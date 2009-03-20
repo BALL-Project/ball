@@ -204,7 +204,7 @@ namespace BALL
 			DatasetController(DatasetController& dc);
 
 			///
-			virtual ~DatasetController() throw();
+			virtual ~DatasetController();
 
 			///
 			void setDatasetControl(DatasetControl* dc) { control_ = dc;}

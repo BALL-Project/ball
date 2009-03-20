@@ -11,7 +11,6 @@ namespace BALL
 	namespace VIEW
 	{
 		GridVisualisation::GridVisualisation()
-			throw()
 				: GeometricObject(),
 				  normal_(Vector3(1.)),
 					point_(),
@@ -22,7 +21,6 @@ namespace BALL
 
 					
 		GridVisualisation::GridVisualisation(const GridVisualisation& rp)
-			throw()
 				: GeometricObject(rp),
 					normal_(rp.normal_),
 					point_(rp.point_)
@@ -31,7 +29,6 @@ namespace BALL
 
 
 		const GridVisualisation& GridVisualisation::operator = (const GridVisualisation& plane)
-			throw()
 		{
 			normal_ = plane.normal_;
 			point_  = plane.point_;

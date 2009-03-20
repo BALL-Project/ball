@@ -70,7 +70,7 @@ class BALL_VIEW_EXPORT RegularData3DController
 	RegularData3DController(RegularData3DController& dc);
 
 	///
-	virtual ~RegularData3DController() throw();
+	virtual ~RegularData3DController();
 
 	///
 	virtual bool write(Dataset* set, String filetype, String filename);
@@ -156,7 +156,7 @@ class BALL_VIEW_EXPORT TrajectoryController
 	TrajectoryController(TrajectoryController& dc);
 
 	///
-	virtual ~TrajectoryController() throw();
+	virtual ~TrajectoryController();
 
 	///
 	virtual bool write(Dataset* set, String filetype, String filename);
@@ -211,7 +211,7 @@ class BALL_VIEW_EXPORT DockResultController
 	DockResultController(DockResultController& dc);
 
 	///
-	virtual ~DockResultController() throw();
+	virtual ~DockResultController();
 
 	///
 	virtual bool write(Dataset* set, String filetype, String filename);
@@ -267,7 +267,7 @@ class BALL_VIEW_EXPORT VectorGridController
 	VectorGridController(VectorGridController& dc);
 
 	///
-	virtual ~VectorGridController() throw();
+	virtual ~VectorGridController();
 
 	///
 	virtual bool write(Dataset* set, String filetype, String filename);
@@ -320,7 +320,7 @@ class BALL_VIEW_EXPORT RaytraceableGridController
 	RaytraceableGridController(RaytraceableGridController& rc);
 
 	///
-	virtual ~RaytraceableGridController() throw();
+	virtual ~RaytraceableGridController();
 
 	///
 	virtual bool createMenuEntries();

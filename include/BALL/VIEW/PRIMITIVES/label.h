@@ -67,16 +67,14 @@ namespace BALL
 					\see         GeometricObject
 					\see         Vertex
 			*/
-			Label()
-				throw();
+			Label();
 
 			/** Copy constructor with cloning facility.
 					\param       label the label to be copied (cloned)
 					\see         GeometricObject
 					\see         Vertex
 			*/
-			Label(const Label& label)
-				throw();
+			Label(const Label& label);
 
 			//@}
 			/** @name Destructors */
@@ -84,8 +82,7 @@ namespace BALL
 
 			/** Destructor.
 			*/
-			virtual ~Label()
-				throw();
+			virtual ~Label();
 
 			/** Explicit default initialization.
 					Calls GeometricObject::clear
@@ -93,8 +90,7 @@ namespace BALL
 					\see  GeometricObject::clear
 					\see  Vertex::clear
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			//@}
 			/**	@name	Assignment methods */
@@ -104,19 +100,16 @@ namespace BALL
 					Assign the label <b> label</b> to this label.
 					\param       label the label to be copied
 			*/
-			void set(const Label& label)
-				throw();
+			void set(const Label& label);
 
 			/** Assignment operator.
 					Calls set.
 			*/
-			const Label& operator = (const Label& label)
-				throw();
+			const Label& operator = (const Label& label);
 
 			/** Swapping of label's.
 			*/
-			void swap(Label& label)
-				throw();
+			void swap(Label& label);
 
 			//@}
 			/**	@name	Inspectors, Mutators, Accessors */
@@ -125,17 +118,16 @@ namespace BALL
 			/** Change the text of the label.
 			*/
 			void setText(const String& text)
-				throw() {text_ = text;}
+				{text_ = text;}
 
 			/** Inspection of the text of the label.
 			*/
 			String getText() const
-				throw() { return text_;}
+				{ return text_;}
 
 			/** Inspection of the expanded text of the label.
 			 */
-			String getExpandedText() const
-				throw();
+			String getExpandedText() const;
 
 			///
 			const QFont& getFont() const { return font_;}
@@ -162,8 +154,7 @@ namespace BALL
 					\see        GeometricObject::isValid
 					\see        Vertex::isValid
 			*/
-			virtual bool isValid() const
-				throw();
+			virtual bool isValid() const;
 
 			/** Internal value dump.
 					Dump the current value of this label to 
@@ -175,8 +166,7 @@ namespace BALL
 					\see     GeometricObject::dump
 					\see     Vertex::dump
 			*/
-			virtual void dump(std::ostream&  s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream&  s = std::cout, Size depth = 0) const;
 			
 			// Method to get all vertices from a geometric object
 			virtual void getVertices(vector<Vector3>& vertices) const;

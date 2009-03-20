@@ -13,7 +13,6 @@ namespace BALL
 	{
 		
 		TwoColoredLine::TwoColoredLine()
-			throw()
 			:	GeometricObject(),
 				ColorExtension2(),
 				Vertex2()
@@ -21,7 +20,6 @@ namespace BALL
 		}
 
 		TwoColoredLine::TwoColoredLine(const TwoColoredLine& two_colored_line)
-			throw()
 			:	GeometricObject(two_colored_line),
 				ColorExtension2(two_colored_line),
 				Vertex2(two_colored_line)
@@ -29,7 +27,6 @@ namespace BALL
 		}
 
 		TwoColoredLine::~TwoColoredLine()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << (void *)this 
@@ -38,7 +35,6 @@ namespace BALL
 		}
 
 		void TwoColoredLine::clear()
-			throw()
 		{
 			GeometricObject::clear();
 			ColorExtension2::clear();
@@ -46,7 +42,6 @@ namespace BALL
 		}
 
 		void TwoColoredLine::set(const TwoColoredLine& two_colored_line)
-			throw()
 		{
 			GeometricObject::set(two_colored_line);
 			ColorExtension2::set(two_colored_line);
@@ -54,14 +49,12 @@ namespace BALL
 		}
 
 		const TwoColoredLine& TwoColoredLine::operator = (const TwoColoredLine &two_colored_line)
-			throw()
 		{
 			set(two_colored_line);
 			return *this;
 		}
 
 		void TwoColoredLine::swap(TwoColoredLine& two_colored_line)
-			throw()
 		{
 			GeometricObject::swap(two_colored_line);
 			ColorExtension2::swap(two_colored_line);
@@ -69,13 +62,11 @@ namespace BALL
 		}
 
 		bool TwoColoredLine::isValid() const
-			throw()
 		{
 			return (GeometricObject::isValid());
 		}
 
 		void TwoColoredLine::dump(ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

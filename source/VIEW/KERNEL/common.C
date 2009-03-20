@@ -30,7 +30,6 @@ namespace BALL
 		Composite composite_to_be_ignored_for_colorprocessors_;
 
 		String vector3ToString(const Vector3& v)
-			throw()
 		{
 			return String("(") + String(v.x) + "," + 
 													 String(v.y) + "," +
@@ -39,7 +38,6 @@ namespace BALL
 
 
 		String createFloatString(float value, Size precision)
-			throw()
 		{
 			ostringstream stream;
 			stream << setprecision(precision);
@@ -50,7 +48,6 @@ namespace BALL
 		}
 
 		bool stringToVector3(const String& data, Vector3& v)
-			throw()
 		{
 			try
 			{
@@ -69,7 +66,6 @@ namespace BALL
 		}
 
 		MainControl* getMainControl()
-			throw()
 		{
 			MainControl* mc = 0;
 			mc = MainControl::getInstance(0);
@@ -86,7 +82,6 @@ namespace BALL
 
 
 		String createTemporaryFilename()
-			throw()
 		{
 			Directory org;
 			Directory::changeToUserHomeDir();
@@ -99,7 +94,6 @@ namespace BALL
 			
 
 		Vector3 getNormal(const Vector3& v)
-			throw()
 		{
 			Vector3 n = v % Vector3(1,0,0);
 			if (Maths::isZero(n.getSquareLength())) 
@@ -422,7 +416,6 @@ namespace BALL
 		};
 
 		void subdivideTriangle(vector<Vector3>& results, Vector3& v1, Vector3& v2, Vector3& v3, Size precision)
-			throw()
 		{
 			if (precision == 0)
 			{

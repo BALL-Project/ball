@@ -24,7 +24,6 @@ namespace BALL
 #define BALL_VIEW_NUMBER_ELEMENTS 111
 
 		ElementColorProcessor::ElementColorProcessor()
-			throw()
 			: ColorProcessor()
 		{
 			const unsigned char color_values[111][3] =
@@ -162,7 +161,6 @@ namespace BALL
 		}
 
 		void ElementColorProcessor::setTransparency(Size value)
-			throw()
 		{
 			ColorProcessor::setTransparency(value);
 			HashMap<Position, ColorRGBA>::Iterator it = color_map_.begin();
@@ -193,7 +191,6 @@ namespace BALL
 
 		////////////////////////////////////////////////////////////////////
 		ResidueNameColorProcessor::ResidueNameColorProcessor()
-			throw()
 			: ColorProcessor()
 		{
 #define BALL_NR_RESIDUES 26
@@ -248,7 +245,6 @@ namespace BALL
 		}
 
 		void ResidueNameColorProcessor::setTransparency(Size value)
-			throw()
 		{
 			ColorProcessor::setTransparency(value);
 			StringHashMap<ColorRGBA>::Iterator it = color_map_.begin();
@@ -288,7 +284,6 @@ namespace BALL
 
 		// ========================================================================
 		ResidueNumberColorProcessor::ResidueNumberColorProcessor()
-			throw()
 			: ColorProcessor(),
 				first_color_("FF0000"),
 				middle_color_("00FF00"),
@@ -326,7 +321,6 @@ namespace BALL
 		}
 
 		bool ResidueNumberColorProcessor::start()
-			throw()
 		{
 			ColorProcessor::start();
 			residue_map_.clear();
@@ -401,7 +395,6 @@ namespace BALL
 
 		////////////////////////////////////////////////////////////////////
 		AtomChargeColorProcessor::AtomChargeColorProcessor()
-			throw()
 			:	InterpolateColorProcessor()
 		{
 			mode_ = NO_OUTSIDE_COLORS;
@@ -420,7 +413,6 @@ namespace BALL
 
 
 		AtomChargeColorProcessor::AtomChargeColorProcessor(const AtomChargeColorProcessor& color_processor)
-			throw()
 			: InterpolateColorProcessor(color_processor)
 		{
 		}
@@ -441,7 +433,6 @@ namespace BALL
 
 		////////////////////////////////////////////////////////////////////
 		AtomDistanceColorProcessor::AtomDistanceColorProcessor()
-			throw()
 			: ColorProcessor(),
 				atom_2_distance_(),
 				distance_((float)10),
@@ -453,7 +444,6 @@ namespace BALL
 		}
 
 		AtomDistanceColorProcessor::AtomDistanceColorProcessor(const AtomDistanceColorProcessor& color_processor)
-			throw()
 			:	ColorProcessor(color_processor),
 				atom_2_distance_(),
 				distance_(color_processor.distance_),
@@ -464,7 +454,6 @@ namespace BALL
 		}
 
 		void AtomDistanceColorProcessor::calculateDistances()
-			throw()
 		{
 			AtomDistanceHashMap::Iterator it1 = atom_2_distance_.begin();
 			AtomDistanceHashMap::Iterator it1_old;
@@ -645,7 +634,6 @@ namespace BALL
 		}
 
 		bool AtomDistanceColorProcessor::finish()
-			throw()
 		{
 			calculateDistances();
 			GeometricObjectList::Iterator it = list_.begin();
@@ -661,7 +649,6 @@ namespace BALL
 		}
 
 		Processor::Result AtomDistanceColorProcessor::operator() (GeometricObject*& object)
-			throw()
 		{
 			if (RTTI::isKindOf<Mesh>(*object))
 			{
@@ -715,7 +702,6 @@ namespace BALL
 		}
 			
 		void AtomDistanceColorProcessor::colorMeshFromGrid_(Mesh& mesh)
-			throw()
 		{
 			if (atom_grid_.isEmpty()) return;
 			
@@ -887,7 +873,6 @@ namespace BALL
 		}
 
 		void SecondaryStructureColorProcessor::setTransparency(Size t)
-			throw()
 		{
 			ColorProcessor::setTransparency(t);
 			helix_color_.setAlpha(255 - t);
@@ -897,53 +882,45 @@ namespace BALL
 		}
 
 		void SecondaryStructureColorProcessor::setHelixColor(const ColorRGBA& color)
-			throw()
 		{
 			helix_color_ = color;
 			helix_color_.setAlpha(255 - transparency_);
 		}
 
 		void SecondaryStructureColorProcessor::setCoilColor(const ColorRGBA& color)
-			throw()
 		{
 			coil_color_ = color;
 			coil_color_.setAlpha(255 - transparency_);
 		}
 
 		void SecondaryStructureColorProcessor::setStrandColor(const ColorRGBA& color)
-			throw()
 		{
 			strand_color_ = color;
 			strand_color_.setAlpha(255 - transparency_);
 		}
 
 		void SecondaryStructureColorProcessor::setTurnColor(const ColorRGBA& color)
-			throw()
 		{
 			turn_color_ = color;
 			turn_color_.setAlpha(255 - transparency_);
 		}
 
 		const ColorRGBA& SecondaryStructureColorProcessor::getHelixColor() const
-			throw()
 		{
 			return helix_color_;
 		}
 
 		const ColorRGBA& SecondaryStructureColorProcessor::getCoilColor() const
-			throw()
 		{
 			return coil_color_;
 		}
 
 		const ColorRGBA& SecondaryStructureColorProcessor::getStrandColor() const
-			throw()
 		{
 			return strand_color_;
 		}
 
 		const ColorRGBA& SecondaryStructureColorProcessor::getTurnColor() const
-			throw()
 		{
 			return turn_color_;
 		}
@@ -1029,85 +1006,72 @@ namespace BALL
 		}
 
 		void ResidueTypeColorProcessor::setBasicColor(const ColorRGBA& color)
-			throw()
 		{
 			basic_color_ = color;
 			basic_color_.setAlpha(255 - transparency_);
 		}
 
 		void ResidueTypeColorProcessor::setAcidicColor(const ColorRGBA& color)
-			throw()
 		{
 			acidic_color_ = color;
 			acidic_color_.setAlpha(255 - transparency_);
 		}
 
 		void ResidueTypeColorProcessor::setPolarColor(const ColorRGBA& color)
-			throw()
 		{
 			polar_color_ = color;
 			polar_color_.setAlpha(255 - transparency_);
 		}
 		
 		void ResidueTypeColorProcessor::setHydrophobicColor(const ColorRGBA& color)
-			throw()
 		{
 			hydrophobic_color_ = color;
 			hydrophobic_color_.setAlpha(255 - transparency_);
 		}
 
 		void ResidueTypeColorProcessor::setAromaticColor(const ColorRGBA& color)
-			throw()
 		{
 			aromatic_color_ = color;
 			aromatic_color_.setAlpha(255 - transparency_);
 		}
 
 		void ResidueTypeColorProcessor::setOtherColor(const ColorRGBA& color)
-			throw()
 		{
 			other_color_ = color;
 			other_color_.setAlpha(255 - transparency_);
 		}
 
 		const ColorRGBA& ResidueTypeColorProcessor::getBasicColor() const
-			throw()
 		{
 			return basic_color_;
 		}
 
 		const ColorRGBA& ResidueTypeColorProcessor::getAcidicColor() const
-			throw()
 		{
 			return acidic_color_;
 		}
 
 		const ColorRGBA& ResidueTypeColorProcessor::getPolarColor() const
-			throw()
 		{
 			return polar_color_;
 		}
 
 		const ColorRGBA& ResidueTypeColorProcessor::getHydrophobicColor() const
-			throw()
 		{
 			return hydrophobic_color_;
 		}
 
 		const ColorRGBA& ResidueTypeColorProcessor::getAromaticColor() const
-			throw()
 		{
 			return aromatic_color_;
 		}
 
 		const ColorRGBA& ResidueTypeColorProcessor::getOtherColor() const
-			throw()
 		{
 			return other_color_;
 		}
 
 		void ResidueTypeColorProcessor::setTransparency(Size t)
-			throw()
 		{
 			basic_color_.setAlpha(255 - t);
 			acidic_color_.setAlpha(255 - t);
@@ -1186,7 +1150,6 @@ namespace BALL
 		}
 
 		bool PositionColorProcessor::start() 
-			throw()
 		{
 			if (!ColorProcessor::start()) return false;
 

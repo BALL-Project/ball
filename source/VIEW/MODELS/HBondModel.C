@@ -18,21 +18,18 @@ namespace BALL
 	{
 
 		HBondModelProcessor::HBondModelProcessor()
-			throw()
 			: AtomBondModelBaseProcessor(),
 				radius_((float)0.3)
 		{
 		}
 
 		HBondModelProcessor::HBondModelProcessor(const HBondModelProcessor& model)
-			throw()
 			: AtomBondModelBaseProcessor(model),
 				radius_(model.radius_)
 		{
 		}
 
 		HBondModelProcessor::~HBondModelProcessor()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << this << " of class HBondModelProcessor" << endl;
@@ -40,21 +37,18 @@ namespace BALL
 		}
 
 		void HBondModelProcessor::clear()
-			throw()
 		{
 			AtomBondModelBaseProcessor::clear();
 			radius_ = (float) 0.3;
 		}
 
 		void HBondModelProcessor::set(const HBondModelProcessor& model)
-			throw()
 		{
 			AtomBondModelBaseProcessor::set(model);
 			radius_ = model.radius_;
 		}
 
 		const HBondModelProcessor &HBondModelProcessor::operator = (const HBondModelProcessor& model)
-			throw()
 		{
 			set(model);
 			return *this;

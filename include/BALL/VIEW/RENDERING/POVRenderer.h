@@ -55,8 +55,7 @@ namespace BALL
 			//@{
 
 			/// Default constructor.
-			POVRenderer()
-				throw();
+			POVRenderer();
 
 			/** Detailed constructor.
 			 		\param name The name of the file we will create
@@ -65,17 +64,14 @@ namespace BALL
 				throw(Exception::FileNotFound);
 			
 			// Only for Python
-			POVRenderer(const POVRenderer& renderer)
-				throw();
+			POVRenderer(const POVRenderer& renderer);
 
 
 			/// Destructor.
-			virtual ~POVRenderer()
-				throw();
+			virtual ~POVRenderer();
 
 			/// Clear method.
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			//@}
 			/** @name Accessors
@@ -93,29 +89,25 @@ namespace BALL
 
 			/// 
 			void setHumanReadable(bool state)
-				throw() { human_readable_ = state;}
+				{ human_readable_ = state;}
 
 			///
 			bool isHumanReadable() const
-				throw() { return human_readable_;}
+				{ return human_readable_;}
 
 			/** Converts a ColorRGBA into a String in POVRay format.
 			 */
-			String POVColorRGBA(const ColorRGBA& input)
-				throw();
+			String POVColorRGBA(const ColorRGBA& input);
 
 			/** Returns the corresponding BALLFinish declaration
 			 */
-			String POVFinish(const String& object, const ColorRGBA& input)
-				throw();
+			String POVFinish(const String& object, const ColorRGBA& input);
 
 			/** Converts a Vector3 into a String in POVRay format.
 			 */
-			String POVVector3(Vector3 input)
-				throw();
+			String POVVector3(Vector3 input);
 
-			virtual bool render(const Representation& representation)
-				throw();
+			virtual bool render(const Representation& representation);
 
 			//@}
 			
@@ -130,46 +122,34 @@ namespace BALL
 			/** Start method. 
 			    This method creates the file and writes the header.
 			 */
-			virtual bool init(const Stage& stage, float width, float height)
-				throw();
+			virtual bool init(const Stage& stage, float width, float height);
 
 			/** Finish method.
 			 		This method writes the ending of the file and closes it.
 			 */
-			virtual bool finish()
-				throw();
+			virtual bool finish();
 
-			void renderSphere_(const Sphere& sphere)
-				throw();
+			void renderSphere_(const Sphere& sphere);
 			
-			void renderDisc_(const Disc& disc)
-				throw();
+			void renderDisc_(const Disc& disc);
 
-			void renderTube_(const Tube& tube)
-				throw();
+			void renderTube_(const Tube& tube);
 
-			void renderTwoColoredTube_(const TwoColoredTube& tube)
-				throw();
+			void renderTwoColoredTube_(const TwoColoredTube& tube);
 
-			void renderMesh_(const Mesh& mesh)
-				throw();
+			void renderMesh_(const Mesh& mesh);
 
-			void renderTwoColoredLine_(const TwoColoredLine& line)
-				throw();
+			void renderTwoColoredLine_(const TwoColoredLine& line);
 
-			void renderLine_(const Line& line)
-				throw();
+			void renderLine_(const Line& line);
 
-			void renderPoint_(const Point& point)
-				throw();
+			void renderPoint_(const Point& point);
 
 			// do nothing
-			void renderLabel_(const Label&)
-				throw();
+			void renderLabel_(const Label&);
 			
 			/// Render an illuminated line
-			virtual void renderMultiLine_(const MultiLine& line)
-				throw();
+			virtual void renderMultiLine_(const MultiLine& line);
 
 			//@}
 

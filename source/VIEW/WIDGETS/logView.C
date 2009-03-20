@@ -51,7 +51,6 @@ namespace BALL
 
 
 		LogView::LogView(QWidget *parent, const char *name)
-			throw()
 			: DockWidget(parent, name),
 				LogStreamNotifier(),
 				text_edit_(new DragLogView(this))
@@ -66,7 +65,6 @@ namespace BALL
 		}
 
 		LogView::LogView(const LogView& view)
-			throw()
 			: DockWidget((QWidget*)view.getParent()),
 				LogStreamNotifier(),
 				text_edit_(new DragLogView(this))
@@ -76,7 +74,6 @@ namespace BALL
 		}
 
 		LogView::~LogView()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "Destructing object " << (void *)this 
@@ -134,7 +131,6 @@ namespace BALL
 		}
 
 		void LogView::initializeWidget(MainControl& main_control)
-			throw()
 		{
 			registerAt(Log);
 			text_edit_->setReadOnly(true);
@@ -147,7 +143,6 @@ namespace BALL
 
 
 		void LogView::finalizeWidget(MainControl& main_control)
-			throw()
 		{
 			DockWidget::finalizeWidget(main_control);
 			LogStreamNotifier::unregister();

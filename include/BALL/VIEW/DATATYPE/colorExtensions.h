@@ -35,26 +35,22 @@ namespace BALL
 			/** Default Constructor.
 					The colors are set to (0.0, 0.0, 0.0, 1.0).
 			*/
-			ColorExtension2()
-				throw();
+			ColorExtension2();
 
 			/** Copy constructor.
 			*/
-			ColorExtension2(const ColorExtension2& color_extension)
-				throw();
+			ColorExtension2(const ColorExtension2& color_extension);
 
 			/** Destructor.
 			*/
-			virtual ~ColorExtension2()
-				throw();
+			virtual ~ColorExtension2();
 
 			/** Explicit default initialization.
 					Set the colors of this colorExtension2 to the color 
 					(0.0, 0.0, 0.0, 1.0).
 					Calls ColorRGBA::clear.
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			//@}
 			/**	@name	Assignment methods
@@ -63,19 +59,16 @@ namespace BALL
 
 			/** Assignment.
 			*/
-			void set(const ColorExtension2& color_extension)
-				throw();
+			void set(const ColorExtension2& color_extension);
 
 			/** Assignment operator.
 					Calls set.
 			*/
-			const ColorExtension2& operator = (const ColorExtension2& color_extension)
-				throw();
+			const ColorExtension2& operator = (const ColorExtension2& color_extension);
 
 			/** Swapping of colorExtensions.
 			*/
-			void swap(ColorExtension2& color_extension)
-				throw();
+			void swap(ColorExtension2& color_extension);
 			
 			//@}
 			/**	@name	Accessors: inspectors and mutators 
@@ -84,23 +77,19 @@ namespace BALL
 
 			/** Change the second color
 			*/
-			void setColor2(const ColorRGBA& color)
-				throw();
+			void setColor2(const ColorRGBA& color);
 		
 			/** Mutable inspection of the second color of this colorExtension2.
 			*/
-			ColorRGBA& getColor2()
-				throw();
+			ColorRGBA& getColor2();
 
 			/** Non-mutable inspection of the second color
 			*/
-			const ColorRGBA& getColor2() const
-				throw();
+			const ColorRGBA& getColor2() const;
 
 			/** Inspection of the second color of this colorExtension2.
 			*/
-			void getColor2(ColorRGBA& color) const
-				throw();
+			void getColor2(ColorRGBA& color) const;
 
 			//@} 
 			/**	@name	debuggers and diagnostics */	
@@ -113,8 +102,7 @@ namespace BALL
 					\param   depth the dumping depth
 					\see     ColorRGBA::operator <<
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 			//@}
 
 			private:
@@ -141,24 +129,20 @@ namespace BALL
 
 			/** Default Constructor.
 			*/
-			MultiColorExtension()
-				throw();
+			MultiColorExtension();
 
 			/** Copy constructor.
 			*/
-			MultiColorExtension(const MultiColorExtension& color_extension)
-				throw();
+			MultiColorExtension(const MultiColorExtension& color_extension);
 
 			/** Destructor.
 			*/
-			virtual ~MultiColorExtension()
-				throw();
+			virtual ~MultiColorExtension();
 
 			/** Explicit default initialization.
 					Clears the color vector.
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			//@}
 			/**	@name	Assignment methods
@@ -167,19 +151,16 @@ namespace BALL
 
 			/** Assignment.
 			*/
-			void set(const MultiColorExtension& color_extension)
-				throw();
+			void set(const MultiColorExtension& color_extension);
 
 			/** Assignment operator.
 					Calls set.
 			*/
-			const MultiColorExtension& operator = (const MultiColorExtension& color_extension)
-				throw();
+			const MultiColorExtension& operator = (const MultiColorExtension& color_extension);
 
 			/** Swapping of colorExtensions.
 			*/
-			void swap(MultiColorExtension& color_extension)
-				throw();
+			void swap(MultiColorExtension& color_extension);
 			
 			//@}
 			/**	@name	Accessors: inspectors and mutators 
@@ -188,18 +169,15 @@ namespace BALL
 
 			/** Change the colors
 			*/
-			void setColors(const vector<ColorRGBA>& colors)
-				throw();
+			void setColors(const vector<ColorRGBA>& colors);
 		
 			/** Mutable inspection of the colors
 			*/
-			vector<ColorRGBA>& getColors()
-				throw();
+			vector<ColorRGBA>& getColors();
 
 			/** Non-mutable inspection of the colors
 			*/
-			const vector<ColorRGBA>& getColors() const
-				throw();
+			const vector<ColorRGBA>& getColors() const;
 
 			/// Set the alpha values for all colors
 			void setAlphas(Size alpha);
@@ -215,8 +193,7 @@ namespace BALL
 					\param   depth the dumping depth
 					\see     ColorRGBA::operator <<
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 			//@}
 
 			vector<ColorRGBA> colors;

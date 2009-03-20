@@ -18,14 +18,12 @@ namespace BALL
 	{
 
 		Label::Label()
-			throw()
 			:	GeometricObject(),
 				Vertex()
 		{
 		}
 
 		Label::Label(const Label& label)
-			throw()
 			:	GeometricObject(label),
 				Vertex(label),
 				text_(label.text_)
@@ -33,7 +31,6 @@ namespace BALL
 		}
 
 		Label::~Label()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << (void *)this 
@@ -42,7 +39,6 @@ namespace BALL
 		}
 
 		void Label::clear()
-			throw()
 		{
 			GeometricObject::clear();
 			Vertex::clear();
@@ -50,7 +46,6 @@ namespace BALL
 		}
 
 		void Label::set(const Label& label)
-			throw()
 		{
 			GeometricObject::set(label);
 			Vertex::set(label);
@@ -58,28 +53,24 @@ namespace BALL
 		}
 
 		const Label& Label::operator = (const Label& label)
-			throw()
 		{
 			set(label);
 			return *this;
 		}
 
 		void Label::swap(Label& label)
-			throw()
 		{
 			GeometricObject::swap(label);
 			Vertex::swap(label);
 		}
 
 		bool Label::isValid() const
-			throw()
 		{
 			return (GeometricObject::isValid() &&
 							Vertex::isValid());
 		}
 
 		void Label::dump(ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -97,7 +88,6 @@ namespace BALL
 
 
 		String Label::getExpandedText() const
-			throw()
 		{
 			if (!text_.has('%') || getComposite() == 0)
 			{

@@ -5,14 +5,12 @@
 
 BALL_INLINE
 float TwoColoredTube::getLength() const
-	throw()
 {
   return (getVertex1() - getVertex2()).getLength();
 }
 
 BALL_INLINE
 Vector3 TwoColoredTube::getMiddleVertex() const
-	throw()
 {
   return (getVertex1() + (getVertex2() - getVertex1()) / 2.0);
 }

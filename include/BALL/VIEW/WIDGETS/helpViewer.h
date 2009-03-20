@@ -73,17 +73,14 @@ namespace BALL
 			BALL_EMBEDDABLE(HelpViewer, DockWidget)
 
 			///
-			HelpViewer(QWidget* parent, const char* name = 0)
-				throw();
+			HelpViewer(QWidget* parent, const char* name = 0);
 
 			///
-			virtual ~HelpViewer()
-				throw();
+			virtual ~HelpViewer();
 
 			/**	Setup the menu entry
 			*/
-			virtual void initializeWidget(MainControl& main_control)
-				throw();
+			virtual void initializeWidget(MainControl& main_control);
 
 			/** Handles messages sent by other registered ConnectionObject objects.
 					Filters for SceneMessage and sets the Camera appropriate or updates the visualization. 
@@ -91,8 +88,7 @@ namespace BALL
 					\see   ConnectionObject
 					\see   Message
 		  */
-			virtual void onNotify(Message *message)
-				throw();
+			virtual void onNotify(Message *message);
 
 			///
 			virtual void showHelp(const String& URL);

@@ -14,7 +14,6 @@ namespace BALL
 		ColorRGBA ClippingPlane::capping_color_ = ColorRGBA(0, 0, 1.0, 1.0);
 
 		ClippingPlane::ClippingPlane()
-			throw()
 				: normal_(Vector3(1.)),
 					point_(),
 					active_(false),
@@ -25,7 +24,6 @@ namespace BALL
 
 					
 		ClippingPlane::ClippingPlane(const ClippingPlane& rp)
-			throw()
 				: normal_(rp.normal_),
 					point_(rp.point_),
 					active_(rp.active_),
@@ -37,7 +35,6 @@ namespace BALL
 
 
 		const ClippingPlane& ClippingPlane::operator = (const ClippingPlane& plane)
-			throw()
 		{
 			reps_   = plane.reps_;
 			normal_ = plane.normal_;
@@ -50,13 +47,11 @@ namespace BALL
 
 
 		ClippingPlane::~ClippingPlane()
-			throw()
 		{
 			clear();
 		}
 
 		void ClippingPlane::clear()
-			throw()
 		{
 			reps_.clear();
 		}
@@ -67,7 +62,6 @@ namespace BALL
 		}
 
 		bool ClippingPlane::operator == (const ClippingPlane& plane) const
-			throw()
 		{
 			return reps_   == plane.reps_   &&
 				     normal_ == plane.normal_ &&

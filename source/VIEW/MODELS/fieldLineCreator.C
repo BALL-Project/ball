@@ -20,7 +20,6 @@ namespace BALL
 	{
 
 		FieldLineCreator::FieldLineCreator()
-			throw()
 			:	tolerance_(0.0001),
 				max_steps_(10000),
 				interpolation_steps_(2),
@@ -37,12 +36,10 @@ namespace BALL
 		}
 
 		FieldLineCreator::FieldLineCreator(const FieldLineCreator& )
-			throw()
 		{
 		}
 
 		FieldLineCreator::~FieldLineCreator()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "Destructing object " << (void *)this 

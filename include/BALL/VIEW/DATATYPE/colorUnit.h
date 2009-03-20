@@ -55,8 +55,7 @@ namespace BALL
 			{
 				public:
 
-				NotInHexFormat(const char* file, int line, const string& data)
-					throw();
+				NotInHexFormat(const char* file, int line, const string& data);
 			};
 
 			//@}
@@ -67,13 +66,11 @@ namespace BALL
 			/** Default Constructor.
 					Its value will be set to zero (0).
 			*/
-			ColorUnit()
-				throw();
+			ColorUnit();
 		
 			/** Copy constructor.
 			*/
-			ColorUnit(const ColorUnit& color_unit)
-				throw();
+			ColorUnit(const ColorUnit& color_unit);
 
 			/** Constructor with Parameter char*,
 					representing a value in hex format (00 - FF, or 00 - ff).
@@ -95,8 +92,7 @@ namespace BALL
 			/** Constructor with Parameter unsigned char.
 					\param       value a char (0 - 255)
 			*/
-			ColorUnit(const unsigned char value)
-				throw();
+			ColorUnit(const unsigned char value);
 
 			/** Constructor with Parameter short.
 					\param       value a short (0 - 255)
@@ -160,8 +156,7 @@ namespace BALL
 
 			/** Destructor.
 			*/
-			~ColorUnit()
-				throw();
+			~ColorUnit();
 
 			/** Explicit default initialization.
 					Sets the value of this colorUnit to the default value.
@@ -169,8 +164,7 @@ namespace BALL
 						- value is zero (0)
 					\par
 			*/
-			void clear()
-				throw();
+			void clear();
 
 			//@}
 			/**	@name	Converters
@@ -180,68 +174,57 @@ namespace BALL
 			/** Conversion to string.
 					\return      string with format <tt> "00"-"FF"</tt> or <tt> "00"-"ff"</tt>
 			*/
-			operator String () const
-				throw();
+			operator String () const;
 
 			/** Conversion to char.
 					\return      char with a value of range <tt> 0 - 255</tt>
 			*/
-			operator char () const
-				throw();
+			operator char () const;
 
 			/** Conversion to unsigned char.
 					\return      unsigned char with a value of range <tt> 0 - 255</tt>
 			*/
-			operator unsigned char () const
-				throw();
+			operator unsigned char () const;
 
 			/** Conversion to short.
 					\return      short with a value of range <tt> 0 - 255</tt>
 			*/
-			operator short () const
-				throw();
+			operator short () const;
 			
 			/** Conversion to unsigned short.
 					\return      unsigned short with a value of range <tt> 0 - 255</tt>
 			*/
-			operator unsigned short	() const
-				throw();
+			operator unsigned short	() const;
 			
 			/** Conversion to int.
 					\return      int with a value of range <tt> 0 - 255</tt>
 			*/
-			operator int () const
-				throw();
+			operator int () const;
 
 			/** Conversion to unsigned int.
 					\return      unsigned int with a value of range <tt> 0 - 255</tt>
 			*/
-			operator unsigned int () const
-				throw();
+			operator unsigned int () const;
 
 			/** Conversion to long.
 					\return      long with a value of range <tt> 0 - 255</tt>
 			*/
-			operator long () const
-				throw();
+			operator long () const;
 
 			/** Conversion to unsigned long.
 					\return      unsigned long with a value of range <tt> 0 - 255</tt>
 			*/
-			operator unsigned long () const
-				throw();
+			operator unsigned long () const;
 
 			/** Conversion to float.
 					\return      float with a value of range <tt> 0 - 1.0</tt>
 			*/
-			operator float () const
-				throw();
+			operator float () const;
 
 			/** Conversion to double.
 					\return      double with a value of range <tt> 0 - 1.0</tt>
 			*/
-			operator double () const
-				throw();
+			operator double () const;
 			
 			//@}
 			/**	@name	Assignment methods
@@ -250,19 +233,16 @@ namespace BALL
 			
 			/** Assignment.
 			*/
-			void set(const ColorUnit& color_unit)
-				throw();
+			void set(const ColorUnit& color_unit);
 
 			/** Assignment operator.
 					\see         set
 			*/
-			const ColorUnit& operator = (const ColorUnit& color_unit)
-				throw();
+			const ColorUnit& operator = (const ColorUnit& color_unit);
 		
 			/** Swapping of colorUnits.
 			*/
-			void swap(ColorUnit& color_unit)
-				throw();
+			void swap(ColorUnit& color_unit);
 
 			//@}
 			/** @name Accessors: inspectors and mutators 
@@ -291,8 +271,7 @@ namespace BALL
 					the size of 3 bytes.
 					\param   value a char* receiving the value of this colorUnit in hex format (<tt> "00"-"FF"</tt> or <tt> "00"-"ff"</tt>)
 			*/
-			void get(char* value) const
-				throw();
+			void get(char* value) const;
 
 			/** Changes the value of the colorUnit.
 					Changes the value of this colorUnit to the value represented by 
@@ -316,27 +295,23 @@ namespace BALL
 			/** Inspection of the colorUnit's value.
 					\param   value a string receiving the value of this colorUnit in hex format (<tt> "00"-"FF"</tt> or <tt> "00"-"ff"</tt>)
 			*/
-			void get(String& value) const
-				throw();
+			void get(String& value) const;
 
 			/** Changes the value of the colorUnit.
 					\param       value an unsigned char of range <tt> 0-255</tt>
 			*/
-			void set(const unsigned char value)
-				throw();
+			void set(const unsigned char value);
 
 			/** Assignment operator with unsigned char.
 					Calls set.
 					\param       value an unsigned char containing a value of range <tt> 0-255</tt>
 			*/
-			const ColorUnit& operator = (const unsigned char value)
-				throw();
+			const ColorUnit& operator = (const unsigned char value);
 
 			/** Inspection of the colorUnit's value.
 					\param   value an unsigned char receiving the value of this colorUnit (range: <tt> 0-255</tt>)
 			*/
-			void get(unsigned char& value) const
-				throw();
+			void get(unsigned char& value) const;
 
 			/** Changes the value of the colorUnit.
 					\param       value a short of range <tt> 0-255</tt>
@@ -356,8 +331,7 @@ namespace BALL
 			/** Inspection of the colorUnit's value.
 					\param   value a short receiving the value of this colorUnit (range: <tt> 0-255</tt>)
 			*/
-			void get(short& value) const
-				throw();
+			void get(short& value) const;
 
 			/** Changes the value of the colorUnit.
 					\param       value an unsigned short of range <tt> 0-255</tt>
@@ -377,8 +351,7 @@ namespace BALL
 			/** Inspection of the colorUnit's value.
 					\param   value an unsigned short receiving the value of this colorUnit (range: <tt> 0-255</tt>)
 			*/
-			void get(unsigned short& value) const
-				throw();
+			void get(unsigned short& value) const;
 
 			/** Changes the value of the colorUnit.
 					\param       value an int of range <tt> 0-255</tt>
@@ -398,8 +371,7 @@ namespace BALL
 			/** Inspection of the colorUnit's value.
 					\param   value an int receiving the value of this colorUnit (range: <tt> 0-255</tt>)
 			*/
-			void get(int& value) const
-				throw();
+			void get(int& value) const;
 
 			/** Changes the value of the colorUnit.
 					\param       value an unsigned int of range <tt> 0-255</tt>
@@ -419,8 +391,7 @@ namespace BALL
 			/** Inspection of the colorUnit's value.
 					\param   value an unsigned int receiving the value of this colorUnit (range: <tt> 0-255</tt>)
 			*/
-			void get(unsigned int& value) const
-				throw();
+			void get(unsigned int& value) const;
 
 			/** Changes the value of the colorUnit.
 					\param       value a long of range <tt> 0-255</tt>
@@ -440,8 +411,7 @@ namespace BALL
 			/** Inspection of the colorUnit's value.
 					\param   value a long receiving the value of this colorUnit (range: <tt> 0-255</tt>)
 			*/
-			void get(long& value) const
-				throw();
+			void get(long& value) const;
 
 			/** Changes the value of the colorUnit.
 					\param       value an unsigned long of range <tt> 0-255</tt>
@@ -461,8 +431,7 @@ namespace BALL
 			/** Inspection of the colorUnit's value.
 					\param   value an unsigned long receiving the value of this colorUnit (range: <tt> 0-255</tt>)
 			*/
-			void get(unsigned long& value) const
-				throw();
+			void get(unsigned long& value) const;
 
 			/** Changes the value of the colorUnit.
 					\param       value a float of range 0-1.0
@@ -482,8 +451,7 @@ namespace BALL
 			/** Inspection of the colorUnit's value.
 					\param   value a float receiving the value of this colorUnit (range: 0-1.0)
 			*/
-			void get(float& value) const
-				throw();
+			void get(float& value) const;
 
 			/** Changes the value of the colorUnit.
 					\param       value a double of range 0-1.0
@@ -503,8 +471,7 @@ namespace BALL
 			/** Inspection of the colorUnit's value.
 					\param   value a double receiving the value of this colorUnit (range: 0-1.0)
 			*/
-			void get(double& value) const
-				throw();
+			void get(double& value) const;
 
 			//@}
 			/**	@name	Predicates
@@ -515,43 +482,37 @@ namespace BALL
 					Equality means that the internals value (floats) of the colorUnit's
 					are equal.
 			*/
-			bool operator == (const ColorUnit& color_unit) const
-				throw();
+			bool operator == (const ColorUnit& color_unit) const;
 
 			/** Unequality test.
 					Unequality means that the internals value (floats) of the colorUnit's
 					are unequal.
 			*/
-			bool operator != (const ColorUnit& color_unit) const
-				throw();
+			bool operator != (const ColorUnit& color_unit) const;
 			
 			/** Smaller test.
 					Smaller means that the internal value (float) this is
 					smaller than the internal value (float) of <b> color_unit</b> colorUnit.
 			*/
-			bool operator < (const ColorUnit& color_unit) const
-				throw();
+			bool operator < (const ColorUnit& color_unit) const;
 			
 			/** Smaller or equal test.
 					Smaller or equal means that the internal value (float) this is
 					smaller or equal than the internal value (float) of <b> color_unit</b> colorUnit.
 			*/
-			bool operator <= (const ColorUnit& color_unit) const
-				throw();
+			bool operator <= (const ColorUnit& color_unit) const;
 			
 			/** Greater test.
 					Greater means that the internal value (float) this is
 					greater than the internal value (float) of <b> color_unit</b> colorUnit.
 			*/
-			bool operator > (const ColorUnit& color_unit) const
-				throw();
+			bool operator > (const ColorUnit& color_unit) const;
 
 			/** Greater or equal test.
 					Greater or equal means that the internal value (float) this is
 					greater or equal than the internal value (float) of <b> color_unit</b> colorUnit.
 			*/ 
-			bool operator >= (const ColorUnit& color_unit) const
-				throw();
+			bool operator >= (const ColorUnit& color_unit) const;
 			
 			//@}
 			/**	@name	debuggers and diagnostics
@@ -565,8 +526,7 @@ namespace BALL
 					\param   s output stream where to output the value of this colorUnit
 					\param   depth the dumping depth (depth is irrelevant here)
 			*/
-			void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 			//@}
 			/**	@name	Storers

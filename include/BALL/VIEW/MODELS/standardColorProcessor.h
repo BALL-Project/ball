@@ -61,12 +61,10 @@ namespace BALL
 					Initialize the internal ColorMap to contain all element colors with 
 					element numbers as names.
 			*/
-			ElementColorProcessor()
-				throw();
+			ElementColorProcessor();
 
 			///
-			void setTransparency(Size value)
-				throw();
+			void setTransparency(Size value);
 
 			///
 			virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
@@ -95,8 +93,7 @@ namespace BALL
 				BALL_CREATE(ResidueNumberColorProcessor)
 
 				///
-				ResidueNumberColorProcessor()
-					throw();
+				ResidueNumberColorProcessor();
 
 				///
 				virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
@@ -120,8 +117,7 @@ namespace BALL
 				const ColorRGBA& getLastColor() const { return last_color_;}
 
 				///
-				virtual bool start()
-					throw();
+				virtual bool start();
 
 			protected:
 				bool canUseMeshShortcut_(const Composite& composite);
@@ -157,7 +153,7 @@ namespace BALL
 			const vector<ColorRGBA>& getColors() const { return colors_;}
 
 			///
-			bool start() throw();
+			bool start();
 
 			protected:
 
@@ -234,12 +230,10 @@ namespace BALL
 					Initialize the internal ColorMap to contain all residue colors with 
 					residue names as names.
 			*/
-			ResidueNameColorProcessor()
-				throw();
+			ResidueNameColorProcessor();
 
 			///
-			void setTransparency(Size value)
-				throw();
+			void setTransparency(Size value);
 
 			///
 			virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
@@ -280,12 +274,10 @@ namespace BALL
 					  - neutral color set to white ("FFFFFFFF")
 					  - negative color set to red ("FF0000FF")
 			*/
-      AtomChargeColorProcessor()
-				throw();
+      AtomChargeColorProcessor();
 
 			/// Copy constructor.
- 			AtomChargeColorProcessor(const AtomChargeColorProcessor& color_Processor)
-				throw();
+ 			AtomChargeColorProcessor(const AtomChargeColorProcessor& color_Processor);
 
 			///
 			virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
@@ -316,12 +308,10 @@ namespace BALL
 					  - max distance color set to blue ("00FF00FF"). 
 					\see         ColorRGBA
 			*/
-      AtomDistanceColorProcessor()
-				throw();
+      AtomDistanceColorProcessor();
 
 			/// Construct with copying the colors and the distance.
- 			AtomDistanceColorProcessor(const AtomDistanceColorProcessor& color_Processor)
-				throw();
+ 			AtomDistanceColorProcessor(const AtomDistanceColorProcessor& color_Processor);
 
 			/** Change the max distance.
 					Every new Atom object is inserted into the AtomDistanceColorProcessor
@@ -329,12 +319,11 @@ namespace BALL
 					the distances of the inserted atoms are calculated.
 					\param distance the new max distance 
 			*/
-			void setDistance(float distance) throw() { distance_ = distance;}
+			void setDistance(float distance) { distance_ = distance;}
 
 			/** Inspection of the max distance.
 			*/
-			float getDistance() const
-				throw();
+			float getDistance() const;
 
 			/** Change the null distance color.
 					If the calculated distance between two Atom objects becomes 0, this
@@ -346,13 +335,11 @@ namespace BALL
 					\see   setMaxDistanceColor
 					\see   ColorRGBA
 			*/
-			void setNullDistanceColor(const ColorRGBA& color)
-				throw();
+			void setNullDistanceColor(const ColorRGBA& color);
 
 			/** Non-mutable inspection of the null distance color.
 			*/
-			const ColorRGBA& getNullDistanceColor() const
-				throw();
+			const ColorRGBA& getNullDistanceColor() const;
 
 			/** Change the max distance color.
 					If the calculated distance between two Atom objects becomes the max distance
@@ -364,15 +351,13 @@ namespace BALL
 					\see   setNullDistanceColor
 					\see   ColorRGBA
 			*/
-			void setMaxDistanceColor(const ColorRGBA& color)
-				throw();
+			void setMaxDistanceColor(const ColorRGBA& color);
 
 			/** Non-mutable inspection of the max distance color.
 					\see     setMaxDistanceColor
 					\see     ColorRGBA
 			*/
-			const ColorRGBA& getMaxDistanceColor() const
-				throw();
+			const ColorRGBA& getMaxDistanceColor() const;
 
 			/** Calculate the distances.
 					If this method is called the distances of all previously inserted Atom objects 
@@ -381,8 +366,7 @@ namespace BALL
 					the max distance as set with the method setDistance().
 					Use this method after all atom containers have applied this processor.
 			*/
-			void calculateDistances()
-				throw();
+			void calculateDistances();
 
 			/** Calculate the distance color of the given Atom by interpolating
 					the null and max distance color according to the previously calculated 
@@ -393,8 +377,7 @@ namespace BALL
 			virtual void addAtom(const Atom& atom);
 
 			///
-			virtual bool finish()
-				throw();
+			virtual bool finish();
 
 			///
 			virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
@@ -407,16 +390,14 @@ namespace BALL
 			
 			/** Collect all atoms from the geometric objects
 			*/
-			virtual Processor::Result operator() (GeometricObject*& object)
-				throw();
+			virtual Processor::Result operator() (GeometricObject*& object);
 
 			private:
 
 			void colorGeometricObject_(GeometricObject& object);
 
 			//_ Colorize the mesh with the computed grid.
-			virtual void colorMeshFromGrid_(Mesh& mesh)
-				throw();
+			virtual void colorMeshFromGrid_(Mesh& mesh);
 
 			typedef HashMap<const Atom*, float> AtomDistanceHashMap;
 
@@ -519,40 +500,31 @@ namespace BALL
 			virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
 
 			///
-			void setHelixColor(const ColorRGBA& color)
-				throw();
+			void setHelixColor(const ColorRGBA& color);
 
 			///
-			void setCoilColor(const ColorRGBA& color)
-				throw();
+			void setCoilColor(const ColorRGBA& color);
 
 			///
-			void setStrandColor(const ColorRGBA& color)
-				throw();
+			void setStrandColor(const ColorRGBA& color);
 
 			///
-			void setTurnColor(const ColorRGBA& color)
-				throw();
+			void setTurnColor(const ColorRGBA& color);
 
 			///
-			const ColorRGBA& getHelixColor() const
-				throw();
+			const ColorRGBA& getHelixColor() const;
 
 			///
-			const ColorRGBA& getCoilColor() const
-				throw();
+			const ColorRGBA& getCoilColor() const;
 
 			///
-			const ColorRGBA& getStrandColor() const
-				throw();
+			const ColorRGBA& getStrandColor() const;
 
 			///
-			const ColorRGBA& getTurnColor() const
-				throw();
+			const ColorRGBA& getTurnColor() const;
 
 			///
-			virtual void setTransparency(Size t)
-				throw();
+			virtual void setTransparency(Size t);
 
 			private:
 
@@ -585,56 +557,43 @@ namespace BALL
 			virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
 
 			///
-			void setBasicColor(const ColorRGBA& color)
-				throw();
+			void setBasicColor(const ColorRGBA& color);
 
 			///
-			void setAcidicColor(const ColorRGBA& color)
-				throw();
+			void setAcidicColor(const ColorRGBA& color);
 
 			///
-			void setPolarColor(const ColorRGBA& color)
-				throw();
+			void setPolarColor(const ColorRGBA& color);
 
 			///
-			void setHydrophobicColor(const ColorRGBA& color)
-				throw();
+			void setHydrophobicColor(const ColorRGBA& color);
 
 			///
-			void setAromaticColor(const ColorRGBA& color)
-				throw();
+			void setAromaticColor(const ColorRGBA& color);
 
 			///
-			void setOtherColor(const ColorRGBA& color)
-				throw();
+			void setOtherColor(const ColorRGBA& color);
 
 			///
-			const ColorRGBA& getBasicColor() const
-				throw();
+			const ColorRGBA& getBasicColor() const;
 
 			///
-			const ColorRGBA& getAcidicColor() const
-				throw();
+			const ColorRGBA& getAcidicColor() const;
 
 			///
-			const ColorRGBA& getPolarColor() const
-				throw();
+			const ColorRGBA& getPolarColor() const;
 
 			///
-			const ColorRGBA& getHydrophobicColor() const
-				throw();
+			const ColorRGBA& getHydrophobicColor() const;
 
 			///
-			const ColorRGBA& getAromaticColor() const
-				throw();
+			const ColorRGBA& getAromaticColor() const;
 
 			///
-			const ColorRGBA& getOtherColor() const
-				throw();
+			const ColorRGBA& getOtherColor() const;
 
 			///
-			virtual void setTransparency(Size t)
-				throw();
+			virtual void setTransparency(Size t);
 
 			private:
 

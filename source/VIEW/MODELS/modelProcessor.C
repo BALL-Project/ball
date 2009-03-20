@@ -16,7 +16,6 @@ namespace BALL
 	{
 
 		ModelProcessor::ModelProcessor()
-			throw()
 			: UnaryProcessor<Composite>(),
 				PropertyManager(),
 				drawing_precision_(DRAWING_PRECISION_HIGH),
@@ -25,7 +24,6 @@ namespace BALL
 		}
 
 		ModelProcessor::ModelProcessor(const ModelProcessor& model_processor)
-			throw()
 			: UnaryProcessor<Composite>(model_processor),
 				PropertyManager(model_processor),
 				drawing_precision_(model_processor.drawing_precision_),
@@ -34,13 +32,11 @@ namespace BALL
 		}
 
 		ModelProcessor::~ModelProcessor()
-			throw()
 		{
 			clear();
 		}
 
 		void ModelProcessor::clear()
-			throw()
 		{
 			PropertyManager::clear();
 			geometric_objects_.clear();
@@ -51,25 +47,21 @@ namespace BALL
 		}
 		
 		void ModelProcessor::setDrawingPrecision(Index precision)
-			throw() 
 		{ 
 			drawing_precision_ = precision;
 		}
 
 		Index ModelProcessor::getDrawingPrecision() const
-			throw() 
 		{ 
 			return drawing_precision_;
 		}
 
 		void ModelProcessor::setSurfaceDrawingPrecision(float precision)
-			throw() 
 		{ 
 			surface_drawing_precision_ = precision;
 		}
 
 		float ModelProcessor::getSurfaceDrawingPrecision() const
-			throw() 
 		{ 
 			return surface_drawing_precision_;
 		}

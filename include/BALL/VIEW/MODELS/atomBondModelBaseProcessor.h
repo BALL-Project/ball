@@ -46,18 +46,15 @@ namespace BALL
 			/** Default Constructor.
 					Clear all used Atom objects.
 			*/
-			AtomBondModelBaseProcessor()
-				throw();
+			AtomBondModelBaseProcessor();
 
 			/** Copy constructor.
 			*/
-			AtomBondModelBaseProcessor(const AtomBondModelBaseProcessor& baseProcessor)
-				throw();
+			AtomBondModelBaseProcessor(const AtomBondModelBaseProcessor& baseProcessor);
 
 			/** Destructor.
 			*/
-			virtual ~AtomBondModelBaseProcessor()
-				throw();
+			virtual ~AtomBondModelBaseProcessor();
 
 			/** Explicit default initialization.
 					Reset the state of this AtomBondModelBaseProcessor:
@@ -66,8 +63,7 @@ namespace BALL
 					Calls ModelProcessor::clear.
 					Calls clearUsedAtoms_().
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			//@} 
 			/**	@name	Assignment 
@@ -79,13 +75,11 @@ namespace BALL
 					Calls ModelProcessor::set.
 			*/
 			void set(const AtomBondModelBaseProcessor& processor)
-				throw();
 
 			/** Assignment operator.
 					Calls set.
 			*/
-			const AtomBondModelBaseProcessor& operator = (const AtomBondModelBaseProcessor& processor)
-				throw();
+			const AtomBondModelBaseProcessor& operator = (const AtomBondModelBaseProcessor& processor);
 
 			//@} 
 			/**	@name Processor specific methods 
@@ -113,16 +107,13 @@ namespace BALL
 					\param   s output stream where to output the state 
 					\param   depth the dumping depth
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 			///
-			virtual void clearComposites()
-				throw();
+			virtual void clearComposites();
 
 			/// 
-			virtual bool createGeometricObjects()
-				throw();
+			virtual bool createGeometricObjects();
 		
 			protected:
 
@@ -142,23 +133,19 @@ namespace BALL
 					of the Bond objects that can be reached from each inserted atom.
 					\param  atom the Atom object to inserted
 			*/
-			void insertAtom_(const Atom* atom)
-				throw();
+			void insertAtom_(const Atom* atom);
 
 			/** Clear all used atoms.
 			*/
-			void clearUsedAtoms_()
-				throw();
+			void clearUsedAtoms_();
 
 			/** Mutable inspection of the list of used atoms.
 			*/
-			List<const Atom*>& getAtomList_()
-				throw();
+			List<const Atom*>& getAtomList_();
 
 			/** Mutable inspection of the hash set of used atoms.
 			*/
-			HashSet<const Atom*>& getAtomSet_()
-				throw();
+			HashSet<const Atom*>& getAtomSet_();
 
 			/** Build the bond models.
 					This method is called from the finish method. It iterates over every Bond
@@ -169,11 +156,9 @@ namespace BALL
 
 			//@}
 			
-			virtual void visualiseBond_(const Bond& bond)
-				throw();
+			virtual void visualiseBond_(const Bond& bond);
 
-			virtual void visualiseRings_()
-				throw(){};
+			virtual void visualiseRings_(){};
 
 			vector<vector<Atom*> > rings_;
 			HashSet<const Atom*> ring_atoms_;

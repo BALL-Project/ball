@@ -62,18 +62,15 @@ class BALL_VIEW_EXPORT Message
 				-  sender    - set to 0
 				-  deletable - set to <tt> false</tt> 
 	*/
-	Message()
-		;
+	Message();
 
 	/** Copy constructor.
 	*/
-	Message(const Message& message)
-		;
+	Message(const Message& message);
 
 	/** Destructor.
 	*/
-	virtual ~Message()
-		;
+	virtual ~Message();
 
 	//@}
 	/**	@name	Accessors: inspectors and mutators 
@@ -85,16 +82,14 @@ class BALL_VIEW_EXPORT Message
 			by ConnectionObject::notify_.
 			\see         ConnectionObject::notify_
 	*/
-	void setSender(const ConnectionObject* sender)
-		;
+	void setSender(const ConnectionObject* sender);
 
 	/** Non-mutable inspection of the sender.
 			This method will be used internally
 			by ConnectionObject::onNotify.
 			\see         ConnectionObject::onNotify
 	*/
-	const ConnectionObject* getSender() const
-		;
+	const ConnectionObject* getSender() const;
 
 	/** Change the deletable flag.
 			If the parameter <b> flag</b> is set to <tt> true</tt> the message is set to deletable
@@ -107,13 +102,11 @@ class BALL_VIEW_EXPORT Message
 			segmentation faults.
 			\param       flag the new deletable state of this message
 	*/
-	void setDeletable(bool flag = true)
-		;
+	void setDeletable(bool flag = true);
 
 	/** Test if this message is deletable.
 	*/
-	bool isDeletable() const
-		;
+	bool isDeletable() const;
 	//@}
 
 	private:
@@ -245,20 +238,16 @@ class BALL_VIEW_EXPORT CompositeMessage
 				-  composite       - set to 0
 				-  composite name  - set to "" 
 	*/
-	CompositeMessage()
-		;
+	CompositeMessage();
 
 	///
-	CompositeMessage(const Composite& composite, CompositeMessageType type, bool update_representations = true)
-		;
+	CompositeMessage(const Composite& composite, CompositeMessageType type, bool update_representations = true);
 
 	/// Copy constructor.
-	CompositeMessage(const CompositeMessage& message)
-		;
+	CompositeMessage(const CompositeMessage& message);
 
 	/// Destructor.
-	virtual ~CompositeMessage()
-		;
+	virtual ~CompositeMessage();
 
 	//@}
 	/**	@name	Accessors: inspectors and mutators 
@@ -267,24 +256,20 @@ class BALL_VIEW_EXPORT CompositeMessage
 	
 	/** Change the composite.
 	*/
-	void setComposite(const Composite& composite)
-		;
+	void setComposite(const Composite& composite);
 
 	/** Inspection of the composite.
 	*/
-	Composite* getComposite() const
-		;
+	Composite* getComposite() const;
 
 	/** Change the name of the composite.
 			\param       name the new name of the composite of this compositeMessage
 	*/
-	void setCompositeName(const String& name)
-		;
+	void setCompositeName(const String& name);
 
 	/** Inspection of the name of the composite.
 	*/
-	const String& getCompositeName() const
-		;
+	const String& getCompositeName() const;
 
 	///
 	void setType(CompositeMessageType type)
@@ -385,18 +370,15 @@ class BALL_VIEW_EXPORT SceneMessage: public Message
 				-  camera - set to defaults
 			\par
 	*/
-	SceneMessage(SceneMessageType type = UNDEFINED)
-		;
+	SceneMessage(SceneMessageType type = UNDEFINED);
 
 	/** Copy constructor.
 	*/
-	SceneMessage(const SceneMessage& message)
-		;
+	SceneMessage(const SceneMessage& message);
 
 	/** Destructor.
 	*/
-	virtual ~SceneMessage()
-		;
+	virtual ~SceneMessage();
 
 	//@}
 	/**	@name	Accessors: inspectors and mutators 
@@ -404,8 +386,7 @@ class BALL_VIEW_EXPORT SceneMessage: public Message
 	//@{
 	
 	/// Set the type of the Message
-	void setType(SceneMessageType type)
-		;
+	void setType(SceneMessageType type);
 
 	/// Get the type of the message
 	SceneMessageType getType() const
@@ -450,18 +431,15 @@ class BALL_VIEW_EXPORT GenericSelectionMessage: public Message
 			The state is set to:
 				-  composite list - empty
 	*/
-	GenericSelectionMessage()
-		;
+	GenericSelectionMessage();
 
 	/** Copy constructor.
 	*/
-	GenericSelectionMessage(const GenericSelectionMessage& message)
-		;
+	GenericSelectionMessage(const GenericSelectionMessage& message);
 
 	/** Destructor.
 	*/
-	virtual ~GenericSelectionMessage()
-		;
+	virtual ~GenericSelectionMessage();
 					
 	//@}
 	/**	@name	Accessors: inspectors and mutators 
@@ -471,18 +449,15 @@ class BALL_VIEW_EXPORT GenericSelectionMessage: public Message
 	/** Change the selection of Composite objects.
 			The selection list will be copied from the given list.
 	*/
-	void setSelection(const List<Composite*>& selection)
-		;
+	void setSelection(const List<Composite*>& selection);
 
 	/** Non-mutable inspection of the selection of Composite objects.
 	*/
-	const List<Composite*>& getSelection() const
-		;
+	const List<Composite*>& getSelection() const;
 
 	/** mutable inspection of the selection of Composite objects.
 	*/
-	List<Composite*>& getSelection()
-		;
+	List<Composite*>& getSelection();
 
 	//@}
 
@@ -500,8 +475,7 @@ class BALL_VIEW_EXPORT GenericSelectionMessage: public Message
 class BALL_VIEW_EXPORT ControlSelectionMessage: public GenericSelectionMessage
 {
 	public:
-	ControlSelectionMessage()
-		;
+	ControlSelectionMessage();
 };
 
 
@@ -510,8 +484,7 @@ class BALL_VIEW_EXPORT ControlSelectionMessage: public GenericSelectionMessage
 class BALL_VIEW_EXPORT NewSelectionMessage: public Message
 {
 	public:
-	NewSelectionMessage()
-		;
+	NewSelectionMessage();
 
 	/// Open all SelectableListViewItems, if they have a selected child
 	bool openItems()
@@ -539,13 +512,11 @@ class BALL_VIEW_EXPORT GeometricObjectSelectionMessage: public Message
 
 	/** Default Constructor.
 	*/
-	GeometricObjectSelectionMessage()
-		;
+	GeometricObjectSelectionMessage();
 
 	/** Destructor.
 	*/
-	virtual ~GeometricObjectSelectionMessage()
-		;
+	virtual ~GeometricObjectSelectionMessage();
 
 	//@}
 	/**	@name	Accessors: inspectors and mutators 
@@ -617,16 +588,13 @@ class BALL_VIEW_EXPORT RepresentationMessage: public Message
 	};
 
 	///
-	RepresentationMessage()
-		;
+	RepresentationMessage();
 	
 	///
-	virtual ~RepresentationMessage()
-		;
+	virtual ~RepresentationMessage();
 
 	///
-	RepresentationMessage(Representation& rep, RepresentationMessageType type)
-		;
+	RepresentationMessage(Representation& rep, RepresentationMessageType type);
 
 	///
 	void setRepresentation(Representation& rep)
@@ -637,8 +605,7 @@ class BALL_VIEW_EXPORT RepresentationMessage: public Message
 		 {return representation_;}
 
 	///
-	void setType(RepresentationMessageType type)
-		;
+	void setType(RepresentationMessageType type);
 
 	///
 	RepresentationMessageType getType() const
@@ -675,12 +642,10 @@ class BALL_VIEW_EXPORT MolecularTaskMessage
 	};
 
 	///
-	MolecularTaskMessage(MolecularTaskMessageType type = UNDEFINED)
-		;
+	MolecularTaskMessage(MolecularTaskMessageType type = UNDEFINED);
 
 	///
-	void setType(MolecularTaskMessageType type)
-		;
+	void setType(MolecularTaskMessageType type);
 
 	///
 	MolecularTaskMessageType getType() const
@@ -712,8 +677,7 @@ class BALL_VIEW_EXPORT CreateRepresentationMessage
 {
 	public:
 		///
-		CreateRepresentationMessage()
-			;
+		CreateRepresentationMessage();
 
 		///
 		CreateRepresentationMessage(const List<Composite*>& composites, 
@@ -759,12 +723,10 @@ class BALL_VIEW_EXPORT TransformationMessage
 	public:
 
 	///
-	TransformationMessage()
-		;
+	TransformationMessage();
 
 	///
-	TransformationMessage(const Matrix4x4& m)
-		;
+	TransformationMessage(const Matrix4x4& m);
 
 	///
 	void setMatrix(const Matrix4x4& m)
@@ -787,8 +749,7 @@ class BALL_VIEW_EXPORT FinishedSimulationMessage
 	public:
 
 	///
-	FinishedSimulationMessage()
-		;
+	FinishedSimulationMessage();
 };
 	
 
@@ -799,8 +760,7 @@ class BALL_VIEW_EXPORT SyncClippingPlanesMessage
 	public:
 
 	///
-	SyncClippingPlanesMessage()
-		 {};
+	SyncClippingPlanesMessage(){};
 };
 
 
@@ -811,8 +771,7 @@ class BALL_VIEW_EXPORT ShowHelpMessage
 	public:
 
 	///
-	ShowHelpMessage(String url = "", String project = "BALLView", String entry = "")
-		;
+	ShowHelpMessage(String url = "", String project = "BALLView", String entry = "");
 
 	String getURL() const { return url_;}
 
@@ -838,8 +797,7 @@ class BALL_VIEW_EXPORT RegisterHelpSystemMessage
 	public:
 
 	///
-	RegisterHelpSystemMessage()
-		;
+	RegisterHelpSystemMessage();
 
 	///
 	void setObject(const QObject* object) { object_ = object;}
@@ -875,16 +833,13 @@ class BALL_VIEW_EXPORT DockingFinishedMessage
 {
 	public:
 		///
-		DockingFinishedMessage()
-			;
+		DockingFinishedMessage();
 
 		///
-		DockingFinishedMessage(bool abort)
-			;
+		DockingFinishedMessage(bool abort);
 			 
 		///
-		virtual ~DockingFinishedMessage()
-			;
+		virtual ~DockingFinishedMessage();
 			
 		///
 		void setConformationSet(const ConformationSet* conformation_set)

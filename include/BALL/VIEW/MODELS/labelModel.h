@@ -61,36 +61,33 @@ namespace BALL
 
 			/** Default Constructor.
 			*/
-			LabelModel()
-				throw();
+			LabelModel();
 
 			/** Copy constructor.
 			*/
-			LabelModel(const LabelModel& model)
-				throw();
+			LabelModel(const LabelModel& model);
 
 			/** Destructor.
 			*/
-			virtual ~LabelModel()
-				throw();
+			virtual ~LabelModel();
 
 			///
-			void setFont(const QFont& font) throw() { font_ = font;} 
+			void setFont(const QFont& font) { font_ = font;} 
 
 			///
-			const QFont& getFont() const throw() { return font_;}
+			const QFont& getFont() const { return font_;}
 			
 			///
-			void setColor(const ColorRGBA& color) throw() { color_ = color;}
+			void setColor(const ColorRGBA& color) { color_ = color;}
 
 			///
-			const ColorRGBA& getColor() const throw() { return color_;}
+			const ColorRGBA& getColor() const { return color_;}
 
 			///
-			void setMode(Mode mode) throw() { mode_ = mode;}
+			void setMode(Mode mode) { mode_ = mode;}
 
 			///
-			Mode getType() const throw() { return mode_;}
+			Mode getType() const { return mode_;}
 
 			///
 			void setText(const String& text) { text_ = text;}
@@ -109,8 +106,7 @@ namespace BALL
 			virtual Processor::Result operator() (Composite& composite);
 						
 			///
-			virtual bool createGeometricObjects() 
-				throw();
+			virtual bool createGeometricObjects();
 			//@}
 
 			protected:

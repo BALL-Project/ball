@@ -18,7 +18,6 @@ namespace BALL
 	{
 
 FileObserver::FileObserver(QWidget *parent, const char *name)
-	throw()
 	: DockWidget(parent, name)
 {
  	hide();
@@ -29,7 +28,6 @@ FileObserver::FileObserver(QWidget *parent, const char *name)
 }
 
 FileObserver::~FileObserver()
-	throw()
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "Destructing object " << (void *)this 
@@ -110,7 +108,6 @@ void FileObserver::setUpdateInterval(Size msec)
 }
 
 void FileObserver::initializeWidget(MainControl&)
-	throw()
 {
 	start_action_ = 
 		insertMenuEntry(MainControl::FILE_MONITOR, "Monitor Molecular File", this, SLOT(chooseFile()));
@@ -141,7 +138,6 @@ void FileObserver::chooseFile()
 }
 
 void FileObserver::checkMenu(MainControl& main_control)
-	throw()
 {
 	stop_action_->setEnabled(timer_.isActive());
 	start_action_->setEnabled(!main_control.isBusy());

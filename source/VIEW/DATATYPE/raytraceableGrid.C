@@ -17,7 +17,6 @@ namespace BALL
 		}
 
 		float RaytraceableGrid::getGridMinValue()
-			throw()
 		{
 			float current_min = std::numeric_limits<float>::max(); 
 			if (grid_ != 0)
@@ -36,7 +35,6 @@ namespace BALL
 		}
 		
 		float RaytraceableGrid::getGridMaxValue()
-			throw()
 		{
 			float current_max = std::numeric_limits<float>::min(); 
 			if (grid_ != 0)

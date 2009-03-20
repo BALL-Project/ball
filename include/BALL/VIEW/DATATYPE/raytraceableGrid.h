@@ -19,26 +19,23 @@ namespace BALL
 		{
 			public:
 				RaytraceableGrid() 
-					throw()
 				{ 
 					grid_ = 0; 
 				}
 
 				RaytraceableGrid(RegularData3D* grid) 
-					throw()
 				{ 
 					grid_ = grid; 
 				}
 
 				// Note: the grid_ - ptr is handled by the calling classes and we must not destroy it!
 				virtual ~RaytraceableGrid() 
-					throw()
 				{}
 
 				
-				float getGridMinValue() throw();
+				float getGridMinValue();
 				
-				float getGridMaxValue() throw();
+				float getGridMaxValue();
 
 				void binaryWrite(const String& filename) const throw(Exception::FileNotFound);
 

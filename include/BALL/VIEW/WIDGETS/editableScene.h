@@ -62,20 +62,16 @@ class BALL_VIEW_EXPORT EditableScene
 		public:
 
 		/// Constructor
-		EditOperation()
-			throw();
+		EditOperation();
 
 		///
-		EditOperation(Atom* atom, Bond* bond, String description= "Added Object", int operation=0)
-			throw();
+		EditOperation(Atom* atom, Bond* bond, String description= "Added Object", int operation=0);
 
 		///
-		EditOperation(const EditOperation& eOperation)
-			throw();
+		EditOperation(const EditOperation& eOperation);
 
 		/// Destructor.
-		virtual ~EditOperation()
-			throw();
+		virtual ~EditOperation();
 
 		///
 		enum OperationType
@@ -104,47 +100,37 @@ class BALL_VIEW_EXPORT EditableScene
 	};
 
 	///
-	EditableScene()
-		throw();
+	EditableScene();
 
 	/// Default Constructor
-	EditableScene(QWidget* parent_widget, const char* name = NULL, Qt::WFlags w_flags = 0)
-		throw();
+	EditableScene(QWidget* parent_widget, const char* name = NULL, Qt::WFlags w_flags = 0);
 
 	/// Copy constructor.
-	EditableScene (const EditableScene& eScene, QWidget* parent_widget = NULL, const char* name = NULL, Qt::WFlags wflags = 0)
-		throw();
+	EditableScene (const EditableScene& eScene, QWidget* parent_widget = NULL, const char* name = NULL, Qt::WFlags wflags = 0);
 
 	/// Destructor.
-	virtual ~EditableScene()
-		throw();
+	virtual ~EditableScene();
 
 	///
-	void initializeWidget(MainControl& main_control)
-		throw();
+	void initializeWidget(MainControl& main_control);
 
 	///
-	void checkMenu(MainControl& main_control)
-		throw();
+	void checkMenu(MainControl& main_control);
 
 	///
-	void initializePreferencesTab(Preferences &preferences)
-		throw();
+	void initializePreferencesTab(Preferences &preferences);
 	
 	///
-	void finalizePreferencesTab(Preferences &preferences)
-		throw();
+	void finalizePreferencesTab(Preferences &preferences);
 
 	///
-	virtual void applyPreferences()
-		throw();
+	virtual void applyPreferences();
 	
 	///
 	void showContextMenu(QPoint pos);
 
 	///
-	virtual void setMode(ModeType mode)
-		throw();
+	virtual void setMode(ModeType mode);
 
 	void addStructure(String name);
 
@@ -201,8 +187,7 @@ class BALL_VIEW_EXPORT EditableScene
 	virtual void mouseDoubleClickEvent(QMouseEvent* e);
 	virtual bool reactToKeyEvent_(QKeyEvent* e);
 
-	virtual void onNotify(Message *message)
-		throw();
+	virtual void onNotify(Message *message);
 
 	/**
 	 * Insert a given Atom in the Scene. Its position is specified by the 2-dim 

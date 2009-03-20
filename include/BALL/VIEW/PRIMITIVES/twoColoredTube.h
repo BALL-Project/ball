@@ -69,16 +69,14 @@ namespace BALL
 					\see         ColorExtension2
 					\see         Vertex2
 			*/
-			TwoColoredTube()
-				throw();
+			TwoColoredTube();
 
 			/** Copy constructor with cloning facility.
 					\see         GeometricObject
 					\see         ColorExtension2
 					\see         Vertex2
 			*/
-			TwoColoredTube(const TwoColoredTube& two_colored_tube)
-				throw();
+			TwoColoredTube(const TwoColoredTube& two_colored_tube);
 
 			//@}
 			/** @name Destructors */
@@ -87,8 +85,7 @@ namespace BALL
 			/** Destructor.
 					Default destruction of this twoColoredTube.
 			*/
-			virtual ~TwoColoredTube()
-				throw();
+			virtual ~TwoColoredTube();
 
 			/** Explicit default initialization.
 					Calls GeometricObject::clear.
@@ -99,8 +96,7 @@ namespace BALL
 					\see  Radius::clear
 					\see  Vertex2::clear
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 			
 			//@}
 			/**	@name	Assignment methods */
@@ -111,19 +107,16 @@ namespace BALL
 					Calls ColorExtension2::set.
 					Calls Vertex2::set.
 			*/
-			void set(const TwoColoredTube& two_colored_tube)
-				throw();
+			void set(const TwoColoredTube& two_colored_tube);
 
 			/** Assignment operator.
 					\see         set
 			*/
-			const TwoColoredTube& operator = (const TwoColoredTube& two_colored_tube)
-				throw();
+			const TwoColoredTube& operator = (const TwoColoredTube& two_colored_tube);
 
 			/** Swapping of two_colored_tube's.
 			*/
-			void swap(TwoColoredTube& two_colored_tube)
-				throw();
+			void swap(TwoColoredTube& two_colored_tube);
 
 			//@}
 			/**	@name	Accessors: inspectors and mutators 
@@ -134,8 +127,7 @@ namespace BALL
 					Access the length of this tube.
 					\return  float the length of this tube
 			*/
-			float getLength() const
-				throw();
+			float getLength() const;
 
 			/** Inspection of the middle vector.
 					Access the geometric middle vertex between vertex1 and vertex2 of
@@ -143,8 +135,7 @@ namespace BALL
 					\return. Vector3 the middle vertex between vertex1 and vertex 2.
 					\see     Vector3
 			*/
-			Vector3 getMiddleVertex() const
-				throw();
+			Vector3 getMiddleVertex() const;
 
 			//@}
 			/**	@name	debuggers and diagnostics
@@ -162,8 +153,7 @@ namespace BALL
 											is correct (self-validated) and consistent, <tt> false</tt> otherwise
 					\see        GeometricObject::isValid
 			*/
-			virtual bool isValid() const
-				throw();
+			virtual bool isValid() const;
 
 			/** Internal value dump.
 					Dump the current value of this twoColoredTube to 
@@ -179,8 +169,7 @@ namespace BALL
 					\see        Radius::dump
 					\see        Vertex2::dump
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 			//@}
 			/**	@name	Storers */
@@ -188,11 +177,11 @@ namespace BALL
 
 			///	Get the radius.
 			float getRadius() const
-				throw() { return radius_;}
+				{ return radius_;}
 
 			/// Set the radius.
 			void setRadius(float radius)
-				throw() { radius_ = radius;}
+				{ radius_ = radius;}
 			
 			// Method to get all vertices from a geometric object
 			virtual void getVertices(vector<Vector3>& vertices) const;

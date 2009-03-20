@@ -17,7 +17,6 @@ namespace BALL
 	{
 
 		LabelModel::LabelModel()
-			throw()
 			: ModelProcessor(),
 				font_("Helvetica", 12),
 				color_(),
@@ -28,7 +27,6 @@ namespace BALL
 		}
 
 		LabelModel::LabelModel(const LabelModel& model)
-			throw()
 			: ModelProcessor(model),
 				font_(model.font_),
 				color_(model.color_),
@@ -38,7 +36,6 @@ namespace BALL
 		}
 
 		LabelModel::~LabelModel()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "Destructing object " << this << " of class LabelModel" << std::endl;
@@ -92,7 +89,6 @@ namespace BALL
 		}
 
 		bool LabelModel::createGeometricObjects() 
-			throw()
 		{
 			if (mode_ != ONE_LABEL || nr_objects_ == 0) return true;
 

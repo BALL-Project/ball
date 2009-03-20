@@ -15,12 +15,10 @@ namespace BALL
 	{
 
 		ModelInformation::ModelInformation()
-			throw()
 		{
 		}
 
 		ModelInformation::~ModelInformation()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << (void *)this 
@@ -30,7 +28,6 @@ namespace BALL
 
 
 		String ModelInformation::getModelName(ModelType type) const
-			throw()
 		{
 			switch (type)
 			{
@@ -75,7 +72,6 @@ namespace BALL
 		}
 
 		String ModelInformation::getColoringName(ColoringMethod type) const
-			throw()
 		{
 			switch (type)
 			{
@@ -113,7 +109,6 @@ namespace BALL
 
 
 		bool ModelInformation::isSurfaceModel(ModelType type) const
-			throw()
 		{
 			if (type == MODEL_SE_SURFACE || 
 					type == MODEL_SA_SURFACE ||
@@ -127,7 +122,6 @@ namespace BALL
 
 
 		bool ModelInformation::modelMustBeRebuild(ModelType type) const
-			throw()
 		{
 			return (type == MODEL_SE_SURFACE ||
 							type == MODEL_SA_SURFACE ||
@@ -140,13 +134,11 @@ namespace BALL
 		}
 
 		bool ModelInformation::modelMuteableByDisplayProperties(ModelType type) const
-			throw()
 		{ 
 			return type <= MODEL_FORCES;
 		}
 
 		bool ModelInformation::coloringMuteableByDisplayProperties(ColoringMethod type) const
-			throw()
 		{ 
 			return type <= COLORING_CUSTOM;
 		}

@@ -20,7 +20,6 @@ namespace BALL
 	{
 
 		ModularWidget::ModularWidget(const char* name)
-			throw()
 			: Embeddable(),
 				ConnectionObject(),
 				window_menu_entry_(0),
@@ -32,7 +31,6 @@ namespace BALL
 		}
 
 		ModularWidget::ModularWidget(const ModularWidget& widget)
-			throw()
 			: Embeddable(widget),
 				ConnectionObject(widget),
 				last_action_(0)
@@ -40,7 +38,6 @@ namespace BALL
 		}
 
 		ModularWidget::~ModularWidget()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << (void *)this 
@@ -54,7 +51,6 @@ namespace BALL
 		}
 
 		void ModularWidget::clear()
-			throw()
 		{
 		}
 
@@ -101,22 +97,18 @@ namespace BALL
 		}
 
 		void ModularWidget::checkMenu(MainControl& /* main_control */)
-			throw()
 		{
 		}
 
 		void ModularWidget::initializePreferencesTab(Preferences & /* preferences */)
-			throw()
 		{
 		}
 
 		void ModularWidget::finalizePreferencesTab(Preferences & /* preferences */)
-			throw()
 		{
 		}
 
 		void ModularWidget::fetchPreferences(INIFile& inifile)
-			throw()
 		{
 			QWidget* widget= dynamic_cast<QWidget*>(this);
 			if (!widget) return;
@@ -140,7 +132,6 @@ namespace BALL
 		}
 
 		void ModularWidget::writePreferences(INIFile& inifile)
-			throw()
 		{
 			QWidget* widget= dynamic_cast<QWidget*>(this);
 			if (!widget) return;
@@ -161,50 +152,43 @@ namespace BALL
 		}
 
 		void ModularWidget::setStatusbarText(String text, bool important)
-			throw()
 		{
 			if (getMainControl() == 0) return;
 			getMainControl()->setStatusbarText(text, important);
 		}
 
 		MainControl* ModularWidget::getMainControl() const
-			throw()
-		{ 
+		{
 			if (getParent() == 0) return VIEW::getMainControl();
-			
+
 			ConnectionObject* root = (const_cast<ModularWidget*>(this))->getRoot();
-			
+
 			if (!RTTI::isKindOf<MainControl>(*root)) return VIEW::getMainControl();
 
 			return (dynamic_cast<MainControl*>(root));
 		}
 
 		FragmentDB& ModularWidget::getFragmentDB() const
-			throw()
 		{
 			return * const_cast<FragmentDB*>(&getMainControl()->getFragmentDB());
 		}
 
 		void ModularWidget::dump(ostream& s, Size depth) const
-			throw()
 		{
 			ConnectionObject::dump(s, depth);
 		}
 
 		String ModularWidget::getWorkingDir()
-			throw() 
 		{ 
 			return getMainControl()->getWorkingDir();
 		}
 
 		void ModularWidget::setWorkingDir(const String& dir)
-			throw() 
 		{ 
 			getMainControl()->setWorkingDir(dir);
 		}
 
 		void ModularWidget::setWorkingDirFromFilename_(String filename)
-			throw()
 		{
 			String separators(FileSystem::PATH_SEPARATOR );
 			// workaround on windows: QT returns the filename in linux style
@@ -221,14 +205,12 @@ namespace BALL
 		}
 
 		bool ModularWidget::lockComposites()
-			throw()
 		{
 			if (getMainControl() == 0) return false;
 			return getMainControl()->lockCompositesFor(this);
 		}
 
 		bool ModularWidget::unlockComposites()
-			throw()
 		{
 			if (getMainControl() == 0) return false;
 			return getMainControl()->unlockCompositesFor(this);
@@ -237,7 +219,6 @@ namespace BALL
 		QAction* ModularWidget::insertMenuEntry(Position menu_id, const String& name, 
 												const QObject* receiver, const char* slot, const String& description,
 												QKeySequence shortcut)
-			throw()
 		{
 			if (getMainControl() == 0) return 0;
 

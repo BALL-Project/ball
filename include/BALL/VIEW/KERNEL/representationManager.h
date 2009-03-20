@@ -74,18 +74,15 @@ namespace BALL
 			/** Default Constructor
 			 		The MainControl is needed for sending Messages.
 			*/
-			RepresentationManager(MainControl* mc = 0)
-				throw();
+			RepresentationManager(MainControl* mc = 0);
 
 			/** Copy constructor
 			*/
-			RepresentationManager(const RepresentationManager& pm)
-				throw();
+			RepresentationManager(const RepresentationManager& pm);
 
 			/** Destructor
 			*/
-			virtual ~RepresentationManager()
-				throw();
+			virtual ~RepresentationManager();
 
 			//@}
 			/**	@name	Accessors
@@ -93,16 +90,13 @@ namespace BALL
 			//@{
 			
 			///
-			const RepresentationManager& operator = (const RepresentationManager& pm)
-				throw();
+			const RepresentationManager& operator = (const RepresentationManager& pm);
 
 			///
-			bool operator == (const RepresentationManager& pm) const
-				throw();
+			bool operator == (const RepresentationManager& pm) const;
 			
 			/// Clears also the representations
-			void clear()
-				throw();
+			void clear();
 
 			/** Delete a representation.
 					It will be removed from the list of representations, 
@@ -110,51 +104,46 @@ namespace BALL
 					If send_message is set to true, a RepresentationMessage with
 					type REMOVE is send to notify all ModularWidget's.
 			*/
-			bool remove(Representation& representation, bool send_message = true)
-				throw();
+			bool remove(Representation& representation, bool send_message = true);
 
 			/** Insert a Representation
 					If send_message is set to true, a RepresentationMessage with
 					type ADD is send to notify all ModularWidget's.
 			*/
-			bool insert(Representation& representation, bool send_message = true)
-				throw();
+			bool insert(Representation& representation, bool send_message = true);
 
 			/// Get the list with the Representations
 			const RepresentationList& getRepresentations() const
-				throw() { return representations_;}
+				{ return representations_;}
 
 			/// Get the number of the Representations
 			Size getNumberOfRepresentations() const
-				throw() { return representations_.size();}
+				{ return representations_.size();}
 
 			/// Create a Representation and insert it
-			Representation* createRepresentation()
-				throw();
+			Representation* createRepresentation();
 
 			/// Test if a Representation is inserted
-			bool has(const Representation& representation) const
-				throw();
+			bool has(const Representation& representation) const;
 			
 			/// Dump the internal state to an output stream
-			void dump(std::ostream& s, Size depth = 0) const
-				throw();
+			void dump(std::ostream& s, Size depth = 0) const;
 
 			/// Iterator to the first Representation
 			RepresentationsIterator begin() 
-				throw() { return representations_.begin();}
+				{ return representations_.begin();}
 
 			/// ConstIterator to the first Representation
 			RepresentationsConstIterator begin() const
-				throw() { return representations_.begin();}
+				{ return representations_.begin();}
 			
 			/// Iterator pointing behind the last Representation
 			RepresentationsIterator end() 
-				throw() { return representations_.end();}
+				{ return representations_.end();}
 
 			/// Const Iterator pointing behind the last Representation
 			RepresentationsConstIterator end() const
-				throw() { return representations_.end();}
+				{ return representations_.end();}
 
 			/** Clean up after a Composite was removed.
 			 		Method is called in MainControl, after removal of
@@ -163,19 +152,16 @@ namespace BALL
 					It can also update all Representations, which have still have other Composites than the one to be deleted.
 					\return a list with the pointers of all removed representations.
 			*/
-			RepresentationList removedComposite(const Composite& composite, bool update = true)
-				throw();
+			RepresentationList removedComposite(const Composite& composite, bool update = true);
 
 			/** Get a list of Representation, which were build for a Composite.
 			 		Method is called in MainControl, after receiving CompositeChangedMessage.
 					\return a list with the pointers of representations, which are to be updated.
 			*/
-			RepresentationList getRepresentationsOf(const Composite& composite)
-				throw();
+			RepresentationList getRepresentationsOf(const Composite& composite);
 
 			///
-			void rebuildAllRepresentations()
-				throw();
+			void rebuildAllRepresentations();
 
 			///
 			const vector<ClippingPlane*>& getClippingPlanes() const { return clipping_planes_;}
@@ -196,12 +182,10 @@ namespace BALL
 			void focusRepresentation(const Representation& rep);
 			
 			/// Return true if a Representation will be updated
-			bool willBeUpdated(const Representation& rep) const
-				throw();
+			bool willBeUpdated(const Representation& rep) const;
 
 			/// Return true, if a Representation is currently beeing updated
-			bool updateRunning() const 
-				throw();
+			bool updateRunning() const ;
 
 			///
 			bool startRendering(Representation* rep);
@@ -223,8 +207,7 @@ namespace BALL
 			 		Update of the Representation.
 					(Only used in Multithreaded code.)
 			*/
-			void update_(Representation& rep)
-				throw();
+			void update_(Representation& rep);
 
 			//_ List with all representations
 			RepresentationList representations_;

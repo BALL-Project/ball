@@ -39,88 +39,85 @@ namespace BALL
 			BALL_CREATE(AddCartoonModel)
 
 			/// Default Constructor.
-			AddCartoonModel()
-				throw();
+			AddCartoonModel();
 
 			/// Copy constructor.
-			AddCartoonModel(const AddCartoonModel& cartoon_model)
-				throw();
+			AddCartoonModel(const AddCartoonModel& cartoon_model);
 
 			/// Destructor.
-			virtual ~AddCartoonModel()
-				throw();
+			virtual ~AddCartoonModel();
 
 			///
 			void setHelixRadius(float radius)
-				throw() { helix_radius_ = radius;}
+				{ helix_radius_ = radius;}
 
 			///
 			float getHelixRadius() const
-				throw() { return helix_radius_;}
+				{ return helix_radius_;}
 
 			///
 			void setArrowWidth(float width)
-				throw() {arrow_width_ = width;}
+				{arrow_width_ = width;}
 
 			///
 			float getArrowWidth() const
-				throw() { return arrow_width_;}
+				{ return arrow_width_;}
 
 			///
 			void setStrandHeight(float heigth)
-				throw() { strand_height_ = heigth;}
+				{ strand_height_ = heigth;}
 
 			///
 			float getStrandHeight() const
-				throw() { return strand_height_;}
+				{ return strand_height_;}
 			
 			///
 			void setStrandWidth(float w)
-				throw() { strand_width_ = w;}
+				{ strand_width_ = w;}
 
 			///
 			float getStrandWidth() const
-				throw() { return strand_width_;}
+				{ return strand_width_;}
 
 			///
 			void setDNABaseRadius(float r)
-				throw() { DNA_base_radius_ = r;}
+				{ DNA_base_radius_ = r;}
 
 			///
 			float getDNABaseRadius() const
-				throw() { return DNA_base_radius_;}
+				{ return DNA_base_radius_;}
 
 			///
 			void setDNAHelixRadius(float r)
-				throw() { DNA_helix_radius_ = r;}
+				{ DNA_helix_radius_ = r;}
 
 			///
 			float getDNAHelixRadius() const
-				throw() { return DNA_helix_radius_;}
+				{ return DNA_helix_radius_;}
 
 			///
 			void setDNALadderRadius(float r)
-				throw() { DNA_ladder_radius_ = r;}
+				{ DNA_ladder_radius_ = r;}
 
 			///
 			float getDNALadderRadius() const
-				throw() { return DNA_ladder_radius_;}
+				{ return DNA_ladder_radius_;}
 
 			///
 			void setDrawDNAAsLadderModel(bool state)
-				throw() { draw_DNA_as_ladder_ = state;}
+				{ draw_DNA_as_ladder_ = state;}
 
 			///
 			bool drawDNAAsLadderModel()
-				throw() { return draw_DNA_as_ladder_;}
+				{ return draw_DNA_as_ladder_;}
 
 			///
 			void enableRibbons(bool state)
-				throw() { draw_ribbon_ = state;}
+				{ draw_ribbon_ = state;}
 
 			///
 			bool ribbonsEnabled() const
-				throw() {return draw_ribbon_;}
+				{return draw_ribbon_;}
 			
 			protected:
 
@@ -132,10 +129,9 @@ namespace BALL
 															 Position& last_vertices,
 															 Mesh& mesh);
 
-			void calculateComplementaryBases_(const Composite& composite) throw();
+			void calculateComplementaryBases_(const Composite& composite);
 
-			bool assignNucleotideAtoms_(Residue& r, Size nr_atoms, String atom_names[10], Atom* atoms[10])
-				throw();
+			bool assignNucleotideAtoms_(Residue& r, Size nr_atoms, String atom_names[10], Atom* atoms[10]);
 
 			void drawRiboseAtoms_(const Atom* atom1, const Atom* atom2, const Vector3& v1, const Vector3& v2);
 

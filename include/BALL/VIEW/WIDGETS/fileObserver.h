@@ -43,20 +43,16 @@ namespace BALL
 			BALL_EMBEDDABLE(FileObserver,DockWidget)
 		
 			///
-			FileObserver(QWidget *parent = 0, const char *name = 0)
-				throw();
+			FileObserver(QWidget *parent = 0, const char *name = 0);
 
 			///
-			virtual ~FileObserver()
-				throw();
+			virtual ~FileObserver();
 
 			//
-			virtual void initializeWidget(MainControl& main_control)
-				throw();
+			virtual void initializeWidget(MainControl& main_control);
 			
 			//
-			virtual void checkMenu(MainControl& main_control)
-				throw();
+			virtual void checkMenu(MainControl& main_control);
 
 			/// Set the name of the molecular file to be observed
 			void setFileName(String filename);

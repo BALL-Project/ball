@@ -154,8 +154,7 @@ namespace BALL
 					\param   s output stream where to output the internal state 
 					\param   depth the dumping depth
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 			protected:
 

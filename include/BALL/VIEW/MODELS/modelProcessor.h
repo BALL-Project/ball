@@ -47,59 +47,51 @@ namespace BALL
 				BALL_CREATE(ModelProcessor)
 				
 				///
-				ModelProcessor()
-					throw();
+				ModelProcessor();
 
 				///
-				ModelProcessor(const ModelProcessor& model_processor)
-					throw();
+				ModelProcessor(const ModelProcessor& model_processor);
 
 				/** Destructor, calls clear
 				*/
-				virtual ~ModelProcessor()
-					throw();
+				virtual ~ModelProcessor();
 
 				/// Clear all datastructures, but dont destroy the geometric objects.
-				virtual void clear()
-					throw();
+				virtual void clear();
 
 				///
 				virtual bool isValid() const
-					throw() {return true;};
+					{return true;};
 
  				/** Needed in derived classes, which store references to the Composite instances they worked on.
 				 		Here only needed for a common interface and therefore empty.
 				*/
 				virtual void clearComposites()
-					throw() {}
+					{};
 
 				///
 				virtual void dump(std::ostream& /*s = std::cout*/, Size /*depth = 0*/) const
-					throw(){};
+					{};
 
 				/// Return the list with the created geometric objects
 				GeometricObjectList& getGeometricObjects() 
-					throw() { return geometric_objects_;}
+					{ return geometric_objects_;}
 				
 				/// Return the list with the created geometric objects
 				const GeometricObjectList& getGeometricObjects() const
-					throw() { return geometric_objects_;}
+					{ return geometric_objects_;}
 				
 				///
-				void setDrawingPrecision(Index precision)
-					throw();
+				void setDrawingPrecision(Index precision);
 
 				///
-				Index getDrawingPrecision() const
-					throw();
+				Index getDrawingPrecision() const;
 
 				///
-				void setSurfaceDrawingPrecision(float precision)
-					throw();
+				void setSurfaceDrawingPrecision(float precision);
 
 				///
-				float getSurfaceDrawingPrecision() const
-					throw();
+				float getSurfaceDrawingPrecision() const;
 
 				/** Method to create geometric objects.
 				 		This method is called in Representation::update() after
@@ -107,7 +99,7 @@ namespace BALL
 				 		To be overloaded in derived classes
 				*/
 				virtual bool createGeometricObjects() 
-					throw() { return true;}
+					{ return true;}
 				
 				protected:
 				

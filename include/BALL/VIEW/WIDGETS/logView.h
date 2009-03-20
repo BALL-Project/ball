@@ -79,31 +79,26 @@ namespace BALL
 					by this logView. 
 					\see         BALL::LogStream
 			*/
-			LogView(QWidget *parent = 0, const char *name = 0)
-				throw();
+			LogView(QWidget *parent = 0, const char *name = 0);
 
 			/** Copy constructor.
 				 	Only for Python Interface
 					The text of <b> view</b> will be copied into this logView.
 			*/
-			LogView(const LogView& view)
-				throw();
+			LogView(const LogView& view);
 
 			/** Destructor.
 					Calls  clear.
 			*/
-			virtual ~LogView()
-				throw();
+			virtual ~LogView();
 
 			/**	Setup the menu entry in "Edit->Clear Logs".
 			*/
-			virtual void initializeWidget(MainControl& main_control)
-				throw();
+			virtual void initializeWidget(MainControl& main_control);
 
 			/**	Remove menu entries.
 			*/
-			virtual void finalizeWidget(MainControl& main_control)
-				throw();
+			virtual void finalizeWidget(MainControl& main_control);
 
 			// output a string
 			void logString(const String& text);

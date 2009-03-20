@@ -15,14 +15,12 @@ namespace BALL
 	{
 
 		Vertex::Vertex()
-			throw()
 			:	vertex1_(),
 				vertex1_ptr_(&vertex1_)
 		{
 		}
 
 		Vertex::Vertex(const Vertex& v)
-			throw()
 			:	vertex1_(v.vertex1_),
 				vertex1_ptr_(v.vertex1_ptr_)
 		{
@@ -37,7 +35,6 @@ namespace BALL
 		}
 
 		Vertex::~Vertex()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this << " of class " << RTTI::getName<Vertex>() << endl;
@@ -45,21 +42,18 @@ namespace BALL
 		}
 
 		void Vertex::clear()
-			throw()
 		{
 			vertex1_.set(0.0);
 			vertex1_ptr_ = &vertex1_;
 		}
 
 		void Vertex::set(const Vertex& v)
-			throw()
 		{
 			vertex1_.set(v.vertex1_);
 			vertex1_ptr_ = v.vertex1_ptr_;
 		}
 
 		const Vertex& Vertex::operator = (const Vertex& v)
-			throw()
 		{
 			set(v);
 
@@ -67,7 +61,6 @@ namespace BALL
 		}
 
 		void Vertex::swap(Vertex& v)
-			throw()
 		{
 			Vector3 *tmp_vector = vertex1_ptr_;
 
@@ -95,13 +88,11 @@ namespace BALL
 		}
 
 		bool Vertex::isValid() const
-			throw()
 		{
 			return vertex1_.isValid();
 		}
 
 		void Vertex::dump(ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

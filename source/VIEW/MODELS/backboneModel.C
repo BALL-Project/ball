@@ -40,7 +40,6 @@ AddBackboneModel::ModelPart::ModelPart(const ModelPart& m)
 }
 
 const AddBackboneModel::ModelPart& AddBackboneModel::ModelPart::operator = (const AddBackboneModel::ModelPart& m)
-	throw()
 {
 	residues = m.residues;
 	type = m.type;
@@ -53,7 +52,6 @@ const AddBackboneModel::ModelPart& AddBackboneModel::ModelPart::operator = (cons
 
 
 AddBackboneModel::AddBackboneModel()
-	throw()
 	: ModelProcessor(),
 		tube_radius_(0.4),
 		interpolation_steps_(9),
@@ -67,7 +65,6 @@ AddBackboneModel::AddBackboneModel()
 }
 
 AddBackboneModel::AddBackboneModel(const AddBackboneModel& bm)
-	throw()
 	:	ModelProcessor(bm),
 		tube_radius_(bm.tube_radius_),
 		interpolation_steps_(bm.interpolation_steps_)
@@ -75,7 +72,6 @@ AddBackboneModel::AddBackboneModel(const AddBackboneModel& bm)
 }
 
 AddBackboneModel::~AddBackboneModel()
-	throw()
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "Destructing object of class AddBackboneModel" << endl;
@@ -83,7 +79,6 @@ AddBackboneModel::~AddBackboneModel()
 }
 
 void AddBackboneModel::clear()
-	throw()
 {
 	ModelProcessor::clear();
 	tube_radius_ = 0.4;
@@ -262,7 +257,6 @@ bool AddBackboneModel::collectPositions(vector<Residue*> residues)
 }
 
 void AddBackboneModel::dump(std::ostream& s, Size depth) const
-	throw()
 {
 	BALL_DUMP_STREAM_PREFIX(s);
 	BALL_DUMP_DEPTH(s, depth);
@@ -463,7 +457,6 @@ void AddBackboneModel::clear_()
 }
 
 bool AddBackboneModel::createGeometricObjects()
-	throw()
 {
 	if (model_parts_.size() == 0 || 
 			model_parts_.size() != ss_.size() ||
@@ -1297,7 +1290,6 @@ void AddBackboneModel::calculateRibbonPoints_(Vector3 right, Vector3 dir, vector
 }
 
 bool AddBackboneModel::start()
-	throw()
 {
 	middle_ribbon_ = (number_of_ribbons_ - 1) /  2;
 	// calculate the number of slides for the circle and the angle in between them

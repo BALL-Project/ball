@@ -67,12 +67,11 @@ namespace BALL
 
 			/** Destructor
 			*/
-			virtual ~Renderer() throw() {}
+			virtual ~Renderer() {}
 
 			/** Explicit default initialization.
 			*/
-			virtual void clear()
-				throw() {}
+			virtual void clear(){}
 
 			/** Initialization routines.
 			 		This method is called by Scene::initializeGL.
@@ -114,8 +113,7 @@ namespace BALL
 			bool isContinuous() { return use_continuous_loop_; }
 
 			///
-			virtual bool finish()
-				throw();
+			virtual bool finish();
 
 			//@}
 			/**	@name	Accessors
@@ -124,8 +122,7 @@ namespace BALL
 			
 			/** Render a Representation.
 			*/
-			virtual bool renderOneRepresentation(const Representation& representation)
-				throw();
+			virtual bool renderOneRepresentation(const Representation& representation);
 
 
 			/** Buffer a Representation for later rendering.
@@ -139,16 +136,15 @@ namespace BALL
 			/** Get the stage for the renderer (const)
 			 */
 			virtual const Stage& getStage() const
-				throw() { return *stage_;}
+				{ return *stage_;}
 			
 			/** Set the stage for the renderer
 			 */
 			virtual void setStage(const Stage& stage)
-				throw() { stage_ = &stage;}
+				{ stage_ = &stage;}
 
 			/// Test if a Stage was assigned to the Renderer
-			bool hasStage() const
-				throw();
+			bool hasStage() const;
 
 			/// Set the size of the display
 			virtual void setSize(float width, float height) { width_ = width; height_ = height;}
@@ -178,72 +174,71 @@ namespace BALL
 			
 			///
 			bool operator == (const Renderer& /*renderer*/) const
-				throw() { return true; }
+				{ return true; }
 			
 			/// Wrapper for the renderering of special GeometricObjects
-			virtual void render_(const GeometricObject* object)
-				throw();
+			virtual void render_(const GeometricObject* object);
 
 			protected:
 
 			///
 			virtual void renderClippingPlane_(const ClippingPlane&)
-				throw() {Log.error() << "renderClippingPlane_ not implemented in derived Renderer class" << std::endl;}
+				{Log.error() << "renderClippingPlane_ not implemented in derived Renderer class" << std::endl;}
 
 			// Render a text label
 			virtual void renderLabel_(const Label& /*label*/)
-				throw() {Log.error() << "renderLabel_ not implemented in derived Renderer class" << std::endl;}
+				{Log.error() << "renderLabel_ not implemented in derived Renderer class" << std::endl;}
 
 			/// Render a line
 			virtual void renderLine_(const Line& /*line*/)
-				throw() {Log.error() << "renderLine_ not implemented in derived Renderer class" << std::endl;}
+				{Log.error() << "renderLine_ not implemented in derived Renderer class" << std::endl;}
 			
 			/// Render an illuminated line
 			virtual void renderMultiLine_(const MultiLine& /*line*/)
-				throw() {Log.error() << "renderMultiLine_ not implemented in derived Renderer class" << std::endl;}
+				{Log.error() << "renderMultiLine_ not implemented in derived Renderer class" << std::endl;}
 
 			/// Render a surface mesh
 			virtual void renderMesh_(const Mesh& /*mesh*/)
-				throw() {Log.error() << "renderMesh_ not implemented in derived Renderer class" << std::endl;}
+				{Log.error() << "renderMesh_ not implemented in derived Renderer class" << std::endl;}
  
 			/// Render a single point
  			virtual void renderPoint_(const Point& /*point*/)
-				throw() {Log.error() << "renderPoint_ not implemented in derived Renderer class" << std::endl;}
+				{Log.error() << "renderPoint_ not implemented in derived Renderer class" << std::endl;}
 
 			/// Render a box
 			virtual void renderBox_(const Box& /*box*/)
-				throw() {Log.error() << "renderBox_ not implemented in derived Renderer class" << std::endl;}
+				{Log.error() << "renderBox_ not implemented in derived Renderer class" << std::endl;}
 
 			/// Render a simple box (parallel to the axes)
 			virtual void renderSimpleBox_(const SimpleBox& /*box*/)
-				throw() {Log.error() << "renderSimpleBox_ not implemented in derived Renderer class" << std::endl;}
+				{Log.error() << "renderSimpleBox_ not implemented in derived Renderer class" << std::endl;}
 
 			/// Render a sphere
 			virtual void renderSphere_(const Sphere& /*sphere*/)
-				throw() {Log.error() << "renderSphere_ not implemented in derived Renderer class" << std::endl;}
+				{Log.error() << "renderSphere_ not implemented in derived Renderer class" << std::endl;}
 
 			/// Render a disc
 			virtual void renderDisc_(const Disc& /*disc*/)
-				throw() {Log.error() << "renderDisc_ not implemented in derived Renderer class" << std::endl;}
+				{Log.error() << "renderDisc_ not implemented in derived Renderer class" << std::endl;}
 
 			/// Render a tube
 			virtual void renderTube_(const Tube& /*tube*/)
-				throw() {Log.error() << "renderTube_ not implemented in derived Renderer class" << std::endl;}
+				{Log.error() << "renderTube_ not implemented in derived Renderer class" << std::endl;}
 
 			/// Render a line with two colors
 			virtual void renderTwoColoredLine_(const TwoColoredLine& /*two_colored_line*/)
-				throw() {Log.error() << "renderTwoColoredLine_ not implemented in derived Renderer class" << std::endl;}
+				{Log.error() << "renderTwoColoredLine_ not implemented in derived Renderer class" << std::endl;}
 
 			/// Render a tube with two colors
 			virtual void renderTwoColoredTube_(const TwoColoredTube& /*two_colored_tube*/)
-				throw() {Log.error() << "renderTwoColoredTube_ not implemented in derived Renderer class" << std::endl;}
+				{Log.error() << "renderTwoColoredTube_ not implemented in derived Renderer class" << std::endl;}
 			
 			/// Render a grid
 			virtual void renderGridVisualisation_(const GridVisualisation&)
-				throw() {Log.error() << "renderGridVisualisation_ not implemented in derived Renderer class" << std::endl;}
+				{Log.error() << "renderGridVisualisation_ not implemented in derived Renderer class" << std::endl;}
 			/// Render a quad mesh
 			virtual void renderQuadMesh_(const QuadMesh&)
-				throw() {Log.error() << "renderQuadMesh_ not implemented in derived Renderer class" << std::endl;}
+				{Log.error() << "renderQuadMesh_ not implemented in derived Renderer class" << std::endl;}
 				//@}
 			
 			//_

@@ -33,18 +33,15 @@ namespace BALL
 
 			/** Default Constructor.
 			*/
-			AddVanDerWaalsModel()
-				throw();
+			AddVanDerWaalsModel();
 
 			/** Copy constructor.
 			*/
-			AddVanDerWaalsModel(const AddVanDerWaalsModel& add_van_der_waals_model)
-				throw();
+			AddVanDerWaalsModel(const AddVanDerWaalsModel& add_van_der_waals_model);
 
 			/** Destructor.
 			*/
-			virtual ~AddVanDerWaalsModel()
-				throw();
+			virtual ~AddVanDerWaalsModel();
 
 			//@}
 			/**	@name Processor specific methods 
@@ -78,16 +75,15 @@ namespace BALL
 					\param   s output stream where to output the state 
 					\param   depth the dumping depth
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 			/// Default = 1
 			void setVDWRadiusFactor(float value)
-				throw() { radius_factor_ = value;}
+				{ radius_factor_ = value;}
 
 			///
 			float getVDWRadiusFactor() const
-				throw() { return 	radius_factor_;}
+				{ return 	radius_factor_;}
 							
 			//@}
 			

@@ -32,24 +32,20 @@ namespace BALL
 
 			/** Default Constructor.
 			*/
-			HBondModelProcessor()
-				throw();
+			HBondModelProcessor();
 
 			/** Copy constructor.
 			*/
-			HBondModelProcessor(const HBondModelProcessor& model)
-				throw();
+			HBondModelProcessor(const HBondModelProcessor& model);
 
 			/** Destructor.
 			*/
-			virtual ~HBondModelProcessor()
-				throw();
+			virtual ~HBondModelProcessor();
 
 			/** Explicit default initialization.
 					Calls AtomBondModelBaseProcessor::clear.
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			//@} 
 			/**	@name	Assignment 
@@ -59,15 +55,13 @@ namespace BALL
 			/** Assignment.
 					Calls AtomBondModelBaseProcessor::set.
 			*/
-			void set(const HBondModelProcessor& model)
-				throw();
+			void set(const HBondModelProcessor& model);
 
 			/** Assignment operator.
 					Calls set().
 					\param       model the HBondModelProcessor to be copied
 			*/
-			const HBondModelProcessor& operator = (const HBondModelProcessor& model)
-				throw();
+			const HBondModelProcessor& operator = (const HBondModelProcessor& model);
 			
 			//@}
 			/**	@name Processor specific methods 
@@ -84,11 +78,11 @@ namespace BALL
 
 			///
 			void setRadius(float radius)
-				throw() { radius_ = radius;}
+				{ radius_ = radius;}
 
 			///
 			float getRadius() const
-				throw() { return radius_;}
+				{ return radius_;}
 			
 			protected:
 

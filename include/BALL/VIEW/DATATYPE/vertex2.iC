@@ -5,7 +5,6 @@
 
 BALL_INLINE
 void Vertex2::setVertex1(const Vector3& v)
-	throw()
 {
   *vertex1_ptr_ = v;
 }
@@ -13,28 +12,24 @@ void Vertex2::setVertex1(const Vector3& v)
 BALL_INLINE
 void Vertex2::setVertex1
   (const float x, const float y, const float z)
-	throw()
 {
   vertex1_ptr_->set(x, y, z);
 }
 
 BALL_INLINE
 Vector3& Vertex2::getVertex1()
-	throw()
 {
   return *vertex1_ptr_;
 }
 
 BALL_INLINE
 const Vector3& Vertex2::getVertex1() const
-	throw()
 {
   return *vertex1_ptr_;
 }
 
 BALL_INLINE
 void Vertex2::getVertex1(Vector3& v) const
-	throw()
 {
   v = *vertex1_ptr_;
 }
@@ -42,35 +37,30 @@ void Vertex2::getVertex1(Vector3& v) const
 BALL_INLINE
 void Vertex2::getVertex1
   (float& x, float& y, float& z) const
-	throw()
 {
   vertex1_ptr_->get(x, y, z);
 }
 
 BALL_INLINE
 void Vertex2::setVertex1Address(const Vector3& v)
-	throw()
 {
   vertex1_ptr_ = (Vector3 *)&v;
 }
 
 BALL_INLINE
 void Vertex2::setDefaultVertex1Address()
-	throw()
 {
   vertex1_ptr_ =  (Vector3 *)&vertex1_;
 }
 
 BALL_INLINE
 Vector3* Vertex2::getVertex1Address() const
-	throw()
 {
   return vertex1_ptr_;
 }
 
 BALL_INLINE
 void Vertex2::setVertex2(const Vector3& v)
-	throw()
 {
   *vertex2_ptr_ = v;
 }
@@ -78,14 +68,12 @@ void Vertex2::setVertex2(const Vector3& v)
 BALL_INLINE
 void Vertex2::setVertex2
   (const float x, const float y, const float z)
-	throw()
 {
   vertex2_ptr_->set(x, y, z);
 }
 
 BALL_INLINE
 Vector3& Vertex2::getVertex2()
-	throw()
 {
   return *vertex2_ptr_;
 }
@@ -93,14 +81,12 @@ Vector3& Vertex2::getVertex2()
 BALL_INLINE
 const Vector3& 
 Vertex2::getVertex2() const
-	throw()
 {
   return *vertex2_ptr_;
 }
 
 BALL_INLINE
 void Vertex2::getVertex2(Vector3& v) const
-	throw()
 {
   v = *vertex2_ptr_;
 }
@@ -108,28 +94,24 @@ void Vertex2::getVertex2(Vector3& v) const
 BALL_INLINE
 void Vertex2::getVertex2
   (float &x, float &y, float &z) const
-	throw()
 {
   vertex2_ptr_->get(x, y, z);
 }
 
 BALL_INLINE
 void Vertex2::setVertex2Address(const Vector3& v)
-	throw()
 {
   vertex2_ptr_ = (Vector3 *)&v;
 }
 
 BALL_INLINE
 void Vertex2::setDefaultVertex2Address()
-	throw()
 {
   vertex2_ptr_ = (Vector3 *)&vertex2_;
 }
 
 BALL_INLINE
 Vector3* Vertex2::getVertex2Address() const
-	throw()
 {
   return vertex2_ptr_;
 }
@@ -138,7 +120,6 @@ BALL_INLINE
 void Vertex2::setVertices
   (const Vector3& vertex1,
    const Vector3& vertex2)
-	throw()
 {
   vertex1_ptr_->set(vertex1);
   vertex2_ptr_->set(vertex2);
@@ -152,7 +133,6 @@ void Vertex2::setVertices
    const float vertex2_x,
    const float vertex2_y,
    const float vertex2_z)
-	throw()
 {
   vertex1_ptr_->set(vertex1_x, vertex1_y, vertex1_z);
   vertex2_ptr_->set(vertex2_x, vertex2_y, vertex2_z);
@@ -161,7 +141,6 @@ void Vertex2::setVertices
 BALL_INLINE
 void Vertex2::setVertexAddresses
   (const Vector3& vertex1, const Vector3& vertex2)
-	throw()
 {
   vertex1_ptr_ = (Vector3*)&vertex1;
   vertex2_ptr_ = (Vector3*)&vertex2;
@@ -170,7 +149,6 @@ void Vertex2::setVertexAddresses
 BALL_INLINE
 void Vertex2::getVertices
   (Vector3& vertex1, Vector3& vertex2)
-	throw()
 {
   vertex1 = *vertex1_ptr_;
   vertex2 = *vertex2_ptr_;
@@ -184,7 +162,6 @@ void Vertex2::getVertices
    float& vertex2_x,
    float& vertex2_y,
    float& vertex2_z)
-	throw()
 {
   vertex1_ptr_->get(vertex1_x, vertex1_y, vertex1_z);
   vertex2_ptr_->get(vertex2_x, vertex2_y, vertex2_z);
@@ -192,7 +169,6 @@ void Vertex2::getVertices
 
 BALL_INLINE
 void Vertex2::setDefaultVertexAddresses()
-	throw()
 {
   vertex1_ptr_ = (Vector3*)&vertex1_;
   vertex2_ptr_ = (Vector3*)&vertex2_;
@@ -200,21 +176,18 @@ void Vertex2::setDefaultVertexAddresses()
 
 BALL_INLINE
 bool Vertex2::isDefaultVertex1Address() const
-	throw()
 {
   return (vertex1_ptr_ == (Vector3*)&vertex1_);
 }
 
 BALL_INLINE
 bool Vertex2::isDefaultVertex2Address() const
-	throw()
 {
   return (vertex2_ptr_ == (Vector3 *)&vertex2_);
 }
 
 BALL_INLINE
 bool Vertex2::isDefaultVertexAddresses() const
-	throw()
 {
   return (vertex1_ptr_ == (Vector3*)&vertex1_ &&
 				  vertex2_ptr_ == (Vector3*)&vertex2_);

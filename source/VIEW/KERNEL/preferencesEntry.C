@@ -532,7 +532,6 @@ namespace BALL
 
 		
 		void PreferencesEntry::dump(ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			BALL_DUMP_DEPTH(s, depth);

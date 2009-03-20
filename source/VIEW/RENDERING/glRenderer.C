@@ -83,7 +83,6 @@ namespace BALL
 #endif
 
 		GLRenderer::GLRenderer()
-			throw()
 			: Renderer(),
 				drawing_mode_(DRAWING_MODE_SOLID),
 				drawing_precision_(DRAWING_PRECISION_HIGH),
@@ -106,13 +105,11 @@ namespace BALL
 		}
 
 		GLRenderer::~GLRenderer()
-			throw()
 		{
 			clear();
 		}
 
 		void GLRenderer::clear()
-			throw()
 		{
 			name_to_object_.clear();
 			object_to_name_.clear();
@@ -447,7 +444,6 @@ bool GLRenderer::getSmoothLines()
 		}
 
 		void GLRenderer::removeRepresentation(const Representation& rep)
-			throw()
 		{
 			if (!getMainControl()->getRepresentationManager().has(rep)) return;
 
@@ -466,7 +462,6 @@ bool GLRenderer::getSmoothLines()
 		}
 
 		void GLRenderer::bufferRepresentation(const Representation& rep)
-			throw()
 		{
 #ifdef BALL_BENCHMARKING
 			Timer t;
@@ -808,7 +803,6 @@ bool GLRenderer::getSmoothLines()
 
 
 		bool GLRenderer::render(const Representation& representation, bool for_display_list)
-			throw()
 		{
 			if (representation.isHidden()) return true;
 
@@ -908,7 +902,6 @@ bool GLRenderer::getSmoothLines()
 		}
 
 void GLRenderer::dump(std::ostream& s, Size depth) const
-	throw()
 {
 	BALL_DUMP_STREAM_PREFIX(s);
 
@@ -941,7 +934,6 @@ void GLRenderer::dump(std::ostream& s, Size depth) const
 // =================================================================================
 
 void GLRenderer::renderSphere_(const Sphere& sphere)
-	throw()
 {
 	initDrawingOthers_();
 
@@ -975,7 +967,6 @@ void GLRenderer::renderSphere_(const Sphere& sphere)
 }
 
 void GLRenderer::renderDisc_(const Disc& disc)
-	throw()
 {
 	initDrawingOthers_();
 
@@ -999,7 +990,6 @@ void GLRenderer::renderDisc_(const Disc& disc)
 
 
 void GLRenderer::renderLine_(const Line& line)
-	throw()
 {
 	initDrawingOthers_();
 
@@ -1015,7 +1005,6 @@ void GLRenderer::renderLine_(const Line& line)
 }
 
 void GLRenderer::renderMultiLine_(const MultiLine& line)
-	throw()
 {
 	initDrawingOthers_();
 
@@ -1073,7 +1062,6 @@ void GLRenderer::renderMultiLine_(const MultiLine& line)
 }
 
 void GLRenderer::renderLabel_(const Label& label)
-	throw()
 {
 	initDrawingOthers_();
 
@@ -1110,7 +1098,6 @@ void GLRenderer::renderLabel_(const Label& label)
 
 
 void GLRenderer::renderPoint_(const Point& point)
-	throw()
 {
 	initDrawingOthers_();
 
@@ -1125,7 +1112,6 @@ void GLRenderer::renderPoint_(const Point& point)
 
 
 void GLRenderer::renderSimpleBox_(const SimpleBox& box)
-	throw()
 {
 	initDrawingOthers_();
 
@@ -1139,7 +1125,6 @@ void GLRenderer::renderSimpleBox_(const SimpleBox& box)
 
 
 void GLRenderer::renderBox_(const Box& box)
-	throw()
 {
 	initDrawingOthers_();
 
@@ -1173,7 +1158,6 @@ void GLRenderer::renderBox_(const Box& box)
 }
 
 void GLRenderer::renderTube_(const Tube& tube)
-	throw()
 {
 	initDrawingOthers_();
 
@@ -1205,7 +1189,6 @@ void GLRenderer::renderTube_(const Tube& tube)
 
 
 void GLRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
-	throw()
 {
 	initDrawingOthers_();
 
@@ -1250,7 +1233,6 @@ void GLRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
 }
 
 void GLRenderer::renderTwoColoredLine_(const TwoColoredLine& line)
-	throw()
 {
 	initDrawingOthers_();
 
@@ -1325,7 +1307,6 @@ void GLRenderer::initDrawingOthers_()
 
 
 void GLRenderer::renderMesh_(const Mesh& mesh)
-	throw()
 {
 	if (mesh.normal.size() != mesh.vertex.size())
 	{
@@ -1527,7 +1508,6 @@ void GLRenderer::initGLU_(DrawingMode mode)
 }
 
 void GLRenderer::createSpheres_()
-	throw()
 {
 	glPushMatrix();
 
@@ -1551,7 +1531,6 @@ void GLRenderer::createSpheres_()
 
 
 void GLRenderer::createDottedSphere_(int precision)
-	throw()
 {
 	glBegin(GL_POINTS);
 
@@ -1566,7 +1545,6 @@ void GLRenderer::createDottedSphere_(int precision)
 
 
 void GLRenderer::createTubes_()
-	throw()
 {
 	glPushMatrix();
 
@@ -1589,7 +1567,6 @@ void GLRenderer::createTubes_()
 
 
 void GLRenderer::createBoxes_()
-	throw()
 {
 	// building point display list
 	for (Position pos = 0; pos < BALL_VIEW_MAXIMAL_DRAWING_PRECISION; pos++)
@@ -1618,7 +1595,6 @@ void GLRenderer::createBoxes_()
 
 
 void GLRenderer::createLineBox_()
-	throw()
 {
 	glBegin(GL_LINES);
 
@@ -1663,7 +1639,6 @@ void GLRenderer::createLineBox_()
 
 
 void GLRenderer::createDotBox_()
-	throw()
 {
 	glBegin(GL_POINTS);
 
@@ -1682,7 +1657,6 @@ void GLRenderer::createDotBox_()
 
 
 void GLRenderer::createSolidBox_()
-	throw()
 {
 	glBegin(GL_QUADS);
 
@@ -1734,7 +1708,6 @@ void GLRenderer::createSolidBox_()
 
 // ############################ PICKING ###################################
 void GLRenderer::pickObjects1(Position x1, Position y1, Position x2, Position y2)
-	throw()
 {
 	glFlush();
 	GLint viewport[4];
@@ -1775,7 +1748,6 @@ void GLRenderer::pickObjects1(Position x1, Position y1, Position x2, Position y2
 
 
 void GLRenderer::pickObjects2(List<GeometricObject*>& objects)
-	throw()
 {
 	glFlush();
 
@@ -1844,7 +1816,6 @@ void GLRenderer::pickObjects2(List<GeometricObject*>& objects)
 // ############################ MOVEMENT/SIZE ###################################
 // TODO: shouldn't we use a camera aperture angle?
 void GLRenderer::setSize(float width, float height)
-	throw()
 {
 	width_ 	= width;
 	height_ = height;
@@ -1918,13 +1889,11 @@ void GLRenderer::setupStereo(float eye_separation, float focal_length)
 }
 
 bool GLRenderer::hasDisplayListFor(const Representation& rep) const
-	throw()
 {
 	return display_lists_.has(&rep);
 }
 
 bool GLRenderer::isExtensionSupported(const String& extension) const
-	throw()
 {
 	// Extension names should not have spaces
 	if (extension == "" || extension.hasSubstring(" ")) return false;
@@ -1974,7 +1943,6 @@ vector<String> GLRenderer::getExtensions()
 }
 
 bool GLRenderer::enableVertexBuffers(bool state)
-	throw()
 {
 #ifndef BALL_USE_GLEW
 	return false;
@@ -1999,7 +1967,6 @@ bool GLRenderer::enableVertexBuffers(bool state)
 }
 
 void GLRenderer::clearVertexBuffersFor(Representation& rep)
-	throw()
 {
 #ifdef BALL_USE_GLEW
 	MeshBufferHashMap::Iterator vit = rep_to_buffers_.find(&rep);
@@ -2018,7 +1985,6 @@ void GLRenderer::clearVertexBuffersFor(Representation& rep)
 }
 
 void GLRenderer::drawBuffered(const Representation& rep)
-	throw()
 {
 	if (rep.isHidden()) return;
 
@@ -2065,7 +2031,6 @@ void GLRenderer::exitPickingMode()
 
 
 bool GLRenderer::vertexBuffersSupported() const
-	throw()
 {
 #ifdef BALL_USE_GLEW
 	return isExtensionSupported("GL_ARB_vertex_buffer_object");
@@ -2075,7 +2040,6 @@ bool GLRenderer::vertexBuffersSupported() const
 }
 
 void GLRenderer::renderClippingPlane_(const ClippingPlane& plane)
-	throw()
 {
 	display_lists_index_ = DRAWING_MODE_SOLID * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + DRAWING_PRECISION_HIGH;
 
@@ -2271,7 +2235,6 @@ void GLRenderer::setupGridClipPlanes_(const GridVisualisation& slice)
 
 
 void GLRenderer::renderGridVisualisation_(const GridVisualisation& vol)
-	throw()
 {
 	if (!grid_to_texture_.has(vol.getGrid()))
 		return;
@@ -2493,7 +2456,6 @@ void GLRenderer::renderGridVisualisation_(const GridVisualisation& vol)
 }
 
 void GLRenderer::renderQuadMesh_(const QuadMesh& mesh)
-	throw()
 {
 	if (mesh.normal.size() != mesh.vertex.size())
 	{

@@ -5,35 +5,30 @@
 
 BALL_INLINE
 void GLDisplayList::useCompileMode()
-  throw()
 {
   compile_ = true;
 }
 
 BALL_INLINE
 void GLDisplayList::useCompileAndExecuteMode()
-  throw()
 {
   compile_ = false;
 }
 
 BALL_INLINE
 bool GLDisplayList::isCompileMode() const
-  throw()
 {
   return compile_;
 }
 
 BALL_INLINE
 bool GLDisplayList::isCompileAndExecuteMode() const
-  throw()
 {
   return (!compile_);
 }
 
 BALL_INLINE
 void GLDisplayList::draw()
-	throw()
 {
 	if (GL_list_ != 0) 
 	{ 

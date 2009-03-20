@@ -13,21 +13,18 @@ namespace BALL
 	{
 
 		Disc::Disc()
-			throw()
 			:	GeometricObject(),
 				Circle3()
 		{
 		}
 
 		Disc::Disc(const Disc& disc)
-			throw()
 			:	GeometricObject(disc),
 				Circle3(disc)
 		{
 		}
 
 		Disc::~Disc()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "Destructing object " << (void *)this 
@@ -36,42 +33,36 @@ namespace BALL
 		}
 
 		void Disc::clear()
-			throw()
 		{
 			GeometricObject::clear();
 			Circle3::clear();
 		}
 
 		void Disc::set(const Disc& disc)
-			throw()
 		{
 			GeometricObject::set(disc);
 			Circle3::set(disc);
 		}
 
 		const Disc& Disc::operator = (const Disc& disc)
-			throw()
 		{
 			set(disc);
 			return *this;
 		}
 
 		void Disc::swap(Disc& disc)
-			throw()
 		{
 			GeometricObject::swap(disc);
 			Circle3::swap(disc);
 		}
 
 		bool Disc::isValid() const
-			throw()
 		{
 			return (GeometricObject::isValid() && 
 											Circle3::isValid());
 		}
 
 		void Disc::dump(ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -85,7 +76,6 @@ namespace BALL
 		}
 
 		void Disc::setCircle(const Circle3& circle)
-			throw()
 		{
 			this->p = circle.p;
 			this->n = circle.n;
@@ -93,7 +83,6 @@ namespace BALL
 		}
 
 		Disc::Disc(const Circle3& circle)
-			throw()
 			: GeometricObject(),
 				Circle3(circle)
 		{}

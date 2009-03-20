@@ -75,8 +75,7 @@ class BALL_VIEW_EXPORT RunPythonThread
 	: public QThread
 {
 	public:
-		RunPythonThread()
-			throw();
+		RunPythonThread();
 
 		///
 		virtual void run();
@@ -95,25 +94,22 @@ struct BALL_VIEW_EXPORT Hotkey
 														 bool& ok, String comment = "");
 
 	///
-	bool operator == (const Hotkey& hotkey) const
-		throw();
+	bool operator == (const Hotkey& hotkey) const;
 
 	///
-	bool operator == (const QKeyEvent& e) const
-		throw();
+	bool operator == (const QKeyEvent& e) const;
 
 	/// 
-	const Hotkey& operator = (const Hotkey& s)
-		throw();
+	const Hotkey& operator = (const Hotkey& s);
 
 	/// Needed for MSVC
 	bool operator < (const Hotkey& key) { return this < &key;}
 
 	///
-	bool set(const String& data) throw();
+	bool set(const String& data);
 
 	///
-	void get(String& data) const throw();
+	void get(String& data) const;
 
 	String 								comment;
 	String 								action;
@@ -180,20 +176,17 @@ class BALL_VIEW_EXPORT PyWidget
 			\param parent the parent widget
 			\param name the widget name
 	*/
-	PyWidget(QWidget* parent = 0, const char* name = 0)
-		throw();
+	PyWidget(QWidget* parent = 0, const char* name = 0);
 
 	/// only needed for Pyhon Interface
-	PyWidget(const PyWidget& p)
-		throw();
+	PyWidget(const PyWidget& p);
 
 	///
-	~PyWidget()
-		throw();
+	~PyWidget();
 	
 	/// Is full Python support available?
 	bool isValid() const 
-		throw() { return valid_;}
+		{ return valid_;}
 
 	/**	@name	ModularWidget related methods
 	*/
@@ -201,31 +194,26 @@ class BALL_VIEW_EXPORT PyWidget
 
 	/**	Setup the menu entries.
 	*/
-	virtual void initializeWidget(MainControl& main_control)
-		throw();
+	virtual void initializeWidget(MainControl& main_control);
 
 	/**	Remove menu entries.
 	*/
-	virtual void finalizeWidget(MainControl& main_control)
-		throw();
+	virtual void finalizeWidget(MainControl& main_control);
 	
 	///
-	void initializePreferencesTab(Preferences &preferences)
-		throw();
+	void initializePreferencesTab(Preferences &preferences);
 	
 	///
-	void finalizePreferencesTab(Preferences &preferences)
-		throw();
+	void finalizePreferencesTab(Preferences &preferences);
 
 	///
-	virtual void applyPreferences()
-		throw();
+	virtual void applyPreferences();
 	
 	/// Open a dialog to select a script
 	virtual void scriptDialog(bool run = false);
 
 	///
-	bool toAbortScript() throw();
+	bool toAbortScript();
 
 	/** Map a key to a command
 	 		Modifier can be: "", Ctrl, Shift
@@ -237,13 +225,13 @@ class BALL_VIEW_EXPORT PyWidget
 	void unmap(String modifier, String key);
 
 	///
-	void insertHotkey(const Hotkey& hotkey) throw();
+	void insertHotkey(const Hotkey& hotkey);
 
 	///
-	void removeHotkey(const Hotkey& hotkey) throw();
+	void removeHotkey(const Hotkey& hotkey);
 
 	///
-	void reactTo(const QKeyEvent& e) throw();
+	void reactTo(const QKeyEvent& e);
 
 	/** Test if this ModularWidget can handle a given file format.
 	 		(Overloaded from ModularWidget)
@@ -261,7 +249,7 @@ class BALL_VIEW_EXPORT PyWidget
 	/** Run a Python script from a given file
 	 		@param is_current states wheter this file is currently loaded in the editor
 	*/
-	bool openFile(const String& filename, bool run, bool is_current = false) throw();
+	bool openFile(const String& filename, bool run, bool is_current = false);
 
 	//
 	bool runString(String command);
@@ -270,23 +258,19 @@ class BALL_VIEW_EXPORT PyWidget
 	String getCurrentLine() const;
 
 	//
-	void dump(std::ostream& s, Size depth) const
-		throw();
+	void dump(std::ostream& s, Size depth) const;
 
 	//
 	void showClassDocu(String classname, String member);
 
 	//
-	virtual void fetchPreferences(INIFile& inifile)
-		throw();
+	virtual void fetchPreferences(INIFile& inifile);
 	
 	//
-	virtual void writePreferences(INIFile& inifile)
-		throw();
+	virtual void writePreferences(INIFile& inifile);
 
 	//
-	void checkMenu(MainControl& main_control)
-		throw();
+	void checkMenu(MainControl& main_control);
 
 	///
 	QString getCurrentScript();
@@ -306,7 +290,7 @@ class BALL_VIEW_EXPORT PyWidget
 	void showCompletion();
 
 	//
-	void clear() throw();
+	void clear();
 
 	//
 	void exportHistory();

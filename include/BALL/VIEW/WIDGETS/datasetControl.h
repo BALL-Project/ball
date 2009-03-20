@@ -48,31 +48,26 @@ namespace BALL
 					\param      name the name of the DatasetControl 
 					\see        ModularWidget
 			*/
-			DatasetControl(QWidget* parent = 0, const char* name = 0)
-				throw();
+			DatasetControl(QWidget* parent = 0, const char* name = 0);
 			
 			/** Destructor.
 			*/
-			virtual ~DatasetControl()
-				throw();
+			virtual ~DatasetControl();
 
 			/** Overload this method to react to further messages
 			 		Reacts to DatasetMessage, it will be passed on to
 					the corresponding DatasetController.
 			*/
-			virtual void onNotify(Message *message)
-				throw();
+			virtual void onNotify(Message *message);
 
 			/**	Initialize the widget.
 			*/
-			virtual void initializeWidget(MainControl& main_control)
-				throw();
+			virtual void initializeWidget(MainControl& main_control);
 
 			/** Check the menu entries.
 			 		Calls DatasetController::checkMenu
 			*/
-			virtual void checkMenu(MainControl& main_control)
-				throw();
+			virtual void checkMenu(MainControl& main_control);
 
 			/** Test if this ModularWidget can handle a given file format.
 					(Overloaded from ModularWidget)
@@ -119,7 +114,7 @@ namespace BALL
 			public slots:
 				
 			// Overloaded from GenericControl 
-//   			virtual void deleteCurrentItems() throw();
+//   			virtual void deleteCurrentItems();
 
 		  protected slots:
 
@@ -128,13 +123,12 @@ namespace BALL
 			/** Called when the item selection changes.
 			 		Sends a DatasetMessage with type DatasetMessage::SELECTED.
 			*/
-			void updateSelection()
-				throw();
+			void updateSelection();
 
 		  protected:
 			
 			// only for Python Interface
-			DatasetControl(const DatasetControl& control) throw();
+			DatasetControl(const DatasetControl& control);
 
 			vector<DatasetController*> controllers_;
 		};

@@ -17,21 +17,18 @@ namespace BALL
 	{
 
 		AddVanDerWaalsModel::AddVanDerWaalsModel()
-			throw()
 			: AtomBondModelBaseProcessor(),
 				radius_factor_(1)
 		{
  		}
 
 		AddVanDerWaalsModel::AddVanDerWaalsModel(const AddVanDerWaalsModel& model)
-			throw()
 			: AtomBondModelBaseProcessor(model),
 				radius_factor_(model.radius_factor_)
 		{
 		}
 
 		AddVanDerWaalsModel::~AddVanDerWaalsModel()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "Destructing object " << (void *)this 
@@ -68,7 +65,6 @@ namespace BALL
 		}
 
 		void AddVanDerWaalsModel::dump(ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

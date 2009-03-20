@@ -50,13 +50,11 @@ namespace BALL
 
 			/** Default Constructor.
 			*/
-			Mesh()
-				throw();
+			Mesh();
 
 			/** Copy constructor 
 			*/
-			Mesh(const Mesh& mesh)
-				throw();
+			Mesh(const Mesh& mesh);
 
 			//@}
 			/** @name Destructors */
@@ -64,14 +62,12 @@ namespace BALL
 
 			/** Destructor.
 			*/
-			virtual ~Mesh()
-				throw();
+			virtual ~Mesh();
 
 			/** Explicit default initialization.
 					Calls GeometricObject::clear
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			//@}	
 			/**	@name	Assignment methods
@@ -80,21 +76,18 @@ namespace BALL
 
 			/** Assignment.
 			*/
-			void set(const Mesh& mesh)
-				throw();
+			void set(const Mesh& mesh);
 
 			/** Assignment operator.
 					Calls set.
 			*/
-			const Mesh& operator = (const Mesh& mesh)
-				throw();
+			const Mesh& operator = (const Mesh& mesh);
 
 			/** Swapping of mesh's.
 					Swap the value of this mesh with the mesh <b> mesh</b>.
 					\param       mesh the mesh being swapped with this mesh 
 			*/
-			void swap(Mesh& mesh)
-				throw();
+			void swap(Mesh& mesh);
 
 			//@}
 			/**	@name	debuggers and diagnostics
@@ -104,8 +97,7 @@ namespace BALL
 			/** Internal state and consistency self-validation.
 					Calls GeometricObject::isValid.
 			*/
-			virtual bool isValid() const
-				throw();
+			virtual bool isValid() const;
 
 			/** Internal value dump.
 					Dump the current value of this mesh to 
@@ -114,8 +106,7 @@ namespace BALL
 					\param   s output stream where to output the value of this mesh
 					\param   depth the dumping depth
 			*/
-			virtual void dump(std::ostream&  s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream&  s = std::cout, Size depth = 0) const;
 
 			///
 			bool binaryWrite(const String& filename);

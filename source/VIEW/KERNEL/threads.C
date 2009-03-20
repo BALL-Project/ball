@@ -72,14 +72,12 @@ namespace BALL
 		// ================================== FetchHTMLThread ===============================
 
 		FetchHTMLThread::FetchHTMLThread()
-			throw()
 			: BALLThread(),
 				file_name_("")
 		{
 		}
 
 		void FetchHTMLThread::setURL(const String& url)
-			throw()
 		{
 			url_ = url;
 		}
@@ -139,7 +137,6 @@ namespace BALL
 		// ==========================================
 		
 		UpdateRepresentationThread::UpdateRepresentationThread()
-			throw() 
 			: BALLThread(),
 				rep_(0)
 		{
@@ -399,7 +396,6 @@ namespace BALL
 		// =================================================0
 		
 		CalculateFDPBThread::CalculateFDPBThread()
-			throw()
 			: BALLThread(),
 				dialog_(0)
 		{}
@@ -415,21 +411,18 @@ namespace BALL
 		
 		///
 		DockingThread::DockingThread()
-			throw()
 			: BALLThread(),
 				dock_alg_(0)
 		{} 
 		
 		// Copy constructor.
 		DockingThread::DockingThread(const DockingThread& dock_thread)
-			throw()
 			: BALLThread(),
 				dock_alg_(dock_thread.dock_alg_)
 		{}
 		
 		///
 		DockingThread::~DockingThread()
-			throw()
 		{
 			output_("delete thread", true);
 
@@ -438,7 +431,6 @@ namespace BALL
 		
 		// Assignment operator
 		const DockingThread& DockingThread::operator =(const DockingThread& dock_thread)
-			throw()
 		{
 			if (&dock_thread != this)
 			{
@@ -449,7 +441,6 @@ namespace BALL
 		
 		//
 		void DockingThread::setDockingAlgorithm(DockingAlgorithm* dock_alg)
-			throw()
 		{
 			dock_alg_ = dock_alg;
 		}

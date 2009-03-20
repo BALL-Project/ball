@@ -14,7 +14,6 @@ namespace BALL
 	{
 
 DatasetControl::DatasetControl(QWidget* parent, const char* name)
-	throw()
 	:	GenericControl(parent, name)
 {
 #ifdef BALL_VIEW_DEBUG
@@ -32,7 +31,6 @@ DatasetControl::DatasetControl(QWidget* parent, const char* name)
 
 
 DatasetControl::~DatasetControl()
-	throw()
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "Destructing object " << this << " of class DatasetControl" << std::endl;
@@ -48,7 +46,6 @@ DatasetControl::~DatasetControl()
 
 
 void DatasetControl::initializeWidget(MainControl& main_control)
-	throw()
 {
 	GenericControl::initializeWidget(main_control);
 	registerForHelpSystem(this, "datasetControl.html");
@@ -60,7 +57,6 @@ void DatasetControl::initializeWidget(MainControl& main_control)
 
 
 void DatasetControl::checkMenu(MainControl& main_control)
-	throw()
 {
 	for (Position p = 0; p < controllers_.size(); p++)
 	{
@@ -70,7 +66,6 @@ void DatasetControl::checkMenu(MainControl& main_control)
 
 
 void DatasetControl::onNotify(Message *message)
-	throw()
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "DatasetControl "<<this<<  " onNotify " << message << std::endl;
@@ -104,7 +99,6 @@ void DatasetControl::onNotify(Message *message)
 
 
 void DatasetControl::updateSelection()
-	throw()
 {
 	GenericControl::updateSelection();
 
@@ -124,7 +118,6 @@ void DatasetControl::updateSelection()
 
 
 DatasetControl::DatasetControl(const DatasetControl& control)
-	throw()
 	: GenericControl(control)
 {
 }

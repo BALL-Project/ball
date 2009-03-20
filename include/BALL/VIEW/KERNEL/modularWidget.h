@@ -73,13 +73,11 @@ namespace BALL
 					Set the name of this ModularWidget to <b>name</b>.
 					\param      name the name of this modularWidget
 			*/
-			ModularWidget(const char* name = "<ModularWidget>")
-				throw();
+			ModularWidget(const char* name = "<ModularWidget>");
 				
 			/**	Copy constructor.
 			*/
-			ModularWidget(const ModularWidget& widget)
-				throw();
+			ModularWidget(const ModularWidget& widget);
 				
 			//@}
 			/** @name Destructors 
@@ -89,18 +87,16 @@ namespace BALL
 			/** Destructor.
 			 		If the ModularWidget was registered, it will call MainControl::removeModularWidget.
 			*/
-			virtual ~ModularWidget()
-				throw();
+			virtual ~ModularWidget();
 
 			///
 			virtual void destroy()
-				throw() { clear(); };
+				{ clear(); };
 
 			/** Explicit default initialization.
 			 		Currently does nothing.
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			//@}	
 			/**	@name	Registering 
@@ -158,13 +154,11 @@ namespace BALL
 					It should be used to update the state of menu entries (e.g. disable or enable entries).
 					\param main_control the MainControl object whose menus should be checked
 			*/
-			virtual void checkMenu(MainControl& main_control)
-				throw();
+			virtual void checkMenu(MainControl& main_control);
 
 			///
 			QAction* insertMenuEntry (Position parent_id, const String& name, const QObject* receiver = 0, 
 													 const char* slot = 0, const String& description = "", QKeySequence accel = QKeySequence())
-				throw();
 
 			/** Set the hint for the last added menu entry
 			 		@see insertMenuEntry
@@ -205,8 +199,7 @@ namespace BALL
 					This method is called automatically by MainControl::show at the start of the application.
 					\param preferences the Preferences dialog of the MainControl
 			*/
-			virtual void initializePreferencesTab(Preferences& preferences)
-				throw();
+			virtual void initializePreferencesTab(Preferences& preferences);
 			
 			/**	Remove the preferences tab.
 					This method can remove a preferences widget (if created in 
@@ -214,8 +207,7 @@ namespace BALL
 					This method is called automatically by MainControl::aboutToExit() at the end of the application.
 					\param  preferences the Preferences dialog of the MainControl
 			*/
-			virtual void finalizePreferencesTab(Preferences& preferences)
-				throw();
+			virtual void finalizePreferencesTab(Preferences& preferences);
 			
 			/** Apply the preferences of the specific tab.
 					In this method the widget can extract any changed values from
@@ -228,24 +220,21 @@ namespace BALL
 					\see    finalizePreferencesTab
 					\see    applyPreferencesTab
 			*/
-			virtual void applyPreferences()
-				throw() {};
+			virtual void applyPreferences(){};
 
 			/** Fetch the widgets preferences from the INIFile.
 					This method is called automatically by MainControl::show() at the start of the application.
 					\param  inifile the INIFile that contains the needed values
 					\see    writePreferences
 			*/
-			virtual void fetchPreferences(INIFile& inifile)
-				throw();
+			virtual void fetchPreferences(INIFile& inifile);
 			
 			/** Writes the widgets preferences to the INIFile.
 					This method is called automatically by MainControl::aboutToExit at the end of the application.
 					\param  inifile the INIFile to contain the values
 					\see    fetchPreferences
 			*/
-			virtual void writePreferences(INIFile& inifile)
-				throw();
+			virtual void writePreferences(INIFile& inifile);
 
 			//@}	
 			/**	@name	Preferences handling
@@ -255,12 +244,10 @@ namespace BALL
 			/** Try to get an exclusive lock on the Composites, so that they can not be altered by
 			 		any other ModularWidget.
 			*/
-			bool lockComposites()
-				throw();
+			bool lockComposites();
 
 			/// Unlock the Composites.
-			bool unlockComposites()
-				throw();
+			bool unlockComposites();
 
 			//@}	
 			/**	@name	Convenience methods
@@ -270,30 +257,25 @@ namespace BALL
 			/** Return the MainControl of this ModularWidget
 					Implemented for convenience.
 			*/
-			MainControl* getMainControl() const
-				throw();
+			MainControl* getMainControl() const;
 
 			/** Set the text of the statusbar of the main application.
 			 		<b>Note:</b> The ModularWidget must be registered to a MainControl.
 					Implemented for convenience.
 			 */
-			virtual void setStatusbarText(String text, bool important = false)
-				throw();
+			virtual void setStatusbarText(String text, bool important = false);
 
 			///	Implemented for convenience.
-			String getWorkingDir()
-				throw();
+			String getWorkingDir();
 
 			///	Implemented for convenience.
-			void setWorkingDir(const String& dir)
-				throw();
+			void setWorkingDir(const String& dir);
 
 			/** Return the FragmentDB.
 			 		<b>Note:</b> The ModularWidget must be registered to a MainControl.
 					Implemented for convenience.
 			*/
-			FragmentDB& getFragmentDB() const
-				throw();
+			FragmentDB& getFragmentDB() const;
 
 			//@}
 			/**	@name	Debugging and Diagnostics
@@ -307,13 +289,11 @@ namespace BALL
 					\param   s output stream where to output the internal state 
 					\param   depth the dumping depth
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 			//@}
 
-			void setWorkingDirFromFilename_(String filename)
-				throw();
+			void setWorkingDirFromFilename_(String filename);
 
 			virtual void showHelp(const String& url);
 

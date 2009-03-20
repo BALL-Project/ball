@@ -22,7 +22,6 @@ namespace BALL
 	{
 
 		AddBallAndStickModel::AddBallAndStickModel()
-			throw()
 			: AtomBondModelBaseProcessor(),
 				ball_radius_((float)0.4),
 				stick_radius_((float)0.2),
@@ -32,7 +31,6 @@ namespace BALL
 		}
 
 		AddBallAndStickModel::AddBallAndStickModel(const AddBallAndStickModel &add_ball_and_stick)
-			throw()
 			: AtomBondModelBaseProcessor(add_ball_and_stick),
 				ball_radius_(add_ball_and_stick.ball_radius_),
 				stick_radius_(add_ball_and_stick.stick_radius_),
@@ -42,7 +40,6 @@ namespace BALL
 		}
 
 		AddBallAndStickModel::~AddBallAndStickModel()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << this << " of class AddBallAndStickModel" << std::endl;
@@ -50,7 +47,6 @@ namespace BALL
 		}
 
 		void AddBallAndStickModel::clear()
-			throw()
 		{
 			AtomBondModelBaseProcessor::clear();
 
@@ -61,7 +57,6 @@ namespace BALL
 		}
 
 		void AddBallAndStickModel::set(const AddBallAndStickModel &add_ball_and_stick)
-			throw()
 		{
 			AtomBondModelBaseProcessor::set(add_ball_and_stick);
 
@@ -72,7 +67,6 @@ namespace BALL
 		}
 
 		const AddBallAndStickModel &AddBallAndStickModel::operator = (const AddBallAndStickModel &processor)
-			throw()
 		{
 			set(processor);
 			return *this;
@@ -141,7 +135,6 @@ namespace BALL
 		}
 
 		void AddBallAndStickModel::dump(std::ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -166,7 +159,6 @@ namespace BALL
 		}
 
 		void AddBallAndStickModel::renderStandardBond_(const Bond& bond)
-			throw()
 		{
 			// generate two colored tube
 			TwoColoredTube *tube = new TwoColoredTube;
@@ -240,7 +232,6 @@ namespace BALL
 		}
 
 		void AddBallAndStickModel::visualiseBond_(const Bond& bond)
-			throw()
 		{
 			// no visualisation for hydrogen bonds
 			if (bond.getType() == Bond::TYPE__HYDROGEN) return;
@@ -312,7 +303,6 @@ namespace BALL
 
 
 		void AddBallAndStickModel::visualiseRings_()
-			throw()
 		{
 			for (Position r = 0; r < rings_.size(); r++)
 			{
@@ -507,7 +497,6 @@ namespace BALL
 
 
 		bool AddBallAndStickModel::createGeometricObjects()
-			throw()
 		{
 			if (!dashed_bonds_) 
 			{

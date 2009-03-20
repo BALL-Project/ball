@@ -283,16 +283,13 @@ namespace BALL
 		/////////////////////////////////////////////////////////
 
 		///
-		BALL_VIEW_EXPORT String vector3ToString(const Vector3& v)
-			throw();
+		BALL_VIEW_EXPORT String vector3ToString(const Vector3& v);
 
 		///
-		BALL_VIEW_EXPORT bool stringToVector3(const String& data, Vector3& v)
-			throw();
+		BALL_VIEW_EXPORT bool stringToVector3(const String& data, Vector3& v);
 
 		/// create a string from a float and cut after a given number of digits after the dot
-		BALL_VIEW_EXPORT String createFloatString(float value, Size precision)
-			throw();
+		BALL_VIEW_EXPORT String createFloatString(float value, Size precision);
 
 		/** Get MainControl
 		 		This method is only to be used for code, which is not part of 
@@ -301,16 +298,13 @@ namespace BALL
 				MainControl* mc = dynamic_cast<MainControl*>(qApp->mainWidget());\\
 				On all other platforms, it uses MainControl::getInstance(0);
 		*/
-		BALL_VIEW_EXPORT MainControl* getMainControl()
-			throw();
+		BALL_VIEW_EXPORT MainControl* getMainControl();
 
 		/// Create a temporary filename in the users home dir
-		BALL_VIEW_EXPORT String createTemporaryFilename()
-			throw();
+		BALL_VIEW_EXPORT String createTemporaryFilename();
 
 		///
-		BALL_VIEW_EXPORT Vector3 getNormal(const Vector3& v)
-			throw();
+		BALL_VIEW_EXPORT Vector3 getNormal(const Vector3& v);
 
 		/// Event class used for thread safe output to logview
 		class BALL_VIEW_EXPORT LogEvent
@@ -397,8 +391,7 @@ namespace BALL
 		extern float 		icosaeder_vertices[12][3];
 		extern Position icosaeder_indices[20][3];
 
-		BALL_VIEW_EXPORT void subdivideTriangle(vector<Vector3>& results, Vector3& v1, Vector3& v2, Vector3& v3, Size precision)
-			throw();
+		BALL_VIEW_EXPORT void subdivideTriangle(vector<Vector3>& results, Vector3& v1, Vector3& v2, Vector3& v3, Size precision);
 
 		BALL_VIEW_EXPORT vector<Vector3> createSphere(Size precision);
 

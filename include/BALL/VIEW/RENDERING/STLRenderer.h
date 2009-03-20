@@ -43,8 +43,7 @@ class BALL_VIEW_EXPORT STLRenderer : public Renderer
 	//@{
 
 	/// Default constructor.
-	STLRenderer()
-		throw();
+	STLRenderer();
 
 	/** Detailed constructor.
 			\param name The name of the file we will create
@@ -53,12 +52,10 @@ class BALL_VIEW_EXPORT STLRenderer : public Renderer
 		throw(Exception::FileNotFound);
 	
 	/// Destructor.
-	virtual ~STLRenderer()
-		throw();
+	virtual ~STLRenderer();
 
 	/// Clear method.
-	virtual void clear()
-		throw();
+	virtual void clear();
 
 	//@}
 	/** @name Accessors
@@ -74,8 +71,7 @@ class BALL_VIEW_EXPORT STLRenderer : public Renderer
 
 	/** Converts a Vector3 into a String in VRML format as stl works in the same perspektive.
 	 */
-	String VRMLVector3(Vector3 input)
-		throw();
+	String VRMLVector3(Vector3 input);
 
 	//@}
 	/** @name Processor specific methods
@@ -85,54 +81,43 @@ class BALL_VIEW_EXPORT STLRenderer : public Renderer
 	/** Start method. 
 			This method creates the file and writes the header.
 	 */
-	virtual bool init(const Stage& stage)
-		throw();
+	virtual bool init(const Stage& stage);
 
 	/** Finish method.
 			This method writes the ending of the file and closes it.
 	 */
-	virtual bool finish()
-		throw();
+	virtual bool finish();
 
 	//@}
 
-	void renderSphere_(const Sphere& sphere)
-		throw();
+	void renderSphere_(const Sphere& sphere);
 	
-	void renderMesh_(const Mesh& mesh)
-		throw();
+	void renderMesh_(const Mesh& mesh);
 
-	void renderTube_(const Tube& tube)
-		throw();
+	void renderTube_(const Tube& tube);
 
-	void renderTwoColoredTube_(const TwoColoredTube& tube)
-		throw();
+	void renderTwoColoredTube_(const TwoColoredTube& tube);
 
-	void renderLine_(const Line& tube)
-		throw();
+	void renderLine_(const Line& tube);
 
-	void renderTwoColoredLine_(const TwoColoredLine& tube)
-		throw();
+	void renderTwoColoredLine_(const TwoColoredLine& tube);
 
-	void out_(const String& data)
-		throw();
+	void out_(const String& data);
 
 	void outheader_(const String& data)
-		throw() {out_(data); current_indent_ += 1;}
+		{out_(data); current_indent_ += 1;}
 
 	void outfinish_(const String& data)
-		throw() {out_(data); current_indent_ -= 1;}
+		{out_(data); current_indent_ -= 1;}
 
 	Size width, height;
 
 	protected:
 
 	void header_(const Vector3& translation, const ColorRGBA& color, 
-							 const String& rotation = "")
-		throw();
+							 const String& rotation = "");
 		
-	void footer_()
-		throw();
+	void footer_();
 
 	File outfile_;
 

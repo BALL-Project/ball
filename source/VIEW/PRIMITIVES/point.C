@@ -13,21 +13,18 @@ namespace BALL
 	{
 
 		Point::Point()
-			throw()
 			:	GeometricObject(),
 				Vertex()
 		{
 		}
 
 		Point::Point(const Point& point)
-			throw()
 			:	GeometricObject(point),
 				Vertex(point)
 		{
 		}
 
 		Point::~Point()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info () << "Destructing object " << (void *)this 
@@ -36,42 +33,36 @@ namespace BALL
 		}
 
 		void Point::clear()
-			throw()
 		{
 			GeometricObject::clear();
 			Vertex::clear();
 		}
 
 		void Point::set(const Point& point)
-			throw()
 		{
 			GeometricObject::set(point);
 			Vertex::set(point);
 		}
 
 		const Point& Point::operator =(const Point& point)
-			throw()
 		{
 			set(point);
 			return *this;
 		}
 
 		void Point::swap(Point& point)
-			throw()
 		{
 			GeometricObject::swap(point);
 			Vertex::swap(point);
 		}
 
 		bool Point::isValid() const
-			throw()
 		{
 			return (GeometricObject::isValid() &&
 											 Vertex::isValid() );
 		}
 
 		void Point::dump(ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

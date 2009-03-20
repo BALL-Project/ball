@@ -65,7 +65,6 @@ namespace BALL
 
 
 		HelpViewer::HelpViewer(QWidget *parent, const char *name)
-			throw()
 			: DockWidget(parent, name),
 				project_("BALLView"),
 				default_page_("index.html"),
@@ -92,7 +91,6 @@ namespace BALL
 		}
 
 		HelpViewer::~HelpViewer()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "Destructing object " << this << " of class HelpViewer" << endl;
@@ -102,7 +100,6 @@ namespace BALL
 		}
 
 		void HelpViewer::initializeWidget(MainControl& main_control)
-			throw()
 		{
 			DockWidget::initializeWidget(main_control);
 			insertMenuEntry(MainControl::HELP, project_ + " Documentation", this, SLOT(showHelp()));
@@ -162,7 +159,6 @@ namespace BALL
 		}
 
 		void HelpViewer::onNotify(Message *message)
-			throw()
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "HelpViewer" << this  << "onNotify " << message << std::endl;

@@ -206,7 +206,6 @@ namespace BALL
 
 		// move this somewhere else ????
 		VectorGrid* createVectorGrid(RegularData3D& potential)
-			throw()
 		{
 			RegularData3D::CoordinateType spacing = potential.getSpacing();
 			RegularData3D::IndexType         size = potential.getSize();
@@ -317,7 +316,6 @@ namespace BALL
 		}
 
 		RegularData3DController::~RegularData3DController()
-			throw()
 		{
 		}
 
@@ -704,7 +702,6 @@ namespace BALL
 		}
 
 		TrajectoryController::~TrajectoryController()
-			throw()
 		{
 		}
 
@@ -848,7 +845,6 @@ namespace BALL
 		}
 
 		DockResultController::~DockResultController()
-			throw()
 		{
 		}
 
@@ -980,7 +976,6 @@ namespace BALL
 		}
 
 		VectorGridController::~VectorGridController()
-			throw()
 		{
 		}
 
@@ -1112,7 +1107,6 @@ namespace BALL
 		}
 
 		RaytraceableGridController::~RaytraceableGridController()
-			throw()
 		{
 			if (rt_contour_surface_dialog_)
 				delete rt_contour_surface_dialog_;

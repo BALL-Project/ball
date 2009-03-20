@@ -42,7 +42,6 @@ namespace BALL
 	{
 
 		DockingController::DockingController(QWidget* parent, const char* name)
-			throw()
 			:	QWidget(parent),
 				ModularWidget(name),
 				dock_dialog_(this),
@@ -61,7 +60,6 @@ namespace BALL
 
 		// Copy constructor.
 		DockingController::DockingController(const DockingController& dock_controller)
-			throw()
 			: QWidget(),
 				ModularWidget(dock_controller),
 				dock_dialog_(),
@@ -73,7 +71,6 @@ namespace BALL
 		
 		// Destructor
 		DockingController::~DockingController()
-			throw()
 		{
 			// remark: progress dialog is automatically deleted because its parent is the docking controller
 			
@@ -93,14 +90,12 @@ namespace BALL
 		
 		// Assignment operator
 		const DockingController& DockingController::operator = (const DockingController&)
-			throw()
 		{
 			return *this;
 		}
 		
 		// Message handling method
 		void DockingController::onNotify(Message *message)
-			throw()
 		{
 			// if (re)docking has finished, start scoring
 			// first check if user has aborted (re)docking
@@ -153,7 +148,6 @@ namespace BALL
 		
 		// Initializes the popup menu Molecular Mechanics with its checkable submenu Docking.
 		void DockingController::initializeWidget(MainControl& main_control)
-			throw()
 		{			
 			action_ = main_control.insertMenuEntry(MainControl::MOLECULARMECHANICS, "&Docking", this,
 																				 SLOT(startDocking()), Qt::CTRL + Qt:: Key_D);
@@ -163,21 +157,18 @@ namespace BALL
 		
 		//Fetches the preferences from the INIFile
 		void DockingController::fetchPreferences(INIFile& file)
-			throw()
 		{
 			dock_dialog_.fetchPreferences(file);
 		}
 
 		//Writes the preferences to the INIFile.
 		void DockingController::writePreferences(INIFile& file)
-			throw()
 		{
 			dock_dialog_.writePreferences(file);
 		}
 		
 		// Updates the state of menu entry Docking in the popup menu Molecular Mechanics.
 		void DockingController::checkMenu(MainControl& main_control)
-			throw()
 		{
 			// if composites are locked disable menu entry "Docking"
 			if (main_control.isBusy())
@@ -195,7 +186,6 @@ namespace BALL
 		}
 		
 		DockDialog& DockingController::getDockDialog()	
-			throw()
 		{
 		 return dock_dialog_;
 		}			
@@ -210,7 +200,6 @@ namespace BALL
 		// Show docking dialog, check which algorithm is chosen and create new DockingAlgorithm object.
 		// Start new Thread and fill/show ProgressDialog.
 		void DockingController::runDocking(bool is_redock)
-			throw()
 		{
 			// Make sure we run just one instance at a time.
 			if (getMainControl()->isBusy())
@@ -351,7 +340,6 @@ namespace BALL
 		// At the end, add the docked system to BALLView structures
 		// and send a NewDockResultMessage to insert the DockResult in DatasetControl.
 		bool DockingController::runScoring_(ConformationSet* conformation_set)
-			throw()
 		{
 			if (!conformation_set) return false;
 

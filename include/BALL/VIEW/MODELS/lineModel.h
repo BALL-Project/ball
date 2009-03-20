@@ -34,18 +34,15 @@ namespace BALL
 
 			/** Default Constructor.
 			*/
-			AddLineModel()
-				throw();
+			AddLineModel();
 
 			/** Copy constructor.
 			*/
-			AddLineModel(const AddLineModel& add_line_model)
-				throw();
+			AddLineModel(const AddLineModel& add_line_model);
 
 			/** Destructor.
 			*/
-			virtual ~AddLineModel()
-				throw();
+			virtual ~AddLineModel();
 
 			//@} 
 			/**	@name Processor specific methods 
@@ -80,15 +77,13 @@ namespace BALL
 					\param   depth the dumping depth
 					\see     AtomBondModelBaseProcessor
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 							
 			//@}
 
 			protected:
 
-			void visualiseBond_(const Bond& bond)
-				throw();
+			void visualiseBond_(const Bond& bond);
 		};
 
 	} // namespace VIEW

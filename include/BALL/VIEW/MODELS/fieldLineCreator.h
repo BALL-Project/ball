@@ -35,18 +35,15 @@ namespace BALL
 
 			/** Default Constructor.
 			*/
-			FieldLineCreator()
-				throw();
+			FieldLineCreator();
 
 			/** Copy constructor.
 			*/
-			FieldLineCreator(const FieldLineCreator& fc)
-				throw();
+			FieldLineCreator(const FieldLineCreator& fc);
 
 			/** Destructor.
 			*/
-			virtual ~FieldLineCreator()
-				throw();
+			virtual ~FieldLineCreator();
 
 			Representation* createLines();
 

@@ -36,7 +36,7 @@ namespace BALL
 			DockWidget(QWidget* parent, const char* title = 0);
 
 			///
-			virtual ~DockWidget() throw() {}
+			virtual ~DockWidget(){}
 			
 			/** Insert a widget with the content of the window.
 			 */
@@ -45,18 +45,17 @@ namespace BALL
 			/**	Initialize the widget.
 					@see ModularWidget::initializeWidget
 			*/
-			virtual void initializeWidget(MainControl& main_control)
-				throw();
+			virtual void initializeWidget(MainControl& main_control);
 
 			/** Load settings from an INIFile
 					@see ModularWidget::fetchPreferences
 			*/
-			virtual void fetchPreferences(INIFile& inifile)	throw();
+			virtual void fetchPreferences(INIFile& inifile);
 			
 			/** Write settings to an INIFile
 					@see ModularWidget::writePreferences
 			*/
-			virtual void writePreferences(INIFile& inifile) throw();
+			virtual void writePreferences(INIFile& inifile);
 
 			/// For usage with Python:
 			virtual void setWidgetVisible(bool state);

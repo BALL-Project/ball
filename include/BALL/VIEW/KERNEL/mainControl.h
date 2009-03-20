@@ -211,28 +211,23 @@ namespace BALL
 					\see    INIFile
 					\see    Preferences
 			*/
-			MainControl(QWidget* parent = 0, const char* name = 0 , String inifile = ".BALL.preferences")
-				throw();
+			MainControl(QWidget* parent = 0, const char* name = 0 , String inifile = ".BALL.preferences");
 
 			/** Destructor.
 					Calls clear
 			*/
-			virtual ~MainControl()
-				throw();
+			virtual ~MainControl();
 					
 			// copy ctor needed for Python support only!
-			MainControl(const MainControl& main_control)
-				throw();
+			MainControl(const MainControl& main_control);
 
 			/** Clear all data fast, to be called at exit only!
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			/** Clear all data, can be called at any time
 			*/
-			void clearData()
-				throw();
+			void clearData();
 
 			//@}
 			/**	@name	Methods to manage Representation(s)
@@ -243,29 +238,26 @@ namespace BALL
 					The class RepresentationManager contains all Representation objects and GeometricObject.
 			*/
 			RepresentationManager& getRepresentationManager()
-				throw() { return primitive_manager_;}
+				{ return primitive_manager_;}
 
 			/** Insert a Representation
 			 		The Representation must be created on the heap!!!
 			 		A RepresentationMessage with type NEW is send.
 					\return false if the RepresentationManager contains the Representation
 			*/
-			bool insert(Representation& rep)
-				throw();
+			bool insert(Representation& rep);
 
 			/** Remove a Representation
 			 		A RepresentationMessage with type REMOVE is send.
 					\return false if the RepresentationManager doesnt contain the Representation
 			*/
-			bool remove(Representation& rep)
-				throw();
+			bool remove(Representation& rep);
 
 			/** Update a Representation
 			 		A RepresentationMessage with type UPDATE and a SceneMessage is send.
 					\return false if the RepresentationManager doesnt contain the Representation
 			*/
-			bool update(Representation& rep)
-				throw();
+			bool update(Representation& rep);
 
 			/** Redraws all Representation objects for a Composite.
 					If the Composite is not inserted into this MainControl <tt>false</tt> will be returned.
@@ -282,15 +274,13 @@ namespace BALL
 					\param  force is set to true, also rebuild non surface models (only usefull with rebuild = true)
 					\return true if an update was performed
 			*/
-			bool updateRepresentationsOf(const Composite& composite, bool rebuild = true, bool force = false)
-				throw();
+			bool updateRepresentationsOf(const Composite& composite, bool rebuild = true, bool force = false);
 
 			/** Redraws all inserted Representation, but doesnt change the Models.
 					\param rebuild_display_lists set to true lets the Scene rebuild the GLDisplayList objects.
 					\see updateRepresentationsOf
 			*/
 			void redrawAllRepresentations(bool rebuild_display_lists = false)
-				throw();
 			
 			//@}
 			/**	@name	Methods to manage Shortcuts
@@ -312,7 +302,7 @@ namespace BALL
 					The class CompositeManager is the owner of all Composite objects.
 			*/
 			CompositeManager& getCompositeManager()
-				throw() { return composite_manager_;}
+				{ return composite_manager_;}
 	
 			/** Insert a Composite and notify all ModularWidget.
 			 		The Composite has to be created on the heap!!!
@@ -320,8 +310,7 @@ namespace BALL
 					CompositeManager::insert called.
 					\return false if the CompositeManager contains the Composite
 			*/
-			bool insert(Composite& composite, String name = "")
-				throw();
+			bool insert(Composite& composite, String name = "");
 
 			/** Remove a Composite and notify all ModularWidget.
 			 		A CompositeMessage with type REMOVED_COMPOSITE is send and
@@ -329,8 +318,7 @@ namespace BALL
 					@param update update Representations if needed
 					\return false if the CompositeManager doesnt contain the Composite
 			*/
-			bool remove(Composite& composite, bool to_delete = true, bool update = true)
-				throw();
+			bool remove(Composite& composite, bool to_delete = true, bool update = true);
 	
 			/** Update a Composite in all ModularWidget.
 			 		This method differs wheter the composites hierarchy was changed or not.
@@ -340,38 +328,30 @@ namespace BALL
 					updateRepresentationsOf(composite) is called.
 					\return false if the CompositeManager doesnt contain the Composite
 			*/
-			void update(Composite& composite, bool changed_hierarchy = true)
-				throw();
+			void update(Composite& composite, bool changed_hierarchy = true);
 			
 			/// Get the HashSet with the selected (e.g. picked) Composite objects (const)
-			const HashSet<Composite*>& getSelection() const
-				throw();
+			const HashSet<Composite*>& getSelection() const;
 
 			/// Get the HashSet with the selected (e.g. picked) Composite objects
-			HashSet<Composite*>& getSelection() 
-				throw();
+			HashSet<Composite*>& getSelection() ;
 
 			/// Get the selection (highlighted items) of the MolecularControl (not the selection with checkboxes)
-			List<Composite*>& getMolecularControlSelection()
-				throw();
+			List<Composite*>& getMolecularControlSelection();
 
 			/// If exactly one System is selected in the Control, return a pointer to this system, otherwise 0.
-			System* getSelectedSystem()
-				throw();
+			System* getSelectedSystem();
 
 			///	Select a Composite recursive and add all Atom and AtomContainer objects to the selection.
-			void selectCompositeRecursive(Composite* composite, bool first_call=false)
-				throw();
+			void selectCompositeRecursive(Composite* composite, bool first_call=false);
 
 			/// Select a Composite recursive and add all Atom and AtomContainer objects to the selection.
-			void deselectCompositeRecursive(Composite* composite, bool first_call=false)
-				throw();
+			void deselectCompositeRecursive(Composite* composite, bool first_call=false);
 
 			/** Clear Selection
 			 		Deselect all Composites and clear the selection list in the MainControl
 			*/
-			void clearSelection()
-				throw();
+			void clearSelection();
 
 			/** Print some informations for the selection in the statusbar.
 					Called by selectComposites_().
@@ -381,8 +361,7 @@ namespace BALL
 					for four Atom 's their torsion angle.
 					Else the number of items is printed.
 			*/
-			void printSelectionInfos()
-				throw();
+			void printSelectionInfos();
 
 
 			//@}
@@ -402,8 +381,7 @@ namespace BALL
 					overriden method to make sure that the general preferences are fetched.
 					\param  inifile the INIFile that contains the needed values
 			*/
-			virtual void fetchPreferences(INIFile &inifile)
-				throw();
+			virtual void fetchPreferences(INIFile &inifile);
 			
 			/** Writes the widgets preferences to the INIFile.
 					Calls writePreferences() for all registered ModularWidgets and
@@ -412,32 +390,26 @@ namespace BALL
 					overriden method to make sure that the general preferences are written.
 					\param  inifile the INIFile that contains the needed values
 			*/
-			virtual void writePreferences(INIFile &inifile)
-				throw();
+			virtual void writePreferences(INIFile &inifile);
 			
 			/// Restore the positions the main window and of all DockWindow's from the INIFile assigned to this instance.
-			virtual void restoreWindows()
-				throw();
+			virtual void restoreWindows();
 	
 			/// Restore the positions the main window and of all DockWindow's from a given inifile
-			virtual void restoreWindows(const INIFile& inifile)
-				throw();
+			virtual void restoreWindows(const INIFile& inifile);
 	
 			/** Mutable inspection of the INIFile.
 			*/
-			INIFile& getINIFile()
-				throw();
+			INIFile& getINIFile();
 
 			/** Non-mutable inspection of the INIFile.
 			*/
-			const INIFile& getINIFile() const
-				throw();
+			const INIFile& getINIFile() const;
 			
 			/** Mutable inspection of the preferences dialog.
 					\return   Preferences* a pointer to the Preferences dialog, (<tt> 0</tt> if not present)
 			*/
-			Preferences* getPreferences()
-				throw();
+			Preferences* getPreferences();
 			
 			/** Apply all preferences.
 					This method is called automatically by applyPreferencesClicked() and calls
@@ -447,8 +419,7 @@ namespace BALL
 					\see    ModularWidget
 					\see    Preferences
 			*/
-			virtual void applyPreferences()
-				throw();
+			virtual void applyPreferences();
 			
 		
 			//@}
@@ -468,24 +439,21 @@ namespace BALL
 					\see      ConnectionObject
 					\see      ModularWidget
 			*/
-			static MainControl* getMainControl(const QObject* object)
-				throw();
+			static MainControl* getMainControl(const QObject* object);
 			
 			/** Add a new ModularWidget to this MainControl.
 					This method will be called internally by the ModularWidget registration process.
 					So, if you dont know exactly what this method does, you will not need it!
 					\param  widget the ModularWidget to be inserted into this mainControl
 			*/
-			void addModularWidget(ModularWidget* widget)
-				throw();
+			void addModularWidget(ModularWidget* widget);
 
 			/** Remove a ModularWidget from the MainControl.
 					This method will be called internally by the ModularWidget registration process.
 					So, if you dont know exactly what this method does, you will not need it!
 					\param  widget the ModularWidget to be removed
 			*/
-			void removeModularWidget(ModularWidget* widget)
-				throw();
+			void removeModularWidget(ModularWidget* widget);
 
 			/** Message handling method.
 					Handles messages sent by other registered ModularWidget objects.
@@ -498,16 +466,14 @@ namespace BALL
 					\see   ModularWidget
 					\see   Message
 			*/
-			virtual void onNotify(Message *message)
-				throw();
+			virtual void onNotify(Message *message);
 
 			/** Send a Message from Python.
 					Otherwise, you should prefer to use ModularWidget::notify_.
 					The MainControl itself also reacts to a Message, send with this method.
 					The Message will be deleted, after it was send to all ModularWidget's.
 			*/
-			void sendMessage(Message& message)
-				throw();
+			void sendMessage(Message& message);
 
 
 			//@}
@@ -528,11 +494,9 @@ namespace BALL
 			*/
 			QAction* insertMenuEntry(Position parent_id, const String& name, const QObject* receiver = 0, 
 													 const char* slot = 0, const String& description = "", QKeySequence accel = QKeySequence())
-				throw();
 
 			/// 
-			void removeMenuEntry (Index parent_id, QAction* action)
-				throw();
+			void removeMenuEntry (Index parent_id, QAction* action);
 			
 			/**	Initialize a new popup menu <b> ID</b>. 
 					If the MainControl has already the popup menu <b>ID</b> that QPopupMenu is returned.
@@ -541,36 +505,30 @@ namespace BALL
 					\return   QPopupMenu* a pointer to the created QPopupMenu
 					\see      PopUpID
 			*/	
-			virtual QMenu* initPopupMenu(int ID)
-				throw();
+			virtual QMenu* initPopupMenu(int ID);
 
 			/** Insert a separator into the popup menu <b> ID</b>. 
 					If the menu <b>ID</b> is not existent, it will be created first.
 					\param ID the id of the menu to which a separator will be inserted
 					\see   PopUpID
 			*/
-			void insertPopupMenuSeparator(int ID)
-				throw();
+			void insertPopupMenuSeparator(int ID);
 
 			/// Set a hint for a menu entry
-			void setMenuHint(QAction* id, const String& hint)
-				throw();
+			void setMenuHint(QAction* id, const String& hint);
 
 			/// Get the hint for a menu entry
-			String getMenuHint(QAction* id) const
-				throw();
+			String getMenuHint(QAction* id) const;
 
 			/** Enable the delete entry for GenericControls.
 					Called by a GenericControl, if it has a selection, that can be deleted.
 			*/
-			void setDeleteEntryEnabled(bool state)
-				throw();
+			void setDeleteEntryEnabled(bool state);
 	
 			/** Insert the delete entry for GenericControls.
 					Called by all GenericControls.
 			*/
-			void insertDeleteEntry()
-				throw();
+			void insertDeleteEntry();
 
 			/// Get the ID of the last highlighted menu entry (used for the HelpViewer)
 			QAction* getLastHighLightedMenuEntry() { return last_highlighted_menu_entry_;}
@@ -583,23 +541,23 @@ namespace BALL
 			/** Check wheter the stored composites can be modified at the moment.
 					This method returns true e.g. while a MD simulation is running.
 			*/
-			bool compositesAreLocked() const throw();
+			bool compositesAreLocked() const;
 
 			/** Lock the Composites for a given Modular Widget.
 					This allows exclusive acces e.g. to delete or modify Composites and prevents those
 					nasty segfaults if an other thread works on the Composites.
 					@retrun true if the exclusive lock on the composites could be obtained
 			*/
-			bool lockCompositesFor(ModularWidget* widget) throw();
+			bool lockCompositesFor(ModularWidget* widget);
 
 			/// Lock the Composites for a given Modular Widget
-			bool unlockCompositesFor(ModularWidget* widget) throw();
+			bool unlockCompositesFor(ModularWidget* widget);
 
 			/// Get the ModularWidget with excluse access to the Composites
-			ModularWidget* getLockingWidget() throw();
+			ModularWidget* getLockingWidget();
 
 			/// Return true if Representations are (re)calculated
-			bool updateOfRepresentationRunning() throw();
+			bool updateOfRepresentationRunning();
 					
 			/// Returns true, if the simulation was told to stop, but hasnt done this so far.
 			bool stopedSimulation() { return stop_simulation_;}
@@ -609,14 +567,12 @@ namespace BALL
 					has finished. If an other simulation is still running, this
 					method returns false.
 			*/
-			bool setSimulationThread(SimulationThread* thread)
-				throw();
+			bool setSimulationThread(SimulationThread* thread);
 
 			/** Get the currently running SimulationThread or
 			 		zero pointer if no simulation running.
 			*/
-			SimulationThread* getSimulationThread()
-				throw();
+			SimulationThread* getSimulationThread();
 
 			/** Method to query if multithreading is enabled.
 			 		Multithreaded code is used for serveral functions:
@@ -630,12 +586,11 @@ namespace BALL
 					Furthermore most of the time, valid benchmark results can only be achived 
 					with one single thread.
 			*/
-			bool useMultithreading()
-				throw();
+			bool useMultithreading();
 
 			/// See above
 			void setMultithreading(bool state)
-				throw() {multi_threading_mode_ = state;}
+				{multi_threading_mode_ = state;}
 
 			///
 			bool isBusy() const;
@@ -659,16 +614,14 @@ namespace BALL
 								 shown there for a longer time
 					@param beep if true a beep tone is played to inform the user about a critical event
 			*/
-			void setStatusbarText(const String& text, bool important = false, bool beep = false)
-				throw();
+			void setStatusbarText(const String& text, bool important = false, bool beep = false);
 
 			///
-			String getStatusbarText() const
-				throw();
+			String getStatusbarText() const;
 	
 			/// Get a const reference for the fragment database
 			const FragmentDB& getFragmentDB() const
-				throw() { return fragment_db_;}
+				{ return fragment_db_;}
 
 			///
 			const ModelInformation& getModelInformation() const;
@@ -681,31 +634,26 @@ namespace BALL
 					This method returns the last directory.
 			*/
 			String getWorkingDir() const
-				throw() { return working_dir_;}
+				{ return working_dir_;}
 
 			/// Set the working directory for the next file dialog and file operation to the given directory.
-			void setWorkingDir(const String& dir)
-				throw();
+			void setWorkingDir(const String& dir);
 
 			/** This enables logging to an file for all messages send per LogStream .e.g. Log().error()
 			*/
-			void enableLoggingToFile()
-				throw();
+			void enableLoggingToFile();
 			
 			/** This disables logging to an file for all messages send per LogStream .e.g. Log().error()
 			*/	
-			void disableLoggingToFile()
-				throw();
+			void disableLoggingToFile();
 
 			/** Set the name for the logging file (see above) to the given name. 
 					This file is stored in the users home dir.
 			*/
-			void setLoggingFilename(const String& string)
-				throw();
+			void setLoggingFilename(const String& string);
 
 			/// See above
-			const String& getLoggingFilename() const
-				throw();
+			const String& getLoggingFilename() const;
 
 			/// Set the proxy for HTTP and FTP operations
 			void setProxy(const String& host, Position port);
@@ -731,8 +679,7 @@ namespace BALL
 					\param   s output stream where to output the internal state 
 					\param   depth the dumping depth
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 					
 			/** Open a file.
 			 		This method is called to parse any command line arguments.
@@ -741,8 +688,7 @@ namespace BALL
 					If one ModularWidget can handle the format, ModularWidget::openFile
 					is called.
 			*/
-			virtual void openFile(const String& file) 
-				throw();
+			virtual void openFile(const String& file) ;
 
 
 			//@}
@@ -806,8 +752,7 @@ namespace BALL
 					@see setMenuHint
 					@see getMenuHint
 			*/
-			void menuItemHighlighted(QAction* action)
-				throw();
+			void menuItemHighlighted(QAction* action);
 			
 			/// Interface to QT events, e.g. to communicate with other threads
 			virtual bool event(QEvent* e);
@@ -831,10 +776,10 @@ namespace BALL
 			void quickLoad();
 			
 			///
-			void saveBALLViewProjectFile() throw();
+			void saveBALLViewProjectFile(); 
 
 			///
-			void loadBALLViewProjectFile() throw();
+			void loadBALLViewProjectFile();
 
 			///
 			void quickLoadConfirm();
@@ -865,8 +810,7 @@ namespace BALL
 
 			protected:
 
-			virtual void initializePreferencesTab_()
-				throw();
+			virtual void initializePreferencesTab_();
 
 			//_  Called after receiving an SimulationThreadFinished event
 			void stopedSimulation_();
@@ -881,20 +825,17 @@ namespace BALL
 					\return bool <tt>true</tt> if the CompositeManager has the Composite
 			*/
 			bool remove_(Composite& composite, bool update_representations_of_parent = true, 
-																				 bool to_delete = true)
-				throw();
+																				 bool to_delete = true);
 
 			/*_ Select the composite parents of the geometric objects.
 					The GeometricObjectSelectionMessage is sent by the Scene.
 			 */
-			void selectComposites_(GeometricObjectSelectionMessage& message)
-				throw();
+			void selectComposites_(GeometricObjectSelectionMessage& message);
 
 			void reduceSelection_(Composite* const composite);
 
 			//_ Called by constructors
-			void setup_()
-				throw();
+			void setup_();
 
 			void complementSelectionHelper_(Composite& c);
 

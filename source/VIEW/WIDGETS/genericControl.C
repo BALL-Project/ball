@@ -33,7 +33,6 @@ namespace BALL
 		}
 
 		GenericControl::GenericControl(QWidget* parent, const char* name)
-			throw()
 				:	DockWidget(parent, name),
  					context_item_(0),
 					listview(new TreeWidget(this)),
@@ -47,7 +46,6 @@ namespace BALL
 
 
 		GenericControl::~GenericControl()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "Destructing object " << this << " of class GenericControl" << endl;
@@ -56,7 +54,6 @@ namespace BALL
 
 
 		GenericControl::ItemList GenericControl::getSelectedItems()
-			throw()
 		{
 			QList<QTreeWidgetItem*> result = listview->selectedItems();
 			if (result.size() > 0)
@@ -82,7 +79,6 @@ namespace BALL
 		}
 
 		void GenericControl::onNotify(Message *message)
-			throw()
 		{
 			if (!RTTI::isKindOf<DeselectControlsMessage>(*message)) return;
 
@@ -90,7 +86,6 @@ namespace BALL
 		}
 
 		void GenericControl::initializeWidget(MainControl& main_control)
-			throw()
 		{
 			main_control.insertDeleteEntry();
 			DockWidget::initializeWidget(main_control);
@@ -105,7 +100,6 @@ namespace BALL
 		}
 
 		void GenericControl::removeItem_(QTreeWidgetItem* item)
-			throw()
 		{
 			while (item->child(0) != 0)
 			{

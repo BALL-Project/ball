@@ -47,35 +47,30 @@ namespace BALL
 
 
 		GLDisplayList::NestedDisplayList::NestedDisplayList(const char* file, int line)
-			throw()
 			:	Exception::GeneralException(file, line, String("NestedDisplayList"), 
 																		String("display list definition inside another is not allowed."))
 		{
 		}
 
 		GLDisplayList::NoDisplayListAvailable::NoDisplayListAvailable(const char* file, int line)
-			throw()
 			:	Exception::GeneralException(file, line, String("NoDisplayListAvailable"), 
 																		String("memory allocation for display list failed."))
 		{
 		}
 
 		GLDisplayList::DisplayListRedeclaration::DisplayListRedeclaration(const char* file, int line)
-			throw()
 			:	Exception::GeneralException(file, line, String("DisplayListRedeclaration"), 
 																		String("display list already defined."))
 		{
 		}
 
 		GLDisplayList::GLDisplayList()
-			throw()
 			:	compile_(true),
 				GL_list_(0)
 		{
 		}
 
 		GLDisplayList::~GLDisplayList()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "Destructing object " << this << " of class GLDisplayList" << endl;
@@ -85,7 +80,6 @@ namespace BALL
 		}
 
 		void GLDisplayList::clear()
-			throw()
 		{
 			if (GL_list_ != 0)
 			{
@@ -140,14 +134,12 @@ namespace BALL
 		}
 
 		void GLDisplayList::endDefinition()
-			throw()
 		{ 
 			CHECK_GL_ERROR
 			glEndList(); 
 		}
 
 		void GLDisplayList::dump(ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
