@@ -1,10 +1,15 @@
 #include <BALL/VIEW/RENDERING/renderSetup.h>
+
+#include <BALL/VIEW/RENDERING/bufferedRenderer.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
+
+#ifdef ENABLE_RAYTRACING
 #include <BALL/VIEW/RENDERING/RENDERERS/rtfactRenderer.h>
 
-// TEST
 #define USE_TBB
 #ifdef USE_TBB
 # include <tbb/task_scheduler_init.h>
+#endif
 #endif
 
 namespace BALL
