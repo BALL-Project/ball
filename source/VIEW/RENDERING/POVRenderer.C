@@ -173,7 +173,7 @@ namespace BALL
 
 		bool POVRenderer::init(Scene& scene)
 		{
-			Renderer::init(scene);
+			return Renderer::init(scene);
 		}
 
 		// init must be called right before the rendering starts, since
