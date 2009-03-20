@@ -224,9 +224,16 @@ namespace BALL
 			descriptions_[current_item] = pr;
 			System S = smiles_parser_.getSystem();
 			original_systems_[current_item] = new System(S);
-
-			SDGenerator sdg;
-			sdg.generateSD(S);
+			
+			try
+			{
+				SDGenerator sdg;
+				sdg.generateSD(S);
+			}
+			catch(...)
+			{
+				Log.info() << "Secondary structure plotting failed";
+			}
 
 			if (plot)
 			{
