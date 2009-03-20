@@ -281,6 +281,16 @@ namespace BALL
 				}
 		}
 
+		void GLRenderWindow::paintEvent(QPaintEvent* e)
+		{
+			if (!ignore_events_) 
+			{
+				QGLWidget::paintEvent(e);
+				refresh();
+				swapBuffers();
+			}
+		}
+
 		void GLRenderWindow::lockGLContext()
 		{
 			contex_mutex_.lock();

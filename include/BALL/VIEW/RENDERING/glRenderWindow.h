@@ -66,7 +66,7 @@ namespace BALL
 			void ignoreEvents(bool ignore) {ignore_events_ = ignore;}
 
 		protected:	
-			void paintEvent(QPaintEvent* e) { if (!ignore_events_) QGLWidget::paintEvent(e);}
+			void paintEvent(QPaintEvent* e);
 			static QGLFormat gl_format_;
 
 			// ID of the fullscreen texture used to paste image into GPU framebuffer            
