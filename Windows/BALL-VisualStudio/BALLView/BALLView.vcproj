@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="BALLView"
 	ProjectGUID="{B45D0A45-D1B7-45B4-A78E-C0F2E4B48D0D}"
 	RootNamespace="BALLView"
@@ -63,7 +63,6 @@
 				AdditionalLibraryDirectories="&quot;$(QTDIR)\lib&quot;;&quot;$(OutDir)&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
-				StackReserveSize="100000000"
 			/>
 			<Tool
 				Name="VCALinkTool"
