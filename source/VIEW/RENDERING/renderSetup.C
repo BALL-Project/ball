@@ -3,10 +3,11 @@
 #include <BALL/VIEW/RENDERING/bufferedRenderer.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 
-#ifdef ENABLE_RAYTRACING
-#include <BALL/VIEW/RENDERING/RENDERERS/rtfactRenderer.h>
 
 #include <BALL/SYSTEM/timer.h>
+
+#ifdef ENABLE_RAYTRACING
+#include <BALL/VIEW/RENDERING/RENDERERS/rtfactRenderer.h>
 
 #define USE_TBB
 #ifdef USE_TBB
