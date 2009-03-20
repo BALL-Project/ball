@@ -6,6 +6,9 @@
 #include <BALL/VIEW/RENDERING/glRenderWindow.h>
 #include <BALL/COMMON/logStream.h>
 
+//#define USE_GLPAINTPIXELS
+#undef USE_GLPAINTPIXELS
+
 namespace BALL 
 {
 	namespace VIEW 
@@ -72,6 +75,10 @@ namespace BALL
 		{
 			checkGL();
 
+			// TODO: is this necessary?
+			if (!format().rgba())
+				Log.error() << "No RGBA mode for OpenGl available." << std::endl;
+
 			RenderWindow<float>::init();
 			bool result = false;
 
@@ -120,12 +127,16 @@ namespace BALL
 			glPushAttrib(GL_TEXTURE_BIT);
 			glPushAttrib(GL_DEPTH_BUFFER_BIT);
 
+#ifdef USE_GLPAINTPIXELS
+			glDrawPixels(m_fmt.getWidth(), m_fmt.getHeight(), FB_TEXTURE_FORMAT, FB_TEXTURE_DATATYPE, m_pixels.get());
+#else
 			glBindTexture(FB_TEXTURE_TARGET, m_screenTexID);
 			glTexSubImage2D(FB_TEXTURE_TARGET, 0, 0, 0, m_fmt.getWidth(), m_fmt.getHeight(), 
 					FB_TEXTURE_FORMAT, FB_TEXTURE_DATATYPE, m_pixels.get());                
 
 			glEnable(FB_TEXTURE_TARGET);
 			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+#endif
 
 			glDisable(GL_DEPTH_TEST);
 			glMatrixMode(GL_PROJECTION);
@@ -134,6 +145,7 @@ namespace BALL
 			glLoadIdentity();
 
 			glPushAttrib(GL_VIEWPORT_BIT);
+#ifndef USE_GLPAINTPIXELS
 			glViewport(0, 0, m_fmt.getWidth(), m_fmt.getHeight());
 			float aspectRatio = static_cast<float>(m_fmt.getWidth()) / m_fmt.getHeight();
 			glOrtho(-aspectRatio, aspectRatio, -1.0f, 1.0f, -1.0f, 1.0f);
@@ -153,6 +165,7 @@ namespace BALL
 			glVertex2f(-aspectRatio, 1.0f);
 
 			glEnd();
+#endif
 			glPopAttrib();
 
 			glPopMatrix();	
@@ -184,6 +197,8 @@ namespace BALL
 
 		void GLRenderWindow::renderText(float x, float y, float z, const String& text, const ColorRGBA& color, Size size)
 		{
+			// TEST!
+			return;
 			QFont font;
 			font.setPixelSize(size);
 			font.setBold(true);
@@ -262,7 +277,7 @@ namespace BALL
 				GLenum err;
 				if(errorInGL(err))
 				{
-						BALL::Log.error() << "Error in OpenGL: " << getGLErrorString(err) << std::endl;
+					BALL::Log.error() << "Error in OpenGL: " << getGLErrorString(err) << std::endl;
 				}
 		}
 

@@ -6,6 +6,8 @@
 #ifdef ENABLE_RAYTRACING
 #include <BALL/VIEW/RENDERING/RENDERERS/rtfactRenderer.h>
 
+#include <BALL/SYSTEM/timer.h>
+
 #define USE_TBB
 #ifdef USE_TBB
 # include <tbb/task_scheduler_init.h>
@@ -108,23 +110,26 @@ namespace BALL
 			if (RTTI::isKindOf<GLRenderer>(*renderer))
 				((GLRenderer*)renderer)->setSize(width, height);
 
-			if (RTTI::isKindOf<BufferedRenderer>(*renderer))
-				target->refresh();
-			else
-				target->updateGL();
-
-			// do *not* move this unlock call below updateCamera, or we will deadlock!
 			target->unlockGLContext();
-
 			render_mutex_.unlock();
 
 			updateCamera();
+
+			renderToBuffer_();
+
+			target->lockGLContext();
+			render_mutex_.lock();
+
+			target->swapBuffers();
 
 			if (reset_continuous)
 			{
 //				use_continuous_loop_ = true;
 //				start();
 			}
+
+			target->unlockGLContext();
+			render_mutex_.unlock();
 		}
 
 		void RenderSetup::updateCamera(const Camera* camera)
@@ -196,11 +201,18 @@ namespace BALL
 			target->lockGLContext();
 
 			useContinuousLoop(true);
+			Timer t;
 
 			// to be stopped from the outside, someone needs to call useContinuousLoop(false)
 			while (use_continuous_loop_)
 			{
+				printf("###################################### FRAME #####################################\n");
+				t.start();
 				renderToBuffer_();
+				t.stop();
+				printf("###################################### DONE (%f)  #####################################\n", t.getClockTime());
+				t.reset();
+				msleep(16);
 			}
 
 			target->unlockGLContext();
@@ -235,7 +247,6 @@ namespace BALL
 			if (RTTI::isKindOf<BufferedRenderer>(*renderer))
 			{
 				((BufferedRenderer*)renderer)->renderToBuffer(target, *stage_);
-				//TEST
 				target->refresh();
 				// TODO: render coordinate systems!
 			}
@@ -252,9 +263,7 @@ namespace BALL
 				// todo: does this work correctly???
 				//scene_->renderGrid_();
 
-				// make sure that the scene does not receive this event again
-				if (target != scene_)
-					target->updateGL();
+				//target->updateGL();
 			}
 
 			if (use_continuous_loop_)
@@ -279,9 +288,9 @@ namespace BALL
 
 				render_mutex_.lock();
 
-				if (!use_continuous_loop_)
-					target->makeCurrent();
+				target->lockGLContext();
 				renderer->bufferRepresentation(rep);
+				target->unlockGLContext();
 
 				render_mutex_.unlock();
 			}
@@ -296,9 +305,9 @@ namespace BALL
 
 				render_mutex_.lock();
 
-				if (!use_continuous_loop_)
-					target->makeCurrent();
+				target->lockGLContext();
 				renderer->removeRepresentation(rep);
+				target->unlockGLContext();
 
 				render_mutex_.unlock();
 			}
@@ -312,10 +321,10 @@ namespace BALL
 			render_mutex_.lock();
 
 			if (!use_continuous_loop_)
-			{
-				target->makeCurrent();
-			}
+				target->lockGLContext();
 			renderer->setLights(reset_all);
+			if (!use_continuous_loop_)
+				target->unlockGLContext();
 
 			render_mutex_.unlock();
 		}
@@ -327,9 +336,9 @@ namespace BALL
 
 			render_mutex_.lock();
 
-			if (!use_continuous_loop_)
-				target->makeCurrent();
+			target->lockGLContext();
 			renderer->updateBackgroundColor();
+			target->unlockGLContext();
 
 			render_mutex_.unlock();
 		}
@@ -340,10 +349,14 @@ namespace BALL
 
 			if (RTTI::isKindOf<GLRenderer>(*renderer))
 			{
+				if (use_continuous_loop_)
+					useContinuousLoop(false);
+
 				render_mutex_.lock();
 
-				target->makeCurrent();
+				target->lockGLContext();
 				texname = ((GLRenderer*)renderer)->createTextureFromGrid(grid, map);
+				target->unlockGLContext();
 
 				render_mutex_.unlock();
 			}
@@ -355,10 +368,14 @@ namespace BALL
 		{
 			if (RTTI::isKindOf<GLRenderer>(*renderer))
 			{
+				if (use_continuous_loop_)
+					useContinuousLoop(false);
+
 				render_mutex_.lock();
 
-				target->makeCurrent();
+				target->lockGLContext();
 				((GLRenderer*)renderer)->removeTextureFor_(grid);
+				target->unlockGLContext();
 
 				render_mutex_.unlock();
 			}

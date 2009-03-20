@@ -113,7 +113,7 @@ namespace BALL
 				\ingroup ViewWidgets
 		*/
 		class BALL_VIEW_EXPORT Scene
-			: public GLRenderWindow,
+			: public QWidget,
 				public ModularWidget
 		{
 			friend class AnimationThread;
@@ -685,16 +685,9 @@ namespace BALL
 			*/
 			//@{
 
-			/** Initialize the OpenGL context.
-					Overriden qt method for initializing the OpenGL context of this scene.
-					This method will be called automatically before any call to paintGL or resizeGL.
-					It initializes the OpenGL-Renderer via GLRenderer::init and GLRenderer::setStage.
-					See QT-library for information concerning the qglwidget events.
-					\see  paintGL
-					\see  resizeGL
-					\see GLRenderer::init
+			/** Initialize the scene and all predefined render setups.
 			*/
-			virtual void initializeGL();
+			virtual void init();
 
 			/** Render the visualization.
 					Overriden qt method for rendering the visualization of this scene.
@@ -707,11 +700,10 @@ namespace BALL
 			/** Resize the widget.
 					Overridden qt method for resizing this scene. 
 					This method will be called automatically every time a rezize event is handled.
-					See QT-library for information concerning qglwidgets and resizeGL methods and events.
 					\param  width the new width of this scene
 					\param  height the new height of this scene
 			*/
-			virtual void resizeGL(int width, int height);
+			virtual void resizeEvent(QResizeEvent* event);
 
 			/**
 			 * This function handles custom events that for example are sent 
