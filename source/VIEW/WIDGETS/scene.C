@@ -57,6 +57,7 @@
 #include <QtGui/QInputDialog>
 #include <QtOpenGL/QGLPixelBuffer>
 #include <QtGui/qmessagebox.h>
+#include <QtGui/QShortcut>
 
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -72,6 +73,7 @@
 
 #endif
 
+//#define BALL_VIEW_DEBUG
 
 //#define BALL_BENCHMARKING
 
@@ -111,7 +113,7 @@ namespace BALL
 
 		Scene::Scene()
 			throw()
-			:	GLRenderWindow(),
+			:	QWidget(),
 				ModularWidget("<Scene>"),
 				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
 				stage_(new Stage()),
@@ -134,10 +136,8 @@ namespace BALL
 			renderers_.push_back(RenderSetup(&*rt_renderer_, main_display_, this, stage_));
 #endif
 
-			main_display_->makeCurrent();
-			main_display_->init();
-			main_display_->resize(width(), height());
-			main_display_->doneCurrent();
+			init();
+			renderers_[0].resize(width(), height());
 
 			setAcceptDrops(true);
 #ifdef BALL_VIEW_DEBUG
@@ -147,7 +147,7 @@ namespace BALL
 
 		Scene::Scene(QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
 			throw()
-			:	GLRenderWindow(parent_widget, name, w_flags),
+			:	QWidget(parent_widget, w_flags),
 				ModularWidget(name),
 				current_mode_(ROTATE__MODE),
 				last_mode_(PICKING__MODE),
@@ -168,8 +168,9 @@ namespace BALL
 #ifdef ENABLE_RAYTRACING
 				rt_renderer_(new t_RaytracingRenderer()),
 #endif
-				light_settings_(0),
-				stage_settings_(0),
+				light_settings_(new LightSettings(this)),
+				stage_settings_(new StageSettings(this)),
+				material_settings_(new MaterialSettings(this)),
 				animation_thread_(0),
 				stop_animation_(false),
 				want_to_use_vertex_buffer_(false),
@@ -184,27 +185,25 @@ namespace BALL
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (2) " << this << std::endl;
 #endif
-			main_display_->makeCurrent();
-			main_display_->init();
-			main_display_->resize(width(), height());
-			main_display_->doneCurrent();
 
 #ifndef ENABLE_RAYTRACING
 			renderers_.push_back(RenderSetup(gl_renderer_, main_display_, this, stage_));
 #else
 			renderers_.push_back(RenderSetup(&*rt_renderer_, main_display_, this, stage_));
 #endif
-
-			setObjectName(name);
 			// the widget with the MainControl
 			registerWidget(this);
+
+			setObjectName(name);
 			setAcceptDrops(true);
 
+			init();
+			renderers_[0].resize(width(), height());
 		}
 
 		Scene::Scene(const Scene& scene, QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
 			throw()
-			:	GLRenderWindow(scene, parent_widget, name, w_flags),
+			:	QWidget(parent_widget, w_flags),
 				ModularWidget(scene),
 				system_origin_(scene.system_origin_),
 				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
@@ -235,16 +234,16 @@ namespace BALL
 
 			setObjectName(name);
 
-			resize((Size) scene.renderers_[0].renderer->getWidth(), 
-						 (Size) scene.renderers_[0].renderer->getHeight());
-			main_display_->makeCurrent();
-			main_display_->init();
-			main_display_->resize(width(), height());
-			main_display_->doneCurrent();
-
 			// the widget with the MainControl
 			ModularWidget::registerWidget(this);
 			setAcceptDrops(true);
+
+			init();
+
+			resize((Size) scene.renderers_[0].renderer->getWidth(), 
+						 (Size) scene.renderers_[0].renderer->getHeight());
+
+			renderers_[0].resize(width(), height());
 		}
 
 		Scene::~Scene()
@@ -253,21 +252,19 @@ namespace BALL
 #ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object Scene " << this << " of class Scene" << std::endl;
 #endif 
+			delete stage_;
 
-				delete stage_;
-
-				for (Position i=0; i<renderers_.size(); ++i)
-				{
+			for (Position i=0; i<renderers_.size(); ++i)
+			{
 				//	NOTE: This is problematic, since we have some smart pointers
-				//	delete renderers_[i].renderer; // TODO: what do we do with the RenderWindows?
-					if (renderers_[i].target != this)
-						delete(renderers_[i].target);
-				}
-
-				//rt_renderer_ & rt_render_window are smart pointers
-
-				if (animation_thread_ != 0) delete animation_thread_;
+				//	delete renderers_[i].renderer; 
+				delete(renderers_[i].target);
 			}
+
+			//rt_renderer_ & rt_render_window are smart pointers
+
+			if (animation_thread_ != 0) delete animation_thread_;
+		}
 
 		void Scene::clear()
 			throw()
@@ -439,16 +436,12 @@ namespace BALL
 			}
 		}
 
-		void Scene::initializeGL()
+		void Scene::init()
 		{
-			QGLWidget::initializeGL();
-			if (!format().rgba())  Log.error() << "no rgba mode for OpenGL available." << endl;
-
 			for (Position i=0; i<renderers_.size(); ++i)
 				renderers_[i].init();
 
 			if (stage_->getLightSources().size() == 0) setDefaultLighting(false);
- 			stage_settings_->getGLSettings();		
 		}
 
 		String Scene::createFPSInfo_()
@@ -555,10 +548,11 @@ namespace BALL
 			}
 		}
 
-		void Scene::resizeGL(int width, int height)
+		void Scene::resizeEvent(QResizeEvent* /*event*/)
 		{						
+			printf("resize called!\n");
 			for (Position i=0; i<renderers_.size(); ++i)
-				renderers_[i].resize(width, height);
+				renderers_[i].resize(width(), height());
 		}
 
 		/////////////////////////////////////////////////////////
@@ -767,7 +761,7 @@ namespace BALL
 																(Position) p1.y());
 
 			// draw the representations
-			gl_renderer_->renderToBuffer(this, GLRenderer::DIRECT_RENDERING);
+			gl_renderer_->renderToBuffer(main_display_, GLRenderer::DIRECT_RENDERING);
 
  			gl_renderer_->pickObjects2(objects);
 
@@ -1097,18 +1091,16 @@ namespace BALL
 			light_settings_->updateFromStage();
 		}
 
-
 		void Scene::initializePreferencesTab(Preferences &preferences)
 			throw()
 		{
-			light_settings_ = new LightSettings(this);
 			preferences.insertEntry(light_settings_);
-			stage_settings_= new StageSettings(this);
+
+ 			stage_settings_->getGLSettings();		
 			preferences.insertEntry(stage_settings_);
-			material_settings_= new MaterialSettings(this);
+
 			preferences.insertEntry(material_settings_);
 		}
-
 
 		void Scene::finalizePreferencesTab(Preferences &preferences)
 			throw()
@@ -1412,10 +1404,13 @@ namespace BALL
 
 			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT);
 
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, SLOT(showViewPoint_()), Qt::CTRL+Qt::Key_W);
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, SLOT(showViewPoint_()));
+
 			setMenuHint("Print the coordinates of the current viewpoint");
 
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, SLOT(setViewPoint_()), Qt::CTRL+Qt::Key_N);
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, SLOT(setViewPoint_()));
+			new QShortcut(QKeySequence(tr("Ctrl+N", "Display|Viewpoint|Set Viewpoint")), this, SLOT(setViewPoint_()));
+
 			setMenuHint("Move the viewpoint to the given coordinates");
 
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, SLOT(resetCamera_()));
@@ -1656,9 +1651,6 @@ namespace BALL
 		{
 			if (isAnimationRunning()) return;
 
-// TEST
-//			makeCurrent();
-
 			need_update_ = true;
 
 			x_window_pos_new_ = e->globalX();
@@ -1693,9 +1685,6 @@ namespace BALL
 
 			if (isAnimationRunning()) return;
 			
-// TEST
-//			makeCurrent();
-
 			mouse_button_is_pressed_ = true;
 			ignore_pick_ = false;
 
@@ -1903,9 +1892,6 @@ namespace BALL
 		{
 			if (isAnimationRunning()) return;
 
-			// TEST
-//			makeCurrent();
-
 			mouse_button_is_pressed_ = false;
 			preview_ = false;
 
@@ -1971,7 +1957,7 @@ namespace BALL
 			for (Position p = 0; p < 8; p++)
 			{
 				gl_renderer_->pickObjects1(pos_x - p, pos_y - p, pos_x + p, pos_y + p);
-				gl_renderer_->renderToBuffer(this, GLRenderer::DIRECT_RENDERING);
+				gl_renderer_->renderToBuffer(main_display_, GLRenderer::DIRECT_RENDERING);
 				gl_renderer_->pickObjects2(objects);
 				if (objects.size() != 0) break;
 			}
@@ -2421,7 +2407,8 @@ namespace BALL
 			QPainter p;
 			if(!p.begin(&printer)) return; 
 
-			QImage pic = grabFrameBuffer();
+			// TODO: push into renderSetup
+			QImage pic = main_display_->grabFrameBuffer();
 			p.drawImage(0,0, pic);	
 			p.end();
 
@@ -2465,7 +2452,9 @@ namespace BALL
 
 		bool Scene::exportPNG(const String& filename)
 		{
-			makeCurrent();
+			// TODO: push into renderSetup!
+			/*
+			main_display_->makeCurrent();
 			QImage image;
 
 			if (offscreen_rendering_)
@@ -2490,7 +2479,7 @@ namespace BALL
 					gl_renderer_->setLights(true);
 					gl_renderer_->enableVertexBuffers(want_to_use_vertex_buffer_);
 					glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-					gl_renderer_->renderToBuffer(this, GLRenderer::DIRECT_RENDERING);
+					gl_renderer_->renderToBuffer(main_display_, GLRenderer::DIRECT_RENDERING);
 					glFlush();
 					image = pbuffer.toImage();
 					makeCurrent();
@@ -2511,6 +2500,7 @@ namespace BALL
 			else 		setStatusbarText("Could not save PNG", true);
 
 			return ok;
+			*/
 		}
 
 		void Scene::exportNextPOVRay()
@@ -2898,6 +2888,8 @@ return;
 
 		bool Scene::stereoBufferSupportTest()
 		{
+			// TODO: push into renderTarget!
+			/*
 			QGLFormat test_format(QGL::DepthBuffer | QGL::StereoBuffers | QGL::DoubleBuffer);
 			QGLWidget* gl_test = new QGLWidget(test_format, 0);
 			gl_test->makeCurrent();
@@ -2917,17 +2909,19 @@ return;
 			}
 			
 			return supports;
+			*/
 		}
 
 		void Scene::setWidgetVisible(bool state)
 		{
 			// only for Python needed
-			QGLWidget::setVisible(state);
+			QWidget::setVisible(state);
 		}
 
 		void Scene::updateGL()
 		{
- 			QGLWidget::updateGL();
+			// TODO: remove!
+			paintGL();
 		}
 
 		void Scene::setOffScreenRendering(bool enabled, Size factor)
@@ -3186,7 +3180,7 @@ Log.error() << "Render grid not yet supported by raytracer!" << std::endl;
 			List<GeometricObject*> objects;
 			gl_renderer_->pickObjects1((Position) p.x(), (Position) p.y(), 
 																(Position) p.x(), (Position) p.y());
-			gl_renderer_->renderToBuffer(this, GLRenderer::DIRECT_RENDERING);
+			gl_renderer_->renderToBuffer(main_display_, GLRenderer::DIRECT_RENDERING);
 			gl_renderer_->pickObjects2(objects);
 
 			if (objects.size() == 0) return;
@@ -3310,11 +3304,11 @@ Log.error() << "Render grid not yet supported by raytracer!" << std::endl;
 				case CONTROL_WINDOW:
 				case LEFT_EYE_WINDOW:
 				case RIGHT_EYE_WINDOW:
-					return RaytracingWindowPtr(this);
+					return RaytracingWindowPtr(main_display_);
 					break;
 
 				default: 
-					return RaytracingWindowPtr(this);
+					return RaytracingWindowPtr(main_display_);
 					break;
 			}
 		}

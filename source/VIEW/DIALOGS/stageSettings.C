@@ -66,7 +66,7 @@ namespace BALL
 		void StageSettings::computeDefaultPressed()
 		{
 			// try to compute sensible stereo settings
-			Camera& camera = Scene::getInstance(0)->getStage()->getCamera();
+			Camera& camera = scene_->getStage()->getCamera();
 			Vector3 view_vector = camera.getViewVector();
 			view_vector.normalize();
 			const Vector3& view_point = camera.getViewPoint();
@@ -215,22 +215,19 @@ namespace BALL
 
 			Scene::setShowLightSources(show_lights_->isChecked());
 			Scene::setAnimationSmoothness(((float)animation_smoothness->value()) / 10.0);
-			Scene::getInstance(0)->setOffScreenRendering(offscreen_group->isChecked(), resolution_factor->value());
+			scene_->setOffScreenRendering(offscreen_group->isChecked(), resolution_factor->value());
 
 			ColorRGBA color;
 			color = getColor(capping_color);
 			color.setAlpha(255 - capping_transparency->value());
 			ClippingPlane::getCappingColor() = color;
 
-			Scene* scene = ((Scene*)Scene::getInstance(0));
-			if (scene == 0) return;
-
-			scene->setFPSEnabled(show_fps->isChecked());
-			scene->setPreview(use_preview->isChecked());
+			scene_->setFPSEnabled(show_fps->isChecked());
+			scene_->setPreview(use_preview->isChecked());
 
 			// use vertex buffers ?
 			bool use_buffer = use_vertex_buffers->isChecked();
-			GLRenderer& renderer = scene->getGLRenderer();
+			GLRenderer& renderer = scene_->getGLRenderer();
 
 			if (use_buffer != renderer.vertexBuffersEnabled() &&
 					getMainControl()->getRepresentationManager().getNumberOfRepresentations() > 0)
@@ -382,7 +379,7 @@ namespace BALL
 		void StageSettings::getGLSettings()
 			throw()
 		{
-			GLRenderer& renderer = ((Scene*)Scene::getInstance(0))->getGLRenderer();
+			GLRenderer& renderer = scene_->getGLRenderer();
 			if (renderer.getVendor() == "") return;
 			vendor_label->setText(renderer.getVendor().c_str());
 			version_label->setText(renderer.getOpenGLVersion().c_str());
