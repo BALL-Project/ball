@@ -128,7 +128,8 @@
 // If ext/hash_map is defined, we use this instead of std::map
 /* #undef BALL_HAS_HASH_MAP */
 #define BALL_MAP_NAMESPACE boost
-#define BALL_MAP_NAME std::tr1::unordered_map<Key, T>
+//#define BALL_MAP_NAME std::tr1::unordered_map<Key, T>
+#define BALL_MAP_NAME boost::unordered_map<Key, T>
 
 // defined, if extensions to hash must be defined in namespace std
 /* #undef BALL_EXTEND_HASH_IN_STD_NS */
