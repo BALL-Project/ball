@@ -353,7 +353,18 @@ namespace BALL
 				}
 
 				if (needs_updategl)
+				{
+					// TODO: for some reason, we need to reset the
+					//       lights here; otherwise, the lighting
+					//       will be wrong until the first call to
+					//       updateCamera()
+					//       this is probably due to some wrong order
+					//       of initializations and should be fixed
+					//       somewhere else instead of this band-aid
+					for (Position i=0; i<renderers_.size(); ++i)
+						renderers_[i].setLights(true);
 					updateGL();
+				}
 
 				return;
 			}
