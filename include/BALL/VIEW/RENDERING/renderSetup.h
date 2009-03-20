@@ -17,10 +17,6 @@
 # include <BALL/VIEW/RENDERING/glRenderWindow.h>
 #endif
 
-#ifndef BALL_VIEW_WIDGETS_SCENE_H
-# include <BALL/VIEW/WIDGETS/scene.h>
-#endif
-
 #ifndef BALL_SYSTEM_MUTEX_H
 # include <BALL/SYSTEM/mutex.h>
 #endif
@@ -29,6 +25,8 @@
 
 namespace BALL {
 	namespace VIEW {
+
+		class Scene;
 
 		/** This class encapsulates a (renderer, target) pair for Scene.
 		 *
