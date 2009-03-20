@@ -48,13 +48,11 @@ namespace BALL
   				  - color - to the color black
 					\par
 			*/
-			SimpleBox()
-				throw();
+			SimpleBox();
 
 			/** Copy constructor with cloning facility.
 			*/
-			SimpleBox(const SimpleBox& box)
-				throw();
+			SimpleBox(const SimpleBox& box);
 
 			//@}
 			/** @name Destructors */
@@ -62,15 +60,13 @@ namespace BALL
 
 			/** Destructor.
 			*/
-			virtual ~SimpleBox()
-				throw();
+			virtual ~SimpleBox();
 
 			/** Explicit default initialization.
 					Calls GeometricObject::clear
 					Calls SimpleBox3::clear
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			//@}
 
@@ -79,13 +75,11 @@ namespace BALL
 
 			/** Assignment.
 			*/
-			void set(const SimpleBox& box)
-				throw();
+			void set(const SimpleBox& box);
 
 			/** Assignment operator.
 			*/
-			const SimpleBox& operator = (const SimpleBox& box)
-				throw();
+			const SimpleBox& operator = (const SimpleBox& box);
 
 			//@}
 			/**	@name	debuggers and diagnostics */
@@ -101,8 +95,7 @@ namespace BALL
 					\see        GeometricObject::isValid
 					\see        SimpleBox3::isValid
 			*/
-			virtual bool isValid() const
-				throw();
+			virtual bool isValid() const;
 
 			/** Internal value dump.
 					Dump the current value of this SimpleBox to 
@@ -114,8 +107,7 @@ namespace BALL
 					\see     GeometricObject::dump
 					\see     SimpleBox::dump
 			*/
-			virtual void dump(std::ostream&  s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream&  s = std::cout, Size depth = 0) const;
 			
 			// Method to get all vertices from a geometric object
 			virtual void getVertices(vector<Vector3>& vertices) const;

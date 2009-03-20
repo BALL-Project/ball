@@ -36,31 +36,25 @@ namespace BALL
 			BALL_CREATE(MultiLine)
 
 			/// Default Constructor.
-			MultiLine()
-				throw();
+			MultiLine();
 
 			/// Copy constructor with cloning facility.
-			MultiLine(const MultiLine& line)
-				throw();
+			MultiLine(const MultiLine& line);
 
 			/** Destructor
 			*/
-			virtual ~MultiLine()
-				throw();
+			virtual ~MultiLine();
 
 			/** Explicit default initialization.
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			///
-			void set(const MultiLine& line)
-				throw();
+			void set(const MultiLine& line);
 
 			/** Assignment operator.
 			*/
-			const MultiLine& operator = (const MultiLine& line)
-				throw();
+			const MultiLine& operator = (const MultiLine& line);
 
 			/** Internal state and consistency self-validation.
 					Initiate self-validation of the internal state and data structure consistencies
@@ -74,8 +68,7 @@ namespace BALL
 					\see        GeometricObject::isValid
 					\see        Vertex2::isValid
 			*/
-			virtual bool isValid() const
-				throw();
+			virtual bool isValid() const;
 
 			/** Internal value dump.
 					Dump the current value of this line to 
@@ -87,8 +80,7 @@ namespace BALL
 					\see        GeometricObject::dump
 					\see        Vertex2::dump
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 			
 			// Method to get all vertices from a geometric object
 			virtual void getVertices(vector<Vector3>& vertices) const;

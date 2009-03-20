@@ -17,7 +17,6 @@ namespace BALL
 		PreciseTime  BALL_SELECTED_COLOR_CHANGE_TIME(PreciseTime::now());
 		
 		ColorRGBA::ColorRGBA()
-			throw()
 			:	red_(),
 				green_(),
 				blue_(),
@@ -26,7 +25,6 @@ namespace BALL
 		}
 
 		ColorRGBA::ColorRGBA(const ColorRGBA& color)
-			throw()
 			:	red_(color.red_),
 				green_(color.green_),
 				blue_(color.blue_),
@@ -35,7 +33,6 @@ namespace BALL
 		}
 		 
 		ColorRGBA::ColorRGBA(const ColorHSV& color_HSV)
-			throw()
 			:	alpha_((float)1)
 		{
 			color_HSV.calculateRGB_(red_, green_, blue_);
@@ -55,7 +52,6 @@ namespace BALL
 		 
 		ColorRGBA::ColorRGBA(const ColorUnit& red, const ColorUnit& green,
 												 const ColorUnit& blue, const ColorUnit& alpha)
-			throw()
 			:	red_(red),
 				green_(green),
 				blue_(blue),
@@ -64,14 +60,12 @@ namespace BALL
 		}
 
 		ColorRGBA::ColorRGBA(const QColor& color, const ColorUnit& alpha)
-			throw()
 		{
 			set(color);
 			setAlpha(alpha);
 		}
 		 
 		ColorRGBA::~ColorRGBA()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 			Log.error() << "Destructing object " << this << " of class ColorRGBA" << endl;
@@ -79,14 +73,12 @@ namespace BALL
 		}
 
 		void ColorRGBA::clear()
-			throw()
 		{
 			red_ = green_ = blue_ = (float)0;
 			alpha_ = ((float)1);
 		}
 
 		ColorRGBA::operator String() const
-			throw()
 		{
 			char temp[10];
 
@@ -98,7 +90,6 @@ namespace BALL
 		}
 
 		void ColorRGBA::set(const ColorRGBA& color)
-			throw()
 		{
 			red_ = color.red_;
 			green_ = color.green_;
@@ -107,28 +98,24 @@ namespace BALL
 		}
 
 		const ColorRGBA& ColorRGBA::operator = (const ColorRGBA& color)
-			throw()
 		{
 			set(color);
 			return *this;
 		}
 
 		void ColorRGBA::set(const ColorHSV& color_HSV)
-			throw()
 		{
 			color_HSV.calculateRGB_(red_, green_, blue_);
 			alpha_ = (float)1;
 		}
 
 		const ColorRGBA& ColorRGBA::operator = (const ColorHSV& color_HSV)
-			throw()
 		{
 			set(color_HSV);
 			return *this;
 		}
 
 		void ColorRGBA::get(ColorHSV& color_HSV) const
-			throw()
 		{
 			color_HSV.set(*this);
 		}
@@ -147,7 +134,6 @@ namespace BALL
 		}
 
 		void ColorRGBA::get(char *char_ptr) const
-			throw()
 		{
 			sprintf(char_ptr, "%2X%2X%2X%2X",
 				(unsigned char)red_, (unsigned char)green_,
@@ -175,7 +161,6 @@ namespace BALL
 		}
 
 		void ColorRGBA::get(String& s) const
-			throw()
 		{
 			char temp[9];
 
@@ -194,13 +179,11 @@ namespace BALL
 		}
 
 		void ColorRGBA::get(QColor& color) const
-			throw()
 		{
 			color.setRgb(getRed(), getGreen(), getBlue());
 		}
 
 		QColor ColorRGBA::getQColor() const
-			throw()
 		{
 			QColor color;
 			get(color);
@@ -208,7 +191,6 @@ namespace BALL
 		}
 
 		bool ColorRGBA::set(const QColor& color)
-			throw()
 		{
 			if (!color.isValid()) return false;
 
@@ -217,7 +199,6 @@ namespace BALL
 		}
 
 		void ColorRGBA::swap(ColorRGBA& color)
-			throw()
 		{
 			red_.swap(color.red_);
 			green_.swap(color.green_);
@@ -227,7 +208,6 @@ namespace BALL
 
 		void ColorRGBA::dump
 			(ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

@@ -13,14 +13,12 @@ namespace BALL
 	{
 
 		QuadMesh::QuadMesh()
-			throw()
 			:	GeometricObject(),
 				MultiColorExtension()
 		{
 		}
 
 		QuadMesh::QuadMesh(const QuadMesh& mesh)
-			throw()
 			:	GeometricObject(mesh),
 				MultiColorExtension(mesh),
 				vertex(mesh.vertex),

@@ -23,7 +23,6 @@ namespace BALL
 
 
 RepresentationManager::RepresentationManager(MainControl* mc)
-	throw()
 	: Object(),
 		update_mutex_(),
 		thread_(new UpdateRepresentationThread()),
@@ -36,20 +35,17 @@ RepresentationManager::RepresentationManager(MainControl* mc)
 }
 
 RepresentationManager::~RepresentationManager()
-	throw()
 {
 	clear();
 }
 
 RepresentationManager::RepresentationManager(const RepresentationManager& pm)
-	throw()
 	: Object(pm)
 {
 }
 
 
 void RepresentationManager::clear()
-	throw()
 {
 	to_update_.clear();
 
@@ -72,7 +68,6 @@ void RepresentationManager::clear()
 
 
 bool RepresentationManager::insert(Representation& representation, bool send_message)
-	throw()
 {
 	if (has(representation)) return false;
 	representations_.push_back(&representation);
@@ -89,7 +84,6 @@ bool RepresentationManager::insert(Representation& representation, bool send_mes
 
 
 bool RepresentationManager::has(const Representation& representation) const
-	throw()
 {
 	RepresentationsConstIterator it = begin();
 	for (; it != end(); it++)
@@ -101,7 +95,6 @@ bool RepresentationManager::has(const Representation& representation) const
 
 
 bool RepresentationManager::remove(Representation& representation, bool send_message)
-	throw()
 {
 	RepresentationsIterator it = begin();
 	for( ; it != end(); it++)
@@ -125,7 +118,6 @@ bool RepresentationManager::remove(Representation& representation, bool send_mes
 }
 
 void RepresentationManager::dump(std::ostream& s, Size depth) const
-	throw()
 {
 	BALL_DUMP_STREAM_PREFIX(s);
 
@@ -147,7 +139,6 @@ void RepresentationManager::dump(std::ostream& s, Size depth) const
 }
 
 Representation* RepresentationManager::createRepresentation()
-	throw()
 {
 	Representation* rp = new Representation;
 	if (main_control_)
@@ -159,7 +150,6 @@ Representation* RepresentationManager::createRepresentation()
 }
 
 const RepresentationManager& RepresentationManager::operator = (const RepresentationManager& pm)
-	throw()
 {
 	RepresentationsConstIterator it = pm.begin();
 
@@ -173,7 +163,6 @@ const RepresentationManager& RepresentationManager::operator = (const Representa
 }
 
 bool RepresentationManager::operator == (const RepresentationManager& pm) const
-	throw()
 {
 	if (pm.getNumberOfRepresentations() != getNumberOfRepresentations()) return false;
 
@@ -190,7 +179,6 @@ bool RepresentationManager::operator == (const RepresentationManager& pm) const
 
 
 RepresentationList RepresentationManager::removedComposite(const Composite& composite, bool update)
-	throw()
 {
 	// Representations either to be updated or deleted
 	RepresentationList changed_representations = getRepresentationsOf(composite);
@@ -266,7 +254,6 @@ RepresentationList RepresentationManager::removedComposite(const Composite& comp
 
 
 List<Representation*> RepresentationManager::getRepresentationsOf(const Composite& composite)
-	throw()
 {
 	List<Representation*> changed_representations;
 	RepresentationsIterator rep_it = begin();
@@ -321,7 +308,6 @@ void RepresentationManager::insertClippingPlane(ClippingPlane* plane)
 }
 
 void RepresentationManager::rebuildAllRepresentations()
-	throw()
 {
 	update_mutex_.lock();
 	RepresentationsIterator it = begin();
@@ -619,7 +605,6 @@ Representation* RepresentationManager::popRepresentationToUpdate()
 }
 
 void RepresentationManager::update_(Representation& rep)
-	throw()
 {
 	if (!has(rep)) return;
 
@@ -678,7 +663,6 @@ void RepresentationManager::finishedUpdate_(Representation* rep)
 }
 
 bool RepresentationManager::updateRunning() const
-	throw() 
 {
  	if (!update_mutex_.tryLock()) return true;
 
@@ -692,7 +676,6 @@ bool RepresentationManager::updateRunning() const
 
 
 bool RepresentationManager::willBeUpdated(const Representation& rep) const
-	throw()
 {
 	if (!update_mutex_.tryLock()) return true;
 

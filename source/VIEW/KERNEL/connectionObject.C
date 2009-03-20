@@ -13,7 +13,6 @@ namespace BALL
 		using std::ostream;
 
 ConnectionObject::ConnectionObject()
-	throw()
 : processing_message_queue_(false),
 	message_queue_(),
 	parent_(0),
@@ -22,7 +21,6 @@ ConnectionObject::ConnectionObject()
 }
 
 ConnectionObject::~ConnectionObject()
-	throw()
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.info() << "Destructing object " << (void *)this 
@@ -33,7 +31,6 @@ ConnectionObject::~ConnectionObject()
 }
 
 void ConnectionObject::clear()
-	throw()
 {
 	// clear the message queue
 	List<Message*>::Iterator message_iterator;
@@ -73,13 +70,11 @@ void ConnectionObject::clear()
 }
 
 void ConnectionObject::destroy()
-	throw()
 {
 	clear();
 }
 
 void ConnectionObject::registerConnectionObject(ConnectionObject &object)
-	throw()
 {
 	// register only once
 	if (isConnectionObjectRegistered(object)) return;
@@ -89,7 +84,6 @@ void ConnectionObject::registerConnectionObject(ConnectionObject &object)
 } 
 
 void ConnectionObject::unregisterConnectionObject(ConnectionObject &object)
-	throw()
 {
 	// search object in list
 	// if inserted cut connection between them
@@ -117,7 +111,6 @@ void ConnectionObject::unregisterConnectionObject(ConnectionObject &object)
 }
 
 bool ConnectionObject::isConnectionObjectRegistered(const ConnectionObject &object)
-	throw()
 {
 	// search object in list
 	// if already inserted return true else return false
@@ -134,7 +127,6 @@ bool ConnectionObject::isConnectionObjectRegistered(const ConnectionObject &obje
 }
 
 ConnectionObject *ConnectionObject::getRoot()
-	throw()
 {
 	ConnectionObject *object = this;
 
@@ -147,12 +139,10 @@ ConnectionObject *ConnectionObject::getRoot()
 }
 
 void ConnectionObject::onNotify(Message * /* message */)
-	throw()
 {
 } 
 
 bool ConnectionObject::isValid() const
-	throw()
 {
 	// check all children if parent will be ´this´
 	List<ConnectionObject*>::ConstIterator list_iterator;
@@ -174,7 +164,6 @@ bool ConnectionObject::isValid() const
 }
 
 void ConnectionObject::dump(ostream& s, Size depth) const
-	throw()
 {
 	BALL_DUMP_STREAM_PREFIX(s);
 	
@@ -201,21 +190,18 @@ void ConnectionObject::dump(ostream& s, Size depth) const
 }
 
 void ConnectionObject::notify_(Message *message)
-	throw()
 {
 	message->setSender(this);
 	getRoot()->onNotify_(message);
 }
 
 void ConnectionObject::notify_(Message &message)
-	throw()
 {
 	message.setSender(this);
 	getRoot()->onNotify_(&message);
 }
 
 void ConnectionObject::onNotify_(Message* message)
-	throw()
 {
 	// insert Message into queue (last position)
 	message_queue_.push_back(message);

@@ -16,14 +16,12 @@ namespace BALL
 	{
 
 		ColorUnitHue::ColorUnitHue()
-			throw()
 			:	value_((float)0)
 		{
 		}
 
 		ColorUnitHue::ColorUnitHue
 			(const ColorUnitHue& color_h_unit)
-			throw()
 			:	value_(color_h_unit.value_)
 		{
 		}
@@ -129,7 +127,6 @@ namespace BALL
 		}
 
 		ColorUnitHue::~ColorUnitHue()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << (void *)this << " of class " << RTTI::getName<ColorUnitHue>() << endl;
@@ -137,19 +134,16 @@ namespace BALL
 		}
 
 		void ColorUnitHue::clear()
-			throw()
 		{
 			value_ = (float)0;
 		}
 
 		void ColorUnitHue::set(const ColorUnitHue& color_h_unit)
-			throw()
 		{
 			value_ = color_h_unit.value_;
 		}
 
 		const ColorUnitHue& ColorUnitHue::operator = (const ColorUnitHue& color_h_unit)
-			throw()
 		{
 			set(color_h_unit);
 			return *this;
@@ -169,7 +163,6 @@ namespace BALL
 		}
 			
 		void ColorUnitHue::get(char* char_ptr) const
-			throw()
 		{
 			sprintf(char_ptr, "%x", (unsigned char)(value_ * 255.0));
 		}
@@ -188,7 +181,6 @@ namespace BALL
 		}
 			
 		void ColorUnitHue::get(String& s) const
-			throw()
 		{
 			char temp[6];
 			sprintf(&temp[0], "%x", (unsigned char)(value_ * 360.0));
@@ -215,7 +207,6 @@ namespace BALL
 		}
 
 		void ColorUnitHue::get(short& s) const
-			throw()
 		{
 			s = (short)(value_ * 360.0);
 		}
@@ -239,7 +230,6 @@ namespace BALL
 		}
 
 		void ColorUnitHue::get(unsigned short& s) const
-			throw()
 		{
 			s = (unsigned short)(value_ * 360.0);
 		}
@@ -264,7 +254,6 @@ namespace BALL
 		}
 
 		void ColorUnitHue::get(int& i) const
-			throw()
 		{
 			i = (int)(value_ * 360.0);
 		}
@@ -289,7 +278,6 @@ namespace BALL
 		}
 
 		void ColorUnitHue::get(unsigned int& i) const
-			throw()
 		{
 			i = (unsigned int)(value_ * 360.0);
 		}
@@ -314,7 +302,6 @@ namespace BALL
 		}
 
 		void ColorUnitHue::get(long& l) const
-			throw()
 		{
 			l = (long)(value_ * 360.0);
 		}
@@ -339,7 +326,6 @@ namespace BALL
 		}
 
 		void ColorUnitHue::get(unsigned long& l) const
-			throw()
 		{
 			l = (unsigned long)(value_ * 360.0);
 		}
@@ -364,7 +350,6 @@ namespace BALL
 		}
 
 		void ColorUnitHue::get(float& f) const
-			throw()
 		{
 			f = (float)(value_ * 360.0);
 		}
@@ -389,13 +374,11 @@ namespace BALL
 		}
 
 		void ColorUnitHue::get(double& d) const
-			throw()
 		{
 			d = (double)(value_ * 360.0);
 		}
 
 		void ColorUnitHue::swap(ColorUnitHue& color_h_unit)
-			throw()
 		{
 			float temp = value_;
 			value_ = color_h_unit.value_;
@@ -404,7 +387,6 @@ namespace BALL
 
 		void ColorUnitHue::dump
 			(ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

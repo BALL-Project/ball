@@ -59,16 +59,14 @@ namespace BALL
 					\see         Radius
 					\see         Vertex2
 			*/
-			Tube()
-				throw();
+			Tube();
 
 			/** Copy constructor with cloning facility.
 					\see         GeometricObject
 					\see         Radius
 					\see         Vertex2
 			*/
-			Tube(const Tube& tube)
-				throw();
+			Tube(const Tube& tube);
 
 			//@}
 			/** @name Destructors */
@@ -77,8 +75,7 @@ namespace BALL
 			/** Destructor.
 					Default destruction of this tube.
 			*/
-			virtual ~Tube()
-				throw();
+			virtual ~Tube();
 
 			/** Explicit default initialization.
 					Calls GeometricObject::clear
@@ -88,8 +85,7 @@ namespace BALL
 					\see  Radius::clear
 					\see  Vertex2::clear
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			//@}
 
@@ -100,21 +96,18 @@ namespace BALL
 					\param       tube the tube to be copied
 					\see         Tube
 			*/
-			void set(const Tube& tube)
-				throw();
+			void set(const Tube& tube);
 
 			/** Assignment operator.
 					Calls set.
 			*/
-			const Tube& operator = (const Tube& tube)
-				throw();
+			const Tube& operator = (const Tube& tube);
 
 			/** Swapping of tube's.
 					Swap the value of this tube with the tube <b> tube</b>.
 					\param       tube the tube being swapped with this tube 
 			*/
-			void swap(Tube& tube)
-				throw();
+			void swap(Tube& tube);
 
 			//@}
 			/**	@name	Accessors: inspectors and mutators */
@@ -125,14 +118,14 @@ namespace BALL
 					\return  float the length of this tube
 			*/
 			float getLength() const
-				throw() {return (getVertex1() - getVertex2()).getLength();}
+				{return (getVertex1() - getVertex2()).getLength();}
 
 			/** Inspection of the square length of the tube.
 					Access the square length of this tube.
 					\return  float the square length of this tube
 			*/
 			float getSquareLength() const
-				throw() {return (getVertex1() - getVertex2()).getSquareLength();}
+				{return (getVertex1() - getVertex2()).getSquareLength();}
 
 			//@}
 			/**	@name	debuggers and diagnostics */
@@ -150,8 +143,7 @@ namespace BALL
 					\see        GeometricObject::isValid
 					\see        Vertex2::isValid
 			*/
-			virtual bool isValid() const
-				throw();
+			virtual bool isValid() const;
 
 			/** Internal value dump.
 					Dump the current value of this tube to 
@@ -165,8 +157,7 @@ namespace BALL
 					\see        Radius::dump
 					\see        Vertex2::dump
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 			
 			// Method to get all vertices from a geometric object
 			virtual void getVertices(vector<Vector3>& vertices) const;
@@ -178,12 +169,12 @@ namespace BALL
 			/**	Get the radius.
 			 */
 			float getRadius() const
-				throw() { return radius_;}
+				{ return radius_;}
 
 			/** Set the radius.
 			 */
 			void setRadius(float radius)
-				throw() { radius_ = radius;}
+				{ radius_ = radius;}
 
 			//@}
 				

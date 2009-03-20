@@ -5,28 +5,24 @@
 
 BALL_INLINE 
 Preferences* MainControl::getPreferences()
-	throw()
 {
 	return preferences_dialog_;
 }
 
 BALL_INLINE 
 INIFile& MainControl::getINIFile()
-	throw()
 {
 	return preferences_file_;
 }
 
 BALL_INLINE 
 const INIFile& MainControl::getINIFile() const
-	throw()
 {
 	return preferences_file_;
 }
 
 BALL_INLINE
 List<Composite*>& MainControl::getMolecularControlSelection()
-	throw()
 {
 	return control_selection_;
 }
@@ -40,63 +36,54 @@ void MainControl::quit(int return_value)
 
 BALL_INLINE
 bool MainControl::compositesAreLocked() const
-	throw()
 {
 	return composites_locked_;
 }
 
 BALL_INLINE
 ModularWidget* MainControl::getLockingWidget() 
-	throw()
 {
 	return locking_widget_;
 }
 
 BALL_INLINE
 bool MainControl::updateOfRepresentationRunning()
-	throw()
 {
 	return primitive_manager_.updateRunning();
 }
 
 BALL_INLINE
 String MainControl::getStatusbarText() const
-	throw()
 {
 	return ascii(message_label_->text());
 }
 
 BALL_INLINE
 const String& MainControl::getLoggingFilename() const
-	throw()
 {
 	return logging_file_name_;
 }
 
 BALL_INLINE
 void MainControl::setMenuHint(QAction* id, const String& string)
-	throw()
 {
 	id->setToolTip(string.c_str());
 }
 
 BALL_INLINE
 String MainControl::getMenuHint(QAction* id) const
-	throw() 
 {
 	return ascii(id->toolTip());
 }
 
 BALL_INLINE
 const HashSet<Composite*>& MainControl::getSelection() const
-	throw()
 {
 	return selection_;
 }
 
 BALL_INLINE
 HashSet<Composite*>& MainControl::getSelection() 
-	throw()
 {
 	return selection_;
 }

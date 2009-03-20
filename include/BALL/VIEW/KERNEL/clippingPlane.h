@@ -28,29 +28,23 @@ namespace BALL
 
 			BALL_CREATE(ClippingPlane)
 
-			ClippingPlane()
-				throw();
+			ClippingPlane();
 
 			///
-			ClippingPlane(const ClippingPlane& plane)
-				throw();
+			ClippingPlane(const ClippingPlane& plane);
 
 			/** Destructor
 			*/
-			virtual ~ClippingPlane()
-				throw();
+			virtual ~ClippingPlane();
 
 			///
-			const ClippingPlane& operator = (const ClippingPlane& plane)
-				throw();
+			const ClippingPlane& operator = (const ClippingPlane& plane);
 			
 			///
-			void clear()
-				throw();
+			void clear();
 
 			///
-			bool operator == (const ClippingPlane& plane) const
-				throw();
+			bool operator == (const ClippingPlane& plane) const;
 
 			///
 			HashSet<const Representation*>& getRepresentations() { return reps_;}

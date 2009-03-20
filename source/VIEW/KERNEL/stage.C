@@ -10,7 +10,6 @@ namespace BALL
 	{
 
 		LightSource::LightSource()
-			throw()
 			:	position_(),
 				direction_(0, 0, -1),
 				attenuation_(1., 0., 0.),
@@ -23,7 +22,6 @@ namespace BALL
 		}
 
 		LightSource::LightSource(const LightSource& light_source)
-			throw()
 			: position_(light_source.position_),
 				direction_(light_source.direction_),
 				attenuation_(light_source.attenuation_),
@@ -36,7 +34,6 @@ namespace BALL
 		}
 
 		LightSource& LightSource::operator = (const LightSource& light) 
-			throw()
 		{
 				position_ = light.position_;
 			 direction_ = light.direction_;
@@ -52,7 +49,6 @@ namespace BALL
 
 
 		bool LightSource::operator == (const LightSource& light_source) const
-			throw()
 		{
 			return position_ 		== light_source.position_ 	 &&
 						 direction_ 	== light_source.direction_ 	 &&
@@ -65,14 +61,12 @@ namespace BALL
 		}
 		
 		bool LightSource::operator < (const LightSource& light) const
-			throw()
 		{
 			return this < &light;
 		}
 
 
 		void LightSource::dump(std::ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -107,7 +101,6 @@ namespace BALL
 		}
 
 		Camera::Camera()
-			throw()
 			: view_point_(0, 0, 0),
 				look_at_(0, 0, -1),
 				look_up_vector_(0, -1, 0)
@@ -116,7 +109,6 @@ namespace BALL
 		}
 
 		Camera::Camera(const Camera& camera)
-			throw()
 			: view_point_(camera.view_point_),
 				look_at_(camera.look_at_),
 				look_up_vector_(camera.look_up_vector_),
@@ -126,7 +118,6 @@ namespace BALL
 		}
 
 		Camera::Camera(const Vector3& view_point, const Vector3& look_at, const Vector3& look_up_vector)
-			throw()
 			: view_point_(view_point),
 				look_at_(look_at),
 				look_up_vector_(look_up_vector)
@@ -135,7 +126,6 @@ namespace BALL
 		}
 
 		Camera& Camera::operator = (const Camera& camera) 
-			throw()
 		{
 					 view_point_ = camera.view_point_;
 							look_at_ = camera.look_at_;
@@ -148,14 +138,12 @@ namespace BALL
 		
 	
 		bool Camera::operator < (const Camera& camera) const
-			throw()
 		{
 			return this < &camera;
 		}
 
 
 		bool Camera::operator == (const Camera& camera) const
-			throw()
 		{
 			return 	view_point_ 		== camera.view_point_ &&
 							look_at_ 				== camera.look_at_ 		&&
@@ -163,7 +151,6 @@ namespace BALL
 		}
 
 		void Camera::calculateVectors_()
-			throw()
 		{
 			view_vector_  = look_at_ - view_point_;
 
@@ -187,7 +174,6 @@ namespace BALL
 
 
 		void Camera::dump(std::ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -207,7 +193,6 @@ namespace BALL
 		}
 
 		String Camera::toString() const
-			throw()
 		{
 			return vector3ToString(view_point_) + " " +
 						 vector3ToString(look_at_) + " " +
@@ -215,7 +200,6 @@ namespace BALL
 		}
 
 		bool Camera::readFromString(const String& data)
-			throw()
 		{
 			vector<String> fields;
 			if (data.split(fields) != 3) return false;
@@ -237,7 +221,6 @@ namespace BALL
 				
 
 		void Camera::rotate(const Quaternion& q, const Vector3& origin)
-			throw()
 		{
 			translate(-origin);
 			Matrix4x4  m;
@@ -252,7 +235,6 @@ namespace BALL
 		}
 
 		void Camera::rotate(const Matrix4x4& mat, const Vector3& origin)
-			throw()
 		{
 			translate(-origin);
 
@@ -265,7 +247,6 @@ namespace BALL
 		}
 		
 		Stage::Stage()
-			throw()
 			: background_color_(ColorRGBA(1.,1.,1.,1.)),
 				info_color_(0, 0, 255, 255),
 				light_sources_(),
@@ -282,7 +263,6 @@ namespace BALL
 		{}
 
 		Stage::Stage(const Stage& stage)
-			throw()
 			: background_color_(stage.background_color_),
 				light_sources_(stage.light_sources_),
 				camera_(stage.camera_),
@@ -299,7 +279,6 @@ namespace BALL
 		}
 
 		void Stage::clear()
-			throw()
 		{
 			background_color_.clear();
 			light_sources_.clear();
@@ -317,7 +296,6 @@ namespace BALL
 
 
 		bool Stage::operator == (const Stage& stage) const
-			throw()
 		{
 			return light_sources_ 					== stage.light_sources_ 		&&
 						 camera_ 					 				== stage.camera_ 						&&
@@ -335,7 +313,6 @@ namespace BALL
 
 
 		void Stage::dump(std::ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -436,13 +413,11 @@ namespace BALL
 		}
 
 		void Stage::addLightSource(const LightSource& light_source)
-			throw()
 		{
 			light_sources_.push_back(light_source);
 		}
 
 		void Stage::removeLightSource(const LightSource& light_source)
-			throw()
 		{
 			List<LightSource>::Iterator it = light_sources_.begin();
 			for (; it != light_sources_.end(); it++)
@@ -456,7 +431,6 @@ namespace BALL
 		}
 
 		void Stage::clearLightSources()
-			throw()
 		{
 			light_sources_.clear();
 		}

@@ -1,6 +1,5 @@
 BALL_INLINE
 void GLRenderer::initTransparent()
-	throw()
 {
 	render_mode_ = RENDER_MODE_TRANSPARENT;
 	glEnable(GL_DEPTH_TEST);
@@ -10,7 +9,6 @@ void GLRenderer::initTransparent()
 
 BALL_INLINE
 void GLRenderer::initSolid()
-	throw()
 {
 	render_mode_ = RENDER_MODE_SOLID;
 	glEnable(GL_DEPTH_TEST);
@@ -20,7 +18,6 @@ void GLRenderer::initSolid()
 
 BALL_INLINE
 void GLRenderer::initAlwaysFront()
-	throw()
 {
 	render_mode_ = RENDER_MODE_ALWAYS_FRONT;
 	glDisable(GL_DEPTH_TEST);
@@ -33,7 +30,6 @@ void GLRenderer::initAlwaysFront()
 // ############################ NAMING ###################################
 BALL_INLINE
 GLRenderer::Name GLRenderer::getName(const GeometricObject& object)
-	throw()
 {
 	const NameHashMap::Iterator name_iterator = object_to_name_.find(&object);
 
@@ -52,7 +48,6 @@ GLRenderer::Name GLRenderer::getName(const GeometricObject& object)
 
 BALL_INLINE
 GeometricObject* GLRenderer::getObject(GLRenderer::Name name) const
-	throw()
 {
  	const GeometricObjectHashMap::ConstIterator it = name_to_object_.find(name);
 	if (it == name_to_object_.end()) return 0;
@@ -63,7 +58,6 @@ GeometricObject* GLRenderer::getObject(GLRenderer::Name name) const
 
 BALL_INLINE
 void GLRenderer::clearNames_()
-	throw()
 {
 	name_to_object_.clear();
 	object_to_name_.clear();
@@ -75,7 +69,6 @@ void GLRenderer::clearNames_()
 
 BALL_INLINE
 void GLRenderer::setStereoMode(StereoMode state)
-	throw()
 {
 	if (state == stereo_) return;
 	stereo_ = state;
@@ -84,51 +77,50 @@ void GLRenderer::setStereoMode(StereoMode state)
 
 BALL_INLINE
 float GLRenderer::getXScale() const
-	throw() { return x_scale_;}
+	{ return x_scale_;}
 
 BALL_INLINE
 float GLRenderer::getYScale() const
-	throw() { return y_scale_;}
+	{ return y_scale_;}
 
 BALL_INLINE
 GLRenderer::StereoMode GLRenderer::getStereoMode() const
-	throw() { return stereo_;}
+	{ return stereo_;}
 
 BALL_INLINE
 GLRenderer::RenderMode GLRenderer::getRenderMode() const
-	throw() { return render_mode_;}
+	{ return render_mode_;}
 
 BALL_INLINE
 void GLRenderer::setColor4ub_(const GeometricObject& object)
-	throw(){ setColorRGBA_(object.getColor()); }
+	{ setColorRGBA_(object.getColor()); }
 
 BALL_INLINE
 void GLRenderer::normalVector3_(const Vector3& v) 
-	throw() { glNormal3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);}
+	{ glNormal3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);}
 
 BALL_INLINE
 void GLRenderer::vertexVector3_(const Vector3& v)
-	throw() { glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z); }
+	{ glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z); }
 
 BALL_INLINE
 void GLRenderer::translateVector3_(const Vector3& v)
-	throw() { glTranslatef((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z); }
+	{ glTranslatef((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z); }
 
 BALL_INLINE
 void GLRenderer::scaleVector3_(const Vector3& v)
-	throw() { glScalef((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z); }
+	{ glScalef((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z); }
 
 BALL_INLINE
 void GLRenderer::rotateVector3Angle_(const Vector3& v, Real angle)
-	throw() { glRotatef(angle, v.x, v.y, v.z); }
+	{ glRotatef(angle, v.x, v.y, v.z); }
 
 BALL_INLINE
 void GLRenderer::scale_(float f)
-	throw() { glScalef(f, f, f);}
+	{ glScalef(f, f, f);}
 
 BALL_INLINE
 void GLRenderer::setColorRGBA_(const ColorRGBA& color)
-	throw() 
 { 
 	//if (color == *last_color_) return;
 	glColor4ub(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());

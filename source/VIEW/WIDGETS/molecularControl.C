@@ -64,14 +64,12 @@ namespace BALL
 
 
 		MolecularControl::MolecularControl(const MolecularControl& mc)
-			throw()
 			: GenericControl(mc)
 		{
 		}
 
 
 		MolecularControl::MolecularControl(QWidget* parent, const char* name)
-			throw()
 				:	GenericControl(parent, name),
 					selected_(),
 					information_(),
@@ -154,7 +152,6 @@ namespace BALL
 		}
 
 		MolecularControl::~MolecularControl()
-			throw()
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "Destroying MolecularControl " << this << std::endl;
@@ -164,7 +161,6 @@ namespace BALL
 		}
 
 		void MolecularControl::checkMenu(MainControl& main_control)
-			throw()
 		{
 			String hint;
 			bool busy = main_control.isBusy();
@@ -246,7 +242,6 @@ namespace BALL
 
 
 		bool MolecularControl::reactToMessages_(Message* message)
-			throw()
 		{
 			// react only to NewMolecularMessage, but not to NewCompositeMessage
 			if (RTTI::isKindOf<CompositeMessage>(*message))
@@ -460,7 +455,6 @@ namespace BALL
 		}
 
 		void MolecularControl::updateContextMenu(Composite& composite)
-			throw()
 		{
 			bool composites_muteable = !getMainControl()->isBusy();
 
@@ -617,7 +611,6 @@ namespace BALL
 
 
 		void MolecularControl::recurseGeneration_(QTreeWidgetItem* item, Composite& composite)
-			throw()
 		{
 			Composite::ChildCompositeIterator it = composite.beginChildComposite();
 			for (; it != composite.endChildComposite(); ++it)
@@ -627,7 +620,6 @@ namespace BALL
 		}
 
 		void MolecularControl::initializeWidget(MainControl& main_control)
-			throw()
 		{
 			String hint;
 
@@ -678,7 +670,6 @@ namespace BALL
 
 
 		void MolecularControl::addComposite(Composite& composite, String given_name)
-			throw()
 		{
 			// get information about the composite
 			composite.host(getInformationVisitor_());
@@ -700,7 +691,6 @@ namespace BALL
 
 
 		Size MolecularControl::removeComposite(Composite& composite)
-			throw()
 		{
 			std::map<Composite*, MyTreeWidgetItem*>::iterator to_find = 
 				composite_to_item_.find(&composite);
@@ -737,7 +727,6 @@ namespace BALL
 		}
 
 		void MolecularControl::removeRecursive_(QTreeWidgetItem* item)
-			throw()
 		{
 			composite_to_item_.erase(((MyTreeWidgetItem*)item)->composite);
 
@@ -754,7 +743,6 @@ namespace BALL
 
 
 		void MolecularControl::onNotify(Message *message)
-			throw()
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "MolecularControl " << this << " onNotify " << message << std::endl;
@@ -778,7 +766,6 @@ namespace BALL
 
 		// set the highlighting according to a given list
 		void MolecularControl::highlight(const List<Composite*>& selection)
-			throw()
 		{	
 			enableUpdates_(false);
 			listview->clearSelection();
@@ -812,7 +799,6 @@ namespace BALL
 
 		// set the checkboxes according to the selection in the MainControl
 		void MolecularControl::setSelection_(bool open, bool force)
-			throw()
 		{	
 			if (!force) open = false;
 
@@ -979,7 +965,6 @@ namespace BALL
 
 		QTreeWidgetItem* MolecularControl::generateListViewItem_(QTreeWidgetItem* parent, 
 																							Composite& composite, QString* default_name)
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 			if (composite_to_item_.has(&composite))
@@ -1046,13 +1031,11 @@ namespace BALL
 
 
 		MolecularInformation& MolecularControl::getInformationVisitor_()
-			throw()
 		{
 			return information_;
 		}
 
 		const List<Composite*>& MolecularControl::getSelection() const
-			throw()
 		{
 			return selected_;
 		}
@@ -1211,7 +1194,6 @@ namespace BALL
 
 
 		void MolecularControl::deleteCurrentItems()
-			throw()
 		{
 			was_delete_ = true;
 			cut();
@@ -1220,7 +1202,6 @@ namespace BALL
 
 
 		bool MolecularControl::pasteAllowedFor_(Composite& child)
-			throw()
 		{
 			if (RTTI::isKindOf<System>(child)) 
 			{
@@ -1296,7 +1277,6 @@ namespace BALL
 		}
 
 		Size MolecularControl::applySelector(const String& expression)
-			throw()
 		{
 			selector_edit_->addItem(expression.c_str());
 			Index x = selector_edit_->findText(expression.c_str());
@@ -1305,7 +1285,6 @@ namespace BALL
 		}
 
 		void MolecularControl::highlightSelection()
-			throw()
 		{
 			enableUpdates_(false);
 			collapseAll();
@@ -1382,7 +1361,6 @@ namespace BALL
 		}
 
 		void MolecularControl::fetchPreferences(INIFile& inifile)
-			throw()
 		{
 			DockWidget::fetchPreferences(inifile);
 
@@ -1405,7 +1383,6 @@ namespace BALL
 		}
 
 		void MolecularControl::writePreferences(INIFile& inifile)
-			throw()
 		{
 			inifile.appendSection("MOLECULARCONTROL");
 			inifile.insertValue("MOLECULARCONTROL", "ShowSS", show_ss_);

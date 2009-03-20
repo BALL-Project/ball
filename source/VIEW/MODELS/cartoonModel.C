@@ -30,7 +30,6 @@ namespace BALL
 	{
 		
 AddCartoonModel::AddCartoonModel()
-	throw()
 	: AddBackboneModel(),
 		helix_radius_(2.1),
 		helix_height_(0.1),
@@ -49,7 +48,6 @@ AddCartoonModel::AddCartoonModel()
 }
 
 AddCartoonModel::AddCartoonModel(const AddCartoonModel& cartoon)
-	throw()
 	:	AddBackboneModel(cartoon),
 		helix_radius_(cartoon.helix_radius_),
 		helix_width_(cartoon.helix_width_),
@@ -66,7 +64,6 @@ AddCartoonModel::AddCartoonModel(const AddCartoonModel& cartoon)
 }
 
 AddCartoonModel::~AddCartoonModel()
-	throw()
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "Destructing object of class AddCartoonModel" << endl;
@@ -446,7 +443,6 @@ void AddCartoonModel::createHelix_(Size set_start, Size part_pos)
 // -----------------------------------------------------------------------
 // --------------------- nucleic acids ----------------------------------->
 void AddCartoonModel::calculateComplementaryBases_(const Composite& composite)
-	throw()
 {
 	complementary_bases_.clear();
 	Protein& protein = *(Protein*)&composite;
@@ -934,7 +930,6 @@ void AddCartoonModel::renderNucleotideOutline_(const vector<Vector3>& positions,
 
 bool AddCartoonModel::assignNucleotideAtoms_(Residue& r, Size nr_atoms, 
 																						 String atom_names[9], Atom* atoms[9])
-	throw()
 {
 	for (Position p = 0; p < 9; p++) atoms[p] = 0;
 

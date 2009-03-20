@@ -121,36 +121,29 @@ namespace BALL
 			{
 				public:
 
-				WrongModes(const char* file, int line, int mode, int precision)
-					throw();
+				WrongModes(const char* file, int line, int mode, int precision);
 			};
 
 			/// Typedef for OPENGL names
 			typedef unsigned int Name;
 
 			/// Default Constructor.
-			GLRenderer()
-				throw();
+			GLRenderer();
 
 			/// Destructor
-			virtual ~GLRenderer()
-				throw();
+			virtual ~GLRenderer();
 
 			/// Explicit default initialization.
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			///
-			void dump(std::ostream& s, Size depth) const
-				throw();
+			void dump(std::ostream& s, Size depth) const;
 
 			///
-			inline Name getName(const GeometricObject& object)
-				throw();
+			inline Name getName(const GeometricObject& object);
 
 			///
-			GeometricObject* getObject(GLRenderer::Name name) const
-				throw();
+			GeometricObject* getObject(GLRenderer::Name name) const;
 
 			virtual bool init(Scene& scene);
 
@@ -168,15 +161,13 @@ namespace BALL
 			/** Pick geometric objects
 			 		\param x1, y1, x2, y2 the rectangle of the selection
 			*/
-			void pickObjects1(Position x1, Position y1, Position x2, Position y2)
-				throw();
+			void pickObjects1(Position x1, Position y1, Position x2, Position y2);
 
 			/** Pick geometric objects method2.
 			 		Call this method after pickObjects1 and rendering the representations.
 					\param objects returns the picked objects
 			*/
-			void pickObjects2(List<GeometricObject*>& objects)
-				throw();
+			void pickObjects2(List<GeometricObject*>& objects);
 
 			///
 			void enterPickingMode();
@@ -185,62 +176,49 @@ namespace BALL
 			void exitPickingMode();
 
 			///
-			void setSize(float width, float height)
-				throw();
+			void setSize(float width, float height);
 
 			///
-			float getXScale() const
-				throw();
+			float getXScale() const;
 
 			///
-			float getYScale() const
-				throw();
+			float getYScale() const;
 
 			/// Update the background color from the stage
 			virtual void updateBackgroundColor();
 
 			// Initialise transparent rendering
-			void initTransparent()
-				throw();
+			void initTransparent();
 
 			// Initialise solid rendering
-			void initSolid()
-				throw();
+			void initSolid();
 
 			// Initialise always front rendering
-			void initAlwaysFront()
-				throw();
+			void initAlwaysFront();
 
 			/// Enable or disable antialiasing
 			void setAntialiasing(bool state);
 
 			/// Remove all VertexBuffer and DisplayLists for the given Representation
-			void removeRepresentation(const Representation& rep)
-				throw();
+			void removeRepresentation(const Representation& rep);
 
 			/// Buffer the visualisation for the given Representation into OpenGL VertexBuffer Objects and DisplayLists.
-			void bufferRepresentation(const Representation& rep)
-				throw();
+			void bufferRepresentation(const Representation& rep);
 
 			/// Draw the visualisation of the given Representation from the VertexBuffers and a DisplayList.
-			void drawBuffered(const Representation& rep)
-				throw();
+			void drawBuffered(const Representation& rep);
 
 			/// Test if a Representation has a DisplayList.
-			bool hasDisplayListFor(const Representation& rep) const
-				throw();
+			bool hasDisplayListFor(const Representation& rep) const;
 
 			///
-			void setStereoMode(StereoMode state)
-				throw();
+			void setStereoMode(StereoMode state);
 
 			///
-			StereoMode getStereoMode() const
-				throw();
+			StereoMode getStereoMode() const;
 
 			///
-			RenderMode getRenderMode() const
-				throw();
+			RenderMode getRenderMode() const;
 
 			///
 			void setRenderMode(RenderMode mode) { render_mode_ = mode;}
@@ -252,24 +230,20 @@ namespace BALL
 			virtual void renderToBuffer(RenderTarget* renderTarget, BufferMode);
 
 			///
-			virtual bool render(const Representation& representation, bool for_display_list = false)
-				throw();
+			virtual bool render(const Representation& representation, bool for_display_list = false);
 
 			virtual void bufferingDependentRender_(const Representation& repr, BufferMode mode);
 
 			/** Test if a given opengl extension is supported by the current driver.
 			 		Call this only after Scene::initializeGL();
 			*/
-			bool isExtensionSupported(const String& extension) const
-				throw();
+			bool isExtensionSupported(const String& extension) const;
 
 			///
-			void clearVertexBuffersFor(Representation& rep)
-				throw();
+			void clearVertexBuffersFor(Representation& rep);
 
 			///
-			bool vertexBuffersSupported() const
-				throw();
+			bool vertexBuffersSupported() const;
 
 			///
 			String getVendor();
@@ -284,8 +258,7 @@ namespace BALL
 			vector<String> getExtensions();
 
 			///
-			bool enableVertexBuffers(bool state)
-				throw();
+			bool enableVertexBuffers(bool state);
 
 			///
 			bool vertexBuffersEnabled() const;
@@ -297,12 +270,10 @@ namespace BALL
 			void initPerspective();
 
 			//_
-			void setColorRGBA_(const ColorRGBA& color)
-				throw();
+			void setColorRGBA_(const ColorRGBA& color);
 
 			//_
-			void vertexVector3_(const Vector3& v)
-				throw();
+			void vertexVector3_(const Vector3& v);
 
 			//
 			void updateCamera(const Camera* camera = 0);
@@ -321,24 +292,19 @@ namespace BALL
 			void renderRepresentations_(BufferMode mode);
 
 			///
-			virtual void renderLabel_(const Label& /*label*/)
-				throw();
+			virtual void renderLabel_(const Label& /*label*/);
 
 			///
-			virtual void renderLine_(const Line& /*line*/)
-				throw();
+			virtual void renderLine_(const Line& /*line*/);
 
 			/// Render an illuminated line
-			virtual void renderMultiLine_(const MultiLine& line)
-				throw();
+			virtual void renderMultiLine_(const MultiLine& line);
 
 			///
-			virtual void renderMesh_(const Mesh& /*mesh*/)
-				throw();
+			virtual void renderMesh_(const Mesh& /*mesh*/);
 
 			///
-			virtual void renderQuadMesh_(const QuadMesh& /*mesh*/)
-				throw();
+			virtual void renderQuadMesh_(const QuadMesh& /*mesh*/);
 
 			///
 			void initDrawingMeshes_();
@@ -347,109 +313,84 @@ namespace BALL
 			void initDrawingOthers_();
 
 			///
-			virtual void renderPoint_(const Point& /*point*/)
-				throw();
+			virtual void renderPoint_(const Point& /*point*/);
 
 			///
-			virtual void renderSimpleBox_(const SimpleBox& /*box*/)
-				throw();
+			virtual void renderSimpleBox_(const SimpleBox& /*box*/);
 
 			///
-			virtual void renderBox_(const Box& /*box*/)
-				throw();
+			virtual void renderBox_(const Box& /*box*/);
 
 			///
-			virtual void renderSphere_(const Sphere& /*sphere*/)
-				throw();
+			virtual void renderSphere_(const Sphere& /*sphere*/);
 
 			///
-			virtual void renderDisc_(const Disc& /*disc*/)
-				throw();
+			virtual void renderDisc_(const Disc& /*disc*/);
 
 			///
-			virtual void renderTube_(const Tube& /*tube*/)
-				throw();
+			virtual void renderTube_(const Tube& /*tube*/);
 
 			///
-			virtual void renderTwoColoredLine_(const TwoColoredLine& /*two_colored_line*/)
-				throw();
+			virtual void renderTwoColoredLine_(const TwoColoredLine& /*two_colored_line*/);
 
 			///
-			virtual void renderTwoColoredTube_(const TwoColoredTube& /*two_colored_tube*/)
-				throw();
+			virtual void renderTwoColoredTube_(const TwoColoredTube& /*two_colored_tube*/);
 
 			///
-			virtual void renderClippingPlane_(const ClippingPlane& plane)
-				throw();
+			virtual void renderClippingPlane_(const ClippingPlane& plane);
 
 			/// Render a grid slice
-			virtual void renderGridVisualisation_(const GridVisualisation& vol)
-				throw();
+			virtual void renderGridVisualisation_(const GridVisualisation& vol);
 
 			//_
-			void setColor4ub_(const GeometricObject& object)
-				throw();
+			void setColor4ub_(const GeometricObject& object);
 
 			//_
-			void createSpheres_()
-				throw();
+			void createSpheres_();
 
 			//_
-			void createTubes_()
-				throw();
+			void createTubes_();
 
 			//_
-			void createBoxes_()
-				throw();
+			void createBoxes_();
 
 			//_
-			void createDottedSphere_(int precision)
-				throw();
+			void createDottedSphere_(int precision);
 
 			//_
-			void subdivideTriangle_(Vector3& v1, Vector3& v2, Vector3& v3, int precision)
-				throw();
+			void subdivideTriangle_(Vector3& v1, Vector3& v2, Vector3& v3, int precision);
 
 			//_
-			void createLineBox_()
-				throw();
+			void createLineBox_();
 
 			//_
-			void createDotBox_()
-				throw();
+			void createDotBox_();
 
 			//_
-			void createSolidBox_()
-				throw();
+			void createSolidBox_();
 
 			//_
-			void clearNames_()
-				throw();
+			void clearNames_();
 
 			//_
-			void normalVector3_(const Vector3& v)
-				throw();
+			void normalVector3_(const Vector3& v);
 
 
 			//_
-			void translateVector3_(const Vector3& v)
-				throw();
+			void translateVector3_(const Vector3& v);
 
 			//_
 			void texCoordVector3_(const Vector3& v)
-				throw() { glTexCoord3f(v.x, v.y, v.z); }
+				{ glTexCoord3f(v.x, v.y, v.z); }
 
 			//_
-			void scaleVector3_(const Vector3& v)
-				throw();
+			void scaleVector3_(const Vector3& v);
 
 			//_
-			void rotateVector3Angle_(const Vector3& v, Real angle)
-				throw();
+			void rotateVector3Angle_(const Vector3& v, Real angle);
 
 			//_
-			void scale_(float f)
-				throw();
+			void scale_(float f);
 
 
 			void initGLU_(DrawingMode mode);

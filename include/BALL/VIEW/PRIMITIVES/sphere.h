@@ -41,14 +41,12 @@ namespace BALL
 
 			/** Default Constructor.
 			*/
-			Sphere()
-				throw();
+			Sphere();
 
 			/** Copy constructor with cloning facility.
 
 			*/
-			Sphere(const Sphere& sphere)
-				throw();
+			Sphere(const Sphere& sphere);
 
 			//@}
 			/** @name Destructors */
@@ -56,15 +54,13 @@ namespace BALL
 
 			/** Destructor.
 			*/
-			virtual ~Sphere()
-				throw();
+			virtual ~Sphere();
 
 			/** Explicit default initialization.
 					\see  GeometricObject::clear
 					\see  Sphere3::clear
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			//@}	
 			/**	@name	Assignment methods
@@ -73,50 +69,47 @@ namespace BALL
 
 			/** Assignment.
 			*/
-			void set(const Sphere& sphere)
-				throw();
+			void set(const Sphere& sphere);
 
 			/** Assignment operator.
 			*/
-			const Sphere& operator = (const Sphere& sphere)
-				throw();
+			const Sphere& operator = (const Sphere& sphere);
 
 			/** Swapping of sphere's.
 			*/
-			void swap(Sphere& sphere)
-				throw();
+			void swap(Sphere& sphere);
 
 			///
 			void setRadius(float new_radius)
-				throw() { radius = new_radius;}
+				{ radius = new_radius;}
 
 			///
 			float getRadius() const
-				throw() { return radius;}
+				{ return radius;}
 
 			///
 			void setPosition(const Vector3& v3)
-				throw() { point_ptr_->set(v3);}
+				{ point_ptr_->set(v3);}
 
 			///
 			const Vector3& getPosition() const
-				throw() { return *point_ptr_;}
+				{ return *point_ptr_;}
 
 			///
 			void setPositionAddress(const Vector3& v3)
-				throw() { point_ptr_ = (Vector3 *)&v3;}
+				{ point_ptr_ = (Vector3 *)&v3;}
 
 			///
 			Vector3* getPositionAddress()
-				throw() { return point_ptr_;}
+				{ return point_ptr_;}
 
 			///
 			bool isDefaultPositionAddress()
-				throw() { return point_ptr_ == &p;}
+				{ return point_ptr_ == &p;}
 
 			///
 			void setDefaultPositionAddress()
-				throw() { point_ptr_ = & p;}
+				{ point_ptr_ = & p;}
 
 			//@}
 			/**	@name	debuggers and diagnostics
@@ -132,8 +125,7 @@ namespace BALL
 					\return			bool <tt> true</tt> if the internal state of this sphere is correct (self-validated) and consistent, <tt> false</tt> otherwise
 					\see        GeometricObject::isValid
 			*/
-			virtual bool isValid() const
-				throw();
+			virtual bool isValid() const;
 
 			/** Internal value dump.
 					Dump the current value of this sphere to 
@@ -145,8 +137,7 @@ namespace BALL
 					\see     GeometricObject::dump
 					\see     Sphere3::dump					
 			*/
-			virtual void dump(std::ostream&  s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream&  s = std::cout, Size depth = 0) const;
 			
 			// Method to get all vertices from a geometric object
 			virtual void getVertices(vector<Vector3>& vertices) const;

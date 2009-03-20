@@ -69,8 +69,7 @@ class BALL_VIEW_EXPORT GLDisplayList
 	{
 		public:
 
-		NestedDisplayList(const char* file, int line) 
-			throw();
+		NestedDisplayList(const char* file, int line) ;
 	};
 
 	/** NoDisplayListAvailable exception class.
@@ -82,8 +81,7 @@ class BALL_VIEW_EXPORT GLDisplayList
 	{
 		public:
 
-		NoDisplayListAvailable(const char* file, int line)
-			throw();
+		NoDisplayListAvailable(const char* file, int line);
 	};
 
 	/** DisplayListRedeclaration exception class.
@@ -95,8 +93,7 @@ class BALL_VIEW_EXPORT GLDisplayList
 	{
 		public:
 
-		DisplayListRedeclaration(const char* file, int line)
-			throw();
+		DisplayListRedeclaration(const char* file, int line);
 	};
 
 	//@}
@@ -111,8 +108,7 @@ class BALL_VIEW_EXPORT GLDisplayList
 				- use compile mode instead of compile and execute mode
 			\par
 	*/
-	GLDisplayList()
-			throw();
+	GLDisplayList();
 
 	//@}
 	/** @name Destructors 
@@ -122,14 +118,12 @@ class BALL_VIEW_EXPORT GLDisplayList
 	/** Destructor.
 			Calls clear()
 	*/
-	virtual ~GLDisplayList()
-			throw();
+	virtual ~GLDisplayList();
 
 	/** Explicit default initialization.
 			Resets the mode of this glDisplayList to compile.
 	*/
-	virtual void clear()
-			throw();
+	virtual void clear();
 
 	//@}
 	/**	@name	Accessors: inspectors and mutators 
@@ -154,8 +148,7 @@ class BALL_VIEW_EXPORT GLDisplayList
 			This method is the end command for a display list definition.
 			\see         startDefinition
 	*/
-	void endDefinition()
-		throw(); 
+	void endDefinition();
 
 	/** Draw the display list.
 			If this method is called the graphical representation of this
@@ -165,8 +158,7 @@ class BALL_VIEW_EXPORT GLDisplayList
 			\see         startDefinition
 			\see         endDefinition
 	*/
-	void draw()
-		throw();
+	void draw();
 
 	/** Compile mode switch.
 			Before the definition of the graphical objects between
@@ -178,8 +170,7 @@ class BALL_VIEW_EXPORT GLDisplayList
 			\see         startDefinition
 			\see         endDefinition
 	*/
-	void useCompileMode()
-		throw();
+	void useCompileMode();
 
 	/** Compile and Execute mode switch.
 			Before the definition of the graphical objects between
@@ -192,8 +183,7 @@ class BALL_VIEW_EXPORT GLDisplayList
 			\see         startDefinition
 			\see         endDefinition
 	*/
-	void useCompileAndExecuteMode()
-		throw();
+	void useCompileAndExecuteMode();
 
 	//@}
 	/**	@name	Predicates
@@ -204,15 +194,13 @@ class BALL_VIEW_EXPORT GLDisplayList
 			Tests if this glDisplayList is set to compile only.
 			\see         useCompileMode				
 	*/
-	bool isCompileMode() const
-		throw();
+	bool isCompileMode() const;
 
 	/** Compile and Execute mode test.
 			Tests if this glDisplayList is set to compile and execute.
 			\see         useCompileAndExecuteMode				
 	*/
-	bool isCompileAndExecuteMode() const
-		throw();
+	bool isCompileAndExecuteMode() const;
 
 	//@}
 	/**	@name	debuggers and diagnostics
@@ -222,7 +210,7 @@ class BALL_VIEW_EXPORT GLDisplayList
 			A glDisplayList is valid if a display list is already defined.
 	*/
 	virtual bool isValid() const
-		throw() { return GL_list_ != 0; }
+		{ return GL_list_ != 0; }
 
 	/** Internal value dump.
 			Dump the current state to 
@@ -230,8 +218,7 @@ class BALL_VIEW_EXPORT GLDisplayList
 			\param   s output stream where to output the state of this glDisplayList
 			\param   depth the dumping depth
 	*/
-	virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-		throw();
+	virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 	//@}
 

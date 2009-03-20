@@ -13,7 +13,6 @@ namespace BALL
 	{
 
 		Sphere::Sphere()
-			throw()
 			:	GeometricObject(),
 				Sphere3(),
 				point_ptr_(&p)
@@ -21,7 +20,6 @@ namespace BALL
 		}
 
 		Sphere::Sphere(const Sphere& sphere)
-			throw()
 			:	GeometricObject(sphere),
 				Sphere3(sphere),
 				point_ptr_(sphere.point_ptr_)
@@ -29,7 +27,6 @@ namespace BALL
 		}
 
 		Sphere::~Sphere()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "Destructing object " << (void *)this 
@@ -38,7 +35,6 @@ namespace BALL
 		}
 
 		void Sphere::clear()
-			throw()
 		{
 			GeometricObject::clear();
 			Sphere3::clear();
@@ -46,7 +42,6 @@ namespace BALL
 		}
 
 		void Sphere::set(const Sphere& sphere)
-			throw()
 		{
 			GeometricObject::set(sphere);
 			Sphere3::set(sphere);
@@ -54,14 +49,12 @@ namespace BALL
 		}
 
 		const Sphere& Sphere::operator = (const Sphere& sphere)
-			throw()
 		{
 			set(sphere);
 			return *this;
 		}
 
 		void Sphere::swap(Sphere& sphere)
-			throw()
 		{
 			GeometricObject::swap(sphere);
 			Sphere3::swap(sphere);
@@ -93,7 +86,6 @@ namespace BALL
 		}
 
 		bool Sphere::isValid() const
-			throw()
 		{
 			return (GeometricObject::isValid() && 
 											Sphere3::isValid() &&
@@ -101,7 +93,6 @@ namespace BALL
 		}
 
 		void Sphere::dump(ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

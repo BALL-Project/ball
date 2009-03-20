@@ -46,7 +46,6 @@ namespace BALL
 	{
 
 		MolecularStructure::MolecularStructure(QWidget* parent, const char* name)
-			throw()
 			:	QWidget(parent),
 				ModularWidget(name),
 				amber_(),
@@ -226,7 +225,6 @@ namespace BALL
 		}
 
 		MolecularStructure::~MolecularStructure()
-			throw()
 		{
 		}
 
@@ -241,7 +239,6 @@ namespace BALL
 
 
 		void MolecularStructure::onNotify(Message *message)
-			throw()
 		{
 	#ifdef BALL_VIEW_DEBUG
 			Log.error() << "MolecularStructure " << this  << "onNotify " << message << std::endl;
@@ -610,7 +607,6 @@ namespace BALL
 
 
 		void MolecularStructure::checkMenu(MainControl& main_control)
-			throw()
 		{
 			Size number_of_selected_objects = main_control.getMolecularControlSelection().size();
 
@@ -656,7 +652,6 @@ namespace BALL
 
 
 		void MolecularStructure::addComposite_(Composite& composite, const String& name)
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "starting applying molecular properties" << std::endl;
@@ -990,43 +985,37 @@ namespace BALL
 		}
 
 		AmberFF& MolecularStructure::getAmberFF()
-			throw()
 		{
 			return amber_;
 		}
 
 		AmberConfigurationDialog& MolecularStructure::getAmberConfigurationDialog()
-			throw()
 		{
 			return amber_dialog_;
 		}
 
 		CharmmConfigurationDialog& MolecularStructure::getCharmmConfigurationDialog()
-			throw()
 		{
 			return charmm_dialog_;
 		}
 
 		MMFF94ConfigurationDialog& MolecularStructure::getMMFF94ConfigurationDialog()
-			throw()
 		{
 			return mmff94_dialog_;
 		}
 
 
 		CharmmFF& MolecularStructure::getCharmmFF()
-			throw()
 		{
 			return charmm_;
 		}
 	
 		MMFF94& MolecularStructure::getMMFF94() 
-			throw()
 		{
 			return mmff_;
 		}
 
-		ForceField& MolecularStructure::getForceField() throw()
+		ForceField& MolecularStructure::getForceField()
 		{
 			if (force_field_id_ == 0) return reinterpret_cast<ForceField&>(amber_);
 			if (force_field_id_ == 1) return reinterpret_cast<ForceField&>(charmm_);
@@ -1036,7 +1025,6 @@ namespace BALL
 		}
 
 		void MolecularStructure::fetchPreferences(INIFile& inifile)
-			throw()
 		{
 			minimization_dialog_.readPreferenceEntries(inifile);
 		//	bond_order_dialog_.readPreferenceEntries(inifile); // TODO:
@@ -1065,7 +1053,6 @@ namespace BALL
 
 
 		void MolecularStructure::writePreferences(INIFile& inifile)
-			throw()
 		{
 			minimization_dialog_.writePreferenceEntries(inifile);
 			//bond_order_dialog_.writePreferenceEntries(inifile); // TODO

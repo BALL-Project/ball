@@ -67,16 +67,14 @@ namespace BALL
 					\see         ColorExtension2
 					\see         Vertex2
 			*/
-			TwoColoredLine()
-				throw();
+			TwoColoredLine();
 
 			/** Copy constructor with cloning facility.
 					\see         GeometricObject
 					\see         ColorExtension2
 					\see         Vertex2
 			*/
-			TwoColoredLine(const TwoColoredLine& two_colored_line)
-				throw();
+			TwoColoredLine(const TwoColoredLine& two_colored_line);
 
 			//@}
 			/** @name Destructors */
@@ -85,8 +83,7 @@ namespace BALL
 			/** Destructor.
 					Default destruction of this twoColoredLine.
 			*/
-			virtual ~TwoColoredLine()
-				throw();
+			virtual ~TwoColoredLine();
 
 			/** Explicit default initialization.
 					Calls GeometricObject::clear.
@@ -96,8 +93,7 @@ namespace BALL
 					\see  ColorExtension2::clear
 					\see  Vertex2::clear
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			//@}
 			/**	@name	Assignment methods */
@@ -111,19 +107,16 @@ namespace BALL
 					\see         ColorExtension2::set
 					\see         Vertex2::set
 			*/
-			void set(const TwoColoredLine& two_colored_line)
-				throw();
+			void set(const TwoColoredLine& two_colored_line);
 
 			/** Assignment operator.
 					Calls set.
 			*/
-			const TwoColoredLine& operator = (const TwoColoredLine& two_colored_line)
-				throw();
+			const TwoColoredLine& operator = (const TwoColoredLine& two_colored_line);
 
 			/** Swapping of two_colored_line's.
 			*/
-			void swap(TwoColoredLine& two_colored_line)
-				throw();
+			void swap(TwoColoredLine& two_colored_line);
 
 			//@}
 			/**	@name	Accessors: inspectors and mutators */
@@ -135,8 +128,7 @@ namespace BALL
 					\return. Vector3 the middle vertex between vertex1 and vertex 2.
 					\see     Vector3
 			*/
-			Vector3 getMiddleVertex() const
-				throw();
+			Vector3 getMiddleVertex() const;
 
 			//@}
 			/**	@name	debuggers and diagnostics */
@@ -152,8 +144,7 @@ namespace BALL
 					\return			bool <tt> true</tt> if the internal state of this twoColoredLine is correct 
 					\see        GeometricObject::isValid
 			*/
-			virtual bool isValid() const
-				throw();
+			virtual bool isValid() const;
 
 			/** Internal value dump.
 					Dump the current value of this twoColoredLine to 
@@ -167,8 +158,7 @@ namespace BALL
 					\see        ColorExtension2::dump
 					\see        Vertex2::dump
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 			
 			// Method to get all vertices from a geometric object
 			virtual void getVertices(vector<Vector3>& vertices) const;

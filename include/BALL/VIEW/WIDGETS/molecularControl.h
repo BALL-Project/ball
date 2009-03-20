@@ -107,13 +107,11 @@ class BALL_VIEW_EXPORT MolecularControl
 			\param      parent the parent widget 
 			\param      name the name of this widget
 	*/
-	MolecularControl(QWidget* parent = 0, const char* name = 0)
-		throw();
+	MolecularControl(QWidget* parent = 0, const char* name = 0);
 	
 	/** Destructor.
 	*/
-	virtual ~MolecularControl()
-		throw();
+	virtual ~MolecularControl();
 	
 	//@} 
 	/**	@name	Accessors: inspectors and mutators 
@@ -126,8 +124,7 @@ class BALL_VIEW_EXPORT MolecularControl
 			\param main_control the MainControl object whose menus should be checked
 			\see   Control::checkMenu
 	*/
-	virtual void checkMenu(VIEW::MainControl& main_control)
-		throw();
+	virtual void checkMenu(VIEW::MainControl& main_control);
 
 	/** Insert a Composite object into this Control.
 			If <tt>name == ""</tt> than the Information visitor is used for determining
@@ -135,26 +132,22 @@ class BALL_VIEW_EXPORT MolecularControl
 			Calls generateListViewItem_() for the Composite.
 			\param   composite a pointer to the Composite to be inserted into the Control
 	*/
-	void addComposite(Composite& composite, String given_name = "")
-		throw();
+	void addComposite(Composite& composite, String given_name = "");
 
 	/** Recursive removal of a Composite from the Control.
 	*/
-	Size removeComposite(Composite& composite)
-		throw();
+	Size removeComposite(Composite& composite);
 
 	/** Non-mutable inspection of the selection.
 	*/
-	const List<Composite*>& getSelection() const
-		throw();
+	const List<Composite*>& getSelection() const;
 	
 	/** Message handling.
 			Overridden method from ConnectionObject to handle incoming messages.\par
 			Calls reactToMessages_().\par
 			\param  message a pointer to a Message object
 	*/
-	virtual void onNotify(Message *message)
-		throw();
+	virtual void onNotify(Message *message);
 
 	/** Build a context menu for a Composite.
 			If the Composite has certain properties a context menu is created.
@@ -165,8 +158,7 @@ class BALL_VIEW_EXPORT MolecularControl
 			\param   composite the Composite object for that a context menu should be created
 			\see     onContextMenu
 	*/
-	virtual void updateContextMenu(Composite& composite)
-		throw();
+	virtual void updateContextMenu(Composite& composite);
 
 	/**	Initialize the menu entries:
 				- cut 
@@ -179,22 +171,18 @@ class BALL_VIEW_EXPORT MolecularControl
 			is started by MainControl::show.
 			\param main_control the MainControl object to be initialized with this ModularWidget
 	*/
-	virtual void initializeWidget(MainControl& main_control)
-		throw();
+	virtual void initializeWidget(MainControl& main_control);
 
 	/** Apply a given BALL expression
 			@return Size number of selected atoms
 	*/
-	Size applySelector(const String& expression)
-		throw();
+	Size applySelector(const String& expression);
 
 	///
-	void writePreferences(INIFile& inifile)
-		throw();
+	void writePreferences(INIFile& inifile);
 
 	///
-	void fetchPreferences(INIFile& inifile)
-		throw();
+	void fetchPreferences(INIFile& inifile);
 
 	///
 	void showDistance(Atom* a1, Atom* a2);
@@ -242,12 +230,10 @@ class BALL_VIEW_EXPORT MolecularControl
 	virtual void updateSelection();
 
 	///
-	void highlightSelection()
-		throw();
+	void highlightSelection();
 
 	///
-	void highlight(const List<Composite*>& composite)
-		throw();
+	void highlight(const List<Composite*>& composite);
 
 	/** Cut the selected Composite objects and copy them into an internal
 			copy list. If there are already Composite objects in the 
@@ -302,8 +288,7 @@ class BALL_VIEW_EXPORT MolecularControl
 	void showSelectorHelp();
 
 	/// Overloaded from GenericControl, calls cut
-	virtual void deleteCurrentItems()
-		throw();
+	virtual void deleteCurrentItems();
 
 	/// Connected to the clear selection button
 	virtual void clearSelector();
@@ -358,8 +343,7 @@ class BALL_VIEW_EXPORT MolecularControl
 			\param force true means, that the item tree is opend and closed
 						 also if more than 50 items are selected.
 	*/
-	void setSelection_(bool open, bool force = false)
-		throw();
+	void setSelection_(bool open, bool force = false);
 
 	/** Access the MolecularInformation visitor.
 			With the MolecularInformation, the names and type entries for the Items
@@ -368,8 +352,7 @@ class BALL_VIEW_EXPORT MolecularControl
 			This method is used in the method generateListViewItem_() to
 			retrieve certain information of the given Composite.
 	*/
-	virtual MolecularInformation& getInformationVisitor_()
-		throw();
+	virtual MolecularInformation& getInformationVisitor_();
 	
 	/** Iterate over the children of the Composite and
 			call for each the method generateListViewItem_().
@@ -377,8 +360,7 @@ class BALL_VIEW_EXPORT MolecularControl
 							 will be inserted
 			\param   composite whose children will be inserted into <tt>item</tt>
 	*/
-	virtual void recurseGeneration_(QTreeWidgetItem* item, Composite& composite)
-		throw();
+	virtual void recurseGeneration_(QTreeWidgetItem* item, Composite& composite);
 
 	/** Message handling.
 			Catch the Message objects and react accordingly to the different messages.
@@ -394,8 +376,7 @@ class BALL_VIEW_EXPORT MolecularControl
 			\return  bool <tt>true</tt> if an update of the Control is necessary, <tt>false</tt> otherwise
 			\see     onNotify
 	*/
-	virtual bool reactToMessages_(Message* message)
-		throw();
+	virtual bool reactToMessages_(Message* message);
 
 	/** Generate a new QTreeWidgetItem for the given Composite.
 			If <tt> default_name == 0</tt> than a new name is created using the 
@@ -411,20 +392,16 @@ class BALL_VIEW_EXPORT MolecularControl
 			\param  default_name the name of the <b>item</b>
 	*/
  	QTreeWidgetItem* generateListViewItem_(QTreeWidgetItem* parent, 
-																					Composite& composite, QString* default_name = 0)
- 		throw();
+																					Composite& composite, QString* default_name = 0);
 	
 	//_ Test, if its allowed to paste the copy liste into the current selected context item.
-	bool pasteAllowedFor_(Composite& composite)
-		throw();
+	bool pasteAllowedFor_(Composite& composite);
 
 	//
- 	inline void removeRecursive_(QTreeWidgetItem* item)
- 		throw();
+ 	inline void removeRecursive_(QTreeWidgetItem* item);
 
 	// only for Python Interface
-	MolecularControl(const MolecularControl& mc)
-		throw();
+	MolecularControl(const MolecularControl& mc);
 
 	//
 	List<QTreeWidgetItem*> getAllItems_();

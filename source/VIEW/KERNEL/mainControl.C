@@ -97,7 +97,6 @@ namespace BALL
 			
 
 		MainControl::MainControl(QWidget* parent, const char* name, String inifile)
-			throw()
 			:	QMainWindow(parent),
 				ConnectionObject(),
 				Embeddable("BALL::VIEW::MainControl"),
@@ -169,7 +168,6 @@ namespace BALL
 		}
 
 		void MainControl::setup_()
-			throw()
 		{
 			// copy the environment variable BALLVIEW_DATA_PATH to BALL_DATA_PATH
 			// this has to be done here also, if it was done in main.C, no idea why!
@@ -270,7 +268,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 
 		MainControl::MainControl(const MainControl& main_control)
-			throw()
 			:	QMainWindow(0),
 				ConnectionObject(main_control),
 				Embeddable(main_control),
@@ -293,7 +290,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		MainControl::~MainControl()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << (void *)this << " of class MainControl" << endl;
@@ -305,7 +301,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		QMenu* MainControl::initPopupMenu(int ID)
-			throw()
 		{
 			if (id_to_menu_.has(ID)) return id_to_menu_[ID];
 
@@ -398,7 +393,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		void MainControl::clearData()
-			throw()
 		{
 			if (simulation_thread_ != 0)
 			{
@@ -426,7 +420,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		void MainControl::clear()
-			throw()
 		{
 			selection_.clear();
 			primitive_manager_.clear();
@@ -606,7 +599,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 
 		bool MainControl::remove_(Composite& composite, bool update_representations_of_parent, bool to_delete)
-			throw()
 		{
 			// delete all representations containing the composite
 			primitive_manager_.removedComposite(composite, update_representations_of_parent);
@@ -642,7 +634,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 		// e.g. is called for root of items from picking, or for MolecularControl Selection
 		bool MainControl::updateRepresentationsOf(const Composite& composite, bool rebuild, bool force)
-			throw()
 		{
 			// update all representations containing the composite
 			List<Representation*> changed_representations = primitive_manager_.getRepresentationsOf(composite);
@@ -675,7 +666,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 
 		void MainControl::redrawAllRepresentations(bool rebuild_display_lists)
-			throw()
 		{
 			// update scene
 			if (rebuild_display_lists)
@@ -690,7 +680,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 
 		void MainControl::onNotify(Message *message)
-			throw()
 		{
   		#ifdef BALL_VIEW_DEBUG
 				Log.error() << "MainControl " << this << " onNotify " << message << std::endl;
@@ -783,7 +772,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 		// VIEW automatic module registration
 		MainControl* MainControl::getMainControl(const QObject* object)
-			throw()
 		{
 			QObject* parent = object->parent();
 			while ((parent != 0) && (parent->parent() != 0))
@@ -812,7 +800,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 		QAction* MainControl::insertMenuEntry(Position parent_id, const String& name, const QObject* receiver, 
 																		 const char* slot, const String& description, QKeySequence accel)
-			throw()
 		{
 			QMenu* popup = initPopupMenu(parent_id);
 			if (popup == 0)
@@ -831,7 +818,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		void MainControl::removeMenuEntry(Index parent_id, QAction* action)
-			throw()
 		{
 			QMenu* popup = initPopupMenu(parent_id);
 			if (popup == 0) return;
@@ -839,7 +825,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		void MainControl::insertPopupMenuSeparator(int ID)
-			throw()
 		{
 			QMenu* popup = initPopupMenu(ID);
 			if (popup == 0)
@@ -851,7 +836,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		void MainControl::initializePreferencesTab_()
-			throw()
 		{
 			main_control_preferences_ = new MainControlPreferences();
 
@@ -896,7 +880,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		void MainControl::applyPreferences()
-			throw()
 		{
 			// MainControls own preferences
 			
@@ -933,7 +916,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		void MainControl::fetchPreferences(INIFile &inifile)
-			throw()
 		{
 			if (inifile.hasEntry("WINDOWS", "File::working_dir"))
 			{
@@ -963,7 +945,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		void MainControl::writePreferences(INIFile &inifile)
-			throw()
 		{
 			inifile.appendSection("MAIN");
 			VersionInfo version;
@@ -1005,7 +986,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		void MainControl::addModularWidget(ModularWidget* widget)
-			throw()
 		{
 			#ifdef BALL_DEBUG_VIEW
 				Log.info() << "MainControl::addModularWidget(" << widget << ")" << endl;
@@ -1021,7 +1001,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		void MainControl::removeModularWidget(ModularWidget* widget)
-			throw()
 		{
 			#ifdef BALL_DEBUG_VIEW
 				Log.info() << "MainControl::removeModularWidget(" << widget << ")" << endl;
@@ -1032,7 +1011,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 
 		void MainControl::selectComposites_(GeometricObjectSelectionMessage& message)
-			throw()
 		{
 			HashSet<Composite*> roots;
 
@@ -1090,7 +1068,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 
 		void MainControl::printSelectionInfos()
-			throw()
 		{
 			if (selection_.size() > 4)
 			{
@@ -1208,7 +1185,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		System* MainControl::getSelectedSystem()
-			throw()
 		{
 			if (getCompositeManager().getComposites().size() == 0) return 0;
 
@@ -1227,7 +1203,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 
 		void MainControl::selectCompositeRecursive(Composite* composite, bool first_call)
-			throw()
 		{
 			composite->select();
 			selection_.insert(composite);
@@ -1299,7 +1274,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 
 		void MainControl::deselectCompositeRecursive(Composite* composite, bool first_call)
-			throw()
 		{
 			composite->deselect();
 			selection_.erase(composite);
@@ -1347,7 +1321,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 
 		void MainControl::setStatusbarText(const String& text, bool important, bool beep)
-			throw()
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << text << std::endl;
@@ -1395,13 +1368,11 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		void MainControl::restoreWindows()
-			throw()
 		{
 			restoreWindows(preferences_file_);
 		}
 
 		void MainControl::restoreWindows(const INIFile& inifile)
-			throw()
 		{
 			try
 			{
@@ -1436,14 +1407,12 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		void MainControl::menuItemHighlighted(QAction* action)
-			throw()
 		{
 			last_highlighted_menu_entry_ = action;
 			setStatusbarText(ascii(action->toolTip()));
 		}
 
 		void MainControl::dump(ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			BALL_DUMP_DEPTH(s, depth);
@@ -1453,7 +1422,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		void MainControl::update(Composite& composite, bool changed_hierarchy)
-			throw()
 		{
 			CompositeMessage* cm = new CompositeMessage(composite, 
 					CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
@@ -1464,7 +1432,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		bool MainControl::insert(Composite& composite, String name)
-			throw()
 		{
 			if (!composite_manager_.insert(composite)) return false;
 			CompositeMessage* cm; 
@@ -1485,7 +1452,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		bool MainControl::remove(Composite& composite, bool to_delete, bool update)
-			throw()
 		{
 			control_selection_.clear();
 
@@ -1496,13 +1462,11 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		bool MainControl::insert(Representation& rep)
-			throw()
 		{
 			return primitive_manager_.insert(rep, true);
 		}
 
 		bool MainControl::update(Representation& rep)
-			throw()
 		{
 			if (!primitive_manager_.has(rep)) return false;
 
@@ -1514,7 +1478,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		bool MainControl::remove(Representation& rep)
-			throw()
 		{
 			if (getRepresentationManager().updateRunning())
 			{
@@ -1537,14 +1500,12 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		void MainControl::sendMessage(Message& message)
-			throw()
 		{
 			onNotify(&message);
 			notify_(&message);
 		}
 
 		void MainControl::clearSelection()
-			throw()
 		{
 			if (getSelection().size() == 0) return;
 
@@ -1575,7 +1536,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		void MainControl::insertDeleteEntry()
-			throw()
 		{
 			if (delete_action_ == 0) 
 			{
@@ -1585,7 +1545,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		void MainControl::setDeleteEntryEnabled(bool state)
-			throw()
 		{
 			delete_action_->setEnabled(state);
 		}
@@ -1645,7 +1604,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 
 		bool MainControl::setSimulationThread(SimulationThread* thread)
-			throw()
 		{
 			if (!lockCompositesFor(0)) return false;
 
@@ -1662,7 +1620,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		SimulationThread* MainControl::getSimulationThread()
-			throw()
 		{
 			return simulation_thread_;
 		}
@@ -1701,7 +1658,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		void MainControl::enableLoggingToFile()
-			throw()
 		{
 			if (logging_to_file_) return;
 			if (logging_file_name_ == "")
@@ -1718,7 +1674,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 		
 		void MainControl::disableLoggingToFile()
-			throw()
 		{
 			if (!logging_to_file_) return;
 			logging_to_file_ = false;
@@ -1727,7 +1682,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		void MainControl::setLoggingFilename(const String& string)
-			throw()
 		{
 			logging_file_name_ = string;
 			if (logging_to_file_) 
@@ -1738,7 +1692,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		void MainControl::setWorkingDir(const String& dir)
-			throw() 
 		{ 
 			String dir2 = dir;
 			// QT will return Paths on windows with "/" as delimiter!
@@ -1757,7 +1710,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 
 		bool MainControl::lockCompositesFor(ModularWidget* widget)
-			throw()
 		{
 			if (!composites_locked_mutex_.tryLock()) return false;
 
@@ -1769,7 +1721,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		bool MainControl::unlockCompositesFor(ModularWidget* widget)
-			throw()
 		{
 			if (!composites_locked_) return true;
 
@@ -1984,7 +1935,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 	}
 
 	void MainControl::saveBALLViewProjectFile()
-		throw()
 	{
 		QString qresult = QFileDialog::getSaveFileName(
 											0,
@@ -2005,7 +1955,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 
 	void MainControl::loadBALLViewProjectFile()
-		throw()
 	{
 		QString result = QFileDialog::getOpenFileName(
 																		0,
@@ -2055,7 +2004,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 	}
 
 	bool MainControl::useMultithreading()
-		throw() 
 	{ 
 		return multi_threading_mode_;
 	}
@@ -2187,7 +2135,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		fullscreen_ = !fullscreen_;
 	}
 
-	void MainControl::openFile(const String& file) throw() 
+	void MainControl::openFile(const String& file) 
 	{
 		// drag and drop operations can result in addition emtpy file names,
 		// ignore these:

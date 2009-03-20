@@ -78,21 +78,18 @@ namespace BALL
 		}
 
 		void DockWidget::initializeWidget(MainControl&)
-			throw()
 		{
 			window_menu_entry_ = toggleViewAction();
 			getMainControl()->initPopupMenu(MainControl::WINDOWS)->addAction(window_menu_entry_);
 		}
 
 		void DockWidget::writePreferences(INIFile& /*inifile*/)
-			throw()
 		{
 			// writing of preferences should be completely covered by saveState that has to 
 			// be called from the widget we are used from (usually MainControl)
 		}
 
 		void DockWidget::fetchPreferences(INIFile & /*inifile*/)
-			throw()
 		{
 			// reading of preferences should be completely covered by restoreState that has to 
 			// be called from the widget we are used from (usually MainControl)

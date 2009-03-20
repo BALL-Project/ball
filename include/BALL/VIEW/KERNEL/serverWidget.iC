@@ -6,14 +6,12 @@
 
 BALL_INLINE
 void ServerWidget::registerObjectCreator(const ObjectCreator& s)
-	throw()
 {
   object_creator_ = const_cast<ObjectCreator *>(&s);
 }
 
 BALL_INLINE
 void ServerWidget::unregisterObjectCreator()
-	throw()
 {
 	object_creator_ = (ObjectCreator *)(&RTTI::getDefault<ObjectCreator>());
 }

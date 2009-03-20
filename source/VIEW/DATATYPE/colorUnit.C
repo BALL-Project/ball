@@ -17,19 +17,16 @@ namespace BALL
 	{
 
 		ColorUnit::NotInHexFormat::NotInHexFormat(const char* file, int line, const string& data)
-			throw()
 			:	Exception::GeneralException(file, line, string("NotInHexFormat"), string("value was not in hex format: ") + data)
 		{
 		}
 
 		ColorUnit::ColorUnit()
-			throw()
 			:	value_((float)0)
 		{
 		}
 
 		ColorUnit::ColorUnit(const ColorUnit& color)
-			throw()
 			:	value_(color.value_)
 		{
 		}
@@ -47,7 +44,6 @@ namespace BALL
 		}
 
 		ColorUnit::ColorUnit(const unsigned char c)
-			throw()
 		{
 			value_ = (float)c / (float)255;
 		}
@@ -153,7 +149,6 @@ namespace BALL
 		}
 
 		ColorUnit::~ColorUnit()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this << " of class " 
@@ -162,19 +157,16 @@ namespace BALL
 		}
 
 		void ColorUnit::clear()
-			throw()
 		{
 			value_ = (float)0;
 		}
 
 		void ColorUnit::set(const ColorUnit& color)
-			throw()
 		{
 			value_ = color.value_;
 		}
 
 		const ColorUnit& ColorUnit::operator = (const ColorUnit& color)
-			throw()
 		{
 			set(color);
 
@@ -196,7 +188,6 @@ namespace BALL
 		}
 			
 		void ColorUnit::get(char* char_ptr) const
-			throw()
 		{
 			sprintf(char_ptr, "%x", (unsigned char)(value_ * 255.0));
 		}
@@ -216,7 +207,6 @@ namespace BALL
 		}
 			
 		void ColorUnit::get(String& values) const
-			throw()
 		{
 			char temp[4];
 
@@ -226,13 +216,11 @@ namespace BALL
 		}
 
 		void ColorUnit::set(const unsigned char c)
-			throw()
 		{
 			value_ = (float)c / (float)255;
 		}
 
 		const ColorUnit& ColorUnit::operator = (const unsigned char c)
-			throw()
 		{
 			set(c);
 
@@ -240,7 +228,6 @@ namespace BALL
 		}
 
 		void ColorUnit::get(unsigned char& c) const
-			throw()
 		{
 			c = (unsigned char)(value_ * 255.0);
 		}
@@ -267,7 +254,6 @@ namespace BALL
 		}
 
 		void ColorUnit::get(short& s) const
-			throw()
 		{
 			s = (short)(value_ * 255.0);
 		}
@@ -294,7 +280,6 @@ namespace BALL
 		}
 
 		void ColorUnit::get(unsigned short& us) const
-			throw()
 		{
 			us = (unsigned short)(value_ * 255.0);
 		}
@@ -321,7 +306,6 @@ namespace BALL
 		}
 
 		void ColorUnit::get(int& i) const
-			throw()
 		{
 			i = (int)(value_ * 255.0);
 		}
@@ -348,7 +332,6 @@ namespace BALL
 		}
 
 		void ColorUnit::get(unsigned int& i) const
-			throw()
 		{
 			i = (unsigned int)(value_ * 255.0);
 		}
@@ -375,7 +358,6 @@ namespace BALL
 		}
 
 		void ColorUnit::get(long& l) const
-			throw()
 		{
 			l = (long)(value_ * 255.0);
 		}
@@ -402,7 +384,6 @@ namespace BALL
 		}
 
 		void ColorUnit::get(unsigned long& ul) const
-			throw()
 		{
 			ul = (unsigned long)(value_ * 255.0);
 		}
@@ -429,7 +410,6 @@ namespace BALL
 		}
 
 		void ColorUnit::get(float& f) const
-			throw()
 		{
 			f = (float)(value_ * 255.0);
 		}
@@ -456,25 +436,21 @@ namespace BALL
 		}
 
 		void ColorUnit::get(double& d) const
-			throw()
 		{
 			d = (double)(value_ * 255.0);
 		}
 
 		void ColorUnit::swap(ColorUnit& color)
-			throw()
 		{
 			float temp = value_;
 			value_ = color.value_;
 			color.value_ = temp;
 		}
 
-		void ColorUnit::dump
-			(ostream& s, Size depth) const
-			throw()
+		void ColorUnit::dump(ostream& s, Size depth) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
-			
+
 			BALL_DUMP_DEPTH(s, depth);
 			BALL_DUMP_HEADER(s, this, this);
 

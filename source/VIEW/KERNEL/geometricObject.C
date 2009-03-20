@@ -17,21 +17,18 @@ namespace BALL
 	{
 
 		GeometricObject::GeometricObject()
-			throw()
 			: color_(),
 				composite_(0)
 		{
 		}
 
 		GeometricObject::GeometricObject(const GeometricObject& geometric_object)
-			throw()
 			: color_(geometric_object.color_),
 				composite_(geometric_object.composite_)
 		{
 		}
 
 		GeometricObject::~GeometricObject()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << this << " of class " << RTTI::getName<GeometricObject>() << endl;
@@ -39,28 +36,24 @@ namespace BALL
 		}
 
 		void GeometricObject::clear()
-			throw()
 		{
 			color_ = ColorRGBA();
 			composite_ = 0;
 		}
 
 		void GeometricObject::set(const GeometricObject& geometric_object)
-			throw()
 		{
 			color_ = geometric_object.color_;
 			composite_ = geometric_object.composite_;
 		}
 
 		GeometricObject& GeometricObject::operator = (const GeometricObject& geometric_object)
-			throw()
 		{
 			set(geometric_object);
 			return *this;
 		}
 
 		void GeometricObject::swap(GeometricObject& geometric_object)
-			throw()
 		{
 			const Composite* composite = geometric_object.composite_;
 			geometric_object.composite_ = composite_;
@@ -68,7 +61,6 @@ namespace BALL
 		}
 
 		void GeometricObject::dump(ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

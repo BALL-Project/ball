@@ -49,8 +49,7 @@ namespace BALL
 			/** Default Constructor.
 					Initialize the message queue and resets all connection to zero.
 			*/
-			ConnectionObject()
-				throw();
+			ConnectionObject();
 				
 			//@}
 			/** @name Destructors 
@@ -61,22 +60,19 @@ namespace BALL
 					Calls destroy.
 					\see   destroy
 			*/
-			virtual ~ConnectionObject()
-				throw();
+			virtual ~ConnectionObject();
 
 			/** Explicit default initialization.
 					Clears the message queue and deletes all deletable messages in it.
 					Further all connections to the children and the parent will be cut.
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			/** Explicit destructor.
 					Calls clear
 					\see   clear
 			*/
-			virtual void destroy()
-				throw();
+			virtual void destroy();
 
 			//@}
 			/**	@name	Accessors: inspectors and mutators 
@@ -90,8 +86,7 @@ namespace BALL
 					\see      unregisterConnectionObject
 					\see      isConnectionObjectRegistered
 			*/
-			void registerConnectionObject(ConnectionObject &object)
-				throw();
+			void registerConnectionObject(ConnectionObject &object);
 
 			/** Unregister connectionObject.
 					The connectionObject this deletes
@@ -101,8 +96,7 @@ namespace BALL
 					\see      registerConnectionObject
 					\see      isConnectionObjectRegistered
 			*/
-			void unregisterConnectionObject(ConnectionObject &object)
-				throw();
+			void unregisterConnectionObject(ConnectionObject &object);
 
 			/** Test if connectionObject is registered.
 					\param   object the connectionObject to be tested
@@ -110,21 +104,18 @@ namespace BALL
 					\see     registerConnectionObject
 					\see     unregisterConnectionObject
 			*/
-			bool isConnectionObjectRegistered(const ConnectionObject &object)
-				throw();
+			bool isConnectionObjectRegistered(const ConnectionObject &object);
 
 			/** Access the parent connectionObject of this connectionObject.
 					If this connectionObject is root <tt> 0</tt> will be returned.
 					\return  ConnectionObject* the pointer to the parent connectionObject, <tt> 0</tt> if this is root.
 			*/
-			ConnectionObject* getParent() const
-				throw();
+			ConnectionObject* getParent() const;
 
 			/** Access the root of this ConnectionObject. 
 			 		Returns the ConnectionObject that parent is <tt> 0</tt>.
 			*/
-			ConnectionObject* getRoot()
-				throw();
+			ConnectionObject* getRoot();
 
 			/** Message handling method.
 					This method handles messages sent to this connectionObject.
@@ -134,8 +125,7 @@ namespace BALL
 					See Message for further information concerning messages.
 					\param   message a pointer to a message. Do not delete the message in this method.
 			*/
-			virtual void onNotify(Message *message)
-				throw();
+			virtual void onNotify(Message *message);
 
 			//@}
 			/**	@name	debuggers and diagnostics
@@ -154,8 +144,7 @@ namespace BALL
                       connectionObject is correct (self-validated) and consistent,
 					 						<tt> false</tt> otherwise
 			*/
-			virtual bool isValid() const
-				throw();
+			virtual bool isValid() const;
 
 			/** Internal value dump.
 					Dump the current state to 
@@ -163,8 +152,7 @@ namespace BALL
 					\param   s output stream where to output the state 
 					\param   depth the dumping depth
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 			//@}
 			
@@ -194,8 +182,7 @@ namespace BALL
 					\param   message a pointer to a message that will be sent through the connectionObject tree.
 					\see     Message
 			*/
-			void notify_(Message *message)
-				throw();
+			void notify_(Message *message);
 
 			/** Notification method with reference.
 					See <b> notify_</b> for detailed information on the notification process.
@@ -203,23 +190,19 @@ namespace BALL
 					\param    message a reference to a message that will be sent through the connectionObject tree.
 					\see      Message
 			*/
-			void notify_(Message &message)
-				throw();
+			void notify_(Message &message);
 
 			//@}
 
 			protected:
 
-			void onNotify_(Message* message)
-				throw();
+			void onNotify_(Message* message);
 
 			private:
 
-			void setParent_(ConnectionObject &object)
-				throw();
+			void setParent_(ConnectionObject &object);
 
-			void clearParent_()
-				throw();
+			void clearParent_();
 
 	
 			bool processing_message_queue_;

@@ -68,12 +68,10 @@ class BALL_VIEW_EXPORT ColorProcessor
 	typedef HashGridBox3<const Atom*> AtomBox;
 
 	/// Default Constructor.
-	ColorProcessor()
-		throw();
+	ColorProcessor();
 
 	/// Copy constructor.
-	ColorProcessor(const ColorProcessor& color_calculator)
-		throw();
+	ColorProcessor(const ColorProcessor& color_calculator);
 
 	/// Destructor.
 	virtual ~ColorProcessor();
@@ -83,22 +81,18 @@ class BALL_VIEW_EXPORT ColorProcessor
 			 <b> default_color_</b> to red (<tt> "FF0000FF"</tt>).
 			The grid is cleared and the pointer to the CompositeSet is set to NULL.
 	*/
-	virtual void clear()
-		throw();
+	virtual void clear();
 
 	/// Assignment
-	void set(const ColorProcessor& color_calculator)
-		throw();
+	void set(const ColorProcessor& color_calculator);
 
 	///
-	virtual bool start()
-		throw();
+	virtual bool start();
 
 	/** Assignment operator.
 			Calls set.
 	*/
-	const ColorProcessor&  operator = (const ColorProcessor& color_calculator)
-		throw();
+	const ColorProcessor&  operator = (const ColorProcessor& color_calculator);
 
 	/** Some coloring processors need only to be applied to a Representation if the hierarchy of
 			the Representations Composite is changed, or the Composites Names or Type (like SecondaryStructure::Type)
@@ -108,17 +102,16 @@ class BALL_VIEW_EXPORT ColorProcessor
 			Initialise the member update_always_needed_ to true in derived classes, if the derived ColorProcessor shall
 			always be applied.
 	*/
-	bool updateAlwaysNeeded() { return update_always_needed_;}
+	bool updateAlwaysNeeded() { return update_always_needed_;};
 
 	/** Change the default color.
 	*/
-	void setDefaultColor(const ColorRGBA& color)
-		throw();
+	void setDefaultColor(const ColorRGBA& color);
 
 	/** Non-mutable inspection of the default color.
 	*/
 	const ColorRGBA& getDefaultColor() const
-		throw() {return default_color_;}
+		{return default_color_;}
 
 	/** Calculate a color for a GeometricObject.
 	*/
@@ -134,42 +127,39 @@ class BALL_VIEW_EXPORT ColorProcessor
 
 	///
 	Size getTransparency() const
-		throw() { return transparency_;}
+		{ return transparency_;}
 
 	/** Set the transparency.
 			To be overloaded in derived classes
 	*/
-	virtual void setTransparency(Size value)
-		throw();
+	virtual void setTransparency(Size value);
 
 	/** Set the pointer to the CompositeSet.
 			This method is called by Representation::setColorProcessor and Representation::update.
 	*/
-	void setComposites(const List<const Composite*>* composites)
-		throw();
+	void setComposites(const List<const Composite*>* composites);
 
 	/// Return a pointer to the Composites.
 	const List<const Composite*>* getComposites()
-		throw() { return composites_;}
+		{ return composites_;}
 
 	///
-	void clearAtomGrid()
-		throw();
+	void clearAtomGrid();
 
 	///
 	void setAdditionalGridDistance(float distance)
-		throw() { additional_grid_distance_ = distance;}
+		{ additional_grid_distance_ = distance;}
 
 	///
 	float getAdditionalGridDistance() const
-		throw() { return additional_grid_distance_;}
+		{ return additional_grid_distance_;}
 
 	///
 	void setMinGridSpacing(float spacing) {min_spacing_ = spacing;}
 
 	///
 	AtomGrid& getAtomGrid() 
-		throw() { return atom_grid_;}
+		{ return atom_grid_;}
 
 	/** Internal value dump.
 			Dump the current state of this ColorProcessor to 
@@ -177,25 +167,21 @@ class BALL_VIEW_EXPORT ColorProcessor
 			\param   s output stream where to output the state of this ColorProcessor
 			\param   depth the dumping depth
 	*/
-	virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-		throw();
+	virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 	///
 	void setModelType(ModelType type) {model_type_ = type;}
 
 	//_ Create the threedimensional grid from the CompositeSet, or a given Composite 
-	virtual void createAtomGrid(const Composite* from_mesh = 0)
-		throw();
+	virtual void createAtomGrid(const Composite* from_mesh = 0);
 
 	///
-	const Atom* getClosestItem(const Vector3& v) const
-		throw();
+	const Atom* getClosestItem(const Vector3& v) const;
 
 	protected:
 
 	//_ Colorize the mesh with the computed grid.
-	virtual void colorMeshFromGrid_(Mesh& mesh)
-		throw();
+	virtual void colorMeshFromGrid_(Mesh& mesh);
 
 	//_
 	virtual bool canUseMeshShortcut_(const Composite&) { return false;}
@@ -249,8 +235,7 @@ class BALL_VIEW_EXPORT InterpolateColorProcessor
 	InterpolateColorProcessor(const InterpolateColorProcessor& pro);
 
 	///
-	virtual bool start()
-		throw();
+	virtual bool start();
 
 	///
 	void setMode(Mode mode) { mode_ = mode;}
@@ -259,47 +244,42 @@ class BALL_VIEW_EXPORT InterpolateColorProcessor
 	Mode getMode() const { return mode_;}
 
 	///
-	vector<ColorRGBA>& getColors() throw() { return colors_;}
+	vector<ColorRGBA>& getColors() { return colors_;}
 	
 	///
-	const vector<ColorRGBA>& getColors() const throw() { return colors_;}
+	const vector<ColorRGBA>& getColors() const { return colors_;}
 
 	///
-	void setColors(const vector<ColorRGBA>& colors) throw() { colors_ = colors;}
+	void setColors(const vector<ColorRGBA>& colors) { colors_ = colors;}
 
 	///
-	void setMinColor(const ColorRGBA& color)
-		throw();
+	void setMinColor(const ColorRGBA& color);
 
 	///
-	void setMaxColor(const ColorRGBA& color)
-		throw();
+	void setMaxColor(const ColorRGBA& color);
 
 	///
-	const ColorRGBA& getMinColor() const
-		throw();
+	const ColorRGBA& getMinColor() const;
 	
 	///
-	const ColorRGBA& getMaxColor() const
-		throw();
+	const ColorRGBA& getMaxColor() const;
 
 	///
-	void setMaxValue(float value) throw() {max_value_ = value;}
+	void setMaxValue(float value) {max_value_ = value;}
 
 	///
-	float getMaxValue() const throw() { return max_value_;}
+	float getMaxValue() const { return max_value_;}
 
 	///
-	void setMinValue(float value) throw() { min_value_ = value;}
+	void setMinValue(float value) { min_value_ = value;}
 
 	///
-	float getMinValue() const throw() { return min_value_;}
+	float getMinValue() const { return min_value_;}
 
 	/** Interpolate a color between the given colors.
 			To be overloaded in derived classes.
 	*/
-	virtual void interpolateColor(float value, ColorRGBA& color_to_be_set)
-		throw();
+	virtual void interpolateColor(float value, ColorRGBA& color_to_be_set);
 
 	protected:
 

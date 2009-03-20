@@ -49,13 +49,11 @@ namespace BALL
 		  			- vertex - to the vector (0,0,0)
 					\par
 			*/
-			Point()
-				throw();
+			Point();
 
 			/** Copy constructor 
 			*/
-			Point(const Point& point)
-				throw();
+			Point(const Point& point);
 
 			//@}
 			/** @name Destructors */
@@ -63,15 +61,13 @@ namespace BALL
 
 			/** Destructor.
 			*/
-			virtual ~Point()
-				throw();
+			virtual ~Point();
 
 			/** Explicit default initialization.
 					Calls GeometricObject::clear
 					Calls Vertex::clear
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			//@}
 
@@ -80,21 +76,18 @@ namespace BALL
 
 			/** Assignment.
 			*/
-			void set(const Point& point)
-				throw();
+			void set(const Point& point);
 
 			/** Assignment operator.
 					Calls set.
 			*/
-			const Point& operator = (const Point& point)
-				throw();
+			const Point& operator = (const Point& point);
 
 			/** Swapping of point's.
 					Swap the value of this point with the point <b> point</b>.
 					\param       point the point being swapped with this point 
 			*/
-			void swap(Point& point)
-				throw();
+			void swap(Point& point);
 
 			//@}
 			/**	@name	debuggers and diagnostics */
@@ -102,8 +95,7 @@ namespace BALL
 
 			/** Internal state and consistency self-validation.
 			*/
-			virtual bool isValid() const
-				throw();
+			virtual bool isValid() const;
 
 			/** Internal value dump.
 					Dump the current value of this point to 
@@ -115,8 +107,7 @@ namespace BALL
 					\see     GeometricObject::dump
 					\see     Vertex::dump
 			*/
-			virtual void dump(std::ostream&  s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream&  s = std::cout, Size depth = 0) const;
 			
 			// Method to get all vertices from a geometric object
 			virtual void getVertices(vector<Vector3>& vertices) const; 

@@ -116,8 +116,7 @@ namespace BALL
 					Calls registerWidget.
 					\see        ModularWidget
 			*/
-			MolecularStructure(QWidget* parent = 0, const char* name = 0)
-				throw();
+			MolecularStructure(QWidget* parent = 0, const char* name = 0);
 			
 			/// only needed for Python Interface, dont call it!
 			MolecularStructure(const MolecularStructure& m);
@@ -129,8 +128,7 @@ namespace BALL
 
 			/** Destructor.
 			*/
-			virtual ~MolecularStructure()
-				throw();
+			virtual ~MolecularStructure();
 
 			//@}
 			/**	@name	Accessors: inspectors and mutators 
@@ -147,8 +145,7 @@ namespace BALL
 					\see   GeometricObjectSelectionMessage
 					\see   MolecularTaskMessage
 			*/
-			virtual void onNotify(Message *message)
-				throw();
+			virtual void onNotify(Message *message);
 
 			/**	Check the menu entries.
 					The menus <b>Select</b>, <b>Deselect</b>, <b>Add Hydrogens</b> and <b>Build Bonds</b>
@@ -156,8 +153,7 @@ namespace BALL
 					The menu <b>Focus camera</b> will be enabled only if only one molecular object
 					is in the selection list.
 			*/
-			virtual void checkMenu(MainControl& main_control)
-				throw();
+			virtual void checkMenu(MainControl& main_control);
 
 			/**	Initialize the popup menus for this Widget.
 					This method is called automatically	immediately before the main application is started 
@@ -171,41 +167,39 @@ namespace BALL
 					This returns either a reference to the amber_ff_ member or to the charmm_ff_ member,
 					depending on the value of use_amber_.
 			*/
-			ForceField& getForceField() throw();
+			ForceField& getForceField();
 
 			/** Get the instance of the AMBER forcefield.
 					The forcefield will be created, when this function is called the first time.
 			*/
-			AmberFF& getAmberFF() throw();
+			AmberFF& getAmberFF();
 			
 			/** Get the instance of the CHARMM forcefield.
 					The forcefield will be created, when this function is called the first time.
 			*/
-			CharmmFF& getCharmmFF() throw();
+			CharmmFF& getCharmmFF();
 
 			///
-			MMFF94& getMMFF94() throw();
+			MMFF94& getMMFF94();
 
 			/// Get an instance of an dialog to setup the AMBER forcefield
-			AmberConfigurationDialog& getAmberConfigurationDialog()	throw();
+			AmberConfigurationDialog& getAmberConfigurationDialog();
 			
 			/// Get an instance of an dialog to setup the CHARMM forcefield
-			CharmmConfigurationDialog& getCharmmConfigurationDialog()	throw();
+			CharmmConfigurationDialog& getCharmmConfigurationDialog();
 
 			///
-			MMFF94ConfigurationDialog& getMMFF94ConfigurationDialog() throw();
+			MMFF94ConfigurationDialog& getMMFF94ConfigurationDialog();
 
 			/** Fetch the widgets preferences from the INIfile.
 					\param  inifile the INIFile that contains the required values
 			*/
-			virtual void fetchPreferences(INIFile &inifile)
-				throw();
+			virtual void fetchPreferences(INIFile &inifile);
 					
 			/** Writes the widgets preferences to the INIFile.
 					\param  inifile the INIFile that contains the needed values
 			*/
-			virtual void writePreferences(INIFile &inifile)
-				throw();
+			virtual void writePreferences(INIFile &inifile);
 
 			///
 			MolecularDynamicsDialog& getMDSimulationDialog() { return md_dialog_;}
@@ -344,8 +338,7 @@ namespace BALL
 			
 			private:
 
-			virtual void addComposite_(Composite& composite, const String& name)
-				throw();
+			virtual void addComposite_(Composite& composite, const String& name);
 
 			void applyForceFieldSettings_();
 

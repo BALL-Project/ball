@@ -5,7 +5,6 @@
 
 BALL_INLINE
 Vector3 TwoColoredLine::getMiddleVertex() const
-	throw()
 {
   return (getVertex1() + (getVertex2() - getVertex1()) / 2.0);
 }

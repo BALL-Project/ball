@@ -31,13 +31,11 @@ namespace BALL
 			/** Default Constructor.
 					Calls clear.
 			*/
-			ModelInformation()
-			  throw();
+			ModelInformation();
 
 			/** Destructor.
 			*/
-			virtual ~ModelInformation()
-				throw();
+			virtual ~ModelInformation();
 
 			//@} 
 			/**	@name	Accessors: inspectors and mutators */ 
@@ -45,35 +43,29 @@ namespace BALL
 		
 			/** Get a name for a ModelType
 			*/
-			virtual String getModelName(ModelType type) const
-				throw();
+			virtual String getModelName(ModelType type) const;
 
 			/** Get a name for a ColoringMethod
 			*/
-			virtual String getColoringName(ColoringMethod type) const
-				throw();
+			virtual String getColoringName(ColoringMethod type) const;
 
 			/** Define, which Models are Surfaces.
 					Add new kinds of Surfaces to this function!
 			*/
-			virtual bool isSurfaceModel(ModelType type) const
-				throw();
+			virtual bool isSurfaceModel(ModelType type) const;
 
 			/** Model can be modified with DisplayProperitesDialog
 			*/
-			virtual bool modelMuteableByDisplayProperties(ModelType type) const
-				throw();
+			virtual bool modelMuteableByDisplayProperties(ModelType type) const;
 
 			/** Model can be modified with DisplayProperitesDialog
 			*/
-			virtual bool coloringMuteableByDisplayProperties(ColoringMethod type) const
-				throw();
+			virtual bool coloringMuteableByDisplayProperties(ColoringMethod type) const;
 
 			/** Model must be rebuild, if Composite changes
 					but hierarchy is unchanged.
 			*/
-			virtual bool modelMustBeRebuild(ModelType type) const
-				throw();
+			virtual bool modelMustBeRebuild(ModelType type) const;
 		};
 
 	} // namespace VIEW

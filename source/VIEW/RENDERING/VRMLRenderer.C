@@ -32,7 +32,6 @@ namespace BALL
 	{
 
 VRMLRenderer::VRMLRenderer()
-	throw()
 	: Renderer(),
 		outfile_(),
 		current_indent_(0)
@@ -53,7 +52,6 @@ VRMLRenderer::VRMLRenderer(const String& name)
 }
 
 VRMLRenderer::~VRMLRenderer()
-	throw()
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.info() << "Destructing object " << (void *)this 
@@ -62,7 +60,6 @@ VRMLRenderer::~VRMLRenderer()
 }
 
 void VRMLRenderer::clear()
-	throw()
 {
 	outfile_.clear();
 	current_indent_ = 0;
@@ -79,7 +76,6 @@ void VRMLRenderer::setFileName(const String& name)
 }
 
 String VRMLRenderer::VRMLColorRGBA(const ColorRGBA& input)
-	throw()
 {
 	return 
 		String((float) input.getRed())   + " " + 
@@ -88,7 +84,6 @@ String VRMLRenderer::VRMLColorRGBA(const ColorRGBA& input)
 }
 
 String VRMLRenderer::VRMLVector3(Vector3 input)
-	throw()
 {
 	// we convert into the new coordinate system: the camera looks
 	// down the negative z axis and sits at (0,0,0)
@@ -109,7 +104,6 @@ String VRMLRenderer::VRMLVector3(Vector3 input)
 // init must be called right before the rendering starts, since
 // we need to fix the camera, light sources, etc...
 bool VRMLRenderer::init(const Stage& stage)
-	throw()
 {
 	#ifdef BALL_VIEW_DEBUG_PROCESSORS
 		Log.info() << "Start the VRMLRender output..." << std::endl;
@@ -133,7 +127,6 @@ bool VRMLRenderer::init(const Stage& stage)
 }
 
 bool VRMLRenderer::finish()
-	throw()
 {
 	//before finishing we write the scaling if was used
 	String infos = "# Biggest Values: (" + (String)(bigX) + "|"+ (String)(bigY) + "|"+ (String)(bigZ) + "); Smallest Values: (" + (String)smallX + "|"+ (String)smallY + "|"+ (String)smallZ +")";
@@ -150,7 +143,6 @@ bool VRMLRenderer::finish()
 
 void VRMLRenderer::header_(const Vector3& translation, const ColorRGBA& color,
 													 const String& rotation)
-	throw()
 {
 	outheader_("Transform {");
  	if (rotation != "")
@@ -167,7 +159,6 @@ void VRMLRenderer::header_(const Vector3& translation, const ColorRGBA& color,
 
 
 void VRMLRenderer::footer_()
-	throw()
 {
 	current_indent_ --;
 	outfinish_("}");
@@ -178,7 +169,6 @@ void VRMLRenderer::footer_()
 
 
 void VRMLRenderer::renderSphere_(const Sphere& sphere)
-	throw()
 {
 	header_(sphere.getPosition(), sphere.getColor());
 	outheader_("geometry Sphere {");
@@ -188,7 +178,6 @@ void VRMLRenderer::renderSphere_(const Sphere& sphere)
 
 
 void VRMLRenderer::renderLine_(const Line& miniTube)
-	throw()
 {
 	static Vector3 default_angle(0,1,0);
 
@@ -216,7 +205,6 @@ void VRMLRenderer::renderLine_(const Line& miniTube)
 }
 
 void VRMLRenderer::renderTwoColoredLine_(const TwoColoredLine& miniTube)
-	throw()
 {
 	static Vector3 default_angle(0,1,0);
 
@@ -252,7 +240,6 @@ void VRMLRenderer::renderTwoColoredLine_(const TwoColoredLine& miniTube)
 }
 
 void VRMLRenderer::renderTube_(const Tube& tube)
-	throw()
 {
 	static Vector3 default_angle(0,1,0);
 
@@ -281,7 +268,6 @@ void VRMLRenderer::renderTube_(const Tube& tube)
 
 
 void VRMLRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
-	throw()
 {
 	static Vector3 default_angle(0,1,0);
 
@@ -319,7 +305,6 @@ void VRMLRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
 
 
 void VRMLRenderer::VRMLColor(const ColorRGBA& color)
-	throw()
 {
 	outheader_("appearance Appearance {");
 	outheader_("material Material {");
@@ -332,7 +317,6 @@ void VRMLRenderer::VRMLColor(const ColorRGBA& color)
 }
 
 void VRMLRenderer::renderMesh_(const Mesh& mesh)
-	throw()
 {
 	// so we should let VRMLRay know...
 	outheader_("Shape {");
@@ -488,7 +472,6 @@ void VRMLRenderer::renderMesh_(const Mesh& mesh)
 }
 
 void VRMLRenderer::out_(const String& data)
-	throw()
 {
 	if (current_indent_ < 0)
 	{

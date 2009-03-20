@@ -197,8 +197,7 @@ namespace BALL
 			*/	
 			//@{
 
-			Scene()
-				throw();
+			Scene();
 
 			/** Default Constructor.
 					Initialize the width and height of this scene to <tt> 600</tt> and sets
@@ -210,8 +209,7 @@ namespace BALL
 					\param      w_flags the flags the scene widget should have 
 											(See documentation of QT-library for information concerning widget flags) 
 			*/
-			Scene(QWidget* parent_widget, const char* name = NULL, Qt::WFlags w_flags = 0)
-				throw();
+			Scene(QWidget* parent_widget, const char* name = NULL, Qt::WFlags w_flags = 0);
 
 			/** Copy constructor.
 					Initialize the width, height and camera position.
@@ -223,13 +221,11 @@ namespace BALL
 					\param  wflags the flags the scene widget should have 
 									(See documentation of QT-library for information concerning widget flags) 
 			 */
-			Scene (const Scene& scene, QWidget* parent_widget = NULL, const char* name = NULL, Qt::WFlags wflags = 0)
-				throw();
+			Scene (const Scene& scene, QWidget* parent_widget = NULL, const char* name = NULL, Qt::WFlags wflags = 0);
 
 			/** Destructor.
 			*/
-			virtual ~Scene()
-				throw();
+			virtual ~Scene();
 
 			/** Explicit default initialization.
 					Reset the default values of this scene to:
@@ -239,8 +235,7 @@ namespace BALL
 					  - camera look at position set to <tt> Vector(0,0,0)</tt>
 					\par
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			//@} 
 			/**	@name	Assignment 
@@ -251,14 +246,12 @@ namespace BALL
 					Initialize the width, height and camera position.
 					\param  scene the scene to be copied
 			*/
-			void set(const Scene& scene)
-				throw();
+			void set(const Scene& scene);
 
 			/** Assignment operator.
 					Calls set.
 			*/
-			const Scene& operator =	(const Scene& scene)
-				throw();
+			const Scene& operator =	(const Scene& scene);
 
 			//@}
 			/**	@name	Accessors: inspectors and mutators 
@@ -271,13 +264,11 @@ namespace BALL
 					\see   ConnectionObject
 					\see   Message
 		  */
-			virtual void onNotify(Message *message)
-				throw();
+			virtual void onNotify(Message *message);
 
 			/** This method exports the content of the Scene to an external Renderer.
 			*/
-			virtual bool exportScene(Renderer &er) const
-				throw();
+			virtual bool exportScene(Renderer &er) const;
 
 			//@}	
 			/**	ModularWidget methods.
@@ -293,16 +284,13 @@ namespace BALL
 					by MainControl::show().
 					\param main_control the MainControl object to be initialized with this scene
 			*/
-			virtual void initializeWidget(MainControl& main_control)
-				throw();
+			virtual void initializeWidget(MainControl& main_control);
 		
 			///
-			virtual void fetchPreferences(INIFile& inifile)
-				throw();
+			virtual void fetchPreferences(INIFile& inifile);
 			
 			///
-			virtual void writePreferences(INIFile& inifile)
-				throw();
+			virtual void writePreferences(INIFile& inifile);
 
 			/**	Menu checking method.
 					This method is called by MainControl::checkMenus before a popup menu is shown.
@@ -314,8 +302,7 @@ namespace BALL
 					\see   checkMenus
 					\see   show
 			*/
-			virtual void checkMenu(MainControl& main_control)
-				throw();
+			virtual void checkMenu(MainControl& main_control);
 			
 			//@}
 			/**	@name	Debugging and Diagnostics
@@ -325,8 +312,7 @@ namespace BALL
 			/** Internal state and consistency self-validation.
 					A Scene is valid if it has a parent.
 			*/
-			virtual bool isValid() const
-				throw();
+			virtual bool isValid() const;
 
 			/** Internal value dump.
 					Dump the current internal state of this scene to 
@@ -334,80 +320,75 @@ namespace BALL
 					\param   s output stream where to output the internal state of this scene
 					\param   depth the dumping depth
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 			
 			///
 			Stage* getStage()
-				throw() { return stage_;}
+				{ return stage_;}
 
 			///
 			const Stage* getStage() const
-				throw() { return stage_;}
+				{ return stage_;}
 
 			///
-			void setCamera(const Camera& camera)
-				throw();
+			void setCamera(const Camera& camera);
 
 			///
 			List<Camera>& getAnimationPoints()
-				throw() { return animation_points_;}
+				{ return animation_points_;}
 
 			///
 			static void setAnimationSmoothness(float value)
-				throw() { animation_smoothness_ = value;}
+				{ animation_smoothness_ = value;}
 
 			///
 			static float getAnimationSmoothness()
-				throw() { return animation_smoothness_;}
+				{ return animation_smoothness_;}
 
 			///
 			void setDefaultLighting(bool update_GL = true);
 
 			///
-			void initializePreferencesTab(Preferences &preferences)
-				throw();
+			void initializePreferencesTab(Preferences &preferences);
 			
 			///
-			void finalizePreferencesTab(Preferences &preferences)
-				throw();
+			void finalizePreferencesTab(Preferences &preferences);
 
 			///
-			virtual void applyPreferences()
-				throw();
+			virtual void applyPreferences();
 				
 			///
 			static void setMouseSensitivity(float sensitivity)
-				throw() { mouse_sensitivity_ = sensitivity; }
+				{ mouse_sensitivity_ = sensitivity; }
 
 			///
 			static float getMouseSensitivity()
-				throw() { return mouse_sensitivity_;}
+				{ return mouse_sensitivity_;}
 			
 			///
 			static void setMouseWheelSensitivity(float sensitivity)
-				throw() { mouse_wheel_sensitivity_ = sensitivity; }
+				{ mouse_wheel_sensitivity_ = sensitivity; }
 
 			///
 			static float getMouseWheelSensitivity()
-				throw() { return mouse_wheel_sensitivity_;}
+				{ return mouse_wheel_sensitivity_;}
 
 			///
 			static void setShowLightSources(bool state)
-				throw() { show_light_sources_ = state;}
+				{ show_light_sources_ = state;}
 			
 			///
 			static bool showLightSourcesEnabled() 
-				throw() { return show_light_sources_;}
+				{ return show_light_sources_;}
 
 			/// 
 			GLRenderer& getGLRenderer()
-				throw() { return *gl_renderer_;}
+				{ return *gl_renderer_;}
 
 #ifdef ENABLE_RAYTRACING
 			///
 			RaytracingRenderer& getRaytracingRenderer()
-				throw() { return *rt_renderer_;}
+				{ return *rt_renderer_;}
 #endif
 
 			/** Set a new GLRenderer.
@@ -448,11 +429,10 @@ namespace BALL
 
 			///
 			ModeType getMode() const
-				throw() { return current_mode_;}
+				{ return current_mode_;}
 
 			///
-			virtual void setMode(ModeType mode)
-				throw();
+			virtual void setMode(ModeType mode);
 
 			///
 			static void setScreenShotNumber(Position pos) { screenshot_nr_ = pos;}
@@ -491,8 +471,7 @@ namespace BALL
 			void rotateComposites(const List<Composite*>& composites, float degree_right, float degree_up, float degree_clockwise = 0);
 
 			///
-			bool isAnimationRunning() const
-				throw();
+			bool isAnimationRunning() const;
 
 			///
 			void setTurnPoint(const Vector3& v) { system_origin_ = v;}
@@ -534,12 +513,10 @@ namespace BALL
 		public slots:
 
 			/// Create an coordinate system at current position
-			void createCoordinateSystem()
-				throw();
+			void createCoordinateSystem();
 
 			/// Create an coordinate system at origin
-			void createCoordinateSystemAtOrigin()
-				throw();
+			void createCoordinateSystemAtOrigin();
 
 			/// Export PNG image and return the filename
 			String exportPNG();
@@ -568,43 +545,34 @@ namespace BALL
 			/** Show or hide widget (Called by menu entry in "WINDOWS")
 					If the ModularWidget is not also a QWidget, this method does nothing
 			*/
-			virtual void switchShowWidget()
-				throw();
+			virtual void switchShowWidget();
 
 			///
 			void addGlWindow();
 
 			///
 			void exitStereo()
-				throw();
 
 			///
-			void enterActiveStereo()
-				throw();
+			void enterActiveStereo();
 
 			///
-			void enterDualStereo()
-				throw();
+			void enterDualStereo();
 
 			///
-			void enterDualStereoDifferentDisplays()
-				throw();
+			void enterDualStereoDifferentDisplays();
 
 			///
-			void clearRecordedAnimation()
-				throw();
+			void clearRecordedAnimation();
 			
 			///
-			void startAnimation()
-				throw();
+			void startAnimation();
 
 			///
-			void stopAnimation()
-				throw();
+			void stopAnimation();
 
 			///
-			void switchToLastMode()
-				throw();
+			void switchToLastMode();
 
 			///
 			void switchShowGrid();
@@ -655,16 +623,13 @@ namespace BALL
 			virtual void moveMode_();
 			
 			/// Show the viewpoint and the look at point in the statusline of the mainwidget.
-			virtual void showViewPoint_()
-				throw();
+			virtual void showViewPoint_();
 
 			/// Set the viewpoint 
-			virtual void setViewPoint_()
-				throw();
+			virtual void setViewPoint_();
 
 			/// Reset the camera to standard values
-			virtual void resetCamera_()
-				throw();
+			virtual void resetCamera_();
 
 			/// Update the GL camera and if necessary the lights
 			virtual void updateCamera_();
@@ -764,8 +729,7 @@ namespace BALL
 			void updateGL();
 
 			//_
-			void animate_()
-				throw();
+			void animate_();
 
 			void processRotateModeMouseEvents_(QMouseEvent* e);
 			void processMoveModeMouseEvents_(QMouseEvent* e);
@@ -782,18 +746,15 @@ namespace BALL
 			void selectObjects_();
 			void pickParent_(QPoint p);
 
-			void writeLights_(INIFile& inifile) const
-				throw();
+			void writeLights_(INIFile& inifile) const;
 			
-			void readLights_(const INIFile& inifile) 
-				throw();
+			void readLights_(const INIFile& inifile) ;
 
 			inline float getXDiff_();
 			inline float getYDiff_();
 			inline Vector3 getTranslationVector_(const Vector3& v);
 			
-			void createCoordinateSystem_(bool at_origin)
-				throw();
+			void createCoordinateSystem_(bool at_origin);
 	
 			/// Estimate current fps and convert into a string
 			String createFPSInfo_();
@@ -912,8 +873,7 @@ namespace BALL
 			public:
 				
 				///
-				AnimationThread()
-					throw(){};
+				AnimationThread(){};
 
 				///
 				virtual void run() {scene_->animate_();}

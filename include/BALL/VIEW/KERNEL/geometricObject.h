@@ -57,19 +57,16 @@ namespace BALL
 					\return      GeometricObject new constructed geometricObject
 					\see         ColorRGBA
 			*/
-			GeometricObject()
-				throw();
+			GeometricObject();
 				
 			/** Copy constructor.
 					\param       object the geometricObject to be copied (cloned)
 			*/
-			GeometricObject(const GeometricObject& object)
-				throw();
+			GeometricObject(const GeometricObject& object);
 
 			/** Destructor.
 			*/
-			virtual ~GeometricObject()
-				throw();
+			virtual ~GeometricObject();
 
 			/** Explicit default initialization.
 					Set the state of this geometricObject to the default values.
@@ -78,8 +75,7 @@ namespace BALL
 						- name is set to "unknown"
 					\par
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			/**	@name	Assignment methods 
 			 */ 
@@ -87,20 +83,17 @@ namespace BALL
 
 			/** Assignment 
 			*/
-			void set(const GeometricObject& object)
-				throw();
+			void set(const GeometricObject& object);
 
 			/** Assignment operator.
 					Calls set.
 			*/
-			GeometricObject& operator = (const GeometricObject& object)
-				throw();
+			GeometricObject& operator = (const GeometricObject& object);
 
 			/** Swapping of geometricObjects.
 					\param       object the geometricObject being swapped with this geometricObject 
 			*/
-			void swap(GeometricObject& object)
-				throw();
+			void swap(GeometricObject& object);
 							
 			//@} 
 			/**	@name	Accessors: inspectors and mutators 
@@ -109,11 +102,11 @@ namespace BALL
 
 			///
 			void setComposite(const Composite* composite)
-				throw() { composite_ = composite;}
+				{ composite_ = composite;}
 
 			///
 			const Composite* getComposite() const
-				throw() { return composite_;}
+				{ return composite_;}
 			
 			//@} 
 			/**	@name	debuggers and diagnostics */ 
@@ -127,7 +120,7 @@ namespace BALL
 					\return			bool <tt> true</tt> if the internal state of this geometricObject is correct
 			*/
 			virtual bool isValid() const
-				throw() {return true;}
+				{return true;}
 
 			/** Internal value dump.
 					Dump the current state of this geometricObject to 
@@ -136,46 +129,45 @@ namespace BALL
 					\param   depth the dumping depth
 					\see     ColorRGBA::dump
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 			/**
 			 */
 			void setColor(const ColorRGBA& color)
-				throw() { color_ = color; }
+				{ color_ = color; }
 
 			/**
 			 */
 			void setColor(const ColorUnit& red, const ColorUnit& green,
 									  const ColorUnit& blue, const ColorUnit& alpha = (float)1)
-				throw() { color_.set(red, green, blue, alpha);}
+				{ color_.set(red, green, blue, alpha);}
 
 			/**
 			*/
 			const ColorRGBA& getColor() const
-				throw() { return color_; }
+				{ return color_; }
 
 			///
 			ColorRGBA& getColor() 
-				throw() { return color_; }
+				{ return color_; }
 
 			/**
 			*/
 			void getColor(ColorUnit& red,  ColorUnit& green,
 										ColorUnit& blue, ColorUnit& alpha) const
-				throw() { color_.get(red, green, blue, alpha); }
+				{ color_.get(red, green, blue, alpha); }
 
 			/// Insert the colors of this object into the hashset
 			void getColors(HashSet<String>& colors);
 			
 			/// Needed for MSVC
 			bool operator == (const GeometricObject& object) const
-				throw() { return this == &object;}
+				{ return this == &object;}
 
 		
 			/// Needed for MSVC
 			bool operator < (const GeometricObject& object) const
-				throw() { return this < &object;}
+				{ return this < &object;}
 
 			// Method to get all vertices from a geometric object
 			virtual void getVertices(std::vector<Vector3>&) const {};
@@ -184,8 +176,7 @@ namespace BALL
 
 			private:
 
-			void clear_()
-				throw();
+			void clear_();
 		
 			ColorRGBA color_;
 

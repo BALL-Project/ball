@@ -81,16 +81,13 @@ namespace BALL
 				//@{
 
 				/// Default Constructor.
-				DockingController(QWidget* parent = 0, const char* name = 0)
-					throw();
+				DockingController(QWidget* parent = 0, const char* name = 0);
 
 				/// Destructor
-				virtual ~DockingController()
-					throw();
+				virtual ~DockingController();
 				
 				///	Assignment operator
-				const DockingController& operator =(const DockingController& dock_controller)
-					throw();
+				const DockingController& operator =(const DockingController& dock_controller);
 				
 				//@}
 				/**	@name ModularWidget methods
@@ -105,38 +102,33 @@ namespace BALL
 					  @see	 finalizeWidget
 					  @see	 insertMenuEntry
 				*/
-				virtual void initializeWidget(MainControl& main_control)
-					throw();
+				virtual void initializeWidget(MainControl& main_control);
 				
 				/** Fetches the preferences from the INIFile.
 				 		Calls \link DockDialog::fetchPreferences DockDialog::fetchPreferences \endlink.
 						This method will be called inside the method \link MainControl::show MainControl::show \endlink. 
 				 		@see		writePreferences
 				*/
-				virtual void fetchPreferences(INIFile& file)
-					throw();
+				virtual void fetchPreferences(INIFile& file);
 
 				/** Writes the preferences to the INIFile.
 				 		Calls \link DockDialog::writePreferences DockDialog::writePreferences \endlink.
 						This method will be called inside the method \link MainControl::aboutToExit MainControl::aboutToExit \endlink. 
 						@see		fetchPreferences
 				*/
-				virtual void writePreferences(INIFile& file)
-					throw();
+				virtual void writePreferences(INIFile& file);
 
 				/** Updates the state of menu entry Docking in the popup menu <b>	Molecular Mechanics </b>.
 					  Enables the menu entry if more than two composites are loaded.
 					  Disables the menu entry if less composites are loaded or if a simulation / calculation is running.
 				*/
-				virtual void checkMenu (MainControl& main_control)
-					throw();	
+				virtual void checkMenu (MainControl& main_control);
 
 				/** Message handling method.
 				  	Catches <b> DockingFinishedMessage </b> and <b> ShowDockResultMessage </b>.
 					 	@param message the pointer to the message that should be processed
 				*/
-				virtual void onNotify(Message *message)
-					throw();	
+				virtual void onNotify(Message *message);
 					
 				//@}	
 			
@@ -144,12 +136,10 @@ namespace BALL
 						Starts new Thread and fills/shows \link DockingController::progress_dialog_ progress_dialog_ \endlink.
 						@param			is_redock flag that indicates if a docking or redocking should be run
 				 */
-				virtual void runDocking(bool is_redock)
-					throw();
+				virtual void runDocking(bool is_redock);
 
 				///	Get docking dialog. 
-				DockDialog& getDockDialog()	
-					throw();
+				DockDialog& getDockDialog()	;
 
 				///
 				virtual EnergeticEvaluation* createEvaluationMethod(Index method);
@@ -172,8 +162,7 @@ namespace BALL
 					  @return		true if scoring function was succesfully applied
 					  @return		false if scoring function was not succesfully applied
 			 */
-			 bool runScoring_(ConformationSet* conformation_set)
-				 throw();
+			 bool runScoring_(ConformationSet* conformation_set);
 				
 			private:
 				
@@ -181,8 +170,7 @@ namespace BALL
 					 	Remark: Copy contructor is private because it is not completed. 
 					 	The copy constuctor of the QT widgets is private and cannot be called.	
 				*/
-				DockingController(const DockingController& dock_controller)
-					throw();
+				DockingController(const DockingController& dock_controller);
 			
 				/** Dialog for docking and redocking
 				 */

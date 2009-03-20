@@ -43,26 +43,21 @@ namespace BALL
 			//@{
 
 			/// Default Constructor.
-			AddSurfaceModel()
-				throw();
+			AddSurfaceModel();
 
 			/// Copy constructor.
-			AddSurfaceModel(const AddSurfaceModel& add_surface_model)
-				throw();
+			AddSurfaceModel(const AddSurfaceModel& add_surface_model);
 
 			/// Destructor.
-			virtual ~AddSurfaceModel()
-				throw();
+			virtual ~AddSurfaceModel();
 
 			/** Explicit default initialization.
 					Calls ModelProcessor::clear.
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			///
-			virtual void clearComposites()
-				throw();
+			virtual void clearComposites();
 
 
 			//@} 
@@ -101,20 +96,18 @@ namespace BALL
 					\param   s output stream where to output the state 
 					\param   depth the dumping depth
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 			///
 			void setProbeRadius(float radius) 
-				throw() { probe_radius_ = radius;}
+				{ probe_radius_ = radius;}
 
 			///
 			float getProbeRadius() const
-				throw() { return probe_radius_;}
+				{ return probe_radius_;}
 			
 			/// 
-			virtual bool createGeometricObjects()
-				throw();
+			virtual bool createGeometricObjects();
 		
 		  private:
 

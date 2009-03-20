@@ -77,18 +77,15 @@ namespace BALL
 
 			/** Constructor
 			 */
-			LightSource()
-				throw();
+			LightSource();
 
 			/** Copy Constructor
 			 */
-			LightSource(const LightSource& light_source)
-				throw();
+			LightSource(const LightSource& light_source);
 
 			/** Destructor
 			 */
-			virtual ~LightSource()
-				throw() {}
+			virtual ~LightSource(){}
 
 			//@}
 			/**	@name	Accessors
@@ -97,87 +94,86 @@ namespace BALL
 
 			/// Get position
 			const Vector3& getPosition() const
-				throw() { return position_;}
+				{ return position_;}
 
 			/// Set position
 			void setPosition(const Vector3& position)
-				throw() { position_ = position; }
+				{ position_ = position; }
 
 			/// Get the direction vector of the light
 			const Vector3& getDirection() const
-				throw() { return direction_;}
+				{ return direction_;}
 
 			/// Set the direction vector of the light
 			void setDirection(const Vector3& direction)
-				throw() { direction_ = direction;}
+				{ direction_ = direction;}
 	
 			/// Get the attenuation parameters of the light
 			const Vector3& getAttenuation() const
-				throw() { return attenuation_;}
+				{ return attenuation_;}
 
 			/// Set the attenuation parameters of the light
 			void setAttenuation(const Vector3& attenuation)
-				throw() { attenuation_ = attenuation;}
+				{ attenuation_ = attenuation;}
 
 
 			/// Get the angle of the light cone
 			const Angle& getAngle() const
-				throw() { return angle_;}
+				{ return angle_;}
 
 			/// Set the angle of the light cone
 			void setAngle(const Angle& angle)
-				throw() { angle_ = angle;}
+				{ angle_ = angle;}
 			
 			/** Get the light intensity.
 					0 is the minumum, 1 is the maximum.
 			*/
 			float getIntensity() const
-				throw() { return intensity_;}
+				{ return intensity_;}
 
 			/** Set the intensity.
 					0 is the minumum, 1 is the maximum.
 			*/
 			void setIntensity(float intensity)
-				throw() { intensity_ = intensity;}
+				{ intensity_ = intensity;}
 				
 			/** Get the color of the light.
 			 		The alpha channel of the color is ignored.
 			*/
 			const ColorRGBA& getColor() const
-				throw() { return color_;}
+				{ return color_;}
 
 			/** Set the color of the light.
 			 		The alpha channel of the color is ignored.
 			*/
 			void setColor(const ColorRGBA& color)
-				throw() { color_ = color;}
+				{ color_ = color;}
 			
 			/** Get the type of the light.
 			 		\see Types
 			*/
 			Index getType() const
-				throw() { return type_;}
+				{ return type_;}
 
 			/** Set the type of the light.
 			 		\see Types
 			*/
 			void setType(Types type)
-				throw() { type_ = type;}
+				{ type_ = type;}
 
 			/// If set to true, the LightSource will move with the Camera
 			void setRelativeToCamera(bool state)
-				throw() { relative_ = state;}
+				{ relative_ = state;}
 
 			/// Test if a LightSource will move with the Camera
 			bool isRelativeToCamera() const
-				throw() { return relative_;}
+				{ return relative_;}
 
 			///
-			LightSource& operator = (const LightSource& light) throw();
+			LightSource& operator = (const LightSource& light);
 
 			/// needed for MSVC, dont use it otherwise!
-			bool operator < (const LightSource& light) const
-				throw();
+			bool operator < (const LightSource& light) const;
 
 			//@}
 			/**	@name Predicates
@@ -185,8 +181,7 @@ namespace BALL
 			//@{
 			
 			///
-			bool operator == (const LightSource& light_source) const
-				throw();
+			bool operator == (const LightSource& light_source) const;
 
 			//@}
 			
@@ -196,8 +191,7 @@ namespace BALL
 					\param   s output stream 
 					\param   depth the dumping depth
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 			protected:
 
@@ -245,22 +239,18 @@ namespace BALL
 			//@{
 			
 			/// Constructor
-			Camera()
-				throw();
+			Camera();
 
 			/// Copy Constructor
-			Camera(const Camera& camera)
-				throw();
+			Camera(const Camera& camera);
 
-			Camera(const Vector3& view_point, const Vector3& look_at, const Vector3& look_up_vector)
-				throw();
+			Camera(const Vector3& view_point, const Vector3& look_at, const Vector3& look_up_vector);
 
 			/// Destructor
-			virtual ~Camera()
-				throw() {}
+			virtual ~Camera(){}
 
 			///
-			Camera& operator = (const Camera& camera) throw();
+			Camera& operator = (const Camera& camera);
 
 			//@}
 			/**	@name	Accessors
@@ -269,80 +259,76 @@ namespace BALL
 
 			/// Move the camera along the right vector
 			void moveRight(float translation)
-				throw() { view_point_ += right_vector_*translation; look_at_ += right_vector_*translation; }
+				{ view_point_ += right_vector_*translation; look_at_ += right_vector_*translation; }
 
 			/// Move the camera along the up vector
 			void moveUp(float translation)
-				throw() { view_point_ += look_up_vector_*translation; look_at_ += look_up_vector_*translation; }
+				{ view_point_ += look_up_vector_*translation; look_at_ += look_up_vector_*translation; }
 
 			/// Move the camera along the view vector
 			void moveForward(float translation)
-				throw() { 
-						Vector3 normal_view_vector(view_vector_);
-						normal_view_vector.normalize();
-						view_point_ += normal_view_vector*translation; 
-						look_at_ += normal_view_vector*translation; 
+			{ 
+				Vector3 normal_view_vector(view_vector_);
+				normal_view_vector.normalize();
+				view_point_ += normal_view_vector*translation; 
+				look_at_ += normal_view_vector*translation; 
 			}
 
 			/// Get the position of the camera
 			const Vector3& getViewPoint() const
-				throw() { return view_point_;}
+				{ return view_point_;}
 
 			/// Set the position of the camera
 			void setViewPoint(const Vector3& view_point) 
-				throw() { view_point_ = view_point; calculateVectors_();}
+				{ view_point_ = view_point; calculateVectors_();}
 
 			/// Get the direction of the camera
 			const Vector3& getLookAtPosition() const
-				throw() { return look_at_;}
+				{ return look_at_;}
 
 			/// Set the direction of the camera
 			void setLookAtPosition(const Vector3& look_at) 
-				throw() { look_at_ = look_at; calculateVectors_();}
+				{ look_at_ = look_at; calculateVectors_();}
 
 			/// Get the look up vector
 			const Vector3& getLookUpVector() const
-				throw() { return look_up_vector_;}
+				{ return look_up_vector_;}
 
 			/// Set the look up vector
 			void setLookUpVector(const Vector3& look_up_vector) 
-				throw() { look_up_vector_ = look_up_vector; calculateVectors_();}
+				{ look_up_vector_ = look_up_vector; calculateVectors_();}
 
 			/// Get the distance between the view point and the look at point
 			float getDistance() const
-				throw() { return view_point_.getDistance(look_at_);}
+				{ return view_point_.getDistance(look_at_);}
 
 			/// Get the view vector
 			Vector3 getViewVector() const
-				throw() { return view_vector_;}
+				{ return view_vector_;}
 
 			/// Get an vector orthogonal to the viewing vector and showing to the right
 			Vector3 getRightVector() const
-				throw() { return right_vector_;}
+				{ return right_vector_;}
 			
 			/// Translate the view point and the point the camera is looking to by a given vector
 			void translate(const Vector3& v) 
-				throw() { view_point_ += v; look_at_ += v; calculateVectors_();}
+				{ view_point_ += v; look_at_ += v; calculateVectors_();}
 
 			/// Rotate the camera
-			void rotate(const Quaternion& q, const Vector3& origin)
-				throw();
+			void rotate(const Quaternion& q, const Vector3& origin);
 			
 			/// Rotate the camera
-			void rotate(const Matrix4x4& mat, const Vector3& origin)
-				throw();
+			void rotate(const Matrix4x4& mat, const Vector3& origin);
 
 			/// Reset Camera to standard values
 			virtual void clear()
-				throw() { *this = Camera();}
+				{ *this = Camera();}
 
 			///
-			String toString() const
-				throw();
+			String toString() const;
 
 			///
-			bool readFromString(const String& data)
-				throw();
+			bool readFromString(const String& data);
 
 			//@}
 			/**	@name Predicates
@@ -350,12 +336,10 @@ namespace BALL
 			//@{
 			
 			///
-			bool operator == (const Camera& camera) const
-				throw();
+			bool operator == (const Camera& camera) const;
 
 			/// Needed for MSVC
-			bool operator < (const Camera& camera) const
-				throw();
+			bool operator < (const Camera& camera) const;
 
 			//@}
 	
@@ -365,14 +349,12 @@ namespace BALL
 					\param   s output stream 
 					\param   depth the dumping depth
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 			protected:
 
 			//_
-			void calculateVectors_()
-				throw();
+			void calculateVectors_();
 
 			//_
 			Vector3 					view_point_;
@@ -427,20 +409,16 @@ namespace BALL
 
 			/** Default Constructor
 			*/
-			Stage()
-				throw();
+			Stage();
 			
 			///	Copy constructor
-			Stage(const Stage& stage)
-				throw();
+			Stage(const Stage& stage);
 
 			/// Destructor
-			virtual ~Stage()
-				throw() {}
+			virtual ~Stage(){}
 
 			/// Explicit default initialization.
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			//@}
 			/**	@name	Accessors
@@ -449,120 +427,117 @@ namespace BALL
 			
 			/// Get the light sources (const)
 			virtual const List<LightSource>& getLightSources() const
-				throw() { return light_sources_;}
+				{ return light_sources_;}
 
 			/// Add a light source
-			virtual void addLightSource(const LightSource& light_source)
-				throw();
+			virtual void addLightSource(const LightSource& light_source);
 
 			/// Remove a light source
-			virtual void removeLightSource(const LightSource& light_source) 
-				throw();
+			virtual void removeLightSource(const LightSource& light_source) ;
 
 			///
-			void clearLightSources()
-				throw();
+			void clearLightSources();
 			
 			/// Get the camera
 			virtual Camera& getCamera() 
-				throw() { return camera_;}
+				{ return camera_;}
 
 			/// Get the camera (const)
 			virtual const Camera& getCamera() const
-				throw() { return camera_;}
+				{ return camera_;}
 
 			/** Set the camera of the stage
 			 */
 			virtual void setCamera(const Camera& camera)
-				throw() { camera_ = camera;}
+				{ camera_ = camera;}
 
 			/// Get the background color
 			virtual const ColorRGBA& getBackgroundColor() const
-				throw() { return background_color_;}
+				{ return background_color_;}
 
 			/// Set the background color
 			virtual void setBackgroundColor(const ColorRGBA& color)
-				throw() { background_color_ = color;}
+				{ background_color_ = color;}
 			
 			/// Get the background color
 			virtual const ColorRGBA& getInfoColor() const
-				throw() { return info_color_;}
+				{ return info_color_;}
 
 			/// Set the background color
 			virtual void setInfoColor(const ColorRGBA& color)
-				throw() { info_color_ = color;}
+				{ info_color_ = color;}
 
 			/// Show coordinate system
 			void showCoordinateSystem(bool state)
-				throw() { show_coordinate_system_ = state;}
+				{ show_coordinate_system_ = state;}
 
 			/// Shows coordinate system
 			bool coordinateSystemEnabled() const
-				throw() { return show_coordinate_system_;}
+				{ return show_coordinate_system_;}
 
 			/// Set the eye distance for the stereo view
 			void setEyeDistance(float value) 
-				throw() { eye_distance_ = value;}
+				{ eye_distance_ = value;}
 
 			/// Get the eye distance for the stereo view
 			float getEyeDistance() const
-				throw() { return eye_distance_;}
+				{ return eye_distance_;}
 				
 			/// Set the focal distance for the stereo view
 			void setFocalDistance(float value) 
-				throw() { focal_distance_ = value;}
+				{ focal_distance_ = value;}
 
 			/// Get the focal distance for the stereo view
 			float getFocalDistance() const
-				throw() { return focal_distance_;}
+				{ return focal_distance_;}
 
 			/// Settings for side by side stereo side swapping
 			void setSwapSideBySideStereo(bool state)
-				throw() { swap_side_by_side_stereo_ = state;}
+				{ swap_side_by_side_stereo_ = state;}
 
 			/// Get settings for side by side stereo side swapping
 			bool swapSideBySideStereo() const
-				throw() { return swap_side_by_side_stereo_;}
+				{ return swap_side_by_side_stereo_;}
 
 			///
 			float getFogIntensity() const
-				throw() { return fog_intensity_;}
+				{ return fog_intensity_;}
 
 			///
 			void setFogIntensity(float value)
-				throw() { fog_intensity_ = value;}
+				{ fog_intensity_ = value;}
 				
 			///
 			float getSpecularIntensity() const
-				throw() { return specular_;}
+				{ return specular_;}
 
 			///
 			void setSpecularIntensity(float value)
-				throw() { specular_ = value;}
+				{ specular_ = value;}
 					
 			///
 			float getDiffuseIntensity() const
-				throw() { return diffuse_;}
+				{ return diffuse_;}
 
 			///
 			void setDiffuseIntensity(float value)
-				throw() { diffuse_ = value;}
+				{ diffuse_ = value;}
 					
 			///
 			float getAmbientIntensity() const
-				throw() { return ambient_;}
+				{ return ambient_;}
 
 			///
 			void setAmbientIntensity(float value)
-				throw() { ambient_ = value;}
+				{ ambient_ = value;}
 					
 			///
 			float getShininess() const
-				throw() { return shininess_;}
+				{ return shininess_;}
 
 			///
 			void setShininess(float value)
-				throw() { shininess_ = value;}
+				{ shininess_ = value;}
 			
 			//@}
 			/**	@name Predicates
@@ -570,8 +545,7 @@ namespace BALL
 			//@{
 			
 			///
-			bool operator == (const Stage& stage) const
-				throw();
+			bool operator == (const Stage& stage) const;
 
 			/** Calculate coordiantes relative to the position of the camera in units of 
 			 		right_vector, look_up_vector and view_vector.
@@ -595,8 +569,7 @@ namespace BALL
 					\param   s output stream 
 					\param   depth the dumping depth
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 			/// Gives access to the default material parameters
 			RaytracingMaterial& getRTMaterial() { return rt_material_; }

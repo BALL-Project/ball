@@ -90,24 +90,20 @@ namespace BALL
 
 			/** Default Constructor
 			*/
-			Representation()
-				throw();
+			Representation();
 
 			///
 			Representation(ModelType model_type,
 										 DrawingPrecision drawing_precision,
-										 DrawingMode drawing_mode)
-				throw();
+										 DrawingMode drawing_mode);
 
 			/** Copy constructor
 			*/
-			Representation(const Representation& representation)
-				throw();
+			Representation(const Representation& representation);
 
 			/** Destructor
 			*/
-			virtual ~Representation()
-				throw();
+			virtual ~Representation();
 
 			//@}
 			/**	@name	Predicats and Accessors
@@ -115,128 +111,99 @@ namespace BALL
 			//@{
 			
 			///
-			const Representation& operator = (const Representation& rep)
-				throw();
+			const Representation& operator = (const Representation& rep);
 			
 			///
-			void clear()
-				throw();
+			void clear();
 
 			///
-			void setHidden(bool state) 
-				throw();
+			void setHidden(bool state) ;
 
 			///
-			bool isHidden() const
-				throw();
+			bool isHidden() const;
 
 			///
-			void setDrawingPrecision(DrawingPrecision precision)
-				throw();
+			void setDrawingPrecision(DrawingPrecision precision);
 
 			///
-			DrawingPrecision getDrawingPrecision() const
-				throw();
+			DrawingPrecision getDrawingPrecision() const;
 
 			///
-			float getSurfaceDrawingPrecision() const
-				throw();
+			float getSurfaceDrawingPrecision() const;
 
 			///
-			void setSurfaceDrawingPrecision(float precision)
-				throw();
+			void setSurfaceDrawingPrecision(float precision);
 
 			///
-			void setDrawingMode(DrawingMode mode)
-				throw();
+			void setDrawingMode(DrawingMode mode);
 
 			///
-			DrawingMode getDrawingMode() const
-				throw();
+			DrawingMode getDrawingMode() const;
 			
 			/// get transparency (0 - 255)
-			Size getTransparency() const
-				throw();
+			Size getTransparency() const;
 
 			/// set transparency (0 - 255)
-			void setTransparency(Size value)
-				throw();
+			void setTransparency(Size value);
 			
 			///
-			const GeometricObjectList& getGeometricObjects() const
-				throw();
+			const GeometricObjectList& getGeometricObjects() const;
 
 			///
-			GeometricObjectList& getGeometricObjects()
-				throw();
+			GeometricObjectList& getGeometricObjects();
 
 			///
 			void setGeometricObjects(GeometricObjectList& gol) 
-				throw() { geometric_objects_ = gol;}
+				{ geometric_objects_ = gol;}
 
 			///
-			void insert(GeometricObject& object) 
-				throw();
+			void insert(GeometricObject& object) ;
 
 			///
 			const List<const Composite*>& getComposites() const
-				throw() { return composites_;}
+				{ return composites_;}
 
 			///
-			void setComposites(const List<const Composite*>& composites)
-				throw();
+			void setComposites(const List<const Composite*>& composites);
 
 			///
-			void setComposite(const Composite* composite)
-				throw();
+			void setComposite(const Composite* composite);
 
 			///
-			const ModelProcessor* getModelProcessor() const
-				throw();
+			const ModelProcessor* getModelProcessor() const;
 
 			///
-			ModelProcessor* getModelProcessor()
-				throw();
+			ModelProcessor* getModelProcessor();
 
 			///
-			void setModelProcessor(ModelProcessor* processor)
-				throw();
+			void setModelProcessor(ModelProcessor* processor);
 			
 			///
-			ColorProcessor* getColorProcessor()
-				throw();
+			ColorProcessor* getColorProcessor();
 
 			///
-			void setColorProcessor(ColorProcessor* processor)
-				throw();
+			void setColorProcessor(ColorProcessor* processor);
 
 			///
-			void setModelType(ModelType type)
-				throw();
+			void setModelType(ModelType type);
 
 			///
-			ModelType getModelType() const
-				throw();
+			ModelType getModelType() const;
 
 			///
-			String getName() const
-				throw();
+			String getName() const;
 
 			///
-			void setName(const String& name)
-				throw();
+			void setName(const String& name);
 
 			/// Returns a human-readable, potentially abbreviated string describing the molecular entity this representation belongs to
-			String getCompositeName() const
-				throw();
+			String getCompositeName() const;
 
 			///
-			void setColoringMethod(ColoringMethod type)
-				throw();
+			void setColoringMethod(ColoringMethod type);
 
 			///
-			ColoringMethod getColoringMethod() const
-				throw();
+			ColoringMethod getColoringMethod() const;
 
 			///
 			void enableModelUpdate(bool state);
@@ -251,50 +218,41 @@ namespace BALL
 			bool coloringUpdateEnabled() const { return coloring_update_enabled_;}
 
 			/// Get a descpription string (nr triangles and geometric objects, transparency, mode)
-			String getProperties() const
-				throw();
+			String getProperties() const;
 			
 			/// Check if drawing mode, transparency and drawing precision have reasonable values.
-			bool isValid() const
-				throw();
+			bool isValid() const;
 
 			/** Apply ModelProcessor (if rebuild) and ColorProcessor.
 			 		The usage of these processors can be disabled, either by setting a NULL-pointer
 					accordingly or call enableColoringUpdate(false) and enableModelUpdate(false).
 			*/
-			void update(bool rebuild)
-				throw();
+			void update(bool rebuild);
 
 			/// Clear and destroy all stored GeometricObject.
-			void clearGeometricObjects()
-				throw();
+			void clearGeometricObjects();
 
 			/** Get the time when the model was builded
 			 		This is needed for updating the Representation, after
 					the vector of atom attributes was modified.
 					@see Atom::getAttributesModificationTime
 			*/
-			const PreciseTime& getModelBuildTime() const
-				throw();
+			const PreciseTime& getModelBuildTime() const;
 
 			/** Returns true, if Representation needs to be updated.
 			 		Called by GeometricControl.
 					Uses needs_update_.
 			*/
-			bool needsUpdate() const
-				throw();
+			bool needsUpdate() const;
 
 			///
-			void setNeedsUpdate(bool state=true)
-				throw();
+			void setNeedsUpdate(bool state=true);
 
 			/// Dum to ostream for debugging
-			void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 			/// Get a String containing all settings for Usage in project files.
-			String toString() const
-				throw();
+			String toString() const;
 
 			/// Set a custom ModelInformation e.g. when new models were added external of the library.
 			void setModelInformation(const ModelInformation& mi);
@@ -303,13 +261,12 @@ namespace BALL
 			const ModelInformation& getModelInformation() const;
 
 			/// 
-			bool operator == (const Representation& object) const
-				throw();
+			bool operator == (const Representation& object) const;
 
 		
 			/// Needed for MSVC
 			bool operator < (const Representation& object) const
-				throw() { return this < &object;}
+				{ return this < &object;}
 
 			//@}
 
@@ -319,13 +276,11 @@ namespace BALL
 			 		Can be called by update() directly, or by the RepresentationManager' s 
 					UpdateRepresentationThread.
 			*/
-			void update_()
-				throw();
+			void update_();
 
 			// Create a hashmap with the numerical position of every composite in its root Composite. 
 			// Needed for toString().
-			void collectRecursive_(const Composite& c, HashMap<const Composite*, Position>& hashmap) const
-				throw();
+			void collectRecursive_(const Composite& c, HashMap<const Composite*, Position>& hashmap) const;
 
 			//_
 			DrawingMode 				drawing_mode_;

@@ -42,21 +42,17 @@ namespace BALL
 			BALL_CREATE(GridVisualisation)
 
 			///
-			GridVisualisation()
-				throw();
+			GridVisualisation();
 
 			///
-			GridVisualisation(const GridVisualisation& plane)
-				throw();
+			GridVisualisation(const GridVisualisation& plane);
 
 			/** Destructor
 			*/
-			virtual ~GridVisualisation()
-				throw() {};
+			virtual ~GridVisualisation(){};
 
 			///
-			const GridVisualisation& operator = (const GridVisualisation& plane)
-				throw();
+			const GridVisualisation& operator = (const GridVisualisation& plane);
 			
 			///
 			const Vector3& getNormal() const { return normal_;}

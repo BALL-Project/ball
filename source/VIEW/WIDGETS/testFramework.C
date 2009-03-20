@@ -51,7 +51,6 @@ void TestFramework::MyEventThread::run()
 }
 
 TestFramework::TestFramework(QWidget *parent, const char *name)
-	throw()
 	: QWidget(parent),
 		ModularWidget(name),
 		widget_(0),
@@ -71,7 +70,6 @@ TestFramework::TestFramework(QWidget *parent, const char *name)
 }
 
 TestFramework::~TestFramework()
-	throw()
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "Destructing TestFramework " <<this << endl;
@@ -80,7 +78,6 @@ TestFramework::~TestFramework()
 
 
 void TestFramework::initializeWidget(MainControl& mc)
-	throw()
 {
 	save_file = 
 		insertMenuEntry(MainControl::MACRO, "Start a new macro", this, SLOT(saveFile()));
@@ -889,7 +886,6 @@ void TestFramework::processEvent_()
 
 
 void TestFramework::checkMenu(MainControl& main_control)
-	throw()
 {
 	bool busy = main_control.isBusy();
 	start_recording->setEnabled(!recording_ && !busy && filename_ != "");

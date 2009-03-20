@@ -34,34 +34,31 @@ namespace BALL
 
 			/** Default Constructor.
 			*/
-			ForceModel()
-				throw();
+			ForceModel();
 
 			/** Copy constructor.
 			*/
-			ForceModel(const ForceModel& add_line_model)
-				throw();
+			ForceModel(const ForceModel& add_line_model);
 
 			/** Destructor.
 			*/
-			virtual ~ForceModel()
-				throw();
+			virtual ~ForceModel();
 
 			///
 			void setScaling(float value)
-				throw() { scaling_ = value;}
+				{ scaling_ = value;}
 
 			///
 			void setMaxLength(float value)
-				throw() { max_length_ = value;}
+				{ max_length_ = value;}
 
 			///
 			float getScaling() const
-				throw() { return scaling_;}
+				{ return scaling_;}
 
 			///
 			float getMaxLength() const
-				throw() { return max_length_;}
+				{ return max_length_;}
 
 			///
 			void setBaseSize(float size) { base_size_ = size;}

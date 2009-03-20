@@ -13,21 +13,18 @@ namespace BALL
 	{
 
 		Line::Line()
-			throw()
 			:	GeometricObject(),
 				Vertex2()
 		{
 		}
 
 		Line::Line(const Line& line)
-			throw()
 			:	GeometricObject(line),
 				Vertex2(line)
 		{
 		}
 
 		Line::~Line()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << (void *)this 
@@ -36,42 +33,36 @@ namespace BALL
 		}
 
 		void Line::clear()
-			throw()
 		{
 			GeometricObject::clear();
 			Vertex2::clear();
 		}
 
 		void Line::set(const Line& line)
-			throw()
 		{
 			GeometricObject::set(line);
 			Vertex2::set(line);
 		}
 
 		const Line& Line::operator = (const Line& line)
-			throw()
 		{
 			set(line);
 			return *this;
 		}
 
 		void Line::swap(Line& line)
-			throw()
 		{
 			GeometricObject::swap(line);
 			Vertex2::swap(line);
 		}
 
 		bool Line::isValid() const
-			throw()
 		{
 			return (GeometricObject::isValid() &&
 										  Vertex2::isValid());
 		}
 
 		void Line::dump(ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

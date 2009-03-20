@@ -55,15 +55,13 @@ namespace BALL
 					\see         GeometricObject
 					\see         Vertex2
 					*/
-			Line()
-				throw();
+			Line();
 
 			/** Copy constructor with cloning facility.
 					\see         GeometricObject
 					\see         Vertex2
 			*/
-			Line(const Line& line)
-				throw();
+			Line(const Line& line);
 
 			//@}
 			/** @name Destructors */
@@ -71,8 +69,7 @@ namespace BALL
 
 			/** Destructor
 			*/
-			virtual ~Line()
-				throw();
+			virtual ~Line();
 
 			/** Explicit default initialization.
 					Calls GeometricObject::clear.
@@ -80,8 +77,7 @@ namespace BALL
 					\see  GeometricObject::clear
 					\see  Vertex2::clear
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			//@}
 			/**	@name	Assignment methods */
@@ -90,22 +86,19 @@ namespace BALL
 			/** Assign the line <b> line</b> to this line.
 					the line <b> line</b>.\par
 			*/
-			void set(const Line& line)
-				throw();
+			void set(const Line& line);
 
 			/** Assignment operator.
 					Calls set.
 			*/
-			const Line& operator = (const Line& line)
-				throw();
+			const Line& operator = (const Line& line);
 
 			/** Swapping of line's.
 					Swap the value of this line with the line <b> line</b>.
 					\param       line the line being swapped with this line 
 					\see         Line
 			*/
-			void swap(Line& line)
-				throw();
+			void swap(Line& line);
 
 			//@}
 			/**	@name	debuggers and diagnostics */
@@ -123,8 +116,7 @@ namespace BALL
 					\see        GeometricObject::isValid
 					\see        Vertex2::isValid
 			*/
-			virtual bool isValid() const
-				throw();
+			virtual bool isValid() const;
 
 			/** Internal value dump.
 					Dump the current value of this line to 
@@ -136,8 +128,7 @@ namespace BALL
 					\see        GeometricObject::dump
 					\see        Vertex2::dump
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 			
 			// Method to get all vertices from a geometric object
 			virtual void getVertices(vector<Vector3>& vertices) const;

@@ -11,7 +11,6 @@ namespace BALL
 	namespace VIEW
 	{
 		EditFunctions::EditFunctions(QWidget* parent, const char *name)
-			throw()
 			: DockWidget(parent, name),
 				pte_(),
 				edit_operations_(),
@@ -25,7 +24,6 @@ namespace BALL
 		}	
 
 		EditFunctions::~EditFunctions()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 			Log.error() << "Destructing object " << (void *)this 
@@ -34,13 +32,11 @@ namespace BALL
 		}
 
 		void EditFunctions::initializeWidget(MainControl& main_control)
-			throw()
 		{
 			DockWidget::initializeWidget(main_control);
 		}
 
 		void EditFunctions::finalizeWidget(MainControl& main_control)
-			throw()
 		{
 			DockWidget::initializeWidget(main_control);
 		}

@@ -29,7 +29,6 @@ namespace BALL
 		ModelInformation     Representation::model_information_ = ModelInformation();
 
 		Representation::Representation()
-			throw()
 				: PropertyManager(),
 					drawing_mode_(DRAWING_MODE_SOLID),
 					drawing_precision_(DRAWING_PRECISION_HIGH),
@@ -54,7 +53,6 @@ namespace BALL
 
 					
 		Representation::Representation(const Representation& rp)
-			throw()
 				: PropertyManager(rp),
 					drawing_mode_(rp.drawing_mode_),
 					drawing_precision_(rp.drawing_precision_),
@@ -98,7 +96,6 @@ namespace BALL
 		Representation::Representation(ModelType model_type,
 																	 DrawingPrecision drawing_precision,
 																	 DrawingMode drawing_mode)
-			throw()
 				: PropertyManager(),
 					drawing_mode_(drawing_mode),
 					drawing_precision_(drawing_precision),
@@ -121,7 +118,6 @@ namespace BALL
 
 
 		bool Representation::operator == (const Representation& representation) const
-			throw()
 		{
 			return drawing_mode_== representation.drawing_mode_ &&
 							drawing_precision_== representation.drawing_precision_ &&
@@ -135,7 +131,6 @@ namespace BALL
 		}
 
 		const Representation& Representation::operator = (const Representation& representation)
-			throw()
 		{
 			clear();
 
@@ -188,14 +183,12 @@ namespace BALL
 
 
 		Representation::~Representation()
-			throw()
 		{
 			clear();
 		}
 
 		
 		void Representation::clear()
-			throw()
 		{
 			composites_.clear();
 
@@ -222,7 +215,6 @@ namespace BALL
 
 		
 		void Representation::clearGeometricObjects()
-			throw()
 		{
 			List<GeometricObject*>::Iterator it = getGeometricObjects().begin();
 			for (; it != getGeometricObjects().end(); it++)
@@ -235,7 +227,6 @@ namespace BALL
 					
 
 		void Representation::dump(std::ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 
@@ -270,7 +261,6 @@ namespace BALL
 
 		
 		bool Representation::isValid() const
-			throw()
 		{
 			if (surface_drawing_precision_ < 0.1) return false;
 				
@@ -296,7 +286,6 @@ namespace BALL
 
 	
 		void Representation::update_() 
-			throw()
 		{
 			if (isHidden())
 			{
@@ -401,7 +390,6 @@ namespace BALL
 		
 
 		String Representation::getProperties() const
-			throw()
 		{
 			String prop;
 			if (getModelInformation().isSurfaceModel(model_type_))
@@ -449,7 +437,6 @@ namespace BALL
 		}
 
 		void Representation::setModelProcessor(ModelProcessor* processor)
-			throw() 
 		{ 
 			clearGeometricObjects();
 
@@ -468,7 +455,6 @@ namespace BALL
 
 
 		void Representation::setColorProcessor(ColorProcessor* processor)
-			throw() 
 		{ 
 			if (color_processor_ != 0)
 			{
@@ -487,7 +473,6 @@ namespace BALL
 
 		
 		void Representation::setTransparency(Size value)
-			throw()
 		{
 			transparency_ = value;
 			if (transparency_ > 255)
@@ -520,7 +505,6 @@ namespace BALL
 		}
 
 		bool Representation::needsUpdate() const
-			throw()
 		{
 			if (needs_update_ || 
 					changed_color_processor_ ||
@@ -539,7 +523,6 @@ namespace BALL
 		}
 
 		String Representation::toString() const
-			throw()
 		{
 			String result;
 
@@ -593,7 +576,6 @@ namespace BALL
 
 		void Representation::collectRecursive_(const Composite& c, 
 									HashMap<const Composite*, Position>& hashmap) const
-			throw()
 		{
 			Size i = hashmap.size();
 			hashmap[&c] = i;
@@ -604,7 +586,6 @@ namespace BALL
 		}
 
 		void Representation::update(bool rebuild)
-			throw()
 		{
 			rebuild_ |= rebuild;
 
@@ -619,13 +600,11 @@ namespace BALL
 		}
 
 		void Representation::setName(const String& name)
-			throw()
 		{
 			name_ = name;
 		}
 
 		String Representation::getName() const
-			throw()
 		{
 			if (name_ != "") return name_;
 
@@ -640,7 +619,6 @@ namespace BALL
 		}
 
 		String Representation::getCompositeName() const
-			throw()
 		{
 			if (getComposites().size() == 0) return "";
 
@@ -673,14 +651,12 @@ namespace BALL
 		}
 
 		void Representation::setComposites(const List<const Composite*>& composites)
-			throw()
 		{
 			composites_ = composites;
 			needs_update_ = true;
 		}
 
 		void Representation::setComposite(const Composite* composite)
-			throw()
 		{
 			composites_.clear();
 			composites_.push_back(composite);

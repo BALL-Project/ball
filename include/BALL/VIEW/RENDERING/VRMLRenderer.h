@@ -50,8 +50,7 @@ class BALL_VIEW_EXPORT VRMLRenderer : public Renderer
 	//@{
 
 	/// Default constructor.
-	VRMLRenderer()
-		throw();
+	VRMLRenderer();
 
 	/** Detailed constructor.
 			\param name The name of the file we will create
@@ -60,12 +59,10 @@ class BALL_VIEW_EXPORT VRMLRenderer : public Renderer
 		throw(Exception::FileNotFound);
 	
 	/// Destructor.
-	virtual ~VRMLRenderer()
-		throw();
+	virtual ~VRMLRenderer();
 
 	/// Clear method.
-	virtual void clear()
-		throw();
+	virtual void clear();
 
 	//@}
 	/** @name Accessors
@@ -80,17 +77,14 @@ class BALL_VIEW_EXPORT VRMLRenderer : public Renderer
 
 	/** Converts a ColorRGBA into a String in VRMLRay format.
 	 */
-	String VRMLColorRGBA(const ColorRGBA& input)
-		throw();
+	String VRMLColorRGBA(const ColorRGBA& input);
 
 	/** Converts a Vector3 into a String in VRMLRay format.
 	 */
-	String VRMLVector3(Vector3 input)
-		throw();
+	String VRMLVector3(Vector3 input);
 
 	///
-	void VRMLColor(const ColorRGBA& color)
-		throw();
+	void VRMLColor(const ColorRGBA& color);
 
 	//@}
 	/** @name Processor specific methods
@@ -100,54 +94,43 @@ class BALL_VIEW_EXPORT VRMLRenderer : public Renderer
 	/** Start method. 
 			This method creates the file and writes the header.
 	 */
-	virtual bool init(const Stage& stage)
-		throw();
+	virtual bool init(const Stage& stage);
 
 	/** Finish method.
 			This method writes the ending of the file and closes it.
 	 */
-	virtual bool finish()
-		throw();
+	virtual bool finish();
 
 	//@}
 
-	void renderSphere_(const Sphere& sphere)
-		throw();
+	void renderSphere_(const Sphere& sphere);
 	
-	void renderMesh_(const Mesh& mesh)
-		throw();
+	void renderMesh_(const Mesh& mesh);
 
-	void renderLine_(const Line& miniTube)
-		throw();
+	void renderLine_(const Line& miniTube);
 
-	void renderTwoColoredLine_(const TwoColoredLine& miniTube)
-		throw();
+	void renderTwoColoredLine_(const TwoColoredLine& miniTube);
 
-	void renderTube_(const Tube& tube)
-		throw();
+	void renderTube_(const Tube& tube);
 
-	void renderTwoColoredTube_(const TwoColoredTube& tube)
-		throw();
+	void renderTwoColoredTube_(const TwoColoredTube& tube);
 
-	void out_(const String& data)
-		throw();
+	void out_(const String& data);
 
 	void outheader_(const String& data)
-		throw() {out_(data); current_indent_ += 1;}
+		{out_(data); current_indent_ += 1;}
 
 	void outfinish_(const String& data)
-		throw() {out_(data); current_indent_ -= 1;}
+		{out_(data); current_indent_ -= 1;}
 
 	Size width, height;
 
 	protected:
 
 	void header_(const Vector3& translation, const ColorRGBA& color, 
-							 const String& rotation = "")
-		throw();
+							 const String& rotation = "");
 		
-	void footer_()
-		throw();
+	void footer_();
 
 	File outfile_;
 

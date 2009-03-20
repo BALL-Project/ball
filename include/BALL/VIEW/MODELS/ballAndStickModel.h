@@ -48,18 +48,15 @@ namespace BALL
 					 - set the ball radius to 0.4
 					 - set the stick radius to 0.2
 			*/
-			AddBallAndStickModel()
-				throw();
+			AddBallAndStickModel();
 
 			/** Copy constructor.
 			*/
-			AddBallAndStickModel(const AddBallAndStickModel& add_ball_and_stick_model)
-				throw();
+			AddBallAndStickModel(const AddBallAndStickModel& add_ball_and_stick_model);
 
 			/** Destructor.
 			*/
-			virtual ~AddBallAndStickModel()
-				throw();
+			virtual ~AddBallAndStickModel();
 
 			/** Explicit default initialization.
 					Reset the state of this AddBallAndStickModel to:
@@ -68,8 +65,7 @@ namespace BALL
 					 - set the stick radius to 0.2
 					Calls AtomBondModelBaseProcessor::clear.
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			//@} 
 			/**	@name	Assignment 
@@ -79,14 +75,12 @@ namespace BALL
 			/** Assignment.
 					Calls AtomBondModelBaseProcessor::set.
 			*/
-			void set(const AddBallAndStickModel& add_ball_and_stick_model)
-				throw();
+			void set(const AddBallAndStickModel& add_ball_and_stick_model);
 
 			/** Assignment operator.
 					Calls set().
 			*/
-			const AddBallAndStickModel& operator = (const AddBallAndStickModel& processor)
-				throw();
+			const AddBallAndStickModel& operator = (const AddBallAndStickModel& processor);
 
 			//@}
 			/**	@name	Accessors: inspectors and mutators 
@@ -107,8 +101,7 @@ namespace BALL
 
 			/** Inspection of the radius of the ball-component.
 			*/
-			float getBallRadius() const
-				throw();
+			float getBallRadius() const;
 
 			/** Change the radius of the stick-component.
 					\param       radius the new radius of the stick-component: (radius > 0)
@@ -119,18 +112,15 @@ namespace BALL
 
 			/** Inspection of the radius of the stick-component.
 			*/
-			float getStickRadius() const
-				throw();
+			float getStickRadius() const;
 
 			/** Enable the creation of the ball and stick model.
 			*/
-			void enableBallAndStickModel()
-				throw();
+			void enableBallAndStickModel();
 
 			/** Enable the creation of the stick model.
 			*/
-			void enableStickModel()
-				throw();
+			void enableStickModel();
 
 			//@} 
 			/**	@name Processor specific methods 
@@ -163,22 +153,20 @@ namespace BALL
 			/** Test if create ball and stick model.
 					\return   bool true if a ball and stick model should be created, false if stick model 
 			*/
-			bool isBallAndStickModel() const
-				throw();
+			bool isBallAndStickModel() const;
 
 			/** Test if create a stick model.
 					\return   bool true if a stick model should be created, false if ball and stick model 
 			*/
-			bool isStickModel() const
-				throw();
+			bool isStickModel() const;
 
 			///
 			bool dashedBondsEnabled() const
-				throw() { return dashed_bonds_;}
+				{ return dashed_bonds_;}
 
 			///
 			void enableDashedBonds(bool state)
-				throw() { dashed_bonds_ = state;}
+				{ dashed_bonds_ = state;}
 
 			//@} 
 			/**	@name	debuggers and diagnostics 
@@ -192,24 +180,19 @@ namespace BALL
 					\param   s output stream where to output the state 
 					\param   depth the dumping depth
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 			//@}
 
-			virtual bool createGeometricObjects()
-				throw();
+			virtual bool createGeometricObjects();
 		
 			protected:
 
-			void visualiseBond_(const Bond& bond)
-				throw();
+			void visualiseBond_(const Bond& bond);
 
-			virtual void visualiseRings_()
-				throw();
+			virtual void visualiseRings_();
 
-			inline void renderStandardBond_(const Bond& bond)
-				throw();
+			inline void renderStandardBond_(const Bond& bond);
 
 			inline void renderMultipleBond_(const Bond& bond, Vector3 normal, Vector3 dir);
 

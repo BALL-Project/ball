@@ -47,7 +47,7 @@ namespace BALL
 			{
 				ModelPart();
 				ModelPart(const ModelPart& m);
-				const ModelPart& operator = (const ModelPart& p) throw();
+				const ModelPart& operator = (const ModelPart& p);
 
 				// residues for this ModelPart
 				vector<Residue*> residues;
@@ -73,26 +73,21 @@ namespace BALL
 			BALL_CREATE(AddBackboneModel)
 
 			/// Default Constructor.
-			AddBackboneModel()
-				throw();
+			AddBackboneModel();
 
 			/// Copy constructor.
-			AddBackboneModel(const AddBackboneModel& add_Backbone_model)
-				throw();
+			AddBackboneModel(const AddBackboneModel& add_Backbone_model);
 
 			/// Destructor.
-			virtual ~AddBackboneModel()
-				throw();
+			virtual ~AddBackboneModel();
 
 			/** Explicit default initialization.
 					Calls ModelProcessor::clear.
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			///
-			virtual bool start()
-				throw();
+			virtual bool start();
 
 			/**	Operator method.
 					This method iterates over each Composite object reachable in the 
@@ -110,28 +105,26 @@ namespace BALL
 					\param   s output stream where to output the state 
 					\param   depth the dumping depth
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 			///
 			void setTubeRadius(float radius)
-				throw() { tube_radius_ = radius;}
+				{ tube_radius_ = radius;}
 
 			///
 			float getTubeRadius() const
-				throw() { return tube_radius_;}
+				{ return tube_radius_;}
 
 			///
-			virtual bool createGeometricObjects()
-				throw();
+			virtual bool createGeometricObjects();
 
 			///
 			void setRibbonMode(bool state)
-				throw() {ribbon_mode_ = state;}
+				{ribbon_mode_ = state;}
 
 			///
 			bool ribbonModeEnabled() const
-				throw() {return ribbon_mode_;}
+				{return ribbon_mode_;}
 
 			protected:
 

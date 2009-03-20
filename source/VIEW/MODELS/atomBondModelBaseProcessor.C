@@ -19,7 +19,6 @@ namespace BALL
 	{
 
 		AtomBondModelBaseProcessor::AtomBondModelBaseProcessor()
-			throw()
 			:	ModelProcessor(),
 			  used_atoms_(),
 				atom_set_()
@@ -27,7 +26,6 @@ namespace BALL
 		}
 
 		AtomBondModelBaseProcessor::AtomBondModelBaseProcessor(const AtomBondModelBaseProcessor& processor)
-			throw()
 			:	ModelProcessor(processor),
 				used_atoms_(),
 				atom_set_()
@@ -35,7 +33,6 @@ namespace BALL
 		}
 
 		AtomBondModelBaseProcessor::~AtomBondModelBaseProcessor()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << this << " of class AtomBondModelBaseProcessor" << std::endl;
@@ -43,7 +40,6 @@ namespace BALL
 		}
 
 		void AtomBondModelBaseProcessor::clear()
-			throw()
 		{
 			ModelProcessor::clear();
 			atom_set_.clear();
@@ -53,28 +49,24 @@ namespace BALL
 		}
 
 		void AtomBondModelBaseProcessor::set(const AtomBondModelBaseProcessor& processor)
-			throw()
 		{
 			clear();
 			ModelProcessor::set(processor);
 		}
 
 		const AtomBondModelBaseProcessor& AtomBondModelBaseProcessor::operator = (const AtomBondModelBaseProcessor& processor)
-			throw()
 		{
 			set(processor);
 			return *this;
 		}
 
 		void AtomBondModelBaseProcessor::clearComposites()
-			throw()
 		{
 			atom_set_.clear();
 			used_atoms_.clear();
 		}
 				
 		void AtomBondModelBaseProcessor::dump(ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -125,12 +117,10 @@ namespace BALL
     }
 
 		void AtomBondModelBaseProcessor::visualiseBond_(const Bond& /*bond*/)
-			throw()
 		{
 		}
 
 		bool AtomBondModelBaseProcessor::createGeometricObjects()
-			throw()
 		{
 			ring_atoms_.clear();
 

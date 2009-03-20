@@ -5,7 +5,6 @@
 
 BALL_INLINE
 ColorUnitHue::operator String () const
-	throw()
 {
   char temp[4];
   
@@ -16,56 +15,48 @@ ColorUnitHue::operator String () const
 
 BALL_INLINE
 ColorUnitHue::operator short() const
-	throw()
 {
   return (short)(value_ * (float)360.0);
 }
 
 BALL_INLINE
 ColorUnitHue::operator unsigned short () const
-	throw()
 {
   return (unsigned short)(value_ * (float)360.0);
 }
 
 BALL_INLINE 
 ColorUnitHue::operator int () const
-	throw()
 {
   return (int)(value_ * (float)360.0);
 }
 
 BALL_INLINE
 ColorUnitHue::operator unsigned int () const
-	throw()
 {
   return (unsigned int)(value_ * (float)360.0);
 }
 
 BALL_INLINE
 ColorUnitHue::operator long () const
-	throw()
 {
   return (long)(value_ * (float)360.0);
 }
 
 BALL_INLINE
 ColorUnitHue::operator unsigned long () const
-	throw()
 {
   return (unsigned long)(value_ * (float)360.0);
 }
 
 BALL_INLINE
 ColorUnitHue::operator float () const
-	throw()
 {
   return value_;
 }
 
 BALL_INLINE
 ColorUnitHue::operator double () const
-	throw()
 {
   return (double)value_;
 }
@@ -73,7 +64,6 @@ ColorUnitHue::operator double () const
 BALL_INLINE
 bool ColorUnitHue::operator ==
   (const ColorUnitHue& color_unit) const
-	throw()
 {
   return (BALL_REAL_EQUAL(value_, color_unit.value_, ::BALL::Constants::EPSILON));
 }
@@ -81,7 +71,6 @@ bool ColorUnitHue::operator ==
 BALL_INLINE
 bool ColorUnitHue::operator !=
   (const ColorUnitHue& color_unit) const
-	throw()
 {
   return (BALL_REAL_NOT_EQUAL(value_, color_unit.value_, ::BALL::Constants::EPSILON));
 }
@@ -89,7 +78,6 @@ bool ColorUnitHue::operator !=
 BALL_INLINE
 bool ColorUnitHue::operator <
   (const ColorUnitHue& color_unit) const
-	throw()
 {
   return (BALL_REAL_LESS(value_, color_unit.value_, ::BALL::Constants::EPSILON));
 }
@@ -97,7 +85,6 @@ bool ColorUnitHue::operator <
 BALL_INLINE
 bool ColorUnitHue::operator <=
   (const ColorUnitHue &color_unit) const
-	throw()
 {
   return (BALL_REAL_LESS_OR_EQUAL(value_, color_unit.value_, ::BALL::Constants::EPSILON));
 }
@@ -105,7 +92,6 @@ bool ColorUnitHue::operator <=
 BALL_INLINE
 bool ColorUnitHue::operator >
   (const ColorUnitHue& color_unit) const
-	throw()
 {
   return (BALL_REAL_GREATER(value_, color_unit.value_, ::BALL::Constants::EPSILON));
 }
@@ -113,7 +99,6 @@ bool ColorUnitHue::operator >
 BALL_INLINE
 bool ColorUnitHue::operator >=
   (const ColorUnitHue &color_unit) const
-	throw()
 {
   return (BALL_REAL_GREATER_OR_EQUAL(value_, color_unit.value_, ::BALL::Constants::EPSILON));
 }

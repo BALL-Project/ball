@@ -61,18 +61,15 @@ namespace BALL
 					Constructs new colorHSV. Initialized with color black (hue=0, saturation=0, value=0).
 					\return      ColorHSV new constructed colorHSV
 			*/
-			ColorHSV()
-				throw();
+			ColorHSV();
 
 			/** Copy constructor.
 			*/
-			ColorHSV(const ColorHSV& color)
-				throw();
+			ColorHSV(const ColorHSV& color);
 
 			/** Constructor with ColorRGBA.
 			*/
-			ColorHSV(const ColorRGBA& color)
-				throw();
+			ColorHSV(const ColorRGBA& color);
 
 			/** Constructor with parameter char*.
 					Constructs new colorHSV by initialising its value with the given pointer to
@@ -112,8 +109,7 @@ namespace BALL
 			ColorHSV
 				(const ColorUnitHue& hue,
 				 const ColorUnit& saturation,
-				 const ColorUnit& value)
-				throw();
+				 const ColorUnit& value);
 
 			//@}
 			/** @name Destructors 
@@ -122,8 +118,7 @@ namespace BALL
 
 			/** Destructor.
 			*/
-			virtual ~ColorHSV()
-				throw();
+			virtual ~ColorHSV();
 
 			/** Explicit default initialization.
 					Sets the color of this colorHSV to the default color (black).
@@ -132,8 +127,7 @@ namespace BALL
 						- staturation component is zero (0)
 						- value component is zero (0)
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			//@}
 			/**	@name	Converters
@@ -143,8 +137,7 @@ namespace BALL
 			/** Conversion to string.
 					\return      a string with hex format. See constructor for information concerning the string format
 			*/
-			operator String () const
-				throw();
+			operator String () const;
 
 			//@}
 			/**	@name	Assignment	
@@ -153,20 +146,17 @@ namespace BALL
 
 			/** Assignment.
 			*/
-			void set(const ColorHSV& color)
-				throw();
+			void set(const ColorHSV& color);
 
 			/** Assignment operator.
 					Calls set.
 			*/
-			const ColorHSV& operator = (const ColorHSV& color)
-				throw();
+			const ColorHSV& operator = (const ColorHSV& color);
 
 			/** Assignment with ColorRGBA.
 					The color of this is initialized to the color of the colorRGBA <b> color</b>.\par
 			*/
-			void set(const ColorRGBA& color)
-				throw();
+			void set(const ColorRGBA& color);
 
 			/** Assignment operator with ColorRGBA.
 					Assigns the colorRGBA <b> color</b> to this colorHSV.
@@ -176,16 +166,14 @@ namespace BALL
 					\return      ColorHSV& constant reference of this colorHSV
 					\see         set
 			*/
-			const ColorHSV& operator = (const ColorRGBA& color)
-				throw();
+			const ColorHSV& operator = (const ColorRGBA& color);
 
 			/** Copying to ColorRGBA.
 					Calls set.
 					The color of the colorRGBA <b> color</b> is initialized to the color of this colorHSV.\par
 					\param       color the colorRGBA to be assigned to
 			*/
-			void get(ColorRGBA& color) const
-				throw();
+			void get(ColorRGBA& color) const;
 
 			/** Assignment with char*.
 					The color of this is initialized to the color represented by the string <b> value</b>.
@@ -216,8 +204,7 @@ namespace BALL
 					\param       value the pointer to string (at least 8 bytes long)
 					\see         set
 			*/
-			void get(char* value) const
-				throw();
+			void get(char* value) const;
 
 			/** Assignment with string.
 					Assigns the color represented by the string <b> value</b> to this colorHSV.
@@ -247,13 +234,11 @@ namespace BALL
 					The format of the string is	the same as the one given to the constructor.
 					\param       value the string receiving the color in hex format
 			*/
-			void get(String& value) const
-				throw();
+			void get(String& value) const;
 
 			/** Swapping of colorHSVs.
 			*/
-			void swap(ColorHSV& color)
-				throw();
+			void swap(ColorHSV& color);
 
 			//@}
 			/**	@name	Accessors: inspectors and mutators 
@@ -268,8 +253,7 @@ namespace BALL
 					\see         getHue
 					\see         ColorUnitHue
 			*/
-			void setHue(const ColorUnitHue& hue)
-				throw();
+			void setHue(const ColorUnitHue& hue);
 
 			/** Mutable inspection of the hue component.
 					Accesses the mutual reference of the hue component of this colorHSV.
@@ -278,57 +262,47 @@ namespace BALL
 					\see         setHue
 					\see         ColorUnitHue
 			*/
-			ColorUnitHue& getHue()
-				throw();
+			ColorUnitHue& getHue();
 
 			/** Non-mutable inspection of the hue component.
 					For further information see <b> ColorUnitHue& getHue()</b>.
 			*/
-			const ColorUnitHue& getHue() const
-				throw();
+			const ColorUnitHue& getHue() const;
 
 			/** Changes the value of the saturation component.
 					\see         getSaturation
 			*/
-			void setSaturation(const ColorUnit& saturation)
-				throw();
+			void setSaturation(const ColorUnit& saturation);
 
 			/** Mutable inspection of the saturation component.
 					\see         setSaturation
 			*/
-			ColorUnit& getSaturation()
-				throw();
+			ColorUnit& getSaturation();
 
 			/** Non-mutable inspection of the saturation component.
 			*/
-			const ColorUnit& getSaturation() const
-				throw();
+			const ColorUnit& getSaturation() const;
 
 			/** Changes the value of the value component.
 			*/
-			void setValue(const ColorUnit& value)
-				throw();
+			void setValue(const ColorUnit& value);
 
 			/** Mutable inspection of the value component.
 			*/
-			ColorUnit& getValue()
-				throw();
+			ColorUnit& getValue();
 
 			/** Non-mutable inspection of the value component.
 			                For further information see <b> ColorUnit& getValue()</b>.
 			*/
-			const ColorUnit& getValue() const
-				throw();
+			const ColorUnit& getValue() const;
 
 			/** Changes the values of the hue, saturation and value component.
 			*/
-			void set (const ColorUnitHue& hue, const ColorUnit& saturation, const ColorUnit& value)
-				throw();
+			void set (const ColorUnitHue& hue, const ColorUnit& saturation, const ColorUnit& value);
 
 			/** Inspection of the colorHSV's components.
 			*/
-			void get (ColorUnitHue& hue, ColorUnit& saturation, ColorUnit& value) const
-				throw();
+			void get (ColorUnitHue& hue, ColorUnit& saturation, ColorUnit& value) const;
 
 			//@}
 			/**	@name	Predicates
@@ -337,41 +311,35 @@ namespace BALL
 
 			/** Equality test.
 			*/
-			bool operator == (const ColorHSV& color) const
-				throw();
+			bool operator == (const ColorHSV& color) const;
 
 			/** Unequality test.
 			*/
-			bool operator != (const ColorHSV& color) const
-				throw();
+			bool operator != (const ColorHSV& color) const;
 
 			/** Smaller test.
 					Smaller means that all components of this are smaller than all the
 					components of <b> color</b> colorHSV.
 			*/
-			bool operator < (const ColorHSV& color) const
-				throw();
+			bool operator < (const ColorHSV& color) const;
 
 			/** Smaller or equal test.
 					Smaller or equal means that all components of this are smaller or
 					equal than all the components of <b> color</b> colorHSV.
 			*/
-			bool operator <= (const ColorHSV& color) const
-				throw();
+			bool operator <= (const ColorHSV& color) const;
 
 			/** Greater test.
 					Greater means that all components of this are greater than all the
 					components of <b> color</b> colorHSV.
 			*/
-			bool operator > (const ColorHSV& color) const
-				throw();
+			bool operator > (const ColorHSV& color) const;
 
 			/** Greater or equal test.
 					Greater or equal means that all components of this are greater or
 					equal than all the components of <b> color</b> colorHSV.
 			*/
-			bool operator >= (const ColorHSV& color) const
-				throw();
+			bool operator >= (const ColorHSV& color) const;
 
 			//@}
 			/**	@name	debuggers and diagnostics
@@ -384,8 +352,7 @@ namespace BALL
 					\param   s output stream where to output the color of this colorHSV
 					\param   depth the dumping depth
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 			//@}
 			/**	@name	Storers
@@ -416,11 +383,9 @@ namespace BALL
 
 			private:
 
-			void calculateHSV_ (const ColorUnit red, const ColorUnit green, const ColorUnit blue)
-				throw();
+			void calculateHSV_ (const ColorUnit red, const ColorUnit green, const ColorUnit blue);
 
-			void calculateRGB_ (ColorUnit& red, ColorUnit& green, ColorUnit& blue) const
-				throw();
+			void calculateRGB_ (ColorUnit& red, ColorUnit& green, ColorUnit& blue) const;
 
 			void stringToHSV_ (const String& value)
 				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);

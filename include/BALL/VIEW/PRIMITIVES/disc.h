@@ -40,16 +40,13 @@ namespace BALL
 
 			/** Default Constructor.
 			*/
-			Disc()
-				throw();
+			Disc();
 
 			/** Copy constructor 
 			*/
-			Disc(const Disc& disc)
-				throw();
+			Disc(const Disc& disc);
 
-			Disc(const Circle3& circle)
-				throw();
+			Disc(const Circle3& circle);
 
 			//@}
 			/** @name Destructors */
@@ -58,15 +55,13 @@ namespace BALL
 			/** Destructor.
 					Default destruction of this Disc.
 			*/
-			virtual ~Disc()
-				throw();
+			virtual ~Disc();
 
 			/** Explicit default initialization.
 					\see  GeometricObject::clear
 					\see  Disc3::clear
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			//@}	
 			/**	@name	Assignment methods
@@ -75,26 +70,22 @@ namespace BALL
 
 			/** Assignment.
 			*/
-			void set(const Disc& Disc)
-				throw();
+			void set(const Disc& Disc);
 
 			/** Assignment operator.
 			*/
-			const Disc& operator = (const Disc& Disc)
-				throw();
+			const Disc& operator = (const Disc& Disc);
 
 			/** Swapping of Disc's.
 					Swap the value of this Disc with the Disc <b> Disc</b>.
 			*/
-			void swap(Disc& Disc)
-				throw();
+			void swap(Disc& Disc);
 
 			///
-			void setCircle(const Circle3& circle)
-				throw();
+			void setCircle(const Circle3& circle);
 
 			const Circle3& getCircle() const
-				throw() { return *this;}
+				{ return *this;}
 
 			//@}
 			/**	@name	debuggers and diagnostics
@@ -110,8 +101,7 @@ namespace BALL
 					\return			bool <tt> true</tt> if the internal state of this Disc is correct (self-validated) and consistent, <tt> false</tt> otherwise
 					\see        GeometricObject::isValid
 			*/
-			virtual bool isValid() const
-				throw();
+			virtual bool isValid() const;
 
 			/** Internal value dump.
 					Dump the current value of this Disc to 
@@ -123,8 +113,7 @@ namespace BALL
 					\see     GeometricObject::dump
 					\see     Disc3::dump					
 			*/
-			virtual void dump(std::ostream&  s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream&  s = std::cout, Size depth = 0) const;
 			
 			// Method to get all vertices from a geometric object
 			virtual void getVertices(vector<Vector3>& vertices) const;

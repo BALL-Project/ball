@@ -47,13 +47,11 @@ namespace BALL
 
 			/** Default Constructor.
 			*/
-			ColorUnitHue()
-				throw();
+			ColorUnitHue();
 		
 			/** Copy constructor.
 			*/
-			ColorUnitHue(const ColorUnitHue& colcor_h_unit)
-				throw();
+			ColorUnitHue(const ColorUnitHue& colcor_h_unit);
 
 			/** Constructor with Parameter char*.
 					\param       value the pointer to a string (<tt> 00 - 168h</tt>)
@@ -139,14 +137,12 @@ namespace BALL
 
 			/** Destructor.
 			*/
-			virtual ~ColorUnitHue()
-				throw();
+			virtual ~ColorUnitHue();
 
 			/** Explicit default initialization.
 					Sets the value  to the default value (0).
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			//@}
 			/**	@name	Converters
@@ -156,62 +152,52 @@ namespace BALL
 			/** Conversion to string.
 					\return      string with hex format <tt> "00"-"168"</tt>
 			*/
-			operator String () const
-				throw();
+			operator String () const;
 
 			/** Conversion to short.
 					\return      short with a value of range <tt> 0 - 360</tt>
 			*/
-			operator short () const
-				throw();
+			operator short () const;
 			
 			/** Conversion to unsigned short.
 					\return      unsigned short with a value of range <tt> 0 - 360</tt>
 			*/
-			operator unsigned short () const
-				throw();
+			operator unsigned short () const;
 			
 			/** Conversion to int.
 					\return      int with a value of range <tt> 0 - 360</tt>
 			*/
-			operator int () const
-				throw();
+			operator int () const;
 
 			/** Conversion to unsigned int.
 					\return      unsigned int with a value of range <tt> 0 - 360</tt>
 			*/
-			operator unsigned int () const
-				throw();
+			operator unsigned int () const;
 
 			/** Conversion to long.
 					\return      long with a value of range <tt> 0 - 360</tt>
 			*/
-			operator long () const
-				throw();
+			operator long () const;
 
 			/** Conversion to unsigned long.
 					\return      unsigned long with a value of range <tt> 0 - 360</tt>
 			*/
-			operator unsigned long () const
-				throw();
+			operator unsigned long () const;
 
 			/** Conversion to float.
 					\return      float with a value of range <tt> 0 - 1.0</tt>
 			*/
-			operator float () const
-				throw();
+			operator float () const;
 
 			/** Conversion to double.
 					\return      double with a value of range <tt> 0 - 1.0</tt>
 			*/
-			operator double () const
-				throw();
+			operator double () const;
 			
 			/** Conversion to long double.
 					\return      long double with a value of range <tt> 0 - 1.0</tt>
 			*/
-			operator long double () const
-				throw();
+			operator long double () const;
 
 			//@}
 			/**	@name	Assignment methods
@@ -220,18 +206,15 @@ namespace BALL
 			
 			/** Assignment.
 			*/
-			void set(const ColorUnitHue& color_unit_hue)
-				throw();
+			void set(const ColorUnitHue& color_unit_hue);
 
 			/** Assignment operator.
 			*/
-			const ColorUnitHue& operator = (const ColorUnitHue& color_unit_hue)
-				throw();
+			const ColorUnitHue& operator = (const ColorUnitHue& color_unit_hue);
 		
 			/** Swapping of colorUnitHues.
 			*/
-			void swap(ColorUnitHue& color_unit_hue)
-				throw();
+			void swap(ColorUnitHue& color_unit_hue);
 
 			/** Changes the value  to the value represented by 
 					a pointer <b> value</b> to a string.
@@ -257,8 +240,7 @@ namespace BALL
 					the size of 4 bytes.
 					\param   value a char* receiving the value  in hex format (<tt> "00"-"168"</tt>)
 			*/
-			void get(char* value) const
-				throw();
+			void get(char* value) const;
 
 			/** Changes the value .
 					\param       value a string (in the hex format <tt> "00"-"168"</tt>)
@@ -281,8 +263,7 @@ namespace BALL
 					\param   value a string receiving the value  in hex format (<tt> "00"-"168"</tt>)
 					\see     set
 			*/
-			void get(String& value) const
-				throw();
+			void get(String& value) const;
 
 			/** Changes the value .
 					\param       value a short of range <tt> 0-360</tt>
@@ -302,8 +283,7 @@ namespace BALL
 			/** Inspection of the value.
 					\param   value a short receiving the value  (range: <tt> 0-360</tt>)
 			*/
-			void get(short& value) const
-				throw();
+			void get(short& value) const;
 
 			/** Changes the value .
 					\param       value an unsigned short of range <tt> 0-360</tt>
@@ -323,8 +303,7 @@ namespace BALL
 			/** Inspection of the value.
 					\param   value an unsigned short receiving the value  (range: <tt> 0-360</tt>)
 			*/
-			void get(unsigned short& value) const
-				throw();
+			void get(unsigned short& value) const;
 
 			/** Changes the value .
 					\param       value an int of range <tt> 0-360</tt>
@@ -344,8 +323,7 @@ namespace BALL
 			/** Inspection of the value.
 					\param   value an int receiving the value  (range: <tt> 0-360</tt>)
 			*/
-			void get(int& value) const
-				throw();
+			void get(int& value) const;
 
 			/** Changes the value.
 					\param       value an unsigned int of range <tt> 0-360</tt>
@@ -365,8 +343,7 @@ namespace BALL
 			/** Inspection of the value.
 					\param   value an unsigned int receiving the value  (range: <tt> 0-360</tt>)
 			*/
-			void get(unsigned int& value) const
-				throw();
+			void get(unsigned int& value) const;
 
 			/** Changes the value.
 					\param       value a long of range <tt> 0-360</tt>
@@ -386,8 +363,7 @@ namespace BALL
 			/** Inspection of the value.
 					\param   value a long receiving the value  (range: <tt> 0-360</tt>)
 			*/
-			void get(long& value) const
-				throw();
+			void get(long& value) const;
 
 			/** Changes the value.
 					\param       value an unsigned long of range <tt> 0-360</tt>
@@ -407,8 +383,7 @@ namespace BALL
 			/** Inspection of the value.
 					\param   value an unsigned long receiving the value  (range: <tt> 0-360</tt>)
 			*/
-			void get(unsigned long& value) const
-				throw();
+			void get(unsigned long& value) const;
 
 			/** Changes the value.
 					\param       value a float of range 0-1.0
@@ -429,8 +404,7 @@ namespace BALL
 					\param   value a float receiving the value  (range: 0-1.0)
 					\see     set
 			*/
-			void get(float& value) const
-				throw();
+			void get(float& value) const;
 
 			/** Changes the value.
 					\param       value a double of range 0-1.0
@@ -450,8 +424,7 @@ namespace BALL
 			/** Inspection of the value.
 					\param   value a double receiving the value  (range: 0-1.0)
 			*/
-			void get(double& value) const
-				throw();
+			void get(double& value) const;
 
 			/** Changes the value.
 					\param       value a long double of range 0-1.0
@@ -471,8 +444,7 @@ namespace BALL
 			/** Inspection of the value.
 					\param   value a long double receiving the value  (range: 0-1.0)
 			*/
-			void get(long double& value) const
-				throw();
+			void get(long double& value) const;
 
 			//@}
 			/**	@name	Predicates
@@ -481,33 +453,27 @@ namespace BALL
 
 			/** Equality test.
 			*/
-			bool operator == (const ColorUnitHue& color_unit_hue) const
-				throw();
+			bool operator == (const ColorUnitHue& color_unit_hue) const;
 
 			/** Unequality test.
 			*/
-			bool operator != (const ColorUnitHue& color_unit_hue) const
-				throw();
+			bool operator != (const ColorUnitHue& color_unit_hue) const;
 			
 			/** Smaller test.
 			*/
-			bool operator <	(const ColorUnitHue& color_unit_hue) const
-				throw();
+			bool operator <	(const ColorUnitHue& color_unit_hue) const;
 			
 			/** Smaller or equal test.
 			*/
-			bool operator <= (const ColorUnitHue& color_unit_hue) const
-				throw();
+			bool operator <= (const ColorUnitHue& color_unit_hue) const;
 			
 			/** Greater test.
 			*/
-			bool operator > (const ColorUnitHue& color_unit_hue) const
-				throw();
+			bool operator > (const ColorUnitHue& color_unit_hue) const;
 
 			/** Greater or equal test.
 			*/
-			bool operator >= (const ColorUnitHue& color_unit_hue) const
-				throw();
+			bool operator >= (const ColorUnitHue& color_unit_hue) const;
 
 			//@}
 			/**	@name	debuggers and diagnostics
@@ -520,8 +486,7 @@ namespace BALL
 					\param   s output stream where to output the value 
 					\param   depth the dumping depth (depth is irrelevant here)
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 			//@}
 			/**	@name	Storers

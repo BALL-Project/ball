@@ -34,7 +34,6 @@ namespace BALL
 	{
 
 		GeometricControl::GeometricControl(QWidget* parent, const char* name)
-			throw()
 			:	GenericControl(parent, name),
 				context_menu_(this),
 				clipping_plane_context_menu_(this),
@@ -77,7 +76,6 @@ namespace BALL
 		}
 
 		GeometricControl::~GeometricControl()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "Destructing object " << this << " of class GeometricControl" << std::endl;
@@ -85,7 +83,6 @@ namespace BALL
 		}
 
 		void GeometricControl::addRepresentation(Representation& rep)
-			throw()
 		{
 			if (representation_to_item_.has(&rep)) 
 			{
@@ -97,7 +94,6 @@ namespace BALL
 		}
 
 		void GeometricControl::removeRepresentation(Representation& rep)
-			throw()
 		{
 			if (!representation_to_item_.has(&rep)) return;
 
@@ -108,7 +104,6 @@ namespace BALL
 		}
 
 		void GeometricControl::updateRepresentation(Representation& rep)
-			throw()
 		{
 			if (getMainControl()->isBusy()) return;
 
@@ -156,7 +151,6 @@ namespace BALL
 
 
 		void GeometricControl::onNotify(Message *message)
-			throw()
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "GeometricControl " << this << " onNotify " << message << std::endl;
@@ -210,7 +204,6 @@ namespace BALL
 		}
 
 		void GeometricControl::buildContextMenu()
-			throw()
 		{
 			QList<QTreeWidgetItem*> il = getSelectedItems();
 			if (il.size() == 0)
@@ -288,7 +281,6 @@ namespace BALL
 		}
 
 		void GeometricControl::generateListViewItem_(Representation& rep)
-			throw()
 		{
 			if (!getMainControl()->getRepresentationManager().has(rep)) return;
 
@@ -318,7 +310,6 @@ namespace BALL
 		}
 
 		void GeometricControl::deleteCurrentItems()
-			throw()
 		{
 			if (getMainControl()->getRepresentationManager().updateRunning() ||
 			    creating_representations_) 
@@ -377,7 +368,6 @@ namespace BALL
 		
 
 		void GeometricControl::modifyRepresentation_()
-			throw()
 		{
 			if (context_representation_ == 0) return;
 
@@ -454,7 +444,6 @@ namespace BALL
 
 
 		List<Representation*> GeometricControl::getHighlightedRepresentations() const
-			throw()
 		{
 			List<Representation*> selection;
 			QList<QTreeWidgetItem*> selected_items = listview->selectedItems();
@@ -472,7 +461,6 @@ namespace BALL
 
 
 		void GeometricControl::checkMenu(MainControl& main_control)
-			throw()
 		{
 			bool busy = main_control.isBusy();
 			if (!busy && getSelectedItems().size() > 0)
@@ -508,7 +496,6 @@ namespace BALL
 		}
 
 		void GeometricControl::initializeWidget(MainControl& main_control)
-			throw()
 		{
 			GenericControl::initializeWidget(main_control);
 
@@ -582,7 +569,6 @@ namespace BALL
 
 
 		void GeometricControl::moveItems(const TransformationMessage& msg)
-			throw()
 		{
 			const Matrix4x4& m = msg.getMatrix();
 
@@ -787,7 +773,6 @@ namespace BALL
 		}
 
 		GeometricControl::GeometricControl(const GeometricControl& mc)
-			throw()
 			: GenericControl(mc)
 		{
 		}

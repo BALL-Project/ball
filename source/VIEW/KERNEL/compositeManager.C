@@ -16,18 +16,15 @@ namespace BALL
 	{
 
 		CompositeManager::CompositeManager()
-			throw()
 		{
 		}
 
 		CompositeManager::CompositeManager(const CompositeManager& /*cm*/)
-			throw()
 		{
 			// ???? copy ctor not implemented!
 		}
 
 		CompositeManager::~CompositeManager()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << (void *)this 
@@ -38,7 +35,6 @@ namespace BALL
 		}
 
 		void CompositeManager::clear()
-			throw()
 		{
 			CompositeIterator it = begin();
 			for(; it != end(); it++)
@@ -50,7 +46,6 @@ namespace BALL
 		}
 
 	  bool CompositeManager::insert(Composite& composite)
-			throw()
     {
 			if (!composite.isRoot() || hasRoot(&composite))
 			{
@@ -79,7 +74,6 @@ namespace BALL
 		}
 
 		bool CompositeManager::hasRoot(const Composite* composite) const
-			throw()
 		{
 			if (composite_set_.has((Composite*) &composite)) return true;
 
@@ -88,7 +82,6 @@ namespace BALL
 
 
 		bool CompositeManager::has(const Composite* composite) const
-			throw()
 		{
 			if (hasRoot(composite)) return true;
 
@@ -106,7 +99,6 @@ namespace BALL
 		}
 
 		void CompositeManager::remove(Composite& composite, bool to_delete) 
-			throw()
 		{
 			HashSet<Composite*>::Iterator it = composite_set_.find(&composite);
 			
@@ -126,7 +118,6 @@ namespace BALL
 		}
 				
 		void CompositeManager::dump(ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

@@ -36,7 +36,6 @@ namespace BALL
 #define BALLVIEW_POVRAY_LINE_RADIUS "BALL_LINE_RADIUS"
 
 		POVRenderer::POVRenderer()
-			throw()
 			: Renderer(),
 				outfile_(&std::cout),
 				human_readable_(true),
@@ -45,7 +44,6 @@ namespace BALL
 		}
 
 		POVRenderer::POVRenderer(const POVRenderer& renderer)
-			throw()
 			: Renderer(renderer),
 				outfile_(&std::cout),
 				human_readable_(renderer.human_readable_)
@@ -63,7 +61,6 @@ namespace BALL
 		}
 
 		POVRenderer::~POVRenderer()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << this << " of class POVRenderer" << endl;
@@ -73,7 +70,6 @@ namespace BALL
 		}
 
 		void POVRenderer::clear()
-			throw()
 		{
 			if (outfile_ != 0 && RTTI::isKindOf<File>(*outfile_))
 			{
@@ -108,7 +104,6 @@ namespace BALL
 
 
 		String POVRenderer::POVColorRGBA(const ColorRGBA& input)
-			throw()
 		{
 			String output = "<";
  			output += trimFloatValue_(input.getRed()) + ", ";
@@ -124,7 +119,6 @@ namespace BALL
 		}
 
 		String POVRenderer::POVFinish(const String& object, const ColorRGBA& input)
-			throw()
 		{
 			String output = "finish { BALLFinish";
 			output += object;
@@ -144,7 +138,6 @@ namespace BALL
 		}
 		
 		String POVRenderer::POVVector3(Vector3 input)
-			throw()
 		{
 			String output = "<";
 			output += trimFloatValue_(input.x) + ", ";
@@ -179,7 +172,6 @@ namespace BALL
 		// init must be called right before the rendering starts, since
 		// we need to fix the camera, light sources, etc...
 		bool POVRenderer::init(const Stage& stage, float width, float height)
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Start the POVRender output..." << endl;
@@ -405,7 +397,6 @@ namespace BALL
 		}
 
 		bool POVRenderer::finish()
-			throw()
 		{
 			std::ostream& out = *outfile_;
 
@@ -475,7 +466,6 @@ namespace BALL
 		}
 
 		void POVRenderer::renderSphere_(const Sphere& sphere)
-			throw()
 		{
 			std::ostream& out = *outfile_;
 
@@ -490,7 +480,6 @@ namespace BALL
 		}
 
 		void POVRenderer::renderDisc_(const Disc& disc)
-			throw()
 		{
 			std::ostream& out = *outfile_;
 
@@ -514,7 +503,6 @@ namespace BALL
 		}
 
 		void POVRenderer::renderLine_(const Line& line)
-			throw()
 		{
 			std::ostream& out = *outfile_;
 
@@ -534,7 +522,6 @@ namespace BALL
 		}
 
 		void POVRenderer::renderTwoColoredLine_(const TwoColoredLine& tube)
-			throw()
 		{
 			std::ostream& out = *outfile_;
 
@@ -572,7 +559,6 @@ namespace BALL
 
 
 		void POVRenderer::renderTube_(const Tube& tube)
-			throw()
 		{
 			std::ostream& out = *outfile_;
 
@@ -592,7 +578,6 @@ namespace BALL
 		}	
 
 		void POVRenderer::renderPoint_(const Point& point)
-			throw()
 		{
 			std::ostream& out = *outfile_;
 
@@ -608,7 +593,6 @@ namespace BALL
 
 
 		void POVRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
-			throw()
 		{
 			std::ostream& out = *outfile_;
 
@@ -644,7 +628,6 @@ namespace BALL
 		}
 
 		void POVRenderer::renderMesh_(const Mesh& mesh)
-			throw()
 		{
 			if (mesh.vertex.size() == 0 ||
 			    mesh.normal.size() == 0 ||
@@ -805,7 +788,6 @@ namespace BALL
 		}
 		
 		bool POVRenderer::render(const Representation& representation)
-			throw()
 		{
 			if (representation.isHidden()) return true;
 
@@ -852,7 +834,6 @@ namespace BALL
 		}
 
 		void POVRenderer::renderLabel_(const Label& label)
-			throw()
 		{
 			std::ostream& out = *outfile_;
 
@@ -874,7 +855,6 @@ namespace BALL
 		}
 
 		void POVRenderer::renderMultiLine_(const MultiLine& line)
-			throw()
 		{
 			std::ostream& out = *outfile_;
 

@@ -45,13 +45,11 @@ namespace BALL
 		};        
   
 		ServerWidget::NotCompositeObject::NotCompositeObject(const char* file, int line)
-			throw()
 			:	Exception::GeneralException(file, line, string("NotCompositeObject"), string("received an non composite object!"))
 		{
 		}
 
 		ServerWidget::ServerWidget(QWidget* parent, const char* name)
-				throw()
 			:	QObject(parent),
 				ModularWidget(name),
 				server_(this, VIEW_DEFAULT_PORT, true),
@@ -88,7 +86,6 @@ namespace BALL
 		}
 
 		ServerWidget::~ServerWidget()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "Destructing object " << this << " ServerWidget" << std::endl;
@@ -104,7 +101,6 @@ namespace BALL
 		}
 
 		void ServerWidget::clear()
-			throw()
 		{
 			ConnectionObject::clear();
 
@@ -112,20 +108,17 @@ namespace BALL
 		}
 
 		int ServerWidget::getPort() const
-			throw()
 		{
 			return port_;
 		}
 		
 		void ServerWidget::setPort(const int port)
-			throw()
 		{
 			port_ = port;
 			server_.setPort(port_);
 		}
 		
 		void ServerWidget::initializeWidget(MainControl& main_control)
-			throw()
 		{
 			server_icon_ = new QLabel(main_control.statusBar());
 			main_control.statusBar()->addPermanentWidget(server_icon_);
@@ -140,14 +133,12 @@ namespace BALL
  		}
 
 		void ServerWidget::finalizeWidget(MainControl& main_control)
-			throw()
 		{
 			main_control.statusBar()->removeWidget(server_icon_);	
 			delete server_icon_;
 		}
 			
 		void ServerWidget::initializePreferencesTab(Preferences &preferences)
-			throw()
 		{
 			server_preferences_ = new ServerPreferences();
 
@@ -155,7 +146,6 @@ namespace BALL
 		}
 
 		void ServerWidget::finalizePreferencesTab(Preferences &preferences)
-			throw()
 		{
 			if (server_preferences_ != 0)
 			{
@@ -165,7 +155,6 @@ namespace BALL
 		}
 		
 		void ServerWidget::applyPreferences()
-			throw()
 		{
 			if (server_preferences_ == 0) return;
 
@@ -199,13 +188,11 @@ namespace BALL
 		}
 
 		bool ServerWidget::isValid() const
-			throw()
 		{
 			return (ConnectionObject::isValid());
 		}
 
 		void ServerWidget::dump(ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

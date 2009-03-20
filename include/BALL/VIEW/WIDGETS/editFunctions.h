@@ -40,21 +40,17 @@ namespace BALL
 
 				BALL_EMBEDDABLE(EditFunctions, DockWidget)
 
-				EditFunctions(QWidget* parent = 0, const char *name = 0)
-					throw();
+				EditFunctions(QWidget* parent = 0, const char *name = 0);
 
-				~EditFunctions()
-					throw();
+				~EditFunctions();
 
 				/**	Setup the menu entry in "Edit->Clear Logs".
 				*/
-				virtual void initializeWidget(MainControl& main_control)
-					throw();
+				virtual void initializeWidget(MainControl& main_control);
 
 				/**	Remove menu entries.
 				*/
-				virtual void finalizeWidget(MainControl& main_control)
-					throw();
+				virtual void finalizeWidget(MainControl& main_control);
 
 			protected:
 				PTEDialog pte_;

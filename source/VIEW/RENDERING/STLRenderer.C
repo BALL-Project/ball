@@ -28,7 +28,6 @@ namespace BALL
 
 //default constructor
 STLRenderer::STLRenderer()
-	throw()
 	: Renderer(),
 		outfile_(),
 		current_indent_(0)
@@ -53,7 +52,6 @@ STLRenderer::STLRenderer(const String& name)
 
 //destructor
 STLRenderer::~STLRenderer()
-	throw()
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.info() << "Destructing object " << (void *)this 
@@ -62,7 +60,6 @@ STLRenderer::~STLRenderer()
 }
 
 void STLRenderer::clear()
-	throw()
 {
 	outfile_.clear();
 	current_indent_ = 0;
@@ -81,7 +78,6 @@ void STLRenderer::setFileName(const String& name)
 
 //The VRML Vewctor interpretation is reused
 String STLRenderer::VRMLVector3(Vector3 input)
-	throw()
 {
 	String output = "";
 	output+=String(input.x);
@@ -96,7 +92,6 @@ String STLRenderer::VRMLVector3(Vector3 input)
 // init must be called right before the rendering starts, since
 // we need to fix the camera, light sources, etc...
 bool STLRenderer::init(const Stage& stage)
-	throw()
 {
 	#ifdef BALL_VIEW_DEBUG_PROCESSORS
 		Log.info() << "Start the STLRender output..." << std::endl;
@@ -108,7 +103,6 @@ bool STLRenderer::init(const Stage& stage)
 
 //finishing means to make the last line the first with "endsolid" instead of "solid"
 bool STLRenderer::finish()
-	throw()
 {
 	out_(endingName_);
 	outfile_.close();
@@ -120,14 +114,12 @@ bool STLRenderer::finish()
 
 
 void STLRenderer::footer_()
-	throw()
 {
 //isn't used
 }
 
 
 void STLRenderer::renderSphere_(const Sphere& sphere)
-	throw()
 {
 //Spere represented by cube with 6 sides or 12 triangles 
 //core is sphere._getPosition()
@@ -393,7 +385,6 @@ void STLRenderer::renderSphere_(const Sphere& sphere)
 
 
 void STLRenderer::renderTube_(const Tube& tube)
-	throw()
 {
 //	Tube is represented by a cuboid with 4 sides or 8 triangles 
 //	the middle of the cuboid is the core
@@ -584,7 +575,6 @@ void STLRenderer::renderTube_(const Tube& tube)
 
 
 void STLRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
-	throw()
 {
 //	Tube is represented by a cuboid with 4 sides or 8 triangles 
 //	the middle of the cuboid is the core
@@ -763,7 +753,6 @@ void STLRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
 }
 
 void STLRenderer::renderLine_(const Line& tube)
-	throw()
 {
 //	Line is represented as a tube but with very small radius 
 //	the middle of the cuboid is the core
@@ -943,7 +932,6 @@ void STLRenderer::renderLine_(const Line& tube)
 }
 
 void STLRenderer::renderTwoColoredLine_(const TwoColoredLine& tube)
-	throw()
 {
 //	Line is represented as a tube but with very small radius 
 //	the middle of the cuboid is the core
@@ -1127,7 +1115,6 @@ void STLRenderer::renderTwoColoredLine_(const TwoColoredLine& tube)
 
 
 void STLRenderer::renderMesh_(const Mesh& mesh)
-	throw()
 {
 
 //	current_indent_ --; 
@@ -1155,7 +1142,6 @@ void STLRenderer::renderMesh_(const Mesh& mesh)
 }
 
 void STLRenderer::out_(const String& data)
-	throw()
 {
 	if (current_indent_ < 0)
 	{

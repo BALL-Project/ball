@@ -14,7 +14,6 @@ namespace BALL
 	{
 
 		Mesh::Mesh()
-			throw()
 			:	GeometricObject(),
 				Surface(),
 				MultiColorExtension()
@@ -22,7 +21,6 @@ namespace BALL
 		}
 
 		Mesh::Mesh(const Mesh& mesh)
-			throw()
 			:	GeometricObject(mesh),
 				Surface(mesh),
 				MultiColorExtension(mesh)
@@ -30,7 +28,6 @@ namespace BALL
 		}
 
 		Mesh::~Mesh()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "Destructing object " << (void *)this 
@@ -39,28 +36,24 @@ namespace BALL
 		}
 
 		void Mesh::clear()
-			throw()
 		{
 			GeometricObject::clear();
 			MultiColorExtension::clear();
 		}
 
 		void Mesh::set(const Mesh& mesh)
-			throw()
 		{
 			GeometricObject::set(mesh);
 			MultiColorExtension::set(mesh);
 		}
 
 		const Mesh& Mesh::operator = (const Mesh& mesh)
-			throw()
 		{
 			set(mesh);
 			return *this;
 		}
 
 		void Mesh::swap(Mesh& mesh)
-			throw()
 		{
 			GeometricObject::swap(mesh);
 //   			Surface::swap(mesh);
@@ -68,13 +61,11 @@ namespace BALL
 		}
 
 		bool Mesh::isValid() const
-			throw()
 		{
 			return (GeometricObject::isValid());
 		}
 
 		void Mesh::dump(ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

@@ -93,23 +93,19 @@ namespace BALL
 			BALL_EMBEDDABLE(TestFramework,DockWidget)
 		
 			///
-			TestFramework(QWidget *parent = 0, const char *name = 0)
-				throw();
+			TestFramework(QWidget *parent = 0, const char *name = 0);
 
 			///
-			virtual ~TestFramework()
-				throw();
+			virtual ~TestFramework();
 
 			//
-			virtual void initializeWidget(MainControl& main_control)
-					throw();
+			virtual void initializeWidget(MainControl& main_control);
 
 			///
 			void setFilename(const String& filename);
 			
 			///
-			void checkMenu(MainControl& main_control)
-				throw();
+			void checkMenu(MainControl& main_control);
 
 			///
 			virtual bool canHandle(const String& fileformat) const;

@@ -15,7 +15,6 @@ namespace BALL
 	{
 
 		ColorHSV::ColorHSV()
-			throw()
 			:	hue_(),
 				saturation_(),
 				value_()
@@ -23,7 +22,6 @@ namespace BALL
 		}
 
 		ColorHSV::ColorHSV(const ColorHSV& color_HSV)
-			throw()
 			:	hue_(color_HSV.hue_),
 				saturation_(color_HSV.saturation_),
 				value_(color_HSV.value_)
@@ -31,7 +29,6 @@ namespace BALL
 		}
 
 		ColorHSV::ColorHSV(const ColorRGBA& color)
-			throw()
 		{
 			calculateHSV_(color.red_, color.green_, color.blue_);
 		}
@@ -52,7 +49,6 @@ namespace BALL
 			(const ColorUnitHue& hue,
 			 const ColorUnit& saturation,
 			 const ColorUnit& value)
-			throw()
 			:	hue_(hue),
 				saturation_(saturation),
 				value_(value)
@@ -60,7 +56,6 @@ namespace BALL
 		}
 
 		ColorHSV::~ColorHSV()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 			cout << "Destructing object " << (void *)this << " of class " << RTTI::getName<ColorHSV>() << endl;
@@ -68,7 +63,6 @@ namespace BALL
 		}
 
 		void ColorHSV::clear()
-			throw()
 		{
 			hue_ = (float)0;
 			saturation_ = (float)0;
@@ -76,7 +70,6 @@ namespace BALL
 		}
 
 		ColorHSV::operator String() const
-			throw()
 		{
 			char temp[10];
 
@@ -90,7 +83,6 @@ namespace BALL
 
 		void ColorHSV::set
 			(const ColorHSV& color_HSV)
-			throw()
 		{
 			hue_ = color_HSV.hue_;
 			saturation_ = color_HSV.saturation_;
@@ -98,7 +90,6 @@ namespace BALL
 		}
 
 		const ColorHSV& ColorHSV::operator = (const ColorHSV& color_HSV)
-			throw()
 		{
 			set(color_HSV);
 
@@ -106,13 +97,11 @@ namespace BALL
 		}
 
 		void ColorHSV::set(const ColorRGBA& color)
-			throw()
 		{
 			calculateHSV_(color.red_, color.green_, color.blue_);
 		}
 
 		const ColorHSV& ColorHSV::operator = (const ColorRGBA& color)
-			throw()
 		{
 			set(color);
 
@@ -120,7 +109,6 @@ namespace BALL
 		}
 
 		void ColorHSV::get(ColorRGBA& color) const
-			throw()
 		{
 		 color.set(*this);
 		}
@@ -140,7 +128,6 @@ namespace BALL
 		}
 
 		void ColorHSV::get(char* char_ptr) const
-			throw()
 		{
 			sprintf(char_ptr, "%x%x%x",
 							(short)hue_, (unsigned char)saturation_,
@@ -162,7 +149,6 @@ namespace BALL
 		}
 
 		void ColorHSV::get(String& s) const
-			throw()
 		{
 			char temp[10];
 
@@ -174,7 +160,6 @@ namespace BALL
 		}
 
 		void ColorHSV::swap(ColorHSV& color_HSV)
-			throw()
 		{
 			hue_.swap(color_HSV.hue_);
 			saturation_.swap(color_HSV.saturation_);
@@ -183,7 +168,6 @@ namespace BALL
 
 		void ColorHSV::dump
 			(ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -225,7 +209,6 @@ namespace BALL
 			(const ColorUnit red,
 			 const ColorUnit green,
 			 const ColorUnit blue)
-			throw()
 		{
 			int tmp_red = (int)red;
 			int tmp_green = (int)green;
@@ -304,7 +287,6 @@ namespace BALL
 
 		void ColorHSV::calculateRGB_
 			(ColorUnit& red, ColorUnit& green, ColorUnit& blue) const
-			throw()
 		{
 			red = green = blue = value_; 
 

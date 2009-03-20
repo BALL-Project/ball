@@ -15,7 +15,6 @@ namespace BALL
 	{
 
 		ColorMap::ColorMap()
-			throw()
 			:	vector<ColorRGBA>(),
 				color_number_(0),
 				alpha_blending_(false),
@@ -29,7 +28,6 @@ namespace BALL
 		}
 
 		ColorMap::ColorMap(Size color_number)
-			throw()
 			:	vector<ColorRGBA>(color_number),
 				color_number_(color_number),
 				alpha_blending_(false),
@@ -43,7 +41,6 @@ namespace BALL
 		}
 
 		ColorMap::ColorMap(const ColorMap& color_Map)
-			throw()
 			:	vector<ColorRGBA>(color_Map),
 				color_number_(color_Map.color_number_),
 				alpha_blending_(color_Map.alpha_blending_),
@@ -57,7 +54,6 @@ namespace BALL
 		}
 
 		ColorMap::ColorMap(Size size, const ColorRGBA& color, bool alpha_blending)
-			throw()
 			:	vector<ColorRGBA>(size, color),
 				color_number_(size),
 				alpha_blending_(alpha_blending),
@@ -71,7 +67,6 @@ namespace BALL
 		}
 
 		ColorMap::ColorMap(const ColorMap& color_Map, Index from, Index to, bool alpha_blending)
-			throw()
 			:	color_number_(to - from + 1),
 				alpha_blending_(alpha_blending),
 				min_color_(),
@@ -89,7 +84,6 @@ namespace BALL
 		}
 		
 		ColorMap::ColorMap(const ColorRGBA* array, Size array_size, bool alpha_blending)
-			throw()
 			: color_number_(array_size),
 				alpha_blending_(alpha_blending),
 				min_color_(),
@@ -108,7 +102,6 @@ namespace BALL
 		
 
 		ColorMap::~ColorMap()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "Destructing object " << (void *)this << " of class ColorMap" << endl;
@@ -118,19 +111,16 @@ namespace BALL
 		}
 
 		void ColorMap::setNumberOfColors(Size color_number)
-			throw()
 		{
 			color_number_ = color_number;
 		}
 			
 		Size ColorMap::getNumberOfColors() const
-			throw()
 		{
 			return color_number_;
 		}
 		
 		void ColorMap::setBaseColors(const ColorRGBA* color_array, Size array_size)
-			throw()
 		{
 			clear();
 			for (Size i = 0; i < array_size; i++)
@@ -140,19 +130,16 @@ namespace BALL
 		}	
 
 		void ColorMap::setAlphaBlending(bool blending)
-			throw()
 		{
 			alpha_blending_ = blending;
 		}
 
 		bool ColorMap::getAlphaBlending() const
-			throw()
 		{
 			return alpha_blending_;
 		}
 				
 		Size ColorMap::createMap()
-			throw()
 		{
 			// TODO: let the user choose to go beyond linear interpolation!
 			
@@ -285,7 +272,6 @@ namespace BALL
 		}
 		
 		void ColorMap::setMinMaxColors(ColorRGBA min, ColorRGBA max)
-			throw()
 		{
 			min_color_ = min;
 			max_color_ = max;
@@ -293,14 +279,12 @@ namespace BALL
 		}
 		
 		void ColorMap::setRange(float min, float max)
-			throw()
 		{
 			min_ = min;
 			max_ = max;
 		}
 
 		ColorRGBA& ColorMap::map(float value)
-			throw()
 		{
 			if (value < min_)
 			{
@@ -332,7 +316,6 @@ namespace BALL
 		}
 
 		const ColorRGBA& ColorMap::map(float value) const
-			throw()
 		{
 			if (value < min_)
 			{
@@ -364,7 +347,6 @@ namespace BALL
 		}
 					
 		bool ColorMap::setInterpolationBoundaries(const vector<Vector4>& boundaries)
-			throw()
 		{
 			if (boundaries.size() == size())
 			{
@@ -377,7 +359,6 @@ namespace BALL
 		}
 
 		void ColorMap::createMapJet(const Size color_number)
-			throw()
 		{
 			clear();
 			setNumberOfColors(color_number);

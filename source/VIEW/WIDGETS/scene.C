@@ -112,7 +112,6 @@ namespace BALL
     #define  ZOOM_FACTOR      7.
 
 		Scene::Scene()
-			throw()
 			:	QWidget(),
 				ModularWidget("<Scene>"),
 				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
@@ -146,7 +145,6 @@ namespace BALL
 		}
 
 		Scene::Scene(QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
-			throw()
 			:	QWidget(parent_widget, w_flags),
 				ModularWidget(name),
 				current_mode_(ROTATE__MODE),
@@ -202,7 +200,6 @@ namespace BALL
 		}
 
 		Scene::Scene(const Scene& scene, QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
-			throw()
 			:	QWidget(parent_widget, w_flags),
 				ModularWidget(scene),
 				system_origin_(scene.system_origin_),
@@ -247,7 +244,6 @@ namespace BALL
 		}
 
 		Scene::~Scene()
-			throw()
 		{
 #ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object Scene " << this << " of class Scene" << std::endl;
@@ -267,7 +263,6 @@ namespace BALL
 		}
 
 		void Scene::clear()
-			throw()
 		{
 			system_origin_.set(0.0, 0.0, 0.0);
 
@@ -276,27 +271,23 @@ namespace BALL
 		}
 
 		void Scene::set(const Scene& scene)
-			throw()
 		{
 			stage_ = scene.stage_;
 			system_origin_.set(scene.system_origin_);
 		}
 
 		const Scene& Scene::operator = (const Scene& scene)
-			throw()
 		{
 			set(scene);
 			return *this;
 		}
 
 		bool Scene::isValid() const
-			throw()
 		{
 			return (getParent() != 0);
 		}
 
 		void Scene::dump(std::ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 
@@ -311,7 +302,6 @@ namespace BALL
 		// ####################GL, CAMERA############################################
 
 		void Scene::onNotify(Message *message)
-			throw()
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "Scene " << this  << "onNotify " << message << std::endl;
@@ -830,7 +820,6 @@ namespace BALL
 
 
 		void Scene::setViewPoint_()
-			throw()
 		{
 			SetCamera set_camera(this);
 			set_camera.exec();
@@ -840,7 +829,6 @@ namespace BALL
 
 
 		void Scene::showViewPoint_()
-			throw()
 		{
 			const Camera& camera = stage_->getCamera();
 
@@ -862,7 +850,6 @@ namespace BALL
 		}
 
 		void Scene::resetCamera_()
-			throw()
 		{
 			// new instance for default values
 			stage_->getCamera().clear();
@@ -934,19 +921,16 @@ namespace BALL
 		}
 
 		void Scene::createCoordinateSystem()
-			throw()
 		{
 			createCoordinateSystem_(false);
 		}
 
 		void Scene::createCoordinateSystemAtOrigin()
-			throw()
 		{
 			createCoordinateSystem_(true);
 		}
 
 		void Scene::createCoordinateSystem_(bool at_origin)
-			throw()
 		{
 			RepresentationManager& pm = getMainControl()->getRepresentationManager();
 
@@ -1063,7 +1047,6 @@ namespace BALL
 
 
 		bool Scene::exportScene(Renderer &er) const
-			throw()
 		{
 			if (er.init(*stage_, (float) width(), (float) height()))
 			{
@@ -1095,7 +1078,6 @@ namespace BALL
 		//##########################PREFERENCES#################################
 
 		void Scene::writePreferences(INIFile& inifile)
-			throw()
 		{
 			// workaround: otherwise the variable might not get set
 			window_menu_entry_->setChecked(!isHidden());
@@ -1118,7 +1100,6 @@ namespace BALL
 
 
 		void Scene::fetchPreferences(INIFile& inifile)
-			throw()
 		{
 			ModularWidget::fetchPreferences(inifile);
 
@@ -1148,7 +1129,6 @@ namespace BALL
 		}
 
 		void Scene::initializePreferencesTab(Preferences &preferences)
-			throw()
 		{
 			preferences.insertEntry(light_settings_);
 
@@ -1159,7 +1139,6 @@ namespace BALL
 		}
 
 		void Scene::finalizePreferencesTab(Preferences &preferences)
-			throw()
 		{
 			if (light_settings_) 
 			{
@@ -1179,7 +1158,6 @@ namespace BALL
 		}
 
 		void Scene::applyPreferences()
-			throw()
 		{
 			if (light_settings_ == 0) return;
 
@@ -1259,7 +1237,6 @@ namespace BALL
 
 
 		void Scene::writeLights_(INIFile& inifile) const
-			throw()
 		{
 			String data;
 			inifile.appendSection("LIGHTING");
@@ -1303,7 +1280,6 @@ namespace BALL
 
 
 		void Scene::readLights_(const INIFile& inifile)
-			throw()
 			{
 				stage_->clearLightSources();
 				vector<String> strings;
@@ -1372,7 +1348,6 @@ namespace BALL
 		// ###########################MENUES##################################
 
 		void Scene::initializeWidget(MainControl& main_control)
-			throw()
 		{
 			setMinimumSize(10, 10);
 
@@ -1593,7 +1568,6 @@ namespace BALL
 		}
 
 		void Scene::checkMenu(MainControl& main_control)
-			throw()
 		{
 			bool busy = main_control.compositesAreLocked();
 			rotate_action_->setChecked(current_mode_ == ROTATE__MODE);
@@ -1617,7 +1591,6 @@ namespace BALL
 		}
 
 		bool Scene::isAnimationRunning() const
-			throw()
 		{
 			if (animation_thread_ != 0 && animation_thread_->isRunning())
 			{
@@ -2293,7 +2266,6 @@ namespace BALL
 		}
 
 		void Scene::setMode(ModeType mode)
-			throw()
 		{
 			if 			(mode == ROTATE__MODE) 	rotateMode_();
 			else if (mode == PICKING__MODE) pickingMode_();
@@ -2668,7 +2640,6 @@ namespace BALL
 
 
 		void Scene::switchShowWidget()
-			throw()
 		{
 			if (window_menu_entry_ == 0) return;
 
@@ -2679,7 +2650,6 @@ namespace BALL
 
 
 		void Scene::exitStereo()
-			throw()
 		{
 			no_stereo_action_->setChecked(true);
 			active_stereo_action_->setChecked(false);
@@ -2743,7 +2713,6 @@ namespace BALL
 		}
 
 		void Scene::enterActiveStereo()
-			throw()
 		{
 return;
 			GLRenderWindow* new_widget = new GLRenderWindow(0, "blubb", Qt::Window);
@@ -2769,7 +2738,6 @@ return;
 		}
 
 		void Scene::enterDualStereo()
-			throw()
 		{
 			GLRenderWindow* left_widget = new GLRenderWindow(0, "bla", Qt::Window);
 			left_widget->makeCurrent();
@@ -2820,7 +2788,6 @@ return;
 		}
 
 		void Scene::enterDualStereoDifferentDisplays()
-			throw()
 		{
 			GLRenderWindow* left_widget = new GLRenderWindow(QApplication::desktop()->screen(0), "left eye");
 			left_widget->makeCurrent();
@@ -2866,7 +2833,6 @@ return;
 		}
 
 		void Scene::setCamera(const Camera& camera)
-			throw()
 		{
 			stage_->getCamera() = camera;
 			updateCamera_();
@@ -2874,13 +2840,11 @@ return;
 		}
 
 		void Scene::clearRecordedAnimation()
-			throw()
 		{
 			animation_points_.clear();
 		}
 
 		void Scene::startAnimation()
-			throw()
 		{
 			if (!lockComposites()) return;
 			record_animation_action_->setChecked(false);
@@ -2901,13 +2865,11 @@ return;
 		}
 
 		void Scene::stopAnimation()
-			throw()
 		{
 			stop_animation_ = true;
 		}
 
 		void Scene::animate_()
-			throw()
 		{
 			bool export_PNG = animation_export_PNG_action_->isChecked();
 			bool export_POV = animation_export_POV_action_->isChecked();
@@ -2984,7 +2946,6 @@ return;
 		}
 
 		void Scene::switchToLastMode()
-			throw()
 		{
 			setMode(last_mode_);
 		}

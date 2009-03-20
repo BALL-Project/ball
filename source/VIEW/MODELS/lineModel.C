@@ -17,19 +17,16 @@ namespace BALL
 	{
 
 		AddLineModel::AddLineModel()
-			throw()
 			: AtomBondModelBaseProcessor()
 		{
 		}
 
 		AddLineModel::AddLineModel(const AddLineModel& model)
-			throw()
 			: AtomBondModelBaseProcessor(model)
 		{
 		}
 
 		AddLineModel::~AddLineModel()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "Destructing object " << (void *)this 
@@ -63,7 +60,6 @@ namespace BALL
 		}
 
 		void AddLineModel::dump(ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -76,7 +72,6 @@ namespace BALL
 		}
 
 		void AddLineModel::visualiseBond_(const Bond& bond)
-			throw()
 		{
 			if (bond.getType() == Bond::TYPE__HYDROGEN ||
 			    bond.getFirstAtom() == 0 ||

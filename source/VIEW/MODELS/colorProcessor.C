@@ -24,7 +24,6 @@ namespace BALL
 	{
 
 		ColorProcessor::ColorProcessor()
-			throw()
 			:	UnaryProcessor<GeometricObject*>(),
 				update_always_needed_(false)
 		{
@@ -32,7 +31,6 @@ namespace BALL
 		}
 
 		ColorProcessor::ColorProcessor(const ColorProcessor& cp)
-			throw()
 			:	UnaryProcessor<GeometricObject*>(cp),
 				update_always_needed_(cp.update_always_needed_),
 				default_color_(cp.default_color_),
@@ -56,7 +54,6 @@ namespace BALL
 		}
 
 		void ColorProcessor::clear()
-			throw()
 		{
 			default_color_.set("FF0000FF");
 			transparency_ = 0;
@@ -69,7 +66,6 @@ namespace BALL
 		}
 
 		void ColorProcessor::set(const ColorProcessor& cp)
-			throw()
 		{
 			update_always_needed_ = cp.update_always_needed_;
 			default_color_ = cp.default_color_;
@@ -84,7 +80,6 @@ namespace BALL
 
 
 		const ColorProcessor& ColorProcessor::operator = (const ColorProcessor& cp)
-			throw()
 		{
 			set(cp);
 			return *this;
@@ -92,7 +87,6 @@ namespace BALL
 
 
 		void ColorProcessor::dump(ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -218,7 +212,6 @@ namespace BALL
 		}
 
 		void ColorProcessor::createAtomGrid(const Composite* from_mesh)
-			throw()
 		{
 			atom_grid_.clear();
 			if (composites_ == 0 && from_mesh == 0)
@@ -309,7 +302,6 @@ namespace BALL
 		}
 
 		void ColorProcessor::colorMeshFromGrid_(Mesh& mesh)
-			throw()
 		{
 			if (atom_grid_.isEmpty()) return;
 			
@@ -339,27 +331,23 @@ namespace BALL
 		}
 
 		void ColorProcessor::setComposites(const List<const Composite*>* composites)
-			throw() 
 		{ 
 			composites_ = composites;
 			clearAtomGrid();
 		}
 
 		void ColorProcessor::clearAtomGrid()
-			throw()
 		{
 			atom_grid_.clear();
 		}
 
 		void ColorProcessor::setDefaultColor(const ColorRGBA& color)
-			throw()
 		{
 			default_color_ = color;
 			default_color_.setAlpha(255 - transparency_);
 		}
 
 		void ColorProcessor::setTransparency(Size value)
-			throw() 
 		{ 
 			transparency_ = value;
 			default_color_.setAlpha(255 - value);
@@ -380,7 +368,6 @@ namespace BALL
 
 
 		const Atom* ColorProcessor::getClosestItem(const Vector3& point) const
-			throw()
 		{
 			const HashGridBox3<const Atom*>* box = atom_grid_.getBox(point);
 			if (!box)
@@ -432,7 +419,6 @@ namespace BALL
 		}
 
 		bool ColorProcessor::start()
-			throw()
 		{
 			selection_color_ = BALL_SELECTED_COLOR;
 			selection_color_.setAlpha(255 - transparency_);
@@ -459,7 +445,6 @@ namespace BALL
 
 		
 		bool InterpolateColorProcessor::start()
-			throw()
 		{
 			if (!ColorProcessor::start()) return false;
 
@@ -495,7 +480,6 @@ namespace BALL
 		}
 
 		void InterpolateColorProcessor::interpolateColor(float value, ColorRGBA& color_to_be_set)
-			throw()
 		{
 			if (value < min_value_)
 			{
@@ -529,25 +513,21 @@ namespace BALL
 		}
 
 		void InterpolateColorProcessor::setMinColor(const ColorRGBA& color)
-			throw()
 		{
 			min_color_ = color;
 		}
 
 		void InterpolateColorProcessor::setMaxColor(const ColorRGBA& color)
-			throw()
 		{
 			max_color_ = color;
 		}
 
 		const ColorRGBA& InterpolateColorProcessor::getMinColor() const
-			throw()
 		{
 			return min_color_;
 		}
 
 		const ColorRGBA& InterpolateColorProcessor::getMaxColor() const
-			throw()
 		{
 			return max_color_;
 		}

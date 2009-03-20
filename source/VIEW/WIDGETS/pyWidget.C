@@ -121,7 +121,6 @@ void PythonHighlighter::highlightBlock(const QString& text)
 
 #ifdef BALL_QT_HAS_THREADS
 		RunPythonThread::RunPythonThread()
-			throw()
 			: QThread(),
 				input(),
 				output()
@@ -175,7 +174,6 @@ Hotkey Hotkey::createHotkey(String modifier, String key, String command,
 
 
 const Hotkey& Hotkey::operator = (const Hotkey& hotkey)
-	throw()
 {
 	comment 			= hotkey.comment;
 	action 				= hotkey.action;
@@ -186,7 +184,6 @@ const Hotkey& Hotkey::operator = (const Hotkey& hotkey)
 
 
 bool Hotkey::operator == (const Hotkey& hotkey) const
-	throw()
 {
 	return (action 				== hotkey.action &&
 					key 	 				== hotkey.key    &&
@@ -195,7 +192,6 @@ bool Hotkey::operator == (const Hotkey& hotkey) const
 }
 
 bool Hotkey::operator == (const QKeyEvent& e) const
-	throw()
 {
 
 	return (key 	 				== e.key() 		&&
@@ -203,7 +199,6 @@ bool Hotkey::operator == (const QKeyEvent& e) const
 }
 
 bool Hotkey::set(const String& data) 
-	throw()
 {
 	vector<String> fields;
 	Size nr = data.split(fields, String('#').c_str());
@@ -234,7 +229,6 @@ bool Hotkey::set(const String& data)
 
 
 void Hotkey::get(String& data) const 
-	throw()
 {
 	data = String(key) + "#" + String(button_state) + "#" + action + "#" + comment;
 }
@@ -300,7 +294,6 @@ void PyWidget::MyTextEdit::keyPressEvent(QKeyEvent* e)
 // ######################################################################################################
 
 PyWidget::PyWidget(QWidget *parent, const char *name)
-	throw()
 	: DockWidget(parent, name),
 		valid_(false),
 		started_startup_script_(false),
@@ -440,11 +433,9 @@ PyWidget::PyWidget(QWidget *parent, const char *name)
 }
 
 PyWidget::~PyWidget()
-	throw()
 {}
 
 void PyWidget::initializeWidget(MainControl& main_control)
-	throw()
 {
 	DockWidget::initializeWidget(main_control);
 	registerForHelpSystem(this, "pythonInterpreter.html");
@@ -474,7 +465,6 @@ void PyWidget::initializeWidget(MainControl& main_control)
 
 
 void PyWidget::finalizeWidget(MainControl& main_control)
-	throw()
 {
 	abortScript();
 	storeScript_();
@@ -484,7 +474,6 @@ void PyWidget::finalizeWidget(MainControl& main_control)
 
 
 void PyWidget::initializePreferencesTab(Preferences &preferences)
-	throw()
 {
 	python_settings_= new PythonSettings();
 	preferences.insertEntry(python_settings_);
@@ -492,7 +481,6 @@ void PyWidget::initializePreferencesTab(Preferences &preferences)
 }
 
 void PyWidget::finalizePreferencesTab(Preferences &preferences)
-	throw()
 {
 	if (python_settings_ != 0)
 	{
@@ -556,7 +544,6 @@ void PyWidget::unmap(String modifier, String key)
 
 
 void PyWidget::applyPreferences()
-	throw()
 {
 	DockWidget::applyPreferences();
 
@@ -669,17 +656,15 @@ void PyWidget::abortScript()
 }
 
 PyWidget::PyWidget(const PyWidget& p)
-	throw()
  : DockWidget(p)
 {}
 
-bool PyWidget::toAbortScript() throw() 
+bool PyWidget::toAbortScript() 
 {
 	return stop_script_;
 }
 
 void PyWidget::insertHotkey(const Hotkey& hotkey) 
-	throw()
 {
 	List<Hotkey>::iterator it = hotkeys_.begin();
 	for (; it != hotkeys_.end(); it++)
@@ -691,7 +676,6 @@ void PyWidget::insertHotkey(const Hotkey& hotkey)
 }
 
 void PyWidget::removeHotkey(const Hotkey& hotkey) 
-	throw()
 {
 	List<Hotkey>::iterator it = hotkeys_.begin();
 	for (; it != hotkeys_.end(); it++)
@@ -703,7 +687,6 @@ void PyWidget::removeHotkey(const Hotkey& hotkey)
 }
 
 void PyWidget::reactTo(const QKeyEvent& e) 
-	throw() 
 {
 	if (e.key() == Qt::Key_F1 &&
 			e.modifiers() == Qt::ShiftModifier)
@@ -853,7 +836,6 @@ void PyWidget::saveScript()
 
 
 void PyWidget::clear()
-	throw()
 {
 	text_edit_->clear();
 	newPrompt_();
@@ -903,7 +885,6 @@ String PyWidget::getCurrentLine() const
 }
 
 bool PyWidget::openFile(const String& filename, bool run, bool is_current)
-	throw()
 {
 	bool dummy;
 	PyInterpreter::run("\n", dummy);
@@ -990,7 +971,6 @@ bool PyWidget::openFile(const String& filename, bool run, bool is_current)
 }
 
 void PyWidget::dump(std::ostream& s, Size depth) const
-	throw()
 {
 	BALL_DUMP_STREAM_PREFIX(s);
 
@@ -1653,7 +1633,6 @@ void PyWidget::showHelp_()
 }
 
 void PyWidget::writePreferences(INIFile& inifile)
-	throw()
 {
 	ModularWidget::writePreferences(inifile);
 	inifile.appendSection("PYTHON");
@@ -1661,7 +1640,6 @@ void PyWidget::writePreferences(INIFile& inifile)
 }
 
 void PyWidget::fetchPreferences(INIFile& inifile)
-	throw()
 {
 	ModularWidget::fetchPreferences(inifile);
 	if (inifile.hasEntry("PYTHON", "current_script"))
@@ -1831,7 +1809,6 @@ void PyWidget::clearHistory_()
 }
 
 void PyWidget::checkMenu(MainControl& main_control)
-	throw()
 {
 	main_control.initPopupMenu(MainControl::TOOLS_PYTHON)->setEnabled(!main_control.isBusy());
 }

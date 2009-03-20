@@ -57,7 +57,6 @@ namespace BALL
 
 
 		bool Renderer::renderOneRepresentation(const Representation& representation)
-			throw()
 		{
 			if (representation.isHidden()) return true;
 
@@ -81,7 +80,6 @@ namespace BALL
 
 
 		void Renderer::render_(const GeometricObject* object)
-			throw()
 		{
 			// most used geometric objects first
 			if 			(RTTI::isKindOf<Sphere>(*object))  				renderSphere_(*(const 								Sphere*) object);
@@ -110,7 +108,6 @@ namespace BALL
 
 
 		bool Renderer::hasStage() const
-			throw() 
 		{ 
 			return stage_ != &RTTI::getDefault<Stage>();
 		}
@@ -161,7 +158,6 @@ namespace BALL
 		}
 
 		bool Renderer::finish()
-			throw()
 		{
 			return true;
 		}

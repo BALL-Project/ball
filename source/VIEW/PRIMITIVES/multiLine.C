@@ -13,21 +13,18 @@ namespace BALL
 	{
 
 		MultiLine::MultiLine()
-			throw()
 			:	GeometricObject(),
 				MultiColorExtension()
 		{
 		}
 
 		MultiLine::MultiLine(const MultiLine& line)
-			throw()
 			:	GeometricObject(line),
 				MultiColorExtension(line)
 		{
 		}
 
 		MultiLine::~MultiLine()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << (void *)this 
@@ -36,33 +33,28 @@ namespace BALL
 		}
 
 		void MultiLine::clear()
-			throw()
 		{
 			GeometricObject::clear();
 			colors.clear();
 		}
 
 		void MultiLine::set(const MultiLine& line)
-			throw()
 		{
 			GeometricObject::set(line);
 		}
 
 		const MultiLine& MultiLine::operator = (const MultiLine& line)
-			throw()
 		{
 			set(line);
 			return *this;
 		}
 
 		bool MultiLine::isValid() const
-			throw()
 		{
 			return (GeometricObject::isValid());
 		}
 
 		void MultiLine::dump(ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

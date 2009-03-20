@@ -51,7 +51,6 @@ namespace BALL
 		}
 
 		const MeshBuffer& MeshBuffer::operator = (const MeshBuffer& mesh_buffer)
-			throw()
 		{
 			mesh_ = mesh_buffer.mesh_;
 			filled_ = false;

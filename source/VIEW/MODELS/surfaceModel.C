@@ -18,7 +18,6 @@ namespace BALL
 	{
 
 		AddSurfaceModel::AddSurfaceModel()
-			throw()
 			: ModelProcessor(),
 				type_(SurfaceProcessor::SOLVENT_EXCLUDED_SURFACE),
 				probe_radius_(1.5)
@@ -26,7 +25,6 @@ namespace BALL
 		}
 
 		AddSurfaceModel::AddSurfaceModel(const AddSurfaceModel& add_surface)
-			throw()
 			:	ModelProcessor(add_surface),
 				type_(add_surface.type_),
 				probe_radius_(add_surface.probe_radius_)
@@ -34,7 +32,6 @@ namespace BALL
 		}
 
 		AddSurfaceModel::~AddSurfaceModel()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << (void *)this 
@@ -43,7 +40,6 @@ namespace BALL
 		}
 
 		void AddSurfaceModel::clear()
-			throw()
 		{
 			ModelProcessor::clear();
 			type_ = SurfaceProcessor::SOLVENT_EXCLUDED_SURFACE;
@@ -70,7 +66,6 @@ namespace BALL
 		}
 
 		void AddSurfaceModel::dump(std::ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -83,13 +78,11 @@ namespace BALL
 		}
 
 		void AddSurfaceModel::clearComposites()
-			throw()
 		{
 			atoms_.clear();
 		}
 
 		bool AddSurfaceModel::createGeometricObjects()
-			throw()
 		{
 			ModelProcessor::createGeometricObjects();
 			Mesh* mesh = new Mesh;

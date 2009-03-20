@@ -79,8 +79,7 @@ namespace BALL
 			{
 				public:
 
-				NotCompositeObject(const char* file, int line)
-					throw();
+				NotCompositeObject(const char* file, int line);
 			};
 
 			//@}
@@ -140,8 +139,7 @@ namespace BALL
 					\par
 					\see         ModularWidget
 			*/
-			ServerWidget(QWidget* parent = 0, const char* name = 0)
-				throw();
+			ServerWidget(QWidget* parent = 0, const char* name = 0);
 
 			// only for Python interface
 			ServerWidget(const ServerWidget& server);
@@ -153,15 +151,13 @@ namespace BALL
 
 			/** Destructor.
 			*/
-			virtual ~ServerWidget()
-				throw();
+			virtual ~ServerWidget();
 
 			/** Explicit default initialization.
 					Calls ConnectionObject::clear.
 					\see ConnectionObject::clear
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 			//@}
 
 			/**	@name	Accessors: inspectors and mutators 
@@ -179,31 +175,27 @@ namespace BALL
 			/**	Set the server port.
 					\param  port the new port
 			*/
-			void setPort(const int port)
-				throw();
+			void setPort(const int port);
 
 			/**	Return the server port.
 					Return the port of this server.
 					\return int the port of this server
 			*/
-			int getPort() const
-				throw();
+			int getPort() const;
 
 			/** Register a ObjectCreator that is used for converting 
 					PersistentObject objects into Composite objects.
 					Every ObjectCreator, that is still registered, when a ServerWidget instance is destructed, will be deleted.
 					\see ObjectCreator
 			*/
-			void registerObjectCreator(const ObjectCreator& s)
-				throw();
+			void registerObjectCreator(const ObjectCreator& s);
 
 			/** Reset the ObjectCreator.
 					After calling this method PersistentObject objects will be converted
 					using the default ObjectCreator.
 					\see ObjectCreator
 			*/
-			void unregisterObjectCreator()
-				throw();
+			void unregisterObjectCreator();
 
 			/** Return the ObjectCreator.
 			 */
@@ -220,8 +212,7 @@ namespace BALL
 				  \see  ModularWidget
 					\see  show
 			*/
-			virtual void initializeWidget(MainControl& main_control)
-				throw();
+			virtual void initializeWidget(MainControl& main_control);
 			
 			/**	Remove the server widget.
 					This method deletes the icon of this server and removes it
@@ -231,8 +222,7 @@ namespace BALL
 				  \see  ModularWidget
 					\see  aboutToExit
 			*/
-			virtual void finalizeWidget(MainControl& main_control)
-				throw();
+			virtual void finalizeWidget(MainControl& main_control);
 			
 			/** Initialize a preferences tab for the server.
 					This method creates the preferences tab ServerPreferences for
@@ -246,8 +236,7 @@ namespace BALL
 					\see    ServerPreferences
 					\see    Preferences
 			*/
-			virtual void initializePreferencesTab(Preferences &preferences)
-				throw();
+			virtual void initializePreferencesTab(Preferences &preferences);
 			
 			/**	Remove the preferences tab.
 					This method removes the ServerPreferences tab of this server
@@ -261,8 +250,7 @@ namespace BALL
 					\see    ServerPreferences
 					\see    Preferences
 			*/
-			virtual void finalizePreferencesTab(Preferences &preferences)
-				throw();
+			virtual void finalizePreferencesTab(Preferences &preferences);
 			
 			/** Apply the preferences of the specific tab.
 					This method applies the preferences of the own tab ServerPreferences
@@ -275,8 +263,7 @@ namespace BALL
 					\see    ServerPreferences
 					\see    Preferences
 			*/
-			virtual void applyPreferences()
-				throw();
+			virtual void applyPreferences();
 
 			//@}
 			/**	@name	debuggers and diagnostics
@@ -288,8 +275,7 @@ namespace BALL
 					\return			bool <tt> true</tt> if the internal state of this server is correct
 					\see        ConnectionObject::isValid
 			*/
-			virtual bool isValid() const
-				throw();
+			virtual bool isValid() const;
 
 			/** Dump the current state of this server to 
 					the output ostream with a dumping depth.
@@ -297,8 +283,7 @@ namespace BALL
 					\param   depth the dumping depth
 					\see     ConnectionObject::dump
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 			/** This function is used by the server thread to handle locking of composites across several threads.
 			 *  

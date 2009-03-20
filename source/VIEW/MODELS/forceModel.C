@@ -17,7 +17,6 @@ namespace BALL
 	{
 
 		ForceModel::ForceModel()
-			throw()
 			: ModelProcessor(),
 				scaling_(1.1),
 				max_length_(10),
@@ -27,7 +26,6 @@ namespace BALL
 		}
 
 		ForceModel::ForceModel(const ForceModel& model)
-			throw()
 			: ModelProcessor(model),
 				scaling_(model.scaling_),
 				max_length_(model.max_length_),
@@ -37,7 +35,6 @@ namespace BALL
 		}
 
 		ForceModel::~ForceModel()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "Destructing object " << this << " of class ForceModel" << std::endl;

@@ -5,84 +5,72 @@
 
 BALL_INLINE 
 void ColorRGBA::setRed(const ColorUnit& red)
-	throw()
 {
   red_ = red;
 }
 
 BALL_INLINE 
 ColorUnit& ColorRGBA::getRed()
-	throw()
 {
   return red_;
 }
 
 BALL_INLINE 
 const ColorUnit& ColorRGBA::getRed() const
-	throw()
 {
   return red_;
 }
 
 BALL_INLINE 
 void ColorRGBA::setGreen(const ColorUnit& green)
-	throw()
 {
   green_ = green;
 }
 
 BALL_INLINE 
 ColorUnit& ColorRGBA::getGreen()
-	throw()
 {
   return green_;
 }
 
 BALL_INLINE 
 const ColorUnit& ColorRGBA::getGreen() const
-	throw()
 {
   return green_;
 }
 
 BALL_INLINE 
 void ColorRGBA::setBlue(const ColorUnit& blue)
-	throw()
 {
   blue_ = blue;
 }
 
 BALL_INLINE 
 ColorUnit& ColorRGBA::getBlue()
-	throw()
 {
   return blue_;
 }
 
 BALL_INLINE 
 const ColorUnit& ColorRGBA::getBlue() const
-	throw()
 {
   return blue_;
 }
 
 BALL_INLINE 
 void ColorRGBA::setAlpha(const ColorUnit& alpha)
-	throw()
 {
   alpha_ = alpha;
 }
 
 BALL_INLINE 
 ColorUnit& ColorRGBA::getAlpha()
-	throw()
 {
   return alpha_;
 }
 
 BALL_INLINE 
 const ColorUnit& ColorRGBA::getAlpha() const
-	throw()
 {
   return alpha_;
 }
@@ -91,7 +79,6 @@ BALL_INLINE
 void ColorRGBA::set
   (const ColorUnit& red, const ColorUnit& green,
    const ColorUnit& blue, const ColorUnit& alpha)
-	throw()
 {
   red_   = red;
   green_ = green;
@@ -103,7 +90,6 @@ BALL_INLINE
 void ColorRGBA::get
   (ColorUnit& red, ColorUnit& green,
    ColorUnit& blue, ColorUnit& alpha) const
-	throw()
 {
   red   = red_;
   green = green_;
@@ -116,7 +102,6 @@ void ColorRGBA::get
   (ColorUnit& red,
    ColorUnit& green,
    ColorUnit& blue) const
-	throw()
 {
   red   = red_;
   green = green_;
@@ -125,7 +110,6 @@ void ColorRGBA::get
 
 BALL_INLINE 
 bool ColorRGBA::operator == (const ColorRGBA& color) const
-	throw()
 {
   return (bool)(red_ == color.red_ && green_ == color.green_
 								&& blue_ == color.blue_ && alpha_ == color.alpha_);
@@ -133,14 +117,12 @@ bool ColorRGBA::operator == (const ColorRGBA& color) const
 
 BALL_INLINE 
 bool ColorRGBA::operator != (const ColorRGBA& color) const
-	throw()
 {
   return (bool)!(this->operator==(color));
 }
 
 BALL_INLINE 
 bool ColorRGBA::operator < (const ColorRGBA& color) const
-	throw()
 {
   return (bool)(red_ < color.red_ && green_ < color.green_
 								&& blue_ < color.blue_ && alpha_ < color.alpha_);
@@ -148,7 +130,6 @@ bool ColorRGBA::operator < (const ColorRGBA& color) const
 
 BALL_INLINE 
 bool ColorRGBA::operator > (const ColorRGBA& color) const
-	throw()
 {
   return (bool)(red_ > color.red_ && green_ > color.green_
 								&& blue_ > color.blue_ && alpha_ > color.alpha_);
@@ -156,14 +137,12 @@ bool ColorRGBA::operator > (const ColorRGBA& color) const
 
 BALL_INLINE 
 bool ColorRGBA::operator <= (const ColorRGBA& color) const
-	throw()
 {
   return (bool)!(this->operator>(color));
 }
 
 BALL_INLINE 
 bool ColorRGBA::operator >= (const ColorRGBA& color) const
-	throw()
 {
   return (bool)!(this->operator<(color));  
 }

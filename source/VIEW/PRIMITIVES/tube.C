@@ -14,7 +14,6 @@ namespace BALL
 	{
 
 		Tube::Tube()
-			throw()
 			: GeometricObject(),
    			Vertex2(),
 				radius_(1)
@@ -22,7 +21,6 @@ namespace BALL
 		}
 
 		Tube::Tube(const Tube& tube)
-			throw()
 			: GeometricObject(tube),
    			Vertex2(tube),
 				radius_(tube.radius_)
@@ -30,7 +28,6 @@ namespace BALL
 		}
 
 		Tube::~Tube()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info()  << "Destructing object " << (void *)this 
@@ -39,7 +36,6 @@ namespace BALL
 		}
 
 		void Tube::clear()
-			throw()
 		{
 			GeometricObject::clear();
 			Vertex2::clear();
@@ -47,7 +43,6 @@ namespace BALL
 		}
 
 		void Tube::set(const Tube& tube)
-			throw()
 		{
 			GeometricObject::set(tube);
 			Vertex2::set(tube);
@@ -55,14 +50,12 @@ namespace BALL
 		}
 
 		const Tube& Tube::operator = (const Tube& tube)
-			throw()
 		{
 			set(tube);
 			return *this;
 		}
 
 		void Tube::swap(Tube& tube)
-			throw()
 		{
 			GeometricObject::swap(tube);
 			Vertex2::swap(tube);
@@ -73,14 +66,12 @@ namespace BALL
 		}
 
 		bool Tube::isValid() const
-			throw()
 		{
 			return (GeometricObject::isValid()	
 							&& Vertex2::isValid());
 		}
 
 		void Tube::dump(ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

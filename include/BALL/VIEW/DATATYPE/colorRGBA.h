@@ -48,19 +48,16 @@ namespace BALL
 			/** Default Constructor.
 					Initialized with color black (red=0, green=0, blue=0, alpha=1).
 			*/
-			ColorRGBA()
-				throw();
+			ColorRGBA();
 
 			/** Copy constructor.
 			*/
-			ColorRGBA(const ColorRGBA& color)
-				throw();
+			ColorRGBA(const ColorRGBA& color);
 
 			/** Constructor with ColorHSV.
 					\see         ColorHSV
 			*/
-			ColorRGBA(const ColorHSV& color)
-				throw();
+			ColorRGBA(const ColorHSV& color);
 
 			/** Constructor with Parameter char*.
 					Constructs new colorRGBA by initialising its value with the given pointer to
@@ -95,12 +92,10 @@ namespace BALL
 			*/
 			ColorRGBA
 				(const ColorUnit& red_value, const ColorUnit& green_value,
-				 const ColorUnit& blue_value, const ColorUnit& alpha_value = (float)1)
-				throw();
+				 const ColorUnit& blue_value, const ColorUnit& alpha_value = (float)1);
 
 			/// Assignment from a QT QColor
-			ColorRGBA(const QColor& color, const ColorUnit& alpha = (float)1)
-				throw();
+			ColorRGBA(const QColor& color, const ColorUnit& alpha = (float)1);
 
 			//@}
 			/** @name Destructors 
@@ -109,8 +104,7 @@ namespace BALL
 
 			/** Destructor.
 			*/
-			~ColorRGBA()
-				throw();
+			~ColorRGBA();
 
 			/** Explicit default initialization.
 					Sets the color of this colorRGBA to the default color (black).
@@ -120,8 +114,7 @@ namespace BALL
 						- blue component is zero (0)
 						- alpha component is 1 (1.0)
 			*/
-			void clear()
-				throw();
+			void clear();
 
 			//@}
 			/**	@name	Converters
@@ -134,8 +127,7 @@ namespace BALL
 											 The string has the same format as the one given to the constructor.
 					\see         ColorRGBA::ColorRGBA
 			*/
-			operator String() const
-				throw();
+			operator String() const;
 
 			//@}
 			/**	@name	Assignment methods
@@ -145,30 +137,25 @@ namespace BALL
 			/** Assignment.
 					\param       color the colorRGBA to be copied 
 			*/
-			void set(const ColorRGBA& color)
-				throw();
+			void set(const ColorRGBA& color);
 
 			/** Assignment operator.
 					\see         set
 			*/
-			const ColorRGBA& operator = (const ColorRGBA& color)
-				throw();
+			const ColorRGBA& operator = (const ColorRGBA& color);
 
 			/** Assignment with ColorHSV.
 			*/
-			void set(const ColorHSV& color)
-				throw();
+			void set(const ColorHSV& color);
 
 			/** Assignment operator with ColorHSV.
 					Calls set.
 			*/
-			const ColorRGBA& operator = (const ColorHSV& color)
-				throw();
+			const ColorRGBA& operator = (const ColorHSV& color);
 
 			/** Copying to ColorHSV.
 			*/
-			void get(ColorHSV& color) const
-				throw();
+			void get(ColorHSV& color) const;
 
 			/** Assignment with char*.
 					Assigns the color represented by the string <b> value</b> to this colorRGBA.
@@ -199,8 +186,7 @@ namespace BALL
 					\param       value the pointer to string (at least 9 bytes long)
 					\see         set
 			*/
-			void get(char* value) const
-				throw();
+			void get(char* value) const;
 
 			/** Assign the color represented by a String.
 					See constructor for format description.
@@ -230,29 +216,24 @@ namespace BALL
 					\param       value the string receiving the color in hex format
 					\see         set
 			*/
-			void get(String& value) const
-				throw();
+			void get(String& value) const;
 
 			/// Assign to a QT QColor
-			void get(QColor& color) const
-				throw();
+			void get(QColor& color) const;
 
 			/** Assign from a QT QColor.
 			 		Aborts, if the QColor is invalid (see QColor::isValid()) and returns false.
 					The alpha-value of this color is set to max.
 			*/
-			bool set(const QColor& color)
-				throw();
+			bool set(const QColor& color);
 
 			/// Get a QColor representing this color
-			QColor getQColor() const
-				throw();
+			QColor getQColor() const;
 
 			/** Swapping of colorRGBAs.
 					\param       color the colorRGBA being swapped with this colorRGBA 
 			*/
-			void swap(ColorRGBA& color)
-				throw();
+			void swap(ColorRGBA& color);
 
 			//@}
 			/**	@name	Accessors: inspectors and mutators 
@@ -262,79 +243,67 @@ namespace BALL
 			/** Changes the value of the red component.
 					\see         getRed
 			*/
-			void setRed(const ColorUnit& red_value)
-				throw();
+			void setRed(const ColorUnit& red_value);
 
 			/** Mutable inspection of the red component.
 					\return      ColorUnit& mutable reference to the red component of this colorRGBA
 					\see         setRed
 			*/
-			ColorUnit& getRed()
-				throw();
+			ColorUnit& getRed();
 
 			/** Non-mutable inspection of the red component.
 			*/
-			const ColorUnit& getRed() const
-				throw();
+			const ColorUnit& getRed() const;
 
 			/** Changes the value of the green component.
 					\param       green_value the new green component of this colorRGBA
 					\see         getGreen
 			*/
-			void setGreen(const ColorUnit& green_value)
-				throw();
+			void setGreen(const ColorUnit& green_value);
 
 			/** Mutable inspection of the green component.
 					\return      ColorUnit& mutable reference to the green component of this colorRGBA
 					\see         setGreen
 			*/
-			ColorUnit& getGreen()
-				throw();
+			ColorUnit& getGreen();
 
 			/** Non-mutable inspection of the green component.
 					For further information see <b> ColorUnit& getGreen()</b>.
 			*/
-			const ColorUnit& getGreen() const
-				throw();
+			const ColorUnit& getGreen() const;
 
 			/** Changes the value of the blue component.
 					\param       blue_value the new blue component of this colorRGBA
 					\see         getBlue
 			*/
-			void setBlue(const ColorUnit& blue_value)
-				throw();
+			void setBlue(const ColorUnit& blue_value);
 
 			/** Mutable inspection of the blue component.
 					\see         setBlue
 			*/
-			ColorUnit& getBlue()
-				throw();
+			ColorUnit& getBlue();
 
 			/** Non-mutable inspection of the blue component.
     			For further information see <b> ColorUnit& getBlue()</b>
 			*/
-			const ColorUnit& getBlue() const
-				throw();
+			const ColorUnit& getBlue() const;
 
 			/** Changes the value of the alpha component.
 					\param       alpha_value the new alpha component of this colorRGBA
 					\see         getAlpha
 			*/
-			void setAlpha(const ColorUnit& alpha_value)
-				throw();
+			void setAlpha(const ColorUnit& alpha_value);
 
 			/** Mutable inspection of the alpha component.
 					\return      ColorUnit& mutable reference to the alpha component of this colorRGBA
 					\see         setAlpha
 			*/
-			ColorUnit& getAlpha()
-				throw();
+			ColorUnit& getAlpha();
 
 			/** Non-mutable inspection of the alpha component.
 			    For further information see <b> ColorUnit& getAlpha()</b>.
 			*/
-			const ColorUnit& getAlpha() const
-				throw();
+			const ColorUnit& getAlpha() const;
 
 			/** Changes the values of the red, green, blue and alpha component.
 					Changes the values of of the red, green, blue and alpha component of this
@@ -349,8 +318,7 @@ namespace BALL
 			*/
 			void set
 				(const ColorUnit& red_value, const ColorUnit& green_value,
-				 const ColorUnit& blue_value, const ColorUnit& alpha_value = (float)1)
-				throw();
+				 const ColorUnit& blue_value, const ColorUnit& alpha_value = (float)1);
 
 			/** Inspection of the colorRGBA's components.
 					Accesses all the components of this colorRGBA by using ColorUnit's.
@@ -362,8 +330,7 @@ namespace BALL
 					\see        ColorUnit
 			*/
 			void get(ColorUnit& red_value, ColorUnit& green_value,
-							 ColorUnit& blue_value, ColorUnit& alpha_value) const
-				throw();
+							 ColorUnit& blue_value, ColorUnit& alpha_value) const;
 
 			/** Inspection of the colorRGBA's components.
 					Accesses only the red, green and blue components of this colorRGBA by using ColorUnit's.
@@ -375,8 +342,7 @@ namespace BALL
 			*/
 			void get(ColorUnit& red_value,
 							 ColorUnit& green_value,
-							 ColorUnit& blue_value) const
-				throw();
+							 ColorUnit& blue_value) const;
 
 			///
 			ColorRGBA getInverseColor() const;
@@ -389,41 +355,35 @@ namespace BALL
 			/** Equality test.
 					Tests if <b> color</b> is equal to this colorRGBA.
 			*/
-			bool operator == (const ColorRGBA& color) const
-				throw();
+			bool operator == (const ColorRGBA& color) const;
 
 			/** Unequality test.
 			*/
-			bool operator !=  (const ColorRGBA& color) const
-				throw();
+			bool operator !=  (const ColorRGBA& color) const;
 
 			/** Smaller test.
 					Smaller means that all components of this are smaller than all the
 					components of <b> color</b> colorRGBA. 
 			*/
-			bool operator < (const ColorRGBA& color) const
-				throw();
+			bool operator < (const ColorRGBA& color) const;
 
 			/** Smaller or equal test.
 					Smaller or equal means that all components of this are smaller or equal than all the
 					components of <b> color</b> colorRGBA. 
 			*/
-			bool operator <= (const ColorRGBA& color) const
-				throw();
+			bool operator <= (const ColorRGBA& color) const;
 
 			/** Greater test.
 					Greater means that all components of this are greater than all the
 					components of <b> color</b> colorRGBA.
 			*/
-			bool operator > (const ColorRGBA& color) const
-				throw();
+			bool operator > (const ColorRGBA& color) const;
 
 			/** Greater or equal test.
 					Greater or equal means that all components of this are greater or equal than all the
 					components of <b> color</b> colorRGBA.
 			*/
-			bool operator >= (const ColorRGBA& color) const
-				throw();
+			bool operator >= (const ColorRGBA& color) const;
 			
 			//@}
 			/**	@name	debuggers and diagnostics
@@ -437,8 +397,7 @@ namespace BALL
 					\param   depth the dumping depth
 					\see     ColorUnit::dump
 			*/
-			void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			void dump(std::ostream& s = std::cout, Size depth = 0) const;
 			
 			//@}
 			/**	@name	Storers

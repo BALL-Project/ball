@@ -15,19 +15,16 @@ namespace BALL
 	{
 
 		ColorExtension2::ColorExtension2()
-			throw()
 			:	color2_()
 		{
 		}
 
 		ColorExtension2::ColorExtension2(const ColorExtension2& color_extension)
-			throw()
 			: color2_(color_extension.color2_)
 		{
 		}
 
 		ColorExtension2::~ColorExtension2()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << (void *)this << " of class " 
@@ -36,32 +33,27 @@ namespace BALL
 		}
 
 		void ColorExtension2::clear()
-			throw()
 		{
 			color2_.clear();
 		}
 
 		void ColorExtension2::set(const ColorExtension2& color_extension)
-			throw()
 		{
 			color2_.set(color_extension.color2_);
 		}
 
 		const ColorExtension2& ColorExtension2::operator = (const ColorExtension2& color_extension)
-			throw()
 		{
 			set(color_extension);
 			return *this;
 		}
 
 		void ColorExtension2::swap(ColorExtension2& color_extension)
-			throw()
 		{
 			color2_.swap(color_extension.color2_);
 		}
 
 		void ColorExtension2::dump(ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -77,19 +69,16 @@ namespace BALL
 
 
 		MultiColorExtension::MultiColorExtension()
-			throw()
 			:	colors()
 		{
 		}
 
 		MultiColorExtension::MultiColorExtension(const MultiColorExtension& color_extension)
-			throw()
 			: colors(color_extension.colors)
 		{
 		}
 
 		MultiColorExtension::~MultiColorExtension()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << (void *)this << " of class " 
@@ -98,26 +87,22 @@ namespace BALL
 		}
 
 		void MultiColorExtension::clear()
-			throw()
 		{
 			colors.clear();
 		}
 
 		void MultiColorExtension::set(const MultiColorExtension& color_extension)
-			throw()
 		{
 			colors = color_extension.colors;
 		}
 
 		const MultiColorExtension& MultiColorExtension::operator = (const MultiColorExtension& color_extension)
-			throw()
 		{
 			set(color_extension);
 			return *this;
 		}
 
 		void MultiColorExtension::swap(MultiColorExtension& color_extension)
-			throw()
 		{
 			colors.swap(color_extension.colors);
 		}
@@ -131,7 +116,6 @@ namespace BALL
 		}
 
 		void MultiColorExtension::dump(ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

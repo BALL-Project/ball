@@ -78,16 +78,13 @@ namespace BALL
 					\param      name the name of the GenericControl 
 					\see        ModularWidget
 			*/
-			GenericControl(QWidget* parent = 0, const char* name = 0)
-				throw();
+			GenericControl(QWidget* parent = 0, const char* name = 0);
 			
 			/** Destructor.
 			*/
-			virtual ~GenericControl()
-				throw();
+			virtual ~GenericControl();
 
- 			ItemList getSelectedItems()
- 				throw();
+ 			ItemList getSelectedItems();
 
 			///
 			QTreeWidgetItem* addRow(const QStringList& entries);
@@ -98,8 +95,7 @@ namespace BALL
 					at any time.
 			 		Call this Method in the derived Classes in their onNotify().
 			*/
- 			virtual void onNotify(Message *message)
- 				throw();
+ 			virtual void onNotify(Message *message);
 
 			/**	Initialize the menu entries:
 					  - delete
@@ -108,16 +104,14 @@ namespace BALL
 					is started by MainControl::show.
 					\param main_control the MainControl object to be initialized with this ModularWidget
 			*/
- 			virtual void initializeWidget(MainControl& main_control)
- 				throw();
+ 			virtual void initializeWidget(MainControl& main_control);
 
 			//@}
 
 			public slots:
 			
 			/// Called by if del is pressed
- 			virtual void deleteCurrentItems()
- 				throw() {};
+ 			virtual void deleteCurrentItems(){};
 
 		  protected slots:
 
@@ -132,8 +126,7 @@ namespace BALL
 			
 		  protected:
 
- 			virtual void removeItem_(QTreeWidgetItem* item)
- 				throw();
+ 			virtual void removeItem_(QTreeWidgetItem* item);
 
  			QTreeWidgetItem* 			context_item_;
 			TreeWidget* 					listview;

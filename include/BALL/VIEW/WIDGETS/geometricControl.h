@@ -68,54 +68,45 @@ namespace BALL
 					\see        ModularWidget
 					\see        onContextMenu
 			*/
-			GeometricControl(QWidget* parent = 0, const char* name = 0)
-				throw();
+			GeometricControl(QWidget* parent = 0, const char* name = 0);
 			
 			/// Destructor.
-			virtual ~GeometricControl()
-				throw();
+			virtual ~GeometricControl();
 
 			/** Explicit default initialization.
 					Empty for further purpose.
 			*/
-			virtual void clear()
-				throw() {};
+			virtual void clear(){};
 
 			///
-			virtual void initializeWidget(MainControl& main_control)
-				throw();
+			virtual void initializeWidget(MainControl& main_control);
 			
 			//@} /**	@name	Accessors: inspectors and mutators */ 
 			//@{
 
 			/** Insert a Representation.
 			*/
-			virtual void addRepresentation(Representation& rep)
-				throw();
+			virtual void addRepresentation(Representation& rep);
 
 			/** Remove a Representation.
 			*/
-			virtual void removeRepresentation(Representation& rep)
-				throw();
+			virtual void removeRepresentation(Representation& rep);
 
 			/** Update a Representation.
 			*/
-			virtual void updateRepresentation(Representation& rep)
-				throw();
+			virtual void updateRepresentation(Representation& rep);
 			
 			/** Mutable inspection of the selection.
 			*/
 			
 			/** Non-mutable inspection of the selection.
 			*/
-			List<Representation*> getHighlightedRepresentations() const
-				throw();
+			List<Representation*> getHighlightedRepresentations() const;
 			
 			/** Message handling.
 					\see    Message
 			*/
-			virtual void onNotify(Message *message)
-				throw();
+			virtual void onNotify(Message *message);
 
 			/** Build a context menu for the Representation object 
 					the QListViewItem object.
@@ -123,16 +114,13 @@ namespace BALL
 					\see     insertContextMenuEntry
 					\see     onContextMenu
 			*/
-			virtual void buildContextMenu()
-				throw();
+			virtual void buildContextMenu();
 
 			/// Overloaded from ModularWidget
-			virtual void checkMenu(MainControl& main_control)
-				throw();
+			virtual void checkMenu(MainControl& main_control);
 
 			///
-			void moveItems(const TransformationMessage& msg)
-				throw();
+			void moveItems(const TransformationMessage& msg);
 
 			void updateClippingPlanes();
 
@@ -207,17 +195,14 @@ namespace BALL
 			//@{
 
 			///
-			virtual void modifyRepresentation_()
-				throw();
+			virtual void modifyRepresentation_();
 
 			/** Generate the item for a representation.
 			*/
-			virtual void generateListViewItem_(Representation& rep)
-				throw();
+			virtual void generateListViewItem_(Representation& rep);
 			
 			/// Overloaded from GenericControl
-			virtual void deleteCurrentItems()
-				throw();
+			virtual void deleteCurrentItems();
 
 			//@}
 			
@@ -231,7 +216,7 @@ namespace BALL
 			void addItem_(const String& text, const char* member, QWidget* widget = 0);
 			
 			// only for Python Interface
-			GeometricControl(const GeometricControl& control) throw();
+			GeometricControl(const GeometricControl& control);
 
 			enum ColumnID
 			{

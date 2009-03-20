@@ -79,13 +79,13 @@ namespace VIEW
 			BALLThread();
 			
 			///
-			void setMainControl(MainControl* mf) throw() {main_control_ = mf;}
+			void setMainControl(MainControl* mf) {main_control_ = mf;}
 			
 			///
-			void setComposite(Composite* composite) throw() {composite_ = composite;}
+			void setComposite(Composite* composite) {composite_ = composite;}
 
 			///
-			Composite* getComposite() throw() { return composite_;}
+			Composite* getComposite() { return composite_;}
 	
 			/** Overloaded from QThread::run(), overload again in derived classes!
 			*/
@@ -129,12 +129,10 @@ namespace VIEW
 	{
 		public:
 			///
-			FetchHTMLThread()
-				throw();
+			FetchHTMLThread();
 
 			///
-			void setURL(const String& text)
-				throw();
+			void setURL(const String& text);
 
 			///
 			virtual void run();
@@ -168,8 +166,7 @@ namespace VIEW
 		public:
 
 			///
-			CalculateFDPBThread()
-				throw();
+			CalculateFDPBThread();
 
 			///
 			virtual void run();
@@ -189,19 +186,18 @@ namespace VIEW
 		public:
 
 			///
-			UpdateRepresentationThread()
-				throw();
+			UpdateRepresentationThread();
 
 			///
 			virtual void run();
 
 			///
 			void setRepresentation(Representation& rep)
-				throw() { rep_ = &rep;}
+				{ rep_ = &rep;}
 
 			///
 			Representation* getRepresentation()
-				throw() { return rep_; }
+				{ return rep_; }
 
 		protected:
 
@@ -223,14 +219,14 @@ namespace VIEW
 			SimulationThread();
 
 			///
-			void setNumberOfStepsBetweenUpdates(Size steps) throw()
+			void setNumberOfStepsBetweenUpdates(Size steps)
 				{ steps_between_updates_ = steps;}
 
 			///
-			void setDCDFile(DCDFile* file) throw() {dcd_file_ = file;}
+			void setDCDFile(DCDFile* file) {dcd_file_ = file;}
 
 			///
-			DCDFile* getDCDFile() throw() { return dcd_file_;}
+			DCDFile* getDCDFile() { return dcd_file_;}
 
 			protected:
 	
@@ -306,26 +302,21 @@ namespace VIEW
 		{
 			public:
 				///
-				DockingThread()
-					throw();
+				DockingThread();
 				
 				/** Copy constructor.
 					*/
-				DockingThread(const DockingThread& dock_thread)
-					throw();
+				DockingThread(const DockingThread& dock_thread);
 					
 				///
-				virtual ~DockingThread()
-					throw();
+				virtual ~DockingThread();
 				
 				/**  Assignment operator
 				 */
-				const DockingThread& operator =(const DockingThread& dock_thread)
-					throw();
+				const DockingThread& operator =(const DockingThread& dock_thread);
 					
 				///
-				void setDockingAlgorithm(DockingAlgorithm* dock_alg)
-					throw();
+				void setDockingAlgorithm(DockingAlgorithm* dock_alg);
 					
 				///
 				virtual void run()

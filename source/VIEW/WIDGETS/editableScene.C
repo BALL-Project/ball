@@ -61,7 +61,6 @@ namespace BALL
 //
 
 EditableScene::EditOperation::EditOperation()
-	throw()
 	: operationType(),
 		atom(),
 		bond(),
@@ -70,7 +69,6 @@ EditableScene::EditOperation::EditOperation()
 }
 
 EditableScene::EditOperation::EditOperation(Atom* new_atom, Bond* new_bond, String new_description, int new_operation)
-	throw()
 	: operationType((EditableScene::EditOperation::OperationType)new_operation),
 		atom(new_atom),
 		bond(new_bond),
@@ -79,7 +77,6 @@ EditableScene::EditOperation::EditOperation(Atom* new_atom, Bond* new_bond, Stri
 }
 
 EditableScene::EditOperation::EditOperation(const EditOperation& eOperation)
-	throw()
 	: operationType(eOperation.operationType),
 		atom(eOperation.atom),
 		bond(eOperation.bond),
@@ -88,7 +85,6 @@ EditableScene::EditOperation::EditOperation(const EditOperation& eOperation)
 }
 
 EditableScene::EditOperation::~EditOperation()	
-	throw()
 {
 #ifdef BALL_VIEW_DEBUG
 		Log.info() << "Destructing object EditOperation " << this << " of class EditOperation>" << std::endl;
@@ -101,14 +97,12 @@ EditableScene::EditOperation::~EditOperation()
 bool EditableScene::only_highlighted_ = true;
 
 EditableScene::EditableScene()
-	throw()
 	:	Scene()
 {
 	init_();
 }
 
 EditableScene::EditableScene(QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
-	throw()
 	: Scene(parent_widget, name, w_flags),
 	  fragment_db_(),
 		fragment_db_initialized_(false)
@@ -119,7 +113,6 @@ EditableScene::EditableScene(QWidget* parent_widget, const char* name, Qt::WFlag
 
 // undo_ is NOT copied, since we would run into trouble with the pointers to atoms and bonds it saves
 EditableScene::EditableScene(const EditableScene& eScene, QWidget* parent_widget, const char* name , Qt::WFlags w_flags)
-	throw()
 	: Scene(eScene, parent_widget, name, w_flags)
 {
 	init_();
@@ -161,7 +154,6 @@ void EditableScene::setCursor(String c)
 }
 
 EditableScene::~EditableScene()
-	throw()
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.info() << "Destructing object EditableScene " << this << " of class EditableScene>" << std::endl;
@@ -170,7 +162,6 @@ EditableScene::~EditableScene()
 
 
 void EditableScene::initializeWidget(MainControl& main_control)
-	throw()
 {
 	Scene::initializeWidget(main_control);
 	String help_url("scene.html#editing");
@@ -237,7 +228,6 @@ void EditableScene::initializeWidget(MainControl& main_control)
 
 
 void EditableScene::checkMenu(MainControl& main_control)
-	throw()
 {
 	bool busy = main_control.compositesAreLocked();
 	edit_id_->setChecked(current_mode_ == (Scene::ModeType)EDIT__MODE);
@@ -1186,7 +1176,6 @@ void EditableScene::changeBondOrder_()
 }
 
 void EditableScene::onNotify(Message *message)
-	throw()
 {
 	if ((current_atom_ != 0 || current_bond_ != 0) &&
 			RTTI::isKindOf<CompositeMessage>(*message))
@@ -1263,7 +1252,6 @@ void EditableScene::createMolecule_()
 }
 
 void EditableScene::setMode(ModeType mode)
-	throw()
 {
 	Scene::setMode(mode);
 
@@ -1272,7 +1260,6 @@ void EditableScene::setMode(ModeType mode)
 }
 
 void EditableScene::applyPreferences()
-	throw()
 {
 	Scene::applyPreferences();
 	if (edit_settings_ == 0) return;
@@ -1285,7 +1272,6 @@ void EditableScene::applyPreferences()
 }
 
 void EditableScene::initializePreferencesTab(Preferences& preferences)
-	throw()
 {
 	Scene::initializePreferencesTab(preferences);
 	edit_settings_ = new EditSettings(this);
@@ -1293,7 +1279,6 @@ void EditableScene::initializePreferencesTab(Preferences& preferences)
 }
 
 void EditableScene::finalizePreferencesTab(Preferences& preferences)
-	throw()
 {
 	Scene::finalizePreferencesTab(preferences);
 	if (edit_settings_) 

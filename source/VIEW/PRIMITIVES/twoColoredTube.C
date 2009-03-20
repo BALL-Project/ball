@@ -13,7 +13,6 @@ namespace BALL
 	{
 
 		TwoColoredTube::TwoColoredTube()
-			throw()
 			:	GeometricObject(),			
 			  ColorExtension2(),
 	  		Vertex2(),
@@ -22,7 +21,6 @@ namespace BALL
 		}
 
 		TwoColoredTube::TwoColoredTube(const TwoColoredTube& two_colored_tube)
-			throw()
 			:	GeometricObject(two_colored_tube),
 				ColorExtension2(two_colored_tube),
 				Vertex2(two_colored_tube),
@@ -31,7 +29,6 @@ namespace BALL
 		}
 
 		TwoColoredTube::~TwoColoredTube()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << (void *)this 
@@ -40,7 +37,6 @@ namespace BALL
 		}
 
 		void TwoColoredTube::clear()
-			throw()
 		{
 			GeometricObject::clear();
 			ColorExtension2::clear();
@@ -49,7 +45,6 @@ namespace BALL
 		}
 
 		void TwoColoredTube::set(const TwoColoredTube& two_colored_tube)
-			throw()
 		{
 			GeometricObject::set(two_colored_tube);
 			ColorExtension2::set(two_colored_tube);
@@ -58,14 +53,12 @@ namespace BALL
 		}
 
 		const TwoColoredTube& TwoColoredTube::operator = (const TwoColoredTube& two_colored_tube)
-			throw()
 		{
 			set(two_colored_tube);
 			return *this;
 		}
 
 		void TwoColoredTube::swap(TwoColoredTube& two_colored_tube)
-			throw()
 		{
 			GeometricObject::swap(two_colored_tube);
 			ColorExtension2::swap(two_colored_tube);
@@ -77,13 +70,11 @@ namespace BALL
 		}
 
 		bool TwoColoredTube::isValid() const
-			throw()
 		{
 			return (GeometricObject::isValid());
 		}
 
 		void TwoColoredTube::dump(ostream& s, Size depth) const
-			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

@@ -60,8 +60,7 @@ namespace BALL
 			static bool initGL();
 
 			///
-			const MeshBuffer& operator = (const MeshBuffer& buffer)
-				throw();
+			const MeshBuffer& operator = (const MeshBuffer& buffer);
 
 			/// Get the Mesh for this buffer object
 			const Mesh* getMesh() { return mesh_;}

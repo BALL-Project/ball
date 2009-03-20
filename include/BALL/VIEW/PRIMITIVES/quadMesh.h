@@ -49,16 +49,13 @@ namespace BALL
 					The properties of this mesh are set to:
   				  - color - to the color black
 			*/
-			QuadMesh()
-				throw();
+			QuadMesh();
 
 			/// Copy constructor 
-			QuadMesh(const QuadMesh& mesh)
-				throw();
+			QuadMesh(const QuadMesh& mesh);
 
 			///
-			~QuadMesh()
-				throw() {}
+			~QuadMesh(){}
 
 			// Method to get all vertices from a geometric object
 			virtual void getVertices(vector<Vector3>& vertices) const { vertices = vertex;}

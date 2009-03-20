@@ -42,16 +42,14 @@ namespace BALL
 					The vector of this vertex is set to (0.0, 0.0, 0.0). The vertex
 					address is set to the address of the own vector of this vertex.
 			*/
-			Vertex()
-				throw();
+			Vertex();
 
 			/** Copy constructor.
 					The vector of <b> vertex</b> is copied to the vector of this vertex.
 					The vertex address of this vertex is set to the value of 
 					the vertex address of <b> vertex</b> vertex.
 			*/
-			Vertex(const Vertex& vertex)
-				throw();
+			Vertex(const Vertex& vertex);
 
 			//@}
 			/** @name Destructors 
@@ -60,16 +58,14 @@ namespace BALL
 
 			/** Destructor.
 			*/
-			virtual ~Vertex()
-				throw();
+			virtual ~Vertex();
 
 			/** Explicit default initialization.
 					Set the vector of this vertex to the vector (0.0, 0.0, 0.0).
 					The vertex address of this vertex is set to the address of 
 					the own vector of this vertex.
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			//@}
 			/**	@name	Assignment methods
@@ -80,23 +76,20 @@ namespace BALL
 					The vector and the vertex address of this vertex is initialized 
 					to the vector and vertex address of the vertex <b> v</b>.\par
 			*/
-			void set(const Vertex& v)
-				throw();
+			void set(const Vertex& v);
 
 			/** Assignment operator.
 					Calls set.
 					The vector and the vertex address of this vertex is initialized
 					to the vector and the vertex address of the vertex <b> v</b>.\par
 			*/
-			const Vertex& operator = (const Vertex& v)
-				throw();
+			const Vertex& operator = (const Vertex& v);
 
 			/** Swapping of vertices.
 					Swap the vector and vertex address of this vertex with 
 					the vector and vertex address of the vertex	<b> v</b>.
 			*/
-			void swap(Vertex& v)
-				throw();
+			void swap(Vertex& v);
 
 			//@}
 			/**	@name	Accessors: inspectors and mutators 
@@ -106,38 +99,32 @@ namespace BALL
 			/** Change the vector of this vertex.
 					\see         getVertex
 			*/
-			void setVertex(const Vector3& v)
-				throw();
+			void setVertex(const Vector3& v);
 
 			/** Change the vector of this vertex.
 					\see         getVertex
 			*/
-			void setVertex(const float x, const float y, const float z)
-				throw();
+			void setVertex(const float x, const float y, const float z);
 
 			/** Mutable inspection of the vector of this vertex.
 					\see         setVertex
 			*/
-			Vector3& getVertex()
-				throw();
+			Vector3& getVertex();
 
 			/** Non-mutable inspection of the vector of this vertex.
 					For further information see getVertex.
 			*/
-			const Vector3& getVertex() const
-				throw();
+			const Vector3& getVertex() const;
 
 			/** Inspection of the vector of this vertex.
 					\see         setVertex
 			*/
-			void getVertex(Vector3& v) const
-				throw();
+			void getVertex(Vector3& v) const;
 
 			/** Access the components of the vector of this vertex by using float.
 					\see         setVertex
 			*/
-			void getVertex(float& x, float& y, float& z) const
-				throw();
+			void getVertex(float& x, float& y, float& z) const;
 
 			/** Change the vector address of this vertex to the vector address
 					represented by the parameter <b> v</b>.
@@ -152,8 +139,7 @@ namespace BALL
 					\param       v the new vector address of this vertex
 					\see         getVertexAddress
 			*/
-			void setVertexAddress(const Vector3& v)
-				throw();
+			void setVertexAddress(const Vector3& v);
 		
 			/** Change the vector address of this vertex to the default address.
 					This method resets the vertex address to the vector address of
@@ -163,15 +149,13 @@ namespace BALL
 					with setVertexAddress.
 					\see         setVertexAddress
 			*/
-			void setDefaultVertexAddress()
-				throw();
+			void setDefaultVertexAddress();
 
 			/** Access the pointer of the vector that contains the value of
 					this	vertex.
 					\see         setVertexAddress
 			*/
-			Vector3* getVertexAddress() const
-				throw();
+			Vector3* getVertexAddress() const;
 
 			//@}
 			/**	@name	Predicates
@@ -185,8 +169,7 @@ namespace BALL
 					\see        getVertexAddress					
 					\see        setDefaultVertexAddress					
 			*/
-			bool isDefaultVertexAddress() const
-				throw();
+			bool isDefaultVertexAddress() const;
 
 			//@}
 			/**	@name	debuggers and diagnostics
@@ -196,8 +179,7 @@ namespace BALL
 			/** Internal state and consistency self-validation.
 					Calls Vector3::isValid
 			*/
-			virtual bool isValid() const
-				throw();
+			virtual bool isValid() const;
 
 			/** Internal value dump.
 					Dump the current state of this vertex to 
@@ -206,8 +188,7 @@ namespace BALL
 					\param   depth the dumping depth
 					\see     Vector3::operator <<
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 			//@}
 

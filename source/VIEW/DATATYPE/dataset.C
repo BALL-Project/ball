@@ -95,7 +95,6 @@ namespace BALL
 		}
 
 		DatasetController::~DatasetController()
-			throw()
 		{
 		}
 
