@@ -2557,6 +2557,7 @@ namespace BALL
 
 			return ok;
 			*/
+            return false;
 		}
 
 		void Scene::exportNextPOVRay()
@@ -2968,6 +2969,7 @@ return;
 			
 			return supports;
 			*/
+            return false;
 		}
 
 		void Scene::setWidgetVisible(bool state)
