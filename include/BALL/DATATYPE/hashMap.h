@@ -27,8 +27,13 @@
 #include <algorithm>
 
 #if defined(BALL_HAS_UNORDERED_MAP)
-# include <boost/unordered_map.hpp>
-//#  include <tr1/unordered_map>
+
+#if defined(BALL_PLATFORM_WINDOWS)
+#	include <boost/unordered_map.hpp>
+#else
+#  	include <tr1/unordered_map>
+#endif
+
 #elif defined(BALL_EXT_INCLUDE_PREFIX)
 # include <ext/hash_map>
 # include <ext/hash_fun.h>
@@ -38,10 +43,11 @@
 #endif
 
 #ifdef BALL_HAS_UNORDERED_MAP
-
+#ifdef BALL_EXTEND_HASH_IN_STD_NS
 namespace std
 {
-	namespace tr1
+#endif
+	namespace BALL_MAP_NAMESPACE
 	{
 		
 		// borrowed from boost
@@ -120,8 +126,9 @@ namespace std
 				return h(s);
 			}
 		};
-
+#ifdef BALL_EXTEND_HASH_IN_STD_NS
 	}
+#endif
 }
 #endif
 
