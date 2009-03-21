@@ -43,11 +43,10 @@
 #endif
 
 #ifdef BALL_HAS_UNORDERED_MAP
-#ifdef BALL_EXTEND_HASH_IN_STD_NS
+
 namespace std
 {
-#endif
-	namespace BALL_MAP_NAMESPACE
+	namespace tr1
 	{
 		
 		// borrowed from boost
@@ -126,9 +125,7 @@ namespace std
 				return h(s);
 			}
 		};
-#ifdef BALL_EXTEND_HASH_IN_STD_NS
 	}
-#endif
 }
 #endif
 
