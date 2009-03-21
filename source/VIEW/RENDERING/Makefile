@@ -26,7 +26,6 @@ CPP_SOURCES=\
 	glRenderWindow.C\
 	renderWindow.C\
 	pixelFormat.C\
-	raytracingRenderer.C
 
 include ../../common.mak
 -include .Dependencies
