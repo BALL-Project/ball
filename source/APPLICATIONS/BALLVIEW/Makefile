@@ -37,7 +37,7 @@ UIC_FILES=\
 	demoTutorialDialogData.h
 
 BALLView:	$(OBJECTS)	$(SPECIAL_OBJECTS)
-	$(LINKER)	$(LDFLAGS) -L$(PREFIX)/$(LIBDIR) -L$(BALL_PATH)/$(LIBDIR) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(BALL_LIBS) $(PYTHON_LIBS) -L/home/andreas/BALL-RAY/RTfact/remote/build/icc-release/lib -lRTfactRemote
+	$(LINKER)	$(LDFLAGS) -L$(PREFIX)/$(LIBDIR) -L$(BALL_PATH)/$(LIBDIR) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(BALL_LIBS) $(PYTHON_LIBS) -L/home/andreas/BALL-RAY/RTfact/remote/build/icc-release/lib 
 
 depend: $(UIC_FILES) $(MOC_SOURCES)
 
