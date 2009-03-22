@@ -176,20 +176,40 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 				QFileInfo file_info(path);
 				if (file_info.isFile())
 				{
+					SDFInputDataItem* existing_sdf_item = dynamic_cast<SDFInputDataItem*>(itemAt(pos));
+					CSVInputDataItem* existing_csv_item = dynamic_cast<CSVInputDataItem*>(itemAt(pos));
+					
 					if (match_sd.exactMatch(path))
 					{
 						SDFInputDataItem* item=NULL;
 	
-						/// replace SD-item by new SD-item
-						SDFInputDataItem* existing_input_item = dynamic_cast<SDFInputDataItem*>(itemAt(pos)); 
-						if(existing_input_item!=NULL)
+						/// replace input-item by new SD-item
+						if(existing_sdf_item!=NULL || (existing_csv_item!=NULL&&existing_csv_item->append()==0))
 						{
-							/// TODO: show warning dialog?!
-							item = main_window->createSDFInput(path);
-							QPointF pos = existing_input_item->pos();
-							addItem(item);
-							item->setPos(pos);
-							item->replaceItem(existing_input_item);
+							InputDataItem* existing_input_item;
+							if(existing_sdf_item!=NULL) existing_input_item=existing_sdf_item;
+							else existing_input_item = existing_csv_item;
+							
+							QMessageBox box;
+							box.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+							box.button(QMessageBox::Ok)->setText("Replace");
+							box.setText("Do you want to replace the input data of this pipeline?!");
+							box.setWindowTitle("Replace input data?");
+							box.setDefaultButton(QMessageBox::Cancel);
+							bool replace = (box.exec()==QMessageBox::Ok);
+							
+							if(replace)
+							{
+								item = main_window->createSDFInput(path);
+								QPointF pos = existing_input_item->pos();
+								addItem(item);
+								item->setPos(pos);
+								item->replaceItem(existing_input_item);
+							}
+							else 
+							{
+								return; // "cancel" was chosen, so do nothing!
+							}
 						}
 						
 						else
@@ -235,52 +255,114 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 					}
 					else if (match_txt.exactMatch(path) || match_csv.exactMatch(path))
 					{
-						CSVInputDataItem* csv_item;
+						CSVInputDataItem* csv_item=0;
 						
-						/// replace SD-item by new SD-item
-						//InputDataItem* existing_input_item = qgraphicsitem_cast<InputDataItem*>(itemAt(pos));
-						bool ok=0; 
-						//if(existing_input_item)
-						//{
-						//	/// TODO: show selection dialog !!
-						//	csv_item = main_window->createCSVInput(path);
-						//	csv_item->replaceItem(existing_input_item);
-						//}
-	
-						if(!ok)
-						{						
-							SDFInputDataItem* input_item_at_pos = qgraphicsitem_cast<SDFInputDataItem*>(itemAt(pos));
-							if (input_item_at_pos) /// create CSVInputDataItem and append descriptors
+						// replace input-item by new CSV-item
+						bool replace=0; 
+						if(existing_sdf_item)
+						{
+							QMessageBox box;
+							box.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+							box.button(QMessageBox::Ok)->setText("Replace");
+							box.setText("Do you want to replace the input data of this pipeline or do you want to append descriptors to the current data set?!");
+							box.button(QMessageBox::Cancel)->setText("Append");
+							box.setWindowTitle("Replace input data?");
+							box.setDefaultButton(QMessageBox::Cancel);
+							replace = (box.exec()==QMessageBox::Ok);
+							
+							if(replace)
 							{
+								QPointF pos=existing_sdf_item->pos();
 								csv_item = main_window->createCSVInput(path);
-								csv_item->setData(input_item_at_pos->data());
+								addItem(csv_item);
+								csv_item->setPos(pos);
+								csv_item->replaceItem(existing_sdf_item);
+							}
+						}
+						else if(existing_csv_item)
+						{
+							// existing_csv_item is appended to a sdf-item
+							if(existing_csv_item->append()==1) return;
+							
+							QMessageBox box;
+							box.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+							box.button(QMessageBox::Ok)->setText("Replace");
+							box.setText("Do you want to replace the input data of this pipeline?!");
+							box.setWindowTitle("Replace input data?");
+							box.setDefaultButton(QMessageBox::Cancel);
+							replace = (box.exec()==QMessageBox::Ok);
+							
+							if(replace)
+							{
+								QPointF pos=existing_csv_item->pos();
+								csv_item = main_window->createCSVInput(path);
+								addItem(csv_item);
+								csv_item->setPos(pos);
+								csv_item->replaceItem(existing_csv_item);
+							}
+							else 
+							{
+								return; // "cancel" was chosen, so do nothing!
+							}
+						}
+						
+						if(!replace)
+						{	
+							csv_item=main_window->createCSVInput(path);
+							ModelItem* model_item_at_pos = dynamic_cast<ModelItem*>(itemAt(pos)); 
+							PredictionItem* pred_item = NULL;
+							
+							if (existing_sdf_item) /// create CSVInputDataItem and append descriptors
+							{
+								csv_item->setData(existing_sdf_item->data());
 								csv_item->setAppend(true);				
 								addItem(csv_item);
-								pos = input_item_at_pos->pos();
-								QPointF p0 = QPointF(input_item_at_pos->width()+10,0);
+								pos = existing_sdf_item->pos();
+								QPointF p0 = QPointF(existing_sdf_item->width()+10,0);
 								csv_item->setPos(pos+p0);
-								//QGraphicsItemGroup* group=new QGraphicsItemGroup(input_item_at_pos,this); 
-								//groups_.push_back(group);
-								//group->addToGroup(csv_item);
-								Edge* edge = new Edge(input_item_at_pos, csv_item);
+								
+								Edge* edge = new Edge(existing_sdf_item, csv_item);
 								addItem(edge);
 								
 								// place the new CSV-item into the pipeline at the correct position, i.e. after the SD-item or after the last CSV-item already appended to it
 								DataItem* d;
-								if(input_item_at_pos->additional_descriptors_.size()>0)
+								if(existing_sdf_item->additional_descriptors_.size()>0)
 								{
-									d = input_item_at_pos->additional_descriptors_.back();
+									d = existing_sdf_item->additional_descriptors_.back();
 								}
-								else d = input_item_at_pos;
+								else d = existing_sdf_item;
 								main_window->all_items_pipeline_.insertAfter(csv_item,d);
 								main_window->csv_input_pipeline_.insert(csv_item);
 								
-								input_item_at_pos->appendCSVDescriptors(csv_item);
+								existing_sdf_item->appendCSVDescriptors(csv_item);
 							}
-	
+							else if(model_item_at_pos) /// create PrecitionItem
+							{
+								pred_item = main_window->createPrediction(csv_item,model_item_at_pos);
+								addItem(pred_item);
+								pos = model_item_at_pos->pos();
+								pred_item->setPos(pos+getOffset(pos,pred_item));
+								addItem(csv_item);
+								QPointF p0 = QPointF(-90,-50);
+								csv_item->setPos(pos+p0);
+					
+								Edge* edge = new Edge(model_item_at_pos, pred_item);
+								addItem(edge);
+								model_item_at_pos->addPredictionInputEdge(edge);
+								Edge* edge2 = new Edge(csv_item, model_item_at_pos);
+								addItem(edge2);	
+								DottedEdge* dedge = new DottedEdge(csv_item, pred_item);
+								addItem(dedge);
+								pred_item->setDottedEdge(dedge);
+								
+								int stat = main_window->chooseValidationStatisticDialog(model_item_at_pos);
+								pred_item->setValidationStatistic(stat);
+								
+								csv_item->addToPipeline();
+								pred_item->addToPipeline();
+							}
 							else /// create CSVInputDataItem (no appending of desc.)
 							{
-								csv_item = main_window->createCSVInput(path);
 								addItem(csv_item);
 								csv_item->setPos(pos.x(),pos.y());
 								csv_item->addToPipeline();
