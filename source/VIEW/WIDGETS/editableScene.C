@@ -7,37 +7,45 @@
 #include <BALL/VIEW/WIDGETS/editableScene.h>
 
 #include <BALL/SYSTEM/path.h>
+#include <BALL/SYSTEM/systemCalls.h>
+
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/bond.h>
+
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/compositeManager.h>
+#include <BALL/VIEW/KERNEL/shortcutRegistry.h>
+#include <BALL/VIEW/KERNEL/common.h>
+
 #include <BALL/VIEW/DIALOGS/compositeProperties.h>
 #include <BALL/VIEW/DIALOGS/editSettings.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
 #include <BALL/VIEW/DIALOGS/PTEDialog.h>
 #include <BALL/VIEW/DIALOGS/assignBondOrderConfigurationDialog.h>
+
 #include <BALL/VIEW/PRIMITIVES/box.h>
 #include <BALL/VIEW/PRIMITIVES/line.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
+
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/STRUCTURE/addHydrogenProcessor.h>
 #include <BALL/STRUCTURE/assignBondOrderProcessor.h>
+
 #include <BALL/QSAR/ringPerceptionProcessor.h>
+
 #include <BALL/MATHS/randomNumberGenerator.h>
 #include <BALL/MATHS/analyticalGeometry.h>
-#include <BALL/SYSTEM/systemCalls.h>
+#include <BALL/MATHS/vector3.h>
+#include <BALL/MATHS/matrix44.h>
+#include <BALL/MATHS/angle.h>
 
 #include <QtGui/qmenubar.h>
 #include <QtGui/QDesktopWidget>
 #include <QtGui/QPainter>
-
-#include <BALL/MATHS/vector3.h>
-#include <BALL/MATHS/matrix44.h>
-#include <BALL/MATHS/angle.h>
 
 #include <sstream>
 
@@ -166,53 +174,64 @@ void EditableScene::initializeWidget(MainControl& main_control)
 {
 	Scene::initializeWidget(main_control);
 	String help_url("scene.html#editing");
-
-	edit_id_ = insertMenuEntry(MainControl::DISPLAY, "Edit Mode", 
-										this, SLOT(editMode_()), Qt::CTRL+Qt::Key_E);
+	
+	String description = "Shortcut|Display|Edit_Mode";
+	edit_id_ = insertMenuEntry(MainControl::DISPLAY, "Edit Mode", this, 
+														 SLOT(editMode_()), description, QKeySequence(tr("Ctrl+E", description.c_str())));
 	edit_id_->setCheckable(true);
 	setIcon(String("edit.png"), false);
 	setMenuHint("Create and modify molecular structures");
 	setMenuHelp(help_url);
 	mode_group_->addAction(edit_id_);
+
 	main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
 	Path path;
 
-	
+	description = "Shortcut|QuicklyAssignBondOrders";
 	QIcon icon4(path.find("graphics/assignBondOrders.png").c_str());
-	bondorders_ = new QAction(icon4, "Quickly optimize bond orders", this);
-	bondorders_->setObjectName(bondorders_->text());
-	bondorders_->setToolTip("Edit mode: Quickly optimize the highlighted structures bond orders");
-	registerForHelpSystem(bondorders_, "scene.html#bondorders");
-	connect(bondorders_, SIGNAL(triggered()), this, SLOT(computeBondOrders()));
+	bondorders_action_ = new QAction(icon4, "Quickly optimize bond orders", this);
+	bondorders_action_->setObjectName(bondorders_action_->text());
+	bondorders_action_->setToolTip("Edit mode: Quickly optimize the highlighted structures bond orders");
+	//TODO
+	//registerForHelpSystem(bondorders_action_, "scene.html#bondorders");
+	connect(bondorders_action_, SIGNAL(triggered()), this, SLOT(computeBondOrders()));
+	getMainControl()->getShortcutRegistry().registerShortcut(description, bondorders_action_);
 
 
+	description = "Shortcut|QuicklyOptimizeStructure";
 	QIcon icon(path.find("graphics/minimize.png").c_str());
-	optimize_ = new QAction(icon, "Quickly optimize structure", this);
-	optimize_->setObjectName(optimize_->text());
-	optimize_->setToolTip("Edit mode: Quickly optimize the highlighted structure");
-	registerForHelpSystem(optimize_, "scene.html#optimize");
-	connect(optimize_, SIGNAL(triggered()), this, SLOT(optimizeStructure()));
+	optimize_action_ = new QAction(icon, "Quickly optimize structure", this);
+	optimize_action_->setObjectName(optimize_action_->text());
+	optimize_action_->setToolTip("Edit mode: Quickly optimize the highlighted structure");
+	registerForHelpSystem(optimize_action_, "scene.html#optimize");
+	connect(optimize_action_, SIGNAL(triggered()), this, SLOT(optimizeStructure()));
+	getMainControl()->getShortcutRegistry().registerShortcut(description, optimize_action_);
 
+	description = "Shortcut|SaturateWithHydrogens";
 	QIcon icon2(path.find("graphics/hydrogens.png").c_str());
-	add_hydrogens_ = new QAction(icon2, "Saturate with Hydrogens", this);
-	add_hydrogens_->setToolTip("Edit mode: Saturate the highlighted structure with hydrogens (with regards to formal charges).");
-	add_hydrogens_->setObjectName(add_hydrogens_->text());
-	registerForHelpSystem(add_hydrogens_, "scene.html#saturate");
-	connect(add_hydrogens_, SIGNAL(triggered()), this, SLOT(saturateWithHydrogens()));
+	add_hydrogens_action_ = new QAction(icon2, "Saturate with Hydrogens", this);
+	add_hydrogens_action_->setToolTip("Edit mode: Saturate the highlighted structure with hydrogens (with regards to formal charges).");
+	add_hydrogens_action_->setObjectName(add_hydrogens_action_->text());
+	registerForHelpSystem(add_hydrogens_action_, "scene.html#saturate");
+	connect(add_hydrogens_action_, SIGNAL(triggered()), this, SLOT(saturateWithHydrogens()));
+	getMainControl()->getShortcutRegistry().registerShortcut(description, add_hydrogens_action_);
 
+	getMainControl()->initPopupMenu(MainControl::BUILD)->addAction(add_hydrogens_action_);
+ 	setMenuHint("Saturate a molecule with hydrogens");
+
+
+	description = "Shortcut|EditMode|SetElement";
 	QIcon icon3(path.find("graphics/element.png").c_str());
 	element_action_ = new QAction(icon3, "Set element", this);
 	element_action_->setToolTip("Edit mode: Choose element for next atom, to modify atom under cursor: Double left click");
 	element_action_->setObjectName(element_action_->text());
 	registerForHelpSystem(element_action_, "scene.html#choose_element");
 	connect(element_action_, SIGNAL(triggered()), this, SLOT(changeElement_()));
+	getMainControl()->getShortcutRegistry().registerShortcut(description, element_action_);
 
-	getMainControl()->initPopupMenu(MainControl::BUILD)->addAction(add_hydrogens_);
- 	setMenuHint("Saturate a molecule with hydrogen bonds");
-
-	new_molecule_ = insertMenuEntry(MainControl::BUILD, "Create new molecule", 
-										this, SLOT(createNewMolecule()));
+	new_molecule_action_ = insertMenuEntry(MainControl::BUILD, "Create new molecule", 
+										this, SLOT(createNewMolecule()), "Shortcut|Build|Create_new_molecule");
  	setMenuHint("Create a new molecule for editing");
 }
 
@@ -227,21 +246,21 @@ void EditableScene::checkMenu(MainControl& main_control)
 	bool edit_mode = (current_mode_ == (Scene::ModeType)EDIT__MODE);
 	bool selected_system = !busy && main_control.getSelectedSystem();
 	
-	optimize_->setEnabled(selected_system);
-	add_hydrogens_->setEnabled(selected_system);
+	optimize_action_->setEnabled(selected_system);
+	add_hydrogens_action_->setEnabled(selected_system);
 	
 	List<Composite*> highl = getMainControl()->getMolecularControlSelection();
 	List<Composite*>::Iterator lit = highl.begin();
 	bool selected_system_or_molecule =   (highl.size() == 1)
 																		&& (RTTI::isKindOf<System>(**lit) || RTTI::isKindOf<Molecule>(**lit) ) ;
 
-	bondorders_->setEnabled(selected_system_or_molecule && !busy);
-	optimize_->setEnabled(selected_system_or_molecule && !busy);
-	add_hydrogens_->setEnabled(selected_system_or_molecule && !busy);
+	bondorders_action_->setEnabled(selected_system_or_molecule && !busy);
+	optimize_action_->setEnabled(selected_system_or_molecule && !busy);
+	add_hydrogens_action_->setEnabled(selected_system_or_molecule && !busy);
 	
 	element_action_->setEnabled(!busy && edit_mode);
 
-	new_molecule_->setEnabled(!busy);
+	new_molecule_action_->setEnabled(!busy);
 }
 
 void EditableScene::mousePressEvent(QMouseEvent* e)
@@ -1042,9 +1061,9 @@ void EditableScene::showContextMenu(QPoint pos)
 
 		menu.addSeparator();
 
-		menu.addAction(optimize_);
-		menu.addAction(add_hydrogens_);
-		menu.addAction(bondorders_);
+		menu.addAction(optimize_action_);
+		menu.addAction(add_hydrogens_action_);
+		menu.addAction(bondorders_action_);
 	}
 
 	menu.exec(mapToGlobal(pos));
@@ -1289,13 +1308,22 @@ void EditableScene::keyPressEvent(QKeyEvent* e)
 	if (!reactToKeyEvent_(e))
 	{
 		Scene::keyPressEvent(e);
+
+		// TODO QShortcut* shortcut 
+		if (e->key() == Qt::Key_E)
+		{
+			setMode((Scene::ModeType)EDIT__MODE);
+			return;
+		}
+
 	}
 }
 
 bool EditableScene::reactToKeyEvent_(QKeyEvent* e)
 {
 	int key = e->key();
-
+	
+	// TODO QShortcut* shortcut 
 	if (key == Qt::Key_E)
 	{
 		setMode((ModeType)EDIT__MODE);
@@ -1307,14 +1335,16 @@ bool EditableScene::reactToKeyEvent_(QKeyEvent* e)
 	if (!getMainControl()->isBusy())
 	{
 		QPoint point = mapFromGlobal(QCursor::pos());
-
+		
+		// TODO QShortcut* shortcut 
 		if (key == Qt::Key_D)
 		{
 			getClickedItems_(point.x(), point.y());
 			deleteAtom_();
 			return true;
 		}
-
+		
+		// TODO QShortcut* shortcut 
 		if (key == Qt::Key_Backspace)
 		{
 			getClickedItems_(point.x(), point.y());
@@ -1323,13 +1353,14 @@ bool EditableScene::reactToKeyEvent_(QKeyEvent* e)
 		}
 	}
 
-
+	// TODO QShortcut* shortcut 
 	if (key < Qt::Key_A ||
 			key > Qt::Key_Z)
 	{
 		return false;
 	}
 
+	// TODO QShortcut* shortcut 
 	if      (key == Qt::Key_H) atomic_number_ = 1;
 	else if (key == Qt::Key_C) atomic_number_ = 6;
 	else if (key == Qt::Key_N) atomic_number_ = 7;
@@ -1673,9 +1704,9 @@ void EditableScene::addToolBarEntries(QToolBar* tb)
 {
 	toolbar_actions_.insert(toolbar_actions_.lastIndexOf(move_action_) + 1, edit_id_);
 	toolbar_actions_.push_back(element_action_);
-	toolbar_actions_.push_back(add_hydrogens_);
-	toolbar_actions_.push_back(optimize_);
-	toolbar_actions_.push_back(bondorders_);
+	toolbar_actions_.push_back(add_hydrogens_action_);
+	toolbar_actions_.push_back(optimize_action_);
+	toolbar_actions_.push_back(bondorders_action_);
 	Scene::addToolBarEntries(tb);
 	toolbar_->insertSeparator(element_action_);
 

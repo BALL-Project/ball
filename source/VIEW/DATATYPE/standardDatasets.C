@@ -372,27 +372,34 @@ namespace BALL
 		bool RegularData3DController::createMenuEntries()
 		{
 			if (!DatasetController::createMenuEntries()) return false;
-
-			insertMenuEntry_(MainControl::TOOLS_GRID, "Calculate normalized Grid", SLOT(createHistogramGrid()));
+			
+			String description = "Shortcut|Tools|Grid|Calculate_normalized_grid";
+			insertMenuEntry_(MainControl::TOOLS_GRID, "Calculate normalized Grid", SLOT(createHistogramGrid()), description);
 			getDatasetControl()->setMenuHint("Create a new grid with a histogram equalization");
 
-			insertMenuEntry_(MainControl::TOOLS_GRID, "Resize for Rendering", SLOT(resizeGrid()));
+			description = "Shortcut|Tools|Grid|Resize_for_Rendering";
+			insertMenuEntry_(MainControl::TOOLS_GRID, "Resize for Rendering", SLOT(resizeGrid()), description);
 			getDatasetControl()->setMenuHint("Resize a grid for rendering");
 			getDatasetControl()->setMenuHelp("datasetControl.html#volume");
 
 			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS_GRID);
 
 			// visualizations:
-			insertMenuEntry_(MainControl::TOOLS_GRID, "Visualize 3D Grid", SLOT(visualizeGrid()));
-			getDatasetControl()->setMenuHint("Visualise a grid");
+			description = "Shortcut|Tools|Grid|Visualize_3D_Grid";
+			insertMenuEntry_(MainControl::TOOLS_GRID, "Visualize 3D Grid", SLOT(visualizeGrid()), description);
+			getDatasetControl()->setMenuHint("Visualize a grid");
 			getDatasetControl()->setMenuHelp("datasetControl.html#volume");
 
+			description = "Shortcut|Tools|Grid|Render_Contour_Surface";
 			insertMenuEntry_(MainControl::TOOLS_GRID, "Render Contour S&urface", 
-																							SLOT(computeIsoContourSurface()), Qt::CTRL+Qt::Key_U);
+											 SLOT(computeIsoContourSurface()), description,
+											 QKeySequence(tr("Ctrl+U", description.c_str())));
 			getDatasetControl()->setMenuHint("Calculate an isocontour surface from a 3D grid. The grid has to be loaded in the DatasetControl.");
 			getDatasetControl()->setMenuHelp("datasetControl.html#isocontour_surfaces");
 
-			insertMenuEntry_(MainControl::TOOLS_GRID, "Create a sphere", SLOT(createSphere()));
+			// TODO: add to Documentation (via setMenuHelp())
+			description = "Shortcut|Tools|Grid|Create_a_Sphere";
+			insertMenuEntry_(MainControl::TOOLS_GRID, "Create a sphere", SLOT(createSphere()), description);
 			getDatasetControl()->setMenuHint("Create a sphere for the grid, e.g. for colorizing");
 
 			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS_GRID);
@@ -767,8 +774,12 @@ namespace BALL
 			if (!DatasetController::createMenuEntries()) return false;
 
 			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
-			insertMenuEntry_(MainControl::TOOLS, "Buffer Trajectory", SLOT(bufferTrajectory()));
+
+			String description = "Shortcut|TrajectoryController|Buffer_Trajectory";
+			insertMenuEntry_(MainControl::TOOLS, "Buffer Trajectory", SLOT(bufferTrajectory()), description);
 			getDatasetControl()->setMenuHint("Buffer Trajectory in RAM for faster access");
+
+			description = "Shortcut|TrajectoryController|Visualize_Trajectory";
 			insertMenuEntry_(MainControl::TOOLS, "Visualize Trajectory", SLOT(visualizeTrajectory()));
 
 			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
@@ -904,7 +915,7 @@ namespace BALL
 		{
 			if (!DatasetController::createMenuEntries()) return false;
 
-			insertMenuEntry_(MainControl::TOOLS, "Visualize DockResult", SLOT(showDockResult()));
+			insertMenuEntry_(MainControl::TOOLS, "Visualize DockResult", SLOT(showDockResult()), "Shortcut|Tools|Visualize_DockResult");
 
 			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
 
@@ -1025,7 +1036,8 @@ namespace BALL
 		{
 			if (!DatasetController::createMenuEntries()) return false;
 
-			insertMenuEntry_(MainControl::TOOLS_GRID, "Visualize Field Lines", SLOT(visualizeFieldLines()));
+			insertMenuEntry_(MainControl::TOOLS_GRID, "Visualize Field Lines", 
+											 SLOT(visualizeFieldLines()), "Shortcut|Tools|Grid|Visualize_Field_Lines");
 			getDatasetControl()->setMenuHint("Visualise a gradient grid per field lines");
 
 			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS_GRID);

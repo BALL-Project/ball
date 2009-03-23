@@ -631,24 +631,33 @@ namespace BALL
 		{
 			String hint;
 
-			select_id_ = insertMenuEntry(MainControl::EDIT, "&Select", this, SLOT(select()));   
+			select_id_ = insertMenuEntry(MainControl::EDIT, "&Select", this, SLOT(select()), "Shortcut|Edit|Select");   
 			setMenuHint("Select a molecular object to see its position in the scene or to mark it for a simulation");
 			setMenuHelp("molecularControl.html#selection_highlight");
-			deselect_id_ = insertMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()));
+			deselect_id_ = insertMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()), "Shortcut|Edit|Deselect");
 			setMenuHint("Deselect a molecular object.");
 			setMenuHelp("molecularControl.html#selection_highlight");
 
 			main_control.insertPopupMenuSeparator(MainControl::EDIT);
 
-			cut_id_ = main_control.insertMenuEntry(MainControl::EDIT, "Cu&t", this, SLOT(cut()), Qt::CTRL+Qt::Key_X);
-			copy_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Copy", this, SLOT(copy()), Qt::CTRL+Qt::Key_C);
-			paste_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Paste", this, SLOT(paste()), Qt::CTRL+Qt::Key_V);
+			String description = "Shortcut|Edit|Cut";
+			cut_id_ = main_control.insertMenuEntry(MainControl::EDIT, "Cu&t", this, 
+																						 SLOT(cut()), description, QKeySequence::Cut);
+
+			description = "Shortcut|Edit|Copy";
+			copy_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Copy", this, 
+																						 SLOT(copy()), description, QKeySequence::Copy);
+
+			description = "Shortcut|Edit|Paste";
+			paste_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Paste", this, 
+																							 SLOT(paste()), description, QKeySequence::Paste);
 
 			main_control.insertDeleteEntry();
 			main_control.insertPopupMenuSeparator(MainControl::EDIT);
 
+			description = "Shortcut|Edit|Clear_Clipboard";
 			clipboard_id_ = main_control.insertMenuEntry(MainControl::EDIT, "Clear Clipboard", this, 
-																									 SLOT(clearClipboard()));
+																									 SLOT(clearClipboard()), description);
 			setMenuHint("Clear the items in the clipboard");
 
 			GenericControl::initializeWidget(main_control);
@@ -656,9 +665,14 @@ namespace BALL
 			registerForHelpSystem(this, "molecularControl.html");
 			registerForHelpSystem(selector_edit_, "molecularControl.html#regular_expressions"); 
 
-			distance_action_ = insertMenuEntry(MainControl::DISPLAY_CREATE, "Distance Label", this, SLOT(showDistance()));
+			description = "Shortcut|Display|Create|Distance_Label";
+			distance_action_ = insertMenuEntry(MainControl::DISPLAY_CREATE, "Distance Label", this, 
+																				 SLOT(showDistance()), description);
 			setMenuHint("Render a label for the distance between two highlighted atoms");
-			angle_action_ = insertMenuEntry(MainControl::DISPLAY_CREATE, "Angle Label", this, SLOT(showAngle()));
+
+			description = "Shortcut|Display|Create|Angle_Label";
+			angle_action_ = insertMenuEntry(MainControl::DISPLAY_CREATE, "Angle Label", this, 
+																			SLOT(showAngle()), description);
 			setMenuHint("Render a label for the angle between three highlighted atoms");
 		}
 

@@ -233,8 +233,8 @@ class BALL_VIEW_EXPORT EditableScene
 	void deselect_(bool update=true);
 	void renderGrid_();
 
-	QAction* edit_id_, *new_molecule_, *optimize_, *add_hydrogens_, *element_action_;	
-	QAction* bondorders_;
+	QAction* edit_id_, *new_molecule_action_, *optimize_action_, *add_hydrogens_action_, *element_action_;	
+	QAction* bondorders_action_;
 	
 	Atom* current_atom_;
 	Bond* current_bond_;

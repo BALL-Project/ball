@@ -10,6 +10,8 @@
 #include <BALL/VIEW/KERNEL/stage.h>
 #include <BALL/VIEW/KERNEL/threads.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
+#include <BALL/VIEW/KERNEL/shortcutRegistry.h>
+#include <BALL/VIEW/KERNEL/common.h>
 
 #include <BALL/VIEW/DIALOGS/setCamera.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
@@ -57,8 +59,6 @@
 #include <QtGui/QInputDialog>
 #include <QtOpenGL/QGLPixelBuffer>
 #include <QtGui/qmessagebox.h>
-#include <QtGui/QShortcut>
-
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/DATATYPE/colorMap.h>
@@ -1386,111 +1386,143 @@ namespace BALL
 
 			mode_group_->setExclusive(true);
 
+			ShortcutRegistry* shortcut_registry = ShortcutRegistry::getInstance(0);
+			QAction* new_action;
+
 			create_coordinate_system_ = getMainControl()->initPopupMenu(MainControl::DISPLAY)->
 				addMenu("Show Coordinate System");
 			setMenuHint("Show a coordinate system");
-			create_coordinate_system_->addAction("at origin", this, SLOT(createCoordinateSystemAtOrigin()));
-			create_coordinate_system_->addAction("here", this, SLOT(createCoordinateSystem()));
+
+			new_action = create_coordinate_system_->addAction("at origin", this, SLOT(createCoordinateSystemAtOrigin()));
+			shortcut_registry->registerShortcut("Shortcut|Display|Show_Coordinate_System|at_origin", new_action);
+
+			new_action = create_coordinate_system_->addAction("here", this, SLOT(createCoordinateSystem()));
+			shortcut_registry->registerShortcut("Shortcut|Display|Show_Coordinate_System|here", new_action);
 			
-			insertMenuEntry(MainControl::DISPLAY, "Add new GL Window", this, SLOT(addGlWindow()));
-			// ======================== ANIMATION ===============================================
+			insertMenuEntry(MainControl::DISPLAY, "Add new GL Window", this, SLOT(addGlWindow()), "Shortcut|Display|Add_new_GL_Window");
+			// ======================== Display->Animation ===============================================
 			String help_url = "tips.html#animations";
 
-			record_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Record", this, SLOT(dummySlot()));
+			record_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Record", this, 
+																	SLOT(dummySlot()), "Shortcut|Display|Animation|Record");
 			setMenuHint("Record an animation for later processing");
 			setMenuHelp(help_url);
 			record_animation_action_->setCheckable(true);
-			
+
 			clear_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Clear", this, 
-															SLOT(clearRecordedAnimation()));
+																	SLOT(clearRecordedAnimation()), "Shortcut|Display|Animation|Clear");
 			setMenuHelp(help_url);
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
 
-			start_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Start", this, SLOT(startAnimation()));
+			start_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Start", this, 
+																	SLOT(startAnimation()), "Shortcut|Display|Animation|Start");
 			setMenuHelp(help_url);
 
-			cancel_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Stop", this, SLOT(stopAnimation()));
+			cancel_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Stop", this, 
+																	SLOT(stopAnimation()), "Shortcut|Display|Animation|Stop");
 			cancel_animation_action_->setEnabled(false);
 			setMenuHelp(help_url);
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
 
-			animation_export_PNG_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export PNG", this, SLOT(dummySlot()));
+			animation_export_PNG_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export PNG", this, 
+																			SLOT(dummySlot()), "Shortcut|Display|Animation|Export_PNG");
 			setMenuHelp(help_url);
 			animation_export_PNG_action_->setCheckable(true);
 
-			animation_export_POV_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export POV", this, SLOT(dummySlot()));
+			animation_export_POV_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export POV", this, 
+																			SLOT(dummySlot()), "Shortcut|Display|Animation|Export_POV");
 			setMenuHelp(help_url);
 			animation_export_POV_action_->setCheckable(true);
 
 
-			animation_repeat_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Repeat", this, SLOT(dummySlot()));
+			animation_repeat_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Repeat", this, 
+																	SLOT(dummySlot()), "Shortcut|Display|Animation|Repeat");
 			setMenuHelp(help_url);
 			animation_repeat_action_->setCheckable(true);
 
+			// ======================== Display->Stereo ===============================================
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
-			no_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, "No Stereo", this, SLOT(exitStereo()));
+			no_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, "No Stereo", this, 
+														SLOT(exitStereo()), "Shortcut|Display|Stereo|No_Stereo");
 			no_stereo_action_->setCheckable(true);
 			no_stereo_action_->setChecked(true);
 			setMenuHelp("tips.html#3D");
 
-			active_stereo_action_ = insertMenuEntry (
- 					MainControl::DISPLAY_STEREO, "Shutter Glasses", this, SLOT(enterActiveStereo()));
+			active_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, "Shutter Glasses", this, 
+																SLOT(enterActiveStereo()), "Shortcut|Display|Stereo|Shutter_Glasses");
 			setMenuHelp("tips.html#3D");
 			active_stereo_action_->setCheckable(true);
 
-			dual_stereo_action_ = insertMenuEntry (
- 					MainControl::DISPLAY_STEREO, "Side by Side", this, SLOT(enterDualStereo()));
+			dual_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, "Side by Side", this,
+															SLOT(enterDualStereo()), "Shortcut|Display|Stereo|Side_by_Side");
 			setMenuHelp("tips.html#3D");
 			dual_stereo_action_->setCheckable(true);
 
-			dual_stereo_different_display_action_ = insertMenuEntry (
- 					MainControl::DISPLAY_STEREO, "Side by Side on Different Displays", this, SLOT(enterDualStereoDifferentDisplays()));
+			dual_stereo_different_display_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, 
+																								"Side by Side on Different Displays", this, 
+																								SLOT(enterDualStereoDifferentDisplays()),
+																								"Shortcut|Display|Stereo|Side_by_Side_on_Different_Displays");
 			setMenuHelp("tips.html#3D");
 			dual_stereo_different_display_action_->setCheckable(true);
 
+			// ======================== Display->Viewpoint ===============================================
 			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT);
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "&Store Viewpoint", this, SLOT(storeViewPoint()));
+
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "&Store Viewpoint", this, 
+											SLOT(storeViewPoint()), "Shortcut|Display|Viewpoint|Store");
 			setMenuHint("Store the current viewpoint");
 
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "&Restore Viewpoint", this, SLOT(restoreViewPoint()));
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "&Restore Viewpoint", this, 
+											SLOT(restoreViewPoint()), "Shortcut|Display|Viewpoint|Restore");
 			setMenuHint("Restore the viewpoint");
 
 			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT);
 
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, SLOT(showViewPoint_()));
-
+			String description("Shortcut|Display|Viewpoint|Show_Viewpoint");
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, 
+											SLOT(showViewPoint_()), description, QKeySequence(tr("Ctrl+W", description.c_str()))); 
 			setMenuHint("Print the coordinates of the current viewpoint");
 
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, SLOT(setViewPoint_()));
-			new QShortcut(QKeySequence(tr("Ctrl+N", "Display|Viewpoint|Set Viewpoint")), this, SLOT(setViewPoint_()));
 
+			description = "Shortcut|Display|Viewpoint|Set_Viewpoint";
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, 
+											SLOT(setViewPoint_()), description, QKeySequence(tr("Ctrl+N", description.c_str())));
 			setMenuHint("Move the viewpoint to the given coordinates");
-
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, SLOT(resetCamera_()));
+			
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, 
+											SLOT(resetCamera_()), "Shortcut|Display|Viewpoint|Reset_Camera");
 			setMenuHint("Reset the camera to the orgin (0,0,0)");
-
+			
 			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT);
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Limit ViewVolume", this, SLOT(setupViewVolume()));
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Limit View Volume", this, 
+											SLOT(setupViewVolume()), "Shortcut|Display|Viewpoint|Limit_View_Volume");
 
-			QAction* screenshot_action = insertMenuEntry(MainControl::FILE_EXPORT, "PNG...", 
-																	this, SLOT(showExportPNGDialog()), Qt::ALT + Qt::Key_P);
+			description = "Shortcut|File|Export|PNG";
+			QAction* screenshot_action = insertMenuEntry(MainControl::FILE_EXPORT, "PNG...", this, 
+																		SLOT(showExportPNGDialog()), description, QKeySequence(tr("Alt+P", description.c_str())));
 			setMenuHint("Export a PNG image file from the Scene");
 			setIcon("screenshot.png", false);
 
-			insertMenuEntry(MainControl::FILE_EXPORT, "POVRa&y scene", this, SLOT(exportPOVRay()), Qt::CTRL+Qt::Key_Y);
+			description = "Shortcut|File|Export|POVRay";
+			insertMenuEntry(MainControl::FILE_EXPORT, "POVRa&y scene", this, 
+											SLOT(exportPOVRay()), description, QKeySequence(tr("Ctrl+Y", description.c_str())));
 			setIcon("povray.png", false);
 			setMenuHint("tips.html#povray");
-
- 			insertMenuEntry(MainControl::FILE_EXPORT, "3D Prototyping Export", this, SLOT(showExportVRMLDialog()));
+			
+			description = "Shortcut|File|Export|VRML";
+ 			insertMenuEntry(MainControl::FILE_EXPORT, "3D Prototyping Export", this, 
+											SLOT(showExportVRMLDialog()), description);
  			setMenuHint("Export a VRML or stl file from the scene");
 
 			// ====================================== MODES =====================================
+			description = "Shortcut|Display|Rotate_Mode";
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
-			rotate_action_ =	insertMenuEntry(
-					MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), Qt::CTRL+Qt::Key_R);
+			rotate_action_ = insertMenuEntry(MainControl::DISPLAY, "&Rotate Mode", this, 
+																			 SLOT(rotateMode_()), description, QKeySequence(tr("Ctrl+R", description.c_str())));
+
 			setMenuHint("Switch to rotate/zoom mode");
 			setMenuHelp("scene.html#rotate_mode");
 			rotate_action_->setCheckable(true);
@@ -1498,7 +1530,10 @@ namespace BALL
 			toolbar_actions_.push_back(rotate_action_);
 			mode_group_->addAction(rotate_action_);
 
-			picking_action_ = insertMenuEntry(MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), Qt::CTRL+Qt::Key_P);
+			description = "Shortcut|Display|Picking_Mode";
+			picking_action_ = insertMenuEntry(MainControl::DISPLAY, "&Picking Mode", this, 
+																				SLOT(pickingMode_()), description, QKeySequence(tr("Ctrl+P", description.c_str())));
+
 			setMenuHint("Switch to picking mode, e.g. to identify singe atoms or groups");
 			setMenuHelp("scene.html#identify_atoms");
 			setIcon("picking.png", false);
@@ -1506,7 +1541,10 @@ namespace BALL
 			toolbar_actions_.push_back(picking_action_);
 			mode_group_->addAction(picking_action_);
 
-			move_action_ = insertMenuEntry(MainControl::DISPLAY, "Move Mode", this, SLOT(moveMode_()));
+			description = "Shortcut|Display|Move_Mode";
+			move_action_ = insertMenuEntry(MainControl::DISPLAY, "Move Mode", this, 
+																		 SLOT(moveMode_()), description);
+			
 			setMenuHint("Move selected items");
 			setMenuHelp("molecularControl.html#move_molecule");
 			setIcon("move.png", false);
@@ -1514,13 +1552,16 @@ namespace BALL
 			toolbar_actions_.push_back(move_action_);
 			mode_group_->addAction(move_action_);
 
+			description = "Shortcut|ToggleFullscreen";
 			fullscreen_action_ = new QAction("Fullscreen", this);
 			fullscreen_action_->setObjectName(fullscreen_action_->text());
 			connect(fullscreen_action_, SIGNAL(triggered()), getMainControl(), SLOT(toggleFullScreen()));
 			filename = path.find("graphics/fullscreen.png");
 			fullscreen_action_->setIcon(QIcon(filename.c_str()));
 			toolbar_actions_.push_back(fullscreen_action_);
+			shortcut_registry->registerShortcut(description, fullscreen_action_);
 
+			description = "Shortcut|ShowRuler";
 			switch_grid_ = new QAction("Show ruler", this);
 			switch_grid_->setObjectName(switch_grid_->text());
 			connect(switch_grid_, SIGNAL(triggered()), this, SLOT(switchShowGrid()));
@@ -1529,10 +1570,12 @@ namespace BALL
 			filename = path.find("graphics/ruler.png");
 			switch_grid_->setIcon(QIcon(filename.c_str()));
 			toolbar_actions_.push_back(switch_grid_);
+			shortcut_registry->registerShortcut(description, switch_grid_);
 
 			toolbar_actions_.push_back(screenshot_action);
 
-			insertMenuEntry(MainControl::FILE, "Print", this, SLOT(printScene()));
+			description = "Shortcut|File|Print";
+			insertMenuEntry(MainControl::FILE, "Print", this, SLOT(printScene()), description);
 
 			window_menu_entry_ = insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
 			window_menu_entry_->setCheckable(true);
@@ -1754,7 +1797,7 @@ namespace BALL
 			}
 
 			if (current_mode_ == PICKING__MODE)
-			{	
+			{		
 				if (e->modifiers() == Qt::NoModifier &&(
 						e->buttons() == Qt::LeftButton ||
 						e->buttons() == Qt::RightButton))
@@ -1776,6 +1819,7 @@ namespace BALL
 
 		Index Scene::getMoveModeAction_(const QMouseEvent& e)
 		{
+			// TODO make keys configurable in shortcutRegistry 
 			if (e.modifiers() == Qt::NoModifier)
 			{
 				if (e.buttons() == Qt::LeftButton) 	return TRANSLATE_ACTION;
@@ -2096,6 +2140,7 @@ namespace BALL
 
 		void Scene::keyPressEvent(QKeyEvent* e)
 		{
+			// TODO make keys configurable in shortcutRegistry 
 			// TEST
 			if (e->key() == Qt::Key_Space)
 			{
@@ -2118,19 +2163,22 @@ namespace BALL
 				switchToLastMode();
 				return;
 			}
-
+			
+			// TODO make keys configurable in shortcutRegistry 
 			if (e->key() == Qt::Key_R)
 			{
 				setMode(ROTATE__MODE);
 				return;
 			}
-
+			
+			// TODO make keys configurable in shortcutRegistry 
 			if (e->key() == Qt::Key_W)
 			{
 				setMode(MOVE__MODE);
 				return;
 			}
 
+			// TODO make keys configurable in shortcutRegistry 
 			if (e->key() == Qt::Key_Q)
 			{
 				setMode(PICKING__MODE);
@@ -2143,14 +2191,16 @@ namespace BALL
 				e->ignore();
 				return;
 			}
-
+			
+			// TODO make keys configurable in shortcutRegistry 
 			if ((e->key() == Qt::Key_Y && e->modifiers() == Qt::AltModifier) ||
 					 e->key() == Qt::Key_Escape)
 			{
 				exitStereo();
 				return;
 			}
-
+			
+			// TODO make keys configurable in shortcutRegistry 
 			// setting of eye and focal distance
 			if (e->key() != Qt::Key_Left  &&
 					e->key() != Qt::Key_Right &&
@@ -2160,14 +2210,16 @@ namespace BALL
 				e->ignore();
 				return;
 			}
-
+			
+			// TODO make keys configurable in shortcutRegistry 
 			// setting of eye distance
 			if (e->key() == Qt::Key_Left ||
 					e->key() == Qt::Key_Right)
 			{
 				float new_distance = stage_->getEyeDistance();
-
-				float modifier;
+				
+				// TODO make keys configurable in shortcutRegistry 
+				float modifier = 1;
 				if (e->key() == Qt::Key_Left)
 				{
 					modifier = -0.1;
@@ -2176,7 +2228,8 @@ namespace BALL
 				{
 					modifier = +0.1;
 				}
-
+				
+				// TODO make keys configurable in shortcutRegistry 
 				if (e->modifiers() == Qt::ShiftModifier)
 				{
 					modifier *= 10;
@@ -2201,8 +2254,9 @@ namespace BALL
 			else
 			{
 				float new_focal_distance = stage_->getFocalDistance();
-
-				float modifier;
+				
+				// TODO make keys configurable in shortcutRegistry 
+				float modifier = 1;
 				if (e->key() == Qt::Key_Down)
 				{
 					modifier = -1;
@@ -2211,7 +2265,8 @@ namespace BALL
 				{
 					modifier = +1;
 				}
-
+				
+				// TODO make keys configurable in shortcutRegistry 
 				if (e->modifiers() == Qt::ShiftModifier)
 				{
 					modifier *= 10;

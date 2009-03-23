@@ -307,8 +307,8 @@ namespace BALL
 
 			String getFileTypes_();
 			String getNameFromFileName_(String filename);
-			QAction* insertMenuEntry_(Position pid, const String& name, const char* slot, 
-																QKeySequence accel = QKeySequence());
+			QAction* insertMenuEntry_(Position pid, const String& name, const char* slot,
+																const String& description = "", QKeySequence accel = QKeySequence());
 			
 			/** In the derived class: cast to concrete type and delete the data!
 			*/

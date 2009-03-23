@@ -591,9 +591,13 @@ void DemoTutorialDialog::onNotifyTutorial_(Message *message) throw()
 void DemoTutorialDialog::initializeWidget(MainControl&)
 {
 	getMainControl()->insertPopupMenuSeparator(MainControl::HELP);
-	demo_action_ = insertMenuEntry(MainControl::HELP, "Demo", this, SLOT(showDemo()));
+	
+	String description = "Shortcut|Help|Demo";
+	demo_action_ = insertMenuEntry(MainControl::HELP, "Demo", this, SLOT(showDemo()), description);
 	setMenuHint("Show a demonstration of BALLView's features");
-	tutorial_action_ = insertMenuEntry(MainControl::HELP, "Tutorial", this, SLOT(showTutorial()));
+
+	description = "Shortcut|Help|Tutorial";
+	tutorial_action_ = insertMenuEntry(MainControl::HELP, "Tutorial", this, SLOT(showTutorial()), description);
 	setMenuHint("Perform a step-by-step tutorial");
 	getMainControl()->insertPopupMenuSeparator(MainControl::HELP);
 }

@@ -109,6 +109,7 @@ namespace BALL
 				message_label_(new QLabel("" , statusBar())),
 				primitive_manager_(this),
 				composite_manager_(),
+				shortcut_registry_(),
 				main_control_preferences_(0),
 				network_preferences_(0),
 				preferences_dialog_(new Preferences(this, "BALLView Preferences")),
@@ -429,6 +430,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			selection_.clear();
 			primitive_manager_.clear();
 			composite_manager_.clear();
+			shortcut_registry_.clear();
 
 			if (simulation_thread_ != 0)
 			{
@@ -486,16 +488,22 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 			// own menu entries
 			insertPopupMenuSeparator(MainControl::FILE);
-			insertMenuEntry(MainControl::FILE, "&Quit", qApp, SLOT(quit()), Qt::CTRL+Qt::Key_Q);	
+
+			String description = "Shortcut|File|Quit";
+			insertMenuEntry(MainControl::FILE, "&Quit", qApp, 
+											SLOT(quit()), description,
+											QKeySequence(tr("Ctrl+Q", description.c_str())));
 
 			// if the preferences dialog has any tabs then show it
 			if (preferences_dialog_->hasPages())
 			{
 				insertPopupMenuSeparator(MainControl::EDIT);
-				preferences_action_ = insertMenuEntry(MainControl::EDIT,
-																					"Preferences", 
-																					preferences_dialog_, 
-																					SLOT(show()), Qt::CTRL+Qt::Key_Z);
+
+				String description = "Shortcut|Edit|Preferences";
+				preferences_action_ = insertMenuEntry(MainControl::EDIT, "Preferences", preferences_dialog_, 
+																							SLOT(show()), description,
+																							QKeySequence(tr("Ctrl+Z", description.c_str())));
+
 				Path path;
 				String filename = path.find("graphics/pref.png");
 				preferences_action_->setIcon(QIcon(filename.c_str()));
@@ -802,7 +810,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		QAction* MainControl::insertMenuEntry(Position parent_id, const String& name, const QObject* receiver, 
-																		 const char* slot, QKeySequence accel)
+																		 const char* slot, const String& description, QKeySequence accel)
 			throw()
 		{
 			QMenu* popup = initPopupMenu(parent_id);
@@ -814,6 +822,9 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 			QAction* action = popup->addAction(name.c_str(), receiver, slot, accel);
 			action->setObjectName(name.c_str());
+
+			if (description != "")
+				shortcut_registry_.registerShortcut(description, action);
 
 			return action;
 		}
@@ -1565,7 +1576,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		{
 			if (delete_action_ == 0) 
 			{
-				delete_action_ = insertMenuEntry(MainControl::EDIT, "Delete", this, SLOT(deleteClicked()));	
+				delete_action_ = insertMenuEntry(MainControl::EDIT, "Delete", this, 
+												 SLOT(deleteClicked()), "Shortcut|Edit|Delete", QKeySequence::Delete);	
 			}
 		}
 
