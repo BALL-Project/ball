@@ -94,8 +94,11 @@ namespace BALL
 		setLoggingFilename("BALLView.log");
 		
 		// Display Menu
-		insertMenuEntry(MainControl::DISPLAY, "Toggle Fullscreen", this, SLOT(toggleFullScreen()),
-										Qt::ALT+Qt::Key_X);
+		String description = "Shortcut|Display|Toggle_Fullscreen";
+		insertMenuEntry(MainControl::DISPLAY, "Toggle Fullscreen", this, 
+										SLOT(toggleFullScreen()), description,
+										QKeySequence(tr("Alt+X", description.c_str())));
+
 		insertPopupMenuSeparator(DISPLAY);
 		initPopupMenu(DISPLAY_VIEWPOINT);
 
@@ -159,35 +162,45 @@ namespace BALL
 		// ---------------------
 		// Menus ---------------
 		// ---------------------
-		String hint;
 
-		insertMenuEntry(MainControl::FILE_OPEN, "Project", this, SLOT(loadBALLViewProjectFile()));
-
+		description = "Shortcut|File|Open|Project";
+		insertMenuEntry(MainControl::FILE_OPEN, "Project", this, 
+										SLOT(loadBALLViewProjectFile()), description);
+		
+		description = "Shortcut|File|Save_Project";
 		save_project_action_ = insertMenuEntry(MainControl::FILE, "Save Project", this, 
-										SLOT(saveBALLViewProjectFile()));
+											 										 SLOT(saveBALLViewProjectFile()), description);
 
 			// Help-Menu -------------------------------------------------------------------
 		QAction* action = 0;
-		action = insertMenuEntry(MainControl::HELP, "About", this, SLOT(about()));
+
+		description = "Shortcut|Help|About";
+		action = insertMenuEntry(MainControl::HELP, "About", this, SLOT(about()), description);
 		setMenuHint(action, "Show informations on this version of BALLView");
-		action = insertMenuEntry(MainControl::HELP, "How to cite", this, SLOT(howToCite()));
+
+		description = "Shortcut|Help|How_to_cite";
+		action = insertMenuEntry(MainControl::HELP, "How to cite", this, SLOT(howToCite()), description);
 		setMenuHint(action, "Show infos on how to cite BALL and BALLView");
 
+		// TODO: why is this done here and not, e.g., in mainControl()???
+		description = "Shortcut|MolecularMechanics|Abort_Calculation";
 		stop_simulation_action_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Abort Calculation", this, 
-										SLOT(stopSimulation()), Qt::ALT+Qt::Key_C);
+																							SLOT(stopSimulation()), description,
+																							QKeySequence(tr("Alt+C", description.c_str())));
 		stop_simulation_action_->setEnabled(false);
 		insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
 		setMenuHint(stop_simulation_action_, "Abort a running simulation");
 		Path path;
 		String filename = path.find("graphics/stop.png");
 		stop_simulation_action_->setIcon(QIcon(filename.c_str()));
-
-		complement_selection_action_ = insertMenuEntry(MainControl::EDIT, "Toggle Selection", this, SLOT(complementSelection()));
+		
+		description = "Shortcut|Edit|Toggle_Selection";
+		complement_selection_action_ = insertMenuEntry(MainControl::EDIT, "Toggle Selection", this, 
+																									 SLOT(complementSelection()), description);
 
  		qApp->installEventFilter(this);
 
 		setStatusbarText("Ready.");
-
 	}
 
 	Mainframe::~Mainframe()

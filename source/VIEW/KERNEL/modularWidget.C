@@ -235,12 +235,13 @@ namespace BALL
 		}
 
 		QAction* ModularWidget::insertMenuEntry(Position menu_id, const String& name, 
-												const QObject* receiver, const char* slot, QKeySequence shortcut)
+												const QObject* receiver, const char* slot, const String& description,
+												QKeySequence shortcut)
 			throw()
 		{
 			if (getMainControl() == 0) return 0;
 
-			last_action_ = getMainControl()->insertMenuEntry(menu_id, name, receiver, slot, shortcut);
+			last_action_ = getMainControl()->insertMenuEntry(menu_id, name, receiver, slot, description, shortcut);
 
 			return last_action_;
 		}

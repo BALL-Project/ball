@@ -449,13 +449,13 @@ void PyWidget::initializeWidget(MainControl& main_control)
 	DockWidget::initializeWidget(main_control);
 	registerForHelpSystem(this, "pythonInterpreter.html");
 
-	insertMenuEntry(MainControl::TOOLS_PYTHON, "Load Python Script", this, SLOT(loadScript()));
-	insertMenuEntry(MainControl::TOOLS_PYTHON, "Save Python Script", this, SLOT(saveScript()));
-	insertMenuEntry(MainControl::TOOLS_PYTHON, "Exec Python Script", this , SLOT(execScript()));
-	insertMenuEntry(MainControl::TOOLS_PYTHON, "Run Current Script", this , SLOT(runCurrentScript()));
-	insertMenuEntry(MainControl::TOOLS_PYTHON, "Abort Python Script", this, SLOT(abortScript()));
-	insertMenuEntry(MainControl::TOOLS_PYTHON, "Export History", this, SLOT(exportHistory()));
-	insertMenuEntry(MainControl::TOOLS_PYTHON, "Clear Editor", this, SLOT(clearScript()));
+	insertMenuEntry(MainControl::TOOLS_PYTHON, "Load Python Script", this, SLOT(loadScript()), "Shortcut|Tools|Python|Load_script");
+	insertMenuEntry(MainControl::TOOLS_PYTHON, "Save Python Script", this, SLOT(saveScript()), "Shortcut|Tools|Python|Save_script");
+	insertMenuEntry(MainControl::TOOLS_PYTHON, "Exec Python Script", this , SLOT(execScript()), "Shortcut|Tools|Python|Exec_script");
+	insertMenuEntry(MainControl::TOOLS_PYTHON, "Run Current Script", this , SLOT(runCurrentScript()), "Shortcut|Tools|Python|Run_current_script");
+	insertMenuEntry(MainControl::TOOLS_PYTHON, "Abort Python Script", this, SLOT(abortScript()), "Shortcut|Tools|Python|Abort_script");
+	insertMenuEntry(MainControl::TOOLS_PYTHON, "Export History", this, SLOT(exportHistory()), "Shortcut|Tools|Python|Export_history");
+	insertMenuEntry(MainControl::TOOLS_PYTHON, "Clear Editor", this, SLOT(clearScript()), "Shortcut|Tools|Python|Clear_editor");
 
 	startInterpreter();
 
@@ -596,7 +596,7 @@ void PyWidget::applyPreferences()
 		}
 
 		QAction* action = insertMenuEntry(MainControl::USER, entry.c_str(), this, 
-				SLOT(hotkeyItem()), seq);
+				SLOT(hotkeyItem()), "", seq);
 		action->setData((*it).action.c_str());
 		String comment = (*it).comment;
 		if (comment != "")

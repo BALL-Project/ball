@@ -282,7 +282,8 @@ namespace BALL
 				return false;
 			}
 
-			QAction* action = getDatasetControl()->insertMenuEntry(MainControl::FILE_OPEN, type_, this, SLOT(open()));
+			QAction* action = getDatasetControl()->insertMenuEntry(MainControl::FILE_OPEN, type_, this, 
+												SLOT(open()), "Shortcut|File|Open|Dataset");
 			actions_for_one_set_.insert(action);
 
 			return true;
@@ -352,11 +353,11 @@ namespace BALL
 		}
 
 		QAction* DatasetController::insertMenuEntry_(Position pid, const String& name, 
-																													const char* slot,
+																													const char* slot, const String& description,
 																													QKeySequence accel)
 		{
 			if (getDatasetControl() == 0) return 0;
-			QAction* action = getDatasetControl()->insertMenuEntry(pid, name, this, slot, accel);
+			QAction* action = getDatasetControl()->insertMenuEntry(pid, name, this, slot, description, accel);
 			actions_.push_back(action);
 			actions_for_one_set_.insert(action);
 			return action;

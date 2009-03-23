@@ -85,8 +85,11 @@ DownloadPDBFile::~DownloadPDBFile()
 void DownloadPDBFile::initializeWidget(MainControl&)
 	throw()
 {
+	String description = "Shortcut|File|Open|Download_PDB";
 	menu_id_ = insertMenuEntry(MainControl::FILE_OPEN, "Download PDB", this,
-															 SLOT(show()), Qt::CTRL+Qt::Key_T);
+															 SLOT(show()), description,
+															 QKeySequence(tr("Ctrl+T", description.c_str())));
+
 	setMenuHint("Download a PDB file from www.rcsb.org");
 	setMenuHelp("tips.html#download_pdb");
 	setIcon("download.png", true);

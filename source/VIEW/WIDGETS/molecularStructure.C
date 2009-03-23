@@ -70,10 +70,11 @@ namespace BALL
 
 		void MolecularStructure::initializeWidget(MainControl&)
 		{
-			// TODO QShortcut* shortcut 
 			// cant use ModularWidget::getMainControl() here, no idea why
+			String description = "Shortcut|Display|Viewpoint|Focus_Camera";
 			center_camera_id_ = insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "&Focus Camera", this, 
-																												SLOT(centerCamera()), Qt::CTRL+Qt::Key_F);
+																												SLOT(centerCamera()), description,
+																												QKeySequence(tr("Ctrl+F", description.c_str())));
 			setMenuHint("Focus the camera on one or multiple objects.");
 			setIcon("focus.png", true);
 
@@ -82,69 +83,84 @@ namespace BALL
 	// 		assign_charges_id_ = insertMenuEntry(MainControl::BUILD, "Assign Char&ges", this, SLOT(assignCharges()),
 	// 										CTRL+Key_G, -1 , hint);
 		
-			// TODO QShortcut* shortcut 
+			description = "Shortcut|Build|Build_Peptide";
 			build_peptide_id_ = insertMenuEntry(MainControl::BUILD, "B&uild Peptide", this, 
-													SLOT(buildPeptide()), Qt::ALT+Qt::Key_U);
+																					SLOT(buildPeptide()), description,
+																					QKeySequence(tr("Alt+U", description.c_str())));
 			setMenuHint("Build a peptide from selected amino acids.");
 
+			description = "Shortcut|Build|Build_Bonds";
 			build_bonds_id_ = insertMenuEntry(MainControl::BUILD, "&Build Bonds", this, 
-																												SLOT(buildBonds()), Qt::CTRL+Qt::Key_B);
+																				SLOT(buildBonds()), description,
+																				QKeySequence(tr("Ctrl+B", description.c_str())));
 			setMenuHint("Add missing bonds to a selected structure.");
 
-			// TODO QShortcut* shortcut 
+			description = "Shortcut|Build|Assign_Bond_Orders";
 			assign_bond_orders_id_ = insertMenuEntry(MainControl::BUILD, "&Assign Bond Orders", this, 
-																												SLOT(runBondOrderAssignment()));
+																							 SLOT(runBondOrderAssignment()), description);
 			setMenuHint("Assign bond orders to a selected structure."); 
 			setIcon("assignBondOrders.png", false); //true);
 
-			
-			// TODO QShortcut* shortcut 
+			description = "Shortcut|Build|Check_Structure";
 			check_structure_id_ = insertMenuEntry(MainControl::BUILD, "Chec&k Structure against FragmentDB", this, 
-																												SLOT(checkResidue()), Qt::CTRL+Qt::Key_K);
+																						SLOT(checkResidue()), description,
+																						QKeySequence(tr("Ctrl+K", description.c_str())));
 			setMenuHint("Check a structure against the fragment database.");
 		
-			// TODO QShortcut* shortcut 
+			description = "Shortcut|Build|Add_Hydrogens";
 			add_hydrogens_id_ = insertMenuEntry(MainControl::BUILD, "Add &Hydrogens", this, 
-																												SLOT(addHydrogens()), Qt::CTRL+Qt::Key_H);
+																					SLOT(addHydrogens()), description,
+																					QKeySequence(tr("Ctrl+H", description.c_str())));
 			setMenuHint("Add missing atoms to a selected structure by using the fragment database.");
 			
 			// MOLECULARMECHANICS Menu -------------------------------------------------------------------
-			// TODO QShortcut* shortcut 
+
+			description = "Shortcut|MolecularMechanics|Single_Point_Calculation";
 			energy_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Single Point Calculation", this, 
-								SLOT(calculateForceFieldEnergy()), Qt::CTRL+Qt::Key_A);
+																	 SLOT(calculateForceFieldEnergy()), description,
+																	 QKeySequence(tr("Ctrl+A", description.c_str())));
 			setMenuHint("Calculate the energy of a System with the selected force field.");
 			setMenuHelp("mm.html#single_point");
 				
-			minimization_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "&Energy Minimization", 
-							this, SLOT(runMinimization()));
+			description = "Shortcut|MolecularMechanics|Energy_Minimization";
+			minimization_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "&Energy Minimization", this, 
+																				 SLOT(runMinimization()), description);
 			setMenuHint("To perform an Energy Minimization, first select the molecular structures.");
 			setMenuHelp("mm.html#mini");
 			
-			// TODO QShortcut* shortcut 
-			mdsimulation_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Molecular &Dynamics", 
-								this, SLOT(MDSimulation()), Qt::CTRL+Qt::Key_M);
+			description = "Shortcut|MolecularMechanics|Molecular_Dynamics";
+			mdsimulation_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Molecular &Dynamics", this, 
+																				 SLOT(MDSimulation()), description,
+																				 QKeySequence(tr("Ctrl+M", description.c_str())));
 			setMenuHint("To perform a MD simulation , first select the molecular structures.");
 			setMenuHelp("mm.html#md");
 
 			getMainControl()->insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
 
-			amber_ff_id_ = insertMenuEntry(MainControl::CHOOSE_FF, "Amber", this, SLOT(chooseAmberFF()));
+			description = "Shortcut|MolecularMechanics|Choose_ForceField|Amber";
+			amber_ff_id_ = insertMenuEntry(MainControl::CHOOSE_FF, "Amber", this, 
+																	   SLOT(chooseAmberFF()), description);
 			amber_ff_id_->setCheckable(true);
 			setMenuHint("Use Amber Force Field");
 			setMenuHelp("mm.html");
 			
-			charmm_ff_id_ = insertMenuEntry(MainControl::CHOOSE_FF, "Charmm", this, SLOT(chooseCharmmFF()));
+			description = "Shortcut|MolecularMechanics|Choose_ForceField|Charmm";
+			charmm_ff_id_ = insertMenuEntry(MainControl::CHOOSE_FF, "Charmm", this, 
+																			SLOT(chooseCharmmFF()), description);
 			charmm_ff_id_->setCheckable(true);
 			setMenuHint("Use Charmm Force Field");
 			setMenuHelp("mm.html");
 
-			mmff94_id_ = insertMenuEntry(MainControl::CHOOSE_FF, "MMFF94", this, SLOT(chooseMMFF94()));
+			description = "Shortcut|MolecularMechanics|Choose_ForceField|MMFF94";
+			mmff94_id_ = insertMenuEntry(MainControl::CHOOSE_FF, "MMFF94", this, 
+																	 SLOT(chooseMMFF94()), description);
 			mmff94_id_->setCheckable(true);
 			setMenuHint("Use MMFF94 Force Field");
 			setMenuHelp("mm.html");
 
+			description = "Shortcut|MolecularMechanics|Options";
 			setup_ff_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Options", this, 
-												SLOT(setupForceField()));
+																	SLOT(setupForceField()), description);
 			setMenuHint("Configure the force field");
 			setMenuHelp("mm.html");
 
@@ -153,35 +169,41 @@ namespace BALL
 //			hint = " Map two proteins.";
 // 			map_proteins_id_ = insertMenuEntry(MainControl::TOOLS, "&Map two Proteins", this, SLOT(mapProteins()), 0, -1, hint);
 
+			description = "Shortcut|Tools|Calculate_RMSD";
 			calculate_RMSD_id_ = insertMenuEntry(MainControl::TOOLS, "&Calculate RMSD", this, 
-													 SLOT(calculateRMSD()));
+																					 SLOT(calculateRMSD()), description);
 			setMenuHint("Highlight two (partial) structures to calculate their RMSD value");
 			
-			// TODO QShortcut* shortcut 	
+			description = "Shortcut|Tools|Calculate_SecondaryStructure";
 			calculate_ss_id_ = insertMenuEntry(MainControl::TOOLS, "Calculate Sec&ondary Structure", this,
-																				 SLOT(calculateSecondaryStructure()), Qt::ALT+Qt::Key_O);
+																				 SLOT(calculateSecondaryStructure()), description,
+																				 QKeySequence(tr("Alt+O", description.c_str())));
 			setMenuHint("Recalculate the secondary structure for a structure");
 
 //   			calculate_ramachandran_ = insertMenuEntry(MainControl::TOOLS, "Ramachandran Plot", this,
 //   																				 SLOT(calculateRamachandranPlot()));
 //   			setMenuHint("Calculate a Ramachandran Plot for a Protein.");
 			
-			// TODO QShortcut* shortcut 
+			description = "Shortcut|Tools|Calculate_HBonds";
 			calculate_hbonds_id_ = insertMenuEntry(MainControl::TOOLS, "Calculate H-B&onds", this, 
-																		SLOT(calculateHBonds()), Qt::ALT+Qt::Key_N);
+																		SLOT(calculateHBonds()), description,
+																		QKeySequence(tr("Alt+N", description.c_str())));
 			setMenuHint("To assign H-bonds, one System has to be selected.");
 
-			menu_FPDB_ = insertMenuEntry(MainControl::TOOLS , "FDPB Electrostatics", this, 
-																		SLOT(calculateFDPB()));
-			setMenuHint("Calculate the Electrostatics with FDPB (for one highlighedt System)");
+			description = "Shortcut|Tools|FDPB";
+			menu_FPDB_ = insertMenuEntry(MainControl::TOOLS, "FDPB Electrostatics", this, 
+																	 SLOT(calculateFDPB()), description);
+			setMenuHint("Calculate the Electrostatics with FDPB (for one highlighted System)");
 				
-			create_distance_grid_id_ = insertMenuEntry(MainControl::TOOLS_GRID, 
-																					"Create &Distance Grid", this, SLOT(createGridFromDistance()));
+			description = "Shortcut|Tools|Grid|Create_Distance_Grid";
+			create_distance_grid_id_ = insertMenuEntry(MainControl::TOOLS_GRID, "Create &Distance Grid", this, 
+																								 SLOT(createGridFromDistance()), description);
 			setMenuHint("Create a grid with the distance to the geometric center of a structure");
 			setMenuHelp("tips.html#distance_grids");
 
-			create_distance_grid_id2_ = insertMenuEntry(MainControl::TOOLS_GRID, 
-																					"Create &Distance from Camera Grid", this, SLOT(createGridFromCameraDistance()));
+			description = "Shortcut|Tools|Grid|Create_Distance_From_Camera_Grid";
+			create_distance_grid_id2_ = insertMenuEntry(MainControl::TOOLS_GRID, "Create &Distance from Camera Grid", this, 
+																									SLOT(createGridFromCameraDistance()), description);
 			setMenuHint("Create a grid with the distance to the view point");
 			setMenuHelp("tips.html#distance_grids");
 

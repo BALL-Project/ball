@@ -27,6 +27,7 @@ CPP_SOURCES=$(ASIO_SOURCES)\
 	preferencesEntry.C\
   representationManager.C\
   representation.C\
+	shortcutRegistry.C\
   stage.C\
 	threads.C
 

@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.77.14.1 2007/03/25 21:25:59 oliver Exp $
-//
-// Author:
-//   Andreas Moll
-//
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -28,6 +23,10 @@
 
 #ifndef BALL_VIEW_KERNEL_COMPOSITEMANAGER_H
 #	include <BALL/VIEW/KERNEL/compositeManager.h>
+#endif
+
+#ifndef BALL_VIEW_KERNEL_SHORTCUTREGISTRY_H
+#include <BALL/VIEW/KERNEL/shortcutRegistry.h>
 #endif
 
 #ifndef BALL_FORMAT_INIFILE_H
@@ -292,9 +291,19 @@ namespace BALL
 			*/
 			void redrawAllRepresentations(bool rebuild_display_lists = false)
 				throw();
+			
+			//@}
+			/**	@name	Methods to manage Shortcuts
+			*/
+			//@{
+			/** Get the shortcut registry.
+					The class ShortcutRegistry is the owner of all shortcuts.
+			*/
+			ShortcutRegistry& getShortcutRegistry() { return shortcut_registry_;}
 
 					
 			//@}
+			//
 			/**	@name	Methods to manage Composite(s)
 			*/
 			//@{
@@ -513,11 +522,12 @@ namespace BALL
 					\param name the name of the new menu entry
 					\param receiver the object to which the menu action will be connected
 					\param slot the function that will be called by activation of the menu entry
+					\param description a unique descriptive string for the action
 					\param accel the acceleration key
 					\return int the new entry_ID
 			*/
 			QAction* insertMenuEntry(Position parent_id, const String& name, const QObject* receiver = 0, 
-													 const char* slot = 0, QKeySequence accel = QKeySequence())
+													 const char* slot = 0, const String& description = "", QKeySequence accel = QKeySequence())
 				throw();
 
 			/// 
@@ -901,7 +911,7 @@ namespace BALL
 			bool								multi_threading_mode_;	
 
 			//_
-			FragmentDB fragment_db_;
+			FragmentDB 									fragment_db_;
 
 			ModelInformation* 					model_information_;
 
@@ -920,7 +930,8 @@ namespace BALL
 			QLabel* 										message_label_;
 
 			RepresentationManager 			primitive_manager_;
-			CompositeManager 						composite_manager_;
+			CompositeManager 						composite_manager_;	
+			ShortcutRegistry            shortcut_registry_;
 
 			MainControlPreferences* 		main_control_preferences_;
 			NetworkPreferences* 				network_preferences_;
@@ -938,7 +949,7 @@ namespace BALL
 					removeModularWidget.
 			*/
 			List<ModularWidget*>				modular_widgets_;
-
+		
 			QLabel*             simulation_icon_;
 			QLabel*             rep_label_;
 			static const char  *simulation_running_xpm_[];
