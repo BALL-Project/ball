@@ -49,7 +49,7 @@ void FeaturePlotter::selectedFeatureChanged()
 void FeaturePlotter::deleteCurrentFeature()
 {
 	bool ok=0;
-	if(deletion_confirmed_)
+	if(!deletion_confirmed_)
 	{
 		QMessageBox box;
 		box.setText("Are you sure you want to delete this feature from the model?!\nIf you choose to do so, the model and all depending items need to be retrained!");
