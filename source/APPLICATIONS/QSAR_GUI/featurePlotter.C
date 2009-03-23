@@ -22,7 +22,8 @@ FeaturePlotter::FeaturePlotter(ModelItem* model_item)
 	delete_feature_button_ = new QPushButton(icon,"",this);
 	buttonsLayout_->addWidget(delete_feature_button_);
 	connect(delete_feature_button_,SIGNAL(pressed()),this,SLOT(deleteCurrentFeature()));
-		
+	
+	deletion_confirmed_ = 0;
 	plot(1);
 	zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas(),this);
 }
@@ -47,15 +48,21 @@ void FeaturePlotter::selectedFeatureChanged()
 // SLOT
 void FeaturePlotter::deleteCurrentFeature()
 {
-	QMessageBox box;
-	box.setText("Are you sure you want to delete this feature from the model?!\nIf you choose to do so, the model and all depending items need to be retrained!");
-	box.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-	box.button(QMessageBox::Ok)->setText("Delete");
-	box.setWindowTitle("Delete feature?");
-	box.setDefaultButton(QMessageBox::Cancel);
+	bool ok=0;
+	if(deletion_confirmed_)
+	{
+		QMessageBox box;
+		box.setText("Are you sure you want to delete this feature from the model?!\nIf you choose to do so, the model and all depending items need to be retrained!");
+		box.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+		box.button(QMessageBox::Ok)->setText("Delete");
+		box.setWindowTitle("Delete feature?");
+		box.setDefaultButton(QMessageBox::Cancel);
+		ok = (box.exec()==QMessageBox::Ok);
+		if(ok) deletion_confirmed_ = 1;
+	}
+	else ok=1;
 	
-	int b = box.exec();
-	if(b==QMessageBox::Ok)
+	if(ok)
 	{
 		uint index = feature_combobox_->currentIndex();
 	

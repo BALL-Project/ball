@@ -30,7 +30,11 @@ namespace BALL
 				
 				void plot(bool zoom);
 				
+				/** user has confirmed deleting a feature; do not show the dialog again if any more features are to be deleted */ 
+				bool deletion_confirmed_;
+				
 				map<String,uint> map_names_to_ID_;
+
 			
 				
 			private slots:
