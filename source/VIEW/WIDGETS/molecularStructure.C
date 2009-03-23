@@ -70,6 +70,7 @@ namespace BALL
 
 		void MolecularStructure::initializeWidget(MainControl&)
 		{
+			// TODO QShortcut* shortcut 
 			// cant use ModularWidget::getMainControl() here, no idea why
 			center_camera_id_ = insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "&Focus Camera", this, 
 																												SLOT(centerCamera()), Qt::CTRL+Qt::Key_F);
@@ -80,7 +81,8 @@ namespace BALL
 	// 		hint = "To assign charges, one System has to be selected.";
 	// 		assign_charges_id_ = insertMenuEntry(MainControl::BUILD, "Assign Char&ges", this, SLOT(assignCharges()),
 	// 										CTRL+Key_G, -1 , hint);
-
+		
+			// TODO QShortcut* shortcut 
 			build_peptide_id_ = insertMenuEntry(MainControl::BUILD, "B&uild Peptide", this, 
 													SLOT(buildPeptide()), Qt::ALT+Qt::Key_U);
 			setMenuHint("Build a peptide from selected amino acids.");
@@ -89,23 +91,25 @@ namespace BALL
 																												SLOT(buildBonds()), Qt::CTRL+Qt::Key_B);
 			setMenuHint("Add missing bonds to a selected structure.");
 
-
+			// TODO QShortcut* shortcut 
 			assign_bond_orders_id_ = insertMenuEntry(MainControl::BUILD, "&Assign Bond Orders", this, 
-																												SLOT(runBondOrderAssignment()), Qt::CTRL+Qt::Key_O);
+																												SLOT(runBondOrderAssignment()));
 			setMenuHint("Assign bond orders to a selected structure."); 
 			setIcon("assignBondOrders.png", false); //true);
 
 			
-
+			// TODO QShortcut* shortcut 
 			check_structure_id_ = insertMenuEntry(MainControl::BUILD, "Chec&k Structure against FragmentDB", this, 
 																												SLOT(checkResidue()), Qt::CTRL+Qt::Key_K);
 			setMenuHint("Check a structure against the fragment database.");
-
+		
+			// TODO QShortcut* shortcut 
 			add_hydrogens_id_ = insertMenuEntry(MainControl::BUILD, "Add &Hydrogens", this, 
 																												SLOT(addHydrogens()), Qt::CTRL+Qt::Key_H);
 			setMenuHint("Add missing atoms to a selected structure by using the fragment database.");
 			
 			// MOLECULARMECHANICS Menu -------------------------------------------------------------------
+			// TODO QShortcut* shortcut 
 			energy_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Single Point Calculation", this, 
 								SLOT(calculateForceFieldEnergy()), Qt::CTRL+Qt::Key_A);
 			setMenuHint("Calculate the energy of a System with the selected force field.");
@@ -115,7 +119,8 @@ namespace BALL
 							this, SLOT(runMinimization()));
 			setMenuHint("To perform an Energy Minimization, first select the molecular structures.");
 			setMenuHelp("mm.html#mini");
-
+			
+			// TODO QShortcut* shortcut 
 			mdsimulation_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Molecular &Dynamics", 
 								this, SLOT(MDSimulation()), Qt::CTRL+Qt::Key_M);
 			setMenuHint("To perform a MD simulation , first select the molecular structures.");
@@ -152,6 +157,7 @@ namespace BALL
 													 SLOT(calculateRMSD()));
 			setMenuHint("Highlight two (partial) structures to calculate their RMSD value");
 			
+			// TODO QShortcut* shortcut 	
 			calculate_ss_id_ = insertMenuEntry(MainControl::TOOLS, "Calculate Sec&ondary Structure", this,
 																				 SLOT(calculateSecondaryStructure()), Qt::ALT+Qt::Key_O);
 			setMenuHint("Recalculate the secondary structure for a structure");
@@ -159,7 +165,8 @@ namespace BALL
 //   			calculate_ramachandran_ = insertMenuEntry(MainControl::TOOLS, "Ramachandran Plot", this,
 //   																				 SLOT(calculateRamachandranPlot()));
 //   			setMenuHint("Calculate a Ramachandran Plot for a Protein.");
-
+			
+			// TODO QShortcut* shortcut 
 			calculate_hbonds_id_ = insertMenuEntry(MainControl::TOOLS, "Calculate H-B&onds", this, 
 																		SLOT(calculateHBonds()), Qt::ALT+Qt::Key_N);
 			setMenuHint("To assign H-bonds, one System has to be selected.");
