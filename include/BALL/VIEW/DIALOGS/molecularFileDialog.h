@@ -190,6 +190,8 @@ namespace BALL
 			///
 			virtual String getSupportedFileFormatsList() const;
 
+			void setReadPDBModels(bool read) { read_all_pdb_models_ = read; }
+
 			public slots:
 
 			/** Open a molecular file.
@@ -234,6 +236,7 @@ namespace BALL
 
 			QAction* save_id_, *open_id_;
 			String file_format_;
+			bool read_all_pdb_models_;
 		};
 
 	} // namespace VIEW

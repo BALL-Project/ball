@@ -31,7 +31,8 @@ MolecularFileDialog::MolecularFileDialog(QWidget *parent, const char* name)
 	throw()
 	:	QWidget(parent),
 		ModularWidget(name),
-		save_id_(0)
+		save_id_(0),
+		read_all_pdb_models_(false)
 {
 #ifdef BALL_VIEW_DEBUG
 Log.error() << "new MolecularFileDialog " << this << std::endl;
@@ -399,7 +400,9 @@ System* MolecularFileDialog::readPDBFile(String filename, String system_name)
 	try
 	{
 		PDBFile pdb_file(filename);
-		pdb_file.selectAllModels();
+		if(read_all_pdb_models_) {
+			pdb_file.selectAllModels();
+		}
 		pdb_file >> *system;
 		pdb_file.close();
 	}
