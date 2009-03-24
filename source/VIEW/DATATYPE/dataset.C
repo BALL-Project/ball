@@ -281,9 +281,13 @@ namespace BALL
 				Log.error() << "DatasetController not bound to Dataset!" << std::endl;
 				return false;
 			}
-
+			
+			String temp_type(type_);
+			temp_type.substitute(" ", "_");
+			String description = "Shortcut|File|Open|Dataset|" + temp_type;
+			
 			QAction* action = getDatasetControl()->insertMenuEntry(MainControl::FILE_OPEN, type_, this, 
-												SLOT(open()), "Shortcut|File|Open|Dataset");
+												SLOT(open()), description);
 			actions_for_one_set_.insert(action);
 
 			return true;
