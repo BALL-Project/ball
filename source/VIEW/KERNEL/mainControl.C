@@ -17,6 +17,7 @@
 #include <BALL/VIEW/DIALOGS/mainControlPreferences.h>
 #include <BALL/VIEW/DIALOGS/networkPreferences.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
+#include <BALL/VIEW/DIALOGS/openSavePreferences.h>
 
 #include <BALL/VIEW/WIDGETS/genericControl.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -856,12 +857,14 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 			preferences_dialog_->insertEntry(main_control_preferences_);
 
+			preferences_dialog_->insertEntry(new OpenSavePreferences());
+
 			main_control_preferences_->enableLoggingToFile(logging_to_file_);
 
 			network_preferences_ = new NetworkPreferences();
 			preferences_dialog_->insertEntry(network_preferences_);
 		}
-		
+
 		void MainControl::okPreferencesClicked_()
 		{	
 			if (isBusy()) 

@@ -50,6 +50,7 @@ CPP_SOURCES=\
 	molecularFileDialog.C\
 	MMFF94ConfigurationDialog.C\
 	networkPreferences.C\
+	openSavePreferences.C\
 	parsedFunctionDialog.C\
 	peptideDialog.C\
 	pluginDialog.C\
@@ -101,6 +102,7 @@ MOC_SOURCES=\
 	molecularDynamicsDialog_moc.C\
 	MMFF94ConfigurationDialog_moc.C\
 	networkPreferences_moc.C\
+	openSavePreferences_moc.C\
 	parsedFunctionDialog_moc.C\
 	peptideDialog_moc.C\
 	pluginDialog_moc.C\
@@ -149,6 +151,7 @@ UIC_SOURCES=\
 	molecularDynamicsDialogData.C\
 	MMFF94ConfigurationDialogData.C\
 	networkPreferencesData.C\
+	openSavePreferencesData.C\
 	parsedFunctionDialogData.C\
 	peptideDialogData.C\
 	preferencesData.C\
