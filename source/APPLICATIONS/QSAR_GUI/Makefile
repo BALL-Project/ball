@@ -143,7 +143,7 @@ QSARTool:	$(OBJECTS)	$(SPECIAL_OBJECTS)
 	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(BALL_LIBS)
 	
 QSARTool-static:	$(OBJECTS)	$(SPECIAL_OBJECTS)
-	$(CXX)	$(LDFLAGS) -o $@ $(OBJECTS) $(SPECIAL_OBJECTS) $(BALL_PATH)/lib/libBALL.a $(BALL_PATH)/lib/libVIEW.a $(BALL_PATH)/contrib/libsvm/libsvm.a $(BALL_PATH)/contrib/gsl-1.8/gsl-1.8/lib/libgsl.a  $(BALL_PATH)/contrib/gsl-1.8/gsl-1.8/lib/libgslcblas.a $(BALL_PATH)/contrib/qwt-5.0.2/lib/libqwt.a -L/share/opt/x86_64_sl4/qt-4.4.0-gcc_4.2.1/lib -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql -lGLU -lGL /share/opt/x86_64_sl5/ATLAS-3.9.4/install/lib/liblapack.a /share/opt/x86_64_sl5/ATLAS-3.9.4/install/lib/libf77blas.a /share/opt/x86_64_sl5/ATLAS-3.9.4/install/lib/libcblas.a /share/opt/x86_64_sl5/ATLAS-3.9.4/install/lib/libatlas.a /share/opt/x86_64_sl4/g95-0.91/lib/gcc-lib/x86_64-suse-linux-gnu/4.0.3/libf95.a -lgfortran
+	$(CXX)	$(LDFLAGS) -o $@ $(OBJECTS) $(SPECIAL_OBJECTS) $(BALL_PATH)/lib/libBALL.a $(BALL_PATH)/lib/libVIEW.a $(BALL_PATH)/contrib/libsvm/libsvm.a $(BALL_PATH)/contrib/gsl-1.8/gsl-1.8/lib/libgsl.a  $(BALL_PATH)/contrib/gsl-1.8/gsl-1.8/lib/libgslcblas.a $(BALL_PATH)/contrib/qwt-5.0.2/lib/libqwt.a -L/share/opt/x86_64_sl4/qt-4.4.0-gcc_4.2.1/lib -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql -lGLU -lGL /share/opt/x86_64_sl5/ATLAS-3.9.4/install/lib/liblapack.a /share/opt/x86_64_sl5/ATLAS-3.9.4/install/lib/libf77blas.a /share/opt/x86_64_sl5/ATLAS-3.9.4/install/lib/libcblas.a /share/opt/x86_64_sl5/ATLAS-3.9.4/install/lib/libatlas.a /share/opt/x86_64_sl4/g95-0.91/lib/gcc-lib/x86_64-suse-linux-gnu/4.0.3/libf95.a /usr/lib/gcc/x86_64-redhat-linux/4.1.1/libgfortran.a
 
 
 QSARTool-static2:	$(OBJECTS)	$(SPECIAL_OBJECTS)
