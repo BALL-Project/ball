@@ -99,7 +99,7 @@ namespace BALL
 				{
 					index = index_str.trim().toInt();
 				} 
-				catch (Exception::InvalidFormat)
+				catch (Exception::InvalidFormat&)
 				{
 					Log.error() << "calculateOoiEnergy: cannot convert to a number: " << index_str << endl;
 					continue;
@@ -145,7 +145,7 @@ namespace BALL
 						g[index] = parameter_section.getValue(i, g_column).toFloat();
 					}
 				}
-				catch (Exception::InvalidFormat)
+				catch (Exception::InvalidFormat&)
 				{
 					Log.error() << "calculateOoiEnergy: cannot convert to a number: " << index_str << endl;
 				}
@@ -172,7 +172,7 @@ namespace BALL
 						type_map.insert(type_section.getKey(i), (Atom::Type)index_str.trim().toInt());
 					}
 				}
-				catch (Exception::InvalidFormat)
+				catch (Exception::InvalidFormat&)
 				{
 					Log.error() << "calculateOoiEnergy: cannot convert to a number: " << index_str << endl;
 				}

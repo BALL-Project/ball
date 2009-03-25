@@ -945,7 +945,7 @@ namespace BALL
 			plane1 = TPlane3<T>(s2.p.x-s1.p.x,s2.p.y-s1.p.y,s2.p.z-s1.p.z,u);
 			plane2 = TPlane3<T>(s3.p.x-s1.p.x,s3.p.y-s1.p.y,s3.p.z-s1.p.z,v);
 		}
-		catch (Exception::DivisionByZero)
+		catch (Exception::DivisionByZero&)
 		{
 			return false;
 		}

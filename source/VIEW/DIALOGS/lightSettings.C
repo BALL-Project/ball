@@ -208,7 +208,7 @@ void LightSettings::saveSettingsToLight_()
 			light.setType(LightSource::DIRECTIONAL);
 		}
 	}
-	catch (Exception::GeneralException e)
+	catch (Exception::GeneralException& e)
 	{
 		Log.error() << "Invalid values in LightSettingsDialog" << std::endl;
 		Log.error() << e;

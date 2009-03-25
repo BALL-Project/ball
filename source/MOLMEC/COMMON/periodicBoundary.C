@@ -359,7 +359,7 @@ namespace BALL
 					return false;
 				}
 			}
-			catch (Exception::FileNotFound e)
+			catch (Exception::FileNotFound& e)
 			{
 				Log.error() << "PeriodicBoundary::setup: Solvent file not found: " << e.getName() << endl;
 				return false;

@@ -236,7 +236,7 @@ namespace BALL
 				}
 			}
 		}
-		catch(Exception::GeneralException e)
+		catch(Exception::GeneralException& e)
 		{
 			ok = false;
 			Log.error() <<  e << std::endl;

@@ -553,7 +553,7 @@ namespace BALL
 					}
 				}	 // all geometric objects
 			}
-			catch (Exception::OutOfGrid)
+			catch (Exception::OutOfGrid&)
 			{
 				error = true;
 			}

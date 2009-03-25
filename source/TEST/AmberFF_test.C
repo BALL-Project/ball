@@ -45,7 +45,7 @@ RESULT
 
 
 AmberFF amber91;
-amber91.options[AmberFF::Option::FILENAME] = "Amber/amber91.ini";
+amber91.options[AmberFF::Option::FILENAME] = "Amber/test91.ini";
 amber91.options[AmberFF::Option::ASSIGN_CHARGES] = "false";
 
 CHECK(energy test 1 (Single Stretch) [AMBER91])
@@ -233,7 +233,6 @@ CHECK(force test 2: ES switching function [AMBER91/CDIEL])
 	f.close();
 	s.deselect();
 	TEST_EQUAL(s.countAtoms(), 2)
-
 	// set the cutoffs and cutons (VdW is switched off)
 	amber91.options[AmberFF::Option::VDW_CUTON] = 0.05;
 	amber91.options[AmberFF::Option::VDW_CUTOFF] = 0.1;

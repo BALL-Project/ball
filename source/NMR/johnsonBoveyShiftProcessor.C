@@ -259,7 +259,7 @@ namespace BALL
 				new_ring.intensity = parameter_section.getValue(key, intensity_column).toFloat();
 				name_list = parameter_section.getValue(key, name_list_column);
 			} 
-			catch (Exception::InvalidFormat)
+			catch (Exception::InvalidFormat&)
 			{
 				Log.error() << "JohnsonBoveyShiftProcessor::init: error interpreting parameter line with key "
 									  << key << std::endl;

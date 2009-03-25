@@ -775,7 +775,7 @@ namespace BALL
 			// Check whether we have an ID for this method already
 			id = getConformationMethod(method, parameters);
 		}
-		catch (InvalidQuery)
+		catch (InvalidQuery&)
 		{
 			// Otherwise, insert a new method into the method generation table.
 			prepare("INSERT INTO conformation_generation (method, parameters) VALUES (?, ?)");
@@ -799,7 +799,7 @@ namespace BALL
       // Check whether we have an ID for this method already
       id = getChargeMethod(method, parameters);
     }
-		catch (InvalidQuery)
+		catch (InvalidQuery&)
     {
       // Otherwise, insert a new method into the method generation table.
       prepare("INSERT INTO charge_generation (method, parameters) VALUES (?, ?)");

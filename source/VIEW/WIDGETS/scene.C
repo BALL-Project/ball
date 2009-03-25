@@ -1357,7 +1357,7 @@ namespace BALL
 						nr++;
 					}
 				}
-				catch(Exception::GeneralException e)
+				catch(Exception::GeneralException& e)
 				{
 					Log.error() << "Could not read lighting settings from Inifile" << std::endl;
 					Log.error() << e;

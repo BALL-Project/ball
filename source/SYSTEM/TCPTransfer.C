@@ -212,7 +212,7 @@ namespace BALL
 				{
 					port_	= temp.toUnsignedInt();
 				}
-				catch(Exception::InvalidFormat)
+				catch(Exception::InvalidFormat&)
 				{
 					return false;
 				}
@@ -292,7 +292,7 @@ namespace BALL
 				return status;
 			}
 		}
-		catch(Exception::InvalidFormat)
+		catch(Exception::InvalidFormat&)
 		{
 			return UNKNOWN__ERROR;
 		}
@@ -511,7 +511,7 @@ namespace BALL
 		{
 			status_ = (Status)temp.toUnsignedInt();
 		}
-		catch(Exception::InvalidFormat)
+		catch(Exception::InvalidFormat&)
 		{
 		}	
 		
@@ -728,7 +728,7 @@ namespace BALL
 			passv_port = temp.getField(4, ",").toUnsignedInt() * 256 + 
 									 temp.getField(5, ",").toUnsignedInt();
 		}
-		catch(Exception::InvalidFormat)
+		catch(Exception::InvalidFormat&)
 		{
 			// we dont need anything to do here
 			// passv_port == 0

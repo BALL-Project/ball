@@ -406,7 +406,7 @@ namespace BALL
 						{
 							scores.push_back(((line.after("=")).toString()).toFloat());
 						}
-					catch (Exception::InvalidFormat)
+					catch (Exception::InvalidFormat&)
 						{
 							Log.error() << "Conversion from String to float failed: invalid format! " << __FILE__ << " " << __LINE__ << std::endl;
 							return false;
@@ -423,7 +423,7 @@ namespace BALL
 						{
 							snapshot_order.push_back(((line.after("=")).toString()).toInt());
 						}
-					catch (Exception::InvalidFormat)
+					catch (Exception::InvalidFormat&)
 						{
 							Log.error() << "Conversion from String to int failed: invalid format! " << __FILE__ << " " << __LINE__ << std::endl;
 							return false;

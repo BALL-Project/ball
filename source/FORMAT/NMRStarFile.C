@@ -189,7 +189,7 @@ namespace BALL
 			readShiftReferences_();
 			readShifts_();
 		}
-		catch (Exception::GeneralException e)
+		catch (Exception::GeneralException& e)
 		{
 			throw Exception::ParseError(e.getFile(), e.getLine(), String("NMRStarFile: ") + e.getMessage(), "");
 		}
@@ -251,11 +251,11 @@ namespace BALL
 
 			number_of_shifts_ = getField(1).toUnsignedInt();
 		}
-		catch (Exception::ParseError)
+		catch (Exception::ParseError&)
 		{
 			Log.warn() << "Number of assigned chemical shifts could not be found" << endl;
 		}
-		catch (Exception::InvalidFormat e)
+		catch (Exception::InvalidFormat& e)
 		{
 			Log.warn() << "Number of assigned chemical shifts could not be transformed into a number: " 
 								 << e.getMessage() << endl;
@@ -286,7 +286,7 @@ namespace BALL
 				Log.warn() << "The name of the molecular system could not be read." << endl;
 			}
 		}
-		catch (Exception::ParseError e)
+		catch (Exception::ParseError& e)
 		{
 			Log.warn() << e.getMessage() << endl;
 		}
@@ -330,7 +330,7 @@ namespace BALL
 					{
 						value = word.toFloat();
 					}
-					catch (Exception::InvalidFormat)
+					catch (Exception::InvalidFormat&)
 					{
 						Log.warn() << "Sample Condition value could not be transformed to a number: " 
 											 << word << endl;
@@ -364,7 +364,7 @@ namespace BALL
 
 			}
 		}
-		catch (Exception::ParseError e)
+		catch (Exception::ParseError& e)
 		{
 			Log.warn() << "Sample Conditions could not be read.\n" 
 								 << e.getMessage() << endl;
@@ -457,7 +457,7 @@ namespace BALL
 										{
 											reference_element.isotope_number = word.toUnsignedInt();
 										}
-										catch (Exception::InvalidFormat)
+										catch (Exception::InvalidFormat&)
 										{
 											reference_element.isotope_number = 0;
 											Log.warn() << "isotope number could not be transformed into a number: " 
@@ -475,7 +475,7 @@ namespace BALL
 										{
 											reference_element.shift_value = word.toFloat();
 										}
-										catch (Exception::InvalidFormat)
+										catch (Exception::InvalidFormat&)
 										{
 											reference_element.shift_value = 0;
 											Log.warn() << "shift value could not be transformed into a number: " 
@@ -521,7 +521,7 @@ namespace BALL
 										{
 											reference_element.indirect_shift_ratio = word.toFloat();
 										}
-										catch (Exception::InvalidFormat)
+										catch (Exception::InvalidFormat&)
 										{
 											reference_element.indirect_shift_ratio = 0;
 											Log.warn() << "shift ratio could not be transformed into a number: " 
@@ -544,7 +544,7 @@ namespace BALL
 				skipLines(4); // skip save_
 			}
 		}
-		catch (Exception::GeneralException e)
+		catch (Exception::GeneralException& e)
 		{
 			Log.warn() << "NMRStarFile: unable to read shift references." << e.getMessage() << endl;
 		}
@@ -567,7 +567,7 @@ namespace BALL
 			{
 				ad.error_value = getField(6).toFloat();			
 			}
-			catch (Exception::InvalidFormat)
+			catch (Exception::InvalidFormat&)
 			{
 				ad.error_value = 0;
 			}
@@ -575,13 +575,13 @@ namespace BALL
 			{
 				ad.ambiguity_code = getField(7).toUnsignedInt();
 			}
-			catch (Exception::InvalidFormat)
+			catch (Exception::InvalidFormat&)
 			{
 				ad.ambiguity_code = 0;
 			}
 
 		}
-		catch (Exception::InvalidFormat e)
+		catch (Exception::InvalidFormat& e)
 		{
 			Log.error() << "An error occured while reading shift data:" << endl;
 			throw Exception::ParseError(__FILE__, __LINE__,  String("error while reading shift data from line ") 
@@ -630,7 +630,7 @@ namespace BALL
 					}
 				}				
 			}
-			catch (Exception::ParseError)
+			catch (Exception::ParseError&)
 			{
 				rewind();
 			}
@@ -655,7 +655,7 @@ namespace BALL
 					}
 				}			
 			}
-			catch (Exception::ParseError)
+			catch (Exception::ParseError&)
 			{
 				rewind();
 			}

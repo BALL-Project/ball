@@ -192,7 +192,7 @@ t.stop();
 Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 #endif
 			}
-			catch(Exception::GeneralException e)
+			catch(Exception::GeneralException& e)
 			{
 				char*	BALLView_data_path = getenv("BALLVIEW_DATA_PATH");
 				char*	BALL_data_path = getenv("BALL_DATA_PATH");

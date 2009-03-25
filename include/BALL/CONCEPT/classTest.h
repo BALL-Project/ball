@@ -262,7 +262,7 @@ int main(int argc, char **argv)\
 		}\
   }\
 	/* catch FileNotFound exceptions to print out the file name */\
-	catch (BALL::Exception::FileNotFound e)\
+	catch (BALL::Exception::FileNotFound& e)\
 	{\
 		TEST::this_test = false;\
 		TEST::test = false;\
@@ -499,11 +499,11 @@ int main(int argc, char **argv)\
 		{\
 			command;\
 		}\
-		catch (Exception::Precondition)\
+		catch (Exception::Precondition&)\
 		{\
 			TEST::exception = 1;\
 		}\
-		catch (::BALL::Exception::GeneralException e)\
+		catch (::BALL::Exception::GeneralException& e)\
 		{\
 			TEST::exception = 2;\
 			TEST::exception_name = e.getName();\

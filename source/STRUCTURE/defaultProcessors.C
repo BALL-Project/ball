@@ -172,7 +172,7 @@ namespace BALL
 				}
 			}
 		}
-    catch (Exception::InvalidFormat e)
+    catch (Exception::InvalidFormat& e)
     { 
       Log.error() << "AssignRadiusProcessor::buildTable_: " << e.getMessage()
                   << " (while reading " << filename_ << ")" << std::endl;

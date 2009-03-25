@@ -155,7 +155,7 @@ namespace BALL
 				options[GeometricFit::Option::PENALTY_STATIC] = ascii(penalty_static->text()).toInt();
 				options[GeometricFit::Option::PENALTY_MOBILE] = ascii(penalty_mobile->text()).toInt();
 			}
-		  catch (Exception::InvalidFormat)
+		  catch (Exception::InvalidFormat&)
 			{
 				Log.error() << "Conversion from String to float, double or int failed: invalid format! " << __FILE__ << " " << __LINE__ << std::endl;
 				return;

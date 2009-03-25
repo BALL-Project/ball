@@ -36,7 +36,7 @@ namespace BALL
 			{	
 				open(file.getName());
 			}
-			catch (Exception::FileNotFound)
+			catch (Exception::FileNotFound&)
 			{
 			}
 		}
