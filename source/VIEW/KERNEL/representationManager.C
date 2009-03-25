@@ -526,7 +526,7 @@ void RepresentationManager::restoreRepresentations(const INIFile& in, const vect
 		} // for all clipping planes
 
 	}
-	catch(Exception::InvalidFormat e)
+	catch(Exception::InvalidFormat& e)
 	{
 		Log.error() << "Error while reading project file! Aborting..." << std::endl;
 		Log.error() << e << std::endl;

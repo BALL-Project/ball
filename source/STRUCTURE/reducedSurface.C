@@ -860,7 +860,7 @@ namespace BALL
 		{
 			atom3 = thirdAtom(vertex1,vertex2,start_face,probe,phi);
 		}
-		catch (Exception::GeneralException e)
+		catch (Exception::GeneralException& e)
 		{
 			String message = e.getMessage();
 			String test_message = "PROBE SPHERE TOUCHES FOUR ATOMS";

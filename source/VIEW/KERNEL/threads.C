@@ -266,7 +266,7 @@ namespace BALL
 					return;
 				}
 			}
-			catch(Exception::GeneralException e)
+			catch(Exception::GeneralException& e)
 			{
 				delete dcd_file_;
 				dcd_file_ = 0;
@@ -358,7 +358,7 @@ namespace BALL
 
 				finish_();
 			}
-			catch(Exception::GeneralException e)
+			catch(Exception::GeneralException& e)
 			{
 				String txt = String("Exception was thrown during MD simulation: ")
 											+ __FILE__ + ": " + String(__LINE__) + " \n" + e.getMessage();

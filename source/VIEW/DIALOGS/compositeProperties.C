@@ -175,7 +175,7 @@ void CompositeProperties::accept()
 														 fields[2].toFloat()));
 		}
 	}
-	catch(Exception::InvalidFormat)
+	catch(Exception::InvalidFormat&)
 	{
 		Log.error() << "Invalid value, try a floating point number!" << std::endl;
 		return;

@@ -136,11 +136,11 @@ namespace BALL
 					}
 				}
 			}
-			catch (Exception::GeneralException e)
+			catch (Exception::GeneralException& e)
 			{
 				Log.error() << "SurfaceModel: caught exception while calculating molecular surface "<<endl;// << e << endl;
 			}
-			catch (std::exception e)
+			catch (std::exception& e)
 			{
 				Log.error() << "SurfaceModel: caught exception while calculating molecular surface: " << e.what() << endl;
 			}

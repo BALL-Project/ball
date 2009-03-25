@@ -225,7 +225,7 @@ void AtomTyper::assignTo(Molecule& mol)
 				rule_times[names_[rule]] += t.getClockTime();
    #endif
 			}
-			catch(Exception::ParseError e)
+			catch(Exception::ParseError& e)
 			{
 				Log.error() << e << std::endl;
 			}

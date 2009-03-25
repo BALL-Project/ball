@@ -577,7 +577,7 @@ namespace BALL
 				{
 					.... // some code which potentially throws an exception
 				}
-				catch (Exception::GeneralException e)
+				catch (Exception::GeneralException& e)
 				{
 					Log.error() << "caught exception: " << e << std::endl;
 				}

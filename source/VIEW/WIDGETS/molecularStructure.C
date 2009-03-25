@@ -673,12 +673,12 @@ namespace BALL
 			{
 				atom_container.apply(getFragmentDB().normalize_names);
 			}
-			catch (Exception::GeneralException e)
+			catch (Exception::GeneralException& e)
 			{
 				Log.error() << " > normalize names failed: " <<endl; 
 				Log.error() << e << endl;
 			}
-			catch (std::exception e)
+			catch (std::exception& e)
 			{
 				Log.error() << "  > normalized names failed." << endl;
 				Log.error() << e.what() << std::endl;
@@ -691,7 +691,7 @@ namespace BALL
 			{
 				atom_container.apply(getFragmentDB().build_bonds);
 			}
-			catch (Exception::GeneralException e)
+			catch (Exception::GeneralException& e)
 			{
 				Log.error() << " > generate missing bonds - failed: " <<endl; 
 				Log.error() << e << endl;
@@ -1435,7 +1435,7 @@ namespace BALL
 				}
 			#endif
 			}
-			catch(Exception::GeneralException e)
+			catch(Exception::GeneralException& e)
 			{
 				String txt = "Calculation aborted because of an unexpected exception";
 				setStatusbarText(txt + ". See Logs", true);

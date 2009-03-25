@@ -281,7 +281,7 @@ bool MolecularFileDialog::writePDBFile(String filename, const System& system)
 		file << system;
 		file.close();
 	}
-	catch(Exception::GeneralException e)
+	catch(Exception::GeneralException& e)
 	{
 		Log.error() << e << std::endl;
 		setStatusbarText("Writing of PDB file failed, see logs!", true);
@@ -301,7 +301,7 @@ bool MolecularFileDialog::writeHINFile(String filename, const System& system)
 		file << system;
 		file.close();
 	}
-	catch(Exception::GeneralException e)
+	catch(Exception::GeneralException& e)
 	{
 		Log.error() << e << std::endl;
 		setStatusbarText("Writing of HIN file failed, see logs!", true);
@@ -321,7 +321,7 @@ bool MolecularFileDialog::writeMOLFile(String filename, const System& system)
 		file << system;
 		file.close();
 	}
-	catch(Exception::GeneralException e)
+	catch(Exception::GeneralException& e)
 	{
 		Log.error() << e << std::endl;
 		setStatusbarText("Writing of MOL file failed, see logs!", true);
@@ -341,7 +341,7 @@ bool MolecularFileDialog::writeMOL2File(String filename, const System& system)
 		file << system;
 		file.close();
 	}
-	catch(Exception::GeneralException e)
+	catch(Exception::GeneralException& e)
 	{
 		Log.error() << e << std::endl;
 		setStatusbarText("Writing of MOL2 file failed, see logs!", true);
@@ -360,7 +360,7 @@ bool MolecularFileDialog::writeSDFile(String filename, const System& system)
 		file << system;
 		file.close();
 	}
-	catch(Exception::GeneralException e)
+	catch(Exception::GeneralException& e)
 	{
 		Log.error() << e << std::endl;
 		setStatusbarText("Writing of SD file failed, see logs!", true);
@@ -379,7 +379,7 @@ bool MolecularFileDialog::writeXYZFile(String filename, const System& system)
 		file << system;
 		file.close();
 	}
-	catch(Exception::GeneralException e)
+	catch(Exception::GeneralException& e)
 	{
 		Log.error() << e << std::endl;
 		setStatusbarText("Writing of XYZ file failed, see logs!", true);
@@ -406,7 +406,7 @@ System* MolecularFileDialog::readPDBFile(String filename, String system_name)
 		pdb_file >> *system;
 		pdb_file.close();
 	}
-	catch(Exception::GeneralException e)
+	catch(Exception::GeneralException& e)
 	{
 		Log.error() << e << std::endl;
 		setStatusbarText("Reading of PDB file failed, see logs!", true);
@@ -440,7 +440,7 @@ System* MolecularFileDialog::readHINFile(String filename, String system_name)
 
 		hin_file.close();
 	}
-	catch(Exception::GeneralException e)
+	catch(Exception::GeneralException& e)
 	{
 		Log.error() << e << std::endl;
 		setStatusbarText("Reading of HIN file failed, see logs!", true);
@@ -485,7 +485,7 @@ System* MolecularFileDialog::readMOLFile(String filename, String system_name)
 		mol_file >> *system;
 		mol_file.close();
 	}
-	catch(Exception::GeneralException e)
+	catch(Exception::GeneralException& e)
 	{
 		Log.error() << e << std::endl;
 		setStatusbarText("Reading of MOL file failed, see logs!", true);
@@ -511,7 +511,7 @@ System* MolecularFileDialog::readMOL2File(String filename, String system_name)
 		mol2_file >> *system;
 		mol2_file.close();
 	}
-	catch(Exception::GeneralException e)
+	catch(Exception::GeneralException& e)
 	{
 		setStatusbarText("Reading of MOL2 file failed, see logs!", true);
 		delete system;
@@ -536,7 +536,7 @@ System* MolecularFileDialog::readSDFile(String filename, String system_name)
 		sd_file >> *system;
 		sd_file.close();
 	}
-	catch(Exception::GeneralException e)
+	catch(Exception::GeneralException& e)
 	{
 		setStatusbarText("Reading of SD file failed, see logs!", true);
 		delete system;
@@ -560,7 +560,7 @@ System* MolecularFileDialog::readXYZFile(String filename, String system_name)
 		sd_file >> *system;
 		sd_file.close();
 	}
-	catch(Exception::GeneralException e)
+	catch(Exception::GeneralException& e)
 	{
 		setStatusbarText("Reading of XYZ file failed, see logs!", true);
 		delete system;

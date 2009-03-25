@@ -877,7 +877,7 @@ void TestFramework::processEvent_()
 			return;
 		}
 	}
-	catch(Exception::InvalidFormat e)
+	catch(Exception::InvalidFormat& e)
 	{
 		BALLVIEW_DEBUG
 		Log.error() << line << std::endl;

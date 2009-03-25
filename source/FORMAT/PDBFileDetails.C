@@ -376,7 +376,7 @@ namespace BALL
 						current_PDB_atom_->setFormalCharge(String(record.charge).toInt());
 					}
 				}
-				catch (Exception::InvalidFormat)
+				catch (Exception::InvalidFormat&)
 				{
 				}
 				current_PDB_atom_->setCharge((float)current_PDB_atom_->getFormalCharge());
@@ -552,7 +552,7 @@ namespace BALL
 				}
 			}
 		}
-		catch (Exception::TooManyBonds e)
+		catch (Exception::TooManyBonds& e)
 		{
 			Log.error() << e << std::endl;
 			return false;

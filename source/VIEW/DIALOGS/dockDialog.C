@@ -415,7 +415,7 @@ namespace BALL
 				algorithm_opt_[GeometricFit::Option::VERBOSITY] = ascii(verbosity->text()).toInt();
 #endif
 			}
-			catch (Exception::InvalidFormat)
+			catch (Exception::InvalidFormat&)
 			{
 				Log.error() << "Conversion from String to int failed: invalid format! " << __FILE__ << " " << __LINE__<< std::endl;
 				return;
@@ -449,7 +449,7 @@ namespace BALL
 						algorithm_opt_[GeometricFit::Option::DEG_THETA] = ascii(delta_theta->text()).toFloat();
 #endif
 					}
-				catch(Exception::InvalidFormat)
+				catch(Exception::InvalidFormat&)
 					{
 						Log.error() << "Conversion from String to float failed: invalid format! " << __FILE__ << " " << __LINE__<< std::endl;
 						return;
@@ -573,7 +573,7 @@ namespace BALL
 					}
 				}
 			}
-			catch (Exception::FileNotFound e)
+			catch (Exception::FileNotFound& e)
 			{
 				Log.error() << "Invalid file " << e.getFilename() << " " << __FILE__ << " " << __LINE__ << std::endl;
 				return false;

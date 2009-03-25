@@ -55,7 +55,7 @@ namespace BALL
 			{	
 				open(file.getName());
 			}
-			catch (Exception::FileNotFound)
+			catch (Exception::FileNotFound&)
 			{
 			}
 		}
@@ -547,7 +547,7 @@ namespace BALL
 						{
 							atom->setCharge(getLine().getField(6).toFloat());
 						}
-						catch (Exception::InvalidFormat)
+						catch (Exception::InvalidFormat&)
 						{
 							ERROR(String("illegal charge ") + getLine().getField(6))
 						}
@@ -558,7 +558,7 @@ namespace BALL
 																				getLine().getField(8).toFloat(), 
 																				getLine().getField(9).toFloat()));
 						}
-						catch (Exception::InvalidFormat)
+						catch (Exception::InvalidFormat&)
 						{
 							ERROR(String("illegal position (") + getLine().getField(7) + " / " + getLine().getField(8) + " / " + getLine().getField(9) + ")")
 						}
@@ -568,7 +568,7 @@ namespace BALL
 						{
 							number_of_atom_bonds = ((Size)getLine().getField(10).toInt());
 						}
-						catch (Exception::InvalidFormat)
+						catch (Exception::InvalidFormat&)
 						{
 							ERROR(String("illegal number of bonds: " + getLine().getField(10)))
 						}
@@ -578,7 +578,7 @@ namespace BALL
 						{
 							atom_number = (Position)getLine().getField(1).toInt() - 1;
 						}
-						catch (Exception::InvalidFormat)
+						catch (Exception::InvalidFormat&)
 						{
 							ERROR(String("illegal atom number: ") + getLine().getField(1))
 						}
@@ -624,7 +624,7 @@ namespace BALL
 									{
 										bond.atom2 = (Index)getLine().getField(11 + 2 * (Index)i).toInt() - 1;
 									}
-									catch (Exception::InvalidFormat)
+									catch (Exception::InvalidFormat&)
 									{
 										ERROR(String("illegal atom number for bond ") + String(i) + ": " + getLine().getField(11 + 2 * (Index)i))
 									}
@@ -668,7 +668,7 @@ namespace BALL
 						velocity.y = getLine().getField(3).toFloat();
 						velocity.z = getLine().getField(4).toFloat();
 					}
-					catch (Exception::InvalidFormat)
+					catch (Exception::InvalidFormat&)
 					{
 						ERROR(String("illegal velocity (") 
 												 + getLine().getField(2) + " / "
@@ -683,7 +683,7 @@ namespace BALL
 					{
 						atom_number = (Position)getLine().getField(1).toInt() - 1;
 					}
-					catch (Exception::InvalidFormat)
+					catch (Exception::InvalidFormat&)
 					{
 						ERROR(String("illegal atom number ") + getLine().getField(1))
 					}
@@ -924,7 +924,7 @@ namespace BALL
 					{
 						temperature_ = getLine().getField(1).toFloat();
 					}
-					catch (Exception::InvalidFormat)
+					catch (Exception::InvalidFormat&)
 					{
 						ERROR(String("illegal temperature ") + getLine().getField(1))
 					}
@@ -946,7 +946,7 @@ namespace BALL
 						box_.a.y = - getLine().getField(2).toFloat() / 2.0;
 						box_.a.z = - getLine().getField(3).toFloat() / 2.0;
 					}
-					catch (Exception::InvalidFormat)
+					catch (Exception::InvalidFormat&)
 					{
 						ERROR(String("illegal box position (")
 												 + getLine().getField(1)  + " / "
@@ -996,7 +996,7 @@ namespace BALL
 			delete protein;
 			throw e;
 		}
-		catch (Exception::IndexOverflow)
+		catch (Exception::IndexOverflow&)
 		{
 		}
 

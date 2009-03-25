@@ -189,7 +189,7 @@ namespace BALL
 					break;
 				}
 			}
-			catch(Exception::InvalidFormat)
+			catch(Exception::InvalidFormat&)
 			{
 				Log.error() << "Could not convert string to number" << std::endl;
 				// throwing exception ParseError anyhow in next line

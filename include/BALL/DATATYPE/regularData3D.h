@@ -769,7 +769,7 @@ namespace BALL
 				}
 				size_ = size;
 			}
-			catch (std::bad_alloc)
+			catch (std::bad_alloc&)
 			{
 				throw Exception::OutOfMemory(__FILE__, __LINE__, new_size * (Size)sizeof(ValueType));
 			}
@@ -827,7 +827,7 @@ namespace BALL
 					}
 				}
 			}
-			catch (std::bad_alloc)
+			catch (std::bad_alloc&)
 			{
 				throw Exception::OutOfMemory(__FILE__, __LINE__, new_size * (Size)sizeof(ValueType));
 			}

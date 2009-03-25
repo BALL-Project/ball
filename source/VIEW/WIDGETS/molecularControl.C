@@ -1143,12 +1143,12 @@ namespace BALL
 			{
 				s.setExpression(Expression(ascii(selector_edit_->currentText())));
 			}
-			catch(Exception::ParseError e)
+			catch(Exception::ParseError& e)
 			{
 				setStatusbarText(String("Invalid expression ") + e.getMessage(), true);
 				return 0;
 			}
-			catch(Exception::GeneralException e)
+			catch(Exception::GeneralException& e)
 			{
 				setStatusbarText(e.getMessage(), true);
 				return 0;
@@ -1164,7 +1164,7 @@ namespace BALL
 				{
 					(*it)->apply(s);
 				}
-				catch(Exception::GeneralException e)
+				catch(Exception::GeneralException& e)
 				{
 					setStatusbarText(String("Invalid expression ") + e.getMessage(), true);
 					return 0;

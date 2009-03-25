@@ -390,7 +390,7 @@ namespace BALL
 						{
 							accepted = true;
 						}
-					} catch (Exception::OutOfGrid e)
+					} catch (Exception::OutOfGrid& e)
 					{
 						h /= 2.;
 						// horrible heuristic... :-)

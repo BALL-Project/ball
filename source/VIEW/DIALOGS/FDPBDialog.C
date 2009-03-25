@@ -334,7 +334,7 @@ namespace BALL
 					}
 				}
 			}
-			catch (Exception::FileNotFound e)
+			catch (Exception::FileNotFound& e)
 			{
 				Log.error() << "Invalid file " << e.getFilename() << std::endl;
 				return false;

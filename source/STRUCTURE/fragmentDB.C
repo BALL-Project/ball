@@ -1329,7 +1329,7 @@ namespace BALL
 				}
 			}
 		}
-		catch(Exception::TooManyBonds)
+		catch(Exception::TooManyBonds&)
 		{
 			ok = false;
 		}
@@ -1387,7 +1387,7 @@ namespace BALL
 			// build all bonds in the fragment
 			bonds_built_ += buildFragmentBonds(fragment);
 		}
-		catch(Exception::TooManyBonds())
+		catch(Exception::TooManyBonds&)
 		{
 			return Processor::ABORT;
 		}

@@ -127,7 +127,7 @@ int main(int argc, char **argv)\
 	/* global try block */\
 	}\
 	/* catch FileNotFound exceptions to print out the file name */\
-	catch (BALL::Exception::FileNotFound e)\
+	catch (BALL::Exception::FileNotFound& e)\
 	{\
 		BENCHMARK::all_tests = false;\
   	if (BENCHMARK::verbose > 1)\
@@ -143,7 +143,7 @@ int main(int argc, char **argv)\
 		}\
   }\
 	/* catch BALL exceptions to retrieve additional information */\
-	catch (BALL::Exception::GeneralException e)\
+	catch (BALL::Exception::GeneralException& e)\
 	{\
 		BENCHMARK::all_tests = false;\
   	if (BENCHMARK::verbose > 1)\
