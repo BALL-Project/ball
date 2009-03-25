@@ -142,7 +142,7 @@ namespace BALL
 				togglePluginButton->setText("Activate");
 			}
 
-			VIEWPlugin* active_view_plugin = qvariant_cast<VIEWPlugin*>(active_object);
+			VIEWPlugin* active_view_plugin = qobject_cast<VIEWPlugin*>(active_object);
 			if (active_view_plugin)
 			{
 				QWidget* cfg_dialog = active_view_plugin->getConfigDialog();
