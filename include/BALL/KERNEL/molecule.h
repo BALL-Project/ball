@@ -54,23 +54,19 @@ namespace BALL
 
 		/**	Default constructor. 
 		*/
-		Molecule()
-			throw();
+		Molecule();
 	
 		/** Copy constructor. 
 		*/
-		Molecule(const Molecule& molecule, bool deep = true)
-			throw();
+		Molecule(const Molecule& molecule, bool deep = true);
 	
 		/** Detailled constructor. 
 		*/
-		Molecule(const String& name)
-			throw();
+		Molecule(const String& name);
 
 		/** Destructor. 
 		*/
-		virtual ~Molecule()
-			throw();
+		virtual ~Molecule();
 		
 		//@}
 		/** @name Persistence 
@@ -98,27 +94,23 @@ namespace BALL
 				@param molecule	the Molecule object to assign from
 				@param  deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy
 		*/
-		void set(const Molecule& molecule, bool deep = true)
-			throw();
+		void set(const Molecule& molecule, bool deep = true);
 
 		/**	Assignment operator.
 				@param molecule the Molecule to assign from
 		**/
-		Molecule& operator = (const Molecule& molecule)
-			throw();
+		Molecule& operator = (const Molecule& molecule);
 
 		/**	Assign to another Molecule.
 				@param molecule	the Molecule to be assigned to
 				@param  deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy
 		*/
-		void get(Molecule& molecule, bool deep = true) const
-			throw();
+		void get(Molecule& molecule, bool deep = true) const;
 
 		/**	Swap the contents of two molecules.
 				@param	molecule the Molecule to swap contents with
 		*/
-		void swap(Molecule& molecule)
-			throw();
+		void swap(Molecule& molecule);
 	
 		//@}
 		/**	@name	Accessors 
@@ -128,110 +120,93 @@ namespace BALL
 		/**	Access the parent System.
 				@return	System* pointer to the parent System
 		*/
-		System* getSystem()
-			throw();
+		System* getSystem();
 
 		/**	Get a const pointer to the parent System.
 				@return	System* pointer to the parent System
 		*/
-		const System* getSystem() const
-			throw();
+		const System* getSystem() const;
 
 		/** Insert an atom as the first child.
 				@param atom the atom to add
 		*/
-		void prepend(Atom& atom)
-			throw();
+		void prepend(Atom& atom);
 
 		/** Insert an atom as the last child.
 				@param atom the atom to add
 		*/
-		void append(Atom& atom)
-			throw();
+		void append(Atom& atom);
 
 		/** Insert an atom as the last child.
 				@param atom the atom to add
 		*/
-		void insert(Atom& atom)
-			throw();
+		void insert(Atom& atom);
 
 		/** Insert an atom before a Composite object.
 				@param atom the atom to insert
 				@param before the Composite object to insert before
 		*/
-		void insertBefore(Atom& atom, Composite& before)
-			throw();
+		void insertBefore(Atom& atom, Composite& before);
 
 		/** Insert an atom after a Composite object.
 				@param atom the atom to insert
 				@param after the Composite object to insert after
 		*/
-		void insertAfter(Atom& atom, Composite& after)
-			throw();
+		void insertAfter(Atom& atom, Composite& after);
 
 		/** Remove an atom.
 				@param atom the atom to remove
 		*/
-		bool remove(Atom& atom)
-			throw();
+		bool remove(Atom& atom);
 
 		/** Insert an AtomContainer as the first child.
 				@param atom_container the AtomContainer to add
 		*/
-		void prepend(AtomContainer& atom_container)
-			throw();
+		void prepend(AtomContainer& atom_container);
 
 		/** Append an AtomContainer as the last child.
 				@param atom_container the AtomContainer to add
 		*/
-		void append(AtomContainer& atom_container)
-			throw();
+		void append(AtomContainer& atom_container);
 
 		/** Insert an AtomContainer as the last child.
 				@param atom_container the AtomContainer to add
 		*/
-		void insert(AtomContainer& atom_container)
-			throw();
+		void insert(AtomContainer& atom_container);
 
 		/** Insert an AtomContainer before a given Composite object.
 				@param atom_container the AtomContainer to insert
 				@param before the Composite object to insert before
 		*/
-		void insertBefore(AtomContainer& atom_container, Composite& before)
-			throw();
+		void insertBefore(AtomContainer& atom_container, Composite& before);
 
 		/** Insert an AtomContainer after a given Composite object.
 				@param atom_container the AtomContainer to insert
 				@param after the Composite object to insert after
 		*/
-		void insertAfter(AtomContainer& atom_container, Composite& after)
-			throw();
+		void insertAfter(AtomContainer& atom_container, Composite& after);
 
 		/**	Cut all children of <tt>atom_container</tt> and prepend them before the children of this molecule.
 				@param atom_container the AtomContainer to access
 		*/
-		void spliceBefore(AtomContainer& atom_container)
-			throw();
+		void spliceBefore(AtomContainer& atom_container);
 
 		/**	Cut all children of <tt>atom_container</tt> and append them after the children of this molecule.
 				@param atom_container the AtomContainer to access
 		*/
-		void spliceAfter(AtomContainer& atom_container)
-			throw();
+		void spliceAfter(AtomContainer& atom_container);
 
 		/**	Move the children of atom_container into this molecule.
 				The children of <tt>atom_container</tt> are inserted at the position of 
 				<tt>atom_container</tt> if it is a child of <tt>this</tt>.
 				Otherwise the children are inserted using  \link spliceBefore spliceBefore \endlink .
 		*/
-		void splice(AtomContainer& atom_container)
-			throw();
+		void splice(AtomContainer& atom_container);
 
 		/** Remove an AtomContainer.
 				@param atom_container the AtomContainer to remove
 		*/
-		bool remove(AtomContainer& atom_container)
-			throw();
+		bool remove(AtomContainer& atom_container);
 
 		//@}
 		/**	@name Debugging and Diagnostics 
@@ -244,8 +219,7 @@ namespace BALL
 				@param	s output stream where to output the internal state
 				@param  depth the dumping depth
 		*/
-		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-			throw();
+		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 		//@}
 
@@ -253,14 +227,12 @@ namespace BALL
 				Two molecules are equal if they have the same handle.
 				@see Object::operator ==.
 		*/
-		bool operator == (const Molecule& molecule) const
-			throw();
+		bool operator == (const Molecule& molecule) const;
 
 		/**	Inequality operator
 				@see operator ==
 		*/
-		bool operator != (const Molecule& molecule) const
-			throw();
+		bool operator != (const Molecule& molecule) const;
 
 
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Fragment)
@@ -268,38 +240,27 @@ namespace BALL
 
 		protected:
 
-		Molecule* getMolecule()
-			throw();
+		Molecule* getMolecule();
 
-		const Molecule* getMolecule() const
-			throw();
+		const Molecule* getMolecule() const;
 
-		AtomContainer* getSuperAtomContainer()
-			throw();
+		AtomContainer* getSuperAtomContainer();
 
-		const AtomContainer* getSuperAtomContainer() const
-			throw();
+		const AtomContainer* getSuperAtomContainer() const;
 
-		void prepend(Molecule& molecule)
-			throw();
+		void prepend(Molecule& molecule);
 
-		void append(Molecule& molecule)
-			throw();
+		void append(Molecule& molecule);
 
-		void insert(Molecule& molecule)
-			throw();
+		void insert(Molecule& molecule);
 
-		void insertBefore(Molecule& molecule, Composite& composite)
-			throw();
+		void insertBefore(Molecule& molecule, Composite& composite);
 
-		void insertAfter(Molecule& molecule, Composite& composite)
-			throw();
+		void insertAfter(Molecule& molecule, Composite& composite);
 
-		bool remove(Molecule& molecule)
-			throw();
+		bool remove(Molecule& molecule);
 
-		bool isSubAtomContainerOf(const AtomContainer& atom_container) const
-			throw();
+		bool isSubAtomContainerOf(const AtomContainer& atom_container) const;
 	};
 } // namespace BALL 
 

@@ -97,7 +97,6 @@ namespace BALL
 		}
 
 		void MMFF94ConfigurationDialog::applyTo(MMFF94& mmff)
-			throw()
 		{
 			mmff.options[MMFF94_STRETCHES_ENABLED] = getValue_(stretch_box);
 			mmff.options[MMFF94_BENDS_ENABLED] = getValue_(bends_box);
@@ -157,7 +156,6 @@ namespace BALL
 		}
 
 		void MMFF94ConfigurationDialog::setMMFF94(MMFF94& mmff)
-			throw()
 		{
 			mmff_ = &mmff;
 		}

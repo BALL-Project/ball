@@ -19,7 +19,6 @@ namespace BALL
 	{
 
 		Preferences::Preferences(const Preferences& /*preferences*/)
-			throw()
 			:	QDialog(0),
 				Ui_PreferencesData()
 		{
@@ -27,7 +26,6 @@ namespace BALL
 		}
 
 		Preferences::Preferences(QWidget* parent, const char* name)
-			throw()
 			:	QDialog(parent),
 				Ui_PreferencesData()
 		{
@@ -43,7 +41,6 @@ namespace BALL
 		}
 
 		Preferences::~Preferences()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << this << " of class Preferences" << std::endl;
@@ -51,13 +48,11 @@ namespace BALL
 		}
 
 		bool Preferences::hasPages()
-			throw()
 		{
 			return (widget_stack->count() > 1);
 		}
 
 		void Preferences::insertEntry(PreferencesEntry *child)
-			throw()
 		{
 			if (!RTTI::isKindOf<QWidget>(*child)) 
 			{
@@ -112,7 +107,6 @@ namespace BALL
 		}
 
 		void Preferences::removeEntry(PreferencesEntry *child)
-			throw()
 		{
 			if (!entries_.has(child)) return;
 
@@ -124,7 +118,6 @@ namespace BALL
 		}
 
 		void Preferences::fetchPreferences(INIFile& inifile)
-			throw()
 		{
 			// the position of the window
 			int x_pos = x();
@@ -152,7 +145,6 @@ namespace BALL
 		}
 
 		void Preferences::writePreferences(INIFile& inifile)
-			throw()
 		{
 			// the window position
 			inifile.insertValue("WINDOWS", "Preferences::x", String(pos().x()));
@@ -217,7 +209,6 @@ namespace BALL
 		}	
 
 		const QWidget* Preferences::currentPage() const
-			throw()
 		{
 			QList<QTreeWidgetItem*> sel = entries_listview->selectedItems();
 			if (sel.size() == 0) return 0;
@@ -229,7 +220,6 @@ namespace BALL
 		}
 		
 		const QWidget* Preferences::currentEntry() const
-			throw()
 		{
 			return widget_stack->currentWidget();
 		}
@@ -262,7 +252,6 @@ namespace BALL
 		}
 
 		void Preferences::removeItem_(QTreeWidgetItem* item, bool)
-			throw()
 		{
 			while (item->child(0) != 0)
 			{

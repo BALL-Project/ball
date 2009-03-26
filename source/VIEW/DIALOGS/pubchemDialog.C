@@ -18,7 +18,6 @@ namespace BALL
 	namespace VIEW
 	{
 		PubChemDialog::PubChemDialog(QWidget* parent, const char* name)
-			throw()
 			: QDialog(parent),
 				Ui_PubChemDialogData(),
 				ModularWidget(name),
@@ -48,7 +47,6 @@ namespace BALL
 		}
 	
 		PubChemDialog::~PubChemDialog()
-			throw()
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "deleting PubChemDialog " << this << std::endl;
@@ -98,7 +96,6 @@ namespace BALL
 		}
 
 		void PubChemDialog::generateFromSMILES(const String& SMILES)
-			throw()
 		{
 			try
 			{
@@ -311,7 +308,6 @@ namespace BALL
 		}
 
 		void PubChemDialog::checkMenu(MainControl& main_control)
-			throw()
 		{
 			bool busy = main_control.compositesAreLocked();
 			action1_->setEnabled(!busy);

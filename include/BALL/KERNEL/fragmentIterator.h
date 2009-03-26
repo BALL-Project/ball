@@ -27,41 +27,41 @@ namespace BALL
 	{
 		public:
 
-		inline FragmentIteratorTraits() throw();
+		inline FragmentIteratorTraits();
 
-		FragmentIteratorTraits(const Composite& composite)	throw();
+		FragmentIteratorTraits(const Composite& composite);
 
-		inline FragmentIteratorTraits(const FragmentIteratorTraits& traits)	throw();
+		inline FragmentIteratorTraits(const FragmentIteratorTraits& traits);
 
-		FragmentIteratorTraits& operator = (const FragmentIteratorTraits& traits)	throw();
+		FragmentIteratorTraits& operator = (const FragmentIteratorTraits& traits);
 
-		void resetPredicate()	throw();
+		void resetPredicate();
 	};
 
-	inline FragmentIteratorTraits::FragmentIteratorTraits() throw()
+	inline FragmentIteratorTraits::FragmentIteratorTraits()
 		:	CompositeIteratorTraits()
 	{
 		predicate_ = &RTTI::getDefault<KernelPredicate<Fragment> >();
 	}
 
-	inline FragmentIteratorTraits::FragmentIteratorTraits(const Composite& composite)	throw()
+	inline FragmentIteratorTraits::FragmentIteratorTraits(const Composite& composite)
 		:	CompositeIteratorTraits(composite)
 	{
 		predicate_ = &RTTI::getDefault<KernelPredicate<Fragment> >();
 	}
 
-	inline FragmentIteratorTraits::FragmentIteratorTraits(const FragmentIteratorTraits& traits) throw()
+	inline FragmentIteratorTraits::FragmentIteratorTraits(const FragmentIteratorTraits& traits)
 		:	CompositeIteratorTraits(traits)
 	{
 	}
 
-	inline FragmentIteratorTraits& FragmentIteratorTraits::operator = (const FragmentIteratorTraits& traits) throw()
+	inline FragmentIteratorTraits& FragmentIteratorTraits::operator = (const FragmentIteratorTraits& traits)
 	{
 		CompositeIteratorTraits::operator=(traits);
 		return *this;
 	}
 
-	inline void FragmentIteratorTraits::resetPredicate() throw()
+	inline void FragmentIteratorTraits::resetPredicate()
 	{
 		predicate_ = &RTTI::getDefault<KernelPredicate<Fragment> >();
 	}

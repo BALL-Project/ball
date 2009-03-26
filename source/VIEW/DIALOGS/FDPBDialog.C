@@ -54,7 +54,6 @@ namespace BALL
 		}
 
 		FDPBDialog::~FDPBDialog()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << this << " of class FDPBDialog" << std::endl;
@@ -111,7 +110,6 @@ namespace BALL
 		// --------------------------------------------------------------------------------
 
 		void FDPBDialog::selectFile_(QLineEdit& lineedit)
-			throw()
 		{
 			QString s = QFileDialog::getOpenFileName(
 										0,
@@ -124,7 +122,6 @@ namespace BALL
 		}
 
 		bool FDPBDialog::calculate()
-			throw()
 		{
 			if (system_ == 0) system_ = getMainControl()->getSelectedSystem();
 			if (system_ == 0)
@@ -216,7 +213,6 @@ namespace BALL
 		}
 
 		void FDPBDialog::applyValues_()
-			throw()
 		{
 			/// ------------------------------
 			options_[FDPB::Option::SOLVENT_DC] 						= dc_solvent->text().toFloat();
@@ -279,7 +275,6 @@ namespace BALL
 		}
 
 		bool FDPBDialog::applyProcessors_()
-			throw()
 		{
 			if (system_ == 0)
 			{

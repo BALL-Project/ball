@@ -21,7 +21,6 @@ namespace BALL
 
 		// ==============================================================================================
 		QColorTable::QColorTable(QWidget* parent, const char* name) 
-			throw()
 			: QTableWidget(0, 2, parent),
 				setting_content_(false)
 		{
@@ -36,19 +35,16 @@ namespace BALL
 		}
 
 		void QColorTable::setNamesTitle(const String& name)
-			throw()
 		{
 			horizontalHeaderItem(0)->setText(name.c_str());
 		}
 
 		String QColorTable::getNamesTitle() const
-			throw()
 		{
 			return ascii(horizontalHeaderItem(0)->text());
 		}
 			
 		void QColorTable::setContent(const vector<String>& names, const vector<ColorRGBA>& colors)
-			throw()
 		{
 			setting_content_ = true;
 			colors_ = colors;
@@ -68,7 +64,6 @@ namespace BALL
 		}
 
 		void QColorTable::setColors(const vector<ColorRGBA>& colors)
-			throw()
 		{
 			setting_content_ = true;
 			colors_ = colors;
@@ -264,7 +259,6 @@ namespace BALL
 		}
 
 		vector<ColorRGBA> ColoringSettingsDialog::getColors(ColoringMethod method) const
-			throw()
 		{
 			vector<ColorRGBA> colors;
 			QColorTable* table = 0;
@@ -294,7 +288,6 @@ namespace BALL
 		}
 
 		void ColoringSettingsDialog::applySettingsTo(ColorProcessor& cp) const
-			throw()
 		{
 			if (RTTI::isKindOf<CustomColorProcessor>(cp)) return;
 
@@ -515,7 +508,6 @@ namespace BALL
 		}
 
 		void ColoringSettingsDialog::getSettings(const ColorProcessor& cp)
-			throw()
 		{
 
 			if (RTTI::isKindOf<CustomColorProcessor>(cp))
@@ -635,7 +627,6 @@ namespace BALL
 		}
 
 		QWidget* ColoringSettingsDialog::getEntryFor(ColoringMethod method)
-			throw()
 		{
 			switch (method)
 			{

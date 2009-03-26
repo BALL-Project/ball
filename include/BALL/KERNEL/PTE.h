@@ -316,13 +316,11 @@ namespace BALL
 					The instance is set to the default values
 					(=  \link UNKNOWN UNKNOWN \endlink  element).
 			*/
-			Element()
-				throw();
+			Element();
 
 			/**	Constructor
 			*/
-			Element(const Element& element)
-				throw();
+			Element(const Element& element);
 
 			/**	Detailed constructor
 			*/
@@ -336,20 +334,17 @@ namespace BALL
 				 float atomic_radius,
 				 float covalent_radius,
 				 float van_der_waals_radius,
-				 float electronegativity)
-			 	throw();
+				 float electronegativity);
 
 			/**	Destructor
 			*/
-			virtual ~Element()
-				throw();
+			virtual ~Element();
 
 			/** Clear method.
 					The instance is set to the default values
 					(=  \link UNKNOWN UNKNOWN \endlink  element).
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 			
 			//@}
 			/**	@name	Assignment 
@@ -360,8 +355,7 @@ namespace BALL
 					@param   element the Element to be copied (cloned)
 					@return  Element& - this instance
 			*/
-			Element& operator = (const Element& element)
-				throw();
+			Element& operator = (const Element& element);
 
 			//@}
 			/** @name	Inspectors and Mutators
@@ -371,122 +365,102 @@ namespace BALL
 			/** Set the name.
 					@param name the new name
 			*/
-			void setName(const String& name)
-				throw();
+			void setName(const String& name);
 
 			/** Get the name.
 					@return String - the name
 			*/
-			const String& getName() const
-				throw();
+			const String& getName() const;
 
 			/** Set the atomic symbol.
 					@param symbol the new symbol
 			*/
-			void setSymbol(const String& symbol)
-				throw();
+			void setSymbol(const String& symbol);
 
 			/** Get the atomic symbol.
 					@return String the symbol
 			*/
-			const String& getSymbol() const
-				throw();
+			const String& getSymbol() const;
 
 			/** Set the atomic group.
 					@param group (short) the new group
 			*/
-			void setGroup(Group group)
-				throw();
+			void setGroup(Group group);
 
 			/** Get the atomic group.
 					@return Group (short) - the group
 			*/
-			Group getGroup() const
-				throw();
+			Group getGroup() const;
 
 			/** Set the atomic period.
 					@param period (short) the new period
 			*/
-			void setPeriod(Period period)
-				throw();
+			void setPeriod(Period period);
 
 			/** Get the atomic period.
 					@return Period (short) the period
 			*/
-			Period getPeriod() const
-				throw();
+			Period getPeriod() const;
 
 			/** Set the atomic number.
 					@param atomic_number the new atomic number
 			*/
-			void setAtomicNumber(AtomicNumber atomic_number)
-				throw();
+			void setAtomicNumber(AtomicNumber atomic_number);
 
 			/** Get the atomic number.
 					@return AtomicNumber (short) - the atomic number
 			*/
-			AtomicNumber getAtomicNumber() const
-				throw();
+			AtomicNumber getAtomicNumber() const;
 
 			/** Set the atomic weight.
 					@param atomic_weight the new atomic weight
 			*/
-			void setAtomicWeight(float atomic_weight)
-				throw();
+			void setAtomicWeight(float atomic_weight);
 
 			/** Get the atomic weight.
 					@return float - the atomic weight
 			*/
-			float getAtomicWeight() const
-				throw();
+			float getAtomicWeight() const;
 
 			/** Set the atomic radius.
 					@param atomic_radius the new atomic radius (in Angstrom)
 			*/
-			void setAtomicRadius(float atomic_radius)
-				throw();
+			void setAtomicRadius(float atomic_radius);
 
 			/** Get the atomic radius.
 					@return float the atomic radius (in Angstrom)
 			*/
-			float getAtomicRadius() const
-				throw();
+			float getAtomicRadius() const;
 
 			/** Set the covalent radius.
 					@param covalent_radius the new covalent radius (in Angstrom)
 			*/
-			void setCovalentRadius(float covalent_radius)
-				throw();
+			void setCovalentRadius(float covalent_radius);
 
 			/** Get the covalent radius.
 					@return float the covalent radius (in Angstrom)
 			*/
-			float getCovalentRadius() const
-				throw();
+			float getCovalentRadius() const;
 
 			/** Set the VanDerWaals radius.
 					@param van_der_waals_radius the new VanDerWaals radius (in Angstrom)
 			*/
-			void setVanDerWaalsRadius(float van_der_waals_radius)
-				throw();
+			void setVanDerWaalsRadius(float van_der_waals_radius);
 
 			/** Get the VanDerWaals radius.
 					@return float the VanDerWaals radius (in Angstrom)
 			*/
-			float getVanDerWaalsRadius() const
-				throw();
+			float getVanDerWaalsRadius() const;
 
 			/** Set the electronegativity.
 					@param electronegativity the new electronegativity (according to the Pauling scale)
 			*/
-			void setElectronegativity(float electronegativity)
-				throw();
+			void setElectronegativity(float electronegativity);
 
 			/** Get the electronegativity.
 					@return float the electronegativity (according to the Pauling scale)
 			*/
-			float getElectronegativity() const
-				throw();
+			float getElectronegativity() const;
 
 			//@}
 			/** @name	Operators
@@ -498,16 +472,14 @@ namespace BALL
 					@param element the Element to compare with
 					@return bool
 			*/
-			bool operator == (const Element& element) const
-				throw();
+			bool operator == (const Element& element) const;
 
 			/** Inequality operator.
 					Tests if the atomic number of two elements are inequal.
 					@param element the Element to compare with
 					@return bool
 			*/
-			bool operator != (const Element& element) const
-				throw();
+			bool operator != (const Element& element) const;
 
 			/** Less operator.
 					Tests if the atomic number of this instance is less
@@ -515,8 +487,7 @@ namespace BALL
 					@param element the Element to compare with
 					@return bool
 			*/
-			bool operator < (const Element& element) const
-				throw();
+			bool operator < (const Element& element) const;
 
 			/** Less or equal operator.
 					Tests if the atomic number of this instance is less
@@ -524,8 +495,7 @@ namespace BALL
 					@param element, the Element to compare with
 					@return bool
 			*/
-			bool operator <= (const Element& element) const
-				throw();
+			bool operator <= (const Element& element) const;
 
 			/** Greater or equal operator.
 					Tests if the atomic number of this instance is greater
@@ -533,8 +503,7 @@ namespace BALL
 					@param element the Element to compare with
 					@return bool
 			*/
-			bool operator >= (const Element& element) const
-				throw();
+			bool operator >= (const Element& element) const;
 
 			/** Greater operator.
 					Tests if the atomic number of this instance is greater
@@ -542,15 +511,13 @@ namespace BALL
 					@param element the Element to compare with
 					@return bool
 			*/
-			bool operator >(const Element& element) const
-				throw();
+			bool operator >(const Element& element) const;
 
 			/**	Output operator
 					Prints <b>  this </b> instance of Element.
 			*/
 			BALL_EXPORT
-			friend std::ostream& operator << (std::ostream& s, const Element& element)
-				throw();
+			friend std::ostream& operator << (std::ostream& s, const Element& element);
 
 			//@}
 			/** @name	Predicates
@@ -562,8 +529,7 @@ namespace BALL
 					(The default constructor returns such an element).
 					@return bool
 			*/
-			bool isUnknown() const
-				throw();
+			bool isUnknown() const;
 
 			//@}
 
@@ -662,8 +628,7 @@ namespace BALL
 			Prints the contents of an instance of  \link Element Element \endlink  to an <tt>ostream</tt>.
 	*/
 	BALL_EXPORT
-	std::ostream& operator << (std::ostream& s, const Element& element)
-		throw();
+	std::ostream& operator << (std::ostream& s, const Element& element);
 
 
 	/**	Periodic Table of Elements Class
@@ -680,23 +645,19 @@ namespace BALL
 
 			/**	Default constructor
 			*/
-			PTE_()
-				throw();
+			PTE_();
 
 			/**	Default constructor
 			*/
-			PTE_(const PTE_& pse)
-				throw();
+			PTE_(const PTE_& pse);
 
 			/**	Destructor
 			*/
-			virtual ~PTE_()
-				throw();
+			virtual ~PTE_();
 
 			/** Clear method.
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			//@}
 			/**	@name	Assignment 
@@ -707,8 +668,7 @@ namespace BALL
 					Does not assign anything.
 					Implemented just for the OCI.
 			*/
-			PTE_& operator = (const PTE_& /*pte*/)
-				throw();
+			PTE_& operator = (const PTE_& /*pte*/);
 			
 			//@}
 			/**	@name	Accessors
@@ -719,14 +679,12 @@ namespace BALL
 					The position is equal to the atomic number.
 					@return Element the static Element at the position <b>  position </b>
 			*/
-			static Element& getElement(Position position)
-				throw();
+			static Element& getElement(Position position);
 		
 			/** Return the element with a given symbol.
 					@return Element the static Element with the symbol <b>  symbol </b>
 			*/
-			static Element& getElement(const String& symbol)
-				throw();
+			static Element& getElement(const String& symbol);
 
 			//@}
 			/**	@name	Operators
@@ -737,56 +695,47 @@ namespace BALL
 					Always returns true.
 					Implemented just for the OCI.
 			*/
-			bool operator == (const PTE_& pte) const
-				throw();
+			bool operator == (const PTE_& pte) const;
 
 			/** Access operator with a given symbol.
 					@return Element the Element with the symbol <b>  symbol </b>
 			*/
-			Element& operator [] (const String& symbol)
-				throw();
+			Element& operator [] (const String& symbol);
 
 			/** Access operator with a given symbol.
 					@return Element the const Element with the symbol <b>  symbol </b>
 			*/
-			const Element& operator [] (const String& symbol) const
-				throw();
+			const Element& operator [] (const String& symbol) const;
 
 			/** Access operator with a given name.
 					@return Element the Element with the name <b>  name </b>
 			*/
-			Element& operator [] (Element::Name name)
-				throw();
+			Element& operator [] (Element::Name name);
 
 			/** Access operator with a given name.
 					@return Element the const Element with the name <b>  name </b>
 			*/
-			const Element& operator [] (Element::Name name) const
-				throw();
+			const Element& operator [] (Element::Name name) const;
 
 			/** Access operator with a given Element::Symbol.
 					@return Element the Element with the symbol <b>  symbol </b>
 			*/
-			Element& operator [] (Element::Symbol symbol)
-				throw();
+			Element& operator [] (Element::Symbol symbol);
 
 			/** Access operator with a given Element::Symbol.
 					@return Element the const Element with the symbol <b>  symbol </b>
 			*/
-			const Element& operator [] (Element::Symbol symbol) const
-				throw();
+			const Element& operator [] (Element::Symbol symbol) const;
 
 			/** Access operator with a given position.
 					@return Element the Element with the position <b>  position </b>
 			*/
-			Element& operator [] (Position position)
-				throw();
+			Element& operator [] (Position position);
 
 			/** Access operator with a given position.
 					@return Element the const Element with the position <b>  position </b>
 			*/
-			const Element& operator [] (Position position) const
-				throw();
+			const Element& operator [] (Position position) const;
 
 			//@}
 			/**	@name	Application methods
@@ -798,8 +747,7 @@ namespace BALL
 					@return  bool - <tt>true</tt> if application has been terminated successfully,
 													<tt>false</tt> otherwise
 			*/
-			static bool apply(UnaryProcessor<Element>& applicator)
-				throw();
+			static bool apply(UnaryProcessor<Element>& applicator);
 
 			//@}
 

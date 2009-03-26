@@ -33,12 +33,10 @@ namespace BALL
 			public:
 
 			//Constructor
-			ExportGeometryDialog(QWidget *parent = NULL, const char *name = "ExportGeometryDialog" )
-				throw();
+			ExportGeometryDialog(QWidget *parent = NULL, const char *name = "ExportGeometryDialog" );
 
 			//Destructor
-			virtual ~ExportGeometryDialog()
-				throw();
+			virtual ~ExportGeometryDialog();
 
 			/**
 			for transfer of continous filenumber from scene to dialog

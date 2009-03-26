@@ -57,7 +57,7 @@ SnapshotVisualisationDialog::SnapshotVisualisationDialog(QWidget* parent, const 
 	ModularWidget::registerWidget(this);
 }
 
-SnapshotVisualisationDialog::~SnapshotVisualisationDialog() throw()
+SnapshotVisualisationDialog::~SnapshotVisualisationDialog()
 {
 }
 

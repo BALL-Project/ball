@@ -49,13 +49,12 @@ namespace BALL
 
 			public:
 				PluginDialog(QWidget* parent, const char *name = "PluginDialog");
-				virtual ~PluginDialog() throw() {}
+				virtual ~PluginDialog() {}
 
 			/** Initialization. This method is called automatically before the main application is started. 
 					It adds the	dialog's menu entries and connections.
 			*/
-			virtual void initializeWidget(MainControl& main_control)
-				throw();
+			virtual void initializeWidget(MainControl& main_control);
 
 			protected slots:
 				virtual void addPluginDirectory();

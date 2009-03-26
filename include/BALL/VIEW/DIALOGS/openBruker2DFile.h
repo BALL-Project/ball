@@ -46,8 +46,7 @@ namespace BALL
 			OpenBruker2DFile(QWidget *parent = 0, const char *name = 0);
 
 			/// Destructor
-			virtual ~OpenBruker2DFile()
-				throw();
+			virtual ~OpenBruker2DFile();
 			//@}
 
 			/** Assignment
@@ -56,15 +55,13 @@ namespace BALL
 			/** Initialization. This method is called automatically before the main application is started. 
 					It adds the	dialog's menu entries and connections.
 			*/
-			virtual void initializeWidget(MainControl& main_control)
-				throw();
+			virtual void initializeWidget(MainControl& main_control);
 
 			public slots:
 
 			/** Open the bruker2DFile.
 			 */
-			virtual void openFile()
-				throw();
+			virtual void openFile();
 
 		};
 	}

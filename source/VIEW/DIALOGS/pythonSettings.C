@@ -87,7 +87,6 @@ void ComboBoxDelegate::updateEditorGeometry(QWidget *editor,
 // =====================================================
 
 HotkeyTable::HotkeyTable(QWidget* parent,  const char*)
-	throw()
 	: QTableWidget(parent),
 		delegate_(this)
 {
@@ -191,7 +190,6 @@ void HotkeyTable::appendHotkey(const String& mod, const String& F_key,
 }
 
 List<Hotkey> HotkeyTable::getContent() const
-	throw()
 {
 	List<Hotkey> result;
 	for (Index pos = 0; pos < rowCount(); pos++)
@@ -222,7 +220,6 @@ List<Hotkey> HotkeyTable::getContent() const
 
 
 void HotkeyTable::setContent(const List<Hotkey>& hotkeys)
-	throw()
 {
   setRowCount(hotkeys.size());
 	setColumnWidth(2, 230);
@@ -325,7 +322,6 @@ void PythonSettings::rowSelected()
 }
 
 const List<Hotkey> PythonSettings::getContent() const
-	throw()
 {
  	return table->getContent();
 }
@@ -378,7 +374,6 @@ void PythonSettings::fileSelected()
 }
 
 void PythonSettings::setFilename(const String& filename)
-	throw()
 {
 	script_edit->setText(filename.c_str());
 	QWidget::update();
@@ -390,7 +385,6 @@ void PythonSettings::clearStartupScript()
 }
 
 String PythonSettings::getFilename() const
-	throw()
 {
 	return ascii(script_edit->text());
 }

@@ -40,13 +40,12 @@ namespace BALL
 
 			public:
 				StereoSettingsDialog(QWidget* parent = 0, const char* name = "StereoSettingsDialog");
-				~StereoSettingsDialog() throw();
+				~StereoSettingsDialog();
 
 				/** Initialization. This method is called automatically before the main application is started. 
 						It adds the	dialog's menu entries and connections.
 				*/
-				virtual void initializeWidget(MainControl& main_control)
-					throw();
+				virtual void initializeWidget(MainControl& main_control);
 						
 			public slots:
 				void okPressed();

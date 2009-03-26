@@ -16,7 +16,6 @@ extern int  GAMESSLogParserparse();
 namespace BALL
 {
 	GAMESSLogFile::GAMESSLogFile()
-		throw()
 		: GenericMolFile(),
 			molecule_(0),
 			factor_(1.)
@@ -52,7 +51,6 @@ namespace BALL
 	}
 
 	GAMESSLogFile::~GAMESSLogFile()
-		throw()
 	{
 	}
 
@@ -121,7 +119,6 @@ namespace BALL
 	}
 
 	void GAMESSLogFile::newMolecule()
-		throw()
 	{
 		if (!molecule_already_defined)
 			molecule_ = new Molecule;
@@ -130,14 +127,12 @@ namespace BALL
 	}
 
 	void GAMESSLogFile::setMoleculeName(char* name)
-		throw()
 	{
 		if (molecule_)
 			molecule_->setName(name);
 	}
 
 	void GAMESSLogFile::insertAtom(const String& element, float /*charge*/, float x, float y, float z)
-		throw()
 	{
 		if (!molecule_already_defined)
 		{
@@ -164,7 +159,6 @@ namespace BALL
 	}
 		
 	void GAMESSLogFile::insertBond(Index a1, Index a2)
-		throw()
 	{
 		Atom* at1 = molecule_->getAtom(a1);
 		Atom* at2 = molecule_->getAtom(a2);
@@ -173,7 +167,6 @@ namespace BALL
 	}
 
 	void GAMESSLogFile::clearBonds()
-		throw()
 	{
 		AtomIterator ai;
 		for (ai = molecule_->beginAtom(); +ai; ++ai)
@@ -181,25 +174,21 @@ namespace BALL
 	}
 	
 	void GAMESSLogFile::setCurrentCharge(float charge)
-		throw()
 	{
 		molecule_->getAtom(current_atom)->setCharge(charge);
 	}
 	
 	void GAMESSLogFile::setUnitConversionFactor(float factor)
-		throw()
 	{
 		factor_ = factor;
 	}
 
 	void GAMESSLogFile::addCoefficient(float coefficient)
-		throw()
 	{
 		qmbs_.addCoefficient(coefficient);
 	}
 
 	void GAMESSLogFile::initializeBasisSet()
-		throw()
 	{
 		String basisfilename = "basis_";
 
@@ -230,19 +219,16 @@ namespace BALL
 	}
 	
 	QMBasisSet& GAMESSLogFile::getBasisSet()
-		throw()
 	{
 		return qmbs_;
 	}
 
 	const QMBasisSet& GAMESSLogFile::getBasisSet() const 
-		throw()
 	{
 		return qmbs_;
 	}
 
 	void GAMESSLogFile::addBasisOption(const String& key, const String& value)
-		throw()
 	{
 		String new_key = key;
 		String new_value = value;
@@ -252,7 +238,6 @@ namespace BALL
 	}
 	
 	String GAMESSLogFile::getBasisOption(const String& key)
-		throw()
 	{
 		String new_key = key;
 		String result;

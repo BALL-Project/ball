@@ -18,20 +18,14 @@ The implementation follows (includes are omitted):
 class GLBoundingBoxModel: public BaseModelProcessor
 {
 	public:
-		GLBoundingBoxModel() 
-			throw();
-		virtual ~GLBoundingBoxModel()
-			throw();
+		GLBoundingBoxModel();
+		virtual ~GLBoundingBoxModel();
 
-		void setColor(const ColorRGBA &color) 
-			throw();
+		void setColor(const ColorRGBA &color);
 
-		virtual bool start()
-			throw();
-		virtual bool finish()
-			throw();
-		virtual Processor::Result operator() (Composite& composite)
-			throw();
+		virtual bool start();
+		virtual bool finish();
+		virtual Processor::Result operator() (Composite& composite);
 
 	private:
 		ColorRGBA color_;
@@ -53,7 +47,6 @@ any information about the molecular structure the bounding box was created for.
 
 \begin{lstlisting}{}
 bool GLBoundingBoxModel::start()
-	throw()
 {
 	new_start_ = true;
 	start_composite_ = 0;
@@ -68,7 +61,6 @@ all atoms of the molecular structure are processed thus the bounding box is comp
 
 \begin{lstlisting}{}
 bool GLBoundingBoxModel::finish()
-	throw()
 {
 	Composite *root = &(start_composite_->getRoot());
 
@@ -123,7 +115,6 @@ The implementation is straight forward.
 \begin{lstlisting}{}
 Processor::Result GLBoundingBoxModel::operator() 
 	(Composite &composite)
-	throw()
 {
 	if (start_composite_ == 0)
 	{

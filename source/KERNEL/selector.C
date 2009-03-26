@@ -11,7 +11,6 @@ namespace BALL
 {
 	
 	Selector::Selector()
-		throw()
 		:	UnaryProcessor<Composite>(),
 			selected_atoms_(),
 			expression_()
@@ -19,7 +18,6 @@ namespace BALL
 	}
 	
 	Selector::Selector(const String& expression_string)
-		throw()
 		:	UnaryProcessor<Composite>(),
 			selected_atoms_(),
 			expression_(expression_string)
@@ -27,7 +25,6 @@ namespace BALL
 	}
 
 	Selector::Selector(const Selector& selector)
-		throw()
 		:	UnaryProcessor<Composite>(selector),
 			selected_atoms_(selector.selected_atoms_),
 			expression_(selector.expression_)
@@ -35,20 +32,17 @@ namespace BALL
 	}
 
 	Selector::~Selector()
-		throw()
 	{
 		clear();
 	}
 
 	void Selector::clear()
-		throw()
 	{
 		expression_.clear();
 		selected_atoms_.clear();
 	}
 
 	Selector& Selector::operator = (const Selector& selector)
-		throw()
 	{
 		selected_atoms_ = selector.selected_atoms_;
 		expression_ = selector.expression_;
@@ -57,33 +51,28 @@ namespace BALL
 	}
 
 	bool Selector::operator == (const Selector& selector) const
-		throw()
 	{
 		return ((selected_atoms_ == selector.selected_atoms_)
 				&& (expression_ == selector.expression_));
 	}
 
 	Size Selector::getNumberOfSelectedAtoms() const
-		throw()
 	{
 		return selected_atoms_.size();
 	}
 
 	void Selector::setExpression(const Expression& expression)
-		throw()
 	{
 		clear();
 		expression_ = expression;
 	}
 
 	const Expression& Selector::getExpression() const
-		throw()
 	{
 		return expression_;
 	}
 
 	bool Selector::start() 
-		throw()
 	{
 		// reset the number of selected atoms
 		selected_atoms_.clear();
@@ -93,7 +82,6 @@ namespace BALL
 	}
 
   Processor::Result Selector::operator () (Composite& composite)
-		throw()
   {
 		// if the composite is an atom, we apply the expression tree...
 		if (RTTI::isKindOf<Atom>(composite))
@@ -111,7 +99,6 @@ namespace BALL
 	}
 
 	List<Atom*>& Selector::getSelectedAtoms()
-		throw()
 	{
 		return selected_atoms_;
 	}

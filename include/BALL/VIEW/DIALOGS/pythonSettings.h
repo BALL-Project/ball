@@ -74,8 +74,7 @@ namespace BALL
 				};
 
 				///
-				HotkeyTable(QWidget* parent = 0, const char* name = "PythonSettings")
-					throw();
+				HotkeyTable(QWidget* parent = 0, const char* name = "PythonSettings");
 				
 				///
 				virtual bool getValue(String& value) const;
@@ -84,12 +83,10 @@ namespace BALL
 				virtual bool setValue(const String& value);
 
 				///
-				List<Hotkey> getContent() const
-					throw();
+				List<Hotkey> getContent() const;
 
 				///
-				void setContent(const List<Hotkey>& hotkeys)
-					throw();
+				void setContent(const List<Hotkey>& hotkeys);
 
 				public slots:
 				
@@ -137,16 +134,13 @@ namespace BALL
 			QFont getEditorFont() const { return font_;}
 
 			/// Set the filename of the startup script
-			void setFilename(const String& filename)
-				throw();
+			void setFilename(const String& filename);
 
 			/// Get the filename of the startup script
-			String getFilename() const
-				throw();
+			String getFilename() const;
 
 			///
-			const List<Hotkey> getContent() const
-				throw();
+			const List<Hotkey> getContent() const;
 			
 			///
 			void setContent(const List<Hotkey>& hotkeys);

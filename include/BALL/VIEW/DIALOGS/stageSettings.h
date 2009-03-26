@@ -59,16 +59,13 @@ namespace BALL
 			~StageSettings() {}
 
 			/// Get the values for Stageing from the stage
-			void updateFromStage()
-				throw();
+			void updateFromStage();
 
 			/// Apply the new values to the stage
-			void apply()
-				throw();
+			void apply();
 
 			///
-			void getGLSettings()
-				throw();
+			void getGLSettings();
 
 			public slots:
 
@@ -135,8 +132,7 @@ namespace BALL
 			void setDefaultValues_();
 
 			//_ apply values to a Stage
-			void saveSettingsToStage_()
-				throw();
+			void saveSettingsToStage_();
 
 			Scene* scene_;
 

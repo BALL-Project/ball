@@ -51,26 +51,21 @@ namespace BALL
 				Q_OBJECT
 
 			public:
-				QColorTable(QWidget* parent = 0, const char* name = 0)
-					throw();
+				QColorTable(QWidget* parent = 0, const char* name = 0);
 				
-				void setNamesTitle(const String& string)
-					throw();
+				void setNamesTitle(const String& string);
 
-				String getNamesTitle() const
-					throw();
+				String getNamesTitle() const;
 				
-				void setContent(const vector<String>& names, const vector<ColorRGBA>& colors)
-					throw();
+				void setContent(const vector<String>& names, const vector<ColorRGBA>& colors);
 
-				void setColors(const vector<ColorRGBA>& colors)
-					throw();
+				void setColors(const vector<ColorRGBA>& colors);
 
 				const vector<ColorRGBA>& getColors() const
-					throw() { return colors_;}
+					{ return colors_;}
 
 				const vector<String>& getNames() const
-					throw() { return names_;}
+					{ return names_;}
 
 				///
 				virtual bool getValue(String&) const;
@@ -111,24 +106,20 @@ namespace BALL
 			virtual ~ColoringSettingsDialog() {}
 
 			///
-			virtual void applySettingsTo(ColorProcessor& cp) const
-				throw();
+			virtual void applySettingsTo(ColorProcessor& cp) const;
 
 			///
 			virtual ColorProcessor* createColorProcessor(ColoringMethod method) const
 				throw(Exception::InvalidOption);
 
 			///
-			virtual void getSettings(const ColorProcessor& cp)
-				throw();
+			virtual void getSettings(const ColorProcessor& cp);
 
 			///
-			virtual QWidget* getEntryFor(ColoringMethod method)
-				throw();
+			virtual QWidget* getEntryFor(ColoringMethod method);
 
 			///
-			virtual vector<ColorRGBA> getColors(ColoringMethod method) const
-				throw();
+			virtual vector<ColorRGBA> getColors(ColoringMethod method) const;
 
 			protected slots:
 

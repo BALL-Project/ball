@@ -57,14 +57,12 @@ namespace BALL
 				<tt>negate_</tt> is set to <b>false</b>, the internal predicate is set
 				to 0, and the list of children is empty.
 		*/
-		ExpressionTree() 
-			throw();
+		ExpressionTree();
 			
 		/** Copy constructor. Note that this copy constructor does not copy
 				predicates but only stores pointers to them.
 		 */
-		ExpressionTree(const ExpressionTree& tree) 
-			throw();
+		ExpressionTree(const ExpressionTree& tree);
 
 		/**	Detailed constructor.
 				Create an expression node representing a leaf, i.e., a 
@@ -73,18 +71,15 @@ namespace BALL
 				@param	negate set to <b>true</b> if the node's predicate should be
 								negated
 		*/
-		ExpressionTree(ExpressionPredicate* predicate, bool negate = false)
-			throw();
+		ExpressionTree(ExpressionPredicate* predicate, bool negate = false);
 
 		/**
 		*/
-		ExpressionTree(Type type, list<const ExpressionTree*> children, bool negate = false) 
-			throw();
+		ExpressionTree(Type type, list<const ExpressionTree*> children, bool negate = false);
 
 		/**	Destructor
 		*/
-		virtual ~ExpressionTree() 
-			throw();
+		virtual ~ExpressionTree();
 
 		//@}
 		/**	@name	Predicates
@@ -93,18 +88,15 @@ namespace BALL
 		
 		/** Evaluate the (sub)expression.
 		*/
-		virtual bool operator () (const Atom& atom) const 
-			throw();
+		virtual bool operator () (const Atom& atom) const;
 
 		/** Equality operator 
 		 */
-		bool operator == (const ExpressionTree& tree) const 
-			throw();
+		bool operator == (const ExpressionTree& tree) const;
 
 		/** Inequality operator 
 		 */
-		bool operator != (const ExpressionTree& tree) const 
-			throw();
+		bool operator != (const ExpressionTree& tree) const;
 
 		//@}
 		/**	@name	Accessors
@@ -113,43 +105,35 @@ namespace BALL
 
 		/**	Set the expression node's type.
 		*/
-		void setType(Type type) 
-			throw();
+		void setType(Type type) ;
 
 		/** Get the expression node's type 
 		 */
-		Type getType() const 
-			throw();
+		Type getType() const;
 		
 		/**	Set the expression node's negation mode.
 		*/
-		void setNegate(bool negate) 
-			throw();
+		void setNegate(bool negate);
 
 		/** Get the expression node's negation mode. 
 		 */
-		bool getNegate() const 
-			throw();
+		bool getNegate() const;
 
 		/**	Set the predicate.
 		*/
-		void setPredicate(ExpressionPredicate* predicate) 
-			throw();
+		void setPredicate(ExpressionPredicate* predicate);
 
 		/**	Get the predicate. 
 		 */
-		ExpressionPredicate* getPredicate() const 
-			throw();
+		ExpressionPredicate* getPredicate() const;
 
 		/**	Append a child to the tree.
 		*/
-		void appendChild(const ExpressionTree* child) 
-			throw();
+		void appendChild(const ExpressionTree* child);
 
 		/** Get the list of children.
 		*/
-		const list<const ExpressionTree*>& getChildren() const
-			throw();
+		const list<const ExpressionTree*>& getChildren() const;
 
 		//@}
 		/** @name Assignment 
@@ -158,20 +142,17 @@ namespace BALL
 
 		/** Asignment operator 
 		 */
-		ExpressionTree& operator = (const ExpressionTree& tree) 
-			throw();
+		ExpressionTree& operator = (const ExpressionTree& tree);
 
 		/** Clear method 
 		 */
-		virtual void clear() 
-			throw();
+		virtual void clear();
 
 		//@}
 		/**	@name Debugging
 		*/
 		//@{
-		void dump(std::ostream& is = std::cout, Size depth = 0) const
-			throw();
+		void dump(std::ostream& is = std::cout, Size depth = 0) const;
 		//@}
 
 		
@@ -180,8 +161,7 @@ namespace BALL
 		/*_ A helper function for operator == () that compares the children of
 				a node.
 		*/
-		bool compareChildren_(const ExpressionTree& tree) const
-			throw();
+		bool compareChildren_(const ExpressionTree& tree) const;
 
 		/*_ The type of this node.
 		*/

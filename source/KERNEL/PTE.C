@@ -17,7 +17,6 @@ namespace BALL
 	__cdecl
 #endif
 	PTEcompare_(const void* a_ptr, const void* b_ptr)
-		throw()
 	{
 		return strcmp(((PTE_::SymbolToElement*)a_ptr)->symbol,
 									((PTE_::SymbolToElement*)b_ptr)->symbol);
@@ -378,7 +377,6 @@ namespace BALL
 	};
 
 	Element::Element()
-		throw()
 		:	name_(BALL_ELEMENT_NAME_DEFAULT),
 			symbol_(BALL_ELEMENT_SYMBOL_DEFAULT),
 			group_(BALL_ELEMENT_GROUP_DEFAULT),
@@ -393,7 +391,6 @@ namespace BALL
 	}
 
 	Element::Element(const Element& element)
-		throw()
 			:	name_(element.name_),
 				symbol_(element.symbol_),
 				group_(element.group_),
@@ -418,7 +415,6 @@ namespace BALL
 		 float covalent_radius,
 		 float van_der_waals_radius,
 		 float electronegativity)
-		throw()
 		:	name_(name),
 			symbol_(symbol),
 			group_(group),
@@ -433,12 +429,10 @@ namespace BALL
 	}
 
 	Element::~Element()
-		throw()
 	{
 	}
 
 	ostream& operator << (ostream& s, const Element& element)
-		throw()
 	{
 		s	<< element.name_ << ' '
 			<< element.symbol_ << ' '
@@ -455,7 +449,6 @@ namespace BALL
 	}
 
 	Element& Element::operator = (const Element& element)
-		throw()
 	{
 		name_ = element.name_;
 		symbol_ = element.symbol_;
@@ -473,23 +466,19 @@ namespace BALL
 
 
 	PTE_::PTE_()
-		throw()
 	{
 	}
 
 	PTE_::PTE_(const PTE_& /*pte*/)
-		throw()
 	{
 		// no nonstatic members to copy
 	}
 
 	PTE_::~PTE_()
-		throw()
 	{
 	}
 
 	Element& PTE_::getElement(Position position)
-		throw()
 	{
 		return ((position < Element::NUMBER_OF_ELEMENTS)
 						 ? element_[position]
@@ -497,7 +486,6 @@ namespace BALL
 	}
  
 	Element& PTE_::getElement(const String& symbol)
-		throw()
 	{
 		if (symbol.isEmpty() == true)
 		{
@@ -542,7 +530,6 @@ namespace BALL
 	}
 
 	bool PTE_::apply(UnaryProcessor<Element>& processor)
-		throw()
 	{
 		if (processor.start() == false)
 		{

@@ -62,8 +62,7 @@ namespace BALL
 			void reject();
 
 			/// apply the settings to a given MMFF94 force field
-			void applyTo(MMFF94& mmff)
-				throw();
+			void applyTo(MMFF94& mmff);
 
 			protected slots:
 
@@ -71,11 +70,9 @@ namespace BALL
 
 			protected:
 
-			void setMMFF94(MMFF94& mmff)
-				throw();
+			void setMMFF94(MMFF94& mmff);
 
-			void chooseSolventFile()
-				throw();
+			void chooseSolventFile();
 
 			private:
 			String getValue_(const QCheckBox* box) const;

@@ -89,7 +89,6 @@ namespace BALL
 
 
 		void CharmmConfigurationDialog::applyTo(CharmmFF& charmm)
-			throw()
 		{
 			try
 			{
@@ -176,13 +175,11 @@ namespace BALL
 		}
 
 		void CharmmConfigurationDialog::setCharmmFF(CharmmFF& charmm)
-			throw()
 		{
 			charmm_ = &charmm;
 		}
 
 		void CharmmConfigurationDialog::chooseSolventFile()
-			throw()
 		{
 			/*
 			QString result = QFileDialog::getOpenFileName(
@@ -195,7 +192,6 @@ namespace BALL
 		}
 	
 		void CharmmConfigurationDialog::periodicBoundaryClicked()
-			throw()
 		{
 			/*
 			if (boundary_box->isChecked())

@@ -52,23 +52,21 @@ namespace BALL
 					BALL_EMBEDDABLE(PubChemDialog,ModularWidget)
 
 					/// Default Constructor.
-					PubChemDialog(QWidget *parent = NULL, const char *name = "PubChemDialog")
-						throw();
+					PubChemDialog(QWidget *parent = NULL, const char *name = "PubChemDialog");
 
 					/// Destructor.
-					virtual ~PubChemDialog() throw();
+					virtual ~PubChemDialog();
 
 					/** Generate a new molecule from a SMILES string. The molecule is displayed in the SDWidget
 							widget but not yet inserted into BALLView.
 					*/
-					void generateFromSMILES(const String& SMILES) throw();
+					void generateFromSMILES(const String& SMILES);
 
 					///
 					virtual void initializeWidget(MainControl& main_control);
 
 					///
-					virtual void checkMenu(MainControl& main_control)
-						throw();
+					virtual void checkMenu(MainControl& main_control);
 
 				public slots:
 					

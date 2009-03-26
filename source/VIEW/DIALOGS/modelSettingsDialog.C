@@ -96,19 +96,16 @@ namespace BALL
 		}
 
 		float ModelSettingsDialog::getFloatValue_(const QSlider* const& slider) const
-			throw()
 		{
 			return (float(slider->value())) / 10.0;
 		}
 
 		void ModelSettingsDialog::setValue_(QSlider* le, float value)
-			throw()
 		{
 			le->setValue((Size)(value * 10.0));
 		}
 
 		void ModelSettingsDialog::setLabelText_(QLabel* label, const QSlider* const from)
-			throw()
 		{
 			String s((float)from->value() / 10.0);
 			s.trimRight("0");
@@ -117,7 +114,6 @@ namespace BALL
 		}
 
 		void ModelSettingsDialog::applySettingsTo(ModelProcessor& mp) const
-			throw()
 		{
 			if (RTTI::isKindOf<AddLineModel>(mp))
 			{
@@ -262,7 +258,6 @@ namespace BALL
 
 
 		void ModelSettingsDialog::getSettings(const ModelProcessor& mp)
-			throw()
 		{
 			if (RTTI::isKindOf<AddBallAndStickModel>(mp))
 			{
@@ -331,7 +326,6 @@ namespace BALL
 		}
 
 		QWidget* ModelSettingsDialog::getEntryFor(ModelType type)
-			throw()
 		{
 			switch (type)
 			{

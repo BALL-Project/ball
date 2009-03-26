@@ -62,12 +62,10 @@ namespace BALL
 			virtual void resetOptions();
 			
 			/// apply the settings to a given AMBER force field
-			void applyTo(AmberFF& amber)
-				throw();
+			void applyTo(AmberFF& amber);
 
 			//_
-			void periodicBoundaryClicked()
-				throw();
+			void periodicBoundaryClicked();
 
 			protected slots:
 
@@ -75,11 +73,9 @@ namespace BALL
 
 			protected:
 
-			void setAmberFF(AmberFF& amber)
-				throw();
+			void setAmberFF(AmberFF& amber);
 
-			void chooseSolventFile()
-				throw();
+			void chooseSolventFile();
 
 			private:
 

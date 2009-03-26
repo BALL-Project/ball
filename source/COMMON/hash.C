@@ -14,7 +14,6 @@ namespace BALL
 	 * [0..(number_of_slots-1)].
 	 */
 	HashIndex hashPointer(void *const void_ptr)
-		throw()
 	{
 		double d = ((double)((unsigned long)void_ptr)) * 0.6180339887;
 		Index index = (Index)(5832641097.37287 * (d - (double)((unsigned long)d)));
@@ -28,7 +27,6 @@ namespace BALL
 	 * Comm. ACM, 33:6(1990), 677
 	 */
 	HashIndex hashString(const char *s)
-		throw()
 	{
 		if (s == 0)
 		{
@@ -70,7 +68,6 @@ namespace BALL
 	 * Taken from: Dr. Dobb's Journal, April 1996, p.26
 	 */
 	HashIndex hashPJWString(const char *s)
-	 throw()
 	{
 		Index index = 0;
 		Index temp_index;
@@ -103,7 +100,6 @@ namespace BALL
 	 * Taken from: Dr. Dobb's Journal, April 1996, p.26
 	 */
 	HashIndex hashElfString(const char *s)
-	 throw()
 	{
 		unsigned long l = 0;
 		unsigned long temp;
@@ -123,7 +119,6 @@ namespace BALL
 
 
   HashIndex getNextPrime(HashIndex l)
-	 throw()
   {
     if (l <= 3)
 		{

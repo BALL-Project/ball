@@ -26,7 +26,6 @@ namespace BALL
 	{
 
 ExportGeometryDialog::ExportGeometryDialog(QWidget* parent, const char* name)
-	throw()
 	:	QDialog(parent),
 		Ui_ExportGeometryDialogData()
 {
@@ -47,7 +46,6 @@ ExportGeometryDialog::ExportGeometryDialog(QWidget* parent, const char* name)
 }
 
 ExportGeometryDialog::~ExportGeometryDialog()
-	throw()
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "deleting ExportGeometryDialog " << this << std::endl;

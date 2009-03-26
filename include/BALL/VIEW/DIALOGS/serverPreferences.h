@@ -52,8 +52,7 @@ namespace BALL
 						-  server status set to not accept clients
 					\par
 			*/
-			ServerPreferences(QWidget *parent = NULL, const char *name = "ServerPreferences")
-				throw();
+			ServerPreferences(QWidget *parent = NULL, const char *name = "ServerPreferences");
 
 			//@}
 			/** @name Destructors 
@@ -62,8 +61,7 @@ namespace BALL
 
 			/** Destructor.
 			*/
-			virtual ~ServerPreferences()
-				throw();
+			virtual ~ServerPreferences();
 			
 			//@}
 			/**	@name	Accessors: inspectors and mutators 
@@ -73,8 +71,7 @@ namespace BALL
 			/** Access the port the Server tries to connect to.
 					\return int the port number of this serverPreferences
 			*/
-			int getPort()
-				throw();
+			int getPort();
 
 			/** Check the server status.
 					If the server status is set to <tt> true</tt> than
@@ -82,8 +79,7 @@ namespace BALL
 					If set to false the Server will not accept clients.
 					\return bool true the Server will try to accept clients, false the Server will not accept clients.
 			*/
-			bool getServerStatus()
-				throw();
+			bool getServerStatus();
 			//@}
 			
 		  private:

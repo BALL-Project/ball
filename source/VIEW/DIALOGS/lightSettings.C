@@ -64,7 +64,6 @@ LightSettings::LightSettings(QWidget* parent, const char* name, Qt::WFlags fl)
 
 
 void LightSettings::updateFromStage()
-	throw()
 {
 	if (stage_ == 0) return;
 	lights_.clear();
@@ -85,7 +84,6 @@ void LightSettings::updateFromStage()
 
 
 void LightSettings::update()
-	throw()
 {
 	if (!lights_.size()) 
 	{
@@ -159,7 +157,6 @@ void LightSettings::defaultsPressed()
 
 // store settings for last selected light
 void LightSettings::saveSettingsToLight_()
-	throw()
 {
 	if (current_light_ == -1 ||
 			current_light_ >= (Index)lights_.size()) 
@@ -284,7 +281,6 @@ void LightSettings::typeSelected_(Position type)
 }
 
 void LightSettings::getValues_()
-	throw()
 {
 	Index current = getCurrentLightNumber_();
 
@@ -324,7 +320,6 @@ void LightSettings::getValues_()
 
 
 void LightSettings::clearFields_()
-	throw()
 {
 	lights_list->clear();
 	position_x->clear();
@@ -365,7 +360,6 @@ void LightSettings::setControlsEnabled_(bool state)
 }
 
 void LightSettings::apply()
-	throw()
 {
 	saveSettingsToLight_();
 
@@ -384,7 +378,6 @@ void LightSettings::intensityChanged()
 
 
 void LightSettings::restoreDefaultValues(bool /*all*/)
-	throw()
 {
 	defaultsPressed();
 	setColor(color_sample, ColorRGBA(255,255,255));

@@ -95,7 +95,6 @@ namespace BALL
 		}
 
 		ModifyRepresentationDialog::~ModifyRepresentationDialog()
-			throw()
 		{
 		}
 
@@ -257,7 +256,6 @@ namespace BALL
 		}
 
 		void ModifyRepresentationDialog::setGrid(RegularData3D* grid)
-			throw()
 		{
 			grid_ = grid;
 		}
@@ -638,7 +636,6 @@ namespace BALL
 		}
 
 		void ModifyRepresentationDialog::onNotify(Message *message)
-			throw()
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "ModifyRepresentationDialog " << this << " onNotify " << message << std::endl;
@@ -689,7 +686,6 @@ namespace BALL
 		}
 
 		void ModifyRepresentationDialog::invalidateGrid_()
-			throw()
 		{
 			grid_ = 0;
 			grids->setCurrentIndex(-1);
@@ -697,7 +693,6 @@ namespace BALL
 		}
 
 		void ModifyRepresentationDialog::invalidateMesh_()
-			throw()
 		{
 			rep_ = 0;
 			checkApplyButton_();
@@ -705,7 +700,6 @@ namespace BALL
 
 
 		void ModifyRepresentationDialog::setRepresentation(Representation* rep)
-			throw()
 		{
 			if (rep == 0 ||
 					rep->getGeometricObjects().size() == 0)

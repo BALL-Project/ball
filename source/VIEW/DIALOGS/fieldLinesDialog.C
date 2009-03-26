@@ -15,7 +15,6 @@ namespace BALL
 	{
 
 FieldLinesDialog::FieldLinesDialog(QWidget* parent, const char* name)
-	throw()
 	:	QDialog(parent),
 		Ui::FieldLinesDialogData(),
 		FieldLineCreator()
@@ -34,7 +33,6 @@ FieldLinesDialog::FieldLinesDialog(QWidget* parent, const char* name)
 }
 
 FieldLinesDialog::~FieldLinesDialog()
-	throw()
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "deleting FieldLinesDialog " << this << std::endl;

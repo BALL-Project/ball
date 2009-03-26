@@ -14,7 +14,6 @@ namespace BALL
 	{
 
 ClippingDialog::ClippingDialog(QWidget* parent, const char* name)
-	throw()
 	:	QDialog(parent),
 		Ui_ClippingDialogData()
 {
@@ -32,7 +31,6 @@ ClippingDialog::ClippingDialog(QWidget* parent, const char* name)
 }
 
 ClippingDialog::~ClippingDialog()
-	throw()
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "deleting ClippingDialog " << this << std::endl;

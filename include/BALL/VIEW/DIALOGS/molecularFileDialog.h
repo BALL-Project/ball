@@ -55,12 +55,10 @@ namespace BALL
 			/** Default Constructor.
 					Calls ModularWidget::registerWidget()
 			 */
-			MolecularFileDialog(QWidget* parent = 0, const char* name = "MolecularFileDialog")
-				throw();
+			MolecularFileDialog(QWidget* parent = 0, const char* name = "MolecularFileDialog");
 
 			/// Destructor.
-			virtual ~MolecularFileDialog()
-				throw();
+			virtual ~MolecularFileDialog();
 
 			/** Initializes the menu entries in <b>File</b>.
 					This method is called automatically immediately before the main application is started.
@@ -68,8 +66,7 @@ namespace BALL
 					\param	main_control the MainControl object to be initialized 
 					\see		finalizeWidget
 			 */
-			virtual void initializeWidget(MainControl& main_control)
-				throw();
+			virtual void initializeWidget(MainControl& main_control);
 
 			/** Test if this ModularWidget can handle a given file format.
 					(Overloaded from ModularWidget)
@@ -89,8 +86,7 @@ namespace BALL
 					This method can be used to load molecular files, which were given as 
 					command line arguments.
 			*/
-			virtual System* openMolecularFile(const String& file)
-				throw();
+			virtual System* openMolecularFile(const String& file);
 
 			/** Wrapper for the read methods.
 					The filetype String is used to indentify the file type (HIN, PDP, MOL, MOL2).
@@ -98,8 +94,7 @@ namespace BALL
 			*/
 			virtual System* openMolecularFile(const String& filename, 
 																				const String& filetype, 
-																				const String& system_name)
-				throw();
+																				const String& system_name);
 
 
 			///
@@ -122,67 +117,54 @@ namespace BALL
 
 			/** Read a PDB file
 			 */
-			System* readPDBFile(String filename, String system_name)
-				throw();
+			System* readPDBFile(String filename, String system_name);
 
 			/** Read a HIN file
 			 */
-			System* readHINFile(String filename, String system_name)
-				throw();
+			System* readHINFile(String filename, String system_name);
 
 			/** Read a MOL file
 			 */
-			System* readMOLFile(String filename, String system_name)
-				throw();
+			System* readMOLFile(String filename, String system_name);
 
 			/** Read a MOL2 file
 			 */
-			System* readMOL2File(String filename, String system_name)
-				throw();
+			System* readMOL2File(String filename, String system_name);
 
 			/** Read a SD file
 			 */
-			System* readSDFile(String filename, String system_name)
-				throw();
+			System* readSDFile(String filename, String system_name);
 
 			/** Read a XYZ file
 			 */
-			System* readXYZFile(String filename, String system_name)
-				throw();
+			System* readXYZFile(String filename, String system_name);
 
 			/** Write a PDB file
 			 */
-			bool writePDBFile(String filename, const System& system)
-				throw();
+			bool writePDBFile(String filename, const System& system);
 			
 			/** Write a HIN file
 			 */
-			bool writeHINFile(String filename, const System& system)
-				throw();
+			bool writeHINFile(String filename, const System& system);
 			
 			/** Write a MOL file
 			 */
-			bool writeMOLFile(String filename, const System& system)
-				throw();
+			bool writeMOLFile(String filename, const System& system);
 			
 			/** Write a MOL2 file
 			 */
-			bool writeMOL2File(String filename, const System& system)
-				throw();
+			bool writeMOL2File(String filename, const System& system);
 
 			/** Write a SD file
 			 */
-			bool writeSDFile(String filename, const System& system)
-				throw();
+			bool writeSDFile(String filename, const System& system);
 
 			/** Write a XYZ file
 			 */
-			bool writeXYZFile(String filename, const System& system)
-				throw();
+			bool writeXYZFile(String filename, const System& system);
 			
 			/// Overloaded from ModularWidget
-			virtual void checkMenu(MainControl& main_control)
-				throw();
+			virtual void checkMenu(MainControl& main_control);
 
 			///
 			virtual String getSupportedFileFormats() const;
@@ -211,16 +193,13 @@ namespace BALL
 
 			protected:
 
-			virtual void onNotify(Message *message)
-				throw();
+			virtual void onNotify(Message *message);
 
 			// Only for Python interface
-			MolecularFileDialog(const MolecularFileDialog& mfd)
-				throw();
+			MolecularFileDialog(const MolecularFileDialog& mfd);
 
 
-			virtual bool finish_(const String& filename, const String& system_name, System* system)
-				throw();
+			virtual bool finish_(const String& filename, const String& system_name, System* system);
 
 			System* openFile_(String type);
 

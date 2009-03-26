@@ -44,12 +44,10 @@ class BALL_VIEW_EXPORT NetworkPreferences
 	
 	/// Default Constructor.
 	NetworkPreferences(QWidget *parent = NULL, const char *name = "NetworkPreferences", 
-										 Qt::WFlags fl=0)
-		throw();
+										 Qt::WFlags fl=0);
 	
 	/// Destructor.
-	virtual ~NetworkPreferences()
-		throw();
+	virtual ~NetworkPreferences();
 
 	///
 	void applySettings();

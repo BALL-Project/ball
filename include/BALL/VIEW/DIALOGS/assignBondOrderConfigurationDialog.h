@@ -58,7 +58,7 @@ namespace BALL
 			AssignBondOrderConfigurationDialog(QWidget* parent = NULL, const char* name = "AssignBondOrderConfigurationDialog");
 
 			/// Destructor
-			virtual ~AssignBondOrderConfigurationDialog() throw();
+			virtual ~AssignBondOrderConfigurationDialog();
 				
 			///
 			virtual void initializeWidget(MainControl& main_control);

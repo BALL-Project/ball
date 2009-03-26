@@ -35,7 +35,7 @@ namespace BALL
 		Mainframe(QWidget* parent = 0, const char* name = 0);
 
 		///
-		virtual ~Mainframe() throw();
+		virtual ~Mainframe();
 
 		public slots:
 

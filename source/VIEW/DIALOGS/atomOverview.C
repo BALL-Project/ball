@@ -15,7 +15,6 @@ namespace BALL
 	{
 
 AtomOverview::AtomOverview(QWidget* parent, const char* name)
-	throw()
 	:	QDialog(parent),
 		Ui_AtomOverviewData(),
 		parent_(0),
@@ -40,7 +39,6 @@ AtomOverview::AtomOverview(QWidget* parent, const char* name)
 }
 
 AtomOverview::~AtomOverview()
-	throw()
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "deleting AtomOverview " << this << std::endl;
@@ -86,21 +84,18 @@ void AtomOverview::accept()
 
 
 AtomOverview::OverviewProcessor::OverviewProcessor()
-	throw()
 	: UnaryProcessor<Composite>(),
 	  table_(0)
 {
 }
 
 AtomOverview::OverviewProcessor::OverviewProcessor(const OverviewProcessor&)
-	throw()
 	: UnaryProcessor<Composite>(),
 		table_(0)
 {
 }
 
 AtomOverview::OverviewProcessor::~OverviewProcessor()
-	throw()
 {
 }
 
@@ -235,21 +230,18 @@ void AtomOverview::itemActivated(QTableWidgetItem* item)
 
 
 AtomOverview::ApplyProcessor::ApplyProcessor()
-	throw()
 	: UnaryProcessor<Composite>(),
 	  table_(0)
 {
 }
 
 AtomOverview::ApplyProcessor::ApplyProcessor(const ApplyProcessor&)
-	throw()
 	: UnaryProcessor<Composite>(),
 		table_(0)
 {
 }
 
 AtomOverview::ApplyProcessor::~ApplyProcessor()
-	throw()
 {
 }
 

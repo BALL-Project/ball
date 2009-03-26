@@ -49,8 +49,7 @@ namespace BALL
 			EditOperationDialog(QWidget* parent = 0, const char* name = "EditOperationDialog", Qt::WFlags fl = 0);
 
 			///
-			~EditOperationDialog()
-				throw();
+			~EditOperationDialog();
 		 
 		
 			public slots:

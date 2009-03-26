@@ -35,25 +35,21 @@ namespace BALL
 
 		/** Default Constructor
 		*/
-		ExpressionPredicate() 
-			throw();
+		ExpressionPredicate();
 			
 		/** Copy constructor 
 		 */
-		ExpressionPredicate(const ExpressionPredicate& predicate) 
-			throw();
+		ExpressionPredicate(const ExpressionPredicate& predicate);
 
 		/** Detailed Constructor.
 				Construct an ExpressionPredicate with a string.
 				@param argument the argument to use for this predicate
 		*/
-		ExpressionPredicate(const String& argument) 
-			throw();
+		ExpressionPredicate(const String& argument);
 
 		/** Destructor
 		*/
-		virtual ~ExpressionPredicate() 
-			throw();
+		virtual ~ExpressionPredicate();
 
 		//@}
 		/** @name Assignment 
@@ -62,13 +58,11 @@ namespace BALL
 
 		/** Assignment operator 
 		 */
-		ExpressionPredicate& operator = (const ExpressionPredicate& predicate) 
-			throw();
+		ExpressionPredicate& operator = (const ExpressionPredicate& predicate);
 
 		/** Clear method 
 		 */
-		virtual void clear() 
-			throw();
+		virtual void clear();
 
 		//@}
 		/** @name Predicates 
@@ -77,8 +71,7 @@ namespace BALL
 
 		/** Equality operator 
 		 */
-		bool operator == (const ExpressionPredicate& predicate) const 
-			throw();
+		bool operator == (const ExpressionPredicate& predicate) const;
 
 		//@}
 		/** @name Accessors.
@@ -89,20 +82,17 @@ namespace BALL
 				the selected predicate of atom.
 				@param atom the atom to compare with
 		*/
-		virtual bool operator () (const Atom& atom) const 
-			throw();
+		virtual bool operator () (const Atom& atom) const;
 
 		/** set the Argument of this ExpressionPredicate
 				@param argument the string to use for this predicate
 		*/
-		virtual void setArgument(const String& argument) 
-			throw();
+		virtual void setArgument(const String& argument);
 
 		/** Get the argument of an ExpressionPredicate
 				@return the argument of the expression
 		 */
-		const String& getArgument() const 
-			throw();
+		const String& getArgument() const;
 
 		//@}
 		

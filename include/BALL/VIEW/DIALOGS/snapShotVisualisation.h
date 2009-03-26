@@ -45,7 +45,7 @@ class BALL_VIEW_EXPORT SnapshotVisualisationDialog
 	SnapshotVisualisationDialog(QWidget* parent = 0, const char* name = "SnapshotVisualisationDialog");
 
 	/// Destructor
-	~SnapshotVisualisationDialog() throw();
+	~SnapshotVisualisationDialog();
 	
 	///This function sets the SnapShotManager
 	void setSnapShotManager(SnapShotManager* snapshot_manager);

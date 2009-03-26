@@ -52,23 +52,19 @@ namespace BALL
 
 			/** Default constructor.
 			*/
-			SyntaxTree()
-				throw();
+			SyntaxTree();
 
 			/** Detailed constructor.
 			*/
-			SyntaxTree(const char* predicate_name, const char* args)
-				throw();
+			SyntaxTree(const char* predicate_name, const char* args);
 				
 			/**	Detailed constructor
 			*/
-			SyntaxTree(SyntaxTree* left, SyntaxTree* right, ExpressionTree::Type type)
-				throw();
+			SyntaxTree(SyntaxTree* left, SyntaxTree* right, ExpressionTree::Type type);
 
 			/** Destructor.
 			*/
-			virtual ~SyntaxTree()
-				throw();
+			virtual ~SyntaxTree();
 			
 			//@}
 			/** @name Assignment
@@ -79,8 +75,7 @@ namespace BALL
 					default construction. <b>Note</b> that the list of children will be
 					cleared but the childrem themselves will \emph{not} be deleted.
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			//@}
 
@@ -90,31 +85,26 @@ namespace BALL
 
 			/** Return a mutable iterator pointing to the first child.
 			*/
-			Iterator begin()
-				throw();
+			Iterator begin();
 
 			/** Return a mutable iterator pointing to the last child.
 			*/
-			Iterator end()
-				throw();
+			Iterator end();
 
 			/** Return a constant iterator pointing to the first child.
 			*/
-			ConstIterator begin() const
-				throw();
+			ConstIterator begin() const;
 
 			/** Return a constant iterator pointing to the last child.
 			*/
-			ConstIterator end() const
-				throw();	
+			ConstIterator end() const;
 
 			//@}
 
 			/**	@name Debugging
 			*/
 			//@{
-			void dump(std::ostream& is = std::cout, Size depth = 0) const
-				throw();
+			void dump(std::ostream& is = std::cout, Size depth = 0) const;
 			//@}
 
 			/** @name Public attributes

@@ -45,11 +45,10 @@ namespace BALL
 					BALL_EMBEDDABLE(AssignBondOrderResultsDialog, ModularWidget)
 
 					/// Default Constructor.
-					AssignBondOrderResultsDialog(QWidget *parent = NULL,	const char *name = "AssignBondOrderResultsDialog")
-						throw();
+					AssignBondOrderResultsDialog(QWidget *parent = NULL,	const char *name = "AssignBondOrderResultsDialog");
 
 					/// Destructor.
-					virtual ~AssignBondOrderResultsDialog() throw();
+					virtual ~AssignBondOrderResultsDialog();
 
 					///
 					virtual void initializeWidget(MainControl& main_control);

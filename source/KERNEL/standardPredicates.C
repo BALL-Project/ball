@@ -23,7 +23,6 @@ namespace BALL
 	// True predicate
 
 	bool TruePredicate::operator () (const Atom& /* atom */) const
-		throw()
 	{
     return true;
  	}
@@ -31,7 +30,6 @@ namespace BALL
 	// False predicate
 
 	bool FalsePredicate::operator () (const Atom& /* atom */) const
-		throw()
 	{
     return false;
  	}
@@ -39,7 +37,6 @@ namespace BALL
 	// selected predicate
 
 	bool SelectedPredicate::operator () (const Atom& atom) const
-		throw()
 	{
     return atom.isSelected();
  	}
@@ -47,7 +44,6 @@ namespace BALL
 	// Atom name predicate
 
 	bool AtomNamePredicate::operator () (const Atom& atom) const
-		throw()
 	{
     return (atom.getName() == argument_);
  	}
@@ -55,7 +51,6 @@ namespace BALL
 	// Atom type predicate
 
 	bool AtomTypePredicate::operator () (const Atom& atom) const
-		throw()
 	{
 		return (atom.getTypeName() == argument_);
  	}
@@ -64,7 +59,6 @@ namespace BALL
 	// element predicate
 
 	bool ElementPredicate::operator () (const Atom& atom) const
-		throw()
 	{
 		return (atom.getElement().getSymbol() == argument_);
 	}
@@ -72,7 +66,6 @@ namespace BALL
 	// residue predicate
 
 	bool ResiduePredicate::operator () (const Atom& atom) const
-		throw()
 	{
 		const Residue*	res = atom.getAncestor(RTTI::getDefault<Residue>());
 		if (res != 0)
@@ -86,7 +79,6 @@ namespace BALL
 	// residue ID predicate
 
 	bool ResidueIDPredicate::operator () (const Atom& atom) const
-		throw()
 	{
     const Residue*	res = atom.getAncestor(RTTI::getDefault<Residue>());
 		if (res != 0)
@@ -119,7 +111,6 @@ namespace BALL
 	// protein predicate
 
 	bool ProteinPredicate::operator () (const Atom& atom) const
-		throw()
 	{
 		const Protein* protein = atom.getAncestor(RTTI::getDefault<Protein>());
 		if (protein != 0)
@@ -133,7 +124,6 @@ namespace BALL
 	// chain predicate
 
 	bool ChainPredicate::operator () (const Atom& atom) const
-		throw()
 	{
  		const Chain* chain = atom.getAncestor(RTTI::getDefault<Chain>());
 		if (chain != 0)
@@ -147,7 +137,6 @@ namespace BALL
 	// secondary structure predicate
 
 	bool SecondaryStructurePredicate::operator () (const Atom& atom) const
-		throw()
 	{
  		const SecondaryStructure* sec_struct 
 			= atom.getAncestor(RTTI::getDefault<SecondaryStructure>());
@@ -157,7 +146,6 @@ namespace BALL
 	// solvent predicate
 
 	bool SolventPredicate::operator () (const Atom& atom) const
-		throw()
 	{
 		const Molecule* molecule = atom.getMolecule();
 		return ((molecule != 0) && (molecule->hasProperty(Molecule::IS_SOLVENT)));
@@ -166,7 +154,6 @@ namespace BALL
 	// molecule predicate
 
 	bool MoleculePredicate::operator () (const Atom& atom) const
-		throw()
 	{
 		const Molecule* molecule = atom.getMolecule();
 		return ((molecule != 0) && (molecule->getName() == argument_));
@@ -175,7 +162,6 @@ namespace BALL
 	// backbone predicate
 
 	bool BackBonePredicate::operator () (const Atom& atom) const
-		throw()
 	{
 		if (atom.hasAncestor(RTTI::getDefault<Residue>()))
 		{
@@ -192,7 +178,6 @@ namespace BALL
 	// nucleic acid predicate
 
 	bool NucleicAcidPredicate::operator () (const Atom& atom) const
-		throw()
 	{
 		const NucleicAcid* nucleic_acid 
 			= atom.getAncestor(RTTI::getDefault<NucleicAcid>());
@@ -206,7 +191,6 @@ namespace BALL
 	// nucleotide predicate
 
 	bool NucleotidePredicate::operator () (const Atom& atom) const
-		throw()
 	{
 		return RTTI::isKindOf<Nucleotide>(atom);
 	}
@@ -214,13 +198,11 @@ namespace BALL
 	// in ring predicate
 
 	InRingPredicate::InRingPredicate()
-		throw()
 		: ExpressionPredicate()
 	{
 	}
 
 	InRingPredicate::InRingPredicate(Size n)
-		throw()
 		: ExpressionPredicate()
 	{
 		String argument(n);
@@ -228,12 +210,10 @@ namespace BALL
 	}
 
 	InRingPredicate::~InRingPredicate()
-		throw()
 	{
 	}
 
 	bool InRingPredicate::operator () (const Atom& atom) const
-		throw()
 	{
 		// the size of the ring to be found
 		int n;
@@ -301,14 +281,12 @@ namespace BALL
 	}
 
 	NumberOfBondsPredicate::NumberOfBondsPredicate()
-		throw()
 	{
 		argument_ = ">0";
 	}
 
 	bool NumberOfBondsPredicate::testPredicate_(const Atom& atom, 
 			Bond::Order order) const
-		throw()
 	{
 		String s = argument_;
 		s.trim();
@@ -410,37 +388,31 @@ namespace BALL
 	}
 
 	bool NumberOfBondsPredicate::operator () (const Atom& atom) const
-		throw()
 	{
 		return testPredicate_(atom, Bond::ORDER__ANY);
 	}
 
 	bool SingleBondsPredicate::operator () (const Atom& atom) const
-		throw()
 	{
 		return testPredicate_(atom, Bond::ORDER__SINGLE);
 	}
 
 	bool DoubleBondsPredicate::operator () (const Atom& atom) const
-		throw()
 	{
 		return testPredicate_(atom, Bond::ORDER__DOUBLE);
 	}
 
 	bool TripleBondsPredicate::operator () (const Atom& atom) const
-		throw()
 	{
 		return testPredicate_(atom, Bond::ORDER__TRIPLE);
 	}
 
 	bool AromaticBondsPredicate::operator () (const Atom& atom) const
-		throw()
 	{
 		return testPredicate_(atom);
 	}
 
 	bool AromaticBondsPredicate::testPredicate_(const Atom& atom) const
-		throw()
 	{
 		String s = argument_;
 		s.trim();
@@ -538,7 +510,6 @@ namespace BALL
 	}
 
 	ConnectedToPredicate::CTPNode::CTPNode()
-		throw()
 		:	element_symbol_("<uninitialized>"),
 			bond_type_(BONDTYPE__UNINITIALISED),
 			children_(),
@@ -550,7 +521,6 @@ namespace BALL
 	}
 
 	ConnectedToPredicate::CTPNode::CTPNode(const ConnectedToPredicate::CTPNode& node)
-		throw()
 		:	element_symbol_(node.element_symbol_),
 			bond_type_(node.bond_type_),
 			children_(node.children_),
@@ -562,13 +532,11 @@ namespace BALL
 	}
 
 	ConnectedToPredicate::CTPNode::~CTPNode()
-		throw()
 	{
 		destroy();
 	}
 
 	void ConnectedToPredicate::CTPNode::destroy()
-		throw()
 	{
 		// This is a bit weird. The situation is the following: If the current
 		// iterator (denoting a child!) is pointing to something which is in
@@ -600,7 +568,6 @@ namespace BALL
 	}
 
 	void ConnectedToPredicate::CTPNode::setParent(ConnectedToPredicate::CTPNode* parent)
-		throw()
 	{
 		if (parent == 0)
 		{
@@ -614,13 +581,11 @@ namespace BALL
 	}
 
 	ConnectedToPredicate::CTPNode* ConnectedToPredicate::CTPNode::getParent() const
-		throw()
 	{
 		return parent_;
 	}
 
 	void ConnectedToPredicate::CTPNode::addChild(ConnectedToPredicate::CTPNode* child)
-		throw()
 	{
 		if (child == 0)
 		{
@@ -634,31 +599,26 @@ namespace BALL
 	}
 
 	ConnectedToPredicate::CTPNode::Iterator ConnectedToPredicate::CTPNode::begin()
-		throw()
 	{
 		return children_.begin();
 	}
 
 	ConnectedToPredicate::CTPNode::ConstIterator ConnectedToPredicate::CTPNode::begin() const
-		throw()
 	{
 		return children_.begin();
 	}
 
 	ConnectedToPredicate::CTPNode::Iterator ConnectedToPredicate::CTPNode::end()
-		throw()
 	{
 		return children_.end();
 	}
 
 	ConnectedToPredicate::CTPNode::ConstIterator ConnectedToPredicate::CTPNode::end() const
-		throw()
 	{
 		return children_.end();
 	}
 
 	void ConnectedToPredicate::CTPNode::removeChild(CTPNode* child)
-		throw()
 	{
 		Iterator it = std::find(begin(), end(), child);
 		if (it != end())
@@ -668,25 +628,21 @@ namespace BALL
 	}
 
 	::std::list<ConnectedToPredicate::CTPNode*>& ConnectedToPredicate::CTPNode::getChildren()
-		throw()
 	{
 		return(children_);
 	}
 
 	Size ConnectedToPredicate::CTPNode::getNumberOfChildren() const
-		throw()
 	{
 		return children_.size();
 	}
 
 	void ConnectedToPredicate::CTPNode::setBondType(Size type)
-		throw()
 	{
 		bond_type_ = type;
 	}
 
 	void ConnectedToPredicate::CTPNode::setBondType(char type)
-		throw()
 	{
 		switch (type)
 		{
@@ -718,13 +674,11 @@ namespace BALL
 	}
 
 	Size ConnectedToPredicate::CTPNode::getBondType() const
-		throw()
 	{
 		return bond_type_;
 	}
 
 	char ConnectedToPredicate::CTPNode::getBondTypeChar() const
-		throw()
 	{
 		switch (bond_type_)
 		{
@@ -755,55 +709,46 @@ namespace BALL
 	}
 
 	String ConnectedToPredicate::CTPNode::getSymbol() const
-		throw()
 	{
 		return element_symbol_;
 	}
 
 	void ConnectedToPredicate::CTPNode::setSymbol(const String& symbol)
-		throw()
 	{
 		element_symbol_ = symbol;
 	}
 
 	void ConnectedToPredicate::CTPNode::setFinished()
-		throw()
 	{
 		finished_ = true;
 	}
 
 	void ConnectedToPredicate::CTPNode::unsetFinished()
-		throw()
 	{
 		finished_ = false;
 	}
 
 	bool ConnectedToPredicate::CTPNode::isFinished() const
-		throw()
 	{
 		return finished_;
 	}
 
 	void ConnectedToPredicate::CTPNode::setLinked()
-		throw()
 	{
 		linked_ = true;
 	}
 
 	void ConnectedToPredicate::CTPNode::unsetLinked()
-		throw()
 	{
 		linked_ = false;
 	}
 
 	bool ConnectedToPredicate::CTPNode::isLinked() const
-		throw()
 	{
 		return linked_;
 	}
 
 	void ConnectedToPredicate::CTPNode::linkWith(ConnectedToPredicate::CTPNode* partner)
-		throw()
 	{
 		if (partner == 0)
 		{
@@ -817,13 +762,11 @@ namespace BALL
 	}
 
 	const HashSet<ConnectedToPredicate::CTPNode*>& ConnectedToPredicate::CTPNode::getLinkSet() const
-		throw()
 	{
 		return link_set_;
 	}
 
 	ConnectedToPredicate::ConnectedToPredicate()
-		throw()
 		:	tree_(0),
 			link_map_(),
 			link_mark_(0)
@@ -831,7 +774,6 @@ namespace BALL
 	}
 
 	ConnectedToPredicate::ConnectedToPredicate(const ConnectedToPredicate& predicate)
-		throw()
 		:	ExpressionPredicate(predicate),
 			tree_(0),
 			link_map_(predicate.link_map_),
@@ -846,7 +788,6 @@ namespace BALL
 	}
 
 	ConnectedToPredicate::~ConnectedToPredicate()
-		throw()
 	{
 		if (tree_ != 0) 
 		{
@@ -855,7 +796,6 @@ namespace BALL
 	}
 			
 	ConnectedToPredicate::CTPNode* ConnectedToPredicate::createNewNode_(ConnectedToPredicate::CTPNode* node)
-		throw()
 	{
 		// PARANOIA
 		if (node == 0)
@@ -895,13 +835,11 @@ namespace BALL
 	}
 
 	ConnectedToPredicate::CTPNode* ConnectedToPredicate::parse_() 
-		throw()
 	{
 		return(parse_(argument_));
 	}
 
 	ConnectedToPredicate::CTPNode* ConnectedToPredicate::parse_(const String& input) 
-		throw()
 	{
 		Size depth = 0;
 		int bracket_count = 0;
@@ -1224,7 +1162,6 @@ namespace BALL
 	}
 
 	bool ConnectedToPredicate::bondOrderMatch_(const Bond& bond, const ConnectedToPredicate::CTPNode& node) const
-		throw()
 	{
 
 		bool result = false;
@@ -1276,7 +1213,6 @@ namespace BALL
 	}
 
 	bool ConnectedToPredicate::find_(const Atom& atom, const ConnectedToPredicate::CTPNode* current, HashSet<const Bond*>& visited) const
-		throw()
 	{
 		Atom* partner;
 		const Bond* bond;
@@ -1351,7 +1287,6 @@ namespace BALL
 	}
 
 	void ConnectedToPredicate::dump() const
-		throw()
 	{
 		Log.info() << std::endl;
 		dump(tree_);
@@ -1359,7 +1294,6 @@ namespace BALL
 	}
 
 	void ConnectedToPredicate::dump(const ConnectedToPredicate::CTPNode* current) const
-		throw()
 	{
 		if (current == 0)
 		{
@@ -1390,7 +1324,6 @@ namespace BALL
 	}
 
 	void ConnectedToPredicate::clear()
-		throw()
 	{
 		if ( tree_ != 0 ) delete tree_;
 		tree_ = 0;
@@ -1399,7 +1332,6 @@ namespace BALL
 	}
 
 	void ConnectedToPredicate::setArgument(const String& argument)
-		throw()
 	{
 		clear();
 		argument_ = argument;
@@ -1407,7 +1339,6 @@ namespace BALL
 	}
 
 	bool ConnectedToPredicate::operator () (const Atom& atom) const
-		throw()
 	{
 		HashSet<const Bond*> visited;
 		return find_(atom, tree_, visited);
@@ -1415,7 +1346,6 @@ namespace BALL
 
 
 	bool SpHybridizedPredicate::operator () (const Atom& atom) const
-		throw()
 	{
 		int dcount = 0;
 		int tcount = 0;
@@ -1442,7 +1372,6 @@ namespace BALL
 	}
 
 	bool Sp2HybridizedPredicate::operator () (const Atom& atom) const
-		throw()
 	{
 		int dcount = 0;
 		int acount = 0;
@@ -1469,7 +1398,6 @@ namespace BALL
 	}
 
 	bool Sp3HybridizedPredicate::operator () (const Atom& atom) const
-		throw()
 	{
 		Size i;
 		if (atom.countBonds() != 4)
@@ -1498,7 +1426,6 @@ namespace BALL
 
 
 	bool ChargePredicate::operator () (const Atom& atom) const
-		throw()
 	{
 		String s = argument_;
 		s.trim();
@@ -1536,7 +1463,6 @@ namespace BALL
 
 
 	bool AxialPredicate::operator () (const Atom& atom) const
-		throw()
 	{
 
 #ifdef DEBUG
@@ -1694,7 +1620,6 @@ namespace BALL
 	}
 
 	bool Conformation4C1Predicate::operator () (const Atom& atom) const
-		throw()
 	{
 		RingFinder in_6_ring(6);
 		if (!in_6_ring(atom))
@@ -1776,7 +1701,6 @@ namespace BALL
 
 
 	RingFinder::RingFinder()
-		throw()
 		: first_atom_(0),
 			n_(0),
 			exact_(true),
@@ -1786,7 +1710,6 @@ namespace BALL
 	}
 
 	RingFinder::RingFinder(Size n)
-		throw()
 		: first_atom_(0),
 			n_(n),
 			exact_(true),
@@ -1796,12 +1719,10 @@ namespace BALL
 	}
 
 	RingFinder::~RingFinder()
-		throw()
 	{
 	}
 
 	bool RingFinder::operator () (const Atom& atom)
-		throw()
 	{
 		exact_ = true;
 
@@ -1830,7 +1751,6 @@ namespace BALL
 	}
 
 	bool RingFinder::dfs(const Atom& atom, const Size limit)
-		throw()
 	{
 		// the following recursive function performs an ad-hoc dfs and returns
 		// true, if a ring was found and false otherwise.
@@ -1895,19 +1815,16 @@ namespace BALL
 	}
 
 	void RingFinder::setRingSize(Size n)
-		throw()
 	{
 		n_ = n;
 	}
 
 	const HashSet<const Bond*>& RingFinder::getVisitedBonds() const
-		throw()
 	{
 		return visited_bonds_;
 	}
 
 	const vector<const Atom*>& RingFinder::getRingAtoms() const
-		throw()
 	{
 		return ring_atoms_;
 	}
@@ -1918,7 +1835,6 @@ namespace BALL
 	Molecule SMARTSPredicate::dummy_molecule_;
 
 	SMARTSPredicate::SMARTSPredicate()
-		throw()
 		: ExpressionPredicate(),
 			last_molecule_(0)
 	{
@@ -1926,7 +1842,6 @@ namespace BALL
 	}
 
 	SMARTSPredicate::SMARTSPredicate(const SMARTSPredicate& pred)
-		throw()
 		: ExpressionPredicate(pred),
 			last_molecule_(0),
 			arom_proc_(pred.arom_proc_)
@@ -1934,12 +1849,10 @@ namespace BALL
 	}
 
 	SMARTSPredicate::~SMARTSPredicate()
-		throw()
 	{
 	}
 
 	bool SMARTSPredicate::operator () (const Atom& atom) const
-		throw()
 	{
 		Molecule* mol = (Molecule*) atom.getAncestor(dummy_molecule_);
 		if (mol == 0) return false;

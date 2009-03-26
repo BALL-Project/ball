@@ -45,8 +45,7 @@ namespace BALL
 			void accept();
 
 		private:
-			String getString_(float data) const
-				throw();
+			String getString_(float data) const;
 
 			Composite* composite_;
 		};

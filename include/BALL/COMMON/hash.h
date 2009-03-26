@@ -29,7 +29,7 @@ namespace BALL
   {
     public:
 		
-		HashIndex operator () (const T& t) const throw()
+		HashIndex operator () (const T& t) const
     {
       return Hash(t);
 		}
@@ -41,19 +41,19 @@ namespace BALL
 	
 	/**
 	*/
-  BALL_EXPORT extern HashIndex hashPointer(void *const ptr) throw();
+  BALL_EXPORT extern HashIndex hashPointer(void *const ptr);
 
 	/**
 	*/
-  BALL_EXPORT extern HashIndex hashString(const char* str) throw();
+  BALL_EXPORT extern HashIndex hashString(const char* str);
 
 	/**
 	*/
-  BALL_EXPORT extern HashIndex hashPJWString(const char* str) throw();
+  BALL_EXPORT extern HashIndex hashPJWString(const char* str);
 
 	/**
 	*/
-  BALL_EXPORT extern HashIndex hashElfString(const char* str) throw();
+  BALL_EXPORT extern HashIndex hashElfString(const char* str);
 
 	/** General default hash function.
 			This method converts a given key to a 
@@ -64,7 +64,7 @@ namespace BALL
 			@return	HashIndex the hash index
 	*/
 	template <typename T>
-	inline HashIndex Hash(const T& key) throw()
+	inline HashIndex Hash(const T& key)
 	{
 		return static_cast<HashIndex>((PointerSizeUInt)key);
 	}
@@ -73,7 +73,7 @@ namespace BALL
 			This method is optimized for the hashing of STL strings.
 			In fact, it is only an inline wrapper around  \link hashString hashString \endlink .
 	*/
-	BALL_EXPORT inline HashIndex Hash(const string& s) throw()
+	BALL_EXPORT inline HashIndex Hash(const string& s)
 	{
 		return hashString(s.c_str());
 	}
@@ -82,7 +82,7 @@ namespace BALL
 			This method is optimized for the hashing of BALL strings.
 			In fact, it is only an inline wrapper around  \link hashString hashString \endlink .
 	*/
-	BALL_EXPORT inline HashIndex Hash(const String& s) throw()
+	BALL_EXPORT inline HashIndex Hash(const String& s)
 	{
 		return hashString(s.c_str());
 	}
@@ -90,7 +90,7 @@ namespace BALL
 	/** Pointer hash function.
 			Use this function to hash pointers to objects.
 	*/
-	BALL_EXPORT inline HashIndex Hash(void *const& ptr) throw()
+	BALL_EXPORT inline HashIndex Hash(void *const& ptr)
 	{
 		return hashPointer(ptr);
 	}
@@ -103,7 +103,7 @@ namespace BALL
 			greater or equal to the number given as the argument.
 			Only odd prime numbers are returned, the lowest number returned is 3.
 	*/
-	BALL_EXPORT HashIndex getNextPrime(HashIndex l) throw();
+	BALL_EXPORT HashIndex getNextPrime(HashIndex l);
 
 	//@}
 

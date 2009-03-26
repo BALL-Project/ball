@@ -17,7 +17,6 @@ namespace BALL
   {
     // Constructor
     DockProgressDialog::DockProgressDialog(QWidget* parent,  const char* name)
-      throw()
       : QDialog(parent),
 				Ui_DockProgressDialogData(),
 				alg_(0)
@@ -36,7 +35,6 @@ namespace BALL
     
     // Copy constructor.
     DockProgressDialog::DockProgressDialog(const DockProgressDialog& dock_prog_dialog)
-    throw()
 			: QDialog(),
 				Ui_DockProgressDialogData(),
 				alg_(dock_prog_dialog.alg_),
@@ -46,7 +44,6 @@ namespace BALL
     
     // Destructor	
     DockProgressDialog::~DockProgressDialog()
-      throw()
     {
 #ifdef BALL_VIEW_DEBUG
       Log.info() << "Destructing object " << this << " of class DockProgressDialog" << std::endl;
@@ -55,7 +52,6 @@ namespace BALL
     
     // Assignment operator
     const DockProgressDialog& DockProgressDialog::operator =(const DockProgressDialog& dock_prog_dialog)
-      throw()
     {
       if (&dock_prog_dialog != this)
 	{
@@ -67,13 +63,11 @@ namespace BALL
     }
     
     void DockProgressDialog::setDockingAlgorithm(DockingAlgorithm* alg)
-      throw()
     {
       alg_ = alg;
     }
     
     const DockingAlgorithm* DockProgressDialog::getDockingAlgorithm() const
-      throw()
     {
       return alg_;
     }
@@ -82,7 +76,6 @@ namespace BALL
     // docking partners, algorithm, scoring function and options
     void DockProgressDialog::fillDialog(const QString& p1, const QString& p2, const QString& alg, const QString& sf,
 					const Options& alg_opt, const Options& sf_opt)
-      throw()
     {
       QString s = "Docking partner 1: ";
       general_params->append(s.append(p1));

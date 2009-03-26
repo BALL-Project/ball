@@ -52,8 +52,7 @@ class BALL_VIEW_EXPORT RaytraceableContourSurfaceDialog
 	RaytraceableContourSurfaceDialog(RaytraceableGrid* grid, QWidget* parent = 0, const char* name = "RaytraceableContourSurfaceDialog", bool modal = FALSE, Qt::WFlags fl = 0);
 
 	///
-	~RaytraceableContourSurfaceDialog()
-		throw();
+	~RaytraceableContourSurfaceDialog();
 
 	void setGrid(RaytraceableGrid* grid) {grid_ = grid;};
 	RaytraceableGrid* getGrid() {return grid_;};
@@ -94,12 +93,11 @@ class BALL_VIEW_EXPORT RaytraceableContourSurfaceDialog
 
 	protected:
 	
-	void addModel_(float threshold) throw();
+	void addModel_(float threshold);
 	
 	private:
 	
-	float getValue_(const QAbstractSlider* slider) const
-		throw();
+	float getValue_(const QAbstractSlider* slider) const;
 	float getValue_(const QLineEdit* edit) const
 		throw(Exception::InvalidFormat);
 	

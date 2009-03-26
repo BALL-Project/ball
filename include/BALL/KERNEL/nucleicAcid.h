@@ -51,35 +51,29 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		NucleicAcid()
-			throw();
+		NucleicAcid();
 	
 		/**	Copy constructor.
 		*/
-		NucleicAcid(const NucleicAcid& nucleic_acid, bool deep = true)
-			throw();
+		NucleicAcid(const NucleicAcid& nucleic_acid, bool deep = true);
 	
 		/**	Detailed constructor.
 		*/
 		NucleicAcid(const String& name,
-				const String& id = BALL_NUCLEICACID_DEFAULT_ID)
-			throw();
+				const String& id = BALL_NUCLEICACID_DEFAULT_ID);
 
 		/**	Destructor.
 		*/
-		virtual ~NucleicAcid()
-			throw();
+		virtual ~NucleicAcid();
 	
 		/**	Clear the contents of the nucleic acid.
 		*/
-		virtual void clear()
-			throw();
+		virtual void clear();
 	
 		/**	Clear the contents of the nucleic acid and remove it from 
 				parent kernel objects.
 		*/
-		virtual void destroy()
-			throw();
+		virtual void destroy();
 
 		//@}
 		/**	@name	Persistence 
@@ -108,23 +102,19 @@ namespace BALL
 				@param  nucleic_acid the NucleicAcid to be copied (cloned)
 				@param  deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy
 		*/
-		void set(const NucleicAcid& nucleic_acid, bool deep = true)
-			throw();
+		void set(const NucleicAcid& nucleic_acid, bool deep = true);
 
 		/**	Assignment operator.
 		*/
-		NucleicAcid& operator = (const NucleicAcid& nucleic_acid)
-			throw();
+		NucleicAcid& operator = (const NucleicAcid& nucleic_acid);
 
 		/**	Assign a NucleicAcid object from another.
 		*/
-		void get(NucleicAcid& nucleic_acid, bool deep = true) const
-			throw();
+		void get(NucleicAcid& nucleic_acid, bool deep = true) const;
 	
 		/**	Swap the contents of two NucleicAcid objects.
 		*/
-		void swap(NucleicAcid& nucleic_acid)
-			throw();
+		void swap(NucleicAcid& nucleic_acid);
 	
 		//@}
 
@@ -132,14 +122,12 @@ namespace BALL
 				Two nucleic acids are equal if they have the same handle.
 				@see Object::operator ==.
 		*/
-		bool operator == (const NucleicAcid& nucleic_acid) const
-			throw();
+		bool operator == (const NucleicAcid& nucleic_acid) const;
 
 		/**	Inequality operator
 				@see operator ==
 		*/
-		bool operator != (const NucleicAcid& nucleic_acid) const
-			throw();
+		bool operator != (const NucleicAcid& nucleic_acid) const;
 
 		/**	@name Accessors */
 		//@{
@@ -151,8 +139,7 @@ namespace BALL
 				@return		Nucleotide* - mutable pointer to the child Nucleotide at
 									<b>  positon </b>
 		*/
-		Nucleotide* getNucleotide(Position position)
-			throw();
+		Nucleotide* getNucleotide(Position position);
 	
 		/** Get a pointer to a child Nucleotide at a given position.
 				The pointer is 0 if this instance does not have a Nucleotide at the
@@ -161,54 +148,46 @@ namespace BALL
 				@return		Nucleotide* - constant pointer to the child Nucleotide at
 									<b>  positon </b>
 		*/
-		const Nucleotide* getNucleotide(Position position) const
-			throw();
+		const Nucleotide* getNucleotide(Position position) const;
 
 		/**	Retrieve a pointer to the Nucleotide at the 3'-end of this instance.
 				The pointer is 0 if this instance does not have a Nucleotide.
 				@return  Nucleotide* - mutable pointer to the first child Nucleotide
 		*/
-		Nucleotide* get3Prime()
-			throw();
+		Nucleotide* get3Prime();
 
 		/**	Retrieve a const pointer to the nucleotide at the 3'-end of this instance.
 				The pointer is 0 if this instance does not have a Nucleotide.
 				@return  Nucleotide* - constant pointer to the first child Nucleotide
 		*/
-		const Nucleotide* get3Prime() const
-			throw();
+		const Nucleotide* get3Prime() const;
 
 		/**	Retrieve a pointer to the Nucleotide at the 5'-end of this instance.
 				The pointer is 0 if this instance does not have a Nucleotide.
 				@return  Nucleotide* - mutable pointer to the last child Nucleotide
 		*/
-		Nucleotide* get5Prime()
-			throw();
+		Nucleotide* get5Prime();
 
 		/**	Retrieve a const pointer to the Nucleotide at the 5'-end of this instance.
 				The pointer is 0 if this instance does not have a Nucleotide.
 				@return  Nucleotide* - constant pointer to the last child Nucleotide
 		*/
-		const Nucleotide* get5Prime() const
-			throw();
+		const Nucleotide* get5Prime() const;
 
 		/**	Set the ID of the NucleicAcid.
 				@param id the new ID
 		*/
-		void setID(const String& id)
-			throw();
+		void setID(const String& id);
 
 		/**	Retrieve the ID of the NucleicAcid.
 				@return String the ID
 		*/
-		const String& getID() const
-			throw();
+		const String& getID() const;
 
 		/**	Return the number of Nucleotides contained in this instance NucleicAcid.
 				@return Size - number of Nucleotides
 		*/
-		Size countNucleotides() const
-			throw();
+		Size countNucleotides() const;
 
 		//@}
 
@@ -243,8 +222,7 @@ namespace BALL
 								 is correct (self-validated) and consistent, <tt>false</tt>
 								 otherwise
 		*/
-		virtual bool isValid() const
-			throw();
+		virtual bool isValid() const;
 
 			/** Internal state dump.
 					Dump the current internal state of this instance to the output
@@ -253,8 +231,7 @@ namespace BALL
 									this instance
 					@param	depth - the dumping depth
 			*/
-		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-			throw();
+		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 		//@}
 

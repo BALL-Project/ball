@@ -17,7 +17,6 @@ namespace BALL
 	{
 
 		ServerPreferences::ServerPreferences(QWidget* parent, const char* name)
-			throw()
 			: QWidget(parent),
 				PreferencesEntry()
 		{
@@ -60,7 +59,6 @@ namespace BALL
 		}
 
 		ServerPreferences::~ServerPreferences()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << (void *)this 
@@ -70,13 +68,11 @@ namespace BALL
 		
 
 		int ServerPreferences::getPort()
-			throw()
 		{
 			return ascii(port_->text()).toInt();
 		}
 		
 		bool ServerPreferences::getServerStatus()
-			throw()
 		{
 			return server_status_->isChecked();
 		}

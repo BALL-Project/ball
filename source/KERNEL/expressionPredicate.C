@@ -10,7 +10,6 @@ namespace BALL
 {
 
 	ExpressionPredicate::ExpressionPredicate() 
-		throw()
 		: UnaryPredicate<Atom>(),
 			argument_("")
 	{
@@ -19,7 +18,6 @@ namespace BALL
 
 	ExpressionPredicate::ExpressionPredicate
 		(const ExpressionPredicate& predicate) 
-		throw()
 		:	UnaryPredicate<Atom>(predicate),
 			argument_(predicate.argument_)
 	{
@@ -27,7 +25,6 @@ namespace BALL
 
 
 	ExpressionPredicate::ExpressionPredicate(const String& argument) 
-		throw()
 		:	UnaryPredicate<Atom>(),
 			argument_(argument)
 	{
@@ -35,14 +32,12 @@ namespace BALL
 
 
 	ExpressionPredicate::~ExpressionPredicate() 
-		throw()
 	{
 		clear();
 	}
 
 
 	ExpressionPredicate& ExpressionPredicate::operator = (const ExpressionPredicate& predicate) 
-		throw()
 	{
 		UnaryPredicate<Atom>::operator = (predicate);
 		argument_ = predicate.argument_;
@@ -52,35 +47,30 @@ namespace BALL
 
 
 	void ExpressionPredicate::clear() 
-		throw()
 	{
 		argument_ = "";
 	}
 
 
 	bool ExpressionPredicate::operator == (const ExpressionPredicate& predicate) const 
-		throw()
 	{
 		return (argument_ == predicate.argument_);
 	}
 
 
 	bool ExpressionPredicate::operator () (const Atom& /* atom */) const 
-		throw()
 	{
 		return true;
 	}
 
 
 	void ExpressionPredicate::setArgument(const String& args) 
-		throw()
 	{
 		argument_ = args;
 	}
 
 
 	const String& ExpressionPredicate::getArgument() const 
-		throw()
 	{
 		return argument_;
 	}

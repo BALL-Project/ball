@@ -76,13 +76,11 @@ namespace BALL
 				 *	@see        QDialog
 				 *	@see				PreferncesEntry
 				 */
-				DockDialog(QWidget* parent = 0, const char* name = "DockDialog")
-					throw();
+				DockDialog(QWidget* parent = 0, const char* name = "DockDialog");
 					
 				/** Destructor.
 				 */
-				virtual ~DockDialog()
-					throw();
+				virtual ~DockDialog();
 				//@}
 
 				/**	@name	Assignment
@@ -91,8 +89,7 @@ namespace BALL
 				
 				/**  Assignment operator
 				 */
-				const DockDialog& operator =(const DockDialog& dock_dialog)
-					throw();
+				const DockDialog& operator =(const DockDialog& dock_dialog);
 				//@}
 					
 				/**	@name	Accessors: inspectors and mutators
@@ -103,33 +100,27 @@ namespace BALL
 				 *	@param      system1 first docking partner
 				 *	@param      system2 second docking partner
 				 */
-				void setSystems(System* system1, System* system2)
-					throw();
+				void setSystems(System* system1, System* system2);
 				
 				/**  Get first docking partner.
 				 */
-				System* getSystem1()
-					throw();
+				System* getSystem1();
 				
 				/**  Get second docking partner.
 				 */
-				System* getSystem2()
-					throw();
+				System* getSystem2();
 				
 				/** Get algorithm options.
 				 */
-				Options& getAlgorithmOptions()
-					throw();
+				Options& getAlgorithmOptions();
 				
 				/** Get scoring options.
 				 */
-				Options& getScoringOptions()
-					throw();
+				Options& getScoringOptions();
 				
 				/** Sets the flags \link DockDialog::is_redock_ is_redock_ \endlink and \link DockDialog::has_changed_ has_changed_ \endlink.
 				 */
-				void isRedock(bool is_redock)
-					throw();
+				void isRedock(bool is_redock);
 					
 				/** Adds docking algorithm to combobox and its advanced option dialog to hashmap.
 				 *	@param      name the name of the algorithm
@@ -137,8 +128,7 @@ namespace BALL
 				 *	@param      dialog pointer to an advanced option dialog
 				 */
 				// remark: score_func isn't enum type because we then have cyclic includes of DockDialog and DockingController
-				void addAlgorithm(const QString& name, const int algorithm, QDialog* dialog)
-					throw();
+				void addAlgorithm(const QString& name, const int algorithm, QDialog* dialog);
 					
 				/** Adds scoring function to combobox and its advanced option dialog to hashmap, if it has such a dialog.
 				 *	@param      name the name of the scoring function
@@ -146,8 +136,7 @@ namespace BALL
 				 *	@param      dialog pointer to an advanced option dialog
 				 */
 				// remark: score_func isn't enum type because we then have cyclic includes of DockDialog and DockingController
-				void addScoringFunction(const QString& name, const int score_func, QDialog* dialog=0)
-					throw();
+				void addScoringFunction(const QString& name, const int score_func, QDialog* dialog=0);
 				
 				/**	Builds hashmaps for algorithm advanced option dialogs and for scoring function advanced option dialogs.
 				 *	Also builds hashmap with the allowed scoring functions for the different algorithms.
@@ -155,8 +144,7 @@ namespace BALL
 				 *	@see				addAlgorithm
 				 *	@see				addScoringFunction
 				 */
-				virtual void initializeWidget()
-					throw();
+				virtual void initializeWidget();
 
 				/** Fetchs the preferences from the INIFile.
 					* Calls \link PreferencesEntry::readPreferenceEntries PreferencesEntry::readPreferenceEntries \endlink.
@@ -164,22 +152,19 @@ namespace BALL
 					* This method is called in \link DockingController::fetchPreferences DockingController::fetchPreferences \endlink.
 				 	*	@see    writePreferences
 				 	*/
-				virtual void fetchPreferences(INIFile& file)
-					throw();
+				virtual void fetchPreferences(INIFile& file);
 				
 				/** Writes the preferences to the INIFile.
 					* Calls \link PreferencesEntry::writePreferenceEntries PreferencesEntry::writePreferenceEntries \endlink.
 				  * This method is called in \link DockingController::writePreferences DockingController::writePreferences \endlink.
 				  * @see    fetchPreferences
 				  */
-				virtual void writePreferences(INIFile& file)
-					throw();
+				virtual void writePreferences(INIFile& file);
 				
 					
 				/** Resets the dialog to the standard values.
 				 */
-				void reset()
-					throw();
+				void reset();
 				//@}
 					
 			public slots:
@@ -263,20 +248,20 @@ namespace BALL
 				/** Sets options \link DockDialog::algorithm_opt_ algorithm_opt_ \endlink and 
 				  * \link DockDialog::scoring_opt_ scoring_opt_ \endlink with values the user has chosen.  
 				 */
-				void applyValues_() throw();
+				void applyValues_();
 				
 				/** Applies processors to the systems.
 				 */
-				bool applyProcessors_() throw();
+				bool applyProcessors_();
 				
 				/** Shows chosen file in the dialog.
 				 */
-				void selectFile_(QLineEdit& lineedit) throw();
+				void selectFile_(QLineEdit& lineedit);
 					
 				/** Fills the system comboboxes.
 				 *  If the user has already selected one or two systems, they are the current items in the comboboxes. 
 				 */
-				void fillSystemComboboxes_() throw();
+				void fillSystemComboboxes_();
 				
 				/** Reads the redocking values from INIFile into vector backup_.
 				 	*	If INIFile has not yet a section <b> REDOCKING </b>, fill vector \link DockDialog::backup_ backup_ \endlink with default values.
@@ -285,13 +270,13 @@ namespace BALL
 					*	@param    	default_value default value
 					* @see				fetchPreferences
 				 */
-				void fetchPreferences_(INIFile& file, const String& entry, const QString& default_value) throw();
+				void fetchPreferences_(INIFile& file, const String& entry, const QString& default_value);
 			
 				/** Swaps the option values between vector backup_ and dialog.
 				 *  Is called in \link DockDialog::show show \endlink if \link DockDialog::has_changed_ has_changed_ \endlink is true
 				 *  and in \link DockDialog::writePreferences writePreferences \endlink if \link DockDialog::is_redock_ is_redock_ \endlink is true
 				 */
-				void swapValues_() throw();
+				void swapValues_();
 				
 				
 			private:
@@ -300,8 +285,7 @@ namespace BALL
 					* Remark: Copy contructor is private because it is not completed. 
 					* The copy constuctor of the QT widgets is private and cannot be called.  
 					*/
-				DockDialog(const DockDialog& dock_dialog)
-					throw();
+				DockDialog(const DockDialog& dock_dialog);
 			
 				/** Flag which indicates if we do docking or redocking.
 					*/

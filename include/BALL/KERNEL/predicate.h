@@ -60,14 +60,12 @@ namespace BALL
 		public:
 
 		/// Constant virtual RTTI evaluation operator
-		virtual bool operator () (const Composite& composite) const
-			throw();
+		virtual bool operator () (const Composite& composite) const;
 		virtual ~KernelPredicate() {}
 	};
 
 	template <class T>
 	bool KernelPredicate<T>::operator () (const Composite& composite) const
-		throw()
 	{
 		return RTTI::isKindOf<T>(composite);
 	}

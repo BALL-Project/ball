@@ -24,7 +24,6 @@ namespace BALL
     }
   
     OpenBruker1DFile::~OpenBruker1DFile()
-      throw()
     {
       #ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object of class OpenBruker1DFile" << endl;
@@ -32,13 +31,11 @@ namespace BALL
     }
 
     void OpenBruker1DFile::initializeWidget(MainControl&)
-  		throw()
     {
       insertMenuEntry(MainControl::FILE_IMPORT, "Bruker&1D File", this, SLOT(openFile()));
     }
 
 	  void OpenBruker1DFile::openFile()
-		  throw()
     {
       Q3FileDialog* fd = new Q3FileDialog(this,"Import Bruker1DFile", true);
 			fd->setMode(Q3FileDialog::ExistingFile);

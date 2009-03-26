@@ -61,8 +61,7 @@ namespace BALL
 					@param atom the atom to test
 					@return true - always
 			*/
-			virtual bool operator () (const Atom& atom) const
-				throw();
+			virtual bool operator () (const Atom& atom) const;
 	};
 
 	/** False predicate.
@@ -79,8 +78,7 @@ namespace BALL
 				@param atom the atom to test
 				@return false - always
 		*/
-		virtual bool operator () (const Atom& atom) const
-			throw();
+		virtual bool operator () (const Atom& atom) const;
 	};
 
 	/** Selection predicate.
@@ -97,8 +95,7 @@ namespace BALL
 					@param atom the atom to test
 					@return true - always
 			*/
-			virtual bool operator () (const Atom& atom) const
-				throw();
+			virtual bool operator () (const Atom& atom) const;
 	};
 
 	/** Predicate for matching atom names. Returns <tt>true</tt>, if the name of
@@ -115,8 +112,7 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
-			virtual bool operator () (const Atom& atom) const
-				throw();
+			virtual bool operator () (const Atom& atom) const;
 	};
 
 	/** Predicate for matching atom types. Returns <tt>true</tt>, if the type name
@@ -132,8 +128,7 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
-			virtual bool operator () (const Atom& atom) const
-				throw();
+			virtual bool operator () (const Atom& atom) const;
 	};
 
 	/** Predicate for matching elements. Returns <tt>true</tt>, if the element
@@ -149,8 +144,7 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
-			virtual bool operator () (const Atom& atom) const
-				throw();
+			virtual bool operator () (const Atom& atom) const;
 	};
 
 	/** Predicate for matching residues. Returns <tt>true</tt>, if the name of the 
@@ -167,8 +161,7 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
-			virtual bool operator () (const Atom& atom) const
-				throw();
+			virtual bool operator () (const Atom& atom) const;
 	};
 
 	/** Predicate for matching residues IDs. Returns <tt>true</tt>, if the ID of
@@ -185,8 +178,7 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
-			virtual bool operator () (const Atom& atom) const
-				throw();
+			virtual bool operator () (const Atom& atom) const;
 	};
 
 	/** Predicate for matching proteins. Returns <tt>true</tt>, if the name of the
@@ -203,8 +195,7 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
-			virtual bool operator () (const Atom& atom) const
-				throw();
+			virtual bool operator () (const Atom& atom) const;
 	};
 
 	/** Predicate for matching chains. Returns <tt>true</tt>, if the name of the
@@ -221,8 +212,7 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
-			virtual bool operator () (const Atom& atom) const
-				throw();
+			virtual bool operator () (const Atom& atom) const;
 	};
 
 	/** Predicate for matching secondary structures. Returns <tt>true</tt>, if the
@@ -239,8 +229,7 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
-			virtual bool operator () (const Atom& atom) const
-				throw();
+			virtual bool operator () (const Atom& atom) const;
 	};
 
 	/** Predicate indicating solvent atoms. 
@@ -261,8 +250,7 @@ namespace BALL
 				@param atom the atom to test
 				@return true, if the predicate is true, false otherwise
 		*/
-		virtual bool operator () (const Atom& atom) const
-			throw();
+		virtual bool operator () (const Atom& atom) const;
 	};
 
 	/** Predicate for matching molecules. Returns <tt>true</tt>, if the atom
@@ -278,8 +266,7 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
-			virtual bool operator () (const Atom& atom) const
-				throw();
+			virtual bool operator () (const Atom& atom) const;
 	};
 
 	/** Predicate indicating backbone atoms. Returns <tt>true</tt>, if the atom
@@ -296,8 +283,7 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
-			virtual bool operator () (const Atom& atom) const
-				throw();
+			virtual bool operator () (const Atom& atom) const;
 	};
 
 	/**
@@ -312,8 +298,7 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
-			virtual bool operator () (const Atom& atom) const
-				throw();
+			virtual bool operator () (const Atom& atom) const;
 	};
 
 	/** Predicate indicating nucleotide atoms. Returns <tt>true</tt>, if the
@@ -329,8 +314,7 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
-			virtual bool operator () (const Atom& atom) const
-				throw();
+			virtual bool operator () (const Atom& atom) const;
 	};
 
 	/** Predicate for atoms being included in rings of a certain number.
@@ -343,23 +327,19 @@ namespace BALL
 			BALL_CREATE(InRingPredicate)
 
 			/// Default constructor;
-			InRingPredicate()
-				throw();
+			InRingPredicate();
 
 			/// Detailed constructor;
-			InRingPredicate(Size n)
-				throw();
+			InRingPredicate(Size n);
 
 			/// Destructor;
-			~InRingPredicate()
-				throw();
+			~InRingPredicate();
 
 			/** Evaluate the predicate for the atom <tt>atom</tt>.
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
-			virtual bool operator () (const Atom& atom) const
-				throw();
+			virtual bool operator () (const Atom& atom) const;
 
 	};
 
@@ -376,8 +356,7 @@ namespace BALL
 		public:
 
 			/// Default constructor.
-			NumberOfBondsPredicate()
-				throw();
+			NumberOfBondsPredicate();
 
 			BALL_CREATE(NumberOfBondsPredicate)
 
@@ -385,12 +364,10 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
-			virtual bool operator () (const Atom& atom) const
-				throw();
+			virtual bool operator () (const Atom& atom) const;
 
 		protected:
-			bool testPredicate_(const Atom& atom, Bond::Order order) const
-				throw();
+			bool testPredicate_(const Atom& atom, Bond::Order order) const;
 	};
 
 
@@ -408,8 +385,7 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
-			virtual bool operator () (const Atom& atom) const
-				throw();
+			virtual bool operator () (const Atom& atom) const;
 	};
 
 
@@ -427,8 +403,7 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
-			virtual bool operator () (const Atom& atom) const
-				throw();
+			virtual bool operator () (const Atom& atom) const;
 
 	};
 
@@ -447,8 +422,7 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 				*/
-			virtual bool operator () (const Atom& atom) const
-				throw();
+			virtual bool operator () (const Atom& atom) const;
 	};
 
 
@@ -472,12 +446,10 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
-			virtual bool operator () (const Atom& atom) const
-				throw();
+			virtual bool operator () (const Atom& atom) const;
 
 		protected:
-			bool testPredicate_(const Atom& atom) const
-				throw();
+			bool testPredicate_(const Atom& atom) const;
 	};
 
 
@@ -531,135 +503,107 @@ namespace BALL
 
 					/*
 					 */
-					CTPNode()
-						throw();
+					CTPNode();
 
 					/*
 					 */
-					CTPNode(const CTPNode& node)
-						throw();
+					CTPNode(const CTPNode& node);
 
 					/*
 					 */
-					virtual ~CTPNode()
-						throw();
+					virtual ~CTPNode();
 
 					/*
 					*/
-					virtual void destroy()
-						throw();
+					virtual void destroy();
 
 					/*
 					 */
-					void setParent(CTPNode* parent)
-						throw();
+					void setParent(CTPNode* parent);
 
 					/*
 					 */
-					CTPNode* getParent() const
-						throw();
+					CTPNode* getParent() const;
 
 					/*
 					 */
-					void addChild(CTPNode* child)
-						throw();
+					void addChild(CTPNode* child);
 
 					/*
 					 */
-					void removeChild(CTPNode* child)
-						throw();
+					void removeChild(CTPNode* child);
 
 					/*
 					 */
-					::std::list<CTPNode*>& getChildren()
-						throw();
+					::std::list<CTPNode*>& getChildren();
 
-					Iterator begin()
-						throw();
+					Iterator begin();
 
-					ConstIterator begin() const
-						throw();
+					ConstIterator begin() const;
 
-					Iterator end()
-						throw();
+					Iterator end();
 
-					ConstIterator end() const
-						throw();
+					ConstIterator end() const;
 
 					/*
 					 */
-					Size getNumberOfChildren() const
-						throw();
+					Size getNumberOfChildren() const;
 
 					/*
 					 */
-					void setBondType(Size type)
-						throw();
+					void setBondType(Size type);
 
 					/*
 					 */
-					void setBondType(char type)
-						throw();
+					void setBondType(char type);
 
 					/*
 					 */
-					Size getBondType() const
-						throw();
+					Size getBondType() const;
 
 					/*
 					 */
-					char getBondTypeChar() const
-						throw();
+					char getBondTypeChar() const;
 
 					/*
 					 */
-					String getSymbol() const
-						throw();
+					String getSymbol() const;
 
 					/*
 					 */
-					void setSymbol(const String& symbol)
-						throw();
+					void setSymbol(const String& symbol);
 
 					/*
 					 */
-					void setFinished()
-						throw();
+					void setFinished();
 
 					/*
 					 */
-					void unsetFinished()
-						throw();
+					void unsetFinished();
 
 					/*
 					 */
-					bool isFinished() const
-						throw();
+					bool isFinished() const;
 
 					/*
 					 */
-					void setLinked()
-						throw();
+					void setLinked();
 
 					/*
 					 */
-					void unsetLinked()
-						throw();
+					void unsetLinked();
 
 					/*
 					 */
-					bool isLinked() const
-						throw();
+					bool isLinked() const;
 
 					/*
 					 */
-					void linkWith(CTPNode* partner)
-						throw();
+					void linkWith(CTPNode* partner);
 
 					/*
 					 */
-					const HashSet<CTPNode*>& getLinkSet() const
-						throw();
+					const HashSet<CTPNode*>& getLinkSet() const;
 
 
 				private: 
@@ -725,33 +669,25 @@ namespace BALL
 		public:
 			BALL_CREATE(ConnectedToPredicate)
 
-			ConnectedToPredicate()
-				throw();
+			ConnectedToPredicate();
 
-			ConnectedToPredicate(const ConnectedToPredicate& predicate)
-				throw();
+			ConnectedToPredicate(const ConnectedToPredicate& predicate);
 
-			virtual ~ConnectedToPredicate()
-				throw();
+			virtual ~ConnectedToPredicate();
 
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			/** Evaluate the predicate for the atom <tt>atom</tt>.
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
-			virtual bool operator () (const Atom& atom) const
-				throw();
+			virtual bool operator () (const Atom& atom) const;
 		
-			void dump() const
-				throw();
+			void dump() const;
 
-			void dump(const CTPNode* current) const
-				throw();
+			void dump(const CTPNode* current) const;
 
-			virtual void setArgument(const String& argument)
-				throw();
+			virtual void setArgument(const String& argument);
 
 		private:
 			/*_ The syntax tree
@@ -768,28 +704,23 @@ namespace BALL
 
 			/*_ Keep it consistent
 			*/
-			CTPNode* createNewNode_(CTPNode* node)
-				throw();
+			CTPNode* createNewNode_(CTPNode* node);
 		
 			/*_
 			*/
-			CTPNode* parse_()
-				throw();
+			CTPNode* parse_();
 
 			// Clean up nodes created if parse_ exits with a parse error.
 			void cleanUpNodes_(std::vector<CTPNode*>& all_nodes);
 
 			/*_
 			*/
-			CTPNode* parse_(const String& input)
-				throw();
+			CTPNode* parse_(const String& input);
 
-			bool bondOrderMatch_(const Bond& bond, const CTPNode& node) const
-				throw();
+			bool bondOrderMatch_(const Bond& bond, const CTPNode& node) const;
 
 			bool find_(const Atom& atom, const CTPNode* current,
-					HashSet<const Bond*>& visited) const
-				throw();
+					HashSet<const Bond*>& visited) const;
 
 	};
 
@@ -805,8 +736,7 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
-			virtual bool operator () (const Atom& atom) const
-				throw();
+			virtual bool operator () (const Atom& atom) const;
 	};
 
 	/** Predicate indicating sp2 hybridized atoms.
@@ -821,8 +751,7 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
-			virtual bool operator () (const Atom& atom) const
-				throw();
+			virtual bool operator () (const Atom& atom) const;
 	};
 
 
@@ -838,8 +767,7 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
-			virtual bool operator () (const Atom& atom) const
-				throw();
+			virtual bool operator () (const Atom& atom) const;
 	};
 
 	/** Charge predicate
@@ -859,8 +787,7 @@ namespace BALL
 				@param atom the atom to test
 				@return true, if the predicate is true, false otherwise
 		*/
-		virtual bool operator () (const Atom& atom) const
-			throw();
+		virtual bool operator () (const Atom& atom) const;
 	};
 
 	/** Axial predicate.
@@ -882,8 +809,7 @@ namespace BALL
 				@param atom the atom to test
 				@return true, if the predicate is true, false otherwise
 		*/
-		virtual bool operator () (const Atom& atom) const
-			throw();
+		virtual bool operator () (const Atom& atom) const;
 	};
 
 	/** Predicate for determining whether a sugar ring is in 4C1
@@ -899,8 +825,7 @@ namespace BALL
 				@param atom the atom to test
 				@return true, if the predicate is true, false otherwise
 		*/
-		virtual bool operator () (const Atom& atom) const
-			throw();
+		virtual bool operator () (const Atom& atom) const;
 	};
 
 	/** Helper class for all predicates that need ring information.
@@ -912,46 +837,38 @@ namespace BALL
 			// BALL_CREATE(RingFinder)
 
 			/// Default constructor
-			RingFinder()
-				throw();
+			RingFinder();
 
 			/** Detailed constructor. Initialize this instance with the size of
 					the ring we want to find. Default setting is 0 which means that
 					any ring size will match.
 			*/
-			RingFinder(Size n)
-				throw();
+			RingFinder(Size n);
 
 			/// Destructor
-			virtual ~RingFinder()
-				throw();
+			virtual ~RingFinder();
 
 			/** Return true, if atom is in a ring.
 			*/
-			bool operator () (const Atom& atom)
-				throw();
+			bool operator () (const Atom& atom);
 
 			/** Depth first search for finding rings.
 			*/
-			bool dfs(const Atom& atom, const Size limit)
-				throw();
+			bool dfs(const Atom& atom, const Size limit);
 
 			/** Set the ring size we want to find. Ring sizes below 3 will always
 					return false, except if the size is set to 0, then any ring size
 					will match. 
 			*/
-			void setRingSize(Size n)
-				throw();
+			void setRingSize(Size n);
 
 			/** Return the hashset containing all visited bonds.
 			*/
-			const HashSet<const Bond*>& getVisitedBonds() const
-				throw();
+			const HashSet<const Bond*>& getVisitedBonds() const;
 
 			/** Return the vector of ring atoms.
 			*/
-			const std::vector<const Atom*>& getRingAtoms() const
-				throw();
+			const std::vector<const Atom*>& getRingAtoms() const;
 
 		private:
 
@@ -985,16 +902,13 @@ namespace BALL
 		public:
 
 		///
-		SMARTSPredicate()
-			throw();
+		SMARTSPredicate();
 
 		///
-		SMARTSPredicate(const SMARTSPredicate& pred)
-			throw();
+		SMARTSPredicate(const SMARTSPredicate& pred);
 
 		///
-		virtual ~SMARTSPredicate()
-			throw();
+		virtual ~SMARTSPredicate();
 	
 		BALL_CREATE(SMARTSPredicate)
 
@@ -1002,8 +916,7 @@ namespace BALL
 				@param atom the atom to test
 				@return true, if the predicate is true, false otherwise
 		*/
-		virtual bool operator () (const Atom& atom) const
-			throw();
+		virtual bool operator () (const Atom& atom) const;
 
  		mutable SmartsMatcher matcher_;
 		mutable Molecule* last_molecule_;

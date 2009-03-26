@@ -17,7 +17,6 @@ namespace BALL
 	{
 
 MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name, Qt::WFlags fl)
-	throw()
 	: QWidget(parent, fl),
 		Ui_MainControlPreferencesData(),
 		PreferencesEntry()
@@ -45,7 +44,6 @@ MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name
 }
 
 MainControlPreferences::~MainControlPreferences()
-	throw()
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "Destructing object " << (void *)this 
@@ -54,7 +52,6 @@ MainControlPreferences::~MainControlPreferences()
 }
 
 QStyle* MainControlPreferences::getStyle()
-	throw()
 {
 	QStyle* new_style = QStyleFactory::create(style_box_->currentText());			
 	return new_style;
@@ -66,14 +63,12 @@ QFont MainControlPreferences::getFont()
 }
 
 void MainControlPreferences::enableLoggingToFile(bool state)
-	throw()
 {
 	if (state) logging_to_file->setChecked(true);
 	else       logging_to_file->setChecked(false);
 }
 
 bool MainControlPreferences::loggingToFileEnabled() const
-	throw()
 {
 	return logging_to_file->isChecked();
 }

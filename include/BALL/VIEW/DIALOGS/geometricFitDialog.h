@@ -56,13 +56,11 @@ namespace BALL
 				 *	@see        QDialog
 				 *	@see				PreferncesEntry
 				 */
-				GeometricFitDialog(QWidget* parent = 0, const char* name = "GeometricFitDialog")
-					throw();
+				GeometricFitDialog(QWidget* parent = 0, const char* name = "GeometricFitDialog");
 					
 				/** Destructor.
 				 */
-				virtual ~GeometricFitDialog()
-					throw();
+				virtual ~GeometricFitDialog();
         //@}
 				
 				/**	@name	Assignment
@@ -70,8 +68,7 @@ namespace BALL
 				//@{
 				/**  Assignment operator
 				 */
-				const GeometricFitDialog& operator =(const GeometricFitDialog& geo_fit_dialog)
-					throw();
+				const GeometricFitDialog& operator =(const GeometricFitDialog& geo_fit_dialog);
 				//@}
 					
 				/**	@name	Accessors: inspectors and mutators
@@ -81,14 +78,12 @@ namespace BALL
 				/** Fills options with values of the dialog.
 					*	@param      options the options that are filled
 					*/
-				void getOptions(Options& options)
-					throw();
+				void getOptions(Options& options);
 
 				/** Sets the flags \link GeometricFitDialog::is_redock_ is_redock_ \endlink and 
 				  * \link GeometricFitDialog::has_changed_ has_changed_ \endlink.
 					*/
-				void isRedock(bool is_redock)
-					throw();
+				void isRedock(bool is_redock);
 				
 				/** Fetchs the preferences from the INIFile.
 					* Calls \link PreferencesEntry::readPreferenceEntries PreferencesEntry::readPreferenceEntries \endlink.
@@ -96,16 +91,14 @@ namespace BALL
 					* This method is called in \link DockDialog::fetchPreferences DockDialog::fetchPreferences \endlink.
 				 	*	@see    writePreferences
 				 	*/
-				void fetchPreferences(INIFile& file)
-					throw();
+				void fetchPreferences(INIFile& file);
 				
 				/** Writes the preferences to the INIFile.
 					* Calls \link PreferencesEntry::writePreferenceEntries PreferencesEntry::writePreferenceEntries \endlink.
 				 * This method is called in \link DockDialog::writePreferences DockDialog::writePreferences \endlink.
 				 * @see    fetchPreferences
 				 */
-				void writePreferences(INIFile& file)
-					throw();
+				void writePreferences(INIFile& file);
 					
 				//@}
 					
@@ -138,14 +131,14 @@ namespace BALL
 					*	@param    	default_value default value
 					* @see				fetchPreferences
 					*/
-				void fetchPreferences_(INIFile& file, const String& entry, const QString& default_value) throw();
+				void fetchPreferences_(INIFile& file, const String& entry, const QString& default_value);
 				
 				/** Swaps the option values between vector backup_ and dialog.
 				 *  Is called in \link GeometricFitDialog::show show \endlink if \link GeometricFitDialog::has_changed_ has_changed_ \endlink 
 				 *  is true and in \link GeometricFitDialog::writePreferences writePreferences \endlink if 
 				 *  \link GeometricFitDialog::is_redock_ is redock_ \endlink is true.
 				 */
-				void swapValues_() throw();
+				void swapValues_();
 			
 				
 			private:
@@ -154,8 +147,7 @@ namespace BALL
 				 	* Remark: Copy contructor is private because it is not completed. 
 					* The copy constuctor of the QT widgets is private and cannot be called.    
 					*/
-				GeometricFitDialog(const GeometricFitDialog& geo_fit_dialog)
-					throw();
+				GeometricFitDialog(const GeometricFitDialog& geo_fit_dialog);
 			
 				/** Flag:
 					* True if we do docking and did redocking before or otherwise.

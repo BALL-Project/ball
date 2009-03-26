@@ -86,16 +86,13 @@ namespace BALL
 		//@{
 
 		/// Default constructor
-		PDBAtom()
-			throw();
+		PDBAtom();
 
 		/// Copy constructor
-		PDBAtom(const PDBAtom& pdb_atom, bool deep = true)
-			throw();
+		PDBAtom(const PDBAtom& pdb_atom, bool deep = true);
 	
 		/// Constructor
-		PDBAtom(const String& name)
-			throw();
+		PDBAtom(const String& name);
 
 		/// Detailed constructor
 		PDBAtom
@@ -112,17 +109,14 @@ namespace BALL
 			 char remoteness_indicator =BALL_PDBATOM_DEFAULT_REMOTENESS_INDICATOR,
 			 char alternate_location_indicator = BALL_PDBATOM_DEFAULT_ALTERNATE_LOCATION_INDICATOR,
 			 float occupancy = BALL_PDBATOM_DEFAULT_OCCUPANCY,
-			 float temperature_factor = BALL_PDBATOM_DEFAULT_TEMPERATURE_FACTOR)
-			throw();
+			 float temperature_factor = BALL_PDBATOM_DEFAULT_TEMPERATURE_FACTOR);
 
 		/// Destructor
-		virtual ~PDBAtom()
-			throw();
+		virtual ~PDBAtom();
 	
 		/// Clears the contents of the atom and removes it from all composite
 		/// structures.
-		virtual void destroy()
-			throw();
+		virtual void destroy();
 
 		//@}
 		/** @name Predicates
@@ -132,14 +126,12 @@ namespace BALL
 		/**	Equality operator.
 				@see Object::operator ==
 		*/
-		bool operator == (const PDBAtom& pdb_atom) const
-			throw();
+		bool operator == (const PDBAtom& pdb_atom) const;
 
 		/**	Inequality operator
 				@see operator ==
 		*/
-		bool operator != (const PDBAtom& pdb_atom) const
-			throw();
+		bool operator != (const PDBAtom& pdb_atom) const;
 
 		//@}
 		/** @name Persistence 
@@ -169,34 +161,29 @@ namespace BALL
         @param  pdb_atom the PDBAtom to be copied (cloned)
         @param  deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy
     */
-    void set(const PDBAtom& pdb_atom, bool deep = true)
-      throw(); 
+    void set(const PDBAtom& pdb_atom, bool deep = true);
 
     /** Copy this instance to {\em pdb_atom}.
         The assignment is either deep or shallow (default).
         @param  pdb_atom the PDBAtom to be assigned to
     */
-    void get(PDBAtom& pdb_atom, bool deep = true) const
-      throw();
+    void get(PDBAtom& pdb_atom, bool deep = true) const;
 
 		/** Assignment operator.
 				The assignment is deep.
 				@param   pdb_atom the PDBAtom to be copied (cloned)
 				@return  pdb_atom& - the instance
 		*/
-		PDBAtom& operator = (const PDBAtom& pdb_atom)
-			throw();
+		PDBAtom& operator = (const PDBAtom& pdb_atom);
 
 		/** Swapping of PDBAtoms.
 				@param  pdb_atom the PDBAtom {\em *this} is being swapped with
 		*/
-		void swap(PDBAtom& pdb_atom)
-			throw();
+		void swap(PDBAtom& pdb_atom);
 
 		/** Clear the contents of the atom.
 		*/
-		virtual void clear()
-			throw();
+		virtual void clear();
 		
 		//@}
 		/**	@name	Accessors 
@@ -207,103 +194,87 @@ namespace BALL
 				The pointer is 0 if the instance does not have a parent protein.
 				@return  Protein* - mutable pointer to the parent protein
 		*/
-		Protein* getProtein()
-			throw();
+		Protein* getProtein();
 
 		/** Get a pointer to the parent protein.
 				The pointer is 0 if the instance does not have a parent protein.
 				@return  Protein* - constant pointer to the parent protein
 		*/
-		const Protein* getProtein() const
-			throw();
+		const Protein* getProtein() const;
 
 		/** Get a pointer to the parent chain.
 				The pointer is 0 if the instance does not have a parent chain.
 				@return  Chain* - mutable pointer to the parent chain
 		*/
-		Chain* getChain()
-			throw();
+		Chain* getChain();
 
 		/** Get a pointer to the parent chain.
 				The pointer is 0 if the instance does not have a parent chain.
 				@return  Chain* - constant pointer to the parent chain
 		*/
-		const Chain* getChain() const
-			throw();
+		const Chain* getChain() const;
 
 		/** Get a pointer to the parent residue.
 				The pointer is 0 if the instance does not have a parent residue.
 				@return  Residue* - mutable pointer to the parent residue
 		*/
-		Residue* getResidue()
-			throw();
+		Residue* getResidue();
 
 		/** Get a pointer to the parent residue.
 				The pointer is 0 if the instance does not have a parent residue.
 				@return  Residue* - constant pointer to the parent residue
 		*/
-		const Residue* getResidue() const
-			throw();
+		const Residue* getResidue() const;
 
 		/** Set the branch designator.
 				@param branch_designator the branch designator
 		*/
-		void setBranchDesignator(char branch_designator)
-			throw();
+		void setBranchDesignator(char branch_designator);
 
 		/** Get the branch designator.
 				@return char the branch designator
 		*/
-		char getBranchDesignator() const
-			throw();
+		char getBranchDesignator() const;
 
 		/** Set the remoteness indicator.
 				@param remoteness_indicator the remoteness indicator
 		*/
-		void setRemotenessIndicator(char remoteness_indicator)
-			throw();
+		void setRemotenessIndicator(char remoteness_indicator);
 
 		/** Get the remoteness indicator.
 				@return char the remoteness indicator
 		*/
-		char getRemotenessIndicator() const
-			throw();
+		char getRemotenessIndicator() const;
 
 		/** Set the alternate location indicator.
 				@param alternate_location_indicator the alternate location indicator
 		*/
-		void setAlternateLocationIndicator(char alternate_location_indicator)
-			throw();
+		void setAlternateLocationIndicator(char alternate_location_indicator);
 
 		/** Get the alternate location indicator.
 				@return char the alternate location indicator
 		*/
-		char getAlternateLocationIndicator() const
-			throw();
+		char getAlternateLocationIndicator() const;
 
 		/** Set the occupancy.
 				@param occupancy the occupancy
 		*/
-		void setOccupancy(float occupancy)
-			throw();
+		void setOccupancy(float occupancy);
 
 		/** Get the occupancy.
 				@return float occupancy the occupancy
 		*/
-		float getOccupancy() const
-			throw();
+		float getOccupancy() const;
 
 		/** Set the temperature factor.
 				@param temperature_factor the temperature factor
 		*/
-		void setTemperatureFactor(float temperature_factor)
-			throw();
+		void setTemperatureFactor(float temperature_factor);
 
 		/** Get the temperature factor.
 				@return float the temperature factor
 		*/
-		float getTemperatureFactor() const
-			throw();
+		float getTemperatureFactor() const;
 
 		//@}
 		/**	@name	Debugging and Diagnostics 
@@ -316,15 +287,13 @@ namespace BALL
 				@param	s output stream where to output the internal state of the instance
 				@param  depth the dumping depth
 		*/
-		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-			throw();
+		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 		//@}
 
 		private:
 
-		void clear_()
-			throw();
+		void clear_();
 
 		/*_ The PDB branch designator
 		*/

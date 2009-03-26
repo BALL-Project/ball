@@ -11,7 +11,6 @@ namespace BALL
 {
 
 	ExpressionTree::ExpressionTree()
-		throw()
 		:	type_(INVALID),
 			negate_(false),
 			predicate_(0),
@@ -21,7 +20,6 @@ namespace BALL
 
 
 	void ExpressionTree::dump(std::ostream& os, Size depth) const
-		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(os);
 		BALL_DUMP_HEADER(os, this, this);
@@ -41,7 +39,6 @@ namespace BALL
 
 	ExpressionTree::ExpressionTree
 		(Type type,	list<const ExpressionTree*>	children, bool negate)
-		throw()
 		:	type_(type),
 			negate_(negate),
 			predicate_(0),
@@ -51,7 +48,6 @@ namespace BALL
 
 
 	ExpressionTree::ExpressionTree(ExpressionPredicate* predicate, bool negate)
-		throw()
 		:	type_(INVALID),
 			negate_(negate),
 			predicate_(predicate),
@@ -61,7 +57,6 @@ namespace BALL
 	
 
 	ExpressionTree::ExpressionTree(const ExpressionTree& tree)
-		throw()
 		:	type_(tree.type_),
 			negate_(tree.negate_),
 			predicate_(0),
@@ -83,14 +78,12 @@ namespace BALL
 			
 
 	ExpressionTree::~ExpressionTree()
-		throw()
 	{
 		clear();
 	}
 
 
 	void ExpressionTree::clear()
-		throw()
 	{
 		type_ = INVALID;
 		negate_ = false;
@@ -110,7 +103,6 @@ namespace BALL
 
 
 	ExpressionTree& ExpressionTree::operator = (const ExpressionTree& tree)
-		throw()
 	{
 		// Avoid self assignment.
 		if (&tree == this)
@@ -141,7 +133,6 @@ namespace BALL
 
 
 	bool ExpressionTree::operator () (const Atom& atom) const 
-		throw()
 	{
 
     bool result = true;
@@ -203,7 +194,6 @@ namespace BALL
 
 
 	bool ExpressionTree::operator == (const ExpressionTree& tree) const
-		throw()
 	{
 		if ((predicate_ == 0) && (tree.predicate_ == 0))
 		{
@@ -232,13 +222,11 @@ namespace BALL
 	}
 
 	bool ExpressionTree::operator != (const ExpressionTree& tree) const
-		throw()
 	{
 		return ! operator == (tree);
 	}
 
 	bool ExpressionTree::compareChildren_(const ExpressionTree& tree) const
-		throw()
 	{
 		if (children_.size() != tree.children_.size())
 		{
@@ -258,56 +246,48 @@ namespace BALL
 
 
 	void ExpressionTree::setType(Type type)
-		throw()
 	{
 		type_ = type;
 	}
 
 
 	ExpressionTree::Type ExpressionTree::getType() const 
-		throw()
 	{
 		return type_;
 	}
 
 
 	void ExpressionTree::setNegate(bool negate)
-		throw()
 	{
 		negate_= negate;
 	}
 
 
 	bool ExpressionTree::getNegate() const 
-		throw()
 	{
 		return negate_;
 	}
 
 
 	void ExpressionTree::setPredicate(ExpressionPredicate* predicate)
-		throw()
 	{
 		predicate_ = predicate;
 	}
 
 
 	ExpressionPredicate*  ExpressionTree::getPredicate() const 
-		throw()
 	{
 		return predicate_;
 	}
 
 
 	void ExpressionTree::appendChild(const ExpressionTree* child)
-		throw()
 	{
 		children_.push_back(child);
 	}
 
 
 	const list<const ExpressionTree*>& ExpressionTree::getChildren() const
-		throw()
 	{
 		return children_;
 	}

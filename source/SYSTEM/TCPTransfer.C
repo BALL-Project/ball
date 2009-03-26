@@ -51,7 +51,6 @@ namespace BALL
 {
 
 	TCPTransfer::TransferFailed::TransferFailed(const char* file, int line, Index error_code)
-		throw()
 		: Exception::GeneralException(file, line, string("TransferFailed"), string("Error code: ") + String(error_code))
 	{
 	}
@@ -84,7 +83,6 @@ namespace BALL
 
 
 	TCPTransfer::~TCPTransfer()
-		throw()
 	{
 		if (socket_ > 0)
 		{
@@ -95,7 +93,6 @@ namespace BALL
 				
 				
 	TCPTransfer::TCPTransfer()
-		throw()
 	:	host_address_(""),
 		file_address_(""),
 		port_(0),
@@ -119,7 +116,6 @@ namespace BALL
 													 const String& 	login,
 													 const String& 	password,
 													 Position 			port)
-		throw()
 	{
 		protocol_ 			= protocol;
 		host_address_ 	= host_address;
@@ -140,7 +136,6 @@ namespace BALL
 
 
 	TCPTransfer::Status TCPTransfer::transfer()
-		throw()
 	{
 		abort_ = false;
 		status_ = UNKNOWN_PROTOCOL__ERROR;
@@ -164,7 +159,6 @@ namespace BALL
 
 
 	bool TCPTransfer::set(std::ostream& file, const String& address)
-		throw()
 	{
 		if (socket_ > 0)
 		{
@@ -243,7 +237,6 @@ namespace BALL
 
 
 	void TCPTransfer::clear()
-		throw()
 	{
 		host_address_.clear();
 		file_address_.clear();
@@ -265,7 +258,6 @@ namespace BALL
 
 
 	TCPTransfer::Status TCPTransfer::getHTTPStatus_()
-		throw()
 	{	
 		// get the status from the server
 		String first_line;
@@ -302,7 +294,6 @@ namespace BALL
 
 		
 	TCPTransfer::Status TCPTransfer::getHTTP_()
-		throw()
 	{
 		String query = "GET ";
 		
@@ -388,7 +379,6 @@ namespace BALL
 		
 
 	TCPTransfer::Status TCPTransfer::setBlock_(Socket socket, bool block)
-		throw()
 	{
 		// WIN port
 		#ifndef BALL_USE_WINSOCK
@@ -412,7 +402,6 @@ namespace BALL
 
 
 	TCPTransfer::Status TCPTransfer::logon_(const String& query)
-		throw()
 	{
 		#ifdef BALL_USE_WINSOCK
 			WORD    wsa_vers = 0x0101;
@@ -499,7 +488,6 @@ namespace BALL
 
 
 	TCPTransfer::Status TCPTransfer::getFTPStatus_()
-		throw()
 	{
 		status_ = UNKNOWN__ERROR;
 		String temp;
@@ -520,7 +508,6 @@ namespace BALL
 
 
 	void TCPTransfer::dump(std::ostream& s, Size depth) const
-		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 
@@ -543,7 +530,6 @@ namespace BALL
 
 
 	TCPTransfer::Status TCPTransfer::sendData_(const String& query, Socket socket)
-		throw()
 	{
 		#ifdef DEBUG
 			Log.info() << "\n>>" << query << std::endl;
@@ -559,7 +545,6 @@ namespace BALL
 
 
 	bool TCPTransfer::waitForOutput_(const String& key, Size seconds)
-		throw()
 	{
 		setBlock_(socket_, false);
 		Timer timer;
@@ -592,7 +577,6 @@ namespace BALL
 
 
 	bool TCPTransfer::getFTPMessage_(Index status)
-		throw()
 	{
 		// read all lines from the server
 		// last line starts with "nr "
@@ -655,7 +639,6 @@ namespace BALL
 	}
 
 	TCPTransfer::Status TCPTransfer::getFTP_()
-		throw()
 	{
 		// connect to FTP-server
 		Status status = logon_("");
@@ -889,7 +872,6 @@ namespace BALL
 	}
 
 	String TCPTransfer::getErrorCode() const
-		throw()
 	{
 		switch(status_)
 		{

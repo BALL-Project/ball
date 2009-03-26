@@ -1001,13 +1001,13 @@ class Cross:
 {
   public:
 
-    Cross() throw();
+    Cross();
 
-    virtual ~Cross() throw();
+    virtual ~Cross();
 		
-    float getRadius() const throw();
+    float getRadius() const;
 
-    void setRadius(float new_radius) throw();
+    void setRadius(float new_radius);
 
   protected:
 					
@@ -1033,7 +1033,6 @@ so it recognizes the new class \class{Cross}.
 
 \begin{lstlisting}{}
 void Renderer::render_(const GeometricObject* object)
-  throw()
 {
   if      (RTTI::isKindOf<Sphere>(*object))         
   { renderSphere_(*(const Sphere*) object);
@@ -1053,7 +1052,6 @@ warning, which will appear if we forget to implement it in a derived Renderer:
 
 \begin{lstlisting}{}
 virtual void renderCross_(const Cross& /* cross */)
-  throw() 
 {
   Log.error() << "renderCross_ not implemented in derived "
               << "Renderer class" << std::endl;
@@ -1065,7 +1063,6 @@ does the actual rendering, so we use OpenGL code here:
 
 \begin{lstlisting}{}
 void GLRenderer::renderCross_(const Cross& cross)
-  throw() 
 {
   glPushMatrix();
 	

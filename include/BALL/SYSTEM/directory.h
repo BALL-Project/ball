@@ -274,12 +274,10 @@ namespace BALL
 		bool operator != (const Directory& directory) const;
 
 		/// Get the home directory of the current user
-		static String getUserHomeDir()
-			throw();
+		static String getUserHomeDir();
 		
 		/// Goto the home directory of the current user
-		static bool changeToUserHomeDir()
-			throw();
+		static bool changeToUserHomeDir();
 
 		//@}
 

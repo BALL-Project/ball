@@ -47,13 +47,11 @@ namespace BALL
 				 	*	@param			modal the modal flag
 				 	*	@param			fl the widget flags
 					*/
-				DockResultDialog(QWidget* parent = 0, const char* name = "DockResultDialog")
-					throw();
+				DockResultDialog(QWidget* parent = 0, const char* name = "DockResultDialog");
 					
 				/** Destructor
 				*/
-				virtual ~DockResultDialog()
-					throw();
+				virtual ~DockResultDialog();
 				//@}
 					
 				/**	@name	Assignment
@@ -62,8 +60,7 @@ namespace BALL
 				
 				/** Assignment operator
 				*/
-				const DockResultDialog& operator =(const DockResultDialog& res_dialog)
-					throw();
+				const DockResultDialog& operator =(const DockResultDialog& res_dialog);
 				//@}
 				
 				/**	@name	Accessors: mutators
@@ -73,22 +70,19 @@ namespace BALL
 				/** Sets the dock result.
 					* @param			dock_res dock result
 					*/
-				void setDockResult(DockResult* dock_res)
-					throw();
+				void setDockResult(DockResult* dock_res);
 
 				/** Sets the docked system.
 					* @param			system docked system
 					*/
-				void setDockedSystem(System* system)
-					throw();
+				void setDockedSystem(System* system);
 
 				/** Adds scoring function to combobox and its advanced option dialog to hashmap, if it has such a dialog.
 					* @param			name the name of the scoring function
 					* @param			score_func the value of enum DockingController::ScoringFunction
 					* @param			dialog advanced option dialog
 					*/
-				void addScoringFunction(const QString& name, DockingController::ScoringFunction score_func, QDialog* dialog=0)
-					throw();
+				void addScoringFunction(const QString& name, DockingController::ScoringFunction score_func, QDialog* dialog=0);
 				//@}
 					
 			public slots:
@@ -182,20 +176,19 @@ namespace BALL
 
 						/** Default constructor
 						*/
-						Compare_() throw();
+						Compare_();
 
 						/** Constructor
 						*/
-						Compare_(Position index) throw();
+						Compare_(Position index);
 
 						/** Destructor
 						*/
-						~Compare_() throw();
+						~Compare_();
 
 						/** Operator ()
 						*/
-						bool operator() (const vector<float>& a, const vector<float>& b) const
-							throw();
+						bool operator() (const vector<float>& a, const vector<float>& b) const;
 
 						/** Index of the entry by which the two vectors in \link Compare::operator() operator() \endlink are compared.
 						*/
@@ -208,8 +201,7 @@ namespace BALL
 					* Remark: Copy contructor is private because it is not completed. 
 					* The copy constuctor of the QT widgets is private and cannot be called.  
 					*/
-				DockResultDialog(const DockResultDialog& dock_res_dialog)
-					throw();
+				DockResultDialog(const DockResultDialog& dock_res_dialog);
 			
 				/** DockResult contains all information of the performed docking.
 					* @see DockResult
