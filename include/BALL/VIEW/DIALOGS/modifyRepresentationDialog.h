@@ -72,20 +72,16 @@ namespace BALL
 																 bool modal = FALSE, Qt::WFlags fl = 0);
 
 			///
-			~ModifyRepresentationDialog()
-				throw();
+			~ModifyRepresentationDialog();
 					
 			///
-			virtual void onNotify(Message *message)
-				throw();
+			virtual void onNotify(Message *message);
 
 			/// 
-			void setRepresentation(Representation* rep)
-				throw();
+			void setRepresentation(Representation* rep);
 
 			///
-			void setGrid(RegularData3D* grid)
-				throw();
+			void setGrid(RegularData3D* grid);
 					
 			///
 			void setMinValue(float value);
@@ -138,8 +134,8 @@ namespace BALL
 			void removeGrid_(RegularData3D& grid);
 			void setColor_(ColorRGBA& color, const QLabel* label, const QSpinBox* box);
 			void getColor_(const ColorRGBA& color, QLabel* label, QSpinBox* box);
-			void invalidateGrid_() throw();
-			void invalidateMesh_() throw();
+			void invalidateGrid_();
+			void invalidateMesh_();
 			void changeDrawingMode_();
 			void checkApplyButton_();
 

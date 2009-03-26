@@ -18,7 +18,6 @@ namespace BALL
 	{
 
 NetworkPreferences::NetworkPreferences(QWidget* parent, const char* name, Qt::WFlags fl)
-	throw()
 	: QWidget(parent, fl),
 		Ui_NetworkPreferencesData(),
 		PreferencesEntry()
@@ -35,7 +34,6 @@ NetworkPreferences::NetworkPreferences(QWidget* parent, const char* name, Qt::WF
 }
 
 NetworkPreferences::~NetworkPreferences()
-	throw()
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "Destructing object " << (void *)this 

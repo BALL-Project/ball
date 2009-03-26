@@ -25,7 +25,6 @@ namespace BALL
 	static const char* const REGEXP_CONFORM_PARENT_DIRECTORY = "\\.\\.";
 
 	void FileSystem::canonizePath(String& path)
-		throw()
 	{
 		if (path == "")
 		{
@@ -104,7 +103,6 @@ namespace BALL
 	}
 
 	void FileSystem::expandTilde_(String& path)
-		throw()
 	{
 
 

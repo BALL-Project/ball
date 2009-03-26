@@ -14,41 +14,35 @@ namespace BALL
 {
 
 	SecondaryStructure::SecondaryStructure()
-		throw()
 		:	AtomContainer(),
 			type_(SecondaryStructure::UNKNOWN)
 	{
 	}
 		
 	SecondaryStructure::SecondaryStructure(const SecondaryStructure& secondary_structure, bool deep)
-		throw()
 		:	AtomContainer(secondary_structure, deep),
 			type_(secondary_structure.type_)
 	{
 	}
 		
 	SecondaryStructure::SecondaryStructure(const String& name)
-		throw()
 		:	AtomContainer(name),
 			type_(SecondaryStructure::UNKNOWN)
 	{
 	}
 
 	SecondaryStructure::~SecondaryStructure()
-		throw()
 	{
 		destroy();
 	}
 
 	void SecondaryStructure::clear()
-		throw()
 	{
 		AtomContainer::clear();
 		type_ = UNKNOWN;
 	}
 		
 	void SecondaryStructure::destroy()
-		throw()
 	{
 		AtomContainer::destroy();
 		type_ = UNKNOWN;
@@ -75,32 +69,27 @@ namespace BALL
 	}
  
 	void SecondaryStructure::set(const SecondaryStructure& secondary_structure, bool deep)
-		throw()
 	{
 		AtomContainer::set(secondary_structure, deep);
 	}
 			
 	SecondaryStructure& SecondaryStructure::operator = (const SecondaryStructure& secondary_structure)
-		throw()
 	{
 		set(secondary_structure);
 		return *this;
 	}
 
 	void SecondaryStructure::get(SecondaryStructure& secondary_structure, bool deep) const
-		throw()
 	{
 		secondary_structure.set(*this, deep);
 	}
 			
 	void SecondaryStructure::swap(SecondaryStructure& secondary_structure)
-		throw()
 	{
 		AtomContainer::swap(secondary_structure);
 	}
 
 	Protein* SecondaryStructure::getProtein()
-		throw()
 	{
 		for (Composite::AncestorIterator ancestor_it = beginAncestor(); !ancestor_it.isEnd(); ++ancestor_it)
 		{
@@ -114,13 +103,11 @@ namespace BALL
 	}
 
 	const Protein* SecondaryStructure::getProtein() const
-		throw()
 	{
 		return const_cast<SecondaryStructure *>(this)->getProtein();
 	}
 
 	Chain* SecondaryStructure::getChain()
-		throw()
 	{
 		for (Composite::AncestorIterator ancestor_it = beginAncestor(); !ancestor_it.isEnd(); ++ancestor_it)
 		{
@@ -134,13 +121,11 @@ namespace BALL
 	}
 
 	const Chain* SecondaryStructure::getChain() const
-		throw()
 	{
 		return const_cast<SecondaryStructure*>(this)->getChain();
 	}
 
 	Residue* SecondaryStructure::getResidue(Position position)
-		throw()
 	{
 		for (ResidueIterator res_it = beginResidue();
 				 !res_it.isEnd();
@@ -156,37 +141,31 @@ namespace BALL
 	}
 
 	const Residue* SecondaryStructure::getResidue(Position position) const
-		throw()
 	{
 		return const_cast<SecondaryStructure*>(this)->getResidue(position);
 	}
 
 	Residue* SecondaryStructure::getNTerminal()
-		throw()
 	{
 		return (Residue *)::BALL::getNTerminal(*this);
 	}
 		
 	const Residue* SecondaryStructure::getNTerminal() const
-		throw()
 	{
 		return ::BALL::getNTerminal(*this);
 	}
 
 	Residue* SecondaryStructure::getCTerminal()
-		throw()
 	{
 		return (Residue *)::BALL::getCTerminal(*this);
 	}
 		
 	const Residue* SecondaryStructure::getCTerminal() const
-		throw()
 	{
 		return ::BALL::getCTerminal(*this);
 	}
 
 	PDBAtom* SecondaryStructure::getPDBAtom(Position position)
-		throw()
 	{
 		for (PDBAtomIterator protein_atom_it = beginPDBAtom(); !protein_atom_it.isEnd(); ++protein_atom_it)
 		{
@@ -200,13 +179,11 @@ namespace BALL
 	}
 
 	const PDBAtom *SecondaryStructure::getPDBAtom(Position position) const
-		throw()
 	{
 		return ((SecondaryStructure *)this)->getPDBAtom(position);
 	}
 
 	Size SecondaryStructure::countResidues() const
-		throw()
 	{
 		Size size = 0;
 
@@ -219,7 +196,6 @@ namespace BALL
 	}
 
 	Size SecondaryStructure::countPDBAtoms() const
-		throw()
 	{
 		Size size = 0;
 
@@ -232,67 +208,56 @@ namespace BALL
 	}
 
 	void SecondaryStructure::prepend(Residue &residue)
-		throw()
 	{
 		AtomContainer::prepend(residue);
 	}
 
 	void SecondaryStructure::append(Residue &residue)
-		throw()
 	{
 		AtomContainer::append(residue);
 	}
 
 	void SecondaryStructure::insert(Residue &residue)
-		throw()
 	{
 		AtomContainer::insert(residue);
 	}
 
 	void SecondaryStructure::insertBefore(Residue& residue, Composite& before)
-		throw()
 	{
 		AtomContainer::insertBefore(residue, before);
 	}
 
 	void SecondaryStructure::insertAfter(Residue& residue, Composite& after)
-		throw()
 	{
 		AtomContainer::insertAfter(residue, after);
 	}
 
 	bool SecondaryStructure::remove(Residue& residue)
-		throw()
 	{
 		return AtomContainer::remove(residue);
 	}
 
 	void SecondaryStructure::spliceBefore(SecondaryStructure& secondary_structure)
-		throw()
 	{
 		AtomContainer::spliceBefore(secondary_structure);
 	}
 
 	void SecondaryStructure::spliceAfter(SecondaryStructure& secondary_structure)
-		throw()
 	{
 		AtomContainer::spliceAfter(secondary_structure);
 	}
 
 	void SecondaryStructure::splice(SecondaryStructure& secondary_structure)
-		throw()
 	{
 		AtomContainer::splice(secondary_structure);
 	}
 
 	bool SecondaryStructure::isValid() const
-		throw()
 	{ 
 		return AtomContainer::isValid();
 	}
 
 	void SecondaryStructure::dump(ostream& s, Size depth) const
-		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(s)
 		
@@ -305,13 +270,11 @@ namespace BALL
 	}
 
 	bool SecondaryStructure::operator == (const SecondaryStructure& secondary_structure) const
-		throw()
 	{
 		return(Object::operator == (secondary_structure));
 	}
 
 	bool SecondaryStructure::operator != (const SecondaryStructure& secondary_structure) const
-		throw()
 	{
 		return ! (*this == secondary_structure);
 	}

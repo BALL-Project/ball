@@ -22,7 +22,6 @@ namespace BALL
 	{
 
 LabelDialog::LabelDialog(QWidget* parent, const char* name)
-	throw()
 	:	QDialog(parent),
 		Ui_LabelDialogData(),
 		ModularWidget(name),
@@ -52,7 +51,6 @@ LabelDialog::LabelDialog(QWidget* parent, const char* name)
 }
 
 LabelDialog::~LabelDialog()
-	throw()
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "deleting LabelDialog " << this << std::endl;
@@ -60,7 +58,6 @@ LabelDialog::~LabelDialog()
 }
 
 void LabelDialog::fetchPreferences(INIFile& inifile)
-	throw()
 {
 	ModularWidget::fetchPreferences(inifile);
 
@@ -90,7 +87,6 @@ void LabelDialog::fetchPreferences(INIFile& inifile)
 }
 
 void LabelDialog::writePreferences(INIFile& inifile)
-	throw()
 {
 	ModularWidget::writePreferences(inifile);
 
@@ -105,7 +101,6 @@ void LabelDialog::writePreferences(INIFile& inifile)
 }
 
 void LabelDialog::onNotify(Message *message)
-	throw()
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "LabelDialog " << this << " onNotify " << message << std::endl;
@@ -122,7 +117,6 @@ void LabelDialog::onNotify(Message *message)
 }
 
 void LabelDialog::initializeWidget(MainControl&)
-	throw()
 {
 	String description = "Shortcut|Display|Create|Label";
 	id_ = insertMenuEntry(MainControl::DISPLAY_CREATE, "&Label", this, 
@@ -221,7 +215,6 @@ void LabelDialog::textChanged()
 }
 
 void LabelDialog::checkMenu(MainControl& main_control)
-	throw()
 {
 	id_->setEnabled(main_control.getMolecularControlSelection().size() > 0 && !main_control.isBusy());
 }

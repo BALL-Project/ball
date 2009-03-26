@@ -95,31 +95,25 @@ namespace BALL
 		//@{	
 	
 		/// Default constructor
-		Residue()
-			throw();
+		Residue();
 	
 		/// Copy constructor
-		Residue(const Residue& residue, bool deep = true)
-			throw();
+		Residue(const Residue& residue, bool deep = true);
 	
 		/// Detailled constructor
 		Residue
 			(const String& name,
 			 const String& id = BALL_RESIDUE_DEFAULT_ID,
-			 char insertion_code = BALL_RESIDUE_DEFAULT_INSERTION_CODE)
-		 	throw();
+			 char insertion_code = BALL_RESIDUE_DEFAULT_INSERTION_CODE);
 
 		/// Destructor
-		virtual ~Residue()
-			throw();
+		virtual ~Residue();
 
 		/// Clears the contents of this instance.
-		virtual void clear()
-			throw();
+		virtual void clear();
 	
 		/// Clears the contents of this instance and removes it from all composite structures.
-		virtual void destroy()
-			throw();
+		virtual void destroy();
 	
 		//@}
 		/** @name Persistence 
@@ -148,23 +142,19 @@ namespace BALL
 				@param  residue the Residue to be copied (cloned)
 				@param  deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy
 		*/
-		void set(const Residue& residue, bool deep = true)
-			throw();
+		void set(const Residue& residue, bool deep = true);
 
 		/**	Assignment operator	
 		*/
-		Residue& operator = (const Residue& residue)
-			throw();
+		Residue& operator = (const Residue& residue);
 
 		/**	Assign a Residue object from another instance.
 		*/
-		void get(Residue& residue, bool deep = true) const
-			throw();
+		void get(Residue& residue, bool deep = true) const;
 
 		/**	Swap the contents of two Residue objects. 
 		*/
-		void swap(Residue& residue)
-			throw();
+		void swap(Residue& residue);
 	
 		//@}
 
@@ -172,14 +162,12 @@ namespace BALL
 				Two residues are equal if they have the same handle.
 				@see Object::operator ==
 		*/
-		bool operator == (const Residue& residue) const
-			throw();
+		bool operator == (const Residue& residue) const;
 
 		/**	Inequality operator
 				@see operator ==
 		*/
-		bool operator != (const Residue& residue) const
-			throw();
+		bool operator != (const Residue& residue) const;
 
 
 		/**	@name	Accessors 
@@ -198,168 +186,149 @@ namespace BALL
 								the variant extension (<tt>-XX</tt>) is omitted.
 				@return String the full fragment name
 		*/
-		String getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const
-			throw();
+		String getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const;
 		
 		/**	Check whether the torsion angle phi is defined.
 				@return bool
 		*/
-		bool hasTorsionPhi() const
-			throw();
+		bool hasTorsionPhi() const;
 	
 		/**	Calculate the torsion angle phi.
 				@return Angle - the torsion angle phi
 		*/
-		Angle getTorsionPhi() const
-			throw();
+		Angle getTorsionPhi() const;
 		
 		/**	Check whether the torsion angle psi is defined.
 				@return bool
 		*/
-		bool hasTorsionPsi() const
-			throw();
+		bool hasTorsionPsi() const;
 	
 		/**	Calculate the torsion angle psi.
 				@return Angle - the torsion angle phi
 		*/
-		Angle getTorsionPsi() const	throw();
+		Angle getTorsionPsi() const;
 
 		/** Get a pointer to the parent protein.
 				The pointer is 0 if this instance does not have a parent protein.
 				@return  Protein* - mutable pointer to the parent protein
 		*/
-		Protein* getProtein()	throw();
+		Protein* getProtein();
 
 		/** Get a constant pointer to the parent protein.
 				The pointer is 0 if this instance does not have a parent protein.
 				@return  Protein* - constant pointer to the parent protein
 		*/
-		const Protein* getProtein() const	throw();
+		const Protein* getProtein() const;
 
 		/** Get a pointer to the parent chain.
 				The pointer is 0 if this instance does not have a parent chain.
 				@return  Chain* - mutable pointer to the parent chain
 		*/
-		Chain* getChain() throw();
+		Chain* getChain();
 
 		/** Get a pointer to the parent chain.
 				The pointer is 0 if this instance does not have a parent chain.
 				@return  Chain* - constant pointer to the parent chain
 		*/
-		const Chain* getChain() const	throw();
+		const Chain* getChain() const;
 
 		/** Get a pointer to the parent secondary structure.
 				The pointer is 0 if this instance does not have a parent secondary structure.
 				@return  SecondaryStructure* - mutable pointer to the parent chain
 		*/
-		SecondaryStructure* getSecondaryStructure() throw();
+		SecondaryStructure* getSecondaryStructure();
 
 		/** Get a pointer to the parent secondary structure.
 				The pointer is 0 if this instance does not have a parent secondary structure.
 				@return  SecondaryStructure* - mutable pointer to the parent chain
 		*/
-		const SecondaryStructure* getSecondaryStructure() const throw();
+		const SecondaryStructure* getSecondaryStructure() const;
 
 		/** Get a pointer to a child PDBAtom at a given position.
 				The pointer is 0 if this instance does not have a PDBAtom at this position.
 				@param   position the position of the child PDBAtom
 				@return  PDBAtom* - mutable pointer to the child
 		*/
-		PDBAtom* getPDBAtom(Position position) throw();
+		PDBAtom* getPDBAtom(Position position);
 	
 		/** Get a pointer to a child PDBAtom at a given position.
 				The pointer is 0 if this instance does not have a PDBAtom at this position.
 				@param   position the position of the child PDBAtom
 				@return  PDBAtom* - constant pointer to the child
 		*/
-		const PDBAtom* getPDBAtom(Position position) const
-			throw();
+		const PDBAtom* getPDBAtom(Position position) const;
 	
 		/**	Set the ID.
 				@param id the new ID
 		*/
-		void setID(const String& id)
-			throw();
+		void setID(const String& id);
 
 		/**	Retrieve the ID.
 				@return String the ID
 		*/
-		const String& getID() const
-			throw();
+		const String& getID() const;
 
 		/**	Set the insertion code.
 				@param insertion_code the new insertion code
 		*/
-		void setInsertionCode(char insertion_code)
-			throw();
+		void setInsertionCode(char insertion_code);
 
 		/**	Get the insertion code.
 				@return  char the insertion code
 		*/
-		char getInsertionCode() const
-			throw();
+		char getInsertionCode() const;
 
 		/**	Count the child PDBAtoms.
 				@return  Size the number of PDBAtoms
 		*/
-		Size countPDBAtoms() const
-			throw();
+		Size countPDBAtoms() const;
 
 		/** Prepend a PDBAtom at position 0.
 				@param atom the PDBAtom to prepend
 		*/
-		void prepend(PDBAtom& atom)
-			throw();
+		void prepend(PDBAtom& atom);
 
 		/** Append a PDBAtom at the last position.
 				@param atom the PDBAtom to append
 		*/
-		void append(PDBAtom& atom)
-			throw();
+		void append(PDBAtom& atom);
 
 		/** Insert a PDBAtom at the last position.
 				@param atom the PDBAtom to append
 		*/
-		void insert(PDBAtom& atom)
-			throw();
+		void insert(PDBAtom& atom);
 
 		/** Insert a PDBAtom before a given Composite object.
 				@param atom the PDBAtom to insert
 				@param before the Composite object to insert before
 		*/
-		void insertBefore(PDBAtom& atom, Composite& before)
-			throw();
+		void insertBefore(PDBAtom& atom, Composite& before);
 
 		/** Insert a PDBAtom after a given Composite object.
 				@param atom the PDBAtom to insert
 				@param after the Composite object to insert after
 		*/
-		void insertAfter(PDBAtom& atom, Composite& after)
-			throw();
+		void insertAfter(PDBAtom& atom, Composite& after);
 
 		/** Remove a PDBAtom.
 				@param atom the PDBAtom to remove
 		*/
-		bool remove(PDBAtom& atom)
-			throw();
+		bool remove(PDBAtom& atom);
 
 		/**	Cut all children of <tt>residue</tt> and prepend them before the children of this instance.
 				@param residue the residue to access
 		*/
-		void spliceBefore(Residue& residue)
-			throw();
+		void spliceBefore(Residue& residue);
 
 		/**	Cut all children of <tt>residue</tt> and append them after the children of this instance.
 				@param residue the residue to access
 		*/
-		void spliceAfter(Residue& residue)
-			throw();
+		void spliceAfter(Residue& residue);
 
 		/**	Move the children of <tt>residue</tt> into this instance.
 				The children are inserted using  \link spliceBefore spliceBefore \endlink .
 		*/
-		void splice(Residue& residue)
-			throw();
+		void splice(Residue& residue);
 
 		//@}
 		/**	@name	Predicates 
@@ -370,32 +339,28 @@ namespace BALL
 				Returns true, if this instance has the property "PROPERTY__AMINO_ACID".
 				@return bool
 		*/
-		bool isAminoAcid() const
-			throw();
+		bool isAminoAcid() const;
 	
 		/** Test if this residue is terminal.
 				Returns true, if this instance has the property "PROPERTY__AMINO_ACID"
 				and is the first or last amino acid residue	in its parent chain.
 				@return bool
 		*/
-		bool isTerminal() const
-			throw();
+		bool isTerminal() const;
 	
 		/** Test if this residue is N-terminal.
 				Returns true, if this instance has the property "PROPERTY__AMINO_ACID"
 				and is the first amino acid residue	in its parent chain.
 				@return bool
 		*/
-		bool isNTerminal() const
-			throw();
+		bool isNTerminal() const;
 	
 		/** Test if this residue is C-terminal.
 				Returns true, if this instance has the property "PROPERTY__AMINO_ACID"
 				and is the last amino acid residue in its parent chain.
 				@return bool
 		*/
-		bool isCTerminal() const
-			throw();
+		bool isCTerminal() const;
 
 		//@}
 		/**	@name	Debugging and Diagnostics 
@@ -406,8 +371,7 @@ namespace BALL
 				@return	 bool - <tt>true</tt> if the internal state 
 								 is correct (self-validated) and consistent, <tt>false</tt> otherwise
 		*/
-		virtual bool isValid() const
-			throw();
+		virtual bool isValid() const;
 
 		/** Internal state dump.
 				Dump the current internal state to the output
@@ -415,8 +379,7 @@ namespace BALL
 				@param	s output stream where to output the internal state
 				@param  depth the dumping depth
 		*/
-		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-			throw();
+		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 		//@}
 
@@ -427,44 +390,31 @@ namespace BALL
 
 		private:
 
-		AtomContainer* getAtomContainer(Position position)
-			throw();
+		AtomContainer* getAtomContainer(Position position);
 	
-		const AtomContainer* getAtomContainer(Position position) const
-			throw();
+		const AtomContainer* getAtomContainer(Position position) const;
 	
-		Size countAtomContainers() const
-			throw();
+		Size countAtomContainers() const;
 
-		void prepend(AtomContainer& atom_container)
-			throw();
+		void prepend(AtomContainer& atom_container);
 
-		void append(AtomContainer& atom_container)
-			throw();
+		void append(AtomContainer& atom_container);
 
-		void insert(AtomContainer& atom_container)
-			throw();
+		void insert(AtomContainer& atom_container);
 
-		void insertBefore(AtomContainer& atom_container, Composite& composite)
-			throw();
+		void insertBefore(AtomContainer& atom_container, Composite& composite);
 
-		void insertAfter(AtomContainer& atom_container, Composite& composite)
-			throw();
+		void insertAfter(AtomContainer& atom_container, Composite& composite);
 
-		void spliceBefore(AtomContainer& atom_container)
-			throw();
+		void spliceBefore(AtomContainer& atom_container);
 
-		void spliceAfter(AtomContainer& base_ragment)
-			throw();
+		void spliceAfter(AtomContainer& base_ragment);
 
-		void splice(AtomContainer& AtomContainer)
-			throw();
+		void splice(AtomContainer& AtomContainer);
 
-		bool remove(AtomContainer& AtomContainer)
-			throw();
+		bool remove(AtomContainer& AtomContainer);
 
-		bool isSuperAtomContainerOf(const AtomContainer& atom_container) const
-			throw();
+		bool isSuperAtomContainerOf(const AtomContainer& atom_container) const;
 
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(AtomContainer)
 
@@ -477,7 +427,6 @@ namespace BALL
 
   template <class ResidueContainerType>
   const Residue* getNTerminal(const ResidueContainerType& residue_container)
-		throw()
   {
 		ResidueConstIterator res_it(residue_container.beginResidue());
     for (; res_it != residue_container.endResidue(); ++res_it)
@@ -493,7 +442,6 @@ namespace BALL
 
   template <class ResidueContainerType>
   const Residue* getCTerminal(const ResidueContainerType& residue_container)
-		throw()
   {
 		ResidueConstReverseIterator res_it(residue_container.rbeginResidue());
     for (; res_it != residue_container.rendResidue(); ++res_it)

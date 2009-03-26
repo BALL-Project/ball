@@ -44,23 +44,19 @@ namespace BALL
 
 		/** Default constructor 
 		*/
-		Fragment()
-			throw();
+		Fragment();
 	
 		/** Copy constructor 
 		*/
-		Fragment(const Fragment& fragment, bool deep = true)
-			throw();
+		Fragment(const Fragment& fragment, bool deep = true);
 	
 		/** Constructor 
 		*/
-		Fragment(const String& name)
-			throw();
+		Fragment(const String& name);
 
 		/** Destructor 
 		*/
-		virtual ~Fragment()
-			throw();
+		virtual ~Fragment();
 
 		//@}
 		/** @name Persistence 
@@ -88,8 +84,7 @@ namespace BALL
 				@param   fragment the Fragment to be copied (cloned)
 				@return  Fragment& - this instance
 		*/
-		Fragment& operator = (const Fragment& fragment)
-			throw();
+		Fragment& operator = (const Fragment& fragment);
 
 		//@}
 
@@ -97,14 +92,12 @@ namespace BALL
 				Two fragments are equal if they have the same handle.
 				@see Object::operator ==.
 		*/
-		bool operator == (const Fragment& fragment) const
-			throw();
+		bool operator == (const Fragment& fragment) const;
 
 		/**	Inequality operator
 				@see operator ==
 		*/
-		bool operator != (const Fragment& fragment) const
-			throw();
+		bool operator != (const Fragment& fragment) const;
 
 		/**	@name	Debugging and Diagnostics 
 		*/
@@ -116,8 +109,7 @@ namespace BALL
 				@param   s - output stream where to output the internal state
 				@param   depth - the dumping depth
 		*/
-		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-			throw();
+		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 		//@}
 	};

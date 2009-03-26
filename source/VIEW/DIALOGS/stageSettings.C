@@ -149,7 +149,6 @@ namespace BALL
 		}
 
 		void StageSettings::updateFromStage()
-			throw()
 		{
 			if (stage_ == 0) return;
 			setColor(color_sample, stage_->getBackgroundColor());
@@ -179,7 +178,6 @@ namespace BALL
 
 
 		void StageSettings::apply()
-			throw()
 		{
 			if (stage_ == 0) return;
 			stage_->setBackgroundColor(getColor(color_sample));
@@ -377,7 +375,6 @@ namespace BALL
 
 		// TODO: rewrite to allow more than one renderer
 		void StageSettings::getGLSettings()
-			throw()
 		{
 			GLRenderer& renderer = scene_->getGLRenderer();
 			if (renderer.getVendor() == "") return;

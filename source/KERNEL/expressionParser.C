@@ -15,7 +15,6 @@ extern int ExpressionParserparse();
 namespace BALL
 {
 	ExpressionParser::SyntaxTree::SyntaxTree()
-		throw()
 		:	expression(""),
 			argument(""),
 			evaluated(false),
@@ -27,7 +26,6 @@ namespace BALL
 
 	ExpressionParser::SyntaxTree::SyntaxTree
 		(ExpressionParser::SyntaxTree* left, ExpressionParser::SyntaxTree* right, ExpressionTree::Type my_type)
-		throw()
 		:	expression(""),
 			argument(""),
 			evaluated(false),
@@ -41,7 +39,6 @@ namespace BALL
 
 	ExpressionParser::SyntaxTree::SyntaxTree
 		(const char* predicate_name, const char* args)
-			throw()
 		:	expression(""),
 			predicate(predicate_name),
 			argument((args == 0) ? "" : args),
@@ -53,7 +50,6 @@ namespace BALL
 	}
 
 	ExpressionParser::SyntaxTree::~SyntaxTree()
-		throw()
 	{
 		for (Iterator it = begin(); it != end(); ++it)
 		{
@@ -62,7 +58,6 @@ namespace BALL
 	}
 
 	void ExpressionParser::SyntaxTree::clear()
-		throw()
 	{
 		expression = "";
 		argument = "";
@@ -73,31 +68,26 @@ namespace BALL
 	}
 
 	ExpressionParser::SyntaxTree::Iterator ExpressionParser::SyntaxTree::begin()
-		throw()
 	{
 		return children.begin();
 	}
 	
 	ExpressionParser::SyntaxTree::ConstIterator ExpressionParser::SyntaxTree::begin() const
-		throw()
 	{
 		return children.begin();
 	}
 	
 	ExpressionParser::SyntaxTree::Iterator ExpressionParser::SyntaxTree::end()
-		throw()
 	{
 		return children.end();
 	}
 	
 	ExpressionParser::SyntaxTree::ConstIterator ExpressionParser::SyntaxTree::end() const
-		throw()
 	{
 		return children.end();
 	}
 
 	void ExpressionParser::SyntaxTree::dump(std::ostream& os, Size depth) const
-		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(os);
 		BALL_DUMP_HEADER(os, this, this);

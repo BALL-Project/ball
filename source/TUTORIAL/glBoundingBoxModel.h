@@ -25,16 +25,16 @@ namespace BALL
 			public:
 
 			// constructors and destructor
-			GLBoundingBoxModel() throw();
-			virtual ~GLBoundingBoxModel()	throw();
+			GLBoundingBoxModel();
+			virtual ~GLBoundingBoxModel();
 
 			// accessors
-			void setColor(const ColorRGBA& color) throw();
+			void setColor(const ColorRGBA& color);
 
 			// processor related methods
-			virtual bool start() throw();
-			virtual bool finish()	throw();
-			virtual Processor::Result operator() (Composite& composite)	throw();
+			virtual bool start();
+			virtual bool finish();
+			virtual Processor::Result operator() (Composite& composite);
 
 			protected:
 			ColorRGBA color_;

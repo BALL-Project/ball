@@ -18,7 +18,6 @@ namespace BALL
 	namespace VIEW
 	{
 		AssignBondOrderResultsDialog::AssignBondOrderResultsDialog(QWidget* parent, const char* name)
-			throw()
 			: QDialog(parent),
 				Ui_AssignBondOrderResultsDialogData(),
 				ModularWidget(name),
@@ -48,7 +47,6 @@ namespace BALL
 		}
 	
 		AssignBondOrderResultsDialog::~AssignBondOrderResultsDialog()
-			throw()
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "deleting AssignBondOrderResultsDialog " << this << std::endl;

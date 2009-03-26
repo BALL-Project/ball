@@ -14,7 +14,6 @@ namespace BALL
 {
 
 	Nucleotide::Nucleotide()
-		throw()
 		:	Fragment(),
 			id_(BALL_NUCLEOTIDE_DEFAULT_ID),
 			insertion_code_(BALL_NUCLEOTIDE_DEFAULT_INSERTION_CODE)
@@ -22,7 +21,6 @@ namespace BALL
 	}
 		
 	Nucleotide::Nucleotide(const Nucleotide& nucleotide, bool deep)
-		throw()
 		:	Fragment(nucleotide, deep),
 			id_(nucleotide.id_),
 			insertion_code_(nucleotide.insertion_code_)
@@ -30,7 +28,6 @@ namespace BALL
 	}
 		
 	Nucleotide::Nucleotide(const String& name, const String& id, char insertion_code)
-		throw()
 		:	Fragment(name),
 			id_(id),
 			insertion_code_(insertion_code)
@@ -38,13 +35,11 @@ namespace BALL
 	}
 
 	Nucleotide::~Nucleotide()
-		throw()
 	{
 		destroy();
 	}
 
 	void Nucleotide::clear()
-		throw()
 	{
 		Fragment::clear();
 		id_ = BALL_NUCLEOTIDE_DEFAULT_ID;
@@ -52,7 +47,6 @@ namespace BALL
 	}
 		
 	void Nucleotide::destroy()
-		throw()
 	{
 		Fragment::destroy();
 		id_ = BALL_NUCLEOTIDE_DEFAULT_ID;
@@ -81,7 +75,6 @@ namespace BALL
 	}
 		
 	void Nucleotide::set(const Nucleotide& nucleotide, bool deep)
-		throw()
 	{
 		Fragment::set(nucleotide, deep);
 		id_ = nucleotide.id_;
@@ -89,20 +82,17 @@ namespace BALL
 	}
 			
 	Nucleotide& Nucleotide::operator = (const Nucleotide& nucleotide)
-		throw()
 	{
 		set(nucleotide);
 		return *this;
 	}
 
 	void Nucleotide::get(Nucleotide& nucleotide, bool deep) const
-		throw()
 	{
 		nucleotide.set(*this, deep);
 	}
 			
 	void Nucleotide::swap(Nucleotide& nucleotide)
-		throw()
 	{
 		Fragment::swap(nucleotide);
 
@@ -114,7 +104,6 @@ namespace BALL
 	}
 
 	NucleicAcid* Nucleotide::getNucleicAcid()
-		throw()
 	{
 		NucleicAcid* nucleic_acid_ptr = 0;
 		for (Composite::AncestorIterator ancestor_it = beginAncestor(); !ancestor_it.isEnd(); ++ancestor_it)
@@ -130,91 +119,76 @@ namespace BALL
 	}
 
 	const NucleicAcid* Nucleotide::getNucleicAcid() const
-		throw()
 	{
 		return (const_cast<Nucleotide*>(this)->getNucleicAcid());
 	}
 
 	void Nucleotide::setID(const String &id)
-		throw()
 	{
 		id_ = id;
 	}
 
 	const String &Nucleotide::getID() const
-		throw()
 	{
 		return id_;
 	}
 
 	void Nucleotide::setInsertionCode(char insertion_code)
-		throw()
 	{
 		insertion_code_ = insertion_code;
 	}
 
 	char Nucleotide::getInsertionCode() const
-		throw()
 	{
 		return insertion_code_;
 	}
 
 	void Nucleotide::prepend(Atom& atom)
-		throw()
 	{
 		Composite::prependChild(atom);
 	}
 
 	void Nucleotide::append(Atom &atom)
-		throw()
 	{
 		Composite::appendChild(atom);
 	}
 
 	void Nucleotide::insert(Atom &atom)
-		throw()
 	{
 		append(atom);
 	}
 
 	void Nucleotide::insertBefore(Atom &atom, Composite& before)
-		throw()
 	{
 		before.Composite::insertBefore(atom);
 	}
 
 	void Nucleotide::insertAfter(Atom& atom, Composite &after)
-		throw()
 	{
 		after.Composite::insertAfter(atom);
 	}
 
 	bool Nucleotide::remove(Atom& atom)
-		throw()
 	{
 		return Composite::removeChild(atom);
 	}
 
 	void Nucleotide::spliceBefore(Nucleotide& nucleotide)
-		throw()
 	{
 		Composite::spliceBefore(nucleotide);
 	}
 
 	void Nucleotide::spliceAfter(Nucleotide& nucleotide)
-		throw()
 	{
 		Composite::spliceAfter(nucleotide);
 	}
 
 	void Nucleotide::splice(Nucleotide& nucleotide)
-		throw()
 	{
 		Composite::splice(nucleotide);
 	}
 
 	bool Nucleotide::isTerminal() const
-		throw()
 	{
 		const NucleicAcid* parent = (*this).getNucleicAcid();
 		if (parent != 0)
@@ -229,7 +203,6 @@ namespace BALL
 	}
 
 	bool Nucleotide::is5Prime() const
-		throw()
 	{
 		const NucleicAcid* parent = getNucleicAcid();
 		if (parent != 0)
@@ -243,7 +216,6 @@ namespace BALL
 	}
 		
 	bool Nucleotide::is3Prime() const
-		throw()
 	{
 		const NucleicAcid* parent = getNucleicAcid();
 		if (parent != 0)
@@ -257,13 +229,11 @@ namespace BALL
 	}
 
 	bool Nucleotide::isValid() const
-		throw()
 	{ 
 		return (Fragment::isValid() && id_.isValid());
 	}
 
 	void Nucleotide::dump(ostream& s, Size depth) const
-		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		
@@ -279,13 +249,11 @@ namespace BALL
 	}
 
 	bool Nucleotide::operator == (const Nucleotide& nucleotide) const
-		throw()
 	{
 		return(Object::operator == (nucleotide));
 	}
 
 	bool Nucleotide::operator != (const Nucleotide& nucleotide) const
-		throw()
 	{
 		return ! (*this == nucleotide);
 	}

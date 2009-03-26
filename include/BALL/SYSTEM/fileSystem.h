@@ -86,8 +86,7 @@ namespace BALL
 				duplicate or redundant separators, e.g.
         '//' is reduced to /'/' and '/./' is removed.
 		*/
-		static void canonizePath(String& path)
-			throw();
+		static void canonizePath(String& path);
 
 		/** Return the base name of a file.
 				This strips the path from the filename, i.e. everything
@@ -104,8 +103,7 @@ namespace BALL
 
 		private:
 
-		static void expandTilde_(String& path)
-			throw();
+		static void expandTilde_(String& path);
 	};
   
 } // namespace BALL

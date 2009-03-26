@@ -16,7 +16,6 @@ namespace BALL
 	{
 
 EditSettings::EditSettings(QWidget* parent, const char* name, Qt::WFlags fl)
-	throw()
 	: QWidget(parent, fl),
 		Ui_EditSettingsData(),
 		PreferencesEntry()
@@ -30,7 +29,6 @@ EditSettings::EditSettings(QWidget* parent, const char* name, Qt::WFlags fl)
 }
 
 EditSettings::~EditSettings()
-	throw()
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "Destructing object " << (void *)this 

@@ -38,7 +38,6 @@ namespace BALL
 	{
 		// Default constructor
 		DockDialog::DockDialog(QWidget* parent,  const char* name)
-			throw()
 			: QDialog(parent),
 				Ui_DockDialogData(),
 				PreferencesEntry(),
@@ -81,7 +80,6 @@ namespace BALL
 		
 		// Copy constructor.
 		DockDialog::DockDialog(const DockDialog& dock_dialog)
-			throw()
 			: QDialog(),
 				Ui_DockDialogData(),
 				PreferencesEntry(dock_dialog),
@@ -105,7 +103,6 @@ namespace BALL
 		
 		// Destructor
 		DockDialog::~DockDialog()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << this << " of class DockDialog" << std::endl;
@@ -117,7 +114,6 @@ namespace BALL
 		
 		// Assignment operator
 		const DockDialog& DockDialog::operator =(const DockDialog& dock_dialog)
-			throw()
 		{
 			if (&dock_dialog != this)
 			{
@@ -153,39 +149,33 @@ namespace BALL
 
 		// Sets two systems as docking partners.
 		void DockDialog::setSystems(System* system1, System* system2)
-			throw() 
 		{
 			docking_partner1_ = system1;
 			docking_partner2_ = system2;
 		}
 		
 		System* DockDialog::getSystem1()
-			throw()
 		{
 			return docking_partner1_;
 		}
 					
 		System* DockDialog::getSystem2()
-			throw()
 		{
 		 	return docking_partner2_;
 		}
 		
 		Options& DockDialog::getAlgorithmOptions()
-			throw()
 		{
 			return algorithm_opt_;
 		}
 					
 		Options& DockDialog::getScoringOptions()
-			throw()
 		{
 			return scoring_opt_;
 		}
 		
 		// Sets the flags 'is_redock_' and 'has_changed_'
 		void DockDialog::isRedock(bool is_redock)
-			throw()
 		{
 			if (is_redock_ == is_redock)
 			{
@@ -200,7 +190,6 @@ namespace BALL
 		
 		// Adds docking algorithm to Combobox and its advanced option dialogs to HashMap.
 		void DockDialog::addAlgorithm(const QString& name, const int algorithm, QDialog* dialog)
-			throw()
 		{
 			if (dialog)
 			{
@@ -213,7 +202,6 @@ namespace BALL
 		
 		// Adds scoring function to Combobox and its advanced option dialogs to HashMap, if it has such an dialog.
 		void DockDialog::addScoringFunction(const QString& name, const int score_func, QDialog* dialog)
-			throw()
 		{
 			if (dialog)
 			{
@@ -228,7 +216,6 @@ namespace BALL
 		// HashMaps for algorithm advanced option dialogs and scoring function advanced option dialogs are built
 		// also HashMap with the allowed scoring functions for the different algorithms
 		void DockDialog::initializeWidget()
-			throw()
 		{
 			//build HashMap for algorithm advanced option dialogs
 			//make sure the order of added algorithms is consistent to the enum order
@@ -265,7 +252,6 @@ namespace BALL
 		  
 		// Read the preferences from the INIFile.
 		void DockDialog::fetchPreferences(INIFile& file)
-			throw()
 		{
 			// read preferences of INI-section docking into the QWidget of the dialog
 			PreferencesEntry::readPreferenceEntries(file);
@@ -297,7 +283,6 @@ namespace BALL
 		// function to read the redocking values from INIFile into vector backup_
 		// if INIFile has not yet a section REDOCKING, fill backup_ vector with default values
 		void DockDialog::fetchPreferences_(INIFile& file, const String& entry, const QString& default_value)
-			throw()
 		{
 			if (!file.hasEntry("REDOCKING", entry))
 			{
@@ -311,7 +296,6 @@ namespace BALL
 		
 		// Write the preferences to the INIFile.
 		void DockDialog::writePreferences(INIFile& file)
-			throw()
 		{
 			// swap values if dialog is in redocking-modus, because for PreferencesEntry::writePreferenceEntries 
 			// the dialog's widgets has to contain the docking values
@@ -343,7 +327,6 @@ namespace BALL
 		
 		/// Reset the dialog to the standard values
 		void DockDialog::reset()
-			throw()
 		{
 			if (tab_pages->currentIndex() == 0)
 			{
@@ -401,7 +384,6 @@ namespace BALL
 		
 		// set options with values user has chosen 
 		void DockDialog::applyValues_()
-			throw()
 		{
 			algorithm_opt_.clear();
 			scoring_opt_.clear();
@@ -500,7 +482,6 @@ namespace BALL
 		
 		// apply processors to the systems
 		bool DockDialog::applyProcessors_()
-			throw()
 		{
 			if ((docking_partner1_ == 0) || (docking_partner2_ == 0)) 
 			{
@@ -588,7 +569,6 @@ namespace BALL
 		
 		// show chosen file in the dialog
 		void DockDialog::selectFile_(QLineEdit& lineedit)
-			throw()
 		{
 			MainControl* main_control = MainControl::getInstance(0);
 			if (!main_control)
@@ -608,7 +588,6 @@ namespace BALL
 		// Function to fill the system comboboxes.
 		// If the user has already selected one or two systems, they are the current items in the comboboxes.
 		void DockDialog::fillSystemComboboxes_()
-			throw()
 		{
 			// pointer to selected systems
 			docking_partner1_ = NULL;
@@ -680,7 +659,6 @@ namespace BALL
 		// Is called in show() if has_changed_ is true
 		// and in writePreferences if is_redock_ is true
 		void DockDialog::swapValues_()
-			throw()
 		{
 			QString temp = algorithms->currentText();
 			algorithms->setCurrentIndex(algorithms->findText(backup_[0]));

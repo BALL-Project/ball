@@ -49,20 +49,16 @@ namespace BALL
 		//@{
 
 		/// Default constructor
-		System()
-			throw();
+		System();
 	
 		/// Copy constructor
-		System(const System& system, bool deep = true)
-			throw();
+		System(const System& system, bool deep = true);
 	
 		/// Detailled constructor
-		System(const String& name)
-			throw();
+		System(const String& name);
 
 		///	Destructor
-		virtual ~System()
-			throw();
+		virtual ~System();
 
 		//@}
 		/** @name Persistence 
@@ -91,22 +87,19 @@ namespace BALL
 				@param  system the System to be copied (cloned)
 				@param  deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy
 		*/
-		void set(const System& system, bool deep = true)
-			throw();
+		void set(const System& system, bool deep = true);
 
 		/** Assignment operator.
 				@param   system the System to be copied (cloned)
 				@return  System& - this instance
 		*/
-		System& operator = (const System& system)
-			throw();
+		System& operator = (const System& system);
 
 		/** Copying with cloning facility.
 				The assignment is either deep or shallow (default).
 				@param  System the System to be assigned to
 		*/
-		void get(System& system, bool deep = true) const
-			throw();
+		void get(System& system, bool deep = true) const;
 	
 		//@}
 
@@ -114,14 +107,12 @@ namespace BALL
 				Two instance of System are equal if they have the same handle.
 				@see Object::operator ==
 		*/
-		bool operator == (const System& system) const
-			throw();
+		bool operator == (const System& system) const;
 
 		/**	Inequality operator
 				@see operator ==
 		*/
-		bool operator != (const System& system) const
-			throw();
+		bool operator != (const System& system) const;
 
 		/**	@name	Accessors 
 		*/
@@ -132,128 +123,108 @@ namespace BALL
 				@param   position the position of the child molecule
 				@return  Molecule* - mutable pointer to the child molecule at <b>  position </b>
 		*/
-		Molecule* getMolecule(Position position)
-			throw();
+		Molecule* getMolecule(Position position);
 
 		/** Get a pointer to a child Molecule at a given position.
 				The pointer is 0 if this instance does not have a Molecule at this position.
 				@param   position the position of the child molecule
 				@return  Molecule* - constant pointer to the child molecule at <b>  position </b>
 		*/
-		const Molecule* getMolecule(Position position) const
-			throw();
+		const Molecule* getMolecule(Position position) const;
 
 		/** Count the molecules in this system.
 				@return Size the number of molecules
 		*/
-		Size countMolecules() const
-			throw();
+		Size countMolecules() const;
 
 		/** Count the fragments in this system.
 				@return Size the number of fragments
 		*/
-		Size countFragments() const
-			throw();
+		Size countFragments() const;
 
 		/** Count the atoms in this system.
 				@return Size the number of atoms
 		*/
-		Size countAtoms() const
-			throw();
+		Size countAtoms() const;
 
 		/** Count the proteins in this system.
 				@return Size the number of proteins
 		*/
-		Size countProteins() const
-			throw();
+		Size countProteins() const;
 
 		/** Count the chains in this system.
 				@return Size the number of chains
 		*/
-		Size countChains() const
-			throw();
+		Size countChains() const;
 
 		/** Count the secondary structures in this system.
 				@return Size the number of secondary structures
 		*/
-		Size countSecondaryStructures() const
-			throw();
+		Size countSecondaryStructures() const;
 
 		/** Count the residues in this system.
 				@return Size the number of residues
 		*/
-		Size countResidues() const
-			throw();
+		Size countResidues() const;
 
 		/** Count the nucleic acids in this system.
 				@return Size the number of nucleic acids
 		*/
-		Size countNucleicAcids() const
-			throw();
+		Size countNucleicAcids() const;
 
 		/** Count the nucleotides in this system.
 				@return Size the number of nucleotides
 		*/
-		Size countNucleotides() const
-			throw();
+		Size countNucleotides() const;
 
 		/** Prepend a molecule at position 0.
 				@param molecule the molecule to prepend
 		*/
-		void prepend(Molecule& molecule)
-			throw();
+		void prepend(Molecule& molecule);
 
 		/** Append a molecule after the last position.
 				@param molecule the molecule to append
 		*/
-		void append(Molecule& molecule)
-			throw();
+		void append(Molecule& molecule);
 
 		/** Insert a molecule after the last position.
 				@param molecule the molecule to insert
 		*/
-		void insert(Molecule& molecule)
-			throw();
+		void insert(Molecule& molecule);
 
 		/** Insert a molecule before a given Composite object.
 				@param molecule the molecule to insert
 				@param before the Composite object to insert before
 		*/
-		void insertBefore(Molecule& molecule, Composite& before)
-			throw();
+		void insertBefore(Molecule& molecule, Composite& before);
 
 		/** Insert a molecule after a given Composite object.
 				@param molecule the molecule to insert
 				@param after the Composite object to insert before
 		*/
-		void insertAfter(Molecule& molecule, Composite& after)
-			throw();
+		void insertAfter(Molecule& molecule, Composite& after);
 
 		/** Remove a molecule.
 				@param molecule the molecule to remove
 		*/
-		bool remove(Molecule& molecule)
-			throw();
+		bool remove(Molecule& molecule);
 
 		/**	Move the children of <tt>system</tt> into this instance.
 				Cut all children of <tt>system</tt> and prepend them before the children of this instance.
 				@param system the system to access
 		*/
-		void spliceBefore(System& system)
-			throw();
+		void spliceBefore(System& system);
 
 		/**	Move the children of <tt>system</tt> into this instance.
 				Cut all children of <tt>system</tt> and append them after the children of this instance.
 				@param system the system to access
 		*/
-		void spliceAfter(System& system)
-			throw();
+		void spliceAfter(System& system);
 
 		/**	Move the children of <tt>system</tt> into this instance.
 				The children are inserted using  \link spliceBefore spliceBefore \endlink .
 		*/
-		void splice(System& system)
-			throw();
+		void splice(System& system);
 
 		//@}
 		

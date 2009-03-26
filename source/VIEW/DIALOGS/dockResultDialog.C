@@ -30,7 +30,6 @@ namespace BALL
 		
 		// Constructor
 		DockResultDialog::DockResultDialog(QWidget* parent,  const char* name)
-			throw()
 			: QDialog(parent),
 				Ui_DockResultDialogData(),
 				dock_res_(0),
@@ -83,7 +82,6 @@ namespace BALL
 		
 		// Copy constructor.
 		DockResultDialog::DockResultDialog(const DockResultDialog& dock_res_dialog)
-			throw()
 			: QDialog(),
 				Ui_DockResultDialogData(),
 				dock_res_(dock_res_dialog.dock_res_),
@@ -95,7 +93,6 @@ namespace BALL
 		
 		// Destructor
 		DockResultDialog::~DockResultDialog()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << this << " of class DockResultDialog" << std::endl;
@@ -109,7 +106,6 @@ namespace BALL
 		
 		// Assignment operator
 		const DockResultDialog& DockResultDialog::operator =(const DockResultDialog& res_dialog)
-			throw()
 		{
 			if (&res_dialog == this) return *this;
 			
@@ -127,14 +123,12 @@ namespace BALL
 		}
 		
 		void DockResultDialog::setDockResult(DockResult* dock_res)
-			throw()
 		{
 			dock_res_ = dock_res;
 			if (dock_res == 0) hide();
 		}
 		
 		void DockResultDialog::setDockedSystem(System* system)
-			throw()
 		{
 			docked_system_ = system;
 		}
@@ -142,7 +136,6 @@ namespace BALL
 		// Adds scoring function to Combobox and its advanced option dialogs to HashMap, if it has such an dialog.
 		void DockResultDialog::addScoringFunction(const QString& name, DockingController::ScoringFunction score_func, 
 																							QDialog* dialog)
-			throw()
 		{
 			if (dialog)
 			{
@@ -519,20 +512,19 @@ namespace BALL
 		/*implementation of nested class Compare_		
 		*/
 		// default constructor
-		DockResultDialog::Compare_::Compare_() throw()
+		DockResultDialog::Compare_::Compare_()
 		{}
 		
 		// constructor
-		DockResultDialog::Compare_::Compare_(Position index) throw()
+		DockResultDialog::Compare_::Compare_(Position index)
 		{ index_ = index; }
 		
 		// destructor
-		DockResultDialog::Compare_::~Compare_() throw()
+		DockResultDialog::Compare_::~Compare_()
 		{}
 			
 		// operator ()
 		bool DockResultDialog::Compare_::operator() (const vector<float>& a, const vector<float>& b) const
-			throw()
 		{ return a[index_] < b[index_]; }
 	
 

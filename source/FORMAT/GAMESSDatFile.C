@@ -18,7 +18,6 @@ extern int  GAMESSDatParserparse();
 namespace BALL
 {
 	GAMESSDatFile::GAMESSDatFile()
-		throw()
 		: GenericMolFile(),
 			molecule_(0),
 			symmetry_group_("C1")
@@ -56,7 +55,6 @@ namespace BALL
 	}
 
 	GAMESSDatFile::~GAMESSDatFile()
-		throw()
 	{
 	}
 
@@ -165,20 +163,17 @@ namespace BALL
 	}
 
 	void GAMESSDatFile::newMolecule()
-		throw()
 	{
 		molecule_ = new Molecule;
 	}
 
 	void GAMESSDatFile::setMoleculeName(char* name)
-		throw()
 	{
 		if (molecule_)
 			molecule_->setName(name);
 	}
 
 	void GAMESSDatFile::insertAtom(char* element, float charge, float x, float y, float z)
-		throw()
 	{
 		Atom *a = new Atom;
 		molecule_->insert(*a);
@@ -198,7 +193,6 @@ namespace BALL
 	}
 		
 	void GAMESSDatFile::insertBond(Index a1, Index a2)
-		throw()
 	{
 		Atom* at1 = molecule_->getAtom(a1);
 		Atom* at2 = molecule_->getAtom(a2);
@@ -207,7 +201,6 @@ namespace BALL
 	}
 	
 	void GAMESSDatFile::inBlock(const char* blockname)
-		throw()
 	{
 		current_block_ = String(blockname);
 		// This simplifies comparing and searching for keys and sections significantly
@@ -216,7 +209,6 @@ namespace BALL
 	}
 
 	void GAMESSDatFile::insertBlockedData(const char* key, const char* value)
-		throw()
 	{
 		// This simplifies comparing and searching for keys and sections significantly
 		String new_key(key);
@@ -225,7 +217,6 @@ namespace BALL
 	}
 	
 	void GAMESSDatFile::insertBlockedData(const String& key, const String& value)
-		throw()
 	{
 		// This simplifies comparing and searching for keys and sections significantly
 		String new_key(key);
@@ -234,7 +225,6 @@ namespace BALL
 	}
 
 	String& GAMESSDatFile::getBlockedData(const String& blockname, const String& key)
-		throw()
 	{
 		String new_blockname(blockname);
 		new_blockname.toLower();
@@ -244,7 +234,6 @@ namespace BALL
 	}
 
 	const String& GAMESSDatFile::getBlockedData(const String& blockname, const String& key) const
-		throw()
 	{
 		String new_blockname(blockname);
 		new_blockname.toLower();
@@ -254,7 +243,6 @@ namespace BALL
 	}	
 
 	void GAMESSDatFile::block::operator >> (ostream& os) const
-		throw()
 	{
 		String result = " " + blockname + " ";
 
@@ -276,7 +264,6 @@ namespace BALL
 	}
 
 	void GAMESSDatFile::clearParameters()
-		throw()
 	{
 		blocks_.clear();
 		current_block_ = "";

@@ -44,14 +44,13 @@ namespace BALL
 			public:
 			
 			/// Default Constructor.
-			DemoTutorialDialog(QWidget *parent = NULL, const char *name = NULL )
-				throw();
+			DemoTutorialDialog(QWidget *parent = NULL, const char *name = NULL );
 
 			/// Destructor.
-			virtual ~DemoTutorialDialog() throw();
+			virtual ~DemoTutorialDialog();
 							
 			/// Message handling method.
- 			virtual void onNotify(Message *message) throw();
+ 			virtual void onNotify(Message *message);
 
 			virtual void initializeWidget(MainControl& main_control);
 
@@ -72,8 +71,7 @@ namespace BALL
 			/// Next Step
 			void nextStepClicked();
 
-			virtual void checkMenu(MainControl& main_control)
-				throw();
+			virtual void checkMenu(MainControl& main_control);
 						
 			protected:
 
@@ -85,8 +83,8 @@ namespace BALL
 
 			void enableNextStep_();
 
- 			virtual void onNotifyTutorial_(Message *message) throw();
- 			virtual void onNotifyDemo_(Message *message) throw();
+ 			virtual void onNotifyTutorial_(Message *message);
+ 			virtual void onNotifyDemo_(Message *message);
 
 			String getBaseDir_();
 

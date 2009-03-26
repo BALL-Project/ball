@@ -64,16 +64,13 @@ namespace BALL
 			void reject();
 
 			/// apply the settings to a given CHARMM force field
-			void applyTo(CharmmFF& charmm)
-				throw();
+			void applyTo(CharmmFF& charmm);
 			
 			///
-			void chooseSolventFile()
-				throw();
+			void chooseSolventFile();
 
 			//_
-			void periodicBoundaryClicked()
-				throw();
+			void periodicBoundaryClicked();
 
 			protected slots:
 
@@ -81,8 +78,7 @@ namespace BALL
 
 			protected:
 
-			void setCharmmFF(CharmmFF& charmm)
-				throw();
+			void setCharmmFF(CharmmFF& charmm);
 
 			private:
 

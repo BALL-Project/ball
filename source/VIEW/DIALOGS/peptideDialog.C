@@ -74,7 +74,6 @@ namespace BALL
 		}
 
 		void PeptideDialog::truncString_(String& data)
-			throw()
 		{
 			if (!data.has('.')) return;
 			data.trimRight("0");
@@ -115,7 +114,6 @@ namespace BALL
 		}
 
 		void PeptideDialog::insert_(char a)
-			throw()
 		{
 			sequence->insert(QString(QChar(a)));
 		}
@@ -253,7 +251,6 @@ namespace BALL
 		}
 
 		String PeptideDialog::getSequence()
-			throw()
 		{
 			return ascii(sequence->text());
 		}

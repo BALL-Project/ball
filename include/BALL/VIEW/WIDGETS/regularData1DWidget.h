@@ -44,31 +44,26 @@ namespace BALL
 			
 			/** Detailed constructor
 			 */
-			RegularData1DWidget(const RegularData1D* data, QWidget *parent = 0)
-				throw();
+			RegularData1DWidget(const RegularData1D* data, QWidget *parent = 0);
 
 			/** Destructor
 			 */
-			~RegularData1DWidget()
-				throw();
+			~RegularData1DWidget();
 
 			/** Handles messages sent by other registered ConnectionObject instances.
 					\param message the pointer to the message that should be processed
 		  */
-			virtual void onNotify(Message *message)
-				throw();
+			virtual void onNotify(Message *message);
 
 			public slots: 
 
 			/** Creator of a plot
 			 */
-			void createPlot()
-				throw();
+			void createPlot();
 			
 			protected:
 
-			RegularData1DWidget(RegularData1DWidget* widget)
-				throw();
+			RegularData1DWidget(RegularData1DWidget* widget);
 
 			const RegularData1D* data_;
 			QColor diagram_color_;
@@ -89,12 +84,10 @@ namespace BALL
       DockableRegularData1DWidget(const RegularData1D* data, QWidget *parent=0 );
 
 			///
-      ~DockableRegularData1DWidget()
-				throw();
+      ~DockableRegularData1DWidget();
 
 			///
-      void plot()
-				throw();
+      void plot();
   
 		public slots:
 		

@@ -40,8 +40,7 @@ class BALL_VIEW_EXPORT PTEDialog
 	PTEDialog(QWidget* parent = 0);
 
 	///
-	~PTEDialog()
-		throw();
+	~PTEDialog();
 	
 	public slots:
 		

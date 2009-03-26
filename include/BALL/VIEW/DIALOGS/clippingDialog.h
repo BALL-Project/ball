@@ -44,8 +44,7 @@ namespace BALL
 
 			/** Default Constructor.
 			*/
-			ClippingDialog(QWidget *parent = NULL, const char *name = "ClippingDialog" )
-				throw();
+			ClippingDialog(QWidget *parent = NULL, const char *name = "ClippingDialog" );
 
 			//@}
 			/** @name Destructors 
@@ -54,8 +53,7 @@ namespace BALL
 
 			/** Destructor.
 			*/
-			virtual ~ClippingDialog()
-				throw();
+			virtual ~ClippingDialog();
 
 			///
 			void setClippingPlane(ClippingPlane* plane) { clipping_plane_ = plane;}

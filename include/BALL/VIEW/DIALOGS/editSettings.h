@@ -46,12 +46,10 @@ class BALL_VIEW_EXPORT EditSettings
 	public:
 	
 	///
-	EditSettings(QWidget *parent = NULL, const char *name = "EditSettings", Qt::WFlags fl=0)
-		throw();
+	EditSettings(QWidget *parent = NULL, const char *name = "EditSettings", Qt::WFlags fl=0);
 	
 	///
-	virtual ~EditSettings()
-		throw();
+	virtual ~EditSettings();
 };
   
 } } // namespace

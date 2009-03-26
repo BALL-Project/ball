@@ -75,17 +75,14 @@ namespace BALL
 			/** Default Constructor.
 					Calls ModularWidget::registerWidget.
 			*/
-			DisplayProperties(QWidget *parent = NULL, const char* name = "DisplayProperties")
-				throw();
+			DisplayProperties(QWidget *parent = NULL, const char* name = "DisplayProperties");
 
 			/// Copy constructor just implemented for Python Interface, dont use it! 
-			DisplayProperties(const DisplayProperties& dp)
-			 throw();
+			DisplayProperties(const DisplayProperties& dp);
 
 			/** Destructor
 			*/
-			virtual ~DisplayProperties()
-				throw();
+			virtual ~DisplayProperties();
 
 			//@} 
 			/**	@name	Accessors: inspectors and mutators 
@@ -103,8 +100,7 @@ namespace BALL
 					\par
 					\param message the pointer to the message that should be processed
 			*/
-			virtual void onNotify(Message *message)
-					throw();
+			virtual void onNotify(Message *message);
 			
 			//@} 
 			/**	ModularWidget methods 
@@ -117,28 +113,23 @@ namespace BALL
 					by MainControl::show()
 					\param main_control the MainControl object to be initialized 
 			*/
-			virtual void initializeWidget(MainControl& main_control)
-					throw();
+			virtual void initializeWidget(MainControl& main_control);
 				
 			/// Insert the ModelSettingsDialog and the ColoringSettingsDialog into the Preferences
-			virtual void initializePreferencesTab(Preferences &preferences)
-				throw();
+			virtual void initializePreferencesTab(Preferences &preferences);
 
 			/// Remove the ModelSettingsDialog and the ColoringSettingsDialog from the Preferences
-			virtual void finalizePreferencesTab(Preferences &preferences)
-				throw();
+			virtual void finalizePreferencesTab(Preferences &preferences);
 
 			///
-			void applyPreferences()
-				throw();
+			void applyPreferences();
 
 			/**	Menu checking method.
 					This method is called by MainControl::checkMenus before a popup menu is shown.
 					The menu entry <b>Display Properties</b> will be checked if this dialog is visible. 
 					\param main_control the MainControl object whose menus should be checked
 			*/
-			virtual void checkMenu(MainControl& main_control)
-					throw();
+			virtual void checkMenu(MainControl& main_control);
 
 			/// Switch to the mode, that a new Representation will be created
 			void createRepresentationMode();
@@ -147,19 +138,18 @@ namespace BALL
 			void modifyRepresentationMode(Representation* rep);
 	
 			/// Settings from String
-			bool getSettingsFromString(const String& data)
-				throw();
+			bool getSettingsFromString(const String& data);
 
 			///
 			void createRepresentation(String data_string, const vector<const Composite*>& new_systems);
 
 			/// Set if Representations are automaticaly created for new Molecules
 			void enableCreationForNewMolecules(bool state) 
-				throw() { create_representations_for_new_molecules_ = state;}
+				{ create_representations_for_new_molecules_ = state;}
 
 			/// Get the Representation on which DisplayProperties is working on
 			Representation* getRepresentation() 
-				throw() { return rep_;}
+				{ return rep_;}
 
 			/* 	Create the new representation for the selection in the MolecularControl or for a given List of Composites.
 					Called by onNotify() after receiving CompositeMessage::NEW_MOLECULE and by apply().
@@ -267,16 +257,13 @@ namespace BALL
 			protected:
 			
 			//_ Set buttons and slider according to the values
-			void checkDrawingPrecision_()
-				throw();
+			void checkDrawingPrecision_();
 
 			//_
-			virtual void getAdvancedModelOptions_()
-				throw();
+			virtual void getAdvancedModelOptions_();
 
 			//_
-			virtual void getAdvancedColoringOptions_()
-				throw();
+			virtual void getAdvancedColoringOptions_();
 
 			//_
 			virtual void applyModelSettings_(Representation& rep);

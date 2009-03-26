@@ -46,29 +46,24 @@ namespace BALL
 			BALL_EMBEDDABLE(RegularData2DWidget, ModularWidget) 
 			
 			///
-			RegularData2DWidget(const RegularData2D* data, QWidget *parent = 0)
-				throw();
+			RegularData2DWidget(const RegularData2D* data, QWidget *parent = 0);
 
 			///
-			~RegularData2DWidget()
-				throw();
+			~RegularData2DWidget();
 
 			/** Handles messages sent by other registered ConnectionObject instances.
 					\param message the pointer to the message that should be processed
 		  */
-			virtual void onNotify(Message *message)
-				throw();
+			virtual void onNotify(Message *message);
 
 			public slots: 
 
 			/// Creator of a plot
-			void createPlot()
-				throw();
+			void createPlot();
 			
 		protected:
 
-			RegularData2DWidget(RegularData2DWidget* widget)
-				throw();
+			RegularData2DWidget(RegularData2DWidget* widget);
 
 			const RegularData2D* data_;
 			QColor diagram_color_;
@@ -89,12 +84,10 @@ namespace BALL
       DockableRegularData2DWidget(const RegularData2D* data, QWidget *parent=0 );
 
 			///
-      ~DockableRegularData2DWidget()
-				throw();
+      ~DockableRegularData2DWidget();
 
 			///
-      void plot()
-				throw();
+      void plot();
   
 		public slots:
 		

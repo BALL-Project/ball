@@ -28,7 +28,6 @@ namespace BALL
 	{
 
 MolecularFileDialog::MolecularFileDialog(QWidget *parent, const char* name)
-	throw()
 	:	QWidget(parent),
 		ModularWidget(name),
 		save_id_(0),
@@ -44,7 +43,6 @@ Log.error() << "new MolecularFileDialog " << this << std::endl;
 }
 
 MolecularFileDialog::~MolecularFileDialog()
-	throw()
 {	
 	#ifdef BALL_VIEW_DEBUG
 	Log.info() << "Destructing object " << (void *)this 
@@ -53,7 +51,6 @@ MolecularFileDialog::~MolecularFileDialog()
 }
 
 void MolecularFileDialog::initializeWidget(MainControl&)
-	throw()
 {
 	String description = "Shortcut|File|Open_Structure";
 	open_id_ = insertMenuEntry(MainControl::FILE_OPEN, "&Structure", this, 
@@ -103,7 +100,6 @@ String MolecularFileDialog::getSupportedFileFormatsList() const
 }
 
 System* MolecularFileDialog::openMolecularFile(const String& file)
-	throw()
 {
 	vector<String> fields;
 	String seperators(FileSystem::PATH_SEPARATOR);
@@ -124,7 +120,6 @@ System* MolecularFileDialog::openMolecularFile(const String& file)
 System* MolecularFileDialog::openMolecularFile(const String& filename, 
 																	 const String& filetype, 
 																	 const String& system_name)
-	throw()
 {
 	bool ok = false;
 	try
@@ -273,7 +268,6 @@ bool MolecularFileDialog::writeFile()
 }
 
 bool MolecularFileDialog::writePDBFile(String filename, const System& system)
-	throw()
 {
 	try
 	{
@@ -293,7 +287,6 @@ bool MolecularFileDialog::writePDBFile(String filename, const System& system)
 
 
 bool MolecularFileDialog::writeHINFile(String filename, const System& system)
-	throw()
 {
 	try
 	{
@@ -313,7 +306,6 @@ bool MolecularFileDialog::writeHINFile(String filename, const System& system)
 
 
 bool MolecularFileDialog::writeMOLFile(String filename, const System& system)
-	throw()
 {
 	try
 	{
@@ -333,7 +325,6 @@ bool MolecularFileDialog::writeMOLFile(String filename, const System& system)
 
 
 bool MolecularFileDialog::writeMOL2File(String filename, const System& system)
-	throw()
 {
 	try
 	{
@@ -352,7 +343,6 @@ bool MolecularFileDialog::writeMOL2File(String filename, const System& system)
 }
 
 bool MolecularFileDialog::writeSDFile(String filename, const System& system)
-	throw()
 {
 	try
 	{
@@ -371,7 +361,6 @@ bool MolecularFileDialog::writeSDFile(String filename, const System& system)
 }
 
 bool MolecularFileDialog::writeXYZFile(String filename, const System& system)
-	throw()
 {
 	try
 	{
@@ -391,7 +380,6 @@ bool MolecularFileDialog::writeXYZFile(String filename, const System& system)
 
 
 System* MolecularFileDialog::readPDBFile(String filename, String system_name)
-	throw()
 {
 	setStatusbarText("reading PDB file...", true);
 
@@ -420,7 +408,6 @@ System* MolecularFileDialog::readPDBFile(String filename, String system_name)
 
 
 System* MolecularFileDialog::readHINFile(String filename, String system_name)
-	throw()
 {
 	bool has_periodic_boundary = false;
 	SimpleBox3 bounding_box;
@@ -473,7 +460,6 @@ System* MolecularFileDialog::readHINFile(String filename, String system_name)
 
 
 System* MolecularFileDialog::readMOLFile(String filename, String system_name)
-	throw()
 {
 	setStatusbarText("reading MOL file...", true);
 
@@ -499,7 +485,6 @@ System* MolecularFileDialog::readMOLFile(String filename, String system_name)
 
 
 System* MolecularFileDialog::readMOL2File(String filename, String system_name)
-	throw()
 {
 	setStatusbarText("reading MOL2 file...", true);
 
@@ -524,7 +509,6 @@ System* MolecularFileDialog::readMOL2File(String filename, String system_name)
 
 
 System* MolecularFileDialog::readSDFile(String filename, String system_name)
-	throw()
 {
 	setStatusbarText("reading SD file...", true);
 
@@ -548,7 +532,6 @@ System* MolecularFileDialog::readSDFile(String filename, String system_name)
 }
 
 System* MolecularFileDialog::readXYZFile(String filename, String system_name)
-	throw()
 {
 	setStatusbarText("reading XYZ file...", true);
 
@@ -573,7 +556,6 @@ System* MolecularFileDialog::readXYZFile(String filename, String system_name)
 
 
 bool MolecularFileDialog::finish_(const String& filename, const String& system_name, System* system)
-	throw()
 {
 	// writing info to log
 	setStatusbarText(String("Read ") + String(system->countAtoms()) + " atoms from file \"" + filename + "\"", true);
@@ -604,7 +586,6 @@ bool MolecularFileDialog::finish_(const String& filename, const String& system_n
 
 
 void MolecularFileDialog::checkMenu(MainControl& mc)
-	throw()
 {
 	bool busy = mc.compositesAreLocked();
 	save_id_->setEnabled(!busy && mc.getSelectedSystem());
@@ -613,7 +594,6 @@ void MolecularFileDialog::checkMenu(MainControl& mc)
 
 
 MolecularFileDialog::MolecularFileDialog(const MolecularFileDialog& mfd)
-	throw()
 	: QWidget(),
 		ModularWidget(mfd)
 {}
@@ -679,7 +659,6 @@ System* MolecularFileDialog::openXYZFile()
 }
 
 void MolecularFileDialog::onNotify(Message *message)
-	throw()
 {
 	if (RTTI::isKindOf<ControlSelectionMessage>(*message)) 
 	{

@@ -54,12 +54,10 @@ namespace BALL
 															bool modal = FALSE, Qt::WFlags fl = 0);
 
 			///
-			~GridVisualizationDialog()
-				throw();
+			~GridVisualizationDialog();
 					
 			///
-			void setGrid(RegularData3D* grid)
-				throw();
+			void setGrid(RegularData3D* grid);
 			
 			///
 			void setController(RegularData3DController* controller);

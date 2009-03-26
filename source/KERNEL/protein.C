@@ -12,41 +12,35 @@ namespace BALL
 {
 
 	Protein::Protein()
-		throw()
 		:	Molecule(),
 			id_(BALL_PROTEIN_DEFAULT_ID)
 	{
 	}
 
 	Protein::Protein(const Protein& protein, bool deep)
-		throw()
 		:	Molecule(protein, deep),
 			id_(protein.id_)
 	{
 	}
 		
 	Protein::Protein(const String& name,const String& id)
-		throw()
 		:	Molecule(name),
 			id_(id)
 	{
 	}
 
 	Protein::~Protein()
-		throw()
 	{
 		destroy();
 	}
 
 	void Protein::clear()
-		throw()
 	{
 		Molecule::clear();
 		id_ = BALL_PROTEIN_DEFAULT_ID;
 	}
 		
 	void Protein::destroy()
-		throw()
 	{
 		Molecule::destroy();
 		id_ = BALL_PROTEIN_DEFAULT_ID;
@@ -71,34 +65,29 @@ namespace BALL
 	}
 
 	void Protein::set(const Protein& protein, bool deep)
-		throw()
 	{
 		Molecule::set(protein, deep);
 		id_ = protein.id_;
 	}
 			
 	Protein& Protein::operator =(const Protein &protein)
-		throw()
 	{
 		set(protein);
 		return *this;
 	}
 
 	void Protein::get(Protein &protein, bool deep) const
-		throw()
 	{
 		protein.set(*this, deep);
 	}
 			
 	void Protein::swap(Protein& protein)
-		throw()
 	{
 		Molecule::swap(protein);
 		id_.swap(protein.id_);
 	}
 		
 	Chain* Protein::getChain(Position position)
-		throw()
 	{
 		for (ChainIterator chain_it = beginChain(); !chain_it.isEnd(); ++chain_it)
 		{
@@ -112,13 +101,11 @@ namespace BALL
 	}
 
 	const Chain* Protein::getChain(Position position) const
-		throw()
 	{
 		return ((Protein *)this)->getChain(position);
 	}
 
 	SecondaryStructure* Protein::getSecondaryStructure(Position position)
-		throw()
 	{
 		for (SecondaryStructureIterator secondary_structure_it = beginSecondaryStructure();
 				 !secondary_structure_it.isEnd(); ++secondary_structure_it)
@@ -133,13 +120,11 @@ namespace BALL
 	}
 
 	const SecondaryStructure* Protein::getSecondaryStructure(Position position) const
-		throw()
 	{
 		return ((Protein *)this)->getSecondaryStructure(position);
 	}
 
 	Residue* Protein::getResidue(Position position)
-		throw()
 	{
 		for (ResidueIterator res_it = beginResidue(); !res_it.isEnd(); ++res_it)
 		{
@@ -153,37 +138,31 @@ namespace BALL
 	}
 
 	const Residue* Protein::getResidue(Position position) const
-		throw()
 	{
 		return ((Protein *)this)->getResidue(position);
 	}
 
 	Residue* Protein::getNTerminal()
-		throw()
 	{
 		return (Residue *)::BALL::getNTerminal(*this);
 	}
 		
 	const Residue* Protein::getNTerminal() const
-		throw()
 	{
 		return ::BALL::getNTerminal(*this);
 	}
 
 	Residue* Protein::getCTerminal()
-		throw()
 	{
 		return (Residue *)::BALL::getCTerminal(*this);
 	}
 		
 	const Residue* Protein::getCTerminal() const
-		throw()
 	{
 		return ::BALL::getCTerminal(*this);
 	}
 
 	PDBAtom* Protein::getPDBAtom(Position position)
-		throw()
 	{
 		for (PDBAtomIterator protein_atom_it = beginPDBAtom();
 				 !protein_atom_it.isEnd(); ++protein_atom_it)
@@ -198,25 +177,21 @@ namespace BALL
 	}
 
 	const PDBAtom* Protein::getPDBAtom(Position position) const
-		throw()
 	{
 		return ((Protein *)this)->getPDBAtom(position);
 	}
 
 	void Protein::setID(const String& id)
-		throw()
 	{
 		id_ = id;
 	}
 
 	const String& Protein::getID() const
-		throw()
 	{
 		return id_;
 	}
 
 	Size Protein::countChains() const
-		throw()
 	{
 		Size size = 0;
 
@@ -229,7 +204,6 @@ namespace BALL
 	}
 
 	Size Protein::countSecondaryStructures() const
-		throw()
 	{
 		Size size = 0;
 
@@ -243,7 +217,6 @@ namespace BALL
 	}
 
 	Size Protein::countResidues() const
-		throw()
 	{
 		Size size = 0;
 
@@ -256,7 +229,6 @@ namespace BALL
 	}
 
 	Size Protein::countPDBAtoms() const
-		throw()
 	{
 		Size size = 0;
 
@@ -269,13 +241,11 @@ namespace BALL
 	}
 
 	bool Protein::isValid() const
-		throw()
 	{ 
 		return(Molecule::isValid() && id_.isValid());
 	}
 
 	void	Protein::dump(ostream& s, Size depth) const
-		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		
@@ -288,13 +258,11 @@ namespace BALL
 	}
 
 	bool Protein::operator == (const Protein& protein) const
-		throw()
 	{
 		return(Object::operator == (protein));
 	}
 
 	bool Protein::operator != (const Protein& protein) const
-		throw()
 	{
 		return ! (*this == protein);
 	}

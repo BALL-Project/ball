@@ -49,24 +49,19 @@ namespace BALL
 
 				///
 				DownloadPDBFile(QWidget* parent = 0, const char* name = "DownloadPDBFileDialog", 
-												bool modal = FALSE, Qt::WFlags fl = 0 )
-					throw();
+												bool modal = FALSE, Qt::WFlags fl = 0 );
 
 				///
-				~DownloadPDBFile()
-					throw();
+				~DownloadPDBFile();
 
 				///
-				virtual void initializeWidget(VIEW::MainControl& main_control)
-					throw();
+				virtual void initializeWidget(VIEW::MainControl& main_control);
 
 				///
-				virtual void fetchPreferences(INIFile& inifile)
-					throw();
+				virtual void fetchPreferences(INIFile& inifile);
 
 				///
-				virtual void writePreferences(INIFile& inifile)
-					throw();
+				virtual void writePreferences(INIFile& inifile);
 
 				/** Set the prefix for the PDB.org url<br>
 						Standard: http://www.rcsb.org/pdb/files/
@@ -79,8 +74,7 @@ namespace BALL
 				void setSuffix(String s) { suffix_ = s;}
 
 				///
-				void checkMenu(MainControl& mc)
-					throw();
+				void checkMenu(MainControl& mc);
 
 			public slots:
 
@@ -96,12 +90,10 @@ namespace BALL
 			protected:
 
 				//_
-				void downloadStarted_()
-					throw();
+				void downloadStarted_();
 
 				//_  
-				void downloadEnded_()
-					throw();
+				void downloadEnded_();
 
 				bool threadedDownload_(const String& url);
 				void removeFile_(const String& filename);

@@ -44,12 +44,11 @@ namespace BALL
 			~PeptideDialog() {}
 
 			///
-			String getSequence()
-				throw();
+			String getSequence();
 
 			///
 			Protein* getProtein() 
-				throw() { return protein_;}
+				{ return protein_;}
 
 			public slots:
 
@@ -127,11 +126,9 @@ namespace BALL
 
 			protected:
  
-			void insert_(char a)
-				throw();
+			void insert_(char a);
 
-			void truncString_(String& data)
-				throw();
+			void truncString_(String& data);
 
 			bool isAminoAcid_(char a) const;
 

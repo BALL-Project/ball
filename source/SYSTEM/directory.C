@@ -708,7 +708,6 @@ namespace BALL
 	}
 
 	String Directory::getUserHomeDir()
-		throw()
 	{
 		String homedir;
 
@@ -748,7 +747,6 @@ namespace BALL
 
 
 	bool Directory::changeToUserHomeDir()
-		throw()
 	{
 		String home = getUserHomeDir();
 		if (home == "") return false;

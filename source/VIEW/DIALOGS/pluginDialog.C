@@ -112,7 +112,6 @@ namespace BALL
 		}
 
 		void PluginDialog::initializeWidget(MainControl&)
-			throw()
 		{	
 			insertMenuEntry(MainControl::TOOLS, "Load Plugin", this, SLOT(show()), "Shortcut|Tools|Load_Plugin");
 		}

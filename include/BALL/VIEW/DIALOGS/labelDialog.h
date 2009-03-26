@@ -62,8 +62,7 @@ namespace BALL
 					@see        QDialog
 					@see        ModularWidget
 			*/
-			LabelDialog(QWidget *parent = NULL, const char *name = "LabelDialog")
-				throw();
+			LabelDialog(QWidget *parent = NULL, const char *name = "LabelDialog");
 
 			//@}
 			/** @name Destructors 
@@ -72,8 +71,7 @@ namespace BALL
 
 			/** Destructor.
 			*/
-			virtual ~LabelDialog()
-				throw();
+			virtual ~LabelDialog();
 							
 			//@}
 			/**	@name	Accessors: inspectors and mutators 
@@ -86,8 +84,7 @@ namespace BALL
 					can be appended onto the selection.
 					@param message the pointer to the message that should be processed
 		  */
-			virtual void onNotify(Message *message)
-				throw();
+			virtual void onNotify(Message *message);
 							
 			//@}
 			/**	ModularWidget methods
@@ -98,15 +95,13 @@ namespace BALL
 					labelDialog) from the	 INIFile.
 					@see    writePreferences
 			*/
-			virtual void fetchPreferences(INIFile &inifile)
-				throw();
+			virtual void fetchPreferences(INIFile &inifile);
 			
 			/** Writes the preferences (the position and the selected color) to the	INIFile.
 					This method will be called inside the method  MainControl::aboutToExit 
 					@see    fetchPreferences
 			*/
-			virtual void writePreferences(INIFile &inifile)
-				throw();
+			virtual void writePreferences(INIFile &inifile);
 				
 			/**	Initializes the popup menu <b>  Display </b> with its checkable submenu <b>  Add Label </b>; 
 					This method is called automatically	immediately before the main application is started. 
@@ -115,8 +110,7 @@ namespace BALL
 					@see   finalizeWidget
 					@see   insertMenuEntry
 			*/
-			virtual void initializeWidget(MainControl& main_control)
-				throw();
+			virtual void initializeWidget(MainControl& main_control);
 			
 			//@}
 			
@@ -164,8 +158,7 @@ namespace BALL
 			//@}
 			
 			/// Overloaded from ModularWidget
-			virtual void checkMenu(MainControl& main_control)
-				throw();
+			virtual void checkMenu(MainControl& main_control);
 				
 			protected:
 

@@ -19,7 +19,6 @@ namespace BALL
 	{
 
 		RegularData1DWidget::RegularData1DWidget(const RegularData1D* data, QWidget *parent)
-			throw()
 			: CanvasWidget(parent),
 				ModularWidget("RegularData1DWidget"),
 				data_(data),
@@ -31,13 +30,11 @@ namespace BALL
 		}
 
 		RegularData1DWidget::~RegularData1DWidget()
-		 throw()
 		{
 		}
 
 		// creates a polygon from a given vector RegularData1D * data
 		void RegularData1DWidget::createPlot()
-			throw()
 		{
 			// no data => no polygon
 			if (data_ == 0 ||
@@ -133,7 +130,6 @@ namespace BALL
 		}
 
 		void RegularData1DWidget::onNotify(Message *message)
-			throw()
 		{
 			if (!RTTI::isKindOf<RegularData1DMessage>(*message))
 			{
@@ -178,12 +174,10 @@ namespace BALL
 
 
 		DockableRegularData1DWidget::~DockableRegularData1DWidget()
-			throw()
 		{
 		}
 
 		void DockableRegularData1DWidget::plot()
-			throw()
 		{
 			canWidget_.showObjects();
 			show();

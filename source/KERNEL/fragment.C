@@ -11,25 +11,21 @@ namespace BALL
 {
 
 	Fragment::Fragment()
-		throw()
 		:	AtomContainer()
 	{
 	}
 		
 	Fragment::Fragment(const Fragment& fragment, bool deep)
-		throw()
 		: AtomContainer(fragment, deep)
 	{
 	}
 		
 	Fragment::Fragment(const String& name)
-		throw()
 		: AtomContainer(name)
 	{
 	}
 
 	Fragment::~Fragment()
-		throw()
 	{
 		destroy();
 	}
@@ -51,26 +47,22 @@ namespace BALL
 	}
 	
 	Fragment& Fragment::operator = (const Fragment& fragment)
-		throw()
 	{
 		AtomContainer::operator =(fragment);
 		return *this;
 	}
 
 	bool Fragment::operator == (const Fragment& fragment) const
-		throw()
 	{
 		return(AtomContainer::operator ==(fragment));
 	}
 
 	bool Fragment::operator != (const Fragment& fragment) const
-		throw()
 	{
 		return !(*this == fragment);
 	}
 			
 	void Fragment::dump(ostream& s, Size depth) const
-		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(s)
 		

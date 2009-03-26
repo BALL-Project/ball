@@ -28,7 +28,6 @@ using namespace BALL::VIEW;
 using namespace std;
 
 GLBoundingBoxModel::GLBoundingBoxModel() 
-	throw()
 	: color_(),
 		new_start_(true),
 		start_composite_(0),
@@ -37,18 +36,15 @@ GLBoundingBoxModel::GLBoundingBoxModel()
 }
 
 GLBoundingBoxModel::~GLBoundingBoxModel()
-	throw()
 {
 }
 
 void GLBoundingBoxModel::setColor(const ColorRGBA &color)
-	throw()
 { 
 	color_ = color; 
 }
 
 bool GLBoundingBoxModel::start()
-	throw()
 {
 	new_start_ = true;
 	start_composite_ = 0;
@@ -58,7 +54,6 @@ bool GLBoundingBoxModel::start()
 
 
 bool GLBoundingBoxModel::finish()
-	throw()
 {
 	Composite *root = &(start_composite_->getRoot());
 
@@ -92,7 +87,6 @@ bool GLBoundingBoxModel::finish()
 
 
 Processor::Result GLBoundingBoxModel::operator() (Composite &composite)
-	throw()
 {
 	// store the composite we started at because we will need it when finishing
 	if (start_composite_ == 0)

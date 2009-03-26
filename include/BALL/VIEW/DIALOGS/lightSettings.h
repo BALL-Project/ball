@@ -55,20 +55,16 @@ namespace BALL
 			~LightSettings() {}
 
 			/// Update the display of all fields
-			void update()
-				throw();
+			void update();
 
 			/// Get the values for lighting from the stage
-			void updateFromStage()
-				throw();
+			void updateFromStage();
 
 			/// Apply the new values to the stage
-			void apply()
-				throw();
+			void apply();
 
 			/// Called when defaults is pressed in Preferences, calls setDefaults
-			virtual void restoreDefaultValues(bool /*all*/ = false)
-				throw();
+			virtual void restoreDefaultValues(bool /*all*/ = false);
 
 			///
 			void restoreValues(bool all);
@@ -113,16 +109,13 @@ namespace BALL
 			void typeSelected_(Position type);
 		
 			//_ apply values to a light
-			void saveSettingsToLight_()
-				throw();
+			void saveSettingsToLight_();
 
 			//_ show the values of a light, after selecting an other one
-			void getValues_()
-				throw();
+			void getValues_();
 
 			//_ empty all fields
-			void clearFields_()
-				throw();
+			void clearFields_();
 
 			Stage* stage_;
 

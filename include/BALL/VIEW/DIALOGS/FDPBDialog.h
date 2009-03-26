@@ -70,24 +70,22 @@ namespace BALL
 								 bool modal = FALSE, Qt::WFlags fl = 0);
 
 			/// Destructor
-			virtual ~FDPBDialog()
-				throw();
+			virtual ~FDPBDialog();
 				
 			/// Calculate the FDPB grid
-			bool calculate()
-				throw();
+			bool calculate();
 
 			/// Get the instance of the FDPB solver
 			FDPB& getFDPBSolver()
-				throw() {return fdpb_;}
+				{return fdpb_;}
 
 			/// Set the system, the FDPB will be calculated for
 			void setSystem(System* system)
-				throw() {system_ = system;}
+				{system_ = system;}
 
 			/// Get the system
 			System* getSystem()
-				throw() { return system_;}
+				{ return system_;}
 			
 
 		public slots:
@@ -116,9 +114,9 @@ namespace BALL
 		protected:
 
 			void calculate_();
-			void selectFile_(QLineEdit& lineedit) throw();
-			void applyValues_() throw();
-			bool applyProcessors_() throw();
+			void selectFile_(QLineEdit& lineedit);
+			void applyValues_();
+			bool applyProcessors_();
 
 			FDPB 			fdpb_;
 			Options 	options_;

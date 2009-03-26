@@ -38,7 +38,6 @@ namespace BALL
 	{
 
 DisplayProperties::DisplayProperties(QWidget* parent, const char* name)
-	throw()
 	:	QDialog(parent),
 		Ui_DisplayPropertiesData(),
 		ModularWidget(name),
@@ -102,7 +101,6 @@ DisplayProperties::DisplayProperties(QWidget* parent, const char* name)
 }
 
 DisplayProperties::DisplayProperties(const DisplayProperties& /*dp*/)
-	throw()
 	: QDialog(),
 		Ui_DisplayPropertiesData(),
 		ModularWidget(*this),
@@ -111,7 +109,6 @@ DisplayProperties::DisplayProperties(const DisplayProperties& /*dp*/)
 }
 
 DisplayProperties::~DisplayProperties()
-	throw()
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "deleting DisplayProperties " << this << std::endl;
@@ -120,7 +117,6 @@ DisplayProperties::~DisplayProperties()
 
 
 void DisplayProperties::initializeWidget(MainControl& main_control)
-	throw()
 {
 	(main_control.initPopupMenu(MainControl::DISPLAY));
 
@@ -140,7 +136,6 @@ void DisplayProperties::initializeWidget(MainControl& main_control)
 
 
 void DisplayProperties::initializePreferencesTab(Preferences &preferences)
-	throw()
 {
 	preferences_ = &preferences;
 	if (model_settings_ == 0)
@@ -157,7 +152,6 @@ void DisplayProperties::initializePreferencesTab(Preferences &preferences)
 }
 
 void DisplayProperties::finalizePreferencesTab(Preferences &preferences)
-	throw()
 {
 	if (model_settings_) 
 	{
@@ -173,7 +167,6 @@ void DisplayProperties::finalizePreferencesTab(Preferences &preferences)
 
 
 void DisplayProperties::checkMenu(MainControl& main_control)
-	throw()
 {
 	bool busy = main_control.isBusy();
 
@@ -318,7 +311,6 @@ void DisplayProperties::selectColoringMethod(int index)
 }
 
 void DisplayProperties::onNotify(Message *message)
-	throw()
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "DisplayProperties::onNotify " << message << std::endl;
@@ -695,7 +687,6 @@ void DisplayProperties::precisionBoxChanged(int index)
 }
 
 void DisplayProperties::checkDrawingPrecision_()
-	throw()
 {
 	ModelType mt = (ModelType)model_type_combobox->currentIndex();
 
@@ -731,7 +722,6 @@ void DisplayProperties::checkDrawingPrecision_()
 }
 
 void DisplayProperties::getAdvancedColoringOptions_()
-	throw()
 {
 	if (rep_ == 0 ||
 			rep_->getColorProcessor() == 0 ||
@@ -744,7 +734,6 @@ void DisplayProperties::getAdvancedColoringOptions_()
 }
 
 void DisplayProperties::getAdvancedModelOptions_()
-	throw()
 {
 	if (rep_ == 0 ||
 			rep_->getModelProcessor() == 0) 
@@ -756,7 +745,6 @@ void DisplayProperties::getAdvancedModelOptions_()
 }
 			
 void DisplayProperties::applyPreferences()
-	throw()
 {
 	if (rep_ == 0) 
 	{
@@ -776,7 +764,6 @@ void DisplayProperties::applyPreferences()
 }
 
 bool DisplayProperties::getSettingsFromString(const String& data)
-	throw()
 {
 	vector<String> fields;
 	if (data.split(fields) < 6 ||

@@ -52,16 +52,13 @@ namespace BALL
 					BALL_CREATE(OverviewProcessor)
 				
 					///
-					OverviewProcessor()
-						throw();
+					OverviewProcessor();
 
 					///
-					OverviewProcessor(const OverviewProcessor& model_processor)
-						throw();
+					OverviewProcessor(const OverviewProcessor& model_processor);
 
 					///
-					virtual ~OverviewProcessor()
-						throw();
+					virtual ~OverviewProcessor();
 
 					///
 					Processor::Result operator() (Composite& composite);
@@ -87,16 +84,13 @@ namespace BALL
 					BALL_CREATE(ApplyProcessor)
 				
 					///
-					ApplyProcessor()
-						throw();
+					ApplyProcessor();
 
 					///
-					ApplyProcessor(const ApplyProcessor& model_processor)
-						throw();
+					ApplyProcessor(const ApplyProcessor& model_processor);
 
 					///
-					virtual ~ApplyProcessor()
-						throw();
+					virtual ~ApplyProcessor();
 
 					///
 					Processor::Result operator() (Composite& composite);
@@ -127,8 +121,7 @@ namespace BALL
 					@param      parent the parent widget 
 					@param 			name
 			*/
-			AtomOverview(QWidget *parent = NULL, const char *name = "AtomOverview")
-				throw();
+			AtomOverview(QWidget *parent = NULL, const char *name = "AtomOverview");
 
 			//@}
 			/** @name Destructors 
@@ -137,8 +130,7 @@ namespace BALL
 
 			/** Destructor.
 			*/
-			virtual ~AtomOverview()
-				throw();
+			virtual ~AtomOverview();
 							
 			//@}
 			/**	@name	Accessors: inspectors and mutators 

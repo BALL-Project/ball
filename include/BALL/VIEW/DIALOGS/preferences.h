@@ -63,15 +63,13 @@ namespace BALL
 					\param       parent the parent QWidget (See QTabDialog in the QT documentation)
 					\param       name (See QDialog in the QT documentation)
 			*/
-			Preferences(QWidget *parent = NULL,	const char *name = "Preferences")
-				throw();
+			Preferences(QWidget *parent = NULL,	const char *name = "Preferences");
 
 			/// Copy constructur
-			Preferences(const Preferences& preferences)
-				throw();
+			Preferences(const Preferences& preferences);
 			
 			/// Destructor.
-			virtual ~Preferences() throw();
+			virtual ~Preferences();
 
 			//@}
 			/**	@name	Accessors
@@ -81,8 +79,7 @@ namespace BALL
 			/** Check if pages are available.				
 					\return bool <tt>true</tt> if pages are available
 			*/
-			bool hasPages()
-				throw();
+			bool hasPages();
 
 			/** Insert a new page.
 					This method can be called inside ModularWidget::initializePreferencesTab
@@ -90,40 +87,34 @@ namespace BALL
 					\param  name the name of the new dialog
 					\see    removePage
 			*/
-			void insertEntry(PreferencesEntry *child)
-				throw();
+			void insertEntry(PreferencesEntry *child);
 
 			/** Remove a previously inserted page.
 					This method can be called inside ModularWidget::finalizePreferencesTab 
 					\param  child a pointer to the dialog to be removed 
 					\see    insertPage
 			*/
-			void removeEntry(PreferencesEntry *child)
-				throw();
+			void removeEntry(PreferencesEntry *child);
 
 			/** Fetch the preferences (the position) from the INIFile <tt>inifile</tt>.
 					This method will be called inside MainControl::show().
 					\param  inifile the INIFile that contains the needed information
 					\see    writePreferences
 			*/
-			void fetchPreferences(INIFile &inifile)
-				throw();
+			void fetchPreferences(INIFile &inifile);
 
 			/** Write the preferences (the position) to the INIFile <tt> inifile</tt>.
 					This method will be called in MainControl::aboutToExit.
 					\param  inifile the INIFile to be written into
 					\see    fetchPreferences
 			*/
-			void writePreferences(INIFile &inifile)
-				throw();
+			void writePreferences(INIFile &inifile);
 
 			///
-			const QWidget* currentEntry() const
-				throw();
+			const QWidget* currentEntry() const;
 
 			///
-			const QWidget* currentPage() const
-				throw();
+			const QWidget* currentPage() const;
 
 			public slots:
 
@@ -156,8 +147,7 @@ namespace BALL
 
 			protected:
 
-			void removeItem_(QTreeWidgetItem* item, bool update)
-				throw();
+			void removeItem_(QTreeWidgetItem* item, bool update);
 
 			HashSet<PreferencesEntry*> entries_;
 			HashMap<QTreeWidgetItem*, QWidget*> item_to_widget_;

@@ -86,7 +86,6 @@ namespace BALL
 		}
 
 		GridVisualizationDialog::~GridVisualizationDialog()
-			throw()
 		{
 		}
 
@@ -149,7 +148,6 @@ namespace BALL
 		}
 
 		void GridVisualizationDialog::setGrid(RegularData3D* grid)
-			throw()
 		{
 			if (grid_ == 0) return;
 			grid_ = grid;

@@ -38,13 +38,11 @@ namespace BALL
 			
 			/** Default Constructor.
 			*/
-			FieldLinesDialog(QWidget *parent = NULL, const char *name = "FieldLinesDialog")
-				throw();
+			FieldLinesDialog(QWidget *parent = NULL, const char *name = "FieldLinesDialog");
 
 			/** Destructor.
 			*/
-			virtual ~FieldLinesDialog()
-				throw();
+			virtual ~FieldLinesDialog();
 
 			Position getSeedMode();
 			Size getMonteCarloNumberLines();

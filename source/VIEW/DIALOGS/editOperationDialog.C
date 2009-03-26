@@ -39,7 +39,6 @@ namespace BALL
 
 
 		EditOperationDialog::~EditOperationDialog()
-			throw()
 		{
 		}
 

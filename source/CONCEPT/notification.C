@@ -14,62 +14,52 @@ namespace BALL
 	using std::endl;
 
 	NotificationTarget_* NotificationTarget_::getNextTarget()
-		throw()
 	{
 		return next_;
 	}
 
 	void* NotificationTarget_::getTarget()
-		throw()
 	{
 		return target_;
 	}
 
 	NotificationTarget_::NotificationTarget_()
-		throw()
 		:	next_(0),
 			target_(0)
 	{
 	}
 
 	NotificationTarget_::NotificationTarget_(NotificationTarget_ *notification_target, void *target)
-		throw()
 		:	next_(notification_target),
 			target_(target)
 	{
 	}
 
 	NotificationTarget_::~NotificationTarget_()
-		throw()
 	{
 	}
 
 	void  NotificationSource_::enable()
-		throw()
 	{
 		enabled_ = true;
 	}
 		
 	void NotificationSource_::disable()
-		throw()
 	{
 		enabled_ = false;
 	}
 
 	bool NotificationSource_::isEnabled()
-		throw()
 	{
 		return (enabled_ == true);
 	}
 		
 	bool NotificationSource_::isDisabled()
-		throw()
 	{
 		return (enabled_ == false);
 	}
 		
 	NotificationSource_::NotificationSource_()
-		throw()
 		:	next_(0),
 			first_(0),
 			source_(0),
@@ -79,7 +69,6 @@ namespace BALL
 	}
 
 	NotificationSource_::NotificationSource_(NotificationSource_ *notification_source, void *source)
-		throw()
 		:	next_(notification_source),
 			first_(0),
 			source_(source),
@@ -89,13 +78,11 @@ namespace BALL
 	}
 
 	NotificationSource_::~NotificationSource_()
-		throw()
 	{
 		destroy();
 	}
 
 	void NotificationSource_::destroy()
-		throw()
 	{
 		NotificationTarget_ *next = 0;
 		
@@ -110,12 +97,10 @@ namespace BALL
 	}
 
 	NotificationSlot_::~NotificationSlot_()
-		throw()
 	{
 	}
 
 	NotificationSlot_::NotificationSlot_()
-		throw()
 		:	first_(0)
 	{
 	}
@@ -123,7 +108,6 @@ namespace BALL
 	const Size NotificationManager_::INITIAL_NUMBER_OF_SLOTS = 4;
 
 	NotificationManager_::NotificationManager_()
-		throw()
 		:	number_of_targets_(0),
 			number_of_slots_(INITIAL_NUMBER_OF_SLOTS),
 			slots_(new NotificationSlot_[INITIAL_NUMBER_OF_SLOTS]),
@@ -132,20 +116,17 @@ namespace BALL
 	}
 
 	NotificationManager_::~NotificationManager_()
-		throw()
 	{
 		destroy();
 		delete [] slots_;
 	}
 
 	Size NotificationManager_::getSize()
-		throw()
 	{
 		return number_of_targets_;
 	}
 
 	void NotificationManager_::insert(void *source, void *target)
-		throw()
 	{
 		if (needResize_() == true)
 		{
@@ -177,7 +158,6 @@ namespace BALL
 	}
 
 	void NotificationManager_::remove(void *source)
-		throw()
 	{
 		NotificationSource_** first = &(slots_[hash_(source)].first_);
 				
@@ -212,7 +192,6 @@ namespace BALL
 	}
 
 	void NotificationManager_::remove(void *source, void *target)
-		throw()
 	{
 		NotificationSource_** first = &(slots_[hash_(source)].first_);
 				
@@ -280,7 +259,6 @@ namespace BALL
 	}
 
 	NotificationSource_ *NotificationManager_::findSource(void *source)
-		throw()
 	{
 		for (NotificationSource_ *notification_source = slots_[hash_(source)].first_;
 				 notification_source != 0; notification_source = notification_source->next_)
@@ -295,7 +273,6 @@ namespace BALL
 	}
 
 	NotificationTarget_* NotificationManager_::findFirstTarget(void *source)
-		throw()
 	{
 		for (NotificationSource_ *notification_source = slots_[hash_(source)].first_;
 				 notification_source != 0; notification_source = notification_source->next_)
@@ -310,7 +287,6 @@ namespace BALL
 	}
 
 	NotificationTarget_* NotificationManager_::findTarget(void *source, void *target)
-		throw()
 	{
 		for (NotificationTarget_ *notification_target = findFirstTarget(source);
 				 notification_target != 0; notification_target = notification_target->next_)
@@ -325,7 +301,6 @@ namespace BALL
 	}
 
 	NotificationSource_* NotificationManager_::findEnabledSource(void *source)
-		throw()
 	{
 		NotificationSource_ *notification_source = findSource(source);
 		
@@ -340,7 +315,6 @@ namespace BALL
 	}
 
 	NotificationTarget_* NotificationManager_::findEnabledFirstTarget(void *source)
-		throw()
 	{
 		NotificationSource_ *notification_source = findSource(source);
 		
@@ -355,7 +329,6 @@ namespace BALL
 	}
 
 	NotificationTarget_* NotificationManager_::findEnabledTarget(void *source, void *target)
-		throw()
 	{
 		for (NotificationTarget_ *notification_target = findEnabledFirstTarget(source);
 				 notification_target != 0; notification_target = notification_target->next_)
@@ -370,7 +343,6 @@ namespace BALL
 	}
 
 	void NotificationManager_::destroy()
-		throw()
 	{
 		NotificationSource_ *next = 0;
 		
@@ -390,49 +362,41 @@ namespace BALL
 	}
 
 	void NotificationManager_::enable()
-		throw()
 	{
 		enabled_ = true;
 	}
 
 	void NotificationManager_::disable()
-		throw()
 	{
 		enabled_ = false;
 	}
 
 	bool NotificationManager_::isEnabled()
-		throw()
 	{
 		return (enabled_ == true);
 	}
 
 	bool NotificationManager_::isDisabled()
-		throw()
 	{
 		return (enabled_ == false);
 	}
 		
 	bool NotificationManager_::isEmpty()
-		throw()
 	{
 		return (number_of_targets_ == 0);
 	}
 
 	bool NotificationManager_::isInserted(void *source)
-		throw()
 	{
 		return (findSource(source) != 0);
 	}
 
 	bool NotificationManager_::isInserted(void *source, void *target)
-		throw()
 	{
 		return (findTarget(source, target) != 0);
 	}
 
 	void NotificationManager_::dump(ostream& s)
-		throw()
 	{
 		Size number_of_sources = 0;
 		
@@ -463,13 +427,11 @@ namespace BALL
 	}
 
 	bool NotificationManager_::needResize_()
-		throw()
 	{
 		return ((number_of_targets_ + 1) >= BALL_NOTIFICATION_MANAGER_GROWTH_THRESHOLD(number_of_slots_));
 	}
 
 	void NotificationManager_::resize_()
-		throw()
 	{
 		Size number_of_old_slots = number_of_slots_;
 		number_of_slots_ = BALL_NOTIFICATION_MANAGER_GROWTH_THRESHOLD(number_of_slots_);
@@ -496,44 +458,37 @@ namespace BALL
 	}
 
 	Index NotificationManager_::hash_(void* ptr)
-		throw()
 	{
 		return (Index)(long(ptr) % (number_of_slots_ - 1));
 	}
 
 	NotificationManager_& NotificationManager()
-		throw()
 	{
 		static NotificationManager_ notification_manager;
 		return notification_manager;
 	}
 
 	void NotificationManagerEnable()
-		throw()
 	{
 		NotificationManager().enable();
 	}
 
 	void NotificationManagerDisable()
-		throw()
 	{
 		NotificationManager().disable();
 	}
 
 	bool NotificationManagerIsEnabled()
-		throw()
 	{
 		return NotificationManager().isEnabled();
 	}
 
 	bool NotificationManagerIsDisabled()
-		throw()
 	{
 		return NotificationManager().isDisabled();
 	}
 
 	void NotificationUnregisterAll()
-		throw()
 	{
 		NotificationManager().destroy();
 	}

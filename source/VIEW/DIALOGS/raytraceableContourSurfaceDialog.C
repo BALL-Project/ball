@@ -63,7 +63,6 @@ RaytraceableContourSurfaceDialog::RaytraceableContourSurfaceDialog(RaytraceableG
 
 		
 RaytraceableContourSurfaceDialog::~RaytraceableContourSurfaceDialog()
-	throw()
 {
 	// TODO
 }
@@ -156,7 +155,6 @@ void RaytraceableContourSurfaceDialog::changedEditThreshold()
 }
 
 void RaytraceableContourSurfaceDialog::addModel_(float threshold)
-	throw()
 {
 	// TODO: create a new model and add it to the representationlist
 }
@@ -217,7 +215,6 @@ void  RaytraceableContourSurfaceDialog::changedRangeSteps()
 }
 
 float RaytraceableContourSurfaceDialog::getValue_(const QAbstractSlider* slider) const
-	throw()
 {
 	return(slider->value());
 }

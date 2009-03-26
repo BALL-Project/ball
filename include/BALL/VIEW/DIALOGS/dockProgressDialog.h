@@ -52,13 +52,11 @@ namespace BALL
 				 	*	@param			modal the modal flag
 				 	*	@param			fl the widget flags
 					*/
-				DockProgressDialog(QWidget* parent = 0, const char* name = "DockProgressDialog")
-					throw();
+				DockProgressDialog(QWidget* parent = 0, const char* name = "DockProgressDialog");
 					
 				/** Destructor
 					*/
-				virtual ~DockProgressDialog()
-					throw();
+				virtual ~DockProgressDialog();
 				//@}
 					
 				/**	@name	Accessors: inspectors and mutators
@@ -68,13 +66,11 @@ namespace BALL
 				/** Sets docking algorithm.
 					* @param      alg docking algorithm
 					*/
-				void setDockingAlgorithm(DockingAlgorithm* alg)
-					throw();
+				void setDockingAlgorithm(DockingAlgorithm* alg);
 				
 				/** Get docking algorithm.
 					*/
-				const DockingAlgorithm* getDockingAlgorithm() const
-					throw();
+				const DockingAlgorithm* getDockingAlgorithm() const;
 
 				/** Fills ProgressDialog with information about the chosen
 					* docking partners, algorithm, scoring function and options.
@@ -85,8 +81,7 @@ namespace BALL
 					* @param      alg_opt algorithm options
 					* @param      sf_opt scoring function options
 					*/
-				void fillDialog(const QString& p1, const QString& p2, const QString& alg, const QString& sf, const Options& alg_opt, const Options& sf_opt)
-					throw();
+				void fillDialog(const QString& p1, const QString& p2, const QString& alg, const QString& sf, const Options& alg_opt, const Options& sf_opt);
 				//@}
 				
 			public slots:
@@ -124,8 +119,7 @@ namespace BALL
 					* Remark: Copy contructor is private because it is not completed. 
 					* The copy constuctor of the QT widgets is private and cannot be called.  
 					*/
-				DockProgressDialog(const DockProgressDialog& dock_prog_dialog)
-					throw();
+				DockProgressDialog(const DockProgressDialog& dock_prog_dialog);
 				
 				/**	@name	Assignment
 					* Remark: Operator is private because it is not completed. 
@@ -135,8 +129,7 @@ namespace BALL
 				
 				/** Assignment operator
 				 	*/
-				const DockProgressDialog& operator =(const DockProgressDialog& dock_prog_dialog)
-					throw();
+				const DockProgressDialog& operator =(const DockProgressDialog& dock_prog_dialog);
 				//@}
 					
 				/** Pointer to docking algorithm.

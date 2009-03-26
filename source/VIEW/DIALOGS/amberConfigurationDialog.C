@@ -94,7 +94,6 @@ namespace BALL
 		}
 
 		void AmberConfigurationDialog::applyTo(AmberFF& amber)
-			throw()
 		{
 			try
 			{
@@ -180,13 +179,11 @@ namespace BALL
 		}
 
 		void AmberConfigurationDialog::setAmberFF(AmberFF& amber)
-			throw()
 		{
 			amber_ = &amber;
 		}
 	
 		void AmberConfigurationDialog::chooseSolventFile()
-			throw()
 		{
 			/*
 			QString result = QFileDialog::getOpenFileName(
@@ -199,7 +196,6 @@ namespace BALL
 		}
 
 		void AmberConfigurationDialog::periodicBoundaryClicked()
-			throw()
 		{
 			/*
 			if (boundary_box->isChecked())

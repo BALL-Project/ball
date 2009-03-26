@@ -93,7 +93,6 @@ CompositeProperties::CompositeProperties(Composite* composite, QWidget* parent,
 }
 
 String CompositeProperties::getString_(float data) const
-	throw()
 {
 	String result(data);
 	result.trimRight("0");

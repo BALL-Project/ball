@@ -34,41 +34,41 @@ namespace BALL
 	{
 		public:
 
-		inline PDBAtomIteratorTraits()	throw();
+		inline PDBAtomIteratorTraits();
 			
-		PDBAtomIteratorTraits(const Composite& composite) throw();
+		PDBAtomIteratorTraits(const Composite& composite);
 			
-		inline PDBAtomIteratorTraits(const PDBAtomIteratorTraits& traits)	throw();
+		inline PDBAtomIteratorTraits(const PDBAtomIteratorTraits& traits);
 			
-		PDBAtomIteratorTraits& operator = (const PDBAtomIteratorTraits& traits)	throw();
+		PDBAtomIteratorTraits& operator = (const PDBAtomIteratorTraits& traits);
 
-		void resetPredicate()	throw();
+		void resetPredicate();
 	};
 
-	inline PDBAtomIteratorTraits::PDBAtomIteratorTraits() throw()
+	inline PDBAtomIteratorTraits::PDBAtomIteratorTraits()
 		:	CompositeIteratorTraits()
 	{
 		predicate_ = &RTTI::getDefault<KernelPredicate<PDBAtom> >();
 	}
 
-	inline PDBAtomIteratorTraits::PDBAtomIteratorTraits(const PDBAtomIteratorTraits& traits)	throw()
+	inline PDBAtomIteratorTraits::PDBAtomIteratorTraits(const PDBAtomIteratorTraits& traits)
 		:	CompositeIteratorTraits(traits)
 	{
 	}
 
-	inline PDBAtomIteratorTraits::PDBAtomIteratorTraits(const Composite& composite)	throw()
+	inline PDBAtomIteratorTraits::PDBAtomIteratorTraits(const Composite& composite)
 		:	CompositeIteratorTraits(composite)
 	{
 		predicate_ = &RTTI::getDefault<KernelPredicate<PDBAtom> >();
 	}
 
-	inline PDBAtomIteratorTraits& PDBAtomIteratorTraits::operator = (const PDBAtomIteratorTraits& traits) throw()
+	inline PDBAtomIteratorTraits& PDBAtomIteratorTraits::operator = (const PDBAtomIteratorTraits& traits)
 	{
 		CompositeIteratorTraits::operator=(traits);
 		return *this;
 	}
 
-	inline void PDBAtomIteratorTraits::resetPredicate() throw()
+	inline void PDBAtomIteratorTraits::resetPredicate()
 	{
 		predicate_ = &RTTI::getDefault<KernelPredicate<PDBAtom> >();
 	}

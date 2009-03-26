@@ -58,7 +58,6 @@ PTEDialog::PTEDialog(QWidget* parent)
 
 		
 PTEDialog::~PTEDialog()
-	throw()
 {
 }
 

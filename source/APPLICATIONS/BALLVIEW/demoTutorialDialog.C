@@ -53,7 +53,6 @@ enum TutorialSteps
 
 
 DemoTutorialDialog::DemoTutorialDialog(QWidget* parent, const char* name)
-	throw()
 	:	QDialog(parent),
 		Ui_DemoTutorialDialogData(),
 		ModularWidget(name),
@@ -74,7 +73,6 @@ DemoTutorialDialog::DemoTutorialDialog(QWidget* parent, const char* name)
 }
 
 DemoTutorialDialog::~DemoTutorialDialog()
-	throw()
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "deleting DemoTutorialDialog " << this << std::endl;
@@ -163,7 +161,6 @@ void DemoTutorialDialog::show()
 }
 
 void DemoTutorialDialog::onNotify(Message* message)
-	throw()
 {
 	if (!isVisible()) return;
 
@@ -178,7 +175,6 @@ void DemoTutorialDialog::onNotify(Message* message)
 }
 
 void DemoTutorialDialog::onNotifyDemo_(Message *message)
-	throw()
 {
 	RepresentationMessage* rmsg = RTTI::castTo<RepresentationMessage>(*message);
 
@@ -474,7 +470,7 @@ void DemoTutorialDialog::showDemo()
 	show();
 }
 
-void DemoTutorialDialog::onNotifyTutorial_(Message *message) throw()
+void DemoTutorialDialog::onNotifyTutorial_(Message *message)
 {
 	CompositeMessage* cmsg = RTTI::castTo<CompositeMessage>(*message);
 	RepresentationMessage* rmsg = RTTI::castTo<RepresentationMessage>(*message);
@@ -603,7 +599,6 @@ void DemoTutorialDialog::initializeWidget(MainControl&)
 }
 
 void DemoTutorialDialog::checkMenu(MainControl& main_control)
-	throw()
 {
 	bool busy = main_control.isBusy();
 	demo_action_->setEnabled(!busy);

@@ -52,28 +52,23 @@ class BALL_VIEW_EXPORT MainControlPreferences
 	
 	/// Default Constructor.
 	MainControlPreferences(QWidget *parent = NULL, const char *name = "MainControlPreferences", 
-												 Qt::WFlags fl=0)
-		throw();
+												 Qt::WFlags fl=0);
 
 	////Destructor.
-	virtual ~MainControlPreferences()
-		throw();
+	virtual ~MainControlPreferences();
 
 	/** Inspection of the selected style.
 			This method will be called from MainControl::applyPreferences().
 			\return  QStyle* a pointer to the selected style.
 			(See documentation of QT-library for information concerning styles)
 	 */
-	QStyle* getStyle()
-		throw();
+	QStyle* getStyle();
 
 	/// Enable logging to file
-	void enableLoggingToFile(bool state)
-		throw();
+	void enableLoggingToFile(bool state);
 
 	///
-	bool loggingToFileEnabled() const
-		throw();
+	bool loggingToFileEnabled() const;
 
 	///
 	QFont getFont();

@@ -14,7 +14,6 @@ namespace BALL
 	{
 		// Constructor
 		GeometricFitDialog::GeometricFitDialog(QWidget* parent, const char* name)
-			throw()
 			: QDialog(parent),
 				Ui_GeometricFitDialogData(),
 				PreferencesEntry()
@@ -37,7 +36,6 @@ namespace BALL
 		
 		// Copy constructor.
 		GeometricFitDialog::GeometricFitDialog(const GeometricFitDialog& geo_fit_dialog)
-			throw()
 			: QDialog(),
 				Ui_GeometricFitDialogData(),
 				PreferencesEntry(),
@@ -48,7 +46,6 @@ namespace BALL
 			
 		// Destructor
 		GeometricFitDialog::~GeometricFitDialog()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << this << " of class GeometricFitDialog" << std::endl;
@@ -57,7 +54,6 @@ namespace BALL
 		
 		// Assignment operator
 		const GeometricFitDialog& GeometricFitDialog::operator =(const GeometricFitDialog& geo_fit_dialog)
-			throw()
 		{
 			if (&geo_fit_dialog != this)
 			{
@@ -72,7 +68,6 @@ namespace BALL
 		// for reading docking preferences call PreferencesEntry::readPreferenceEntries
 		// for reading redocking options call fetchPreferences_
 		void GeometricFitDialog::fetchPreferences(INIFile& file)
-					throw()
 		{
 			PreferencesEntry::readPreferenceEntries(file);
 			
@@ -89,7 +84,6 @@ namespace BALL
 		// function to read the redocking options from INIFile into vector backup_
 		// if INIFile has not yet a section GEOMETRIC_FIT_OPTIONS_REDOCK, fill backup_ vector with default values
 		void GeometricFitDialog::fetchPreferences_(INIFile& file, const String& entry, const QString& default_value)
-			throw()
 		{
 			if (!file.hasEntry("GEOMETRIC_FIT_OPTIONS_REDOCK", entry))
 			{
@@ -106,7 +100,6 @@ namespace BALL
 		// Calls  PreferencesEntry::writePreferenceEntries for docking preferences
 		// for redocking options: append section and insert the values of backup_ vector as entries
 		void GeometricFitDialog::writePreferences(INIFile& file)
-			throw()
 		{
 			if (is_redock_)
 			{
@@ -143,7 +136,6 @@ namespace BALL
 		
 		// Fill options with values of the dialog.
 		void GeometricFitDialog::getOptions(Options& options)
-					throw()
 		{
 		  try
 			{
@@ -177,7 +169,6 @@ namespace BALL
 		  
 		// Sets the flags 'is_redock_' and 'has_changed_'
 		void GeometricFitDialog::isRedock(bool is_redock)
-			throw()
 		{
 			if (is_redock_ == is_redock)
 			{
@@ -194,7 +185,6 @@ namespace BALL
 		// Is called in show() if has_changed_ is true
 		// and in writePreferences if is_redock_ is true
 		void GeometricFitDialog::swapValues_()
-			throw()
 		{
 			QString temp = surface_thickness->text();
 			surface_thickness->setText(backup_[0]);

@@ -51,7 +51,6 @@ namespace BALL
 		}
 
 		AssignBondOrderConfigurationDialog::~AssignBondOrderConfigurationDialog()
-			throw()
 		{
 		}
 

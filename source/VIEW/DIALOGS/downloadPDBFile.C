@@ -33,7 +33,6 @@ namespace BALL
 	{
 
 DownloadPDBFile::DownloadPDBFile(QWidget* parent, const char* name, bool, Qt::WFlags fl)
-	throw()
 	: QDialog(parent, fl),
 		Ui_DownloadPDBFileData(),
 		ModularWidget(name),
@@ -65,7 +64,6 @@ DownloadPDBFile::DownloadPDBFile(QWidget* parent, const char* name, bool, Qt::WF
 }
 
 DownloadPDBFile::~DownloadPDBFile()
-	throw()
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.info() << "Destructing object " << this << " of class DownloadPDBFile" << std::endl; 
@@ -83,7 +81,6 @@ DownloadPDBFile::~DownloadPDBFile()
 }
 
 void DownloadPDBFile::initializeWidget(MainControl&)
-	throw()
 {
 	String description = "Shortcut|File|Open|Download_PDB";
 	menu_id_ = insertMenuEntry(MainControl::FILE_OPEN, "Download PDB", this,
@@ -225,7 +222,6 @@ void DownloadPDBFile::abort()
 }
 
 void DownloadPDBFile::downloadStarted_()
-	throw()
 {
 	aborted_ = false;
 	error_   = false;
@@ -237,7 +233,6 @@ void DownloadPDBFile::downloadStarted_()
 }
 
 void DownloadPDBFile::downloadEnded_()
-	throw()
 {
 	if (!aborted_ && !error_)
 	{
@@ -274,7 +269,6 @@ void DownloadPDBFile::setProxyAndTransfer_(TCPTransfer& tcp)
 }
 
 void DownloadPDBFile::fetchPreferences(INIFile& inifile)
-	throw()
 {
 	if (!inifile.hasSection("PDBFiles") ||
 			!inifile.hasEntry("PDBFiles", "History"))
@@ -296,7 +290,6 @@ void DownloadPDBFile::fetchPreferences(INIFile& inifile)
 }
 
 void DownloadPDBFile::writePreferences(INIFile& inifile)
-	throw()
 {
 	String files;
 	for (Index p = 0; p < pdbId->count(); p++)
@@ -311,7 +304,6 @@ void DownloadPDBFile::writePreferences(INIFile& inifile)
 }
 
 void DownloadPDBFile::checkMenu(MainControl& mc)
-	throw()
 {
 	menu_id_->setEnabled(!mc.compositesAreLocked());
 }
