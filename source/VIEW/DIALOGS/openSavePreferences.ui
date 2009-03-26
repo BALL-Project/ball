@@ -17,13 +17,18 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>191</width>
+     <width>541</width>
      <height>21</height>
     </rect>
    </property>
    <property name="toolTip" >
-    <string>Some PDB files (like files obtained from NMR experiments) contain multiple "models" representing differing snapshots of the same molecule. If this option is enabled all models present in the PDBFile will be read in.
-Be aware that this might cause high computational effort for large molecules with many models and a complex default representation.</string>
+    <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'DejaVu Sans'; font-size:9pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Some PDB files (like files obtained from NMR experiments) contain multiple "models" representing differing snapshots of the same molecule. If this option is enabled all models present in the PDBFile will be read in.&lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600;">Be aware&lt;/span> that this might cause high computational effort for large molecules with many models and a complex default representation.&lt;/p>&lt;/body>&lt;/html></string>
    </property>
    <property name="text" >
     <string>Load all Models from PDB file</string>
