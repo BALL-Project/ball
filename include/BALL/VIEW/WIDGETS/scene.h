@@ -551,7 +551,7 @@ namespace BALL
 			void addGlWindow();
 
 			///
-			void exitStereo()
+			void exitStereo();
 
 			///
 			void enterActiveStereo();
