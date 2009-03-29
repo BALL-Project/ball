@@ -96,7 +96,6 @@ namespace BALL
 		Position Scene::pov_nr_ = 100000;
 		Position Scene::vrml_nr_ = 100000;
 		bool Scene::offscreen_rendering_ = true;
-		QSize Scene::PNG_size_ = QSize(1500,1000);
 
 		// ###############CONSTRUCTORS,DESTRUCTORS,CLEAR###################
 
@@ -2545,55 +2544,73 @@ namespace BALL
 
 		bool Scene::exportPNG(const String& filename)
 		{
-			// TODO: push into renderSetup!
-			/*
-			main_display_->makeCurrent();
-			QImage image;
+			bool ok = false;
+			bool restart_renderer = false;
+
+			// TODO: currently, we always use the first renderer in the list for exporting;
+			// 			 we should decide this in a sensible way instead
+			RenderSetup* export_renderer = &(renderers_[0]);
+			
+			// if the renderer is currently running continuously, pause it for a while
+			if (export_renderer->isContinuous())
+			{
+				export_renderer->useContinuousLoop(false);
+				export_renderer->wait();
+				restart_renderer = true;
+			}
 
 			if (offscreen_rendering_)
 			{
-				glFlush();
-				QGLFormat f = format();
-				f.setSampleBuffers(true);
-				Log.info() << "Starting offscreen rendering with " << PNG_size_.width() << " * " << PNG_size_.height() << std::endl;
-				QGLPixelBuffer pbuffer(PNG_size_, f,this );
-				bool pb = pbuffer.makeCurrent();
-				if (!pb)
+				// the idea here is:
+				// 		- resize the renderer to desired off screen resolution
+				// 		- render to buffer
+				// 		- export image
+				// 		- resize to old resolution
+				// 		- render again
+
+				// we truncate the resolution at 4096 for technical reasons
+				Size w = width() * offscreen_factor_;
+				Size h = height() * offscreen_factor_;
+				Size max = BALL_MAX(w, h);
+				Size min = BALL_MIN(w, h);
+
+				if (max >= 4096)
 				{
-					setStatusbarText("Offscreen rendering not supported, using normal screenshots", true);
-					image = grabFrameBuffer();
+					Size f = (Size) (4095. * (float) min / (float) max);
+					if (w < h)
+					{
+						w = f;
+						h = 4095;
+					}
+					else
+					{
+						w = 4095;
+						h = f;
+					}
 				}
-				else
-				{
-					gl_renderer_->init(*this);
-					gl_renderer_->initSolid();
-					gl_renderer_->setSize(PNG_size_.width(), PNG_size_.height());
-					gl_renderer_->updateCamera();
-					gl_renderer_->setLights(true);
-					gl_renderer_->enableVertexBuffers(want_to_use_vertex_buffer_);
-					glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-					gl_renderer_->renderToBuffer(main_display_, GLRenderer::DIRECT_RENDERING);
-					glFlush();
-					image = pbuffer.toImage();
-					makeCurrent();
-					gl_renderer_->setSize(width(), height());
-					gl_renderer_->updateCamera();
-					gl_renderer_->setLights(true);
-				}
+				// resize already renders to the buffer
+				export_renderer->resize(w, h);
+				ok = export_renderer->exportPNG(filename);
+
+				export_renderer->resize(width(), height());
 			}
 			else
 			{
-				image = grabFrameBuffer();
+				// TODO: decide which renderer to use
+				ok = renderers_[0].exportPNG(filename);
 			}
-			bool ok = image.save(filename.c_str(), "PNG");
 
 			setWorkingDirFromFilename_(filename);
 
 			if (ok) setStatusbarText("Saved PNG to " + filename);
 			else 		setStatusbarText("Could not save PNG", true);
 
+			if (restart_renderer)
+			{
+				export_renderer->start();
+			}
+
 			return ok;
-			*/
             return false;
 		}
 
