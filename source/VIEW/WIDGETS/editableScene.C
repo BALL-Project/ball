@@ -1294,6 +1294,7 @@ bool EditableScene::reactToKeyEvent_(QKeyEvent* e)
 
 	setElementCursor();
 
+	String text("Setting element to ");
 	text += PTE[atomic_number_].getName();
 	setStatusbarText(text, true);
 
