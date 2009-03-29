@@ -35,6 +35,11 @@ namespace BALL
 			scene_ = rs.scene_;
 			stage_ = rs.stage_;
 
+			width_  = rs.width_;
+			height_ = rs.height_;
+
+			show_ruler_ = rs.show_ruler_;
+
 			render_mutex_.unlock();
 
 			return *this;
@@ -258,12 +263,10 @@ namespace BALL
 				current_gl_renderer->renderToBuffer(target, GLRenderer::DISPLAY_LISTS_RENDERING);
 
 				glFlush();
-
-				// todo: does this work correctly???
-				//scene_->renderGrid_();
-
-				//target->updateGL();
 			}
+
+			if (show_ruler_)
+				renderer->renderRuler();
 
 			if (use_continuous_loop_)
 				target->swapBuffers();
@@ -414,6 +417,12 @@ namespace BALL
 			((GLRenderer*)renderer)->pickObjects1(x1, y1, x2, y2);
 			((GLRenderer*)renderer)->renderToBuffer(target, GLRenderer::DIRECT_RENDERING);
 			((GLRenderer*)renderer)->pickObjects2(objects);
+		}
+
+		void RenderSetup::showRuler(bool show)
+		{
+			MutexLocker ml(&render_mutex_);
+			show_ruler_ = show;
 		}
 	}
 }

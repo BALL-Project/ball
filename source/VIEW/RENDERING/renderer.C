@@ -168,6 +168,11 @@ namespace BALL
 			return Vector2();
 		}
 
+		void Renderer::renderRuler()
+		{
+			Log.error() << "Renderer::renderRuler() not implemented for this kind of renderer yet!" << std::endl;
+		}
+
 		bool Renderer::finish()
 		{
 			return true;

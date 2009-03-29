@@ -50,7 +50,8 @@ namespace BALL {
 						use_continuous_loop_(false),
 						scene_(scene),
 						stage_(stage),
-						render_mutex_(true)
+						render_mutex_(true),
+						show_ruler_(false)
 				{}
 
 				RenderSetup(const RenderSetup& rs)
@@ -66,7 +67,8 @@ namespace BALL {
 						use_continuous_loop_(rs.use_continuous_loop_),
 						scene_(rs.scene_),
 						stage_(rs.stage_),
-						render_mutex_(true)
+						render_mutex_(true),
+						show_ruler_(rs.show_ruler_)
 				{}
 
 				const RenderSetup& operator = (const RenderSetup& rs);
@@ -207,6 +209,16 @@ namespace BALL {
 				 */
 				void pickObjects(Position x1, Position y1, Position x2, Position y2, List<GeometricObject*>& objects);
 
+				/** Show a simple ruler.
+				 *
+				 *  If supported by the renderer implementation, this function can be used 
+				 *  to produce a simple ruler that is rendered together with the other 
+				 *  representations. 
+				 *  The main use of this function is in the edit mode, where it can help to 
+				 *  straighten-up structures and to correctly estimate angles and distances.
+				 */
+				void showRuler(bool show);
+
 				/** Decide between event based and (threaded) continuous loop rendering.
 				 */
 				void useContinuousLoop(bool use_loop);
@@ -242,6 +254,8 @@ namespace BALL {
 				Size width_;
 				Size height_;
 				bool do_resize_;
+
+				bool show_ruler_;
 		};
 	}
 }

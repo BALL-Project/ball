@@ -329,6 +329,15 @@ namespace BALL
 			///
 			void initDrawingOthers_();
 
+			/** Render a ruler.
+			 *
+			 *  If supported by the renderer implementation, this function will produce
+			 *  a simple ruler that is rendered together with the other representations.
+			 *  The main use of this function is in the edit mode, where it can help to
+			 *  straighten-up structures and to correctly estimate angles and distances.
+			 */
+			virtual void renderRuler();
+
 			///
 			virtual void renderPoint_(const Point& /*point*/);
 
