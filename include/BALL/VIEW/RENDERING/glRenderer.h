@@ -35,7 +35,9 @@
 # include <BALL/VIEW/RENDERING/glDisplayList.h>
 #endif
 
-#include <BALL/DATATYPE/regularData3D.h>
+#ifndef BALL_DATATYPE_REGULARDATA3D_H
+# include <BALL/DATATYPE/regularData3D.h>
+#endif
 
 #ifndef APIENTRY
 #define APIENTRY
@@ -157,6 +159,16 @@ namespace BALL
 			///be smoothed?
 			virtual void setSmoothLines(bool smooth_lines);
 			virtual bool getSmoothLines();
+
+			/** Compute the 3D position on the view plane corresponding
+			 *  to point (x,y) on the view port
+			 */
+			Vector3 mapViewportTo3D(Position x, Position y);
+
+			/** Compute the 2D position on the screen corresponding
+			 *  to the 3D point vec
+			 */
+			Vector2 map3DToViewport(const Vector3& vec);
 
 			/** Pick geometric objects
 			 		\param x1, y1, x2, y2 the rectangle of the selection
@@ -286,6 +298,11 @@ namespace BALL
 
 	protected:
 
+			/** Maps the current viewplane to screen coordinates.
+			 *  Returns false if the projection matrix is not correctly initialized.
+			 */
+			bool mapViewplaneToScreen_();
+
 			void renderRepresentation_(const Representation& representation, bool for_display_list);
 
 			///
@@ -407,6 +424,19 @@ namespace BALL
 			///
 			Index 								drawing_precision_;
 
+			//_
+			float									near_;
+			//_
+			float									far_;
+			//_
+			float									left_;
+			//_
+			float									right_;
+			//_
+			float									top_;
+			//_
+			float									bottom_;
+			
 			//_
 			float 								x_scale_;
 

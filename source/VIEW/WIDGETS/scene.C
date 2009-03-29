@@ -789,27 +789,19 @@ namespace BALL
 
 
 		// picking routine ------
+		// TODO: make renderer configurable
 		void Scene::selectObjects_()
 		{
-#ifdef ENABLE_RAYTRACING
-			Log.info() << "Scene::showInfos(): sorry, raytracing does not yet support picking!" << std::endl;
-			return;
-#endif
 			rb_->hide();
 
 			QPoint p0 = mapFromGlobal(QPoint(x_window_pick_pos_first_, y_window_pick_pos_first_));
 			QPoint p1 = mapFromGlobal(QPoint(x_window_pos_new_, y_window_pos_new_));
 
 			List<GeometricObject*> objects;
-			gl_renderer_->pickObjects1((Position) p0.x(),
-																(Position) p0.y(),
-																(Position) p1.x(),
-																(Position) p1.y());
 
 			// draw the representations
-			gl_renderer_->renderToBuffer(main_display_, GLRenderer::DIRECT_RENDERING);
-
- 			gl_renderer_->pickObjects2(objects);
+			renderers_[0].pickObjects((Position)p0.x(), (Position)p0.y(),
+															  (Position)p1.x(), (Position)p1.y(), objects);
 
 			// sent collected objects
 			GeometricObjectSelectionMessage* message = new GeometricObjectSelectionMessage;
@@ -930,6 +922,7 @@ namespace BALL
 			createCoordinateSystem_(true);
 		}
 
+		// TODO: add the representation correctly
 		void Scene::createCoordinateSystem_(bool at_origin)
 		{
 			RepresentationManager& pm = getMainControl()->getRepresentationManager();
@@ -1038,11 +1031,11 @@ namespace BALL
 			// we have to add the representation in the GLRenderer manualy,
 			// because the message wont arrive in Scene::onNotify
 			// TODO: this needs to be changed to a correct RenderSetup call!
-			gl_renderer_->bufferRepresentation(*rp);
+//			gl_renderer_->bufferRepresentation(*rp);
 #endif
 
-			// notify GeometricControl
-			notify_(new RepresentationMessage(*rp, RepresentationMessage::ADD));
+			bool result = getMainControl()->update(*rp);
+			printf("result was %d\n", result);
 		}
 
 
@@ -1278,72 +1271,71 @@ namespace BALL
 			}
 		}
 
-
 		void Scene::readLights_(const INIFile& inifile)
+		{
+			stage_->clearLightSources();
+			vector<String> strings;
+			Position nr = 0;
+
+			try
 			{
-				stage_->clearLightSources();
-				vector<String> strings;
-				Position nr = 0;
-
-				try
+				while(inifile.hasEntry("LIGHTING", "Light_" + String(nr) + "_Position"))
 				{
-					while(inifile.hasEntry("LIGHTING", "Light_" + String(nr) + "_Position"))
-					{
-						LightSource light;
-						Vector3 pos, dir, att;
+					LightSource light;
+					Vector3 pos, dir, att;
 
-						String data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Relative");
-						light.setRelativeToCamera(data.toUnsignedInt());
+					String data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Relative");
+					light.setRelativeToCamera(data.toUnsignedInt());
 
-						data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Position");
-						stringToVector3(data, pos);
+					data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Position");
+					stringToVector3(data, pos);
 
-						data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Direction");
-						stringToVector3(data, dir);
+					data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Direction");
+					stringToVector3(data, dir);
 
-						data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Attenuation");
-						// old ini files may not contain the attenuation. Try to be compatible
-						if (data == INIFile::UNDEFINED)
-							att = Vector3(1, 0, 0);
-						else
-							stringToVector3(data, att);
+					data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Attenuation");
+					// old ini files may not contain the attenuation. Try to be compatible
+					if (data == INIFile::UNDEFINED)
+						att = Vector3(1, 0, 0);
+					else
+						stringToVector3(data, att);
 
-						light.setPosition(pos);
-						light.setDirection(dir);
-						light.setAttenuation(att);
+					light.setPosition(pos);
+					light.setDirection(dir);
+					light.setAttenuation(att);
 
-						data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Angle");
-						light.setAngle(Angle(data.toFloat()));
+					data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Angle");
+					light.setAngle(Angle(data.toFloat()));
 
-						data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Intensity");
-						light.setIntensity(data.toFloat());
+					data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Intensity");
+					light.setIntensity(data.toFloat());
 
-						data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Color");
-						data.split(strings, "(,)");
-						ColorRGBA color(strings[0].toUnsignedInt(),
-								strings[1].toUnsignedInt(),
-								strings[2].toUnsignedInt(),
-								strings[3].toUnsignedInt());
-						light.setColor(color);
+					data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Color");
+					data.split(strings, "(,)");
+					ColorRGBA color(strings[0].toUnsignedInt(),
+							strings[1].toUnsignedInt(),
+							strings[2].toUnsignedInt(),
+							strings[3].toUnsignedInt());
+					light.setColor(color);
 
-						data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Type");
-						light.setType((LightSource::Types)data.toUnsignedInt());
+					data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Type");
+					light.setType((LightSource::Types)data.toUnsignedInt());
 
-						stage_->addLightSource(light);
-						nr++;
-					}
-				}
-				catch(Exception::GeneralException& e)
-				{
-					Log.error() << "Could not read lighting settings from Inifile" << std::endl;
-					Log.error() << e;
-				}
-
-				if (!stage_->getLightSources().size())
-				{
-					setDefaultLighting(true);
+					stage_->addLightSource(light);
+					nr++;
 				}
 			}
+			catch(Exception::GeneralException& e)
+			{
+				Log.error() << "Could not read lighting settings from Inifile" << std::endl;
+				Log.error() << e;
+			}
+
+			if (!stage_->getLightSources().size())
+			{
+				setDefaultLighting(true);
+			}
+		}
 
 		// ###########################MENUES##################################
 
@@ -2000,12 +1992,9 @@ namespace BALL
 			}
 		}
 
+		// TODO: make renderer configurable
 		void Scene::showInfos()
 		{
-#ifdef ENABLE_RAYTRACING
-			Log.info() << "Scene::showInfos(): sorry, raytracing does not yet support picking!" << std::endl;
-			return;
-#endif
 			info_string_ = "";
 
 			if (getMainControl()->isBusy()) return;
@@ -2029,9 +2018,7 @@ namespace BALL
 			// ok, do the picking, until we find something
 			for (Position p = 0; p < 8; p++)
 			{
-				gl_renderer_->pickObjects1(pos_x - p, pos_y - p, pos_x + p, pos_y + p);
-				gl_renderer_->renderToBuffer(main_display_, GLRenderer::DIRECT_RENDERING);
-				gl_renderer_->pickObjects2(objects);
+				renderers_[0].pickObjects(pos_x - p, pos_y - p, pos_x + p, pos_y + p, objects);
 				if (objects.size() != 0) break;
 			}
 
@@ -2286,10 +2273,6 @@ namespace BALL
 
 		void Scene::pickingMode_()
 		{
-#ifdef ENABLE_RAYTRACING
-			Log.info() << "Scene::showInfos(): sorry, raytracing does not yet support picking!" << std::endl;
-			return;
-#endif
 			if (current_mode_ == PICKING__MODE) return;
 			
 			gl_renderer_->enterPickingMode();
@@ -3003,29 +2986,7 @@ return;
 		void Scene::setOffScreenRendering(bool enabled, Size factor)
 		{
 			offscreen_rendering_ = enabled;
-			if (enabled) 
-			{
-				Size w = width() * factor;
-				Size h = height() * factor;
-				Size max = BALL_MAX(w, h);
-				Size min = BALL_MIN(w, h);
-				if (max < 4096)
-				{
-					PNG_size_ = QSize(w, h);
-				}
-				else
-				{
-					Size f = (Size) (4095. * (float) min / (float) max);
-					if (w < h)
-					{
-						PNG_size_ = QSize(f, 4095);
-					}
-					else
-					{
-						PNG_size_ = QSize(4095, f);
-					}
-				}
-			}
+			offscreen_factor_ = factor;
 		}
 
 		void Scene::showText(const String& text, Size font_size) 
@@ -3109,9 +3070,11 @@ Log.error() << "Render grid not yet supported by raytracer!" << std::endl;
 			float delta = 0.001;
 			float size = 50;
 
+			// TODO: make renderer configurable
+			main_display_->makeCurrent();
 			gl_renderer_->initTransparent();
 
-			Vector3 p = get3DPosition_((Index)(width() / 2.0), (Index)(height() / 2.0)) - x * size / 2.0 - y * size / 2.0;
+			Vector3 p = gl_renderer_->mapViewportTo3D((Index)(width() / 2.0), (Index)(height() / 2.0)) - x * size / 2.0 - y * size / 2.0;
 			Box xp(p, x * size, y * size, delta);
 			xp.setColor(ColorRGBA(0,255,190,90));
 			gl_renderer_->render_(&xp);
@@ -3139,99 +3102,6 @@ Log.error() << "Render grid not yet supported by raytracer!" << std::endl;
 #endif
 		}
 
-
-		// Convert 2D screen coordinate to 3D coordinate on the view plane
-		Vector3 Scene::get3DPosition_(int x, int y)
-		{
-			// 	Scale variables for Frustum
-			double xs_ = width();
-			double ys_ = height(); 
-
-			mapViewplaneToScreen_();
-
-			// vectors for arithmetics
-			// TODO: give sensible names!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			Vector3 p_(0., 0., 0.);      // vector look_at ray ----> insertion ray cutting the nearplane
-			Vector3 la_m_d_(0., 0., 0.); // look_at vector ray cutting the near plane
-			Vector3 la_m_v_(0., 0., 0.); // look_at vector ray cutting the near plane
-			Vector3 s_(0., 0., 0.);      // vector look_at_ray ----> insertion ray cutting viewing plane
-			Vector3 k_(0., 0., 0.);      // vector of insertionpoint in the viewing volume
-
-			// determine the vector/look_at ray : camera --> lookAt cuts the near plane
-			la_m_d_=Vector3(  near_left_bot_
-					+( (near_right_bot_ - near_left_bot_)*0.5 )
-					+( (near_left_top_  - near_left_bot_)*0.5 )
-					);	
-
-			// determine the vector look_at point--->insertion_ray cutting the near plane 
-			p_=Vector3((   near_left_top_  //c
-						+ ( x / (float)xs_ * (near_right_bot_ - near_left_bot_) )  //b-a
-						- ( y / (float)ys_ * (near_left_top_  - near_left_bot_) )  //c-a
-						)
-					- la_m_d_ );
-
-			// determine the vector look_at_ray ----> insertion ray cutting viewing plane
-			s_= Vector3(   ( ( getStage()->getCamera().getLookAtPosition() - getStage()->getCamera().getViewPoint() ).getLength()
-						/ (la_m_d_ -  getStage()->getCamera().getViewPoint()).getLength()) 
-					* p_ );
-
-			// vector of insertionpoint in the viewing volume
-			k_=Vector3( getStage()->getCamera().getLookAtPosition() + s_ );		
-
-			return k_;
-		}	
-
-		bool Scene::mapViewplaneToScreen_()
-		{
-			// matrix for the Projection matrix 	
-			GLdouble projection_matrix[16];
-			// matrix for the Modelview matrix
-			GLdouble modelview_matrix[16];
-
-			// variables for definition of projection matrix
-			float near_=0, left_=0, right_=0, bottom_ =0, top_=0; 
-
-			// take the Projection matrix	
-			glMatrixMode(GL_PROJECTION);
-			glGetDoublev(GL_PROJECTION_MATRIX, projection_matrix);
-			glMatrixMode(GL_MODELVIEW);
-			glGetDoublev(GL_MODELVIEW_MATRIX, modelview_matrix); 
-
-			// determine the projection variables
-			if(projection_matrix[0]==0. || projection_matrix[5]==0. || projection_matrix[10]==1.)
-			{	
-				Log.error() << "Projection variables equal zero! " << endl;
-				return false;
-			}	
-			near_   = projection_matrix[14]/(projection_matrix[10]-1);
-			left_   = projection_matrix[14]*(projection_matrix[8]-1) / (projection_matrix[0]*(projection_matrix[10]-1));
-			right_  = projection_matrix[14]*(projection_matrix[8]+1) / (projection_matrix[0]*(projection_matrix[10]-1));
-			bottom_ = projection_matrix[14]*(projection_matrix[9]-1) / (projection_matrix[5]*(projection_matrix[10]-1));
-			top_    = projection_matrix[14]*(projection_matrix[9]+1) / (projection_matrix[5]*(projection_matrix[10]-1));
-
-			// we have to move all points of the viewing volume with the inverted Modelview matrix 
-			Matrix4x4 mod_view_mat_(modelview_matrix[0], modelview_matrix[4], modelview_matrix[8], modelview_matrix[12],
-					modelview_matrix[1], modelview_matrix[5], modelview_matrix[9], modelview_matrix[13],
-					modelview_matrix[2], modelview_matrix[6], modelview_matrix[10], modelview_matrix[14],
-					modelview_matrix[3], modelview_matrix[7], modelview_matrix[11],	modelview_matrix[15]);
-
-
-			Matrix4x4 inverse_mod_view_mat_;
-			mod_view_mat_.invert(inverse_mod_view_mat_);
-
-			// determine the nearplane vectors
-			near_left_bot_ = Vector3(left_,  bottom_, near_*-1.); //a
-			near_right_bot_= Vector3(right_, bottom_, near_*-1.); //b
-			near_left_top_ = Vector3(left_,  top_,    near_*-1.); //c	
-
-			near_left_bot_  = inverse_mod_view_mat_*near_left_bot_;
-			near_right_bot_ = inverse_mod_view_mat_*near_right_bot_;
-			near_left_top_  = inverse_mod_view_mat_*near_left_top_;
-
-			return true;
-		}
-
-
 		void Scene::mouseDoubleClickEvent(QMouseEvent*)
 		{
 			if (getMainControl()->isBusy()) return;
@@ -3250,14 +3120,13 @@ Log.error() << "Render grid not yet supported by raytracer!" << std::endl;
 			}
 		}
 
+		// TODO: make renderer configurable
 		void Scene::pickParent_(QPoint p)
 		{
 			ignore_pick_ = true;
 			List<GeometricObject*> objects;
-			gl_renderer_->pickObjects1((Position) p.x(), (Position) p.y(), 
-																(Position) p.x(), (Position) p.y());
-			gl_renderer_->renderToBuffer(main_display_, GLRenderer::DIRECT_RENDERING);
-			gl_renderer_->pickObjects2(objects);
+			renderers_[0].pickObjects((Position) p.x(), (Position) p.y(), 
+																(Position) p.x(), (Position) p.y(), objects);
 
 			if (objects.size() == 0) return;
 		

@@ -86,7 +86,8 @@ namespace BALL
 
 			render_mutex_.lock();
 
-			target->lockGLContext();
+			if (QGLContext::currentContext() != target->context())
+				target->makeCurrent();
 
 			if(!target->resize(width, height))
 			{
@@ -101,7 +102,6 @@ namespace BALL
 				{
 					Log.error() << "Raytracing render does not support window framebuffer format. Seems to be configuration error" << endl;
 
-					target->unlockGLContext();
 					render_mutex_.unlock();
 
 					throw Exception::GeneralException(__FILE__, __LINE__);
@@ -111,14 +111,12 @@ namespace BALL
 			if (RTTI::isKindOf<GLRenderer>(*renderer))
 				((GLRenderer*)renderer)->setSize(width, height);
 
-			target->unlockGLContext();
 			render_mutex_.unlock();
 
 			updateCamera();
 
 			renderToBuffer_();
 
-			target->lockGLContext();
 			render_mutex_.lock();
 
 			target->swapBuffers();
@@ -129,7 +127,6 @@ namespace BALL
 //				start();
 			}
 
-			target->unlockGLContext();
 			render_mutex_.unlock();
 		}
 
@@ -199,6 +196,7 @@ namespace BALL
 			tbb::task_scheduler_init init;
 #endif
 			target->ignoreEvents(true);
+			// TODO: do we really want to lock the context here???
 			target->lockGLContext();
 
 			useContinuousLoop(true);
@@ -237,8 +235,8 @@ namespace BALL
 
 			render_mutex_.lock();
 
-			if (!use_continuous_loop_)
-				target->lockGLContext();
+			if (QGLContext::currentContext() != target->context())
+				target->makeCurrent();
 
 			renderer->setPreviewMode(scene_->use_preview_ && scene_->preview_);
 			renderer->showLightSources(scene_->show_light_sources_);
@@ -268,14 +266,7 @@ namespace BALL
 			}
 
 			if (use_continuous_loop_)
-			{
 				target->swapBuffers();
-//				target->doneCurrent();
-			}
-			else
-			{
-				target->unlockGLContext();
-			}
 
 			render_mutex_.unlock();
 		}
@@ -289,9 +280,10 @@ namespace BALL
 
 				render_mutex_.lock();
 
-				target->lockGLContext();
+				if (QGLContext::currentContext() != target->context())
+					target->makeCurrent();
+
 				renderer->bufferRepresentation(rep);
-				target->unlockGLContext();
 
 				render_mutex_.unlock();
 			}
@@ -306,9 +298,10 @@ namespace BALL
 
 				render_mutex_.lock();
 
-				target->lockGLContext();
+				if (QGLContext::currentContext() != target->context())
+					target->makeCurrent();
+
 				renderer->removeRepresentation(rep);
-				target->unlockGLContext();
 
 				render_mutex_.unlock();
 			}
@@ -321,11 +314,10 @@ namespace BALL
 
 			render_mutex_.lock();
 
-			if (!use_continuous_loop_)
-				target->lockGLContext();
+			if (QGLContext::currentContext() != target->context())
+					target->makeCurrent();
+
 			renderer->setLights(reset_all);
-			if (!use_continuous_loop_)
-				target->unlockGLContext();
 
 			render_mutex_.unlock();
 		}
@@ -337,9 +329,10 @@ namespace BALL
 
 			render_mutex_.lock();
 
-			target->lockGLContext();
+			if (QGLContext::currentContext() != target->context())
+					target->makeCurrent();
+
 			renderer->updateBackgroundColor();
-			target->unlockGLContext();
 
 			render_mutex_.unlock();
 		}
@@ -355,9 +348,10 @@ namespace BALL
 
 				render_mutex_.lock();
 
-				target->lockGLContext();
+				if (QGLContext::currentContext() != target->context())
+					target->makeCurrent();
+
 				texname = ((GLRenderer*)renderer)->createTextureFromGrid(grid, map);
-				target->unlockGLContext();
 
 				render_mutex_.unlock();
 			}
@@ -372,14 +366,54 @@ namespace BALL
 				if (use_continuous_loop_)
 					useContinuousLoop(false);
 
-				render_mutex_.lock();
+				MutexLocker ml(&render_mutex_);
 
-				target->lockGLContext();
+				if (QGLContext::currentContext() != target->context())
+					target->makeCurrent();
+
 				((GLRenderer*)renderer)->removeTextureFor_(grid);
-				target->unlockGLContext();
-
-				render_mutex_.unlock();
 			}
+		}
+
+		Vector3 RenderSetup::mapViewportTo3D(Position x, Position y)
+		{
+			MutexLocker ml(&render_mutex_);
+			render_mutex_.lock();
+
+			if (QGLContext::currentContext() != target->context())
+				target->makeCurrent();
+
+			return renderer->mapViewportTo3D(x, y);
+		}
+
+		Vector2 RenderSetup::map3DToViewport(const Vector3& vec)
+		{
+			MutexLocker ml(&render_mutex_);
+
+			if (QGLContext::currentContext() != target->context())
+				target->makeCurrent();
+
+			return renderer->map3DToViewport(vec);
+		}
+
+		void RenderSetup::pickObjects(Position x1, Position y1,
+																  Position x2, Position y2, 
+																	List<GeometricObject*>& objects)
+		{
+			if (!RTTI::isKindOf<GLRenderer>(*renderer))
+			{
+				Log.error() << "RenderSetup::pickObjects not supported for this kind of renderer!" << std::endl;
+				return;
+			}
+	
+			MutexLocker ml(&render_mutex_);
+
+			if (QGLContext::currentContext() != target->context())
+				target->makeCurrent();
+
+			((GLRenderer*)renderer)->pickObjects1(x1, y1, x2, y2);
+			((GLRenderer*)renderer)->renderToBuffer(target, GLRenderer::DIRECT_RENDERING);
+			((GLRenderer*)renderer)->pickObjects2(objects);
 		}
 	}
 }

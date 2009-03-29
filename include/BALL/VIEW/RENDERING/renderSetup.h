@@ -193,6 +193,20 @@ namespace BALL {
 				 */
 				void removeGridTextures(const RegularData3D& grid);
 
+				/** Compute the 3D position on the view plane corresponding
+				 *  to point (x,y) on the view port
+				 */
+				Vector3 mapViewportTo3D(Position x, Position y);
+
+				/** Compute the 2D position on the screen corresponding
+				 *  to the 3D point vec
+				 */
+				Vector2 map3DToViewport(const Vector3& vec);
+
+				/** Pick all objects in the given screen rectangle.
+				 */
+				void pickObjects(Position x1, Position y1, Position x2, Position y2, List<GeometricObject*>& objects);
+
 				/** Decide between event based and (threaded) continuous loop rendering.
 				 */
 				void useContinuousLoop(bool use_loop);
