@@ -1035,9 +1035,7 @@ namespace BALL
 #endif
 
 			bool result = getMainControl()->update(*rp);
-			printf("result was %d\n", result);
 		}
-
 
 		bool Scene::exportScene(Renderer &er) const
 		{
@@ -1343,7 +1341,6 @@ namespace BALL
 		{
 			setMinimumSize(10, 10);
 
-			draw_grid_ = false;
 			ignore_pick_ = false;
 
 			Path path;
@@ -1533,7 +1530,7 @@ namespace BALL
 			switch_grid_->setObjectName(switch_grid_->text());
 			connect(switch_grid_, SIGNAL(triggered()), this, SLOT(switchShowGrid()));
 			switch_grid_->setCheckable(true);
-			switch_grid_->setChecked(draw_grid_);
+			switch_grid_->setChecked(false);
 			filename = path.find("graphics/ruler.png");
 			switch_grid_->setIcon(QIcon(filename.c_str()));
 			toolbar_actions_.push_back(switch_grid_);
@@ -3050,56 +3047,11 @@ return;
 
 		void Scene::switchShowGrid()
 		{
-			draw_grid_ = !draw_grid_;
-			switch_grid_->setChecked(draw_grid_);
+			// TODO: maybe we want this to be local to the targets?
+			for (Position i=0; i<renderers_.size(); ++i)
+				renderers_[i].showRuler(switch_grid_->isChecked());
+
 			updateGL();
-		}
-
-		void Scene::renderGrid_()
-		{
-			if (!draw_grid_) return;
-
-#ifdef ENABLE_RAYTRACING
-Log.error() << "Render grid not yet supported by raytracer!" << std::endl;
-#else
-			const Camera& s = getStage()->getCamera();
-			Vector3 v = s.getViewVector();
-			v.normalize();
-			const Vector3 x = s.getRightVector();
-			const Vector3 y = s.getLookUpVector();
-			float delta = 0.001;
-			float size = 50;
-
-			// TODO: make renderer configurable
-			main_display_->makeCurrent();
-			gl_renderer_->initTransparent();
-
-			Vector3 p = gl_renderer_->mapViewportTo3D((Index)(width() / 2.0), (Index)(height() / 2.0)) - x * size / 2.0 - y * size / 2.0;
-			Box xp(p, x * size, y * size, delta);
-			xp.setColor(ColorRGBA(0,255,190,90));
-			gl_renderer_->render_(&xp);
-
-			ColorRGBA color1(255,255,255,255);
-			ColorRGBA color2(0,0,0,230);
-			Line line;
-			p -= v * delta;
-
-			for (Position i = 0; i <= size; i+=1)
-			{
-				if (i % 10 == 0) line.setColor(color2);
-				else  					 line.setColor(color1);
-
-				line.setVertex1(p + x * i);
-				line.setVertex2(p + x * i + y * size);
-				gl_renderer_->render_(&line);
-
-				line.setVertex1(p + y * i);
-				line.setVertex2(p + y * i + x * size);
-				gl_renderer_->render_(&line);
-			}
-
-			gl_renderer_->initSolid();
-#endif
 		}
 
 		void Scene::mouseDoubleClickEvent(QMouseEvent*)

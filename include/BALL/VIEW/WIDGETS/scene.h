@@ -759,8 +759,6 @@ namespace BALL
 			/// Estimate current fps and convert into a string
 			String createFPSInfo_();
 
-			void renderGrid_();
-
 			//_ state of the scene: picking or rotate mode?
 			ModeType current_mode_;
 
@@ -843,7 +841,7 @@ namespace BALL
 			Size   font_size_;
 			QToolBar* toolbar_;
 			QList<QAction*> toolbar_actions_;
-			bool draw_grid_, ignore_pick_;
+			bool ignore_pick_;
 			QActionGroup* mode_group_;
 
 			String info_string_;

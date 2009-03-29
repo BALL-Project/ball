@@ -1001,1723 +1001,1762 @@ namespace BALL
 // --------------------------render methods-----------------------------------------
 // =================================================================================
 
-void GLRenderer::renderSphere_(const Sphere& sphere)
-{
-	initDrawingOthers_();
-
-	glPushMatrix();
-	setColor4ub_(sphere);
-	translateVector3_(sphere.getPosition());
-	scale_(sphere.getRadius());
-
-	// render spheres of stick models with less precision for atoms with
-	// more than 2 bonds:
-	if (model_type_ == MODEL_STICK &&
-			drawing_precision_ > DRAWING_PRECISION_LOW)
-	{
-		Index precision = drawing_precision_;
-		const Atom* const atom = dynamic_cast<const Atom*>(sphere.getComposite());
-
-		if (atom != 0 && atom->countBonds() > 2)
+		void GLRenderer::renderRuler()
 		{
-			precision--;
+			const Camera& s = stage_->getCamera();
+			Vector3 v = s.getViewVector();
+			v.normalize();
+			const Vector3 x = s.getRightVector();
+			const Vector3 y = s.getLookUpVector();
+			float delta = 0.001;
+			float size = 50;
+
+			initTransparent();
+
+			Vector3 p = mapViewportTo3D((Index)(width_ / 2.0), (Index)(height_ / 2.0)) - x * size / 2.0 - y * size / 2.0;
+
+			Box xp(p, x * size, y * size, delta);
+			xp.setColor(ColorRGBA(0,255,190,90));
+			render_(&xp);
+
+			ColorRGBA color1(255,255,255,255);
+			ColorRGBA color2(0,0,0,230);
+			Line line;
+			p -= v * delta;
+
+			for (Position i = 0; i <= size; i+=1)
+			{
+				if (i % 10 == 0) line.setColor(color2);
+				else  					 line.setColor(color1);
+
+				line.setVertex1(p + x * i);
+				line.setVertex2(p + x * i + y * size);
+				render_(&line);
+
+				line.setVertex1(p + y * i);
+				line.setVertex2(p + y * i + x * size);
+				render_(&line);
+			}
+
+			initSolid();
 		}
 
-		GL_spheres_list_[drawing_mode_ * BALL_VIEW_MAXIMAL_DRAWING_PRECISION +
-										 precision].draw();
-	}
-	else
-	{
-		GL_spheres_list_[display_lists_index_].draw();
-	}
-
-	glPopMatrix();
-}
-
-void GLRenderer::renderDisc_(const Disc& disc)
-{
-	initDrawingOthers_();
-
-	glPushMatrix();
-	setColor4ub_(disc);
-	translateVector3_(disc.getCircle().p);
-	const Vector3 rotation_axis(-disc.getCircle().n.y, disc.getCircle().n.x, 0.0);
-	// angle between z-axis-vector and result
-	const float angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(disc.getCircle().n.z / disc.getCircle().n.getLength()));
-	rotateVector3Angle_(rotation_axis, angle);
-
-	static Position slices[4] = {6, 14, 24, 40};
-	static Position rings[4]  = {4, 8, 16, 32};
-
-	initGLU_(drawing_mode_);
-
-	gluDisk(GLU_quadric_obj_, 0, disc.getCircle().radius, slices[drawing_precision_], rings[drawing_precision_]);
-
-	glPopMatrix();
-}
-
-
-void GLRenderer::renderLine_(const Line& line)
-{
-	initDrawingOthers_();
-
-	glDisable(GL_LIGHTING);
-	setColor4ub_(line);
-
-	glBegin(GL_LINES);
-		vertexVector3_(line.getVertex1());
-		vertexVector3_(line.getVertex2());
-	glEnd();
-
-	glEnable(GL_LIGHTING);
-}
-
-void GLRenderer::renderMultiLine_(const MultiLine& line)
-{
-	initDrawingOthers_();
-
-	glDisable(GL_LIGHTING);
-	/*
-
-	// TEST!!! this should use a light source. currently we use a headlight
-	Vector3 view_vector = stage_->getCamera().getViewVector();
-	view_vector.normalize();
-	Vector3 light_source = view_vector - stage_->getCamera().getLookUpVector();;
-	light_source.normalize();
-//    			Vector3 light_source = stage_->getCamera().getRightVector();
-
-	// This should be definitely done somewhere else...
-	GLint current_matrix_mode;
-	glGetIntegerv(GL_MATRIX_MODE, &current_matrix_mode);
-
-	glMatrixMode(GL_TEXTURE);
-	GLfloat matrix[16];
-
-	for (Size i=0; i<16; i++)
-		matrix[i] = 0.;
-
-//			matrix[0] = 0.5 * light_source.x; matrix[1] = 0.5 * light_source.y; matrix[2] = 0.5 * light_source.z; matrix[3] = 1.;
-//			matrix[4] = 0.5 * view_vector.x;  matrix[5] = 0.5 * view_vector.y;  matrix[6] = 0.5 * view_vector.z;  matrix[7] = 1.;
-	matrix[0] = 0.5 * light_source.x; matrix[4] = 0.5 * light_source.y; matrix[8] = 0.5 * light_source.z; matrix[12] = 1.;
-	matrix[1] = 0.5 * view_vector.x;  matrix[5] = 0.5 * view_vector.y;  matrix[9] = 0.5 * view_vector.z;  matrix[13] = 1.;
-
-	matrix[15] = 2.;
-
-	glLoadMatrixf(matrix);
-	glMatrixMode(current_matrix_mode);
-
-	line_list_.draw();
-	*/
-
-	const std::vector<Vector3>& vertices = line.vertices;
-//   			const std::vector<Vector3>& tangents = line.tangents;
-	const std::vector<ColorRGBA>& colors = line.colors;
-
-	glBegin(GL_LINE_STRIP);
-
-	if (colors.size() > 0) setColorRGBA_(colors[0]);
-
-	for (Position i = 0; i < vertices.size(); i++)
-	{
-		if (colors.size() > 1) setColorRGBA_(colors[i]);
-//    				glTexCoord3f(tangents[i].x, tangents[i].y, tangents[i].z);
-		vertexVector3_(vertices[i]);
-	}
-
-	glEnd();
-
-//   			glDisable(GL_TEXTURE_2D);
-}
-
-void GLRenderer::renderLabel_(const Label& label)
-{
-	initDrawingOthers_();
-
-	glPushMatrix();
-	glDisable(GL_LIGHTING);
-
-	glRasterPos3f((GLfloat)label.getVertex().x,
-								(GLfloat)label.getVertex().y,
-								(GLfloat)label.getVertex().z);
-
-	QFontMetrics fm(label.getFont());
-	QString text = label.getExpandedText().c_str();
-	QRect r = fm.boundingRect(text);
-
-	int border = 2;
-	QPixmap pm(r.size() + QSize(border * 2, border * 2));
-
-	QPainter p;
-	p.begin(&pm);
-		p.setFont(label.getFont());
-		pm.fill(scene_->getStage()->getBackgroundColor().getQColor());
-		p.setPen(label.getColor().getQColor());
-		p.drawText(-r.x() + border, -r.y() + border, text);
-	p.end();
-
-	QImage data = pm.toImage();
-	QImage gldata = QGLWidget::convertToGLFormat(data);
-
-	glDrawPixels(data.width(), data.height(), GL_RGBA, GL_UNSIGNED_BYTE, gldata.bits());
-
-	glPopMatrix();
-	glEnable(GL_LIGHTING);
-}
-
-
-void GLRenderer::renderPoint_(const Point& point)
-{
-	initDrawingOthers_();
-
-	glDisable(GL_LIGHTING);
-	setColor4ub_(point);
-	glBegin(GL_POINTS);
-	normalVector3_(normal_vector_);
-	vertexVector3_(point.getVertex());
-	glEnd();
-	glEnable(GL_LIGHTING);
-}
-
-
-void GLRenderer::renderSimpleBox_(const SimpleBox& box)
-{
-	initDrawingOthers_();
-
-	glPushMatrix();
-	setColor4ub_(box);
-	translateVector3_(box.a);
-	scaleVector3_(box.b - box.a);
-	GL_boxes_list_[display_lists_index_].draw();
-	glPopMatrix();
-}
-
-
-void GLRenderer::renderBox_(const Box& box)
-{
-	initDrawingOthers_();
-
-	glPushMatrix();
-	setColor4ub_(box);
-
-	translateVector3_(box.getPoint());
-
-	Vector3 v1(box.getRightVector());
-	if (v1.getSquareLength() != 0) v1.normalize();
-
-	Vector3 v2(box.getHeightVector());
-	if (v2.getSquareLength() != 0) v2.normalize();
-
-	Vector3 v3(box.getRightVector() % box.getHeightVector());
-	if (v3.getSquareLength() != 0) v3.normalize();
-
-	float m[16] = { v1.x, v1.y, v1.z, 0,
-									v2.x, v2.y, v2.z, 0,
-									v3.x, v3.y, v3.z, 0,
-									0,0,0,1};
-	glMultMatrixf(m);
-
-	glScalef(box.getRightVector().getLength(),
-					 box.getHeightVector().getLength(),
-					 box.getDepth());
-
-	GL_boxes_list_[display_lists_index_].draw();
-
-	glPopMatrix();
-}
-
-void GLRenderer::renderTube_(const Tube& tube)
-{
-	initDrawingOthers_();
-
-	glPushMatrix();
-	setColor4ub_(tube);
-
-	const Vector3 result = tube.getVertex2() - tube.getVertex1();
-	const float length = result.getLength();
-
-	if (Maths::isZero(length)) return;
-
-	// cross product with z-axis-vector and result
-	const Vector3 rotation_axis(-result.y, result.x, 0.0);
-	// angle between z-axis-vector and result
-	const float angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(result.z / length));
-
-	translateVector3_(tube.getVertex1());
-
-	rotateVector3Angle_(rotation_axis, angle);
-
-	glScalef((GLfloat)tube.getRadius(),
-					 (GLfloat)tube.getRadius(),
-					 (GLfloat)tube.getLength());
-
-	GL_tubes_list_[display_lists_index_].draw();
-
-	glPopMatrix();
-}
-
-
-void GLRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
-{
-	initDrawingOthers_();
-
-	const Vector3 result(tube.getVertex2() - tube.getVertex1());
-	const float length = result.getLength();
-
-	if (Maths::isZero(length)) return;
-
-	// cross product with z-axis-vector and result
-	const Vector3 rotation_axis(-result.y, result.x, 0.0);
-	// angle between z-axis-vector and result
-	const float angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(result.z / length));
-
-	glPushMatrix();
-	setColor4ub_(tube);
-
-	translateVector3_(tube.getVertex1());
-
-	rotateVector3Angle_(rotation_axis, angle);
-
-	glScalef((GLfloat)tube.getRadius(),
-					 (GLfloat)tube.getRadius(),
-					 (GLfloat)tube.getLength() / (float)2);
-
-	GL_tubes_list_[display_lists_index_].draw();
-
-	glPopMatrix();
-	glPushMatrix();
-	translateVector3_(tube.getMiddleVertex());
-
-	rotateVector3Angle_(rotation_axis, angle);
-
-	glScalef((GLfloat)tube.getRadius(),
-					 (GLfloat)tube.getRadius(),
-					 (GLfloat)tube.getLength() / (float)2);
-
-	setColorRGBA_(tube.getColor2());
-
-	GL_tubes_list_[display_lists_index_].draw();
-
-	glPopMatrix();
-}
-
-void GLRenderer::renderTwoColoredLine_(const TwoColoredLine& line)
-{
-	initDrawingOthers_();
-
-	setColor4ub_(line);
-	glDisable(GL_LIGHTING);
-
-	glBegin(GL_LINES);
-	vertexVector3_(line.getVertex1());
-	vertexVector3_(line.getMiddleVertex());
-	glEnd();
-
-	glBegin(GL_LINES);
-	setColorRGBA_(line.getColor2());
-	vertexVector3_(line.getMiddleVertex());
-	vertexVector3_(line.getVertex2());
-	glEnd();
-
-	glEnable(GL_LIGHTING);
-}
-
-
-void GLRenderer::initDrawingMeshes_()
-{
-	if (drawed_mesh_) return;
-
-	if (drawing_mode_ == DRAWING_MODE_DOTS)
-	{
-		glDisable(GL_LIGHTING);
-		normalVector3_(normal_vector_);
-	}
-	else if (drawing_mode_ == DRAWING_MODE_WIREFRAME)
-	{
-		glDisable(GL_LIGHTING);
-	}
-	else // draw the triangles solid
-	{
-		if (model_type_  == MODEL_CARTOON)
+		void GLRenderer::renderSphere_(const Sphere& sphere)
 		{
+			initDrawingOthers_();
+
+			glPushMatrix();
+			setColor4ub_(sphere);
+			translateVector3_(sphere.getPosition());
+			scale_(sphere.getRadius());
+
+			// render spheres of stick models with less precision for atoms with
+			// more than 2 bonds:
+			if (model_type_ == MODEL_STICK &&
+					drawing_precision_ > DRAWING_PRECISION_LOW)
+			{
+				Index precision = drawing_precision_;
+				const Atom* const atom = dynamic_cast<const Atom*>(sphere.getComposite());
+
+				if (atom != 0 && atom->countBonds() > 2)
+				{
+					precision--;
+				}
+
+				GL_spheres_list_[drawing_mode_ * BALL_VIEW_MAXIMAL_DRAWING_PRECISION +
+												 precision].draw();
+			}
+			else
+			{
+				GL_spheres_list_[display_lists_index_].draw();
+			}
+
+			glPopMatrix();
+		}
+
+		void GLRenderer::renderDisc_(const Disc& disc)
+		{
+			initDrawingOthers_();
+
+			glPushMatrix();
+			setColor4ub_(disc);
+			translateVector3_(disc.getCircle().p);
+			const Vector3 rotation_axis(-disc.getCircle().n.y, disc.getCircle().n.x, 0.0);
+			// angle between z-axis-vector and result
+			const float angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(disc.getCircle().n.z / disc.getCircle().n.getLength()));
+			rotateVector3Angle_(rotation_axis, angle);
+
+			static Position slices[4] = {6, 14, 24, 40};
+			static Position rings[4]  = {4, 8, 16, 32};
+
+			initGLU_(drawing_mode_);
+
+			gluDisk(GLU_quadric_obj_, 0, disc.getCircle().radius, slices[drawing_precision_], rings[drawing_precision_]);
+
+			glPopMatrix();
+		}
+
+
+		void GLRenderer::renderLine_(const Line& line)
+		{
+			initDrawingOthers_();
+
+			glDisable(GL_LIGHTING);
+			setColor4ub_(line);
+
+			glBegin(GL_LINES);
+				vertexVector3_(line.getVertex1());
+				vertexVector3_(line.getVertex2());
+			glEnd();
+
+			glEnable(GL_LIGHTING);
+		}
+
+		void GLRenderer::renderMultiLine_(const MultiLine& line)
+		{
+			initDrawingOthers_();
+
+			glDisable(GL_LIGHTING);
+			/*
+
+			// TEST!!! this should use a light source. currently we use a headlight
+			Vector3 view_vector = stage_->getCamera().getViewVector();
+			view_vector.normalize();
+			Vector3 light_source = view_vector - stage_->getCamera().getLookUpVector();;
+			light_source.normalize();
+		//    			Vector3 light_source = stage_->getCamera().getRightVector();
+
+			// This should be definitely done somewhere else...
+			GLint current_matrix_mode;
+			glGetIntegerv(GL_MATRIX_MODE, &current_matrix_mode);
+
+			glMatrixMode(GL_TEXTURE);
+			GLfloat matrix[16];
+
+			for (Size i=0; i<16; i++)
+				matrix[i] = 0.;
+
+		//			matrix[0] = 0.5 * light_source.x; matrix[1] = 0.5 * light_source.y; matrix[2] = 0.5 * light_source.z; matrix[3] = 1.;
+		//			matrix[4] = 0.5 * view_vector.x;  matrix[5] = 0.5 * view_vector.y;  matrix[6] = 0.5 * view_vector.z;  matrix[7] = 1.;
+			matrix[0] = 0.5 * light_source.x; matrix[4] = 0.5 * light_source.y; matrix[8] = 0.5 * light_source.z; matrix[12] = 1.;
+			matrix[1] = 0.5 * view_vector.x;  matrix[5] = 0.5 * view_vector.y;  matrix[9] = 0.5 * view_vector.z;  matrix[13] = 1.;
+
+			matrix[15] = 2.;
+
+			glLoadMatrixf(matrix);
+			glMatrixMode(current_matrix_mode);
+
+			line_list_.draw();
+			*/
+
+			const std::vector<Vector3>& vertices = line.vertices;
+		//   			const std::vector<Vector3>& tangents = line.tangents;
+			const std::vector<ColorRGBA>& colors = line.colors;
+
+			glBegin(GL_LINE_STRIP);
+
+			if (colors.size() > 0) setColorRGBA_(colors[0]);
+
+			for (Position i = 0; i < vertices.size(); i++)
+			{
+				if (colors.size() > 1) setColorRGBA_(colors[i]);
+		//    				glTexCoord3f(tangents[i].x, tangents[i].y, tangents[i].z);
+				vertexVector3_(vertices[i]);
+			}
+
+			glEnd();
+
+		//   			glDisable(GL_TEXTURE_2D);
+		}
+
+		void GLRenderer::renderLabel_(const Label& label)
+		{
+			initDrawingOthers_();
+
+			glPushMatrix();
+			glDisable(GL_LIGHTING);
+
+			glRasterPos3f((GLfloat)label.getVertex().x,
+										(GLfloat)label.getVertex().y,
+										(GLfloat)label.getVertex().z);
+
+			QFontMetrics fm(label.getFont());
+			QString text = label.getExpandedText().c_str();
+			QRect r = fm.boundingRect(text);
+
+			int border = 2;
+			QPixmap pm(r.size() + QSize(border * 2, border * 2));
+
+			QPainter p;
+			p.begin(&pm);
+				p.setFont(label.getFont());
+				pm.fill(scene_->getStage()->getBackgroundColor().getQColor());
+				p.setPen(label.getColor().getQColor());
+				p.drawText(-r.x() + border, -r.y() + border, text);
+			p.end();
+
+			QImage data = pm.toImage();
+			QImage gldata = QGLWidget::convertToGLFormat(data);
+
+			glDrawPixels(data.width(), data.height(), GL_RGBA, GL_UNSIGNED_BYTE, gldata.bits());
+
+			glPopMatrix();
+			glEnable(GL_LIGHTING);
+		}
+
+
+		void GLRenderer::renderPoint_(const Point& point)
+		{
+			initDrawingOthers_();
+
+			glDisable(GL_LIGHTING);
+			setColor4ub_(point);
+			glBegin(GL_POINTS);
+			normalVector3_(normal_vector_);
+			vertexVector3_(point.getVertex());
+			glEnd();
+			glEnable(GL_LIGHTING);
+		}
+
+
+		void GLRenderer::renderSimpleBox_(const SimpleBox& box)
+		{
+			initDrawingOthers_();
+
+			glPushMatrix();
+			setColor4ub_(box);
+			translateVector3_(box.a);
+			scaleVector3_(box.b - box.a);
+			GL_boxes_list_[display_lists_index_].draw();
+			glPopMatrix();
+		}
+
+
+		void GLRenderer::renderBox_(const Box& box)
+		{
+			initDrawingOthers_();
+
+			glPushMatrix();
+			setColor4ub_(box);
+
+			translateVector3_(box.getPoint());
+
+			Vector3 v1(box.getRightVector());
+			if (v1.getSquareLength() != 0) v1.normalize();
+
+			Vector3 v2(box.getHeightVector());
+			if (v2.getSquareLength() != 0) v2.normalize();
+
+			Vector3 v3(box.getRightVector() % box.getHeightVector());
+			if (v3.getSquareLength() != 0) v3.normalize();
+
+			float m[16] = { v1.x, v1.y, v1.z, 0,
+											v2.x, v2.y, v2.z, 0,
+											v3.x, v3.y, v3.z, 0,
+											0,0,0,1};
+			glMultMatrixf(m);
+
+			glScalef(box.getRightVector().getLength(),
+							 box.getHeightVector().getLength(),
+							 box.getDepth());
+
+			GL_boxes_list_[display_lists_index_].draw();
+
+			glPopMatrix();
+		}
+
+		void GLRenderer::renderTube_(const Tube& tube)
+		{
+			initDrawingOthers_();
+
+			glPushMatrix();
+			setColor4ub_(tube);
+
+			const Vector3 result = tube.getVertex2() - tube.getVertex1();
+			const float length = result.getLength();
+
+			if (Maths::isZero(length)) return;
+
+			// cross product with z-axis-vector and result
+			const Vector3 rotation_axis(-result.y, result.x, 0.0);
+			// angle between z-axis-vector and result
+			const float angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(result.z / length));
+
+			translateVector3_(tube.getVertex1());
+
+			rotateVector3Angle_(rotation_axis, angle);
+
+			glScalef((GLfloat)tube.getRadius(),
+							 (GLfloat)tube.getRadius(),
+							 (GLfloat)tube.getLength());
+
+			GL_tubes_list_[display_lists_index_].draw();
+
+			glPopMatrix();
+		}
+
+
+		void GLRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
+		{
+			initDrawingOthers_();
+
+			const Vector3 result(tube.getVertex2() - tube.getVertex1());
+			const float length = result.getLength();
+
+			if (Maths::isZero(length)) return;
+
+			// cross product with z-axis-vector and result
+			const Vector3 rotation_axis(-result.y, result.x, 0.0);
+			// angle between z-axis-vector and result
+			const float angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(result.z / length));
+
+			glPushMatrix();
+			setColor4ub_(tube);
+
+			translateVector3_(tube.getVertex1());
+
+			rotateVector3Angle_(rotation_axis, angle);
+
+			glScalef((GLfloat)tube.getRadius(),
+							 (GLfloat)tube.getRadius(),
+							 (GLfloat)tube.getLength() / (float)2);
+
+			GL_tubes_list_[display_lists_index_].draw();
+
+			glPopMatrix();
+			glPushMatrix();
+			translateVector3_(tube.getMiddleVertex());
+
+			rotateVector3Angle_(rotation_axis, angle);
+
+			glScalef((GLfloat)tube.getRadius(),
+							 (GLfloat)tube.getRadius(),
+							 (GLfloat)tube.getLength() / (float)2);
+
+			setColorRGBA_(tube.getColor2());
+
+			GL_tubes_list_[display_lists_index_].draw();
+
+			glPopMatrix();
+		}
+
+		void GLRenderer::renderTwoColoredLine_(const TwoColoredLine& line)
+		{
+			initDrawingOthers_();
+
+			setColor4ub_(line);
+			glDisable(GL_LIGHTING);
+
+			glBegin(GL_LINES);
+			vertexVector3_(line.getVertex1());
+			vertexVector3_(line.getMiddleVertex());
+			glEnd();
+
+			glBegin(GL_LINES);
+			setColorRGBA_(line.getColor2());
+			vertexVector3_(line.getMiddleVertex());
+			vertexVector3_(line.getVertex2());
+			glEnd();
+
+			glEnable(GL_LIGHTING);
+		}
+
+
+		void GLRenderer::initDrawingMeshes_()
+		{
+			if (drawed_mesh_) return;
+
+			if (drawing_mode_ == DRAWING_MODE_DOTS)
+			{
+				glDisable(GL_LIGHTING);
+				normalVector3_(normal_vector_);
+			}
+			else if (drawing_mode_ == DRAWING_MODE_WIREFRAME)
+			{
+				glDisable(GL_LIGHTING);
+			}
+			else // draw the triangles solid
+			{
+				if (model_type_  == MODEL_CARTOON)
+				{
+					glEnable(GL_CULL_FACE);
+				}
+				else
+				{
+					glDisable(GL_CULL_FACE);
+					glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
+				}
+			}
+
+			drawed_mesh_ = true;
+			drawed_other_object_ = false;
+		}
+
+
+		void GLRenderer::initDrawingOthers_()
+		{
+			if (drawed_other_object_) return;
+
+			if (drawing_mode_ == DRAWING_MODE_DOTS ||
+					drawing_mode_ == DRAWING_MODE_WIREFRAME)
+			{
+				glEnable(GL_LIGHTING);
+			}
+			else // solid
+			{
+				glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, false);
+			}
+
 			glEnable(GL_CULL_FACE);
-		}
-		else
-		{
-			glDisable(GL_CULL_FACE);
-			glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
-		}
-	}
 
-	drawed_mesh_ = true;
-	drawed_other_object_ = false;
-}
-
-
-void GLRenderer::initDrawingOthers_()
-{
-	if (drawed_other_object_) return;
-
-	if (drawing_mode_ == DRAWING_MODE_DOTS ||
-			drawing_mode_ == DRAWING_MODE_WIREFRAME)
-	{
-		glEnable(GL_LIGHTING);
-	}
-	else // solid
-	{
-		glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, false);
-	}
-
-	glEnable(GL_CULL_FACE);
-
-	drawed_other_object_ = true;
-	drawed_mesh_ = false;
-}
-
-
-void GLRenderer::renderMesh_(const Mesh& mesh)
-{
-	if (mesh.normal.size() != mesh.vertex.size())
-	{
-		BALLVIEW_DEBUG;
-		return;
-	}
-
-	/*
-	// debugging for normals:
-	initDrawingOthers_();
-	glDisable(GL_LIGHTING);
-	glBegin(GL_LINES);
-
-	for (Size index = 0; index < mesh.vertex.size(); ++index)
-	{
-		vertexVector3_(mesh.vertex[index]);
-		vertexVector3_(mesh.vertex[index] + mesh.normal[index]);
-	}
-	glEnd();
-	glEnable(GL_LIGHTING);
-	*/
-
-	///////////////////////////////////////////////
-	// here starts the normal mesh rendering code:
-	initDrawingMeshes_();
-
-	// If we have only one color for the whole mesh, this can
-	// be assigned efficiently
-	bool multiple_colors = true;
-	if (mesh.colors.size() < mesh.vertex.size())
-	{
-		if (mesh.colors.size() > 0)
-		{
-			setColorRGBA_(mesh.colors[0]);
-		}
-		multiple_colors = false;
-	}
-
-	Size nr_triangles = mesh.triangle.size();
-
-	///////////////////////////////////////////////////////////////////
-	if (drawing_mode_ == DRAWING_MODE_DOTS)
-	{
-		glBegin(GL_POINTS);
-		for (Size index = 0; index < mesh.vertex.size(); ++index)
-		{
-			if (multiple_colors) setColorRGBA_(mesh.colors[index]);
-			vertexVector3_(mesh.vertex[index]);
-		}
-		glEnd();
-	}
-	///////////////////////////////////////////////////////////////////
-	else if (drawing_mode_ == DRAWING_MODE_WIREFRAME)
-	{
-		for (Size index = 0; index < nr_triangles; ++index)
-		{
-			glBegin(GL_LINE_STRIP);
-
-			normalVector3_(normal_vector_);
-
-			if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v1]);
-			vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
-
-			if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v2]);
-			vertexVector3_(mesh.vertex[mesh.triangle[index].v2]);
-
-			if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v3]);
-			vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
-
-			glEnd();
-		}
-	}
-	///////////////////////////////////////////////////////////////////
-	else if (drawing_mode_ == DRAWING_MODE_SOLID)				// draw the triangles solid
-	{
-		glBegin(GL_TRIANGLES);
-		for (Size index = 0; index < nr_triangles; ++index)
-		{
-			Position p = mesh.triangle[index].v1;
-			if (multiple_colors) setColorRGBA_(mesh.colors[p]);
-			normalVector3_(mesh.normal[p]);
-			vertexVector3_(mesh.vertex[p]);
-
-			p = mesh.triangle[index].v2;
-			if (multiple_colors) setColorRGBA_(mesh.colors[p]);
-			normalVector3_(mesh.normal[p]);
-			vertexVector3_(mesh.vertex[p]);
-
-			p = mesh.triangle[index].v3;
-			if (multiple_colors) setColorRGBA_(mesh.colors[p]);
-			normalVector3_(mesh.normal[p]);
-			vertexVector3_(mesh.vertex[p]);
-		}
-		glEnd();
-	}
-	else 		// draw the triangles per cel shading
-	{
-		// a part of this code stems from http://nehe.gamedev.net lesson 37
-		glDisable(GL_LIGHTING);
-		glPolygonMode(GL_BACK, GL_LINE);										// Draw Backfacing Polygons As Wireframes
-		glLineWidth(3);																			// Set The Line Width
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_FRONT);																// Don't Draw Any Front-Facing Polygons
-		glDepthFunc(GL_LEQUAL);															// Change The Depth Mode
-		setColorRGBA_(ColorRGBA(0.,0.,0.,1.));
-		glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);							// Use The Good Calculations
-		glEnable(GL_LINE_SMOOTH);														// Enable Anti-Aliasing
-
-		glBegin(GL_TRIANGLES);															// Tell OpenGL What We Want To Draw
-		for (Size index = 0; index < nr_triangles; ++index)
-		{
-			vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
-			vertexVector3_(mesh.vertex[mesh.triangle[index].v2]);
-			vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
-		}
-		glEnd ();													// Tell OpenGL We've Finished
-
-		// reset to normal:
-		glCullFace(GL_BACK);							// Reset The Face To Be Culled
-		glPolygonMode (GL_BACK, GL_FILL);	// Reset Back-Facing Polygon Drawing Mode
-		glLineWidth(1);										// Set The Line Width
-
-		// map the texture so it simulates shadows:
-		glEnable(GL_TEXTURE_1D);
-		glBindTexture(GL_TEXTURE_1D, cel_texture_);
-		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
-		glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
-
-		// some artefacts when using GL_LINEAR:
-//   				glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//   				glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-		vector<float> tex_values;
-		tex_values.reserve(mesh.normal.size());
-		Vector3 vv = -scene_->getStage()->getCamera().getViewVector() ;
-		vv.normalize();
-		// other light positions possible:
-//    				vv += scene_->getStage()->getCamera().getLookUpVector() / 2.0;
-//    				vv += scene_->getStage()->getCamera().getRightVector() / 2.0;
-//    				vv.normalize();
-
-		float v;
-		for (Position p = 0; p < mesh.normal.size(); p++)
-		{
-			v = mesh.normal[p] * vv;
-			if (v < 0.) v = 0.;
-			tex_values.push_back(BALL_MIN(1., v));
+			drawed_other_object_ = true;
+			drawed_mesh_ = false;
 		}
 
-		// prevent problems with single colored meshes:
-		if (mesh.colors.size() > 0) setColorRGBA_(mesh.colors[0]);
 
-		glBegin(GL_TRIANGLES);
-		for (Size index = 0; index < nr_triangles; ++index)
+		void GLRenderer::renderMesh_(const Mesh& mesh)
 		{
-			Position p = mesh.triangle[index].v1;
-			if (multiple_colors) setColorRGBA_(mesh.colors[p]);
-			glTexCoord1f (tex_values[p]);
-			vertexVector3_(mesh.vertex[p]);
-
-			p = mesh.triangle[index].v2;
-			glTexCoord1f (tex_values[p]);
-			if (multiple_colors) setColorRGBA_(mesh.colors[p]);
-			vertexVector3_(mesh.vertex[p]);
-
-			p = mesh.triangle[index].v3;
-			glTexCoord1f (tex_values[p]);
-			if (multiple_colors) setColorRGBA_(mesh.colors[p]);
-			vertexVector3_(mesh.vertex[p]);
-		}
-
-		glEnd();
-		glEnable(GL_LIGHTING);
-		glDisable(GL_TEXTURE_1D);
-	}
-}
-
-
-void GLRenderer::initGLU_(DrawingMode mode)
-{
-	if (mode == DRAWING_MODE_WIREFRAME)
-	{
-		gluQuadricDrawStyle(GLU_quadric_obj_, GLU_LINE);
-	}
-	else if (mode >= DRAWING_MODE_SOLID)
-	{
-		gluQuadricDrawStyle(GLU_quadric_obj_, GLU_FILL);
-	}
-	else if (mode == DRAWING_MODE_DOTS)
-	{
-		gluQuadricDrawStyle(GLU_quadric_obj_, GLU_POINT);
-	}
-	else
-	{
-		BALLVIEW_DEBUG;
-	}
-}
-
-void GLRenderer::createSpheres_()
-{
-	glPushMatrix();
-
-	Position slices[4] = {14, 24, 64, 100};
-	Position stacks[4] = {8, 16, 44, 80};
-
-	for (Position mode = DRAWING_MODE_DOTS; mode < BALL_VIEW_MAXIMAL_DRAWING_MODE; mode++)
-	{
-		initGLU_((DrawingMode)mode);
-
-		for (Position dp = DRAWING_PRECISION_LOW; dp <= DRAWING_PRECISION_ULTRA; dp++)
-		{
-			GL_spheres_list_[mode * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + dp].startDefinition();
-			gluSphere(GLU_quadric_obj_, 1, slices[dp], stacks[dp]);
-			GL_spheres_list_[mode * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + dp].endDefinition();
-		}
-	}
-
-	glPopMatrix();
-}
-
-
-void GLRenderer::createDottedSphere_(int precision)
-{
-	glBegin(GL_POINTS);
-
-	vector<Vector3> results = createSphere((Size)precision);
-	for (Position p = 0; p < results.size(); p++)
-	{
-		vertexVector3_(results[p]);
-	}
-
-	glEnd();
-}
-
-
-void GLRenderer::createTubes_()
-{
-	glPushMatrix();
-
-	Position slices[4] = {6, 10, 20, 64};
-
-	for (Position mode = DRAWING_MODE_DOTS; mode < BALL_VIEW_MAXIMAL_DRAWING_MODE; mode++)
-	{
-		initGLU_((DrawingMode)mode);
-
-		for (Position dp = DRAWING_PRECISION_LOW; dp <= DRAWING_PRECISION_ULTRA; dp++)
-		{
-			GL_tubes_list_[mode * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + dp].startDefinition();
-			gluCylinder(GLU_quadric_obj_, 1, 1, 1, slices[dp], 1);
-			GL_tubes_list_[mode * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + dp].endDefinition();
-		}
-	}
-
-	glPopMatrix();
-}
-
-
-void GLRenderer::createBoxes_()
-{
-	// building point display list
-	for (Position pos = 0; pos < BALL_VIEW_MAXIMAL_DRAWING_PRECISION; pos++)
-	{
-		GL_boxes_list_[0 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + pos].startDefinition();
-		createDotBox_();
-		GL_boxes_list_[0 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + pos].endDefinition();
-	}
-
-	// building wireframe display list
-	for (Position pos = 0; pos < BALL_VIEW_MAXIMAL_DRAWING_PRECISION; pos++)
-	{
-		GL_boxes_list_[1 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + pos].startDefinition();
-		createLineBox_();
-		GL_boxes_list_[1 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + pos].endDefinition();
-	}
-
-	// building solid display list
-	for (Position pos = 0; pos < BALL_VIEW_MAXIMAL_DRAWING_PRECISION; pos++)
-	{
-		GL_boxes_list_[2 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + pos].startDefinition();
-		createSolidBox_();
-		GL_boxes_list_[2 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + pos].endDefinition();
-	}
-}
-
-
-void GLRenderer::createLineBox_()
-{
-	glBegin(GL_LINES);
-
-	glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)0);
-	glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)0);
-
-	glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)0);
-	glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)1);
-
-	glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)1);
-	glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)1);
-
-	glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)1);
-	glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)0);
-
-	glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)0);
-	glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)0);
-
-	glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)0);
-	glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)1);
-
-	glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)1);
-	glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)1);
-
-	glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)1);
-	glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)0);
-
-	glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)0);
-	glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)0);
-
-	glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)0);
-	glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)0);
-
-	glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)1);
-	glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)1);
-
-	glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)1);
-	glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)1);
-
-	glEnd();
-}
-
-
-void GLRenderer::createDotBox_()
-{
-	glBegin(GL_POINTS);
-
-	glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)0);
-	glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)0);
-	glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)1);
-	glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)1);
-
-	glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)0);
-	glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)0);
-	glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)1);
-	glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)1);
-
-	glEnd();
-}
-
-
-void GLRenderer::createSolidBox_()
-{
-	glBegin(GL_QUADS);
-
-	// back
-	glNormal3f((GLfloat)0, (GLfloat)0, (GLfloat)-1);
-	glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)0);
-	glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)0);
-	glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)0);
-	glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)0);
-
-	// above
-	glNormal3f((GLfloat)0, (GLfloat)1, (GLfloat)0);
-	glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)0);
-	glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)1);
-	glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)1);
-	glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)0);
-
-	// front
-	glNormal3f((GLfloat)0, (GLfloat)0, (GLfloat)1);
-	glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)1);
-	glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)1);
-	glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)1);
-	glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)1);
-
-	// under
-	glNormal3f((GLfloat)0, (GLfloat)-1, (GLfloat)0);
-	glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)1);
-	glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)0);
-	glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)0);
-	glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)1);
-
-	// left
-	glNormal3f((GLfloat)-1, (GLfloat)0, (GLfloat)0);
-	glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)0);
-	glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)0);
-	glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)1);
-	glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)1);
-
-	// right
-	glNormal3f((GLfloat)1, (GLfloat)0, (GLfloat)0);
-	glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)1);
-	glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)1);
-	glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)0);
-	glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)0);
-
-	glEnd();
-}
-
-
-// ############################ PICKING ###################################
-void GLRenderer::pickObjects1(Position x1, Position y1, Position x2, Position y2)
-{
-	glFlush();
-	GLint viewport[4];
-	// init name stack for 32000 objects
-	glGetIntegerv(GL_VIEWPORT, viewport);
-	glSelectBuffer(BALL_GLRENDERER_PICKING_NUMBER_OF_MAX_OBJECTS, object_buffer_);
-	// uncoment this for debuging:
-	glRenderMode(GL_SELECT);
-	glInitNames();
-	glPushName(0);
-	glMatrixMode(GL_PROJECTION);
-
-	glPushMatrix();
-	glLoadIdentity();
-
-	// calculate picking rectangle
-	Size width  = BALL_ABS((Index)x2 - (Index)x1);
-	Size height = BALL_ABS((Index)y2 - (Index)y1);
-
-	Position center_x = BALL_MIN(x2, x1) + width / 2;
-	Position center_y = BALL_MIN(y2, y1) + height / 2;
-
-	if (width == 0)	width = 1;
-	if (height == 0) height = 1;
-
-	single_pick_ = (width <= 3 && height <= 3);
-	clearNames_();
-
-	// calculate picking matrix
-	gluPickMatrix(center_x, viewport[3] - center_y, width, height, viewport);
-
-	// prepare camera
-	initPerspective();
-
-	glMatrixMode(GL_MODELVIEW);
-	updateCamera();
-}
-
-
-void GLRenderer::pickObjects2(List<GeometricObject*>& objects)
-{
-	glFlush();
-
-	glMatrixMode(GL_PROJECTION);
-	// get number of hits
-	int number_of_hits = glRenderMode(GL_RENDER);
-	glPopMatrix();
-	glMatrixMode(GL_MODELVIEW);
-	// return if no objects are picked
-	if (number_of_hits == 0)
-	{
-		updateCamera();
-		return;
-	}
-
-	Position minimum_z_coord = UINT_MAX;
-	Position names;
-	Name nearest_name = 0;
-	Position* object_buffer_ptr = (Position*) object_buffer_;
-	GeometricObject* go = 0;
-
-	// collect only the nearest Object
-	if (single_pick_)
-	{
-		Position z_coord;
-
-		// find minimum z-coord
-		for (Index index = 0; index < number_of_hits; ++index)
-		{
-			names = *object_buffer_ptr;
-			++object_buffer_ptr;
-			z_coord = *object_buffer_ptr;
-
-			object_buffer_ptr += 2;
-
-			if (z_coord <= minimum_z_coord)
+			if (mesh.normal.size() != mesh.vertex.size())
 			{
-				minimum_z_coord = z_coord;
-				nearest_name = *object_buffer_ptr;
+				BALLVIEW_DEBUG;
+				return;
 			}
 
-			object_buffer_ptr += names;
-		}
+			/*
+			// debugging for normals:
+			initDrawingOthers_();
+			glDisable(GL_LIGHTING);
+			glBegin(GL_LINES);
 
-		go = getObject(nearest_name);
-		if (go != 0) objects.push_back(go);
-	}
-	else // collect all objects that are in the picking area
-	{
-		for (Index index = 0; index < number_of_hits; ++index)
-		{
-			names = *object_buffer_ptr;
-			object_buffer_ptr += 3;
-			nearest_name = *object_buffer_ptr;
-			object_buffer_ptr += names;
+			for (Size index = 0; index < mesh.vertex.size(); ++index)
+			{
+				vertexVector3_(mesh.vertex[index]);
+				vertexVector3_(mesh.vertex[index] + mesh.normal[index]);
+			}
+			glEnd();
+			glEnable(GL_LIGHTING);
+			*/
 
-			go = getObject(nearest_name);
-			if (go != 0) objects.push_back(go);
-		}
-	}
-
-	updateCamera();
-}
-
-
-// ############################ MOVEMENT/SIZE ###################################
-// TODO: shouldn't we use a camera aperture angle?
-void GLRenderer::setSize(float width, float height)
-{
-	width_ 	= width;
-	height_ = height;
-
-	if (width > height)
-	{
-		x_scale_ = width / (height * 2);
-		y_scale_ = 0.5;
-	}
-	else
-	{
-		x_scale_ = 0.5;
-		y_scale_ = height / (width * 2);
-	}
-
-	glViewport(0, 0, (int)width_, (int)height_);
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	initPerspective();
-	glMatrixMode(GL_MODELVIEW);
-}
-
-
-void GLRenderer::updateCamera(const Camera* camera)
-{
-	if (camera == 0) camera = &(stage_->getCamera());
-
-	if (Maths::isZero(camera->getViewVector().getSquareLength()))
-	{
-		Log.error() << "Unvalid camera settings: View point = LookAt point" << std::endl;
-		return;
-	}
-
-	glLoadIdentity();
-
-	gluLookAt(camera->getViewPoint().x,
-						camera->getViewPoint().y,
-						camera->getViewPoint().z,
-						camera->getLookAtPosition().x,
-						camera->getLookAtPosition().y,
-						camera->getLookAtPosition().z,
-						camera->getLookUpVector().x,
-						camera->getLookUpVector().y,
-						camera->getLookUpVector().z);
-
-	normal_vector_ = (-camera->getViewVector().normalize());
-}
-
-void GLRenderer::setupStereo(float eye_separation, float focal_length)
-{
-	// TODO: - make near and far clip configurable!!!
-	//       - keep the same frustrum until either the size or the stereo settings change
-
-	float ndfl    = near_ / focal_length;
-
-	float new_left   = left_  - eye_separation * ndfl;
-	float new_right  = right_ - eye_separation * ndfl;
-
-	glMatrixMode(GL_PROJECTION);
-
-	glLoadIdentity();
-	glFrustum(new_left, new_right, bottom_, top_, near_, far_);
-	glViewport(0, 0, width_, height_);
-
-	glMatrixMode(GL_MODELVIEW);
-}
-
-bool GLRenderer::hasDisplayListFor(const Representation& rep) const
-{
-	return display_lists_.has(&rep);
-}
-
-bool GLRenderer::isExtensionSupported(const String& extension) const
-{
-	// Extension names should not have spaces
-	if (extension == "" || extension.hasSubstring(" ")) return false;
-
-	// Get Extensions String
-	if (glGetString(GL_EXTENSIONS) == 0)
-	{
-		return false;
-	}
-
-	String supported_extensions = (const char*) glGetString(GL_EXTENSIONS);
-	if (supported_extensions.hasSubstring(extension)) return true;
-
-	return false;
-}
-
-String GLRenderer::getVendor()
-{
-	if (glGetString(GL_VENDOR) == 0) return "";
-	return (char*)glGetString(GL_VENDOR);
-}
-
-String GLRenderer::getRenderer()
-{
-	if (glGetString(GL_RENDERER) == 0) return "";
-	return (char*)glGetString(GL_RENDERER);
-}
-
-String GLRenderer::getOpenGLVersion()
-{
-	if (glGetString(GL_VERSION) == 0) return "";
-	return (char*)glGetString(GL_VERSION);
-}
-
-vector<String> GLRenderer::getExtensions()
-{
-	vector<String> string_vector;
-	char* extensions = (char*)glGetString(GL_EXTENSIONS);
-
-	if (!extensions) 
-		return string_vector;
-
-	String exts(extensions);
-
-	exts.split(string_vector);
-	return string_vector;
-}
-
-bool GLRenderer::enableVertexBuffers(bool state)
-{
-#ifndef BALL_USE_GLEW
-	return false;
-#else
-	if (!isExtensionSupported("GL_ARB_vertex_buffer_object"))
-	{
-		use_vertex_buffer_ = false;
-		return false;
-	}
-
-	if (state != use_vertex_buffer_)
-	{
-		if (state) Log.info() << "Enabling Vertex Buffer" << std::endl;
-		else       Log.info() << "Disabling Vertex Buffer" << std::endl;
-	}
-	use_vertex_buffer_ = state;
-
-	if (use_vertex_buffer_) MeshBuffer::initGL();
-
-	return true;
-#endif
-}
-
-void GLRenderer::clearVertexBuffersFor(Representation& rep)
-{
-#ifdef BALL_USE_GLEW
-	MeshBufferHashMap::Iterator vit = rep_to_buffers_.find(&rep);
-	if (vit == rep_to_buffers_.end()) return;
-
-	vector<MeshBuffer*>& meshes = vit->second;
-	vector<MeshBuffer*>::iterator bit = meshes.begin();
-	for (; bit != meshes.end(); bit++)
-	{
-		delete *bit;
-	}
-
-	meshes.clear();
-	rep_to_buffers_.erase(vit);
-#endif
-}
-
-void GLRenderer::drawBuffered(const Representation& rep)
-{
-	if (rep.isHidden()) return;
-
-#ifdef BALL_USE_GLEW
-	// if we have vertex buffers for this Representation, draw them
-	if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
-	{
-		MeshBufferHashMap::Iterator vit = rep_to_buffers_.find(&rep);
-		if (vit != rep_to_buffers_.end())
-		{
+			///////////////////////////////////////////////
+			// here starts the normal mesh rendering code:
 			initDrawingMeshes_();
-			MeshBuffer::setGLRenderer(this);
-			vector<MeshBuffer*>& buffers = vit->second;
 
-			vector<MeshBuffer*>::iterator bit = buffers.begin();
-			for (; bit != buffers.end(); bit++)
+			// If we have only one color for the whole mesh, this can
+			// be assigned efficiently
+			bool multiple_colors = true;
+			if (mesh.colors.size() < mesh.vertex.size())
 			{
-				(*bit)->draw();
-			}
-		}
-	}
-#endif
-
-	// if we have a displaylist for this Representation, draw it
-	DisplayListHashMap::Iterator dit = display_lists_.find(&rep);
-	if (dit != display_lists_.end())
-	{
-		dit->second->draw();
-	}
-}
-
-void GLRenderer::enterPickingMode()
-{
-	picking_mode_ = true;
-}
-
-void GLRenderer::exitPickingMode()
-{
-	picking_mode_ = false;
-	object_to_name_.clear();
-	name_to_object_.clear();
-	all_names_ = 1;
-}
-
-
-bool GLRenderer::vertexBuffersSupported() const
-{
-#ifdef BALL_USE_GLEW
-	return isExtensionSupported("GL_ARB_vertex_buffer_object");
-#else
-	return false;
-#endif
-}
-
-void GLRenderer::renderClippingPlane_(const ClippingPlane& plane)
-{
-	display_lists_index_ = DRAWING_MODE_SOLID * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + DRAWING_PRECISION_HIGH;
-
-	glPushAttrib(GL_LIGHTING_BIT | GL_BLEND);
-	const Vector3& point(plane.getPoint());
-	const Vector3& n(plane.getNormal());
-
-	Tube tube;
-	tube.setVertex1(point);
-	tube.setVertex2(point - (plane.getNormal() * 10.0));
-	tube.setColor(ColorRGBA(0,255,255));
-	tube.setRadius(1);
-
-	initDrawingOthers_();
-	initTransparent();
-	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
-	glDisable(GL_CULL_FACE);
-	renderTube_(tube);
-
-	initDrawingOthers_();
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);
-	glDepthMask(GL_FALSE);
-
-	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
-	glDisable(GL_CULL_FACE);
-
-	glPushMatrix();
-	setColorRGBA_(ColorRGBA(0,0,255, 190));;
-	translateVector3_(point);
-	const Vector3 rotation_axis(-n.y, n.x, 0.0);
-	// angle between z-axis-vector and result
-	const float angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(n.z / n.getLength()));
-	rotateVector3Angle_(rotation_axis, angle);
-
-	initGLU_(DRAWING_MODE_SOLID);
-	gluDisk(GLU_quadric_obj_, 0, 20 , 140, 80);
-
-	glPopMatrix();
-	glEnable(GL_CULL_FACE);
-
-	glPopAttrib();
-}
-
-void GLRenderer::initPerspective()
-{
-	if (getStereoMode() == GLRenderer::ACTIVE_STEREO)
-	{
-		//  "Dont call GLRenderer::initPerspective() in Stereo mode! "
-		return;
-	}
-
-	left_   = -2.0 * x_scale_;
-	right_  =  2.0 * x_scale_;
-	bottom_ = -2.0 * y_scale_;
-	top_    =  2.0 * y_scale_;
-
-	glFrustum(left_, right_, bottom_, top_, near_, far_);
-}
-
-void GLRenderer::generateIlluminationTexture_(float ka, float kd, float kr, float shininess)
-{
-	const int TEXTURE_SIZE = 128;  // including border
-	enum { R = 0, G = 1, B = 2, A = 3 };
-
-//   			assert( 0. <= ka && ka <= 1. );
-//   			assert( 0. <= kd && kd <= 1. );
-//   			assert( 0. <= kr && kr <= 1. );
-//   			float k = ka + kd + kr;
-//   			assert( 0. <= k  &&  k <= 1. );
-
-	Index i = 0;
-	Index j = 0;
-	for( i = 0; i < TEXTURE_SIZE; ++i )
-	{
-		for( j = 0; j < TEXTURE_SIZE; ++j )
-		{
-			float x = ( (float) j + 1. ) / (TEXTURE_SIZE + 1.);
-			float y = ( (float) i + 1. ) / (TEXTURE_SIZE + 1.);
-
-			float LT = 2. * x - 1.;
-			float VT = 2. * y - 1.;
-
-			float intensity = 0.;
-			intensity += ka;
-			intensity += kd * sqrt( 1. - LT*LT );
-			intensity += kr * pow( fabs( LT*VT - sqrt( 1. - LT*LT ) * sqrt( 1. - VT*VT ) ), shininess * 255. );
-
-			if( intensity < 0. || 1. < intensity )
-			{
-				if( intensity < 0. ) intensity = 0.;
-				if( 1. < intensity ) intensity = 1.;
-			}
-//   					assert( 0. <= intensity && intensity <= 1. );
-
-			Index c = (Index)(intensity * 255);
-//   					assert( 0 <= c && c <= 255 );
-
-			line_tex_[i][j][R] = (GLubyte) c;
-			line_tex_[i][j][G] = (GLubyte) c;
-			line_tex_[i][j][B] = (GLubyte) c;
-			line_tex_[i][j][A] = 127;
-		}
-	}
-}
-
-Position GLRenderer::getTextureIndex_(Position x, Position y, Position z, Size width, Size height)
-{
-	return BYTES_PER_TEXEL * (x * width + y) +
-				 BYTES_PER_TEXEL * width * height * z;
-}
-
-Position GLRenderer::createTextureFromGrid(const RegularData3D& grid, const ColorMap& map)
-{
-	if (!isExtensionSupported("GL_EXT_texture3D")) return 0;
-
-	// prevent warning and error if not using GLEW:
-	Position texname = 0;
-#ifdef BALL_USE_GLEW
-	removeTextureFor_(grid);
-	RegularData3D::IndexType tex_size = grid.getSize();
-
-	// Generate The Texture
-	Position i = 0;
-	GLubyte* texels = new GLubyte[tex_size.x * tex_size.y * tex_size.z * BYTES_PER_TEXEL];
-	for (Position z = 0; z < tex_size.z; z++)
-	{
-		for (Position y = 0; y < tex_size.y; y++)
-		{
-			for (Position x = 0; x < tex_size.x; x++)
-			{
-				const ColorRGBA& c = map.map(grid.getData(RegularData3D::IndexType(x,y,z)));
-				texels[i + 0] = (unsigned char)c.getRed();
-				texels[i + 1] = (unsigned char)c.getGreen();
-				texels[i + 2] = (unsigned char)c.getBlue();
-				texels[i + 3] = (unsigned char)c.getAlpha();
-				i += 4;
-			}
-		}
-	}
-
-	glGenTextures(1, &texname);
-	glBindTexture(GL_TEXTURE_3D, texname);
-	glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, tex_size.x, tex_size.y, tex_size.z, 0, GL_RGBA, GL_UNSIGNED_BYTE, texels);
-	glBindTexture(GL_TEXTURE_3D, 0);
-	grid_to_texture_[&grid] = texname;
-	delete[] texels;
-#endif
-	return texname;
-}
-
-void GLRenderer::removeTextureFor_(const RegularData3D& grid)
-{
-	if (!grid_to_texture_.has(&grid)) return;
-	glDeleteTextures(1, (GLuint*)&grid_to_texture_[&grid]);
-	grid_to_texture_.erase(&grid);
-}
-
-void GLRenderer::setupGridClipPlanes_(const GridVisualisation& slice)
-{
-	double planes[6][4];
-
-	Vector3 x,y,z;
-	x = slice.x;
-	x.normalize();
-	y = slice.y;
-	y.normalize();
-	z = slice.z;
-	z.normalize();
-
-
-	Vector3 origin = slice.origin;
-	Vector3 dv = slice.x + slice.y + slice.z;
-	dv *= 0.001;
-	Vector3 e = origin + slice.x + slice.y + slice.z + dv ;
-	origin -= dv;
-
-	float d = x * (-origin);
-	planes[0][0] = x.x; planes[0][1] = x.y; planes[0][2] = x.z; planes[0][3] = d;
-	d = y * (-origin);
-	planes[1][0] = y.x; planes[1][1] = y.y; planes[1][2] = y.z; planes[1][3] = d;
-	d = z * (-origin);
-	planes[2][0] = z.x; planes[2][1] = z.y; planes[2][2] = z.z; planes[2][3] = d;
-
-	d = -x * (-e);
-	planes[3][0] = -x.x; planes[3][1] = -x.y; planes[3][2] = -x.z; planes[3][3] = d;
-	d = -y * (-e);
-	planes[4][0] = -y.x; planes[4][1] = -y.y; planes[4][2] = -y.z; planes[4][3] = d;
-	d = -z * (-e);
-	planes[5][0] = -z.x; planes[5][1] = -z.y; planes[5][2] = -z.z; planes[5][3] = d;
-
-	for (Position plane = GL_CLIP_PLANE0 + 0; plane < GL_CLIP_PLANE0 + 6; plane++)
-	{
-		glClipPlane(plane, &planes[plane - GL_CLIP_PLANE0][0]);
-		glEnable(plane);
-	}
-}
-
-
-void GLRenderer::renderGridVisualisation_(const GridVisualisation& vol)
-{
-	if (!grid_to_texture_.has(vol.getGrid()))
-		return;
-
-	Position texname = grid_to_texture_[vol.getGrid()];
-	if (texname == 0)
-	{
-		scene_->setStatusbarText("Graphics card does not support 3D textures", true);
-		return;
-	}
-
-	const Vector3 origin = vol.origin;
-
-	if (vol.draw_box)
-	{
-		Box box(origin, vol.x, vol.y, vol.z.getLength());
-		box.setColor(stage_->getBackgroundColor().getInverseColor());
-		Position dli = display_lists_index_;
-		display_lists_index_ = DRAWING_MODE_WIREFRAME * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + drawing_precision_;
-		renderBox_(box);
-		display_lists_index_ = dli;
-	}
-
-	initDrawingOthers_();
-	glDisable(GL_LIGHTING);
-	glDisable(GL_CULL_FACE);
-
-	////////////////////////////////////////////////////////////////////////////////
-	glBindTexture(GL_TEXTURE_3D, texname);
-	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP);
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-
-	///// init the texture: automated texture coordinate generation
-	// normalized vectors in grids directions:
-	Vector3 xd = vol.x;
-	xd.normalize();
-	Vector3 yd = vol.y;
-	yd.normalize();
-	Vector3 zd = vol.z;
-	zd.normalize();
-
-	// plane vectors and distance for texture coordinates:
-	float xp[4], yp[4], zp[4], d;
-	Vector3 n;
-
-	n = zd;
-	d = n * (-origin);
-	xp[0] = n.x; xp[1] = n.y; xp[2] = n.z; xp[3] = d;
-
-	n = xd;
-	d = n * (-origin);
-	yp[0] = n.x; yp[1] = n.y; yp[2] = n.z; yp[3] = d;
-
-	n = yd;
-	d = n * (-origin);
-	zp[0] = n.x; zp[1] = n.y; zp[2] = n.z; zp[3] = d;
-
-	glEnable(GL_TEXTURE_3D);
-	glTexGenf(GL_S,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
-	glTexGenf(GL_T,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
-	glTexGenf(GL_R,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
-	glTexGenfv(GL_S,GL_OBJECT_PLANE, yp);
-	glTexGenfv(GL_T,GL_OBJECT_PLANE, zp);
-	glTexGenfv(GL_R,GL_OBJECT_PLANE, xp);
-	glEnable(GL_TEXTURE_GEN_S);
-	glEnable(GL_TEXTURE_GEN_T);
-	glEnable(GL_TEXTURE_GEN_R);
-
-	// stretch the texture accordingly
-	glMatrixMode(GL_TEXTURE);
-	glLoadIdentity();
-	const Vector3 dim = vol.x + vol.y + vol.z;
-	glScaled((double)1.0 / (double) dim.x,
-					 (double)1.0 / (double) dim.y,
-					 (double)1.0 / (double) dim.z);
-	glMatrixMode(GL_MODELVIEW);
-
-	// render this as one slice
-	if (vol.type == GridVisualisation::PLANE)
-	{
-		setupGridClipPlanes_(vol);
-		Vector3 n = vol.getNormal();
-		Vector3 v1 = getNormal(n);
-		Vector3 v2 = v1 % n;
-
-		v1.normalize();
-		v2.normalize();
-		v1 *= vol.max_dim * 2.0;
-		v2 *= vol.max_dim * 2.0;
-
-		Vector3 o = vol.getPoint() - v1 - v2;
-
-		v1 *= 2.0;
-		v2 *= 2.0;
-
-		glBegin(GL_QUADS);
-		normalVector3_(-vol.getNormal());
-		vertexVector3_(o);
-		vertexVector3_(o + v1);
-		vertexVector3_(o + v1 + v2);
-		vertexVector3_(o + v2);
-		glEnd();
-
-		for (Position plane = GL_CLIP_PLANE0; plane < GL_CLIP_PLANE0 + 6; plane++)
-		{
-			glDisable(plane);
-		}
-	}
-	else if (vol.type == GridVisualisation::SLICES)
-	{
-		// volume rendering
-		const Vector3& vv = scene_->getStage()->getCamera().getViewVector();
-
-		Vector3 normals[3];
-		normals[0] = vol.x;
-		normals[1] = vol.y;
-		normals[2] = vol.z;
-
-		// calculate the angles between vv and the axes of the grid
-		Angle angles[3], aangles[3];
-
-		for (Position i = 0; i < 3; i++)
-		{
-			angles[i] = normals[i].getAngle(vv);
-			aangles[i] = (-normals[i]).getAngle(vv);
-		}
-
-		Angle min_angle(angles[0]);
-		Position min = 0;
-		bool anti = false;
-		for (Position i = 0; i < 3; i++)
-		{
-			if (angles[i] < min_angle)
-			{
-				min = i;
-				anti = false;
-				min_angle = angles[i];
+				if (mesh.colors.size() > 0)
+				{
+					setColorRGBA_(mesh.colors[0]);
+				}
+				multiple_colors = false;
 			}
 
-			if (aangles[i] < min_angle)
+			Size nr_triangles = mesh.triangle.size();
+
+			///////////////////////////////////////////////////////////////////
+			if (drawing_mode_ == DRAWING_MODE_DOTS)
 			{
-				min = i;
-				anti = true;
-				min_angle = aangles[i];
+				glBegin(GL_POINTS);
+				for (Size index = 0; index < mesh.vertex.size(); ++index)
+				{
+					if (multiple_colors) setColorRGBA_(mesh.colors[index]);
+					vertexVector3_(mesh.vertex[index]);
+				}
+				glEnd();
+			}
+			///////////////////////////////////////////////////////////////////
+			else if (drawing_mode_ == DRAWING_MODE_WIREFRAME)
+			{
+				for (Size index = 0; index < nr_triangles; ++index)
+				{
+					glBegin(GL_LINE_STRIP);
+
+					normalVector3_(normal_vector_);
+
+					if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v1]);
+					vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
+
+					if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v2]);
+					vertexVector3_(mesh.vertex[mesh.triangle[index].v2]);
+
+					if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v3]);
+					vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
+
+					glEnd();
+				}
+			}
+			///////////////////////////////////////////////////////////////////
+			else if (drawing_mode_ == DRAWING_MODE_SOLID)				// draw the triangles solid
+			{
+				glBegin(GL_TRIANGLES);
+				for (Size index = 0; index < nr_triangles; ++index)
+				{
+					Position p = mesh.triangle[index].v1;
+					if (multiple_colors) setColorRGBA_(mesh.colors[p]);
+					normalVector3_(mesh.normal[p]);
+					vertexVector3_(mesh.vertex[p]);
+
+					p = mesh.triangle[index].v2;
+					if (multiple_colors) setColorRGBA_(mesh.colors[p]);
+					normalVector3_(mesh.normal[p]);
+					vertexVector3_(mesh.vertex[p]);
+
+					p = mesh.triangle[index].v3;
+					if (multiple_colors) setColorRGBA_(mesh.colors[p]);
+					normalVector3_(mesh.normal[p]);
+					vertexVector3_(mesh.vertex[p]);
+				}
+				glEnd();
+			}
+			else 		// draw the triangles per cel shading
+			{
+				// a part of this code stems from http://nehe.gamedev.net lesson 37
+				glDisable(GL_LIGHTING);
+				glPolygonMode(GL_BACK, GL_LINE);										// Draw Backfacing Polygons As Wireframes
+				glLineWidth(3);																			// Set The Line Width
+				glEnable(GL_CULL_FACE);
+				glCullFace(GL_FRONT);																// Don't Draw Any Front-Facing Polygons
+				glDepthFunc(GL_LEQUAL);															// Change The Depth Mode
+				setColorRGBA_(ColorRGBA(0.,0.,0.,1.));
+				glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);							// Use The Good Calculations
+				glEnable(GL_LINE_SMOOTH);														// Enable Anti-Aliasing
+
+				glBegin(GL_TRIANGLES);															// Tell OpenGL What We Want To Draw
+				for (Size index = 0; index < nr_triangles; ++index)
+				{
+					vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
+					vertexVector3_(mesh.vertex[mesh.triangle[index].v2]);
+					vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
+				}
+				glEnd ();													// Tell OpenGL We've Finished
+
+				// reset to normal:
+				glCullFace(GL_BACK);							// Reset The Face To Be Culled
+				glPolygonMode (GL_BACK, GL_FILL);	// Reset Back-Facing Polygon Drawing Mode
+				glLineWidth(1);										// Set The Line Width
+
+				// map the texture so it simulates shadows:
+				glEnable(GL_TEXTURE_1D);
+				glBindTexture(GL_TEXTURE_1D, cel_texture_);
+				glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
+				glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
+
+				// some artefacts when using GL_LINEAR:
+		//   				glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		//   				glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+				glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+				vector<float> tex_values;
+				tex_values.reserve(mesh.normal.size());
+				Vector3 vv = -scene_->getStage()->getCamera().getViewVector() ;
+				vv.normalize();
+				// other light positions possible:
+		//    				vv += scene_->getStage()->getCamera().getLookUpVector() / 2.0;
+		//    				vv += scene_->getStage()->getCamera().getRightVector() / 2.0;
+		//    				vv.normalize();
+
+				float v;
+				for (Position p = 0; p < mesh.normal.size(); p++)
+				{
+					v = mesh.normal[p] * vv;
+					if (v < 0.) v = 0.;
+					tex_values.push_back(BALL_MIN(1., v));
+				}
+
+				// prevent problems with single colored meshes:
+				if (mesh.colors.size() > 0) setColorRGBA_(mesh.colors[0]);
+
+				glBegin(GL_TRIANGLES);
+				for (Size index = 0; index < nr_triangles; ++index)
+				{
+					Position p = mesh.triangle[index].v1;
+					if (multiple_colors) setColorRGBA_(mesh.colors[p]);
+					glTexCoord1f (tex_values[p]);
+					vertexVector3_(mesh.vertex[p]);
+
+					p = mesh.triangle[index].v2;
+					glTexCoord1f (tex_values[p]);
+					if (multiple_colors) setColorRGBA_(mesh.colors[p]);
+					vertexVector3_(mesh.vertex[p]);
+
+					p = mesh.triangle[index].v3;
+					glTexCoord1f (tex_values[p]);
+					if (multiple_colors) setColorRGBA_(mesh.colors[p]);
+					vertexVector3_(mesh.vertex[p]);
+				}
+
+				glEnd();
+				glEnable(GL_LIGHTING);
+				glDisable(GL_TEXTURE_1D);
 			}
 		}
 
-		// order the axes: 3. vector is the axis nearest to view vector direction
-		Vector3 vectors[2];
-		Position v = 0;
-		Vector3 normal;
-		for (Position i = 0; i < 3; i++)
+
+		void GLRenderer::initGLU_(DrawingMode mode)
 		{
-			if (i == min)
+			if (mode == DRAWING_MODE_WIREFRAME)
 			{
-				normal = normals[i];
-				continue;
+				gluQuadricDrawStyle(GLU_quadric_obj_, GLU_LINE);
+			}
+			else if (mode >= DRAWING_MODE_SOLID)
+			{
+				gluQuadricDrawStyle(GLU_quadric_obj_, GLU_FILL);
+			}
+			else if (mode == DRAWING_MODE_DOTS)
+			{
+				gluQuadricDrawStyle(GLU_quadric_obj_, GLU_POINT);
+			}
+			else
+			{
+				BALLVIEW_DEBUG;
+			}
+		}
+
+		void GLRenderer::createSpheres_()
+		{
+			glPushMatrix();
+
+			Position slices[4] = {14, 24, 64, 100};
+			Position stacks[4] = {8, 16, 44, 80};
+
+			for (Position mode = DRAWING_MODE_DOTS; mode < BALL_VIEW_MAXIMAL_DRAWING_MODE; mode++)
+			{
+				initGLU_((DrawingMode)mode);
+
+				for (Position dp = DRAWING_PRECISION_LOW; dp <= DRAWING_PRECISION_ULTRA; dp++)
+				{
+					GL_spheres_list_[mode * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + dp].startDefinition();
+					gluSphere(GLU_quadric_obj_, 1, slices[dp], stacks[dp]);
+					GL_spheres_list_[mode * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + dp].endDefinition();
+				}
 			}
 
-			vectors[v] = normals[i];
-			v++;
+			glPopMatrix();
 		}
 
-		// order of layers: depends on direction of normal to view vector direction
-		Vector3 offset;
-		Vector3 diff = normal;
-		if (!anti)
+
+		void GLRenderer::createDottedSphere_(int precision)
 		{
-			offset = normal;
-			diff *= -1;
-		}
+			glBegin(GL_POINTS);
 
-		// normal and start points
-		diff /= ((float)vol.slices - 1.);
-		Vector3 o  = origin + offset;
-		Vector3 x  = o + vectors[0];
-		Vector3 xy = x + vectors[1];
-		Vector3 y  = o + vectors[1];
-
-		glBegin(GL_QUADS);
-		for (Position i = 0; i < vol.slices; ++i)
-		{
-			vertexVector3_(y);
-			vertexVector3_(xy);
-			vertexVector3_(x);
-			vertexVector3_(o);
-
-			o  += diff;
-			x  += diff;
-			xy += diff;
-			y  += diff;
-		}
-		glEnd();
-	}
-	else
-	{
-		glPointSize(vol.getDotSize());
-		glBegin(GL_POINTS);
-		for (Position p = 0; p < vol.points.size(); p++)
-		{
-			vertexVector3_(vol.points[p]);
-		}
-		glEnd();
-		glEnable(GL_LIGHTING);
-		glPointSize(1);
-	}
-
-	glEnable(GL_LIGHTING);
-	glEnable(GL_CULL_FACE);
-
-	glDisable(GL_TEXTURE_GEN_S);
-	glDisable(GL_TEXTURE_GEN_T);
-	glDisable(GL_TEXTURE_GEN_R);
-	glBindTexture(GL_TEXTURE_3D, 0);
-}
-
-void GLRenderer::renderQuadMesh_(const QuadMesh& mesh)
-{
-	if (mesh.normal.size() != mesh.vertex.size())
-	{
-		BALLVIEW_DEBUG;
-		return;
-	}
-
-	/*
-	// debugging for normals:
-	initDrawingOthers_();
-	glDisable(GL_LIGHTING);
-	glBegin(GL_LINES);
-
-	for (Size index = 0; index < mesh.vertex.size(); ++index)
-	{
-		vertexVector3_(mesh.vertex[index]);
-		vertexVector3_(mesh.vertex[index] + mesh.normal[index]);
-	}
-	glEnd();
-	glEnable(GL_LIGHTING);
-	*/
-
-	///////////////////////////////////////////////
-	// here starts the normal mesh rendering code:
-	initDrawingMeshes_();
-
-	// If we have only one color for the whole mesh, this can
-	// be assigned efficiently
-	bool multiple_colors = true;
-	if (mesh.colors.size() < mesh.vertex.size())
-	{
-		if (mesh.colors.size() > 0)
-		{
-			setColorRGBA_(mesh.colors[0]);
-		}
-		multiple_colors = false;
-	}
-
-	Size nr_triangles = mesh.quad.size();
-
-	///////////////////////////////////////////////////////////////////
-	if (drawing_mode_ == DRAWING_MODE_DOTS)
-	{
-		glBegin(GL_POINTS);
-		for (Size index = 0; index < mesh.vertex.size(); ++index)
-		{
-			if (multiple_colors) setColorRGBA_(mesh.colors[index]);
-			vertexVector3_(mesh.vertex[index]);
-		}
-		glEnd();
-	}
-	///////////////////////////////////////////////////////////////////
-	else if (drawing_mode_ == DRAWING_MODE_WIREFRAME)
-	{
-		for (Size index = 0; index < nr_triangles; ++index)
-		{
-			glBegin(GL_LINE_STRIP);
-
-			normalVector3_(normal_vector_);
-
-			if (multiple_colors) setColorRGBA_(mesh.colors[mesh.quad[index].q1]);
-			vertexVector3_(mesh.vertex[mesh.quad[index].q1]);
-
-			if (multiple_colors) setColorRGBA_(mesh.colors[mesh.quad[index].q2]);
-			vertexVector3_(mesh.vertex[mesh.quad[index].q2]);
-
-			if (multiple_colors) setColorRGBA_(mesh.colors[mesh.quad[index].q3]);
-			vertexVector3_(mesh.vertex[mesh.quad[index].q3]);
-
-			if (multiple_colors) setColorRGBA_(mesh.colors[mesh.quad[index].q4]);
-			vertexVector3_(mesh.vertex[mesh.quad[index].q4]);
+			vector<Vector3> results = createSphere((Size)precision);
+			for (Position p = 0; p < results.size(); p++)
+			{
+				vertexVector3_(results[p]);
+			}
 
 			glEnd();
 		}
-	}
-	///////////////////////////////////////////////////////////////////
-	else if (drawing_mode_ == DRAWING_MODE_SOLID)				// draw the triangles solid
-	{
-		glBegin(GL_QUADS);
-		for (Size index = 0; index < nr_triangles; ++index)
+
+
+		void GLRenderer::createTubes_()
 		{
-			Position p = mesh.quad[index].q1;
-			if (multiple_colors) setColorRGBA_(mesh.colors[p]);
-			normalVector3_(mesh.normal[p]);
-			vertexVector3_(mesh.vertex[p]);
+			glPushMatrix();
 
-			p = mesh.quad[index].q2;
-			if (multiple_colors) setColorRGBA_(mesh.colors[p]);
-			normalVector3_(mesh.normal[p]);
-			vertexVector3_(mesh.vertex[p]);
+			Position slices[4] = {6, 10, 20, 64};
 
-			p = mesh.quad[index].q3;
-			if (multiple_colors) setColorRGBA_(mesh.colors[p]);
-			normalVector3_(mesh.normal[p]);
-			vertexVector3_(mesh.vertex[p]);
+			for (Position mode = DRAWING_MODE_DOTS; mode < BALL_VIEW_MAXIMAL_DRAWING_MODE; mode++)
+			{
+				initGLU_((DrawingMode)mode);
 
-			p = mesh.quad[index].q4;
-			if (multiple_colors) setColorRGBA_(mesh.colors[p]);
-			normalVector3_(mesh.normal[p]);
-			vertexVector3_(mesh.vertex[p]);
-		}
-		glEnd();
-	}
-	else 		// draw the triangles per cel shading
-	{
-		// a part of this code stems from http://nehe.gamedev.net lesson 37
-		glDisable(GL_LIGHTING);
-		glPolygonMode(GL_BACK, GL_LINE);										// Draw Backfacing Polygons As Wireframes
-		glLineWidth(3);																			// Set The Line Width
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_FRONT);																// Don't Draw Any Front-Facing Polygons
-		glDepthFunc(GL_LEQUAL);															// Change The Depth Mode
-		setColorRGBA_(ColorRGBA(0.,0.,0.,1.));
-		glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);							// Use The Good Calculations
-		glEnable(GL_LINE_SMOOTH);														// Enable Anti-Aliasing
+				for (Position dp = DRAWING_PRECISION_LOW; dp <= DRAWING_PRECISION_ULTRA; dp++)
+				{
+					GL_tubes_list_[mode * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + dp].startDefinition();
+					gluCylinder(GLU_quadric_obj_, 1, 1, 1, slices[dp], 1);
+					GL_tubes_list_[mode * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + dp].endDefinition();
+				}
+			}
 
-		glBegin(GL_TRIANGLES);															// Tell OpenGL What We Want To Draw
-		for (Size index = 0; index < nr_triangles; ++index)
-		{
-			vertexVector3_(mesh.vertex[mesh.quad[index].q1]);
-			vertexVector3_(mesh.vertex[mesh.quad[index].q2]);
-			vertexVector3_(mesh.vertex[mesh.quad[index].q3]);
-			vertexVector3_(mesh.vertex[mesh.quad[index].q3]);
-		}
-		glEnd ();													// Tell OpenGL We've Finished
-
-		// reset to normal:
-		glCullFace(GL_BACK);							// Reset The Face To Be Culled
-		glPolygonMode (GL_BACK, GL_FILL);	// Reset Back-Facing Polygon Drawing Mode
-		glLineWidth(1);										// Set The Line Width
-
-		// map the texture so it simulates shadows:
-		glEnable(GL_TEXTURE_1D);
-		glBindTexture(GL_TEXTURE_1D, cel_texture_);
-		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
-		glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
-
-		// some artefacts when using GL_LINEAR:
-//   				glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//   				glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-		vector<float> tex_values;
-		tex_values.reserve(mesh.normal.size());
-		Vector3 vv = -scene_->getStage()->getCamera().getViewVector() ;
-		vv.normalize();
-		// other light positions possible:
-//    				vv += scene_->getStage()->getCamera().getLookUpVector() / 2.0;
-//    				vv += scene_->getStage()->getCamera().getRightVector() / 2.0;
-//    				vv.normalize();
-
-		float v;
-		for (Position p = 0; p < mesh.normal.size(); p++)
-		{
-			v = mesh.normal[p] * vv;
-			if (v < 0.) v = 0.;
-			tex_values.push_back(BALL_MIN(1., v));
+			glPopMatrix();
 		}
 
-		// prevent problems with single colored meshes:
-		if (mesh.colors.size() > 0) setColorRGBA_(mesh.colors[0]);
 
-		glBegin(GL_QUADS);
-		for (Size index = 0; index < nr_triangles; ++index)
+		void GLRenderer::createBoxes_()
 		{
-			Position p = mesh.quad[index].q1;
-			if (multiple_colors) setColorRGBA_(mesh.colors[p]);
-			glTexCoord1f (tex_values[p]);
-			vertexVector3_(mesh.vertex[p]);
+			// building point display list
+			for (Position pos = 0; pos < BALL_VIEW_MAXIMAL_DRAWING_PRECISION; pos++)
+			{
+				GL_boxes_list_[0 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + pos].startDefinition();
+				createDotBox_();
+				GL_boxes_list_[0 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + pos].endDefinition();
+			}
 
-			p = mesh.quad[index].q2;
-			glTexCoord1f (tex_values[p]);
-			if (multiple_colors) setColorRGBA_(mesh.colors[p]);
-			vertexVector3_(mesh.vertex[p]);
+			// building wireframe display list
+			for (Position pos = 0; pos < BALL_VIEW_MAXIMAL_DRAWING_PRECISION; pos++)
+			{
+				GL_boxes_list_[1 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + pos].startDefinition();
+				createLineBox_();
+				GL_boxes_list_[1 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + pos].endDefinition();
+			}
 
-			p = mesh.quad[index].q3;
-			glTexCoord1f (tex_values[p]);
-			if (multiple_colors) setColorRGBA_(mesh.colors[p]);
-			vertexVector3_(mesh.vertex[p]);
-
-			p = mesh.quad[index].q4;
-			glTexCoord1f (tex_values[p]);
-			if (multiple_colors) setColorRGBA_(mesh.colors[p]);
-			vertexVector3_(mesh.vertex[p]);
+			// building solid display list
+			for (Position pos = 0; pos < BALL_VIEW_MAXIMAL_DRAWING_PRECISION; pos++)
+			{
+				GL_boxes_list_[2 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + pos].startDefinition();
+				createSolidBox_();
+				GL_boxes_list_[2 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + pos].endDefinition();
+			}
 		}
 
-		glEnd();
-		glEnable(GL_LIGHTING);
-		glDisable(GL_TEXTURE_1D);
-	}
-}
 
+		void GLRenderer::createLineBox_()
+		{
+			glBegin(GL_LINES);
+
+			glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)0);
+			glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)0);
+
+			glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)0);
+			glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)1);
+
+			glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)1);
+			glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)1);
+
+			glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)1);
+			glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)0);
+
+			glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)0);
+			glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)0);
+
+			glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)0);
+			glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)1);
+
+			glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)1);
+			glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)1);
+
+			glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)1);
+			glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)0);
+
+			glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)0);
+			glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)0);
+
+			glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)0);
+			glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)0);
+
+			glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)1);
+			glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)1);
+
+			glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)1);
+			glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)1);
+
+			glEnd();
+		}
+
+
+		void GLRenderer::createDotBox_()
+		{
+			glBegin(GL_POINTS);
+
+			glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)0);
+			glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)0);
+			glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)1);
+			glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)1);
+
+			glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)0);
+			glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)0);
+			glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)1);
+			glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)1);
+
+			glEnd();
+		}
+
+
+		void GLRenderer::createSolidBox_()
+		{
+			glBegin(GL_QUADS);
+
+			// back
+			glNormal3f((GLfloat)0, (GLfloat)0, (GLfloat)-1);
+			glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)0);
+			glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)0);
+			glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)0);
+			glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)0);
+
+			// above
+			glNormal3f((GLfloat)0, (GLfloat)1, (GLfloat)0);
+			glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)0);
+			glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)1);
+			glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)1);
+			glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)0);
+
+			// front
+			glNormal3f((GLfloat)0, (GLfloat)0, (GLfloat)1);
+			glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)1);
+			glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)1);
+			glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)1);
+			glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)1);
+
+			// under
+			glNormal3f((GLfloat)0, (GLfloat)-1, (GLfloat)0);
+			glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)1);
+			glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)0);
+			glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)0);
+			glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)1);
+
+			// left
+			glNormal3f((GLfloat)-1, (GLfloat)0, (GLfloat)0);
+			glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)0);
+			glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)0);
+			glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)1);
+			glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)1);
+
+			// right
+			glNormal3f((GLfloat)1, (GLfloat)0, (GLfloat)0);
+			glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)1);
+			glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)1);
+			glVertex3f((GLfloat)1, (GLfloat)0, (GLfloat)0);
+			glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)0);
+
+			glEnd();
+		}
+
+
+		// ############################ PICKING ###################################
+		void GLRenderer::pickObjects1(Position x1, Position y1, Position x2, Position y2)
+		{
+			glFlush();
+			GLint viewport[4];
+			// init name stack for 32000 objects
+			glGetIntegerv(GL_VIEWPORT, viewport);
+			glSelectBuffer(BALL_GLRENDERER_PICKING_NUMBER_OF_MAX_OBJECTS, object_buffer_);
+			// uncoment this for debuging:
+			glRenderMode(GL_SELECT);
+			glInitNames();
+			glPushName(0);
+			glMatrixMode(GL_PROJECTION);
+
+			glPushMatrix();
+			glLoadIdentity();
+
+			// calculate picking rectangle
+			Size width  = BALL_ABS((Index)x2 - (Index)x1);
+			Size height = BALL_ABS((Index)y2 - (Index)y1);
+
+			Position center_x = BALL_MIN(x2, x1) + width / 2;
+			Position center_y = BALL_MIN(y2, y1) + height / 2;
+
+			if (width == 0)	width = 1;
+			if (height == 0) height = 1;
+
+			single_pick_ = (width <= 3 && height <= 3);
+			clearNames_();
+
+			// calculate picking matrix
+			gluPickMatrix(center_x, viewport[3] - center_y, width, height, viewport);
+
+			// prepare camera
+			initPerspective();
+
+			glMatrixMode(GL_MODELVIEW);
+			updateCamera();
+		}
+
+
+		void GLRenderer::pickObjects2(List<GeometricObject*>& objects)
+		{
+			glFlush();
+
+			glMatrixMode(GL_PROJECTION);
+			// get number of hits
+			int number_of_hits = glRenderMode(GL_RENDER);
+			glPopMatrix();
+			glMatrixMode(GL_MODELVIEW);
+			// return if no objects are picked
+			if (number_of_hits == 0)
+			{
+				updateCamera();
+				return;
+			}
+
+			Position minimum_z_coord = UINT_MAX;
+			Position names;
+			Name nearest_name = 0;
+			Position* object_buffer_ptr = (Position*) object_buffer_;
+			GeometricObject* go = 0;
+
+			// collect only the nearest Object
+			if (single_pick_)
+			{
+				Position z_coord;
+
+				// find minimum z-coord
+				for (Index index = 0; index < number_of_hits; ++index)
+				{
+					names = *object_buffer_ptr;
+					++object_buffer_ptr;
+					z_coord = *object_buffer_ptr;
+
+					object_buffer_ptr += 2;
+
+					if (z_coord <= minimum_z_coord)
+					{
+						minimum_z_coord = z_coord;
+						nearest_name = *object_buffer_ptr;
+					}
+
+					object_buffer_ptr += names;
+				}
+
+				go = getObject(nearest_name);
+				if (go != 0) objects.push_back(go);
+			}
+			else // collect all objects that are in the picking area
+			{
+				for (Index index = 0; index < number_of_hits; ++index)
+				{
+					names = *object_buffer_ptr;
+					object_buffer_ptr += 3;
+					nearest_name = *object_buffer_ptr;
+					object_buffer_ptr += names;
+
+					go = getObject(nearest_name);
+					if (go != 0) objects.push_back(go);
+				}
+			}
+
+			updateCamera();
+		}
+
+
+		// ############################ MOVEMENT/SIZE ###################################
+		// TODO: shouldn't we use a camera aperture angle?
+		void GLRenderer::setSize(float width, float height)
+		{
+			width_ 	= width;
+			height_ = height;
+
+			if (width > height)
+			{
+				x_scale_ = width / (height * 2);
+				y_scale_ = 0.5;
+			}
+			else
+			{
+				x_scale_ = 0.5;
+				y_scale_ = height / (width * 2);
+			}
+
+			glViewport(0, 0, (int)width_, (int)height_);
+
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
+			initPerspective();
+			glMatrixMode(GL_MODELVIEW);
+		}
+
+
+		void GLRenderer::updateCamera(const Camera* camera)
+		{
+			if (camera == 0) camera = &(stage_->getCamera());
+
+			if (Maths::isZero(camera->getViewVector().getSquareLength()))
+			{
+				Log.error() << "Unvalid camera settings: View point = LookAt point" << std::endl;
+				return;
+			}
+
+			glLoadIdentity();
+
+			gluLookAt(camera->getViewPoint().x,
+								camera->getViewPoint().y,
+								camera->getViewPoint().z,
+								camera->getLookAtPosition().x,
+								camera->getLookAtPosition().y,
+								camera->getLookAtPosition().z,
+								camera->getLookUpVector().x,
+								camera->getLookUpVector().y,
+								camera->getLookUpVector().z);
+
+			normal_vector_ = (-camera->getViewVector().normalize());
+		}
+
+		void GLRenderer::setupStereo(float eye_separation, float focal_length)
+		{
+			// TODO: - make near and far clip configurable!!!
+			//       - keep the same frustrum until either the size or the stereo settings change
+
+			float ndfl    = near_ / focal_length;
+
+			float new_left   = left_  - eye_separation * ndfl;
+			float new_right  = right_ - eye_separation * ndfl;
+
+			glMatrixMode(GL_PROJECTION);
+
+			glLoadIdentity();
+			glFrustum(new_left, new_right, bottom_, top_, near_, far_);
+			glViewport(0, 0, width_, height_);
+
+			glMatrixMode(GL_MODELVIEW);
+		}
+
+		bool GLRenderer::hasDisplayListFor(const Representation& rep) const
+		{
+			return display_lists_.has(&rep);
+		}
+
+		bool GLRenderer::isExtensionSupported(const String& extension) const
+		{
+			// Extension names should not have spaces
+			if (extension == "" || extension.hasSubstring(" ")) return false;
+
+			// Get Extensions String
+			if (glGetString(GL_EXTENSIONS) == 0)
+			{
+				return false;
+			}
+
+			String supported_extensions = (const char*) glGetString(GL_EXTENSIONS);
+			if (supported_extensions.hasSubstring(extension)) return true;
+
+			return false;
+		}
+
+		String GLRenderer::getVendor()
+		{
+			if (glGetString(GL_VENDOR) == 0) return "";
+			return (char*)glGetString(GL_VENDOR);
+		}
+
+		String GLRenderer::getRenderer()
+		{
+			if (glGetString(GL_RENDERER) == 0) return "";
+			return (char*)glGetString(GL_RENDERER);
+		}
+
+		String GLRenderer::getOpenGLVersion()
+		{
+			if (glGetString(GL_VERSION) == 0) return "";
+			return (char*)glGetString(GL_VERSION);
+		}
+
+		vector<String> GLRenderer::getExtensions()
+		{
+			vector<String> string_vector;
+			char* extensions = (char*)glGetString(GL_EXTENSIONS);
+
+			if (!extensions) 
+				return string_vector;
+
+			String exts(extensions);
+
+			exts.split(string_vector);
+			return string_vector;
+		}
+
+		bool GLRenderer::enableVertexBuffers(bool state)
+		{
+#ifndef BALL_USE_GLEW
+			return false;
+#else
+			if (!isExtensionSupported("GL_ARB_vertex_buffer_object"))
+			{
+				use_vertex_buffer_ = false;
+				return false;
+			}
+
+			if (state != use_vertex_buffer_)
+			{
+				if (state) Log.info() << "Enabling Vertex Buffer" << std::endl;
+				else       Log.info() << "Disabling Vertex Buffer" << std::endl;
+			}
+			use_vertex_buffer_ = state;
+
+			if (use_vertex_buffer_) MeshBuffer::initGL();
+
+			return true;
+#endif
+		}
+
+		void GLRenderer::clearVertexBuffersFor(Representation& rep)
+		{
+#ifdef BALL_USE_GLEW
+			MeshBufferHashMap::Iterator vit = rep_to_buffers_.find(&rep);
+			if (vit == rep_to_buffers_.end()) return;
+
+			vector<MeshBuffer*>& meshes = vit->second;
+			vector<MeshBuffer*>::iterator bit = meshes.begin();
+			for (; bit != meshes.end(); bit++)
+			{
+				delete *bit;
+			}
+
+			meshes.clear();
+			rep_to_buffers_.erase(vit);
+#endif
+		}
+
+		void GLRenderer::drawBuffered(const Representation& rep)
+		{
+			if (rep.isHidden()) return;
+
+#ifdef BALL_USE_GLEW
+			// if we have vertex buffers for this Representation, draw them
+			if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
+			{
+				MeshBufferHashMap::Iterator vit = rep_to_buffers_.find(&rep);
+				if (vit != rep_to_buffers_.end())
+				{
+					initDrawingMeshes_();
+					MeshBuffer::setGLRenderer(this);
+					vector<MeshBuffer*>& buffers = vit->second;
+
+					vector<MeshBuffer*>::iterator bit = buffers.begin();
+					for (; bit != buffers.end(); bit++)
+					{
+						(*bit)->draw();
+					}
+				}
+			}
+#endif
+
+			// if we have a displaylist for this Representation, draw it
+			DisplayListHashMap::Iterator dit = display_lists_.find(&rep);
+			if (dit != display_lists_.end())
+			{
+				dit->second->draw();
+			}
+		}
+
+		void GLRenderer::enterPickingMode()
+		{
+			picking_mode_ = true;
+		}
+
+		void GLRenderer::exitPickingMode()
+		{
+			picking_mode_ = false;
+			object_to_name_.clear();
+			name_to_object_.clear();
+			all_names_ = 1;
+		}
+
+
+		bool GLRenderer::vertexBuffersSupported() const
+		{
+#ifdef BALL_USE_GLEW
+			return isExtensionSupported("GL_ARB_vertex_buffer_object");
+#else
+			return false;
+#endif
+		}
+
+		void GLRenderer::renderClippingPlane_(const ClippingPlane& plane)
+		{
+			display_lists_index_ = DRAWING_MODE_SOLID * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + DRAWING_PRECISION_HIGH;
+
+			glPushAttrib(GL_LIGHTING_BIT | GL_BLEND);
+			const Vector3& point(plane.getPoint());
+			const Vector3& n(plane.getNormal());
+
+			Tube tube;
+			tube.setVertex1(point);
+			tube.setVertex2(point - (plane.getNormal() * 10.0));
+			tube.setColor(ColorRGBA(0,255,255));
+			tube.setRadius(1);
+
+			initDrawingOthers_();
+			initTransparent();
+			glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
+			glDisable(GL_CULL_FACE);
+			renderTube_(tube);
+
+			initDrawingOthers_();
+			glEnable(GL_DEPTH_TEST);
+			glEnable(GL_BLEND);
+			glDepthMask(GL_FALSE);
+
+			glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
+			glDisable(GL_CULL_FACE);
+
+			glPushMatrix();
+			setColorRGBA_(ColorRGBA(0,0,255, 190));;
+			translateVector3_(point);
+			const Vector3 rotation_axis(-n.y, n.x, 0.0);
+			// angle between z-axis-vector and result
+			const float angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(n.z / n.getLength()));
+			rotateVector3Angle_(rotation_axis, angle);
+
+			initGLU_(DRAWING_MODE_SOLID);
+			gluDisk(GLU_quadric_obj_, 0, 20 , 140, 80);
+
+			glPopMatrix();
+			glEnable(GL_CULL_FACE);
+
+			glPopAttrib();
+		}
+
+		void GLRenderer::initPerspective()
+		{
+			if (getStereoMode() == GLRenderer::ACTIVE_STEREO)
+			{
+				//  "Dont call GLRenderer::initPerspective() in Stereo mode! "
+				return;
+			}
+
+			left_   = -2.0 * x_scale_;
+			right_  =  2.0 * x_scale_;
+			bottom_ = -2.0 * y_scale_;
+			top_    =  2.0 * y_scale_;
+
+			glFrustum(left_, right_, bottom_, top_, near_, far_);
+		}
+
+		void GLRenderer::generateIlluminationTexture_(float ka, float kd, float kr, float shininess)
+		{
+			const int TEXTURE_SIZE = 128;  // including border
+			enum { R = 0, G = 1, B = 2, A = 3 };
+
+		//   			assert( 0. <= ka && ka <= 1. );
+		//   			assert( 0. <= kd && kd <= 1. );
+		//   			assert( 0. <= kr && kr <= 1. );
+		//   			float k = ka + kd + kr;
+		//   			assert( 0. <= k  &&  k <= 1. );
+
+			Index i = 0;
+			Index j = 0;
+			for( i = 0; i < TEXTURE_SIZE; ++i )
+			{
+				for( j = 0; j < TEXTURE_SIZE; ++j )
+				{
+					float x = ( (float) j + 1. ) / (TEXTURE_SIZE + 1.);
+					float y = ( (float) i + 1. ) / (TEXTURE_SIZE + 1.);
+
+					float LT = 2. * x - 1.;
+					float VT = 2. * y - 1.;
+
+					float intensity = 0.;
+					intensity += ka;
+					intensity += kd * sqrt( 1. - LT*LT );
+					intensity += kr * pow( fabs( LT*VT - sqrt( 1. - LT*LT ) * sqrt( 1. - VT*VT ) ), shininess * 255. );
+
+					if( intensity < 0. || 1. < intensity )
+					{
+						if( intensity < 0. ) intensity = 0.;
+						if( 1. < intensity ) intensity = 1.;
+					}
+		//   					assert( 0. <= intensity && intensity <= 1. );
+
+					Index c = (Index)(intensity * 255);
+		//   					assert( 0 <= c && c <= 255 );
+
+					line_tex_[i][j][R] = (GLubyte) c;
+					line_tex_[i][j][G] = (GLubyte) c;
+					line_tex_[i][j][B] = (GLubyte) c;
+					line_tex_[i][j][A] = 127;
+				}
+			}
+		}
+
+		Position GLRenderer::getTextureIndex_(Position x, Position y, Position z, Size width, Size height)
+		{
+			return BYTES_PER_TEXEL * (x * width + y) +
+						 BYTES_PER_TEXEL * width * height * z;
+		}
+
+		Position GLRenderer::createTextureFromGrid(const RegularData3D& grid, const ColorMap& map)
+		{
+			if (!isExtensionSupported("GL_EXT_texture3D")) return 0;
+
+			// prevent warning and error if not using GLEW:
+			Position texname = 0;
+#ifdef BALL_USE_GLEW
+			removeTextureFor_(grid);
+			RegularData3D::IndexType tex_size = grid.getSize();
+
+			// Generate The Texture
+			Position i = 0;
+			GLubyte* texels = new GLubyte[tex_size.x * tex_size.y * tex_size.z * BYTES_PER_TEXEL];
+			for (Position z = 0; z < tex_size.z; z++)
+			{
+				for (Position y = 0; y < tex_size.y; y++)
+				{
+					for (Position x = 0; x < tex_size.x; x++)
+					{
+						const ColorRGBA& c = map.map(grid.getData(RegularData3D::IndexType(x,y,z)));
+						texels[i + 0] = (unsigned char)c.getRed();
+						texels[i + 1] = (unsigned char)c.getGreen();
+						texels[i + 2] = (unsigned char)c.getBlue();
+						texels[i + 3] = (unsigned char)c.getAlpha();
+						i += 4;
+					}
+				}
+			}
+
+			glGenTextures(1, &texname);
+			glBindTexture(GL_TEXTURE_3D, texname);
+			glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, tex_size.x, tex_size.y, tex_size.z, 0, GL_RGBA, GL_UNSIGNED_BYTE, texels);
+			glBindTexture(GL_TEXTURE_3D, 0);
+			grid_to_texture_[&grid] = texname;
+			delete[] texels;
+#endif
+			return texname;
+		}
+
+		void GLRenderer::removeTextureFor_(const RegularData3D& grid)
+		{
+			if (!grid_to_texture_.has(&grid)) return;
+			glDeleteTextures(1, (GLuint*)&grid_to_texture_[&grid]);
+			grid_to_texture_.erase(&grid);
+		}
+
+		void GLRenderer::setupGridClipPlanes_(const GridVisualisation& slice)
+		{
+			double planes[6][4];
+
+			Vector3 x,y,z;
+			x = slice.x;
+			x.normalize();
+			y = slice.y;
+			y.normalize();
+			z = slice.z;
+			z.normalize();
+
+
+			Vector3 origin = slice.origin;
+			Vector3 dv = slice.x + slice.y + slice.z;
+			dv *= 0.001;
+			Vector3 e = origin + slice.x + slice.y + slice.z + dv ;
+			origin -= dv;
+
+			float d = x * (-origin);
+			planes[0][0] = x.x; planes[0][1] = x.y; planes[0][2] = x.z; planes[0][3] = d;
+			d = y * (-origin);
+			planes[1][0] = y.x; planes[1][1] = y.y; planes[1][2] = y.z; planes[1][3] = d;
+			d = z * (-origin);
+			planes[2][0] = z.x; planes[2][1] = z.y; planes[2][2] = z.z; planes[2][3] = d;
+
+			d = -x * (-e);
+			planes[3][0] = -x.x; planes[3][1] = -x.y; planes[3][2] = -x.z; planes[3][3] = d;
+			d = -y * (-e);
+			planes[4][0] = -y.x; planes[4][1] = -y.y; planes[4][2] = -y.z; planes[4][3] = d;
+			d = -z * (-e);
+			planes[5][0] = -z.x; planes[5][1] = -z.y; planes[5][2] = -z.z; planes[5][3] = d;
+
+			for (Position plane = GL_CLIP_PLANE0 + 0; plane < GL_CLIP_PLANE0 + 6; plane++)
+			{
+				glClipPlane(plane, &planes[plane - GL_CLIP_PLANE0][0]);
+				glEnable(plane);
+			}
+		}
+
+
+		void GLRenderer::renderGridVisualisation_(const GridVisualisation& vol)
+		{
+			if (!grid_to_texture_.has(vol.getGrid()))
+				return;
+
+			Position texname = grid_to_texture_[vol.getGrid()];
+			if (texname == 0)
+			{
+				scene_->setStatusbarText("Graphics card does not support 3D textures", true);
+				return;
+			}
+
+			const Vector3 origin = vol.origin;
+
+			if (vol.draw_box)
+			{
+				Box box(origin, vol.x, vol.y, vol.z.getLength());
+				box.setColor(stage_->getBackgroundColor().getInverseColor());
+				Position dli = display_lists_index_;
+				display_lists_index_ = DRAWING_MODE_WIREFRAME * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + drawing_precision_;
+				renderBox_(box);
+				display_lists_index_ = dli;
+			}
+
+			initDrawingOthers_();
+			glDisable(GL_LIGHTING);
+			glDisable(GL_CULL_FACE);
+
+			////////////////////////////////////////////////////////////////////////////////
+			glBindTexture(GL_TEXTURE_3D, texname);
+			glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+			glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+			glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP);
+			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
+			///// init the texture: automated texture coordinate generation
+			// normalized vectors in grids directions:
+			Vector3 xd = vol.x;
+			xd.normalize();
+			Vector3 yd = vol.y;
+			yd.normalize();
+			Vector3 zd = vol.z;
+			zd.normalize();
+
+			// plane vectors and distance for texture coordinates:
+			float xp[4], yp[4], zp[4], d;
+			Vector3 n;
+
+			n = zd;
+			d = n * (-origin);
+			xp[0] = n.x; xp[1] = n.y; xp[2] = n.z; xp[3] = d;
+
+			n = xd;
+			d = n * (-origin);
+			yp[0] = n.x; yp[1] = n.y; yp[2] = n.z; yp[3] = d;
+
+			n = yd;
+			d = n * (-origin);
+			zp[0] = n.x; zp[1] = n.y; zp[2] = n.z; zp[3] = d;
+
+			glEnable(GL_TEXTURE_3D);
+			glTexGenf(GL_S,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
+			glTexGenf(GL_T,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
+			glTexGenf(GL_R,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
+			glTexGenfv(GL_S,GL_OBJECT_PLANE, yp);
+			glTexGenfv(GL_T,GL_OBJECT_PLANE, zp);
+			glTexGenfv(GL_R,GL_OBJECT_PLANE, xp);
+			glEnable(GL_TEXTURE_GEN_S);
+			glEnable(GL_TEXTURE_GEN_T);
+			glEnable(GL_TEXTURE_GEN_R);
+
+			// stretch the texture accordingly
+			glMatrixMode(GL_TEXTURE);
+			glLoadIdentity();
+			const Vector3 dim = vol.x + vol.y + vol.z;
+			glScaled((double)1.0 / (double) dim.x,
+							 (double)1.0 / (double) dim.y,
+							 (double)1.0 / (double) dim.z);
+			glMatrixMode(GL_MODELVIEW);
+
+			// render this as one slice
+			if (vol.type == GridVisualisation::PLANE)
+			{
+				setupGridClipPlanes_(vol);
+				Vector3 n = vol.getNormal();
+				Vector3 v1 = getNormal(n);
+				Vector3 v2 = v1 % n;
+
+				v1.normalize();
+				v2.normalize();
+				v1 *= vol.max_dim * 2.0;
+				v2 *= vol.max_dim * 2.0;
+
+				Vector3 o = vol.getPoint() - v1 - v2;
+
+				v1 *= 2.0;
+				v2 *= 2.0;
+
+				glBegin(GL_QUADS);
+				normalVector3_(-vol.getNormal());
+				vertexVector3_(o);
+				vertexVector3_(o + v1);
+				vertexVector3_(o + v1 + v2);
+				vertexVector3_(o + v2);
+				glEnd();
+
+				for (Position plane = GL_CLIP_PLANE0; plane < GL_CLIP_PLANE0 + 6; plane++)
+				{
+					glDisable(plane);
+				}
+			}
+			else if (vol.type == GridVisualisation::SLICES)
+			{
+				// volume rendering
+				const Vector3& vv = scene_->getStage()->getCamera().getViewVector();
+
+				Vector3 normals[3];
+				normals[0] = vol.x;
+				normals[1] = vol.y;
+				normals[2] = vol.z;
+
+				// calculate the angles between vv and the axes of the grid
+				Angle angles[3], aangles[3];
+
+				for (Position i = 0; i < 3; i++)
+				{
+					angles[i] = normals[i].getAngle(vv);
+					aangles[i] = (-normals[i]).getAngle(vv);
+				}
+
+				Angle min_angle(angles[0]);
+				Position min = 0;
+				bool anti = false;
+				for (Position i = 0; i < 3; i++)
+				{
+					if (angles[i] < min_angle)
+					{
+						min = i;
+						anti = false;
+						min_angle = angles[i];
+					}
+
+					if (aangles[i] < min_angle)
+					{
+						min = i;
+						anti = true;
+						min_angle = aangles[i];
+					}
+				}
+
+				// order the axes: 3. vector is the axis nearest to view vector direction
+				Vector3 vectors[2];
+				Position v = 0;
+				Vector3 normal;
+				for (Position i = 0; i < 3; i++)
+				{
+					if (i == min)
+					{
+						normal = normals[i];
+						continue;
+					}
+
+					vectors[v] = normals[i];
+					v++;
+				}
+
+				// order of layers: depends on direction of normal to view vector direction
+				Vector3 offset;
+				Vector3 diff = normal;
+				if (!anti)
+				{
+					offset = normal;
+					diff *= -1;
+				}
+
+				// normal and start points
+				diff /= ((float)vol.slices - 1.);
+				Vector3 o  = origin + offset;
+				Vector3 x  = o + vectors[0];
+				Vector3 xy = x + vectors[1];
+				Vector3 y  = o + vectors[1];
+
+				glBegin(GL_QUADS);
+				for (Position i = 0; i < vol.slices; ++i)
+				{
+					vertexVector3_(y);
+					vertexVector3_(xy);
+					vertexVector3_(x);
+					vertexVector3_(o);
+
+					o  += diff;
+					x  += diff;
+					xy += diff;
+					y  += diff;
+				}
+				glEnd();
+			}
+			else
+			{
+				glPointSize(vol.getDotSize());
+				glBegin(GL_POINTS);
+				for (Position p = 0; p < vol.points.size(); p++)
+				{
+					vertexVector3_(vol.points[p]);
+				}
+				glEnd();
+				glEnable(GL_LIGHTING);
+				glPointSize(1);
+			}
+
+			glEnable(GL_LIGHTING);
+			glEnable(GL_CULL_FACE);
+
+			glDisable(GL_TEXTURE_GEN_S);
+			glDisable(GL_TEXTURE_GEN_T);
+			glDisable(GL_TEXTURE_GEN_R);
+			glBindTexture(GL_TEXTURE_3D, 0);
+		}
+
+		void GLRenderer::renderQuadMesh_(const QuadMesh& mesh)
+		{
+			if (mesh.normal.size() != mesh.vertex.size())
+			{
+				BALLVIEW_DEBUG;
+				return;
+			}
+
+			/*
+			// debugging for normals:
+			initDrawingOthers_();
+			glDisable(GL_LIGHTING);
+			glBegin(GL_LINES);
+
+			for (Size index = 0; index < mesh.vertex.size(); ++index)
+			{
+				vertexVector3_(mesh.vertex[index]);
+				vertexVector3_(mesh.vertex[index] + mesh.normal[index]);
+			}
+			glEnd();
+			glEnable(GL_LIGHTING);
+			*/
+
+			///////////////////////////////////////////////
+			// here starts the normal mesh rendering code:
+			initDrawingMeshes_();
+
+			// If we have only one color for the whole mesh, this can
+			// be assigned efficiently
+			bool multiple_colors = true;
+			if (mesh.colors.size() < mesh.vertex.size())
+			{
+				if (mesh.colors.size() > 0)
+				{
+					setColorRGBA_(mesh.colors[0]);
+				}
+				multiple_colors = false;
+			}
+
+			Size nr_triangles = mesh.quad.size();
+
+			///////////////////////////////////////////////////////////////////
+			if (drawing_mode_ == DRAWING_MODE_DOTS)
+			{
+				glBegin(GL_POINTS);
+				for (Size index = 0; index < mesh.vertex.size(); ++index)
+				{
+					if (multiple_colors) setColorRGBA_(mesh.colors[index]);
+					vertexVector3_(mesh.vertex[index]);
+				}
+				glEnd();
+			}
+			///////////////////////////////////////////////////////////////////
+			else if (drawing_mode_ == DRAWING_MODE_WIREFRAME)
+			{
+				for (Size index = 0; index < nr_triangles; ++index)
+				{
+					glBegin(GL_LINE_STRIP);
+
+					normalVector3_(normal_vector_);
+
+					if (multiple_colors) setColorRGBA_(mesh.colors[mesh.quad[index].q1]);
+					vertexVector3_(mesh.vertex[mesh.quad[index].q1]);
+
+					if (multiple_colors) setColorRGBA_(mesh.colors[mesh.quad[index].q2]);
+					vertexVector3_(mesh.vertex[mesh.quad[index].q2]);
+
+					if (multiple_colors) setColorRGBA_(mesh.colors[mesh.quad[index].q3]);
+					vertexVector3_(mesh.vertex[mesh.quad[index].q3]);
+
+					if (multiple_colors) setColorRGBA_(mesh.colors[mesh.quad[index].q4]);
+					vertexVector3_(mesh.vertex[mesh.quad[index].q4]);
+
+					glEnd();
+				}
+			}
+			///////////////////////////////////////////////////////////////////
+			else if (drawing_mode_ == DRAWING_MODE_SOLID)				// draw the triangles solid
+			{
+				glBegin(GL_QUADS);
+				for (Size index = 0; index < nr_triangles; ++index)
+				{
+					Position p = mesh.quad[index].q1;
+					if (multiple_colors) setColorRGBA_(mesh.colors[p]);
+					normalVector3_(mesh.normal[p]);
+					vertexVector3_(mesh.vertex[p]);
+
+					p = mesh.quad[index].q2;
+					if (multiple_colors) setColorRGBA_(mesh.colors[p]);
+					normalVector3_(mesh.normal[p]);
+					vertexVector3_(mesh.vertex[p]);
+
+					p = mesh.quad[index].q3;
+					if (multiple_colors) setColorRGBA_(mesh.colors[p]);
+					normalVector3_(mesh.normal[p]);
+					vertexVector3_(mesh.vertex[p]);
+
+					p = mesh.quad[index].q4;
+					if (multiple_colors) setColorRGBA_(mesh.colors[p]);
+					normalVector3_(mesh.normal[p]);
+					vertexVector3_(mesh.vertex[p]);
+				}
+				glEnd();
+			}
+			else 		// draw the triangles per cel shading
+			{
+				// a part of this code stems from http://nehe.gamedev.net lesson 37
+				glDisable(GL_LIGHTING);
+				glPolygonMode(GL_BACK, GL_LINE);										// Draw Backfacing Polygons As Wireframes
+				glLineWidth(3);																			// Set The Line Width
+				glEnable(GL_CULL_FACE);
+				glCullFace(GL_FRONT);																// Don't Draw Any Front-Facing Polygons
+				glDepthFunc(GL_LEQUAL);															// Change The Depth Mode
+				setColorRGBA_(ColorRGBA(0.,0.,0.,1.));
+				glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);							// Use The Good Calculations
+				glEnable(GL_LINE_SMOOTH);														// Enable Anti-Aliasing
+
+				glBegin(GL_TRIANGLES);															// Tell OpenGL What We Want To Draw
+				for (Size index = 0; index < nr_triangles; ++index)
+				{
+					vertexVector3_(mesh.vertex[mesh.quad[index].q1]);
+					vertexVector3_(mesh.vertex[mesh.quad[index].q2]);
+					vertexVector3_(mesh.vertex[mesh.quad[index].q3]);
+					vertexVector3_(mesh.vertex[mesh.quad[index].q3]);
+				}
+				glEnd ();													// Tell OpenGL We've Finished
+
+				// reset to normal:
+				glCullFace(GL_BACK);							// Reset The Face To Be Culled
+				glPolygonMode (GL_BACK, GL_FILL);	// Reset Back-Facing Polygon Drawing Mode
+				glLineWidth(1);										// Set The Line Width
+
+				// map the texture so it simulates shadows:
+				glEnable(GL_TEXTURE_1D);
+				glBindTexture(GL_TEXTURE_1D, cel_texture_);
+				glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
+				glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
+
+				// some artefacts when using GL_LINEAR:
+		//   				glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		//   				glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+				glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+				vector<float> tex_values;
+				tex_values.reserve(mesh.normal.size());
+				Vector3 vv = -scene_->getStage()->getCamera().getViewVector() ;
+				vv.normalize();
+				// other light positions possible:
+		//    				vv += scene_->getStage()->getCamera().getLookUpVector() / 2.0;
+		//    				vv += scene_->getStage()->getCamera().getRightVector() / 2.0;
+		//    				vv.normalize();
+
+				float v;
+				for (Position p = 0; p < mesh.normal.size(); p++)
+				{
+					v = mesh.normal[p] * vv;
+					if (v < 0.) v = 0.;
+					tex_values.push_back(BALL_MIN(1., v));
+				}
+
+				// prevent problems with single colored meshes:
+				if (mesh.colors.size() > 0) setColorRGBA_(mesh.colors[0]);
+
+				glBegin(GL_QUADS);
+				for (Size index = 0; index < nr_triangles; ++index)
+				{
+					Position p = mesh.quad[index].q1;
+					if (multiple_colors) setColorRGBA_(mesh.colors[p]);
+					glTexCoord1f (tex_values[p]);
+					vertexVector3_(mesh.vertex[p]);
+
+					p = mesh.quad[index].q2;
+					glTexCoord1f (tex_values[p]);
+					if (multiple_colors) setColorRGBA_(mesh.colors[p]);
+					vertexVector3_(mesh.vertex[p]);
+
+					p = mesh.quad[index].q3;
+					glTexCoord1f (tex_values[p]);
+					if (multiple_colors) setColorRGBA_(mesh.colors[p]);
+					vertexVector3_(mesh.vertex[p]);
+
+					p = mesh.quad[index].q4;
+					glTexCoord1f (tex_values[p]);
+					if (multiple_colors) setColorRGBA_(mesh.colors[p]);
+					vertexVector3_(mesh.vertex[p]);
+				}
+
+				glEnd();
+				glEnable(GL_LIGHTING);
+				glDisable(GL_TEXTURE_1D);
+			}
+		}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/RENDERING/glRenderer.iC>
