@@ -252,7 +252,6 @@ namespace BALL
 			{
 				((BufferedRenderer*)renderer)->renderToBuffer(target, *stage_);
 				target->refresh();
-				// TODO: render coordinate systems!
 			}
 
 			if (RTTI::isKindOf<GLRenderer>(*renderer))
@@ -272,6 +271,20 @@ namespace BALL
 				target->swapBuffers();
 
 			render_mutex_.unlock();
+		}
+
+		bool RenderSetup::exportPNG(const String& filename)
+		{
+			render_mutex_.lock();
+			if (QGLContext::currentContext() != target->context())
+				target->makeCurrent();
+			QImage image(target->grabFrameBuffer(true));
+
+			render_mutex_.unlock();
+
+			bool ok = image.save(filename.c_str(), "PNG");
+
+			return ok;
 		}
 
 		void RenderSetup::bufferRepresentation(const Representation& rep)

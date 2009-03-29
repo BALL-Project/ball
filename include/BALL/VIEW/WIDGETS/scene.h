@@ -836,7 +836,7 @@ namespace BALL
 			list<float> fps_;
 			bool show_fps_;
 			static bool offscreen_rendering_;
-			static QSize PNG_size_;
+			Size offscreen_factor_;
 			String text_;
 			Size   font_size_;
 			QToolBar* toolbar_;

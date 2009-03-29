@@ -173,6 +173,10 @@ namespace BALL {
 				 */
 				void renderToBuffer();
 
+				/** Render the current state into a PNG file.
+				 */
+				bool exportPNG(const String& filename);
+
 				/** Calls light setup for the current renderer.
 				 */
 				void setLights(bool reset_all = false);
