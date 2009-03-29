@@ -480,12 +480,16 @@ namespace BALL
 
 			fps /= fps_.size();
 
-			fps_string = createFloatString(fps, 1);
+			ostringstream stream;
+			stream.imbue(std::locale("C"));
+			stream.setf(ios::fixed, ios_base::floatfield);
+			stream.setf(ios::right, ios_base::adjustfield);
+			stream.precision(1);
+			stream.width(6);
 
-			if (fps < 10.0) fps_string = String(" ") + fps_string;
-			if (fps < 100.0) fps_string = String(" ") + fps_string;
+			stream << fps;
 
-			if (!fps_string.has('.')) fps_string = fps_string + ".0";
+			fps_string = stream.str();
 
 			fps_string = String("FPS ") + fps_string;
 
@@ -532,19 +536,43 @@ namespace BALL
 
 				if (show_fps_)
 				{
-					QFont font;
-					font.setPixelSize(16);
+					QPainter p(current_window);
+
+					QPen pen(QColor((int)text_color.getRed(),  (int)text_color.getGreen(), 
+													(int)text_color.getBlue(), (int)text_color.getAlpha()));
+					p.setPen(pen);
+
+					QFont font("Arial", 16., QFont::Bold);
+					font.setPointSizeF(16.);
 					font.setBold(true);
 					QFontMetrics fm(font);
 
 					QRect r = fm.boundingRect(fps_string.c_str());
+					QPointF fps_point((float)current_window->width() - 20 - r.width(), 20);
 
-					QPoint fps_point(current_window->width() - 20 - r.width(), 20);
-					current_window->renderText(fps_point.x(), fps_point.y(), fps_string.c_str(), text_color);
+					p.setRenderHint(QPainter::Antialiasing, true);
+					p.setRenderHint(QPainter::TextAntialiasing, true);
+					p.setFont(font);
+					p.drawText(QPointF(fps_point), fps_string.c_str());
+
+					p.end();
 				}
 
 				if (info_string_ != "")
-					current_window->renderText(info_point_.x(), info_point_.y(), info_string_, text_color);
+				{
+					QPainter p(current_window);
+
+					QPen pen(QColor((int)text_color.getRed(),  (int)text_color.getGreen(), 
+													(int)text_color.getBlue(), (int)text_color.getAlpha()));
+
+					p.setPen(pen);
+					p.setRenderHint(QPainter::Antialiasing, true);
+					p.setRenderHint(QPainter::TextAntialiasing, true);
+					p.setFont(QFont("Arial", 16., QFont::Bold));
+					p.drawText(info_point_, info_string_.c_str());
+
+					p.end();
+				}
 
 				current_window->swapBuffers();
 
@@ -2088,6 +2116,8 @@ namespace BALL
 
 		void Scene::wheelEvent(QWheelEvent *qmouse_event)
 		{
+			info_string_ = "";
+
 			qmouse_event->accept();
 
 			y_window_pos_new_ = (Position)(y_window_pos_old_ + (qmouse_event->delta() / 120 * mouse_wheel_sensitivity_));
