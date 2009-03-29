@@ -36,6 +36,7 @@ namespace BALL
 			m_screenTexID = 0;
 			// we will swap buffers manually in the scene for synchronization
 			setAutoBufferSwap(false);
+			setAutoFillBackground(false);
 		}
 
 		GLRenderWindow::GLRenderWindow(QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
@@ -52,6 +53,7 @@ namespace BALL
 			}
 			// we will swap buffers manually in the scene for synchronization
 			setAutoBufferSwap(false);
+			setAutoFillBackground(false);
 		}
 
 		GLRenderWindow::GLRenderWindow(const GLRenderWindow& window, QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
@@ -64,6 +66,7 @@ namespace BALL
 		{
 			// we will swap buffers manually in the scene for synchronization
 			setAutoBufferSwap(false);
+			setAutoFillBackground(false);
 		}
 
 		GLRenderWindow::~GLRenderWindow()

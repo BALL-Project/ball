@@ -18,6 +18,10 @@
 # include <BALL/VIEW/KERNEL/stage.h>
 #endif
 
+#ifndef BALL_MATHS_VECTOR2_H
+# include <BALL/MATHS/vector2.h>
+#endif
+
 namespace BALL
 {
 	namespace VIEW
@@ -114,6 +118,16 @@ namespace BALL
 
 			///
 			virtual bool finish();
+
+			/** Compute the 3D position on the view plane corresponding
+			 *  to point (x,y) on the view port
+			 */
+			virtual Vector3 mapViewportTo3D(Position x, Position y);
+
+			/** Compute the 2D position on the screen corresponding
+			 *  to the 3D point vec
+			 */
+			virtual Vector2 map3DToViewport(const Vector3& vec);
 
 			//@}
 			/**	@name	Accessors

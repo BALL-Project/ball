@@ -23,7 +23,6 @@
 #include <BALL/VIEW/PRIMITIVES/quadMesh.h>
 #include <BALL/VIEW/PRIMITIVES/gridVisualisation.h>
 
-
 namespace BALL
 {
 	namespace VIEW
@@ -155,6 +154,18 @@ namespace BALL
 		void Renderer::setupStereo(float /*eye_separation*/, float /*focal_length*/)
 		{
 			Log.error() << "Renderer::setupStereo() not implemented for this kind of renderer yet!" << std::endl;
+		}
+
+		Vector3 Renderer::mapViewportTo3D(Position /*x*/, Position /*y*/)
+		{
+			Log.error() << "Renderer::mapViewportTo3D() not implemented for this kind of renderer yet!" << std::endl;
+			return Vector3();
+		}
+
+		Vector2 Renderer::map3DToViewport(const Vector3& /*vec*/)
+		{
+			Log.error() << "Renderer::map3DToViewport() not implemented for this kind of renderer yet!" << std::endl;
+			return Vector2();
 		}
 
 		bool Renderer::finish()

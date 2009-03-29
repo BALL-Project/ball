@@ -33,6 +33,7 @@
 #include <QtGui/qpainter.h>
 #include <QtGui/qimage.h>
 
+#include <BALL/MATHS/vector2.h>
 #include <BALL/MATHS/plane3.h>
 #include <BALL/MATHS/analyticalGeometry.h>
 
@@ -86,6 +87,12 @@ namespace BALL
 			: Renderer(),
 				drawing_mode_(DRAWING_MODE_SOLID),
 				drawing_precision_(DRAWING_PRECISION_HIGH),
+				near_(1.5),
+				far_(600.),
+				left_(-1),
+				right_(1),
+				top_(1),
+				bottom_(-1),
 				GL_spheres_list_(0),
 				GL_tubes_list_(0),
 				GL_boxes_list_(0),
@@ -95,7 +102,7 @@ namespace BALL
 				stereo_(NO_STEREO),
 				render_mode_(RENDER_MODE_UNDEFINED),
 				use_vertex_buffer_(false),
-		smooth_lines_(false),
+				smooth_lines_(false),
 				picking_mode_(false),
 				model_type_(MODEL_LINES),
 				drawed_other_object_(false),
@@ -135,10 +142,11 @@ namespace BALL
 			if (state)
 			{
 				glEnable(GL_MULTISAMPLE);
-		if(smooth_lines_) {
-			// smooth line drawing
-			glEnable(GL_LINE_SMOOTH);
-		}
+
+				if(smooth_lines_) {
+					// smooth line drawing
+					glEnable(GL_LINE_SMOOTH);
+				}
 				// slower, but better results:
 				glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
 				glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
@@ -153,15 +161,15 @@ namespace BALL
 			}
 		}
 
-void GLRenderer::setSmoothLines(bool smooth_lines)
-{
-	smooth_lines_ = smooth_lines;
-}
+		void GLRenderer::setSmoothLines(bool smooth_lines)
+		{
+			smooth_lines_ = smooth_lines;
+		}
 
-bool GLRenderer::getSmoothLines()
-{
-	return smooth_lines_;
-}
+		bool GLRenderer::getSmoothLines()
+		{
+			return smooth_lines_;
+		}
 
 		bool GLRenderer::init(Scene& scene)
 		{
@@ -172,11 +180,11 @@ bool GLRenderer::getSmoothLines()
 		{
 			Renderer::init(stage, width, height);
 			
-	// Force OpenGL to normalize transformed normals to be of unit
-	// length before using the normals in OpenGL's lighting equations
-	// While this corrects potential lighting problems introduced by scaling,
-	// it also slows OpenGL's vertex processing speed since normalization requires extra operations.
-	glEnable(GL_NORMALIZE);
+			// Force OpenGL to normalize transformed normals to be of unit
+			// length before using the normals in OpenGL's lighting equations
+			// While this corrects potential lighting problems introduced by scaling,
+			// it also slows OpenGL's vertex processing speed since normalization requires extra operations.
+			glEnable(GL_NORMALIZE);
 
 #ifdef BALL_USE_GLEW
 			glewInit();
@@ -196,10 +204,6 @@ bool GLRenderer::getSmoothLines()
 			glFrontFace(GL_CCW);     // selects counterclockwise polygons as front-facing
 			glCullFace(GL_BACK);		 // specify whether front- or back-facing facets can be culled
 
-			// Force OpenGL to normalize transformed normals to be of unit 
-			// length before using the normals in OpenGL's lighting equations
-			// While this corrects potential lighting problems introduced by scaling, 
-			// it also slows OpenGL's vertex processing speed since normalization requires extra operations.
 			glDisable(GL_FOG);
 			
 			glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, false);
@@ -801,7 +805,6 @@ bool GLRenderer::getSmoothLines()
 			pm.finishedRendering(rep);
 		}
 
-
 		bool GLRenderer::render(const Representation& representation, bool for_display_list)
 		{
 			if (representation.isHidden()) return true;
@@ -901,33 +904,98 @@ bool GLRenderer::getSmoothLines()
 			glFlush();
 		}
 
-void GLRenderer::dump(std::ostream& s, Size depth) const
-{
-	BALL_DUMP_STREAM_PREFIX(s);
+		void GLRenderer::dump(std::ostream& s, Size depth) const
+		{
+			BALL_DUMP_STREAM_PREFIX(s);
 
-	BALL_DUMP_DEPTH(s, depth);
-	BALL_DUMP_HEADER(s, this, this);
+			BALL_DUMP_DEPTH(s, depth);
+			BALL_DUMP_HEADER(s, this, this);
 
-	BALL_DUMP_DEPTH(s, depth);
-	s << "Drawing Precision: " 	<< drawing_precision_ 	<< std::endl;
+			BALL_DUMP_DEPTH(s, depth);
+			s << "Drawing Precision: " 	<< drawing_precision_ 	<< std::endl;
 
-	BALL_DUMP_DEPTH(s, depth);
-	s << "Drawing Mode: " 		 	<< drawing_mode_  << std::endl;
+			BALL_DUMP_DEPTH(s, depth);
+			s << "Drawing Mode: " 		 	<< drawing_mode_  << std::endl;
 
-	BALL_DUMP_DEPTH(s, depth);
-	s << "Width: " << width_ << endl;
+			BALL_DUMP_DEPTH(s, depth);
+			s << "Width: " << width_ << endl;
 
-	BALL_DUMP_DEPTH(s, depth);
-	s << "Height: " << height_ << endl;
+			BALL_DUMP_DEPTH(s, depth);
+			s << "Height: " << height_ << endl;
 
-	BALL_DUMP_DEPTH(s, depth);
-	s << "XScale: " << x_scale_ << endl;
+			BALL_DUMP_DEPTH(s, depth);
+			s << "XScale: " << x_scale_ << endl;
 
-	BALL_DUMP_DEPTH(s, depth);
-	s << "YScale: " << y_scale_ << endl;
+			BALL_DUMP_DEPTH(s, depth);
+			s << "YScale: " << y_scale_ << endl;
 
-	BALL_DUMP_STREAM_SUFFIX(s);
-}
+			BALL_DUMP_STREAM_SUFFIX(s);
+		}
+
+		// Convert 2D screen coordinate to 3D coordinate on the view plane
+		Vector3 GLRenderer::mapViewportTo3D(Position x, Position y)
+		{
+			// the mapping works as follows:
+			//   - all points are mapped to the view plane, defined by the view 
+			//     vector and the right/up vectors of the camera
+			//   - the width of the view plane in world coordinates can be computed
+			//     using elementary geometry from the intercept theorem as
+			//     (right - left) * distance_camera_view_plane / distance_camera_near_plane
+			//   - the look_at_vector of the camera points at the center of the view plane
+			// 	   this center should be mapped to (width()/2, height()/2)
+			const Camera&  camera  = stage_->getCamera();
+
+			const Vector3& view	 = camera.getViewVector();
+			const Vector3& right = camera.getRightVector();
+			const Vector3& up    = camera.getLookUpVector();
+
+			float distance_camera_view_plane = view.getLength();
+
+			float scale_right_vector = (distance_camera_view_plane / near_) * (right_ - left_  )/2.;
+			float scale_up_vector    = (distance_camera_view_plane / near_) * (top_   - bottom_)/2.;
+
+			Vector3 result = 		camera.getLookAtPosition()
+												+ right   * (2.*(float)x/width_  - 1.) * scale_right_vector
+												- up      * (2.*(float)y/height_ - 1.) * scale_up_vector;
+
+			return result;
+		}	
+
+		Vector2 GLRenderer::map3DToViewport(const Vector3& vec)
+		{
+			const Camera&  camera  = stage_->getCamera();
+
+			const Vector3& right   = camera.getRightVector();
+			const Vector3& up      = camera.getLookUpVector();
+			
+			Vector3 point = vec - camera.getViewPoint();
+
+			Vector3 normalized_view = camera.getViewVector();
+			if (normalized_view.getLength() > 0)
+				normalized_view.normalize();
+			else
+				normalized_view = Vector3(0.,0.,-1.);
+
+			Vector2 result(FLT_MAX, FLT_MAX); 
+
+			float projection_on_view = normalized_view * point;
+			if (projection_on_view <= 0)
+				return result;
+
+			Vector3 point_on_near = near_ / projection_on_view * point;
+
+			// project point on plane
+			point_on_near -= near_ * normalized_view;
+
+			float near_width = right_-left_;
+			result.x = width_ / near_width * ((point_on_near * right) + near_width/2.);
+
+			float near_height = top_-bottom_;
+			result.y = height_ / near_height * ((point_on_near * (-up)) + near_height/2.);
+
+			return result;
+		}
+
 
 // =================================================================================
 // --------------------------render methods-----------------------------------------
@@ -1869,20 +1937,16 @@ void GLRenderer::setupStereo(float eye_separation, float focal_length)
 {
 	// TODO: - make near and far clip configurable!!!
 	//       - keep the same frustrum until either the size or the stereo settings change
-	float nearf = 1.5; 
-	float farf = 600;
 
-	float ndfl    = nearf / focal_length;
+	float ndfl    = near_ / focal_length;
 
-	float left   = -2.0 * x_scale_ - eye_separation * ndfl;
-	float right  =  2.0 * x_scale_ - eye_separation * ndfl;
-	float bottom = -2.0 * y_scale_;
-	float top    =  2.0 * y_scale_;
+	float new_left   = left_  - eye_separation * ndfl;
+	float new_right  = right_ - eye_separation * ndfl;
 
 	glMatrixMode(GL_PROJECTION);
 
 	glLoadIdentity();
-	glFrustum(left, right, bottom, top, nearf, farf);
+	glFrustum(new_left, new_right, bottom_, top_, near_, far_);
 	glViewport(0, 0, width_, height_);
 
 	glMatrixMode(GL_MODELVIEW);
@@ -2092,7 +2156,12 @@ void GLRenderer::initPerspective()
 		return;
 	}
 
-	glFrustum(-2.0 * x_scale_, 2.0 * x_scale_, -2.0 * y_scale_, 2.0 * y_scale_, 1.5, 600);
+	left_   = -2.0 * x_scale_;
+	right_  =  2.0 * x_scale_;
+	bottom_ = -2.0 * y_scale_;
+	top_    =  2.0 * y_scale_;
+
+	glFrustum(left_, right_, bottom_, top_, near_, far_);
 }
 
 void GLRenderer::generateIlluminationTexture_(float ka, float kd, float kr, float shininess)

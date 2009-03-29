@@ -206,8 +206,6 @@ class BALL_VIEW_EXPORT EditableScene
 
 	void getClickedItems_(int x, int y);
 
-	virtual void paintGL();
-
 	void init_();
 
 	String getBondOrderString_(Index order);
@@ -225,7 +223,6 @@ class BALL_VIEW_EXPORT EditableScene
 	Bond* current_bond_;
 
 	Vector3 atom_pos_;
-	bool draw_line_;
 
 	// pick atoms/bonds only in highlighted AtomContainer?
 	static bool only_highlighted_;

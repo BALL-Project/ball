@@ -748,7 +748,7 @@ namespace BALL
 
 			void writeLights_(INIFile& inifile) const;
 			
-			void readLights_(const INIFile& inifile) ;
+			void readLights_(const INIFile& inifile);
 
 			inline float getXDiff_();
 			inline float getYDiff_();
@@ -760,14 +760,6 @@ namespace BALL
 			String createFPSInfo_();
 
 			void renderGrid_();
-
-			/// Given 2D screen coordinates computes the 3D Position in Viewing Volume
-			Vector3 get3DPosition_(int x, int y);
-
-			/** Maps the current viewplane to screen coordinates.
-				  Returns false if the projection matrix is not correctly initialized.
-			*/
-			bool mapViewplaneToScreen_();
 
 			//_ state of the scene: picking or rotate mode?
 			ModeType current_mode_;
@@ -854,7 +846,6 @@ namespace BALL
 			bool draw_grid_, ignore_pick_;
 			QActionGroup* mode_group_;
 
-			Vector3 near_left_bot_, near_right_bot_, near_left_top_;
 			String info_string_;
 
 			GLRenderWindow* main_display_;
