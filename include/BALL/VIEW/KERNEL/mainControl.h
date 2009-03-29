@@ -280,7 +280,7 @@ namespace BALL
 					\param rebuild_display_lists set to true lets the Scene rebuild the GLDisplayList objects.
 					\see updateRepresentationsOf
 			*/
-			void redrawAllRepresentations(bool rebuild_display_lists = false)
+			void redrawAllRepresentations(bool rebuild_display_lists = false);
 			
 			//@}
 			/**	@name	Methods to manage Shortcuts
@@ -493,7 +493,7 @@ namespace BALL
 					\return int the new entry_ID
 			*/
 			QAction* insertMenuEntry(Position parent_id, const String& name, const QObject* receiver = 0, 
-													 const char* slot = 0, const String& description = "", QKeySequence accel = QKeySequence())
+													 const char* slot = 0, const String& description = "", QKeySequence accel = QKeySequence());
 
 			/// 
 			void removeMenuEntry (Index parent_id, QAction* action);
