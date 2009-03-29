@@ -158,7 +158,7 @@ namespace BALL
 
 			///
 			QAction* insertMenuEntry (Position parent_id, const String& name, const QObject* receiver = 0, 
-													 const char* slot = 0, const String& description = "", QKeySequence accel = QKeySequence())
+													 const char* slot = 0, const String& description = "", QKeySequence accel = QKeySequence());
 
 			/** Set the hint for the last added menu entry
 			 		@see insertMenuEntry
