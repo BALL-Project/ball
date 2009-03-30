@@ -62,6 +62,7 @@ CPP_SOURCES=\
 	setCamera.C\
 	setClippingPlane.C\
 	serverPreferences.C\
+	shortcutDialog.C\
 	snapShotVisualisation.C\
 	stageSettings.C\
 	stereoSettingsDialog.C
@@ -114,6 +115,7 @@ MOC_SOURCES=\
 	serverPreferences_moc.C\
 	setCamera_moc.C\
 	setClippingPlane_moc.C\
+	shortcutDialog_moc.C\
 	snapShotVisualisation_moc.C\
 	stageSettings_moc.C\
 	stereoSettingsDialog_moc.C
@@ -162,6 +164,7 @@ UIC_SOURCES=\
 	raytraceableContourSurfaceDialogData.C\
 	setCameraData.C\
 	setClippingPlaneData.C\
+	shortcutDialogData.C\
 	snapShotVisualisationData.C\
 	stageSettingsData.C\
 	stereoSettingsDialogData.C\

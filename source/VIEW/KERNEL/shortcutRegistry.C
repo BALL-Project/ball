@@ -13,7 +13,8 @@ namespace BALL
 	{
 		ShortcutRegistry::ShortcutRegistry()
 			: Embeddable(),
-			  shortcuts_()
+			  shortcuts_(),
+				shortcut_keys_()
 		{
 			registerThis();
 		}
@@ -31,8 +32,17 @@ namespace BALL
 			while (description.substitute("\r", "") != String::EndPos) {};
 			while (description.substitute("\n", "") != String::EndPos) {};
 
-			if (!shortcuts_.has(description))
-				shortcuts_.insert(description, shortcut);
+			if ( ! (    hasDescription(description)
+						   || shortcut_keys_.has(ascii(shortcut->shortcut().toString()))
+						)
+					)
+			{	
+				shortcuts_[description] = shortcut; 
+				if (shortcut->shortcut().toString() != "")
+				{
+					shortcut_keys_.insert(ascii(shortcut->shortcut().toString()));
+				}
+			}
 			else
 				Log.warn() << "Double shortcut entry " << description << std::endl;
 		}
@@ -40,52 +50,68 @@ namespace BALL
 		void ShortcutRegistry::clear()
 		{
 			shortcuts_.clear();
+			shortcut_keys_.clear();
 		}
 
 		void ShortcutRegistry::clearKeySequences()
 		{
-			StringHashMap<QAction*>::Iterator it;
-			for (it=shortcuts_.begin(); it!=shortcuts_.end(); ++it)
+			std::map<String, QAction*>::iterator it;
+			for (it = shortcuts_.begin(); it != shortcuts_.end(); ++it)
 			{
 				it->second->setShortcut(QKeySequence());
 			}
+			shortcut_keys_.clear();
 		}
 
 		bool ShortcutRegistry::readShortcutsFromFile(const String& filename)
 		{
+			LineBasedFile infile;
 			try 
 			{
-				LineBasedFile infile(filename, std::ios::in);
-				infile.enableTrimWhitespaces(true);
-
-				while (infile.readLine())
-				{
-					std::vector<String> fields;
-					infile.getLine().split(fields);
-
-					if (fields.size() != 2)
-						continue; // no shortcut given
-
-					if (!shortcuts_.has(fields[0]))
-					{
-						Log.warn() << "ShortcutRegistry: no action associated with description " << fields[0] << std::endl;
-					}
-					else
-					{
-						QAction* action = shortcuts_[fields[0]];
-						if (!action->parent())
-							Log.error() << "ShortcutRegistry: action associated with description " << fields[0] << " has no parent! Ignoring!" << std::endl;
-						else
-							action->setShortcut(QKeySequence(action->parent()->tr(fields[1].c_str(), fields[0].c_str())));
-					}
-				}
-
-				infile.close();
+				infile.open(filename, std::ios::in);
 			} 
-			catch (...) // todo: explain what went wrong
+			catch(Exception::FileNotFound) 
 			{
+				Log.error() << "ShortcutRegistry: Could not open file " << filename << "." << std::endl;
 				return false;
 			}
+			infile.enableTrimWhitespaces(true);
+
+			while (infile.readLine())
+			{
+				std::vector<String> fields;
+				infile.getLine().split(fields);
+
+				if (fields.size() != 2)
+					continue; // no shortcut given
+
+				if (!hasDescription(fields[0]))
+				{
+					Log.warn() << "ShortcutRegistry: no action associated with description " << fields[0] << std::endl;
+				}
+				else // we have this action
+				{
+					QAction* action = shortcuts_[fields[0]];
+					if (!action->parent())
+					{
+						Log.error() << "ShortcutRegistry: action associated with description " << fields[0] << " has no parent! Ignoring!" << std::endl;
+					}
+					else
+					{	
+						if (!shortcut_keys_.has(fields[1]))
+						{
+							action->setShortcut(QKeySequence(action->parent()->tr(fields[1].c_str(), fields[0].c_str())));
+							shortcut_keys_.insert(fields[1]);
+						}
+						else
+						{
+							Log.warn() << "ShortcutRegistry: duplicate shortcut " << fields[1] << ". Ignoring!" << std::endl;
+						}
+					}
+				}
+			}
+
+			infile.close();
 
 			return true;
 		}
@@ -96,7 +122,7 @@ namespace BALL
 			{
 				File outfile(filename, std::ios::out);
 
-				StringHashMap<QAction*>::ConstIterator it;
+				std::map<String,QAction*>::const_iterator it;
 				for (it=shortcuts_.begin(); it!=shortcuts_.end(); ++it)
 				{
 					outfile << it->first << "\t" << ascii(it->second->shortcut().toString()) << std::endl;
@@ -110,6 +136,38 @@ namespace BALL
 			}
 
 			return true;
+		}
+
+		size_t ShortcutRegistry::size()
+		{
+			return shortcuts_.size();
+		}
+
+		bool ShortcutRegistry::hasDescription(const String& description)
+		{
+			return (shortcuts_.find(description) != shortcuts_.end());
+		}
+
+		bool ShortcutRegistry::hasKey(const QString& key_seq)
+		{
+			return shortcut_keys_.has(ascii(key_seq));
+		}
+
+		std::pair<String, QAction*> ShortcutRegistry::operator[](Index i)
+		{
+			return getEntry_(i);
+		}
+
+		std::pair<String, QAction*> ShortcutRegistry::getEntry_(Index pos)
+		{
+			if ((size_t)pos >= shortcuts_.size()) {
+				throw Exception::OutOfRange(__FILE__, __LINE__);
+			}
+
+			std::map<String, QAction*>::iterator it = shortcuts_.begin();
+			for(int i = 0; i < pos; ++i, ++it) ;
+
+			return *it;
 		}
 	} // namespace VIEW
 } // namespace BALL

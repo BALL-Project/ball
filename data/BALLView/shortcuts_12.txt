@@ -1,0 +1,102 @@
+Shortcut|Display|Stereo|Shutter_Glasses	
+Shortcut|Tools|FDPB	
+Shortcut|Display|Animation|Repeat	
+Shortcut|MolecularMechanics|Choose_ForceField|MMFF94	
+Shortcut|File|Open|Dataset|3D_Grid	
+Shortcut|File|Open|Dataset|Raytraceable_Grid	
+Shortcut|Display|Create|Distance_Label	
+Shortcut|File|Export|PNG	Alt+P
+Shortcut|Display|Rotate_Mode	Ctrl+R
+Shortcut|MolecularMechanics|Abort_Calculation	Alt+C
+Shortcut|Display|Viewpoint|Restore	
+Shortcut|Tools|Grid|Create_a_Sphere	
+Shortcut|Display|Create|Angle_Label	
+Shortcut|Edit|Cut	Ctrl+X
+Shortcut|File|Export|POVRay	Ctrl+Y
+Shortcut|TrajectoryController|Buffer_Trajectory	
+Shortcut|Tools|Python|Exec_script	
+Shortcut|Display|Picking_Mode	Ctrl+P
+Shortcut|Display|Show_Coordinate_System|at_origin	
+Shortcut|Tools|Grid|Resize_for_Rendering	
+Shortcut|Build|Build_Bonds	Ctrl+B
+Shortcut|Display|Viewpoint|Show_Viewpoint	Ctrl+W
+Shortcut|Tools|Calculate_SecondaryStructure	Alt+O
+Shortcut|Edit|Copy	Ctrl+C
+Shortcut|File|Print	
+Shortcut|Tools|Grid|Render_Contour_Surface	Ctrl+U
+Shortcut|Display|Animation|Record	
+Shortcut|File|Save_Structure	Ctrl+S
+Shortcut|Help|Demo	
+Shortcut|Display|Stereo|Side_by_Side	
+Shortcut|Edit|Deselect	
+Shortcut|Display|Animation|Export_PNG	
+Shortcut|Edit|Delete	Del
+Shortcut|Display|Stereo|No_Stereo	
+Shortcut|Tools|Visualize_DockResult	
+Shortcut|Tools|Grid|Visualize_Field_Lines	
+Shortcut|ToggleFullscreen	
+Shortcut|MolecularMechanics|Choose_ForceField|Charmm	
+Shortcut|Display|Edit_Mode	Ctrl+E
+Shortcut|Edit|Toggle_Selection	
+Shortcut|Tools|Python|Load_script	
+Shortcut|Display|Move_Mode	
+Shortcut|Tools|Python|Run_current_script	
+Shortcut|Display|Animation|Export_POV	
+Shortcut|Display|Display_Properties	Ctrl+I
+Shortcut|MolecularMechanics|Choose_ForceField|Amber	
+Shortcut|QuicklyAssignBondOrders	
+Shortcut|File|Open_Structure	Ctrl+O
+Shortcut|Tools|Load_Plugin	
+Shortcut|Build|Create_new_molecule	
+Shortcut|Display|Show_Coordinate_System|here	
+Shortcut|Build|Build_Peptide	Alt+U
+Shortcut|Tools|Calculate_RMSD	
+Shortcut|Tools|Python|Export_history	
+Shortcut|File|Open|Download_PDB	Ctrl+T
+Shortcut|Build|Check_Structure	Ctrl+K
+Shortcut|Display|Viewpoint|Store	
+Shortcut|Display|Viewpoint|Focus_Camera	Ctrl+F
+Shortcut|File|Open|Dataset|Trajectory	
+Shortcut|File|Open|PubChem	
+Shortcut|Display|Stereo|Side_by_Side_on_Different_Displays	
+Shortcut|Help|About	
+Shortcut|Build|Add_Hydrogens	Ctrl+H
+Shortcut|Tools|Python|Clear_editor	
+Shortcut|Tools|Python|Save_script	
+Shortcut|QuicklyOptimizeStructure	
+Shortcut|Tools|Grid|Create_Distance_From_Camera_Grid	
+Shortcut|Help|How_to_cite	
+Shortcut|Display|Animation|Start	
+Shortcut|Build|Assign_Bond_Orders	
+Shortcut|Display|Viewpoint|Limit_View_Volume	
+Shortcut|Help|Tutorial	
+Shortcut|File|Save_Project	
+Shortcut|Display|Toggle_Fullscreen	Alt+X
+Shortcut|MolecularMechanics|Single_Point_Calculation	Ctrl+A
+Shortcut|Display|Viewpoint|Reset_Camera	
+Shortcut|Tools|Grid|Visualize_3D_Grid	
+Shortcut|Build|Build_from_SMILES	
+Shortcut|Tools|Grid|Calculate_normalized_grid	
+Shortcut|File|Export|VRML	
+Shortcut|Display|Animation|Clear	
+Shortcut|Display|Viewpoint|Set_Viewpoint	Ctrl+N
+Shortcut|Edit|Clear_Clipboard	
+Shortcut|Tools|Python|Abort_script	
+Shortcut|File|Quit	Ctrl+Q
+Shortcut|Tools|Grid|Create_Distance_Grid	
+Shortcut|Edit|Preferences	Ctrl+Z
+Shortcut|SaturateWithHydrogens	
+Shortcut|MolecularMechanics|Molecular_Dynamics	Ctrl+M
+Shortcut|Edit|Select	
+Shortcut|MolecularMechanics|Energy_Minimization	
+Shortcut|Display|Create|Label	Ctrl+L
+Shortcut|Display|Animation|Stop	
+Shortcut|MolecularMechanics|Options	
+Shortcut|ShowRuler	
+Shortcut|Display|Add_new_GL_Window	
+Shortcut|EditMode|SetElement	
+Shortcut|File|Open|Dataset|DockResult	
+Shortcut|File|Open|Project	
+Shortcut|Tools|Calculate_HBonds	Alt+N
+Shortcut|File|Open|Dataset|Vector_Grid	
+Shortcut|Edit|Paste	Ctrl+V
