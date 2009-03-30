@@ -224,7 +224,8 @@ BALL::Vector<double> Model::getSubstanceVector(const vector<double>& substance, 
 {
 	if(transform==1 && descriptor_transformations_.Ncols()==0)
 	{
-		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Transformation of test data requested although no scaling of training data was done!!");
+		transform=0;
+		//throw Exception::InconsistentUsage(__FILE__,__LINE__,"Transformation of test data requested although no scaling of training data was done!!");
 	}
 	
 	if( (data!=NULL && data->getNoDescriptors()!=substance.size()) || (data==NULL&&substance.size()<=descriptor_IDs_.back()) )	
