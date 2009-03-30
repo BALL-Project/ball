@@ -9,8 +9,14 @@
 #	include <BALL/CONCEPT/embeddable.h>
 #endif
 
-#ifndef BALL_DATATYPE_STRINGHASHMAP_H
-# include <BALL/DATATYPE/stringHashMap.h>
+//#ifndef BALL_DATATYPE_STRINGHASHMAP_H
+//# include <BALL/DATATYPE/stringHashMap.h>
+//#endif
+
+#include <map>
+
+#ifndef BALL_DATATYPE_HASHSET_H
+# include <BALL/DATATYPE/hashSet.h>
 #endif
 
 #include <QtGui/QAction>
@@ -51,8 +57,21 @@ namespace BALL
 				/// Write the shortcuts to a data file.
 				bool writeShortcutsToFile(const String& filename);
 
+				/// 
+				bool changeShortcut(QAction* shortcut, const String& new_sequence);
+
+				size_t size();
+
+				bool hasDescription(const String& description);
+				bool hasKey(const QString& key_seq);
+
+				std::pair<String, QAction*> operator[](Index i);
+
 			protected:
-				StringHashMap<QAction*> shortcuts_;
+				std::pair<String, QAction*> getEntry_(Index pos);
+
+				std::map<String, QAction*> shortcuts_;
+				HashSet<String> shortcut_keys_;
 		};
 		
 	}// namespace VIEW

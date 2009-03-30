@@ -29,6 +29,7 @@ CPP_SOURCES=\
 	dockingController.C\
 	helpViewer.C\
 	fileObserver.C\
+	shortcutTableView.C\
 	SDWidget.C\
 	testFramework.C\
 	datasetControl.C
@@ -55,6 +56,7 @@ MOC_SOURCES=\
 	molecularStructure_moc.C\
 	fileObserver_moc.C\
 	testFramework_moc.C\
+	shortcutTableView_moc.C\
 	scene_moc.C\
 #	canvasWidget_moc.C\
 #	regularData1DWidget_moc.C\
@@ -94,6 +96,9 @@ molecularStructure_moc.C:	$(HEADER_DIR)/molecularStructure.h
 
 scene_moc.C:	$(HEADER_DIR)/scene.h
 	$(MOC) $(HEADER_DIR)/scene.h -o $@
+
+shortcutTableView_moc.C: $(HEADER_DIR)/shortcutTableView.h
+	$(MOC) $(HEADER_DIR)/shortcutTableView.h -o $@
 
 #stereoHalfImage_moc.C:	$(HEADER_DIR)/stereoHalfImage.h
 #	$(MOC) $(HEADER_DIR)/stereoHalfImage.h -o $@
