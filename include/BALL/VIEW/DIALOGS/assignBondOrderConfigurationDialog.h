@@ -37,7 +37,7 @@ namespace BALL
 	{
 		class MolecularStructure;
 
-		/** Dialog for changing the options of the assignBondOrderProcessro
+		/** Dialog for changing the options of the assignBondOrderProcessor
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT AssignBondOrderConfigurationDialog
