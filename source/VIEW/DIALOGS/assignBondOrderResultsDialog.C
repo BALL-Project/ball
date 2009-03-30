@@ -114,8 +114,8 @@ namespace BALL
 
 				stream_description << "\n  " << ascii(name) 
 											 	 << " :\n\tsolution : " << num_of_sol 
-							 						 << "\n\tpenalty  : " << bond_order_processor_->getTotalPenalty(num_of_sol-1)
-							 						 << "\n\tcharge   : " << bond_order_processor_->getTotalCharge(num_of_sol-1);
+							 						 << "\n\tpenalty  : " << bond_order_processor_->getTotalPenalty(num_of_sol-1);
+				//			 						 << "\n\tcharge   : " << bond_order_processor_->getTotalCharge(num_of_sol-1);
 
 				String description = stream_description.str();
 
@@ -189,8 +189,8 @@ namespace BALL
 
 					stream_description << "\n  " << ascii(name) 
 												 	 << " :\n\tsolution : " << i+1 
-								 						 << "\n\tpenalty  : " << bond_order_processor_->getTotalPenalty(i)
-								 						 << "\n\tcharge   : " << bond_order_processor_->getTotalCharge(i);
+								 						 << "\n\tpenalty  : " << bond_order_processor_->getTotalPenalty(i);
+	//							 						 << "\n\tcharge   : " << bond_order_processor_->getTotalCharge(i);
 
 					String description = stream_description.str();
 
