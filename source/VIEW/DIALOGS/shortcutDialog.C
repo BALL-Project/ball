@@ -41,11 +41,6 @@ namespace BALL
 			//registerWidgetForHelpSystem_(widget_stack->widget(0), "shortcuts.html#shortcuts");
 			hide();
 		
-			// signals and slots connections
-			//connect( close_button, SIGNAL( clicked() ), this, SLOT( accept() ) );
-			//connect( cancel_button, SIGNAL( clicked() ), this, SLOT( reject() ) );
-			//connect( reset_button, SIGNAL( clicked() ), this, SLOT( resetOptions() ) );
-			
 			connect( browse_export_button, SIGNAL( clicked() ), this, SLOT( browseExportFile_() ) );	
 			connect( browse_import_button, SIGNAL( clicked() ), this, SLOT( browseImportFile_() ) );	
 
@@ -55,7 +50,6 @@ namespace BALL
 		}
 
 		ShortcutDialog::~ShortcutDialog()
-			throw()
 		{
 		}
 
@@ -64,25 +58,7 @@ namespace BALL
 			std::cout << "TODO: read last used shortcuts from preferences" << std::endl;
 			PreferencesEntry::restoreValues();
 		}
-/*
-		void ShortcutDialog::resetOptions()
-		{
-			PreferencesEntry::restoreDefaultValues();
-		}
 		
-		void ShortcutDialog::reject()
-		{
-			hide();
-			PreferencesEntry::restoreValues();
-		}
-
-		void ShortcutDialog::accept()
-		{
-			hide();
-			PreferencesEntry::storeValues();
-			//QDialog::accept();
-		}
-*/	
 		void ShortcutDialog:: browseImportFile_()
 		{
 			Path p;

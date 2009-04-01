@@ -18,12 +18,16 @@ namespace BALL
 		//////////////////  INSERTER  ////////////////////////////
 
 		ShortcutInserter::ShortcutInserter(QWidget* parent)
-			: QPushButton(parent), 
+			: EditSingleShortcut(parent), //QPushButton(parent), 
 			  modifiers_(0), 
 				key_(0)
 		{
-			setText("Please insert your shortcut now");
+			setShortcutText("Please insert your shortcut now.");
 			grabKeyboard();
+		}
+
+		ShortcutInserter::~ShortcutInserter()
+		{
 		}
 
 		void ShortcutInserter::keyPressEvent(QKeyEvent* evt)
@@ -99,11 +103,6 @@ namespace BALL
 			evt->accept();
 
 			updateText_();
-
-//			if (released_key) 
-//			{
-//				emit shortcutRecorded(new_sequence_, this, index_);
-//			}
 		}
 
 		void ShortcutInserter::updateText_()
@@ -111,7 +110,7 @@ namespace BALL
 			QString s = new_sequence_.toString(QKeySequence::NativeText);
 			s.replace('&', QLatin1String("&&"));
 
-			setText(s);
+			setShortcutText(s);
 		}
 
 		
@@ -230,7 +229,6 @@ namespace BALL
 			{ 
 				(*registry_)[index.row()].second->setShortcut(seq);
 
-
 				// TODO: getDescription(QKeySequence) in shortcutRegistry to provide more helpful message.
 				Scene::getInstance(0)->setStatusbarText("Shortcut " + ascii(seq.toString()) + " successfully set");
 				emit dataChanged(index, index);
@@ -256,9 +254,6 @@ namespace BALL
 
 			ShortcutInserter* editor = new ShortcutInserter(parent);
 
-			//connect(editor, SIGNAL(shortcutRecorded(const QKeySequence&, QWidget*, const QModelIndex&)),
-			 //       this,     SLOT(    newShortcut_(const QKeySequence&, QWidget*, const QModelIndex&)));
-
 			return editor;
 		}
 
@@ -266,18 +261,22 @@ namespace BALL
 		{
 			if (index.column() == 1) 
 			{
-				QPushButton* label = static_cast<QPushButton*>(editor);
-				label->setText(qvariant_cast<QString>(index.model()->data(index, Qt::DisplayRole)));
+				((EditSingleShortcut*)editor)->setShortcutText(qvariant_cast<QString>(index.model()->data(index, Qt::DisplayRole)));
 			}
 		}
 
-		// returns updated data to the model
+		// Returns updated data to the model
 		void ShortcutTableDelegate::setModelData(QWidget* editor,
 		                                         QAbstractItemModel* model,
 		                                         const QModelIndex& index) const
 		{
-			model->setData(index, QVariant::fromValue(((ShortcutInserter*)editor)->getKeySequence()));
-			//model->setData(index, QVariant::fromValue(new_shortcut_));
+			if (((ShortcutInserter*)editor)->wasEdited())
+			{
+				if (((ShortcutInserter*)editor)->wasCustomMode())
+					model->setData(index, QVariant::fromValue(((ShortcutInserter*)editor)->getKeySequence()));
+				else
+					model->setData(index, QVariant::fromValue(QKeySequence()));
+			}
 		}
 /*
 		QSize ShortcutTableDelegate::sizeHint ( const QStyleOptionViewItem& option, const QModelIndex& index ) const
@@ -297,7 +296,12 @@ namespace BALL
 		                                                 const QStyleOptionViewItem& style,
 		                                                 const QModelIndex& index) const
 		{
-			editor->setGeometry(style.rect);
+			QRect new_rect(style.rect.topLeft(),
+					           style.rect.topLeft() + QPoint(editor->minimumWidth(), editor->minimumHeight()));
+
+			editor->setGeometry(new_rect);
+
+			((QTableView*)(editor->parent()))->setRowHeight(index.row(), editor->minimumHeight());
 		}
 
 		/////////////////////////  ShortcutTableView  ///////////////////////////////
@@ -311,7 +315,7 @@ namespace BALL
 			// Setting up a view to display the items in the model
 			setModel(model);
 			
-			//
+			// Setting up the Delegate
 			setItemDelegate(new ShortcutTableDelegate());
 		}
 
