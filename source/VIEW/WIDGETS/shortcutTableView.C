@@ -18,11 +18,13 @@ namespace BALL
 		//////////////////  INSERTER  ////////////////////////////
 
 		ShortcutInserter::ShortcutInserter(QWidget* parent)
-			: EditSingleShortcut(parent), //QPushButton(parent), 
+			: EditSingleShortcut(parent), 
 			  modifiers_(0), 
 				key_(0)
 		{
 			setShortcutText("Please insert your shortcut now.");
+			setErrorText("");
+
 			grabKeyboard();
 		}
 
@@ -65,7 +67,7 @@ namespace BALL
 			}
 
 			new_sequence_ = QKeySequence(key_ | modifiers_);
-
+			edited_ = true;
 			updateText_();
 		}
 
@@ -103,6 +105,8 @@ namespace BALL
 			evt->accept();
 
 			updateText_();
+			//key_=0;
+			//modifiers_=0;
 		}
 
 		void ShortcutInserter::updateText_()
@@ -111,6 +115,15 @@ namespace BALL
 			s.replace('&', QLatin1String("&&"));
 
 			setShortcutText(s);
+			
+			if (ShortcutRegistry::getInstance(0)->hasKey(new_sequence_))
+			{
+				setErrorText("Shortcut already in use.");
+			}
+			else
+			{
+				setErrorText("");
+			}
 		}
 
 		
@@ -223,14 +236,14 @@ namespace BALL
 		                                 int role)
 		{
 			QKeySequence seq = qvariant_cast<QKeySequence>(data);
-			Log.error() << "Setting Data to " << ascii(seq.toString()) << std::endl;
+			Log.error() << "Setting Data to " << ascii(seq.toString())  << "." << std::endl;
 
 			if ((index.column() == 1) && isValid(seq)) 
 			{ 
 				(*registry_)[index.row()].second->setShortcut(seq);
 
 				// TODO: getDescription(QKeySequence) in shortcutRegistry to provide more helpful message.
-				Scene::getInstance(0)->setStatusbarText("Shortcut " + ascii(seq.toString()) + " successfully set");
+				Scene::getInstance(0)->setStatusbarText("Shortcut " + ascii(seq.toString()) + " successfully set.");
 				emit dataChanged(index, index);
 				return true;
 			}

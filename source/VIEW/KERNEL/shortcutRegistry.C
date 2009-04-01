@@ -152,6 +152,11 @@ namespace BALL
 		{
 			return shortcut_keys_.has(ascii(key_seq));
 		}
+	
+		bool ShortcutRegistry::hasKey(const  QKeySequence& key_seq)
+		{
+			return hasKey(key_seq.toString());
+		}
 
 		std::pair<String, QAction*> ShortcutRegistry::operator[](Index i)
 		{
