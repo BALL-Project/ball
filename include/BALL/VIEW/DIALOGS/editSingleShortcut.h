@@ -68,6 +68,9 @@ namespace BALL
 				void setShortcutText(QString new_keysequence);
 				
 				///
+				void setErrorText(QString error);
+
+				///
 				bool wasCustomMode(){return custom_shortcut_mode_ ;}
 				
 				///

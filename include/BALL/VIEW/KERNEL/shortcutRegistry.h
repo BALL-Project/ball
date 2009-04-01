@@ -9,10 +9,6 @@
 #	include <BALL/CONCEPT/embeddable.h>
 #endif
 
-//#ifndef BALL_DATATYPE_STRINGHASHMAP_H
-//# include <BALL/DATATYPE/stringHashMap.h>
-//#endif
-
 #include <map>
 
 #ifndef BALL_DATATYPE_HASHSET_H
@@ -64,6 +60,7 @@ namespace BALL
 
 				bool hasDescription(const String& description);
 				bool hasKey(const QString& key_seq);
+				bool hasKey(const QKeySequence& key_seq);
 
 				std::pair<String, QAction*> operator[](Index i);
 

@@ -67,7 +67,7 @@ namespace BALL
 				virtual void browseImportFile_();
 				virtual void browseExportFile_();
 
-				virtual void validateShortcuts_();
+				bool validateShortcut_();
 
 				void loadLegacyShortcuts_();	
 				void loadShortcutsFromFile_(const String& filename);

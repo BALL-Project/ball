@@ -112,6 +112,40 @@
     <bool>true</bool>
    </property>
   </widget>
+  <widget class="QLabel" name="error_label" >
+   <property name="geometry" >
+    <rect>
+     <x>160</x>
+     <y>30</y>
+     <width>180</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="minimumSize" >
+    <size>
+     <width>180</width>
+     <height>25</height>
+    </size>
+   </property>
+   <property name="font" >
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="toolTip" >
+    <string/>
+   </property>
+   <property name="statusTip" >
+    <string/>
+   </property>
+   <property name="whatsThis" >
+    <string/>
+   </property>
+   <property name="text" >
+    <string> </string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

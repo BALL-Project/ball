@@ -45,8 +45,6 @@ namespace BALL
 			connect( browse_import_button, SIGNAL( clicked() ), this, SLOT( browseImportFile_() ) );	
 
 			connect(use_legacy_shortcuts, SIGNAL(stateChanged(int)), this, SLOT(loadLegacyShortcuts_()));
-
-			validateShortcuts_();
 		}
 
 		ShortcutDialog::~ShortcutDialog()
@@ -102,12 +100,6 @@ namespace BALL
 				// TODO this method should not occure if the dialog was canceled
 				Log.warn()<< "Could not export shortcuts to file " << ascii(s) << std::endl; 
 			}
-
-		}
-
-		void ShortcutDialog::validateShortcuts_()
-		{
-				std::cout << " TODO ShortcutDialog::validateShortcuts_()" << std::endl;
 		}
 
 		void ShortcutDialog::loadLegacyShortcuts_()

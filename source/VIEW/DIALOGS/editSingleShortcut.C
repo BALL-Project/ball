@@ -37,8 +37,8 @@ namespace BALL
 			connect( buttonBox, SIGNAL( accepted() ), this, SLOT( accepted() ) );
 			connect( buttonBox, SIGNAL( rejected() ), this, SLOT( rejected() ) );
 			
-			connect( customize_button, SIGNAL( toggled(bool) ), this, SLOT( newMode_(bool) ) );
-			connect( none_button, SIGNAL( toggled(bool) ), this, SLOT( newMode_(bool) ) );
+			connect( customize_button, SIGNAL( toggled(bool) ), this, SLOT( modeChanged_(bool) ) );
+			connect( none_button, SIGNAL( toggled(bool) ), this, SLOT( modeChanged_(bool) ) );
 			
 			new_shortcut_label->setText("Please type key sequence!");	
 		}
@@ -61,7 +61,6 @@ namespace BALL
 
 		void EditSingleShortcut::accepted()
 		{
-			edited_ = true;
 			hide();
 		}
 		
@@ -69,7 +68,7 @@ namespace BALL
 		{
 			custom_shortcut_mode_ = customize_button->isChecked();
 			if (custom_shortcut_mode_)
-				new_shortcut_label->setText("Please insert your shortcut now.");
+				new_shortcut_label->setText("Please insert your shortcut.");
 			else
 				new_shortcut_label->setText("Set shortcut to None.");
 		}
@@ -78,6 +77,11 @@ namespace BALL
 		{
 			new_shortcut_label->setText(new_keysequence);	
 		}
-
+		
+		void EditSingleShortcut::setErrorText(QString error)
+		{
+			error_label->setText(error);	
+		}
+	
 	}//namespace VIEW
 }//namespace BALL
