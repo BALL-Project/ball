@@ -35,6 +35,7 @@ CPP_SOURCES=\
 	dockResultDialog.C\
 	downloadPDBFile.C\
 	editSettings.C\
+	editSingleShortcut.C\
 	displayProperties.C\
 	fieldLinesDialog.C\
 	FDPBDialog.C\
@@ -89,6 +90,7 @@ MOC_SOURCES=\
 	dockResultDialog_moc.C\
 	downloadPDBFile_moc.C\
  	editSettings_moc.C\
+	editSingleShortcut_moc.C\
 	displayProperties_moc.C\
 	FDPBDialog_moc.C\
 	gridVisualizationDialog_moc.C\
@@ -140,6 +142,7 @@ UIC_SOURCES=\
 	downloadPDBFileData.C\
 	displayPropertiesData.C\
 	editSettingsData.C\
+	editSingleShortcutData.C\
 	FDPBDialogData.C\
 	fieldLinesDialogData.C\
 	gridVisualizationDialogData.C\

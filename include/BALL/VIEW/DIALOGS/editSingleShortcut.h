@@ -3,8 +3,8 @@
 //
 //
 
-#ifndef BALL_VIEW_DIALOGS_SHORTCUTDIALOG_H
-#define BALL_VIEW_DIALOGS_SHORTCUTDIALOG_H
+#ifndef BALL_VIEW_DIALOGS_EDITSINGLESHORTCUT_H
+#define BALL_VIEW_DIALOGS_EDITSINGLESHORTCUT_H
 
 #ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
@@ -23,9 +23,9 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
-# include <BALL/VIEW/UIC/ui_shortcutDialog.h>
+# include <BALL/VIEW/UIC/ui_editSingleShortcut.h>
 #else
-# include <BALL/VIEW/UIC/shortcutDialogData.h>
+# include <BALL/VIEW/UIC/editSingleShortcutData.h>
 #endif
 
 namespace BALL
@@ -34,12 +34,12 @@ namespace BALL
 	{
 		//class MolecularStructure;
 
-		/** Dialog for changing the BALLView shortcuts 
-				\ingroup ViewDialogs
+		/** Widget for customizing BALLView shortcuts 
+				\ingroup ViewWidgets
 		*/
-		class BALL_VIEW_EXPORT ShortcutDialog
+		class BALL_VIEW_EXPORT EditSingleShortcut
 			: public QWidget,
-				public Ui_ShortcutDialogData,
+				public Ui_EditSingleShortcutData,
 				public ModularWidget,
 				public PreferencesEntry
 		{
@@ -48,34 +48,39 @@ namespace BALL
 			
 			public:
 
-			BALL_EMBEDDABLE(ShortcutDialog,ModularWidget)
-
 			/// Constructor
-			ShortcutDialog(QWidget* parent = NULL, const char* name = "ShortcutDialog", Qt::WFlags fl = 0 );
+			EditSingleShortcut(QWidget* parent = NULL, const char* name = "EditSingleShortcut", Qt::WFlags fl = 0 );
 
 			/// Destructor
-			virtual ~ShortcutDialog();
+			virtual ~EditSingleShortcut();
 			
-			// method for e.g. initializing menu entries, overloaded
 			///
 			virtual void initializeWidget(MainControl& main_control);
 
 			public slots:
+				///
+				void accepted();
+
+				///
+				void rejected(); 
+
+				///
+				void setShortcutText(QString new_keysequence);
+				
+				///
+				bool wasCustomMode(){return custom_shortcut_mode_ ;}
+				
+				///
+				bool wasEdited(){return edited_;}
 
 			protected slots:
 
-				virtual void browseImportFile_();
-				virtual void browseExportFile_();
-
-				virtual void validateShortcuts_();
-
-				void loadLegacyShortcuts_();	
-				void loadShortcutsFromFile_(const String& filename);
+				void modeChanged_(bool toggled);
 
 			protected:
-
-			private:
-				
+							
+				bool custom_shortcut_mode_;
+				bool edited_;
 		};
 	}
 }

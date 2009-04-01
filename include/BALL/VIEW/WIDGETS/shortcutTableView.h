@@ -5,6 +5,10 @@
 # include <BALL/VIEW/KERNEL/common.h>
 #endif
 
+#ifndef BALL_VIEW_DIALOGS_EDITSINGLESHORTCUT_H
+# include <BALL/VIEW/DIALOGS/editSingleShortcut.h>
+#endif
+
 #include <QtGui/QTableView>
 #include <QtGui/QItemDelegate>
 #include <QtGui/QPushButton>
@@ -21,11 +25,13 @@ namespace BALL
 				ShortcutTableView(QWidget* parent);
 		};
 
-		class ShortcutInserter : public QPushButton
+		class ShortcutInserter : public  EditSingleShortcut
 		{
 			Q_OBJECT
 			public:
 				ShortcutInserter(QWidget* parent);
+				virtual ~ShortcutInserter();
+
 				QKeySequence const& getKeySequence() const { return new_sequence_; }
 
 			protected:
