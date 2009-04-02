@@ -6193,7 +6193,16 @@
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\BALL.sip"
 				>
 				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="SipGenerator"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
 					>
 					<Tool
 						Name="SipGenerator"
