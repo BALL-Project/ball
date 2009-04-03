@@ -109,6 +109,7 @@ namespace BALL
 				: QReadWriteLock( is_recursive ? Recursive : NonRecursive )
 #else
 				: QReadWriteLock()
+#endif
 			{
 			}
 	};
