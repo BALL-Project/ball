@@ -32,6 +32,7 @@ namespace BALL
 				~OpenSavePreferences();
 
 				void storeValues();
+				bool binaryProjectsEnabled();
 		};
 	}
 }

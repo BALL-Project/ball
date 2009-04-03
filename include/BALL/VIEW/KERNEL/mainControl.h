@@ -56,6 +56,7 @@ namespace BALL
 		class ModularWidget;
 		class Preferences;
 		class MainControlPreferences;
+		class OpenSavePreferences;
 		class NetworkPreferences;
 		class GeometricObjectSelectionMessage;
 		class SimulationThread;
@@ -370,7 +371,7 @@ namespace BALL
 			//@{
 			
 			/// Save the current configuration, structures and representations to a BALLView project file (*.bvp)
-			void saveBALLViewProjectFile(const String& filename, bool binary = false);
+			void saveBALLViewProjectFile(const String& filename, bool binary = true);
 			
 			/// Load a BALLView project file
 			void loadBALLViewProjectFile(const String& filename);
@@ -875,6 +876,7 @@ namespace BALL
 			ShortcutRegistry            shortcut_registry_;
 
 			MainControlPreferences* 		main_control_preferences_;
+			OpenSavePreferences*				open_save_preferences_;
 			NetworkPreferences* 				network_preferences_;
 			Preferences*								preferences_dialog_;
 			INIFile		 									preferences_file_;
