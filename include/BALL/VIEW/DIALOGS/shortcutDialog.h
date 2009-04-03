@@ -34,7 +34,7 @@ namespace BALL
 	{
 		//class MolecularStructure;
 
-		/** Dialog for changing the BALLView shortcuts 
+		/** Dialog for changing the BALLView shortcuts
 				\ingroup ViewDialogs
 		*/
 		class BALL_VIEW_EXPORT ShortcutDialog
@@ -45,7 +45,7 @@ namespace BALL
 		{
 			// macro needed for Qt's slot mechanism:
 			Q_OBJECT
-			
+
 			public:
 
 			BALL_EMBEDDABLE(ShortcutDialog,ModularWidget)
@@ -55,28 +55,22 @@ namespace BALL
 
 			/// Destructor
 			virtual ~ShortcutDialog();
-			
+
 			// method for e.g. initializing menu entries, overloaded
 			///
 			virtual void initializeWidget(MainControl& main_control);
 
 			public slots:
+				virtual void searchTextChanged(QString filter);
 
 			protected slots:
-
 				virtual void browseImportFile_();
 				virtual void browseExportFile_();
 
-				//bool validateShortcut_();
-
-				void loadLegacyShortcuts_();	
+				void loadLegacyShortcuts_();
 				void loadShortcutsFromFile_(const String& filename);
-
-			protected:
-
-			private:
-				
 		};
+
 	}
 }
 #endif
