@@ -104,7 +104,11 @@ namespace BALL
 	{
 		public:
 			TReadWriteLock(bool is_recursive = false)
+// NOTE: Qt only supports non-recursive read write locks since version 4.3. Before that, they were always recursive.
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 3, 0))
 				: QReadWriteLock( is_recursive ? Recursive : NonRecursive )
+#else
+				: QReadWriteLock()
 			{
 			}
 	};

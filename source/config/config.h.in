@@ -154,6 +154,9 @@
 // defined if we have boost::iostreams support
 #undef BALL_HAS_BOOST_IOSTREAMS
 
+// defined if we have boost::thread support
+#undef BALL_HAS_BOOST_THREAD
+
 // defined if asio is taken from boost
 #undef BALL_HAS_BOOST_ASIO
 
