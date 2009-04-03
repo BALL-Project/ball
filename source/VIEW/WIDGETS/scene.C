@@ -2127,22 +2127,6 @@ namespace BALL
 		void Scene::keyPressEvent(QKeyEvent* e)
 		{
 			// TODO make keys configurable in shortcutRegistry 
-			// TEST
-			if (e->key() == Qt::Key_Space)
-			{
-				if (renderers_[0].isContinuous())
-				{
-					renderers_[0].useContinuousLoop(false);
-					renderers_[0].wait();
-				}
-				else
-				{
-					// TEST
-					renderers_[0].target->unlockGLContext();
-					renderers_[0].start();
-				}
-			}
-
 			if (gl_renderer_->getStereoMode() == GLRenderer::NO_STEREO &&
 			    e->key() == Qt::Key_Escape) 
 			{
@@ -2588,6 +2572,7 @@ namespace BALL
 						h = f;
 					}
 				}
+std::cout << width() << "," << w << " " << height() << "," << h << std::endl;
 				// resize already renders to the buffer
 				export_renderer->resize(w, h);
 				ok = export_renderer->exportPNG(filename);
