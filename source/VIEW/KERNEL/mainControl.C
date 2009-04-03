@@ -843,15 +843,16 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 			// General
 			preferences_dialog_->insertEntry(main_control_preferences_);
+			main_control_preferences_->enableLoggingToFile(logging_to_file_);
 			
 			// Shortcuts
 			preferences_dialog_->insertEntry(new ShortcutDialog(this));
 
 			// Open/Save
-			preferences_dialog_->insertEntry(new OpenSavePreferences());
+			open_save_preferences_ = new OpenSavePreferences();
+			preferences_dialog_->insertEntry(open_save_preferences_);
 
-			main_control_preferences_->enableLoggingToFile(logging_to_file_);
-
+			// Network Preferences
 			network_preferences_ = new NetworkPreferences();
 			preferences_dialog_->insertEntry(network_preferences_);
 		}
@@ -1956,7 +1957,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 		if (!result.hasSuffix(".bvp")) result += ".bvp";
 
- 		saveBALLViewProjectFile(result);
+ 		saveBALLViewProjectFile(result, open_save_preferences_->binaryProjectsEnabled());
 		setStatusbarText("Saved project to " + result);
 	} 
 

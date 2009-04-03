@@ -34,6 +34,11 @@ namespace BALL
 				mf->setReadPDBModels(pdb_model_box_->isChecked());
 			}
 		}
+		
+		bool  OpenSavePreferences::binaryProjectsEnabled()
+		{
+			return binary_project_radiobutton->isChecked();
+		}
 	}
 }
 
