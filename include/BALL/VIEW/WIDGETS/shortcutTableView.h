@@ -13,6 +13,8 @@
 #include <QtGui/QItemDelegate>
 #include <QtGui/QPushButton>
 
+class QSortFilterProxyModel;
+
 namespace BALL
 {
 	namespace VIEW
@@ -23,52 +25,22 @@ namespace BALL
 
 			public:
 				ShortcutTableView(QWidget* parent);
+
+				void setFilter(const QString& filter);
+
+			protected slots:
+				void editSuccess_();
+
+			protected slots:
+				void onDoubleClick(const QModelIndex& index);
+
+			private:
+				QSortFilterProxyModel* proxy_model_;
+				EditSingleShortcut* editor_;
+				int edited_row_;
 		};
-
-		class ShortcutInserter : public  EditSingleShortcut
-		{
-			Q_OBJECT
-			public:
-				ShortcutInserter(QWidget* parent);
-				virtual ~ShortcutInserter();
-
-				QKeySequence const& getKeySequence() const { return new_sequence_; }
-
-			protected:
-				unsigned int modifiers_;
-				int key_;
-				QKeySequence new_sequence_;
-				
-				void updateText_();
-
-				void keyPressEvent(QKeyEvent* evt);
-				void keyReleaseEvent(QKeyEvent* evt);
-		};
-
-		// TODO MODEL
-
-		class ShortcutTableDelegate : public QItemDelegate
-		{
-			Q_OBJECT
-
-			public:
-				QWidget *createEditor(QWidget* parent, const QStyleOptionViewItem& option,
-														 const QModelIndex& index) const;
-
-				void setEditorData(QWidget* editor, const QModelIndex& index) const;
-				void setModelData(QWidget* editor, QAbstractItemModel* model,
-												 const QModelIndex& index) const;
-
-		//		QSize sizeHint (const QStyleOptionViewItem& option, const QModelIndex & index ) const;
-		//		void paint (QPainter* painter, const QStyleOptionViewItem& option, 
-		//																			 const QModelIndex& index ) const;  
-
-				void updateEditorGeometry(QWidget* editor,
-				                          const QStyleOptionViewItem& option,
-				                          const QModelIndex& index) const;
-		};
-
 	}
 }
 
 #endif //BALL_VIEW_WIDGETS_SHORTCUTTABLEVIEW_H
+

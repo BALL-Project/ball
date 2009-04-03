@@ -23,7 +23,7 @@ namespace BALL
 		{
 			unregisterThis();
 		}
-		
+
 		void ShortcutRegistry::registerShortcut(String description, QAction* shortcut)
 		{
 			// eat white spaces and tabs in the description
@@ -32,15 +32,14 @@ namespace BALL
 			while (description.substitute("\r", "") != String::EndPos) {};
 			while (description.substitute("\n", "") != String::EndPos) {};
 
-			if ( ! (    hasDescription(description)
-						   || shortcut_keys_.has(ascii(shortcut->shortcut().toString()))
-						)
-					)
-			{	
-				shortcuts_[description] = shortcut; 
-				if (shortcut->shortcut().toString() != "")
+			String key_seq = ascii(shortcut->shortcut().toString());
+
+			if ( !(hasDescription(description) || shortcut_keys_.has(key_seq)))
+			{
+				shortcuts_[description] = shortcut;
+				if (key_seq != "")
 				{
-					shortcut_keys_.insert(ascii(shortcut->shortcut().toString()));
+					shortcut_keys_.insert(key_seq);
 				}
 			}
 			else
@@ -66,11 +65,11 @@ namespace BALL
 		bool ShortcutRegistry::readShortcutsFromFile(const String& filename)
 		{
 			LineBasedFile infile;
-			try 
+			try
 			{
 				infile.open(filename, std::ios::in);
-			} 
-			catch(Exception::FileNotFound) 
+			}
+			catch(Exception::FileNotFound&)
 			{
 				Log.error() << "ShortcutRegistry: Could not open file " << filename << "." << std::endl;
 				return false;
@@ -97,7 +96,7 @@ namespace BALL
 						Log.error() << "ShortcutRegistry: action associated with description " << fields[0] << " has no parent! Ignoring!" << std::endl;
 					}
 					else
-					{	
+					{
 						if (!shortcut_keys_.has(fields[1]))
 						{
 							action->setShortcut(QKeySequence(action->parent()->tr(fields[1].c_str(), fields[0].c_str())));
@@ -118,22 +117,25 @@ namespace BALL
 
 		bool ShortcutRegistry::writeShortcutsToFile(const String& filename)
 		{
-			try 
-			{
-				File outfile(filename, std::ios::out);
+			File outfile;
 
-				std::map<String,QAction*>::const_iterator it;
-				for (it=shortcuts_.begin(); it!=shortcuts_.end(); ++it)
-				{
-					outfile << it->first << "\t" << ascii(it->second->shortcut().toString()) << std::endl;
-				}
-
-				outfile.close();
-			} 
-			catch (...) // todo: explain what went wrong
+			try
 			{
+				outfile.open(filename, std::ios::out);
+			}
+			catch (Exception::FileNotFound& e) // todo: explain what went wrong
+			{
+				Log.error() << "ShortcutRegistry: " << e.what() << std::endl;
 				return false;
 			}
+
+			std::map<String,QAction*>::const_iterator it;
+			for (it=shortcuts_.begin(); it!=shortcuts_.end(); ++it)
+			{
+				outfile << it->first << "\t" << ascii(it->second->shortcut().toString()) << std::endl;
+			}
+
+			outfile.close();
 
 			return true;
 		}
@@ -156,6 +158,11 @@ namespace BALL
 		bool ShortcutRegistry::hasKey(const  QKeySequence& key_seq)
 		{
 			return hasKey(key_seq.toString());
+		}
+
+		bool ShortcutRegistry::hasKey(const String& key_seq)
+		{
+			return shortcut_keys_.has(key_seq);
 		}
 
 		std::pair<String, QAction*> ShortcutRegistry::operator[](Index i)

@@ -38,52 +38,45 @@ namespace BALL
 				\ingroup ViewWidgets
 		*/
 		class BALL_VIEW_EXPORT EditSingleShortcut
-			: public QWidget,
-				public Ui_EditSingleShortcutData,
-				public ModularWidget,
-				public PreferencesEntry
+			: public QDialog,
+				public Ui_EditSingleShortcutData
 		{
 			// macro needed for Qt's slot mechanism:
 			Q_OBJECT
-			
+
 			public:
 
-			/// Constructor
-			EditSingleShortcut(QWidget* parent = NULL, const char* name = "EditSingleShortcut", Qt::WFlags fl = 0 );
+				/// Constructor
+				EditSingleShortcut(QWidget* parent = NULL, const char* name = "EditSingleShortcut", Qt::WFlags fl = 0 );
 
-			/// Destructor
-			virtual ~EditSingleShortcut();
-			
-			///
-			virtual void initializeWidget(MainControl& main_control);
+				QKeySequence const& getKeySequence() const { return new_sequence_; }
+
+				void setIndex(const QModelIndex& index);
 
 			public slots:
 				///
-				void accepted();
-
-				///
-				void rejected(); 
-
-				///
 				void setShortcutText(QString new_keysequence);
-				
+
 				///
 				void setErrorText(QString error);
 
 				///
 				bool wasCustomMode(){return custom_shortcut_mode_ ;}
-				
-				///
-				bool wasEdited(){return edited_;}
 
 			protected slots:
-
 				void modeChanged_(bool toggled);
 
 			protected:
-							
 				bool custom_shortcut_mode_;
-				bool edited_;
+
+				unsigned int modifiers_;
+				int key_;
+				QKeySequence new_sequence_;
+
+				void updateText_();
+
+				void keyPressEvent(QKeyEvent* evt);
+				void keyReleaseEvent(QKeyEvent* evt);
 		};
 	}
 }

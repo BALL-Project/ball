@@ -1,34 +1,35 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>EditSingleShortcutData</class>
- <widget class="QWidget" name="EditSingleShortcutData" >
-  <property name="geometry" >
+ <widget class="QWidget" name="EditSingleShortcutData">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>463</width>
+    <width>460</width>
     <height>75</height>
    </rect>
   </property>
-  <property name="sizePolicy" >
-   <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <property name="minimumSize" >
+  <property name="minimumSize">
    <size>
     <width>460</width>
     <height>75</height>
    </size>
   </property>
-  <property name="focusPolicy" >
+  <property name="focusPolicy">
    <enum>Qt::NoFocus</enum>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Customize shortcut</string>
   </property>
-  <widget class="QRadioButton" name="none_button" >
-   <property name="geometry" >
+  <widget class="QRadioButton" name="none_button">
+   <property name="geometry">
     <rect>
      <x>10</x>
      <y>40</y>
@@ -36,18 +37,18 @@
      <height>25</height>
     </rect>
    </property>
-   <property name="minimumSize" >
+   <property name="minimumSize">
     <size>
      <width>25</width>
      <height>25</height>
     </size>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>None</string>
    </property>
   </widget>
-  <widget class="QDialogButtonBox" name="buttonBox" >
-   <property name="geometry" >
+  <widget class="QDialogButtonBox" name="buttonBox">
+   <property name="geometry">
     <rect>
      <x>360</x>
      <y>10</y>
@@ -55,15 +56,15 @@
      <height>61</height>
     </rect>
    </property>
-   <property name="orientation" >
+   <property name="orientation">
     <enum>Qt::Vertical</enum>
    </property>
-   <property name="standardButtons" >
+   <property name="standardButtons">
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QLabel" name="new_shortcut_label" >
-   <property name="geometry" >
+  <widget class="QLabel" name="new_shortcut_label">
+   <property name="geometry">
     <rect>
      <x>160</x>
      <y>10</y>
@@ -71,27 +72,27 @@
      <height>25</height>
     </rect>
    </property>
-   <property name="minimumSize" >
+   <property name="minimumSize">
     <size>
      <width>180</width>
      <height>25</height>
     </size>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Define a customized shortcut by pressing the correspoding keys</string>
    </property>
-   <property name="statusTip" >
+   <property name="statusTip">
     <string>Define a customized shortcut by pressing the correspoding keys</string>
    </property>
-   <property name="whatsThis" >
+   <property name="whatsThis">
     <string>Dialog for defining customized shortcuts.</string>
    </property>
-   <property name="text" >
-    <string>Please type key sequence!</string>
+   <property name="text">
+    <string>Please type a key sequence!</string>
    </property>
   </widget>
-  <widget class="QRadioButton" name="customize_button" >
-   <property name="geometry" >
+  <widget class="QRadioButton" name="customize_button">
+   <property name="geometry">
     <rect>
      <x>10</x>
      <y>10</y>
@@ -99,16 +100,16 @@
      <height>25</height>
     </rect>
    </property>
-   <property name="minimumSize" >
+   <property name="minimumSize">
     <size>
      <width>130</width>
      <height>25</height>
     </size>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Custom Shortcut</string>
    </property>
-   <property name="checked" >
+   <property name="checked">
     <bool>true</bool>
    </property>
   </widget>

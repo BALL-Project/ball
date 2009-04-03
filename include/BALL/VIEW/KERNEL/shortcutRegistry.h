@@ -6,7 +6,7 @@
 #define BALL_VIEW_KERNEL_SHORTCUTREGISTRY_H
 
 #ifndef BALL_CONCEPT_EMBEDDABLE_H
-#	include <BALL/CONCEPT/embeddable.h>
+# include <BALL/CONCEPT/embeddable.h>
 #endif
 
 #include <map>
@@ -20,8 +20,7 @@
 namespace BALL
 {
 	namespace VIEW
-	{	
-
+	{
 		/** ShortcutRegistry 
 		*/
 		class BALL_VIEW_EXPORT ShortcutRegistry
@@ -30,17 +29,17 @@ namespace BALL
 			public:
 				BALL_EMBEDDABLE(ShortcutRegistry, Embeddable)
 				BALL_CREATE(ShortcutRegistry)
-				
+
 				///
 				ShortcutRegistry();
 
 				/** Destructor
 				*/
 				virtual ~ShortcutRegistry();
-				
+
 				///
 				void registerShortcut(String description, QAction* shortcut);
-	
+
 				///
 				void clear();
 
@@ -61,6 +60,7 @@ namespace BALL
 				bool hasDescription(const String& description);
 				bool hasKey(const QString& key_seq);
 				bool hasKey(const QKeySequence& key_seq);
+				bool hasKey(const String& key_seq);
 
 				std::pair<String, QAction*> operator[](Index i);
 
@@ -70,7 +70,7 @@ namespace BALL
 				std::map<String, QAction*> shortcuts_;
 				HashSet<String> shortcut_keys_;
 		};
-		
+
 	}// namespace VIEW
 }// namespace BALL
 
