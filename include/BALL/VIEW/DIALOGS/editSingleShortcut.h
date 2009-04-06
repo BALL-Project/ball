@@ -39,7 +39,7 @@ namespace BALL
 		*/
 		class BALL_VIEW_EXPORT EditSingleShortcut
 			: public QDialog,
-				public Ui_EditSingleShortcutData
+		    public Ui_EditSingleShortcutData
 		{
 			// macro needed for Qt's slot mechanism:
 			Q_OBJECT
@@ -52,32 +52,40 @@ namespace BALL
 				QKeySequence const& getKeySequence() const { return new_sequence_; }
 
 				void setIndex(const QModelIndex& index);
+				void reset();
+				void setup(const QString& shortcut);
 
 			public slots:
-				///
-				void setShortcutText(QString new_keysequence);
-
-				///
-				void setErrorText(QString error);
-
-				///
-				bool wasCustomMode(){return custom_shortcut_mode_ ;}
+				virtual void accept();
+				virtual void reject();
 
 			protected slots:
 				void modeChanged_(bool toggled);
 
 			protected:
-				bool custom_shortcut_mode_;
+				bool is_recording_;
 
 				unsigned int modifiers_;
 				int key_;
 				QKeySequence new_sequence_;
 
+				///
+				void setErrorText(QString error);
+
+				///
+				void setShortcutText(QString new_keysequence);
+
 				void updateText_();
+				void changeMode_(bool mode);
 
 				void keyPressEvent(QKeyEvent* evt);
 				void keyReleaseEvent(QKeyEvent* evt);
+
+				void startRecording_();
+				void stopRecording_();
 		};
 	}
 }
+
 #endif
+

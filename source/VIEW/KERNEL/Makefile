@@ -32,7 +32,8 @@ CPP_SOURCES=$(ASIO_SOURCES)\
 	threads.C
 
 MOC_SOURCES=$(ASIO_MOC_SOURCES)\
-	mainControl_moc.C
+	mainControl_moc.C\
+	shortcutRegistry_moc.C
 
 include ../../common.mak
 -include .Dependencies
@@ -40,6 +41,9 @@ include ../../common.mak
 mainControl_moc.C:  $(BALL_PATH)/include/BALL/VIEW/KERNEL/mainControl.h
 	$(MOC) $(BALL_PATH)/include/BALL/VIEW/KERNEL/mainControl.h -o mainControl_moc.C
  
+shortcutRegistry_moc.C:  $(BALL_PATH)/include/BALL/VIEW/KERNEL/shortcutRegistry.h
+	$(MOC) $^ -o $@
+
 serverWidget_moc.C:  $(BALL_PATH)/include/BALL/VIEW/KERNEL/serverWidget.h
 	$(MOC) $(BALL_PATH)/include/BALL/VIEW/KERNEL/serverWidget.h -o serverWidget_moc.C
  

@@ -23,22 +23,6 @@ namespace BALL
 
 		//////////////////////////   MODEL   ////////////////////////////
 
-		class ShortcutTableModel : public QAbstractTableModel
-		{
-			public:
-				ShortcutTableModel(ShortcutRegistry* reg);
-				int rowCount(const QModelIndex& parent = QModelIndex()) const;
-				int columnCount(const QModelIndex& parent = QModelIndex()) const;
-
-				QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-				QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-				Qt::ItemFlags flags(const QModelIndex& index) const;
-				bool isValid(const QKeySequence& seq) const;
-				bool setData(const QModelIndex& index, const QVariant& data, int role = Qt::EditRole);
-			private:
-				ShortcutRegistry* registry_;
-		};
-
 		ShortcutTableModel::ShortcutTableModel(ShortcutRegistry* reg)
 			: registry_(reg)
 		{
@@ -157,6 +141,9 @@ namespace BALL
 
 			connect(this, SIGNAL(doubleClicked(const QModelIndex&)),
 			        this, SLOT(  onDoubleClick(const QModelIndex&)));
+
+			connect(ShortcutRegistry::getInstance(0), SIGNAL(shortcutChanged()),
+			        proxy_model_, SLOT(invalidate()));
 		}
 
 		void ShortcutTableView::onDoubleClick(const QModelIndex& index)
@@ -168,13 +155,12 @@ namespace BALL
 			QModelIndex sc_index = index.model()->index(index.row(), 1, QModelIndex());
 
 			edited_row_ = sc_index.row();
-			editor_->setShortcutText(sc_index.data().toString());
+			editor_->setup(sc_index.data().toString());
 			editor_->show();
 		}
 
 		void ShortcutTableView::setFilter(const QString& filter)
 		{
-			proxy_model_->invalidate();
 			proxy_model_->setFilterFixedString(filter);
 		}
 
@@ -184,8 +170,10 @@ namespace BALL
 				return;
 			}
 
-			model()->setData(model()->index(edited_row_, 1, QModelIndex()),
-			                 QVariant::fromValue(editor_->getKeySequence()));
+			if(model()->setData(model()->index(edited_row_, 1, QModelIndex()),
+			                 QVariant::fromValue(editor_->getKeySequence()))) {
+				emit shortcutChanged();
+			}
 		}
 	}
 }

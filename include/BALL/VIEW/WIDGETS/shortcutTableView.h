@@ -28,6 +28,9 @@ namespace BALL
 
 				void setFilter(const QString& filter);
 
+			signals:
+				void shortcutChanged();
+
 			protected slots:
 				void editSuccess_();
 
@@ -39,6 +42,25 @@ namespace BALL
 				EditSingleShortcut* editor_;
 				int edited_row_;
 		};
+
+		class ShortcutTableModel : public QAbstractTableModel
+		{
+			Q_OBJECT
+
+			public:
+				ShortcutTableModel(ShortcutRegistry* reg);
+				int rowCount(const QModelIndex& parent = QModelIndex()) const;
+				int columnCount(const QModelIndex& parent = QModelIndex()) const;
+
+				QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+				QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+				Qt::ItemFlags flags(const QModelIndex& index) const;
+				bool isValid(const QKeySequence& seq) const;
+				bool setData(const QModelIndex& index, const QVariant& data, int role = Qt::EditRole);
+			private:
+				ShortcutRegistry* registry_;
+		};
+
 	}
 }
 
