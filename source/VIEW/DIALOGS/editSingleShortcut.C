@@ -17,7 +17,7 @@ namespace BALL
 		EditSingleShortcut::EditSingleShortcut(QWidget* parent, const char* name, Qt::WFlags)
 			: QDialog(parent),
 				Ui_EditSingleShortcutData(),
-				custom_shortcut_mode_(true),
+				is_recording_(false),
 			  modifiers_(0),
 				key_(0)
 		{
@@ -26,7 +26,6 @@ namespace BALL
 
 			setObjectName(name);
 			setAutoFillBackground(true);
-
 
 			// signals and slots connections
 			new_shortcut_label->setText("Please type key sequence!");
@@ -37,18 +36,64 @@ namespace BALL
 			connect(customize_button, SIGNAL(toggled(bool)), this, SLOT(modeChanged_(bool)));
 			connect(none_button,      SIGNAL(toggled(bool)), this, SLOT(modeChanged_(bool)));
 
-			new_shortcut_label->setText("Please type key sequence!");
 			setShortcutText("Please insert your shortcut now.");
 			grabKeyboard();
 		}
 
-		void EditSingleShortcut::modeChanged_(bool /*toggled*/)
+		void EditSingleShortcut::accept()
 		{
-			custom_shortcut_mode_ = customize_button->isChecked();
-			if (custom_shortcut_mode_)
-				new_shortcut_label->setText("Please insert your shortcut.");
-			else
-				new_shortcut_label->setText("Set shortcut to None.");
+			QDialog::accept();
+			stopRecording_();
+		}
+
+		void EditSingleShortcut::reject()
+		{
+			QDialog::reject();
+			stopRecording_();
+		}
+
+		void EditSingleShortcut::setup(const QString& seq)
+		{
+			new_sequence_ = QKeySequence(seq);
+
+			updateText_();
+
+			setErrorText("");
+			key_ = 0;
+			modifiers_ = 0;
+
+			if(new_sequence_ != QKeySequence()) {
+				customize_button->setChecked(true);
+				none_button->setChecked(false);
+			} else {
+				customize_button->setChecked(false);
+				none_button->setChecked(true);
+			}
+
+			changeMode_(new_sequence_ != QKeySequence());
+		}
+
+		void EditSingleShortcut::modeChanged_(bool toggled)
+		{
+			if(toggled) {
+				changeMode_(customize_button->isChecked());
+			}
+		}
+
+		void EditSingleShortcut::changeMode_(bool mode)
+		{
+			if(mode) {
+				if(new_sequence_ = QKeySequence()) {
+					setShortcutText("Please insert your shortcut.");
+				}
+				startRecording_();
+			} else {
+				key_ = 0;
+				modifiers_ = 0;
+				setShortcutText("None");
+				stopRecording_();
+				new_sequence_ = QKeySequence();
+			}
 		}
 
 		void EditSingleShortcut::setShortcutText(QString new_keysequence)
@@ -58,6 +103,10 @@ namespace BALL
 
 		void EditSingleShortcut::keyPressEvent(QKeyEvent* evt)
 		{
+			if(!is_recording_) {
+				return;
+			}
+
 			// Qt delivered a garbage keycode; Ignore it!
 			if (evt->key() == -1)
 			{
@@ -97,6 +146,10 @@ namespace BALL
 
 		void EditSingleShortcut::keyReleaseEvent(QKeyEvent* evt)
 		{
+			if(!is_recording_) {
+				return;
+			}
+
 			// Qt delivered a garbage keycode; Ignore it!
 			if (evt->key() == -1) {
 				return;
@@ -134,15 +187,43 @@ namespace BALL
 		void EditSingleShortcut::updateText_()
 		{
 			QString s = new_sequence_.toString(QKeySequence::NativeText);
+			//"Escape" the ampersand character
 			s.replace('&', QLatin1String("&&"));
+
+			if (ShortcutRegistry::getInstance(0)->hasKey(new_sequence_))
+			{
+				setErrorText("Shortcut already in use.");
+			}
+			else
+			{
+				setErrorText("");
+			}
 
 			setShortcutText(s);
 		}
 
 		void EditSingleShortcut::setErrorText(QString error)
 		{
-			error_label->setText(error);
+			//make it nice and red
+			error_label->setText("<span style=\" color:#ff0000;\">" + error + "</span>");
 		}
 
-	}//namespace VIEW
-}//namespace BALL
+		void EditSingleShortcut::startRecording_()
+		{
+			if(!is_recording_) {
+				grabKeyboard();
+				is_recording_ = true;
+			}
+		}
+
+		void EditSingleShortcut::stopRecording_()
+		{
+			if(is_recording_) {
+				releaseKeyboard();
+				is_recording_ = false;
+			}
+		}
+
+	} //namespace VIEW
+} //namespace BALL
+

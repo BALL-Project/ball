@@ -41,6 +41,8 @@ namespace BALL
 				{
 					shortcut_keys_.insert(key_seq);
 				}
+
+				emit shortcutChanged();
 			}
 			else
 				Log.warn() << "Double shortcut entry " << description << std::endl;
@@ -50,6 +52,8 @@ namespace BALL
 		{
 			shortcuts_.clear();
 			shortcut_keys_.clear();
+
+			emit shortcutChanged();
 		}
 
 		void ShortcutRegistry::clearKeySequences()
@@ -60,6 +64,8 @@ namespace BALL
 				it->second->setShortcut(QKeySequence());
 			}
 			shortcut_keys_.clear();
+
+			emit shortcutChanged();
 		}
 
 		bool ShortcutRegistry::readShortcutsFromFile(const String& filename)
@@ -111,6 +117,8 @@ namespace BALL
 			}
 
 			infile.close();
+
+			emit shortcutChanged();
 
 			return true;
 		}

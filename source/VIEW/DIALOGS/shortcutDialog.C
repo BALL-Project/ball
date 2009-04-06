@@ -41,10 +41,9 @@ namespace BALL
 			//registerWidgetForHelpSystem_(widget_stack->widget(0), "shortcuts.html#shortcuts");
 			hide();
 
-			connect( browse_export_button, SIGNAL( clicked() ), this, SLOT( browseExportFile_() ) );
-			connect( browse_import_button, SIGNAL( clicked() ), this, SLOT( browseImportFile_() ) );
-
-			connect(use_legacy_shortcuts, SIGNAL(stateChanged(int)), this, SLOT(loadLegacyShortcuts_()));
+			connect(browse_export_button, SIGNAL(clicked()), this, SLOT(browseExportFile_()));
+			connect(browse_import_button, SIGNAL(clicked()), this, SLOT(browseImportFile_()));
+			connect(tableView, SIGNAL(shortcutChanged()), this, SLOT(shortcutChanged_()));
 		}
 
 		ShortcutDialog::~ShortcutDialog()
@@ -68,7 +67,7 @@ namespace BALL
 			String filename = p.find("shortcuts_13.txt");
 			QString s = QFileDialog::getOpenFileName(
 																							 0,
-																							 "Choose a File to import Shortcuts",
+																							 "Choose a file to import shortcuts from",
 																							 //getMainControl()->getWorkingDir().c_str(),
 																							 filename.c_str(),
 																							 "Text files (*.*)");
@@ -107,21 +106,30 @@ namespace BALL
 			}
 		}
 
-		void ShortcutDialog::loadLegacyShortcuts_()
+		void ShortcutDialog::loadPredefinedShortcuts_(QString entry)
 		{
-			bool  load_legacy_shortcuts = use_legacy_shortcuts->isChecked();
+			Path p;
+			String filename;
 
-			if (load_legacy_shortcuts)
-			{
-				Path p;
-				String filename = p.find("BALLView/shortcuts_12.txt");
-				if (filename.isEmpty())
-				{
-					setStatusbarText("Could not load legacy shortcuts.");
-					return;
-				}
-				loadShortcutsFromFile_(filename);
+			if(entry == "Legacy Shortcuts (Version 1.3)") {
+				filename = p.find("BALLView/shortcuts_13.txt");
+			} else if(entry == "Legacy Shortcuts (Version 1.2)") {
+				filename = p.find("BALLView/shortcuts_12.txt");
+			} else if(entry == "Custom") {
+				return;
 			}
+
+			if (filename.isEmpty())
+			{
+				setStatusbarText("Could not load legacy shortcuts.");
+				return;
+			}
+			loadShortcutsFromFile_(filename);
+		}
+
+		void ShortcutDialog::shortcutChanged_()
+		{
+			predefined_combo_box->setCurrentIndex(2);
 		}
 
 		void ShortcutDialog::loadShortcutsFromFile_(const String& filename)

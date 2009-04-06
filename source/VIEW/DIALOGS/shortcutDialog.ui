@@ -31,13 +31,7 @@
   <property name="windowTitle">
    <string>Shortcuts</string>
   </property>
-  <layout class="QGridLayout">
-   <property name="margin">
-    <number>9</number>
-   </property>
-   <property name="spacing">
-    <number>6</number>
-   </property>
+  <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0" colspan="2">
     <widget class="QGroupBox" name="settings_group">
      <property name="title">
@@ -70,12 +64,6 @@
         <attribute name="verticalHeaderVisible">
          <bool>false</bool>
         </attribute>
-        <attribute name="verticalHeaderVisible">
-         <bool>false</bool>
-        </attribute>
-        <attribute name="horizontalHeaderHighlightSections">
-         <bool>false</bool>
-        </attribute>
        </widget>
       </item>
       <item row="0" column="1">
@@ -98,14 +86,7 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="QCheckBox" name="use_legacy_shortcuts">
-     <property name="text">
-      <string>Use Legacy Shortcuts (Version 1.2)</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
+   <item row="1" column="0" rowspan="3">
     <widget class="QGroupBox" name="orientation_group">
      <property name="title">
       <string>Load/Save Shortcuts from File</string>
@@ -176,6 +157,32 @@
      </layout>
     </widget>
    </item>
+   <item row="1" column="1">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Use Predefined Shortcuts:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QComboBox" name="predefined_combo_box">
+     <item>
+      <property name="text">
+       <string>Legacy Shortcuts (Version 1.3)</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Legacy Shortcuts (Version 1.2)</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Custom</string>
+      </property>
+     </item>
+    </widget>
+   </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
@@ -186,6 +193,14 @@
    <header>BALL/VIEW/WIDGETS/shortcutTableView.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>searchEdit</tabstop>
+  <tabstop>clearButton</tabstop>
+  <tabstop>tableView</tabstop>
+  <tabstop>browse_import_button</tabstop>
+  <tabstop>browse_export_button</tabstop>
+  <tabstop>predefined_combo_box</tabstop>
+ </tabstops>
  <includes>
   <include location="global">BALL/COMMON/global.h</include>
  </includes>
@@ -223,8 +238,25 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>predefined_combo_box</sender>
+   <signal>currentIndexChanged(QString)</signal>
+   <receiver>ShortcutDialogData</receiver>
+   <slot>loadPredefinedShortcuts_(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>432</x>
+     <y>329</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>391</x>
+     <y>350</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>searchTextChanged(QString)</slot>
+  <slot>loadPredefinedShortcuts_(QString)</slot>
  </slots>
 </ui>

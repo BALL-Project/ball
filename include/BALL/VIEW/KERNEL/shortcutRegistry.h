@@ -15,6 +15,7 @@
 # include <BALL/DATATYPE/hashSet.h>
 #endif
 
+#include <QtCore/QObject>
 #include <QtGui/QAction>
 
 namespace BALL
@@ -24,11 +25,14 @@ namespace BALL
 		/** ShortcutRegistry 
 		*/
 		class BALL_VIEW_EXPORT ShortcutRegistry
-			: public Embeddable
+			: public QObject,
+			  public Embeddable
 		{
+			Q_OBJECT
+
 			public:
 				BALL_EMBEDDABLE(ShortcutRegistry, Embeddable)
-				BALL_CREATE(ShortcutRegistry)
+//				BALL_CREATE(ShortcutRegistry)
 
 				///
 				ShortcutRegistry();
@@ -64,6 +68,9 @@ namespace BALL
 
 				std::pair<String, QAction*> operator[](Index i);
 
+			signals:
+				void shortcutChanged();
+
 			protected:
 				std::pair<String, QAction*> getEntry_(Index pos);
 
@@ -74,6 +81,5 @@ namespace BALL
 	}// namespace VIEW
 }// namespace BALL
 
-
-
 #endif // BALL_VIEW_KERNEL_SHORTCUTREGISTRY_H
+
