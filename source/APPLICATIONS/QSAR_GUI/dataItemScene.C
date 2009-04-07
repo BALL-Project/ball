@@ -60,14 +60,7 @@ QPointF DataItemScene::getOffset(QPointF& origin, DataItem* item)
 	for(uint i=0; i<50;i++)
 	{
 		QPointF p = origin+pos;
-		if( qgraphicsitem_cast<SDFInputDataItem*>(itemAt(p)) ||
-		    qgraphicsitem_cast<CSVInputDataItem*>(itemAt(p)) ||
-		    qgraphicsitem_cast<ModelItem*>(itemAt(p)) ||
-		    qgraphicsitem_cast<FeatureSelectionItem*>(itemAt(p)) ||
-		    qgraphicsitem_cast<ValidationItem*>(itemAt(p)) ||
-		    qgraphicsitem_cast<PredictionItem*>(itemAt(p)) ||
-		    qgraphicsitem_cast<PartitioningItem*>(itemAt(p)) ||
-		    qgraphicsitem_cast<InputPartitionItem*>(itemAt(p))	)
+		if((dynamic_cast<DataItem*>(itemAt(p))))
 		{
 			pos+=QPointF(200,0);
 		}
@@ -438,7 +431,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 	else if (type==FeatureSelectionItem::Type) 
 	{
 		FeatureSelectionItem* item;
-		ModelItem* model_item_at_pos = qgraphicsitem_cast<ModelItem *>(itemAt(pos));
+		ModelItem* model_item_at_pos = dynamic_cast<ModelItem*>(itemAt(pos));
 		
 		if(main_window->drag_source!="fs_list") return;
 		
@@ -495,7 +488,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 	else if (type==ValidationItem::Type) 
 	{
 		ValidationItem* item;
-		ModelItem* model_item_at_pos = qgraphicsitem_cast<ModelItem *>(itemAt(pos));
+		ModelItem* model_item_at_pos = dynamic_cast<ModelItem*>(itemAt(pos));
 		
 		if(main_window->drag_source!="val_list") return;
 		
@@ -608,7 +601,7 @@ void DataItemScene::createExternalValPipeline(ModelItem* model_item, ValidationI
 			item=*it;
 			if(item->type()==ModelItem::Type)
 			{
-				ModelItem* m_item=qgraphicsitem_cast<ModelItem*>(item);
+				ModelItem* m_item=dynamic_cast<ModelItem*>(item);
 				ModelItem* new_model = new ModelItem(*m_item); // copies model-/kernel-parameters and save_attribute_ 
 				if(model_item==m_item) target_model = new_model;
 				new_model->setInputDataItem(train_part);
