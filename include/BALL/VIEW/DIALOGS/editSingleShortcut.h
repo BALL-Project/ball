@@ -32,7 +32,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		//class MolecularStructure;
 
 		/** Widget for customizing BALLView shortcuts 
 				\ingroup ViewWidgets
@@ -84,6 +83,7 @@ namespace BALL
 				void startRecording_();
 				void stopRecording_();
 		};
+
 	}
 }
 

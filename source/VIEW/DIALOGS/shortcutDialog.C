@@ -96,7 +96,7 @@ namespace BALL
 																							 filename.c_str(),
 																							 "Text files (*.*)");
 
-			if (s.isEmpty())	return;
+			if (s.isEmpty()) return;
 
 			bool ret = ShortcutRegistry::getInstance(0)->writeShortcutsToFile(ascii(s));
 			if (!ret)
@@ -124,6 +124,7 @@ namespace BALL
 				setStatusbarText("Could not load legacy shortcuts.");
 				return;
 			}
+
 			loadShortcutsFromFile_(filename);
 		}
 
@@ -139,14 +140,16 @@ namespace BALL
 			bool ret = registry->readShortcutsFromFile(filename);
 			if (!ret)
 			{
-				String description = 	"Could not load shortcuts from file " +  filename + ".";
+				String description = "Could not load shortcuts from file " + filename + ".";
 				setStatusbarText(description);
 			}
 			else
 			{
-				String description = 	"Successfully loaded shortcuts from file " +  filename + ".";
+				String description = "Successfully loaded shortcuts from file " + filename + ".";
 				setStatusbarText(description);
 			}
 		}
+
 	}//namespace VIEW
 }//namespace BALL
+
