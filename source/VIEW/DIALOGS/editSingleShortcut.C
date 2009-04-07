@@ -37,7 +37,6 @@ namespace BALL
 			connect(none_button,      SIGNAL(toggled(bool)), this, SLOT(modeChanged_(bool)));
 
 			setShortcutText("Please insert your shortcut now.");
-			grabKeyboard();
 		}
 
 		void EditSingleShortcut::accept()
@@ -83,7 +82,7 @@ namespace BALL
 		void EditSingleShortcut::changeMode_(bool mode)
 		{
 			if(mode) {
-				if(new_sequence_ = QKeySequence()) {
+				if(new_sequence_ == QKeySequence()) {
 					setShortcutText("Please insert your shortcut.");
 				}
 				startRecording_();

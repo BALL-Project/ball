@@ -75,4 +75,6 @@ namespace BALL
 
 	}
 }
-#endif
+
+#endif //BALL_VIEW_DIALOGS_SHORTCUTDIALOG_H
+

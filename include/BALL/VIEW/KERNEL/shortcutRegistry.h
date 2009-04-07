@@ -58,6 +58,7 @@ namespace BALL
 
 				/// 
 				bool changeShortcut(QAction* shortcut, const String& new_sequence);
+				bool changeShortcut(int index, const String& new_sequence);
 
 				size_t size();
 

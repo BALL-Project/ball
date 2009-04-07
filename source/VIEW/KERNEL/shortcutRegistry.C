@@ -148,6 +148,37 @@ namespace BALL
 			return true;
 		}
 
+		bool ShortcutRegistry::changeShortcut(QAction* shortcut, const String& new_sequence)
+		{
+			if(!shortcut) {
+				throw Exception::NullPointer(__FILE__, __LINE__);
+			}
+
+			if(hasKey(new_sequence)) {
+				return false;
+			}
+
+			if(shortcut->shortcut() != QKeySequence()) {
+				shortcut_keys_.erase(ascii(shortcut->shortcut().toString()));
+			}
+
+			QKeySequence seq(new_sequence.c_str());
+
+			if(seq == QKeySequence()) {
+				return false;
+			}
+
+			shortcut_keys_.insert(ascii(seq.toString()));
+			shortcut->setShortcut(seq);
+
+			return true;
+		}
+
+		bool ShortcutRegistry::changeShortcut(int index, const String& new_sequence)
+		{
+			return changeShortcut(getEntry_(index).second, new_sequence);
+		}
+
 		size_t ShortcutRegistry::size()
 		{
 			return shortcuts_.size();
@@ -162,7 +193,7 @@ namespace BALL
 		{
 			return shortcut_keys_.has(ascii(key_seq));
 		}
-	
+
 		bool ShortcutRegistry::hasKey(const  QKeySequence& key_seq)
 		{
 			return hasKey(key_seq.toString());

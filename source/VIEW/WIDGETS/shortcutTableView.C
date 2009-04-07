@@ -103,20 +103,19 @@ namespace BALL
 		bool ShortcutTableModel::setData(const QModelIndex& index, const QVariant& data, int /*role*/)
 		{
 			QKeySequence seq = qvariant_cast<QKeySequence>(data);
-			Log.error() << "Setting Data to " << ascii(seq.toString())  << "." << std::endl;
+			QString new_seq = seq.toString();
+			Log.error() << "Setting Data to " << ascii(new_seq)  << "." << std::endl;
 
-			if ((index.column() == 1) && isValid(seq))
+			if ((index.column() == 1) && registry_->changeShortcut(index.row(), ascii(new_seq)))
 			{
-				(*registry_)[index.row()].second->setShortcut(seq);
-
 				// TODO: getDescription(QKeySequence) in shortcutRegistry to provide more helpful message.
-				Scene::getInstance(0)->setStatusbarText("Shortcut " + ascii(seq.toString()) + " successfully set.");
+				Scene::getInstance(0)->setStatusbarText("Shortcut " + ascii(new_seq) + " successfully set.");
 				emit dataChanged(index, index);
 				return true;
 			}
 
 			// TODO: getDescription(QKeySequence) in shortcutRegistry to provide more helpful message.
-			Scene::getInstance(0)->setStatusbarText("Shortcut " + ascii(seq.toString()) + " already associated!");
+			Scene::getInstance(0)->setStatusbarText("Shortcut " + ascii(new_seq) + " already associated!");
 
 			return false;
 		}
@@ -144,6 +143,8 @@ namespace BALL
 
 			connect(ShortcutRegistry::getInstance(0), SIGNAL(shortcutChanged()),
 			        proxy_model_, SLOT(invalidate()));
+
+			resizeColumnsToContents();
 		}
 
 		void ShortcutTableView::onDoubleClick(const QModelIndex& index)
@@ -175,6 +176,7 @@ namespace BALL
 				emit shortcutChanged();
 			}
 		}
+
 	}
 }
 
