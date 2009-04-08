@@ -45,7 +45,7 @@ RESULT
 
 
 AmberFF amber91;
-amber91.options[AmberFF::Option::FILENAME] = "Amber/test91.ini";
+amber91.options[AmberFF::Option::FILENAME] = "Amber/amber91.ini";
 amber91.options[AmberFF::Option::ASSIGN_CHARGES] = "false";
 
 CHECK(energy test 1 (Single Stretch) [AMBER91])
