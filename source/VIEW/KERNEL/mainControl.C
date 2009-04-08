@@ -1873,9 +1873,15 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		if (use_xdr)
+		{
 			pm = new XDRPersistenceManager(file, file);
+			pm->initializeInputStream();
+			((XDRPersistenceManager*)pm)->setHandleStreamsExternally(true);
+		}
 		else
+		{
 			pm = new TextPersistenceManager(file, file);
+		}
 
 		while (file.good() && !file.eof() && current_composite < nr_composites)
 		{
@@ -1893,6 +1899,12 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			insert(*system);
 			new_systems.push_back(system);
 			current_composite++;
+		}
+
+		if (use_xdr)
+		{
+			((XDRPersistenceManager*)pm)->setHandleStreamsExternally(false);
+			pm->finalizeInputStream();
 		}
 
 		delete (pm);
