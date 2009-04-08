@@ -28,6 +28,8 @@
 # include <BALL/VIEW/UIC/editSingleShortcutData.h>
 #endif
 
+class QModelIndex;
+
 namespace BALL
 {
 	namespace VIEW
