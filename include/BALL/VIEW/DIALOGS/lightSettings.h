@@ -112,7 +112,7 @@ namespace BALL
 			void saveSettingsToLight_();
 
 			//_ show the values of a light, after selecting an other one
-			void getValues_();
+			void getValues_(Index light = -1);
 
 			//_ empty all fields
 			void clearFields_();
