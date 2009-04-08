@@ -870,6 +870,7 @@ build_cpu
 build_vendor
 build_os
 BOOST_SYSTEM_LIB
+BOOST_THREAD_LIB
 ASIO_INCLUDES
 ASIO_LIBS
 BALL_HAS_ASIO
@@ -1633,6 +1634,10 @@ Optional Packages:
                           use the System library from boost - it is possible
                           to specify a certain library for the linker e.g.
                           --with-boost-system=boost_system-gcc-mt
+  --with-boost-thread[=special-lib]
+                          use the Thread library from boost - it is possible
+                          to specify a certain library for the linker e.g.
+                          --with-boost-thread=boost_thread-gcc-mt
   --with-asio-incl[=DIR]  path to asio includes
   --with-boost-asio[=special-lib]
                           use the ASIO library from boost - it is possible to
@@ -2686,7 +2691,7 @@ else
 	LPSOLVE_SUPPORT=
 fi
 
-if test "$enable_spacenavigator" != "no" -a "$USE_VIEW" == "true"; then
+if test "$USE_VIEW" == "true" -a "$enable_spacenavigator" = "yes" ; then
 	SPACENAV_SUPPORT=true
 	SPACENAV_LIBDIR=${with_spacenavigator_lib}
 	SPACENAV_INCLDIR=${with_spacenavigator_incl}
@@ -21536,8 +21541,388 @@ echo "$as_me: error: Could not link against $ax_lib !" >&2;}
     	LDFLAGS="$LDFLAGS_SAVED"
 	fi
 
+
+
+# Check whether --with-boost-thread was given.
+if test "${with_boost_thread+set}" = set; then
+  withval=$with_boost_thread;
+        if test "$withval" = "no"; then
+			want_boost="no"
+        elif test "$withval" = "yes"; then
+            want_boost="yes"
+            ax_boost_user_thread_lib=""
+        else
+		    want_boost="yes"
+        	ax_boost_user_thread_lib="$withval"
+		fi
+
+else
+  want_boost="yes"
+
+fi
+
+
+	if test "x$want_boost" = "xyes"; then
+
+
+		CPPFLAGS_SAVED="$CPPFLAGS"
+		CPPFLAGS="$CPPFLAGS $BOOST_CPPFLAGS"
+		export CPPFLAGS
+
+		LDFLAGS_SAVED="$LDFLAGS"
+		LDFLAGS="$LDFLAGS $BOOST_LDFLAGS"
+		export LDFLAGS
+
+        { echo "$as_me:$LINENO: checking whether the Boost::Thread library is available" >&5
+echo $ECHO_N "checking whether the Boost::Thread library is available... $ECHO_C" >&6; }
+if test "${ax_cv_boost_thread+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+			 CXXFLAGS_SAVE=$CXXFLAGS
+
+			 if test "x$build_os" = "xsolaris" ; then
+  				 CXXFLAGS="-pthreads $CXXFLAGS"
+			 elif test "x$build_os" = "xming32" ; then
+				 CXXFLAGS="-mthreads $CXXFLAGS"
+			 else
+				CXXFLAGS="-pthread $CXXFLAGS"
+			 fi
+			 cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <boost/thread/thread.hpp>
+int
+main ()
+{
+boost::thread_group thrds;
+                                   return 0;
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_cxx_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  ax_cv_boost_thread=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ax_cv_boost_thread=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+			 CXXFLAGS=$CXXFLAGS_SAVE
+             ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+
+fi
+{ echo "$as_me:$LINENO: result: $ax_cv_boost_thread" >&5
+echo "${ECHO_T}$ax_cv_boost_thread" >&6; }
+		if test "x$ax_cv_boost_thread" = "xyes"; then
+           if test "x$build_os" = "xsolaris" ; then
+			  BOOST_CPPFLAGS="-pthreads $BOOST_CPPFLAGS"
+		   elif test "x$build_os" = "xming32" ; then
+			  BOOST_CPPFLAGS="-mthreads $BOOST_CPPFLAGS"
+		   else
+			  BOOST_CPPFLAGS="-pthread $BOOST_CPPFLAGS"
+		   fi
+
+
+
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_BOOST_THREAD
+_ACEOF
+
+            BOOSTLIBDIR=`echo $BOOST_LDFLAGS | sed -e 's/[^\/]*//'`
+
+			LDFLAGS_SAVE=$LDFLAGS
+                        case "x$build_os" in
+                          *bsd* )
+                               LDFLAGS="-pthread $LDFLAGS"
+                          break;
+                          ;;
+                        esac
+            if test "x$ax_boost_user_thread_lib" = "x"; then
+                for libextension in `ls $BOOSTLIBDIR/libboost_thread*.{so,a}* 2>/dev/null | sed 's,.*/,,' | sed -e 's;^lib\(boost_thread.*\)\.so.*$;\1;' -e 's;^lib\(boost_thread.*\)\.a*$;\1;'` ; do
+                     ax_lib=${libextension}
+				    as_ac_Lib=`echo "ac_cv_lib_$ax_lib''_exit" | $as_tr_sh`
+{ echo "$as_me:$LINENO: checking for exit in -l$ax_lib" >&5
+echo $ECHO_N "checking for exit in -l$ax_lib... $ECHO_C" >&6; }
+if { as_var=$as_ac_Lib; eval "test \"\${$as_var+set}\" = set"; }; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-l$ax_lib  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char exit ();
+int
+main ()
+{
+return exit ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_cxx_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  eval "$as_ac_Lib=yes"
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	eval "$as_ac_Lib=no"
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+ac_res=`eval echo '${'$as_ac_Lib'}'`
+	       { echo "$as_me:$LINENO: result: $ac_res" >&5
+echo "${ECHO_T}$ac_res" >&6; }
+if test `eval echo '${'$as_ac_Lib'}'` = yes; then
+  BOOST_THREAD_LIB="-l$ax_lib";  link_thread="yes"; break
+else
+  link_thread="no"
+fi
+
+  				done
+                if test "x$link_thread" != "xyes"; then
+                for libextension in `ls $BOOSTLIBDIR/boost_thread*.{dll,a}* 2>/dev/null | sed 's,.*/,,' | sed -e 's;^\(boost_thread.*\)\.dll.*$;\1;' -e 's;^\(boost_thread.*\)\.a*$;\1;'` ; do
+                     ax_lib=${libextension}
+				    as_ac_Lib=`echo "ac_cv_lib_$ax_lib''_exit" | $as_tr_sh`
+{ echo "$as_me:$LINENO: checking for exit in -l$ax_lib" >&5
+echo $ECHO_N "checking for exit in -l$ax_lib... $ECHO_C" >&6; }
+if { as_var=$as_ac_Lib; eval "test \"\${$as_var+set}\" = set"; }; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-l$ax_lib  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char exit ();
+int
+main ()
+{
+return exit ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_cxx_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  eval "$as_ac_Lib=yes"
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	eval "$as_ac_Lib=no"
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+ac_res=`eval echo '${'$as_ac_Lib'}'`
+	       { echo "$as_me:$LINENO: result: $ac_res" >&5
+echo "${ECHO_T}$ac_res" >&6; }
+if test `eval echo '${'$as_ac_Lib'}'` = yes; then
+  BOOST_THREAD_LIB="-l$ax_lib";  link_thread="yes"; break
+else
+  link_thread="no"
+fi
+
+  				done
+                fi
+
+            else
+               for ax_lib in $ax_boost_user_thread_lib boost_thread-$ax_boost_user_thread_lib; do
+				      as_ac_Lib=`echo "ac_cv_lib_$ax_lib''_exit" | $as_tr_sh`
+{ echo "$as_me:$LINENO: checking for exit in -l$ax_lib" >&5
+echo $ECHO_N "checking for exit in -l$ax_lib... $ECHO_C" >&6; }
+if { as_var=$as_ac_Lib; eval "test \"\${$as_var+set}\" = set"; }; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-l$ax_lib  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char exit ();
+int
+main ()
+{
+return exit ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_cxx_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  eval "$as_ac_Lib=yes"
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	eval "$as_ac_Lib=no"
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+ac_res=`eval echo '${'$as_ac_Lib'}'`
+	       { echo "$as_me:$LINENO: result: $ac_res" >&5
+echo "${ECHO_T}$ac_res" >&6; }
+if test `eval echo '${'$as_ac_Lib'}'` = yes; then
+  BOOST_THREAD_LIB="-l$ax_lib";  link_thread="yes"; break
+else
+  link_thread="no"
+fi
+
+                  done
+
+            fi
+			if test "x$link_thread" = "xno"; then
+				{ { echo "$as_me:$LINENO: error: Could not link against $ax_lib !" >&5
+echo "$as_me: error: Could not link against $ax_lib !" >&2;}
+   { (exit 1); exit 1; }; }
+                        else
+                           case "x$build_os" in
+                              *bsd* )
+			        BOOST_LDFLAGS="-pthread $BOOST_LDFLAGS"
+                              break;
+                              ;;
+                           esac
+
+			fi
+		fi
+
+		CPPFLAGS="$CPPFLAGS_SAVED"
+    	LDFLAGS="$LDFLAGS_SAVED"
+	fi
+
+
+	if test "$ax_cv_boost_thread" = yes; then
+		cat >>confdefs.h <<\_ACEOF
+#define BALL_HAS_BOOST_THREAD 1
+_ACEOF
+
+	fi
+
 	BALL_INCLUDES="${BALL_INCLUDES} ${BOOST_CPPFLAGS}"
-	BOOST_LIBS="${BOOST_LDFLAGS} ${BOOST_SYSTEM_LIB}"
+	BOOST_LIBS="${BOOST_LDFLAGS} ${BOOST_SYSTEM_LIB} ${BOOST_THREAD_LIB}"
+	LDFLAGS="${LDFLAGS} ${BOOST_LDFLAGS}"
 
 
 
@@ -22782,9 +23167,9 @@ echo "${ECHO_T}disabled" >&6; }
 
 fi
 
-QT_MIN_VERSION=410
+QT_MIN_VERSION=420
 QT_MAX_VERSION=499
-QT_RECOMMENDED_VERSION=4.1.0
+QT_RECOMMENDED_VERSION=4.5.0
 
 if test "${USE_VIEW}" = true ; then
 	if test "${OS}" != "Darwin" ; then
@@ -28260,13 +28645,13 @@ if test "${lt_cv_nm_interface+set}" = set; then
 else
   lt_cv_nm_interface="BSD nm"
   echo "int some_variable = 0;" > conftest.$ac_ext
-  (eval echo "\"\$as_me:28263: $ac_compile\"" >&5)
+  (eval echo "\"\$as_me:28648: $ac_compile\"" >&5)
   (eval "$ac_compile" 2>conftest.err)
   cat conftest.err >&5
-  (eval echo "\"\$as_me:28266: $NM \\\"conftest.$ac_objext\\\"\"" >&5)
+  (eval echo "\"\$as_me:28651: $NM \\\"conftest.$ac_objext\\\"\"" >&5)
   (eval "$NM \"conftest.$ac_objext\"" 2>conftest.err > conftest.out)
   cat conftest.err >&5
-  (eval echo "\"\$as_me:28269: output\"" >&5)
+  (eval echo "\"\$as_me:28654: output\"" >&5)
   cat conftest.out >&5
   if $GREP 'External.*some_variable' conftest.out > /dev/null; then
     lt_cv_nm_interface="MS dumpbin"
@@ -29365,7 +29750,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 29368 "configure"' > conftest.$ac_ext
+  echo '#line 29753 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -31338,11 +31723,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:31341: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:31726: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:31345: \$? = $ac_status" >&5
+   echo "$as_me:31730: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -31662,11 +32047,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:31665: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:32050: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:31669: \$? = $ac_status" >&5
+   echo "$as_me:32054: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -31767,11 +32152,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:31770: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:32155: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:31774: \$? = $ac_status" >&5
+   echo "$as_me:32159: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -31822,11 +32207,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:31825: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:32210: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:31829: \$? = $ac_status" >&5
+   echo "$as_me:32214: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -34583,7 +34968,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<_LT_EOF
-#line 34586 "configure"
+#line 34971 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -34683,7 +35068,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<_LT_EOF
-#line 34686 "configure"
+#line 35071 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -36686,11 +37071,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:36689: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:37074: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:36693: \$? = $ac_status" >&5
+   echo "$as_me:37078: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -36785,11 +37170,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:36788: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:37173: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:36792: \$? = $ac_status" >&5
+   echo "$as_me:37177: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -36837,11 +37222,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:36840: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:37225: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:36844: \$? = $ac_status" >&5
+   echo "$as_me:37229: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -39078,6 +39463,7 @@ build_cpu!$build_cpu$ac_delim
 build_vendor!$build_vendor$ac_delim
 build_os!$build_os$ac_delim
 BOOST_SYSTEM_LIB!$BOOST_SYSTEM_LIB$ac_delim
+BOOST_THREAD_LIB!$BOOST_THREAD_LIB$ac_delim
 ASIO_INCLUDES!$ASIO_INCLUDES$ac_delim
 ASIO_LIBS!$ASIO_LIBS$ac_delim
 BALL_HAS_ASIO!$BALL_HAS_ASIO$ac_delim
@@ -39165,7 +39551,6 @@ LINKER!$LINKER$ac_delim
 LIBDIR!$LIBDIR$ac_delim
 ADDITIONAL_COMMENTS!$ADDITIONAL_COMMENTS$ac_delim
 USE_VIEW!$USE_VIEW$ac_delim
-BALL_HAS_VIEW!$BALL_HAS_VIEW$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -39207,6 +39592,7 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+BALL_HAS_VIEW!$BALL_HAS_VIEW$ac_delim
 VIEW_PLATFORM!$VIEW_PLATFORM$ac_delim
 LIBVIEW!$LIBVIEW$ac_delim
 TEMPLATE_DIR!$TEMPLATE_DIR$ac_delim
@@ -39215,7 +39601,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 6; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 7; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
