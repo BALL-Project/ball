@@ -214,12 +214,10 @@ namespace BALL
 	}
 
 	void PersistenceManager::initializeInputStream()
-		
 	{
 	}
 
 	void PersistenceManager::finalizeInputStream()
-		
 	{
 	}
 

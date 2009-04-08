@@ -348,6 +348,16 @@ namespace BALL
       ;
 		//@}
 
+		/** Accesssors
+		 */
+		//@{
+
+		/** With this method, our caller can take responsibility for
+		 *  initializing and destroying the XDR streams.
+		 */
+		void setHandleStreamsExternally(bool handle_externally);
+			
+		//@}
 		private:
 
 		/**	The XDR struct used to read from
@@ -357,6 +367,11 @@ namespace BALL
 		/**	The XDR struct used to write to
 		*/
 		XDR		xdr_out_;
+
+		/** If this flag is set to true, we will not destroy
+		 *  or initialize the XDR variables automatically.
+		 */
+		bool streams_handled_externally_;
 		
 	};
 
