@@ -8,6 +8,11 @@ AC_DEFUN([CF_BOOST], [
 	AX_BOOST_SYSTEM()
 	AX_BOOST_THREAD()
 
+	dnl
+	dnl		delete potential occurences of /usr/lib from the LDFLAGS
+	dnl
+	BOOST_LDFLAGS=$(cat ${BOOST_LDFLAGS} | ${SED} "s_/usr/lib/__g")
+
 	if test "$ax_cv_boost_thread" = yes; then
 		AC_DEFINE(PROJECT[]_HAS_BOOST_THREAD)
 	fi
