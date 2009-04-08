@@ -234,16 +234,10 @@ void LightSettings::removeLightPressed()
 	}
 	lights_.erase(it);
 
-	update();
+	getValues_(current);
+	lights_list->setCurrentRow(current);
 
-	if (current == 0)
-	{ 
-		// the light we removed was the first one -> select the new first item
-		if (lights_.size() > 0)
-			lights_list->setCurrentRow(0, QItemSelectionModel::Select);
-	}
-	else
-		lights_list->setCurrentRow(current-1, QItemSelectionModel::Select);
+	update();
 }
 
 
@@ -280,9 +274,10 @@ void LightSettings::typeSelected_(Position type)
 	label_3->setEnabled(pos_enabled);
 }
 
-void LightSettings::getValues_()
+void LightSettings::getValues_(Index current)
 {
-	Index current = getCurrentLightNumber_();
+	if (current == -1)
+		current = getCurrentLightNumber_();
 
 	if (current == -1) return;
 
