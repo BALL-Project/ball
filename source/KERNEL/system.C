@@ -29,7 +29,7 @@ namespace BALL
 		throw(Exception::GeneralException)
   {
     pm.writeObjectHeader(this, name);
-      AtomContainer::persistentWrite(pm);
+		AtomContainer::persistentWrite(pm);
     pm.writeObjectTrailer(name);
 	}
 
@@ -37,7 +37,7 @@ namespace BALL
 		throw(Exception::GeneralException)
   {
     pm.checkObjectHeader(RTTI::getStreamName<AtomContainer>());
-			AtomContainer::persistentRead(pm);
+		AtomContainer::persistentRead(pm);
     pm.checkObjectTrailer(0);
 	}
 
