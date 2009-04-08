@@ -16,7 +16,10 @@
 #include <QtCore/QWriteLocker>
 
 #ifdef BALL_HAS_BOOST_THREAD
+# include <boost/version.hpp>
+# if BOOST_VERSION >= 103500
 #	include <boost/thread/mutex.hpp>
+# endif
 #endif
 
 #undef BALL_USE_THREAD_CHECKER_API
