@@ -514,6 +514,8 @@ namespace BALL
 		void GeometricControl::enterMoveMode()
 		{
 			getMainControl()->clearSelection();
+			selectAtoms();
+
 			notify_(new SceneMessage(SceneMessage::ENTER_MOVE_MODE));
 		}
 
