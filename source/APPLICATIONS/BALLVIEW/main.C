@@ -17,7 +17,6 @@
 #include <QtOpenGL/qgl.h>
 
 #include "mainframe.h"
-#include "splash.h"
 #include <BALL/SYSTEM/path.h>
 #include <BALL/SYSTEM/directory.h>
 #include <BALL/COMMON/logStream.h>
@@ -72,7 +71,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 	putenv("BALL_RETURN_VALUE=");
 	QApplication application(argc, argv);
 
-  QPixmap splash_pm(splash_xpm);
+  QPixmap splash_pm("BALLView-1.3-Splashscreen.png");
   QSplashScreen* splash = new QSplashScreen(splash_pm);
   splash->show();
 

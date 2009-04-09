@@ -25,8 +25,7 @@ CPP_SOURCES=\
 	demoTutorialDialog.C\
 	icons.C\
 	main.C\
-	mainframe.C\
-	splash.C
+	mainframe.C
 
 MOC_SOURCES=\
 	demoTutorialDialog_moc.C\
