@@ -578,7 +578,9 @@ namespace BALL
 
 			// Make sure BALLView knows about the new representation.
 			getMainControl()->insert(*rep);
+			getMainControl()->getRepresentationManager().focusRepresentation(*rep);
 			getMainControl()->update(*rep);
+
 			return true;
 		}
 
