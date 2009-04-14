@@ -1469,22 +1469,174 @@ namespace BALL
 			///////////////////////////////////////////////////////////////////
 			else if (drawing_mode_ == DRAWING_MODE_WIREFRAME)
 			{
-				for (Size index = 0; index < nr_triangles; ++index)
+				if (model_type_ == MODEL_CONTOUR_SURFACE)
 				{
-					glBegin(GL_LINE_STRIP);
+					
+					Position masking_bit = 0;
+					Position mask_12 = 1;
+					Position mask_23 = 2;
+					Position mask_31 = 4;
+					Vector3 v1, v2, v3;
+					vector<Position> triangle_masks;
 
-					normalVector3_(normal_vector_);
+					for (Size index = 0; index < nr_triangles; ++index)
+					{
+						v1 = mesh.vertex[mesh.triangle[index].v1];
+						v2 = mesh.vertex[mesh.triangle[index].v2];
+						v3 = mesh.vertex[mesh.triangle[index].v3];
+						
+						float trs = 0.02;
+						if	(	((fabs(v1.x - v2.x) <= trs) && v3.x != v1.x)
+								||((fabs(v1.y - v2.y) <= trs) && v3.y != v1.y)
+								||((fabs(v1.z - v2.z) <= trs) && v3.z != v1.z))
+							masking_bit |= mask_12;
+						if	(	((fabs(v2.x - v3.x) <= trs) && v1.x != v2.x)
+								||((fabs(v2.y - v3.y) <= trs) && v1.y != v2.y)
+								||((fabs(v2.z - v3.z) <= trs) && v1.z != v2.z))
+							masking_bit |= mask_23;		
+						if	(	((fabs(v3.x - v1.x) <= trs) && v2.x != v3.x)
+								||((fabs(v3.y - v1.y) <= trs) && v2.y != v3.y)
+								||((fabs(v3.z - v1.z) <= trs) && v2.z != v3.z))
+							masking_bit |= mask_31;
+						
+						masking_bit ^= 7;
+						triangle_masks.push_back(masking_bit);
+						masking_bit = 0;
+					}
 
-					if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v1]);
-					vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
+					for (Size index = 0; index < nr_triangles; ++index)
+					{
+						if (triangle_masks[index] == 0)
+						{
+							glBegin(GL_LINE_LOOP);
 
-					if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v2]);
-					vertexVector3_(mesh.vertex[mesh.triangle[index].v2]);
+							normalVector3_(normal_vector_);
 
-					if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v3]);
-					vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
+							if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v1]);
+							vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
 
-					glEnd();
+							if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v2]);
+							vertexVector3_(mesh.vertex[mesh.triangle[index].v2]);
+
+							if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v3]);
+							vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
+
+							glEnd();
+						}
+						else if (triangle_masks[index] == 1)
+						{
+							glBegin(GL_LINE_STRIP);
+
+							normalVector3_(normal_vector_);
+
+							if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v1]);
+							vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
+
+							if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v3]);
+							vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
+
+							if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v2]);
+							vertexVector3_(mesh.vertex[mesh.triangle[index].v2]);
+
+							glEnd();
+						}
+						else if (triangle_masks[index] == 2)
+						{
+							glBegin(GL_LINE_STRIP);
+
+							normalVector3_(normal_vector_);
+
+							if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v2]);
+							vertexVector3_(mesh.vertex[mesh.triangle[index].v2]);
+
+							if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v1]);
+							vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
+
+							if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v3]);
+							vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
+
+							glEnd();
+						}
+						else if (triangle_masks[index] == 3)
+						{
+							glBegin(GL_LINE_STRIP);
+
+							normalVector3_(normal_vector_);
+
+							if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v1]);
+							vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
+
+							if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v3]);
+							vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
+
+							glEnd();
+						}
+						else if (triangle_masks[index] == 4)
+						{
+							glBegin(GL_LINE_STRIP);
+
+							normalVector3_(normal_vector_);
+
+							if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v1]);
+							vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
+
+							if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v2]);
+							vertexVector3_(mesh.vertex[mesh.triangle[index].v2]);
+
+							if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v3]);
+							vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
+
+							glEnd();
+						}
+						else if (triangle_masks[index] == 5)
+						{
+							glBegin(GL_LINE_STRIP);
+
+							normalVector3_(normal_vector_);
+
+							if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v2]);
+							vertexVector3_(mesh.vertex[mesh.triangle[index].v2]);
+
+							if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v3]);
+							vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
+
+							glEnd();
+						}
+						else if (triangle_masks[index] == 6)
+						{
+							glBegin(GL_LINE_STRIP);
+
+							normalVector3_(normal_vector_);
+
+							if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v1]);
+							vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
+
+							if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v2]);
+							vertexVector3_(mesh.vertex[mesh.triangle[index].v2]);
+
+							glEnd();
+						}
+					}
+				}
+				else
+				{
+					for (Size index = 0; index < nr_triangles; ++index)
+					{
+						glBegin(GL_LINE_LOOP);
+
+						normalVector3_(normal_vector_);
+
+						if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v1]);
+						vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
+
+						if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v2]);
+						vertexVector3_(mesh.vertex[mesh.triangle[index].v2]);
+
+						if (multiple_colors) setColorRGBA_(mesh.colors[mesh.triangle[index].v3]);
+						vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
+
+						glEnd();
+					}
 				}
 			}
 			///////////////////////////////////////////////////////////////////
