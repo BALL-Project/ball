@@ -845,10 +845,8 @@ namespace BALL
 
 			GLRenderWindow* main_display_;
 
-			/*
-			StereoHalfImage* left_eye_widget_;
-			StereoHalfImage* right_eye_widget_;
-			*/
+			Index stereo_left_eye_;
+			Index stereo_right_eye_;
 		};
 
 

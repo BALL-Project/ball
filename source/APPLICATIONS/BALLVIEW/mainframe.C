@@ -229,13 +229,6 @@ namespace BALL
 			return true;
 		}
 
-		if (widget != scene_ &&
-        e->key() == Qt::Key_Escape) 
-		{
- 			scene_->switchToLastMode();
-			return true;
-		}
-
  		if (e->key() == Qt::Key_Delete &&
 				RTTI::isKindOf<QTreeWidget>(*sender))
  		{
