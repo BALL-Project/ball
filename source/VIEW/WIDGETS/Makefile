@@ -33,7 +33,6 @@ CPP_SOURCES=\
 	SDWidget.C\
 	testFramework.C\
 	datasetControl.C
-#	stereoHalfImage.C\
 
 #	canvasWidget.C\
 #	regularData2DWidget.C\
