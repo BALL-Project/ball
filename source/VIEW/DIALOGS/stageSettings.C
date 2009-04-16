@@ -41,6 +41,7 @@ namespace BALL
 			setDefaultValues_();
 			setINIFileSectionName("STAGE");
 			setWidgetStackName("Display");
+			widget_stack->removeWidget(RTFact);
 			setWidgetStack(widget_stack);
 			registerWidgets_();
 
@@ -303,6 +304,7 @@ namespace BALL
 			//smooth_lines_->setChecked(false);
 			fog_box->setChecked(false);
 			fog_slider->setValue(200);
+			environment_map->setDisabled(true);
 			environment_map->setChecked(false);
 			
 			setTextureUpDirection_(stage_->getCamera().getLookUpVector());	
