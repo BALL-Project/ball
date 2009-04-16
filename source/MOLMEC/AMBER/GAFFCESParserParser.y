@@ -3,13 +3,13 @@
 #include <BALL/MOLMEC/AMBER/GAFFCESParser.h>
 
 #include <iostream>
-#include <malloc.h>
+#include <cstdlib>
 
 using namespace BALL;
 using namespace std;
 
 extern int yylex();
-extern void yyerror(char* s);
+extern void yyerror(const char* s);
 
 /* There is some nasty problem with alloca under Intel/icc/Linux */
 /* so we use (inefficient) malloc instead. */
@@ -221,7 +221,7 @@ atom_definition:	ATOMSTRING {
 	};
 
 %%
-void yyerror(char* s)
+void yyerror(const char* s)
 {
 	printf("Parse Error! %s\n", s);
 }
