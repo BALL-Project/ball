@@ -631,9 +631,6 @@ namespace BALL
 			/// Reset the camera to standard values
 			virtual void resetCamera_();
 
-			/// Update the GL camera and if necessary the lights
-			virtual void updateCamera_();
-			
 			/** Rebuffer all representations for the current renderer_.
 			 *  Note: this function does not yet clear the old state of the renderer.
 			 */

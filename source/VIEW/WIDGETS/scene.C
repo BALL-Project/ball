@@ -401,8 +401,8 @@ namespace BALL
 				case SceneMessage::UPDATE_CAMERA:
 					stage_->getCamera() = scene_message->getStage().getCamera();
 					system_origin_ = scene_message->getStage().getCamera().getLookAtPosition();
-					updateCamera_();
 					light_settings_->updateFromStage();
+					updateGL();
 					return;
 
 				case SceneMessage::REMOVE_COORDINATE_SYSTEM:
@@ -651,7 +651,7 @@ namespace BALL
 
 			camera.setLookUpVector(m * camera.getLookUpVector());
 			stage_->getCamera() = camera;
-			updateCamera_();
+			updateGL();
 		}
 
 		void Scene::move(Vector3 v)
@@ -659,7 +659,7 @@ namespace BALL
 			Camera& camera = stage_->getCamera();
 
 			camera.translate(-getTranslationVector_(v));
-			updateCamera_();
+			updateGL();
 		}
 
 		void Scene::rotate(float degree_right, float degree_up)
@@ -675,7 +675,7 @@ namespace BALL
  			q1 += q2;
 			
 			stage_->getCamera().rotate(q1, system_origin_);
-			updateCamera_();
+			updateGL();
 		}
 
 		void Scene::moveComposites(const List<Composite*>& composites, Vector3 v)
@@ -872,20 +872,7 @@ namespace BALL
 		{
 			// new instance for default values
 			stage_->getCamera().clear();
-			updateCamera_();
  			light_settings_->updateFromStage();
-		}
-
-		void Scene::updateCamera_()
-		{
-			// NOTE: we do *not* call renderers_[i].updateCamera() here, since this is
-			// 			 already handled by paintGL(). Maybe it would be nicer to have all
-			// 			 camera updates only in this single place, but coupling camera update
-			// 			 to rendering allows, e.g., to have the same renderer render into
-			// 			 different targets with different offset
-			//
-			// TODO: we do not need this function any longer and should be able to replace
-			//       it completely by updateGL()
 
 			updateGL();
 		}
@@ -1171,8 +1158,6 @@ namespace BALL
 
 			for (Position i=0; i<renderers_.size(); ++i)
 				renderers_[i].setLights(true);
-
-			updateCamera_();
 
 			bool showed_coordinate = stage_->coordinateSystemEnabled();
 			stage_settings_->apply();
@@ -2835,8 +2820,9 @@ return;
 		void Scene::setCamera(const Camera& camera)
 		{
 			stage_->getCamera() = camera;
-			updateCamera_();
  			light_settings_->updateFromStage();
+
+			updateGL();
 		}
 
 		void Scene::clearRecordedAnimation()
@@ -3199,7 +3185,7 @@ return;
 		void Scene::restoreViewPoint()
 		{
 			getStage()->setCamera(stored_camera_);
-			updateCamera_();
+			updateGL();
 		}
 
 		void Scene::storeViewPoint()
