@@ -883,21 +883,9 @@ namespace BALL
 			// 			 camera updates only in this single place, but coupling camera update
 			// 			 to rendering allows, e.g., to have the same renderer render into
 			// 			 different targets with different offset
-			for (Position i=0; i<renderers_.size(); ++i)
-			{
-				Renderer* current_renderer = renderers_[i].renderer;
-
-				if (RTTI::isKindOf<GLRenderer>(*current_renderer))
-				{
-					GLRenderer* current_gl_renderer = (GLRenderer*)current_renderer;
-
-					if (current_gl_renderer->getStereoMode() == GLRenderer::NO_STEREO)
-					{
-						// TODO: do we need a reset all here??? and dont we want to set that for all kinds of renderers?
-						renderers_[i].setLights();
-					}
-				}
-			}
+			//
+			// TODO: we do not need this function any longer and should be able to replace
+			//       it completely by updateGL()
 
 			updateGL();
 		}

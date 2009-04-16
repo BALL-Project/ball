@@ -1971,6 +1971,8 @@ namespace BALL
 								camera->getLookUpVector().z);
 
 			normal_vector_ = (-camera->getViewVector().normalize());
+
+			setLights(false);
 		}
 
 		void GLRenderer::setupStereo(float eye_separation, float focal_length)
