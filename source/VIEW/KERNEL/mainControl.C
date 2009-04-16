@@ -559,7 +559,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			Log.error() << "MainControl::aboutToExit()" << std::endl;
 		#endif
 			about_to_quit_ = true;
-			
+
 			stopSimulation();
 
 			// write the preferences
@@ -1497,11 +1497,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			{
 				notify_(new SceneMessage(SceneMessage::REMOVE_COORDINATE_SYSTEM));
 			}
-			else if (rep.hasProperty("AX"))
-			{
-				notify_(new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS));
-			}
-					
+
 			notify_(new RepresentationMessage(rep, RepresentationMessage::REMOVE));
 
 			return primitive_manager_.remove(rep);
