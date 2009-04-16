@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="BALLView"
 	ProjectGUID="{B45D0A45-D1B7-45B4-A78E-C0F2E4B48D0D}"
 	RootNamespace="BALLView"
@@ -249,26 +249,6 @@
 					/>
 				</FileConfiguration>
 			</File>
-			<File
-				RelativePath="..\..\..\source\APPLICATIONS\BALLVIEW\splash.C"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="2"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="2"
-					/>
-				</FileConfiguration>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -330,10 +310,6 @@
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_mainframe.cpp&quot;"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\source\APPLICATIONS\BALLVIEW\splash.h"
-				>
 			</File>
 		</Filter>
 		<Filter
