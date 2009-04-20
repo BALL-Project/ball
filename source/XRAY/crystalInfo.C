@@ -186,7 +186,7 @@ namespace BALL
 	const Matrix4x4& CrystalInfo::getNCS(Position p) const
 		throw(Exception::IndexOverflow)
 	{
-		if (p > (ncs_symops_.size()))
+		if (p >= (ncs_symops_.size()))
 		{
 			throw Exception::IndexOverflow(__FILE__, __LINE__, p, ncs_symops_.size());
 		}
@@ -196,7 +196,7 @@ namespace BALL
 	Matrix4x4& CrystalInfo::getNCS(Position p)
 		throw(Exception::IndexOverflow)
 	{
-		if (p > (ncs_symops_.size()))
+		if (p >= (ncs_symops_.size()))
 		{
 			throw Exception::IndexOverflow(__FILE__, __LINE__, p, ncs_symops_.size());
 		}
@@ -206,7 +206,7 @@ namespace BALL
 	const bool CrystalInfo::isgivenNCS(Position p) const
 		throw(Exception::IndexOverflow)
 	{
-		if (p > (ncs_symops_.size()))
+		if (p >= (ncs_symops_.size()))
 		{
 			throw Exception::IndexOverflow(__FILE__, __LINE__, p, ncs_symops_.size());
 		}
@@ -216,7 +216,7 @@ namespace BALL
 	bool CrystalInfo::isgivenNCS(Position p)
 		throw(Exception::IndexOverflow)
 	{
-		if (p > (ncs_symops_.size()))
+		if (p >= (ncs_symops_.size()))
 		{
 			throw Exception::IndexOverflow(__FILE__, __LINE__, p, ncs_symops_.size());
 		}
