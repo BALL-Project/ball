@@ -55,8 +55,8 @@ namespace BALL
 			// entries of them in the INIFile will be generated
 			setINIFileSectionName("DOCKING");
 			registerWidgets_();
-			unregisterWidget_(systems1);
-			unregisterWidget_(systems2);
+			unregisterObject_(systems1);
+			unregisterObject_(systems2);
 			
 			// set flag
 			is_redock_ = false;

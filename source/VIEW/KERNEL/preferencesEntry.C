@@ -33,7 +33,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "New PreferencesEntry " << (void *)this << std::endl;
-			#endif 
+			#endif
 		}
 
 		PreferencesEntry::~PreferencesEntry()
@@ -49,14 +49,14 @@ namespace BALL
 				return;
 			}
 
-			QList<QWidget*> widgets = obj->findChildren<QWidget *>();
-			QList<QWidget*>::iterator it2 = widgets.begin();
+			QList<QObject*> widgets = obj->findChildren<QObject *>();
+			QList<QObject*>::iterator it2 = widgets.begin();
 			for (; it2 != widgets.end(); it2++)
 			{
-				QWidget& widget = **it2;
-				if (isSupported_(widget)) registerWidget_(&widget);
+				QObject& widget = **it2;
+				if (isSupported_(widget)) registerObject_(&widget);
 			}
-			
+
 			//////////////////////////////////////////////////////
 			// prevent problems with inconsistant sliders/labels combinations:
 			QList<QSlider*> sliders = obj->findChildren<QSlider*>();
@@ -74,19 +74,19 @@ namespace BALL
 					slider.setValue(value + 1);
 				}
 
- 				slider.setValue(value);
+				slider.setValue(value);
 			}
 		}
 
 
-		bool PreferencesEntry::isSupported_(QWidget& widget)
+		bool PreferencesEntry::isSupported_(QObject& widget)
 		{
 			if (RTTI::isKindOf<ExtendedPreferencesObject>(widget) ||
-					RTTI::isKindOf<QSlider>(widget) 			||
-					RTTI::isKindOf<QSpinBox>(widget)			||
-					RTTI::isKindOf<QLineEdit>(widget)			||
-					RTTI::isKindOf<QCheckBox>(widget)			||
-					RTTI::isKindOf<QComboBox>(widget)			||
+					RTTI::isKindOf<QSlider>(widget)   ||
+					RTTI::isKindOf<QSpinBox>(widget)  ||
+					RTTI::isKindOf<QLineEdit>(widget) ||
+					RTTI::isKindOf<QCheckBox>(widget) ||
+					RTTI::isKindOf<QComboBox>(widget) ||
 					RTTI::isKindOf<QButtonGroup>(widget))
 			{
 				return true;
@@ -94,7 +94,7 @@ namespace BALL
 
 			// color labels
 			QLabel* label = dynamic_cast<QLabel*>(&widget);
-			if (label != 0 								&& 
+			if (label != 0                &&
 					label->objectName() != "" &&
 					label->text() == "")
 			{
@@ -121,7 +121,7 @@ namespace BALL
 				return;
 			}
 
-			if (inifile_section_name_ == "") 
+			if (inifile_section_name_ == "")
 			{
 				Log.error() << "INIFile section name not set in " << ascii(widget->objectName()) << std::endl;
 				StackPages::const_iterator lit = stack_pages_.begin();
@@ -139,8 +139,8 @@ namespace BALL
 			}
 
 			String value, name;
-			
-			HashSet<QWidget*>::Iterator it = registered_objects_.begin();
+
+			HashSet<QObject*>::Iterator it = registered_objects_.begin();
 			for (; it != registered_objects_.end(); it++)
 			{
 				name = ascii((**it).objectName());
@@ -163,7 +163,7 @@ namespace BALL
 		}
 
 
-		bool PreferencesEntry::getValue_(const QWidget* widget, String& value)
+		bool PreferencesEntry::getValue_(const QObject* widget, String& value)
 		{
 			const ExtendedPreferencesObject* epo = dynamic_cast<const ExtendedPreferencesObject*>(widget);
 			if (epo != 0)
@@ -215,7 +215,7 @@ namespace BALL
 				value.clear();
 				// QGroupBoxes can either be checkable and/or have QRadioButtons as childs
 				const QGroupBox* gb = dynamic_cast<const QGroupBox*>(widget);
-				if (gb->isCheckable() && gb->isChecked()) 
+				if (gb->isCheckable() && gb->isChecked())
 				{
 					value = "#";
 				}
@@ -249,7 +249,7 @@ namespace BALL
 
 		void PreferencesEntry::readPreferenceEntries(const INIFile& inifile)
 		{
-			HashSet<QWidget*>::Iterator it = registered_objects_.begin();
+			HashSet<QObject*>::Iterator it = registered_objects_.begin();
 			for (; it != registered_objects_.end(); it++)
 			{
 				if (!inifile.hasEntry(inifile_section_name_, ascii((**it).objectName()))) continue;
@@ -262,8 +262,8 @@ namespace BALL
 				}
 			}
 		}
-		
-		bool PreferencesEntry::setValue_(QWidget* widget, const String& value)
+
+		bool PreferencesEntry::setValue_(QObject* widget, const String& value)
 		{
 			try
 			{
@@ -312,11 +312,11 @@ namespace BALL
 					{
 						gb->setChecked(v[0] == '#');
 					}
-						
+
 					v.trimLeft("#");
 
 					QRadioButton* button = widget->findChild<QRadioButton*>(v.c_str());
-					if (button != 0) 
+					if (button != 0)
 					{
 						button->setChecked(true);
 						return true;
@@ -324,12 +324,12 @@ namespace BALL
 
 					if (!gb->isCheckable())
 					{
-						Log.error() << "Warning: Could not find QRadioButton " << value 
+						Log.error() << "Warning: Could not find QRadioButton " << value
 												<< " in GroupBox in PreferencesEntry" << std::endl;
 						return false;
 					}
 				}
-				else 
+				else
 				{
 					Log.error() << "Unknown QWidget " << ascii(widget->objectName()) << " in ";
 					if (widget->parent() != 0)
@@ -349,8 +349,8 @@ namespace BALL
 			return true;
 		}
 
-		
-		void PreferencesEntry::registerWidget_(QWidget* widget)
+
+		void PreferencesEntry::registerObject_(QObject* widget)
 		{
 			if (widget == 0) return;
 
@@ -362,7 +362,7 @@ namespace BALL
 
 			if (registered_objects_.has(widget))
 			{
-				Log.error() << "Widget " << widget << " with name " << ascii(widget->objectName()) 
+				Log.error() << "Widget " << widget << " with name " << ascii(widget->objectName())
 										<< " was already added!" << std::endl;
 				return;
 			}
@@ -374,19 +374,19 @@ namespace BALL
 			{
 				BALLVIEW_DEBUG
 			}
-			
+
 			default_values_[widget] = value;
 			last_values_[widget] = value;
 		}
 
 
-		void PreferencesEntry::unregisterWidget_(QWidget* widget)
+		void PreferencesEntry::unregisterObject_(QObject* widget)
 		{
 			if (widget == 0) return;
 
 			if (!registered_objects_.has(widget))
 			{
-				Log.error() << "Widget " << widget << " with name " << ascii(widget->objectName()) 
+				Log.error() << "Widget " << widget << " with name " << ascii(widget->objectName())
 										<< " was not added!" << std::endl;
 				return;
 			}
@@ -397,7 +397,7 @@ namespace BALL
 			last_values_.erase(widget);
 		}
 
-	
+
 		void PreferencesEntry::setWidgetStackName(const String& name)
 		{
 			QWidget* widget = dynamic_cast<QWidget*>(this);
@@ -410,23 +410,23 @@ namespace BALL
 
 			insertStackEntry_(widget, name);
 		}
-			
+
 		void PreferencesEntry::insertStackEntry_(QWidget* widget, const String& name)
 		{
 			stack_pages_.push_back(std::pair<QWidget*, String>(widget, name));
 		}
 
-		
-		void PreferencesEntry::showStackPage(Position nr) 
-		{ 
+
+		void PreferencesEntry::showStackPage(Position nr)
+		{
 			if (widget_stack_ == 0) return;
 			widget_stack_->setCurrentWidget(widget_stack_->widget(nr));
 		}
 
-		void PreferencesEntry::showStackPage(QWidget* widget) 
-		{ 
+		void PreferencesEntry::showStackPage(QWidget* widget)
+		{
 			if (widget_stack_ == 0) return;
-			
+
 			// workaround for damn QT 4.1!
 			for (Index p = 0; p < widget_stack_->count(); p++)
 			{
@@ -438,7 +438,6 @@ namespace BALL
 			widget->show();
 		}
 
-		
 		void PreferencesEntry::setWidgetStack(QStackedWidget* stack)
 		{
 			widget_stack_ = stack;
@@ -475,16 +474,16 @@ namespace BALL
 			msg->setURL(url);
 			getMainControl()->sendMessage(*msg);
 		}
-		
+
 
 		void PreferencesEntry::storeValues()
 		{
 			String value;
 
-			HashSet<QWidget*>::Iterator it = registered_objects_.begin();
+			HashSet<QObject*>::Iterator it = registered_objects_.begin();
 			for (; it != registered_objects_.end(); it++)
 			{
-			 	getValue_(*it, value);
+				getValue_(*it, value);
 				last_values_[*it] = value;
 			}
 		}
@@ -494,7 +493,7 @@ namespace BALL
 			// if this entry does not have a widget stack, or all child entries are to be restored:
 			if (widget_stack_ == 0 || all)
 			{
-				HashSet<QWidget*>::Iterator it = registered_objects_.begin();
+				HashSet<QObject*>::Iterator it = registered_objects_.begin();
 				for (; +it; it++)
 				{
 					setValue_(*it, map[*it]);
@@ -530,17 +529,17 @@ namespace BALL
 			restoreValues_(all, default_values_);
 		}
 
-		
+
 		void PreferencesEntry::dump(ostream& s, Size depth) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			BALL_DUMP_DEPTH(s, depth);
-			HashSet<QWidget*>::ConstIterator it = registered_objects_.begin();
+			HashSet<QObject*>::ConstIterator it = registered_objects_.begin();
 			for (; +it; ++it)
 			{
 				s << ascii((**it).objectName()) << std::endl;
 			}
-			BALL_DUMP_STREAM_SUFFIX(s);     
+			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
 	} // namespace VIEW

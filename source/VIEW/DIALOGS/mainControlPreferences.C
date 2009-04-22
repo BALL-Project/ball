@@ -38,7 +38,7 @@ MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name
 
 	setWidgetStackName("General");
 	registerWidgets_();
-	unregisterWidget_(style_box_);
+	unregisterObject_(style_box_);
 
 	connect( font_button, SIGNAL( clicked() ), this, SLOT( selectFont() ) );
 }
