@@ -7,6 +7,7 @@
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/SYSTEM/path.h>
+
 #include <QtGui/QFileDialog>
 
 namespace BALL
@@ -31,11 +32,13 @@ namespace BALL
 			// defines the dialogs Entry name
 			setWidgetStackName("Shortcuts");
 
-			// for preferences
 			registerWidgets_();
 
-			// register the widget with the MainControl  for actions, icons...
-			//ModularWidget::registerWidget(this);
+			//The shortcut registry has should be saved along with the other options for shortcuts
+			registerObject_(ShortcutRegistry::getInstance(0));
+
+			//The search should not be stored from session to session
+			unregisterObject_(searchEdit);
 
 			//TODO
 			//registerWidgetForHelpSystem_(widget_stack->widget(0), "shortcuts.html#shortcuts");
@@ -66,11 +69,10 @@ namespace BALL
 			Path p;
 			String filename = p.find("shortcuts_13.txt");
 			QString s = QFileDialog::getOpenFileName(
-																							 0,
-																							 "Choose a file to import shortcuts from",
-																							 //getMainControl()->getWorkingDir().c_str(),
-																							 filename.c_str(),
-																							 "Text files (*.*)");
+			                0,
+			                "Choose a file to import shortcuts from",
+			                filename.c_str(),
+			                "Text files (*.*)");
 
 			if (s.isEmpty())
 			{
@@ -90,11 +92,10 @@ namespace BALL
 			String filename = p.find("shortcuts_13.txt");
 
 			QString s = QFileDialog::getSaveFileName(
-																							 0,
-																							 "Choose a File to export Shortcuts",
-																							 //getMainControl()->getWorkingDir().c_str(),
-																							 filename.c_str(),
-																							 "Text files (*.*)");
+			                0,
+			                "Choose a File to export Shortcuts",
+			                filename.c_str(),
+			                "Text files (*.*)");
 
 			if (s.isEmpty()) return;
 

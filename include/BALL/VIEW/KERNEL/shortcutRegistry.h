@@ -15,8 +15,14 @@
 # include <BALL/DATATYPE/hashSet.h>
 #endif
 
+#ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY_H
+# include <BALL/VIEW/KERNEL/preferencesEntry.h>
+#endif
+
 #include <QtCore/QObject>
-#include <QtGui/QAction>
+
+class QAction;
+class QKeySequence;
 
 namespace BALL
 {
@@ -26,7 +32,8 @@ namespace BALL
 		*/
 		class BALL_VIEW_EXPORT ShortcutRegistry
 			: public QObject,
-			  public Embeddable
+			  public Embeddable,
+			  public PreferencesEntry::ExtendedPreferencesObject
 		{
 			Q_OBJECT
 
@@ -69,13 +76,20 @@ namespace BALL
 
 				std::pair<String, QAction*> operator[](Index i);
 
+				virtual bool getValue(String&) const;
+				virtual bool setValue(const String&);
+
 			signals:
 				void shortcutChanged();
 
 			protected:
+				static const char* BETWEEN_SC_SEPERATOR;
+				static const char* IN_SC_SEPERATOR;
+
 				std::pair<String, QAction*> getEntry_(Index pos);
 
 				std::map<String, QAction*> shortcuts_;
+				std::map<String, String> unknown_shortcuts_;
 				HashSet<String> shortcut_keys_;
 		};
 

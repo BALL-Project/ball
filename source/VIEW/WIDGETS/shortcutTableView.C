@@ -104,7 +104,6 @@ namespace BALL
 		{
 			QKeySequence seq = qvariant_cast<QKeySequence>(data);
 			QString new_seq = seq.toString();
-			Log.error() << "Setting Data to " << ascii(new_seq)  << "." << std::endl;
 
 			if ((index.column() == 1) && registry_->changeShortcut(index.row(), ascii(new_seq)))
 			{
@@ -139,7 +138,9 @@ namespace BALL
 			connect(editor_, SIGNAL(accepted()), this, SLOT(editSuccess_()));
 
 			connect(this, SIGNAL(doubleClicked(const QModelIndex&)),
-			        this, SLOT(  onDoubleClick(const QModelIndex&)));
+			        this, SLOT(  onClick(const QModelIndex&)));
+			connect(this, SIGNAL(clicked(const QModelIndex&)),
+			        this, SLOT(  onClick(const QModelIndex&)));
 
 			connect(ShortcutRegistry::getInstance(0), SIGNAL(shortcutChanged()),
 			        proxy_model_, SLOT(invalidate()));
@@ -147,7 +148,7 @@ namespace BALL
 			resizeColumnsToContents();
 		}
 
-		void ShortcutTableView::onDoubleClick(const QModelIndex& index)
+		void ShortcutTableView::onClick(const QModelIndex& index)
 		{
 			if(!index.isValid() || editor_->isVisible()) {
 				return;

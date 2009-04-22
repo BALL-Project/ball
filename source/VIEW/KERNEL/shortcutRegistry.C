@@ -7,15 +7,19 @@
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
+#include <QtGui/QAction>
+
 namespace BALL
 {
 	namespace VIEW
 	{
+
+		const char* ShortcutRegistry::BETWEEN_SC_SEPERATOR = "?";
+		const char* ShortcutRegistry::IN_SC_SEPERATOR = "$";
+
 		ShortcutRegistry::ShortcutRegistry()
-			: Embeddable(),
-			  shortcuts_(),
-				shortcut_keys_()
 		{
+			setObjectName("ShortcutRegistry");
 			registerThis();
 		}
 
@@ -32,7 +36,18 @@ namespace BALL
 			while (description.substitute("\r", "") != String::EndPos) {};
 			while (description.substitute("\n", "") != String::EndPos) {};
 
-			String key_seq = ascii(shortcut->shortcut().toString());
+			String key_seq;
+
+			std::map<String, String>::iterator res = unknown_shortcuts_.find(description);
+			if (res != unknown_shortcuts_.end())
+			{
+				shortcut->setShortcut(QKeySequence(QString(res->second.c_str())));
+				key_seq = res->second;
+			}
+			else
+			{
+				key_seq = ascii(shortcut->shortcut().toString());
+			}
 
 			if ( !(hasDescription(description) || shortcut_keys_.has(key_seq)))
 			{
@@ -164,7 +179,8 @@ namespace BALL
 
 			QKeySequence seq(new_sequence.c_str());
 
-			if(seq == QKeySequence()) {
+			//If new_sequence contained garbage we failed setting a shortcut
+			if((new_sequence != "") && (seq == QKeySequence())) {
 				return false;
 			}
 
@@ -209,6 +225,67 @@ namespace BALL
 			return getEntry_(i);
 		}
 
+		bool ShortcutRegistry::getValue(String& value) const
+		{
+			std::map<String,QAction*>::const_iterator it = shortcuts_.begin();
+
+			QByteArray out;
+
+			for (; it->second->shortcut().isEmpty(); ++it) ;
+
+			value += ascii(QByteArray(it->first.c_str()).toPercentEncoding());
+			value += IN_SC_SEPERATOR;
+			value += ascii(it->second->shortcut().toString().toUtf8().toPercentEncoding());
+
+			for (++it; it != shortcuts_.end(); ++it)
+			{
+				if (it->second->shortcut().isEmpty())
+				{
+					continue;
+				}
+
+				value += BETWEEN_SC_SEPERATOR;
+				value += ascii(QByteArray(it->first.c_str()).toPercentEncoding());
+				value += IN_SC_SEPERATOR;
+				value += ascii(it->second->shortcut().toString().toAscii().toPercentEncoding());
+			}
+
+			return true;
+		}
+
+		bool ShortcutRegistry::setValue(const String& value)
+		{
+			std::vector<String> shortcuts;
+			String tmp(QByteArray::fromPercentEncoding(QByteArray(value.c_str())).data());
+			tmp.split(shortcuts, BETWEEN_SC_SEPERATOR, 0);
+
+			for (size_t i = 0; i < shortcuts.size(); ++i) {
+				String sc[2];
+				shortcuts[i].split(sc, 2, IN_SC_SEPERATOR);
+
+				//If no shortcut has been set, we do not need to take it into consideration
+				if (sc[1] == "")
+				{
+					continue;
+				}
+
+				//Update the currently known shortcuts
+				std::map<String, QAction*>::iterator res = shortcuts_.find(sc[0]);
+				if (res != shortcuts_.end())
+				{
+					changeShortcut(res->second, sc[1]);
+				}
+				else
+				{
+					//Should unknown shortcuts block existing shortcuts?
+					//I don't think so, let's see how it works out...
+					unknown_shortcuts_.insert(std::make_pair(sc[0], sc[1]));
+				}
+			}
+
+			return true;
+		}
+
 		std::pair<String, QAction*> ShortcutRegistry::getEntry_(Index pos)
 		{
 			if ((size_t)pos >= shortcuts_.size()) {
@@ -220,5 +297,7 @@ namespace BALL
 
 			return *it;
 		}
+
 	} // namespace VIEW
 } // namespace BALL
+

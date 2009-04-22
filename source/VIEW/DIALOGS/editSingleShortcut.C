@@ -41,14 +41,14 @@ namespace BALL
 
 		void EditSingleShortcut::accept()
 		{
-			QDialog::accept();
 			stopRecording_();
+			QDialog::accept();
 		}
 
 		void EditSingleShortcut::reject()
 		{
-			QDialog::reject();
 			stopRecording_();
+			QDialog::reject();
 		}
 
 		void EditSingleShortcut::setup(const QString& seq)
@@ -61,7 +61,7 @@ namespace BALL
 			key_ = 0;
 			modifiers_ = 0;
 
-			if(new_sequence_ != QKeySequence()) {
+			if(!new_sequence_.isEmpty()) {
 				customize_button->setChecked(true);
 				none_button->setChecked(false);
 			} else {
@@ -82,7 +82,7 @@ namespace BALL
 		void EditSingleShortcut::changeMode_(bool mode)
 		{
 			if(mode) {
-				if(new_sequence_ == QKeySequence()) {
+				if(new_sequence_.isEmpty()) {
 					setShortcutText("Please insert your shortcut.");
 				}
 				startRecording_();

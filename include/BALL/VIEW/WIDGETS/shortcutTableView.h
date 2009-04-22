@@ -35,7 +35,7 @@ namespace BALL
 				void editSuccess_();
 
 			protected slots:
-				void onDoubleClick(const QModelIndex& index);
+				void onClick(const QModelIndex& index);
 
 			private:
 				QSortFilterProxyModel* proxy_model_;
