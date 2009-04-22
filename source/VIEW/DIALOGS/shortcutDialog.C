@@ -72,7 +72,7 @@ namespace BALL
 			                0,
 			                "Choose a file to import shortcuts from",
 			                filename.c_str(),
-			                "Text files (*.*)");
+			                "Text files (*)");
 
 			if (s.isEmpty())
 			{
