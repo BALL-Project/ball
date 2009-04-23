@@ -237,8 +237,9 @@ bool AddBackboneModel::collectPositions(vector<Residue*> residues)
 			{
 				logString(String("Warning: not all atoms found for protein backbone/cartoon model!"));
 				String rname = residue.getFullName() + String(" ") + String(residue.getID());
-				if (!ca_found) logString(String("Could not found ") + batom + " for " + rname);
-				if (!o_found)  logString(String("Could not found O for ") + rname);
+				if (!ca_found) logString(String(" Could not found ") + batom + " for " + rname + ".");
+				if (!o_found)  logString(String(" Could not found O for ") + rname + "."); 
+				logString(String(" Consider using \"Add Hydrogens\" on this structure."));
 				return false;
 			}
 		} // all residues
