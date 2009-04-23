@@ -24,12 +24,12 @@ namespace BALL
 {
 
 	PersistenceManager::PersistenceManager()
-		
 		: create_methods_(),
 			object_out_(),
 			object_out_needed_(),
 			pointer_map_(),
 			pointer_list_(),
+			smart_pointer_list_(),
 			object_in_(),
 			ostr_(),
 			istr_()
@@ -39,12 +39,12 @@ namespace BALL
 	}
 
 	PersistenceManager::PersistenceManager(const PersistenceManager& pm)
-		
 		: create_methods_(pm.create_methods_),
 			object_out_(pm.object_out_),
 			object_out_needed_(pm.object_out_needed_),
 			pointer_map_(pm.pointer_map_),
 			pointer_list_(pm.pointer_list_),
+			smart_pointer_list_(pm.smart_pointer_list_),
 			object_in_(pm.object_in_),
 			ostr_(pm.ostr_),
 			istr_(pm.istr_)
@@ -52,12 +52,12 @@ namespace BALL
 	}
 
 	PersistenceManager::PersistenceManager(istream& is)
-		
 		: create_methods_(),
 			object_out_(),
 			object_out_needed_(),
 			pointer_map_(),
 			pointer_list_(),
+			smart_pointer_list_(),
 			object_in_(),
 			ostr_(),
 			istr_()
@@ -68,12 +68,12 @@ namespace BALL
 	}
 
 	PersistenceManager::PersistenceManager(ostream& os)
-		
 		: create_methods_(),
 			object_out_(),
 			object_out_needed_(),
 			pointer_map_(),
 			pointer_list_(),
+			smart_pointer_list_(),
 			object_in_(),
 			ostr_(),
 			istr_()
@@ -84,12 +84,12 @@ namespace BALL
 	}
 
 	PersistenceManager::PersistenceManager(istream& is, ostream& os)
-		
 		: create_methods_(),
 			object_out_(),
 			object_out_needed_(),
 			pointer_map_(),
 			pointer_list_(),
+			smart_pointer_list_(),
 			object_in_(),
 			ostr_(),
 			istr_()
@@ -101,12 +101,10 @@ namespace BALL
 	}
 
 	PersistenceManager::~PersistenceManager()
-		
 	{
 	}
 
 	void PersistenceManager::registerKernelClasses_()
-		
 	{
 		// all kernel classes, their base classes, 
 		// and the classes used in kernel classes
@@ -151,13 +149,11 @@ namespace BALL
 	}
 
 	void PersistenceManager::registerClass(String signature, const CreateMethod	m)
-		
 	{
 		create_methods_.insert(signature, m);
 	}
 
 	void* PersistenceManager::createObject(String signature) const
-		
 	{
 		DEBUG("PersistenceManager: createObject(" << signature)
 		if (create_methods_.has(signature)) 
@@ -174,13 +170,11 @@ namespace BALL
 	}
 
 	Size PersistenceManager::getNumberOfClasses() const
-		
 	{
 		return create_methods_.size();
 	}
 
 	void PersistenceManager::setOstream(ostream& s) 
-		
 	{
 		ostr_ = &s;
 		object_out_.clear();
@@ -188,15 +182,14 @@ namespace BALL
 	}
 
 	void PersistenceManager::setIstream(istream& s) 
-		
 	{
 		istr_ = &s;
 		pointer_list_.clear();
+		smart_pointer_list_.clear();
 		pointer_map_.clear();
 	}
 		
 	void PersistenceManager::startOutput()
-		
 	{
 		initializeOutputStream();
 		object_out_.clear();
@@ -205,7 +198,6 @@ namespace BALL
 	}
 
 	void PersistenceManager::endOutput()
-		
 	{
 		writeStreamTrailer();
 		addNeededObjects_();
@@ -222,24 +214,20 @@ namespace BALL
 	}
 
 	void PersistenceManager::initializeOutputStream()
-		
 	{
 	}
 
 	void PersistenceManager::finalizeOutputStream()
-		
 	{
 	}
 
 	PersistenceManager& PersistenceManager::operator << (const PersistentObject& object)
-		
 	{
 		object >> *this;
 		return *this;
 	}
 
 	PersistenceManager& PersistenceManager::operator >> (PersistentObject*& object_ptr)
-		
 	{
 		object_ptr = readObject();
 		return *this;
@@ -259,6 +247,7 @@ namespace BALL
 
 		pointer_map_.clear();
 		pointer_list_.clear();
+		smart_pointer_list_.clear();
 		object_in_.clear();
 		
 		String type_name;
@@ -362,7 +351,6 @@ namespace BALL
 	}
 
 	void PersistenceManager::addPointerPair_(LongSize old_ptr, void* new_ptr)
-		
 	{
 		DEBUG("PersistenceManager: pointer pair (" << hex << old_ptr << "/" << new_ptr << ")")
 		pointer_map_.insert(std::make_pair(old_ptr, new_ptr));
@@ -387,7 +375,6 @@ namespace BALL
 	}
 
 	bool PersistenceManager::updatePointers_()
-		
 	{
 		// assume everything will go smoothly
 		bool result = true;
@@ -409,8 +396,34 @@ namespace BALL
 			}
 		}
 		
+		SmartPointerList::iterator s_it = smart_pointer_list_.begin();
+		for (; s_it != smart_pointer_list_.end(); ++it) 
+		{
+			if (pointer_map_.has((*s_it).second)) 
+			{
+				// OK. We know the correct value for the pointer
+				(*(*s_it).first) = boost::shared_ptr<PersistentObject>((PersistentObject*)pointer_map_[(*s_it).second]);
+			} 
+			else 
+			{ 
+				Log.error() << "PersistenceManager: size of pointer map: " << pointer_map_.size() << std::endl;
+				Log.error() << "PersistenceManager: Could not assign object for pointer to "
+																				<< hex << (unsigned int)(*s_it).second << endl;
+				result = false;
+			}
+		}
+		
 		return result;
 	}
+
+	void PersistenceManager::registerSmartPointer(boost::shared_ptr<PersistentObject>& s_ptr)
+	{
+		if (s_ptr.get() != 0)
+		{
+			smart_pointer_list_.push_back(std::make_pair((boost::shared_ptr<PersistentObject>*)&s_ptr, (LongSize)((void*)s_ptr.get())));
+		}
+	}
+
 
 #ifdef BALL_NO_INLINE_FUNCTIONS
 #	include <BALL/CONCEPT/persistenceManager.iC>

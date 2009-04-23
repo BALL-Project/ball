@@ -24,23 +24,23 @@ using namespace std;
 
 NamedProperty* np;
 
-CHECK(NamedProperty() throw())
+CHECK(NamedProperty())
 	np = new NamedProperty();
 	TEST_NOT_EQUAL(np, 0)
 RESULT
 
-CHECK(~NamedProperty() throw())
+CHECK(~NamedProperty())
 	delete np;
 RESULT
 
-CHECK(NamedProperty(const string& name) throw())
+CHECK(NamedProperty(const string& name))
 	np = new NamedProperty("name");
 	TEST_NOT_EQUAL(np, 0)
 	TEST_EQUAL(np->getName(), "name")
 	delete np;
 RESULT
 
-CHECK(NamedProperty(const string& name, bool value) throw())
+CHECK(NamedProperty(const string& name, bool value))
 	bool x = true;
   np = new NamedProperty("test", x);
 	TEST_NOT_EQUAL(np, 0)
@@ -58,7 +58,7 @@ CHECK(BALL_CREATE(NamedProperty))
 	delete np2;
 RESULT
 
-CHECK(NamedProperty(const string& name, int value) throw())
+CHECK(NamedProperty(const string& name, int value))
 	int x = -99;
   np = new NamedProperty("test", x);
 	TEST_NOT_EQUAL(np, 0)
@@ -68,7 +68,7 @@ CHECK(NamedProperty(const string& name, int value) throw())
 	delete np;
 RESULT
 
-CHECK(NamedProperty(const string& name, unsigned int value) throw())
+CHECK(NamedProperty(const string& name, unsigned int value))
 	unsigned int x = 99;
   np = new NamedProperty("test", x);
 	TEST_NOT_EQUAL(np, 0)
@@ -78,7 +78,7 @@ CHECK(NamedProperty(const string& name, unsigned int value) throw())
 	delete np;
 RESULT
 
-CHECK(NamedProperty(const string& name, double value) throw())
+CHECK(NamedProperty(const string& name, double value))
 	double x = -99.9;
   np = new NamedProperty("test", x);
 	TEST_NOT_EQUAL(np, 0)
@@ -88,7 +88,7 @@ CHECK(NamedProperty(const string& name, double value) throw())
 	delete np;
 RESULT
 
-CHECK(NamedProperty(const string& name, const string& str) throw())
+CHECK(NamedProperty(const string& name, const string& str))
 	string x = "xxx";
   np = new NamedProperty("test", x);
 	TEST_NOT_EQUAL(np, 0)
@@ -98,7 +98,7 @@ CHECK(NamedProperty(const string& name, const string& str) throw())
 	delete np;
 RESULT
 
-CHECK(NamedProperty(const string& name, PersistentObject& po) throw())
+CHECK(NamedProperty(const string& name, PersistentObject& po))
 	PersistentObject x;
   np = new NamedProperty("test", x);
 	TEST_NOT_EQUAL(np, 0)
@@ -108,7 +108,17 @@ CHECK(NamedProperty(const string& name, PersistentObject& po) throw())
 	delete np;
 RESULT
 
-CHECK(NamedProperty(const string& name, float value) throw())
+CHECK(NamedProperty(const string& name, boost::shared_ptr<PersistentObject>& po))
+	boost::shared_ptr<PersistentObject> p(new PersistentObject());
+  np = new NamedProperty("test", p);
+	TEST_NOT_EQUAL(np, 0)
+	TEST_EQUAL(np->getType(), NamedProperty::SMART_OBJECT)
+	TEST_EQUAL(np->getName(), "test")
+	TEST_EQUAL(np->getSmartObject(), p)
+	delete np;
+RESULT
+
+CHECK(NamedProperty(const string& name, float value))
 	float x = -99.9;
   np = new NamedProperty("test", x);
 	TEST_NOT_EQUAL(np, 0)
@@ -117,7 +127,7 @@ CHECK(NamedProperty(const string& name, float value) throw())
 	TEST_REAL_EQUAL(np->getFloat(), x)
 RESULT
 
-CHECK(NamedProperty(const NamedProperty&) throw())
+CHECK(NamedProperty(const NamedProperty&))
 	float x = -99.9;
 	NamedProperty np2(*np);
 	TEST_EQUAL(np2.getType(), NamedProperty::FLOAT)
@@ -138,7 +148,7 @@ CHECK(NamedProperty(const NamedProperty&) throw())
 	TEST_EQUAL(np4.getType(), NamedProperty::NONE)
 RESULT
 
-CHECK(void clear() throw())
+CHECK(void clear())
 	//
 RESULT
 
@@ -184,6 +194,16 @@ CHECK(void persistentWrite(PersistenceManager& pm, const char* name = "") const 
 	*np >> pm;
 	ofile.close();	
 	TEST_FILE_REGEXP(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_String11.txt")
+	delete np;
+
+	boost::shared_ptr<PersistentObject> ptr((PersistentObject*)new Protein("PROTEIN2"));
+	np = new NamedProperty("test5", ptr);
+	NEW_TMP_FILE(filename)
+	ofile.open(filename.c_str());
+	pm.setOstream(ofile);
+	*np >> pm;
+	ofile.close();	
+	TEST_FILE_REGEXP(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_SmartObject11.txt")
 	delete np;
 RESULT
 
@@ -267,49 +287,70 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 		}
 		delete ptr;
 	}
+
+	// due to some problems in the IRIX/CC fstream implementation....
+	ifile.clear();
+	ifile.open("data/PropertyManager_test/NamedProperty_test_SmartObject1.txt");
+	ptr = pm.readObject();
+	ifile.close();
+
+	TEST_NOT_EQUAL(ptr, 0)
+	if (ptr != 0)
+	{
+		TEST_EQUAL(isKindOf<NamedProperty>(*ptr), true)
+		if (isKindOf<NamedProperty>(*ptr))
+		{
+			NamedProperty* pers_a = castTo<NamedProperty>(*ptr);
+			TEST_EQUAL(pers_a->getType(), NamedProperty::SMART_OBJECT)
+			TEST_EQUAL(pers_a->getName(), "test5")
+			TEST_NOT_EQUAL(pers_a->getSmartObject().get(), 0)
+		}
+		delete ptr;
+	}
+	
 RESULT
 
-CHECK(Type getType() const throw())
+CHECK(Type getType() const)
   //TESTED ABOVE
 RESULT
 
-CHECK(string getName() const throw())
+CHECK(string getName() const)
   //TESTED ABOVE
 RESULT
 
-CHECK(bool getBool() const throw())
+CHECK(bool getBool() const)
   //TESTED ABOVE
 RESULT
 
-CHECK(int getInt() const throw())
+CHECK(int getInt() const)
   //TESTED ABOVE
 RESULT
 
-CHECK(float getFloat() const throw())
+CHECK(float getFloat() const)
   //TESTED ABOVE
 RESULT
 
-CHECK(double getDouble() const throw())
+CHECK(double getDouble() const)
   //TESTED ABOVE
 RESULT
 
-CHECK(unsigned int getUnsignedInt() const throw())
+CHECK(unsigned int getUnsignedInt() const)
   //TESTED ABOVE
 RESULT
 
-CHECK(PersistentObject* getObject() const throw())
+CHECK(PersistentObject* getObject() const)
   //TESTED ABOVE
 RESULT
 
-CHECK(string getString() const throw())
+CHECK(string getString() const)
   //TESTED ABOVE
 RESULT
 
-CHECK(bool operator != (const NamedProperty& np) const throw())
+CHECK(bool operator != (const NamedProperty& np) const)
   // ???
 RESULT
 
-CHECK(bool operator == (const NamedProperty& np) const throw())
+CHECK(bool operator == (const NamedProperty& np) const)
 	// ???
 RESULT
 

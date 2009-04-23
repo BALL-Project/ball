@@ -15,7 +15,6 @@ namespace BALL
 
 
 	NamedProperty::NamedProperty()
-		
 		: PersistentObject(),
 			type_(NONE),
 			name_("")
@@ -23,7 +22,6 @@ namespace BALL
 	}
 
 	NamedProperty::NamedProperty(const NamedProperty& property) 
-		
 		: PersistentObject(property),
 			type_(property.type_),
 			name_(property.name_)
@@ -34,7 +32,7 @@ namespace BALL
 		} 
 		else 
 		{
-			data_.s = new string(*(property.data_.s));
+			data_ = new string(*(boost::any_cast<std::string*>(property.data_)));
 		}
 	}
  
@@ -47,14 +45,15 @@ namespace BALL
 			
 			switch (type_)
 			{
-				case	INT:					pm.writePrimitive(data_.i, "data_.i");		break;
-				case	FLOAT:				pm.writePrimitive(data_.f, "data_.f");		break;
-				case	DOUBLE:				pm.writePrimitive(data_.d, "data_.d");		break;
-				case	UNSIGNED_INT:	pm.writePrimitive(data_.ui, "data_.ui"); break;
-				case	BOOL:					pm.writePrimitive(data_.b, "data_.b");		break;
-				case	OBJECT:				pm.writeObjectPointer(data_.object, "data_.object"); break;
+				case	INT:					pm.writePrimitive(boost::any_cast<int>(data_), "data_.i");		break;
+				case	FLOAT:				pm.writePrimitive(boost::any_cast<float>(data_), "data_.f");		break;
+				case	DOUBLE:				pm.writePrimitive(boost::any_cast<double>(data_), "data_.d");		break;
+				case	UNSIGNED_INT:	pm.writePrimitive(boost::any_cast<unsigned int>(data_), "data_.ui"); break;
+				case	BOOL:					pm.writePrimitive(boost::any_cast<bool>(data_), "data_.b");		break;
+				case	OBJECT:				pm.writeObjectPointer(boost::any_cast<PersistentObject*>(data_), "data_.object"); break;
+				case	SMART_OBJECT:	pm.writeObjectPointer(boost::any_cast<boost::shared_ptr<PersistentObject> >(data_).get(), "data_.smart_object"); break;
 				case	NONE:					break;
-				case	STRING:				pm.writePrimitive(String(*data_.s), "data_.s");	break;
+				case	STRING:				pm.writePrimitive(String(*boost::any_cast<string*>(data_)), "data_.s");	break;
 				default:
 					Log.error() << "cannot write unknown property type: " << (int)type_ << endl;
 			}
@@ -67,7 +66,7 @@ namespace BALL
 		// Clear potentially allocated strings.
 		if (type_ == STRING)
 		{
-			delete data_.s;
+			delete boost::any_cast<string*>(data_);
 		}
 
 		int type;
@@ -79,23 +78,47 @@ namespace BALL
 
 		switch (type_)
 		{
-			case	INT:					pm.readPrimitive(data_.i, "data_.i");		break;
-			case	FLOAT:				pm.readPrimitive(data_.f, "data_.f");		break;
-			case	DOUBLE:				pm.readPrimitive(data_.d, "data_.d");		break;
-			case	UNSIGNED_INT:	pm.readPrimitive(data_.ui, "data_.ui"); break;
-			case	BOOL:					pm.readPrimitive(data_.b, "data_.b");		break;
+			case	INT:					int i;
+													pm.readPrimitive(i, "data_.i");		
+													data_ = i;
+													break;
+			case	FLOAT:				float f;
+													pm.readPrimitive(f, "data_.f");		
+													data_ = f;
+													break;
+			case	DOUBLE:				double d;
+			                    pm.readPrimitive(d, "data_.d");
+													data_ = d;
+													break;
+			case	UNSIGNED_INT:	unsigned int ui;
+			                    pm.readPrimitive(ui, "data_.ui");  
+													data_ = ui;
+													break;
+			case	BOOL:					bool b;
+			                    pm.readPrimitive(b, "data_.b");		
+													break;
 			case	NONE:	break;
 
 			case	STRING:				
 				// we have to create a new string
 				pm.readPrimitive(s, "data_.s");	
-				data_.s = new string(s);
+				data_ = new string(s);
 				break;
 
 			case	OBJECT:				
 				// the persistence manager will take care of
 				// reading the object and will set this pointer afterwards 
-				pm.readObjectPointer(data_.object, "data_.object"); 
+				data_ = (PersistentObject*)0;
+				pm.readObjectPointer(*(boost::any_cast<PersistentObject*>(&data_)), "data_.object"); 
+				break;
+
+			case	SMART_OBJECT:				
+				// the persistence manager will take care of
+				// reading the object and will set this pointer afterwards 
+				PersistentObject* ptr;
+				pm.readObjectPointer(ptr, "data_.smart_object"); 
+				data_ = boost::shared_ptr<PersistentObject>(ptr);
+				pm.registerSmartPointer(*(boost::any_cast<boost::shared_ptr<PersistentObject> >(&data_)));
 				break;
 
 			default:
@@ -104,7 +127,6 @@ namespace BALL
 	}
 
   void PropertyManager::write(PersistenceManager& pm) const
-		
   {
 		pm.writeStorableObject(bitvector_, "bitvector_");
 		Size size = (Size)named_properties_.size();
@@ -116,7 +138,6 @@ namespace BALL
 	}
 
   bool PropertyManager::read(PersistenceManager& pm)
-		
   {
 		if (!pm.readStorableObject(bitvector_, "bitvector_"))
 		{
@@ -139,14 +160,12 @@ namespace BALL
 	}
   
 	void PropertyManager::set(const PropertyManager& property_manager)
-		
 	{
 		bitvector_ = property_manager.bitvector_;
 		named_properties_ = property_manager.named_properties_;
 	}
 
 	void PropertyManager::setProperty(const NamedProperty& property)
-		
 	{
 		// search whether the property already exists
 		vector<NamedProperty>::iterator it = named_properties_.begin();
@@ -165,7 +184,6 @@ namespace BALL
 	}
 
 	void PropertyManager::setProperty(const string& name)
-		
 	{
 		// search whether a property with the same name already exists
 		vector<NamedProperty>::iterator it = named_properties_.begin();
@@ -184,7 +202,6 @@ namespace BALL
 	}
 
 	const NamedProperty& PropertyManager::getProperty(const string& name) const
-		
 	{
 		for (Size i = 0; i < named_properties_.size(); ++i)
 		{
@@ -198,7 +215,6 @@ namespace BALL
 	}
 	
 	void PropertyManager::clearProperty(const string& name)
-		
 	{
     vector<NamedProperty>::iterator it = named_properties_.begin();
 		for (; it != named_properties_.end(); ++it)
@@ -212,7 +228,6 @@ namespace BALL
 	}
 
 	bool PropertyManager::hasProperty(const string& name) const
-		
 	{
 		for (Size i = 0; i < named_properties_.size(); i++)
 		{
@@ -226,7 +241,6 @@ namespace BALL
 	}
 
 	void PropertyManager::dump(ostream& s, Size depth) const
-		
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 
@@ -265,6 +279,8 @@ namespace BALL
 					break;
 				case NamedProperty::OBJECT:
 					s << "OBJECT: " << named_properties_[i].getObject();
+				case NamedProperty::SMART_OBJECT:
+					s << "SMART_OBJECT: " << named_properties_[i].getSmartObject();
 			}
 
 			s << ")" << endl;

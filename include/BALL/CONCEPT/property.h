@@ -21,6 +21,9 @@
 
 #include <iostream>
 
+#include <boost/shared_ptr.hpp>
+#include <boost/any.hpp>
+
 namespace BALL 
 {
 
@@ -85,7 +88,13 @@ namespace BALL
 					The type can be seen as an extension of the bit properties 
 					used in PropertyManager except for the user-defined name.
 			*/
-			NONE
+			NONE,
+
+			/**	Object-type properties contain a smart pointer to a PersistentObject.
+			    Here, destruction will autmatically be handled by the smart pointer
+					implementation.
+			 */
+			SMART_OBJECT
 		};
 		
 		//@}
@@ -95,8 +104,7 @@ namespace BALL
 
 		/*	The default constructor
 		*/
-		NamedProperty()
-			;
+		NamedProperty();
 
 		/**	Standard constructor.
 				Creates an object of type NONE. Use this constructor to create
@@ -104,8 +112,7 @@ namespace BALL
 				The <tt>Type</tt> is set to  \link OBJECT OBJECT \endlink .
 				@param	name the propertie's name
 		*/
-		NamedProperty(const string& name)
-			;
+		NamedProperty(const string& name);
 
 		/**	Constructor for bool-type properties.
 				Creates a NamedProperty object containing a boolean value.
@@ -113,8 +120,7 @@ namespace BALL
 				@param	name the property's name
 				@param	value the boolean value stored in the property
 		*/	
-		NamedProperty(const string& name, bool value)
-			;
+		NamedProperty(const string& name, bool value);
 
 		/**	Constructor for int-type properties.
 				Creates a NamedProperty object containing a signed int value.
@@ -122,8 +128,7 @@ namespace BALL
 				@param	name the property's name
 				@param	value the int value stored in the property
 		*/
-		NamedProperty(const string& name, int value)
-			;
+		NamedProperty(const string& name, int value);
 
 		/** Constructor for unsigned int-type properties.
 				Creates a NamedProperty object containing an unsigned int value.
@@ -131,8 +136,7 @@ namespace BALL
 				@param	name the property's name
 				@param	value the int value stored in the property
 		*/
-		NamedProperty(const string& name, unsigned int value)
-			;
+		NamedProperty(const string& name, unsigned int value);
 
 		/** Constructor for float-type properties.
 				Creates a NamedProperty object containing a float value.
@@ -140,8 +144,7 @@ namespace BALL
 				@param	name the property's name
 				@param	value the float value stored in the property
 		*/
-		NamedProperty(const string& name, float value)
-			;
+		NamedProperty(const string& name, float value);
 
 		/** Constructor for double-type properties.
 				Creates a NamedProperty object containing a double value.
@@ -149,8 +152,7 @@ namespace BALL
 				@param	name the property's name
 				@param	value the double value stored in the property
 		*/
-		NamedProperty(const string& name, double value)
-			;
+		NamedProperty(const string& name, double value);
 
 		/** Constructor for string-type properties.
 				Objects of type STRING contain a pointer to a string
@@ -159,8 +161,7 @@ namespace BALL
 				@param	name the property's name
 				@param	str the string stored in the property
 		*/
-		NamedProperty(const string& name, const string& str)
-			;
+		NamedProperty(const string& name, const string& str);
 
 		/**	Constructor for object-type properties.
 				Creates a NamedProperty object containing a 
@@ -169,25 +170,30 @@ namespace BALL
 				@param	name the property's name
 				@param	po a reference to the persistent object stored in the property
 		*/
-		NamedProperty(const string& name, PersistentObject& po)
-			;
+		NamedProperty(const string& name, PersistentObject& po);
+
+		/**	Constructor for smart-pointer handled object-type properties.
+				Creates a NamedProperty object containing a 
+				smart pointer to a persistent object.
+				The <tt>Type</tt> is set to  \link SMART_OBJECT SMART_OBJECT \endlink .
+				@param	name the property's name
+				@param	ptr a smart pointer to the persistent object
+		*/
+		NamedProperty(const string& name, boost::shared_ptr<PersistentObject>& po);
 
 		/**	Copy constructor
 		*/
-		NamedProperty(const NamedProperty&)
-			;
+		NamedProperty(const NamedProperty&);
 
 		/**	Destructor .
 				The destructor destructs the contained data in the case of STRING-type 
 				properties only.
 		*/
-		~NamedProperty()
-			;
+		~NamedProperty();
 
 		/** Clear method
 		*/
-		virtual void clear()
-			;
+		virtual void clear();
 		
 		//@}	
 		/**	@name Persistence
@@ -210,61 +216,58 @@ namespace BALL
 		//@{
 
 		/// Return the type of the data stored in the property object
-		Type getType() const
-			;
+		Type getType() const;
 		
 		/// Return the name of the property
-		string getName() const
-			;
+		string getName() const;
 
 		/** Return the data of the property object as bool.
 				If the property object is not of BOOL type, <b>false</b>
 				is returned.
 		*/
-		bool getBool() const
-			;
+		bool getBool() const;
 
 		/** Return the data of the property object as int.
 				If the property object is not of INT type, <b>0</b>
 				is returned.
 		*/
-		int getInt() const
-			;
+		int getInt() const;
 			
 		/** Return the data of the property object as float.
 				If the property object is not of FLOAT type, <b>0.0</b>
 				is returned.
 		*/
-		float getFloat() const
-			;
+		float getFloat() const;
 			
 		/** Return the data of the property object as double.
 				If the property object is not of DOUBLE type, <b>0.0</b>
 				is returned.
 		*/
-		double getDouble() const
-			;
+		double getDouble() const;
 			
 		/** Return the data of the property object as unsigned int.
 				If the property object is not of UNSIGNED_INT type, <b>0</b>
 				is returned.
 		*/
-		unsigned int getUnsignedInt() const
-			;
+		unsigned int getUnsignedInt() const;
 
 		/** Return the data of the property object as a pointer to a PersistentObject.
 				If the property object is not of OBJECT type, <b>0</b>
 				is returned.
 		*/
-		PersistentObject* getObject() const
-			;
+		PersistentObject* getObject() const;
+
+		/** Return the data of the property object as a smart pointer to a PersistentObject.
+				If the property object is not of SMART_OBJECT type, <b>0</b>
+				is returned.
+		*/
+		boost::shared_ptr<PersistentObject> getSmartObject() const;
 
 		/** Return the data of the property object as a string.
 				If the property object is not of STRING type, <b>""</b>
 				is returned.
 		*/
-		string getString() const
-			;
+		string getString() const;
 
 		//@}
 
@@ -274,14 +277,12 @@ namespace BALL
 		/** Equality operator
 				Two instances are equal if they have the same name and the same value.
 		*/
-		bool operator == (const NamedProperty& np) const 
-			;
+		bool operator == (const NamedProperty& np) const;
 
 		/** Inequality operator
 				@see operator ==
 		*/
-		bool operator != (const NamedProperty& np) const 
-			;
+		bool operator != (const NamedProperty& np) const;
 
 		//@}
 
@@ -297,16 +298,7 @@ namespace BALL
 		
 		/*_	The data
 		*/
-		union 
-		{
-			bool							b;
-			int								i;
-			unsigned int			ui;
-			float							f;
-			double						d;
-			string*						s;
-			PersistentObject*	object;
-		} data_;
+		boost::any data_;
 
 	};
 
@@ -344,26 +336,22 @@ namespace BALL
 		//@{
 
 		BALL_INLINE 
+
 		/// Default constructor
-		PropertyManager()
-			;
+		PropertyManager();
 
 		BALL_INLINE
 		/// Copy constructor
-		PropertyManager(const PropertyManager& property_manager)
-			;
+		PropertyManager(const PropertyManager& property_manager);
 
 		/// Destructor
-		virtual ~PropertyManager()
-			;
+		virtual ~PropertyManager();
 
 		/// Clears all properties
-		virtual void clear()
-			;
+		virtual void clear();
 
 		/// Clears all properties
-		virtual void destroy()
-			;
+		virtual void destroy();
 
 		//@}
 		/**	@name	Assignment 
@@ -373,8 +361,7 @@ namespace BALL
 		/** Assign properties from another property manager
 				@param property_manager the PropertyManager object to copy from
 		*/
-		void set(const PropertyManager& property_manager)
-			;
+		void set(const PropertyManager& property_manager);
 
 		/** Assignment operator.
 				This operator calls <tt>set(property_manager)</tt> to assign
@@ -382,22 +369,19 @@ namespace BALL
 				@param property_manager the PropertyManager object to copy from
 				@return PropertyManager <tt>*this</tt>
 		*/
-		const PropertyManager& operator = (const PropertyManager& property_manager)
-			;
+		const PropertyManager& operator = (const PropertyManager& property_manager);
 
 		/** Assign properties to another property manager.
 				This method copies the contents of the PropertyManager object
 				to the given <tt>property_manager</tt>.
 				@param	property_manager the target object
 		*/
-		void get(PropertyManager& property_manager) const
-			;
+		void get(PropertyManager& property_manager) const;
 
 		/** Swap the properties with another property manager.
 				@param property_manager the PropertyManager object to swap the properties with
 		*/
-		void swap(PropertyManager& property_manager)
-			;
+		void swap(PropertyManager& property_manager);
 
 		//@}
 		/**	@name	Accessors 
@@ -410,8 +394,7 @@ namespace BALL
 				@return BitVector& a mutable reference to the (private) BitVector containing 
 					the unnamed properties
 		*/
-		BitVector& getBitVector()
-			;
+		BitVector& getBitVector();
 
 		/** Return a const reference to the bit vector containing the unnamed properties.
 				This method returns the bit vector containing the unnamed properties
@@ -419,8 +402,7 @@ namespace BALL
 				@return BitVector& a const reference to the (private) BitVector containing 
 					the unnamed properties
 		*/
-		const BitVector& getBitVector() const
-			;
+		const BitVector& getBitVector() const;
 			
 		//@}
 		/**	@name Converters 
@@ -433,8 +415,7 @@ namespace BALL
 				@return BitVector& a reference to the BitVector containing the
 					unnamed properties of the property manager
 		*/
-		operator BitVector& ()
-			;
+		operator BitVector& ();
 
 		//@}
 		/**	@name	Handling unnamed bit properties 
@@ -446,32 +427,28 @@ namespace BALL
 				calling <tt>BitVector::setBit(property)</tt> for the private bit vector.
 				@param property the number of the property to be set
 		*/
-		void setProperty(Property property)
-			;
+		void setProperty(Property property);
 
 		/** Clear a property.
 				This method clears an unnamed property of a PropertyManager object by
 				calling <tt>BitVector::clearBit(property)</tt> for the private bit vector.
 				@param property the number of the property to be cleared
 		*/
-		void clearProperty(Property property)
-			;
+		void clearProperty(Property property);
 
 		/** Toggle (invert) a property.
 				This method clears an unnamed property of a PropertyManager object by
 				calling <tt>BitVector::toggleBit(property)</tt> for the private bit vector.
 				@param property the number of the property to be toggled
 		*/
-		void toggleProperty(Property property)
-			;
+		void toggleProperty(Property property);
 
 		/** Count all properties.
 				This method returns the sum of unnamed and named properties.
 				It counts the number of <b>  ones </b> in the bit vector
 				and the number of properties stored in the named property vector.
 		*/
-		Size countProperties() const
-			;
+		Size countProperties() const;
 	
 		//@}
 
@@ -501,8 +478,7 @@ namespace BALL
 				<tt>property</tt> already exists, it is destructed.
 				@param	property the new property to be set
 		*/
-		void setProperty(const NamedProperty& property)
-			;
+		void setProperty(const NamedProperty& property);
 
 		/**	Set a named property without any data.
 				This method creates a new named property not containing any data
@@ -510,8 +486,7 @@ namespace BALL
 				Already existing data using the same <tt>name</tt> is overwritten.
 				@param	name the name to be used for the new property
 		*/
-		void setProperty(const string& name)
-			;
+		void setProperty(const string& name);
 
 		/**	Set a named property containing boolean data.
 				This method creates a new named property containing boolean
@@ -520,8 +495,7 @@ namespace BALL
 				@param	name the name to be used for the new property
 				@param	value the boolean value 
 		*/
-		void setProperty(const string& name, bool value)
-			;
+		void setProperty(const string& name, bool value);
 
 		/**	Set a named property containing a signed integer number.
 				This method creates a new named property containing an 
@@ -530,8 +504,7 @@ namespace BALL
 				@param	name the name to be used for the new property
 				@param	value the data 
 		*/
-		void setProperty(const string& name, int value)
-			;
+		void setProperty(const string& name, int value);
 
 		/**	Set a named property containing an unsigned integer number.
 				This method creates a new named property containing an 
@@ -540,8 +513,7 @@ namespace BALL
 				@param	name the name to be used for the new property
 				@param	value the data 
 		*/
-		void setProperty(const string& name, unsigned int value)
-			;
+		void setProperty(const string& name, unsigned int value);
 
 		/**	Set a named property containing a floating point number.
 				This method creates a new named property containing a
@@ -550,8 +522,7 @@ namespace BALL
 				@param	name the name to be used for the new property
 				@param	value the data 
 		*/
-		void setProperty(const string& name, float value)
-			;
+		void setProperty(const string& name, float value);
 
 		/**	Set a named property containing a double-precision floating point number.
 				This method creates a new named property containing a
@@ -560,8 +531,7 @@ namespace BALL
 				@param	name the name to be used for the new property
 				@param	value the data 
 		*/
-		void setProperty(const string& name, double value)
-			;
+		void setProperty(const string& name, double value);
 
 		/**	Set a named property containing a string.
 				This method creates a new named property containing a
@@ -570,8 +540,7 @@ namespace BALL
 				@param	name the name to be used for the new property
 				@param	value the data 
 		*/
-		void setProperty(const string& name, const string& value)
-			;
+		void setProperty(const string& name, const string& value);
 
 		/**	Set a named property containing a PersistentObject.
 				This method creates a new named property containing a
@@ -580,8 +549,7 @@ namespace BALL
 				@param	name the name to be used for the new property
 				@param	value the data 
 		*/
-		void setProperty(const string& name, const PersistentObject& value)
-			;
+		void setProperty(const string& name, const PersistentObject& value);
 
 		/**	Retrieve a named property.
 				If the property manager contains a property named <tt>name</tt>
@@ -589,38 +557,37 @@ namespace BALL
 				otherwise.
 				@param	name the name of the proeprty to be retrieved
 		*/
-		const NamedProperty& getProperty(const string& name) const
-			;
+		const NamedProperty& getProperty(const string& name) const;
 
 		/**	Remove a named property.
 				If the named property <tt>name</tt> does exist, it is remove from
 				the array of properties.
 				@param name the name of the property to be removed
 		*/
-		void clearProperty(const string& name) ;
+		void clearProperty(const string& name);
 
 		/**	Return the number of named properties.
 				@return Size the number of named properties stored in the ProprtyManager object
 		*/
-		Size countNamedProperties() const ;
+		Size countNamedProperties() const;
 		//@}
 
 		/**	@name	Predicates 
 		*/
 		//@{
 		/// Query for an unnamed property
-		bool hasProperty(Property property) const	;
+		bool hasProperty(Property property) const;
 
 		/// Query for a named property
-		bool hasProperty(const string& name) const ;
+		bool hasProperty(const string& name) const;
 
 		/** Equality operator
 				Two instances are equal if they have the same named and unnamed properties.
 		*/
-		bool operator == (const PropertyManager& pm) const ;
+		bool operator == (const PropertyManager& pm) const;
 
 		/// Inequality operator
-		bool operator != (const PropertyManager& pm) const ;
+		bool operator != (const PropertyManager& pm) const;
 
 		//@}
 
@@ -629,10 +596,10 @@ namespace BALL
 		*/
 		//@{
 		///	Persistent stream writing.
-		void write(PersistenceManager& pm) const ;
+		void write(PersistenceManager& pm) const;
 
 		///	Persistent stream reading.
-		bool read(PersistenceManager& pm) ;
+		bool read(PersistenceManager& pm);
 		//@}
 
 		/**	@name	Debugging and Diagnostics 
@@ -643,7 +610,7 @@ namespace BALL
 				Returns true if the bitvector is valid.
 				@return bool <b>true</b>
 		*/
-		bool isValid() const ;
+		bool isValid() const;
 	
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} to 
@@ -651,7 +618,7 @@ namespace BALL
 				@param   s - output stream where to output the internal state of {\em *this}
 				@param   depth - the dumping depth
 		*/
-		void dump(std::ostream& s = std::cout, Size depth = 0) const ;
+		void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		
 		//@}
 

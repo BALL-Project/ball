@@ -8,13 +8,11 @@ using namespace std;
 
 BALL_INLINE 
 PropertyManager::PropertyManager()
-	
 {
 }
 
 BALL_INLINE 
 PropertyManager::PropertyManager(const PropertyManager& property_manager)
-	
 	:	bitvector_(property_manager.bitvector_),
 		named_properties_(property_manager.named_properties_)
 {
@@ -22,19 +20,17 @@ PropertyManager::PropertyManager(const PropertyManager& property_manager)
 
 BALL_INLINE 
 PropertyManager::~PropertyManager()
-	
 {
 }
 
 
 BALL_INLINE 
 void NamedProperty::clear()
-	
 {
 	// free allocated space for strings
-	if ((type_ == STRING) && (data_.s != 0))
+	if ((type_ == STRING) && (boost::any_cast<string*>(data_) != 0))
 	{
-		delete data_.s;
+		delete boost::any_cast<string*>(data_);
 	}
 	type_ = NONE;
 	name_ = "";
@@ -51,84 +47,84 @@ NamedProperty::NamedProperty(const string& name)
 
 BALL_INLINE 
 NamedProperty::NamedProperty(const string& name, bool value)
-	
 	:	PersistentObject(),
 		type_(BOOL),
 		name_(name)
 {
-	data_.b = value;
+	data_ = value;
 }
 
 BALL_INLINE 
 NamedProperty::NamedProperty(const string& name, int value)
-	
 	:	PersistentObject(),
 		type_(INT),
 		name_(name)
 {
-	data_.i = value;
+	data_ = value;
 }
 
 BALL_INLINE 
 NamedProperty::NamedProperty(const string& name, unsigned int value)
-	
 	:	PersistentObject(),
 		type_(UNSIGNED_INT),
 		name_(name)
 {
-	data_.ui = value;
+	data_ = value;
 }
 
 BALL_INLINE 
 NamedProperty::NamedProperty(const string& name, float value)
-	
 	:	PersistentObject(),
 		type_(FLOAT),
 		name_(name)
 {
-	data_.f = value;
+	data_ = value;
 }
 
 BALL_INLINE 
 NamedProperty::NamedProperty(const string& name, double value)
-	
 	:	PersistentObject(),
 		type_(DOUBLE),
 		name_(name)
 {
-	data_.d = value;
+	data_ = value;
 }
 
 BALL_INLINE 
 NamedProperty::NamedProperty(const string& name, const string& str)
-	
 	:	PersistentObject(),
 		type_(STRING),
 		name_(name)
 {
-	data_.s = new string(str);
+	data_ = new string(str);
 }
 
 BALL_INLINE 
 NamedProperty::NamedProperty(const string& name, PersistentObject& po)
-	
 	:	PersistentObject(),
 		type_(OBJECT),
 		name_(name)
 {
-	data_.object = &po;
+	data_ = &po;
+}
+
+BALL_INLINE 
+NamedProperty::NamedProperty(const string& name, boost::shared_ptr<PersistentObject>& po)
+	:	PersistentObject(),
+		type_(SMART_OBJECT),
+		name_(name)
+{
+	data_ = po;
 }
 
 BALL_INLINE 
 NamedProperty::~NamedProperty()
-	
 {
 	clear();
 }
 
 BALL_INLINE 
 bool NamedProperty::operator == (const NamedProperty& np) const
-	
 {
 	if (type_	!= np.type_)
 	{
@@ -137,18 +133,17 @@ bool NamedProperty::operator == (const NamedProperty& np) const
 
 	switch (type_)
 	{
-		case	INT:					return(data_.i			== np.data_.i);
-		case	FLOAT:				return(data_.f			== np.data_.f);
-		case	DOUBLE:				return(data_.d			== np.data_.d);
-		case	UNSIGNED_INT:	return(data_.ui			== np.data_.ui);
-		case	BOOL:					return(data_.b			== np.data_.b);
-		case	OBJECT:				return(data_.object == np.data_.object);
-		case	NONE:					return(true);	
-		case	STRING:				return(*data_.s == *np.data_.s);	
+		case	BOOL:				  return(boost::any_cast<bool>(data_) == boost::any_cast<bool>(np.data_)); break;
+		case	INT:				  return(boost::any_cast<int> (data_) == boost::any_cast<int> (np.data_)); break;
+		case	UNSIGNED_INT: return(boost::any_cast<unsigned int> (data_) == boost::any_cast<unsigned int> (np.data_)); break;
+		case	FLOAT:        return(boost::any_cast<float> (data_) == boost::any_cast<float> (np.data_)); break;
+		case	DOUBLE:       return(boost::any_cast<double> (data_) == boost::any_cast<double> (np.data_)); break;
+		case	NONE:					return(true);	break;
+		case	STRING:				return(*boost::any_cast<string*>(data_) == *boost::any_cast<string*>(np.data_)); break;
+		case	OBJECT:				return(boost::any_cast<PersistentObject*>(data_) == boost::any_cast<PersistentObject*>(np.data_)); break;
+		case	SMART_OBJECT:	return(boost::any_cast<boost::shared_ptr<PersistentObject> >(data_) == boost::any_cast<boost::shared_ptr<PersistentObject> >(np.data_)); break;
 		default:
-		{
-			Log.error() << "cannot write unknown property type: " << (int)type_ << endl;
-		}
+			Log.error() << "property.C: can not cast type!" << std::endl;
 	}
 
 	return true;
@@ -164,74 +159,70 @@ bool NamedProperty::operator != (const NamedProperty& np) const
 
 BALL_INLINE 
 int NamedProperty::getInt() const
-	
 {
-	return (type_ == INT ? data_.i : 0);
+	return (type_ == INT ? boost::any_cast<int>(data_) : 0);
 }
 
 BALL_INLINE 
 float NamedProperty::getFloat() const
-	
 {
-	return (type_ == FLOAT ? data_.f : 
-						(type_ == DOUBLE ? (float)data_.d : 
-							(type_ == INT ? (float)data_.i : (float)0.0)));
+	return (type_ == FLOAT ? boost::any_cast<float>(data_) : 
+						(type_ == DOUBLE ? (float)boost::any_cast<double>(data_) : 
+							(type_ == INT    ? (float)boost::any_cast<int>(data_) : (float)0.0)));
 }
 
 BALL_INLINE 
 double NamedProperty::getDouble() const
-	
 {
-	return (type_ == DOUBLE ? data_.d : 
-						(type_ == FLOAT ? (double)data_.f : 
-							(type_ == INT ? (double)data_.i : 0.0)));
+	return (type_ == FLOAT ? (double)boost::any_cast<float>(data_) : 
+						(type_ == DOUBLE ?       boost::any_cast<double>(data_) : 
+							(type_ == INT    ? (double)boost::any_cast<int>(data_) : 0.0)));
 }
 
 BALL_INLINE 
 string NamedProperty::getString() const
-	
 {
-	return (((type_ == STRING) && (data_.s != 0)) ? (*data_.s) : string(""));
+	return (((type_ == STRING) && (boost::any_cast<string*>(data_) != 0)) ? (*boost::any_cast<string*>(data_)) : string(""));
 }
 
 BALL_INLINE 
 unsigned int NamedProperty::getUnsignedInt() const
-	
 {
-	return (type_ == UNSIGNED_INT ? data_.ui : 0);
+	return (type_ == UNSIGNED_INT ? boost::any_cast<unsigned int>(data_) : 0);
 }
 
 BALL_INLINE 
 string NamedProperty::getName() const
-	
 {
 	return name_;
 }
 
 BALL_INLINE 
 NamedProperty::Type NamedProperty::getType() const
-	
 {
 	return type_;
 }
 
 BALL_INLINE 
 PersistentObject* NamedProperty::getObject() const
-	
 {
-	return (type_ == OBJECT ? data_.object : 0);
+	return (type_ == OBJECT ? boost::any_cast<PersistentObject*>(data_) : 0);
+}
+
+BALL_INLINE 
+boost::shared_ptr<PersistentObject> NamedProperty::getSmartObject() const
+{
+	return (type_ == SMART_OBJECT ? boost::any_cast<boost::shared_ptr<PersistentObject> >(data_) : boost::shared_ptr<PersistentObject>());
 }
 
 BALL_INLINE 
 bool NamedProperty::getBool() const
-	
 {
-	return (type_ == BOOL ? data_.b : false);
+	return (type_ == BOOL ? boost::any_cast<bool>(data_) : false);
 }
 
 BALL_INLINE 
 void PropertyManager::clear()
-	
 {
 	bitvector_.clear();
 	named_properties_.clear();
@@ -239,14 +230,12 @@ void PropertyManager::clear()
 
 BALL_INLINE 
 void PropertyManager::destroy()
-	
 {
   clear();	// same as clear
 }
 
 BALL_INLINE 
 const PropertyManager& PropertyManager::operator = (const PropertyManager& property_manager)
-	
 {
   set(property_manager);
   return *this;
