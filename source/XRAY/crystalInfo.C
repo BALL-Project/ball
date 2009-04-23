@@ -30,6 +30,24 @@ namespace BALL
 		retrieveSymOps_(space_group_);
 	}
 
+	CrystalInfo::CrystalInfo(const CrystalInfo& ci)
+		:	space_group_(ci.space_group_),
+			cell_dimensions_(ci.cell_dimensions_),
+			alpha_(ci.alpha_),
+			beta_(ci.beta_),
+			gamma_(ci.gamma_),
+			z_score_(ci.z_score_),
+			filename_(ci.filename_),
+			cart2frac_(),
+			frac2cart_(),
+			ncs_symops_(),
+			ncs_isgiven_(),
+			sg_symops_()
+	{
+		calculateMatrices_();
+		retrieveSymOps_(space_group_);
+	}
+	
 	CrystalInfo::CrystalInfo(String group, Vector3 dim, Angle alpha, Angle beta, Angle gamma)
 		:	space_group_(group),
 			cell_dimensions_(dim.x, dim.y, dim.z),

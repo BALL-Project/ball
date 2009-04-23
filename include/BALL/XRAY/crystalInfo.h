@@ -65,13 +65,18 @@ namespace BALL
 			 */
 			CrystalInfo();
 
-			/** Constructor
+			/** Detailed Constructor
 			 */
 			CrystalInfo(String group, Vector3 dim, Angle alpha, Angle beta, Angle gamma);
+			
+			/** Copy Constructor
+			 */
+			CrystalInfo(const CrystalInfo& ci);
 			
 			/** Default Constructor
 			 */
 			~CrystalInfo() throw ();
+			//@}
 	
 			bool setSpaceGroup(const String& sg);
 			const String& getSpaceGroup() const;
