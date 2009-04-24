@@ -5,8 +5,8 @@
 BUILD_VIEW=true
 BUILD_PYTHON=true
 
-CDEBUG="--enable-debuginfo"
-#CDEBUG="--disable-debuginfo"
+#CDEBUG="--enable-debuginfo"
+CDEBUG="--disable-debuginfo"
 
 COPTI="--enable-optimization"
 #COPTI="--disable-optimization"
