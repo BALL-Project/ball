@@ -32,6 +32,10 @@
 # include <BALL/MATHS/box3.h>
 #endif
 
+#ifndef BALL_DATATYPE_LIST_H
+# include <BALL/DATATYPE/list.h>
+#endif
+
 namespace BALL
 {
 	/** CrystalGenerator Class
@@ -40,6 +44,21 @@ namespace BALL
 	class BALL_EXPORT CrystalGenerator
 	{
 		public:
+
+
+			/** @name Enums
+			*/
+			//@{
+
+			/**
+			*/
+			enum CellType
+			{
+				NCS_ASU 	= 0,
+				ASU     	= 1,
+				UNITCELL	= 2
+			};
+
 
 			/** @name constructors and Destructors
 			*/
@@ -72,7 +91,7 @@ namespace BALL
 			void setCrystalInfo(CrystalInfo& ci);
 			void setSystem(System* system_ptr);	
 
-			System* generatePacking(Index a, Index b, Index c);	
+			List<System*> generatePacking(Index a_loweridx, Index a_upperidx, Index b_loweridx, Index b_upperid, Index c_loweridx, Index c_upperid);	
 
 			System* generateUnitCell(Index a, Index b, Index c);	
 			System* generateUnitCell();	

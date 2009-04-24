@@ -115,27 +115,67 @@ namespace BALL
 	//}
 
 
-	System* CrystalGenerator::generatePacking(Index a, Index b, Index c)
+	List<System*> CrystalGenerator::generatePacking(Index a_loweridx, Index a_upperidx, Index b_loweridx, Index b_upperidx, Index c_loweridx, Index c_upperidx)
 	{
-		//System* crystal = new System();
-		//crystal->setName("CRYSTAL");
-		//for (Index a = 0; a <= )
-		return 0;
+		if (a_loweridx > a_upperidx) std::swap(a_loweridx, a_upperidx);		
+		if (b_loweridx > b_upperidx) std::swap(b_loweridx, b_upperidx);		
+		if (c_loweridx > c_upperidx) std::swap(c_loweridx, c_upperidx);		
+
+		List<System*> crystal;	
+		for (Index a = a_loweridx; a <= a_upperidx; a++)
+		{
+			for (Index b = b_loweridx; b <= b_upperidx; b++)
+			{
+				for (Index c = c_loweridx; c <= c_upperidx; c++)
+				{
+					crystal.push_back(generateUnitCell(a,b,c));	
+				}
+			}
+		}
+		return crystal;
 	}
 
 	System* CrystalGenerator::generateUnitCell(Index a, Index b, Index c)
 	{
-		Matrix4x4 transmatrix;
-		transmatrix.setIdentity();
+
 		System* unitcell = new System(*unitcell_);
 		unitcell->setName("UNITCELL (" + String(a) + "|" + String(b) + "|" + String(c) +")");
-		transformer_.setTransformation(ci_ptr_->getCart2Frac());
-		unitcell->apply(transformer_);
-		transmatrix.setTranslation(Vector3(a,b,c));
+		
+		// set CELLTYPE to UNITCELL = 2, TODO: switch to an enum later
+		unitcell->setProperty("CELLTYPE", (unsigned int)2 );	
+		unitcell->setProperty("UC_IDX_A", (int)a );	
+		unitcell->setProperty("UC_IDX_B", (int)b );	
+		unitcell->setProperty("UC_IDX_C", (int)c );	
+		
+		// define a global transformation matrix
+		Matrix4x4 transmatrix;
+		transmatrix.setIdentity();
+		
+		Matrix4x4 translationmatrix;
+		transmatrix.setIdentity();
+		translationmatrix.setTranslation(Vector3(a,b,c));
+		
+		//to apply the transformation correctly, be aware that the order of multiplications is reversed
+		// assume two linear mappings:
+		//  		f: Cart -> Frac
+		//  		g: Cart -> Frac
+		// composition of both means for matrix multiplications:
+		// 			g x f
+		transmatrix *= ci_ptr_->getFrac2Cart();
+		transmatrix *= translationmatrix;
+		transmatrix *= ci_ptr_->getCart2Frac();
 		transformer_.setTransformation(transmatrix);
 		unitcell->apply(transformer_);
-		transformer_.setTransformation(ci_ptr_->getFrac2Cart());
-		unitcell->apply(transformer_);
+			
+		//Set Unit Cell index for all Molecules in the unit cell
+		MoleculeIterator mit = unitcell->beginMolecule();
+		for(; mit != unitcell->endMolecule(); ++mit)
+		{
+			mit->setProperty("UC_IDX_A", (int)a );	
+			mit->setProperty("UC_IDX_B", (int)b );	
+			mit->setProperty("UC_IDX_C", (int)c );	
+		}
+
 		return unitcell;
 	}
 	
@@ -146,12 +186,23 @@ namespace BALL
 
 	System* CrystalGenerator::generateAsymmetricUnit()
 	{
-		cout << unitcell_ << endl;	
 		return asu_;
 	}
 	
 	System* CrystalGenerator::generateSymMoleculesWithinDistance(float angstrom)
 	{
+		BoundingBoxProcessor bbp;	
+		
+		//	create BoundingBoxes for all asymmetric units
+		List<SimpleBox3> asu_bbs;	
+		//	transform into fractional space
+		System* temp_unitcell = new System(*unitcell_);
+		transformer_.setTransformation(ci_ptr_->getCart2Frac());
+		temp_unitcell->apply(transformer_);
+		// Iterate over all asymmetric units
+		//SystemIterator si;
+		MoleculeIterator mit;
+		delete temp_unitcell;
 		return 0;
 	}
 	
@@ -168,52 +219,65 @@ namespace BALL
 	bool CrystalGenerator::buildUnitCell_()
 	{
 		unitcell_ = new System();
+
+		// set a name and specify the cell type of this system
 		unitcell_->setName("UNITCELL (0|0|0)");
+		unitcell_->setProperty("CELLTYPE", (unsigned int)2 );	
+
 		Size symops_size = ci_ptr_->getNumberOfSymOps();
 
 		cout << "symops_size " << symops_size << endl;
 		//System* current_asu;
-
+		Matrix4x4 transmatrix;
 		for (Position i = 0; i < symops_size; i++)
 		{
+			transmatrix.setIdentity();
 			cout << "symop " << i;
 			System* current_asu = new System(*asu_);
-			transformer_.setTransformation(ci_ptr_->getCart2Frac());
-			current_asu->apply(transformer_);
-			transformer_.setTransformation(ci_ptr_->getSymOp(i));
-			current_asu->apply(transformer_);
-			transformer_.setTransformation(ci_ptr_->getFrac2Cart());
-			current_asu->apply(transformer_);
-			
-			unitcell_->spliceAfter(*current_asu);
 
-			cout << endl;
-		}
+			transmatrix *= ci_ptr_->getFrac2Cart();
+			transmatrix *= ci_ptr_->getSymOp(i);
+			transmatrix *= ci_ptr_->getCart2Frac();
+			transformer_.setTransformation(transmatrix);
+			current_asu->apply(transformer_);
 
-		MoleculeIterator mi;
-		Matrix4x4 corr_matrix;
-		Vector3 center;
-		Vector3 corr_trans;
-		for(mi = unitcell_->beginMolecule(); mi != unitcell_->endMolecule(); ++mi)
-		{
-			corr_matrix.setIdentity();
-			corr_trans = Vector3(0,0,0);
-			transformer_.setTransformation(ci_ptr_->getCart2Frac());
-			mi->apply(transformer_);
-			mi->apply(center_processor_);
-			center = center_processor_.getCenter();
-			for (int k=0; k<3; k++)
+
+			//	Postprocess Molecules in Unit Cell
+			Matrix4x4 corr_matrix;
+			Vector3 center;
+			Vector3 corr_trans;
+			MoleculeIterator mit = current_asu->beginMolecule();
+			for(; mit != current_asu->endMolecule(); ++mit)
 			{
-				if (center[k] < 0) corr_trans[k] = 1;
-				else if (center[k] >= 1) corr_trans[k] = -1;
+				//	Shift the molecules into unit cell if their geometric center is
+				//		- necessary because symop transformations do not distinguish application
+				//		order of  rotations and translations
+				corr_matrix.setIdentity();
+				corr_trans = Vector3(0,0,0);
+				transformer_.setTransformation(ci_ptr_->getCart2Frac());
+				mit->apply(transformer_);
+				mit->apply(center_processor_);
+				center = center_processor_.getCenter();
+				for (int k=0; k<3; k++)
+				{
+					if (center[k] < 0) corr_trans[k] = 1;
+					else if (center[k] >= 1) corr_trans[k] = -1;
+				}
+
+				corr_matrix.setTranslation(corr_trans);
+				corr_matrix = ci_ptr_->getFrac2Cart() * corr_matrix;
+				transformer_.setTransformation(corr_matrix);
+				mit->apply(transformer_);
+
+				// set cell type and asymmetric unit index for all top level atom
+				// containers of the current asymmetric unit
+				mit->setProperty("CELLTYPE", (unsigned int)1 );	
+				mit->setProperty("ASU_IDX", (unsigned int)i );	
+
 			}
-			//cout << center << endl;
-			//cout << corr_trans << endl;
-			corr_matrix.setTranslation(corr_trans);
-			transformer_.setTransformation(corr_matrix);
-			mi->apply(transformer_);
-			transformer_.setTransformation(ci_ptr_->getFrac2Cart());
-			mi->apply(transformer_);
+
+			unitcell_->spliceAfter(*current_asu);
+			cout << endl;
 		}
 
 		cout << "uc_cP" << unitcell_->countProteins() << endl;
@@ -229,13 +293,15 @@ namespace BALL
 		System* current_ncs;
 
 		current_ncs = new System(*system_);
+
 		asu_->spliceAfter(*current_ncs);
 		for (Position i = 0; i < ncs_symops_size; i++)
 		{
 			cout << "ncs " << i;
-			current_ncs = new System(*system_);
+			// TODO add if for isIdentity
 			if (!ci_ptr_->isgivenNCS(i))
 			{
+				current_ncs = new System(*system_);
 				transformer_.setTransformation(ci_ptr_->getNCS(i));
 				current_ncs->apply(transformer_);
 				asu_->spliceAfter(*current_ncs);
