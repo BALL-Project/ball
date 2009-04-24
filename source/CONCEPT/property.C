@@ -117,8 +117,8 @@ namespace BALL
 				// reading the object and will set this pointer afterwards 
 				PersistentObject* ptr;
 				pm.readObjectPointer(ptr, "data_.smart_object"); 
-				data_ = boost::shared_ptr<PersistentObject>(ptr);
-				pm.registerSmartPointer(*(boost::any_cast<boost::shared_ptr<PersistentObject> >(&data_)));
+				data_ = boost::shared_ptr<PersistentObject>();
+				pm.registerSmartPointer(*(boost::any_cast<boost::shared_ptr<PersistentObject> >(&data_)), ptr);
 				break;
 
 			default:

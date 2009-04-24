@@ -318,7 +318,7 @@ namespace BALL
 				This method also checks header and trailer.
 				@param	object a mutable pointer reference we want to read.
 				@param	name the name of the object pointer (usually the name of the member variable)
-				@return	true if reading wass successful
+				@return	true if reading was successful
 		*/
 		template <typename T>
 		bool readObjectPointer(T*& object, const char* name);
@@ -328,8 +328,9 @@ namespace BALL
 				an object with corresponding this pointer has been read.
 				If s_ptr currently points to zero this method is a noop.
 				@param s_ptr a mutable shared_ptr reference for later update
+				@param ptr the pointer stub for the this pointer
 		 */
-		void registerSmartPointer(boost::shared_ptr<PersistentObject>& s_ptr);
+		void registerSmartPointer(boost::shared_ptr<PersistentObject>& s_ptr, PersistentObject* ptr);
 
 		/** Write a reference to a PersistentObject. 
 				This method also writes the necessary header and trailer.

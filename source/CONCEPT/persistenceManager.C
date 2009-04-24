@@ -397,7 +397,7 @@ namespace BALL
 		}
 		
 		SmartPointerList::iterator s_it = smart_pointer_list_.begin();
-		for (; s_it != smart_pointer_list_.end(); ++it) 
+		for (; s_it != smart_pointer_list_.end(); ++s_it) 
 		{
 			if (pointer_map_.has((*s_it).second)) 
 			{
@@ -416,11 +416,11 @@ namespace BALL
 		return result;
 	}
 
-	void PersistenceManager::registerSmartPointer(boost::shared_ptr<PersistentObject>& s_ptr)
+	void PersistenceManager::registerSmartPointer(boost::shared_ptr<PersistentObject>& s_ptr, PersistentObject* ptr)
 	{
-		if (s_ptr.get() != 0)
+		if (ptr != 0)
 		{
-			smart_pointer_list_.push_back(std::make_pair((boost::shared_ptr<PersistentObject>*)&s_ptr, (LongSize)((void*)s_ptr.get())));
+			smart_pointer_list_.push_back(std::make_pair((boost::shared_ptr<PersistentObject>*)&s_ptr, (LongSize)((PersistentObject*)ptr)));
 		}
 	}
 

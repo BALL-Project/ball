@@ -304,6 +304,7 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 			TEST_EQUAL(pers_a->getType(), NamedProperty::SMART_OBJECT)
 			TEST_EQUAL(pers_a->getName(), "test5")
 			TEST_NOT_EQUAL(pers_a->getSmartObject().get(), 0)
+			TEST_EQUAL(((Protein*)(pers_a->getSmartObject().get()))->getName(), "PROTEIN2")
 		}
 		delete ptr;
 	}
