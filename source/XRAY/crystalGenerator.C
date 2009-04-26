@@ -1,4 +1,3 @@
-
 #include <BALL/XRAY/crystalGenerator.h>
 #include <BALL/KERNEL/system.h>
 
@@ -15,9 +14,9 @@ namespace BALL
 	}
 	
 	CrystalGenerator::CrystalGenerator(const CrystalGenerator& cg)
-		:	system_(0),
-			asu_(0),
-			unitcell_(0)
+		:	system_(cg.system_),
+			asu_(cg.asu_),
+			unitcell_(cg.unitcell_)
 	{
 	}
 
@@ -189,21 +188,112 @@ namespace BALL
 		return asu_;
 	}
 	
-	System* CrystalGenerator::generateSymMoleculesWithinDistance(float angstrom)
+	List<System*> CrystalGenerator::generateSymMoleculesWithinDistance(float angstrom)
 	{
-		BoundingBoxProcessor bbp;	
+		// As we calculate the bounding boxes in fractional space
+		// Scale the distance for every axis
+		Vector3 distance = Vector3(angstrom, angstrom, angstrom);
+		distance = ci_ptr_->getCart2Frac() * distance;
 		
-		//	create BoundingBoxes for all asymmetric units
-		List<SimpleBox3> asu_bbs;	
-		//	transform into fractional space
-		System* temp_unitcell = new System(*unitcell_);
 		transformer_.setTransformation(ci_ptr_->getCart2Frac());
-		temp_unitcell->apply(transformer_);
-		// Iterate over all asymmetric units
-		//SystemIterator si;
-		MoleculeIterator mit;
-		delete temp_unitcell;
-		return 0;
+		system_->apply(transformer_);
+		
+		// calulate the bounding box of the system, extended about the distance
+		BoundingBoxProcessor bbp;	
+		system_->apply(bbp);
+		
+		Vector3 sys_lo =  bbp.getLower();
+    Vector3 sys_up =  bbp.getUpper();
+    sys_lo =  sys_lo - distance;
+    sys_up =  sys_up + distance;
+		
+		// calculate bounding box for every molecule in the unit cell	
+		// and store them in a vector
+		vector<SimpleBox3> boundingboxes;
+		MoleculeIterator mit = unitcell_->beginMolecule();
+		for (; mit != unitcell_->endMolecule(); ++mit)
+		{
+			transformer_.setTransformation(ci_ptr_->getCart2Frac());
+			mit->apply(transformer_);
+			mit->apply(bbp);
+			boundingboxes.push_back(bbp.getBox());
+			transformer_.setTransformation(ci_ptr_->getFrac2Cart());
+			mit->apply(transformer_);
+		}
+		
+		//for every surrounding unit cell 
+		Vector3 lo, up;
+		vector<BitVector> boundingbits_vector;		
+		for (Index i = -1; i <= 1; i++)
+		{
+			for (Index j = -1; j <= 1; j++)
+			{
+				for (Index k = -1; k <= 1; k++)
+				{
+					//	check if any of the bounding boxes reaches into the extended bounding box of the origin system 
+					BitVector boundingbits;
+					boundingbits.setSize(boundingboxes.size());
+					for (vector<SimpleBox3>::iterator it = boundingboxes.begin(); it != boundingboxes.end(); ++it)
+					{
+						it->get(lo, up);
+
+						bool bbit =(	(		((lo.x + i > sys_lo.x) && (lo.x +i <= sys_up.x)) 
+													&&	((lo.y + j > sys_lo.y) && (lo.y +j <= sys_up.y))
+													&&	((lo.z + k > sys_lo.z) && (lo.z +k <= sys_up.z)) )
+												||
+													(		((up.x + i <= sys_up.x) && (up.x +i > sys_lo.x))
+                          &&	((up.y + j <= sys_up.y) && (up.y +j > sys_lo.y))
+													&&	((up.z + k <= sys_up.z) && (up.z +k > sys_lo.z)) ));
+
+						// store clashing information in a bitvector for every unitcell 
+						boundingbits.setBit((it - boundingboxes.begin()), bbit);
+					}
+					boundingbits_vector.push_back(boundingbits);
+				}
+			}
+		}
+
+
+		cout << ci_ptr_->getFrac2Cart() * sys_lo << endl;
+		cout << ci_ptr_->getFrac2Cart() * sys_up << endl;
+		
+		transformer_.setTransformation(ci_ptr_->getFrac2Cart());
+		system_->apply(transformer_);
+		
+		// generate surrounding unitcell, if there are clashing asyymetric units and delete delete non-clashing
+		List<System*> crystal;	
+		System* current_unitcell = 0;
+		vector<BitVector>::iterator bit = boundingbits_vector.begin();
+		for (Index a = -1; a <= 1; a++)
+		{
+			for (Index b = -1; b <= 1; b++)
+			{
+				for (Index c = -1; c <= 1; c++)
+				{
+					if (bit->isAnyBit(true))
+					{
+						current_unitcell = generateUnitCell(a,b,c);	
+						MoleculeIterator mit = current_unitcell->beginMolecule();
+						MoleculeIterator temp_mit;
+						while ( mit != current_unitcell->endMolecule())
+						{
+							if (!(bit->getBit(mit->getProperty("ASU_IDX").getUnsignedInt())))
+							{
+								temp_mit = mit;
+								++temp_mit;
+								(*mit).destroy();
+								mit = temp_mit;
+							}
+							else ++mit;
+						}
+						crystal.push_back(current_unitcell);
+					}
+
+					++bit;
+				}
+			}
+		}
+		return crystal;
 	}
 	
 	Box3 CrystalGenerator::getUnitCellBox(Index a, Index b, Index c)
@@ -243,32 +333,9 @@ namespace BALL
 
 
 			//	Postprocess Molecules in Unit Cell
-			Matrix4x4 corr_matrix;
-			Vector3 center;
-			Vector3 corr_trans;
 			MoleculeIterator mit = current_asu->beginMolecule();
 			for(; mit != current_asu->endMolecule(); ++mit)
 			{
-				//	Shift the molecules into unit cell if their geometric center is
-				//		- necessary because symop transformations do not distinguish application
-				//		order of  rotations and translations
-				corr_matrix.setIdentity();
-				corr_trans = Vector3(0,0,0);
-				transformer_.setTransformation(ci_ptr_->getCart2Frac());
-				mit->apply(transformer_);
-				mit->apply(center_processor_);
-				center = center_processor_.getCenter();
-				for (int k=0; k<3; k++)
-				{
-					if (center[k] < 0) corr_trans[k] = 1;
-					else if (center[k] >= 1) corr_trans[k] = -1;
-				}
-
-				corr_matrix.setTranslation(corr_trans);
-				corr_matrix = ci_ptr_->getFrac2Cart() * corr_matrix;
-				transformer_.setTransformation(corr_matrix);
-				mit->apply(transformer_);
-
 				// set cell type and asymmetric unit index for all top level atom
 				// containers of the current asymmetric unit
 				mit->setProperty("CELLTYPE", (unsigned int)1 );	
@@ -279,7 +346,10 @@ namespace BALL
 			unitcell_->spliceAfter(*current_asu);
 			cout << endl;
 		}
-
+		
+		//correct positions of the asu's
+		correctASUPositions_(unitcell_);
+		
 		cout << "uc_cP" << unitcell_->countProteins() << endl;
 		cout << "uc_cM" << unitcell_->countMolecules() << endl;
 		return true;
@@ -316,6 +386,39 @@ namespace BALL
 		cout << "asu_cP" << asu_->countProteins() << endl;
 		cout << "asu_cM" << asu_->countMolecules() << endl;
 		return true;
+	}
+
+	bool CrystalGenerator::correctASUPositions_(System* raw_cell)
+	{
+			//	Postprocess Molecules in Unit Cell
+			Matrix4x4 corr_matrix;
+			Vector3 center;
+			Vector3 corr_trans;
+			MoleculeIterator mit = raw_cell->beginMolecule();
+			for(; mit != raw_cell->endMolecule(); ++mit)
+			{
+				//	Shift the molecules into unit cell if their geometric center is
+				//		- necessary because symop transformations do not distinguish application
+				//		order of  rotations and translations
+				corr_matrix.setIdentity();
+				corr_trans = Vector3(0,0,0);
+				transformer_.setTransformation(ci_ptr_->getCart2Frac());
+				mit->apply(transformer_);
+				mit->apply(center_processor_);
+				center = center_processor_.getCenter();
+				for (int k=0; k<3; k++)
+				{
+					if (center[k] < 0) corr_trans[k] = 1;
+					else if (center[k] >= 1) corr_trans[k] = -1;
+				}
+
+				corr_matrix.setTranslation(corr_trans);
+				corr_matrix = ci_ptr_->getFrac2Cart() * corr_matrix;
+				transformer_.setTransformation(corr_matrix);
+				mit->apply(transformer_);
+
+			}
+			return true;
 	}
 
 

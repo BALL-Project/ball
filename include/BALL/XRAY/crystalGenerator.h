@@ -96,7 +96,7 @@ namespace BALL
 			System* generateUnitCell(Index a, Index b, Index c);	
 			System* generateUnitCell();	
 			System* generateAsymmetricUnit();	
-			System* generateSymMoleculesWithinDistance(float angstrom);	
+			List<System*> generateSymMoleculesWithinDistance(float angstrom);	
 			
 			Box3 getUnitCellBox(Index a, Index b, Index c);
 
@@ -104,6 +104,7 @@ namespace BALL
 			
 			bool buildUnitCell_();	
 			bool buildASU_();
+			bool correctASUPositions_(System* raw_cell);
 			
 			GeometricCenterProcessor center_processor_;
 			TransformationProcessor transformer_;
