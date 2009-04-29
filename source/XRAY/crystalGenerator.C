@@ -47,7 +47,16 @@ namespace BALL
 	//}
 	void CrystalGenerator::setCrystalInfo(CrystalInfo& ci)
 	{
+		ci_ptr_ = &ci;
+		if (buildASU_())
+		{
+			cout << "ASU successfully build" << endl;
+			if (buildUnitCell_())
+			{
+				cout << "UnitCell successfully build" << endl;
+			}
 
+		}
 	}
 
 	void CrystalGenerator::setSystem(System* system_ptr)
@@ -75,25 +84,6 @@ namespace BALL
 			Log.warn() << "No CrystalInfo object found, generating default CrystalInfo" << std::endl;
 			ci_ptr_ = new CrystalInfo();
 		}
-		//Protein* prot = dynamic_cast<Protein*>(system->getMolecule(0));
-		//if( prot != 0)
-		//{
-		//	if (prot->hasProperty("CRYSTALINFO"))
-		//	{
-		//		cout << "hasProperty" << endl;
-		//		ci_ptr_ = dynamic_cast<CrystalInfo*>(prot->getProperty("CRYSTALINFO").getObject());	
-		//	}
-		//	else	
-		//	{
-		//		cout << "hasNoProperty" << endl;
-		//		ci_ptr_ = new CrystalInfo();
-		//	}
-		//}
-		//else
-		//{
-		//	cout << "hasNoProperty and contains no protein" << endl;
-		//	ci_ptr_ = new CrystalInfo();
-		//}
 
 		if (buildASU_())
 		{
