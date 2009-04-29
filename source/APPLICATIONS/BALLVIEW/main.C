@@ -8,6 +8,8 @@
 #include <QtGui/qapplication.h>
 #include <BALL/CONFIG/config.h>
 
+#include "splashscreen.rcc"
+
 #ifdef BALL_USE_GLEW
 #	include <GL/glew.h>
 #endif
@@ -71,7 +73,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 	putenv("BALL_RETURN_VALUE=");
 	QApplication application(argc, argv);
 
-  QPixmap splash_pm("BALLView-1.3-Splashscreen.png");
+  QPixmap splash_pm(":BALLView-1.3-Splashscreen.png");
   QSplashScreen* splash = new QSplashScreen(splash_pm);
   splash->show();
 

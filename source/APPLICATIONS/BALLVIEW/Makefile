@@ -58,6 +58,8 @@ demoTutorialDialog_moc.C: demoTutorialDialog.h
 ballviewDemoData_moc.C: demoTutorialDialogData.h
 	$(MOC) demoTutorialDialogData.h -o $@
 
+%.rcc: %.qrc
+	${RCC} $< -o $@
 
 clean: 
 	@$(RM) -f $(UIC_FILES)
