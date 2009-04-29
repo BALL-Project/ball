@@ -102,26 +102,6 @@
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QComboBox" name="server" >
-   <property name="geometry" >
-    <rect>
-     <x>108</x>
-     <y>30</y>
-     <width>261</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <item>
-    <property name="text" >
-     <string>Uppsala Electron-Density Server</string>
-    </property>
-   </item>
-   <item>
-    <property name="text" >
-     <string>Electron Microscopy Data Bank</string>
-    </property>
-   </item>
-  </widget>
   <widget class="QComboBox" name="entryId" >
    <property name="geometry" >
     <rect>
@@ -147,7 +127,7 @@
     <number>4</number>
    </property>
   </widget>
-  <widget class="QGroupBox" name="groupBox" >
+  <widget class="QGroupBox" name="eds_options" >
    <property name="enabled" >
     <bool>true</bool>
    </property>
@@ -162,12 +142,12 @@
    <property name="title" >
     <string>EDS Options</string>
    </property>
-   <widget class="QLabel" name="edstype" >
+   <widget class="QLabel" name="eds_typelabel" >
     <property name="geometry" >
      <rect>
       <x>31</x>
       <y>31</y>
-      <width>101</width>
+      <width>71</width>
       <height>22</height>
      </rect>
     </property>
@@ -175,7 +155,23 @@
      <string>Map Type</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="comboBox" >
+   <widget class="QCheckBox" name="eds_downloadpdb" >
+    <property name="geometry" >
+     <rect>
+      <x>32</x>
+      <y>70</y>
+      <width>271</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="layoutDirection" >
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="text" >
+     <string>Download PDB File</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="eds_maptype" >
     <property name="geometry" >
      <rect>
       <x>104</x>
@@ -194,22 +190,6 @@
       <string>Fobs - Fcalc</string>
      </property>
     </item>
-   </widget>
-   <widget class="QCheckBox" name="checkBox" >
-    <property name="geometry" >
-     <rect>
-      <x>32</x>
-      <y>70</y>
-      <width>271</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="layoutDirection" >
-     <enum>Qt::LeftToRight</enum>
-    </property>
-    <property name="text" >
-     <string>Download PDB File</string>
-    </property>
    </widget>
   </widget>
   <widget class="QLabel" name="entryLabel" >
@@ -240,6 +220,26 @@
    <property name="text" >
     <string>Server</string>
    </property>
+  </widget>
+  <widget class="QComboBox" name="server" >
+   <property name="geometry" >
+    <rect>
+     <x>108</x>
+     <y>30</y>
+     <width>261</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text" >
+     <string>Uppsala Electron-Density Server</string>
+    </property>
+   </item>
+   <item>
+    <property name="text" >
+     <string>Electron Microscopy Data Bank</string>
+    </property>
+   </item>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11" />

@@ -8,8 +8,21 @@
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/WIDGETS/datasetControl.h>
+#include <BALL/VIEW/DATATYPE/standardDatasets.h>
+#include <BALL/FORMAT/DSN6File.h>
+#include <BALL/FORMAT/CCP4File.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/threads.h>
+
+#include <fstream>
+#include <iostream>
+//#include "/usr/include/boost/iostreams/filtering_streambuf.hpp"
+//#include "/usr/include/boost/iostreams/copy.hpp"
+//#include "/usr/include/boost/iostreams/filter/gzip.hpp"
+#include <boost/iostreams/filtering_streambuf.hpp>
+#include <boost/iostreams/copy.hpp>
+#include <boost/iostreams/filter/gzip.hpp>
 
 #include <QtGui/qlineedit.h> 
 #include <QtGui/qradiobutton.h>
@@ -40,9 +53,11 @@ namespace BALL
 			thread_(0),
 			aborted_(false),
 			error_(false),
-			eds_prefix_("http://eds.bmc.uu.se/"),
+			eds_prefix_("http://eds.bmc.uu.se/eds/sfd/"),
+			eds_infix_("/"),
 			eds_suffix_(".omap"),
-			emdb_prefix_("ftp://ftp.ebi.ac.uk/pub/databases/emdb/structures/"),
+			emdb_prefix_("ftp://ftp1.ebi.ac.uk/pub/databases/emdb/structures/EMD-"),
+			emdb_infix_("/map/"),
 			emdb_suffix_(".map.gz")
 		{
 #ifdef BALL_VIEW_DEBUG
@@ -56,6 +71,7 @@ namespace BALL
 			connect( download, SIGNAL( clicked() ), this, SLOT( slotDownload() ) );
 			connect( button_abort, SIGNAL( clicked() ), this, SLOT( abort() ) );
 			connect( entryId, SIGNAL( editTextChanged(const QString&) ), this, SLOT( idChanged() ) );
+			connect( server, SIGNAL( currentIndexChanged(int) ), this, SLOT( serverChanged() ) );
 
 			// register the widget with the MainControl
 			registerWidget(this);
@@ -100,9 +116,19 @@ namespace BALL
 			downloadStarted_();
 			thread_->setURL(url);
 			thread_->start();
+			
 			Size last_bytes = 0;
 			while (thread_->isRunning())
 			{
+				//cout << "Protocol       " << thread_->getTCPTransfer().getProtocol() << endl;
+				//cout << "HostAddress    " << thread_->getTCPTransfer().getHostAddress() << endl;
+				//cout << "FileAddress    " << thread_->getTCPTransfer().getFileAddress() << endl;
+				//cout << "Port           " << thread_->getTCPTransfer().getPort() << endl;
+				//cout << "StatusCode     " << thread_->getTCPTransfer().getStatusCode() << endl;
+				//cout << "ReceivedBytes  " << thread_->getTCPTransfer().getReceivedBytes() << endl,
+				//cout << "Login          " << thread_->getTCPTransfer().getLogin() << endl;
+				//cout << "Password       " << thread_->getTCPTransfer().getPassword() << endl;
+				//cout << "Stream         " << thread_->getTCPTransfer().getStream() << endl;
 				qApp->processEvents();
 
 				Size bytes = thread_->getTCPTransfer().getReceivedBytes();
@@ -115,6 +141,7 @@ namespace BALL
 				thread_->wait(200);
 			}
 
+			
 			if (aborted_) return false;
 
 			if (thread_->getTCPTransfer().getReceivedBytes() == 0 ||
@@ -137,6 +164,257 @@ namespace BALL
 
 			return true;
 		}
-	}
-}
 
+		void DownloadElectronDensity::slotDownload()
+		{
+			RegularData3D* d3 = new RegularData3D();
+			RegularData3DDataset* set = new RegularData3DDataset();
+
+			//try
+			//{
+				String id = ascii(entryId->currentText());
+				String url = "";
+				String filename = ""; 
+				if(server->currentIndex() == 0) //if EDS
+				{
+					url += eds_prefix_;
+					url += id;
+					url += eds_infix_;
+					if(eds_maptype->currentIndex() == 1)//diff map
+					{
+						id += "_diff";
+					}
+					filename += id;
+					filename += eds_suffix_;
+					url += filename;
+				}
+				else
+				{
+					url += emdb_prefix_; 
+					url += id;
+					url += emdb_infix_;
+					id = "emd_" + id;
+					filename += id;
+					filename += emdb_suffix_;
+					url += filename;
+				}
+				//cout << filename << " " << url << endl;
+				thread_->setFilename(filename);
+				bool ok = threadedDownload_(url);
+				//bool ok = threadedDownload_("ftp://ftp.ebi.ac.uk/pub/databases/emdb/structures/EMD-1119/map/emd-1119.map.gz");
+				//bool ok = threadedDownload_("ftp://ftp.mpi-sb.mpg.de/pub/welcome.msg");
+				//bool ok = threadedDownload_("ftp://ftp.mpi-sb.mpg.de/pub/linux/debian/ls-lR.gz");
+				downloadEnded_();
+			
+
+				if (!ok) 
+				{
+					delete d3;
+					delete set;
+					cout << "Mist" << endl;
+					return;
+				}
+
+				if(server->currentIndex() == 0)
+				{
+					DSN6File map_file(filename);
+					map_file.read(*d3);
+					map_file.close();
+				}
+				else
+				{
+					//ifstream file(filename.c_str(), ios_base::in | ios_base::binary);
+					//filtering_streambuf<input> in;
+					//in.push(gzip_decompressor());
+					//in.push(file);
+					//boost::iostreams::copy(in, cout);
+
+					//CCP4File map_file("exec:gunzip -c " + filename);
+					//map_file.read(*d3);
+					//map_file.close();
+				}
+
+				set->setData(d3);
+				set->setName(id);
+				set->setType(RegularData3DController::type);
+
+				notify_(new DatasetMessage(set, DatasetMessage::ADD));
+				removeFile_(filename);
+
+				//if (system->countAtoms() == 0)
+				//{
+				//	delete system;
+				//	show();
+				//	setStatusbarText("Could not fetch the given PDBFile", true);
+				//	return;
+				//}
+				//else
+				//{
+				setStatusbarText(String("read ") + id + " electron density map", true);
+				//}
+
+				//if (system->getName() == "")
+				//{
+				//	system->setName(ascii(pdbId->currentText()));
+				//}
+				DatasetController* dc = DatasetControl::getInstance(0)->getController(RegularData3DController::type);
+				RegularData3DController& rcon = *(RegularData3DController*) dc;
+
+				if(eds_maptype->currentIndex() == 1)//diff map
+				{
+					rcon.computeIsoContourSurface(*set, ColorRGBA(0,255,0), 3*d3->calculateSD());
+					rcon.computeIsoContourSurface(*set, ColorRGBA(255,0,0), -3*d3->calculateSD());
+				}
+				else
+				{
+					rcon.computeIsoContourSurface(*set, ColorRGBA(0,0,255), d3->calculateSD());
+				}
+
+				//system->setProperty("FROM_FILE", url);
+				close();
+				entryId->clearEditText();
+
+				//notify_(new CompositeMessage(*system, CompositeMessage::CENTER_CAMERA));
+
+				download->setDefault(true);
+				entryId->setFocus();
+			//}
+			//catch(...)
+			//{
+			//	setStatusbarText("download PDB file failed", true);
+			//	//delete system;
+			//}
+		}
+
+		void DownloadElectronDensity::idChanged()
+		{
+			download->setEnabled(entryId->currentText() != "");
+		}
+
+		void DownloadElectronDensity::typeChanged()
+		{
+		}
+
+		void DownloadElectronDensity::serverChanged()
+		{
+			//disable eds options if anything other than EDS is selected
+			eds_options->setDisabled(server->currentIndex());
+		}
+
+		void DownloadElectronDensity::pdbDownloadChecked()
+		{
+		}
+
+
+		void DownloadElectronDensity::abort()
+		{
+			if (thread_ == 0) return;
+			aborted_ = true;
+
+			thread_->abort();
+			thread_->wait(5500);
+
+			if (thread_->isRunning())
+			{
+				thread_->terminate();
+				thread_->wait();
+			}
+			removeFile_(thread_->getFilename());
+
+			downloadEnded_();
+		}
+
+		void DownloadElectronDensity::downloadStarted_()
+			throw()
+		{
+			aborted_ = false;
+			error_   = false;
+			setStatusbarText("Started download, please wait...", true);
+			button_abort->setEnabled(true);
+			download->setEnabled(false);
+			entryId->setEnabled(false);
+			buttonClose->setEnabled(false);
+		}
+
+		void DownloadElectronDensity::downloadEnded_()
+			throw()
+		{
+			if (!aborted_ && !error_)
+			{
+				setStatusbarText("Finished downloading, please wait...", true);
+			}
+			button_abort->setEnabled(false);
+			download->setEnabled(true);
+			entryId->setEnabled(true);
+			buttonClose->setEnabled(true);
+			idChanged();
+			qApp->processEvents();
+			entryId->setFocus();
+
+			if (error_)
+			{
+				removeFile_(thread_->getFilename());
+			}
+		}
+
+		void DownloadElectronDensity::removeFile_(const String& filename)
+		{
+			try
+			{
+				File::remove(filename);
+			}
+			catch(...) {}
+		}
+
+		void DownloadElectronDensity::setProxyAndTransfer_(TCPTransfer& tcp)
+		{
+			MainControl* mc = getMainControl();
+			tcp.setProxy(mc->getProxy(), mc->getProxyPort());
+			tcp.transfer();
+		}
+
+		void DownloadElectronDensity::fetchPreferences(INIFile& inifile)
+			throw()
+			{
+				if (!inifile.hasSection("ElectronDensityFiles") ||
+						!inifile.hasEntry("ElectronDensityFiles", "History"))
+				{
+					return;
+				}
+
+				String files = inifile.getValue("ElectronDensityFiles", "History");
+				vector<String> fields;
+				files.split(fields, "# ");
+				for (Position p = 0; p < fields.size(); p++)
+				{
+					QString file(fields[p].c_str());
+					if (entryId->findText(file) == -1)
+					{
+						entryId->addItem(file);
+					}
+				}
+			}
+
+		void DownloadElectronDensity::writePreferences(INIFile& inifile)
+			throw()
+			{
+				String files;
+				for (Index p = 0; p < entryId->count(); p++)
+				{
+					String s = ascii(entryId->itemText(p));
+					if (s == "") continue;
+					files += s + "#";
+				}
+
+				inifile.appendSection("ElectronDensityFiles");
+				inifile.insertValue("ElectronDensityFiles", "History", files);
+			}
+
+		void DownloadElectronDensity::checkMenu(MainControl& mc)
+			throw()
+		{
+			menu_id_->setEnabled(!mc.compositesAreLocked());
+		}
+
+	} // namespace VIEW
+} // namespace BALL

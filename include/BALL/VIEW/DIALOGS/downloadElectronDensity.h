@@ -126,7 +126,8 @@ namespace BALL
 				HashSet<String> 				unsupported_images_;
 
 				QAction* menu_id_;
-				String   eds_prefix_, eds_suffix_, emdb_prefix_, emdb_suffix_;
+				String   eds_prefix_, eds_infix_, eds_suffix_; 
+				String emdb_prefix_, emdb_infix_, emdb_suffix_;
 		};
 
 	} 
