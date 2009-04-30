@@ -32,6 +32,9 @@
 #include <QtGui/qpushbutton.h>
 #include <QtGui/qapplication.h>
 
+#include <QtNetwork/qhttp.h>
+#include <QtNetwork/qftp.h>
+
 #ifdef BALL_HAS_SSTREAM
 # include <sstream>
 #else
@@ -120,15 +123,6 @@ namespace BALL
 			Size last_bytes = 0;
 			while (thread_->isRunning())
 			{
-				//cout << "Protocol       " << thread_->getTCPTransfer().getProtocol() << endl;
-				//cout << "HostAddress    " << thread_->getTCPTransfer().getHostAddress() << endl;
-				//cout << "FileAddress    " << thread_->getTCPTransfer().getFileAddress() << endl;
-				//cout << "Port           " << thread_->getTCPTransfer().getPort() << endl;
-				//cout << "StatusCode     " << thread_->getTCPTransfer().getStatusCode() << endl;
-				//cout << "ReceivedBytes  " << thread_->getTCPTransfer().getReceivedBytes() << endl,
-				//cout << "Login          " << thread_->getTCPTransfer().getLogin() << endl;
-				//cout << "Password       " << thread_->getTCPTransfer().getPassword() << endl;
-				//cout << "Stream         " << thread_->getTCPTransfer().getStream() << endl;
 				qApp->processEvents();
 
 				Size bytes = thread_->getTCPTransfer().getReceivedBytes();
@@ -198,12 +192,8 @@ namespace BALL
 					filename += emdb_suffix_;
 					url += filename;
 				}
-				//cout << filename << " " << url << endl;
 				thread_->setFilename(filename);
 				bool ok = threadedDownload_(url);
-				//bool ok = threadedDownload_("ftp://ftp.ebi.ac.uk/pub/databases/emdb/structures/EMD-1119/map/emd-1119.map.gz");
-				//bool ok = threadedDownload_("ftp://ftp.mpi-sb.mpg.de/pub/welcome.msg");
-				//bool ok = threadedDownload_("ftp://ftp.mpi-sb.mpg.de/pub/linux/debian/ls-lR.gz");
 				downloadEnded_();
 			
 
@@ -223,15 +213,21 @@ namespace BALL
 				}
 				else
 				{
-					//ifstream file(filename.c_str(), ios_base::in | ios_base::binary);
-					//filtering_streambuf<input> in;
-					//in.push(gzip_decompressor());
-					//in.push(file);
-					//boost::iostreams::copy(in, cout);
+					ifstream file(filename.c_str(), ios_base::in | ios_base::binary);
+					cout << "ifstream build" << endl;
+					boost::iostreams::filtering_streambuf<boost::iostreams::input> in;
+					cout << "filtering_streambuf build" << endl;
+					in.push(boost::iostreams::gzip_decompressor());
+					cout << "unzipper set up" << endl;
+					in.push(file);
+					cout << "handed file to unzipper" << endl;
+					CCP4File map_file("test.test", ios::out | ios::binary);
+					boost::iostreams::copy(in, map_file);
+					map_file.reopen(ios::in);
+					cout << "copied unzipped stream to map_file" << endl;
 
-					//CCP4File map_file("exec:gunzip -c " + filename);
-					//map_file.read(*d3);
-					//map_file.close();
+					map_file.read(*d3);
+					map_file.close();
 				}
 
 				set->setData(d3);
@@ -241,22 +237,8 @@ namespace BALL
 				notify_(new DatasetMessage(set, DatasetMessage::ADD));
 				removeFile_(filename);
 
-				//if (system->countAtoms() == 0)
-				//{
-				//	delete system;
-				//	show();
-				//	setStatusbarText("Could not fetch the given PDBFile", true);
-				//	return;
-				//}
-				//else
-				//{
 				setStatusbarText(String("read ") + id + " electron density map", true);
-				//}
 
-				//if (system->getName() == "")
-				//{
-				//	system->setName(ascii(pdbId->currentText()));
-				//}
 				DatasetController* dc = DatasetControl::getInstance(0)->getController(RegularData3DController::type);
 				RegularData3DController& rcon = *(RegularData3DController*) dc;
 
@@ -270,15 +252,11 @@ namespace BALL
 					rcon.computeIsoContourSurface(*set, ColorRGBA(0,0,255), d3->calculateSD());
 				}
 
-				//system->setProperty("FROM_FILE", url);
 				close();
 				entryId->clearEditText();
 
-				//notify_(new CompositeMessage(*system, CompositeMessage::CENTER_CAMERA));
-
 				download->setDefault(true);
 				entryId->setFocus();
-			//}
 			//catch(...)
 			//{
 			//	setStatusbarText("download PDB file failed", true);
