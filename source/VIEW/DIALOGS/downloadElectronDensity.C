@@ -168,7 +168,8 @@ namespace BALL
 			//{
 				String id = ascii(entryId->currentText());
 				String url = "";
-				String filename = ""; 
+				String filename_onserver = ""; 
+				String temp_filename = VIEW::createTemporaryFilename(); 
 				if(server->currentIndex() == 0) //if EDS
 				{
 					url += eds_prefix_;
@@ -178,9 +179,9 @@ namespace BALL
 					{
 						id += "_diff";
 					}
-					filename += id;
-					filename += eds_suffix_;
-					url += filename;
+					filename_onserver += id;
+					filename_onserver += eds_suffix_;
+					url += filename_onserver;
 				}
 				else
 				{
@@ -188,11 +189,11 @@ namespace BALL
 					url += id;
 					url += emdb_infix_;
 					id = "emd_" + id;
-					filename += id;
-					filename += emdb_suffix_;
-					url += filename;
+					filename_onserver += id;
+					filename_onserver += emdb_suffix_;
+					url += filename_onserver;
 				}
-				thread_->setFilename(filename);
+				thread_->setFilename(temp_filename);
 				bool ok = threadedDownload_(url);
 				downloadEnded_();
 			
@@ -207,27 +208,36 @@ namespace BALL
 
 				if(server->currentIndex() == 0)
 				{
-					DSN6File map_file(filename);
+					DSN6File map_file(temp_filename);
 					map_file.read(*d3);
 					map_file.close();
 				}
 				else
 				{
-					ifstream file(filename.c_str(), ios_base::in | ios_base::binary);
-					cout << "ifstream build" << endl;
+					//String unzipped_filename = filename.before(".gz");
+					String unzipped_filename = VIEW::createTemporaryFilename();
+					ifstream file(temp_filename.c_str(), ios_base::in | ios_base::binary);
+					//cout << "ifstream build" << endl;
 					boost::iostreams::filtering_streambuf<boost::iostreams::input> in;
-					cout << "filtering_streambuf build" << endl;
+					//cout << "filtering_streambuf build" << endl;
 					in.push(boost::iostreams::gzip_decompressor());
-					cout << "unzipper set up" << endl;
+					//cout << "unzipper set up" << endl;
 					in.push(file);
-					cout << "handed file to unzipper" << endl;
-					CCP4File map_file("test.test", ios::out | ios::binary);
+					//cout << "handed file to unzipper" << endl;
+					CCP4File map_file(unzipped_filename, ios::out | ios::binary);
 					boost::iostreams::copy(in, map_file);
 					map_file.reopen(ios::in);
-					cout << "copied unzipped stream to map_file" << endl;
+					//cout << "copied unzipped stream to map_file" << endl;
+					//CCP4File map_file(filename.c_str(), ios_base::in | ios_base::binary);
+					//boost::iostreams::filtering_streambuf<boost::iostreams::input> in;
+					//in.push(boost::iostreams::gzip_decompressor());
+					//map_file.reopen(ios::out | ios::binary);
+					//boost::iostreams::copy(in, map_file);
+					//map_file.reopen(ios::in);
 
 					map_file.read(*d3);
 					map_file.close();
+					removeFile_(unzipped_filename);
 				}
 
 				set->setData(d3);
@@ -235,7 +245,7 @@ namespace BALL
 				set->setType(RegularData3DController::type);
 
 				notify_(new DatasetMessage(set, DatasetMessage::ADD));
-				removeFile_(filename);
+				removeFile_(temp_filename);
 
 				setStatusbarText(String("read ") + id + " electron density map", true);
 
@@ -249,7 +259,7 @@ namespace BALL
 				}
 				else
 				{
-					rcon.computeIsoContourSurface(*set, ColorRGBA(0,0,255), d3->calculateSD());
+					rcon.computeIsoContourSurface(*set, ColorRGBA(0,100,255), d3->calculateSD());
 				}
 
 				close();
