@@ -33,7 +33,6 @@ namespace BALL
 		system_ = 0;
 		asu_ = 0;
 		unitcell_ = 0;
-		ci_ptr_ = 0;
 	}
 	//bool CrystalGenerator::buildASU_()
 	//{
@@ -45,9 +44,9 @@ namespace BALL
 	//	}
 	//	return true;
 	//}
-	void CrystalGenerator::setCrystalInfo(CrystalInfo& ci)
+	void CrystalGenerator::setCrystalInfo(boost::shared_ptr<CrystalInfo> ci_ptr)
 	{
-		ci_ptr_ = &ci;
+		ci_ptr_ = ci_ptr;
 		if (buildASU_())
 		{
 			cout << "ASU successfully build" << endl;
@@ -74,7 +73,7 @@ namespace BALL
 				if (pit->hasProperty("CRYSTALINFO"))
 				{
 					Log.info() << "CrystalInfo found in Protein " << pit->getName() << std::endl;
-					ci_ptr_ = dynamic_cast<CrystalInfo*>(pit->getProperty("CRYSTALINFO").getObject());	
+					ci_ptr_ = boost::dynamic_pointer_cast<CrystalInfo>(pit->getProperty("CRYSTALINFO").getSmartObject());	
 					break;
 				}
 			}
@@ -82,7 +81,8 @@ namespace BALL
 		if ( ci_ptr_ == 0)
 		{
 			Log.warn() << "No CrystalInfo object found, generating default CrystalInfo" << std::endl;
-			ci_ptr_ = new CrystalInfo();
+			boost::shared_ptr<CrystalInfo> tmp_ptr(new CrystalInfo());
+			ci_ptr_ = tmp_ptr;
 		}
 
 		if (buildASU_())

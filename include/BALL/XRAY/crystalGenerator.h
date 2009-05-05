@@ -88,7 +88,7 @@ namespace BALL
 			//@}
 	
 			
-			void setCrystalInfo(CrystalInfo& ci);
+			void setCrystalInfo(boost::shared_ptr<CrystalInfo> ci_ptr);
 			void setSystem(System* system_ptr);	
 
 			List<System*> generatePacking(Index a_loweridx, Index a_upperidx, Index b_loweridx, Index b_upperid, Index c_loweridx, Index c_upperid);	
@@ -113,7 +113,7 @@ namespace BALL
 			
 			System* asu_;
 			System* unitcell_;
-			CrystalInfo* ci_ptr_;
+			boost::shared_ptr<CrystalInfo> ci_ptr_;
 	};
 }	// namespace BALL
 

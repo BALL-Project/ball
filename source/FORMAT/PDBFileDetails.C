@@ -581,14 +581,16 @@ namespace BALL
 		
 	bool PDBFile::interpretRecord(const PDB::RecordCRYST1& record )
 	{
-		CrystalInfo* ci_ptr;
+		//CrystalInfo* ci_ptr;
+		boost::shared_ptr<CrystalInfo> ci_ptr;
 		if (!(current_protein_->hasProperty("CRYSTALINFO")))
 		{
-		ci_ptr = new CrystalInfo();
-		current_protein_->setProperty("CRYSTALINFO", *ci_ptr);
+			boost::shared_ptr<CrystalInfo> temp_ptr(new CrystalInfo());
+			ci_ptr = temp_ptr;
+			current_protein_->setProperty("CRYSTALINFO", *ci_ptr);
 		}
 
-		ci_ptr = dynamic_cast<CrystalInfo*>(current_protein_->getProperty("CRYSTALINFO").getObject());
+		ci_ptr = boost::dynamic_pointer_cast<CrystalInfo>(current_protein_->getProperty("CRYSTALINFO").getSmartObject());
 		
 		ci_ptr->setSpaceGroup(String(record.unit_cell.space_group));
 		ci_ptr->setCellEdgeLengthA(record.unit_cell.a);
@@ -774,14 +776,16 @@ namespace BALL
 	
 	bool PDBFile::interpretRecord(const PDB::RecordMTRIX1& record)
 	{
-		CrystalInfo* ci_ptr;
+		//CrystalInfo* ci_ptr;
+		boost::shared_ptr<CrystalInfo> ci_ptr;
 		if (!(current_protein_->hasProperty("CRYSTALINFO")))
 		{
-		ci_ptr = new CrystalInfo();
-		current_protein_->setProperty("CRYSTALINFO", *ci_ptr);
+			boost::shared_ptr<CrystalInfo> temp_ptr(new CrystalInfo());
+			ci_ptr = temp_ptr;
+			current_protein_->setProperty("CRYSTALINFO", *ci_ptr);
 		}
 
-		ci_ptr = dynamic_cast<CrystalInfo*>(current_protein_->getProperty("CRYSTALINFO").getObject());
+		ci_ptr = boost::dynamic_pointer_cast<CrystalInfo>(current_protein_->getProperty("CRYSTALINFO").getSmartObject());
 		
 		if (!(ci_ptr->getNumberOfNCSSymOps() >= (Size)record.serial_number))
 		{
@@ -819,14 +823,16 @@ namespace BALL
 	
 	bool PDBFile::interpretRecord(const PDB::RecordMTRIX2& record)
 	{
-		CrystalInfo* ci_ptr;
+		//CrystalInfo* ci_ptr;
+		boost::shared_ptr<CrystalInfo> ci_ptr;
 		if (!(current_protein_->hasProperty("CRYSTALINFO")))
 		{
-		ci_ptr = new CrystalInfo();
-		current_protein_->setProperty("CRYSTALINFO", *ci_ptr);
+			boost::shared_ptr<CrystalInfo> temp_ptr(new CrystalInfo());
+			ci_ptr = temp_ptr;
+			current_protein_->setProperty("CRYSTALINFO", *ci_ptr);
 		}
 
-		ci_ptr = dynamic_cast<CrystalInfo*>(current_protein_->getProperty("CRYSTALINFO").getObject());
+		ci_ptr = boost::dynamic_pointer_cast<CrystalInfo>(current_protein_->getProperty("CRYSTALINFO").getSmartObject());
 		
 		if (!(ci_ptr->getNumberOfNCSSymOps() >= (Size)record.serial_number))
 		{
@@ -864,14 +870,16 @@ namespace BALL
 	
 	bool PDBFile::interpretRecord(const PDB::RecordMTRIX3& record)
 	{
-		CrystalInfo* ci_ptr;
+		//CrystalInfo* ci_ptr;
+		boost::shared_ptr<CrystalInfo> ci_ptr;
 		if (!(current_protein_->hasProperty("CRYSTALINFO")))
 		{
-		ci_ptr = new CrystalInfo();
-		current_protein_->setProperty("CRYSTALINFO", *ci_ptr);
+			boost::shared_ptr<CrystalInfo> temp_ptr(new CrystalInfo());
+			ci_ptr = temp_ptr;
+			current_protein_->setProperty("CRYSTALINFO", *ci_ptr);
 		}
 
-		ci_ptr = dynamic_cast<CrystalInfo*>(current_protein_->getProperty("CRYSTALINFO").getObject());
+		ci_ptr = boost::dynamic_pointer_cast<CrystalInfo>(current_protein_->getProperty("CRYSTALINFO").getSmartObject());
 		
 		if (!(ci_ptr->getNumberOfNCSSymOps() >= (Size)record.serial_number))
 		{
@@ -1225,7 +1233,8 @@ namespace BALL
 		{
 			if (ac.getAtomContainer(0)->hasProperty("CRYSTALINFO"))
 			{
-				CrystalInfo* ci_ptr = dynamic_cast<CrystalInfo*>(ac.getAtomContainer(0)->getProperty("CRYSTALINFO").getObject());
+				//CrystalInfo* ci_ptr = dynamic_cast<CrystalInfo*>(ac.getAtomContainer(0)->getProperty("CRYSTALINFO").getObject());
+				boost::shared_ptr<CrystalInfo> ci_ptr = boost::dynamic_pointer_cast<CrystalInfo>(ac.getAtomContainer(0)->getProperty("CRYSTALINFO").getSmartObject());
 				if (ci_ptr != 0)
 				{
 					// extract all crystal informations to the structure
