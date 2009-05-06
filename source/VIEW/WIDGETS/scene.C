@@ -2611,6 +2611,7 @@ namespace BALL
 
 			try
 			{
+				main_display_->makeCurrent();
 				POVRenderer pr(result);
 				if (exportScene(pr)) ok = true;
 			}
