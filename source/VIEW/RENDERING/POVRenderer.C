@@ -81,6 +81,7 @@ namespace BALL
 
 			representations_.clear();
 			color_map_.clear();
+			color_index_ = 0;
 		}
 
 		void POVRenderer::setFileName(const String& name)
@@ -181,6 +182,7 @@ namespace BALL
 			representations_.clear();
 			color_map_.clear();
 			color_strings_.clear();
+			color_index_ = 0;
 
 			std::ostream& out = *outfile_;
 
@@ -787,7 +789,7 @@ namespace BALL
 			return object.getColor();
 		}
 		
-		bool POVRenderer::render(const Representation& representation)
+		bool POVRenderer::renderOneRepresentation(const Representation& representation)
 		{
 			if (representation.isHidden()) return true;
 
@@ -812,12 +814,11 @@ namespace BALL
 				}
 			}
 
-			Position p = 0;
 			HashSet<String>::ConstIterator cit = color_strings_.begin();
 			for (; +cit; ++cit)
 			{
-				color_map_.insert(ColorMap::ValueType(*cit, p));
-				p++;
+				color_map_.insert(ColorMap::ValueType(*cit, color_index_));
+				color_index_++;
 			}
 
 			representations_.push_back(&representation);

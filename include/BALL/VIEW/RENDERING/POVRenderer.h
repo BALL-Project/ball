@@ -107,7 +107,7 @@ namespace BALL
 			 */
 			String POVVector3(Vector3 input);
 
-			virtual bool render(const Representation& representation);
+			virtual bool renderOneRepresentation(const Representation& representation);
 
 			//@}
 			
@@ -174,6 +174,7 @@ namespace BALL
 				HashSet<String> color_strings_;
 				String font_file_;
 				double m_[12];
+				Position color_index_;
 		};
   
 	} // namespace BALL
