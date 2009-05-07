@@ -62,6 +62,12 @@ void NetworkPreferences::getSettings()
 
 void NetworkPreferences::applySettings()
 {
+	DownloadPDBFile* df = DownloadPDBFile::getInstance(0);
+	if (df == 0) return;
+
+	df->setPrefix(ascii(pdb_prefix->text()));
+	df->setSuffix(ascii(pdb_suffix->text()));
+
 	MainControl* mc = getMainControl();
 	if (mc == 0) return;
 
@@ -84,12 +90,6 @@ void NetworkPreferences::applySettings()
 	}
 		
 	mc->setProxy(ascii(host_edit->text()), port);
-
-	DownloadPDBFile* df = DownloadPDBFile::getInstance(0);
-	if (df == 0) return;
-
-	df->setPrefix(ascii(pdb_prefix->text()));
-	df->setSuffix(ascii(pdb_suffix->text()));
 }
 
 } } // namespaces
