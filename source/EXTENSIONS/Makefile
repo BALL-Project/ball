@@ -20,7 +20,7 @@ ifeq ($(SPACENAV_SUPPORT), true)
 SUBDIRS+="SPACENAV"
 endif
 
-SUBDIRS+=VRPN VRPNHD
+SUBDIRS+=VRPN VRPNHD MULTITOUCH
 
 depend: subdirs_depend
 
