@@ -96,6 +96,7 @@ namespace BALL
 													break;
 			case	BOOL:					bool b;
 			                    pm.readPrimitive(b, "data_.b");		
+													data_ = b;
 													break;
 			case	NONE:	break;
 
