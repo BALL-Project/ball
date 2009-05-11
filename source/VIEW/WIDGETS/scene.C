@@ -121,7 +121,6 @@ namespace BALL
 				rt_renderer_(new t_RaytracingRenderer()),
 #endif
 				light_settings_(new LightSettings(this)),
-				stage_settings_(new StageSettings(this)),
 				material_settings_(new MaterialSettings(this)),
 				animation_thread_(0),
 				toolbar_(new QToolBar("3D View Controls", this)),
@@ -130,6 +129,7 @@ namespace BALL
 				stereo_left_eye_(-1),
 				stereo_right_eye_(-1)
 		{
+			stage_settings_=new StageSettings(this);
 #ifndef ENABLE_RAYTRACING
 			renderers_.push_back(RenderSetup(gl_renderer_, main_display_, this, stage_));
 #else
@@ -168,7 +168,6 @@ namespace BALL
 				rt_renderer_(new t_RaytracingRenderer()),
 #endif
 				light_settings_(new LightSettings(this)),
-				stage_settings_(new StageSettings(this)),
 				material_settings_(new MaterialSettings(this)),
 				animation_thread_(0),
 				stop_animation_(false),
@@ -183,6 +182,7 @@ namespace BALL
 				stereo_left_eye_(-1),
 				stereo_right_eye_(-1)
 		{
+			stage_settings_=new StageSettings(this);
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (2) " << this << std::endl;
 #endif
@@ -214,7 +214,6 @@ namespace BALL
 				rt_renderer_(new t_RaytracingRenderer()),
 #endif
 				light_settings_(new LightSettings(this)),
-				stage_settings_(new StageSettings(this)),
 				material_settings_(new MaterialSettings(this)),
 				animation_thread_(0),
 				stop_animation_(false),
@@ -224,6 +223,7 @@ namespace BALL
 				stereo_left_eye_(-1),
 				stereo_right_eye_(-1)
 		{
+			stage_settings_=new StageSettings(this);
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (3) " << this << std::endl;
 #endif
