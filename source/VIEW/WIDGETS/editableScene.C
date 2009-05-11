@@ -1537,7 +1537,7 @@ void EditableScene::computeBondOrders()
 
 			stream_description  << "      Solution " << i 
 						 						 << " has penalty " << abop.getTotalPenalty(i)
-						 						 << ", charge " << abop.getTotalCharge(i)
+			//			 						 << ", charge " << abop.getTotalCharge(i)
 												 << ", " <<  abop.getNumberOfAddedHydrogens(i) << " added hydrogens.";
  
 			String description = stream_description.str();
