@@ -13,7 +13,9 @@ DIRECTORY=CONCEPT
 
 THISLIB=$(LIBNAME)
 
-ASIO_SOURCES=$(BALL_HAS_ASIO:true=client.C)
+ifeq ($(BALL_HAS_VIEW),true)
+	ASIO_SOURCES=$(BALL_HAS_ASIO:true=client.C)
+endif
 
 CPP_SOURCES=$(ASIO_SOURCES)\
 	autoDeletable.C\
@@ -29,12 +31,16 @@ CPP_SOURCES=$(ASIO_SOURCES)\
 	textPersistenceManager.C\
 	timeStamp.C\
 	visitor.C\
-	objectCreator.C\
-	moleculeObjectCreator.C\
 	molecularInformation.C
 
 ifeq ($(BALL_HAS_XDR),true)
 	CPP_SOURCES += XDRPersistenceManager.C
+endif
+
+ifeq ($(BALL_HAS_VIEW),true)
+	CPP_SOURCES +=\
+ 	objectCreator.C\
+	moleculeObjectCreator.C
 endif
 
 include ../rules.mak

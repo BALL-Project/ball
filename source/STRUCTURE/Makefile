@@ -7,6 +7,8 @@
 #   Oliver Kohlbacher
 #
 
+include ../config.mak
+
 DIRECTORY=STRUCTURE
 
 THISLIB=$(LIBNAME)
@@ -27,7 +29,6 @@ SMARTS_SOURCES=\
 CPP_SOURCES=\
 	addHydrogenProcessor.C\
 	analyticalSES.C\
-	assignBondOrderProcessor.C\
 	atomBijection.C\
 	atomTyper.C\
 	bindingPocketProcessor.C\
@@ -43,7 +44,6 @@ CPP_SOURCES=\
 	graphFace.C\
 	graphVertex.C\
 	HBondProcessor.C\
-	hybridisationProcessor.C\
 	kekulizer.C\
 	moleculeAssembler.C\
 	molecularGraph.C\
@@ -92,6 +92,12 @@ CPP_SOURCES=\
 	residueRotamerSet.C\
 	rotamerLibrary.C\
 	RMSDMinimizer.C
+
+ifeq ($(BALL_HAS_VIEW),true)
+	CPP_SOURCES+=\
+	hybridisationProcessor.C\
+	assignBondOrderProcessor.C
+endif
 
 SMILES_PARSER_PREFIX=SmilesParser
 SMARTS_PARSER_PREFIX=SmartsParser

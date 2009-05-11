@@ -139,6 +139,7 @@ automaticInstaller()
 							"--enable-double-cplx"\
 							"--with-fftw-lib=$LIBDIR"\
 							"--with-fftw-incl=$INCDIR"\
+							"--with-boost=$CDIR"\
 							${VIEW_STRING}\
 							${PYTHON_STRING} || exit
 	make depend || exit
