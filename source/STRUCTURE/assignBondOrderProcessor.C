@@ -19,7 +19,7 @@
 
 // Qt
 #include <QtXml/QtXml>
-#include <Qt/qdom.h>
+#include <QtXml/qdom.h>
 
 #ifdef BALL_HAS_LPSOLVE
 # include <lpsolve/lp_lib.h>

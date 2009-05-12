@@ -18,7 +18,7 @@
 #include <QtSql/qsqlrecord.h>
 #include <QtSql/qsqldatabase.h>
 #include <QtSql/qsqlquery.h>
-#include <Qt/qvariant.h>
+#include <QtCore/qvariant.h>
 
 namespace BALL
 {

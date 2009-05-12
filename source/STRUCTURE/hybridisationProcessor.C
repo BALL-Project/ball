@@ -17,7 +17,7 @@
 
 // Qt
 #include <QtXml/QtXml>
-#include <Qt/qdom.h>
+#include <QtXml/qdom.h>
 
 //#define DEBUG 1
 #undef DEBUG
