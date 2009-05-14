@@ -71,7 +71,6 @@ namespace BALL
 	}
 
 	void SmartsMatcher::match(vector<Match>& matches, Molecule& mol, const vector<String>& smarts)
-		throw(Exception::ParseError)
 	{
 		// TODO implement clever SSSR handling, benefit from the smarts group
 		for (vector<String>::const_iterator it = smarts.begin(); it != smarts.end(); ++it)
@@ -83,7 +82,6 @@ namespace BALL
 	}
 
 	void SmartsMatcher::match(vector<Match>& matches, Molecule& mol, const vector<String>& smarts, const set<const Atom*>& start_atoms)
-		throw(Exception::ParseError)
 	{
 		for (vector<String>::const_iterator it = smarts.begin(); it != smarts.end(); ++it)
 		{
@@ -94,7 +92,6 @@ namespace BALL
 	}
 
 	void SmartsMatcher::match(Match& matches, Molecule& molecule, const String& smarts)
-		throw(Exception::ParseError)
 	{
 		set<const Atom*> start_atoms;
 		for (AtomConstIterator it = molecule.beginAtom(); +it; ++it)
@@ -105,7 +102,6 @@ namespace BALL
 	}
 
 	void SmartsMatcher::match(Match& matches, Molecule& molecule, const String& smarts, const set<const Atom*>& start_atoms)
-		throw(Exception::ParseError)
 	{
 		// TODO:
 		//  - what attributes of the molecule must be set, or external by the user?

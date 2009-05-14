@@ -70,20 +70,16 @@ namespace BALL
 			*/
 			//@{
 			/// method to match a Smarts pattern given as a string to given molecule
-			void match(Match& matches, Molecule& mol, const String& smarts)
-				throw(Exception::ParseError);
+			void match(Match& matches, Molecule& mol, const String& smarts);
 
 			/// method to match a Smarts pattern given as a string to given molecule. The atoms which will be used for starting matching are given in atoms
-			void match(Match& matches, Molecule& mol, const String& smarts, const std::set<const Atom*>& start_atoms)
-				throw(Exception::ParseError);
+			void match(Match& matches, Molecule& mol, const String& smarts, const std::set<const Atom*>& start_atoms);
 
 			/// method to match several Smarts patterns given as a vector of strings
-			void match(std::vector<Match>& matches, Molecule& mol, const std::vector<String>& smarts)
-				throw(Exception::ParseError);
+			void match(std::vector<Match>& matches, Molecule& mol, const std::vector<String>& smarts);
 
 			/// method to match several Smarts patterns given as a vector of string. The atoms used for start matchings are given in start_atoms
-			void match(std::vector<Match>& matches, Molecule& mol, const std::vector<String>& smarts, const std::set<const Atom*>& start_atoms)
-				throw(Exception::ParseError);
+			void match(std::vector<Match>& matches, Molecule& mol, const std::vector<String>& smarts, const std::set<const Atom*>& start_atoms);
 
 			/// sets an SSSR which is used instead of doing an ring perception
 			void setSSSR(const std::vector<std::vector<Atom*> >& sssr);
