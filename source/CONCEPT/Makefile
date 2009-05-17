@@ -25,6 +25,7 @@ CPP_SOURCES=$(ASIO_SOURCES)\
 	factory.C\
 	object.C\
 	persistenceManager.C\
+	preferencesObject.C\
 	processor.C\
 	property.C\
 	selectable.C\
