@@ -13,7 +13,7 @@ namespace BALL
 {
 	const char* PluginManager::BETWEEN_PLUGINDIR_SEPERATOR  = "?";
 	boost::shared_ptr<PluginManager> PluginManager::manager_;
-
+	
 	QMutex PluginManager::mutex_;
 
 	PluginManager::PluginManager()
@@ -289,13 +289,13 @@ namespace BALL
 			if ( it != loaded_plugin_dirs_.end())
 			{
 			
-			value += it->first.toAscii().toPercentEncoding().data();
-			
-			for (++it; it != loaded_plugin_dirs_.end(); ++it)
-			{
-				value += BETWEEN_PLUGINDIR_SEPERATOR;
 				value += it->first.toAscii().toPercentEncoding().data();
-			}
+				
+				for (++it; it != loaded_plugin_dirs_.end(); ++it)
+				{
+					value += BETWEEN_PLUGINDIR_SEPERATOR;
+					value += it->first.toAscii().toPercentEncoding().data();
+				}
 			}
 		}
 		return true;
