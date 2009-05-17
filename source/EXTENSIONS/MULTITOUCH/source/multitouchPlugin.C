@@ -43,7 +43,6 @@ namespace BALL
 
 		QDialog* MultitouchPlugin::getConfigDialog()
 		{
-			// TODO: hier dialog mit host (string) / port (int)
 			MultitouchSettings *settings = new MultitouchSettings(this, receiver_);
 
 			settings->setHostName(hostname_);

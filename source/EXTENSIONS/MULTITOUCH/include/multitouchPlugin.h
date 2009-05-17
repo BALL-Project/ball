@@ -42,13 +42,14 @@ namespace BALL
 
 				void setHostName(const String& hostname) 
 				{ 
-					hostname_=hostname; 
+					hostname_ = hostname; 
 				}
 
 				void setPort(const String& port) 
 				{ 
-					port_=port; 
+					port_ = port; 
 				}
+
 			private:
 				QWidget* receiver_;
 				QPixmap icon_;

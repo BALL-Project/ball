@@ -54,7 +54,7 @@ namespace BALL
 
 			if (!connection_.good())
 			{
-				std::cout << "Connection to multitouch died!" << std::endl;
+				std::cout << "Connection to Multi Touch died!" << std::endl;
 				setEnabled(false);
 			}
 		}
@@ -62,7 +62,6 @@ namespace BALL
 		bool MultitouchDriver::setUp()
 		{
 			connection_.connect(hostname_, port_);
-			connection_ << "Hallo Anne!" << std::endl;
 			connection_.flush();
 
 			// TODO: error handling
@@ -71,6 +70,7 @@ namespace BALL
 
 		bool MultitouchDriver::tearDown()
 		{
+			connection_ << " Bye! MultitouchDriver::tearDown()" << std::endl;
 			connection_.close();
 
 			return true;
@@ -80,7 +80,8 @@ namespace BALL
 		{
 			InputDeviceDriver::setEnabled(enabled);
 
-			if(enabled) {
+			if(enabled) 
+			{
 				start();
 			}
 		}
