@@ -139,15 +139,15 @@ namespace BALL
 				}
 			}
 
-			rep_->enableModelUpdate(false);
-			rep_->enableColoringUpdate(false);
 			if (rep_->isHidden())
 			{
 				rep_->setNeedsUpdate();
 				return;
 			}
 
-			notify_(new RepresentationMessage(*rep_, RepresentationMessage::UPDATE));
+			getMainControl()->update(*rep_);
+
+			accept();
 		}
 
 
@@ -367,96 +367,36 @@ namespace BALL
 				col.setAlpha(255 - rep_->getTransparency());
 			}
 
-			// if not color only selected composites
+			// if the whole representation needs recoloring, things are pretty simple
 			if (!color_only_selection->isChecked())
 			{
-				GeometricObjectList::iterator git = rep_->getGeometricObjects().begin();
-				for (; git != rep_->getGeometricObjects().end(); ++git)
+				// if the current representation is not already custom colored,
+				// change its coloring processor
+				if (   (rep_->getColorProcessor() == 0) 
+						|| (!RTTI::isKindOf<CustomColorProcessor>(*(rep_->getColorProcessor()))))
 				{
-					Mesh* mesh = dynamic_cast<Mesh*> (*git);
-					if (mesh != 0)
-					{
-						mesh->colors.resize(1);
-						mesh->colors[0] = col;
-						continue;
-					}
-					QuadMesh* qmesh = dynamic_cast<QuadMesh*> (*git);
-					if (qmesh != 0)
-					{
-						qmesh->colors.resize(1);
-						qmesh->colors[0] = col;
-						continue;
-					}
-					MultiLine* line = dynamic_cast<MultiLine*>(*git);
-					if (line != 0)
-					{
-						line->colors.resize(1);
-						line->colors[0] = col;
-						continue;
-					}
+					rep_->setColorProcessor(new CustomColorProcessor);
+					rep_->setColoringMethod(COLORING_CUSTOM);
+					rep_->getColorProcessor()->createAtomGrid();
 				}
-
-				return;
+				ColorProcessor* cp = rep_->getColorProcessor();
+				cp->setDefaultColor(col);
 			}
-
-
-			// make sure we have a colorProcessor
-			if (rep_->getColorProcessor() == 0)
+			else
 			{
-				rep_->setColorProcessor(new CustomColorProcessor);
-				rep_->getColorProcessor()->createAtomGrid();
-			}
-			ColorProcessor* cp = rep_->getColorProcessor();
+				// color only vertices belonging to selected atoms
 
-			vector<ColorRGBA>* colors;
-			vector<Vector3>*   vertices;
-			GeometricObjectList::iterator git = rep_->getGeometricObjects().begin();
-			for (; git != rep_->getGeometricObjects().end(); ++git)
-			{
-				colors  = 0;
-				vertices = 0;
-
-				Mesh* mesh = dynamic_cast<Mesh*> (*git);
-				if (mesh != 0)
+				// if the current representation already has a coloring processor we won't 
+				// change it; we only want to color a certain selected patch
+				if (rep_->getColorProcessor() == 0) 
 				{
-					colors = &mesh->colors;
-					vertices = &mesh->vertex;
+					rep_->setColorProcessor(new CustomColorProcessor);
+					rep_->setColoringMethod(COLORING_CUSTOM);
+					rep_->getColorProcessor()->createAtomGrid();
 				}
-				else
-				{
-					QuadMesh* mesh = dynamic_cast<QuadMesh*> (*git);
-					if (mesh != 0)
-					{
-						colors = &mesh->colors;
-						vertices = &mesh->vertex;
-					}
-				}
-
-				if (colors == 0) continue;
-
-				if (colors->size() != vertices->size())
-				{
-					colors->resize(vertices->size());
-				}
-
-				// collect informations which vertices are to be colored
-				for (Position p = 0; p < vertices->size(); p++)
-				{
-					// make sure we found an atom
-					const Atom* atom = cp->getClosestItem((*vertices)[p]);
-
-					if (atom == 0 || !atom->isSelected())
-					{
-						(*colors)[p].setAlpha(255 - rep_->getTransparency());
-					}
-					else
-					{
-						(*colors)[p] = col;
-					}
-				}
+				BALL_SELECTED_COLOR = col;
 			}
 		}
-
 
 		bool ModifyRepresentationDialog::colorByGrid_()
 		{
