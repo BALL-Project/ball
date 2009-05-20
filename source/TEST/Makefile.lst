@@ -205,6 +205,7 @@ $(PREFIX)OoiEnergy_test$(EXEEXT)
 
 EXECUTABLES_STRUCTURE = \
 $(PREFIX)Enumerator_test$(EXEEXT)\
+$(PREFIX)BindingPocketProcessor_test$(EXEEXT)\
 $(PREFIX)EnumeratorIndex_test$(EXEEXT)\
 $(PREFIX)AnalyticalSES_test$(EXEEXT)\
 $(PREFIX)MolecularGraph_test$(EXEEXT)\

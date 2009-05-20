@@ -27,10 +27,9 @@
  #include <BALL/DATATYPE/regularData3D.h>
 #endif
 
-#include <QtGui/qcolordialog.h>
+#include <QtCore/QEvent>
+#include <QtGui/QColorDialog>
 #include <QtGui/QLabel>
-#include <QtGui/qevent.h>
-#include <QtCore/QCustomEvent>
 #include <QtGui/QDropEvent>
 
 namespace BALL
@@ -69,9 +68,9 @@ namespace BALL
 
 		/** Enumeration of Events
 				These events are used to communicate between different threads.
-				Have a look at QWidget::customEvent(QCustomEvent) to learn about
+				Have a look at QWidget::customEvent(QEvent*) to learn about
 				QT and its events concept. This enum is used to give every type
-				of derived QCustomEvent its individual type id.
+				of derived QEvent its individual type id.
 		*/
 		enum EventsIDs
 		{

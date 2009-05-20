@@ -16,13 +16,17 @@
 #endif
 
 #include <utility>
-
 #include <algorithm>
 
-#ifdef BALL_HAS_HASH_MAP
-#include <ext/hash_map>
+#ifdef BALL_EXT_INCLUDE_PREFIX
+# include <ext/hash_map>
+# include <ext/hash_fun.h>
+#else
+# include <hash_map>
+# include <hash_fun.h>
+#endif
 
-namespace BALL_MAP_NAMESPACE
+namespace BALL_EXT_NAMESPACE
 {
 
 	template<class T>
@@ -31,18 +35,20 @@ namespace BALL_MAP_NAMESPACE
 		size_t operator()(const T* x) const { return (size_t)x; }
 	};
 
-  template<>
-	struct hash<BALL::LongSize>
-	{
-		size_t operator()(BALL::LongSize x) const { return (size_t)x; }
-	};
-
-
 	template<>
   struct hash<BALL::String>
   {
     size_t operator () (const BALL::String& s) const {return __stl_hash_string(s.c_str());}
 	};
+
+#ifdef BALL_NEEDS_LONGSIZE_HASH
+  template<>
+	struct hash<BALL::LongSize>
+	{
+		size_t operator()(BALL::LongSize x) const { return (size_t)x; }
+	};
+#endif
+
 }
 #endif
 
@@ -68,8 +74,8 @@ namespace BALL
 				:	public Exception::GeneralException
 			{
 				public:
-				IllegalKey(const char* file, int line, const String& function)
-					:	Exception::GeneralException(file, line, function, "")
+				IllegalKey(const char* file, int line)
+					:	Exception::GeneralException(file, line)
 				{
 				}
 			};
@@ -116,7 +122,7 @@ namespace BALL
 		ConstIterator it = find(key);
 		if (it == Base::end())
 		{
-			throw IllegalKey(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+			throw IllegalKey(__FILE__, __LINE__);
 		}
 		else
 		{
