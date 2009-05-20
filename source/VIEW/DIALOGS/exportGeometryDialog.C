@@ -3,7 +3,7 @@
 //
 // $Id:
 
-#include <BALL/VIEW/DIALOGS/printingDialog.h>
+#include <BALL/VIEW/DIALOGS/exportGeometryDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/common.h>
@@ -25,38 +25,38 @@ namespace BALL
 	namespace VIEW
 	{
 
-PrintingDialog::PrintingDialog(QWidget* parent, const char* name)
+ExportGeometryDialog::ExportGeometryDialog(QWidget* parent, const char* name)
 	throw()
 	:	QDialog(parent),
-		Ui_PrintingDialogData()
+		Ui_ExportGeometryDialogData()
 {
 #ifdef BALL_VIEW_DEBUG
-	Log.error() << "new PrintingDialog " << this << std::endl;
+	Log.error() << "new ExportGeometryDialog " << this << std::endl;
 #endif
 
 	setupUi(this);
-	
+
   // signals and slots connections
 	QObject::connect( browse_button, SIGNAL( clicked() ), this, SLOT( browseFiles() ) );
   QObject::connect( buttonOk, SIGNAL( clicked() ), this, SLOT( accept() ) );
   QObject::connect( buttonCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
   QObject::connect( prototyping_radio, SIGNAL( clicked() ), this, SLOT( protomode() ) );
-  QObject::connect( view_radio, SIGNAL( clicked() ), this, SLOT( viewmode() ) );	
+  QObject::connect( view_radio, SIGNAL( clicked() ), this, SLOT( viewmode() ) );
 
 	setObjectName(name);
 }
 
-PrintingDialog::~PrintingDialog()
+ExportGeometryDialog::~ExportGeometryDialog()
 	throw()
 {
 #ifdef BALL_VIEW_DEBUG
-	Log.error() << "deleting PrintingDialog " << this << std::endl;
+	Log.error() << "deleting ExportGeometryDialog " << this << std::endl;
 #endif
 }
 
 
 
-void PrintingDialog::exec()
+void ExportGeometryDialog::exec()
 {
 	MainControl* mc = getMainControl();
 	if (mc == 0) return;
@@ -64,14 +64,14 @@ void PrintingDialog::exec()
 	RepresentationManager& rm = mc->getRepresentationManager();
 
 	//creation of the listpart of the GUI
- 	listview->setColumnCount(3);
+	listview->setColumnCount(3);
 	listview->setRowCount(rm.getRepresentations().size());
 	listview->setHorizontalHeaderItem(0, new QTableWidgetItem());
 	listview->setHorizontalHeaderItem(1, new QTableWidgetItem());
 	listview->setHorizontalHeaderItem(2, new QTableWidgetItem());
- 	listview->horizontalHeaderItem(0)->setText("Model");
- 	listview->horizontalHeaderItem(1)->setText("Coloring");
- 	listview->horizontalHeaderItem(2)->setText("Properties");
+	listview->horizontalHeaderItem(0)->setText("Model");
+	listview->horizontalHeaderItem(1)->setText("Coloring");
+	listview->horizontalHeaderItem(2)->setText("Properties");
 	listview->setColumnWidth(0, 140);
 	listview->setColumnWidth(1, 140);
 	listview->setColumnWidth(2, 140);
@@ -80,7 +80,7 @@ void PrintingDialog::exec()
 
 	Position row= 0;
 	RepresentationList::ConstIterator it = rm.getRepresentations().begin();
-	
+
 	//filling of the list: as "for viewing" is the standard configuration all reps are checkable 
 	for (; it != rm.getRepresentations().end(); it++)
 	{
@@ -91,7 +91,7 @@ void PrintingDialog::exec()
 
 		//the same represantations are checked as in BALLView
 		if ( (*it)->isHidden() )
-		{	
+		{
 			item->setCheckState(Qt::Unchecked);
 		}
 		else
@@ -116,7 +116,7 @@ void PrintingDialog::exec()
 }
 
 
-void PrintingDialog::accept()
+void ExportGeometryDialog::accept()
 {
 	hide();
 
@@ -127,21 +127,21 @@ void PrintingDialog::accept()
 	RepresentationList::ConstIterator rit;
 
 	Position count = 0;
-				
+
 	rit = rm.getRepresentations().begin();
 	for (; rit != rm.getRepresentations().end(); rit++)
-	{	
+	{
 		if(!((*rit)->isHidden()))
 		{
 			basestats[count]=true;
 			(*rit)->setHidden(true);
-		}	
-		else 
+		}
+		else
 		{
 			basestats[count]=false;
 		}
 		count ++;
-	}		
+	}
 
 //we have to get to know which representations the user wants to export:
 	for (Position pos = 0; pos < (Position)listview->rowCount(); pos++)
@@ -162,7 +162,7 @@ void PrintingDialog::accept()
 	{
 		split_ = true;
 	}
-	else 
+	else
 	{
 		split_ = false;
 	}
@@ -188,7 +188,7 @@ void PrintingDialog::accept()
 }
 
 
-	void PrintingDialog::browseFiles()
+	void ExportGeometryDialog::browseFiles()
 	{
 		QFileDialog fd(0, "Export as 3D file", getMainControl()->getWorkingDir().c_str(), "*.*");
 		fd.setAcceptMode(QFileDialog::AcceptSave);
@@ -203,22 +203,22 @@ void PrintingDialog::accept()
 		file_edit->setText(fname);
 	}
 
-	bool PrintingDialog::export_vrml()
+	bool ExportGeometryDialog::export_vrml()
 	{
 		return vrml_;
-	}	
+	}
 
-	bool PrintingDialog::export_stl()
+	bool ExportGeometryDialog::export_stl()
 	{
 		return stl_;
-	}	
+	}
 
-	bool PrintingDialog::split()
+	bool ExportGeometryDialog::split()
 	{
 		return split_;
 	}
 
-	void PrintingDialog::protomode()
+	void ExportGeometryDialog::protomode()
 	{
 		MainControl* mc = getMainControl();
 		if (mc == 0) return;
@@ -257,15 +257,15 @@ void PrintingDialog::accept()
 				}
 
 			}
-			
+
 			if (printable)
 			//item is the same as normal
 			{
-			
+
 				QTableWidgetItem* item = new QTableWidgetItem(rep.getName().c_str());
 				item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
 				if ( (*it)->isHidden() )
-				{	
+				{
 					item->setCheckState(Qt::Unchecked);
 				}
 				else
@@ -301,9 +301,9 @@ void PrintingDialog::accept()
 			}
 		}
 		raise();
-	}	
-			
-	void PrintingDialog::viewmode()
+	}
+
+	void ExportGeometryDialog::viewmode()
 	{
 		MainControl* mc = getMainControl();
 		if (mc == 0) return;
@@ -321,7 +321,7 @@ void PrintingDialog::accept()
 			QTableWidgetItem* item = new QTableWidgetItem(rep.getName().c_str());
 			item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
 			if ( (*it)->isHidden() )
-			{	
+			{
 				item->setCheckState(Qt::Unchecked);
 			}
 			else
@@ -340,5 +340,5 @@ void PrintingDialog::accept()
 		}
 		raise();
 
-	}		
+	}
 } } // namespaces

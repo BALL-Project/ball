@@ -12,6 +12,7 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/SYSTEM/path.h>
+#include <BALL/FORMAT/parameters.h>
 
 #include <algorithm>
 
@@ -111,16 +112,18 @@ namespace BALL
 		if (!parameters_.isInitialized())
 		{
 			Path    path;
-			String  filename(path.find("MMFF94/MMFFTOR.PAR"));
+			String  filename(path.find("MMFF94/mmff94.ini"));
 
-			if (filename == "") 
+			if (filename == "")
 			{
 				throw Exception::FileNotFound(__FILE__, __LINE__, filename);
 			}
 
+			Parameters p(filename);
+
 			const MMFF94AtomTypeEquivalences& equivalences = mmff->getEquivalences();
 			parameters_.setEquivalences(equivalences);
-			parameters_.readParameters(filename);
+			parameters_.readParameters(p, "Torsions");
 		}
 
 		torsions_.clear();

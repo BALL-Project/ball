@@ -263,9 +263,10 @@ namespace BALL
 		{
 			Path    path;
 
-			String  filename(path.find("MMFF94/MMFFVDW.PAR"));
-			if (filename == "") throw Exception::FileNotFound(__FILE__, __LINE__, "MMFFVDW.PAR");
-			vdw_parameters_.readParameters(filename);
+			String  filename(path.find("MMFF94/mmff94.ini"));
+			if (filename == "") throw Exception::FileNotFound(__FILE__, __LINE__, "mmff94.ini");
+			Parameters p(filename);
+			vdw_parameters_.readParameters(p, "VanDerWaals");
 		}
 
 		// Determine the most efficient way to calculate all non bonded atom pairs
