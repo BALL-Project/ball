@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleBox.h,v 1.8.16.1 2007/03/25 21:26:11 oliver Exp $
+// $Id: simpleBox.h,v 1.8.16.1 2007-03-25 21:26:11 oliver Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_SIMPLEBOX_H
@@ -119,6 +119,11 @@ namespace BALL
 			
 			// Method to get all vertices from a geometric object
 			virtual void getVertices(vector<Vector3>& vertices) const;
+
+			//Method for printability
+			Position isType()
+				throw() { return 9; }
+
 
 			//@}
 		};

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.h,v 1.14.16.2 2007/04/09 20:44:38 amoll Exp $
+// $Id: label.h,v 1.14.16.2 2007-04-09 20:44:38 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_LABEL_H
@@ -180,6 +180,11 @@ namespace BALL
 			
 			// Method to get all vertices from a geometric object
 			virtual void getVertices(vector<Vector3>& vertices) const;
+
+			//Method for printability
+			Position isType()
+				throw() { return 3; }
+
 
 			protected:
 				String text_;

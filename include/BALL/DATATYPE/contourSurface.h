@@ -26,7 +26,8 @@
 #include <vector>
 #include <math.h>
 
-namespace __gnu_cxx
+#ifdef BALL_HAS_HASH_MAP
+namespace BALL_MAP_NAMESPACE
 {
   template<>
   struct hash<std::pair<BALL::Position, BALL::Position> >
@@ -35,6 +36,7 @@ namespace __gnu_cxx
     {return (size_t)(p.first + p.second);}
 	};
 }
+#endif
 
 namespace BALL
 {

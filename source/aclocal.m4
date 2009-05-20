@@ -1,4 +1,4 @@
-dnl -*- Mode: C++; tab-width: 1; -*-
+l -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
 dnl		$Id: aclocal.m4,v 1.89.10.6 2007/08/07 17:48:28 oliver Exp $
@@ -28,12 +28,7 @@ dnl		accepted and do not show the license the second time
 dnl
 
 AC_DEFUN(CF_CHECK_LICENSE,[
-dnl AC_PATH_PROG(PAGER, more, no)
-dnl if test "${PAGER}" = "no" ; then
-dnl 	PAGER=cat
-dnl fi
-dnl ${PAGER} COPYRIGHT
-dnl echo " "
+	dnl deprecated -- no check required
 ])
 
 dnl		define a macro to remove the directory name
@@ -595,33 +590,32 @@ dnl		Check whether CXX is a GNU compiler and retrieve its
 dnl			version number.
 dnl
 AC_DEFUN(CF_IDENTIFY_GXX,[
-AC_MSG_CHECKING(for GNU compiler)
-cat > /tmp/$$.conftest.c << EOF
-#ifdef __GNUC__
-GXX:true
-#else
-GXX:false
-#endif
+	AC_MSG_CHECKING(for GNU compiler)
+	cat > /tmp/$$.conftest.c << EOF
+	#ifdef __GNUC__
+	GXX:true
+	#else
+	GXX:false
+	#endif
 EOF
 
-IS_GXX=`${CXX} -E /tmp/$$.conftest.c 2>/dev/null | ${EGREP} GXX|${CUT} -d: -f2|${TR} -d " "`
-if test "${IS_GXX}" = "true" ; then
-AC_MSG_RESULT(yes)
-HAS_GPLUSPLUS=true
-CXX_NAME="g++"
-CXX_IDENTIFIED=true
+	IS_GXX=`${CXX} -E /tmp/$$.conftest.c 2>/dev/null | ${EGREP} GXX|${CUT} -d: -f2|${TR} -d " "`
+	if test "${IS_GXX}" = "true" ; then
+		AC_MSG_RESULT(yes)
+		HAS_GPLUSPLUS=true
+		CXX_NAME="g++"
+		CXX_IDENTIFIED=true
 
-dnl 
-dnl 	Define a symbol for G++.
-dnl
-AC_DEFINE(PROJECT[]_COMPILER_GXX, )
-AC_DEFINE(PROJECT[]_COMPILER, GXX)
-else
-AC_MSG_RESULT(no)
-HAS_GPLUSPLUS=false
-fi
-${RM} /tmp/$$.conftest.c
-
+		dnl 
+		dnl 	Define a symbol for G++.
+		dnl
+		AC_DEFINE(PROJECT[]_COMPILER_GXX, )
+		AC_DEFINE(PROJECT[]_COMPILER, GXX)
+	else
+		AC_MSG_RESULT(no)
+		HAS_GPLUSPLUS=false
+	fi
+	${RM} /tmp/$$.conftest.c
 ])
 
 AC_DEFUN(CF_GXX_OPTIONS, [
@@ -691,8 +685,12 @@ dnl	Some compiler versions have problems with -O3 unter Darwin (3.3.0),
 dnl so we go back to -O1.
 dnl
 if test "${OS}" = "Darwin" ; then
-	CXXFLAGS_O="${CXXFLAGS_O} -O1 -Wall -W -pedantic -Wno-long-long -Wno-long-double"		
-	CXXFLAGS_D="${CXXFLAGS_D} -O1"
+	if test "${CXX_VERSION_1}" -lt 4 ; then
+		CXXFLAGS_O="${CXXFLAGS_O} -O1 -Wall -W -pedantic -Wno-long-long -Wno-long-double"		
+	else
+		CXXFLAGS_O="${CXXFLAGS_O} -O3 -Wall -W -pedantic -Wno-long-long -Wno-long-double"		
+	fi
+	CXXFLAGS_D="${CXXFLAGS_D} -O3"
 else
 	CXXFLAGS_O="${CXXFLAGS_O} -O3 -Wall -W -pedantic -Wno-long-long"
 fi
@@ -2909,7 +2907,7 @@ AC_DEFUN(CF_VIEW_QT_BASICS, [
 
 	AC_MSG_CHECKING(for libQtCore)
 	if test "${QTDIR}" != "" ; then
-		if test -a "${QTDIR}/lib/libQtCore.so" ; then
+		if test -a "${QTDIR}/lib/libQtCore.${SHARED_LIB_SUFFIX}" ; then
 			QT_LIBPATH="${QTDIR}/lib"
 		fi
 		if test "${QT_LIBPATH}" = "" ; then
@@ -2937,7 +2935,7 @@ AC_DEFUN(CF_VIEW_QT_BASICS, [
 
 	AC_MSG_CHECKING(for libQtGui)
 	if test "${QTDIR}" != "" ; then
-		if test -a "${QTDIR}/lib/libQtGui.so" ; then
+		if test -a "${QTDIR}/lib/libQtGui.${SHARED_LIB_SUFFIX}" ; then
 			QT_LIBPATH="${QTDIR}/lib"
 			AC_MSG_RESULT((${QT_LIBPATH}))	
 		fi
@@ -2959,12 +2957,14 @@ AC_DEFUN(CF_VIEW_QT_BASICS, [
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(Note: BALL requires QT 4.x! QT3 is no longer supported.)
 			CF_ERROR
+		else
+			AC_MSG_RESULT()
 		fi
 	fi
 
 	AC_MSG_CHECKING(for libQtSql)
 	if test "${QTDIR}" != "" ; then
-		if test -a "${QTDIR}/lib/libQtSql.so" ; then
+		if test -a "${QTDIR}/lib/libQtSql.${SHARED_LIB_SUFFIX}" ; then
 			QT_LIBPATH="${QTDIR}/lib"
 			AC_MSG_RESULT((${QT_LIBPATH}))	
 		fi
@@ -2986,13 +2986,15 @@ AC_DEFUN(CF_VIEW_QT_BASICS, [
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(Note: BALL requires QT 4.x! QT3 is no longer supported.)
 			CF_ERROR
+		else
+			AC_MSG_RESULT()
 		fi
 	fi
 
 
 	AC_MSG_CHECKING(for libQtOpenGL)
 	if test "${QTDIR}" != "" ; then
-		if test -a "${QTDIR}/lib/libQtOpenGL.so" ; then
+		if test -a "${QTDIR}/lib/libQtOpenGL.${SHARED_LIB_SUFFIX}" ; then
 			QT_LIBPATH="${QTDIR}/lib"
 			AC_MSG_RESULT((${QT_LIBPATH}))	
 		fi
@@ -3014,6 +3016,8 @@ AC_DEFUN(CF_VIEW_QT_BASICS, [
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(Note: BALL requires QT 4.x! QT3 is no longer supported.)
 			CF_ERROR
+		else
+			AC_MSG_RESULT()
 		fi
 	fi
 
@@ -4842,7 +4846,7 @@ AC_DEFUN(CF_GSL, [
 		dnl Check for the GSL lib
 		dnl
 	
-	  AC_MSG_CHECKING(for libgsl.so)
+	  AC_MSG_CHECKING(for libgsl)
   	if test "${GSL_LIBDIR}" != "" ; then
       if test -a "${GSL_LIBDIR}/libgsl.a" ; then
 		  	GSL_LIBDIR="${GSL_LIBDIR}/"
@@ -4862,14 +4866,14 @@ AC_DEFUN(CF_GSL, [
 		  AC_MSG_RESULT()
 			CF_ERROR
 	  else
-			AC_MSG_CHECKING(for libgslcblas.so)
+			AC_MSG_CHECKING(for libgslcblas)
 			if test "${GSL_LIBDIR}" != "" ; then
 				if test -a "${GSL_LIBDIR}/libgslcblas.a" ; then
 					AC_MSG_RESULT(${GSL_LIBDIR}/libgslcblas.a)
 				else
 					AC_MSG_RESULT((not found!))
 					AC_MSG_RESULT()
-					AC_MSG_RESULT([The GSL library could not be found. Please specify the path to <libgsl.so>])
+					AC_MSG_RESULT([The GSL library could not be found. Please specify the path to <libgsl.${SHARED_LIB_SUFFIX}>])
 					AC_MSG_RESULT([by passing the option --with-gsl-libs=DIR to configure.])
 					AC_MSG_RESULT([You may also set the environment variable GSL_LIB_DIR to the correct])
 					AC_MSG_RESULT([path - configure will recognize this, too.])
@@ -4890,4 +4894,27 @@ AC_DEFUN(CF_GSL, [
 		AC_MSG_RESULT(disabled)
 	fi
 	
+])
+
+
+dnl
+dnl	Check for hash_map instead of map to speed up things
+dnl
+AC_DEFUN(CF_CHECK_MAP, [
+	AC_MSG_CHECKING(for hash map)
+	if test "${HAS_GPLUSPLUS}" = true ; then
+		BALL_HAS_HASH_MAP="true"
+		AC_MSG_RESULT(enable std::hash_map)
+	else
+		AC_MSG_RESULT(disabled)
+	fi
+	if test "${BALL_HAS_HASH_MAP}" = true ; then
+		AC_DEFINE(PROJECT[]_HAS_HASH_MAP)
+		AC_DEFINE(PROJECT[]_MAP_NAMESPACE, __gnu_cxx)	
+		AC_DEFINE(PROJECT[]_MAP_NAME, [__gnu_cxx::hash_map<Key,T>])	
+	else
+		AC_DEFINE(PROJECT[]_MAP_NAMESPACE, std)	
+		AC_DEFINE(PROJECT[]_MAP_NAME, [std::map<Key,T>])	
+	fi
+	AC_SUBST(PROJECT[]_HAS_HASH_MAP)
 ])

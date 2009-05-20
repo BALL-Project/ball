@@ -28,7 +28,8 @@
 #endif
 
 
-namespace __gnu_cxx
+#ifdef BALL_HAS_HASH_MAP
+namespace BALL_MAP_NAMESPACE
 {
   template<>
   struct hash<BALL::Bond::BondOrder>
@@ -37,7 +38,7 @@ namespace __gnu_cxx
     {return (size_t)o;}
 	};
 }
-
+#endif
 
 namespace BALL 
 {

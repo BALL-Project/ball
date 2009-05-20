@@ -132,6 +132,11 @@
 #undef BALL_XDRREC_CREATE_VOID_VOID_UINT
 #undef BALL_XDRREC_CREATE_VOID
 
+// If ext/hash_map is defined, we use this instead of std::map
+#undef BALL_HAS_HASH_MAP
+#define BALL_MAP_NAMESPACE __gnu_cxx
+#define BALL_MAP_NAME map
+
 // some platforms (e.g. Debian 2.1) do not provide xdr_u_hyper, so we 
 // need a workaround for this
 #undef BALL_HAS_XDR_U_HYPER 
