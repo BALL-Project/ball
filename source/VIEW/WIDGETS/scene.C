@@ -2322,7 +2322,7 @@ namespace BALL
 
 			//prepare the filename
 			QString filename = ts.getFilename();
-			QString vrml_end = ".vrml";
+			QString vrml_end = ".wrl";
 			QString stl_end = ".stl"; 
 			filename.remove( vrml_end );
 			filename.remove( stl_end );
@@ -2356,7 +2356,7 @@ namespace BALL
 						{
 							vtemp.append("_");
 							vtemp.append(QString::number(partCounter));
-							vtemp.append(".vrml");
+							vtemp.append(".wrl");
 							VRMLRenderer vrml(ascii(vtemp));
 							if ( exportScene(vrml) )
 							{
@@ -2403,7 +2403,7 @@ namespace BALL
 					//export as requested
 					if (ve)
 					{
-						vtemp.append(".vrml");
+						vtemp.append(".wrl");
 						VRMLRenderer vrml(ascii(vtemp));
 						if ( exportScene(vrml) )
 						{
