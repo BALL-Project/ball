@@ -305,6 +305,7 @@ namespace BALL
 		throw()
 		: TRegularData1D<Complex>(0, 0, 1.),  // AR: old case: This is necessary because FFTW_COMPLEX has no default constructor
 			length_(0),
+			inFourierSpace_(false),
 			dataAdress_(0),
 			planCalculated_(false)
 	{
@@ -323,6 +324,7 @@ namespace BALL
 				maxPhys_ == fft1d.maxPhys_ &&
 				minFourier_ == fft1d.minFourier_ &&
 				maxFourier_ == fft1d.maxFourier_ &&
+				inFourierSpace_ == fft1d.inFourierSpace_ &&
 				numPhysToFourier_ == fft1d.numPhysToFourier_ &&
 				numFourierToPhys_ == fft1d.numFourierToPhys_ &&
 				planCalculated_ == fft1d.planCalculated_)
@@ -706,17 +708,21 @@ namespace BALL
 			return to;
 		}
 	}
+	*/
 	
+	template <typename ComplexTraits>
 	const RegularData1D& operator << (RegularData1D& to, const TFFT1D<ComplexTraits>& from)
 		throw()
 	{
-		// first decide if the FFT3D data is in Fourier space.
+		// first decide if the FFT1D data is in Fourier space.
 		if (!from.isInFourierSpace())
 		{
 			// create a new grid
 			Size lengthX = from.getMaxIndex()+1;
 			
-			RegularData1D newGrid(RegularData1D::IndexType(lengthX), from.getPhysSpaceMin(), from.getPhysSpaceMax());
+			RegularData1D newGrid(lengthX);
+			newGrid.setOrigin(from.getPhysSpaceMin());
+			newGrid.setDimension(from.getPhysSpaceMax()-from.getPhysSpaceMin());
 
 			// and fill it
 			double normalization = 1./(pow((float)(lengthX),from.getNumberOfInverseTransforms()));
@@ -739,10 +745,9 @@ namespace BALL
 			//float stepPhysX = from.getPhysStepWidth();
 			float stepFourierX = from.getFourierStepWidth();
 
-
-			
-			RegularData1D newGrid(RegularData1D::IndexType(lengthX),from.getFourierSpaceMin(),from.getFourierSpaceMax());
-
+			RegularData1D newGrid(lengthX);
+			newGrid.setOrigin(from.getFourierSpaceMin());
+			newGrid.setDimension(from.getFourierSpaceMax()-from.getFourierSpaceMin());
 
 			// and fill it
 			// AR: old version double normalization=1./(sqrt(2.*M_PI))*(stepPhysX*stepPhysY*stepPhysZ)/(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
@@ -773,9 +778,9 @@ namespace BALL
 				}
 
 
-				r = ((float)xp * stepFourierX;
+				r = ((float)xp * stepFourierX);
 
-				newGrid[i] = (from[i]*(ComplexTraits::ComplexPrecision)normalization*from.phase(r)).real();
+				newGrid[i] = (from[i]*(typename ComplexTraits::ComplexPrecision)normalization*from.phase(r)).real();
 			}
 
 			to = newGrid;
@@ -783,6 +788,5 @@ namespace BALL
 			return to;
 		}
 	}
-	*/
 }
 #endif // BALL_MATHS_TFFT1D_H

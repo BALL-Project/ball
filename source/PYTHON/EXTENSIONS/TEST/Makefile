@@ -43,7 +43,7 @@ echo:
 
 include ../../../common.mak
 
-BALL_PY_LIBPATH="$(BALL_PATH)/lib/$(BINFMT)"
+BALL_PY_LIBPATH="$(BALL_PATH)/lib:$(BALL_PATH)/contrib/lib"
 
 dummy:
 	@echo 'export BALL_PY_LIBPATH="'${BALL_PY_LIBPATH}'"' > .vars

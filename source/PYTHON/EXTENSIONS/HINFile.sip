@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.sip,v 1.14.18.1 2007/03/25 21:36:59 oliver Exp $
+// $Id$
 //
 
 class HINFile

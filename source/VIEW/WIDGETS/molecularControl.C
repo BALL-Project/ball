@@ -24,6 +24,7 @@
 #include <QtGui/qmessagebox.h> 
 #include <QtGui/qtooltip.h> 
 #include <QtGui/QGridLayout> 
+#include <QtGui/QCompleter> 
 
 #include <set>
 
@@ -105,8 +106,11 @@ namespace BALL
 			selector_edit_->setLineEdit(new QLineEdit());
 			selector_edit_->lineEdit()->setObjectName("lineedit");
 
-			selector_edit_->setAutoCompletion(true);
-			selector_edit_->setAutoCompletionCaseSensitivity(Qt::CaseSensitive);
+			// set up suitable completion for the selector widget
+			QCompleter* completer = selector_edit_->completer();
+			completer->setCaseSensitivity(Qt::CaseSensitive);
+			completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
+
 			selector_edit_->setDuplicatesEnabled(false);
 			selector_edit_->setEditable(true);
 			selector_edit_->resize(100, 25);

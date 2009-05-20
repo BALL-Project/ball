@@ -37,7 +37,7 @@ namespace BALL
 		PointerSizeUInt* fast_sphere_relative;
 		
 		// contains the squared length of the diagonal distance in the grid
-		float	d2, d;
+		float d;
 
 		// contains the squared grid spacing
 		float spacing2 = spacing * spacing;
@@ -76,8 +76,7 @@ namespace BALL
 		}
 
 		// ..then, calculate the grid's diagonal length
-		d2 = spacing * spacing * spacing;
-		d = sqrt(d2);
+		d = sqrt(3) * spacing;
 
 		// calculate some constants used for FAST access to the grid.
 		origin = grid->getOrigin();
@@ -298,7 +297,7 @@ namespace BALL
 		// CCONN__INSIDE are sure inside the molecule
 
 		// contains the squared length of the diagonal distance in the grid
-		float	d2, d;
+		float d;
 
 		// the atom_radius
 		float atom_radius;
@@ -336,8 +335,7 @@ namespace BALL
 		}
 				
 		// ..then, calculate the grid's diagonal length
-		d2 = spacing * spacing * spacing;
-		d = sqrt(d2);
+		d = sqrt(3) * spacing;
 
 		// calculate some constants used for FAST access to the grid.
 		origin = grid->getOrigin();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularDynamics.sip,v 1.6 2005/01/24 16:59:23 amoll Exp $
+// $Id$
 //
 
 class MolecularDynamics

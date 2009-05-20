@@ -127,17 +127,18 @@ namespace BALL
 	
 
 	template <>
-	BALL_INLINE
-	const TFFT2D<DoubleTraits>& TFFT2D<DoubleTraits>::operator = (const TFFT2D& fft2D)
+	const TFFT2D<DoubleTraits>& TFFT2D<DoubleTraits>::operator = (const TFFT2D<DoubleTraits>& fft2D)
 		throw()
 	{
 		clear();
 		//lower_ = fft2D.lower_;
 		//upper_ = fft2D.upper_;
 		//spacing_ = fft2D.spacing_;
-		data_ = fft2D.data_;
 		lengthX_ = fft2D.lengthX_;
 		lengthY_ = fft2D.lengthY_;
+		inFourierSpace_ = fft2D.inFourierSpace_;
+		numPhysToFourier_ = fft2D.numPhysToFourier_;
+		numFourierToPhys_ = fft2D.numFourierToPhys_;
 		origin_ = fft2D.origin_;
 		stepPhysX_ = fft2D.stepPhysX_;
 		stepPhysY_ = fft2D.stepPhysY_;
@@ -147,13 +148,14 @@ namespace BALL
     maxPhys_ = Vector2(((lengthX_-1)*stepPhysX_)-origin_.x,((lengthY_-1)*stepPhysY_)-origin_.y);
 	  minFourier_ = Vector2(-(lengthX_/2.-1)*stepFourierX_,-(lengthY_/2.-1)*stepFourierY_);
     maxFourier_ = Vector2((lengthX_/2.)*stepFourierX_,(lengthY_/2.)*stepFourierY_);
-		numPhysToFourier_ = fft2D.numPhysToFourier_;
-		numFourierToPhys_ = fft2D.numFourierToPhys_;
+
+		data_ = fft2D.data_;
+		size_ = fft2D.size_;
 				
 		// AR: destroy old FFTW plans if there are any
 		if (planCalculated_)
 		{
-    	fftw_destroy_plan(planForward_);
+			fftw_destroy_plan(planForward_);
 			fftw_destroy_plan(planBackward_);
 		}
 		
@@ -166,7 +168,7 @@ namespace BALL
 			planForward_  = fftw_plan_dft_2d(lengthX_, lengthY_, reinterpret_cast<fftw_complex*>(dataAdress_),
 																							reinterpret_cast<fftw_complex*>(dataAdress_), FFTW_FORWARD, FFTW_ESTIMATE);
 			planBackward_ = fftw_plan_dft_2d(lengthX_, lengthY_, reinterpret_cast<fftw_complex*>(dataAdress_),
-																							reinterpret_cast<fftw_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
+																							reinterpret_cast<fftw_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);	
 		}
 		else
 		{
@@ -416,7 +418,6 @@ namespace BALL
 	
 
 	template <>
-	BALL_INLINE
 	const TFFT2D<FloatTraits>& TFFT2D<FloatTraits>::operator = (const TFFT2D& fft2D)
 		throw()
 	{
@@ -424,9 +425,11 @@ namespace BALL
 		//lower_ = fft2D.lower_;
 		//upper_ = fft2D.upper_;
 		//spacing_ = fft2D.spacing_;
-		data_ = fft2D.data_;
 		lengthX_ = fft2D.lengthX_;
 		lengthY_ = fft2D.lengthY_;
+		inFourierSpace_ = fft2D.inFourierSpace_;
+		numPhysToFourier_ = fft2D.numPhysToFourier_;
+		numFourierToPhys_ = fft2D.numFourierToPhys_;
 		origin_ = fft2D.origin_;
 		stepPhysX_ = fft2D.stepPhysX_;
 		stepPhysY_ = fft2D.stepPhysY_;
@@ -436,8 +439,9 @@ namespace BALL
     maxPhys_ = Vector2(((lengthX_-1)*stepPhysX_)-origin_.x,((lengthY_-1)*stepPhysY_)-origin_.y);
 	  minFourier_ = Vector2(-(lengthX_/2.-1)*stepFourierX_,-(lengthY_/2.-1)*stepFourierY_);
     maxFourier_ = Vector2((lengthX_/2.)*stepFourierX_,(lengthY_/2.)*stepFourierY_);
-		numPhysToFourier_ = fft2D.numPhysToFourier_;
-		numFourierToPhys_ = fft2D.numFourierToPhys_;
+
+		data_ = fft2D.data_;
+		size_ = fft2D.size_;
 				
 		// AR: destroy old FFTW plans if there are any
 		if (planCalculated_)
@@ -706,7 +710,6 @@ template <>
 	
 
 	template <>
-	BALL_INLINE
 	const TFFT2D<LongDoubleTraits>& TFFT2D<LongDoubleTraits>::operator = (const TFFT2D& fft2D)
 		throw()
 	{
@@ -714,9 +717,11 @@ template <>
 		//lower_ = fft2D.lower_;
 		//upper_ = fft2D.upper_;
 		//spacing_ = fft2D.spacing_;
-		data_ = fft2D.data_;
 		lengthX_ = fft2D.lengthX_;
 		lengthY_ = fft2D.lengthY_;
+		inFourierSpace_ = fft2D.inFourierSpace_;
+		numPhysToFourier_ = fft2D.numPhysToFourier_;
+		numFourierToPhys_ = fft2D.numFourierToPhys_;
 		origin_ = fft2D.origin_;
 		stepPhysX_ = fft2D.stepPhysX_;
 		stepPhysY_ = fft2D.stepPhysY_;
@@ -726,8 +731,9 @@ template <>
     maxPhys_ = Vector2(((lengthX_-1)*stepPhysX_)-origin_.x,((lengthY_-1)*stepPhysY_)-origin_.y);
 	  minFourier_ = Vector2(-(lengthX_/2.-1)*stepFourierX_,-(lengthY_/2.-1)*stepFourierY_);
     maxFourier_ = Vector2((lengthX_/2.)*stepFourierX_,(lengthY_/2.)*stepFourierY_);
-		numPhysToFourier_ = fft2D.numPhysToFourier_;
-		numFourierToPhys_ = fft2D.numFourierToPhys_;
+
+		data_ = fft2D.data_;
+		size_ = fft2D.size_;
 				
 		// AR: destroy old FFTW plans if there are any
 		if (planCalculated_)
@@ -744,8 +750,8 @@ template <>
 			planCalculated_ = true;
 			planForward_  = fftwl_plan_dft_2d(lengthX_, lengthY_, reinterpret_cast<fftwl_complex*>(dataAdress_),
 																							reinterpret_cast<fftwl_complex*>(dataAdress_), FFTW_FORWARD, FFTW_ESTIMATE);
-			planBackward_ = fftwl_plan_dft_2d(lengthX_, lengthY_, reinterpret_cast<fftwl_complex*>(dataAdress_),
-																							reinterpret_cast<fftwl_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
+			planBackward_ = fftwl_plan_dft_2d(lengthX_, lengthY_, reinterpret_cast<fftwf_complex*>(dataAdress_),
+																							reinterpret_cast<fftwl_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);	
 		}
 		else
 		{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.sip,v 1.6 2003/11/01 09:27:37 oliver Exp $
+// $Id$
 //
 
 class FragmentDB 
@@ -9,6 +9,7 @@ class FragmentDB
 %TypeHeaderCode
 	#include <BALL/STRUCTURE/fragmentDB.h>
 	#include <BALL/STRUCTURE/reconstructFragmentProcessor.h>
+	typedef UnaryProcessor<Fragment> FragmentProcessor;
 	using namespace BALL;
 %End
   public:
@@ -72,6 +73,7 @@ class NormalizeNamesProcessor
 %TypeHeaderCode
 	#include <BALL/STRUCTURE/fragmentDB.h>
 	typedef FragmentDB::NormalizeNamesProcessor NormalizeNamesProcessor;
+	typedef UnaryProcessor<Fragment> FragmentProcessor;
 	using namespace BALL;
 %End
 	public:
@@ -99,6 +101,7 @@ class BuildBondsProcessor
 %TypeHeaderCode
 	#include <BALL/STRUCTURE/fragmentDB.h>
 	typedef FragmentDB::BuildBondsProcessor BuildBondsProcessor;
+	typedef UnaryProcessor<Fragment> FragmentProcessor;
 	using namespace BALL;
 %End
 	public:

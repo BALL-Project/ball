@@ -636,6 +636,7 @@ namespace BALL
 			<b>Caveat:</b> This concept relies on the C++ memory layout and thus 
 			is highly non-portable!
 			\par
+			The flag swap_endian can be used to swap between big- and little-endian.
 			\ingroup System		
 	*/
 	template <typename T>
@@ -652,12 +653,20 @@ namespace BALL
 			throw();
 
 		/// Detailed constructor
-		BinaryFileAdaptor(const T& data)
+		BinaryFileAdaptor(const T& data, bool swap_endian = false)
 			throw();
 
 		//@}
 		///@name Accessors
 		//@{
+
+		/// Set the swap_endian flag
+		void setSwapEndian(bool swap_endian)
+			throw();
+
+		/// return the swap_endian flag
+		bool getSwapEndian() const
+			throw();
 
 		/** Sets the member <tt>data</tt> to the desired value.
 				@param data data of type T
@@ -681,22 +690,43 @@ namespace BALL
 
 		//_ The member data.
 		T data_;
+
+		//_ A flag indicating whether we should swap all reads and writes
+		bool swap_endian_;
 	};
 
 	template <typename T>
 	BALL_INLINE
 	BinaryFileAdaptor<T>::BinaryFileAdaptor()
 		throw()
-		: data_()
+		: data_(),
+			swap_endian_(false)
 	{
 	}
 
 	template <typename T>
 	BALL_INLINE
-	BinaryFileAdaptor<T>::BinaryFileAdaptor(const T& data)
+	BinaryFileAdaptor<T>::BinaryFileAdaptor(const T& data, bool swap_endian)
 		throw()
-		: data_(data)
+		: data_(data),
+			swap_endian_(swap_endian)
 	{
+	}
+
+	template <typename T>
+	BALL_INLINE
+	void BinaryFileAdaptor<T>::setSwapEndian(bool swap_endian)
+		throw()
+	{
+		swap_endian_ = swap_endian;
+	}
+
+	template <typename T>
+	BALL_INLINE
+	bool BinaryFileAdaptor<T>::getSwapEndian() const
+		throw()
+	{
+		return swap_endian_;
 	}
 
 	template <typename T>
@@ -727,7 +757,17 @@ namespace BALL
 	template <typename T>
 	std::ostream& operator << (std::ostream& os, const BinaryFileAdaptor<T>& data)
 	{
-		os.write(reinterpret_cast<const char*>(&data.getData()), sizeof(T));
+		// do we need to swap endianness?
+		if (!data.getSwapEndian())
+		{
+			os.write(reinterpret_cast<const char*>(&data.getData()), sizeof(T));
+		}
+		else
+		{
+			T swapped_data = data.getData();
+			swapBytes(swapped_data);
+			os.write(reinterpret_cast<const char*>(&swapped_data), sizeof(T));
+		}
 		return os;
 	}
 
@@ -735,7 +775,18 @@ namespace BALL
 	template <typename T>
 	std::istream& operator >> (std::istream& is, BinaryFileAdaptor<T>& data)
 	{
-		is.read(reinterpret_cast<char*>(&data.getData()), sizeof(T));
+		// do we need to swap endianness?
+		if (!data.getSwapEndian())
+		{
+			is.read(reinterpret_cast<char*>(&data.getData()), sizeof(T));
+		}
+		else
+		{
+			T swapped_data;
+			is.read(reinterpret_cast<char*>(&swapped_data), sizeof(T));
+			swapBytes(swapped_data);
+			data.setData(swapped_data);
+		}
 		return is;
 	}
 

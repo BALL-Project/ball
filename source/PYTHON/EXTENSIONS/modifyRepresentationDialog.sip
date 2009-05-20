@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modifyRepresentationDialog.sip,v 1.1.4.1 2007/03/25 21:37:13 oliver Exp $
+// $Id$
 //
 
 class ModifyRepresentationDialog

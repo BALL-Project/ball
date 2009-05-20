@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.sip,v 1.3.20.2 2007/03/28 13:58:55 amoll Exp $
+// $Id$
 //
 
 class ModelProcessor
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/MODELS/modelProcessor.h>
-	#include "sipBALLComposite.h"
+	#include "sipAPIBALL.h"
 	using namespace BALL;
 	using namespace BALL::VIEW;
 %End

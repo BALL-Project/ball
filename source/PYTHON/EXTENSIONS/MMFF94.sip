@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.sip,v 1.1.2.1 2007/06/15 09:40:49 amoll Exp $
+// $Id$
 //
 
 class MMFF94

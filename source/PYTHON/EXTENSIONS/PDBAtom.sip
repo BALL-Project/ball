@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBAtom.sip,v 1.7.28.1 2007/03/25 21:37:01 oliver Exp $
+// $Id$
 //
 
 class PDBAtom

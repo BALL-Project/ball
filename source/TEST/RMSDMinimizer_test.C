@@ -29,7 +29,7 @@ CHECK(RMSDMinimizer::Result RMSDMinimizer::computeTransformation(const AtomBijec
 	// ????
 RESULT
 
-CHECK(RMSDMinimizer::Reszlt RMSDMinimizer::computeTransformation
+CHECK(RMSDMinimizer::Result RMSDMinimizer::computeTransformation
     (const RMSDMinimizer::PointVector& X, const RMSDMinimizer::PointVector& Y)
     throw(RMSDMinimizer::IncompatibleCoordinateSets, RMSDMinimizer::TooFewCoordinates))
 	Points A;
@@ -71,6 +71,46 @@ CHECK(RMSDMinimizer::Reszlt RMSDMinimizer::computeTransformation
 	TEST_REAL_EQUAL(r.first.m42, 0.0)
 	TEST_REAL_EQUAL(r.first.m43, 0.0)
 	TEST_REAL_EQUAL(r.first.m44, 1.0)
+RESULT
+
+CHECK(RMSDMinimizer::Reszlt RMSDMinimizer::computeTransformation
+    (const RMSDMinimizer::PointVector& X, const RMSDMinimizer::PointVector& Y)
+    throw(RMSDMinimizer::IncompatibleCoordinateSets, RMSDMinimizer::TooFewCoordinates))
+	vector<Vector3> vs1, vs2;
+	
+	vs1.push_back(Vector3(25.861,	3.886,	34.880));
+	vs1.push_back(Vector3(27.128,	3.019,	34.851));
+	vs1.push_back(Vector3(27.781,	3.086,	36.096));
+	vs1.push_back(Vector3(30.318,   3.114,  35.247));
+	vs1.push_back(Vector3(31.422,   4.794,  34.532));
+	vs1.push_back(Vector3(30.314,   4.429,  35.143));		
+	vs1.push_back(Vector3(32.569,	7.979,	33.549));
+	vs1.push_back(Vector3(32.867,	7.345,	32.521));
+	vs1.push_back(Vector3(31.964,	7.456,	34.484));
+	
+	vs2.push_back(Vector3(25.861,   3.886,  34.880));
+	vs2.push_back(Vector3(27.126,   3.020,  34.851));
+	vs2.push_back(Vector3(27.526,   2.665,  36.160));
+	vs2.push_back(Vector3(30.319,   3.546,  35.391));
+	vs2.push_back(Vector3(31.422,   5.105,  34.317));
+	vs2.push_back(Vector3(30.304,   4.842,  35.018));
+	vs2.push_back(Vector3(32.521,   8.000,  33.476));
+	vs2.push_back(Vector3(32.575,   7.569,  32.307));
+	vs2.push_back(Vector3(32.080,   7.387,  34.471));
+		
+	RMSDMinimizer::Result r = RMSDMinimizer::computeTransformation(vs1, vs2);	
+	Matrix4x4 m = r.first;
+	
+	double rmsd = 0;
+	for (unsigned int i = 0; i < 9; ++i)
+	{
+			Vector3 v1 = m * vs1[i];
+			Vector3 v2 = vs2[i];
+			rmsd += v1.getSquareDistance(v2);
+	}	
+
+	rmsd = sqrt(rmsd/9);		
+	TEST_REAL_EQUAL(rmsd, r.second)
 RESULT
 
 /////////////////////////////////////////////////////////////

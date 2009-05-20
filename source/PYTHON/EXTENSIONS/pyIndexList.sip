@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyIndexList.sip,v 1.2 2005/12/23 17:02:56 amoll Exp $
+// $Id$
 //
 
 %MappedType PyIndexList
 {
 %TypeHeaderCode
 	#include <BALL/PYTHON/pyIndexList.h>
-	#include "sipBALLIndex.h"
+	#include "sipAPIBALL.h"
   #include <BALL/PYTHON/pyBALLSipHelper.h>
 %End
 %ConvertFromTypeCode

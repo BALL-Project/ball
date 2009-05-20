@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyResidueProcessor.sip,v 1.6 2004/02/25 11:22:41 oliver Exp $
+// $Id$
 //
 
 class ResidueProcessor
 {
 %TypeHeaderCode
 	#include <BALL/CONCEPT/processor.h>
-	#include "sipBALLResidue.h"
+	#include "sipAPIBALL.h"
 	typedef UnaryProcessor<Residue> ResidueProcessor;
 %End
 	public:

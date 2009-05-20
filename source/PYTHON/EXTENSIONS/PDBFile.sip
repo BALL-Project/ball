@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.sip,v 1.12.18.1 2007/03/25 21:37:01 oliver Exp $
+// $Id$
 //
 
 class PDBFile

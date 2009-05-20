@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chain.sip,v 1.7.28.1 2007/03/25 21:37:04 oliver Exp $
+// $Id$
 //
 
 class Chain

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBRecords.sip,v 1.2.22.1 2007/03/25 21:37:02 oliver Exp $
+// $Id$
 //
 	class PDBRecords
 	{

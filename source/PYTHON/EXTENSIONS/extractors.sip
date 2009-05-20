@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: extractors.sip,v 1.7.8.4 2007/03/27 21:25:46 amoll Exp $
+// $Id$
 //
 // Author:
 //   Oliver Kohlbacher

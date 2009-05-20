@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: version.sip,v 1.5 2003/10/29 22:08:40 oliver Exp $
+// $Id$
 //
 
 class VersionInfo

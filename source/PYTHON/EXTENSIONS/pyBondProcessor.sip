@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyBondProcessor.sip,v 1.2 2005/12/23 17:02:55 amoll Exp $
+// $Id$
 //
 
 class BondProcessor
 {
 %TypeHeaderCode
 	#include <BALL/CONCEPT/processor.h>
-	#include "sipBALLBond.h"
+	#include "sipAPIBALL.h"
 	using namespace BALL;
 	typedef UnaryProcessor<Bond> BondProcessor;
 %End

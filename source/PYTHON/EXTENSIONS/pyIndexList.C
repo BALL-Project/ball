@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyIndexList.C,v 1.2 2005/12/23 17:02:56 amoll Exp $
+// $Id: pyIndexList.C,v 1.2 2005-12-23 17:02:56 amoll Exp $
 //
 
 #include <BALL/PYTHON/pyIndexList.h>

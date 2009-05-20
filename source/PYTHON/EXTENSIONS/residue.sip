@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residue.sip,v 1.8.24.1 2007/03/25 21:38:52 oliver Exp $
+// $Id$
 //
 
 class Residue

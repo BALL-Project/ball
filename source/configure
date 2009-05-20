@@ -1356,6 +1356,7 @@ Optional Features:
   --enable-debuginfo      add -g to the compiler flags (to create debug information)
   --disable-VIEW          disable the compilation of the visualization component
   --enable-64             create 64 bit binaries (if allowed by the compiler)
+  --disable-glew          disable check for GLEW library (default:enabled)
   --enable-python         enable Python support and search for executable
   --enable-fftw           enable the build of BALL with support for FFTW (a FFT library)
   --disable-fftw-float    disable support for float precision in FFT code
@@ -1993,6 +1994,11 @@ if test "${with_mesa+set}" = set; then
 fi
 
 
+# Check whether --enable-glew was given.
+if test "${enable_glew+set}" = set; then
+  enableval=$enable_glew;
+fi
+
 
 # Check whether --with-glew-incl was given.
 if test "${with_glew_incl+set}" = set; then
@@ -2200,6 +2206,12 @@ if test "$with_qt_mt" = "yes" -o "${with_qt_mt+set}" != set; then
 else
 	USE_THREADSAFE_QT=false
 	QT_MT_SUFFIX=""
+fi
+
+if test "$enable_glew" != "no"; then
+	GLEW="true"
+else
+	GLEW="false"
 fi
 
 if test "$with_glew_incl" != "" ; then
@@ -20443,6 +20455,8 @@ fi
 
 
 
+		if test "${GLEW}" = "true"; then
+
 if test ${VIEW_PLATFORM} = OpenGL ; then
 	{ echo "$as_me:$LINENO: checking for GLEW library" >&5
 echo $ECHO_N "checking for GLEW library... $ECHO_C" >&6; }
@@ -20677,6 +20691,7 @@ _ACEOF
 	fi
 fi
 
+	fi
 
 
 	{ echo "$as_me:$LINENO: checking for QT headers" >&5

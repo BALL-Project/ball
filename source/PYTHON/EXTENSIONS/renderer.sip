@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: renderer.sip,v 1.2 2004/04/16 13:18:40 amoll Exp $
+// $Id$
 //
 
 class Renderer 

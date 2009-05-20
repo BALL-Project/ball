@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.sip,v 1.3 2005/12/23 17:02:59 amoll Exp $
+// $Id$
 //
 
 class ElementColorProcessor
@@ -100,7 +100,7 @@ class ResidueNameColorProcessor
   ResidueNameColorProcessor() throw();
 	void setTransparency(Size) throw();
 	virtual void getColor(const Composite&, ColorRGBA&);
-  //StringHashMap<ColorRGBA> & getColorMap();
+  StringHashMap<ColorRGBA> & getColorMap();
   //constStringHashMap<ColorRGBA> & getColorMap() const;
 };
 

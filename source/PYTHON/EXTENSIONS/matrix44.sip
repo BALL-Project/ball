@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: matrix44.sip,v 1.9.12.1 2007/03/25 21:37:11 oliver Exp $
+// $Id$
 //
 
 class Matrix4x4

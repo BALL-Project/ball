@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.sip,v 1.3.24.1 2007/03/25 21:37:14 oliver Exp $
+// $Id$
 //
 
 class  MolecularStructure

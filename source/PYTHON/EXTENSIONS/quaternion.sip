@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quaternion.sip,v 1.6 2003/10/29 22:54:45 oliver Exp $
+// $Id$
 //
 
 class Quaternion

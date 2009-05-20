@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomVector.sip,v 1.3 2003/10/29 22:54:37 oliver Exp $
+// $Id$
 //
 
 class AtomVector

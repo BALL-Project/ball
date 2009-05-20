@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: disc.sip,v 1.1 2003/11/24 22:46:31 amoll Exp $
+// $Id$
 //
 
 class Disc 

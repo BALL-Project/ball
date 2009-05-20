@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File.sip,v 1.10 2005/12/23 17:02:46 amoll Exp $
+// $Id$
 //
 
 class MOL2File

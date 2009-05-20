@@ -228,70 +228,66 @@ namespace BALL
 	bool TRRFile::readNextHeader(TRRHeader &header)
 		throw()
 	{
-		BinaryFileAdaptor<char>   adapt_char;
-		BinaryFileAdaptor<Size>   adapt_size;
-		BinaryFileAdaptor<float>  adapt_float;
-
 		Size i;
 
-		*this >> adapt_size;
-		header.MAGIC = adapt_size.getData();
+		*this >> adapt_size_;
+		header.MAGIC = adapt_size_.getData();
 
 		if (header.MAGIC != 1993)
 		{
 			Log.error() << "TRRFile::readNextHeader(): "
 									<< "the magic number of header # "
 									<< timestep_index_
-									<< " is incorrect; expected \"1999\", got "
+									<< " is incorrect; expected \"1993\", got "
 				          << header.MAGIC << endl;
 
 			return false;
 		}
 
-		*this >> adapt_size;
-		header.VERSION = adapt_size.getData();
+		*this >> adapt_size_;
+		header.VERSION = adapt_size_.getData();
 
-		*this >> adapt_size;
-		header.title_string_length = adapt_size.getData();
+		*this >> adapt_size_;
+		header.title_string_length = adapt_size_.getData();
 
 		// read the title string one by one character (because of the
 		// lacking NULL - termination
 		for (i=0; i<header.title_string_length; i++)
 		{
-			*this >> adapt_char;
-			header.title_string[i] = adapt_char.getData();
+			*this >> adapt_char_;
+			header.title_string[i] = adapt_char_.getData();
 		}
 
-		*this >> adapt_size;
-		header.ir_size = adapt_size.getData();
-		*this >> adapt_size;
-		header.e_size = adapt_size.getData();
-		*this >> adapt_size;
-		header.bounding_box_data_size = adapt_size.getData();
-		*this >> adapt_size;
-		header.vir_size = adapt_size.getData();
-		*this >> adapt_size;
-		header.pres_size = adapt_size.getData();
-		*this >> adapt_size;
-		header.top_size = adapt_size.getData();
-		*this >> adapt_size;
-		header.sym_size = adapt_size.getData();
-		*this >> adapt_size;
-		header.position_data_size = adapt_size.getData();
-		*this >> adapt_size;
-		header.velocity_data_size = adapt_size.getData();
-		*this >> adapt_size;
-		header.force_data_size = adapt_size.getData();
-		*this >> adapt_size;
-		header.number_of_atoms = adapt_size.getData();
-		*this >> adapt_size;
-		header.timestep_index = adapt_size.getData();
-		*this >> adapt_size;
-		header.nre = adapt_size.getData();
-		*this >> adapt_float;
-		header.timestep_time = adapt_float.getData();
-		*this >> adapt_float;
-		header.lambda = adapt_float.getData();
+		*this >> adapt_size_;
+		header.ir_size = adapt_size_.getData();
+		*this >> adapt_size_;
+		header.e_size = adapt_size_.getData();
+		*this >> adapt_size_;
+		header.bounding_box_data_size = adapt_size_.getData();
+		*this >> adapt_size_;
+		header.vir_size = adapt_size_.getData();
+		*this >> adapt_size_;
+		header.pres_size = adapt_size_.getData();
+		*this >> adapt_size_;
+		header.top_size = adapt_size_.getData();
+		*this >> adapt_size_;
+		header.sym_size = adapt_size_.getData();
+		*this >> adapt_size_;
+		header.position_data_size = adapt_size_.getData();
+		*this >> adapt_size_;
+		header.velocity_data_size = adapt_size_.getData();
+		*this >> adapt_size_;
+		header.force_data_size = adapt_size_.getData();
+		*this >> adapt_size_;
+		header.number_of_atoms = adapt_size_.getData();
+		*this >> adapt_size_;
+		header.timestep_index = adapt_size_.getData();
+		*this >> adapt_size_;
+		header.nre = adapt_size_.getData();
+		*this >> adapt_float_;
+		header.timestep_time = adapt_float_.getData();
+		*this >> adapt_float_;
+		header.lambda = adapt_float_.getData();
 
 		if (header.velocity_data_size != 0)
 		{
@@ -309,9 +305,6 @@ namespace BALL
 	bool TRRFile::append(const SnapShot& snapshot)
 		throw()
 	{
-		BinaryFileAdaptor<float>  adapt_float;
-		BinaryFileAdaptor<double> adapt_double;
-
 		Size noa = snapshot.getNumberOfAtoms();
 		header_.number_of_atoms = noa;
 
@@ -344,42 +337,42 @@ namespace BALL
 			// size in this case is stored in the form x1 y2 z3
 			if (precision_ == 4)
 			{
-				adapt_float.setData( (float) box1_.x); *this << adapt_float.getData();
-				adapt_float.setData( (float) box2_.y); *this << adapt_float.getData();
-				adapt_float.setData( (float) box3_.z); *this << adapt_float.getData();
+				adapt_float_.setData( (float) box1_.x); *this << adapt_float_.getData();
+				adapt_float_.setData( (float) box2_.y); *this << adapt_float_.getData();
+				adapt_float_.setData( (float) box3_.z); *this << adapt_float_.getData();
 			}
 			else
 			{
-				adapt_double.setData( (double) box1_.x); *this << adapt_double.getData();
-				adapt_double.setData( (double) box2_.y); *this << adapt_double.getData();
-				adapt_double.setData( (double) box3_.z); *this << adapt_double.getData();
+				adapt_double_.setData( (double) box1_.x); *this << adapt_double_.getData();
+				adapt_double_.setData( (double) box2_.y); *this << adapt_double_.getData();
+				adapt_double_.setData( (double) box3_.z); *this << adapt_double_.getData();
 			}
 		}
 		else
 		{
 			if (precision_ == 4)
 			{
-				adapt_float.setData( (float) box1_.x); *this << adapt_float.getData();
-				adapt_float.setData( (float) box1_.y); *this << adapt_float.getData();
-				adapt_float.setData( (float) box1_.z); *this << adapt_float.getData();
-				adapt_float.setData( (float) box2_.x); *this << adapt_float.getData();
-				adapt_float.setData( (float) box2_.y); *this << adapt_float.getData();
-				adapt_float.setData( (float) box2_.z); *this << adapt_float.getData();
-				adapt_float.setData( (float) box3_.x); *this << adapt_float.getData();
-				adapt_float.setData( (float) box3_.y); *this << adapt_float.getData();
-				adapt_float.setData( (float) box3_.z); *this << adapt_float.getData();
+				adapt_float_.setData( (float) box1_.x); *this << adapt_float_.getData();
+				adapt_float_.setData( (float) box1_.y); *this << adapt_float_.getData();
+				adapt_float_.setData( (float) box1_.z); *this << adapt_float_.getData();
+				adapt_float_.setData( (float) box2_.x); *this << adapt_float_.getData();
+				adapt_float_.setData( (float) box2_.y); *this << adapt_float_.getData();
+				adapt_float_.setData( (float) box2_.z); *this << adapt_float_.getData();
+				adapt_float_.setData( (float) box3_.x); *this << adapt_float_.getData();
+				adapt_float_.setData( (float) box3_.y); *this << adapt_float_.getData();
+				adapt_float_.setData( (float) box3_.z); *this << adapt_float_.getData();
 			}
 			else
 			{
-				adapt_double.setData( (double) box1_.x); *this << adapt_double.getData();
-				adapt_double.setData( (double) box1_.y); *this << adapt_double.getData();
-				adapt_double.setData( (double) box1_.z); *this << adapt_double.getData();
-				adapt_double.setData( (double) box2_.x); *this << adapt_double.getData();
-				adapt_double.setData( (double) box2_.y); *this << adapt_double.getData();
-				adapt_double.setData( (double) box2_.z); *this << adapt_double.getData();
-				adapt_double.setData( (double) box3_.x); *this << adapt_double.getData();
-				adapt_double.setData( (double) box3_.y); *this << adapt_double.getData();
-				adapt_double.setData( (double) box3_.z); *this << adapt_double.getData();
+				adapt_double_.setData( (double) box1_.x); *this << adapt_double_.getData();
+				adapt_double_.setData( (double) box1_.y); *this << adapt_double_.getData();
+				adapt_double_.setData( (double) box1_.z); *this << adapt_double_.getData();
+				adapt_double_.setData( (double) box2_.x); *this << adapt_double_.getData();
+				adapt_double_.setData( (double) box2_.y); *this << adapt_double_.getData();
+				adapt_double_.setData( (double) box2_.z); *this << adapt_double_.getData();
+				adapt_double_.setData( (double) box3_.x); *this << adapt_double_.getData();
+				adapt_double_.setData( (double) box3_.y); *this << adapt_double_.getData();
+				adapt_double_.setData( (double) box3_.z); *this << adapt_double_.getData();
 			}
 		}
 
@@ -394,9 +387,9 @@ namespace BALL
 
 			for (actAtom=0; actAtom<noa; actAtom++)
 			{
-				adapt_float.setData( (float) positions[actAtom].x); *this << adapt_float.getData();
-				adapt_float.setData( (float) positions[actAtom].y); *this << adapt_float.getData();
-				adapt_float.setData( (float) positions[actAtom].z); *this << adapt_float.getData();
+				adapt_float_.setData( (float) positions[actAtom].x); *this << adapt_float_.getData();
+				adapt_float_.setData( (float) positions[actAtom].y); *this << adapt_float_.getData();
+				adapt_float_.setData( (float) positions[actAtom].z); *this << adapt_float_.getData();
 			}
 		}
 		else
@@ -409,9 +402,9 @@ namespace BALL
 
 			for (actAtom=0; actAtom<noa; actAtom++)
 			{
-				adapt_double.setData( (float) positions[actAtom].x); *this << adapt_double.getData();
-				adapt_double.setData( (float) positions[actAtom].y); *this << adapt_double.getData();
-				adapt_double.setData( (float) positions[actAtom].z); *this << adapt_double.getData();
+				adapt_double_.setData( (float) positions[actAtom].x); *this << adapt_double_.getData();
+				adapt_double_.setData( (float) positions[actAtom].y); *this << adapt_double_.getData();
+				adapt_double_.setData( (float) positions[actAtom].z); *this << adapt_double_.getData();
 			}
 		}
 
@@ -425,9 +418,9 @@ namespace BALL
 
 				for (actAtom=0; actAtom<noa; actAtom++)
 			  {
-					adapt_float.setData( (float) velocities[actAtom].x); *this << adapt_float.getData();
-					adapt_float.setData( (float) velocities[actAtom].y); *this << adapt_float.getData();
-					adapt_float.setData( (float) velocities[actAtom].z); *this << adapt_float.getData();
+					adapt_float_.setData( (float) velocities[actAtom].x); *this << adapt_float_.getData();
+					adapt_float_.setData( (float) velocities[actAtom].y); *this << adapt_float_.getData();
+					adapt_float_.setData( (float) velocities[actAtom].z); *this << adapt_float_.getData();
 				}
 			}
 			else
@@ -438,9 +431,9 @@ namespace BALL
 
 				for (actAtom=0; actAtom<noa; actAtom++)
 				{	 
-					adapt_double.setData( (float) velocities[actAtom].x); *this << adapt_double.getData();
-					adapt_double.setData( (float) velocities[actAtom].y); *this << adapt_double.getData();
-					adapt_double.setData( (float) velocities[actAtom].z); *this << adapt_double.getData();
+					adapt_double_.setData( (float) velocities[actAtom].x); *this << adapt_double_.getData();
+					adapt_double_.setData( (float) velocities[actAtom].y); *this << adapt_double_.getData();
+					adapt_double_.setData( (float) velocities[actAtom].z); *this << adapt_double_.getData();
 				}
 			}
 		}
@@ -454,9 +447,9 @@ namespace BALL
 
 				for (actAtom=0; actAtom<noa; actAtom++)
 			  {
-					adapt_float.setData( (float) forces[actAtom].x); *this << adapt_float.getData();
-					adapt_float.setData( (float) forces[actAtom].y); *this << adapt_float.getData();
-					adapt_float.setData( (float) forces[actAtom].z); *this << adapt_float.getData();
+					adapt_float_.setData( (float) forces[actAtom].x); *this << adapt_float_.getData();
+					adapt_float_.setData( (float) forces[actAtom].y); *this << adapt_float_.getData();
+					adapt_float_.setData( (float) forces[actAtom].z); *this << adapt_float_.getData();
 				}
 			}
 			else
@@ -467,9 +460,9 @@ namespace BALL
 
 				for (actAtom=0; actAtom<noa; actAtom++)
 				{
-					adapt_double.setData( (float) forces[actAtom].x); *this << adapt_double.getData();
-					adapt_double.setData( (float) forces[actAtom].y); *this << adapt_double.getData();
-					adapt_double.setData( (float) forces[actAtom].z); *this << adapt_double.getData();
+					adapt_double_.setData( (float) forces[actAtom].x); *this << adapt_double_.getData();
+					adapt_double_.setData( (float) forces[actAtom].y); *this << adapt_double_.getData();
+					adapt_double_.setData( (float) forces[actAtom].z); *this << adapt_double_.getData();
 				}
 			}
 		}
@@ -484,9 +477,6 @@ namespace BALL
 	bool TRRFile::read(SnapShot& snapshot)
 		throw()
 	{
-		BinaryFileAdaptor<float>  adapt_float;
-		BinaryFileAdaptor<double> adapt_double;
-
  		if (!readNextHeader(header_)) return false;
 
 		Size noa = header_.number_of_atoms;
@@ -527,42 +517,42 @@ namespace BALL
 			// The information is stored in the short format.
 			if (precision_ == 4)
 			{
-				*this >> adapt_float; box1_.x = adapt_float.getData();
-				*this >> adapt_float; box2_.y = adapt_float.getData();
-				*this >> adapt_float; box3_.z = adapt_float.getData();
+				*this >> adapt_float_; box1_.x = adapt_float_.getData();
+				*this >> adapt_float_; box2_.y = adapt_float_.getData();
+				*this >> adapt_float_; box3_.z = adapt_float_.getData();
 			}
 			else
 			{
-				*this >> adapt_double; box1_.x = adapt_double.getData();
-				*this >> adapt_double; box2_.y = adapt_double.getData();
-				*this >> adapt_double; box3_.z = adapt_double.getData();
+				*this >> adapt_double_; box1_.x = adapt_double_.getData();
+				*this >> adapt_double_; box2_.y = adapt_double_.getData();
+				*this >> adapt_double_; box3_.z = adapt_double_.getData();
 			}
 		}
 		else
 		{
 			if (precision_ == 4)
 			{
-				*this >> adapt_float; box1_.x = adapt_float.getData();
-				*this >> adapt_float; box1_.y = adapt_float.getData();
-				*this >> adapt_float; box1_.z = adapt_float.getData();
-				*this >> adapt_float; box2_.x = adapt_float.getData();
-				*this >> adapt_float; box2_.y = adapt_float.getData();
-				*this >> adapt_float; box2_.z = adapt_float.getData();
-				*this >> adapt_float; box3_.x = adapt_float.getData();
-				*this >> adapt_float; box3_.y = adapt_float.getData();
-				*this >> adapt_float; box3_.z = adapt_float.getData();
+				*this >> adapt_float_; box1_.x = adapt_float_.getData();
+				*this >> adapt_float_; box1_.y = adapt_float_.getData();
+				*this >> adapt_float_; box1_.z = adapt_float_.getData();
+				*this >> adapt_float_; box2_.x = adapt_float_.getData();
+				*this >> adapt_float_; box2_.y = adapt_float_.getData();
+				*this >> adapt_float_; box2_.z = adapt_float_.getData();
+				*this >> adapt_float_; box3_.x = adapt_float_.getData();
+				*this >> adapt_float_; box3_.y = adapt_float_.getData();
+				*this >> adapt_float_; box3_.z = adapt_float_.getData();
 			}
 			else
 			{
-				*this >> adapt_double; box1_.x = adapt_double.getData();
-				*this >> adapt_double; box1_.y = adapt_double.getData();
-				*this >> adapt_double; box1_.z = adapt_double.getData();
-				*this >> adapt_double; box2_.x = adapt_double.getData();
-				*this >> adapt_double; box2_.y = adapt_double.getData();
-				*this >> adapt_double; box2_.z = adapt_double.getData();
-				*this >> adapt_double; box3_.x = adapt_double.getData();
-				*this >> adapt_double; box3_.y = adapt_double.getData();
-				*this >> adapt_double; box3_.z = adapt_double.getData();
+				*this >> adapt_double_; box1_.x = adapt_double_.getData();
+				*this >> adapt_double_; box1_.y = adapt_double_.getData();
+				*this >> adapt_double_; box1_.z = adapt_double_.getData();
+				*this >> adapt_double_; box2_.x = adapt_double_.getData();
+				*this >> adapt_double_; box2_.y = adapt_double_.getData();
+				*this >> adapt_double_; box2_.z = adapt_double_.getData();
+				*this >> adapt_double_; box3_.x = adapt_double_.getData();
+				*this >> adapt_double_; box3_.y = adapt_double_.getData();
+				*this >> adapt_double_; box3_.z = adapt_double_.getData();
 			}
 		}
 
@@ -576,11 +566,11 @@ namespace BALL
 			{
 				if (precision_ == 4)
 				{
-					*this >> adapt_double;
+					*this >> adapt_double_;
 				}
 				else
 				{
-					*this >> adapt_float;
+					*this >> adapt_float_;
 				}
 			}
 		}
@@ -593,9 +583,9 @@ namespace BALL
 
 			for (actAtom=0; actAtom<noa; actAtom++)
 			{
-				*this >> adapt_float; positions[actAtom].x = adapt_float.getData();
-				*this >> adapt_float; positions[actAtom].y = adapt_float.getData();
-				*this >> adapt_float; positions[actAtom].z = adapt_float.getData();
+				*this >> adapt_float_; positions[actAtom].x = adapt_float_.getData();
+				*this >> adapt_float_; positions[actAtom].y = adapt_float_.getData();
+				*this >> adapt_float_; positions[actAtom].z = adapt_float_.getData();
 			}
 			snapshot.setAtomPositions(positions);
 		}
@@ -608,9 +598,9 @@ namespace BALL
 
 			for (actAtom=0; actAtom<noa; actAtom++)
 			{
-				*this >> adapt_double; positions[actAtom].x = adapt_double.getData();
-				*this >> adapt_double; positions[actAtom].y = adapt_double.getData();
-				*this >> adapt_double; positions[actAtom].z = adapt_double.getData();
+				*this >> adapt_double_; positions[actAtom].x = adapt_double_.getData();
+				*this >> adapt_double_; positions[actAtom].y = adapt_double_.getData();
+				*this >> adapt_double_; positions[actAtom].z = adapt_double_.getData();
 			}
 			snapshot.setAtomPositions(positions);
 		}
@@ -623,9 +613,9 @@ namespace BALL
 
 				for (actAtom=0; actAtom<noa; actAtom++)
 			  {
-					*this >> adapt_float; velocities[actAtom].x = adapt_float.getData();
-					*this >> adapt_float; velocities[actAtom].y = adapt_float.getData();
-					*this >> adapt_float; velocities[actAtom].z = adapt_float.getData();
+					*this >> adapt_float_; velocities[actAtom].x = adapt_float_.getData();
+					*this >> adapt_float_; velocities[actAtom].y = adapt_float_.getData();
+					*this >> adapt_float_; velocities[actAtom].z = adapt_float_.getData();
 
 				}
 					snapshot.setAtomVelocities(velocities);
@@ -638,9 +628,9 @@ namespace BALL
 
 				for (actAtom=0; actAtom<noa; actAtom++)
 				{
-					*this >> adapt_double; velocities[actAtom].x = adapt_double.getData();
-					*this >> adapt_double; velocities[actAtom].y = adapt_double.getData();
-					*this >> adapt_double; velocities[actAtom].z = adapt_double.getData();
+					*this >> adapt_double_; velocities[actAtom].x = adapt_double_.getData();
+					*this >> adapt_double_; velocities[actAtom].y = adapt_double_.getData();
+					*this >> adapt_double_; velocities[actAtom].z = adapt_double_.getData();
 				}
 				snapshot.setAtomVelocities(velocities);
 			}
@@ -654,9 +644,9 @@ namespace BALL
 
 				for (actAtom=0; actAtom<noa; actAtom++)
 			  {
-					*this >> adapt_float; forces[actAtom].x = adapt_float.getData();
-					*this >> adapt_float; forces[actAtom].y = adapt_float.getData();
-					*this >> adapt_float; forces[actAtom].z = adapt_float.getData();
+					*this >> adapt_float_; forces[actAtom].x = adapt_float_.getData();
+					*this >> adapt_float_; forces[actAtom].y = adapt_float_.getData();
+					*this >> adapt_float_; forces[actAtom].z = adapt_float_.getData();
 				}
 				snapshot.setAtomForces(forces);
 			}
@@ -668,9 +658,9 @@ namespace BALL
 
 				for (actAtom=0; actAtom<noa; actAtom++)
 				{
-					*this >> adapt_double; forces[actAtom].x = adapt_double.getData();
-					*this >> adapt_double; forces[actAtom].y = adapt_double.getData();
-					*this >> adapt_double; forces[actAtom].z = adapt_double.getData();
+					*this >> adapt_double_; forces[actAtom].x = adapt_double_.getData();
+					*this >> adapt_double_; forces[actAtom].y = adapt_double_.getData();
+					*this >> adapt_double_; forces[actAtom].z = adapt_double_.getData();
 				}
 				snapshot.setAtomForces(forces);
 			}
@@ -745,6 +735,36 @@ namespace BALL
 			return false;
 		}
 
+		// try to determine the endianness of the file
+
+		*this >> adapt_size_;
+		Log.info() << "first test" << std::endl;
+		this->reopen();
+		if (adapt_size_.getData() != 1993)
+		{
+			adapt_size_.setSwapEndian(true);
+			*this >> adapt_size_;
+		 
+			if (adapt_size_.getData() != 1993)
+			{
+				Log.error() << "TRRFile::init(): "
+										<< "first header could not be identified. "
+										<< "This does not seem to be a correct TRR file. Aborting!" << endl;
+
+				return false;
+			}
+			else
+			{
+				Log.info() << "TRRFile::init(): "
+									 << "TRRFile seems to use non-standard endianness. Will try auto-byte-swapping." << endl;
+			// chars can not be swapped!
+			//	adapt_char_.setSwapEndian(true);
+				adapt_float_.setSwapEndian(true);
+				adapt_double_.setSwapEndian(true);
+			}
+		}
+
+		this->reopen();
 		return true;
 	}
 }

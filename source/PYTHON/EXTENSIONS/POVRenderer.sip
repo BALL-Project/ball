@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.sip,v 1.1.30.1 2007/04/18 19:28:19 amoll Exp $
+// $Id$
 //
 
 class POVRenderer 

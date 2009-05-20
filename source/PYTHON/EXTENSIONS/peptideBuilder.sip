@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peptideBuilder.sip,v 1.1.6.1 2007/03/25 21:37:16 oliver Exp $
+// $Id$
 //
 
 class AminoAcidDescriptor

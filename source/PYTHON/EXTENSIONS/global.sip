@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.sip,v 1.7 2005/12/23 17:02:51 amoll Exp $
+// $Id$
 //
 
 %MappedType Index
 {
 %TypeHeaderCode
 	#include <BALL/COMMON/global.h>
-	#include "sipBALLIndex.h"
+	#include "sipAPIBALL.h"
 %End
 
 %ConvertToTypeCode
@@ -65,7 +65,7 @@
 {
 %TypeHeaderCode
 	#include <BALL/COMMON/global.h>
-	#include "sipBALLLongIndex.h"
+	#include "sipAPIBALL.h"
 %End
 
 %ConvertToTypeCode
@@ -96,7 +96,7 @@
 {
 %TypeHeaderCode
 	#include <BALL/COMMON/global.h>
-	#include "sipBALLTime.h"
+	#include "sipAPIBALL.h"
 %End
 
 %ConvertToTypeCode

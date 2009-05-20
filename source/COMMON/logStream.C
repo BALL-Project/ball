@@ -69,8 +69,8 @@ namespace BALL
 				
 			char*	line_start = pbase();
 			char*	line_end = pbase();
-			
-			while (line_end <= pptr())
+
+			while (line_end < pptr())
 			{
 				// search for the first end of line
 				for (; line_end < pptr() && *line_end != '\n'; line_end++);
@@ -79,9 +79,16 @@ namespace BALL
 				{
 					// Copy the incomplete line to the incomplete_line_ buffer
 					size_t length = line_end - line_start + 1;
-					length = std::max(length, (size_t)(BUFFER_LENGTH - 1));
+					length = std::min(length, (size_t)(BUFFER_LENGTH - 1));
 					strncpy(&(buf[0]), line_start, length);
-					buf[line_end - line_start] = '\0';
+
+					// if length was too large, we copied one byte less than BUFFER_LENGTH to have
+					// room for the final \0
+					if (length == (size_t)(BUFFER_LENGTH - 1))
+						buf[BUFFER_LENGTH] = '\0';
+					else
+						buf[length] = '\0';
+
 					incomplete_line_ += &(buf[0]);
 
 					// mark everything as read
@@ -89,6 +96,7 @@ namespace BALL
 				} 
 				else 
 				{
+					// note: pptr() - pbase() should be bounded by BUFFER_LENGTH, so this should always work
 					memcpy(&(buf[0]), line_start, line_end - line_start + 1);
 					buf[line_end - line_start] = '\0';
 						

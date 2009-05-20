@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineModel.sip,v 1.4 2005/12/23 17:02:52 amoll Exp $
+// $Id$
 //
 
 class AddLineModel 

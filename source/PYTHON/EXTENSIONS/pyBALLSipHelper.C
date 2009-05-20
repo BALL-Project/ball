@@ -1,25 +1,19 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyBALLSipHelper.C,v 1.4.28.2 2007/03/28 13:58:08 amoll Exp $
+// $Id: pyBALLSipHelper.C,v 1.4.28.2 2007-03-28 13:58:08 amoll Exp $
 
 #include <typeinfo>
 #include "sipAPIBALL.h"
-#include "sipBALLComposite.h"
-#include "sipBALLAtom.h"
-#include "sipBALLBond.h"
-#include "sipBALLPDBAtom.h"
-#include "sipBALLAtomContainer.h"
-#include "sipBALLFragment.h"
-#include "sipBALLResidue.h"
-#include "sipBALLNucleotide.h"
-#include "sipBALLMolecule.h"
-#include "sipBALLProtein.h"
-#include "sipBALLNucleicAcid.h"
-#include "sipBALLSecondaryStructure.h"
-#include "sipBALLChain.h"
-#include "sipBALLSystem.h"
-#include "sipBALLObject.h"
+#include <BALL/KERNEL/PDBAtom.h>
+#include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/secondaryStructure.h>
+#include <BALL/KERNEL/chain.h>
+#include <BALL/KERNEL/system.h>
+#include <BALL/KERNEL/protein.h>
+#include <BALL/KERNEL/nucleicAcid.h>
+#include <BALL/KERNEL/nucleotide.h>
+#include <BALL/KERNEL/molecule.h>
 
 namespace BALL
 {
