@@ -1022,51 +1022,43 @@ namespace BALL
 	bool FragmentDB::NormalizeNamesProcessor::matchName(String& res_name, String&	atom_name, const FragmentDB::NameMap&	map) const
 	{
 		// residue name (non const)
-		String r_name(res_name);
-		r_name.trim();
-
+		res_name.trim();
 		String	s[2];
 
 		NameMap::ConstIterator it;
-		String match_name(r_name + ":*");
-		it = map.find(match_name);
+		it = map.find(res_name + ":*");
 		if (it != map.end())
 		{
 			it->second.split(s, 2, ":");
-			r_name = s[0];
+			res_name = s[0];
 		}
 		
 		// atom name (non const)
-		String a_name(atom_name);
-		a_name.trim();
+		atom_name.trim();
 
 		bool hit = false;
 
 		// first, try to match exactly
-		match_name = r_name + ":" + a_name;
-		it = map.find(match_name);
+		it = map.find(res_name + ":" + atom_name);
 		if (it != map.end())
 		{
 			it->second.split(s, 2, ":");
-			a_name = s[1];
-			r_name = s[0];
+			atom_name = s[1];
+			res_name = s[0];
 			hit = true;
 		} 
 		else 
 		{
 			// second, try wildcard match for residue names
-			match_name = "*:" + a_name;
-			it = map.find(match_name);
+			it = map.find("*:" + atom_name);
 			if (it != map.end())
 			{
 				it->second.split(s, 2, ":");
-				a_name = s[1];
+				atom_name = s[1];
 				hit = true;
 			}
 		}
 
-		res_name = r_name;
-		atom_name = a_name;
 		return hit;
 	}
 

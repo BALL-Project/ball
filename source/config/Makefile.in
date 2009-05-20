@@ -24,6 +24,15 @@ SHARED_LIBS	= $(STATIC_LIBS:.a=.@SHARED_LIB_SUFFIX@)
 # names of the library object file lists
 OBJECT_LISTS = $(STATIC_LIBS:.a=.objects)
 
+#Check whether the user has specified DESTDIR when invoking make install.
+#This can be used by buildscripts in order to install into a temporary
+#staging tree.
+ifndef DESTDIR
+DESTINATION=$(PREFIX)
+else
+DESTINATION=$(DESTDIR)$(PREFIX)
+endif
+
 .SUFFIXES:	.objects .a	.@SHARED_LIB_SUFFIX@
 
 .PHONY: libBALL.objects libVIEW.objects
@@ -101,45 +110,45 @@ lib:	.Dependencies dirs collect $(SHARED_LIBS)
 	@$(ECHO) " "
 	@$(ECHO) "If you use the shared libraries, don't forget to add"
 	@$(ECHO) "the path "
-	@$(ECHO) " $(PREFIX)/lib"
+	@$(ECHO) " $(DESTINATION)/$(LIBDIR)"
 	@$(ECHO) "to your LD_LIBRARY_PATH. "
 	@$(ECHO) "@ADDITIONAL_COMMENTS@"
 
 install.headers:
-	@$(ECHO) Installing headers under $(PREFIX)/include...
-	$(BALL_PATH)/source/install-sh -d $(PREFIX)/include
-	$(CP) -R $(BALL_PATH)/include/BALL $(PREFIX)/include
+	@$(ECHO) Installing headers under $(DESTINATION)/include...
+	$(BALL_PATH)/source/install-sh -d $(DESTINATION)/include
+	$(CP) -R $(BALL_PATH)/include/BALL $(DESTINATION)/include
 
 install.data:
-	$(BALL_PATH)/source/install-sh -d $(PREFIX)/share/BALL
-	$(CP) -R $(BALL_PATH)/data $(PREFIX)/share/BALL
+	$(BALL_PATH)/source/install-sh -d $(DESTINATION)/share/BALL
+	$(CP) -R $(BALL_PATH)/data $(DESTINATION)/share/BALL
 	
 install.libtool:
-	@$(ECHO) Installing libraries under $(PREFIX)/lib...
-	$(BALL_PATH)/source/install-sh -d $(PREFIX)/lib
-	$(BALL_PATH)/source/libtool --mode=install install -c libBALL.la $(PREFIX)/lib/libBALL.la
-	$(BALL_PATH)/source/libtool --mode=install install -c libVIEW.la $(PREFIX)/lib/libVIEW.la
-	$(BALL_PATH)/source/libtool -n --finish $(PREFIX)/lib
+	@$(ECHO) Installing libraries under $(DESTINATION)/$(LIBDIR)...
+	$(BALL_PATH)/source/install-sh -d $(DESTINATION)/$(LIBDIR)
+	$(BALL_PATH)/source/libtool --mode=install install -c libBALL.la $(DESTINATION)/$(LIBDIR)/libBALL.la
+	$(BALL_PATH)/source/libtool --mode=install install -c libVIEW.la $(DESTINATION)/$(LIBDIR)/libVIEW.la
+	$(BALL_PATH)/source/libtool -n --finish $(DESTINATION)/$(LIBDIR)
 
 install.static:	
-	@$(ECHO) Installing static libraries under $(PREFIX)/lib...
-	@-mkdir $(PREFIX)/lib 2>/dev/null | cat >/dev/null
-	@-mkdir $(PREFIX)/lib 2>/dev/null | cat >/dev/null
-	@$(MV) -f $(STATIC_LIBS) $(PREFIX)/lib
+	@$(ECHO) Installing static libraries under $(DESTINATION)/$(LIBDIR)...
+	@-mkdir $(DESTINATION)/$(LIBDIR) 2>/dev/null | cat >/dev/null
+	@-mkdir $(DESTINATION)/$(LIBDIR) 2>/dev/null | cat >/dev/null
+	@$(MV) -f $(STATIC_LIBS) $(DESTINATION)/$(LIBDIR)
 
 install.shared:	
-	@$(ECHO) Installing shared libraries under $(PREFIX)/lib...
-	@-mkdir $(PREFIX)/lib 2>/dev/null | cat >/dev/null 
-	@-mkdir $(PREFIX)/lib 2>/dev/null | cat >/dev/null
-	@$(MV) -f $(SHARED_LIBS) $(PREFIX)/lib
+	@$(ECHO) Installing shared libraries under $(DESTINATION)/$(LIBDIR)...
+	@-mkdir $(DESTINATION)/$(LIBDIR) 2>/dev/null | cat >/dev/null 
+	@-mkdir $(DESTINATION)/$(LIBDIR) 2>/dev/null | cat >/dev/null
+	@$(MV) -f $(SHARED_LIBS) $(DESTINATION)/$(LIBDIR)
 
 delete.static:	
-	@$(ECHO) deleting static libraries under $(PREFIX)/lib...
-	@set -e; for i in $(STATIC_LIBS) ; do $(RM) $(PREFIX)/lib//$$i 2>/dev/null ; done
+	@$(ECHO) deleting static libraries under $(DESTINATION)/$(LIBDIR)...
+	@set -e; for i in $(STATIC_LIBS) ; do $(RM) $(DESTINATION)/$(LIBDIR)//$$i 2>/dev/null ; done
 
 delete.shared:	
-	@$(ECHO) deleting shared libraries under $(PREFIX)/lib...
-	@set -e; for i in $(SHARED_LIBS) ; do $(RM) $(PREFIX)/lib/$$i 2>/dev/null ; done
+	@$(ECHO) deleting shared libraries under $(DESTINATION)/$(LIBDIR)...
+	@set -e; for i in $(SHARED_LIBS) ; do $(RM) $(DESTINATION)/$(LIBDIR)/$$i 2>/dev/null ; done
 
 .Dependencies:
 	@$(MAKE) depend
