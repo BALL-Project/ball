@@ -29,7 +29,7 @@ namespace BALL
 	const float PierottiCavFreeEnergyProcessor::Default::PROBE_RADIUS = 1.385;
 
 
-	PierottiCavFreeEnergyProcessor::PierottiCavFreeEnergyProcessor() throw()
+	PierottiCavFreeEnergyProcessor::PierottiCavFreeEnergyProcessor()
 	{
 		setDefaultOptions();
 
@@ -38,13 +38,13 @@ namespace BALL
 
 
 	PierottiCavFreeEnergyProcessor::PierottiCavFreeEnergyProcessor
-	(const PierottiCavFreeEnergyProcessor& proc) throw()
+	(const PierottiCavFreeEnergyProcessor& proc)
 		:	EnergyProcessor(proc)
 	{
 	}
 
 
-	PierottiCavFreeEnergyProcessor::~PierottiCavFreeEnergyProcessor() throw()
+	PierottiCavFreeEnergyProcessor::~PierottiCavFreeEnergyProcessor()
 	{
 		clear();
 
@@ -52,14 +52,14 @@ namespace BALL
 	}
 
 
-	void PierottiCavFreeEnergyProcessor::clear() throw()
+	void PierottiCavFreeEnergyProcessor::clear()
 	{
 		setDefaultOptions();
 
 		valid_ = true;
 	}
 
-        const PierottiCavFreeEnergyProcessor& PierottiCavFreeEnergyProcessor::operator = (const PierottiCavFreeEnergyProcessor& proc) throw()     
+        const PierottiCavFreeEnergyProcessor& PierottiCavFreeEnergyProcessor::operator = (const PierottiCavFreeEnergyProcessor& proc)
         {
 	         valid_=proc.valid_;
                  energy_=proc.energy_;
@@ -67,7 +67,7 @@ namespace BALL
                  return *this;
         }
 
-        bool PierottiCavFreeEnergyProcessor::operator == (const PierottiCavFreeEnergyProcessor& proc) const throw()
+        bool PierottiCavFreeEnergyProcessor::operator == (const PierottiCavFreeEnergyProcessor& proc) const
         {
           bool result;
 		if ((fragment_ == 0) && (proc.fragment_ == 0))
@@ -90,7 +90,7 @@ namespace BALL
 		return result;
 	}
 
-	bool PierottiCavFreeEnergyProcessor::finish() throw()
+	bool PierottiCavFreeEnergyProcessor::finish()
 	{
 
 		// first check for user settings
@@ -160,7 +160,7 @@ namespace BALL
 	}
 
 
-	void PierottiCavFreeEnergyProcessor::setDefaultOptions() throw()
+	void PierottiCavFreeEnergyProcessor::setDefaultOptions()
 	{
 		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
 		options.setDefaultReal(Option::SOLVENT_NUMBER_DENSITY, 

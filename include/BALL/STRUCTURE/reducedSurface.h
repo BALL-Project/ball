@@ -105,14 +105,14 @@ namespace BALL
 				respectivly.
 		*/
 		ReducedSurface()
-			throw();
+			;
 
 		/**	Copy constructor.
 				@param reduced_surface the ReducedSurface object to be copied
 				@param bool ignored - just for interface consistency
 		*/
 		ReducedSurface(const ReducedSurface& reduced_surface, bool = true)
-			throw();
+			;
 
 		/**	Detailed constructor.
 				Create a new ReducedSurface object from a list of spheres.
@@ -120,12 +120,12 @@ namespace BALL
 		ReducedSurface
 				(const std::vector< TSphere3<double> >& spheres,
 				 const double& probe_radius)
-			throw();
+			;
 
 		/**	Destructor.
 		*/
 		virtual ~ReducedSurface()
-			throw();
+			;
 
 		//@}
 		/** @name Assignment
@@ -136,23 +136,23 @@ namespace BALL
 				@param reduced_surface the ReducedSurface object to assign from
 		*/
 		void operator=(const ReducedSurface& reduced_surface)
-			throw();
+			;
 
 		/**	Assign from another ReducedSurface.
 				@param reduced_surface the ReducedSurface object to assign from
 		*/
 		void set(const ReducedSurface& reduced_surface)
-			throw();
+			;
 
 		/** Delete all vertices, edges and faces.
 		*/
 		void clear()
-			throw();
+			;
 
 		/** Remove all NULL-pointers
 		*/
 		void clean()
-			throw();
+			;
 
 		//@}
 		/**	@name	Accessors
@@ -163,31 +163,31 @@ namespace BALL
 				@return Size the number of atoms
 		*/
 		Size numberOfAtoms() const
-			throw();
+			;
 
 		/** Return the number of rsvertices.
 				@return Size the number of rsvertices
 		*/
 		Size numberOfVertices() const
-			throw();
+			;
 
 		/** Return the number of rsedges.
 				@return Size the number of rsedges
 		*/
 		Size numberOfEdges() const
-			throw();
+			;
 
 		/** Return the number of rsfaces.
 				@return Size the number of rsfaces
 		*/
 		Size numberOfFaces() const
-			throw();
+			;
 
 		/** Return the probe radius.
 				@return double the radius of the used probe sphere
 		*/
 		double getProbeRadius() const
-			throw();
+			;
 
 		/** Return the i'th sphere.
 				@param	i	the index of the sphere that should be given back
@@ -221,38 +221,38 @@ namespace BALL
 				@param	rsvertex	a pointer to the RSVertex to insert
 		*/
 		void insert(RSVertex* rsvertex)
-			throw();
+			;
 
 		/** Insert a new RSEdge.
 				@param	rsedge	a pointer to the RSEdge to insert
 		*/
 		void insert(RSEdge* rsedge)
-			throw();
+			;
 
 		/** Insert a new RSFace.
 				@param	rsface	a pointer to the RSFace to insert
 		*/
 		void insert(RSFace* rsface)
-			throw();
+			;
 
 		/** Return the maximal radius of te atoms of te molecule
 				@return double	the maximal radius
 		*/
 		double getMaximalRadius() const
-			throw();
+			;
 
 		/** Return the bounding box of the centers of te atoms of te molecule
 				@return TSimpleBox3<double>	the bounding box
 		*/
 		TSimpleBox3<double> getBoundingBox() const
-			throw();
+			;
 
 		/** Delete a pair of similar faces.
 				@param	face1	a pointer to the first face
 				@param	face2	a pointer to the second face
 		*/
 		void deleteSimilarFaces(RSFace* face1, RSFace* face2)
-			throw();
+			;
 
 		/** Get the angle between two RSFaces.
 				@param	face1		a pointer to the first face
@@ -269,7 +269,7 @@ namespace BALL
 				 RSVertex* vertex2,
 				 TAngle<double>& angle,
 				 bool check = false)			const
-			throw();
+			;
 
 		/** Compute the reduced surface.
 		*/
@@ -285,12 +285,12 @@ namespace BALL
 		/*_ Test whether a ReducedSurface object can be copied.
 		*/
 		bool canBeCopied(const ReducedSurface& reduced_surface)
-			throw();
+			;
 
 		/*_ Copy a ReducedSurface object.
 		*/
 		void copy(const ReducedSurface& reduced_surface)
-			throw();
+			;
 
 		/*_
 		*/
@@ -299,7 +299,7 @@ namespace BALL
 				 RSFace* face2,
 				 RSEdge* edge1,
 			 	 RSEdge* edge2)
-			throw();
+			;
 
 		/*_
 		*/
@@ -308,7 +308,7 @@ namespace BALL
 				 RSFace* face2,
 				 RSVertex* vertex1,
 			 	 RSVertex* vertex2)
-			throw();
+			;
 
 		/*_
 		*/
@@ -317,7 +317,7 @@ namespace BALL
 				RSFace* face2,
 				std::vector<RSVertex*>& rsvertex1,
 				std::vector<RSVertex*>& rsvertex2)
-			throw();
+			;
 
 		/*_
 		*/
@@ -326,7 +326,7 @@ namespace BALL
 				RSFace* face2,
 				std::vector<RSEdge*>& rsedge1,
 				std::vector<RSEdge*>& rsedge2)
-			throw();
+			;
 
 		protected:
 
@@ -434,17 +434,17 @@ namespace BALL
 				respectivly.
 		*/
 		RSComputer()
-			throw();
+			;
 
 		/**	Detiled constructor.
 		*/
 		RSComputer(ReducedSurface* rs)
-			throw();
+			;
 
 		/**	Destructor.
 		*/
 		virtual ~RSComputer()
-			throw();
+			;
 
 		//@}
 		/**	@name	Accessors
@@ -470,7 +470,7 @@ namespace BALL
 		/*_
 		*/
 		void preProcessing()
-			throw();
+			;
 
 		/*_ Compute a RSComponent.
 		*/
@@ -501,7 +501,7 @@ namespace BALL
 				@param	atom	the index of the atom
 		*/
 		void correct(Index atom)
-	  	throw();
+	  	;
 
 		/*_ Check all new created vertices for extensions
 		*/
@@ -588,7 +588,7 @@ namespace BALL
 													NULL otherwise
 		*/
 		RSEdge* findFirstEdge()
-			throw();
+			;
 
 		/*_ Try to find a starting edge in a given direction
 			@param	direction		search in x-direction, if direction is 0,
@@ -600,7 +600,7 @@ namespace BALL
 													NULL otherwise
 		*/
 		RSEdge* findEdge(Position direction, Position extrem)
-			throw();
+			;
 
 		//@}
 		/*_ @name Finding a first vertex
@@ -612,7 +612,7 @@ namespace BALL
 														found, NULL otherwise
 		*/
 		RSVertex* findFirstVertex()
-			throw();
+			;
 
 		/*_ Find a single atom in a given direction
 			@param	direction	search in x-direction, if direction is 0,
@@ -623,7 +623,7 @@ namespace BALL
 			@return	Index			the index of the found atom
 		*/
 		Index findFirstAtom(Position direction, Position extrem)
-			throw();
+			;
 
 		/*_ Find a second atom close enougth to the first atom in a given direction
 			@param	atom1			the index of the first atom
@@ -635,7 +635,7 @@ namespace BALL
 			@return	Index			the index of the found atom
 		*/
 		Index findSecondAtom(Index atom, Position direction, Position extrem)
-			throw();
+			;
 
 		/*_ Find a second atom close enougth to the first two atoms
 			@param	atom1			the index of the first atom
@@ -649,7 +649,7 @@ namespace BALL
 				Index																		 atom2,
 				const std::list<Index>&									 third,
 				std::list< std::pair< Index,TSphere3<double> > >& atoms)
-			throw();
+			;
 
 		//@}
 		/*_ @name Some utilities
@@ -664,7 +664,7 @@ namespace BALL
 			@param	output_list	list of all atoms close enougth to the given atoms
 		*/
 		void neighboursOfTwoAtoms(Index atom1, Index atom2)
-			throw();
+			;
 
 		/*_ Find all atoms close enougth to three given atoms.
 			The indices of all atoms which can be touched by the probe sphere when
@@ -679,7 +679,7 @@ namespace BALL
 				Index							atom2,
 				Index							atom3,
 				std::list<Index>& output_list)
-			throw();
+			;
 
 
     /*_ Get the extrem coordinate of a circle in a given direction
@@ -695,7 +695,7 @@ namespace BALL
 			 (const TCircle3<double>& circle,
 				Position			 direction,
 				Position			 extrem)
-			throw();
+			;
 
 		//@}
 		/*_ @name Creating / updating edges / faces
@@ -709,7 +709,7 @@ namespace BALL
 													NULL otherwise
 		*/
 		RSEdge* createFreeEdge(RSVertex* vertex1, RSVertex* vertex2)
-			throw();
+			;
 
 		/*_ Get the circle described by the center of the probe sphere and the two
 				contact circles with the atoms when the probe sphere rolls over two
@@ -728,7 +728,7 @@ namespace BALL
 				TCircle3<double>& circle1,
 				TCircle3<double>& circle2,
 				TCircle3<double>& circle3)
-			throw();
+			;
 
 		/*_ Get the normal vector of the face described by three atoms and a probe
 			@param	atom1				the index of the first atom
@@ -742,7 +742,7 @@ namespace BALL
 				const TSphere3<double>& atom2,
 				const TSphere3<double>& atom3,
 				const TSphere3<double>& probe)
-			throw();
+			;
 
 		/*_ Update a face and it's edges
 			@param	v1		the first vertex of the face
@@ -763,7 +763,7 @@ namespace BALL
 				RSEdge* e3,
 				RSFace* f,
 				const TSphere3<double>& probe)
-			throw();
+			;
 
 		/*_ Test, weather a face exists or not
 			@param	face				a pointer to the face to be tested
@@ -772,7 +772,7 @@ namespace BALL
 		RSFace* faceExists
 			 (RSFace* face,
 				const std::list< RSVertex* >& vertices)
-			throw();
+			;
 
 		//@}
 		/*_ @name Finding a probe sphere
@@ -794,7 +794,7 @@ namespace BALL
 				Index		 a3,
 				TVector3<double>& c1,
 				TVector3<double>& c2)
-			throw();
+			;
 
 		/*_ Check,weather a probe sphere is inside an atom
 			@param	probe	the probe sphere to be tested
@@ -806,39 +806,39 @@ namespace BALL
 				Index atom1,
 				Index atom2,
 				Index atom3)
-			throw();
+			;
 
 		/*_
 		*/
 		void correctProbePosition(Position atom)
-			throw();
+			;
 
 		/*_
 		*/
 		void sort
 			 (Index		u1, Index		u2, Index		u3,
 				Index&	s1,	Index&	s2, Index&	s3)
-			throw();
+			;
 
 		/*_
 		*/
 		void correctProbePosition(Position a1, Position a2, Position a3)
-			throw();
+			;
 
 		/*_
 		*/
 		void insert(RSVertex* vertex)
-			throw();
+			;
 
 		/*_
 		*/
 		void insert(RSEdge* edge)
-			throw();
+			;
 
 		/*_
 		*/
 		void insert(RSFace* face)
-			throw();
+			;
 
 		//@}
 

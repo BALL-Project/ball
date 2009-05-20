@@ -24,22 +24,22 @@ namespace BALL
 		/**	Default constructor.
 		*/
 		ChemScoreMetal()
-			throw();
+			;
 
 		/**	Constructor.
 		*/
 		ChemScoreMetal(ForceField& force_field)
-			throw();
+			;
 
 		/**	Copy constructor
 		*/
 		ChemScoreMetal(const ChemScoreMetal& csm)
-			throw();
+			;
 
 		/**	Destructor.
 		*/
 		virtual ~ChemScoreMetal()
-			throw();
+			;
 
 		//@}
 		/**	@name	Assignment
@@ -49,12 +49,12 @@ namespace BALL
 		/** Assignment.
 		*/
 		const ChemScoreMetal& operator = (const ChemScoreMetal& csm)
-			throw();
+			;
 
 		/** Clear method.
 		*/
 		virtual void clear()
-			throw();
+			;
 
 		//@}
 		/**	@name	Predicates.
@@ -62,7 +62,7 @@ namespace BALL
 		//@{
 
 		bool operator == (const ChemScoreMetal& csm) const
-			throw();
+			;
 
 		//@}
 		/**	@name	Setup Methods	
@@ -72,7 +72,7 @@ namespace BALL
 		/**	Setup method.
 		*/
 		virtual bool setup()
-			throw();
+			;
 
 		//@}
 		/**	@name	Accessors	
@@ -82,12 +82,12 @@ namespace BALL
 		/**	Calculates and returns the component's energy.
 		*/
 		virtual double updateEnergy()
-			throw();
+			;
 
 		/**	Calculates and returns the component's forces.
 		*/
 		virtual void updateForces()
-			throw();
+			;
 
 		//@}
 

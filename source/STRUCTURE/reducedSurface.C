@@ -13,7 +13,7 @@ namespace BALL
 {
 
 	ReducedSurface::ReducedSurface()
-		throw()
+		
 		:	number_of_atoms_(0),
 			atom_(),
 			probe_radius_(0.0),
@@ -31,7 +31,7 @@ namespace BALL
 
 	ReducedSurface::ReducedSurface
 			(const ReducedSurface& reduced_surface, bool)
-		throw()
+		
 		:	number_of_atoms_(0),
 			atom_(),
 			probe_radius_(0.0),
@@ -51,7 +51,7 @@ namespace BALL
 	ReducedSurface::ReducedSurface
 		 (const std::vector< TSphere3<double> >& spheres,
 			const double& probe_radius)
-		throw()
+		
 		:	number_of_atoms_(spheres.size()),
 			atom_(spheres),
 			probe_radius_(probe_radius),
@@ -68,28 +68,28 @@ namespace BALL
 
 
 	ReducedSurface::~ReducedSurface()
-		throw()
+		
 	{
 		clear();
 	}
 
 
 	void ReducedSurface::set(const ReducedSurface& reduced_surface)
-		throw()
+		
 	{
 		copy(reduced_surface);
 	}
 
 
 	void ReducedSurface::operator=(const ReducedSurface& reduced_surface)
-		throw()
+		
 	{
 		copy(reduced_surface);
 	}
 
 
 	void ReducedSurface::clear()
-		throw()
+		
 	{
 		for (Position i = 0; i < number_of_vertices_; i++)
 		{
@@ -113,7 +113,7 @@ namespace BALL
 
 
 	void ReducedSurface::clean()
-		throw()
+		
 	{
 		while ((number_of_vertices_ > 0) &&
 					 (vertices_[number_of_vertices_-1] == NULL))
@@ -182,35 +182,35 @@ namespace BALL
 
 
 	Size ReducedSurface::numberOfAtoms() const
-		throw()
+		
 	{
 		return number_of_atoms_;
 	}
 
 
 	Size ReducedSurface::numberOfVertices() const
-		throw()
+		
 	{
 		return number_of_vertices_;
 	}
 
 
 	Size ReducedSurface::numberOfEdges() const
-		throw()
+		
 	{
 		return number_of_edges_;
 	}
 
 
 	Size ReducedSurface::numberOfFaces() const
-		throw()
+		
 	{
 		return number_of_faces_;
 	}
 
 
 	double ReducedSurface::getProbeRadius() const
-		throw()
+		
 	{
 		return probe_radius_;
 	}
@@ -277,7 +277,7 @@ namespace BALL
 
 
 	void ReducedSurface::insert(RSVertex* rsvertex)
-		throw()
+		
 	{
 		rsvertex->index_ = number_of_vertices_;
 		vertices_.push_back(rsvertex);
@@ -286,7 +286,7 @@ namespace BALL
 
 
 	void ReducedSurface::insert(RSEdge* rsedge)
-		throw()
+		
 	{
 		rsedge->index_ = number_of_edges_;
 		edges_.push_back(rsedge);
@@ -295,7 +295,7 @@ namespace BALL
 
 
 	void ReducedSurface::insert(RSFace* rsface)
-		throw()
+		
 	{
 		rsface->index_ = number_of_faces_;
 		faces_.push_back(rsface);
@@ -304,14 +304,14 @@ namespace BALL
 
 
 	double ReducedSurface::getMaximalRadius() const
-		throw()
+		
 	{
 		return r_max_;
 	}
 
 
 	TSimpleBox3<double> ReducedSurface::getBoundingBox() const
-		throw()
+		
 	{
 		return bounding_box_;
 	}
@@ -320,7 +320,7 @@ namespace BALL
 	void ReducedSurface::deleteSimilarFaces
 		 (RSFace* face1,
 			RSFace* face2)
-		throw()
+		
 	{
 		if ((*face1) *= (*face2))
 		{
@@ -361,7 +361,7 @@ namespace BALL
 			std::vector<RSEdge*>& rsedge2)
 			//RSEdge*& rsedge1[3],
 			//RSEdge*& rsedge2[3])
-		throw()
+		
 	{
 		rsedge1[0] = face1->edge_[0];
 		rsedge1[1] = face1->edge_[1];
@@ -388,7 +388,7 @@ namespace BALL
 			std::vector<RSVertex*>& rsvertex2)
 			//RSVertex*& rsvertex1[3],
 			//RSVertex*& rsvertex2[3])
-		throw()
+		
 	{
 		rsvertex1[0] = face1->vertex_[0];
 		rsvertex1[1] = face1->vertex_[1];
@@ -413,7 +413,7 @@ namespace BALL
 			 RSFace* face2,
 			 RSVertex* vertex1,
 		 	 RSVertex* vertex2)
-		throw()
+		
 	{
 		if (vertex1 != vertex2)
 		{
@@ -432,7 +432,7 @@ namespace BALL
 			 RSFace* face2,
 			 RSEdge* edge1,
 		 	 RSEdge* edge2)
-		throw()
+		
 	{
 		if (edge1 == edge2)
 		{
@@ -488,7 +488,7 @@ namespace BALL
 			 RSVertex* vertex2,
 			 TAngle<double>& angle,
 			 bool check) const
-		throw()
+		
 	{
 		if (check)
 		{
@@ -522,7 +522,7 @@ namespace BALL
 
 
 	void ReducedSurface::copy(const ReducedSurface& reduced_surface)
-		throw()
+		
 	{
 		if (canBeCopied(reduced_surface))
 		{
@@ -591,7 +591,7 @@ namespace BALL
 
 	bool ReducedSurface::canBeCopied
 			(const ReducedSurface& reduced_surface)
-		throw()
+		
 	{
 		for (Position i = 0; i < number_of_vertices_; i++)
 		{
@@ -689,7 +689,7 @@ namespace BALL
 ////////////////////////////////////
 
 	RSComputer::RSComputer()
-		throw()
+		
 		:	rs_(NULL),
 			neighbours_(),
 			atom_status_(),
@@ -703,7 +703,7 @@ namespace BALL
 
 
 	RSComputer::RSComputer(ReducedSurface* rs)
-		throw()
+		
 		:	rs_(rs),
 			neighbours_(rs->number_of_atoms_),
 			atom_status_(rs->number_of_atoms_,STATUS_UNKNOWN),
@@ -717,7 +717,7 @@ namespace BALL
 
 
 	RSComputer::~RSComputer()
-		throw()
+		
 	{
 		// delete probe_positions
 		HashMap< Position,
@@ -995,7 +995,7 @@ namespace BALL
 
 
 	void RSComputer::correct(Index atom)
-	  throw()
+	  
 	{
 		std::list<RSVertex*>::iterator v;
 		RSVertex* vertex;
@@ -1290,7 +1290,7 @@ namespace BALL
 
 
 	RSEdge* RSComputer::findFirstEdge()
-		throw()
+		
 	{
 		for (Position direction = 0; direction < 3; direction++)
 		{
@@ -1308,7 +1308,7 @@ namespace BALL
 
 
 	RSVertex* RSComputer::findFirstVertex()
-		throw()
+		
 	{
 		for (Position i = 0; i < rs_->number_of_atoms_; i++)
 		{
@@ -1385,7 +1385,7 @@ namespace BALL
 
 
 	RSEdge* RSComputer::findEdge(Position direction, Position extrem)
-		throw()
+		
 	{
 		Index a1 = findFirstAtom(direction,extrem);
 		if (a1 == -1)
@@ -1420,7 +1420,7 @@ namespace BALL
 
 
 	Index RSComputer::findFirstAtom(Position direction, Position extrem)
-		throw()
+		
 	{
 		Index extrem_atom = -1;
 		// find the first atom of unknown status
@@ -1472,7 +1472,7 @@ namespace BALL
 			(Index atom,
 			 Position direction,
 			 Position extrem)
-		throw()
+		
 	{
 		Index second_atom = -1;
 		// find the first neighbour atom of unknown status
@@ -1530,7 +1530,7 @@ namespace BALL
 			Index																				 atom2,
 			const std::list<Index>&											 third,
 			std::list<std::pair<Index,TSphere3<double> > >& atoms)
-		throw()
+		
 	{
 		// This function computes a list of all atoms (with its probe positions)
 		// which can be touched by the probe sphere when it touches the two given
@@ -1569,7 +1569,7 @@ namespace BALL
 
 
 	void RSComputer::neighboursOfTwoAtoms(Index atom1, Index atom2)
-		throw()
+		
 	{
 		bool found = false;
 		HashMap<Position, HashMap<Position, std::list<Index> > >::Iterator n1 = neighbours_of_two_.find(atom1);
@@ -1616,7 +1616,7 @@ namespace BALL
 			Index								atom2,
 			Index								atom3,
 			::std::list<Index>& output_list)
-		throw()
+		
 	{
 		neighboursOfTwoAtoms(atom1,atom2);
 		neighboursOfTwoAtoms(atom1,atom3);
@@ -1655,7 +1655,7 @@ namespace BALL
 		 (const TCircle3<double>& circle,
 			Position					 direction,
 			Position					 extrem)
-		throw()
+		
 	{
 		double min = 0;
 		double max = 0;
@@ -1721,7 +1721,7 @@ namespace BALL
 	RSEdge* RSComputer::createFreeEdge
 			(RSVertex* vertex1,
 			 RSVertex* vertex2)
-		throw()
+		
 	{
 		Index atom1 = vertex1->atom_;
 		Index atom2 = vertex2->atom_;
@@ -1769,7 +1769,7 @@ namespace BALL
 			TCircle3<double>& circle1,
 			TCircle3<double>& circle2,
 			TCircle3<double>& circle3)
-		throw()
+		
 	{
 		TSphere3<double> sphere1(rs_->atom_[atom1]);
 		TSphere3<double> sphere2(rs_->atom_[atom2]);
@@ -1794,7 +1794,7 @@ namespace BALL
 			const TSphere3<double>& atom2,
 			const TSphere3<double>& atom3,
 			const TSphere3<double>& probe)
-		throw()
+		
 	{
 		TPlane3<double> plane(atom1.p,atom2.p,atom3.p);
 		TVector3<double> norm(plane.n);
@@ -1815,7 +1815,7 @@ namespace BALL
 			RSEdge* e3,
 			RSFace* f,
 			const TSphere3<double>& probe)
-		throw()
+		
 	{
 		e1->vertex_[0] = v1;
 		e1->vertex_[1] = v2;
@@ -1848,7 +1848,7 @@ namespace BALL
 	RSFace* RSComputer::faceExists
 		 (RSFace* face,
 			const std::list<RSVertex*>& vertices)
-		throw()
+		
 	{
 		std::list<RSVertex*>::const_iterator v;
 		RSFace* f;
@@ -1870,7 +1870,7 @@ namespace BALL
 			Index				 a3,
 			TVector3<double>& c1,
 			TVector3<double>& c2)
-		throw()
+		
 	{
 		sort(a1,a2,a3,a1,a2,a3);
 		HashMap<Position,
@@ -1935,7 +1935,7 @@ namespace BALL
 			 Index atom1,
 			 Index atom2,
 			 Index atom3)
-		throw()
+		
 	{
 		sort(atom1,atom2,atom3,atom1,atom2,atom3);
 		Position index;
@@ -1976,7 +1976,7 @@ namespace BALL
 
 
 	void RSComputer::correctProbePosition(Position atom)
-		throw()
+		
 	{
 		HashMap<Position,
 						HashMap<Position,
@@ -2027,7 +2027,7 @@ namespace BALL
 
 	void RSComputer::correctProbePosition
 			(Position a1, Position a2, Position a3)
-		throw()
+		
 	{
 		Index ai1 = (Index)a1;
 		Index ai2 = (Index)a2;
@@ -2064,7 +2064,7 @@ namespace BALL
 
 
 	void RSComputer::preProcessing()
-		throw()
+		
 	{
 		rs_->r_max_ = rs_->atom_[0].radius;
 		double x_min = rs_->atom_[0].p.x;
@@ -2144,7 +2144,7 @@ namespace BALL
 
 
 	void RSComputer::insert(RSVertex* vertex)
-		throw()
+		
 	{
 		rs_->insert(vertex);
 		new_vertices_.insert(vertex);
@@ -2154,7 +2154,7 @@ namespace BALL
 
 
 	void RSComputer::insert(RSEdge* edge)
-		throw()
+		
 	{
 		rs_->insert(edge);
 		edge->vertex_[0]->edges_.insert(edge);
@@ -2163,7 +2163,7 @@ namespace BALL
 
 
 	void RSComputer::insert(RSFace* face)
-		throw()
+		
 	{
 		rs_->insert(face);
 		new_faces_.insert(face);
@@ -2185,7 +2185,7 @@ namespace BALL
 	void RSComputer::sort
 		 (Index		u1, Index		u2, Index		u3,
 			Index&	s1, Index&	s2, Index&	s3)
-		throw()
+		
 	{
 		s1 = u1;
 		s2 = u2;

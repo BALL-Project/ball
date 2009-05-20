@@ -631,13 +631,13 @@ namespace BALL
 
 
 		void PeptideBuilder::setFragmentDB(const FragmentDB* db)
-			throw()
+			
 		{
 			fragment_db_ = (FragmentDB*) db;
 		}
 
 		const FragmentDB* PeptideBuilder::getFragmentDB() const
-			throw()
+			
 		{
 			return fragment_db_;
 		}

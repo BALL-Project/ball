@@ -55,22 +55,22 @@ namespace BALL
 
 		
 		AromaticRingStacking()
-			throw();
+			;
 
 		AromaticRingStacking(ScoringFunction& sf)
-			throw();
+			;
 
 		AromaticRingStacking(const AromaticRingStacking& ars)
-			throw();
+			;
 
 		~AromaticRingStacking()
-			throw();
+			;
 
 		virtual bool setup()
-			throw();
+			;
 
 		virtual double  calculateScore()
-			throw();
+			;
 
 		private:
 

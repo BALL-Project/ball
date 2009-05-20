@@ -107,29 +107,29 @@ namespace BALL
 		/**	Default constructor.
 		*/
 		SLICKEnergy()
-			throw();
+			;
 
 		/** Construct a SLICKEnergy with a system and pointers to protein and
 				ligand
 		*/
 		SLICKEnergy(Molecule& protein, Molecule& ligand)
-			throw();
+			;
 
 		/** Construct a SLICKEnergy with a system and options.
 		*/
 		SLICKEnergy(Molecule& protein, Molecule& ligand,
 				const Options& options)
-			throw();
+			;
 
 		/**	Copy constructor
 		*/
 		SLICKEnergy(const SLICKEnergy& slick)
-			throw();
+			;
 
 		/** Destructor
 		*/
 		virtual ~SLICKEnergy()
-			throw();
+			;
 
 		//@}
 		/**	@name Assignment
@@ -139,12 +139,12 @@ namespace BALL
 		/**	Assignment operator.
 		*/
 		const SLICKEnergy& operator = (const SLICKEnergy& slick)
-			throw();
+			;
 
 		/** Clear method.
 		*/
 		virtual void clear()
-			throw();
+			;
 
 		//@}
 		/**	@name	Setup Methods
@@ -164,27 +164,27 @@ namespace BALL
 		/**
 		*/
 		double getCHPIScore() const
-			throw();
+			;
 
 		/**
 		*/
 		double getHydrogenBondScore() const
-			throw();
+			;
 
 		/**
 		*/
 		double getVDWScore() const
-			throw();
+			;
 
 		/**
 		*/
 		double getPolarSolvationScore() const
-			throw();
+			;
 
 		/**
 		*/
 		double getNonpolarSolvationScore() const
-			throw();
+			;
 		//@}
 
 
@@ -193,7 +193,7 @@ namespace BALL
 		/*_
 		*/
 		void registerComponents_()
-			throw();
+			;
 
 	};
 

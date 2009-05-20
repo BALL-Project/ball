@@ -18,7 +18,7 @@ namespace BALL
 {
 
 	bool BoundingBoxProcessor::start()
-		throw()
+		
 	{
 		lower_.set(Limits<float>::max(), Limits<float>::max(), Limits<float>::max());
 		upper_.set(-Limits<float>::max(), -Limits<float>::max(), -Limits<float>::max());
@@ -26,7 +26,7 @@ namespace BALL
 	}
 
 	bool BoundingBoxProcessor::finish()
-		throw()
+		
 	{
 		if ((lower_.x == Limits<float>::max()) && (lower_.y == Limits<float>::max()) && (lower_.z == Limits<float>::max())
 				&& (upper_.x == -Limits<float>::max()) && (upper_.y == -Limits<float>::max()) && (upper_.z == -Limits<float>::max()))
@@ -41,7 +41,7 @@ namespace BALL
 
 
 	Processor::Result BoundingBoxProcessor::operator()(const Vector3& v)
-		throw()
+		
 	{
 
 		if (lower_.x > v.x) 
@@ -78,19 +78,19 @@ namespace BALL
 	}
 
 	SimpleBox3 BoundingBoxProcessor::getBox() const
-		throw()
+		
 	{
 		return SimpleBox3(lower_, upper_);
 	}
 
 	const Vector3& BoundingBoxProcessor::getLower() const
-		throw()
+		
 	{
 		return lower_;
 	}
 
 	const Vector3& BoundingBoxProcessor::getUpper() const
-		throw()
+		
 	{
 		return upper_;
 	}
@@ -98,7 +98,7 @@ namespace BALL
 
 	//  GeometricCenterProcessor
 	bool GeometricCenterProcessor::start()
-		throw()
+		
 	{
 		center_.set(0, 0, 0);
 		n_ = 0;
@@ -107,7 +107,7 @@ namespace BALL
 	}
 
 	bool GeometricCenterProcessor::finish()
-		throw()
+		
 	{
 		if (n_ != 0)
 		{
@@ -118,7 +118,7 @@ namespace BALL
 	}
 
 	Processor::Result GeometricCenterProcessor::operator()(const Vector3& v)
-		throw()
+		
 	{
 		center_ += v;
 		n_++;
@@ -127,7 +127,7 @@ namespace BALL
 	}
 
 	Vector3& GeometricCenterProcessor::getCenter()
-		throw()
+		
 	{
 		return center_;
 	}
@@ -137,27 +137,27 @@ namespace BALL
 
 	// default constructor
 	FragmentDistanceCollector::FragmentDistanceCollector() 
-		throw()
+		
 		:	reference_composite_(0)
 	{
 	}
 
 	FragmentDistanceCollector::FragmentDistanceCollector(const Composite& composite) 
-		throw()
+		
 		:	reference_composite_(&composite),
 			squared_distance_(0)
 	{
 	}
 
 	FragmentDistanceCollector::FragmentDistanceCollector(const Composite& composite,float distance) 
-		throw()
+		
 		:	reference_composite_(&composite),
 			squared_distance_(distance * distance)
 	{
 	}
 
 	bool FragmentDistanceCollector::start()
-		throw()
+		
 	{
 		// clear the array containing the collected fragments
 		fragments.clear();
@@ -173,19 +173,19 @@ namespace BALL
 	}
 
 	float FragmentDistanceCollector::getDistance() const
-		throw()
+		
 	{
 		return sqrt(squared_distance_);
 	}
 
 	void FragmentDistanceCollector::setDistance(float distance)
-		throw()
+		
 	{
 		squared_distance_ = distance * distance;
 	}
 
 	bool FragmentDistanceCollector::finish()
-		throw()
+		
 	{
 		bool                                	collect_it = false;
 		AtomIterator                        	atom_iterator2;
@@ -259,7 +259,7 @@ namespace BALL
 	}
 
 	Processor::Result FragmentDistanceCollector::operator()(Composite& composite)
-		throw()
+		
 	{
 		
 		if (RTTI::isKindOf<Fragment>(composite))
@@ -272,19 +272,19 @@ namespace BALL
 	}
 
 	Size FragmentDistanceCollector::getNumberOfFragments()
-		throw()
+		
 	{
 		return (Size)fragments.size();
 	}
 
 	void FragmentDistanceCollector::setComposite(const Composite& composite)
-		throw()
+		
 	{
 		reference_composite_ = &composite;
 	}
 
 	const Composite* FragmentDistanceCollector::getComposite() const
-		throw()
+		
 	{
 		return reference_composite_;
 	}

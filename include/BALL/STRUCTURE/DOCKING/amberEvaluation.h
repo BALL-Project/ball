@@ -29,36 +29,36 @@ namespace BALL
 
 				// Default constructor.
 				AmberEvaluation()
-					throw();
+					;
 				
 				AmberEvaluation(AmberFF& ff)
-					throw();
+					;
 
 				AmberEvaluation(AmberFF& ff, Options& option)
-					throw();
+					;
 
 				virtual ~AmberEvaluation()
-					throw();
+					;
 				
 				/** Operations
 				*/
 				void setForceField(ForceField& ff)
-					throw();
+					;
 
 				void setOptions(const Options& options)
-					throw();
+					;
 
 				ForceField& getForceField()
-					throw();
+					;
 
 				const ForceField& getForceField() const
-					throw();
+					;
 
 				Options& getOptions()
-					throw();
+					;
 
 				const Options& getOptions() const
-					throw();
+					;
 				
 		};
 }

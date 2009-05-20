@@ -54,7 +54,7 @@ namespace BALL
 	Triple<bool, const Atom*, const Atom*> 
 	ReconstructFragmentProcessor::getTwoReferenceAtoms
 		(const Atom& ref_center_atom, const HashSet<const Atom*>& allowed)
-		throw()
+		
 	{
 		Triple<bool, const Atom*, const Atom*> result(false, 0, 0);
 		

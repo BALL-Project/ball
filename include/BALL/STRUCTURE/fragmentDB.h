@@ -90,7 +90,7 @@ namespace BALL
 			:	public Exception::GeneralException
 		{
 			public:
-			NoFragmentNode(const char* file, int line, const string& filename) throw();
+			NoFragmentNode(const char* file, int line, const string& filename) ;
 			~NoFragmentNode() throw() {}
 
 			protected:
@@ -119,7 +119,7 @@ namespace BALL
 
 		/// Assignment  operator 
 		FragmentDB& operator = (const FragmentDB& db)
-			throw();
+			;
 
 		/**	Destructor.
 		*/

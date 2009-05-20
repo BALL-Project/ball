@@ -67,7 +67,7 @@ namespace BALL
 			:	public Bond
 		{
 			public:
-			virtual ~SPBond() throw();
+			virtual ~SPBond() ;
 
 			SPBond(SPAtom* first, SPAtom* second, Index order = 1);
 
@@ -84,7 +84,7 @@ namespace BALL
 			public:
 				
 			SPAtom(const String& symbol, bool in_brackets);
-			virtual ~SPAtom() throw();
+			virtual ~SPAtom() ;
 
 			Size getDefaultValence() const;
 			Size countRealValences() const;

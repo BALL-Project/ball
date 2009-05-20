@@ -61,7 +61,7 @@ namespace BALL
 				This method creates a new SolventAccessibleSurface object.
 		*/
 		SolventAccessibleSurface()
-			throw();
+			;
 
 		/**	Copy constructor.
 				Create a new SolventAccessibleSurface object from another.
@@ -69,18 +69,18 @@ namespace BALL
 				@param	bool	ignored - just for interface consistency
 		*/
 		SolventAccessibleSurface(const SolventAccessibleSurface& sas, bool = false)
-			throw();
+			;
 
 		/** Detailed constructor
 		*/
 		SolventAccessibleSurface(ReducedSurface* reduced_surface)
-			throw();
+			;
 
 		/**	Destructor.
 				As there are no dynamic	data structures, nothing happens.
 		*/
 		virtual ~SolventAccessibleSurface()
-			throw();
+			;
 
 		//@}
 		/**	@name	Accessors
@@ -100,7 +100,7 @@ namespace BALL
 		/**
 		*/
 		Size numberOfVertices() const
-			throw();
+			;
 		
 		/**
 		*/
@@ -115,7 +115,7 @@ namespace BALL
 		/**
 		*/
 		Size numberOfEdges() const
-			throw();
+			;
 		
 		/**
 		*/
@@ -130,17 +130,17 @@ namespace BALL
 		/**
 		*/
 		Size numberOfFaces() const
-			throw();
+			;
 
 		/**
 		*/
 		void setRS(ReducedSurface* rs)
-			throw();
+			;
 
 		/**
 		*/
 		ReducedSurface* getRS() const
-			throw();
+			;
 
 		/**
 		*/
@@ -149,7 +149,7 @@ namespace BALL
 		/**	Computes the solvent excluded surface from a ReducedSurface object
 		*/
 		void compute()
-			throw();
+			;
 
 		//@}
 
@@ -160,19 +160,19 @@ namespace BALL
 		//@{
 
 		void preProcessing()
-			throw();
+			;
 
 		void get()
-			throw();
+			;
 
 		void createFace(Position j)
-			throw();
+			;
 
 		void createVertex(Position j)
-			throw();
+			;
 
 		void createEdge(Position j)
-			throw();
+			;
 
 		//@}
 

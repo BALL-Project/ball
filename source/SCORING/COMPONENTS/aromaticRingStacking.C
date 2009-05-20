@@ -46,14 +46,14 @@ namespace BALL
 
 
 	AromaticRingStacking::AromaticRingStacking()
-		throw()
+		
 	{
 		// Set the name
 		setName("SLICK AromaticRingStacking");
 	}
 
 	AromaticRingStacking::AromaticRingStacking(ScoringFunction& sf)
-		throw()
+		
 		: ScoringComponent(sf)
 	{
 		// Set the name
@@ -61,12 +61,12 @@ namespace BALL
 	}
 
 	AromaticRingStacking::~AromaticRingStacking()
-		throw()
+		
 	{
 	}
 
 	bool AromaticRingStacking::setup()
-		throw()
+		
 	{
 
 
@@ -193,7 +193,7 @@ namespace BALL
 	}
 
 	double AromaticRingStacking::calculateScore()
-		throw()
+		
 	{
 
 		if (possible_interactions_.size() == 0)

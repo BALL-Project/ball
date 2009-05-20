@@ -100,29 +100,29 @@ namespace BALL
 		/**	Default constructor.
 		*/
 		SLICKScore()
-			throw();
+			;
 
 		/** Construct a SLICKScore with pointers to protein and
 				ligand
 		*/
 		SLICKScore(Molecule& protein, Molecule& ligand)
-			throw();
+			;
 
 		/** Construct a SLICKScore with options.
 		*/
 		SLICKScore(Molecule& protein, Molecule& ligand,
 				const Options& options)
-			throw();
+			;
 
 		/**	Copy constructor
 		*/
 		SLICKScore(const SLICKScore& slick)
-			throw();
+			;
 
 		/** Destructor
 		*/
 		virtual ~SLICKScore()
-			throw();
+			;
 
 		//@}
 		/**	@name Assignment
@@ -132,12 +132,12 @@ namespace BALL
 		/**	Assignment operator.
 		*/
 		const SLICKScore& operator = (const SLICKScore& slick)
-			throw();
+			;
 
 		/** Clear method.
 		*/
 		virtual void clear()
-			throw();
+			;
 
 		//@}
 		/**	@name	Setup Methods
@@ -157,27 +157,27 @@ namespace BALL
 		/**
 		*/
 		double getVDWScore() const
-			throw();
+			;
 
 		/**
 		*/
 		double getCHPIScore() const
-			throw();
+			;
 
 		/**
 		*/
 		double getPolarSolvationScore() const
-			throw();
+			;
 
 		/**
 		*/
 		double getNonpolarSolvationScore() const
-			throw();
+			;
 
 		/**
 		*/
 		double getHydrogenBondScore() const
-			throw();
+			;
 		//@}
 
 
@@ -186,7 +186,7 @@ namespace BALL
 		/*_
 		*/
 		void registerComponents_()
-			throw();
+			;
 
 	};
 

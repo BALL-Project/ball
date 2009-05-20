@@ -51,44 +51,44 @@ namespace BALL
 
 		///
 		ScoringFunction()
-			throw();
+			;
 
 		///
 		ScoringFunction(const ScoringFunction& sf)
-			throw();
+			;
 
 		///
 		ScoringFunction(Molecule& receptor, Molecule& ligand)
-			throw();
+			;
 
 		///
 		ScoringFunction(Molecule& receptor, Molecule& ligand,
 				const Options& options)
-			throw();
+			;
 
 		///
 		virtual ~ScoringFunction()
-			throw();
+			;
 
 		///
 		virtual void clear()
-			throw();
+			;
 
 		///
 		ScoringFunction& operator = (const ScoringFunction& sf)
-			throw();
+			;
 
 		///
 		bool setup()
-			throw();
+			;
 
 		/// 
 		bool setup(Molecule& receptor, Molecule& ligand)
-			throw();
+			;
 
 		/// 
 		bool setup(Molecule& receptor, Molecule& ligand, const Options& options)
-			throw();
+			;
 
 		///
 		virtual bool specificSetup()
@@ -96,73 +96,73 @@ namespace BALL
 
 		///
 		void setMaximumNumberOfErrors(Size nr)
-			throw();
+			;
 
 		///
 		Size getMaximumNumberOfErrors() const
-			throw();
+			;
 
 		///
 		void setFirstMolecule(Molecule& molecule1) 
-			throw();
+			;
 
 		///
 		Molecule* getFirstMolecule() const
-			throw();
+			;
 
 		///
 		void setSecondMolecule(Molecule& molecule2) 
-			throw();
+			;
 
 		///
 		Molecule* getSecondMolecule() const
-			throw();
+			;
 
 		/** Set the receptor of the complex (which is just the same as
 				molecule1_).
 		*/
 		void setReceptor(Molecule& receptor) 
-			throw();
+			;
 
 		/** Return the receptor of the complex (which is just the same as
 				molecule1_).
 		*/
 		Molecule* getReceptor() const
-			throw();
+			;
 
 		/** Set the ligand of the complex (which is just the same as
 				molecule2_).
 		*/
 		void setLigand(Molecule& ligand) 
-			throw();
+			;
 
 		/** Return the ligand of the complex (which is just the same as
 				molecule2_).
 		*/
 		Molecule* getLigand() const
-			throw();
+			;
 
 		///
 		void setIntercept(double intercept)
-			throw();
+			;
 
 		///
 		double getIntercept() const
-			throw();
+			;
 
 		/// Set the instance of BaseFunction for the scoring function.
 		void setBaseFunction(ScoringBaseFunction& base_function)
-			throw();
+			;
 
 		/** Return a pointer to the instance of BaseFunction used by this
 				scoring function.
 		*/
 		ScoringBaseFunction* getBaseFunction() const
-			throw();
+			;
 
 		///
 		void insertComponent(ScoringComponent* component, float coefficient = 1.0f)
-			throw();
+			;
 
 		/** Remove a component from the component list of this scoring
 				function and delete it from memory. If there was no matching
@@ -170,7 +170,7 @@ namespace BALL
 				there was no component removed.
 		*/
 		void removeComponent(const ScoringComponent* component)
-			throw();
+			;
 
 		/** Remove a component from the component list of this scoring
 				function and delete it from memory. If there was no matching
@@ -179,14 +179,14 @@ namespace BALL
 				in the component list will be removed.
 		*/
 		void removeComponent(const String& name)
-			throw();
+			;
 
 		/** Set the coefficient of a component. If there was no matching
 				component, do nothing. Note that the user will get no feedback if
 				there was no coefficient set.
 		*/
 		void setCoefficient(const ScoringComponent* component, float coefficient)
-			throw();
+			;
 
 		/** Set the coefficient of a named component. If there was no matching
 				component, do nothing. Note that the user will get no feedback if
@@ -194,40 +194,40 @@ namespace BALL
 				in the component list will be changed.
 		*/
 		void setCoefficient(const String& name, float coefficient)
-			throw();
+			;
 
 		/** Get the coefficient of a component. If there was no matching
 				component, return false, ow return true. 
 		*/
 		bool getCoefficient(const ScoringComponent* component,
 				float& coefficient) const
-			throw();
+			;
 
 		/** Get the coefficient of a component. If there was no matching
 				component, return false, ow return true. 
 		*/
 		bool getCoefficient(const String& name, float& coefficient) const
-			throw();
+			;
 
 		/// Return a pointer to a component in the components vector.
 		ScoringComponent* getComponent(const String& name) const
-			throw();
+			;
 
 		/// Return a pointer to a component in the components vector.
 		ScoringComponent* getComponent(const Size index) const
-			throw();
+			;
 
 		///
 		double calculateScore()
-			throw();
+			;
 
 		///
 		const HashSet<const Atom*>& getUnassignedAtoms() const
-			throw();
+			;
 
 		///
 		HashSet<const Atom*>& getUnassignedAtoms()
-			throw();
+			;
 
 		///
 		Options options;

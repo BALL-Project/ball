@@ -10,7 +10,7 @@
 namespace BALL
 {
 	TriangulatedSurface::TriangulatedSurface()
-		throw()
+		
 		:	number_of_points_(0),
 			points_(),
 			number_of_edges_(0),
@@ -23,7 +23,7 @@ namespace BALL
 
 	TriangulatedSurface::TriangulatedSurface
 			(const TriangulatedSurface& surface, bool)
-		throw()
+		
 		:	number_of_points_(0),
 			points_(),
 			number_of_edges_(0),
@@ -36,7 +36,7 @@ namespace BALL
 
 
 	TriangulatedSurface::~TriangulatedSurface()
-		throw()
+		
 	{
 		clear();
 	}
@@ -253,7 +253,7 @@ namespace BALL
 	}
 
 	void TriangulatedSurface::clear()
-		throw()
+		
 	{
 		std::list<TrianglePoint*>::iterator p;
 		for (p = points_.begin(); p != points_.end(); p++)
@@ -280,7 +280,7 @@ namespace BALL
 
 
 	void TriangulatedSurface::set(const TriangulatedSurface& surface, bool)
-		throw()
+		
 	{
 		if (this != &surface)
 		{
@@ -290,7 +290,7 @@ namespace BALL
 
 
 	TriangulatedSurface& TriangulatedSurface::operator = (const TriangulatedSurface& surface)
-		throw()
+		
 	{
 		if (this != &surface)
 		{
@@ -301,7 +301,7 @@ namespace BALL
 
 
 	void TriangulatedSurface::insert(TrianglePoint* p)
-		throw()
+		
 	{
 		points_.push_back(p);
 		number_of_points_++;
@@ -309,7 +309,7 @@ namespace BALL
 
 
 	void TriangulatedSurface::insert(TriangleEdge* e)
-		throw()
+		
 	{
 		edges_.push_back(e);
 		number_of_edges_++;
@@ -317,7 +317,7 @@ namespace BALL
 
 
 	void TriangulatedSurface::insert(Triangle* t)
-		throw()
+		
 	{
 		triangles_.push_back(t);
 		number_of_triangles_++;
@@ -325,44 +325,44 @@ namespace BALL
 
 
 	Size TriangulatedSurface::numberOfPoints() const
-		throw()
+		
 	{
 		return number_of_points_;
 	}
 
 	Size TriangulatedSurface::getNumberOfPoints() const
-		throw()
+		
 	{
 		return number_of_points_;
 	}
 
 
 	Size TriangulatedSurface::numberOfEdges() const
-		throw()
+		
 	{
 		return number_of_edges_;
 	}
 
 	Size TriangulatedSurface::getNumberOfEdges() const
-		throw()
+		
 	{
 		return number_of_edges_;
 	}
 
 	Size TriangulatedSurface::numberOfTriangles() const
-		throw()
+		
 	{
 		return number_of_triangles_;
 	}
 
 	Size TriangulatedSurface::getNumberOfTriangles() const
-		throw()
+		
 	{
 		return number_of_triangles_;
 	}
 
 	void TriangulatedSurface::remove(TrianglePoint* point, bool deep)
-		throw()
+		
 	{
 		if (deep)
 		{
@@ -398,7 +398,7 @@ namespace BALL
 
 
 	void TriangulatedSurface::remove(PointIterator point, bool deep)
-		throw()
+		
 	{
 		if (deep)
 		{
@@ -434,7 +434,7 @@ namespace BALL
 
 
 	void TriangulatedSurface::remove(TriangleEdge* edge, bool deep)
-		throw()
+		
 	{
 		if (deep)
 		{
@@ -456,7 +456,7 @@ namespace BALL
 
 
 	void TriangulatedSurface::remove(EdgeIterator e, bool deep)
-		throw()
+		
 	{
 		TriangleEdge& edge = **e;
 		if (deep)
@@ -479,7 +479,7 @@ namespace BALL
 
 
 	void TriangulatedSurface::remove(Triangle* triangle, bool deep)
-		throw()
+		
 	{
 		if (deep)
 		{
@@ -497,7 +497,7 @@ namespace BALL
 
 
 	void TriangulatedSurface::remove(TriangleIterator t, bool deep)
-		throw()
+		
 	{
 		Triangle& tri = **t;
 		if (deep)
@@ -516,7 +516,7 @@ namespace BALL
 
 
 	void TriangulatedSurface::exportSurface(Surface& surface)
-		throw()
+		
 	{
 		std::list<TrianglePoint*>::iterator p;
 		Index i = 0;
@@ -549,7 +549,7 @@ namespace BALL
 
 
 	TriangulatedSurface& TriangulatedSurface::operator += (const TriangulatedSurface& surface)
-		throw()
+		
 	{
 		std::list<TrianglePoint*>::const_iterator p;
 		for (p = surface.points_.begin(); p != surface.points_.end(); p++)
@@ -574,7 +574,7 @@ namespace BALL
 
 
 	void TriangulatedSurface::join(TriangulatedSurface& source)
-		throw()
+		
 	{
 		points_.splice(points_.end(),source.points_);
 		edges_.splice(edges_.end(),source.edges_);
@@ -720,7 +720,7 @@ namespace BALL
 
 
 	void TriangulatedSurface::deleteIsolatedEdges()
-		throw()
+		
 	{
 		std::list<TriangleEdge*>::iterator e1;
 		std::list<TriangleEdge*>::iterator e2;
@@ -751,7 +751,7 @@ namespace BALL
 
 
 	void TriangulatedSurface::deleteIsolatedPoints()
-		throw()
+		
 	{
 		std::list<TrianglePoint*>::iterator p1;
 		std::list<TrianglePoint*>::iterator p2;
@@ -788,7 +788,7 @@ namespace BALL
 
 	TriangulatedSurface::PointIterator
 			TriangulatedSurface::beginPoint()
-		throw()
+		
 	{
 		return points_.begin();
 	}
@@ -796,7 +796,7 @@ namespace BALL
 
 	TriangulatedSurface::ConstPointIterator
 			TriangulatedSurface::beginPoint() const
-		throw()
+		
 	{
 		return points_.begin();
 	}
@@ -804,7 +804,7 @@ namespace BALL
 
 	TriangulatedSurface::PointIterator
 			TriangulatedSurface::endPoint()
-		throw()
+		
 	{
 		return points_.end();
 	}
@@ -812,7 +812,7 @@ namespace BALL
 
 	TriangulatedSurface::ConstPointIterator
 			TriangulatedSurface::endPoint() const
-		throw()
+		
 	{
 		return points_.end();
 	}
@@ -820,7 +820,7 @@ namespace BALL
 
 	TriangulatedSurface::EdgeIterator
 			TriangulatedSurface::beginEdge()
-		throw()
+		
 	{
 		return edges_.begin();
 	}
@@ -828,7 +828,7 @@ namespace BALL
 
 	TriangulatedSurface::ConstEdgeIterator
 			TriangulatedSurface::beginEdge() const
-		throw()
+		
 	{
 		return edges_.begin();
 	}
@@ -836,7 +836,7 @@ namespace BALL
 
 	TriangulatedSurface::EdgeIterator
 			TriangulatedSurface::endEdge()
-		throw()
+		
 	{
 		return edges_.end();
 	}
@@ -844,7 +844,7 @@ namespace BALL
 
 	TriangulatedSurface::ConstEdgeIterator
 			TriangulatedSurface::endEdge() const
-		throw()
+		
 	{
 		return edges_.end();
 	}
@@ -852,7 +852,7 @@ namespace BALL
 
 	TriangulatedSurface::TriangleIterator
 			TriangulatedSurface::beginTriangle()
-		throw()
+		
 	{
 		return triangles_.begin();
 	}
@@ -860,7 +860,7 @@ namespace BALL
 
 	TriangulatedSurface::ConstTriangleIterator
 			TriangulatedSurface::beginTriangle() const
-		throw()
+		
 	{
 		return triangles_.begin();
 	}
@@ -868,7 +868,7 @@ namespace BALL
 
 	TriangulatedSurface::TriangleIterator
 			TriangulatedSurface::endTriangle()
-		throw()
+		
 	{
 		return triangles_.end();
 	}
@@ -876,14 +876,14 @@ namespace BALL
 
 	TriangulatedSurface::ConstTriangleIterator
 			TriangulatedSurface::endTriangle() const
-		throw()
+		
 	{
 		return triangles_.end();
 	}
 
 
 	bool TriangulatedSurface::canBeCopied() const
-		throw()
+		
 	{
 		std::list<TrianglePoint*>::const_iterator p;
 		Index i = 0;
@@ -934,7 +934,7 @@ namespace BALL
 
 
 	void TriangulatedSurface::copy(const TriangulatedSurface& surface)
-		throw()
+		
 	{
 		if (surface.canBeCopied())
 		{
@@ -1020,7 +1020,7 @@ namespace BALL
 
 
 	TriangulatedSphere::TriangulatedSphere()
-		throw()
+		
 		:	TriangulatedSurface()
 	{
 	}
@@ -1028,20 +1028,20 @@ namespace BALL
 
 	TriangulatedSphere::TriangulatedSphere
 			(const TriangulatedSphere& sphere, bool)
-		throw()
+		
 		:	TriangulatedSurface(sphere)
 	{
 	}
 
 
 	TriangulatedSphere::~TriangulatedSphere()
-		throw()
+		
 	{
 	}
 
 
 	void TriangulatedSphere::set(const TriangulatedSphere& sphere, bool)
-		throw()
+		
 	{
 		if (this != &sphere)
 		{
@@ -1052,7 +1052,7 @@ namespace BALL
 
 	TriangulatedSphere& TriangulatedSphere::operator =
 			(const TriangulatedSphere& sphere)
-		throw()
+		
 	{
 		if (this != &sphere)
 		{
@@ -1187,7 +1187,7 @@ namespace BALL
 			 Triangle* face1,
 			 Triangle* face2,
 			 Triangle* face3)
-		throw()
+		
 	{
 		Triangle* triangle[3];
 		triangle[0] = face0;

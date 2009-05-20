@@ -30,19 +30,16 @@
 				Name="VCPreBuildEventTool"
 			/>
 			<Tool
-				Name="FlexGenerator"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
 				Name="BisonParser"
 			/>
 			<Tool
 				Name="SipGenerator"
 			/>
 			<Tool
-				Name="UicGenerator"
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="FlexGenerator"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -55,6 +52,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/MP"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\include&quot;;&quot;$(SolutionDir)\..\..\include&quot;;&quot;$(SolutionDir)\..\Contrib\include&quot;;&quot;$(SolutionDir)\..\Contrib\include\boost\tr1&quot;;&quot;$(SolutionDir)\..\Contrib\include\Python&quot;;.\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtSql&quot;;&quot;$(QTDIR)\include\QtNetwork&quot;"
 				PreprocessorDefinitions="WIN32;QT_THREAD_SUPPORT;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_SQL_LIB;LIBBALL_LIB;QT_NETWORK_LIB;BALL_BUILD_DLL"
 				RuntimeLibrary="2"
@@ -112,19 +110,16 @@
 				Name="VCPreBuildEventTool"
 			/>
 			<Tool
-				Name="FlexGenerator"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
 				Name="BisonParser"
 			/>
 			<Tool
 				Name="SipGenerator"
 			/>
 			<Tool
-				Name="UicGenerator"
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="FlexGenerator"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -137,8 +132,9 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\include&quot;;&quot;$(SolutionDir)\..\..\include&quot;;&quot;$(SolutionDir)\..\Contrib\include&quot;;&quot;$(SolutionDir)\..\Contrib\include\boost\tr1&quot;;&quot;$(SolutionDir)\..\Contrib\include\Python&quot;;.\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtSql&quot;;&quot;$(QTDIR)\include\QtNetwork&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\include&quot;;&quot;$(SolutionDir)\..\..\include&quot;;&quot;$(SolutionDir)\..\Contrib\include&quot;;&quot;$(SolutionDir)\..\Contrib\include\boost\tr1&quot;;&quot;$(SolutionDir)\..\Contrib\include\Python&quot;;.\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtSql&quot;;&quot;$(QTDIR)\include\QtNetwork&quot;;&quot;C:\Program Files (x86)\Intel\VTune\tcheck\include&quot;"
 				PreprocessorDefinitions="WIN32;QT_THREAD_SUPPORT;QT_CORE_LIB;QT_SQL_LIB;LIBBALL_LIB;BALL_BUILD_DLL;QT_NETWORK_LIB"
 				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="false"
@@ -156,7 +152,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/NODEFAULTLIB:libcmtd"
-				AdditionalDependencies="qtmaind.lib QtCored4.lib QtSqld4.lib QtXmld4.lib regex.lib oncrpc.lib gsl_mtd.lib cblas_mtd.lib libfftw3f-3.lib libfftw3l-3.lib libfftw3-3.lib QtNetworkd4.lib WSock32.lib"
+				AdditionalDependencies="qtmaind.lib QtCored4.lib QtSqld4.lib QtXmld4.lib regex.lib oncrpcd.lib gsl_mtd.lib cblas_mtd.lib libfftw3f-3.lib libfftw3l-3.lib libfftw3-3.lib QtNetworkd4.lib WSock32.lib"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\Contrib\lib&quot;;&quot;$(QTDIR)\lib&quot;"

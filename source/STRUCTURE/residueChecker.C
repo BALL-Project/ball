@@ -56,19 +56,16 @@ namespace BALL
 	}
 
 	bool ResidueChecker::isEnabled(ResidueChecker::TestType t) const 
-		throw()
 	{
 		return tests_.getBit((Position)t);
 	}
 
 	void ResidueChecker::enable(ResidueChecker::TestType t) 
-		throw()
 	{
 		tests_.setBit((Position)t);
 	}
 	
 	void ResidueChecker::disable(ResidueChecker::TestType t) 
-		throw()
 	{
 		tests_.setBit((Position)t, false);
 	}
@@ -138,7 +135,6 @@ namespace BALL
 	}
 
 	bool ResidueChecker::checkCharge(const Residue& residue, const String& res_name)
-		throw()
 	{
 		// Make sure we are suppose to do this.
 		if (!isEnabled(LARGE_NET_CHARGE) && !isEnabled(LARGE_CHARGES) && !isEnabled(NON_INTEGRAL_NET_CHARGE))
@@ -212,7 +208,6 @@ namespace BALL
 
 	bool ResidueChecker::checkCompleteness
 		(const Residue& residue, const Residue& reference, const String& res_name)
-		throw()
 	{
 		// Make sure we are suppose to do this.
 		if (!isEnabled(EXTRA_ATOMS) && !isEnabled(MISSING_ATOMS))
@@ -274,7 +269,6 @@ namespace BALL
 	}
 
 	bool ResidueChecker::checkAtomPositions(const Residue& res, const String& res_name)
-		throw()
 	{
 		// Make sure we are suppose to do this.
 		if (!isEnabled(NAN_POSITIONS) && !isEnabled(STRONGLY_OVERLAPPING_ATOMS) 
@@ -388,7 +382,6 @@ namespace BALL
 	}
 
 	bool ResidueChecker::checkTemplate(const Residue& residue, const Residue& reference, const String& res_name)
-		throw()
 	{
 		// Make sure there's something to be done at all.
 		if (!isEnabled(SUSPECT_BOND_LENGTHS) && !isEnabled(ELEMENTS))

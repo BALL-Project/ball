@@ -90,8 +90,7 @@ namespace BALL
 		/**	Default constructor.
 				This method creates a new RSVertex object.
 		*/
-		RSVertex()
-			throw();
+		RSVertex();
 
 		/**	Copy constructor.
 				Create a new RSVertex object from another.
@@ -100,21 +99,18 @@ namespace BALL
 													(default). Otherwise the new RSVertex object is
 													linked to the neighbours of the old RSVertex object.
 		*/
-		RSVertex(const RSVertex& rsvertex, bool deep = false)
-			throw();
+		RSVertex(const RSVertex& rsvertex, bool deep = false);
 
 		/**	Detailled constructor.
 				Create a new RSVertex object from an index.
 				@param	atom	assigned to the index of the atom
 		*/
-		RSVertex(Index atom)
-			throw();
+		RSVertex(Index atom);
 
 		/**	Destructor.
 				Destructs the RSVertex object.
 		*/
-		virtual ~RSVertex()
-			throw();
+		virtual ~RSVertex();
 		//@}
 
 		/**	@name	Assignment
@@ -128,16 +124,14 @@ namespace BALL
 													linked to the neighbours of the RSVertex object to
 													assign from.
 		*/
-		void set(const RSVertex& rsvertex, bool deep = false)
-			throw();
+		void set(const RSVertex& rsvertex, bool deep = false);
 
 		/**	Assign from another RSVertex.
 				The RSVertex object is linked to the neighbours of the RSVertex	
 				object to assign from.
 				@param	rsvertex	the RSVertex object to assign from
 		*/
-		RSVertex& operator = (const RSVertex& rsvertex)
-			throw();
+		RSVertex& operator = (const RSVertex& rsvertex);
 
 		//@}
 		/**	@name	Accessors
@@ -147,14 +141,12 @@ namespace BALL
 		/** Set the index of the atom represented by the vertex.
 				@param	atom	the new index
 		*/
-		void setAtom(Index atom)
-			throw();
+		void setAtom(Index atom);
 
 		/** Return the index of the atom represented by the vertex.
 				@return	Index	the index of the atom represented by the vertex
 		*/
-		Index getAtom() const
-			throw();
+		Index getAtom() const;
 
 		//@}
 		/**	@name	Predicates
@@ -165,21 +157,18 @@ namespace BALL
 				@return	bool	<b>true</b> if the vertices are equal in all components,
 											<b>false</b> otherwise
 		*/
-		virtual bool operator == (const RSVertex& rsvertex) const
-			throw();
+		virtual bool operator == (const RSVertex& rsvertex) const;
 
 		/**	Inequality operator.
 				@return	bool	<b>false</b> if the vertices are equal in all components,
 											<b>true</b> otherwise
 		*/
-		virtual bool operator != (const RSVertex& rsvertex) const
-			throw();
+		virtual bool operator != (const RSVertex& rsvertex) const;
 
 		/**	Similarity operator.
 				@return	bool	<b>true</b> if the atoms are equal, <b>false</b> otherwise
 		*/
-		virtual bool operator *= (const RSVertex& rsvertex) const
-			throw();
+		virtual bool operator *= (const RSVertex& rsvertex) const;
 
 		//@}
 

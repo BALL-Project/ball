@@ -174,14 +174,14 @@ namespace BALL
 		/** Default constructor 
 		*/
 		Pair6_12InteractionEnergyProcessor() 
-			throw();
+			;
 
 		/** Copy constructor 
 				@param proc the processor to copy
 		*/
 		Pair6_12InteractionEnergyProcessor
 			(const Pair6_12InteractionEnergyProcessor& proc) 
-			throw();
+			;
 
 		/** Detailed constructor
 				@param solvent a description of the surrounding solvent (@see	SolventDescriptor)
@@ -192,11 +192,11 @@ namespace BALL
 		Pair6_12InteractionEnergyProcessor(const SolventDescriptor& solvent, 
 				const RDFParameter& rdf_param,
 				const Pair6_12RDFIntegrator& rdf_integrator) 
-			throw();
+			;
 
 		/** Destructor 
 		*/
-		virtual ~Pair6_12InteractionEnergyProcessor() throw();
+		virtual ~Pair6_12InteractionEnergyProcessor() ;
 
 		//@}
 		/** @name Accessors 
@@ -206,32 +206,32 @@ namespace BALL
 		/** Set the solvent descriptor.
 				@param solvent the solvent descriptor to be set
 		*/
-		void setSolventDescriptor(const SolventDescriptor& solvent) throw();
+		void setSolventDescriptor(const SolventDescriptor& solvent) ;
 
 		/** Get the solvent descriptor.
 				@return the current solvent descriptor of this instance
 		*/
-		const SolventDescriptor& getSolventDescriptor() const throw();
+		const SolventDescriptor& getSolventDescriptor() const ;
 
 		/** Set the parameters for the radial distribution function 
 				@param rdf_parameter the RDF parameter to be set
 		*/
-		void setRDFParameters(const RDFParameter& rdf_parameter) throw();
+		void setRDFParameters(const RDFParameter& rdf_parameter) ;
 
 		/** Get the parameters for the radial distribution function 
 				@return a const reference of the current RDF parameter
 		*/
-		const RDFParameter& getRDFParameter() const throw();
+		const RDFParameter& getRDFParameter() const ;
 
 		/** Set the integrator of this processor
 				@param integrator the integrator to be set
 		*/
-		void setRDFIntegrator(const Pair6_12RDFIntegrator& integrator) throw();
+		void setRDFIntegrator(const Pair6_12RDFIntegrator& integrator) ;
 
 		/** Get the integrator of this processor
 				@return the current integrator 
 		*/
-		const Pair6_12RDFIntegrator& getRDFIntegrator() const throw();
+		const Pair6_12RDFIntegrator& getRDFIntegrator() const ;
 
 		//@}
 		/** @name Assignment 
@@ -241,11 +241,11 @@ namespace BALL
 		/** Assignment operator 
 		*/
 		const Pair6_12InteractionEnergyProcessor& operator =
-			(const Pair6_12InteractionEnergyProcessor& proc) throw();
+			(const Pair6_12InteractionEnergyProcessor& proc) ;
 
 		/** Clear function 
 		*/
-		virtual void clear() throw();
+		virtual void clear() ;
 		
 		//@}
 		/** @name Processor functions 
@@ -274,7 +274,7 @@ namespace BALL
 		/** Equality operator 
 		*/
 		bool operator == (const Pair6_12InteractionEnergyProcessor& proc) 
-			const throw();
+			const ;
 
 		//@}
 
@@ -296,7 +296,7 @@ namespace BALL
 		private:
 
 		void getExternalSurface_(std::vector<std::pair<Vector3, Surface> >& surface_map, 
-				const char* surface_file) throw();
+				const char* surface_file) ;
 	};
    
 } // namespace BALL

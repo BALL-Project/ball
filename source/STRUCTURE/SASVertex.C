@@ -13,7 +13,7 @@ namespace BALL
 {
 
 	SASVertex::SASVertex()
-		throw()
+		
 		: GraphVertex< SASVertex,SASEdge,SASFace >(),
 			point_()
 	{
@@ -21,7 +21,7 @@ namespace BALL
 
 
 	SASVertex::SASVertex(const SASVertex& sasvertex, bool deep)
-		throw()
+		
 		: GraphVertex< SASVertex,SASEdge,SASFace >(sasvertex,deep),
 			point_(sasvertex.point_)
 	{
@@ -29,7 +29,7 @@ namespace BALL
 
 
 	SASVertex::SASVertex(const TVector3<double>& point, Index index)
-		throw()
+		
 		: GraphVertex< SASVertex,SASEdge,SASFace >(),
 			point_(point)
 	{
@@ -38,13 +38,13 @@ namespace BALL
 
 
 	SASVertex::~SASVertex()
-		throw()
+		
 	{
 	}
 
 
 	void SASVertex::set(const SASVertex& sasvertex, bool deep)
-		throw()
+		
 	{
 		if (this != &sasvertex)
 		{
@@ -55,7 +55,7 @@ namespace BALL
 
 
 	SASVertex& SASVertex::operator = (const SASVertex& sasvertex)
-		throw()
+		
 	{
 		if (this != &sasvertex)
 		{
@@ -68,7 +68,7 @@ namespace BALL
 
 
 	void SASVertex::set(const TVector3<double> point, Index index)
-		throw()
+		
 	{
 		point_ = point;
 		index_ = index;
@@ -76,35 +76,35 @@ namespace BALL
 
 
 	void SASVertex::setPoint(const TVector3<double>& point)
-		throw()
+		
 	{
 		point_ = point;
 	}
 
 
 	TVector3<double> SASVertex::getPoint() const
-		throw()
+		
 	{
 		return point_;
 	}
 
 
 	bool SASVertex::operator == (const SASVertex&) const
-		throw()
+		
 	{
 		return true;
 	}
 
 
 	bool SASVertex::operator != (const SASVertex&) const
-		throw()
+		
 	{
 		return false;
 	}
 
 
 	bool SASVertex::operator *= (const SASVertex&) const
-		throw()
+		
 	{
 		return true;
 	}

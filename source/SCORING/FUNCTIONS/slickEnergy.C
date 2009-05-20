@@ -51,7 +51,7 @@ namespace BALL
 	const float SLICKEnergy::Default::POLAR    = -0.10725374;
 
 	SLICKEnergy::SLICKEnergy()
-		throw()
+		
 		:	ScoringFunction()
 	{
 		// register all components of the force field
@@ -60,7 +60,7 @@ namespace BALL
 
 
 	SLICKEnergy::SLICKEnergy(Molecule& protein, Molecule& ligand)
-		throw()
+		
 		:	ScoringFunction()
 	{
 		setReceptor(protein);
@@ -82,7 +82,7 @@ namespace BALL
 
 	SLICKEnergy::SLICKEnergy(Molecule& protein, Molecule& ligand,
 			const Options& new_options)
-		throw()
+		
 		:	ScoringFunction()
 	{
 		setReceptor(protein);
@@ -104,28 +104,28 @@ namespace BALL
 
 
 	SLICKEnergy::SLICKEnergy(const SLICKEnergy& slick)
-		throw()
+		
 		:	ScoringFunction(slick)
 	{
 	}
 
 
 	SLICKEnergy::~SLICKEnergy()
-		throw()
+		
 	{
 		clear();
 	}
 
 
 	void SLICKEnergy::clear()
-		throw()
+		
 	{
 		ScoringFunction::clear();
 	}
 
 
 	bool SLICKEnergy::specificSetup()
-		throw()
+	throw()	
 	{
 
 		options.set(NonpolarSolvation::Option::NONPOLAR_METHOD,
@@ -182,7 +182,7 @@ namespace BALL
 
 
 	const SLICKEnergy& SLICKEnergy::operator = (const SLICKEnergy& slick)
-		throw()
+		
 	{
 		// avoid self assignment
 		if (&slick != this)
@@ -195,7 +195,7 @@ namespace BALL
 
 
 	double SLICKEnergy::getHydrogenBondScore() const
-		throw()
+		
 	{
 		const ScoringComponent* component = getComponent("SLICK HydrogenBond");
 		if (component != 0)
@@ -210,7 +210,7 @@ namespace BALL
 	
 
 	double SLICKEnergy::getCHPIScore() const
-		throw()
+		
 	{
 		const ScoringComponent* component = getComponent("CHPI");
 		if (component != 0)
@@ -225,7 +225,7 @@ namespace BALL
 
 
 	double SLICKEnergy::getVDWScore() const
-		throw()
+		
 	{
 		const ScoringComponent* component = getComponent("van-der-Waals");
 		if (component != 0)
@@ -240,7 +240,7 @@ namespace BALL
 
 
 	double SLICKEnergy::getPolarSolvationScore() const
-		throw()
+		
 	{
 		const ScoringComponent* component = getComponent("Polar Solvation");
 		if (component != 0)
@@ -255,7 +255,7 @@ namespace BALL
 
 
 	double SLICKEnergy::getNonpolarSolvationScore() const
-		throw()
+		
 	{
 		const ScoringComponent* component = getComponent("Nonpolar Solvation");
 		if (component != 0)
@@ -270,7 +270,7 @@ namespace BALL
 
 	
 	void SLICKEnergy::registerComponents_()
-		throw()
+		
 	{
 		// create the component list
 		insertComponent(new CHPI(*this));

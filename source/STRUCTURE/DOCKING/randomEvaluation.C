@@ -4,18 +4,18 @@ using namespace::std;
 using namespace BALL;
 
 RandomEvaluation::RandomEvaluation()
-	throw()
+	
 	: EnergeticEvaluation()
 {
 }
 
 RandomEvaluation::~RandomEvaluation()
-	throw()
+	
 {
 }
 
 vector<ConformationSet::Conformation> RandomEvaluation::operator () (ConformationSet& conformations)
-	throw()
+	
 {
 	Log.info() << "in RandomEvaluation::operator() " << std::endl;
 	vector<ConformationSet::Conformation> result;

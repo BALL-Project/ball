@@ -43,7 +43,7 @@ namespace BALL
 
 
 	RotationalEntropyLoss::RotationalEntropyLoss()
-		throw()
+		
 		:	ScoringComponent(),
 			rotatable_bonds_(),
 			glycosidic_bonds_(),
@@ -64,7 +64,7 @@ namespace BALL
 
 
 	RotationalEntropyLoss::RotationalEntropyLoss(ScoringFunction& sf)
-		throw()
+		
 		:	ScoringComponent(sf),
 			rotatable_bonds_(),
 			glycosidic_bonds_(),
@@ -85,7 +85,7 @@ namespace BALL
 
 
 	RotationalEntropyLoss::RotationalEntropyLoss(const RotationalEntropyLoss& fr)
-		throw()
+		
 		:	ScoringComponent(fr),
 			rotatable_bonds_(fr.rotatable_bonds_),
 			glycosidic_bonds_(fr.glycosidic_bonds_),
@@ -104,14 +104,14 @@ namespace BALL
 
 
 	RotationalEntropyLoss::~RotationalEntropyLoss()
-		throw()
+		
 	{
 		clear();
 	}
 
 
 	void RotationalEntropyLoss::clear()
-		throw()
+		
 	{
 		rotatable_bonds_.clear();
 		glycosidic_bonds_.clear();
@@ -143,7 +143,7 @@ namespace BALL
 
 
 	bool RotationalEntropyLoss::setup()
-		throw()
+		
 	{
 
 		Timer timer;
@@ -572,7 +572,7 @@ namespace BALL
 
 
 	double RotationalEntropyLoss::calculateScore()
-		throw()
+		
 	{
 
 		Timer timer;
@@ -686,7 +686,7 @@ namespace BALL
 			stack<const Bond*>& possible_cycle_bonds,
 			HashSet<const Bond*>& cycle_bonds,
 			int& cycle_count)
-		throw()
+		
 	{
 		// mark this atom as visited
 		visited.insert(atom);
@@ -810,7 +810,7 @@ namespace BALL
 	void RotationalEntropyLoss::heavyAtomsDFS_(const Atom* atom, const Bond* bond,
 			HashSet<const Atom*>& visited,
 			int& heavy_atom_count, int& nonlip_heavy_atom_count)
-		throw()
+		
 	{
 
 		// mark this atom as visited
@@ -848,7 +848,7 @@ namespace BALL
 
 
 	void RotationalEntropyLoss::updateFrozenBonds_()
-		throw()
+		
 	{
 		HashSet<const Atom*> visited;
 
@@ -885,7 +885,7 @@ namespace BALL
 
 	bool RotationalEntropyLoss::frozenBondsDFS_(const Atom* atom, 
 			HashSet<const Atom*>& visited)
-		throw()
+		
 	{
 
 		Size verbosity 

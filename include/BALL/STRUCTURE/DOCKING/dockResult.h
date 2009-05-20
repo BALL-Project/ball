@@ -37,23 +37,23 @@ namespace BALL
 				/** Default Constructor
 				*/
 				DockResult()
-					throw();
+					;
 					
 				/** Constructor
 				*/
 				DockResult(const String& docking_algorithm, ConformationSet* conformation_set,
 										const Options& docking_options)
-					throw();
+					;
 				
 				/** Copy constructor
 					*/
 				DockResult(const DockResult& dock_res)
-					throw();
+					;
 					
 				/** Destructor
 				*/
 				virtual ~DockResult()
-					throw();
+					;
 					
 				//@}
 				
@@ -64,7 +64,7 @@ namespace BALL
 				/** Assignment operator
 				*/
 				const DockResult& operator =(const DockResult& dock_res)
-					throw();
+					;
 					
 				//@}
 				
@@ -75,27 +75,27 @@ namespace BALL
 				/** Sets the conformation set.
 				*/
 				void setConformationSet(ConformationSet* conformation_set)
-					throw();
+					;
 				
 				/** Get the docking algorithm.
 				*/
 				const String& getDockingAlgorithm() const
-					throw();
+					;
 					
 				/** Get the options of the docking algorithm.
 				*/
 				const Options& getDockingOptions() const
-					throw();
+					;
 				
 				/** Get the conformation set.
 				*/
 				const ConformationSet* getConformationSet() const
-					throw();
+					;
 				
 				/** Get the conformation set.
 				*/
 				ConformationSet* getConformationSet()
-					throw();
+					;
 				
 				/*  Sets scoring flag by which all scores are sorted displayed
 						a negative index corresponds to sorting by snapshot index
@@ -106,7 +106,7 @@ namespace BALL
 				/*  Get the number of the scoring by which all scores are sorted displayed
 				 */
 				Index isSortedBy() const
-					throw();
+					;
 				
 				/** Returns score i of the scoring j in respect of the current sorting 
 				 *  indicated by the flag \link DockResult::sorted_by_ sorted_by_ \endlink.
@@ -132,7 +132,7 @@ namespace BALL
 				/** Returns the number of scorings.
 				*/
 				Size numberOfScorings() const
-					throw();
+					;
 					
 				/** Add  a new Scoring_ to vector \link DockResult::scorings_ scorings_ \endlink.
 				 *  @param			name name of the scoring function
@@ -140,7 +140,7 @@ namespace BALL
 				 *  @param			scores scores calculated by the scoring function
 				*/
 				void addScoring(const String& name, const Options& options, vector<ConformationSet::Conformation> scores)
-					throw();
+					;
 					
 				/** Deletes Scoring_ i of vector \link DockResult::scorings_ scorings_ \endlink.
 				*/
@@ -160,7 +160,7 @@ namespace BALL
 					* @return 	false otherwise
 				*/
 				bool writeDockResult(const String& filename)
-					throw();
+					;
 				
 				/** Stores dock result in an ostream.
 					* @param 	  file ostream 
@@ -168,7 +168,7 @@ namespace BALL
 					* @return 	false otherwise
 				*/
 				bool writeDockResult(std::ostream& file) const
-					throw();
+					;
 					
 				/** Reads dock result from a file.
 					* Calls \link DockResult::readDockResult readDockResult(std::istream& file) \endlink.
@@ -177,7 +177,7 @@ namespace BALL
 					* @return 	false otherwise
 				*/
 				bool readDockResult(const String& filename)
-					throw();
+					;
 					
 				/** Read dock result from an istream.
 					* @param 	  file istream 
@@ -185,19 +185,19 @@ namespace BALL
 					* @return 	false otherwise
 				*/
 				bool readDockResult(std::istream& file)
-					throw();
+					;
 				
 				/** Operator to write dock result into an ostream.
 					* Calls \link DockResult::writeDockResult writeDockResult(std::ostream& file)\endlink.
 				*/
 				friend std::ostream& operator <<(std::ostream& out, const DockResult& dock_res)
-					throw();
+					;
 				
 				/** Operator to read dock result into an istream.
 					* Calls \link DockResult::readDockResult readDockResult(std::istream& file) \endlink.
 				*/
 				friend std::istream& operator >>(std::istream& in, DockResult& dock_res)
-					throw();
+					;
 				
 				//@}
 				
@@ -215,25 +215,25 @@ namespace BALL
 					
 						/** Default Constructor
 						*/
-						Scoring_() throw();
+						Scoring_() ;
 						
 						/** Copy constructor
 						*/
 						Scoring_(const Scoring_& scoring)
-							throw();
+							;
 						
 						/** Constructor
 						*/
-						Scoring_(const String& name, const Options& options, const vector<float>& scores, const vector<Index>& snapshot_order) throw();
+						Scoring_(const String& name, const Options& options, const vector<float>& scores, const vector<Index>& snapshot_order) ;
 						
 						/** Destructor
 						*/
-						~Scoring_() throw();
+						~Scoring_() ;
 						
 						/** Assignment operator
 						*/
 						const Scoring_& operator =(const Scoring_& scoring)
-							throw();
+							;
 						
 						/** Name of scoring function
 						*/
@@ -263,17 +263,17 @@ namespace BALL
 
 						/** Default constructor
 						*/
-						Compare_() throw();
+						Compare_() ;
 
 						/** Destructor
 						*/
-						~Compare_() throw();
+						~Compare_() ;
 
 						/** Operator ()
 						*/
 						//bool operator() (const std::pair<Index, float>& a, const std::pair<Index, float>& b) const
 						bool operator() (const ConformationSet::Conformation& a, const ConformationSet::Conformation& b) const
-							throw();
+							;
 				};
 				
 				/** Name of docking algorithm
@@ -297,9 +297,9 @@ namespace BALL
 		};
 		
 		std::ostream& operator <<(std::ostream& out, const DockResult& dock_res)
-			throw();
+			;
 			
 		std::istream& operator >>(std::istream& in, DockResult& dock_res)
-			throw();
+			;
 }
 #endif

@@ -24,7 +24,7 @@ namespace BALL
 
 
 	Lipophilic::Lipophilic()
-		throw()
+		
 		:	ScoringComponent(),
 			possible_lipophilic_interactions_(),
 			r1_offset_(0.0),
@@ -36,7 +36,7 @@ namespace BALL
 
 
 	Lipophilic::Lipophilic(ScoringFunction& sf)
-		throw()
+		
 		:	ScoringComponent(sf),
 			possible_lipophilic_interactions_(),
 			r1_offset_(0.0),
@@ -48,7 +48,7 @@ namespace BALL
 
 
 	Lipophilic::Lipophilic(const Lipophilic& fl)
-		throw()
+		
 		:	ScoringComponent(fl),
 			possible_lipophilic_interactions_(fl.possible_lipophilic_interactions_),
 			r1_offset_(fl.r1_offset_),
@@ -58,14 +58,14 @@ namespace BALL
 
 
 	Lipophilic::~Lipophilic()
-		throw()
+		
 	{
 		clear();
 	}
 
 
 	void Lipophilic::clear()
-		throw()
+		
 	{
 		possible_lipophilic_interactions_.clear();
 		r1_offset_ = 0.0;
@@ -77,7 +77,7 @@ namespace BALL
 
 
 	bool Lipophilic::setup()
-		throw()
+		
 	{
 		Timer timer;
 		timer.start();
@@ -168,7 +168,7 @@ namespace BALL
 
 
 	double Lipophilic::calculateScore()
-		throw()
+		
 	{
 
 		Timer timer;

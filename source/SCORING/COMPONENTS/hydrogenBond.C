@@ -37,7 +37,7 @@ namespace BALL
 
 
 	HydrogenBond::HydrogenBond()
-		throw()
+		
 		:	ScoringComponent(),
 			possible_hydrogen_bonds_()
 	{
@@ -47,7 +47,7 @@ namespace BALL
 
 
 	HydrogenBond::HydrogenBond(ScoringFunction& sf)
-		throw()
+		
 		:	ScoringComponent(sf),
 			possible_hydrogen_bonds_()
 	{
@@ -57,7 +57,7 @@ namespace BALL
 
 
 	HydrogenBond::HydrogenBond(const HydrogenBond& hb)
-		throw()
+		
 		:	ScoringComponent(hb),
 			possible_hydrogen_bonds_(hb.possible_hydrogen_bonds_),
 			h_bond_distance_lower_(hb.h_bond_distance_lower_),
@@ -69,14 +69,14 @@ namespace BALL
 
 
 	HydrogenBond::~HydrogenBond()
-		throw()
+		
 	{
 		clear();
 	}
 
 
 	void HydrogenBond::clear()
-		throw()
+		
 	{
 		possible_hydrogen_bonds_.clear();
 		h_bond_distance_lower_ = 0.0;
@@ -90,7 +90,7 @@ namespace BALL
 
 
 	bool HydrogenBond::setup()
-		throw()
+		
 	{
 
 		Timer timer;
@@ -224,14 +224,14 @@ namespace BALL
 
 
 	const HashMap<const Atom*, Size>& HydrogenBond::getFresnoTypes()
-		throw()
+		
 	{
 		return(fresno_types);
 	}
 
 
 	double HydrogenBond::calculateScore()
-		throw()
+		
 	{
 
 		Timer timer;

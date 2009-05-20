@@ -138,7 +138,7 @@ namespace BALL
 				SPBond(SPAtom* first, SPAtom* second, SPBondOrder bond_order);
 
 				/// Destructor
-				virtual ~SPBond() throw();
+				virtual ~SPBond() ;
 				//@}
 
 				/** @name Accessors
@@ -313,7 +313,7 @@ namespace BALL
 				SPAtom(const String& symbol);
 
 				/// destructor
-				virtual ~SPAtom() throw();
+				virtual ~SPAtom() ;
 				//@}
 
 
