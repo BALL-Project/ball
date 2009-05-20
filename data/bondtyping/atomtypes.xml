@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<table>
+	<!-- 	This file supplies SMARTS for atom types 
+	  		in hybridisation assignment accoring to openbabel 2.0.2 
+	 			
+
+	 		
+	 			Rev 24.6.2008  Conversion was done by Anna Dehof
+ -->	
+	<entry id="3">
+		<smartstring>SMARTS([$([#6]([#8D1])[#8D1])])</smartstring>
+		<hybridisationstate>2</hybridisationstate>
+	</entry>
+ 	<entry id="4">
+		<smartstring>SMARTS([$(C#*),$(C(=*)=*)])</smartstring>
+		<hybridisationstate>1</hybridisationstate>
+	</entry>
+	<entry id="2">
+		<smartstring>SMARTS([c,$(C=*)])</smartstring>
+		<hybridisationstate>2</hybridisationstate>
+	</entry>
+	<entry id="1">
+		<smartstring>SMARTS([C])</smartstring>
+		<hybridisationstate>3</hybridisationstate>
+	</entry>
+  <entry id="6">
+		<smartstring>SMARTS([n,$(N=*),$(N[#6,#7,#8]=,:,#*)])</smartstring>
+		<hybridisationstate>2</hybridisationstate>
+	</entry>
+ 	<entry id="7">
+		<smartstring>SMARTS([ND1,ND2,ND3]a)</smartstring>
+		<hybridisationstate>2</hybridisationstate>
+	</entry>
+ 	<entry id="8">
+		<smartstring>SMARTS([$(N#*),$([ND2](=*)=*)])</smartstring>
+		<hybridisationstate>1</hybridisationstate>
+	</entry>
+ 	<entry id="5">
+		<smartstring>SMARTS([N])</smartstring>
+		<hybridisationstate>3</hybridisationstate>
+	</entry>
+	<entry id="11">
+		<smartstring>SMARTS([$([#8D1][#6][#8D1])])</smartstring>
+		<hybridisationstate>2</hybridisationstate>
+	</entry>
+  <entry id="10">
+		<smartstring>SMARTS([o,$(O=*),$(O[#6,#7,#8]=,:*)])</smartstring>
+		<hybridisationstate>2</hybridisationstate>
+	</entry>
+ 	<entry id="12">
+		<smartstring>SMARTS([$(O#*)])</smartstring>
+		<hybridisationstate>1</hybridisationstate>
+	</entry>
+	<entry id="9">
+		<smartstring>SMARTS([O])</smartstring>
+		<hybridisationstate>3</hybridisationstate>
+	</entry>
+  <entry id="15">
+		<smartstring>SMARTS([#15;$([PD1]=*)])</smartstring>
+		<hybridisationstate>2</hybridisationstate>
+	</entry>
+	<entry id="14">
+		<smartstring>SMARTS([P])</smartstring>
+		<hybridisationstate>3</hybridisationstate>
+	</entry>
+ 	<entry id="17">
+		<smartstring>SMARTS([#16;s,$([SD1]=*)])</smartstring>
+		<hybridisationstate>2</hybridisationstate>
+	</entry>
+	<entry id="16">
+		<smartstring>SMARTS([S])</smartstring>
+		<hybridisationstate>3</hybridisationstate>
+	</entry>
+	<entry id="19">
+		<smartstring>SMARTS([BD4])</smartstring>
+		<hybridisationstate>3</hybridisationstate>
+	</entry> 
+	<entry id="18">
+		<smartstring>SMARTS([B])</smartstring>
+		<hybridisationstate>2</hybridisationstate>
+		</entry> 
+	<entry id="13">
+		<smartstring>SMARTS([D4])</smartstring>
+		<hybridisationstate>3</hybridisationstate>
+	</entry>
+</table>
+
+<!--
+INTHYB	[C]															3	#sp3 carbon
+INTHYB	[c,$(C=*)]											2	#sp2 carbon
+INTHYB	[$([#6]([#8D1])[#8D1])]					2	#sp2 carbon
+INTHYB	[$(C#*),$(C(=*)=*)]							1	#sp  carbon
+INTHYB	[N]															3	#sp3 nitrogen
+INTHYB	[n,$(N=*),$(N[#6,#7,#8]=,:,#*)]	2	#sp2 nitrogen
+INTHYB  [ND1,ND2,ND3]a									2	#sp2 nitrogen
+INTHYB	[$(N#*),$([ND2](=*)=*)]					1	#sp  nitrogen
+INTHYB	[O]															3	#sp3 oxygen
+INTHYB	[o,$(O=*),$(O[#6,#7,#8]=,:*)]		2	#sp2 oxygen
+INTHYB	[$([#8D1][#6][#8D1])]						2	#sp2 oxygen
+INTHYB	[$(O#*)]												1	#sp  oxygen
+INTHYB  [D4]                            3 #any 4 valent atom
+
+INTHYB	[P]									3	#sp3 phosphorus
+INTHYB	[#15;$([PD1]=*)]		2	#sp2 phosphorus
+INTHYB	[S]									3	#sp3 sulfur
+INTHYB	[#16;s,$([SD1]=*)]	2	#sp2 sulfur
+INTHYB	[B]									2	#sp2 boron
+INTHYB	[BD4]								3	#sp3 boron 
+
+-->	

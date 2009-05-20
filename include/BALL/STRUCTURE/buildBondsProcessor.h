@@ -142,6 +142,10 @@ namespace BALL
 
 			/// sets the parameters file
 			void setBondLengths(const String& file_name) throw(Exception::FileNotFound);
+
+			/// Return the bond length Hashmap 
+			HashMap<Size, HashMap<Size, HashMap<int, float> > > getBondMap() { return bond_lengths_;};
+
 			//@}
 
 			/** @name Assignment

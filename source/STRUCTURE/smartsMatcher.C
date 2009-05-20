@@ -362,7 +362,7 @@ namespace BALL
 							else
 							{
 								// TODO correct?!? only aromatic and single ring closure bonds are allowed?
-								if (first->getBond(*second)->getOrder() != Bond::ORDER__SINGLE && first->getBond(*second)->getOrder() != Bond::ORDER__AROMATIC)
+								if (first->getBond(*second)->getOrder() != Bond::ORDER__SINGLE && !(first->getBond(*second)->isAromatic()))
 								{
 									return false;
 								}

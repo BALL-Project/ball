@@ -236,7 +236,8 @@ $(TEST_PREFIX)RSConstructor_test$(EXEEXT)\
 $(TEST_PREFIX)RingAnalyser_test$(EXEEXT)\
 $(TEST_PREFIX)RingClusterer_test$(EXEEXT)\
 $(TEST_PREFIX)ResidueRotamerSet_test$(EXEEXT)\
-$(TEST_PREFIX)RotamerLibrary_test$(EXEEXT)
+$(TEST_PREFIX)RotamerLibrary_test$(EXEEXT)\
+$(TEST_PREFIX)AssignBondOrderProcessor_test$(EXEEXT)
 
 EXECUTABLES_SOLVATION = \
 $(TEST_PREFIX)PoissonBoltzmann_test$(EXEEXT)\

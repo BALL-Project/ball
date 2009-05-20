@@ -35,6 +35,14 @@
 # include <BALL/VIEW/DIALOGS/MMFF94ConfigurationDialog.h>
 #endif
 
+#ifndef BALL_VIEW_DIALOGS_ASSIGNBONDORDERCONFIGURATIONDIALOG_H
+# include <BALL/VIEW/DIALOGS/assignBondOrderConfigurationDialog.h>
+#endif
+
+#ifndef BALL_VIEW_DIALOGS_ASSIGNBONDORDERRESULTSDIALOG_H
+# include <BALL/VIEW/DIALOGS/assignBondOrderResultsDialog.h>
+#endif
+
 #ifndef BALL_MOLMEC_AMBER_AMBER_H
 # include <BALL/MOLMEC/AMBER/amber.h>
 #endif
@@ -59,12 +67,13 @@ namespace BALL
 		class FDPBDialog;
 
 		/**	MolecularStructure provides means to modify molecular structures and do
-		 		several calculations. To do so, it contains the AMBER and CHARMM forcefields and
+		 		several calculations. To do so, it contains the  MMFF94, AMBER and CHARMM forcefields and
 				dialogs to do the setup.
 				The widget itself is invisible, but it has several menu entries, e.g.:
 				- checkResidue
 				- centerCamera
 				- buildBonds
+				- assignBondOrders
 				- addHydrogens
 				- createGridFromDistance
 				- calculateSecondaryStructure
@@ -206,6 +215,18 @@ namespace BALL
 
 			///
 			FDPBDialog* getFDPBDialog() { return fdpb_dialog_;}
+			
+			///
+			AssignBondOrderConfigurationDialog& getBondOrderDialog() { return bond_order_dialog_;}
+			
+			///
+			const AssignBondOrderConfigurationDialog& getBondOrderDialog() const { return bond_order_dialog_;}
+	
+			///
+			AssignBondOrderResultsDialog& getBondOrderResultsDialog() { return bond_order_results_dialog_;}
+			
+			///
+			const AssignBondOrderResultsDialog& getBondOrderResultsDialog() const { return bond_order_results_dialog_;}
 
 					
 			public slots:
@@ -225,6 +246,24 @@ namespace BALL
 			*/
 			void buildBonds();
 			
+			/** Assigns bond orders.
+					If a single selected molecular object is available Bond Orders will be set
+					for each bond object of the selected AtomContainer using the assign_bond_order processor.
+					A CompositeMessage will be sent for the object in the selection list.
+					The number of bond orders changed will be written into the Log object.
+			*/
+			void runBondOrderAssignment(bool show_dialog = true);
+			
+
+			/** Shows the results of the given BondOrderAssigner.
+					All bond order assignment sets found by the given BondOrderAssigner will be presented
+					as structural sketch, additional scoring information is provided by click on the entry.
+					A single assignment can either be applied to the selected AtomContainer, or a copy of the
+					original system with the bond order assignment of the current result is added to the 
+					Structure list. 
+			*/
+		void showBondOrderAssignmentResults(AssignBondOrderProcessor& bop);
+
 			/** Adds hydrogens.
 					If selected molecular objects are available hydrogens will be created
 					for each object in the selection list
@@ -316,6 +355,7 @@ namespace BALL
 
 			QAction* center_camera_id_;
 			QAction* build_bonds_id_;
+			QAction* assign_bond_orders_id_;
 			QAction* add_hydrogens_id_;
 			QAction* check_structure_id_;
 			QAction* create_distance_grid_id_, *create_distance_grid_id2_;
@@ -343,8 +383,10 @@ namespace BALL
 			MMFF94ConfigurationDialog 	mmff94_dialog_;
 			MinimizationDialog 					minimization_dialog_;
 			MolecularDynamicsDialog 		md_dialog_;
-			FDPBDialog* 								fdpb_dialog_;
-			Position 										force_field_id_;
+			FDPBDialog* 												fdpb_dialog_;
+			AssignBondOrderConfigurationDialog 	bond_order_dialog_;
+			AssignBondOrderResultsDialog				bond_order_results_dialog_;
+			Position 														force_field_id_;
 		};
 
 	} // namespace VIEW

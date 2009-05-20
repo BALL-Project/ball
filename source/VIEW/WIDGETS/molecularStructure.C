@@ -36,6 +36,8 @@
 
 #include <QtGui/qmenubar.h>
 
+#include <sstream>
+
 using namespace std;
 
 namespace BALL
@@ -53,7 +55,9 @@ namespace BALL
 				charmm_dialog_(parent),
 				minimization_dialog_(parent),
 				md_dialog_(parent),
-				fdpb_dialog_(0)
+				fdpb_dialog_(0),
+				bond_order_dialog_(parent),
+				bond_order_results_dialog_(parent)
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "New MolecularStructure " << this << std::endl;
@@ -85,7 +89,14 @@ namespace BALL
 																												SLOT(buildBonds()), Qt::CTRL+Qt::Key_B);
 			setMenuHint("Add missing bonds to a selected structure.");
 
-		
+
+			assign_bond_orders_id_ = insertMenuEntry(MainControl::BUILD, "&Assign Bond Orders", this, 
+																												SLOT(runBondOrderAssignment()), Qt::CTRL+Qt::Key_O);
+			setMenuHint("Assign bond orders to a selected structure."); 
+			setIcon("assignBondOrders.png", false); //true);
+
+			
+
 			check_structure_id_ = insertMenuEntry(MainControl::BUILD, "Chec&k Structure against FragmentDB", this, 
 																												SLOT(checkResidue()), Qt::CTRL+Qt::Key_K);
 			setMenuHint("Check a structure against the fragment database.");
@@ -382,7 +393,7 @@ namespace BALL
 			// copy the selection_, it can change after a changemessage event
 			List<Composite*> temp_selection_ = getMainControl()->getMolecularControlSelection();
 			List<Composite*>::ConstIterator it = temp_selection_.begin();	
-			
+
 			Size old_number_of_bonds = 0;
 
 			HashSet<System*> roots;
@@ -414,12 +425,154 @@ namespace BALL
 			}
 
 			String result = "added " + String(new_number_of_bonds - old_number_of_bonds) + 
-										  " bonds (total " + String(new_number_of_bonds) + ").";
+				" bonds (total " + String(new_number_of_bonds) + ").";
 
 			if (!ok) result += " An error occured. Too many bonds for one atom?";
 			setStatusbarText(result, true);
 		}
 
+		
+		void MolecularStructure::runBondOrderAssignment(bool show_dialog)
+		{
+			// Make sure we run one instance of a assignment at a time only.
+			if (getMainControl()->isBusy())
+			{
+				Log.error() << "Assignment already running or still rendering!" << std::endl;
+				return;
+			}
+
+			if (getMainControl()->getMolecularControlSelection().size() == 0) 
+			{
+				setStatusbarText("Please highlight exactly one AtomContainer!", true);
+				return;
+			}
+			
+			setStatusbarText("  > assigning bond orders ...", true);
+
+			// Retrieve the selected atom container and abort if nothing is selected.
+			List<AtomContainer*> containers;
+			List<Composite*> highl = getMainControl()->getMolecularControlSelection();
+			List<Composite*>::Iterator lit = highl.begin();
+			for (; lit != highl.end(); ++lit)
+			{
+				AtomContainer* ac = dynamic_cast<AtomContainer*>(*lit);
+				if (ac != 0) containers.push_back(ac);
+			}
+
+			if (containers.size() != 1) 
+			{
+				setStatusbarText("Please highlight exactly one AtomContainer!", true);
+				return;
+			}
+
+			if (show_dialog)
+			{
+				// Execute the assign bond order dialog
+				// and abort if cancel is clicked or nonsense arguments are given
+				if (!bond_order_dialog_.exec())
+				{
+					return;
+				}
+			}
+
+			AssignBondOrderProcessor abop;
+
+			// read the options
+			abop.options[AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS] 		= bond_order_dialog_.overwrite_singleBO_box->isChecked();
+			abop.options[AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS] 		= bond_order_dialog_.overwrite_doubleBO_box->isChecked();
+			abop.options[AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS] 		= bond_order_dialog_.overwrite_tripleBO_box->isChecked();
+			abop.options[AssignBondOrderProcessor::Option::OVERWRITE_SELECTED_BONDS] 		= bond_order_dialog_.overwrite_selected_bonds_box->isChecked();
+			abop.options[AssignBondOrderProcessor::Option::KEKULIZE_RINGS] 									= bond_order_dialog_.kekulizeBonds_button->isChecked();
+			abop.options[AssignBondOrderProcessor::Option::ADD_HYDROGENS] 									= bond_order_dialog_.add_hydrogens_checkBox->isChecked();
+			abop.options[AssignBondOrderProcessor::Option::ALGORITHM] 											= bond_order_dialog_.ILP_button->isChecked() ? AssignBondOrderProcessor::Algorithm::ILP : AssignBondOrderProcessor::Algorithm::A_STAR;
+			abop.options[AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING]						= (bond_order_dialog_.penalty_balance_slider->value()/100.);
+			
+			// automatically applying a solution might confuse the user --> set to false
+			abop.options.setBool(AssignBondOrderProcessor::Option::APPLY_FIRST_SOLUTION, false);
+			
+			// get the parameter folder
+			abop.options[AssignBondOrderProcessor::Option::INIFile] = ascii(bond_order_dialog_.parameter_file_edit->text());
+
+			// check for valid input
+			if (bond_order_dialog_.max_n_opt_solutions->text().toInt() < 1)
+				bond_order_dialog_.max_n_opt_solutions->setText(String(1).c_str());
+
+			if (bond_order_dialog_.max_n_all_solutions->text().toInt() < 1)
+				bond_order_dialog_.max_n_all_solutions->setText(String(1).c_str());
+
+			// get the limitations for number of bond order assignments
+			if (bond_order_dialog_.single_solution_button->isChecked())
+			{
+				abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]						= 1;
+				abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS]= false;
+			}
+			else if (bond_order_dialog_.all_optimal_solutions_button->isChecked())
+			{
+				abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]						= 0;
+				abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS]= false;
+			}
+			else if (bond_order_dialog_.n_opt_solutions_button->isChecked())
+			{
+				abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]						= bond_order_dialog_.max_n_opt_solutions->text().toInt();
+				abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS]= false;
+			}
+			else if (bond_order_dialog_.n_all_solutions_button->isChecked())
+			{
+				abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]						= bond_order_dialog_.max_n_all_solutions->text().toInt();
+				abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS]= true;
+			}
+
+		
+			// apply
+			containers.front()->apply(abop);
+			
+			// give a message
+			if (abop.getNumberOfComputedSolutions() == 0)
+			{
+				setStatusbarText(String("Could not find a valid bond order assignment.", true));
+			}
+			else
+			{	
+				String nr = abop.getNumberOfComputedSolutions();
+				setStatusbarText(String("Found ") + nr + " bond order assignments.", true);
+			
+				Log.info()<< "  > Result AssignBondOrderProcessor: " << endl;
+
+				for (Size i = 0; i < abop.getNumberOfComputedSolutions(); i++)
+				{
+					ostringstream stream_description;
+					stream_description.setf(std::ios_base::fixed);
+					stream_description.precision(2);
+
+					stream_description  << "      Solution " << i 
+								 						 << " has penalty " << abop.getTotalPenalty(i)
+								 						 << ", charge " << abop.getTotalCharge(i)
+														 << ", " <<  abop.getNumberOfAddedHydrogens(i) << " added hydrogens.";
+ 
+					String description = stream_description.str();
+
+					Log.info() << description << endl; 
+				}
+
+				showBondOrderAssignmentResults(abop);
+			}
+			
+			getMainControl()->update(*containers.front(), true);
+		}
+		
+		
+		void MolecularStructure::showBondOrderAssignmentResults(AssignBondOrderProcessor& bop)
+		{
+			bond_order_results_dialog_.setProcessor(&bop);
+			bond_order_results_dialog_.createEntries();
+
+			// Execute the assign bond order dialog
+			// and abort if cancel is clicked or nonsense arguments are given
+			if (!bond_order_results_dialog_.exec())
+			{
+				return;
+			}
+		}
 
 		void MolecularStructure::centerCamera(Composite* composite)
 		{
@@ -443,6 +596,7 @@ namespace BALL
 			minimization_id_->setEnabled( one_system && composites_muteable);
 			mdsimulation_id_->setEnabled( one_system && composites_muteable);
 
+			assign_bond_orders_id_->setEnabled( one_system && composites_muteable);
 			calculate_hbonds_id_->setEnabled( one_system && composites_muteable);
 
 			// prevent changes to forcefields, if simulation is running
@@ -856,6 +1010,8 @@ namespace BALL
 			throw()
 		{
 			minimization_dialog_.readPreferenceEntries(inifile);
+		//	bond_order_dialog_.readPreferenceEntries(inifile); // TODO:
+		//  bond_order_results_dialog_.readPreferenceEntries(inifile); // TODO:
 			md_dialog_.readPreferenceEntries(inifile);
 			amber_dialog_.readPreferenceEntries(inifile);
 			charmm_dialog_.readPreferenceEntries(inifile);
@@ -883,6 +1039,8 @@ namespace BALL
 			throw()
 		{
 			minimization_dialog_.writePreferenceEntries(inifile);
+			//bond_order_dialog_.writePreferenceEntries(inifile); // TODO
+			//bond_order_results_dialog_.writePreferenceEntries(inifile); // TODO
 			md_dialog_.writePreferenceEntries(inifile);
 			amber_dialog_.writePreferenceEntries(inifile);
 			charmm_dialog_.writePreferenceEntries(inifile);

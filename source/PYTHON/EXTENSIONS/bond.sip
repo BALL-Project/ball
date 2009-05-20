@@ -64,6 +64,7 @@ class Bond
   const String& getName() const;
   void setOrder(Order /bond_order/);
   Order getOrder() const;
+	bool isAromatic() const;
   void setType(Type /bond_type/);
   Type getType() const;
   float getLength() const;

@@ -20,6 +20,8 @@ UIC_DIR=$(BALL_PATH)/include/BALL/VIEW/UIC
 THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
+	assignBondOrderConfigurationDialog.C\
+	assignBondOrderResultsDialog.C\
 	atomOverview.C\
 	amberConfigurationDialog.C\
 	bondProperties.C\
@@ -66,6 +68,8 @@ PYTHON_CPP_SOURCES=\
 	pythonSettings.C
 
 MOC_SOURCES=\
+	assignBondOrderConfigurationDialog_moc.C\
+	assignBondOrderResultsDialog_moc.C\
 	amberConfigurationDialog_moc.C\
 	atomOverview_moc.C\
 	minimizationDialog_moc.C\
@@ -112,6 +116,8 @@ PYTHON_MOC_SOURCES=\
 	pythonSettings_moc.C
 
 UIC_SOURCES=\
+	assignBondOrderConfigurationDialogData.C\
+	assignBondOrderResultsDialogData.C\
 	amberConfigurationDialogData.C\
 	atomOverviewData.C\
 	bondPropertiesData.C\

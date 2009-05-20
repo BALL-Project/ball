@@ -1,0 +1,20 @@
+@<TRIPOS>MOLECULE
+AN06A
+    5     4    1     0    0
+SMALL
+USER_CHARGES
+@<TRIPOS>ATOM
+   1 C1       1.3097    -0.3471     0.0002 C.3      1  OA01  0.0500
+   2 S1       3.1352    -0.4075     0.0002 S.3      1  OA01 -1.0500
+   3 H1       0.9024     0.1722     0.8754 H        1  OA01  0.0000
+   4 H2       0.9024     0.1718    -0.8752 H        1  OA01  0.0000
+   5 H3       0.8523    -1.3432     0.0004 H        1  OA01  0.0000
+@<TRIPOS>BOND
+   1    1    5 1 
+   2    1    4 1 
+   3    1    3 1 
+   4    1    2 1 
+@<TRIPOS>SUBSTRUCTURE
+   1  OA01    1
+@<TRIPOS>COMMENT
+COMMENT METHYLSULFIDE ANION

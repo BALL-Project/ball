@@ -145,7 +145,7 @@ namespace BALL
 				}
 				break;
 			case SINGLE_OR_AROMATIC:
-				if (bond->getOrder() == Bond::ORDER__SINGLE || bond->getOrder() == Bond::ORDER__AROMATIC)
+				if (bond->getOrder() == Bond::ORDER__SINGLE || bond->isAromatic())
 				{
 					matches = true;
 				}
@@ -163,7 +163,7 @@ namespace BALL
 				}
 				break;
 			case AROMATIC: 
-				if (bond->getOrder() == Bond::ORDER__AROMATIC)
+				if (bond->isAromatic())
 				{
 					matches = true;
 				}
@@ -250,22 +250,27 @@ namespace BALL
 		double count(0);
 		for (Atom::BondConstIterator bit = atom->beginBond(); +bit; ++bit)
 		{
-			switch(bit->getOrder())
+			// NOTE: we test the aromatic case first, since the bond might have
+			//       single or double order, but the property IS_AROMATIC and
+			//       we cannot handle this through the switch() below
+			if (bit->isAromatic())
+				count += 1.5;
+			else
 			{
-				case Bond::ORDER__SINGLE:		
-					count += 1; 
-					break;
-				case Bond::ORDER__AROMATIC: 
-					count += 1.5; 
-					break;
-				case Bond::ORDER__DOUBLE:		
-					count += 2;
-					break;
-				case Bond::ORDER__TRIPLE:		
-					count += 3;
-					break;
-				default:
-					Log.error() << "SmartsParser: errorneous bond order (" << bit->getOrder() << ")" << endl;
+				switch(bit->getOrder())
+				{
+					case Bond::ORDER__SINGLE:		
+						count += 1; 
+						break;
+					case Bond::ORDER__DOUBLE:		
+						count += 2;
+						break;
+					case Bond::ORDER__TRIPLE:		
+						count += 3;
+						break;
+					default:
+						Log.error() << "SmartsParser: errorneous bond order (" << bit->getOrder() << ")" << endl;
+				}
 			}
 		}
 		return Size(count);
@@ -274,7 +279,13 @@ namespace BALL
 	Size SmartsParser::SPAtom::getNumberOfImplicitHydrogens(const Atom* atom) const
 	{
 		// TODO charges?
-		return getDefaultValence(atom) - countRealValences(atom);
+		int defaultValence = getDefaultValence(atom);
+		int countedValence = countRealValences(atom);
+
+		if (countedValence > defaultValence)
+			return 0;
+		else
+		 return defaultValence - countedValence;
 	}
 
 	bool SmartsParser::SPAtom::equals(const Atom * atom) const
@@ -495,24 +506,16 @@ namespace BALL
 					break;
 					
 				case DEGREE:
-					tmp = 0;
-					for (Atom::BondConstIterator bit = atom->beginBond(); +bit; ++bit)
+					if ((int)(atom->countBonds()) != it->second.int_value)
 					{
-						if (bit->getPartner(*atom)->getElement() != PTE[Element::H])
-						{
-							++tmp;
-						}
-					}
-					if (tmp == it->second.int_value)
-					{
-						if (not_properties_.find(DEGREE) != not_properties_.end())
+						if (not_properties_.find(DEGREE) == not_properties_.end())
 						{
 							return false;
 						}
 					}
 					else
 					{
-						if (not_properties_.find(DEGREE) == not_properties_.end())
+						if (not_properties_.find(DEGREE) != not_properties_.end())
 						{
 							return false;
 						}

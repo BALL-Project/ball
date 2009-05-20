@@ -297,7 +297,7 @@ namespace BALL
 						++num_bonds;
 						Bond* const b = (**ait1).getBond(**ait2);
 						bonds.insert(b);
-						if (b->getOrder() == Bond::ORDER__AROMATIC)
+						if (b->isAromatic())
 						{
 							++num_aro;
 						}
@@ -317,9 +317,10 @@ namespace BALL
 			{
 				for (HashSet<Bond*>::Iterator bit = bonds.begin(); +bit; ++bit)
 				{
-					if ((*bit)->getOrder() == Bond::ORDER__AROMATIC)
+					if ((*bit)->isAromatic())
 					{
 						(*bit)->setOrder(Bond::ORDER__SINGLE);
+						(*bit)->clearProperty(Bond::IS_AROMATIC);
 					}
 				}
 			}

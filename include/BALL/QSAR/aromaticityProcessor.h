@@ -10,6 +10,10 @@
 #	include <BALL/KERNEL/atomContainer.h>
 #endif
 
+#ifndef BALL_DATATYPE_OPTIONS_H
+	#include <BALL/DATATYPE/options.h>
+#endif
+
 namespace BALL
 {
 	/**	Processor method to detect aromaticity of AtomContainers. If it is called
@@ -22,10 +26,29 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(AromaticityProcessor)
+			/** @name Constant Definitions
+		*/
+		//@{
+		/// Option names
+		struct BALL_EXPORT Option
+		{	
+			/**	overwrite bond orders or storing the bond order as a property
+			*/
+		 	static const char* OVERWRITE_BOND_ORDERS;	
+		};
+
+		/// Default values for options
+		struct BALL_EXPORT Default
+		{
+			static const bool OVERWRITE_BOND_ORDERS;
+		};
+		//@}
 
 		/** @name Constructors and Destructors
 		*/
+	
+		BALL_CREATE(AromaticityProcessor)
+
 		//@{
 		/** Default constructor
 		*/		
@@ -47,8 +70,19 @@ namespace BALL
 		/** Assignment operator
 		*/
 		AromaticityProcessor& operator = (const AromaticityProcessor& aro);
-
 		//@}
+
+		/** @name Public Attributes
+		*/
+		//@{
+		/// options
+		Options options;
+
+		/** reset the options to default values
+		*/
+		void setDefaultOptions();
+		//@}
+
 		/** @name Accessors
 		*/
 		//@{
@@ -77,6 +111,9 @@ namespace BALL
 		
 		///
 		Processor::Result operator () (AtomContainer& ac);
+		
+		///
+		virtual bool start();
 		//@}
 
 
@@ -118,6 +155,11 @@ namespace BALL
 				@param ring as HashSet<Atom*>, from which the number of pi electrons to count
 		*/
 		Size countPiElectrons_(HashSet<Atom*>& ring);
+
+		/** Should we set the bond orders to aromatic or merely store the information as a property of the bond?
+		 *  This value depends on the value of the option OVERWRITE_BOND_ORDERS 
+		 */
+		bool overwrite_bond_orders_;
 	};
 } // namespace BALL
 
