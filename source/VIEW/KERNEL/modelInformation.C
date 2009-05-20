@@ -65,6 +65,8 @@ namespace BALL
 					return "Label";
 				case MODEL_INFORMATIONS:
 					return "Informations";
+				case MODEL_COORDINATE_SYSTEM:
+					return "Coordinate System";
 				case MODEL_UNKNOWN:
 					return "Unknown";
 			}

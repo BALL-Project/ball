@@ -935,7 +935,6 @@ namespace BALL
 			createCoordinateSystem_(true);
 		}
 
-		// TODO: add the representation correctly
 		void Scene::createCoordinateSystem_(bool at_origin)
 		{
 			RepresentationManager& pm = getMainControl()->getRepresentationManager();
@@ -963,12 +962,9 @@ namespace BALL
 				
 				p = s.getViewPoint() + (v * 25) - (s.getLookUpVector() * 5.);
 
-				x = -v + s.getRightVector();
-				x.normalize();
-				y = -v - s.getRightVector();
-				y.normalize();
-
-				z = -(x % y);
+				x = Vector3(1,0,0);
+				y = Vector3(0,1,0);
+				z = Vector3(0,0,1);
  			}
 
 			float delta = 0.001;
@@ -1038,16 +1034,15 @@ namespace BALL
 				}
 			}
 
+			rp->setModelType(MODEL_COORDINATE_SYSTEM);
+			rp->setColoringMethod(COLORING_CUSTOM);
+
 			rp->setProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM);
 
-#ifndef ENABLE_RAYTRACING
-			// we have to add the representation in the GLRenderer manualy,
-			// because the message wont arrive in Scene::onNotify
-			// TODO: this needs to be changed to a correct RenderSetup call!
-//			gl_renderer_->bufferRepresentation(*rp);
-#endif
+			getMainControl()->insert(*rp);
+			getMainControl()->update(*rp);
 
-			bool result = getMainControl()->update(*rp);
+			notify_(new RepresentationMessage(*rp, RepresentationMessage::ADD_TO_GEOMETRIC_CONTROL));
 		}
 
 		bool Scene::exportScene(Renderer &er) const

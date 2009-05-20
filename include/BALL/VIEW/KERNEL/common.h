@@ -217,6 +217,9 @@ namespace BALL
 			///
 			MODEL_INFORMATIONS,
 
+			///
+			MODEL_COORDINATE_SYSTEM,
+
 			/// unkown property
 			MODEL_UNKNOWN = 200
 		};
