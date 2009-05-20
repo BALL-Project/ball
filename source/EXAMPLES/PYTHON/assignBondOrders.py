@@ -17,9 +17,12 @@ abop.options.setInteger(BALL.AssignBondOrderProcessor.Option.MAX_NUMBER_OF_SOLUT
 abop.options.setBool(BALL.AssignBondOrderProcessor.Option.COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, True)
 abop.options.setBool(BALL.AssignBondOrderProcessor.Option.ADD_HYDROGENS, True)
 
-print abop.evaluatePenalty(system)
+print "Current penalty: " , abop.evaluatePenalty(system)
 
+# apply the processor
 system.apply(abop)
+
+# print all solutions penalty
 for i in range(abop.getNumberOfComputedSolutions()):
   print "solution ", str(i) , ": penalty ", str(abop.getTotalPenalty(i)), ", charge ", abop.getTotalCharge(i), " , ", abop.getNumberOfAddedHydrogens(i) , " added hydrogens."
 
