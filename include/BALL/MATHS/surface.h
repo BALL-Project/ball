@@ -41,20 +41,20 @@ namespace BALL
 		class Triangle
 		{
 			public:
-			Index	v1;
-			Index	v2;
-			Index	v3;
+				Index	v1;
+				Index	v2;
+				Index	v3;
 
-			bool operator == (const Triangle& triangle) const throw()
-			{
-				return (v1 == triangle.v1) && (v2 == triangle.v2) && (v3 == triangle.v3);
-			}
+				bool operator == (const Triangle& triangle) const throw()
+				{
+					return (v1 == triangle.v1) && (v2 == triangle.v2) && (v3 == triangle.v3);
+				}
 
 
-			bool operator != (const Triangle& triangle) const throw()
-			{
-				return !(v1 == triangle.v1) && (v2 == triangle.v2) && (v3 == triangle.v3);
-			}
+				bool operator != (const Triangle& triangle) const throw()
+				{
+					return !(v1 == triangle.v1) && (v2 == triangle.v2) && (v3 == triangle.v3);
+				}
 		};
 			
 		/// A vertex

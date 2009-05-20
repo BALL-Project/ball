@@ -18,6 +18,12 @@ namespace BALL
 	{
 	}
 
+	TrianglePoint::TrianglePoint(const TVector3<double>& point, const TVector3<double>& normal)
+	 : GraphVertex<TrianglePoint,TriangleEdge,Triangle>(),
+		 point_(point),
+		 normal_(normal)
+	{
+	}
 
 	TrianglePoint::TrianglePoint(const TrianglePoint& point, bool deep)
 		throw()

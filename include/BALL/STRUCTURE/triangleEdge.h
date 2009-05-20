@@ -72,8 +72,14 @@ namespace BALL
 		/**	Default constructor.
 				This method creates a new TriangleEdge object.
 		*/
-		TriangleEdge()
-			throw();
+		TriangleEdge();
+
+		/** 
+		 * Detailed constructor.
+		 * Creates a new TriangleEdge object connecting the passed 
+		 * TrianglePoint instances.
+		 */ 
+		TriangleEdge(TrianglePoint* v1, TrianglePoint* v2);
 
 		/**	Copy constructor.
 				Create a new TriangleEdge object from another.
@@ -82,14 +88,12 @@ namespace BALL
 											Otherwise the new TriangleEdge object is linked to the	
 											neighbours of the old TriangleEdge object.
 		*/
-		TriangleEdge(const TriangleEdge& edge, bool deep = false)
-			throw();
+		TriangleEdge(const TriangleEdge& edge, bool deep = false);
 
 		/**	Destructor.
 				Destructs the TriangleEdge object.
 		*/
-		virtual ~TriangleEdge()
-			throw();
+		virtual ~TriangleEdge();
 		//@}
 
 		/**	@name	Accessors
@@ -100,32 +104,28 @@ namespace BALL
 				@param	i			the first point is changed if i = 0, the second otherwise
 				@param	point	a pointer to the new point
 		*/
-		void setPoint(Position i, TrianglePoint* point)
-			throw();
+		void setPoint(Position i, TrianglePoint* point);
 
 		/** Return one of the two points of the TriangleEdge.
 				@param	i
 				@return	TrianglePoint*	a pointer to the first point if i = 0,	
 																		a pointer to the second point otherwise
 		*/
-		TrianglePoint* getPoint(Position i) const
-			throw();
+		TrianglePoint* getPoint(Position i) const;
 
 		/** Set one of the two triangles of the TriangleEdge.
 				@param	i					change the first triangle, if i = 0, the second	
 													otherwise
 				@param	triangle	a pointer to the new triangle
 		*/
-		void setTriangle(Position i, Triangle* triangle)
-			throw();
+		void setTriangle(Position i, Triangle* triangle);
 
 		/** Return one of the two triangles of the TriangleEdge.
 				@param	i
 				@return	Triangle*	a pointer to the first triangle if i = 0,	
 															a pointer to the second triangle otherwise
 		*/
-		Triangle* getTriangle(Position i) const
-			throw();
+		Triangle* getTriangle(Position i) const;
 
 		//@}
 
@@ -137,21 +137,18 @@ namespace BALL
 				@return	bool	<b>true</b> if the vertices are similar,	
 											<b>false</b> otherwise.
 		*/
-		virtual bool operator == (const TriangleEdge&) const
-			throw();
+		virtual bool operator == (const TriangleEdge&) const;
 
 		/** Inequality operator
 				@return	bool	<b>false</b> if the vertices are similar,	
 											<b>true</b> otherwise.
 		*/
-		virtual bool operator != (const TriangleEdge&) const
-			throw();
+		virtual bool operator != (const TriangleEdge&) const;
 
 		/** Similarity operator
 				@return	bool	<b>true</b>
 		*/
-		virtual bool operator *= (const TriangleEdge&) const
-			throw();
+		virtual bool operator *= (const TriangleEdge&) const;
 
 		//@}
 

@@ -72,8 +72,23 @@ namespace BALL
 		/**	Default constructor.
 				This method creates a new Triangle object.
 		*/
-		Triangle()
-			throw();
+		Triangle();
+
+		/**
+		 * Detailed constructor.
+		 * Creates a new Triangle object. Its vertices are initialized with
+		 * the passed TrianglePoint instances.
+		 */
+		Triangle(TrianglePoint* v1, TrianglePoint* v2, TrianglePoint* v3);
+
+		/**
+		 * Detailed constructor.
+		 * Creates a new Triangle object. Its edges are initialized with
+		 * the passed TriangleEdge instances.
+		 * Its vertices are taken from the edges. This requires the edges
+		 * to be properly oriented in a counter clockwise manner.
+		 */
+		Triangle(TriangleEdge* e1, TriangleEdge* e2, TriangleEdge* e3);
 
 		/**	Copy constructor.
 				Create a new Triangle object from another.
@@ -82,14 +97,12 @@ namespace BALL
 													(default). Otherwise the new Triangle object is
 													linked to the neighbours of the old Triangle object.
 		*/
-		Triangle(const Triangle& triangle, bool deep = false)
-			throw();
+		Triangle(const Triangle& triangle, bool deep = false);
 
 		/**	Destructor.
 				Destructs the Triangle object.
 		*/
-		virtual ~Triangle()
-			throw();
+		virtual ~Triangle();
 
 		//@}
 		/**	@name	Assignments
@@ -103,16 +116,14 @@ namespace BALL
 													to the neighbours of the Triangle object to assign	
 													from
 		*/
-		void set(const Triangle& triangle, bool deep = false)
-			throw();
+		void set(const Triangle& triangle, bool deep = false);
 
 		/**	Assign from another Triangle.
 				The Triangle object is linked to the neighbours of the Triangle	
 				object to assign from
 				@param	triangle	the Triangle object to assign from
 		*/
-		Triangle& operator = (const Triangle& triangle)
-			throw();
+		Triangle& operator = (const Triangle& triangle);
 
 		//@}
 		/**	@name	Accessors
@@ -140,8 +151,7 @@ namespace BALL
 				The edge is set to NULL.
 				@param	edge	the edge to delete
 		*/
-		void remove(TriangleEdge* edge)
-			throw();
+		void remove(TriangleEdge* edge);
 
 		//@}
 		/**	@name	Predicates
@@ -151,20 +161,17 @@ namespace BALL
 		/**	Equality operator.
 				@return	<b>true</b>
 		*/
-		virtual bool operator == (const Triangle&) const
-			throw();
+		virtual bool operator == (const Triangle&) const;
 
 		/**	Inequality operator.
 				@return	<b>false</b>
 		*/
-		virtual bool operator != (const Triangle&) const
-			throw();
+		virtual bool operator != (const Triangle&) const;
 
 		/**	Similarity operator.
 				@return	<b>true</b>
 		*/
-		virtual bool operator *= (const Triangle&) const
-			throw();
+		virtual bool operator *= (const Triangle&) const;
 		
 		//@}
 
