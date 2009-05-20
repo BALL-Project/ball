@@ -5,7 +5,6 @@
 
 BALL_INLINE
 void Bond::clear_()
-	throw()
 {
 	first_ = BALL_BOND_DEFAULT_FIRST_ATOM;
 	second_ = BALL_BOND_DEFAULT_SECOND_ATOM;
@@ -16,7 +15,6 @@ void Bond::clear_()
 
 BALL_INLINE
 void Bond::clear()
-	throw()
 {
 	PropertyManager::clear();
 	
@@ -26,7 +24,6 @@ void Bond::clear()
 
 BALL_INLINE
 void Bond::destroy()
-	throw()
 {
 	PropertyManager::destroy();
 	arrangeBonds_();
@@ -47,21 +44,18 @@ void Bond::finalize()
 
 BALL_INLINE
 void Bond::setFirstAtom(Atom* atom)
-	throw()
 {
 	first_ = atom;
 }
 
 BALL_INLINE	 
 const Atom* Bond::getFirstAtom() const
-	throw()
 {
 	return first_;
 }
 
 BALL_INLINE	 
 Atom* Bond::getPartner(const Atom& atom) const
-	throw()
 {
 	Atom* partner = 0;
 	if (&atom == first_)
@@ -80,63 +74,54 @@ Atom* Bond::getPartner(const Atom& atom) const
 
 BALL_INLINE
 void Bond::setSecondAtom(Atom* atom)
-	throw()
 {
 	second_ = atom;
 }
 
 BALL_INLINE	 
 const Atom* Bond::getSecondAtom() const
-	throw()
 {
 	return second_;
 }
 
 BALL_INLINE
 void Bond::setName(const String& name)
-	throw()
 {
 	name_ = name;
 }
 
 BALL_INLINE
 const String& Bond::getName() const
-	throw()
 {
 	return name_;
 }
 
 BALL_INLINE
 void Bond::setOrder(Bond::Order bond_order)
-	throw()
 {
 	bond_order_ = bond_order;
 }
 	
 BALL_INLINE	
 Bond::Order Bond::getOrder() const
-	throw()
 {
 	return bond_order_;
 }
 	
 BALL_INLINE
 bool Bond::isAromatic() const
-	throw()
 {
 	return (hasProperty(IS_AROMATIC) || (bond_order_ == ORDER__AROMATIC));
 }
 
 BALL_INLINE
 void Bond::setType(Type bond_type)
-	throw()
 {
 	bond_type_ = bond_type;
 }
 	
 BALL_INLINE
 Bond::Type Bond::getType() const
-	throw()
 {
 	return bond_type_;
 }
@@ -156,7 +141,6 @@ Real Bond::getLength() const
 
 BALL_INLINE
 const Atom* Bond::getBoundAtom(const Atom& atom) const
-	throw()
 {
 	if (first_ == &atom)
 	{
@@ -193,21 +177,18 @@ Atom* Bond::getBoundAtom(const Atom& atom)
 
 BALL_INLINE
 bool Bond::isBondOf(const Atom& atom) const
-	throw()
 {
 	return atom.hasBond(*this);
 }
 
 BALL_INLINE
 bool Bond::isBound() const
-	throw()
 {
 	return (first_ != 0);
 }
 
 BALL_INLINE
 bool Bond::isInterBond() const
-	throw()
 {
 	// the two atoms have to be inside the same (non-NULL) composite
 	return (isBound() && (first_->Composite::getRoot() != second_->Composite::getRoot())
@@ -216,7 +197,6 @@ bool Bond::isInterBond() const
 
 BALL_INLINE
 bool Bond::isInterBondOf(const AtomContainer& atom_container) const
-	throw()
 {
 	if (isBound())
 	{
@@ -231,7 +211,7 @@ bool Bond::isInterBondOf(const AtomContainer& atom_container) const
 }
 
 BALL_INLINE
-bool Bond::isIntraBond() const throw()
+bool Bond::isIntraBond() const
 {	
 	// the two atoms have to be inside two different (non-NULL) composite
 	return (isBound() && (first_->Composite::getRoot() == second_->Composite::getRoot()) 
@@ -239,14 +219,14 @@ bool Bond::isIntraBond() const throw()
 }
 
 BALL_INLINE
-bool Bond::isIntraBondOf(const AtomContainer &atom_container) const	throw()
+bool Bond::isIntraBondOf(const AtomContainer &atom_container) const
 {
 	return (isBound() &&  first_->Composite::isDescendantOf(atom_container)
 										&& second_->Composite::isDescendantOf(atom_container));
 }
 
 BALL_INLINE
-bool Bond::isValid () const throw()
+bool Bond::isValid () const
 {
 	return (PropertyManager::isValid()
 								&& first_  != 0
@@ -257,13 +237,13 @@ bool Bond::isValid () const throw()
 }
 
 BALL_INLINE
-bool Bond::operator == (const Bond& bond) const throw()
+bool Bond::operator == (const Bond& bond) const
 {
 	return (this == &bond);
 }
 
 BALL_INLINE
-bool Bond::operator != (const Bond& bond) const throw()
+bool Bond::operator != (const Bond& bond) const
 {
 	return (this != &bond);
 }

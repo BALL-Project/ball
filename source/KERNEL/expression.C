@@ -9,12 +9,11 @@
 #include <BALL/CONCEPT/factory.h>
 
 using namespace::std;
-namespace BALL 
+namespace BALL
 {
 	// Expression class, frontend to ExpressionTree
 
-	Expression::Expression() 
-		throw()
+	Expression::Expression()
 		: create_methods_(),
 			expression_tree_(0),
 			expression_string_("<not initialized>")
@@ -23,8 +22,7 @@ namespace BALL
 	}
 
 
-	Expression::Expression(const Expression& expression) 
-		throw()
+	Expression::Expression(const Expression& expression)
 		:	create_methods_(expression.create_methods_),
 		  expression_tree_(new ExpressionTree(*expression.expression_tree_)),
 			expression_string_(expression.expression_string_)
@@ -32,7 +30,7 @@ namespace BALL
 	}
 
 
-	Expression::Expression(const String& expression_string) 
+	Expression::Expression(const String& expression_string)
 		throw(Exception::ParseError)
 		:	create_methods_(),
 			expression_tree_(0),
@@ -45,15 +43,13 @@ namespace BALL
 	}
 
 
-	Expression::~Expression() 
-		throw()
+	Expression::~Expression()
 	{
 		clear();
 	}
 
 
 	void Expression::clear()
-		throw()
 	{
 		delete expression_tree_;
 		expression_tree_ = 0;
@@ -62,7 +58,6 @@ namespace BALL
 
 
 	Expression& Expression::operator = (const Expression& expression)
-		throw()
 	{
 
 		// don't use clear() here (for performance reasons, create_methods_ is
@@ -79,8 +74,7 @@ namespace BALL
 	}
 
 
-	bool Expression::operator == (const Expression& expression) const 
-		throw()
+	bool Expression::operator == (const Expression& expression) const
 	{
 		if ((expression_tree_ == 0) && (expression.expression_tree_ == 0))
 		{
@@ -106,20 +100,18 @@ namespace BALL
 	}
 
 
-	bool Expression::hasPredicate(const String& name) const 
-		throw()
+	bool Expression::hasPredicate(const String& name) const
 	{
 		return create_methods_.has(name);
 	}
 
-	bool Expression::operator () (const Atom& atom) const 
-		throw()
+	bool Expression::operator () (const Atom& atom) const
 	{
 		if (expression_tree_ != 0)
 		{
 			return expression_tree_->operator () (atom);
 		}
-		else 
+		else
 		{
 			Log.error() << "Expression::operator (): no expression set" << endl;
 			return false;
@@ -127,9 +119,7 @@ namespace BALL
 	}
 
 
-	ExpressionPredicate* Expression::getPredicate
-		(const String& name, const String& args) const 
-		throw()
+	ExpressionPredicate* Expression::getPredicate (const String& name, const String& args) const
   {
     CreationMethod create_method = create_methods_[name];
     ExpressionPredicate* predicate = (ExpressionPredicate*)(create_method)();
@@ -140,9 +130,7 @@ namespace BALL
 	}
 
 
-	void Expression::registerPredicate
-		(const String& name, CreationMethod creation_method)
-		throw()
+	void Expression::registerPredicate(const String& name, CreationMethod creation_method)
 	{
 		create_methods_.insert(name, creation_method);
 	}
@@ -160,7 +148,7 @@ namespace BALL
 
 		// remember the expression
 		expression_string_ = expression_string;
-		
+
 		// create a temporary tree from which the expression_tree_ can be built
 		ExpressionParser parser;
 		parser.parse(expression_string);
@@ -170,22 +158,19 @@ namespace BALL
 	}
 
 
-	const String& Expression::getExpressionString() const 
-		throw()
+	const String& Expression::getExpressionString() const
 	{
 		return expression_string_;
 	}
 
 
 	const ExpressionTree* Expression::getExpressionTree() const
-		throw()
 	{
 		return expression_tree_;
 	}
 
 
 	const StringHashMap<Expression::CreationMethod>& Expression::getCreationMethods() const
-		throw()
 	{
 		return create_methods_;
 	}
@@ -208,7 +193,7 @@ namespace BALL
 			{
         root->setType(ExpressionTree::INVALID);
 
-				throw Exception::ParseError(__FILE__, 0, 
+				throw Exception::ParseError(__FILE__, 0,
 																		String(t.predicate  + "(" + t.argument + ")"),
 																		"Predicate could not be found");
 			}
@@ -227,7 +212,6 @@ namespace BALL
 
 
 	void Expression::registerStandardPredicates_()
-		throw()
 	{
 		create_methods_.insert("true", (PersistenceManager::CreateMethod)Factory<TruePredicate>::createVoid);
 		create_methods_.insert("false", (PersistenceManager::CreateMethod)Factory<FalsePredicate>::createVoid);

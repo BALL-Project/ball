@@ -15,11 +15,11 @@
 #	include <BALL/KERNEL/expressionParser.h>
 #endif
 
-namespace BALL 
+namespace BALL
 {
 	class Atom;
 	class ExpressionTree;
-	
+
 	/** Expression class. 
 			This class provides a frontend to ExpressionTree.	 \par
 			Expressions may be built from the following modules:  \par
@@ -38,7 +38,7 @@ namespace BALL
 	class BALL_EXPORT Expression
 	{
 		public:
-		
+
 		BALL_CREATE(Expression)
 
 		/**	@name	Type Definitions
@@ -50,28 +50,26 @@ namespace BALL
 		typedef void * (*CreationMethod) ();
 
 		//@}
- 		/**	@name	Constructors and Destructor
+		/**	@name	Constructors and Destructor
 		*/
 		//@{
 
 		/** Default Constructor.
 		*/
-		Expression() throw();
+		Expression();
 
 		/** Copy Constructor.
 		*/
-		Expression(const Expression& expression) 
-			throw();
+		Expression(const Expression& expression);
 
 		/** Construct an Expression with a string
 		*/
-		Expression(const String& expression_string) 
+		Expression(const String& expression_string)
 			throw(Exception::ParseError);
 
 		/** Destructor.
 		*/
-		virtual ~Expression() 
-			throw();
+		virtual ~Expression();
 
 		//@}
 		/**	@name	Predicates
@@ -80,13 +78,11 @@ namespace BALL
 
 		/**
 		*/
-		bool hasPredicate(const String& name) const 
-			throw();
+		bool hasPredicate(const String& name) const;
 
 		/** Equality operator 
 		 */
-		bool operator == (const Expression& expression) const 
-			throw();
+		bool operator == (const Expression& expression) const;
 
 		//@}
 		/**	@name	Accessors
@@ -96,42 +92,35 @@ namespace BALL
 		/** Evaluate the expression of <tt>atom</tt>
 				@param atom
 		*/
-		virtual bool operator () (const Atom& atom) const 
-			throw();
+		virtual bool operator () (const Atom& atom) const;
 
 		/**	Create a new predicate according to the name.
 				If the predicate is not known, return 0.
 				@param name the name of the predicate
 				@param args the optional argument of the predicate
 		*/
-		ExpressionPredicate* getPredicate(const String& name, 
-				const String& args = "") const 
-			throw();
+		ExpressionPredicate* getPredicate(const String& name,
+		                                  const String& args = "") const;
 
 		/**	Register a new predicate class.
 		*/
-		void registerPredicate(const String& name, CreationMethod creation_method)
-			throw();
+		void registerPredicate(const String& name, CreationMethod creation_method);
 
 		/** Set the expression and build a tree for it.
 		*/
-		void setExpression(const String& expression) 
-			throw(Exception::ParseError);
+		void setExpression(const String& expression) throw(Exception::ParseError);
 
 		/** Get the expression string.
 		*/
-		const String& getExpressionString() const 
-			throw();
+		const String& getExpressionString() const;
 
 		/** Get the expression tree.
 		*/
-		const ExpressionTree* getExpressionTree() const
-			throw();
+		const ExpressionTree* getExpressionTree() const;
 
 		/** Get the creation methods.
 		*/
-		const StringHashMap<CreationMethod>& getCreationMethods() const
-			throw();
+		const StringHashMap<CreationMethod>& getCreationMethods() const;
 
 		//@}
 		/** @name Assignment 
@@ -140,13 +129,11 @@ namespace BALL
 
 		/** Assignment operator 
 		 */
-		Expression& operator = (const Expression& expression) 
-			throw();
+		Expression& operator = (const Expression& expression);
 
 		/** Clear method 
 		 */
-		virtual void clear() 
-			throw();
+		virtual void clear();
 
 		//@}
 
@@ -164,8 +151,7 @@ namespace BALL
 		/*_ Register the predicates defined by default.
 				See also: BALL/KERNEL/standardPredicates.h
 		*/
-		void registerStandardPredicates_() 
-			throw();
+		void registerStandardPredicates_();
 
 		//@}
 		/*_ @name Protected attributes
@@ -187,6 +173,7 @@ namespace BALL
 
 		//@}
 	};
-}	
+}
 
 #endif // BALL_KERNEL_EXPRESSION_H
+

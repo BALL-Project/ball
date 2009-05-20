@@ -11,23 +11,23 @@
 #include <BALL/KERNEL/secondaryStructure.h>
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/molecule.h>
-#include <BALL/KERNEL/PTE.h> 
+#include <BALL/KERNEL/PTE.h>
 
 #include <algorithm>
 
 using namespace::std;
 
-namespace BALL 
+namespace BALL
 {
 
-	Atom::AttributeVector			Atom::static_attributes_;
-	Atom::AtomIndexList				Atom::free_list_;
-	PreciseTime 							Atom::attributes_changed_time_;
+	Atom::AttributeVector Atom::static_attributes_;
+	Atom::AtomIndexList   Atom::free_list_;
+	PreciseTime           Atom::attributes_changed_time_;
 
-	Atom::AttributeVector::~AttributeVector() throw()
+	Atom::AttributeVector::~AttributeVector()
 	{
 	}
-	
+
 	void Atom::StaticAtomAttributes::clear()
 	{
 		formal_charge = BALL_ATOM_DEFAULT_FORMAL_CHARGE;
@@ -46,7 +46,7 @@ namespace BALL
 		std::swap(ptr, attr.ptr);
 		position.swap(attr.position);
 		velocity.swap(attr.velocity);
-		force.swap(attr.force);		
+		force.swap(attr.force);
 	}
 
 	void Atom::StaticAtomAttributes::set(Atom::StaticAtomAttributes& attr)
@@ -58,11 +58,11 @@ namespace BALL
 		// ptr = attr.ptr;
 		position = attr.position;
 		velocity = attr.velocity;
-		force = attr.force;		
+		force = attr.force;
 	}
 
-	
-	Atom::StaticAtomAttributes& Atom::StaticAtomAttributes::operator = 
+
+	Atom::StaticAtomAttributes& Atom::StaticAtomAttributes::operator =
 		(const Atom::StaticAtomAttributes& attr)
 	{
 		formal_charge = attr.formal_charge;
@@ -72,13 +72,12 @@ namespace BALL
 		// ptr = attr.ptr;
 		position = attr.position;
 		velocity = attr.velocity;
-		force = attr.force;		
+		force = attr.force;
 
 		return *this;
-	}	
+	}
 
 	Atom::Atom()
-		throw()
 		:	Composite(),
 			PropertyManager(),
 			index_(Atom::nextIndex_()),
@@ -92,9 +91,8 @@ namespace BALL
 		static_attributes_[index_].clear();
 		static_attributes_[index_].ptr = this;
 	}
-		
+
 	Atom::Atom(const Atom& atom, bool deep)
-		throw()
 		:	Composite(atom, deep),
 			PropertyManager(atom),
 			index_(Atom::nextIndex_()),
@@ -114,7 +112,6 @@ namespace BALL
 			 const String& type_name, Atom::Type type,
 			 const Vector3& position, const Vector3& velocity,
 			 const Vector3& force, float charge, float radius, Index formal_charge)
-		throw()
 		:	Composite(),
 			PropertyManager(),
 			index_(Atom::nextIndex_()),
@@ -132,9 +129,8 @@ namespace BALL
 		static_attributes_[index_].position = position;
 		static_attributes_[index_].ptr = this;
 	}
-		
+
 	Atom::~Atom()
-		throw()
 	{
 		destroy();
 		freeIndex_(index_);
@@ -157,7 +153,7 @@ namespace BALL
 				static_attributes_[i].ptr = 0;
 			}
 		}
-		
+
 		// return the next free index
 		Position index = free_list_.front();
 		free_list_.pop_front();
@@ -171,16 +167,14 @@ namespace BALL
 	}
 
 	void Atom::clear()
-		throw()
 	{
 		Composite::clear();
 		PropertyManager::clear();
 
 		clear_();
 	}
-		
+
 	void Atom::destroy()
-		throw()
 	{
 		Composite::destroy();
 		PropertyManager::destroy();
@@ -195,7 +189,7 @@ namespace BALL
 
 			Composite::persistentWrite(pm);
 
-			pm.writeStorableObject(dynamic_cast<const PropertyManager&>(*this), 
+			pm.writeStorableObject(dynamic_cast<const PropertyManager&>(*this),
 														 "PropertyManager");
 
 			pm.writePrimitive((String)element_->getSymbol(), "element_");
@@ -222,11 +216,11 @@ namespace BALL
 			Composite::persistentRead(pm);
 		pm.checkObjectTrailer(0);
 
-		pm.readStorableObject(dynamic_cast<PropertyManager&>(*this), 
+		pm.readStorableObject(dynamic_cast<PropertyManager&>(*this),
 													"PropertyManager");
 
 		String s;
-		pm.readPrimitive(s, "element_");	
+		pm.readPrimitive(s, "element_");
 		element_ = &PTE[s];
 		pm.readPrimitive(static_attributes_[index_].formal_charge, "formal_charge_");
 		pm.readPrimitive(static_attributes_[index_].charge, "charge_");
@@ -252,11 +246,10 @@ namespace BALL
 	}
 
   void Atom::set(const Atom& atom, bool deep)
-    throw()
   {
     Composite::set(atom, deep);
     PropertyManager::operator = (atom);
-    
+
     element_ = atom.element_;
     name_ = atom.name_;
     type_name_ = atom.type_name_;
@@ -268,11 +261,10 @@ namespace BALL
   }
 
 	Atom& Atom::operator = (const Atom& atom)
-		throw()
 	{
 		Composite::operator =(atom);
 		PropertyManager::operator = (atom);
-		
+
 		element_ = atom.element_;
 		name_ = atom.name_;
 		type_name_ = atom.type_name_;
@@ -284,9 +276,8 @@ namespace BALL
 
 		return *this;
 	}
-			
+
 	void Atom::swap(Atom &atom)
-		throw()
 	{
 		Composite::swap(atom);
 		PropertyManager::swap(atom);
@@ -294,7 +285,7 @@ namespace BALL
 		const Element *temp_element = element_;
 		element_ = atom.element_;
 		atom.element_ = temp_element;
-		
+
 		name_.swap(atom.name_);
 		type_name_.swap(atom.type_name_);
 
@@ -319,34 +310,33 @@ namespace BALL
 		index_ = atom.index_;
 		atom.index_ = tmp_index;
 	}
-		
-	Molecule* Atom::getMolecule() throw()
+
+	Molecule* Atom::getMolecule()
 	{
 		return Composite::getAncestor(RTTI::getDefault<Molecule>());
 	}
 
-	Fragment* Atom::getFragment() throw()
+	Fragment* Atom::getFragment()
 	{
 		return Composite::getAncestor(RTTI::getDefault<Fragment>());
 	}
-					                                                                                                                              
-	Residue* Atom::getResidue() throw()
+
+	Residue* Atom::getResidue()
 	{
 		return Composite::getAncestor(RTTI::getDefault<Residue>());
 	}
- 
-	Chain* Atom::getChain() throw()
+
+	Chain* Atom::getChain()
 	{
 		return Composite::getAncestor(RTTI::getDefault<Chain>());
 	}
- 
-	SecondaryStructure* Atom::getSecondaryStructure() throw()
+
+	SecondaryStructure* Atom::getSecondaryStructure()
 	{
 		return Composite::getAncestor(RTTI::getDefault<SecondaryStructure>());
 	}
- 
+
 	String Atom::getFullName(Atom::FullNameType type) const
-		throw()
 	{
 		// determine the parent`s name
 		String parent_name;
@@ -367,8 +357,8 @@ namespace BALL
 				parent_name.trim();
 				parent_name += ":";
 			}
-		} 
-		else 
+		}
+		else
 		{
 			// retrieve the fragment name
 			parent_name = parent->getFullName((Residue::FullNameType)type) + ":";
@@ -405,7 +395,6 @@ namespace BALL
 	}
 
 	Bond* Atom::getBond(const Atom &atom)
-		throw()
 	{
 		if (&atom != this)
 		{
@@ -422,7 +411,6 @@ namespace BALL
 	}
 
 	const Bond* Atom::getBond(const Atom &atom) const
-		throw()
 	{
 		return ((Atom*)this)->getBond(atom);
 	}
@@ -439,7 +427,7 @@ namespace BALL
 		{
 			// No, we have to create a new one.
 			bond = Bond::createBond(*new Bond, *this, atom);
-		} 
+		}
 		return bond;
 	}
 
@@ -450,17 +438,16 @@ namespace BALL
 	}
 
 	Bond* Atom::cloneBond(Bond& bond, Atom& atom)
-		throw()
 	{
 		Bond* bond_ptr = getBond(atom);
-		
+
 		if (bond_ptr == 0)
 		{
 			bond_ptr = (Bond*)bond.create();
 			bond_ptr->setFirstAtom(0);
 			bond_ptr->setSecondAtom(0);
-			
-			try 
+
+			try
 			{
 				bond_ptr = Bond::createBond(*bond_ptr, *this, atom);
 			}
@@ -470,12 +457,11 @@ namespace BALL
 				delete bond_ptr;
 				bond_ptr = 0;
 			}
-		} 
+		}
 		return bond_ptr;
 	}
 
 	bool Atom::destroyBond(const Atom& atom)
-		throw()
 	{
 		Bond* bond = getBond(atom);
 
@@ -483,12 +469,12 @@ namespace BALL
 		{
 			return false;
 		}
-			
+
 		if (bond->isAutoDeletable() == true)
 		{
 			delete bond;
-		} 
-		else 
+		}
+		else
 		{
 			bond->destroy();
 		}
@@ -497,20 +483,19 @@ namespace BALL
 	}
 
 	void Atom::destroyBonds()
-		throw()
 	{
 		for (int i = char(number_of_bonds_) - 1; i >= 0; --i)
 		{
 			if (bond_[i]->isAutoDeletable() == true)
 			{
 				delete bond_[i];
-			} 
-			else 
+			}
+			else
 			{
 				bond_[i]->destroy();
 			}
 		}
-		
+
 		number_of_bonds_ = 0;
 	}
 
@@ -525,7 +510,6 @@ namespace BALL
 	}
 
 	bool Atom::hasBond(const Bond& bond) const
-		throw()
 	{
 		for (int i = 0; i < number_of_bonds_; ++i)
 		{
@@ -538,7 +522,6 @@ namespace BALL
 	}
 
 	bool Atom::isBoundTo(const Atom& atom) const
-		throw()
 	{
 		const Bond* bond = getBond(atom);
 		if (bond != 0)
@@ -550,7 +533,6 @@ namespace BALL
 	}
 
 	bool Atom::isGeminal(const Atom& atom) const
-		throw()
 	{
 		if (atom == *this) return false;
 
@@ -560,7 +542,7 @@ namespace BALL
 
 		// second, it has to be bonded to an atom
 		// that is bonded to *this atom, too
-		if (is_geminal)	
+		if (is_geminal)
 		{
 			is_geminal = false;
 			for (Size i = 0; (i < countBonds()) && !is_geminal; i++)
@@ -581,8 +563,7 @@ namespace BALL
 	}
 
 	bool Atom::isVicinal(const Atom& atom) const
-		throw()
-	{ 
+	{
 		if (atom == *this)
 		{
 			return false;
@@ -595,7 +576,7 @@ namespace BALL
 		// second, it has to be bonded to an atom
 		// that is bonded to an atom that is bonded 
 		// to *this atom
-		if (is_vicinal)	
+		if (is_vicinal)
 		{
 			is_vicinal = false;
 			for (Size i = 0; (i < countBonds()) && !is_vicinal; i++)
@@ -620,8 +601,7 @@ namespace BALL
 	}
 
 	bool Atom::isValid() const
-		throw()
-	{ 
+	{
 		if (Composite::isValid() == false
 				|| PropertyManager::isValid() == false
 				|| element_ == 0)
@@ -645,10 +625,9 @@ namespace BALL
 	}
 
 	void Atom::dump(ostream& s, Size depth) const
-		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
-		
+
 		Composite::dump(s, depth);
 
 		BALL_DUMP_DEPTH(s, depth);
@@ -656,34 +635,34 @@ namespace BALL
 
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  formal charge: " << static_attributes_[index_].formal_charge << endl;
-		
+
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  charge: " << static_attributes_[index_].charge << endl;
-		
+
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  name: " << name_ << endl;
-		
+
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  type name: " << type_name_ << endl;
-		
+
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  position: " << static_attributes_[index_].position << endl;
-		
+
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  radius: " << radius_ << endl;
 
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  type: " << static_attributes_[index_].type << endl;
-		
+
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  velocity: " << static_attributes_[index_].velocity << endl;
-		
+
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  force: " << static_attributes_[index_].force << endl;
-		
+
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  number of bonds: " << (int)number_of_bonds_ << endl;
-		
+
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  bonds: " << endl;
 
@@ -697,7 +676,7 @@ namespace BALL
 	}
 
 	bool Atom::applyBonds(UnaryProcessor<Bond>& processor)
-		throw()
+
 	{
 		if (processor.start() == false)
 		{
@@ -719,20 +698,18 @@ namespace BALL
 	}
 
 	void Atom::clear_()
-		throw()
 	{
 		element_ = BALL_ATOM_DEFAULT_ELEMENT;
 		name_ = BALL_ATOM_DEFAULT_NAME;
 		type_name_ = BALL_ATOM_DEFAULT_TYPE_NAME;
 		radius_ = BALL_ATOM_DEFAULT_RADIUS;
-				 
+
 		static_attributes_[index_].clear();
 
 		destroyBonds();
 	}
-		
+
 	void Atom::swapLastBond_(const Atom *atom)
-		throw()
 	{
 		for (int i = 0; i < number_of_bonds_; ++i)
 		{
@@ -750,7 +727,7 @@ namespace BALL
 	{
 		// create a sorted copy of the indices
 		AtomIndexList sorted_indices(indices);
-		sorted_indices.sort();	
+		sorted_indices.sort();
 
 		// Remove all indices in the range of [i...i+indices.size()],
 		// where i is the smalles index in the list. Those entries
@@ -758,10 +735,10 @@ namespace BALL
 		// reassigned.
 		Position first_pos = sorted_indices.front();
 
-	
+
 		// sort the free list to achieve higher locality 
 		free_list_.sort();
-				
+
 		Atom::AtomIndexList::const_iterator idx_it = indices.begin();
 		Atom::AtomIndexList::iterator free_it = free_list_.begin();
 		for (Position i = first_pos; (idx_it != indices.end()) && (i < static_attributes_.size()); ++i, ++idx_it)
@@ -778,7 +755,7 @@ namespace BALL
 			}
 
 			// Make sure that we are at the right position in the free list.
-			while (free_it != free_list_.end() && (*free_it < i)) 
+			while (free_it != free_list_.end() && (*free_it < i))
 			{
 				++free_it;
 			}
@@ -790,10 +767,10 @@ namespace BALL
 				// position (which is free) and adjust the atom's index.
 				static_attributes_[i].set(static_attributes_[*idx_it]);
 				static_attributes_[i].ptr->index_ = i;
-				
+
 				// Mark the old position as free.
 				*free_it = *idx_it;
-				
+
 				// Resort the free_list and re-initialize the invalidated iterator.
 				free_list_.sort();
 				free_it = free_list_.begin();
@@ -804,7 +781,7 @@ namespace BALL
 				static_attributes_[i].swap(static_attributes_[*idx_it]);
 				std::swap(static_attributes_[i].ptr->index_, static_attributes_[*idx_it].ptr->index_);
 			}
-		}	
+		}
 
 		return first_pos;
 	}
