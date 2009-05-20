@@ -1,8 +1,4 @@
 <node>Amber<value>PDB</value>
- <node>CYX:*<value>CYS:*</value></node>
- <node>HIE:*<value>HIS:*</value></node>
- <node>HID:*<value>HIS:*</value></node>
- <node>HIP:*<value>HIS:*</value></node>
  <node>*:H1<value>*:1H</value></node>
  <node>*:H2<value>*:2H</value></node>
  <node>*:H3<value>*:3H</value></node>
@@ -61,6 +57,7 @@
  <node>CYS:HB3<value>CYS:2HB</value></node>
  <node>CYS:SG<value>CYS:SG</value></node>
  <node>CYS:HG<value>CYS:HG</value></node>
+ <node>CYS:HSG<value>CYS:HG</value></node>
  <node>GLU:CA<value>GLU:CA</value></node>
  <node>GLU:HA<value>GLU:HA</value></node>
  <node>GLU:CB<value>GLU:CB</value></node>
@@ -309,7 +306,7 @@
  <node>DA:H62<value>A:2H6</value></node>
  <node>DA:N1<value>A:N1</value></node>
  <node>DA:C2<value>A:C2</value></node>
- <node>DA:H2<value>A:H2</value></node>
+ <node>DA:H2<value>A:2H</value></node>
  <node>DA:N3<value>A:N3</value></node>
  <node>DA:C4<value>A:C4</value></node>
  <node>DA:C3'<value>A:C3*</value></node>
@@ -341,12 +338,12 @@
  <node>DT:C4<value>T:C4</value></node>
  <node>DT:O4<value>T:O4</value></node>
  <node>DT:N3<value>T:N3</value></node>
- <node>DT:H3<value>T:H3</value></node>
+ <node>DT:H3<value>T:3H</value></node>
  <node>DT:C2<value>T:C2</value></node>
  <node>DT:O2<value>T:O2</value></node>
  <node>DT:C3'<value>T:C3*</value></node>
  <node>DT:H3'<value>T:H3*</value></node>
- <node>DT:C2'<value>T:H2*</value></node>
+ <node>DT:C2'<value>T:C2*</value></node>
  <node>DT:H2'1<value>T:1H2*</value></node>
  <node>DT:H2'2<value>T:2H2*</value></node>
  <node>DT:O3'<value>T:O3*</value></node>
@@ -370,7 +367,7 @@
  <node>DG:C6<value>G:C6</value></node>
  <node>DG:O6<value>G:O6</value></node>
  <node>DG:N1<value>G:N1</value></node>
- <node>DG:H1<value>G:H1</value></node>
+ <node>DG:H1<value>G:1H</value></node>
  <node>DG:C2<value>G:C2</value></node>
  <node>DG:N2<value>G:N2</value></node>
  <node>DG:H21<value>G:1H2</value></node>
@@ -383,4 +380,107 @@
  <node>DG:H2'1<value>G:1H2*</value></node>
  <node>DG:H2'2<value>G:2H2*</value></node>
  <node>DG:O3'<value>G:O3*</value></node>
+
+ <node>*:OXT<value>*:OXT</value></node>
+
+ <node>GLH:CA<value>GLH:CA</value></node>
+ <node>GLH:HA<value>GLH:HA</value></node>
+ <node>GLH:CB<value>GLH:CB</value></node>
+ <node>GLH:HB2<value>GLH:1HB</value></node>
+ <node>GLH:HB3<value>GLH:2HB</value></node>
+ <node>GLH:CG<value>GLH:CG</value></node>
+ <node>GLH:HG2<value>GLH:1HG</value></node>
+ <node>GLH:HG3<value>GLH:2HG</value></node>
+ <node>GLH:CD<value>GLH:CD</value></node>
+ <node>GLH:OE1<value>GLH:OE1</value></node>
+ <node>GLH:OE2<value>GLH:OE2</value></node>
+ <node>GLH:HE2<value>GLH:2HE</value></node>
+
+ <node>HID:CA<value>HID:CA</value></node>
+ <node>HID:HA<value>HID:HA</value></node>
+ <node>HID:CB<value>HID:CB</value></node>
+ <node>HID:HB2<value>HID:1HB</value></node>
+ <node>HID:HB3<value>HID:2HB</value></node>
+ <node>HID:CG<value>HID:CG</value></node>
+ <node>HID:ND1<value>HID:ND1</value></node>
+ <node>HID:HD1<value>HID:HD1</value></node>
+ <node>HID:CE1<value>HID:CE1</value></node>
+ <node>HID:HE1<value>HID:HE1</value></node>
+ <node>HID:NE2<value>HID:NE2</value></node>
+ <node>HID:HE2<value>HID:HE2</value></node>
+ <node>HID:CD2<value>HID:CD2</value></node>
+ <node>HID:HD2<value>HID:HD2</value></node>
+
+ <node>HIE:CA<value>HIE:CA</value></node>
+ <node>HIE:HA<value>HIE:HA</value></node>
+ <node>HIE:CB<value>HIE:CB</value></node>
+ <node>HIE:HB2<value>HIE:1HB</value></node>
+ <node>HIE:HB3<value>HIE:2HB</value></node>
+ <node>HIE:CG<value>HIE:CG</value></node>
+ <node>HIE:ND1<value>HIE:ND1</value></node>
+ <node>HIE:HD1<value>HIE:HD1</value></node>
+ <node>HIE:CE1<value>HIE:CE1</value></node>
+ <node>HIE:HE1<value>HIE:HE1</value></node>
+ <node>HIE:NE2<value>HIE:NE2</value></node>
+ <node>HIE:HE2<value>HIE:HE2</value></node>
+ <node>HIE:CD2<value>HIE:CD2</value></node>
+ <node>HIE:HD2<value>HIE:HD2</value></node>
+
+ <node>HIP:CA<value>HIP:CA</value></node>
+ <node>HIP:HA<value>HIP:HA</value></node>
+ <node>HIP:CB<value>HIP:CB</value></node>
+ <node>HIP:HB2<value>HIP:1HB</value></node>
+ <node>HIP:HB3<value>HIP:2HB</value></node>
+ <node>HIP:CG<value>HIP:CG</value></node>
+ <node>HIP:ND1<value>HIP:ND1</value></node>
+ <node>HIP:HD1<value>HIP:HD1</value></node>
+ <node>HIP:CE1<value>HIP:CE1</value></node>
+ <node>HIP:HE1<value>HIP:HE1</value></node>
+ <node>HIP:NE2<value>HIP:NE2</value></node>
+ <node>HIP:HE2<value>HIP:HE2</value></node>
+ <node>HIP:CD2<value>HIP:CD2</value></node>
+ <node>HIP:HD2<value>HIP:HD2</value></node>
+
+ <node>CYM:CA<value>CYM:CA</value></node>
+ <node>CYM:CB<value>CYM:CB</value></node>
+ <node>CYM:HA<value>CYM:HA</value></node>
+ <node>CYM:HB2<value>CYM:1HB</value></node>
+ <node>CYM:HB3<value>CYM:2HB</value></node>
+ <node>CYM:SG<value>CYM:SG</value></node>
+ <node>CYM:HN<value>CYM:HN</value></node>
+
+ <node>CYX:CA<value>CYX:CA</value></node>
+ <node>CYX:CB<value>CYX:CB</value></node>
+ <node>CYX:HA<value>CYX:HA</value></node>
+ <node>CYX:HB2<value>CYX:1HB</value></node>
+ <node>CYX:HB3<value>CYX:2HB</value></node>
+ <node>CYX:SG<value>CYX:SG</value></node>
+
+ <node>ACE:CH3<value>ACE:CH3</value></node>
+ <node>ACE:HH31<value>ACE:1HH3</value></node>
+ <node>ACE:HH32<value>ACE:2HH3</value></node>
+ <node>ACE:HH33<value>ACE:3HH3</value></node>
+ <node>NME:CH3<value>NME:CH3</value></node>
+ <node>NME:HH31<value>NME:1HH3</value></node>
+ <node>NME:HH32<value>NME:2HH3</value></node>
+ <node>NME:HH33<value>NME:3HH3</value></node>
+
+ <node>LYN:NZ<value>LYN:NZ</value></node>
+ <node>LYN:CA<value>LYN:CA</value></node>
+ <node>LYN:CB<value>LYN:CB</value></node>
+ <node>LYN:CG<value>LYN:CG</value></node>
+ <node>LYN:CD<value>LYN:CD</value></node>
+ <node>LYN:CE<value>LYN:CE</value></node>
+ <node>LYN:HA<value>LYN:HA</value></node>
+ <node>LYN:HB2<value>LYN:1HB</value></node>
+ <node>LYN:HB3<value>LYN:2HB</value></node>
+ <node>LYN:HD2<value>LYN:1HD</value></node>
+ <node>LYN:HD3<value>LYN:2HD</value></node>
+ <node>LYN:HE2<value>LYN:1HE</value></node>
+ <node>LYN:HE3<value>LYN:2HE</value></node>
+ <node>LYN:HG2<value>LYN:1HG</value></node>
+ <node>LYN:HG3<value>LYN:2HG</value></node>
+ <node>LYN:HZ2<value>LYN:2HZ</value></node>
+ <node>LYN:HZ3<value>LYN:3HZ</value></node>
 </node>
+

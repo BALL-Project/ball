@@ -1004,6 +1004,27 @@ namespace BALL
 		return standards_;
 	}
 
+	const StringHashMap<String>& FragmentDB::getNamingStandard(const String& std) const
+		throw(StringHashMap<String>::IllegalKey)
+	{
+		return standards_[std];
+	}
+
+	std::vector<String> FragmentDB::getAvailableNamingStandards() const
+	{
+		std::vector<String> result(standards_.size());
+
+		int i = 0;
+		for(StringHashMap<StringHashMap<String> >::const_iterator it = standards_.begin();
+		    it != standards_.end();
+		    ++it, ++i)
+		{
+			result[i] = it->first;
+		}
+
+		return result;
+	}
+
 	Processor::Result FragmentDB::NormalizeNamesProcessor::operator () (Fragment& fragment) 
 	{
 		fragments_.push_back(&fragment);
