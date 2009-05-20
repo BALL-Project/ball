@@ -23,6 +23,15 @@ void storeBondOrders(System& sys)
 	BALL_FOREACH_BOND(sys, a_it, b_it)
 	{
 		b_it->setProperty("FORMER_ORDER", b_it->getOrder());
+	}
+}
+
+void deleteBondOrders(System& sys)
+{
+	AtomIterator a_it = sys.beginAtom();
+	Atom::BondIterator b_it;
+	BALL_FOREACH_BOND(sys, a_it, b_it)
+	{
 		b_it->setOrder(Bond::ORDER__UNKNOWN);
 	}
 }
@@ -67,8 +76,8 @@ bool compareBondOrder(System& sys)
 	Atom::BondIterator b_it;
 	BALL_FOREACH_BOND(sys, a_it, b_it)
 	{
-		if ( b_it->getProperty("FORMER_ORDER").getInt() != b_it->getOrder())
-			cout << b_it->getFirstAtom()->getFullName() << " " << b_it->getSecondAtom()->getFullName() << "    new:" << b_it->getOrder() << "  old:" << b_it->getProperty("FORMER_ORDER").getInt() << endl;
+		//if ( b_it->getProperty("FORMER_ORDER").getInt() != b_it->getOrder())
+			//cout << b_it->getFirstAtom()->getFullName() << " " << b_it->getSecondAtom()->getFullName() << "    new:" << b_it->getOrder() << "  old:" << b_it->getProperty("FORMER_ORDER").getInt() << endl;
 		all_bonds_equal &= ( b_it->getProperty("FORMER_ORDER").getInt() == b_it->getOrder());
 	}
 	return all_bonds_equal;
@@ -180,9 +189,23 @@ CHECK(setDefaultOptions())
 
 	TEST_EQUAL(testbop.options.get(AssignBondOrderProcessor::Option::ALGORITHM),
 													 AssignBondOrderProcessor::Default::ALGORITHM)
+	
+TEST_EQUAL(testbop.options.get(AssignBondOrderProcessor::Option::HEURISTIC),
+													 AssignBondOrderProcessor::Default::HEURISTIC)
 
 	TEST_EQUAL(testbop.options.getReal(AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING),
 													 AssignBondOrderProcessor::Default::BOND_LENGTH_WEIGHTING)
+	
+	TEST_EQUAL(testbop.options.getBool(AssignBondOrderProcessor::Option::APPLY_FIRST_SOLUTION),
+													 AssignBondOrderProcessor::Default::APPLY_FIRST_SOLUTION)	
+
+	TEST_EQUAL(testbop.options.getInteger(AssignBondOrderProcessor::Option::GREEDY_K_SIZE),
+													 AssignBondOrderProcessor::Default::GREEDY_K_SIZE)
+	
+	TEST_EQUAL(testbop.options.getInteger(AssignBondOrderProcessor::Option::BRANCH_AND_BOUND_CUTOFF),
+													 AssignBondOrderProcessor::Default::BRANCH_AND_BOUND_CUTOFF)
+
+
 RESULT
 
 
@@ -227,7 +250,7 @@ CHECK( operator() and apply(Position i) A* single solution )
 	System sys3;
 	MOL2File mol3("data/AssignBondOrderProcessor_test_CITSED10_sol_6.mol2", std::ios::in);
 	mol3 >> sys3;
-	storeBondOrders(sys3);	
+	storeBondOrders(sys3);
 	sys3.apply(testbop);
 	testbop.apply(6);
 	TEST_EQUAL(compareBondOrder(sys3), true)
@@ -236,7 +259,7 @@ CHECK( operator() and apply(Position i) A* single solution )
 	System sys4;
 	MOL2File mol4("data/AssignBondOrderProcessor_test_COHKOZ_sol_1.mol2", std::ios::in);
 	mol4 >> sys4;
-	storeBondOrders(sys4);	
+	storeBondOrders(sys4);
 	sys4.apply(testbop);
 	testbop.apply(1);
 	TEST_EQUAL(compareBondOrder(sys4), true)
@@ -244,7 +267,7 @@ CHECK( operator() and apply(Position i) A* single solution )
 	System sys5;
 	MOL2File mol5("data/AssignBondOrderProcessor_test_COHKOZ_sol_2.mol2", std::ios::in);
 	mol5 >> sys5;
-	storeBondOrders(sys5);	
+	storeBondOrders(sys5);
 	sys5.apply(testbop);
 	testbop.apply(2);
 	TEST_EQUAL(compareBondOrder(sys5), true)
@@ -252,7 +275,7 @@ CHECK( operator() and apply(Position i) A* single solution )
 	System sys6;
 	MOL2File mol6("data/AssignBondOrderProcessor_test_COHKOZ_sol_5.mol2", std::ios::in);
 	mol6 >> sys6;
-	storeBondOrders(sys6);	
+	storeBondOrders(sys6);
 	sys6.apply(testbop);
 	testbop.apply(5);
 	TEST_EQUAL(compareBondOrder(sys6), true)
@@ -276,7 +299,7 @@ CHECK( operator() and apply(Position i) A* single solution )
 	System sys9;
 	MOL2File mol9("data/AssignBondOrderProcessor_test_CONFAM_sol_3.mol2", std::ios::in);
 	mol9 >> sys9;
-	storeBondOrders(sys9);	
+	storeBondOrders(sys9);
 	sys9.apply(testbop);
 	testbop.apply(3);
 	TEST_EQUAL(compareBondOrder(sys9), true)
@@ -284,7 +307,7 @@ CHECK( operator() and apply(Position i) A* single solution )
 	System sys10;
 	MOL2File mol10("data/AssignBondOrderProcessor_test_CONFAM_sol_4.mol2", std::ios::in);
 	mol10 >> sys10;
-	storeBondOrders(sys10);	
+	storeBondOrders(sys10);
 	sys10.apply(testbop);
 	testbop.apply(4);
 	TEST_EQUAL(compareBondOrder(sys10), true)
@@ -292,7 +315,7 @@ CHECK( operator() and apply(Position i) A* single solution )
 	System sys11;
 	MOL2File mol11("data/AssignBondOrderProcessor_test_CUDJAM_sol_1.mol2", std::ios::in);
 	mol11 >> sys11;
-	storeBondOrders(sys11);	
+	storeBondOrders(sys11);
 	sys11.apply(testbop);
 	testbop.apply(1);
 	TEST_EQUAL(compareBondOrder(sys11), true)
@@ -316,7 +339,7 @@ CHECK( operator() and apply(Position i) A* single solution )
 	System sys14;
 	MOL2File mol14("data/AssignBondOrderProcessor_test_CUDJAM_sol_4.mol2", std::ios::in);
 	mol14 >> sys14;
-	storeBondOrders(sys14);	
+	storeBondOrders(sys14);
 	sys14.apply(testbop);
 	testbop.apply(4);
 	TEST_EQUAL(compareBondOrder(sys14), true)
@@ -324,7 +347,7 @@ CHECK( operator() and apply(Position i) A* single solution )
 	System sys15;
 	MOL2File mol15("data/AssignBondOrderProcessor_test_CUDJAM_sol_5.mol2", std::ios::in);
 	mol15 >> sys15;
-	storeBondOrders(sys15);	
+	storeBondOrders(sys15);
 	sys15.apply(testbop);
 	testbop.apply(5);
 	TEST_EQUAL(compareBondOrder(sys15), true)
@@ -332,7 +355,7 @@ CHECK( operator() and apply(Position i) A* single solution )
 	System sys16;
 	MOL2File mol16("data/AssignBondOrderProcessor_test_AAA.mol2", std::ios::in);
 	mol16 >> sys16;
-	storeBondOrders(sys16);	
+	storeBondOrders(sys16);
 	sys16.apply(testbop);
 	testbop.apply(0);
 	TEST_EQUAL(compareBondOrder(sys16), true)
@@ -439,29 +462,30 @@ CHECK(getTotalCharge(Position i))
 	MOL2File mol_in("data/AssignBondOrderProcessor_test_AMHTAR01.mol2", std::ios::in);
 	mol_in >> sys;
 	sys.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalCharge(0), 1.)
-	TEST_REAL_EQUAL(testbop.getTotalCharge(3), 3.)
-	TEST_REAL_EQUAL(testbop.getTotalCharge(7), 5.)
+	TEST_REAL_EQUAL(testbop.getTotalCharge(0), -1.)
+	TEST_REAL_EQUAL(testbop.getTotalCharge(1), -1)
+	TEST_REAL_EQUAL(testbop.getTotalCharge(2), 1)
 
 	System sys2;
 	MOL2File mol_in2("data/AssignBondOrderProcessor_test_AN06.mol2", std::ios::in);
 	mol_in2 >> sys2;
 	sys2.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalCharge(0), 1.)	
-	TEST_REAL_EQUAL(testbop.getTotalCharge(2), -1.)	
+	TEST_REAL_EQUAL(testbop.getTotalCharge(0), -1.)	
+	TEST_REAL_EQUAL(testbop.getTotalCharge(1), 1.)	
 
 	System sys3;
 	MOL2File mol_in3("data/AssignBondOrderProcessor_test_BEWCUB.mol2", std::ios::in);
 	mol_in3 >> sys3;	
 	sys3.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalCharge(0), -2.)
-	TEST_REAL_EQUAL(testbop.getTotalCharge(2), -4 )
+	TEST_REAL_EQUAL(testbop.getTotalCharge(0), 4)
+	TEST_REAL_EQUAL(testbop.getTotalCharge(2), 2)
 	
 	System sys40;
 	MOL2File mol40("data/AssignBondOrderProcessor_test_C3_input.mol2", std::ios::in);
 	mol40 >> sys40;	
 	sys40.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalCharge(0), -4.)
+	TEST_REAL_EQUAL(testbop.getTotalCharge(0), 0.)
+	TEST_REAL_EQUAL(testbop.getTotalCharge(1), -2.)
 
 RESULT
 
@@ -539,6 +563,52 @@ RESULT
 
 CHECK(computeNextSolution() using ILP all optimal solutions)
 	//TODO
+RESULT
+
+CHECK(resetBondOrders())
+	AssignBondOrderProcessor testbop;	
+	testbop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, true);
+	
+	System sys2;
+	MOL2File mol2("data/AssignBondOrderProcessor_test_CITSED10_sol_2.mol2", std::ios::in);
+	mol2 >> sys2;
+	storeBondOrders(sys2);	
+	sys2.apply(testbop);
+	testbop.apply(0);
+	TEST_EQUAL(compareBondOrder(sys2), false)
+	testbop.resetBondOrders();
+	TEST_EQUAL(compareBondOrder(sys2), true)
+
+	System sys4;
+	MOL2File mol4("data/AssignBondOrderProcessor_test_COHKOZ_sol_1.mol2", std::ios::in);
+	mol4 >> sys4;
+	storeBondOrders(sys4);	
+	sys4.apply(testbop);
+	testbop.apply(0);
+	TEST_EQUAL(compareBondOrder(sys4), false)
+	testbop.resetBondOrders();
+	TEST_EQUAL(compareBondOrder(sys4), true)
+
+	System sys7;
+	MOL2File mol7("data/AssignBondOrderProcessor_test_CONFAM_sol_1.mol2", std::ios::in);
+	mol7 >> sys7;
+	storeBondOrders(sys7);	
+	sys7.apply(testbop);
+	testbop.apply(0);
+	TEST_EQUAL(compareBondOrder(sys7), false)
+	testbop.resetBondOrders();
+	TEST_EQUAL(compareBondOrder(sys7), true)
+
+	System sys11;
+	MOL2File mol11("data/AssignBondOrderProcessor_test_CUDJAM_sol_1.mol2", std::ios::in);
+	mol11 >> sys11;
+	storeBondOrders(sys11);	
+	sys11.apply(testbop);
+	testbop.apply(0);
+	TEST_EQUAL(compareBondOrder(sys11), false)
+	testbop.resetBondOrders();
+	TEST_EQUAL(compareBondOrder(sys11), true)
+
 RESULT
 
 ///////////// options
@@ -837,7 +907,8 @@ CHECK(Option:::KEKULIZE_RINGS using A* )
 	System sys31;
 	MOL2File mol31("data/AssignBondOrderProcessor_test_AMPTRB10_arom_sol0.mol2", std::ios::in);
 	mol31 >> sys31;
-	storeBondOrders(sys31);	
+	storeBondOrders(sys31);
+	//deleteBondOrders(sys31);
 	sys31.apply(testbop);
 	TEST_EQUAL(compareBondOrder(sys31), true)
 
@@ -999,6 +1070,22 @@ CHECK(getSolution(Position i))
 
 	TEST_EXCEPTION(Exception::IndexOverflow, testbop.getSolution(limit))
 	
+RESULT
+
+
+CHECK(int getNumberOfNodeExpansions(Position i)) //TODO
+RESULT
+
+CHECK(int getNumberOfNodeExpansions(const Solution_& sol)) //TODO
+
+RESULT
+
+CHECK(int getQueueSize(Position i)) //TODO
+
+RESULT
+
+CHECK(int getQueueSize(const Solution_& sol)) //TODO
+
 RESULT
 
 

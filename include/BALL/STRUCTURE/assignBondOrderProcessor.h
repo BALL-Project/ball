@@ -124,6 +124,10 @@ namespace BALL
 				*/
 				static const char* ADD_HYDROGENS;
 
+				/**	resolve penalty ties based on structural information
+				*/
+				static const char* USE_FINE_PENALTY;
+
 				/**	kekulize rings
 				*/
 				static const char* KEKULIZE_RINGS;
@@ -132,6 +136,10 @@ namespace BALL
 				*/
 				static const char* ALGORITHM; 
 				
+				/**	heuristic defining the tightness of the search critria
+				*/
+				static const char* HEURISTIC; //TODO TEST 
+
 				/** the penalty parameter file
 				 */
 				static const char* INIFile;	
@@ -161,6 +169,18 @@ namespace BALL
 				 * Default is false.
 				 */
 				static const char* APPLY_FIRST_SOLUTION;
+				
+				/** the size of priority queue for the greedy algorithm.
+				 * Default is 1.
+				 */
+				static const char* GREEDY_K_SIZE;	 //TODO TEST
+				
+				/** the percentage cutoff for keeping PQ-Entries in the branch and bound algorithm.
+				 * Default is 1.2.
+				 */
+				static const char* BRANCH_AND_BOUND_CUTOFF; //TODO TEST
+
+
 			};
 
 			/// Default values for options
@@ -171,22 +191,35 @@ namespace BALL
 				static const bool OVERWRITE_TRIPLE_BOND_ORDERS;
 				static const bool OVERWRITE_SELECTED_BONDS;
 				static const bool ADD_HYDROGENS;
+				static const bool USE_FINE_PENALTY;
 				static const bool KEKULIZE_RINGS;
 				static const String ALGORITHM;
+				static const String HEURISTIC;
 				static const String INIFile;
 				static const int MAX_BOND_ORDER;	
 				static const int MAX_NUMBER_OF_SOLUTIONS;
 				static const bool COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS;
 				static const float BOND_LENGTH_WEIGHTING;
 				static const bool APPLY_FIRST_SOLUTION;
+				static const int GREEDY_K_SIZE;
+				static const float BRANCH_AND_BOUND_CUTOFF;
 			};
 
 			struct BALL_EXPORT Algorithm
 			{
 				static const String A_STAR;
 				static const String ILP; 
+				static const String K_GREEDY;
+				static const String BRANCH_AND_BOUND;
 			};
 			
+			struct BALL_EXPORT Heuristic
+			{
+				static const String SIMPLE;
+				static const String MEDIUM; 
+				static const String TIGHT;
+			};
+
 			//@}
 		
 
@@ -375,6 +408,56 @@ namespace BALL
 									+ (alpha_*sol.bond_length_penalty/bond_length_normalization_factor_));
 				} 
 			}
+		 
+			/** Returns the number of node expansions before solution i was found.
+			 *
+			 * @param    i  index of the solution, whose number of node expansions should be returned.
+			 * @return  int -   number of node expansions before solution i was found.   
+			 */
+			int getNumberOfNodeExpansions(Position i)
+			{
+				if (i >= solutions_.size())
+				{
+					Log.error() << "AssignBondOrderProcessor: No solution with index " << i << std::endl;
+
+					return -1;
+				}
+				else
+					return getNumberOfNodeExpansions(solutions_[i]);
+			}
+			
+			/** Returns the number of node expansions before the given solution was found.
+			 *
+			 * @param   sol  solution, whose number of node expansions should be returned. 
+			 * @return  int -  number of node expansions before solution i was found.  
+			 */
+			int getNumberOfNodeExpansions(const Solution_& sol){return sol.getNumberOfNodeExpansions();}
+	
+
+			/** Returns the number of node expansions before solution i was found.
+			 *
+			 * @param    i  index of the solution, whose  queue size should be returned. 
+			 * @return  int -  queue size when solution i was found.  
+			 */
+			int getQueueSize(Position i)
+			{	
+				if (i >= solutions_.size())
+				{
+					Log.error() << "AssignBondOrderProcessor: No solution with index " << i << std::endl;
+
+					return -1;
+				}
+				else
+					return getQueueSize(solutions_[i]);
+			}
+			
+			/** Returns the queue's size at the moment the given solution was found.
+			 *
+			 * @param   sol  solution, whose queue size should be returned. 
+			 * @return  int -  queue size when the given solution was found.  
+			 */	
+			int getQueueSize(const Solution_& sol){return sol.getQueueSize();}
+
 
 			/** Applies the i-th precomputed bond order combination.
 			 *
@@ -442,13 +525,23 @@ namespace BALL
 				public:
 					// Default constructor
 					Solution_();
-				
+					
+					// Detailed constructor 
+					Solution_(PQ_Entry_& entry ,AssignBondOrderProcessor* abop,
+										int number_of_node_expansions, int search_queue_size);
+
 					// Destructor
 					virtual ~Solution_();
 					
 					// 
 					void clear();
 				
+					// 
+					int getNumberOfNodeExpansions() const {return node_expansions;}
+					
+					//
+					int getQueueSize() const {return queue_size;}
+
 					// equality operator // TODO
 					bool operator == (Solution_ b);
 
@@ -470,6 +563,9 @@ namespace BALL
 					float atom_type_penalty;
 					float bond_length_penalty;
 					float total_charge;
+					int node_expansions;
+					int queue_size;
+					AssignBondOrderProcessor* parent;
 			};
 			
 			// Nested class storing a priority queue entry for the A-STAR-Option
@@ -480,7 +576,7 @@ namespace BALL
 				public:
 				
 					// Default constructor
-					PQ_Entry_(float alpha = 0., float atom_type_normalization_factor = 1., float bond_length_normalization_factor = 1.);
+					PQ_Entry_(float alpha = 0., float atom_type_normalization_factor = 1., float bond_length_normalization_factor = 1., bool use_fine_penalty=true);
 								
 					// Copy constructor
 					PQ_Entry_(const PQ_Entry_& entry);
@@ -494,15 +590,22 @@ namespace BALL
 					// the less operator.
 					// NOTE: we want a reverse sort, hence we actually return a "greater" 
 					bool operator < (const PQ_Entry_& b) const;  
-					
-					// the penalty
-					float coarsePenalty() const {
+						// the penalty
+		
+					float coarsePenalty(float atom_type_penalty, float bond_length_penalty) const 
+					{
 						return ( ( (    (atom_type_normalization_factor_ < 0.0001)
 										     || (bond_length_normalization_factor_ < 0.0001)
 												 || (alpha_ < 0.0001)) ? 
-											 estimated_atom_type_penalty :
-											 ((1.-alpha_) * (estimated_atom_type_penalty / atom_type_normalization_factor_)
-								    		+ (alpha_* estimated_bond_length_penalty / bond_length_normalization_factor_))));}
+											 atom_type_penalty :
+											 ((1.-alpha_) * (atom_type_penalty / atom_type_normalization_factor_)
+								    		+ (alpha_* bond_length_penalty / bond_length_normalization_factor_))));
+					}
+									
+					// the penalty
+					float coarsePenalty() const 
+					{ return coarsePenalty(estimated_atom_type_penalty, estimated_bond_length_penalty);
+					}
 					
 					// the bond length penalty 
 					float finePenalty() const {return estimated_bond_length_penalty;}
@@ -524,6 +627,7 @@ namespace BALL
 						float alpha_;
 						float atom_type_normalization_factor_;
 						float bond_length_normalization_factor_;
+						bool  use_fine_penalty_;
 				};
 
 			/** Reads and stores the penalty-INIFile (for example BondOrder.ini).
@@ -593,7 +697,7 @@ namespace BALL
 
 			/** Solve the current integer linear program and convert it into a Solution_
 			 */
-			bool solveILP_(Solution_& solution);
+			bool solveILP_();
 #endif
 			
 			/// Processor is in a useable valid state. 
@@ -696,26 +800,41 @@ namespace BALL
 			// flag for adding missing hydrogens
 			bool add_missing_hydrogens_;
 
+			// flag for using fine penalties derived from 3d information
+			bool use_fine_penalty_;
+			
+			// //////// ************ for Algorithm::BRANCH_AND_BOUND ************ /////////
+			bool performBranchAndBound_();
+			float greedy_atom_type_penalty_; 
+			float greedy_bond_length_penalty_; 
 
-			// //////// ************ for Algorithm::A_START ************ /////////
+			// //////// ************ for Algorithm::K_GREEDY ************ /////////
+			vector<PQ_Entry_> performGreedy_(PQ_Entry_& entry, Size greedy_k  = 10);
+			int greedy_node_expansions_;
+			int queue_size_;
+
+			
+			// //////// ************ for Algorithm::A_STAR ************ /////////
 			/// Computes a next solution in the ASTAR - algorithm.
-			bool	performAStarStep_(Solution_& sol);
+			bool	performAStarStep_();
 
 			/// the priority queue 
 			priority_queue<PQ_Entry_> queue_;
 			
-			/** Estimates the objective function f = g* + h* of the ASTAR - algorithm.
+			/** Estimates the objective function f = g* + h* of the ASTAR - algorithm, if
+			 *  include_heuristic_term == true, otherwise compute only f = g*.
+			 *
 			 *  Returns true, if the entry is still valid.
 			 */
-			bool estimatePenalty_(PQ_Entry_& entry);
+			bool estimatePenalty_(PQ_Entry_& entry, bool include_heuristic_term = true);
 		
 			/// Estimates the atom type penalty for a given unclosed atom.
 			float estimateAtomTypePenalty_(Atom* atom, 
-																		 Index atom_index, // the atom index
-																		 int fixed_valence,  // its so far fixed valence (incl. virtual H's)
+																		 Index atom_index, 		// the atom index
+																		 int fixed_valence,  	// its so far fixed valence (incl. virtual H's)
 																		 int fixed_virtual_order, // its so far fixed virtual H's
-																		 int num_free_bonds);   // its number of unfixed original bonds
-
+																		 int num_free_bonds,	// its number of unfixed original bonds
+																		 PQ_Entry_& entry);   
 			/// Estimates the bond length penalty for a given unclosed atom.
 			//  NOTE: virtual bonds are excluded!
 			float estimateBondLengthPenalty_(Index atom_index, // the atom index
@@ -723,7 +842,7 @@ namespace BALL
 																			 int fixed_virtual_order,  
 																			 int fixed_valence, 
 																			 int num_free_bonds);
-
+		
 			// The penalty administration datastructures.
 			//  filled by readAtomPenalties_
 			//  organized in imaginarey blocks of length  
@@ -746,6 +865,10 @@ namespace BALL
 					
 			// Stores the possible bond lengths penalties per order.
 			HashMap<Bond*, vector<float> > bond_lengths_penalties_;
+
+			// The current number of node expansions. 
+			// step_ + queue_.size() gives the number of touched nodes.
+			int step_;
 
 #ifdef BALL_HAS_LPSOLVE
 			lprec* ilp_;

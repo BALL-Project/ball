@@ -6,6 +6,7 @@
 #include <BALL/VIEW/DIALOGS/assignBondOrderResultsDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/STRUCTURE/sdGenerator.h>
+#include <BALL/VIEW/KERNEL/message.h>
 
 #include <QtGui/qpushbutton.h>
 #include <QtGui/qtreewidget.h>
@@ -72,7 +73,19 @@ namespace BALL
 
 				new_system->setName(solution_systems_[activated_item_]->getName());
 				getMainControl()->insert(*new_system);
-				getMainControl()->update(*new_system);
+				getMainControl()->update(*new_system);		
+				
+				//highlight as before
+				List<Composite*> sel;
+				Composite* to_highlight = bond_order_processor_->getAtomContainer()->getParent();
+
+				if (to_highlight)
+				{
+					sel.push_back(to_highlight);
+					ControlSelectionMessage* msg = new ControlSelectionMessage();
+					msg->setSelection(sel);
+					notify_(msg);
+				}
 			}
 			else
 			{
@@ -194,10 +207,16 @@ namespace BALL
 					System S = bond_order_processor_->getSolution(i);
 					solution_systems_[current_item] = new System(S);
 
-					SDGenerator sdg(true);
-					sdg.generateSD(S);
+					// The SDGenerator sometimes crashes ...
+					try {
+						SDGenerator sdg(true);
+						sdg.generateSD(S);
 
-					sd_systems_[current_item] = new System(S);
+						sd_systems_[current_item] = new System(S);
+					} catch (...)
+					{
+						sd_systems_[current_item] = new System;
+					}
 				
 					queries->setCurrentItem(current_item);
 					//current_item->setSelected(true);
@@ -250,7 +269,7 @@ namespace BALL
 				
 				sdwidget_.plot(*sd_systems_[item], true, false);
 				if (applyToSelected_checkBox->isChecked())
-				{	
+				{
 					bond_order_processor_->apply(solution_number_[item]);
 					getMainControl()->update(*(bond_order_processor_->getAtomContainer()));
 				}

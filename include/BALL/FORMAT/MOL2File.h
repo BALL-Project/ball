@@ -34,6 +34,21 @@ namespace BALL
 	{
 		public:
 
+		/// A class used for storing TRIPOS sets
+		BALL_EXPORT struct SetStruct
+		{
+			String			name;
+			bool				is_static;
+			String			obj_type;
+			String			sub_type;
+			String			status;
+			String			comment;
+			Size				number_of_members;
+
+			vector<Index>	 static_members;
+			String         dynamic_rule;
+		};
+		
 		/**	@name	Constants	
 		*/
 		//@{
@@ -95,6 +110,15 @@ namespace BALL
 		///
 		const MOL2File& operator = (const MOL2File& file) throw();
 
+		/// Return the number of TRIPOS-Sets defined in this instance
+		Size getNumberOfSets() const { return sets_.size(); }
+
+		/// Return the i-th TRIPOS set. NOTE: no range checking is performed
+		SetStruct& getSet(Position i) { return sets_[i]; }
+
+		/// Return the i-th TRIPOS set, const version. NOTE: no range checking is performed
+		const SetStruct& getSet(Position i) const { return sets_[i]; }
+
 		//@}
 
 		protected:
@@ -149,16 +173,6 @@ namespace BALL
 			String			comment;
 		};
 
-		BALL_EXPORT struct SetStruct
-		{
-			String			name;
-			String			type;
-			String			subtype;
-			String			comment;
-			Size				number_of_members;
-			vector<int>	members;
-		};
-		
 		BALL_EXPORT struct SubstructureStruct
 		{
 			String			name;

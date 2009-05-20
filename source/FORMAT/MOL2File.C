@@ -250,6 +250,34 @@ namespace BALL
 			f << endl;
 		}
 
+		// if we have sets, we should write them
+		if (sets_.size())
+		{
+			for (Position i=0; i<sets_.size(); i++)
+			{
+				SetStruct& set = sets_[i];
+
+				String type = set.is_static ? " STATIC " : " DYNAMIC ";
+
+				f << TRIPOS       << "SET" << endl
+					<< set.name     << type  << set.obj_type << " " 
+					<< set.sub_type << " "   << set.status   << " " 
+					<< set.comment  << endl;
+
+				// is this a static set?
+				if (set.is_static)
+				{
+					f << set.number_of_members;
+					for (Position j=0; j<set.number_of_members; j++)
+						f << " " << set.static_members[j];
+				}
+				else
+				{
+					f << set.dynamic_rule;
+				}
+				f << endl;
+			}
+		}
 		// done with writing.
 		return false;
 	}
@@ -406,6 +434,7 @@ namespace BALL
 		}	
 	}
 			
+	// TODO: handle backslash at end of line correctly!
 	void MOL2File::readSetSection_()
 	{
 		Size number_of_fields = 1;
@@ -418,42 +447,63 @@ namespace BALL
 			{
 				if (number_of_fields < 3)
 				{
-					Log.error() << "MOL2File::readSetSection_: too few fields for a bond entry in line " 
+					Log.error() << "MOL2File::readSetSection_: too few fields for a set entry in line " 
 											<< number_of_lines_ << endl;
 				} 
 				else 
 				{
 					// split the line into fields
-					String	fields[6];
-					getLine().split(fields, 6);
+					std::vector<String>	fields;
+					getLine().split(fields);
 
 					// create an atom and assign the fields of the line
 					SetStruct	set;
-					set.name = fields[1].toInt();
-					set.type = fields[3].toInt();
-					set.subtype = fields[4];
-					set.comment = fields[6];
-					if (fields[2] == "static")
+					set.name     = fields[0];
+
+					String type  = fields[1];
+					type.toUpper();
+					set.is_static = (type == "STATIC");
+
+					set.obj_type = fields[2];
+
+					if (number_of_fields > 3)
+						set.sub_type  = fields[3];
+					if (number_of_fields > 4)
+						set.status   = fields[4];
+
+					 // all remaining parts of the line were comments
+					for (Size i=5; i<number_of_fields; i++)
+					{
+						set.comment+=fields[i]+" ";
+					}
+
+					if (set.is_static)
 					{
 						readLine();
 						getLine().trim();
 						Size number_of_fields = getLine().countFields();
+						set.number_of_members = getLine().getField(0).toInt();
 
-						for (Size i = 1; (i <= (Size)getLine().getField(0).toInt()) && (i < number_of_fields); i++)
+						if (set.number_of_members != number_of_fields-1)
 						{
-							set.members.push_back(getLine().getField(i).toInt());
+							Log.warn() << "Warning: inconsistent set definition in MOL2File! Ignoring the set!" << std::endl;
 						}
-
-						// remember this set
-						sets_.push_back(set);
-
+						else
+						{
+							for (Size i = 1; (i <= (Size)getLine().getField(0).toInt()) && (i < number_of_fields); i++)
+							{
+								set.static_members.push_back(getLine().getField(i).toInt());
+							}
+						}
 					} 
 					else 
 					{	
-						// we cannot read dynamic sets. What is the syntax of these rules?
-						Log.warn() << "MOL2File::readSetSection: unsupported set type: " 
-											 << fields[2] << ". Ignored." << endl;
+						// we just read the rule without interpreting it
+						readLine();
+						set.dynamic_rule = getLine();
 					}					
+					// remember this set
+					sets_.push_back(set);
 				}
 			}
 		}	
