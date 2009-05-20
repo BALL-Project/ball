@@ -283,13 +283,13 @@ namespace BALL
 			public slots:
 
 			/// Show a file dialog for writing the selected Dataset.
-			virtual bool write();
+			bool write();
 
 			/** Show a file dialog to open a data file.
 			 		Calls open(String, String).
 					Overload this method to support multiple file formats.
 			*/
-			virtual bool open();
+			bool open();
 
 			/// Delete all Datasets
 			virtual bool deleteDatasets();

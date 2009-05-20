@@ -191,7 +191,7 @@ namespace BALL
 
 	PDBFile::~PDBFile() 
 	{
-		clear_();
+		clear();
 		close();
 	}
 
@@ -720,7 +720,7 @@ namespace BALL
 		}
 	}
 
-	void PDBFile::clear_()
+	void PDBFile::clear()
 	{
 		current_model_ = INVALID_INDEX;
 		current_record_ = INVALID_INDEX;

@@ -1,6 +1,14 @@
 <ui version="4.0" >
  <class>PreferencesData</class>
  <widget class="QDialog" name="PreferencesData" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>850</width>
+    <height>470</height>
+   </rect>
+  </property>
   <property name="sizePolicy" >
    <sizepolicy>
     <hsizetype>0</hsizetype>
@@ -42,67 +50,10 @@
     </property>
    </column>
   </widget>
-  <widget class="QStackedWidget" name="widget_stack" >
-   <property name="geometry" >
-    <rect>
-     <x>236</x>
-     <y>9</y>
-     <width>610</width>
-     <height>416</height>
-    </rect>
-   </property>
-   <property name="minimumSize" >
-    <size>
-     <width>610</width>
-     <height>16</height>
-    </size>
-   </property>
-   <property name="maximumSize" >
-    <size>
-     <width>610</width>
-     <height>16777215</height>
-    </size>
-   </property>
-   <property name="frameShape" >
-    <enum>QFrame::NoFrame</enum>
-   </property>
-   <property name="frameShadow" >
-    <enum>QFrame::Plain</enum>
-   </property>
-   <property name="lineWidth" >
-    <number>0</number>
-   </property>
-   <widget class="QWidget" name="WStackPage" >
-    <widget class="QLabel" name="label" >
-     <property name="geometry" >
-      <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>521</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="font" >
-      <font>
-       <family>Sans Serif</family>
-       <pointsize>12</pointsize>
-       <weight>50</weight>
-       <italic>false</italic>
-       <bold>false</bold>
-       <underline>false</underline>
-       <strikeout>false</strikeout>
-      </font>
-     </property>
-     <property name="text" >
-      <string>Please select an (child) entry on the left side!</string>
-     </property>
-    </widget>
-   </widget>
-  </widget>
   <widget class="QWidget" name="layoutWidget" >
    <property name="geometry" >
     <rect>
-     <x>270</x>
+     <x>260</x>
      <y>430</y>
      <width>546</width>
      <height>32</height>
@@ -153,7 +104,7 @@
       </property>
       <property name="minimumSize" >
        <size>
-        <width>110</width>
+        <width>100</width>
         <height>30</height>
        </size>
       </property>
@@ -170,13 +121,13 @@
        <string>&amp;Apply</string>
       </property>
       <property name="shortcut" >
-       <string>Alt+K</string>
+       <string>Alt+A</string>
       </property>
       <property name="autoDefault" >
        <bool>true</bool>
       </property>
       <property name="default" >
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
      </widget>
     </item>
@@ -201,7 +152,7 @@
        <string>&amp;Cancel</string>
       </property>
       <property name="shortcut" >
-       <string/>
+       <string>Alt+C</string>
       </property>
       <property name="autoDefault" >
        <bool>true</bool>
@@ -265,6 +216,66 @@
      </widget>
     </item>
    </layout>
+  </widget>
+  <widget class="QStackedWidget" name="widget_stack" >
+   <property name="geometry" >
+    <rect>
+     <x>236</x>
+     <y>9</y>
+     <width>610</width>
+     <height>416</height>
+    </rect>
+   </property>
+   <property name="minimumSize" >
+    <size>
+     <width>610</width>
+     <height>16</height>
+    </size>
+   </property>
+   <property name="maximumSize" >
+    <size>
+     <width>610</width>
+     <height>16777215</height>
+    </size>
+   </property>
+   <property name="frameShape" >
+    <enum>QFrame::NoFrame</enum>
+   </property>
+   <property name="frameShadow" >
+    <enum>QFrame::Plain</enum>
+   </property>
+   <property name="lineWidth" >
+    <number>0</number>
+   </property>
+   <property name="currentIndex" >
+    <number>0</number>
+   </property>
+   <widget class="QWidget" name="WStackPage" >
+    <widget class="QLabel" name="label" >
+     <property name="geometry" >
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>521</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="font" >
+      <font>
+       <family>Sans Serif</family>
+       <pointsize>12</pointsize>
+       <weight>50</weight>
+       <italic>false</italic>
+       <bold>false</bold>
+       <underline>false</underline>
+       <strikeout>false</strikeout>
+      </font>
+     </property>
+     <property name="text" >
+      <string>Please select an (child) entry on the left side!</string>
+     </property>
+    </widget>
+   </widget>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11" />

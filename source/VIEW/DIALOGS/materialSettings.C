@@ -37,6 +37,7 @@ namespace BALL
 			connect( specularity_factor_slider, SIGNAL( valueChanged(int) ), this, SLOT( specularityFactorChanged() ) );
 			connect( reflectiveness_factor_slider, SIGNAL( valueChanged(int) ), this, SLOT( reflectivenessFactorChanged() ) );
 			connect( shininess_factor_slider, SIGNAL( valueChanged(int) ), this, SLOT( shininessFactorChanged() ) );
+			connect( transparency_factor_slider, SIGNAL( valueChanged(int) ), this, SLOT( transparencyFactorChanged() ) );
 
 			connect (update_directly_checkBox, SIGNAL(stateChanged(int)), this, SLOT (updateDirectlyBoxChanged()));
 		
@@ -54,9 +55,9 @@ namespace BALL
 
 		void MaterialSettings::apply()
 		{
-//TODO still missing: use the colors:  ambient_color_button, .. in POVRay and OpenGL 
-
-			//TODO necessary?
+//TODO still missing: use the colors (ambient_color_button, ..) in POVRay and OpenGL 
+//TODO what should happen, when this dialog is called for a specific representation in POVRay and OpenGL?
+//TODO So far OpenGL and POVRay do not make any use of transparency!
 			if (Scene::getInstance(0) && Scene::getInstance(0)->getStage())
 			{	
 				Stage& stage = *Scene::getInstance(0)->getStage();
@@ -65,18 +66,13 @@ namespace BALL
 				if (radioButton_OpenGL->isChecked() || radioButton_POVRay->isChecked())
 				{
 					stage.setSpecularIntensity(specularity_factor_label->text().toFloat());
-					//  ((float)specular_factor_slider->value())  / 100.0);
-					//TODO are diffusity and reflectiveness really the same?? 
 					stage.setDiffuseIntensity(1. - reflectiveness_factor_label->text().toFloat());
-					// ((float)diffuse_factor_slider->value())   / 100.0);
 					stage.setAmbientIntensity( ambient_factor_label->text().toFloat());
-					//	((float)ambient_factor_slider->value())   / 100.0);
-					stage.setShininess(	 shininess_factor_label->text().toFloat());
-					//				(float)shininess_factor_slider->value());
+					stage.setShininess(	shininess_factor_label->text().toFloat() );
 				}
 				if (radioButton_OpenGL->isChecked()) // TODO is this correct? names indicate but who knows??
 				{
-					glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, stage.getShininess());
+					glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, (stage.getShininess()+0.1));
 					GLfloat values[4];
 					values[0] = values[1] = values[2] =  stage.getSpecularIntensity();
 					values[3] = 1.0;
@@ -96,7 +92,8 @@ namespace BALL
 					rt_material.specular_intensity   = specularity_factor_label->text().toFloat();
 					rt_material.reflective_intensity = reflectiveness_factor_label->text().toFloat();
 
-					rt_material.shininess          = shininess_factor_label->text().toFloat();
+					rt_material.shininess          = shininess_factor_label->text().toFloat()+0.1;
+					rt_material.transparency			 = transparency_factor_label->text().toFloat();
 
 					if (objectName() == "MaterialSettingsForRepresentation")
 					{
@@ -110,7 +107,7 @@ namespace BALL
 					else
 					{
 						// we have been called from the preferences and should set new default values for *all* representations
-						rt_material = stage.getRTMaterial() = rt_material;
+						stage.getRTMaterial() = rt_material;
 						Scene::getInstance(0)->updateAllRTMaterials();
 					}
 				}
@@ -123,7 +120,6 @@ namespace BALL
 			setValues_(*ambient_factor_slider, *ambient_factor_label, 100);
 			if (update_directly_checkBox->isChecked())
 				apply();
-
 		}
 
 		void MaterialSettings::specularityFactorChanged()
@@ -143,7 +139,16 @@ namespace BALL
 
 		void MaterialSettings::shininessFactorChanged()
 		{
-			setValues_(*shininess_factor_slider, *shininess_factor_label, 1);	
+			//setValues_(*shininess_factor_slider, *shininess_factor_label, 1);	
+			setQuadraticValues_(*shininess_factor_slider, *shininess_factor_label, shininess_factor_slider->maximum());	
+			if (update_directly_checkBox->isChecked())
+				apply();
+		}
+		
+		void MaterialSettings::transparencyFactorChanged()
+		{
+			String text = String((int)transparency_factor_slider->value());
+			transparency_factor_label->setText(text.c_str());
 			if (update_directly_checkBox->isChecked())
 				apply();
 		}
@@ -155,7 +160,8 @@ namespace BALL
 				apply();
 			}
 		}
-
+	
+		
 		void MaterialSettings::setValues_(const QSlider& slider, QLabel& label, int divisor)
 		{
 			String text = String(((float)slider.value()) / divisor);
@@ -170,22 +176,48 @@ namespace BALL
 			label.setText(text.c_str());
 		}
 		
+		void MaterialSettings::setQuadraticValues_(const QSlider& slider, QLabel& label, int divisor)
+		{
+			float quadratic_value =((float)slider.value()) / divisor; 
+			quadratic_value *= quadratic_value;
+			quadratic_value *= divisor;
+			QString truncated_text;
+			truncated_text.setNum(quadratic_value,'f', 3);
+			//String text = String(quadratic_value);
+			//
+			//while (text.has('.') && text.hasSuffix("0"))
+			//{
+			//	text = text.trimRight("0");
+			//}
+
+			//if (text.hasSuffix(".")) text += "0";
+			//	
+			//label.setText(text.c_str());
+			label.setText(truncated_text);
+		}
+		
 		void MaterialSettings::editAmbientColor()
 		{
 			QColor color = VIEW::chooseColor(ambient_color_label);
-			std::cout << "Ambient color is " << color.rgb() << std::endl;
+
+			if (update_directly_checkBox->isChecked())
+				apply();
 		}	
 		
 		void MaterialSettings::editSpecularityColor()
 		{
 			QColor color = VIEW::chooseColor(specularity_color_label);
-			std::cout << "Specularity color is " << color.rgb() << std::endl;
+
+			if (update_directly_checkBox->isChecked())
+				apply();
 		}
 		
 		void MaterialSettings::editReflectivenessColor()
 		{
 			QColor color = VIEW::chooseColor(reflectiveness_color_label);
-			std::cout << "Reflectiveness color is " << color.rgb() << std::endl;
+
+			if (update_directly_checkBox->isChecked())
+				apply();
 		}
 	
 		void MaterialSettings::rendererChanged()
@@ -194,7 +226,8 @@ namespace BALL
 			bool isPOVRay = radioButton_POVRay->isChecked();
 			bool isRTFact = radioButton_RTFact->isChecked();
 			groupBox_ambientIntensity->setDisabled(isOpenGL && (!isPOVRay) && (!isRTFact));
-			groupBox_Reflectiveness->setDisabled(isOpenGL && (!isPOVRay) && (!isRTFact));
+			groupBox_Reflectiveness->setDisabled(isOpenGL && (!isPOVRay) && (!isRTFact));	
+			groupBox_Transparency->setDisabled(((isOpenGL) || (isPOVRay)) && (!isRTFact));
 			if (isOpenGL || isPOVRay)
 			{
 				update_directly_checkBox->setChecked(false);

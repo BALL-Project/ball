@@ -6,6 +6,7 @@
 
 #include <BALL/FORMAT/XYZFile.h>
 #include <BALL/DATATYPE/string.h>
+#include <BALL/KERNEL/atomContainer.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/atom.h>
@@ -41,7 +42,7 @@ namespace BALL
 	{
 	}
 	
-	bool XYZFile::write(const System& system)
+	bool XYZFile::write(const AtomContainer& ac)
 		throw(File::CannotWrite)
 	{
 		if (!isOpen() || getOpenMode() != std::ios::out)
@@ -52,11 +53,11 @@ namespace BALL
 		// write the first and the second line:
 		//  - the number of atoms
 		//  - a comment line
-		(File&)(*this) << (Size)system.countAtoms() << endl
-									 << system.getName() << endl;
+		(File&)(*this) << (Size)ac.countAtoms() << endl
+									 << ac.getName() << endl;
 		
 		// write all atoms
-		AtomConstIterator it = system.beginAtom();
+		AtomConstIterator it = ac.beginAtom();
 		for (; +it; ++it)
 		{
 			// write the atom symbol and the coordinates
@@ -68,13 +69,38 @@ namespace BALL
 
 		return true;
 	}
+	bool XYZFile::write(const System& system)
+		throw(File::CannotWrite)
+	{
+		return write((const AtomContainer&)system);
+	}
 
+	bool XYZFile::write(const Molecule& mol)
+		throw(File::CannotWrite)
+	{
+		return write((const AtomContainer&)mol);
+	}
+	
 	bool XYZFile::read(System& system)
 		throw(Exception::ParseError)
 	{
 		// remove old rubbish from the system
 		system.destroy();
 
+		Molecule *molecule = read();
+
+		if (!molecule)
+			return false;
+
+		system.insert(*molecule);
+		system.setName(molecule->getName());
+
+		return true;
+	}
+
+	Molecule* XYZFile::read()
+		throw(Exception::ParseError)
+	{
 		// remember the line number for error messages
 		Size number_of_lines = 0;
 		String line;
@@ -105,7 +131,7 @@ namespace BALL
 			{
 				// if the first line cannot be read correctly, abort immediately
 				Log.error() << "XYZFile::read: illegal header line in XYZ file " << getName() << endl;
-				return false;
+				return NULL;
 			}
 		}
 		else 
@@ -113,14 +139,17 @@ namespace BALL
 			// we could not read the first line. Abort
 			// if the first line cannot be read correctly, abort immediately
 			Log.error() << "XYZFile::read: illegal header line in XYZ file " << getName() << endl;
-			return false;
+			return NULL;
 		}
+
+		// ...create a molecule to hold the atoms, and start reading...
+		Molecule* mol = new Molecule;
 
 		// second line: comment -> name of the system
 		if (comment_ == "")
 		{
 			getline(buffer, BUF_SIZE);
-			system.setName(buffer);
+			mol->setName(buffer);
 			comment_ = buffer;
 		}
 
@@ -131,8 +160,6 @@ namespace BALL
 		bool ok = true;
 
 		bool modern_type = 0;
-		// ...create a molecule to hold the atoms, and start reading...
-		Molecule* mol = new Molecule;
 
 		try
 		{
@@ -229,11 +256,10 @@ namespace BALL
 		{
 			Log.error() << "XYZFile: Aborting, could not parse line!" << std::endl;
 			delete mol;
-			return false;
+			return NULL;
 		}
 
-		system.insert(*mol);
-		return true;
+		return mol;
 	}
 				
 } // namespace BALL

@@ -734,25 +734,6 @@ bool GLRenderer::getSmoothLines()
 				}
 			}
 
-			// TODO: what do we do with *that*????
-			/**
-			if (text_ != "")
-			{
-				ColorRGBA c = stage_->getBackgroundColor().getInverseColor();
-				QFont font;
-				font.setPixelSize(font_size_);
-				font.setBold(true);
-				glDisable(GL_LIGHTING);
-				setColorRGBA_(c);
-				QFontMetrics fm(font);
-				QRect r = fm.boundingRect(text_.c_str());
-				renderText(width() -  (20 + r.width()), 
-									 height() - (r.height() - 5),
-									 text_.c_str(), font);
-				glEnable(GL_LIGHTING);
-			}
-			**/
-
 			if (show_preview_) 
 				setAntialiasing(true);
 

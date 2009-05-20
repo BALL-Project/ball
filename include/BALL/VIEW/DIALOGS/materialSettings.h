@@ -67,6 +67,7 @@ namespace BALL
 			virtual void specularityFactorChanged();
 			virtual void reflectivenessFactorChanged();
 			virtual void shininessFactorChanged();
+			virtual void transparencyFactorChanged();
 			virtual void updateDirectlyBoxChanged();
 			virtual void editAmbientColor();
 			virtual void editSpecularityColor();
@@ -75,6 +76,7 @@ namespace BALL
 			private:
 
 			void setValues_(const QSlider& slider, QLabel& label, int divisor);
+			void setQuadraticValues_(const QSlider& slider, QLabel& label, int divisor);
 
 			Representation const* current_representation_;
 		};

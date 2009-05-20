@@ -417,7 +417,8 @@ namespace BALL
 					ColorRGBA reflective_color;
 					float			reflective_intensity;
 
-					float     shininess;
+					float     shininess;	
+					float     transparency;
 			};
 
 			/**	@name	Constructors and Destructors

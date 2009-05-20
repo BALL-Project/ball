@@ -18,149 +18,6 @@
   <property name="windowTitle" >
    <string>MaterialSettings</string>
   </property>
-  <widget class="QGroupBox" name="groupBox_Shininess" >
-   <property name="geometry" >
-    <rect>
-     <x>310</x>
-     <y>120</y>
-     <width>298</width>
-     <height>104</height>
-    </rect>
-   </property>
-   <property name="title" >
-    <string>Shininess</string>
-   </property>
-   <layout class="QGridLayout" >
-    <property name="margin" >
-     <number>9</number>
-    </property>
-    <property name="spacing" >
-     <number>6</number>
-    </property>
-    <item row="0" column="0" >
-     <layout class="QVBoxLayout" >
-      <property name="margin" >
-       <number>0</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item>
-       <layout class="QHBoxLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
-        <property name="spacing" >
-         <number>6</number>
-        </property>
-        <item>
-         <widget class="QLabel" name="textLabel1_50" >
-          <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>0</hsizetype>
-            <vsizetype>0</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize" >
-           <size>
-            <width>80</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize" >
-           <size>
-            <width>220</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="text" >
-           <string>factor</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="shininess_factor_slider" >
-          <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>0</hsizetype>
-            <vsizetype>0</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize" >
-           <size>
-            <width>120</width>
-            <height>21</height>
-           </size>
-          </property>
-          <property name="maximumSize" >
-           <size>
-            <width>120</width>
-            <height>21</height>
-           </size>
-          </property>
-          <property name="minimum" >
-           <number>0</number>
-          </property>
-          <property name="maximum" >
-           <number>128</number>
-          </property>
-          <property name="pageStep" >
-           <number>1</number>
-          </property>
-          <property name="value" >
-           <number>77</number>
-          </property>
-          <property name="sliderPosition" >
-           <number>77</number>
-          </property>
-          <property name="orientation" >
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="tickInterval" >
-           <number>1</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="shininess_factor_label" >
-          <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>0</hsizetype>
-            <vsizetype>0</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize" >
-           <size>
-            <width>60</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize" >
-           <size>
-            <width>60</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="text" >
-           <string>77</string>
-          </property>
-          <property name="alignment" >
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-     </layout>
-    </item>
-   </layout>
-  </widget>
   <widget class="QGroupBox" name="groupBox_Specularity" >
    <property name="geometry" >
     <rect>
@@ -880,7 +737,7 @@
    <property name="title" >
     <string>Renderer</string>
    </property>
-   <widget class="QWidget" name="" >
+   <widget class="QWidget" name="layoutWidget" >
     <property name="geometry" >
      <rect>
       <x>10</x>
@@ -2360,11 +2217,323 @@
     </item>
    </layout>
   </widget>
-  <widget class="QCheckBox" name="update_directly_checkBox" >
+  <widget class="QGroupBox" name="groupBox_Shininess" >
    <property name="geometry" >
     <rect>
-     <x>340</x>
-     <y>240</y>
+     <x>310</x>
+     <y>120</y>
+     <width>298</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="title" >
+    <string>Shininess</string>
+   </property>
+   <layout class="QGridLayout" >
+    <property name="margin" >
+     <number>9</number>
+    </property>
+    <property name="spacing" >
+     <number>6</number>
+    </property>
+    <item row="0" column="0" >
+     <layout class="QVBoxLayout" >
+      <property name="margin" >
+       <number>0</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item>
+       <layout class="QHBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="textLabel1_50" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>0</hsizetype>
+            <vsizetype>0</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize" >
+           <size>
+            <width>80</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>220</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text" >
+           <string>factor</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="shininess_factor_slider" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>0</hsizetype>
+            <vsizetype>0</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize" >
+           <size>
+            <width>120</width>
+            <height>21</height>
+           </size>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>120</width>
+            <height>21</height>
+           </size>
+          </property>
+          <property name="minimum" >
+           <number>0</number>
+          </property>
+          <property name="maximum" >
+           <number>128</number>
+          </property>
+          <property name="pageStep" >
+           <number>1</number>
+          </property>
+          <property name="value" >
+           <number>77</number>
+          </property>
+          <property name="sliderPosition" >
+           <number>77</number>
+          </property>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="tickInterval" >
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="shininess_factor_label" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>0</hsizetype>
+            <vsizetype>0</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize" >
+           <size>
+            <width>60</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>60</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text" >
+           <string>77</string>
+          </property>
+          <property name="alignment" >
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_Transparency" >
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
+   <property name="geometry" >
+    <rect>
+     <x>310</x>
+     <y>200</y>
+     <width>298</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="title" >
+    <string>Transparency</string>
+   </property>
+   <widget class="QWidget" name="" >
+    <property name="geometry" >
+     <rect>
+      <x>14</x>
+      <y>31</y>
+      <width>260</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="textLabel1_51" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>0</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>70</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>220</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="text" >
+        <string>factor</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSlider" name="transparency_factor_slider" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>0</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>120</width>
+         <height>21</height>
+        </size>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>120</width>
+         <height>21</height>
+        </size>
+       </property>
+       <property name="minimum" >
+        <number>0</number>
+       </property>
+       <property name="maximum" >
+        <number>100</number>
+       </property>
+       <property name="pageStep" >
+        <number>1</number>
+       </property>
+       <property name="value" >
+        <number>0</number>
+       </property>
+       <property name="sliderPosition" >
+        <number>0</number>
+       </property>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="tickInterval" >
+        <number>1</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="transparency_factor_label" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>0</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>40</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>50</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="text" >
+        <string>0</string>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="transparcency_label_3" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>0</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>10</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>10</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="text" >
+        <string>%</string>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QCheckBox" name="update_directly_checkBox" >
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
+   <property name="geometry" >
+    <rect>
+     <x>310</x>
+     <y>280</y>
      <width>151</width>
      <height>22</height>
     </rect>

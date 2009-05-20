@@ -21,6 +21,10 @@
 # include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #endif
 
+#ifndef BALL_SYSTEM_MUTEX_H
+# include <BALL/SYSTEM/mutex.h>
+#endif
+
 #include <QtOpenGL/qgl.h>
 
 namespace BALL
@@ -47,14 +51,22 @@ namespace BALL
 			virtual bool resize(const unsigned int width, const unsigned int height);
 			virtual void refresh();			
 
-			void setRenderText(const QPoint& position, const String& text, const ColorRGBA& color)
-			{
-				info_point_ = position;
-				info_text_  = text;
-				info_color_ = color;
-			}
+			// render the given text in the given color and size at window coordinates (x, y)
+			virtual void renderText(int x, int y, const String& text, const ColorRGBA& color, Size size = 16);
+			// render the given text in the given color and size at world coordinates (x, y, z)
+			virtual void renderText(float x, float y, float z, const String& text, const ColorRGBA& color, Size size = 16);
+
+			/// Lock the context for the current thread and make it active
+			void lockGLContext();
+
+			/// Unlock the context for the current thread and make it active
+			void unlockGLContext();
+
+			/// Force the window to ignore paint events
+			void ignoreEvents(bool ignore) {ignore_events_ = ignore;}
 
 		protected:	
+			void paintEvent(QPaintEvent* e) { if (!ignore_events_) QGLWidget::paintEvent(e);}
 			static QGLFormat gl_format_;
 
 			// ID of the fullscreen texture used to paste image into GPU framebuffer            
@@ -76,10 +88,8 @@ namespace BALL
 			bool errorInGL(GLenum& error);
 			String getGLErrorString(GLenum error);
 
-			// position and text of possible information texts like fps
-			QPoint 	  info_point_;
-			String 	  info_text_;
-			ColorRGBA info_color_;
+			mutable Mutex contex_mutex_;
+			bool ignore_events_;
 		};
 
 	} // namespace VIEW

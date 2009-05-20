@@ -33,9 +33,11 @@ LightSettings::LightSettings(QWidget* parent, const char* name, Qt::WFlags fl)
 	setINIFileSectionName("LIGHTING");
 	registerWidgetForHelpSystem_(this, "scene.html#lightsources");
 	registerWidgets_();
-		
+	
+	lights_list->setSelectionMode(QAbstractItemView::SingleSelection);	
 	// signals and slots connections
-	connect( lights_list, SIGNAL( itemSelectionChanged() ), this, SLOT( lightSelected() ) );
+	connect( lights_list, SIGNAL( currentItemChanged(QListWidgetItem*, QListWidgetItem*) ), 
+	         this,        SLOT( lightSelected(QListWidgetItem*, QListWidgetItem*) ) );
 	connect( ambient, SIGNAL( clicked() ), this, SLOT( typeSelected() ) );
 	connect( point, SIGNAL( clicked() ), this, SLOT( typeSelected() ) );
 	connect( directional, SIGNAL( clicked() ), this, SLOT( typeSelected() ) );
@@ -134,7 +136,10 @@ void LightSettings::addLightPressed()
 
 
 	lights_.push_back(light);
+
 	update();
+
+	lights_list->setCurrentRow(lights_.size()-1, QItemSelectionModel::Select);
 }
 
 
@@ -211,10 +216,11 @@ void LightSettings::saveSettingsToLight_()
 }
 	
 
-void LightSettings::lightSelected()
+void LightSettings::lightSelected(QListWidgetItem* current_item, QListWidgetItem* previous_item)
 {
 	if (!ignore_) saveSettingsToLight_();
-	current_light_ = getCurrentLightNumber_();
+	current_light_ = lights_list->currentRow();
+
 	getValues_();
 }
 
@@ -230,7 +236,17 @@ void LightSettings::removeLightPressed()
 		i++;
 	}
 	lights_.erase(it);
+
 	update();
+
+	if (current == 0)
+	{ 
+		// the light we removed was the first one -> select the new first item
+		if (lights_.size() > 0)
+			lights_list->setCurrentRow(0, QItemSelectionModel::Select);
+	}
+	else
+		lights_list->setCurrentRow(current-1, QItemSelectionModel::Select);
 }
 
 
@@ -271,6 +287,7 @@ void LightSettings::getValues_()
 	throw()
 {
 	Index current = getCurrentLightNumber_();
+
 	if (current == -1) return;
 
 	setControlsEnabled_(true);
@@ -351,6 +368,7 @@ void LightSettings::apply()
 	throw()
 {
 	saveSettingsToLight_();
+
 	stage_->clearLightSources();
 	for (Position p = 0; p < lights_.size(); p++)
 	{
@@ -459,8 +477,10 @@ Vector3 LightSettings::getAttenuation_()
 Index LightSettings::getCurrentLightNumber_() const
 {
 	QList<QListWidgetItem*> items = lights_list->selectedItems();
-	if (items.size() == 0) return -1;
-	return lights_list->row(*items.begin());
+
+	if (items.size() == 0) 
+		return -1;
+
 	return lights_list->currentRow();
 }
 

@@ -122,6 +122,11 @@ namespace BALL
 			/** @name Processor specific methods
 			 */
 			//@{
+
+			/** Initialization routine.
+			*/
+			virtual bool init(Scene& scene);
+
 			/** Start method. 
 			    This method creates the file and writes the header.
 			 */

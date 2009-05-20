@@ -85,7 +85,7 @@ namespace BALL
 			virtual void defaultsPressed();
    		
 			/// Slot for selection in the listbox with lights
-			virtual void lightSelected();
+			virtual void lightSelected(QListWidgetItem* current_item, QListWidgetItem* previous_item);
    		
 			/// Slot for the RemoveLight button
 			virtual void removeLightPressed();
