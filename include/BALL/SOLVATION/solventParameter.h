@@ -28,7 +28,7 @@ namespace BALL
 	/** Parameter section for the solvent description.
 			This class provides parameter file interface for the SolventDescriptor
 			class ( \link SolventDescriptor SolventDescriptor \endlink ).   \par
-	\ingroup Solvation		
+	\ingroup Solvation
 	 */
 	class BALL_EXPORT SolventParameter
 		:	public ParameterSection
@@ -44,20 +44,20 @@ namespace BALL
 
 		/** Default constructor 
 		*/
-		SolventParameter() throw();
+		SolventParameter();
 
-		//SolventParameter(Parameters& parameters) throw();
+		//SolventParameter(Parameters& parameters);
 
 		/** Copy constructor 
 		*/
-		SolventParameter(const SolventParameter& param) throw();
+		SolventParameter(const SolventParameter& param);
 
 		/** 
 		*/
-		SolventParameter(const AtomTypes& atom_types) throw();
+		SolventParameter(const AtomTypes& atom_types);
 
 		/** Destructor */
-		virtual ~SolventParameter() throw();
+		virtual ~SolventParameter();
 
 		//@}
 		/** @name Assignment 
@@ -66,12 +66,11 @@ namespace BALL
 
 		/** Assignment operator 
 		*/
-		const SolventParameter& operator = (const SolventParameter& param)
-			throw();
+		const SolventParameter& operator = (const SolventParameter& param);
 
 		/** Clear method 
 		*/
-		virtual void clear() throw();
+		virtual void clear();
 
 		//@}
 		/** @name Accessors 
@@ -80,25 +79,25 @@ namespace BALL
 
 		/** Return a SolventDescriptor with the values from the parameter file 
 		*/
-		const SolventDescriptor& getSolventDescriptor() const throw();
+		const SolventDescriptor& getSolventDescriptor() const;
 
 		/** Return a SolventDescriptor with the values from the parameter file.
 		 * 	Muteable version.
 		 */
-		SolventDescriptor& getSolventDescriptor() throw();
+		SolventDescriptor& getSolventDescriptor();
 
                 /** Return the name of the SolventDescriptor 
 		*/
-		const String& getSolventName() const throw();
+		const String& getSolventName() const;
 
 
                 /** Return the solvents density 
 		*/
-		const float& getSolventDensity() const throw();
+		const float& getSolventDensity() const;
 
                  /** Return the SolventDescription 
 		*/
-		const std::vector<SolventAtomDescriptor>& getSolventDescription() const throw();
+		const std::vector<SolventAtomDescriptor>& getSolventDescription() const;
 
 		//@}
 		/** @name Predicates 
@@ -107,14 +106,13 @@ namespace BALL
 
 		/** Equality operator 
 		*/
-		bool operator == (const SolventParameter& param) const throw();
+		bool operator == (const SolventParameter& param) const;
 
 		//@}
 
 		/** 
 		*/
-		virtual bool extractSection(Parameters& parameters, const String&
-				section_name) throw();
+		virtual bool extractSection(Parameters& parameters, const String& section_name);
 
 
 		protected:
@@ -139,8 +137,7 @@ namespace BALL
 		*/
 		AtomTypes atom_types_;
 
-	};
-   
+	}; 
 } // namespace BALL
 
 #endif // BALL_SOLVATION_SOLVENTPARAMETER_H

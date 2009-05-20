@@ -129,15 +129,15 @@ namespace BALL
 
 		/** Default constructor 
 		*/
-		ReissCavFreeEnergyProcessor() throw();
+		ReissCavFreeEnergyProcessor();
 
 		/** Copy constructor 
 		*/
-		ReissCavFreeEnergyProcessor(const ReissCavFreeEnergyProcessor& proc) throw();
+		ReissCavFreeEnergyProcessor(const ReissCavFreeEnergyProcessor& proc);
 
 		/** Destructor 
 		*/
-		virtual ~ReissCavFreeEnergyProcessor() throw();
+		virtual ~ReissCavFreeEnergyProcessor();
 
 		//@}
 		/** @name Assignment 
@@ -147,11 +147,11 @@ namespace BALL
 		/** Assignment operator 
 		*/
 		const ReissCavFreeEnergyProcessor& operator = 
-			(const ReissCavFreeEnergyProcessor& proc) throw();
+			(const ReissCavFreeEnergyProcessor& proc);
 
 		/** Clear function 
 		*/
-		virtual void clear() throw();
+		virtual void clear();
 
 		//@}
 		/** @name Predicates 
@@ -160,7 +160,7 @@ namespace BALL
 
 		/** Equality operator 
 		*/
-		bool operator == (const ReissCavFreeEnergyProcessor& proc) const throw();
+		bool operator == (const ReissCavFreeEnergyProcessor& proc) const;
 
 		//@}
 		/** @name processor functions 
@@ -169,7 +169,7 @@ namespace BALL
 
 		/** This is where the actual computation takes place. 
 		*/
-		virtual bool finish() throw();
+		virtual bool finish();
 
 		//@}
 		/** @name Options 
@@ -184,7 +184,7 @@ namespace BALL
 
 		private:
 
-		void setDefaultOptions() throw();
+		void setDefaultOptions();
 
 	};
    

@@ -187,16 +187,16 @@ namespace BALL
 
 		/** Default constructor 
 		*/
-		PairExpInteractionEnergyProcessor() throw();
+		PairExpInteractionEnergyProcessor();
 
 		/** Copy constructor 
 		*/
 		PairExpInteractionEnergyProcessor(const
-				PairExpInteractionEnergyProcessor& proc) throw();
+				PairExpInteractionEnergyProcessor& proc);
 
 		/** Destructor 
 		*/
-		virtual ~PairExpInteractionEnergyProcessor() throw();
+		virtual ~PairExpInteractionEnergyProcessor();
 
 		//@}
 		/** @name Assignment 
@@ -206,11 +206,11 @@ namespace BALL
 		/** Assignment operator 
 		*/
 		const PairExpInteractionEnergyProcessor& operator = 
-			(const PairExpInteractionEnergyProcessor& proc) throw();
+			(const PairExpInteractionEnergyProcessor& proc);
 
 		/** Clear function 
 		*/
-		virtual void clear() throw();
+		virtual void clear();
 		
 		//@}
 		/** @name Processor functions 
@@ -219,7 +219,7 @@ namespace BALL
 
 		/** 
 		*/
-		virtual bool finish() throw();
+		virtual bool finish();
 
 		//@}
 		/** @name Options 
@@ -260,11 +260,10 @@ namespace BALL
 		private:
 
 		void computeClaverieParameters(Atom::Type solvent_type,
-				Atom::Type solute_type, std::pair<float, float>& parameters)
-			throw();
+				Atom::Type solute_type, std::pair<float, float>& parameters);
 		void getExternalSurface_(
 				std::vector< std::pair<Vector3, Surface> >& surface_map, 
-				const char* surface_file) throw();
+				const char* surface_file);
 
 	};
    

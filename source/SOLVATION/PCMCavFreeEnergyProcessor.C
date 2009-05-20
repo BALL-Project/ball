@@ -27,7 +27,7 @@ namespace BALL
 		= 298.0;
 	const float PCMCavFreeEnergyProcessor::Default::PROBE_RADIUS = 1.385;
 
-	PCMCavFreeEnergyProcessor::PCMCavFreeEnergyProcessor() throw()
+	PCMCavFreeEnergyProcessor::PCMCavFreeEnergyProcessor()
 		:	EnergyProcessor()
 	{
 		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
@@ -40,13 +40,13 @@ namespace BALL
 	}
 
 	PCMCavFreeEnergyProcessor::PCMCavFreeEnergyProcessor
-	(const PCMCavFreeEnergyProcessor& proc) throw()
+	(const PCMCavFreeEnergyProcessor& proc)
 		: EnergyProcessor(proc)
 	{
 	}
 
 	
-	PCMCavFreeEnergyProcessor::~PCMCavFreeEnergyProcessor() throw()
+	PCMCavFreeEnergyProcessor::~PCMCavFreeEnergyProcessor()
 	{
 		clear();
 
@@ -54,14 +54,14 @@ namespace BALL
 	}
 
 
-	void PCMCavFreeEnergyProcessor::clear() throw()
+	void PCMCavFreeEnergyProcessor::clear()
 	{
 		options.clear();
 
 		valid_ = true;
 	}
 
-        const PCMCavFreeEnergyProcessor& PCMCavFreeEnergyProcessor::operator = (const PCMCavFreeEnergyProcessor& proc) throw()     
+        const PCMCavFreeEnergyProcessor& PCMCavFreeEnergyProcessor::operator = (const PCMCavFreeEnergyProcessor& proc) 
         {
 	         valid_=proc.valid_;
                  energy_=proc.energy_;
@@ -69,7 +69,7 @@ namespace BALL
                  return *this;
         }
 
-        bool PCMCavFreeEnergyProcessor::operator == (const PCMCavFreeEnergyProcessor& proc) const throw()
+        bool PCMCavFreeEnergyProcessor::operator == (const PCMCavFreeEnergyProcessor& proc) const
         {
           bool result;
 		if ((fragment_ == 0) && (proc.fragment_ == 0))
@@ -92,7 +92,7 @@ namespace BALL
 		return result;
 	}
 	
-	bool PCMCavFreeEnergyProcessor::finish() throw()
+	bool PCMCavFreeEnergyProcessor::finish()
 	{
 		// first check for user settings
 
