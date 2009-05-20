@@ -7,7 +7,7 @@ CPP_SOURCES=\
 	file.C\
 	fileSystem.C\
 	path.C\
-	socket.C\
+	networking.C\
 	sysinfo.C\
 	systemCalls.C\
 	TCPTransfer.C\

@@ -71,7 +71,7 @@ namespace VIEW
 			If you dont pay attention to these rules, dont wonder if BALLView should freeze or crash!
 	*/
 	class BALL_VIEW_EXPORT BALLThread
-		: public QThread
+		: public virtual QThread
 	{
 		public:
 

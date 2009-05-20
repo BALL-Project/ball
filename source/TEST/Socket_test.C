@@ -1,74 +1,86 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Socket_test.C,v 1.12.20.1 2007/03/25 21:49:00 oliver Exp $
+
 
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
-#include <BALL/SYSTEM/socket.h>
-#include <unistd.h>
-
-#ifdef BALL_COMPILER_MSVC
-#	include<windows.h>
-#	include<process.h>
-#endif
+#include <BALL/SYSTEM/networking.h>
 
 ///////////////////////////
 
 using namespace BALL;
 
-SockInetBuf sock_inet_buf(SocketBuf::sock_stream);
-char c;
-
-void socket_listener(void*)
+class SimpleTCPServerTestThread
+	: public TCPServerThread
 {
-	sock_inet_buf.listen();
-	IOStreamSocket s(sock_inet_buf.accept());
-	s.get(c);
-}
+	public:
+		SimpleTCPServerTestThread(Size port, bool async, bool restart)
+			: TCPServerThread(port, async, restart),
+				sent_async("HelloAsync!"),
+				sent_sync("HelloSync!")
+		{}
 
-START_TEST(Socket, "$Id: Socket_test.C,v 1.12.20.1 2007/03/25 21:49:00 oliver Exp $")
+		void handleConnection() 
+		{
+			getline(connected_stream_, received);
+
+			connected_stream_ << sent_sync << std::endl;
+		}
+
+		void handleAsyncConnection() 
+		{
+			getline(connected_stream_, received);
+
+			connected_stream_ << sent_async << std::endl;
+		}
+
+		String received;
+		String sent_async;
+		String sent_sync;
+};
+
+START_TEST(Socket, "")
 using namespace BALL;
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 	  
-CHECK([EXTRA]simple socket transmission)
-	
-	sock_inet_buf.bind();
-	int port = sock_inet_buf.localport();
-	STATUS("localport = " << port)
-	STATUS("localhost = " << sock_inet_buf.localhost())
+CHECK([EXTRA] simple asynchronous socket transmission to/from threaded server)
+	SimpleTCPServerTestThread server(0, true, false);
+	server.start();
+
+	Size port = server.getPort();
 	ABORT_IF(port <= 0)
 
-#ifdef BALL_COMPILER_MSVC
-	_beginthread(socket_listener,0,NULL);
-	Sleep(1);
-	IOStreamSocket sio(SocketBuf::sock_stream);
-	int result = sio->connect(sock_inet_buf.localhost(), port);
-	STATUS("B:connect = " << result)
-	sio.put((char)123);
-	sio.flush();
-	STATUS("B:done.")
-#else
-	if (fork())
-	{	
-		socket_listener(0);
-	} 
-	else
-	{
-		sleep(1);
-		IOStreamSocket sio(SocketBuf::sock_stream);
-		int result = sio->connect(sock_inet_buf.localhost(), port);
-		STATUS("B:connect = " << result)
-		sio.put((char)123);
-		STATUS("B:done.")
-		return 0;
-	}
-#endif
+	String sent("Hello, world!");
 
-	TEST_EQUAL((int)c, (int)123);
+	TCPIOStream stream("localhost", port);
+	stream << sent << std::endl;
+	TEST_EQUAL(sent, server.received);
+
+	String received;
+	stream >> received;
+	TEST_EQUAL(received, server.sent_async);	
+RESULT
+	
+CHECK([EXTRA] simple synchronous socket transmission to/from threaded server)
+	SimpleTCPServerTestThread server(0, false, false);
+	server.start();
+
+	Size port = server.getPort();
+	ABORT_IF(port <= 0)
+
+	String sent("Hello, world!");
+
+	TCPIOStream stream("localhost", port);
+	stream << sent << std::endl;
+	TEST_EQUAL(sent, server.received);
+
+	String received;
+	stream >> received;
+	TEST_EQUAL(received, server.sent_sync);	
 RESULT
 	
 
