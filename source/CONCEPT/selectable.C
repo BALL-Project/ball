@@ -12,24 +12,24 @@ namespace BALL
 {
 
 	Selectable::Selectable()
-		throw()
+		
 		:	selected_(BALL_SELECTABLE_DEFAULT_SELECTION)
 	{
 	}
 
 	Selectable::Selectable(const Selectable& selectable, bool)
-		throw()
+		
 		:	selected_(selectable.selected_)
 	{
 	}
 
 	Selectable::~Selectable()
-		throw()
+		
 	{
 	}
 
 	void Selectable::dump(ostream& s, Size depth) const
-		throw()
+		
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 
@@ -43,13 +43,13 @@ namespace BALL
 	}  
 
   void Selectable::write(PersistenceManager& pm) const
-		throw()
+		
   {
 		pm.writePrimitive(selected_, "selected_");
 	}
 
   bool Selectable::read(PersistenceManager& pm)
-		throw()
+		
   {
 		return pm.readPrimitive(selected_, "selected_");
 	}

@@ -17,26 +17,26 @@ namespace BALL
 	Handle Object::global_handle_ = (Handle)0;
 
 	Object::Object()
-		throw()
+		
 		:	AutoDeletable(),
 			handle_(Object::global_handle_++)
 	{
 	}
 
 	Object::Object(const Object& /* object */)
-		throw()
+		
 		:	AutoDeletable(),
 			handle_(Object::global_handle_++)
 	{
 	}
 
 	Object::~Object()
-		throw()
+		
 	{
 	}
 
 	void Object::dump(ostream& s, Size depth) const
-		throw()
+		
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 
@@ -53,7 +53,7 @@ namespace BALL
 	}
 
 	int Object::compare(const Object & object) const
-		throw()
+		
 	{
 		if (*this == object)
 		{

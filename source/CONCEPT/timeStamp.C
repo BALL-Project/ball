@@ -27,7 +27,7 @@ namespace BALL
 {
 
 	PreciseTime::PreciseTime()
-		throw()
+		
 		: secs_(0),
 			usecs_(0)
 	{
@@ -39,7 +39,7 @@ namespace BALL
 	}
 
 	PreciseTime::PreciseTime(const PreciseTime& time)
-		throw()
+		
 		:	secs_(time.secs_),
 			usecs_(time.usecs_)
 	{
@@ -50,14 +50,14 @@ namespace BALL
 #endif
 
 	TimeStamp::TimeStamp()
-		throw()
+		
 		:	time_()
 	{
 	}
 
 
 	void PreciseTime::write(PersistenceManager& pm) const
-		throw()
+		
   {
 		Size tmp = (Size)secs_;
 		pm.writePrimitive(tmp, "secs_");
@@ -66,7 +66,7 @@ namespace BALL
 	}
 
 	bool PreciseTime::read(PersistenceManager& pm)
-		throw()
+		
 	{
 	  Size tmp;
 		bool result = pm.readPrimitive(tmp, "secs_");
@@ -79,7 +79,7 @@ namespace BALL
 	}
 	
 	PreciseTime PreciseTime::now() 
-		throw()
+		
 	{
 		#ifdef BALL_COMPILER_MSVC
 			#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
@@ -105,7 +105,7 @@ namespace BALL
 	const PreciseTime PreciseTime::ZERO;
 
   ostream& operator << (ostream& os, const PreciseTime& time)
-		throw()
+		
 	{
 		String usecs((double)time.getMicroSeconds() / 1.0e6);
 		time_t secs = (time_t)time.getSeconds();
@@ -116,7 +116,7 @@ namespace BALL
 	}
 
   ostream& operator << (ostream& os, const TimeStamp& stamp)
-		throw()
+		
 	{
 		return os << stamp.getTime();
 	}

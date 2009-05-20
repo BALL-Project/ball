@@ -73,12 +73,12 @@ namespace BALL
 				Calls clear.
 		*/
 		MolecularInformation()
-			throw();
+			;
 
 		/** Destructor.
 		*/
 		virtual ~MolecularInformation()
-			throw();
+			;
 
 		/** Explicit default initialization.
 				Reset the state of this moleculareInformation to:
@@ -86,7 +86,7 @@ namespace BALL
 					-  type is set to <tt> TYPE__UNKNOWN</tt>
 		*/
 		virtual void clear()
-			throw();
+			;
 
 		//@} 
 		/**	@name	Accessors: inspectors and mutators */ 
@@ -99,13 +99,13 @@ namespace BALL
 				\see     Type
 				\see     visit
 		*/
-		Type getType() const throw() { return type_;}
+		Type getType() const  { return type_;}
 
 		///
-		String getName() const throw() { return name_;}
+		String getName() const  { return name_;}
 
 		///
-		String getTypeName() const throw() { return type_name_;}
+		String getTypeName() const  { return type_name_;}
 
 		/** Visit method.
 				This method tries to determine the name and the type of the Composite

@@ -24,7 +24,7 @@ namespace BALL
 {
 
 	PersistenceManager::PersistenceManager()
-		throw()
+		
 		: create_methods_(),
 			object_out_(),
 			object_out_needed_(),
@@ -39,7 +39,7 @@ namespace BALL
 	}
 
 	PersistenceManager::PersistenceManager(const PersistenceManager& pm)
-		throw()
+		
 		: create_methods_(pm.create_methods_),
 			object_out_(pm.object_out_),
 			object_out_needed_(pm.object_out_needed_),
@@ -52,7 +52,7 @@ namespace BALL
 	}
 
 	PersistenceManager::PersistenceManager(istream& is)
-		throw()
+		
 		: create_methods_(),
 			object_out_(),
 			object_out_needed_(),
@@ -68,7 +68,7 @@ namespace BALL
 	}
 
 	PersistenceManager::PersistenceManager(ostream& os)
-		throw()
+		
 		: create_methods_(),
 			object_out_(),
 			object_out_needed_(),
@@ -84,7 +84,7 @@ namespace BALL
 	}
 
 	PersistenceManager::PersistenceManager(istream& is, ostream& os)
-		throw()
+		
 		: create_methods_(),
 			object_out_(),
 			object_out_needed_(),
@@ -101,12 +101,12 @@ namespace BALL
 	}
 
 	PersistenceManager::~PersistenceManager()
-		throw()
+		
 	{
 	}
 
 	void PersistenceManager::registerKernelClasses_()
-		throw()
+		
 	{
 		// all kernel classes, their base classes, 
 		// and the classes used in kernel classes
@@ -151,13 +151,13 @@ namespace BALL
 	}
 
 	void PersistenceManager::registerClass(String signature, const CreateMethod	m)
-		throw()
+		
 	{
 		create_methods_.insert(signature, m);
 	}
 
 	void* PersistenceManager::createObject(String signature) const
-		throw()
+		
 	{
 		DEBUG("PersistenceManager: createObject(" << signature)
 		if (create_methods_.has(signature)) 
@@ -174,13 +174,13 @@ namespace BALL
 	}
 
 	Size PersistenceManager::getNumberOfClasses() const
-		throw()
+		
 	{
 		return create_methods_.size();
 	}
 
 	void PersistenceManager::setOstream(ostream& s) 
-		throw()
+		
 	{
 		ostr_ = &s;
 		object_out_.clear();
@@ -188,7 +188,7 @@ namespace BALL
 	}
 
 	void PersistenceManager::setIstream(istream& s) 
-		throw()
+		
 	{
 		istr_ = &s;
 		pointer_list_.clear();
@@ -196,7 +196,7 @@ namespace BALL
 	}
 		
 	void PersistenceManager::startOutput()
-		throw()
+		
 	{
 		initializeOutputStream();
 		object_out_.clear();
@@ -205,7 +205,7 @@ namespace BALL
 	}
 
 	void PersistenceManager::endOutput()
-		throw()
+		
 	{
 		writeStreamTrailer();
 		addNeededObjects_();
@@ -214,34 +214,34 @@ namespace BALL
 	}
 
 	void PersistenceManager::initializeInputStream()
-		throw()
+		
 	{
 	}
 
 	void PersistenceManager::finalizeInputStream()
-		throw()
+		
 	{
 	}
 
 	void PersistenceManager::initializeOutputStream()
-		throw()
+		
 	{
 	}
 
 	void PersistenceManager::finalizeOutputStream()
-		throw()
+		
 	{
 	}
 
 	PersistenceManager& PersistenceManager::operator << (const PersistentObject& object)
-		throw()
+		
 	{
 		object >> *this;
 		return *this;
 	}
 
 	PersistenceManager& PersistenceManager::operator >> (PersistentObject*& object_ptr)
-		throw()
+		
 	{
 		object_ptr = readObject();
 		return *this;
@@ -364,7 +364,7 @@ namespace BALL
 	}
 
 	void PersistenceManager::addPointerPair_(LongSize old_ptr, void* new_ptr)
-		throw()
+		
 	{
 		DEBUG("PersistenceManager: pointer pair (" << hex << old_ptr << "/" << new_ptr << ")")
 		pointer_map_.insert(std::make_pair(old_ptr, new_ptr));
@@ -389,7 +389,7 @@ namespace BALL
 	}
 
 	bool PersistenceManager::updatePointers_()
-		throw()
+		
 	{
 		// assume everything will go smoothly
 		bool result = true;

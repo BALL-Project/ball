@@ -43,16 +43,16 @@ namespace BALL
 		//@{
 
 		///
-		BALL_INLINE ConstRandomAccessIterator() throw() {}
+		BALL_INLINE ConstRandomAccessIterator()  {}
 	
 		///
-		BALL_INLINE ConstRandomAccessIterator(const ConstRandomAccessIterator& iterator) throw()
+		BALL_INLINE ConstRandomAccessIterator(const ConstRandomAccessIterator& iterator) 
 			:	Base(iterator)
 		{
 		}
 
 		///
-		BALL_INLINE ~ConstRandomAccessIterator() throw() {}
+		BALL_INLINE ~ConstRandomAccessIterator()  {}
 		//@}
 
 
@@ -122,10 +122,10 @@ namespace BALL
 		//@{
 
 		///
-		BALL_INLINE bool operator + () const throw() { return Base::getTraits().isValid(); }
+		BALL_INLINE bool operator + () const  { return Base::getTraits().isValid(); }
 
 		///
-		BALL_INLINE bool operator - () const throw() { return !Base::getTraits().isValid(); }
+		BALL_INLINE bool operator - () const  { return !Base::getTraits().isValid(); }
 
     /** Lesser operator.
 		 *	Returns true if both iterators have the same container
@@ -179,7 +179,7 @@ namespace BALL
 
 		protected:
 
-		ConstRandomAccessIterator(const Container& container) throw()
+		ConstRandomAccessIterator(const Container& container) 
 			:	Base(container)
 		{
 		}
@@ -448,16 +448,16 @@ namespace BALL
 		//@{
 
 		///
-		BALL_INLINE RandomAccessIterator() throw() {}
+		BALL_INLINE RandomAccessIterator()  {}
 	
 		///
-		BALL_INLINE RandomAccessIterator(const RandomAccessIterator& iterator) throw()
+		BALL_INLINE RandomAccessIterator(const RandomAccessIterator& iterator) 
 			:	Base(iterator)
 		{
 		}
 
 		///
-		BALL_INLINE ~RandomAccessIterator() throw() {}
+		BALL_INLINE ~RandomAccessIterator()  {}
 		//@}
 
 		/**	@name Dereferenciation
@@ -466,9 +466,9 @@ namespace BALL
 		///
 		BALL_INLINE reference operator [] (Index index) const throw(Exception::InvalidIterator) { return const_cast<reference>(Base::getTraits().getData(index)); }
 		///
-		BALL_INLINE reference operator * () const throw() { return const_cast<reference>(Base::getTraits().getData()); }
+		BALL_INLINE reference operator * () const  { return const_cast<reference>(Base::getTraits().getData()); }
 		///
-		BALL_INLINE pointer operator -> () const throw() { return const_cast<pointer>(&Base::getTraits().getData()); }
+		BALL_INLINE pointer operator -> () const  { return const_cast<pointer>(&Base::getTraits().getData()); }
 		//@}
 
 		/**	@name Assignment
@@ -501,7 +501,7 @@ namespace BALL
 
 		protected:
 
-		BALL_INLINE RandomAccessIterator(const Container& container) throw()
+		BALL_INLINE RandomAccessIterator(const Container& container) 
 			:	Base(container)
 		{
 		}

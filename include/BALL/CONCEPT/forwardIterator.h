@@ -43,16 +43,16 @@ namespace BALL
 		//@{
 
 		/// Default constructor
-		BALL_INLINE ConstForwardIterator() throw() {}
+		BALL_INLINE ConstForwardIterator()  {}
 	
 		/// Copy constructor
-		BALL_INLINE ConstForwardIterator(const ConstForwardIterator& iterator) throw()
+		BALL_INLINE ConstForwardIterator(const ConstForwardIterator& iterator) 
 			:	BaseIterator<Container, DataType, Position, Traits>(iterator)
 		{
 		}
 			
 		///
-		BALL_INLINE ~ConstForwardIterator() throw() {}
+		BALL_INLINE ~ConstForwardIterator()  {}
 
 		//@}
 
@@ -60,14 +60,14 @@ namespace BALL
 		*/
 		//@{
 		///
-		BALL_INLINE ConstForwardIterator& operator = (const ConstForwardIterator& iterator) throw()
+		BALL_INLINE ConstForwardIterator& operator = (const ConstForwardIterator& iterator) 
 		{
 			BaseIterator<Container, DataType, Position, Traits>::operator = (iterator);
 			return *this;
 		}
 
 		///
-		BALL_INLINE void swap(ConstForwardIterator& iterator) throw() { std::swap(ConstForwardIterator<Container, DataType, Position, Traits>::getTraits(), iterator.getTraits()); }
+		BALL_INLINE void swap(ConstForwardIterator& iterator)  { std::swap(ConstForwardIterator<Container, DataType, Position, Traits>::getTraits(), iterator.getTraits()); }
 		//@}
 
 		/** @name Iterator methods
@@ -78,13 +78,13 @@ namespace BALL
 		BALL_INLINE void toBegin() throw(Exception::Precondition);
 
 		/// Check whether the iterator points to the first item of the container
-		BALL_INLINE bool isBegin() const throw();
+		BALL_INLINE bool isBegin() const ;
 
 		/// Move the iterator behind the last item of the container
 		BALL_INLINE void toEnd() throw(Exception::Precondition);
 
 		/// Check whether the iterator points behind the last item of the container
-		BALL_INLINE bool isEnd() const throw();
+		BALL_INLINE bool isEnd() const ;
 
 		/// Return an iterator pointing to the beginning of the container
 		static ConstForwardIterator begin(const Container& container)
@@ -116,7 +116,7 @@ namespace BALL
 		protected:
 
 		///
-		BALL_INLINE ConstForwardIterator(const Container& container) throw()
+		BALL_INLINE ConstForwardIterator(const Container& container) 
 			:	BaseIterator<Container, DataType, Position, Traits>(container)
 		{
 		}
@@ -146,7 +146,7 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	BALL_INLINE
 	bool ConstForwardIterator<Container, DataType, Position, Traits>::isBegin() const
-		throw()
+		
 	{
 		if (Base::getTraits().isSingular())
 		{
@@ -178,7 +178,7 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	BALL_INLINE
 	bool ConstForwardIterator<Container, DataType, Position, Traits>::isEnd() const
-		throw()
+		
 	{
 		if (Base::isSingular())
 		{
@@ -212,30 +212,30 @@ namespace BALL
 		//@{
 
 		///
-		BALL_INLINE ForwardIterator() throw() {}
+		BALL_INLINE ForwardIterator()  {}
 	
 		///
-		BALL_INLINE ForwardIterator(const ForwardIterator& iterator) throw()
+		BALL_INLINE ForwardIterator(const ForwardIterator& iterator) 
 			:	ConstForwardIterator<Container, DataType, Position, Traits>(iterator)
 		{
 		}
 
 		///
-		BALL_INLINE ~ForwardIterator() throw() {}			
+		BALL_INLINE ~ForwardIterator()  {}			
 		//@}
 
 		/** @name Assignemnt
 		*/
 		//@{
 		///
-		BALL_INLINE ForwardIterator& operator = (const ForwardIterator& iterator) throw()
+		BALL_INLINE ForwardIterator& operator = (const ForwardIterator& iterator) 
 		{
 			ConstForwardIterator<Container, DataType, Position, Traits>::operator = (iterator);
 			return *this;
 		}
 
 		///
-		BALL_INLINE void swap(ForwardIterator& iterator) throw() { std::swap(Base::getTraits(), iterator.getTraits()); }
+		BALL_INLINE void swap(ForwardIterator& iterator)  { std::swap(Base::getTraits(), iterator.getTraits()); }
 		//@}
 
 		/** @name Iterator methods
@@ -249,13 +249,13 @@ namespace BALL
 		static ForwardIterator end(const Container& container) throw(Exception::Precondition);
 
 		///
-		BALL_INLINE reference operator * () const throw() 
+		BALL_INLINE reference operator * () const  
 		{ 
 			return (reference)Base::getTraits().getData(); 
 		}
 
 		///
-		BALL_INLINE pointer operator -> () const throw() 
+		BALL_INLINE pointer operator -> () const  
 		{ 
 			return (pointer)&Base::getTraits().getData(); 
 		}
@@ -282,7 +282,7 @@ namespace BALL
 		protected:
 
 		///
-		BALL_INLINE ForwardIterator(const Container& container) throw()	
+		BALL_INLINE ForwardIterator(const Container& container) 	
 			:	Base(container)
 		{
 		}
