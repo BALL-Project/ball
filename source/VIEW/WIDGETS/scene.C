@@ -25,6 +25,7 @@
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
 #include <BALL/VIEW/RENDERING/VRMLRenderer.h>
 #include <BALL/VIEW/RENDERING/STLRenderer.h>
+#include <BALL/VIEW/RENDERING/tilingRenderer.h>
 
 #include <BALL/VIEW/PRIMITIVES/simpleBox.h>
 #include <BALL/VIEW/PRIMITIVES/box.h>

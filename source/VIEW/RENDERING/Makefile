@@ -21,9 +21,11 @@ CPP_SOURCES=\
 	renderSetup.C\
 	POVRenderer.C\
 	STLRenderer.C\
+	tilingRenderer.C\
 	VRMLRenderer.C\
 	vertexBuffer.C\
 	glRenderWindow.C\
+	glOffscreenTarget.C\
 	renderWindow.C\
 	pixelFormat.C\
 

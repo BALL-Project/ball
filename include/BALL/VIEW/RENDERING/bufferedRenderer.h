@@ -30,7 +30,6 @@ namespace BALL
 			: public Renderer
 		{
 		public:
-
 			BufferedRenderer()
 			 : Renderer(), 
 			 	 bufferFormat() { }

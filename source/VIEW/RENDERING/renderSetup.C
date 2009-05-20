@@ -1,6 +1,7 @@
 #include <BALL/VIEW/RENDERING/renderSetup.h>
 
 #include <BALL/VIEW/RENDERING/bufferedRenderer.h>
+#include <BALL/VIEW/RENDERING/tilingRenderer.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 
 
@@ -113,8 +114,7 @@ namespace BALL
 				}
 			}
 
-			if (RTTI::isKindOf<GLRenderer>(*renderer))
-				((GLRenderer*)renderer)->setSize(width, height);
+			((GLRenderer*)renderer)->setSize(width, height);
 
 			render_mutex_.unlock();
 
@@ -252,9 +252,8 @@ namespace BALL
 			{
 				((BufferedRenderer*)renderer)->renderToBuffer(target, *stage_);
 				target->refresh();
-			}
-
-			if (RTTI::isKindOf<GLRenderer>(*renderer))
+			} 
+			else if (RTTI::isKindOf<GLRenderer>(*renderer))
 			{
 				GLRenderer* current_gl_renderer = (GLRenderer*)renderer;
 
@@ -262,6 +261,12 @@ namespace BALL
 				current_gl_renderer->renderToBuffer(target, GLRenderer::DISPLAY_LISTS_RENDERING);
 
 				glFlush();
+			}
+			else if (RTTI::isKindOf<TilingRenderer>(*renderer))
+			{
+				static_cast<TilingRenderer*>(renderer)->renderToBuffer(target);
+				glFlush();
+				target->swapBuffers();
 			}
 
 			if (show_ruler_)
