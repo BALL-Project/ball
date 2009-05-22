@@ -67,6 +67,7 @@ namespace BALL
 			qApp->postEvent(main_control_, new MessageEvent(msg));
 		}
 
+				throw;
 		// ==========================================
 		
 		UpdateRepresentationThread::UpdateRepresentationThread()
