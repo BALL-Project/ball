@@ -34,22 +34,66 @@ enum DrawingPrecision
 
 enum ModelType
 {
-	MODEL_UNKNOWN = -1,
+	/// defines the property for the model: Lines
 	MODEL_LINES = 0,
+
+	/// defines the property for the model: Stick
 	MODEL_STICK,
+
+	/// defines the property for the model: Ball and Stick
 	MODEL_BALL_AND_STICK,
+
+	/// defines the property for the model: Van der Waals
 	MODEL_VDW,
+
+	/// defines the property for the model: solvent-excluded surface
 	MODEL_SE_SURFACE,
+
+	/// defines the property for the model: solvent-accessible surface
 	MODEL_SA_SURFACE,
+
+	/// defines the property for the model: Backbone
 	MODEL_BACKBONE,
+
+	/// defines the property for the model: Cartoon
 	MODEL_CARTOON,
+
+	/// defines the property for the model: Ribbon
+	MODEL_RIBBON,
+
+	/// defines the property for the model: H-Bonds
 	MODEL_HBONDS,
-  MODEL_FORCES,
-	MODEL_LABEL,
+
+	/// 
+	MODEL_FORCES,
+
+	// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	// add new model types before this comment!!!!
+	// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+	/// defines the property for the model: Label
+	MODEL_LABEL = 100,
+
+	/// defines the property for the model: contour surface
 	MODEL_CONTOUR_SURFACE,
+
+	///
 	MODEL_GRID_SLICE,
+
+	///
 	MODEL_GRID_VOLUME,
-	MODEL_FIELD_LINES
+
+	///
+	MODEL_FIELD_LINES,
+
+	///
+	MODEL_INFORMATIONS,
+
+	/// defines the property for the model: proximity light
+	MODEL_PROXIMITY_LIGHT,
+
+	/// unkown property
+	MODEL_UNKNOWN = 200
 };
 
 enum ColoringMethod
