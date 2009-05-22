@@ -17,7 +17,6 @@
 # include <BALL/VIEW/KERNEL/common.h>
 #endif 
 
-
 #include <QtCore/QPoint>
 #include <QtGui/QMenu>
 
@@ -202,6 +201,9 @@ namespace BALL
 			
 			/// Overloaded from GenericControl
 			virtual void deleteCurrentItems();
+
+			///
+			virtual void setupProximityLight();
 
 			//@}
 			

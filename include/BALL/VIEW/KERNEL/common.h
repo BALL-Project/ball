@@ -221,6 +221,9 @@ namespace BALL
 
 			///
 			MODEL_COORDINATE_SYSTEM,
+			
+			/// defines the property for the model: proximity light
+			MODEL_PROXIMITY_LIGHT,
 
 			/// unkown property
 			MODEL_UNKNOWN = 200

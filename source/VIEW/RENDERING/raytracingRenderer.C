@@ -9,7 +9,7 @@ namespace BALL
 {
 	namespace VIEW
 	{		
-        bool RaytracingRenderer::supports(const PixelFormat &format) const
+		bool RaytracingRenderer::supports(const PixelFormat &format) const
 		{
 			return ((format == PixelFormat::RGBA_32) || (format == PixelFormat::RGBF_96));
 		}
@@ -29,6 +29,14 @@ namespace BALL
 		bool RaytracingRenderer::supports(const FrameBufferFormat &format) const
 		{
             return supports(format.getPixelFormat());				
+		}
+
+		std::vector<float> RaytracingRenderer::intersectRaysWithGeometry(const std::vector<Vector3>& origins,
+		                                                                 const std::vector<Vector3>& directions)
+		{
+			Log.error() << "Sorry, intersectRaysWithGeometry() not implemented for this kind of renderer!" << std::endl;
+
+			return std::vector<float>();
 		}
 
 	} // namespace VIEW

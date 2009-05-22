@@ -229,48 +229,56 @@ namespace BALL
 			addItem_((String)tr("Focus"), SLOT(focus()));
 			addItem_((String)tr("Duplicate"), SLOT(duplicate()));
 			addItem_((String)tr("Move"), SLOT(enterMoveMode()));
-			Size all_pos = context_menu_actions_.size() - 1;
-			context_menu_.addSeparator();
-			addItem_((String)tr("Save Surface"), SLOT(saveSurface()));
- 			addItem_((String)tr("Select Atoms"), SLOT(selectAtoms()));
-			addItem_((String)tr("Modify Model"), SLOT(modifyRepresentation_()));	
- 			addItem_((String)tr("Modify Representation"), SLOT(show()), modify_rep_dialog_);	
-			addItem_((String)tr("Rename"), SLOT(renameRepresentation()));
-			context_menu_.addSeparator();
-			Size acs = context_menu_actions_.size() - 1;
-			context_menu_actions_.push_back(context_menu_.addMenu(&clipping_plane_context_menu_));
-			context_menu_actions_[acs + 1]->setText(tr("Clipping Plane"));
 
-			// planes ->
-			if (plane != 0)
+			if (rep->getModelType() == MODEL_PROXIMITY_LIGHT)
 			{
-				context_menu_actions_[acs + 1]->setEnabled(true);
-
-				for (Position p = all_pos + 1; p <= acs; p++)
-				{
-					context_menu_actions_[p]->setEnabled(false); 
-				}
-				return;
+				addItem_((String)tr("Setup Proximity Light"), SLOT(setupProximityLight()));
 			}
-
-			// representations ->
-			context_menu_actions_[4]->setEnabled(rep->getModelType() == MODEL_GRID_SLICE);
-			const ModelInformation& mi = getMainControl()->getModelInformation();
-			context_menu_actions_[all_pos + 1]->setEnabled(mi.isSurfaceModel(rep->getModelType()));
-			context_menu_actions_[acs + 1]->setEnabled(false);
-
-			if (getSelectedItems().size() != 1)
+			else
 			{
-				for (Position p = 1; p <= acs; p++)
+				Size all_pos = context_menu_actions_.size() - 1;
+				context_menu_.addSeparator();
+				addItem_((String)tr("Save Surface"), SLOT(saveSurface()));
+				addItem_((String)tr("Select Atoms"), SLOT(selectAtoms()));
+				addItem_((String)tr("Modify Model"), SLOT(modifyRepresentation_()));	
+				addItem_((String)tr("Modify Representation"), SLOT(show()), modify_rep_dialog_);	
+				addItem_((String)tr("Rename"), SLOT(renameRepresentation()));
+				context_menu_.addSeparator();
+				Size acs = context_menu_actions_.size() - 1;
+				context_menu_actions_.push_back(context_menu_.addMenu(&clipping_plane_context_menu_));
+				context_menu_actions_[acs + 1]->setText(tr("Clipping Plane"));
+
+				// planes ->
+				if (plane != 0)
 				{
-					context_menu_actions_[p]->setEnabled(false); 
-				}
-			}
+					context_menu_actions_[acs + 1]->setEnabled(true);
 
-			// not modifyable
-			if (rep->getModelType() >= MODEL_LABEL)
-			{
-				context_menu_actions_[6]->setEnabled(false);
+					for (Position p = all_pos + 1; p <= acs; p++)
+					{
+						context_menu_actions_[p]->setEnabled(false); 
+					}
+					return;
+				}
+
+				// representations ->
+				context_menu_actions_[4]->setEnabled(rep->getModelType() == MODEL_GRID_SLICE);
+				const ModelInformation& mi = getMainControl()->getModelInformation();
+				context_menu_actions_[all_pos + 1]->setEnabled(mi.isSurfaceModel(rep->getModelType()));
+				context_menu_actions_[acs + 1]->setEnabled(false);
+
+				if (getSelectedItems().size() != 1)
+				{
+					for (Position p = 1; p <= acs; p++)
+					{
+						context_menu_actions_[p]->setEnabled(false); 
+					}
+				}
+
+				// not modifyable
+				if (rep->getModelType() >= MODEL_LABEL)
+				{
+					context_menu_actions_[6]->setEnabled(false);
+				}
 			}
 
 			modify_rep_dialog_->setRepresentation(rep);
@@ -340,6 +348,11 @@ namespace BALL
 				getMainControl()->getRepresentationManager().removeClippingPlane(plane);
 				setStatusbarText((String)tr("Deleted Clipping Plane."));
 			}
+		}
+
+		void GeometricControl::setupProximityLight()
+		{
+			Log.info() << "I am sooooo sorry, but this does not exist yet!" << std::endl;
 		}
 
 		void GeometricControl::selectedRepresentation(Representation& representation, bool state)
