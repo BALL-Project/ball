@@ -107,8 +107,6 @@ namespace BALL
 				ColorRGBA const& color = it->getColor();
 
 				lights_[current_light]->setParam("intensity", float3((float)color.getRed()*intensity,(float)color.getGreen()*intensity,(float)color.getBlue()*intensity));
-
-				printf("adding light with intensity %f\n", intensity);
 			}
 		}
 
@@ -189,8 +187,8 @@ namespace BALL
 
 			List<GeometricObject*>::ConstIterator it;
 			for (it =  rep.getGeometricObjects().begin();
-					it != rep.getGeometricObjects().end();
-					it++)
+					 it != rep.getGeometricObjects().end();
+					 it++)
 			{
 				if (RTTI::isKindOf<Mesh>(**it))
 				{
@@ -491,8 +489,28 @@ namespace BALL
 			// shininess
 			material->setParam("shininess", rt_material.shininess);
 
-            // transparency
-            material->setParam("alpha", (100.f - rt_material.transparency) * 0.01f);
+			// transparency
+			material->setParam("alpha", (100.f - rt_material.transparency) * 0.01f);
+		}
+
+		std::vector<float> RTfactRenderer::intersectRaysWithGeometry(const std::vector<Vector3>& origins,
+		                                                             const std::vector<Vector3>& directions)
+		{
+			if (origins.size() != directions.size())
+			{
+				Log.error() << "RTfactRenderer::intersectRaysWithGeometry: sizes of origins/directions vectors disagree!" << std::endl;
+
+				return std::vector<float>();
+			}
+
+			std::vector<float> results(origins.size());
+
+			m_renderer.intersectRays(reinterpret_cast<const float*>(&origins[0]), 
+			                         reinterpret_cast<const float*>(&directions[0]), 
+															 origins.size(),
+															 reinterpret_cast<float*>(&results[0]));
+
+			return results;
 		}
 
 	}

@@ -67,6 +67,8 @@ namespace BALL
 					return "Informations";
 				case MODEL_COORDINATE_SYSTEM:
 					return "Coordinate System";
+				case MODEL_PROXIMITY_LIGHT:
+					return "Proximity Light";
 				case MODEL_UNKNOWN:
 					return "Unknown";
 			}

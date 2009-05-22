@@ -15,6 +15,8 @@
 
 #include <BALL/VIEW/RENDERING/bufferedRenderer.h>
 
+#include <vector>
+
 namespace BALL
 {
 	namespace VIEW
@@ -48,7 +50,21 @@ namespace BALL
 			virtual void updateMaterialForRepresentation(Representation const* rep) = 0;
 			virtual void updateMaterialForRepresentation(Representation const* rep, const Stage::RaytracingMaterial& new_material) = 0;
 
-        protected:
+			/** Raytracing-related functionality **/
+			//@{ 
+			/** Intersect a set of rays with the geometry buffered by this renderer.
+			 *
+			 *  This function will intersect the rays 
+			 *
+			 *     origins[i] + l * directions[i]
+			 *
+			 *  with the geometry that has been buffered by this renderer previously.
+			 */
+			virtual std::vector<float> intersectRaysWithGeometry(const std::vector<Vector3>& origins, 
+			                                                     const std::vector<Vector3>& directions);
+
+			//@}
+		protected:
 
 			/* BufferedRender protected methods */
 			virtual bool supports(const FrameBufferFormat &format) const;
