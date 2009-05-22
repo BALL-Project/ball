@@ -131,6 +131,7 @@ namespace BALL
 			catch(...)
 			{
 				output_(String("Exception in ") + String(__FILE__) + ": " + String(__LINE__), true);
+				throw;
 			}
 		}
 
