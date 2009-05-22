@@ -252,7 +252,7 @@ namespace BALL
 				DatasetController* dc = DatasetControl::getInstance(0)->getController(RegularData3DController::type);
 				RegularData3DController& rcon = *(RegularData3DController*) dc;
 
-				if(eds_maptype->currentIndex() == 1)//diff map
+				if((eds_maptype->currentIndex() == 1) && (server->currentIndex() == 0))//diff map
 				{
 					rcon.computeIsoContourSurface(*set, ColorRGBA(0,255,0), 3*d3->calculateSD());
 					rcon.computeIsoContourSurface(*set, ColorRGBA(255,0,0), -3*d3->calculateSD());
