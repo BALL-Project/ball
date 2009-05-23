@@ -238,20 +238,30 @@ namespace BALL
 				gl_target_->ignoreEvents(true);
 			Timer t;
 
+			Size current_frame = 0;
+			double fps = 0.;
 			// to be stopped from the outside, someone needs to call useContinuousLoop(false)
 			while (!about_to_quit_)
 			{
-				printf("###################################### FRAME #####################################\n");
 				t.start();
 				renderToBuffer_();
+				t.stop();
 
+				fps += t.getClockTime();
+				
+				if (current_frame % 10 == 0)
+				{
+					fps = 10./fps;
+					printf("########## Average rendering FPS = %.2lf  #########\n", fps);
+
+					fps = 0.;
+				}
 				loop_mutex.lock();
 				qApp->postEvent(scene_, new RenderToBufferFinishedEvent(this));
 				wait_for_render.wait(&loop_mutex);
 				loop_mutex.unlock();
-				t.stop();
-				printf("###################################### DONE (%f)  #####################################\n", t.getClockTime());
 				t.reset();
+				current_frame++;
 			}
 		}
 
