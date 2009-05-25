@@ -123,11 +123,6 @@ namespace BALL
 				atom_grid.insert(at_it->getPosition(), &(*at_it));
 		}
 
-		// get the Index size of the grid
-		const Index size_x = atom_grid.getSizeX();
-		const Index size_y = atom_grid.getSizeY();
-		const Index size_z = atom_grid.getSizeZ();
-
 		Size last_surface_index = 0;
 
 		// now iterate over all atoms and determine their possibly occluding neighbours
@@ -147,37 +142,22 @@ namespace BALL
 			// find the atom's box
 			HashGridBox3<Atom const*>* box = atom_grid.getBox(at_it->getPosition());
 
-			// get the indices of the box containing atom B
-			Position x, y, z;                            
-			atom_grid.getIndices(*box, x, y, z);   
+			// and iterate over all boxes in the neighbourhood, including the box itself
+			HashGridBox3<Atom const*>::BoxIterator neighbour_box = box->beginBox();
 
-			// iterate over all the neighbouring boxes
-			for (int nx = x-1; (nx < size_x) && (nx < (int)x+2); nx++)
+			for (; +neighbour_box; ++neighbour_box)
 			{
-				if (nx < 0) continue;
-				for (int ny = y-1; (ny < size_y) && (ny < (int)y+2); ny++)
+				// iterate over all atoms of the current neighbouring box
+				HashGridBox3<Atom const*>::DataIterator data_it;
+				for (data_it = neighbour_box->beginData(); +data_it; ++data_it)
 				{
-					if (ny < 0) continue;     
-					for (int nz = z-1; (nz < size_z) && (nz < (int)z+2); nz++)
-					{
-						if (nz < 0) continue;
+					if (*data_it == &*at_it)
+						continue;
 
-						// get the current neighbouring box
-						HashGridBox3<Atom const*>* neighbour_box = atom_grid.getBox(nx, ny, nz);
-
-						// iterate over all atoms of the current neighbouring box
-						HashGridBox3<Atom const*>::DataIterator data_it;
-						for (data_it = neighbour_box->beginData(); +data_it; ++data_it)
-						{
-							if (*data_it == &*at_it)
-								continue;
-
-							// do the atoms overlap at all?
-							float radius_sum = current_radius + (*data_it)->getRadius() + probe_radius;
-							if ((current_center-(*data_it)->getPosition()).getSquareLength() <= radius_sum*radius_sum)
-								neighbours.push_back(*data_it);
-						}
-					}
+					// do the atoms overlap at all?
+					float radius_sum = current_radius + (*data_it)->getRadius() + probe_radius;
+					if ((current_center-(*data_it)->getPosition()).getSquareLength() <= radius_sum*radius_sum)
+						neighbours.push_back(*data_it);
 				}
 			} // end loop over neighbour boxes
 
