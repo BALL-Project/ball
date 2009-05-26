@@ -129,7 +129,7 @@ namespace BALL
 		BALL_docu->setBaseDirectory(dirp);
 		BALL_docu->setWhatsThisEnabled(false);
 		BALL_docu->setProject("BALL");
-		BALL_docu->setDefaultPage("index.htm");
+		BALL_docu->setDefaultPage("index.html");
 
 		addDockWidget(Qt::BottomDockWidgetArea, new HelpViewer(this, "BALLView Docu"));
 
