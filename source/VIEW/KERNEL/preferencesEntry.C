@@ -185,14 +185,6 @@ namespace BALL
 					BALLVIEW_DEBUG;
 				}
 			}
-			else if (RTTI::isKindOf<PreferencesObject>(*widget))
-			{
-				const PreferencesObject* epo = dynamic_cast<const PreferencesObject*>(widget);
-				if (!epo->getValue(value))
-				{
-					BALLVIEW_DEBUG;
-				}
-			}
 			else if (RTTI::isKindOf<QSlider>(*widget))
 			{
 				value = String((dynamic_cast<const QSlider*>(widget))->value());
