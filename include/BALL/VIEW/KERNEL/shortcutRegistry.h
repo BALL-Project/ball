@@ -28,7 +28,10 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		/** ShortcutRegistry 
+		/** ShortcutRegistry.
+		 *  It takes care of handling all shortcuts.
+		 *  It is responsible for registering, changing single shortcuts
+		 *  or loading entire shortcut-configuration files.
 		*/
 		class BALL_VIEW_EXPORT ShortcutRegistry
 			: public QObject,
@@ -39,7 +42,6 @@ namespace BALL
 
 			public:
 				BALL_EMBEDDABLE(ShortcutRegistry, Embeddable)
-//				BALL_CREATE(ShortcutRegistry)
 
 				///
 				ShortcutRegistry();
@@ -75,7 +77,8 @@ namespace BALL
 				bool hasKey(const String& key_seq);
 
 				std::pair<String, QAction*> operator[](Index i);
-
+				
+				// needed for storing this classes' preferences
 				virtual bool getValue(String&) const;
 				virtual bool setValue(const String&);
 

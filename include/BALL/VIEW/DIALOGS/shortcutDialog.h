@@ -32,8 +32,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		//class MolecularStructure;
-
 		/** Dialog for changing the BALLView shortcuts
 				\ingroup ViewDialogs
 		*/
@@ -46,9 +44,9 @@ namespace BALL
 			// macro needed for Qt's slot mechanism:
 			Q_OBJECT
 
-			public:
-
 			BALL_EMBEDDABLE(ShortcutDialog,ModularWidget)
+			
+			public:
 
 			/// Constructor
 			ShortcutDialog(QWidget* parent = NULL, const char* name = "ShortcutDialog", Qt::WFlags fl = 0 );
@@ -56,8 +54,12 @@ namespace BALL
 			/// Destructor
 			virtual ~ShortcutDialog();
 
-			// method for e.g. initializing menu entries, overloaded
-			///
+			
+			/** Initialization. 
+			 		This method is called automatically before the main 
+					application is started. 
+					It adds the	dialog's menu entries and connections.
+			*/
 			virtual void initializeWidget(MainControl& main_control);
 
 			public slots:
