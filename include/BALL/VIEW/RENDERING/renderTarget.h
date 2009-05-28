@@ -237,7 +237,7 @@ namespace BALL
 			 *  the RenderTarget supports only a single buffer at a time), a
 			 *  NoBufferAvailable exception is thrown.
 			 */
-            virtual FrameBufferPtr getBuffer() throw(BALL::Exception::NoBufferAvailable) = 0;
+			virtual FrameBufferPtr getBuffer() throw(BALL::Exception::NoBufferAvailable) = 0;
 
 			virtual FrameBufferFormat getFormat() const = 0;
 
@@ -249,6 +249,21 @@ namespace BALL
 			 */
 			virtual void releaseBuffer(FrameBufferPtr buffer) = 0;
 
+			/** Initialization routine.
+			 */
+			virtual bool init() = 0;
+
+			/** Resize method.
+			 */
+			virtual bool resize(const unsigned int width, const unsigned int height) = 0;
+
+			/** Refresh the contents of the target buffer.
+			 */
+			virtual void refresh() = 0;
+
+			/* Prepare the window for rendering, e.g., make it current if necessary.
+			 */
+			virtual void prepareRendering() = 0;
 		};
 
 	} //namespace VIEW

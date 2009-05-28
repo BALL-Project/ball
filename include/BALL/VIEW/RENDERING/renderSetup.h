@@ -9,8 +9,8 @@
 # include <BALL/VIEW/RENDERING/glRenderer.h>
 #endif
 
-#ifndef BALL_VIEW_RENDERING_RENDERWINDOW_H
-# include <BALL/VIEW/RENDERING/renderWindow.h>
+#ifndef BALL_VIEW_RENDERING_RENDERTARGET_H
+# include <BALL/VIEW/RENDERING/renderTarget.h>
 #endif
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERWINDOW_H
@@ -37,45 +37,15 @@ namespace BALL {
 			:	public QThread
 		{
 			public:
-				RenderSetup(Renderer* r, GLRenderWindow* t, Scene* scene, const Stage* stage)
-					: QThread(),
-						renderer(r),
-						target(t),
-						rendering_paused_(false),
-						receive_updates_(true),
-						use_offset_(false),
-						camera_(),
-						camera_offset_(Vector3(0.)),
-						stereo_setup_(NONE),
-						use_continuous_loop_(false),
-						scene_(scene),
-						stage_(stage),
-						render_mutex_(true),
-						show_ruler_(false)
-				{}
+				RenderSetup(Renderer* r, RenderTarget* t, Scene* scene, const Stage* stage);
 
-				RenderSetup(const RenderSetup& rs)
-					: QThread(),
-						renderer(rs.renderer),
-						target(rs.target),
-						rendering_paused_(rs.rendering_paused_),
-						receive_updates_(rs.receive_updates_),
-						use_offset_(rs.use_offset_),
-						camera_(rs.camera_),
-						camera_offset_(rs.camera_offset_),
-						stereo_setup_(rs.stereo_setup_),
-						use_continuous_loop_(rs.use_continuous_loop_),
-						scene_(rs.scene_),
-						stage_(rs.stage_),
-						render_mutex_(true),
-						show_ruler_(rs.show_ruler_)
-				{}
+				RenderSetup(const RenderSetup& rs);
 
 				const RenderSetup& operator = (const RenderSetup& rs);
 
 				// TODO: this should be boost smart pointers!
-				Renderer* 				renderer;
-				GLRenderWindow*		target;
+				Renderer* 			renderer;
+				RenderTarget*		target;
 
 				enum STEREO_SETUP {
 					NONE,
@@ -231,6 +201,14 @@ namespace BALL {
 				 */
 				bool isContinuous() { return use_continuous_loop_; }
 
+				/** Ensure correct current rendering context.
+				 		
+					  If the target type uses a GL context, this is made current if
+						necessary. If the target does not need GL, this function is a
+						noop.
+				*/
+				virtual void makeCurrent();
+
 				virtual void run();
 
 			protected:
@@ -260,6 +238,10 @@ namespace BALL {
 				bool do_resize_;
 
 				bool show_ruler_;
+
+				// This pointer is used to avoid uneccessary RTTI calls and casting. If the target is not a
+				// GLRenderWindow or one of its derived classes, this pointer will simply be NULL
+				GLRenderWindow* gl_target_;
 		};
 	}
 }

@@ -26,6 +26,7 @@
 #include <BALL/VIEW/RENDERING/VRMLRenderer.h>
 #include <BALL/VIEW/RENDERING/STLRenderer.h>
 #include <BALL/VIEW/RENDERING/tilingRenderer.h>
+#include <BALL/VIEW/RENDERING/glOffscreenTarget.h>
 
 #include <BALL/VIEW/PRIMITIVES/simpleBox.h>
 #include <BALL/VIEW/PRIMITIVES/box.h>
@@ -453,7 +454,12 @@ namespace BALL
 			for (Position i=0; i<renderers_.size(); ++i)
 			{
 				renderers_[i].init();
-				renderers_[i].target->installEventFilter(this);
+				GLRenderWindow* gt = dynamic_cast<GLRenderWindow*>(renderers_[i].target);
+				if (gt) 
+				{
+					gt->ignoreEvents(true);
+					gt->installEventFilter(this);
+				}
 			}
 
 			if (stage_->getLightSources().size() == 0) setDefaultLighting(false);
@@ -541,13 +547,13 @@ namespace BALL
 				if (renderers_[i].isPaused() || renderers_[i].isContinuous())
 					continue;
 
-				GLRenderWindow* current_window = renderers_[i].target;
+				renderers_[i].makeCurrent();
 
-				current_window->lockGLContext();
+				QPaintDevice* current_dev = dynamic_cast<QPaintDevice*>(renderers_[i].target);
 
-				if (show_fps_)
+				if (show_fps_ && current_dev)
 				{
-					QPainter p(current_window);
+					QPainter p(current_dev);
 
 					QPen pen(QColor((int)text_color.getRed(),  (int)text_color.getGreen(), 
 													(int)text_color.getBlue(), (int)text_color.getAlpha()));
@@ -559,7 +565,7 @@ namespace BALL
 					QFontMetrics fm(font);
 
 					QRect r = fm.boundingRect(fps_string.c_str());
-					QPointF fps_point((float)current_window->width() - 20 - r.width(), 20);
+					QPointF fps_point((float)current_dev->width() - 20 - r.width(), 20);
 
 					p.setRenderHint(QPainter::Antialiasing, true);
 					p.setRenderHint(QPainter::TextAntialiasing, true);
@@ -571,7 +577,7 @@ namespace BALL
 
 				if (info_string_ != "")
 				{
-					QPainter p(current_window);
+					QPainter p(current_dev);
 
 					QPen pen(QColor((int)text_color.getRed(),  (int)text_color.getGreen(), 
 													(int)text_color.getBlue(), (int)text_color.getAlpha()));
@@ -585,9 +591,10 @@ namespace BALL
 					p.end();
 				}
 
-				current_window->swapBuffers();
-
-				current_window->unlockGLContext();
+				if (RTTI::isKindOf<GLRenderWindow>(*renderers_[i].target))
+					static_cast<GLRenderWindow*>(renderers_[i].target)->swapBuffers();
+				else if (RTTI::isKindOf<GLOffscreenTarget>(*renderers_[i].target))
+					static_cast<GLOffscreenTarget*>(renderers_[i].target)->refresh();
 			}
 		}
 
@@ -2646,8 +2653,8 @@ namespace BALL
 			if (gl_renderer_->getStereoMode() == GLRenderer::NO_STEREO) return;
 
 			// remember pointers to the left and right windows
-			GLRenderWindow* left_window  = (stereo_left_eye_  != -1) ? renderers_[stereo_left_eye_ ].target : 0;
-			GLRenderWindow* right_window = (stereo_right_eye_ != -1) ? renderers_[stereo_right_eye_].target : 0;
+			RenderTarget* left_window  = (stereo_left_eye_  != -1) ? renderers_[stereo_left_eye_ ].target : 0;
+			RenderTarget* right_window = (stereo_right_eye_ != -1) ? renderers_[stereo_right_eye_].target : 0;
 
 			// note: it is important to erase the right eye first, because then the index of the
 			// left eye will still be valid (being smaller than the erased right one)
@@ -2695,6 +2702,30 @@ namespace BALL
 
 		void Scene::addGlWindow()
 		{
+			GLOffscreenTarget* new_widget = new GLOffscreenTarget(main_display_, "test_tiling.png");
+			new_widget->init();
+			new_widget->resize(width(), height());
+			new_widget->prepareRendering();
+
+			GLRenderer* new_gl_renderer = new GLRenderer;
+			new_gl_renderer->init(*this);
+			new_gl_renderer->enableVertexBuffers(want_to_use_vertex_buffer_);
+
+			TilingRenderer* new_renderer = new TilingRenderer(new_gl_renderer);
+			new_renderer->init(*this);
+
+//			new_widget->show();
+
+			RenderSetup new_rs(new_renderer, new_widget, this, stage_);
+			resetRepresentationsForRenderer_(new_rs);
+
+/*			if (new_widget->isSharing())
+			else
+				*/
+
+			renderers_.push_back(new_rs);
+
+			/*
 			GLRenderWindow* new_widget = new GLRenderWindow(0, "Scene", Qt::Window);
 			new_widget->makeCurrent();
 			new_widget->init();
@@ -2713,6 +2744,7 @@ namespace BALL
 			resetRepresentationsForRenderer_(new_rs);
 
 			renderers_.push_back(new_rs);
+			*/
 		}
 
 		void Scene::enterActiveStereo()

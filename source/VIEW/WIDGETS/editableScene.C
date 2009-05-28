@@ -486,7 +486,8 @@ namespace BALL
 			p.drawLine(QPointF(draw_from.x, draw_from.y), QPointF(draw_to.x, draw_to.y));
 			p.end();
 
-			renderers_[0].target->swapBuffers();
+			GLRenderWindow* gt = dynamic_cast<GLRenderWindow*>(renderers_[0].target);
+			if (gt) gt->swapBuffers();
 
 			x_window_pos_old_ = x_window_pos_new_;
 			y_window_pos_old_ = y_window_pos_new_;

@@ -78,6 +78,14 @@ namespace BALL
 				*/
 				virtual bool renderOneRepresentation(const Representation& representation);
 
+				/** Buffer a Representation for later rendering.
+				*/
+				virtual void bufferRepresentation(const Representation& rep);
+
+				/** Remove a representation from the buffer.
+				*/
+				virtual void removeRepresentation(const Representation& rep);
+
 				/// Set the size of the display
 				virtual void setSize(float width, float height);
 

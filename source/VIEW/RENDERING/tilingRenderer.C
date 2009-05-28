@@ -8,6 +8,7 @@
 #include <BALL/VIEW/RENDERING/tilingRenderer.h>
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
+#include <BALL/VIEW/RENDERING/glRenderWindow.h>
 
 namespace BALL
 {
@@ -60,6 +61,16 @@ namespace BALL
 			return real_renderer_->renderOneRepresentation(representation);
 		}
 
+		void TilingRenderer::bufferRepresentation(const Representation& rep)
+		{
+			real_renderer_->bufferRepresentation(rep);
+		}
+
+		void TilingRenderer::removeRepresentation(const Representation& rep)
+		{
+			real_renderer_->removeRepresentation(rep);
+		}
+
 		void TilingRenderer::setSize(float width, float height)
 		{
 			width_  = width;
@@ -80,7 +91,7 @@ namespace BALL
 		{
 			if (RTTI::isKindOf<GLRenderer>(*real_renderer_))
 			{
-				static_cast<GLRenderer*>(real_renderer_)->renderToBuffer(target, GLRenderer::DIRECT_RENDERING);
+				static_cast<GLRenderer*>(real_renderer_)->renderToBuffer(target, GLRenderer::DISPLAY_LISTS_RENDERING);
 			}
 		}
 	}

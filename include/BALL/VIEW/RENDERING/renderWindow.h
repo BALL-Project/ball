@@ -87,6 +87,10 @@ namespace BALL
 			 */
 			virtual void releaseBuffer(FrameBufferPtr buffer);			
 
+			/* Prepare the window for rendering, e.g., make it current if necessary.
+			 */
+			virtual void prepareRendering() {};
+
 			protected:
 			t_PixelPtr m_pixels;					// raw pixel buffer
 			FrameBufferPtr m_framebuffer;           // frame buffer given out to the wild by getBuffer method

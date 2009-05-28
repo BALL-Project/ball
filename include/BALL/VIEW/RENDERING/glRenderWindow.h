@@ -90,6 +90,8 @@ namespace BALL
 
 			mutable Mutex contex_mutex_;
 			bool ignore_events_;
+
+			bool is_buffered_;
 		};
 
 	} // namespace VIEW

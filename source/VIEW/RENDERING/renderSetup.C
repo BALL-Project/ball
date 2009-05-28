@@ -2,6 +2,8 @@
 
 #include <BALL/VIEW/RENDERING/bufferedRenderer.h>
 #include <BALL/VIEW/RENDERING/tilingRenderer.h>
+#include <BALL/VIEW/RENDERING/glRenderWindow.h>
+
 #include <BALL/VIEW/WIDGETS/scene.h>
 
 
@@ -20,6 +22,44 @@ namespace BALL
 {
 	namespace VIEW
 	{
+		RenderSetup::RenderSetup(Renderer* r, RenderTarget* t, Scene* scene, const Stage* stage)
+			: QThread(),
+				renderer(r),
+				target(t),
+				rendering_paused_(false),
+				receive_updates_(true),
+				use_offset_(false),
+				camera_(),
+				camera_offset_(Vector3(0.)),
+				stereo_setup_(NONE),
+				use_continuous_loop_(false),
+				scene_(scene),
+				stage_(stage),
+				render_mutex_(true),
+				show_ruler_(false)
+		{
+			gl_target_ = dynamic_cast<GLRenderWindow*>(target);
+		}
+
+		RenderSetup::RenderSetup(const RenderSetup& rs)
+			: QThread(),
+				renderer(rs.renderer),
+				target(rs.target),
+				rendering_paused_(rs.rendering_paused_),
+				receive_updates_(rs.receive_updates_),
+				use_offset_(rs.use_offset_),
+				camera_(rs.camera_),
+				camera_offset_(rs.camera_offset_),
+				stereo_setup_(rs.stereo_setup_),
+				use_continuous_loop_(rs.use_continuous_loop_),
+				scene_(rs.scene_),
+				stage_(rs.stage_),
+				render_mutex_(true),
+				show_ruler_(rs.show_ruler_)
+		{
+			gl_target_ = dynamic_cast<GLRenderWindow*>(target);
+		}
+
 		const RenderSetup& RenderSetup::operator = (const RenderSetup& rs)
 		{
 			render_mutex_.lock();
@@ -41,6 +81,8 @@ namespace BALL
 
 			show_ruler_ = rs.show_ruler_;
 
+			gl_target_ = dynamic_cast<GLRenderWindow*>(target);
+
 			render_mutex_.unlock();
 
 			return *this;
@@ -50,9 +92,9 @@ namespace BALL
 		{
 			render_mutex_.lock();
 
-			target->lockGLContext();
-
 			do_resize_ = false;
+
+			makeCurrent();
 
 			// initialize the rendering target
 			target->init();
@@ -66,8 +108,6 @@ namespace BALL
 			if (RTTI::isKindOf<GLRenderer>(*renderer))
 				((GLRenderer*)renderer)->enableVertexBuffers(scene_->want_to_use_vertex_buffer_);
 
-			target->unlockGLContext();
-
 			render_mutex_.unlock();
 		}
 
@@ -75,7 +115,7 @@ namespace BALL
 		{
 			// prevent resizing of full screen Windows because they are
 			// most probably stereo half images
-			if (target->isFullScreen())
+			if (gl_target_ && gl_target_->isFullScreen())
 				return;
 
 			bool reset_continuous = false;
@@ -92,8 +132,7 @@ namespace BALL
 
 			render_mutex_.lock();
 
-			if (QGLContext::currentContext() != target->context())
-				target->makeCurrent();
+			makeCurrent();
 
 			if(!target->resize(width, height))
 			{
@@ -114,7 +153,7 @@ namespace BALL
 				}
 			}
 
-			((GLRenderer*)renderer)->setSize(width, height);
+			renderer->setSize(width, height);
 
 			render_mutex_.unlock();
 
@@ -124,7 +163,8 @@ namespace BALL
 
 			render_mutex_.lock();
 
-			target->swapBuffers();
+			if (gl_target_)
+				gl_target_->swapBuffers();
 
 			if (reset_continuous)
 			{
@@ -195,14 +235,25 @@ namespace BALL
 			render_mutex_.unlock();
 		}
 
+		void RenderSetup::makeCurrent()
+		{
+			if (gl_target_ && 
+				   (QGLContext::currentContext() != gl_target_->context()))
+				gl_target_->makeCurrent();
+			else
+				target->prepareRendering();
+		}
+
 		void RenderSetup::run()
 		{
 #ifdef USE_TBB
 			tbb::task_scheduler_init init;
 #endif
-			target->ignoreEvents(true);
-			// TODO: do we really want to lock the context here???
-			target->lockGLContext();
+
+			makeCurrent();
+
+			if (gl_target_)
+				gl_target_->ignoreEvents(true);
 
 			useContinuousLoop(true);
 			Timer t;
@@ -219,8 +270,8 @@ namespace BALL
 				msleep(16);
 			}
 
-			target->unlockGLContext();
-			target->ignoreEvents(false);
+			if (gl_target_)
+				gl_target_->ignoreEvents(false);
 		}
 
 		void RenderSetup::renderToBuffer()
@@ -240,8 +291,7 @@ namespace BALL
 
 			render_mutex_.lock();
 
-			if (QGLContext::currentContext() != target->context())
-				target->makeCurrent();
+			makeCurrent();
 
 			renderer->setPreviewMode(scene_->use_preview_ && scene_->preview_);
 			renderer->showLightSources(scene_->show_light_sources_);
@@ -266,24 +316,27 @@ namespace BALL
 			{
 				static_cast<TilingRenderer*>(renderer)->renderToBuffer(target);
 				glFlush();
-				target->swapBuffers();
+				target->refresh();
 			}
 
 			if (show_ruler_)
 				renderer->renderRuler();
 
-			if (use_continuous_loop_)
-				target->swapBuffers();
+			if (use_continuous_loop_ && gl_target_)
+				gl_target_->swapBuffers();
 
 			render_mutex_.unlock();
 		}
 
 		bool RenderSetup::exportPNG(const String& filename)
 		{
+			if (!gl_target_)
+				return false;
+
 			render_mutex_.lock();
-			if (QGLContext::currentContext() != target->context())
-				target->makeCurrent();
-			QImage image(target->grabFrameBuffer(true));
+
+			makeCurrent();
+			QImage image(gl_target_->grabFrameBuffer(true));
 
 			render_mutex_.unlock();
 
@@ -301,9 +354,7 @@ namespace BALL
 
 				render_mutex_.lock();
 
-				if (QGLContext::currentContext() != target->context())
-					target->makeCurrent();
-
+				makeCurrent();
 				renderer->bufferRepresentation(rep);
 
 				render_mutex_.unlock();
@@ -319,9 +370,7 @@ namespace BALL
 
 				render_mutex_.lock();
 
-				if (QGLContext::currentContext() != target->context())
-					target->makeCurrent();
-
+				makeCurrent();
 				renderer->removeRepresentation(rep);
 
 				render_mutex_.unlock();
@@ -335,9 +384,7 @@ namespace BALL
 
 			render_mutex_.lock();
 
-			if (QGLContext::currentContext() != target->context())
-					target->makeCurrent();
-
+			makeCurrent();
 			renderer->setLights(reset_all);
 
 			render_mutex_.unlock();
@@ -350,9 +397,7 @@ namespace BALL
 
 			render_mutex_.lock();
 
-			if (QGLContext::currentContext() != target->context())
-					target->makeCurrent();
-
+			makeCurrent();
 			renderer->updateBackgroundColor();
 
 			render_mutex_.unlock();
@@ -369,9 +414,7 @@ namespace BALL
 
 				render_mutex_.lock();
 
-				if (QGLContext::currentContext() != target->context())
-					target->makeCurrent();
-
+				makeCurrent();
 				texname = ((GLRenderer*)renderer)->createTextureFromGrid(grid, map);
 
 				render_mutex_.unlock();
@@ -389,9 +432,7 @@ namespace BALL
 
 				MutexLocker ml(&render_mutex_);
 
-				if (QGLContext::currentContext() != target->context())
-					target->makeCurrent();
-
+				makeCurrent();
 				((GLRenderer*)renderer)->removeTextureFor_(grid);
 			}
 		}
@@ -401,9 +442,7 @@ namespace BALL
 			MutexLocker ml(&render_mutex_);
 			render_mutex_.lock();
 
-			if (QGLContext::currentContext() != target->context())
-				target->makeCurrent();
-
+			makeCurrent();
 			return renderer->mapViewportTo3D(x, y);
 		}
 
@@ -411,9 +450,7 @@ namespace BALL
 		{
 			MutexLocker ml(&render_mutex_);
 
-			if (QGLContext::currentContext() != target->context())
-				target->makeCurrent();
-
+			makeCurrent();
 			return renderer->map3DToViewport(vec);
 		}
 
@@ -429,8 +466,7 @@ namespace BALL
 	
 			MutexLocker ml(&render_mutex_);
 
-			if (QGLContext::currentContext() != target->context())
-				target->makeCurrent();
+			makeCurrent();
 
 			((GLRenderer*)renderer)->pickObjects1(x1, y1, x2, y2);
 			((GLRenderer*)renderer)->renderToBuffer(target, GLRenderer::DIRECT_RENDERING);
