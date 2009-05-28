@@ -170,6 +170,7 @@ namespace BALL
 			const ExtendedPreferencesObject* epo = dynamic_cast<const ExtendedPreferencesObject*>(widget);
 			if (epo != 0)
 			{
+				value = "";
 				if (!epo->getValue(value))
 				{
 					BALLVIEW_DEBUG;
@@ -177,6 +178,7 @@ namespace BALL
 			}
 			else if (RTTI::isKindOf<PreferencesObject>(*widget))
 			{
+				value = "";
 				const PreferencesObject* epo = dynamic_cast<const PreferencesObject*>(widget);
 				if (!epo->getValue(value))
 				{
