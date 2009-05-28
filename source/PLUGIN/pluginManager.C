@@ -279,13 +279,17 @@ namespace BALL
 		if (loaded_plugin_dirs_.size() > 0)
 		{
 			std::map<QString, vector<BALLPlugin*> >::const_iterator it = loaded_plugin_dirs_.begin(); 	
-
+			
+			if ( it != loaded_plugin_dirs_.end())
+			{
+			
 			value += it->first.toAscii().toPercentEncoding().data();
 			
 			for (++it; it != loaded_plugin_dirs_.end(); ++it)
 			{
 				value += BETWEEN_PLUGINDIR_SEPERATOR;
 				value += it->first.toAscii().toPercentEncoding().data();
+			}
 			}
 		}
 		return true;
