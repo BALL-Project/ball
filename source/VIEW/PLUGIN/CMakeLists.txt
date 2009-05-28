@@ -1,0 +1,5 @@
+list(APPEND VIEW_SOURCES 
+	VIEW/PLUGIN/inputDevPluginHandler.C
+	VIEW/PLUGIN/VIEWPlugin.C
+)
+

@@ -1,0 +1,7 @@
+include(MOLMEC/AMBER/CMakeLists.txt)
+include(MOLMEC/CHARMM/CMakeLists.txt)
+include(MOLMEC/COMMON/CMakeLists.txt)
+include(MOLMEC/MDSIMULATION/CMakeLists.txt)
+include(MOLMEC/MINIMIZATION/CMakeLists.txt)
+include(MOLMEC/MMFF94/CMakeLists.txt)
+include(MOLMEC/PARAMETER/CMakeLists.txt)

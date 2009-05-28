@@ -1,0 +1,14 @@
+list(APPEND BALL_SOURCES 
+	MOLMEC/PARAMETER/atomTypes.C
+	MOLMEC/PARAMETER/charmmEEF1.C
+	MOLMEC/PARAMETER/cosineTorsion.C
+	MOLMEC/PARAMETER/forceFieldParameters.C
+	MOLMEC/PARAMETER/lennardJones.C
+	MOLMEC/PARAMETER/potential1210.C
+	MOLMEC/PARAMETER/quadraticAngleBend.C
+	MOLMEC/PARAMETER/quadraticBondStretch.C
+	MOLMEC/PARAMETER/quadraticImproperTorsion.C
+	MOLMEC/PARAMETER/residueTorsions.C
+	MOLMEC/PARAMETER/templates.C
+)
+

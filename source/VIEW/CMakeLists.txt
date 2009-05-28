@@ -1,0 +1,11 @@
+include(VIEW/DIALOGS/CMakeLists.txt)
+include(VIEW/DATATYPE/CMakeLists.txt)
+include(VIEW/INPUT/CMakeLists.txt)
+include(VIEW/KERNEL/CMakeLists.txt)
+include(VIEW/MODELS/CMakeLists.txt)
+include(VIEW/PRIMITIVES/CMakeLists.txt)
+include(VIEW/RENDERING/CMakeLists.txt)
+include(VIEW/SOAP/CMakeLists.txt)
+include(VIEW/WIDGETS/CMakeLists.txt)
+include(VIEW/PLUGIN/CMakeLists.txt) 
+
