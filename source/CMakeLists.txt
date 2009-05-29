@@ -12,46 +12,71 @@ SET(QT_MOC_EXECUTABLE /usr/bin/moc)
 SET(QT_UIC_EXECUTABLE /usr/bin/uic)
 SET(YACC_EXECUTABLE bison -y )
 SET(FLEX_EXECUTABLE /usr/bin/flex)
-#include_directories(../include /usr/include/qt4 /media/sda3/BALL-git/contrib/gsl-1.8/gsl-1.8/include /media/sda3/BALL-git/contrib/glew/include)
+
+
+
+##### simple temporary detection of contrib packages: just look under ../contrib/ and /usr/lib resp. usr/include ######
 
 include_directories(../include /usr/include/qt4)
 SET(LIB_DIRS "")
 SET(SYS_LIBDIR "/usr/lib")
 SET(SYS_INCLDIR "/usr/include")
-SET(USE_gsl 0)
 SET(Added_contrIncl 0)
 SET(Added_contrLib 0)
 
-function(check_headers package_name header)
+macro(check_headers package_name header)
 	if(EXISTS ${SYS_INCLDIR}/${ARGV1})
-		SET(USE_${ARGV0} 1)
+		SET(HEADERS_${ARGV0} 1)
 	elseif(EXISTS ../contrib/${ARGV0}/include/${ARGV1})
-		SET(USE_${ARGV0} 1)
+		SET(HEADERS_${ARGV0} 1)
 		include_directories(../contrib/${ARGV0}/include/)
 	elseif(EXISTS ../contrib/include/${ARGV1})
-		SET(USE_${ARGV0} 1)
+		SET(HEADERS_${ARGV0} 1)
 		if(NOT ${Added_contrIncl})
 			include_directories(../contrib/include/)
 			SET(Added_contrIncl 1)
 		endif(NOT ${Added_contrIncl})
 	else(EXISTS ${SYS_INCLDIR}/${ARGV1})
-		message(STATUS "${ARGV0} headers not found!")
-		SET(USE_${ARGV0} 0)
+		SET(HEADERS_${ARGV0} 0)
 	endif(EXISTS ${SYS_INCLDIR}/${ARGV1})
-endfunction(check_headers name)
+	
+	if(HEADERS_${ARGV0})
+		message(STATUS "searching headers for ${ARGV0} ... ok")
+	else(HEADERS_${ARGV0})
+		message(STATUS "searching headers for ${ARGV0} ... NOT found")
+	endif(HEADERS_${ARGV0})
+	
+	if(HEADERS_${ARGV0} AND LIB_${ARGV0})
+		set(USE_${ARGV0} 1)
+	else(HEADERS_${ARGV0} AND LIB_${ARGV0})
+		set(USE_${ARGV0} 0)
+	endif(HEADERS_${ARGV0} AND LIB_${ARGV0})
+endmacro(check_headers name)
 
-function(check_lib package_name libname)
+
+macro(check_lib package_name libname)
 	if(EXISTS ${SYS_LIBDIR}/lib${ARGV1}.so)
-		SET(USE_${ARGV0} 1)
+		SET(LIB_${ARGV0} 1)
 	elseif(EXISTS ../contrib/${ARGV0}/lib/lib${ARGV1}.so)
-		SET(USE_${ARGV0} 1)
+		SET(LIB_${ARGV0} 1)
 	elseif(EXISTS ../contrib/lib/lib${ARGV1}.so)
-		SET(USE_${ARGV0} 1)
+		SET(LIB_${ARGV0} 1)
 	else(EXISTS ${SYS_LIBDIR}/lib${ARGV1}.so)
-		message(STATUS "lib${ARGV1} not found!")
-		SET(USE_${ARGV0} 0)
+		SET(LIB_${ARGV0} 0)
 	endif(EXISTS ${SYS_LIBDIR}/lib${ARGV1}.so)
-endfunction(check_lib name)
+	
+	if(LIB_${ARGV0})
+		message(STATUS "searching lib${ARGV1} ... ok")
+	else(LIB_${ARGV0})
+		message(STATUS "searching lib${ARGV1} ... NOT found")
+	endif(LIB_${ARGV0})
+	
+	if(HEADERS_${ARGV0} AND LIB_${ARGV0})
+		set(USE_${ARGV0} 1)
+	else(HEADERS_${ARGV0} AND LIB_${ARGV0})
+		set(USE_${ARGV0} 0)
+	endif(HEADERS_${ARGV0} AND LIB_${ARGV0})
+endmacro(check_lib name)
 
 
 # search necessary libraries and headers
@@ -63,6 +88,20 @@ check_lib(glew GLEW)
 check_headers(Qt qt4/Qt/qstring.h)
 check_lib(Qt QtCore)
 check_lib(Qt QtGui)
+check_headers(boost boost/any.hpp)
+check_lib(boost boost_system)
+check_lib(boost boost_system-mt)
+
+if(NOT USE_gsl OR NOT USE_boost)
+	message(FATAL_ERROR "\nNecessary contrib-packages could not be found! Please fix this!")
+endif(NOT USE_gsl OR NOT USE_boost)
+
+
+################## end of simple temporary contrib-detection ################
+
+
+
+
 
 set(BALL_SOURCES "")
 set(VIEW_SOURCES "")
@@ -125,28 +164,10 @@ endmacro(wrap_MOC path input_filename)
 
 
 
-
-#include_directories(/media/sda3/BALL-git/contrib/boost_1_39_0/include)
-include_directories(/media/sda6/boost_1_39_0/include)
-
-
-message(STATUS "${USE_gsl}")
-
-# FIND_PACKAGE(Qt4)
-# if(Qt4_FOUND)
-# 	message(STATUS "found Qt4")
-# endif(Qt4_FOUND)
-# FIND_PACKAGE(GSL)
-# if(GSL_FOUND)
-# 	message(STATUS "found gsl")
-# endif(GSL_FOUND)
-
-
 #include(BENCHMARKS/CMakeLists.txt)
 include(COMMON/CMakeLists.txt)
 include(CONCEPT/CMakeLists.txt)
 include(DATATYPE/CMakeLists.txt)
-#include(DOCKING/CMakeLists.txt)
 include(ENERGY/CMakeLists.txt)
 include(FORMAT/CMakeLists.txt)
 include(KERNEL/CMakeLists.txt)
