@@ -17,7 +17,7 @@ class AmberBend
   AmberBend();
   AmberBend(ForceField& /force_field/);
   AmberBend(const AmberBend& /amber_stretch/);
-  ~AmberBend();
+  virtual ~AmberBend();
   virtual bool setup() throw(TooManyErrors);
   virtual double updateEnergy();
   virtual void updateForces();

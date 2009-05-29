@@ -170,6 +170,14 @@
 %Include vector3.sip
 %Include vector4.sip
 
+// MOLMEC/SUPPORT
+%Include molmec-support.sip
+
+// MOLMEC/PARAMETER
+%Include atomTypes.sip
+%Include forceFieldParameters.sip
+%Include cosineTorsion.sip
+
 // MOLMEC/MMFF94
 %Include MMFF94.sip
 

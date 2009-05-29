@@ -18,7 +18,13 @@ class AmberTorsion
   AmberTorsion();
   AmberTorsion(ForceField& /force_field/);
   AmberTorsion(const AmberTorsion& /amber_stretch/);
-  ~AmberTorsion();
+  virtual ~AmberTorsion();
+
+	struct SingleAmberTorsion {
+			SingleAmberTorsion();
+			SingleAmberTorsion(SingleData& t);
+	};
+
   virtual bool setup() throw(TooManyErrors);
   virtual double updateEnergy();
   virtual void updateForces();

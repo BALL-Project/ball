@@ -18,9 +18,10 @@ class AmberStretch
   AmberStretch();
   AmberStretch(ForceField& /force_field/);
   AmberStretch(const AmberStretch& /amber_stretch/);
-  ~AmberStretch();
+  virtual ~AmberStretch();
   virtual bool setup() throw(TooManyErrors);
   virtual double updateEnergy();
   virtual void updateForces();
+	virtual void update() throw(TooManyErrors);
 };
   
