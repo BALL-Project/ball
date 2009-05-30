@@ -586,7 +586,12 @@ namespace BALL
 					p.setRenderHint(QPainter::Antialiasing, true);
 					p.setRenderHint(QPainter::TextAntialiasing, true);
 					p.setFont(QFont("Arial", 16., QFont::Bold));
-					p.drawText(info_point_, info_string_.c_str());
+
+					// account for differently sized windows
+					float xscale = current_dev->width()  / width();
+					float yscale = current_dev->height() / height();
+
+					p.drawText(QPointF(info_point_.x()*xscale, info_point_.y()*yscale), info_string_.c_str());
 
 					p.end();
 				}
@@ -2511,74 +2516,49 @@ namespace BALL
 		bool Scene::exportPNG(const String& filename)
 		{
 			bool ok = false;
-			bool restart_renderer = false;
 
 			// TODO: currently, we always use the first renderer in the list for exporting;
 			// 			 we should decide this in a sensible way instead
-			RenderSetup* export_renderer = &(renderers_[0]);
-			
-			// if the renderer is currently running continuously, pause it for a while
-			if (export_renderer->isContinuous())
-			{
-				export_renderer->useContinuousLoop(false);
-				export_renderer->wait();
-				restart_renderer = true;
-			}
 
-			if (offscreen_rendering_)
-			{
-				// the idea here is:
-				// 		- resize the renderer to desired off screen resolution
-				// 		- render to buffer
-				// 		- export image
-				// 		- resize to old resolution
-				// 		- render again
+			// first find out if we need to render offscreen or whether we can just use the current image
+			if (!offscreen_rendering_)
+				return renderers_[0].exportPNG(filename);
 
-				// we truncate the resolution at 4096 for technical reasons
-				Size w = width() * offscreen_factor_;
-				Size h = height() * offscreen_factor_;
-				Size max = BALL_MAX(w, h);
-				Size min = BALL_MIN(w, h);
+			// ok, we have to do this the hard way...	
+			GLOffscreenTarget new_widget(main_display_, filename);
+			new_widget.init();
+			new_widget.resize(width(), height());
+			new_widget.prepareRendering();
 
-				if (max >= 4096)
-				{
-					Size f = (Size) (4095. * (float) min / (float) max);
-					if (w < h)
-					{
-						w = f;
-						h = 4095;
-					}
-					else
-					{
-						w = 4095;
-						h = f;
-					}
-				}
+			GLRenderer gr;
+			gr.init(*this);
+			gr.enableVertexBuffers(want_to_use_vertex_buffer_);
+			gr.setSize(width(), height());
 
-				// resize already renders to the buffer
-				export_renderer->resize(w, h);
-				ok = export_renderer->exportPNG(filename);
+			TilingRenderer tr(&gr, offscreen_factor_*width(), offscreen_factor_*height());
+			tr.init(*this);
+			tr.setSize(width(), height());
 
-				export_renderer->resize(width(), height());
-			}
-			else
-			{
-				// TODO: decide which renderer to use
-				ok = renderers_[0].exportPNG(filename);
-			}
+			RenderSetup tr_rs(&tr, &new_widget, this, stage_);
+			resetRepresentationsForRenderer_(tr_rs);
+
+			renderers_.push_back(tr_rs);
+			updateGL();
+			renderers_.pop_back();
+
+			// TODO: we should not rely on the first renderer being the one
+			// related to the main_display_!
+			renderers_[0].resize(width(), height());
+			updateGL();
+
+			ok = true;
 
 			setWorkingDirFromFilename_(filename);
 
 			if (ok) setStatusbarText("Saved PNG to " + filename);
 			else 		setStatusbarText("Could not save PNG", true);
 
-			if (restart_renderer)
-			{
-				export_renderer->start();
-			}
-
 			return ok;
-            return false;
 		}
 
 		void Scene::exportNextPOVRay()
@@ -2703,6 +2683,7 @@ namespace BALL
 		void Scene::addGlWindow()
 		{
 			GLOffscreenTarget* new_widget = new GLOffscreenTarget(main_display_, "test_tiling.png");
+			new_widget->tryUsePixelBuffer(false);
 			new_widget->init();
 			new_widget->resize(width(), height());
 			new_widget->prepareRendering();
@@ -2711,12 +2692,15 @@ namespace BALL
 			new_gl_renderer->init(*this);
 			new_gl_renderer->enableVertexBuffers(want_to_use_vertex_buffer_);
 
-			TilingRenderer* new_renderer = new TilingRenderer(new_gl_renderer);
+			TilingRenderer* new_renderer = new TilingRenderer(new_gl_renderer, 2*width(), 2*height());
 			new_renderer->init(*this);
 
 //			new_widget->show();
 
 			RenderSetup new_rs(new_renderer, new_widget, this, stage_);
+			new_renderer->setSize(width(), height());
+			//new_rs.resize(width(), height());
+			new_widget->prepareRendering();
 			resetRepresentationsForRenderer_(new_rs);
 
 /*			if (new_widget->isSharing())

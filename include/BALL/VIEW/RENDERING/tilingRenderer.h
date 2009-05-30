@@ -21,6 +21,11 @@ namespace BALL
 				This class encapsulates a renderer object which it uses to render a
 				number of individual tiles to compose them into a full image. This can
 				be used to render very large images into files.
+
+				The idea behind this renderer is heavily based on the extremely useful
+				open-source TR library for tile rendering by Brian Paul
+				(http://www.mesa3d.org/brianp/TR.html).
+				
 				\ingroup ViewRendering
 		*/
 		class BALL_VIEW_EXPORT TilingRenderer
@@ -34,9 +39,13 @@ namespace BALL
 
 				/** Detailed Constructor.
 				*
-				* 	@param real_renderer the renderer to encapsulate.
+				* 	@param real_renderer the renderer to encapsulate
+				* 	@param final_width   the width of the generated image
+				* 	@param final_height  the height of the generated image
+				* 	@param border        an optional border around each tile
+				*
 				*/
-				TilingRenderer(Renderer* real_renderer);
+				TilingRenderer(Renderer* real_renderer, Size final_width, Size final_height, Size border = 0);
 				
 				/**	Copy constructor.
 				*/
@@ -110,8 +119,22 @@ namespace BALL
 				virtual void render_(const GeometricObject* object);
 
 			protected:
+				void computeTilingSetup_();
 
+				/// The renderer used for rendering the individual tiles
 				Renderer* real_renderer_;
+
+				/// The desired width of the final image
+				Size final_width_;
+				
+				/// The desired height of the final image
+				Size final_height_;
+
+				/// The border oversampled for each tile
+				Size border_;
+
+				Size num_cols_;
+				Size num_rows_;
 		};
 	}
 }

@@ -43,11 +43,18 @@ namespace BALL
 				GLOffscreenTarget(GLRenderWindow* share_from, const String& filename);
 
 				virtual void prepareRendering();
+				virtual void prepareUpscaling(Size final_width, Size final_height);
 
 				virtual bool resize(const unsigned int width, const unsigned int height);
 				virtual void refresh();
 
+				void tryUsePixelBuffer(bool use_pbo = true);
+
+				QImage getImage();
+				void updateImageTile(Size x_lower, Size y_lower, Size x_upper, Size y_upper);
+
 				virtual QPaintEngine* paintEngine() const;
+				virtual int metric(PaintDeviceMetric metric) const;
 
 			protected:
 				String     		 filename_;
@@ -57,6 +64,8 @@ namespace BALL
 				boost::shared_ptr<QGLPixelBuffer> pixel_buffer_;
 
 				bool use_pixel_buffer_;
+
+				QImage current_image_;
 		};
 
 	}

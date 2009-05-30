@@ -296,6 +296,8 @@ namespace BALL
 			Position createTextureFromGrid(const RegularData3D& grid, const ColorMap& map);
 			void removeTextureFor_(const RegularData3D& grid);
 
+			void getFrustum(float& near, float& far, float& left, float& right, float& top, float& bottom);
+
 	protected:
 
 			/** Maps the current viewplane to screen coordinates.

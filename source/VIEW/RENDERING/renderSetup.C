@@ -129,7 +129,6 @@ namespace BALL
 				useContinuousLoop(false);
 				reset_continuous = true;
 			}
-
 			render_mutex_.lock();
 
 			makeCurrent();
@@ -316,7 +315,6 @@ namespace BALL
 			{
 				static_cast<TilingRenderer*>(renderer)->renderToBuffer(target);
 				glFlush();
-				target->refresh();
 			}
 
 			if (show_ruler_)
