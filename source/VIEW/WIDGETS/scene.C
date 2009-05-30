@@ -2525,26 +2525,30 @@ namespace BALL
 				return renderers_[0].exportPNG(filename);
 
 			// ok, we have to do this the hard way...	
-			GLOffscreenTarget new_widget(main_display_, filename);
-			new_widget.init();
-			new_widget.resize(width(), height());
-			new_widget.prepareRendering();
+			GLOffscreenTarget* new_widget = new GLOffscreenTarget(main_display_, filename);
+			new_widget->init();
+			new_widget->resize(width(), height());
+			new_widget->prepareRendering();
 
-			GLRenderer gr;
-			gr.init(*this);
-			gr.enableVertexBuffers(want_to_use_vertex_buffer_);
-			gr.setSize(width(), height());
+			GLRenderer* gr = new GLRenderer;
+			gr->init(*this);
+			gr->enableVertexBuffers(want_to_use_vertex_buffer_);
+			gr->setSize(width(), height());
 
-			TilingRenderer tr(&gr, offscreen_factor_*width(), offscreen_factor_*height());
-			tr.init(*this);
-			tr.setSize(width(), height());
+			TilingRenderer *tr = new TilingRenderer(gr, offscreen_factor_*width(), offscreen_factor_*height());
+			tr->init(*this);
+			tr->setSize(width(), height());
 
-			RenderSetup tr_rs(&tr, &new_widget, this, stage_);
+			RenderSetup tr_rs(tr, new_widget, this, stage_);
 			resetRepresentationsForRenderer_(tr_rs);
 
 			renderers_.push_back(tr_rs);
 			updateGL();
 			renderers_.pop_back();
+
+			delete(tr);
+			delete(gr);
+			delete(new_widget);
 
 			// TODO: we should not rely on the first renderer being the one
 			// related to the main_display_!
