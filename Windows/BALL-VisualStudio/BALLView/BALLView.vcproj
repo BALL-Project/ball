@@ -377,17 +377,37 @@
 			ParseFiles="false"
 			>
 			<File
-				RelativePath=".\ballview.qrc"
+				RelativePath="..\..\..\source\APPLICATIONS\BALLVIEW\BALLView-1.3-Splashscreen.png"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\APPLICATIONS\BALLVIEW\splashscreen.qrc"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description=""
-						CommandLine=""
-						AdditionalDependencies=""
-						Outputs=""
+						Description="Rcc&apos;ing splashscreen.qrc..."
+						CommandLine="&quot;$(QTDIR)\bin\rcc.exe&quot; $(InputPath) -o $(InputDir)\splashscreen.rcc&#x0D;&#x0A;"
+						AdditionalDependencies="..\..\..\source\APPLICATIONS\BALLVIEW\splashscreen.qrc;..\..\..\source\APPLICATIONS\BALLVIEW\BALLView-1.3-Splashscreen.png"
+						Outputs="$(InputDir)\splashscreen.rcc"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -395,10 +415,10 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description=""
-						CommandLine=""
-						AdditionalDependencies=""
-						Outputs=""
+						Description="Rcc&apos;ing splashscreen.qrc..."
+						CommandLine="&quot;$(QTDIR)\bin\rcc.exe&quot; $(InputPath) -o $(InputDir)\splashscreen.rcc"
+						AdditionalDependencies="..\..\..\source\APPLICATIONS\BALLVIEW\splashscreen.qrc;..\..\..\source\APPLICATIONS\BALLVIEW\BALLView-1.3-Splashscreen.png"
+						Outputs="$(InputDir)\splashscreen.rcc"
 					/>
 				</FileConfiguration>
 			</File>
