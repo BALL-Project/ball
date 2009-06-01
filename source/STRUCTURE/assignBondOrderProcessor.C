@@ -2351,7 +2351,7 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 			BALL_FOREACH_ATOM(*ac_, a_it)
 			{
 				HashMap<Atom*, int>::Iterator it = tmp_virtual_hydrogens.find(&*a_it);
-				if (it != solution.number_of_virtual_hydrogens.end())
+				if (it != tmp_virtual_hydrogens.end())
 				{
 					Size missing_hydrogens = (Size)it->second;
 					for (Size m=0; m < missing_hydrogens; m++)
