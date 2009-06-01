@@ -135,16 +135,3 @@ bool GLRenderer::vertexBuffersEnabled() const
 
 BALL_INLINE
 DrawingMode GLRenderer::getDrawingMode() const { return drawing_mode_;}
-
-BALL_INLINE
-void GLRenderer::getFrustum(float& near, float& far, float& left, float& right, float& top, float& bottom)
-{
-	near = near_;
-	far  = far_;
-
-	left  = left_;
-	right = right_;
-
-	top    = top_;
-	bottom = bottom_;
-}

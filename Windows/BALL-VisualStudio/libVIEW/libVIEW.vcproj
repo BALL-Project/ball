@@ -2251,6 +2251,18 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\..\..\source\VIEW\RENDERING\glOffscreenTarget.C"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath="..\..\..\source\VIEW\RENDERING\glRenderer.C"
 					>
 					<FileConfiguration
@@ -2403,6 +2415,18 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\RENDERING\tilingRenderer.C"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -4311,7 +4335,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing $(InputName)"
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL -D_WINDLL  -I&quot;$(INCLUDE)\.&quot; -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\Contrib\include\boost\tr1\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\KERNEL\shortcutRegistry.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL -D_WINDLL  -I&quot;$(INCLUDE)\.&quot; -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\Contrib\include\boost\tr1\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\KERNEL\shortcutRegistry.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 							Outputs="&quot;&quot;.\GeneratedFiles\$(ConfigurationName)\&quot;moc_$(InputName).cpp&quot;"
 						/>
 					</FileConfiguration>
@@ -4321,7 +4345,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing $(InputName)"
-							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL -DQT_LEAN_AND_MEAN -D_WINDLL  -I&quot;$(INCLUDE)\.&quot; -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\Contrib\include\boost\tr1\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\KERNEL\shortcutRegistry.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_shortcutRegistry.cpp&quot;"
+							CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -DQT_SVG_LIB -DLIBVIEW_LIB -DBALL_VIEW_BUILD_DLL -DQT_LEAN_AND_MEAN -D_WINDLL  -I&quot;$(INCLUDE)\.&quot; -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;$(QTDIR)\include\QtXml\.&quot; -I&quot;$(QTDIR)\include\QtSql\.&quot; -I&quot;$(QTDIR)\include\QtOpenGL\.&quot; -I&quot;$(QTDIR)\include\QtNetwork\.&quot; -I&quot;$(QTDIR)\include\QtSvg\.&quot; -I&quot;$(SolutionDir)\..\include\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\.&quot; -I&quot;$(SolutionDir)\..\Contrib\include\boost\tr1\.&quot; -I&quot;$(SolutionDir)\..\contrib\include\python\.&quot; -I&quot;$(SolutionDir)\..\..\include\.&quot; -I&quot;$(QTDIR)\include\QtTest\.&quot; -I&quot;$(SolutionDir)\..\..\include\BALL\VIEW\UIC\.&quot; &quot;..\..\..\include\BALL\VIEW\KERNEL\shortcutRegistry.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_shortcutRegistry.cpp&quot;&#x0D;&#x0A;"
 							Outputs="&quot;&quot;.\GeneratedFiles\$(ConfigurationName)\&quot;moc_$(InputName).cpp&quot;"
 						/>
 					</FileConfiguration>
@@ -4467,6 +4491,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\glOffscreenTarget.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\glRenderer.h"
 					>
 				</File>
@@ -4496,6 +4524,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\STLRenderer.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\tilingRenderer.h"
 					>
 				</File>
 				<File

@@ -15,6 +15,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
+
 		TilingRenderer::TilingRenderer(Renderer* real_renderer, Size final_width, Size final_height, Size border)
 			: Renderer(),
 				real_renderer_(real_renderer),
@@ -95,6 +96,12 @@ namespace BALL
 		{
 			real_renderer_->render_(object);
 		}
+
+#ifdef BALL_COMPILER_MSVC
+// yes, it *is* *that* stupid...
+#undef near
+#undef far
+#endif
 
 		void TilingRenderer::renderToBuffer(RenderTarget* target)
 		{
