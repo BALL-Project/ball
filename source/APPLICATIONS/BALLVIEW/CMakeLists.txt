@@ -14,7 +14,7 @@ set(BALLVIEW_SOURCES "")
 
 
 include_directories(../../../include /usr/include/qt4 ../../../contrib/gsl-1.8/gsl-1.8/include ../../../contrib/glew/include)
-include_directories(/media/sda6/boost_1_39_0/include)
+include_directories(../../../contrib/boost/include)
 
 
 
@@ -37,7 +37,7 @@ list(APPEND BALLVIEW_SOURCES mainframe.C)
 #list(APPEND BALLVIEW_SOURCES splash.C)
 
 
-link_directories(/media/sda7/BALL-git/source /usr/lib /usr/lib/qt4  ../../../contrib/gsl/lib ../../../contrib/glew/lib /media/sda6/boost_1_39_0/lib)
+link_directories(../.. /usr/lib /usr/lib/qt4  ../../../contrib/gsl/lib ../../../contrib/glew/lib ../../../contrib/boost/lib)
 add_executable(BALLView ${BALLVIEW_SOURCES})
 target_link_libraries(BALLView VIEW BALL QtCore QtGui QtOpenGL QtXml gsl gslcblas GLEW boost_system-mt QtTest mysqlclient)
 

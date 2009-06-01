@@ -1,5 +1,6 @@
 list(APPEND VIEW_SOURCES 
 	VIEW/RENDERING/glDisplayList.C
+	VIEW/RENDERING/glOffscreenTarget.C
 	VIEW/RENDERING/glRenderer.C
 	VIEW/RENDERING/glRenderWindow.C
 	VIEW/RENDERING/pixelFormat.C
@@ -8,6 +9,7 @@ list(APPEND VIEW_SOURCES
 	VIEW/RENDERING/renderSetup.C
 	VIEW/RENDERING/renderWindow.C
 	VIEW/RENDERING/STLRenderer.C
+	VIEW/RENDERING/tilingRenderer.C
 	VIEW/RENDERING/vertexBuffer.C
 	VIEW/RENDERING/VRMLRenderer.C
 )
