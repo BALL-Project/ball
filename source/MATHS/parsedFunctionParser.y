@@ -56,7 +56,8 @@ exp:     NUM               { $$ = $1;                         			        			}
 
 void ParsedFunctionerror(char* /* s */)
 {
-	//throw Exception::ParseError(__FILE__, 0,
-	cerr << "Parse Error!" << endl;
+	String a = "parsedFunctionerror";
+	String b=  "the given function could not be pared!";
+	throw Exception::ParseError(__FILE__,__LINE__,a,b);
 }
 															

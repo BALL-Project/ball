@@ -57,7 +57,10 @@ namespace BALL
 		/** Methods to calculate the PEOE charges of Gasteiger. This method
 				can be called explicitely, not as processor.
 		*/
-  	void calculatePEOE(AtomContainer& ac);
+  		void calculatePEOE(AtomContainer& ac);
+	
+		/** allows to set the data-folder without using BALL_DATA_PATH enviroment variable, which is useful for standalone applications */
+		void setDataFolder(const char* folder);
 		//@}
 
 		/** @name Processor-realted methods
@@ -92,6 +95,8 @@ namespace BALL
 		//@}		
 
 		HashSet<Element::AtomicNumber> warned_elements_;
+		
+		String data_folder_;
 	};
 } // namespace BALL
 

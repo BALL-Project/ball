@@ -1,0 +1,57 @@
+#!/bin/bash 
+
+# Contrib path
+CPATH=`echo $0 | sed "s/\/build_contrib//"`
+cd $CPATH
+CPATH=`pwd`
+
+echo building contrib package from $CPATH ...
+
+
+tar -xzf clapack3.tar.gz;
+tar -xzf libsvm.tar.gz;
+tar -xzf gsl-1.8.tar.gz;
+tar -xzf qwt-5.0.2.tar.gz;
+
+echo
+echo building gsl ...
+echo
+cd gsl-1.8
+./configure --prefix=`pwd`/gsl-1.8
+make
+make install
+cd ..
+
+# at the moment clapack has to install manually...
+# echo
+# echo building clapack ...
+# echo 
+# cd CLAPACK
+# make
+# cd ..
+
+echo
+echo building libsvm ...
+echo
+cd libsvm
+make
+cd ..
+
+
+echo
+echo building Qwt ...
+echo
+cd qwt-5.0.2
+echo "using " `qmake -v`
+echo "If the above stated Qt-version is not the one of the Qt library (>4.2.0) that will be used for BALL,"
+echo "you will get problems linking your applications!!"
+echo 
+qmake; make;
+cd src; make staticlib;
+cd ..
+make clean
+cd ..
+
+echo
+echo Finished building QSAR contrib package
+echo

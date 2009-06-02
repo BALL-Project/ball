@@ -51,7 +51,16 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
-		SimpleBase& operator = (const SimpleBase& sb);
+		virtual SimpleBase& operator = (const SimpleBase& sb);
+		
+		
+		/** @name Accessors
+		*/
+		//@{
+		void computeAllDescriptors(AtomContainer& ac);
+		
+		/** allows to set the data-folder without using BALL_DATA_PATH enviroment variable, which is useful for standalone applications */
+		void setDataFolder(const char* folder);
 		//@}
 
 
@@ -111,6 +120,8 @@ namespace BALL
 				bound to carbon an hydrogen!
 		*/
 		bool isHydrophobic_(const Atom* atom) const;
+		
+		String data_folder_;
 		//@}
 	};
 } // namespace BALL

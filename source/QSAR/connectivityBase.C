@@ -84,6 +84,13 @@ namespace BALL
 		}
 	}
 	
+	void ConnectivityBase::computeAllDescriptors(AtomContainer& ac)
+	{	
+		if (!isValid_(ac))
+		{
+			calculate_(ac);
+		}
+	}
 
 	void ConnectivityBase::calculate_(AtomContainer& ac)
 	{

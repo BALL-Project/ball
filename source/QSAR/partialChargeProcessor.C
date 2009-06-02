@@ -19,8 +19,8 @@
 
 using namespace std;
 
-#define BALL_QSAR_ATOMIC_IONIZATION_ENERGIES_FILE "QSAR/atomic_ionization_potentials.data"
-#define BALL_QSAR_ATOMIC_ELECTRON_AFFINITIES_FILE "QSAR/atomic_electron_affinities.data"
+#define BALL_QSAR_ATOMIC_IONIZATION_ENERGIES_FILE "/atomic_ionization_potentials.data"
+#define BALL_QSAR_ATOMIC_ELECTRON_AFFINITIES_FILE "/atomic_electron_affinities.data"
 
 namespace BALL
 {
@@ -28,12 +28,14 @@ namespace BALL
 		: UnaryProcessor<AtomContainer>(),
 		warned_elements_()
 	{
+		data_folder_ = "QSAR/";
 	}
 
 	PartialChargeProcessor::PartialChargeProcessor(const PartialChargeProcessor& pc)
     : UnaryProcessor<AtomContainer>(pc),
 		warned_elements_()
 	{
+		data_folder_ = "QSAR/";
 	}
 	
 	PartialChargeProcessor::~PartialChargeProcessor()
@@ -50,7 +52,11 @@ namespace BALL
 		calculatePEOE(ac);
 		return Processor::CONTINUE;
 	}
-
+	
+	void PartialChargeProcessor::setDataFolder(const char* folder)
+	{
+		data_folder_ = folder;
+	}
 
 	void PartialChargeProcessor::calculatePEOE(AtomContainer& ac)
 	{
@@ -203,11 +209,11 @@ namespace BALL
 	{
 		vector<float> first_ies, second_ies;
 		Path path;
-		String filename = path.find(BALL_QSAR_ATOMIC_IONIZATION_ENERGIES_FILE);
+		String filename = path.find(data_folder_+BALL_QSAR_ATOMIC_IONIZATION_ENERGIES_FILE);
 		// empty filename means no file could be found
 		if (filename == "")
 		{
-			throw Exception::FileNotFound(__FILE__, __LINE__, BALL_QSAR_ATOMIC_IONIZATION_ENERGIES_FILE);
+			throw Exception::FileNotFound(__FILE__, __LINE__, data_folder_+BALL_QSAR_ATOMIC_IONIZATION_ENERGIES_FILE);
 		}
 		File ie_file(filename);
 		// skip comment line
@@ -252,11 +258,11 @@ namespace BALL
 	void PartialChargeProcessor::readElectronAffinities_(vector<float>& electron_affinities)
 	{
 		Path path;
-		String filename = path.find(BALL_QSAR_ATOMIC_ELECTRON_AFFINITIES_FILE);
+		String filename = path.find(data_folder_+BALL_QSAR_ATOMIC_ELECTRON_AFFINITIES_FILE);
 		// if filename is empty the file is missing
 		if (filename == "")
 		{
-			throw Exception::FileNotFound(__FILE__, __LINE__, BALL_QSAR_ATOMIC_ELECTRON_AFFINITIES_FILE);
+			throw Exception::FileNotFound(__FILE__, __LINE__, data_folder_+BALL_QSAR_ATOMIC_ELECTRON_AFFINITIES_FILE);
 		}
 		File ea_file(filename);
 		// skip comment line

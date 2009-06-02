@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: partialChargeBase.C,v 1.2.28.1 2007/03/16 00:06:47 bertsch Exp $
+// $Id: partialChargeBase.C,v 1.2.28.1 2007-03-16 00:06:47 bertsch Exp $
 //
 
 #include <BALL/QSAR/partialChargeBase.h>
@@ -23,21 +23,25 @@ namespace BALL
 	PartialChargeBase::PartialChargeBase()
 		:	Descriptor()
 	{
+		data_folder_ = "QSAR/";
 	}
 
 	PartialChargeBase::PartialChargeBase(const PartialChargeBase& pcb)
 		:	Descriptor(pcb)
 	{
+		data_folder_ = "QSAR/";
 	}
 
 	PartialChargeBase::PartialChargeBase(const String& name)
 		:	Descriptor(name)
 	{
+		data_folder_ = "QSAR/";
 	}
 
 	PartialChargeBase::PartialChargeBase(const String& name, const String& unit)
 		:	Descriptor(name, unit)
 	{
+		data_folder_ = "QSAR/";
 	}
 
 	PartialChargeBase::~PartialChargeBase()
@@ -46,8 +50,9 @@ namespace BALL
 
 	PartialChargeBase& PartialChargeBase::operator = (const PartialChargeBase& pcb)
 	{
-		this->setName(pcb.getName());
-		this->setUnit(pcb.getUnit());
+		setName(pcb.getName());
+		setUnit(pcb.getUnit());
+		data_folder_ = pcb.data_folder_;
 		return *this;
 	}
 
@@ -75,11 +80,25 @@ namespace BALL
 		}
 	}
 
+	
+	void PartialChargeBase::computeAllDescriptors(AtomContainer& ac)
+	{	
+		if (!isValid_(ac))
+		{
+			calculate_(ac);
+		}
+	}
+	
+	void PartialChargeBase::setDataFolder(const char* folder)
+	{
+		data_folder_ = folder;
+	}
 
 	void PartialChargeBase::calculate_(AtomContainer& ac)
 	{
 		// sets partial charges;
 		PartialChargeProcessor pcp;
+		pcp.setDataFolder(data_folder_.c_str());
 		ac.apply(pcp);
 	
 		//HashMap<Atom*, double>::Iterator it = charges.begin();	

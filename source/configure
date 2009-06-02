@@ -961,6 +961,9 @@ USE_VIEW
 BALL_HAS_VIEW
 VIEW_PLATFORM
 LIBVIEW
+BALL_HAS_LIBSVM
+BALL_HAS_QWT
+BALL_HAS_CBLAS
 TEMPLATE_DIR
 SUBDIRS
 LIBOBJS
@@ -1576,6 +1579,7 @@ Optional Features:
   --enable-longdbl-cplx   use long double precision floats for Complex type
   --enable-lpsolve        enable the build of BALL with support for lpsolve55)
   --enable-spacenavigator    enable the build of the SpaceNav plugin for Space Navigator input devices
+  --enable-cblas      enable building those parts of BALL that depend on CBLAS (Basic Linear Algebra Subprograms in C)
   --enable-shared[=PKGS]  build shared libraries [default=yes]
   --enable-static[=PKGS]  build static libraries [default=yes]
   --enable-fast-install[=PKGS]
@@ -1621,6 +1625,9 @@ Optional Packages:
   --with-lpsolve-incl=DIR lpsolve includes are in DIR
   --with-spacenavigator-lib  the directory in which libspnav can be found
   --with-spacenavigator-incl the directory in which the headers of libspnav can be found
+  --with-libsvm=DIR      libgsl is in DIR
+  --with-qwt=DIR      qwt (Qt Widget for Technical Applications) is in DIR
+  --with-cblas-libs=DIR      full path&filename of all BLAS libraries to be used
   --with-boost[=DIR]      use boost (default is yes) - it is possible to
                           specify the root directory for boost (optional)
   --with-boost-libdir=LIB_DIR
@@ -2408,6 +2415,7 @@ if test "${with_gsl_incl+set}" = set; then
 fi
 
 
+
 # Check whether --enable-lpsolve was given.
 if test "${enable_lpsolve+set}" = set; then
   enableval=$enable_lpsolve;
@@ -2442,6 +2450,33 @@ fi
 if test "${with_spacenavigator_incl+set}" = set; then
   withval=$with_spacenavigator_incl;
 fi
+
+
+
+# Check whether --with-libsvm was given.
+if test "${with_libsvm+set}" = set; then
+  withval=$with_libsvm;
+fi
+
+
+
+# Check whether --with-qwt was given.
+if test "${with_qwt+set}" = set; then
+  withval=$with_qwt;
+fi
+
+
+# Check whether --enable-cblas was given.
+if test "${enable_cblas+set}" = set; then
+  enableval=$enable_cblas;
+fi
+
+
+# Check whether --with-cblas-libs was given.
+if test "${with_cblas_libs+set}" = set; then
+  withval=$with_cblas_libs;
+fi
+
 
 
 if test "x$prefix" = xNONE ; then
@@ -2690,6 +2725,37 @@ else
 	SPACENAV_LIBDIR=""
 	SPACENAV_INCLDIR=""
 fi
+
+# support for libsvm
+if test "$with_libsvm" != "" ; then
+	BALL_HAS_LIBSVM=true
+	LIBSVM_LIBDIR=${with_libsvm}
+	LIBSVM_INCDIR=${with_libsvm}
+else
+	BALL_HAS_LIBSVM=
+fi
+
+# support for qwt
+if test "$with_qwt" != "" ; then
+	BALL_HAS_QWT=true
+	QWT_LIBDIR=${with_qwt}/lib
+	QWT_INCDIR=${with_qwt}/src
+else
+	BALL_HAS_QWT=
+fi
+
+
+# support for CBLAS-interface
+if test "$enable_cblas" = yes -o "$with_cblas_libs" != ""; then
+	BALL_HAS_CBLAS=true
+else
+	BALL_HAS_CBLAS=
+fi
+
+if test "$with_cblas_libs" != ""; then
+	CBLAS_LIBS=${with_cblas_libs}
+fi
+
 
 
 BINFORMAT_FILE=config/binary_formats
@@ -28037,16 +28103,22 @@ echo "${ECHO_T}${VALGRIND_VERSION} (${VALGRIND_VERS_MAJOR}.${VALGRIND_VERS_MINOR
 	fi
 
 
-BALL_INCLUDES="-I$BALL_PATH/include ${BALL_INCLUDES}"
+BALL_INCLUDES="-I$BALL_PATH/include ${BALL_INCLUDES} -I${LIBSVM_INCDIR} -I${QWT_INCDIR} -I${QT_INCPATH}/QtGui -I${QT_INCPATH}/QtCore"
 
 BINFMT="${BINFMT}-${CXX_NAME}"
 BINFMT_INDEX=""
 
 BALL_INCLUDES="${BALL_INCLUDES} ${VIEW_INCLUDES}"
 
+<<<<<<< HEAD:source/configure.ac
 LIBS="${LIBS} ${FFTW_LIBS} ${GSL_LIBS} ${LPSOLVE_LIBS} ${BOOST_LIBS} -lm"
 VIEW_LIBS="${VIEW_LIBS} ${QT_VIEW_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib -lBALL ${LIBS}"
+=======
+LIBS="${LIBS} ${FFTW_LIBS} ${GSL_LIBS} -L${LIBSVM_LIBDIR} -lsvm -L${QWT_LIBDIR} -lqwt ${CBLAS_LIBS} -lm"
+VIEW_LIBS="${VIEW_LIBS} ${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
+BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib/${BINFMT} -lBALL ${LIBS}"
+>>>>>>> dde2946f8d16745ba460332b490665a75969c2db:source/configure.ac
 if test "${USE_VIEW}" = true ; then
 	BALL_LIBS="-L${BALL_PATH}/lib -lVIEW -lBALL ${VIEW_LIBS}"
 fi
@@ -28633,13 +28705,13 @@ if test "${lt_cv_nm_interface+set}" = set; then
 else
   lt_cv_nm_interface="BSD nm"
   echo "int some_variable = 0;" > conftest.$ac_ext
-  (eval echo "\"\$as_me:28636: $ac_compile\"" >&5)
+  (eval echo "\"\$as_me:28708: $ac_compile\"" >&5)
   (eval "$ac_compile" 2>conftest.err)
   cat conftest.err >&5
-  (eval echo "\"\$as_me:28639: $NM \\\"conftest.$ac_objext\\\"\"" >&5)
+  (eval echo "\"\$as_me:28711: $NM \\\"conftest.$ac_objext\\\"\"" >&5)
   (eval "$NM \"conftest.$ac_objext\"" 2>conftest.err > conftest.out)
   cat conftest.err >&5
-  (eval echo "\"\$as_me:28642: output\"" >&5)
+  (eval echo "\"\$as_me:28714: output\"" >&5)
   cat conftest.out >&5
   if $GREP 'External.*some_variable' conftest.out > /dev/null; then
     lt_cv_nm_interface="MS dumpbin"
@@ -29738,7 +29810,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 29741 "configure"' > conftest.$ac_ext
+  echo '#line 29813 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -31711,11 +31783,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:31714: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:31786: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:31718: \$? = $ac_status" >&5
+   echo "$as_me:31790: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -32035,11 +32107,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:32038: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:32110: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:32042: \$? = $ac_status" >&5
+   echo "$as_me:32114: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -32140,11 +32212,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:32143: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:32215: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:32147: \$? = $ac_status" >&5
+   echo "$as_me:32219: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -32195,11 +32267,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:32198: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:32270: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:32202: \$? = $ac_status" >&5
+   echo "$as_me:32274: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -34956,7 +35028,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<_LT_EOF
-#line 34959 "configure"
+#line 35031 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -35056,7 +35128,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<_LT_EOF
-#line 35059 "configure"
+#line 35131 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -37059,11 +37131,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:37062: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:37134: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:37066: \$? = $ac_status" >&5
+   echo "$as_me:37138: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -37158,11 +37230,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:37161: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:37233: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:37165: \$? = $ac_status" >&5
+   echo "$as_me:37237: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -37210,11 +37282,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:37213: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:37285: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:37217: \$? = $ac_status" >&5
+   echo "$as_me:37289: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -38315,6 +38387,13 @@ if test "$BALL_HAS_SSTREAM" = yes ; then
 _ACEOF
 
 fi
+
+
+
+
+
+
+
 
 
 
@@ -39586,13 +39665,16 @@ for ac_last_try in false false false false false :; do
 BALL_HAS_VIEW!$BALL_HAS_VIEW$ac_delim
 VIEW_PLATFORM!$VIEW_PLATFORM$ac_delim
 LIBVIEW!$LIBVIEW$ac_delim
+BALL_HAS_LIBSVM!$BALL_HAS_LIBSVM$ac_delim
+BALL_HAS_QWT!$BALL_HAS_QWT$ac_delim
+BALL_HAS_CBLAS!$BALL_HAS_CBLAS$ac_delim
 TEMPLATE_DIR!$TEMPLATE_DIR$ac_delim
 SUBDIRS!$SUBDIRS$ac_delim
 LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 7; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 10; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

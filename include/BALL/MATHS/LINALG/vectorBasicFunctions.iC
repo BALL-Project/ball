@@ -1,0 +1,821 @@
+#ifndef BALL_LINALG_VECTORBASICFUNCTIONS_IC
+#define BALL_LINALG_VECTORBASICFUNCTIONS_IC
+
+namespace BALL {
+
+typedef std::complex<float> ComplexFloat;
+typedef std::complex<double> ComplexDouble;
+
+template <typename valuetype>
+void Vector<valuetype>::clear()
+{
+	data_.clear();
+	is_column_vector_ = true;
+	n_ = 0;
+}
+
+template <typename valuetype>
+size_t Vector<valuetype>::getSize() const
+	throw()
+{
+	return n_;
+}
+
+template <typename valuetype>
+void Vector<valuetype>::resize(size_t size)
+{
+	n_ = size;
+	data_.resize(n_);
+}
+
+template <typename valuetype>
+bool Vector<valuetype>::isColumnVector() const
+	throw()
+{
+	return is_column_vector_;
+}
+
+template <typename valuetype>
+void Vector<valuetype>::setVectorType(bool column_vector)
+	throw()
+{
+	is_column_vector_ = column_vector;
+}
+
+template <typename valuetype>
+void Vector<valuetype>::transpose()
+	throw()
+{
+	is_column_vector_ = !is_column_vector_;
+}
+
+template <typename valuetype>
+valuetype& Vector<valuetype>::operator() (size_t i)
+{
+	return data_[i-1];
+}
+
+template <typename valuetype>
+const valuetype& Vector<valuetype>::operator() (size_t i) const
+{
+	return data_[i-1];
+}
+
+template <typename valuetype>
+valuetype& Vector<valuetype>::operator [] (size_t position)
+{
+	return data_[position];
+}
+
+template <typename valuetype>
+const valuetype& Vector<valuetype>::operator [] (size_t position) const
+{
+	return data_[position];
+}
+
+template <typename valuetype>
+Vector<valuetype>& Vector<valuetype>::operator+= (const Vector<valuetype>& B)
+	throw(Exception::VectorHasWrongDimension)
+{
+	if (n_ != B.getSize())
+	{
+		Exception::VectorHasWrongDimension e;
+		throw (e);
+	}
+
+#ifdef USE_BLAS
+#ifdef DEBUG
+	std::cout << "Info: using add_inline_blas" << std::endl;
+#endif
+	add_inline_blas(B);	
+#else
+#ifdef DEBUG
+	std::cout << "Info: using add_inline_native" << std::endl;
+#endif
+	add_inline_native(B);
+#endif
+	
+	return *this;
+}
+
+///----------------------------------------
+
+
+template <typename valuetype>
+void Vector<valuetype>::operator=(valuetype value)
+{
+	size_t size=getSize();
+	for(size_t i=1; i<=size; i++)
+	{
+		operator()(i)=value;
+	}
+}
+
+
+template <typename valuetype>
+valuetype Vector<valuetype>::sum()
+{
+	valuetype sum=0;
+	for (size_t i=0; i<n_; i++)
+	{
+		sum += data_[i];
+	}
+	return sum;
+}
+
+///----------------------------------------
+
+template <typename valuetype>
+void Vector<valuetype>::add_inline_native(const Vector<valuetype>& B)
+	throw()
+{
+	/** TODO: find out if this would be faster using pointers **/
+	for (size_t i=0; i<n_; i++)
+		data_[i] += B[i];
+}
+
+template <typename valuetype>
+Vector<valuetype> Vector<valuetype>::operator + (const Vector<valuetype>& B) const
+	throw(Exception::VectorHasWrongDimension)
+{
+	if (n_ != B.getSize())
+	{
+		Exception::VectorHasWrongDimension e;
+		throw (e);
+	}
+
+	Vector<valuetype> result(n_);
+#ifdef USE_BLAS
+#ifdef DEBUG
+	std::cout << "Info: using add_blas" << std::endl;
+#endif
+	add_blas(result, B);	
+#else
+#ifdef DEBUG
+	std::cout << "Info: using add_native" << std::endl;
+#endif
+	add_native(result, B);
+#endif
+
+	return result;
+}
+
+template <typename valuetype>
+void Vector<valuetype>::add_native(Vector<valuetype>& result, const Vector<valuetype>& B) const
+	throw()
+{
+	// TODO: find out if this would be faster using pointers
+	for (size_t i=0; i<n_; i++)
+		result[i] = (*this)[i]+B[i];
+}
+
+template <typename valuetype>
+Vector<valuetype>& Vector<valuetype>::operator-= (const Vector<valuetype>& B)
+	throw(Exception::VectorHasWrongDimension)
+{
+	if (n_ != B.getSize())
+	{
+		Exception::VectorHasWrongDimension e;
+		throw (e);
+	}
+
+#ifdef USE_BLAS
+#ifdef DEBUG
+	std::cout << "Info: using subtract_inline_blas" << std::endl;
+#endif
+	subtract_inline_blas(B);	
+#else
+#ifdef DEBUG
+	std::cout << "Info: using subtract_inline_native" << std::endl;
+#endif
+	subtract_inline_native(B);
+#endif
+	
+	return *this;
+}
+
+template <typename valuetype>
+void Vector<valuetype>::subtract_inline_native(const Vector<valuetype>& B)
+	throw()
+{
+	/** TODO: find out if this would be faster using pointers **/
+	for (size_t i=0; i<n_; i++)
+		data_[i] -= B[i];
+}
+
+template <typename valuetype>
+Vector<valuetype> Vector<valuetype>::operator - (const Vector<valuetype>& B) const
+	throw(Exception::VectorHasWrongDimension)
+{
+	if (n_ != B.getSize())
+	{
+		Exception::VectorHasWrongDimension e;
+		throw (e);
+	}
+
+	Vector<valuetype> result(n_);
+#ifdef USE_BLAS
+#ifdef DEBUG
+	std::cout << "Info: using subtract_blas" << std::endl;
+#endif
+	subtract_blas(result, B);	
+#else
+#ifdef DEBUG
+	std::cout << "Info: using subtract_native" << std::endl;
+#endif
+	subtract_native(result, B);
+#endif
+
+	return result;
+}
+
+template <typename valuetype>
+void Vector<valuetype>::subtract_native(Vector<valuetype>& result, const Vector<valuetype>& B) const
+	throw()
+{
+	// TODO: find out if this would be faster using pointers
+	for (size_t i=0; i<n_; i++)
+		result[i] = (*this)[i]-B[i];
+}
+
+template <typename valuetype>
+Vector<valuetype> Vector<valuetype>::operator* (const valuetype& a) const
+	throw()
+{
+	Vector<valuetype> result(*this);
+
+#ifdef USE_BLAS
+#ifdef DEBUG
+	std::cout << "Info: using multiply_blas" << std::endl;
+#endif
+	multiply_blas(result, a);	
+#else
+#ifdef DEBUG
+	std::cout << "Info: using multiply_native" << std::endl;
+#endif
+	multiply_native(result, a);
+#endif
+
+	return result;
+}
+
+template <typename valuetype> inline
+Vector<valuetype> Vector<valuetype>::operator/ (const valuetype& a) const
+{
+	valuetype a_inv = ((valuetype)1.)/a;
+
+	return (*this)*a_inv;
+}
+
+template <typename valuetype>
+void Vector<valuetype>::multiply_native(Vector<valuetype>& result, const valuetype& a) const
+{
+	valuetype* v_ptr = const_cast<valuetype*>(&result[0]);
+
+	for (size_t i=0; i<n_; i++)
+		*v_ptr++ *= a;
+}
+
+template <typename valuetype>
+Vector<valuetype>& Vector<valuetype>::operator*= (const valuetype& a)
+	throw()
+{
+#ifdef USE_BLAS
+#ifdef DEBUG
+	std::cout << "Info: using multiply_inline_blas" << std::endl;
+#endif
+	multiply_inline_blas(a);	
+#else
+#ifdef DEBUG
+	std::cout << "Info: using multiply_inline_native" << std::endl;
+#endif
+	multiply_inline_native(a);
+#endif
+
+	return *this;
+}
+
+template <typename valuetype> inline
+Vector<valuetype>& Vector<valuetype>::operator/= (const valuetype& a)
+{
+	valuetype a_inv = ((valuetype)1.)/a;
+
+	return (*this)*=(a_inv);
+}
+
+template <typename valuetype>
+void Vector<valuetype>::multiply_inline_native(const valuetype& a)
+{
+	valuetype* v_ptr = &data_[0];
+
+	for (size_t i=0; i<n_; i++)
+		*v_ptr++ *= a;
+}
+
+template <typename valuetype>
+Vector<valuetype> Vector<valuetype>::operator % (const Vector<valuetype>& a) const
+	throw(Exception::VectorHasWrongDimension)
+{
+	// quick and dirty implementation... no blas stuff yet, handles only case D=3
+	if (n_ != 3)
+	{
+		Exception::VectorHasWrongDimension e;
+		throw(e);
+	}
+
+	Vector<valuetype> result(3);
+	result[0] = data_[1]*a[2] - data_[2]*a[1];
+  result[1] = data_[2]*a[0] - data_[0]*a[2];
+	result[2] = data_[0]*a[1] - data_[1]*a[0];
+
+	return result;
+}
+
+template <> 
+void Vector<float>::add_inline_blas(const Vector<float>& B);
+
+template <>
+void Vector<double>::add_inline_blas(const Vector<double>& B);
+
+template <>
+void Vector<ComplexFloat>::add_inline_blas(const Vector<ComplexFloat>& B);
+
+template <>
+void Vector<ComplexDouble>::add_inline_blas(const Vector<ComplexDouble>& B);
+
+////////////////////////////////////////////////////////////
+
+template <>
+void Vector<float>::add_blas(Vector<float>& result, const Vector<float>& B) const;
+
+template <>
+void Vector<double>::add_blas(Vector<double>& result, const Vector<double>& B) const;
+
+template <>
+void Vector<ComplexFloat>::add_blas(Vector<ComplexFloat>& result, const Vector<ComplexFloat>& B) const;
+
+template <>
+void Vector<ComplexDouble>::add_blas(Vector<ComplexDouble>& result, const Vector<ComplexDouble>& B) const;
+
+////////////////////////////////////////////////////////////
+
+template <>
+void Vector<float>::subtract_inline_blas(const Vector<float>& B);
+
+template <>
+void Vector<double>::subtract_inline_blas(const Vector<double>& B);
+
+template <>
+void Vector<ComplexFloat>::subtract_inline_blas(const Vector<ComplexFloat>& B);
+
+template <>
+void Vector<ComplexDouble>::subtract_inline_blas(const Vector<ComplexDouble>& B);
+
+////////////////////////////////////////////////////////////
+
+template <>
+void Vector<float>::subtract_blas(Vector<float>& result, const Vector<float>& B) const;
+
+template <>
+void Vector<double>::subtract_blas(Vector<double>& result, const Vector<double>& B) const;
+
+template <>
+void Vector<ComplexFloat>::subtract_blas(Vector<ComplexFloat>& result, const Vector<ComplexFloat>& B) const;
+
+template <>
+void Vector<ComplexDouble>::subtract_blas(Vector<ComplexDouble>& result, const Vector<ComplexDouble>& B) const;
+
+////////////////////////////////////////////////////////////
+
+template <>
+void Vector<float>::multiply_blas(Vector<float>& result, const float& a) const;
+
+template <>
+void Vector<double>::multiply_blas(Vector<double>& result, const double& a) const;
+
+/** TODO: multiplication by float instead of ComplexFloat **/
+template <>
+void Vector<ComplexFloat>::multiply_blas(Vector<ComplexFloat>& result, const ComplexFloat& a) const;
+
+template <>
+void Vector<ComplexDouble>::multiply_blas(Vector<ComplexDouble>& result, const ComplexDouble& a) const;
+
+////////////////////////////////////////////////////////////
+template <> inline
+float Vector<float>::get1Norm() const
+	throw()
+{
+	float result = fabs(data_[0]);
+	
+	for (size_t i=1; i<n_; i++)
+	{
+		result += fabs(data_[i]);
+	}
+
+	return result;
+}
+
+template <> inline
+double Vector<double>::get1Norm() const
+	throw()
+{
+	double result = fabs(data_[0]);
+	
+	for (size_t i=1; i<n_; i++)
+	{
+		result += fabs(data_[i]);
+	}
+
+	return result;
+}
+
+template <> inline
+ComplexFloat Vector<ComplexFloat>::get1Norm() const
+	throw()
+{
+	ComplexFloat result = sqrt(norm(data_[0]));
+	
+	for (size_t i=1; i<n_; i++)
+	{
+		result += sqrt(norm(data_[i]));
+	}
+
+	return result;
+}
+
+template <> inline
+ComplexDouble Vector<ComplexDouble>::get1Norm() const
+	throw()
+{
+	ComplexDouble result = sqrt(norm(data_[0]));
+	
+	for (size_t i=1; i<n_; i++)
+	{
+		result += sqrt(norm(data_[i]));
+	}
+
+	return result;
+}
+
+
+template <typename valuetype> inline
+valuetype Vector<valuetype>::get2Norm() const
+	throw()
+{
+	return getLength();
+}
+
+template <> inline
+float Vector<float>::getInftyNorm() const
+	throw()
+{
+	float result = fabs(data_[0]);
+	
+	for (size_t i=1; i<n_; i++)
+	{
+		if (fabs(data_[i]) > result) 
+			result = fabs(data_[i]);
+	}
+
+	return result;
+}
+
+template <> inline
+double Vector<double>::getInftyNorm() const
+	throw()
+{
+	double result = fabs(data_[0]);
+	
+	for (size_t i=1; i<n_; i++)
+	{
+		if (fabs(data_[i]) > result) 
+			result = fabs(data_[i]);
+	}
+
+	return result;
+}
+
+template <> inline
+ComplexFloat Vector<ComplexFloat>::getInftyNorm() const
+	throw()
+{
+	ComplexFloat result = sqrt(norm(data_[0]));
+	
+	for (size_t i=1; i<n_; i++)
+	{
+		if (sqrt(norm(data_[i])) > result.real()) 
+			result = sqrt(norm(data_[i]));
+	}
+
+	return result;
+}
+
+template <> inline
+ComplexDouble Vector<ComplexDouble>::getInftyNorm() const
+	throw()
+{
+	ComplexDouble result = sqrt(norm(data_[0]));
+	
+	for (size_t i=1; i<n_; i++)
+	{
+		if (sqrt(norm(data_[i])) > result.real()) 
+			result = sqrt(norm(data_[i]));
+	}
+
+	return result;
+}
+
+template <typename valuetype> inline
+valuetype Vector<valuetype>::getLength() const
+	throw()
+{
+#ifdef USE_BLAS
+#ifdef DEBUG
+	std::cout << "Info: using compute_length_blas" << std::endl;
+#endif
+	return compute_length_blas();
+#else
+#ifdef DEBUG
+	std::cout << "Info: using compute_length_native" << std::endl;
+#endif
+	return compute_length_native();
+#endif
+}
+
+template <typename valuetype>
+valuetype Vector<valuetype>::compute_length_native() const
+	throw()
+{
+	valuetype result = valuetype(0.);
+	
+	// TODO: this is _not_ stable!!!
+	for (size_t i=0; i<n_; i++)
+	{
+		result += data_[i]*data_[i];
+	}
+
+	return sqrt(result);
+}
+
+template <>
+float Vector<float>::compute_length_blas() const;
+
+template <>
+double Vector<double>::compute_length_blas() const;
+
+template <>
+ComplexFloat Vector<ComplexFloat>::compute_length_blas() const;
+
+template <>
+ComplexDouble Vector<ComplexDouble>::compute_length_blas() const;
+
+////////////////////////////////////////////////////////////
+
+template <>
+void Vector<float>::multiply_inline_blas(const float& a);
+
+template <>
+void Vector<double>::multiply_inline_blas(const double& a);
+
+template <>
+void Vector<ComplexFloat>::multiply_inline_blas(const ComplexFloat& a);
+
+template <>
+void Vector<ComplexDouble>::multiply_inline_blas(const ComplexDouble& a);
+
+
+template <typename valuetype>
+valuetype Vector<valuetype>::operator* (const Vector<valuetype>& a) const
+	throw(Exception::VectorHasWrongDimension)
+{
+	if (n_ != a.getSize())
+	{
+		Exception::VectorHasWrongDimension e;
+		throw (e);
+	}
+#ifdef USE_BLAS
+#ifdef DEBUG
+	std::cout << "Info: using scalarproduct_blas" << std::endl;
+#endif
+	return scalarproduct_blas(a);
+#else
+#ifdef DEBUG
+	std::cout << "Info: using scalarproduct_native" << std::endl;
+#endif
+	return scalarproduct_native(a);
+#endif
+}
+
+// TODO: numerically stable implementation
+template <>
+ComplexFloat Vector<ComplexFloat>::scalarproduct_native(const Vector<ComplexFloat>& a) const;
+
+template <>
+ComplexDouble Vector<ComplexDouble>::scalarproduct_native(const Vector<ComplexDouble>& a) const;
+
+// TODO: numerically stable implementation
+template <typename valuetype>
+valuetype Vector<valuetype>::scalarproduct_native(const Vector<valuetype>& a) const
+{
+	valuetype result = (valuetype)0;
+	for (size_t i=1; i<n_; i++)
+		result += data_[i-1]*a(i);
+
+	return result;
+}
+
+template <>
+float Vector<float>::scalarproduct_blas(const Vector<float>& a) const;
+
+template <>
+double Vector<double>::scalarproduct_blas(const Vector<double>& a) const;
+
+template <>
+ComplexFloat Vector<ComplexFloat>::scalarproduct_blas(const Vector<ComplexFloat>& a) const;
+
+template <>
+ComplexDouble Vector<ComplexDouble>::scalarproduct_blas(const Vector<ComplexDouble>& a) const;
+
+
+template <class valuetype> template <class mvaluetype, class mtraits>
+void Vector<valuetype>::dotProduct(const Vector<valuetype>& a, Matrix<mvaluetype, mtraits>& result) const
+{
+	size_t size_this = getSize();
+	size_t size_a = a.getSize();
+	
+	result.resize(size_this,size_a);
+	for(size_t i=1; i<=size_this; i++)
+	{
+		for(size_t j=1; j<=size_a; j++)
+		{	
+			result(i,j)=operator()(i)*a(j);
+		}
+	}
+}
+
+
+template <class valuetype> template <class mvaluetype, class mtraits>
+Vector<valuetype> Vector<valuetype>::operator* (const Matrix<mvaluetype, mtraits>& A) const
+	throw(Exception::VectorHasWrongDimension)
+{
+	if ((uint)A.getRowCount() != getSize())
+	{
+		Exception::VectorHasWrongDimension e;
+		throw (e);
+	}
+
+	Vector<valuetype> result(A.getColumnCount());
+
+#ifdef USE_BLAS
+#ifdef DEBUG
+	std::cout << "Info: using multiply_blas" << std::endl;
+#endif
+	multiply_blas(result, A, false);
+#else
+#ifdef DEBUG
+	std::cout << "Info: using multiply_native" << std::endl;
+#endif
+	multiply_native(result, A, false);
+#endif
+
+	return result;
+}
+////////////////////////////////////////////////////////////
+
+
+template <class valuetype> template <class mvaluetype, class mtraits>
+void Vector<valuetype>::multiply_native(Vector<valuetype>& result, const Matrix<mvaluetype, mtraits>& A, bool right) const
+{
+	// this method of multiplication will not work for all kinds of matrix storage.
+	// unfortunately, we cannot partially specialize this function because it's a member
+	// template function, thus we have to check for the correct matrixtraits typeid here
+	if (  (mtraits::traits_id == STANDARD_TRAITS)
+			||(mtraits::traits_id == SYMMETRIC_TRAITS) )
+	{
+		valuetype* result_ptr 	= &result[0];
+		valuetype const* this_ptr   = &data_[0];
+		valuetype const* a_ptr	= &A[0];
+
+		uint n_ = A.getRowCount();
+		uint m_ = A.getColumnCount();
+
+		if (right)
+		{
+			// we have to take care of possible shallow transposal
+			if (A.isRowMajor())
+			{
+				size_t size = data_.size();
+				for (size_t result_i=0; result_i != result.getSize(); result_i++)
+				{
+					this_ptr   = &data_[0];
+					*result_ptr = 0;
+					for (size_t i=0; i<size; i++)
+					{
+						*result_ptr += *a_ptr++ * *this_ptr++;
+					}
+					result_ptr++;
+				}
+			}
+			else
+			{
+				size_t size = data_.size();
+				for (size_t result_i=0; result_i != result.getSize(); result_i++)
+				{
+					this_ptr   = &data_[0];
+					*result_ptr = 0;
+					a_ptr = &A[result_i];
+					for (size_t i=0; i<size; i++)
+					{
+						*result_ptr += *a_ptr * *this_ptr++;
+						a_ptr += n_;
+					}
+					result_ptr++;
+				}
+			}
+		} 
+		else
+		{
+			// we have to take care of possible shallow transposal
+			if (A.isRowMajor())
+			{
+				size_t size = data_.size();
+				for (size_t result_i=0; result_i != result.getSize(); result_i++)
+				{
+					this_ptr   = &data_[0];
+					*result_ptr = 0;
+					a_ptr = &A[result_i];
+					for (size_t i=0; i<size; i++)
+					{
+						*result_ptr += *a_ptr * *this_ptr++;
+						a_ptr += m_;
+					}
+					result_ptr++;
+				}
+			}
+			else
+			{
+				size_t size = data_.size();
+				for (size_t result_i=0; result_i != result.getSize(); result_i++)
+				{
+					this_ptr   = &data_[0];
+					*result_ptr = 0;
+					for (size_t i=0; i<size; i++)
+					{
+						*result_ptr += *a_ptr++ * *this_ptr++;
+					}
+					result_ptr++;
+				}
+			}
+		}
+	}
+	else
+	{
+		std::cerr << "multiply_native not implemented for the current storage type! Multiplication has not been performed!" << std::endl;
+		return;
+	}
+}
+
+////////////////////////////////////////////////////////////
+template <> template <>
+void Vector<float>::multiply_blas(Vector<float>& result, const Matrix<float, StandardTraits>& A, bool right) const;
+
+template <> template <>
+void Vector<double>::multiply_blas(Vector<double>& result, const Matrix<double, StandardTraits>& A, bool right) const;
+
+template <> template <>
+void Vector<ComplexFloat>::multiply_blas(Vector<ComplexFloat>& result, const Matrix<ComplexFloat, StandardTraits>& A, bool right) const;
+
+template <> template <>
+void Vector<ComplexDouble>::multiply_blas(Vector<ComplexDouble>& result, const Matrix<ComplexDouble, StandardTraits>& A, bool right) const;
+
+template <> template <>
+void Vector<float>::multiply_blas(Vector<float>& result, const Matrix<float, SymmetricTraits>& A, bool right) const;
+////////////////////////////////////////////////////////////
+template <>
+void Vector<ComplexFloat>::normalize();
+
+template <>
+void Vector<ComplexDouble>::normalize();
+
+template <typename valuetype>
+void Vector<valuetype>::normalize()
+{
+	valuetype norm =  1.; 
+	norm /= get2Norm();
+
+#ifdef USE_BLAS
+#ifdef DEBUG
+	std::cout << "Info: using multiply_inline_blas" << std::endl;
+#endif
+	multiply_inline_blas(norm);
+#else
+#ifdef DEBUG
+	std::cout << "Info: using multiply_inline_native" << std::endl;
+#endif
+	multiply_inline_native(norm);
+#endif
+}
+
+}
+
+#endif

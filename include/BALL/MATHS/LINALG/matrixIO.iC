@@ -1,0 +1,52 @@
+#ifndef BALL_LINALG_MATRIXIO_IC
+#define BALL_LINALG_MATRIXIO_IC
+
+namespace BALL {
+	
+	// Output Operator
+	template <class valuetype, class matrixtraits>
+	std::ostream& Matrix<valuetype, matrixtraits>::operator>> (std::ostream& stream) const
+	{
+	  for (size_t i=1; i<=n_; i++)
+	  {
+	    for (size_t j=1; j<=m_; j++)
+	    {
+	      stream << Matrix<valuetype, matrixtraits>::operator() (i,j) << '\t';
+	    }
+	    stream << std::endl;
+	  }
+	  return stream;
+	}
+	
+	// External definition of output operator
+	template <class valuetype, class matrixtraits>
+	std::ostream& operator<< (std::ostream& stream, const Matrix<valuetype, matrixtraits>& m)
+	{
+		return (m >> stream);
+	}
+	
+	// Input Operator
+	template <class valuetype, class matrixtraits>
+	std::istream& Matrix<valuetype, matrixtraits>::operator<< (std::istream& stream)
+	{
+		valuetype dummy;
+		for (size_t i=1; i<=n_; i++)
+		{
+			for (size_t j=1; j<=m_; j++)
+			{
+				stream >> dummy;
+				Matrix<valuetype, matrixtraits>::operator() (i,j) = dummy;
+			}
+		}
+		return stream;
+	}
+	
+	// External definition of our input operator
+	template <class valuetype, class matrixtraits>
+	std::istream& operator>> (std::istream& stream, Matrix<valuetype, matrixtraits>& m)
+	{
+		return(m << stream);
+	}
+	
+}
+#endif
