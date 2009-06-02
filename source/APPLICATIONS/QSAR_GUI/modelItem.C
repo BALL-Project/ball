@@ -664,7 +664,7 @@ void ModelItem::loadFromFile(String file)
 {
 	try
 	{
-		model_->readFromFile(file.toStdString());
+		model_->readFromFile(file);
 	}
 	catch(WrongDataType e)
 	{

@@ -543,9 +543,6 @@ void MainWindow::createActions()
 	exportAct_->setStatusTip(tr("Saves the Pipeline"));
 	exportAct_->setShortcut(tr("Ctrl+S"));
 	connect(exportAct_, SIGNAL(triggered()), this, SLOT(exportPipeline()));
-
-	loadModelsAct_ = new QAction(QIcon(),tr("Load Models"), this);
-	connect(loadModelsAct_, SIGNAL(triggered()), this, SLOT(loadModels()));
  }
  
  
