@@ -47,7 +47,6 @@ namespace BALL
 	
 	template <>
 	ParsedFunction<double>::ParsedFunction(const String& expression)
-		throw()
 		: constants_(),
 			functions_(),
 			expression_(expression)
@@ -77,7 +76,6 @@ namespace BALL
 	}
 	template <>
 	ParsedFunction<double>::~ParsedFunction()
-		throw()
 	{
 	}
 	
@@ -116,12 +114,12 @@ namespace BALL
 	{
 		double arg = argument;
 		constants_["X"] = &arg;
-		parsedFunctionConstants = &constants_;
-		parsedFunctionFunctions = &functions_;
-		parsedFunction_initBuffer(expression_.c_str());
-		parsedFunctionparse();
-		parsedFunction_delBuffer();
-		return parsedFunctionResult;
+		ParsedFunctionConstants = &constants_;
+		ParsedFunctionFunctions = &functions_;
+		ParsedFunction_initBuffer(expression_.c_str());
+		ParsedFunctionparse();
+		ParsedFunction_delBuffer();
+		return ParsedFunctionResult;
 	}
 
 

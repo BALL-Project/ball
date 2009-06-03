@@ -52,3 +52,6 @@ if(USE_FFTW)
 		MATHS/FFT3D.C
 		)
 endif(USE_FFTW)
+
+
+include(MATHS/LINALG/CMakeLists.txt)
