@@ -21,7 +21,7 @@ namespace BALL
 				CSVInputDataItem(QString filename, DataItemView* view);	
 				~CSVInputDataItem();
 				CSVInputDataItem(CSVInputDataItem& item);
-				CSVInputDataItem(QSARData* data);
+				CSVInputDataItem(QSARData* data, DataItemView* view);
 				
 				/** read the input data */
 				bool execute();

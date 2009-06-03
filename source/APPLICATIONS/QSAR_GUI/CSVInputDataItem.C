@@ -30,8 +30,9 @@ CSVInputDataItem::CSVInputDataItem(QString filename, DataItemView* view):
 	data_ = new QSARData();
 }
 
-CSVInputDataItem::CSVInputDataItem(QSARData* data)	
+CSVInputDataItem::CSVInputDataItem(QSARData* data, DataItemView* view)
 {
+	view_ = view;
 	append_ = true;
 	String dir = view_->data_scene->main_window->getImageDirectory();
 	QPixmap pm = QPixmap((dir+"csv_icon.png").c_str()).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
