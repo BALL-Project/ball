@@ -34,14 +34,15 @@ InputPartitionItem::InputPartitionItem(bool test_partition, PartitioningItem* pa
 	
 	/// set pixmap and name of this item
 	QPixmap pm;
+	String dir = view_->data_scene->main_window->getImageDirectory();
 	if(test_partition)
 	{
-		pm = QPixmap("./images/test_part.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation);
+		pm = QPixmap((dir+"test_part.png").c_str()).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation);
 		name_ = "validation";
 	}
 	else
 	{
-		pm = QPixmap("./images/train_part.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation);
+		pm = QPixmap((dir+"train_part.png").c_str()).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation);
 		name_ = "train";
 	}
 	setPixmap(pm);

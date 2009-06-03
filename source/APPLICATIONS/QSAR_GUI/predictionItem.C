@@ -19,7 +19,8 @@ PredictionItem::PredictionItem(InputDataItem* input_item, ModelItem* model_item,
 	dotted_edge_(NULL)
 {
 	model_item_ = model_item;
-	setPixmap(QPixmap("./images/prediction.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
+	String dir = view_->data_scene->main_window->getImageDirectory();
+	setPixmap(QPixmap((dir+"prediction.png").c_str()).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
 	name_ = "Prediction for " + input_item->name();
 	plotter_ = NULL;
 	dotted_edge_ = NULL;
@@ -91,7 +92,8 @@ PredictionItem::PredictionItem(String& configfile_section, map<String, DataItem*
 	Edge* edge2 = new Edge(model_item_,this);
 	view_->data_scene->addItem(edge2);
 	
-	setPixmap(QPixmap("./images/prediction.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
+	String dir = view_->data_scene->main_window->getImageDirectory();
+	setPixmap(QPixmap((dir+"prediction.png").c_str()).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
 	name_ = "Prediction for " + test_data_item_->name();
 	view_->data_scene->addItem(this);
 	addToPipeline();
