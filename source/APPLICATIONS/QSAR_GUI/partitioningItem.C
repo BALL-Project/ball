@@ -17,7 +17,8 @@ PartitioningItem::PartitioningItem(InputDataItem* input, DataItemView* miv, uint
 	DataItem(miv),
 	input_(input)
 {
-	setPixmap(QPixmap("./images/partitioning.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
+	String dir = view_->data_scene->main_window->getImageDirectory();
+	setPixmap(QPixmap((dir+"partitioning.png").c_str()).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
 	name_ = "Partitioning of "+ input_->name();
 	no_folds_ = folds;
 	val_fraction_ = fraction;
