@@ -724,8 +724,8 @@ if test "${OS}" = "Solaris" ; then
 else 
 	if test "${OS}" = "Darwin" ; then
 		DYNAROPTS="${DYNAROPTS} -headerpad_max_install_names -compatibility_version ${BALL_COMPATIBILITY_VERSION} -current_version ${BALL_CURRENT_VERSION} -dynamiclib -o"
-		ADD_DYNAROPTS_LIBBALL="-seg1addr 0xb0000000"
-		ADD_DYNAROPTS_LIBVIEW="-seg1addr 0x80000000"
+		ADD_DYNAROPTS_LIBBALL="-seg1addr 0xb0000000 -install_name \$(DESTINATION)/\$(LIBDIR)/libBALL.dylib"
+		ADD_DYNAROPTS_LIBVIEW="-seg1addr 0x80000000 -install_name \$(DESTINATION)/\$(LIBDIR)/libVIEW.dylib"
 		DYNAROPTS_PYMODULE="-headerpad_max_install_names -bundle -framework Python -o"
 		RANLIB="ranlib -s "
 	else	

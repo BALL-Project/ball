@@ -70,36 +70,25 @@ clean:
 
 macos_app: $(EXECUTABLE) BALLView.app/Contents/MacOS/../PkgInfo BALLView.app/Contents/MacOS/../Info.plist 
 	@$(CP) BALLView BALLView.app/Contents/MacOS
+	@test -d BALLView.app/Contents/Resources/ || mkdir -p BALLView.app/Contents/Resources/
+	@$(CP) $(BALL_PATH)/MacOSX/BALLView.icns BALLView.app/Contents/Resources
 
 BALLView.app/Contents/MacOS/../PkgInfo: 
 	@test -d BALLView.app/Contents/MacOS/ || mkdir -p BALLView.app/Contents/MacOS/
 	@-$(RM) -f BALLView.app/Contents/MacOS/../PkgInfo 2>/dev/null
-	@echo "APPL????" >BALLView.app/Contents/MacOS/../PkgInfo
+	@echo "APPLBALL" >BALLView.app/Contents/MacOS/../PkgInfo
 
 BALLView.app/Contents/MacOS/../Info.plist: 
 	@test -d BALLView.app/Contents/MacOS/ || mkdir -p BALLView.app/Contents/MacOS/
 	@-$(RM) -f BALLView.app/Contents/MacOS/../Info.plist 2>/dev/null
-	@sed -e "s,@ICON@,application.icns,g" -e "s,@EXECUTABLE@,BALLView,g" "../../../MacOSX/BALLView/Info.plist.app" >"BALLView.app/Contents/MacOS/../Info.plist"
+	@$(CP) $(BALL_PATH)/MacOSX/Info.plist.app BALLView.app/Contents/Info.plist
 
-
-macos_pkg: $(EXECUTABLE)
-	@echo "Cleaning old package contents..."
-	@-$(RM) -fr $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL/Library/lib*dylib 2>/dev/null | true
-	@-$(RM) -fr $(BALL_PATH)/MacOSX/BALLPackage/Applications/BALLView.app/Contents/MacOS/BALLView 2>/dev/null | true
-	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage 2>/dev/null | true
-	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Library 2>/dev/null | true
-	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL 2>/dev/null | true
-	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL/Library 2>/dev/null | true
-	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Applications 2>/dev/null | true
-	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Applications/BALLView.app 2>/dev/null | true
-	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Applications/BALLView.app/Contents 2>/dev/null | true
-	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Applications/BALLView.app/Contents/MacOS 2>/dev/null | true
-	@echo "Copying BALL/data..."
-	@$(CP) -r $(BALL_PATH)/data $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL
-	@echo "Copying BALLView"
-	@$(CP) BALLView $(BALL_PATH)/MacOSX/BALLPackage/Applications/BALLView.app/Contents/MacOS/
-	@echo "Copying contrib libraries..."
-	@$(CP) $(BALL_PATH)/contrib/lib/lib*dylib $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL/Library/
-	
-	
+macos_pkg: macos_app
+	@$(CP) -r $(BALL_PATH)/data BALLView.app/Contents/
+	@macdeployqt BALLView.app	
+	@$(CP) $(BALL_PATH)/lib/*.so BALLView.app/Contents/Frameworks
+	@$(RM) -rf $(BALL_PATH)/MacOSX/BALLPackage/Applications/BALLView.app
+	@$(CP) $(BALL_PATH)/MacOSX/Info.plist.app BALLView.app/Contents/Info.plist
+	@$(MV) BALLView.app $(BALL_PATH)/MacOSX/BALLPackage/Applications
+	@open -a PackageMaker $(BALL_PATH)/MacOSX/BALLView-package.pmdoc
 	
