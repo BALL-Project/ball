@@ -30,7 +30,7 @@ MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name
 	prefered_style = "WindowsXP";
 #endif
 #ifdef BALL_OS_DARWIN
-	prefered_style = "Macintosh style";
+	prefered_style = "Macintosh (aqua)";
 #endif
 
 	Index pos = style_box_->findText(prefered_style);
