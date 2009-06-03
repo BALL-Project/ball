@@ -220,7 +220,7 @@ void InputDataItemIO::readConfigSection(String& configfile_section, map<String, 
 			CSVInputDataItem* csv_item;
 			if(sd_item!=0)
 			{
-				csv_item = new CSVInputDataItem(sd_item->data());	
+				csv_item = new CSVInputDataItem(sd_item->data(),view_);	
 				csv_item->setAppend(true);
 				if(i==no-1)
 				{

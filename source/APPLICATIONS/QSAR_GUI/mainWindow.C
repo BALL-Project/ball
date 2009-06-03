@@ -288,7 +288,7 @@ CSVInputDataItem* MainWindow::createCSVInput(QString filename)
 ///create a new CSVInputItem with the given file
 CSVInputDataItem* MainWindow::createCSVInput(QSARData* data)
 {
-	CSVInputDataItem* input = new CSVInputDataItem(data);
+	CSVInputDataItem* input = new CSVInputDataItem(data, view_);
 	bool ok = false;
 	int exec = 0;
 	CSVInputDialog csvInputDialog(input);
