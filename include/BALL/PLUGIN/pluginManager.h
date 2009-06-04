@@ -1,12 +1,17 @@
 #ifndef BALL_PLUGIN_PLUGINMANAGER_H
 #define BALL_PLUGIN_PLUGINMANAGER_H
 
+#ifndef BALL_CONCEPT_PREFERENCESOBJECT_H
+# include <BALL/CONCEPT/preferencesObject.h>
+#endif
+
 #include <QtCore/QString>
 #include <QtCore/QHash>
 #include <QtCore/QMutex>
 #include <QtCore/QReadWriteLock>
 
 #include <list>
+#include <map>
 
 class QPluginLoader;
 class QObject;
@@ -23,10 +28,13 @@ namespace BALL
 	 * the PluginHandler helper classes, that need to be supplemented
 	 * for each new plugin type.
 	 */
-	class PluginManager
+	class BALL_EXPORT PluginManager
+		: public PreferencesObject
 	{
-		public:
-			~PluginManager();
+		
+		public:	
+
+			virtual ~PluginManager();
 
 			/**
 			 * Use this method to obtain the PluginManager instance.
@@ -41,7 +49,19 @@ namespace BALL
 			 *
 			 * @param dir the directory to search for plugins.
 			 */
-			void setPluginDirectory(const QString& dir);
+			void addPluginDirectory(const QString& dir, bool autoactivate = false);
+			
+			/**
+			 * Tries to unload all plugins (files named like: pluginMyPlugin.$LIBRARY_SUFFIX)
+			 * located in the specified directoy dir.
+			 *
+			 * @param dir the directory to search for plugins to remove.
+				*/
+			bool removePluginDirectory(const QString& dir);
+
+			/** Return a list of directories currently searched for plugins.
+			 */
+			vector<QString> getPluginDirectories() const;
 
 			/**
 			 * Loads the plugin specified by plugin_name.
@@ -134,13 +154,20 @@ namespace BALL
 			 * be available for starting new plugins.
 			 */
 			void registerHandler(PluginHandler* h);
+	
+			// needed for storing this classes' preferences
+			virtual bool getValue(String&) const;
+			virtual bool setValue(const String&);
 
-		private:
+		protected: 
+			static const char* BETWEEN_PLUGINDIR_SEPERATOR;
+
 			PluginManager();
 			PluginManager(const PluginManager&);
 			const PluginManager& operator=(const PluginManager&);
 
-			QString plugin_dir_;
+			std::map<QString, vector<BALLPlugin*> > loaded_plugin_dirs_;
+			
 			QHash<QString, QPluginLoader*> loaders_;
 			std::list<PluginHandler*> handlers_;
 

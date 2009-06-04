@@ -11,36 +11,45 @@
 
 namespace BALL
 {
+	const char* PluginManager::BETWEEN_PLUGINDIR_SEPERATOR  = "?";
+
 	PluginManager* PluginManager::manager_ = NULL;
 	QMutex PluginManager::mutex_;
 
 	PluginManager::PluginManager()
+		: PreferencesObject()
 	{
+		setObjectName("PluginManager");
 	}
 
 	PluginManager::~PluginManager()
 	{
 		QHash<QString, QPluginLoader*>::iterator it = loaders_.begin();
-		for(; it != loaders_.end(); ++it) {
+		for (; it != loaders_.end(); ++it) 
+		{
 			it.value()->unload();
 			delete it.value();
 		}
 
 		std::list<PluginHandler*>::iterator ht = handlers_.begin();
-		for(; ht != handlers_.end(); ++it) {
+		for (; ht != handlers_.end(); ++it) 
+		{
 			delete *it;
-		}
+		}	
+		//unregisterThis();
 	}
 
 	PluginManager& PluginManager::instance()
 	{
 		//Make the PluginManager creation thread safe
-		if(!manager_) {
+		if (!manager_) 
+		{
 			//Another thread could have taken over control right now
 			//so lock a mutex to ensure the PluginManager is created only once.
 			mutex_.lock();
 			//Check that the manager has not been created by a concurring thread
-			if(!manager_) {
+			if(!manager_) 
+			{
 				manager_ = new PluginManager();
 			}
 			mutex_.unlock();
@@ -49,18 +58,69 @@ namespace BALL
 		return *manager_;
 	}
 
-	void PluginManager::setPluginDirectory(const QString& dir)
+	void PluginManager::addPluginDirectory(const QString& dir, bool autoactivate)
 	{
-		plugin_dir_ = dir;
+		std::map<QString, vector<BALLPlugin*> >::iterator to_load_it = loaded_plugin_dirs_.find(dir);
 #ifndef BALL_OS_DARWIN
-		QDir plugin_dir(plugin_dir_, "plugin*.so", QDir::Name | QDir::IgnoreCase, QDir::Files);
 #else
 		QDir plugin_dir(plugin_dir_, "plugin*.dylib", QDir::Name | QDir::IgnoreCase, QDir::Files);
 #endif
 
-		foreach(QString it, plugin_dir.entryList()) {
-			loadPlugin(plugin_dir.absoluteFilePath(it));
+		if (to_load_it == loaded_plugin_dirs_.end())
+		{
+			vector<BALLPlugin*> loaded_plugins;
+
+			QDir plugin_dir(dir, "plugin*.so", QDir::Name | QDir::IgnoreCase, QDir::Files);
+
+			// collect the loaded plugins in this dir
+			foreach(QString it, plugin_dir.entryList()) 
+			{
+				BALLPlugin* new_plugin = loadPlugin(plugin_dir.absoluteFilePath(it));
+				if (new_plugin)
+				{
+					loaded_plugins.push_back(new_plugin);	
+					if (autoactivate)
+						startPlugin(new_plugin);
+				}
+			}
+
+			// and store the entry
+			loaded_plugin_dirs_[dir]=loaded_plugins;
 		}
+	}
+
+	bool PluginManager::removePluginDirectory(const QString& dir)
+	{	
+		std::map<QString, vector<BALLPlugin*> >::iterator to_unload_it = loaded_plugin_dirs_.find(dir);
+
+		if (to_unload_it != loaded_plugin_dirs_.end())
+		{
+			// remove the corresponding plugins
+			vector<BALLPlugin*> to_unload = to_unload_it->second;
+			for (Size i=0; i<to_unload.size(); i++)
+			{
+				unloadPlugin(to_unload[i]->getName());
+			}
+
+			// and the directory itself
+			loaded_plugin_dirs_.erase(to_unload_it);
+		}
+		else
+		{
+			return false;
+		}
+		return true;
+	}
+
+	vector<QString> PluginManager::getPluginDirectories() const
+	{
+		vector<QString> result;
+
+		std::map<QString, vector<BALLPlugin*> >::const_iterator it = loaded_plugin_dirs_.begin();
+		for (; it!=loaded_plugin_dirs_.end(); ++it)
+		 	result.push_back(it->first);	
+
+		return result;
 	}
 
 	BALLPlugin* PluginManager::loadPlugin(const QString& plugin_name)
@@ -78,8 +138,9 @@ namespace BALL
 			qDebug() << "Error:" << loader->errorString();
 		}
 
-		if(plugin) {
-			qDebug("loaded plugin");
+		if (plugin) 
+		{
+			qDebug() << "Loaded plugin " << plugin_name << ".";
 			loader_mutex_.lockForWrite();
 			loaders_.insert(plugin->getName(), loader);
 			loader_mutex_.unlock();
@@ -93,7 +154,8 @@ namespace BALL
 		QWriteLocker locker(&loader_mutex_);
 		QHash<QString, QPluginLoader*>::iterator it = loaders_.find(plugin);
 
-		if(it != loaders_.end()) {
+		if (it != loaders_.end()) 
+		{
 			//Shutdown the plugin
 			stopPlugin(qobject_cast<BALLPlugin*>(it.value()->instance()));
 			//Delete the loader
@@ -112,7 +174,8 @@ namespace BALL
 		QReadLocker locker(&loader_mutex_);
 		QHash<QString, QPluginLoader*>::iterator it = loaders_.find(plugin);
 
-		if(it != loaders_.end()) {
+		if(it != loaders_.end()) 
+		{
 			return (it.value()->instance());
 		}
 
@@ -122,12 +185,14 @@ namespace BALL
 	QObject* PluginManager::getPluginInstance(int pos)
 	{
 		QReadLocker locker(&loader_mutex_);
-		if(pos < 0 || pos >= getPluginCount()) {
+		if(pos < 0 || pos >= getPluginCount()) 
+		{
 			return NULL;
 		}
 
 		QHash<QString, QPluginLoader*>::const_iterator it = loaders_.begin();
-		for(int i = 0; i < pos; ++i, ++it) {}
+		for(int i = 0; i < pos; ++i, ++it) 
+		{}
 
 		return it.value()->instance();
 	}
@@ -151,15 +216,18 @@ namespace BALL
 
 	bool PluginManager::startPlugin(BALLPlugin* plugin)
 	{
-		if(!plugin) {
+		if (!plugin) 
+		{
 			return true;
 		}
 
 		bool started = false;
 		handler_mutex_.lockForRead();
 		std::list<PluginHandler*>::iterator it = handlers_.begin();
-		for(; it != handlers_.end(); ++it) {
-			if((*it)->canHandle(plugin)) {
+		for (; it != handlers_.end(); ++it) 
+		{
+			if ((*it)->canHandle(plugin)) 
+			{
 				started = (*it)->startPlugin(plugin) && !started;
 			}
 		}
@@ -180,15 +248,18 @@ namespace BALL
 
 	bool PluginManager::stopPlugin(BALLPlugin* plugin)
 	{
-		if(!plugin) {
+		if (!plugin) 
+		{
 			return true;
 		}
 
 		bool all_stopped = true;
 		handler_mutex_.lockForRead();
 		std::list<PluginHandler*>::iterator it = handlers_.begin();
-		for(; it != handlers_.end(); ++it) {
-			if((*it)->isRunning(plugin)) {
+		for (; it != handlers_.end(); ++it) 
+		{
+			if ((*it)->isRunning(plugin)) 
+			{
 				all_stopped = (*it)->stopPlugin(plugin) && all_stopped;
 			}
 		}
@@ -201,6 +272,38 @@ namespace BALL
 	{
 		QReadLocker locker(&loader_mutex_);
 		return loaders_.size();
+	}
+
+	bool PluginManager::getValue(String& value) const
+	{
+		if (loaded_plugin_dirs_.size() > 0)
+		{
+			std::map<QString, vector<BALLPlugin*> >::const_iterator it = loaded_plugin_dirs_.begin(); 	
+
+			value += it->first.toAscii().toPercentEncoding().data();
+			
+			for (++it; it != loaded_plugin_dirs_.end(); ++it)
+			{
+				value += BETWEEN_PLUGINDIR_SEPERATOR;
+				value += it->first.toAscii().toPercentEncoding().data();
+			}
+		}
+		return true;
+	}
+
+	bool PluginManager::setValue(const String& value)
+	{		
+		std::vector<String> plugin_directories;
+
+		String tmp(QByteArray::fromPercentEncoding(QByteArray(value.c_str())).data());
+		tmp.split(plugin_directories, BETWEEN_PLUGINDIR_SEPERATOR, 0);
+		
+		for (size_t i = 0; i < plugin_directories.size(); ++i) 
+		{
+ 			addPluginDirectory(plugin_directories[i].c_str());
+		}
+
+		return true;
 	}
 }
 
