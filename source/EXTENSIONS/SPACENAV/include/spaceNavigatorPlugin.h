@@ -39,6 +39,7 @@ namespace BALL
 				QWidget* receiver_;
 				QPixmap icon_;
 				bool is_active_;
+				InputDeviceDriver* driver_;
 		};
 	}
 }

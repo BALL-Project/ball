@@ -83,7 +83,7 @@ BALLView.app/Contents/MacOS/../Info.plist:
 	@-$(RM) -f BALLView.app/Contents/MacOS/../Info.plist 2>/dev/null
 	@$(CP) $(BALL_PATH)/MacOSX/Info.plist.app BALLView.app/Contents/Info.plist
 
-macos_pkg: macos_app
+macos_pkg_prepare: macos_app
 	@$(CP) -r $(BALL_PATH)/data BALLView.app/Contents/
 	@macdeployqt BALLView.app	
 	@$(CP) $(BALL_PATH)/lib/*.so BALLView.app/Contents/Frameworks
@@ -91,6 +91,16 @@ macos_pkg: macos_app
 	@$(BALL_PATH)/MacOSX/fixnames.sh BALLView.app/Contents/Frameworks/BALLmodule.so $(BALL_PATH)/contrib/lib
 	@$(RM) -rf $(BALL_PATH)/MacOSX/BALLPackage/Applications/BALLView.app
 	@$(CP) $(BALL_PATH)/MacOSX/Info.plist.app BALLView.app/Contents/Info.plist
+
+macos_pkg: macos_pkg_prepare
 	@$(MV) BALLView.app $(BALL_PATH)/MacOSX/BALLPackage/Applications
+ifeq ($(SPACENAV_SUPPORT),true)
+	@mkdir -p $(BALL_PATH)/MacOSX/Plugins/
+	@$(CP) $(BALL_PATH)/plugins/*.dylib $(BALL_PATH)/MacOSX/Plugins/
+	@$(BALL_PATH)/MacOSX/fixnames.sh $(BALL_PATH)/MacOSX/Plugins/pluginSpaceNavigator.dylib $(BALL_PATH)/lib
+	@$(BALL_PATH)/MacOSX/fixnames.sh $(BALL_PATH)/MacOSX/Plugins/pluginSpaceNavigator.dylib $(BALL_PATH)/contrib/lib
+	@open -a PackageMaker $(BALL_PATH)/MacOSX/BALLView-package-spnav.pmdoc
+else
 	@open -a PackageMaker $(BALL_PATH)/MacOSX/BALLView-package.pmdoc
-	
+endif
+

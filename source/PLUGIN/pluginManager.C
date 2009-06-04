@@ -52,7 +52,11 @@ namespace BALL
 	void PluginManager::setPluginDirectory(const QString& dir)
 	{
 		plugin_dir_ = dir;
+#ifndef BALL_OS_DARWIN
 		QDir plugin_dir(plugin_dir_, "plugin*.so", QDir::Name | QDir::IgnoreCase, QDir::Files);
+#else
+		QDir plugin_dir(plugin_dir_, "plugin*.dylib", QDir::Name | QDir::IgnoreCase, QDir::Files);
+#endif
 
 		foreach(QString it, plugin_dir.entryList()) {
 			loadPlugin(plugin_dir.absoluteFilePath(it));

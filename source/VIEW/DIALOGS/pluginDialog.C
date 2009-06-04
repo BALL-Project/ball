@@ -13,6 +13,7 @@ Q_DECLARE_METATYPE(BALL::VIEW::VIEWPlugin*)
 #include <QtGui/QFileDialog>
 #include <QtCore/QObject>
 #include <QtCore/QDebug>
+#include <QtCore/QLibraryInfo>
 
 namespace BALL
 {
@@ -99,8 +100,9 @@ namespace BALL
 			setupUi(this);
 			pluginView->setModel(&model_);
 
-			QString plugin_path(BALL_PATH);
-			plugin_path += "/plugins";
+//			QString plugin_path(BALL_PATH);
+//			plugin_path += "/plugins";
+			QString plugin_path(QLibraryInfo::location(QLibraryInfo::PluginsPath));
 
 			PluginManager& man = PluginManager::instance();
 			man.setPluginDirectory(plugin_path);

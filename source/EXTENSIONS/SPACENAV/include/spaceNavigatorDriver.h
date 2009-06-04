@@ -1,6 +1,10 @@
 #ifndef SPACENAVIGATORDRIVER_H
 #define SPACENAVIGATORDRIVER_H
 
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
+
 #include <BALL/VIEW/INPUT/inputDeviceDriver.h>
 
 #include <QtCore/QThread>

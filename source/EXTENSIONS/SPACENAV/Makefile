@@ -18,3 +18,5 @@ depend:
 clean:
 	@cd source; make clean;
 
+install:
+	@cd source; make install;
