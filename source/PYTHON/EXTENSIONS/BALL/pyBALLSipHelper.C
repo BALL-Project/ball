@@ -4,7 +4,7 @@
 // $Id: pyBALLSipHelper.C,v 1.4.28.2 2007-03-28 13:58:08 amoll Exp $
 
 #include <typeinfo>
-#include "sipAPIBALL.h"
+#include "sipAPIBALLCore.h"
 #include <BALL/KERNEL/PDBAtom.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/secondaryStructure.h>

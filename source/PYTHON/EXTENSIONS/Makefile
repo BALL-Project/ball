@@ -32,6 +32,7 @@ subdirsdepend:
 
 install:
 	@$(MAKE) subdirs TARGET=$@
+	$(CP) BALL.py $(PREFIX)/lib
 
 depend: subdirsdepend
 

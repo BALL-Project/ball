@@ -7,7 +7,7 @@
 
 %Module VIEW
 
-%Import BALL/BALL.sip
+%Import BALL/BALLCore.sip
 
 %Include pyLists.sip
 %Include pyDatasetVector.sip

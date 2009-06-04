@@ -14,7 +14,7 @@
 // module definition file
 //
 
-%Module BALL
+%Module BALLCore
 
 %Feature BALL_HAS_ASIO
 
