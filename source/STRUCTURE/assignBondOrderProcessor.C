@@ -1646,7 +1646,7 @@ cout << " ) : atom type pen = " << entry.estimated_atom_type_penalty << ", bond 
 																 current_end_valence -(num_free_bonds-1)-fixed_valence); 
 						
 						// for all possible valences for this bond
-						for (Size j = 1; j <= (Size)up_to; j++)
+						for (int j = 1; j <= up_to; j++)
 						{
 							float deviation = current_bond_length_penalties[j]; 
 
