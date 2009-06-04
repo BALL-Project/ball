@@ -30,7 +30,7 @@ namespace BALL
 		#elif defined (BALL_OS_DARWIN)
 			#include "spaceNavigatorDriver_mac.iC"
 		#else
-			#include "spaceNavigatorDriver_win.iC"
+			#include "spaceNavigatorDriver_x11.iC"
 		#endif
 	}
 }
