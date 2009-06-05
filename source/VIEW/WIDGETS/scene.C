@@ -2686,34 +2686,6 @@ namespace BALL
 
 		void Scene::addGlWindow()
 		{
-			GLOffscreenTarget* new_widget = new GLOffscreenTarget(main_display_, "test_tiling.png");
-			new_widget->tryUsePixelBuffer(false);
-			new_widget->init();
-			new_widget->resize(width(), height());
-			new_widget->prepareRendering();
-
-			GLRenderer* new_gl_renderer = new GLRenderer;
-			new_gl_renderer->init(*this);
-			new_gl_renderer->enableVertexBuffers(want_to_use_vertex_buffer_);
-
-			TilingRenderer* new_renderer = new TilingRenderer(new_gl_renderer, 2*width(), 2*height());
-			new_renderer->init(*this);
-
-//			new_widget->show();
-
-			RenderSetup new_rs(new_renderer, new_widget, this, stage_);
-			new_renderer->setSize(width(), height());
-			//new_rs.resize(width(), height());
-			new_widget->prepareRendering();
-			resetRepresentationsForRenderer_(new_rs);
-
-/*			if (new_widget->isSharing())
-			else
-				*/
-
-			renderers_.push_back(new_rs);
-
-			/*
 			GLRenderWindow* new_widget = new GLRenderWindow(0, "Scene", Qt::Window);
 			new_widget->makeCurrent();
 			new_widget->init();
@@ -2732,7 +2704,6 @@ namespace BALL
 			resetRepresentationsForRenderer_(new_rs);
 
 			renderers_.push_back(new_rs);
-			*/
 		}
 
 		void Scene::enterActiveStereo()
