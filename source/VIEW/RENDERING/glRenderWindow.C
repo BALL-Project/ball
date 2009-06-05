@@ -4,8 +4,11 @@
 
 # include <GL/glew.h>
 #include <BALL/VIEW/RENDERING/glRenderWindow.h>
-#include <BALL/COMMON/logStream.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
 
+#include <BALL/COMMON/logStream.h>
+#include <QtCore/QEvent>
+#include <QtGui/QPaintEvent>
 //#define USE_GLPAINTPIXELS
 #undef USE_GLPAINTPIXELS
 
@@ -289,9 +292,19 @@ namespace BALL
 			if (!ignore_events_) 
 			{
 				QGLWidget::paintEvent(e);
-				refresh();
-				swapBuffers();
 			}
+		}
+
+		bool GLRenderWindow::event(QEvent* event)
+		{
+			if (event->type() == QEvent::Paint)
+			{
+				paintEvent((QPaintEvent*)event);
+				Scene* scene = dynamic_cast<Scene*>(parent());
+				if (scene)
+					scene->updateGL();
+			}
+			QGLWidget::event(event);
 		}
 
 		void GLRenderWindow::lockGLContext()

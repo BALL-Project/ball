@@ -510,6 +510,8 @@ namespace BALL
 
 			Position prepareGridTextures(const RegularData3D& grid, const ColorMap& map);
 
+			void updateGL();
+
 		public slots:
 
 			/// Create an coordinate system at current position
@@ -722,8 +724,6 @@ namespace BALL
 					\param  e the QT-mouse event (See QT-library for mouse events)
 			*/
 			virtual void wheelEvent(QWheelEvent* qmouse_event);
-
-			void updateGL();
 
 			//_
 			void animate_();
