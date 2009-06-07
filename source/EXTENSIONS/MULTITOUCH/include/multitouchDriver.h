@@ -25,6 +25,9 @@ namespace BALL
 
 				void setEnabled(bool enabled);
 
+				void receiveValues();
+				void sendCamera();
+
 			private:
 				void run();
 				float deadzone(float x);

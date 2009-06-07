@@ -16,8 +16,8 @@ namespace BALL
 			: receiver_(), 
 			  icon_(":logo.png"), 
 				is_active_(false),
-				hostname_("localhost"),
-				port_("4711") // TODO: ask for the default port
+				hostname_("134.96.248.72"),
+				port_("51967") 
 		{
 		}
 
