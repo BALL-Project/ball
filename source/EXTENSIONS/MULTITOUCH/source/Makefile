@@ -38,7 +38,8 @@ default_clean: clean_uic
 
 clean_uic:
 	@echo "Cleaning UIC files in $(UIC_DIR)..."
-	@$(RM) -f $(UIC_DIR)/*.h
+	@$(RM) -f $(UIC_DIR)/*Data.h
+
 %.so: $(OBJECTS)
 	$(CXX) -shared $(LDFLAGS) -o $@ $(OBJECTS)
 
