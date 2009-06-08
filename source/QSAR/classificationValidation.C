@@ -259,7 +259,7 @@ void ClassificationValidation::bootstrap(int k, bool restore)
 		int test_size=0;
 		for(int j=0; j<N;j++)
 		{
-			if(sample_substances[j]==1) 
+			if(sample_substances[j]>0) 
 			{
 				continue;
 			}
