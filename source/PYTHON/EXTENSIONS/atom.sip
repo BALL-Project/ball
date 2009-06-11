@@ -123,6 +123,7 @@ class Atom
 
    void setPosition(const Vector3& /position/) throw();
    const Vector3& getPosition() const throw();
+   float getDistance(const Atom& a) const;
    //Vector3& getPosition() throw();
 
    void setRadius(float /radius/) throw();

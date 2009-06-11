@@ -608,6 +608,14 @@ namespace BALL
 			 */
 			const Atom* getPartnerAtom(Position i) const throw(Exception::IndexOverflow);
 
+			/**
+			 * A convenience function for computing the distance between two atoms.
+			 * This is equivalent to calling this->getPosition().getDistance(a.getPosition())
+			 *
+			 * @param a the atom to which to compute the distance
+			 */
+			float getDistance(const Atom& a) const;
+
 			//@}
 
 			/** @name Predicates 
