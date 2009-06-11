@@ -56,7 +56,7 @@ namespace BALL
 			Stage* stage = scene->getStage();
 
 			Vector3 const& viewpoint = stage->getCamera().getViewPoint();
-			connection_ << viewpoint.x << " " << viewpoint.y << " " << viewpoint.z << " ";
+			connection_ << "2 " << viewpoint.x << " " << viewpoint.y << " " << viewpoint.z << " ";
 
 			CompositeManager const& cm = scene->getMainControl()->getCompositeManager();
 
@@ -80,6 +80,8 @@ namespace BALL
 
 			connection_ << lower.x << " " << lower.y << " " << lower.z << " "; 
 			connection_ << upper.x << " " << upper.y << " " << upper.z << std::endl << std::flush;
+
+			std::cout << viewpoint << " " << lower << " " << upper << std::endl;
 		}
 
 		void MultitouchDriver::run()
