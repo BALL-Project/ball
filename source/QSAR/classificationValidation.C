@@ -316,6 +316,7 @@ void ClassificationValidation::bootstrap(int k, bool restore)
 	{
 		model_->descriptor_matrix_=desc_backup;   // prevent confusion of cross-validation coefficients with coefficients
 		model_->Y_=y_backup;
+		model_->readTrainingData();
 		model_->train();
 	}
 }
