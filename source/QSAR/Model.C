@@ -517,7 +517,8 @@ void Model::saveModelParametersToFile(ofstream& out)
 void Model::readDescriptorInformationFromFile(ifstream& input, int no_descriptors, bool transformation)
 {
 	descriptor_names_.clear();
-	descriptor_transformations_.ReSize(2,no_descriptors);
+	if(transformation) descriptor_transformations_.resize(2,no_descriptors);
+	else descriptor_transformations_.resize(0,0);
 	String line;
 	getline(input,line);  // skip comment line
 	for(int i=1; i<=no_descriptors; i++)

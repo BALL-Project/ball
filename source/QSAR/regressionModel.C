@@ -198,7 +198,8 @@ void RegressionModel::readFromFile(string filename)
 void RegressionModel::readDescriptorInformationFromFile(ifstream& input, int no_descriptors, bool transformation, int no_coefficients)
 {
 	descriptor_names_.clear();
-	descriptor_transformations_.ReSize(2,no_descriptors);
+	if(transformation) descriptor_transformations_.resize(2,no_descriptors);
+	else descriptor_transformations_.resize(0,0);
 	if(no_coefficients>0) training_result_.ReSize(no_descriptors,no_coefficients);
 	else training_result_.ReSize(0,0);
 	String line;
