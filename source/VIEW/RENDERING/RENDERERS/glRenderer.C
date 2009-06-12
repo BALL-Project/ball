@@ -86,7 +86,7 @@ namespace BALL
 				drawing_mode_(DRAWING_MODE_SOLID),
 				drawing_precision_(DRAWING_PRECISION_HIGH),
 				near_(1.5),
-				far_(600.),
+				far_(2000.),
 				left_(-1),
 				right_(1),
 				top_(1),
