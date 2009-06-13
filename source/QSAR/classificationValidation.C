@@ -383,8 +383,8 @@ void ClassificationValidation::calculateAverageSensitivity()
 	
 	for(int j=1;j<=confusion_matrix_.Ncols();j++) // calculate quality_ of all classes
 	{	
-		int TP = confusion_matrix_(1,j);
-		int FN = confusion_matrix_(4,j);
+		int TP = (int)confusion_matrix_(1,j);
+		int FN = (int)confusion_matrix_(4,j);
 		double sens = 1;
 		if(TP!=0 || FN!=0)
 		{
@@ -411,8 +411,8 @@ void ClassificationValidation::calculateWeightedSensitivity()
 
 	for(int j=1;j<=confusion_matrix_.Ncols();j++) 
 	{	
-		int TP = confusion_matrix_(1,j);
-		int FN = confusion_matrix_(4,j);
+		int TP = (int)confusion_matrix_(1,j);
+		int FN = (int)confusion_matrix_(4,j);
 		double sens = 1;
 		if(TP!=0 || FN!=0)
 		{
