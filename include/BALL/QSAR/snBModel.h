@@ -69,6 +69,8 @@ namespace BALL{
 				
 				/** vector containing one matrix for each modelled activity which holds the standard deviation of each feature for each class */
 				vector<Matrix<double> > stddev_;
+				
+				static const double sqrt2Pi_;
 							
 
 				
