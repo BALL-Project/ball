@@ -1191,36 +1191,7 @@ namespace BALL
 		// calculate all the rotation angles
 		RotationAngles_ rotAng;
 
-		/*if(options.has("phi_min") && options.has("phi_max") && options.has("deg_phi") &&
-			 options.has("theta_min") && options.has("theta_max") && options.has("deg_theta") &&
-			 options.has("psi_min") && options.has("psi_max") && options.has("deg_psi") )
-		{
-			if(    rotAng.generateSomeAngles( (float)options.getReal(Option::DEG_PHI), 
-																				(float)options.getReal(Option::DEG_PSI),
-																				(float)options.getReal(Option::DEG_THETA),
-																				(float)options.getReal(Option::PHI_MIN),
-																				(float)options.getReal(Option::PHI_MAX),
-																				(float)options.getReal(Option::PSI_MIN),
-																				(float)options.getReal(Option::PSI_MAX),
-																				(float)options.getReal(Option::THETA_MIN),
-																				(float)options.getReal(Option::THETA_MAX) ) == false
-					|| rotAng.getRotationNum() == 0 )
-			{
-    		Log.error() << "Bad degree interval!" << endl;
-     		exit(1);
-   		}
-		}
-		else
-		{
-			if(    rotAng.generateAllAngles( (int)options.getReal(Option::DEGREE_INTERVAL) ) == false
-					|| rotAng.getRotationNum() == 0 )
-			{
-    		Log.error() << "Bad degree interval!" << endl;
-     		exit(1);
-   		}
-		}	*/
-
-		if(     rotAng.generateSomeAngles( (float)options.getReal(Option::DEG_PHI), 
+		if(     rotAng.generateSomeAngles( (float)options.getReal(Option::DEG_PHI),
 																			 (float)options.getReal(Option::DEG_PSI),
 																			 (float)options.getReal(Option::DEG_THETA),
 																			 (float)options.getReal(Option::PHI_MIN),
@@ -1231,10 +1202,10 @@ namespace BALL
 																			 (float)options.getReal(Option::THETA_MAX) ) == false
 				||  rotAng.getRotationNum() == 0 )
 		{
-    	Log.error() << "Bad degree interval!" << endl;
-     	exit(1);
-   	}
-		
+			Log.error() << "Bad degree interval!" << endl;
+			throw Exception::OutOfRange(__FILE__, __LINE__);
+		}
+
 		int rotation_num = rotAng.getRotationNum();
 		total_round_ = rotAng.getRotationNum();
 

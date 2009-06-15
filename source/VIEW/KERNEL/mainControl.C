@@ -216,7 +216,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 						QMessageBox::Abort,  Qt::NoButton);
 				Log.error() << e << std::endl;
 
-				exit(-1);
+				throw Exception::GeneralException(__FILE__, __LINE__, "Datapath Error", "Could not read the FragmentDB");
 			}
 
 			preferences_file_.read();
