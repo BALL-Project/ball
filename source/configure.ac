@@ -109,6 +109,11 @@ AC_ARG_ENABLE(lpsolve,				 [  --enable-lpsolve        enable the build of BALL w
 AC_ARG_WITH(lpsolve-lib,			 [  --with-lpsolve-lib=DIR  liblpsolve55 is in DIR])
 AC_ARG_WITH(lpsolve-incl,			 [  --with-lpsolve-incl=DIR lpsolve includes are in DIR])
 
+dnl ** RTFACT **
+AC_ARG_ENABLE(rtfact,          [  --enable-rtfact         enable the build of BALL with support for RTfact - based real time raytracing])
+AC_ARG_WITH(rtfact-lib,        [  --with-rtfact-lib=DIR   libRTfactRemote is in DIR])
+AC_ARG_WITH(rtfact-incl,       [  --with-rtfact-incl=DIR  RTfact includes are in DIR])
+
 dnl ** Stuff for the plugins **
 AC_ARG_ENABLE(spacenavigator,    [  --enable-spacenavigator    enable the build of the SpaceNav plugin for Space Navigator input devices])
 AC_ARG_WITH(spacenavigator-lib,  [  --with-spacenavigator-lib  the directory in which libspnav can be found])
@@ -353,6 +358,19 @@ if test "$with_lpsolve" != "" -a "$with_lpsolve" != "no" -o "$enable_lpsolve" = 
 	fi
 else
 	LPSOLVE_SUPPORT=
+fi
+
+# support for RTfact
+if test "$USE_VIEW" == "true" -a "$with_rtfact" != "" -a "$with_rtfact" != "no" -o "$enable_rtfact" = yes -o "$with_rtfact_lib" != "" -o "$with_rtfact_incl" != "" ; then
+	RTFACT_SUPPORT=true
+	if test "${with_rtfact_lib}" != "" ; then
+		RTFACT_LIBDIR=${with_rtfact_lib}
+	fi
+	if test "${with_rtfact_incl}" != "" ; then
+		RTFACT_INCDIR=${with_rtfact_incl}
+	fi
+else
+	RTFACT_SUPPORT=
 fi
 
 if test "$USE_VIEW" == "true" -a "$enable_spacenavigator" = "yes" ; then
@@ -636,6 +654,13 @@ if test "${LPSOLVE_SUPPORT}" == true ; then
 	CF_LPSOLVE
 fi
 
+dnl
+dnl RTFACT
+dnl
+if test "${RTFACT_SUPPORT}" == true ; then
+	CF_VIEW_RTFACT
+fi
+
 dnl Spacenavigator input plugin support
 dnl
 if test "${SPACENAV_SUPPORT}" == true ; then
@@ -676,7 +701,7 @@ BINFMT_INDEX=""
 BALL_INCLUDES="${BALL_INCLUDES} ${VIEW_INCLUDES}"
 
 LIBS="${LIBS} ${FFTW_LIBS} ${GSL_LIBS} ${LPSOLVE_LIBS} ${BOOST_LIBS} -lm"
-VIEW_LIBS="${VIEW_LIBS} ${QT_VIEW_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
+VIEW_LIBS="${VIEW_LIBS} ${QT_VIEW_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${RTFACT_LIBS} ${LIBS}"
 BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib -lBALL ${LIBS}"
 if test "${USE_VIEW}" = true ; then
 	BALL_LIBS="-L${BALL_PATH}/lib -lVIEW -lBALL ${VIEW_LIBS}"

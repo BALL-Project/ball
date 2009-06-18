@@ -67,7 +67,7 @@
 
 #include <BALL/VIEW/RENDERING/bufferedRenderer.h>
 
-#ifdef ENABLE_RAYTRACING
+#ifdef BALL_HAS_RTFACT
     
 #include <BALL/VIEW/RENDERING/glRenderWindow.h>
 //#include <BALL/VIEW/RENDERING/RENDERERS/cudaVolumeRenderer.h>    
@@ -88,7 +88,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-#ifdef ENABLE_RAYTRACING    
+#ifdef BALL_HAS_RTFACT    
 		//typedef CudaVolumeRenderer t_RaytracingRenderer;
 		typedef RTfactRenderer t_RaytracingRenderer;
 		typedef GLRenderWindow t_RaytracingWindow;    
@@ -121,7 +121,7 @@ namespace BALL
 				stage_(new Stage()),
 				renderers_(),
 				gl_renderer_(new GLRenderer()),
-#ifdef ENABLE_RAYTRACING
+#ifdef BALL_HAS_RTFACT
 				rt_renderer_(new t_RaytracingRenderer()),
 #endif
 				light_settings_(new LightSettings(this)),
@@ -134,7 +134,7 @@ namespace BALL
 				stereo_right_eye_(-1)
 		{
 			stage_settings_=new StageSettings(this);
-#ifndef ENABLE_RAYTRACING
+#ifndef BALL_HAS_RTFACT
 			renderers_.push_back(RenderSetup(gl_renderer_, main_display_, this, stage_));
 #else
 			renderers_.push_back(RenderSetup(&*rt_renderer_, main_display_, this, stage_));
@@ -170,7 +170,7 @@ namespace BALL
 				stage_(new Stage),
 				renderers_(),
 				gl_renderer_(new GLRenderer),
-#ifdef ENABLE_RAYTRACING
+#ifdef BALL_HAS_RTFACT
 				rt_renderer_(new t_RaytracingRenderer()),
 #endif
 				light_settings_(new LightSettings(this)),
@@ -193,7 +193,7 @@ namespace BALL
 			Log.error() << "new Scene (2) " << this << std::endl;
 #endif
 
-#ifndef ENABLE_RAYTRACING
+#ifndef BALL_HAS_RTFACT
 			renderers_.push_back(RenderSetup(gl_renderer_, main_display_, this, stage_));
 #else
 			renderers_.push_back(RenderSetup(&*rt_renderer_, main_display_, this, stage_));
@@ -218,7 +218,7 @@ namespace BALL
 				stage_(new Stage(*scene.stage_)),
 				renderers_(),
 				gl_renderer_(new GLRenderer()),
-#ifdef ENABLE_RAYTRACING
+#ifdef BALL_HAS_RTFACT
 				rt_renderer_(new t_RaytracingRenderer()),
 #endif
 				light_settings_(new LightSettings(this)),
@@ -236,7 +236,7 @@ namespace BALL
 			Log.error() << "new Scene (3) " << this << std::endl;
 #endif
 
-#ifndef ENABLE_RAYTRACING
+#ifndef BALL_HAS_RTFACT
 			renderers_.push_back(RenderSetup(gl_renderer_, main_display_, this, stage_));
 #else
 			renderers_.push_back(RenderSetup(&*rt_renderer_, main_display_, this, stage_));
@@ -3103,7 +3103,7 @@ return;
 			getMainControl()->initPopupMenu(MainControl::WINDOWS)->addAction(toolbar_view_controls_->toggleViewAction());	
 		}
 
-#ifdef ENABLE_RAYTRACING
+#ifdef BALL_HAS_RTFACT
 		void Scene::updateAllRTMaterials()
 		{
 			RepresentationManager& pm = getMainControl()->getRepresentationManager();
@@ -3290,7 +3290,7 @@ return;
 			gl_renderer_ = &renderer;
 		}
 
-#ifdef ENABLE_RAYTRACING
+#ifdef BALL_HAS_RTFACT
 		Scene::RaytracingWindowPtr Scene::getWindow(WindowType aWindowType)
 		{
 			switch(aWindowType)

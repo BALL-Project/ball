@@ -40,17 +40,17 @@
 
 // This allows us to switch raytracing on and off. Later, we might add this flag
 // to config.h or remove it completely and always raytracing always.
-#undef ENABLE_RAYTRACING
-#define ENABLE_RAYTRACING
+#undef BALL_HAS_RTFACT
+#define BALL_HAS_RTFACT
 			 
-#ifdef ENABLE_RAYTRACING 
+#ifdef BALL_HAS_RTFACT 
 
 #ifndef BALL_VIEW_RENDERING_RAYTRACINGRENDERER_H
 # include <BALL/VIEW/RENDERING/raytracingRenderer.h>
 #endif
 
 # include <boost/shared_ptr.hpp>
-#endif // ENABLE_RAYTRACING 
+#endif // BALL_HAS_RTFACT 
 
 class QMouseEvent;
 class QRubberBand;
@@ -119,7 +119,7 @@ namespace BALL
 			friend class AnimationThread;
 			friend class RenderSetup;
 
-#ifdef ENABLE_RAYTRACING
+#ifdef BALL_HAS_RTFACT
       typedef boost::shared_ptr<RaytracingRenderer> RaytracingRendererPtr;
       typedef boost::shared_ptr<t_RenderWindow> RaytracingWindowPtr;
 #endif
@@ -392,7 +392,7 @@ namespace BALL
 			GLRenderer& getGLRenderer()
 				{ return *gl_renderer_;}
 
-#ifdef ENABLE_RAYTRACING
+#ifdef BALL_HAS_RTFACT
 			///
 			RaytracingRenderer& getRaytracingRenderer()
 				{ return *rt_renderer_;}
@@ -506,7 +506,7 @@ namespace BALL
 			bool inMoveMode() const { return (mouse_button_is_pressed_ && (getMode() == MOVE__MODE)); }
 
 // TODO: this pretty hacky!
-#ifdef ENABLE_RAYTRACING
+#ifdef BALL_HAS_RTFACT
 			void updateAllRTMaterials();
 
 			void updateRTMaterialForRepresentation(Representation const* rep, const Stage::RaytracingMaterial& new_material);
@@ -595,7 +595,7 @@ namespace BALL
 			///
 			void restoreViewPoint();
 
-#ifdef ENABLE_RAYTRACING
+#ifdef BALL_HAS_RTFACT
 			RaytracingWindowPtr getWindow(WindowType aWindowType);
 #endif
 	
@@ -801,7 +801,7 @@ namespace BALL
 			std::vector<RenderSetup> renderers_;
 			GLRenderer* gl_renderer_;
 
-#ifdef ENABLE_RAYTRACING
+#ifdef BALL_HAS_RTFACT
 			RaytracingRendererPtr rt_renderer_;
 			RaytracingWindowPtr rt_window_;
 #endif

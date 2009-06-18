@@ -265,6 +265,10 @@
 #undef BALL_HAS_LPSOLVE
 
 // VIEW related options
+// Define whether BALL was built with rtfact support
+#undef BALL_HAS_RTFACT
+
+// QT options
 #undef BALL_HAS_VIEW
 
 // QT options
