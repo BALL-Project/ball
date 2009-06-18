@@ -55,7 +55,7 @@ if test "${LPSOLVE_SUPPORT}" = "true" ; then
 		AC_MSG_RESULT((not found!))
 		AC_MSG_RESULT()
 		AC_MSG_RESULT([The lpsolve library, version 5.5, could not be found. Please specify the path to liblpsolve55.a])
-		AC_MSG_RESULT([by passing the option --with-lpsolve-libs=DIR to configure.])
+		AC_MSG_RESULT([by passing the option --with-lpsolve-lib=DIR to configure.])
 		AC_MSG_RESULT([You may also set the environment variable LPSOLVE_LIBDIR to the correct])
 		AC_MSG_RESULT([path - configure will recognize this, too.])
 		AC_MSG_RESULT()
