@@ -1,3 +1,4 @@
+
 #include <multitouchDriver.h>
 
 #include <BALL/STRUCTURE/geometricProperties.h>
@@ -12,7 +13,8 @@ namespace BALL
 	{
 
 		MultitouchDriver::MultitouchDriver(QWidget* receiver)
-			: InputDeviceDriver(receiver)
+			: InputDeviceDriver(receiver),
+				sensitivity_(20)
 		{
 		}
 
@@ -28,19 +30,47 @@ namespace BALL
 		{
 			// TODO scalierungsfaktoren
 			// TODO bezugsrahmen Boundingbox-dimensionen
+			Scene* scene = dynamic_cast<Scene*>(getReceiver());
+
+			if (!scene)
+			{
+				Log.error() << "Error: receiver for multitouch events is not a scene!" << std::endl;	
+				return;
+			}
+	
+			Stage* stage = scene->getStage();
+			Vector3 const& right = stage->getCamera().getRightVector();
+			Vector3 const& up    = stage->getCamera().getLookUpVector();
+			Vector3 view  = stage->getCamera().getViewVector();
+			view.normalize();
 
 			float x, y, z, rx, ry, rz;
 
 			connection_ >> x;
 			connection_ >> y;
 			connection_ >> z;
+
 			connection_ >> rx;
 			connection_ >> ry;
 			connection_ >> rz;	
 
-			std::cout << x << " " << y << " " << z << " " << rx << " " << ry << " " << rz << std::endl;
-			emitPositionChange( 10.*deadzone(-x), 10.*deadzone(-y), 10.*deadzone(-z),
-							 					1./3.*deadzone(rx), 1./3.*deadzone(ry), 1./3.*deadzone(rz));
+			std::cout << sensitivity_ << " " << sensitivity_*x << " " << sensitivity_*y << " " << sensitivity_*z << " " << rx << " " << ry << " " << rz << std::endl;
+			emitPositionChange( sensitivity_*deadzone(-x), sensitivity_*deadzone(-y), sensitivity_*deadzone(-z),
+							 					  sensitivity_*deadzone(rx), sensitivity_*deadzone(ry), sensitivity_*deadzone(rz));
+		}
+
+		void MultitouchDriver::focusMolecule()
+		{
+			Scene* scene = dynamic_cast<Scene*>(getReceiver());
+
+			if (!scene)
+			{
+				Log.error() << "Error: receiver for multitouch events is not a scene!" << std::endl;	
+				return;
+			}
+
+			Stage* stage = scene->getStage();
+
 		}
 
 		void MultitouchDriver::sendCamera()
@@ -101,8 +131,10 @@ namespace BALL
 									break;
 					case 2: sendCamera();
 									break;
+					case 3: focusMolecule();
+									break;
+
 				}
-				msleep(35);
 			}
 
 			if (!connection_.good())

@@ -22,11 +22,13 @@ namespace BALL
 
 				void setHostName(const String& hostname) { hostname_ = hostname; }
 				void setPort(const String& port) { port_ = port; }
+				void setSensitivity(const Size sensitivity)  { printf("sensi: %d\n", sensitivity); sensitivity_ = sensitivity; }
 
 				void setEnabled(bool enabled);
 
 				void receiveValues();
 				void sendCamera();
+				void focusMolecule();
 
 			private:
 				void run();
@@ -36,6 +38,7 @@ namespace BALL
 
 				String hostname_;
 				String port_;
+				Size sensitivity_;
 		};
 
 	}

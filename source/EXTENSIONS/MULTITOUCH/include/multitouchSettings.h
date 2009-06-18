@@ -42,6 +42,7 @@ namespace BALL
 
 				void setHostName(const String& hostname);
 				void setPort(const String& port);
+				void setSensitivity(const Size sensitivity);
 
 			public slots:
 				virtual void accept();

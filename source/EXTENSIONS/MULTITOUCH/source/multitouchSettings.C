@@ -30,10 +30,16 @@ namespace BALL
 			port_edit->setText(port.c_str());
 		}
 
+		void MultitouchSettings::setSensitivity(const Size sensitivity)
+		{
+			sensitivity_slider->setValue(sensitivity);
+		}
+
 		void MultitouchSettings::accept()
 		{
 			plugin_->setHostName(ascii(host_edit->text()));
 			plugin_->setPort(ascii(port_edit->text()));
+			plugin_->setSensitivity(sensitivity_slider->value());
 
 			QDialog::accept();
 		}

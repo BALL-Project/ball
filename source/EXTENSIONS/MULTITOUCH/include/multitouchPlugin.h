@@ -50,12 +50,17 @@ namespace BALL
 					port_ = port; 
 				}
 
+				void setSensitivity(const Size sensitivity)
+				{
+					sensitivity_ = sensitivity;
+				}
 			private:
 				QWidget* receiver_;
 				QPixmap icon_;
 				bool is_active_;
 				String hostname_;
 				String port_;
+				Size sensitivity_;
 		};
 	}
 }

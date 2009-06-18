@@ -17,7 +17,8 @@ namespace BALL
 			  icon_(":logo.png"), 
 				is_active_(false),
 				hostname_("134.96.248.72"),
-				port_("51967") 
+				port_("51967"),
+				sensitivity_(500)
 		{
 		}
 
@@ -47,6 +48,7 @@ namespace BALL
 
 			settings->setHostName(hostname_);
 			settings->setPort(port_);
+			settings->setSensitivity(sensitivity_);
 
 			return static_cast<QDialog*>(settings);
 		}
@@ -56,6 +58,8 @@ namespace BALL
 			MultitouchDriver* driver = new MultitouchDriver(receiver_);
 			driver->setHostName(hostname_);
 			driver->setPort(port_);
+
+			driver->setSensitivity(sensitivity_);
 
 			if(!driver->setUp()) 
 			{
