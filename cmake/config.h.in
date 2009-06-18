@@ -312,6 +312,9 @@
 // VIEW related options
 #cmakedefine BALL_HAS_VIEW
 
+// Define whether BALL was built with rtfact support
+#cmakedefine BALL_HAS_RTFACT
+
 // QT options
 #define BALL_QT_HAS_THREADS // Qt now always has thread support
 #define QT_THREAD_SUPPORT

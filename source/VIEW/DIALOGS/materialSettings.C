@@ -76,7 +76,7 @@ namespace BALL
 					values[3] = 1.0;
 					glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  values);
 				}
-#ifdef ENABLE_RAYTRACING	
+#ifdef BALL_HAS_RTFACT	
 				else if (radioButton_RTFact->isChecked())
 				{
 					// first, decide whether we have been called from the preferences or from the geometric control
