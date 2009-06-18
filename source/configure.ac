@@ -105,7 +105,7 @@ AC_ARG_WITH(gsl-lib,           [  --with-gsl-lib=DIR      libgsl is in DIR])
 AC_ARG_WITH(gsl-incl,          [  --with-gsl-incl=DIR     gsl includes are in DIR])
 
 dnl ** LPSOLVE **
-AC_ARG_ENABLE(lpsolve,				 [  --enable-lpsolve        enable the build of BALL with support for lpsolve55)])
+AC_ARG_ENABLE(lpsolve,				 [  --enable-lpsolve        enable the build of BALL with support for lpsolve55])
 AC_ARG_WITH(lpsolve-lib,			 [  --with-lpsolve-lib=DIR  liblpsolve55 is in DIR])
 AC_ARG_WITH(lpsolve-incl,			 [  --with-lpsolve-incl=DIR lpsolve includes are in DIR])
 

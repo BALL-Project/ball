@@ -14,6 +14,7 @@
 m4_include([config/m4/ac_python_devel.m4])
 m4_include([config/m4/ax_boost_asio.m4])
 m4_include([config/m4/ax_boost_base.m4])
+m4_include([config/m4/ax_boost_iostreams.m4])
 m4_include([config/m4/ax_boost_system.m4])
 m4_include([config/m4/ax_boost_thread.m4])
 m4_include([config/m4/boost.m4])
