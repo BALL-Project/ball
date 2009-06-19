@@ -98,7 +98,9 @@ namespace BALL
 						// we have been called from the right mouse button menu of a representation and should *only*
 						// apply the values to this one
 						if (current_representation_)
+						{
 							Scene::getInstance(0)->updateRTMaterialForRepresentation(current_representation_, rt_material);
+						}
 						else
 							Log.error() << "MaterialSettings::apply(): Invalid representation selected!" << std::endl;
 					}
@@ -125,7 +127,6 @@ namespace BALL
 			setValues_(*specularity_factor_slider, *specularity_factor_label, 100);	
 			if (update_directly_checkBox->isChecked())
 				apply();
-
 		}
 
 		void MaterialSettings::reflectivenessFactorChanged()

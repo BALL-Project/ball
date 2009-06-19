@@ -49,7 +49,7 @@ namespace BALL
 			void apply();
 
 			/// set the current representation
-			void setCurrentRepresentation(Representation const* representation)
+			void setCurrentRepresentation(Representation* representation)
 			{
 				current_representation_ = representation;
 			}
@@ -71,7 +71,7 @@ namespace BALL
 			void setValues_(const QSlider& slider, QLabel& label, int divisor);
 			void setQuadraticValues_(const QSlider& slider, QLabel& label, int divisor);
 
-			Representation const* current_representation_;
+			Representation* current_representation_;
 		};
 
 	}

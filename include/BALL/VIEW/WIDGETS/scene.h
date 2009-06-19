@@ -512,7 +512,7 @@ namespace BALL
 #ifdef BALL_HAS_RTFACT
 			void updateAllRTMaterials();
 
-			void updateRTMaterialForRepresentation(Representation const* rep, const Stage::RaytracingMaterial& new_material);
+			void updateRTMaterialForRepresentation(Representation* rep, const Stage::RaytracingMaterial& new_material);
 #endif
 
 			Position prepareGridTextures(const RegularData3D& grid, const ColorMap& map);

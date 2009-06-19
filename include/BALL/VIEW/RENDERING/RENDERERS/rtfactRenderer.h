@@ -92,7 +92,6 @@ namespace BALL
 				void updateBackgroundColor();
 
 				void updateMaterialForRepresentation(Representation const* rep);
-				void updateMaterialForRepresentation(Representation const* rep, const Stage::RaytracingMaterial& new_material);
 
 				GroupHandle transformTube(const TwoColoredTube& tube);
 				void updateMaterialFromStage(RTfact::Remote::RTAppearanceHandle& material);
