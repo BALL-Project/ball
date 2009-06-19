@@ -384,8 +384,29 @@ namespace BALL
 			/** This class holds all material parameters passed on to a raytracer.
 			 */
 			class RaytracingMaterial
+				: public PersistentObject
 			{
 				public:
+					RaytracingMaterial();
+
+					/** @name Persistence
+					 */
+					//@{
+
+					/** Write a raytracing material to a persistent stream.
+					 		@param pm the persistence manager
+					 */
+					virtual void persistentWrite(PersistenceManager& pm, const char* name = 0) const
+						throw(Exception::GeneralException);
+
+					/** Read a raytracing material from a persistent stream.
+					 		@param pm the persistence manager
+					*/
+					virtual void persistentRead(PersistenceManager& pm)
+						throw(Exception::GeneralException);
+
+					//@}
+
 					ColorRGBA ambient_color;
 					float     ambient_intensity;
 

@@ -245,6 +245,57 @@ namespace BALL
 			calculateVectors_();
 			translate(origin);
 		}
+
+		Stage::RaytracingMaterial::RaytracingMaterial()
+			: PersistentObject()
+		{
+		}
+
+		void Stage::RaytracingMaterial::persistentWrite(PersistenceManager& pm, const char* name) const
+			throw(Exception::GeneralException)
+		{
+			pm.writeObjectHeader(this, name);
+				// ambient
+				pm.writePrimitive((String)ambient_color, "ambient_color_");
+				pm.writePrimitive(ambient_intensity,     "ambient_intensity_");
+				// specular
+				pm.writePrimitive((String)specular_color, "specular_color_");
+				pm.writePrimitive(specular_intensity,     "specular_intensity_");
+				// reflective
+				pm.writePrimitive((String)reflective_color, "reflective_color_");
+				pm.writePrimitive(reflective_intensity,     "reflective_intensity_");
+				
+				pm.writePrimitive(shininess,    "shininess_");
+				pm.writePrimitive(transparency, "transparency_");
+			pm.writeObjectTrailer(name);
+		}
+		
+		void Stage::RaytracingMaterial::persistentRead(PersistenceManager& pm)
+			throw(Exception::GeneralException)
+		{
+			String color;
+
+			// ambient
+			pm.readPrimitive(color, "ambient_color_");
+			ambient_color.set(color);
+
+			pm.readPrimitive(ambient_intensity,     "ambient_intensity_");
+			
+			// specular
+			pm.readPrimitive(color, "specular_color_");
+			specular_color.set(color);
+
+			pm.readPrimitive(specular_intensity,     "specular_intensity_");
+
+			// reflective
+			pm.readPrimitive(color, "reflective_color_");
+			reflective_color.set(color);
+
+			pm.readPrimitive(reflective_intensity,     "reflective_intensity_");
+			
+			pm.readPrimitive(shininess,    "shininess_");
+			pm.readPrimitive(transparency, "transparency_");
+		}		
 		
 		Stage::Stage()
 			: background_color_(ColorRGBA(1.,1.,1.,1.)),
