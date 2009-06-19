@@ -414,24 +414,17 @@ namespace BALL
 
 				for (Position i=0; i<rt_data.material_handles.size(); ++i)
 				{
-					updateMaterialFromStage(rt_data.material_handles[i]);
+					if (rep->hasProperty("RTFact::Material"))
+					{
+						NamedProperty rt_mat_property = rep->getProperty("RTFact::Material");
+						boost::shared_ptr<PersistentObject> mat_ptr = rt_mat_property.getSmartObject();
+						convertMaterial(*dynamic_cast<Stage::RaytracingMaterial*>(mat_ptr.get()), rt_data.material_handles[i]);
+					}
+					else
+						updateMaterialFromStage(rt_data.material_handles[i]);
 				}
 			}
 		}
-
-		void RTfactRenderer::updateMaterialForRepresentation(Representation const* rep, const Stage::RaytracingMaterial& new_material)
-		{
-			if (objects_.find(rep) != objects_.end())
-			{
-				RTfactData& rt_data = objects_[rep];
-
-				for (Position i=0; i<rt_data.material_handles.size(); ++i)
-				{
-					convertMaterial(new_material, rt_data.material_handles[i]);
-				}
-			}
-		}
-
 
 		GroupHandle RTfactRenderer::transformTube(const TwoColoredTube& tube) 
 		{

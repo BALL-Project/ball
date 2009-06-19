@@ -3117,9 +3117,15 @@ return;
 			updateGL();
 		}
 
-		void Scene::updateRTMaterialForRepresentation(Representation const* rep, const Stage::RaytracingMaterial& new_material)
+		void Scene::updateRTMaterialForRepresentation(Representation* rep, const Stage::RaytracingMaterial& new_material)
 		{
-			rt_renderer_->updateMaterialForRepresentation(rep, new_material);
+			rep->clearProperty("RTFact::Material");
+			boost::shared_ptr<PersistentObject> p(new Stage::RaytracingMaterial(new_material));
+			NamedProperty rt_mat_property("RTFact::Material", p);
+
+			rep->setProperty(rt_mat_property);
+
+			rt_renderer_->updateMaterialForRepresentation(rep);
 
 			updateGL();
 		}

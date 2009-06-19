@@ -136,6 +136,11 @@ namespace BALL
 				if (material_settings_)
 				{
 					material_settings_->apply();
+
+					// the material settings take care of updating the representations without our help
+					accept();
+
+					return;
 				}
 			}
 
