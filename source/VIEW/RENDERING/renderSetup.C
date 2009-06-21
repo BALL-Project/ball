@@ -190,7 +190,7 @@ namespace BALL
 
 				renderer->setupStereo(eye_separation, stage.getFocalDistance());
 
-				camera_offset_  = Vector3(eye_separation, 5., 0.);
+				camera_offset_  = Vector3(eye_separation, 0., 0.);
 
 				use_offset_ = true;
 			}
