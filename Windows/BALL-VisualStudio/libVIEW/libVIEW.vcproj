@@ -58,9 +58,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="qtmain.lib QtCore4.lib QtGui4.lib QtXml4.lib QtSql4.lib QtOpenGL4.lib glu32.lib QtNetwork4.lib QtSvg4.lib QtTest4.lib libBALL.lib glew32.lib opengl32.lib"
+				AdditionalDependencies="qtmain.lib QtCore4.lib QtGui4.lib QtXml4.lib QtSql4.lib QtOpenGL4.lib glu32.lib QtNetwork4.lib QtSvg4.lib QtTest4.lib libBALL.lib glew32.lib opengl32.lib RTfactRemote.lib"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\contrib\lib&quot;;&quot;$(QTDIR)\lib&quot;;&quot;$(OutDir)&quot;;$(LIB);$(RTREMOTE_RELEASE)"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\contrib\lib&quot;;&quot;$(QTDIR)\lib&quot;;&quot;$(OutDir)&quot;;&quot;$(RTFACT_RELEASE)&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 			/>
@@ -2355,6 +2355,14 @@
 					RelativePath="..\..\..\source\VIEW\RENDERING\raytracingRenderer.C"
 					>
 					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
 						Name="Debug|Win32"
 						>
 						<Tool
@@ -2489,6 +2497,14 @@
 					<File
 						RelativePath="..\..\..\source\VIEW\RENDERING\RENDERERS\rtfactRenderer.C"
 						>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								CompileAs="2"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Debug|Win32"
 							>
@@ -7377,6 +7393,14 @@
 				<File
 					RelativePath=".\GeneratedFiles\Debug\moc_editSingleShortcut.cpp"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\GeneratedFiles\Debug\moc_exportGeometryDialog.cpp"
@@ -7813,14 +7837,38 @@
 				<File
 					RelativePath=".\GeneratedFiles\Debug\moc_shortcutDialog.cpp"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\GeneratedFiles\Debug\moc_shortcutRegistry.cpp"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\GeneratedFiles\Debug\moc_shortcutTableView.cpp"
 					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\GeneratedFiles\Debug\moc_snapShotVisualisation.cpp"
