@@ -12,8 +12,8 @@
 namespace BALL
 {
 	const char* PluginManager::BETWEEN_PLUGINDIR_SEPERATOR  = "?";
+	boost::shared_ptr<PluginManager> PluginManager::manager_;
 
-	PluginManager* PluginManager::manager_ = NULL;
 	QMutex PluginManager::mutex_;
 
 	PluginManager::PluginManager()
@@ -24,17 +24,12 @@ namespace BALL
 
 	PluginManager::~PluginManager()
 	{
-		QHash<QString, QPluginLoader*>::iterator it = loaders_.begin();
-		for (; it != loaders_.end(); ++it) 
-		{
-			it.value()->unload();
-			delete it.value();
-		}
+		unloadAllPlugins();
 
 		std::list<PluginHandler*>::iterator ht = handlers_.begin();
-		for (; ht != handlers_.end(); ++it) 
+		for (; ht != handlers_.end(); ++ht) 
 		{
-			delete *it;
+			delete *ht;
 		}	
 		//unregisterThis();
 	}
@@ -50,7 +45,7 @@ namespace BALL
 			//Check that the manager has not been created by a concurring thread
 			if(!manager_) 
 			{
-				manager_ = new PluginManager();
+				manager_ = boost::shared_ptr<PluginManager>(new PluginManager());
 			}
 			mutex_.unlock();
 		}
@@ -61,16 +56,14 @@ namespace BALL
 	void PluginManager::addPluginDirectory(const QString& dir, bool autoactivate)
 	{
 		std::map<QString, vector<BALLPlugin*> >::iterator to_load_it = loaded_plugin_dirs_.find(dir);
-#ifndef BALL_OS_DARWIN
-#else
-		QDir plugin_dir(plugin_dir_, "plugin*.dylib", QDir::Name | QDir::IgnoreCase, QDir::Files);
-#endif
-
 		if (to_load_it == loaded_plugin_dirs_.end())
 		{
 			vector<BALLPlugin*> loaded_plugins;
-
+#ifndef BALL_OS_DARWIN
 			QDir plugin_dir(dir, "plugin*.so", QDir::Name | QDir::IgnoreCase, QDir::Files);
+#else
+			QDir plugin_dir(dir, "plugin*.dylib", QDir::Name | QDir::IgnoreCase, QDir::Files);
+#endif
 
 			// collect the loaded plugins in this dir
 			foreach(QString it, plugin_dir.entryList()) 
@@ -167,6 +160,19 @@ namespace BALL
 		}
 
 		return false;
+	}
+
+	void PluginManager::unloadAllPlugins()
+	{
+		QHash<QString, QPluginLoader*>::iterator it = loaders_.begin();
+		for (; it != loaders_.end(); ++it) 
+		{
+			stopPlugin(qobject_cast<BALLPlugin*>(it.value()->instance()));
+			//Delete the loader
+			it.value()->unload();
+			delete it.value();
+		}
+		loaders_.clear();
 	}
 
 	QObject* PluginManager::getPluginInstance(const QString& plugin)

@@ -1,19 +1,20 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>PluginDialogData</class>
- <widget class="QDialog" name="PluginDialogData" >
-  <property name="geometry" >
+ <widget class="QDialog" name="PluginDialogData">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>549</width>
-    <height>330</height>
+    <width>681</width>
+    <height>332</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Configure Plugins</string>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox" >
-   <property name="geometry" >
+  <widget class="QDialogButtonBox" name="buttonBox">
+   <property name="geometry">
     <rect>
      <x>140</x>
      <y>290</y>
@@ -21,12 +22,12 @@
      <height>31</height>
     </rect>
    </property>
-   <property name="standardButtons" >
+   <property name="standardButtons">
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QLabel" name="label" >
-   <property name="geometry" >
+  <widget class="QLabel" name="label">
+   <property name="geometry">
     <rect>
      <x>10</x>
      <y>10</y>
@@ -34,12 +35,12 @@
      <height>18</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Plugin Directories:</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_2" >
-   <property name="geometry" >
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
     <rect>
      <x>250</x>
      <y>10</y>
@@ -47,15 +48,15 @@
      <height>18</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Plugin:</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="plugin_dir_button_add" >
-   <property name="enabled" >
+  <widget class="QPushButton" name="plugin_dir_button_add">
+   <property name="enabled">
     <bool>true</bool>
    </property>
-   <property name="geometry" >
+   <property name="geometry">
     <rect>
      <x>10</x>
      <y>210</y>
@@ -63,24 +64,24 @@
      <height>30</height>
     </rect>
    </property>
-   <property name="sizePolicy" >
-    <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Add</string>
    </property>
-   <property name="checkable" >
+   <property name="checkable">
     <bool>false</bool>
    </property>
   </widget>
-  <widget class="QPushButton" name="plugin_dir_button_remove" >
-   <property name="enabled" >
+  <widget class="QPushButton" name="plugin_dir_button_remove">
+   <property name="enabled">
     <bool>true</bool>
    </property>
-   <property name="geometry" >
+   <property name="geometry">
     <rect>
      <x>160</x>
      <y>210</y>
@@ -88,37 +89,28 @@
      <height>30</height>
     </rect>
    </property>
-   <property name="sizePolicy" >
-    <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Remove </string>
    </property>
   </widget>
-  <widget class="QListView" name="plugin_view" >
-   <property name="geometry" >
+  <widget class="QListView" name="plugin_view">
+   <property name="geometry">
     <rect>
      <x>250</x>
      <y>30</y>
-     <width>181</width>
+     <width>291</width>
      <height>241</height>
     </rect>
    </property>
-   <property name="iconSize" >
-    <size>
-     <width>16</width>
-     <height>10</height>
-    </size>
-   </property>
-   <property name="viewMode" >
-    <enum>QListView::IconMode</enum>
-   </property>
   </widget>
-  <widget class="QListWidget" name="plugin_directories_view" >
-   <property name="geometry" >
+  <widget class="QListWidget" name="plugin_directories_view">
+   <property name="geometry">
     <rect>
      <x>10</x>
      <y>30</y>
@@ -127,8 +119,8 @@
     </rect>
    </property>
   </widget>
-  <widget class="QCheckBox" name="activate_all_plugins_check_box" >
-   <property name="geometry" >
+  <widget class="QCheckBox" name="activate_all_plugins_check_box">
+   <property name="geometry">
     <rect>
      <x>10</x>
      <y>250</y>
@@ -136,45 +128,45 @@
      <height>22</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Activate all Plugins</string>
    </property>
   </widget>
-  <widget class="QWidget" name="" >
-   <property name="geometry" >
+  <widget class="QWidget" name="">
+   <property name="geometry">
     <rect>
-     <x>451</x>
-     <y>64</y>
-     <width>85</width>
+     <x>560</x>
+     <y>60</y>
+     <width>93</width>
      <height>66</height>
     </rect>
    </property>
-   <layout class="QFormLayout" name="formLayout" >
-    <item row="0" column="0" >
-     <widget class="QPushButton" name="plugin_toggle_button" >
-      <property name="enabled" >
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QPushButton" name="plugin_toggle_button">
+      <property name="enabled">
        <bool>false</bool>
       </property>
-      <property name="sizePolicy" >
-       <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>Activate</string>
       </property>
      </widget>
     </item>
-    <item row="1" column="0" >
-     <widget class="QPushButton" name="settings_button" >
-      <property name="enabled" >
+    <item>
+     <widget class="QPushButton" name="settings_button">
+      <property name="enabled">
        <bool>false</bool>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>Settings</string>
       </property>
-      <property name="icon" >
+      <property name="icon">
        <iconset>
         <normaloff>../../../../../../../../usr/kde/4.1/share/icons/oxygen/16x16/actions/configure.png</normaloff>../../../../../../../../usr/kde/4.1/share/icons/oxygen/16x16/actions/configure.png</iconset>
       </property>
@@ -191,11 +183,11 @@
    <receiver>PluginDialogData</receiver>
    <slot>reject()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>293</x>
      <y>309</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>0</x>
      <y>34</y>
     </hint>
@@ -207,11 +199,11 @@
    <receiver>PluginDialogData</receiver>
    <slot>close()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>330</x>
      <y>320</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>497</x>
      <y>227</y>
     </hint>
@@ -223,11 +215,11 @@
    <receiver>PluginDialogData</receiver>
    <slot>togglePluginState()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>490</x>
      <y>79</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>269</x>
      <y>165</y>
     </hint>
@@ -239,11 +231,11 @@
    <receiver>PluginDialogData</receiver>
    <slot>pluginChanged(QModelIndex)</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>340</x>
      <y>150</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>269</x>
      <y>165</y>
     </hint>

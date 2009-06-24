@@ -10,6 +10,8 @@
 #include <QtCore/QMutex>
 #include <QtCore/QReadWriteLock>
 
+#include <boost/shared_ptr.hpp>
+
 #include <list>
 #include <map>
 
@@ -144,6 +146,10 @@ namespace BALL
 			 */
 			bool stopPlugin(BALLPlugin* plugin);
 
+			/** Unload all registered plugins.
+			 */	
+			void unloadAllPlugins();
+
 			/**
 			 * Returns the number of loaded plugins.
 			 */
@@ -171,7 +177,7 @@ namespace BALL
 			QHash<QString, QPluginLoader*> loaders_;
 			std::list<PluginHandler*> handlers_;
 
-			static PluginManager* manager_;
+			static boost::shared_ptr<PluginManager> manager_;
 
 			//This mutex is used in the creation of the singleton
 			static QMutex mutex_;

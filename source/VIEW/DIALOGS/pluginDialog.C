@@ -87,7 +87,7 @@ namespace BALL
 					VIEWPlugin* ptr = qobject_cast<VIEWPlugin*>(man.getPluginInstance(i.row()));
 
 					if (ptr)
-						return QIcon(*(ptr->getIcon()));
+						return *(ptr->getIcon());
 					else
 						return QVariant();
 				}
@@ -143,6 +143,12 @@ namespace BALL
 		{	
 			insertMenuEntry(MainControl::TOOLS, "Load Plugin", this, SLOT(show()), "Shortcut|Tools|Load_Plugin");	
 			PreferencesEntry::restoreValues();
+		}
+
+		void PluginDialog::finalizeWidget(MainControl& mc)
+		{
+			ModularWidget::finalizeWidget(mc);	
+			PluginManager::instance().unloadAllPlugins();
 		}
 
 		void PluginDialog::readPreferenceEntries(const INIFile& inifile)

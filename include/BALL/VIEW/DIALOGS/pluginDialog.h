@@ -75,6 +75,12 @@ namespace BALL
 			*/
 			virtual void initializeWidget(MainControl& main_control);
 
+			/** Finalization 
+			 		This method is called automatically before the main 
+					application is closed. 
+			*/
+			virtual void finalizeWidget(MainControl& main_control);
+
 			virtual void readPreferenceEntries(const INIFile& inifile);
 
 			protected slots:
