@@ -232,14 +232,19 @@ namespace BALL
 		void RenderSetup::run()
 		{
 #ifdef USE_TBB
-			const char* num_threads_s = getenv("BALL_NUM_RENDER_THREADS");
+			boost::shared_ptr<tbb::task_scheduler_init> scheduler;
 
-			Index num_threads = tbb::task_scheduler_init::automatic;
-			if (num_threads_s != 0)
-				num_threads = atoi(num_threads_s);
+			if (!gl_renderer_)
+			{
+				const char* num_threads_s = getenv("BALL_NUM_RENDER_THREADS");
 
-			printf("Using %d render threads\n", num_threads);
-			tbb::task_scheduler_init init(num_threads);
+				Index num_threads = tbb::task_scheduler_init::automatic;
+				if (num_threads_s != 0)
+					num_threads = atoi(num_threads_s);
+
+				printf("Using %d render threads\n", num_threads);
+				scheduler = boost::shared_ptr<tbb::task_scheduler_init>(new tbb::task_scheduler_init(num_threads));
+			}
 #endif
 			if (gl_target_)
 				gl_target_->ignoreEvents(true);
@@ -251,7 +256,9 @@ namespace BALL
 			while (!about_to_quit_)
 			{
 				t.start();
-				renderToBuffer_();
+				// NOTE: GLRenderers currently *have* to render in the GUI thread!
+				if (!gl_renderer_)
+					renderToBuffer_();
 				t.stop();
 
 				fps += t.getClockTime();
