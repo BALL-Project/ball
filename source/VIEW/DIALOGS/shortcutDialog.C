@@ -112,7 +112,7 @@ namespace BALL
 			Path p;
 			String filename;
 
-			if(entry == "Legacy Shortcuts (Version 1.3)") {
+			if(entry == "Default Shortcuts (Version 1.3)") {
 				filename = p.find("BALLView/shortcuts_13.txt");
 			} else if(entry == "Legacy Shortcuts (Version 1.2)") {
 				filename = p.find("BALLView/shortcuts_12.txt");
