@@ -11,10 +11,6 @@
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/MATHS/surface.h>
 
-#ifdef BALL_HAS_VALUES_H
-# include <values.h>
-#endif
-
 namespace BALL
 {
 	const String NumericalSAS::Option::COMPUTE_AREA      					= "compute_area";
@@ -123,8 +119,6 @@ namespace BALL
 				atom_grid.insert(at_it->getPosition(), &(*at_it));
 		}
 
-		Size last_surface_index = 0;
-
 		// now iterate over all atoms and determine their possibly occluding neighbours
 		for (AtomConstIterator at_it = fragment.beginAtom(); +at_it; ++at_it)
 		{
@@ -191,7 +185,7 @@ namespace BALL
 					if (compute_surface)
 					{
 						surface_.vertex.push_back(current_point);
-						surface_.normal.push_back(sphere_template.vertex[current_point_index]);
+						surface_.normal.push_back(sphere_template.vertex[current_point_index]*current_radius*current_radius*unit_area_per_point);
 					}
 
 					if (compute_surface_per_atom)
@@ -224,14 +218,6 @@ namespace BALL
 																					 * (  (current_center-center_of_gravity)*dr 
 																							 + current_radius * (num_points - num_occluded));
 				total_volume_ += atom_volume;
-			}
-
-			if (compute_surface)
-			{
-				float length = current_radius*current_radius * unit_area_per_point;
-				for (Position i=last_surface_index; i<surface_.normal.size(); ++i)
-					surface_.normal[i] *= length;
-				last_surface_index += num_points - num_occluded;
 			}
 
 			if (compute_surface_per_atom)
