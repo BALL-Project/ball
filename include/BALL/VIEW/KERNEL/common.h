@@ -89,7 +89,10 @@ namespace BALL
 			BUTTON_PRESS_EVENT,
 
 			/// Event for button press events of custom input devices
-			BUTTON_RELEASE_EVENT
+			BUTTON_RELEASE_EVENT,
+
+			/// Event posted by renderers after a new buffer is available
+			RENDER_TO_BUFFER_FINISHED_EVENT
 		};
 
 		//@}

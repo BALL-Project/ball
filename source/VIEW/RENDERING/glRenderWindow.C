@@ -2,13 +2,16 @@
 // vi: set ts=2:
 //
 
-# include <GL/glew.h>
+#include <GL/glew.h>
+
 #include <BALL/VIEW/RENDERING/glRenderWindow.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
-
 #include <BALL/COMMON/logStream.h>
+#include <BALL/VIEW/KERNEL/common.h>
+
 #include <QtCore/QEvent>
 #include <QtGui/QPaintEvent>
+
 //#define USE_GLPAINTPIXELS
 #undef USE_GLPAINTPIXELS
 
@@ -285,6 +288,17 @@ namespace BALL
 				{
 					BALL::Log.error() << "Error in OpenGL: " << getGLErrorString(err) << std::endl;
 				}
+		}
+
+		void GLRenderWindow::customEvent(QEvent* evt)
+		{
+			switch(static_cast<EventsIDs>(evt->type())) {
+				case RENDER_TO_BUFFER_FINISHED_EVENT:
+					printf("refreshing\n");
+					refresh();
+					swapBuffers();
+					break;
+			}
 		}
 
 		void GLRenderWindow::paintEvent(QPaintEvent* e)

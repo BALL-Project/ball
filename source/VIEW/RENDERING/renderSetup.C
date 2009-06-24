@@ -9,7 +9,7 @@
 
 #include <BALL/SYSTEM/timer.h>
 
-#ifdef ENABLE_RAYTRACING
+#ifdef BALL_HAS_RTFACT
 #include <BALL/VIEW/RENDERING/RENDERERS/rtfactRenderer.h>
 
 #define USE_TBB
@@ -38,7 +38,8 @@ namespace BALL
 				render_mutex_(true),
 				show_ruler_(false)
 		{
-			gl_target_ = dynamic_cast<GLRenderWindow*>(target);
+			gl_target_   = dynamic_cast<GLRenderWindow*>(target);
+			gl_renderer_ = dynamic_cast<GLRenderer*>(renderer);
 		}
 
 		RenderSetup::RenderSetup(const RenderSetup& rs)
@@ -57,7 +58,8 @@ namespace BALL
 				render_mutex_(true),
 				show_ruler_(rs.show_ruler_)
 		{
-			gl_target_ = dynamic_cast<GLRenderWindow*>(target);
+			gl_target_   = dynamic_cast<GLRenderWindow*>(target);
+			gl_renderer_ = dynamic_cast<GLRenderer*>(renderer);
 		}
 
 		const RenderSetup& RenderSetup::operator = (const RenderSetup& rs)
@@ -69,6 +71,7 @@ namespace BALL
 			rendering_paused_ = rs.rendering_paused_;
 			receive_updates_ = rs.receive_updates_;
 			use_offset_ = rs.use_offset_;
+			about_to_quit_ = rs.about_to_quit_;
 			camera_ = rs.camera_;
 			camera_offset_ = rs.camera_offset_;
 			stereo_setup_ = rs.stereo_setup_;
@@ -76,12 +79,10 @@ namespace BALL
 			scene_ = rs.scene_;
 			stage_ = rs.stage_;
 
-			width_  = rs.width_;
-			height_ = rs.height_;
-
 			show_ruler_ = rs.show_ruler_;
 
-			gl_target_ = dynamic_cast<GLRenderWindow*>(target);
+			gl_target_   = dynamic_cast<GLRenderWindow*>(target);
+			gl_renderer_ = dynamic_cast<GLRenderer*>(renderer);
 
 			render_mutex_.unlock();
 
@@ -92,9 +93,10 @@ namespace BALL
 		{
 			render_mutex_.lock();
 
-			do_resize_ = false;
-
 			makeCurrent();
+
+			gl_target_   = dynamic_cast<GLRenderWindow*>(target);
+			gl_renderer_ = dynamic_cast<GLRenderer*>(renderer);
 
 			// initialize the rendering target
 			target->init();
@@ -105,8 +107,9 @@ namespace BALL
 				Log.error() << "Renderer failed to initialize" << std::endl;
 				throw Exception::GeneralException(__FILE__, __LINE__);
 			}			
-			if (RTTI::isKindOf<GLRenderer>(*renderer))
-				((GLRenderer*)renderer)->enableVertexBuffers(scene_->want_to_use_vertex_buffer_);
+
+			if (gl_renderer_)
+				gl_renderer_->enableVertexBuffers(scene_->want_to_use_vertex_buffer_);
 
 			render_mutex_.unlock();
 		}
@@ -118,17 +121,6 @@ namespace BALL
 			if (gl_target_ && gl_target_->isFullScreen())
 				return;
 
-			bool reset_continuous = false;
-
-			if (use_continuous_loop_)
-			{
-				width_  = width;
-				height_ = height;
-				do_resize_ = true;
-				// stop the thread
-				useContinuousLoop(false);
-				reset_continuous = true;
-			}
 			render_mutex_.lock();
 
 			makeCurrent();
@@ -140,6 +132,7 @@ namespace BALL
 										<< height << " is not supported" << std::endl;
 			}
 
+			renderer->setSize(width, height);
 			if (RTTI::isKindOf<BufferedRenderer>(*renderer))
 			{
 				if(!(((BufferedRenderer*)renderer)->setFrameBufferFormat(target->getFormat())))
@@ -164,12 +157,6 @@ namespace BALL
 
 			if (gl_target_)
 				gl_target_->swapBuffers();
-
-			if (reset_continuous)
-			{
-//				use_continuous_loop_ = true;
-//				start();
-			}
 
 			render_mutex_.unlock();
 		}
@@ -248,29 +235,25 @@ namespace BALL
 #ifdef USE_TBB
 			tbb::task_scheduler_init init;
 #endif
-
-			makeCurrent();
-
 			if (gl_target_)
 				gl_target_->ignoreEvents(true);
-
-			useContinuousLoop(true);
 			Timer t;
 
 			// to be stopped from the outside, someone needs to call useContinuousLoop(false)
-			while (use_continuous_loop_)
+			while (!about_to_quit_)
 			{
 				printf("###################################### FRAME #####################################\n");
 				t.start();
 				renderToBuffer_();
+
+				loop_mutex.lock();
+				qApp->postEvent(scene_, new RenderToBufferFinishedEvent(this));
+				wait_for_render.wait(&loop_mutex);
+				loop_mutex.unlock();
 				t.stop();
 				printf("###################################### DONE (%f)  #####################################\n", t.getClockTime());
 				t.reset();
-				msleep(16);
 			}
-
-			if (gl_target_)
-				gl_target_->ignoreEvents(false);
 		}
 
 		void RenderSetup::renderToBuffer()
@@ -290,8 +273,6 @@ namespace BALL
 
 			render_mutex_.lock();
 
-			makeCurrent();
-
 			renderer->setPreviewMode(scene_->use_preview_ && scene_->preview_);
 			renderer->showLightSources(scene_->show_light_sources_);
 
@@ -300,12 +281,11 @@ namespace BALL
 			if (RTTI::isKindOf<BufferedRenderer>(*renderer))
 			{
 				((BufferedRenderer*)renderer)->renderToBuffer(target, *stage_);
-				target->refresh();
 			} 
 			else if (RTTI::isKindOf<GLRenderer>(*renderer))
 			{
-				GLRenderer* current_gl_renderer = (GLRenderer*)renderer;
-
+				GLRenderer* current_gl_renderer = static_cast<GLRenderer*>(renderer);
+				// TODO: what do we do here? should we push the gl calls somewhere else, i.e. in the GUI thread?
 				// cannot call update here, because it calls updateGL
 				current_gl_renderer->renderToBuffer(target, GLRenderer::DISPLAY_LISTS_RENDERING);
 
@@ -320,9 +300,6 @@ namespace BALL
 			if (show_ruler_)
 				renderer->renderRuler();
 
-			if (use_continuous_loop_ && gl_target_)
-				gl_target_->swapBuffers();
-
 			render_mutex_.unlock();
 		}
 
@@ -334,7 +311,8 @@ namespace BALL
 			render_mutex_.lock();
 
 			makeCurrent();
-			QImage image(gl_target_->grabFrameBuffer(true));
+
+			QImage image(target->grabFrameBuffer(true));
 
 			render_mutex_.unlock();
 
@@ -347,12 +325,10 @@ namespace BALL
 		{
 			if (receive_updates_)
 			{
-				if (use_continuous_loop_)
-					useContinuousLoop(false);
-
 				render_mutex_.lock();
 
 				makeCurrent();
+
 				renderer->bufferRepresentation(rep);
 
 				render_mutex_.unlock();
@@ -363,12 +339,10 @@ namespace BALL
 		{
 			if (receive_updates_)
 			{
-				if (use_continuous_loop_)
-					useContinuousLoop(false);
-
 				render_mutex_.lock();
 
 				makeCurrent();
+
 				renderer->removeRepresentation(rep);
 
 				render_mutex_.unlock();
@@ -377,12 +351,10 @@ namespace BALL
 
 		void RenderSetup::setLights(bool reset_all)
 		{
-			if (reset_all && use_continuous_loop_)
-				useContinuousLoop(false);
-
 			render_mutex_.lock();
 
 			makeCurrent();
+				
 			renderer->setLights(reset_all);
 
 			render_mutex_.unlock();
@@ -390,12 +362,10 @@ namespace BALL
 
 		void RenderSetup::updateBackgroundColor()
 		{
-			if (use_continuous_loop_)
-				useContinuousLoop(false);
-
 			render_mutex_.lock();
 
 			makeCurrent();
+
 			renderer->updateBackgroundColor();
 
 			render_mutex_.unlock();
@@ -407,12 +377,10 @@ namespace BALL
 
 			if (RTTI::isKindOf<GLRenderer>(*renderer))
 			{
-				if (use_continuous_loop_)
-					useContinuousLoop(false);
-
 				render_mutex_.lock();
 
 				makeCurrent();
+
 				texname = ((GLRenderer*)renderer)->createTextureFromGrid(grid, map);
 
 				render_mutex_.unlock();
@@ -425,12 +393,10 @@ namespace BALL
 		{
 			if (RTTI::isKindOf<GLRenderer>(*renderer))
 			{
-				if (use_continuous_loop_)
-					useContinuousLoop(false);
-
 				MutexLocker ml(&render_mutex_);
 
 				makeCurrent();
+
 				((GLRenderer*)renderer)->removeTextureFor_(grid);
 			}
 		}
@@ -441,6 +407,7 @@ namespace BALL
 			render_mutex_.lock();
 
 			makeCurrent();
+
 			return renderer->mapViewportTo3D(x, y);
 		}
 
@@ -449,6 +416,7 @@ namespace BALL
 			MutexLocker ml(&render_mutex_);
 
 			makeCurrent();
+
 			return renderer->map3DToViewport(vec);
 		}
 
@@ -465,6 +433,7 @@ namespace BALL
 			MutexLocker ml(&render_mutex_);
 
 			makeCurrent();
+
 
 			((GLRenderer*)renderer)->pickObjects1(x1, y1, x2, y2);
 			((GLRenderer*)renderer)->renderToBuffer(target, GLRenderer::DIRECT_RENDERING);

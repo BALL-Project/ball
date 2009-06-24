@@ -141,6 +141,7 @@ namespace BALL
 
 			init();
 			renderers_[0].resize(width(), height());
+			renderers_[0].start();
 
 			setAcceptDrops(true);
 #ifdef BALL_VIEW_DEBUG
@@ -204,6 +205,7 @@ namespace BALL
 
 			init();
 			renderers_[0].resize(width(), height());
+			renderers_[0].start();
 		}
 
 		Scene::Scene(const Scene& scene, QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
@@ -251,6 +253,7 @@ namespace BALL
 						 (Size) scene.renderers_[0].renderer->getHeight());
 
 			renderers_[0].resize(width(), height());
+			renderers_[0].start();
 		}
 
 		Scene::~Scene()
@@ -262,6 +265,14 @@ namespace BALL
 
 			for (Position i=0; i<renderers_.size(); ++i)
 			{
+				//	stop all running renderers
+				renderers_[i].stop();
+
+				renderers_[i].loop_mutex.lock();
+				renderers_[i].wait_for_render.wakeAll();
+				renderers_[i].loop_mutex.unlock();
+
+				renderers_[i].wait(1000);
 				//	NOTE: This is problematic, since we have some smart pointers
 				//	delete renderers_[i].renderer; 
 				delete(renderers_[i].target);
@@ -535,7 +546,14 @@ namespace BALL
 			
 			// first, let all renderers do their work
 			for (Position i=0; i<renderers_.size(); ++i)
-				renderers_[i].renderToBuffer();
+			{
+				if (!renderers_[i].isContinuous())
+				{
+					renderers_[i].loop_mutex.lock();
+					renderers_[i].wait_for_render.wakeAll();
+					renderers_[i].loop_mutex.unlock();
+				}
+			}
 
 			// then, estimate fps if necessary and add to the render target
 			ColorRGBA text_color = stage_->getBackgroundColor().getInverseColor();
@@ -549,13 +567,12 @@ namespace BALL
 			// draw all renderable texts and swap the new buffers in
 			for (Position i=0; i<renderers_.size(); ++i)
 			{
-				if (renderers_[i].isPaused() || renderers_[i].isContinuous())
+				if (renderers_[i].isPaused())
 					continue;
 
 				renderers_[i].makeCurrent();
 
 				QPaintDevice* current_dev = dynamic_cast<QPaintDevice*>(renderers_[i].target);
-
 				if (show_fps_ && current_dev)
 				{
 					QPainter p(current_dev);
@@ -1248,7 +1265,6 @@ namespace BALL
 			updateGL();
 		}
 
-
 		void Scene::writeLights_(INIFile& inifile) const
 		{
 			String data;
@@ -1358,7 +1374,6 @@ namespace BALL
 		}
 
 		// ###########################MENUES##################################
-
 		void Scene::initializeWidget(MainControl& main_control)
 		{
 			IconLoader& loader = IconLoader::instance();
@@ -1623,6 +1638,19 @@ namespace BALL
 					break;
 				case BUTTON_PRESS_EVENT:
 					buttonPressEvent(static_cast<ButtonEvent*>(evt));
+					break;
+				case RENDER_TO_BUFFER_FINISHED_EVENT:
+					RenderSetup* renderer = static_cast<RenderToBufferFinishedEvent*>(evt)->getRenderer();
+					renderer->target->makeCurrent();
+					renderer->target->refresh();
+					renderer->target->swapBuffers();
+
+					if (renderer->isContinuous())
+					{
+						renderer->loop_mutex.lock();
+						renderer->wait_for_render.wakeAll();
+						renderer->loop_mutex.unlock();
+					}
 					break;
 			}
 		}
@@ -2117,6 +2145,22 @@ namespace BALL
 
 		void Scene::keyPressEvent(QKeyEvent* e)
 		{
+			// TEST
+			if (e->key() == Qt::Key_Space)
+			{
+				if (renderers_[0].isContinuous())
+				{
+					renderers_[0].useContinuousLoop(false);
+				}
+				else
+				{
+					renderers_[0].useContinuousLoop(true);
+					renderers_[0].loop_mutex.lock();
+					renderers_[0].wait_for_render.wakeAll();
+					renderers_[0].loop_mutex.unlock();
+				}
+			}
+
 			// TODO make keys configurable in shortcutRegistry 
 			if ((gl_renderer_->getStereoMode() == GLRenderer::NO_STEREO) &&
 			    (e->key() == Qt::Key_Escape))
@@ -2707,6 +2751,7 @@ namespace BALL
 			resetRepresentationsForRenderer_(new_rs);
 
 			renderers_.push_back(new_rs);
+			new_rs.start();
 		}
 
 		void Scene::enterActiveStereo()
@@ -2761,6 +2806,7 @@ return;
 
 			renderers_.push_back(left_rs);
 			stereo_left_eye_ = renderers_.size()-1;
+			left_rs.start();
 
 			GLRenderWindow* right_widget = new GLRenderWindow(0, "right eye");
 			right_widget->makeCurrent();
@@ -2781,6 +2827,7 @@ return;
 
 			renderers_.push_back(right_rs);
 			stereo_right_eye_ = renderers_.size()-1;
+			right_rs.start();
 
 			gl_renderer_->setStereoMode(GLRenderer::DUAL_VIEW_STEREO);
 
@@ -2817,6 +2864,7 @@ return;
 
 			renderers_.push_back(left_rs);
 			stereo_left_eye_ = renderers_.size()-1;
+			left_rs.start();
 
 			GLRenderWindow* right_widget = new GLRenderWindow(QApplication::desktop()->screen(1), "right eye");
 			right_widget->makeCurrent();
@@ -2837,6 +2885,7 @@ return;
 
 			renderers_.push_back(right_rs);
 			stereo_right_eye_ = renderers_.size()-1;
+			right_rs.start();
 
 			gl_renderer_->setStereoMode(GLRenderer::DUAL_VIEW_DIFFERENT_DISPLAY_STEREO);
 

@@ -66,6 +66,14 @@ namespace BALL
 			void ignoreEvents(bool ignore) {ignore_events_ = ignore;}
 
 		protected:	
+
+			/** This function handles custom Qt Events.
+			 *  
+			 *  The main use of this function is notification of a fresh buffer to
+			 *  display from a separate renderer thread.
+			 */
+			virtual void customEvent(QEvent* evt);
+
 			void paintEvent(QPaintEvent* e);
 			static QGLFormat gl_format_;
 
@@ -90,8 +98,6 @@ namespace BALL
 
 			mutable Mutex contex_mutex_;
 			bool ignore_events_;
-
-			bool is_buffered_;
 		};
 
 	} // namespace VIEW

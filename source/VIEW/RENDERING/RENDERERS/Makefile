@@ -2,7 +2,7 @@ DIRECTORY=VIEW/RENDERING/RENDERERS
 
 THISLIB=$(LIBNAME)
 
-CPP_SOURCES=
+CPP_SOURCES=rtfactRenderer.C
 
 include ../../../common.mak
 include .Dependencies

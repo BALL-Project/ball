@@ -22,6 +22,7 @@
 #endif
 
 #include <QtCore/qthread.h>
+#include <QtCore/QWaitCondition>
 
 namespace BALL {
 	namespace VIEW {
@@ -197,6 +198,12 @@ namespace BALL {
 				 */
 				void useContinuousLoop(bool use_loop);
 
+				/** Signal the renderer to quit as soon as possible.
+				 *
+				 *  Note: this function works asynchronously, so a rs.wait(); maybe required.
+				 */
+				void stop() { MutexLocker ml(&render_mutex_); about_to_quit_ = true; }
+
 				/** Returns the mode of the render loop.
 				 */
 				bool isContinuous() { return use_continuous_loop_; }
@@ -211,6 +218,13 @@ namespace BALL {
 
 				virtual void run();
 
+				void lock() { render_mutex_.lock(); }
+				void unlock() { render_mutex_.unlock(); }
+
+				mutable QWaitCondition wait_for_render;
+				// locks the renderer before the next render call
+				mutable Mutex loop_mutex;
+
 			protected:
 				// does the hard work and can be called from a continuous loop as well as from event-based rendering
 				void renderToBuffer_();
@@ -218,6 +232,8 @@ namespace BALL {
 				bool rendering_paused_;
 				bool receive_updates_;
 				bool use_offset_;
+
+				bool about_to_quit_;
 
 				Camera  camera_;
 				Vector3 camera_offset_;
@@ -232,17 +248,31 @@ namespace BALL {
 
 				// locks the renderer during updates and rendering
 				mutable Mutex render_mutex_;
-
-				Size width_;
-				Size height_;
-				bool do_resize_;
-
+				
 				bool show_ruler_;
 
 				// This pointer is used to avoid uneccessary RTTI calls and casting. If the target is not a
 				// GLRenderWindow or one of its derived classes, this pointer will simply be NULL
 				GLRenderWindow* gl_target_;
 		};
+
+		/** This class is used for communication of render events over thread boundaries.
+		 */
+		class BALL_VIEW_EXPORT RenderToBufferFinishedEvent
+			: public QEvent
+		{
+			public:
+				RenderToBufferFinishedEvent(RenderSetup* renderer)
+					: QEvent(static_cast<QEvent::Type>(RENDER_TO_BUFFER_FINISHED_EVENT)),
+						renderer_(renderer)
+				{};
+
+				RenderSetup* getRenderer() { return renderer_; }
+
+			protected:
+				RenderSetup* renderer_;
+		};
+
 	}
 }
 

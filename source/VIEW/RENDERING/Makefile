@@ -12,7 +12,7 @@ DIRECTORY=VIEW/RENDERING
 THISLIB=$(LIBNAME)
 
 VIEW_RENDERING_SUBDIRS=\
-#	RENDERERS
+	RENDERERS
 
 CPP_SOURCES=\
 	glDisplayList.C\
@@ -28,6 +28,7 @@ CPP_SOURCES=\
 	glOffscreenTarget.C\
 	renderWindow.C\
 	pixelFormat.C\
+	raytracingRenderer.C
 
 include ../../common.mak
 -include .Dependencies
