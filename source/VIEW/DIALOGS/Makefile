@@ -159,6 +159,7 @@ UIC_SOURCES=\
 	openSavePreferencesData.C\
 	parsedFunctionDialogData.C\
 	peptideDialogData.C\
+	pluginDialogData.C\
 	preferencesData.C\
 	exportGeometryDialogData.C\
 	PTEDialogData.C\
