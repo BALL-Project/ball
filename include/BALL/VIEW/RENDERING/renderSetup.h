@@ -258,6 +258,10 @@ namespace BALL {
 				// This pointer is used to avoid uneccessary RTTI calls and casting. If the target is not a
 				// GLRenderWindow or one of its derived classes, this pointer will simply be NULL
 				GLRenderWindow* gl_target_;
+				
+				// This pointer is used to avoid uneccessary RTTI calls and casting. If the renderer is not a
+				// GLRenderer or one of its derived classes, this pointer will simply be NULL
+				GLRenderer* gl_renderer_;
 		};
 
 		/** This class is used for communication of render events over thread boundaries.
