@@ -91,6 +91,9 @@ namespace BALL
 
 			///
 			void projectionTransformationChanged();
+			
+			///
+			void downsamplingSliderChanged();
 
 			private:
 			

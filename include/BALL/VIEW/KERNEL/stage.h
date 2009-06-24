@@ -534,7 +534,8 @@ namespace BALL
 			///
 			void setShininess(float value)
 				{ shininess_ = value;}
-			
+
+
 			//@}
 			/**	@name Predicates
 			*/
@@ -600,7 +601,7 @@ namespace BALL
 			float 							focal_distance_;
 
 			//_
-			bool 								swap_side_by_side_stereo_;
+			bool 							swap_side_by_side_stereo_;
 
 			float 							specular_;
 			float 							diffuse_;

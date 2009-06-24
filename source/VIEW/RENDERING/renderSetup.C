@@ -146,7 +146,6 @@ namespace BALL
 			}
 
 			renderer->setSize(width, height);
-
 			render_mutex_.unlock();
 
 			updateCamera();
