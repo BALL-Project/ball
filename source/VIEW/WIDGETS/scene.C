@@ -140,14 +140,14 @@ namespace BALL
 		{
 			stage_settings_=new StageSettings(this);
 #ifndef BALL_HAS_RTFACT
-			renderers_.push_back(RenderSetup(gl_renderer_, main_display_, this, stage_));
+			renderers_.push_back(boost::shared_ptr<RenderSetup>(new RenderSetup(gl_renderer_, main_display_, this, stage_)));
 #else
-			renderers_.push_back(RenderSetup(&*rt_renderer_, main_display_, this, stage_));
+			renderers_.push_back(boost::shared_ptr<RenderSetup>(new RenderSetup(&*rt_renderer_, main_display_, this, stage_)));
 #endif
 
 			init();
-			renderers_[0].resize(width(), height());
-			renderers_[0].start();
+			renderers_[0]->resize(width(), height());
+			renderers_[0]->start();
 
 			setAcceptDrops(true);
 #ifdef BALL_VIEW_DEBUG
@@ -199,10 +199,11 @@ namespace BALL
 #endif
 
 #ifndef BALL_HAS_RTFACT
-			renderers_.push_back(RenderSetup(gl_renderer_, main_display_, this, stage_));
+			renderers_.push_back(boost::shared_ptr<RenderSetup>(new RenderSetup(gl_renderer_, main_display_, this, stage_)));
 #else
-			renderers_.push_back(RenderSetup(&*rt_renderer_, main_display_, this, stage_));
+			renderers_.push_back(boost::shared_ptr<RenderSetup>(new RenderSetup(&*rt_renderer_, main_display_, this, stage_)));
 #endif
+
 			// the widget with the MainControl
 			registerWidget(this);
 
@@ -210,8 +211,8 @@ namespace BALL
 			setAcceptDrops(true);
 
 			init();
-			renderers_[0].resize(width(), height());
-			renderers_[0].start();
+			renderers_[0]->resize(width(), height());
+			renderers_[0]->start();
 		}
 
 		Scene::Scene(const Scene& scene, QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
@@ -242,9 +243,9 @@ namespace BALL
 #endif
 
 #ifndef BALL_HAS_RTFACT
-			renderers_.push_back(RenderSetup(gl_renderer_, main_display_, this, stage_));
+			renderers_.push_back(boost::shared_ptr<RenderSetup>(new RenderSetup(gl_renderer_, main_display_, this, stage_)));
 #else
-			renderers_.push_back(RenderSetup(&*rt_renderer_, main_display_, this, stage_));
+			renderers_.push_back(boost::shared_ptr<RenderSetup>(new RenderSetup(&*rt_renderer_, main_display_, this, stage_)));
 #endif
 
 			setObjectName(name);
@@ -255,11 +256,11 @@ namespace BALL
 
 			init();
 
-			resize((Size) scene.renderers_[0].renderer->getWidth(), 
-						 (Size) scene.renderers_[0].renderer->getHeight());
+			resize((Size) scene.renderers_[0]->renderer->getWidth(), 
+						 (Size) scene.renderers_[0]->renderer->getHeight());
 
-			renderers_[0].resize(width(), height());
-			renderers_[0].start();
+			renderers_[0]->resize(width(), height());
+			renderers_[0]->start();
 		}
 
 		Scene::~Scene()
@@ -272,16 +273,16 @@ namespace BALL
 			for (Position i=0; i<renderers_.size(); ++i)
 			{
 				//	stop all running renderers
-				renderers_[i].stop();
+				renderers_[i]->stop();
 
-				renderers_[i].loop_mutex.lock();
-				renderers_[i].wait_for_render.wakeAll();
-				renderers_[i].loop_mutex.unlock();
+				renderers_[i]->loop_mutex.lock();
+				renderers_[i]->wait_for_render.wakeAll();
+				renderers_[i]->loop_mutex.unlock();
 
-				renderers_[i].wait(1000);
+				renderers_[i]->wait(1000);
 				//	NOTE: This is problematic, since we have some smart pointers
 				//	delete renderers_[i].renderer; 
-				delete(renderers_[i].target);
+				delete(renderers_[i]->target);
 			}
 
 			//rt_renderer_ & rt_render_window are smart pointers
@@ -354,7 +355,7 @@ namespace BALL
 						if (pm.startRendering(rep))
 						{
 							for (Position i=0; i<renderers_.size(); ++i)
-								renderers_[i].bufferRepresentation(*rep);
+								renderers_[i]->bufferRepresentation(*rep);
 
 							pm.finishedRendering(rep);
 						}
@@ -363,7 +364,7 @@ namespace BALL
 
 					case RepresentationMessage::REMOVE:
 							for (Position i=0; i<renderers_.size(); ++i)
-								renderers_[i].removeRepresentation(*rep);
+								renderers_[i]->removeRepresentation(*rep);
 							break;
 
 					case RepresentationMessage::FINISHED_UPDATE:
@@ -384,7 +385,7 @@ namespace BALL
 					//       of initializations and should be fixed
 					//       somewhere else instead of this band-aid
 					for (Position i=0; i<renderers_.size(); ++i)
-						renderers_[i].setLights(true);
+						renderers_[i]->setLights(true);
 					updateGL();
 				}
 
@@ -404,7 +405,7 @@ namespace BALL
 					case DatasetMessage::REMOVE:
 						// TODO: change to a correct render setup call!
 						for (Position i=0; i<renderers_.size(); ++i)
-							renderers_[i].removeGridTextures(*set->getData());
+							renderers_[i]->removeGridTextures(*set->getData());
 						break;
 
 					default:
@@ -491,8 +492,8 @@ namespace BALL
 		{
 			for (Position i=0; i<renderers_.size(); ++i)
 			{
-				renderers_[i].init();
-				GLRenderWindow* gt = dynamic_cast<GLRenderWindow*>(renderers_[i].target);
+				renderers_[i]->init();
+				GLRenderWindow* gt = dynamic_cast<GLRenderWindow*>(renderers_[i]->target);
 				if (gt) 
 				{
 					gt->ignoreEvents(true);
@@ -571,11 +572,11 @@ namespace BALL
 			// first, let all renderers do their work
 			for (Position i=0; i<renderers_.size(); ++i)
 			{
-				if (!renderers_[i].isContinuous())
+				if (!renderers_[i]->isContinuous())
 				{
-					renderers_[i].loop_mutex.lock();
-					renderers_[i].wait_for_render.wakeAll();
-					renderers_[i].loop_mutex.unlock();
+					renderers_[i]->loop_mutex.lock();
+					renderers_[i]->wait_for_render.wakeAll();
+					renderers_[i]->loop_mutex.unlock();
 				}
 			}
 
@@ -591,12 +592,12 @@ namespace BALL
 			// draw all renderable texts and swap the new buffers in
 			for (Position i=0; i<renderers_.size(); ++i)
 			{
-				if (renderers_[i].isPaused())
+				if (renderers_[i]->isPaused())
 					continue;
 
-				renderers_[i].makeCurrent();
+				renderers_[i]->makeCurrent();
 
-				QPaintDevice* current_dev = dynamic_cast<QPaintDevice*>(renderers_[i].target);
+				QPaintDevice* current_dev = dynamic_cast<QPaintDevice*>(renderers_[i]->target);
 				if (show_fps_ && current_dev)
 				{
 					QPainter p(current_dev);
@@ -654,14 +655,14 @@ namespace BALL
 		void Scene::resizeEvent(QResizeEvent* /*event*/)
 		{						
 			for (Position i=0; i<renderers_.size(); ++i)
-				renderers_[i].resize(width(), height());
+				renderers_[i]->resize(width(), height());
 		}
 
 		bool Scene::eventFilter(QObject* object, QEvent* event)
 		{
 			for (Position i=0; i<renderers_.size(); ++i)
 			{				
-				if (static_cast<QObject*>(dynamic_cast<GLRenderWindow*>(renderers_[i].target)) != object)
+				if (static_cast<QObject*>(dynamic_cast<GLRenderWindow*>(renderers_[i]->target)) != object)
 					continue;
 
 				bool filter_out = false;
@@ -681,7 +682,7 @@ namespace BALL
 					case QEvent::ToolTip:
 						// prevent tool tip events for continuous renderers; these would
 						// stall the rendering loop
-						if (renderers_[i].isContinuous())
+						if (renderers_[i]->isContinuous())
 							filter_out = true;
 						break;
 					default:
@@ -906,8 +907,8 @@ namespace BALL
 			list<GeometricObject*> objects;
 
 			// draw the representations
-			renderers_[0].pickObjects((Position)p0.x(), (Position)p0.y(),
-			                          (Position)p1.x(), (Position)p1.y(), objects);
+			renderers_[0]->pickObjects((Position)p0.x(), (Position)p0.y(),
+															   (Position)p1.x(), (Position)p1.y(), objects);
 
 			// sent collected objects
 			GeometricObjectSelectionMessage* message = new GeometricObjectSelectionMessage;
@@ -977,8 +978,11 @@ namespace BALL
 		{
 			for (size_t i=0; i<renderers_.size(); ++i)
 			{
-				renderers_[i].target->setDownsamplingFactor(ds_factor);
-				renderers_[i].resize(renderers_[i].renderer->getWidth(), renderers_[i].renderer->getHeight());
+				if (RTTI::isKindOf<GLRenderWindow>(*(renderers_[i]->target)))
+				{
+					static_cast<GLRenderWindow*>(renderers_[i]->target)->setDownsamplingFactor(ds_factor);
+					renderers_[i]->resize(renderers_[i]->renderer->getWidth(), renderers_[i]->renderer->getHeight());
+				}
 			}
 		}
 
@@ -994,7 +998,7 @@ namespace BALL
 			stage_->addLightSource(light);
 
 			for (Position i=0; i<renderers_.size(); ++i)
-				renderers_[i].setLights(true);
+				renderers_[i]->setLights(true);
 
 			light_settings_->updateFromStage();
 
@@ -1258,7 +1262,7 @@ namespace BALL
 			light_settings_->apply();
 
 			for (Position i=0; i<renderers_.size(); ++i)
-				renderers_[i].setLights(true);
+				renderers_[i]->setLights(true);
 
 			bool showed_coordinate = stage_->coordinateSystemEnabled();
 			stage_settings_->apply();
@@ -1293,7 +1297,7 @@ namespace BALL
 			material_settings_->apply();
 
 			for (Position i=0; i<renderers_.size(); ++i)
-				renderers_[i].updateBackgroundColor();
+				renderers_[i]->updateBackgroundColor();
 
 			if (stage_->getFogIntensity() == 0)
 			{
@@ -1697,13 +1701,15 @@ namespace BALL
 				case RENDER_TO_BUFFER_FINISHED_EVENT:
 					RenderSetup* renderer = static_cast<RenderToBufferFinishedEvent*>(evt)->getRenderer();
 
-					renderer->target->makeCurrent();
+					renderer->makeCurrent();
 					// NOTE: GLRenderers currently render in the GUI thread!
 					if (RTTI::isKindOf<GLRenderer>(*(renderer->renderer)))
 						renderer->renderToBuffer();
 					else
 						renderer->target->refresh();
-					renderer->target->swapBuffers();
+
+					if (RTTI::isKindOf<GLRenderWindow>(*(renderer->target)))
+						static_cast<GLRenderWindow*>(renderer->target)->swapBuffers();
 
 					if (renderer->isContinuous())
 					{
@@ -2123,7 +2129,7 @@ namespace BALL
 			// ok, do the picking, until we find something
 			for (Position p = 0; p < 8; p++)
 			{
-				renderers_[0].pickObjects(pos_x - p, pos_y - p, pos_x + p, pos_y + p, objects);
+				renderers_[0]->pickObjects(pos_x - p, pos_y - p, pos_x + p, pos_y + p, objects);
 				if (!objects.empty()) break;
 			}
 
@@ -2210,16 +2216,16 @@ namespace BALL
 			// TEST
 			if (e->key() == Qt::Key_Space)
 			{
-				if (renderers_[0].isContinuous())
+				if (renderers_[0]->isContinuous())
 				{
-					renderers_[0].useContinuousLoop(false);
+					renderers_[0]->useContinuousLoop(false);
 				}
 				else
 				{
-					renderers_[0].useContinuousLoop(true);
-					renderers_[0].loop_mutex.lock();
-					renderers_[0].wait_for_render.wakeAll();
-					renderers_[0].loop_mutex.unlock();
+					renderers_[0]->useContinuousLoop(true);
+					renderers_[0]->loop_mutex.lock();
+					renderers_[0]->wait_for_render.wakeAll();
+					renderers_[0]->loop_mutex.unlock();
 				}
 			}
 
@@ -2639,7 +2645,7 @@ namespace BALL
 
 			// first find out if we need to render offscreen or whether we can just use the current image
 			if (!offscreen_rendering_)
-				return renderers_[0].exportPNG(filename);
+				return renderers_[0]->exportPNG(filename);
 
 			// ok, we have to do this the hard way...	
 			GLOffscreenTarget* new_widget = new GLOffscreenTarget(main_display_, filename);
@@ -2656,8 +2662,8 @@ namespace BALL
 			trenderer->init(*this);
 			trenderer->setSize(width(), height());
 
-			RenderSetup tr_rs(trenderer, new_widget, this, stage_);
-			resetRepresentationsForRenderer_(tr_rs);
+			boost::shared_ptr<RenderSetup> tr_rs(new RenderSetup(trenderer, new_widget, this, stage_));
+			resetRepresentationsForRenderer_(*tr_rs);
 
 			renderers_.push_back(tr_rs);
 			updateGL();
@@ -2669,7 +2675,7 @@ namespace BALL
 
 			// TODO: we should not rely on the first renderer being the one
 			// related to the main_display_!
-			renderers_[0].resize(width(), height());
+			renderers_[0]->resize(width(), height());
 			updateGL();
 
 			ok = true;
@@ -2753,8 +2759,8 @@ namespace BALL
 			if (gl_renderer_->getStereoMode() == GLRenderer::NO_STEREO) return;
 
 			// remember pointers to the left and right windows
-			RenderTarget* left_window  = (stereo_left_eye_  != -1) ? renderers_[stereo_left_eye_ ].target : 0;
-			RenderTarget* right_window = (stereo_right_eye_ != -1) ? renderers_[stereo_right_eye_].target : 0;
+			RenderTarget* left_window  = (stereo_left_eye_  != -1) ? renderers_[stereo_left_eye_ ]->target : 0;
+			RenderTarget* right_window = (stereo_right_eye_ != -1) ? renderers_[stereo_right_eye_]->target : 0;
 
 			// note: it is important to erase the right eye first, because then the index of the
 			// left eye will still be valid (being smaller than the erased right one)
@@ -2812,14 +2818,14 @@ namespace BALL
 
 			new_widget->show();
 
-			RenderSetup new_rs(new_renderer, new_widget, this, stage_);
+			boost::shared_ptr<RenderSetup> new_rs(new RenderSetup(new_renderer, new_widget, this, stage_));
 
-			resetRepresentationsForRenderer_(new_rs);
+			resetRepresentationsForRenderer_(*new_rs);
 
 			renderers_.push_back(new_rs);
 			// NOTE: *don't* try to start new_rs, since this is an automatic variable
 			//       that will be destroyed soon afterwards
-			renderers_[renderers_.size()-1].start();
+			renderers_[renderers_.size()-1]->start();
 		}
 
 		void Scene::enterActiveStereo()
@@ -2868,14 +2874,14 @@ namespace BALL
 			left_widget->showFullScreen();
 			left_renderer->setSize(left_widget->width(), left_widget->height());
 
-			RenderSetup left_rs(left_renderer, left_widget, this, stage_);
+			boost::shared_ptr<RenderSetup> left_rs(new RenderSetup(left_renderer, left_widget, this, stage_));
 
-			resetRepresentationsForRenderer_(left_rs);
-			left_rs.setStereoMode(RenderSetup::LEFT_EYE);
+			resetRepresentationsForRenderer_(*left_rs);
+			left_rs->setStereoMode(RenderSetup::LEFT_EYE);
 
 			renderers_.push_back(left_rs);
 			stereo_left_eye_ = renderers_.size()-1;
-			left_rs.start();
+			left_rs->start();
 
 			GLRenderWindow* right_widget = new GLRenderWindow(0, String(tr("right eye")).c_str());
 			right_widget->makeCurrent();
@@ -2889,14 +2895,14 @@ namespace BALL
 			right_widget->showFullScreen();
 			right_renderer->setSize(right_widget->width(), right_widget->height());
 
-			RenderSetup right_rs = RenderSetup(right_renderer, right_widget, this, stage_);
+			boost::shared_ptr<RenderSetup> right_rs(new RenderSetup(right_renderer, right_widget, this, stage_));
 
-			resetRepresentationsForRenderer_(right_rs);
-			right_rs.setStereoMode(RenderSetup::RIGHT_EYE);
+			resetRepresentationsForRenderer_(*right_rs);
+			right_rs->setStereoMode(RenderSetup::RIGHT_EYE);
 
 			renderers_.push_back(right_rs);
 			stereo_right_eye_ = renderers_.size()-1;
-			right_rs.start();
+			right_rs->start();
 
 			gl_renderer_->setStereoMode(GLRenderer::DUAL_VIEW_STEREO);
 
@@ -2926,14 +2932,14 @@ namespace BALL
 			left_widget->showFullScreen();
 			left_renderer->setSize(left_widget->width(), left_widget->height());
 
-			RenderSetup left_rs = RenderSetup(left_renderer, left_widget, this, stage_);
+			boost::shared_ptr<RenderSetup> left_rs(new RenderSetup(left_renderer, left_widget, this, stage_));
 
-			resetRepresentationsForRenderer_(left_rs);
-			left_rs.setStereoMode(RenderSetup::LEFT_EYE);
+			resetRepresentationsForRenderer_(*left_rs);
+			left_rs->setStereoMode(RenderSetup::LEFT_EYE);
 
 			renderers_.push_back(left_rs);
 			stereo_left_eye_ = renderers_.size()-1;
-			left_rs.start();
+			left_rs->start();
 
 			GLRenderWindow* right_widget = new GLRenderWindow(QApplication::desktop()->screen(1), String(tr("right eye")).c_str());
 			right_widget->makeCurrent();
@@ -2947,14 +2953,14 @@ namespace BALL
 			right_widget->showFullScreen();
 			right_renderer->setSize(right_widget->width(), right_widget->height());
 
-			RenderSetup right_rs = RenderSetup(right_renderer, right_widget, this, stage_);
+			boost::shared_ptr<RenderSetup> right_rs(new RenderSetup(right_renderer, right_widget, this, stage_));
 
-			resetRepresentationsForRenderer_(right_rs);
-			right_rs.setStereoMode(RenderSetup::RIGHT_EYE);
+			resetRepresentationsForRenderer_(*right_rs);
+			right_rs->setStereoMode(RenderSetup::RIGHT_EYE);
 
 			renderers_.push_back(right_rs);
 			stereo_right_eye_ = renderers_.size()-1;
-			right_rs.start();
+			right_rs->start();
 
 			gl_renderer_->setStereoMode(GLRenderer::DUAL_VIEW_DIFFERENT_DISPLAY_STEREO);
 
@@ -3202,7 +3208,7 @@ namespace BALL
 			Position texname = 0;
 
 			for (Position i=0; i<renderers_.size(); ++i)
-				texname = renderers_[i].prepareGridTextures(grid, map);
+				texname = renderers_[i]->prepareGridTextures(grid, map);
 
 			return texname;
 		}
@@ -3211,7 +3217,7 @@ namespace BALL
 		{
 			// TODO: maybe we want this to be local to the targets?
 			for (Position i=0; i<renderers_.size(); ++i)
-				renderers_[i].showRuler(switch_grid_->isChecked());
+				renderers_[i]->showRuler(switch_grid_->isChecked());
 
 			updateGL();
 		}
@@ -3239,8 +3245,8 @@ namespace BALL
 		{
 			ignore_pick_ = true;
 			list<GeometricObject*> objects;
-			renderers_[0].pickObjects((Position) p.x(), (Position) p.y(), 
-			                          (Position) p.x(), (Position) p.y(), objects);
+			renderers_[0]->pickObjects((Position) p.x(), (Position) p.y(), 
+																 (Position) p.x(), (Position) p.y(), objects);
 
 			if (objects.empty()) return;
 		
