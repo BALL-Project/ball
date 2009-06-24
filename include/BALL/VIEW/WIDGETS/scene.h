@@ -432,6 +432,9 @@ namespace BALL
 			virtual void mouseDoubleClickEvent(QMouseEvent* e);
 
 			///
+			virtual bool eventFilter(QObject* object, QEvent* event);
+
+			///
 			ModeType getMode() const
 				{ return current_mode_;}
 
