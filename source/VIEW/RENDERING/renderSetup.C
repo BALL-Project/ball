@@ -335,7 +335,7 @@ namespace BALL
 
 			makeCurrent();
 
-			QImage image(target->grabFrameBuffer(true));
+			QImage image(gl_target_->grabFrameBuffer(true));
 
 			render_mutex_.unlock();
 

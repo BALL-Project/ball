@@ -801,7 +801,7 @@ namespace BALL
 			Camera stereo_camera_;
 			Camera stored_camera_;
 
-			std::vector<RenderSetup> renderers_;
+			std::vector<boost::shared_ptr<RenderSetup> > renderers_;
 			GLRenderer* gl_renderer_;
 
 #ifdef BALL_HAS_RTFACT

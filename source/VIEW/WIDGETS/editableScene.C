@@ -474,7 +474,7 @@ namespace BALL
 				// if we are really close to an atom, the endpoints of the line we draw will be set to
 				// its center, so that the user has a drop in effect for the bonds
 				atom_pos_ = current_atom_->getPosition();
-				draw_to   = renderers_[0].map3DToViewport(atom_pos_);
+				draw_to   = renderers_[0]->map3DToViewport(atom_pos_);
 			}
 			else
 			{
@@ -489,7 +489,7 @@ namespace BALL
 			if (current_atom_ == 0)
 				return;
 
-			Vector2 draw_from = renderers_[0].map3DToViewport(current_atom_->getPosition());
+			Vector2 draw_from = renderers_[0]->map3DToViewport(current_atom_->getPosition());
 
 			// paint the line representing the offered bond
 			QPainter p(main_display_);
@@ -506,7 +506,7 @@ namespace BALL
 			p.drawLine(QPointF(draw_from.x, draw_from.y), QPointF(draw_to.x, draw_to.y));
 			p.end();
 
-			GLRenderWindow* gt = dynamic_cast<GLRenderWindow*>(renderers_[0].target);
+			GLRenderWindow* gt = dynamic_cast<GLRenderWindow*>(renderers_[0]->target);
 			if (gt) gt->swapBuffers();
 
 			x_window_pos_old_ = x_window_pos_new_;
@@ -586,7 +586,7 @@ namespace BALL
 			{
 				// project the new atom on the plane of the old atom
 				current_atom_ = atom;
-				Vector3 new_pos = renderers_[0].mapViewportTo3D(e->x(), e->y());
+				Vector3 new_pos = renderers_[0]->mapViewportTo3D(e->x(), e->y());
 
 				// test if the two atoms would have the same position
 				if (current_atom_->getPosition() == new_pos)
@@ -700,8 +700,8 @@ namespace BALL
 
 			QPoint p(x,y);
 			list<GeometricObject*> objects;
-			renderers_[0].pickObjects((Position)p.x(), (Position)p.y(),
-															  (Position)p.x(), (Position)p.y(), objects);
+			renderers_[0]->pickObjects((Position)p.x(), (Position)p.y(),
+															   (Position)p.x(), (Position)p.y(), objects);
 
 			if (objects.size() > 0)
 			{
@@ -767,7 +767,7 @@ namespace BALL
 		{
 			// find the 3D coordinates of screen position (x,y) on the view plane
 			// move the atom to that position
-			atom.setPosition(renderers_[0].mapViewportTo3D(x,y));
+			atom.setPosition(renderers_[0]->mapViewportTo3D(x,y));
 
 			// now we need to find the AtomContainer into which we will insert the atom.
 			// get all highlighted composites
@@ -1520,7 +1520,7 @@ void EditableScene::addStructure(String name)
 	p /= (float) nr;
 
 	Matrix4x4 m;
-	Vector3 x = renderers_[0].mapViewportTo3D(menu_point_.x(), menu_point_.y());
+	Vector3 x = renderers_[0]->mapViewportTo3D(menu_point_.x(), menu_point_.y());
 	TransformationProcessor tf;
 
 	Vector3 vv = getStage()->getCamera().getViewVector();
