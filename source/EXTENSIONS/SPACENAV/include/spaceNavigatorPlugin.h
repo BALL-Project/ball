@@ -20,6 +20,7 @@ namespace BALL
 
 			public:
 				SpaceNavigatorPlugin();
+				virtual ~SpaceNavigatorPlugin();
 
 				const QPixmap* getIcon() const;
 				QString getName() const;
