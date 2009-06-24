@@ -49,11 +49,12 @@ namespace BALL
 			connect( capping_color_button, SIGNAL( clicked() ), this, SLOT( cappingColorPressed() ) );
 			connect( eye_distance_slider, SIGNAL( valueChanged(int) ), this, SLOT( eyeDistanceChanged() ) );
 			connect( focal_distance_slider, SIGNAL( valueChanged(int) ), this, SLOT( focalDistanceChanged() ) );
-			connect( radioButton_perspectiveProjection, SIGNAL( clicked() ), this, SLOT( projectionTransformationChanged()));
-			connect( radioButton_orthographicProjection, SIGNAL( clicked() ), this, SLOT( projectionTransformationChanged()));
-			connect( texture_browse_button, SIGNAL( clicked() ), this, SLOT( loadEnvironmentMapPressed()));
-			connect( environment_map, SIGNAL( toggled(bool)), this, SLOT(environmentMapChanged(bool)));
-			connect( fog_box, SIGNAL( toggled(bool)), this, SLOT(fogBoxChanged(bool)));
+			connect( radioButton_perspectiveProjection, SIGNAL( clicked() ), this, SLOT( projectionTransformationChanged() ) );
+			connect( radioButton_orthographicProjection, SIGNAL( clicked() ), this, SLOT( projectionTransformationChanged() ) );
+			connect( texture_browse_button, SIGNAL( clicked() ), this, SLOT( loadEnvironmentMapPressed() ) );
+			connect( environment_map, SIGNAL( toggled(bool)), this, SLOT( environmentMapChanged(bool) ) );
+			connect( fog_box, SIGNAL( toggled(bool)), this, SLOT( fogBoxChanged(bool) ) );	
+			connect( downsampling_slider, SIGNAL( valueChanged(int) ), this, SLOT( downsamplingSliderChanged() ) );
 		} 
 
 
@@ -111,6 +112,9 @@ namespace BALL
 			focal_distance_slider->setValue((int) ((focal_distance) * 10.));
 			eyeDistanceChanged();
 			focalDistanceChanged();
+			
+			scene_->setDownsamplingFactor((float)downsamplingfactor_label->text().toFloat());
+			downsamplingSliderChanged();  
 		}
 		
 		void StageSettings::environmentMapChanged(bool active)
@@ -161,7 +165,7 @@ namespace BALL
 			fog_box->setChecked(stage_->getFogIntensity() > 0);
 			animation_smoothness->setValue((int) (Scene::getAnimationSmoothness() * 10.0));
 			
-			//TODO
+			//TODO: integration of textures
 			//environment_box->setChecked(stage->getTexture()!=""); or pointer to some texture
 			//setTextureUpDirection_(stage->getTextureUpDirection());
 				
@@ -171,8 +175,10 @@ namespace BALL
 
 			eyeDistanceChanged();
 			focalDistanceChanged();
-
 			getGLSettings();
+			
+			downsampling_slider->setSliderPosition(scene_->getDownsamplingFactor()*4.);
+			downsamplingSliderChanged();
 		}
 
 
@@ -187,7 +193,7 @@ namespace BALL
 			stage_->setEyeDistance((float)(eye_distance_slider->value() / 10.0));
 			stage_->setFocalDistance((float)(focal_distance_slider->value() / 10.));
 			
-			//TODO
+			//TODO integration of textures
 			//if (environement_map->isChecked())
 			//{
 			//   stage->setTextureUpDirection(getTextureUpDirection_()));	
@@ -244,6 +250,8 @@ namespace BALL
 
 			renderer.enableVertexBuffers(use_buffer);
 			renderer.setSmoothLines(smooth_lines_->isChecked());
+
+			scene_->setDownsamplingFactor(downsamplingfactor_label->text().toFloat());
 		}
 
 		Vector3 StageSettings::getTextureUpDirection_()
@@ -321,6 +329,7 @@ namespace BALL
 			{
 				use_vertex_buffers->setChecked(true);
 			}
+			downsampling_slider->setValue(4);
 		}
 
 		void StageSettings::eyeDistanceChanged()
@@ -337,6 +346,7 @@ namespace BALL
 				text.truncate(text.size() - 1);
 			}
 			eye_distance_label->setText(text.c_str());
+			//TODO ersetzen durch eye_distance_label->setText(createFloatString(eye_distance_slider->value()) / 10.0));
 		}
 
 		void StageSettings::focalDistanceChanged()
@@ -353,6 +363,7 @@ namespace BALL
 				text.truncate(text.size() - 1);
 			}
 			focal_distance_label->setText(text.c_str());
+			//TODO ersetzen durch focal_distance_label->setText(createFloatString(focal_distance_slider->value()) / 10.0));
 		}
 	
 		void StageSettings::projectionTransformationChanged()
@@ -369,6 +380,16 @@ namespace BALL
 
 			stage_->getCamera().setProjectionMode(projection_mode);
 			scene_->projectionModeChanged();
+		}
+		
+		void StageSettings::downsamplingSliderChanged()
+		{
+			if (downsampling_slider->value() == 0)
+			{
+				downsamplingfactor_label->setText("0");
+				return;
+			}
+			downsamplingfactor_label->setText(createFloatString( (downsampling_slider->value()/4.0), 2).c_str()); 
 		}
 
 		// TODO: rewrite to allow more than one renderer

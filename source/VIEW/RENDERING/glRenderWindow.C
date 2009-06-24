@@ -19,7 +19,6 @@ namespace BALL
 {
 	namespace VIEW 
 	{
-
 	  QGLFormat GLRenderWindow::gl_format_(
 				QGL::DepthBuffer 		 | 
 #ifndef BALL_OS_DARWIN
@@ -38,7 +37,8 @@ namespace BALL
 			  FB_TEXTURE_FORMAT(GL_RGB),
 			  FB_INTERNAL_TEXTURE_FORMAT(GL_RGB),
 			  FB_TEXTURE_DATATYPE(GL_FLOAT),
-			  ignore_events_(false)
+			  ignore_events_(false),
+				down_sampling_factor_(1.)
 		{		
 			// we will swap buffers manually in the scene for synchronization
 			setAutoBufferSwap(false);
@@ -52,7 +52,8 @@ namespace BALL
 			  FB_TEXTURE_FORMAT(GL_RGB),
 			  FB_INTERNAL_TEXTURE_FORMAT(GL_RGB),
 			  FB_TEXTURE_DATATYPE(GL_FLOAT),
-			  ignore_events_(false)
+			  ignore_events_(false),
+				down_sampling_factor_(1.)
 		{
 			if (!QGLWidget::isValid())
 			{
@@ -70,7 +71,8 @@ namespace BALL
 			  FB_TEXTURE_FORMAT(GL_RGB),
 			  FB_INTERNAL_TEXTURE_FORMAT(GL_RGB),
 			  FB_TEXTURE_DATATYPE(GL_FLOAT),
-			  ignore_events_(false)
+			  ignore_events_(false),
+				down_sampling_factor_(1.)
 		{
 			// we will swap buffers manually in the scene for synchronization
 			setAutoBufferSwap(false);
@@ -117,11 +119,11 @@ namespace BALL
 		
 		bool GLRenderWindow::resize(const unsigned int width, const unsigned int height)
 		{						
-			if(!RenderWindow<float>::resize(width, height))
+			if(!RenderWindow<float>::resize((int)ceil(width/down_sampling_factor_), (int)ceil(height/down_sampling_factor_)))
 			{
 				return false;
 			}
-			createTexture(width, height);
+			createTexture((int)ceil(width/down_sampling_factor_), (int)ceil(height/down_sampling_factor_));
 
 			QGLWidget::resize(width, height);
 
@@ -157,7 +159,7 @@ namespace BALL
 
 			glPushAttrib(GL_VIEWPORT_BIT);
 #ifndef USE_GLPAINTPIXELS
-			glViewport(0, 0, m_fmt.getWidth(), m_fmt.getHeight());
+			glViewport(0, 0, down_sampling_factor_*m_fmt.getWidth(), down_sampling_factor_*m_fmt.getHeight());
 			float aspectRatio = static_cast<float>(m_fmt.getWidth()) / m_fmt.getHeight();
 			glOrtho(-aspectRatio, aspectRatio, -1.0f, 1.0f, -1.0f, 1.0f);
 
@@ -231,8 +233,8 @@ namespace BALL
 
 			glBindTexture(FB_TEXTURE_TARGET, m_screenTexID);			                
 
-			glTexParameteri(FB_TEXTURE_TARGET, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-			glTexParameteri(FB_TEXTURE_TARGET, GL_TEXTURE_MAG_FILTER, GL_NEAREST);                
+			glTexParameteri(FB_TEXTURE_TARGET, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(FB_TEXTURE_TARGET, GL_TEXTURE_MAG_FILTER, GL_LINEAR);                
 					
 			glTexImage2D(FB_TEXTURE_TARGET, 0, FB_INTERNAL_TEXTURE_FORMAT, width, height, 0, FB_TEXTURE_FORMAT, FB_TEXTURE_DATATYPE, NULL);                                
 

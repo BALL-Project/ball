@@ -64,6 +64,14 @@ namespace BALL
 
 			/// Force the window to ignore paint events
 			void ignoreEvents(bool ignore) {ignore_events_ = ignore;}
+			
+			/// Set the window's downsampling factor. This is a speed up factor.
+			void setDownsamplingFactor(float dsfactor)
+				{down_sampling_factor_ = dsfactor;}
+			
+			/// Get the window's downsampling factor.
+			float getDownsamplingFactor() const
+				{return down_sampling_factor_;}
 
 		protected:	
 
@@ -83,7 +91,7 @@ namespace BALL
 			GLenum FB_TEXTURE_TARGET;
 			// format of the GL texture (GL_RGB, GL_RGBA, etc.)
 			GLenum FB_TEXTURE_FORMAT;
-      // internal format specified when creating the textures
+			// internal format specified when creating the textures
 			GLenum FB_INTERNAL_TEXTURE_FORMAT;
 			// data type of the GL texture (GL_FLOAT, GL_UNSIGNED_INT, etc.)
 			GLenum FB_TEXTURE_DATATYPE;
@@ -98,6 +106,7 @@ namespace BALL
 
 			mutable Mutex contex_mutex_;
 			bool ignore_events_;
+			float down_sampling_factor_;
 		};
 
 	} // namespace VIEW

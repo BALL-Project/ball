@@ -345,6 +345,13 @@ namespace BALL
 			static float getAnimationSmoothness()
 				{ return animation_smoothness_;}
 
+			/// 
+			float getDownsamplingFactor() const
+				{ return downsampling_factor_;}
+			
+			///
+			void setDownsamplingFactor(float ds_factor);
+	
 			///
 			void setDefaultLighting(bool update_GL = true);
 
@@ -806,6 +813,7 @@ namespace BALL
 			static float mouse_wheel_sensitivity_;
 			static bool show_light_sources_;
 			static float animation_smoothness_;
+			static float downsampling_factor_;
 
 			LightSettings* light_settings_;
 			StageSettings* stage_settings_;
@@ -847,20 +855,20 @@ namespace BALL
 
 			Index stereo_left_eye_;
 			Index stereo_right_eye_;
-		};
+	};
 
 
-		///
-		class BALL_VIEW_EXPORT AnimationThread
-			: public QThread
-		{
-			public:
-				
-				///
-				AnimationThread(){};
+	///
+	class BALL_VIEW_EXPORT AnimationThread
+		: public QThread
+	{
+		public:
 
-				///
-				virtual void run() {scene_->animate_();}
+			///
+			AnimationThread(){};
+
+			///
+			virtual void run() {scene_->animate_();}
 
 				///
 				void mySleep(Size msec);

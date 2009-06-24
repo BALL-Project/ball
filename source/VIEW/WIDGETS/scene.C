@@ -111,6 +111,7 @@ namespace BALL
 		float Scene::mouse_wheel_sensitivity_ = 5;
 		bool  Scene::show_light_sources_ = false;
 		float Scene::animation_smoothness_ = 2;
+		float Scene::downsampling_factor_ = 1;
 
 		#define  ROTATE_FACTOR    50.
 		#define  ROTATE_FACTOR2   50.
@@ -976,6 +977,15 @@ namespace BALL
 		}
 
 		// ##################MISC############################
+
+		void Scene::setDownsamplingFactor(float ds_factor)
+		{
+			for (size_t i=0; i<renderers_.size(); ++i)
+			{
+				renderers_[i].target->setDownsamplingFactor(ds_factor);
+				renderers_[i].resize(renderers_[i].renderer->getWidth(), renderers_[i].renderer->getHeight());
+			}
+		}
 
 		void Scene::setDefaultLighting(bool update_GL)
 		{
