@@ -618,11 +618,6 @@ namespace BALL
 
 					p.end();
 				}
-
-				if (RTTI::isKindOf<GLRenderWindow>(*renderers_[i].target))
-					static_cast<GLRenderWindow*>(renderers_[i].target)->swapBuffers();
-				else if (RTTI::isKindOf<GLOffscreenTarget>(*renderers_[i].target))
-					static_cast<GLOffscreenTarget*>(renderers_[i].target)->refresh();
 			}
 			
 			update_running_ = false;
