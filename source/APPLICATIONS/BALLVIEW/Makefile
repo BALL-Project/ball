@@ -72,6 +72,9 @@ macos_app: $(EXECUTABLE) BALLView.app/Contents/MacOS/../PkgInfo BALLView.app/Con
 	@$(CP) BALLView BALLView.app/Contents/MacOS
 	@test -d BALLView.app/Contents/Resources/ || mkdir -p BALLView.app/Contents/Resources/
 	@$(CP) $(BALL_PATH)/MacOSX/BALLView.icns BALLView.app/Contents/Resources
+	@test -d BALLView.app/Contents/doc || mkdir -p BALLView.app/Contents/doc
+	@$(CP) -R $(BALL_PATH)/doc/internal BALLView.app/Contents/doc
+	@$(CP) -R $(BALL_PATH)/doc/BALLView BALLView.app/Contents/doc
 
 BALLView.app/Contents/MacOS/../PkgInfo: 
 	@test -d BALLView.app/Contents/MacOS/ || mkdir -p BALLView.app/Contents/MacOS/
