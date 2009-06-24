@@ -1696,8 +1696,13 @@ namespace BALL
 				default:
 				case RENDER_TO_BUFFER_FINISHED_EVENT:
 					RenderSetup* renderer = static_cast<RenderToBufferFinishedEvent*>(evt)->getRenderer();
+
 					renderer->target->makeCurrent();
-					renderer->target->refresh();
+					// NOTE: GLRenderers currently render in the GUI thread!
+					if (RTTI::isKindOf<GLRenderer>(*(renderer->renderer)))
+						renderer->renderToBuffer();
+					else
+						renderer->target->refresh();
 					renderer->target->swapBuffers();
 
 					if (renderer->isContinuous())
@@ -2812,7 +2817,9 @@ namespace BALL
 			resetRepresentationsForRenderer_(new_rs);
 
 			renderers_.push_back(new_rs);
-			new_rs.start();
+			// NOTE: *don't* try to start new_rs, since this is an automatic variable
+			//       that will be destroyed soon afterwards
+			renderers_[renderers_.size()-1].start();
 		}
 
 		void Scene::enterActiveStereo()
