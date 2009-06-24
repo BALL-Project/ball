@@ -107,6 +107,8 @@ namespace BALL
 				ColorRGBA const& color = it->getColor();
 
 				lights_[current_light]->setParam("intensity", float3((float)color.getRed()*intensity,(float)color.getGreen()*intensity,(float)color.getBlue()*intensity));
+
+				printf("adding light with intensity %f\n", intensity);
 			}
 		}
 
@@ -165,9 +167,9 @@ namespace BALL
 
 		void RTfactRenderer::updateBackgroundColor() 
 		{
-			m_renderer.setEnvironmentColor(float3(stage_->getBackgroundColor().getRed(),
-									 												  stage_->getBackgroundColor().getGreen(),
-																						stage_->getBackgroundColor().getBlue()));
+			m_renderer.setEnvironmentColor(stage_->getBackgroundColor().getRed(),
+																		 stage_->getBackgroundColor().getGreen(),
+																		 stage_->getBackgroundColor().getBlue());
 		}
 			
 		void RTfactRenderer::prepareBufferedRendering(const Stage& stage)

@@ -92,7 +92,10 @@ namespace BALL
 			BUTTON_RELEASE_EVENT,
 
 			/// Event for passing BALL Messages accross threads
-			NOTIFICATION_EVENT
+			NOTIFICATION_EVENT,
+
+			/// Event posted by renderers after a new buffer is available
+			RENDER_TO_BUFFER_FINISHED_EVENT
 		};
 
 		//@}
