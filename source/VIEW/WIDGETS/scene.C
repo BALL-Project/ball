@@ -617,8 +617,8 @@ namespace BALL
 		bool Scene::eventFilter(QObject* object, QEvent* event)
 		{
 			for (Position i=0; i<renderers_.size(); ++i)
-			{
-				if ((QGLWidget*)renderers_[i].target != object)
+			{				
+				if (static_cast<QObject*>(dynamic_cast<GLRenderWindow*>(renderers_[i].target)) != object)
 					continue;
 
 				bool filter_out = false;
