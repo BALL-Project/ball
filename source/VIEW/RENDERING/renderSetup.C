@@ -29,6 +29,7 @@ namespace BALL
 				rendering_paused_(false),
 				receive_updates_(true),
 				use_offset_(false),
+				about_to_quit_(false),
 				camera_(),
 				camera_offset_(Vector3(0.)),
 				stereo_setup_(NONE),
@@ -49,6 +50,7 @@ namespace BALL
 				rendering_paused_(rs.rendering_paused_),
 				receive_updates_(rs.receive_updates_),
 				use_offset_(rs.use_offset_),
+				about_to_quit_(false),
 				camera_(rs.camera_),
 				camera_offset_(rs.camera_offset_),
 				stereo_setup_(rs.stereo_setup_),
@@ -231,6 +233,7 @@ namespace BALL
 
 		void RenderSetup::run()
 		{
+			render_mutex_.lock();
 #ifdef USE_TBB
 			boost::shared_ptr<tbb::task_scheduler_init> scheduler;
 
@@ -253,6 +256,8 @@ namespace BALL
 			Size current_frame = 0;
 			double fps = 0.;
 			// to be stopped from the outside, someone needs to call useContinuousLoop(false)
+			render_mutex_.unlock();
+
 			while (!about_to_quit_)
 			{
 				t.start();
