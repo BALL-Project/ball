@@ -21,7 +21,7 @@
 	for (; it != sipCpp->end(); ++it)
 	{
 		ColorRGBA& obj = *(ColorRGBA*)&*it;
-		PyObject *inst = sipConvertFromInstance(&obj, sipClass_ColorRGBA, 0);
+		PyObject *inst = sipConvertFromType(&obj, sipType_ColorRGBA, 0);
 		if (inst == NULL || PyList_Append(pl,inst) < 0)
 		{
 			Py_DECREF(pl);
@@ -41,7 +41,7 @@
  
 	for (int i = 0; i < PyList_GET_SIZE(sipPy); ++i)
 	{
-		ColorRGBA* c = reinterpret_cast<ColorRGBA*>(sipForceConvertTo_ColorRGBA(PyList_GET_ITEM(sipPy,i),sipIsErr));
+		ColorRGBA* c = reinterpret_cast<ColorRGBA*>(sipForceConvertToType(PyList_GET_ITEM(sipPy,i), sipType_ColorRGBA, NULL, SIP_NO_CONVERTORS, NULL,sipIsErr));
  
 		if (*sipIsErr)
 		{

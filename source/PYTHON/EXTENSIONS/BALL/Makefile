@@ -6,8 +6,11 @@ DIRECTORY=PYTHON/EXTENSIONS/BALL
 # default target: the BALL Python extensions in BALLCoremodule.so
 all: BALLCoremodule.so
 
-#
 include ../../../common.mak
+
+#A workaround for sip 4.8
+CPP_MODE_FLAGS=${CPP_MODE_FLAGS/-pedantic/}
+
 -include BALLCore.sbf
 
 SIP_SOURCES=\

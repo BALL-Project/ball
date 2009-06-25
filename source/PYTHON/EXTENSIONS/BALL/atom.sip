@@ -20,7 +20,7 @@ class AtomType
 		return 1;
 	}
 	
-	*sipCppPtr = (AtomType*)sipConvertToCpp(sipPy, sipClass_AtomType, sipIsErr);
+	*sipCppPtr = (AtomType*)sipConvertToType(sipPy, sipType_AtomType, NULL, SIP_NO_CONVERTORS, NULL, sipIsErr);
 
 	return 0;
 %End

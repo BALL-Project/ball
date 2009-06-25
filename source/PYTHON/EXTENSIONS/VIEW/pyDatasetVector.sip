@@ -24,7 +24,7 @@
 	{
 		Dataset* obj = *it;
 
-		if (PyList_Append(pl, sipConvertFromInstance(obj, sipClass_Dataset, 0)) < 0)
+		if (PyList_Append(pl, sipConvertFromType(obj, sipType_Dataset, 0)) < 0)
 		{
 			Py_DECREF(pl);
 			return NULL;
@@ -49,7 +49,7 @@
 	for (int i = 0; i < PyList_GET_SIZE(sipPy); ++i)
 	{
 		Dataset* set;
-		set = reinterpret_cast<Dataset*>(sipForceConvertTo_Dataset(PyList_GET_ITEM(sipPy,i),sipIsErr));
+		set = reinterpret_cast<Dataset*>(sipForceConvertToType(PyList_GET_ITEM(sipPy,i), sipType_Dataset, NULL, SIP_NO_CONVERTORS, NULL, sipIsErr));
  
 		if (*sipIsErr)
 		{

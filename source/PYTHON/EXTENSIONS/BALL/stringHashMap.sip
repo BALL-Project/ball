@@ -19,7 +19,7 @@ template <ValueType>
 	for (StringHashMap<ValueType>::Iterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
 		// NOTE: keys into a string hash map are const!
-		PyObject* key = sipConvertFromInstance(const_cast<String*>(&(it->first)), sipClass_String, sipTransferObj);
+		PyObject* key = sipConvertFromType(const_cast<String*>(&(it->first)), sipType_String, sipTransferObj);
 		if (key == NULL)
 		{
 			Py_DECREF(dict);
@@ -31,7 +31,7 @@ template <ValueType>
 
 		// get the Python wrapper for the Type instance, creating a new one
 		// if necessary, and handle any ownership transfer.
-		if ((pobj = sipConvertFromInstance(cpp, sipClass_ValueType, sipTransferObj)) == NULL)
+		if ((pobj = sipConvertFromType(cpp, sipType_ValueType, sipTransferObj)) == NULL)
 		{
 			// There was an error so garbage collect the python dict.
 			Py_DECREF(dict);
@@ -69,13 +69,13 @@ template <ValueType>
 			break;
 		}
 
-		String* str_key = reinterpret_cast<String*>(sipForceConvertTo_String(key,sipIsErr));
+		String* str_key = reinterpret_cast<String*>(sipForceConvertToType(key, sipType_String, NULL, SIP_NO_CONVERTORS, NULL, sipIsErr));
 		if (*sipIsErr)
 		{
 			break;
 		}
 		PyObject* item = PyDict_GetItem(sipPy,key);
-		if (!sipCanConvertToInstance(item, sipClass_ValueType, SIP_NOT_NONE))
+		if (!sipCanConvertToType(item, sipType_ValueType, SIP_NOT_NONE))
 		{
 			PyErr_Format(PyExc_TypeError, "object in dictionary cannot be converted to ValueType");
 			*sipIsErr = 1;
@@ -84,12 +84,12 @@ template <ValueType>
 
 		int state;
 		ValueType* p = reinterpret_cast<ValueType*>(
-				sipConvertToInstance(item, sipClass_ValueType, 0, SIP_NOT_NONE, &state, sipIsErr));
+				sipConvertToType(item, sipType_ValueType, 0, SIP_NOT_NONE, &state, sipIsErr));
 
 		if (!*sipIsErr)
 			(*d)[*str_key] = *p;
 
-		sipReleaseInstance(p, sipClass_ValueType, state);
+		sipReleaseType(p, sipType_ValueType, state);
 		Py_DECREF(item);
 	}
 
@@ -123,7 +123,7 @@ template <ValueType>
 	for (StringHashMap<double>::Iterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
 		// NOTE: keys into a string hash map are const!
-		PyObject* key = sipConvertFromInstance(const_cast<String*>(&(it->first)), sipClass_String, sipTransferObj);
+		PyObject* key = sipConvertFromType(const_cast<String*>(&(it->first)), sipType_String, sipTransferObj);
 		if (key == NULL)
 		{
 			Py_DECREF(dict);
@@ -163,7 +163,7 @@ template <ValueType>
 			break;
 		}
 
-		String* str_key = reinterpret_cast<String*>(sipForceConvertTo_String(key,sipIsErr));
+		String* str_key = reinterpret_cast<String*>(sipForceConvertToType(key, sipType_String, NULL, SIP_NO_CONVERTORS, NULL, sipIsErr));
 		if (*sipIsErr)
 		{
 			break;
@@ -207,7 +207,7 @@ template <ValueType>
 	for (StringHashMap<float>::Iterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
 		// NOTE: keys into a string hash map are const!
-		PyObject* key = sipConvertFromInstance(const_cast<String*>(&(it->first)), sipClass_String, sipTransferObj);
+		PyObject* key = sipConvertFromType(const_cast<String*>(&(it->first)), sipType_String, sipTransferObj);
 		if (key == NULL)
 		{
 			Py_DECREF(dict);
@@ -247,7 +247,7 @@ template <ValueType>
 			break;
 		}
 
-		String* str_key = reinterpret_cast<String*>(sipForceConvertTo_String(key,sipIsErr));
+		String* str_key = reinterpret_cast<String*>(sipForceConvertToType(key, sipType_String, NULL, SIP_NO_CONVERTORS, NULL, sipIsErr));
 		if (*sipIsErr)
 		{
 			break;
@@ -290,7 +290,7 @@ template <ValueType>
 	for (StringHashMap<int>::Iterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
 		// NOTE: keys into a string hash map are const!
-		PyObject* key = sipConvertFromInstance(const_cast<String*>(&(it->first)), sipClass_String, sipTransferObj);
+		PyObject* key = sipConvertFromType(const_cast<String*>(&(it->first)), sipType_String, sipTransferObj);
 		if (key == NULL)
 		{
 			Py_DECREF(dict);
@@ -330,7 +330,7 @@ template <ValueType>
 			break;
 		}
 
-		String* str_key = reinterpret_cast<String*>(sipForceConvertTo_String(key,sipIsErr));
+		String* str_key = reinterpret_cast<String*>(sipForceConvertToType(key, sipType_String, NULL, SIP_NO_CONVERTORS, NULL, sipIsErr));
 		if (*sipIsErr)
 		{
 			break;

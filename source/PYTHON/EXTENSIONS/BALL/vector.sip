@@ -33,7 +33,7 @@ template<TYPE>
 
         // Get the Python wrapper for the Type instance, creating a new
         // one if necessary, and handle any ownership transfer.
-        if ((pobj = sipConvertFromInstance(cpp, sipClass_TYPE, sipTransferObj)) == NULL)
+        if ((pobj = sipConvertFromType(cpp, sipType_TYPE, sipTransferObj)) == NULL)
         {
             // There was an error so garbage collect the Python list.
             Py_DECREF(l);
@@ -67,7 +67,7 @@ template<TYPE>
 
     while ((item = PyIter_Next(iterator)))
     {
-        if (!sipCanConvertToInstance(item, sipClass_TYPE, SIP_NOT_NONE))
+        if (!sipCanConvertToType(item, sipType_TYPE, SIP_NOT_NONE))
         {
             PyErr_Format(PyExc_TypeError, "object in iterable cannot be converted to TYPE");
             *sipIsErr = 1;
@@ -76,12 +76,12 @@ template<TYPE>
 
         int state;
         TYPE* p = reinterpret_cast<TYPE*>(
-             sipConvertToInstance(item, sipClass_TYPE, 0, SIP_NOT_NONE, &state, sipIsErr));
+             sipConvertToType(item, sipType_TYPE, 0, SIP_NOT_NONE, &state, sipIsErr));
 
         if (!*sipIsErr)
             V->push_back(*p);
 
-        sipReleaseInstance(p, sipClass_TYPE, state);
+        sipReleaseType(p, sipType_TYPE, state);
         Py_DECREF(item);
     }
 

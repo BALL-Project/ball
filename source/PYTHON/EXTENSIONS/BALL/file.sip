@@ -115,7 +115,7 @@ class OpenMode
 
 %ConvertToTypeCode
   if (sipIsErr == NULL)
-    return (PyInt_Check(sipPy) || sipIsSubClassInstance(sipPy, sipClass_OpenMode));
+    return (PyInt_Check(sipPy) || sipCanConvertToType(sipPy, sipType_OpenMode, SIP_NOT_NONE | SIP_NO_CONVERTORS));
 
 	if (PyInt_Check(sipPy))
   {
@@ -137,7 +137,7 @@ class OpenMode
     return 1;
   }
 
-  *sipCppPtr = (OpenMode*)sipConvertToCpp(sipPy, sipClass_OpenMode, sipIsErr);
+  *sipCppPtr = (OpenMode*)sipConvertToType(sipPy, sipType_OpenMode, NULL, SIP_NO_CONVERTORS, NULL, sipIsErr);
 
   return 0;
 %End

@@ -26,7 +26,7 @@
 	{
 		GeometricObject* obj = *it;
 
-		if (PyList_Append(pl, sipConvertFromInstance(obj, sipClass_GeometricObject, 0)) < 0)
+		if (PyList_Append(pl, sipConvertFromType(obj, sipType_GeometricObject, NULL, SIP_NO_CONVERTORS, NULL, 0)) < 0)
 		{
 			Py_DECREF(pl);
 			return NULL;
@@ -46,7 +46,7 @@
 	{
 		GeometricObject* geometric_object;
  
-		geometric_object = reinterpret_cast<GeometricObject*>(sipForceConvertTo_GeometricObject(PyList_GET_ITEM(sipPy,i),sipIsErr));
+		geometric_object = reinterpret_cast<GeometricObject*>(sipForceConvertToType(PyList_GET_ITEM(sipPy,i), sipType_GeometricObject, NULL, SIP_NO_CONVERTORS, NULL, sipIsErr));
  
 		if (*sipIsErr)
 		{

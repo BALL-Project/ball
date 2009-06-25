@@ -23,7 +23,7 @@ typedef List<RegularData3D*> RegularData3DList;
 	\
 	for (TYPE##List::const_iterator it = sipCpp->begin(); it != sipCpp->end(); ++it)\
 	{\
-		PyObject *inst = sipConvertFromInstance(*it, sipClass_##TYPE, 0);\
+		PyObject *inst = sipConvertFromType(*it, sipType_##TYPE, 0);\
 		\
 		if (inst == NULL || PyList_Append(pl,inst) < 0)\
 		{\
@@ -43,7 +43,7 @@ typedef List<RegularData3D*> RegularData3DList;
  	\
 	for (int i = 0; i < PyList_GET_SIZE(sipPy); ++i)\
 	{\
-		TYPE* a = reinterpret_cast<TYPE*>(sipForceConvertTo_##TYPE(PyList_GET_ITEM(sipPy,i),sipIsErr));\
+		TYPE* a = reinterpret_cast<TYPE*>(sipForceConvertToType(PyList_GET_ITEM(sipPy,i), sipType_##TYPE, NULL, SIP_NOT_NONE | SIP_NO_CONVERTORS, NULL, sipIsErr ));\
  		\
 		if (*sipIsErr)\
 		{\

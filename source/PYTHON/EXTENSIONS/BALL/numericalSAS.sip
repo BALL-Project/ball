@@ -26,7 +26,7 @@ PyAtomDict& calculateSASAtomAreas
  
 		res = new PyAtomDict;
 		calculateSASAtomAreas(*a0, *res, a1, a2);
-		PyObject *resobj = sipConvertFromMappedType(res,sipMappedType_PyAtomDict,NULL);
+		PyObject *resobj = sipConvertFromType(res,sipType_PyAtomDict,NULL);
 
 		delete res;
 
@@ -46,6 +46,6 @@ Surface& calculateSASPoints
 		Surface* res = new Surface;
 		calculateSASPoints(*a0, *res, a1, a2);
 
-		return sipConvertFromInstance(res,sipClass_Surface, 0);
+		return sipConvertFromType(res,sipType_Surface, 0);
 	}
 %End

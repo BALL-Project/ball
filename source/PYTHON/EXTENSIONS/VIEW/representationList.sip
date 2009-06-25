@@ -29,7 +29,7 @@
 	{
 		Representation* obj = *it;
 
-		if (PyList_Append(pl, sipConvertFromInstance(obj, sipClass_Representation, 0)) < 0)
+		if (PyList_Append(pl, sipConvertFromType(obj, sipType_Representation, 0)) < 0)
 		{
 			Py_DECREF(pl);
 			return NULL;
@@ -52,7 +52,7 @@
 	{
 		Representation* representation;
  
-		representation = reinterpret_cast<Representation*>(sipForceConvertTo_Representation(PyList_GET_ITEM(sipPy,i),sipIsErr));
+		representation = reinterpret_cast<Representation*>(sipForceConvertToType(PyList_GET_ITEM(sipPy,i), sipType_Representation, NULL, SIP_NO_CONVERTORS, NULL, sipIsErr));
  
 		if (*sipIsErr)
 		{

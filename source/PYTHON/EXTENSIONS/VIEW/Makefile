@@ -7,6 +7,10 @@ DIRECTORY=PYTHON/EXTENSIONS/VIEW
 all: VIEWmodule.so
 
 include ../../../common.mak
+
+#A workaround for sip 4.8
+CPP_MODE_FLAGS=${CPP_MODE_FLAGS/-pedantic/}
+
 -include VIEW.sbf
 
 SIP_SOURCES=\

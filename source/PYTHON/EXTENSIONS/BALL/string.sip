@@ -291,7 +291,7 @@ SIP_PYOBJECT __repr__();
 
 %ConvertToTypeCode
   if (sipIsErr == NULL)
-    return (PyString_Check(sipPy) || sipIsSubClassInstance(sipPy,sipClass_String));
+    return (PyString_Check(sipPy) || sipCanConvertToType(sipPy, sipType_String, SIP_NOT_NONE | SIP_NO_CONVERTORS));
 
   if (sipPy == Py_None)
   {
@@ -306,7 +306,7 @@ SIP_PYOBJECT __repr__();
     return 1;
   }
 
-  *sipCppPtr = (String *)sipConvertToCpp(sipPy,sipClass_String,sipIsErr);
+  *sipCppPtr = (String *)sipConvertToType(sipPy, sipType_String, NULL, SIP_NO_CONVERTORS, NULL, sipIsErr);
 
   return 0;
 %End
