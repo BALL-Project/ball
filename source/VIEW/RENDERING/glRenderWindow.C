@@ -295,18 +295,6 @@ namespace BALL
 			}
 		}
 
-		bool GLRenderWindow::event(QEvent* event)
-		{
-			if (event->type() == QEvent::Paint)
-			{
-				paintEvent((QPaintEvent*)event);
-				Scene* scene = dynamic_cast<Scene*>(parent());
-				if (scene)
-					scene->updateGL();
-			}
-			QGLWidget::event(event);
-		}
-
 		void GLRenderWindow::lockGLContext()
 		{
 			contex_mutex_.lock();

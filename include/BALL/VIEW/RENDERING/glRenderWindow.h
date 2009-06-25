@@ -66,7 +66,6 @@ namespace BALL
 			void ignoreEvents(bool ignore) {ignore_events_ = ignore;}
 
 		protected:	
-			virtual bool event(QEvent* event);
 			void paintEvent(QPaintEvent* e);
 			static QGLFormat gl_format_;
 
