@@ -36,4 +36,3 @@ install:
 
 depend: subdirsdepend
 
--include BALL.sbf
