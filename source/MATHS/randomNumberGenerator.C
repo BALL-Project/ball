@@ -47,6 +47,8 @@ namespace BALL
 		 */
 		if (ij < 0 || ij > 31328 || kl < 0 || kl > 30081)
 		{
+			Log.warn() << "Warning: Random number generator initialized with too large (ij > 31328 || kl > 30081) or negative values!\n" <<
+			              "         Using default values instead."<< std::endl;
 			ij = 1802;
 			kl = 9373;
 		}
