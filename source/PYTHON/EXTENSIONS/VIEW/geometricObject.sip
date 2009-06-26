@@ -32,7 +32,7 @@ class GeometricObject
 #define BALL_TO_SIP_MAP(type)\
 	if (RTTI::isKindOf<type>(*sipCpp))\
 	{\
-		sipClass = sipClass_##type;\
+		sipType = sipType_##type;\
 	}\
 	else\
 /////////////////////////////////////////////////

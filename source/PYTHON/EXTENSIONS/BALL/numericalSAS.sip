@@ -20,7 +20,7 @@ PyAtomDict& calculateSASAtomAreas
 	float a1 = 1.5;
 	Size a2 = 400;
 
-	if (sipParseArgs(&sipArgsParsed,sipArgs,"J1|fi",sipClass_AtomContainer,&a0,&a1,&a2))
+	if (sipParseArgs(&sipArgsParsed,sipArgs,"J1|fi",sipType_AtomContainer,&a0,&a1,&a2))
 	{
 		PyAtomDict *res;
  
@@ -41,7 +41,7 @@ Surface& calculateSASPoints
 	float a1 = 1.5;
 	Size a2 = 400;
 
-	if (sipParseArgs(&sipArgsParsed,sipArgs,"J1|fi",sipClass_AtomContainer, &a0, &a1, &a2))
+	if (sipParseArgs(&sipArgsParsed,sipArgs,"J1|fi",sipType_AtomContainer, &a0, &a1, &a2))
 	{
 		Surface* res = new Surface;
 		calculateSASPoints(*a0, *res, a1, a2);
