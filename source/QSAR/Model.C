@@ -615,6 +615,23 @@ bool Model::optimizeParameters(int k)
 }
 
 
+void Model::getUnnormalizedFeatureValue(int compound, int feature, double& return_value)
+{
+	if(compound<1 || feature<1 || compound>descriptor_matrix_.getRowCount() || feature>descriptor_matrix_.getColumnCount())
+	{
+		cout<<"Model::getUnnormalizedFeatureValue(): Specified compound or feature ID is out of range!"<<endl;
+		BALL::Exception::OutOfRange e(__FILE__,__LINE__);
+		e.setMessage("Specified compound or feature ID is out of range!");
+		throw e;
+	}
+
+	return_value = descriptor_matrix_(compound,feature);
+	if(descriptor_transformations_.getColumnCount()>0)
+	{
+		return_value *= descriptor_transformations_(2,feature); // stddev
+		return_value += descriptor_transformations_(1,feature); // mean
+	}
+}
 
 
 Model* QSAR::createNewModelFromFile(String model_file, const QSARData& q)
@@ -644,6 +661,6 @@ Model* QSAR::createNewModelFromFile(String model_file, const QSARData& q)
 	}
 	
 	m->readFromFile(model_file);
-	return m;	
+	return m;
 }
 
