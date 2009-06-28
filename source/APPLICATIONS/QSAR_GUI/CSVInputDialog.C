@@ -11,7 +11,7 @@ CSVInputDialog::CSVInputDialog(CSVInputDataItem* item):
 	input_item_(item)
 {
 	layout_ = new QGridLayout(this);
-	QString tmp; tmp.setNum(0);
+	QString tmp; tmp.setNum(1);
 	activity_edit_ = new QLineEdit(tmp);
 	
 	separator_box_ = new QComboBox;
