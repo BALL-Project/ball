@@ -16,6 +16,10 @@ namespace BALL
 			public:
 				MatrixHasWrongDimension() 
 					throw();
+				
+				MatrixHasWrongDimension(const char* file, unsigned long line)
+					throw();
+				
 				virtual ~MatrixHasWrongDimension()
 					throw();
 		};
@@ -24,6 +28,9 @@ namespace BALL
 		{
 			public:
 				VectorHasWrongDimension()
+					throw();
+				
+				VectorHasWrongDimension(const char* file, unsigned long line)
 					throw();
 
 				virtual ~VectorHasWrongDimension()
