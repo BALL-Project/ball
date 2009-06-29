@@ -1956,18 +1956,18 @@ namespace BALL
 
 			switch ((Index)(e->buttons() | e->modifiers()))
 			{
-				case (Qt::ShiftModifier | Qt::LeftButton): 
+				case ((int)Qt::ShiftModifier | (int)Qt::LeftButton): 
 				case  Qt::MidButton:
 					zoomSystem_();
 					break;
 
-				case (Qt::ControlModifier | Qt::LeftButton):
+				case ((int)Qt::ControlModifier | (int)Qt::LeftButton):
 				case  Qt::RightButton:
 					translateSystem_();
 					break;
 
-				case (Qt::LeftButton | (Index)Qt::RightButton):
-				case (Qt::LeftButton | Qt::ShiftModifier | Qt::ControlModifier):
+				case ((int)Qt::LeftButton | (int)Qt::RightButton):
+				case ((int)Qt::LeftButton | (int)Qt::ShiftModifier | (int)Qt::ControlModifier):
 					rotateSystemClockwise_();
 					break;
 

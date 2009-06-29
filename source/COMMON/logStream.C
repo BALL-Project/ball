@@ -6,6 +6,7 @@
 
 #include <limits>
 #include <string>
+#include <cstring>
 #include <BALL/COMMON/logStream.h>
 
 #define BUFFER_LENGTH 32768
