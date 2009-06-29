@@ -1537,11 +1537,13 @@ void QSARData::removeHighlyCorrelatedCompounds(double& cor_threshold)
 	}
 		
 	double abs_cor_threshold = abs(cor_threshold);
+	bool discrete_response = checkforDiscreteY();
 	SortedList<int> to_be_deleted;
 	
 	for(uint i=0; i<descriptor_matrix_[0].size(); i++)
 	{	
 		if(to_be_deleted.contains(i)) continue;
+		int no=1;
 		
 		for(uint j=0; j<descriptor_matrix_[0].size(); j++)
 		{
@@ -1554,11 +1556,46 @@ void QSARData::removeHighlyCorrelatedCompounds(double& cor_threshold)
 			
 			if(abs_cor>abs_cor_threshold)
 			{
-				cout<<i<<" "<<j<<" : "<<abs_cor<<endl;
-				to_be_deleted.insert(j);
+				if(!discrete_response)
+				{
+					// add up response values in order to calculate the mean later
+					for(uint c=0; c<Y_.size(); c++)
+					{
+						Y_[c][i]+=Y_[c][j];
+					}
+					cout<<i<<" "<<j<<" : "<<abs_cor<<endl;
+					to_be_deleted.insert(j);
+				}
+				else
+				{
+					bool identical_labels=1;
+					// delete compound only if all class-labels are identical!
+					for(uint c=0; c<Y_.size(); c++)
+					{
+						if((int)Y_[c][i]!=(int)Y_[c][j]) 
+						{
+							identical_labels = false;
+							break;
+						}
+					}
+					if(identical_labels)
+					{
+						cout<<i<<" "<<j<<" : "<<abs_cor<<endl;
+						to_be_deleted.insert(j);
+					}					
+				}
 			}
 		}
+		
+		if(discrete_response && no>1)
+		{
+			for(uint c=0; c<Y_.size(); c++)
+			{
+				Y_[c][i]/=no;
+			}
+		}		
 	}
+	
 	removeInvalidSubstances(to_be_deleted);
 }
 
