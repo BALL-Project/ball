@@ -55,10 +55,11 @@ void NBModel::train()
 	/// discretize the training data features
 	(this->*discretizeFeatures)(discretization_steps_,min_max_);
 	
+	Matrix<double> prob_matrix(discretization_steps_,no_features); prob_matrix=0;
 	probabilities_.resize(no_activities);
 	for(uint act=0; act<no_activities;act++)
 	{
-		probabilities_[act].resize(no_classes,sums);
+		probabilities_[act].resize(no_classes,prob_matrix);
 	
 		for(uint j=1;j<=no_compounds;j++)
 		{
