@@ -126,8 +126,11 @@ namespace BALL
 				/** returns the type of the current model, e.g. "MLR", "PLS", ... */
 				const string* getType();
 				
-				/** Fetches the un-normalized value for the specified feature of the desired compound (instance) from the data that this Model currently contains. */ 
+				/** Fetches the un-normalized value for the specified feature of the desired compound (instance) from the data that this Model currently contains. This method is needed for visualization purposes only. */ 
 				void getUnnormalizedFeatureValue(int compound, int feature, double& return_value);
+				
+				/** Fetches the un-normalized value for the specified response of the desired compound (instance) from the data that this Model currently contains. This method is needed for visualization purposes only. */
+				void getUnnormalizedResponseValue(int compound, int response, double& return_value);
 				//@}
 				
 				

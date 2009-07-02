@@ -194,9 +194,10 @@ void FeaturePlotter::plot(bool zoom)
 		SortedList<pair<double,double> > values;
 		for(uint j=1; j<=no_compounds; j++)
 		{
-			double d;
-			model->getUnnormalizedFeatureValue(j,feature_index,d);
-			values.insert(make_pair(d,(*Y)(j,1)));
+			double feature_value, response_value;
+			model->getUnnormalizedFeatureValue(j,feature_index,feature_value);
+			model->getUnnormalizedResponseValue(j,1,response_value);
+			values.insert(make_pair(feature_value,response_value));
 		}
 		
 		values.front();
