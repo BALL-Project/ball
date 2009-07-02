@@ -377,7 +377,7 @@ namespace BALL
 		}
 
 		xput_char (c);
-		if ((unbuffered() || (linebuffered() && c == '\n') || pptr() >= epptr()) && flush_output() == EOF)
+		if ((unbuffered() || linebuffered() && c == '\n' || pptr() >= epptr()) && flush_output() == EOF)
 		{
 			return EOF;
 		}

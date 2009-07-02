@@ -432,14 +432,14 @@ namespace BALL
 
 				temp2 = temp = format_column;
 
-				for (; isdigit(*format_column); ++format_column) { }
+				for (; isdigit(*format_column); ++format_column);
 
 				if (*format_column == '.')
 				{
 					++format_column;
 
 					temp2 = format_column;
-					for (; isdigit(*format_column); ++format_column) { }
+					for (; isdigit(*format_column); ++format_column);
 				}
 			}
 

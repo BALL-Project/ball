@@ -427,7 +427,7 @@ namespace BALL
 			stp = (stp < minstp) ? minstp : stp;
 			stp = (stp < maxstp) ? stp : maxstp;
 			
-			if (((is_bracketed_) && ((stp <= stmin) || (stp >= stmax))) || ((is_bracketed_) && (stmax - stmin <= stptol_ * stmax)))
+			if ((is_bracketed_) && ((stp <= stmin) || (stp >= stmax)) || (is_bracketed_) && (stmax - stmin <= stptol_ * stmax))
 			{
 				// If we are not able to make further progress, let stp be the best point we could find.
 				stp = st_a;
