@@ -382,16 +382,16 @@ namespace BALL
 					bool_tmp = not_properties_.find(IN_NUM_RINGS) != not_properties_.end();
 					if (it->second.int_value == 999)
 					{
-						if (tmp == 0 && !bool_tmp ||
-								tmp != 0 && bool_tmp)
+						if ((tmp == 0 && !bool_tmp) ||
+								(tmp != 0 && bool_tmp))
 						{
 							return false;							
 						}
 					}
 					else
 					{
-						if (tmp == it->second.int_value && bool_tmp ||
-								tmp != it->second.int_value && !bool_tmp)
+						if ((tmp == it->second.int_value && bool_tmp) ||
+								(tmp != it->second.int_value && !bool_tmp))
 						{
 							return false;
 						}

@@ -882,7 +882,7 @@ namespace BALL
 
 		// set every grid point to zero
 		Index i;
-		for (i = 0; i < (Index)q_grid->size(); (*q_grid)[i++] = 0.0);
+		for (i = 0; i < (Index)q_grid->size(); (*q_grid)[i++] = 0.0) { }
 		
 		// fraction of charge assigned in x|y|z-direction
 		// needed for linear interpolation
@@ -1260,7 +1260,7 @@ namespace BALL
 
 		// setting Phi to zero everywhere
 		Index i;
-		for (i = 0; i < (Index)phi_grid->size(); (*phi_grid)[i++] = 0.0);
+		for (i = 0; i < (Index)phi_grid->size(); (*phi_grid)[i++] = 0.0) { }
 
 		step_timer.stop();
 		if (print_timing && (verbosity > 1))
@@ -1974,7 +1974,7 @@ namespace BALL
 		}
 
 		// T[i] = 0 --- is this necessary ????
-		for (i = 0; i < (6 * N); T[i++] = 0.0);
+		for (i = 0; i < (6 * N); T[i++] = 0.0) { }
 
 		using namespace Constants;
 		for (i = 1; i < (Nx - 1); i++)

@@ -36,7 +36,7 @@ namespace BALL
 		// replace all double occurences of a PATH_SEPARATOR with a single PATH_SEPARATOR
 		String s(FileSystem::PATH_SEPARATOR);
 		s += FileSystem::PATH_SEPARATOR;
-		for (; index != INVALID_INDEX; index = path.substitute(s, FileSystem::PATH_SEPARATOR));
+		for (; index != INVALID_INDEX; index = path.substitute(s, FileSystem::PATH_SEPARATOR)) { }
 		
 		// expand ~ to the user's home directory
 		FileSystem::expandTilde_(path);
@@ -46,7 +46,7 @@ namespace BALL
 		s += FileSystem::CURRENT_DIRECTORY;
 		s += FileSystem::PATH_SEPARATOR;
 		for (index = 0; index != INVALID_INDEX;
-				 index = path.substitute(s, FileSystem::PATH_SEPARATOR));
+				 index = path.substitute(s, FileSystem::PATH_SEPARATOR)) { }
 
 		// remove a leading "./"
 		s.set(FileSystem::CURRENT_DIRECTORY);
