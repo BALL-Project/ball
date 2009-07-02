@@ -1002,7 +1002,7 @@ namespace BALL
 			// walk over all nodes in this bucket and identify the predecessor
 			// of the node refered to by the iterator pos
 			Node* prev = bucket_[pos.getTraits().bucket_];
-			for (; (prev != 0) && (prev->next != pos.getTraits().position_); prev = prev->next);
+			for (; (prev != 0) && (prev->next != pos.getTraits().position_); prev = prev->next) { }
 			if (prev != 0)
 			{
 				// remove the node and reconnect the list
@@ -1063,7 +1063,7 @@ namespace BALL
 				// find the predecessor of f
 				Node* n = bucket_[bucket];
 				Node* next;
-				for (; (n->next != f.getTraits().position_) && (n->next != 0); n = n->next);
+				for (; (n->next != f.getTraits().position_) && (n->next != 0); n = n->next) { }
 				
 				if (bucket == last_bucket)
 				{

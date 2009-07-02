@@ -327,7 +327,7 @@ namespace BALL
 
 		// Create a molecule and insert the atoms.
 		Molecule* m = new Molecule;
-		for (Position i = 0; i < atoms.size(); m->insert(*atoms[i++]));
+		for (Position i = 0; i < atoms.size(); m->insert(*atoms[i++])) { }
 		atoms.clear();
 
 		// Remove old crap from the system and insert the new structure instead.

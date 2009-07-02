@@ -308,7 +308,7 @@ namespace BALL
 			if (name != "")
 			{
 				// Make sure the name does not contain double quotes.
-				while (name.substitute("\"", "") != String::EndPos);
+				while (name.substitute("\"", "") != String::EndPos) { }
 				getFileStream() << "mol " << j + 1 << " \"" << name << "\"" << std::endl;
 			}
 			else

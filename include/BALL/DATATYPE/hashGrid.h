@@ -742,7 +742,7 @@ namespace BALL
 		Size size = 0;
 
 		// count all items in the box
-		for (const DataItem* item = first_item_; item != 0; item = item->next_, size++);
+		for (const DataItem* item = first_item_; item != 0; item = item->next_, size++) { }
 		
 		return size;
 	}
@@ -894,7 +894,7 @@ namespace BALL
 			}
 		}
 		
-		for (; item_ptr_ != 0; item_ptr_ = item_ptr_->previous_, --size);
+		for (; item_ptr_ != 0; item_ptr_ = item_ptr_->previous_, --size) { }
 		
 		if (size != 0)
 		{
@@ -914,7 +914,7 @@ namespace BALL
 			}
 		}
 		
-		for (; item != 0; item = item->previous_, --size);
+		for (; item != 0; item = item->previous_, --size) { }
 		
 		return (size == 0);
 	}

@@ -1934,9 +1934,9 @@ namespace BALL
 			{
 				if (e.modifiers() == Qt::ShiftModifier) 											return ZOOM_ACTION;
 				if (e.modifiers() == Qt::ControlModifier) 										return ROTATE_ACTION;
-				if (e.modifiers() == Qt::ShiftModifier | Qt::ControlModifier) return ROTATE_CLOCKWISE_ACTION;
+				if ((e.modifiers()==Qt::ShiftModifier) | Qt::ControlModifier) return ROTATE_CLOCKWISE_ACTION;
 			}
-			else if (e.buttons() == Qt::LeftButton | Qt::RightButton)
+			else if ((e.buttons()==Qt::LeftButton) | Qt::RightButton)
 			{
 				return ROTATE_CLOCKWISE_ACTION;
 			}
