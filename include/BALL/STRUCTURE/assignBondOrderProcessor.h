@@ -775,7 +775,8 @@ namespace BALL
 			Bond* virtual_bond_;
 			//
 			//
-
+			
+#ifdef BALL_HAS_LPSOLVE
 			// ********************* ILP stuff ***********************
 			//
 			// Vector for mapping from variable indices onto free bonds in the
@@ -784,8 +785,8 @@ namespace BALL
 
 			// number of bond variables in the ILP
 			Position ilp_number_of_free_bonds_;
-
-
+#endif
+			
 			// ******************* general datastructures *********************
 
 			// the number of bonds given (free + fixed!)
