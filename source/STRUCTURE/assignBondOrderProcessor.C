@@ -2483,18 +2483,43 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 		{
 #ifdef BALL_HAS_LPSOLVE
 			// NOTE: lpsolve5.5 despite claiming does not support this!
-
-			// first find out if there is a further solution
-			int number_of_solutions = get_solutioncount(ilp_);
-
-			if (solutions_.size() >= (Size)number_of_solutions)
+			// Thus, we include this feature by incorporating constraints which forbid old solutions
+			
+			// Get old variables
+			REAL *vars;
+			get_ptr_variables(ilp_, &vars);
+			
+			set_add_rowmode(ilp_, TRUE);
+			
+			// Indices of the variables (constraints)
+			std::vector<int> cons_indices(ilp_number_of_free_bonds_+1); // colno
+			// Prefactors (constraints)
+			std::vector<REAL> cons_prefactors(ilp_number_of_free_bonds_+1,1.); // row
+			
+			Position j = 0;
+			for(Position i = 0; i < ilp_number_of_free_bonds_; ++i)
+			{
+				if (fabs(vars[i]-1.) < 1.e-5)
+				{
+					cons_indices[j] = i+1;
+					++j;
+				}
+			}
+			
+			if (!add_constraintex(ilp_, j, &cons_prefactors[0], &cons_indices[0], LE, (REAL)j-1))
+			{
+				Log.error() << "AssignBondOrderProcessor: Adding constraint for next solution failed" << endl;
 				return false;
-
-			// set the solution number of the next solution to return
-			// NOTE: count starts at 1
-			set_solutionlimit(ilp_, solutions_.size());
-
+			}
+			
+			set_add_rowmode(ilp_, FALSE);
+			
+			// Reset the basis to reinitialize the solve process
+			reset_basis(ilp_);
+			
+			// Resolve ILP with the new constraint
 			found_a_sol = solveILP_();
+			
 #else
 			Log.error() << "AssignBondOrderProcessor: BALL was configured without lp_solve support! Try using A_STAR instead!" << std::endl;
 #endif
@@ -2543,20 +2568,19 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 
 		// Maximum number of bonds of an atom
 		Position max_no_atom_bonds = 0;
-	
+		
 		// compute the maps, variables ...
 		for (Position current_atom = 0; current_atom < no_atoms; ++current_atom)
 		{
 			Atom* at1 = ac_->getAtom(current_atom);
 			Position consider_bonds = 0;
-
 			for (Atom::BondIterator bit = at1->beginBond(); +bit; ++bit)
-			{		
+			{
 				if (!bond_fixed_[&*bit]) // this bond is free => calculate bond order
 				{
 					++consider_bonds;
 					if (bond_map.find(&*bit) == bond_map.end())
-					{ 
+					{
 						bond_map[&*bit] = ilp_number_of_free_bonds_;
 						ilp_index_to_free_bond_[ilp_number_of_free_bonds_] = &*bit;
 						++ilp_number_of_free_bonds_;
@@ -2564,18 +2588,32 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 				}
 			} // end of for all bonds of this atom
 
-			if (consider_bonds)
+			if (add_missing_hydrogens_)
+			{
+				Size total_length = 0;
+				for(Position j = 0; j < atom_to_block_[current_atom].size(); ++j)
+				{
+					Size current_length = block_to_length_[atom_to_block_[current_atom][j]];
+					no_y += current_length;
+					total_length += current_length;
+				}
+				max_no_ent = std::max(max_no_ent, total_length);
+			}
+			else if (consider_bonds)
 			{
 				Size current_length = block_to_length_[atom_to_block_[current_atom][0]];
 				
 				no_y += current_length;
 				max_no_ent = std::max(max_no_ent, current_length);
 			}
-
+			
 			max_no_atom_bonds = std::max(consider_bonds, max_no_atom_bonds);
 
 		} // end of for all atoms
-
+		
+		// Decision variables for every bond order
+		ilp_number_of_free_bonds_ *= max_bond_order_;
+		
 		// Number of variables of the whole ILP
 		Position no_vars = ilp_number_of_free_bonds_ + no_y;
 		
@@ -2590,12 +2628,13 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 
 		// Set the binary and integer constraints
 		// Variables for bond orders are integer
-		for(Position i = 1; i <= ilp_number_of_free_bonds_; ++i)
+		/*for(Position i = 1; i <= ilp_number_of_free_bonds_; ++i)
 		{
 			set_int(ilp_, i, TRUE);
-		}
+		}*/
 		// Decision variables for atom valences are binary 
-		for(Position i = ilp_number_of_free_bonds_+1; i <= no_vars; ++i)
+		//for(Position i = ilp_number_of_free_bonds_+1; i <= no_vars; ++i)
+		for(Position i = 1; i <= no_vars; ++i)
 		{
 			set_binary(ilp_, i, TRUE);
 		}
@@ -2604,37 +2643,35 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 		// use lp_solves internal types.
 
 		// Indices of the variables (constraints)
-		std::vector<int> cons_indices(max_no_atom_bonds + 1 + max_no_ent,0); // colno
+		std::vector<int> cons_indices(max_no_atom_bonds*max_bond_order_ + 1 + max_no_ent,0); // colno
 		// Prefactors (constraints)
-		std::vector<REAL> cons_prefactors(max_no_atom_bonds + 1 + max_no_ent,0); // row
+		std::vector<REAL> cons_prefactors(max_no_atom_bonds*max_bond_order_ + 1 + max_no_ent, 0.); // row
 		// Indices of the variables (objective function)
-		std::vector<int> obj_indices(no_y+1,0); // obj_colno
+		std::vector<int> obj_indices(no_y,0); // obj_colno
 		// Prefactors (objective function)
-		std::vector<REAL> obj_prefactors(no_y+1,0); // obj_row
+		std::vector<REAL> obj_prefactors(no_y, 0.); // obj_row
 
 		// Factors for choice constraints
-		std::vector<REAL> choices(max_no_ent, 1);
+		std::vector<REAL> choices(max_no_ent, 1.);
 
 		// Makes building the model faster if it's done
 		// row by row
 		set_add_rowmode(ilp_, TRUE);
 
-		// Set the lower and upper constraints for bonds
-		for(Position i = 1; i <= ilp_number_of_free_bonds_; ++i)
+		// Set the choice constraints for bonds
+		for(Position i = 1; i <= ilp_number_of_free_bonds_;)
 		{
-			cons_indices[0] = i;
-			if (!add_constraintex(ilp_, 1, &choices[0], &cons_indices[0], LE, max_bond_order_))
+			for (int j = 0; j < max_bond_order_; ++j, ++i)
 			{
-				Log.error() << "AssignBondOrderProcessor: Setting upper bound for bond constraint failed" << endl;
-				return false;
+				cons_indices[j] = i;
 			}
-			if (!add_constraintex(ilp_, 1, &choices[0], &cons_indices[0], GE, 1))
+			if (!add_constraintex(ilp_, max_bond_order_, &choices[0], &cons_indices[0], EQ, 1))
 			{
-				Log.error() << "AssignBondOrderProcessor: Setting lower bound for bond constraint failed" << endl;
+				Log.error() << "AssignBondOrderProcessor: Setting bond choice constraint for ILP failed" << endl;
 				return false;
 			}
 		}
-
+		
 		// Create all remaining constraints and the objective function
 		// Indices of the choice variables (y)
 		Position ind_y = 0;
@@ -2652,13 +2689,60 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 				map<Bond*, unsigned int>::iterator it = bond_map.find(&(*bit));
 				if (it != bond_map.end())
 				{
-					cons_indices[count_b] = it->second + 1;
-					cons_prefactors[count_b] = -1;
-					++count_b;
+					for(int k = 1; k <= max_bond_order_; ++k, ++count_b)
+					{
+						cons_indices[count_b] = it->second*max_bond_order_ + k;
+						cons_prefactors[count_b] = -k;
+					}
 				}
 			}
 
-			if (count_b)
+			if (add_missing_hydrogens_)
+			{
+				// Create indices for the choice variables and set
+				// the entries for the valence constraint and the
+				// objective function
+
+				// Count the number of variables participating in the current cons_prefactors
+				Position count_vars = count_b;
+				Position total_length = 0;
+				for(Position h = 0; h < atom_to_block_[i].size(); ++h)
+				{
+					total_length += block_to_length_[atom_to_block_[i][h]];
+					for(Position j = 0; j < block_to_length_[atom_to_block_[i][h]]; ++j, ++ind_y, ++count_vars)
+					{
+						// Choice variables have indices > ilp_number_of_free_bonds_ in variable vector for ILP
+						obj_indices[ind_y]  = ind_y + ilp_number_of_free_bonds_ + 1;
+						cons_indices[count_vars] = obj_indices[ind_y];
+						
+						// Set valences
+						cons_prefactors[count_vars] = std::max(((REAL)block_to_start_valence_[atom_to_block_[i][h]]) + j - h, 0.);
+						
+						// Set penalties 
+						obj_prefactors[ind_y] = (penalties_[block_to_start_idx_[atom_to_block_[i][h]] + j]);
+					}
+				}
+				
+				// in case we got an empty penalty cons_prefactors 
+				if (total_length != 0)
+				{
+					// Add valence constraint
+					if (!add_constraintex(ilp_, count_vars, &cons_prefactors[0], &cons_indices[0], EQ,
+							 fixed_val_[i]))
+					{
+						Log.error() << "AssignBondOrderProcessor: Setting valence constraint for ILP failed" << endl;
+						return false;
+					}
+					// Add choice constraint 
+					if (!add_constraintex(ilp_, total_length, &choices[0], &cons_indices[count_b], EQ, 1))
+					{
+						Log.error() << "AssignBondOrderProcessor: Setting valence choice constraint for ILP failed" << endl;
+						return false;
+					}
+				}
+				
+			}
+			else if (count_b)
 			{
 				// This atom has bonds whose orders should be calculated
 
@@ -2678,7 +2762,7 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 					cons_prefactors[count_vars] = block_to_start_valence_[atom_to_block_[i][0]] + j;
 
 					// Set penalties 
-					obj_prefactors[ind_y]       = penalties_[block_to_start_idx_[atom_to_block_[i][0]] + j];
+					obj_prefactors[ind_y]       = (penalties_[block_to_start_idx_[atom_to_block_[i][0]] + j]);
 				}
 
 				// in case we got an empty penalty cons_prefactors 
@@ -2705,7 +2789,7 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 		set_add_rowmode(ilp_, FALSE);
 
 		// Set objective function
-		if (!set_obj_fnex(ilp_, no_y, &obj_prefactors[0], &obj_indices[0]))
+		if (!set_obj_fnex(ilp_, obj_prefactors.size(), &obj_prefactors[0], &obj_indices[0]))
 		{
 			Log.error() << "AssignBondOrderProcessor: Setting objective function for ILP failed" << endl;
 		}
@@ -2727,10 +2811,7 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 
 		// Let lp_solve solve our problem
 		int ret = solve(ilp_);
-
-		// Get the value of the objective function
-		solution.atom_type_penalty = (int)get_objective(ilp_);
-
+		
 		// Check whether lp_solve could do its job successfully
 		if (ret == OPTIMAL)
 		{
@@ -2748,35 +2829,72 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 			// Get variables
 			REAL *vars;
 			get_ptr_variables(ilp_, &vars);
-
+			
+			solution.atom_type_penalty = get_objective(ilp_);
+			
 			// Do the assignment of the bond orders
-			for(Position i = 0; i < ilp_number_of_free_bonds_; ++i)
+			for(Position i = 0; i < ilp_number_of_free_bonds_; )
 			{
-				if (fabs(vars[i] - 1.) < 1.e-10)
+				for(int j = 1; j <= max_bond_order_; ++j, ++i)
 				{
-					solution.bond_orders[ilp_index_to_free_bond_[i]] = Bond::ORDER__SINGLE;
-					continue;
+					if (fabs(vars[i] - 1.) < 1.e-10)
+					{
+						switch (j)
+						{
+							case 1:
+							{
+								solution.bond_orders[ilp_index_to_free_bond_[i/max_bond_order_]] = Bond::ORDER__SINGLE;
+								break;
+							}
+							case 2:
+							{
+								solution.bond_orders[ilp_index_to_free_bond_[i/max_bond_order_]] = Bond::ORDER__DOUBLE;
+								break;
+							}
+							case 3:
+							{
+								solution.bond_orders[ilp_index_to_free_bond_[i/max_bond_order_]] = Bond::ORDER__TRIPLE;
+								break;
+							}
+							default:
+							{
+								solution.bond_orders[ilp_index_to_free_bond_[i/max_bond_order_]] = Bond::ORDER__QUADRUPLE;
+							}
+						}
+					}
 				}
-				if (fabs(vars[i] - 2.) < 1.e-10)
+			}
+			
+			
+			if (add_missing_hydrogens_)
+			{
+				// Store the atoms which need additional hydrogens
+				
+				Position no_atoms = ac_->countAtoms();
+				Position current_var = ilp_number_of_free_bonds_;
+				for (Position current_atom = 0; current_atom < no_atoms; ++current_atom)
 				{
-					solution.bond_orders[ilp_index_to_free_bond_[i]] = Bond::ORDER__DOUBLE;
-					continue;
-				}
-				if (fabs(vars[i] - 3.) < 1.e-10)
-				{
-					solution.bond_orders[ilp_index_to_free_bond_[i]] = Bond::ORDER__TRIPLE;
-					continue;
-				}
-				if (fabs(vars[i] - 4.) < 1.e-10)
-				{
-					solution.bond_orders[ilp_index_to_free_bond_[i]] = Bond::ORDER__QUADRUPLE;
-					continue;
+					current_var += block_to_length_[atom_to_block_[current_atom][0]];
+					
+					// Note: If there are no hydrogens to be added there is no need to check the variables
+					for(Position j = 1; j < atom_to_block_[current_atom].size(); ++j)
+					{
+						Size current_length = block_to_length_[atom_to_block_[current_atom][j]];
+						
+						for(Position k = 0; k < current_length; ++k, ++current_var)
+						{
+							if (fabs(vars[current_var] - 1.) < 1.e-10)
+							{
+								solution.number_of_virtual_hydrogens[ac_->getAtom(current_atom)] = j;
+							}
+						}
+					}
 				}
 			}
 		}
 		else
 		{
-			Log.error() << "AssignBondOrderProcessor: ILP could not be solved successfully" << endl;
+			Log.error() << "AssignBondOrderProcessor: ILP could not be solved successfully, reason: " << ret << endl;
 			solution.valid = false;
 			return false;
 		}
