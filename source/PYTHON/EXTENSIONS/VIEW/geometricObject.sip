@@ -29,12 +29,6 @@ class GeometricObject
 
 %ConvertToSubClassCode
 /////////////////////////////////////////////////
-#define BALL_TO_SIP_MAP(type)\
-	if (RTTI::isKindOf<type>(*sipCpp))\
-	{\
-		sipType = sipType_##type;\
-	}\
-	else\
 /////////////////////////////////////////////////
 
 	//BALL_TO_SIP_MAP(Point)

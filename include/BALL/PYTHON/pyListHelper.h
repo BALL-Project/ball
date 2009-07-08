@@ -16,14 +16,14 @@ namespace BALL
 typedef List<RegularData3D*> RegularData3DList;
 
 // Convert the list.
-#define BALL_CONVERT_FROM(TYPE)\
+#define BALL_CONVERT_LIST_FROM(TYPE)\
 	PyObject *pl;\
 	\
 	if ((pl = PyList_New(0)) == NULL) return NULL;\
 	\
 	for (TYPE##List::const_iterator it = sipCpp->begin(); it != sipCpp->end(); ++it)\
 	{\
-		PyObject *inst = sipConvertFromType(*it, sipType_##TYPE, 0);\
+		PyObject *inst = BALL_CONVERT_FROM_INSTANCE(*it, TYPE, 0);\
 		\
 		if (inst == NULL || PyList_Append(pl,inst) < 0)\
 		{\
@@ -36,14 +36,14 @@ typedef List<RegularData3D*> RegularData3DList;
  
 
 // Convert a Python list of TYPE instances to a TYPEList object on the heap.
-#define BALL_CONVERT_TO(TYPE)\
+#define BALL_CONVERT_LIST_TO(TYPE)\
 	if (sipIsErr == NULL) return PyList_Check(sipPy);\
 	\
 	TYPE##List* alist = new TYPE##List;\
  	\
 	for (int i = 0; i < PyList_GET_SIZE(sipPy); ++i)\
 	{\
-		TYPE* a = reinterpret_cast<TYPE*>(sipForceConvertToType(PyList_GET_ITEM(sipPy,i), sipType_##TYPE, NULL, SIP_NOT_NONE | SIP_NO_CONVERTORS, NULL, sipIsErr ));\
+		TYPE* a = reinterpret_cast<TYPE*>(BALL_FORCE_CONVERT_TO_TYPE(PyList_GET_ITEM(sipPy,i), TYPE));\
  		\
 		if (*sipIsErr)\
 		{\

@@ -17,12 +17,12 @@
 %End
 
 %ConvertFromTypeCode
-	BALL_CONVERT_FROM(Atom)
+	BALL_CONVERT_LIST_FROM(Atom)
 %End
  
 %ConvertToTypeCode
   if (sipCppPtr == 0) return 0;
-	BALL_CONVERT_TO(Atom)
+	BALL_CONVERT_LIST_TO(Atom)
 %End
 };
 
@@ -36,12 +36,12 @@
 %End
 
 %ConvertFromTypeCode
-	BALL_CONVERT_FROM(PDBAtom)
+	BALL_CONVERT_LIST_FROM(PDBAtom)
 %End
  
 %ConvertToTypeCode
   if (sipCppPtr == 0) return 0;
-	BALL_CONVERT_TO(PDBAtom)
+	BALL_CONVERT_LIST_TO(PDBAtom)
 %End
 };
 
@@ -55,12 +55,12 @@
 %End
 
 %ConvertFromTypeCode
-	BALL_CONVERT_FROM(Bond)
+	BALL_CONVERT_LIST_FROM(Bond)
 %End
  
 %ConvertToTypeCode
   if (sipCppPtr == 0) return 0;
-	BALL_CONVERT_TO(Bond)
+	BALL_CONVERT_LIST_TO(Bond)
 %End
 };
 
@@ -74,12 +74,12 @@
 %End
 
 %ConvertFromTypeCode
-	BALL_CONVERT_FROM(AtomContainer)
+	BALL_CONVERT_LIST_FROM(AtomContainer)
 %End
  
 %ConvertToTypeCode
   if (sipCppPtr == 0) return 0;
-	BALL_CONVERT_TO(AtomContainer)
+	BALL_CONVERT_LIST_TO(AtomContainer)
 %End
 };
 
@@ -93,12 +93,12 @@
 %End
 
 %ConvertFromTypeCode
-	BALL_CONVERT_FROM(Fragment)
+	BALL_CONVERT_LIST_FROM(Fragment)
 %End
  
 %ConvertToTypeCode
   if (sipCppPtr == 0) return 0;
-	BALL_CONVERT_TO(Fragment)
+	BALL_CONVERT_LIST_TO(Fragment)
 %End
 };
 
@@ -112,12 +112,12 @@
 %End
 
 %ConvertFromTypeCode
-	BALL_CONVERT_FROM(Molecule)
+	BALL_CONVERT_LIST_FROM(Molecule)
 %End
  
 %ConvertToTypeCode
   if (sipCppPtr == 0) return 0;
-	BALL_CONVERT_TO(Molecule)
+	BALL_CONVERT_LIST_TO(Molecule)
 %End
 };
 
@@ -131,12 +131,12 @@
 %End
 
 %ConvertFromTypeCode
-	BALL_CONVERT_FROM(Residue)
+	BALL_CONVERT_LIST_FROM(Residue)
 %End
  
 %ConvertToTypeCode
   if (sipCppPtr == 0) return 0;
-	BALL_CONVERT_TO(Residue)
+	BALL_CONVERT_LIST_TO(Residue)
 %End
 };
 
@@ -150,12 +150,12 @@
 %End
 
 %ConvertFromTypeCode
-	BALL_CONVERT_FROM(SecondaryStructure)
+	BALL_CONVERT_LIST_FROM(SecondaryStructure)
 %End
  
 %ConvertToTypeCode
   if (sipCppPtr == 0) return 0;
-	BALL_CONVERT_TO(SecondaryStructure)
+	BALL_CONVERT_LIST_TO(SecondaryStructure)
 %End
 };
 
@@ -169,12 +169,12 @@
 %End
 
 %ConvertFromTypeCode
-	BALL_CONVERT_FROM(Chain)
+	BALL_CONVERT_LIST_FROM(Chain)
 %End
  
 %ConvertToTypeCode
   if (sipCppPtr == 0) return 0;
-	BALL_CONVERT_TO(Chain)
+	BALL_CONVERT_LIST_TO(Chain)
 %End
 };
 
@@ -188,12 +188,12 @@
 %End
 
 %ConvertFromTypeCode
-	BALL_CONVERT_FROM(Protein)
+	BALL_CONVERT_LIST_FROM(Protein)
 %End
  
 %ConvertToTypeCode
   if (sipCppPtr == 0) return 0;
-	BALL_CONVERT_TO(Protein)
+	BALL_CONVERT_LIST_TO(Protein)
 %End
 };
 
@@ -207,12 +207,12 @@
 %End
 
 %ConvertFromTypeCode
-	BALL_CONVERT_FROM(Nucleotide)
+	BALL_CONVERT_LIST_FROM(Nucleotide)
 %End
  
 %ConvertToTypeCode
   if (sipCppPtr == 0) return 0;
-	BALL_CONVERT_TO(Nucleotide)
+	BALL_CONVERT_LIST_TO(Nucleotide)
 %End
 };
 
@@ -226,12 +226,12 @@
 %End
 
 %ConvertFromTypeCode
-	BALL_CONVERT_FROM(NucleicAcid)
+	BALL_CONVERT_LIST_FROM(NucleicAcid)
 %End
  
 %ConvertToTypeCode
   if (sipCppPtr == 0) return 0;
-	BALL_CONVERT_TO(NucleicAcid)
+	BALL_CONVERT_LIST_TO(NucleicAcid)
 %End
 };
 
@@ -243,12 +243,12 @@
 %End
 
 %ConvertFromTypeCode
-	BALL_CONVERT_FROM(RegularData3D)
+	BALL_CONVERT_LIST_FROM(RegularData3D)
 %End
 
 %ConvertToTypeCode
 	if (sipCppPtr == 0) return 0;
-	BALL_CONVERT_TO(RegularData3D)
+	BALL_CONVERT_LIST_TO(RegularData3D)
 %End
 };
 

@@ -52,7 +52,7 @@
 	{
 		Composite* composite;
  
-		composite = reinterpret_cast<Composite*>(sipForceConvertToType(PyList_GET_ITEM(sipPy,i), sipType_Composite, NULL, SIP_NO_CONVERTORS, NULL, sipIsErr));
+		composite = reinterpret_cast<Composite*>(BALL_FORCE_CONVERT_TO_TYPE(PyList_GET_ITEM(sipPy,i), Composite));
  
 		if (*sipIsErr)
 		{

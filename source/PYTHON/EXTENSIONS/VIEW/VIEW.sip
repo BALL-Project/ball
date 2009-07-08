@@ -7,6 +7,10 @@
 
 %Module VIEW
 
+%ModuleHeaderCode
+#include "../BALLPyMacros.h"
+%End
+
 %Import BALL/BALLCore.sip
 
 %Include BALL/pyLists.sip

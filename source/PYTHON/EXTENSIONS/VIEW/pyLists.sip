@@ -6,12 +6,12 @@
 %End
 
 %ConvertFromTypeCode
-	BALL_CONVERT_FROM(Representation)
+	BALL_CONVERT_LIST_FROM(Representation)
 %End
 
 %ConvertToTypeCode
 	if (sipCppPtr == 0) return 0;
-	BALL_CONVERT_TO(Representation)
+	BALL_CONVERT_LIST_TO(Representation)
 %End
 };
 
@@ -23,12 +23,12 @@
 %End
 
 %ConvertFromTypeCode
-	BALL_CONVERT_FROM(GeometricObject)
+	BALL_CONVERT_LIST_FROM(GeometricObject)
 %End
 
 %ConvertToTypeCode
 	if (sipCppPtr == 0) return 0;
-	BALL_CONVERT_TO(GeometricObject)
+	BALL_CONVERT_LIST_TO(GeometricObject)
 %End
 };
 

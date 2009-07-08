@@ -20,7 +20,7 @@ namespace BALL
 
 #define BALL_TO_SIP_MAP_BASECLASS(type)\
 	if (dynamic_cast<const type*>(&object) != NULL)\
-		return sipConvertFromType(&object, sipType_##type, 0);
+		return BALL_CONVERT_FROM_INSTANCE(&object, type, 0);
 
 	PyObject* pyMapBALLObjectToSip(Composite& object)
 	{
@@ -39,6 +39,6 @@ namespace BALL
 		BALL_TO_SIP_MAP_BASECLASS(AtomContainer)
 
 		// last resort - this *should* work!
-		return sipConvertFromType(&object, sipType_Composite, 0);
+		return BALL_CONVERT_FROM_INSTANCE(&object, Composite, 0);
 	}
 }

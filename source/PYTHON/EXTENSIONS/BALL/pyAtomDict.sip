@@ -57,7 +57,7 @@
 		{
 			break;
 		}
-		Atom* atom = reinterpret_cast<Atom*>(sipForceConvertToType(key, sipType_Atom, NULL, SIP_NO_CONVERTORS, NULL, sipIsErr));
+		Atom* atom = reinterpret_cast<Atom*>(BALL_FORCE_CONVERT_TO_TYPE(key, Atom));
 		if (*sipIsErr)
 		{
 			break;

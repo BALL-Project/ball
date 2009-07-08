@@ -16,6 +16,10 @@
 
 %Module BALLCore
 
+%ModuleHeaderCode
+#include "../BALLPyMacros.h"
+%End
+
 %Feature BALL_HAS_ASIO
 
 %Include versions.sip
