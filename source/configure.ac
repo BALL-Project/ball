@@ -834,7 +834,7 @@ dnl on the safe side...
 dnl
 if test "${USE_LIBTOOL}" = "true" ; then
 	LINKER="${BALL_PATH}/source/libtool --tag=CXX --mode=link ${DYNAR}"
-	DYNAR="${BALL_PATH}/source/libtool --tag=CXX --mode=link ${DYNAR} -export-dynamic -release ${BALL_VERSION_STRING} -rpath ${LIBTOOL_RPATH}/${LIBDIR}"
+	DYNAR="${BALL_PATH}/source/libtool --tag=CXX --mode=link ${DYNAR} --shared -export-dynamic -release ${BALL_VERSION_STRING} -rpath ${LIBTOOL_RPATH}/${LIBDIR}"
 	SHARED_LIB_SUFFIX=la
 	AC_SUBST(SHARED_LIB_SUFFIX)
 else
