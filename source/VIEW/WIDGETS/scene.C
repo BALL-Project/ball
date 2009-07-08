@@ -129,7 +129,8 @@ namespace BALL
 				mode_group_(new QActionGroup(this)),
 				main_display_(new GLRenderWindow(this)),
 				stereo_left_eye_(-1),
-				stereo_right_eye_(-1)
+				stereo_right_eye_(-1),
+				update_running_(false)
 		{
 			stage_settings_=new StageSettings(this);
 #ifndef ENABLE_RAYTRACING
@@ -182,7 +183,8 @@ namespace BALL
 				mode_group_(new QActionGroup(this)),
 				main_display_(new GLRenderWindow(this)),
 				stereo_left_eye_(-1),
-				stereo_right_eye_(-1)
+				stereo_right_eye_(-1),
+				update_running_(false)
 		{
 			stage_settings_=new StageSettings(this);
 #ifdef BALL_VIEW_DEBUG
@@ -223,7 +225,8 @@ namespace BALL
 				mode_group_(new QActionGroup(this)),
 				main_display_(new GLRenderWindow(this)),
 				stereo_left_eye_(-1),
-				stereo_right_eye_(-1)
+				stereo_right_eye_(-1),
+				update_running_(false)
 		{
 			stage_settings_=new StageSettings(this);
 #ifdef BALL_VIEW_DEBUG
@@ -515,6 +518,8 @@ namespace BALL
 
 		void Scene::paintGL()
 		{
+			update_running_ = true;
+			
 			// This function tries to sync renderers by letting (a) all renderers
 			// perform their updates and then (b) swap in the newly created buffers
 			// of all render targets
@@ -601,6 +606,8 @@ namespace BALL
 				else if (RTTI::isKindOf<GLOffscreenTarget>(*renderers_[i].target))
 					static_cast<GLOffscreenTarget*>(renderers_[i].target)->refresh();
 			}
+			
+			update_running_ = false;
 		}
 
 		void Scene::paintEvent(QPaintEvent* e)
