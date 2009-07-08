@@ -1,6 +1,6 @@
 #!/bin/sh
 
-test -f $(which libtoolize) && libtoolize --copy --force
+test -f $(which libtoolize) && libtoolize --copy --force && sed -i -r 's/(hardcode_into_libs)=.*$/\1=no/' config/m4/*.m4
 automake --add-missing --copy
 aclocal -I config/m4
 autoconf
