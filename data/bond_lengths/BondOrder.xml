@@ -139,13 +139,19 @@
 		<penalty valence="4">1</penalty>
 		<penalty valence="5">2</penalty>
 	</entry>
+	<entry id="181">
+		<elementstring>N</elementstring>
+		<smartstring>SMARTS([#7D4+])</smartstring>
+		<penalty valence="3">32</penalty>
+		<penalty valence="4">0</penalty>
+	</entry>
 	<entry id="18">
 		<elementstring>N</elementstring>
 		<smartstring>SMARTS([#7D4])</smartstring>
 		<penalty valence="2">64</penalty>
 		<penalty valence="3">0</penalty>
 		<penalty valence="4">64</penalty>
-		</entry>
+	</entry>
 	<entry id="182">
 		<elementstring>N</elementstring>
 		<smartstring>SMARTS([#7D5])</smartstring>
