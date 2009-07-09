@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <table>
-	<!-- 	This file supplies penalty scores for different 
-	  		atom types in bond type perception accoring to 
+	<!-- 	This file supplies improved penalty scores for different 
+	  		atom types in bond type perception based on the work of 
 	 								 	
 	 				Wang, J., Wang, W., Kollman P. A.; Case, D. A. "Automatic atom type and 
 	 				bond type perception in molecular mechanical calculations". Journal of 
@@ -13,8 +13,6 @@
 				Note that in the SMARTS strings we use atomic numbers rather than symbols (e.g. #8 instead of O).
 				The reason is that wrongly assigned aromatic bonds in the input would lead to failure to identify the
 				right rule!
-
-	 			Rev 14.12.2007  Conversion was done by Anna Dehof
  -->	
 	<entry id="1">
 		<elementstring>H</elementstring>
@@ -154,6 +152,12 @@
 		<penalty valence="5">0</penalty>
 	</entry>
 	<entry id="191">
+		<elementstring>O</elementstring>
+		<smartstring>SMARTS([#8D1-])</smartstring>
+		<penalty valence="1">0</penalty>
+		<penalty valence="2">32</penalty>
+	</entry>
+	<entry id="192">
 		<elementstring>O</elementstring>
 		<smartstring>SMARTS([$([#8D1](~[#6D3]~[#8D1,#16D1]))])</smartstring>
 		<penalty valence="1">0</penalty>
