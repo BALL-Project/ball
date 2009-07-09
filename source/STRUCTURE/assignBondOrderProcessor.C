@@ -430,15 +430,7 @@ namespace BALL
 				          << " : Error in options! Please check the option Option::BRANCH_AND_BOUND_CUTOFF."  << endl;
 			ret = false;
 		}
-		if (   (options.get(Option::ALGORITHM) == Algorithm::ILP )  
-				&& (options.getInteger(Option::MAX_NUMBER_OF_SOLUTIONS) > 1))
-		{
-			Log.error() << __FILE__ << " " << __LINE__ 
-				          << " : Error in options! Please check the option Option::MAX_NUMBER_OF_SOLUTIONS."  << endl;
-			ret = false;
-		}
-
-
+		
 		valid_ = ret;
 		return ret;
 	}
