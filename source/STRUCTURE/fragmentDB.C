@@ -1112,39 +1112,39 @@ namespace BALL
 		list<Fragment*>::iterator	frag_it;				
 		AtomIterator										atom_it;
 		StringHashMap<Index>::Iterator	map_iterator;
-		NameMap*												map = 0;
-		String													match_name;
-		String													atom_name;
-		String													res_name;
-		String													res_name_suffix;
-		Size														hit_counter;
-
-		for (map_iterator = usable_maps.begin(); !(map_iterator == usable_maps.end()); ++map_iterator)
-		{
-			hit_counter = 0;
-			map = &table[map_iterator->first];
-			for (frag_it = fragments_.begin(); frag_it != fragments_.end(); ++frag_it)
+		NameMap* map = 0;
+		String match_name;
+		String atom_name;
+		String res_name;
+		String res_name_suffix;
+		Size hit_counter;
+		
+		for (frag_it = fragments_.begin(); frag_it != fragments_.end(); ++frag_it)
+		{	
+			for (map_iterator = usable_maps.begin(); !(map_iterator == usable_maps.end()); ++map_iterator)
 			{
+				hit_counter = 0;
+				map = &table[map_iterator->first];
 				// determine the fragment name
 				res_name = (*frag_it)->getName();
-
+				
 				// determine whether the fragment is an amino acid
 				// if it is: determine the correct name for N-,C-terminal AA
 				Residue* const residue = RTTI::castTo<Residue>(**frag_it);
 				if (residue != 0)
 				{
-					if 			(residue->isCTerminal()) res_name_suffix = "-C";
+					if (residue->isCTerminal()) res_name_suffix = "-C";
 					else if (residue->isNTerminal()) res_name_suffix = "-N";
-				} 
-				else 
+				}
+				else
 				{
 					res_name_suffix = "";
 				}
-
+				
 				for (atom_it = (*frag_it)->beginAtom(); +atom_it; ++atom_it)
 				{
 					atom_name = atom_it->getName();
-
+					
 					// first, try to match exactly
 					match_name = res_name + res_name_suffix;
 					if (!matchName(match_name, atom_name, *map))
@@ -1163,49 +1163,45 @@ namespace BALL
 							}
 						}
 					}
-
+					
 					hit_counter++;
 				}
+				
+				// update hit_count for each map
+				map_iterator->second = hit_counter;
 			}
-
-			// update hit_count for each map
-			map_iterator->second = hit_counter;
-		}
-
-		// these two variables are needed to store the best map
-		Index max_hits = -1;
-		map_name = "";
-		
-		// look for the best map
-		for (map_iterator = usable_maps.begin(); !(map_iterator == usable_maps.end()); ++map_iterator)
-		{
-			if (map_iterator->second > max_hits)
+			
+			// these two variables are needed to store the best map
+			Index max_hits = -1;
+			map_name = "";
+			
+			// look for the best map
+			for (map_iterator = usable_maps.begin(); !(map_iterator == usable_maps.end()); ++map_iterator)
 			{
-				max_hits = (*map_iterator).second;
-				map_name = (*map_iterator).first;
+				if (map_iterator->second > max_hits)
+				{
+					max_hits = (*map_iterator).second;
+					map_name = (*map_iterator).first;
+				}
 			}
-		}
-
-		// after having identified the map, use it to replace the names
-		// first, get the map
-		if (table.find(map_name) != table.end())
-		{
-			map = &table[map_name];
-		} 
-		else 
-		{
-			map = 0;
-		}
-	
-		// we found an appropriate map, so use it
-		if ((max_hits > 0) && (map != 0))
-		{
-			// now iterate over all fragments we collected
-			for (frag_it = fragments_.begin(); frag_it != fragments_.end(); ++frag_it)
+			
+			// after having identified the map, use it to replace the names
+			// first, get the map
+			if (table.find(map_name) != table.end())
+			{
+				map = &table[map_name];
+			}
+			else
+			{
+				map = 0;
+			}
+			
+			// we found an appropriate map, so use it
+			if ((max_hits > 0) && (map != 0))
 			{
 				// extract the residue name
 				res_name = (*frag_it)->getName();
-
+				
 				// determine whether the fragment is an amino acid
 				// if it is: determine the correct name for N-,C-terminal AA
 				Residue* const residue = RTTI::castTo<Residue>(**frag_it);
@@ -1213,18 +1209,18 @@ namespace BALL
 				{
 					if 			(residue->isCTerminal()) res_name_suffix = "-C";
 					else if (residue->isNTerminal()) res_name_suffix = "-N";
-				} 
-				else 
+				}
+				else
 				{
 					res_name_suffix = "";
 				}
-
+				
 				// now, iterate over the fragment`s atoms
 				for (atom_it = (*frag_it)->beginAtom(); +atom_it; ++atom_it)
 				{
 					// get the atom name
 					atom_name = atom_it->getName();
-
+					
 					// first, try to match exactly
 					match_name = res_name + res_name_suffix;
 					if (!matchName(match_name, atom_name, *map))
@@ -1245,20 +1241,20 @@ namespace BALL
 							}
 						}
 					}
-
+					
 					atom_it->setName(atom_name);
 					atom_it->getFragment()->setName(res_name);
 				}
 			}
+			
+			// if we couldn't find an appropriate table, complain about it!
+			if (number_of_tables == 0 || max_hits < 0)
+			{
+				Log.error() << "FragmentDB: cannot locate an appropriate name conversion table!" << endl;
+				return false;
+			}
 		}
-
-		// if we couldn't find an appropriate table, complain about it!
-		if (number_of_tables == 0 || max_hits < 0)
-		{
-			Log.error() << "FragmentDB: cannot locate an appropriate name conversion table!" << endl;
-			return false;
-		}
-
+		
 		return true;
 	}
 
