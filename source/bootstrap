@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # create a new libtool if possbile
-#test -f $(which libtoolize) && libtoolize --copy --force && sed -i -r 's/(hardcode_into_libs)=.*$/\1=no/' config/m4/*.m4
+test -f $(which libtoolize) && libtoolize --copy --force && sed -i -r 's/(hardcode_into_libs)=.*$/\1=no/' config/m4/*.m4
 
 # on ubuntu, libtool 2.2.6a-1ubuntu1 is broken. Since we need that for package building, try to fix it if necessary
 grep -l "^VERSION=\"2.2.6 Debian-2.2.6a-1ubuntu1\"" ltmain.sh
