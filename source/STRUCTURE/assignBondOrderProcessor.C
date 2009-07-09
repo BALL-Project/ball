@@ -1133,7 +1133,7 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 									)
 						{	
 							found_another = computeNextSolution(options.getBool(Option::APPLY_FIRST_SOLUTION));
-							last_sol_is_optimal &= (getTotalPenalty(0)==getTotalPenalty(solutions_.size()-1));
+							last_sol_is_optimal &= (fabs(getTotalPenalty(0)-getTotalPenalty(solutions_.size()-1)) < 1.e-4);
 						}
 #if defined DEBUG_TIMER		
 					timer_.stop();
