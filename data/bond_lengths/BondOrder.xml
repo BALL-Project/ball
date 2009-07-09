@@ -212,6 +212,13 @@
 		<penalty valence="3">0</penalty>
 		<penalty valence="4">1</penalty>
 		<penalty valence="5">2</penalty>
+	</entry>	
+	<entry id="251">
+		<elementstring>P</elementstring>
+		<!-- Note: this is _SLOW_ -->
+		<smartstring>SMARTS([$([#15D4](~[#8D1,#16D1])(~[!#8&amp;!#16,!D1])(~[!#8&amp;!#16,!D1])(~[#8D1-,#16D1-]))])</smartstring>
+		<penalty valence="5">0</penalty>
+		<penalty valence="6">32</penalty>
 	</entry>
 	<entry id="25">
 		<elementstring>P</elementstring>
