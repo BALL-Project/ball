@@ -283,8 +283,12 @@ namespace BALL
  
     std::vector<std::vector<std::pair<Vector3,double> > > layers_; 
   
-    /** returns radius for an element
-     */    
+    /** Determine the radius of an element
+		 *
+		 * @param element the full name of the element for which a radius should be looked up. Example: "Oxygen"
+		 * @throw IllegalArgument if an unknown element has been passed
+		 * @return The radius of the specified element
+     */
     double radius_(const String& element);
     
     /** calculates two spheres if possible
