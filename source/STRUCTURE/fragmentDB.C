@@ -1165,10 +1165,6 @@ namespace BALL
 					}
 					
 					hit_counter++;
-					
-					// Stop after finding first atom-name of the current fragment. 
-					// Within *one* fragment name-convention can savely be assumed not to change.
-					break; 
 				}
 				
 				// update hit_count for each map
