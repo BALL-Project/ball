@@ -2,6 +2,7 @@
 
 #include <BALL/MOLMEC/AMBER/GAFFCESParser.h>
 #include "GAFFCESParserParser.h"
+#include <BALL/COMMON/parserDefinitions.h>
 
 using namespace BALL;
 

@@ -1,5 +1,6 @@
 %{
 #include <BALL/STRUCTURE/smilesParser.h>
+#include <BALL/COMMON/parserDefinitions.h>
 
 using namespace BALL;
 
