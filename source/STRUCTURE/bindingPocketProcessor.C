@@ -363,7 +363,7 @@ namespace BALL
 		else
 		{
 			Log.error() << "error: unknown element: "  << element << std::endl;
-			exit(-1);
+			throw(Exception::InvalidArgument(__FILE__, __LINE__, element));
 		}
 
 		return radius;

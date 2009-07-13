@@ -1,6 +1,7 @@
 %{
 // $Id: parsedFunctionLexer.l,v 1.2 2002/12/12 10:22:09 oliver Exp $
 #include <BALL/MATHS/parsedFunction.h>
+#include <BALL/COMMON/parserDefinitions.h>
 
 using namespace BALL;
 
