@@ -826,9 +826,9 @@ namespace BALL
 			}
 
 		  // !!!! attention: resnum is the real "index"
-			if (summary_[resnum] != last_struct)
+			if (summary_[resnum]!=last_struct)
 			{
-				if (last_struct != 'L' || (summary_[resnum] != 'G' && summary_[resnum] != '-'))
+				if (last_struct!='L' || summary_[resnum]=='H' || summary_[resnum]=='E')
 				{
 					ss = new SecondaryStructure;
 					new_ss.push_back(ss);
