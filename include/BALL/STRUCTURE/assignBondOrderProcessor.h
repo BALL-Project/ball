@@ -542,13 +542,13 @@ namespace BALL
 				public:
 				
 					// Default constructor
-					PQ_Entry_(float alpha = 0., float atom_type_normalization_factor = 1., float bond_length_normalization_factor = 1., bool use_fine_penalty=true);
+					PQ_Entry_();
 								
 					// Copy constructor
 					PQ_Entry_(const PQ_Entry_& entry);
 
 					// Destructor
-					virtual ~PQ_Entry_();
+					~PQ_Entry_();
 					
 					// 
 					void clear();
@@ -560,17 +560,18 @@ namespace BALL
 		
 					float coarsePenalty(float atom_type_penalty, float bond_length_penalty) const 
 					{
-						return ( ( (    (atom_type_normalization_factor_ < 0.0001)
-										     || (bond_length_normalization_factor_ < 0.0001)
-												 || (alpha_ < 0.0001)) ? 
+						return ( ( (    (atom_type_normalization_factor < 0.0001)
+										     || (bond_length_normalization_factor < 0.0001)
+												 || (alpha < 0.0001)) ? 
 											 atom_type_penalty :
-											 ((1.-alpha_) * (atom_type_penalty / atom_type_normalization_factor_)
-								    		+ (alpha_* bond_length_penalty / bond_length_normalization_factor_))));
+											 ((1.-alpha) * (atom_type_penalty / atom_type_normalization_factor)
+								    		+ (alpha* bond_length_penalty / bond_length_normalization_factor))));
 					}
 									
 					// the penalty
 					float coarsePenalty() const 
-					{ return coarsePenalty(estimated_atom_type_penalty, estimated_bond_length_penalty);
+					{ 
+						return coarsePenalty(estimated_atom_type_penalty, estimated_bond_length_penalty);
 					}
 					
 					// the bond length penalty 
@@ -584,16 +585,24 @@ namespace BALL
 					// the bond orders 
 					// the i-th entry denotes the bondorder of the i-th bond
 					// unset bonds get the order 0
-					vector<int> bond_orders;
+					vector<short> bond_orders;
 			
 					// the index of the bond last considered 
 					Position last_bond;
 
-					protected:
-						float alpha_;
-						float atom_type_normalization_factor_;
-						float bond_length_normalization_factor_;
-						bool  use_fine_penalty_;
+					// NOTE: these variables are here to speed up
+					//       a number of decisions, but we do not
+					//       want to store them in each PQ_Entry_
+					//       object since they are the same in the
+					//       whole queue
+					//
+					//       But this approach is not thread-safe!
+					//       Two simultaneously running bond order threads
+					//       might overwrite their alpha, ... values!
+					static float alpha;
+					static float atom_type_normalization_factor;
+					static float bond_length_normalization_factor;
+					static bool  use_fine_penalty;
 				};
 			
 			/** Reads, checks and stores the options. 	
@@ -739,7 +748,7 @@ namespace BALL
 
 			// Map for storing the bonds fixed orders
 			// if a bond is free, the map returns 0
-			std::map<Bond*, int> bond_fixed_;
+			std::map<Bond*, short> bond_fixed_;
 
 			// all free bonds in the atom container
 			std::vector<Bond*> free_bonds_;
@@ -838,6 +847,16 @@ namespace BALL
 			// flag for using fine penalties derived from 3d information
 			bool use_fine_penalty_;
 			
+			// this enum allows faster access to the type of the chosen heuristic than a string compare
+			enum HEURISTIC_INDEX
+			{
+				SIMPLE,
+				MEDIUM,
+				TIGHT
+			};
+
+			HEURISTIC_INDEX heuristic_index_;
+
 			// //////// ************ for Algorithm::BRANCH_AND_BOUND ************ /////////
 			bool performBranchAndBound_();
 			float greedy_atom_type_penalty_; 

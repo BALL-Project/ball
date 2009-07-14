@@ -124,6 +124,11 @@ namespace BALL
 	const char* AssignBondOrderProcessor::Option::BRANCH_AND_BOUND_CUTOFF = "branch_and_bound_cutoff";
 	const float  AssignBondOrderProcessor::Default::BRANCH_AND_BOUND_CUTOFF = 1.2;
 
+	float AssignBondOrderProcessor::PQ_Entry_::alpha = 0.;
+	float AssignBondOrderProcessor::PQ_Entry_::atom_type_normalization_factor = 1.;
+	float AssignBondOrderProcessor::PQ_Entry_::bond_length_normalization_factor = 1.;
+	bool  AssignBondOrderProcessor::PQ_Entry_::use_fine_penalty = true;
+
 	AssignBondOrderProcessor::AssignBondOrderProcessor()
 		: UnaryProcessor<AtomContainer>(),
 			options(),
@@ -157,6 +162,7 @@ namespace BALL
 			add_missing_hydrogens_(),
 			compute_also_connectivity_(),
 			use_fine_penalty_(),
+			heuristic_index_(SIMPLE),
 			greedy_atom_type_penalty_(0.),
 			greedy_bond_length_penalty_(0.),
 			greedy_node_expansions_(0),
@@ -210,6 +216,7 @@ namespace BALL
 			add_missing_hydrogens_(abop.add_missing_hydrogens_),	
 			compute_also_connectivity_(abop.compute_also_connectivity_),
 			use_fine_penalty_(abop.use_fine_penalty_),	
+			heuristic_index_(abop.heuristic_index_),
 			greedy_atom_type_penalty_(abop.greedy_atom_type_penalty_),
 			greedy_bond_length_penalty_(abop.greedy_bond_length_penalty_),
 			greedy_node_expansions_(abop.greedy_node_expansions_),
@@ -291,6 +298,7 @@ namespace BALL
 		add_missing_hydrogens_ = abop.add_missing_hydrogens_;	
 		compute_also_connectivity_ = abop.compute_also_connectivity_;
 		use_fine_penalty_ = abop.use_fine_penalty_;	
+		heuristic_index_ = abop.heuristic_index_;	
 		greedy_atom_type_penalty_ = abop.greedy_atom_type_penalty_,
 		greedy_bond_length_penalty_ = abop.greedy_bond_length_penalty_,
 		greedy_node_expansions_ = abop.greedy_node_expansions_;
@@ -391,6 +399,14 @@ namespace BALL
 		compute_also_connectivity_ = options.getBool(Option::COMPUTE_ALSO_CONNECTIVITY);
 		use_fine_penalty_ = options.getBool(Option::USE_FINE_PENALTY);
 		
+		String heuristic = options.get(Option::HEURISTIC);
+		if (heuristic == Heuristic::TIGHT)
+			heuristic_index_ = TIGHT;
+		else if (heuristic == Heuristic::MEDIUM)
+			heuristic_index_ = MEDIUM;
+		else if (heuristic == Heuristic::SIMPLE)
+			heuristic_index_ = SIMPLE;
+
 		if (max_bond_order_ <= 0)
 		{
 			Log.error() << __FILE__ << " " << __LINE__ 
@@ -919,6 +935,12 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 				// Generate penalty values for all atoms in the AtomContainer ac
 				if (preassignPenaltyClasses_() && precomputeBondLengthPenalties_())
 				{
+					// set the static variables in the PQ entries for faster access
+					PQ_Entry_::alpha = alpha_;
+					PQ_Entry_::atom_type_normalization_factor = atom_type_normalization_factor_;
+					PQ_Entry_::bond_length_normalization_factor = bond_length_normalization_factor_;
+					PQ_Entry_::use_fine_penalty = use_fine_penalty_;
+
 					bool found_a_sol = false;
 
 #if defined DEBUG_TIMER	
@@ -931,7 +953,7 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 						// Further solutions will be computed calling the method computeNextSolution
 
 						// Initialize the priority queue
-						PQ_Entry_ entry(alpha_, atom_type_normalization_factor_, bond_length_normalization_factor_, use_fine_penalty_);
+						PQ_Entry_ entry;
 						entry.bond_orders.resize(total_num_of_bonds_ + num_of_virtual_bonds_,-1);
 						entry.last_bond = 0;
 
@@ -992,7 +1014,7 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 					{
 						int greedy_k = options.getInteger(Option::GREEDY_K_SIZE);
 						// Create a dummy entry for initialization of the greedy set
-						PQ_Entry_ entry(alpha_, atom_type_normalization_factor_, bond_length_normalization_factor_, use_fine_penalty_);
+						PQ_Entry_ entry;
 						entry.bond_orders.resize(total_num_of_bonds_ + num_of_virtual_bonds_, -1);
 						entry.last_bond = 0;
 						
@@ -1012,7 +1034,7 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 						// Initialize the greedy search
 						int greedy_k = options.getInteger(Option::GREEDY_K_SIZE);
 						// Create a dummy entry for initialization of the greedy set
-						PQ_Entry_ entry(alpha_, atom_type_normalization_factor_, bond_length_normalization_factor_, use_fine_penalty_);
+						PQ_Entry_ entry;
 						entry.bond_orders.resize(total_num_of_bonds_ + num_of_virtual_bonds_, -1);
 						entry.last_bond = 0;
 						
@@ -1037,7 +1059,7 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 						step_ = greedy_node_expansions_; 
 
 						// Initialize the priority queue
-						entry = PQ_Entry_(alpha_, atom_type_normalization_factor_, bond_length_normalization_factor_, use_fine_penalty_);
+						entry = PQ_Entry_();
 						entry.bond_orders.resize(total_num_of_bonds_ + num_of_virtual_bonds_,-1);
 						entry.last_bond = 0;
 
@@ -1248,7 +1270,7 @@ cout << "AssignBondOrderProcessor::called estimatePenalty_()"<< endl;
 			if (     add_missing_hydrogens_
 					 && (atom_to_virtual_bond_index_.find(&*a_it) != atom_to_virtual_bond_index_.end()))
 			{
-				virtual_order = std::max(0,entry.bond_orders[atom_to_virtual_bond_index_[&*a_it] + total_num_of_bonds_]);
+				virtual_order = std::max((short)0,entry.bond_orders[atom_to_virtual_bond_index_[&*a_it] + total_num_of_bonds_]);
 				valence += virtual_order;
 			}
 
@@ -1459,19 +1481,19 @@ cout << " ) : atom type pen = " << entry.estimated_atom_type_penalty << ", bond 
 				{ 
 					// at which position in the current penalty vector are we at the moment?
 					int i = current_start_valence;
-					if (options.get(Option::HEURISTIC) == Heuristic::SIMPLE) 	
+					if (heuristic_index_ == SIMPLE)
 					{
 				 		// this is the default case
 				 		// Position i = current_start_valence;
 					}
-					else if (options.get(Option::HEURISTIC) == Heuristic::MEDIUM) 	
+					else if (heuristic_index_ == MEDIUM)
 					{
 						// at which position in the current penalty vector are we at the moment?
 						i = (fixed_valence + num_free_bonds < current_start_valence) 
 							? current_start_valence
 							: fixed_valence + num_free_bonds;
 					}
-					else if (options.get(Option::HEURISTIC) == Heuristic::TIGHT) 
+					else if (heuristic_index_ == TIGHT)
 					{
 						// find a lower bound
 						// at which position in the current penalty vector are we at the moment?
@@ -1523,7 +1545,7 @@ cout << " ) : atom type pen = " << entry.estimated_atom_type_penalty << ", bond 
 								if (    add_missing_hydrogens_
 										&& (atom_to_virtual_bond_index_.find(neighbor) != atom_to_virtual_bond_index_.end()))
 								{
-									neighbors_virtual_bonds = std::max(0,entry.bond_orders[atom_to_virtual_bond_index_[neighbor] + total_num_of_bonds_]);
+									neighbors_virtual_bonds = std::max((short)0,entry.bond_orders[atom_to_virtual_bond_index_[neighbor] + total_num_of_bonds_]);
 								}
 							}
 							int n_atom_index = neighbor->getProperty("AssignBondOrderProcessorAtomNo").getUnsignedInt();
@@ -3035,15 +3057,11 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 	//////////////////////////// the PQ_Entry_ - class
 	
 	// Default constructor
-	AssignBondOrderProcessor::PQ_Entry_::PQ_Entry_(float alpha, float atom_type_normalization_factor, float bond_length_normalization_factor, bool use_fine_penalty)
+	AssignBondOrderProcessor::PQ_Entry_::PQ_Entry_()
 		: estimated_atom_type_penalty(0.), 
 			estimated_bond_length_penalty(0.),
 			bond_orders(),
-			last_bond(),
-			alpha_(alpha),
-			atom_type_normalization_factor_(atom_type_normalization_factor), 
-			bond_length_normalization_factor_(bond_length_normalization_factor),
-			use_fine_penalty_(use_fine_penalty)
+			last_bond()
 	{
 	}
 
@@ -3052,11 +3070,7 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 		: estimated_atom_type_penalty(entry.estimated_atom_type_penalty),
 			estimated_bond_length_penalty(entry.estimated_bond_length_penalty),
 			bond_orders(entry.bond_orders),
-			last_bond(entry.last_bond),
-			alpha_(entry.alpha_),
-			atom_type_normalization_factor_(entry.atom_type_normalization_factor_), 
-			bond_length_normalization_factor_(entry.bond_length_normalization_factor_),
-			use_fine_penalty_(entry.use_fine_penalty_)
+			last_bond(entry.last_bond)
 	{	
 	}
 	
@@ -3068,14 +3082,10 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 	// clear-method
 	void AssignBondOrderProcessor::PQ_Entry_::clear()
 	{
-		alpha_ = 0;
 		estimated_atom_type_penalty = 0.;
 		estimated_bond_length_penalty = 0.;
 		last_bond = 0;
 		bond_orders.clear();
-		atom_type_normalization_factor_ = 0;
-		bond_length_normalization_factor_ = 0;
-		use_fine_penalty_ = true;
 	}
 
 	// the less operator
@@ -3091,7 +3101,7 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 		{ 
 			if (coarsePenalty() == b.coarsePenalty())
 			{
-				if (use_fine_penalty_ && (finePenalty() > b.finePenalty()))
+				if (use_fine_penalty && (finePenalty() > b.finePenalty()))
 				{
 					value = true;
 				}
@@ -3123,7 +3133,13 @@ cout << "AssignBondOrderProcessor::PQ_Entry_::operator <: " <<  coarsePenalty() 
 			ac_ = ac;
 			if (preassignPenaltyClasses_() && precomputeBondLengthPenalties_())
 			{
-				PQ_Entry_ entry(alpha_, atom_type_normalization_factor_, bond_length_normalization_factor_, use_fine_penalty_);
+				// set the static variables in the PQ entries for faster access
+				PQ_Entry_::alpha = alpha_;
+				PQ_Entry_::atom_type_normalization_factor = atom_type_normalization_factor_;
+				PQ_Entry_::bond_length_normalization_factor = bond_length_normalization_factor_;
+				PQ_Entry_::use_fine_penalty = use_fine_penalty_;
+
+				PQ_Entry_ entry;
 				
 				AtomIterator a_it = ac_->beginAtom();
 				Atom::BondIterator b_it = a_it->beginBond();
@@ -3139,7 +3155,7 @@ cout << "AssignBondOrderProcessor::PQ_Entry_::operator <: " <<  coarsePenalty() 
 					{
 						bond_to_index_[&(*b_it)] = i;	
 						index_to_bond_[i] = &(*b_it);
-						entry.bond_orders[i] = b_it->getOrder();	
+						entry.bond_orders[i] = (short)b_it->getOrder();	
 						i++;
 					}
 				}
