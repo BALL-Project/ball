@@ -13,7 +13,13 @@
 				Note that in the SMARTS strings we use atomic numbers rather than symbols (e.g. #8 instead of O).
 				The reason is that wrongly assigned aromatic bonds in the input would lead to failure to identify the
 				right rule!
- -->	
+	-->	
+	<!-- for charged H -->
+	<entry id="0">
+		<elementstring>H</elementstring>
+		<smartstring>SMARTS([#1+])</smartstring>
+		<penalty valence="0">0</penalty>
+	</entry>
 	<entry id="1">
 		<elementstring>H</elementstring>
 		<smartstring>SMARTS([#1])</smartstring>
@@ -25,16 +31,7 @@
 		<penalty valence="0">64</penalty>
 		<penalty valence="1">0</penalty>
 		<penalty valence="2">64</penalty>
-	</entry>
-	<entry id="3">
-		<elementstring>Cl</elementstring>
-		<smartstring>SMARTS(Cl)</smartstring>
-		<penalty valence="0">64</penalty>
-		<penalty valence="1">0</penalty>
-		<penalty valence="2">64</penalty>	
-		<penalty valence="3">128</penalty>
-		<penalty valence="4">128</penalty>
-	</entry>
+	</entry>	
 	<entry id="4">
 		<elementstring>Br</elementstring>
 		<smartstring>SMARTS(Br)</smartstring>
@@ -49,9 +46,9 @@
 		<penalty valence="1">0</penalty>
 		<penalty valence="2">64</penalty>
 	</entry>
-	<entry id="6">
+	<entry id="6"> <!-- 	SMARTS([CD1]~[ND2]) AND element(C)</smartstring> -->
 		<elementstring>C</elementstring>
-		<smartstring>SMARTS([$([#6D1](~[#7D2]))])</smartstring> <!-- 	SMARTS([CD1]~[ND2]) AND element(C)</smartstring> -->
+		<smartstring>SMARTS([$([#6D1](~[#7D2]))])</smartstring>
 		<penalty valence="3">0</penalty>
 		<penalty valence="4">1</penalty>
 		<penalty valence="5">32</penalty>
@@ -63,19 +60,6 @@
 		<penalty valence="4">0</penalty>
 		<penalty valence="5">32</penalty>
 	</entry>
-	<!--	<entry id="81">
-		<elementstring>C</elementstring>
-		<smartstring>SMARTS([$([#6D3](~[#8D1,#16D1,#8H,#16H])(~[#8D1,#16D1]))])</smartstring>
-		<penalty valence="3">0</penalty>
-		<penalty valence="4">0</penalty>
-	</entry>
-	<entry id="8">
-		<elementstring>C</elementstring>
-		<smartstring>SMARTS([$([#6D3](~[#8D1,#16D1])(~[#8D1,#16D1]))])</smartstring>
-		<penalty valence="4">32</penalty>
-		<penalty valence="5">0</penalty>
-		<penalty valence="6">32</penalty>
-	</entry> -->
 	<entry id="9">
 		<elementstring>C</elementstring>
 		<smartstring>SMARTS([#6])</smartstring>
@@ -116,6 +100,14 @@
 		<penalty valence="3">0</penalty>
 		<penalty valence="4">2</penalty>
 	</entry>
+	<entry id="151"><!-- for charged N in  O == N+ __ O- -->	
+		<elementstring>N</elementstring>
+		<smartstring>SMARTS([$([#7D3](~[#8D1-,#16D1-])~[#8D1,#16D1])])</smartstring>
+		<penalty valence="3">32</penalty>
+		<penalty valence="4">0</penalty>
+		<penalty valence="5">32</penalty>
+		<penalty valence="6">64</penalty>
+	</entry>
 	<entry id="15">
 		<elementstring>N</elementstring>
 		<smartstring>SMARTS([$([#7D3](~[#8D1,#16D1])~[#8D1,#16D1])])</smartstring>
@@ -139,7 +131,7 @@
 		<penalty valence="4">1</penalty>
 		<penalty valence="5">2</penalty>
 	</entry>
-	<entry id="181">
+	<entry id="181"><!-- for charged N in   N+ H_4 -->
 		<elementstring>N</elementstring>
 		<smartstring>SMARTS([#7D4+])</smartstring>
 		<penalty valence="3">32</penalty>
@@ -157,7 +149,7 @@
 		<smartstring>SMARTS([#7D5])</smartstring>
 		<penalty valence="5">0</penalty>
 	</entry>
-	<entry id="191">
+	<entry id="191"><!-- for charged O- -->	
 		<elementstring>O</elementstring>
 		<smartstring>SMARTS([#8D1-])</smartstring>
 		<penalty valence="1">0</penalty>
@@ -177,25 +169,17 @@
 	</entry>
 	<entry id="20">
 		<elementstring>O</elementstring>
-		<smartstring> SMARTS([#8D1])</smartstring> <!--SMARTS(OD1) OR SMARTS([oD1])</smartstring> -->
+		<smartstring> SMARTS([#8D1])</smartstring> 
 		<penalty valence="1">1</penalty>
 		<penalty valence="2">0</penalty>
 		<penalty valence="3">64</penalty>
 	</entry>
 	<entry id="21">
 		<elementstring>O</elementstring>
-		<smartstring>SMARTS([#8D2])</smartstring> <!--SMARTS(OD2) OR SMARTS([oD2])</smartstring>-->
+		<smartstring>SMARTS([#8D2])</smartstring> 
 		<penalty valence="1">32</penalty>
 		<penalty valence="2">0</penalty>
 		<penalty valence="3">64</penalty>
-	</entry>
-	<entry id="211">
-		<elementstring>O</elementstring>
-		<smartstring>SMARTS([#8D3])</smartstring> <!--ANNE TODO: delete>-->
-		<penalty valence="1">64</penalty>
-		<penalty valence="2">32</penalty>
-		<penalty valence="3">0</penalty>
-		<penalty valence="4">32</penalty>
 	</entry>
 	<entry id="22">
 		<elementstring>P</elementstring>
@@ -222,7 +206,7 @@
 	<entry id="251">
 		<elementstring>P</elementstring>
 		<!-- Note: this is _SLOW_ -->
-		<smartstring>SMARTS([$([#15D4](~[#8D1,#16D1])(~[!#8&amp;!#16,!D1])(~[!#8&amp;!#16,!D1])(~[#8D1-,#16D1-]))])</smartstring>
+		<smartstring>SMARTS([$([#15D4](~[#8D1,#16D1])(~[!#8&amp;!#16,!D1])(~[!#8&amp;!#16,!D1,#8D1-,#16D1-])(~[#8D1-,#16D1-]))])</smartstring>
 		<penalty valence="5">0</penalty>
 		<penalty valence="6">32</penalty>
 	</entry>
@@ -271,11 +255,6 @@
 	<entry id="30">
 		<elementstring>S</elementstring>
 		<smartstring>SMARTS([#16D2])</smartstring>
-		<!-- These are the penalties given in the GAFF - paper; unfortunately, the values implemented in antechamber are different!		
-		<penalty valence="1">32</penalty>
-		<penalty valence="2">0</penalty>
-		<penalty valence="3">32</penalty>
-		<penalty valence="4">1</penalty> -->
 		<penalty valence="1">2</penalty>
 		<penalty valence="2">0</penalty>
 		<penalty valence="3">64</penalty>
@@ -293,6 +272,11 @@
 		<smartstring>	SMARTS([$([#16D4](~[#8D1,#16D1])(~[#8D1,#16D1])(~[!#8&amp;!#16,!D1])(~[!#8&amp;!#16,!D1]))])</smartstring>
 		<penalty valence="6">0</penalty>
 		<penalty valence="7">32</penalty>
+		</entry>	
+	<entry id="331"><!--for a charged O in SO_4 -->
+		<elementstring>S</elementstring>
+		<smartstring>SMARTS([$([#16D4](~[#8D1-,#16D1-])(~[#8D1,#16D1])(~[#8D1,#16D1])(~[!#8&amp;!#16,!D1]))])</smartstring>		
+		<penalty valence="6">0</penalty>
 	</entry>
 	<entry id="33">
 		<elementstring>S</elementstring>
@@ -360,9 +344,18 @@
 		<smartstring>SMARTS([#26])</smartstring>
 		<penalty valence="0">0</penalty>
 	</entry>
-	<entry id="47">
+	<entry id="48">
+		<elementstring>Cl</elementstring>
+		<smartstring>SMARTS([#17-])</smartstring>
+		<penalty valence="0">0</penalty>
+	</entry>
+	<entry id="49">
 		<elementstring>Cl</elementstring>
 		<smartstring>SMARTS([#17])</smartstring>
-		<penalty valence="0">0</penalty>
+		<penalty valence="0">64</penalty>
+		<penalty valence="1">0</penalty>
+		<penalty valence="2">64</penalty>	
+		<penalty valence="3">128</penalty>
+		<penalty valence="4">128</penalty>
 	</entry>
 </table>
