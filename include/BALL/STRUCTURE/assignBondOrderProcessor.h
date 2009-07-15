@@ -785,7 +785,6 @@ namespace BALL
 			//
 			//
 			
-#ifdef BALL_HAS_LPSOLVE
 			// ********************* ILP stuff ***********************
 			//
 			// Vector for mapping from variable indices onto free bonds in the
@@ -794,7 +793,9 @@ namespace BALL
 
 			// number of bond variables in the ILP
 			Position ilp_number_of_free_bonds_;
-#endif
+			
+			// Constant penalty (fixed bonds)
+			float ilp_const_penalty_;
 			
 			// ******************* general datastructures *********************
 

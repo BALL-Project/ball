@@ -146,6 +146,7 @@ namespace BALL
 			virtual_bond_(NULL), 
 			ilp_index_to_free_bond_(),
 			ilp_number_of_free_bonds_(),
+			ilp_const_penalty_(0.f),
 			total_num_of_bonds_(0),
 			num_of_free_bonds_(0),
 			fixed_val_(),
@@ -200,6 +201,7 @@ namespace BALL
 			virtual_bond_(abop.virtual_bond_), 
 			ilp_index_to_free_bond_(abop.ilp_index_to_free_bond_),
 			ilp_number_of_free_bonds_(abop.ilp_number_of_free_bonds_),
+			ilp_const_penalty_(abop.ilp_const_penalty_),
 			total_num_of_bonds_(abop.total_num_of_bonds_),
 			num_of_free_bonds_(abop.num_of_free_bonds_),
 			fixed_val_(abop.fixed_val_),
@@ -282,6 +284,7 @@ namespace BALL
 
 		ilp_index_to_free_bond_ = abop.ilp_index_to_free_bond_;
 		ilp_number_of_free_bonds_ = abop.ilp_number_of_free_bonds_;
+		ilp_const_penalty_ = abop.ilp_const_penalty_;
 		total_num_of_bonds_ = abop.total_num_of_bonds_;
 		num_of_free_bonds_ = abop.num_of_free_bonds_;
 		fixed_val_ = abop.fixed_val_;
@@ -351,6 +354,7 @@ namespace BALL
 
 		ilp_index_to_free_bond_.clear();
 		ilp_number_of_free_bonds_ = 0;
+		ilp_const_penalty_ = 0.f;
 		total_num_of_bonds_ = 0;
 		num_of_free_bonds_ = 0;
 
@@ -2321,7 +2325,7 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 			// we assume, that the AtomContainer is valid and the correct one! 
 
 			// delete all former VIRTUAL BONDs
-			// did we already applied a solution?
+			// did we already apply a solution?
 			if (last_applied_solution_>=0)
 			{	
 				for (Size j=0; j < solutions_[last_applied_solution_].atoms_to_delete.size(); j++)
@@ -2557,6 +2561,8 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 #ifdef BALL_HAS_LPSOLVE
 	bool AssignBondOrderProcessor::createILP_()
 	{
+		ilp_const_penalty_ = 0.f;
+		
 		// Check number of variables with prefix 'x'
 		Position total_no_bonds = ac_->countBonds();
 
@@ -2588,8 +2594,10 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 		{
 			Atom* at1 = ac_->getAtom(current_atom);
 			Position consider_bonds = 0;
+			int valence = 0;
 			for (Atom::BondIterator bit = at1->beginBond(); +bit; ++bit)
 			{
+				valence += bit->getOrder();
 				if (!bond_fixed_[&*bit]) // this bond is free => calculate bond order
 				{
 					++consider_bonds;
@@ -2619,6 +2627,14 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 				
 				no_y += current_length;
 				max_no_ent = std::max(max_no_ent, current_length);
+			}
+			else
+			{
+				int pos = valence - block_to_start_valence_[atom_to_block_[current_atom][0]];
+				if (pos >= 0)
+				{
+					ilp_const_penalty_ += penalties_[block_to_start_idx_[atom_to_block_[current_atom][0]] + pos];
+				}
 			}
 			
 			max_no_atom_bonds = std::max(consider_bonds, max_no_atom_bonds);
@@ -2818,7 +2834,8 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 		//write_LP(ilp_, stdout);
 		return true;
 	}
-
+	
+	
 	bool AssignBondOrderProcessor::solveILP_()
 	{
 		Solution_ solution;
@@ -2844,7 +2861,7 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 			REAL *vars;
 			get_ptr_variables(ilp_, &vars);
 			
-			solution.atom_type_penalty = get_objective(ilp_);
+			solution.atom_type_penalty = get_objective(ilp_) + ilp_const_penalty_;
 			
 			// Do the assignment of the bond orders
 			for(Position i = 0; i < ilp_number_of_free_bonds_; )
