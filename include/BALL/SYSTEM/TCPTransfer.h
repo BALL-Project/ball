@@ -36,6 +36,8 @@ namespace BALL
 
 			/// typdef for Socket
 			typedef int Socket;
+			
+			static const int TIMEOUT;
 
 			/** Enumeration of some status codes.
 					In addition to these TCPTransfer can also return the
@@ -277,6 +279,10 @@ namespace BALL
 				
 				//_
 				int getReceivedBytes_(Socket& socket);
+				
+				/** Reads input from 'socket', waiting if there is a network connection problem (as long as specified by TIMEOUT) 
+				@return the number of bytes that were read */
+				int readInputFromSocket_(Socket& socket);
 
 			private:
 				
