@@ -257,13 +257,13 @@ class String
 	int size() const;
   const char* c_str() const;
 
-/*
+
 	long __hash__();
 %MethodCode
-	BALL_MAP_NAMESPACE::hash<const String> h;
+	BALL_MAP_NAMESPACE::hash<String> h;
 	sipRes = h(*sipCpp);
 %End
-*/
+
 
   SIP_PYOBJECT __str__();
 %MethodCode
