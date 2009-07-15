@@ -490,7 +490,7 @@ CHECK(testing bond order assignment using ILP - operator() and apply(Position i)
 	mol3 >> sys3;
 	storeBondOrders(sys3);
 	sys3.apply(testbop);
-	testbop.apply(6);
+	testbop.apply(7);
 	TEST_EQUAL(compareBondOrder(sys3), true)
 
 
@@ -1236,7 +1236,7 @@ CHECK(Option::ADD_HYDROGENS using ILP )
 	storeHBonds(sys2);
 	deleteHBonds(sys2);
 	sys2.apply(testbop);	
-	testbop.apply(1);
+	testbop.apply(2);
 	TEST_EQUAL(compareHBonds(sys2), true)
 
 	System sys3;
@@ -1245,7 +1245,7 @@ CHECK(Option::ADD_HYDROGENS using ILP )
 	storeHBonds(sys3);
 	deleteHBonds(sys3);
 	sys3.apply(testbop);
-	testbop.apply(2);
+	testbop.apply(1);
 	TEST_EQUAL(compareHBonds(sys3), true)
 	
 RESULT
@@ -1326,17 +1326,18 @@ CHECK(getNumberOfAddedHydrogens() using ILP)
 	mol20 >> sys20;
 	sys20.apply(testbop_ilp);
 
-	// NOTE: operator () __has to__ compute 1 solution more than optimal!
-	TEST_EQUAL(testbop_ilp.getNumberOfComputedSolutions(), 4)
+	// NOTE: Usually operator () has to compute 1 solution more than optimal but not in this case.
+	// The resulting ILP for another solution is not feasible!
+	TEST_EQUAL(testbop_ilp.getNumberOfComputedSolutions(), 3)
 
 	testbop_ilp.apply(0);
 	TEST_REAL_EQUAL(testbop_ilp.getNumberOfAddedHydrogens(0), 6)
 	
 	testbop_ilp.apply(1);
-	TEST_REAL_EQUAL(testbop_ilp.getNumberOfAddedHydrogens(1), 4)
+	TEST_REAL_EQUAL(testbop_ilp.getNumberOfAddedHydrogens(1), 2)
 	
 	testbop_ilp.apply(2);
-	TEST_REAL_EQUAL(testbop_ilp.getNumberOfAddedHydrogens(2), 2)
+	TEST_REAL_EQUAL(testbop_ilp.getNumberOfAddedHydrogens(2), 4)
 RESULT
 #endif
 
