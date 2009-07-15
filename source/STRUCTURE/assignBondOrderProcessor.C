@@ -2205,7 +2205,14 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 				hydrogen->setName((PTE[Element::H].getSymbol())+String(num_of_atoms));
 				num_of_atoms++;
 				hydrogen->setProperty("VIRTUAL__ATOM", true);
-				atom->getFragment()->insert(*hydrogen);
+				if (atom->getFragment())
+				{
+					atom->getFragment()->insert(*hydrogen);
+				}
+				else
+				{
+					atom->getMolecule()->insert(*hydrogen);
+				}
 				atoms_to_delete.push_back(hydrogen);
 				
 				// and a bond to the atomcontainer
@@ -2380,7 +2387,14 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 						hydrogen->setName(PTE[Element::H].getSymbol()+String(num_of_atoms));
 						num_of_atoms++;
 						hydrogen->setProperty("VIRTUAL__ATOM", true);
-						a_it->getFragment()->insert(*hydrogen);
+						if (a_it->getFragment())
+						{
+							a_it->getFragment()->insert(*hydrogen);
+						}
+						else
+						{
+							a_it->getMolecule()->insert(*hydrogen);
+						}
 						solution.atoms_to_delete.push_back(hydrogen);
 
 						// TODO: set the Hydrogen's Positions correctly!
