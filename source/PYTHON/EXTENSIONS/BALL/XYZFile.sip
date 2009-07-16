@@ -4,7 +4,7 @@
 // $Id$
 //
 
-class XYZFile 
+class XYZFile
 	: File
 {
 %TypeHeaderCode
@@ -19,4 +19,5 @@ class XYZFile
   ~XYZFile() throw();
   virtual bool write(const System&) throw(File::CannotWrite);
   virtual bool read(System&) throw(ParseError);
+	const String& getComment();
 };
