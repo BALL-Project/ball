@@ -13,6 +13,8 @@
 #include <QtGui/qapplication.h>
 #include <QtCore/QUrl>
 
+#include <BALL/COMMON/init.h>
+
 namespace BALL
 {
 	namespace VIEW
@@ -579,6 +581,10 @@ namespace BALL
 				}
 			}
 		}
+
+	// just to be on the safe side, create a BALL initializer object here as well,
+	// so that libVIEW is also covered
+	GlobalInitializer* gi = GlobalInitializer::init();
 
 	} // namespace VIEW
 } //namespace BALL
