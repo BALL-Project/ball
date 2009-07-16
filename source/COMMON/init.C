@@ -4,12 +4,16 @@
 
 #include <BALL/COMMON/init.h>
 
+#include <locale.h>
 #include <stdlib.h>
 
 namespace BALL
 {
 	GlobalInitializer* GlobalInitializer::init()
 	{
+		setlocale(LC_NUMERIC, "C");
+		setenv("LC_NUMERIC", "C", 1);
+
 		static GlobalInitializer instance;
 		return &instance;
 	}
