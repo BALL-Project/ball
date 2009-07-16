@@ -638,19 +638,13 @@ bool String::isDigit(char c)
 
 BALL_INLINE 
 bool String::isFloat() const 
-	
 {
-	// for compatibility, we treat the empty string as a float that will be cast to 0
-	if (size() == 0)
-		return true;
-
-	double d=0.;
-	std::istringstream sstr(*this);
-	sstr.imbue(std::locale("C"));
-
-	sstr >> d;
-
-	return (!sstr.fail() && sstr.eof());
+	char* test;
+	char* str = const_cast<char*>(c_str());
+  errno = 0;
+	double d = 0;
+	d = strtod(str, &test);
+	return (errno == 0 && strlen(test) == 0);
 }
 
 BALL_INLINE 
