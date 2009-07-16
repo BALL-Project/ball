@@ -345,7 +345,6 @@ namespace BALL
 
 	void Mainframe::about()
 	{
-		Log.info() << sizeof(Mainframe) <<std::endl;
 		// Display about dialog
 		QDialog w;
  		Ui_AboutDialog about;
