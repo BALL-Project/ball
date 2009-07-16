@@ -125,8 +125,9 @@ namespace BALL
 				static const char* OVERWRITE_SELECTED_BONDS; 	
 				
 				/**	add hydrogens based on free valences
+				 *  <b>NOTE:</b> This option is still experimental.
 				*/
-				static const char* ADD_HYDROGENS;
+				static const char* ADD_HYDROGENS;             //TODO
 
 				/**  compute also the connectivity of the molecule 
 				 * \par
@@ -138,7 +139,7 @@ namespace BALL
 				 *  \par
 				 *   <b>NOTE:</b> This option is still experimental
 				 */
-				static const char* CONNECTIVITY_CUTOFF;      //TODO 
+				static const char* CONNECTIVITY_CUTOFF;       //TODO 
 				
 				/**	resolve penalty ties based on structural information
 				*/
@@ -656,7 +657,7 @@ namespace BALL
 			bool precomputeBondLengthPenalties_();
 
 			/** Adds missing hydrogens as virtual hydrogens to the 
-			 *  given Atom,determines the possible penalty blocks, and 
+			 *  given Atom, determines the possible penalty blocks, and 
 			 *  returns the maximal possible atom type penalty.  
 			 *
 			 *  "virtual" means that NO  
