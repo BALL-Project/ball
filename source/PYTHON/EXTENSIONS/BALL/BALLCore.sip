@@ -22,7 +22,6 @@
 
 %Feature BALL_HAS_ASIO
 
-%Include versions.sip
 %Include copying.sip
 
 %Include vector.sip
