@@ -11,6 +11,8 @@
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/nucleotide.h>
+#include <BALL/KERNEL/nucleicAcid.h>
+#include <BALL/KERNEL/chain.h>
 #include <BALL/COMMON/limits.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/forEach.h>
@@ -1090,174 +1092,222 @@ namespace BALL
 			return false;
 		}
 
-		String map_name = "-" + naming_standard_;
+		const char* error_msg = "FragmentDB: cannot locate an appropriate name conversion table!";
+		const String map_name = "-" + naming_standard_;
 
-		StringHashMap<NameMap>	table;
-		table = fragment_db_->getNamingStandards();
+		StringHashMap<NameMap>& table = fragment_db_->getNamingStandards();
 
-		StringHashMap<NameMap>::Iterator it;
+		HashMap<NameMap*, Index> usable_maps;
 
-		StringHashMap<Index> usable_maps;
-
-		Size number_of_tables = 0;
-		for (it = table.begin(); it != table.end(); ++it)
+		for (StringHashMap<NameMap>::Iterator it = table.begin(); it != table.end(); ++it)
 		{
 			if (it->first.hasSubstring(map_name))
 			{
-				number_of_tables++;
-				usable_maps[it->first] = 0;
+				usable_maps[&it->second] = 0;
 			}
 		}
-				
-		list<Fragment*>::iterator	frag_it;				
-		AtomIterator										atom_it;
-		StringHashMap<Index>::Iterator	map_iterator;
-		NameMap* map = 0;
-		String match_name;
-		String atom_name;
-		String res_name;
-		String res_name_suffix;
-		Size hit_counter;
-		
-		for (frag_it = fragments_.begin(); frag_it != fragments_.end(); ++frag_it)
-		{	
-			for (map_iterator = usable_maps.begin(); !(map_iterator == usable_maps.end()); ++map_iterator)
+
+		if (usable_maps.size() == 0) {
+			Log.error() << error_msg << endl;
+			return false;
+		}
+
+		//We now sort the fragments into parent containers if available. The rational
+		//is that we should get a more stable estimate of the applicable naming scheme
+		//if we iterate over a set of fragments than applying naming schemes to a
+		//single Fragment, as there might by errors which could lead to the selection
+		//of a wrong naming scheme.
+		map<AtomContainer*, list<Fragment*> > parent_containers;
+
+		list<Fragment*>::iterator frag_it = fragments_.begin();
+		while(frag_it != fragments_.end()) {
+			Residue* residue = 0;
+			Nucleotide* nacid = 0;
+
+			if((residue = RTTI::castTo<Residue>(**frag_it)) && residue->getChain())
 			{
-				hit_counter = 0;
-				map = &table[map_iterator->first];
-				// determine the fragment name
-				res_name = (*frag_it)->getName();
-				
-				// determine whether the fragment is an amino acid
-				// if it is: determine the correct name for N-,C-terminal AA
-				Residue* const residue = RTTI::castTo<Residue>(**frag_it);
-				if (residue != 0)
-				{
-					if (residue->isCTerminal()) res_name_suffix = "-C";
-					else if (residue->isNTerminal()) res_name_suffix = "-N";
-				}
-				else
-				{
-					res_name_suffix = "";
-				}
-				
-				for (atom_it = (*frag_it)->beginAtom(); +atom_it; ++atom_it)
-				{
-					atom_name = atom_it->getName();
-					
-					// first, try to match exactly
-					match_name = res_name + res_name_suffix;
-					if (!matchName(match_name, atom_name, *map))
-					{
-						// try to match non-terminal residues
-						if (!matchName(res_name, atom_name, *map))
-						{
-							match_name = "*" + res_name_suffix;
-							if (!matchName(match_name, atom_name, *map))
-							{
-								match_name = "*";
-								if (!matchName(match_name, atom_name, *map))
-								{
-									continue;
-								}
-							}
-						}
-					}
-					
-					hit_counter++;
-				}
-				
-				// update hit_count for each map
-				map_iterator->second = hit_counter;
+				parent_containers[static_cast<AtomContainer*>(residue->getChain())].push_back(*frag_it);
+				frag_it = fragments_.erase(frag_it);
 			}
-			
-			// these two variables are needed to store the best map
-			Index max_hits = -1;
-			map_name = "";
-			
-			// look for the best map
-			for (map_iterator = usable_maps.begin(); !(map_iterator == usable_maps.end()); ++map_iterator)
+			else if ((nacid = RTTI::castTo<Nucleotide>(**frag_it)) && nacid->getNucleicAcid())
 			{
-				if (map_iterator->second > max_hits)
-				{
-					max_hits = (*map_iterator).second;
-					map_name = (*map_iterator).first;
-				}
-			}
-			
-			// after having identified the map, use it to replace the names
-			// first, get the map
-			if (table.find(map_name) != table.end())
-			{
-				map = &table[map_name];
+				parent_containers[static_cast<AtomContainer*>(nacid->getNucleicAcid())].push_back(*frag_it);
+				frag_it = fragments_.erase(frag_it);
 			}
 			else
 			{
-				map = 0;
-			}
-			
-			// we found an appropriate map, so use it
-			if ((max_hits > 0) && (map != 0))
-			{
-				// extract the residue name
-				res_name = (*frag_it)->getName();
-				
-				// determine whether the fragment is an amino acid
-				// if it is: determine the correct name for N-,C-terminal AA
-				Residue* const residue = RTTI::castTo<Residue>(**frag_it);
-				if (residue != 0)
-				{
-					if 			(residue->isCTerminal()) res_name_suffix = "-C";
-					else if (residue->isNTerminal()) res_name_suffix = "-N";
-				}
-				else
-				{
-					res_name_suffix = "";
-				}
-				
-				// now, iterate over the fragment`s atoms
-				for (atom_it = (*frag_it)->beginAtom(); +atom_it; ++atom_it)
-				{
-					// get the atom name
-					atom_name = atom_it->getName();
-					
-					// first, try to match exactly
-					match_name = res_name + res_name_suffix;
-					if (!matchName(match_name, atom_name, *map))
-					{
-						// second, try to match non-terminal residues exactly
-						if (!matchName(res_name, atom_name, *map))
-						{
-							// try wildcard match for residue names
-							match_name = "*" + res_name_suffix;
-							if (!matchName(match_name, atom_name, *map))
-							{
-								// last alternative: try wildcard with unmodified name
-								match_name = "*";
-								if (!matchName(match_name, atom_name, *map))
-								{
-									continue;
-								}
-							}
-						}
-					}
-					
-					atom_it->setName(atom_name);
-					atom_it->getFragment()->setName(res_name);
-				}
-			}
-			
-			// if we couldn't find an appropriate table, complain about it!
-			if (number_of_tables == 0 || max_hits < 0)
-			{
-				Log.error() << "FragmentDB: cannot locate an appropriate name conversion table!" << endl;
-				return false;
+				++frag_it;
 			}
 		}
-		
+
+		const NameMap* map;
+
+		//First deal with the remaining fragments
+		for(list<Fragment*>::iterator frag_it = fragments_.begin(); frag_it != fragments_.end(); ++frag_it) {
+			countHits_(usable_maps, *frag_it, OVERWRITE);
+			// we found an appropriate map, so use it
+			if ((map = getBestMap_(usable_maps)) != 0)
+			{
+				normalizeFragment_(map, *frag_it);
+			}
+			else
+			{
+				// if we couldn't find an appropriate table, complain about it!
+				Log.error() << error_msg << endl;
+			}
+		}
+
+		//Now look at all fragments that could be assigned to a chain
+		std::map<AtomContainer*, list<Fragment*> >::iterator chain_it;
+		for (chain_it = parent_containers.begin(); chain_it != parent_containers.end(); ++chain_it)
+		{
+			countHits_(usable_maps, chain_it->second);
+			// we found an appropriate map, so use it
+			if ((map = getBestMap_(usable_maps)) != 0)
+			{
+				normalizeFragments_(map, chain_it->second);
+			}
+			else
+			{
+				// if we couldn't find an appropriate table, complain about it!
+				Log.error() << error_msg << endl;
+			}
+
+		}
+
 		return true;
 	}
 
+	String FragmentDB::NormalizeNamesProcessor::getSuffix_(const Fragment* frag) const
+	{
+		// determine whether the fragment is an amino acid
+		// if it is: determine the correct name for N-,C-terminal AA
+		const Residue* const residue = RTTI::castTo<Residue>(*frag);
+		if (residue != 0)
+		{
+			if (residue->isCTerminal()) return String("-C");
+			if (residue->isNTerminal()) return String("-N");
+		}
+
+		return String();
+	}
+
+	bool FragmentDB::NormalizeNamesProcessor::doMatch_(String& res_name, const String& res_name_suffix, String& atom_name, const NameMap& name_map) const
+	{
+		// first, try to match exactly
+		String match_name = res_name + res_name_suffix;
+		if (res_name_suffix.isEmpty() || !matchName(match_name, atom_name, name_map))
+		{
+			// try to match non-terminal residues
+			if (!matchName(res_name, atom_name, name_map))
+			{
+				match_name = "*" + res_name_suffix;
+				if (res_name_suffix.isEmpty() || !matchName(match_name, atom_name, name_map))
+				{
+					match_name = "*";
+					if (!matchName(match_name, atom_name, name_map))
+					{
+						return false;
+					}
+				}
+			}
+		}
+
+		return true;
+	}
+
+	void FragmentDB::NormalizeNamesProcessor::countHits_(HashMap<NameMap*, Index>& maps, const std::list<Fragment*>& frags)
+	{
+		if(frags.size() == 0) {
+			return;
+		}
+
+		list<Fragment*>::const_iterator it = frags.begin();
+		countHits_(maps, *it, OVERWRITE);
+
+		for (++it; it != frags.end(); ++it)
+		{
+			countHits_(maps, *it, ADD);
+		}
+	}
+
+	void FragmentDB::NormalizeNamesProcessor::countHits_(HashMap<NameMap*, Index>& maps, const Fragment* frag, CountingMode mode)
+	{
+		String atom_name;
+		String res_name = frag->getName();
+		AtomConstIterator atom_it;
+		HashMap<NameMap*, Index>::Iterator map_iterator;
+
+		for (map_iterator = maps.begin(); map_iterator != maps.end(); ++map_iterator)
+		{
+			Size hit_counter = 0;
+			String res_name_suffix = getSuffix_(frag);
+
+			for (atom_it = frag->beginAtom(); +atom_it; ++atom_it)
+			{
+				atom_name = atom_it->getName();
+
+				if(doMatch_(res_name, res_name_suffix, atom_name, *map_iterator->first)) {
+					hit_counter++;
+				}
+			}
+
+			// update hit_count for each map
+			if(mode == ADD) {
+				map_iterator->second += hit_counter;
+			} else {
+				map_iterator->second = hit_counter;
+			}
+		}
+	}
+
+	const FragmentDB::NameMap* FragmentDB::NormalizeNamesProcessor::getBestMap_(const HashMap<NameMap*, Index>& maps) const
+	{
+		// these two variables are needed to store the best map
+		Index max_hits = 0;
+		NameMap* result = 0;
+
+		// look for the best map
+		HashMap<NameMap*, Index>::ConstIterator map_iterator;
+		for (map_iterator = maps.begin(); map_iterator != maps.end(); ++map_iterator)
+		{
+			if (map_iterator->second > max_hits)
+			{
+				max_hits = (*map_iterator).second;
+				result   = (*map_iterator).first;
+			}
+		}
+
+		return result;
+	}
+
+	void FragmentDB::NormalizeNamesProcessor::normalizeFragments_(const NameMap* name_map, const std::list<Fragment*>& frags)
+	{
+		for (list<Fragment*>::const_iterator frag_it = frags.begin(); frag_it != frags.end(); ++frag_it)
+		{
+			normalizeFragment_(name_map, *frag_it);
+		}
+	}
+
+	void FragmentDB::NormalizeNamesProcessor::normalizeFragment_(const NameMap* name_map, Fragment* frag)
+	{
+		String atom_name;
+		// extract the residue name
+		String res_name = frag->getName();
+		String res_name_suffix = getSuffix_(frag);
+
+		// now, iterate over the fragment`s atoms
+		for (AtomIterator atom_it = frag->beginAtom(); +atom_it; ++atom_it)
+		{
+			// get the atom name
+			atom_name = atom_it->getName();
+
+			if(doMatch_(res_name, res_name_suffix, atom_name, *name_map)) {
+				atom_it->setName(atom_name);
+				atom_it->getFragment()->setName(res_name);
+			}
+		}
+	}
 	/////////////////////////////////////////////////////////////////////
 	//	BuildBondsProcessor
 	/////////////////////////////////////////////////////////////////////
