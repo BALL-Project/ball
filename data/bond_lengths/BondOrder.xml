@@ -181,6 +181,11 @@
 		<penalty valence="2">0</penalty>
 		<penalty valence="3">64</penalty>
 	</entry>
+	<entry id="211">
+		<elementstring>O</elementstring>
+		<smartstring>SMARTS([#8D3])</smartstring>
+		<penalty valence="3">0</penalty>
+	</entry>
 	<entry id="22">
 		<elementstring>P</elementstring>
 		<smartstring>SMARTS(#15D1)</smartstring>
