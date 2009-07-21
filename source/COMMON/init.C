@@ -12,6 +12,7 @@ namespace BALL
 	GlobalInitializer* GlobalInitializer::init()
 	{
 		setlocale(LC_NUMERIC, "C");
+		unsetenv("LC_ALL");
 		setenv("LC_NUMERIC", "C", 1);
 
 		static GlobalInitializer instance;
