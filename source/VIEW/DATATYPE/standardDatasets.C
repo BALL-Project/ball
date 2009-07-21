@@ -541,7 +541,7 @@ namespace BALL
 			rep->insert(*mesh);
 			rep->setModelType(MODEL_CONTOUR_SURFACE); 
 
-			List<const Composite*> composites;
+			list<const Composite*> composites;
 			if (data.getComposite() != 0) composites.push_back(data.getComposite());
 			rep->setComposites(composites);
 

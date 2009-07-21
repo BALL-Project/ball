@@ -11,10 +11,6 @@
 #	include <BALL/CONCEPT/composite.h>
 #endif
 
-#ifndef BALL_DATATYPE_LIST_H
-#	include <BALL/DATATYPE/list.h>
-#endif
-
 #ifndef BALL_CONCEPT_PROPERTY_H
 # include <BALL/CONCEPT/property.h>
 #endif

@@ -60,7 +60,7 @@ namespace BALL
 
 	bool ComposedEnergyProcessor::finish()
 	{
-		EnergyProcessorList::Iterator list_it = components_.begin();
+		EnergyProcessorList::iterator list_it = components_.begin();
 		for (; list_it != components_.end(); ++list_it)
 		{
 			((AtomContainer*) fragment_)->apply(**list_it);
@@ -104,7 +104,7 @@ namespace BALL
 	void ComposedEnergyProcessor::checkValidity()
 	{
 		valid_ = true;
-		EnergyProcessorList::Iterator it = components_.begin();
+		EnergyProcessorList::iterator it = components_.begin();
 		for (; it != components_.end(); ++it)
 		{
 			if (!(*it)->isValid())

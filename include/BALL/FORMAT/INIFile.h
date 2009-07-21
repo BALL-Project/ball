@@ -15,10 +15,6 @@
 #	include <BALL/CONCEPT/processor.h>
 #endif
 
-#ifndef BALL_DATATYPE_LIST_H
-# include <BALL/DATATYPE/list.h>
-#endif
-
 namespace BALL 
 {
 	class INIFile;
@@ -79,14 +75,14 @@ namespace BALL
 			String																	name_;
 
 			// all lines of the section
-			List<String>														lines_;
+			std::list<String>														lines_;
 
 			// hashmap with all keys
-			StringHashMap<List<String>::Iterator>		key_map_;
+			StringHashMap<std::list<String>::iterator>		key_map_;
 		};
 
 		///
-		typedef List<Section>::Iterator SectionIterator;
+		typedef std::list<Section>::iterator SectionIterator;
 
 		/** An iterator for the lines in an INIFile.
 				With a LineIterator it is easy to iterate over all lines
@@ -416,11 +412,11 @@ namespace BALL
 		bool duplicateKeyCheckEnabled() const;
 
 		///
-		List<String> getContent() const
+		std::list<String> getContent() const
 			;
 
 		///
-		bool setContent(const List<String>& lines)
+		bool setContent(const std::list<String>& lines)
 			;
 
 		protected:
@@ -432,7 +428,7 @@ namespace BALL
 		String														filename_;	
 
 		// all sections, 0. section is HEADER
-		List<Section>											sections_;
+		std::list<Section>											sections_;
 
 		// hashmap with the section names  => index
 		StringHashMap<SectionIterator>		section_index_;
@@ -461,7 +457,7 @@ namespace BALL
 			const IteratorTraits_& operator = (const IteratorTraits_ &traits);
 
 			///
-			List<String>::Iterator getPosition();
+			std::list<String>::iterator getPosition();
 
 			///
 			SectionIterator getSection();
@@ -520,21 +516,21 @@ namespace BALL
 			protected:
 
 			//_
-			IteratorTraits_(List<Section>& list, 
+			IteratorTraits_(std::list<Section>& list,
 											SectionIterator section, 
-											List<String>::Iterator line);
+											std::list<String>::iterator line);
 			
 			//_
-			const List<Section>* getBound_() const;
+			const std::list<Section>* getBound_() const;
 
 			//_
 			void setLine_(const String& line);
 
 			private:
 
-			List<Section>*					bound_;
+			std::list<Section>*					bound_;
 			SectionIterator					section_;
-			List<String>::Iterator	position_;
+			std::list<String>::iterator	position_;
 		};
 	};
 } // namespace BALL

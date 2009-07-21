@@ -449,21 +449,21 @@ class BALL_VIEW_EXPORT GenericSelectionMessage: public Message
 	/** Change the selection of Composite objects.
 			The selection list will be copied from the given list.
 	*/
-	void setSelection(const List<Composite*>& selection);
+	void setSelection(const std::list<Composite*>& selection);
 
 	/** Non-mutable inspection of the selection of Composite objects.
 	*/
-	const List<Composite*>& getSelection() const;
+	const std::list<Composite*>& getSelection() const;
 
 	/** mutable inspection of the selection of Composite objects.
 	*/
-	List<Composite*>& getSelection();
+	std::list<Composite*>& getSelection();
 
 	//@}
 
 	private:
 
-	List<Composite*> selection_;
+	std::list<Composite*> selection_;
 };
 
 
@@ -526,12 +526,12 @@ class BALL_VIEW_EXPORT GeometricObjectSelectionMessage: public Message
 	/** Change the selection of Composite objects.
 			The selection list will be copied from the given list.
 	*/
-	void setSelection(const List<GeometricObject*>& selection)
+	void setSelection(const std::list<GeometricObject*>& selection)
 		 { selection_ = selection;}
 
 	/** Non-mutable inspection of the selection of Composite objects.
 	*/
-	const List<GeometricObject*>& getSelection() const
+	const std::list<GeometricObject*>& getSelection() const
 		 { return selection_;}
 
 	/// Set the GeometricObject's to be selected or deselected
@@ -546,7 +546,7 @@ class BALL_VIEW_EXPORT GeometricObjectSelectionMessage: public Message
 
 	private:
 
-	List<GeometricObject*> selection_;
+	std::list<GeometricObject*> selection_;
 
 	bool state_;
 };
@@ -680,13 +680,13 @@ class BALL_VIEW_EXPORT CreateRepresentationMessage
 		CreateRepresentationMessage();
 
 		///
-		CreateRepresentationMessage(const List<Composite*>& composites, 
+		CreateRepresentationMessage(const std::list<Composite*>& composites,
 																ModelType model_type, 
 																ColoringMethod coloring_method)
 			;   
 
 		///
-		const List<Composite*>& getComposites() const
+		const std::list<Composite*>& getComposites() const
 			 { return composites_;}
 
 		///
@@ -698,7 +698,7 @@ class BALL_VIEW_EXPORT CreateRepresentationMessage
 			 { return coloring_method_;} 
 	
  		private: 
-		List<Composite*> 	composites_;
+		std::list<Composite*> 	composites_;
 		ModelType 				model_type_;
 		ColoringMethod 		coloring_method_;
 };

@@ -151,7 +151,7 @@ namespace BALL
 			ColorRGBA	 	selected_color, min_min_color, min_color, mid_color, max_color, max_max_color;	
 
 			Representation* rep_;
-			List<RegularData3D*> grid_list_;
+			std::list<RegularData3D*> grid_list_;
 			vector<Vector3> vertices_;
 			MaterialSettings* material_settings_;
 		};

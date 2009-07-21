@@ -89,6 +89,6 @@ class ItemCollector
 	}
 
 	protected:
-	List<DataType*>											list_;
-	typename List<DataType*>::iterator	list_it_;
+	list<DataType*>											list_;
+	typename list<DataType*>::iterator	list_it_;
 };

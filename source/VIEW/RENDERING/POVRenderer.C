@@ -262,7 +262,7 @@ namespace BALL
 			}
 
 			// Set the light sources
-			List<LightSource>::ConstIterator it = stage_->getLightSources().begin();
+			list<LightSource>::const_iterator it = stage_->getLightSources().begin();
 			for (; it!=stage_->getLightSources().end(); ++it)
 			{
 				// first, set up the color of the light source
@@ -460,7 +460,7 @@ namespace BALL
 					out << "union {" << endl;
 				}
 
-				List<GeometricObject*>::ConstIterator it;
+				list<GeometricObject*>::const_iterator it;
 				for (it =  (*rit)->getGeometricObjects().begin();
 						 it != (*rit)->getGeometricObjects().end();
 						 it++)
@@ -859,7 +859,7 @@ namespace BALL
 				return false;
 			}	
 
-			List<GeometricObject*>::ConstIterator it;
+			list<GeometricObject*>::const_iterator it;
 
 			for (it =  representation.getGeometricObjects().begin();
 					 it != representation.getGeometricObjects().end();

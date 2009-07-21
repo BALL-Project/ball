@@ -322,7 +322,7 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			s << "Light sources: -------------------------------" << endl;
 
-			List<LightSource>::ConstIterator it = light_sources_.begin();
+			list<LightSource>::const_iterator it = light_sources_.begin();
 			for (; it != light_sources_.end(); it++)
 			{
 				it->dump(s, depth + 1);
@@ -419,7 +419,7 @@ namespace BALL
 
 		void Stage::removeLightSource(const LightSource& light_source)
 		{
-			List<LightSource>::Iterator it = light_sources_.begin();
+			list<LightSource>::iterator it = light_sources_.begin();
 			for (; it != light_sources_.end(); it++)
 			{
 				if (&*it == &light_source) 

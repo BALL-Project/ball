@@ -188,13 +188,13 @@ namespace BALL
 			}
 		}
 
-		Camera focusCamera(const List<Vector3>& points)
+		Camera focusCamera(const list<Vector3>& points)
 		{
 			// use processor for calculating the center
 			GeometricCenterProcessor center;
 			center.start();
 
-			List<Vector3>::const_iterator vit = points.begin();
+			list<Vector3>::const_iterator vit = points.begin();
 			for (; vit != points.end(); ++vit)
 			{
 				center.operator()(*vit);
@@ -279,7 +279,7 @@ namespace BALL
 				to_center_on = *mc->getMolecularControlSelection().begin();
 			}
 
-			List<Vector3> positions;
+			list<Vector3> positions;
 
 			AtomContainer* ai = dynamic_cast<AtomContainer*>(to_center_on);
 			if (ai != 0)

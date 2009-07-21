@@ -347,7 +347,7 @@ namespace BALL
 				light_nr = GL_LIGHT0;
 			}
 
-			List<LightSource>::ConstIterator it = stage_->getLightSources().begin();
+			list<LightSource>::const_iterator it = stage_->getLightSources().begin();
 			for (; it != stage_->getLightSources().end(); it++)
 			{
 				if (reset_all && !it->isRelativeToCamera())
@@ -500,8 +500,8 @@ namespace BALL
 				
 				vector<MeshBuffer*>& buffers = rep_to_buffers_.find(&rep)->second;
 
-				const List<GeometricObject*>& geometric_objects = rep.getGeometricObjects();
-				List<GeometricObject*>::ConstIterator git = geometric_objects.begin();
+				const list<GeometricObject*>& geometric_objects = rep.getGeometricObjects();
+				list<GeometricObject*>::const_iterator git = geometric_objects.begin();
 				for (; git != geometric_objects.end(); git++)
 				{
 					const Mesh* const mesh = dynamic_cast<Mesh*>(*git);
@@ -572,7 +572,7 @@ namespace BALL
 			// show light sources
 			if (show_light_sources_)
 			{
-				List<LightSource>::ConstIterator lit = stage_->getLightSources().begin();
+				list<LightSource>::const_iterator lit = stage_->getLightSources().begin();
 				for (; lit != stage_->getLightSources().end(); lit++)
 				{
 					Vector3 pos = (*lit).getPosition();
@@ -619,7 +619,7 @@ namespace BALL
 					}
 				}
 
-				RepresentationList::ConstIterator it = pm.getRepresentations().begin();
+				RepresentationList::const_iterator it = pm.getRepresentations().begin();
 				for(; it != pm.getRepresentations().end(); it++)
 				{
 					Representation& rep = **it;
@@ -869,9 +869,9 @@ namespace BALL
 			model_type_ = representation.getModelType();
 
 			// accelerate things a little by calling getGeometricObjects() only once
-			const List<GeometricObject*>& geometric_objects = representation.getGeometricObjects();
+			const list<GeometricObject*>& geometric_objects = representation.getGeometricObjects();
 			if (geometric_objects.size() == 0) return;
-			List<GeometricObject*>::ConstIterator it = geometric_objects.begin();
+			list<GeometricObject*>::const_iterator it = geometric_objects.begin();
 			if (for_display_list)
 			{
 				if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
@@ -1855,7 +1855,7 @@ namespace BALL
 		}
 
 
-		void GLRenderer::pickObjects2(List<GeometricObject*>& objects)
+		void GLRenderer::pickObjects2(list<GeometricObject*>& objects)
 		{
 			glFlush();
 

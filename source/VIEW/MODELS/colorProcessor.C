@@ -12,7 +12,6 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/PTE.h>
-#include <BALL/DATATYPE/list.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/SYSTEM/sysinfo.h>
 
@@ -219,11 +218,11 @@ namespace BALL
 				return;
 			}
 			
-			List<const Atom*> atoms;
+			list<const Atom*> atoms;
 
 			if (from_mesh == 0)
 			{
-				List<const Composite*>::const_iterator it = composites_->begin();
+				list<const Composite*>::const_iterator it = composites_->begin();
 				for(; it != composites_->end(); it++)
 				{
 					if (RTTI::isKindOf<AtomContainer>(**it))
@@ -264,7 +263,7 @@ namespace BALL
 
 			BoundingBoxProcessor boxp;
 			boxp.start();
-			List<const Atom*>::Iterator lit = atoms.begin();
+			list<const Atom*>::iterator lit = atoms.begin();
 			for(;lit != atoms.end(); lit++)
 			{
 				boxp.operator() (*(Atom*)*lit);
@@ -330,7 +329,7 @@ namespace BALL
 			}
 		}
 
-		void ColorProcessor::setComposites(const List<const Composite*>* composites)
+		void ColorProcessor::setComposites(const list<const Composite*>* composites)
 		{ 
 			composites_ = composites;
 			clearAtomGrid();
@@ -382,7 +381,7 @@ namespace BALL
 
 			const Atom* const* item = 0;
 			float distance = Limits<float>::max();
-			List<HashGridBox3<const Atom*>* > box_list;
+			list<HashGridBox3<const Atom*>* > box_list;
 			Size dist = 1;
 			// iterator over neighbour boxes
 			for (Index xi = -(Index)dist; xi <= (Index)dist; xi++)

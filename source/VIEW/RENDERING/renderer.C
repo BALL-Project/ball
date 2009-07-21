@@ -66,7 +66,7 @@ namespace BALL
 				return false;
 			}
 
-			List<GeometricObject*>::ConstIterator it;
+			list<GeometricObject*>::const_iterator it;
 			for (it =  representation.getGeometricObjects().begin();
 					 it != representation.getGeometricObjects().end();
 					 it++)

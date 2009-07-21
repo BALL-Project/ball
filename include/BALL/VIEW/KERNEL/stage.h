@@ -26,10 +26,6 @@
 # include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #endif
 
-#ifndef BALL_DATATYPE_LIST_H
-# include <BALL/DATATYPE/list.h>
-#endif
-
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
 # include <BALL/VIEW/KERNEL/representation.h>
 #endif
@@ -426,7 +422,7 @@ namespace BALL
 			//@{
 			
 			/// Get the light sources (const)
-			virtual const List<LightSource>& getLightSources() const
+			virtual const std::list<LightSource>& getLightSources() const
 				{ return light_sources_;}
 
 			/// Add a light source
@@ -586,7 +582,7 @@ namespace BALL
 			ColorRGBA 					info_color_;
 
 			//_
-			List<LightSource> 	light_sources_;
+			std::list<LightSource> light_sources_;
 
 			//_
 			Camera 						 	camera_;

@@ -453,8 +453,8 @@ namespace BALL
 		}
 
 		void RenderSetup::pickObjects(Position x1, Position y1,
-																  Position x2, Position y2, 
-																	List<GeometricObject*>& objects)
+		                              Position x2, Position y2,
+		                              list<GeometricObject*>& objects)
 		{
 			if (!RTTI::isKindOf<GLRenderer>(*renderer))
 			{

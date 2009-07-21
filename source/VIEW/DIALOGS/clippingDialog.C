@@ -61,7 +61,7 @@ void ClippingDialog::exec()
 	const ModelInformation& mi = mc->getModelInformation();
 
 	Position row= 0;
-	RepresentationList::ConstIterator it = pm.getRepresentations().begin();
+	RepresentationList::const_iterator it = pm.getRepresentations().begin();
 	for (; it != pm.getRepresentations().end(); it++)
 	{
 		const Representation& rep = **it;
@@ -98,7 +98,7 @@ void ClippingDialog::accept()
 
 	clipping_plane_->getRepresentations().clear();
 
-	List<Representation*> lreps = getMainControl()->getRepresentationManager().getRepresentations();
+	std::list<Representation*> lreps = getMainControl()->getRepresentationManager().getRepresentations();
 	vector<const Representation*> reps;
 	reps.resize(lreps.size());
 	copy(lreps.begin(), lreps.end(), reps.begin());

@@ -83,10 +83,10 @@ namespace BALL
 				virtual bool setValue(const String& value);
 
 				///
-				List<Hotkey> getContent() const;
+				std::list<Hotkey> getContent() const;
 
 				///
-				void setContent(const List<Hotkey>& hotkeys);
+				void setContent(const std::list<Hotkey>& hotkeys);
 
 				public slots:
 				
@@ -140,10 +140,10 @@ namespace BALL
 			String getFilename() const;
 
 			///
-			const List<Hotkey> getContent() const;
+			const std::list<Hotkey> getContent() const;
 			
 			///
-			void setContent(const List<Hotkey>& hotkeys);
+			void setContent(const std::list<Hotkey>& hotkeys);
 
 			///
 			void writePreferenceEntries(INIFile& inifile);

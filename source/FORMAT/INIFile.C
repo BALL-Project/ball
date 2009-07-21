@@ -47,8 +47,8 @@ namespace BALL
 
 	void INIFile::clear()
 	{
-		sections_.destroy();
-		section_index_.destroy();
+		sections_.clear();
+		section_index_.clear();
 		valid_ = false;
 		check_duplicate_keys_ = false;
 
@@ -98,7 +98,7 @@ namespace BALL
 			return false;
 		}
 
-		List<Section>::Iterator	section_it(sections_.begin());
+		list<Section>::iterator	section_it(sections_.begin());
 
 		// read all lines from the file
 		std::vector<char> buffer(MAX_LINE_LENGTH);
@@ -333,7 +333,7 @@ namespace BALL
  			}
 			
 			section.lines_.push_back(line);
-			List<String >::Iterator	line_it(section.lines_.end());
+			list<String >::iterator	line_it(section.lines_.end());
 			line_it--;
 
 			section.key_map_[key] = line_it;
@@ -350,7 +350,7 @@ namespace BALL
 	{
 		Size number_of_lines(0);
 	
-		List<Section>::ConstIterator it = sections_.begin();
+		list<Section>::const_iterator it = sections_.begin();
 		for (; it != sections_.end(); ++it)
 		{
 			number_of_lines += it->lines_.size();
@@ -416,7 +416,7 @@ namespace BALL
 		}
 
 		SectionIterator sit = getSection(section_name);
-		List<String >::Iterator	line_it(sit->lines_.end());
+		list<String >::iterator	line_it(sit->lines_.end());
 		if (sit->lines_.size() > 0) line_it--;
 		return LineIterator(sections_, getSection(section_name), line_it);
 	}
@@ -589,7 +589,7 @@ namespace BALL
 
 	bool INIFile::isValid(const SectionIterator& it) const
 	{
-		return ((List<Section>::ConstIterator)it != sections_.end());
+		return ((list<Section>::const_iterator)it != sections_.end());
 	}
 
 	void INIFile::setDuplicateKeyCheck(bool mode)
@@ -602,10 +602,10 @@ namespace BALL
 		return check_duplicate_keys_;
 	}
 
-	List<String> INIFile::getContent() const
+	list<String> INIFile::getContent() const
 		
 	{
-		List<String> lines;
+		list<String> lines;
 		LineIterator it = const_cast<INIFile*>(this)->getLine(0);
 		for (; +it; ++it)
 		{
@@ -616,10 +616,10 @@ namespace BALL
 	}
 
 
-	bool INIFile::setContent(const List<String>& lines)
+	bool INIFile::setContent(const list<String>& lines)
 		
 	{
- 		List<String>::ConstIterator it = lines.begin();
+		list<String>::const_iterator it = lines.begin();
 		for (; it != lines.end(); ++it)
 		{
 			if (!appendLine(*it)) return false;
@@ -649,9 +649,9 @@ namespace BALL
 	{
 	}
 	
-	INIFile::IteratorTraits_::IteratorTraits_(List<INIFile::Section>& list, 
+	INIFile::IteratorTraits_::IteratorTraits_(list<INIFile::Section>& list,
 																					  INIFile::SectionIterator section, 
-																						List<String>::Iterator line)
+																						list<String>::iterator line)
 		:	bound_(&list),
 			section_(section),
 			position_(line)
@@ -679,7 +679,7 @@ namespace BALL
 		return *this;
 	}
 
-	List<String>::Iterator INIFile::IteratorTraits_::getPosition()
+	list<String>::iterator INIFile::IteratorTraits_::getPosition()
 	{
 		return position_;
 	}
@@ -794,7 +794,7 @@ namespace BALL
 	bool INIFile::IteratorTraits_::isSectionLastLine() const
 	{
 		if (!isValid()) return false;
-		List<String>::Iterator it = section_->lines_.end();
+		list<String>::iterator it = section_->lines_.end();
 		it--;
 		return (position_ == it);
 	}				
@@ -833,7 +833,7 @@ namespace BALL
 	}
 
 
-	const List<INIFile::Section>* INIFile::IteratorTraits_::getBound_() const
+	const list<INIFile::Section>* INIFile::IteratorTraits_::getBound_() const
 	{
 		return bound_;
 	}

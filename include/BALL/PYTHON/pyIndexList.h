@@ -11,10 +11,6 @@
 #	include <BALL/common.h>
 #endif
 
-#ifndef BALL_DATAYPE_LIST_H
-#	include <BALL/DATATYPE/list.h>
-#endif
-
 #ifndef BALL_DATAYPE_STRING_H
 #	include <BALL/DATATYPE/string.h>
 #endif
@@ -27,7 +23,7 @@ namespace BALL
 			\ingroup PythonExtensions		
 	*/
 	class PyIndexList
-		:	public List<Index>
+		:	public std::list<Index>
 	{
 		public:
 
@@ -47,11 +43,11 @@ namespace BALL
 
 		/**	Iterator type.
 		*/
-		typedef List<Index>::iterator Iterator;
+		typedef std::list<Index>::iterator Iterator;
 
 		/**	Constant iterator type.
 		*/
-		typedef List<Index>::const_iterator ConstIterator;
+		typedef std::list<Index>::const_iterator ConstIterator;
 
 		//@}
 

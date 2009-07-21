@@ -87,7 +87,7 @@ CHECK(ShiftModel::getModuleList() throw())
 
 	if (sm.getModuleList().size() == 4)
 	{
-		List<ShiftModule*>::const_iterator list_it = sm.getModuleList().begin();
+		list<ShiftModule*>::const_iterator list_it = sm.getModuleList().begin();
 		for (; list_it != sm.getModuleList().end(); ++list_it)
 		{
 			TEST_EQUAL((*list_it)->isValid(), true)

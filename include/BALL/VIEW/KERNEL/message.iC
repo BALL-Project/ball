@@ -66,21 +66,21 @@ const String& CompositeMessage::getCompositeName() const
 }
 	
 BALL_INLINE
-void GenericSelectionMessage::setSelection(const List<Composite*>& selection)
+void GenericSelectionMessage::setSelection(const std::list<Composite*>& selection)
 	
 {
 	selection_ = selection;
 }
 
 BALL_INLINE
-const List<Composite*>& GenericSelectionMessage::getSelection() const
+const std::list<Composite*>& GenericSelectionMessage::getSelection() const
 	
 {
 	return selection_;
 }
 
 BALL_INLINE
-List<Composite*>& GenericSelectionMessage::getSelection()
+std::list<Composite*>& GenericSelectionMessage::getSelection()
 	
 {
 	return selection_;

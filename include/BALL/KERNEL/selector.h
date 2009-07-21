@@ -11,10 +11,6 @@
 #	include <BALL/KERNEL/expression.h>
 #endif
 
-#ifndef BALL_DATATYPE_LIST_H
-#	include <BALL/DATATYPE/list.h>
-#endif
-
 
 namespace BALL 
 {
@@ -103,7 +99,7 @@ namespace BALL
 
 		/** Return a list containing pointers to all selected Atoms
 		*/
-		List<Atom*>& getSelectedAtoms();
+		std::list<Atom*>& getSelectedAtoms();
 		
 		/** Define the expression.
 		*/
@@ -118,7 +114,7 @@ namespace BALL
 			
 		protected:
 
-		List<Atom*>	selected_atoms_;
+		std::list<Atom*> selected_atoms_;
 		Expression	expression_;
 	};
 

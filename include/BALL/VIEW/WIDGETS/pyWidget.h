@@ -400,7 +400,7 @@ class BALL_VIEW_EXPORT PyWidget
 
 	QComboBox* getCompletionBox_();
 
-	List<Hotkey>::Iterator findKey_(Hotkey& hotkey);
+	std::list<Hotkey>::iterator findKey_(Hotkey& hotkey);
 
 	QTextEdit* 				text_edit_, *script_output_;
 	MyTextEdit* 			script_edit_;
@@ -408,7 +408,7 @@ class BALL_VIEW_EXPORT PyWidget
 	PythonHighlighter highlighter_1_, highlighter_2_;
 	MyLineEdit* 			line_edit_;
 	QComboBox* 				combo_box_, *editor_combo_box_;
-	List<Hotkey> 			hotkeys_;
+	std::list<Hotkey>	hotkeys_;
 	// 								we use an own working dir to find Python Scripts
 	String 						working_dir_;
 	bool 							valid_;

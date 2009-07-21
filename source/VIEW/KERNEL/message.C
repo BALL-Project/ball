@@ -276,7 +276,7 @@ CreateRepresentationMessage::CreateRepresentationMessage()
 	#endif
 }
 
-CreateRepresentationMessage::CreateRepresentationMessage(const List<Composite*>& composites, 
+CreateRepresentationMessage::CreateRepresentationMessage(const list<Composite*>& composites,
 		ModelType model_type, ColoringMethod coloring_method)
  	 
 	: Message(),

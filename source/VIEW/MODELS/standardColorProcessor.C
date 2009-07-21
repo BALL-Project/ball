@@ -334,7 +334,7 @@ namespace BALL
 
 			if (composites_ == 0) return false;
 
-			List<const Composite*>::const_iterator it = composites_->begin();
+			list<const Composite*>::const_iterator it = composites_->begin();
 			ResidueIterator res_it;
 			for(; it != composites_->end(); it++)
 			{
@@ -636,7 +636,7 @@ namespace BALL
 		bool AtomDistanceColorProcessor::finish()
 		{
 			calculateDistances();
-			GeometricObjectList::Iterator it = list_.begin();
+			GeometricObjectList::iterator it = list_.begin();
 			for(; it != list_.end(); it++)
 			{
 				colorGeometricObject_(**it);
@@ -656,7 +656,7 @@ namespace BALL
 				{ 
 					createAtomGrid();
 				}
-				List<const Composite*>::const_iterator it = composites_->begin();
+				list<const Composite*>::const_iterator it = composites_->begin();
 				for(; it != composites_->end(); it++)
 				{
 					if (RTTI::isKindOf<AtomContainer>(**it))

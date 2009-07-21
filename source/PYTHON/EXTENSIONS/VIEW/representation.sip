@@ -50,8 +50,8 @@ class Representation
 	PyCompositeList getComposites() const throw();
 %MethodCode
 	PyCompositeList& my_list = *new PyCompositeList;
-	List<const Composite*> org_list = sipCpp->getComposites();
-	List<const Composite*>::Iterator it = org_list.begin();
+	std::list<const Composite*> org_list = sipCpp->getComposites();
+	std::list<const Composite*>::iterator it = org_list.begin();
 	for (; it != org_list.end(); it++)
 	{
 		my_list.push_back((Composite*)*it);
@@ -61,7 +61,7 @@ class Representation
 
 	void setComposites(const PyCompositeList&) throw();
 %MethodCode
-	List<const Composite*> my_list;
+	std::list<const Composite*> my_list;
 	for (PyCompositeList::ConstIterator it = a0->begin(); it != a0->end(); ++it)
 	{
 		Composite* obj = *it;

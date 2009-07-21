@@ -334,7 +334,7 @@ namespace BALL
 			void setCamera(const Camera& camera);
 
 			///
-			List<Camera>& getAnimationPoints()
+			std::list<Camera>& getAnimationPoints()
 				{ return animation_points_;}
 
 			///
@@ -461,14 +461,14 @@ namespace BALL
 					v.y = up     \\
 					v.z = view direction 
 			*/
-			void moveComposites(const List<Composite*>& composites, Vector3 v);
+			void moveComposites(const std::list<Composite*>& composites, Vector3 v);
 
 			/** Rotate some Composites. \\
 			 		v.x = right  \\
 					v.y = up     \\
 					v.z = view direction 
 			*/
-			void rotateComposites(const List<Composite*>& composites, float degree_right, float degree_up, float degree_clockwise = 0);
+			void rotateComposites(const std::list<Composite*>& composites, float degree_right, float degree_up, float degree_clockwise = 0);
 
 			///
 			bool isAnimationRunning() const;
@@ -818,7 +818,7 @@ namespace BALL
 			//nr of last vrml or stl export
 			static Position vrml_nr_;
 
-			List<Camera> animation_points_;
+			std::list<Camera> animation_points_;
 			AnimationThread* animation_thread_;
 			bool stop_animation_;
 			bool want_to_use_vertex_buffer_;

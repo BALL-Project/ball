@@ -140,7 +140,7 @@ class BALL_VIEW_EXPORT MolecularControl
 
 	/** Non-mutable inspection of the selection.
 	*/
-	const List<Composite*>& getSelection() const;
+	const std::list<Composite*>& getSelection() const;
 	
 	/** Message handling.
 			Overridden method from ConnectionObject to handle incoming messages.\par
@@ -233,7 +233,7 @@ class BALL_VIEW_EXPORT MolecularControl
 	void highlightSelection();
 
 	///
-	void highlight(const List<Composite*>& composite);
+	void highlight(const std::list<Composite*>& composite);
 
 	/** Cut the selected Composite objects and copy them into an internal
 			copy list. If there are already Composite objects in the 
@@ -404,10 +404,10 @@ class BALL_VIEW_EXPORT MolecularControl
 	MolecularControl(const MolecularControl& mc);
 
 	//
-	List<QTreeWidgetItem*> getAllItems_();
+	std::list<QTreeWidgetItem*> getAllItems_();
 
 	void enableUpdates_(bool state);
-	void newSelection_(List<Composite*>& sel, bool selected);
+	void newSelection_(std::list<Composite*>& sel, bool selected);
 	
 	//@} 
 	/** @name Menu entries ids
@@ -420,8 +420,8 @@ class BALL_VIEW_EXPORT MolecularControl
 
 	//@}
 	
-	List<Composite*> 				selected_;
-	List<Composite*> 				copy_list_;
+	std::list<Composite*> 				selected_;
+	std::list<Composite*> 				copy_list_;
 	
 	MolecularInformation 		information_;
 	

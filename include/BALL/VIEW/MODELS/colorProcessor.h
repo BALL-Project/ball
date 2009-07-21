@@ -19,10 +19,6 @@
 # include <BALL/DATATYPE/hashGrid.h>
 #endif
 
-#ifndef BALL_DATATYPE_LIST_H
-# include <BALL/DATATYPE/list.h>
-#endif
-
 #ifndef BALL_VIEW_KERNEL_COMMON_H
 # include <BALL/VIEW/KERNEL/common.h>
 #endif
@@ -137,10 +133,10 @@ class BALL_VIEW_EXPORT ColorProcessor
 	/** Set the pointer to the CompositeSet.
 			This method is called by Representation::setColorProcessor and Representation::update.
 	*/
-	void setComposites(const List<const Composite*>* composites);
+	void setComposites(const std::list<const Composite*>* composites);
 
 	/// Return a pointer to the Composites.
-	const List<const Composite*>* getComposites()
+	const std::list<const Composite*>* getComposites()
 		{ return composites_;}
 
 	///
@@ -193,7 +189,7 @@ class BALL_VIEW_EXPORT ColorProcessor
 	ColorRGBA		selection_color_;
 	Size 				transparency_;
 
-	const 			List<const Composite*>* composites_;
+	const       std::list<const Composite*>* composites_;
 
 	AtomGrid 		atom_grid_;
 	ModelType   model_type_;

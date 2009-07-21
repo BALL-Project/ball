@@ -170,7 +170,7 @@ int main(int argc, char **argv)
   system->apply(bb_processor);
 
   Representation* rep = new Representation();
-	List<GeometricObject*>::Iterator it = bb_processor.getGeometricObjects().begin();
+	list<GeometricObject*>::Iterator it = bb_processor.getGeometricObjects().begin();
 	for (;it != bb_processor.getGeometricObjects().end(); ++it)
 	{
 		rep->insert(**it);

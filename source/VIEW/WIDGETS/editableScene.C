@@ -250,8 +250,8 @@ namespace BALL
 			optimize_action_->setEnabled(selected_system);
 			add_hydrogens_action_->setEnabled(selected_system);
 			
-			List<Composite*> highl = getMainControl()->getMolecularControlSelection();
-			List<Composite*>::Iterator lit = highl.begin();
+			list<Composite*> highl = getMainControl()->getMolecularControlSelection();
+			list<Composite*>::iterator lit = highl.begin();
 			bool selected_system_or_molecule =   (highl.size() == 1)
 																				&& (RTTI::isKindOf<System>(**lit) || RTTI::isKindOf<Molecule>(**lit) ) ;
 
@@ -649,13 +649,13 @@ namespace BALL
 		}
 
 /// ******************** Helper Functions *************************
-		List<AtomContainer*> EditableScene::getContainers_()
+		list<AtomContainer*> EditableScene::getContainers_()
 		{
-			List<AtomContainer*> containers;
+			list<AtomContainer*> containers;
 			if (only_highlighted_)
 			{
-				List<Composite*> highl = getMainControl()->getMolecularControlSelection();
-				List<Composite*>::Iterator lit = highl.begin();
+				list<Composite*> highl = getMainControl()->getMolecularControlSelection();
+				list<Composite*>::iterator lit = highl.begin();
 				for (; lit != highl.end(); ++lit)
 				{
 					AtomContainer* ac = dynamic_cast<AtomContainer*>(*lit);
@@ -688,7 +688,7 @@ namespace BALL
 			current_atom_ = 0;
 
 			QPoint p(x,y);
-			List<GeometricObject*> objects;
+			list<GeometricObject*> objects;
 			renderers_[0].pickObjects((Position)p.x(), (Position)p.y(),
 															  (Position)p.x(), (Position)p.y(), objects);
 
@@ -721,10 +721,10 @@ namespace BALL
 				fragment_db_initialized_ = true;
 			}
 
-			List<AtomContainer*> acs = getContainers_();
+			list<AtomContainer*> acs = getContainers_();
 
-			List<Composite*> sel;
-			List<AtomContainer*>::iterator lit = acs.begin();
+			list<Composite*> sel;
+			list<AtomContainer*>::iterator lit = acs.begin();
 			for (; lit != acs.end(); lit++)
 			{
 				sel.push_back(*lit);
@@ -760,7 +760,7 @@ namespace BALL
 
 			// now we need to find the AtomContainer into which we will insert the atom.
 			// get all highlighted composites
-			List<Composite*> composite_list = getMainControl()->getMolecularControlSelection(); 
+			list<Composite*> composite_list = getMainControl()->getMolecularControlSelection();
 			
 			Size nr_high = composite_list.size();
 			if (nr_high > 1 || (only_highlighted_ && nr_high == 0))
@@ -1190,7 +1190,7 @@ void EditableScene::createMolecule_()
 	getMainControl()->insert(*system);
 
 	ControlSelectionMessage* nsm =  new ControlSelectionMessage();
-	List<Composite*> selection;
+	list<Composite*> selection;
 	selection.push_back(current_molecule);
 	nsm->setSelection(selection);
 	notify_(nsm);
@@ -1323,7 +1323,7 @@ void EditableScene::addStructure(String name)
 		fragment_db_initialized_ = true;
 	}
 
-	List<AtomContainer*> containers = getContainers_();
+	list<AtomContainer*> containers = getContainers_();
 	if (containers.size() == 0) return;
 
 	Residue* residue = fragment_db_.getResidueCopy(name);
@@ -1411,7 +1411,7 @@ void EditableScene::createNewMolecule()
 	getMainControl()->insert(*s);
 	getMainControl()->update(*s);
 	ControlSelectionMessage* msg = new ControlSelectionMessage();
-	List<Composite*> sel;
+	list<Composite*> sel;
 	sel.push_back(m);
 	msg->setSelection(sel);
 	notify_(msg);
@@ -1424,7 +1424,7 @@ void EditableScene::saturateWithHydrogens()
 	if (getMainControl()->isBusy()) return;
 
 	deselect_(false);
-	List<AtomContainer*> containers = getContainers_();
+	list<AtomContainer*> containers = getContainers_();
 	if (containers.size() < 1) return;
 	AtomContainer* ac = *containers.begin();
 	RingPerceptionProcessor rpp;
@@ -1455,11 +1455,11 @@ void EditableScene::computeBondOrders()
 	if (ms == 0) return;
 
 	// get the highlighted atomcontainer
-	List<AtomContainer*> containers;
+	list<AtomContainer*> containers;
 	if (only_highlighted_)
 	{
-		List<Composite*> highl = getMainControl()->getMolecularControlSelection();
-		List<Composite*>::Iterator lit = highl.begin();
+		list<Composite*> highl = getMainControl()->getMolecularControlSelection();
+		list<Composite*>::iterator lit = highl.begin();
 		for (; lit != highl.end(); ++lit)
 		{
 			AtomContainer* ac = dynamic_cast<AtomContainer*>(*lit);
@@ -1566,7 +1566,7 @@ void EditableScene::optimizeStructure()
 	if (getMainControl()->isBusy()) return;
 
 	deselect_();
-	List<AtomContainer*> containers = getContainers_();
+	list<AtomContainer*> containers = getContainers_();
 	if (containers.size() < 1) return;
 
 	MolecularStructure* ms = MolecularStructure::getInstance(0);
@@ -1579,7 +1579,7 @@ void EditableScene::optimizeStructure()
 
 	// highlight System for minimization
 	ControlSelectionMessage* nsm =  new ControlSelectionMessage();
-	List<Composite*> selection;
+	list<Composite*> selection;
 	selection.push_back(system);
 	nsm->setSelection(selection);
 	notify_(nsm);

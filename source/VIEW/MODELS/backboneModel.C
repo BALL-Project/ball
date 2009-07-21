@@ -498,7 +498,7 @@ bool AddBackboneModel::createGeometricObjects()
  	clear_();
 
 
-	GeometricObjectList::Iterator it = geometric_objects_.begin();
+	GeometricObjectList::iterator it = geometric_objects_.begin();
 	for (; it != geometric_objects_.end(); ++it)
 	{
 		Mesh* mesh = dynamic_cast<Mesh*>(*it);

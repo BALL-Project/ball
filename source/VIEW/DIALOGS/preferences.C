@@ -74,7 +74,7 @@ namespace BALL
 				return;
 			}
 
-			PreferencesEntry::StackPages::Iterator it = child->getStackPages().begin();
+			PreferencesEntry::StackPages::iterator it = child->getStackPages().begin();
  			entries_.insert(child);
    		widget_stack->addWidget((*it).first);
 

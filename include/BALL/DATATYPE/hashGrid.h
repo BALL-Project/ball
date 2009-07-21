@@ -25,10 +25,6 @@
 #	include <BALL/MATHS/vector3.h>
 #endif
 
-#ifndef BALL_DATATYPE_LIST_H
-# include <BALL/DATATYPE/list.h>
-#endif
-
 namespace BALL 
 {
 	/**	\defgroup GenericHash3D Three-dimensional Hash Grid

@@ -77,7 +77,7 @@ void ExportGeometryDialog::exec()
 	const ModelInformation& mi = mc->getModelInformation();
 
 	Position row= 0;
-	RepresentationList::ConstIterator it = rm.getRepresentations().begin();
+	RepresentationList::const_iterator it = rm.getRepresentations().begin();
 
 	//filling of the list: as "for viewing" is the standard configuration all reps are checkable 
 	for (; it != rm.getRepresentations().end(); it++)
@@ -122,7 +122,7 @@ void ExportGeometryDialog::accept()
 	//as the export works by switching them on and off => saving base stats
 	MainControl* mc = getMainControl();
 	RepresentationManager& rm = mc->getRepresentationManager();
-	RepresentationList::ConstIterator rit;
+	RepresentationList::const_iterator rit;
 
 	Position count = 0;
 
@@ -227,13 +227,13 @@ void ExportGeometryDialog::accept()
 
 		Position row= 0;
 		bool printable;
-		RepresentationList::ConstIterator it = rm.getRepresentations().begin();
+		RepresentationList::const_iterator it = rm.getRepresentations().begin();
 		for (; it != rm.getRepresentations().end(); it++)
 		{
 			const Representation& rep = **it;
 			printable = true;
 
-			List<GeometricObject*>::ConstIterator git = (*it)->getGeometricObjects().begin();
+			list<GeometricObject*>::const_iterator git = (*it)->getGeometricObjects().begin();
 			for (; git != (*it)->getGeometricObjects().end(); git++)
 			{
 				//now we test if the geo object is printable
@@ -311,7 +311,7 @@ void ExportGeometryDialog::accept()
 		const ModelInformation& mi = mc->getModelInformation();
 
 		Position row= 0;
-		RepresentationList::ConstIterator it = rm.getRepresentations().begin();
+		RepresentationList::const_iterator it = rm.getRepresentations().begin();
 		for (; it != rm.getRepresentations().end(); it++)
 		{
 			const Representation& rep = **it;
