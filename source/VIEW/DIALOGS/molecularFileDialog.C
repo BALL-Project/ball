@@ -177,7 +177,7 @@ System* MolecularFileDialog::openMolecularFile(const String& filename,
 
 bool MolecularFileDialog::writeFile()
 {
-	List<Composite*>& selection = getMainControl()->getMolecularControlSelection();
+	list<Composite*>& selection = getMainControl()->getMolecularControlSelection();
 
 	if (selection.size() != 1 || !RTTI::isKindOf<System> (**selection.begin()))
 	{

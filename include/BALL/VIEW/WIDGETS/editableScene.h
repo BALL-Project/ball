@@ -210,7 +210,7 @@ class BALL_VIEW_EXPORT EditableScene
 
 	String getBondOrderString_(Index order);
 
-	List<AtomContainer*> getContainers_();
+	std::list<AtomContainer*> getContainers_();
 
 	void changeBondOrder_(Index delta);
 	void deselect_(bool update=true);

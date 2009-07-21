@@ -443,9 +443,9 @@ namespace BALL
 		}
 
 
-		List<Representation*> GeometricControl::getHighlightedRepresentations() const
+		list<Representation*> GeometricControl::getHighlightedRepresentations() const
 		{
-			List<Representation*> selection;
+			list<Representation*> selection;
 			QList<QTreeWidgetItem*> selected_items = listview->selectedItems();
 
 			QList<QTreeWidgetItem*>::const_iterator sel_it = selected_items.begin();
@@ -475,7 +475,7 @@ namespace BALL
 
 		void GeometricControl::focus()
 		{
-			List<Representation*> reps = getHighlightedRepresentations();
+			list<Representation*> reps = getHighlightedRepresentations();
 			if (reps.size() == 1) 
 			{
 				getMainControl()->getRepresentationManager().focusRepresentation(**reps.begin());
@@ -635,7 +635,7 @@ namespace BALL
 
 			Representation& rep = *context_representation_;
 
-			List<const Composite*>::const_iterator it = rep.getComposites().begin();
+			list<const Composite*>::const_iterator it = rep.getComposites().begin();
 			for (; it != rep.getComposites().end(); ++it)
 			{
 				getMainControl()->selectCompositeRecursive((Composite*)*it, false);
@@ -675,7 +675,7 @@ namespace BALL
 			plane->setPoint(camera.getLookAtPosition() + vv * 10);
 
 			RepresentationManager& pm = mc->getRepresentationManager();
-			RepresentationList::ConstIterator it = pm.getRepresentations().begin();
+			RepresentationList::const_iterator it = pm.getRepresentations().begin();
 			for (; it != pm.getRepresentations().end(); it++)
 			{
 				plane->getRepresentations().insert(*it);
@@ -878,9 +878,9 @@ namespace BALL
 			String result = ascii(qresult);
 			Mesh* mesh = new Mesh();
 			Representation* rep = new Representation();
-			List<Composite*> cl = getMainControl()->getMolecularControlSelection();
-			List<const Composite*> ccl;
-			List<Composite*>::iterator cit = cl.begin();
+			list<Composite*> cl = getMainControl()->getMolecularControlSelection();
+			list<const Composite*> ccl;
+			list<Composite*>::iterator cit = cl.begin();
 			for (; cit != cl.end(); cit++)
 			{
 				ccl.push_back(*cit);

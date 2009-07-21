@@ -179,7 +179,7 @@ namespace BALL
 			 		Call this method after pickObjects1 and rendering the representations.
 					\param objects returns the picked objects
 			*/
-			void pickObjects2(List<GeometricObject*>& objects);
+			void pickObjects2(std::list<GeometricObject*>& objects);
 
 			///
 			void enterPickingMode();

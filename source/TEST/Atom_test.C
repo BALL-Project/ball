@@ -670,7 +670,7 @@ CHECK(bool applyBonds(UnaryProcessor<Bond>& processor) throw())
 	Bond bond2("", a,c);
 	a.applyBonds(ic);
 	TEST_EQUAL(ic.getList().size(), 2)
-	List<Bond*>::Iterator it = ic.getList().begin();
+	list<Bond*>::iterator it = ic.getList().begin();
 	TEST_EQUAL(*it, &bond1)
 	it++;
 	TEST_EQUAL(*it, &bond2)

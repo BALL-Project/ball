@@ -86,7 +86,7 @@ namespace BALL
 			// generate bond primitive
 			const Atom* second_atom_ptr = 0;
 			AtomBondConstIterator bond_it;
-			List<const Atom*>::ConstIterator atom_it;
+			list<const Atom*>::const_iterator atom_it;
 
 			// for all used atoms
 			for (atom_it  = getAtomList_().begin();

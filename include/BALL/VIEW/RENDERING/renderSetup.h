@@ -181,7 +181,7 @@ namespace BALL {
 
 				/** Pick all objects in the given screen rectangle.
 				 */
-				void pickObjects(Position x1, Position y1, Position x2, Position y2, List<GeometricObject*>& objects);
+				void pickObjects(Position x1, Position y1, Position x2, Position y2, std::list<GeometricObject*>& objects);
 
 				/** Show a simple ruler.
 				 *

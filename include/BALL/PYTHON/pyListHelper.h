@@ -8,12 +8,11 @@
 #define BALL_PYTHON_PYLIST_HELPER
 
 #include <BALL/DATATYPE/regularData3D.h>
-#include <BALL/DATATYPE/list.h>
 
-namespace BALL 
+namespace BALL
 {
 
-typedef List<RegularData3D*> RegularData3DList;
+typedef std::list<RegularData3D*> RegularData3DList;
 
 // Convert the list.
 #define BALL_CONVERT_LIST_FROM(TYPE)\

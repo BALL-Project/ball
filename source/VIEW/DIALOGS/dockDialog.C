@@ -623,10 +623,10 @@ namespace BALL
 				loaded_systems_.push_back(system);			
 			}
 
-			List<Composite*> cl = main_control->getMolecularControlSelection();
+			std::list<Composite*> cl = main_control->getMolecularControlSelection();
 			if (cl.size() == 2)
 			{
-				List<Composite*>::iterator lit = cl.begin();
+				list<Composite*>::iterator lit = cl.begin();
 				System* system1 = dynamic_cast<System*>(*lit);
 				lit++;
 				System* system2 = dynamic_cast<System*>(*lit);

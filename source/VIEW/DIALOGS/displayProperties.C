@@ -327,7 +327,7 @@ void DisplayProperties::onNotify(Message *message)
 
 		// generate graphical representation
 		createRepresentationMode();
-		List<Composite*> clist;
+		list<Composite*> clist;
 		clist.push_back(composite_message->getComposite());
 		createRepresentation(clist);
 		return;
@@ -521,7 +521,7 @@ void DisplayProperties::applyColoringSettings_(Representation& rep)
 }
 
 
-Representation* DisplayProperties::createRepresentation(const List<Composite*>& composites, bool hidden)
+Representation* DisplayProperties::createRepresentation(const list<Composite*>& composites, bool hidden)
 {
 	if (composites.size() == 0) return 0;
 
@@ -535,8 +535,8 @@ Representation* DisplayProperties::createRepresentation(const List<Composite*>& 
 	applyModelSettings_(*rep_);
 
 	// stupid, but must be: create a List with const Composites!
-	List<const Composite*> temp_composites;
-	List<Composite*>::ConstIterator it = composites.begin();
+	list<const Composite*> temp_composites;
+	list<Composite*>::const_iterator it = composites.begin();
 	for (; it != composites.end(); it++)
 	{
 		temp_composites.push_back(*it);
@@ -860,7 +860,7 @@ void DisplayProperties::createRepresentation(String data_string, const vector<co
 		Composite* composite = (Composite*) new_systems[system_pos];
 
 		Position current = 0;
-		List<Composite*> c_list;
+		list<Composite*> c_list;
 		Composite::CompositeIterator ccit = composite->beginComposite();
 		for (; +ccit; ++ccit)
 		{

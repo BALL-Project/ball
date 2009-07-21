@@ -328,7 +328,7 @@ void DemoTutorialDialog::nextStepDemo_()
 	// remove representations
 	RepresentationManager& pm = getMainControl()->getRepresentationManager();
 	Size nr = pm.getNumberOfRepresentations();
-	list<Representation*> reps = pm.getRepresentations();
+	std::list<Representation*> reps = pm.getRepresentations();
 
 	if (surface_ == 0 && nr == 1 && current_step_ == 7)
 	{
@@ -389,7 +389,7 @@ void DemoTutorialDialog::nextStepDemo_()
 		notify_(new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT));
 		getMainControl()->setMultithreading(1);
 
-		List<Composite*> composites;
+		list<Composite*> composites;
 		composites.push_back(*getMainControl()->getCompositeManager().getComposites().begin());
  		MolecularControl::getInstance(0)->highlight(composites);
 

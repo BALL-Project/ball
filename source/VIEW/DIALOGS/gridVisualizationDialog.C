@@ -155,7 +155,7 @@ namespace BALL
 			resize_needed->setChecked(controller_->isGridSizePowerOfTwo(*grid_));
 
 			Position p = 0;
-			List<RegularData3D*>::Iterator it = grid_list_.begin();
+			list<RegularData3D*>::iterator it = grid_list_.begin();
 			for (; it != grid_list_.end(); it++)
 			{
 				if (*it == grid_) break;

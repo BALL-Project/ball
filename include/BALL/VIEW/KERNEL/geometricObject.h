@@ -19,10 +19,6 @@
 #	include <BALL/DATATYPE/hashSet.h>
 #endif
 
-#ifndef BALL_DATATYPE_LIST_H
-# include <BALL/DATATYPE/list.h>
-#endif
-
 namespace BALL
 {
 	class Composite;
@@ -186,7 +182,7 @@ namespace BALL
 		};
 
 		///
-		typedef List<GeometricObject*> GeometricObjectList;
+		typedef std::list<GeometricObject*> GeometricObjectList;
 
 } } // namespaces
 #endif // BALL_VIEW_KERNEL_GEOMETIRCOBJECT_H

@@ -148,7 +148,7 @@ CHECK(List& getSelectedAtoms() throw())
 	system.deselect();
 	Selector selector("true()");
 	system.apply(selector);
-	List<Atom*> atom_list = selector.getSelectedAtoms();
+	list<Atom*> atom_list = selector.getSelectedAtoms();
 	TEST_EQUAL(atom_list.size(), 6)
 RESULT 
 

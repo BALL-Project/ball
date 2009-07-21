@@ -291,7 +291,7 @@ namespace BALL
 		bool MolecularStructure::checkResidue()
 		{
 			// selection can change
-			List<Composite*> selection = getMainControl()->getMolecularControlSelection();
+			list<Composite*> selection = getMainControl()->getMolecularControlSelection();
 			if (selection.size() == 0) 
 			{
 				return false;
@@ -306,7 +306,7 @@ namespace BALL
 			bool okay = true;
 			
 			HashSet<Composite*> changed_roots;
-			List<Composite*>::ConstIterator it = selection.begin();	
+			list<Composite*>::const_iterator it = selection.begin();
 			for (; it != selection.end(); ++it)
 			{	
 				if (!RTTI::isKindOf<AtomContainer>(**it))
@@ -369,8 +369,8 @@ namespace BALL
 			setStatusbarText("adding hydrogens ...", true);
 
 			// copy the selection_, it can change after a changemessage event
-			List<Composite*> temp_selection_ = getMainControl()->getMolecularControlSelection();
-			List<Composite*>::ConstIterator it = temp_selection_.begin();	
+			list<Composite*> temp_selection_ = getMainControl()->getMolecularControlSelection();
+			list<Composite*>::const_iterator it = temp_selection_.begin();
 
 			Size number_of_hydrogens = 0;
 
@@ -417,8 +417,8 @@ namespace BALL
 			setStatusbarText("building bonds ...", true);
 
 			// copy the selection_, it can change after a changemessage event
-			List<Composite*> temp_selection_ = getMainControl()->getMolecularControlSelection();
-			List<Composite*>::ConstIterator it = temp_selection_.begin();	
+			list<Composite*> temp_selection_ = getMainControl()->getMolecularControlSelection();
+			list<Composite*>::const_iterator it = temp_selection_.begin();
 
 			Size old_number_of_bonds = 0;
 
@@ -476,9 +476,9 @@ namespace BALL
 			setStatusbarText("  > assigning bond orders ...", true);
 
 			// Retrieve the selected atom container and abort if nothing is selected.
-			List<AtomContainer*> containers;
-			List<Composite*> highl = getMainControl()->getMolecularControlSelection();
-			List<Composite*>::Iterator lit = highl.begin();
+			list<AtomContainer*> containers;
+			list<Composite*> highl = getMainControl()->getMolecularControlSelection();
+			list<Composite*>::iterator lit = highl.begin();
 			for (; lit != highl.end(); ++lit)
 			{
 				AtomContainer* ac = dynamic_cast<AtomContainer*>(*lit);
@@ -816,7 +816,7 @@ namespace BALL
 				return;
 			}
 
-			List<Composite*>::Iterator sit = getMainControl()->getMolecularControlSelection().begin();
+			list<Composite*>::iterator sit = getMainControl()->getMolecularControlSelection().begin();
 
 			AtomContainer* a1 = dynamic_cast<AtomContainer*>(*sit);
 			sit++;
@@ -904,7 +904,7 @@ namespace BALL
 			Protein* a1 = 0;
 			Protein* a2 = 0;
 
-			List<Composite*>::Iterator it = getMainControl()->getMolecularControlSelection().begin();
+			list<Composite*>::iterator it = getMainControl()->getMolecularControlSelection().begin();
 			
 			if (!RTTI::isKindOf<Protein>(**it)) 
 			{

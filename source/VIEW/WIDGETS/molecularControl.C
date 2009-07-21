@@ -177,7 +177,7 @@ namespace BALL
 			if (allow_paste)
 			{
 				hint = "Paste a copied or cuted object into current selected object.";
-				List<Composite*>::Iterator it = copy_list_.begin();
+				list<Composite*>::iterator it = copy_list_.begin();
 				for (; it != copy_list_.end(); it++)
 				{
 					if (!pasteAllowedFor_(**it)) 
@@ -765,14 +765,14 @@ namespace BALL
 
 
 		// set the highlighting according to a given list
-		void MolecularControl::highlight(const List<Composite*>& selection)
+		void MolecularControl::highlight(const list<Composite*>& selection)
 		{	
 			enableUpdates_(false);
 			listview->clearSelection();
 			selected_.clear();
 
 			list<QTreeWidgetItem*> items;
-			List<Composite*>::ConstIterator sit = selection.begin();
+			list<Composite*>::const_iterator sit = selection.begin();
 			std::map<Composite*, MyTreeWidgetItem*>::iterator fit;
 			for (; sit != selection.end(); ++sit)
 			{
@@ -835,9 +835,9 @@ namespace BALL
 			// for all roots of removed items the representations are rebuild
 			HashSet<Composite*> roots, deleted_roots;
 
-			List<Composite*> sel = selected_;
+			list<Composite*> sel = selected_;
 			selected_.clear();
-			List<Composite*>::Iterator it = sel.begin();	
+			list<Composite*>::iterator it = sel.begin();
 			for (; it != sel.end(); it++)
 			{
 				bool update = false;
@@ -876,7 +876,7 @@ namespace BALL
 		{
 			if (getMainControl()->isBusy()) return;
 
-			const List<Composite*> selection = getSelection();
+			const list<Composite*> selection = getSelection();
 			if (selection.size() == 0) return;
 
 			setStatusbarText("copied " + String(selection.size()) + " objects ...");
@@ -885,7 +885,7 @@ namespace BALL
 			clearClipboard();
 
 			// copy the selected composites into the copy_list_
-			List<Composite*>::Iterator it = selected_.begin();	
+			list<Composite*>::iterator it = selected_.begin();
 			for (; it != selected_.end(); it++)
 			{
 				copy_list_.push_back((Composite*)(*it)->create());
@@ -903,7 +903,7 @@ namespace BALL
 
 			HashSet<Composite*> changed_roots;
 			// copying composites
-			List<Composite*>::ConstIterator list_it = copy_list_.begin();	
+			list<Composite*>::const_iterator list_it = copy_list_.begin();
 			for (; list_it != copy_list_.end(); ++list_it)
 			{
 				if (RTTI::isKindOf<System>(**list_it))
@@ -944,7 +944,7 @@ namespace BALL
 			// delete old composites
 			if (copy_list_.size() > 0)
 			{
-				List<Composite*>::ConstIterator list_it = copy_list_.begin();	
+				list<Composite*>::const_iterator list_it = copy_list_.begin();
 				for (; list_it != copy_list_.end(); ++list_it)
 				{
 					delete *list_it;
@@ -1035,7 +1035,7 @@ namespace BALL
 			return information_;
 		}
 
-		const List<Composite*>& MolecularControl::getSelection() const
+		const list<Composite*>& MolecularControl::getSelection() const
 		{
 			return selected_;
 		}
@@ -1153,7 +1153,7 @@ namespace BALL
 					return 0;
 				}
 
-				List<Atom*>::Iterator ait = s.getSelectedAtoms().begin();
+				list<Atom*>::iterator ait = s.getSelectedAtoms().begin();
 				for (; ait != s.getSelectedAtoms().end(); ait++)
 				{
 					getMainControl()->selectCompositeRecursive(*ait, true);
@@ -1236,7 +1236,7 @@ namespace BALL
 		void MolecularControl::select()
 		{
 			// copy list, because selection could change
-			List<Composite*> selection = selected_;
+			list<Composite*> selection = selected_;
 			newSelection_(selection, true);
 		}
 
@@ -1244,16 +1244,16 @@ namespace BALL
 		void MolecularControl::deselect()
 		{
 			// copy list, because selection could change
-			List<Composite*> selection = selected_;
+			list<Composite*> selection = selected_;
 			newSelection_(selection, false);
 		}
 
-		void MolecularControl::newSelection_(List<Composite*>& sel, bool selected)
+		void MolecularControl::newSelection_(list<Composite*>& sel, bool selected)
 		{
 			HashSet<Composite*> roots;
 			MainControl* mc = getMainControl();
 			
-			List<Composite*>::Iterator it = sel.begin();
+			list<Composite*>::iterator it = sel.begin();
 			for(; it != sel.end(); it++)
 			{
 				roots.insert(&(*it)->getRoot());
@@ -1425,7 +1425,7 @@ namespace BALL
 				return;
 			}
 
-			List<Composite*> l;
+			list<Composite*> l;
 			l.push_back(((MyTreeWidgetItem*)item)->composite);
 			newSelection_(l, checked);
 		}
@@ -1449,7 +1449,7 @@ namespace BALL
 		{
 			if (getSelection().size() != 2) return;
 
-			List<Composite*>::ConstIterator it = getSelection().begin();
+			list<Composite*>::const_iterator it = getSelection().begin();
 
 			Atom* a1 = dynamic_cast<Atom*>(*it);
 			it++;
@@ -1506,7 +1506,7 @@ namespace BALL
 
 		void MolecularControl::showAngle()
 		{
-			List<Composite*>::ConstIterator it = getSelection().begin();
+			list<Composite*>::const_iterator it = getSelection().begin();
 
 			vector<Atom*> atoms;
 

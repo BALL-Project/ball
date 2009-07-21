@@ -93,7 +93,7 @@ namespace BALL
 			};
 
 			///
-			typedef List<std::pair<QWidget*, String> > StackPages;
+			typedef std::list<std::pair<QWidget*, String> > StackPages;
 
 			///
 			PreferencesEntry();

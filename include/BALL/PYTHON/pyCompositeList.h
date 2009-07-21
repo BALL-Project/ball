@@ -11,10 +11,6 @@
 #	include <BALL/common.h>
 #endif
 
-#ifndef BALL_DATAYPE_LIST_H
-#	include <BALL/DATATYPE/list.h>
-#endif
-
 #ifndef BALL_DATAYPE_HASHSET_H
 #	include <BALL/DATATYPE/hashSet.h>
 #endif
@@ -31,7 +27,7 @@ namespace BALL
 			\ingroup PythonExtensions
 	*/
 	class PyCompositeList
-		:	public List<Composite*>
+		:	public std::list<Composite*>
 	{
 		public:
 
@@ -51,11 +47,11 @@ namespace BALL
 
 		/**	Iterator type.
 		*/
-		typedef List<Composite*>::iterator Iterator;
+		typedef std::list<Composite*>::iterator Iterator;
 
 		/**	Constant iterator type.
 		*/
-		typedef List<Composite*>::const_iterator ConstIterator;
+		typedef std::list<Composite*>::const_iterator ConstIterator;
 
 		//@}
 
@@ -71,13 +67,13 @@ namespace BALL
 		PyCompositeList(const PyCompositeList& composite_list);
 
 		/// Copy constructor.
-		PyCompositeList(const List<Composite*>& composite_list);
+		PyCompositeList(const std::list<Composite*>& composite_list);
 		
 		/// Copy constructor.
-		PyCompositeList(const List<const Composite*>& composite_list);
+		PyCompositeList(const std::list<const Composite*>& composite_list);
 
 		/// Constructor from a const Composite pointer list
-		PyCompositeList& operator = (const List<const Composite*>& composite_list)	throw();
+		PyCompositeList& operator = (const std::list<const Composite*>& composite_list);
 				
 		/// Construction from a HashSet
 		PyCompositeList(const HashSet<const Composite*>& composite_set);

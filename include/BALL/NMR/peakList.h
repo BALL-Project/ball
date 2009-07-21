@@ -15,10 +15,6 @@
 #	include<BALL/COMMON/limits.h>
 #endif
 
-#ifndef BALL_DATATYPE_LIST_H
-#	include<BALL/DATATYPE/list.h>
-#endif
-
 namespace BALL 
 {
 
@@ -28,7 +24,7 @@ namespace BALL
 	*/
 	template <typename PT>
 	class PeakList
-		:	public List<PT>
+		:	public std::list<PT>
 	{
 		public:
 		
@@ -45,10 +41,10 @@ namespace BALL
 		typedef	PT PeakType;
 	
 		///
-		typedef typename List<PT>::iterator Iterator;
+		typedef typename std::list<PT>::iterator Iterator;
 
 		///
-		typedef typename List<PT>::ConstIterator ConstIterator;
+		typedef typename std::list<PT>::const_iterator ConstIterator;
 		//@}
 
 		/** @name	Constructors and Destructors
@@ -64,7 +60,7 @@ namespace BALL
 		/**	Copy constructor
 		*/
 		PeakList(const PeakList& peak_list)
-			:	List<PT>(peak_list)
+			:	std::list<PT>(peak_list)
 		{
 		}		
 
@@ -84,8 +80,8 @@ namespace BALL
 		*/
 		void scale(float x)
 		{
-			Iterator it = List<PT>::begin();
-			for (; it != List<PT>::end(); ++it)
+			Iterator it = std::list<PT>::begin();
+			for (; it != std::list<PT>::end(); ++it)
 			{
 				it->setIntensity(it->getIntensity() * x);
 			}
@@ -96,9 +92,9 @@ namespace BALL
 		*/
 		float getMaxIntensity() const
 		{
-			ConstIterator it = List<PT>::begin();
+			ConstIterator it = std::list<PT>::begin();
 			float max = -Limits<float>::max();
-			for (; it != List<PT>::end(); ++it)
+			for (; it != std::list<PT>::end(); ++it)
 			{
 				max = std::max(max, it->getIntensity());
 			}
@@ -111,9 +107,9 @@ namespace BALL
 		*/
 		float getMinIntensity() const
 		{
-			ConstIterator it = List<PT>::begin();
+			ConstIterator it = std::list<PT>::begin();
 			float min = Limits<float>::max();
-			for (; it != List<PT>::end(); ++it)
+			for (; it != std::list<PT>::end(); ++it)
 			{
 				min = std::min(min, it->getIntensity());
 			}

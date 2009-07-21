@@ -709,7 +709,7 @@ namespace BALL
 			updateGL();
 		}
 
-		void Scene::moveComposites(const List<Composite*>& composites, Vector3 v)
+		void Scene::moveComposites(const list<Composite*>& composites, Vector3 v)
 		{
 			HashSet<Composite*> roots;
 
@@ -719,7 +719,7 @@ namespace BALL
 			m.setTranslation(x);
 			TransformationProcessor tp(m);
 
-			List<Composite*>::const_iterator cit = composites.begin();
+			list<Composite*>::const_iterator cit = composites.begin();
 			for (; cit != composites.end(); ++cit)
 			{
 				roots.insert(&(**cit).getRoot());
@@ -733,7 +733,7 @@ namespace BALL
 			}
 		}
 	
-		void Scene::rotateComposites(const List<Composite*>& selection, float degree_right, float degree_up, float degree_clockwise)
+		void Scene::rotateComposites(const list<Composite*>& selection, float degree_right, float degree_up, float degree_clockwise)
 		{
 			const Camera& camera = stage_->getCamera();
 
@@ -754,7 +754,7 @@ namespace BALL
 			
 			GeometricCenterProcessor center_processor;
 			Vector3 center;
-			List<Composite*>::const_iterator cit = selection.begin();
+			list<Composite*>::const_iterator cit = selection.begin();
 			for(; cit != selection.end(); cit++)
 			{
 				(*cit)->apply(center_processor);
@@ -855,7 +855,7 @@ namespace BALL
 			QPoint p0 = mapFromGlobal(QPoint(x_window_pick_pos_first_, y_window_pick_pos_first_));
 			QPoint p1 = mapFromGlobal(QPoint(x_window_pos_new_, y_window_pos_new_));
 
-			List<GeometricObject*> objects;
+			list<GeometricObject*> objects;
 
 			// draw the representations
 			renderers_[0].pickObjects((Position)p0.x(), (Position)p0.y(),
@@ -915,7 +915,7 @@ namespace BALL
 			{
 				RepresentationManager& pm = getMainControl()->getRepresentationManager();
 
-				RepresentationList::ConstIterator it = pm.getRepresentations().begin();
+				RepresentationList::const_iterator it = pm.getRepresentations().begin();
 				for (; it != pm.getRepresentations().end(); ++it)
 				{
 					rs.bufferRepresentation(**it);
@@ -1069,7 +1069,7 @@ namespace BALL
 		{
 			if (er.init(*stage_, (float) width(), (float) height()))
 			{
-				RepresentationList::ConstIterator it;
+				RepresentationList::const_iterator it;
 				MainControl *main_control = MainControl::getMainControl(this);
 
 				it = main_control->getRepresentationManager().getRepresentations().begin();
@@ -1255,7 +1255,7 @@ namespace BALL
 			inifile.appendSection("LIGHTING");
 
 			Position nr = 0;
-			List<LightSource>::ConstIterator it = stage_->getLightSources().begin();
+			list<LightSource>::const_iterator it = stage_->getLightSources().begin();
 			for (; it != stage_->getLightSources().end(); it++)
 			{
 				const LightSource& light = *it;
@@ -1883,7 +1883,7 @@ namespace BALL
 			const HashSet<Composite*>& selection = getMainControl()->getSelection();
 			if (selection.size() != 0)
 			{
-				List<Composite*> composites;
+				list<Composite*> composites;
 				std::copy(selection.begin(), selection.end(), std::front_inserter(composites));
 
 				switch (action)
@@ -2032,7 +2032,7 @@ namespace BALL
 
 			// if the mouse was at on other position 500 ms before, store position and abort
 
-			List<GeometricObject*> objects;
+			list<GeometricObject*> objects;
 
 			// ok, do the picking, until we find something
 			for (Position p = 0; p < 8; p++)
@@ -2052,7 +2052,7 @@ namespace BALL
 			MolecularInformation info;
 
 			GeometricObject* object = 0;
-			List<GeometricObject*>::Iterator git = objects.begin();
+			list<GeometricObject*>::iterator git = objects.begin();
 			for (; git != objects.end(); git++)
 			{
 				// do we have a composite?
@@ -2344,7 +2344,7 @@ namespace BALL
 
 			MainControl* mc = getMainControl();
 			RepresentationManager& rm = mc->getRepresentationManager();
-			RepresentationList::ConstIterator rit;
+			RepresentationList::const_iterator rit;
 			
 			if ( ve || se)
 			{	
@@ -2899,7 +2899,7 @@ return;
 
 			do
 			{
-				List<Camera>::Iterator it = getAnimationPoints().begin();
+				list<Camera>::iterator it = getAnimationPoints().begin();
 				Camera last_camera = *it;
 				it++;
 
@@ -3053,7 +3053,7 @@ return;
 		{
 			RepresentationManager& pm = getMainControl()->getRepresentationManager();
 
-			RepresentationList::ConstIterator it = pm.getRepresentations().begin();
+			RepresentationList::const_iterator it = pm.getRepresentations().begin();
 			for (; it != pm.getRepresentations().end(); ++it)
 			{
 				rt_renderer_->updateMaterialForRepresentation(*it);
@@ -3118,7 +3118,7 @@ return;
 		void Scene::pickParent_(QPoint p)
 		{
 			ignore_pick_ = true;
-			List<GeometricObject*> objects;
+			list<GeometricObject*> objects;
 			renderers_[0].pickObjects((Position) p.x(), (Position) p.y(), 
 																(Position) p.x(), (Position) p.y(), objects);
 

@@ -470,7 +470,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			initializePreferencesTab_();
 
 			// initialize all modular widgets 
-			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+			list<ModularWidget*>::iterator it = modular_widgets_.begin();
 			for (; it != modular_widgets_.end(); ++it)
 			{
 #ifdef BALL_VIEW_DEBUG
@@ -524,7 +524,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			if (delete_action_ != 0) delete_action_->setEnabled(false);
 
 			// checks all modular widgets 
-			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+			list<ModularWidget*>::iterator it = modular_widgets_.begin();
 			for (; it != modular_widgets_.end(); ++it)
 			{
 				(*it)->checkMenu(*this);
@@ -566,7 +566,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			preferences_file_.clear();
 			writePreferences(preferences_file_);
 
-			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+			list<ModularWidget*>::iterator it = modular_widgets_.begin();
 			for (; it != modular_widgets_.end(); ++it)
 			{
 //   				(*it)->finalizePreferencesTab(*preferences_dialog_);
@@ -611,8 +611,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			if (!composite.isSelected() &&
 					composite.containsSelection())
 			{
-				List<Composite*> to_remove;
 				HashSet<Composite*>::Iterator cit = getSelection().begin();
+				list<Composite*> to_remove;
 				for (; +cit; ++cit)
 				{
 					if ((**cit).isDescendantOf(composite))
@@ -621,7 +621,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 					}
 				}
 
-				List<Composite*>::iterator lit = to_remove.begin();
+				list<Composite*>::iterator lit = to_remove.begin();
 				for (; lit != to_remove.end(); ++lit)
 				{
 					getSelection().erase(*lit);
@@ -638,9 +638,9 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		bool MainControl::updateRepresentationsOf(const Composite& composite, bool rebuild, bool force)
 		{
 			// update all representations containing the composite
-			List<Representation*> changed_representations = primitive_manager_.getRepresentationsOf(composite);
+			list<Representation*> changed_representations = primitive_manager_.getRepresentationsOf(composite);
 
-			List<Representation*>::Iterator reps_it = changed_representations.begin();
+			list<Representation*>::iterator reps_it = changed_representations.begin();
 			// notify GeometricControl of changed representations
 			for (; reps_it != changed_representations.end(); reps_it++)
 			{
@@ -913,7 +913,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			}
 
 			// all other preferences
-			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+			list<ModularWidget*>::iterator it = modular_widgets_.begin();
 			for (; it != modular_widgets_.end(); ++it)
 			{
 				(*it)->applyPreferences();
@@ -945,7 +945,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			preferences_dialog_->fetchPreferences(inifile);
 
 			// check menu entries, fetch and apply preferences
-			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+			list<ModularWidget*>::iterator it = modular_widgets_.begin();
 			for (; it != modular_widgets_.end(); ++it)
 			{
 				(*it)->fetchPreferences(inifile);
@@ -982,7 +982,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			inifile.insertValue("WINDOWS", "Main::dockwidgets", ba.data());
 
 			// finalizes all modular widgets
-			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+			list<ModularWidget*>::iterator it = modular_widgets_.begin();
 			for (; it != modular_widgets_.end(); ++it)
 			{
 				(*it)->writePreferences(inifile);
@@ -999,7 +999,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				Log.info() << "MainControl::addModularWidget(" << widget << ")" << endl;
 			#endif
 			widget->registerThis();
-			List<ModularWidget*>::Iterator it = modular_widgets_.begin();
+			list<ModularWidget*>::iterator it = modular_widgets_.begin();
 			for (; it != modular_widgets_.end(); it++)
 			{
 				if (*it == widget) return;
@@ -1022,8 +1022,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		{
 			HashSet<Composite*> roots;
 
-			List<GeometricObject*>& objects = const_cast<List<GeometricObject*>&>(message.getSelection());
-			List<GeometricObject*>::Iterator it_objects = objects.begin();
+			list<GeometricObject*>& objects = const_cast<list<GeometricObject*>&>(message.getSelection());
+			list<GeometricObject*>::iterator it_objects = objects.begin();
 			
 			const bool to_select = message.isSelected();
 
@@ -1529,7 +1529,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 		void MainControl::deleteClicked()
 		{
-			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+			list<ModularWidget*>::iterator it = modular_widgets_.begin();
 			for (; it != modular_widgets_.end(); ++it)
 			{
 				if (RTTI::isKindOf<GenericControl>(**it))
@@ -2130,7 +2130,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			// correctly if the widget already considers itself to be fullscreen.
 			last_size_ = size();
 			last_point_ = pos();
-			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+			list<ModularWidget*>::iterator it = modular_widgets_.begin();
 			for (; it != modular_widgets_.end(); ++it)
 			{
 				DockWidget* widget = dynamic_cast<DockWidget*>(*it);
@@ -2186,7 +2186,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 
 		String ext = fields[fields.size() - 1];
-		List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+		list<ModularWidget*>::iterator it = modular_widgets_.begin();
 		for (; it != modular_widgets_.end(); ++it)
 		{
 			if ((**it).canHandle(ext))

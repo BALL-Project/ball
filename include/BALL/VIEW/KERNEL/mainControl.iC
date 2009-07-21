@@ -22,7 +22,7 @@ const INIFile& MainControl::getINIFile() const
 }
 
 BALL_INLINE
-List<Composite*>& MainControl::getMolecularControlSelection()
+std::list<Composite*>& MainControl::getMolecularControlSelection()
 {
 	return control_selection_;
 }

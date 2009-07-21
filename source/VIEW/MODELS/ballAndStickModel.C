@@ -452,7 +452,7 @@ namespace BALL
 			AtomBondConstIterator bond_it;
 
 			// for all used atoms
-			List<const Atom*>::ConstIterator atom_it;
+			list<const Atom*>::const_iterator atom_it;
 			for (atom_it  = getAtomList_().begin();
 					 atom_it != getAtomList_().end(); ++atom_it)
 			{

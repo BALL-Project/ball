@@ -61,10 +61,10 @@ namespace BALL
 			typedef HashSet<Representation*> RepresentationSet;
 
 			/// Iteration to the Representations
-			typedef RepresentationList::Iterator RepresentationsIterator;
+			typedef RepresentationList::iterator RepresentationsIterator;
 
 			/// ConstIterator to the Representations
-			typedef RepresentationList::ConstIterator RepresentationsConstIterator;
+			typedef RepresentationList::const_iterator RepresentationsConstIterator;
 
 			//@}
 			/**	@name	Constructors and Destructor

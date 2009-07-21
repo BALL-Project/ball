@@ -493,9 +493,9 @@ void PyWidget::finalizePreferencesTab(Preferences &preferences)
 	}
 }
 
-List<Hotkey>::Iterator PyWidget::findKey_(Hotkey& hotkey)
+list<Hotkey>::iterator PyWidget::findKey_(Hotkey& hotkey)
 {
-	List<Hotkey>::Iterator it = hotkeys_.begin();
+	list<Hotkey>::iterator it = hotkeys_.begin();
 	for (; it != hotkeys_.end(); it++)
 	{
 		Hotkey& this_key = *it;
@@ -520,7 +520,7 @@ void PyWidget::map(String modifier, String key, String command, String comment)
 		return;
 	}
 
-	List<Hotkey>::Iterator it = findKey_(hotkey);
+	list<Hotkey>::iterator it = findKey_(hotkey);
 	if (it != hotkeys_.end())  *it = hotkey; 
 	else 											 hotkeys_.push_back(hotkey);
 
@@ -539,7 +539,7 @@ void PyWidget::unmap(String modifier, String key)
 		return;
 	}
 
-	List<Hotkey>::Iterator it = findKey_(hotkey);
+	list<Hotkey>::iterator it = findKey_(hotkey);
   if (it != hotkeys_.end()) hotkeys_.erase(it);
 
 	python_settings_->setContent(hotkeys_);
@@ -565,7 +565,7 @@ void PyWidget::applyPreferences()
 	QMenu* menu = getMainControl()->initPopupMenu(MainControl::USER);
 	menu->clear();
 
-	List<Hotkey>::Iterator it = hotkeys_.begin();
+	list<Hotkey>::iterator it = hotkeys_.begin();
 	for (; it != hotkeys_.end(); it++)
 	{
 		String entry = (*it).action;
@@ -672,7 +672,7 @@ bool PyWidget::toAbortScript()
 
 void PyWidget::insertHotkey(const Hotkey& hotkey) 
 {
-	List<Hotkey>::iterator it = hotkeys_.begin();
+	list<Hotkey>::iterator it = hotkeys_.begin();
 	for (; it != hotkeys_.end(); it++)
 	{
 		if ((*it) == hotkey) return;
@@ -683,7 +683,7 @@ void PyWidget::insertHotkey(const Hotkey& hotkey)
 
 void PyWidget::removeHotkey(const Hotkey& hotkey) 
 {
-	List<Hotkey>::iterator it = hotkeys_.begin();
+	list<Hotkey>::iterator it = hotkeys_.begin();
 	for (; it != hotkeys_.end(); it++)
 	{
 		if ((*it) == hotkey) return;
@@ -701,7 +701,7 @@ void PyWidget::reactTo(const QKeyEvent& e)
 		return;
 	}
 
-	List<Hotkey>::iterator it = hotkeys_.begin();
+	list<Hotkey>::iterator it = hotkeys_.begin();
 	for (; it != hotkeys_.end(); it++)
 	{
 		if ((*it) == e) 

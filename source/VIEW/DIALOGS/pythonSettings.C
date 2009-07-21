@@ -189,9 +189,9 @@ void HotkeyTable::appendHotkey(const String& mod, const String& F_key,
 	scrollToBottom();
 }
 
-List<Hotkey> HotkeyTable::getContent() const
+list<Hotkey> HotkeyTable::getContent() const
 {
-	List<Hotkey> result;
+	list<Hotkey> result;
 	for (Index pos = 0; pos < rowCount(); pos++)
 	{
 		if (item(pos, 2)->text().isEmpty())
@@ -219,12 +219,12 @@ List<Hotkey> HotkeyTable::getContent() const
 }
 
 
-void HotkeyTable::setContent(const List<Hotkey>& hotkeys)
+void HotkeyTable::setContent(const list<Hotkey>& hotkeys)
 {
   setRowCount(hotkeys.size());
 	setColumnWidth(2, 230);
 
-	List<Hotkey>::ConstIterator it = hotkeys.begin();
+	list<Hotkey>::const_iterator it = hotkeys.begin();
 	Position p = 0;
 	for (; it != hotkeys.end(); it++)
 	{
@@ -321,12 +321,12 @@ void PythonSettings::rowSelected()
  	remove_button->setEnabled(table->currentRow() >= 0);
 }
 
-const List<Hotkey> PythonSettings::getContent() const
+const list<Hotkey> PythonSettings::getContent() const
 {
  	return table->getContent();
 }
 
-void PythonSettings::setContent(const List<Hotkey>& hotkeys)
+void PythonSettings::setContent(const list<Hotkey>& hotkeys)
 {
  	table->setContent(hotkeys);
 }

@@ -11,10 +11,6 @@
 #	include <BALL/common.h>
 #endif
 
-#ifndef BALL_DATATYPE_LIST_H
-#	include <BALL/DATATYPE/list.h>
-#endif
-
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
 #	include <BALL/DATATYPE/stringHashMap.h>
 #endif

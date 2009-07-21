@@ -11,10 +11,6 @@
 # include <BALL/common.h>
 #endif
 
-#ifndef BALL_DATATYPE_LIST_H
-# include <BALL/DATATYPE/list.h>
-#endif
-
 #ifndef BALL_ENERGY_ENERGYPROCESSOR_H
 # include <BALL/ENERGY/energyProcessor.h>
 #endif
@@ -25,7 +21,7 @@ namespace BALL
 	/** EnergyProcessorList
 			\ingroup EnergyMiscellaneous
 	*/
-	typedef List<EnergyProcessor*> EnergyProcessorList;
+	typedef std::list<EnergyProcessor*> EnergyProcessorList;
 
 	/** A class for composed energy calculations.
 			Most energies are compositions of several energy contributions. To model

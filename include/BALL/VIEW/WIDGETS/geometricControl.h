@@ -101,7 +101,7 @@ namespace BALL
 			
 			/** Non-mutable inspection of the selection.
 			*/
-			List<Representation*> getHighlightedRepresentations() const;
+			std::list<Representation*> getHighlightedRepresentations() const;
 			
 			/** Message handling.
 					\see    Message

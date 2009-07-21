@@ -236,8 +236,8 @@ namespace BALL
 		current_molecule_->apply(select);
 
 		// we know that the selected atoms only have one bond each. so we only need to make sure it really is a double bond
-		List<Atom*> selected_atoms = select.getSelectedAtoms();
-		List<Atom*>::iterator it = selected_atoms.begin();					
+		list<Atom*> selected_atoms = select.getSelectedAtoms();
+		list<Atom*>::iterator it = selected_atoms.begin();
 		for(;it != selected_atoms.end(); ++it)
 		{
 			Atom::BondIterator bond_it = (*it)->beginBond();

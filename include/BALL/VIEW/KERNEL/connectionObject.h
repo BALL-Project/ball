@@ -7,8 +7,8 @@
 #ifndef BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
 #define BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
 
-#ifndef BALL_DATATYPE_LIST_H
-# include <BALL/DATATYPE/list.h>
+#ifndef BALL_COMMON_MACROS_H
+# include <BALL/COMMON/macros.h>
 #endif
 
 namespace BALL
@@ -206,10 +206,10 @@ namespace BALL
 
 	
 			bool processing_message_queue_;
-			List<Message *> message_queue_;
+			std::list<Message *> message_queue_;
 
 			ConnectionObject *parent_;
-			List<ConnectionObject *> children_connection_objects_;
+			std::list<ConnectionObject *> children_connection_objects_;
 		};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

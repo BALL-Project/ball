@@ -134,7 +134,7 @@ void LabelDialog::show()
 
 void LabelDialog::accept()
 {
-	List<Composite*> selection = getMainControl()->getMolecularControlSelection();
+	list<Composite*> selection = getMainControl()->getMolecularControlSelection();
 
 	// no selection present => return
 	if (selection.empty()) return;
@@ -156,8 +156,8 @@ void LabelDialog::accept()
 	rep->setModelProcessor(model);
 
 	// process all objects in the selection list
-	List<Composite*>::ConstIterator list_it = selection.begin();
-	List<const Composite*> composites;
+	list<Composite*>::const_iterator list_it = selection.begin();
+	list<const Composite*> composites;
 
 	for (; list_it != selection.end(); ++list_it)
 	{

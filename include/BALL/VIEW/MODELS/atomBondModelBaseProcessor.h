@@ -7,10 +7,6 @@
 #ifndef BALL_VIEW_MODELS_ATOMBONDMODELBASEPROCESSOR_H
 #define BALL_VIEW_MODELS_ATOMBONDMODELBASEPROCESSOR_H
 
-#ifndef BALL_DATATYPE_LIST_H
-#	include <BALL/DATATYPE/list.h>
-#endif
-
 #ifndef BALL_DATATYPE_HASHSET_H
 #	include <BALL/DATATYPE/hashSet.h>
 #endif
@@ -141,7 +137,7 @@ namespace BALL
 
 			/** Mutable inspection of the list of used atoms.
 			*/
-			List<const Atom*>& getAtomList_();
+			std::list<const Atom*>& getAtomList_();
 
 			/** Mutable inspection of the hash set of used atoms.
 			*/
@@ -165,7 +161,7 @@ namespace BALL
 
 			private:
 
-			List<const Atom*> used_atoms_;
+			std::list<const Atom*> used_atoms_;
 			HashSet<const Atom*> atom_set_;
 		};
 

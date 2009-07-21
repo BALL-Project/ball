@@ -152,7 +152,7 @@ namespace BALL
 					change (See also VIEW/KERNEL/common.h).
 					@param hidden set to true will prevent that the representations model is created right now
 			*/
-			virtual Representation* createRepresentation(const List<Composite*>& composites, bool hidden = false);
+			virtual Representation* createRepresentation(const std::list<Composite*>& composites, bool hidden = false);
 
 
 			///

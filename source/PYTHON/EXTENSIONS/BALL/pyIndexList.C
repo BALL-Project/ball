@@ -13,12 +13,12 @@ namespace BALL
 {
 
 	PyIndexList::PyIndexList()
-		: List<Index>()
+		: list<Index>()
 	{
 	}
 
 	PyIndexList::PyIndexList(const PyIndexList& new_list)
-		: List<Index>(new_list)
+		: list<Index>(new_list)
   {
 	}
 

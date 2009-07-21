@@ -67,7 +67,7 @@ void LightSettings::updateFromStage()
 {
 	if (stage_ == 0) return;
 	lights_.clear();
-	List<LightSource>::ConstIterator it = stage_->getLightSources().begin();
+	list<LightSource>::const_iterator it = stage_->getLightSources().begin();
 	for (; it != stage_->getLightSources().end(); it++)
 	{
 		lights_.push_back(*it);

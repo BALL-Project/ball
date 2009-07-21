@@ -33,7 +33,7 @@ ConnectionObject::~ConnectionObject()
 void ConnectionObject::clear()
 {
 	// clear the message queue
-	List<Message*>::Iterator message_iterator;
+	list<Message*>::iterator message_iterator;
 	for(message_iterator = message_queue_.begin();
 			message_iterator != message_queue_.end();
 			++message_iterator)
@@ -57,7 +57,7 @@ void ConnectionObject::clear()
 	}
 
 	// unregister all children
-	List<ConnectionObject*>::Iterator list_iterator;
+	list<ConnectionObject*>::iterator list_iterator;
 
 	for(list_iterator = children_connection_objects_.begin();
 			list_iterator != children_connection_objects_.end();
@@ -66,7 +66,7 @@ void ConnectionObject::clear()
 		(*list_iterator)->clearParent_();
 	}
 
-	children_connection_objects_.destroy();
+	children_connection_objects_.clear();
 }
 
 void ConnectionObject::destroy()
@@ -87,8 +87,8 @@ void ConnectionObject::unregisterConnectionObject(ConnectionObject &object)
 {
 	// search object in list
 	// if inserted cut connection between them
-	List<ConnectionObject*>::Iterator list_iterator;
-	List<ConnectionObject*>::Iterator to_be_deleted_iterator 
+	list<ConnectionObject*>::iterator list_iterator;
+	list<ConnectionObject*>::iterator to_be_deleted_iterator
 		= children_connection_objects_.end();
 
 	for(list_iterator = children_connection_objects_.begin();
@@ -114,7 +114,7 @@ bool ConnectionObject::isConnectionObjectRegistered(const ConnectionObject &obje
 {
 	// search object in list
 	// if already inserted return true else return false
-	List<ConnectionObject*>::ConstIterator list_iterator;
+	list<ConnectionObject*>::const_iterator list_iterator;
 
 	for(list_iterator = children_connection_objects_.begin();
 			list_iterator != children_connection_objects_.end();
@@ -145,7 +145,7 @@ void ConnectionObject::onNotify(Message * /* message */)
 bool ConnectionObject::isValid() const
 {
 	// check all children if parent will be ´this´
-	List<ConnectionObject*>::ConstIterator list_iterator;
+	list<ConnectionObject*>::const_iterator list_iterator;
 
 	for(list_iterator = children_connection_objects_.begin();
 			list_iterator != children_connection_objects_.end();
@@ -178,7 +178,7 @@ void ConnectionObject::dump(ostream& s, Size depth) const
 
 	BALL_DUMP_DEPTH(s, depth);
 	s << "number of registered objects: " << children_connection_objects_.size() << std::endl;
-	List<ConnectionObject*>::ConstIterator it = children_connection_objects_.begin();
+	list<ConnectionObject*>::const_iterator it = children_connection_objects_.begin();
 	for (Position p = 0; p < children_connection_objects_.size(); p++)
 	{
 		s << String(p) + ": " << *it  << "  " << typeid(**it).name() << std::endl;
@@ -227,7 +227,7 @@ void ConnectionObject::onNotify_(Message* message)
 		}
 		
 		// notify all children
-		List<ConnectionObject *>::Iterator list_iterator;
+		list<ConnectionObject *>::iterator list_iterator;
 
 		for(list_iterator = children_connection_objects_.begin();
 				list_iterator != children_connection_objects_.end();

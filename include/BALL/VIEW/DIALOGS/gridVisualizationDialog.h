@@ -17,10 +17,6 @@
 # include <BALL/DATATYPE/regularData3D.h>
 #endif 
 
-#ifndef BALL_DATATYPE_LIST_H
-# include <BALL/DATATYPE/list.h>
-#endif
-
 #ifndef BALL_VIEW_DATATYPE_STANDARDDATASETS_H
 # include <BALL/VIEW/DATATYPE/standardDatasets.h>
 #endif
@@ -95,7 +91,7 @@ namespace BALL
 
 			ColorRGBA	 	min_min_color, min_color, mid_color, max_color, max_max_color;	
 
-			List<RegularData3D*> grid_list_;
+			std::list<RegularData3D*> grid_list_;
 		};
 
 	} // namespace VIEW

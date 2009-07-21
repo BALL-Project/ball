@@ -338,7 +338,7 @@ namespace BALL
 			HashSet<Composite*>& getSelection() ;
 
 			/// Get the selection (highlighted items) of the MolecularControl (not the selection with checkboxes)
-			List<Composite*>& getMolecularControlSelection();
+			std::list<Composite*>& getMolecularControlSelection();
 
 			/// If exactly one System is selected in the Control, return a pointer to this system, otherwise 0.
 			System* getSelectedSystem();
@@ -864,7 +864,7 @@ namespace BALL
 			/*_ List with the selected composites of the control.
 					(Not the one with the checkboxes!)
 			*/
-			List<Composite*>						control_selection_;		
+			std::list<Composite*>						control_selection_;
 
 			/*_ Message label in the statusbar
 					\see setStatusbarText
@@ -891,7 +891,7 @@ namespace BALL
 					This list is modified by addModularWidget and
 					removeModularWidget.
 			*/
-			List<ModularWidget*>				modular_widgets_;
+			std::list<ModularWidget*>				modular_widgets_;
 		
 			QLabel*             simulation_icon_;
 			QLabel*             rep_label_;

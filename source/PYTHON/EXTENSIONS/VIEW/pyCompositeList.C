@@ -11,36 +11,35 @@ namespace BALL
 {
 
 	PyCompositeList::PyCompositeList()
-		: List<Composite*>()
+		: std::list<Composite*>()
 	{
 	}
 
 	PyCompositeList::PyCompositeList(const PyCompositeList& composite_list)
-		: List<Composite*>(composite_list)
+		: std::list<Composite*>(composite_list)
   {
 	}
 
-	PyCompositeList::PyCompositeList(const List<Composite*>& composite_list)
-		: List<Composite*>(composite_list)
+	PyCompositeList::PyCompositeList(const std::list<Composite*>& composite_list)
+		: std::list<Composite*>(composite_list)
   {
 	}
 
-	PyCompositeList::PyCompositeList(const List<const Composite*>& composite_list)
-		: List<Composite*>()
+	PyCompositeList::PyCompositeList(const std::list<const Composite*>& composite_list)
+		: std::list<Composite*>()
   {
-		List<const Composite*>::const_iterator it(composite_list.begin());
+		std::list<const Composite*>::const_iterator it(composite_list.begin());
 		for (; it != composite_list.end(); ++it)
 		{
 			push_back(const_cast<Composite*>(*it));
 		}
 	}
 
-	PyCompositeList& PyCompositeList::operator = (const List<const Composite*>& composite_list)
-		throw()
+	PyCompositeList& PyCompositeList::operator = (const std::list<const Composite*>& composite_list)
 	{
 		clear();
 
-		List<const Composite*>::const_iterator it(composite_list.begin());
+		std::list<const Composite*>::const_iterator it(composite_list.begin());
 		for (; it != composite_list.end(); ++it)
 		{
 			push_back(const_cast<Composite*>(*it));
@@ -50,13 +49,13 @@ namespace BALL
 	}
 
 	PyCompositeList::PyCompositeList(const HashSet<Composite*>& composite_set)
-		: List<Composite*>()
+		: std::list<Composite*>()
   {
 		std::copy(composite_set.begin(), composite_set.end(), std::inserter(*this, begin()));
 	}
 
 	PyCompositeList::PyCompositeList(const HashSet<const Composite*>& composite_set)
-		: List<Composite*>()
+		: std::list<Composite*>()
   {
 		HashSet<const Composite*>::ConstIterator it(composite_set.begin());
 		for (; +it; ++it)

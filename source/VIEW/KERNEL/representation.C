@@ -84,7 +84,7 @@ namespace BALL
 				color_processor_ = (ColorProcessor*) rp.color_processor_->create();
 			}
 
-			GeometricObjectList::ConstIterator it = rp.getGeometricObjects().begin();
+			GeometricObjectList::const_iterator it = rp.getGeometricObjects().begin();
 			for (;it != rp.getGeometricObjects().end(); it++)
 			{
 				GeometricObject* object = (GeometricObject*)(**it).create();
@@ -162,7 +162,7 @@ namespace BALL
 				color_processor_ = 0;
 			}
 
-			GeometricObjectList::ConstIterator it = representation.getGeometricObjects().begin();
+			GeometricObjectList::const_iterator it = representation.getGeometricObjects().begin();
 			for (;it != representation.getGeometricObjects().end(); it++)
 			{
 				GeometricObject* object = (GeometricObject*)(**it).create();
@@ -216,7 +216,7 @@ namespace BALL
 		
 		void Representation::clearGeometricObjects()
 		{
-			List<GeometricObject*>::Iterator it = getGeometricObjects().begin();
+			list<GeometricObject*>::iterator it = getGeometricObjects().begin();
 			for (; it != getGeometricObjects().end(); it++)
 			{
 				delete *it;
@@ -272,7 +272,7 @@ namespace BALL
 			}
 
 #ifdef BALL_VIEW_DEBUG
-			GeometricObjectList::ConstIterator it = getGeometricObjects().begin();
+			GeometricObjectList::const_iterator it = getGeometricObjects().begin();
 			for (; it != getGeometricObjects().end(); it++)
 			{
 				if (!(*it)->isValid()) return false;
@@ -308,7 +308,7 @@ namespace BALL
 				// (CompositeMessage::CHANGED_COMPOSITE instead of CHANGED_COMPOSITE_HIERARCHY)
 				if (!rebuild_)
 				{
-					List<const Composite*>::const_iterator it = composites_.begin();
+					list<const Composite*>::const_iterator it = composites_.begin();
 					for (; it!= composites_.end(); it++)
 					{
 						if ((*it)->getModificationTime() > model_build_time_) 
@@ -328,7 +328,7 @@ namespace BALL
 					clearGeometricObjects();
 					model_processor_->clearComposites();
 					
-					List<const Composite*>::const_iterator it = composites_.begin();
+					list<const Composite*>::const_iterator it = composites_.begin();
 					for (; it!= composites_.end(); it++)
 					{
 						(const_cast<Composite*>(*it))->apply(*model_processor_);
@@ -352,7 +352,7 @@ namespace BALL
 				// we have to apply the ColorProcessor anyhow if the selection changed since the last model build
 				if (!apply_color_processor)
 				{
-					List<const Composite*>::const_iterator it = composites_.begin();
+					list<const Composite*>::const_iterator it = composites_.begin();
 					for (; it!= composites_.end(); it++)
 					{
 						if ((*it)->getSelectionTime() > model_build_time_) 
@@ -369,7 +369,18 @@ namespace BALL
 					if (rebuild_) color_processor_->setComposites(&getComposites());
 					color_processor_->setTransparency(transparency_);
 					color_processor_->setModelType(model_type_);
-					getGeometricObjects().apply(*color_processor_);
+
+					if (color_processor_->start())
+					{
+						for (std::list<GeometricObject*>::iterator it = getGeometricObjects().begin(); it != getGeometricObjects().end(); ++it)
+						{
+							if ((*color_processor_)(*it) <= Processor::BREAK)
+							{
+								break;
+							}
+						}
+					}
+
 					changed_color_processor_ = false;
 #ifdef BALL_BENCHMARKING
 					t.stop();
@@ -394,7 +405,7 @@ namespace BALL
 			String prop;
 			if (getModelInformation().isSurfaceModel(model_type_))
 			{
-				GeometricObjectList::ConstIterator it = getGeometricObjects().begin();
+				GeometricObjectList::const_iterator it = getGeometricObjects().begin();
 				Size triangles = 0;
 				for (;it != getGeometricObjects().end(); it++)
 				{
@@ -487,7 +498,7 @@ namespace BALL
 			else
 			{
 				Size alpha = 255 - transparency_;
-				GeometricObjectList::Iterator it = geometric_objects_.begin();
+				GeometricObjectList::iterator it = geometric_objects_.begin();
 				for (; it != geometric_objects_.end(); ++it)
 				{
 					MultiColorExtension* mce = dynamic_cast<MultiColorExtension*>(*it);
@@ -513,7 +524,7 @@ namespace BALL
 				return true;
 			}
 
-			List<const Composite*>::const_iterator it = composites_.begin();
+			list<const Composite*>::const_iterator it = composites_.begin();
 			for (;it != composites_.end(); it++)
 			{
 				if (getModelBuildTime() < (*it)->getModificationTime()) return true;
@@ -545,7 +556,7 @@ namespace BALL
 			HashMap<const Composite*, Position> composite_to_index;
 			collectRecursive_(root, composite_to_index);
 
-			List<const Composite*>::const_iterator it = composites_.begin();
+			list<const Composite*>::const_iterator it = composites_.begin();
 			for (; it != composites_.end(); it++)
 			{
 				if (composite_to_index.has(*it))
@@ -650,7 +661,7 @@ namespace BALL
 			return composite_name;
 		}
 
-		void Representation::setComposites(const List<const Composite*>& composites)
+		void Representation::setComposites(const list<const Composite*>& composites)
 		{
 			composites_ = composites;
 			needs_update_ = true;

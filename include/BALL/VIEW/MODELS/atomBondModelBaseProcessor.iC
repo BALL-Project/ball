@@ -18,7 +18,7 @@ void AtomBondModelBaseProcessor::clearUsedAtoms_()
 }
 
 BALL_INLINE
-List<const Atom*>& AtomBondModelBaseProcessor::getAtomList_()
+std::list<const Atom*>& AtomBondModelBaseProcessor::getAtomList_()
 {
 	return used_atoms_;
 }

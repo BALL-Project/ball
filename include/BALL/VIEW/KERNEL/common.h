@@ -19,10 +19,6 @@
  #include <BALL/CONCEPT/composite.h>
 #endif
 
-#ifndef BALL_DATATYPE_LIST_H
- #include <BALL/DATATYPE/list.h>
-#endif
-
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
  #include <BALL/DATATYPE/regularData3D.h>
 #endif
@@ -360,7 +356,7 @@ namespace BALL
 		/** Focus the camera on a list of points, e.g. atoms or geometric objects.
 				Sends a SceneMessage.
 		*/
-		BALL_VIEW_EXPORT Camera focusCamera(const List<Vector3>& points);
+		BALL_VIEW_EXPORT Camera focusCamera(const std::list<Vector3>& points);
 
 		///
 		BALL_VIEW_EXPORT String ascii(const QString& str);

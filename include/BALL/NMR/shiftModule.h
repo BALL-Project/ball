@@ -15,10 +15,6 @@
 #	include<BALL/DATATYPE/string.h>
 #endif
 
-#ifndef BALL_DATATYPE_LIST_H
-#	include<BALL/DATATYPE/list.h>
-#endif
-
 #ifndef BALL_CONCEPT_PROCESSOR_H
 #	include<BALL/CONCEPT/processor.h>
 #endif

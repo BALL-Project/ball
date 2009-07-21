@@ -74,7 +74,7 @@ namespace BALL
 				getMainControl()->update(*new_system);		
 				
 				//highlight as before
-				List<Composite*> sel;
+				list<Composite*> sel;
 				Composite* to_highlight = bond_order_processor_->getAtomContainer()->getParent();
 
 				if (to_highlight)

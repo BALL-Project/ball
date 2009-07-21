@@ -268,7 +268,7 @@ namespace BALL
 			{
 				const GeometricObjectList& ls = rep_->getGeometricObjects();
 
-				GeometricObjectList::ConstIterator it = ls.begin();
+				GeometricObjectList::const_iterator it = ls.begin();
 				for (; it != ls.end(); it++)
 				{
 					(**it).getVertices(vertices_);
@@ -673,7 +673,7 @@ namespace BALL
 			GeometricControl* go = GeometricControl::getInstance(0);
 			if (go != 0) 
 			{
-				List<Representation*> reps = go->getHighlightedRepresentations();
+				list<Representation*> reps = go->getHighlightedRepresentations();
 				if (reps.size())
 				{
 					setRepresentation(*reps.begin());
@@ -738,7 +738,7 @@ namespace BALL
 			}
 
 			HashSet<const Composite*> roots;
-			List<const Composite*>::const_iterator cit = rep_->getComposites().begin();
+			list<const Composite*>::const_iterator cit = rep_->getComposites().begin();
 			for (; cit != rep_->getComposites().end(); ++cit)
 			{
 				roots.insert(&(*cit)->getRoot());
@@ -753,8 +753,8 @@ namespace BALL
 			ColorProcessor cp;
 			if (split_by_selection->isChecked())
 			{
-				HashSet<const Composite*>::Iterator it = roots.begin();
-				List<const Composite*> roots_list;
+				HashSet<const Composite*>::iterator it = roots.begin();
+				list<const Composite*> roots_list;
 				for (; +it; ++it)
 				{
 					roots_list.push_back(*it);
@@ -912,8 +912,8 @@ namespace BALL
 
 		void ModifyRepresentationDialog::calculateIncludedVertices_(vector<bool>& include_vertex, const Mesh& org_mesh, HashSet<const Composite*>& roots)
 		{
-			List<const Atom*> selected_atoms;
-			List<const Atom*> all_atoms;
+			list<const Atom*> selected_atoms;
+			list<const Atom*> all_atoms;
 
 			HashSet<const Composite*>::ConstIterator it = roots.begin();
 			for(; +it; it++)
@@ -942,7 +942,7 @@ namespace BALL
 
 			BoundingBoxProcessor boxp;
 			boxp.start();
-			List<const Atom*>::Iterator lit = all_atoms.begin();
+			list<const Atom*>::iterator lit = all_atoms.begin();
 			for(;lit != all_atoms.end(); lit++)
 			{
 				boxp.operator() (*(Atom*)*lit);

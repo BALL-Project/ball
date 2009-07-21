@@ -86,7 +86,7 @@ namespace BALL
 
 			private:
 
-			List<Composite*> composites_;
+			std::list<Composite*> composites_;
 			RegularData3D* grid_;
 			System*  		 	 system_;
 

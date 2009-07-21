@@ -98,7 +98,7 @@ namespace BALL
     return Processor::CONTINUE;
 	}
 
-	List<Atom*>& Selector::getSelectedAtoms()
+	list<Atom*>& Selector::getSelectedAtoms()
 	{
 		return selected_atoms_;
 	}

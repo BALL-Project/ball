@@ -11,10 +11,6 @@
 #	include <BALL/CONCEPT/property.h>
 #endif
 
-#ifndef BALL_DATATYPE_LIST_H
-#	include <BALL/DATATYPE/list.h>
-#endif
-
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
 #endif
@@ -160,11 +156,11 @@ namespace BALL
 			void insert(GeometricObject& object) ;
 
 			///
-			const List<const Composite*>& getComposites() const
+			const std::list<const Composite*>& getComposites() const
 				{ return composites_;}
 
 			///
-			void setComposites(const List<const Composite*>& composites);
+			void setComposites(const std::list<const Composite*>& composites);
 
 			///
 			void setComposite(const Composite* composite);
@@ -307,7 +303,7 @@ namespace BALL
 			ColorProcessor* 		color_processor_;
 
 			//_
-			List<const Composite*> composites_;
+			std::list<const Composite*> composites_;
 
 			//_
 			PreciseTime 				model_build_time_;
@@ -345,7 +341,7 @@ namespace BALL
 		};
 
 		///
-		typedef List<Representation*> RepresentationList;
+		typedef std::list<Representation*> RepresentationList;
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/representation.iC>

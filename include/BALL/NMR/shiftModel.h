@@ -42,7 +42,7 @@ namespace BALL
 
 		/**	The module list type
 		*/
-		typedef List<ShiftModule*> ModuleList;
+		typedef std::list<ShiftModule*> ModuleList;
 
 		/**	The creation method type.
 				This type describes a method that can construct an object

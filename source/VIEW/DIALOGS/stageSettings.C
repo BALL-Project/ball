@@ -80,7 +80,7 @@ namespace BALL
 
 			for (; rit != r.getRepresentations().end(); ++rit)
 			{
-				List<GeometricObject*>::ConstIterator it = (*rit)->getGeometricObjects().begin();
+				list<GeometricObject*>::const_iterator it = (*rit)->getGeometricObjects().begin();
 
 				vector<Vector3> positions;
 				for (; it != (*rit)->getGeometricObjects().end(); ++it)

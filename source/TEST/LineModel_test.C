@@ -74,7 +74,7 @@ CHECK(AddLineModel::createGeometricObjects() throw())
 	Atom* atom = *atoms(system).begin();
 	TEST_EQUAL(m->getVertex(), atom->getPosition())
 	TEST_EQUAL(m->getComposite(), atom)
-	List<GeometricObject*>::iterator it = bs.getGeometricObjects().begin();
+	list<GeometricObject*>::iterator it = bs.getGeometricObjects().begin();
 	bool found = false;
 	for (; it != bs.getGeometricObjects().end(); it++)
 	{	

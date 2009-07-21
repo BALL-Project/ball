@@ -26,7 +26,7 @@ class MyItemCollector
 		return Processor::CONTINUE;
 	}
 
-	List<String> list2;
+	list<String> list2;
 };
 
 
@@ -434,8 +434,8 @@ CHECK(bool apply(UnaryProcessor<LineIterator>& processor))
 
 	TEST_EQUAL(ini.apply(myproc), true)
 	TEST_EQUAL(myproc.getSize(), 10)
-	TEST_EQUAL(myproc.list2.getSize(), 10)
-	List<String>::Iterator it(myproc.list2.begin());
+	TEST_EQUAL(myproc.list2.size(), 10)
+	list<String>::iterator it(myproc.list2.begin());
 	TEST_EQUAL(*it, "[Section1]")
 	it = myproc.list2.end();
 	it--;
@@ -578,7 +578,7 @@ CHECK(IteratorTraits_& operator -- ())
 	--unbound;
 RESULT
 
-CHECK(List<String> ::Iterator getPosition())
+CHECK(List<String> ::iterator getPosition())
 	it = ini.getLine(0);
 	TEST_EQUAL(*(it.getPosition()), "[Section1]")
 	unbound.getPosition();

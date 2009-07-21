@@ -192,10 +192,10 @@ RepresentationList RepresentationManager::removedComposite(const Composite& comp
 		Representation& rep = **rep_it;
 
 		// test if a Representation has Composites which are (not) to be removed
-		List<const Composite*> composites;
+		list<const Composite*> composites;
 
 
-		List<const Composite*>::ConstIterator crit = rep.getComposites().begin();
+		list<const Composite*>::const_iterator crit = rep.getComposites().begin();
 
 		// special case for representations with composites of two different roots:
 		// we have to update them manualy here!
@@ -253,13 +253,13 @@ RepresentationList RepresentationManager::removedComposite(const Composite& comp
 }
 
 
-List<Representation*> RepresentationManager::getRepresentationsOf(const Composite& composite)
+list<Representation*> RepresentationManager::getRepresentationsOf(const Composite& composite)
 {
-	List<Representation*> changed_representations;
+	list<Representation*> changed_representations;
 	RepresentationsIterator rep_it = begin();
 	for (; rep_it != end(); rep_it++)
 	{
-		List<const Composite*>::const_iterator cit = (**rep_it).getComposites().begin();
+		list<const Composite*>::const_iterator cit = (**rep_it).getComposites().begin();
 		for (; cit != (**rep_it).getComposites().end(); ++cit)
 		{
 			if (&composite == *cit ||
@@ -341,7 +341,7 @@ void RepresentationManager::storeRepresentations(INIFile& out)
 		bool ok = true;
 
 		// we can only store reps for one system!
-		List<const Composite*>::const_iterator cit = (**it).getComposites().begin();
+		list<const Composite*>::const_iterator cit = (**it).getComposites().begin();
 		const Composite* root = &(**cit).getRoot();
 		cit++;
 		for (; cit != (**it).getComposites().end(); cit++)
@@ -526,7 +526,7 @@ void RepresentationManager::focusRepresentation(const Representation& rep)
 	vector<Vector3> positions;
 
 	Vector3 center;
-	List<GeometricObject*>::ConstIterator it = rep.getGeometricObjects().begin();
+	list<GeometricObject*>::const_iterator it = rep.getGeometricObjects().begin();
 	for (; it != rep.getGeometricObjects().end(); it++)
 	{
 		const GeometricObject& go = **it;
@@ -534,7 +534,7 @@ void RepresentationManager::focusRepresentation(const Representation& rep)
 	}
 
 	// stupid one, but must be:
-	List<Vector3> posl;
+	list<Vector3> posl;
 	posl.resize(positions.size());
 	copy(positions.begin(), positions.end(), posl.begin());
 
