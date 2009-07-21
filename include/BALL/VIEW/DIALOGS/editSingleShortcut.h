@@ -22,6 +22,8 @@
 
 #include <QtGui/QDialog>
 
+#include <QtGui/QDialog>
+
 class QModelIndex;
 
 namespace BALL
