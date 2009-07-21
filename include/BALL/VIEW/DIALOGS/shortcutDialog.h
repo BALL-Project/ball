@@ -13,10 +13,6 @@
 # include <BALL/VIEW/KERNEL/shortcutRegistry.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
-# include <BALL/VIEW/KERNEL/mainControl.h>
-#endif
-
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
 # include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
@@ -27,6 +23,8 @@ namespace BALL
 {
 	namespace VIEW
 	{
+		class MainControl;
+
 		/** Dialog for changing the BALLView shortcuts
 				\ingroup ViewDialogs
 		*/
