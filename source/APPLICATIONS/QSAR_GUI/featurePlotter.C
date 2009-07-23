@@ -188,12 +188,16 @@ void FeaturePlotter::plot(bool zoom)
 	for(uint i=first_index; i<=last_index; i++)
 	{
 		uint feature_index = feature_combobox_->itemData(i).toInt();
+		if(feature_index==0) continue;
 		
 		// sort ascendingly according to activity value
 		SortedList<pair<double,double> > values;
 		for(uint j=1; j<=no_compounds; j++)
 		{
-			values.insert(make_pair((*descriptor_matrix)(j,feature_index),(*Y)(j,1)));
+			double feature_value, response_value;
+			model->getUnnormalizedFeatureValue(j,feature_index,feature_value);
+			model->getUnnormalizedResponseValue(j,1,response_value);
+			values.insert(make_pair(feature_value,response_value));
 		}
 		
 		values.front();

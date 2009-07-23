@@ -8,6 +8,8 @@
 using namespace BALL::QSAR;
 
 
+const double SNBModel::sqrt2Pi_ = sqrt(2*BALL::Constants::PI);
+
 
 
 SNBModel::SNBModel(const QSARData& q) : BayesModel(q) 
@@ -103,7 +105,7 @@ BALL::Vector<double> SNBModel::predict(const vector<double>& substance, bool tra
 			{
 				double stddev = stddev_[act](j+1,i+1);
 				if(stddev==0) stddev = 0.000001; // zero is not allowed by the below equation
-				probabilities[i][j] = (1/(stddev*sqrt(2*Constants::PI))) * exp(-pow((x-mean_[act](j+1,i+1)),2)/(2*stddev));
+				probabilities[i][j] = (1/(stddev*sqrt2Pi_)) * exp(-pow((x-mean_[act](j+1,i+1)),2)/(2*stddev*stddev));
 				pdf_sums[i] += probabilities[i][j];
 			}
 		}
@@ -164,7 +166,7 @@ vector<double> SNBModel::calculateProbabilities(int activitiy_index, int feature
 	{
 		double stddev = stddev_[activitiy_index](i+1,feature_index+1);
 		if(stddev==0) stddev = 0.000001; // zero is not allowed by the below equation
-		pdf_values[i] = (1/(stddev*sqrt(2*Constants::PI))) * exp(-pow((feature_value-mean_[activitiy_index](i+1,feature_index+1)),2)/(2*stddev));
+		pdf_values[i] = (1/(stddev*sqrt2Pi_)) * exp(-pow((feature_value-mean_[activitiy_index](i+1,feature_index+1)),2)/(2*stddev*stddev));
 		pdf_sum += pdf_values[i];
 	}
 	for(int i=0; i<no_classes;i++) // convert pdf-values to probabilities

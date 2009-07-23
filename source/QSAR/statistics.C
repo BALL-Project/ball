@@ -273,6 +273,13 @@ double Statistics::scalarProduct(const Vector<double>& cv)
 
 double Statistics::euclDistance(const Vector<double>& c1, const Vector<double>& c2)
 {
+	if(c1.getSize()!=c2.getSize()) 
+	{
+		BALL::Exception::VectorHasWrongDimension e;
+		e.setMessage("Vectors must have the same number of cells in order to be able to calculate the euclidian distance between them!!");
+		throw e;
+	}
+	
 	double n=0;
 	for(uint i=1; i<=c1.getSize();i++)
 	{
@@ -306,7 +313,9 @@ double Statistics::distance(const Matrix<double>& m1, const Matrix<double>& m2, 
 {
 	if(m1.Ncols()!=m2.Ncols()) 
 	{
-		cout << "Matrices must have the same number of columns!!"<<endl; return 0;
+		BALL::Exception::MatrixHasWrongDimension e;
+		e.setMessage("Matrices must have the same number of columns in order to be able to calculate a distance between two of their rows!!");
+		throw e;
 	}
 	
 	double dist=0;
@@ -328,7 +337,9 @@ double Statistics::distance(const Matrix<double>& m1, const Matrix<double>& m2, 
 {
 	if(m1.Ncols()!=m2.Ncols()) 
 	{
-		cout << "Matrices must have the same number of columns!!"<<endl; return 0;
+		BALL::Exception::MatrixHasWrongDimension e;
+		e.setMessage("Matrices must have the same number of columns in order to be able to calculate a distance between two of their rows!!");
+		throw e;
 	}
 	
 	double dist=0;
@@ -352,7 +363,9 @@ double Statistics::euclDistance(const Matrix<double>& m1, const Matrix<double>& 
 {
 	if(m1.Ncols()!=m2.Ncols()) 
 	{
-		cout << "Matrices must have the same number of columns!!"<<endl; return 0;
+		BALL::Exception::MatrixHasWrongDimension e;
+		e.setMessage("Matrices must have the same number of columns in order to be able to calculate the euclidian distance between two of their rows!!");
+		throw e;
 	}
 	
 	double dist=0;

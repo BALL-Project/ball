@@ -259,7 +259,7 @@ void ClassificationValidation::bootstrap(int k, bool restore)
 		int test_size=0;
 		for(int j=0; j<N;j++)
 		{
-			if(sample_substances[j]==1) 
+			if(sample_substances[j]>0) 
 			{
 				continue;
 			}
@@ -316,6 +316,7 @@ void ClassificationValidation::bootstrap(int k, bool restore)
 	{
 		model_->descriptor_matrix_=desc_backup;   // prevent confusion of cross-validation coefficients with coefficients
 		model_->Y_=y_backup;
+		model_->readTrainingData();
 		model_->train();
 	}
 }
@@ -382,9 +383,15 @@ void ClassificationValidation::calculateAverageSensitivity()
 	
 	for(int j=1;j<=confusion_matrix_.Ncols();j++) // calculate quality_ of all classes
 	{	
-		double acc = (confusion_matrix_(1,j)) / (confusion_matrix_(1,j)+confusion_matrix_(4,j));
-		class_results_(j) += acc;
-		quality_ += acc;
+		int TP = (int)confusion_matrix_(1,j);
+		int FN = (int)confusion_matrix_(4,j);
+		double sens = 1;
+		if(TP!=0 || FN!=0)
+		{
+			sens = ((double)TP) / (TP+FN);
+		}
+		class_results_(j) += sens;
+		quality_ += sens;
 	}
 	
 	quality_ /= confusion_matrix_.Ncols(); // mean quality_ of all classes
@@ -404,10 +411,16 @@ void ClassificationValidation::calculateWeightedSensitivity()
 
 	for(int j=1;j<=confusion_matrix_.Ncols();j++) 
 	{	
-		double acc = (confusion_matrix_(1,j)) / (confusion_matrix_(1,j)+confusion_matrix_(4,j));
-		double acc_weighted = acc*(((double)clas_model->no_substances_[j-1])/no_all);
-		class_results_(j) += acc_weighted;
-		quality_ += acc_weighted;
+		int TP = (int)confusion_matrix_(1,j);
+		int FN = (int)confusion_matrix_(4,j);
+		double sens = 1;
+		if(TP!=0 || FN!=0)
+		{
+			sens = ((double)TP) / (TP+FN);
+		}		
+		double sens_weighted = sens*(((double)clas_model->no_substances_[j-1])/no_all);
+		class_results_(j) += sens_weighted;
+		quality_ += sens_weighted;
 	}
 }
 

@@ -1498,19 +1498,19 @@ bool QSARData::checkforDiscreteY(const char* file, SortedList<int>& activity_IDs
 }
 
 
-void QSARData::removeHighlyCorrelatedCompounds(double& cor_threshold)
+void QSARData::removeHighlyCorrelatedCompounds(double& compound_cor_threshold, double& feature_cor_threshold)
 {
 	if(descriptor_matrix_.size()==0)
 	{
 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Data must be read before highly correlated compounds can be removed!");
 	}
 	
-	/// use only those features that do not have identical values for all compounds !
+	/// use only those features that do not have identical values for all compounds
 	SortedList<int> features_to_use;
-	for(uint i=0; i<descriptor_matrix_.size();i++)
+	for(uint i=0; i<descriptor_matrix_.size();i++) // descriptors
 	{
 		bool identical_values=1;
-		for(uint j=1; j<descriptor_matrix_[0].size();j++)
+		for(uint j=1; j<descriptor_matrix_[0].size();j++) // compounds
 		{
 			if(descriptor_matrix_[i][j]!=descriptor_matrix_[i][0])
 			{
@@ -1523,6 +1523,17 @@ void QSARData::removeHighlyCorrelatedCompounds(double& cor_threshold)
 			features_to_use.push_back(i);
 		}
 	}
+	/// check remaining features for correlaton to each other !
+	features_to_use.front();
+	while(features_to_use.hasNext())
+	{
+		list<pair<uint,String> > similar_descriptor_IDs;
+		getSimilarDescriptors(features_to_use.next(),feature_cor_threshold,similar_descriptor_IDs);
+		for(list<pair<uint,String> >::iterator it=similar_descriptor_IDs.begin(); it!=similar_descriptor_IDs.end(); it++)
+		{
+			features_to_use.erase(it->first);
+		}
+	}	
 	
 	vector<double> stddev(descriptor_matrix_[0].size(),0);
 	vector<double> mean(descriptor_matrix_[0].size(),0);
@@ -1536,12 +1547,15 @@ void QSARData::removeHighlyCorrelatedCompounds(double& cor_threshold)
 		stddev[i] = Statistics::getRowStddev(descriptor_matrix_,i, mean[i],&features_to_use);
 	}
 		
-	double abs_cor_threshold = abs(cor_threshold);
+	double abs_cor_threshold = abs(compound_cor_threshold);
+	bool discrete_response = checkforDiscreteY();
 	SortedList<int> to_be_deleted;
 	
+	/// find highly correlated compounds
 	for(uint i=0; i<descriptor_matrix_[0].size(); i++)
 	{	
 		if(to_be_deleted.contains(i)) continue;
+		int no=1;
 		
 		for(uint j=0; j<descriptor_matrix_[0].size(); j++)
 		{
@@ -1554,12 +1568,49 @@ void QSARData::removeHighlyCorrelatedCompounds(double& cor_threshold)
 			
 			if(abs_cor>abs_cor_threshold)
 			{
-				cout<<i<<" "<<j<<" : "<<abs_cor<<endl;
-				to_be_deleted.insert(j);
+				if(!discrete_response)
+				{
+					// add up response values in order to calculate the mean later
+					for(uint c=0; c<Y_.size(); c++)
+					{
+						Y_[c][i]+=Y_[c][j];
+					}
+					cout<<i<<" "<<j<<" : "<<abs_cor<<endl;
+					to_be_deleted.insert(j);
+				}
+				else
+				{
+					bool identical_labels=1;
+					// delete compound only if all class-labels are identical!
+					for(uint c=0; c<Y_.size(); c++)
+					{
+						if((int)Y_[c][i]!=(int)Y_[c][j]) 
+						{
+							identical_labels = false;
+							break;
+						}
+					}
+					if(identical_labels)
+					{
+						cout<<i<<" "<<j<<" : "<<abs_cor<<endl;
+						to_be_deleted.insert(j);
+					}					
+				}
 			}
 		}
+		
+		if(discrete_response && no>1)
+		{
+			for(uint c=0; c<Y_.size(); c++)
+			{
+				Y_[c][i]/=no;
+			}
+		}		
 	}
+	
 	removeInvalidSubstances(to_be_deleted);
+	cout<<"Removed "<<to_be_deleted.size()<<" highly correlated compounds."<<endl;
+	cout<<"Used "<<features_to_use.size()<<" out of "<<descriptor_matrix_.size()<<" descriptors."<<endl;
 }
 
 

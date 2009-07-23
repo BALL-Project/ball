@@ -55,13 +55,11 @@ void NBModel::train()
 	/// discretize the training data features
 	(this->*discretizeFeatures)(discretization_steps_,min_max_);
 	
+	Matrix<double> prob_matrix(discretization_steps_,no_features); prob_matrix=0;
 	probabilities_.resize(no_activities);
 	for(uint act=0; act<no_activities;act++)
 	{
-		// the number of members of each feature-bin as a sum over all classes
-		Matrix<double> sums(discretization_steps_,no_features); sums = 0;
-		
-		probabilities_[act].resize(no_classes,sums);
+		probabilities_[act].resize(no_classes,prob_matrix);
 	
 		for(uint j=1;j<=no_compounds;j++)
 		{
@@ -72,16 +70,8 @@ void NBModel::train()
 				// features have been discretized, so that descriptor_matrix_ contains only uint's
 				uint feat_bucket = (uint)descriptor_matrix_(j,i);
 				probabilities_[act][class_id](feat_bucket+1,i)++;
-				sums(feat_bucket+1,i)++;
 			}	
 		}
-		
-// 		cout<<"sums:"<<endl;
-// 		cout<<sums<<endl;
-// 		cout<<"#of feature values in each bin for CLASS 0:"<<endl;
-// 		cout<<probabilities_[0][0]<<endl;
-// 		cout<<"#of feature values in each bin for CLASS 1:"<<endl;
-// 		cout<<probabilities_[0][1]<<endl;
 		
 		for(uint i=1;i<=no_features;i++)
 		{
@@ -89,12 +79,8 @@ void NBModel::train()
 			{
 				for(uint k=0; k<no_classes;k++)
 				{
-					// divide number of occurences of feature i within range j and in class k by its number of occurences in all classes
-					// ==> probability for i within range j to be in class k
-					if(probabilities_[act][k](j,i)!=0)
-					{
-						probabilities_[act][k](j,i) /= sums(j,i);
-					}
+					// calculate p(x_ij | k)
+					probabilities_[act][k](j,i) /= no_substances_[k];
 				}
 			}
 		}

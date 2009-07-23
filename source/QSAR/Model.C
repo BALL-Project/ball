@@ -517,7 +517,8 @@ void Model::saveModelParametersToFile(ofstream& out)
 void Model::readDescriptorInformationFromFile(ifstream& input, int no_descriptors, bool transformation)
 {
 	descriptor_names_.clear();
-	descriptor_transformations_.ReSize(2,no_descriptors);
+	if(transformation) descriptor_transformations_.resize(2,no_descriptors);
+	else descriptor_transformations_.resize(0,0);
 	String line;
 	getline(input,line);  // skip comment line
 	for(int i=1; i<=no_descriptors; i++)
@@ -614,6 +615,41 @@ bool Model::optimizeParameters(int k)
 }
 
 
+void Model::getUnnormalizedFeatureValue(int compound, int feature, double& return_value)
+{
+	if(compound<1 || feature<1 || compound>(int)descriptor_matrix_.getRowCount() || feature>(int)descriptor_matrix_.getColumnCount())
+	{
+		cout<<"Model::getUnnormalizedFeatureValue(): Specified compound or feature ID is out of range!"<<endl;
+		BALL::Exception::OutOfRange e(__FILE__,__LINE__);
+		e.setMessage("Specified compound or feature ID is out of range!");
+		throw e;
+	}
+
+	return_value = descriptor_matrix_(compound,feature);
+	if(descriptor_transformations_.getColumnCount()>0)
+	{
+		return_value *= descriptor_transformations_(2,feature); // stddev
+		return_value += descriptor_transformations_(1,feature); // mean
+	}
+}
+
+void Model::getUnnormalizedResponseValue(int compound, int response, double& return_value)
+{
+	if(compound<1 || response<1 || compound>(int)Y_.getRowCount() || response>(int)Y_.getColumnCount())
+	{
+		cout<<"Model::getUnnormalizedFeatureValue(): Specified compound or response ID is out of range!"<<endl;
+		BALL::Exception::OutOfRange e(__FILE__,__LINE__);
+		e.setMessage("Specified compound or response ID is out of range!");
+		throw e;
+	}
+
+	return_value = Y_(compound,response);
+	if(y_transformations_.getColumnCount()>0)
+	{
+		return_value *= y_transformations_(2,response); // stddev
+		return_value += y_transformations_(1,response); // mean
+	}
+}
 
 
 Model* QSAR::createNewModelFromFile(String model_file, const QSARData& q)
@@ -643,6 +679,6 @@ Model* QSAR::createNewModelFromFile(String model_file, const QSARData& q)
 	}
 	
 	m->readFromFile(model_file);
-	return m;	
+	return m;
 }
 

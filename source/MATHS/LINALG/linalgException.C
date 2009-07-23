@@ -10,11 +10,25 @@ MatrixHasWrongDimension::MatrixHasWrongDimension() throw()
 	BALL::Exception::globalHandler.setName(String(name_));
 }
 
+MatrixHasWrongDimension::MatrixHasWrongDimension(const char* file, unsigned long line) throw()
+	: GeneralException(file,line)
+{
+	name_= "MatrixHasWrongDimension";
+	BALL::Exception::globalHandler.setName(String(name_));
+}
+
 MatrixHasWrongDimension::~MatrixHasWrongDimension() throw()
 {
 }
 
 VectorHasWrongDimension::VectorHasWrongDimension() throw()
+{
+	name_= "VectorHasWrongDimension";
+	BALL::Exception::globalHandler.setName(String(name_));
+}
+
+VectorHasWrongDimension::VectorHasWrongDimension(const char* file, unsigned long line) throw()
+	: GeneralException(file,line)
 {
 	name_= "VectorHasWrongDimension";
 	BALL::Exception::globalHandler.setName(String(name_));

@@ -172,8 +172,9 @@ namespace BALL
 				/** allows to set the data-folder neccessary for computation of descriptors without using BALL_DATA_PATH enviroment variable, which is useful for standalone applications */
 				void setDataFolder(const char* folder);
 				
-				/** removes compounds whose absolute correlation coefficient to another compound is larger than cor_threshold */
-				void removeHighlyCorrelatedCompounds(double& cor_threshold);
+				/** removes compounds whose absolute correlation coefficient to another compound is larger than cor_threshold 
+				@param feature_cor_threshold Only features that do not have a correlation larger than this value to another feature are used to calculate the similarity of compounds (=instances). */
+				void removeHighlyCorrelatedCompounds(double& compound_cor_threshold, double& feature_cor_threshold);
 				
 				/** Find all descriptors of the current data set that have a correlation of at least 'similarity' to the specified feature 
 				@param descriptor_ID the ID of the descriptor for which similar features should be searched

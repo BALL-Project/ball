@@ -125,6 +125,12 @@ namespace BALL
 				
 				/** returns the type of the current model, e.g. "MLR", "PLS", ... */
 				const string* getType();
+				
+				/** Fetches the un-normalized value for the specified feature of the desired compound (instance) from the data that this Model currently contains. This method is needed for visualization purposes only. */ 
+				void getUnnormalizedFeatureValue(int compound, int feature, double& return_value);
+				
+				/** Fetches the un-normalized value for the specified response of the desired compound (instance) from the data that this Model currently contains. This method is needed for visualization purposes only. */
+				void getUnnormalizedResponseValue(int compound, int response, double& return_value);
 				//@}
 				
 				
@@ -190,7 +196,7 @@ namespace BALL
 				/** @name Attributes
 				 */
 				//@{
-				/** newmat-matrix containing the values of each descriptor for each substance */ 
+				/** matrix containing the values of each descriptor for each substance */ 
 				Matrix<double> descriptor_matrix_;
 					
 				/** names of all substances */
@@ -207,7 +213,7 @@ namespace BALL
 				The content of this matrix is updated only by Model.readTrainingData() */
 				Matrix<double> y_transformations_;
 				
-				/** newmat-Matrix<double> containing the experimentally determined results (active/non-active) for each substance. \n
+				/** Matrix containing the experimentally determined results (active/non-active) for each substance. \n
 				Each column contains the values for one activity. */
 				Matrix<double> Y_;
 
