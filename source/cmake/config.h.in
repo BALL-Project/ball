@@ -1,0 +1,195 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: config.h.in,v 1.50.16.1 2007/03/25 22:02:48 oliver Exp $ 
+//
+
+#ifndef BALL_CONFIG_CONFIG_H
+#define BALL_CONFIG_CONFIG_H
+
+
+
+// ====   Platform-independend definitions  ===========
+
+	// Defines an unsigned type that has the same length as size_t
+	#define BALL_SIZE_TYPE unsigned int
+	
+	// Defines a signed type that has the same length as size_t
+	#define BALL_INDEX_TYPE int
+	
+	#define BALL_ULONG64_TYPE unsigned long
+	#define BALL_LONG64_TYPE long
+	
+	#define BALL_CHAR_SIZE 1
+	
+
+// ======   Boost  ====================================
+
+	// defined if BALL was configured with asio support
+	#cmakedefine BALL_HAS_ASIO
+	
+	// defined if asio is taken from boost
+	#define BALL_HAS_BOOST_ASIO 
+	
+	// the namespace to use for asio
+	#define BALL_ASIO_NAMESPACE boost::asio
+
+
+// ======   Type-Sizes (pointers, int, etc.)   ========
+
+	// Define to `int' if <sys/types.h> doesn't define.  
+	#cmakedefine pid_t
+	
+	// Define to `unsigned' if <sys/types.h> doesn't define.  
+	#cmakedefine size_t
+
+	// Define the argument type for xdr_u_hyper (64 bit)
+	#define BALL_XDR_UINT64_TYPE u_quad_t
+
+	// Defines an unsigned integer type of the same size as void*
+	#define BALL_POINTERSIZEUINT_TYPE unsigned long
+
+
+// ======   Compiler   ================================
+
+	// Define compiler specifics (used in VERY few places only, e.g. COMMON/rtti.C).
+	// Microsoft Visual Studio .NET
+	#cmakedefine BALL_COMPILER_MSVC
+	// GNU g++
+	#cmakedefine BALL_COMPILER_GXX
+	// Intel C++
+	#cmakedefine BALL_COMPILER_INTEL
+	
+	// The compiler name.
+	#define BALL_COMPILER "unknown"
+	
+	// Defines for the compiler version (major.minor.minor_minor)
+	#define BALL_COMPILER_VERSION_MAJOR 0
+
+
+// ======   BALL_HAS - stuff   ========================
+
+	// on some systems (e.g. Solaris) we need to include /usr/include/values.h
+	// for some floating point functions
+	#cmakedefine BALL_HAS_VALUES_H
+	
+	#cmakedefine BALL_HAS_UNORDERED_MAP
+	// If ext/hash_map is defined, we use this instead of std::map
+	#cmakedefine BALL_HAS_HASH_MAP
+	#define @BALL_MAP_NAMESPACE@
+	#define @BALL_MAP_NAME@
+	
+	#cmakedefine BALL_HAS_REGEX_H
+	#cmakedefine BALL_HAS_FLOAT_H
+	#cmakedefine BALL_HAS_UNISTD_H
+	#cmakedefine BALL_HAS_PROCESS_H
+	#cmakedefine BALL_HAS_TIME_H
+	#cmakedefine BALL_HAS_PWD_H
+	#cmakedefine BALL_HAS_SYS_IOCTL_H
+	#cmakedefine BALL_HAS_SYS_TIME_H
+	#cmakedefine BALL_HAS_SYS_TIMES_H
+	#cmakedefine BALL_HAS_SYS_TYPES_H
+	#cmakedefine BALL_HAS_SYS_PARAM_H
+	#cmakedefine BALL_HAS_SYS_SOCKET_H
+	#cmakedefine BALL_HAS_SYS_SYSINFO_H
+	
+	#cmakedefine BALL_HAS_NETINET_IN_H
+	#cmakedefine BALL_HAS_NETDB_H
+	
+	#cmakedefine BALL_HAS_KILL
+	#cmakedefine BALL_HAS_SYSCONF
+	
+	#cmakedefine BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+	#cmakedefine BALL_USE_WINSOCK
+	
+	// QT options
+	#cmakedefine BALL_HAS_VIEW
+	#cmakedefine BALL_QT_HAS_THREADS
+	#cmakedefine BALL_USE_GLEW
+
+	// Define whether BALL was built with lpsolve support
+	#cmakedefine BALL_HAS_LPSOLVE
+
+// ====================================================
+
+
+
+// BALL_DEBUG enables some debugging methods
+// change the DEBUG entry in configure to define this flag.
+// If in debug mode, inline functions won't be compiled
+// as inline by defining BALL_NO_INLINE_FUNCTIONS
+// This facilitates debugging, as the debugger can always
+// find the corresponding source code line.
+// See also COMMON/debug.h for these symbols.
+#cmakedefine BALL_DEBUG
+#cmakedefine BALL_NO_INLINE_FUNCTIONS
+
+
+// This define is used in string.C and enables a workaround
+// on on of these poor systems that do not define vsnprintf.
+#cmakedefine  BALL_HAVE_VSNPRINTF
+
+// The path to the directory where BALL is installed.
+#define @BALL_PATH@
+
+// Define OS
+#cmakedefine BALL_OS_SOLARIS
+#cmakedefine BALL_OS_DARWIN
+
+
+// the signature of the function arguments used in xdrrec_create differs
+// from platform to platform, so we define some symbols describing the
+// correct arguments: (void*, char*, int), (char*, char*, int), or (void)
+// take arguments of type (void*, char*, int)
+#cmakedefine BALL_XDRREC_CREATE_VOID_VOID_INT
+#cmakedefine BALL_XDRREC_CREATE_VOID_CHAR_INT
+#cmakedefine BALL_XDRREC_CREATE_CHAR_CHAR_INT
+#cmakedefine BALL_XDRREC_CREATE_VOID_VOID_UINT
+#cmakedefine BALL_XDRREC_CREATE_VOID
+
+// some platforms (e.g. Debian 2.1) do not provide xdr_u_hyper, so we 
+// need a workaround for this
+#cmakedefine BALL_HAS_XDR_U_HYPER 
+
+// Define if numeric_limits is defined in <limits>
+#cmakedefine BALL_HAS_NUMERIC_LIMITS
+
+
+// Basically a work-around for the broken SUNPro CC (WS 6U2),
+// which handles function template incorrectly -- see amberNonBonded.C
+#cmakedefine BALL_MUST_CAST_TEMPLATE_FUNCTION_ARGS
+
+// Define whether the compiler provides an ANSI-compliant implementation
+// of <iostream>. This is required in COMMON/socket.h/C since we need
+// the correct initialisation of the base classes. These base classes are
+// either something like std::basic_ios<char> etc., or ios, istream etc.
+#cmakedefine BALL_HAS_ANSI_IOSTREAM
+
+// Define whether we can use <sstream> or whether we have to use the
+// older <strstream>
+#cmakedefine BALL_HAS_SSTREAM
+
+// Define whether inline functions may be used as template parameters.
+#cmakedefine BALL_HAS_INLINE_TPL_ARGS
+
+// Define whether the FFTW library/header is available.
+#cmakedefine BALL_HAS_FFTW
+#cmakedefine BALL_HAS_FFTW_H
+
+// Define which versions of fftw can be used: double, float, long double
+#cmakedefine BALL_HAS_FFTW_DOUBLE
+#cmakedefine BALL_HAS_FFTW_FLOAT
+#cmakedefine BALL_HAS_FFTW_LONG_DOUBLE
+
+// The default traits for the FFTW classes
+#define BALL_FFTW_DEFAULT_TRAITS FloatTraits
+
+// Define for activated PYTHON support
+#cmakedefine BALL_PYTHON_SUPPORT
+
+// Maximum line length for reading from files (see source/FORMAT)
+#define BALL_MAX_LINE_LENGTH 65535
+
+
+
+#endif // BALL_CONFIG_CONFIG_H
