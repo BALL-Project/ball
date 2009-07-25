@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<table>
+	<!-- 	This file supplies improved penalty scores for different 
+	  		atom types in bond type perception based on the work of 
+	 								 	
+	 				Wang, J., Wang, W., Kollman P. A.; Case, D. A. "Automatic atom type and 
+	 				bond type perception in molecular mechanical calculations". Journal of 
+	 				Molecular Graphics and Modelling , 25, 2006, 247260	
+
+				A penalty score of 0 means that the corresponding valence is optimal.
+				Note that the first matching entry is taken as the final atom type.
+
+				Note that in the SMARTS strings we use atomic numbers rather than symbols (e.g. #8 instead of O).
+				The reason is that wrongly assigned aromatic bonds in the input would lead to failure to identify the
+				right rule!
+	-->	
+	<!--  H -->	
+	<entry id="1">	<!-- for charged H -->
+		<elementstring>H</elementstring>
+		<smartstring>SMARTS([#1+])</smartstring>
+		<penalty valence="0">0</penalty>
+	</entry>
+	<entry id="2">
+		<elementstring>H</elementstring>
+		<smartstring>SMARTS([#1])</smartstring>
+		<penalty valence="1">0</penalty>
+	</entry>
+	<entry id="3"> <!-- 	SMARTS([CD1]~[ND2]) AND element(C)  -->
+		<elementstring>C</elementstring>
+		<smartstring>SMARTS([$([#6D1](~[#7D2]))])</smartstring>
+		<penalty valence="3">0</penalty>
+		<penalty valence="4">1</penalty>
+		<penalty valence="5">32</penalty>
+	</entry>
+	<entry id="4">
+		<elementstring>C</elementstring>
+		<smartstring>SMARTS([#6D1])</smartstring>
+		<penalty valence="3">1</penalty>
+		<penalty valence="4">0</penalty>
+		<penalty valence="5">32</penalty>
+	</entry>
+	<entry id="5">
+		<elementstring>C</elementstring>
+		<smartstring>SMARTS([#6])</smartstring>
+		<penalty valence="2">64</penalty>
+		<penalty valence="3">32</penalty>
+		<penalty valence="4">0</penalty>
+		<penalty valence="5">32</penalty>
+		<penalty valence="6">64</penalty>
+	</entry>
+	<entry id="6"><!--SMARTS([ND1]~[ND2]) AND SMARTS([ND1]) -->
+		<elementstring>N</elementstring>
+		<smartstring>SMARTS([$([#7D1](~[#7D2]))])</smartstring> 		
+		<penalty valence="2">0</penalty>
+		<penalty valence="3">0</penalty>
+	</entry>
+	<entry id="7">
+		<elementstring>N</elementstring>
+		<smartstring>SMARTS([#7D1])</smartstring>
+		<penalty valence="2">3</penalty>
+		<penalty valence="3">0</penalty>
+		<penalty valence="4">32</penalty>
+	</entry>
+	<entry id="8"><!--SMARTS([ND1]~[ND2]) AND SMARTS([ND2]) -->
+		<elementstring>N</elementstring>
+		<smartstring>SMARTS([$([#7D2](~[#7D1]))])</smartstring> 		
+		<penalty valence="3">1</penalty>
+		<penalty valence="4">0</penalty>
+	</entry>
+	<entry id="9">
+		<elementstring>N</elementstring>
+		<smartstring>SMARTS([#7D2])</smartstring>
+		<penalty valence="2">4</penalty>
+		<penalty valence="3">0</penalty>
+		<penalty valence="4">2</penalty>
+	</entry>
+	<entry id="10"><!-- for charged N in  O == N+ __ O- -->	
+		<elementstring>N</elementstring>
+		<smartstring>SMARTS([$([#7D3](~[#8D1-,#16D1-])~[#8D1,#16D1])])</smartstring>
+		<penalty valence="3">32</penalty>
+		<penalty valence="4">0</penalty>
+		<penalty valence="5">32</penalty>
+		<penalty valence="6">64</penalty>
+	</entry>
+	<entry id="11">
+		<elementstring>N</elementstring>
+		<smartstring>SMARTS([$([#7D3](~[#8D1,#16D1])~[#8D1,#16D1])])</smartstring>
+		<penalty valence="3">64</penalty>
+		<penalty valence="4">32</penalty>
+		<penalty valence="5">0</penalty>
+		<penalty valence="6">32</penalty>
+	</entry>
+	<entry id="12">
+		<elementstring>N</elementstring>
+		<!-- SMARTS([$(*OD1)&amp;$(*aR)&amp;n]) OR SMARTS([$(*OD1);$(*R);N]) -->	
+		<smartstring>SMARTS([$([#7D3](~[#8D1,#16D1])(~[!#8&amp;!#16,!D1])(~[!#8&amp;!#16,!D1]))])</smartstring>
+		<penalty valence="3">1</penalty>
+		<penalty valence="4">0</penalty>
+		<penalty valence="5">0</penalty>
+	</entry>
+	<entry id="13">
+		<elementstring>N</elementstring>
+		<smartstring>SMARTS([#7D3])</smartstring>
+		<penalty valence="3">0</penalty>
+		<penalty valence="4">1</penalty>
+		<penalty valence="5">2</penalty>
+	</entry>
+	<entry id="14"><!-- for charged N in   N+ H_4 -->
+		<elementstring>N</elementstring>
+		<smartstring>SMARTS([#7D4+])</smartstring>
+		<penalty valence="4">0</penalty>
+	</entry>
+	<entry id="15">
+		<elementstring>N</elementstring>
+		<smartstring>SMARTS([#7D4])</smartstring>
+		<penalty valence="4">0</penalty> <!-- KEGG 1 -->
+		<penalty valence="5">1</penalty> <!-- KEGG 0 -->
+	</entry>
+	<entry id="16">
+		<elementstring>N</elementstring>
+		<smartstring>SMARTS([#7D5])</smartstring>
+		<penalty valence="5">0</penalty>
+	</entry>
+	<!-- O -->	
+	<entry id="17"><!-- for charged O- -->	
+		<elementstring>O</elementstring>
+		<smartstring>SMARTS([#8D1-])</smartstring>
+		<penalty valence="1">0</penalty>
+		<penalty valence="2">32</penalty>
+	</entry>
+	<entry id="18">
+		<elementstring>O</elementstring>
+		<smartstring>SMARTS([$([#8D1](~[#6D3]~[#8D1,#16D1]))])</smartstring>
+		<penalty valence="1">0</penalty>
+		<penalty valence="2">0</penalty>
+	</entry>	
+	<entry id="19">
+		<elementstring>O</elementstring>
+		<smartstring>SMARTS([#7D3](~[#8D1,#16D1])(~[!#8&amp;!#16,!D1])(~[!#8&amp;!#16,!D1])) AND element(O)</smartstring>
+		<penalty valence="1">0</penalty><!-- KEGG 1 -->
+		<penalty valence="2">1</penalty><!-- KEGG 0 -->
+	</entry>
+	<entry id="20">
+		<elementstring>O</elementstring>
+		<smartstring> SMARTS([#8D1])</smartstring> 
+		<penalty valence="1">1</penalty>
+		<penalty valence="2">0</penalty>
+		<penalty valence="3">64</penalty>
+	</entry>
+	<entry id="21">
+		<elementstring>O</elementstring>
+		<smartstring>SMARTS([#8D2])</smartstring> 
+		<penalty valence="2">0</penalty>
+		<penalty valence="3">64</penalty>
+	</entry>
+	<entry id="22">
+		<elementstring>O</elementstring>
+		<smartstring>SMARTS([#8D3])</smartstring>
+		<penalty valence="3">0</penalty>
+	</entry>
+	<!-- P -->	
+	<entry id="23">
+		<elementstring>P</elementstring>
+		<smartstring>SMARTS(#15D1)</smartstring>
+		<penalty valence="2">2</penalty>
+		<penalty valence="3">0</penalty>
+		<penalty valence="4">32</penalty>
+	</entry>
+	<entry id="24">
+		<elementstring>P</elementstring>
+		<smartstring>SMARTS(#15D2)</smartstring>
+		<penalty valence="2">4</penalty>
+		<penalty valence="3">0</penalty>
+		<penalty valence="4">2</penalty>
+	</entry>
+	<entry id="25">
+		<elementstring>P</elementstring>
+		<smartstring>SMARTS(#15D3)</smartstring>
+		<penalty valence="3">0</penalty>
+		<penalty valence="4">1</penalty>
+		<penalty valence="5">2</penalty>
+	</entry>	
+	<entry id="26">
+		<elementstring>P</elementstring>
+		<!-- Note: this is _SLOW_ -->
+		<smartstring>SMARTS([$([#15D4](~[#8D1,#16D1])(~[!#8&amp;!#16,!D1])(~[!#8&amp;!#16,!D1,#8D1-,#16D1-])(~[#8D1-,#16D1-]))])</smartstring>
+		<penalty valence="5">0</penalty>
+		<penalty valence="6">32</penalty>
+	</entry>
+	<entry id="27">
+		<elementstring>P</elementstring>
+		<!-- Note: this is _SLOW_ -->
+		<smartstring>SMARTS([$([#15D4](~[#8D1,#16D1])(~[!#8&amp;!#16,!D1])(~[!#8&amp;!#16,!D1])(~[#8D1,#16D1]))])</smartstring>
+		<penalty valence="5">32</penalty>
+		<penalty valence="6">0</penalty>
+		<penalty valence="7">32</penalty>
+	</entry>
+	<entry id="28">
+		<elementstring>P</elementstring>
+		<smartstring>SMARTS([$([#15D4](~[#8D1,#16D1])(~[#8D1,#16D1])(~[#8D1,#16D1])(~[!#8&amp;!#16,!D1]))])</smartstring>
+		<penalty valence="6">32</penalty>
+		<penalty valence="7">0</penalty>
+	</entry>
+	<entry id="29">
+		<elementstring>P</elementstring>
+		<!-- This rule should be the last PD4 rule because it should only match when the other rules fail! -->
+		<smartstring>SMARTS(#15D4)</smartstring>
+		<penalty valence="4">1</penalty>
+		<penalty valence="5">0</penalty>
+		<penalty valence="6">32</penalty>
+	</entry>
+	<!-- S -->	
+	<entry id="30">
+		<elementstring>S</elementstring>
+		<smartstring>SMARTS([#7D3](~[#16D1])(~[!#8&amp;!#16,!D1])(~[!#8&amp;!#16,!D1])) AND element(S)</smartstring>
+		<penalty valence="1">0</penalty>
+		<penalty valence="2">1</penalty>
+		</entry>
+	<entry id="31">
+		<elementstring>S</elementstring>
+		<smartstring>SMARTS([$([#16D1](~[#6D3]~[#8D1,#16D1]))])</smartstring>
+		<penalty valence="1">0</penalty>
+		<penalty valence="2">0</penalty>
+	</entry>
+	<entry id="32">
+		<elementstring>S</elementstring>
+		<smartstring>SMARTS([#16D1])</smartstring>
+		<penalty valence="1">2</penalty>
+		<penalty valence="2">0</penalty>
+		<penalty valence="3">64</penalty>
+	</entry>
+	<entry id="331"> 
+		<elementstring>S</elementstring>
+		<smartstring>SMARTS([$([#16D2](~[#8D1,#16D1])~[#8D1,#16D1])])</smartstring>
+		<penalty valence="4">0</penalty>
+	</entry>
+	<entry id="33">
+		<elementstring>S</elementstring>
+		<smartstring>SMARTS([#16D2])</smartstring>
+		<penalty valence="1">2</penalty>
+		<penalty valence="2">0</penalty>
+		<penalty valence="3">64</penalty>
+	</entry>
+	<entry id="34">
+		<elementstring>S</elementstring>
+		<smartstring>SMARTS([#16D3])</smartstring>
+		<penalty valence="3">1</penalty>
+		<penalty valence="4">0</penalty>
+		<penalty valence="5">2</penalty>
+		<penalty valence="6">2</penalty>
+	</entry>
+	<entry id="35">
+		<elementstring>S</elementstring>
+		<smartstring>	SMARTS([$([#16D4](~[#8D1,#16D1])(~[#8D1,#16D1])(~[!#8&amp;!#16,!D1])(~[!#8&amp;!#16,!D1]))])</smartstring>
+		<penalty valence="6">0</penalty>
+		<penalty valence="7">32</penalty>
+		</entry>	
+	<entry id="36"><!--for a charged O in SO_4 -->
+		<elementstring>S</elementstring>
+		<smartstring>SMARTS([$([#16D4](~[#8D1-,#16D1-])(~[#8D1,#16D1])(~[#8D1,#16D1])(~[!#8&amp;!#16,!D1]))])</smartstring>		
+		<penalty valence="6">0</penalty>
+	</entry>
+	<!-- entry id="37">
+		<elementstring>S</elementstring>
+		<smartstring>SMARTS([$([#16D4](~[#8D1,#16D1])(~[#8D1,#16D1])(~[#8D1,#16D1])(~[!#8&amp;!#16,!D1]))])</smartstring>		
+		<penalty valence="6">32</penalty>
+		<penalty valence="7">0</penalty>
+	</entry>
+	<entry id="38">
+		<elementstring>S</elementstring>
+		<smartstring>SMARTS([$([#16D4](~[#8D1,#16D1])(~[#8D1,#16D1])(~[#8D1,#16D1])(~[#8D1,#16D1]))])</smartstring>
+		<penalty valence="6">32</penalty>
+		<penalty valence="7">0</penalty>
+	</entry> -->
+	<entry id="37">
+		<elementstring>S</elementstring>
+		<smartstring>SMARTS([$([#16D4](~[#8D1,#16D1])(~[#8D1,#16D1])(~[#8D1,#16D1]))])</smartstring>		
+		<penalty valence="6">32</penalty>
+		<penalty valence="7">0</penalty>
+	</entry>
+	<entry id="39">
+		<elementstring>S</elementstring>
+		<smartstring>SMARTS([#16D4])</smartstring>
+		<penalty valence="4">4</penalty>
+		<penalty valence="5">2</penalty>
+		<penalty valence="6">0</penalty>
+		</entry>	
+	<entry id="40">
+		<elementstring>S</elementstring>
+		<smartstring>SMARTS([#16D5])</smartstring>
+		<penalty valence="5">2</penalty>
+		<penalty valence="6">0</penalty>
+	</entry>	
+	<!-- others -->	
+	<entry id="41">
+		<elementstring>F</elementstring>
+		<smartstring>SMARTS(F)</smartstring>
+		<penalty valence="0">64</penalty>
+		<penalty valence="1">0</penalty>
+		<penalty valence="2">64</penalty>
+	</entry>	
+	<entry id="42">
+		<elementstring>Br</elementstring>
+		<smartstring>SMARTS(Br)</smartstring>
+		<penalty valence="0">64</penalty>
+		<penalty valence="1">0</penalty>
+		<penalty valence="2">64</penalty>
+	</entry>
+	<entry id="43">
+		<elementstring>I</elementstring>
+		<smartstring>SMARTS(I)</smartstring>
+		<penalty valence="0">64</penalty>
+		<penalty valence="1">0</penalty>
+		<penalty valence="2">64</penalty>
+	</entry>
+	<entry id="44">
+		<elementstring>Cl</elementstring>
+		<smartstring>SMARTS([#17-])</smartstring>
+		<penalty valence="0">0</penalty>
+	</entry>
+	<entry id="45">
+		<elementstring>Cl</elementstring>
+		<smartstring>SMARTS([#17])</smartstring>
+		<penalty valence="0">64</penalty>
+		<penalty valence="1">0</penalty>
+		<penalty valence="2">64</penalty>	
+		<penalty valence="3">128</penalty>
+		<penalty valence="4">128</penalty>
+	</entry>
+	<entry id="46">
+		<elementstring>Si</elementstring>
+		<smartstring>SMARTS(Si)</smartstring>
+		<penalty valence="4">0</penalty>
+		<penalty valence="5">2</penalty>
+		<penalty valence="6">0</penalty>
+	</entry>
+	<!-- ions -->	
+ <!-- The following rules are added to cope with ions -->
+	<entry id="47">
+		<elementstring>Li</elementstring>
+		<smartstring>SMARTS([#3])</smartstring>
+		<penalty valence="0">0</penalty>
+	</entry>
+	<entry id="48">
+		<elementstring>Na</elementstring>
+		<smartstring>SMARTS([#11])</smartstring>
+		<penalty valence="0">0</penalty>
+		<penalty valence="1">0</penalty>
+	</entry>
+	<entry id="49">
+		<elementstring>Mg</elementstring>
+		<smartstring>SMARTS([#12])</smartstring>
+		<penalty valence="0">0</penalty>
+		<penalty valence="1">2</penalty>
+		<penalty valence="2">0</penalty>
+	</entry>
+	<entry id="50">
+		<elementstring>K</elementstring>
+		<smartstring>SMARTS([#19])</smartstring>
+		<penalty valence="0">0</penalty>
+	</entry>
+	<entry id="51">
+		<elementstring>Ca</elementstring>
+		<smartstring>SMARTS([#20])</smartstring>
+		<penalty valence="0">0</penalty>
+		<penalty valence="1">2</penalty>
+		<penalty valence="2">0</penalty>
+	</entry>
+	<entry id="52">
+		<elementstring>Cu</elementstring>
+		<smartstring>SMARTS([#29])</smartstring>
+		<penalty valence="0">0</penalty>
+	</entry>
+	<entry id="53">
+		<elementstring>Zn</elementstring>
+		<smartstring>SMARTS([#30])</smartstring>
+		<penalty valence="0">0</penalty>
+		<penalty valence="1">2</penalty>
+		<penalty valence="2">0</penalty>
+	</entry>
+	<entry id="54">
+		<elementstring>Fe</elementstring>
+		<smartstring>SMARTS([#26])</smartstring>
+		<penalty valence="0">0</penalty>
+	</entry>
+</table>
