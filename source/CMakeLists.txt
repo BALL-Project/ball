@@ -16,6 +16,7 @@ SET(FLEX_EXECUTABLE flex)
 # temporary hack only
 include(cmake/simpleContribDetection.cmake)
 
+include(cmake/createConfigH.cmake)
 
 set(BALL_SOURCES "")
 set(VIEW_SOURCES "")
@@ -47,7 +48,7 @@ include(VIEW/CMakeLists.txt)
 ADD_LIBRARY(BALL STATIC ${BALL_SOURCES})
 #ADD_LIBRARY(BALL_shared SHARED ${BALL_SOURCES})
 
-ADD_LIBRARY(VIEW STATIC ${VIEW_SOURCES})
+#ADD_LIBRARY(VIEW STATIC ${VIEW_SOURCES})
 #ADD_LIBRARY(VIEW SHARED ${VIEW_SOURCES})
 
 
