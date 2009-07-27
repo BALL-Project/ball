@@ -9,6 +9,7 @@
 
 				A penalty score of 0 means that the corresponding valence is optimal.
 				Note that the first matching entry is taken as the final atom type.
+				Note that the allowed valences must be contiguous, without gaps. 
 
 				Note that in the SMARTS strings we use atomic numbers rather than symbols (e.g. #8 instead of O).
 				The reason is that wrongly assigned aromatic bonds in the input would lead to failure to identify the
@@ -113,8 +114,8 @@
 	<entry id="15">
 		<elementstring>N</elementstring>
 		<smartstring>SMARTS([#7D4])</smartstring>
-		<penalty valence="4">0</penalty> <!-- KEGG 1 -->
-		<penalty valence="5">1</penalty> <!-- KEGG 0 -->
+		<penalty valence="4">1</penalty> <!-- KEGG 1 --><!-- MMFF 0 -->
+		<penalty valence="5">0</penalty> <!-- KEGG 0 --><!-- MMFF 1 -->
 	</entry>
 	<entry id="16">
 		<elementstring>N</elementstring>
@@ -137,8 +138,8 @@
 	<entry id="19">
 		<elementstring>O</elementstring>
 		<smartstring>SMARTS([#7D3](~[#8D1,#16D1])(~[!#8&amp;!#16,!D1])(~[!#8&amp;!#16,!D1])) AND element(O)</smartstring>
-		<penalty valence="1">0</penalty><!-- KEGG 1 -->
-		<penalty valence="2">1</penalty><!-- KEGG 0 -->
+		<penalty valence="1">1</penalty><!-- KEGG 1 --><!-- MMFF 0 -->
+		<penalty valence="2">0</penalty><!-- KEGG 0 --><!-- MMFF 1 -->
 	</entry>
 	<entry id="20">
 		<elementstring>O</elementstring>
@@ -260,65 +261,53 @@
 		<smartstring>SMARTS([$([#16D4](~[#8D1-,#16D1-])(~[#8D1,#16D1])(~[#8D1,#16D1])(~[!#8&amp;!#16,!D1]))])</smartstring>		
 		<penalty valence="6">0</penalty>
 	</entry>
-	<!-- entry id="37">
-		<elementstring>S</elementstring>
-		<smartstring>SMARTS([$([#16D4](~[#8D1,#16D1])(~[#8D1,#16D1])(~[#8D1,#16D1])(~[!#8&amp;!#16,!D1]))])</smartstring>		
-		<penalty valence="6">32</penalty>
-		<penalty valence="7">0</penalty>
-	</entry>
-	<entry id="38">
-		<elementstring>S</elementstring>
-		<smartstring>SMARTS([$([#16D4](~[#8D1,#16D1])(~[#8D1,#16D1])(~[#8D1,#16D1])(~[#8D1,#16D1]))])</smartstring>
-		<penalty valence="6">32</penalty>
-		<penalty valence="7">0</penalty>
-	</entry> -->
-	<entry id="37">
+	<entry id="37"> <!-- merge of antechamber rule 33 and 34 -->
 		<elementstring>S</elementstring>
 		<smartstring>SMARTS([$([#16D4](~[#8D1,#16D1])(~[#8D1,#16D1])(~[#8D1,#16D1]))])</smartstring>		
 		<penalty valence="6">32</penalty>
 		<penalty valence="7">0</penalty>
 	</entry>
-	<entry id="39">
+	<entry id="38">
 		<elementstring>S</elementstring>
 		<smartstring>SMARTS([#16D4])</smartstring>
 		<penalty valence="4">4</penalty>
 		<penalty valence="5">2</penalty>
 		<penalty valence="6">0</penalty>
 		</entry>	
-	<entry id="40">
+	<entry id="39">
 		<elementstring>S</elementstring>
 		<smartstring>SMARTS([#16D5])</smartstring>
 		<penalty valence="5">2</penalty>
 		<penalty valence="6">0</penalty>
 	</entry>	
 	<!-- others -->	
-	<entry id="41">
+	<entry id="40">
 		<elementstring>F</elementstring>
 		<smartstring>SMARTS(F)</smartstring>
 		<penalty valence="0">64</penalty>
 		<penalty valence="1">0</penalty>
 		<penalty valence="2">64</penalty>
 	</entry>	
-	<entry id="42">
+	<entry id="41">
 		<elementstring>Br</elementstring>
 		<smartstring>SMARTS(Br)</smartstring>
 		<penalty valence="0">64</penalty>
 		<penalty valence="1">0</penalty>
 		<penalty valence="2">64</penalty>
 	</entry>
-	<entry id="43">
+	<entry id="42">
 		<elementstring>I</elementstring>
 		<smartstring>SMARTS(I)</smartstring>
 		<penalty valence="0">64</penalty>
 		<penalty valence="1">0</penalty>
 		<penalty valence="2">64</penalty>
 	</entry>
-	<entry id="44">
+	<entry id="43">
 		<elementstring>Cl</elementstring>
 		<smartstring>SMARTS([#17-])</smartstring>
 		<penalty valence="0">0</penalty>
 	</entry>
-	<entry id="45">
+	<entry id="44">
 		<elementstring>Cl</elementstring>
 		<smartstring>SMARTS([#17])</smartstring>
 		<penalty valence="0">64</penalty>
@@ -327,7 +316,7 @@
 		<penalty valence="3">128</penalty>
 		<penalty valence="4">128</penalty>
 	</entry>
-	<entry id="46">
+	<entry id="45">
 		<elementstring>Si</elementstring>
 		<smartstring>SMARTS(Si)</smartstring>
 		<penalty valence="4">0</penalty>
@@ -336,49 +325,49 @@
 	</entry>
 	<!-- ions -->	
  <!-- The following rules are added to cope with ions -->
-	<entry id="47">
+	<entry id="46">
 		<elementstring>Li</elementstring>
 		<smartstring>SMARTS([#3])</smartstring>
 		<penalty valence="0">0</penalty>
 	</entry>
-	<entry id="48">
+	<entry id="47">
 		<elementstring>Na</elementstring>
 		<smartstring>SMARTS([#11])</smartstring>
 		<penalty valence="0">0</penalty>
 		<penalty valence="1">0</penalty>
 	</entry>
-	<entry id="49">
+	<entry id="48">
 		<elementstring>Mg</elementstring>
 		<smartstring>SMARTS([#12])</smartstring>
 		<penalty valence="0">0</penalty>
 		<penalty valence="1">2</penalty>
 		<penalty valence="2">0</penalty>
 	</entry>
-	<entry id="50">
+	<entry id="49">
 		<elementstring>K</elementstring>
 		<smartstring>SMARTS([#19])</smartstring>
 		<penalty valence="0">0</penalty>
 	</entry>
-	<entry id="51">
+	<entry id="50">
 		<elementstring>Ca</elementstring>
 		<smartstring>SMARTS([#20])</smartstring>
 		<penalty valence="0">0</penalty>
 		<penalty valence="1">2</penalty>
 		<penalty valence="2">0</penalty>
 	</entry>
-	<entry id="52">
+	<entry id="51">
 		<elementstring>Cu</elementstring>
 		<smartstring>SMARTS([#29])</smartstring>
 		<penalty valence="0">0</penalty>
 	</entry>
-	<entry id="53">
+	<entry id="52">
 		<elementstring>Zn</elementstring>
 		<smartstring>SMARTS([#30])</smartstring>
 		<penalty valence="0">0</penalty>
 		<penalty valence="1">2</penalty>
 		<penalty valence="2">0</penalty>
 	</entry>
-	<entry id="54">
+	<entry id="53">
 		<elementstring>Fe</elementstring>
 		<smartstring>SMARTS([#26])</smartstring>
 		<penalty valence="0">0</penalty>
