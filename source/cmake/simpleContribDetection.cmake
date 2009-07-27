@@ -106,8 +106,10 @@ check_headers(Qt qt4/Qt/qstring.h)
 check_lib(Qt QtCore dynamic)
 check_lib(Qt QtGui dynamic)
 check_headers(boost boost/any.hpp)
-check_lib(boost boost_system static)
 check_lib(boost boost_system-mt static)
+if(NOT USE_boost)
+	check_lib(boost boost_system static)
+endif(NOT USE_boost)
 check_headers(libsvm svm.h)
 check_lib(libsvm svm static)
 check_headers(qwt qwt.h)
@@ -116,7 +118,12 @@ check_lib(qwt qwt static)
 set(USE_lapack 1)
 
 
-if(NOT USE_gsl OR NOT USE_boost)
-	message(FATAL_ERROR "\nNecessary contrib-packages could not be found! Please fix this!")
-endif(NOT USE_gsl OR NOT USE_boost)
+if(NOT USE_gsl) 
+	message(FATAL_ERROR "\nNecessary contrib-package 'GSL' could not be found! Please fix this!")
+endif(NOT USE_gsl)
+
+if(NOT USE_boost) 
+	message(FATAL_ERROR "\nNecessary contrib-package 'Boost' could not be found! Please fix this!")
+endif(NOT USE_boost)
+
 
