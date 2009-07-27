@@ -500,10 +500,10 @@ namespace BALL
 
 			fps /= fps_.size();
 
-			ostringstream stream;
+			std::ostringstream stream;
 			stream.imbue(std::locale("C"));
-			stream.setf(ios::fixed, ios_base::floatfield);
-			stream.setf(ios::right, ios_base::adjustfield);
+			stream.setf(std::ios::fixed, std::ios_base::floatfield);
+			stream.setf(std::ios::right, std::ios_base::adjustfield);
 			stream.precision(1);
 			stream.width(6);
 

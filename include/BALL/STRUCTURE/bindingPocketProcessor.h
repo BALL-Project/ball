@@ -140,11 +140,11 @@ namespace BALL
 
     /** Returns the position and burial counts of the calculated actice site points
      */
-    const vector<pair<Vector3,double> >& getActiveSitePoints() const;
+    const vector<std::pair<Vector3,double> >& getActiveSitePoints() const;
     
     /** Returns a vector of vectors, each containing one layer with position and probe weight of its spheres 
      */
-    const vector<vector<pair<Vector3,double> > >& getLayers() const;
+    const vector<vector<std::pair<Vector3,double> > >& getLayers() const;
 
     /** options for BALLPass 
      */

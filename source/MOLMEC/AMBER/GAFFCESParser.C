@@ -957,7 +957,7 @@ namespace BALL
 	}
 
 
-	const set<String>& GAFFCESParser::getElementSymbols()
+	const std::set<String>& GAFFCESParser::getElementSymbols()
 	{
 		return element_symbols_;
 	}

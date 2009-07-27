@@ -143,7 +143,7 @@ namespace BALL
 			void setAtomTypeSmarts(const String& file_name) throw(Exception::FileNotFound);
 
 			/// Return the atom_types--hybridisation  Hashmap 
-			vector< pair<String, Size> > getHybridisationMap() { return atom_type_smarts_;};
+			vector< std::pair<String, Size> > getHybridisationMap() { return atom_type_smarts_;};
 			//@}
 
 			/** @name Assignment
@@ -195,12 +195,12 @@ namespace BALL
 			Size num_hybridisation_states_;
 
 			/// structure where atom type smarts and the corresponding hybridisation states are stored in
-			vector< pair<String, Size> > atom_type_smarts_;
+			vector< std::pair<String, Size> > atom_type_smarts_;
 			
 			/** Contains the bond angles and their atom types. The bond angles 
 			 *  are stored in 'rad'.
 			 */
-			StringHashMap<StringHashMap<StringHashMap<multimap<float, AtomNames_> > > > bond_angles_;
+			StringHashMap<StringHashMap<StringHashMap<std::multimap<float, AtomNames_> > > > bond_angles_;
 			
 			bool readAndInitBondAnglesFromFile_(const String& file_name = "") throw(Exception::FileNotFound);
 			

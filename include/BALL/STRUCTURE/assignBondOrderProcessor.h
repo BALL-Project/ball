@@ -876,7 +876,7 @@ namespace BALL
 			// ////////              general stuff                      /////////
 
 			/// The priority queue. 
-			priority_queue<PQ_Entry_> queue_;
+			std::priority_queue<PQ_Entry_> queue_;
 			
 			/** Estimates the objective function f = g* + h* of the ASTAR - algorithm, if
 			 *  include_heuristic_term == true, otherwise compute only f = g*. The
@@ -913,7 +913,7 @@ namespace BALL
 			vector<Size> block_to_length_;
 			vector<int> block_to_start_valence_;
 			// stores the defining element and the SMART-string of each block
-			vector<pair<String, String> > block_definition_; 
+			vector<std::pair<String, String> > block_definition_; 
 
 
 			// Stores which atom belongs to which penalty block.

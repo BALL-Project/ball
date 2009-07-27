@@ -102,7 +102,7 @@ namespace BALL
 			// initialize the renderer
 			if(!renderer->init(*scene_))
 			{
-				Log.error() << "Renderer failed to initialize" << endl;
+				Log.error() << "Renderer failed to initialize" << std::endl;
 				throw Exception::GeneralException(__FILE__, __LINE__);
 			}			
 			if (RTTI::isKindOf<GLRenderer>(*renderer))
@@ -137,14 +137,14 @@ namespace BALL
 			{
 				Log.error() << "Cannot resize window. Size " 
 										<< width  << " x " 
-										<< height << " is not supported" << endl;
+										<< height << " is not supported" << std::endl;
 			}
 
 			if (RTTI::isKindOf<BufferedRenderer>(*renderer))
 			{
 				if(!(((BufferedRenderer*)renderer)->setFrameBufferFormat(target->getFormat())))
 				{
-					Log.error() << "Raytracing render does not support window framebuffer format. Seems to be configuration error" << endl;
+					Log.error() << "Raytracing render does not support window framebuffer format. Seems to be configuration error" << std::endl;
 
 					render_mutex_.unlock();
 

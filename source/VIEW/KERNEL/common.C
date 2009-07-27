@@ -41,8 +41,8 @@ namespace BALL
 
 		String createFloatString(float value, Size precision)
 		{
-			ostringstream stream;
-			stream << setprecision(precision);
+			std::ostringstream stream;
+			stream << std::setprecision(precision);
 			stream.imbue(std::locale("C"));
 			stream << value;
 

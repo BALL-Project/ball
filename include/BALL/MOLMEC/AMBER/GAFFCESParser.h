@@ -288,7 +288,7 @@ namespace BALL
 
 			//initialize Set of Elementsymbols
 			void initElementSymbols();
-			const set<String>& getElementSymbols();
+			const std::set<String>& getElementSymbols();
 
 			GAFFCESParser();	
 			GAFFCESParser(const String& cesstring);
@@ -322,7 +322,7 @@ namespace BALL
 			//current chemical environment string
 			String cesstring_;
 			//set with all valid element symbols
-			set<String> element_symbols_;
+			std::set<String> element_symbols_;
 			//for Parser/Lexer function YYINPUT
 			Position read_start_;
 	};
