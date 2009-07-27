@@ -50,8 +50,8 @@ endmacro(check_compile filename variable body)
 check_file(regex.h BALL_HAS_REGEX_H)
 check_file(pwd.h BALL_HAS_PWD_H)
 check_file(sys/types.h BALL_HAS_SYS_TYPES_H)
-check_file(sys/time.h BALL_HAS_TIME_H)
-check_file(sys/times.h BALL_HAS_TIMES_H)
+check_file(sys/time.h BALL_HAS_SYS_TIME_H)
+check_file(sys/times.h BALL_HAS_SYS_TIMES_H)
 check_file(sys/ioctl.h BALL_HAS_SYS_IOCTL_H)
 check_file(sys/stat.h BALL_HAS_SYS_STAT_H)
 check_file(sys/param.h BALL_HAS_SYS_PARAM_H)
@@ -212,7 +212,6 @@ message(STATUS "COMPILER="${CMAKE_SYSTEM_NAME}-${CMAKE_CXX_COMPILER}-${CMAKE_CXX
 SET(BALL_COMPILER_VERSION_MAJOR "BALL_COMPILER_VERSION_MAJOR 4")
 
 SET(BALL_HAS_INLINE_TPL_ARGS 1)
-
 
 
 #file(REMOVE test.C)

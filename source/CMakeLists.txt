@@ -8,11 +8,6 @@ include(AddFileDependencies)
 # use g++ -O3 -DNDEBUG
 SET(CMAKE_BUILD_TYPE Release)
 
-SET(QT_MOC_EXECUTABLE moc)
-SET(QT_UIC_EXECUTABLE uic)
-SET(YACC_EXECUTABLE bison -y )
-SET(FLEX_EXECUTABLE flex)
-
 # temporary hack only
 include(cmake/simpleContribDetection.cmake)
 
