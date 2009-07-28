@@ -13,6 +13,10 @@ get_cmake_property(var QT_INCL:UNINITIALIZED)
 get_cmake_property(var QT_LIBS:UNINITIALIZED)
 get_cmake_property(var MOC:UNINITIALIZED)
 get_cmake_property(var UIC:UNINITIALIZED)
+get_cmake_property(var LAPACK_LIB:UNINITIALIZED)
+get_cmake_property(var BLAS_LIB:UNINITIALIZED)
+get_cmake_property(var DISABLE_VIEW:UNINITIALIZED)
+get_cmake_property(var DISABLE_QUEASY:UNINITIALIZED)
 
 if(NOT ${GSL_LIBS} STREQUAL "") 
 	set(GSL_INCL ${GSL_INCL}${s})
@@ -52,7 +56,7 @@ set(ADD_BIN_SEARCH_DIRS ${BIN_DIRS})
 
 set(LIB_DIRS "")
 set(INCL_DIRS "")
-set(LIBS)
+set(LIBS "")
 include_directories(../include) # for BALL includes
 
 #message(STATUS "LIB_SEARCH_DIRS="${LIB_SEARCH_DIRS})
@@ -62,7 +66,7 @@ include_directories(../include) # for BALL includes
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 	SET(DYLIB_EXT "so")
-	SET(STATICLIB_EXT "so")
+	SET(STATICLIB_EXT "a")
 elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
 	SET(DYLIB_EXT "dll")
 	SET(STATICLIB_EXT "lib")
@@ -72,12 +76,13 @@ elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
 endif(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 
 
+#==== macros for search headers and libs ==================
+
 macro(check_headers package_name header)
 	message(STATUS "looking for "${ARGV1})
 	set(RES "RES-NOTFOUND")
 	find_file(RES ${ARGV1} ${ADD_INCL_SEARCH_DIRS})
 	if(NOT RES STREQUAL "RES-NOTFOUND")
-		message(STATUS "found header as "${RES})
 		string(LENGTH ${ARGV1} size1)
 		string(LENGTH ${RES} size2)
 		math(EXPR size ${size2}-${size1})
@@ -175,7 +180,8 @@ macro(check_lib package_name libname static)
 endmacro(check_lib name)
 
 
-# search necessary libraries and headers
+#==== search contrib libraries and headers ===========
+
 check_headers(gsl ${GSL_INCL}gsl/gsl_blas.h)
 check_lib(gsl ${GSL_LIBS}gsl static)
 check_lib(gsl ${GSL_LIBS}gslcblas static)
@@ -194,7 +200,41 @@ check_lib(libsvm svm static)
 check_headers(qwt qwt.h)
 check_lib(qwt qwt static)
 
-set(USE_lapack 1)
+
+if(NOT ${LIB_lapack} STREQUAL "")
+	set(RES "RES-NOTFOUND")
+	find_library(RES {LIB_lapack})
+	if(NOT ${RES} STREQUAL "RES-NOTFOUND")
+		set(LIB_lapack 1)
+	endif(NOT ${RES} STREQUAL "RES-NOTFOUND")
+else(NOT ${LIB_lapack} STREQUAL "")
+	check_lib(lapack lapack static)
+endif(NOT ${LIB_lapack} STREQUAL "")
+
+if(NOT ${LIB_blas} STREQUAL "")
+	set(RES "RES-NOTFOUND")
+	find_library(RES {LIB_blas})
+	if(NOT ${RES} STREQUAL "RES-NOTFOUND")
+		set(LIB_blas 1)
+	endif(NOT ${RES} STREQUAL "RES-NOTFOUND")
+elseif(NOT ${LIB_blas} STREQUAL "")
+	check_lib(blas blas static)
+endif(NOT ${LIB_blas} STREQUAL "")
+
+if(LIB_lapack)
+	set(USE_lapack 1)
+	if(NOT LIB_blas)
+		# search blas-lib in lapack directory, since lapack is distributed with an own blas-version
+		check_lib(lapack blas static)
+		set(USE_lapack 1)
+		set(LIB_blas ${LIB_lapack})
+	endif(NOT LIB_blas)
+endif(LIB_lapack)
+if(LIB_blas)
+	set(USE_blas 1)
+endif(LIB_blas)
+
+
 
 
 # ==== search flex, yacc, moc, uic ====================
@@ -277,10 +317,31 @@ if(NOT USE_boost)
 	set(missing_packages ${missing_packages}${name}\n)
 endif(NOT USE_boost)
 
-if(NOT USE_Qt) 
-	set(name "  Qt4, Cross-platform application and UI framework, http://www.qtsoftware.com/")
-	set(missing_packages ${missing_packages}${name}\n)
-endif(NOT USE_Qt)
+if(NOT DISABLE_VIEW)
+	if(NOT USE_Qt) 
+		set(name "  Qt4, Cross-platform application and UI framework, http://www.qtsoftware.com/")
+		set(missing_packages ${missing_packages}${name}\n)
+	endif(NOT USE_Qt)
+endif(NOT DISABLE_VIEW)
+
+if(NOT DISABLE_QUEASY)
+	if(NOT USE_lapack)
+		set(name "  Lapack library, Linear Algebra PACKage, http://www.netlib.org/lapack/")
+		set(missing_packages ${missing_packages}${name}\n)
+	endif(NOT USE_lapack)
+	
+	if(NOT USE_blas)
+		set(name "  BLAS library, Basic Linear Algebra Subprograms, e.g. http://www.netlib.org/blas/")
+		set(missing_packages ${missing_packages}${name}\n)
+	endif(NOT USE_blas)
+	
+	if(NOT USE_qwt AND NOT DISABLE_VIEW AND NOT DISABLE_VIEW)
+		set(name "  Qwt, Qt widgets for technical applications, http://qwt.sourceforge.net/")
+		set(missing_packages ${missing_packages}${name}\n)
+	endif(NOT USE_qwt AND NOT DISABLE_VIEW AND NOT DISABLE_VIEW)
+endif(NOT DISABLE_QUEASY)
+
+
 
 #message(STATUS "includes ="${INCLUDE_DIRS})
 #message(STATUS "libs ="${LIB_DIRS})
