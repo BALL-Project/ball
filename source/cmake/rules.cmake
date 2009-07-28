@@ -30,7 +30,7 @@ macro(wrap_FLEX libname path input_filename) # input= .l-files
 	set(prefix ${fc}${lc})
 	#message(STATUS "prefix=${prefix}")
 	
-	add_custom_command(OUTPUT ${path}/${name}.C COMMAND ${FLEX_EXECUTABLE} ARGS -P ${prefix} -o ${path}/${name}.C ${path}/${input_filename} MAIN_DEPENDENCY ${path}/${input_filename})
+	add_custom_command(OUTPUT ${path}/${name}.C COMMAND ${FLEX_EXECUTABLE} ARGS -P${prefix} -o${path}/${name}.C ${path}/${input_filename} MAIN_DEPENDENCY ${path}/${input_filename})
 	list(APPEND ${libname}_SOURCES ${path}/${name}.C)	
 endmacro(wrap_FLEX path input_filename)
 

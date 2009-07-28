@@ -8,8 +8,7 @@ include(AddFileDependencies)
 # use g++ -O3 -DNDEBUG
 SET(CMAKE_BUILD_TYPE Release)
 
-# temporary hack only
-include(cmake/simpleContribDetection.cmake)
+include(cmake/contribDetection.cmake)
 
 include(cmake/createConfigH.cmake)
 
