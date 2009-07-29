@@ -10,6 +10,7 @@ SET(SOURCES_LIST
 	bindingPocketProcessor.C
 	buildBondsProcessor.C
 	chainBuilder.C
+	connectedComponentsProcessor.C
 	connolly.C
 	defaultProcessors.C
 	DNAMutator.C
