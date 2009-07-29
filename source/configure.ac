@@ -666,6 +666,7 @@ CF_VALGRIND
 dnl
 dnl		include the default BALL include path
 dnl
+BALL_INCLUDES=$(echo ${BALL_INCLUDES} | ${SED} "s_-I\s*/usr/include\(\s\|$\)_ _g")
 BALL_INCLUDES="-I$BALL_PATH/include ${BALL_INCLUDES}"
 
 dnl
