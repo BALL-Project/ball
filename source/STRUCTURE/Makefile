@@ -34,6 +34,7 @@ CPP_SOURCES=\
 	bindingPocketProcessor.C\
 	buildBondsProcessor.C\
 	chainBuilder.C\
+	connectedComponentsProcessor.C\
 	connolly.C\
 	defaultProcessors.C\
 	DNAMutator.C\
