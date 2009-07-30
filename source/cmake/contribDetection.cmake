@@ -36,6 +36,10 @@ set(ADD_BIN_SEARCH_DIRS ${BIN_DIRS})
 
 set(LIB_DIRS "")
 set(INCL_DIRS "")
+
+# save pathes of dynamic libs, just in order to tell to user what needs to added to LD_LIBRARY_PATH
+set(DY_LIB_DIRS "")
+
 set(LIBS "")
 include_directories(../include) # for BALL includes
 
@@ -135,6 +139,10 @@ macro(search_lib package_name libname static)
 		list(FIND LIB_DIRS ${path} found)
 		if(${found} EQUAL -1)
 			list(APPEND LIB_DIRS ${path})
+			if("${ARGV2}" STREQUAL "dynamic")
+				string(REPLACE ".." "${PROJECT_SOURCE_DIR}/.." abs_path ${path})
+				set(DY_LIB_DIRS "${DY_LIB_DIRS}  ${abs_path}")
+			endif("${ARGV2}" STREQUAL "dynamic")
 		endif(${found} EQUAL -1)
 		SET(LIB_${ARGV0} 1)
 		message(STATUS "searching ${name}: ${path}/${name}")
@@ -200,6 +208,10 @@ macro(check_lib package_name lib static path)
 		list(FIND LIB_DIRS ${ARGV2} found)
 		if(${found} EQUAL -1)
 			list(APPEND LIB_DIRS ${name})
+			if("${ARGV2}" STREQUAL "dynamic")
+				string(REPLACE ".." "${PROJECT_SOURCE_DIR}/.." abs_path ${path})
+				set(DY_LIB_DIRS "${DY_LIB_DIRS}  ${abs_path}")
+			endif("${ARGV2}" STREQUAL "dynamic")
 		endif(${found} EQUAL -1)
 	
 	#check whether a full path (including file name) was given

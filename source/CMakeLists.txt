@@ -50,3 +50,6 @@ ADD_LIBRARY(BALL STATIC ${BALL_SOURCES})
 # Qwt needs include-path to QtGui and QtCore
 include_directories(/usr/include/qt4/QtGui /usr/include/qt4/QtCore)
 include(APPLICATIONS/QSAR_GUI/CMakeLists.txt)
+
+
+message(STATUS "\n\nPlease don't forget to add \n  ${DY_LIB_DIRS}\nto your LD_LIBRARY_PATH !\n\n")
