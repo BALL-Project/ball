@@ -140,6 +140,8 @@
 
 	#cmakedefine BALL_EXTEND_HASH_IN_STD_NS true
 	
+	#cmakedefine BALL_EXT_INCLUDE_PREFIX
+	
 	#cmakedefine BALL_HAS_UNORDERED_MAP
 	// If ext/hash_map is defined, we use this instead of std::map
 	#cmakedefine BALL_HAS_HASH_MAP
