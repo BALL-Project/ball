@@ -75,7 +75,7 @@ list(APPEND QSARGUI_SOURCES
 )
 
 
-link_directories(. /usr/lib /usr/lib/qt4  ../contrib/gsl/lib ../contrib/qwt/lib ../contrib/glew/lib ../contrib/boost/lib ../contrib/libsvm)
+link_directories(. ${LIB_DIRS})
 add_executable(APPLICATIONS/QSAR_GUI/QPipeViz ${QSARGUI_SOURCES})
-target_link_libraries(APPLICATIONS/QSAR_GUI/QPipeViz VIEW BALL qwt QtCore QtGui QtOpenGL QtXml gsl gslcblas GLEW boost_system-mt QtTest mysqlclient /media/sda6/lapack-3.1.1/lapack_LINUX.a /media/sda6/lapack-3.1.1/tmglib_LINUX.a /media/sda6/lapack-3.1.1/blas_LINUX.a /usr/lib/gcc/x86_64-linux-gnu/4.3/libgfortran.a svm)
+target_link_libraries(APPLICATIONS/QSAR_GUI/QPipeViz BALL ${LIBS})
 
