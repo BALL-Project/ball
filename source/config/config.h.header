@@ -1,5 +1,0 @@
-// $Id: config.h.header,v 1.1 1999/08/26 08:02:33 oliver Exp $
-
-#ifndef BALL_CONFIG_H
-#define BALL_CONFIG_H
-

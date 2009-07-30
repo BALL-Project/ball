@@ -1,7 +1,0 @@
-#!/bin/sh
-
-test -f $(which libtoolize) && libtoolize --copy --force
-automake --add-missing --copy
-aclocal -I config/m4
-autoconf
-
