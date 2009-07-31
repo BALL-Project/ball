@@ -271,6 +271,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\include\BALL\COMMON\init.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\include\BALL\COMMON\limits.h"
 					>
 				</File>
@@ -588,6 +592,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\FORMAT\MOLFile.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\FORMAT\molFileFactory.h"
 					>
 				</File>
 				<File
@@ -1955,6 +1963,26 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\..\..\source\COMMON\init.C"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath="..\..\..\source\COMMON\logStream.C"
 					>
 					<FileConfiguration
@@ -3060,6 +3088,26 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\FORMAT\MOLFile.C"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\source\FORMAT\molFileFactory.C"
 					>
 					<FileConfiguration
 						Name="Release|Win32"

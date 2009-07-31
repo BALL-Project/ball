@@ -206,7 +206,7 @@
 		<CustomBuildRule
 			Name="SipGenerator"
 			DisplayName="SipGenerator"
-			CommandLine="$(SolutionDir)\..\Contrib\bin\runSip.bat $(InputDir) [OutputDir] [SBFFile]  [Inputs]"
+			CommandLine="$(SolutionDir)\..\Contrib\bin\runSip.bat $(InputDir) [OutputDir] [SBFFile] $(SolutionDir)\..\..\source\PYTHON\EXTENSIONS $(InputFileName)"
 			Outputs="$(SolutionDir)\GeneratedFiles\$(InputName).C"
 			FileExtensions="*.sip"
 			ExecutionDescription="Generating python bindings..."
