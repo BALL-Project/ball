@@ -1827,10 +1827,10 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		file >> nr_lines;
 		file >> nr_composites;
  		INIFile in;
-		char buffer[INIFile::MAX_LINE_LENGTH];
+		String buffer;
 		for (Position p = 0; p <= nr_lines; p++)
 		{
-			if (!file.getline(&(buffer[0]), INIFile::MAX_LINE_LENGTH))
+			if (!buffer.getline(file))
 			{
 				setStatusbarText("Error while reading project file, could not read INIFile", true);
 				BALLVIEW_DEBUG
