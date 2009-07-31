@@ -1762,7 +1762,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		bool ok = false;
 		try
 		{
-			ok = result.open(filename, std::ios::out);
+			ok = result.open(filename, (binary) ? std::ios::out|std::ios::binary : std::ios::out);
 		}
 		catch(...)
 		{
@@ -1815,7 +1815,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		File file;
 		try
 		{
-			file.open(filename, std::ios::in);
+			file.open(filename, std::ios::in|std::ios::binary);
 		}
 		catch(...)
 		{
