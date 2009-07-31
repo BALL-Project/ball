@@ -42,14 +42,16 @@ include(VIEW/CMakeLists.txt)
 ADD_LIBRARY(BALL STATIC ${BALL_SOURCES})
 #ADD_LIBRARY(BALL_shared SHARED ${BALL_SOURCES})
 
-#ADD_LIBRARY(VIEW STATIC ${VIEW_SOURCES})
+ADD_LIBRARY(VIEW STATIC ${VIEW_SOURCES})
 #ADD_LIBRARY(VIEW SHARED ${VIEW_SOURCES})
 
 
-
-# Qwt needs include-path to QtGui and QtCore
-include_directories(/usr/include/qt4/QtGui /usr/include/qt4/QtCore)
-include(APPLICATIONS/QSAR_GUI/CMakeLists.txt)
-
+if(NOT DISABLE_VIEW)
+	if(NOT DISABLE_QUEASY)
+		include(APPLICATIONS/QSAR_GUI/CMakeLists.txt)
+	endif(NOT DISABLE_QUEASY)
+	include(APPLICATIONS/BALLVIEW/CMakeLists.txt)
+	include(APPLICATIONS/NMRVIEW/CMakeLists.txt)
+endif(NOT DISABLE_VIEW)
 
 message(STATUS "\n\nPlease don't forget to add \n  ${DY_LIB_DIRS}\nto your LD_LIBRARY_PATH !\n\n")
