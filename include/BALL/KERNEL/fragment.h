@@ -113,6 +113,11 @@ namespace BALL
 
 		//@}
 	};
+
+// required for visual studio
+#ifdef BALL_COMPILER_MSVC
+template class BALL_EXPORT UnaryProcessor<Fragment>;
+#endif
 } // namespace BALL
 
 #endif // BALL_KERNEL_FRAGMENT_H

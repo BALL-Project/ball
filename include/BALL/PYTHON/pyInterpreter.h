@@ -15,6 +15,10 @@
 #	include <BALL/DATATYPE/string.h>
 #endif
 
+#ifndef BALL_SYSTEM_PATH_H
+# include <BALL/SYSTEM/path.h>
+#endif
+
 #include <vector>
 
 namespace BALL 

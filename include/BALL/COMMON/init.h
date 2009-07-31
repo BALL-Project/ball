@@ -5,6 +5,10 @@
 #ifndef BALL_COMMON_INIT_H
 #define BALL_COMMON_INIT_H
 
+#ifndef BALL_COMMON_GLOBAL_H
+#include <BALL/COMMON/global.h>
+#endif
+
 namespace BALL
 {
 	/** General initialization class for the BALL library.
@@ -15,7 +19,7 @@ namespace BALL
 			particular order of the creation of this class with respect
 			to all other static variables.
 	*/
-	class GlobalInitializer
+	class BALL_EXPORT GlobalInitializer
 	{
 		public:
 			~GlobalInitializer();
