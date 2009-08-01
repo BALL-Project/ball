@@ -13,7 +13,6 @@
 
 %Import BALL/BALLCore.sip
 
-%Include BALL/pyLists.sip
 %Include pyLists.sip
 %Include pyDatasetVector.sip
 
@@ -97,5 +96,3 @@
 %Include datasetControl.sip
 //%Include helpViewer.sip
 
-// Makefile
-//%Include Makefile.sip

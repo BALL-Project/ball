@@ -24,6 +24,7 @@
 
 %Include copying.sip
 
+%Include list.sip
 %Include vector.sip
 
 // COMMON
@@ -259,7 +260,7 @@
 %Include pyFragmentProcessor.sip
 %Include pyResidueProcessor.sip
 %Include pyCompositeProcessor.sip
-%Include pyLists.sip
+//%Include pyLists.sip
 
 // QSAR
 //%Include descriptor.sip

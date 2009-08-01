@@ -38,6 +38,7 @@ SIP_OPTS+=-b VIEW.sbf
 ADD_INCLUDES=$(SIPFLAGS)
 
 PYBALL_SOURCES = \
+	pyBALLSipHelper.C\
 	pyColorRGBAVector.C \
 	pyDatasetVector.C
 
