@@ -13,6 +13,7 @@ class AmberNonBonded
 	#include <BALL/COMMON/exception.h>
 	using namespace BALL;
 	using namespace BALL::Exception;
+	using namespace BALL::MolmecSupport;
 %End
   public:
   // BALL_CREATE(AmberNonBonded)

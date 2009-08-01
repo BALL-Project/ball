@@ -4,7 +4,7 @@
 // $Id$
 //
 
-%ModuleHeaderCode
+%ModuleCode
 	#include <BALL/STRUCTURE/numericalSAS.h>
 	using namespace BALL;
 %End

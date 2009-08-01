@@ -8,11 +8,11 @@ class IllegalKey
 	:	GeneralException
 {
 %TypeHeaderCode
-	#include <BALL/DATATYPE/hashMap.h>
 	#include <BALL/COMMON/exception.h>
+	#include <BALL/DATATYPE/stringHashMap.h>
+	using namespace BALL;
 	using namespace BALL::Exception;
 	typedef StringHashMap<String>::IllegalKey IllegalKey;
-	using namespace BALL;
 %End
 	public:
 	IllegalKey(const char* /file/, int /line/);

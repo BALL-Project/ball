@@ -73,7 +73,7 @@ class FragmentDistanceCollector
 };
 
 
-%ModuleHeaderCode
+%ModuleCode
 	#include <BALL/STRUCTURE/geometricProperties.h>
 	using namespace BALL;
 %End

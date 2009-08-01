@@ -8,6 +8,8 @@ class ResidueProcessor
 {
 %TypeHeaderCode
 	#include <BALL/CONCEPT/processor.h>
+	#include <BALL/KERNEL/residue.h>
+	using namespace BALL;
 	typedef UnaryProcessor<Residue> ResidueProcessor;
 %End
 	public:

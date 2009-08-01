@@ -4,7 +4,7 @@
 // $Id$
 //
 
-%ModuleHeaderCode
+%ModuleCode
 	#include <BALL/ENERGY/distanceCoulomb.h>
 	using namespace BALL;
 %End

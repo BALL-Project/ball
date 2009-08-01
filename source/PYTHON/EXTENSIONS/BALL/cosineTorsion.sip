@@ -2,8 +2,8 @@ struct Data
 {
 %TypeHeaderCode
 	#include <BALL/MOLMEC/PARAMETER/cosineTorsion.h>
-	typedef CosineTorsion::Data Data;
 	using namespace BALL;
+	typedef CosineTorsion::Data Data;
 %End
 };
 
@@ -11,8 +11,8 @@ struct SingleData
 {
 %TypeHeaderCode
 	#include <BALL/MOLMEC/PARAMETER/cosineTorsion.h>
-	typedef CosineTorsion::SingleData SingleData;
 	using namespace BALL;
+	typedef CosineTorsion::SingleData SingleData;
 %End
 };
 
@@ -20,8 +20,8 @@ struct SingleValues
 {
 %TypeHeaderCode
 	#include <BALL/MOLMEC/PARAMETER/cosineTorsion.h>
-	typedef CosineTorsion::SingleValues SingleValues;
 	using namespace BALL;
+	typedef CosineTorsion::SingleValues SingleValues;
 %End
 	SingleValues(const SingleValues& v);
 	SingleValues();
@@ -33,8 +33,8 @@ struct Values
 {
 %TypeHeaderCode
 	#include <BALL/MOLMEC/PARAMETER/cosineTorsion.h>
-	typedef CosineTorsion::Values Values;
 	using namespace BALL;
+	typedef CosineTorsion::Values Values;
 %End
 	Values();
 	Values(Size number);
@@ -46,7 +46,7 @@ struct Values
 };
 
 class CosineTorsion
-	:	ParameterSection
+	: ParameterSection
 {
 %TypeHeaderCode
 	#include <BALL/MOLMEC/PARAMETER/cosineTorsion.h>

@@ -7,6 +7,7 @@
 class GeneralException 
 {
 %TypeHeaderCode
+	#include <BALL/DATATYPE/string.h>
 	#include <BALL/COMMON/exception.h>
 	using namespace BALL;
 	using namespace BALL::Exception;
@@ -50,6 +51,7 @@ class IndexUnderflow
  	: GeneralException
 {
 %TypeHeaderCode
+	#include <BALL/DATATYPE/string.h>
 	#include <BALL/COMMON/exception.h>
 	using namespace BALL;
 	using namespace BALL::Exception;
@@ -75,6 +77,7 @@ class SizeUnderflow
   : GeneralException
 {
 %TypeHeaderCode
+	#include <BALL/DATATYPE/string.h>
 	#include <BALL/COMMON/exception.h>
 	using namespace BALL;
 	using namespace BALL::Exception;
@@ -102,6 +105,7 @@ class IndexOverflow
   : GeneralException
 {
 %TypeHeaderCode
+	#include <BALL/DATATYPE/string.h>
 	#include <BALL/COMMON/exception.h>
 	using namespace BALL;
 	using namespace BALL::Exception;
@@ -127,6 +131,7 @@ class InvalidRange
 	: GeneralException
 {
 %TypeHeaderCode
+	#include <BALL/DATATYPE/string.h>
 	#include <BALL/COMMON/exception.h>
 	using namespace BALL;
 	using namespace BALL::Exception;
@@ -152,6 +157,7 @@ class InvalidFormat
 	: GeneralException
 {
 %TypeHeaderCode
+	#include <BALL/DATATYPE/string.h>
 	#include <BALL/COMMON/exception.h>
 	using namespace BALL;
 	using namespace BALL::Exception;
@@ -177,6 +183,7 @@ class IllegalSelfOperation
 	: GeneralException
 {
 %TypeHeaderCode
+	#include <BALL/DATATYPE/string.h>
 	#include <BALL/COMMON/exception.h>
 	using namespace BALL;
 	using namespace BALL::Exception;
@@ -202,6 +209,7 @@ class NullPointer
 	: GeneralException
 {
 %TypeHeaderCode
+	#include <BALL/DATATYPE/string.h>
 	#include <BALL/COMMON/exception.h>
 	using namespace BALL;
 	using namespace BALL::Exception;
@@ -227,6 +235,7 @@ class InvalidIterator
 	: GeneralException
 {
 %TypeHeaderCode
+	#include <BALL/DATATYPE/string.h>
 	#include <BALL/COMMON/exception.h>
 	using namespace BALL;
 	using namespace BALL::Exception;
@@ -252,6 +261,7 @@ class IncompatibleIterators
 	: GeneralException
 {
 %TypeHeaderCode
+	#include <BALL/DATATYPE/string.h>
 	#include <BALL/COMMON/exception.h>
 	using namespace BALL;
 	using namespace BALL::Exception;
@@ -277,6 +287,7 @@ class NotImplemented
 	: GeneralException
 {
 %TypeHeaderCode
+	#include <BALL/DATATYPE/string.h>
 	#include <BALL/COMMON/exception.h>
 	using namespace BALL;
 	using namespace BALL::Exception;
@@ -302,6 +313,7 @@ class TooManyErrors
 	: GeneralException
 {
 %TypeHeaderCode
+	#include <BALL/DATATYPE/string.h>
 	#include <BALL/COMMON/exception.h>
 	using namespace BALL;
 	using namespace BALL::Exception;
@@ -328,6 +340,7 @@ class OutOfMemory
 	: GeneralException
 {
 %TypeHeaderCode
+	#include <BALL/DATATYPE/string.h>
 	#include <BALL/COMMON/exception.h>
 	using namespace BALL;
 	using namespace BALL::Exception;
@@ -354,6 +367,7 @@ class OutOfGrid
   : GeneralException
 {
 %TypeHeaderCode
+	#include <BALL/DATATYPE/string.h>
 	#include <BALL/COMMON/exception.h>
 	using namespace BALL;
 	using namespace BALL::Exception;
@@ -381,6 +395,7 @@ class BufferOverflow
 	: GeneralException
 {
 %TypeHeaderCode
+	#include <BALL/DATATYPE/string.h>
 	#include <BALL/COMMON/exception.h>
 	using namespace BALL;
 	using namespace BALL::Exception;
@@ -406,6 +421,7 @@ class DivisionByZero
 	: GeneralException
 {
 %TypeHeaderCode
+	#include <BALL/DATATYPE/string.h>
 	#include <BALL/COMMON/exception.h>
 	using namespace BALL;
 	using namespace BALL::Exception;
@@ -431,6 +447,7 @@ class FileNotFound
  : GeneralException
 {
 %TypeHeaderCode
+	#include <BALL/DATATYPE/string.h>
 	#include <BALL/COMMON/exception.h>
 	using namespace BALL;
 	using namespace BALL::Exception;
@@ -457,6 +474,7 @@ class ParseError
 	: GeneralException
 {
 %TypeHeaderCode
+	#include <BALL/DATATYPE/string.h>
 	#include <BALL/COMMON/exception.h>
 	using namespace BALL;
 	using namespace BALL::Exception;
@@ -484,6 +502,7 @@ class TooManyBonds
  : GeneralException
 {
 %TypeHeaderCode
+	#include <BALL/DATATYPE/string.h>
   #include <BALL/COMMON/exception.h>
   using namespace BALL;
   using namespace BALL::Exception;
@@ -497,6 +516,7 @@ class TooManyBonds
 class GlobalExceptionHandler
 {
 %TypeHeaderCode
+	#include <BALL/DATATYPE/string.h>
 	#include <BALL/COMMON/exception.h>
 	using namespace BALL;
 	using namespace BALL::Exception;

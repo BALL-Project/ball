@@ -10,8 +10,8 @@ class ExpressionPredicate
 {
 %TypeHeaderCode
 	#include <BALL/KERNEL/expression.h>
-	typedef UnaryPredicate<Atom> UnaryAtomPredicate;
 	using namespace BALL;
+	typedef UnaryPredicate<Atom> UnaryAtomPredicate;
 %End
   public:
   // BALL_CREATE_NODEEP(ExpressionPredicate)

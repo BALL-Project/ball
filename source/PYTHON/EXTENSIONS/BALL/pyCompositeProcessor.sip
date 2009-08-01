@@ -8,6 +8,8 @@ class CompositeProcessor
 {
 %TypeHeaderCode
 	#include <BALL/CONCEPT/processor.h>
+	#include <BALL/CONCEPT/composite.h>
+	using namespace BALL;
 	typedef UnaryProcessor<Composite> CompositeProcessor;
 %End
 	public:

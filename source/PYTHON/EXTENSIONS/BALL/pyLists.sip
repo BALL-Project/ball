@@ -14,6 +14,7 @@
   #include <BALL/KERNEL/extractors.h>
   #include <BALL/PYTHON/pyBALLSipHelper.h>
   #include <BALL/PYTHON/pyListHelper.h>
+	using namespace BALL;
 %End
 
 %ConvertFromTypeCode
@@ -33,6 +34,7 @@
   #include <BALL/KERNEL/extractors.h>
   #include <BALL/PYTHON/pyBALLSipHelper.h>
   #include <BALL/PYTHON/pyListHelper.h>
+	using namespace BALL;
 %End
 
 %ConvertFromTypeCode
@@ -52,6 +54,7 @@
   #include <BALL/KERNEL/extractors.h>
   #include <BALL/PYTHON/pyBALLSipHelper.h>
   #include <BALL/PYTHON/pyListHelper.h>
+	using namespace BALL;
 %End
 
 %ConvertFromTypeCode
@@ -71,6 +74,7 @@
   #include <BALL/KERNEL/extractors.h>
   #include <BALL/PYTHON/pyBALLSipHelper.h>
   #include <BALL/PYTHON/pyListHelper.h>
+	using namespace BALL;
 %End
 
 %ConvertFromTypeCode
@@ -90,6 +94,7 @@
   #include <BALL/KERNEL/extractors.h>
   #include <BALL/PYTHON/pyBALLSipHelper.h>
   #include <BALL/PYTHON/pyListHelper.h>
+	using namespace BALL;
 %End
 
 %ConvertFromTypeCode
@@ -109,6 +114,7 @@
   #include <BALL/KERNEL/extractors.h>
   #include <BALL/PYTHON/pyBALLSipHelper.h>
   #include <BALL/PYTHON/pyListHelper.h>
+	using namespace BALL;
 %End
 
 %ConvertFromTypeCode
@@ -128,6 +134,7 @@
   #include <BALL/KERNEL/extractors.h>
   #include <BALL/PYTHON/pyBALLSipHelper.h>
   #include <BALL/PYTHON/pyListHelper.h>
+	using namespace BALL;
 %End
 
 %ConvertFromTypeCode
@@ -147,6 +154,7 @@
   #include <BALL/KERNEL/extractors.h>
   #include <BALL/PYTHON/pyBALLSipHelper.h>
   #include <BALL/PYTHON/pyListHelper.h>
+	using namespace BALL;
 %End
 
 %ConvertFromTypeCode
@@ -166,6 +174,7 @@
   #include <BALL/KERNEL/extractors.h>
   #include <BALL/PYTHON/pyBALLSipHelper.h>
   #include <BALL/PYTHON/pyListHelper.h>
+	using namespace BALL;
 %End
 
 %ConvertFromTypeCode
@@ -185,6 +194,7 @@
   #include <BALL/KERNEL/extractors.h>
   #include <BALL/PYTHON/pyBALLSipHelper.h>
   #include <BALL/PYTHON/pyListHelper.h>
+	using namespace BALL;
 %End
 
 %ConvertFromTypeCode
@@ -204,6 +214,7 @@
   #include <BALL/KERNEL/extractors.h>
   #include <BALL/PYTHON/pyBALLSipHelper.h>
   #include <BALL/PYTHON/pyListHelper.h>
+	using namespace BALL;
 %End
 
 %ConvertFromTypeCode
@@ -223,6 +234,7 @@
   #include <BALL/KERNEL/extractors.h>
   #include <BALL/PYTHON/pyBALLSipHelper.h>
   #include <BALL/PYTHON/pyListHelper.h>
+	using namespace BALL;
 %End
 
 %ConvertFromTypeCode
@@ -240,6 +252,7 @@
 {
 %TypeHeaderCode
 	#include <BALL/PYTHON/pyListHelper.h>
+	using namespace BALL;
 %End
 
 %ConvertFromTypeCode

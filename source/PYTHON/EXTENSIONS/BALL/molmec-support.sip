@@ -1,4 +1,4 @@
-%ModuleHeaderCode
+%ModuleCode
 #include <BALL/MOLMEC/COMMON/support.h>
 using namespace BALL;
 using namespace BALL::MolmecSupport;

@@ -4,8 +4,8 @@ class SecondaryStructureProcessor
 {
 %TypeHeaderCode
 	#include <BALL/STRUCTURE/secondaryStructureProcessor.h>
-	typedef UnaryProcessor<Composite> CompositeProcessor;
 	using namespace BALL;
+	typedef UnaryProcessor<Composite> CompositeProcessor;
 %End
 	public:
 	SecondaryStructureProcessor();

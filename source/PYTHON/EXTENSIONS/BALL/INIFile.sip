@@ -4,6 +4,9 @@
 // $Id$
 //
 
+%ModuleCode
+	#include <BALL/FORMAT/INIFile.h>
+%End
 
 class INIFile
 {

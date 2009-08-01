@@ -7,6 +7,7 @@
 class Angle
 {
 %TypeHeaderCode
+	#include <BALL/DATATYPE/string.h>
 	#include <BALL/MATHS/angle.h>
 	using namespace BALL;
 %End

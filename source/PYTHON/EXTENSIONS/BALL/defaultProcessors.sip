@@ -11,8 +11,8 @@ class ClearChargeProcessor
 %TypeHeaderCode
 	#include <BALL/STRUCTURE/defaultProcessors.h>
 	#include <BALL/CONCEPT/processor.h>
-	typedef UnaryProcessor<Atom> AtomProcessor;
 	using namespace BALL;
+	typedef UnaryProcessor<Atom> AtomProcessor;
 %End
   public:
   Processor::Result operator () (Atom& /atom/);
@@ -27,8 +27,8 @@ class ClearRadiusProcessor
 {
 %TypeHeaderCode
 	#include <BALL/STRUCTURE/defaultProcessors.h>
-	typedef UnaryProcessor<Atom> AtomProcessor;
 	using namespace BALL;
+	typedef UnaryProcessor<Atom> AtomProcessor;
 %End
   public:
   Processor::Result operator () (Atom& /atom/);
@@ -43,8 +43,8 @@ class AssignRadiusProcessor
 {
 %TypeHeaderCode
 	#include <BALL/STRUCTURE/defaultProcessors.h>
-	typedef UnaryProcessor<Atom> AtomProcessor;
 	using namespace BALL;
+	typedef UnaryProcessor<Atom> AtomProcessor;
 %End
   public:
   AssignRadiusProcessor();
@@ -66,8 +66,8 @@ class AssignChargeProcessor
 {
 %TypeHeaderCode
 	#include <BALL/STRUCTURE/defaultProcessors.h>
-	typedef UnaryProcessor<Atom> AtomProcessor;
 	using namespace BALL;
+	typedef UnaryProcessor<Atom> AtomProcessor;
 %End
   public:
   AssignChargeProcessor();

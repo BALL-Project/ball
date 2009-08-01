@@ -3,7 +3,7 @@
 //
 // $Id$
 //
-%ModuleHeaderCode
+%ModuleCode
 	#include <BALL/KERNEL/PTE.h>
 	using namespace BALL;
 %End

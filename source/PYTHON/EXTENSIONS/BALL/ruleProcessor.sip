@@ -9,6 +9,7 @@ class RuleProcessor
 {
 %TypeHeaderCode
 	#include <BALL/MOLMEC/COMMON/ruleProcessor.h>
+	using namespace BALL;
 	typedef UnaryProcessor<Atom> AtomProcessor;
 %End
   public:

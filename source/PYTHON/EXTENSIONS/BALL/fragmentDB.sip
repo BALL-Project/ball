@@ -9,8 +9,8 @@ class FragmentDB
 %TypeHeaderCode
 	#include <BALL/STRUCTURE/fragmentDB.h>
 	#include <BALL/STRUCTURE/reconstructFragmentProcessor.h>
-	typedef UnaryProcessor<Fragment> FragmentProcessor;
 	using namespace BALL;
+	typedef UnaryProcessor<Fragment> FragmentProcessor;
 %End
   public:
   enum FragmentTypes 
@@ -75,9 +75,9 @@ class NormalizeNamesProcessor
 {
 %TypeHeaderCode
 	#include <BALL/STRUCTURE/fragmentDB.h>
+	using namespace BALL;
 	typedef FragmentDB::NormalizeNamesProcessor NormalizeNamesProcessor;
 	typedef UnaryProcessor<Fragment> FragmentProcessor;
-	using namespace BALL;
 %End
 	public:
 	NormalizeNamesProcessor();
@@ -103,9 +103,9 @@ class BuildBondsProcessor
 {
 %TypeHeaderCode
 	#include <BALL/STRUCTURE/fragmentDB.h>
+	using namespace BALL;
 	typedef FragmentDB::BuildBondsProcessor BuildBondsProcessor;
 	typedef UnaryProcessor<Fragment> FragmentProcessor;
-	using namespace BALL;
 %End
 	public:
 	BuildBondsProcessor();

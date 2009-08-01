@@ -8,6 +8,7 @@ class BondProcessor
 {
 %TypeHeaderCode
 	#include <BALL/CONCEPT/processor.h>
+	#include <BALL/KERNEL/bond.h>
 	using namespace BALL;
 	typedef UnaryProcessor<Bond> BondProcessor;
 %End

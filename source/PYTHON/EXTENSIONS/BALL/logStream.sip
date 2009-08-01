@@ -7,7 +7,7 @@
 //   Oliver Kohlbacher
 //
 
-%ModuleHeaderCode
+%ModuleCode
   #include <BALL/COMMON/logStream.h>
 	#include <fstream>
 	using namespace BALL;

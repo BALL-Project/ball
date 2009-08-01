@@ -3,6 +3,10 @@
 //
 // $Id$
 //
+%ModuleCode
+	#include <BALL/FORMAT/parameterSection.h>
+	using namespace BALL;
+%End
 
 	class ParameterSection 
 	{

@@ -8,6 +8,7 @@
 {
 %TypeHeaderCode
 	#include <BALL/COMMON/global.h>
+	using namespace BALL;
 %End
 
 %ConvertToTypeCode
@@ -36,6 +37,10 @@
 
 %MappedType Position
 {
+%TypeHeaderCode
+	#include <BALL/COMMON/global.h>
+	using namespace BALL;
+%End
 %ConvertToTypeCode
 	if (sipIsErr == NULL)
 	{
@@ -64,6 +69,7 @@
 {
 %TypeHeaderCode
 	#include <BALL/COMMON/global.h>
+	using namespace BALL;
 %End
 
 %ConvertToTypeCode
@@ -94,6 +100,7 @@
 {
 %TypeHeaderCode
 	#include <BALL/COMMON/global.h>
+	using namespace BALL;
 %End
 
 %ConvertToTypeCode

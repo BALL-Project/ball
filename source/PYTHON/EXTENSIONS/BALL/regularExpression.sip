@@ -4,6 +4,10 @@
 // $Id$
 //
 
+%ModuleCode
+	#include <BALL/DATATYPE/regularExpression.h>
+%End
+
 class RegularExpression
 {
 %TypeHeaderCode

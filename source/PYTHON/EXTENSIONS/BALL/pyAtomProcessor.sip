@@ -8,6 +8,7 @@ class AtomProcessor
 {
 %TypeHeaderCode
 	#include <BALL/CONCEPT/processor.h>
+	#include <BALL/KERNEL/atom.h>
 	using namespace BALL;
 	typedef UnaryProcessor<Atom> AtomProcessor;
 %End

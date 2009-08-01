@@ -4,7 +4,7 @@
 // $Id$
 //
 
-%ModuleHeaderCode
+%ModuleCode
 	#include <BALL/MATHS/analyticalGeometry.h>
 	using namespace BALL;
 %End

@@ -13,6 +13,7 @@
 
 namespace BALL 
 {
+	class Composite;
 	/**	Virtual mapping of BALL objects to their true class.
     	\ingroup  PythonExtensions
 	*/

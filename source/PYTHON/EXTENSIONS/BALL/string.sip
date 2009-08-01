@@ -79,7 +79,10 @@ class String
 // : public string
 {
 %TypeHeaderCode
+	#include <BALL/DATATYPE/string.h>
 	#include <BALL/DATATYPE/hashMap.h>
+	using namespace BALL;
+	using namespace std;
 %End
 
   // friend class Substring;

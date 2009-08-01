@@ -9,6 +9,7 @@
 %TypeHeaderCode
 	#include <BALL/PYTHON/pyIndexList.h>
   #include <BALL/PYTHON/pyBALLSipHelper.h>
+	using namespace BALL;
 %End
 %ConvertFromTypeCode
 	PyObject *pl;

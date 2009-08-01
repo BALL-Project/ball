@@ -7,7 +7,7 @@
 class SimpleBox3
 {
 %TypeHeaderCode
-	#include <BALL/MATHS/box3.h>
+	#include <BALL/MATHS/simpleBox3.h>
 	using namespace BALL;
 %End
 	public:

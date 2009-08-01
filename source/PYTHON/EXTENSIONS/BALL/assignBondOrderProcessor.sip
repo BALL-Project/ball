@@ -4,8 +4,9 @@
 // $Id:$
 //
 
-%ModuleHeaderCode
-	#include <BALL/STRUCTURE/assignBondOrderProcessor.h>	
+%ModuleCode
+	#include <BALL/STRUCTURE/assignBondOrderProcessor.h>
+	using namespace BALL;
 	typedef UnaryProcessor<Composite> CompositeProcessor;
 %End
 
@@ -15,19 +16,10 @@ class AssignBondOrderProcessor
 	: CompositeProcessor
 {
 %TypeHeaderCode
-	#include <BALL/CONCEPT/processor.h>
-	#include <BALL/KERNEL/atomContainer.h>
-	#include <BALL/DATATYPE/hashMap.h>
-	#include <BALL/DATATYPE/hashSet.h>
-	#include <BALL/KERNEL/bond.h>
-	#include <BALL/DATATYPE/options.h>
-	#include <BALL/COMMON/limits.h>
-	#include <BALL/COMMON/exception.h>
-	#include <map>
-	#include <vector>
-	#include <queue>
-	using namespace BALL;	
+	#include <BALL/STRUCTURE/assignBondOrderProcessor.h>
+	using namespace BALL;
 	using namespace BALL::Exception;
+	typedef UnaryProcessor<Composite> CompositeProcessor;
 %End
 
 	public:

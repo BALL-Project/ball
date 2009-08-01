@@ -9,6 +9,8 @@
 %TypeHeaderCode
 	#include <BALL/DATATYPE/hashMap.h>
   #include <BALL/PYTHON/pyBALLSipHelper.h>
+	#include <BALL/KERNEL/atom.h>
+	using namespace BALL;
 	typedef HashMap<const Atom*, float> PyAtomDict;
 %End
 

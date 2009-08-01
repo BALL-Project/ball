@@ -8,6 +8,8 @@ class FragmentProcessor
 {
 %TypeHeaderCode
 	#include <BALL/CONCEPT/processor.h>
+	#include <BALL/KERNEL/fragment.h>
+	using namespace BALL;
 	typedef UnaryProcessor<Fragment> FragmentProcessor;
 %End
 	public:

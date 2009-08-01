@@ -9,6 +9,7 @@ class UnaryCompositePredicate
 {
 %TypeHeaderCode
 	#include <BALL/CONCEPT/predicate.h>
+	#include <BALL/CONCEPT/composite.h>
 	using namespace BALL;
 	typedef UnaryPredicate<Composite> UnaryCompositePredicate;
 %End
@@ -27,6 +28,7 @@ class UnaryAtomPredicate
 {
 %TypeHeaderCode
 	#include <BALL/CONCEPT/predicate.h>
+	#include <BALL/KERNEL/atom.h>
 	using namespace BALL;
 	typedef UnaryPredicate<Atom> UnaryAtomPredicate;
 %End
