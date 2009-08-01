@@ -8,7 +8,7 @@
 #
 
 DIRECTORY=PYTHON/EXTENSIONS
-SUBDIRS=COMMON BALL
+SUBDIRS=BALL
 
 ifneq (BALL_HAS_VIEW, "")
   SUBDIRS+=VIEW
@@ -30,9 +30,13 @@ clean:
 subdirsdepend:
 	@$(MAKE) subdirs TARGET=depend
 
+subdirssip:
+	@$(MAKE) subdirs TARGET=sip
+
 install:
 	@$(MAKE) subdirs TARGET=$@
 	$(CP) BALL.py $(PREFIX)/lib
 
 depend: subdirsdepend
+sip: subdirssip
 
