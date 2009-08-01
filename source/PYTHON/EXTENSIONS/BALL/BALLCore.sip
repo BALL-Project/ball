@@ -254,7 +254,6 @@
 %Include extractors.sip
 %Include pyIndexList.sip // a list of numbers (indices etc.)
 %Include pyAtomDict.sip // a dictionary mapping to atoms
-%Include ../COMMON/pyCompositeList.sip
 %Include pyAtomProcessor.sip 
 %Include pyBondProcessor.sip
 %Include pyFragmentProcessor.sip

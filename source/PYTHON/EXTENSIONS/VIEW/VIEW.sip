@@ -15,6 +15,7 @@
 
 %Include pyLists.sip
 %Include pyDatasetVector.sip
+%Include pyCompositeList.sip
 
 // VIEW/KERNEL
 %Include message.sip

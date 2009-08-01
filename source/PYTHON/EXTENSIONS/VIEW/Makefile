@@ -38,6 +38,7 @@ SIP_OPTS+=-b VIEW.sbf
 ADD_INCLUDES=$(SIPFLAGS)
 
 PYBALL_SOURCES = \
+	pyCompositeList.C\
 	pyBALLSipHelper.C\
 	pyColorRGBAVector.C \
 	pyDatasetVector.C
@@ -46,9 +47,6 @@ PYBALL_OBJECTS  = $(PYBALL_SOURCES:.C=.$(OBJECT_EXTENSION))
 
 CPP_SOURCES = $(SIP_SOURCES:.h=.C) $(PYBALL_SOURCES)
 CPP_OBJECTS = $(SIP_OBJECTS) $(PYBALL_OBJECTS)
-
-COMMON_OBJECTS = \
-	../COMMON/pyCompositeList.$(OBJECT_EXTENSION)
 
 LIBS=-lBALL -lVIEW $(QT_VIEW_LIBOPTS) $(OPENGL_LIBS)
 
@@ -65,7 +63,7 @@ sip:
 	@for i in $(SIP_DIR)/*; do if cmp -s $$i `basename $$i`; then true ; else echo " - $$i"; cp $$i . ; fi ; done
 
 VIEWmodule.so:  $(CPP_OBJECTS)
-	$(DYNAR) -L$(PREFIX)/lib -L$(BALL_PATH)/lib $(DYNAROPTS_PYMODULE) VIEWmodule.so $(CPP_OBJECTS) $(COMMON_OBJECTS) $(SIP_LIB) $(LIBS) $(PYTHON_LIBS)
+	$(DYNAR) -L$(PREFIX)/lib -L$(BALL_PATH)/lib $(DYNAROPTS_PYMODULE) VIEWmodule.so $(CPP_OBJECTS) $(SIP_LIB) $(LIBS) $(PYTHON_LIBS)
 
 install:	VIEWmodule.so
 	$(CP) VIEWmodule.so  $(PREFIX)/lib
