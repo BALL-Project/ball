@@ -1,3 +1,5 @@
 sip*.[Ch]
 Makefile.inc
-BALL.sbf
+*.sbf
+*.so
+*.pyc
