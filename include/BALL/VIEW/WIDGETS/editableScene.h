@@ -242,6 +242,8 @@ class BALL_VIEW_EXPORT EditableScene
 	FragmentDB fragment_db_;
 	bool fragment_db_initialized_;
 	bool temp_move_;
+	QToolBar* toolbar_edit_controls_;
+	QList<QAction*> toolbar_actions_edit_controls_;
 };
 
 	}//end of namespace

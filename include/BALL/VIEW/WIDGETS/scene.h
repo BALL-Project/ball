@@ -836,8 +836,8 @@ namespace BALL
 			Size offscreen_factor_;
 			String text_;
 			Size   font_size_;
-			QToolBar* toolbar_;
-			QList<QAction*> toolbar_actions_;
+			QToolBar* toolbar_view_controls_;
+			QList<QAction*> toolbar_actions_view_controls_;
 			bool ignore_pick_;
 			QActionGroup* mode_group_;
 
