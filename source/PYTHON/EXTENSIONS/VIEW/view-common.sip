@@ -84,6 +84,5 @@ void logString(const String&);
 //void processDropEvent(QDropEvent* e);
 //Camera focusCamera(const Vector3List)
 Camera focusCamera(Composite*);
-String getDataPath();
 
 

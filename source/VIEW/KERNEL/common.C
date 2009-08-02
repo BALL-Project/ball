@@ -300,39 +300,6 @@ namespace BALL
 			return focusCamera(positions);
 		}
 
-		String getDataPath()
-		{
-			// we set the base directory to the first stored data path in the Path class
-			// this should be equal to the BALLVIEW_DATA_PATH environment variable
-			// (if it was set, otherwise the compiled data path)
-			Path path;
-			String dir1 = path.getDataPath();
-
-			if (dir1.has('\n')) dir1 = dir1.before(String('\n'));
-
-			// sort out double slashes
-			String dir = "";
-			dir += dir1[0];
-
-			for (Position p = 1; p < dir1.size(); p++)
-			{
-				if (dir1[p - 1] == FileSystem::PATH_SEPARATOR &&
-						dir1[p] 		 == FileSystem::PATH_SEPARATOR)
-				{
-					continue;
-				}
-
-				dir += dir1[p];
-			}
-
-			if (!dir.hasSuffix(String(FileSystem::PATH_SEPARATOR)))
-			{
-				dir += FileSystem::PATH_SEPARATOR;
-			}
-				
-			return dir;
-		}
-
 		String ascii(const QString& str)
 		{
 			return str.toAscii().constData();

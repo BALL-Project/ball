@@ -102,12 +102,15 @@ void DemoTutorialDialog::initDemo_()
 
 String DemoTutorialDialog::getBaseDir_()
 {
-	return String(getDataPath()) + ".." +
-					FileSystem::PATH_SEPARATOR + 
-					"doc" + 
-					FileSystem::PATH_SEPARATOR +
-					"internal" +
-					FileSystem::PATH_SEPARATOR;
+	Path p;
+	String dir = p.find(   String("..")
+	                     + FileSystem::PATH_SEPARATOR
+											 + "doc"
+											 + FileSystem::PATH_SEPARATOR
+											 + "internal" 
+											 + FileSystem::PATH_SEPARATOR );
+
+	return dir;
 }
 
 void DemoTutorialDialog::initTutorial_()
@@ -279,13 +282,7 @@ void DemoTutorialDialog::nextStepDemo_()
 		try
 		{
 			Path path;
-			String file_name(path.getDataPath());
-			file_name = file_name.before("data");
-			file_name += "data";
-			file_name += FileSystem::PATH_SEPARATOR;
-			file_name += String("structures");
-			file_name += FileSystem::PATH_SEPARATOR;
-			file_name += "bpti.pdb";
+			String file_name = path.find("structures/bpti.pdb");
 
 			MolecularFileDialog* dialog = MolecularFileDialog::getInstance(0);
 			if (dialog == 0) return;
@@ -297,7 +294,7 @@ void DemoTutorialDialog::nextStepDemo_()
 			if (system_ == 0)
 			{
 				String msg("Could not open bpti.pdb. Maybe the file was deleted?\n");
-				msg += "It should be found in " + Path().getDataPath() + "bpti.pdb";
+				msg += "It should be found in " + file_name;
 
 				QMessageBox::critical(0, "Error while starting BALLView Demo", msg.c_str(),
 						QMessageBox::Ok, Qt::NoButton, Qt::NoButton);

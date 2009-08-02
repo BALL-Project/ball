@@ -362,11 +362,6 @@ namespace BALL
 		*/
 		BALL_VIEW_EXPORT Camera focusCamera(const List<Vector3>& points);
 
-		/** Get the first defined data path, this should be the content of the environment variable BALLVIEW_DATA_PATH.
-		 		We also sort out double slashes and make sure a slash is at the end.
-		*/
-		BALL_VIEW_EXPORT String getDataPath();
-
 		///
 		BALL_VIEW_EXPORT String ascii(const QString& str);
 		

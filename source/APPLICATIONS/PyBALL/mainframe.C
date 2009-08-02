@@ -60,8 +60,15 @@ namespace BALL
 
 		HelpViewer* BALL_docu = new HelpViewer(this, "BALL Docu");
 		addDockWidget(Qt::LeftDockWidgetArea, BALL_docu);
-		String dirp = getDataPath() + ".." + FileSystem::PATH_SEPARATOR + "doc" + 
-									FileSystem::PATH_SEPARATOR + "BALL" + FileSystem::PATH_SEPARATOR;
+
+		Path path;
+		String dirp = path.find(   String("..")
+		                         + FileSystem::PATH_SEPARATOR 
+														 + "doc" 
+														 + FileSystem::PATH_SEPARATOR
+														 + "BALL"
+														 + FileSystem::PATH_SEPARATOR );
+
 		BALL_docu->setBaseDirectory(dirp);
 		BALL_docu->setWhatsThisEnabled(false);
 		BALL_docu->setProject("BALL");

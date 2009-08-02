@@ -126,8 +126,16 @@ namespace BALL
 
 		HelpViewer* BALL_docu = new HelpViewer(this, "BALL Docu");
 		addDockWidget(Qt::BottomDockWidgetArea, BALL_docu);
-		String dirp = getDataPath() + ".." + FileSystem::PATH_SEPARATOR + "doc" + 
-									FileSystem::PATH_SEPARATOR + "BALL" + FileSystem::PATH_SEPARATOR;
+
+		Path path;
+
+		String dirp = path.find(   String("..") 
+		                         + FileSystem::PATH_SEPARATOR 
+														 + "doc" 
+														 + FileSystem::PATH_SEPARATOR 
+														 + "BALL" 
+														 + FileSystem::PATH_SEPARATOR );
+
 		BALL_docu->setBaseDirectory(dirp);
 		BALL_docu->setWhatsThisEnabled(false);
 		BALL_docu->setProject("BALL");
@@ -192,7 +200,7 @@ namespace BALL
 		stop_simulation_action_->setEnabled(false);
 		insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
 		setMenuHint(stop_simulation_action_, "Abort a running simulation");
-		Path path;
+		
 		String filename = path.find("graphics/stop.png");
 		stop_simulation_action_->setIcon(QIcon(filename.c_str()));
 		

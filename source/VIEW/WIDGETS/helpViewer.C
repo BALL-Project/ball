@@ -74,13 +74,13 @@ namespace BALL
 				whats_this_(true),
 				whats_action_(0)
 		{
-			String dir = getDataPath();
-			dir += 	String("..") + 
-							FileSystem::PATH_SEPARATOR + 
-							"doc" + 
-							FileSystem::PATH_SEPARATOR +
-							"BALLView" +
-							FileSystem::PATH_SEPARATOR;
+			Path p;
+			String dir = p.find(  String("..")
+													+ FileSystem::PATH_SEPARATOR
+													+ "doc"
+												  + FileSystem::PATH_SEPARATOR
+													+ "BALLView" 
+													+ FileSystem::PATH_SEPARATOR );
 
 			setBaseDirectory(dir);
 
@@ -220,11 +220,11 @@ namespace BALL
 		{
 			classes_to_files_.clear();
 			
-			String dir = getDataPath();
-			dir += 	String("..") + 
-							FileSystem::PATH_SEPARATOR + 
-							"doc" + 
-							FileSystem::PATH_SEPARATOR;
+			Path p;
+			String dir = p.find(   String("..") 
+					                 + FileSystem::PATH_SEPARATOR 
+													 + "doc"
+													 + FileSystem::PATH_SEPARATOR );
 
 			try
 			{
