@@ -173,6 +173,11 @@ namespace BALL
 	};
 
 	//@}
+// required for visual studio
+#ifdef BALL_COMPILER_MSVC
+class Atom;
+template class BALL_EXPORT UnaryProcessor<Atom>;
+#endif
 
 } // namespace BALL
 

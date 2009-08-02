@@ -191,7 +191,7 @@ namespace BALL
 			QIcon icon4(path.find("graphics/assignBondOrders.png").c_str());
 			bondorders_action_ = new QAction(icon4, "Quickly optimize bond orders", this);
 			bondorders_action_->setObjectName(bondorders_action_->text());
-			bondorders_action_->setToolTip("Edit mode: Compute the highlighted structures bond orders");
+			bondorders_action_->setToolTip("Compute the highlighted structures bond orders");
 			//TODO
 			//registerForHelpSystem(bondorders_action_, "scene.html#bondorders");
 			connect(bondorders_action_, SIGNAL(triggered()), this, SLOT(computeBondOrders()));
@@ -201,7 +201,7 @@ namespace BALL
 			QIcon icon(path.find("graphics/minimize.png").c_str());
 			optimize_action_ = new QAction(icon, "Quickly optimize structure", this);
 			optimize_action_->setObjectName(optimize_action_->text());
-			optimize_action_->setToolTip("Edit mode: Quickly optimize the highlighted structure");
+			optimize_action_->setToolTip("Quickly optimize the highlighted structure");
 			registerForHelpSystem(optimize_action_, "scene.html#optimize");
 			connect(optimize_action_, SIGNAL(triggered()), this, SLOT(optimizeStructure()));
 			getMainControl()->getShortcutRegistry().registerShortcut(description, optimize_action_);
@@ -209,15 +209,13 @@ namespace BALL
 			description = "Shortcut|SaturateWithHydrogens";
 			QIcon icon2(path.find("graphics/hydrogens.png").c_str());
 			add_hydrogens_action_ = new QAction(icon2, "Saturate with Hydrogens", this);
-			add_hydrogens_action_->setToolTip("Edit mode: Saturate the highlighted structure with hydrogens (with regards to formal charges).");
+			add_hydrogens_action_->setToolTip("Saturate the highlighted structure with hydrogens (with regards to formal charges).");
 			add_hydrogens_action_->setObjectName(add_hydrogens_action_->text());
 			registerForHelpSystem(add_hydrogens_action_, "scene.html#saturate");
 			connect(add_hydrogens_action_, SIGNAL(triggered()), this, SLOT(saturateWithHydrogens()));
 			getMainControl()->getShortcutRegistry().registerShortcut(description, add_hydrogens_action_);
 
 			getMainControl()->initPopupMenu(MainControl::BUILD)->addAction(add_hydrogens_action_);
-			//setMenuHint("Saturate a molecule with hydrogens");
-
 
 			description = "Shortcut|EditMode|SetElement";
 			QIcon icon3(path.find("graphics/element.png").c_str());
@@ -231,6 +229,7 @@ namespace BALL
 			new_molecule_action_ = insertMenuEntry(MainControl::BUILD, "Create new molecule", 
 												this, SLOT(createNewMolecule()), "Shortcut|Build|Create_new_molecule");
 			setMenuHint("Create a new molecule for editing");
+			//TODO create an icon
 
 			toolbar_edit_controls_->setObjectName("Edit Control toolbar");
 			toolbar_edit_controls_->setIconSize(QSize(23,23));

@@ -614,7 +614,9 @@ void PyWidget::applyPreferences()
 
 	started_startup_script_ = true;
 
-	String startup = getDataPath() + "startup.py";
+	Path p;
+
+	String startup = p.find("startup.py");
 	if (!openFile(startup, true))
 	{
 		Log.error() << "Could not find startup script. Please set the correct path to the data path!" << std::endl;
