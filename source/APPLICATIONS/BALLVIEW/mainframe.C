@@ -116,7 +116,9 @@ namespace BALL
 		dc->registerController(new TrajectoryController());
 		dc->registerController(new VectorGridController());
 		dc->registerController(new DockResultController());
-		dc->registerController(new RaytraceableGridController());
+
+//  NOTE: raytraceable grids have been deferred until 1.4/2.0
+//		dc->registerController(new RaytraceableGridController());
 		
 		DatasetControl::getInstance(0)->hide();
 
