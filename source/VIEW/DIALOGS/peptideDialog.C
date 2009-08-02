@@ -73,6 +73,8 @@ namespace BALL
 					case QEvent::Leave:
 						prolineDeactivated();
 						break;
+					default: // do nothing
+						break;
 				}
 			}
 
