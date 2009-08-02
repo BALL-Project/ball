@@ -557,8 +557,8 @@ void DemoTutorialDialog::onNotifyTutorial_(Message *message)
 		case TUTORIAL_SES_COLORING: // "Coloring a SES by electrostatics"
 		{
 			if (rmsg == 0 || 
-					rmsg->getType() != RepresentationMessage::UPDATE &&
-					rmsg->getRepresentation()->getModelType() != MODEL_SE_SURFACE)
+					(rmsg->getType() != RepresentationMessage::UPDATE &&
+					rmsg->getRepresentation()->getModelType() != MODEL_SE_SURFACE))
 			{
 				return;
 			}
