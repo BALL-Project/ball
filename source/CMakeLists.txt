@@ -51,7 +51,11 @@ if(NOT DISABLE_VIEW)
 		include(APPLICATIONS/QSAR_GUI/CMakeLists.txt)
 	endif(NOT DISABLE_QUEASY)
 	include(APPLICATIONS/BALLVIEW/CMakeLists.txt)
-	include(APPLICATIONS/NMRVIEW/CMakeLists.txt)
 endif(NOT DISABLE_VIEW)
+
+if(NOT DISABLE_QUEASY)
+	include(APPLICATIONS/QuEasyRun/CMakeLists.txt)
+endif(NOT DISABLE_QUEASY)
+
 
 message(STATUS "\n\nPlease don't forget to add \n  ${DY_LIB_DIRS}\nto your LD_LIBRARY_PATH !\n\n")

@@ -466,7 +466,7 @@ if(NOT DISABLE_QUEASY)
 	if(NOT USE_qwt AND NOT DISABLE_VIEW)
 		set(name "  Qwt, Qt widgets for technical applications, http://qwt.sourceforge.net/")
 		set(missing_packages ${missing_packages}${name}\n)
-	endif(NOT USE_qwt AND NOT DISABLE_VIEW AND NOT DISABLE_VIEW)
+	endif(NOT USE_qwt AND NOT DISABLE_VIEW)
 endif(NOT DISABLE_QUEASY)
 
 
