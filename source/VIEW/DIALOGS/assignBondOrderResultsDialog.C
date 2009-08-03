@@ -87,7 +87,7 @@ namespace BALL
 			}
 			else
 			{
-				Log.error()<< "Invalid state! " << __FILE__ << " " << __LINE__ << endl;
+				Log.error()<< "Invalid state! " << __FILE__ << " " << __LINE__ << std::endl;
 			}
 		}
 
@@ -101,14 +101,14 @@ namespace BALL
 				
 				Size num_of_sol = bond_order_processor_->getNumberOfComputedSolutions();
 					
-				ostringstream stream_name;
+				std::ostringstream stream_name;
 				stream_name.setf(std::ios_base::fixed);
 				stream_name.precision(2);
 
 				stream_name << ascii(name) << "_sol_" << num_of_sol << "_" << bond_order_processor_->getTotalPenalty(num_of_sol-1);
 				String sol_text = stream_name.str();
 				
-				ostringstream stream_description;
+				std::ostringstream stream_description;
 				stream_description.setf(std::ios_base::fixed);
 				stream_description.precision(2);
 
@@ -141,7 +141,7 @@ namespace BALL
 			}	
 			else
 			{
-					Log.info() << "There are no further solutions!" << endl;
+					Log.info() << "There are no further solutions!" << std::endl;
 			}
 		}
 		
@@ -176,14 +176,14 @@ namespace BALL
 				Size num_of_sol = bond_order_processor_->getNumberOfComputedSolutions();
 				for (Size i=0; i < num_of_sol; i++)
 				{
-					ostringstream stream_name;
+					std::ostringstream stream_name;
 					stream_name.setf(std::ios_base::fixed);
 					stream_name.precision(2);
 
 					stream_name << ascii(name) << "_sol_" << i+1 << "_" << bond_order_processor_->getTotalPenalty(i);
 					String sol_text = stream_name.str();
 					
-					ostringstream stream_description;
+					std::ostringstream stream_description;
 					stream_description.setf(std::ios_base::fixed);
 					stream_description.precision(2);
 

@@ -507,10 +507,12 @@ namespace BALL
 			BALL_XDR_UINT64_TYPE* p = (BALL_XDR_UINT64_TYPE*)&ptr;
 			xdr_u_hyper(&xdr_out_, p);
 #   else
-			Size* p = (Size*)&ptr;
-			xdr_u_int(&xdr_out_, p);
-			p++;
-			xdr_u_int(&xdr_out_, p);
+			Size t1, t2;
+			t1 = (Size)(ptr >> 32);
+			t2 = (Size)(ptr);
+
+			XDR_PUTLONG(&xdr_out_, &t1);
+			XDR_PUTLONG(&xdr_out_, &t2);
 #   endif
 
 		DEBUG("XDRPersistenceManager: put(LongSize = " << ptr << ")")
@@ -594,10 +596,13 @@ namespace BALL
 		BALL_XDR_UINT64_TYPE* p = (BALL_XDR_UINT64_TYPE*)&ptr;
 		xdr_u_hyper(&xdr_in_, p);
 #   else
-		Size* p = (Size*)&ptr;
-		xdr_u_int(&xdr_in_, p);
-		p++;
-		xdr_u_int(&xdr_in_, p);
+		Size t1, t2;
+
+		XDR_GETLONG(&xdr_in_, &t1);
+		XDR_GETLONG(&xdr_in_, &t2);
+
+		ptr  = ((LongSize)t1) << 32;
+		ptr |= (Size) t2; 
 #   endif
 
 		DEBUG("XDRPersistenceManager: get ptr: " << hex << ptr)

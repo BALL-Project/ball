@@ -19,7 +19,8 @@
 
 namespace BALL
 {
-  
+	class SecondaryStructure;
+	  
   /** Secondary structure extraction from 3D structure.
 			This class implements the DSSP algorithm described in
 			"Kabsch W & Sander C (1983). Dictionary of protein secondary structure: 
@@ -52,6 +53,9 @@ namespace BALL
 
 		/// Compute the secondary structure
 		void compute_();
+
+		// helper function for finish()
+		char setSecondaryStructureType_(SecondaryStructure* ss, char type);
 
 		bool testString_(const String& s, Size offset, Size offset_2);
 		bool testString2_(const String& s, Size offset);

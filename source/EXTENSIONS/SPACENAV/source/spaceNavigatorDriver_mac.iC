@@ -1,0 +1,94 @@
+#include <3DConnexionClient/ConnexionClientAPI.h>
+
+	struct values
+	{
+		values () {memset(axis, 0, 6*sizeof(SInt16));}
+		QMutex m;
+
+		bool fresh;
+		SInt16 axis[6]; 
+	};
+
+	values* v;
+
+	void SpaceNavigatorDriver::run()
+	{
+		while (isEnabled())
+		{ 
+			v->m.lock();
+			if (v->fresh)
+			{
+				v->fresh = false;
+				emitPositionChange(deadzone(-v->axis[0]), deadzone(v->axis[1]), deadzone(-v->axis[2]),
+													 deadzone(v->axis[3]), deadzone(v->axis[4]), deadzone(v->axis[5]));
+			}
+			v->m.unlock();
+
+			msleep(5);
+		}
+	}
+
+	// this function is deliberately not a member of the driver class
+  // so that we can simply register it as a callback without any problems 
+
+	UInt16 clientID;
+	
+	void messageHandler(io_connect_t connection, natural_t messageType, void *messageArgument)
+  {
+		ConnexionDeviceState *state;
+
+		switch (messageType)
+		{
+			case kConnexionMsgDeviceState:
+				state = (ConnexionDeviceState*)messageArgument;
+
+				if (state->client == clientID)
+				{
+					switch (state->command)
+					{
+						case kConnexionCmdHandleAxis:
+							v->m.lock();
+							v->fresh = true;
+							memcpy(v->axis, state->axis, 6*sizeof(SInt16));
+							v->m.unlock();
+							break;
+						case kConnexionCmdHandleButtons:
+							break;
+					}
+				}
+				break;
+
+				default: break;
+		}
+	}
+	
+	bool SpaceNavigatorDriver::setUp()
+	{
+		// set the pointer to our values instance, so that the damned callback can access it safely
+		v = new values;
+
+		OSErr result = InstallConnexionHandlers(messageHandler, 0L, 0L);
+		clientID = RegisterConnexionClient(kConnexionClientWildcard, 0L,
+													kConnexionClientModeTakeOver, kConnexionMaskAll);
+
+		if (result != noErr)
+			return false;
+
+		return true;
+	}
+
+	bool SpaceNavigatorDriver::tearDown()
+	{
+		UnregisterConnexionClient(clientID);
+		CleanupConnexionHandlers();
+
+		delete(v);
+
+		setEnabled(false);
+
+		if (isRunning())
+			wait(50);
+
+		return true;
+	}
+

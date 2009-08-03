@@ -190,6 +190,13 @@ namespace BALL
 				globalHandler.setMessage(message_);
 			}
 
+			InvalidArgument::InvalidArgument(const char* file, int line, const String& arg)
+				: GeneralException(file, line, "InvalidArgument",
+				                   "An invalid argument has been passed: ")
+			{
+				message_ += arg;
+			}
+
 			InvalidSize::InvalidSize(const char* file, int line, Size size)
 				
 				:	GeneralException(file, line, "InvalidSize", ""),

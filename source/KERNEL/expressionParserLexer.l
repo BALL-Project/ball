@@ -1,6 +1,7 @@
 %{
 // $Id: expressionParserLexer.l,v 1.4 2002/01/28 00:10:06 oliver Exp $
 #include <BALL/KERNEL/expressionParser.h>
+#include <BALL/COMMON/parserDefinitions.h>
 
 using namespace BALL;
 

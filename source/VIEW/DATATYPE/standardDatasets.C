@@ -363,7 +363,10 @@ namespace BALL
 			menu->addSeparator();
 			menu->addAction("Create normalized Grid", this, SLOT(createHistogramGrid()));
 			menu->addAction("Create Gradient Grid", this, SLOT(createVectorGrid()));
-			menu->addAction("Create raytraceable Grid", this, SLOT(createRaytraceableGrid()));
+
+			// NOTE: raytraceable grids are deferred until 1.4/2.0
+			// menu->addAction("Create raytraceable Grid", this, SLOT(createRaytraceableGrid()));
+
 			return menu;
 		}
 

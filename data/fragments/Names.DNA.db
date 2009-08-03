@@ -2,6 +2,7 @@
  <node>C:P<value>C:P</value></node>
  <node>DC:OP1<value>C:O1P</value></node>
  <node>DC:OP2<value>C:O2P</value></node>
+ <node>DC:*<value>C:*</value></node>
  <node>C:OP1<value>C:O1P</value></node>
  <node>C:OP2<value>C:O2P</value></node>
  <node>C:O5'<value>C:O5*</value></node>
@@ -36,6 +37,7 @@
  <node>A:P<value>A:P</value></node>
  <node>DA:OP1<value>A:O1P</value></node>
  <node>DA:OP2<value>A:O2P</value></node>
+ <node>DA:*<value>A:*</value></node>
  <node>A:OP1<value>A:O1P</value></node>
  <node>A:OP2<value>A:O2P</value></node>
  <node>A:O5'<value>A:O5*</value></node>
@@ -101,6 +103,7 @@
  <node>T:P<value>T:P</value></node>
  <node>DT:OP1<value>T:O1P</value></node>
  <node>DT:OP2<value>T:O2P</value></node>
+ <node>DT:*<value>T:*</value></node>
  <node>T:OP1<value>T:O1P</value></node>
  <node>T:OP2<value>T:O2P</value></node>
  <node>T:O5'<value>T:O5*</value></node>
@@ -135,6 +138,7 @@
  <node>G:P<value>G:P</value></node>
  <node>DG:OP1<value>G:O1P</value></node>
  <node>DG:OP2<value>G:O2P</value></node>
+ <node>DG:*<value>G:*</value></node>
  <node>G:OP1<value>G:O1P</value></node>
  <node>G:OP2<value>G:O2P</value></node>
  <node>G:O5'<value>G:O5*</value></node>
@@ -167,4 +171,7 @@
  <node>G:H2'<value>G:1H2*</value></node>
  <node>G:H2''<value>G:2H2*</value></node>
  <node>G:O3'<value>G:O3*</value></node>
+ 
+ <node>*:O2'<value>*:O2*</value></node>
+ <node>*:HO2'<value>*:1HO2*</value></node>
 </node>

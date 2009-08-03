@@ -36,14 +36,14 @@ pdbf >> sys;
 CHECK(getActiveSitePoints())
   bpp = new BindingPocketProcessor;
   sys.apply(*bpp);
-  vector<pair<Vector3,double> > v = bpp->getActiveSitePoints();
+  vector<std::pair<Vector3,double> > v = bpp->getActiveSitePoints();
   TEST_EQUAL(v.size(),5);
   TEST_REAL_EQUAL(v[4].first.getDistance(Vector3(56.9969,7.84631,45.0952)),0);
   TEST_REAL_EQUAL(fabs(v[4].second - 1831.21),0)
 RESULT
 
 CHECK(getLayers())
-  vector<vector<pair<Vector3,double> > > v2  = bpp->getLayers();
+  vector<vector<std::pair<Vector3,double> > > v2  = bpp->getLayers();
   TEST_EQUAL(v2.size(),9); 
   TEST_EQUAL(v2[7].size(),1);
   TEST_REAL_EQUAL(v2[7][0].first.getDistance(Vector3(38.5656,-9.65292,34.183)),0);

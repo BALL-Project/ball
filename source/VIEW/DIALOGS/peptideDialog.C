@@ -54,9 +54,31 @@ namespace BALL
 			connect( sequence, SIGNAL( textChanged(const QString&) ), this, SLOT( insert_seq() ) );
 			connect( cancel_button, SIGNAL( pressed() ), this, SLOT( close() ) );
 
+			pro->installEventFilter(this);
+
 			setObjectName(name);
 			sequence->clear();
 			show();
+		}
+
+		bool PeptideDialog::eventFilter(QObject* object, QEvent* event)
+		{
+			if (static_cast<QPushButton*>(object) == pro)
+			{
+				switch (event->type())
+				{
+					case QEvent::Enter:
+					 	prolineActivated();
+						break;
+					case QEvent::Leave:
+						prolineDeactivated();
+						break;
+					default: // do nothing
+						break;
+				}
+			}
+
+			return QDialog::eventFilter(object, event);
 		}
 
 		void PeptideDialog::back_pressed()
@@ -112,6 +134,37 @@ namespace BALL
 				psi->setEnabled(true);
 			}
 		}
+		
+		void PeptideDialog::prolineActivated() 
+		{	
+			if (alpha->isChecked())
+			{
+				phi->setEnabled(false);
+				psi->setEnabled(false);
+				phi->setText("-60");
+				psi->setText("-45");
+			}
+			else if (beta->isChecked())
+			{
+				phi->setEnabled(false);
+				psi->setEnabled(false);
+				phi->setText("-60");
+				psi->setText("135");
+			}
+			else // other
+			{
+				phi->setEnabled(true);
+				psi->setEnabled(true);
+				phi->setText("-60");
+				psi->setText("-45");
+			}
+		}
+      
+		void PeptideDialog::prolineDeactivated()
+		{
+			angle_changed();
+		}
+
 
 		void PeptideDialog::insert_(char a)
 		{

@@ -125,11 +125,12 @@ namespace BALL
 				light_settings_(new LightSettings(this)),
 				material_settings_(new MaterialSettings(this)),
 				animation_thread_(0),
-				toolbar_(new QToolBar("3D View Controls", this)),
+				toolbar_view_controls_(new QToolBar("3D View Controls", this)),
 				mode_group_(new QActionGroup(this)),
 				main_display_(new GLRenderWindow(this)),
 				stereo_left_eye_(-1),
-				stereo_right_eye_(-1)
+				stereo_right_eye_(-1),
+				update_running_(false)
 		{
 			stage_settings_=new StageSettings(this);
 #ifndef ENABLE_RAYTRACING
@@ -178,11 +179,12 @@ namespace BALL
 				preview_(false),
 				use_preview_(true),
 				show_fps_(false),
-				toolbar_(new QToolBar("3D View Controls", this)),
+				toolbar_view_controls_(new QToolBar("3D View Controls", this)),
 				mode_group_(new QActionGroup(this)),
 				main_display_(new GLRenderWindow(this)),
 				stereo_left_eye_(-1),
-				stereo_right_eye_(-1)
+				stereo_right_eye_(-1),
+				update_running_(false)
 		{
 			stage_settings_=new StageSettings(this);
 #ifdef BALL_VIEW_DEBUG
@@ -219,11 +221,12 @@ namespace BALL
 				material_settings_(new MaterialSettings(this)),
 				animation_thread_(0),
 				stop_animation_(false),
-				toolbar_(new QToolBar("3D View Controls", this)),
+				toolbar_view_controls_(new QToolBar("3D View Controls", this)),
 				mode_group_(new QActionGroup(this)),
 				main_display_(new GLRenderWindow(this)),
 				stereo_left_eye_(-1),
-				stereo_right_eye_(-1)
+				stereo_right_eye_(-1),
+				update_running_(false)
 		{
 			stage_settings_=new StageSettings(this);
 #ifdef BALL_VIEW_DEBUG
@@ -497,10 +500,10 @@ namespace BALL
 
 			fps /= fps_.size();
 
-			ostringstream stream;
+			std::ostringstream stream;
 			stream.imbue(std::locale("C"));
-			stream.setf(ios::fixed, ios_base::floatfield);
-			stream.setf(ios::right, ios_base::adjustfield);
+			stream.setf(std::ios::fixed, std::ios_base::floatfield);
+			stream.setf(std::ios::right, std::ios_base::adjustfield);
 			stream.precision(1);
 			stream.width(6);
 
@@ -515,6 +518,8 @@ namespace BALL
 
 		void Scene::paintGL()
 		{
+			update_running_ = true;
+			
 			// This function tries to sync renderers by letting (a) all renderers
 			// perform their updates and then (b) swap in the newly created buffers
 			// of all render targets
@@ -601,6 +606,8 @@ namespace BALL
 				else if (RTTI::isKindOf<GLOffscreenTarget>(*renderers_[i].target))
 					static_cast<GLOffscreenTarget*>(renderers_[i].target)->refresh();
 			}
+			
+			update_running_ = false;
 		}
 
 		void Scene::paintEvent(QPaintEvent* e)
@@ -617,8 +624,8 @@ namespace BALL
 		bool Scene::eventFilter(QObject* object, QEvent* event)
 		{
 			for (Position i=0; i<renderers_.size(); ++i)
-			{
-				if ((QGLWidget*)renderers_[i].target != object)
+			{				
+				if (static_cast<QObject*>(dynamic_cast<GLRenderWindow*>(renderers_[i].target)) != object)
 					continue;
 
 				bool filter_out = false;
@@ -1377,47 +1384,47 @@ namespace BALL
 
 			new_action = create_coordinate_system_->addAction("here", this, SLOT(createCoordinateSystem()));
 			shortcut_registry->registerShortcut("Shortcut|Display|Show_Coordinate_System|here", new_action);
-			
+
 			insertMenuEntry(MainControl::DISPLAY, "Add new GL Window", this, SLOT(addGlWindow()), "Shortcut|Display|Add_new_GL_Window");
 			// ======================== Display->Animation ===============================================
 			String help_url = "tips.html#animations";
 
 			record_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Record", this, 
-																	SLOT(dummySlot()), "Shortcut|Display|Animation|Record");
+					SLOT(dummySlot()), "Shortcut|Display|Animation|Record");
 			setMenuHint("Record an animation for later processing");
 			setMenuHelp(help_url);
 			record_animation_action_->setCheckable(true);
 
 			clear_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Clear", this, 
-																	SLOT(clearRecordedAnimation()), "Shortcut|Display|Animation|Clear");
+					SLOT(clearRecordedAnimation()), "Shortcut|Display|Animation|Clear");
 			setMenuHelp(help_url);
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
 
 			start_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Start", this, 
-																	SLOT(startAnimation()), "Shortcut|Display|Animation|Start");
+					SLOT(startAnimation()), "Shortcut|Display|Animation|Start");
 			setMenuHelp(help_url);
 
 			cancel_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Stop", this, 
-																	SLOT(stopAnimation()), "Shortcut|Display|Animation|Stop");
+					SLOT(stopAnimation()), "Shortcut|Display|Animation|Stop");
 			cancel_animation_action_->setEnabled(false);
 			setMenuHelp(help_url);
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
 
 			animation_export_PNG_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export PNG", this, 
-																			SLOT(dummySlot()), "Shortcut|Display|Animation|Export_PNG");
+					SLOT(dummySlot()), "Shortcut|Display|Animation|Export_PNG");
 			setMenuHelp(help_url);
 			animation_export_PNG_action_->setCheckable(true);
 
 			animation_export_POV_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export POV", this, 
-																			SLOT(dummySlot()), "Shortcut|Display|Animation|Export_POV");
+					SLOT(dummySlot()), "Shortcut|Display|Animation|Export_POV");
 			setMenuHelp(help_url);
 			animation_export_POV_action_->setCheckable(true);
 
 
 			animation_repeat_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Repeat", this, 
-																	SLOT(dummySlot()), "Shortcut|Display|Animation|Repeat");
+					SLOT(dummySlot()), "Shortcut|Display|Animation|Repeat");
 			setMenuHelp(help_url);
 			animation_repeat_action_->setCheckable(true);
 
@@ -1425,25 +1432,25 @@ namespace BALL
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
 			no_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, "No Stereo", this, 
-														SLOT(exitStereo()), "Shortcut|Display|Stereo|No_Stereo");
+					SLOT(exitStereo()), "Shortcut|Display|Stereo|No_Stereo");
 			no_stereo_action_->setCheckable(true);
 			no_stereo_action_->setChecked(true);
 			setMenuHelp("tips.html#3D");
 
 			active_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, "Shutter Glasses", this, 
-																SLOT(enterActiveStereo()), "Shortcut|Display|Stereo|Shutter_Glasses");
+					SLOT(enterActiveStereo()), "Shortcut|Display|Stereo|Shutter_Glasses");
 			setMenuHelp("tips.html#3D");
 			active_stereo_action_->setCheckable(true);
 
 			dual_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, "Side by Side", this,
-															SLOT(enterDualStereo()), "Shortcut|Display|Stereo|Side_by_Side");
+					SLOT(enterDualStereo()), "Shortcut|Display|Stereo|Side_by_Side");
 			setMenuHelp("tips.html#3D");
 			dual_stereo_action_->setCheckable(true);
 
 			dual_stereo_different_display_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, 
-																								"Side by Side on Different Displays", this, 
-																								SLOT(enterDualStereoDifferentDisplays()),
-																								"Shortcut|Display|Stereo|Side_by_Side_on_Different_Displays");
+					"Side by Side on Different Displays", this, 
+					SLOT(enterDualStereoDifferentDisplays()),
+					"Shortcut|Display|Stereo|Side_by_Side_on_Different_Displays");
 			setMenuHelp("tips.html#3D");
 			dual_stereo_different_display_action_->setCheckable(true);
 
@@ -1451,84 +1458,84 @@ namespace BALL
 			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT);
 
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "&Store Viewpoint", this, 
-											SLOT(storeViewPoint()), "Shortcut|Display|Viewpoint|Store");
+					SLOT(storeViewPoint()), "Shortcut|Display|Viewpoint|Store");
 			setMenuHint("Store the current viewpoint");
 
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "&Restore Viewpoint", this, 
-											SLOT(restoreViewPoint()), "Shortcut|Display|Viewpoint|Restore");
+					SLOT(restoreViewPoint()), "Shortcut|Display|Viewpoint|Restore");
 			setMenuHint("Restore the viewpoint");
 
 			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT);
 
 			String description("Shortcut|Display|Viewpoint|Show_Viewpoint");
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, 
-											SLOT(showViewPoint_()), description, QKeySequence(tr("Ctrl+W", description.c_str()))); 
+					SLOT(showViewPoint_()), description, QKeySequence(tr("Ctrl+W", description.c_str()))); 
 			setMenuHint("Print the coordinates of the current viewpoint");
 
 
 			description = "Shortcut|Display|Viewpoint|Set_Viewpoint";
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, 
-											SLOT(setViewPoint_()), description, QKeySequence(tr("Ctrl+N", description.c_str())));
+					SLOT(setViewPoint_()), description, QKeySequence(tr("Ctrl+N", description.c_str())));
 			setMenuHint("Move the viewpoint to the given coordinates");
-			
+
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, 
-											SLOT(resetCamera_()), "Shortcut|Display|Viewpoint|Reset_Camera");
+					SLOT(resetCamera_()), "Shortcut|Display|Viewpoint|Reset_Camera");
 			setMenuHint("Reset the camera to the orgin (0,0,0)");
-			
+
 			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT);
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Limit View Volume", this, 
-											SLOT(setupViewVolume()), "Shortcut|Display|Viewpoint|Limit_View_Volume");
+					SLOT(setupViewVolume()), "Shortcut|Display|Viewpoint|Limit_View_Volume");
 
 			description = "Shortcut|File|Export|PNG";
 			QAction* screenshot_action = insertMenuEntry(MainControl::FILE_EXPORT, "PNG...", this, 
-																		SLOT(showExportPNGDialog()), description, QKeySequence(tr("Alt+P", description.c_str())));
+					SLOT(showExportPNGDialog()), description, QKeySequence(tr("Alt+P", description.c_str())));
 			setMenuHint("Export a PNG image file from the Scene");
 			setIcon("screenshot.png", false);
 
 			description = "Shortcut|File|Export|POVRay";
 			insertMenuEntry(MainControl::FILE_EXPORT, "POVRa&y scene", this, 
-											SLOT(exportPOVRay()), description, QKeySequence(tr("Ctrl+Y", description.c_str())));
+					SLOT(exportPOVRay()), description, QKeySequence(tr("Ctrl+Y", description.c_str())));
 			setIcon("povray.png", false);
 			setMenuHint("tips.html#povray");
-			
+
 			description = "Shortcut|File|Export|VRML";
- 			insertMenuEntry(MainControl::FILE_EXPORT, "3D Prototyping Export", this, 
-											SLOT(showExportVRMLDialog()), description);
- 			setMenuHint("Export a VRML or stl file from the scene");
+			insertMenuEntry(MainControl::FILE_EXPORT, "3D Prototyping Export", this, 
+					SLOT(showExportVRMLDialog()), description);
+			setMenuHint("Export a VRML or stl file from the scene");
 
 			// ====================================== MODES =====================================
 			description = "Shortcut|Display|Rotate_Mode";
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 			rotate_action_ = insertMenuEntry(MainControl::DISPLAY, "&Rotate Mode", this, 
-																			 SLOT(rotateMode_()), description, QKeySequence(tr("Ctrl+R", description.c_str())));
+					SLOT(rotateMode_()), description, QKeySequence(tr("Ctrl+R", description.c_str())));
 
 			setMenuHint("Switch to rotate/zoom mode");
 			setMenuHelp("scene.html#rotate_mode");
 			rotate_action_->setCheckable(true);
 			setIcon("rotate.png", false);
-			toolbar_actions_.push_back(rotate_action_);
+			toolbar_actions_view_controls_.push_back(rotate_action_);
 			mode_group_->addAction(rotate_action_);
 
 			description = "Shortcut|Display|Picking_Mode";
 			picking_action_ = insertMenuEntry(MainControl::DISPLAY, "&Picking Mode", this, 
-																				SLOT(pickingMode_()), description, QKeySequence(tr("Ctrl+P", description.c_str())));
+					SLOT(pickingMode_()), description, QKeySequence(tr("Ctrl+P", description.c_str())));
 
-			setMenuHint("Switch to picking mode, e.g. to identify singe atoms or groups");
+			setMenuHint("Switch to picking mode, e.g. to identify single atoms or groups");
 			setMenuHelp("scene.html#identify_atoms");
 			setIcon("picking.png", false);
 			picking_action_->setCheckable(true);
-			toolbar_actions_.push_back(picking_action_);
+			toolbar_actions_view_controls_.push_back(picking_action_);
 			mode_group_->addAction(picking_action_);
 
 			description = "Shortcut|Display|Move_Mode";
 			move_action_ = insertMenuEntry(MainControl::DISPLAY, "Move Mode", this, 
-																		 SLOT(moveMode_()), description);
-			
-			setMenuHint("Move selected items");
+					SLOT(moveMode_()), description);
+
+			setMenuHint("Switch to move mode, e.g. move selected items");
 			setMenuHelp("molecularControl.html#move_molecule");
 			setIcon("move.png", false);
 			move_action_->setCheckable(true);
-			toolbar_actions_.push_back(move_action_);
+			toolbar_actions_view_controls_.push_back(move_action_);
 			mode_group_->addAction(move_action_);
 
 			description = "Shortcut|ToggleFullscreen";
@@ -1537,7 +1544,7 @@ namespace BALL
 			connect(fullscreen_action_, SIGNAL(triggered()), getMainControl(), SLOT(toggleFullScreen()));
 			filename = path.find("graphics/fullscreen.png");
 			fullscreen_action_->setIcon(QIcon(filename.c_str()));
-			toolbar_actions_.push_back(fullscreen_action_);
+			toolbar_actions_view_controls_.push_back(fullscreen_action_);
 			shortcut_registry->registerShortcut(description, fullscreen_action_);
 
 			description = "Shortcut|ShowRuler";
@@ -1548,10 +1555,10 @@ namespace BALL
 			switch_grid_->setChecked(false);
 			filename = path.find("graphics/ruler.png");
 			switch_grid_->setIcon(QIcon(filename.c_str()));
-			toolbar_actions_.push_back(switch_grid_);
+			toolbar_actions_view_controls_.push_back(switch_grid_);
 			shortcut_registry->registerShortcut(description, switch_grid_);
 
-			toolbar_actions_.push_back(screenshot_action);
+			toolbar_actions_view_controls_.push_back(screenshot_action);
 
 			description = "Shortcut|File|Print";
 			insertMenuEntry(MainControl::FILE, "Print", this, SLOT(printScene()), description);
@@ -1565,10 +1572,10 @@ namespace BALL
 			setFocusPolicy(Qt::StrongFocus);
 			registerForHelpSystem(this, "scene.html");
 
-			toolbar_->setObjectName("3D toolbar");
-			toolbar_->setIconSize(QSize(23,23));
-			toolbar_->layout()->setMargin(2);
-			toolbar_->layout()->setSpacing(2);
+			toolbar_view_controls_->setObjectName("3D View Control toolbar");
+			toolbar_view_controls_->setIconSize(QSize(23,23));
+			toolbar_view_controls_->layout()->setMargin(2);
+			toolbar_view_controls_->layout()->setSpacing(2);
 		}
 
 		void Scene::checkMenu(MainControl& main_control)
@@ -2686,34 +2693,6 @@ namespace BALL
 
 		void Scene::addGlWindow()
 		{
-			GLOffscreenTarget* new_widget = new GLOffscreenTarget(main_display_, "test_tiling.png");
-			new_widget->tryUsePixelBuffer(false);
-			new_widget->init();
-			new_widget->resize(width(), height());
-			new_widget->prepareRendering();
-
-			GLRenderer* new_gl_renderer = new GLRenderer;
-			new_gl_renderer->init(*this);
-			new_gl_renderer->enableVertexBuffers(want_to_use_vertex_buffer_);
-
-			TilingRenderer* new_renderer = new TilingRenderer(new_gl_renderer, 2*width(), 2*height());
-			new_renderer->init(*this);
-
-//			new_widget->show();
-
-			RenderSetup new_rs(new_renderer, new_widget, this, stage_);
-			new_renderer->setSize(width(), height());
-			//new_rs.resize(width(), height());
-			new_widget->prepareRendering();
-			resetRepresentationsForRenderer_(new_rs);
-
-/*			if (new_widget->isSharing())
-			else
-				*/
-
-			renderers_.push_back(new_rs);
-
-			/*
 			GLRenderWindow* new_widget = new GLRenderWindow(0, "Scene", Qt::Window);
 			new_widget->makeCurrent();
 			new_widget->init();
@@ -2732,7 +2711,6 @@ namespace BALL
 			resetRepresentationsForRenderer_(new_rs);
 
 			renderers_.push_back(new_rs);
-			*/
 		}
 
 		void Scene::enterActiveStereo()
@@ -3063,11 +3041,11 @@ return;
 
 		void Scene::addToolBarEntries(QToolBar* tb)
 		{
-			toolbar_->addActions(toolbar_actions_);
-			toolbar_->insertSeparator(fullscreen_action_);
-			getMainControl()->addToolBar(Qt::TopToolBarArea, toolbar_);
+			toolbar_view_controls_->addActions(toolbar_actions_view_controls_);
+			toolbar_view_controls_->insertSeparator(fullscreen_action_);
+			getMainControl()->addToolBar(Qt::TopToolBarArea, toolbar_view_controls_);
 			ModularWidget::addToolBarEntries(tb);
-			getMainControl()->initPopupMenu(MainControl::WINDOWS)->addAction(toolbar_->toggleViewAction());
+			getMainControl()->initPopupMenu(MainControl::WINDOWS)->addAction(toolbar_view_controls_->toggleViewAction());	
 		}
 
 #ifdef ENABLE_RAYTRACING

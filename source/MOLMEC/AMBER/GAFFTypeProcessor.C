@@ -81,14 +81,14 @@ namespace BALL
 	{	
 		ces_parsers_.clear();
 
-		ifstream atomfile;
+		std::ifstream atomfile;
 		Path path;
 		String filename = path.find(options.get(Option::ATOMTYPE_FILENAME));
 
 		atomfile.open(filename.c_str());
 		if(!atomfile)
 		{
-			Log.error() << "atomtype table could not be read!" << endl;
+			Log.error() << "atomtype table could not be read!" << std::endl;
 			throw(Exception::FileNotFound(__FILE__, __LINE__, filename));
 		}
 	

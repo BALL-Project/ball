@@ -2760,6 +2760,25 @@ namespace BALL
 			}
 		}
 
+#ifdef BALL_COMPILER_MSVC
+// don't ask... just *don't* ask... *sigh*
+#undef near
+#undef far
+#endif
+
+		void GLRenderer::getFrustum(float& near, float& far, float& left, float& right, float& top, float& bottom)
+		{
+			near = near_;
+			far  = far_;
+
+			left  = left_;
+			right = right_;
+
+			top    = top_;
+			bottom = bottom_;
+		}
+
+
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/RENDERING/glRenderer.iC>
 #	endif

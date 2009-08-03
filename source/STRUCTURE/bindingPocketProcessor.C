@@ -259,10 +259,10 @@ namespace BALL
 
 		/** compute options
 		 */ 
-		double max_rad = max(options.getReal(Option::RADIUS_HYDROGEN),options.getReal(Option::RADIUS_OXYGEN));
-		max_rad = max(max_rad,options.getReal(Option::RADIUS_NITROGEN));
-		max_rad = max(max_rad,options.getReal(Option::RADIUS_CARBON));   
-		max_rad = max(max_rad,options.getReal(Option::RADIUS_SULFUR));   
+		double max_rad = std::max(options.getReal(Option::RADIUS_HYDROGEN),options.getReal(Option::RADIUS_OXYGEN));
+		max_rad = std::max(max_rad,options.getReal(Option::RADIUS_NITROGEN));
+		max_rad = std::max(max_rad,options.getReal(Option::RADIUS_CARBON));   
+		max_rad = std::max(max_rad,options.getReal(Option::RADIUS_SULFUR));   
 
 		if (options.getBool(Option::HEAVY_ONLY))
 		{
@@ -363,7 +363,7 @@ namespace BALL
 		else
 		{
 			Log.error() << "error: unknown element: "  << element << std::endl;
-			exit(-1);
+			throw(Exception::InvalidArgument(__FILE__, __LINE__, element));
 		}
 
 		return radius;
@@ -460,7 +460,7 @@ namespace BALL
 
 			if (insert)
 			{
-				asps_.push_back(pair<Vector3,double>(v[x].position,v[x].probe_weight));
+				asps_.push_back(std::pair<Vector3,double>(v[x].position,v[x].probe_weight));
 			}
 		}
 
@@ -474,19 +474,19 @@ namespace BALL
 
 			for (;+data_it;data_it++)
 			{
-				layers_[data_it->layer].push_back(pair<Vector3,double>(data_it->position,data_it->b_count));
+				layers_[data_it->layer].push_back(std::pair<Vector3,double>(data_it->position,data_it->b_count));
 			}
 		}
 
 		return true;
 	}
 
-  const vector<pair<Vector3,double> >& BindingPocketProcessor::getActiveSitePoints() const
+  const vector<std::pair<Vector3,double> >& BindingPocketProcessor::getActiveSitePoints() const
   {
     return asps_;
   }
   
-  const vector<vector<pair<Vector3,double> > >& BindingPocketProcessor::getLayers() const
+  const vector<vector<std::pair<Vector3,double> > >& BindingPocketProcessor::getLayers() const
   {
     return layers_;
   }

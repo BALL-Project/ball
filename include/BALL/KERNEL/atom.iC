@@ -220,4 +220,9 @@ bool Atom::isBound() const
 	return (number_of_bonds_ > 0);
 }
 
+BALL_INLINE
+float Atom::getDistance(const Atom& a) const
+{
+	return getPosition().getDistance(a.getPosition());
+}
 

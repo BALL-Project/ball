@@ -20,6 +20,7 @@ namespace BALL
 
 			public:
 				SpaceNavigatorPlugin();
+				virtual ~SpaceNavigatorPlugin();
 
 				const QPixmap* getIcon() const;
 				QString getName() const;
@@ -39,6 +40,7 @@ namespace BALL
 				QWidget* receiver_;
 				QPixmap icon_;
 				bool is_active_;
+				InputDeviceDriver* driver_;
 		};
 	}
 }

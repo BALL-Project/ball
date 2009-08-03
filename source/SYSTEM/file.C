@@ -96,7 +96,7 @@ namespace BALL
 		{
 			// substitute "%s" with the full file name
 			Size count = 0;
-			while ((result.substitute("%s", name) != String::EndPos) && (++count <= MAX_SUBSTITUTIONS));
+			while ((result.substitute("%s", name) != String::EndPos) && (++count <= MAX_SUBSTITUTIONS)) { }
 
 			// substitute "%f" with the full name without the last file suffix (after and including the last ".")
 			// and "%f[suffix]" with the full filename without [suffix]
@@ -129,7 +129,7 @@ namespace BALL
 					}
 				}
 				count = 0;
-				while ((result.substitute("%f", full_name) != String::EndPos) && (++count <= MAX_SUBSTITUTIONS));
+				while ((result.substitute("%f", full_name) != String::EndPos) && (++count <= MAX_SUBSTITUTIONS)) { }
 			}
 			// substitute "%f" with the full name without the last file suffix (after and including the last ".")
 			// and "%f[suffix]" with the full filename without [suffix]
@@ -162,12 +162,12 @@ namespace BALL
 					}
 				}
 				count = 0;
-				while ((result.substitute("%b", base_name) != String::EndPos) && (++count <= MAX_SUBSTITUTIONS));
+				while ((result.substitute("%b", base_name) != String::EndPos) && (++count <= MAX_SUBSTITUTIONS)) { }
 			}
 
 			// "%p" with the path to the file
 			count = 0;
-			while ((result.substitute("%p", FileSystem::path(name)) != String::EndPos) && (++count <= MAX_SUBSTITUTIONS));
+			while ((result.substitute("%p", FileSystem::path(name)) != String::EndPos) && (++count <= MAX_SUBSTITUTIONS)) { }
 
 			// "%t" with a temporary file name
 			if (result.hasSubstring("%t"))
@@ -175,7 +175,7 @@ namespace BALL
 				String tmp_file;
 				File::createTemporaryFilename(tmp_file);
 				count = 0;
-				while ((result.substitute("%t", tmp_file) != String::EndPos) && (++count <= MAX_SUBSTITUTIONS));
+				while ((result.substitute("%t", tmp_file) != String::EndPos) && (++count <= MAX_SUBSTITUTIONS)) { }
 			}
 		}
 

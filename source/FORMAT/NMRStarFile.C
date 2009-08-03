@@ -529,8 +529,7 @@ namespace BALL
 										}
 										break;
 							default:
-								Log.warn() << "unknown reference option" << endl;
-								exit(1);
+								throw Exception::ParseError(__FILE__,__LINE__, word, "Unknown reference option");
 						}
 					}
 					readLine();

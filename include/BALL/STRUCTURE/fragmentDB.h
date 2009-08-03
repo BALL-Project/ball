@@ -319,7 +319,14 @@ namespace BALL
 			//@}
 
 			private:
-			
+				enum CountingMode { ADD, OVERWRITE };
+				String getSuffix_(const Fragment* frag) const;
+				bool doMatch_(String& res_name, const String& res_name_suffix, String& atom_name, const NameMap& map) const;
+				void countHits_(HashMap<NameMap*, Index>& maps, const std::list<Fragment*>& frags);
+				void countHits_(HashMap<NameMap*, Index>& maps, const Fragment* frag, CountingMode mode = OVERWRITE);
+				const NameMap* getBestMap_(const HashMap<NameMap*, Index>& maps) const;
+				void normalizeFragments_(const NameMap* map, const std::list<Fragment*>& frags);
+				void normalizeFragment_ (const NameMap* map, Fragment* frag);
 
 			String								naming_standard_;
 

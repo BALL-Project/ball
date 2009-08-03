@@ -117,8 +117,10 @@ namespace BALL
 		Molecule* new_mol = read();
 		if (new_mol != 0)
 		{
-			molecule = *new_mol;
+			molecule = *new_mol; // copy the Molecule
 		}
+		
+		delete new_mol;
 		return *this;
 	}
  

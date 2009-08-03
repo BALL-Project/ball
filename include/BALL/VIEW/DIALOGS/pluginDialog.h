@@ -1,10 +1,19 @@
 #ifndef BALL_VIEW_PLUGINDIALOG_H
 #define BALL_VIEW_PLUGINDIALOG_H
 
-#include <BALL/VIEW/UIC/pluginDialogData.h>
+
+#ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
+# include <BALL/VIEW/KERNEL/preferencesEntry.h>
+#endif
 
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
 # include <BALL/VIEW/KERNEL/modularWidget.h>
+#endif
+
+#ifdef BALL_COMPILER_MSVC
+# include <BALL/VIEW/UIC/ui_pluginData.h>
+#else
+# include <BALL/VIEW/UIC/pluginDialogData.h>
 #endif
 
 #include <QtCore/QModelIndex>
@@ -26,12 +35,14 @@ namespace BALL
 				void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 		};
 */
-		class PluginModel : public QAbstractListModel
+		class PluginModel : 
+			public QAbstractListModel	
 		{
 			Q_OBJECT
 
 			public:
 				PluginModel();
+
 				int rowCount(const QModelIndex& parent = QModelIndex()) const;
 				QVariant data(const QModelIndex& i, int role) const;
 				void pluginsLoaded();
@@ -39,28 +50,46 @@ namespace BALL
 				int num_rows_;
 		};
 
+
+		
+		/** Dialog for handling the BALLView plugins
+		*/
 		class PluginDialog 
 			: public QDialog, 
-				private Ui_PluginDialog,
-				public ModularWidget
+				private Ui_PluginDialogData,
+				public ModularWidget,
+				public PreferencesEntry
 		{
 			Q_OBJECT
-			BALL_EMBEDDABLE(PluginDialog, ModularWidget)
 
+			BALL_EMBEDDABLE(PluginDialog, ModularWidget)
+			
 			public:
 				PluginDialog(QWidget* parent, const char *name = "PluginDialog");
 				virtual ~PluginDialog() {}
 
-			/** Initialization. This method is called automatically before the main application is started. 
+			/** Initialization. 
+			 		This method is called automatically before the main 
+					application is started. 
 					It adds the	dialog's menu entries and connections.
 			*/
 			virtual void initializeWidget(MainControl& main_control);
 
+			/** Finalization 
+			 		This method is called automatically before the main 
+					application is closed. 
+			*/
+			virtual void finalizeWidget(MainControl& main_control);
+
+			virtual void readPreferenceEntries(const INIFile& inifile);
+
 			protected slots:
 				virtual void addPluginDirectory();
-				virtual void applyChanges();
+				virtual void removePluginDirectory();
+				virtual void directorySelectionChanged();
+				//virtual void close();
+				//virtual void reject();
 				virtual void pluginChanged(QModelIndex i);
-				virtual void revertChanges();
 				virtual void togglePluginState();
 
 			private:

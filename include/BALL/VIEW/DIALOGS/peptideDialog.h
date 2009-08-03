@@ -47,8 +47,7 @@ namespace BALL
 			String getSequence();
 
 			///
-			Protein* getProtein() 
-				{ return protein_;}
+			Protein* getProtein() { return protein_;}
 
 			public slots:
 
@@ -123,6 +122,15 @@ namespace BALL
 			
 			///
 			void insert_seq();
+				
+			///
+			void prolineActivated(); 
+      
+			///
+			void prolineDeactivated();
+
+			///
+			virtual bool eventFilter(QObject* object, QEvent* event);
 
 			protected:
  

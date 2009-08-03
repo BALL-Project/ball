@@ -1,7 +1,0 @@
-#!/bin/sh
-export LD_LIBRARY_PATH=/usr/lib/BALL
-export BALL_DATA_PATH=/usr/share/BALL/data
-export PYTHONPATH=/usr/lib/BALL/
-# set Antialiasing for NVIDIA cards
-export __GL_FSAA_MODE=6
-/usr/lib/BALL/BALLView $@

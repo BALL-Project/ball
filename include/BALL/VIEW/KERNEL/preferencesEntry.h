@@ -67,8 +67,6 @@ namespace BALL
 		 */
 		class BALL_VIEW_EXPORT PreferencesEntry
 		{
-			friend class PreferencesObject;
-
 			public:
 
 			/** Base class for the more sophisticated GUI elements in a dialog,

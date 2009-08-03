@@ -180,6 +180,16 @@ namespace BALL
 			Index index_;
 		};
 
+		/** Invalid Argument
+		 * Use this exception when a function is called with an invalid argument and no other exception applies.
+		 */
+		class BALL_EXPORT InvalidArgument
+			: public GeneralException
+		{
+			public:
+				InvalidArgument(const char* file, int line, const String& arg);
+		};
+
 		/**	Invalid range.
 				Use this exception to indicate a general range problems.
 		*/

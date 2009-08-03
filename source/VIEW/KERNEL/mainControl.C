@@ -216,7 +216,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 						QMessageBox::Abort,  Qt::NoButton);
 				Log.error() << e << std::endl;
 
-				exit(-1);
+				throw Exception::GeneralException(__FILE__, __LINE__, "Datapath Error", "Could not read the FragmentDB");
 			}
 
 			preferences_file_.read();
@@ -1762,7 +1762,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		bool ok = false;
 		try
 		{
-			ok = result.open(filename, std::ios::out);
+			ok = result.open(filename, (binary) ? std::ios::out|std::ios::binary : std::ios::out);
 		}
 		catch(...)
 		{
@@ -1815,7 +1815,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		File file;
 		try
 		{
-			file.open(filename, std::ios::in);
+			file.open(filename, std::ios::in|std::ios::binary);
 		}
 		catch(...)
 		{
@@ -1827,10 +1827,10 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		file >> nr_lines;
 		file >> nr_composites;
  		INIFile in;
-		char buffer[INIFile::MAX_LINE_LENGTH];
+		String buffer;
 		for (Position p = 0; p <= nr_lines; p++)
 		{
-			if (!file.getline(&(buffer[0]), INIFile::MAX_LINE_LENGTH))
+			if (!buffer.getline(file))
 			{
 				setStatusbarText("Error while reading project file, could not read INIFile", true);
 				BALLVIEW_DEBUG

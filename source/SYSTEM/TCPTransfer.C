@@ -49,12 +49,13 @@
 
 namespace BALL
 {
-
+	const int TCPTransfer::TIMEOUT = 3;  // 3 seconds timeout
+	
+	
 	TCPTransfer::TransferFailed::TransferFailed(const char* file, int line, Index error_code)
 		: Exception::GeneralException(file, line, string("TransferFailed"), string("Error code: ") + String(error_code))
 	{
 	}
-
 
 	TCPTransfer::TCPTransfer(std::ostream& file, const String& address)
 		throw(TCPTransfer::TransferFailed) 
@@ -324,7 +325,7 @@ namespace BALL
 		{
 			return status;
 		}
-
+		
 		// read Status from HTTP-Request-Response
 		status = getHTTPStatus_();
 
@@ -359,8 +360,8 @@ namespace BALL
 
 		// receive the rest
 		do
-		{
-			bytes = getReceivedBytes_(socket_);
+		{		
+			bytes = readInputFromSocket_(socket_);
 
 			if (bytes < 0)
 			{
@@ -468,7 +469,7 @@ namespace BALL
 		{
 			sendData_(query, socket_);
 		}
-		received_bytes_ = getReceivedBytes_(socket_);
+		received_bytes_ = readInputFromSocket_(socket_);
 
 		if (received_bytes_ < 0)
 		{
@@ -543,7 +544,6 @@ namespace BALL
 		return OK;
 	}
 
-
 	bool TCPTransfer::waitForOutput_(const String& key, Size seconds)
 	{
 		setBlock_(socket_, false);
@@ -595,7 +595,7 @@ namespace BALL
 		timer.start();
 		do		
 		{	
-			received_bytes_ = getReceivedBytes_(socket_);
+			received_bytes_ = readInputFromSocket_(socket_);
 
 			if (received_bytes_ > 0)
 			{
@@ -786,7 +786,7 @@ namespace BALL
 
 		while (!abort_ && control_bytes < 1 && bytes != 0)
 		{			
-			bytes = getReceivedBytes_(socket2);
+			bytes = readInputFromSocket_(socket2);
 
 			if (bytes > 0)
 			{
@@ -797,7 +797,7 @@ namespace BALL
 				received_bytes_ += bytes;
 			}
 
-			control_bytes = getReceivedBytes_(socket_);
+			control_bytes = readInputFromSocket_(socket_);
 			if (control_bytes > 0)
 			{	
 				buffer_[control_bytes] = '\0';
@@ -815,7 +815,7 @@ namespace BALL
 		{
 			// due to a race condition between the control socket and the data socket, we might have
 			// missed some data so far
-			bytes = getReceivedBytes_(socket2);
+			bytes = readInputFromSocket_(socket2);
 
 			while (bytes > 0)
 			{
@@ -825,7 +825,7 @@ namespace BALL
 				}
 				received_bytes_ += bytes;
 
-				bytes = getReceivedBytes_(socket2);
+				bytes = readInputFromSocket_(socket2);
 			}
 
 			GLOBAL_CLOSE(socket2);
@@ -858,6 +858,23 @@ namespace BALL
 #		else
 			return read(socket, buffer_, BUFFER_SIZE);
 #		endif
+	}
+	
+	int TCPTransfer::readInputFromSocket_(Socket& socket)
+	{	
+		setBlock_(socket, false);
+	
+		int received_bytes = -1;
+		Timer timer;
+		timer.start();
+		while (received_bytes<0 && timer.getClockTime()<TIMEOUT)
+		{
+			received_bytes = getReceivedBytes_(socket); // returns -1 if there was an error (e.g. no connection)
+			if(received_bytes<0) sleep(0.2);
+		}
+		
+		setBlock_(socket, true);
+		return received_bytes;
 	}
 
 	void TCPTransfer::setProxy(const String proxy_address, Position port)

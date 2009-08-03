@@ -40,6 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
+				Optimization="3"
 				AdditionalIncludeDirectories=".\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtGui&quot;;&quot;$(QTDIR)\include\QtSql&quot;;&quot;$(QTDIR)\include\QtOpenGL&quot;;&quot;$(QTDIR)\include\QtNetwork&quot;;&quot;$(QTDIR)\include\QtSvg&quot;;&quot;$(SolutionDir)\..\include&quot;;&quot;$(SolutionDir)\..\Contrib\include&quot;;&quot;$(SolutionDir)\..\Contrib\include\boost\tr1&quot;;&quot;$(SolutionDir)\..\..\include&quot;"
 				PreprocessorDefinitions="UNICODE;WIN32;QT_THREAD_SUPPORT;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_SQL_LIB;QT_OPENGL_LIB;QT_NETWORK_LIB;QT_SVG_LIB;WIN32_LEAN_AND_MEAN"
 				RuntimeLibrary="2"
@@ -377,17 +378,37 @@
 			ParseFiles="false"
 			>
 			<File
-				RelativePath=".\ballview.qrc"
+				RelativePath="..\..\..\source\APPLICATIONS\BALLVIEW\BALLView-1.3-Splashscreen.png"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\APPLICATIONS\BALLVIEW\splashscreen.qrc"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description=""
-						CommandLine=""
-						AdditionalDependencies=""
-						Outputs=""
+						Description="Rcc&apos;ing splashscreen.qrc..."
+						CommandLine="&quot;$(QTDIR)\bin\rcc.exe&quot; $(InputPath) -o $(InputDir)\splashscreen.rcc&#x0D;&#x0A;"
+						AdditionalDependencies="..\..\..\source\APPLICATIONS\BALLVIEW\splashscreen.qrc;..\..\..\source\APPLICATIONS\BALLVIEW\BALLView-1.3-Splashscreen.png"
+						Outputs="$(InputDir)\splashscreen.rcc"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -395,10 +416,10 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description=""
-						CommandLine=""
-						AdditionalDependencies=""
-						Outputs=""
+						Description="Rcc&apos;ing splashscreen.qrc..."
+						CommandLine="&quot;$(QTDIR)\bin\rcc.exe&quot; $(InputPath) -o $(InputDir)\splashscreen.rcc&#x0D;&#x0A;"
+						AdditionalDependencies="..\..\..\source\APPLICATIONS\BALLVIEW\splashscreen.qrc;..\..\..\source\APPLICATIONS\BALLVIEW\BALLView-1.3-Splashscreen.png"
+						Outputs="$(InputDir)\splashscreen.rcc"
 					/>
 				</FileConfiguration>
 			</File>

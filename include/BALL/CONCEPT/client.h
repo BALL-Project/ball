@@ -27,6 +27,8 @@
 # include <BALL/CONCEPT/textPersistenceManager.h>
 #endif
 
+#define DEFAULT_PORT 20000
+
 namespace BALL
 {
 	/** Client class.	

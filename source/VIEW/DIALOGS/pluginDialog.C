@@ -13,6 +13,7 @@ Q_DECLARE_METATYPE(BALL::VIEW::VIEWPlugin*)
 #include <QtGui/QFileDialog>
 #include <QtCore/QObject>
 #include <QtCore/QDebug>
+#include <QtCore/QLibraryInfo>
 
 namespace BALL
 {
@@ -57,17 +58,20 @@ namespace BALL
 
 		QVariant PluginModel::data(const QModelIndex& i, int role) const
 		{
-			if(!i.isValid()) {
+			if(!i.isValid()) 
+			{
 				return QVariant();
 			}
 
 			PluginManager& man = PluginManager::instance();
 
-			if(i.row() >= num_rows_) {
+			if(i.row() >= num_rows_) 
+			{
 				return QVariant();
 			}
 
-			switch(role) {
+			switch(role) 
+			{
 				case Qt::UserRole:
 					return qVariantFromValue(man.getPluginInstance(i.row()));
 				case Qt::DisplayRole:
@@ -83,7 +87,7 @@ namespace BALL
 					VIEWPlugin* ptr = qobject_cast<VIEWPlugin*>(man.getPluginInstance(i.row()));
 
 					if (ptr)
-						return QIcon(*(ptr->getIcon()));
+						return *(ptr->getIcon());
 					else
 						return QVariant();
 				}
@@ -92,53 +96,114 @@ namespace BALL
 			}
 		}
 
+		
+		/////////////////////////////////////////////////////////////////
+
+
 		PluginDialog::PluginDialog(QWidget* parent, const char* name)
-			: QDialog(parent),
+			: QDialog(parent),	
+				Ui_PluginDialogData(),
 				ModularWidget(name)
 		{
 			setupUi(this);
-			pluginView->setModel(&model_);
+			
+			// define the dialogs section name in the INIFile
+			setINIFileSectionName("BALLVIEW_PLUGIN_DIRECTORIES");
 
-			QString plugin_path(BALL_PATH);
-			plugin_path += "/plugins";
+			setObjectName(name);
+
+			// register all visible childs
+			registerWidgets_();	
+			// register the PluginManager explicitly; it is not a QWidget
+			registerObject_(&(PluginManager::instance()));
+			
+			//TODO
+			//registerWidgetForHelpSystem_(widget_stack->widget(0), "plugins.html#plugins");
+
+			plugin_view->setModel(&model_);
+
+//			QString plugin_path(BALL_PATH);
+//			plugin_path += "/plugins";
+			QString plugin_path(QLibraryInfo::location(QLibraryInfo::PluginsPath));
 
 			PluginManager& man = PluginManager::instance();
-			man.setPluginDirectory(plugin_path);
+			man.addPluginDirectory(plugin_path);
 			model_.pluginsLoaded();
 
 			setObjectName(name);
 			ModularWidget::registerWidget(this);
-			hide();
+			hide();	
+			
+			connect(plugin_dir_button_add, SIGNAL(clicked()), this, SLOT(addPluginDirectory()));
+			connect(plugin_dir_button_remove, SIGNAL(clicked()), this, SLOT(removePluginDirectory()));
+			connect(plugin_directories_view, SIGNAL(itemSelectionChanged()), this, SLOT(directorySelectionChanged()));
 		}
 
 		void PluginDialog::initializeWidget(MainControl&)
 		{	
-			insertMenuEntry(MainControl::TOOLS, "Load Plugin", this, SLOT(show()), "Shortcut|Tools|Load_Plugin");
+			insertMenuEntry(MainControl::TOOLS, "Load Plugin", this, SLOT(show()), "Shortcut|Tools|Load_Plugin");	
+			PreferencesEntry::restoreValues();
 		}
 
-		void PluginDialog::applyChanges()
+		void PluginDialog::finalizeWidget(MainControl& mc)
 		{
+			ModularWidget::finalizeWidget(mc);	
+			PluginManager::instance().unloadAllPlugins();
 		}
 
-		void PluginDialog::revertChanges()
+		void PluginDialog::readPreferenceEntries(const INIFile& inifile)
 		{
+			PreferencesEntry::readPreferenceEntries(inifile);
+			model_.pluginsLoaded();
+
+			vector<QString> plugin_dirs = PluginManager::instance().getPluginDirectories();
+
+			for (Size i=0; i<plugin_dirs.size(); i++)
+			{
+				plugin_directories_view->addItem(plugin_dirs[i]);
+			}
+
+			if (activate_all_plugins_check_box->isChecked())
+			{
+				PluginManager& pm = PluginManager::instance();
+
+				for (int i=0; i<pm.getPluginCount(); ++i)
+				{
+					pm.startPlugin(i);
+				}
+			}
 		}
 
+/*		void PluginDialog::close()
+		{
+			hide();
+		}
+
+		void PluginDialog::reject()
+		{
+			hide();
+		}
+*/
+		
 		void PluginDialog::pluginChanged(QModelIndex i)
 		{
 			active_index_ = i;
 			QObject* active_object = qvariant_cast<QObject*>(model_.data(i, Qt::UserRole));
 
 			BALLPlugin* active_plugin;
-			if(!(active_plugin = qobject_cast<BALLPlugin*>(active_object))) {
+			if (!(active_plugin = qobject_cast<BALLPlugin*>(active_object))) 
+			{
 				return;
 			}
-
-			togglePluginButton->setEnabled(true);
-			if(active_plugin->isActive()) {
-				togglePluginButton->setText("Deactivate");
-			} else {
-				togglePluginButton->setText("Activate");
+			
+			plugin_toggle_button->setEnabled(true);
+			if (active_plugin->isActive()) 
+			{
+				plugin_toggle_button->setText("Deactivate");
+			} 
+			else 
+			{
+				plugin_toggle_button->setText("Activate");
 			}
 
 			VIEWPlugin* active_view_plugin = qobject_cast<VIEWPlugin*>(active_object);
@@ -146,15 +211,18 @@ namespace BALL
 			{
 				QWidget* cfg_dialog = active_view_plugin->getConfigDialog();
 
-				if(cfg_dialog) {
-					settingsButton->setEnabled(true);
-					connect(settingsButton, SIGNAL(clicked()), cfg_dialog, SLOT(show()));
-				} else {
-					settingsButton->setEnabled(false);
+				if (cfg_dialog) 
+				{
+					settings_button->setEnabled(true);
+					connect(settings_button, SIGNAL(clicked()), cfg_dialog, SLOT(show()));
+				} 
+				else 
+				{
+					settings_button->setEnabled(false);
 				}
 			}
 			else
-				settingsButton->setEnabled(false);
+				settings_button->setEnabled(false);
 		}
 
 		void PluginDialog::addPluginDirectory()
@@ -164,24 +232,56 @@ namespace BALL
 
 			QString dir = QFileDialog::getExistingDirectory(0, "Select a plugin directory", plugin_path);
 			PluginManager& man = PluginManager::instance();
-			man.setPluginDirectory(dir);
+			man.addPluginDirectory(dir, activate_all_plugins_check_box->isChecked());
 			model_.pluginsLoaded();
+
+			plugin_directories_view->addItem(dir);
+		}
+
+		void PluginDialog::removePluginDirectory()
+		{
+			// TODO: disable remove button if no item selected
+			if (!plugin_directories_view->currentItem())
+			{
+				return;
+			}
+
+			QListWidgetItem* item = plugin_directories_view->takeItem(plugin_directories_view->currentRow());
+
+			PluginManager& man = PluginManager::instance();
+			man.removePluginDirectory(item->text());
+
+			model_.pluginsLoaded();
+
+			delete(item);
+		}
+
+		void PluginDialog::directorySelectionChanged()
+		{
+			if (plugin_directories_view->selectedItems().size() > 0)
+				plugin_dir_button_remove->setEnabled(true);
+			else
+				plugin_dir_button_remove->setEnabled(false);
 		}
 
 		void PluginDialog::togglePluginState()
 		{
-			if(!active_index_.isValid()) {
+			if (!active_index_.isValid()) 
+			{
 				return;
 			}
 
 			QObject* active_object = qvariant_cast<QObject*>(model_.data(active_index_, Qt::UserRole));
 			BALLPlugin* active_plugin = qobject_cast<BALLPlugin*>(active_object);
-			if(active_plugin->isActive()) {
+			if (active_plugin->isActive()) 
+			{
 				PluginManager::instance().stopPlugin(active_plugin);
-				togglePluginButton->setText("Activate");
-			} else {
+				plugin_toggle_button->setText("Activate");
+			} 
+			else 
+			{
 				PluginManager::instance().startPlugin(active_plugin);
-				togglePluginButton->setText("Deactivate");
+				plugin_toggle_button->setText("Deactivate");
 			}
 		}
 

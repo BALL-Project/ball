@@ -98,7 +98,8 @@ namespace BALL
 		bool EditableScene::only_highlighted_ = true;
 
 		EditableScene::EditableScene()
-			:	Scene()
+			:	Scene(),
+				toolbar_edit_controls_(new QToolBar("Edit Controls", this))
 		{
 			init_();
 		}
@@ -106,7 +107,9 @@ namespace BALL
 		EditableScene::EditableScene(QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
 			: Scene(parent_widget, name, w_flags),
 				fragment_db_(),
-				fragment_db_initialized_(false)
+				fragment_db_initialized_(false),
+				toolbar_edit_controls_(new QToolBar("Edit Controls", this))
+
 		{	
 			registerWidget(this); 
 			init_();
@@ -114,7 +117,8 @@ namespace BALL
 
 		// undo_ is NOT copied, since we would run into trouble with the pointers to atoms and bonds it saves
 		EditableScene::EditableScene(const EditableScene& eScene, QWidget* parent_widget, const char* name , Qt::WFlags w_flags)
-			: Scene(eScene, parent_widget, name, w_flags)
+			: Scene(eScene, parent_widget, name, w_flags),
+				toolbar_edit_controls_(new QToolBar("Edit Controls", this))
 		{
 			init_();
 		}
@@ -171,9 +175,11 @@ namespace BALL
 			String description = "Shortcut|Display|Edit_Mode";
 			edit_id_ = insertMenuEntry(MainControl::DISPLAY, "Edit Mode", this, 
 																 SLOT(editMode_()), description, QKeySequence(tr("Ctrl+E", description.c_str())));
+			setMenuHint("Create and modify molecular structures");	
+			edit_id_->setToolTip("Switch to edit mode, e.g. draw your own molecule");
+
 			edit_id_->setCheckable(true);
 			setIcon(String("edit.png"), false);
-			setMenuHint("Create and modify molecular structures");
 			setMenuHelp(help_url);
 			mode_group_->addAction(edit_id_);
 
@@ -185,18 +191,17 @@ namespace BALL
 			QIcon icon4(path.find("graphics/assignBondOrders.png").c_str());
 			bondorders_action_ = new QAction(icon4, "Quickly optimize bond orders", this);
 			bondorders_action_->setObjectName(bondorders_action_->text());
-			bondorders_action_->setToolTip("Edit mode: Quickly optimize the highlighted structures bond orders");
+			bondorders_action_->setToolTip("Compute the highlighted structures bond orders");
 			//TODO
 			//registerForHelpSystem(bondorders_action_, "scene.html#bondorders");
 			connect(bondorders_action_, SIGNAL(triggered()), this, SLOT(computeBondOrders()));
 			getMainControl()->getShortcutRegistry().registerShortcut(description, bondorders_action_);
 
-
 			description = "Shortcut|QuicklyOptimizeStructure";
 			QIcon icon(path.find("graphics/minimize.png").c_str());
 			optimize_action_ = new QAction(icon, "Quickly optimize structure", this);
 			optimize_action_->setObjectName(optimize_action_->text());
-			optimize_action_->setToolTip("Edit mode: Quickly optimize the highlighted structure");
+			optimize_action_->setToolTip("Quickly optimize the highlighted structure");
 			registerForHelpSystem(optimize_action_, "scene.html#optimize");
 			connect(optimize_action_, SIGNAL(triggered()), this, SLOT(optimizeStructure()));
 			getMainControl()->getShortcutRegistry().registerShortcut(description, optimize_action_);
@@ -204,15 +209,13 @@ namespace BALL
 			description = "Shortcut|SaturateWithHydrogens";
 			QIcon icon2(path.find("graphics/hydrogens.png").c_str());
 			add_hydrogens_action_ = new QAction(icon2, "Saturate with Hydrogens", this);
-			add_hydrogens_action_->setToolTip("Edit mode: Saturate the highlighted structure with hydrogens (with regards to formal charges).");
+			add_hydrogens_action_->setToolTip("Saturate the highlighted structure with hydrogens (with regards to formal charges).");
 			add_hydrogens_action_->setObjectName(add_hydrogens_action_->text());
 			registerForHelpSystem(add_hydrogens_action_, "scene.html#saturate");
 			connect(add_hydrogens_action_, SIGNAL(triggered()), this, SLOT(saturateWithHydrogens()));
 			getMainControl()->getShortcutRegistry().registerShortcut(description, add_hydrogens_action_);
 
 			getMainControl()->initPopupMenu(MainControl::BUILD)->addAction(add_hydrogens_action_);
-			setMenuHint("Saturate a molecule with hydrogens");
-
 
 			description = "Shortcut|EditMode|SetElement";
 			QIcon icon3(path.find("graphics/element.png").c_str());
@@ -226,6 +229,12 @@ namespace BALL
 			new_molecule_action_ = insertMenuEntry(MainControl::BUILD, "Create new molecule", 
 												this, SLOT(createNewMolecule()), "Shortcut|Build|Create_new_molecule");
 			setMenuHint("Create a new molecule for editing");
+			//TODO create an icon
+
+			toolbar_edit_controls_->setObjectName("Edit Control toolbar");
+			toolbar_edit_controls_->setIconSize(QSize(23,23));
+			toolbar_edit_controls_->layout()->setMargin(2);
+			toolbar_edit_controls_->layout()->setSpacing(2);
 		}
 
 
@@ -1537,7 +1546,7 @@ void EditableScene::computeBondOrders()
 
 			stream_description  << "      Solution " << i 
 						 						 << " has penalty " << abop.getTotalPenalty(i)
-						 						 << ", charge " << abop.getTotalCharge(i)
+			//			 						 << ", charge " << abop.getTotalCharge(i)
 												 << ", " <<  abop.getNumberOfAddedHydrogens(i) << " added hydrogens.";
  
 			String description = stream_description.str();
@@ -1624,17 +1633,26 @@ void EditableScene::optimizeStructure()
 
 void EditableScene::addToolBarEntries(QToolBar* tb)
 {
-	toolbar_actions_.insert(toolbar_actions_.lastIndexOf(move_action_) + 1, edit_id_);
-	toolbar_actions_.push_back(element_action_);
-	toolbar_actions_.push_back(add_hydrogens_action_);
-	toolbar_actions_.push_back(optimize_action_);
-	toolbar_actions_.push_back(bondorders_action_);
 	Scene::addToolBarEntries(tb);
-	toolbar_->insertSeparator(element_action_);
+	
+	toolbar_actions_edit_controls_.push_back(edit_id_);
+	toolbar_actions_edit_controls_.push_back(element_action_);
+	toolbar_actions_edit_controls_.push_back(add_hydrogens_action_);
+	toolbar_actions_edit_controls_.push_back(optimize_action_);
+	toolbar_actions_edit_controls_.push_back(bondorders_action_);	
+	//TODO make icon
+	//toolbar_actions_edit_controls_.push_back(new_molecule_action_);
+	
+	toolbar_edit_controls_->addActions(toolbar_actions_edit_controls_);
+	getMainControl()->addToolBar(Qt::TopToolBarArea, toolbar_edit_controls_);
+	ModularWidget::addToolBarEntries(tb);
+	getMainControl()->initPopupMenu(MainControl::WINDOWS)->addAction(toolbar_edit_controls_->toggleViewAction());
 
 	// workaround for Qt, when it only would show the first item:
-	toolbar_->hide();
-	toolbar_->show();
+	//	toolbar_view_controls_->hide();
+	//	toolbar_view_controls_->show();
+	toolbar_edit_controls_->hide();
+	toolbar_edit_controls_->show();
 }
 
 void EditableScene::mouseDoubleClickEvent(QMouseEvent* e)

@@ -4,6 +4,7 @@
 // $Id: preferencesEntry.C,v 1.19.16.2 2007/05/30 20:14:15 amoll Exp $
 //
 
+#include <BALL/CONCEPT/preferencesObject.h>
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -81,7 +82,8 @@ namespace BALL
 
 		bool PreferencesEntry::isSupported_(QObject& widget)
 		{
-			if (RTTI::isKindOf<ExtendedPreferencesObject>(widget) ||
+			if (RTTI::isKindOf<PreferencesObject>(widget) ||
+					RTTI::isKindOf<ExtendedPreferencesObject>(widget) ||
 					RTTI::isKindOf<QSlider>(widget)   ||
 					RTTI::isKindOf<QSpinBox>(widget)  ||
 					RTTI::isKindOf<QLineEdit>(widget) ||
@@ -168,6 +170,16 @@ namespace BALL
 			const ExtendedPreferencesObject* epo = dynamic_cast<const ExtendedPreferencesObject*>(widget);
 			if (epo != 0)
 			{
+				value = "";
+				if (!epo->getValue(value))
+				{
+					BALLVIEW_DEBUG;
+				}
+			}
+			else if (RTTI::isKindOf<PreferencesObject>(*widget))
+			{
+				value = "";
+				const PreferencesObject* epo = dynamic_cast<const PreferencesObject*>(widget);
 				if (!epo->getValue(value))
 				{
 					BALLVIEW_DEBUG;
@@ -271,6 +283,13 @@ namespace BALL
 				if (epo != 0)
 				{
 					if (!epo->setValue(value))
+					{
+						BALLVIEW_DEBUG;
+					}
+				}
+				else if (RTTI::isKindOf<PreferencesObject>(*widget))
+				{
+					if (!(dynamic_cast<PreferencesObject*>(widget))->setValue(value))
 					{
 						BALLVIEW_DEBUG;
 					}

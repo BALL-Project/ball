@@ -1,7 +1,5 @@
 #include <spaceNavigatorDriver.h>
 
-#include <spnav.h>
-
 namespace BALL
 {
 	namespace VIEW
@@ -17,44 +15,6 @@ namespace BALL
 			return x * sign > 50 ? x - sign * 50 : 0;
 		}
 
-		void SpaceNavigatorDriver::run()
-		{
-			spnav_event sev;
-			bool drop=false;
-
-			while(isEnabled()) {
-				if(drop) {
-					spnav_remove_events(SPNAV_EVENT_MOTION);
-					drop=false;
-					continue;
-				}
-
-				if(spnav_poll_event(&sev) && (sev.type == SPNAV_EVENT_MOTION)) {
-					//printf("got motion event: t(%d, %d, %d) ", deadzone(sev.motion.x), deadzone(sev.motion.y), deadzone(sev.motion.z));
-					//printf("r(%d, %d, %d)\n", deadzone(sev.motion.rx), deadzone(sev.motion.ry), deadzone(sev.motion.rz));
-
-					emitPositionChange( deadzone(-sev.motion.x), deadzone(-sev.motion.y), deadzone(-sev.motion.z),
-					                    deadzone(sev.motion.rx), deadzone(sev.motion.ry), deadzone(sev.motion.rz));
-
-					drop=true;
-				}
-
-				msleep(35);
-			}
-		}
-
-		bool SpaceNavigatorDriver::setUp()
-		{
-			return spnav_open() != -1;
-		}
-
-		bool SpaceNavigatorDriver::tearDown()
-		{
-			spnav_close();
-
-			return true;
-		}
-
 		void SpaceNavigatorDriver::setEnabled(bool enabled)
 		{
 			InputDeviceDriver::setEnabled(enabled);
@@ -64,6 +24,14 @@ namespace BALL
 			}
 		}
 
+		// include the correct implementation depending on the operating system used
+		#if defined (BALL_COMPILER_MSVC)
+			#include "spaceNavigatorDriver_win.iC"
+		#elif defined (BALL_OS_DARWIN)
+			#include "spaceNavigatorDriver_mac.iC"
+		#else
+			#include "spaceNavigatorDriver_x11.iC"
+		#endif
 	}
 }
 

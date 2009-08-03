@@ -780,6 +780,34 @@ namespace BALL
 	}
 	
 	
+	char SecondaryStructureProcessor::setSecondaryStructureType_(SecondaryStructure* ss, char type)
+	{
+		char result;
+
+		switch (type)
+		{
+			case 'H': ss->setType(SecondaryStructure::HELIX);
+								ss->setProperty("HELIX_TYPE", "ALPHA");
+								result = 'H';
+								break;
+			case 'G': ss->setType(SecondaryStructure::HELIX);
+								ss->setProperty("HELIX_TYPE", "THREE_TEN");
+								result = 'G';
+								break;
+			case 'I': ss->setType(SecondaryStructure::HELIX);
+								ss->setProperty("HELIX_TYPE", "PI");
+								result = 'I';
+								break;
+			case 'E': ss->setType(SecondaryStructure::STRAND);
+								result = 'E';
+								break;
+			default:  ss->setType(SecondaryStructure::COIL);
+								result = 'L';
+		}
+
+		return result;
+	}
+
 /**********************************************
  *   determine the new Secondary Structure and
  *   replace the old one with the new one
@@ -817,6 +845,7 @@ namespace BALL
 		vector<SecondaryStructure*> new_ss;
 		vector<SecondaryStructure*> new_parent;
 		vector<Residue*> 						residues;
+
 		for (;+ri;++ri)
 		{
 			if (resnum >= summary_.size())
@@ -825,34 +854,38 @@ namespace BALL
 				return Processor::CONTINUE;
 			}
 
-		  // !!!! attention: resnum is the real "index"
-			if (summary_[resnum] != last_struct)
+			// depending on the last type of secondary structure we have seen,
+			// we need to react differently to merge them sensibly
+			if (last_struct != summary_[resnum])
 			{
-				if (last_struct != 'L' || (summary_[resnum] != 'G' && summary_[resnum] != '-'))
+				switch (last_struct)
 				{
-					ss = new SecondaryStructure;
-					new_ss.push_back(ss);
+					case 'L': // we are in a loop
+						// note that we identify 'real' loops, isolated bridges and turns (-,B,T)
+						// and map them all to loops. Thus we need to determine here if the current
+						// residue also maps to a loop (we already know that the last residue was one)
+						switch (summary_[resnum])
+						{
+							case '-':
+							case 'B':
+							case 'T': break; // nothing to see here... please walk on...
+
+							default:
+								// the current residue is no loop => build a new SecondaryStructure
+								ss = new SecondaryStructure;
+								last_struct = setSecondaryStructureType_(ss, summary_[resnum]);
+								new_ss.push_back(ss);
+						}
+						break;
+				
+					default: // in all other cases, setSecondaryStructure does the hard work
+						ss = new SecondaryStructure;
+						last_struct = setSecondaryStructureType_(ss, summary_[resnum]);
+						new_ss.push_back(ss);
 				}
 			}
 
-			// first determine the type of this residue
-			if (summary_[resnum] == 'H') 			// Alpha - HELIX
-			{
-				// TODO: what about other helices???
-				ss->setType(SecondaryStructure::HELIX);
-				last_struct = 'H';
-			}
-			else if (summary_[resnum] == 'E') 	// Beta - STRAND
-			{
-				ss->setType(SecondaryStructure::STRAND);
-				last_struct = 'E';
-			}
-			else 															// LOOP
-			{
-				ss->setType(SecondaryStructure::COIL);
-				last_struct = 'L';
-			}
-
+			// in all cases, ss is now the new parent of this residue
 			new_parent.push_back(ss);
 			residues.push_back(&*ri);
 			

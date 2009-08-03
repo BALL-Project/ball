@@ -207,7 +207,6 @@ namespace BALL
 			++id;
 			
 			// consistency check for empty sequences and sequences of length < 2!!	
-			// ????
 			// loop for the remaining residues ;
 			for (++i; i != sequence_.end(); ++i)
 			{
@@ -217,14 +216,7 @@ namespace BALL
 				String type = (i-1)->getType();
 				type.toUpper();
 
-				// first special case: last residue was proline
-				if (type == "PRO")
-				{
-					// in this case, the second torsion angle is fixed to -80 degrees
-					(i-1)->setPsi(Angle(-80.,false));
-				}
-
-				// second special case: this residue is a proline
+				// special case: this residue is a proline
 				type = i->getType();
 				type.toUpper();
 

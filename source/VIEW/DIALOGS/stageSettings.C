@@ -360,7 +360,7 @@ namespace BALL
 		{
 			if (radioButton_perspectiveProjection->isChecked())
 			{
-				Log.info() << "Switched to perspective projection." << endl;
+				Log.info() << "Switched to perspective projection." << std::endl;
 					// glMatrixMode(GL_PROJECTION);
 					// glLoadIdentity();
 					// glFrustrum(left, right, bottom, top, near, far);	
@@ -368,7 +368,7 @@ namespace BALL
 			}
 			else if (radioButton_orthographicProjection->isChecked())
 			{
-				Log.info() << "Switched to orthographic projection." << endl;
+				Log.info() << "Switched to orthographic projection." << std::endl;
 				// glMatrixMode(GL_PROJECTION);
 				// glLoadIdentity();
 				// glOrtho(left, right, bottom, top, near, far);

@@ -1,7 +1,9 @@
 %{
 #include <BALL/FORMAT/GAMESSDatFile.h>
+#include <BALL/COMMON/parserDefinitions.h>
 
 using namespace BALL;
+
 
 #include "GAMESSDatParserParser.h"
 #include <string.h>

@@ -510,6 +510,8 @@ namespace BALL
 
 			Position prepareGridTextures(const RegularData3D& grid, const ColorMap& map);
 
+			void updateGL();
+
 		public slots:
 
 			/// Create an coordinate system at current position
@@ -723,8 +725,6 @@ namespace BALL
 			*/
 			virtual void wheelEvent(QWheelEvent* qmouse_event);
 
-			void updateGL();
-
 			//_
 			void animate_();
 
@@ -836,8 +836,8 @@ namespace BALL
 			Size offscreen_factor_;
 			String text_;
 			Size   font_size_;
-			QToolBar* toolbar_;
-			QList<QAction*> toolbar_actions_;
+			QToolBar* toolbar_view_controls_;
+			QList<QAction*> toolbar_actions_view_controls_;
 			bool ignore_pick_;
 			QActionGroup* mode_group_;
 

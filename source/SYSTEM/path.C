@@ -13,6 +13,10 @@
 #include <BALL/SYSTEM/fileSystem.h>
 #include <fstream>
 
+#ifdef BALL_COMPILER_MSVC
+#include <windows.h>
+#endif
+
 using std::ifstream;
 
 namespace BALL 
@@ -83,11 +87,49 @@ namespace BALL
 				bdp.append(path_);
 				setDataPath(bdp);
 			}
+#ifdef BALL_COMPILER_MSVC
+			// we may have additional path information in the registry
+			std::vector<unsigned char> regbuffer(MAX_PATH, 0);
+			DWORD valuesize;
+			DWORD regresult;
+
+			REGSAM dSam = KEY_QUERY_VALUE;
+			HKEY key;
+
+			// first, look in the local user's part of the registry
+			HKEY base = HKEY_CURRENT_USER;
 			
+			DWORD reg_result = RegOpenKeyEx(base, "Software\\BALL", 0, dSam, &key);
+      
+			if (reg_result == ERROR_SUCCESS)
+				reg_result = RegQueryValueEx(key, "BALL_DATA_PATH", 0, 0, &(regbuffer[0]), &valuesize);
+
+			// if we found BALL_DATA_PATH in the registry keys, reg_result will equal ERROR_SUCCESS
+			if ((reg_result == ERROR_SUCCESS) && (valuesize > 0))
+			{
+				std::string bdp(reinterpret_cast<char*>(&(regbuffer[0])), valuesize-1);
+				addDataPath(bdp);
+			}
+
+			// and also look in the system wide settings
+			base = HKEY_LOCAL_MACHINE;
+			reg_result = RegOpenKeyEx(base, "Software\\BALL", 0, dSam, &key);
+
+			if (reg_result == ERROR_SUCCESS)
+				reg_result = RegQueryValueEx(key, "BALL_DATA_PATH", 0, 0, &(regbuffer[0]), &valuesize);
+			
+			if ((reg_result == ERROR_SUCCESS) && (valuesize > 0))
+			{
+				std::string bdp(reinterpret_cast<char*>(&(regbuffer[0])), valuesize-1);
+				addDataPath(bdp);
+			}
+#endif
+	
 			// don`t try this again
 			environment_checked_ = true;
 		}
 
+		
 		// segment the path string and insert each path 
 		// into the path array. append slashes where neccessary
 		string tmp = path_ + "\n";
@@ -98,9 +140,9 @@ namespace BALL
 			string path = tmp.substr(0, position);
 
 			// append a '/' if neccessary (just to be sure...)
-			if (path[path.size() - 1] != '/')
+			if (path[path.size() - 1] != FileSystem::PATH_SEPARATOR)
 			{
-				path.append("/");
+				path.append(String(FileSystem::PATH_SEPARATOR));
 			}
 
 			// store the path...
@@ -155,7 +197,7 @@ namespace BALL
 		// iterate over all path entries and check for 
 		// a file of the desired name...
 		vector<string>::iterator path_it = path_array_.begin();
-		string filename;
+		String filename;
 		for (; path_it != path_array_.end(); ++path_it)
 		{
 			filename = *path_it + name;

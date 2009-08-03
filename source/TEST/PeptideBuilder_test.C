@@ -207,11 +207,11 @@ CHECK(Protein* construct())
 
 	TEST_EQUAL(res_it->getName(), "PRO")
 	TEST_REAL_EQUAL(res_it->getTorsionPhi(), Angle(0,false));
-  TEST_REAL_EQUAL(res_it->getTorsionPsi(), Angle(-80.,false));
+  TEST_REAL_EQUAL(res_it->getTorsionPsi(), Angle(-58.,false));
   ++res_it;
 	TEST_EQUAL(res_it->getName(), "PRO")
   TEST_REAL_EQUAL(res_it->getTorsionPhi(), Angle(-12, false));
-	TEST_REAL_EQUAL(res_it->getTorsionPsi(), Angle(-80, false));
+	TEST_REAL_EQUAL(res_it->getTorsionPsi(), Angle(42, false));
   ++res_it;
 	TEST_EQUAL(res_it->getName(), "PRO")
 	TEST_REAL_EQUAL(res_it->getTorsionPhi(), Angle(28,false));

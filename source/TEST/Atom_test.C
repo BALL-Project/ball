@@ -72,7 +72,7 @@ CHECK(void setPosition(const Vector3& position) throw())
 	atom->setPosition(test_vector);
 	TEST_EQUAL(atom->getPosition(), test_vector)
 RESULT
-			
+
 CHECK(const Vector3& getPosition() const throw())
 	TEST_EQUAL(ac.getPosition(), Vector3(BALL_ATOM_DEFAULT_POSITION))
 RESULT
@@ -81,6 +81,13 @@ CHECK(Vector3& getPosition() throw())
 	Atom a;
 	a.getPosition().set(1,2,3);
 	TEST_EQUAL(a.getPosition(), Vector3(1,2,3))
+RESULT
+
+CHECK(float getDistance(const Vector3&) const)
+	Atom a, b;
+	a.getPosition().set(1,2,3);
+	b.getPosition().set(0, 0, 0);
+	TEST_REAL_EQUAL(a.getDistance(b), 3.741657387)
 RESULT
 
 CHECK(void setRadius(float radius) throw())

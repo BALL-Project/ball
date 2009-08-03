@@ -140,11 +140,11 @@ namespace BALL
 
     /** Returns the position and burial counts of the calculated actice site points
      */
-    const vector<pair<Vector3,double> >& getActiveSitePoints() const;
+    const vector<std::pair<Vector3,double> >& getActiveSitePoints() const;
     
     /** Returns a vector of vectors, each containing one layer with position and probe weight of its spheres 
      */
-    const vector<vector<pair<Vector3,double> > >& getLayers() const;
+    const vector<vector<std::pair<Vector3,double> > >& getLayers() const;
 
     /** options for BALLPass 
      */
@@ -283,8 +283,12 @@ namespace BALL
  
     std::vector<std::vector<std::pair<Vector3,double> > > layers_; 
   
-    /** returns radius for an element
-     */    
+    /** Determine the radius of an element
+		 *
+		 * @param element the full name of the element for which a radius should be looked up. Example: "Oxygen"
+		 * @throw IllegalArgument if an unknown element has been passed
+		 * @return The radius of the specified element
+     */
     double radius_(const String& element);
     
     /** calculates two spheres if possible

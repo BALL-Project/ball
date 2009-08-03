@@ -4,8 +4,11 @@
 
 # include <GL/glew.h>
 #include <BALL/VIEW/RENDERING/glRenderWindow.h>
-#include <BALL/COMMON/logStream.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
 
+#include <BALL/COMMON/logStream.h>
+#include <QtCore/QEvent>
+#include <QtGui/QPaintEvent>
 //#define USE_GLPAINTPIXELS
 #undef USE_GLPAINTPIXELS
 
@@ -289,8 +292,6 @@ namespace BALL
 			if (!ignore_events_) 
 			{
 				QGLWidget::paintEvent(e);
-				refresh();
-				swapBuffers();
 			}
 		}
 

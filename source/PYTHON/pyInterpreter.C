@@ -113,12 +113,27 @@ namespace BALL
 
 		// Add the BALL library path to the Python search path
 		// to make sure Python can find the BALL extensions.
+#ifndef BALL_COMPILER_MSVC
 		runSingleString_("sys.path.append(\"" BALL_PATH "/lib/" "\")", Py_single_input);
-		start_log_ += error_message_;
-#ifdef BALL_OS_DARWIN // Quick hack for Darwin BALLVIew installer // [20050624/OK]
-		runSingleString_("sys.path.append(\"/Library/BALL/Library/Python\")", Py_single_input);
-		start_log_ += error_message_;
+#else
+		// on windows, we put our python packages one step above the data directory
+		Path p;
+		String python_path = String(p.find("..\\BALL.py")).before("BALL.py");
+		python_path.trim();
+		while (python_path.substitute("\\", "/") != String::EndPos) {};
+
+		if (python_path != "")
+			sys_path_.push_back(python_path);
+
+		python_path = String(p.find("startup.py")).before("startup.py");
+		python_path.trim();
+		while (python_path.substitute("\\", "/") != String::EndPos) {};
+
+		if (python_path != "")
+			sys_path_.push_back(python_path);
+
 #endif
+		start_log_ += error_message_;
 
 		// Add additional paths (user-defined) to the end of the search path.
 		// 

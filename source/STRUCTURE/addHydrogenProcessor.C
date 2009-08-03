@@ -61,12 +61,6 @@ namespace BALL
 		//
 		Index h_to_add = con - sum_bond_orders;
 		
-		if (h_to_add != 0)
-		{
-			Log.info() << "AddHydrogen: "  
-									<< atom->getFullName(Atom::ADD_RESIDUE_ID) 
-									<< " " << h_to_add << std::endl;
-		}
 		if (h_to_add <= 0) return Processor::CONTINUE;
 
 		float bond_length = getBondLength_(atom->getElement().getAtomicNumber());

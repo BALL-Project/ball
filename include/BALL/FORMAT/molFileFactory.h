@@ -14,7 +14,7 @@ class GenericMolFile;
  * determines the file type based on the file extension and returns
  * a pointer to an appropriate subclass of GenericMolFile
  */
-class MolFileFactory
+class BALL_EXPORT MolFileFactory
 {
     public:
         /**
