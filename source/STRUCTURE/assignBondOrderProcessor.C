@@ -2436,6 +2436,12 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 					ap.options.setBool(AromaticityProcessor::Option::OVERWRITE_BOND_ORDERS, true); 
 					ap.aromatize(rings, *ac_);
 				}
+				else
+				{
+					// to be on the safe side, we have to mark all bonds we may have changed as non-aromatic
+					for (Position i=0; i<free_bonds_.size(); ++i)
+						free_bonds_[i]->clearProperty(Bond::IS_AROMATIC);
+				}
 			}
 		}
 
