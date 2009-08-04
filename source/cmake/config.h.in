@@ -8,21 +8,20 @@
 #define BALL_CONFIG_CONFIG_H
 
 
-// ====   Platform-independend definitions  ===========
+// ====   Platform-independend type-definitions  ===========
 
-	// Defines an unsigned type that has the same length as size_t
-	#define BALL_SIZE_TYPE unsigned int
-	
-	// Defines a signed type that has the same length as size_t
-	#define BALL_INDEX_TYPE int
-	
-	#define BALL_ULONG64_TYPE unsigned long
-	#define BALL_LONG64_TYPE long
-	
 	#define BALL_CHAR_SIZE 1
 	
 	// Maximum line length for reading from files (see source/FORMAT)
 	#define BALL_MAX_LINE_LENGTH 65535
+	
+		
+// ====   Platform-dependend type-definitions  ===========
+
+	#define @BALL_SIZE_TYPE@
+	#define @BALL_INDEX_TYPE@
+	#define @BALL_ULONG64_TYPE@
+	#define @BALL_LONG64_TYPE@
 	
 	
 // ======   Operating System  =========================

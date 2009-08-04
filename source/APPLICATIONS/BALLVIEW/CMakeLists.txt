@@ -9,15 +9,11 @@ list(APPEND BALLVIEW_SOURCES ${path}/demoTutorialDialog_moc.C)
 add_custom_command(OUTPUT ${path}/mainframe_moc.C COMMAND ${QT_MOC_EXECUTABLE} ARGS -o ${path}/mainframe_moc.C ${path}/mainframe.h DEPENDS ${path}/mainframe.h)
 list(APPEND BALLVIEW_SOURCES ${path}/mainframe_moc.C)
 
-
-SET(UIC_SOURCES
-	aboutDialog.ui
-	demoTutorialDialog.ui
-)
-
-foreach(i ${UIC_SOURCES})
-	wrap_UIC(BALLVIEW ${path} ${i})
-endforeach(i)
+add_custom_command(OUTPUT ${path}/aboutDialog.h COMMAND ${QT_UIC_EXECUTABLE} ARGS -o ${path}/aboutDialog.h ${path}/aboutDialog.ui MAIN_DEPENDENCY ${path}/aboutDialog.ui)
+list(APPEND BALLVIEW_SOURCES ${path}/aboutDialog.ui)
+	
+add_custom_command(OUTPUT ${path}/demoTutorialDialogData.h COMMAND ${QT_UIC_EXECUTABLE} ARGS -o ${path}/demoTutorialDialogData.h ${path}/demoTutorialDialog.ui MAIN_DEPENDENCY ${path}/demoTutorialDialog.ui)
+list(APPEND BALLVIEW_SOURCES ${path}/demoTutorialDialog.ui)
 
 
 list(APPEND BALLVIEW_SOURCES 

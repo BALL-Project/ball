@@ -81,7 +81,7 @@ check_compile(sstream BALL_HAS_SSTREAM "")
 check_compile(float.h BALL_HAS_FLOAT_H "")
 check_compile(iostream BALL_HAS_ANSI_IOSTREAM "")
 
-set(text "#include <rpc/xdr.h>\nint main ()\n
+set(text "#include <rpc/types.h>\n#include <rpc/xdr.h>\nint main ()\n
 	{	xdr_u_hyper(0, 0);\n return 0;\n}\n\n")
 file(WRITE test.C "${text}")
 set(RES 0)
@@ -92,6 +92,49 @@ if(RES)
 else(RES)
 	message(STATUS "checking whether xdr_u_hyper() can be used ... no")
 endif(RES)
+
+
+# ==== determine platform-dependend types =============
+
+set(text "int main()\n{\nreturn sizeof(long);\n};\n\n")
+file(WRITE test.C "${text}")
+set(RES 0)
+try_run(RES LONG_SIZE ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/test.C)
+if(LONG_SIZE EQUAL 4)
+	set(BALL_SIZE_TYPE "BALL_SIZE_TYPE long")
+	set(BALL_INDEX_TYPE "BALL_INDEX_TYPE long")
+	message(STATUS "checking size type ... long")
+	message(STATUS "checking index type ... long")
+else(LONG_SIZE EQUAL 4)
+	set(BALL_SIZE_TYPE "BALL_SIZE_TYPE unsigned int")
+	set(BALL_INDEX_TYPE "BALL_INDEX_TYPE int")
+	message(STATUS "checking size type ... unsigned int")
+	message(STATUS "checking index type ... int")
+endif(LONG_SIZE EQUAL 4)
+
+set(text "int main()\n{\nreturn sizeof(unsigned long);\n};\n\n")
+file(WRITE test.C "${text}")
+set(RES 0)
+try_run(ULONG_SIZE RES ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/test.C)
+if(RES AND ULONG_SIZE EQUAL 8)
+	set(BALL_LONG64_TYPE "BALL_LONG64_TYPE long")
+	set(BALL_ULONG64_TYPE "BALL_ULONG64_TYPE unsigned long")
+	message(STATUS "checking ulong type ... unsigned long")
+	message(STATUS "checking long type ... long")
+else(RES AND ULONG_SIZE EQUAL 8)
+	set(text "int main()\n{\nreturn sizeof(unsigned long long);\n};\n\n")
+	set(RES 0)
+	try_run(ULONG_SIZE RES ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/test.C)
+	if(RES AND ULONG_SIZE EQUAL 8)
+		set(BALL_LONG64_TYPE "BALL_LONG64_TYPE long long")
+		set(BALL_ULONG64_TYPE "BALL_ULONG64_TYPE unsigned long long")
+		message(STATUS "checking ulong type ... unsigned long long")
+		message(STATUS "checking long type ... long long ")
+	endif(RES AND ULONG_SIZE EQUAL 8)
+endif(RES AND ULONG_SIZE EQUAL 8)
+if(NOT ULONG_SIZE EQUAL 8)
+	message(FATAL_ERROR "\nUnsigned 64bit type cannot be found!\n")
+endif(NOT ULONG_SIZE EQUAL 8)
 
 
 # ==== check whether 'using' has to be used ===========
