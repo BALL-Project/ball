@@ -370,7 +370,7 @@ Oliver Kohlbacher</string>
     </widget>
    </item>
    <item row="0" column="0" >
-    <widget class="QLabel" name="PixmapLabel1" >
+    <widget class="QLabel" name="BALLView_logo_label" >
      <property name="focusPolicy" >
       <enum>Qt::StrongFocus</enum>
      </property>
@@ -390,7 +390,7 @@ Oliver Kohlbacher</string>
  <layoutdefault spacing="6" margin="11" />
  <pixmapfunction></pixmapfunction>
  <tabstops>
-  <tabstop>PixmapLabel1</tabstop>
+  <tabstop>BALLView_logo_label</tabstop>
   <tabstop>PushButton1</tabstop>
  </tabstops>
  <resources/>

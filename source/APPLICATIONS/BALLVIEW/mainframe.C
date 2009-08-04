@@ -369,6 +369,14 @@ namespace BALL
 		font.setPixelSize(18);
 		about.BALLView_version_label->setFont(font);
 		about.BALL_version_label->setText(__DATE__);
+
+		// find the BALLView log
+		Path p;
+		String logo_path = p.find("graphics/logo.png");
+
+		if (logo_path != "")
+			about.BALLView_logo_label->setPixmap(QPixmap(logo_path.c_str()));
+
 		w.exec(); 
 	}
 
