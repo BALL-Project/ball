@@ -1,6 +1,6 @@
 #!/bin/sh
 cat /dev/null > classes
-for i in *-members.htm; do
+for i in *-members.html; do
  class=`echo $i | sed "s/.*1_1//g" | sed "s/-members.*//"`
  echo $class           $i  >> classes
 done
