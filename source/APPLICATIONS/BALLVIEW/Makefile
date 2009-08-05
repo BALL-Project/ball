@@ -90,8 +90,10 @@ macos_pkg_prepare: macos_app
 	@$(CP) -r $(BALL_PATH)/data BALLView.app/Contents/
 	@macdeployqt BALLView.app	
 	@$(CP) $(BALL_PATH)/lib/*.so BALLView.app/Contents/Frameworks
-	@$(BALL_PATH)/MacOSX/fixnames.sh BALLView.app/Contents/Frameworks/BALLmodule.so $(BALL_PATH)/lib
-	@$(BALL_PATH)/MacOSX/fixnames.sh BALLView.app/Contents/Frameworks/BALLmodule.so $(BALL_PATH)/contrib/lib
+	@$(BALL_PATH)/MacOSX/fixnames.sh BALLView.app/Contents/Frameworks/BALLCoremodule.so $(BALL_PATH)/lib
+	@$(BALL_PATH)/MacOSX/fixnames.sh BALLView.app/Contents/Frameworks/BALLCoremodule.so $(BALL_PATH)/contrib/lib
+	@$(BALL_PATH)/MacOSX/fixnames.sh BALLView.app/Contents/Frameworks/VIEWmodule.so $(BALL_PATH)/lib
+	@$(BALL_PATH)/MacOSX/fixnames.sh BALLView.app/Contents/Frameworks/VIEWmodule.so $(BALL_PATH)/contrib/lib
 	@$(RM) -rf $(BALL_PATH)/MacOSX/BALLPackage/Applications/BALLView.app
 	@$(CP) $(BALL_PATH)/MacOSX/Info.plist.app BALLView.app/Contents/Info.plist
 
