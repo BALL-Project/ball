@@ -37,8 +37,6 @@
 		<node>2H<value>H 30.296 33.518 35.635</value></node>
 		<node>N3<value>N 29.245 34.933 34.744</value></node>
 		<node>C4<value>C 29.090 35.512 33.538</value></node>
-		<node>O2*<value>O 28.356 38.621 33.239</value></node>
-		<node>1HO2*<value>H 28.164 37.804 32.772</value></node>
 	</node>
 	<node>Bonds
 		<node>1<value>P O1P s</value></node>
@@ -70,13 +68,11 @@
 		<node>27<value>C1* H1* s</value></node>
 		<node>28<value>C3* H3* s</value></node>
 		<node>29<value>C2* 1H2* s</value></node>
-		<node>30<value>C2* 2H2* s</value></node>
+    <node>30<value>C2* 2H2* s</value></node>
 		<node>31<value>C8 H8 s</value></node>
 		<node>32<value>N6 1H6 s</value></node>
 		<node>33<value>N6 2H6 s</value></node>
 		<node>34<value>C2 2H s</value></node>
-		<node>35<value>C2* O2* s</value></node>
-		<node>36<value>O2* 1HO2* s</value></node>
  	</node>
 	<node>Connections
 		<node>5-term<value>P 3-term s 1.62 0.5</value></node>

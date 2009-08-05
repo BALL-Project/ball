@@ -171,7 +171,4 @@
  <node>G:H2'<value>G:1H2*</value></node>
  <node>G:H2''<value>G:2H2*</value></node>
  <node>G:O3'<value>G:O3*</value></node>
- 
- <node>*:O2'<value>*:O2*</value></node>
- <node>*:HO2'<value>*:1HO2*</value></node>
 </node>
