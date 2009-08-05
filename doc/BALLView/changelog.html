@@ -17,9 +17,58 @@
 <a href="index.html"><img src="images/right.png" width="58" height="28" border=0 align="absmiddle"></a>
 </h2> <hr width=550>
 
-	<H2 align=center>BALL and BALLView 1.1.1 Changelog</H2>
+	<H2 align=center>BALL and BALLView 1.3 Changelog</H2>
 	<table width="700" border="0" cellpadding="5">
 	  <tr><td>
+
+<h2 align=center>Changes Since Version 1.2 (05.08.09):</h2>
+<ul>
+	<li>Improved stereo capabilities 3D StereoSettings:
+		<ul>	
+    	<li>New stereo mode: "Side-by-side on different displays" (allows the use of an additional operator window for live presentations)
+      <li>Introduced a dialog for fine tuning/computing the stereo settings (adapt screen sizes, user distance, etc.) 
+		</ul>
+	<li>Separation of renderers from scene data:
+   	<ul>
+			<li>Multiple render windows are possible
+   		<li>Other renderers than OpenGL are possible
+		</ul>
+	<li>Input Devices (experimental):
+		<ul>
+   		<li>Spacenavigator plugin 
+		</ul>
+	<li>Optionally write binary Project files
+	<li>Introduced thread locking into the gui to prevent race situations
+	<li>Customizable shortcuts
+	<li>Add an option to load all models from a PDB file (e.g. PDB files generated from NMR data can be coped with)
+	<li>Add VRML export for further editing or 3D printing
+	<li>Improved handling of lightsources
+	<li>Editable materials for the 3D structures
+	<li>Start to work on more consistency in the gui
+	<li>Accelerate working with representations
+	<li>Line smoothing can now be disabled. This makes the line representation look less cluttered.
+	<li>Added a switch for changing between perspective and orthographic projection 
+	<li>Fixes to the OpenGL visualization in BALLView
+	<li>Fixed the POVRay Exporter
+	<li>Changing the PDB download URL works again
+	<li>Made offscreen rendering work better than ever
+	<li>Reworked some icons to play better with dark colorthemes
+	<li>Improved the SpaceNavigatorPlugin (MacOS support)
+	<li>Fixes to the Stereo mode
+	<li>Added a nice splash screen :-)
+	<li>Splitted the 3D toolbar
+</ul>
+<h2 align=center>Changes Since Version 1.1.1 (14.11.07):</h2>
+<ul>
+  <li>Integrated molecule editor
+  <li>Volume rendering for electrostaticsm, projection onto planes, field lines
+  <li>Improved cartoon and ribbon models, non-photorealistic shading (toon shader)
+  <li>Off-screen rendering
+  <li>Toolbars for quick access to important functionality
+  <li>Numerous improvements to the interface
+  <li>Merck Molecular Force Field (MMFF 94)
+	<li>Automated download of structures from PDB and PubChem
+</ul>
 
 <h2 align=center>Changes Since Version 1.1 (21.06.05):</h2>
 
