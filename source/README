@@ -4,10 +4,12 @@
                                 Release 1.3
 	
 
-To install BALL it should be sufficient to type the following
+To install BALL on most platforms, it is sufficient to type the following
 command in the current directory:
   
  ./autobuild
+
+Compilation instructions on Windows can be found in BALL/Windows/README.txt.
 
 For further details of the build process, please refer to the
 installation section of the tutorial found on our website

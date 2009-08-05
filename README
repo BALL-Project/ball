@@ -3,5 +3,7 @@
 For installation, please refer to the files BALL/source/INSTALLATION
 and BALL/source/README.
 
+Compilation on Windows is covered in BALL/Windows/README.txt
+
 Further information is available from our website:
   http://www.ball-project.org
