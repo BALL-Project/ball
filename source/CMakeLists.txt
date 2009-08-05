@@ -57,5 +57,12 @@ if(NOT DISABLE_QUEASY)
 	include(APPLICATIONS/QuEasyRun/CMakeLists.txt)
 endif(NOT DISABLE_QUEASY)
 
+if(${DY_LIB_DIRS} NOT STREQUAL "")
+	set(ld_name LD_LIBRARY_PATH)
+	if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+		set(ld_name DYLD_LIBRARY_PATH)
+	endif(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+	message(STATUS "\n\nPlease don't forget to add \n  ${DY_LIB_DIRS}\nto your LD_LIBRARY_PATH !\n\n")
+endif(${DY_LIB_DIRS} NOT STREQUAL "")
 
-message(STATUS "\n\nPlease don't forget to add \n  ${DY_LIB_DIRS}\nto your LD_LIBRARY_PATH !\n\n")
+#include(cmake/install.cmake)

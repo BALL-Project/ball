@@ -15,6 +15,8 @@
 	// Maximum line length for reading from files (see source/FORMAT)
 	#define BALL_MAX_LINE_LENGTH 65535
 	
+	typedef unsigned int unit;
+	
 		
 // ====   Platform-dependend type-definitions  ===========
 
@@ -175,6 +177,7 @@
 	#cmakedefine  BALL_HAVE_VSNPRINTF
 	
 	#cmakedefine BALL_HAS_UNISTD_H
+	//#cmakedefine BALL_HAS_STDINT_H
 	
 	
 // ======   FFTW   ====================================

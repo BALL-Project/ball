@@ -76,6 +76,6 @@ list(APPEND QSARGUI_SOURCES
 
 
 link_directories(. ${LIB_DIRS})
-add_executable(APPLICATIONS/QSAR_GUI/QPipeViz ${QSARGUI_SOURCES})
-target_link_libraries(APPLICATIONS/QSAR_GUI/QPipeViz BALL ${LIBS})
+add_executable(APPLICATIONS/QSAR_GUI/QuEasyViz ${QSARGUI_SOURCES})
+target_link_libraries(APPLICATIONS/QSAR_GUI/QuEasyViz BALL ${LIBS})
 
