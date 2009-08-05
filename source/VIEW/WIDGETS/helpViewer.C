@@ -191,6 +191,7 @@ namespace BALL
 				classname = true;
 				project = project.before(" ");
 			}
+
 			if (project != project_) return;
 
 			if (classname)
@@ -221,14 +222,23 @@ namespace BALL
 			classes_to_files_.clear();
 			
 			Path p;
-			String dir = p.find(   String("..") 
-					                 + FileSystem::PATH_SEPARATOR 
-													 + "doc"
-													 + FileSystem::PATH_SEPARATOR );
+			String filename = p.find(   String("..") 
+					                      + FileSystem::PATH_SEPARATOR 
+													      + "doc"
+													      + FileSystem::PATH_SEPARATOR 
+													      + "classes" );
+
+			if (filename == "")
+			{
+				Log.error() << "Could not load the file \"classes\" to parse class list for the documentation!"
+										<< std::endl;
+
+				return;
+			}
 
 			try
 			{
-				LineBasedFile file(dir + "classes");
+				LineBasedFile file(filename);
 				vector<String> fields;
 				while (file.readLine())
 				{
@@ -239,7 +249,7 @@ namespace BALL
 			}
 			catch(...)
 			{
-				Log.error() << "Could not load the file \"classes\" to parse class list for documentation!"
+				Log.error() << "Could not parse the file \"classes\" containing the class list for the documentation!"
 										<< std::endl;
 			}
 		}
