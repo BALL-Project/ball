@@ -111,28 +111,29 @@ namespace BALL
 		runSingleString_("import cStringIO, sys", Py_single_input);
 		start_log_ += error_message_;
 
+		Path p;
+
 		// Add the BALL library path to the Python search path
 		// to make sure Python can find the BALL extensions.
 #ifndef BALL_COMPILER_MSVC
 		runSingleString_("sys.path.append(\"" BALL_PATH "/lib/" "\")", Py_single_input);
 #else
 		// on windows, we put our python packages one step above the data directory
-		Path p;
 		String python_path = String(p.find("..\\BALL.py")).before("BALL.py");
 		python_path.trim();
 		while (python_path.substitute("\\", "/") != String::EndPos) {};
 
 		if (python_path != "")
 			sys_path_.push_back(python_path);
-
-		python_path = String(p.find("startup.py")).before("startup.py");
-		python_path.trim();
-		while (python_path.substitute("\\", "/") != String::EndPos) {};
-
-		if (python_path != "")
-			sys_path_.push_back(python_path);
-
 #endif
+		// try to locate startup.py as well
+		String python_startup_path = String(p.find("startup.py")).before("startup.py");
+		python_startup_path.trim();
+		while (python_startup_path.substitute("\\", "/") != String::EndPos) {};
+
+		if (python_startup_path != "")
+			sys_path_.push_back(python_startup_path);
+
 		start_log_ += error_message_;
 
 		// Add additional paths (user-defined) to the end of the search path.
