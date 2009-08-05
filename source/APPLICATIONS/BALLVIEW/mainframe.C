@@ -124,11 +124,10 @@ namespace BALL
 
 		new DemoTutorialDialog(this, "BALLViewDemo");
 
-		HelpViewer* BALL_docu = new HelpViewer(this, "BALL Docu");
-		addDockWidget(Qt::BottomDockWidgetArea, BALL_docu);
-
 		Path path;
 
+		// NOTE: disable the link to the BALL documentation until we can use webkit to correctly
+		//       display full HTML including remote links
 		String dirp = path.find(   String("..") 
 		                         + FileSystem::PATH_SEPARATOR 
 														 + "doc" 
@@ -136,13 +135,20 @@ namespace BALL
 														 + "BALL" 
 														 + FileSystem::PATH_SEPARATOR );
 
-		BALL_docu->setBaseDirectory(dirp);
-		BALL_docu->setWhatsThisEnabled(false);
-		BALL_docu->setProject("BALL");
-		BALL_docu->setDefaultPage("index.html");
+		if (dirp != "")
+		{
+			HelpViewer* BALL_docu = new HelpViewer(this, "BALL Docu");
+			addDockWidget(Qt::BottomDockWidgetArea, BALL_docu);
+
+
+			BALL_docu->setBaseDirectory(dirp);
+			BALL_docu->setWhatsThisEnabled(false);
+			BALL_docu->setProject("BALL");
+			BALL_docu->setDefaultPage("index.html");
+
+		}
 
 		addDockWidget(Qt::BottomDockWidgetArea, new HelpViewer(this, "BALLView Docu"));
-
 		new LabelDialog(				this, "LabelDialog");
 		new MolecularStructure(	this, "MolecularStructure");
  		addDockWidget(Qt::BottomDockWidgetArea, new LogView(this, "Logs"));
@@ -225,9 +231,9 @@ namespace BALL
 		QKeyEvent* e = dynamic_cast<QKeyEvent*>(event);
 
 		if (e->key() == Qt::Key_Escape &&
-				HelpViewer::getInstance(1)->isWhatsThisEnabled())
+				HelpViewer::getInstance("BALLView Docu")->isWhatsThisEnabled())
 		{
-			HelpViewer::getInstance(1)->exitWhatsThisMode();
+			HelpViewer::getInstance("BALLView Docu")->exitWhatsThisMode();
 		}
 
 		QPoint point = QCursor::pos();
@@ -294,7 +300,7 @@ namespace BALL
 	
 	void Mainframe::howToCite()
 	{
-		HelpViewer::getInstance(1)->showHelp("tips.html", "cite");
+		HelpViewer::getInstance("BALLView Docu")->showHelp("tips.html", "cite");
 	}
 
 	void Mainframe::show()
@@ -327,14 +333,14 @@ namespace BALL
 		qload_action_ = new QAction(load_icon, "quickload", this);
 		qload_action_->setObjectName("quickload");
 		connect(qload_action_, SIGNAL(triggered()), this, SLOT(quickLoadConfirm()));
-		HelpViewer::getInstance(1)->registerForHelpSystem(qload_action_, "tips.html#quickload");
+		HelpViewer::getInstance("BALLView Docu")->registerForHelpSystem(qload_action_, "tips.html#quickload");
 		tb->addAction(qload_action_);
 
 		QIcon save_icon(path.find("graphics/quicksave.png").c_str());
 		qsave_action_ = new QAction(save_icon, "quicksave", this);
 		qsave_action_->setObjectName("quicksave");
 		connect(qsave_action_, SIGNAL(triggered()), this, SLOT(quickSave()));
-		HelpViewer::getInstance(1)->registerForHelpSystem(qsave_action_, "tips.html#quickload");
+		HelpViewer::getInstance("BALLView Docu")->registerForHelpSystem(qsave_action_, "tips.html#quickload");
 		tb->addAction(qsave_action_);
 
 		tb->addSeparator();
@@ -343,7 +349,7 @@ namespace BALL
 		scene_->addToolBarEntries(tb);
 		tb->addAction(stop_simulation_action_);
 		tb->addAction(preferences_action_);
-		HelpViewer::getInstance(1)->addToolBarEntries(tb);
+		HelpViewer::getInstance("BALLView Docu")->addToolBarEntries(tb);
 
 		// we have changed the child widgets stored in the maincontrol (e.g. toolbars), so we have
 		// to restore the window state again!
