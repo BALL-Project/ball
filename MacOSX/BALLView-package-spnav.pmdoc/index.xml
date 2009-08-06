@@ -21,4 +21,4 @@ in\
 \b BALLView.app/Contents/Info.plist\
 
 \b0 \
-to point to the correct install location!}]]></resource></locale></resources><flags/><postinstall><action id="com.apple.packagemaker.actions.showfile"><value>org.ballview.ballview13Beta2.ballview.pkg.ballviewapp</value><type>component</type></action></postinstall><item type="file">01ballview.xml</item><item type="file">02plugins.xml</item><mod>properties.customizeOption</mod><mod>properties.title</mod><mod>postinstallActions.actions</mod></pkmkdoc>
+to point to the correct install location!}]]></resource></locale></resources><flags/><postinstall><action id="com.apple.packagemaker.actions.showfile"><value>org.ballview.ballview13Beta2.ballview.pkg.ballviewapp</value><type>component</type></action></postinstall><item type="file">01ballview.xml</item><item type="file">02plugins.xml</item><mod>properties.customizeOption</mod><mod>postinstallActions.actions</mod><mod>properties.title</mod></pkmkdoc>
