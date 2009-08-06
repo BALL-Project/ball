@@ -28,9 +28,9 @@ link_directories(. ${LIB_DIRS})
 add_executable(${path}/BALLView ${BALLVIEW_SOURCES})
 
 set(ballview_libs "")
-list(APPEND ballview_libs VIEW BALL ${LIBS} QtOpenGL QtXml QtTest)
-if(USE_glew)
-	list(APPEND ballview_libs GLEW)
-endif(USE_glew)
+
+
+list(APPEND ballview_libs VIEW BALL ${VIEW_LIBS} QtOpenGL QtXml QtTest ${VIEW_GL_LIBS} ${CORE_LIBS})
+
 target_link_libraries(${path}/BALLView ${ballview_libs})
 
