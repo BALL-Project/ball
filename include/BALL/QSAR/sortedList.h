@@ -11,6 +11,8 @@
 #include <iostream>
 #include <BALL/DATATYPE/string.h>
 
+typedef unsigned int uint;
+
 
 namespace BALL
 {
