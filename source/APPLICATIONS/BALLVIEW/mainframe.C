@@ -128,12 +128,7 @@ namespace BALL
 
 		// NOTE: disable the link to the BALL documentation until we can use webkit to correctly
 		//       display full HTML including remote links
-		String dirp = path.find(   String("..") 
-		                         + FileSystem::PATH_SEPARATOR 
-														 + "doc" 
-														 + FileSystem::PATH_SEPARATOR 
-														 + "BALL" 
-														 + FileSystem::PATH_SEPARATOR );
+		String dirp = path.find("../doc/BALL/"); 
 
 		if (dirp != "")
 		{

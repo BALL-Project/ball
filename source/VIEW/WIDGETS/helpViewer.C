@@ -75,12 +75,7 @@ namespace BALL
 				whats_action_(0)
 		{
 			Path p;
-			String dir = p.find(  String("..")
-													+ FileSystem::PATH_SEPARATOR
-													+ "doc"
-												  + FileSystem::PATH_SEPARATOR
-													+ "BALLView" 
-													+ FileSystem::PATH_SEPARATOR );
+			String dir = p.find("../doc/BALLView/");
 
 			setBaseDirectory(dir);
 
@@ -222,11 +217,7 @@ namespace BALL
 			classes_to_files_.clear();
 			
 			Path p;
-			String filename = p.find(   String("..") 
-					                      + FileSystem::PATH_SEPARATOR 
-													      + "doc"
-													      + FileSystem::PATH_SEPARATOR 
-													      + "classes" );
+			String filename = p.find("../doc/classes");
 
 			if (filename == "")
 			{
