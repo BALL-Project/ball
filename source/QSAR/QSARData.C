@@ -829,6 +829,7 @@ void QSARData::readCSVFile(const char* file, int no_y, bool xlabels, bool ylabel
 	}
 	
 	int old_size=descriptor_matrix_.size(); 
+	int old_no_y=Y_.size();
 		
 	if(!appendDescriptors)
 	{
@@ -844,6 +845,7 @@ void QSARData::readCSVFile(const char* file, int no_y, bool xlabels, bool ylabel
 	else
 	{
 		descriptor_matrix_.resize(descriptor_matrix_.size()+prop-no_y-ylabels);
+		Y_.resize(Y_.size()+no_y);
 	}
 		
 	ifstream input(file);
@@ -948,15 +950,14 @@ void QSARData::readCSVFile(const char* file, int no_y, bool xlabels, bool ylabel
 					}
 				}
 			}
-			else if(!appendDescriptors)
+			else
 			{
 				String value; getline(line_stream,value,sep[0]);
-				
 				if(!translate_class_labels)
 				{
 					try
 					{
-						Y_[i-(prop-no_y)].push_back(value.toDouble());
+						Y_[old_no_y+i-(prop-no_y)].push_back(value.toDouble());
 					}
 					catch(BALL::Exception::InvalidFormat g) 
 					{
@@ -968,13 +969,13 @@ void QSARData::readCSVFile(const char* file, int no_y, bool xlabels, bool ylabel
 					map<String,int>::iterator it=class_names_.find(value);
 					if(it!=class_names_.end())
 					{
-						Y_[i-(prop-no_y)].push_back(it->second);
+						Y_[old_no_y+i-(prop-no_y)].push_back(it->second);
 					}
 					else
 					{
 						// assign ID for new class label
 						int id = class_names_.size();
-						Y_[i-(prop-no_y)].push_back(id);
+						Y_[old_no_y+i-(prop-no_y)].push_back(id);
 						class_names_.insert(make_pair(value,id));
 					}
 				}
