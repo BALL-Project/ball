@@ -38,6 +38,31 @@ void DataItemScene::setMainWindow(MainWindow* mw)
 
 QPointF DataItemScene::getOffset(QPointF& origin, DataItem* item)
 {
+	// InputPartitionItems connected to each other
+	InputDataItem* in_item=dynamic_cast<InputDataItem*>(item);
+	if(in_item)
+	{
+		if(dynamic_cast<InputDataItem*>(itemAt(origin)))
+		{
+			QPointF pos(20,0);
+			for(uint i=0; i<20;i++)
+			{
+				QPointF p = origin+pos;
+				if((dynamic_cast<DataItem*>(itemAt(p))))
+				{
+					pos+=QPointF(20,0);
+				}
+				else
+				{
+					break;
+				}
+			}
+			
+			return pos;
+		}
+	}
+	
+	
 	// InputDataItem created together with a PredictionItem
 	QPointF pos = default_offset;
 	if(item->type()==SDFInputDataItem::Type || item->type()==CSVInputDataItem::Type || (item->type()==InputPartitionItem::Type && ((InputPartitionItem*)item)->isTestPartition()))
@@ -311,8 +336,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 								csv_item->setAppend(true);				
 								addItem(csv_item);
 								pos = existing_sdf_item->pos();
-								QPointF p0 = QPointF(existing_sdf_item->width()+10,0);
-								csv_item->setPos(pos+p0);
+								csv_item->setPos(pos+getOffset(pos,csv_item));
 								
 								Edge* edge = new Edge(existing_sdf_item, csv_item);
 								addItem(edge);
