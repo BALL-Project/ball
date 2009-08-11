@@ -148,6 +148,7 @@
 	#cmakedefine BALL_HAS_HASH_MAP
 	#define @BALL_MAP_NAMESPACE@
 	#define @BALL_MAP_NAME@
+	#cmakedefine BALL_NEEDS_LONGSIZE_HASH
 	
 	
 // ======   std-datatypes   ===========================

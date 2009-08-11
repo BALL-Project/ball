@@ -3,6 +3,8 @@ set(CPACK_DEBIAN_PACKAGE_MAINTAINER "someone")
 set(CPACK_DEBIAN_PACKAGE_VERSION "1.0-alpha1")
 set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
 SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt4-core (>= 4.2.0), libqt4-gui (>= 4.2.0), libc6, libstdc++6")
+SET(DEBIAN_PACKAGE_SECTION "Science")
+#set(DEBIAN_PACKAGE_DESCRIPTION "add description here...")
 
 
 INCLUDE(CPack)
