@@ -1,0 +1,51 @@
+START
+/OBJECT BALL::NamedProperty @ [0-9]+ -
+  BALL::Index type_ = 8 
+  BALL::String name_ = 5 test5 
+/  BALL::PersistentObject .*
+END_OBJECT
+END
+START
+/OBJECT BALL::Protein @ [0-9]+ -
+/  BASEOBJECT BALL::Molecule @ [0-9]+ -
+/    BASEOBJECT BALL::AtomContainer @ [0-9]+ -
+/      BASEOBJECT BALL::Composite @ [0-9]+ -
+        STORABLE BALL::Selectable  Selectable 
+          bool selected_ = FALSE 
+        END_STORABLE
+        BALL::Size number_of_children_ = 0 
+        BALL::Composite * parent_  0 
+        BALL::Composite * previous_  0 
+        BALL::Composite * next_  0 
+        BALL::Composite * first_child_  0 
+        BALL::Composite * last_child_  0 
+        unsigned_char properties_ = 0 
+        bool contains_selection_ = FALSE 
+        BALL::Size number_of_selected_children_ = 0 
+        BALL::Size number_of_children_containing_selection_ = 0 
+        STORABLE BALL::TimeStamp  selection_stamp_ 
+          STORABLE BALL::PreciseTime  time_ 
+/            BALL::Size secs_ = [0-9]+ 
+/            BALL::Size usecs_ = [0-9]+ 
+          END_STORABLE
+        END_STORABLE
+        STORABLE BALL::TimeStamp  modification_stamp_ 
+          STORABLE BALL::PreciseTime  time_ 
+/            BALL::Size secs_ = [0-9]+ 
+/            BALL::Size usecs_ = [0-9]+ 
+          END_STORABLE
+        END_STORABLE
+      END_BASEOBJECT
+      STORABLE BALL::PropertyManager  PropertyManager 
+        STORABLE BALL::BitVector  bitvector_ 
+          BALL::Size size = 0 
+        END_STORABLE
+        BALL::Size size = 0 
+      END_STORABLE
+      BALL::String name_ = 8 PROTEIN2 
+    END_BASEOBJECT
+  END_BASEOBJECT
+  BALL::String id_ = 0  
+END_OBJECT
+END
+END
