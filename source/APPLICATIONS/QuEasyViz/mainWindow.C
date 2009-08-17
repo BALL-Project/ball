@@ -1145,11 +1145,8 @@ void MainWindow::loadItemsFromFiles(String directory)
 		}
 		for (Pipeline<CSVInputDataItem*>::iterator it = csv_input_pipeline_.begin(); it != csv_input_pipeline_.end(); it++)
 		{
-			if((*it)->append()) 
-			{
-				(*it)->setDone(1);
-				continue;
-			}
+			// if dat-file has already been read by connected SDFInputItem, do not read it again
+			if((*it)->isDone()) continue;
 			
 			String filename=directory+(*it)->savedAs().toStdString();
 			ifstream input(filename.c_str());
@@ -1298,6 +1295,7 @@ void MainWindow::restoreDesktop(QString filename)
 	int s = configfile.find_last_of(settings.path_separator);
 	String directory = configfile.substr(0,s+1); // name of config-file folder
 	bool archive = 0;
+	String input_directory = directory;
 	
 	if(configfile.size()>7 && configfile.substr(configfile.size()-7)==".tar.gz")
 	{
@@ -1375,8 +1373,8 @@ void MainWindow::restoreDesktop(QString filename)
 			}
 			if(line.hasPrefix("["))
 			{
-				if(input_section) input_reader.readConfigSection(section,filenames_map,&item_positions);
-				if(partitioner_section) input_reader.readConfigSection(section,filenames_map,&item_positions);
+				if(input_section) input_reader.readConfigSection(section,filenames_map,&item_positions,input_directory);
+				if(partitioner_section) input_reader.readConfigSection(section,filenames_map,&item_positions,input_directory);
 				if(model_section) new ModelItem(section,filenames_map,&item_positions,view_);
  				if(fs_section) new FeatureSelectionItem(section,filenames_map,&item_positions,view_);
  				if(val_section) new ValidationItem(section,filenames_map,&item_positions,view_);
@@ -1397,8 +1395,8 @@ void MainWindow::restoreDesktop(QString filename)
 			
 			section+=line+"\n"; // store line of current section
 		}
- 		if(input_section) input_reader.readConfigSection(section,filenames_map,&item_positions);
-		if(partitioner_section) input_reader.readConfigSection(section,filenames_map,&item_positions);
+ 		if(input_section) input_reader.readConfigSection(section,filenames_map,&item_positions,input_directory);
+		if(partitioner_section) input_reader.readConfigSection(section,filenames_map,&item_positions,input_directory);
  		if(model_section) new ModelItem(section,filenames_map,&item_positions,view_);
  		if(fs_section) new FeatureSelectionItem(section,filenames_map,&item_positions,view_);
  		if(val_section) new ValidationItem(section,filenames_map,&item_positions,view_);
@@ -1521,12 +1519,12 @@ void MainWindow::exportPipeline(QString filename)
 		{
 			CSVInputDataItem* csv_item = (CSVInputDataItem*) item;
 			if(csv_item->append()) continue;
-			input_writer.writeConfigSection(csv_item,out);
+			input_writer.writeConfigSection(csv_item,out,directory);
 		}
 		else if(type==SDFInputDataItem::Type)
 		{
 			SDFInputDataItem* sdf_item = (SDFInputDataItem*) item;
-			input_writer.writeConfigSection(sdf_item,out,positions);
+			input_writer.writeConfigSection(sdf_item,out,positions,directory);
 			continue;
 		}
 		else if(type==PartitioningItem::Type)

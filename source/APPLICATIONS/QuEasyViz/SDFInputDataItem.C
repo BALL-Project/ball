@@ -233,3 +233,17 @@ bool SDFInputDataItem::useSDProperties()
 {
 	return use_SD_properties_;
 }
+
+void SDFInputDataItem::loadFromFile(String file)
+{
+	InputDataItem::loadFromFile(file);
+	
+	// if dat-file was read sucessfully, make sure that it is not read again by connected CSV-items
+	if(done_)
+	{
+		for(list<CSVInputDataItem*>::iterator csv_it=additional_descriptors_.begin(); csv_it!=additional_descriptors_.end(); csv_it++)
+		{
+			(*csv_it)->setDone(1);
+		}
+	}
+}

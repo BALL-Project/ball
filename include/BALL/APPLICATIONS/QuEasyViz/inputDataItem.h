@@ -59,7 +59,7 @@ namespace BALL
 				bool getNonNumericClassNames() {return nonnumeric_class_names_;}
 			
 				/** load preprocessed input data from a file */
-				void loadFromFile(String file);
+				virtual void loadFromFile(String file);
 
 				virtual bool checkForDiscreteY() = 0;
 			
