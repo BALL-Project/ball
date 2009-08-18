@@ -41,7 +41,7 @@ tutorial.bbl: *.bib
 	bibtex tutorial
 
 tutorial.ind: tutorial.idx
-	makeindex -s indexstyle.ids tutorial.idx
+	makeindex -s indexstyle.ist tutorial.idx
 
 tutorial.dvi:	*.tex tutorial.ind
 	@latex tutorial
