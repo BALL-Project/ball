@@ -9,8 +9,7 @@ CPP_SOURCES=\
 	init.C\
 	logStream.C\
 	rtti.C\
-	version.C\
-	MD5Hash.C
+	version.C
 
 include ../common.mak
 -include .Dependencies

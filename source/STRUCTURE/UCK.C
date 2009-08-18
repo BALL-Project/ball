@@ -6,17 +6,12 @@
 
 #include <BALL/STRUCTURE/UCK.h>
 
-#include <BALL/COMMON/MD5Hash.h>
 #include <BALL/COMMON/limits.h>
 
 #include <BALL/KERNEL/molecule.h>
-//#include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/PTE.h>
 
-//#include <iostream>
-//#include <fstream>
-//#include <vector>
-//#include <map>
+#include <QtCore/QCryptographicHash>
 
 using namespace std;
 
@@ -252,10 +247,9 @@ namespace BALL
 		}	
 		uck_str_ += "\n";
 
-		// RSA Data Security, Inc. MD5 Message-Digest Algorithm
-		MD5Hash md5;
-		md5.encode(uck_str_);
-		uck_str_ = md5.asString();
+		uck_str_ = QCryptographicHash::hash(QByteArray(uck_str_.c_str()), 
+		                                    QCryptographicHash::Md5).toHex().constData(); 
+
 		return;
 	}
 	

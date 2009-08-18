@@ -648,7 +648,7 @@ dnl
 dnl		VIEW
 dnl
 dnl Currently, we require QT >= 4.2. QT 3.x isn't supported any more.
-QT_MIN_VERSION=420
+QT_MIN_VERSION=430
 QT_MAX_VERSION=499
 QT_RECOMMENDED_VERSION=4.5.0
 CF_VIEW
