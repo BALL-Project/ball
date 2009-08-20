@@ -129,7 +129,7 @@ namespace BALL
 
 		// Walk over the residues in parallel
 		ResidueList::iterator ita(rla.begin());
-		ResidueList::iterator itb(rla.begin());
+		ResidueList::iterator itb(rlb.begin());
 		for (; ita != rla.end() && itb != rlb.end(); ++ita, ++itb)
 		{
 			// If the two residues do have an atom named CA, push back the pair.
@@ -155,7 +155,7 @@ namespace BALL
 
 		// Walk over the residues in parallel
 		ResidueList::iterator ita(rla.begin());
-		ResidueList::iterator itb(rla.begin());
+		ResidueList::iterator itb(rlb.begin());
 		for (; ita != rla.end() && itb != rlb.end(); ++ita, ++itb)
 		{
 			// If the two residues do have backbone atoms (CA, C, N, O, H)
