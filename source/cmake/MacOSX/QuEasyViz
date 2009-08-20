@@ -1,0 +1,15 @@
+#!/bin/bash
+# bash script which sets the correct paths and executes QuEasyViz
+
+export QUEASY_PATH=`dirname $0`
+
+## we need to set the DYLIB_LIBRARY_PATH
+export DYLD_LIBRARY_PATH=${QUEASY_PATH}/../../../lib/:$DYLIB_LIBRARY_PATH
+
+## setting of the BALL data path to the share directory
+export BALL_DATA_PATH=${QUEASY_PATH}/../../../share/QuEasy
+
+## start QuEasyViz
+${QUEASY_PATH}/QuEasyViz.exe
+
+
