@@ -146,6 +146,8 @@ namespace BALL
 				void deleteItem();
 				void restoreDesktop();
 				void executePipeline();
+				void zoomIn();
+				void zoomOut();
 				
 				/** exports the pipeline to files and return the name of the created config-file */
 				String exportPipeline();

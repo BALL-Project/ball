@@ -44,9 +44,10 @@ namespace BALL
 
 			/** name of the widget for which this object is used,i.e. "view", "model_list" or "source_list" */
 			std::string name; 
-// 			void itemMoved();
 
 			void addDropSite();
+			
+			void scaleView(qreal scaleFactor);
 		
 
 		
@@ -65,9 +66,6 @@ namespace BALL
 			* used for moving the items on the view
 			*/
 			void keyPressEvent(QKeyEvent* event);
-
-			void scaleView(qreal scaleFactor);
-// 			void timerEvent(QTimerEvent *event);
 			
 		
 		private:

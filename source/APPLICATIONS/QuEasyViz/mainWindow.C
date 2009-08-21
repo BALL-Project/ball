@@ -506,24 +506,23 @@ void MainWindow::createActions()
  {
 	String dir = getImageDirectory();
 	 
-	//exit action: cloes the application
 	exitAct_ = new QAction(QIcon((dir+"exit.png").c_str()),tr("E&xit"), this);
 	exitAct_->setShortcut(tr("Ctrl+Q"));
 	exitAct_->setStatusTip(tr("Exit the application"));
 	connect(exitAct_, SIGNAL(triggered()), this, SLOT(close()));
 
-	//about action: shows information about the application
 	aboutAct_ = new QAction(tr("&About"), this);
 	aboutAct_->setStatusTip(tr("Show the application's About box"));
 	connect(aboutAct_, SIGNAL(triggered()), this, SLOT(about()));
 
 	clearAct_ = new QAction(QIcon((dir+"clear_desktop.png").c_str()),tr("&Clear Desktop"), this);
 	clearAct_->setShortcut(tr("Ctrl+C"));
-	clearAct_->setStatusTip(tr("Clears the desktop (the main view)"));
+	clearAct_->setStatusTip(tr("Clear the desktop"));
 	connect(clearAct_, SIGNAL(triggered()), this, SLOT(clearDesktop()));
 
 	delAct_ = new QAction(QIcon((dir+"delete_item.png").c_str()),tr("&Delete Selection"), this);
-	delAct_->setStatusTip(tr("Deletes the selected Item from the pipeline"));
+	delAct_->setStatusTip(tr("Delete the selected Item from the pipeline"));
+	delAct_->setShortcut(tr("Ctrl+D"));
 	connect(delAct_, SIGNAL(triggered()), this, SLOT(deleteItem()));
 	
 	QShortcut* del_shortcut = new QShortcut(QKeySequence::Delete,this);
@@ -531,21 +530,32 @@ void MainWindow::createActions()
 
 	executeAct_ = new QAction(QIcon((dir+"run_pipeline.png").c_str()),tr("&Execute Pipeline"), this);
 	executeAct_->setShortcut(tr("Ctrl+E"));
-	executeAct_->setStatusTip(tr("Executes the Pipeline"));
+	executeAct_->setStatusTip(tr("Execute the Pipeline"));
 	connect(executeAct_, SIGNAL(triggered()), this, SLOT(executePipeline()));
 
 	restoreAct_ = new QAction(QIcon((dir+"restore_desktop.png").c_str()),tr("&Restore Pipeline"), this);
 	restoreAct_->setShortcut(tr("Ctrl+R"));
-	restoreAct_->setStatusTip(tr("Restores a Pipeline"));
+	restoreAct_->setStatusTip(tr("Restore a Pipeline"));
 	connect(restoreAct_, SIGNAL(triggered()), this, SLOT(restoreDesktop()));
 
 	exportAct_ = new QAction(QIcon((dir+"save.png").c_str()),tr("Save Pipeline"), this);
-	exportAct_->setStatusTip(tr("Saves the Pipeline"));
+	exportAct_->setStatusTip(tr("Save the Pipeline"));
 	exportAct_->setShortcut(tr("Ctrl+S"));
 	connect(exportAct_, SIGNAL(triggered()), this, SLOT(exportPipeline()));
  }
  
- 
+// SLOT
+void MainWindow::zoomIn()
+{
+	view_->scaleView(1.41);
+}
+
+// SLOT
+void MainWindow::zoomOut()
+{
+	view_->scaleView(0.7);
+}
+
 // SLOT
 void MainWindow::print()
 {
@@ -593,8 +603,8 @@ void MainWindow::printToFile()
 	helpMenu_ = menuBar()->addMenu(tr("&Help"));
 	QAction* doc = new QAction(tr("&Documentation"), this);
 	QList<QKeySequence> list;
-	list.push_back(QKeySequence("Ctrl+D")); list.push_back(QKeySequence::HelpContents);
-	doc->setShortcuts(list);  // F1-key or Ctrl+D
+	list.push_back(QKeySequence("Ctrl+H")); list.push_back(QKeySequence::HelpContents);
+	doc->setShortcuts(list);  // F1-key or Ctrl+H
 	connect(doc, SIGNAL(triggered()), this, SLOT(showDocumentation()));
 	helpMenu_->addAction(doc);
 	helpMenu_->addAction(aboutAct_);
@@ -678,17 +688,28 @@ function for setting up the tool bars
 	QAction* print = new QAction(QIcon((dir+"printer1.png").c_str()),"Print",this);
 	fileToolBar_->addAction(print);
 	
-	QAction* submit_action = new QAction(QIcon((dir+"cluster.png").c_str()),"Submit job",this);
 	fileToolBar_->addSeparator();
-	fileToolBar_->addAction(executeAct_);
-	connect(print, SIGNAL(triggered()), this, SLOT(print()));
-	fileToolBar_->addAction(submit_action);
-	connect(submit_action, SIGNAL(triggered()), this, SLOT(submit()));	
-	
+
 	fullscreen_action_ = new QAction(QIcon((dir+"window_fullscreen.png").c_str()),"Fullscreen",this);
 	fileToolBar_->addAction(fullscreen_action_);
 	fullscreen_action_->setShortcut(tr("Ctrl+F"));
 	connect(fullscreen_action_, SIGNAL(triggered()), this, SLOT(fullscreen()));
+	QAction* zoom_in_action = new QAction(QIcon((dir+"zoom_in.png").c_str()),"zoom in",this);
+	zoom_in_action->setShortcut(tr("+"));
+	connect(zoom_in_action, SIGNAL(triggered()), this, SLOT(zoomIn()));
+	fileToolBar_->addAction(zoom_in_action);
+	QAction* zoom_out_action = new QAction(QIcon((dir+"zoom_out.png").c_str()),"zoom out",this);
+	zoom_out_action->setShortcut(tr("-"));
+	connect(zoom_out_action, SIGNAL(triggered()), this, SLOT(zoomOut()));
+	fileToolBar_->addAction(zoom_out_action);
+
+	fileToolBar_->addSeparator();
+	
+	QAction* submit_action = new QAction(QIcon((dir+"cluster.png").c_str()),"Submit job",this);
+	fileToolBar_->addAction(executeAct_);
+	connect(print, SIGNAL(triggered()), this, SLOT(print()));
+	fileToolBar_->addAction(submit_action);
+	connect(submit_action, SIGNAL(triggered()), this, SLOT(submit()));
  }
  
  
@@ -1145,11 +1166,8 @@ void MainWindow::loadItemsFromFiles(String directory)
 		}
 		for (Pipeline<CSVInputDataItem*>::iterator it = csv_input_pipeline_.begin(); it != csv_input_pipeline_.end(); it++)
 		{
-			if((*it)->append()) 
-			{
-				(*it)->setDone(1);
-				continue;
-			}
+			// if dat-file has already been read by connected SDFInputItem, do not read it again
+			if((*it)->isDone()) continue;
 			
 			String filename=directory+(*it)->savedAs().toStdString();
 			ifstream input(filename.c_str());
@@ -1298,6 +1316,7 @@ void MainWindow::restoreDesktop(QString filename)
 	int s = configfile.find_last_of(settings.path_separator);
 	String directory = configfile.substr(0,s+1); // name of config-file folder
 	bool archive = 0;
+	String input_directory = directory;
 	
 	if(configfile.size()>7 && configfile.substr(configfile.size()-7)==".tar.gz")
 	{
@@ -1375,8 +1394,8 @@ void MainWindow::restoreDesktop(QString filename)
 			}
 			if(line.hasPrefix("["))
 			{
-				if(input_section) input_reader.readConfigSection(section,filenames_map,&item_positions);
-				if(partitioner_section) input_reader.readConfigSection(section,filenames_map,&item_positions);
+				if(input_section) input_reader.readConfigSection(section,filenames_map,&item_positions,input_directory);
+				if(partitioner_section) input_reader.readConfigSection(section,filenames_map,&item_positions,input_directory);
 				if(model_section) new ModelItem(section,filenames_map,&item_positions,view_);
  				if(fs_section) new FeatureSelectionItem(section,filenames_map,&item_positions,view_);
  				if(val_section) new ValidationItem(section,filenames_map,&item_positions,view_);
@@ -1397,8 +1416,8 @@ void MainWindow::restoreDesktop(QString filename)
 			
 			section+=line+"\n"; // store line of current section
 		}
- 		if(input_section) input_reader.readConfigSection(section,filenames_map,&item_positions);
-		if(partitioner_section) input_reader.readConfigSection(section,filenames_map,&item_positions);
+ 		if(input_section) input_reader.readConfigSection(section,filenames_map,&item_positions,input_directory);
+		if(partitioner_section) input_reader.readConfigSection(section,filenames_map,&item_positions,input_directory);
  		if(model_section) new ModelItem(section,filenames_map,&item_positions,view_);
  		if(fs_section) new FeatureSelectionItem(section,filenames_map,&item_positions,view_);
  		if(val_section) new ValidationItem(section,filenames_map,&item_positions,view_);
@@ -1521,12 +1540,12 @@ void MainWindow::exportPipeline(QString filename)
 		{
 			CSVInputDataItem* csv_item = (CSVInputDataItem*) item;
 			if(csv_item->append()) continue;
-			input_writer.writeConfigSection(csv_item,out);
+			input_writer.writeConfigSection(csv_item,out,directory);
 		}
 		else if(type==SDFInputDataItem::Type)
 		{
 			SDFInputDataItem* sdf_item = (SDFInputDataItem*) item;
-			input_writer.writeConfigSection(sdf_item,out,positions);
+			input_writer.writeConfigSection(sdf_item,out,positions,directory);
 			continue;
 		}
 		else if(type==PartitioningItem::Type)

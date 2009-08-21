@@ -13,7 +13,7 @@ InputDataItemIO::InputDataItemIO(DataItemView* view)
 	view_ = view;
 }
 
-void InputDataItemIO::writeConfigSection(SDFInputDataItem* sd_item, ofstream& out, ostringstream& item_positions)
+void InputDataItemIO::writeConfigSection(SDFInputDataItem* sd_item, ofstream& out, ostringstream& item_positions, const String& directory)
 {
 	String activity_string;
 	String tmp;
@@ -26,7 +26,10 @@ void InputDataItemIO::writeConfigSection(SDFInputDataItem* sd_item, ofstream& ou
 	}
 	out << "[InputReader]" << "\n";
 	if(sd_item->isDone()) out<<"done = "<<1<<endl;
-	out << "sd_file = "<< sd_item->filename().toStdString() << "\n";
+	
+	QDir qdir(directory.c_str());
+	String rel_filename = (qdir.relativeFilePath(sd_item->filename())).toStdString();
+	out << "sd_file = "<< rel_filename << "\n";
 	out << "read_sd_descriptors = "<< sd_item->useSDProperties() << "\n";
 	out << "activity_IDs = "<< activity_string << "\n";
 	out << "center_data = "<< sd_item->centerData() << "\n";
@@ -40,7 +43,8 @@ void InputDataItemIO::writeConfigSection(SDFInputDataItem* sd_item, ofstream& ou
 	list<CSVInputDataItem*>* csv_items = sd_item->getConnectedCSVItems();
 	for(list<CSVInputDataItem*>::iterator it=csv_items->begin(); it!=csv_items->end(); it++)
 	{
-		out << "csv_file = " << (*it)->filename().toStdString()<<"\n";
+		String rel_filename = (qdir.relativeFilePath((*it)->filename())).toStdString();
+		out << "csv_file = " << rel_filename <<"\n";
 		out << "csv_separator = "<<"\""<<(*it)->getSeperator()<<"\"\n";
 		out << "csv_desc_labels = "<<(*it)->getDescriptorLabels()<<"\n";
 		out << "csv_compound_labels = "<< (*it)->getCompoundLabels()<<"\n";
@@ -57,14 +61,16 @@ void InputDataItemIO::writeConfigSection(SDFInputDataItem* sd_item, ofstream& ou
 }
 
 
-void InputDataItemIO::writeConfigSection(CSVInputDataItem* csv_item, ofstream& out)
+void InputDataItemIO::writeConfigSection(CSVInputDataItem* csv_item, ofstream& out, const String& directory)
 {
 	// if csv_item has been written to a config section because it is connected to a SDFInputDataItem, do nothing!
 	if(written_csv_.find(csv_item)!=written_csv_.end()) return;
 	
+	QDir qdir(directory.c_str());
+	String rel_filename = (qdir.relativeFilePath(csv_item->filename())).toStdString();
 	out << "[InputReader]" << "\n";
 	if(csv_item->isDone()) out<<"done = "<<1<<endl;
-	out << "csv_file = " << csv_item->filename().toStdString()<<"\n";
+	out << "csv_file = " << rel_filename<<"\n";
 	out << "csv_separator = "<<"\""<<csv_item->getSeperator()<<"\"\n";
 	out << "csv_desc_labels = "<<csv_item->getDescriptorLabels()<<"\n";
 	out << "csv_compound_labels = "<<csv_item->getCompoundLabels()<<"\n";
@@ -160,7 +166,7 @@ void InputDataItemIO::readPartitionerSection(String& configfile_section, map<Str
 	}	
 }
 
-void InputDataItemIO::readConfigSection(String& configfile_section, map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions)
+void InputDataItemIO::readConfigSection(String& configfile_section, map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions, const String& directory)
 {
 	istringstream input;
 	input.str(configfile_section);
@@ -190,7 +196,10 @@ void InputDataItemIO::readConfigSection(String& configfile_section, map<String, 
 	{
 		try
 		{
-			sd_item = new SDFInputDataItem(conf.sd_file.c_str(), conf.activities,conf.center_data, conf.center_y, view_);
+			QDir qdir(directory.c_str());
+			QString abs_filename = qdir.absoluteFilePath(conf.sd_file.c_str());
+						
+			sd_item = new SDFInputDataItem(abs_filename, conf.activities,conf.center_data, conf.center_y, view_);
 			view_->data_scene->addItem(sd_item);
 			sd_item->addToPipeline();
 			sd_item->setSavedAs(conf.output.c_str());
@@ -215,6 +224,7 @@ void InputDataItemIO::readConfigSection(String& configfile_section, map<String, 
 	try
 	{
 		uint no=conf.csv_file.size();
+		QDir qdir(directory.c_str());
 		for(uint i=0; i<no;i++)
 		{
 			CSVInputDataItem* csv_item;
@@ -233,11 +243,15 @@ void InputDataItemIO::readConfigSection(String& configfile_section, map<String, 
 					csv_item->setCenterResponseFlag(0);
 				}
 				csv_item->setView(view_);
-				csv_item->setFilename(conf.csv_file[i]);
+				QString abs_filename = qdir.absoluteFilePath(conf.csv_file[i].c_str());
+				csv_item->setFilename(abs_filename.toStdString());
+				QStringList list = abs_filename.split("/");
+				csv_item->setName(list[list.size()-1]);
 			}
 			else
 			{
-				csv_item = new CSVInputDataItem(conf.csv_file[i].c_str(),view_);	
+				QString abs_filename = qdir.absoluteFilePath(conf.csv_file[i].c_str());	
+				csv_item = new CSVInputDataItem(abs_filename,view_);	
 				csv_item->setAppend(false);
 				csv_item->setCenterDataFlag(conf.center_data);
 				csv_item->setCenterResponseFlag(conf.center_y);

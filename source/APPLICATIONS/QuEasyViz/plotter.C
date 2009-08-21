@@ -97,9 +97,35 @@ void Plotter::save()
 		plot(0);
 	}
 	
+	QString selected_ext;
 	QString file = QFileDialog::getSaveFileName(this, tr("Save Plot"),
-			QDir::homePath(), tr("Images (*.png *.xpm *.jpg *.pdf *.ps *.eps)"));
-	if(file!="") printToFile(file);
+		QDir::homePath(), tr("PNG (*.png);;Encapsulated PostScript (*.eps);;Portable Document Format (*.pdf);;PostScript (*.ps);;JPG (*.jpg);;GIF (*.gif);;Windows Bitmap (*.bmp);;Tagged Image File Format (*.tif)"),&selected_ext);
+	if(file=="") return; 
+	
+	String f=file.toStdString();
+	bool valid_extension=false;
+	if(f.find_last_of(".")!=string::npos) // check whether user ommitted file-extension
+	{
+		String ext=f.substr(f.find_last_of(".")+1);
+		if(ext=="png"||ext=="eps"||ext=="pdf"||ext=="ps"||ext=="jpg"||ext=="gif"||ext=="bmp"||ext=="tif")
+		{
+			valid_extension=true;
+		}
+	}
+	if(!valid_extension) // set extension according to selected filter
+	{
+		String s = selected_ext.toStdString().substr(0,3);
+		if(s=="PNG") file+=".png";
+		else if(s=="Enc") file+=".eps";
+		else if(s=="Por") file+=".pdf";
+		else if(s=="Pos") file+=".ps";
+		else if(s=="JPG") file+=".jpg";
+		else if(s=="GIF") file+=".gif";
+		else if(s=="Win") file+=".bmp";
+		else if(s=="Tag") file+=".tif";		
+	}
+	
+	printToFile(file);
 	
 	if(data_symbol!=symbol_backup)
 	{
@@ -154,11 +180,27 @@ void Plotter::printToFile(QString& file)
 		plot(0);
 	}
 	
-	QPrinter printer(QPrinter::HighResolution);
-	printer.setOutputFileName(file);
-	printer.setResolution(600);
-	printer.setOrientation(QPrinter::Landscape);
-	qwt_plot_->print(printer);
+	String ext = file.toStdString();
+	if(ext.find_last_of(".")!=string::npos)
+	{
+		ext=ext.substr(ext.find_last_of(".")+1);
+	}
+	if(ext=="eps"||ext=="pdf"||ext=="ps")
+	{
+		QPrinter printer(QPrinter::HighResolution);
+		printer.setOutputFileName(file);
+		printer.setResolution(600);
+		printer.setOrientation(QPrinter::Landscape);
+		qwt_plot_->print(printer);
+	}
+	else
+	{
+		QImage image(qwt_plot_->width(),qwt_plot_->height(),QImage::Format_RGB32);
+		QColor color(255,255,255);
+		image.fill(color.rgb());
+		qwt_plot_->print(image);
+		image.save(file);		
+	}
 	
 	if(data_symbol!=symbol_backup)
 	{
