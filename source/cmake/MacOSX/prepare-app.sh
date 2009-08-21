@@ -11,10 +11,10 @@ for exe in `echo $EXECUTABLES`; do
 		install_name_tool -change         ${QT_PATH}/$i.framework/Versions/4/$i @executable_path/../../../lib/$i.framework/Versions/4/$i $exe
 	done
 
-	echo "install_name_tool -change /Users/admin/Documents/BALL-1.3-beta1/contrib/lib/libgsl.0.dylib @executable_path/../../../lib/libgsl.dylib $exe.exe"
-	install_name_tool -change /Users/admin/Documents/BALL-1.3-beta1/contrib/lib/libgsl.0.dylib @executable_path/../../../lib/libgsl.dylib $exe
-	echo "install_name_tool -change /Users/admin/Documents/BALL-1.3-beta1/contrib/lib/libgslcblas.0.dylib @executable_path/../../../lib/libgslcblas.dylib $exe.exe"
-	install_name_tool -change /Users/admin/Documents/BALL-1.3-beta1/contrib/lib/libgslcblas.0.dylib @executable_path/../../../lib/libgslcblas.dylib $exe
+# 	echo "install_name_tool -change /Users/admin/Documents/BALL-1.3-beta1/contrib/lib/libgsl.0.dylib @executable_path/../../../lib/libgsl.dylib $exe.exe"
+# 	install_name_tool -change /Users/admin/Documents/BALL-1.3-beta1/contrib/lib/libgsl.0.dylib @executable_path/../../../lib/libgsl.dylib $exe
+# 	echo "install_name_tool -change /Users/admin/Documents/BALL-1.3-beta1/contrib/lib/libgslcblas.0.dylib @executable_path/../../../lib/libgslcblas.dylib $exe.exe"
+# 	install_name_tool -change /Users/admin/Documents/BALL-1.3-beta1/contrib/lib/libgslcblas.0.dylib @executable_path/../../../lib/libgslcblas.dylib $exe
 done
 
 echo

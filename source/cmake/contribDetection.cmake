@@ -47,6 +47,7 @@ set(VIEW_LIBS "")  # libs needed by all visualization applications
 set(VIEW_GL_LIBS "")  # libs needed only by applications that use GL (e.g. BALLView)
 set(QUEASY_LIBS "")  # additional libs needed by all QuEasy applications
 set(QUEASYVIZ_LIBS "")   # additional libs for QuEasyViz
+
 include_directories(../include) # for BALL includes
 
 
@@ -139,16 +140,20 @@ macro(search_lib package_name libname static libs_list)
 	endif(NOT RES STREQUAL "RES-NOTFOUND")
 	
 	if(NOT ${path} STREQUAL "")
-		list(APPEND ${ARGV3} ${name})
 		set(found -1)
 		list(FIND LIB_DIRS ${path} found)
+		string(REPLACE ".." "${PROJECT_SOURCE_DIR}/.." abs_path ${path})
 		if(${found} EQUAL -1)
 			list(APPEND LIB_DIRS ${path})
 			if("${ARGV2}" STREQUAL "dynamic")
-				string(REPLACE ".." "${PROJECT_SOURCE_DIR}/.." abs_path ${path})
 				set(DY_LIB_DIRS "${DY_LIB_DIRS}  ${abs_path}")
 			endif("${ARGV2}" STREQUAL "dynamic")
 		endif(${found} EQUAL -1)
+		if("${ARGV2}" STREQUAL "dynamic")
+			list(APPEND ${ARGV3} ${name})
+		else("${ARGV2}" STREQUAL "dynamic")
+			list(APPEND ${ARGV3} ${abs_path}/${name})  # on mac, we need *full* path to static libs!
+		endif("${ARGV2}" STREQUAL "dynamic")
 		SET(LIB_${ARGV0} 1)
 		message(STATUS "searching ${name}: ${path}/${name}")
 	else(NOT ${path} STREQUAL "")
@@ -207,16 +212,20 @@ macro(check_lib package_name lib static path libs_list)
 	set(name "lib${ARGV1}.${LIB_EXT}")
 	if(EXISTS ${ARGV3}/${name})
 		set(LIB_${ARGV0} 1)
-		list(APPEND ${ARGV4} ${name})
+		string(REPLACE ".." "${PROJECT_SOURCE_DIR}/.." abs_path ${path})
 		message(STATUS "searching ${name}: ${path}/${name}")
 		set(found -1)
 		list(FIND LIB_DIRS ${ARGV3} found)
 		if(${found} EQUAL -1)
 			if("${ARGV2}" STREQUAL "dynamic")
-				string(REPLACE ".." "${PROJECT_SOURCE_DIR}/.." abs_path ${path})
 				set(DY_LIB_DIRS "${DY_LIB_DIRS}  ${abs_path}")
 			endif("${ARGV2}" STREQUAL "dynamic")
 		endif(${found} EQUAL -1)
+		if("${ARGV2}" STREQUAL "dynamic")
+			list(APPEND ${ARGV4} ${name})
+		else("${ARGV2}" STREQUAL "dynamic")
+			list(APPEND ${ARGV4} ${abs_path}/${name})  # on mac, we need *full* path to static libs!
+		endif("${ARGV2}" STREQUAL "dynamic")
 	
 	#check whether a full path (including file name) was given
 	else(EXISTS ${ARGV3}/${name})

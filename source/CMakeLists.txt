@@ -39,10 +39,10 @@ include(PLUGIN/CMakeLists.txt)
 include(VIEW/CMakeLists.txt)
 
 
-#ADD_LIBRARY(BALL STATIC ${BALL_SOURCES})
+ADD_LIBRARY(BALL STATIC ${BALL_SOURCES})
 #ADD_LIBRARY(BALL_shared SHARED ${BALL_SOURCES})
 
-#ADD_LIBRARY(VIEW STATIC ${VIEW_SOURCES})
+ADD_LIBRARY(VIEW STATIC ${VIEW_SOURCES})
 #ADD_LIBRARY(VIEW SHARED ${VIEW_SOURCES})
 
 
@@ -65,4 +65,4 @@ if(NOT ${DY_LIB_DIRS} STREQUAL "")
 	message(STATUS "\n\nPlease don't forget to add \n  ${DY_LIB_DIRS}\nto your LD_LIBRARY_PATH !\n\n")
 endif(NOT ${DY_LIB_DIRS} STREQUAL "")
 
-include(cmake/install.cmake)
+include(cmake/package_deb.cmake)
