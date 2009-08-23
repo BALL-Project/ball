@@ -1,3 +1,23 @@
+/* mainWindow.C
+ * 
+ * Copyright (C) 2009 Marcel Schumann
+ * 
+ * This file is part of QuEasy -- A Toolbox for Automated QSAR Model
+ * Construction and Validation.
+ * QuEasy is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ * 
+ * QuEasy is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include <BALL/APPLICATIONS/QuEasyViz/mainWindow.h>
 #include <BALL/QSAR/exception.h>
 #include <BALL/APPLICATIONS/QuEasyViz/exception.h>
@@ -85,6 +105,7 @@ void MainWindow::init()
 	settings.email_address="";
 	settings.tmp_folder="";
 	settings.path_separator = BALL::FileSystem::PATH_SEPARATOR;
+	settings.show_documentation = true;
 	settings.descriptor_explanation_files.push_back("dragon_descriptors.txt");
 	settings.readFromFile(s);
 	
@@ -127,7 +148,7 @@ void MainWindow::init()
 	
 	read_descriptor_explanations_=0;
 	documentation_= 0;
-	showDocumentation();
+	if(settings.show_documentation) showDocumentation();
 }
 
 
@@ -172,6 +193,7 @@ void MainWindow::Settings::saveToFile(String file)
 	out.insertValue("QuEasyViz","send_email",send_email);
 	out.insertValue("QuEasyViz","email_address",email_address);
 	out.insertValue("QuEasyViz","path_separator",path_separator);
+	out.insertValue("QuEasyViz","show_documentation",show_documentation);
 	out.write();
 }
 
@@ -205,6 +227,7 @@ void MainWindow::Settings::readFromFile(String file)
 		if(ini.hasEntry("QuEasyViz","email_address")) email_address = ini.getValue("QuEasyViz","email_address");
 		if(ini.hasEntry("QuEasyViz","tmp_folder")) tmp_folder = ini.getValue("QuEasyViz","tmp_folder");
 		if(ini.hasEntry("QuEasyViz","path_separator")) path_separator = ini.getValue("QuEasyViz","path_separator");
+		if(ini.hasEntry("QuEasyViz","show_documentation")) show_documentation = ini.getValue("QuEasyViz","show_documentation").toBool();
 	}
 	// if there are unacceptable entries in the ini-file, ignore the file
 	catch(BALL::Exception::GeneralException e) { }
@@ -617,33 +640,8 @@ void MainWindow::printToFile()
 	QDialog dialog;
 	QVBoxLayout main_layout;
 	
-	QHBoxLayout h_layout;
-	QLabel label("Queue submitting command");
-	QLineEdit edit;
-	edit.setText(settings.submit_prefix.c_str());
-	h_layout.addWidget(&label);
-	h_layout.addWidget(&edit);
-	main_layout.addLayout(&h_layout);
-	
-	QHBoxLayout h2_layout;
-	QLabel label2("Path of QPipeStarter");
-	QLineEdit edit2;
-	edit2.setText(settings.tools_path.c_str());
-	h2_layout.addWidget(&label2);
-	h2_layout.addWidget(&edit2);
-	main_layout.addLayout(&h2_layout);
-	
-	QCheckBox checkbox("send email when job is finished?");
-	checkbox.setChecked(settings.send_email);
-	main_layout.addWidget(&checkbox);
-	
-	QHBoxLayout h3_layout;
-	QLabel label3("email address");
-	QLineEdit edit3;
-	edit3.setText(settings.email_address.c_str());
-	h3_layout.addWidget(&label3);
-	h3_layout.addWidget(&edit3);
-	main_layout.addLayout(&h3_layout);
+	QVBoxLayout* layout1 = new QVBoxLayout;
+	QGroupBox general_settins(tr("General settings"));
 	
 	QHBoxLayout h4_layout;
 	QLabel label4("tmp folder");
@@ -651,7 +649,49 @@ void MainWindow::printToFile()
 	edit4.setText(settings.tmp_folder.c_str());
 	h4_layout.addWidget(&label4);
 	h4_layout.addWidget(&edit4);
-	main_layout.addLayout(&h4_layout);
+	layout1->addLayout(&h4_layout);
+	
+	QCheckBox doc_checkbox("show documentation at start-up?");
+	doc_checkbox.setChecked(settings.show_documentation);
+	layout1->addWidget(&doc_checkbox);
+	
+	general_settins.setLayout(layout1);
+	main_layout.addWidget(&general_settins);
+	
+	
+	QVBoxLayout* layout2 = new QVBoxLayout;
+	QGroupBox cluster_settins(tr("Cluster submit settings"));
+	
+	QHBoxLayout h_layout;
+	QLabel label("Queue submitting command");
+	QLineEdit edit;
+	edit.setText(settings.submit_prefix.c_str());
+	h_layout.addWidget(&label);
+	h_layout.addWidget(&edit);
+	layout2->addLayout(&h_layout);
+	
+	QHBoxLayout h2_layout;
+	QLabel label2("Path to QuEasyRun");
+	QLineEdit edit2;
+	edit2.setText(settings.tools_path.c_str());
+	h2_layout.addWidget(&label2);
+	h2_layout.addWidget(&edit2);
+	layout2->addLayout(&h2_layout);
+	
+	QCheckBox checkbox("send email when job is finished?");
+	checkbox.setChecked(settings.send_email);
+	layout2->addWidget(&checkbox);
+	
+	QHBoxLayout h3_layout;
+	QLabel label3("email address");
+	QLineEdit edit3;
+	edit3.setText(settings.email_address.c_str());
+	h3_layout.addWidget(&label3);
+	h3_layout.addWidget(&edit3);
+	layout2->addLayout(&h3_layout);
+	
+	cluster_settins.setLayout(layout2);
+	main_layout.addWidget(&cluster_settins);
 	
 	QDialogButtonBox buttons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,Qt::Horizontal);
 	main_layout.addWidget(&buttons);
@@ -659,7 +699,6 @@ void MainWindow::printToFile()
 	connect(&buttons, SIGNAL(rejected()), &dialog, SLOT(reject()));
 	
 	dialog.setLayout(&main_layout);
-	 
 	if(dialog.exec()) // if user clicks "ok"
 	{
 		settings.submit_prefix = edit.text().toStdString();
@@ -667,6 +706,7 @@ void MainWindow::printToFile()
 		settings.send_email= checkbox.isChecked();
 		settings.email_address = edit3.text().toStdString();
 		settings.tmp_folder = edit4.text().toStdString();
+		settings.show_documentation = doc_checkbox.isChecked();
 	}	 
  } 
  
