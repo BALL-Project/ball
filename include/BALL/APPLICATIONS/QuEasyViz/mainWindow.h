@@ -203,6 +203,9 @@ namespace BALL
 					/** names of files containing explanations for descriptors */
 					list<String> descriptor_explanation_files;
 					
+					/** determines whether the documentation is to be shown at start-up */
+					bool show_documentation;
+					
 					MainWindow* main_window;
 					
 					void saveToFile(String file);
