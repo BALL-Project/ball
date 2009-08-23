@@ -75,12 +75,12 @@ list(APPEND QUEASYVIZ_SOURCES
 
 link_directories(. ${LIB_DIRS})
 add_executable(APPLICATIONS/QuEasyViz/QuEasyViz ${QUEASYVIZ_SOURCES})
-target_link_libraries(APPLICATIONS/QuEasyViz/QuEasyViz BALL ${QUEASYVIZ_LIBS} ${VIEW_LIBS} ${QUEASY_LIBS} ${CORE_LIBS})
+target_link_libraries(APPLICATIONS/QuEasyViz/QuEasyViz QuEasy BALL ${QUEASYVIZ_LIBS} ${VIEW_LIBS} ${QUEASY_LIBS} ${CORE_LIBS})
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
 	link_directories(. ${LIB_DIRS})
 	add_executable(QuEasyViz MACOSX_BUNDLE ${QUEASYVIZ_SOURCES})
-	target_link_libraries(QuEasyViz BALL ${QUEASYVIZ_LIBS} ${VIEW_LIBS} ${QUEASY_LIBS} ${CORE_LIBS})
+	target_link_libraries(QuEasyViz QuEasy BALL ${QUEASYVIZ_LIBS} ${VIEW_LIBS} ${QUEASY_LIBS} ${CORE_LIBS})
 endif(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
 
 
