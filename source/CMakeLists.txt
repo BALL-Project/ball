@@ -69,8 +69,8 @@ if(NOT ${DY_LIB_DIRS} STREQUAL "")
 endif(NOT ${DY_LIB_DIRS} STREQUAL "")
 
 # include script for building deb-/dmg-package
-if(${CMAKE_SYSTEM_NAME} STREQUAL "Debian")
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 	include(cmake/package_deb.cmake)
 elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
 	include(cmake/package_dmg.cmake)
-endif(${CMAKE_SYSTEM_NAME} STREQUAL "Debian")
+endif(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
