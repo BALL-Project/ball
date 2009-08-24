@@ -20,8 +20,8 @@ INSTALL(FILES cmake/MacOSX/QuEasy-shell.rc DESTINATION . RENAME .QuEasy-shell.rc
 INSTALL(DIRECTORY ../doc/QuEasyViz/ DESTINATION share/QuEasy/doc/QuEasyViz/)
 INSTALL(DIRECTORY ../data/QSAR/ DESTINATION share/QuEasy/data/)
 
-INSTALL(FILES cmake/QuEasy-license.txt DESTINATION . RENAME Licence.txt)
-SET(CPACK_DRAGNDROP_FILE_LICENCE Licence.txt)
+INSTALL(FILES cmake/QuEasy-license.txt DESTINATION . RENAME License.txt)
+SET(CPACK_DRAGNDROP_FILE_LICENCE License.txt)
 
 # copy dynamic libraries  ##
 install(FILES /Users/admin/Documents/BALL-1.3-beta1/contrib/lib/QtGui.framework/Versions/4/QtGui DESTINATION lib/QtGui.framework/Versions/4/QtGui COMPONENT library)

@@ -18,8 +18,8 @@ INSTALL(PROGRAMS APPLICATIONS/QuEasyRun/QuEasyRun DESTINATION share/QuEasy/)
 INSTALL(DIRECTORY ../doc/QuEasyViz/ DESTINATION share/QuEasy/doc/QuEasyViz/)
 INSTALL(DIRECTORY ../data/QSAR/ DESTINATION share/QuEasy/data/)
 
-INSTALL(FILES cmake/QuEasy-license.txt DESTINATION . RENAME share/QuEasy/Licence.txt)
-SET(CPACK_DEBIAN_FILE_LICENCE Licence.txt)
+INSTALL(FILES cmake/QuEasy-license.txt DESTINATION . RENAME share/QuEasy/License.txt)
+SET(CPACK_DEBIAN_FILE_LICENCE share/QuEasy/License.txt)
 
 # add start script
 file(WRITE cmake/QuEasyViz "/usr/share/QuEasy/QuEasyViz")
