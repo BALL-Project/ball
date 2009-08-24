@@ -23,7 +23,7 @@ SET(CPACK_DEBIAN_FILE_LICENCE share/QuEasy/License.txt)
 
 # add start script
 file(WRITE cmake/QuEasyViz "/usr/share/QuEasy/QuEasyViz")
-file(WRITE cmake/QuEasyRun "/usr/share/QuEasy/QuEasyRun")
+file(WRITE cmake/QuEasyRun "/usr/share/QuEasy/QuEasyRun $1")
 INSTALL(PROGRAMS cmake/QuEasyViz DESTINATION bin/)
 INSTALL(PROGRAMS cmake/QuEasyRun DESTINATION bin/)
 
