@@ -1,10 +1,12 @@
+set(CPACK_GENERATOR "DEB")
+
 SET(CMAKE_PROJECT_NAME QuEasy)
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "someone")
 set(CPACK_DEBIAN_PACKAGE_VERSION "1.0-alpha3")
 set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
 SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt4-core (>= 4.2.0), libqt4-gui (>= 4.2.0), libc6, libstdc++6 (>=4.3)")
-SET(DEBIAN_PACKAGE_SECTION "Science")
-#set(DEBIAN_PACKAGE_DESCRIPTION "add description here...")
+SET(CPACK_DEBIAN_PACKAGE_SECTION "Science")
+SET(CPACK_DEBIAN_PACKAGE_DESCRIPTION "QuEasy - A Toolbox for Automated QSAR Model Construction and Validation")
 
 
 INCLUDE(CPack)
@@ -15,6 +17,9 @@ INSTALL(PROGRAMS APPLICATIONS/QuEasyRun/QuEasyRun DESTINATION share/QuEasy/)
 
 INSTALL(DIRECTORY ../doc/QuEasyViz/ DESTINATION share/QuEasy/doc/QuEasyViz/)
 INSTALL(DIRECTORY ../data/QSAR/ DESTINATION share/QuEasy/data/)
+
+INSTALL(FILES cmake/QuEasy-license.txt DESTINATION . RENAME share/QuEasy/Licence.txt)
+SET(CPACK_DEBIAN_FILE_LICENCE Licence.txt)
 
 # add start script
 file(WRITE cmake/QuEasyViz "/usr/share/QuEasy/QuEasyViz")

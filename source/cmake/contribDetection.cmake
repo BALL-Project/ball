@@ -479,8 +479,8 @@ if(NOT DISABLE_QUEASY)
 	endif(NOT USE_lapack)
 		
 	if(NOT LIB_fortran)
-		set(name "  fortran library, needed for linking against Lapack lib")
-		set(missing_packages ${missing_packages}${name}\n)
+	#	set(name "  fortran library, needed for linking against Lapack lib")
+	#	set(missing_packages ${missing_packages}${name}\n)
 	endif(NOT LIB_fortran)
 	
 	if(NOT USE_blas)
