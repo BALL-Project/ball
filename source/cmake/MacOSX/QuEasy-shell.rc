@@ -1,0 +1,8 @@
+
+source /etc/profile
+
+export DYLD_LIBRARY_PATH=${QUEASY_PATH}/lib:$DYLD_LIBRARY_PATH
+
+export BALL_DATA_PATH=${QUEASY_PATH}/share/QuEasy/data
+
+export PATH=${QUEASY_PATH}/QuEasyRun.app/Contents/MacOS/:$PATH

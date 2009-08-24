@@ -1,0 +1,13 @@
+#!/bin/bash
+clear
+echo ""
+echo ""
+echo "   ------------------------------------------------"
+echo "       Welcome to the QuEasy command shell    "
+echo "   ------------------------------------------------"
+echo ""
+echo ""
+
+export QUEASY_PATH=`dirname $0`
+bash --rcfile ${QUEASY_PATH}/.QuEasy-shell.rc
+

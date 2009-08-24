@@ -13,6 +13,8 @@ add_custom_command(TARGET QuEasyViz POST_BUILD COMMAND cmake/MacOSX/prepare-app.
 # add executables  ##
 INSTALL(TARGETS QuEasyRun DESTINATION .)
 INSTALL(TARGETS QuEasyViz DESTINATION .)
+INSTALL(FILES cmake/MacOSX/QuEasy-shell DESTINATION . PERMISSIONS OWNER_EXECUTE OWNER_READ OWNER_WRITE)
+INSTALL(FILES cmake/MacOSX/QuEasy-shell.rc DESTINATION . RENAME .QuEasy-shell.rc)
 
 # add documentation, images and data  ##
 INSTALL(DIRECTORY ../doc/QuEasyViz/ DESTINATION share/QuEasy/doc/QuEasyViz/)
