@@ -68,4 +68,9 @@ if(NOT ${DY_LIB_DIRS} STREQUAL "")
 	message(STATUS "\n\nPlease don't forget to add \n  ${DY_LIB_DIRS}\nto your LD_LIBRARY_PATH !\n\n")
 endif(NOT ${DY_LIB_DIRS} STREQUAL "")
 
-include(cmake/package_deb.cmake)
+# include script for building deb-/dmg-package
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Debian")
+	include(cmake/package_deb.cmake)
+elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+	include(cmake/package_dmg.cmake)
+endif(${CMAKE_SYSTEM_NAME} STREQUAL "Debian")
