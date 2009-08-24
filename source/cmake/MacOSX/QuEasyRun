@@ -13,6 +13,6 @@ export BALL_DATA_PATH=${QUEASY_PATH}/../../../share/QuEasy
 export PATH=${QUEASY_PATH}
 
 ## start QuEasyRun
-${QUEASY_PATH}/QuEasyRun.exe
+${QUEASY_PATH}/QuEasyRun.exe $1
 
 
