@@ -22,6 +22,7 @@
 #include <BALL/QSAR/registry.h>
 #include <BALL/QSAR/featureSelection.h>
 #include <BALL/QSAR/configIO.h>
+#include <BALL/SYSTEM/path.h>
 
 #define EXT_MAIN
 #include "inputReader.C"
@@ -62,6 +63,20 @@ int main(int argc, char* argv[])
 	
 	QSARData* q = new QSARData; //  try to reload data as seldom as possible...
 	String data_filename = "none";
+
+	// -- set data-path if enviroment-variable BALL_DATA_PATH is not set --
+	Path p;
+	String executable_directory = argv[0];
+	String sep = BALL::FileSystem::PATH_SEPARATOR;
+	executable_directory = executable_directory.substr(0,executable_directory.find_last_of(sep));
+	String file = "QSAR"+sep+"atomic_electron_affinities.data";
+	String dir = p.find(file);
+	if(dir=="")
+	{
+		String folder = executable_directory+sep+"data"+sep;
+		q->setDataFolder(folder.c_str());
+	}
+	// -----  -----
 	
 	for(int i=0;!in.eof();i++) // process all sections
 	{
