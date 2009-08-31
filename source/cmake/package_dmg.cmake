@@ -18,7 +18,7 @@ INSTALL(FILES cmake/MacOSX/QuEasy-shell.rc DESTINATION . RENAME .QuEasy-shell.rc
 
 # add documentation, images and data  ##
 INSTALL(DIRECTORY ../doc/QuEasyViz/ DESTINATION share/QuEasy/doc/QuEasyViz/)
-INSTALL(DIRECTORY ../data/QSAR/ DESTINATION share/QuEasy/data/)
+INSTALL(DIRECTORY ../data/QSAR/ DESTINATION share/QuEasy/data/QSAR/)
 
 INSTALL(FILES cmake/QuEasy-license.txt DESTINATION . RENAME License.txt)
 SET(CPACK_DRAGNDROP_FILE_LICENCE License.txt)

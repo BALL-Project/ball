@@ -5,17 +5,26 @@ EXECUTABLES="QuEasyViz.app/Contents/MacOS/QuEasyViz QuEasyRun.app/Contents/MacOS
 
 echo
 
+# fix linking of applications to qt-libs
 for exe in `echo $EXECUTABLES`; do
 	for i in QtCore QtGui; do
 		echo "install_name_tool -change ${QT_PATH}/$i.framework/Versions/4/$i @executable_path/../../../lib/$i.framework/Versions/4/$i $exe.exe"
 		install_name_tool -change ${QT_PATH}/$i.framework/Versions/4/$i @executable_path/../../../lib/$i.framework/Versions/4/$i $exe
 	done
-
-# 	echo "install_name_tool -change /Users/admin/Documents/BALL-1.3-beta1/contrib/lib/libgsl.0.dylib @executable_path/../../../lib/libgsl.dylib $exe.exe"
-# 	install_name_tool -change /Users/admin/Documents/BALL-1.3-beta1/contrib/lib/libgsl.0.dylib @executable_path/../../../lib/libgsl.dylib $exe
-# 	echo "install_name_tool -change /Users/admin/Documents/BALL-1.3-beta1/contrib/lib/libgslcblas.0.dylib @executable_path/../../../lib/libgslcblas.dylib $exe.exe"
-# 	install_name_tool -change /Users/admin/Documents/BALL-1.3-beta1/contrib/lib/libgslcblas.0.dylib @executable_path/../../../lib/libgslcblas.dylib $exe
 done
+
+# fix qt-libs
+for i in QtCore QtGui; do
+		# fix id's
+		echo "install_name_tool -id @executable_path/../../../lib/$i.framework/Versions/4/$i ${QT_PATH}/$i.framework/Versions/4/$i"
+		install_name_tool -id @executable_path/../../../lib/$i.framework/Versions/4/$i ${QT_PATH}/$i.framework/Versions/4/$i
+
+		# fix linking to QtCore
+		echo "install_name_tool -change ${QT_PATH}/QtCore.framework/Versions/4/QtCore @executable_path/../../../lib/QtCore.framework/Versions/4/QtCore ${QT_PATH}/$i.framework/Versions/4/$i"
+		install_name_tool -change ${QT_PATH}/QtCore.framework/Versions/4/QtCore @executable_path/../../../lib/QtCore.framework/Versions/4/QtCore ${QT_PATH}/$i.framework/Versions/4/$i
+	
+done
+
 
 echo
 
