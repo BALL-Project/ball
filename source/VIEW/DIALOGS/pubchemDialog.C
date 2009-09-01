@@ -7,11 +7,14 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/STRUCTURE/sdGenerator.h>
 
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qtreewidget.h>
+#include <QtGui/QPushButton>
+#include <QtGui/QTreeWidget>
+#include <QtGui/QProgressBar>
 
-#include "../SOAP/soapeUtilsServiceSoapProxy.h" // get proxy 
-#include "../SOAP/eUtilsServiceSoap.nsmap" // obtain the namespace mapping table 
+#include <QtCore/QUrl>
+#include <QtXml/QDomDocument>
+
+#include <algorithm>
 
 namespace BALL
 {
@@ -22,7 +25,10 @@ namespace BALL
 				Ui_PubChemDialogData(),
 				ModularWidget(name),
 				action1_(0),
-				action2_(0)
+				action2_(0),
+				esearch_base_url_("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"), // TODO: make configurable
+				esummary_base_url_("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi"), // TODO: make configurable
+				progress_(0)
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "new PubChemDialog " << this << std::endl;
@@ -44,6 +50,10 @@ namespace BALL
 
 			queries->setColumnCount(1);
 			queries->headerItem()->setText(0, "Results");
+
+			// connect the Http connectors...
+			connect(&esearch_connector_,  SIGNAL(requestFinished(int, bool)), this, SLOT( esearchFinished(int, bool)));
+			connect(&esummary_connector_, SIGNAL(requestFinished(int, bool)), this, SLOT(esummaryFinished(int, bool)));
 		}
 	
 		PubChemDialog::~PubChemDialog()
@@ -150,80 +160,37 @@ namespace BALL
 			String qt = ascii(pubchem_label->displayText());
 			if (qt == "") return;
 
-			eUtilsServiceSoap q; 
-			std::string search_term(qt);
-			std::string db_name = "pcsubstance";
-			std::string usehistory = "y";
-
-			_ns5__eSearchRequest*  search_request = new _ns5__eSearchRequest;
-	
-			search_request->db   = &db_name;
-			search_request->term = &search_term;
-			search_request->usehistory = &usehistory;
-
-			_ns5__eSearchResult* search_result = new _ns5__eSearchResult;
-
-			if (q.__ns1__run_USCOREeSearch(search_request, search_result) != SOAP_OK) 
+			// we do the proxy settings here, not in the constructor, since the
+			// user might have changed them since the last download
+			MainControl* mc = getMainControl();
+			if (mc->getProxy() != "")
 			{
-				Log.error() << "Query failed!" << std::endl;
-				return;
+				esearch_connector_.setProxy(mc->getProxy().c_str(), mc->getProxyPort());
 			}
 
-			// now call eSummary
-			std::string webenv(*(search_result->WebEnv));
-			_ns6__eSummaryRequest* summary_request = new _ns6__eSummaryRequest;
-			summary_request->db 		 = &db_name;
-			summary_request->WebEnv = search_result->WebEnv;
-			summary_request->query_USCOREkey = search_result->QueryKey;
-			_ns6__eSummaryResult*  summary_result  = new _ns6__eSummaryResult;
+			// first, perform the search
+			QUrl search_url(esearch_base_url_.c_str());
+			search_url.addQueryItem("db", "pcsubstance");
+			search_url.addQueryItem("usehistory", "n");
+			search_url.addQueryItem("term", pubchem_label->displayText());
 
-			if (q.__ns1__run_USCOREeSummary(summary_request, summary_result) != SOAP_OK) 
-			{
-				Log.info() << "ESummary failed!" << std::endl;
-				return;
-			}
-
-			// generate the tree entries
-			QList<QTreeWidgetItem *> query_results;
-			QTreeWidgetItem* query_item = new QTreeWidgetItem((QTreeWidget*)0, QStringList(pubchem_label->displayText()));
-			query_results.append(query_item);
-			queries->insertTopLevelItems(0, query_results);
-			queries->expandItem(query_item);
-
-			Index max = (int)std::min(10,(int)summary_result->DocSum.size()) - 1;
-			for (int i = 0; i <= max; i++)
-			{
-				ParsedResult_ pr = parseResultRecursive_(summary_result->DocSum[i]);
-
-				// update the maps
-				//std::cout << "smiles: " << std::endl;
-				if (pr.smiles != "")
-				{
-					//std::cout << pr.smiles << std::endl;
-					try 
-					{
-						smiles_parser_.parse(pr.smiles);
-					} 
-					catch (...) 
-					{ 
-						continue;
-					}
-
-					insert_(pr, query_item, i == max);
-				}
-
-			}
+			esearch_connector_.setHost(QUrl::toAce(search_url.host()));
+			current_request_id_ = esearch_connector_.get(search_url.encodedPath()+"?"+search_url.encodedQuery());
 		}
 
 		void PubChemDialog::insert_(ParsedResult_ pr, QTreeWidgetItem* parent, bool plot)
 		{
 			QTreeWidgetItem* current_item = new QTreeWidgetItem(parent, QStringList(pr.name.c_str()));
 			descriptions_[current_item] = pr;
-			System S = smiles_parser_.getSystem();
-			original_systems_[current_item] = new System(S);
+			System S;
 			
 			try
 			{
+				smiles_parser_.parse(pr.smiles);
+				S = smiles_parser_.getSystem();
+
+				original_systems_[current_item] = new System(S);
+
 				SDGenerator sdg;
 				sdg.generateSD(S);
 			}
@@ -251,50 +218,62 @@ namespace BALL
 			queries->update();
 		}
 
-		String PubChemDialog::parseItemRecursive_(ns6__ItemType* item, int level)
+		void PubChemDialog::parseItemRecursive_(const QDomNode& current_node, Position level, ParsedResult_& result)
 		{
-			String result;
+			// the special "Id" node is just ignored
+			if (current_node.nodeName() == "Id")
+				return;
 
-			for (int i=0; i<level; i++) result+="\t";
-
-			if (item->__size_ItemType == 0)
+			// are we finally at a leaf node?
+			if (current_node.isText())
 			{
-				if (level == 0) result+=item->Name+String(": ");
-
-				result+=item->__mixed+String("\n");
-			}
-			else
-			{
-				result += item->Name+String(": ");
-				for (int i=0; i<item->__size_ItemType; i++)
-				{
-					result+=parseItemRecursive_(item->__union_ItemType[i].union_ItemType.Item, level+1);
-				}
+				result.description += ascii(current_node.nodeValue())+"<br/>";	
 			}
 
-			return result;
-		}
+			// nope. we have children to cover.
 
-		PubChemDialog::ParsedResult_ PubChemDialog::parseResultRecursive_(ns6__DocSumType* result)
-		{
-			ParsedResult_ pr;
-			for (int i=0; i<(int)result->Item.size(); i++)
+			// first, determine if we have to put our own "Name"-attribute as a
+			// description. We do this whenever it is not too generic (i.e. "string")
+			QString node_name = "string";
+
+			if (current_node.hasAttributes())
 			{
-				if (result->Item[i]->Name == "IUPACName")
-				{
-					pr.name = String(result->Item[i]->__mixed);
-				}
-				else if (result->Item[i]->Name == "CanonicalSmile")
-				{
-					pr.smiles = String(result->Item[i]->__mixed);
-				}
-				else
-				{
-					pr.description += parseItemRecursive_(result->Item[i]);
-				}
+				if (current_node.attributes().contains("Name"))
+					node_name = current_node.attributes().namedItem("Name").nodeValue();
 			}
 
-			return pr;
+			// two kinds of nodes are special: IUPACNames (we need them for the heading) and
+			// CanonicalSmiles (to generate the molecule)
+			if (node_name == "IUPACName")
+			{
+				result.name = ascii(current_node.firstChild().nodeValue());
+			} 
+			else if (node_name == "CanonicalSmile")
+			{
+				result.smiles = ascii(current_node.firstChild().nodeValue());
+			}
+
+			QDomNodeList children = current_node.childNodes();
+			Size num_children = children.length();
+			bool text_only = (num_children == 1) && children.item(0).isText();
+
+			if (node_name != "string" && node_name != "int")
+			{
+				for (Position i=0; i<level-1; ++i) result.description += "&nbsp;&nbsp;";
+
+				result.description += "<b>"+ascii(node_name)+": </b>";
+
+				if (!text_only)
+					result.description += "<br/>";
+			}
+
+			for (Position i=0; i<num_children; ++i)
+			{
+				if (!text_only)
+					for (Position i=0; i<level; ++i) result.description += "&nbsp;&nbsp;";
+
+				parseItemRecursive_(children.item(i), level+1, result);
+			}
 		}
 
 		void PubChemDialog::initializeWidget(MainControl&)
@@ -314,5 +293,184 @@ namespace BALL
 			action2_->setEnabled(!busy);
 		}
 
+		void PubChemDialog::esearchFinished(int id, bool error)
+		{
+			if (error)
+			{
+				Log.error() << "Error while contacting PubChem! Reason given was: " << ascii(esearch_connector_.errorString()) << std::endl;
+				getMainControl()->setStatusbarText("Error in connecting to PubChem!", true);
+
+				return;
+			}
+
+			if (id == current_request_id_)
+			{
+				QString error_msg;
+				int error_line, error_col;
+
+				QByteArray buffer = esearch_connector_.readAll();
+
+				QDomDocument dom;
+				bool ok = dom.setContent(buffer, true, &error_msg, &error_line, &error_col);
+
+				if (!ok)
+				{
+					Log.error() << "Error while parsing PubChem esearch results in line " << error_line << " col " << error_col << std::endl;
+					Log.error() << "Reason given was: " << ascii(error_msg) << std::endl;
+
+					getMainControl()->setStatusbarText("Error in parsing PubChem esearch results!", true);
+
+					return;
+				}
+
+				QDomNode num_total_node = dom.elementsByTagName("Count").item(0);
+				QDomNode num_download_node = dom.elementsByTagName("RetMax").item(0);
+
+				Size num_total = 0;
+				Size num_download = 0;
+
+				if (!num_total_node.isNull() && !num_download_node.isNull())
+				{
+					 num_total    =    num_total_node.firstChild().nodeValue().toInt();
+					 num_download = num_download_node.firstChild().nodeValue().toInt();
+
+					getMainControl()->setStatusbarText(String("Downloading ")+num_download+" of "+num_total+" entries");
+				}
+
+				QDomNode idList = dom.elementsByTagName("IdList").item(0);
+
+				if (idList.isNull())
+				{
+					Log.info() << "No entries found!" << std::endl;
+
+					return;
+				}
+
+				QDomNodeList entries = idList.toElement().elementsByTagName("Id");
+
+				Size num_entries = entries.length();
+
+				if (num_entries > 0)
+				{
+					if (progress_)
+					{
+						delete(progress_);
+					}
+
+					progress_ = new QProgressBar(queries);
+					progress_->setRange(0, num_download);
+					progress_->resize(queries->width(), progress_->height());
+					progress_->move(0, queries->height()-progress_->height());
+					progress_->show();
+
+					QTreeWidgetItem* new_query_result = new QTreeWidgetItem((QTreeWidget*)0, 
+					                                                        QStringList(pubchem_label->displayText()
+																																		+" ("+QString::number(num_download)+"/"+QString::number(num_total)+")"));
+					queries->insertTopLevelItem(0, new_query_result);
+					queries->expandItem(new_query_result);
+
+					for (Position i=0; i<num_entries; ++i)
+					{
+						if (!entries.item(i).firstChild().isNull())
+						{
+							callESummary(entries.item(i).firstChild().nodeValue(), new_query_result);
+						}
+					}
+				}
+			}
+		}
+
+		void PubChemDialog::callESummary(QString const& entry_id, QTreeWidgetItem* current_item)
+		{
+			// we do the proxy settings here, not in the constructor, since the
+			// user might have changed them since the last download
+			MainControl* mc = getMainControl();
+			if (mc->getProxy() != "")
+			{
+				esummary_connector_.setProxy(mc->getProxy().c_str(), mc->getProxyPort());
+			}
+
+			// now prepare the download
+			QUrl summary_url(esummary_base_url_.c_str());
+			summary_url.addQueryItem("db", "pcsubstance");
+			summary_url.addQueryItem("id", entry_id);
+
+			esummary_connector_.setHost(QUrl::toAce(summary_url.host()));
+
+			int id = esummary_connector_.get(summary_url.encodedPath()+"?"+summary_url.encodedQuery());
+			esummary_request_ids_[id] = current_item;
+		}
+
+		void PubChemDialog::esummaryFinished(int id, bool error)
+		{
+			// see if we have been looking for this one...
+			if (esummary_request_ids_.has(id) && !error)
+			{
+				if (progress_)
+				{
+					progress_->setValue(progress_->value()+1);
+				}
+
+				HashMap<int, QTreeWidgetItem*>::iterator list_it = esummary_request_ids_.find(id);
+				QTreeWidgetItem* current_item = list_it->second;
+
+				esummary_request_ids_.erase(list_it);
+	
+				// parse the file and insert results
+				ParsedResult_ parsed_result;
+
+				if (parseESummaryXml_(esummary_connector_.readAll(), parsed_result) && current_item)
+					insert_(parsed_result, current_item, true);
+			}
+
+			if (esummary_request_ids_.size() == 0)
+			{
+				delete (progress_);
+				progress_ = 0;
+			}
+		}
+
+		bool PubChemDialog::parseESummaryXml_(const QByteArray& data, ParsedResult_& result)
+		{
+			QString error_msg;
+			int error_line, error_col;
+
+			QDomDocument esummary;
+			bool ok = esummary.setContent(data, true, &error_msg, &error_line, &error_col);	
+
+			if (!ok)
+			{
+				Log.error() << "Could not parse PubChem ESummary! Error in line " << error_line 
+										<< " col " << error_col << std::endl;
+
+				Log.error() << "Reason given was: " << ascii(error_msg) << std::endl;
+
+				getMainControl()->setStatusbarText("Error in parsing PubChem esummary results!", true);
+
+				return false;
+			}
+
+			QDomNodeList item_list = esummary.elementsByTagName("DocSum");
+
+			for (Position i=0; i<item_list.length(); ++i)
+				parseItemRecursive_(item_list.item(i), 0, result);
+
+			if (result.name == "")
+			{
+				result.name = "(unknown)";
+			}
+
+			if (result.smiles == "")
+			{
+				Log.error() << "Error: PubChem ESummary contains no CanonicalSmile! Skipping this entry!"
+				            << std::endl;
+
+				getMainControl()->setStatusbarText("Error in parsing PubChem esummary results!", true);
+
+				return false;
+			}
+
+			return true;
+		}
 	}
 }

@@ -79,6 +79,32 @@ AC_DEFUN([CF_VIEW_QT_BASICS], [
 		fi
 	fi
 
+	AC_MSG_CHECKING(for libQtNetwork)
+	if test "${QTDIR}" != "" ; then
+		if test -a "${QTDIR}/lib/libQtNetwork.${SHARED_LIB_SUFFIX}" ; then
+			QT_LIBPATH="${QTDIR}/lib"
+			AC_MSG_RESULT((${QT_LIBPATH}))	
+		fi
+		if test "${QT_LIBPATH}" = "" ; then
+			CF_FIND_LIB(QT_LIBPATH, libQtNetwork, ${QTDIR}/lib ${QTDIR}/lib ${PROJECT[]_PATH}/contrib/lib)
+			AC_MSG_RESULT((${QT_LIBPATH}))	
+		fi
+		if test "${QT_LIBPATH}" = "" ; then
+			AC_MSG_RESULT((not found!))
+			AC_MSG_RESULT()
+			AC_MSG_RESULT([The QtNetwork library could not be found. Please specify the path to libqt])
+			AC_MSG_RESULT([by passing the option --with-qt-libs=DIR to configure.])
+			AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
+			AC_MSG_RESULT([path - configure will recognize this, too.])
+			AC_MSG_RESULT([The QT package can be found under the following URL:])
+			AC_MSG_RESULT(  http://www.troll.no/qt)
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(Note: BALL requires QT 4.x! QT3 is no longer supported.)
+			CF_ERROR
+		else
+			AC_MSG_RESULT()
+		fi
+	fi
 	AC_MSG_CHECKING(for libQtSql)
 	if test "${QTDIR}" != "" ; then
 		if test -a "${QTDIR}/lib/libQtSql.${SHARED_LIB_SUFFIX}" ; then
@@ -283,13 +309,13 @@ AC_DEFUN([CF_VIEW_QT_LINK_TEST], [
 		fi
 
 		if test "${OS}" = "Darwin" ; then
-			QTQGL_LIBOPTS="${DARWIN_QT_LIBPATH} -framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest -framework QtSql -framework QtXml"
-			QT_BALL_LIBOPTS="${DARWIN_QT_LIBPATH} -framework QtCore -framework QtSql -framework QtXml"
-			QT_VIEW_LIBOPTS="${QT_BALL_LIBOPTS} -framework QtOpenGL -framework QtGui -framework QtTest -framework QtXml"
+			QTQGL_LIBOPTS="${DARWIN_QT_LIBPATH} -framework QtOpenGL -framework QtGui -framework QtCore -framework QtTest -framework QtSql -framework QtXml -framework QtNetwork"
+			QT_BALL_LIBOPTS="${DARWIN_QT_LIBPATH} -framework QtCore -framework QtSql -framework QtXml -framework QtNetwork"
+			QT_VIEW_LIBOPTS="${QT_BALL_LIBOPTS} -framework QtOpenGL -framework QtGui -framework QtTest -framework QtXml -framework QtNetwork"
 		else
-			QTQGL_LIBOPTS="${GENERIC_QT_LIBPATH} -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql -lQtXml"
-			QT_BALL_LIBOPTS="${GENERIC_QT_LIBPATH} -lQtCore -lQtSql -lQtXml"
-			QT_VIEW_LIBOPTS="${QT_BALL_LIBOPTS} -lQtOpenGL -lQtGui -lQtTest"
+			QTQGL_LIBOPTS="${GENERIC_QT_LIBPATH} -lQtOpenGL -lQtGui -lQtCore -lQtTest -lQtSql -lQtXml -lQtNetwork"
+			QT_BALL_LIBOPTS="${GENERIC_QT_LIBPATH} -lQtCore -lQtSql -lQtXml -lQtNetwork"
+			QT_VIEW_LIBOPTS="${QT_BALL_LIBOPTS} -lQtOpenGL -lQtGui -lQtTest -lQtNetwork"
 		fi
 
 		AC_DEFINE_UNQUOTED(QT_BALL_LIBOPTS, ${QT_BALL_LIBOPTS})

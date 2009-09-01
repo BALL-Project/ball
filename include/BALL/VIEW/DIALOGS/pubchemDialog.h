@@ -28,11 +28,13 @@
 # include <BALL/VIEW/UIC/pubchemDialogData.h>
 #endif
 
-#include <QtGui/qdialog.h>
+#include <QtGui/QDialog>
+#include <QtNetwork/QHttp>
+
 #include <map>
 
-class ns6__ItemType;
-class ns6__DocSumType;
+class QDomNode;
+class QProgressBar;
 
 namespace BALL
 {
@@ -68,6 +70,9 @@ namespace BALL
 					///
 					virtual void checkMenu(MainControl& main_control);
 
+					/// Calls the esummary web service from entrez to download the molecule with given pcsubstance id
+					void callESummary(QString const& entry_id, QTreeWidgetItem* current_item = NULL);
+
 				public slots:
 					
 					/// Show and raise dialog
@@ -88,6 +93,12 @@ namespace BALL
 					///
 					void finished();
 
+					/// An entrez esearch has finished
+					void esearchFinished(int id, bool error);
+
+					/// A pubchem download has finished
+					void esummaryFinished(int id, bool error);
+
 				protected:
 
 					struct ParsedResult_
@@ -97,10 +108,12 @@ namespace BALL
 						String smiles;
 					};
 
-					String				parseItemRecursive_(ns6__ItemType* item, int level=0);
-					ParsedResult_ parseResultRecursive_(ns6__DocSumType* result);
+					void parseItemRecursive_(const QDomNode& current_node, Position level, ParsedResult_& result);
+					 
 					void insert_(ParsedResult_ d, QTreeWidgetItem* parent, bool plot);
 					
+					bool parseESummaryXml_(const QByteArray& data, ParsedResult_& result);
+
 					SDWidget sdwidget_;
 
 					std::map<QTreeWidgetItem*, System*> 				sd_systems_;
@@ -110,6 +123,18 @@ namespace BALL
 					SmilesParser smiles_parser_;
 
 					QAction* action1_, *action2_;
+
+					String esearch_base_url_;
+					String esummary_base_url_;
+
+					int current_request_id_;
+
+					HashMap<int, QTreeWidgetItem*> esummary_request_ids_;
+
+					QHttp esearch_connector_;
+					QHttp esummary_connector_;
+
+					QProgressBar *progress_;
 			};
 	}
 }
