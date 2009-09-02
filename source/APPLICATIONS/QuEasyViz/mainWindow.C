@@ -134,21 +134,16 @@ void MainWindow::init()
 
 	connect(this, SIGNAL(sendNewValue(int)), progress_bar_, SLOT(setValue(int))); 
 	
-	String ball_data_path = getenv("BALL_DATA_PATH");
-	String path = ball_data_path;
-	path+= settings.path_separator+"QSAR"+settings.path_separator+"atomic_electron_affinities.data";
-	if(!ifstream(path.c_str()))  // use subfolder of executable's directory
+	Path p;
+	String file = "QSAR"+settings.path_separator+"atomic_electron_affinities.data";
+	String dir = p.find(file);
+	if(dir=="")
 	{
 		data_directory_ = executable_directory_+settings.path_separator+"data"+settings.path_separator;
-		string test = data_directory_+"atomic_electron_affinities.data";
-		if(!fstream(test.c_str()))
-		{
-			cout<<"[Error:] Data-directory not found !!"<<endl;
-		}
 	}
 	else
 	{
-		data_directory_ = ball_data_path+settings.path_separator+"QSAR"+settings.path_separator;
+		data_directory_ = "QSAR"+settings.path_separator;
 	}
 	
 	read_descriptor_explanations_=0;
@@ -919,19 +914,12 @@ void MainWindow::showDocumentation()
 		QTextBrowser* browser = new QTextBrowser(documentation_);
 		documentation_->setWidget(browser);
 		
-		String ball_data_path = getenv("BALL_DATA_PATH");
-		String path=ball_data_path+settings.path_separator+".."+settings.path_separator+"doc";
-		path+=settings.path_separator+"QuEasyViz"+settings.path_separator+"index.html";
-
+		String path = BALL_PATH; 
+		path+=settings.path_separator+"doc"+settings.path_separator+"QuEasyViz"+settings.path_separator+"index.html";
 		if(!ifstream(path.c_str())) // use subfolder of executable's directory
 		{
 			path = executable_directory_+settings.path_separator+"doc"+settings.path_separator+"QuEasyViz"+settings.path_separator+"index.html";
-
-			if(!fstream(path.c_str()))
-			{
-				cout<<"[Error:] Documentation-directory not found !!"<<endl;
-			}
-		}
+		}		
 		
 		QUrl qurl = QUrl::fromLocalFile(path.c_str());
 		browser->setSource(qurl);

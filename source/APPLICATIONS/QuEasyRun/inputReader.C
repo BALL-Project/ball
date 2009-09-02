@@ -26,7 +26,7 @@ using namespace BALL::QSAR;
 using namespace BALL;
 
 
-void startInputReading(ifstream& in, String data_path, QSARData* q, String* data_filename)
+void startInputReading(ifstream& in, String executable_path, QSARData* q, String* data_filename)
 {
 	InputConfiguration conf = ConfigIO::readInputConfiguration(&in);
 		
@@ -43,7 +43,12 @@ void startInputReading(ifstream& in, String data_path, QSARData* q, String* data
 		if(data_filename) *data_filename = conf.output;
 	}
 	
-	q->setDataFolder(data_path.c_str());
+	/// data should be in subfolder "data" of the folder where this executable is located!
+	String data=executable_path;
+	data=data.substr(0,data.find_last_of("/"));
+	data = data+"/data";
+				
+	q->setDataFolder(data.c_str());
 		
 	if(conf.sd_file!="") // read sd-file (and csv-table)
 	{
@@ -104,30 +109,6 @@ int main(int argc, char* argv[])
 	}
 	
 	String line;
-
-	// -- set data-path if enviroment-variable BALL_DATA_PATH is not set --
-	String data_directory="";
-	String executable_directory = argv[0];
-	String sep = BALL::FileSystem::PATH_SEPARATOR;
-	executable_directory = executable_directory.substr(0,executable_directory.find_last_of(sep));
-
-	String ball_data_path = getenv("BALL_DATA_PATH");
-	String path = ball_data_path+sep;
-	path+= "QSAR"+sep+"atomic_electron_affinities.data";
-	if(!ifstream(path.c_str()))  // use subfolder of executable's directory
-	{
-		data_directory = executable_directory+sep+"data"+sep;
-		string test = data_directory+"atomic_electron_affinities.data";
-		if(!fstream(test.c_str()))
-		{
-			cout<<"[Error:] Data-directory not found !!"<<endl;
-		}
-	}
-	else
-	{
-		data_directory = ball_data_path+sep+"QSAR";
-	}
-	// -----  ----- -----  -----
 	
 	for(int i=0;!in.eof();i++) // read ALL InputReader section
 	{		
@@ -140,7 +121,7 @@ int main(int argc, char* argv[])
 		if(!line.hasPrefix("[InputReader]")) break; // there are no (more) input-sections!
 		ConfigIO::putbackLine(&in,line);
 		
-		startInputReading(in,data_directory);
+		startInputReading(in,argv[0]);
 	}
 }
 #endif
