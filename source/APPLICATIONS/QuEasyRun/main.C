@@ -22,7 +22,6 @@
 #include <BALL/QSAR/registry.h>
 #include <BALL/QSAR/featureSelection.h>
 #include <BALL/QSAR/configIO.h>
-#include <BALL/SYSTEM/path.h>
 
 #define EXT_MAIN
 #include "inputReader.C"
@@ -65,18 +64,28 @@ int main(int argc, char* argv[])
 	String data_filename = "none";
 
 	// -- set data-path if enviroment-variable BALL_DATA_PATH is not set --
-	Path p;
+	String data_directory="";
 	String executable_directory = argv[0];
 	String sep = BALL::FileSystem::PATH_SEPARATOR;
 	executable_directory = executable_directory.substr(0,executable_directory.find_last_of(sep));
-	String file = "QSAR"+sep+"atomic_electron_affinities.data";
-	String dir = p.find(file);
-	if(dir=="")
+
+	String ball_data_path = getenv("BALL_DATA_PATH");
+	String path = ball_data_path+sep;
+	path+= "QSAR"+sep+"atomic_electron_affinities.data";
+	if(!ifstream(path.c_str()))  // use subfolder of executable's directory
 	{
-		String folder = executable_directory+sep+"data"+sep;
-		q->setDataFolder(folder.c_str());
+		data_directory = executable_directory+sep+"data"+sep;
+		string test = data_directory+"atomic_electron_affinities.data";
+		if(!fstream(test.c_str()))
+		{
+			cout<<"[Error:] Data-directory not found !!"<<endl;
+		}
 	}
-	// -----  -----
+	else
+	{
+		data_directory = ball_data_path+sep+"QSAR";
+	}
+	// -----  ----- -----  -----
 	
 	for(int i=0;!in.eof();i++) // process all sections
 	{
@@ -87,7 +96,7 @@ int main(int argc, char* argv[])
 			if(line.hasPrefix("[InputReader]"))
 			{
 				ConfigIO::putbackLine(&in,line);
-				startInputReading(in,argv[0],q,&data_filename);
+				startInputReading(in,data_directory,q,&data_filename);
 			}
 			else if(line.hasPrefix("[InputPartitioner]"))
 			{
