@@ -134,7 +134,9 @@ void MainWindow::init()
 
 	connect(this, SIGNAL(sendNewValue(int)), progress_bar_, SLOT(setValue(int))); 
 	
-	String ball_data_path = getenv("BALL_DATA_PATH");
+	char* bdp = getenv("BALL_DATA_PATH");
+	String ball_data_path = "";
+	if(bdp!=NULL) ball_data_path=String(bdp);
 	String path = ball_data_path;
 	path+= settings.path_separator+"QSAR"+settings.path_separator+"atomic_electron_affinities.data";
 	if(!ifstream(path.c_str()))  // use subfolder of executable's directory
@@ -919,7 +921,9 @@ void MainWindow::showDocumentation()
 		QTextBrowser* browser = new QTextBrowser(documentation_);
 		documentation_->setWidget(browser);
 		
-		String ball_data_path = getenv("BALL_DATA_PATH");
+		char* bdp = getenv("BALL_DATA_PATH");
+		String ball_data_path = "";
+		if(bdp!=NULL) ball_data_path=String(bdp);
 		String path=ball_data_path+settings.path_separator+".."+settings.path_separator+"doc";
 		path+=settings.path_separator+"QuEasyViz"+settings.path_separator+"index.html";
 

@@ -111,7 +111,9 @@ int main(int argc, char* argv[])
 	String sep = BALL::FileSystem::PATH_SEPARATOR;
 	executable_directory = executable_directory.substr(0,executable_directory.find_last_of(sep));
 
-	String ball_data_path = getenv("BALL_DATA_PATH");
+	char* bdp = getenv("BALL_DATA_PATH");
+	String ball_data_path = "";
+	if(bdp!=NULL) ball_data_path=String(bdp);
 	String path = ball_data_path+sep;
 	path+= "QSAR"+sep+"atomic_electron_affinities.data";
 	if(!ifstream(path.c_str()))  // use subfolder of executable's directory
