@@ -7,7 +7,7 @@ export QUEASY_PATH=`dirname $0`
 export DYLD_LIBRARY_PATH=${QUEASY_PATH}/../../../lib/:$DYLIB_LIBRARY_PATH
 
 ## setting of the BALL data path to the share directory
-export BALL_DATA_PATH=${QUEASY_PATH}/../../../share/QuEasy
+export BALL_DATA_PATH=${QUEASY_PATH}/../../../share/QuEasy/data
 
 ## start QuEasyViz
 ${QUEASY_PATH}/QuEasyViz.exe

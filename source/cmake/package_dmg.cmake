@@ -2,6 +2,7 @@ set(CPACK_GENERATOR "DragNDrop")
 
 SET(CMAKE_PROJECT_NAME QuEasy)
 SET(CPACK_BUNDLE_NAME QuEasy)
+SET(CPACK_RESOURCE_FILE_LICENSE "cmake/QuEasy-license.txt")
 
 
 INCLUDE(CPack)
@@ -21,7 +22,6 @@ INSTALL(DIRECTORY ../doc/QuEasyViz/ DESTINATION share/QuEasy/doc/QuEasyViz/)
 INSTALL(DIRECTORY ../data/QSAR/ DESTINATION share/QuEasy/data/QSAR/)
 
 INSTALL(FILES cmake/QuEasy-license.txt DESTINATION . RENAME License.txt)
-SET(CPACK_DRAGNDROP_FILE_LICENCE License.txt)
 
 # copy dynamic libraries  ##
 install(FILES /Users/admin/Documents/BALL-1.3-beta1/contrib/lib/QtGui.framework/Versions/4/QtGui DESTINATION lib/QtGui.framework/Versions/4/QtGui COMPONENT library)
