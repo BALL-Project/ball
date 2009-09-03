@@ -12,20 +12,20 @@ add_custom_command(TARGET QuEasyViz POST_BUILD COMMAND cmake/MacOSX/prepare-app.
 
 
 # add executables  ##
-INSTALL(TARGETS QuEasyRun DESTINATION .)
-INSTALL(TARGETS QuEasyViz DESTINATION .)
-INSTALL(FILES cmake/MacOSX/QuEasy-shell DESTINATION . PERMISSIONS OWNER_EXECUTE OWNER_READ OWNER_WRITE)
-INSTALL(FILES cmake/MacOSX/QuEasy-shell.rc DESTINATION . RENAME .QuEasy-shell.rc)
+INSTALL(TARGETS QuEasyRun DESTINATION QuEasy/)
+INSTALL(TARGETS QuEasyViz DESTINATION QuEasy/)
+INSTALL(FILES cmake/MacOSX/QuEasy-shell DESTINATION QuEasy/ PERMISSIONS OWNER_EXECUTE OWNER_READ OWNER_WRITE)
+INSTALL(FILES cmake/MacOSX/QuEasy-shell.rc DESTINATION QuEasy/ RENAME .QuEasy-shell.rc)
 
 # add documentation, images and data  ##
-INSTALL(DIRECTORY ../doc/QuEasyViz/ DESTINATION share/QuEasy/doc/QuEasyViz/)
-INSTALL(DIRECTORY ../data/QSAR/ DESTINATION share/QuEasy/data/QSAR/)
+INSTALL(DIRECTORY ../doc/QuEasyViz/ DESTINATION QuEasy/share/doc/QuEasyViz/)
+INSTALL(DIRECTORY ../data/QSAR/ DESTINATION QuEasy/share/data/QSAR/)
 
-INSTALL(FILES cmake/QuEasy-license.txt DESTINATION . RENAME License.txt)
+INSTALL(FILES cmake/QuEasy-license.txt DESTINATION QuEasy/ RENAME License.txt)
 
 # copy dynamic libraries  ##
-install(FILES /Users/admin/Documents/BALL-1.3-beta1/contrib/lib/QtGui.framework/Versions/4/QtGui DESTINATION lib/QtGui.framework/Versions/4/QtGui COMPONENT library)
-install(FILES /Users/admin/Documents/BALL-1.3-beta1/contrib/lib/QtCore.framework/Versions/4/QtCore DESTINATION lib/QtCore.framework/Versions/4/QtCore COMPONENT library)
+install(FILES /Users/admin/Documents/BALL-1.3-beta1/contrib/lib/QtGui.framework/Versions/4/QtGui DESTINATION QuEasy/lib/QtGui.framework/Versions/4/QtGui COMPONENT library)
+install(FILES /Users/admin/Documents/BALL-1.3-beta1/contrib/lib/QtCore.framework/Versions/4/QtCore DESTINATION QuEasy/lib/QtCore.framework/Versions/4/QtCore COMPONENT library)
 
 
 
