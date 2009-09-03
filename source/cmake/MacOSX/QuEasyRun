@@ -10,7 +10,7 @@ export DYLD_LIBRARY_PATH=${QUEASY_PATH}/../../../lib/:$DYLIB_LIBRARY_PATH
 export BALL_DATA_PATH=${QUEASY_PATH}/../../../share/data
 
 ## we need to set the path variable accordingly
-export PATH=${QUEASY_PATH}
+export PATH=${QUEASY_PATH}:$PATH
 
 ## start QuEasyRun
 ${QUEASY_PATH}/QuEasyRun.exe $1

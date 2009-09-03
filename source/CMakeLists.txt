@@ -14,6 +14,7 @@ include(cmake/createConfigH.cmake)
 
 set(BALL_SOURCES "")
 set(VIEW_SOURCES "")
+set(QUEASY_VERSION "1.0-alpha5")
 
 # rules for uic, moc, yacc, flex
 include(cmake/rules.cmake)
@@ -70,7 +71,8 @@ endif(NOT ${DY_LIB_DIRS} STREQUAL "")
 
 # include script for building deb-/dmg-package
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-	include(cmake/package_deb.cmake)
+	#include(cmake/package_deb.cmake)
+	include(cmake/package_stgz.cmake)
 elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
 	include(cmake/package_dmg.cmake)
 endif(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
