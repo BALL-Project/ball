@@ -1358,34 +1358,62 @@ void MainWindow::restoreDesktop(QString filename)
 	bool archive = 0;
 	String input_directory = directory;
 	
-	if(configfile.size()>7 && configfile.substr(configfile.size()-7)==".tar.gz")
-	{
-		archive = 1;
-		String call;
-		if(settings.tmp_folder=="") call = "cd "+directory;
-		else call = "cd "+settings.tmp_folder;
-		call+="; tar -xzvf "+configfile+" > archive_contents.tmp";
-		system(call.c_str());  // extrace files from archive
-		
-		configfile = configfile.substr(0,configfile.size()-7)+".conf"; //config-file within archive will always have extension ".conf"
-		
-		if(settings.tmp_folder!="")
-		{
-			int s = configfile.find_last_of(settings.path_separator);
-			configfile = settings.tmp_folder+settings.path_separator+configfile.substr(s+1);
-			directory = settings.tmp_folder+settings.path_separator;
-		}
-	}	
-	
-	ifstream file(configfile.c_str());
-	if(!file)
-	{
-		cout<<"configfile file '"<<configfile<<"' does not exist!!"<<endl;
-		return;
-	}
-	
 	try
 	{
+		if(configfile.size()>7 && configfile.substr(configfile.size()-7)==".tar.gz")
+		{
+			archive = 1;
+			String call;
+			if(settings.tmp_folder=="") call = "cd "+directory;
+			else call = "cd "+settings.tmp_folder;
+			call+="; tar -xzvf "+configfile+" > archive_contents.tmp";
+			system(call.c_str());  // extrace files from archive
+			
+			configfile = configfile.substr(0,configfile.size()-7)+".conf"; //config-file within archive will always have extension ".conf"
+		
+			if(settings.tmp_folder!="")
+			{
+				int s = configfile.find_last_of(settings.path_separator);
+				configfile = settings.tmp_folder+settings.path_separator+configfile.substr(s+1);
+				directory = settings.tmp_folder+settings.path_separator;
+			}
+			
+			if(!ifstream(configfile.c_str())) // find config-file if archive has been renamed
+			{
+				ifstream archive_contents;
+				string contents_file = directory+"/archive_contents.tmp";
+				archive_contents.open(contents_file.c_str());
+				
+				uint no_conf_files=0;
+				while(archive_contents)
+				{
+					String item;
+					archive_contents >> item;
+					if(item.hasSuffix(".conf")) 
+					{
+						configfile=directory+settings.path_separator+item;
+						no_conf_files++;
+					}
+				}
+				if(no_conf_files==0)
+				{
+					throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Pipeline-archive reading error","No conf-file found in archive!");
+				}
+				else if(no_conf_files>1)
+				{
+					throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Pipeline-archive reading error","More than one conf-file found in archive!");
+				}
+			}
+		}	
+		
+		ifstream file(configfile.c_str());
+		if(!file)
+		{
+			string txt="config-file '";
+			txt+=configfile+"' can not be found!";
+			throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Pipeline reading error",txt.c_str());
+		}
+	
 		bool input_section=0;
 		bool model_section=0;
 		bool fs_section=0;
@@ -1468,6 +1496,20 @@ void MainWindow::restoreDesktop(QString filename)
 	catch(BALL::Exception::GeneralException e)
 	{
 		QMessageBox::warning(this,e.getName(),e.getMessage());
+		if(archive)
+		{	
+			string file = directory+"archive_contents.tmp";
+			ifstream in(file.c_str());
+			String files="";
+			while(in)
+			{
+				String tmp;
+				in >> tmp;
+				files += tmp+" ";
+			}
+			String call = "cd "+directory+"; "+"rm -f "+files+" archive_contents.tmp";
+			system(call.c_str());   // delete uncompressed files
+		}
 		return;
 	}
 	
