@@ -509,7 +509,7 @@ PredictionItem* MainWindow::createPrediction(InputDataItem* input, ModelItem* mo
 
  void MainWindow::about()
 {
-	String s = "Version 0.80\nbuild "+String(__DATE__);
+	String s = "Version 1.0\nbuild "+String(__DATE__);
 	QMessageBox::information(this, tr("About QuEasyViz"), tr(s.c_str()),
 	QMessageBox::Ok);
 }
