@@ -71,10 +71,10 @@ int main(int argc, char* argv[])
 	executable_directory = executable_directory.substr(0,executable_directory.find_last_of(sep));
 	String file = "QSAR"+sep+"atomic_electron_affinities.data";
 	String dir = p.find(file);
+	String data_folder = "";
 	if(dir=="")
 	{
-		String folder = executable_directory+sep+"data"+sep;
-		q->setDataFolder(folder.c_str());
+		data_folder = executable_directory+sep+"data"+sep;
 	}
 	// -----  -----
 	
@@ -87,7 +87,7 @@ int main(int argc, char* argv[])
 			if(line.hasPrefix("[InputReader]"))
 			{
 				ConfigIO::putbackLine(&in,line);
-				startInputReading(in,argv[0],q,&data_filename);
+				startInputReading(in,data_folder,q,&data_filename);
 			}
 			else if(line.hasPrefix("[InputPartitioner]"))
 			{
