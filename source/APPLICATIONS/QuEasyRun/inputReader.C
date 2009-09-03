@@ -26,7 +26,7 @@ using namespace BALL::QSAR;
 using namespace BALL;
 
 
-void startInputReading(ifstream& in, String executable_path, QSARData* q, String* data_filename)
+void startInputReading(ifstream& in, String data_path, QSARData* q, String* data_filename)
 {
 	InputConfiguration conf = ConfigIO::readInputConfiguration(&in);
 		
@@ -43,12 +43,10 @@ void startInputReading(ifstream& in, String executable_path, QSARData* q, String
 		if(data_filename) *data_filename = conf.output;
 	}
 	
-	/// data should be in subfolder "data" of the folder where this executable is located!
-	String data=executable_path;
-	data=data.substr(0,data.find_last_of("/"));
-	data = data+"/data";
-				
-	q->setDataFolder(data.c_str());
+	if(data_path!="")
+	{
+		q->setDataFolder(data_path.c_str());
+	}
 		
 	if(conf.sd_file!="") // read sd-file (and csv-table)
 	{
