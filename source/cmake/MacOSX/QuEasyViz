@@ -3,13 +3,19 @@
 
 export QUEASY_PATH=`dirname $0`
 
+# BALL-Path does not reliably find data-folder on mac if it contains "../../.."
+dir=`pwd`
+cd ${QUEASY_PATH}/../../..
+export BASE_PATH=`pwd`
+cd ${dir}
+
 ## we need to set the DYLIB_LIBRARY_PATH
-export DYLD_LIBRARY_PATH=${QUEASY_PATH}/../../../lib/:$DYLIB_LIBRARY_PATH
+export DYLD_LIBRARY_PATH=${BASE_PATH}/lib/:$DYLIB_LIBRARY_PATH
 
 ## setting of the BALL data path to the share directory
-export BALL_DATA_PATH=${QUEASY_PATH}/../../../share/data
+export BALL_DATA_PATH=${BASE_PATH}/share/data
 
 ## start QuEasyViz
-${QUEASY_PATH}/QuEasyViz.exe
+${QUEASY_PATH}/QuEasyViz.exe $@
 
 
