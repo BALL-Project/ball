@@ -24,8 +24,8 @@ INSTALL(DIRECTORY ../data/QSAR/ DESTINATION QuEasy/share/data/QSAR/)
 INSTALL(FILES cmake/QuEasy-license.txt DESTINATION QuEasy/ RENAME License.txt)
 
 # copy dynamic libraries  ##
-install(FILES /Users/admin/Documents/BALL-1.3-beta1/contrib/lib/QtGui.framework/Versions/4/QtGui DESTINATION QuEasy/lib/QtGui.framework/Versions/4/QtGui COMPONENT library)
-install(FILES /Users/admin/Documents/BALL-1.3-beta1/contrib/lib/QtCore.framework/Versions/4/QtCore DESTINATION QuEasy/lib/QtCore.framework/Versions/4/QtCore COMPONENT library)
+install(FILES /Users/admin/Documents/BALL-1.3-beta1/contrib/lib/QtGui.framework/Versions/4/QtGui DESTINATION QuEasy/lib/QtGui.framework/Versions/4/ COMPONENT library)
+install(FILES /Users/admin/Documents/BALL-1.3-beta1/contrib/lib/QtCore.framework/Versions/4/QtCore DESTINATION QuEasy/lib/QtCore.framework/Versions/4/ COMPONENT library)
 
 
 
