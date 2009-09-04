@@ -188,6 +188,7 @@ void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 		else  // move only one time
 		{
 			main_window->dragged_item->setPos(pos.x(),pos.y());
+			main_window->dragged_item->adjustEdges();
 		}
 		main_window->dragged_item=NULL;
 	}
