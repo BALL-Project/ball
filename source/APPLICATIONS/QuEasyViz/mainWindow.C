@@ -509,7 +509,7 @@ PredictionItem* MainWindow::createPrediction(InputDataItem* input, ModelItem* mo
 
  void MainWindow::about()
 {
-	String s = "Version 0.80\nbuild "+String(__DATE__);
+	String s = "Version 1.0\nbuild "+String(__DATE__);
 	QMessageBox::information(this, tr("About QuEasyViz"), tr(s.c_str()),
 	QMessageBox::Ok);
 }
@@ -914,14 +914,15 @@ void MainWindow::showDocumentation()
 		QTextBrowser* browser = new QTextBrowser(documentation_);
 		documentation_->setWidget(browser);
 		
-		String path = BALL_PATH; 
-		path+=settings.path_separator+"doc"+settings.path_separator+"QuEasyViz"+settings.path_separator+"index.html";
-		if(!ifstream(path.c_str())) // use subfolder of executable's directory
+		String file=".."+settings.path_separator+"doc"+settings.path_separator+"QuEasyViz"+settings.path_separator+"index.html";
+		Path p;
+		file = p.find(file);
+		if(file=="") // use subfolder of executable's directory
 		{
-			path = executable_directory_+settings.path_separator+"doc"+settings.path_separator+"QuEasyViz"+settings.path_separator+"index.html";
+			file = executable_directory_+settings.path_separator+"doc"+settings.path_separator+"QuEasyViz"+settings.path_separator+"index.html";
 		}		
 		
-		QUrl qurl = QUrl::fromLocalFile(path.c_str());
+		QUrl qurl = QUrl::fromLocalFile(file.c_str());
 		browser->setSource(qurl);
 		addDockWidget(Qt::LeftDockWidgetArea, documentation_);
 		documentation_->setFloating(1);
