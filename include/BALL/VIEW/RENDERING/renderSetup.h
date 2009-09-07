@@ -199,6 +199,8 @@ namespace BALL {
 				 *  straighten-up structures and to correctly estimate angles and distances.
 				 */
 				void showRuler(bool show);
+				
+				void updateMaterialForRepresentation(const Representation* rep);
 
 				/** Notifies the renderer that the projection mode has changed.
 				 */

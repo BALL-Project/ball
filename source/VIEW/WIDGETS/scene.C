@@ -3061,6 +3061,7 @@ namespace BALL
 			gl_renderer_->setStereoMode(GLRenderer::DUAL_VIEW_DIFFERENT_DISPLAY_STEREO);
 
 			setFullScreen(false);
+			applyPreferences();
 			updateGL();
 
 			no_stereo_action_->setChecked(false);
@@ -3320,7 +3321,10 @@ namespace BALL
 			RepresentationList::const_iterator it = pm.getRepresentations().begin();
 			for (; it != pm.getRepresentations().end(); ++it)
 			{
-				rt_renderer_->updateMaterialForRepresentation(*it);
+				for (Position i=0; i<renderers_.size(); ++i)
+				{
+					renderers_[i]->updateMaterialForRepresentation(*it);
+				}
 			}
 
 			updateGL();

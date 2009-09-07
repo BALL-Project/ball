@@ -509,7 +509,24 @@ namespace BALL
 
 			render_mutex_.unlock();
 		}
+		void RenderSetup::updateMaterialForRepresentation(const Representation* rep)
+		{
+			if (RTTI::isKindOf<RTfactRenderer>(*renderer))
+			{
+			render_mutex_.lock();
 
+			makeCurrent();
+			
+			((RTfactRenderer*)renderer)->updateMaterialForRepresentation(rep);
+			
+			render_mutex_.unlock();
+			}
+			else
+			{
+				return;
+			}
+		}
+		
 		void RenderSetup::updateBackgroundColor()
 		{
 			render_mutex_.lock();
