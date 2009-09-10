@@ -419,16 +419,12 @@ namespace BALL
 			vector<const Representation*>::iterator rit = representations_.begin();
 			for (; rit != representations_.end(); rit++)
 			{
-				// now begin the CSG union containing all the geometric objects of this rep
-				out << "union {" << endl;
+				// give the user some hints what this triangle soup once was
+				out << "// Representation " << (*rit)->getName() << std::endl;
 
-				List<GeometricObject*>::ConstIterator it;
-				for (it =  (*rit)->getGeometricObjects().begin();
-						 it != (*rit)->getGeometricObjects().end();
-						 it++)
-				{
-					render_(*it);
-				}
+				// determine all clipping and capping planes for this representation
+				vector<ClippingPlane*> clipped_by;
+				vector<ClippingPlane*> capped_by;
 
 				vector<ClippingPlane*>::const_iterator plane_it = vc.begin();
 				for (;plane_it != vc.end(); plane_it++)
@@ -443,19 +439,82 @@ namespace BALL
 
 					if (plane.getRepresentations().has((Representation*)*rit))
 					{
-						out << "  clipped_by{" << endl
-										 << "   plane{< -"  // negate normal vector
-										 << plane.getNormal().x << ", -" 
-										 << plane.getNormal().y << ", -" 
-										 << plane.getNormal().z << ">, "
-										 << plane.getDistance()
-										 << "  }" << endl
-										 << " }" << endl;
+						if (plane.cappingEnabled())
+							capped_by.push_back(&plane);
+						else
+							clipped_by.push_back(&plane);
 					}
 				} // all clipping planes
 
-				out << "}" << endl; // union
+				// if there is at least one capping plane active for this representation, we will need
+				// a CSG intersection
+				if (capped_by.size() > 0)
+				{
+					out << "intersection {" << endl;
+				}
 
+				// if we have more than one object in the representation we now begin a CSG 
+				// union containing all the geometric objects of this rep
+				if (((*rit)->getGeometricObjects().size() > 1) || (clipped_by.size() > 0))
+				{
+					out << "union {" << endl;
+				}
+
+				List<GeometricObject*>::ConstIterator it;
+				for (it =  (*rit)->getGeometricObjects().begin();
+						 it != (*rit)->getGeometricObjects().end();
+						 it++)
+				{
+					render_(*it);
+				}
+
+				// put all clipping planes in the correct location
+				if (clipped_by.size() > 0)
+				{
+					out << "  clipped_by{" << endl;
+				}
+
+				for (Position i=0; i<clipped_by.size(); ++i)
+				{
+					ClippingPlane& plane = *clipped_by[i];
+
+					out << "   plane{< -"  // negate normal vector
+							<< plane.getNormal().x << ", -" 
+							<< plane.getNormal().y << ", -" 
+							<< plane.getNormal().z << ">, "
+							<< plane.getDistance()
+							<< "  }" << endl;
+				}
+
+				if (clipped_by.size() > 0)
+				{
+					out << " }" << endl
+						  << "}" << endl;
+				}
+
+				if ((*rit)->getGeometricObjects().size() > 1)
+				{
+					out << "}" << endl; // union
+				}
+
+				// now put all the capping planes
+				for (Position i=0; i<capped_by.size(); ++i)
+				{
+					ClippingPlane& plane = *capped_by[i];
+
+					out << " plane {< -" // negate normal vector
+							<< plane.getNormal().x << ", -" 
+							<< plane.getNormal().y << ", -" 
+							<< plane.getNormal().z << ">, "
+							<< plane.getDistance() << " "
+							<< "pigment { color rgb" << POVColorRGBA(plane.getCappingColor()) << " }"
+							<< "  }" << endl;
+				}
+
+				if (capped_by.size() > 0)
+				{
+					out << "}" << endl;
+				}
 			} // all Representations
 
 
