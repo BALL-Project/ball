@@ -13,7 +13,7 @@
   <property name="maximumSize">
    <size>
     <width>610</width>
-    <height>360</height>
+    <height>343</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -588,7 +588,7 @@
            </palette>
           </property>
           <property name="focusPolicy">
-           <enum>Qt::StrongFocus</enum>
+           <enum>Qt::NoFocus</enum>
           </property>
           <property name="autoFillBackground">
            <bool>true</bool>
@@ -1372,7 +1372,7 @@
            </palette>
           </property>
           <property name="focusPolicy">
-           <enum>Qt::StrongFocus</enum>
+           <enum>Qt::NoFocus</enum>
           </property>
           <property name="autoFillBackground">
            <bool>true</bool>
@@ -2069,7 +2069,7 @@
            </palette>
           </property>
           <property name="focusPolicy">
-           <enum>Qt::StrongFocus</enum>
+           <enum>Qt::NoFocus</enum>
           </property>
           <property name="autoFillBackground">
            <bool>true</bool>
@@ -2504,6 +2504,20 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>ambient_color_button</tabstop>
+  <tabstop>ambient_factor_slider</tabstop>
+  <tabstop>reflectiveness_color_button</tabstop>
+  <tabstop>reflectiveness_factor_slider</tabstop>
+  <tabstop>specularity_color_button</tabstop>
+  <tabstop>specularity_factor_slider</tabstop>
+  <tabstop>shininess_factor_slider</tabstop>
+  <tabstop>radioButton_OpenGL</tabstop>
+  <tabstop>radioButton_POVRay</tabstop>
+  <tabstop>radioButton_RTFact</tabstop>
+  <tabstop>transparency_factor_slider</tabstop>
+  <tabstop>update_directly_checkBox</tabstop>
+ </tabstops>
  <includes>
   <include location="global">BALL/COMMON/global.h</include>
  </includes>
