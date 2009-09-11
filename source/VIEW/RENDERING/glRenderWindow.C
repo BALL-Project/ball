@@ -357,6 +357,17 @@ namespace BALL
 			doneCurrent();
 			contex_mutex_.unlock();
 		}
+		
+		void GLRenderWindow::setupStereo(float eye_separation, float focal_length)
+		{
+				float aperture = 60.;
+				float width = static_cast<float>(m_fmt.getWidth());
+				
+				//formula according to Paul Bourke
+				//http://local.wasp.uwa.edu.au/~pbourke/miscellaneous/stereographics/stereorender/
+				stereo_delta_ = (fabs(eye_separation) * width) / (focal_length * tan(Angle(aperture, false).toRadian())); 
+				std::cout << stereo_delta_ << std::endl;
+		}
 	} // namespace VIEW
 } //namespace BALL
 

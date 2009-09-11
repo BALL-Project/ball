@@ -264,6 +264,13 @@ namespace BALL
 			/* Prepare the window for rendering, e.g., make it current if necessary.
 			 */
 			virtual void prepareRendering() = 0;
+
+			/** Sets this render target as a part of a stereo setup.
+			 *
+			 *  eye_separation denotes the distance along the right vector used
+			 *  by this "eye".
+			 */
+		  virtual void setupStereo(float eye_separation, float focal_length) {};
 		};
 
 	} //namespace VIEW
