@@ -188,56 +188,19 @@ namespace BALL
 #ifndef BALL_HAS_RTFACT
 				renderer->setupStereo(eye_separation, stage.getFocalDistance());
 #else
-				float delta = 0; 
-				float width = renderer->getWidth();
-				float height = renderer->getHeight();
-				float aperture = 60.;
+				target->setupStereo(eye_separation, stage.getFocalDistance());
+#endif
 
-				delta = (eye_separation * width) / (2. * stage.getFocalDistance() * tan(Angle(aperture, false).toRadian())); 
-				delta *= stage.swapSideBySideStereo() ? -1. : 1.;
-				static_cast<GLRenderWindow*>(target)->setStereoDelta(delta);
-
+				//delta *= stage.swapSideBySideStereo() ? -1. : 1.;
 				if (stereo_setup_ == LEFT_EYE)
 				{
-					std::cout << "<<<Left Eye: ";
+					std::cout << "<<<Left Eye:" << gl_target_->stereo_delta_ << std::endl;
 				}
 				else if (stereo_setup_ == RIGHT_EYE)
 				{
-					std::cout << ">>>Right Eye: ";
+					std::cout << ">>>Right Eye:" << gl_target_->stereo_delta_ << std::endl;
 				}
-				else std::cout << "---No Eye:   " << delta << std::endl;
-				std::cout << "Aper: " << aperture;
-				std::cout << " WxH: " << width;
-				std::cout << "x" << height;
-				std::cout << " FD: " << stage.getFocalDistance();
-				std::cout << " ES: " << stage.getEyeDistance();
-				std::cout << " d: " << delta;
-				std::cout << "---" << std::endl;
-				//resize(width+delta, height);
-				//makeCurrent();
-
-				//if(!target->resize(width+delta, height))
-				//{
-				//	Log.error() << "Cannot resize window. Size " 
-				//							<< width  << " x " 
-				//							<< height << " is not supported" << std::endl;
-				//}
-
-				//renderer->setSize(width, height);
-				//if (RTTI::isKindOf<BufferedRenderer>(*renderer))
-				//{
-				//	if(!(((BufferedRenderer*)renderer)->setFrameBufferFormat(target->getFormat())))
-				//	{
-				//		Log.error() << "Raytracing render does not support window framebuffer format. Seems to be configuration error" << std::endl;
-
-				//		//render_mutex_.unlock();
-
-				//		throw Exception::GeneralException(__FILE__, __LINE__);
-				//	}
-				//}
-
-				//renderer->setSize(width, height);
-#endif
+				else std::cout << "---No Eye:" << gl_target_->stereo_delta_ << std::endl;
 
 				camera_offset_  = Vector3(eye_separation, 0., 0.);
 

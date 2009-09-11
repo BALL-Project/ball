@@ -73,9 +73,13 @@ namespace BALL
 			void setStereoDelta(float delta)
 				{stereo_delta_ = delta;}
 			
+			void setupStereo(float eye_separation, float focal_length);
+			
 			/// Get the window's downsampling factor.
 			float getDownsamplingFactor() const
 				{return down_sampling_factor_;}
+			
+			float stereo_delta_;
 
 		protected:	
 
@@ -111,7 +115,7 @@ namespace BALL
 			mutable Mutex contex_mutex_;
 			bool ignore_events_;
 			float down_sampling_factor_;
-			float stereo_delta_;
+			//float stereo_delta_;
 		};
 
 	} // namespace VIEW
