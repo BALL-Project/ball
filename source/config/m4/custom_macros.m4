@@ -365,6 +365,10 @@ if test "$OS" = Linux ; then
     ARCHITECTURE=ppc64
     BINFMT=Linux-ppc64
 	fi
+	if test `echo $PROCESSOR` = s390 ; then
+		ARCHITECTURE=s390
+		BINFMT=s390
+	fi
 
 	if test "${ARCHITECTURE}" = "unknown" -a "${PROJECT[]_IGNORE_ARCH}" = ""; then
 		AC_MSG_RESULT(OS: ${OS} / hardware: ${PROCESSOR})
