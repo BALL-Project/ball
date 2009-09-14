@@ -89,7 +89,7 @@ namespace BALL
 			pos.res = &(*resit);
 
 			// the N-terminus is special
-			if (pos.is_complete && !(pos.res->isNTerminal()))
+			if (pos.is_complete && !(pos.res->isNTerminal()) && (j>0))
 			{
 				// evaluate the position of H 
 				const Vector3 OC(residue_data_[j-1].pos_O - residue_data_[j-1].pos_C);
