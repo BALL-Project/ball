@@ -40,7 +40,7 @@ namespace BALL
 	const float AmberFF::Default::VDW_CUTON = 13.0;
 	const float AmberFF::Default::ELECTROSTATIC_CUTOFF = 15.0;
 	const float AmberFF::Default::ELECTROSTATIC_CUTON = 13.0;
-	const float AmberFF::Default::SCALING_ELECTROSTATIC_1_4 = 2.0;
+	const float AmberFF::Default::SCALING_ELECTROSTATIC_1_4 = 1.2;
 	const float AmberFF::Default::SCALING_VDW_1_4 = 2.0;
 	const bool  AmberFF::Default::DISTANCE_DEPENDENT_DIELECTRIC = false;   
 	const bool	AmberFF::Default::ASSIGN_CHARGES = true;
