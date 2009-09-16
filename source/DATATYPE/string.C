@@ -147,6 +147,16 @@ namespace BALL
 		return s;
 	}
 
+	String::String(const QString& string)
+	{
+		assign(string.toAscii().data());
+	}
+
+	String::String(const QByteArray& string)
+	{
+		assign(string.data());
+	}
+
 	String::String(const char* char_ptr, Index from, Size len)
  	 throw(Exception::NullPointer, Exception::IndexUnderflow,
 	Exception::IndexOverflow)
