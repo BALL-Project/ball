@@ -42,6 +42,9 @@
 
 using std::string;
 
+class QString;
+class QByteArray;
+
 namespace BALL 
 {
 	// forward declaration
@@ -154,6 +157,12 @@ namespace BALL
 
 		/// STL string copy constructor
 		String(const string& string);
+
+		/// QString copy constructor
+		explicit String(const QString& string);
+
+		/// QByteArray copy constructor
+		explicit String(const QByteArray& string);
 
 		/** Creates a new string from a given range of another string.
 				@see 		String:Indices

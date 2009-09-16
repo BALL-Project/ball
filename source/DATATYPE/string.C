@@ -7,6 +7,9 @@
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/limits.h>
 
+#include <QtCore/QString>
+#include <QtCore/QByteArray>
+
 #include <stdio.h>
 #include <stdarg.h>
 #include <algorithm>
@@ -141,6 +144,16 @@ namespace BALL
 		}
 
 		return s;
+	}
+
+	String::String(const QString& string)
+	{
+		assign(string.toAscii().data());
+	}
+
+	String::String(const QByteArray& string)
+	{
+		assign(string.data());
 	}
 
 	String::String(const char* char_ptr, Index from, Size len)
