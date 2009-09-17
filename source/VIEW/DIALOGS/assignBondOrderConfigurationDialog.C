@@ -48,6 +48,12 @@ namespace BALL
 			connect(overwrite_selected_bonds_box, SIGNAL(stateChanged(int)), this, SLOT(validateBOBoxes_()));
 
 			validateBOBoxes_();
+
+#ifndef BALL_HAS_LPSOLVE
+			ILP_button->setEnabled(false);
+			ILP_button->setChecked(false);
+			ASTAR_button->setChecked(true);
+#endif
 		}
 
 		AssignBondOrderConfigurationDialog::~AssignBondOrderConfigurationDialog()
