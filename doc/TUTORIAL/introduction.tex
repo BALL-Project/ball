@@ -4,8 +4,8 @@ software prototyping in the field of Molecular Modeling.
 It provides an extensive C++ framework of data structures and algorithms for
 structural bioinformatics and cheminformatics.
 BALL is available for all major operating systems, including Linux, Windows, MacOS X.
-It is available free of charge under the Lesser GNU Public License (LPGP).
-Parts of the code are distrubuted under the GNU Public License (GPL).
+It is available free of charge under the Lesser GNU Public License (LGPL).
+Parts of the code are distributed under the GNU Public License (GPL).
 This tutorial shall help new users to make their first steps with BALL.
 It is {\em not} a full documentation. For a full documentation, please refer to the \newterm{Reference
 Manual}~\cite{BALL-RM} which can be obtained in HTML, PDF, or postscript format.
@@ -35,7 +35,7 @@ Further documentation, a Wiki and a bug tracker, can be found on
 \begin{enumerate}
   \item[] \URL{http://ball-trac.bioinf.uni-sb.de/}
 \end{enumerate}
-providing a Code Library with Code snippets, further tutorials, Release Notes and FAQs.
+providing a Code Library with Code snippets, further tutorials, Release Notes, and FAQs.
 
 
 The next section of this tutorial gives a short overview of the structure and
@@ -45,8 +45,8 @@ fundamental concepts and classes are explained. After that we will show how to
 use more advanced features of BALL. We will have a general overview of BALL 
  (Chapters \ref{chapter:foundation-classes} and  \ref{chapter:kernel}) 
 and the usage of the visualization parts of BALL (Chapter \ref{chapter:view-programming}). 
-Chapter \ref{chapter:python} will show you
-the mechanisms and the usage of BALL's Python bindings.  Finally, Chapter
+Chapter \ref{chapter:python} will introduce the mechanisms and the usage of
+BALL's Python bindings.  Finally, Chapter
 \ref{chapter:faq} tries to answer some of the most frequently asked questions.
 
 \section{Overview}
@@ -79,7 +79,7 @@ methods}, structure analysis/comparison and \Index{visualization}. These
 areas were selected, because our main interest stems from the field of protein
 docking. The Molecular Mechanics component does not only provide standard
 force fields (AMBER~\cite{AMBER95}, CHARMM~\cite{BBO+83},
-MMFF~\cite{MMFF94a,MMFF94b,MMFF94c,MMFF94d,MMFF94e}), but also a generic
+MMFF94~\cite{MMFF94a,MMFF94b,MMFF94c,MMFF94d,MMFF94e}), but also a generic
 \Index{force field}.  This generic force field is a base class for all force
 fields. It implements fundamental methods to manage parameter files, parameter
 assignment, and atom type assignment, and defines a common interface for all
@@ -87,7 +87,7 @@ force fields. Thus, large portions of code may be reused for the
 implementation of new force fields.  The file import/export component
 implements general methods for efficient file handling, but also methods to
 read and write the most common file formats used for molecular structures
-(\eg, PDB, MOL2, HIN). The solvation component provides methods for calculating
+(\eg, PDB, MOL, MOL2, HIN, XYZ, KCF, SD). The solvation component provides methods for calculating
 solvation effects. The first method that accounts for solvation is the atomic
 contact energy by Zhang {\it et al.}~\cite{ZVC+97}. The second approach that
 we implemented is a numerical solver for the \Index{Poisson-Boltzmann} equation.  The

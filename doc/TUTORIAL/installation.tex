@@ -1,51 +1,8 @@
 \section{System Requirements}
 \label{requirements}
 
-\subsection{Compiler}
-\index{compiler}
-BALL requires a (more or less) ANSI compliant \CPP compiler. It has been 
-successfully built and tested using the {\tt autobuild} script (see Section 
-\ref{section:building-ball}) on the following platforms:
-\begin{itemize}	
-  \item Linux/x86 2.x (32bit Intel and AMD) with a wealth of distributions:
-    \begin{itemize}
-      \item Debian 3.1 (sarge) using g{\tt ++} 3.3.5
-      \item Debian unstable (sid) using g{\tt ++} 4.1.3
-      \item Fedora Core 6 using g{\tt ++} 4.1.2
-      \item Fedora 7 using g{\tt ++} 4.1.2
-      \item Gentoo Linux using g{\tt ++} 4.2.0
-      \item Redhat 9 (shrike) using g{\tt ++} 3.2.2
-      \item Scientific Linux 4.2 using g{\tt ++} 3.4.4
-      \item Ubuntu 5.10 using g{\tt ++} 4.0.2
-      \item Ubuntu 6.10 using g{\tt ++} 4.1.2
-      \item Ubuntu 7.04 using g{\tt ++} 4.1.2
-    \end{itemize}
-  \item Linux/x86 2.x (64bit) on the following distributions:
-    \begin{itemize}
-      \item Scientific Linux 4.2 using g{\tt ++} 3.4.4, 4.0.3, and 4.1.1
-    \end{itemize}
-  \item MacOS X/Intel (Darwin 8.5.6) using g{\tt ++} 4.0.1
-  \item MacOS X/PPC (Darwin 8.10) using g{\tt ++} 4.0.1
-\end{itemize}
+BALL has been tested on all major platforms including recent Linux distributions, MacOS X, and Windows.
 
-\noindent 
-Using the configure/make mechanisms, there are reports on successful
-installations on the following platforms:
-
-\begin{itemize}
-  \item Solaris/SPARC 8 using g{\tt ++} 3.2.1
-  \item IRIX 6.5 using CC 7.3.1.1m (32 and 64 bit)
-  \item FreeBSD/x86 using g{\tt ++} 3.4.4
-  \item Linux/x86 2.x (32bit) using the Intel \CPP Compiler icc/icpc 9.1
-\end{itemize}
-
-
-\subsection{BALL on the Windows Platform}
-
-For instructions on how to install BALL on the Windows platform, please
-have a look at {\tt BALL/Windows/README.txt}. We recommend using the 
-Windows installer provided on the BALL project page. The sections below will 
-describe how to build BALL on Unix, Linux and MacOS...
 
 \subsection{External Software and Libraries}
 
@@ -58,9 +15,16 @@ The usage of GNU {\tt make} is recommended, although BALL will also build with
 other versions of {\tt make}. It is available from \URL{ftp://ftp.gnu.org/gnu/}
 and easy to install.
 
+The following packages can be found in our contrib package. You only need to install
+them manually when not using the autobuild script.
+
+BALL uses the boost library~\cite{boost} for various classes and internal tasks. A version greater 
+or equal 1.35.0 is required.
+
+
 The compilation of the visualization component VIEW also requires the Qt 
-library (at least version 4.2), which is available from
-\URL{http://trolltech.com/products/qt}.
+library (at least version 4.3), which is available from
+\URL{http://qt.nokia.com/products/}.
 
 If Qt was not installed in one of the standard library paths or the
 Qt header files were not installed in one of the compiler's default
@@ -88,9 +52,9 @@ are \URL{http://www.intel.com/support/graphics} (Intel),
 \URL{http://www.nvidia.com/content/drivers} (NVidia).
 
 To use the Python extensions of BALL (Python is an object oriented scripting
-language), \index{Python} you will also need Python (version 2.3 or above) 
+language), \index{Python} you will also need Python (version 2.5 or above) 
 installed (\URL{http://www.python.org}) and a recent version of SIP (version 
-4.5.2 or above, available at \URL{http://www.riverbankcomputing.co.uk/sip/}).
+4.6.0 or above, available at \URL{http://www.riverbankcomputing.co.uk/sip/}).
 SIP~\cite{SIP} \index{SIP} is a tool for generating Python bindings for \CPP 
 class libraries.
 
@@ -117,10 +81,10 @@ simply typing
 \end{lstlisting}
 
 \noindent in the directory \directory{BALL/source}.  
-This procedure is especially suited for unexperienced users, since it 
+This procedure is especially suited for inexperienced users, since it 
 automatically downloads a contrib source package from our website. This 
 package contains almost all dependencies and prevents any clashes with already 
-installed libraries, by compiling and installing them in a subfolder in the 
+installed libraries, by compiling and installing them in a sub folder in the 
 BALL directory. Afterwards, the BALL library is configured, build and linked 
 against the downloaded libraries. We recommend to use the {\tt autobuild} 
 script for installations which should run out of the box on most platforms. 

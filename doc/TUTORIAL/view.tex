@@ -118,6 +118,7 @@ custom-tailored applications.
 \class{PubChemDialog}                & Download a structure from PubChem\\
 \class{PyWidget}                     & Python scripting\\
 \class{Scene}                        & Three-dimensional graphics\\
+\class{ShortcutDialog}               & Editor for keyboard shortcuts\\
 \class{SnapshotVisualisation}        & Visualization of trajectories\\
 \class{TestFramework}                & Recording and playback of user input\\
 \hline
@@ -204,7 +205,7 @@ class BALL_VIEW_EXPORT LabelDialog
 };
 \end{lstlisting}
 
-The following paragraphgraphs will discuss the actual implementation, starting 
+The following paragraphs will discuss the actual implementation, starting 
 with the constructor: It must be called with the \class{Main\-Control} as 
 parent to enable the registration of the \class{Modular\-Widget}. Since this 
 example class is derived from three other classes, these also have to be 
@@ -571,7 +572,7 @@ framework. From this base class, we then derived the classes for the individual
 tangible geometric objects (see Table~\ref{tab:go}). The instances of these 
 derived classes are created by the different model processors and later get 
 colored by the color processors, and stored in a \class{Representation}. The 
-renderer classes can then translate their informations such that they can \eg
+renderer classes can then translate their information such that they can \eg
 be drawn on the screen or processed by an external program.
 
 \begin{table} [ht] %[htbp]
@@ -867,7 +868,7 @@ This has several advantages:
 
 Since multithreading has so many advantages, we also used it for further 
 purposes: The (re)calculation of models and colorings are now also started in 
-separagraphte threads. A further functionality were the mulithreading technique
+separate threads. A further functionality were the multithreading technique
 became very handy is the dialog for downloading structures from the protein 
 database. Here it allows to monitor the progress of the download and to abort 
 it at any time.

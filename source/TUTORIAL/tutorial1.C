@@ -64,12 +64,10 @@ int main()
 	cout << "# of atoms in H1: " << hydrogen1->countBonds() << endl;
 	cout << "# of atoms in H2: " << hydrogen2->countBonds() << endl;
 
-	// bond_vector is a vector and is set to the
-	// difference of atom positions of oxygen and hydrogen1
-	Vector3 bond_vector = oxygen->getPosition() - hydrogen1->getPosition();
+	// compute the bond length
+  float distance = oxygen->getDistance(*hydrogen1);
 
-	// Vector3::getLength prints the length of the vector
-	cout << "bond distance: " << bond_vector.getLength() << endl;
+  cout << "bond length: " << distance << endl;
 
 	// Now we copy our molecule using a copy constructor.
 	Molecule* water2 = new Molecule(*water);
