@@ -483,8 +483,17 @@ namespace BALL
 			// Rotate all atoms with index larger equal 3
 			for (Size i = 3; i < movable.size(); i++)
 			{
-				//(atom_name_map_[movable[i]])->setPosition((R * (atom_name_map_[movable[i]])->getPosition()));
-				residue.getAtom(movable[i])->setPosition(R * residue.getAtom(movable[i])->getPosition());
+				// Check if atom exists
+				if (residue.getAtom(movable[i]))
+				{
+					residue.getAtom(movable[i])->setPosition(R * residue.getAtom(movable[i])->getPosition());
+				}
+				else
+				{
+					Log.warn() << "ResidueRotamerSet: Rotamer could not be set for atom " << movable[i]
+					           << " in residue " << residue.getFullName() << " " << __FILE__ << " "
+					           << __LINE__ << std::endl;
+				}
 			}
 		}
 	}
