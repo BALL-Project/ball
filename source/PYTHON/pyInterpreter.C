@@ -91,35 +91,42 @@ namespace BALL
 		// initialize the interpreter
 		Py_Initialize();
 
-		PyObject *module = PyImport_ImportModule("site");
-		if (module == 0) 
+		// get a borrowed reference to the main - module
+		PyObject* main_module = PyImport_AddModule("__main__");
+
+		if (main_module == 0) 
 		{
-			Log.error() << "Could not import Python module \"site\"! No Python support available." << std::endl;
+			Log.error() << "Python intialization failed: could not add \"__main__\" module! No Python support available." << std::endl;
 			return;
 		}
 
-		context_ = PyModule_GetDict(module);
-
+		// and create a valid context for our further Python - calls
+		context_ = PyModule_GetDict(main_module);
+	
 		if (context_ == 0) 
 		{
-			Log.error() << "Could not get dict for Python module \"site\"! No Python support available." << std::endl;
+			Log.error() << "Could not get valid context for Python module \"__main__\"! No Python support available." << std::endl;
 			return;
 		}
 
-		Py_DECREF(module);
-
-		// import the modules required for the output redirection
-		// and the system stuff
-		runSingleString_("import cStringIO, sys", Py_single_input);
+		// import sys
+		runSingleString_("import sys", Py_single_input);
 		start_log_ += error_message_;
-
-		Path p;
 
 		// Add the BALL library path to the Python search path
 		// to make sure Python can find the BALL extensions.
+		Path p;
+
 #ifndef BALL_COMPILER_MSVC
 		runSingleString_("sys.path.append(\"" BALL_PATH "/lib/" "\")", Py_single_input);
 #else
+		// first, make sure that the site packages of our python installation will be found
+		String site_path = String(p.find("Python\\lib"));
+		site_path.trim();
+		while (site_path.substitute("\\", "/") != String::EndPos) {};
+		if (site_path != "")
+			sys_path_.push_back(site_path);
+
 		// on windows, we put our python packages one step above the data directory
 		String python_path = String(p.find("..\\BALL.py")).before("BALL.py");
 		python_path.trim();
@@ -146,6 +153,10 @@ namespace BALL
 			runSingleString_("sys.path.append(\"" + *it + "\")", Py_single_input);
 			start_log_ += error_message_;
 		}
+
+		// import the site module, and the one required for the output redirection
+		runSingleString_("import site, cStringIO", Py_single_input);
+		start_log_ += error_message_;
 
 		PyObject *sip_module = PyImport_ImportModule("sip");
 		if (sip_module == 0) 
