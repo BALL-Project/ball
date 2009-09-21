@@ -399,6 +399,17 @@ namespace BALL
 			render_mutex_.unlock();
 		}
 
+		void RenderSetup::setupEnvironmentMap(const QImage& image)
+		{
+			render_mutex_.lock();
+
+			makeCurrent();
+
+			renderer->setupEnvironmentMap(image);
+
+			render_mutex_.unlock();
+		}
+
 		Position RenderSetup::prepareGridTextures(const RegularData3D& grid, const ColorMap& map)
 		{
 			Position texname = 0;

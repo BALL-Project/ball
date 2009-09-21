@@ -55,6 +55,7 @@
 class QMouseEvent;
 class QRubberBand;
 class QMenu;
+class QImage;
 
 namespace BALL
 {
@@ -517,6 +518,9 @@ namespace BALL
 
 			void updateRTMaterialForRepresentation(Representation* rep, const Stage::RaytracingMaterial& new_material);
 #endif
+
+			/// Try to setup an environment map for all renderers that support it
+			void setupEnvironmentMap(const QImage& image);
 
 			Position prepareGridTextures(const RegularData3D& grid, const ColorMap& map);
 

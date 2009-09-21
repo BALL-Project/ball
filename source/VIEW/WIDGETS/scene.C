@@ -3196,6 +3196,15 @@ namespace BALL
 		}
 #endif
 
+		void Scene::setupEnvironmentMap(const QImage& image)
+		{
+			for (Position i=0; i<renderers_.size(); ++i)
+			{
+				if (renderers_[i]->receivesBufferUpdates())
+					renderers_[i]->setupEnvironmentMap(image);
+			}
+		}
+
 		Position Scene::prepareGridTextures(const RegularData3D& grid, const ColorMap& map)
 		{
 			// NOTE: this implementation has a slight disadvantage:
