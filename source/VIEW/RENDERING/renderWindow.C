@@ -14,7 +14,7 @@ namespace BALL
 	{
 		template<typename taPixelDatatype>
 			RenderWindow<taPixelDatatype>::RenderWindow()
-			:m_pfm((BALLVIEW_IS_SAME_TYPE(taPixelDatatype, int) ? PixelFormat::RGBA_32 : PixelFormat::RGBF_96)),
+			:m_pfm((BALLVIEW_IS_SAME_TYPE(taPixelDatatype, char) ? PixelFormat::RGBA_32 : PixelFormat::RGBF_96)),
 			m_minimalWidth(2),
 			m_minimalHeight(2)
 			{
@@ -98,7 +98,7 @@ namespace BALL
 
 
 		// Explicit specializations to be able to have window defined in .cpp file
-		template class RenderWindow<int>;
+		template class RenderWindow<char>;
 		template class RenderWindow<float>;
 
 	} // namespace VIEW
