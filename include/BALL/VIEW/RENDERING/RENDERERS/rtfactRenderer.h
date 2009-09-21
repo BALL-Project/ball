@@ -91,6 +91,8 @@ namespace BALL
 
 				void updateBackgroundColor();
 
+				void setupEnvironmentMap(const QImage& image);
+
 				void updateMaterialForRepresentation(Representation const* rep);
 
 				GroupHandle transformTube(const TwoColoredTube& tube);

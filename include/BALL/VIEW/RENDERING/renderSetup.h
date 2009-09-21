@@ -24,6 +24,8 @@
 #include <QtCore/qthread.h>
 #include <QtCore/QWaitCondition>
 
+class QImage;
+
 namespace BALL {
 	namespace VIEW {
 
@@ -156,6 +158,10 @@ namespace BALL {
 				 */
 				void updateBackgroundColor();
 				
+				/** Setup an environment map if supported by the Renderer.
+				 */
+				void setupEnvironmentMap(const QImage& image);
+
 				/** Send a grid texture to the renderer.
 				 *  
 				 *  If the current renderer can not handle this kind of object,

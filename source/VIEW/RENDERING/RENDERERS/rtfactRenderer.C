@@ -7,6 +7,8 @@
 #include <RTfact/Config/Init.hpp>
 #include <RTfact/Utils/Transform.hpp>
 
+#include <QtGui/QImage>
+
 using RTfact::Vec3f;
 using RTfact::Remote::GroupHandle;
 using RTfact::Remote::GeoHandle;
@@ -168,6 +170,31 @@ namespace BALL
 			m_renderer.setEnvironmentColor(stage_->getBackgroundColor().getRed(),
 																		 stage_->getBackgroundColor().getGreen(),
 																		 stage_->getBackgroundColor().getBlue());
+		}
+
+		void RTfactRenderer::setupEnvironmentMap(const QImage& image)
+		{
+			// convert the image into an RTfact - compatible array
+			Size num_pixels = image.width()*image.height();
+
+			float* rtfact_env_map = new float[3*num_pixels];
+
+			Position current_pixel = 0;
+			for (Position i=0; i<image.width(); ++i)
+			{
+				for (Position j=0; j<image.height(); ++j, ++current_pixel)
+				{
+					QRgb pixel = image.pixel(i,j);
+
+					rtfact_env_map[3*current_pixel]   = qRed(pixel)/255.;
+					rtfact_env_map[3*current_pixel+1] = qGreen(pixel)/255.;
+					rtfact_env_map[3*current_pixel+2] = qBlue(pixel)/255.;
+				}
+			}
+
+			m_renderer.setEnvironmentTexture(rtfact_env_map, 3, image.width(), image.height());
+
+			delete[] (rtfact_env_map);
 		}
 			
 		void RTfactRenderer::prepareBufferedRendering(const Stage& stage)

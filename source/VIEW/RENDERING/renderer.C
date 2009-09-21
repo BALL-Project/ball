@@ -151,6 +151,11 @@ namespace BALL
 			Log.error() << "Renderer::updateBackgroundColor() not implemented for this kind of renderer yet!" << std::endl;
 		}
 
+		void Renderer::setupEnvironmentMap(const QImage& image)
+		{
+			Log.error() << "Renderer::setupEnvironmentMap() not implemented for this kind of renderer yet!" << std::endl;
+		}
+
 		void Renderer::setupStereo(float /*eye_separation*/, float /*focal_length*/)
 		{
 			Log.error() << "Renderer::setupStereo() not implemented for this kind of renderer yet!" << std::endl;

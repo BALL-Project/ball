@@ -22,6 +22,8 @@
 # include <BALL/MATHS/vector2.h>
 #endif
 
+class QImage;
+
 namespace BALL
 {
 	namespace VIEW
@@ -96,6 +98,9 @@ namespace BALL
 
 			/// Update the background color from the stage
 			virtual void updateBackgroundColor();
+
+			/// Setup an environment map
+			virtual void setupEnvironmentMap(const QImage& image);
 
 			/** Sets this renderer as a part of a stereo setup.
 			 *

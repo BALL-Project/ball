@@ -17,6 +17,7 @@
 #include <QtGui/QStackedWidget>
 #include <QtGui/QListWidget>
 #include <QtGui/QFileDialog>
+#include <QtGui/QImage>
 
 namespace BALL
 {
@@ -141,10 +142,15 @@ namespace BALL
 					"Choose an environment texture file to open",
 					scene_->getWorkingDir().c_str(),
 					"*");
+
 			if (files.begin() != files.end())
 			{
 				texture_file_edit->setText(*files.begin());
 				//TODO open this file and prepare for stage or submit the filename to the stage or scene
+
+				QImage loaded_env_map(*files.begin());
+				
+				scene_->setupEnvironmentMap(loaded_env_map);		
 			}
 		}
 
@@ -312,7 +318,7 @@ namespace BALL
 			smooth_lines_->setChecked(false);
 			fog_box->setChecked(false);
 			fog_slider->setValue(200);
-			environment_map->setDisabled(true);
+//			environment_map->setDisabled(true);
 			environment_map->setChecked(false);
 			
 			setTextureUpDirection_(stage_->getCamera().getLookUpVector());	
