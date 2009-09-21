@@ -15,8 +15,10 @@
 #define BALLVIEW_IS_SAME_TYPE(aTypeA, aTypeB) (boost::is_same<aTypeA, aTypeB>::value)
 
 ///Macro checks at compile time, whether <tt>aType</tt> is int or float
-#define BALLVIEW_STATIC_ASSERT_TYPE_IS_INT_OR_FLOAT(aType)				                                \
-        BOOST_STATIC_ASSERT(BALLVIEW_IS_SAME_TYPE(aType, int) || BALLVIEW_IS_SAME_TYPE(aType, float))
+#define BALLVIEW_STATIC_ASSERT_TYPE_IS_CHAR_OR_FLOAT(aType)				                                \
+        BOOST_STATIC_ASSERT(BALLVIEW_IS_SAME_TYPE(aType, char) || BALLVIEW_IS_SAME_TYPE(aType, float))
+
+#define BALL_DEFAULT_PIXEL_TYPE float
 
 namespace BALL
 {
@@ -31,7 +33,7 @@ namespace BALL
 			class BALL_VIEW_EXPORT RenderWindow : public RenderTarget
 		{
 			// only int or floats are allowed as template parameters
-			BALLVIEW_STATIC_ASSERT_TYPE_IS_INT_OR_FLOAT(taPixelDatatype);
+			BALLVIEW_STATIC_ASSERT_TYPE_IS_CHAR_OR_FLOAT(taPixelDatatype);
 
 			// type of the pixel buffer pointer
 			typedef boost::shared_array<taPixelDatatype> t_PixelPtr;
@@ -101,7 +103,7 @@ namespace BALL
 			const unsigned int m_minimalHeight;     // minimum height the window can have
 		};
 
-		typedef RenderWindow<float> t_RenderWindow;
+		typedef RenderWindow<BALL_DEFAULT_PIXEL_TYPE> t_RenderWindow;
 
 	} // namespace VIEW
 

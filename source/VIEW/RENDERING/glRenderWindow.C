@@ -90,7 +90,7 @@ namespace BALL
 			if (!format().rgba())
 				Log.error() << "No RGBA mode for OpenGl available." << std::endl;
 
-			RenderWindow<float>::init();
+			t_RenderWindow::init();
 			bool result = false;
 
 			FB_TEXTURE_TARGET = GL_TEXTURE_2D;
@@ -117,7 +117,7 @@ namespace BALL
 		
 		bool GLRenderWindow::resize(const unsigned int width, const unsigned int height)
 		{						
-			if(!RenderWindow<float>::resize((int)ceil(width/down_sampling_factor_), (int)ceil(height/down_sampling_factor_)))
+			if(!t_RenderWindow::resize((int)ceil(width/down_sampling_factor_), (int)ceil(height/down_sampling_factor_)))
 			{
 				return false;
 			}
@@ -130,7 +130,7 @@ namespace BALL
 
 		void GLRenderWindow::refresh()
 		{			
-			RenderWindow<float>::refresh();
+			t_RenderWindow::refresh();
 
 			glMatrixMode(GL_MODELVIEW);
 			glLoadIdentity();
