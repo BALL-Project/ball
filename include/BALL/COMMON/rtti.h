@@ -98,7 +98,7 @@ namespace BALL
 		template <typename T>
 		const char* getName()
 		{
-			return typeid(getDefault<T>()).name();
+			return typeid(T).name();
 		}
 
 		/**	Return a void pointer that is unique for each class.
@@ -174,7 +174,7 @@ namespace BALL
 			if (!is_set)
 			{
 				is_set = true;
-				s = streamClassName(typeid(getDefault<T>()));
+				s = streamClassName(typeid(T));
 			}
 
 			return s.c_str();
@@ -227,8 +227,7 @@ namespace BALL
 		template <typename T, typename U>
 		bool isInstanceOf(const U& u)
 		{
-			T		t;
-			return (typeid(u) == typeid(t));
+			return (typeid(u) == typeid(T));
 		}
 
 	} // namespace RTTI
