@@ -660,6 +660,8 @@ namespace BALL
 					ResourceEntry::Iterator variant_it;
 					Residue& original_fragment(*fragment);
 
+					bool has_default_variant = false;
+
 					for (variant_it = ++entry->begin(); +variant_it; ++variant_it)
 					{	
 						if (variant_it->getDepth() == entry->getDepth() + 1)
@@ -668,14 +670,14 @@ namespace BALL
 							Residue*	variant;
 							if (variant_name == "Default")
 							{
+								has_default_variant = true;
 								variant = new Residue(original_fragment);
-								Position index = addNewFragment_(variant);
-									
-								// Make sure that the default fragment is the first in the list
-								// just to ensure it is selected, if other fragments fit
-								// equally well from their properties.
-								name_to_variants_[fragment_name].push_back(index);
-								name_to_frag_index_[fragment_name] = index;
+
+								//If a default variant exists, it should take the place of the
+								//basis fragment. The basis fragment itself is no longer required
+								fragments_[fragment_index] = variant;
+								name_to_variants_[fragment_name].push_back(fragment_index);
+								name_to_frag_index_[fragment_name] = fragment_index;
 								name_to_path_[fragment_name] = "/Fragments/" + fragment_name + "/Variants/" + variant_name;
 							} 
 							else 
@@ -721,6 +723,10 @@ namespace BALL
 								}
 							}
 						}
+					}
+
+					if(has_default_variant) {
+						delete fragment;
 					}
 				}
 			}
