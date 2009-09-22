@@ -20,7 +20,8 @@ using namespace BALL;
 	for (StringHashMap<ValueType>::Iterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
 		// NOTE: keys into a string hash map are const!
-		PyObject* key = BALL_CONVERT_FROM_INSTANCE(const_cast<String*>(&(it->first)), String, sipTransferObj);
+		String* skey = new String(it->first);
+		PyObject* key = BALL_CONVERT_FROM_INSTANCE(skey, String, sipTransferObj);
 		if (key == NULL)
 		{
 			Py_DECREF(dict);
