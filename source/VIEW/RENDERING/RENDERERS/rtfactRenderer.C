@@ -423,9 +423,18 @@ namespace BALL
 			}
 
 			FrameBufferFormat fmt = buffer->getFormat();		    
-			if ((fmt.getPixelFormat() == PixelFormat::RGBF_96) && (objects_.size() != 0))
+			if (objects_.size() != 0)
 			{
-				m_renderer.attachFrameBuffer((float*)buffer->getData(), 3, fmt.getWidth(), fmt.getHeight());
+				if (fmt.getPixelFormat() == PixelFormat::RGBF_96)
+					m_renderer.attachFrameBuffer((float*)buffer->getData(), 3, fmt.getWidth(), fmt.getHeight(), fmt.getWidth());
+				else if (fmt.getPixelFormat() == PixelFormat::RGBA_32)
+				{
+					printf("using char buffer\n");
+					m_renderer.attachFrameBuffer((unsigned char*)buffer->getData(), 4, fmt.getWidth(), fmt.getHeight(), fmt.getWidth());
+				}
+				else
+					return;
+
 				m_renderer.renderToBuffer();
 
 				if (use_continuous_loop_)
