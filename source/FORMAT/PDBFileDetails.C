@@ -340,7 +340,7 @@ namespace BALL
 		// locations are present to avoid invalid structures due
 		// to duplicate atoms
 		if ((record.alternate_location_indicator == ' ' )
-				|| (record.alternate_location_indicator == 'A'))
+				|| (record.alternate_location_indicator == alternate_location_indicator_))
 		{
 			current_PDB_atom_ = new PDBAtom;
 			current_residue_->insert(*current_PDB_atom_);
