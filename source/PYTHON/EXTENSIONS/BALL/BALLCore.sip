@@ -274,6 +274,7 @@
 // STRUCTURE
 // %Include analyticalSES.sip
 %Include assignBondOrderProcessor.sip
+%Include atomBijection.sip
 %Include defaultProcessors.sip
 %Include fragmentDB.sip
 %Include reconstructFragmentProcessor.sip
