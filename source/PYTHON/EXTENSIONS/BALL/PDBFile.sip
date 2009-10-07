@@ -16,7 +16,8 @@ class PDBFile
   PDBFile();
 	// default open mode: READ
   PDBFile(const String&, OpenMode /openmode/ = std::ios::in) throw(FileNotFound);
-	~PDBFile() throw();
+	~PDBFile();
+	void selectAltLocationIndicator(char ch);
   virtual bool read(Protein& /protein/) throw (ParseError);
   virtual bool read(Molecule& /molecule/) throw (ParseError);
   virtual bool read(System& /system/) throw (ParseError);
