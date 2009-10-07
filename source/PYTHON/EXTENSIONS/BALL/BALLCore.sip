@@ -282,6 +282,7 @@
 %Include geometricTransformations.sip
 %Include numericalSAS.sip 
 %Include residueChecker.sip
+%Include RMSDMinimizer.sip
 // %Include rotamerLibrary.sip
 // %Include rules.sip
 // %Include structureMapper.sip
