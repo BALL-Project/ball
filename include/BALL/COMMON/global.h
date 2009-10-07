@@ -14,10 +14,6 @@
 #include <limits.h>
 #include <time.h>
 
-#if defined(BALL_LOG_MEMORY) && !defined(BALL_COMMON_MEMORY_H)
-#	include <BALL/COMMON/memory.h>
-#endif
-
 #ifdef BALL_HAS_BASETSD_H
 #	include <basetsd.h>
 #endif
