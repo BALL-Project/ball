@@ -79,7 +79,25 @@ namespace BALL
 	{
 		return ((System *)this)->getMolecule(position);
 	}
-			
+
+	Protein* System::getProtein(Position position)
+	{
+		for (ProteinIterator res_it = beginProtein(); !res_it.isEnd(); ++res_it)
+		{
+			if (position-- == 0)
+			{
+				return &(*res_it);
+			}
+		}
+
+		return 0;
+	}
+
+	const Protein* System::getProtein(Position position) const
+	{
+		return ((System *)this)->getProtein(position);
+	}
+
 	Size System::countMolecules() const
 	{
 		Size size = 0;

@@ -120,17 +120,43 @@ namespace BALL
 
 		/** Get a pointer to a child Molecule at a given position.
 				The pointer is 0 if this instance does not have a Molecule at this position.
+
+				@note The current implementation of this function has linear complexity
+
 				@param   position the position of the child molecule
-				@return  Molecule* - mutable pointer to the child molecule at <b>  position </b>
+				@return  Molecule* - mutable pointer to the child Molecule at <b>  position </b>
 		*/
 		Molecule* getMolecule(Position position);
 
 		/** Get a pointer to a child Molecule at a given position.
 				The pointer is 0 if this instance does not have a Molecule at this position.
+
+				@note The current implementation of this function has linear complexity
+
 				@param   position the position of the child molecule
-				@return  Molecule* - constant pointer to the child molecule at <b>  position </b>
+				@return  Molecule* - constant pointer to the child Molecule at <b>  position </b>
 		*/
 		const Molecule* getMolecule(Position position) const;
+
+		/** Get a pointer to a child Protein a given position.
+		    The pointer is 0 if this instance does not have a Protein at this position.
+
+		    @note The current implementation of this function has linear complexity
+
+		    @param   position the position of the child Protein
+		    @return  Protien* - mutable pointer to the child Protein at <b>  position </b>
+		*/
+		Protein* getProtein(Position position);
+
+		/** Get a pointer to a child Protein a given position.
+		    The pointer is 0 if this instance does not have a Protein at this position.
+
+		    @note The current implementation of this function has linear complexity
+
+		    @param   position the position of the child Protein
+		    @return  Protien* - mutable pointer to the child Protein at <b>  position </b>
+		*/
+		const Protein* getProtein(Position position) const;
 
 		/** Count the molecules in this system.
 				@return Size the number of molecules
