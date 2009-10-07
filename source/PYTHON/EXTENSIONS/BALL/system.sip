@@ -27,6 +27,8 @@ class System
   void swap(System&);
   void setName(const String&);
   const String& getName() const;
+	Molecule* getMolecule(Position position);
+	Protein* getProtein(Position position);
   Size countMolecules() const;
   Size countFragments() const;
   Size countAtoms() const;
