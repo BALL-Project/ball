@@ -95,6 +95,17 @@ void PDBFile::selectModel(Index index)
 	selected_model_ = index;
 }
 
+BALL_INLINE
+void PDBFile::selectAltLocationIndicator(char c)
+{
+	if (!isalpha(c)) {
+		throw Exception::InvalidArgument(__FILE__, __LINE__,
+		        String("The specified alternate location indicator '") + c + "' is invalid.");
+	}
+
+	alternate_location_indicator_ = c;
+}
+
 BALL_INLINE 
 void PDBFile::selectAllModels()
 {

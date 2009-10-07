@@ -63,6 +63,7 @@ namespace BALL
 			current_record_(INVALID_INDEX),
 			record_fields_(0),
 			current_record_type_(PDB::RECORD_TYPE__UNKNOWN),
+			alternate_location_indicator_('A'),
 			insertion_code_(0),
 			chain_ID_(0),
 			sequence_number_(-1),
@@ -96,6 +97,7 @@ namespace BALL
 			record_fields_(0),
 			current_record_type_(PDB::RECORD_TYPE__UNKNOWN),
 
+			alternate_location_indicator_('A'),
 			insertion_code_(0),
 			chain_ID_(0),
 			sequence_number_(-1),
@@ -154,6 +156,7 @@ namespace BALL
 	{
 		init_();
 		setName(file.getName());
+		alternate_location_indicator_ = file.alternate_location_indicator_;
 	}
 
 	PDBFile::PDBFile(const String& filename, File::OpenMode open_mode)
@@ -165,6 +168,7 @@ namespace BALL
 			current_record_(INVALID_INDEX),
 			record_fields_(0),
 			current_record_type_(PDB::RECORD_TYPE__UNKNOWN),
+			alternate_location_indicator_('A'),
 			insertion_code_(0),
 			chain_ID_(0),
 			sequence_number_(-1),

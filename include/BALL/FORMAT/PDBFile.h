@@ -225,6 +225,19 @@ namespace BALL
 		*/
 		void selectModel(Index index);
 
+		/**
+		 * This function allows to select the alternate location indicator
+		 * That should be parsed if one is specified. Default is 'A'.
+		 *
+		 * If other location indicators exist, but the specified one is missing
+		 * for an atom nothing will be parsed. Thus this option should be used
+		 * with caution.
+		 *
+		 * @throw IllegalArgument This exception is thrown if an invalid
+		 *        Location indicator (not a letter) was passed.
+		 */
+		void selectAltLocationIndicator(char c);
+
 		/// Return the model currently selected
 		Index getSelectedModel() const;
 
@@ -778,6 +791,7 @@ namespace BALL
 		SecStructList new_sheet_secstruc_list_;
 		SecStructList new_turn_secstruc_list_;
 
+		char alternate_location_indicator_;
 		PDB::AChar insertion_code_;
 		PDB::Character chain_ID_;
 		PDB::Integer sequence_number_;
