@@ -309,6 +309,32 @@ class NotImplemented
 %End
 };
 
+class InvalidOption
+	: GeneralException
+{
+%TypeHeaderCode
+	#include <BALL/COMMON/exception.h>
+	using namespace BALL;
+	using namespace BALL::Exception;
+%End
+	public:
+		InvalidOption(const char* file, int line, String option);
+
+		SIP_PYOBJECT __repr__();
+%MethodCode
+	if(sipCpp == 0)
+	{
+		sipRes = PyString_FromString("");
+	}
+	else
+	{
+		sipRes = PyString_FromString(String(String(sipCpp->getName())
+		         + " in line " + String(sipCpp->getLine()) + " of "
+		         + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
+	}
+%End
+};
+
 class TooManyErrors
 	: GeneralException
 {
