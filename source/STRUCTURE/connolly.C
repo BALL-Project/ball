@@ -7,6 +7,92 @@
 #	define _USE_MATH_DEFINES
 #endif
 
+// Defines that ease refactoring
+// defines the number of atoms connolly_() can take
+#ifndef CONNOLLY_STATIC_SIZE
+#define CONNOLLY_STATIC_SIZE 10000
+#endif
+
+// defines the number of neighbors allowed for one atom
+#ifndef CONNOLLY_STATIC_NEIGHBOR_SIZE
+#define CONNOLLY_STATIC_NEIGHBOR_SIZE 1000
+#endif
+
+// defines the number of neighboring atom pairs
+#ifndef CONNOLLY_STATIC_NEIGHBOR_PAIRS_SIZE
+#define CONNOLLY_STATIC_NEIGHBOR_PAIRS_SIZE 500000
+#endif
+
+// defines the maximum number of tori allowed in torus_()
+// this is ALWAYS <= CONNOLLY_STATIC_NEIGHBOR_PAIRS_SIZE
+// this must be > CONNOLLY_STATIC_SIZE
+#ifndef CONNOLLY_STATIC_TORI_SIZE
+#define CONNOLLY_STATIC_TORI_SIZE 250000
+#endif
+#if CONNOLLY_STATIC_TORI_SIZE < CONNOLLY_STATIC_SIZE
+#error CONNOLLY_STATIC_TORI_SIZE is too small.
+#endif
+
+// defines the maximum number of mutual neighbors in place_()
+#ifndef CONNOLLY_STATIC_MUTUAL_SIZE
+#define CONNOLLY_STATIC_MUTUAL_SIZE 500
+#endif
+
+//defines the maximum number of convex edges per atom used in contact_
+//this is always < CONNOLLY_STATIC_MUTUAL_SIZE * 2
+#ifndef CONNOLLY_STATIC_CONVEX_SIZE
+#define CONNOLLY_STATIC_CONVEX_SIZE 300
+#endif
+
+//defines the maximum number of cycles per atom? used in contact_
+#ifndef CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE 
+#define CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE 100
+#endif
+
+//defis the maximum number of edges per Cycle
+#ifndef CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE
+#define CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE 30
+#endif
+
+//defines the overall maximum number of cycles that can be stored in face12_
+#ifndef CONNOLLY_STATIC_CYCLES_GLOBAL_SIZE
+#define CONNOLLY_STATIC_CYCLES_GLOBAL_SIZE 5000
+#endif
+
+// defines the maximum probe positions used in place_() 
+// at most 2 * CONNOLLY_STATIC_TORI_SIZE
+#ifndef CONNOLLY_STATIC_PROBES_SIZE
+#define CONNOLLY_STATIC_PROBES_SIZE 10000
+#endif
+
+// defines the maximum number of faces generated in place_() 
+// must be < CONNOLLY_STATIC_TORI_SIZE / 3
+// and > CONNOLLY_STATIC_SIZE
+#ifndef CONNOLLY_STATIC_FACES_SIZE
+#define CONNOLLY_STATIC_FACES_SIZE 25000
+#endif
+#if CONNOLLY_STATIC_FACES_SIZE > CONNOLLY_STATIC_TORI_SIZE / 3 || CONNOLLY_STATIC_FACES_SIZE < CONNOLLY_STATIC_SIZE
+#error CONNOLLY_STATIC_FACES_SIZE is not set right
+#endif
+
+//defines the number of convex faces stored in face13_1
+//convex faces are derived from the faces defined by CONNOLLY_STATIC_FACES_SIZE
+#ifndef CONNOLLY_STATIC_CONVEX_FACES_SIZE
+#define CONNOLLY_STATIC_CONVEX_FACES_SIZE 5000
+#endif
+
+//defines the maximum number of cycles bounding a convex face
+#ifndef CONNOLLY_STATIC_BOUNDING_CYCLES_SIZE 
+#define CONNOLLY_STATIC_BOUNDING_CYCLES_SIZE 10
+#endif
+
+//defines the maximum number of nop's in vam_
+#ifndef CONNOLLY_STATIC_NOP_SIZE
+#define CONNOLLY_STATIC_NOP_SIZE 100
+#endif
+
+// End of defines 
+
 #include <math.h>
 
 #ifdef BALL_HAS_VALUES_H
@@ -15,7 +101,7 @@
 
 #include <algorithm>
 #include <iostream>
-
+#include <BALL/COMMON/exception.h>
 using std::min;
 using std::max;
 using std::cerr;
@@ -28,7 +114,7 @@ namespace	BALL
 
 	struct
 	{
-		double x[10000], y[10000], z__[10000];
+		double x[CONNOLLY_STATIC_SIZE], y[CONNOLLY_STATIC_SIZE], z__[CONNOLLY_STATIC_SIZE];
 		int n;
 	}
 	atoms_;
@@ -37,52 +123,78 @@ namespace	BALL
 
 	struct
 	{
-		double a[30000] /* was [3][5000] */ , ar[10000], pr;
-		int na;
+		double a[3 * CONNOLLY_STATIC_SIZE], // contains the atoms coordinates 											[R]
+					 ar[CONNOLLY_STATIC_SIZE], 		// contains the atoms radii 														[R]
+					 pr; 													// contains the probe radius		 												[R]
+		int na; 														// contains the number of atoms <= CONNOLLY_STATIC_SIZE	[1:CONNOLLY_STATIC_SIZE]
 	}
 	face01_;
 
 #define face01_1 face01_
-
+	// stores antom properties.
 	struct
 	{
-		bool skip[10000], nosurf[10000], afree[10000], abur[10000];
+		bool skip[CONNOLLY_STATIC_SIZE],		//should this atom be skipped? set by neighbor_()						[0:1]
+				 nosurf[CONNOLLY_STATIC_SIZE],	//is this atom on the surface																[0:1]
+				 afree[CONNOLLY_STATIC_SIZE],		//is the atom free, used in thorus_ 												[0:1]
+				 abur[CONNOLLY_STATIC_SIZE];		//is the atom buried? gets rewritten in different functions [0:1]
 	}
 	face02_;
 
 #define face02_1 face02_
 
+	// neighborhood structure. Stores linked lists to neighbors for all atoms, and torus pointers 
 	struct
 	{
-		int anbr[40000] /* was [2][5000] */ , nbr[1000000], nbrt[1000000];
+		int anbr[2 * CONNOLLY_STATIC_SIZE], 						// stores two pointer to nbr.begin and end of the neighbor list
+																										// [1:CONNOLLY_STATIC_NEIGHBOR_PAIRS_SIZE]		
+			  nbr[CONNOLLY_STATIC_NEIGHBOR_PAIRS_SIZE], 	// lists of neighboring atoms to which anbr refers with indices 
+																										// [1:CONNOLLY_STATIC_SIZE]
+				nbrt[CONNOLLY_STATIC_NEIGHBOR_PAIRS_SIZE];	// contains pointer to the face including a neighbor
+																										// [1:CONNOLLY_STATIC_TORI_SIZE]
 	}
 	face03_;
 
 #define face03_1 face03_
 
+	//Torus related structure... mostly used in torus_() function
 	struct
 	{
-		int ntt, tta[1000000] /* was [2][250000] */ , ttfe[500000], ttle[500000], enext[100000];
-		bool ttbur[500000], ttfree[500000];
+		int ntt,	//number of torii stored [1:CONNOLLY_STATIC_TORI_SIZE]
+				tta[2 * CONNOLLY_STATIC_TORI_SIZE],		//contains pointers to atoms forming a face [1:CONNOLLY_STATIC_SIZE]
+			 	ttfe[2 * CONNOLLY_STATIC_TORI_SIZE],	//points to first concave edge [1:CONNOLLY_STATIC_TORI_SIZE]
+				ttle[2 * CONNOLLY_STATIC_TORI_SIZE],  //points to last concave edge
+																							// [1:max(CONNOLLY_STATIC_TORI_SIZE,3 * CONNOLLY_STATIC_FACES_SIZE + 3]
+				enext[CONNOLLY_STATIC_TORI_SIZE]; //edge lists. I don't get them
+		bool ttbur[CONNOLLY_STATIC_TORI_SIZE],	//is the torus buried
+				 ttfree[CONNOLLY_STATIC_TORI_SIZE];	//is the torus free
 	}
 	face04_;
 
 #define face04_1 face04_
 
+	// stores the number of nonburied tori
 	struct
 	{
-		double t[90000] /* was [3][15000] */ , tr[45000], tax[90000]	/* was [3][15000] */ ;
-		int nt, ta[60000] /* was [2][15000] */ , tfe[30000];
-		bool tfree[30000];
+		double	t[3 * CONNOLLY_STATIC_TORI_SIZE], 
+						tr[CONNOLLY_STATIC_TORI_SIZE], 
+						tax[3 * CONNOLLY_STATIC_TORI_SIZE];
+		int nt, // [1:CONNOLLY_STATIC_TORI_SIZE]
+				ta[2* CONNOLLY_STATIC_TORI_SIZE], //contains atoms forming a face [1:CONNOLLY_STATIC_SIZE]
+			 	tfe[CONNOLLY_STATIC_TORI_SIZE]; //contains pointers to the first edge (like face04.ttfe)
+		bool tfree[CONNOLLY_STATIC_TORI_SIZE];
 	}
 	face05_;
 
 #define face05_1 face05_
 
+	// stores probe informations generated in face()_ 
 	struct
 	{
-		double p[60000] /* was [3][10000] */ ;
-		int np, pa[60000] /* was [3][10000] */ ;
+		double p[3 * CONNOLLY_STATIC_PROBES_SIZE]; 		// stores positions of probes [R]
+		int np, 																			// [1:CONNOLLY_STATIC_PROBES_SIZE]
+				pa[3 * CONNOLLY_STATIC_PROBES_SIZE];			// stores pointers to three atoms that take part in a triangle
+																									// [1:CONNOLLY_STATIC_SIZE]
 	}
 	face06_;
 
@@ -90,8 +202,11 @@ namespace	BALL
 
 	struct
 	{
-		double v[150000] /* was [3][25000] */ ;
-		int nv, va[50000], vp[50000];
+		double v[3 * 3 * CONNOLLY_STATIC_FACES_SIZE + 9]; //stores?!?
+		int nv, 																//[1:9 * CONNOLLY_STATIC_FACES_SIZE]
+				va[3 * CONNOLLY_STATIC_FACES_SIZE],	//stores pointers to the atoms that take part in the triangle
+																						//[1:CONNOLLY_STATIC_SIZE]
+				vp[3 * CONNOLLY_STATIC_FACES_SIZE]; //[1:CONNOLLY_STATIC_PROBE_SIZE]
 	}
 	face07_;
 
@@ -99,16 +214,23 @@ namespace	BALL
 
 	struct
 	{
-		int nen, env[100000] /* was [2][25000] */ , nfn, fnen[60000]	/* was [3][10000] */ ;
+		int nen, 
+				env[3 * 2 * CONNOLLY_STATIC_FACES_SIZE], //stores pointers to edges [1:3*CONNOLLY_STATIC_FACES_SIZE]
+				nfn, //[1:CONNOLLY_STATIC_FACES_SIZE]
+				fnen[3 * CONNOLLY_STATIC_FACES_SIZE]; //stores plointers from faces to edges [1:3*CONNOLLY_STATIC_FACES_SIZE]
 	}
 	face08_;
 
 #define face08_1 face08_
 
+	// stores information about circles used in saddle_
 	struct
 	{
-		double c__[150000] /* was [3][50000] */ , cr[50000];
-		int nc, ca[50000], ct[50000];
+		double c__[2 * 3 * CONNOLLY_STATIC_TORI_SIZE], //stores circle centers
+					 cr[2 * CONNOLLY_STATIC_TORI_SIZE]; //the circle radius
+		int nc, // [1:2 * CONNOLLY_STATIC_TORI_SIZE]
+				ca[2 * CONNOLLY_STATIC_TORI_SIZE],  //contains pointer to the circle atom [1:CONNOLLY_STATIC_SIZE]
+				ct[2 * CONNOLLY_STATIC_TORI_SIZE]; //contains pointer to the circle torus [1:CONNOLLY_STATIC_TORUS]
 	}
 	face09_;
 
@@ -116,7 +238,12 @@ namespace	BALL
 
 	struct
 	{
-		int nep, epc[50000], epv[100000] /* was [2][25000] */ , afe[10000], ale[10000], epnext[50000];
+		int nep, // [1:CONNOLLY_STATIC_TORI_SIZE] 
+				epc[CONNOLLY_STATIC_TORI_SIZE],  //stores circle pointers? [1:2*CONNOLLY_STATIC_TORI_SIZE]
+				epv[2 * CONNOLLY_STATIC_TORI_SIZE],  // [1:3*CONNOLLY_STATIC_FACES_SIZE]
+				afe[CONNOLLY_STATIC_SIZE], // stores first edge in epnext... [1:CONNOLLY_STATIC_TORI_SIZE]
+				ale[CONNOLLY_STATIC_SIZE], // stores last edge in epnext... [1:CONNOLLY_STATIC_TORI_SIZE]
+				epnext[CONNOLLY_STATIC_TORI_SIZE];
 	}
 	face10_;
 
@@ -124,23 +251,31 @@ namespace	BALL
 
 	struct
 	{
-		int nfs, fsen[60000] /* was [2][15000] */ , fsep[60000]	/* was [2][15000] */ ;
+		int nfs,
+			 	fsen[2 * CONNOLLY_STATIC_TORI_SIZE], //stores edge pointers [1:3*CONNOLLY_STATIC_FACES_SIZE]
+			 	fsep[2 * CONNOLLY_STATIC_TORI_SIZE]; // [1:CONNOLLY_STATIC_TORI_SIZE]
 	}
 	face11_;
 
 #define face11_1 face11_
-
+// stores the ?cycles? generated in contact_()
 	struct
 	{
-		int ncy, cynep[10000], cyep[300000] /* was [30][5000] */ ;
+		int ncy, //[1:CONNOLLY_STATIC_CYCLES_GLOBAL_SIZE]
+			 	cynep[2 * CONNOLLY_STATIC_CYCLES_GLOBAL_SIZE], //[1:CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE]
+			 	cyep[CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE * CONNOLLY_STATIC_CYCLES_GLOBAL_SIZE]; // was [30][5000] [1:CONNOLLY_STATIC_TORI_SIZE]
 	}
 	face12_;
 
 #define face12_1 face12_
 
+	//stores the ?convex faces? generated in contact_
 	struct
 	{
-		int nfp, fpa[10000], fpcy[100000] /* was [10][5000] */ , fpncy[10000];
+		int nfp, //[1:CONNOLLY_STATIC_CONVEX_FACES_SIZE]
+				fpa[CONNOLLY_STATIC_CONVEX_FACES_SIZE], // [1:CONNOLLY_STATIC_SIZE]
+				fpcy[CONNOLLY_STATIC_BOUNDING_CYCLES_SIZE * CONNOLLY_STATIC_CONVEX_FACES_SIZE], // was [10][5000]  
+				fpncy[CONNOLLY_STATIC_CONVEX_FACES_SIZE];
 	}
 	face13_;
 
@@ -191,7 +326,12 @@ namespace	BALL
 	int connolly_ (int number_of_atoms, double *coordinates, double *radius,
 								 double *volume, double *area, double probe, double exclude, double* atom_areas)
 	{
-		/*     set the probe radius and the number of atoms */
+		//     fail if there are too many atoms    
+		if (number_of_atoms > CONNOLLY_STATIC_SIZE)
+		{
+			throw Exception::OutOfRange(__FILE__,__LINE__);
+		}
+		//     set the probe radius and the number of atoms 
 
 		/* Parameter adjustments */
 		--radius;
@@ -472,10 +612,10 @@ namespace	BALL
 		double d__1, d__2, d__3;
 
 		/* Local variables */
-		static int nbra[1000], jnbr, jmin, nnbr, iuse, itnl[1000], iptr;
+		static int nbra[CONNOLLY_STATIC_NEIGHBOR_SIZE], jnbr, jmin, nnbr, iuse, itnl[CONNOLLY_STATIC_NEIGHBOR_SIZE], iptr;
 		static double sumi, vect1, vect2, vect3;
-		static int i__, j, k, m, icube[64000] /* was [40][40][40] */ , nnbra;
-		static bool scube[64000] /* was [40][40][40] */ ;
+		static int i__, j, k, m, icube[64000],nnbra; // was [40][40][40] 
+		static bool scube[64000]; // was [40][40][40] 
 		static int jmold;
 		static double comin[3];
 		static int iatom, jatom;
@@ -483,8 +623,8 @@ namespace	BALL
 		static int i1, j1, k1;
 		static double r2, radmax;
 		static int jminbr;
-		static bool sscube[64000] /* was [40][40][40] */ ;
-		static int icuptr[5000], ici, icj, ick, jci, jcj, jck, ico[15000] /* was [3][5000] */ ;
+		static bool sscube[64000]; // was [40][40][40]
+		static int icuptr[CONNOLLY_STATIC_SIZE], ici, icj, ick, jci, jcj, jck, ico[3*CONNOLLY_STATIC_SIZE]; // was [3][5000]
 		static double sum;
 
 
@@ -492,6 +632,7 @@ namespace	BALL
 
 		/*     may give nonsense results if this step is not taken */
 
+		// loop cannot overflow as indeces are [1:CONNOLLY_STATIC_SIZE]
 		i__1 = face01_1.na - 1;
 		for (i__ = 1; i__ <= i__1; ++i__)
 		{
@@ -559,10 +700,14 @@ namespace	BALL
 				if (ico[k + i__ * 3 - 4] < 1)
 				{
 					cerr << "Cube Coordinate Too Small" << endl;
+					// fail before overflow 
+					throw Exception::OutOfRange(__FILE__,__LINE__);
 				}
 				else if (ico[k + i__ * 3 - 4] > 40)
 				{
 					cerr << "Cube Coordinate Too Large" << endl;
+					//fail before overflow 
+					throw Exception::OutOfRange(__FILE__,__LINE__);
 				}
 			}
 		}
@@ -816,9 +961,11 @@ namespace	BALL
 							face02_1.nosurf[i__ - 1] = false;
 						}
 						++nnbra;
-						if (nnbra > 1000)
+						if (nnbra > CONNOLLY_STATIC_NEIGHBOR_SIZE)
 						{
 							cerr << "Too many Neighbors for Atom" << endl;
+							// fail before overflow 
+							throw Exception::OutOfRange(__FILE__,__LINE__);
 						}
 						itnl[nnbra - 1] = j;
 					L50:
@@ -874,9 +1021,11 @@ namespace	BALL
 				for (m = 1; m <= i__4; ++m)
 				{
 					++nnbr;
-					if (nnbr > 500000)
+					if (nnbr > CONNOLLY_STATIC_NEIGHBOR_PAIRS_SIZE)
 					{
 						cerr << "Too many Neighboring Atom Pairs" << endl;
+						// fail before overflow 
+						throw Exception::OutOfRange(__FILE__,__LINE__);
 					}
 					face03_1.nbr[nnbr - 1] = nbra[m - 1];
 				}
@@ -981,9 +1130,11 @@ namespace	BALL
 								//     we have a temporary torus, set up variables
 
 								++face04_1.ntt;
-								if (face04_1.ntt > 250000)
+								if (face04_1.ntt > CONNOLLY_STATIC_TORI_SIZE)
 								{
 									cerr << "Too many Temporary Tori" << endl;
+									// fail before overflow 
+									throw Exception::OutOfRange(__FILE__,__LINE__);
 								}
 
 								//     mark both atoms not free
@@ -1056,7 +1207,7 @@ namespace	BALL
 		static int
 			nmut;
 		static int
-			k, l, lknbr[250000];
+			k, l, lknbr[CONNOLLY_STATIC_MUTUAL_SIZE];
 		static bool
 			prbok;
 		static double
@@ -1070,19 +1221,21 @@ namespace	BALL
 		static int
 			kv;
 		static double
-			disnbr[500];
+			disnbr[CONNOLLY_STATIC_MUTUAL_SIZE];
 		static double
-			sumnbr[500], bij[3], hij;
+			sumnbr[CONNOLLY_STATIC_MUTUAL_SIZE], bij[3], hij;
 		static int
 			lkf;
 		static double
 			det;
 		static int
-			ikt[500], jkt[500];
+			ikt[CONNOLLY_STATIC_MUTUAL_SIZE], // [1:CONNOLLY_STATIC_TORI_SIZE]
+		 	jkt[CONNOLLY_STATIC_MUTUAL_SIZE]; // [1:CONNOLLY_STATIC_TORI_SIZE]
 		static double
 			uij[3];
 		static int
-			itt, mut[500];
+			itt,
+			mut[CONNOLLY_STATIC_MUTUAL_SIZE]; // [1:CONNOLLY_STATIC_SIZE]
 
 
 
@@ -1159,9 +1312,11 @@ namespace	BALL
 /*     save atom number of mutual neighbor */
 
 			++nmut;
-			if (nmut > 500)
+			if (nmut > CONNOLLY_STATIC_MUTUAL_SIZE)
 			{
 				cerr << "Too many Mutual Neighbors" << endl;
+				// fail before overflow 
+				throw Exception::OutOfRange(__FILE__,__LINE__);
 			}
 			mut[nmut - 1] = face03_1.nbr[iptr - 1];
 
@@ -1361,9 +1516,11 @@ namespace	BALL
 					/*     we have a new probe position */
 
 					++face06_1.np;
-					if (face06_1.np > 10000)
+					if (face06_1.np > CONNOLLY_STATIC_PROBES_SIZE)
 					{
 						cerr << "Too many Probe Positions" << endl;
+						// fail before overflow 
+						throw Exception::OutOfRange(__FILE__,__LINE__);
 					}
 
 					/*     mark three tori not buried */
@@ -1381,10 +1538,14 @@ namespace	BALL
 
 					/*     calculate vectors from probe to atom centers */
 
-					if (face07_1.nv + 3 > 25000)
+					//IC FOR ME: this bound is tight
+					if (face07_1.nv + 3 > 3 * CONNOLLY_STATIC_FACES_SIZE)
 					{
 						cerr << "Too many Vertices" << endl;
+						// fail before overflow 
+						throw Exception::OutOfRange(__FILE__,__LINE__);
 					}
+					//copy the three participating atoms coordinates into the face07_1 datastructure
 					for (k = 1; k <= 3; ++k)
 					{
 						face07_1.v[k + (face07_1.nv + 1) * 3 - 4] = face01_1.a[k
@@ -1415,18 +1576,14 @@ namespace	BALL
 
 					for (k = 1; k <= 3; ++k)
 					{
-						face07_1.v[k + (face07_1.nv + 1) * 3 - 4] = face06_1.p[k
-																																	 + face06_1.np * 3 - 4] + face07_1.v[k +
-																																																			 (face07_1.nv +
-																																																				1) * 3 -
-																																																			 4] *
-							face01_1.pr / (face01_1.ar[ia - 1] + face01_1.pr);
-						face07_1.v[k + (face07_1.nv + 2) * 3 - 4] =
-							face06_1.p[k + face06_1.np * 3 - 4] + face07_1.v[k + (face07_1.nv + 2) * 3 -
-																															 4] * face01_1.pr / (face01_1.ar[ja - 1] + face01_1.pr);
-						face07_1.v[k + (face07_1.nv + 3) * 3 - 4] =
-							face06_1.p[k + face06_1.np * 3 - 4] + face07_1.v[k + (face07_1.nv + 3) * 3 -
-																															 4] * face01_1.pr / (face01_1.ar[ka - 1] + face01_1.pr);
+						face07_1.v[k + (face07_1.nv + 1) * 3 - 4] = face06_1.p[k + face06_1.np * 3 - 4] + 
+							face07_1.v[k + (face07_1.nv + 1) * 3 - 4] *	face01_1.pr / (face01_1.ar[ia - 1] + face01_1.pr);
+
+						face07_1.v[k + (face07_1.nv + 2) * 3 - 4] = face06_1.p[k + face06_1.np * 3 - 4] + 
+							face07_1.v[k + (face07_1.nv + 2) * 3 - 4] * face01_1.pr / (face01_1.ar[ja - 1] + face01_1.pr);
+
+						face07_1.v[k + (face07_1.nv + 3) * 3 - 4] = face06_1.p[k + face06_1.np * 3 - 4] + 
+							face07_1.v[k + (face07_1.nv + 3) * 3 - 4] * face01_1.pr / (face01_1.ar[ka - 1] + face01_1.pr);
 					}
 
 /*     want the concave face to have counter-clockwise orienta
@@ -1493,9 +1650,11 @@ namespace	BALL
 
 /*     set up concave edges and concave face */
 
-					if (face08_1.nen + 3 > 25000)
+					if (face08_1.nen + 1 > CONNOLLY_STATIC_FACES_SIZE)
 					{
 						cerr << "Too many Concave Edges" << endl;
+						//fail before overflow
+						throw Exception::OutOfRange(__FILE__,__LINE__);
 					}
 
 /*     edges point to vertices */
@@ -1506,9 +1665,12 @@ namespace	BALL
 					face08_1.env[((face08_1.nen + 2) << 1) - 1] = face07_1.nv + 3;
 					face08_1.env[((face08_1.nen + 3) << 1) - 2] = face07_1.nv + 3;
 					face08_1.env[((face08_1.nen + 3) << 1) - 1] = face07_1.nv + 1;
-					if (face08_1.nfn + 1 > 10000)
+
+					if (face08_1.nfn + 1 > CONNOLLY_STATIC_FACES_SIZE)
 					{
 						cerr << "Too many Concave Faces" << endl;
+						//fail before overflow
+						throw Exception::OutOfRange(__FILE__,__LINE__);
 					}
 
 /*     face points to edges */
@@ -1653,10 +1815,13 @@ namespace	BALL
 				/*     first, transfer information */
 
 				++face05_1.nt;
-				if (face05_1.nt > 15000)
+				if (face05_1.nt > CONNOLLY_STATIC_TORI_SIZE)
 				{
 					cerr << "Too many NonBuried Tori" << endl;
+					// fail before overflow
+					throw Exception::OutOfRange(__FILE__,__LINE__);
 				}
+
 				ia = face04_1.tta[(itt << 1) - 2];
 				ja = face04_1.tta[(itt << 1) - 1];
 				gettor_ (&ia, &ja, &ttok, &face05_1.t[face05_1.nt * 3 - 3], &face05_1.tr[face05_1.nt - 1],
@@ -1722,7 +1887,7 @@ namespace	BALL
 		static int
 			nent, itwo, k;
 		static double
-			teang[500];
+			teang[CONNOLLY_STATIC_MUTUAL_SIZE];
 		static int
 			l1, l2, m1, n1, ia, in, ip;
 		static double
@@ -1732,13 +1897,13 @@ namespace	BALL
 		static double
 			factor, atvect[3];
 		static int
-			nxtang[500];
+			nxtang[CONNOLLY_STATIC_MUTUAL_SIZE];
 		static bool
-			sdstrt[500];
+			sdstrt[CONNOLLY_STATIC_MUTUAL_SIZE];
 		static int
-			ien, ten[500];
+			ien, ten[CONNOLLY_STATIC_MUTUAL_SIZE];
 		static double
-			tev[1500] /* was [3][500] */ ;
+			tev[3 * CONNOLLY_STATIC_MUTUAL_SIZE];
 
 
 /*     zero the number of circles, convex edges and saddle faces */
@@ -1792,9 +1957,11 @@ namespace	BALL
 /*     one more circle */
 
 				++face09_1.nc;
-				if (face09_1.nc > 25000)
+				if (face09_1.nc > 2 * CONNOLLY_STATIC_TORI_SIZE )
 				{
 					cerr << "Too many Circles" << endl;
+					//fail before overflow
+					throw Exception::OutOfRange(__FILE__,__LINE__);
 				}
 
 /*     circle center */
@@ -1850,9 +2017,11 @@ namespace	BALL
 /*     one more concave edge */
 
 			++nent;
-			if (nent > 500)
+			if (nent > CONNOLLY_STATIC_MUTUAL_SIZE)
 			{
 				cerr << "Too many Edges for Torus" << endl;
+				//fail before overflow
+				throw Exception::OutOfRange(__FILE__,__LINE__);
 			}
 
 /*     first vertex of edge */
@@ -2013,9 +2182,11 @@ namespace	BALL
 				/*     one more saddle face */
 
 				++face11_1.nfs;
-				if (face11_1.nfs > 15000)
+				if (face11_1.nfs > CONNOLLY_STATIC_TORI_SIZE)
 				{
 					cerr << "Too many Saddle Faces" << endl;
+					//fail before overflow 
+					throw Exception::OutOfRange(__FILE__,__LINE__);
 				}
 
 				/*     get edge number */
@@ -2029,9 +2200,11 @@ namespace	BALL
 				/*     one more convex edge */
 
 				++face10_1.nep;
-				if (face10_1.nep > 25000)
+				if (face10_1.nep > CONNOLLY_STATIC_TORI_SIZE)
 				{
 					cerr << "Too many Convex Edges" << endl;
+					//fail before overflow
+					throw Exception::OutOfRange(__FILE__,__LINE__);
 				}
 
 				/*     first convex edge points to second circle */
@@ -2057,9 +2230,11 @@ namespace	BALL
 				/*     one more convex edge */
 
 				++face10_1.nep;
-				if (face10_1.nep > 25000)
+				if (face10_1.nep > CONNOLLY_STATIC_TORI_SIZE)
 				{
 					cerr << "Too many Convex Edges" << endl;
+					// fail before overflow
+					throw Exception::OutOfRange(__FILE__,__LINE__);
 				}
 
 				/*     second convex edge points to first circle */
@@ -2147,9 +2322,11 @@ namespace	BALL
 /*     one more saddle face */
 
 			++face11_1.nfs;
-			if (face11_1.nfs > 15000)
+			if (face11_1.nfs > CONNOLLY_STATIC_TORI_SIZE)
 			{
 				cerr << "Too many Saddle Faces" << endl;
+				// fail before overflow
+				throw Exception::OutOfRange(__FILE__,__LINE__);
 			}
 
 /*     no concave edges for saddle */
@@ -2282,30 +2459,33 @@ namespace	BALL
 		static double
 			pole[3];
 		static bool
-			cycy[10000] /* was [100][100] */ ;
+			cycy[CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE * CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE]; // was [100][100]
 		static int
 			i__, k;
 		static bool
-			samef[10000] /* was [100][100] */ ;
+			samef[CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE * CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE]; // was [100][100]  
 		static int
-			cyepa[3000] /* was [30][100] */ , ncypa, icyep, ncyep, jcyep, nused;
+			cyepa[CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE * CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE], // was [30][100]  
+		 	ncypa, icyep, ncyep, jcyep, nused;
 
 		static int
-			lookv, ia, ic, jc, av[600] /* was [2][300] */ , it;
+			lookv, ia, ic, jc, av[2 * CONNOLLY_STATIC_CONVEX_SIZE], // was [2][300]  
+			it;
 		static double
-			aavect[900] /* was [3][300] */ , factor;
+			aavect[3 * CONNOLLY_STATIC_CONVEX_SIZE], // was [3][300]  
+		 	factor;
 		static int
-			ncyepa[100];
+			ncyepa[CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE];
 		static bool
-			epused[300];
+			epused[CONNOLLY_STATIC_CONVEX_SIZE];
 		static int
 			ncyold, ia2;
 		static bool
-			cyused[100];
+			cyused[CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE];
 		static double
 			unvect[3];
 		static int
-			aic[300], aep[300];
+			aic[CONNOLLY_STATIC_CONVEX_SIZE], aep[CONNOLLY_STATIC_CONVEX_SIZE];
 		static int
 			iep, jcy;
 
@@ -2371,9 +2551,11 @@ namespace	BALL
 /*     one more edge */
 
 			++nepa;
-			if (nepa > 300)
+			if (nepa > CONNOLLY_STATIC_CONVEX_SIZE)
 			{
 				cerr << "Too many Convex Edges for Atom" << endl;
+				//fail before overflow
+				throw Exception::OutOfRange(__FILE__,__LINE__);
 			}
 
 /*      store vertices of edge */
@@ -2469,9 +2651,11 @@ namespace	BALL
 /*     one more cycle for atom */
 
 			++ncypa;
-			if (ncypa > 100)
+			if (ncypa > CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE)
 			{
 				cerr << "Too many Cycles per Atom" << endl;
+				//fail before overflow
+				throw Exception::OutOfRange(__FILE__,__LINE__);
 			}
 
 /*     mark edge used in cycle */
@@ -2482,18 +2666,20 @@ namespace	BALL
 /*     one more cycle for molecule */
 
 			++face12_1.ncy;
-			if (face12_1.ncy > 5000)
+			if (face12_1.ncy > CONNOLLY_STATIC_CYCLES_GLOBAL_SIZE)
 			{
 				cerr << "Too many Cycles" << endl;
+				//fail before overflow
+				throw Exception::OutOfRange(__FILE__,__LINE__);
 			}
 
 /*     index of edge in atom cycle array */
 
-			cyepa[ncyep + ncypa * 30 - 31] = iepa;
+			cyepa[ncyep + ncypa * CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE - CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE - 1] = iepa;
 
 /*     store in molecule cycle array a pointer to edge */
 
-			face12_1.cyep[ncyep + face12_1.ncy * 30 - 31] = iep;
+			face12_1.cyep[ncyep + face12_1.ncy * CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE - CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE - 1] = iep;
 
 /*     second vertex of this edge is the vertex to look */
 
@@ -2535,20 +2721,22 @@ namespace	BALL
 /*     one more edge for this cycle */
 
 				++ncyep;
-				if (ncyep > 30)
+				if (ncyep > CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE)
 				{
 					cerr << "Too many Edges per Cycle" << endl;
+					//fail before overflow
+					throw Exception::OutOfRange(__FILE__,__LINE__);
 				}
 				epused[jepa - 1] = true;
 				++nused;
 
 /*     store index in local edge array */
 
-				cyepa[ncyep + ncypa * 30 - 31] = jepa;
+				cyepa[ncyep + ncypa * CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE - CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE - 1] = jepa;
 
 /*     store pointer to edge */
 
-				face12_1.cyep[ncyep + face12_1.ncy * 30 - 31] = iep;
+				face12_1.cyep[ncyep + face12_1.ncy * CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE - CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE - 1] = iep;
 
 /*     new vertex to look for */
 
@@ -2603,7 +2791,7 @@ namespace	BALL
 
 /*     initialize */
 
-					cycy[icya + jcya * 100 - 101] = true;
+					cycy[icya + jcya * CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - 1] = true;
 
 /*     check for same cycle */
 
@@ -2622,27 +2810,26 @@ namespace	BALL
 					}
 
 /*     if cycles i and j have a pair of edges belonging */
-
 /*     to the same circle, then they are outside each other */
 
 					i__4 = ncyepa[icya - 1];
 					for (icyep = 1; icyep <= i__4; ++icyep)
 					{
-						iepa = cyepa[icyep + icya * 30 - 31];
+						iepa = cyepa[icyep + icya * CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE - CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE - 1];
 						ic = aic[iepa - 1];
 						i__5 = ncyepa[jcya - 1];
 						for (jcyep = 1; jcyep <= i__5; ++jcyep)
 						{
-							jepa = cyepa[jcyep + jcya * 30 - 31];
+							jepa = cyepa[jcyep + jcya * CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE - CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE - 1];
 							jc = aic[jepa - 1];
 							if (ic == jc)
 							{
-								cycy[icya + jcya * 100 - 101] = false;
+								cycy[icya + jcya * CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - 1] = false;
 								goto L90;
 							}
 						}
 					}
-					iepa = cyepa[icya * 30 - 30];
+					iepa = cyepa[icya * CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE - CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE];
 					anaa = anorm_ (&aavect[iepa * 3 - 3]);
 					factor = face01_1.ar[ia - 1] / anaa;
 
@@ -2653,7 +2840,7 @@ namespace	BALL
 						pole[k - 1] = factor * aavect[k + iepa * 3 - 4] + face01_1.a[k + ia * 3 - 4];
 						unvect[k - 1] = -aavect[k + iepa * 3 - 4] / anaa;
 					}
-					cycy[icya + jcya * 100 - 101] = ptincy_ (pole, unvect, &jcy);
+					cycy[icya + jcya * CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - 1] = ptincy_ (pole, unvect, &jcy);
 				L90:
 					;
 				}
@@ -2672,7 +2859,9 @@ namespace	BALL
 
 /*     the same face if they are inside each other */
 
-					samef[icya + jcya * 100 - 101] = cycy[icya + jcya * 100 - 101] && cycy[jcya + icya * 100 - 101];
+					samef[icya + jcya * CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - 1] = 
+						cycy[icya + jcya * CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - 1] && 
+						cycy[jcya + icya * CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - 1];
 				}
 			}
 
@@ -2693,10 +2882,12 @@ namespace	BALL
 						{
 							if (kcya != icya && kcya != jcya)
 							{
-								if (cycy[kcya + icya * 100 - 101] && cycy[kcya + jcya * 100 - 101] && !cycy[icya + kcya * 100 - 101])
+								if (cycy[kcya + icya * CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - 1] && 
+										cycy[kcya + jcya * CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - 1] && 
+										!cycy[icya + kcya * CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - 1])
 								{
-									samef[icya + jcya * 100 - 101] = false;
-									samef[jcya + icya * 100 - 101] = false;
+									samef[icya + jcya * CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE -1] = false;
+									samef[jcya + icya * CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - 1] = false;
 								}
 							}
 						}
@@ -2712,15 +2903,15 @@ namespace	BALL
 				i__3 = ncypa - 1;
 				for (jcya = icya + 1; jcya <= i__3; ++jcya)
 				{
-					if (samef[icya + jcya * 100 - 101])
+					if (samef[icya + jcya * CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - 1])
 					{
 						i__4 = ncypa;
 						for (kcya = jcya + 1; kcya <= i__4; ++kcya)
 						{
-							if (samef[jcya + kcya * 100 - 101])
+							if (samef[jcya + kcya * CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - 1])
 							{
-								samef[icya + kcya * 100 - 101] = true;
-								samef[kcya + icya * 100 - 101] = true;
+								samef[icya + kcya * CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - 1] = true;
+								samef[kcya + icya * CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - 1] = true;
 							}
 						}
 					}
@@ -2752,9 +2943,11 @@ namespace	BALL
 /*     one more convex face */
 
 				++face13_1.nfp;
-				if (face13_1.nfp > 5000)
+					if (face13_1.nfp > CONNOLLY_STATIC_CONVEX_FACES_SIZE)
 				{
 					cerr << "Too many Convex Faces" << endl;
+					//fail before overflow 
+					throw Exception::OutOfRange(__FILE__,__LINE__);
 				}
 
 /*     clear number of cycles for face */
@@ -2780,7 +2973,7 @@ namespace	BALL
 
 /*     cycles i and j belonging to same face */
 
-					if (!samef[icya + jcya * 100 - 101])
+					if (!samef[icya + jcya * CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - CONNOLLY_STATIC_CYCLES_PER_ATOM_SIZE - 1])
 					{
 						goto L100;
 					}
@@ -2793,15 +2986,17 @@ namespace	BALL
 /*     one more cycle for face */
 
 					++face13_1.fpncy[face13_1.nfp - 1];
-					if (face13_1.fpncy[face13_1.nfp - 1] > 10)
+					if (face13_1.fpncy[face13_1.nfp - 1] > CONNOLLY_STATIC_BOUNDING_CYCLES_SIZE)
 					{
 						cerr << "Too many Cycles bounding Convex Face" << endl;
+						//fail before overflow
+						throw Exception::OutOfRange(__FILE__,__LINE__);
 					}
 					i__ = face13_1.fpncy[face13_1.nfp - 1];
 
 /*     store cycle number */
 
-					face13_1.fpcy[i__ + face13_1.nfp * 10 - 11] = ncyold + jcya;
+					face13_1.fpcy[i__ + face13_1.nfp * CONNOLLY_STATIC_BOUNDING_CYCLES_SIZE - CONNOLLY_STATIC_BOUNDING_CYCLES_SIZE - 1] = ncyold + jcya;
 
 /*     check for finished */
 
@@ -2824,9 +3019,11 @@ namespace	BALL
 /*     one face for free atom; no cycles */
 
 			++face13_1.nfp;
-			if (face13_1.nfp > 5000)
+			if (face13_1.nfp > CONNOLLY_STATIC_CONVEX_FACES_SIZE)
 			{
 				cerr << "Too many Convex Faces" << endl;
+				//fail before overflow
+				throw Exception::OutOfRange(__FILE__,__LINE__);
 			}
 			face13_1.fpa[face13_1.nfp - 1] = ia;
 			face13_1.fpncy[face13_1.nfp - 1] = 0;
@@ -2857,28 +3054,31 @@ namespace	BALL
 		double d__1, d__2, d__3;
 
 		/* Local variables */
-		static bool badt[10000], alli, allj;
-		static double cora[10000];
-		static int nate, neat, nlap[10000], enfs[25000], idot;
-		static double dota, alts[30000] /* was [3][10000] */ , corv[10000],
-					 sdot[3], dotv[20], voln, dots[3000] /* was [3][1000] */ , vint, volp;
+		static bool badt[CONNOLLY_STATIC_FACES_SIZE], alli, allj;
+		static double cora[CONNOLLY_STATIC_FACES_SIZE];
+		static int nate, neat, nlap[CONNOLLY_STATIC_FACES_SIZE], enfs[CONNOLLY_STATIC_FACES_SIZE], idot;
+		static double dota, alts[3 * CONNOLLY_STATIC_FACES_SIZE],	// was [3][10000]  
+									corv[CONNOLLY_STATIC_FACES_SIZE],
+					 sdot[3], dotv[20], voln, dots[3000], // was [3][1000]  
+					 vint, volp;
 		static bool anyi;
 		static double vols;
-		static int nspt[30000] /* was [3][10000] */ ;
+		static int nspt[3 * CONNOLLY_STATIC_FACES_SIZE]; // was [3][10000]
 		static bool anyj, case1, case2;
 		static double vpyr, vect1[3], vect2[3], vect3[3];
 		static double vect4[3], vect5[3], vect6[3], vect7[3], vect8[3], xpnt1[3];
 		static int k;
 		static double xpnt2[3];
-		static bool badav[10000];
-		static double arean, areap, areas, fncen[30000] /* was [3][10000] */ ;
+		static bool badav[CONNOLLY_STATIC_FACES_SIZE];
+		static double arean, areap, areas, fncen[3 * CONNOLLY_STATIC_FACES_SIZE]; // was [3][10000]
 		static double scinc, alens, coran;
-		static int ifnop[100];
+		static int ifnop[CONNOLLY_STATIC_NOP_SIZE];
 		static double vcone;
 		static double totan, voldo;
 		static int ndots;
-		static double vlens, totap, totas, prism, sumsc, corvn, vects[9]
-						/* was [3][3] */ , tdots[3000] /* was [3][1000] */ ;
+		static double vlens, totap, totas, prism, sumsc, corvn, vects[9], // was [3][3]
+									tdots[3000]; // was [3][1000]
+						
 		static bool cinsp;
 		static double volsp;
 		static bool cintp;
@@ -2891,21 +3091,21 @@ namespace	BALL
 		static double uc[3], uq[3];
 		static double areasp;
 		static double hedron, alensn, sigmaq[3];
-		static double fnvect[90000] /* was [3][3][10000] */ ;
+		static double fnvect[3 * 3 * CONNOLLY_STATIC_FACES_SIZE]; // was [3][3][10000]
 		static int ispind[3];
-		static double alenst, depths[10000];
+		static double alenst, depths[CONNOLLY_STATIC_FACES_SIZE];
 		static int neatmx;
 		static double sumlam;
 		static double thetaq[3];
 		static bool spindl;
 		static int ke2;
-		static bool fntrev[30000] /* was [3][10000] */ ;
+		static bool fntrev[3 * CONNOLLY_STATIC_FACES_SIZE]; // was [3][10000] 
 		static double vlensn, ds2, totasp, vlenst, sumsig;
 		static bool usenum;
 		static int iv1, iv2;
 		static double totvsp;
-		static bool ate[100];
-		static int ien, ifn, iep, ifp, ifs, isc, jfn, nop, iop, ivs[3], fnt[30000] /* was [3][10000] */ ;
+		static bool ate[CONNOLLY_STATIC_NOP_SIZE];
+		static int ien, ifn, iep, ifp, ifs, isc, jfn, nop, iop, ivs[3], fnt[3 * CONNOLLY_STATIC_FACES_SIZE]; // was [3][10000]
 		static double dpp, rat, rsc, rho, stq, tau[3], ppm[3], qij[3], upp[3], umq[3], upq[3], uij[3];
 		static double dij2;
 
@@ -3503,9 +3703,11 @@ namespace	BALL
 						if (depths[jfn - 1] <= face01_1.pr)
 						{
 							++nop;
-							if (nop > 100)
+							if (nop > CONNOLLY_STATIC_NOP_SIZE)
 							{
 								cerr << "NOP Overflow in VAM" << endl;
+								//fail before overflow
+								throw Exception::OutOfRange(__FILE__,__LINE__);
 							}
 							ifnop[nop - 1] = jfn;
 						}
@@ -3732,7 +3934,7 @@ namespace	BALL
 		static int
 			ien;
 		static double
-			pav[9] /* was [3][3] */ ;
+			pav[9]; // was [3][3] 
 
 		height = 0.0;
 		for (ke = 1; ke <= 3; ++ke)
@@ -3783,7 +3985,9 @@ namespace	BALL
 
 		/* Local variables */
 		static double
-			tanv[180] /* was [3][2][30] */ , vect1[3], vect2[3];
+			tanv[3 * 2 * CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE], // was [3][2][30]  
+			vect1[3], 
+			vect2[3];
 		static int
 			k, nedge;
 		static double
@@ -3791,7 +3995,7 @@ namespace	BALL
 		static int
 			ia, ic, ke;
 		static double
-			dt, radial[90] /* was [3][30] */ ;
+			dt, radial[3 * CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE]; // was [3][30]
 		static int
 			it;
 		static double
@@ -3828,12 +4032,12 @@ namespace	BALL
 		i__1 = ncycle;
 		for (icyptr = 1; icyptr <= i__1; ++icyptr)
 		{
-			icy = face13_1.fpcy[icyptr + *ifp * 10 - 11];
+			icy = face13_1.fpcy[icyptr + *ifp * CONNOLLY_STATIC_BOUNDING_CYCLES_SIZE - CONNOLLY_STATIC_BOUNDING_CYCLES_SIZE - 1];
 			nedge = face12_1.cynep[icy - 1];
 			i__2 = nedge;
 			for (ke = 1; ke <= i__2; ++ke)
 			{
-				iep = face12_1.cyep[ke + icy * 30 - 31];
+				iep = face12_1.cyep[ke + icy * CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE - CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE - 1];
 				ic = face10_1.epc[iep - 1];
 				it = face09_1.ct[ic - 1];
 				if (ia == face05_1.ta[(it << 1) - 2])
@@ -4087,10 +4291,11 @@ namespace	BALL
 		static int ia, ke, je, ip;
 		static double defect;
 		static int iv;
-		static double planev[9] /* was [3][3] */ ;
+		static double planev[9]; // was [3][3]  
 		static double simplx;
 		static int ien;
-		static double pav[9] /* was [3][3] */ , pvv[9]	/* was [3][3] */ ;
+		static double pav[9], // was [3][3]
+									pvv[9];	// was [3][3] 
 
 		for (ke = 1; ke <= 3; ++ke)
 		{
@@ -4204,7 +4409,7 @@ namespace	BALL
 
 /*     vertex number (use first vertex of edge) */
 
-			iep = face12_1.cyep[ke + *icy * 30 - 31];
+			iep = face12_1.cyep[ke + *icy * CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE - CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE - 1];
 			iv = face10_1.epv[(iep << 1) - 2];
 			if (iv != 0)
 			{
@@ -4279,8 +4484,8 @@ namespace	BALL
 		static int
 			iep;
 		static double
-			epu[90] /* was [3][30] */ , spv[90]	/* was [3][30]
-																					 */ ;
+			epu[3 * CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE], // was [3][30]  
+			spv[3 * CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE]; // was [3][30];
 
 
 
@@ -4295,7 +4500,7 @@ namespace	BALL
 		i__1 = face12_1.cynep[*icy - 1];
 		for (ke = 1; ke <= i__1; ++ke)
 		{
-			iep = face12_1.cyep[ke + *icy * 30 - 31];
+			iep = face12_1.cyep[ke + *icy * CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE - CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE - 1];
 			ic = face10_1.epc[iep - 1];
 			it = face09_1.ct[ic - 1];
 			iatom = face09_1.ca[ic - 1];
