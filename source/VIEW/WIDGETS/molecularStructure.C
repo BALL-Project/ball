@@ -84,8 +84,8 @@ namespace BALL
 		
 			description = "Shortcut|Build|Build_Peptide";
 			build_peptide_id_ = insertMenuEntry(MainControl::BUILD, "B&uild Peptide", this, 
-																					SLOT(buildPeptide()), description,
-																					QKeySequence(tr("Alt+U", description.c_str())));
+			                                    SLOT(buildPeptide()), description,
+			                                    QKeySequence(tr("Ctrl+Alt+U", description.c_str())));
 			setMenuHint("Build a peptide from selected amino acids.");
 
 			description = "Shortcut|Build|Build_Bonds";
