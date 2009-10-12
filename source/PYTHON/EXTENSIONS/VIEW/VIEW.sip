@@ -76,6 +76,7 @@
 // VIEW/DIALOGS
 %Include preferences.sip
 %Include displayProperties.sip
+%Include lightSettings.sip
 %Include molecularFileDialog.sip
 %Include modifyRepresentationDialog.sip
 
