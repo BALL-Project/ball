@@ -22,6 +22,7 @@ LightSettings::LightSettings(QWidget* parent, const char* name, Qt::WFlags fl)
   : QWidget(parent, fl),
 		Ui_LightSettingsData(),
 		PreferencesEntry(),
+		Embeddable("BALL::VIEW::LightSettings"),
 		ignore_(false),
 		current_light_(-1)
 {
@@ -60,6 +61,8 @@ LightSettings::LightSettings(QWidget* parent, const char* name, Qt::WFlags fl)
 		Log.error() << "LightSettings dialog was created with a Scene as parent, which has no Stage!" << std::endl;
 		return;
 	}
+
+	registerThis();
 }
 
 
