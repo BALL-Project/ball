@@ -9,6 +9,10 @@
 # include <BALL/COMMON/global.h>
 #endif
 
+#ifndef BALL_CONCEPT_EMBEDDABLE_H
+#	include <BALL/CONCEPT/embeddable.h>
+#endif
+
 #ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
@@ -34,11 +38,14 @@ namespace BALL
 		class BALL_VIEW_EXPORT LightSettings 
 			: public QWidget,
 				public Ui_LightSettingsData,
-				public PreferencesEntry
+				public PreferencesEntry,
+				public Embeddable
 		{ 
 			Q_OBJECT
 
 			public:
+
+			BALL_EMBEDDABLE(LightSettings,Embeddable)
 
 			/// Constructor
 			LightSettings( QWidget* parent = 0, const char* name = "LightSettings", 
