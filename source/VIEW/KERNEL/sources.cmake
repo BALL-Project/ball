@@ -5,6 +5,7 @@ SET(SOURCES_LIST
 	compositeManager.C
 	connectionObject.C
 	geometricObject.C
+	iconLoader.C
 	mainControl.C
 	message.C
 	modelInformation.C
