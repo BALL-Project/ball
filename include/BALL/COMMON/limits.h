@@ -24,10 +24,11 @@
 #	ifdef BALL_HAS_VALUES_H
 #		include <limits.h>
 #	endif
+#endif
+
 #	ifdef BALL_HAS_FLOAT_H
 #		include <float.h>
 #	endif
-#endif
 
 namespace BALL 
 {
