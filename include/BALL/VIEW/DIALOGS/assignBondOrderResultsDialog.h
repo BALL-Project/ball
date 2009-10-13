@@ -18,11 +18,7 @@
 # include <BALL/STRUCTURE/assignBondOrderProcessor.h>
 #endif
 
-#ifdef BALL_COMPILER_MSVC
-# include <BALL/VIEW/UIC/ui_assignBondOrderResultsDialog.h>
-#else
-# include <BALL/VIEW/UIC/assignBondOrderResultsDialogData.h>
-#endif
+#include <BALL/VIEW/UIC/ui_assignBondOrderResultsDialog.h>
 
 #include <QtGui/qdialog.h>
 #include <map>

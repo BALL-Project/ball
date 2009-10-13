@@ -8,16 +8,11 @@
 # include <BALL/COMMON/global.h>
 #endif
 
-#ifdef BALL_COMPILER_MSVC
-# include <BALL/VIEW/UIC/ui_contourSurfaceDialog.h>
-#else
-# include <BALL/VIEW/UIC/contourSurfaceDialogData.h>
-#endif
-
-
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
- #include <BALL/VIEW/DATATYPE/colorRGBA.h>
+# include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #endif
+
+#include <BALL/VIEW/UIC/ui_contourSurfaceDialog.h>
 
 namespace BALL
 {

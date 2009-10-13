@@ -11,16 +11,11 @@
 # include <BALL/COMMON/global.h>
 #endif
 
-#ifdef BALL_COMPILER_MSVC
-# include <BALL/VIEW/UIC/ui_MMFF94ConfigurationDialog.h>
-#else
-# include <BALL/VIEW/UIC/MMFF94ConfigurationDialogData.h>
-#endif
-
-
 #ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
+
+#include <BALL/VIEW/UIC/ui_MMFF94ConfigurationDialog.h>
 
 namespace BALL
 {

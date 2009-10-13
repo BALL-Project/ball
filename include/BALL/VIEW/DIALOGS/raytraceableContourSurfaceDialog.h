@@ -13,12 +13,6 @@
 #	include <BALL/COMMON/exception.h>
 #endif
 
-#ifdef BALL_COMPILER_MSVC
-# include <BALL/VIEW/UIC/ui_raytraceableContourSurfaceDialog.h>
-#else
-# include <BALL/VIEW/UIC/raytraceableContourSurfaceDialogData.h>
-#endif
-
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
 # include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
@@ -26,6 +20,8 @@
 #ifndef BALL_VIEW_DATATYP_RAYTRACEABLEGRID_H
 # include <BALL/VIEW/DATATYPE/raytraceableGrid.h>
 #endif
+
+#include <BALL/VIEW/UIC/ui_raytraceableContourSurfaceDialog.h>
 
 #include <QtGui/QDialog>
 

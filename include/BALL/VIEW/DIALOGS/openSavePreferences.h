@@ -5,11 +5,7 @@
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
 
-#ifdef BALL_COMPILER_MSVC
-# include <BALL/VIEW/UIC/ui_openSavePreferences.h>
-#else
-# include <BALL/VIEW/UIC/openSavePreferencesData.h>
-#endif
+#include <BALL/VIEW/UIC/ui_openSavePreferences.h>
 
 #include <QtGui/QWidget>
 

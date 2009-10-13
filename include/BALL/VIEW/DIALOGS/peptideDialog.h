@@ -10,16 +10,11 @@
 # include <BALL/COMMON/global.h>
 #endif
 
-#ifdef BALL_COMPILER_MSVC
-# include <BALL/VIEW/UIC/ui_peptideDialog.h>
-#else
-# include <BALL/VIEW/UIC/peptideDialogData.h>
-#endif
-
-
 #ifndef BALL_STRUCTURE_PEPTIDEBUILDER_H
 #include <BALL/STRUCTURE/peptideBuilder.h>
 #endif
+
+#include <BALL/VIEW/UIC/ui_peptideDialog.h>
 
 namespace BALL
 {

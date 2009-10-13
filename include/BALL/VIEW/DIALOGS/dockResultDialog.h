@@ -9,16 +9,11 @@
 # include <BALL/COMMON/global.h>
 #endif
 
-#ifdef BALL_COMPILER_MSVC
-# include <BALL/VIEW/UIC/ui_dockResultDialog.h>
-#else
-# include <BALL/VIEW/UIC/dockResultDialogData.h>
-#endif
-
-
 #ifndef BALL_WIDGETS_DOCKINGCONTROLLER_H
 # include <BALL/VIEW/WIDGETS/dockingController.h>
 #endif
+
+#include <BALL/VIEW/UIC/ui_dockResultDialog.h>
 
 namespace BALL
 {

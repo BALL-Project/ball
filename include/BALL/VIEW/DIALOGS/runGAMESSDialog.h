@@ -19,12 +19,7 @@
 # include <BALL/FORMAT/GAMESSDatFile.h>
 #endif
 
-#ifdef BALL_COMPILER_MSVC
-# include <BALL/VIEW/UIC/ui_runGAMESSDialog.h>
-#else
-# include <BALL/VIEW/UIC/runGAMESSDialogData.h>
-#endif
-
+#include <BALL/VIEW/UIC/ui_runGAMESSDialog.h>
 
 namespace BALL
 {

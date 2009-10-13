@@ -22,12 +22,7 @@
 # include <BALL/VIEW/KERNEL/message.h>
 #endif
 
-#ifdef BALL_COMPILER_MSVC
-# include <BALL/VIEW/UIC/ui_labelDialog.h>
-#else
-# include <BALL/VIEW/UIC/labelDialogData.h>
-#endif
-
+#include <BALL/VIEW/UIC/ui_labelDialog.h>
 
 #include <QtGui/qfont.h>
 

@@ -11,13 +11,6 @@
 # include <BALL/COMMON/global.h>
 #endif
 
-#ifdef BALL_COMPILER_MSVC
-# include <BALL/VIEW/UIC/ui_coloringSettingsDialog.h>
-#else
-# include <BALL/VIEW/UIC/coloringSettingsDialogData.h>
-#endif
-
-
 #ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
@@ -29,6 +22,8 @@
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 # include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #endif 
+
+#include <BALL/VIEW/UIC/ui_coloringSettingsDialog.h>
 
 #include <QtGui/QTableWidget>
 #include <vector>

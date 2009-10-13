@@ -11,13 +11,6 @@
 # include <BALL/COMMON/global.h>
 #endif
 
-#ifdef BALL_COMPILER_MSVC
-# include <BALL/VIEW/UIC/ui_modifyRepresentationDialog.h>
-#else
-# include <BALL/VIEW/UIC/modifyRepresentationDialogData.h>
-#endif
-
-
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 # include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #endif
@@ -46,6 +39,7 @@
 # include <BALL/VIEW/DIALOGS/materialSettings.h>
 #endif
 
+#include <BALL/VIEW/UIC/ui_modifyRepresentationDialog.h>
 
 namespace BALL
 {
