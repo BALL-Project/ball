@@ -8,13 +8,6 @@
 # include <BALL/COMMON/global.h>
 #endif
 
-#ifdef BALL_COMPILER_MSVC
-# include <BALL/VIEW/UIC/ui_pythonSettings.h>
-#else
-# include <BALL/VIEW/UIC/pythonSettingsData.h>
-#endif
-
-
 #ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
@@ -22,6 +15,8 @@
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
  #include <BALL/VIEW/WIDGETS/pyWidget.h>
 #endif
+
+#include <BALL/VIEW/UIC/ui_pythonSettings.h>
 
 #include <QtGui/QTableWidget>
 #include <QtGui/QWidget>

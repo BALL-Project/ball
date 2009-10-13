@@ -8,16 +8,11 @@
 # include <BALL/COMMON/global.h>
 #endif
 
-#ifdef BALL_COMPILER_MSVC
-# include <BALL/VIEW/UIC/ui_bondProperties.h>
-#else
-# include <BALL/VIEW/UIC/bondPropertiesData.h>
-#endif
-
-
 #ifndef BALL_KERNEL_ATOM_H
 # include <BALL/KERNEL/atom.h>
 #endif
+
+#include <BALL/VIEW/UIC/ui_bondProperties.h>
 
 namespace BALL
 {

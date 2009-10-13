@@ -9,12 +9,7 @@
 #include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
-#ifdef BALL_COMPILER_MSVC
-# include <BALL/VIEW/UIC/ui_snapShotVisualisation.h>
-#else
-# include <BALL/VIEW/UIC/snapShotVisualisationData.h>
-#endif
-
+#include <BALL/VIEW/UIC/ui_snapShotVisualisation.h>
 
 #include <QtGui/QDialog>
 

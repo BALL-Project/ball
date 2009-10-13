@@ -20,12 +20,7 @@
 #include <QtCore/qtimer.h>
 #include <QtCore/qdatetime.h>
 
-#ifdef BALL_COMPILER_MSVC
-# include <BALL/VIEW/UIC/ui_dockProgressDialog.h>
-#else
-# include <BALL/VIEW/UIC/dockProgressDialogData.h>
-#endif
-
+#include <BALL/VIEW/UIC/ui_dockProgressDialog.h>
 
 namespace BALL
 {

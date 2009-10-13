@@ -22,11 +22,7 @@
 # include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
-#ifdef BALL_COMPILER_MSVC
-# include <BALL/VIEW/UIC/ui_shortcutDialog.h>
-#else
-# include <BALL/VIEW/UIC/shortcutDialogData.h>
-#endif
+#include <BALL/VIEW/UIC/ui_shortcutDialog.h>
 
 namespace BALL
 {

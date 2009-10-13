@@ -8,13 +8,6 @@
 # include <BALL/COMMON/global.h>
 #endif
 
-#ifdef BALL_COMPILER_MSVC
-# include <BALL/VIEW/UIC/ui_FDPBDialog.h>
-#else
-# include <BALL/VIEW/UIC/FDPBDialogData.h>
-#endif
-
-
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
  #include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
@@ -38,6 +31,8 @@
 #ifndef BALL_STRUCTURE_DEFAULTPROCESSORS_H
  #include <BALL/STRUCTURE/defaultProcessors.h>
 #endif
+
+#include <BALL/VIEW/UIC/ui_FDPBDialog.h>
 
 class QLineEdit;
 

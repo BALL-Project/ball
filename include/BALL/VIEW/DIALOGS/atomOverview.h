@@ -10,16 +10,11 @@
 # include <BALL/COMMON/global.h>
 #endif
 
-#ifdef BALL_COMPILER_MSVC
-# include <BALL/VIEW/UIC/ui_atomOverview.h>
-#else
-# include <BALL/VIEW/UIC/atomOverviewData.h>
-#endif
-
-
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
 #endif
+
+#include <BALL/VIEW/UIC/ui_atomOverview.h>
 
 namespace BALL
 {

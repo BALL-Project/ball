@@ -10,11 +10,7 @@
 # include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
-#ifdef BALL_COMPILER_MSVC
-# include <BALL/VIEW/UIC/ui_pluginData.h>
-#else
-# include <BALL/VIEW/UIC/pluginDialogData.h>
-#endif
+#include <BALL/VIEW/UIC/ui_pluginDialog.h>
 
 #include <QtCore/QModelIndex>
 #include <QtGui/QItemDelegate>

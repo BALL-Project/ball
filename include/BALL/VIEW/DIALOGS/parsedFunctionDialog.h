@@ -11,12 +11,7 @@
 # include <BALL/COMMON/global.h>
 #endif
 
-#ifdef BALL_COMPILER_MSVC
-# include <BALL/VIEW/UIC/ui_parsedFunctionDialog.h>
-#else
-# include <BALL/VIEW/UIC/parsedFunctionDialogData.h>
-#endif
-
+#include <BALL/VIEW/UIC/ui_parsedFunctionDialog.h>
 
 #include <QtGui/qdialog.h>
 

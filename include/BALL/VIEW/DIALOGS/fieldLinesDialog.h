@@ -10,15 +10,11 @@
 # include <BALL/COMMON/global.h>
 #endif
 
-#ifdef BALL_COMPILER_MSVC
-# include <BALL/VIEW/UIC/ui_fieldLinesDialog.h>
-#else
-# include <BALL/VIEW/UIC/fieldLinesDialogData.h>
-#endif
-
 #ifndef BALL_VIEW_MODELS_FIELDLINE_CREATOR_H
 # include <BALL/VIEW/MODELS/fieldLineCreator.h>
 #endif
+
+#include <BALL/VIEW/UIC/ui_fieldLinesDialog.h>
 
 namespace BALL
 {

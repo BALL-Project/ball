@@ -11,13 +11,6 @@
 # include <BALL/COMMON/global.h>
 #endif
 
-#ifdef BALL_COMPILER_MSVC
-# include <BALL/VIEW/UIC/ui_gridVisualizationDialog.h>
-#else
-# include <BALL/VIEW/UIC/gridVisualizationDialogData.h>
-#endif
-
-
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 # include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #endif
@@ -33,6 +26,8 @@
 #ifndef BALL_VIEW_DATATYPE_STANDARDDATASETS_H
 # include <BALL/VIEW/DATATYPE/standardDatasets.h>
 #endif
+
+#include <BALL/VIEW/UIC/ui_gridVisualizationDialog.h>
 
 namespace BALL
 {

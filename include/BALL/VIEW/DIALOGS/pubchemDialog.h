@@ -22,11 +22,7 @@
 # include <BALL/VIEW/WIDGETS/SDWidget.h>
 #endif
 
-#ifdef BALL_COMPILER_MSVC
-# include <BALL/VIEW/UIC/ui_pubchemDialog.h>
-#else
-# include <BALL/VIEW/UIC/pubchemDialogData.h>
-#endif
+#include <BALL/VIEW/UIC/ui_pubchemDialog.h>
 
 #include <QtGui/QDialog>
 #include <QtNetwork/QHttp>

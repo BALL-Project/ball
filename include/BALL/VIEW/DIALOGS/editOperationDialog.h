@@ -11,13 +11,6 @@
 # include <BALL/COMMON/global.h>
 #endif
 
-#ifdef BALL_COMPILER_MSVC
-# include <BALL/VIEW/UIC/ui_editOperationDialog.h>
-#else
-# include <BALL/VIEW/UIC/editOperationDialogData.h>
-#endif
-
-
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
 # include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
@@ -25,6 +18,8 @@
 #ifndef BALL_VIEW_WIDGETS_EDITABLESCENE_H
 # include <BALL/VIEW/WIDGETS/editableScene.h>
 #endif
+
+#include <BALL/VIEW/UIC/ui_editOperationDialog.h>
 
 namespace BALL
 {

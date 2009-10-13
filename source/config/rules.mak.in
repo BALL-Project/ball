@@ -39,7 +39,7 @@
 # *Data.h files exists.
 #
 .ui.dh:
-	$(UIC) -o $(UIC_DIR)/$*Data.h $< && touch $*.dh
+	$(UIC) -o $(UIC_DIR)/ui_$*.h $< && touch ui_$*.dh
 
 .dhData.C:
 	touch $@

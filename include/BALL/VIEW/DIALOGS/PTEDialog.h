@@ -11,12 +11,7 @@
 # include <BALL/COMMON/global.h>
 #endif
 
-#ifdef BALL_COMPILER_MSVC
-# include <BALL/VIEW/UIC/ui_PTEDialog.h>
-#else
-# include <BALL/VIEW/UIC/PTEDialogData.h>
-#endif
-
+#include <BALL/VIEW/UIC/ui_PTEDialog.h>
 
 #include <QtGui/QDialog>
 

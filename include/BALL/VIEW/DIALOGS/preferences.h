@@ -11,11 +11,6 @@
 # include <BALL/COMMON/global.h>
 #endif
 
-#include <BALL/DATATYPE/string.h>
-#ifdef BALL_COMPILER_MSVC
-# include <BALL/VIEW/UIC/ui_preferences.h>
-#else
-# include <BALL/VIEW/UIC/preferencesData.h>
 #endif
 
 
@@ -26,6 +21,8 @@
 #ifndef BALL_DATATYPE_HASHMAP_H
 # include <BALL/DATATYPE/hashMap.h>
 #endif
+
+#include <BALL/VIEW/UIC/ui_preferences.h>
 
 namespace BALL
 {
