@@ -1183,10 +1183,6 @@ AC_DEFINE(SOLARIS,)
 
 TEMPLATE_DIR="SunWS_cache"
 
-dnl  a nasty bug in SUNPro CC 5.3 causes trouble
-dnl  with the function templates in amberNonBonded.C
-AC_DEFINE(PROJECT[]_MUST_CAST_TEMPLATE_FUNCTION_ARGS,)
-
 dnl  set the default binary format (if none selected)
 dnl
 if test "${BINFMT_64_BIT}" = true ; then
