@@ -21,6 +21,8 @@ namespace BALL
 		class BALL_VIEW_EXPORT SDWidget 
 			: public QWidget
 		{
+			Q_OBJECT
+
 			public:
 		
 				/** @name Constant Definitions
