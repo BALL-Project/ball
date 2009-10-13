@@ -23,7 +23,7 @@ if test ${VIEW_PLATFORM} = OpenGL ; then
 		else
 			if test "${INCPATH}" != "" ; then
 				AC_MSG_RESULT((${INCPATH}))
-				AC_DEFINE(PROJECT[]_USE_GLEW,)
+				AC_DEFINE(PROJECT[]_HAS_GLEW,)
 				GLEW_INCPATH="${INCPATH}"
 	
 				dnl

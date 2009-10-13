@@ -37,14 +37,14 @@
 #include <BALL/MATHS/plane3.h>
 #include <BALL/MATHS/analyticalGeometry.h>
 
-#ifndef BALL_USE_GLEW
+#ifndef BALL_HAS_GLEW
  #define GLX_GLXEXT_PROTOTYPES // required for Mesa-like implementations
  #include <GL/gl.h>
  #include <GL/glx.h>
  #include <GL/glext.h>
 #endif
 
-#ifdef BALL_USE_GLEW
+#ifdef BALL_HAS_GLEW
 # include <BALL/VIEW/RENDERING/vertexBuffer.h>
 #endif
 
@@ -186,7 +186,7 @@ namespace BALL
 			// it also slows OpenGL's vertex processing speed since normalization requires extra operations.
 			glEnable(GL_NORMALIZE);
 
-#ifdef BALL_USE_GLEW
+#ifdef BALL_HAS_GLEW
 			glewInit();
 			// accelerate lighting calculations, if possible:
 			if (isExtensionSupported("GL_EXT_rescale_normal"))
@@ -490,7 +490,7 @@ namespace BALL
 			
 			display_list->endDefinition();
 
-#ifdef BALL_USE_GLEW
+#ifdef BALL_HAS_GLEW
 			clearVertexBuffersFor(*(Representation*)&rep);
 			
 			if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
@@ -2050,7 +2050,7 @@ namespace BALL
 
 		bool GLRenderer::enableVertexBuffers(bool state)
 		{
-#ifndef BALL_USE_GLEW
+#ifndef BALL_HAS_GLEW
 			return false;
 #else
 			if (!isExtensionSupported("GL_ARB_vertex_buffer_object"))
@@ -2074,7 +2074,7 @@ namespace BALL
 
 		void GLRenderer::clearVertexBuffersFor(Representation& rep)
 		{
-#ifdef BALL_USE_GLEW
+#ifdef BALL_HAS_GLEW
 			MeshBufferHashMap::Iterator vit = rep_to_buffers_.find(&rep);
 			if (vit == rep_to_buffers_.end()) return;
 
@@ -2094,7 +2094,7 @@ namespace BALL
 		{
 			if (rep.isHidden()) return;
 
-#ifdef BALL_USE_GLEW
+#ifdef BALL_HAS_GLEW
 			// if we have vertex buffers for this Representation, draw them
 			if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
 			{
@@ -2138,7 +2138,7 @@ namespace BALL
 
 		bool GLRenderer::vertexBuffersSupported() const
 		{
-#ifdef BALL_USE_GLEW
+#ifdef BALL_HAS_GLEW
 			return isExtensionSupported("GL_ARB_vertex_buffer_object");
 #else
 			return false;
@@ -2264,7 +2264,7 @@ namespace BALL
 
 			// prevent warning and error if not using GLEW:
 			Position texname = 0;
-#ifdef BALL_USE_GLEW
+#ifdef BALL_HAS_GLEW
 			removeTextureFor_(grid);
 			RegularData3D::IndexType tex_size = grid.getSize();
 

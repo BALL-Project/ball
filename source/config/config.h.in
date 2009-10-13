@@ -248,7 +248,7 @@
 #undef BALL_QT_VERSION
 #undef BALL_QT_VERSION_STR
 #define QT_THREAD_SUPPORT
-#undef BALL_USE_GLEW
+#undef BALL_HAS_GLEW
 
 // Define whether to use the ARM style or ANSI style access modifications
 //   ARM style:   BaseClass::foo;

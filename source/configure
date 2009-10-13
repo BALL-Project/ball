@@ -24935,7 +24935,7 @@ $as_echo "$as_me: error: Aborted." >&2;}
 				{ $as_echo "$as_me:$LINENO: result: (${INCPATH})" >&5
 $as_echo "(${INCPATH})" >&6; }
 				cat >>confdefs.h <<\_ACEOF
-#define BALL_USE_GLEW /**/
+#define BALL_HAS_GLEW /**/
 _ACEOF
 
 				GLEW_INCPATH="${INCPATH}"

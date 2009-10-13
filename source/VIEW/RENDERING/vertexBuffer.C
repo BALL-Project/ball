@@ -4,8 +4,8 @@
 // $Id: vertexBuffer.C,v 1.6.16.1 2007/03/25 21:57:02 oliver Exp $
 
 #include <BALL/CONFIG/config.h>
-#ifdef BALL_USE_GLEW
 
+#ifdef BALL_HAS_GLEW
 #include <GL/glew.h>
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -249,4 +249,4 @@ namespace BALL
 
 	} 
 }
-#endif
+#endif // BALL_HAS_GLEW

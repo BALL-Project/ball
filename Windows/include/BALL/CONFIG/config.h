@@ -265,6 +265,6 @@
 #define NOWINRES
 
 #define WINDOWS_LEAN_AND_MEAN
-#define BALL_USE_GLEW
+#define BALL_HAS_GLEW
 
 #endif // BALL_CONFIG_CONFIG_H
