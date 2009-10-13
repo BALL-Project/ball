@@ -105,7 +105,7 @@ System* MolecularFileDialog::openMolecularFile(const String& file)
 	String seperators(FileSystem::PATH_SEPARATOR);
 	// workaround on windows: QT returns the filename in linux style
 	// but I am not sure, if this will stay this way.
-#ifdef BALL_PLATFORM_WINDOWS
+#ifdef BALL_OS_WINDOWS
 	 seperators += "/";
 #endif
 	Position p = file.split(fields, seperators.c_str()) -1;
@@ -613,7 +613,7 @@ System* MolecularFileDialog::openFile_(String type)
 		String seperators(FileSystem::PATH_SEPARATOR);
 		// workaround on windows: QT returns the filename in linux style
 		// but I am not sure, if this will stay this way.
-#ifdef BALL_PLATFORM_WINDOWS
+#ifdef BALL_OS_WINDOWS
 		 seperators += "/";
 #endif
 		String file = ascii(*it);

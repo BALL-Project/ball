@@ -193,7 +193,7 @@ namespace BALL
 			String separators(FileSystem::PATH_SEPARATOR );
 			// workaround on windows: QT returns the filename in linux style
 			// but I am not sure, if this will stay this way.
-			#ifdef BALL_PLATFORM_WINDOWS
+			#ifdef BALL_OS_WINDOWS
 				separators += "/";
 			#endif
 			vector<String> fields;
