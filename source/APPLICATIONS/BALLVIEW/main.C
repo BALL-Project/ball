@@ -10,7 +10,7 @@
 
 #include "splashscreen.rcc"
 
-#ifdef BALL_USE_GLEW
+#ifdef BALL_HAS_GLEW
 #	include <GL/glew.h>
 #endif
 

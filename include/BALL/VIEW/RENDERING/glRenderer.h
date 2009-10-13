@@ -27,7 +27,7 @@
 # include <BALL/VIEW/KERNEL/stage.h>
 #endif
 
-#ifdef BALL_USE_GLEW
+#ifdef BALL_HAS_GLEW
 # include <GL/glew.h>
 #endif
 
