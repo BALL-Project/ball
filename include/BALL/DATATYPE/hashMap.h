@@ -26,12 +26,14 @@
 #include <utility>
 #include <algorithm>
 
-#if defined(BALL_HAS_UNORDERED_MAP)
+#ifdef BALL_HAS_UNORDERED_MAP
 
-#if defined(BALL_PLATFORM_WINDOWS)
-#	include <boost/unordered_map.hpp>
-#else
-#  	include <tr1/unordered_map>
+#if defined(BALL_HAS_STD_UNORDERED_MAP)
+# include <unordered_map>
+#elif defined(BALL_HAS_TR1_UNORDERED_MAP)
+# include <tr1/unordered_map>
+#elif defined(BALL_HAS_BOOST_UNORDERED_MAP)
+# include <boost/unordered_map.hpp>
 #endif
 
 #elif defined(BALL_EXT_INCLUDE_PREFIX)
@@ -43,7 +45,6 @@
 #endif
 
 #ifdef BALL_HAS_UNORDERED_MAP
-
 namespace std
 {
 	namespace tr1
