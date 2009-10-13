@@ -49,7 +49,7 @@ namespace BALL
 	{
 		public:
 
-#ifdef BALL_HAVE_NUMERIC_LIMITS
+#ifdef BALL_HAS_NUMERIC_LIMITS
 
 
 		/**	Return the minimum value.
@@ -79,7 +79,7 @@ namespace BALL
 #endif
 	};
 
-#ifndef BALL_HAVE_NUMERIC_LIMITS
+#ifndef BALL_HAS_NUMERIC_LIMITS
 	
 	template <> 
 	class BALL_EXPORT Limits<float>
@@ -273,7 +273,7 @@ namespace BALL
 		}
 	};
 
-#endif // BALL_HAVE_NUMERIC_LIMITS
+#endif // BALL_HAS_NUMERIC_LIMITS
 
 }	// namespace BALL
 
