@@ -1,7 +1,6 @@
 #ifndef BALL_VIEW_PLUGINDIALOG_H
 #define BALL_VIEW_PLUGINDIALOG_H
 
-
 #ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif

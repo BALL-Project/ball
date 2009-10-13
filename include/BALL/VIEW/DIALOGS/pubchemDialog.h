@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id:
 
 #ifndef BALL_VIEW_DIALOGSPUBCHEMDIALOG_H
 #define BALL_VIEW_DIALOGSPUBCHEMDIALOG_H

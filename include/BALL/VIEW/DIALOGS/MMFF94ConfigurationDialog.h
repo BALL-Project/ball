@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94ConfigurationDialog.h,v 1.1.6.1 2007/03/25 21:25:43 oliver Exp $
-//
 
 #ifndef BALL_VIEW_DIALOGS_MMFF94CONFIGURATIONDIALOG_H
 #define BALL_VIEW_DIALOGS_MMFF94CONFIGURATIONDIALOG_H

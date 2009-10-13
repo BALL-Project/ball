@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: materialSettings.h,v 1.6.16.1 2007/03/25 21:25:51 oliver Exp $
-//
 
 #ifndef BALL_VIEW_DIALOGS_MATERIALSETTINGS_H
 #define BALL_VIEW_DIALOGS_MATERIALSETTINGS_H

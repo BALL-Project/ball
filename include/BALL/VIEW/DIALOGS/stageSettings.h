@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stageSettings.h,v 1.15.16.1 2007/03/25 21:25:57 oliver Exp $
-//
 
 #ifndef BALL_VIEW_DIALOGS_STAGESETTINGS_H
 #define BALL_VIEW_DIALOGS_STAGESETTINGS_H
@@ -16,7 +14,7 @@
 #endif
 
 #ifndef BALL_MATH_VECTOR3
-#  include <BALL/MATHS/vector3.h>
+# include <BALL/MATHS/vector3.h>
 #endif
 
 #include <BALL/VIEW/UIC/ui_stageSettings.h>

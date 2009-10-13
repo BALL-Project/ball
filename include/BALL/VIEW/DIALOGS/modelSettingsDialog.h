@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.h,v 1.24.16.1 2007/03/25 21:25:51 oliver Exp $
-//
 
 #ifndef BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
 #define BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
