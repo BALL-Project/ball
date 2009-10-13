@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.h,v 1.11.16.1 2007/03/25 21:25:50 oliver Exp $
-//
 
 #ifndef BALL_VIEW_DIALOGS_LIGHTSETTINGS_H
 #define BALL_VIEW_DIALOGS_LIGHTSETTINGS_H

@@ -1,5 +1,3 @@
-//ExportGeometryDialog: Version 1.0 (2008.09.12) Annette Treichel
-
 #ifndef BALL_VIEW_DIALOGS_EXPORTGEOMETRYDIALOG_H
 #define BALL_VIEW_DIALOGS_EXPORTGEOMETRYDIALOG_H
 

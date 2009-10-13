@@ -9,7 +9,7 @@
 #endif
 
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
- #include <BALL/VIEW/KERNEL/modularWidget.h>
+# include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
@@ -17,19 +17,19 @@
 #endif
 
 #ifndef BALL_SOLVATION_POISSONBOLTZMANN_H
- #include <BALL/SOLVATION/poissonBoltzmann.h>
+# include <BALL/SOLVATION/poissonBoltzmann.h>
 #endif
 
 #ifndef BALL_MOLMEC_COMMON_RADIUSRULEPROCESSOR_H
- #include <BALL/MOLMEC/COMMON/radiusRuleProcessor.h>
+# include <BALL/MOLMEC/COMMON/radiusRuleProcessor.h>
 #endif
 
 #ifndef BALL_MOLMEC_COMMON_CHARGERULEPROCESSOR_H
- #include <BALL/MOLMEC/COMMON/chargeRuleProcessor.h>
+# include <BALL/MOLMEC/COMMON/chargeRuleProcessor.h>
 #endif
 
 #ifndef BALL_STRUCTURE_DEFAULTPROCESSORS_H
- #include <BALL/STRUCTURE/defaultProcessors.h>
+# include <BALL/STRUCTURE/defaultProcessors.h>
 #endif
 
 #include <BALL/VIEW/UIC/ui_FDPBDialog.h>

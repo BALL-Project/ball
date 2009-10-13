@@ -1,6 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+
 #ifndef BALL_VIEW_DIALOGS_PYTHONSETTINGS_H
 #define BALL_VIEW_DIALOGS_PYTHONSETTINGS_H
 
@@ -13,7 +14,7 @@
 #endif
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
- #include <BALL/VIEW/WIDGETS/pyWidget.h>
+# include <BALL/VIEW/WIDGETS/pyWidget.h>
 #endif
 
 #include <BALL/VIEW/UIC/ui_pythonSettings.h>

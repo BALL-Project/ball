@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: setCamera.h,v 1.5.16.1 2007/03/25 21:25:56 oliver Exp $
-//
 
 #ifndef BALL_VIEW_DIALOGS_SETCAMERA_H
 #define BALL_VIEW_DIALOGS_SETCAMERA_H
