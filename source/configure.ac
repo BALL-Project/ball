@@ -499,14 +499,12 @@ dnl     -- null template arguments (whether <> is required)
 dnl			-- inline functions as template function arguments
 dnl 		-- ANSI-compliant iostreams 
 dnl			-- sstream vs. strstream
-dnl			-- ARM vs. ANSI-style access modifications
 dnl
 CF_CHECK_NUM_LIMITS
 CF_CHECK_TPL_NULL_ARGS
 CF_CHECK_INLINE_TPL_ARGS
 CF_CHECK_ANSI_IOSTREAM
 CF_CHECK_HAS_SSTREAM
-CF_CHECK_ARM_ACCESS_MODIFICATION
 
 dnl
 dnl		Check for the word lengths of different C/C++ types, define

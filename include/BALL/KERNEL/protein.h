@@ -262,7 +262,6 @@ namespace BALL
 
 		//@}
 
-#ifdef	BALL_CFG_USING_METHOD_DIRECTIVE
 		using Molecule::prepend;
 		using Molecule::append;
 		using Molecule::insert;
@@ -272,17 +271,6 @@ namespace BALL
 		using Molecule::splice;
 		using Molecule::spliceBefore;
 		using Molecule::spliceAfter;
-#else
-		Molecule::prepend;
-		Molecule::append;
-		Molecule::insert;
-		Molecule::insertBefore;
-		Molecule::insertAfter;
-		Molecule::remove;
-		Molecule::splice;
-		Molecule::spliceBefore;
-		Molecule::spliceAfter;
-#endif
 
 		/**	@name	Debugging and Diagnostics
 		*/
