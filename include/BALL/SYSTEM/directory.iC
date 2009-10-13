@@ -67,7 +67,7 @@ bool Directory::desynchronize_(bool result1)
 BALL_INLINE 
 void Directory::clear()
 {
-	#ifdef BALL_PLATFORM_WINDOWS
+	#ifdef BALL_OS_WINDOWS
 	if (dirent_ != INVALID_HANDLE_VALUE) FindClose(dirent_);
 	if (dir_ != INVALID_HANDLE_VALUE) CloseHandle(dir_);
 	#else
@@ -127,7 +127,7 @@ BALL_INLINE
 bool Directory::setCurrent(String directory_path)
 {
   FileSystem::canonizePath(directory_path);
-	#ifdef BALL_PLATFORM_WINDOWS
+	#ifdef BALL_OS_WINDOWS
 		return (::_chdir(directory_path.data()) == 0);
 	#else
 		return (::chdir(directory_path.data()) == 0);

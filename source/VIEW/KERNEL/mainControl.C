@@ -1699,7 +1699,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		{ 
 			String dir2 = dir;
 			// QT will return Paths on windows with "/" as delimiter!
-#ifdef BALL_PLATFORM_WINDOWS
+#ifdef BALL_OS_WINDOWS
 			for (Position p = 0; p < dir2.size(); p++)
 			{
 				if (dir2[p] == '/') dir2[p] = '\\';
@@ -2159,7 +2159,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		// workaround for drag and drop under windows: damn QT sometimes adds slashes!
 		
 		String filename(file);
-#ifdef BALL_PLATFORM_WINDOWS
+#ifdef BALL_OS_WINDOWS
 		if (filename[0] == '/') 
 		{
 			filename.trimLeft("/");

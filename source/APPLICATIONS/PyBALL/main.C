@@ -35,9 +35,9 @@ void myMessageOutput( QtMsgType type, const char *msg )
 
 
 // uncomment this to use debugging to std::cout!
-//#undef BALL_PLATFORM_WINDOWS
+//#undef BALL_OS_WINDOWS
 
-#ifndef BALL_PLATFORM_WINDOWS
+#ifndef BALL_OS_WINDOWS
 int main(int argc, char **argv)
 {
 #else

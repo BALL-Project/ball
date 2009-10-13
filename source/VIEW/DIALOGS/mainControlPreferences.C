@@ -26,7 +26,7 @@ MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name
 	setINIFileSectionName("GENERAL");
 	style_box_->addItems(QStyleFactory::keys());
 	QString prefered_style = "Plastique";
-#ifdef BALL_PLATFORM_WINDOWS
+#ifdef BALL_OS_WINDOWS
 	prefered_style = "WindowsXP";
 #endif
 #ifdef BALL_OS_DARWIN

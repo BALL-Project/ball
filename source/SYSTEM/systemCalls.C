@@ -6,7 +6,7 @@
 
 #include <BALL/SYSTEM/systemCalls.h>
 
-#ifdef BALL_PLATFORM_WINDOWS
+#ifdef BALL_OS_WINDOWS
 #include <windows.h>
 #else
 #ifdef BALL_HAS_UNISTD_H
@@ -18,7 +18,7 @@ namespace BALL
 {
 	void sleepFor(Size mseconds)
 	{
-#ifdef BALL_PLATFORM_WINDOWS
+#ifdef BALL_OS_WINDOWS
  		Sleep(mseconds);
 #else
 		usleep(mseconds);

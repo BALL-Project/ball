@@ -159,7 +159,7 @@ namespace BALL
 		{
 			while (busy_)
 			{
-		#ifdef BALL_PLATFORM_WINDOWS
+		#ifdef BALL_OS_WINDOWS
 				Sleep(1);
 		#else
 				// sleep(1);

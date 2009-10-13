@@ -196,7 +196,7 @@ namespace BALL
 	String FileSystem::baseName(const String& filename)
 	{
 		Position idx = (Position)filename.find_last_of(PATH_SEPARATOR);
-#		ifdef BALL_PLATFORM_WINDOWS
+#		ifdef BALL_OS_WINDOWS
 		// this is an ugly hack to force similar behaviour of the
 		// TransformationManager for Windows and Unix
 		// this means that "/" and "\" are treated the same

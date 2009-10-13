@@ -18,7 +18,7 @@
 #	include <unistd.h>
 #endif
 
-#ifdef BALL_PLATFORM_WINDOWS
+#ifdef BALL_OS_WINDOWS
 # include <Tchar.h>
 #endif
 
@@ -40,7 +40,7 @@ namespace BALL
 	{
 		char* buffer;
 
-		#ifdef BALL_PLATFORM_WINDOWS
+		#ifdef BALL_OS_WINDOWS
 			if ((buffer = ::_getcwd(NULL, MAX_PATH_LENGTH)) != NULL)	
 			{
 				directory_path_ = buffer;
@@ -80,7 +80,7 @@ namespace BALL
 			directory_path_ = "";
 		}
 		
-		#ifdef BALL_PLATFORM_WINDOWS
+		#ifdef BALL_OS_WINDOWS
 			dir_ = CreateFile(_T(directory_path_.data()),
 												FILE_LIST_DIRECTORY,                // access (read/write) mode
 												FILE_SHARE_READ|FILE_SHARE_DELETE|FILE_SHARE_WRITE,  // share mode
@@ -107,7 +107,7 @@ namespace BALL
 
 	bool Directory::getFirstEntry(String& entry) 
 	{
-		#ifdef BALL_PLATFORM_WINDOWS
+		#ifdef BALL_OS_WINDOWS
 			synchronize_();
 			if (dir_ != INVALID_HANDLE_VALUE) 
 			{	
@@ -591,7 +591,7 @@ namespace BALL
 			FileSystem::canonizePath(directory_path_);
 			return isValid();
 		}
-#ifdef BALL_PLATFORM_WINDOWS
+#ifdef BALL_OS_WINDOWS
 		if ((buffer = ::_getcwd(NULL, MAX_PATH_LENGTH)) != NULL)
 #else
 		if ((buffer = ::getcwd(NULL, MAX_PATH_LENGTH)) != NULL)

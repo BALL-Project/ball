@@ -48,7 +48,7 @@ namespace BALL
 	*/
 	class BALL_EXPORT Directory
 	{
-#ifndef BALL_PLATFORM_WINDOWS
+#ifndef BALL_OS_WINDOWS
 # define INVALID_HANDLE_VALUE 0 
 #endif
 

@@ -10,7 +10,7 @@
 #include <BALL/SYSTEM/directory.h>
 ///////////////////////////
 
-#ifdef BALL_PLATFORM_WINDOWS
+#ifdef BALL_OS_WINDOWS
 #	define chdir(a) _chdir(a)
 #	define getcwd(a, b) _getcwd(a, b)
 #endif
@@ -29,7 +29,7 @@ bool cleanup()
 		char buffer[10000];
 		::getcwd(buffer, Directory::MAX_PATH_LENGTH);
 		test_dir = buffer;
-		#ifdef BALL_PLATFORM_WINDOWS
+		#ifdef BALL_OS_WINDOWS
 			test_dir += "\\data\\Directory_test";
 		#else
 			test_dir += "/data/Directory_test";
