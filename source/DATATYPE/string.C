@@ -10,8 +10,9 @@
 #include <QtCore/QString>
 #include <QtCore/QByteArray>
 
-#include <stdio.h>
-#include <stdarg.h>
+#include <cstdio>
+#include <cstdarg>
+
 #include <algorithm>
 
 using std::ostream;
