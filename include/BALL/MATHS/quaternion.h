@@ -76,12 +76,12 @@ namespace BALL
 				Destructs the TQuaternion object. As there are no dynamic
 				data structures, nothing happens.
 		*/
-		virtual ~TQuaternion();
+		~TQuaternion();
 
 		/**	Clear method.
 				The values are set to the identity quaternion.
 		*/
-		virtual void clear();
+		void clear();
 
 		//@}
 		/**	@name	Assignment
