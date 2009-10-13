@@ -206,10 +206,6 @@
 // either "" or "<>"
 #define BALL_NULL_TEMPLATE_ARGS ""
 
-// Basically a work-around for the broken SUNPro CC (WS 6U2),
-// which handles function template incorrectly -- see amberNonBonded.C
-#undef BALL_MUST_CAST_TEMPLATE_FUNCTION_ARGS
-
 // Define whether the compiler provides an ANSI-compliant implementation
 // of <iostream>. This is required in COMMON/socket.h/C since we need
 // the correct initialisation of the base classes. These base classes are
