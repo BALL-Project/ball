@@ -215,11 +215,6 @@
 #define BALL_HAS_VIEW
 #define BALL_QT_HAS_THREADS
 
-// Define whether to use the ARM style or ANSI style access modifications
-//   ARM style:   BaseClass::foo;
-//   ANSI style:  using BaseClass::foo;
-#define BALL_CFG_USING_METHOD_DIRECTIVE 1
-
 // Define for activated PYTHON support
 #define BALL_PYTHON_SUPPORT
 
