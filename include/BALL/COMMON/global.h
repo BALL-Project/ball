@@ -66,8 +66,6 @@ namespace BALL
 
 	typedef int (*ComparatorType)(const void *, const void *);
 
-
-	#ifndef BALL_HAS_STDINT_H
 	/**	@name Type aliases defined by BALL.
 			These predefined types are used in BALL for portability and
 			comprehensibility.
@@ -223,26 +221,6 @@ namespace BALL
 			<b>Size:</b> 32/64 bit (platform dependent)\par
 	*/
 	typedef BALL_POINTERSIZEUINT_TYPE PointerSizeUInt;
-	#else
-		// the ISO C99 definitions
-		typedef int32_t	Distance; 
-		typedef uint32_t	Handle;
-		typedef int32_t	Index;
-		typedef uint32_t	Size;
-		typedef uint64_t LongSize;
-		typedef int64_t	 LongIndex;
-		typedef time_t	Time;
-		typedef	uint32_t	HashIndex;
-		typedef	uint32_t	Position;
-		typedef float Real;
-		typedef double DoubleReal;
-		typedef uint32_t Property;
-		typedef int32_t ErrorCode;
-		typedef	uint8_t Byte;
-		typedef uint64_t LongIndex;
-		typedef int64_t	 LongSize;
-
-	#endif
 
 	//@}
 
