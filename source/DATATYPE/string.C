@@ -7,8 +7,12 @@
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/limits.h>
 
-#include <stdio.h>
-#include <stdarg.h>
+#include <QtCore/QString>
+#include <QtCore/QByteArray>
+
+#include <cstdio>
+#include <cstdarg>
+
 #include <algorithm>
 
 using std::ostream;
