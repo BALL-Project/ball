@@ -1,0 +1,11 @@
+SET(VIEW_sources CACHE INTERNAL "This variable should hold all VIEW sources at the end of the config step")
+
+INCLUDE(source/VIEW/DIALOGS/sources.cmake)
+INCLUDE(source/VIEW/DATATYPE/sources.cmake)
+INCLUDE(source/VIEW/KERNEL/sources.cmake)
+INCLUDE(source/VIEW/MODELS/sources.cmake)
+INCLUDE(source/VIEW/PRIMITIVES/sources.cmake)
+INCLUDE(source/VIEW/RENDERING/sources.cmake)
+INCLUDE(source/VIEW/WIDGETS/sources.cmake)
+INCLUDE(source/VIEW/INPUT/sources.cmake)
+INCLUDE(source/VIEW/PLUGIN/sources.cmake)
