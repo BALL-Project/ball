@@ -279,7 +279,7 @@ TARGET_LINK_LIBRARIES(VIEW BALL
                            ${QT_QTTEST_LIBRARY}
                            ${QT_QTOPENGL_LIBRARY})
 ## add BALLView target
-INCLUDE(source/APPLICATIONS/BALLVIEW/sources.cmake)
+ADD_SUBDIRECTORY(source/APPLICATIONS/BALLVIEW)
 
 #if (NOT APPLE AND NOT MSVC) ##=Linux
 #	target_link_libraries(OpenMS ${OPENMS_DEP_LIBRARIES}) ## do not link OpenMS against QT on Linux
