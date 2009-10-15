@@ -18,7 +18,11 @@ SET(SOURCES_LIST
 	timeStamp.C
 	visitor.C
 	molecularInformation.C
-)	
+)
+
+IF(BALL_HAS_XDR)
+	LIST(APPEND SOURCES_LIST XDRPersistenceManager.C)
+ENDIF()
 
 ### asio dependent sources ###
 IF (BALL_HAS_ASIO)
