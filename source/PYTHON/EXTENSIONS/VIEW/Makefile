@@ -35,7 +35,7 @@ endif
 
 SIP_OPTS+=-b VIEW.sbf
 
-ADD_INCLUDES=$(SIPFLAGS)
+ADD_INCLUDES=$(SIPFLAGS) -I..
 
 PYBALL_SOURCES = \
 	pyCompositeList.C\
