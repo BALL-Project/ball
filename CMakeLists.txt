@@ -253,13 +253,25 @@ ENDIF()
 
 IF (BALL_HAS_VIEW)
 ## TODO: Qt handling!
-	SET(VIEW_DEP_LIBRARIES ${BALL} ${GLEW_LIBRARIES})
+	SET(VIEW_DEP_LIBRARIES ${GLEW_LIBRARY})
 	IF(MSVC)
 		## Do we really need this?
 		LIST(APPEND VIEW_DEP_LIBRARIES opengl32.lib)
 	ENDIF()
 ENDIF()
 
+TARGET_LINK_LIBRARIES(BALL ${BALL_DEP_LIBRARIES}
+                           ${QT_QTCORE_LIBRARY}
+                           ${QT_QTSQL_LIBRARY}
+                           ${QT_QTXML_LIBRARY})
+
+TARGET_LINK_LIBRARIES(VIEW BALL
+                           ${VIEW_DEP_LIBRARIES}
+                           ${QT_QTCORE_LIBRARY}
+                           ${QT_QTNETWORK_LIBRARY}
+                           ${QT_QTGUI_LIBRARY}
+                           ${QT_QTTEST_LIBRARY}
+                           ${QT_QTOPENGL_LIBRARY})
 ## add BALLView target
 INCLUDE(source/APPLICATIONS/BALLVIEW/sources.cmake)
 
