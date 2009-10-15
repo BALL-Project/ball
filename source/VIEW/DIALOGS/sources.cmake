@@ -98,7 +98,7 @@ SET(SOURCES_LIST
 	stereoSettingsDialog.C
 )
 
-IF(BALL_HAS_PYTHON)
+IF(BALL_PYTHON_SUPPORT)
 	SET(UI_LIST ${UI_LIST} pythonSettings.ui)
 	SET(SOURCES_LIST ${SOURCES_LIST} pythonSettings.C)
 ENDIF()
