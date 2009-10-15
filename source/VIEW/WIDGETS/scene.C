@@ -1573,7 +1573,7 @@ namespace BALL
 			registerForHelpSystem(this, "scene.html");
 
 			toolbar_view_controls_->setObjectName("3D View Control toolbar");
-			toolbar_view_controls_->setIconSize(QSize(23,23));
+			toolbar_view_controls_->setIconSize(QSize(22,22));
 			toolbar_view_controls_->layout()->setMargin(2);
 			toolbar_view_controls_->layout()->setSpacing(2);
 		}
