@@ -17,7 +17,7 @@
 %Module BALLCore
 
 %ModuleHeaderCode
-#include "../BALLPyMacros.h"
+#include <BALLPyMacros.h>
 %End
 
 %Feature BALL_HAS_ASIO

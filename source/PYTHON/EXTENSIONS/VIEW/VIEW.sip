@@ -8,7 +8,7 @@
 %Module VIEW
 
 %ModuleHeaderCode
-#include "../BALLPyMacros.h"
+#include <BALLPyMacros.h>
 %End
 
 %Import BALL/BALLCore.sip
