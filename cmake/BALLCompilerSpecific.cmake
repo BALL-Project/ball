@@ -83,7 +83,7 @@ ELSEIF(MINGW)
 	ADD_DEFINITIONS(-Wall -Wextra -Wno-long-long)
 
 	IF(USE_PEDANTIC)
-		ADD_DEFINITIONS(--pedantic)
+		ADD_DEFINITIONS(-pedantic)
 	ENDIF()
 
 ELSEIF(MSVC)
