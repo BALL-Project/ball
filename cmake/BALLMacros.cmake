@@ -32,7 +32,7 @@ MACRO(QT4_WRAP_UI_BALL outfiles )
 
 	### BALL ###
   # create output directory (will not exist for out-of-source builds)
-  FILE(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/${DIRECTORY})
+  FILE(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/include/BALL/VIEW/UIC/)
 
   FOREACH (it ${ui_files})
     GET_FILENAME_COMPONENT(outfile ${it} NAME_WE)
