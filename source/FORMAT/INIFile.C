@@ -649,10 +649,10 @@ namespace BALL
 	{
 	}
 	
-	INIFile::IteratorTraits_::IteratorTraits_(list<INIFile::Section>& list,
+	INIFile::IteratorTraits_::IteratorTraits_(list<INIFile::Section>& list_var,
 																					  INIFile::SectionIterator section, 
 																						list<String>::iterator line)
-		:	bound_(&list),
+		:	bound_(&list_var),
 			section_(section),
 			position_(line)
 	{
