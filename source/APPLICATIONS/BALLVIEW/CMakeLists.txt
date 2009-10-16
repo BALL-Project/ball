@@ -6,7 +6,6 @@ SET(SOURCES_LIST
 	icons.C
 	main.C
 	mainframe.C
-	splashscreen.rcc
 )
 
 ### the list of all files requiring a moc run ###

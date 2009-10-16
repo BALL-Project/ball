@@ -8,8 +8,6 @@
 #include <QtGui/qapplication.h>
 #include <BALL/CONFIG/config.h>
 
-#include "splashscreen.rcc"
-
 #ifdef BALL_HAS_GLEW
 #	include <GL/glew.h>
 #endif

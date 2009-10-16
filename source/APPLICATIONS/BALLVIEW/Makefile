@@ -25,14 +25,15 @@ CPP_SOURCES=\
 	demoTutorialDialog.C\
 	icons.C\
 	main.C\
-	mainframe.C
+	mainframe.C\
+	splashscreen.C
 
 MOC_SOURCES=\
 	demoTutorialDialog_moc.C\
 	mainframe_moc.C
 
 RCC_FILES=\
-	splashscreen.rcc
+	splashscreen.C
 
 UIC_FILES=\
 	aboutDialog.h\
@@ -61,8 +62,8 @@ demoTutorialDialog_moc.C: demoTutorialDialog.h
 ballviewDemoData_moc.C: demoTutorialDialogData.h
 	$(MOC) demoTutorialDialogData.h -o $@
 
-%.rcc: %.qrc
-	${RCC} $< -o $@
+splashscreen.C: splashscreen.qrc
+	${RCC} $< -o splashscreen.C
 
 clean: 
 	@$(RM) -f $(UIC_FILES)
