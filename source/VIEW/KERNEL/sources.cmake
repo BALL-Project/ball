@@ -1,19 +1,19 @@
 ### list all filenames of the directory here ###
 SET(SOURCES_LIST
-  clippingPlane.C
+	clippingPlane.C
 	common.C
-  compositeManager.C
-  connectionObject.C
-  geometricObject.C
-  mainControl.C
-  message.C
-  modelInformation.C
-  modularWidget.C
+	compositeManager.C
+	connectionObject.C
+	geometricObject.C
+	mainControl.C
+	message.C
+	modelInformation.C
+	modularWidget.C
 	preferencesEntry.C
-  representationManager.C
-  representation.C
+	representationManager.C
+	representation.C
 	shortcutRegistry.C
-  stage.C
+	stage.C
 	threads.C
 )
 
