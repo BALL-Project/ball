@@ -82,10 +82,11 @@ INCLUDE_DIRECTORIES(${PROJECT_BINARY_DIR}/include/) ## for configured files, i.e
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include/)
 INCLUDE_DIRECTORIES(${CONTRIB_INCLUDE_DIR})
 
+
 ## Flex and Bison
 ## This ugly hack is required as long as we cannot tell cmake to set an environment variable for bison...
 IF (WIN32)
-	FIND_PROGRAM(BISON_EXECUTABLE bison BALL-bison.bat DOC "path to the bison executable")
+	FIND_PROGRAM(BISON_EXECUTABLE BALL-bison.bat DOC "path to the bison executable")
 ENDIF()
 FIND_PACKAGE(BISON)
 IF (NOT BISON_FOUND)
