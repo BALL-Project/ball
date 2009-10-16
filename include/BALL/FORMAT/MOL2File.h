@@ -139,7 +139,7 @@ namespace BALL
 		
 		void clear_();
 		
-		bool buildAll_(System& system);
+		bool buildAll_(Molecule& molecule);
 
 		bool containsAtomChilds_(AtomContainerConstIterator& frag_it);
 
@@ -196,6 +196,7 @@ namespace BALL
 		static const Size MAX_LENGTH_;
 		char buffer_[4096];
 		String line_;
+		bool found_next_header_;
 	};
 } // namespace BALL
 

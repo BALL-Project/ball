@@ -21,20 +21,25 @@ using namespace std;
 namespace BALL 
 {
 	MOL2File::MOL2File()
-		
-		:	GenericMolFile()
+		:	GenericMolFile(),
+			number_of_lines_(0),
+			found_next_header_(0)
 	{
 	}
 
 	MOL2File::MOL2File(const String& name, File::OpenMode open_mode)
 		throw(Exception::FileNotFound)
-		: GenericMolFile(name, open_mode)
+		: GenericMolFile(name, open_mode),
+		  number_of_lines_(0),
+		  found_next_header_(0) 
 	{
 	}
 
 	MOL2File::MOL2File(const MOL2File& file)
 		throw(Exception::FileNotFound)
-		: GenericMolFile(file)
+		: GenericMolFile(file),
+		  number_of_lines_(0),
+		  found_next_header_(0) 
 	{
 	}
 
@@ -47,7 +52,7 @@ namespace BALL
 	const String MOL2File::TRIPOS = "@<TRIPOS>";
 	const Size MOL2File::MAX_LENGTH_ = 4096;
 
-	bool MOL2File::write(const System& system)
+	bool MOL2File::write(const Molecule& molecule)
 		throw(File::CannotWrite)
 	{
 		if (!isOpen() || getOpenMode() != std::ios::out)
@@ -58,11 +63,12 @@ namespace BALL
 		// create a shorthand for the file of the MOL2File object
 		File& f = static_cast<File&>(*this);
 
+		
 		// write the molecule header
 		f << TRIPOS << "MOLECULE" << endl;
-
+		
 		// if the system name is empty...
-		String name = system.getName();
+		String name = molecule.getName();
 		if (name == "")
 		{
 			// .. replace it by four stars
@@ -77,12 +83,14 @@ namespace BALL
 		HashMap<const AtomContainer*, Position> substructure_map;
 		vector<String>	substructure_name;
 		vector<const AtomContainer*> substructure_pointers;
-		AtomContainerConstIterator frag_it = system.beginAtomContainer();
+		AtomContainerConstIterator frag_it = molecule.beginAtomContainer();
 
 		// we will need to exclude atomcontainers that have only other atom containers as childs
 		for (; +frag_it; ++frag_it)
 		{
-			if (containsAtomChilds_(frag_it))
+			if(&*frag_it==&molecule) continue;
+			
+			if(containsAtomChilds_(frag_it))
 			{
 				name = frag_it->getName();
 				// if the fragment is a residue...
@@ -103,39 +111,42 @@ namespace BALL
 				// store the name and the pointer 
 				substructure_map.insert(pair<const AtomContainer*, Position>(&*frag_it, (Size)substructure_name.size()));
 				substructure_pointers.push_back(&*frag_it);
+				
+				if(name.has(' '))
+				{
+					// spaces are not allowed in fragment names (would cause reading-errors)
+					name = "****";
+				}
 				substructure_name.push_back(name);
 			}
 		}
+		
 
-		// count the bonds in the system
+		// count the bonds in the molecule
 		Atom::BondConstIterator bond_it;
 		AtomConstIterator atom_it;
 		Size number_of_bonds = 0;
-		BALL_FOREACH_BOND(system, atom_it, bond_it)
+		BALL_FOREACH_BOND(molecule, atom_it, bond_it)
 		{
 			number_of_bonds++;
 		}
 
 		// write the number of atoms, bonds, and substructures
-		f << system.countAtoms() << " " << number_of_bonds << " " << substructure_name.size() << endl;
+		f << molecule.countAtoms() << " " << number_of_bonds << " " << substructure_name.size() << endl;
 		
 		String mol_type = "SMALL";
-		MoleculeConstIterator mol_it = system.beginMolecule();	
-		for (; +mol_it; ++mol_it)
+		// if we are in a protein, set the molecule type to PROTEIN
+		if (RTTI::isKindOf<Protein>(molecule))
 		{
-			// if we find a protein, set the molecule type to PROTEIN
-			if (RTTI::isKindOf<Protein>(*mol_it))
-			{
-				mol_type = "PROTEIN";
-			}
-			// if there is a nucleic acid in the system,
-			// set the type to NUCLEIC_ACID. PROTEIN has priority!
-			if (RTTI::isKindOf<NucleicAcid>(*mol_it) && (mol_type == "SMALL"))
-			{
-				mol_type = "PROTEIN";
-			}
+			mol_type = "PROTEIN";
 		}
-	
+		// if we are in an nucleic acid,
+		// set the type to NUCLEIC_ACID
+		else if (RTTI::isKindOf<NucleicAcid>(molecule))
+		{
+			mol_type = "PROTEIN";
+		}
+		
 		// write it the molecule type, the charge type, flags, and a comment line
 		f << mol_type << endl
 			<< "USER_CHARGES" << endl
@@ -150,7 +161,7 @@ namespace BALL
 
 		HashMap<const Atom*, Position> atom_map;
 		Size number_of_atoms = 0;
-		atom_it = system.beginAtom();
+		atom_it = molecule.beginAtom();
 		for (; +atom_it; ++atom_it)
 		{
 			number_of_atoms++;
@@ -200,7 +211,7 @@ namespace BALL
 		{
 			f << TRIPOS << "BOND" << endl;
 			number_of_bonds = 0;
-			BALL_FOREACH_BOND(system, atom_it, bond_it)
+			BALL_FOREACH_BOND(molecule, atom_it, bond_it)
 			{
 				number_of_bonds++;
 				// check whether both atoms were written
@@ -226,9 +237,9 @@ namespace BALL
 				{
 					// emit a warning
 					Log.warn() << "MOL2File::write: could not write bond from " 
-										 << bond_it->getFirstAtom()->getFullName() 
-										 << " to " << bond_it->getSecondAtom()->getFullName() 
-										 << " - not in system!" << endl;	
+										<< bond_it->getFirstAtom()->getFullName() 
+										<< " to " << bond_it->getSecondAtom()->getFullName() 
+										<< " - not in system!" << endl;	
 				}
 			}
 		}
@@ -278,8 +289,11 @@ namespace BALL
 				f << endl;
 			}
 		}
+		
+		f << endl;
+		
 		// done with writing.
-		return false;
+		return true;
 	}
 
 
@@ -295,10 +309,37 @@ namespace BALL
 		// remember the line number for error messages
 		number_of_lines_ = 0;
 		
-    while (readLine())
-    {
+		Molecule* mol;
+		
+		while((mol=read()))
+		{
+			system.insert(*mol);
+		}
+		
+		String name = getName(); // set system-name to file-name
+		int pos = name.find_last_of('/');
+		if(pos!=string::npos && name.size()>pos)
+		{
+			name = name.substr(pos+1);
+		}
+		system.setName(name); 
+		
+		return true;
+	}
+	
+	
+	
+	Molecule* MOL2File::read()
+		throw(Exception::ParseError)
+	{   
+		//reset the contents of the members
+		clear_();
+		int mol_ID=0;
+	
+		while (found_next_header_ || readLine())
+		{
 			getLine().toUpper();
-
+			
 			getLine().trim();
 			if (getLine().hasPrefix("#")) continue;
 			
@@ -307,7 +348,7 @@ namespace BALL
 				// we found a "Record Type Identifier" (RTI)
 				String RTI = getLine().after(TRIPOS);
 				RTI.trim();
-					
+				
 				// interpret the RTI (at least the known ones)
 				if (RTI == "ATOM")
 				{
@@ -319,7 +360,23 @@ namespace BALL
 				}	
 				else if (RTI == "MOLECULE") 
 				{
+					// We have found the beginning of a new molecule !
+					if(mol_ID>0)
+					{
+						Molecule* mol = new Molecule;
+						bool ok = buildAll_(*mol);
+						clear_();
+						if(!ok) 
+						{
+							delete mol;
+							return NULL;
+						}
+						found_next_header_ = true;
+						return mol;
+					}
+					found_next_header_=false;
 					readMoleculeSection_();
+					mol_ID++;
 				}	
 				else if (RTI == "SET") 
 				{
@@ -338,28 +395,39 @@ namespace BALL
 				{	
 					// we found an unknown MOL2 section: print a warning message and ignore it!
 					Log.warn() << "MOL2File::read: section ignored in line " 
-										 << number_of_lines_ << ": " << RTI << endl;
+					<< number_of_lines_ << ": " << RTI << endl;
 					readLine();
 				}
 				
 				getLine().toUpper();
 			}
 		}
-
+		
 		// interpret the section we already read from the file
-		return buildAll_(system);
+		Molecule* mol = new Molecule;
+		bool ok = buildAll_(*mol);
+		clear_();
+		if(!ok) 
+		{
+			delete mol;
+			return NULL;
+		}
+		return mol;		
 	}
-
-	Molecule* MOL2File::read()
-		throw(Exception::ParseError)
-	{
-		return GenericMolFile::read();
-	}
+	
 				
-	bool MOL2File::write(const Molecule& molecule)
+	bool MOL2File::write(const System& system)
 		throw(File::CannotWrite)
 	{
-		return GenericMolFile::write(molecule);
+		for(MoleculeConstIterator mol_it=system.beginMolecule(); +mol_it; mol_it++)
+		{
+			if(!write(*mol_it))
+			{
+				return false;
+			}
+		}
+		
+		return true;
 	}
 
 	void MOL2File::readAtomSection_()
@@ -381,7 +449,7 @@ namespace BALL
 					// split the line into fields
 					String fields[10];
 					getLine().split(fields, 10);
-
+				
 					// create an atom and assign the fields of the line
 					AtomStruct	atom;
 					atom.name = fields[1];
@@ -640,7 +708,7 @@ namespace BALL
 		molecule_.name = "";
 		molecule_.number_of_atoms = 0;
 		molecule_.number_of_bonds = 0;
-		molecule_.number_of_substructures = 1;
+		molecule_.number_of_substructures = 0;
 		molecule_.number_of_features = 0;
 		molecule_.number_of_sets = 0;
 
@@ -652,7 +720,7 @@ namespace BALL
 	}
 		
 
-	bool MOL2File::buildAll_(System& system) 
+	bool MOL2File::buildAll_(Molecule& molecule) 
 	{
 		// consistency check
 		if (atoms_.size() != molecule_.number_of_atoms)
@@ -802,18 +870,13 @@ namespace BALL
 			}
 		}
 
-		// Create a molecule and insert it into the system.	
-		// Then add all the rest: substructures and atoms.
-		Molecule* molecule = new Molecule;
-		system.insert(*molecule);
-
 		// if there are no substructures, insert the atoms
     // into the molecule
 		if (substructures_.size() == 0)
 		{
 			for (i = 0; i < atom_ptr.size(); i++)
 			{	
-				molecule->insert(*atom_ptr[i]);
+				molecule.insert(*atom_ptr[i]);
 			}
 		}
 		else
@@ -853,13 +916,12 @@ namespace BALL
 			// Finally, insert all substructures into the system.
 			for (i = 0; i < sub_ptr.size(); i++)
 			{
-				molecule->insert(*sub_ptr[i]);
+				molecule.insert(*sub_ptr[i]);
 			}
 		}
 		
-		// name the system
-		system.setName(molecule_.name);
-
+		molecule.setName(molecule_.name);
+		
 		return read_anything;
 	}
 
