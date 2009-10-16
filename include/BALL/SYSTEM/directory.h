@@ -39,6 +39,7 @@
 #ifdef BALL_COMPILER_MSVC
 #define WINDOWS_LEAN_AND_MEAN
 #include <windows.h>
+#define mode_t int
 #endif
 
 namespace BALL 
