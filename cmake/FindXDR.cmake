@@ -11,6 +11,7 @@ INCLUDE(CheckIncludeFileCXX)
 INCLUDE(CheckCXXSourceCompiles)
 INCLUDE(CheckFunctionExists)
 INCLUDE(CheckTypeSize)
+INCLUDE(CheckLibraryExists)
 
 ## First try to find the required header files (rpc/types.h, rpc/xdr.h)
 
@@ -19,7 +20,13 @@ CHECK_INCLUDE_FILE_CXX(rpc/types.h XDR_HAS_RPC_TYPES_H)
 IF(NOT XDR_HAS_RPC_TYPES_H)
     MESSAGE(SEND_ERROR "Cannot find RPC headers (rpc/types.h). Persistence will be disabled!")
 ELSE()
-	CHECK_INCLUDE_FILE_CXX(rpc/xdr.h XDR_HAS_RPC_XDR_H)
+	CHECK_CXX_SOURCE_COMPILES("#include <rpc/types.h>
+		#include <rpc/xdr.h>
+
+		int main(int /*argc*/, char** /*argv*/)
+		{
+			return 0;
+		}" XDR_HAS_RPC_XDR_H)
 	IF(NOT XDR_HAS_RPC_XDR_H)
     MESSAGE(SEND_ERROR "Cannot find RPC headers (rpc/xdr.h). Persistence will be disabled!")
 	ENDIF()
@@ -27,28 +34,34 @@ ENDIF()
 
 IF (XDR_HAS_RPC_TYPES_H AND XDR_HAS_RPC_XDR_H)
 	## Now let's see if we need an extra lib to compile it
-	CHECK_FUNCTION_EXISTS(xdr_int XDR_IN_LIBC)
+	SET(XDR_INT_FOUND)
+	CHECK_FUNCTION_EXISTS(xdr_int XDR_INT_FOUND)
 
-	SET(XDR_FOUND_SYMBOLS TRUE)
+	IF (NOT XDR_INT_FOUND)
+		FOREACH(lib nsl oncrpc)
+			## Try to find the corresponding lib
+			SET(XDR_INT_LIBRARY)
+			FIND_LIBRARY(XDR_INT_LIBRARY ${lib})
 
-	IF (NOT XDR_IN_LIBC)
-		## Let's see if we can find the symbols in libnsl (Solaris hides it there sometimes...)
-		CHECK_LIBRARY_EXISTS(nsl xdr_int XDR_IN_LIBNSL)
-
-		IF (XDR_IN_LIBNSL)
-			SET(XDR_LIBRARIES "-lnsl")		
-		ELSE()
-			SET(XDR_FOUND_SYMBOLS FALSE)
-			MESSAGE(SEND_ERROR "Could not locate xdr symbols in libc or libnsl. Persistence will be disabled!")
-		ENDIF()
+			IF (XDR_INT_LIBRARY)
+				CHECK_LIBRARY_EXISTS(${XDR_INT_LIBRARY} xdr_int "" XDR_INT_SYMBOL_FOUND)
+			ENDIF()
+			IF (XDR_INT_SYMBOL_FOUND)
+				SET(XDR_LIBRARIES ${XDR_INT_LIBRARY})
+				SET(XDR_INT_FOUND TRUE)
+				BREAK()
+			ENDIF()
+		ENDFOREACH()
 	ENDIF()
 
-	IF (XDR_FOUND_SYMBOLS)
+	IF(NOT XDR_INT_FOUND)
+		MESSAGE(SEND_ERROR "Could not locate xdr symbols in libc or libnsl. Persistence will be disabled!")
+	ELSE()
 
 		SET(XDR_FOUND TRUE)
 
 		## Let's see if we have an implementation for xdr_u_hyper
-		CHECK_FUNCTION_EXISTS(xdr_u_hyper BALL_HAS_XDR_U_HYPER)
+		CHECK_LIBRARY_EXISTS(${XDR_LIBRARIES} xdr_u_hyper "" BALL_HAS_XDR_U_HYPER)
 
 		IF(BALL_HAS_XDR_U_HYPER)
 				SET(XDR_TEST_HEADER "#include <rpc/types.h>
@@ -63,13 +76,9 @@ IF (XDR_HAS_RPC_TYPES_H AND XDR_HAS_RPC_XDR_H)
 				SET(POSSIBLE_64BIT_TYPES u_quad_t u_longlong_t "unsigned long long" __uint64_t)
 
 				#iterate over the list and try out the types
-				LIST( LENGTH POSSIBLE_64BIT_TYPES LEN )
-				WHILE( LEN GREATER 0 AND NOT XDR_64Bit_Type )
-						LIST( GET POSSIBLE_64BIT_TYPES 0 BALL_XDR_UINT64_TYPE )
-						LIST( REMOVE_AT POSSIBLE_64BIT_TYPES 0 )
-						MATH( EXPR LEN "${LEN} - 1" )
+				FOREACH(BALL_XDR_UINT64_TYPE "${POSSIBLE_64BIT_TYPES}")
 						CHECK_CXX_SOURCE_COMPILES( "${XDR_TEST_HEADER}${BALL_XDR_UINT64_TYPE} q;${XDR_TEST_FOOTER}" XDR_64Bit_Type )
-				ENDWHILE( LEN GREATER 0 AND NOT XDR_64Bit_Type )
+				ENDFOREACH()
 
 				IF(XDR_64Bit_Type)
 						#This puts the value of BALL_HAS_XDR_U_HYPER into the cache
@@ -88,5 +97,5 @@ IF (XDR_HAS_RPC_TYPES_H AND XDR_HAS_RPC_XDR_H)
 							MESSAGE(SEND_ERROR "Could not identify an 64 bit unsigned type (long long).")
 					ENDIF(SUPPORTS_64_BIT)
 			ENDIF(BALL_HAS_XDR_U_HYPER)
-	ENDIF(XDR_FOUND_SYMBOLS)
+	ENDIF()
 ENDIF()

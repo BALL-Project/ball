@@ -43,7 +43,7 @@ IF(WIN32)
     )
   
   FIND_LIBRARY(GSL_GSL_LIBRARY
-    NAMES libgsl.dll.a gsl libgsl
+    NAMES gsl_mt libgsl.dll.a gsl libgsl
     PATHS  ${GSL_POSSIBLE_ROOT_DIRS}
     PATH_SUFFIXES lib
     DOC "GSL library" )
@@ -57,7 +57,7 @@ IF(WIN32)
   endif(NOT GSL_GSL_LIBRARY)
   
   FIND_LIBRARY(GSL_GSLCBLAS_LIBRARY
-    NAMES libgslcblas.dll.a gslcblas libgslcblas
+    NAMES libgslcblas.dll.a gslcblas libgslcblas cblas_mt
     PATHS  ${GSL_POSSIBLE_ROOT_DIRS}
     PATH_SUFFIXES lib
     DOC "GSL cblas library dir" )
