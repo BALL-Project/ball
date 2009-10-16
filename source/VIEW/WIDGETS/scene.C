@@ -12,6 +12,7 @@
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
 #include <BALL/VIEW/KERNEL/shortcutRegistry.h>
 #include <BALL/VIEW/KERNEL/common.h>
+#include <BALL/VIEW/KERNEL/iconLoader.h>
 
 #include <BALL/VIEW/DIALOGS/setCamera.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
@@ -42,7 +43,6 @@
 #include <BALL/VIEW/INPUT/buttonEvent.h>
 
 #include <BALL/SYSTEM/timer.h>
-#include <BALL/SYSTEM/path.h>
 #include <BALL/SYSTEM/directory.h>
 #include <BALL/MATHS/quaternion.h>
 
@@ -1361,12 +1361,10 @@ namespace BALL
 
 		void Scene::initializeWidget(MainControl& main_control)
 		{
+			IconLoader& loader = IconLoader::instance();
 			setMinimumSize(10, 10);
 
 			ignore_pick_ = false;
-
-			Path path;
-			String filename;
 
 			main_control.initPopupMenu(MainControl::DISPLAY);
 
@@ -1490,12 +1488,12 @@ namespace BALL
 			QAction* screenshot_action = insertMenuEntry(MainControl::FILE_EXPORT, "PNG...", this, 
 					SLOT(showExportPNGDialog()), description, QKeySequence(tr("Alt+P", description.c_str())));
 			setMenuHint("Export a PNG image file from the Scene");
-			setIcon("screenshot.png", false);
+			setIcon("actions/screenshot", false);
 
 			description = "Shortcut|File|Export|POVRay";
 			insertMenuEntry(MainControl::FILE_EXPORT, "POVRa&y scene", this, 
 					SLOT(exportPOVRay()), description, QKeySequence(tr("Ctrl+Y", description.c_str())));
-			setIcon("povray.png", false);
+			setIcon("mimetype/text-x-povray", false);
 			setMenuHint("tips.html#povray");
 
 			description = "Shortcut|File|Export|VRML";
@@ -1512,7 +1510,7 @@ namespace BALL
 			setMenuHint("Switch to rotate/zoom mode");
 			setMenuHelp("scene.html#rotate_mode");
 			rotate_action_->setCheckable(true);
-			setIcon("rotate.png", false);
+			setIcon("actions/transform-rotate", false);
 			toolbar_actions_view_controls_.push_back(rotate_action_);
 			mode_group_->addAction(rotate_action_);
 
@@ -1522,7 +1520,7 @@ namespace BALL
 
 			setMenuHint("Switch to picking mode, e.g. to identify single atoms or groups");
 			setMenuHelp("scene.html#identify_atoms");
-			setIcon("picking.png", false);
+			setIcon("actions/select-rectangular", false);
 			picking_action_->setCheckable(true);
 			toolbar_actions_view_controls_.push_back(picking_action_);
 			mode_group_->addAction(picking_action_);
@@ -1533,7 +1531,7 @@ namespace BALL
 
 			setMenuHint("Switch to move mode, e.g. move selected items");
 			setMenuHelp("molecularControl.html#move_molecule");
-			setIcon("move.png", false);
+			setIcon("actions/transform-move", false);
 			move_action_->setCheckable(true);
 			toolbar_actions_view_controls_.push_back(move_action_);
 			mode_group_->addAction(move_action_);
@@ -1542,8 +1540,7 @@ namespace BALL
 			fullscreen_action_ = new QAction("Fullscreen", this);
 			fullscreen_action_->setObjectName(fullscreen_action_->text());
 			connect(fullscreen_action_, SIGNAL(triggered()), getMainControl(), SLOT(toggleFullScreen()));
-			filename = path.find("graphics/fullscreen.png");
-			fullscreen_action_->setIcon(QIcon(filename.c_str()));
+			fullscreen_action_->setIcon(loader.getIcon("actions/view-fullscreen"));
 			toolbar_actions_view_controls_.push_back(fullscreen_action_);
 			shortcut_registry->registerShortcut(description, fullscreen_action_);
 
@@ -1553,8 +1550,7 @@ namespace BALL
 			connect(switch_grid_, SIGNAL(triggered()), this, SLOT(switchShowGrid()));
 			switch_grid_->setCheckable(true);
 			switch_grid_->setChecked(false);
-			filename = path.find("graphics/ruler.png");
-			switch_grid_->setIcon(QIcon(filename.c_str()));
+			switch_grid_->setIcon(loader.getIcon("actions/measure"));
 			toolbar_actions_view_controls_.push_back(switch_grid_);
 			shortcut_registry->registerShortcut(description, switch_grid_);
 

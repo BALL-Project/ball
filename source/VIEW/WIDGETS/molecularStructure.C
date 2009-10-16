@@ -75,7 +75,7 @@ namespace BALL
 																												SLOT(centerCamera()), description,
 																												QKeySequence(tr("Ctrl+F", description.c_str())));
 			setMenuHint("Focus the camera on one or multiple objects.");
-			setIcon("focus.png", true);
+			setIcon("actions/object-focus", true);
 
 			// Build Menu -------------------------------------------------------------------
 	// 		hint = "To assign charges, one System has to be selected.";
@@ -98,7 +98,7 @@ namespace BALL
 			assign_bond_orders_id_ = insertMenuEntry(MainControl::BUILD, "&Assign Bond Orders", this, 
 																							 SLOT(runBondOrderAssignment()), description);
 			setMenuHint("Assign bond orders to a selected structure."); 
-			setIcon("assignBondOrders.png", false); //true);
+			setIcon("actions/molecule-assign-bond-orders", false); //true);
 
 			description = "Shortcut|Build|Check_Structure";
 			check_structure_id_ = insertMenuEntry(MainControl::BUILD, "Chec&k Structure against FragmentDB", this, 

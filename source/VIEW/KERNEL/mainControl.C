@@ -11,6 +11,7 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/modelInformation.h>
 #include <BALL/VIEW/KERNEL/geometricObject.h>
+#include <BALL/VIEW/KERNEL/iconLoader.h>
 #include <BALL/VIEW/KERNEL/modularWidget.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
@@ -43,7 +44,6 @@
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/SYSTEM/systemCalls.h>
-#include <BALL/SYSTEM/path.h>
 #include <BALL/VIEW/KERNEL/threads.h>
 
 #include <QtGui/QStatusBar>  // statusbar
@@ -500,9 +500,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 																							SLOT(show()), description,
 																							QKeySequence(tr("Ctrl+Z", description.c_str())));
 
-				Path path;
-				String filename = path.find("graphics/pref.png");
-				preferences_action_->setIcon(QIcon(filename.c_str()));
+				preferences_action_->setIcon(IconLoader::instance().getIcon("categories/preferences"));
 			}
 
 			fetchPreferences(preferences_file_);

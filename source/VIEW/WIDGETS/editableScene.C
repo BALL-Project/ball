@@ -20,6 +20,7 @@
 #include <BALL/VIEW/KERNEL/compositeManager.h>
 #include <BALL/VIEW/KERNEL/shortcutRegistry.h>
 #include <BALL/VIEW/KERNEL/common.h>
+#include <BALL/VIEW/KERNEL/iconLoader.h>
 
 #include <BALL/VIEW/DIALOGS/compositeProperties.h>
 #include <BALL/VIEW/DIALOGS/editSettings.h>
@@ -179,17 +180,16 @@ namespace BALL
 			edit_id_->setToolTip("Switch to edit mode, e.g. draw your own molecule");
 
 			edit_id_->setCheckable(true);
-			setIcon(String("edit.png"), false);
+			setIcon("actions/mode-edit", false);
 			setMenuHelp(help_url);
 			mode_group_->addAction(edit_id_);
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
-			Path path;
+			IconLoader& loader = IconLoader::instance();
 
 			description = "Shortcut|QuicklyAssignBondOrders";
-			QIcon icon4(path.find("graphics/assignBondOrders.png").c_str());
-			bondorders_action_ = new QAction(icon4, "Quickly optimize bond orders", this);
+			bondorders_action_ = new QAction(loader.getIcon("actions/molecule-assign-bond-orders"), "Quickly optimize bond orders", this);
 			bondorders_action_->setObjectName(bondorders_action_->text());
 			bondorders_action_->setToolTip("Compute the highlighted structures bond orders");
 			//TODO
@@ -198,8 +198,7 @@ namespace BALL
 			getMainControl()->getShortcutRegistry().registerShortcut(description, bondorders_action_);
 
 			description = "Shortcut|QuicklyOptimizeStructure";
-			QIcon icon(path.find("graphics/minimize.png").c_str());
-			optimize_action_ = new QAction(icon, "Quickly optimize structure", this);
+			optimize_action_ = new QAction(loader.getIcon("actions/molecule-minimize"), "Quickly optimize structure", this);
 			optimize_action_->setObjectName(optimize_action_->text());
 			optimize_action_->setToolTip("Quickly optimize the highlighted structure");
 			registerForHelpSystem(optimize_action_, "scene.html#optimize");
@@ -207,8 +206,7 @@ namespace BALL
 			getMainControl()->getShortcutRegistry().registerShortcut(description, optimize_action_);
 
 			description = "Shortcut|SaturateWithHydrogens";
-			QIcon icon2(path.find("graphics/hydrogens.png").c_str());
-			add_hydrogens_action_ = new QAction(icon2, "Saturate with Hydrogens", this);
+			add_hydrogens_action_ = new QAction(loader.getIcon("actions/molecule-add-hydrogens"), "Saturate with Hydrogens", this);
 			add_hydrogens_action_->setToolTip("Saturate the highlighted structure with hydrogens (with regards to formal charges).");
 			add_hydrogens_action_->setObjectName(add_hydrogens_action_->text());
 			registerForHelpSystem(add_hydrogens_action_, "scene.html#saturate");
@@ -218,8 +216,7 @@ namespace BALL
 			getMainControl()->initPopupMenu(MainControl::BUILD)->addAction(add_hydrogens_action_);
 
 			description = "Shortcut|EditMode|SetElement";
-			QIcon icon3(path.find("graphics/element.png").c_str());
-			element_action_ = new QAction(icon3, "Set &Editor Element", this);
+			element_action_ = new QAction(loader.getIcon("actions/molecule-set-element"), "Set element", this);
 			element_action_->setToolTip("Edit mode: Choose element for next atom, to modify atom under cursor: Double left click");
 			element_action_->setObjectName(element_action_->text());
 			registerForHelpSystem(element_action_, "scene.html#choose_element");

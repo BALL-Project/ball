@@ -89,7 +89,7 @@ void DownloadPDBFile::initializeWidget(MainControl&)
 
 	setMenuHint("Download a PDB file from www.rcsb.org");
 	setMenuHelp("tips.html#download_pdb");
-	setIcon("download.png", true);
+	setIcon("actions/download-pdb", true);
 }
 
 bool DownloadPDBFile::threadedDownload_(const String& url)

@@ -7,6 +7,7 @@
 #include "icons.h"
 #include "demoTutorialDialog.h"
 
+#include <BALL/VIEW/KERNEL/iconLoader.h>
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
 #include <BALL/VIEW/RENDERING/VRMLRenderer.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -198,8 +199,7 @@ namespace BALL
 		insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
 		setMenuHint(stop_simulation_action_, "Abort a running simulation");
 		
-		String filename = path.find("graphics/stop.png");
-		stop_simulation_action_->setIcon(QIcon(filename.c_str()));
+		stop_simulation_action_->setIcon(IconLoader::instance().getIcon("actions/process-stop"));
 		
 		description = "Shortcut|Edit|Toggle_Selection";
 		complement_selection_action_ = insertMenuEntry(MainControl::EDIT, "Toggle Selection", this, 
@@ -319,16 +319,15 @@ namespace BALL
 		DownloadPDBFile::getInstance(0)->addToolBarEntries(tb);
 		PubChemDialog::getInstance(0)->addToolBarEntries(tb);
 		Path path;
-		
-		QIcon load_icon(path.find("graphics/quickload.png").c_str());
-		qload_action_ = new QAction(load_icon, "quickload", this);
+
+		IconLoader& loader = IconLoader::instance();
+		qload_action_ = new QAction(loader.getIcon("actions/quickopen-file"), "quickload", this);
 		qload_action_->setObjectName("quickload");
 		connect(qload_action_, SIGNAL(triggered()), this, SLOT(quickLoadConfirm()));
 		HelpViewer::getInstance("BALLView Docu")->registerForHelpSystem(qload_action_, "tips.html#quickload");
 		tb->addAction(qload_action_);
 
-		QIcon save_icon(path.find("graphics/quicksave.png").c_str());
-		qsave_action_ = new QAction(save_icon, "quicksave", this);
+		qsave_action_ = new QAction(loader.getIcon("actions/quicksave"), "quicksave", this);
 		qsave_action_->setObjectName("quicksave");
 		connect(qsave_action_, SIGNAL(triggered()), this, SLOT(quickSave()));
 		HelpViewer::getInstance("BALLView Docu")->registerForHelpSystem(qsave_action_, "tips.html#quickload");

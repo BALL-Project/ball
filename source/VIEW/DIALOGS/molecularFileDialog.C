@@ -57,13 +57,13 @@ void MolecularFileDialog::initializeWidget(MainControl&)
 									SLOT(readFiles()), description, QKeySequence::Open);
 
 	setMenuHint("Open a molecular file (e.g. PDB,MOL2,SDF)");
-	setIcon("open.png", true);
+	setIcon("actions/document-open", true);
 
 	description = "Shortcut|File|Save_Structure";
 	save_id_ = insertMenuEntry(MainControl::FILE, "&Save Structure", this, 
 														 SLOT(writeFile()), description, QKeySequence::Save);
 	setMenuHint("Save the highlighted System (e.g. as PDB,MOL2,SDF file)");
-	setIcon("save.png", true);
+	setIcon("actions/document-save", true);
 }
 
 void MolecularFileDialog::readFiles()
