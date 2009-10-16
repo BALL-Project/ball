@@ -70,27 +70,27 @@ MACRO(ADD_BALL_SOURCES GROUP SOURCES_LIST)
 
 	### source group definition ###
 	STRING(REGEX REPLACE "/" "\\\\" S_GROUP ${GROUP})
-	SOURCE_GROUP("Source Files\\\\${S_GROUP}" FILES ${SOURCE})
+	SOURCE_GROUP("Source Files\\\\${S_GROUP}" FILES ${SOURCES})
 ENDMACRO()
 
-## Add the source files in SOURCES_LIST to the list
+## Add the header files in HEADERS_LIST to the list
 ## of files compiled into libBALL, and mark them as
 ## part of source group GROUP
-MACRO(ADD_BALL_SOURCES GROUP SOURCES_LIST)
-	SET(DIRECTORY source/${GROUP})
+MACRO(ADD_BALL_HEADERS GROUP HEADERS_LIST)
+	SET(DIRECTORY include/BALL/${GROUP})
 
 	### add full path to the filenames ###
-	SET(SOURCES)
-	FOREACH(i ${SOURCES_LIST})
-		LIST(APPEND SOURCES ${DIRECTORY}/${i})
+	SET(HEADERS)
+	FOREACH(i ${HEADERS_LIST})
+		LIST(APPEND HEADERS ${DIRECTORY}/${i})
 	ENDFOREACH()
 
 	### pass source file list to the upper instance ###
-	SET(BALL_sources ${BALL_sources} ${SOURCES})
+	SET(BALL_headers ${BALL_headers} ${HEADERS})
 
 	### source group definition ###
 	STRING(REGEX REPLACE "/" "\\\\" S_GROUP ${GROUP})
-	SOURCE_GROUP("Source Files\\\\${S_GROUP}" FILES ${SOURCE})
+	SOURCE_GROUP("Header Files\\\\${S_GROUP}" FILES ${HEADERS})
 ENDMACRO()
 
 ## Add a parser and corresponding lexer to libBALL
@@ -135,7 +135,7 @@ MACRO(ADD_VIEW_SOURCES GROUP SOURCES_LIST)
 
 	### source group definition ###
 	STRING(REGEX REPLACE "/" "\\\\" S_GROUP ${GROUP})
-	SOURCE_GROUP("Source Files\\\\${S_GROUP}" FILES ${SOURCE})
+	SOURCE_GROUP("Source Files\\\\${S_GROUP}" FILES ${SOURCES})
 ENDMACRO()
 
 ### Generate appropriate uic and moc rules for the files in UI_LIST,
