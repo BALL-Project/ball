@@ -1,56 +1,80 @@
-# Find SIP
-# ~~~~~~~~
+# Try to find the python interface generator SIP (http://www.riverbankcomputing.co.uk/sip/index.php)
 #
-# SIP website: http://www.riverbankcomputing.co.uk/sip/index.php
-#
-# Find the installed version of SIP. FindSIP should be called after Python
-# has been found.
+# Unfortunately, we cannot use the standard way of calling sipconfig.py, since this seems to hard-code
+# the paths during sip build time and these do not have to coincide with wherever BALL_contrib has been
+# placed by the user...
 #
 # This file defines the following variables:
 #
-# SIP_VERSION - The version of SIP found expressed as a 6 digit hex number
-#     suitable for comparision as a string.
+# SIP_FOUND       = system has sip support, and sip modules could be loaded successfully
 #
-# SIP_VERSION_STR - The version of SIP found as a human readable string.
+# SIP_LIBRARIES   = full path to the sip libraries
 #
-# SIP_EXECUTABLE - Path and filename of the SIP command line executable.
+# SIP_VERSION     = The version of SIP found expressed as a 6 digit hex number
+#                   suitable for comparison as a string.
 #
-# SIP_INCLUDE_DIR - Directory holding the SIP C++ header file.
+# SIP_VERSION_STR = The version of SIP found as a human readable string.
 #
-# SIP_DEFAULT_SIP_DIR - Default directory where .sip files should be installed
-#     into.
-
-# Copyright (c) 2007, Simon Edwards <simon@simonzone.com>
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
-
-
+# SIP_EXECUTABLE  = Full path of the SIP command line executable.
+#
+# SIP_INCLUDE_DIR = Directory holding the SIP C++ header file.
+#
 
 IF(SIP_VERSION)
   # Already in cache, be silent
   SET(SIP_FOUND TRUE)
 ELSE(SIP_VERSION)
 
-  FIND_FILE(_find_sip_py FindSIP.py PATHS ${CMAKE_MODULE_PATH})
+  # (a) Try to find the sip headers:
 
-  EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} ${_find_sip_py} OUTPUT_VARIABLE sip_config)
-  IF(sip_config)
-    STRING(REGEX REPLACE "^sip_version:([^\n]+).*$" "\\1" SIP_VERSION ${sip_config})
-    STRING(REGEX REPLACE ".*\nsip_version_str:([^\n]+).*$" "\\1" SIP_VERSION_STR ${sip_config})
-    STRING(REGEX REPLACE ".*\nsip_bin:([^\n]+).*$" "\\1" SIP_EXECUTABLE ${sip_config})
-    STRING(REGEX REPLACE ".*\ndefault_sip_dir:([^\n]+).*$" "\\1" SIP_DEFAULT_SIP_DIR ${sip_config})
-    STRING(REGEX REPLACE ".*\nsip_inc_dir:([^\n]+).*$" "\\1" SIP_INCLUDE_DIR ${sip_config})
-    SET(SIP_FOUND TRUE)
-  ENDIF(sip_config)
+  # Use the path to the python installation as a hint for finding sip
+  SET(SIP_POSSIBLE_INC_DIRS "${PYTHON_INCLUDE_PATH}")
 
-  IF(SIP_FOUND)
-    IF(NOT SIP_FIND_QUIETLY)
-      MESSAGE(STATUS "Found SIP version: ${SIP_VERSION_STR}")
-    ENDIF(NOT SIP_FIND_QUIETLY)
-  ELSE(SIP_FOUND)
-    IF(SIP_FIND_REQUIRED)
-      MESSAGE(FATAL_ERROR "Could not find SIP")
-    ENDIF(SIP_FIND_REQUIRED)
-  ENDIF(SIP_FOUND)
+  FIND_PATH(SIP_INCLUDE_DIR
+    NAMES sip.h sip/sip.h Python/sip.h
+    PATHS ${SIP_POSSIBLE_INC_DIRS}
+    PATH_SUFFIXES include
+    DOC "SIP header include dir")
+
+  # (b) Try to find the sip library:
+
+  # Use the path to the python installation as a hint for finding sip
+  GET_FILENAME_COMPONENT(SIP_POSSIBLE_LIB_DIRS "${PYTHON_LIBRARIES}"  ABSOLUTE)
+
+  FIND_FILE(SIP_LIBRARIES
+    NAMES sip libsip
+    PATHS ${SIP_POSSIBLE_LIB_DIRS}
+    PATH_SUFFIXES lib dlls
+    DOC "SIP module")
+
+  # (c) Try to find the sip executable:
+
+  # Use the path to the python installation as a hint for finding sip
+  GET_FILENAME_COMPONENT(SIP_POSSIBLE_BIN_DIRS "${PYTHON_EXECUTABLE}" ABSOLUTE)
+  FIND_PROGRAM(SIP_EXECUTABLE sip
+    ${SIP_POSSIBLE_BIN_DIRS}
+    /usr/bin/
+  )
+
+  # (d) Try to extract version information from sip.h:
+  
+  FILE(READ ${SIP_INCLUDE_DIR}/sip.h SIP_H_TEXT)
+  STRING(REGEX MATCH   "define SIP_VERSION[ \t]+([0-9x]+)"       SIP_VERSION "${SIP_H_TEXT}" )
+  STRING(REGEX REPLACE "define SIP_VERSION[ \t]+([0-9x]+)" "\\1" SIP_VERSION "${SIP_VERSION}")
+
+  STRING(REGEX MATCH   "define SIP_VERSION_STR[ \t]+\"([^\"]*)\""        SIP_VERSION_STR "${SIP_H_TEXT}"     )
+  STRING(REGEX REPLACE "define SIP_VERSION_STR[ \t]+\"([^\"]*)\""  "\\1" SIP_VERSION_STR "${SIP_VERSION_STR}")
+
+  INCLUDE(FindPackageHandleStandardArgs)
+  FIND_PACKAGE_HANDLE_STANDARD_ARGS(SIP DEFAULT_MSG 
+    SIP_EXECUTABLE 
+    SIP_LIBRARIES 
+    SIP_INCLUDE_DIR
+    SIP_VERSION
+    SIP_VERSION_STR)
+
+  MARK_AS_ADVANCED(SIP_EXECUTABLE)
+  MARK_AS_ADVANCED(SIP_LIBRARIES)
+  MARK_AS_ADVANCED(SIP_INCLUDE_DIR)
 
 ENDIF(SIP_VERSION)
