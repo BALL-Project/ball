@@ -3,6 +3,9 @@ INCLUDE(CheckCXXSourceCompiles)
 
 ## first, search the headers
 OPTION(USE_LPSOLVE "Compile with lpsolve support, if lpsolve can be found" ON)
+
+OPTION(LPSOLVE_REQUIRED "Abort if lpsolve cannot be found" OFF)
+
 IF (USE_LPSOLVE)
 
 	SET(LPSOLVE_INCLUDE_DIR "" CACHE STRING "Full path to the lpsolve headers")
@@ -63,6 +66,11 @@ IF (USE_LPSOLVE)
 			ENDIF()
 		ENDIF()
 	ELSE()
-		MESSAGE(SEND_ERROR "lpsolve was requested, but could not be found!")
+		IF (LPSOLVE_REQUIRED)
+			MESSAGE(SEND_ERROR "lpsolve was requested, but could not be found!")
+		ELSE()
+			MESSAGE(STATUS "lpsolve was requested, but could not be found!")
+		ENDIF()
+
 	ENDIF()
 ENDIF()
