@@ -72,6 +72,8 @@ ENDIF()
 SET(BALL_CONTRIB_PATH "" CACHE STRING "Path to the contrib directory, if installed (optional)")
 SET(CMAKE_PREFIX_PATH ${BALL_CONTRIB_PATH} ${CMAKE_PREFIX_PATH})
 
+SET(CMAKE_REQUIRED_INCLUDES ${BALL_CONTRIB_PATH}/include ${CMAKE_REQUIRED_INCLUDES})
+
 # some of our own macros (BALL_CHECKLIB, QT4_WRAP_UI_OWN, ...)
 INCLUDE(cmake/BALLMacros.cmake)
 INCLUDE(cmake/BALLCompilerSpecific.cmake)
@@ -80,7 +82,7 @@ INCLUDE(cmake/BALLConfig.cmake)
 ## additional include directories
 INCLUDE_DIRECTORIES(${PROJECT_BINARY_DIR}/include/) ## for configured files, i.e. config.h
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include/)
-INCLUDE_DIRECTORIES(${CONTRIB_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${BALL_CONTRIB_PATH}/include/)
 
 
 ## Flex and Bison
