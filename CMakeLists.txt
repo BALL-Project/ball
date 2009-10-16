@@ -50,6 +50,11 @@ SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 
 SET(CF_BALL_PACKAGE_VERSION "${BALL_PACKAGE_VERSION_MAJOR}.${BALL_PACKAGE_VERSION_MINOR}.${BALL_PACKAGE_VERSION_PATCH}" CACHE INTERNAL "BALL VERSION" FORCE)
 
+# Initialize the various PREFIX variables. This has to happen before any files
+# using them are included.
+SET(CMAKE_INSTALL_PREFIX "" CACHE INTERNAL "This must be equal to INSTALL_PREFIX!" FORCE)
+SET(INSTALL_PREFIX "." CACHE PATH "Installation prefix for BALL")
+
 ## default build type (for Makefile generators): Release
 ## TODO: 64 Bit builds etc for Windows
 SET(BALL_BUILD_TYPE "Release" CACHE STRING "Build type: 'Debug' or 'Release'")
@@ -199,9 +204,6 @@ ADD_SUBDIRECTORY(source/PYTHON/EXTENSIONS)
 SET(CONFIGURED_CONFIG_H ${PROJECT_BINARY_DIR}/include/BALL/CONFIG/config.h)
 CONFIGURE_FILE(cmake/config.h.in ${CONFIGURED_CONFIG_H})
 
-
-SET(CMAKE_INSTALL_PREFIX "" CACHE INTERNAL "This must be equal to INSTALL_PREFIX!" FORCE)
-SET(INSTALL_PREFIX "." CACHE PATH "Installation prefix for BALL")
 
 ADD_DEFINITIONS(${BALL_DEFINITIONS})
 
