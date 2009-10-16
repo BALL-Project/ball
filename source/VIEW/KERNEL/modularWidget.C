@@ -7,9 +7,9 @@
 #include <BALL/VIEW/KERNEL/modularWidget.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/iconLoader.h>
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
-#include <BALL/SYSTEM/path.h>
 #include <QtGui/qmenubar.h>
 
 using namespace std;
@@ -266,10 +266,8 @@ namespace BALL
 
 		void ModularWidget::setIcon(const String& filename, bool add_to_main_toolbar)
 		{
-			Path path;
-			String file = path.find(String("graphics/") + filename);
-			last_action_->setIcon(QIcon(file.c_str()));
-			
+			last_action_->setIcon(IconLoader::instance().getIcon(filename.c_str()));
+
 			if (add_to_main_toolbar)
 			{
 				main_toolbar_actions_.push_back(last_action_);

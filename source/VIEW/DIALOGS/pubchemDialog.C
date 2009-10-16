@@ -280,7 +280,7 @@ namespace BALL
 		{
 			action1_ = insertMenuEntry(MainControl::FILE_OPEN, "PubChem", this, SLOT(show()), "Shortcut|File|Open|PubChem");
 			setMenuHint("Download a file from pubchem");
-			setIcon("pubchem.png", true);
+			setIcon("actions/download-pubchem", true);
 			
 			action2_ = insertMenuEntry(MainControl::BUILD, "Build from SMILES", this, SLOT(show()), "Shortcut|Build|Build_from_SMILES");
 			setMenuHint("Create a structure from a SMILES expression");

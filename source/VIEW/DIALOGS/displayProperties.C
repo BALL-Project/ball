@@ -127,7 +127,7 @@ void DisplayProperties::initializeWidget(MainControl& main_control)
 
 	setMenuHint("Create a new representation or modify an existing one");
 	setMenuHelp("displayProperties.html");
-	setIcon("colorize.png", true);
+	setIcon("categories/preferences-display", true);
 
 	registerForHelpSystem(this, "displayProperties.html");
 
