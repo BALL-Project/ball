@@ -111,7 +111,7 @@ MACRO(ADD_BALL_PARSER_LEXER GROUP BASENAME PREFIX)
 
 	ADD_FLEX_BISON_DEPENDENCY(${BASENAME}Lexer ${BASENAME}Parser)
 
-	SET(BALL_sources ${BALL_sources} ${PARSEROUTPUT} ${LEXEROUTPUT})
+	SET(BALL_sources ${BALL_sources} ${PARSERINPUT} ${PARSEROUTPUT} ${LEXERINPUT} ${LEXEROUTPUT})
 
 	SOURCE_GROUP("Source Files\\\\${GROUP}" FILES ${PARSEROUTPUT} ${LEXEROUTPUT})
 	SOURCE_GROUP("Parser Files\\\\${GROUP}" FILES ${PARSERINPUT})
@@ -155,9 +155,13 @@ MACRO(ADD_BALL_UIFILES GROUP UI_LIST)
 		SET(OUTFILES)
 		QT4_WRAP_UI_BALL(OUTFILES ${UI_FILE})
 
-		### Setting a source group won't work here  ###
-		### since the files do not really exist yet ###
-		SET(VIEW_sources ${VIEW_sources} "${OUTFILES}")
+		### and add them to the sources ###
+		SET(VIEW_sources ${VIEW_sources} "${OUTFILES}" ${UI_FILE})
+
+		### source group definition ###
+		STRING(REGEX REPLACE "/" "\\\\" S_GROUP ${GROUP})
+		SOURCE_GROUP("Source Files\\\\${S_GROUP}" FILES ${OUTFILES})
+		SOURCE_GROUP("UI Files" FILES ${UI_FILE})
 	ENDFOREACH()
 ENDMACRO()
 
@@ -177,8 +181,11 @@ MACRO(ADD_BALL_MOCFILES GROUP INPUT_DIRECTORY MOC_LIST)
 		### generate the corresponding moc files ###
 		QT4_GENERATE_MOC(${MOC_FILE} ${OUTFILE})
 
-		### Setting a source group won't work here  ###
-		### since the files do not really exist yet ###
+		### and add them to the sources ###
 		SET(VIEW_sources ${VIEW_sources} ${OUTFILE})
+
+		### source group definition ###
+		STRING(REGEX REPLACE "/" "\\\\" S_GROUP ${GROUP})
+		SOURCE_GROUP("Source Files\\\\${S_GROUP}" FILES ${OUTFILE})
 	ENDFOREACH()
 ENDMACRO()
