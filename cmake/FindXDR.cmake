@@ -79,21 +79,18 @@ IF (XDR_HAS_RPC_TYPES_H AND XDR_HAS_RPC_XDR_H)
 				SET(POSSIBLE_64BIT_TYPES u_quad_t u_longlong_t "unsigned long long" __uint64_t)
 
 				#iterate over the list and try out the types
-				FOREACH(BALL_XDR_UINT64_TYPE ${POSSIBLE_64BIT_TYPES})
-						CHECK_CXX_SOURCE_COMPILES( "${XDR_TEST_HEADER}${BALL_XDR_UINT64_TYPE} q;${XDR_TEST_FOOTER}" XDR_64Bit_Type )
+				FOREACH(XDR_UINT64_TYPE ${POSSIBLE_64BIT_TYPES})
+						CHECK_CXX_SOURCE_COMPILES( "${XDR_TEST_HEADER}${XDR_UINT64_TYPE} q;${XDR_TEST_FOOTER}" XDR_64Bit_Type )
 						IF (XDR_64Bit_Type)
+							SET(BALL_XDR_UINT64_TYPE ${XDR_UINT64_TYPE} CACHE STRING "Unsigned 64bit type for xdr_u_hyper" FORCE)
 							BREAK()
 						ENDIF()
 				ENDFOREACH()
 
-				IF(XDR_64Bit_Type)
-						#This puts the value of BALL_HAS_XDR_U_HYPER into the cache
-						#Necessary, because cmake would skip the assignement on a second run because XDR_64Bit_Type is true
-						SET(BALL_XDR_UINT64_TYPE ${BALL_XDR_UINT64_TYPE} CACHE STRING "Unsigned 64bit type for xdr_u_hyper")
-				ELSE(XDR_64Bit_Type)
+				IF (NOT XDR_64Bit_Type)
 						SET(BALL_XDR_UINT64_TYPE OFF)
 						MESSAGE(SEND_ERROR "Could not identify an appropriate type for XDR_64Bit_Type.")
-				ENDIF(XDR_64Bit_Type)
+				ENDIF()
 
 			ELSE(BALL_HAS_XDR_U_HYPER)
 					CHECK_TYPE_SIZE("unsigned long long int" SUPPORTS_64_BIT)
