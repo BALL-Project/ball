@@ -207,10 +207,21 @@ ENDIF()
 
 ADD_SUBDIRECTORY(source/PYTHON/EXTENSIONS)
 
+## On Windows, we need a seperate regex2-lib
+IF (WIN32)
+	FIND_LIBRARY(REGEX_LIBRARIES
+		NAMES regex2 regex
+		PATH_SUFFIXES lib dlls
+		DOC "Regular expressions library")
+
+	IF (NOT REGEX_LIBRARIES)
+		MESSAGE(SEND_ERROR "Could not find required regex2.lib!")
+	ENDIF()
+ENDIF()
+
 ## replace any variables in config.h.in with current values
 SET(CONFIGURED_CONFIG_H ${PROJECT_BINARY_DIR}/include/BALL/CONFIG/config.h)
 CONFIGURE_FILE(cmake/config.h.in ${CONFIGURED_CONFIG_H})
-
 
 ADD_DEFINITIONS(${BALL_DEFINITIONS})
 
@@ -224,9 +235,9 @@ INCLUDE(cmake/BALLDoc.cmake)
 ###    BUILD the lib																 ###
 ########################################################
 
-## are we building a shared or static lib?! (BOTH within the same BUILD-tree is NOT possible currently!!)
+## are we building a shared or static lib?! (BOTH within 
+## the same BUILD-tree is NOT possible currently!!)
 SET(BUILD_SHARED_LIBS TRUE)
-
 
 SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib")
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
@@ -261,7 +272,7 @@ ENDIF()
 #SET_TARGET_PROPERTIES(VIEW PROPERTIES LINKER_LANGUAGE CXX)
 
 ## all the dependency libraries are linked into libBALL.so, except Qt and CUDA which are still dynamic
-SET(BALL_DEP_LIBRARIES ${XDR_LIBRARIES} ${GSL_LIBRARIES} ${FFTW_LIBRARIES} ${LPSOLVE_LIBRARIES} optimized ${PYTHON_LIBRARIES} debug ${PYTHON_DEBUG_LIBRARIES})
+SET(BALL_DEP_LIBRARIES ${REGEX_LIBRARIES} ${XDR_LIBRARIES} ${GSL_LIBRARIES} ${FFTW_LIBRARIES} ${LPSOLVE_LIBRARIES} optimized ${PYTHON_LIBRARIES} debug ${PYTHON_DEBUG_LIBRARIES})
 
 IF(TBB_FOUND)
 	SET(BALL_DEP_LIBRARIES ${BALL_DEP_LIBRARIES} ${TBB_LIBRARIES})
