@@ -20,4 +20,4 @@ ENDFOREACH()
 SET(BALL_sources ${BALL_sources} ${SOURCES})
 
 ### source group definition ###
-SOURCE_GROUP("Source Files\\DATATYPE" FILES ${SOURCE})
+SOURCE_GROUP("Source Files\\ENERGY" FILES ${SOURCE})
