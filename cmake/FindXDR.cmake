@@ -36,7 +36,6 @@ IF (XDR_HAS_RPC_TYPES_H AND XDR_HAS_RPC_XDR_H)
 	## Now let's see if we need an extra lib to compile it
 	SET(XDR_INT_FOUND)
 	CHECK_FUNCTION_EXISTS(xdr_int XDR_INT_FOUND)
-
 	IF (NOT XDR_INT_FOUND)
 		FOREACH(lib nsl oncrpc)
 			## Try to find the corresponding lib
@@ -61,7 +60,11 @@ IF (XDR_HAS_RPC_TYPES_H AND XDR_HAS_RPC_XDR_H)
 		SET(XDR_FOUND TRUE)
 
 		## Let's see if we have an implementation for xdr_u_hyper
-		CHECK_LIBRARY_EXISTS(${XDR_LIBRARIES} xdr_u_hyper "" BALL_HAS_XDR_U_HYPER)
+		IF (${XDR_LIBRARIES})
+			CHECK_LIBRARY_EXISTS(${XDR_LIBRARIES} xdr_u_hyper "" BALL_HAS_XDR_U_HYPER)
+		ELSE()
+			CHECK_FUNCTION_EXISTS(xdr_u_hyper BALL_HAS_XDR_U_HYPER)
+		ENDIF()
 
 		IF(BALL_HAS_XDR_U_HYPER)
 				SET(XDR_TEST_HEADER "#include <rpc/types.h>
@@ -76,8 +79,11 @@ IF (XDR_HAS_RPC_TYPES_H AND XDR_HAS_RPC_XDR_H)
 				SET(POSSIBLE_64BIT_TYPES u_quad_t u_longlong_t "unsigned long long" __uint64_t)
 
 				#iterate over the list and try out the types
-				FOREACH(BALL_XDR_UINT64_TYPE "${POSSIBLE_64BIT_TYPES}")
+				FOREACH(BALL_XDR_UINT64_TYPE ${POSSIBLE_64BIT_TYPES})
 						CHECK_CXX_SOURCE_COMPILES( "${XDR_TEST_HEADER}${BALL_XDR_UINT64_TYPE} q;${XDR_TEST_FOOTER}" XDR_64Bit_Type )
+						IF (XDR_64Bit_Type)
+							BREAK()
+						ENDIF()
 				ENDFOREACH()
 
 				IF(XDR_64Bit_Type)
