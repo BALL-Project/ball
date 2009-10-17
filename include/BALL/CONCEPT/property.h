@@ -268,6 +268,10 @@ namespace BALL
 				is returned.
 		*/
 		string getString() const;
+		
+		/** Converts the data contained in this NamedProperty to a string and returns it. \n
+		Note that this function is intended as a convenience and does NOT depend on the type of the data (in constrast to getString()). */
+		string toString() const;
 
 		//@}
 

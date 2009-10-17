@@ -186,6 +186,47 @@ string NamedProperty::getString() const
 }
 
 BALL_INLINE 
+string NamedProperty::toString() const
+{
+	String res;
+	if(type_ == INT)
+	{
+		int value = getInt();
+		res = String(value);
+		return res;
+	}
+	if(type_ == FLOAT)
+	{
+		float value = getFloat();
+		res = String(value);
+		return res;
+	}
+	if(type_ == DOUBLE)
+	{
+		double value = getDouble();
+		res = String(value);
+		return res;
+	}
+	if(type_ == UNSIGNED_INT)
+	{
+		unsigned int value = getUnsignedInt();
+		res = String(value);
+		return res;		
+	}
+	if(type_ == BOOL)
+	{
+		bool value = getBool();
+		res = String(value);
+		return res;
+	}
+	if(type_ == STRING)
+	{
+		return getString();
+	}
+	return "";	
+}
+
+BALL_INLINE 
 unsigned int NamedProperty::getUnsignedInt() const
 {
 	return (type_ == UNSIGNED_INT ? boost::any_cast<unsigned int>(data_) : 0);

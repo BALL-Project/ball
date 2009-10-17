@@ -132,6 +132,8 @@ namespace BALL
 		void readSetSection_();
 
 		void readSubstructureSection_();
+		
+		void readCommentSection_();
 
 		String getSybylType_(const Atom& atom) const;
 
@@ -184,12 +186,19 @@ namespace BALL
 			Size				inter_bonds;
 			String			comment;
 		};
+		
+		BALL_EXPORT struct CommentStruct
+		{
+			String name;
+			String value;
+		};
 
 			
 		vector<AtomStruct>					atoms_;
 		vector<BondStruct>					bonds_;
 		vector<SetStruct>						sets_;
 		vector<SubstructureStruct>	substructures_;
+		vector<CommentStruct>	comments_;
 		MoleculeStruct							molecule_;
 
 		Size	number_of_lines_;

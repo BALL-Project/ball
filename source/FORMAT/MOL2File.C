@@ -289,6 +289,16 @@ namespace BALL
 				f << endl;
 			}
 		}
+		int no_properties=molecule.countNamedProperties();
+		if(no_properties>0)
+		{
+			f << TRIPOS << "COMMENT"<<endl;
+			for(uint i=0; i<no_properties; i++)
+			{
+				const NamedProperty& np(molecule.getNamedProperty(i));
+				f << np.getName() << "=" << np.toString() << endl;
+			}
+		}
 		
 		f << endl;
 		
@@ -388,8 +398,7 @@ namespace BALL
 				} 
 				else if (RTI == "COMMENT") 
 				{
-					// do nothing
-					readLine();
+					readCommentSection_();
 				} 
 				else 
 				{	
@@ -633,7 +642,8 @@ namespace BALL
 			}
 		}	
 	}
-
+	
+	
 	void MOL2File::readSubstructureSection_()
 	{
 		while (readLine() && (getLine().countFields() > 0) && !getLine().hasPrefix(TRIPOS))
@@ -701,6 +711,21 @@ namespace BALL
 			substructures_.push_back(sub);
 		}	
 	}
+	
+	
+	void MOL2File::readCommentSection_()
+	{
+		while (readLine() && (getLine().countFields() > 0) && !getLine().hasPrefix(TRIPOS))
+		{
+			if(getLine().has('='))
+			{
+				CommentStruct comment;
+				comment.name = ((String)getLine().before('=')).trim();
+				comment.value = ((String)getLine().after('=')).trim();
+				comments_.push_back(comment);
+			}	
+		}		
+	}
 
 	void MOL2File::clear_()
 	{
@@ -716,6 +741,7 @@ namespace BALL
 		atoms_.clear();
 		bonds_.clear();
 		substructures_.clear();
+		comments_.clear();
 		sets_.clear();
 	}
 		
@@ -918,6 +944,12 @@ namespace BALL
 			{
 				molecule.insert(*sub_ptr[i]);
 			}
+		}
+		
+		// create NamedProperties (if any)
+		for(uint i=0; i<comments_.size(); i++)
+		{
+			molecule.setProperty(comments_[i].name, comments_[i].value);	
 		}
 		
 		molecule.setName(molecule_.name);
