@@ -325,11 +325,27 @@ namespace BALL
 			
 			///
 			Stage* getStage()
-				{ return stage_;}
+			{ return stage_;}
 
 			///
 			const Stage* getStage() const
-				{ return stage_;}
+			{ return stage_;}
+
+			///
+			StageSettings* getStageSettings()
+			{ return stage_settings_; }
+
+			///
+			const StageSettings* getStageSettings() const
+			{ return stage_settings_; }
+
+			///
+			MaterialSettings* getMaterialSettings()
+			{ return material_settings_; }
+
+			///
+			const MaterialSettings* getMaterialSettings() const
+			{ return material_settings_; }
 
 			///
 			void setCamera(const Camera& camera);
