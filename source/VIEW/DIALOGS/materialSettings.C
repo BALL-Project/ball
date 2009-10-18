@@ -117,6 +117,38 @@ namespace BALL
 			}
 		}
 
+		void MaterialSettings::updateDefaultMaterialsFromStage()
+		{
+			Stage* stage = Scene::getInstance(0)->getStage();
+			Stage::RaytracingMaterial& rt_material = stage->getRTMaterial();
+
+			// set the renderer to RTfact, just to be on the safe side.
+			radioButton_RTFact->setChecked(true);
+
+			// now set the values
+			setColor(ambient_color_label, rt_material.ambient_color);
+			setColor(reflectiveness_color_label, rt_material.reflective_color);
+			setColor(specularity_color_label, rt_material.specular_color);
+
+			ambient_factor_slider->setValue(rt_material.ambient_intensity);
+			setValues_(*ambient_factor_slider, *ambient_factor_label, 1);
+
+			specularity_factor_slider->setValue(rt_material.specular_intensity);
+			setValues_(*specularity_factor_slider, *specularity_factor_label, 1);
+
+			reflectiveness_factor_slider->setValue(rt_material.reflective_intensity);
+			setValues_(*reflectiveness_factor_slider, *reflectiveness_factor_label, 1);
+
+			shininess_factor_slider->setValue(rt_material.shininess);
+			setValues_(*shininess_factor_slider, *shininess_factor_label, 1);	
+
+			transparency_factor_slider->setValue(rt_material.transparency*100);
+			setValues_(*transparency_factor_slider, *transparency_factor_label, 1);
+
+			if (update_directly_checkBox->isChecked())
+				apply();
+		}
+
 		void MaterialSettings::ambientFactorChanged()
 		{ 
 			setValues_(*ambient_factor_slider, *ambient_factor_label, 100);
