@@ -54,6 +54,12 @@ namespace BALL
 				current_representation_ = representation;
 			}
 
+			/** Set the values according to the ones stored in the scene
+			 *  TODO: currently, this only works for RTfact materials!
+			 *  OpenGL and POVRay are not yet supported!
+			 */
+			void updateDefaultMaterialsFromStage();
+
 			public slots:
 
 			virtual void ambientFactorChanged();
