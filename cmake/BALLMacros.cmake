@@ -82,6 +82,8 @@ MACRO(ADD_BALL_HEADERS GROUP HEADERS_LIST)
 	### add full path to the filenames ###
 	SET(HEADERS)
 	FOREACH(i ${HEADERS_LIST})
+		### make sure we do not have absolute paths flying around...
+		GET_FILENAME_COMPONENT(i ${i} NAME)
 		LIST(APPEND HEADERS ${DIRECTORY}/${i})
 	ENDFOREACH()
 
