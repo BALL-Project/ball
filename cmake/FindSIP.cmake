@@ -29,6 +29,10 @@ ELSE(SIP_VERSION)
 
   # Use the path to the python installation as a hint for finding sip
   SET(SIP_POSSIBLE_INC_DIRS "${PYTHON_INCLUDE_PATH}")
+	EXECUTE_PROCESS ( COMMAND python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()"
+		OUTPUT_VARIABLE PYTHON_SITE_PACKAGES
+		OUTPUT_STRIP_TRAILING_WHITESPACE
+	)
 
   FIND_PATH(SIP_INCLUDE_DIR
     NAMES sip.h sip/sip.h Python/sip.h
@@ -45,7 +49,7 @@ ELSE(SIP_VERSION)
 	SET(CMAKE_FIND_LIBRARY_PREFIXES "")
   FIND_LIBRARY(SIP_LIBRARIES
     NAMES sip libsip
-    PATHS ${SIP_POSSIBLE_LIB_DIRS}
+    PATHS ${SIP_POSSIBLE_LIB_DIRS} ${PYTHON_SITE_PACKAGES}
     PATH_SUFFIXES lib dlls
     DOC "SIP module")
 	SET(CMAKE_FIND_LIBRARY_PREFIXES "${OLD_CMAKE_FIND_LIBRARY_PREFIXES}")
