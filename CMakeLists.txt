@@ -256,6 +256,11 @@ IF (MSVC)
 	SET(CMAKE_DEBUG_POSTFIX d)
 ENDIF()
 
+## mark header files as headers...
+SET_PROPERTY(SOURCE ${BALL_headers} APPEND PROPERTY HEADER_FILE_ONLY TRUE)
+IF (BALL_HAS_VIEW)
+	SET_PROPERTY(SOURCE ${VIEW_headers} APPEND PROPERTY HEADER_FILE_ONLY TRUE)
+ENDIF()
 ## add library target
 ## warning: set BUILD_SHARED_LIBS to decide if library is shared or static (see above)! 
 ## We need the BUILD_SHARED_LIBS flag to set declspec flags for MSVC!
@@ -270,7 +275,6 @@ ELSE()
 		ADD_LIBRARY(VIEW ${VIEW_sources} ${VIEW_headers})
 	ENDIF()
 ENDIF()
-#SET_TARGET_PROPERTIES(VIEW PROPERTIES LINKER_LANGUAGE CXX)
 
 ## all the dependency libraries are linked into libBALL.so, except Qt and CUDA which are still dynamic
 SET(BALL_DEP_LIBRARIES ${REGEX_LIBRARIES} ${XDR_LIBRARIES} ${GSL_LIBRARIES} ${FFTW_LIBRARIES} ${LPSOLVE_LIBRARIES} ${PYTHON_LIBRARIES})
