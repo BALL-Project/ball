@@ -260,14 +260,14 @@ ENDIF()
 ## warning: set BUILD_SHARED_LIBS to decide if library is shared or static (see above)! 
 ## We need the BUILD_SHARED_LIBS flag to set declspec flags for MSVC!
 IF (FOUND_CUDART AND MT_ENABLE_CUDA) # we need both conditions due to possible present cached entries
-	CUDA_ADD_LIBRARY(BALL ${BALL_sources} ${Cuda_sources})
+	CUDA_ADD_LIBRARY(BALL ${BALL_sources} ${BALL_headers} ${Cuda_sources})
 	IF (BALL_HAS_VIEW)
-		CUDA_ADD_LIBRARY(VIEW ${VIEW_sources} ${Cuda_sources})
+		CUDA_ADD_LIBRARY(VIEW ${VIEW_sources} ${VIEW_headers} ${Cuda_sources})
 	ENDIF()
 ELSE()
-	ADD_LIBRARY(BALL ${BALL_sources})
+	ADD_LIBRARY(BALL ${BALL_sources} ${BALL_headers})
 	IF (BALL_HAS_VIEW)
-		ADD_LIBRARY(VIEW ${VIEW_sources} ${Cuda_sources})
+		ADD_LIBRARY(VIEW ${VIEW_sources} ${VIEW_headers})
 	ENDIF()
 ENDIF()
 #SET_TARGET_PROPERTIES(VIEW PROPERTIES LINKER_LANGUAGE CXX)
