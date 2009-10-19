@@ -1,6 +1,11 @@
 #ifndef BALL_PLUGIN_PLUGINHANDLER_H
 #define BALL_PLUGIN_PLUGINHANDLER_H
 
+
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
+
 #include <list>
 #include <QtCore/QReadWriteLock>
 
@@ -19,7 +24,7 @@ namespace BALL
 	 * defining the plugin interface itsself that is needed to create
 	 * a new plugin api for BALL.
 	 */
-	class PluginHandler
+	class BALL_EXPORT PluginHandler
 	{
 		public:
 			/**
