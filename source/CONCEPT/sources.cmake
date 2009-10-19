@@ -9,6 +9,8 @@ SET(SOURCES_LIST
 	enumerator.C
 	factory.C
 	object.C
+	objectCreator.C
+	moleculeObjectCreator.C
 	persistenceManager.C
 	preferencesObject.C
 	processor.C
