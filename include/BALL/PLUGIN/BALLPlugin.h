@@ -1,6 +1,10 @@
 #ifndef BALL_PLUGIN_BALLPLUGIN_H
 #define BALL_PLUGIN_BALLPLUGIN_H
 
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
+
 #include <QtCore/QString>
 #include <QtCore/QtPlugin>
 #include <QtCore/QVariant>
@@ -13,7 +17,7 @@ namespace BALL
 
 	class PluginHandler;
 
-	class BALLPlugin
+	class BALL_EXPORT BALLPlugin
 	{
 		public:
 			virtual ~BALLPlugin() {}
