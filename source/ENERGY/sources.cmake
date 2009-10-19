@@ -10,14 +10,4 @@ SET(SOURCES_LIST
 	energyProcessor.C
 )	
 
-### add path to the filenames ###
-SET(SOURCES)
-FOREACH(i ${SOURCES_LIST})
-	LIST(APPEND SOURCES ${DIRECTORY}/${i})
-ENDFOREACH()
-
-### pass source file list to the upper instance ###
-SET(BALL_sources ${BALL_sources} ${SOURCES})
-
-### source group definition ###
-SOURCE_GROUP("Source Files\\ENERGY" FILES ${SOURCE})
+ADD_BALL_SOURCES("ENERGY" "${SOURCES_LIST}")
