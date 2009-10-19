@@ -115,7 +115,7 @@ namespace BALL
 				if(name.has(' '))
 				{
 					// spaces are not allowed in fragment names (would cause reading-errors)
-					name = "****";
+					name.substitute(" ","_");
 				}
 				substructure_name.push_back(name);
 			}
