@@ -165,6 +165,8 @@
 #define NOWINRES
 
 #define WINDOWS_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+
 #endif // BALL_OS_WINDOWS
 
 // Define whether the compiler provides an ANSI-compliant implementation
