@@ -18,7 +18,7 @@
 
 using namespace std;
 
-namespace BALL 
+namespace BALL
 {
 	MOL2File::MOL2File()
 		:	GenericMolFile(),
@@ -31,7 +31,7 @@ namespace BALL
 		throw(Exception::FileNotFound)
 		: GenericMolFile(name, open_mode),
 		  number_of_lines_(0),
-		  found_next_header_(0) 
+		  found_next_header_(0)
 	{
 	}
 
@@ -39,15 +39,15 @@ namespace BALL
 		throw(Exception::FileNotFound)
 		: GenericMolFile(file),
 		  number_of_lines_(0),
-		  found_next_header_(0) 
+		  found_next_header_(0)
 	{
 	}
 
 	MOL2File::~MOL2File()
-		
+
 	{
 	}
-	
+
 	// the Tripos record type identifier: RTI
 	const String MOL2File::TRIPOS = "@<TRIPOS>";
 	const Size MOL2File::MAX_LENGTH_ = 4096;
@@ -63,10 +63,10 @@ namespace BALL
 		// create a shorthand for the file of the MOL2File object
 		File& f = static_cast<File&>(*this);
 
-		
+
 		// write the molecule header
 		f << TRIPOS << "MOLECULE" << endl;
-		
+
 		// if the system name is empty...
 		String name = molecule.getName();
 		if (name == "")
@@ -76,9 +76,9 @@ namespace BALL
 		}
 		f << name << endl;
 
-		// determine the number of substructures (= fragments) 
+		// determine the number of substructures (= fragments)
 		// and hash the fragment pointers to a substructure ID (Position)
-		// the vector substr_names holds the assembled names of the 
+		// the vector substr_names holds the assembled names of the
 		// substructures
 		HashMap<const AtomContainer*, Position> substructure_map;
 		vector<String>	substructure_name;
@@ -89,14 +89,14 @@ namespace BALL
 		for (; +frag_it; ++frag_it)
 		{
 			if(&*frag_it==&molecule) continue;
-			
+
 			if(containsAtomChilds_(frag_it))
 			{
 				name = frag_it->getName();
 				// if the fragment is a residue...
 				const Residue* residue = dynamic_cast<const Residue*>(&*frag_it);
 				if (residue != 0)
-				{	
+				{
 					// ...append its ID (PDB ID) to the name. E.g.: ALA154
 					name = name + residue->getID();
 				}
@@ -108,10 +108,10 @@ namespace BALL
 					name = "****";
 				}
 
-				// store the name and the pointer 
+				// store the name and the pointer
 				substructure_map.insert(pair<const AtomContainer*, Position>(&*frag_it, (Size)substructure_name.size()));
 				substructure_pointers.push_back(&*frag_it);
-				
+
 				if(name.has(' '))
 				{
 					// spaces are not allowed in fragment names (would cause reading-errors)
@@ -120,7 +120,7 @@ namespace BALL
 				substructure_name.push_back(name);
 			}
 		}
-		
+
 
 		// count the bonds in the molecule
 		Atom::BondConstIterator bond_it;
@@ -133,7 +133,7 @@ namespace BALL
 
 		// write the number of atoms, bonds, and substructures
 		f << molecule.countAtoms() << " " << number_of_bonds << " " << substructure_name.size() << endl;
-		
+
 		String mol_type = "SMALL";
 		// if we are in a protein, set the molecule type to PROTEIN
 		if (RTTI::isKindOf<Protein>(molecule))
@@ -146,7 +146,7 @@ namespace BALL
 		{
 			mol_type = "PROTEIN";
 		}
-		
+
 		// write it the molecule type, the charge type, flags, and a comment line
 		f << mol_type << endl
 			<< "USER_CHARGES" << endl
@@ -167,7 +167,7 @@ namespace BALL
 			number_of_atoms++;
 			// remember this atom in the hash map
 			atom_map.insert(pair<const Atom*, Position>(&*atom_it, number_of_atoms));
-			
+
 			f << number_of_atoms << " ";
 			name = atom_it->getName();
 			name.trim();
@@ -177,8 +177,8 @@ namespace BALL
 				name = "****";
 			}
 			f << name << " "
-				<< atom_it->getPosition().x << " " 
-				<< atom_it->getPosition().y << " " 
+				<< atom_it->getPosition().x << " "
+				<< atom_it->getPosition().y << " "
 				<< atom_it->getPosition().z << " ";
 			name = getSybylType_(*atom_it);
 			name.trim();
@@ -188,20 +188,20 @@ namespace BALL
 				name = "****";
 			}
 			f	<< name << " ";
-			
+
 			// if the atom has a substructure, retrieve its name and ID
 			const AtomContainer* frag = dynamic_cast<const AtomContainer*>(atom_it->getParent());
 			if ((frag != 0) && substructure_map.has(frag))
 			{
 				f << substructure_map[frag] << " " << substructure_name[substructure_map[frag]] << " ";
 			}
-			else 
+			else
 			{
 				// write empty substructure ID and name
 				f << "1 **** ";
 			}
 
-			// write the charge	
+			// write the charge
 			f << atom_it->getCharge() << endl;
 		}
 		// done with the atom section.
@@ -217,8 +217,8 @@ namespace BALL
 				// check whether both atoms were written
 				if (atom_map.has(bond_it->getFirstAtom()) && atom_map.has(bond_it->getSecondAtom()))
 				{
-					
-					f << number_of_bonds << " " << atom_map[bond_it->getFirstAtom()] 
+
+					f << number_of_bonds << " " << atom_map[bond_it->getFirstAtom()]
 						<< " " << atom_map[bond_it->getSecondAtom()] << " ";
 
 					// determine the bond type
@@ -233,20 +233,20 @@ namespace BALL
 						case Bond::ORDER__SINGLE:		  f << "1"  << endl;
 					}
 				}
-				else 
+				else
 				{
 					// emit a warning
-					Log.warn() << "MOL2File::write: could not write bond from " 
-										<< bond_it->getFirstAtom()->getFullName() 
-										<< " to " << bond_it->getSecondAtom()->getFullName() 
-										<< " - not in system!" << endl;	
+					Log.warn() << "MOL2File::write: could not write bond from "
+										<< bond_it->getFirstAtom()->getFullName()
+										<< " to " << bond_it->getSecondAtom()->getFullName()
+										<< " - not in system!" << endl;
 				}
 			}
 		}
 
 		// write the substructure section
 		// iterate over all substructures and write the substructure parts
-		// 
+		//
 		for (Position i = 0; i < substructure_pointers.size(); i++)
 		{
 			f << TRIPOS << "SUBSTRUCTURE" << endl
@@ -254,7 +254,7 @@ namespace BALL
 				<< substructure_name[i] << " ";
 			Position root_atom = atom_map[&*(substructure_pointers[i]->beginAtom())];
 			f << root_atom;
-			if (RTTI::isKindOf<Residue>(*substructure_pointers[i]))	
+			if (RTTI::isKindOf<Residue>(*substructure_pointers[i]))
 			{
 				f << " RESIDUE";
 			}
@@ -271,8 +271,8 @@ namespace BALL
 				String type = set.is_static ? " STATIC " : " DYNAMIC ";
 
 				f << TRIPOS       << "SET" << endl
-					<< set.name     << type  << set.obj_type << " " 
-					<< set.sub_type << " "   << set.status   << " " 
+					<< set.name     << type  << set.obj_type << " "
+					<< set.sub_type << " "   << set.status   << " "
 					<< set.comment  << endl;
 
 				// is this a static set?
@@ -299,9 +299,9 @@ namespace BALL
 				f << np.getName() << "=" << np.toString() << endl;
 			}
 		}
-		
+
 		f << endl;
-		
+
 		// done with writing.
 		return true;
 	}
@@ -318,57 +318,57 @@ namespace BALL
 
 		// remember the line number for error messages
 		number_of_lines_ = 0;
-		
+
 		Molecule* mol;
-		
+
 		while((mol=read()))
 		{
 			system.insert(*mol);
 		}
-		
+
 		String name = getName(); // set system-name to file-name
 		int pos = name.find_last_of('/');
 		if(pos!=string::npos && name.size()>pos)
 		{
 			name = name.substr(pos+1);
 		}
-		system.setName(name); 
-		
+		system.setName(name);
+
 		return true;
 	}
-	
-	
-	
+
+
+
 	Molecule* MOL2File::read()
 		throw(Exception::ParseError)
-	{   
+	{
 		//reset the contents of the members
 		clear_();
 		int mol_ID=0;
-	
+
 		while (found_next_header_ || readLine())
 		{
 			getLine().toUpper();
-			
+
 			getLine().trim();
 			if (getLine().hasPrefix("#")) continue;
-			
+
 			while (startsWith(TRIPOS))
 			{
 				// we found a "Record Type Identifier" (RTI)
 				String RTI = getLine().after(TRIPOS);
 				RTI.trim();
-				
+
 				// interpret the RTI (at least the known ones)
 				if (RTI == "ATOM")
 				{
 					readAtomSection_();
-				} 
-				else if (RTI == "BOND") 
+				}
+				else if (RTI == "BOND")
 				{
 					readBondSection_();
-				}	
-				else if (RTI == "MOLECULE") 
+				}
+				else if (RTI == "MOLECULE")
 				{
 					// We have found the beginning of a new molecule !
 					if(mol_ID>0)
@@ -376,7 +376,7 @@ namespace BALL
 						Molecule* mol = new Molecule;
 						bool ok = buildAll_(*mol);
 						clear_();
-						if(!ok) 
+						if(!ok)
 						{
 							delete mol;
 							return NULL;
@@ -387,44 +387,44 @@ namespace BALL
 					found_next_header_=false;
 					readMoleculeSection_();
 					mol_ID++;
-				}	
-				else if (RTI == "SET") 
+				}
+				else if (RTI == "SET")
 				{
 					readSetSection_();
-				}	
-				else if (RTI == "SUBSTRUCTURE") 
+				}
+				else if (RTI == "SUBSTRUCTURE")
 				{
 					readSubstructureSection_();
-				} 
-				else if (RTI == "COMMENT") 
+				}
+				else if (RTI == "COMMENT")
 				{
 					readCommentSection_();
-				} 
-				else 
-				{	
+				}
+				else
+				{
 					// we found an unknown MOL2 section: print a warning message and ignore it!
-					Log.warn() << "MOL2File::read: section ignored in line " 
+					Log.warn() << "MOL2File::read: section ignored in line "
 					<< number_of_lines_ << ": " << RTI << endl;
 					readLine();
 				}
-				
+
 				getLine().toUpper();
 			}
 		}
-		
+
 		// interpret the section we already read from the file
 		Molecule* mol = new Molecule;
 		bool ok = buildAll_(*mol);
 		clear_();
-		if(!ok) 
+		if(!ok)
 		{
 			delete mol;
 			return NULL;
 		}
-		return mol;		
+		return mol;
 	}
-	
-				
+
+
 	bool MOL2File::write(const System& system)
 		throw(File::CannotWrite)
 	{
@@ -435,7 +435,7 @@ namespace BALL
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
 
@@ -452,13 +452,13 @@ namespace BALL
 				if (number_of_fields < 6)
 				{
 					throw(Exception::ParseError(__FILE__, __LINE__, getLine(), String("MOL2File::readAtomSection_: too few fields for an atom entry in line ") + String(getLineNumber())));
-				} 
-				else 
-				{	
+				}
+				else
+				{
 					// split the line into fields
 					String fields[10];
 					getLine().split(fields, 10);
-				
+
 					// create an atom and assign the fields of the line
 					AtomStruct	atom;
 					atom.name = fields[1];
@@ -474,9 +474,9 @@ namespace BALL
 					atoms_.push_back(atom);
 				}
 			}
-		}	
+		}
 	}
-			
+
 	void MOL2File::readBondSection_()
 	{
 		Size number_of_fields = 1;
@@ -489,10 +489,10 @@ namespace BALL
 			{
 				if (number_of_fields < 4)
 				{
-					Log.error() << "MOL2File::readBondSection_: too few fields for a bond entry in line " 
+					Log.error() << "MOL2File::readBondSection_: too few fields for a bond entry in line "
 											<< number_of_lines_ << endl;
-				} 
-				else 
+				}
+				else
 				{
 					// split the line into fields
 					String	fields[4];
@@ -503,14 +503,14 @@ namespace BALL
 					bond.atom1 = fields[1].toUnsignedInt();
 					bond.atom2 = fields[2].toUnsignedInt();
 					bond.type = fields[3];
-					
+
 					// remember this bond
 					bonds_.push_back(bond);
 				}
 			}
-		}	
+		}
 	}
-			
+
 	// TODO: handle backslash at end of line correctly!
 	void MOL2File::readSetSection_()
 	{
@@ -524,10 +524,10 @@ namespace BALL
 			{
 				if (number_of_fields < 3)
 				{
-					Log.error() << "MOL2File::readSetSection_: too few fields for a set entry in line " 
+					Log.error() << "MOL2File::readSetSection_: too few fields for a set entry in line "
 											<< number_of_lines_ << endl;
-				} 
-				else 
+				}
+				else
 				{
 					// split the line into fields
 					std::vector<String>	fields;
@@ -572,20 +572,20 @@ namespace BALL
 								set.static_members.push_back(getLine().getField(i).toInt());
 							}
 						}
-					} 
-					else 
-					{	
+					}
+					else
+					{
 						// we just read the rule without interpreting it
 						readLine();
 						set.dynamic_rule = getLine();
-					}					
+					}
 					// remember this set
 					sets_.push_back(set);
 				}
 			}
-		}	
+		}
 	}
-			
+
 	void MOL2File::readMoleculeSection_()
 	{
 		Size number_of_fields = 1;
@@ -640,10 +640,10 @@ namespace BALL
 					// ignore lines 3 - 5
 					;
 			}
-		}	
+		}
 	}
-	
-	
+
+
 	void MOL2File::readSubstructureSection_()
 	{
 		while (readLine() && (getLine().countFields() > 0) && !getLine().hasPrefix(TRIPOS))
@@ -665,7 +665,7 @@ namespace BALL
 				String dictionary_type = getLine().getField(4);
 				if (dictionary_type == "****")
 				{
-					sub.dictionary_type = 0;	
+					sub.dictionary_type = 0;
 				}
 				else
 				{
@@ -676,7 +676,7 @@ namespace BALL
 					catch (Exception::InvalidFormat& e)
 					{
 						sub.dictionary_type = 0;
-						Log.warn() << "MOL2File::read: error in field 5 of line " 
+						Log.warn() << "MOL2File::read: error in field 5 of line "
 											<< getLineNumber() << " of " << getName() << ": " << e << endl;
 					}
 				}
@@ -698,7 +698,7 @@ namespace BALL
 				catch (Exception::InvalidFormat& e)
 				{
 					sub.inter_bonds = 0;
-					Log.warn() << "MOL2File::read: error in field 8 of line " 
+					Log.warn() << "MOL2File::read: error in field 8 of line "
 										<< getLineNumber() << " of " << getName() << ": " << e << endl;
 				}
 			}
@@ -707,12 +707,12 @@ namespace BALL
 				sub.comment += getLine().getField(i) + " ";
 			}
 			sub.comment.trimRight();
-					
+
 			substructures_.push_back(sub);
-		}	
+		}
 	}
-	
-	
+
+
 	void MOL2File::readCommentSection_()
 	{
 		while (readLine() && (getLine().countFields() > 0) && !getLine().hasPrefix(TRIPOS))
@@ -723,8 +723,8 @@ namespace BALL
 				comment.name = ((String)getLine().before('=')).trim();
 				comment.value = ((String)getLine().after('=')).trim();
 				comments_.push_back(comment);
-			}	
-		}		
+			}
+		}
 	}
 
 	void MOL2File::clear_()
@@ -744,32 +744,32 @@ namespace BALL
 		comments_.clear();
 		sets_.clear();
 	}
-		
 
-	bool MOL2File::buildAll_(Molecule& molecule) 
+
+	bool MOL2File::buildAll_(Molecule& molecule)
 	{
 		// consistency check
 		if (atoms_.size() != molecule_.number_of_atoms)
 		{
-			Log.error() << "MOL2File::read: number of atoms in the MOLECULE section (" 
+			Log.error() << "MOL2File::read: number of atoms in the MOLECULE section ("
 									<< molecule_.number_of_atoms << ")"
-									<< " is not consistent with the contents of the ATOM section (" 
+									<< " is not consistent with the contents of the ATOM section ("
 									<< atoms_.size() << " atoms)!" << endl;
 			return false;
 		}
 		if (bonds_.size() != molecule_.number_of_bonds)
 		{
-			Log.error() << "MOL2File::read: number of bonds in the MOLECULE section (" 
+			Log.error() << "MOL2File::read: number of bonds in the MOLECULE section ("
 									<< molecule_.number_of_bonds << ")"
-									<< " is not consistent with the contents of the BOND section (" 
+									<< " is not consistent with the contents of the BOND section ("
 									<< bonds_.size() << " bonds)!" << endl;
 			return false;
 		}
 		if (substructures_.size() != molecule_.number_of_substructures)
 		{
-			Log.error() << "MOL2File::read: number of substructures in the MOLECULE section (" 
+			Log.error() << "MOL2File::read: number of substructures in the MOLECULE section ("
 									<< molecule_.number_of_substructures << ")"
-									<< " is not consistent with the contents of the SUBSTRUCTURE section (" 
+									<< " is not consistent with the contents of the SUBSTRUCTURE section ("
 									<< substructures_.size() << " substructures)!" << endl;
 			return false;
 		}
@@ -790,7 +790,7 @@ namespace BALL
 				Residue* residue= new Residue;
 				frag = static_cast<AtomContainer*>(residue);
 
-				// Sybyl stores the residue (PDB) ID in the 
+				// Sybyl stores the residue (PDB) ID in the
 				// residue name (e.g. ALA175)
 				RegularExpression re("[0-9][0-9A-Z]*$");
 				Substring ID;
@@ -825,7 +825,7 @@ namespace BALL
 			// store the pointer to this substructure
 			sub_ptr[i] = frag;
  		}
-		
+
 
 		// construct the atoms
 		vector<Atom*> atom_ptr(atoms_.size());
@@ -840,7 +840,7 @@ namespace BALL
 			atom->setCharge(atoms_[i].charge);
 
 			// Try to assign the element. MOL2 format
-      // usually has type names like O.2 or C.ar, so 
+      // usually has type names like O.2 or C.ar, so
 			// we use the portion before the dot or the complete
 			// name if there's no dot in the name. PTE will translate
 			// it to the correct element or Element::UNKNOWN otherwise.
@@ -852,7 +852,7 @@ namespace BALL
 			{
 				atom->setElement(PTE[atoms_[i].type]);
 			}
-			
+
 			// store the atom pointer for bond construction
 			atom_ptr[i] = atom;
 		}
@@ -862,10 +862,10 @@ namespace BALL
 		{
 			if ((bonds_[i].atom1 > atom_ptr.size()) || (bonds_[i].atom2 > atom_ptr.size()))
 			{
-				Log.error() << "MOL2File::read: cannot build bond between atoms " 
+				Log.error() << "MOL2File::read: cannot build bond between atoms "
 					<< bonds_[i].atom1 << " and " << bonds_[i].atom2 << endl;
 			}
-			else 
+			else
 			{
 				Bond* bond = atom_ptr[bonds_[i].atom1 - 1]->createBond(*atom_ptr[bonds_[i].atom2 - 1]);
 				if (bonds_[i].type == "ar")
@@ -901,14 +901,14 @@ namespace BALL
 		if (substructures_.size() == 0)
 		{
 			for (i = 0; i < atom_ptr.size(); i++)
-			{	
+			{
 				molecule.insert(*atom_ptr[i]);
 			}
 		}
 		else
-		{	
+		{
 			// Otherwise, insert all atoms into their proper substructures.
-			
+
 			// make sure that no substructures with id 0 occur. these would lead to a memory leak later, since we
 			// rely on MOL2 starting with substructure id 1 (see bug #48)
 			// we need an extra loop that cannot be merged with the following one, since all ids must be adapted
@@ -924,7 +924,7 @@ namespace BALL
 			}
 
 			for (i = 0; i < atoms_.size(); i++)
-			{	
+			{
 				// MOL2 starts counting at 1, we start at zero, ergo: > instead of >=.
 				if (atoms_[i].substructure > sub_ptr.size())
 				{
@@ -945,15 +945,15 @@ namespace BALL
 				molecule.insert(*sub_ptr[i]);
 			}
 		}
-		
+
 		// create NamedProperties (if any)
 		for(uint i=0; i<comments_.size(); i++)
 		{
-			molecule.setProperty(comments_[i].name, comments_[i].value);	
+			molecule.setProperty(comments_[i].name, comments_[i].value);
 		}
-		
+
 		molecule.setName(molecule_.name);
-		
+
 		return read_anything;
 	}
 
@@ -962,7 +962,7 @@ namespace BALL
 		// the basename of Sybyl name is always the element
 		// and a trailing dot
 		String name = atom.getElement().getSymbol();
-		
+
 		// if there's more than one bond, add the number of
 		// bonds and a dot as separator
 		if (atom.countBonds() > 1)
@@ -970,7 +970,7 @@ namespace BALL
 			name = name + ".";
 			name = name + String(atom.countBonds());
 		}
-		
+
 		return name;
 	}
 
@@ -988,7 +988,7 @@ namespace BALL
 	}
 
 	const MOL2File& MOL2File::operator = (const MOL2File& file)
-		
+
 	{
 		atoms_		     = file.atoms_;
 		bonds_		     = file.bonds_;
@@ -1002,7 +1002,7 @@ namespace BALL
 			buffer_[i] = file.buffer_[i];
 		}
 		line_ = file.line_;
-	
+
 		GenericMolFile::operator = (file);
 		return *this;
 	}

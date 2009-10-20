@@ -19,14 +19,14 @@
 # include <BALL/KERNEL/atomContainer.h>
 #endif
 
-namespace BALL 
+namespace BALL
 {
 	class Atom;
 	class System;
 
 	/**	SYBYL MOL2 file class.
 			This class is used to read and write SYBYL MOL2 files (Tripos).	 \par
-			
+
     	\ingroup  StructureFormats
 	*/
 	class BALL_EXPORT MOL2File
@@ -48,16 +48,16 @@ namespace BALL
 			vector<Index>	 static_members;
 			String         dynamic_rule;
 		};
-		
-		/**	@name	Constants	
+
+		/**	@name	Constants
 		*/
 		//@{
-			
+
 		/**	Tripos Record Type Identifier (RTI)
 		*/
 		static const String TRIPOS;
 		//@}
-		
+
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
@@ -80,29 +80,29 @@ namespace BALL
 		/// Destructor
 		virtual ~MOL2File()
 			;
-		
+
 		//@}
 
 		/**	@name Reading and Writing of Kernel Datastructures
 		*/
 		//@{
-		
+
 		/**	Write a system to the MOL2 file
 		*/
 		virtual bool write(const System& system)
 			throw(File::CannotWrite);
-		
+
 		/**	Read a system from the MOL2 file
 		*/
 		virtual bool read(System&	system)
 			throw(Exception::ParseError);
 
-		/**	
+		/**
 		*/
 		virtual Molecule* read()
 			throw(Exception::ParseError);
 
-		/**	
+		/**
 		*/
 		virtual bool write(const Molecule& molecule)
 			throw(File::CannotWrite);
@@ -122,7 +122,7 @@ namespace BALL
 		//@}
 
 		protected:
-		
+
 		void readAtomSection_();
 
 		void readBondSection_();
@@ -132,15 +132,15 @@ namespace BALL
 		void readSetSection_();
 
 		void readSubstructureSection_();
-		
+
 		void readCommentSection_();
 
 		String getSybylType_(const Atom& atom) const;
 
 		bool nextLine_();
-		
+
 		void clear_();
-		
+
 		bool buildAll_(Molecule& molecule);
 
 		bool containsAtomChilds_(AtomContainerConstIterator& frag_it);
@@ -186,14 +186,14 @@ namespace BALL
 			Size				inter_bonds;
 			String			comment;
 		};
-		
+
 		BALL_EXPORT struct CommentStruct
 		{
 			String name;
 			String value;
 		};
 
-			
+
 		vector<AtomStruct>					atoms_;
 		vector<BondStruct>					bonds_;
 		vector<SetStruct>						sets_;
