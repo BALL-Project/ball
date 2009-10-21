@@ -49,6 +49,7 @@ namespace BALL
 				/** The file name for the space group to symmetry operations mappings file
 				 */
 				static const char* SPACE_GROUP_FILE;
+				static const char* SPACE_GROUP_LIST_FILE;
 			};
 			
 			/** Default Names
@@ -58,6 +59,7 @@ namespace BALL
 				/** The default filename for the space group mappings file
 				 */
 				static const char* SPACE_GROUP_FILE;
+				static const char* SPACE_GROUP_LIST_FILE;
 			};
 
 			//@}

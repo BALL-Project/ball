@@ -1,0 +1,236 @@
+P 1	1
+P -1	2
+P 2	2
+P 1 21 1	2
+P 21	2
+C 1 2 1	4
+C 2	4
+P M	2
+P C	2
+C M	4
+C C	4
+P 2/M	4
+P 21/M	4
+C 2/M	8
+P 2/C	4
+P 21/C	4
+C 2/C	8
+P 2 2 2	4
+P 2 2 21	4
+P 21 21 2	4
+P 21 21 21	4
+C 2 2 21	8
+C 2 2 2	8
+F 2 2 2	16
+I 2 2 2	8
+I 21 21 21	8
+P M M 2	4
+P M C 21	4
+P C C 2	4
+P M A 2	4
+P C A 21	4
+P N C 2	4
+P M N 21	4
+P B A 2	4
+P N A 21	4
+P N N 2	4
+C M M 2	8
+C M C 21	8
+C C C 2	8
+A M M 2	8
+A B M 2	8
+A M A 2	8
+A B A 2	8
+F M M 2	16
+F D D 2	16
+I M M 2	8
+I B A 2	8
+I M A 2	8
+P M M M	8
+P N N N	8
+P C C M	8
+P B A N	8
+P M M A	8
+P N N A	8
+P M N A	8
+P C C A	8
+P B A M	8
+P C C N	8
+P B C M	8
+P N N M	8
+P M M N	8
+P B C N	8
+P B C A	8
+P N M A	8
+C M C M	16
+C M C A	16
+C M M M	16
+C C C M	16
+C M M A	16
+C C C A	16
+F M M M	32
+F D D D	32
+I M M M	16
+I B A M	16
+I B C A	16
+I M M A	16
+P 4	4
+P 41	4
+P 42	4
+P 43	4
+I 4	8
+I 41	8
+P -4	4
+I -4	8
+P 4/M	8
+P 42/M	8
+P 4/N	8
+P 42/N	8
+I 4/M	16
+I 41/A	16
+P 4 2 2	8
+P 4 21 2	8
+P 41 2 2	8
+P 41 21 2	8
+P 42 2 2	8
+P 42 21 2	8
+P 43 2 2	8
+P 43 21 2	8
+I 4 2 2	16
+I 41 2 2	16
+P 4 M M	8
+P 4 B M	8
+P 42 C M	8
+P 42 N M	8
+P 4 C C	8
+P 4 N C	8
+P 42 M C	8
+P 42 B C	8
+I 4 M M	16
+I 4 C M	16
+I 41 M D	16
+I 41 C D	16
+P -4 2 M	8
+P -4 2 C	8
+P -4 21 M	8
+P -4 21 C	8
+P -4 M 2	8
+P -4 C 2	8
+P -4 B 2	8
+P -4 N 2	8
+I -4 M 2	16
+I -4 C 2	16
+I -4 2 M	16
+I -4 2 D	16
+P 4/M M M	16
+P 4/M C C	16
+P 4/N B M	16
+P 4/N N C	16
+P 4/M B M	16
+P 4/M N C	16
+P 4/N M M	16
+P 4/N C C	16
+P 42/M M C	16
+P 42/M C M	16
+P 42/N B C	16
+P 42/N N M	16
+P 42/M B C	16
+P 42/M N M	16
+P 42/N M C	16
+P 42/N C M	16
+I 4/M M M	32
+I 4/M C M	32
+I 41/A M D	32
+I 41/A C D	32
+P 3	3
+P 31	3
+P 32	3
+R 3	9
+P -3	6
+R -3	18
+P 3 1 2	6
+P 3 2 1	6
+P 31 1 2	6
+P 31 2 1	6
+P 32 1 2	6
+P 32 2 1	6
+R 3 2	18
+P 3 M 1	6
+P 3 1 M	6
+P 3 C 1	6
+P 3 1 C	6
+R 3 M	18
+R 3 C	18
+P -3 1 M	12
+P -3 1 C	12
+P -3 M 1	12
+P -3 C 1	12
+R -3 M	36
+R -3 C	36
+P 6	6
+P 61	6
+P 65	6
+P 62	6
+P 64	6
+P 63	6
+P 6/M	12
+P 63/M	12
+P 6 2 2	12
+P 61 2 2	12
+P 65 2 2	12
+P 62 2 2	12
+P 64 2 2	12
+P 63 2 2	12
+P 6 M M	12
+P 6 C C	12
+P 63 C M	12
+P 63 M C	12
+P -6 M 2	12
+P -6 C 2	12
+P -6 2 M	12
+P -6 2 C	12
+P 6/M M M	24
+P 6/M C C	24
+P 63/M C M	24
+P 63/M M C	24
+P 2 3	12
+F 2 3	48
+I 2 3	24
+P 21 3	12
+I 21 3	24
+P M -3	24
+P N -3	24
+F M -3	96
+F D -3	96
+I M -3	48
+P A -3	24
+I A -3	48
+P 4 3 2	24
+P 42 3 2	24
+F 4 3 2	96
+F 41 3 2	96
+I 4 3 2	48
+P 43 3 2	24
+P 41 3 2	24
+I 41 3 2	48
+P -4 3 M	24
+F 4 -3 M	96
+I -4 3 M	48
+P -4 3 N	24
+F -4 3 C	96
+I -4 3 D	48
+P M -3 M	48
+P N -3 N	48
+P M -3 N	48
+P N -3 M	48
+F M -3 M	192
+F M -3 C	192
+F D -3 M	192
+F D -3 C	192
+I M -3 M	96
+I A -3 D	96
+B 2	4
+P 1 1 21	2
+P 2 21 21	4
+P 21 2 21	4
+I 1 2 1	4

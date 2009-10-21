@@ -10,7 +10,9 @@ using namespace std;
 namespace BALL
 {
 	const char* CrystalInfo::Option::SPACE_GROUP_FILE = "filename";
-	const char* CrystalInfo::Default::SPACE_GROUP_FILE = "XRAY/spacegroups.dat";
+	const char* CrystalInfo::Default::SPACE_GROUP_FILE = "XRAY/spacegroups-details.dat";
+	const char* CrystalInfo::Option::SPACE_GROUP_LIST_FILE = "filename";
+	const char* CrystalInfo::Default::SPACE_GROUP_LIST_FILE = "XRAY/spacegroups-list.dat";
 
 	CrystalInfo::CrystalInfo()
 		:	space_group_("P 1"),
