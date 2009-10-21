@@ -41,6 +41,10 @@
 # include <BALL/VIEW/DIALOGS/assignBondOrderResultsDialog.h>
 #endif
 
+#ifndef BALL_VIEW_DIALOGS_GENERaTECRYSTALDIALOG_H
+# include <BALL/VIEW/DIALOGS/generateCrystalDialog.h>
+#endif
+
 #ifndef BALL_MOLMEC_AMBER_AMBER_H
 # include <BALL/MOLMEC/AMBER/amber.h>
 #endif
@@ -293,6 +297,9 @@ namespace BALL
 			/// Build a Peptide from a amino acid sequence
 			void buildPeptide();
 
+			/// Build a crystal packing for a loaded system
+			void generateCrystal();
+			
 			/// Calculate the H-Bonds for a Protein
 			void calculateHBonds();
 
@@ -372,6 +379,7 @@ namespace BALL
 			QAction* setup_ff_;
 			QAction* calculate_ramachandran_;
 			QAction* menu_FPDB_;
+			QAction* generate_crystal_;
 
 			AmberFF 										amber_;
 			CharmmFF										charmm_;
@@ -385,6 +393,7 @@ namespace BALL
 			AssignBondOrderConfigurationDialog 	bond_order_dialog_;
 			AssignBondOrderResultsDialog				bond_order_results_dialog_;
 			Position 														force_field_id_;
+			GenerateCrystalDialog				generate_crystal_dialog_;
 		};
 
 	} // namespace VIEW

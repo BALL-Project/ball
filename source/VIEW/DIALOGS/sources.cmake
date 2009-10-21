@@ -21,6 +21,7 @@ SET(UI_LIST
 	displayProperties.ui
 	fieldLinesDialog.ui
 	FDPBDialog.ui
+	generateCrystalDialog.ui
 	gridColorWidget.ui
 	gridVisualizationDialog.ui
 	labelDialog.ui
@@ -75,6 +76,7 @@ SET(SOURCES_LIST
 	displayProperties.C
 	fieldLinesDialog.C
 	FDPBDialog.C
+	generateCrystalDialog.C
 	gridVisualizationDialog.C
 	labelDialog.C
 	lightSettings.C

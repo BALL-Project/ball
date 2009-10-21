@@ -1,8 +1,3 @@
-/* TRANSLATOR BALL::VIEW::MolecularStructure
-
-		Necessary for lupdate.
-*/
-
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
@@ -12,6 +7,7 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/DIALOGS/peptideDialog.h>
+#include <BALL/VIEW/DIALOGS/generateCrystalDialog.h>
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
 
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
@@ -61,7 +57,8 @@ namespace BALL
 				md_dialog_(parent),
 				fdpb_dialog_(0),
 				bond_order_dialog_(parent),
-				bond_order_results_dialog_(parent)
+				bond_order_results_dialog_(parent),
+				generate_crystal_dialog_(parent)
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "New MolecularStructure " << this << std::endl;
@@ -93,6 +90,12 @@ namespace BALL
 																					tr("Build a peptide from selected amino acids."), 
 																					UIOperationMode::MODE_ADVANCED);
 
+			description = "Shortcut|Build|Generate_Crystal";
+			build_bonds_id_ = insertMenuEntry(MainControl::BUILD, tr("&Generate Crystal"), this, 
+																				SLOT(generateCrystal()), description, QKeySequence("Ctrl+Alt+G"), 
+																				tr("Generate a crystal packing."), 
+																				UIOperationMode::MODE_ADVANCED);
+			
 			description = "Shortcut|Build|Build_Bonds";
 			build_bonds_id_ = insertMenuEntry(MainControl::BUILD, tr("&Build Bonds"), this, 
 																				SLOT(buildBonds()), description, QKeySequence("Ctrl+B"), 
@@ -1564,7 +1567,52 @@ namespace BALL
 			getMainControl()->insert(*system, dialog.getSequence());
 			setStatusbarText((String)tr("  > build peptide ") + Peptides::GetSequence(*protein), true);
 		}
+		
+		void MolecularStructure::generateCrystal()
+		{
+			// Make sure we only perform one crystal generation at a time.
+			if (getMainControl()->isBusy())
+			{
+				Log.error() << (String)tr("Please, be patient. Another task is still in progress") << std::endl;
+				return;
+			}
+			
+			if (getMainControl()->getMolecularControlSelection().size() == 0) 
+			{
+				setStatusbarText((String)tr("Please highlight exactly one AtomContainer!"), true);
+				return;
+			}
+			
+			setStatusbarText("  > " + (String)tr("Crystal generation in progress") + " ...", true);
+			
+			// Retrieve the selected atom container and abort if nothing is selected.
+			list<AtomContainer*> containers;
+			list<Composite*> highl = getMainControl()->getMolecularControlSelection();
+			list<Composite*>::iterator lit = highl.begin();
+			for (; lit != highl.end(); ++lit)
+			{
+				AtomContainer* ac = dynamic_cast<AtomContainer*>(*lit);
+				if (ac != 0) containers.push_back(ac);
+			}
 
+			if (containers.size() != 1) 
+			{
+				setStatusbarText((String)tr("Please highlight exactly one AtomContainer!"), true);
+				return;
+			}
+
+			// Execute the assign bond order dialog
+			// and abort if cancel is clicked or nonsense arguments are given
+			if (!generate_crystal_dialog_.exec())
+			{
+					return;
+			}
+
+// 			GenerateCrystalDialog dialog(this, ((String)tr("CrystalDialog")).c_str());
+// 			dialog.exec();
+			
+		}
+		
 		void MolecularStructure::showAmberForceFieldOptions()
 		{
 			amber_dialog_.raise();
