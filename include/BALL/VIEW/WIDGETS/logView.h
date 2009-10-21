@@ -49,7 +49,7 @@ namespace BALL
 		/** LogView class.
 				The class LogView records all messages sent to the  \link BALL::LogStream Log \endlink  object and
 				displays them as a text history. The class is derived from 
-				<b> NotificationTarget<LogStreamNotifier></b> that provides the connection
+				<b> LogStreamNotifier </b> that provides the connection
 				to the  \link BALL::LogStream Log \endlink  object. The class  QTextEdit from the 
 				qt - library is responsible for the visualization of the text history.
 				Use the class LogView as a widget. There are no initializations necessary.
