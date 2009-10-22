@@ -5,9 +5,10 @@
 //
 
 #include <Python.h>
-#include <sip.h>
 
 #include <BALL/PYTHON/pyInterpreter.h>
+#include <BALL/PYTHON/BALLPythonConfig.h>
+
 #include <BALL/FORMAT/lineBasedFile.h>
 
 namespace BALL
@@ -173,12 +174,12 @@ namespace BALL
 		String imported_sip_version = run("import sip", valid_);
 		imported_sip_version = run("print(sip.SIP_VERSION_STR)", valid_).trim();
 
-		if (imported_sip_version != SIP_VERSION_STR)
+		if (imported_sip_version != BALL_SIP_VERSION_STR)
 		{
 			String sip_module_path = run("print(sip)", valid_).trim();
 
 			error_message_ += "ERROR: Version of imported sip module does not match the expected version!\n";
-			error_message_ += "got (from " + sip_module_path + ") " + imported_sip_version + ", expected " + SIP_VERSION_STR +"\n";
+			error_message_ += "got (from " + sip_module_path + ") " + imported_sip_version + ", expected " + BALL_SIP_VERSION_STR +"\n";
 			
 			Log.error() << error_message_ << std::endl;
 
