@@ -29,7 +29,7 @@ ELSE(SIP_VERSION)
 
   # Use the path to the python installation as a hint for finding sip
   SET(SIP_POSSIBLE_INC_DIRS "${PYTHON_INCLUDE_PATH}")
-	EXECUTE_PROCESS ( COMMAND python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()"
+	EXECUTE_PROCESS ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()"
 		OUTPUT_VARIABLE PYTHON_SITE_PACKAGES
 		OUTPUT_STRIP_TRAILING_WHITESPACE
 	)
