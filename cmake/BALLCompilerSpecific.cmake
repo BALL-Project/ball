@@ -55,7 +55,7 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 	ADD_DEFINITIONS(-Wall -Wextra -Wno-long-long)
 
 	IF(USE_PEDANTIC)
-		ADD_DEFINITIONS(--pedantic)
+		ADD_DEFINITIONS(-pedantic)
 	ENDIF()
 
 	## Recommended setting for eclipse, see http://www.cmake.org/Wiki/CMake:Eclipse
