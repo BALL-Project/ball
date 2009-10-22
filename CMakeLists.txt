@@ -218,8 +218,6 @@ IF (BALL_PYTHON_SUPPORT)
 	ENDIF()
 ENDIF()
 
-ADD_SUBDIRECTORY(source/PYTHON/EXTENSIONS)
-
 ## On Windows, we need a seperate regex2-lib
 IF (WIN32)
 	FIND_LIBRARY(REGEX_LIBRARIES
@@ -326,6 +324,10 @@ TARGET_LINK_LIBRARIES(VIEW BALL
                            ${QT_QTGUI_LIBRARY}
                            ${QT_QTTEST_LIBRARY}
                            ${QT_QTOPENGL_LIBRARY})
+
+## add targets for Python modules
+ADD_SUBDIRECTORY(source/PYTHON/EXTENSIONS)
+
 ## add BALLView target
 ADD_SUBDIRECTORY(source/APPLICATIONS/BALLVIEW)
 
