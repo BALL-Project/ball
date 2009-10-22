@@ -70,7 +70,7 @@ IF (XDR_HAS_RPC_TYPES_H AND XDR_HAS_RPC_XDR_H)
 		SET(XDR_FOUND TRUE)
 
 		## Let's see if we have an implementation for xdr_u_hyper
-		IF (${XDR_LIBRARIES})
+		IF (XDR_LIBRARIES)
 			CHECK_LIBRARY_EXISTS(${XDR_LIBRARIES} xdr_u_hyper "" BALL_HAS_XDR_U_HYPER)
 		ELSE()
 			CHECK_FUNCTION_EXISTS(xdr_u_hyper BALL_HAS_XDR_U_HYPER)
