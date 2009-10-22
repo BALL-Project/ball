@@ -40,11 +40,7 @@
 #include <BALL/VIEW/KERNEL/serverWidget.h>
 #endif
 
-#ifdef BALL_COMPILER_MSVC
-# include "ui_aboutDialog.h"
-#else
-# include "aboutDialog.h"
-#endif
+#include "ui_aboutDialog.h"
 
 // NOTE: this does not yet work correctly on windows
 #ifndef BALL_COMPILER_MSVC
