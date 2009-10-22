@@ -69,7 +69,7 @@ ELSE()
 	MESSAGE(FATAL_ERROR "BALL_BUILD_TYPE must be 'Debug' or 'Release'!")
 ENDIF()
 
-SET(BALL_CONTRIB_PATH "" CACHE STRING "Path to the contrib directory, if installed (optional)")
+SET(BALL_CONTRIB_PATH "" CACHE PATH "Path to the contrib directory, if installed (optional)")
 SET(CMAKE_PREFIX_PATH ${BALL_CONTRIB_PATH} ${CMAKE_PREFIX_PATH})
 
 SET(CMAKE_REQUIRED_INCLUDES ${BALL_CONTRIB_PATH}/include ${CMAKE_REQUIRED_INCLUDES})
