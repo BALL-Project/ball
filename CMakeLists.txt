@@ -206,6 +206,8 @@ IF (BALL_PYTHON_SUPPORT)
 		IF (PYTHONLIBS_FOUND)
 			BALL_COMBINE_LIBS(PYTHON_LIBRARIES "${PYTHON_LIBRARIES}" "${PYTHON_DEBUG_LIBRARIES}")
 			FIND_PACKAGE(SIP)
+			SET(BALL_SIP_VERSION ${SIP_VERSION})
+			SET(BALL_SIP_VERSION_STR ${SIP_VERSION_STR})
 		ENDIF()
 	ENDIF()
 
@@ -233,6 +235,10 @@ ENDIF()
 ## replace any variables in config.h.in with current values
 SET(CONFIGURED_CONFIG_H ${PROJECT_BINARY_DIR}/include/BALL/CONFIG/config.h)
 CONFIGURE_FILE(cmake/config.h.in ${CONFIGURED_CONFIG_H})
+
+## build a config.h file for the python support to not disturb the
+## rest of BALL
+CONFIGURE_FILE(cmake/BALLPythonConfig.h.in ${PROJECT_BINARY_DIR}/include/BALL/PYTHON/BALLPythonConfig.h)
 
 ADD_DEFINITIONS(${BALL_DEFINITIONS})
 
