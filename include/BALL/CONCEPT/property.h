@@ -288,6 +288,9 @@ namespace BALL
 		*/
 		bool operator != (const NamedProperty& np) const;
 
+		/** copy operator */
+		void operator = (const NamedProperty& np);
+
 		//@}
 
 		private:
