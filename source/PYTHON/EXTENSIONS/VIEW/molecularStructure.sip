@@ -47,4 +47,7 @@ class  MolecularStructure
   void showCharmmForceFieldOptions();
 	void calculateFDPB(bool = true);
   ~MolecularStructure() throw();
+
+	private:
+		const MolecularStructure& operator=(const MolecularStructure&);
 };

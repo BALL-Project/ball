@@ -122,5 +122,7 @@ class ResourceFile
   // bool apply(UnaryProcessor<Entry>& processor);
   // static bool applyChildren(Entry& entry, UnaryProcessor<Entry>& processor);
   // typedef Entry::Iterator Iterator;
+	private:
+		const ResourceFile& operator=(const ResourceFile&);
 };
   
