@@ -59,6 +59,19 @@ namespace BALL
 			}
 		pm.writeObjectTrailer(name);
 	}
+
+
+	void NamedProperty::operator = (const NamedProperty& np)
+	{
+		clear();
+		name_ = np.name_;
+		type_ = np.type_;
+		if(type_ == STRING)
+		{
+			data_ = new string(np.getString());
+		}
+		else data_ = np.data_;
+	}
 	
 	void NamedProperty::persistentRead(PersistenceManager& pm)
 		throw(Exception::GeneralException)
