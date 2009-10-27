@@ -13,6 +13,9 @@ class AtomType
 %End
 	public:
 %ConvertToTypeCode
+	if (sipIsErr == NULL)
+		return PyInt_Check(sipPy) || BALL_CAN_CONVERT_TO_INSTANCE(sipPy, Atom);
+
 	if (PyInt_Check(sipPy))
 	{
 		*sipCppPtr = new AtomType(PyInt_AS_LONG(sipPy));

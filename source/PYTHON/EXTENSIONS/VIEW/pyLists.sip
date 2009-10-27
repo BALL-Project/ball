@@ -10,6 +10,8 @@
 %End
 
 %ConvertToTypeCode
+	//The following line is to work around an oddity (bug) in the preprocessor.
+	sipIsErr == 0 || sipPy == 0;
 	if (sipCppPtr == 0) return 0;
 	BALL_CONVERT_LIST_TO(Representation)
 %End
@@ -27,6 +29,8 @@
 %End
 
 %ConvertToTypeCode
+	//The following line is to work around an oddity (bug) in the preprocessor.
+	sipIsErr == 0 || sipPy == 0;
 	if (sipCppPtr == 0) return 0;
 	BALL_CONVERT_LIST_TO(GeometricObject)
 %End
