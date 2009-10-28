@@ -63,6 +63,8 @@ namespace BALL
 
 	void NamedProperty::operator = (const NamedProperty& np)
 	{
+		if(&np == this) return; // thou shalt not copy yourself!
+		
 		clear();
 		name_ = np.name_;
 		type_ = np.type_;
