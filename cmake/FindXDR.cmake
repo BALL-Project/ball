@@ -18,7 +18,7 @@ INCLUDE(CheckLibraryExists)
 #check for the XDR functions: their interface and the libraries they're hidden in.
 CHECK_INCLUDE_FILE_CXX(rpc/types.h XDR_HAS_RPC_TYPES_H)
 IF(NOT XDR_HAS_RPC_TYPES_H)
-    MESSAGE(SEND_ERROR "Cannot find RPC headers (rpc/types.h). Persistence will be disabled!")
+    MESSAGE(STATUS "Cannot find RPC headers (rpc/types.h). Persistence will be disabled!")
 ELSE()
 	CHECK_CXX_SOURCE_COMPILES("#include <rpc/types.h>
 		#include <rpc/xdr.h>
