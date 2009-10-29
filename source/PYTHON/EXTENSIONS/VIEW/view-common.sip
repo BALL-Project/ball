@@ -94,6 +94,12 @@ enum ModelType
 	/// defines the property for the model: proximity light
 	MODEL_PROXIMITY_LIGHT,
 
+	///
+	MODEL_PLANE,
+
+	///
+	MODEL_SPHERE,
+
 	/// unkown property
 	MODEL_UNKNOWN = 200
 };

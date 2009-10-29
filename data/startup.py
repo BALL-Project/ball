@@ -341,6 +341,7 @@ def addPlane(plane_specifier, height, boundary, bottom = True):
   #
   r = Representation()
   r.insert(plane)
+  r.setModelType(MODEL_PLANE)
   #
   getMainControl().insert(r)
   getMainControl().update(r)
