@@ -36,12 +36,16 @@
 # include <boost/unordered_map.hpp>
 #endif
 
-#elif defined(BALL_EXT_INCLUDE_PREFIX)
+#elif defined(BALL_HAS_HASH_MAP)
+#if defined(BALL_EXT_INCLUDE_PREFIX)
 # include <ext/hash_map>
 # include <ext/hash_fun.h>
 #else
 # include <hash_map>
 # include <hash_fun.h>
+#endif
+#else
+# include <map>
 #endif
 
 #if defined(BALL_HAS_UNORDERED_MAP) && !defined(BALL_HAS_BOOST_UNORDERED_MAP)

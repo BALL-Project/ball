@@ -263,8 +263,10 @@ class String
 
 	long __hash__();
 %MethodCode
+#if defined(BALL_HAS_UNORDERED_MAP) || defined(BALL_HAS_HASH_MAP)
 	BALL_MAP_NAMESPACE::hash<String> h;
 	sipRes = h(*sipCpp);
+#endif
 %End
 
 
