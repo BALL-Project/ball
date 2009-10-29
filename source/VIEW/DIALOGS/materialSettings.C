@@ -50,6 +50,8 @@ namespace BALL
 			connect( reflectiveness_color_button, SIGNAL(clicked()), this, SLOT( editReflectivenessColor() ) );
 
 			registerWidgets_();
+
+			rendererChanged();
 		}
 
 

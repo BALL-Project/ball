@@ -1171,6 +1171,8 @@ namespace BALL
 
 			readLights_(inifile);
 			light_settings_->updateFromStage();
+
+			material_settings_->rendererChanged();
 		}
 
 		void Scene::initializePreferencesTab(Preferences &preferences)
