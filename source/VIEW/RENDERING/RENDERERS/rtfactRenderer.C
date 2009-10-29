@@ -5,7 +5,6 @@
 #include <BALL/VIEW/RENDERING/RENDERERS/rtfactRenderer.h>
 
 #include <RTfact/Config/Init.hpp>
-#include <RTfact/Utils/Transform.hpp>
 
 #include <QtGui/QImage>
 
@@ -14,8 +13,7 @@
 using RTfact::Vec3f;
 using RTfact::Remote::GroupHandle;
 using RTfact::Remote::GeoHandle;
-using RTfact::Transform;
-using RTfact::Matrix4f;
+using RTfact::Remote::Transform;
 using RTfact::Remote::float3;
 using RTfact::Remote::RTAppearanceHandle;
 
@@ -283,8 +281,24 @@ namespace BALL
 					Vector3 const& sphere_pos = sphere.getPosition();
 					float radius = sphere.getRadius();
 
-					GroupHandle sphereGroup = m_renderer.createGroup(  Transform::translation(sphere_pos.x, sphere_pos.y, sphere_pos.z)
-							*Transform::scale(Vec3f<1>(radius, radius, radius)));
+					const float mat[16] = {
+						radius, 0, 0, 0,
+						0, radius, 0, 0,
+						0, 0, radius, 0,
+						sphere_pos.x, sphere_pos.y, sphere_pos.z, 1};
+
+					float inv_radius = 1./radius;
+
+					const float inv_mat[16] = {
+						inv_radius, 0, 0, 0,
+						0, inv_radius, 0, 0,
+						0, 0, inv_radius, 0,
+						-sphere_pos.x, -sphere_pos.y, -sphere_pos.z, 1};
+
+					Transform trafo(mat, inv_mat);
+
+					GroupHandle sphereGroup = m_renderer.createGroup(trafo);
+
 					sphereGroup->add(handle);
 					m_renderer.getRoot()->add(sphereGroup);
 
@@ -471,21 +485,29 @@ namespace BALL
 			const double angle = acos(vec.z / len); // the denominator accounts for the non-normalized rotation axis
 			const float radius = tube.getRadius();
 
-			Matrix4x4 trafo = Matrix4x4::getIdentity();
+			Vector3 const& midpoint = tube.getVertex1();
 			//Rotate the vector around the normal
 			vec /= sqrt(vec.x*vec.x + vec.y*vec.y);
 
-			trafo.rotate(Angle(-angle), vec.y, -vec.x, 0);
+			Matrix4x4 matrix = Matrix4x4::getIdentity(); 
+			matrix.rotate(Angle(-angle), vec.y, -vec.x, 0);
 
-			Matrix4f matrix(trafo.m11, trafo.m12, trafo.m13, trafo.m14,
-											trafo.m21, trafo.m22, trafo.m23, trafo.m24,
-											trafo.m31, trafo.m32, trafo.m33, trafo.m34,
-											trafo.m41, trafo.m42, trafo.m43, trafo.m44);	
+			Matrix4x4 temp;
+			temp.setScale(radius, radius, len);
+			matrix*=temp;
 
-			Vector3 const& midpoint = tube.getVertex1();
+			temp.setTranslation(midpoint);
+			matrix = temp*matrix;
 
-			return m_renderer.createGroup(	Transform::translation(midpoint.x, midpoint.y, midpoint.z)
-																		 *matrix*Transform::scale(Vec3f<1>(radius, radius, len)));
+			//return m_renderer.createGroup(	Transform::translation(midpoint.x, midpoint.y, midpoint.z)
+			//															 *matrix*Transform::scale(Vec3f<1>(radius, radius, len)));
+			Transform trafo;
+			for (Position i=0; i<4; ++i)
+				for (Position j=0; j<4; ++j)
+					trafo.matrix[j][i] = matrix(i, j);
+			trafo.hasInverse = false;
+
+			return m_renderer.createGroup(trafo);
 		}
 
 		void RTfactRenderer::updateMaterialFromStage(RTAppearanceHandle& material)
