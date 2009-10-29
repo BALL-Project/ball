@@ -67,6 +67,8 @@ namespace BALL
 					return (String)qApp->translate("BALL::VIEW::ModelInformation", "Coordinate System");
 				case MODEL_PROXIMITY_LIGHT:
 					return (String)qApp->translate("BALL::VIEW::ModelInformation", "Proximity Light");
+				case MODEL_PLANE:
+					return (String)qApp->translate("BALL::VIEW::ModelInformation", "Plane");
 				case MODEL_UNKNOWN:
 					return (String)qApp->translate("BALL::VIEW::ModelInformation", "Unknown");
 			}
