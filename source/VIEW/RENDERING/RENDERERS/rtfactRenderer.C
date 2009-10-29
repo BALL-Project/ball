@@ -9,6 +9,8 @@
 
 #include <QtGui/QImage>
 
+#include <list>
+
 using RTfact::Vec3f;
 using RTfact::Remote::GroupHandle;
 using RTfact::Remote::GeoHandle;
@@ -59,7 +61,7 @@ namespace BALL
 			Size current_light=0; 
 			Size num_lights=lights_.size();
 
-			List<LightSource>::ConstIterator it = stage_->getLightSources().begin();
+			std::list<LightSource>::const_iterator it = stage_->getLightSources().begin();
 
 			for (; it != stage_->getLightSources().end(); ++it, ++current_light)
 			{
@@ -135,7 +137,7 @@ namespace BALL
 
 			// lights that are relative to the camera need to have their position updated
 			if (lights_.size() == 0) return; // TEST
-			List<LightSource>::ConstIterator it = stage_->getLightSources().begin();
+			std::list<LightSource>::const_iterator it = stage_->getLightSources().begin();
 			Size current_light=0;
 			Vector3 light_position, direction;
 			for (; it != stage_->getLightSources().end(); ++it, ++current_light)
@@ -212,7 +214,7 @@ namespace BALL
 
 			RTfactData rt_data;
 
-			List<GeometricObject*>::ConstIterator it;
+			std::list<GeometricObject*>::const_iterator it;
 			for (it =  rep.getGeometricObjects().begin();
 					 it != rep.getGeometricObjects().end();
 					 it++)
