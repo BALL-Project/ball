@@ -395,6 +395,17 @@ ADD_SUBDIRECTORY(source/EXTENSIONS)
 ## add BALLView target
 ADD_SUBDIRECTORY(source/APPLICATIONS/BALLVIEW)
 
+###### add Utility targets ########
+SET(UTILITIES_EXECUTABLES)
+INCLUDE(source/APPLICATIONS/UTILITIES/BALLUtilities.cmake)
+
+FOREACH(i ${UTILITIES_EXECUTABLES})
+	ADD_EXECUTABLE(${i} source/APPLICATIONS/UTILITIES/${i}.C)
+	TARGET_LINK_LIBRARIES(${i} BALL VIEW)
+ENDFOREACH(i)
+ADD_CUSTOM_TARGET(UTILITIES EXCLUDE_FROM_ALL)
+ADD_DEPENDENCIES(UTILITIES ${UTILITIES_EXECUTABLES})
+
 ########################################################
 ###    Documentation    														 ###
 ########################################################
@@ -517,16 +528,6 @@ ENDIF()
 #add_custom_target(TOPP)
 #add_dependencies(TOPP ${TOPP_executables})
 #
-###### UTILS ########
-#set(UTILS_executables)
-#include(source/APPLICATIONS/UTILS/executables.cmake)
-#
-#foreach(i ${UTILS_executables})
-#	add_executable(${i} source/APPLICATIONS/UTILS/${i}.C)
-#	target_link_libraries(${i} ${OPENMS_LIBRARIES})
-#endforeach(i)
-#add_custom_target(UTILS)
-#add_dependencies(UTILS ${UTILS_executables})
 #
 ###### Doc progs ####
 #set(OpenMS_doc_executables)
