@@ -2282,6 +2282,7 @@ AC_DEFUN([CF_MOVE_CONFIG_FILES], [
 	${MV} config.mak.tmp config.mak
 	${MV} rules.mak.tmp rules.mak
 	${MV} targets.mak.tmp targets.mak
+	${MV} BALLPythonConfig.h.tmp $PROJECT[]_PATH/include/PROJECT[]/PYTHON/BALLPythonConfig.h
 
 	dnl
 	dnl move that damned file only if it differs from the previous
