@@ -76,7 +76,7 @@ MACRO(ADD_SIP_PYTHON_MODULE MODULE_NAME OUTPUT_BASENAME MODULE_SIP)
     SET(_sip_output_files)
     FOREACH(CONCAT_NUM RANGE 0 ${SIP_CONCAT_PARTS} )
         IF( ${CONCAT_NUM} LESS ${SIP_CONCAT_PARTS} )
-            SET(_sip_output_files ${_sip_output_files} ${SIP_MODULE_BINARY_DIR}/sip${OUTPUT_BASENAME}part${CONCAT_NUM}.cpp )
+            SET(_sip_output_files ${_sip_output_files} ${SIP_MODULE_BINARY_DIR}/sip${MODULE_NAME}part${CONCAT_NUM}.cpp )
         ENDIF( ${CONCAT_NUM} LESS ${SIP_CONCAT_PARTS} )
     ENDFOREACH(CONCAT_NUM RANGE 0 ${SIP_CONCAT_PARTS} )
 
