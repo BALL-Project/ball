@@ -37,6 +37,7 @@ CPP_SOURCES=\
 	SDFile.C\
 	MOL2File.C\
 	NMRStarFile.C\
+	NWChemTRJFile.C\
 	parameters.C\
 	parameterSection.C\
 	PDBdefs.C\
