@@ -12,7 +12,8 @@
 #     Specifies a SIP file to be built into a Python module and installed.
 #     MODULE_NAME is the name of Python module including any path name. (e.g.
 #     os.sys, Foo.bar etc). MODULE_SIP the path and filename of the .sip file
-#     to process and compile. libraryN are libraries that the Python module,
+#     to process and compile. OUTPUT_BASENAME is the basename of the library to be generated,
+#			and libraryN are libraries that the Python module,
 #     which is typically a shared library, should be linked to. The built
 #     module will also be install into Python's site-packages directory.
 #
@@ -41,25 +42,18 @@ SET(SIP_CONCAT_PARTS 8)
 SET(SIP_DISABLE_FEATURES)
 SET(SIP_EXTRA_OPTIONS)
 
-MACRO(ADD_SIP_PYTHON_MODULE MODULE_NAME MODULE_SIP)
+MACRO(ADD_SIP_PYTHON_MODULE MODULE_NAME OUTPUT_BASENAME MODULE_SIP)
 
     SET(EXTRA_LINK_LIBRARIES ${ARGN})
 
     STRING(REPLACE "." "/" _x ${MODULE_NAME})
-    GET_FILENAME_COMPONENT(_parent_module_path ${_x}  PATH)
-    GET_FILENAME_COMPONENT(_child_module_name ${_x} NAME)
+    GET_FILENAME_COMPONENT(_parent_module_path ${_x} PATH)
+    GET_FILENAME_COMPONENT(_child_module_name  ${_x} NAME)
 
-    GET_FILENAME_COMPONENT(_module_path ${MODULE_SIP} PATH)
+    GET_FILENAME_COMPONENT(_module_path    ${MODULE_SIP} PATH)
     GET_FILENAME_COMPONENT(_abs_module_sip ${MODULE_SIP} ABSOLUTE)
 
-    # We give this target a long logical target name.
-    # (This is to avoid having the library name clash with any already
-    # install library names. If that happens then cmake dependancy
-    # tracking get confused.)
-    STRING(REPLACE "." "_" _logical_name ${MODULE_NAME})
-    SET(_logical_name "${_logical_name}module")
-
-    SET(SIP_MODULE_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/${_child_module_name})    # Output goes in this dir.
+    SET(SIP_MODULE_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/${OUTPUT_BASENAME})    # Output goes in this dir.
     FILE(MAKE_DIRECTORY ${SIP_MODULE_BINARY_DIR})
 
     SET(_sip_includes)
@@ -82,7 +76,7 @@ MACRO(ADD_SIP_PYTHON_MODULE MODULE_NAME MODULE_SIP)
     SET(_sip_output_files)
     FOREACH(CONCAT_NUM RANGE 0 ${SIP_CONCAT_PARTS} )
         IF( ${CONCAT_NUM} LESS ${SIP_CONCAT_PARTS} )
-            SET(_sip_output_files ${_sip_output_files} ${SIP_MODULE_BINARY_DIR}/sip${_child_module_name}part${CONCAT_NUM}.cpp )
+            SET(_sip_output_files ${_sip_output_files} ${SIP_MODULE_BINARY_DIR}/sip${OUTPUT_BASENAME}part${CONCAT_NUM}.cpp )
         ENDIF( ${CONCAT_NUM} LESS ${SIP_CONCAT_PARTS} )
     ENDFOREACH(CONCAT_NUM RANGE 0 ${SIP_CONCAT_PARTS} )
 
@@ -104,13 +98,13 @@ MACRO(ADD_SIP_PYTHON_MODULE MODULE_NAME MODULE_SIP)
         DEPENDS ${_abs_module_sip} ${SIP_EXTRA_FILES_DEPEND}
     )
     
-    ADD_LIBRARY(${_logical_name} SHARED ${_sip_output_files} ${SIP_EXTRA_SOURCES})
-    TARGET_LINK_LIBRARIES(${_logical_name} ${PYTHON_LIBRARY})
-    TARGET_LINK_LIBRARIES(${_logical_name} ${EXTRA_LINK_LIBRARIES})
-    SET_TARGET_PROPERTIES(${_logical_name} PROPERTIES PREFIX "" OUTPUT_NAME ${_child_module_name})
+    ADD_LIBRARY(${OUTPUT_BASENAME} MODULE ${_sip_output_files} ${SIP_EXTRA_SOURCES})
+    TARGET_LINK_LIBRARIES(${OUTPUT_BASENAME} ${PYTHON_LIBRARY})
+    TARGET_LINK_LIBRARIES(${OUTPUT_BASENAME} ${EXTRA_LINK_LIBRARIES})
+    SET_TARGET_PROPERTIES(${OUTPUT_BASENAME} PROPERTIES PREFIX "" OUTPUT_NAME ${OUTPUT_BASENAME})
 
     IF (WIN32)
-    	SET_TARGET_PROPERTIES(${_logical_name} PROPERTIES SUFFIX .pyd)
+    	SET_TARGET_PROPERTIES(${OUTPUT_BASENAME} PROPERTIES SUFFIX .pyd)
     ENDIF()
 #    INSTALL(TARGETS ${_logical_name} DESTINATION "${PYTHON_SITE_PACKAGES_DIR}/${_parent_module_path}")
 
