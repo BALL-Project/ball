@@ -425,11 +425,10 @@ ADD_SUBDIRECTORY(source/APPLICATIONS/BALLVIEW)
 
 
 ##### Tests #####
-#if ("${PACKAGE_TYPE}" STREQUAL "none")
-#	INCLUDE(Dart) ## for Nighlty Build log
-#	add_subdirectory(source/TEST EXCLUDE_FROM_ALL) ## configure the Test project (but do not add it to OpenMS itself)
-#endif()
-
+#IF ("${PACKAGE_TYPE}" STREQUAL "none")
+#	INCLUDE(Dart) ## for Nighlty Build log (TODO)
+	ADD_SUBDIRECTORY(source/TEST EXCLUDE_FROM_ALL) ## configure the Test project (but do not add it to OpenMS itself)
+#ENDIF()
 
 #### configs for external include files, e.g. to develop code with OpenMS
 #configure_file(
