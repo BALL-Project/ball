@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT2D.C,v 1.6 2005/02/02 10:50:48 anhi Exp $
+// $Id: FFT2D.C,v 1.6.10.1 2006/03/02 18:52:58 anhi Exp $
 
 #include <BALL/MATHS/FFT2D.h>
 
@@ -61,7 +61,7 @@ namespace BALL
 	// AR: ldn is not any longer the binary logarithm but the absolute number of grid points
 	template <>
 	TFFT2D<DoubleTraits>::TFFT2D(Size ldnX, Size ldnY, double stepPhysX, double stepPhysY, Vector2 origin, bool inFourierSpace)
-		: TRegularData2D<Complex>(TRegularData2D<Complex>::IndexType((ldnX), (ldnY)), -origin, Vector2((((ldnX)-1)*stepPhysX_),(((ldnX)-1)*stepPhysY_))),
+		: TRegularData2D<Complex>(TRegularData2D<Complex>::IndexType((ldnX), (ldnY)), -origin, Vector2((((ldnX)-1)*stepPhysX),(((ldnX)-1)*stepPhysY))),
 		  lengthX_(ldnX),
 			lengthY_(ldnY),
 			inFourierSpace_(inFourierSpace),
