@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockResult.C,v 1.3.16.2 2007/08/07 16:16:17 bertsch Exp $
+// $Id: dockResult.C,v 1.3.2.1 2006/03/08 14:46:52 anhi Exp $
 //
 
 #include <BALL/FORMAT/INIFile.h>
@@ -96,6 +96,12 @@ namespace BALL
 			
 		{
 			return conformation_set_;
+		}
+
+		const System& DockResult::getSystem() const
+			throw()
+		{
+			return docked_system_;
 		}
 		
 		void DockResult::sortBy(Index scoring_index)
@@ -449,14 +455,15 @@ namespace BALL
 			
 			// read PDBFile, fill system
 			PDB_in.reopen(std::ios::in);
-			System s;
-			PDB_in >> s;
+			docked_system_.clear();
+
+			PDB_in >> docked_system_;
 			// create new ConformationSet and set the docked system
 			if (conformation_set_)
 			{
 				delete conformation_set_;
 			}
-			conformation_set_ = new ConformationSet(s);
+			conformation_set_ = new ConformationSet(docked_system_);
 			// set scoring of ConformationSet
 			vector<ConformationSet::Conformation> conformations;
 			ConformationSet::Conformation conf;

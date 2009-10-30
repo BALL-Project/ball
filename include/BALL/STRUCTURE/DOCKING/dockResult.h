@@ -97,6 +97,14 @@ namespace BALL
 				ConformationSet* getConformationSet()
 					;
 				
+				/** Get the docked system. Note that the system should be considered
+				 *  as a definition of the _topology_ only, i.e. it is not guaranteed
+				 *  to be the best docking result but should only be used as a basis
+				 *  for the ConformationSet contained in this class.
+				 */
+				const System& getSystem() const
+					throw();
+
 				/*  Sets scoring flag by which all scores are sorted displayed
 						a negative index corresponds to sorting by snapshot index
 				 */
@@ -294,6 +302,10 @@ namespace BALL
 						It is needed for the operator(i,j)
 				 */
 				Index sorted_by_;
+
+				/** System containing the topology for the ConformationSet.
+				 */
+				System docked_system_;
 		};
 		
 		std::ostream& operator <<(std::ostream& out, const DockResult& dock_res)
