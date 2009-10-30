@@ -1247,6 +1247,11 @@ namespace BALL
 
 		return s;
 	}
+// required for visual studio
+#ifdef BALL_COMPILER_MSVC
+#include <vector>
+template class BALL_EXPORT std::vector<Vector3>;
+#endif
 
 }// namespace BALL
 
