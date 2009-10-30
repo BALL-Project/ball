@@ -110,6 +110,8 @@ AC_DEFUN([CF_PYTHON], [
 		AC_MSG_CHECKING(sip version)
 		SIP_VERSION=`$SIP -V`
 		AC_MSG_RESULT(${SIP_VERSION})
+		BALL_SIP_VERSION_STR=${SIP_VERSION}
+		AC_SUBST(BALL_SIP_VERSION_STR)
 		if test "${SIP}" = "" ; then
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(Could not determine version number of ${SIP}!)
