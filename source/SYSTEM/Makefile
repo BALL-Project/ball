@@ -17,6 +17,12 @@ CPP_SOURCES=$(ASIO_SOURCES)\
 	systemCalls.C\
 	TCPTransfer.C\
 	timer.C
+
+ifeq ($(BALL_HAS_MPI),true)
+	CPP_SOURCES+=\
+	MPISupport.C
+endif
+		 
 	
 ifeq ($(BALL_HAS_VIEW),true)
 	CPP_SOURCES+=\

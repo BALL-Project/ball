@@ -274,6 +274,9 @@
 // Glew
 #cmakedefine BALL_HAS_GLEW
 
+// MPI
+#cmakedefine BALL_HAS_MPI
+
 // Define for activated PYTHON support
 #cmakedefine BALL_PYTHON_SUPPORT
 
