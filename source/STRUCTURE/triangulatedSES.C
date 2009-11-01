@@ -33,9 +33,9 @@ namespace BALL
 	{
 	}
 
-	TriangulatedSES::TriangulatedSES(const TriangulatedSES& surface, bool deep)
-		
-		:	TriangulatedSurface(surface, deep),
+	TriangulatedSES::TriangulatedSES
+			(const TriangulatedSES& surface, bool deep)
+		:	TriangulatedSurface(surface,deep),
 			ses_(surface.ses_),
 			density_(surface.density_)
 	{
