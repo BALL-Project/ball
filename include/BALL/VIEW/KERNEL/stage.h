@@ -477,7 +477,7 @@ namespace BALL
 					throw(e);
 				}
 
-				List<LightSource>::iterator l_it;
+				std::list<LightSource>::iterator l_it;
 
 				Position current_light = 0;
 				for (l_it = light_sources_.begin(); 
