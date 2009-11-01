@@ -27,16 +27,15 @@ namespace BALL
 {
 
 	TriangulatedSES::TriangulatedSES()
-		
 		:	TriangulatedSurface(),
 			ses_(NULL),
 			density_(4.5)
 	{
 	}
 
-	TriangulatedSES::TriangulatedSES(const TriangulatedSES& surface, bool deep)
-		
-		:	TriangulatedSurface(surface, deep),
+	TriangulatedSES::TriangulatedSES
+			(const TriangulatedSES& surface, bool deep)
+		:	TriangulatedSurface(surface,deep),
 			ses_(surface.ses_),
 			density_(surface.density_)
 	{
@@ -255,7 +254,6 @@ namespace BALL
 	void SESTriangulator::triangulateToricFace
 			(SESFace*	face,
 			 const double&			probe_radius)
-		
 	{
 		if (face->isFree())
 		{
@@ -278,7 +276,6 @@ namespace BALL
 	void SESTriangulator::triangulateNonSingularToricFace
 			(SESFace*	face,
 			 const double&			probe_radius)
-		
 	{
 		std::list<SESEdge*>::iterator e = face->edge_.begin();
 		SESEdge* edge0 = *e;
@@ -292,25 +289,31 @@ namespace BALL
 		SESVertex* p0 = *v;
 		v++;
 		SESVertex* p1 = *v;
+
 		// In how much segments the edge should be triangulated? This depends on the angle of the
 		// corresponding RSEdge and the density.
 		Size number_of_segments =
 				(Size)Maths::round(face->rsedge_->angle_.value*edge3->circle_.radius*sqrt_density_);
+
 		if (number_of_segments == 0)
 		{
 			number_of_segments++;
 		}
+
 		TAngle<double> psi(face->rsedge_->angle_.value/number_of_segments,true);
+
 		// Get the normal vector of the rotation used to partition the SESEdges of the SESFace ...
-		TCircle3<double> circle3(edge3->circle_);
-		TCircle3<double> circle1(edge1->circle_);
-		TVector3<double> normal(circle3.n);
+		const TCircle3<double>& circle3 = edge3->circle_;
+		const TCircle3<double>& circle1 = edge1->circle_;
+
+		TVector3<double> normal = circle3.n;
+
 		// ... and now partition the SESEdges ...
-		vector< TVector3<double> > edge3_segments;
-		vector< TVector3<double> > edge1_segments;
+		vector< TVector3<double> > edge3_segments(number_of_segments+1);
 		partitionOfCircle(circle3,edge3->vertex_[0]->point_,psi,number_of_segments,edge3_segments);
-		edge3_segments.pop_back();
-		edge3_segments.push_back(edge3->vertex_[1]->point_);
+
+		edge3_segments[number_of_segments] = edge3->vertex_[1]->point_;
+
 		if (edge3->vertex_[0] != p0)
 		{
 			TVector3<double> tmp;
@@ -322,9 +325,12 @@ namespace BALL
 			}
 			normal.negate();
 		}
+
+		vector< TVector3<double> > edge1_segments(number_of_segments+1);
 		partitionOfCircle(circle1,edge1->vertex_[0]->point_,psi,number_of_segments,edge1_segments);
-		edge1_segments.pop_back();
-		edge1_segments.push_back(edge1->vertex_[1]->point_);
+
+		edge1_segments[number_of_segments] = edge1->vertex_[1]->point_;
+
 		if (edge1->vertex_[0] != p1)
 		{
 			TVector3<double> tmp;
@@ -340,10 +346,10 @@ namespace BALL
 															face->rsedge_->radius_of_torus_);
 		// ... and the "center_circle". This is the circle on which the centers oft the circle lie which
 		// define the segments of the face.
-		vector< TVector3<double> > centers;
+		vector< TVector3<double> > centers(number_of_segments+1);
 		partitionOfCircle(center_circle,edge0->circle_.p,psi,number_of_segments,centers);
-		centers.pop_back();
-		centers.push_back(edge2->circle_.p);
+		centers[number_of_segments] = edge2->circle_.p;
+
 		// save an iterator to the last triangle
 		//
 		// workaround for MSVC from Andreas Moll: 22.07.06
@@ -357,7 +363,9 @@ namespace BALL
 		{
 			last_triangle--;
 		}
+
 		buildTriangles(edge0,edge1,edge2,edge3,centers,edge1_segments,edge3_segments, probe_radius);
+
 		if (at_start) 
 		{
 			last_triangle = tses_->triangles_.begin();
@@ -380,103 +388,6 @@ namespace BALL
 				(*t)->vertex_[1] = temp;
 			}
 		}
-		/*SESEdge* edge[4];
-		Position i = 0;
-		std::list<SESEdge*>::iterator e;
-		for (e = face->edge_.begin(); e != face->edge_.end(); e++)
-		{
-			edge[i] = *e;
-			i++;
-		}
-		SESVertex* p[4];
-		i = 0;
-		std::list<SESVertex*>::iterator v;
-		for (v = face->vertex_.begin(); v != face->vertex_.end(); v++)
-		{
-			p[i] = *v;
-			i++;
-		}
-		// In how much segments the edge should be triangulated?
-		// This depends on the angle of the corresponding RSEdge and the density.
-		TCircle3<double>* circle3 = &(edge[3]->circle_);
-		TCircle3<double>* circle1 = &(edge[1]->circle_);
-		Size number_of_segments = (Size)Maths::round(face->rsedge_->angle_.value*
-																								 circle3->radius*
-																								 sqrt_density_);
-		number_of_segments = (number_of_segments == 0 ? 1 : number_of_segments);
-		TAngle<double> psi(face->rsedge_->angle_.value/number_of_segments,true);
-		// Get the normal vector of the rotation used to partition the SESEdges
-		// of the SESFace ...
-		TVector3<double> normal(circle3->n);
-		// ... and now partition the SESEdges ...
-		std::vector< TVector3<double> > edge3_segments;
-		std::vector< TVector3<double> > edge1_segments;
-		partitionOfCircle(*circle3,edge[3]->vertex_[0]->point_,psi,
-											number_of_segments,edge3_segments);
-		edge3_segments.pop_back();
-		edge3_segments.push_back(edge[3]->vertex_[1]->point_);
-		if (edge[3]->vertex_[0] != p[0])
-		{
-			// revert edge3_segments
-			TVector3<double> tmp;
-			for (Position i = 0; i < (number_of_segments+1)/2; i++)
-			{
-				tmp = edge3_segments[i];
-				edge3_segments[i] = edge3_segments[number_of_segments-i];
-				edge3_segments[number_of_segments-i] = tmp;
-			}
-			normal.negate();
-		}
-		partitionOfCircle(*circle1,edge[1]->vertex_[0]->point_,psi,
-											number_of_segments,edge1_segments);
-		edge1_segments.pop_back();
-		edge1_segments.push_back(edge[1]->vertex_[1]->point_);
-		if (edge[1]->vertex_[0] != p[1])
-		{
-			// revert edge1_segments
-			TVector3<double> tmp;
-			for (Position i = 0; i < (number_of_segments+1)/2; i++)
-			{
-				tmp = edge1_segments[i];
-				edge1_segments[i] = edge1_segments[number_of_segments-i];
-				edge1_segments[number_of_segments-i] = tmp;
-			}
-		}
-		TCircle3<double> center_circle(face->rsedge_->center_of_torus_,
-															normal,
-															face->rsedge_->radius_of_torus_);
-		// ... and the "center_circle". This is the circle on which the centers of
-		// the circle lie which define the segments of the face.
-		vector< TVector3<double> > centers;
-		partitionOfCircle(center_circle,edge[0]->circle_.p,psi,number_of_segments,
-											centers);
-		centers.pop_back();
-		centers.push_back(edge[2]->circle_.p);
-		// save an iterator to the last triangle of the TriangulatedSES
-		std::list<Triangle*>::iterator last_triangle
-				= tses_->triangles_.end();
-		last_triangle--;
-		buildTriangles(edge[0],edge[1],edge[2],edge[3],centers,
-									 edge1_segments,edge3_segments,
-									 probe_radius);
-		last_triangle++;
-		Triangle* test_triangle = *last_triangle;
-		// swap the triangles if necessary
-		TVector3<double> orth((test_triangle->vertex_[1]->point_-
-											test_triangle->vertex_[0]->point_	) %
-										 (test_triangle->vertex_[2]->point_-
-											test_triangle->vertex_[0]->point_	)	);
-		if (Maths::isGreater(orth*test_triangle->vertex_[0]->point_,
-												 orth*centers[0]))
-		{
-			std::list<Triangle*>::iterator t;
-			for (t = last_triangle; t != tses_->triangles_.end(); t++)
-			{
-				TrianglePoint* temp = (*t)->vertex_[0];
-				(*t)->vertex_[0] = (*t)->vertex_[1];
-				(*t)->vertex_[1] = temp;
-			}
-		}*/
 	}
 
 
@@ -508,9 +419,9 @@ namespace BALL
 			number_of_points++;
 		}
 		TAngle<double> phi(2*Constants::PI/number_of_points,true);
-		std::vector< TVector3<double> > points1;
-		std::vector< TVector3<double> > points2;
-		std::vector< TVector3<double> > centers;
+		std::vector< TVector3<double> > points1(number_of_points+1);
+		std::vector< TVector3<double> > points2(number_of_points+1);
+		std::vector< TVector3<double> > centers(number_of_points+1);
 		partitionOfCircle(circle1,p1,phi,number_of_points,points1);
 		partitionOfCircle(circle2,p2,phi,number_of_points,points2);
 		partitionOfCircle(circle3,p3,phi,number_of_points,centers);
@@ -570,14 +481,14 @@ namespace BALL
 		last--;
 		for (Position counter = 0; counter < 2; counter++)
 		{
-			std::vector< TVector3<double> > edge_segments;
+			std::vector< TVector3<double> > edge_segments(number_of_segments+1);
 			partitionOfCircle(edge[0+offset]->circle_,
 												edge[0+offset]->vertex_[0]->point_,
 												psi,
 												number_of_segments,
 												edge_segments);
-			edge_segments.pop_back();
-			edge_segments.push_back(edge[0+offset]->vertex_[1]->point_);
+			edge_segments[number_of_segments] = edge[0+offset]->vertex_[1]->point_;
+
 			TVector3<double> axis(edge[0+offset]->circle_.n);
 			if (edge[0+offset]->vertex_[0] != vertex[0+offset])
 			{
@@ -598,11 +509,12 @@ namespace BALL
 			TCircle3<double> center_circle(face->rsedge_->center_of_torus_,
 																axis,
 																face->rsedge_->radius_of_torus_);
-			vector< TVector3<double> > centers;
+
+			vector< TVector3<double> > centers(number_of_segments+1);
 			partitionOfCircle(center_circle,edge[1+offset]->circle_.p,psi,
 												number_of_segments,centers);
-			centers.pop_back();
-			centers.push_back(edge[2+offset]->circle_.p);
+			centers[number_of_segments] = edge[2+offset]->circle_.p;
+
 			SESEdge* dummy(NULL);
 			buildTriangles(edge[1+offset],edge[0+offset],edge[2+offset],
 										 dummy,centers,edge_segments,point,probe_radius);
@@ -663,7 +575,7 @@ namespace BALL
 			number_of_segments++;
 		}
 		TAngle<double> psi(phi.value/number_of_segments,true);
-		std::vector< TVector3<double> > points;
+		std::vector< TVector3<double> > points(number_of_segments+1);
 		partitionOfCircle(singular_edge->circle_,
 											TVector3<double>::getZero(),psi,
 											number_of_segments,points,false);
@@ -724,7 +636,7 @@ namespace BALL
 			number_of_segments++;
 		}
 		TAngle<double> psi(phi.value/number_of_segments,true);
-		std::vector< TVector3<double> > points;
+		std::vector< TVector3<double> > points(number_of_segments+1);
 		partitionOfCircle(singular_edge->circle_,
 											singular_edge->vertex_[0]->point_,psi,
 											number_of_segments,points);
@@ -1406,20 +1318,14 @@ namespace BALL
 	}
 
 
-	void SESTriangulator::partitionOfCircle
-			(const TCircle3<double>&			circle,
-			 const TVector3<double>&			p0,
-			 const TAngle<double>&				phi,
-			 Size										number_of_segments,
-			 vector< TVector3<double> >&	partition,
-			 bool										on_surface)
-		
+	void SESTriangulator::partitionOfCircle(const TCircle3<double>&	circle, const TVector3<double>&	p0, const TAngle<double>&	phi,
+	                                        Size number_of_segments, vector< TVector3<double> >& partition, bool on_surface)
 	{
 		TVector4<double> p;
 		if (on_surface)
 		{
 			TVector3<double> p_(p0-circle.p);
-			p.set(p_.x,p_.y,p_.z,0.0);
+			p.set(p_.x, p_.y, p_.z, 0.0);
 		}
 		else
 		{
@@ -1431,20 +1337,21 @@ namespace BALL
 			p.normalize();
 			p *= circle.radius;
 		}
-		TQuaternion<double> rotate(circle.n,phi);
-		TMatrix4x4<double> rotation;
+
+		TQuaternion<double> rotate(circle.n, phi);
+		TMatrix4x4<double>  rotation;
 		rotate.getRotationMatrix(rotation);
-		partition.push_back(TVector3<double>(p.x,p.y,p.z)+circle.p);
+
+		partition[0] = TVector3<double>(p.x,p.y,p.z)+circle.p;
 		for (Size i = 0; i < number_of_segments; i++)
 		{
 			p = rotation*p;
-			partition.push_back(TVector3<double>(p.x,p.y,p.z)+circle.p);
+			partition[i+1] = TVector3<double>(p.x,p.y,p.z)+circle.p;
 		}
 	}
 
 
 	Size SESTriangulator::numberOfRefinements(const double& density, const double& radius)
-		
 	{
 		double test0 = (4.0*density*Constants::PI*radius*radius-12.0)/30.0;
 		Size n = 0;
@@ -1561,9 +1468,9 @@ namespace BALL
 												 (edge1_points[i]-centers[i])%
 												 (edge3_points[i]-centers[i]),
 												 probe_radius);
-			std::vector< TVector3<double> > line;
-			line.clear();
+			std::vector< TVector3<double> > line(number_of_triangles+1);
 			partitionOfCircle(circle,edge1_points[i],phi,number_of_triangles,line);
+
 			for (Position j = 0; j < end; j++)
 			{
 				// get the index of the point if it just exists (point on the corner)
