@@ -377,6 +377,7 @@ namespace BALL
 				return false;
 			}
 
+			RegularData3D* selected_grid = grid_;
 			vector<Dataset*> sets = controller_->getDatasets();
 			vector<Dataset*>::iterator it = sets.begin();
 			for (; it != sets.end(); it++)
@@ -384,6 +385,9 @@ namespace BALL
 				insertGrid_(*controller_->getData(*it), (**it).getName());
 			}
 
+			// make sure that previously selected grid (selected by use of setGrid()) stays selected!
+			if(selected_grid) setGrid(selected_grid);
+				
 			gridSelected();
 			return QDialog::exec();
 		}
