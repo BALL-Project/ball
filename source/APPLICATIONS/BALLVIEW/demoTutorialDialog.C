@@ -13,8 +13,11 @@
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
 #include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
+#include <BALL/VIEW/DIALOGS/lightSettings.h>
+#include <BALL/VIEW/DIALOGS/stageSettings.h>
 
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
+#include <BALL/DATATYPE/contourSurface.h>
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -24,8 +27,7 @@
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/WIDGETS/helpViewer.h>
-
-#include <BALL/DATATYPE/contourSurface.h>
+#include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/SYSTEM/path.h>
 
 #include <QtGui/QPushButton>
@@ -114,25 +116,86 @@ String DemoTutorialDialog::getBaseDir_()
 
 void DemoTutorialDialog::initTutorial_()
 {
-	setWindowTitle(tr("BALLView Tutorial"));
+	if (tutorial_type_ == TUTORIAL)
+	{
+		setWindowTitle(tr("BALLView Tutorial"));
+		prefix_ = getBaseDir_() + "tutorial";
+	}
+	else if (tutorial_type_ == RAYTRACING_TUTORIAL)
+	{
+		setWindowTitle(tr("Ray tracing Tutorial"));
+		prefix_ = getBaseDir_() + "raytracing_tutorial";
+	}
 	
-	prefix_ = getBaseDir_() + "tutorial";
-
 	next_button->setEnabled(false);
 
+	// Set the defaults
 	((Mainframe*)getMainControl())->reset();
 
 	Scene::getInstance(0)->show();
 	MolecularControl::getInstance(0)->show();
 	MolecularControl::getInstance(0)->setFloating(false);
 	MolecularControl::getInstance(0)->applyPreferences();
- 	DatasetControl::getInstance(0)->show();
- 	DatasetControl::getInstance(0)->applyPreferences();
- 	DatasetControl::getInstance(0)->setFloating(false);
-	GeometricControl::getInstance(0)->show();
+ 	GeometricControl::getInstance(0)->show();
 	GeometricControl::getInstance(0)->applyPreferences();
 	GeometricControl::getInstance(0)->setFloating(false);
 
+	if (tutorial_type_ == TUTORIAL)
+	{
+		DatasetControl::getInstance(0)->show();
+ 		DatasetControl::getInstance(0)->applyPreferences();
+ 		DatasetControl::getInstance(0)->setFloating(false);
+	}
+	else if  (tutorial_type_ == RAYTRACING_TUTORIAL)
+	{ 
+		// Set the background to black
+		ColorRGBA color(0, 0, 0, 255);
+		Stage* stage = Scene::getInstance(0)->getStage();
+		
+		stage->setBackgroundColor(color);
+
+		StageSettings* stage_settings = Scene::getInstance(0)->getStageSettings();
+		stage_settings->updateFromStage();
+
+		// get one useable light source
+		stage->clearLightSources();
+
+		LightSource ls;
+		
+		ls.setPosition(Vector3(1, -2, -15));
+		ls.setAttenuation(Vector3(0., 0., 0.7));
+		ls.setType(LightSource::POSITIONAL);
+		ls.setColor(ColorRGBA(255, 245, 208, 255));
+		ls.setIntensity(500./100);
+
+		stage->addLightSource(ls);
+
+		LightSettings::getInstance(0)->updateFromStage();
+
+		Stage::RaytracingMaterial& rt_material = stage->getRTMaterial();
+
+		rt_material.ambient_color = ColorRGBA(255, 255, 255, 255);
+		rt_material.ambient_intensity = 0.;
+
+		rt_material.specular_color = ColorRGBA(255, 255, 255, 255);
+		rt_material.specular_intensity = 1.;
+
+		rt_material.reflective_color = ColorRGBA(255, 255, 255, 255);
+		rt_material.reflective_intensity = 0.;
+
+		rt_material.shininess = 75.031;
+		rt_material.transparency = 0;
+
+		Scene::getInstance(0)->getMaterialSettings()->updateDefaultMaterialsFromStage();
+
+		// set ball and stick as next model
+		DisplayProperties::getInstance(0)->selectModel(MODEL_BALL_AND_STICK);
+
+		// apply everything to the scene...
+		Scene::getInstance(0)->applyPreferences();
+
+		next_button->setEnabled(true);
+	}
 	LogView::getInstance(0)->hide();
 }
 
@@ -140,20 +203,20 @@ void DemoTutorialDialog::show()
 {
 	current_step_ = 1;
 
-	if (demo_mode_)
+	if (tutorial_type_ == DEMO)
 	{
 		initDemo_();
 	}
-	else
+	else  
 	{
 		int result = QMessageBox::question(this, tr("Warning"),
 				tr("To start the tutorial, all loaded structures and molecules will be deleted."),
 				QMessageBox::Ok| QMessageBox::Cancel, QMessageBox::Ok);
 		if (result != QMessageBox::Ok) return;
-
+		
 		initTutorial_();
 	}
-
+	
 	QUrl qurl = QUrl::fromLocalFile((prefix_ + "01.html").c_str());
 	text_browser->setSource(qurl);
 
@@ -166,13 +229,17 @@ void DemoTutorialDialog::onNotify(Message* message)
 {
 	if (!isVisible()) return;
 
-	if (demo_mode_)
+	switch (tutorial_type_)
 	{
-		onNotifyDemo_(message);
-	}
-	else
-	{
-		onNotifyTutorial_(message);
+		case DEMO: 
+			onNotifyDemo_(message);
+			break;
+		case TUTORIAL: 
+			onNotifyTutorial_(message);
+			break;	 
+		case RAYTRACING_TUTORIAL:
+			onNotifyRaytracingTutorial_(message);
+			break;
 	}
 }
 
@@ -224,7 +291,7 @@ void DemoTutorialDialog::enableNextStep_()
 	next_button->setEnabled(true);
 }
 
-
+// TODO: split into several functions...
 void DemoTutorialDialog::nextStepClicked()
 {
 	String id = String(current_step_ + 1);
@@ -236,9 +303,9 @@ void DemoTutorialDialog::nextStepClicked()
 	text_browser->setSource(qurl);
 	next_button->setEnabled(false);
 
-	current_step_ ++;
+	current_step_++;
 
-	if (demo_mode_) 
+	if (tutorial_type_ == DEMO) 
 	{
 		if (current_step_ == 18)
 		{
@@ -248,7 +315,7 @@ void DemoTutorialDialog::nextStepClicked()
 
 		nextStepDemo_();
 	}
-	else
+	else if (tutorial_type_ == TUTORIAL) 
 	{
 		if (current_step_ == 9)
 		{
@@ -262,6 +329,178 @@ void DemoTutorialDialog::nextStepClicked()
 			hv->showHelp();
 			hv->setFloating(true);
 			hv->showMaximized();
+		}
+	}
+	else if (tutorial_type_ == RAYTRACING_TUTORIAL) 
+	{
+		// NOTE: current_step_ is already incremented!
+		//TODO put increment to the end of this function and check, if the other tutorial still work
+		switch (current_step_)
+		{
+			case 3:
+			{
+				// prepare the background for the next step
+				ColorRGBA color(255, 255, 255, 255); // white
+				Scene::getInstance(0)->getStage()->setBackgroundColor(color);
+				StageSettings* stage_settings = Scene::getInstance(0)->getStageSettings();
+				stage_settings->updateFromStage();
+				Scene::getInstance(0)->applyPreferences();
+				break;
+			}
+			
+			case 5: // preparing downgraded light settings 
+			{
+				// There should be just a single light source!
+				// first manipulate the light
+				LightSource& ls = Scene::getInstance(0)->getStage()->getLightSource(0);
+				ls.setPosition(Vector3(1, -8, -45));        //(Vector3(1, -2, -15));
+				ls.setAttenuation(Vector3(0., 0., 0.2));    //0.7
+				ls.setType(LightSource::POSITIONAL);
+				ls.setColor(ColorRGBA(255, 255, 255, 255)); //ColorRGBA(255, 245, 208, 255));
+				ls.setIntensity(250./100);
+				LightSettings::getInstance(0)->updateFromStage();
+
+				// then change the camera position
+				Camera& camera = Scene::getInstance(0)->getStage()->getCamera();
+				camera.setViewPoint(camera.getViewPoint()+Vector3(20,20,20));
+
+				// update everything
+				Scene::getInstance(0)->applyPreferences();
+				break;
+			}
+			case 6: //preparing bad materials
+			{
+				// Add a plane to be used as a mirror
+				if (getMainControl()->getCompositeManager().getComposites().size() == 0)
+				{
+					Log.info() << "DemoTutorialDialog: no system available! " << __FILE__ << " " << __LINE__ << endl;
+				 	return;	
+				}
+				
+				HashSet<Composite*> composites = MainControl::getInstance(0)->getCompositeManager().getComposites();
+				HashSet<Composite*>::Iterator sit = composites.begin();
+
+				BoundingBoxProcessor bbp;
+				Vector3 v_low(0., 0., 0.);
+  			Vector3 v_upp(0., 0., 0.);
+
+				System* system = NULL;
+				system = dynamic_cast<System*>(*sit);
+				if (system != 0) 
+				{
+					system->apply(bbp);
+					v_low = Vector3(bbp.getLower().x, bbp.getLower().y, bbp.getLower().z);
+  				v_upp = Vector3(bbp.getUpper().x, bbp.getUpper().y, bbp.getUpper().z);
+				}
+				else
+				{
+					Log.info() << "DemoTutorialDialog: No system given! "<< __FILE__ << " " << __LINE__ << endl;
+					return;
+				}
+
+				++sit;
+				for (; +sit; ++sit)
+				{
+					system = dynamic_cast<System*>(*sit);
+					if (system != 0) 
+					{
+						system->apply(bbp);
+						Vector3 low = Vector3(bbp.getLower().x, bbp.getLower().y, bbp.getLower().z);
+  			 		Vector3 upp = Vector3(bbp.getUpper().x, bbp.getUpper().y, bbp.getUpper().z);
+					
+						// find the boundaries over all systems	
+						if (v_low.x > low.x) v_low.x = low.x;
+						if (v_low.y > low.y) v_low.y = low.y; 
+						if (v_low.z > low.z) v_low.z = low.z;
+						
+						if (v_upp.x < upp.x) v_upp.x = upp.x; 
+						if (v_upp.y < upp.y) v_upp.y = upp.y;
+						if (v_upp.z < upp.z) v_upp.z = upp.z;
+
+					}
+				}
+
+				Vector3 v_low_left (0., 0., 0.);
+			  Vector3 v_low_right(0., 0., 0.);
+				Vector3 v_upp_right(0., 0., 0.);
+				Vector3 v_upp_left (0., 0., 0.);
+				
+				Vector3 normal(0., 0., 0.);
+				
+				int height = 5;
+				int boundary = 5;
+
+				// x axis
+				v_low = v_low - Vector3(height, boundary, boundary);
+				v_upp = v_upp + Vector3(height, boundary, boundary);
+				v_low_left  = Vector3(v_low.x, v_low.y, v_low.z);
+				v_low_right = Vector3(v_low.x, v_upp.y, v_low.z);
+				v_upp_right = Vector3(v_low.x, v_upp.y, v_upp.z);
+				v_upp_left  = Vector3(v_low.x, v_low.y, v_upp.z);
+				normal = Vector3(1., 0., 0.);
+
+				// create the plane
+	 		  Mesh* plane = new Mesh();
+
+			  // the vertices
+				plane->vertex.push_back(v_low_left);
+				plane->vertex.push_back(v_low_right);
+				plane->vertex.push_back(v_upp_right);
+				plane->vertex.push_back(v_upp_left);
+				
+				// the first triangle of the plane
+				Mesh::Triangle t1;
+				t1.v1 = 0; // v_low_left
+				t1.v2 = 1; // v_low_right
+				t1.v3 = 2; // v_upp_right
+				
+				plane->triangle.push_back(t1);
+
+				// the second triangle of the plane
+				Mesh::Triangle t2;
+				t2.v1 = 2; // v_upp_right
+				t2.v2 = 3; // v_upp_left
+				t2.v3 = 0; // v_low_left
+				
+				plane->triangle.push_back(t2);
+				
+				// the normals
+				for (int i=0; i<4; i++)
+					plane->normal.push_back(normal);
+				
+				// color
+				ColorRGBA color(0,0,0,1);
+				plane->setColor(color);
+				
+				// a representation
+				Representation* rep = getMainControl()->getRepresentationManager().createRepresentation();
+				rep->setName("Mirror Plane");
+				//rep->setModelType(MODEL_PLANE); //TODO
+					
+				// insert 
+				rep->insert(*plane);
+				
+				// and commit
+				getMainControl()->insert(*rep);
+				getMainControl()->update(*rep);			
+				notify_(new RepresentationMessage(*rep, RepresentationMessage::ADD_TO_GEOMETRIC_CONTROL));
+				
+				break;
+			}
+			case 8:
+			{
+				// offer the Documentation
+				hide();
+				HelpViewer* hv = HelpViewer::getInstance(1);
+				if (hv == 0) return;
+				hv->showHelp();
+				hv->setFloating(true);
+				hv->showMaximized();
+				break;
+			}
+
+			default: // nothing to see here...
+				break;
 		}
 	}
 }
@@ -454,15 +693,25 @@ void DemoTutorialDialog::nextStepDemo_()
 	}
 }
 
+void DemoTutorialDialog::showRaytracingTutorial()
+{
+	demo_mode_ = false;
+	tutorial_type_ = RAYTRACING_TUTORIAL;
+	show();
+}
+
+
 void DemoTutorialDialog::showTutorial()
 {
 	demo_mode_ = false;
+	tutorial_type_ = TUTORIAL;
 	show();
 }
 
 void DemoTutorialDialog::showDemo()
 {
-	demo_mode_ = true;
+	demo_mode_ = true;	
+	tutorial_type_ = DEMO;
 	show();
 }
 
@@ -580,6 +829,87 @@ void DemoTutorialDialog::onNotifyTutorial_(Message *message)
 	enableNextStep_();
 }
 
+void DemoTutorialDialog::onNotifyRaytracingTutorial_(Message *message)
+{
+	CompositeMessage* cmsg = RTTI::castTo<CompositeMessage>(*message);
+	RepresentationMessage* rmsg = RTTI::castTo<RepresentationMessage>(*message);
+
+	if (rmsg != 0 && rmsg->getRepresentation() == 0) return;
+
+	switch (current_step_)
+	{
+		case 1:
+		{
+			// nothing to be checked
+			break;
+		}
+		case 2: // "Building a peptide from a given sequence"
+		{
+			if (cmsg == 0 || cmsg->getType() != CompositeMessage::NEW_MOLECULE) return;
+			break;
+		}
+		case 3: // "Set the background color"
+		{
+			if (Scene::getInstance(0)->getStage()->getBackgroundColor() != ColorRGBA(0, 0, 0, 255)) return;
+			break;
+		}	
+		case 4: // "Rotating"
+		{
+			if (!RTTI::isKindOf<SceneMessage>(*message)) return;
+			break;
+		}	
+		case 5: // "Setting light sources"
+		{		
+			//if (Scene::getInstance(0)->getStage()->getLightSource(0).getColor() != ColorRGBA(255, 245, 208, 255)) return;
+			if (Scene::getInstance(0)->getStage()->getLightSources().size() != 2) return;
+			break;
+		}
+		case 6: // "Setting the materials"
+		{	
+			// check, if we got an SES 
+			if (rmsg == 0 ||
+					rmsg->getType() != RepresentationMessage::ADD_TO_GEOMETRIC_CONTROL ||
+					rmsg->getRepresentation()->getModelType() != MODEL_SE_SURFACE)
+			{
+				return;
+			}
+			break;
+		}
+		case 7:  // "downsampling/PNGs"
+		{	
+			//TODO find a checker!!
+			if (cmsg != 0) 
+				cout <<  "*7*" << cmsg->getType() << endl;
+			//	break; //TODO wieder rein!
+			
+		}	
+	
+		/* Put into a later step
+			if (tutorial_type_ == RAYTRACING_TUTORIAL)
+			{
+				// set the camera non-optimal
+				Camera& camera = Scene::getInstance(0)->getStage()->getCamera();
+				Vector3 absolute_offset = 	camera.getRightVector() * 100
+																	+	camera.getLookUpVector() * 100
+																	+ camera.getViewVector() * 100;
+
+				camera.setViewPoint(camera.getViewPoint()+absolute_offset);
+				camera.setLookAtPosition(camera.getLookAtPosition()+absolute_offset);		
+				Scene::getInstance(0)->rotateClockwise(90);
+				Scene::getInstance(0)->update();
+				Scene::getInstance(0)->updateGL();
+			}
+			*/
+
+		default:
+			BALLVIEW_DEBUG;
+			Log.error() << "Current step: " << current_step_ << std::endl;
+			return;
+	}
+
+	enableNextStep_();
+}
+
 void DemoTutorialDialog::initializeWidget(MainControl&)
 {
 	getMainControl()->insertPopupMenuSeparator(MainControl::HELP);
@@ -591,7 +921,13 @@ void DemoTutorialDialog::initializeWidget(MainControl&)
 	description = "Shortcut|Help|Tutorial";
 	tutorial_action_ = insertMenuEntry(MainControl::HELP, (String)tr("Tutorial"), this, SLOT(showTutorial()), description);
 	setMenuHint((String)tr("Perform a step-by-step tutorial"));
+
+	description = "Shortcut|Help|RaytracingTutorial";
+	raytracing_tutorial_action_ = insertMenuEntry(MainControl::HELP, (String)tr("Ray tracing Tutorial"), this, SLOT(showRaytracingTutorial()), description);
+	setMenuHint((String)tr("Learn how to use RTFact"));
+
 	getMainControl()->insertPopupMenuSeparator(MainControl::HELP);
+
 }
 
 void DemoTutorialDialog::checkMenu(MainControl& main_control)
@@ -599,6 +935,7 @@ void DemoTutorialDialog::checkMenu(MainControl& main_control)
 	bool busy = main_control.isBusy();
 	demo_action_->setEnabled(!busy);
 	tutorial_action_->setEnabled(!busy);
+	raytracing_tutorial_action_->setEnabled(!busy);
 }
 						
 } } // namespaces

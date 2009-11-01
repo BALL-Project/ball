@@ -52,7 +52,10 @@ namespace BALL
 
 			///
 			void setDemoMode(bool state) { demo_mode_ = state;}
-							
+			
+			///
+			//void setTutorialType(int type) { tutorial_type_ = type;}
+
 			public slots:
 				
 			/// Show and raise the dialog
@@ -63,6 +66,9 @@ namespace BALL
 
 			///
 			void showTutorial();
+			
+			///
+			void showRaytracingTutorial();
 
 			/// Next Step
 			void nextStepClicked();
@@ -76,25 +82,36 @@ namespace BALL
 			
 			void initDemo_();
 			void initTutorial_();
-
+		
 			void enableNextStep_();
 
  			virtual void onNotifyTutorial_(Message *message);
+ 			virtual void onNotifyRaytracingTutorial_(Message *message);
  			virtual void onNotifyDemo_(Message *message);
 
 			String getBaseDir_();
 
 			private:
+			
+			enum TUTORIAL_TYPE
+			{
+				DEMO,
+				TUTORIAL,
+				RAYTRACING_TUTORIAL
+			};
+
+			TUTORIAL_TYPE    tutorial_type_;
 
 			std::list<Composite*> composites_;
-			RegularData3D* grid_;
-			System*  		 	 system_;
+			
+			RegularData3D*   grid_;
+			System*  		 	   system_;
 
-			String 					prefix_;
-			bool 						demo_mode_;
-			Position  			current_step_;
-			Mesh* 					surface_;
-			QAction* 				demo_action_, *tutorial_action_;
+			String 					 prefix_;
+			bool 						 demo_mode_;
+			Position  			 current_step_;
+			Mesh* 					 surface_;
+			QAction* 				 demo_action_, *tutorial_action_, *raytracing_tutorial_action_;
 		};
 
 } } // namespaces

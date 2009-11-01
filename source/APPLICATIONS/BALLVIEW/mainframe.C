@@ -120,6 +120,7 @@ namespace BALL
 		
 		DatasetControl::getInstance(0)->hide();
 
+		// For Demo, Tutorial, and RayTracing 
 		new DemoTutorialDialog(this, ((String)tr("BALLViewDemo")).c_str());
 
 		Path path;
