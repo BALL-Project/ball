@@ -377,7 +377,7 @@ namespace BALL
 		// workaround for MSVC from Andreas Moll: 22.07.06
 		std::list<Triangle*>::iterator last_triangle = tses_->triangles_.end();
 		bool at_start = false;
-		if (tses_->triangles_.size() == 0)
+		if (tses_->number_of_triangles_ == 0)
 		{
 			at_start = true;
 		}
