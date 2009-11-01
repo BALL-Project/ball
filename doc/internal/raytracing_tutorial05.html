@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>BALLView ray tracing Demo  1</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+<body>
+<blockquote>
+ 	
+<h3>Setting the light sources</h3>
+In a typical scenario the default light settings are inappropriate. 
+So let's try to recreate the nice light settings as show in the last step.
+<br>
+<br>
+The light sources of the scene can be modified using the <b>Preferences</b> dialog.
+Open it by clicking the menu entry 
+<br>
+<b>"Edit->Preferences"</b>
+<br>
+and highlight the entry <b>"Lighting"</b>.
+<br>
+
+<h4>Setting the light intensity</h4>
+To be able to work comfortably with a light source its intensity
+should be maximal.<br>
+Change the intensity of the current light by highlighting <b>Light 1</b>
+in the <b>Light Sources</b> list and setting its intensity to <b>500</b>.
+Activate your choice by pressing the <b>Apply</b> button. 
+<br>
+
+<h4>Set the light position</h4>
+A light's position can either be 
+<ul>
+<li>relative to the camera or
+<li>absolute in the scene.
+</ul>
+In order to find a good light position, we attach the light to the camera,
+move until we are pleased, and then change it to an absolute position.<br>
+First attach the light relative to the camera at <b>Position (1, -2, -15)</b> and 
+activate this change by pressing the <b>Apply</b> button. <br>
+Then find a nice light position by changing
+the camera position (clicking and draging the mouse).<br>
+If you found a nice spot, switch to an <b>absolute</b> light orientation and activate
+it by clicking the <b>Apply</b> button. <br>
+Now we can change the camera position, e.g., rotate around the molecule, but the
+light will keep its position.<br>
+Finally, try to set the light to the <b>absolute position</b> of <b>(-2, 24, -14)</b> 
+(Do not forget to press the <b>Apply</b> button!)
+and re<b>focus</b> the camera (Structures window->right click->Focus). 
+<br>
+The resulting scene is clearly to bright. 
+This can be change by setting the attenuation.
+<br>
+
+
+<h4>Change the attenuation</h4>
+The attenuation determines the loss of intensity with increasing distance
+to the light source/from the objects???. It is controlled by three 
+coefficients:<ul>
+	<li> constant, 
+	<li> linear, and 
+	<li>  quadratic.</ul>
+Using constant attenuation, e.g., (2,0.0), the light intensity does not decrease 
+with the distance.<br>
+Linear attenuation, e.g., (0, 10, 0), yields a decreasing light intensity linearly with distance from objects(??).<br>
+Using quadratic attenuation, e.g. (0, 0, 1), the intensity decreases quadraticly.<br>
+For the current scene set the <b>attenuation</b> to <b>(0, 0, 0.7)</b>.<br>
+Activate your choice by pressing the <b>Apply</b> button. 
+<br>
+
+<h4>Change the lights colour</h4>
+Sometimes a smoother light might looks more appealing than a flashy light. <br>
+The light's color can be changed by pressing the <b>Edit</b>-button of the
+Intensity box.  Choose a smoother color, e.g., light yellow. The color can be selected 
+using the color picker, a CMYK model, or the RGB model.<br>
+Light yellow in the RGB-Model is given by i.e. Red=255, Green=245, and Blue=208.<br> 
+Activate your choice by pressing the <b>OK</B> button of the Select Color dialog and activate 
+your choice by pressing the <b>Apply</b> button. 
+<br>
+
+
+<h4>Add a second light source</h4>
+For more advanced settings, additional light sources might spice up the scene.
+To add a point light source press the <b>Add</b> button under the Light Sources list. 
+All its properties can be easily changed after hightlighting the new light <b>Light 2</b>.
+<br>
+Try to position a second light source at absolute position <b>(-6.3, 3.1; -1)</b> 
+with attenuation of <b>(1, 0, 0.9)</b>, and Intensity of <b>18</b>.<br>
+Close the Preferences dialog by pressing the OK button.
+<br>
+<br>
+Press Next to continue.
+<br>
+<br>
+</blockquote>
+
+</html>

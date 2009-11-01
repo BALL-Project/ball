@@ -119,6 +119,7 @@ namespace BALL
 		
 		DatasetControl::getInstance(0)->hide();
 
+		// For Demo, Tutorial, and RayTracing 
 		new DemoTutorialDialog(this, "BALLViewDemo");
 
 		Path path;
@@ -156,9 +157,9 @@ namespace BALL
 		// setup the VIEW server
 		#ifdef BALL_HAS_ASIO
 			ServerWidget* server = new ServerWidget(this);
-		// registering object generator
-		MoleculeObjectCreator* object_creator = new MoleculeObjectCreator;
-		server->registerObjectCreator(*object_creator);
+			// registering object generator
+			MoleculeObjectCreator* object_creator = new MoleculeObjectCreator;
+			server->registerObjectCreator(*object_creator);
 		#endif
 
 		new TestFramework(this, "Test Framework");
@@ -179,7 +180,7 @@ namespace BALL
 		save_project_action_ = insertMenuEntry(MainControl::FILE, "Save Project", this, 
 											 										 SLOT(saveBALLViewProjectFile()), description);
 
-			// Help-Menu -------------------------------------------------------------------
+		// Help-Menu -------------------------------------------------------------------
 		QAction* action = 0;
 
 		description = "Shortcut|Help|About";
