@@ -255,14 +255,15 @@ void LightSettings::typeSelected_(Position type)
 {
 	bool is_ambient = (type == LightSource::AMBIENT);
 	bool pos_enabled = type != LightSource::DIRECTIONAL && !is_ambient;
+	bool is_directional = (type == LightSource::DIRECTIONAL); 
 
 	position_x->setEnabled(pos_enabled);
 	position_y->setEnabled(pos_enabled);
 	position_z->setEnabled(pos_enabled);
 
-	direction_x->setEnabled(!is_ambient);
-	direction_y->setEnabled(!is_ambient);
-	direction_z->setEnabled(!is_ambient);
+	direction_x->setEnabled(is_directional);
+	direction_y->setEnabled(is_directional);
+	direction_z->setEnabled(is_directional);
 	relative->setEnabled(!is_ambient);
 	not_relative->setEnabled(!is_ambient);
 
