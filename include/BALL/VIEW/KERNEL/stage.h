@@ -29,6 +29,10 @@
 # include <BALL/VIEW/KERNEL/representation.h>
 #endif
 
+#ifndef BALL_COMMON_EXCEPTION_H
+# include <BALL/COMMON/exception.h>
+#endif
+
 namespace BALL
 {
 	namespace VIEW
@@ -464,6 +468,25 @@ namespace BALL
 			virtual const std::list<LightSource>& getLightSources() const
 				{ return light_sources_;}
 
+			/// Get a reference to the i-th light source
+			virtual LightSource& getLightSource(Position i)
+			{
+				if (i >= light_sources_.size())
+				{
+					Exception::OutOfRange e(__FILE__, __LINE__);
+					throw(e);
+				}
+
+				List<LightSource>::iterator l_it;
+
+				Position current_light = 0;
+				for (l_it = light_sources_.begin(); 
+						(current_light < i) && (l_it != light_sources_.end()); 
+						++l_it, ++current_light)
+				{ }
+
+				return *l_it;
+			}
 			/// Add a light source
 			virtual void addLightSource(const LightSource& light_source);
 
