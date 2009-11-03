@@ -122,7 +122,7 @@ int main(int argc, char **argv)\
 				TEST::exception++;\
     	std::cout << std::endl << "    (caught exception of type ";\
 			std::cout << e.getName();\
-			if ((e.getLine() > 0) && (!(e.getFile() == "")))\
+			if ((e.getLine() > 0) && (!(e.getFile()[0] == '\0')))\
 				std::cout << " outside a subtest, which was thrown in line " << e.getLine() << " of file " << e.getFile();\
 			std::cout << " while looking for file " << e.getFilename();\
 			std::cout << " - unexpected!) " << std::endl;\
@@ -140,7 +140,7 @@ int main(int argc, char **argv)\
 				TEST::exception++;\
     	std::cout << std::endl << "    (caught exception of type ";\
 			std::cout << e.getName();\
-			if ((e.getLine() > 0) && (!(e.getFile() == "")))\
+			if ((e.getLine() > 0) && (!(e.getFile()[0] == '\0')))\
 				std::cout << " outside a subtest, which was thrown in line " << e.getLine() << " of file " << e.getFile();\
 			std::cout << " - unexpected!) " << std::endl;\
 			std::cout << "    (message is: " << e.getMessage() << ")" << std::endl;\
@@ -273,7 +273,7 @@ int main(int argc, char **argv)\
 				TEST::exception++;\
     	std::cout << std::endl << "    (caught exception of type ";\
 			std::cout << e.getName();\
-			if ((e.getLine() > 0) && (!(e.getFile() == "")))\
+			if ((e.getLine() > 0) && (!(e.getFile()[0] == '\0')))\
 				std::cout << " outside a subtest, which was thrown in line " << e.getLine() << " of file " << e.getFile();\
 			std::cout << " while looking for file " << e.getFilename();\
 			std::cout << " - unexpected!) " << std::endl;\
@@ -293,7 +293,7 @@ int main(int argc, char **argv)\
 			}\
       std::cout << "    (caught exception of type ";\
       std::cout << e.getName();\
-      if ((e.getLine() > 0) && (!(e.getFile() == "")))\
+      if ((e.getLine() > 0) && (!(e.getFile()[0] == '\0')))\
         std::cout << ", which was thrown in line " << e.getLine() << " of file " << e.getFile();\
       std::cout << " - unexpected!) " << std::endl;\
 			std::cout << "    (message is: " << e.getMessage() << ")" << std::endl;\
