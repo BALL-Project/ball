@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 #include <BALL/VIEW/KERNEL/representationManager.h>
@@ -117,7 +118,7 @@ CHECK(RepresentationManager::dump(std::ostream& s, Size depth) const  throw())
 	std::ofstream outfile(filename.c_str(), std::ios::out);
 	rm.dump(outfile);
 	outfile.close();
-	TEST_FILE_REGEXP(filename.c_str(), "data/RepresentationManager.txt")
+	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(RepresentationManager.txt))
 RESULT
 
 
@@ -221,12 +222,12 @@ CHECK(storeRepresentations(INIFile&))
 	INIFile file(filename);
 	mrm.storeRepresentations(file);
 	file.write();
-	TEST_FILE(filename.c_str(), "data/RepresentationManager2.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(RepresentationManager2.txt))
 RESULT
 			
 CHECK(restoreRepresentations(const INIFile& in, const vector<const Composite*>& new_systems))
 	mrm.clear();
-	INIFile infile("data/RepresentationManager2.txt");
+	INIFile infile(BALL_TEST_DATA_PATH(RepresentationManager2.txt));
 	infile.read();
 	vector<const Composite*> new_systems;
 	new_systems.push_back(system);

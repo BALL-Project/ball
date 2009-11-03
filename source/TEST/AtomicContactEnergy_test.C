@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -23,7 +24,7 @@ using namespace BALL;
 CHECK(calculateACE())
 	// read protein A (trypsin from 2ptc)
 	STATUS("reading PDB file data/ACE_test_A.pdb")
-	PDBFile pdb_file_A("data/ACE_test_A.pdb");
+	PDBFile pdb_file_A(BALL_TEST_DATA_PATH(ACE_test_A.pdb));
 	TEST_EQUAL(pdb_file_A.good(), true)
 	System A;
 	pdb_file_A >> A;
@@ -32,7 +33,7 @@ CHECK(calculateACE())
 
 	// read protein B (BPTI from 2ptc)
 	STATUS("reading PDB file data/ACE_test_B.pdb")
-	PDBFile pdb_file_B("data/ACE_test_B.pdb");
+	PDBFile pdb_file_B(BALL_TEST_DATA_PATH(ACE_test_B.pdb));
 	TEST_EQUAL(pdb_file_B.good(), true)
 	System B;
 	pdb_file_B >> B;

@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -138,7 +139,7 @@ CHECK(void setNumberOfRecords(Size n))
 RESULT
 
 CHECK([Extra] reading a PDB file)
-	PDBFile f("data/PDBInfo_test.pdb");
+	PDBFile f(BALL_TEST_DATA_PATH(PDBInfo_test.pdb));
 	System S;
 	f.read(S);
 	TEST_EQUAL(f.info.getSkippedRecords().size(), 155)

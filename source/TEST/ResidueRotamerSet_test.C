@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -164,7 +165,7 @@ RESULT
 
 CHECK(Rotamer ResidueRotamerSet::getRotamer(const Residue& residue))	
   System S;
-  HINFile ags_file("data/AlaGlySer.hin");
+  HINFile ags_file(BALL_TEST_DATA_PATH(AlaGlySer.hin));
 	ags_file >> S;
 	ABORT_IF(S.countResidues() != 3)
 
@@ -211,7 +212,7 @@ RESULT
 
 CHECK(bool ResidueRotamerSet::setTemplateResidue(const Residue& residue, Size number_of_torsions))
   System S;
-  HINFile ags_file("data/AlaGlySer.hin");
+  HINFile ags_file(BALL_TEST_DATA_PATH(AlaGlySer.hin));
 	ags_file >> S;
 	ABORT_IF(S.countResidues() != 3)
 

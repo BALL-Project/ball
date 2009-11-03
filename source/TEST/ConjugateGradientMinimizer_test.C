@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 #include <BALL/MOLMEC/MINIMIZATION/conjugateGradient.h>
@@ -217,7 +218,7 @@ RESULT
 
 CHECK(ConjugateGradientMinimizer::minimize(Size, bool, FLETCHER_REEVES) AlaAla)
 	System S;
-	HINFile f("data/AA.hin");
+	HINFile f(BALL_TEST_DATA_PATH(AA.hin));
 	f >> S;
 	S.deselect();
 	
@@ -267,7 +268,7 @@ RESULT
 
 CHECK(ConjugateGradientMinimizer::minimize(Size, bool, POLAK_RIBIERE) AlaAla)
 	System S;
-	HINFile f("data/AA.hin");
+	HINFile f(BALL_TEST_DATA_PATH(AA.hin));
 	f >> S;
 	S.deselect();
 	
@@ -317,7 +318,7 @@ RESULT
 
 CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO) AlaAla)
 	System S;
-	HINFile f("data/AA.hin");
+	HINFile f(BALL_TEST_DATA_PATH(AA.hin));
 	f >> S;
 	S.deselect();
 	
@@ -367,7 +368,7 @@ RESULT
 
 CHECK(ConjugateGradientMinimizer::minimize(Size, bool, FLETCHER_REEVES))
 	System S;
-	HINFile f("data/ethan.hin");
+	HINFile f(BALL_TEST_DATA_PATH(ethan.hin));
 	f >> S;
 	FF.options[AmberFF::Option::ASSIGN_CHARGES] = "false";
 	FF.setup(S);
@@ -442,7 +443,7 @@ RESULT
 
 CHECK(ConjugateGradientMinimizer::minimize(Size, bool, POLAK_RIBIERE))
 	System S;
-	HINFile f("data/ethan.hin");
+	HINFile f(BALL_TEST_DATA_PATH(ethan.hin));
 	f >> S;
 	FF.options[AmberFF::Option::ASSIGN_CHARGES] = "false";
 	FF.setup(S);
@@ -516,7 +517,7 @@ RESULT
 
 CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO) ethan)
 	System S;
-	HINFile f("data/ethan.hin");
+	HINFile f(BALL_TEST_DATA_PATH(ethan.hin));
 	f >> S;
 	FF.options[AmberFF::Option::ASSIGN_CHARGES] = "false";
 	FF.setup(S);

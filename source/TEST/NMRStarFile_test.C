@@ -3,6 +3,7 @@
 //
 // $Id: NMRStarFile_test.C,v 1.14.28.1 2007/03/25 21:47:22 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/NMRStarFile.h>
@@ -42,7 +43,7 @@ NMRStarFile rs;
 
 CHECK(NMRStarFile(const String& file_name) throw(Exception::FileNotFound, Exception::ParseError))
 	PRECISION(1e-3)
-	rs = NMRStarFile("data/AssignShiftProcessor_test2.str");
+	rs = NMRStarFile(BALL_TEST_DATA_PATH(AssignShiftProcessor_test2.str));
 	TEST_EQUAL(rs.getData().size(), 1)
 	TEST_EQUAL(rs.getNumberOfAtoms(), 1914)
 	if (rs.getData().size() == 1 && rs.getNumberOfAtoms() == 1914)
@@ -87,7 +88,7 @@ NMRStarFile f2;
 CHECK(bool operator == (const NMRStarFile& f) throw())
 	NMRStarFile f1;
 	TEST_EQUAL(f1 == f2, true)
-	f2 = NMRStarFile("data/AssignShiftProcessor_test2.str");
+	f2 = NMRStarFile(BALL_TEST_DATA_PATH(AssignShiftProcessor_test2.str));
 	TEST_EQUAL(f1 == f2, false)
 RESULT
 

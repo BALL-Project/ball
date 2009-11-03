@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -266,7 +267,7 @@ CHECK([EXTRA]NucleotidePredicate::operator () (const Atom& atom) const )
 	delete a1;
 RESULT
 
-HINFile f("data/L-Tryptophan.hin");
+HINFile f(BALL_TEST_DATA_PATH(L-Tryptophan.hin));
 System S;
 f >> S;
 f.close();
@@ -749,7 +750,7 @@ CHECK([EXTRA]NumberOfBondsPredicate::operator () (const Atom& atom) const )
 RESULT
 
 S.destroy();
-HINFile g("data/Predicate_test.hin");
+HINFile g(BALL_TEST_DATA_PATH(Predicate_test.hin));
 g >> S;
 g.close();
 
@@ -1000,7 +1001,7 @@ CHECK([EXTRA]ChargePredicate::operator ())
 RESULT
 
 S.clear();
-f.open("data/LacNAc.hin");
+f.open(BALL_TEST_DATA_PATH(LacNAc.hin));
 f >> S;
 f.close();
 

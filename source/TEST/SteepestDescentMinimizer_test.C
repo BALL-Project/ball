@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
@@ -210,7 +211,7 @@ RESULT
 
 CHECK(SteepestDescentMinimizer::minimize(Size, bool) ethan)
 	System S;
-	HINFile f("data/ethan.hin");
+	HINFile f(BALL_TEST_DATA_PATH(ethan.hin));
 	f >> S;
 	FF.options[AmberFF::Option::ASSIGN_CHARGES] = "false";
 	FF.setup(S);

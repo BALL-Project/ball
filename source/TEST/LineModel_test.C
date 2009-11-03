@@ -8,6 +8,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/bond.h>
@@ -33,7 +34,7 @@ CHECK(AddLineModel::BALL_CREATE(AddLineModel))
 RESULT
 
 
-PDBFile pdb("data/1BNA.pdb");
+PDBFile pdb(BALL_TEST_DATA_PATH(1BNA.pdb));
 System system;
 pdb >> system;
 

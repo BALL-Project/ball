@@ -3,6 +3,7 @@
 //
 // $Id: PCMCavFreeEnergyProcessor_test.C,v 1.4.30.1 2007/03/25 21:47:25 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 #include <BALL/SOLVATION/PCMCavFreeEnergyProcessor.h>
@@ -28,7 +29,7 @@ CHECK(PCMCavFreeEnergyProcessor::PCMCavFreeEnergyProcessor())
 RESULT 
 
 CHECK(PCMCavFreeEnergyProcessor::PCMCavFreeEnergyProcessor(const PCMCavFreeEnergyProcessor& proc))
-  HINFile f("data/methane.hin");
+  HINFile f(BALL_TEST_DATA_PATH(methane.hin));
   System S;
   f >> S;
   f.close();
@@ -56,7 +57,7 @@ RESULT
 
 
 CHECK(PCMCavFreeEnergyProcessor::PCMCavFreeEnergyProcessor& operator = (const PCMCavFreeEnergyProcessor& proc) + operator ==)
-  HINFile f("data/methane.hin");
+  HINFile f(BALL_TEST_DATA_PATH(methane.hin));
   System S;
   f >> S;
   f.close();
@@ -80,7 +81,7 @@ RESULT
 
 CHECK(PCMCavFreeEnergyProcessor / Methane)
 	PRECISION(0.001)
-	HINFile f("data/methane.hin");
+	HINFile f(BALL_TEST_DATA_PATH(methane.hin));
 	System S;
 	f >> S;
 	f.close();

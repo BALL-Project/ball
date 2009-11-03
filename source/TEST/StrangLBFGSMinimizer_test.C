@@ -8,6 +8,7 @@
 //			 the line search fails
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 #include <BALL/MOLMEC/MINIMIZATION/strangLBFGS.h>
@@ -294,7 +295,7 @@ RESULT
 
 CHECK(StrangLBFGSMinimizer::minimize(Size, bool, improved) AlaAla)	
 	System S;
-	HINFile f("data/AA.hin");
+	HINFile f(BALL_TEST_DATA_PATH(AA.hin));
 	f >> S;
 	S.deselect();
 	
@@ -341,7 +342,7 @@ RESULT
 
 CHECK(StrangLBFGSMinimizer::minimize(Size, bool, not improved) AlaAla)	
 	System S;
-	HINFile f("data/AA.hin");
+	HINFile f(BALL_TEST_DATA_PATH(AA.hin));
 	f >> S;
 	S.deselect();
 	
@@ -389,7 +390,7 @@ RESULT
 
 CHECK(StrangLBFGSMinimizer::minimize(Size, bool, improved) Ethane)
 	System S;
-	HINFile f("data/ethan.hin");
+	HINFile f(BALL_TEST_DATA_PATH(ethan.hin));
 	f >> S;
 	FF.options[AmberFF::Option::ASSIGN_CHARGES] = "false";
 	FF.setup(S);
@@ -458,7 +459,7 @@ RESULT
 
 CHECK(StrangLBFGSMinimizer::minimize(Size, bool, not improved) Ethane)
 	System S;
-	HINFile f("data/ethan.hin");
+	HINFile f(BALL_TEST_DATA_PATH(ethan.hin));
 	f >> S;
 	FF.options[AmberFF::Option::ASSIGN_CHARGES] = "false";
 	FF.setup(S);

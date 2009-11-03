@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -33,8 +34,8 @@ CHECK(JohnsonBoveyShiftProcessor::~JohnsonBoveyShiftProcessor() throw())
   delete sp;
 RESULT
 
-Parameters parameters("data/JohnsonBoveyShiftProcessor_test.ini");
-HINFile f("data/JohnsonBoveyShiftProcessor_test.hin");
+Parameters parameters(BALL_TEST_DATA_PATH(JohnsonBoveyShiftProcessor_test.ini));
+HINFile f(BALL_TEST_DATA_PATH(JohnsonBoveyShiftProcessor_test.hin));
 System S;
 f >> S;
 f.close();
@@ -108,11 +109,11 @@ RESULT
 
 
 S.destroy();
-f.open("data/JohnsonBoveyShiftProcessor_test2.hin");
+f.open(BALL_TEST_DATA_PATH(JohnsonBoveyShiftProcessor_test2.hin));
 f >> S;
 CHECK(chemical shifts/with rings)
 	StringHashMap<float> rc_shifts;
-	ifstream infile("data/JohnsonBoveyShiftProcessor_test.dat");
+	ifstream infile(BALL_TEST_DATA_PATH(JohnsonBoveyShiftProcessor_test.dat));
 	String name;
 	float shift;
 	while (infile.good())

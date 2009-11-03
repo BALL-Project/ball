@@ -922,6 +922,7 @@ AC_CONFIG_FILES([
 	common.mak.tmp:config/common.mak.in 
 	Makefile.tmp:config/Makefile.in
 	BALLPythonConfig.h.tmp:config/BALLPythonConfig.h.in
+	BALLTestConfig.h.tmp:config/BALLTestConfig.h.in
 ])
 AC_OUTPUT
 CF_MOVE_CONFIG_FILES

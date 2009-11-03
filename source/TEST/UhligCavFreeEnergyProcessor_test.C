@@ -3,6 +3,7 @@
 //
 // $Id: UhligCavFreeEnergyProcessor_test.C,v 1.5.30.1 2007/03/25 21:49:10 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 #include <BALL/SOLVATION/uhligCavFreeEnergyProcessor.h>
@@ -21,7 +22,7 @@ using namespace BALL;
 
 PRECISION(1.0)
 CHECK(UhligCavFreeEnergyProcessor / Methane)
-HINFile f("data/methane.hin");
+HINFile f(BALL_TEST_DATA_PATH(methane.hin));
 System S;
 f >> S;
 f.close();
@@ -40,7 +41,7 @@ CHECK(UhligCavFreeEnergyProcessor::UhligCavFreeEnergyProcessor())
 RESULT 
 
 CHECK(UhligCavFreeEnergyProcessor::UhligCavFreeEnergyProcessor(const UhligCavFreeEnergyProcessor& proc))
-  HINFile f("data/methane.hin");
+  HINFile f(BALL_TEST_DATA_PATH(methane.hin));
   System S;
   f >> S;
   f.close();
@@ -68,7 +69,7 @@ RESULT
 
 
 CHECK(UhligCavFreeEnergyProcessor::UhligCavFreeEnergyProcessor& operator = (const UhligCavFreeEnergyProcessor& proc) + operator ==)
-  HINFile f("data/methane.hin");
+  HINFile f(BALL_TEST_DATA_PATH(methane.hin));
   System S;
   f >> S;
   f.close();

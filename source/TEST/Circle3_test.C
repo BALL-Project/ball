@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -151,11 +152,11 @@ CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	std::ofstream outfile(filename.c_str(), std::ios::out);
 	c.dump(outfile);
 	outfile.close();
-	TEST_FILE_REGEXP(filename.c_str(), "data/Circle3_test.txt")
+	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(Circle3_test.txt))
 RESULT
 
 CHECK(std::istream& operator >> (std::istream& s, TCircle3& circle))
-	std::ifstream instr("data/Circle3_test2.txt");
+	std::ifstream instr(BALL_TEST_DATA_PATH(Circle3_test2.txt));
 	v1 = Vector3(3.0, 4.0, 5.0);
 	v2 = Vector3(6.0, 7.0, 8.0);
 	c = Circle3();
@@ -175,7 +176,7 @@ CHECK(std::ostream& operator << (std::ostream& s, const TCircle3& circle))
 	std::ofstream outstr(filename.c_str(), std::ios::out);
 	outstr << c;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/Circle3_test2.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(Circle3_test2.txt))
 RESULT
 
 CHECK(TCircle3& operator = (const TCircle3& circle) throw())

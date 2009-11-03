@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -81,7 +82,7 @@ CHECK(ReconstructFragmentProcessor::operator ())
 
 	// try to fix C and N-termini
 	System S;
-	HINFile f("data/ReconstructFragmentProcessor_test1.hin");
+	HINFile f(BALL_TEST_DATA_PATH(ReconstructFragmentProcessor_test1.hin));
 	f >> S;
 	TEST_EQUAL(S.countAtoms(), 27)
 	ABORT_IF(S.countAtoms() != 27)

@@ -3,6 +3,7 @@
 //
 // $Id: EFShiftProcessor_test.C,v 1.5.32.1 2007/03/25 21:47:03 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -56,13 +57,13 @@ CHECK(EFShiftProcessor::finish() throw())
   //?????
 RESULT
 
-HINFile f("data/EFShiftProcessor_test.hin");
+HINFile f(BALL_TEST_DATA_PATH(EFShiftProcessor_test.hin));
 System S;
 f >> S;
 ClearChargeProcessor clear_charge;
 S.apply(clear_charge);
 
-Parameters parameters("data/EFShiftProcessor_test.ini");
+Parameters parameters(BALL_TEST_DATA_PATH(EFShiftProcessor_test.ini));
 
 CHECK(charge assignment)
 	EFShiftProcessor sp;

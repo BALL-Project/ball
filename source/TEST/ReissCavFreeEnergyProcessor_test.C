@@ -3,6 +3,7 @@
 //
 // $Id: ReissCavFreeEnergyProcessor_test.C,v 1.7.30.1 2007/03/25 21:48:52 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 #include <BALL/SOLVATION/reissCavFreeEnergyProcessor.h>
@@ -28,7 +29,7 @@ CHECK(ReissCavFreeEnergyProcessor::ReissCavFreeEnergyProcessor())
 RESULT 
 
 CHECK(ReissCavFreeEnergyProcessor::ReissCavFreeEnergyProcessor(const ReissCavFreeEnergyProcessor& proc))
-  HINFile f("data/methane.hin");
+  HINFile f(BALL_TEST_DATA_PATH(methane.hin));
   System S;
   f >> S;
   f.close();
@@ -56,7 +57,7 @@ RESULT
 
 
 CHECK(ReissCavFreeEnergyProcessor::ReissCavFreeEnergyProcessor& operator = (const ReissCavFreeEnergyProcessor& proc) + operator ==)
-  HINFile f("data/methane.hin");
+  HINFile f(BALL_TEST_DATA_PATH(methane.hin));
   System S;
   f >> S;
   f.close();
@@ -80,7 +81,7 @@ RESULT
 
 CHECK(ReissCavFreeEnergyProcessor / Methane)
 	PRECISION(0.05)
-	HINFile f("data/methane.hin");
+	HINFile f(BALL_TEST_DATA_PATH(methane.hin));
 	System S;
 	f >> S;
 	f.close();

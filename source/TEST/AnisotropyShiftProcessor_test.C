@@ -3,6 +3,7 @@
 //
 // $Id: AnisotropyShiftProcessor_test.C,v 1.7.32.1 2007/03/25 21:46:45 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -59,16 +60,16 @@ CHECK(AnisotropyShiftProcessor::finish() throw())
   // tested below
 RESULT
 
-HINFile f("data/AnisotropyShiftProcessor_test.hin");
+HINFile f(BALL_TEST_DATA_PATH(AnisotropyShiftProcessor_test.hin));
 System S;
 f >> S;
 
-Parameters parameters("data/AnisotropyShiftProcessor_test.ini");
+Parameters parameters(BALL_TEST_DATA_PATH(AnisotropyShiftProcessor_test.ini));
 
 CHECK(chemical shifts/with rings)
 	PRECISION(0.0001)
 	StringHashMap<float> aniso_shifts;
-	ifstream infile("data/AnisotropyShiftProcessor_test.dat");
+	ifstream infile(BALL_TEST_DATA_PATH(AnisotropyShiftProcessor_test.dat));
 	String name;
 	float shift;
 	while (infile.good())

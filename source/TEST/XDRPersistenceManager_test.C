@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -80,7 +81,7 @@ CHECK(void writeHeader(const char* type_name, const char* name, PointerSizeUInt 
 	Composite composite;
 	// composite >> pm;
 	os.close();
-	TEST_FILE_REGEXP(outfilename.c_str(), "data/XDRPersistenceManager_test1.txt")
+	TEST_FILE_REGEXP(outfilename.c_str(), BALL_TEST_DATA_PATH(XDRPersistenceManager_test1.txt))
 RESULT
 
 
@@ -509,7 +510,7 @@ RESULT
 
 CHECK([EXTRA] full_test2)
 	String filename;
-	PDBFile in("data/bpti.pdb");
+	PDBFile in(BALL_TEST_DATA_PATH(bpti.pdb));
 	System s;
 	in >> s;
 
@@ -548,7 +549,7 @@ RESULT
 // this time with bonds and all properties !
 CHECK([Extra] full_test3)
 	String filename;
-	HINFile hin("data/AlaGlySer.hin");
+	HINFile hin(BALL_TEST_DATA_PATH(AlaGlySer.hin));
 	System s;
 	hin >> s;
 

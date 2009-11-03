@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -98,7 +99,7 @@ RESULT
 
 
 CHECK(bool operator () (const Atom& atom) const throw())
-	PDBFile file("data/Expression_test.pdb");
+	PDBFile file(BALL_TEST_DATA_PATH(Expression_test.pdb));
 	System S;
 	file >> S;
 	HashMap<String, Size> test_expressions;

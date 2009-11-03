@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 #include <BALL/STRUCTURE/fragmentDB.h>
@@ -142,7 +143,7 @@ CHECK(FragmentDB::BuildBondsProcessor::operator () )
 RESULT
 
 CHECK(FragmentDB::BuildBondsProcessor::operator () / Tripeptide)
-  HINFile infile("data/AlaGlySer.hin");
+  HINFile infile(BALL_TEST_DATA_PATH(AlaGlySer.hin));
 	System S;
 	infile >> S;
 	TEST_EQUAL(S.countAtoms(), 31)
@@ -204,7 +205,7 @@ CHECK(FragmentDB::BuildBondsProcessor::operator () / Tripeptide)
 RESULT
 
 CHECK(FragmentDB::BuildBondsProcessor::operator () / BPTI)
-  PDBFile infile("data/OoiEnergy_test.pdb");
+  PDBFile infile(BALL_TEST_DATA_PATH(OoiEnergy_test.pdb));
 	System S;
 	infile >> S;
 	TEST_EQUAL(S.countAtoms(), 892)
@@ -222,7 +223,7 @@ CHECK(FragmentDB::BuildBondsProcessor::operator () / BPTI)
 RESULT
 
 CHECK([EXTRA]DNA bond contruction)
-	PDBFile f("data/AG.pdb");
+	PDBFile f(BALL_TEST_DATA_PATH(AG.pdb));
 	System S;
 	f.read(S);
 	f.close();

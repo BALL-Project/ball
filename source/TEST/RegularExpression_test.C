@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -239,7 +240,7 @@ CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	std::ofstream outfile(filename.c_str(), std::ios::out);
 	re2.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/Regular_Expression.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(Regular_Expression.txt))
 RESULT
 
 CHECK(friend std::ostream& operator << (std::ostream& s, const RegularExpression& regular_expression) throw())
@@ -247,11 +248,11 @@ CHECK(friend std::ostream& operator << (std::ostream& s, const RegularExpression
 	std::ofstream outstr(filename.c_str(), std::ios::out);
 	outstr << re2;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/Regular_Expression2.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(Regular_Expression2.txt))
 RESULT
 
 CHECK(friend std::istream& operator >> (std::istream& s, RegularExpression& regular_expression) throw())
-	std::ifstream instr("data/Regular_Expression2.txt");
+	std::ifstream instr(BALL_TEST_DATA_PATH(Regular_Expression2.txt));
 	re2.clear();
 	instr >> re2;
 	instr.close();

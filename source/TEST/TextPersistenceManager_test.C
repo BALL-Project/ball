@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -76,12 +77,12 @@ CHECK(TextPersistenceManager::writeHeader(const char* type_name, const char* nam
 	pm.writeHeader("TYPENAME1", "NAME", (LongSize)12345678);
 	pm.writeHeader("TYPENAME2", (const char*)0, (LongSize)34567890);
 	os.close();
-	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeHeader.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(TextPersistenceManager_test.writeHeader.txt))
 RESULT
 
 
 CHECK(TextPersistenceManager::checkHeader(const char* type_name, const char* name, LongPointerType& ptr))
-	ifstream is("data/TextPersistenceManager_test.checkHeader.txt");
+	ifstream is(BALL_TEST_DATA_PATH(TextPersistenceManager_test.checkHeader.txt));
 	TextPersistenceManager pm;
 	pm.setIstream(is);
 	LongSize ptr;
@@ -110,12 +111,12 @@ CHECK(TextPersistenceManager::writeTrailer(const char* name = 0))
 	STATUS("stream open: " << filename)
 	pm.writeTrailer((const char*)0);
 	os.close();
-	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeTrailer.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(TextPersistenceManager_test.writeTrailer.txt))
 RESULT
 
 
 CHECK(TextPersistenceManager::checkTrailer(const char* name = 0))
-	ifstream is("data/TextPersistenceManager_test.checkTrailer.txt");
+	ifstream is(BALL_TEST_DATA_PATH(TextPersistenceManager_test.checkTrailer.txt));
 	TextPersistenceManager pm;
 	pm.setIstream(is);
 	bool result = pm.checkTrailer("TYPENAME");
@@ -138,7 +139,7 @@ CHECK(TextPersistenceManager::writeStreamHeader())
 	pm.setOstream(os);
 	pm.writeStreamHeader();
 	os.close();
-	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeStreamHeader.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(TextPersistenceManager_test.writeStreamHeader.txt))
 RESULT
 
 
@@ -150,12 +151,12 @@ CHECK(TextPersistenceManager::writeStreamTrailer())
 	pm.setOstream(os);
 	pm.writeStreamTrailer();
 	os.close();
-	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeStreamTrailer.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(TextPersistenceManager_test.writeStreamTrailer.txt))
 RESULT
 
 
 CHECK(TextPersistenceManager::checkStreamHeader())
-	ifstream is("data/TextPersistenceManager_test.checkStreamHeader.txt");
+	ifstream is(BALL_TEST_DATA_PATH(TextPersistenceManager_test.checkStreamHeader.txt));
 	TextPersistenceManager pm;
 	pm.setIstream(is);
 	bool result = pm.checkStreamHeader();
@@ -167,7 +168,7 @@ RESULT
 
 
 CHECK(TextPersistenceManager::checkStreamTrailer())
-	ifstream is("data/TextPersistenceManager_test.checkStreamTrailer.txt");
+	ifstream is(BALL_TEST_DATA_PATH(TextPersistenceManager_test.checkStreamTrailer.txt));
 	TextPersistenceManager pm;
 	pm.setIstream(is);
 	bool result = pm.checkStreamTrailer();
@@ -179,7 +180,7 @@ RESULT
 
 
 CHECK(TextPersistenceManager::getObjectHeader(String& type_name, LongPointerType& ptr))
-	ifstream is("data/TextPersistenceManager_test.getObjectHeader.txt");
+	ifstream is(BALL_TEST_DATA_PATH(TextPersistenceManager_test.getObjectHeader.txt));
 	TextPersistenceManager pm;
 	pm.setIstream(is);
 	LongSize ptr = 0;
@@ -206,12 +207,12 @@ CHECK(TextPersistenceManager::writeName(const char* name))
 	pm.writeName("TEST1");
 	pm.writeName((const char*)0);
 	os.close();
-	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeName.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(TextPersistenceManager_test.writeName.txt))
 RESULT
 
 
 CHECK(TextPersistenceManager::checkName(const char* name))
-	ifstream is("data/TextPersistenceManager_test.checkName.txt");
+	ifstream is(BALL_TEST_DATA_PATH(TextPersistenceManager_test.checkName.txt));
 	TextPersistenceManager pm;
 	pm.setIstream(is);
 	bool result = pm.checkName("TEST1");
@@ -233,12 +234,12 @@ CHECK(TextPersistenceManager::writeStorableHeader(const char* type_name, const c
 	pm.writeStorableHeader("TEST1", "TEST2");
 	pm.writeStorableHeader((const char*)0, (const char*)0);
 	os.close();
-	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeStorableHeader.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(TextPersistenceManager_test.writeStorableHeader.txt))
 RESULT
 
 
 CHECK(TextPersistenceManager::checkStorableHeader(const char* type_name, const char* name))
-	ifstream is("data/TextPersistenceManager_test.checkStorableHeader.txt");
+	ifstream is(BALL_TEST_DATA_PATH(TextPersistenceManager_test.checkStorableHeader.txt));
 	TextPersistenceManager pm;
 	pm.setIstream(is);
 	bool result = pm.checkStorableHeader("TEST1", "TEST2");
@@ -261,12 +262,12 @@ CHECK(TextPersistenceManager::writePrimitiveHeader(const char* type_name, const 
 	os << std::endl;
 	pm.writePrimitiveHeader("TEST4", "TEST5");
 	os.close();
-	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writePrimitiveHeader.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(TextPersistenceManager_test.writePrimitiveHeader.txt))
 RESULT
 
 
 CHECK(TextPersistenceManager::checkPrimitiveHeader(const char* type_name, const char* name))
-	ifstream is("data/TextPersistenceManager_test.checkPrimitiveHeader.txt");
+	ifstream is(BALL_TEST_DATA_PATH(TextPersistenceManager_test.checkPrimitiveHeader.txt));
 	TextPersistenceManager pm;
 	pm.setIstream(is);
 	bool result = pm.checkPrimitiveHeader("TEST1", "TEST2");
@@ -287,12 +288,12 @@ CHECK(TextPersistenceManager::writeStorableTrailer())
 	pm.setOstream(os);
 	pm.writeStorableTrailer();
 	os.close();
-	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeStorableTrailer.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(TextPersistenceManager_test.writeStorableTrailer.txt))
 RESULT
 
 
 CHECK(TextPersistenceManager::checkStorableTrailer())
- 	ifstream is("data/TextPersistenceManager_test.checkStorableTrailer.txt");
+ 	ifstream is(BALL_TEST_DATA_PATH(TextPersistenceManager_test.checkStorableTrailer.txt));
 	TextPersistenceManager pm;
 	pm.setIstream(is);
 	bool result = pm.checkStorableTrailer();
@@ -311,12 +312,12 @@ CHECK(TextPersistenceManager::writePrimitiveTrailer())
 	pm.setOstream(os);
 	pm.writePrimitiveTrailer();
 	os.close();
-	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writePrimitiveTrailer.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(TextPersistenceManager_test.writePrimitiveTrailer.txt))
 RESULT
 
 
 CHECK(TextPersistenceManager::checkPrimitiveTrailer())
- 	ifstream is("data/TextPersistenceManager_test.checkPrimitiveTrailer.txt");
+ 	ifstream is(BALL_TEST_DATA_PATH(TextPersistenceManager_test.checkPrimitiveTrailer.txt));
 	TextPersistenceManager pm;
 	pm.setIstream(is);
 	bool result = pm.checkPrimitiveTrailer();
@@ -339,12 +340,12 @@ CHECK(TextPersistenceManager::writeObjectPointerHeader(const char* type_name, co
 	os << std::endl;
 	pm.writeObjectPointerHeader("TEST4", (const char*)0);
 	os.close();
-	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeObjectPointerHeader.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(TextPersistenceManager_test.writeObjectPointerHeader.txt))
 RESULT
 
 
 CHECK(TextPersistenceManager::checkObjectPointerHeader(const char* type_name, const char* name))
-	ifstream is("data/TextPersistenceManager_test.checkObjectPointerHeader.txt");
+	ifstream is(BALL_TEST_DATA_PATH(TextPersistenceManager_test.checkObjectPointerHeader.txt));
 	TextPersistenceManager pm;
 	pm.setIstream(is);
 	bool result = pm.checkObjectPointerHeader("TEST1", "TEST2");
@@ -367,12 +368,12 @@ CHECK(TextPersistenceManager::writeObjectReferenceHeader(const char* type_name, 
 	os << std::endl;
 	pm.writeObjectReferenceHeader("TEST4", (const char*)0);
 	os.close();
-	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeObjectReferenceHeader.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(TextPersistenceManager_test.writeObjectReferenceHeader.txt))
 RESULT
 
 
 CHECK(TextPersistenceManager::checkObjectReferenceHeader(const char* type_name, const char* name))
-	ifstream is("data/TextPersistenceManager_test.checkObjectReferenceHeader.txt");
+	ifstream is(BALL_TEST_DATA_PATH(TextPersistenceManager_test.checkObjectReferenceHeader.txt));
 	TextPersistenceManager pm;
 	pm.setIstream(is);
 	bool result = pm.checkObjectReferenceHeader("TEST1", "TEST2");
@@ -395,12 +396,12 @@ CHECK(TextPersistenceManager::writeObjectPointerArrayHeader(const char* type_nam
 	os << std::endl;
 	pm.writeObjectPointerArrayHeader("TEST4", "TEST5", 456789);
 	os.close();
-	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeObjectPointerArrayHeader.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(TextPersistenceManager_test.writeObjectPointerArrayHeader.txt))
 RESULT
 
 
 CHECK(TextPersistenceManager::checkObjectPointerArrayHeader(const char* type_name, const char* name, Size& size))
-	ifstream is("data/TextPersistenceManager_test.checkObjectPointerArrayHeader.txt");
+	ifstream is(BALL_TEST_DATA_PATH(TextPersistenceManager_test.checkObjectPointerArrayHeader.txt));
 	TextPersistenceManager pm;
 	pm.setIstream(is);
 	Size size = 0;
@@ -424,12 +425,12 @@ CHECK(TextPersistenceManager::writeObjectPointerArrayTrailer())
 	pm.setOstream(os);
 	pm.writeObjectPointerArrayTrailer();
 	os.close();
-	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeObjectPointerArrayTrailer.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(TextPersistenceManager_test.writeObjectPointerArrayTrailer.txt))
 RESULT
 
 
 CHECK(TextPersistenceManager::checkObjectPointerArrayTrailer())
- 	ifstream is("data/TextPersistenceManager_test.checkObjectPointerArrayTrailer.txt");
+ 	ifstream is(BALL_TEST_DATA_PATH(TextPersistenceManager_test.checkObjectPointerArrayTrailer.txt));
 	TextPersistenceManager pm;
 	pm.setIstream(is);
 	bool result = pm.checkObjectPointerArrayTrailer();
@@ -640,7 +641,7 @@ infile.close();
 
 CHECK([EXTRA] full_test1)
 	String filename;
-	PDBFile in("data/bpti.pdb");
+	PDBFile in(BALL_TEST_DATA_PATH(bpti.pdb));
 	System s;
 	in >> s;
 
@@ -676,7 +677,7 @@ RESULT
 // this time with bonds and all properties !
 CHECK([Extra] full_test2)
 	String filename;
-	HINFile hin("data/AlaGlySer.hin");
+	HINFile hin(BALL_TEST_DATA_PATH(AlaGlySer.hin));
 	System s;
 	hin >> s;
 

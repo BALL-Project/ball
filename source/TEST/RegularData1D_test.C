@@ -4,6 +4,7 @@
 // $Id: RegularData1D_test.C,v 1.21.30.1 2007/03/25 21:48:50 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 

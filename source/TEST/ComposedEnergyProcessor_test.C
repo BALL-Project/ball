@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 #include <BALL/ENERGY/composedEnergyProcessor.h>
@@ -68,7 +69,7 @@ CHECK(Preparations)
  	pep2 = new MyEnergyProcessor;
 	pep2->change = 2.0;
 
-	HINFile f("data/AnisotropyShiftProcessor_test.hin");   
+	HINFile f(BALL_TEST_DATA_PATH(AnisotropyShiftProcessor_test.hin));   
   f >> S; 
   f.close();
 

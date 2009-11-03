@@ -1,0 +1,1 @@
+#define BALL_TEST_DATA_PATH(filename) "data" #filename

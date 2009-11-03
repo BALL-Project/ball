@@ -3,6 +3,7 @@
 //
 // $Id: PreciseTime_test.C,v 1.11.20.1 2007/03/25 21:47:34 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -23,7 +24,7 @@ using namespace std;
 // tests for class PreciseTime::
 
 #define BUSY_WAIT \
-	double x = 0.0;  for (int i = 0; i < 200000; i++, x += rand());
+	double x = 0.0;  for (int i = 0; i < 200000; i++, x += rand()) {};
 
 PreciseTime* t_ptr = 0;
 CHECK(PreciseTime::PreciseTime())
@@ -170,13 +171,13 @@ CHECK(PreciseTime::write(PersistenceManager& pm) const )
 	pm.setOstream(of);
 	t.write(pm);
 	of.close();
-	TEST_FILE(filename.c_str(), "data/PreciseTime_test2.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(PreciseTime_test2.txt))
 RESULT
 
 
 CHECK(PreciseTime::read(PersistenceManager& pm))
 	PreciseTime t;
-	std::ifstream inf("data/PreciseTime_test2.txt");
+	std::ifstream inf(BALL_TEST_DATA_PATH(PreciseTime_test2.txt));
 	pm.setIstream(inf);
 	t.read(pm);
 	inf.close();
@@ -191,7 +192,7 @@ CHECK(ostream& operator << (ostream& os, const PreciseTime& time))
 	ofstream of(filename.c_str(), std::ios::out);
 	of << t << std::endl;
 	of.close();
-	TEST_FILE_REGEXP(filename.c_str(), "data/PreciseTime_test.txt")
+	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(PreciseTime_test.txt))
 RESULT
 
 /////////////////////////////////////////////////////////////

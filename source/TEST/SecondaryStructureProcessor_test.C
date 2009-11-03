@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -36,7 +37,7 @@ RESULT
 
 CHECK([EXTRA]assignment for BPTI)
 	System S;
-	PDBFile f("data/PDBFile_test2.pdb");
+	PDBFile f(BALL_TEST_DATA_PATH(PDBFile_test2.pdb));
 	f.read(S);
 	f.close();
 

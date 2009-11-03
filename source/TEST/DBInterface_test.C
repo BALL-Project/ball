@@ -8,6 +8,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 // NOTE: This test *cannot* be run automatically unless you provide login credentials
 // for the database in your home directory (~/.ballrc). Please make sure that this

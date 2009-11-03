@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 #include <BALL/STRUCTURE/structureMapper.h>
 #include <BALL/KERNEL/atom.h>
@@ -422,7 +423,7 @@ RESULT
 
 CHECK(RSMD for two bptis)
 	System s1, s2;
-	PDBFile pf("data/StructureMapper_test.pdb");
+	PDBFile pf(BALL_TEST_DATA_PATH(StructureMapper_test.pdb));
 	pf >> s1;
 	pf >> s2;
 	StructureMapper sm(s1, s2);	

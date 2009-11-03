@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -43,7 +44,7 @@ RESULT
 // ... all obvious test missing
 
 CHECK(SurfaceProcessor / single atom)
-	HINFile infile("data/SurfaceProcessor_test_single_atom.hin");
+	HINFile infile(BALL_TEST_DATA_PATH(SurfaceProcessor_test_single_atom.hin));
 	System system;
 	infile >> system;
 	infile.close();
@@ -57,7 +58,7 @@ CHECK(SurfaceProcessor / single atom)
 RESULT
 
 CHECK(SurfaceProcessor / methane)
-	HINFile infile("data/methane.hin");
+	HINFile infile(BALL_TEST_DATA_PATH(methane.hin));
 	System system;
 	infile >> system;
 	infile.close();

@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 #include <BALL/DATATYPE/string.h>
@@ -537,19 +538,19 @@ CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	s2->dump(dump_stream, 0);
 	dump_stream.clear();
 	dump_stream.close();
-	TEST_FILE_REGEXP(tmp_filename.c_str(), "data/string_test_dump0.txt")
+	TEST_FILE_REGEXP(tmp_filename.c_str(), BALL_TEST_DATA_PATH(string_test_dump0.txt))
 
 	NEW_TMP_FILE(tmp_filename)
 	std::ofstream dump_stream2(tmp_filename.c_str(), std::ios::out);
 	s2->dump(dump_stream2, 4);
 	dump_stream2.close();
-	TEST_FILE_REGEXP(tmp_filename.c_str(), "data/string_test_dump4.txt")
+	TEST_FILE_REGEXP(tmp_filename.c_str(), BALL_TEST_DATA_PATH(string_test_dump4.txt))
 	delete s2;
 RESULT
 
 CHECK(std::istream& getline(std::istream& s = std::cin, char delimiter = '\n') throw())
 	String line;
-	std::ifstream instream("data/String_test2.txt");
+	std::ifstream instream(BALL_TEST_DATA_PATH(String_test2.txt));
 	line.getline(instream);
 	TEST_EQUAL(line, "ABC DEF")
 	line.getline(instream);
@@ -559,10 +560,10 @@ CHECK(std::istream& getline(std::istream& s = std::cin, char delimiter = '\n') t
 RESULT
 
 CHECK(friend std::istream& getline(std::istream& s, String& string, char delimiter = '\n') throw())
-	std::ifstream test_stream("data/String_test2.txt");
+	std::ifstream test_stream(BALL_TEST_DATA_PATH(String_test2.txt));
 	if (!test_stream.good())
 	{
-		throw Exception::FileNotFound(__FILE__, __LINE__, "data/String_test2.txt");
+		throw Exception::FileNotFound(__FILE__, __LINE__, BALL_TEST_DATA_PATH(String_test2.txt));
 	}
 	String s;
 	s.getline(test_stream);

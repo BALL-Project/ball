@@ -4,6 +4,7 @@
 // $Id: RuleEvaluator_test.C,v 1.8.30.1 2007/03/25 21:48:55 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -46,7 +47,7 @@ CHECK(RuleEvaluator::getPrefix() const )
   TEST_EQUAL(eval->getPrefix(), "")
 RESULT
 
-INIFile ini("data/RuleEvaluator_test.ini");
+INIFile ini(BALL_TEST_DATA_PATH(RuleEvaluator_test.ini));
 ini.read();
 CHECK(RuleEvaluator::RuleEvaluator(INIFile& file, const String& prefix))
 	TEST_EQUAL(ini.isValid(), true)
@@ -89,7 +90,7 @@ RESULT
 
 CHECK(RuleEvaluator::String operator () (const Atom& atom) const )
 	RuleEvaluator eval(ini, "TEST1");
-	HINFile f("data/RuleEvaluator_test.hin");
+	HINFile f(BALL_TEST_DATA_PATH(RuleEvaluator_test.hin));
 	System S;
 	f >> S;
 	f.close();

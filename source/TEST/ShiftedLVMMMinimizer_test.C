@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 #include <BALL/MOLMEC/MINIMIZATION/shiftedLVMM.h>
@@ -273,7 +274,7 @@ RESULT
 
 CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) AlaAla RANK_1 UNIT_VALUE)	
 	System S;
-	HINFile f("data/AA.hin");
+	HINFile f(BALL_TEST_DATA_PATH(AA.hin));
 	f >> S;
 	S.deselect();
 	
@@ -321,7 +322,7 @@ RESULT
 
 CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) AlaAla RANK_1 BALANCING_VALUE)	
 	System S;
-	HINFile f("data/AA.hin");
+	HINFile f(BALL_TEST_DATA_PATH(AA.hin));
 	f >> S;
 	S.deselect();
 	
@@ -369,7 +370,7 @@ RESULT
 
 CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) AlaAla RANK_1 SQUARE_ROOT)	
 	System S;
-	HINFile f("data/AA.hin");
+	HINFile f(BALL_TEST_DATA_PATH(AA.hin));
 	f >> S;
 	S.deselect();
 	
@@ -417,7 +418,7 @@ RESULT
 
 CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) AlaAla RANK_1 GEOMETRIC_MEAN)	
 	System S;
-	HINFile f("data/AA.hin");
+	HINFile f(BALL_TEST_DATA_PATH(AA.hin));
 	f >> S;
 	S.deselect();
 	
@@ -465,7 +466,7 @@ RESULT
 
 CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) AlaAla RANK_1 RATIO_OF_SHIFT_PARAMS)	
 	System S;
-	HINFile f("data/AA.hin");
+	HINFile f(BALL_TEST_DATA_PATH(AA.hin));
 	f >> S;
 	S.deselect();
 	
@@ -513,7 +514,7 @@ RESULT
 
 CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) AlaAla RANK_2 UNIT_VALUE)	
 	System S;
-	HINFile f("data/AA.hin");
+	HINFile f(BALL_TEST_DATA_PATH(AA.hin));
 	f >> S;
 	S.deselect();
 	
@@ -561,7 +562,7 @@ RESULT
 
 CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) AlaAla RANK_2 BALANCING_VALUE)	
 	System S;
-	HINFile f("data/AA.hin");
+	HINFile f(BALL_TEST_DATA_PATH(AA.hin));
 	f >> S;
 	S.deselect();
 	
@@ -609,7 +610,7 @@ RESULT
 
 CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) AlaAla RANK_2 SQUARE_ROOT)	
 	System S;
-	HINFile f("data/AA.hin");
+	HINFile f(BALL_TEST_DATA_PATH(AA.hin));
 	f >> S;
 	S.deselect();
 	
@@ -657,7 +658,7 @@ RESULT
 
 CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) AlaAla RANK_2 GEOMETRIC_MEAN)	
 	System S;
-	HINFile f("data/AA.hin");
+	HINFile f(BALL_TEST_DATA_PATH(AA.hin));
 	f >> S;
 	S.deselect();
 	
@@ -705,7 +706,7 @@ RESULT
 
 CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) AlaAla RANK_2 RATIO_OF_SHIFT_PARAMS)	
 	System S;
-	HINFile f("data/AA.hin");
+	HINFile f(BALL_TEST_DATA_PATH(AA.hin));
 	f >> S;
 	S.deselect();
 	
@@ -754,7 +755,7 @@ RESULT
 
 CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) Ethane RANK_1 UNIT_VALUE)
 	System S;
-	HINFile f("data/ethan.hin");
+	HINFile f(BALL_TEST_DATA_PATH(ethan.hin));
 	f >> S;
 	FF.options[AmberFF::Option::ASSIGN_CHARGES] = "false";
 	FF.setup(S);
@@ -825,7 +826,7 @@ RESULT
 
 CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) Ethane RANK_1 BALANCING_VALUE)
 	System S;
-	HINFile f("data/ethan.hin");
+	HINFile f(BALL_TEST_DATA_PATH(ethan.hin));
 	f >> S;
 	FF.options[AmberFF::Option::ASSIGN_CHARGES] = "false";
 	FF.setup(S);
@@ -896,7 +897,7 @@ RESULT
 
 CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) Ethane RANK_1 SQUARE_ROOT)
 	System S;
-	HINFile f("data/ethan.hin");
+	HINFile f(BALL_TEST_DATA_PATH(ethan.hin));
 	f >> S;
 	FF.options[AmberFF::Option::ASSIGN_CHARGES] = "false";
 	FF.setup(S);
@@ -967,7 +968,7 @@ RESULT
 
 CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) Ethane RANK_1 GEOMETRIC_MEAN)
 	System S;
-	HINFile f("data/ethan.hin");
+	HINFile f(BALL_TEST_DATA_PATH(ethan.hin));
 	f >> S;
 	FF.options[AmberFF::Option::ASSIGN_CHARGES] = "false";
 	FF.setup(S);
@@ -1038,7 +1039,7 @@ RESULT
 
 CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) Ethane RANK_1 RATIO_OF_SHIFT_PARAMS)
 	System S;
-	HINFile f("data/ethan.hin");
+	HINFile f(BALL_TEST_DATA_PATH(ethan.hin));
 	f >> S;
 	FF.options[AmberFF::Option::ASSIGN_CHARGES] = "false";
 	FF.setup(S);
@@ -1109,7 +1110,7 @@ RESULT
 
 CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) Ethane RANK_2 UNIT_VALUE)
 	System S;
-	HINFile f("data/ethan.hin");
+	HINFile f(BALL_TEST_DATA_PATH(ethan.hin));
 	f >> S;
 	FF.options[AmberFF::Option::ASSIGN_CHARGES] = "false";
 	FF.setup(S);
@@ -1180,7 +1181,7 @@ RESULT
 
 CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) Ethane RANK_2 BALANCING_VALUE)
 	System S;
-	HINFile f("data/ethan.hin");
+	HINFile f(BALL_TEST_DATA_PATH(ethan.hin));
 	f >> S;
 	FF.options[AmberFF::Option::ASSIGN_CHARGES] = "false";
 	FF.setup(S);
@@ -1251,7 +1252,7 @@ RESULT
 
 CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) Ethane RANK_2 SQUARE_ROOT)
 	System S;
-	HINFile f("data/ethan.hin");
+	HINFile f(BALL_TEST_DATA_PATH(ethan.hin));
 	f >> S;
 	FF.options[AmberFF::Option::ASSIGN_CHARGES] = "false";
 	FF.setup(S);
@@ -1322,7 +1323,7 @@ RESULT
 
 CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) Ethane RANK_2 GEOMETRIC_MEAN)
 	System S;
-	HINFile f("data/ethan.hin");
+	HINFile f(BALL_TEST_DATA_PATH(ethan.hin));
 	f >> S;
 	FF.options[AmberFF::Option::ASSIGN_CHARGES] = "false";
 	FF.setup(S);
@@ -1393,7 +1394,7 @@ RESULT
 
 CHECK(ShiftedLVMMMinimizer::minimize(Size, bool) Ethane RANK_2 RATIO_OF_SHIFT_PARAMS)
 	System S;
-	HINFile f("data/ethan.hin");
+	HINFile f(BALL_TEST_DATA_PATH(ethan.hin));
 	f >> S;
 	FF.options[AmberFF::Option::ASSIGN_CHARGES] = "false";
 	FF.setup(S);

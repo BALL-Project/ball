@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -56,7 +57,7 @@ CHECK(http/no login)
 	TEST_EQUAL(tcp_t.getStream(), &os)
 	os.close();
 	
-	TEST_FILE(filename.c_str(), "data/http_test.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(http_test.txt))
 RESULT
 
 CHECK(set(ofstream& file, const String& address))
@@ -79,7 +80,7 @@ CHECK(set(ofstream& file, const String& address))
 	TEST_EQUAL(tcp_t.getReceivedBytes(), 3048)
 	os.close();
 
-	TEST_FILE(filename.c_str(), "data/http_test.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(http_test.txt))
 RESULT
 
 /*
@@ -98,7 +99,7 @@ CHECK(http/login)
 	TEST_EQUAL(tcp_t.getPassword(), "test")	
 	os.close();
 
-	TEST_FILE(filename.c_str(), "data/http_test.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(http_test.txt))
 RESULT
 */
 
@@ -120,7 +121,7 @@ CHECK(ftp)
 
 	os.close();
 
-	TEST_FILE(filename.c_str(), "data/ftp_test.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(ftp_test.txt))
 RESULT
 
 
@@ -156,7 +157,7 @@ CHECK(PROXY)
 	if (tcp_t.getStatusCode() != TCPTransfer::PROXY__ERROR)
 	{
 		TEST_EQUAL(tcp_t.getReceivedBytes(), 3048)
-		TEST_FILE(filename.c_str(), "data/http_test.txt")
+		TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(http_test.txt))
 	}
 RESULT
 

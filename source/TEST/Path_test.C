@@ -4,6 +4,7 @@
 // $Id: Path_test.C,v 1.12.30.3 2007/06/21 19:44:53 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -17,6 +18,8 @@ START_TEST(Path, "$Id: Path_test.C,v 1.12.30.3 2007/06/21 19:44:53 oliver Exp $"
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
+
+::chdir(BALL_TEST_DATA_PATH(..));
 
 CHECK(Path())
 	Path* p = new Path();

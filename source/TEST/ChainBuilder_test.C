@@ -8,6 +8,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -37,7 +38,7 @@ RESULT
 
 ChainBuilder cb_2;
 System molecule_sys;
-MOLFile infile("data/input_ChainBuilder_test.mol");
+MOLFile infile(BALL_TEST_DATA_PATH(input_ChainBuilder_test.mol));
 infile >> molecule_sys;
 infile.close();
 

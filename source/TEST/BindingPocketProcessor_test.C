@@ -1,5 +1,6 @@
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 #include <BALL/FORMAT/PDBFile.h>
 ///////////////////////////
 
@@ -29,7 +30,7 @@ bpp = 0;
 RESULT
 
 System sys;
-PDBFile pdbf("data/HSD1.pdb");
+PDBFile pdbf(BALL_TEST_DATA_PATH(HSD1.pdb));
 pdbf >> sys;
 
 

@@ -3,6 +3,7 @@
 //
 // $Id: ResourceFile_test.C,v 1.18.32.1 2007/03/25 21:48:53 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/resourceFile.h>
@@ -463,7 +464,7 @@ RESULT
 
 ResourceFile f;
 CHECK(ResourceFile::open(const String&))
-	TEST_EQUAL(f.open("data/test.db"), true)
+	TEST_EQUAL(f.open(BALL_TEST_DATA_PATH(test.db)), true)
 	TEST_EQUAL(f.isValid(), true)
 	TEST_NOT_EQUAL(f.getEntry("/Node1"), 0)
 	TEST_EQUAL(f.getEntry("//Node1"), 0)
@@ -492,7 +493,7 @@ RESULT
 
 CHECK(ResourceFile::saveAs(const Entry&, const String&))
 	ResourceFile rf;
-	rf.open("data/test.db");
+	rf.open(BALL_TEST_DATA_PATH(test.db));
 	TEST_EQUAL(rf.isValid(), true)
 	String filename;
 	NEW_TMP_FILE(filename);

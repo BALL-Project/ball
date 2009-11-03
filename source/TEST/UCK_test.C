@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -32,7 +33,7 @@ START_TEST(UCK, "$Id: UCK_test.C,v 1.6.20.1 2007/03/25 21:49:10 oliver Exp $")
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
-SDFile f("data/benzoic_acid.sdf");
+SDFile f(BALL_TEST_DATA_PATH(benzoic_acid.sdf));
 Molecule* m = 0;
 CHECK([Extra] Structure initialization)
 	m = f.read();

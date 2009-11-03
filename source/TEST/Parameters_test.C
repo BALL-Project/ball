@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -36,14 +37,14 @@ RESULT
 
 
 CHECK(Parameters::Parameters(const String& filename))
-  String filename("data/Parameters_test.ini");
+  String filename(BALL_TEST_DATA_PATH(Parameters_test.ini));
   Parameters para(filename);
   TEST_EQUAL(para.getFilename(), filename)
 RESULT
 
 
 CHECK(Parameters::Parameters(const Parameters& parameter))
-  String filename("data/Parameters_test.ini");
+  String filename(BALL_TEST_DATA_PATH(Parameters_test.ini));
   Parameters para(filename);
   TEST_EQUAL(para.getFilename(), filename)
   Parameters para2(para);
@@ -52,7 +53,7 @@ RESULT
 
 
 CHECK(Parameters::clear())
-  String filename("data/Parameters_test.ini");
+  String filename(BALL_TEST_DATA_PATH(Parameters_test.ini));
   Parameters para(filename);
   INIFile* inif = &para.getParameterFile();
   para.clear();
@@ -62,19 +63,19 @@ RESULT
 
 
 CHECK(Parameters::Parameters& operator = (const Parameters& parameters))
-  String filename("data/Parameters_test.ini");
+  String filename(BALL_TEST_DATA_PATH(Parameters_test.ini));
   Parameters para(filename);
   Parameters para2;
   para2 = para;
-  TEST_EQUAL(para2.getFilename(),"data/Parameters_test.ini")
+  TEST_EQUAL(para2.getFilename(),BALL_TEST_DATA_PATH(Parameters_test.ini))
   TEST_EQUAL(para2 == para, true)
 RESULT
 
 
 CHECK(Parameters::setFilename(const String& filename) + Parameters::getFilename() const + Parameters::getParameterFile())
   Parameters para;
-  para.setFilename("data/Parameters_test.ini");
-  TEST_EQUAL(para.getFilename(),"data/Parameters_test.ini")
+  para.setFilename(BALL_TEST_DATA_PATH(Parameters_test.ini));
+  TEST_EQUAL(para.getFilename(),BALL_TEST_DATA_PATH(Parameters_test.ini))
   INIFile* inif = &para.getParameterFile();
   TEST_NOT_EQUAL(inif,0)
 RESULT
@@ -82,21 +83,21 @@ RESULT
 
 CHECK(Parameters::init())
   Parameters para;
-  para.setFilename("data/Parameters_test.ini");
+  para.setFilename(BALL_TEST_DATA_PATH(Parameters_test.ini));
   bool test = para.init();
   TEST_EQUAL(test,true)
 RESULT
 
 
 CHECK(Parameters::isValid() const )
-  String filename("data/Parameters_test.ini");
+  String filename(BALL_TEST_DATA_PATH(Parameters_test.ini));
   Parameters para(filename);
   TEST_EQUAL(para.isValid(),true)
 RESULT
 
 
 CHECK(bool Parameters::operator == (const Parameters& parameters))
-  String filename("data/Parameters_test.ini");
+  String filename(BALL_TEST_DATA_PATH(Parameters_test.ini));
   Parameters para(filename);
   Parameters para2(para);  
   bool test = (para == para2);

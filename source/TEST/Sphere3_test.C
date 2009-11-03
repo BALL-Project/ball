@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 #	include <BALL/MATHS/sphere3.h>
@@ -165,11 +166,11 @@ CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	std::ofstream outfile(filename.c_str(), std::ios::out);
 	s.dump(outfile);
 	outfile.close();
-	TEST_FILE_REGEXP(filename.c_str(), "data/Sphere3_test.txt")
+	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(Sphere3_test.txt))
 RESULT
 
 CHECK(std::istream& operator >> (std::istream& s, TSphere3<T>& sphere))
-	std::ifstream instr("data/Sphere3_test2.txt");
+	std::ifstream instr(BALL_TEST_DATA_PATH(Sphere3_test2.txt));
 	s2 = Sphere3();
 	s = Sphere3(v, 4.0);	
 	instr >> s2;
@@ -184,7 +185,7 @@ CHECK(std::ostream& operator << (std::ostream& s, const TSphere3<T>& sphere))
 	std::ofstream outstr(filename.c_str(), std::ios::out);
 	outstr << s;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/Sphere3_test2.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(Sphere3_test2.txt))
 RESULT
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -8,6 +8,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/bond.h>
@@ -105,10 +106,10 @@ CHECK(AddBallAndStickModel::dump(std::ostream& s = std::cout, Size depth = 0) co
 	std::ofstream outfile(filename.c_str(), std::ios::out);
 	bs.dump(outfile);
 	outfile.close();
-	TEST_FILE_REGEXP(filename.c_str(), "data/BallAndStickModel.txt")
+	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(BallAndStickModel.txt))
 RESULT
 
-PDBFile pdb("data/1BNA.pdb");
+PDBFile pdb(BALL_TEST_DATA_PATH(1BNA.pdb));
 System system;
 pdb >> system;
 

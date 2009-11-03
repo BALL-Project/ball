@@ -4,6 +4,7 @@
 // $Id: EnergyProcessor_test.C,v 1.10.30.1 2007/03/25 21:47:04 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 #include <BALL/CONCEPT/processor.h>
@@ -59,7 +60,7 @@ using namespace BALL;
 	Size count;
 };
 
-HINFile f("data/AnisotropyShiftProcessor_test.hin");
+HINFile f(BALL_TEST_DATA_PATH(AnisotropyShiftProcessor_test.hin));
 System S;
 f >> S;
 

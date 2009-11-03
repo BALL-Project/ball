@@ -3,6 +3,7 @@
 //
 // $Id: TimeStamp_test.C,v 1.14.32.1 2007/03/25 21:49:08 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -17,7 +18,7 @@ START_TEST(TimeStamp, "$Id: TimeStamp_test.C,v 1.14.32.1 2007/03/25 21:49:08 oli
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
-#define BUSY_WAIT { double x = 0.0; for (int i = 0; i < 2000000; i++, x += rand()); } 
+#define BUSY_WAIT { double x = 0.0; for (int i = 0; i < 2000000; i++, x += rand()) {}; } 
 
 using namespace BALL;
 using namespace std;
@@ -152,13 +153,13 @@ CHECK(TimeStamp::write(PersistenceManager& pm) const )
 	pm.setOstream(of);
 	t.write(pm);
 	of.close();
-	TEST_FILE(filename.c_str(), "data/TimeStamp_test2.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(TimeStamp_test2.txt))
 RESULT
 
 
 CHECK(TimeStamp::read(PersistenceManager& pm))
 	TimeStamp t;
-	std::ifstream inf("data/TimeStamp_test2.txt");
+	std::ifstream inf(BALL_TEST_DATA_PATH(TimeStamp_test2.txt));
 	pm.setIstream(inf);
 	t.read(pm);
 	inf.close();
@@ -177,7 +178,7 @@ CHECK(TimeStamp::operator << (std::ostream& os, const TimeStamp& ts))
 	ofstream of(filename.c_str(), std::ios::out);
 	of << t << std::endl;
 	of.close();
-	TEST_FILE_REGEXP(filename.c_str(), "data/TimeStamp_test.txt")
+	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(TimeStamp_test.txt))
 RESULT
 
 /////////////////////////////////////////////////////////////

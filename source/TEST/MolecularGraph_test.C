@@ -3,6 +3,7 @@
 //
 // $Id: MolecularGraph_test.C,v 1.3.34.2 2007/03/25 21:47:21 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -32,7 +33,7 @@ RESULT
 Molecule M;
 CHECK(test molecule)
 	System S;
-	HINFile f("data/AlaGlySer.hin");
+	HINFile f(BALL_TEST_DATA_PATH(AlaGlySer.hin));
 	f >> S;
 	f.close();
 	TEST_EQUAL(S.countAtoms(), 31)

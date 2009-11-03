@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 #include <BALL/SYSTEM/file.h>
@@ -29,6 +30,8 @@ START_TEST(File, "$Id: File_test.C,v 1.47.20.1 2007/03/25 21:47:07 oliver Exp $"
 
 File* f1 = 0;
 
+String source_name(BALL_TEST_DATA_PATH(../File_test.C));
+
 CHECK(File() throw())
 	f1 = new File();
 	TEST_NOT_EQUAL(f1, 0)
@@ -39,7 +42,7 @@ CHECK(~File() throw())
 RESULT
 
 CHECK(File(const String& name, OpenMode open_mode = std::ios::in) throw(Exception::FileNotFound))
-	File f("data/File_test.txt");
+	File f(BALL_TEST_DATA_PATH(File_test.txt));
 	TEST_EQUAL(f.getSize(), 100)
 
 	File* f2;
@@ -48,7 +51,7 @@ CHECK(File(const String& name, OpenMode open_mode = std::ios::in) throw(Exceptio
 RESULT
 
 CHECK(File(const File& file) throw(Exception::FileNotFound))
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
 	File f1(f);
 	TEST_EQUAL(f1 == f, true)
@@ -59,7 +62,7 @@ CHECK(File(const File& file) throw(Exception::FileNotFound))
 RESULT
 
 CHECK(void close() throw())
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
 	TEST_EQUAL(file.getSize(), 100)
 	file.close();
@@ -68,9 +71,9 @@ CHECK(void close() throw())
 RESULT
 
 CHECK(bool open(const String& name, File::OpenMode open_mode = std::ios::in) throw(Exception::FileNotFound))
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
-	file.open("data/File_test.txt");
+	file.open(BALL_TEST_DATA_PATH(File_test.txt));
 	TEST_EQUAL(f.isOpen(), true)
 	TEST_EQUAL(file.getSize(), 100)
 
@@ -79,7 +82,7 @@ CHECK(bool open(const String& name, File::OpenMode open_mode = std::ios::in) thr
 RESULT
 
 CHECK(bool reopen() throw(Exception::FileNotFound))
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
 	file.close();
 	file.reopen();
@@ -92,39 +95,39 @@ CHECK(bool reopen() throw(Exception::FileNotFound))
 RESULT
 
 CHECK(const String& getName() const throw())
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
-	TEST_EQUAL(f.getName(), "data/File_test.txt")
+	TEST_EQUAL(f.getName(), BALL_TEST_DATA_PATH(File_test.txt))
 	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
 CHECK(Size getSize() throw())
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
 CHECK(static Size getSize(String name) throw(Exception::FileNotFound))
-	File  file("data/File_test.txt");
-	TEST_EQUAL(file.getSize("data/File_test.txt"), 100)
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
+	TEST_EQUAL(file.getSize(BALL_TEST_DATA_PATH(File_test.txt)), 100)
 	TEST_EXCEPTION(Exception::FileNotFound, file.getSize("XXX"))
 RESULT
 
 CHECK(File::OpenMode getOpenMode() const throw())
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
 	TEST_EQUAL(f.getOpenMode(), std::ios::in)
 	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
 CHECK(static Type getType(String name, bool trace_link) throw(Exception::FileNotFound))
-	File  file("data/File_test.txt");
-	TEST_EQUAL(file.getType("data/File_test.txt", false), 4)
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
+	TEST_EQUAL(file.getType(BALL_TEST_DATA_PATH(File_test.txt), false), 4)
 	TEST_EQUAL(file.getSize(), 100)
 	TEST_EXCEPTION(Exception::FileNotFound, File::getType("this_file_should_not_exists", true))
 RESULT
 
 CHECK(Type getType(bool trace_link) const throw(Exception::FileNotFound))
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
 	TEST_EQUAL(f.getType(false), 4)
 	TEST_EQUAL(f.getType(true), 4)
@@ -134,27 +137,27 @@ CHECK(Type getType(bool trace_link) const throw(Exception::FileNotFound))
 RESULT
 
 CHECK(static bool copy(String source_name, String destination_name, Size buffer_size = 4096) throw(Exception::FileNotFound))
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
-	TEST_EQUAL(f.copy("data/File_test.txt", "data/File_test.txt"), false)
-	TEST_EQUAL(f.copy("", "data/File_test.txt"), false)
-	TEST_EQUAL(f.copy("data/File_test.txt", ""), false)
+	TEST_EQUAL(f.copy(BALL_TEST_DATA_PATH(File_test.txt), BALL_TEST_DATA_PATH(File_test.txt)), false)
+	TEST_EQUAL(f.copy("", BALL_TEST_DATA_PATH(File_test.txt)), false)
+	TEST_EQUAL(f.copy(BALL_TEST_DATA_PATH(File_test.txt), ""), false)
 	TEST_EQUAL(f.copy("", ""), false)
 	TEST_EXCEPTION(Exception::FileNotFound, f.copy("ZZZZZZZZZZ", "XXX"))
-	TEST_EQUAL(f.copy("data/File_test.txt", "XXX"), true)
-	TEST_EQUAL(f.copy("data/File_test.txt", "XXX"), true)
+	TEST_EQUAL(f.copy(BALL_TEST_DATA_PATH(File_test.txt), "XXX"), true)
+	TEST_EQUAL(f.copy(BALL_TEST_DATA_PATH(File_test.txt), "XXX"), true)
 	TEST_EQUAL(file.getSize(), 100)
 	TEST_EQUAL(file.getSize("XXX"), 100)
 	f.remove("XXX");
 
 	TEST_EQUAL(f.copy("", "X"), false)
-	TEST_EQUAL(f.copy("data/File_test.txt", ""), false)
+	TEST_EQUAL(f.copy(BALL_TEST_DATA_PATH(File_test.txt), ""), false)
 RESULT
 
 CHECK(bool copyTo(const String& destination_name, Size buffer_size = 4096) throw(Exception::FileNotFound))
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
-	TEST_EQUAL(file.copyTo("data/File_test.txt"), false)
+	TEST_EQUAL(file.copyTo(BALL_TEST_DATA_PATH(File_test.txt)), false)
 	TEST_EQUAL(file.copyTo(""), false)
 	TEST_EQUAL(file.copyTo("XXX"), true)
 	TEST_EQUAL(file.copyTo("XXX"), true)
@@ -170,7 +173,7 @@ CHECK(bool copyTo(const String& destination_name, Size buffer_size = 4096) throw
 RESULT
 
 CHECK(static bool move(const String& source_name, const String& destination_name) throw(Exception::FileNotFound))
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
 	TEST_EQUAL(file.copyTo("XXX"), true)
 	TEST_EQUAL(file.copyTo("YYY"), true)
@@ -196,7 +199,7 @@ CHECK(static bool move(const String& source_name, const String& destination_name
 RESULT
 
 CHECK(bool moveTo(const String& destination_name) throw(Exception::FileNotFound))
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
 	file.copyTo("XXX");
 	File f1("XXX");
@@ -214,7 +217,7 @@ CHECK(bool moveTo(const String& destination_name) throw(Exception::FileNotFound)
 RESULT
 
 CHECK(static bool remove(String name) throw())
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
 	file.copyTo("XXX");
 	TEST_EQUAL(f.remove("XXX"), true)
@@ -223,7 +226,7 @@ CHECK(static bool remove(String name) throw())
 RESULT
 
 CHECK(bool remove() throw())
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	file.copyTo("XXX");
 	File f1 = File("XXX");
 	TEST_EQUAL(f1.remove(), true)
@@ -232,10 +235,10 @@ CHECK(bool remove() throw())
 RESULT
 
 CHECK(static bool rename(String old_path, String new_path) throw(Exception::FileNotFound))
-	File  filex("data/File_test.txt");
+	File  filex(BALL_TEST_DATA_PATH(File_test.txt));
 	filex.copyTo("XXX");
 
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
 	File f1("XXX");
 	TEST_EQUAL(f1.rename("XXX", "XXX"), true)
@@ -254,7 +257,7 @@ CHECK(static bool rename(String old_path, String new_path) throw(Exception::File
 RESULT
 
 CHECK(bool renameTo(const String& new_path) throw(Exception::FileNotFound))
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	file.copyTo("XXX");
 
 	File f1("XXX");
@@ -270,7 +273,7 @@ CHECK(bool renameTo(const String& new_path) throw(Exception::FileNotFound))
 RESULT
 
 CHECK(static bool truncate(String path, Size size = 0) throw(Exception::FileNotFound))
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	file.copyTo("XXX");
 	File f1("XXX");
 	TEST_EQUAL(f1.truncate("XXX", 50), true)
@@ -283,7 +286,7 @@ CHECK(static bool truncate(String path, Size size = 0) throw(Exception::FileNotF
 RESULT
 
 CHECK(bool truncate(Size size = 0) throw(Exception::FileNotFound))
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	file.copyTo("XXX");
 	File f1("XXX");
 	TEST_EQUAL(f1.truncate(50), true)
@@ -297,7 +300,7 @@ CHECK(bool truncate(Size size = 0) throw(Exception::FileNotFound))
 RESULT
 
 CHECK(static bool createTemporaryFilename(String& temporary) throw())
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
 	String s;
 	TEST_EQUAL(f.createTemporaryFilename(s), true)
@@ -305,7 +308,7 @@ CHECK(static bool createTemporaryFilename(String& temporary) throw())
 RESULT
 
 CHECK(bool operator == (const File& file) const throw())
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
 	File f1(f);
 	TEST_EQUAL(f1 == f, true)	
@@ -316,7 +319,7 @@ CHECK(bool operator == (const File& file) const throw())
 RESULT
 
 CHECK(bool operator != (const File& file) const throw())
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
 	File f1(f);
 	TEST_EQUAL(f1 != f, false)	
@@ -327,15 +330,15 @@ CHECK(bool operator != (const File& file) const throw())
 RESULT
 
 CHECK(static bool isAccessible(String name) throw(Exception::FileNotFound))
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
-	TEST_EQUAL(f.isAccessible("data/File_test.txt"), true)
+	TEST_EQUAL(f.isAccessible(BALL_TEST_DATA_PATH(File_test.txt)), true)
 	f.remove("XXX");
 	TEST_EQUAL(f.isAccessible("XXX"), false)
 RESULT
 
 CHECK(bool isAccessible() const throw())
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
 	TEST_EQUAL(f.isAccessible(), true)
 	file.copyTo("XXZ");
@@ -346,23 +349,23 @@ CHECK(bool isAccessible() const throw())
 RESULT
 
 CHECK(bool isCanonized() const throw(Exception::FileNotFound))
-	File f0("../TEST/data/File_test.txt");
+	File f0(BALL_TEST_DATA_PATH(../../TEST/data/File_test.txt));
 	TEST_EQUAL(f0.isValid(), true)
 	TEST_EQUAL(f0.isCanonized(), true)
 
-	File f2("data//File_test.txt");
+	File f2(BALL_TEST_DATA_PATH(/File_test.txt));
 	TEST_EQUAL(f2.isValid(), true)
 	TEST_EQUAL(f2.isCanonized(), true)
 
-	File f4("data/../data/File_test.txt");
+	File f4(BALL_TEST_DATA_PATH(../data/File_test.txt));
 	TEST_EQUAL(f4.isValid(), true)
 	TEST_EQUAL(f4.isCanonized(), true)
 
-	File f5("./data/File_test.txt");
+	File f5(BALL_TEST_DATA_PATH(.././data/File_test.txt));
 	TEST_EQUAL(f5.isValid(), true)
 	TEST_EQUAL(f5.isCanonized(), true)
 
-	File f6("data/File_test.txt");
+	File f6(BALL_TEST_DATA_PATH(File_test.txt));
 	TEST_EQUAL(f6.isValid(), true)
 	TEST_EQUAL(f6.isCanonized(), true)
 
@@ -372,15 +375,15 @@ CHECK(bool isCanonized() const throw(Exception::FileNotFound))
 RESULT
 
 CHECK(static bool isReadable(String name) throw(Exception::FileNotFound))
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
-	TEST_EQUAL(f.isReadable("File_test.C"), true)	
+	TEST_EQUAL(f.isReadable(source_name), true)	
 
 	TEST_EXCEPTION(Exception::FileNotFound, File::isReadable("this_file_should_not_exists"))
 RESULT
 
 CHECK(bool isReadable() const throw(Exception::FileNotFound))
-	File f2("File_test.C");
+	File f2(source_name);
 	TEST_EQUAL(f2.isReadable(), true)
 
 	File x;
@@ -388,15 +391,15 @@ CHECK(bool isReadable() const throw(Exception::FileNotFound))
 RESULT
 
 CHECK(static bool isWritable(String name) throw(Exception::FileNotFound))
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
-	TEST_EQUAL(f.isWritable("File_test.C"), true)	
+	TEST_EQUAL(f.isWritable(source_name), true)	
 
 	TEST_EXCEPTION(Exception::FileNotFound, File::isWritable("this_file_should_not_exists"))
 RESULT
 
 CHECK(bool isWritable() const throw(Exception::FileNotFound))
-	File f2("File_test.C");
+	File f2(source_name);
 	TEST_EQUAL(f2.isWritable(), true)	
 
 	File x;
@@ -404,12 +407,12 @@ CHECK(bool isWritable() const throw(Exception::FileNotFound))
 RESULT
 
 CHECK(static bool isExecutable(String name) throw(Exception::FileNotFound))
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
 #ifndef BALL_COMPILER_MSVC
 	TEST_EQUAL(f.isExecutable(BALL_PATH "/source/configure"), true)	
 #endif
-	TEST_EQUAL(f.isExecutable("File_test.C"), false)	
+	TEST_EQUAL(f.isExecutable(source_name), false)	
 
 	TEST_EXCEPTION(Exception::FileNotFound, File::isExecutable("this_file_should_not_exists"))
 RESULT
@@ -419,7 +422,7 @@ CHECK(bool isExecutable() const throw(Exception::FileNotFound))
 	File f1(BALL_PATH "/source/configure");
 	TEST_EQUAL(f1.isExecutable(), true)	
 #endif
-	File f2("File_test.C");
+	File f2(source_name);
 	TEST_EQUAL(f2.isExecutable(), false)	
 RESULT
 
@@ -431,31 +434,31 @@ CHECK(bool isValid() const throw())
 	TEST_EXCEPTION(Exception::FileNotFound, f1 = File("XXY"))
 	TEST_EQUAL(f1.isValid(), false)	
 
-	File f2("File_test.C");
+	File f2(source_name);
 	TEST_EQUAL(f2.isValid(), true)	
 	f2.close();
 	TEST_EQUAL(f2.isValid(), true)	
 RESULT
 
 CHECK(bool isOpen() const throw())
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
 	TEST_EQUAL(f.isOpen(), true)	
 	File f2;
 	TEST_EQUAL(f2.isOpen(), false)	
-	f2.open("File_test.C");
+	f2.open(source_name);
 	TEST_EQUAL(f2.isOpen(), true)	
 	f2.close();
 	TEST_EQUAL(f2.isOpen(), false)	
 RESULT
 
 CHECK(bool isClosed() const throw())
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
 	TEST_EQUAL(f.isClosed(), false)	
 	File f2;
 	TEST_EQUAL(f2.isClosed(), true)	
-	f2.open("File_test.C");
+	f2.open(source_name);
 	TEST_EQUAL(f2.isClosed(), false)	
 	f2.close();
 	TEST_EQUAL(f2.isClosed(), true)	
@@ -465,10 +468,10 @@ String filename;
 CHECK(std::fstream& getFileStream())
 	NEW_TMP_FILE(filename);
 	File new_file(filename, std::ios::out);
-	File  file("data/File_test.txt");
+	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	new_file.getFileStream() << "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789";
 	new_file.close();
-	TEST_FILE(filename.c_str(), "data/File_test.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(File_test.txt))
 
 	File x;
 	x.getFileStream();
@@ -505,9 +508,9 @@ RESULT
 CHECK(const String& getOriginalName() const)
 	File file;
 	TEST_EQUAL(file.getOriginalName(), "")
-	File file2("file:File_test.C");
-	TEST_EQUAL(file2.getOriginalName(), "file:File_test.C")
-	TEST_EQUAL(file2.getName(), "File_test.C")
+	File file2(String("file:")+argv[0]);
+	TEST_EQUAL(file2.getOriginalName(), String("file:")+argv[0])
+	TEST_EQUAL(file2.getName(), argv[0])
 RESULT
 
 CHECK(TransformationManager& getTransformationManager())
@@ -552,7 +555,7 @@ CHECK([EXTRA]TCPTransfer/1)
 	String filename;
 	NEW_TMP_FILE(filename)
 	f.copyTo(filename);
-	TEST_FILE(filename.c_str(), "data/http_test.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(http_test.txt))
 RESULT
 
 sleep(1);
@@ -566,7 +569,7 @@ CHECK([EXTRA]TCPTransfer/2)
 	String filename;
 	NEW_TMP_FILE(filename)
 	f.copyTo(filename);
-	TEST_FILE(filename.c_str(), "data/http_test.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(http_test.txt))
 RESULT
 
 sleep(1);
@@ -579,7 +582,7 @@ CHECK([EXTRA]TCPTransfer/3)
 	String filename;
 	NEW_TMP_FILE(filename)
 	f.copyTo(filename);
-	TEST_FILE(filename.c_str(), "data/ftp_test.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(ftp_test.txt))
 RESULT	
 
 sleep(1);
@@ -593,7 +596,7 @@ CHECK([EXTRA]TCPTransfer/4)
 	String filename;
 	NEW_TMP_FILE(filename)
 	f.copyTo(filename);
-	TEST_FILE(filename.c_str(), "data/ftp_test.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(ftp_test.txt))
 RESULT	
 
 sleep(1);
@@ -607,7 +610,7 @@ CHECK([EXTRA]TCPTransfer/5)
 	String filename;
 	NEW_TMP_FILE(filename)
 	f.copyTo(filename);
-	TEST_FILE(filename.c_str(), "data/ftp_test.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(ftp_test.txt))
 RESULT	
 
 sleep(1);
@@ -621,7 +624,7 @@ CHECK([EXTRA]TCPTransfer/6)
 	String filename;
 	NEW_TMP_FILE(filename)
 	f.copyTo(filename);
-	TEST_FILE(filename.c_str(), "data/http_test.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(http_test.txt))
 RESULT
 
 sleep(1);
@@ -635,7 +638,7 @@ CHECK([EXTRA]TCPTransfer/7)
 	String filename;
 	NEW_TMP_FILE(filename)
 	f.copyTo(filename);
-	TEST_FILE(filename.c_str(), "data/ftp_test.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(ftp_test.txt))
 RESULT
 
 CHECK([EXTRA]TCPTransfer/failedTransfer)
