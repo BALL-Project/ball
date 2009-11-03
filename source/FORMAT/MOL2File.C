@@ -413,7 +413,9 @@ namespace BALL
 		}
 
 		// interpret the section we already read from the file
-		Molecule* mol = new Molecule;
+		Molecule* mol;
+		if(molecule_.type=="PROTEIN") mol = new Protein;
+		else mol = new Molecule;
 		bool ok = buildAll_(*mol);
 		clear_();
 		if(!ok)
@@ -635,9 +637,10 @@ namespace BALL
 					break;
 
 				case 3:
+					molecule_.type = getLine().getField(0);
 				case 4:
 				case 5:
-					// ignore lines 3 - 5
+					// ignore lines 4 and 5
 					;
 			}
 		}
