@@ -8,6 +8,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -121,11 +122,11 @@ CHECK(AddCartoonModel::ribbonsEnabled())
 	TEST_EQUAL(cm.ribbonsEnabled(), false)
 RESULT
 
-HINFile hin("data/NMRSpectrum_test.hin");
+HINFile hin(BALL_TEST_DATA_PATH(NMRSpectrum_test.hin));
 System system;
 hin >> system;
 
-PDBFile pdb("data/1BNA.pdb");
+PDBFile pdb(BALL_TEST_DATA_PATH(1BNA.pdb));
 System system2;
 pdb >> system2;
 
@@ -153,7 +154,7 @@ CHECK(AddCartoonModel::createGeometricObjects() throw())
 	// System has no bonds!
 	TEST_EQUAL(cm.getGeometricObjects().size(), 0)
 
-	HINFile hin2("data/1BNA.hin");
+	HINFile hin2(BALL_TEST_DATA_PATH(1BNA.hin));
 	hin2 >> system2;
 
 	cm.clear();
@@ -165,7 +166,7 @@ RESULT
 
 CHECK(DNA model)
 	System system;
-	HINFile hin3("data/1BNA_2.hin");
+	HINFile hin3(BALL_TEST_DATA_PATH(1BNA_2.hin));
 	hin3 >> system;
 
 	cm.clear();

@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -63,7 +64,7 @@ CHECK(ShiftModel::setFilename(const String& filename))
 	sm.setFilename("XXXXXX");
 	TEST_EQUAL(sm.isValid(), false)
 	TEST_EQUAL(sm.getParameters().isValid(), false)
-	sm.setFilename("data/ShiftModel_test.ini");
+	sm.setFilename(BALL_TEST_DATA_PATH(ShiftModel_test.ini));
 	TEST_EQUAL(sm.isValid(), true)
 	TEST_EQUAL(sm.getParameters().isValid(), true)
 RESULT
@@ -73,16 +74,16 @@ CHECK(ShiftModel::getFilename() const  throw())
 	sm.setFilename("XXXXXX");
 	TEST_EQUAL(sm.isValid(), false)
 	TEST_EQUAL(sm.getFilename(), "XXXXXX")
-	sm.setFilename("data/ShiftModel_test.ini");
+	sm.setFilename(BALL_TEST_DATA_PATH(ShiftModel_test.ini));
 	TEST_EQUAL(sm.isValid(), true)
-	TEST_EQUAL(sm.getFilename(), "data/ShiftModel_test.ini")
+	TEST_EQUAL(sm.getFilename(), BALL_TEST_DATA_PATH(ShiftModel_test.ini))
 RESULT
 
 CHECK(ShiftModel::getModuleList() throw())
 	ShiftModel sm;
 	TEST_EQUAL(sm.getModuleList().size(), 0)
 	
-	sm.setFilename("data/ShiftModel_test.ini");
+	sm.setFilename(BALL_TEST_DATA_PATH(ShiftModel_test.ini));
 	TEST_EQUAL(sm.getModuleList().size(), 4)
 
 	if (sm.getModuleList().size() == 4)
@@ -121,7 +122,7 @@ CHECK(ShiftModel::unregisterModule(const String& name) throw())
 RESULT
 
 CHECK(ShiftModel::ShiftModel(const String& filename) throw())
-  ShiftModel sm("data/ShiftModel_test.ini");
+  ShiftModel sm(BALL_TEST_DATA_PATH(ShiftModel_test.ini));
 	TEST_EQUAL(sm.isValid(), true)
 	ShiftModel::ModuleList mod_list = sm.getModuleList();
 	TEST_EQUAL(mod_list.size(), 4)
@@ -132,13 +133,13 @@ CHECK(ShiftModel::ShiftModel(const String& filename) throw())
 RESULT
 
 CHECK(ShiftModel::clear() throw())
-  ShiftModel sm("data/ShiftModel_test.ini");
+  ShiftModel sm(BALL_TEST_DATA_PATH(ShiftModel_test.ini));
 	sm.clear();
 	TEST_EQUAL(sm.isValid(), false)
 	TEST_EQUAL(sm.getModuleList().size(), 0)
 RESULT
 
-const ShiftModel smx("data/ShiftModel_test.ini");
+const ShiftModel smx(BALL_TEST_DATA_PATH(ShiftModel_test.ini));
 
 CHECK(ShiftModel::ShiftModel(const ShiftModel& model) throw())
 	ShiftModel sm(smx);
@@ -163,7 +164,7 @@ CHECK(ShiftModel::ShiftModel& operator = (const ShiftModel& model) throw())
 RESULT
 
 CHECK(ShiftModel::ShiftModel& operator = (const String& filename) throw())
-	ShiftModel sm = String("data/ShiftModel_test.ini");
+	ShiftModel sm = String(BALL_TEST_DATA_PATH(ShiftModel_test.ini));
 	TEST_EQUAL(sm.isValid(), true)
 	ShiftModel::ModuleList mod_list = sm.getModuleList();
 	TEST_EQUAL(mod_list.size(), 4)
@@ -175,7 +176,7 @@ RESULT
 
 PRECISION(0.0001)
 CHECK(chemical shift/BPTI)
-	PDBFile f("data/ShiftModel_test.pdb");
+	PDBFile f(BALL_TEST_DATA_PATH(ShiftModel_test.pdb));
 	System S;
 	f >> S;
 	TEST_EQUAL(S.countAtoms(), 892)
@@ -184,12 +185,12 @@ CHECK(chemical shift/BPTI)
 	bool result = S.apply(frag_db.build_bonds);
 	TEST_EQUAL(result, true)
 	
-	ShiftModel sm("data/ShiftModel_test.ini");
+	ShiftModel sm(BALL_TEST_DATA_PATH(ShiftModel_test.ini));
 	TEST_EQUAL(sm.isValid(), true)
 	S.apply(sm);
 
   StringHashMap<float> shifts;
-  ifstream infile("data/ShiftModel_test.dat");
+  ifstream infile(BALL_TEST_DATA_PATH(ShiftModel_test.dat));
   String name;
   float shift;
   while (infile.good())

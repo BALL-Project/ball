@@ -4,6 +4,7 @@
 // $Id: Selectable_test.C,v 1.9.30.1 2007/03/25 21:48:56 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -99,7 +100,7 @@ using namespace RTTI;
 TextPersistenceManager pm;
 
 CHECK(bool read(PersistenceManager& pm) throw())
-	ifstream ifile("data/Selectable_test2.txt");
+	ifstream ifile(BALL_TEST_DATA_PATH(Selectable_test2.txt));
 	pm.setIstream(ifile);
 	se2.clear();
 	TEST_EQUAL(se2.read(pm), true)
@@ -113,7 +114,7 @@ CHECK(void write(PersistenceManager& pm) const throw())
 	pm.setOstream(ofile);
 	se.write(pm);
 	ofile.close();	
-	TEST_FILE_REGEXP(filename.c_str(), "data/Selectable_test2.txt")
+	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(Selectable_test2.txt))
 RESULT
 
 CHECK(void dump(::std::ostream& s = std::cout, Size depth = 0) const throw())
@@ -122,7 +123,7 @@ CHECK(void dump(::std::ostream& s = std::cout, Size depth = 0) const throw())
 	std::ofstream outfile(filename.c_str(), std::ios::out);
 	se.dump(outfile);
 	outfile.close();
-	TEST_FILE_REGEXP(filename.c_str(), "data/Selectable_test3.txt")
+	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(Selectable_test3.txt))
 RESULT	
 
 CHECK(bool operator != (const Selectable& selectable) const throw())

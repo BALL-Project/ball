@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -50,7 +51,7 @@ amber91.options[AmberFF::Option::ASSIGN_CHARGES] = "false";
 
 CHECK(energy test 1 (Single Stretch) [AMBER91])
 	// read a file containing a single stretch
-	HINFile f("data/AmberFF_test_1.hin");	
+	HINFile f(BALL_TEST_DATA_PATH(AmberFF_test_1.hin));	
 
 	System s;
 	f >> s;
@@ -75,7 +76,7 @@ CHECK(energy test 1 (Single Stretch) [AMBER91])
 RESULT
 
 CHECK(energy test 2 (Bend) [AMBER91])
-	HINFile f("data/AmberFF_test_2.hin");	
+	HINFile f(BALL_TEST_DATA_PATH(AmberFF_test_2.hin));	
 	System s;
 	f >> s;
 	f.close();
@@ -96,7 +97,7 @@ CHECK(energy test 2 (Bend) [AMBER91])
 RESULT
 
 CHECK(energy test 3 (VdW) [AMBER91])
-	HINFile f("data/AmberFF_test_3.hin");	
+	HINFile f(BALL_TEST_DATA_PATH(AmberFF_test_3.hin));	
 	System s;
 	f >> s;
 	f.close();
@@ -117,7 +118,7 @@ CHECK(energy test 3 (VdW) [AMBER91])
 RESULT
 
 CHECK(energy test 4 (Torsion) [AMBER91])
-	HINFile f("data/AmberFF_test_4.hin");	
+	HINFile f(BALL_TEST_DATA_PATH(AmberFF_test_4.hin));	
 	System s;
 	f >> s;
 	f.close();
@@ -137,7 +138,7 @@ CHECK(energy test 4 (Torsion) [AMBER91])
 RESULT
 
 CHECK(energy test 5 (AlaGlySer) [AMBER91])
-	HINFile f("data/AlaGlySer.hin");	
+	HINFile f(BALL_TEST_DATA_PATH(AlaGlySer.hin));	
 	System s;
 	f >> s;
 	f.close();
@@ -169,7 +170,7 @@ amber94.options[AmberFF::Option::OVERWRITE_CHARGES] = "true";
 amber94.options[AmberFF::Option::OVERWRITE_TYPENAMES] = "true";
 
 CHECK(energy test 6 (AlaGlySer) [AMBER94])
-	HINFile f("data/AlaGlySer2.hin");	
+	HINFile f(BALL_TEST_DATA_PATH(AlaGlySer2.hin));	
 	System s;
 	f >> s;
 	f.close();
@@ -190,7 +191,7 @@ CHECK(energy test 6 (AlaGlySer) [AMBER94])
 RESULT
 
 CHECK(force test 1 (Torsion) [AMBER94])
-	HINFile f("data/AMBER_test_1.hin");	
+	HINFile f(BALL_TEST_DATA_PATH(AMBER_test_1.hin));	
 	System s;
 	f >> s;
 	f.close();
@@ -227,7 +228,7 @@ CHECK(force test 1 (Torsion) [AMBER94])
 RESULT
 
 CHECK(force test 2: ES switching function [AMBER91/CDIEL])
-	HINFile f("data/AmberFF_test_3.hin");	
+	HINFile f(BALL_TEST_DATA_PATH(AmberFF_test_3.hin));	
 	System s;
 	f >> s;
 	f.close();
@@ -273,7 +274,7 @@ CHECK(force test 2: ES switching function [AMBER91/CDIEL])
 RESULT
 
 CHECK(force test 3: ES switching function [AMBER91/RDIEL])
-	HINFile f("data/AmberFF_test_3.hin");	
+	HINFile f(BALL_TEST_DATA_PATH(AmberFF_test_3.hin));	
 	System s;
 	f >> s;
 	f.close();
@@ -320,7 +321,7 @@ CHECK(force test 3: ES switching function [AMBER91/RDIEL])
 RESULT
 
 CHECK(force test 4: VdW switching function [AMBER91])
-	HINFile f("data/AmberFF_test_3.hin");	
+	HINFile f(BALL_TEST_DATA_PATH(AmberFF_test_3.hin));	
 	System s;
 	f >> s;
 	f.close();
@@ -366,7 +367,7 @@ CHECK(force test 4: VdW switching function [AMBER91])
 RESULT
 
 CHECK([EXTRA] Energies w/ selection)
-	HINFile f("data/AA.hin");
+	HINFile f(BALL_TEST_DATA_PATH(AA.hin));
 	System S;
 	f.read(S);
 
@@ -397,7 +398,7 @@ CHECK([EXTRA] Energies w/ selection)
 RESULT
 
 CHECK([EXTRA] Additivity of energies w/ selection)
-	HINFile f("data/G4.hin");
+	HINFile f(BALL_TEST_DATA_PATH(G4.hin));
 	System S;
 	f.read(S);
 

@@ -4,6 +4,7 @@
 // $Id: SDFile_test.C,v 1.8.28.1 2007/03/25 21:48:55 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -39,7 +40,7 @@ RESULT
 
 
 CHECK(Molecule* SDFile::read())
-	SDFile f("data/SDFile_test1.sdf");
+	SDFile f(BALL_TEST_DATA_PATH(SDFile_test1.sdf));
 	Molecule* molecule = f.read();
 	TEST_NOT_EQUAL(molecule, 0)
 	ABORT_IF(molecule == 0)
@@ -49,7 +50,7 @@ CHECK(Molecule* SDFile::read())
 RESULT
 
 CHECK(SDFile::read(System& system))
-	SDFile f("data/SDFile_test1.sdf");
+	SDFile f(BALL_TEST_DATA_PATH(SDFile_test1.sdf));
 	System system;
 	f.read(system);
 	TEST_EQUAL(system.countAtoms(), 518)
@@ -78,7 +79,7 @@ RESULT
 
 
 CHECK(SDFile::SDFile(const String& filename, File::OpenMode open_mode))
-	SDFile f("data/SDFile_test1.sdf", std::ios::in);
+	SDFile f(BALL_TEST_DATA_PATH(SDFile_test1.sdf), std::ios::in);
 	System system;
 	f.read(system);
 	TEST_EQUAL(system.countAtoms(), 518)
@@ -120,12 +121,12 @@ CHECK(SDFile::write(const System& system))
 	f.write(S);
 	f.close();
 	
-	TEST_FILE_REGEXP(filename.c_str(), "data/SDFile_test2.sdf")
+	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(SDFile_test2.sdf))
 RESULT
 
 
 CHECK(SDFile::SDFile& operator >> (System& system))
-  SDFile f("data/SDFile_test1.sdf");
+  SDFile f(BALL_TEST_DATA_PATH(SDFile_test1.sdf));
 	System S;
 	f >> S;
 	f.close();
@@ -167,13 +168,13 @@ CHECK(SDFile::SDFile& operator << (const System& system))
 	f << S;	
 	f.close();
 	
-	TEST_FILE_REGEXP(filename.c_str(), "data/SDFile_test2.sdf")
+	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(SDFile_test2.sdf))
 RESULT
 
 CHECK(disableAtoms() throw())
   SDFile f;
 	f.disableAtoms();
-	f.open("data/SDFile_test1.sdf");
+	f.open(BALL_TEST_DATA_PATH(SDFile_test1.sdf));
 	System S;
 	f >> S;
 	f.close();
@@ -184,7 +185,7 @@ RESULT
 
 CHECK(enableAtoms() throw())
   SDFile f;
-	f.open("data/SDFile_test1.sdf");
+	f.open(BALL_TEST_DATA_PATH(SDFile_test1.sdf));
 	f.disableAtoms();
 	f.enableAtoms();
 	System S;

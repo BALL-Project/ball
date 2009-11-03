@@ -4,6 +4,7 @@
 // $Id: PTE_test.C,v 1.13.30.1 2007/03/25 21:47:27 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 #include <BALL/KERNEL/PTE.h>
@@ -265,7 +266,7 @@ CHECK(friend std::ostream& operator << (std::ostream& s, const Element& element)
 	std::ofstream outstr(filename.c_str(), std::ios::out);
 	outstr << e1;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/PTE_test.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(PTE_test.txt))
 RESULT
 
 

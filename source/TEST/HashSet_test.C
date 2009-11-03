@@ -4,6 +4,7 @@
 // $Id: HashSet_test.C,v 1.19.30.1 2007/03/25 21:47:13 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 #include <BALL/DATATYPE/hashSet.h>
@@ -713,7 +714,7 @@ CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	std::ofstream outfile(filename.c_str(), std::ios::out);
 	hs.dump(outfile);
 	outfile.close();
-	TEST_FILE_REGEXP(filename.c_str(), "data/HashSet_test.txt")
+	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(HashSet_test.txt))
 RESULT
 
 CHECK(bool isValid() const throw())

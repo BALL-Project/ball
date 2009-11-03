@@ -8,6 +8,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -41,7 +42,7 @@ CHECK(RSConstructor())
 RESULT
 
 System molecule_sys;
-PDBFile infile("data/input_RSConstructor_test.mol");
+PDBFile infile(BALL_TEST_DATA_PATH(input_RSConstructor_test.mol));
 infile >> molecule_sys;
 infile.close();
 
@@ -80,7 +81,7 @@ for(vector<vector<vector<Atom*> > >::size_type i = 0; i != ringsystems.size(); i
 }
 	
 System molecule_sys_2;
-MOLFile infile_2("data/input_RSConstructor_test_2.mol");
+MOLFile infile_2(BALL_TEST_DATA_PATH(input_RSConstructor_test_2.mol));
 infile_2 >> molecule_sys_2;
 infile.close(); 
 

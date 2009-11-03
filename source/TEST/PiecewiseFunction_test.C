@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -239,7 +240,7 @@ CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	std::ofstream outfile(filename.c_str(), std::ios::out);
 	PWF2.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/PiecewiseFunction_test.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(PiecewiseFunction_test.txt))
 RESULT
 
 /////////////////////////////////////////////////////////////

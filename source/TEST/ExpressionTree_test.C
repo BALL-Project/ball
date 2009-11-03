@@ -4,6 +4,7 @@
 // $Id: ExpressionTree_test.C,v 1.2.32.1 2007/03/25 21:47:05 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -293,7 +294,7 @@ CHECK(void dump(std::ostream& is = std::cout, Size depth = 0) const throw())
 	std::ofstream outfile(filename.c_str(), std::ios::out);
 	et1.dump(outfile);
 	outfile.close();
-	TEST_FILE_REGEXP(filename.c_str(), "data/ExpressionTree_test.txt")
+	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(ExpressionTree_test.txt))
 RESULT
 
 ////////////////////////////////////////////////////////////

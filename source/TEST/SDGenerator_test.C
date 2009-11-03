@@ -8,6 +8,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -42,7 +43,7 @@ RESULT
 
 SDGenerator sdg_2;
 System molecule_sys;
-PDBFile infile("data/input_SDGenerator_test.pdb");
+PDBFile infile(BALL_TEST_DATA_PATH(input_SDGenerator_test.pdb));
 infile >> molecule_sys;
 infile.close();
 
@@ -104,12 +105,12 @@ CHECK(vector<vector<Atom*> sequenceRings(vector<vector<Atom*> >& ringsystem))
 RESULT
 
 System molecule_sys_2;
-PDBFile infile_2("data/input_SDGenerator_test_2a.pdb");
+PDBFile infile_2(BALL_TEST_DATA_PATH(input_SDGenerator_test_2a.pdb));
 infile_2 >> molecule_sys_2;
 infile.close(); 
 
 System molecule_sys_3;
-PDBFile infile_3("data/input_SDGenerator_test_2b.pdb");
+PDBFile infile_3(BALL_TEST_DATA_PATH(input_SDGenerator_test_2b.pdb));
 infile_3 >> molecule_sys_3;
 infile_3.close(); 
 

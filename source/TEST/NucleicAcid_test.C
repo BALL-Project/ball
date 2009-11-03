@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 #include <BALL/KERNEL/nucleicAcid.h>
@@ -226,7 +227,7 @@ CHECK([EXTRA]NucleicAcid::dump(ostream&, Size))
 	std::ofstream outfile(filename.c_str(), std::ios::out);
 	na1.dump(outfile);
 	outfile.close();
-	TEST_FILE_REGEXP(filename.c_str(), "data/NucleicAcid_test.txt")
+	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(NucleicAcid_test.txt))
 RESULT
 
 TextPersistenceManager pm;

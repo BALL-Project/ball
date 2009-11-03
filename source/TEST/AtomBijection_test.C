@@ -8,6 +8,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -74,17 +75,17 @@ CHECK(double calculateRMSD() const)
 RESULT
 
 Molecule benzene;
-HINFile f("data/benzene.hin");
+HINFile f(BALL_TEST_DATA_PATH(benzene.hin));
 f >> benzene;
 f.close();
 
 Molecule pyrrole;
-f.open("data/pyrrole.hin");
+f.open(BALL_TEST_DATA_PATH(pyrrole.hin));
 f >> pyrrole;
 f.close();
 
 Molecule indole;
-f.open("data/indole.hin");
+f.open(BALL_TEST_DATA_PATH(indole.hin));
 f >> indole;
 f.close();
 

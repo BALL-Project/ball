@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 #include <BALL/NMR/assignShiftProcessor.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
@@ -22,7 +23,7 @@ System s;
 CHECK(preparations)
 	STATUS("opening HIN file")
 	HINFile f;
-	f.open("data/AssignShiftProcessor_test.hin");
+	f.open(BALL_TEST_DATA_PATH(AssignShiftProcessor_test.hin));
 	STATUS("reading structure")
 	f >> s;
 RESULT
@@ -30,7 +31,7 @@ RESULT
 FragmentDB db("fragments/Fragments.db");
 
 CHECK(AssignShiftProcessor::AssignShiftProcessor(const vector<NMRAtomData*>& atom_data)/apply())
-	NMRStarFile rs("data/AssignShiftProcessor_test.str");
+	NMRStarFile rs(BALL_TEST_DATA_PATH(AssignShiftProcessor_test.str));
 	TEST_EQUAL(rs.getData()[0].atom_data.size(), 797)
 	TEST_EQUAL(rs.getNumberOfAtoms(), 797)
 	TEST_EQUAL(s.countAtoms(), 1944)

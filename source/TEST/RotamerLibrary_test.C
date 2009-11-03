@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -80,7 +81,7 @@ RESULT
 
 CHECK(ResidueRotamerSet* getRotamerSet(const Residue& residue))
   System S;
-	HINFile ags_file("data/AlaGlySer.hin");
+	HINFile ags_file(BALL_TEST_DATA_PATH(AlaGlySer.hin));
 	ags_file >> S;
 	ABORT_IF(S.countResidues() != 3)
 
@@ -172,7 +173,7 @@ rc.disable(ResidueChecker::OVERLAPPING_ATOMS);
 
 CHECK(Side chain positions for Ser)
 	System S;
-	HINFile ags_file("data/AlaGlySer.hin");
+	HINFile ags_file(BALL_TEST_DATA_PATH(AlaGlySer.hin));
 	ags_file >> S;
 	ABORT_IF(S.countResidues() != 3)
 
@@ -220,7 +221,7 @@ RESULT
 
 CHECK(Side chain positions for Pro)
 	System S;
-	HINFile ags_file("data/GPG.hin");
+	HINFile ags_file(BALL_TEST_DATA_PATH(GPG.hin));
 	ags_file >> S;
 	ABORT_IF(S.countResidues() != 3)
 
@@ -301,7 +302,7 @@ RESULT
 
 CHECK(Side chain conformations for Dunbrack library)
 	System S;
-	HINFile infile("data/all_amino.hin");
+	HINFile infile(BALL_TEST_DATA_PATH(all_amino.hin));
 	infile >> S;
 	infile.close();
 	TEST_EQUAL(S.countResidues(), 20)

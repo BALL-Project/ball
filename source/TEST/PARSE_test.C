@@ -3,6 +3,7 @@
 //
 // $Id: PARSE_test.C,v 1.5.28.1 2007/03/25 21:47:25 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -43,7 +44,7 @@ float total_charge;
 ClearChargeProcessor clear_charges;
 
 CHECK("AlaGlySer: -CONH-, -OH, COO(-), NH3(+), aliphatic carbons with hydrogens")
-	hinfile.open("data/AlaGlySer.hin");
+	hinfile.open(BALL_TEST_DATA_PATH(AlaGlySer.hin));
 	hinfile >> system;
 	hinfile.close();
 	system.apply(db.normalize_names);
@@ -55,7 +56,7 @@ CHECK("AlaGlySer: -CONH-, -OH, COO(-), NH3(+), aliphatic carbons with hydrogens"
 		total_charge += atom_it->getCharge();
 	}
 	TEST_REAL_EQUAL(total_charge, 0.0)
-	hinfile.open("data/AlaGlySer_PARSE_charges.hin");
+	hinfile.open(BALL_TEST_DATA_PATH(AlaGlySer_PARSE_charges.hin));
 	hinfile >> ref_system;
 	hinfile.close();
 	for (atom_it = system.beginAtom(), ref_atom_it = ref_system.beginAtom();
@@ -67,7 +68,7 @@ RESULT
 
 CHECK("AspGluAsnGlnArg: -COOH -CONH2 -CONH- -CNC-(NH2)2")
 	system.clear();
-	hinfile.open("data/AspGluAsnGlnArg.hin");
+	hinfile.open(BALL_TEST_DATA_PATH(AspGluAsnGlnArg.hin));
 	hinfile >> system;
 	hinfile.close();
 	system.apply(db.normalize_names);
@@ -81,7 +82,7 @@ CHECK("AspGluAsnGlnArg: -COOH -CONH2 -CONH- -CNC-(NH2)2")
 	}
 	TEST_REAL_EQUAL(total_charge, -0.0)
 	ref_system.clear();
-	hinfile.open("data/AspGluAsnGlnArg_PARSE_charges.hin");
+	hinfile.open(BALL_TEST_DATA_PATH(AspGluAsnGlnArg_PARSE_charges.hin));
 	hinfile >> ref_system;
 	hinfile.close();
 	for (atom_it = system.beginAtom(), ref_atom_it = ref_system.beginAtom();
@@ -93,7 +94,7 @@ RESULT
 
 CHECK("PheTyrTrpHisLys+.hin")
 	system.clear();
-	hinfile.open("data/PheTyrTrpHisLys+.hin");
+	hinfile.open(BALL_TEST_DATA_PATH(PheTyrTrpHisLys+.hin));
 	hinfile >> system;
 	hinfile.close();
 	system.apply(db.normalize_names);
@@ -107,7 +108,7 @@ CHECK("PheTyrTrpHisLys+.hin")
 	}
 	TEST_REAL_EQUAL(total_charge, 1.0)
 	ref_system.clear();
-	hinfile.open("data/PheTyrTrpHisLys+_PARSE_charges.hin");
+	hinfile.open(BALL_TEST_DATA_PATH(PheTyrTrpHisLys+_PARSE_charges.hin));
 	hinfile >> ref_system;
 	hinfile.close();
 	for (atom_it = system.beginAtom(), ref_atom_it = ref_system.beginAtom();
@@ -119,7 +120,7 @@ RESULT
 
 CHECK("Cys-Asp-Glu-Tyr-His+Arg+.hin")
 	system.clear();
-	hinfile.open("data/Cys-Asp-Glu-Tyr-His+Arg+.hin");
+	hinfile.open(BALL_TEST_DATA_PATH(Cys-Asp-Glu-Tyr-His+Arg+.hin));
 	hinfile >> system;
 	hinfile.close();
 	system.apply(db.normalize_names);
@@ -133,7 +134,7 @@ CHECK("Cys-Asp-Glu-Tyr-His+Arg+.hin")
 	}
 	TEST_REAL_EQUAL(total_charge, -2.0)
 	ref_system.clear();
-	hinfile.open("data/Cys-Asp-Glu-Tyr-His+Arg+_PARSE_charges.hin");
+	hinfile.open(BALL_TEST_DATA_PATH(Cys-Asp-Glu-Tyr-His+Arg+_PARSE_charges.hin));
 	hinfile >> ref_system;
 	hinfile.close();
 	for (atom_it = system.beginAtom(), ref_atom_it = ref_system.beginAtom();
@@ -146,7 +147,7 @@ RESULT
 
 CHECK("SerThrLysCysMet.hin")
 	system.clear();
-	hinfile.open("data/SerThrLysCysMet.hin");
+	hinfile.open(BALL_TEST_DATA_PATH(SerThrLysCysMet.hin));
 	hinfile >> system;
 	hinfile.close();
 	system.apply(db.normalize_names);
@@ -160,7 +161,7 @@ CHECK("SerThrLysCysMet.hin")
 	}
 	TEST_REAL_EQUAL(total_charge, 0.0)
 	ref_system.clear();
-	hinfile.open("data/SerThrLysCysMet_PARSE_charges.hin");
+	hinfile.open(BALL_TEST_DATA_PATH(SerThrLysCysMet_PARSE_charges.hin));
 	hinfile >> ref_system;
 	hinfile.close();
 	for (atom_it = system.beginAtom(), ref_atom_it = ref_system.beginAtom();

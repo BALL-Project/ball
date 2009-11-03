@@ -3,6 +3,7 @@
 //
 // $Id: Peptides_test.C,v 1.3.34.1 2007/03/25 21:47:31 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -107,7 +108,7 @@ CHECK(OneLetterToThreeLetter(const OneLetterAASequence& sequence))
 RESULT
 
 CHECK(GetSequence(const Protein& protein))
-	HINFile f("data/AlaGlySer.hin");
+	HINFile f(BALL_TEST_DATA_PATH(AlaGlySer.hin));
 	System S;
 	f >> S;
 	TEST_EQUAL(S.countResidues(), 3)

@@ -8,6 +8,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -43,7 +44,7 @@ RESULT
 
 
 CHECK(MOL2File::read(System& system))
-	MOL2File f("data/AAG.mol2");
+	MOL2File f(BALL_TEST_DATA_PATH(AAG.mol2));
 	System system;
 	f.read(system);
 	TEST_EQUAL(system.countAtoms(), 30)
@@ -52,14 +53,14 @@ CHECK(MOL2File::read(System& system))
 RESULT
 
 CHECK(MOL2File::MOL2File(const String& filename, File::OpenMode open_mode))
-	MOL2File f("data/AAG.mol2", std::ios::in);
+	MOL2File f(BALL_TEST_DATA_PATH(AAG.mol2), std::ios::in);
 	System system;
 	f.read(system);
 	TEST_EQUAL(system.countAtoms(), 30)
 	TEST_EQUAL(system.countResidues(), 3)
 	TEST_EQUAL(system.countBonds(), 29)
 
-	MOL2File f2("data/chimera-test.mol2");
+	MOL2File f2(BALL_TEST_DATA_PATH(chimera-test.mol2));
 	System s2;
 	f2.read(s2);
 	TEST_EQUAL(s2.countAtoms(), 3);
@@ -100,12 +101,12 @@ CHECK(MOL2File::write(const System& system))
 	f.write(S);
 	f.close();
 	
-	TEST_FILE_REGEXP(filename.c_str(), "data/MOL2File_test.mol2")
+	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(MOL2File_test.mol2))
 RESULT
 
 
 CHECK(MOL2File::MOL2File& operator >> (System& system))
-  MOL2File f("data/AAG.mol2");
+  MOL2File f(BALL_TEST_DATA_PATH(AAG.mol2));
 	System S;
 	f >> S;
 	f.close();
@@ -143,11 +144,11 @@ CHECK(MOL2File::MOL2File& operator << (const System& system))
 	f << S;	
 	f.close();
 	
-	TEST_FILE_REGEXP(filename.c_str(), "data/MOL2File_test.mol2")
+	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(MOL2File_test.mol2))
 RESULT
 
 CHECK([Extra]Reading of triple bonds)
-	MOL2File f("data/MOL2File_test2.mol2");
+	MOL2File f(BALL_TEST_DATA_PATH(MOL2File_test2.mol2));
 	System S;
 	CAPTURE_OUTPUT_LEVEL(2000)
 	f >> S;
@@ -159,7 +160,7 @@ CHECK([Extra]Reading of triple bonds)
 RESULT
 
 CHECK([Extra]Handling of subfragments)
-	MOL2File f("data/MOL2File_test3.mol2");
+	MOL2File f(BALL_TEST_DATA_PATH(MOL2File_test3.mol2));
 	System S;
 	CAPTURE_OUTPUT_LEVEL(2000)
 	f >> S;
@@ -187,7 +188,7 @@ CHECK([Extra]Handling of subfragments)
 RESULT
 
 CHECK([Extra]Handling of static sets)
-	MOL2File f("data/MOL2File_test4.mol2");
+	MOL2File f(BALL_TEST_DATA_PATH(MOL2File_test4.mol2));
 	System S;
 	CAPTURE_OUTPUT_LEVEL(2000)
 	f >> S;

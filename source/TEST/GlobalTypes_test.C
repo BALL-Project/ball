@@ -4,6 +4,7 @@
 // $Id: GlobalTypes_test.C,v 1.5.28.1 2007/03/25 21:47:10 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 

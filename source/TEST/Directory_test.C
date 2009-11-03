@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 #include <BALL/SYSTEM/directory.h>
@@ -26,15 +27,7 @@ bool cleanup()
 {
 	if (test_dir == "")
 	{
-		char buffer[10000];
-		::getcwd(buffer, Directory::MAX_PATH_LENGTH);
-		test_dir = buffer;
-		#ifdef BALL_OS_WINDOWS
-			test_dir += "\\data\\Directory_test";
-		#else
-			test_dir += "/data/Directory_test";
-		#endif
-
+		test_dir = BALL_TEST_DATA_PATH(Directory_test);
 		::chdir(test_dir.c_str());
 	}
 

@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 #include <BALL/STRUCTURE/buildBondsProcessor.h>
@@ -45,19 +46,19 @@ CHECK(operator() (AtomContainer& ac))
 	bbp2.options[BuildBondsProcessor::Option::REESTIMATE_BONDORDERS_RINGS] = "false";
 	bbp2.options[BuildBondsProcessor::Option::DELETE_OVERESTIMATED_BONDS] = "false";
 	
-	PDBFile infileA("data/ACE_test_A.pdb");
+	PDBFile infileA(BALL_TEST_DATA_PATH(ACE_test_A.pdb));
 	System sysA;
 	infileA >> sysA;
 	sysA.apply(bbp2);
 	TEST_EQUAL(sysA.countBonds(), 1666)
 
-	PDBFile infileB("data/ACE_test_B.pdb");
+	PDBFile infileB(BALL_TEST_DATA_PATH(ACE_test_B.pdb));
 	System sysB;
 	infileB >> sysB;
 	sysB.apply(bbp2);
 	TEST_EQUAL(sysB.countBonds(), 468)
 		
-	SDFile infileC("data/buildBondsProcessor_test.sdf");
+	SDFile infileC(BALL_TEST_DATA_PATH(buildBondsProcessor_test.sdf));
 	System sysC;
 	infileC >> sysC;
 	Size results[] = {9, 9, 9, 9, 9, 8, 9, 20, 6, 18, 12, 24, 21, 22};
@@ -104,7 +105,7 @@ RESULT
 CHECK(setBondLengths(const String& filename))
 	BuildBondsProcessor bbp2;
 	bbp2.setBondLengths("bond_lengths/bond_lengths.db");
-	PDBFile infileA("data/ACE_test_A.pdb");
+	PDBFile infileA(BALL_TEST_DATA_PATH(ACE_test_A.pdb));
 	System sysA;
 	infileA >> sysA;
 	sysA.apply(bbp2);

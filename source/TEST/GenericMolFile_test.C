@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -35,7 +36,7 @@ RESULT
 GenericMolFile mol;
 
 CHECK(GenericMolFile(const String& filename, File::OpenMode open_mode = std::ios::in) throw(Exception::FileNotFound))
-  mol = GenericMolFile("data/GenericMolFile_test.dat");
+  mol = GenericMolFile(BALL_TEST_DATA_PATH(GenericMolFile_test.dat));
   TEST_EQUAL(mol.isValid(), true)
 RESULT
 

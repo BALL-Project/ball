@@ -4,6 +4,7 @@
 // $Id: INIFile_test.C,v 1.27.28.2 2007/08/09 17:17:09 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/INIFile.h>
@@ -82,10 +83,10 @@ RESULT
 INIFile ini;
 
 CHECK(bool read())
-	ini.setFilename("data/INIFile_test.ini");
+	ini.setFilename(BALL_TEST_DATA_PATH(INIFile_test.ini));
 	TEST_EQUAL(ini.read(), true)
 	
-	INIFile ini2("data/empty_file.txt");
+	INIFile ini2(BALL_TEST_DATA_PATH(empty_file.txt));
 	TEST_EQUAL(ini2.read(), true)
 RESULT
 
@@ -112,7 +113,7 @@ CHECK(LineIterator getLine(Size line_number))
 RESULT
 
 CHECK(bool setLine(LineIterator line_it, const String& line))
-	INIFile ini("data/INIFile_test.ini");
+	INIFile ini(BALL_TEST_DATA_PATH(INIFile_test.ini));
 	ini.read();
 	INIFile::LineIterator it(ini.getLine(6));
   TEST_EQUAL(ini.setLine(it, "test2=b"), true)
@@ -131,7 +132,7 @@ CHECK(bool setLine(LineIterator line_it, const String& line))
 RESULT
 
 CHECK(bool deleteLine(LineIterator line_it))
-	INIFile ini("data/INIFile_test.ini");
+	INIFile ini(BALL_TEST_DATA_PATH(INIFile_test.ini));
 	ini.read();
 
 	INIFile::LineIterator it;
@@ -156,7 +157,7 @@ CHECK(bool deleteLine(LineIterator line_it))
 RESULT
 
 CHECK(bool insertLine(LineIterator line_it, const String& line))
-	INIFile ini("data/INIFile_test.ini");
+	INIFile ini(BALL_TEST_DATA_PATH(INIFile_test.ini));
 	ini.read();
 	INIFile::LineIterator it(ini.getLine(5));
   TEST_EQUAL(ini.insertLine(it, "insertTest = QQQ"), true)
@@ -193,15 +194,15 @@ CHECK(bool insertLine(LineIterator line_it, const String& line))
 RESULT
 
 CHECK(bool appendLine(const String& section_name, const String& line))
-	INIFile ini("data/INIFile_test.ini");
+	INIFile ini(BALL_TEST_DATA_PATH(INIFile_test.ini));
 	ini.read();
 	
 	CAPTURE_OUTPUT_LEVEL(2000)
 		TEST_EQUAL(ini.appendLine("Section9", "GAU"), false)
-	COMPARE_OUTPUT("In INIFile data/INIFile_test.ini , error while appending line: GAU . Illegal section-name: Section9\n")
+	COMPARE_OUTPUT("In INIFile "BALL_TEST_DATA_PATH(INIFile_test.ini)" , error while appending line: GAU . Illegal section-name: Section9\n")
 	CAPTURE_OUTPUT_LEVEL(2000)
 		TEST_EQUAL(ini.appendLine("Section2", "[AU"), false)	
-	COMPARE_OUTPUT("In INIFile data/INIFile_test.ini , error while appending line: [AU . Illegal section-name: Section2\n")
+	COMPARE_OUTPUT("In INIFile "BALL_TEST_DATA_PATH(INIFile_test.ini)" , error while appending line: [AU . Illegal section-name: Section2\n")
 	TEST_EQUAL(ini.appendLine("Section3", "test1 = 123"), true)	
 	TEST_EQUAL(*ini.getLine(9), "test1 = 123")
 	TEST_EQUAL(ini.getNumberOfLines(), 11)
@@ -220,7 +221,7 @@ CHECK(bool appendLine(const String& section_name, const String& line))
 RESULT
 
 CHECK(Size getNumberOfLines() const)
-	INIFile ini2("data/amber91.ini");
+	INIFile ini2(BALL_TEST_DATA_PATH(amber91.ini));
 	TEST_EQUAL(ini2.read(), true)
 	TEST_EQUAL(ini2.getNumberOfLines(), 1379)
   TEST_EQUAL(ini.getNumberOfLines(), 10)
@@ -354,7 +355,7 @@ CHECK(bool setValue(const String& section, const String& key, const String& valu
 RESULT
 
 CHECK(bool insertValue(const String& section, const String& key, const String& value))
-	INIFile ini("data/INIFile_test.ini");
+	INIFile ini(BALL_TEST_DATA_PATH(INIFile_test.ini));
 	ini.read();
 	TEST_EQUAL(ini.insertValue("nonsense", "test", "insertValue_test"), false)
 	TEST_EQUAL(ini.insertValue("Section1", "test", "insertValue_test"), true)
@@ -368,7 +369,7 @@ CHECK(bool write())
 	NEW_TMP_FILE(filename)
 	ini.setFilename(filename);
 	TEST_EQUAL(ini.write(), true)
-	TEST_FILE("data/INIFile_test2.ini", filename.c_str())
+	TEST_FILE(BALL_TEST_DATA_PATH(INIFile_test2.ini), filename.c_str())
 
 	NEW_TMP_FILE(filename)
 	INIFile emptyFile;
@@ -377,7 +378,7 @@ CHECK(bool write())
 RESULT
 
 CHECK(bool deleteSection(const String& section))
-	INIFile ini("data/INIFile_test.ini");
+	INIFile ini(BALL_TEST_DATA_PATH(INIFile_test.ini));
 	ini.read();
 	
 	TEST_EQUAL(ini.deleteSection(ini.HEADER), true)
@@ -398,18 +399,18 @@ CHECK(bool deleteSection(const String& section))
 RESULT
 
 CHECK(bool appendSection(const String& section))
-	INIFile ini("data/INIFile_test.ini");
+	INIFile ini(BALL_TEST_DATA_PATH(INIFile_test.ini));
 	ini.read();
 	TEST_EQUAL(ini.hasSection(ini.HEADER), true)
 	CAPTURE_OUTPUT_LEVEL(2000)
 		TEST_EQUAL(ini.appendSection(ini.HEADER), false)
-		const char* output = "INIFile::appendSection: data/INIFile_test.ini , while adding section: '#HEADER!' already exists.\n";
+		const char* output = "INIFile::appendSection: "BALL_TEST_DATA_PATH(INIFile_test.ini)" , while adding section: '#HEADER!' already exists.\n";
 	COMPARE_OUTPUT(output)
   TEST_EQUAL(ini.getNumberOfLines(), 10)
 
   CAPTURE_OUTPUT_LEVEL(2000)
 		TEST_EQUAL(ini.appendSection("Section1"), false)
-	COMPARE_OUTPUT("INIFile::appendSection: data/INIFile_test.ini , while adding section: 'Section1' already exists.\n")
+	COMPARE_OUTPUT("INIFile::appendSection: "BALL_TEST_DATA_PATH(INIFile_test.ini)" , while adding section: 'Section1' already exists.\n")
   TEST_EQUAL(ini.getNumberOfLines(), 10)
 	TEST_EQUAL(ini.hasSection("Section1"), true)
 
@@ -428,7 +429,7 @@ RESULT
 
 CHECK(bool apply(UnaryProcessor<LineIterator>& processor))
 	MyItemCollector<INIFile::LineIterator> myproc;
-	INIFile ini("data/INIFile_test.ini");
+	INIFile ini(BALL_TEST_DATA_PATH(INIFile_test.ini));
 	ini.read();
 
 	TEST_EQUAL(ini.apply(myproc), true)
@@ -445,9 +446,9 @@ CHECK(bool apply(UnaryProcessor<LineIterator>& processor))
 RESULT
 
 CHECK(bool operator == (const INIFile& inifile) const)
-	INIFile ini("data/INIFile_test.ini");
+	INIFile ini(BALL_TEST_DATA_PATH(INIFile_test.ini));
 	ini.read();
-	INIFile ini2("data/INIFile_test.ini");
+	INIFile ini2(BALL_TEST_DATA_PATH(INIFile_test.ini));
 	ini2.read();
 	TEST_EQUAL(ini == ini2, true)
 	ini.deleteLine(ini.getLine(2));
@@ -458,7 +459,7 @@ CHECK(bool operator == (const INIFile& inifile) const)
 RESULT
 
 CHECK(bool isValid(const LineIterator& it) const)
-	INIFile ini("data/INIFile_test.ini");
+	INIFile ini(BALL_TEST_DATA_PATH(INIFile_test.ini));
 	ini.read();
 
 	INIFile::LineIterator it;
@@ -471,7 +472,7 @@ CHECK(bool isValid(const LineIterator& it) const)
 RESULT
 
 CHECK(bool isValid(const SectionIterator& it) const)
-	INIFile ini("data/INIFile_test.ini");
+	INIFile ini(BALL_TEST_DATA_PATH(INIFile_test.ini));
 	ini.read();
 	INIFile::SectionIterator it;
 	TEST_EQUAL(ini.isValid(it), true)
@@ -515,7 +516,7 @@ CHECK(~IteratorTraits_())
 	delete itt;
 RESULT
 
-INIFile inix("data/INIFile_test.ini");
+INIFile inix(BALL_TEST_DATA_PATH(INIFile_test.ini));
 inix.read();
 INIFile::LineIterator it(ini.getLine(0));
 INIFile::LineIterator unbound;
@@ -728,7 +729,7 @@ CHECK(void toSectionLastLine())
 RESULT
 
 CHECK([EXTRA] large_enry)
-	INIFile ini("data/INIFile_test3.ini");
+	INIFile ini(BALL_TEST_DATA_PATH(INIFile_test3.ini));
 	ini.read();
 	TEST_EQUAL(ini.hasEntry("Section1", "PythonHotkeys"), true)
 	String res = ini.getValue("Section1", "PythonHotkeys");

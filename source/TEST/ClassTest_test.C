@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 using namespace BALL;
 
@@ -58,11 +59,11 @@ CHECK("STATUS(a)")
 RESULT
 
 CHECK("TEST_FILE(filename, templatename)")
-	TEST_FILE("data/class_test_infile.txt", "data/class_test_template.txt")
+	TEST_FILE(BALL_TEST_DATA_PATH(class_test_infile.txt), BALL_TEST_DATA_PATH(class_test_template.txt))
 RESULT
 
 CHECK("TEST_FILE_REGEXP(filename, templatename)")
-	TEST_FILE_REGEXP("data/class_test_infile.txt", "data/class_test_regexp_template.txt")
+	TEST_FILE_REGEXP(BALL_TEST_DATA_PATH(class_test_infile.txt), BALL_TEST_DATA_PATH(class_test_regexp_template.txt))
 RESULT
 
 CHECK("ABORT_IF(condition)")

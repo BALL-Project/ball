@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -101,7 +102,7 @@ CHECK(parse errors)
 RESULT
 	
 CHECK(example library)
-	std::ifstream is("data/SmilesParser_test.txt");
+	std::ifstream is(BALL_TEST_DATA_PATH(SmilesParser_test.txt));
 	std::pair<String, Formula> smiles;
 	while (is.good())
 	{

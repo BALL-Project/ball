@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -25,7 +26,7 @@ START_TEST(RingPerceptionProcessor, "$Id: RingPerceptionProcessor_test.C,v 1.2.2
 
 using namespace BALL;
 
-SDFile infile("data/descriptors_test.sdf");
+SDFile infile(BALL_TEST_DATA_PATH(descriptors_test.sdf));
 System S;
 infile >> S;
 infile.close();
@@ -74,7 +75,7 @@ CHECK(RingPerceptionProcessor)
 RESULT
 
 CHECK(DNA)
-	PDBFile pdb("data/1BNA.pdb");
+	PDBFile pdb(BALL_TEST_DATA_PATH(1BNA.pdb));
 	System s2;
 	pdb >> s2;
 	RingPerceptionProcessor rpp;

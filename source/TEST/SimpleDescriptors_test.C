@@ -3,6 +3,7 @@
 //
 // $Id: SimpleDescriptors_test.C,v 1.5.28.2 2007/03/25 21:48:58 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -22,7 +23,7 @@ START_TEST(SimpleDescriptors, "no version")
 
 using namespace BALL;
 
-SDFile infile("data/descriptors_test.sdf");
+SDFile infile(BALL_TEST_DATA_PATH(descriptors_test.sdf));
 System S;
 infile >> S;
 

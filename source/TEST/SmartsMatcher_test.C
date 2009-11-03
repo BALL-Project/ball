@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -34,14 +35,14 @@ RESULT
 
 CHECK(match(Molecule& mol, const String& smarts))
 
-	SDFile infile("data/SmartsMatcher_test.sdf");
+	SDFile infile(BALL_TEST_DATA_PATH(SmartsMatcher_test.sdf));
 	System s;
 	infile >> s;
 	infile.close();
 
 	sm = new SmartsMatcher();
 
-	ifstream is("data/SmartsMatcher_test.txt");
+	ifstream is(BALL_TEST_DATA_PATH(SmartsMatcher_test.txt));
 	String line;
 
 	while (line.getline(is))

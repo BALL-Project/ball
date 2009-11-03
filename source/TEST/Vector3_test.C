@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 #include <BALL/MATHS/vector3.h>
@@ -459,7 +460,7 @@ CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	std::ofstream outfile(filename.c_str(), std::ios::out);
 	v.dump(outfile);
 	outfile.close();
-	TEST_FILE_REGEXP(filename.c_str(), "data/Vector3_test.txt")
+	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(Vector3_test.txt))
 RESULT
 
 CHECK(bool isValid() const throw())
@@ -509,7 +510,7 @@ CHECK(static T getTripleProduct(const TVector3<T>& a, const TVector3<T>& b, cons
 RESULT
 
 CHECK(std::istream& operator >> (std::istream& s, TVector3& vector))
-	std::ifstream instr("data/Vector3_test2.txt");
+	std::ifstream instr(BALL_TEST_DATA_PATH(Vector3_test2.txt));
 	Vector3 v(1, 2, 3);
 	instr >> v;
 	instr.close();
@@ -524,7 +525,7 @@ CHECK(std::ostream& operator << (std::ostream& s, const TVector3& vector))
 	std::ofstream outstr(filename.c_str(), std::ios::out);
 	outstr << v;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/Vector3_test2.txt")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(Vector3_test2.txt))
 RESULT
 
 CHECK(TVector3& negate() throw())

@@ -3,6 +3,7 @@
 //
 // $Id: ShiftModule_test.C,v 1.3.32.1 2007/03/25 21:48:57 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -46,7 +47,7 @@ CHECK(ShiftModule::getName() const  throw())
 RESULT
 
 
-Parameters parameters("data/ShiftModule_test.ini");
+Parameters parameters(BALL_TEST_DATA_PATH(ShiftModule_test.ini));
 CHECK(ShiftModule::setParameters(Parameters& parameters) throw())
 	ShiftModule sm;
 	sm.setParameters(parameters);

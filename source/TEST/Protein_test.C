@@ -4,6 +4,7 @@
 // $Id: Protein_test.C,v 1.13.30.1 2007/03/25 21:47:35 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 #include <BALL/KERNEL/residue.h>
@@ -408,7 +409,7 @@ CHECK([EXTRA]Protein::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	std::ofstream outfile(filename.c_str(), std::ios::out);
 	p1.dump(outfile);
 	outfile.close();
-	TEST_FILE_REGEXP(filename.c_str(), "data/Protein_test.txt")
+	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(Protein_test.txt))
 RESULT
 
 TextPersistenceManager pm;

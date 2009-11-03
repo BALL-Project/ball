@@ -8,6 +8,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -41,7 +42,7 @@ RESULT
 
 SDGenerator sdg;
 System molecule_sys;
-PDBFile infile("data/input_MoleculeAssembler_test.pdb");
+PDBFile infile(BALL_TEST_DATA_PATH(input_MoleculeAssembler_test.pdb));
 infile >> molecule_sys;
 infile.close();
 
@@ -176,7 +177,7 @@ for(AtomIterator atom_it = molecule_sys.beginAtom(); atom_it != molecule_sys.end
 
 
 System molecule_sys_2;
-PDBFile infile_2("data/input_MoleculeAssembler_test.pdb");
+PDBFile infile_2(BALL_TEST_DATA_PATH(input_MoleculeAssembler_test.pdb));
 infile_2 >> molecule_sys_2;
 infile_2.close();
 
@@ -184,7 +185,7 @@ sdg.generateSD(molecule_sys_2);
 
 
 System molecule_sys_3;
-PDBFile infile_3("data/input_MoleculeAssembler_test.pdb");
+PDBFile infile_3(BALL_TEST_DATA_PATH(input_MoleculeAssembler_test.pdb));
 infile_3 >> molecule_sys_3;
 infile_3.close();
 
@@ -192,7 +193,7 @@ sdg.generateSD(molecule_sys_3);
 
 
 System molecule_sys_4;
-PDBFile infile_4("data/input_MoleculeAssembler_test.pdb");
+PDBFile infile_4(BALL_TEST_DATA_PATH(input_MoleculeAssembler_test.pdb));
 infile_4 >> molecule_sys_4;
 infile_4.close();
 

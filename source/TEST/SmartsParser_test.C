@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -34,7 +35,7 @@ CHECK(~SmartsParser())
 RESULT
 
 CHECK(parse(const String& s))
-	ifstream is("data/SmartsParser_test.txt");
+	ifstream is(BALL_TEST_DATA_PATH(SmartsParser_test.txt));
 	sp = new SmartsParser();
 	String line;
 	while (line.getline(is))

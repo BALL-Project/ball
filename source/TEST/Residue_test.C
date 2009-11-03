@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 #include <BALL/KERNEL/residue.h>
@@ -212,7 +213,7 @@ CHECK(bool hasTorsionPhi() const throw())
 RESULT
 
 CHECK(Angle getTorsionPhi() const throw())
-	HINFile infile("data/AlaGlySer.hin");
+	HINFile infile(BALL_TEST_DATA_PATH(AlaGlySer.hin));
 	System s;
 	infile >> s;
 	TEST_EQUAL(s.countResidues(), 3)
@@ -247,7 +248,7 @@ CHECK(bool hasTorsionPsi() const throw())
 RESULT
 
 CHECK(Angle getTorsionPsi() const throw())
-	HINFile infile("data/AlaGlySer.hin");
+	HINFile infile(BALL_TEST_DATA_PATH(AlaGlySer.hin));
 	System s;
 	infile >> s;
 	TEST_EQUAL(s.countResidues(), 3)
@@ -549,7 +550,7 @@ CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	std::ofstream outfile(filename.c_str(), std::ios::out);
 	r1.dump(outfile);
 	outfile.close();
-	TEST_FILE_REGEXP(filename.c_str(), "data/Residue_test.txt")
+	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(Residue_test.txt))
 RESULT
 
 TextPersistenceManager pm;

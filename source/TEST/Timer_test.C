@@ -4,6 +4,7 @@
 // $Id: Timer_test.C,v 1.23.20.1 2007/03/25 21:49:08 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 #include <unistd.h>
 ///////////////////////////
 #include <BALL/SYSTEM/timer.h>
@@ -24,7 +25,7 @@ using namespace BALL;
 
 #define BUSY_WAIT \
 	STATUS("WAITING")\
-	{ double x = 0.0; for (int i = 0; i < 5e6; i++, x += rand()); }
+	{ double x = 0.0; for (int i = 0; i < 5e6; i++, x += rand()) {}; }
 
 Timer* timer_ptr = 0;
 CHECK(Timer())
@@ -156,12 +157,12 @@ CHECK(double getSystemTime() const)
 	t1.stop();
 	TEST_EQUAL(t1.getSystemTime() >= 0, true)	
 	t1.start();
-	File f("data/Timer_test1.txt");
+	File f(BALL_TEST_DATA_PATH(Timer_test1.txt));
 	for (int i = 0; i < 200 ; i++)
 	{
-		TEST_EQUAL(f.copyTo("data/Timer_test1.bak"), true)
+		TEST_EQUAL(f.copyTo(BALL_TEST_DATA_PATH(Timer_test1.bak)), true)
 	}
-	f.remove("data/Timer_test1.bak");
+	f.remove(BALL_TEST_DATA_PATH(Timer_test1.bak));
 	t1.stop();
 	TEST_EQUAL(t1.getSystemTime() >= 0, true)	
 RESULT
@@ -319,7 +320,7 @@ CHECK(void dump(::std::ostream& s = ::std::cout, Size depth = 0L) const)
 
 	t1.dump(outfile);
 	outfile.close();
-	TEST_FILE_REGEXP(filename.c_str(), "data/Timer_test.txt")
+	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(Timer_test.txt))
 RESULT
 
 /////////////////////////////////////////////////////////////

@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -34,13 +35,13 @@ RESULT
 
 
 CHECK(SCWRLRotamerFile::SCWRLRotamerFile(const String& filename, File::OpenMode open_mode))
-	SCWRLRotamerFile* f = new SCWRLRotamerFile("data/SCWRLRotamerFile_test1.lib"); // bb dep file
+	SCWRLRotamerFile* f = new SCWRLRotamerFile(BALL_TEST_DATA_PATH(SCWRLRotamerFile_test1.lib)); // bb dep file
 	TEST_NOT_EQUAL(f, 0)
   delete f;
 RESULT
 
 CHECK(SCWRLRotamerFile::SCWRLRotamerFile(const SCWRLRotamerFile& file) throw())
-  SCWRLRotamerFile f("data/SCWRLRotamerFile_test2.lib"); // bb indep file
+  SCWRLRotamerFile f(BALL_TEST_DATA_PATH(SCWRLRotamerFile_test2.lib)); // bb indep file
   SCWRLRotamerFile copy_of_f(f);
   RotamerLibrary lib;
   copy_of_f >> lib;
@@ -48,7 +49,7 @@ CHECK(SCWRLRotamerFile::SCWRLRotamerFile(const SCWRLRotamerFile& file) throw())
 RESULT
 
 CHECK(void SCWRLRotamerFile::operator >> (RotamerLibrary& library) throw())
-  SCWRLRotamerFile f("data/SCWRLRotamerFile_test1.lib"); // bb dep file
+  SCWRLRotamerFile f(BALL_TEST_DATA_PATH(SCWRLRotamerFile_test1.lib)); // bb dep file
 	RotamerLibrary lib;
   lib.clear();
 	f >> lib;
@@ -56,14 +57,14 @@ CHECK(void SCWRLRotamerFile::operator >> (RotamerLibrary& library) throw())
 RESULT
 
 CHECK(void SCWRLRotamerFile::operator >> (RotamerLibrary& library) throw())
-  SCWRLRotamerFile f("data/SCWRLRotamerFile_test2.lib"); // bb indep file
+  SCWRLRotamerFile f(BALL_TEST_DATA_PATH(SCWRLRotamerFile_test2.lib)); // bb indep file
   RotamerLibrary lib;
   f >> lib;
   TEST_EQUAL(lib.getNumberOfRotamers(), 110);
 RESULT
 
 CHECK(const SCWRLRotamerFile& SCWRLRotamerFile::operator = (const SCWRLRotamerFile& file))
-  SCWRLRotamerFile f("data/SCWRLRotamerFile_test2.lib"); // bb indep file
+  SCWRLRotamerFile f(BALL_TEST_DATA_PATH(SCWRLRotamerFile_test2.lib)); // bb indep file
   SCWRLRotamerFile copy_of_f;
   copy_of_f = f;
   RotamerLibrary lib;

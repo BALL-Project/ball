@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -60,7 +61,7 @@ RESULT
 
 
 CHECK(Processor::Result operator () (Composite& composite) throw())
-	HINFile file("data/Selector_test.hin");
+	HINFile file(BALL_TEST_DATA_PATH(Selector_test.hin));
 	System S;
 	file >> S;
 	file.close();
@@ -107,7 +108,7 @@ RESULT
 
 
 CHECK(Size getNumberOfSelectedAtoms() const throw())
-	HINFile file("data/Selector_test.hin");
+	HINFile file(BALL_TEST_DATA_PATH(Selector_test.hin));
 	System S;
 	file >> S;
 	file.close();
@@ -139,7 +140,7 @@ CHECK(Size getNumberOfSelectedAtoms() const throw())
 RESULT
 
 CHECK(List& getSelectedAtoms() throw())
-	HINFile file("data/Selector_test.hin");
+	HINFile file(BALL_TEST_DATA_PATH(Selector_test.hin));
 	System system;
 	file >> system;
 	file.close();

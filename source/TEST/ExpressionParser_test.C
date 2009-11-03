@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -165,7 +166,7 @@ CHECK(void dump(std::ostream& is = std::cout, Size depth = 0) const throw())
 	tree.children.push_back(child1);
 	tree.dump(outfile);
 	outfile.close();
-	TEST_FILE_REGEXP(filename.c_str(), "data/ExpressionParser_test.txt")
+	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(ExpressionParser_test.txt))
 RESULT
 // tests for ExpressionParser
 

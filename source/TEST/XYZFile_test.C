@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -36,13 +37,13 @@ RESULT
 
 CHECK(XYZFile::XYZFile(const String& filename, File::OpenMode open_mode))
 	// checking for default mode: reading
-	XYZFile f("data/XYZFile_test1.xyz");
+	XYZFile f(BALL_TEST_DATA_PATH(XYZFile_test1.xyz));
 	TEST_EQUAL(f.isValid(), true)
 RESULT
 
 
 CHECK(XYZFile::read(System& system))
-  XYZFile f("data/XYZFile_test1.xyz");
+  XYZFile f(BALL_TEST_DATA_PATH(XYZFile_test1.xyz));
 	System S;
 	f.read(S);
 	f.close();
@@ -62,7 +63,7 @@ CHECK(XYZFile::read(System& system))
 RESULT
 
 CHECK(XYZFile::read(System& system))
-  XYZFile f("data/current.xyz");
+  XYZFile f(BALL_TEST_DATA_PATH(current.xyz));
 	System S;
 	f.read(S);
 	f.close();
@@ -97,12 +98,12 @@ CHECK(XYZFile::write(const System& system))
 	f.write(S);
 	f.close();
 		
-	TEST_FILE(filename.c_str(), "data/XYZFile_test2.xyz")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(XYZFile_test2.xyz))
 RESULT
 
 
 CHECK(XYZFile::XYZFile& operator >> (System& system))
-  XYZFile f("data/XYZFile_test1.xyz");
+  XYZFile f(BALL_TEST_DATA_PATH(XYZFile_test1.xyz));
 	System S;
 	f >> S;
 	f.close();
@@ -138,7 +139,7 @@ CHECK(XYZFile::XYZFile& operator << (const System& system))
 	f << S;
 	f.close();
 		
-	TEST_FILE(filename.c_str(), "data/XYZFile_test2.xyz")
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(XYZFile_test2.xyz))
 RESULT
 
 /////////////////////////////////////////////////////////////

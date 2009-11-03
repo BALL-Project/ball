@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 #include <BALL/CONCEPT/property.h>
@@ -164,7 +165,7 @@ CHECK(void persistentWrite(PersistenceManager& pm, const char* name = "") const 
 	pm.setOstream(ofile);
 	*np >> pm;
 	ofile.close();	
-	TEST_FILE_REGEXP(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_Float11.txt")
+	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(PropertyManager_test/NamedProperty_test_Float11.txt))
 	delete np;
 
 	Protein protein("PROTEIN1");
@@ -174,7 +175,7 @@ CHECK(void persistentWrite(PersistenceManager& pm, const char* name = "") const 
 	pm.setOstream(ofile);
 	*np >> pm;
 	ofile.close();	
-	TEST_FILE_REGEXP(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_Object11.txt")
+	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(PropertyManager_test/NamedProperty_test_Object11.txt))
 	delete np;
 
 	np = new NamedProperty("test3");
@@ -183,7 +184,7 @@ CHECK(void persistentWrite(PersistenceManager& pm, const char* name = "") const 
 	pm.setOstream(ofile);
 	*np >> pm;
 	ofile.close();	
-	TEST_FILE_REGEXP(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_None11.txt")
+	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(PropertyManager_test/NamedProperty_test_None11.txt))
 	delete np;
 
 	string s("titel");
@@ -193,7 +194,7 @@ CHECK(void persistentWrite(PersistenceManager& pm, const char* name = "") const 
 	pm.setOstream(ofile);
 	*np >> pm;
 	ofile.close();	
-	TEST_FILE_REGEXP(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_String11.txt")
+	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(PropertyManager_test/NamedProperty_test_String11.txt))
 	delete np;
 
 	boost::shared_ptr<PersistentObject> ptr((PersistentObject*)new Protein("PROTEIN2"));
@@ -203,14 +204,14 @@ CHECK(void persistentWrite(PersistenceManager& pm, const char* name = "") const 
 	pm.setOstream(ofile);
 	*np >> pm;
 	ofile.close();	
-	TEST_FILE_REGEXP(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_SmartObject11.txt")
+	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(PropertyManager_test/NamedProperty_test_SmartObject11.txt))
 	delete np;
 RESULT
 
 CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralException))
 	NamedProperty np;
 	PersistentObject* ptr;
-	ifstream  ifile("data/PropertyManager_test/NamedProperty_test_Float1.txt");
+	ifstream  ifile(BALL_TEST_DATA_PATH(PropertyManager_test/NamedProperty_test_Float1.txt));
 	pm.setIstream(ifile);
 
 	ptr = pm.readObject();
@@ -231,7 +232,7 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 
 	// due to some problems in the IRIX/CC fstream implementation....
 	ifile.clear();
-	ifile.open("data/PropertyManager_test/NamedProperty_test_Object1.txt");
+	ifile.open(BALL_TEST_DATA_PATH(PropertyManager_test/NamedProperty_test_Object1.txt));
 	ptr = pm.readObject();
 	ifile.close();
 
@@ -252,7 +253,7 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 	
 	// due to some problems in the IRIX/CC fstream implementation....
 	ifile.clear();
-	ifile.open("data/PropertyManager_test/NamedProperty_test_None1.txt");
+	ifile.open(BALL_TEST_DATA_PATH(PropertyManager_test/NamedProperty_test_None1.txt));
 	ptr = pm.readObject();
 	ifile.close();
 	TEST_NOT_EQUAL(ptr, 0)
@@ -270,7 +271,7 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 
 	// due to some problems in the IRIX/CC fstream implementation....
 	ifile.clear();
-	ifile.open("data/PropertyManager_test/NamedProperty_test_String1.txt");
+	ifile.open(BALL_TEST_DATA_PATH(PropertyManager_test/NamedProperty_test_String1.txt));
 	ptr = pm.readObject();
 	ifile.close();
 
@@ -290,7 +291,7 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 
 	// due to some problems in the IRIX/CC fstream implementation....
 	ifile.clear();
-	ifile.open("data/PropertyManager_test/NamedProperty_test_SmartObject1.txt");
+	ifile.open(BALL_TEST_DATA_PATH(PropertyManager_test/NamedProperty_test_SmartObject1.txt));
 	ptr = pm.readObject();
 	ifile.close();
 

@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -98,24 +99,30 @@ RESULT
 CHECK(Pair6_12InteractionEnergyProcessor::finish())
 	PRECISION(0.0001)
 	System S;
-	HINFile f("data/6_12-test.hin");
+	HINFile f(BALL_TEST_DATA_PATH(6_12-test.hin));
 	f >> S;
 	f.close();
-	INIFile ini("data/6_12-test.rul");
+	INIFile ini(BALL_TEST_DATA_PATH(6_12-test.rul));
 	ini.read();
 	RadiusRuleProcessor radius_rules;
 	radius_rules.initialize(ini, "RadiusRules");
 	S.apply(radius_rules);
 
 	Pair6_12InteractionEnergyProcessor proc;
-	proc.options.readOptionFile("data/6_12-test.options");
+	proc.options.readOptionFile(BALL_TEST_DATA_PATH(6_12-test.options));
+
+	// ensure the correct absolute path to the data directory
+	proc.options.set(Pair6_12InteractionEnergyProcessor::Option::RDF_FILENAME,
+		String(BALL_TEST_DATA_PATH())+proc.options[Pair6_12InteractionEnergyProcessor::Option::RDF_FILENAME].c_str());
+	proc.options.set(Pair6_12InteractionEnergyProcessor::Option::SOLVENT_FILENAME,
+		String(BALL_TEST_DATA_PATH())+proc.options[Pair6_12InteractionEnergyProcessor::Option::SOLVENT_FILENAME].c_str());
 
 	S.apply(proc);
 	double val = proc.getEnergy();
 	TEST_REAL_EQUAL(val, -6.027207050)
 
 	proc.options.set(Pair6_12InteractionEnergyProcessor::Option::RDF_FILENAME,
-			"data/6_12-test.rdf-fake.ini");
+			BALL_TEST_DATA_PATH(6_12-test.rdf-fake.ini));
 	proc.options.setBool(Pair6_12InteractionEnergyProcessor::Option::USE_RDF,
 			true);
 	proc.options.setInteger(Pair6_12RDFIntegrator::Option::METHOD,
@@ -125,7 +132,7 @@ CHECK(Pair6_12InteractionEnergyProcessor::finish())
 	TEST_REAL_EQUAL(val, -6.027207050)
 
 	proc.options.set(Pair6_12InteractionEnergyProcessor::Option::RDF_FILENAME,
-			"data/6_12-test.rdf.ini");
+			BALL_TEST_DATA_PATH(6_12-test.rdf.ini));
 	S.apply(proc);
 	val = proc.getEnergy();
 	TEST_REAL_EQUAL(val, -7.62216)

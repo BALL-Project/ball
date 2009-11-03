@@ -3,6 +3,7 @@
 //
 // $Id: RandomCoilShiftProcessor_test.C,v 1.5.32.1 2007/03/25 21:48:49 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -56,11 +57,11 @@ CHECK(RandomCoilShiftProcessor::finish() throw())
   //?????
 RESULT
 
-HINFile f("data/RandomCoilShiftProcessor_test.hin");
+HINFile f(BALL_TEST_DATA_PATH(RandomCoilShiftProcessor_test.hin));
 System S;
 f >> S;
 
-Parameters parameters("data/RandomCoilShiftProcessor_test.ini");
+Parameters parameters(BALL_TEST_DATA_PATH(RandomCoilShiftProcessor_test.ini));
 
 CHECK(chemical shifts)
 	PRECISION(0.0001)

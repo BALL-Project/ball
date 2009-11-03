@@ -3,6 +3,7 @@
 //
 // $Id: AtomTypes_test.C,v 1.1.32.1 2007/03/25 21:46:47 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -24,7 +25,7 @@ using namespace BALL;
 ///
 	
 AtomTypes* at_ptr = 0;
-Parameters parm("data/AtomTypes_test.ini");
+Parameters parm(BALL_TEST_DATA_PATH(AtomTypes_test.ini));
 parm.init();
 
 CHECK(AtomTypes::AtomTypes)

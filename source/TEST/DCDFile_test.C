@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/DCDFile.h>
@@ -21,7 +22,7 @@ START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.27.28.1 2007/03/25 21:47:01 oliver 
 
 using namespace BALL;
 
-String dcd_test_file("data/DCD_test.dcd");
+String dcd_test_file(BALL_TEST_DATA_PATH(DCD_test.dcd));
 
 DCDFile* p = 0;
 CHECK(DCDFile() throw())
@@ -93,7 +94,7 @@ System system;
 Size nr_of_atoms;
 
 CHECK([EXTRA] full test writing)
-	PDBFile pfile("data/DCDFile_test.pdb");
+	PDBFile pfile(BALL_TEST_DATA_PATH(DCDFile_test.pdb));
 	pfile.read(system);
 	nr_of_atoms = system.countAtoms();
 	TEST_EQUAL(nr_of_atoms, 892)
@@ -146,7 +147,7 @@ CHECK(bool readHeader() throw())
 	bool test = one.readHeader();
 	TEST_EQUAL(test, false)
 	one.close();
-	DCDFile two("data/INIFile_test.ini", std::ios::in);
+	DCDFile two(BALL_TEST_DATA_PATH(INIFile_test.ini), std::ios::in);
 	test = two.readHeader();
 	TEST_EQUAL(test, false)
 

@@ -74,6 +74,8 @@ SET(CMAKE_PREFIX_PATH ${BALL_CONTRIB_PATH} ${CMAKE_PREFIX_PATH})
 
 SET(CMAKE_REQUIRED_INCLUDES ${BALL_CONTRIB_PATH}/include ${CMAKE_REQUIRED_INCLUDES})
 
+SET(BALL_TEST_DATA_PATH ${PROJECT_SOURCE_DIR}/source/TEST/data)
+
 # Used for linking BALL dependent applications and libraries (BALLView, Python bindings, ...)
 SET(BALL_LIBRARIES optimized BALL debug BALLd)
 SET(VIEW_LIBRARIES optimized VIEW debug VIEWd)
@@ -243,6 +245,9 @@ CONFIGURE_FILE(cmake/config.h.in ${CONFIGURED_CONFIG_H})
 ## build a config.h file for the python support to not disturb the
 ## rest of BALL
 CONFIGURE_FILE(cmake/BALLPythonConfig.h.in ${PROJECT_BINARY_DIR}/include/BALL/PYTHON/BALLPythonConfig.h)
+
+## build a config.h file for our tests to not disturb the rest of BALL
+CONFIGURE_FILE(cmake/BALLTestConfig.h.in ${PROJECT_BINARY_DIR}/source/TEST/BALLTestConfig.h)
 
 ADD_DEFINITIONS(${BALL_DEFINITIONS})
 
@@ -427,6 +432,7 @@ ADD_SUBDIRECTORY(source/APPLICATIONS/BALLVIEW)
 ##### Tests #####
 #IF ("${PACKAGE_TYPE}" STREQUAL "none")
 #	INCLUDE(Dart) ## for Nighlty Build log (TODO)
+	ENABLE_TESTING()
 	ADD_SUBDIRECTORY(source/TEST EXCLUDE_FROM_ALL) ## configure the Test project (but do not add it to OpenMS itself)
 #ENDIF()
 

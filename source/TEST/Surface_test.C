@@ -5,6 +5,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -420,7 +421,7 @@ RESULT
 
 CHECK(void readMSMSFile(const String& vert_filename, const String& face_filename) throw(Exception::FileNotFound))
 	Surface s;
-	s.readMSMSFile("data/Surface_test.vert.dat", "data/Surface_test.face.dat");
+	s.readMSMSFile(BALL_TEST_DATA_PATH(Surface_test.vert.dat), BALL_TEST_DATA_PATH(Surface_test.face.dat));
 	TEST_EQUAL(s.getNumberOfTriangles(), 170)
 	TEST_EQUAL(s.getNumberOfVertices(), 87)
 	TEST_EQUAL(s.getNumberOfNormals(), 87)
@@ -453,9 +454,9 @@ CHECK(void readMSMSFile(const String& vert_filename, const String& face_filename
 	TEST_REAL_EQUAL(s.getNormal(0).y, 0.786)
 	TEST_REAL_EQUAL(s.getNormal(0).z, 0.566)
 	
-	TEST_EXCEPTION(Exception::FileNotFound, s.readMSMSFile("data/Surface_test.vert.dat", "data/Surface_test.face.dot"))
-	TEST_EXCEPTION(Exception::FileNotFound, s.readMSMSFile("data/Surface_test.vert.dot", "data/Surface_test.face.dat"))
-	TEST_EXCEPTION(Exception::FileNotFound, s.readMSMSFile("data/Surface_test.vert.dot", "data/Surface_test.face.dot"))
+	TEST_EXCEPTION(Exception::FileNotFound, s.readMSMSFile(BALL_TEST_DATA_PATH(Surface_test.vert.dat), BALL_TEST_DATA_PATH(Surface_test.face.dot)))
+	TEST_EXCEPTION(Exception::FileNotFound, s.readMSMSFile(BALL_TEST_DATA_PATH(Surface_test.vert.dot), BALL_TEST_DATA_PATH(Surface_test.face.dat)))
+	TEST_EXCEPTION(Exception::FileNotFound, s.readMSMSFile(BALL_TEST_DATA_PATH(Surface_test.vert.dot), BALL_TEST_DATA_PATH(Surface_test.face.dot)))
 RESULT
 
 CHECK(float getArea() const throw())

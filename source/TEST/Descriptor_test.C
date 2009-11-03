@@ -3,6 +3,7 @@
 //
 //
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -19,7 +20,7 @@ START_TEST(Descriptor, "")
 
 using namespace BALL;
 
-SDFile infile("data/descriptors_test.sdf");
+SDFile infile(BALL_TEST_DATA_PATH(descriptors_test.sdf));
 System S;
 infile >> S;
 infile.close();

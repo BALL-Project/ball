@@ -8,6 +8,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -33,7 +34,7 @@ RESULT
 
 
 System molecule_sys;
-PDBFile infile("data/input_RingClusterer_test.pdb");
+PDBFile infile(BALL_TEST_DATA_PATH(input_RingClusterer_test.pdb));
 infile >> molecule_sys;
 infile.close();
 
