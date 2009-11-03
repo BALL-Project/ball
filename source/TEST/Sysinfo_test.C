@@ -62,7 +62,10 @@ CHECK(getNumberOfProcessors())
 	STATUS(" # of processors: " << getNumberOfProcessors())
 RESULT		
 
-CHECK([Extra Allocs reduce av. mem])
+// NOTE: I've commented out the following two tests! I don't think that we should
+//       something as extreme during tests! That's terrible!
+/*
+CHECK([Extra] Allocs reduce av. mem)
 	LongIndex i1 = getFreeMemory() + getFreeSwapSpace();
 	STATUS(" mem before: " << i1 / 1024 / 1024 << " MiB")	
 	char* ptr = 0;
@@ -87,7 +90,7 @@ CHECK([Extra Allocs reduce av. mem])
 	TEST_EQUAL((i1 - i2) > 0, true)
 RESULT
 
-CHECK([Extra new throws std::bad_alloc if out of memory])
+CHECK([Extra] new throws std::bad_alloc if out of memory)
 	LongIndex i1 = getTotalMemory() + getFreeSwapSpace();
 	STATUS(" mem free: " << i1 / 1024 / 1024 << " MiB")	
 	// Try to allocate more memory than the available amount,
@@ -110,6 +113,7 @@ CHECK([Extra new throws std::bad_alloc if out of memory])
 		delete [] c;
 	}
 RESULT
+*/
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
