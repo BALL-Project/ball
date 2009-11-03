@@ -431,7 +431,7 @@ ADD_SUBDIRECTORY(source/APPLICATIONS/BALLVIEW)
 
 ##### Tests #####
 #IF ("${PACKAGE_TYPE}" STREQUAL "none")
-#	INCLUDE(Dart) ## for Nighlty Build log (TODO)
+	INCLUDE(Dart)
 	ENABLE_TESTING()
 	ADD_SUBDIRECTORY(source/TEST EXCLUDE_FROM_ALL) ## configure the Test project (but do not add it to OpenMS itself)
 #ENDIF()
