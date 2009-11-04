@@ -142,6 +142,21 @@ namespace BALL
 		return ((Protein *)this)->getResidue(position);
 	}
 
+	Residue* Protein::getResidueByID(String residue_ID)
+	{
+		for (ResidueIterator res_it = beginResidue(); !res_it.isEnd(); ++res_it)
+		{
+			if(res_it->getID()==residue_ID) return &*res_it;
+		}
+
+		return 0;
+	}
+
+	const Residue* Protein::getResidueByID(String residue_ID) const
+	{
+		return ((Protein*)this)->getResidueByID(residue_ID);
+	}		
+
 	Residue* Protein::getNTerminal()
 	{
 		return (Residue *)::BALL::getNTerminal(*this);
