@@ -174,6 +174,20 @@ namespace BALL
 		*/
 		const Residue* getResidue(Position position) const;
 
+		/** Get a pointer to a child Residue with the given ID.
+		The pointer is 0 if this instance does not have a Residue with the given ID.
+		@param   residue_ID the ID of the residue
+		@return  Residue* - pointer to the child
+		*/
+		Residue* getResidueByID(String residue_ID);
+
+		/** Get a pointer to a child Residue with the given ID.
+		The pointer is 0 if this instance does not have a Residue with the given ID.
+		@param   residue_ID the ID of the residue
+		@return  Residue* - constant pointer to the child
+		*/
+		const Residue* getResidueByID(String residue_ID) const;
+
 		/** Get a pointer to the N-terminal Residue.
 				The pointer is 0 if this instance does not have a Residue with
 				the property "PROPERTY__AMINO_ACID".
