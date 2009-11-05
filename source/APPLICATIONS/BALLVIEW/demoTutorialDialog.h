@@ -51,7 +51,7 @@ namespace BALL
 			virtual void initializeWidget(MainControl& main_control);
 
 			///
-			void setDemoMode(bool state) { demo_mode_ = state;}
+			void setDemoMode(bool state) { tutorial_type_ = DEMO; }
 			
 			///
 			//void setTutorialType(int type) { tutorial_type_ = type;}
@@ -72,7 +72,7 @@ namespace BALL
 
 			/// Next Step
 			void nextStepClicked();
-
+						
 			virtual void checkMenu(MainControl& main_control);
 						
 			protected:
@@ -81,13 +81,15 @@ namespace BALL
 			void nextStepTutorial_();
 			
 			void initDemo_();
-			void initTutorial_();
+			void initTutorials_();
 		
 			void enableNextStep_();
 
  			virtual void onNotifyTutorial_(Message *message);
  			virtual void onNotifyRaytracingTutorial_(Message *message);
  			virtual void onNotifyDemo_(Message *message);
+
+			void addPlane_(char plane_specifier, int height, int boundary, bool bottom = true);
 
 			String getBaseDir_();
 
@@ -108,7 +110,6 @@ namespace BALL
 			System*  		 	   system_;
 
 			String 					 prefix_;
-			bool 						 demo_mode_;
 			Position  			 current_step_;
 			Mesh* 					 surface_;
 			QAction* 				 demo_action_, *tutorial_action_, *raytracing_tutorial_action_;
