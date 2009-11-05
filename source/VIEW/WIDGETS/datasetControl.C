@@ -264,5 +264,13 @@ Size DatasetControl::getSelectionSize()
 	return getSelectedItems().size();
 }
 
+void DatasetControl::deleteCurrentItems()
+{
+	for (Position p = 0; p < controllers_.size(); p++)
+	{
+		controllers_[p]->deleteDatasets();
+	}
+}
+
 	} // namespace VIEW
 } // namespace BALL
