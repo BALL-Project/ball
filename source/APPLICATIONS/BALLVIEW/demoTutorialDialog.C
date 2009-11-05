@@ -156,6 +156,7 @@ void DemoTutorialDialog::initTutorials_()
 	
 	next_button->setEnabled(false);
 
+#ifdef BALL_HAS_RTFACT
 	// Set the defaults
 	((Mainframe*)getMainControl())->reset();
 
@@ -167,6 +168,29 @@ void DemoTutorialDialog::initTutorials_()
 	GeometricControl::getInstance(0)->applyPreferences();
 	GeometricControl::getInstance(0)->setFloating(false);
 
+	// Set the background to black
+	ColorRGBA color(0, 0, 0, 255);
+	Stage* stage = Scene::getInstance(0)->getStage();
+		
+	stage->setBackgroundColor(color);
+
+	StageSettings* stage_settings = Scene::getInstance(0)->getStageSettings();
+	stage_settings->updateFromStage();
+
+	// get one useable light source
+	stage->clearLightSources();
+
+	LightSource ls;
+		
+	ls.setPosition(Vector3(1, -2, -15));
+	ls.setAttenuation(Vector3(0., 0., 0.7));
+	ls.setType(LightSource::POSITIONAL);
+	ls.setColor(ColorRGBA(255, 255, 255, 255));
+	ls.setIntensity(500./100);
+
+	stage->addLightSource(ls);
+	LightSettings::getInstance(0)->updateFromStage();
+#endif
 	if (tutorial_type_ == TUTORIAL)
 	{
 		DatasetControl::getInstance(0)->show();
@@ -175,30 +199,7 @@ void DemoTutorialDialog::initTutorials_()
 	}
 	else if  (tutorial_type_ == RAYTRACING_TUTORIAL)
 	{ 
-		// Set the background to black
-		ColorRGBA color(0, 0, 0, 255);
-		Stage* stage = Scene::getInstance(0)->getStage();
-		
-		stage->setBackgroundColor(color);
-
-		StageSettings* stage_settings = Scene::getInstance(0)->getStageSettings();
-		stage_settings->updateFromStage();
-
-		// get one useable light source
-		stage->clearLightSources();
-
-		LightSource ls;
-		
-		ls.setPosition(Vector3(1, -2, -15));
-		ls.setAttenuation(Vector3(0., 0., 0.7));
-		ls.setType(LightSource::POSITIONAL);
-		ls.setColor(ColorRGBA(255, 245, 208, 255));
-		ls.setIntensity(500./100);
-
-		stage->addLightSource(ls);
-
-		LightSettings::getInstance(0)->updateFromStage();
-
+#ifdef BALL_HAS_RTFACT
 		Stage::RaytracingMaterial& rt_material = stage->getRTMaterial();
 
 		rt_material.ambient_color = ColorRGBA(255, 255, 255, 255);
@@ -222,6 +223,10 @@ void DemoTutorialDialog::initTutorials_()
 		Scene::getInstance(0)->applyPreferences();
 
 		next_button->setEnabled(true);
+#else
+		Log.info() << "DemoTutorialDialog: no RTFact available! Close the dialog!" << __FILE__ << " " << __LINE__ << endl;
+		return;
+#endif
 	}
 	LogView::getInstance(0)->hide();
 }
@@ -356,7 +361,7 @@ void DemoTutorialDialog::nextStepClicked()
 		{
 			next_button->setEnabled(true);
 		}
-		if (current_step_ == 9)
+		if (current_step_ == 10) 
 		{
 			hide();
 			HelpViewer* hv = HelpViewer::getInstance(1);
@@ -421,7 +426,7 @@ void DemoTutorialDialog::nextStepClicked()
 				if (hv == 0) return;
 				hv->showHelp();
 				hv->setFloating(true);
-				hv->showMaximized();
+				hv->showMaximized();	
 				break;
 			}
 
@@ -963,8 +968,7 @@ void DemoTutorialDialog::onNotifyRaytracingTutorial_(Message *message)
 			//TODO find a checker!!
 			if (cmsg != 0) 
 				cout <<  "*7*" << cmsg->getType() << endl;
-			//	break; //TODO wieder rein!
-			
+			break; 
 		}	
 	
 		/* Put into a later step
