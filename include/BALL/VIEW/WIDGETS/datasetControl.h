@@ -111,6 +111,9 @@ namespace BALL
 			/// Get the type for one QTreeWidgetItem
 			String getType(QTreeWidgetItem* item);
 
+			/// Deletes the currently selected items
+			virtual void deleteCurrentItems();
+
 			public slots:
 				
 			// Overloaded from GenericControl 
