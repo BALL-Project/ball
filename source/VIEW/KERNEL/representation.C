@@ -19,6 +19,8 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/SYSTEM/timer.h>
 
+#include <BALL/CONCEPT/textPersistenceManager.h>
+
 //     #define BALL_BENCHMARKING
 
 namespace BALL
@@ -579,6 +581,26 @@ namespace BALL
 			if (isHidden())
 			{
 				result += "H";
+			}
+
+			// now, add all the NamedProperties of the object that can be serialized
+			if (countProperties() > 0)
+			{
+				result += "\\";
+				for (Position i=0; i<countProperties(); ++i) 
+				{
+					ostringstream serialized_properties;
+					TextPersistenceManager tpm(serialized_properties);
+
+					NamedProperty prop = getNamedProperty(i);
+					tpm << prop;
+
+					String serialized_properties_str = serialized_properties.str();
+					result += serialized_properties_str.encodeBase64();
+					
+					if (i != countProperties()-1)
+						result += "*";
+				}
 			}
 
 			return result;

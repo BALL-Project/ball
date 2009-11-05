@@ -212,6 +212,14 @@ namespace BALL
 
 			RTfactData rt_data;
 
+			Stage::RaytracingMaterial rt_material = scene_->getStage()->getRTMaterial();
+			if (rep.hasProperty("RTFact::Material"))
+			{
+				NamedProperty rt_mat_property = rep.getProperty("RTFact::Material");
+				boost::shared_ptr<PersistentObject> mat_ptr = rt_mat_property.getSmartObject();
+				rt_material = *dynamic_cast<Stage::RaytracingMaterial*>(mat_ptr.get());
+			}
+
 			std::list<GeometricObject*>::const_iterator it;
 			for (it =  rep.getGeometricObjects().begin();
 					 it != rep.getGeometricObjects().end();
@@ -227,7 +235,7 @@ namespace BALL
 
 
 					RTAppearanceHandle material = m_renderer.createAppearance("PhongShader");
-					updateMaterialFromStage(material);
+					convertMaterial(rt_material, material);
 
 					GeoHandle handle;
 
@@ -271,7 +279,7 @@ namespace BALL
 					ColorRGBA const& color = sphere.getColor();
 
 					RTAppearanceHandle material = m_renderer.createAppearance("PhongShader");
-					updateMaterialFromStage(material);
+					convertMaterial(rt_material, material);
 
 					material->setParam("diffuseColor", float3(color.getRed(), color.getGreen(), color.getBlue()));
 					material->setParam("useVertexColor", false);
@@ -322,7 +330,7 @@ namespace BALL
 					ColorRGBA const& color2 = old_tube.getColor2();
 
 					RTAppearanceHandle material_1 = m_renderer.createAppearance("PhongShader");
-					updateMaterialFromStage(material_1);
+					convertMaterial(rt_material, material_1);
 
 					material_1->setParam("diffuseColor", float3(color1.getRed(), color1.getGreen(), color1.getBlue()));
 					material_1->setParam("useVertexColor", false);
@@ -343,7 +351,7 @@ namespace BALL
 					else 
 					{
 						RTAppearanceHandle material_2 = m_renderer.createAppearance("PhongShader");
-						updateMaterialFromStage(material_2);
+						convertMaterial(rt_material, material_2);
 
 						material_2->setParam("diffuseColor", float3(color2.getRed(), color2.getGreen(), color2.getBlue()));
 						material_2->setParam("useVertexColor", false);
