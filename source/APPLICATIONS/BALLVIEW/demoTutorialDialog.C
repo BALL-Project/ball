@@ -99,6 +99,33 @@ void DemoTutorialDialog::initDemo_()
 #ifdef BALL_PYTHON_SUPPORT
  	if (PyWidget::getInstance(0) != 0) 			 PyWidget::getInstance(0)->hide();
 #endif
+	
+#ifdef	BALL_HAS_RTFACT
+	// Set the background to black
+	ColorRGBA color(0, 0, 0, 255);
+	Stage* stage = Scene::getInstance(0)->getStage();
+		
+	stage->setBackgroundColor(color);
+	StageSettings* stage_settings = Scene::getInstance(0)->getStageSettings();
+	stage_settings->updateFromStage();
+
+	//TODO: get rid of this hack. 
+	//TODO: BALLView should come up with good light settings by itself!
+	// set a good light source	
+	stage->clearLightSources();
+
+	LightSource ls;
+		
+	ls.setPosition(Vector3(1, -2, -15));
+	ls.setAttenuation(Vector3(0., 0., 0.3));
+	ls.setType(LightSource::POSITIONAL);
+	ls.setColor(ColorRGBA(255, 255, 255, 255));
+	ls.setIntensity(500./100);
+	stage->addLightSource(ls);
+	LightSettings::getInstance(0)->updateFromStage();
+	// apply everything to the scene...
+	Scene::getInstance(0)->applyPreferences();
+#endif
 }
 
 String DemoTutorialDialog::getBaseDir_()
@@ -114,7 +141,7 @@ String DemoTutorialDialog::getBaseDir_()
 	return dir;
 }
 
-void DemoTutorialDialog::initTutorial_()
+void DemoTutorialDialog::initTutorials_()
 {
 	if (tutorial_type_ == TUTORIAL)
 	{
@@ -214,7 +241,7 @@ void DemoTutorialDialog::show()
 				QMessageBox::Ok| QMessageBox::Cancel, QMessageBox::Ok);
 		if (result != QMessageBox::Ok) return;
 		
-		initTutorial_();
+		initTutorials_();
 	}
 	
 	QUrl qurl = QUrl::fromLocalFile((prefix_ + "01.html").c_str());
@@ -294,7 +321,7 @@ void DemoTutorialDialog::enableNextStep_()
 // TODO: split into several functions...
 void DemoTutorialDialog::nextStepClicked()
 {
-	String id = String(current_step_ + 1);
+	String id = String(current_step_ + 1); //TODO WHY??
 	if (id.size() == 1) id = "0" + id;
 
 	id = prefix_ + id + ".html";
@@ -303,25 +330,33 @@ void DemoTutorialDialog::nextStepClicked()
 	text_browser->setSource(qurl);
 	next_button->setEnabled(false);
 
-	current_step_++;
-
 	if (tutorial_type_ == DEMO) 
 	{
-		if (current_step_ == 18)
+		if (current_step_ == 17)
 		{
 			showTutorial();
 			return;
 		}
 
 		nextStepDemo_();
+		
+		#ifdef BALL_HAS_RTFACT
+		// we do not want to show energy minimization and MD simulation
+		if (current_step_ == 11)
+		{
+			current_step_ +=2;	
+			next_button->setEnabled(true);
+		}
+		#endif
+
 	}
 	else if (tutorial_type_ == TUTORIAL) 
 	{
-		if (current_step_ == 9)
+		if (current_step_ == 8)
 		{
 			next_button->setEnabled(true);
 		}
-		if (current_step_ == 10)
+		if (current_step_ == 9)
 		{
 			hide();
 			HelpViewer* hv = HelpViewer::getInstance(1);
@@ -333,11 +368,9 @@ void DemoTutorialDialog::nextStepClicked()
 	}
 	else if (tutorial_type_ == RAYTRACING_TUTORIAL) 
 	{
-		// NOTE: current_step_ is already incremented!
-		//TODO put increment to the end of this function and check, if the other tutorial still work
 		switch (current_step_)
 		{
-			case 3:
+			case 2:
 			{
 				// prepare the background for the next step
 				ColorRGBA color(255, 255, 255, 255); // white
@@ -348,7 +381,7 @@ void DemoTutorialDialog::nextStepClicked()
 				break;
 			}
 			
-			case 5: // preparing downgraded light settings 
+			case 4: // preparing downgraded light settings 
 			{
 				// There should be just a single light source!
 				// first manipulate the light
@@ -368,7 +401,7 @@ void DemoTutorialDialog::nextStepClicked()
 				Scene::getInstance(0)->applyPreferences();
 				break;
 			}
-			case 6: //preparing bad materials
+			case 5: //preparing bad materials
 			{
 				// Add a plane to be used as a mirror
 				if (getMainControl()->getCompositeManager().getComposites().size() == 0)
@@ -377,117 +410,10 @@ void DemoTutorialDialog::nextStepClicked()
 				 	return;	
 				}
 				
-				HashSet<Composite*> composites = MainControl::getInstance(0)->getCompositeManager().getComposites();
-				HashSet<Composite*>::Iterator sit = composites.begin();
-
-				BoundingBoxProcessor bbp;
-				Vector3 v_low(0., 0., 0.);
-  			Vector3 v_upp(0., 0., 0.);
-
-				System* system = NULL;
-				system = dynamic_cast<System*>(*sit);
-				if (system != 0) 
-				{
-					system->apply(bbp);
-					v_low = Vector3(bbp.getLower().x, bbp.getLower().y, bbp.getLower().z);
-  				v_upp = Vector3(bbp.getUpper().x, bbp.getUpper().y, bbp.getUpper().z);
-				}
-				else
-				{
-					Log.info() << "DemoTutorialDialog: No system given! "<< __FILE__ << " " << __LINE__ << endl;
-					return;
-				}
-
-				++sit;
-				for (; +sit; ++sit)
-				{
-					system = dynamic_cast<System*>(*sit);
-					if (system != 0) 
-					{
-						system->apply(bbp);
-						Vector3 low = Vector3(bbp.getLower().x, bbp.getLower().y, bbp.getLower().z);
-  			 		Vector3 upp = Vector3(bbp.getUpper().x, bbp.getUpper().y, bbp.getUpper().z);
-					
-						// find the boundaries over all systems	
-						if (v_low.x > low.x) v_low.x = low.x;
-						if (v_low.y > low.y) v_low.y = low.y; 
-						if (v_low.z > low.z) v_low.z = low.z;
-						
-						if (v_upp.x < upp.x) v_upp.x = upp.x; 
-						if (v_upp.y < upp.y) v_upp.y = upp.y;
-						if (v_upp.z < upp.z) v_upp.z = upp.z;
-
-					}
-				}
-
-				Vector3 v_low_left (0., 0., 0.);
-			  Vector3 v_low_right(0., 0., 0.);
-				Vector3 v_upp_right(0., 0., 0.);
-				Vector3 v_upp_left (0., 0., 0.);
-				
-				Vector3 normal(0., 0., 0.);
-				
-				int height = 5;
-				int boundary = 5;
-
-				// x axis
-				v_low = v_low - Vector3(height, boundary, boundary);
-				v_upp = v_upp + Vector3(height, boundary, boundary);
-				v_low_left  = Vector3(v_low.x, v_low.y, v_low.z);
-				v_low_right = Vector3(v_low.x, v_upp.y, v_low.z);
-				v_upp_right = Vector3(v_low.x, v_upp.y, v_upp.z);
-				v_upp_left  = Vector3(v_low.x, v_low.y, v_upp.z);
-				normal = Vector3(1., 0., 0.);
-
-				// create the plane
-	 		  Mesh* plane = new Mesh();
-
-			  // the vertices
-				plane->vertex.push_back(v_low_left);
-				plane->vertex.push_back(v_low_right);
-				plane->vertex.push_back(v_upp_right);
-				plane->vertex.push_back(v_upp_left);
-				
-				// the first triangle of the plane
-				Mesh::Triangle t1;
-				t1.v1 = 0; // v_low_left
-				t1.v2 = 1; // v_low_right
-				t1.v3 = 2; // v_upp_right
-				
-				plane->triangle.push_back(t1);
-
-				// the second triangle of the plane
-				Mesh::Triangle t2;
-				t2.v1 = 2; // v_upp_right
-				t2.v2 = 3; // v_upp_left
-				t2.v3 = 0; // v_low_left
-				
-				plane->triangle.push_back(t2);
-				
-				// the normals
-				for (int i=0; i<4; i++)
-					plane->normal.push_back(normal);
-				
-				// color
-				ColorRGBA color(0,0,0,1);
-				plane->setColor(color);
-				
-				// a representation
-				Representation* rep = getMainControl()->getRepresentationManager().createRepresentation();
-				rep->setName("Mirror Plane");
-				//rep->setModelType(MODEL_PLANE); //TODO
-					
-				// insert 
-				rep->insert(*plane);
-				
-				// and commit
-				getMainControl()->insert(*rep);
-				getMainControl()->update(*rep);			
-				notify_(new RepresentationMessage(*rep, RepresentationMessage::ADD_TO_GEOMETRIC_CONTROL));
-				
+				addPlane_('x', 5, 5);
 				break;
 			}
-			case 8:
+			case 7:
 			{
 				// offer the Documentation
 				hide();
@@ -503,13 +429,160 @@ void DemoTutorialDialog::nextStepClicked()
 				break;
 		}
 	}
+ 
+	current_step_++;		
 }
+
+void  DemoTutorialDialog::addPlane_(char plane_specifier, int height, int boundary, bool bottom)
+{
+	HashSet<Composite*> composites = MainControl::getInstance(0)->getCompositeManager().getComposites();
+	HashSet<Composite*>::Iterator sit = composites.begin();
+
+	BoundingBoxProcessor bbp;
+	Vector3 v_low(0., 0., 0.);
+	Vector3 v_upp(0., 0., 0.);
+
+	System* system = NULL;
+	system = dynamic_cast<System*>(*sit);
+	if (system != 0) 
+	{
+		system->apply(bbp);
+		v_low = Vector3(bbp.getLower().x, bbp.getLower().y, bbp.getLower().z);
+		v_upp = Vector3(bbp.getUpper().x, bbp.getUpper().y, bbp.getUpper().z);
+	}
+	else
+	{
+		Log.info() << "DemoTutorialDialog.addPlane(): No system given! "<< __FILE__ << " " << __LINE__ << endl;
+		return;
+	}
+
+	++sit;
+	for (; +sit; ++sit)
+	{
+		system = dynamic_cast<System*>(*sit);
+		if (system != 0) 
+		{
+			system->apply(bbp);
+			Vector3 low = Vector3(bbp.getLower().x, bbp.getLower().y, bbp.getLower().z);
+			Vector3 upp = Vector3(bbp.getUpper().x, bbp.getUpper().y, bbp.getUpper().z);
+
+			// find the boundaries over all systems	
+			if (v_low.x > low.x) v_low.x = low.x;
+			if (v_low.y > low.y) v_low.y = low.y; 
+			if (v_low.z > low.z) v_low.z = low.z;
+
+			if (v_upp.x < upp.x) v_upp.x = upp.x; 
+			if (v_upp.y < upp.y) v_upp.y = upp.y;
+			if (v_upp.z < upp.z) v_upp.z = upp.z;
+
+		}
+	}
+
+ 	if (! bottom)
+	{ 
+	 	Vector3 v_tmp = v_low;
+    v_low = v_upp;
+    v_upp = v_tmp;
+    height = height*(-1);
+    boundary = boundary*(-1);
+	}
+
+	Vector3 v_low_left (0., 0., 0.);
+	Vector3 v_low_right(0., 0., 0.);
+	Vector3 v_upp_right(0., 0., 0.);
+	Vector3 v_upp_left (0., 0., 0.);
+
+	Vector3 normal(0., 0., 0.);
+
+	
+	if (plane_specifier == 'x')
+	{
+		v_low       = v_low - Vector3(height, boundary, boundary);
+		v_upp       = v_upp + Vector3(height, boundary, boundary);
+		v_low_left  = Vector3(v_low.x, v_low.y, v_low.z);
+		v_low_right = Vector3(v_low.x, v_upp.y, v_low.z);
+		v_upp_right = Vector3(v_low.x, v_upp.y, v_upp.z);
+		v_upp_left  = Vector3(v_low.x, v_low.y, v_upp.z);
+		normal      = Vector3(1., 0., 0.);
+	}
+	else if (plane_specifier == 'y')
+	{ 
+		v_low       = v_low - Vector3(boundary, height, boundary);
+    v_upp       = v_upp + Vector3(boundary, height, boundary);
+    v_low_left  = Vector3(v_low.x, v_low.y, v_low.z);
+    v_low_right = Vector3(v_low.x, v_low.y, v_upp.z);
+    v_upp_right = Vector3(v_upp.x, v_low.y, v_upp.z);
+    v_upp_left  = Vector3(v_upp.x, v_low.y, v_low.z);
+    normal      = Vector3(0., 1., 0.);
+	}
+	else if (plane_specifier == 'z')
+	{
+		v_low 			= v_low - Vector3(boundary, boundary, height);
+    v_upp 			= v_upp + Vector3(boundary, boundary, height);
+    v_low_left  = Vector3(v_low.x, v_low.y, v_low.z);
+    v_low_right = Vector3(v_low.x, v_upp.y, v_low.z);
+    v_upp_right = Vector3(v_upp.x, v_upp.y, v_low.z);
+    v_upp_left  = Vector3(v_upp.x, v_low.y, v_low.z);
+    normal 			= Vector3(0., 0., 1.);
+	}
+	else
+	{
+		Log.info() << "DemoTutorialDialog.addPlane(): unknown plane_specifier! "<< __FILE__ << " " << __LINE__ << endl;
+		return;
+	}
+
+	// create the plane
+	Mesh* plane = new Mesh();
+
+	// the vertices
+	plane->vertex.push_back(v_low_left);
+	plane->vertex.push_back(v_low_right);
+	plane->vertex.push_back(v_upp_right);
+	plane->vertex.push_back(v_upp_left);
+
+	// the first triangle of the plane
+	Mesh::Triangle t1;
+	t1.v1 = 0; // v_low_left
+	t1.v2 = 1; // v_low_right
+	t1.v3 = 2; // v_upp_right
+
+	plane->triangle.push_back(t1);
+
+	// the second triangle of the plane
+	Mesh::Triangle t2;
+	t2.v1 = 2; // v_upp_right
+	t2.v2 = 3; // v_upp_left
+	t2.v3 = 0; // v_low_left
+
+	plane->triangle.push_back(t2);
+
+	// the normals
+	for (int i=0; i<4; i++)
+		plane->normal.push_back(normal);
+
+	// color
+	ColorRGBA color(0,0,0,1);
+	plane->setColor(color);
+
+	// a representation
+	Representation* rep = getMainControl()->getRepresentationManager().createRepresentation();
+	rep->setName("Mirror Plane");
+
+	// insert 
+	rep->insert(*plane);
+
+	// and commit
+	getMainControl()->insert(*rep);
+	getMainControl()->update(*rep);			
+	notify_(new RepresentationMessage(*rep, RepresentationMessage::ADD_TO_GEOMETRIC_CONTROL));
+}
+
 
 
 void DemoTutorialDialog::nextStepDemo_()
 {
 	// initialisation for first real step
-	if (current_step_ == 2)
+	if (current_step_ == 1)
 	{
 		DisplayProperties* dp = DisplayProperties::getInstance(0);
 		dp->setDrawingPrecision(DRAWING_PRECISION_HIGH);
@@ -529,7 +602,7 @@ void DemoTutorialDialog::nextStepDemo_()
 			system_ = dialog->openMolecularFile(file_name);
 			dp->enableCreationForNewMolecules(true);
 
-			if (system_ == 0)
+		  if (system_ == 0)
 			{
 				String msg((String)tr("Could not open bpti.pdb. Maybe the file was deleted?")+"\n");
 				msg += (String)tr("It should be found in") + " " + file_name;
@@ -552,23 +625,22 @@ void DemoTutorialDialog::nextStepDemo_()
 		composites_.clear();
 		composites_.push_back(system_);
 	}
-
-	if (current_step_ == 18) // last page
+	
+	if (current_step_ == 17) // last page
 	{
 		hide();
 		return;
 	}
-
 	MolecularStructure* ms = MolecularStructure::getInstance(0);
 
-	next_button->setEnabled(current_step_ >= 15);
+	next_button->setEnabled(current_step_ >= 14);
 
 	// remove representations
 	RepresentationManager& pm = getMainControl()->getRepresentationManager();
 	Size nr = pm.getNumberOfRepresentations();
 	std::list<Representation*> reps = pm.getRepresentations();
 
-	if (surface_ == 0 && nr == 1 && current_step_ == 7)
+	if (surface_ == 0 && nr == 1 && current_step_ == 6)
 	{
 		GeometricObject* go = *(**reps.begin()).getGeometricObjects().begin();
 		Mesh* mesh = dynamic_cast<Mesh*>(go);
@@ -590,38 +662,48 @@ void DemoTutorialDialog::nextStepDemo_()
 		reps.pop_front();
 	}
 
-	if (current_step_ < 9)
+	if (current_step_ < 6)
 	{
-		ModelType type = (ModelType) (current_step_ - 2);
+		ModelType type = (ModelType) (current_step_ - 1);
 		if (type >= MODEL_SA_SURFACE)
 		{
 			type = (ModelType)((Index)type + 1);
 		}
 		notify_(new CreateRepresentationMessage(composites_, type, COLORING_ELEMENT));
 	}
-	else if (current_step_ == 9)
+	else if (current_step_ < 8)
+	{	
+		ModelType type = (ModelType) (current_step_ - 1);
+		if (type >= MODEL_SA_SURFACE)
+		{
+			type = (ModelType)((Index)type + 1);
+		}
+		notify_(new CreateRepresentationMessage(composites_, type, COLORING_MOLECULE));
+	}
+	else if (current_step_ == 8)
 	{
 		getMainControl()->getMolecularControlSelection().clear();
 		getMainControl()->getMolecularControlSelection().push_back(system_);
 		ms->calculateHBonds();
    	notify_(new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT));
+#ifndef BALL_HAS_RTFACT
  		notify_(new CreateRepresentationMessage(composites_, MODEL_HBONDS, COLORING_ELEMENT));
-
+#endif
 	}
-	else if (current_step_ == 10)
+	else if (current_step_ == 9)
 	{
 		notify_(new CreateRepresentationMessage(composites_, MODEL_VDW, COLORING_TEMPERATURE_FACTOR));
 	}
-	else if (current_step_ == 11)
+	else if (current_step_ == 10)
 	{
 		notify_(new CreateRepresentationMessage(composites_, MODEL_CARTOON, COLORING_SECONDARY_STRUCTURE));
 	}
-	else if (current_step_ == 12)
+	else if (current_step_ == 11)
 	{
 		notify_(new CreateRepresentationMessage(composites_, MODEL_CARTOON, COLORING_RESIDUE_INDEX));
 	}
-	else if (current_step_ == 13 ||
-					 current_step_ == 14)
+	else if (current_step_ == 12 ||
+					 current_step_ == 13)
 	{
 		getMainControl()->setMultithreading(0);
 		notify_(new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT));
@@ -631,13 +713,17 @@ void DemoTutorialDialog::nextStepDemo_()
 		composites.push_back(*getMainControl()->getCompositeManager().getComposites().begin());
  		MolecularControl::getInstance(0)->highlight(composites);
 
-		if (current_step_ == 13)
+		if (current_step_ == 12)
 		{
 			ms->getAmberConfigurationDialog().resetOptions();
 			ms->chooseAmberFF();
 			ms->getMinimizationDialog().setMaxGradient(1.);
 			ms->getMinimizationDialog().setMaxIterations(20);
+#ifdef BALL_HAS_RTFACT
+			ms->getMinimizationDialog().setRefresh(10);
+#else
 			ms->getMinimizationDialog().setRefresh(5);
+#endif
 			ms->runMinimization(false);
 		}
 		else
@@ -647,7 +733,7 @@ void DemoTutorialDialog::nextStepDemo_()
 			ms->MDSimulation(false);
 		}
 	}
-	else if (current_step_ == 15) //FDPB
+	else if (current_step_ == 14) //FDPB
 	{
 		getMainControl()->setMultithreading(0);
 		if (!ms->calculateFDPB(false))
@@ -656,7 +742,7 @@ void DemoTutorialDialog::nextStepDemo_()
 		}
 		getMainControl()->setMultithreading(1);
 	}
-	else if (current_step_ == 16) // SES colored 
+	else if (current_step_ == 15) // SES colored 
 	{
 		// Create a new representation containing the contour surface.
 		Representation* rep = getMainControl()->getRepresentationManager().createRepresentation();
@@ -674,7 +760,7 @@ void DemoTutorialDialog::nextStepDemo_()
 
 		getMainControl()->update(*rep);
 	}
-	else if (current_step_ == 17)
+	else if (current_step_ == 16)
 	{
 		getMainControl()->setMultithreading(0);
 		notify_(new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT));
@@ -695,7 +781,6 @@ void DemoTutorialDialog::nextStepDemo_()
 
 void DemoTutorialDialog::showRaytracingTutorial()
 {
-	demo_mode_ = false;
 	tutorial_type_ = RAYTRACING_TUTORIAL;
 	show();
 }
@@ -703,14 +788,12 @@ void DemoTutorialDialog::showRaytracingTutorial()
 
 void DemoTutorialDialog::showTutorial()
 {
-	demo_mode_ = false;
 	tutorial_type_ = TUTORIAL;
 	show();
 }
 
 void DemoTutorialDialog::showDemo()
 {
-	demo_mode_ = true;	
 	tutorial_type_ = DEMO;
 	show();
 }
