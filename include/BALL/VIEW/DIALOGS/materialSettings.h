@@ -49,10 +49,7 @@ namespace BALL
 			void apply();
 
 			/// set the current representation
-			void setCurrentRepresentation(Representation* representation)
-			{
-				current_representation_ = representation;
-			}
+			void setCurrentRepresentation(Representation* representation);
 
 			/** Set the values according to the ones stored in the scene
 			 *  TODO: currently, this only works for RTfact materials!
@@ -74,6 +71,7 @@ namespace BALL
 			virtual void rendererChanged();
 			private:
 
+			void setLabel_(QLabel& label, float value);
 			void setValues_(const QSlider& slider, QLabel& label, int divisor);
 			void setQuadraticValues_(const QSlider& slider, QLabel& label, int divisor);
 

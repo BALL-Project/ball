@@ -6,6 +6,7 @@
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
+#include <BALL/CONCEPT/property.h>
 
 #include <QtGui/QLabel>
 #include <QtGui/QSlider>
@@ -44,8 +45,7 @@ namespace BALL
 			connect (radioButton_RTFact, SIGNAL(clicked()), this, SLOT (rendererChanged()));
 
 			connect( ambient_color_button, SIGNAL( clicked() ), this, SLOT( editAmbientColor() ) );
-			connect( specularity_color_button, SIGNAL(clicked()), this, SLOT( editSpecularityColor() ) );
-			connect( reflectiveness_color_button, SIGNAL(clicked()), this, SLOT( editReflectivenessColor() ) );
+			connect( specularity_color_button, SIGNAL(clicked()), this, SLOT( editSpecularityColor() ) ); connect( reflectiveness_color_button, SIGNAL(clicked()), this, SLOT( editReflectivenessColor() ) );
 
 			registerWidgets_();
 
@@ -115,6 +115,57 @@ namespace BALL
 				}
 #endif
 			}
+		}
+
+		void MaterialSettings::setCurrentRepresentation(Representation* representation)
+		{
+			current_representation_ = representation;
+
+			// NOTE: this currently only works for RTfact! Sorry about that!
+			if (!radioButton_RTFact->isChecked())
+				return;
+
+			// update the sliders
+			Stage::RaytracingMaterial rt_material;
+
+			if (representation->hasProperty("RTFact::Material"))
+			{
+				NamedProperty rt_mat_property = representation->getProperty("RTFact::Material");
+				boost::shared_ptr<PersistentObject> mat_ptr = rt_mat_property.getSmartObject();
+				rt_material = *(dynamic_cast<Stage::RaytracingMaterial*>(mat_ptr.get()));
+			}
+			else
+			{
+				Stage* stage = Scene::getInstance(0)->getStage();
+				rt_material = stage->getRTMaterial();
+			}
+
+			// remember the update-directly value
+			bool do_update = update_directly_checkBox->isChecked();
+			// and disable it for now to prevent unnecessary raytracing calls
+			update_directly_checkBox->setChecked(false);
+
+			// now set the values
+			setColor(ambient_color_label, rt_material.ambient_color);
+			setColor(reflectiveness_color_label, rt_material.reflective_color);
+			setColor(specularity_color_label, rt_material.specular_color);
+
+			setLabel_(*ambient_factor_label, rt_material.ambient_intensity);
+			ambient_factor_slider->setValue(rt_material.ambient_intensity*(float)ambient_factor_slider->maximum());
+
+			setLabel_(*specularity_factor_label, rt_material.specular_intensity);
+			specularity_factor_slider->setValue(rt_material.specular_intensity*(float)specularity_factor_slider->maximum());
+
+			setLabel_(*reflectiveness_factor_label, rt_material.reflective_intensity);
+			reflectiveness_factor_slider->setValue(rt_material.reflective_intensity*(float)reflectiveness_factor_slider->maximum());
+
+			setLabel_(*shininess_factor_label, rt_material.shininess);
+			shininess_factor_slider->setValue(rt_material.shininess);
+
+			setLabel_(*transparency_factor_label, rt_material.transparency);
+			transparency_factor_slider->setValue(rt_material.transparency);
+
+			update_directly_checkBox->setChecked(do_update);
 		}
 
 		void MaterialSettings::updateDefaultMaterialsFromStage()
@@ -197,8 +248,13 @@ namespace BALL
 		
 		void MaterialSettings::setValues_(const QSlider& slider, QLabel& label, int divisor)
 		{
-			String text = String(((float)slider.value()) / divisor);
-			
+			setLabel_(label, ((float)slider.value()) / divisor);
+		}
+
+		void MaterialSettings::setLabel_(QLabel& label, float value)
+		{
+			String text(10, "%2f", value);
+
 			while (text.has('.') && text.hasSuffix("0"))
 			{
 				text = text.trimRight("0");

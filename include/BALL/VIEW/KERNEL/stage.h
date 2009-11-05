@@ -409,6 +409,9 @@ namespace BALL
 				: public PersistentObject
 			{
 				public:
+
+					BALL_CREATE(RaytracingMaterial)
+
 					RaytracingMaterial();
 
 					/** @name Persistence

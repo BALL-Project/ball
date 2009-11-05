@@ -1232,7 +1232,7 @@
            <string>POVRay</string>
           </property>
           <property name="checked">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -1240,6 +1240,9 @@
          <widget class="QRadioButton" name="radioButton_RTFact">
           <property name="text">
            <string>RTFact</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
           </property>
          </widget>
         </item>

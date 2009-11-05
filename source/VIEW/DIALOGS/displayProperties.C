@@ -29,6 +29,8 @@
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 
+#include <BALL/CONCEPT/textPersistenceManager.h>
+
 #include <QtGui/QMenuBar>
 #include <QtGui/QLabel>
 #include <QtGui/QPushButton>
@@ -543,6 +545,7 @@ Representation* DisplayProperties::createRepresentation(const list<Composite*>& 
 	getMainControl()->getRepresentationManager().insert(*rep_, false);
 		
 	Representation* repx = rep_;
+
 	// now we can add the Representation to the GeometricControl
 	notify_(new RepresentationMessage(*rep_, RepresentationMessage::ADD_TO_GEOMETRIC_CONTROL));
 
@@ -789,12 +792,13 @@ void DisplayProperties::createRepresentation(String data_string, const vector<co
 	{
 		vector<String> string_vector;
 
-		// Representation0=1;3 2 2 6.500000 0 0 [2]|Color|H
+		// Representation0=1;3 2 2 6.500000 0 0 [2]|Color|H\...
 		// 								 ^ 																	System Number
 		// 								         ^            							Model Settings
 		// 								         							 ^            Composites numbers
 		// 								         							     ^        Custom Color
 		// 								         							     			^   Hidden Flag
+		//                                                  ^ Named Properties
 
 		// split off information of system number
 		data_string.split(string_vector, ";");
@@ -816,7 +820,7 @@ void DisplayProperties::createRepresentation(String data_string, const vector<co
 			return;
 		}
 
-		bool hidden = (string_vector2.size() >= 3 && string_vector2[2].has('H'));
+		bool hidden = (string_vector2.size() >= 3 && string_vector2[2].hasSubstring("|H"));
 
 		data_string = string_vector2[0];
 
@@ -869,7 +873,30 @@ void DisplayProperties::createRepresentation(String data_string, const vector<co
 			return;
 		}
 
-		createRepresentation(c_list, hidden);
+		Representation* rep = createRepresentation(c_list, hidden);
+
+		// named properties
+		vector<String> properties;
+		data_string.split(properties, "\\");
+
+		if (properties.size() > 1)
+		{
+			vector<String> string_vector_properties;
+			properties[1].split(string_vector_properties, "*");
+
+			for (Position i=0; i<string_vector_properties.size(); ++i)
+			{
+				istringstream is(string_vector_properties[i].decodeBase64());
+
+				TextPersistenceManager tmp(is);
+				tmp.registerClass(RTTI::getStreamName<Stage::RaytracingMaterial>(), Stage::RaytracingMaterial::createDefault);
+
+				NamedProperty* prop = (NamedProperty*) tmp.readObject();
+
+				rep->setProperty(*prop);
+			}
+		}
+
 	}
 	catch(...)
 	{
