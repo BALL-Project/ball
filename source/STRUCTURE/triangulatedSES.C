@@ -34,35 +34,26 @@ namespace BALL
 	{
 	}
 
-
-	TriangulatedSES::TriangulatedSES
-			(const TriangulatedSES& surface, bool deep)
+	TriangulatedSES::TriangulatedSES(const TriangulatedSES& surface, bool deep)
 		
-		:	TriangulatedSurface(surface,deep),
+		:	TriangulatedSurface(surface, deep),
 			ses_(surface.ses_),
 			density_(surface.density_)
 	{
 	}
 
-
-	TriangulatedSES::TriangulatedSES
-			(SolventExcludedSurface* ses, const double& density)
-		
+	TriangulatedSES::TriangulatedSES(SolventExcludedSurface* ses, const double& density)
 		:	TriangulatedSurface(),
 			ses_(ses),
 			density_(density)
 	{
 	}
 
-
 	TriangulatedSES::~TriangulatedSES()
-		
 	{
 	}
 
-
 	void TriangulatedSES::set(const TriangulatedSES& surface, bool)
-		
 	{
 		if (this != &surface)
 		{
@@ -72,10 +63,7 @@ namespace BALL
 		}
 	}
 
-
-	TriangulatedSES& TriangulatedSES::operator =
-			(const TriangulatedSES& surface)
-		
+	TriangulatedSES& TriangulatedSES::operator = (const TriangulatedSES& surface)
 	{
 		if (this != &surface)
 		{
@@ -86,20 +74,15 @@ namespace BALL
 		return *this;
 	}
 
-
 	void TriangulatedSES::setDensity(const double& density)
-		
 	{
 		density_ = density;
 	}
 
-
 	double TriangulatedSES::getDensity() const
-		
 	{
 		return density_;
 	}
-
 
 	void TriangulatedSES::compute()
 		throw(Exception::GeneralException,Exception::DivisionByZero)
@@ -110,7 +93,6 @@ namespace BALL
 
 
 	SESTriangulator::SESTriangulator()
-		
 		:	tses_(0),
 			point_(),
 			edge_(),
@@ -119,9 +101,7 @@ namespace BALL
 	{
 	}
 
-
 	SESTriangulator::SESTriangulator(TriangulatedSES* tses)
-		
 		:	tses_(tses),
 			point_(tses->ses_->number_of_vertices_),
 			edge_(tses->ses_->number_of_edges_),
@@ -130,9 +110,7 @@ namespace BALL
 	{
 	}
 
-
 	SESTriangulator::~SESTriangulator()
-		
 	{
 		std::list<TrianglePoint*>::iterator i;
 		for (i = template_spheres_[0].begin(); i != template_spheres_[0].end(); i++)
@@ -153,7 +131,6 @@ namespace BALL
 		}
 	}
 
-
 	void SESTriangulator::run()
 		throw(Exception::GeneralException,Exception::DivisionByZero)
 	{
@@ -169,9 +146,7 @@ namespace BALL
 		//}
 	}
 
-
 	void SESTriangulator::preProcessing()
-		
 	{
 		tses_->ses_->clean(tses_->density_);
 		tses_->ses_->splitSphericFaces();
@@ -202,7 +177,6 @@ namespace BALL
 
 
 	void SESTriangulator::partitionSingularEdges()
-		
 	{
 		std::list<SESEdge*>::iterator e;
 		for (e = tses_->ses_->singular_edges_.begin();
@@ -215,7 +189,6 @@ namespace BALL
 
 
 	void SESTriangulator::triangulateContactFaces()
-		
 	{
 		SESFace* current_face;
 		TSphere3<double> sphere;
@@ -230,7 +203,6 @@ namespace BALL
 
 
 	void SESTriangulator::triangulateSphericFaces()
-		
 	{
 		SESFace* current_face;
 		TSphere3<double> sphere;
@@ -511,7 +483,6 @@ namespace BALL
 	void SESTriangulator::triangulateFreeToricFace
 			(SESFace*	face,
 			 const double&			probe_radius)
-		
 	{
 		TVector3<double> normal(face->edge_.front()->circle_.n);
 		TCircle3<double> circle1(face->edge_.front()->circle_);
@@ -794,10 +765,7 @@ namespace BALL
 	}
 
 
-	void SESTriangulator::triangulateContactFace
-			(SESFace*				face,
-			 const TSphere3<double>&	sphere)
-		
+	void SESTriangulator::triangulateContactFace(SESFace*	face, const TSphere3<double>&	sphere)
 	{
 		Position number_of_edges = face->edge_.size();
 		if (number_of_edges > 0)
@@ -826,12 +794,9 @@ namespace BALL
 					triangle->vertex_[i] = *p;
 					p++;
 				}
-				TVector3<double> normal((triangle->vertex_[0]->point_-
-														triangle->vertex_[1]->point_	)%
-													 (triangle->vertex_[0]->point_-
-														triangle->vertex_[2]->point_	)	);
-				if (Maths::isGreater(normal*(sphere.p-triangle->vertex_[1]->point_),
-														 0.0))
+				TVector3<double> normal((triangle->vertex_[0]->point_- triangle->vertex_[1]->point_	) %
+				                        (triangle->vertex_[0]->point_- triangle->vertex_[2]->point_	)	 );
+				if (Maths::isGreater(normal*(sphere.p-triangle->vertex_[1]->point_), 0.0))
 				{
 					TrianglePoint* tmp = triangle->vertex_[0];
 					triangle->vertex_[0] = triangle->vertex_[1];
@@ -841,9 +806,11 @@ namespace BALL
 				tses_->number_of_triangles_++;
 				return;
 			}
+
 			// get a template sphere for the face to triangulate
 			HashMap<Size, std::list<TrianglePoint*> >::ConstIterator s
 					= template_spheres_.find(numberOfRefinements(tses_->density_,	sphere.radius));
+
 			std::list<TrianglePoint*>::const_iterator p;
 			TrianglePoint* point;
 			TriangulatedSES part;
@@ -867,7 +834,7 @@ namespace BALL
 				part.cut(plane, 0.05);
 			}
 			part.shift(sphere.p);
-			buildSphericTriangles(face,part,sphere);
+			buildSphericTriangles(face, part, sphere);
 			part.deleteIsolatedPoints();
 			tses_->join(part);
 		}
@@ -903,12 +870,8 @@ namespace BALL
 	}
 
 
-	bool SESTriangulator::buildSphericTriangles
-			(SESFace*					face,
-			 TriangulatedSES&	part,
-			 const TSphere3<double>&		sphere,
-			 bool									convex)
-		
+	bool SESTriangulator::buildSphericTriangles(SESFace* face, TriangulatedSES&	part,
+	                                            const TSphere3<double>& sphere, bool convex)
 	{
 		HashSet<TrianglePoint*> points;
 		std::list<TrianglePoint*>::iterator p;
@@ -1019,7 +982,6 @@ namespace BALL
 			 const TSphere3<double>&									sphere,
 			 const HashSet<TrianglePoint*>&	points,
 				bool															convex)
-		
 	{
 		SESEdge* first_sesedge = firstSESEdge(face->edge_);
 		if (first_sesedge == NULL)

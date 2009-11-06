@@ -10,7 +10,6 @@
 namespace BALL
 {
 	TriangulatedSurface::TriangulatedSurface()
-		
 		:	number_of_points_(0),
 			points_(),
 			number_of_edges_(0),
@@ -21,9 +20,7 @@ namespace BALL
 	}
 
 
-	TriangulatedSurface::TriangulatedSurface
-			(const TriangulatedSurface& surface, bool)
-		
+	TriangulatedSurface::TriangulatedSurface(const TriangulatedSurface& surface, bool)
 		:	number_of_points_(0),
 			points_(),
 			number_of_edges_(0),
@@ -36,7 +33,6 @@ namespace BALL
 
 
 	TriangulatedSurface::~TriangulatedSurface()
-		
 	{
 		clear();
 	}
@@ -253,7 +249,6 @@ namespace BALL
 	}
 
 	void TriangulatedSurface::clear()
-		
 	{
 		std::list<TrianglePoint*>::iterator p;
 		for (p = points_.begin(); p != points_.end(); p++)
@@ -574,7 +569,6 @@ namespace BALL
 
 
 	void TriangulatedSurface::join(TriangulatedSurface& source)
-		
 	{
 		points_.splice(points_.end(),source.points_);
 		edges_.splice(edges_.end(),source.edges_);
@@ -587,7 +581,6 @@ namespace BALL
 		source.number_of_triangles_ = 0;
 	}
 
-
 	void TriangulatedSurface::shift(const TVector3<double>& c)
 	{
 		std::list<TrianglePoint*>::iterator i;
@@ -597,7 +590,6 @@ namespace BALL
 		}
 	}
 
-
 	void TriangulatedSurface::blowUp(const double& r)
 	{
 		std::list<TrianglePoint*>::iterator i;
@@ -606,7 +598,6 @@ namespace BALL
 			(*i)->point_ *= r;
 		}
 	}
-
 
 	void TriangulatedSurface::setIndices()
 	{
@@ -632,7 +623,6 @@ namespace BALL
 			i++;
 		}
 	}
-
 
 	void TriangulatedSurface::cut(const TPlane3<double>& plane, const double& fuzzy)
 	{
@@ -1020,28 +1010,23 @@ namespace BALL
 
 
 	TriangulatedSphere::TriangulatedSphere()
-		
 		:	TriangulatedSurface()
 	{
 	}
 
 
-	TriangulatedSphere::TriangulatedSphere
-			(const TriangulatedSphere& sphere, bool)
-		
+	TriangulatedSphere::TriangulatedSphere(const TriangulatedSphere& sphere, bool)
 		:	TriangulatedSurface(sphere)
 	{
 	}
 
 
 	TriangulatedSphere::~TriangulatedSphere()
-		
 	{
 	}
 
 
 	void TriangulatedSphere::set(const TriangulatedSphere& sphere, bool)
-		
 	{
 		if (this != &sphere)
 		{
@@ -1050,9 +1035,7 @@ namespace BALL
 	}
 
 
-	TriangulatedSphere& TriangulatedSphere::operator =
-			(const TriangulatedSphere& sphere)
-		
+	TriangulatedSphere& TriangulatedSphere::operator = (const TriangulatedSphere& sphere)
 	{
 		if (this != &sphere)
 		{
