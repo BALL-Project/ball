@@ -121,8 +121,7 @@ namespace BALL
 		/**	Default constructor.
 				This method creates a new SolventExcludedSurface object.
 		*/
-		SolventExcludedSurface()
-			;
+		SolventExcludedSurface();
 
 		/**	Copy constructor.
 				Create a new SolventExcludedSurface object from another.
@@ -130,13 +129,11 @@ namespace BALL
 				@param	bool	ignored - just for interface consistency
 		*/
 		SolventExcludedSurface
-				(const SolventExcludedSurface& ses, bool = false)
-			;
+				(const SolventExcludedSurface& ses, bool = false);
 
 		/** Detailed constructor
 		*/
-		SolventExcludedSurface(ReducedSurface* reduced_surface)
-			;
+		SolventExcludedSurface(ReducedSurface* reduced_surface);
 
 		/**	Destructor.
 				As there are no dynamic	data structures, nothing happens.
@@ -435,11 +432,9 @@ namespace BALL
 			(const TVector3<double>& p1,
 			 const TVector3<double>& p2,
 			 const double&						dist,
-			 TVector3<double>&				result)
-			;
+			 TVector3<double>&				result);
 
-		Index vertexExists(const TVector3<double>& point)
-			;
+		Index vertexExists(const TVector3<double>& point);
 
 		//@}
 
@@ -452,7 +447,6 @@ namespace BALL
 		/*_ a HashGrid to store and find the vertices in an efficient way
 		*/
 		HashGrid3<Index> vertex_grid_;
-
 	};
 
 
@@ -591,30 +585,26 @@ namespace BALL
 			 Index									end,
 			 SESVertex*&						vertex,
 			 const HashSet<Index>&	indices,
-			 bool										minimum)
-			;
+			 bool										minimum);
 
 		void getExtrema
 				(const std::list<Intersection>& intersections,
 				 std::list<Intersection>& min,
-				 std::list<Intersection>& max)
-			;
+				 std::list<Intersection>& max);
 
 		void buildEndEdge
 			(SESEdge*												edge,
 			 const std::list<Intersection>&	extrema,
 			 SESVertex*&										vertex,
 			 Index&													actual_extremum,
-			 bool														min)
-			;
+			 bool														min);
 
 		bool probeIntersection
 			 (Index		 face1,
 				Index		 face2,
 				Index		 face3,
 				TVector3<double>& point1,
-				TVector3<double>& point2)
-			;
+				TVector3<double>& point2);
 
 		void sort
 				(SESFace* face1,
@@ -622,13 +612,11 @@ namespace BALL
 				 std::vector<SESEdge*>& sesedge1,
 				 std::vector<SESEdge*>& sesedge2,
 				 std::vector<SESVertex*>& sesvertex1,
-				 std::vector<SESVertex*>& sesvertex2)
-			;
+				 std::vector<SESVertex*>& sesvertex2);
 
 		void sort
 			 (Index		u1, Index		u2, Index		u3,
-				Index&	s1,	Index&	s2, Index&	s3)
-			;
+				Index&	s1,	Index&	s2, Index&	s3);
 
 		//@}
 

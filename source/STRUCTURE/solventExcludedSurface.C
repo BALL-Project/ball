@@ -26,7 +26,6 @@ namespace BALL
 {
 
 	SolventExcludedSurface::SolventExcludedSurface()
-		
 		:	number_of_vertices_(0),
 			vertices_(),
 			number_of_edges_(0),
@@ -46,7 +45,6 @@ namespace BALL
 
 	SolventExcludedSurface::SolventExcludedSurface
 		(const SolventExcludedSurface& ses, bool)
-		
 		:	number_of_vertices_(ses.vertices_.size()),
 			vertices_(number_of_vertices_),
 			number_of_edges_(ses.edges_.size()),
@@ -91,7 +89,6 @@ namespace BALL
 
 	SolventExcludedSurface::SolventExcludedSurface
 			(ReducedSurface* reduced_surface)
-		
 		:	number_of_vertices_(0),
 			vertices_(),
 			number_of_edges_(0),
@@ -110,7 +107,6 @@ namespace BALL
 
 
 	SolventExcludedSurface::~SolventExcludedSurface()
-		
 	{
 		clear();
 	}
@@ -198,7 +194,6 @@ namespace BALL
 	bool SolventExcludedSurface::cleanSingularToricFace
 			(SESFace* face,
 			 const double&			sqrt_density)
-		
 	{
 		face->normalize(true);
 		std::list<SESEdge*>::iterator e = face->edge_.begin();
@@ -644,7 +639,6 @@ namespace BALL
 
 
 	void SolventExcludedSurface::splitSphericFaces()
-		
 	{
 		for (Position i = 0; i < number_of_spheric_faces_; i++)
 		{
@@ -1036,7 +1030,6 @@ namespace BALL
 
 
 	SESComputer::SESComputer()
-		
 		:	ses_(),
 			vertex_grid_()
 	{
@@ -1044,7 +1037,6 @@ namespace BALL
 
 
 	SESComputer::SESComputer(SolventExcludedSurface* ses)
-		
 		:	ses_(ses),
 			vertex_grid_()
 	{
@@ -1052,7 +1044,6 @@ namespace BALL
 
 
 	SESComputer::~SESComputer()
-		
 	{
 	}
 
@@ -1132,7 +1123,6 @@ namespace BALL
 
 
 	void SESComputer::get()
-		
 	{
 		for (Position i = 0; i < ses_->number_of_spheric_faces_; i++)
 		{
@@ -1146,7 +1136,6 @@ namespace BALL
 
 
 	void SESComputer::createSphericFace(Position j)
-		
 	{
 		SESFace* face = ses_->spheric_faces_[j];
 		RSFace* rsface = face->rsface_;
@@ -1169,7 +1158,6 @@ namespace BALL
 		(SESFace*				face,
 		 const TSphere3<double>& probe,
 		 RSVertex*			rsvertex)
-		
 	{
 		// Create a new vertex on the correct position ...
 		SESVertex* vertex(createVertex(probe.p,rsvertex->atom_));
