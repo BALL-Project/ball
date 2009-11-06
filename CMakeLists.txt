@@ -53,7 +53,7 @@ SET(CF_BALL_PACKAGE_VERSION "${BALL_PACKAGE_VERSION_MAJOR}.${BALL_PACKAGE_VERSIO
 # Initialize the various PREFIX variables. This has to happen before any files
 # using them are included.
 SET(CMAKE_INSTALL_PREFIX "" CACHE INTERNAL "This must be equal to INSTALL_PREFIX!" FORCE)
-SET(INSTALL_PREFIX "." CACHE PATH "Installation prefix for BALL")
+SET(INSTALL_PREFIX ${CMAKE_BINARY_DIR} CACHE PATH "Installation prefix for BALL")
 
 ## default build type (for Makefile generators): Release
 ## TODO: 64 Bit builds etc for Windows
@@ -347,6 +347,16 @@ ADD_SUBDIRECTORY(source/PYTHON/EXTENSIONS)
 ## add BALLView target
 ADD_SUBDIRECTORY(source/APPLICATIONS/BALLVIEW)
 
+## Install the results to the desired places
+INSTALL(TARGETS BALL VIEW
+	RUNTIME DESTINATION bin
+	LIBRARY DESTINATION lib
+	ARCHIVE DESTINATION lib
+)
+
+## Install the data directories
+INSTALL(DIRECTORY data DESTINATION ${BALL_PATH}/share/BALL)
+
 #if (NOT APPLE AND NOT MSVC) ##=Linux
 #	target_link_libraries(OpenMS ${OPENMS_DEP_LIBRARIES}) ## do not link OpenMS against QT on Linux
 #else()
@@ -433,7 +443,7 @@ ADD_SUBDIRECTORY(source/APPLICATIONS/BALLVIEW)
 #IF ("${PACKAGE_TYPE}" STREQUAL "none")
 	INCLUDE(Dart)
 	ENABLE_TESTING()
-	ADD_SUBDIRECTORY(source/TEST EXCLUDE_FROM_ALL) ## configure the Test project (but do not add it to OpenMS itself)
+	ADD_SUBDIRECTORY(source/TEST EXCLUDE_FROM_ALL) ## configure the Test project (but do not add it to BALL itself)
 #ENDIF()
 
 #### configs for external include files, e.g. to develop code with OpenMS
