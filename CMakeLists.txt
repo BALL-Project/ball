@@ -36,7 +36,7 @@ SET(BALL_PACKAGE_VERSION_PATCH "1")
 ###    end manual	entries													   ###
 ########################################################
 
-# Heart of the BUILD system : only edit when you know what you´re doing (we don´t)
+# Heart of the BUILD system : only edit when you know what youï¿½re doing (we donï¿½t)
 # quick manual for most commands: http://www.cmake.org/cmake/help/cmake2.6docs.html
 # useful predefined variables: http://www.paraview.org/Wiki/CMake_Useful_Variables
 
@@ -350,7 +350,10 @@ ADD_SUBDIRECTORY(source/PYTHON/EXTENSIONS)
 ## add BALLView target
 ADD_SUBDIRECTORY(source/APPLICATIONS/BALLVIEW)
 
-## Install the results to the desired places
+######################################################################
+####        Installation Routines                                  ###
+######################################################################
+
 INCLUDE(cmake/BALLComponents.cmake)
 
 INSTALL(TARGETS BALL
@@ -367,8 +370,26 @@ INSTALL(TARGETS VIEW
 	COMPONENT "${COMPONENT_LIBVIEW}"
 )
 
-## Install the data directories
-INSTALL(DIRECTORY data DESTINATION share/BALL COMPONENT "${COMPONENT_LIBBALL}")
+## If we are not installing into the source directory directly, take
+## care of data files and headers
+IF (NOT "${INSTALL_PREFIX}" STREQUAL ".")
+	## Install the data directories
+	INSTALL(DIRECTORY data DESTINATION share/BALL COMPONENT ${COMPONENT_LIBBALL})
+	
+	## Install the includes
+	INSTALL(DIRECTORY include DESTINATION include)
+ENDIF()
+
+## The configured files have to be copied in any case
+INSTALL(FILES 
+		${PROJECT_BINARY_DIR}/include/BALL/CONFIG/config.h 
+		DESTINATION include/BALL/CONFIG
+)
+
+INSTALL(FILES 
+		${PROJECT_BINARY_DIR}/include/BALL/PYTHON/BALLPythonConfig.h
+		DESTINATION include/BALL/PYTHON
+)
 
 #if (NOT APPLE AND NOT MSVC) ##=Linux
 #	target_link_libraries(OpenMS ${OPENMS_DEP_LIBRARIES}) ## do not link OpenMS against QT on Linux
