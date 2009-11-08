@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reducedSurface.h,v 1.47.18.1 2007/03/25 21:25:29 oliver Exp $
-//
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -54,7 +52,6 @@
 #include <list>
 #include <vector>
 
-
 namespace BALL
 {
 	class RSComputer;
@@ -104,28 +101,23 @@ namespace BALL
 				All components are initialized to <tt>(T)0</tt> or <tt>NULL</tt>,
 				respectivly.
 		*/
-		ReducedSurface()
-			;
+		ReducedSurface();
 
 		/**	Copy constructor.
 				@param reduced_surface the ReducedSurface object to be copied
 				@param bool ignored - just for interface consistency
 		*/
-		ReducedSurface(const ReducedSurface& reduced_surface, bool = true)
-			;
+		ReducedSurface(const ReducedSurface& reduced_surface, bool = true);
 
 		/**	Detailed constructor.
 				Create a new ReducedSurface object from a list of spheres.
 		*/
-		ReducedSurface
-				(const std::vector< TSphere3<double> >& spheres,
-				 const double& probe_radius)
-			;
+		ReducedSurface(const std::vector< TSphere3<double> >& spheres,
+		               const double& probe_radius);
 
 		/**	Destructor.
 		*/
-		virtual ~ReducedSurface()
-			;
+		virtual ~ReducedSurface();
 
 		//@}
 		/** @name Assignment
@@ -135,24 +127,20 @@ namespace BALL
 		/**	Assign from another ReducedSurface.
 				@param reduced_surface the ReducedSurface object to assign from
 		*/
-		void operator=(const ReducedSurface& reduced_surface)
-			;
+		void operator = (const ReducedSurface& reduced_surface);
 
 		/**	Assign from another ReducedSurface.
 				@param reduced_surface the ReducedSurface object to assign from
 		*/
-		void set(const ReducedSurface& reduced_surface)
-			;
+		void set(const ReducedSurface& reduced_surface);
 
 		/** Delete all vertices, edges and faces.
 		*/
-		void clear()
-			;
+		void clear();
 
 		/** Remove all NULL-pointers
 		*/
-		void clean()
-			;
+		void clean();
 
 		//@}
 		/**	@name	Accessors
@@ -162,39 +150,34 @@ namespace BALL
 		/** Return the number of atoms.
 				@return Size the number of atoms
 		*/
-		Size numberOfAtoms() const
-			;
+		Size numberOfAtoms() const;
 
 		/** Return the number of rsvertices.
 				@return Size the number of rsvertices
 		*/
-		Size numberOfVertices() const
-			;
+		Size numberOfVertices() const;
 
 		/** Return the number of rsedges.
 				@return Size the number of rsedges
 		*/
-		Size numberOfEdges() const
-			;
+		Size numberOfEdges() const;
 
 		/** Return the number of rsfaces.
 				@return Size the number of rsfaces
 		*/
-		Size numberOfFaces() const
-			;
+		Size numberOfFaces() const;
 
 		/** Return the probe radius.
 				@return double the radius of the used probe sphere
 		*/
-		double getProbeRadius() const
-			;
+		double getProbeRadius() const;
 
 		/** Return the i'th sphere.
 				@param	i	the index of the sphere that should be given back
 				@return TSphere3<double>, the i'th sphere
 		*/
     TSphere3<double> getSphere(Position i) const
-			throw(Exception::IndexOverflow);
+	    throw(Exception::IndexOverflow);
 
 		/** Return the i'th rsvertex.
 				@param	i	the index of the rsvertex that should be given back
@@ -220,39 +203,33 @@ namespace BALL
 		/** Insert a new RSVertex.
 				@param	rsvertex	a pointer to the RSVertex to insert
 		*/
-		void insert(RSVertex* rsvertex)
-			;
+		void insert(RSVertex* rsvertex);
 
 		/** Insert a new RSEdge.
 				@param	rsedge	a pointer to the RSEdge to insert
 		*/
-		void insert(RSEdge* rsedge)
-			;
+		void insert(RSEdge* rsedge);
 
 		/** Insert a new RSFace.
 				@param	rsface	a pointer to the RSFace to insert
 		*/
-		void insert(RSFace* rsface)
-			;
+		void insert(RSFace* rsface);
 
 		/** Return the maximal radius of te atoms of te molecule
 				@return double	the maximal radius
 		*/
-		double getMaximalRadius() const
-			;
+		double getMaximalRadius() const;
 
-		/** Return the bounding box of the centers of te atoms of te molecule
+		/** Return the bounding box of the centers of the atoms of the molecule
 				@return TSimpleBox3<double>	the bounding box
 		*/
-		TSimpleBox3<double> getBoundingBox() const
-			;
+		TSimpleBox3<double> getBoundingBox() const;
 
 		/** Delete a pair of similar faces.
 				@param	face1	a pointer to the first face
 				@param	face2	a pointer to the second face
 		*/
-		void deleteSimilarFaces(RSFace* face1, RSFace* face2)
-			;
+		void deleteSimilarFaces(RSFace* face1, RSFace* face2);
 
 		/** Get the angle between two RSFaces.
 				@param	face1		a pointer to the first face
@@ -262,21 +239,16 @@ namespace BALL
 				@param	angle		the computed angle
 				@param	check		you kan ask to check whether the angle can be computed
 		*/
-		bool getAngle
-				(RSFace* face1,
-				 RSFace* face2,
-				 RSVertex* vertex1,
-				 RSVertex* vertex2,
-				 TAngle<double>& angle,
-				 bool check = false)			const
-			;
+		bool getAngle(RSFace*   face1,   RSFace*   face2,
+		              RSVertex* vertex1, RSVertex* vertex2,
+		              TAngle<double>& angle, bool check = false) const;
 
 		/** Compute the reduced surface.
 		*/
 		void compute()
 			throw(Exception::GeneralException,
-						Exception::DivisionByZero,
-						Exception::IndexOverflow);
+			      Exception::DivisionByZero,
+			      Exception::IndexOverflow);
 
 		//@}
 
@@ -284,88 +256,81 @@ namespace BALL
 
 		/*_ Test whether a ReducedSurface object can be copied.
 		*/
-		bool canBeCopied(const ReducedSurface& reduced_surface)
-			;
+		bool canBeCopied(const ReducedSurface& reduced_surface);
 
 		/*_ Copy a ReducedSurface object.
 		*/
-		void copy(const ReducedSurface& reduced_surface)
-			;
+		void copy(const ReducedSurface& reduced_surface);
 
 		/*_
 		*/
-		void correctEdges
-				(RSFace* face1,
-				 RSFace* face2,
-				 RSEdge* edge1,
-			 	 RSEdge* edge2)
-			;
+		void correctEdges(RSFace* face1, RSFace* face2,
+		                  RSEdge* edge1, RSEdge* edge2);
 
 		/*_
 		*/
-		void joinVertices
-				(RSFace* face1,
-				 RSFace* face2,
-				 RSVertex* vertex1,
-			 	 RSVertex* vertex2)
-			;
+		void joinVertices(RSFace*   face1,   RSFace*   face2,
+		                  RSVertex* vertex1, RSVertex* vertex2);
 
 		/*_
 		*/
-		void findSimilarVertices
-			 (RSFace* face1,
-				RSFace* face2,
-				std::vector<RSVertex*>& rsvertex1,
-				std::vector<RSVertex*>& rsvertex2)
-			;
+		void findSimilarVertices(RSFace* face1, RSFace* face2,
+		                         std::vector<RSVertex*>& rsvertex1,
+		                         std::vector<RSVertex*>& rsvertex2);
 
 		/*_
 		*/
-		void findSimilarEdges
-			 (RSFace* face1,
-				RSFace* face2,
-				std::vector<RSEdge*>& rsedge1,
-				std::vector<RSEdge*>& rsedge2)
-			;
+		void findSimilarEdges(RSFace* face1, RSFace* face2,
+		                      std::vector<RSEdge*>& rsedge1,
+		                      std::vector<RSEdge*>& rsedge2);
 
 		protected:
 
-    /*_ the number of atoms of the reduced surface
-    */
-    Size number_of_atoms_;
-    /*_ the atoms of the molecule
-    */
-    std::vector< TSphere3<double> > atom_;
-    /*_	probe radius
-    */
-    double probe_radius_;
-    /*_ the number of vertices of the reduced surface
-    */
-    Size number_of_vertices_;
-    /*_ the vertices of the reduced surface
-    */
-    std::vector< RSVertex* > vertices_;
-    /*_ the number of edges of the reduced surface
-    */
-    Size number_of_edges_;
-    /*_ the edges of the reduced surface
-    */
-    std::vector< RSEdge* > edges_;
-    /*_ the number of faces of the reduced surface
-    */
-    Size number_of_faces_;
-    /*_ the faces of the reduced surface
-    */
-    std::vector< RSFace* > faces_;
-    /*_ maximal radius of all atoms
-    */
-    double r_max_;
-    /*_ bounding SimpleBox of the atom centers of the molecule
-    */
+		/*_ the number of atoms of the reduced surface
+		*/
+		Size number_of_atoms_;
+
+		/*_ the atoms of the molecule
+		*/
+
+		std::vector< TSphere3<double> > atom_;
+
+		/*_	probe radius
+		*/
+		double probe_radius_;
+
+		/*_ the number of vertices of the reduced surface
+		*/
+		Size number_of_vertices_;
+
+		/*_ the vertices of the reduced surface
+		*/
+		std::vector< RSVertex* > vertices_;
+
+		/*_ the number of edges of the reduced surface
+		*/
+		Size number_of_edges_;
+
+		/*_ the edges of the reduced surface
+		*/
+		std::vector< RSEdge* > edges_;
+
+		/*_ the number of faces of the reduced surface
+		*/
+		Size number_of_faces_;
+
+		/*_ the faces of the reduced surface
+		*/
+		std::vector< RSFace* > faces_;
+
+		/*_ maximal radius of all atoms
+		*/
+		double r_max_;
+
+		/*_ bounding SimpleBox of the atom centers of the molecule
+		*/
 		TSimpleBox3<double> bounding_box_;
-
 	};
-
 
 	/**	@name	Storers
 	*/
@@ -377,9 +342,6 @@ namespace BALL
 	BALL_EXPORT std::ostream& operator << (std::ostream& s, const ReducedSurface& rs);
 
 	//@}
-
-
-
 
 	/** Generic RSComputer Class.
 			\ingroup Surface
@@ -401,9 +363,9 @@ namespace BALL
 		*/
 		enum ProbeStatus
 		{
-			STATUS_OK  = 0,
-			STATUS_NOT_OK = 1,
-			STATUS_NOT_TESTED = 2
+			STATUS_OK = 0,
+			STATUS_NOT_OK,
+			STATUS_NOT_TESTED
 		};
 
 		/** status of an atom
@@ -413,9 +375,9 @@ namespace BALL
 		*/
 		enum AtomStatus
 		{
-			STATUS_ON_SURFACE  = 0,
-			STATUS_INSIDE = 1,
-			STATUS_UNKNOWN = 2
+			STATUS_ON_SURFACE = 0,
+			STATUS_INSIDE,
+			STATUS_UNKNOWN
 		};
 		//@}
 
@@ -433,18 +395,15 @@ namespace BALL
 				All components are initialized to <tt>(T)0</tt> or <tt>NULL</tt>,
 				respectivly.
 		*/
-		RSComputer()
-			;
+		RSComputer();
 
-		/**	Detiled constructor.
+		/**	Detailed constructor.
 		*/
-		RSComputer(ReducedSurface* rs)
-			;
+		RSComputer(ReducedSurface* rs);
 
 		/**	Destructor.
 		*/
-		virtual ~RSComputer()
-			;
+		virtual ~RSComputer();
 
 		//@}
 		/**	@name	Accessors
@@ -469,8 +428,7 @@ namespace BALL
 
 		/*_
 		*/
-		void preProcessing()
-			;
+		void preProcessing();
 
 		/*_ Compute a RSComponent.
 		*/
@@ -500,8 +458,7 @@ namespace BALL
 				faces. The radius of the atom is decreased by 10 EPSILON.
 				@param	atom	the index of the atom
 		*/
-		void correct(Index atom)
-	  	;
+		void correct(Index atom);
 
 		/*_ Check all new created vertices for extensions
 		*/
@@ -510,13 +467,12 @@ namespace BALL
 						Exception::DivisionByZero,
 						Exception::IndexOverflow);
 
-
 		/*_ Find a third atom rolling over two vertices starting on a face.
-				From all atoms which can be touced by the probe sphere when it
-				touches the given two vertices this one is chosen, for which is
-				the rotation angle the smalest.
+				From all atoms which can be touched by the probe sphere when it
+				touches the given two vertices we choose the one with smallest
+				rotation angle.
 				If the rotation angle equals zero, the probe sphere can touch four
-				atoms an an exception is thrown.
+				atoms and an exception is thrown.
 				If no atom can be found an exception is thrown.
 			@param	vertex1	the first vertex
 			@param	vertex2	the second vertex
@@ -525,12 +481,8 @@ namespace BALL
 			@param	phi			the rotation angle
 			@return	Index		index of the found atom
 		*/
-		Index thirdAtom
-			 (RSVertex*	vertex1,
-				RSVertex* vertex2,
-				RSFace*		face,
-				TSphere3<double>&	probe,
-				TAngle<double>&		phi)
+		Index thirdAtom(RSVertex* vertex1, RSVertex* vertex2,
+		                RSFace* face, TSphere3<double>& probe, TAngle<double>& phi)
 			throw(Exception::GeneralException,
 						Exception::DivisionByZero,
 						Exception::IndexOverflow);
@@ -587,8 +539,7 @@ namespace BALL
 			@return	RSEdge*	a pointer to the found edge, if a face can be found,
 													NULL otherwise
 		*/
-		RSEdge* findFirstEdge()
-			;
+		RSEdge* findFirstEdge();
 
 		/*_ Try to find a starting edge in a given direction
 			@param	direction		search in x-direction, if direction is 0,
@@ -599,8 +550,7 @@ namespace BALL
 			@return	RSEdge*	a pointer to the found edge, if a face can be found,
 													NULL otherwise
 		*/
-		RSEdge* findEdge(Position direction, Position extrem)
-			;
+		RSEdge* findEdge(Position direction, Position extrem);
 
 		//@}
 		/*_ @name Finding a first vertex
@@ -611,8 +561,7 @@ namespace BALL
 			@return	RSVertex*	a pointer to the found vertex, if a vertex can be
 														found, NULL otherwise
 		*/
-		RSVertex* findFirstVertex()
-			;
+		RSVertex* findFirstVertex();
 
 		/*_ Find a single atom in a given direction
 			@param	direction	search in x-direction, if direction is 0,
@@ -622,8 +571,7 @@ namespace BALL
 												search in max direction, if extrem is 1
 			@return	Index			the index of the found atom
 		*/
-		Index findFirstAtom(Position direction, Position extrem)
-			;
+		Index findFirstAtom(Position direction, Position extrem);
 
 		/*_ Find a second atom close enougth to the first atom in a given direction
 			@param	atom1			the index of the first atom
@@ -634,8 +582,7 @@ namespace BALL
 												search in max direction, if extrem is 1
 			@return	Index			the index of the found atom
 		*/
-		Index findSecondAtom(Index atom, Position direction, Position extrem)
-			;
+		Index findSecondAtom(Index atom, Position direction, Position extrem);
 
 		/*_ Find a second atom close enougth to the first two atoms
 			@param	atom1			the index of the first atom
@@ -644,12 +591,8 @@ namespace BALL
 			@return	::std::list< ::std::pair< Index,TSphere3<double> > >
 												a list of all candidates with their probe spheres
 		*/
-		void findThirdAtom
-			 (Index																		 atom1,
-				Index																		 atom2,
-				const std::list<Index>&									 third,
-				std::list< std::pair< Index,TSphere3<double> > >& atoms)
-			;
+		void findThirdAtom(Index atom1, Index atom2, const std::list<Index>& third,
+		                   std::list< std::pair< Index,TSphere3<double> > >& atoms);
 
 		//@}
 		/*_ @name Some utilities
@@ -663,8 +606,7 @@ namespace BALL
 			@param	atom2				the index of the second given atom
 			@param	output_list	list of all atoms close enougth to the given atoms
 		*/
-		void neighboursOfTwoAtoms(Index atom1, Index atom2)
-			;
+		void neighboursOfTwoAtoms(Index atom1, Index atom2);
 
 		/*_ Find all atoms close enougth to three given atoms.
 			The indices of all atoms which can be touched by the probe sphere when
@@ -674,13 +616,8 @@ namespace BALL
 			@param	atom3				the index of the third given atom
 			@param	output_list	list of all atoms close enougth to the given atoms
 		*/
-		void neighboursOfThreeAtoms
-			 (Index							atom1,
-				Index							atom2,
-				Index							atom3,
-				std::list<Index>& output_list)
-			;
-
+		void neighboursOfThreeAtoms(Index atom1, Index atom2, Index atom3,
+		                            std::list<Index>& output_list);
 
     /*_ Get the extrem coordinate of a circle in a given direction
     	@param	circle		the circle
@@ -691,11 +628,8 @@ namespace BALL
 												search in max direction, if extrem is 1
 			@return	double					the extrem coordinate
     */
-		double getCircleExtremum
-			 (const TCircle3<double>& circle,
-				Position			 direction,
-				Position			 extrem)
-			;
+		double getCircleExtremum(const TCircle3<double>& circle,
+		                         Position direction, Position extrem);
 
 		//@}
 		/*_ @name Creating / updating edges / faces
@@ -708,8 +642,7 @@ namespace BALL
 			@return	RSEdge* a pointer to the created free edge, if there is one,
 													NULL otherwise
 		*/
-		RSEdge* createFreeEdge(RSVertex* vertex1, RSVertex* vertex2)
-			;
+		RSEdge* createFreeEdge(RSVertex* vertex1, RSVertex* vertex2);
 
 		/*_ Get the circle described by the center of the probe sphere and the two
 				contact circles with the atoms when the probe sphere rolls over two
@@ -722,13 +655,8 @@ namespace BALL
 				@return	bool		true, if the probe sphere can touch both atoms,
 												false, otherwise
 		*/
-		bool getCircles
-			 (Index atom1,
-				Index atom2,
-				TCircle3<double>& circle1,
-				TCircle3<double>& circle2,
-				TCircle3<double>& circle3)
-			;
+		bool getCircles(Index atom1, Index atom2, TCircle3<double>& circle1,
+		                TCircle3<double>& circle2, TCircle3<double>& circle3);
 
 		/*_ Get the normal vector of the face described by three atoms and a probe
 			@param	atom1				the index of the first atom
@@ -737,12 +665,8 @@ namespace BALL
 			@param	probe				the probe sphere lying on atom1, atom2, atom3
 			@return	TVector3<double>	the normal vector
 		*/
-		TVector3<double> getFaceNormal
-			 (const TSphere3<double>& atom1,
-				const TSphere3<double>& atom2,
-				const TSphere3<double>& atom3,
-				const TSphere3<double>& probe)
-			;
+		TVector3<double> getFaceNormal(const TSphere3<double>& atom1, const TSphere3<double>& atom2,
+		                               const TSphere3<double>& atom3, const TSphere3<double>& probe);
 
 		/*_ Update a face and it's edges
 			@param	v1		the first vertex of the face
@@ -754,25 +678,15 @@ namespace BALL
 			@param	f			the face
 			@param	probe	the probe sphere of the face
 		*/
-		void updateFaceAndEdges
-			 (RSVertex* v1,
-				RSVertex* v2,
-				RSVertex* v3,
-				RSEdge* e1,
-				RSEdge* e2,
-				RSEdge* e3,
-				RSFace* f,
-				const TSphere3<double>& probe)
-			;
+		void updateFaceAndEdges(RSVertex* v1, RSVertex* v2, RSVertex* v3,
+		                        RSEdge*   e1, RSEdge*   e2, RSEdge*   e3,
+		                        RSFace* f, const TSphere3<double>& probe);
 
-		/*_ Test, weather a face exists or not
+		/*_ Test, whether a face exists or not
 			@param	face				a pointer to the face to be tested
 			@return	RSFace*	a pointer to the face, if it exists, otherwise NULL
 		*/
-		RSFace* faceExists
-			 (RSFace* face,
-				const std::list< RSVertex* >& vertices)
-			;
+		RSFace* faceExists(RSFace* face, const std::list< RSVertex* >& vertices);
 
 		//@}
 		/*_ @name Finding a probe sphere
@@ -788,57 +702,41 @@ namespace BALL
 			@return	bool	true, if the probe sphere can touch the three atoms,
 										false, otherwise
 		*/
-		bool centerOfProbe
-			 (Index		 a1,
-				Index		 a2,
-				Index		 a3,
-				TVector3<double>& c1,
-				TVector3<double>& c2)
-			;
+		bool centerOfProbe(Index a1, Index a2, Index a3,
+		                   TVector3<double>& c1, TVector3<double>& c2);
 
 		/*_ Check,weather a probe sphere is inside an atom
 			@param	probe	the probe sphere to be tested
 			@return	bool	true, if the probe sphere is not intersecting any atom
 										false, otherwise
 		*/
-		bool checkProbe
-			 (const TSphere3<double>& probe,
-				Index atom1,
-				Index atom2,
-				Index atom3)
-			;
+		bool checkProbe(const TSphere3<double>& probe,
+		                Index atom1, Index atom2, Index atom3);
 
 		/*_
 		*/
-		void correctProbePosition(Position atom)
-			;
+		void correctProbePosition(Position atom);
 
 		/*_
 		*/
-		void sort
-			 (Index		u1, Index		u2, Index		u3,
-				Index&	s1,	Index&	s2, Index&	s3)
-			;
+		void sort(Index  u1, Index  u2, Index  u3,
+		          Index& s1, Index& s2, Index& s3);
 
 		/*_
 		*/
-		void correctProbePosition(Position a1, Position a2, Position a3)
-			;
+		void correctProbePosition(Position a1, Position a2, Position a3);
 
 		/*_
 		*/
-		void insert(RSVertex* vertex)
-			;
+		void insert(RSVertex* vertex);
 
 		/*_
 		*/
-		void insert(RSEdge* edge)
-			;
+		void insert(RSEdge* edge);
 
 		/*_
 		*/
-		void insert(RSFace* face)
-			;
+		void insert(RSFace* face);
 
 		//@}
 
@@ -847,41 +745,36 @@ namespace BALL
 		/*_ a pointer to the reduced surface to compute
 		*/
 		ReducedSurface* rs_;
+
 		/*_ for each atom a list of its neighbours
 		*/
 		std::vector< std::list<Index> > neighbours_;
+
 		/*_ for each atom a status
 		*/
 		std::vector< AtomStatus > atom_status_;
+
 		/*_ for each pair of atoms a list of its neighbours
 		*/
-		HashMap< Position,
-						 HashMap< Position,
-						 					std::list<Index>
-						 				>
-					 > neighbours_of_two_;
+		HashMap< Position, HashMap< Position, std::list<Index> > > neighbours_of_two_;
+
 		/*_ for each triple of atoms its probe positions
 		*/
-		HashMap< Position,
-						 HashMap< Position,
-											HashMap< Position,
-															 ProbePosition*
-														 >
-										>
-					 > probe_positions_;
+		HashMap< Position, 
+		         HashMap< Position, HashMap< Position, ProbePosition* > > > probe_positions_;
+
 		/*_ all new created vertices which are not yet checked for extensions
 		*/
 		HashSet<RSVertex*> new_vertices_;
+
 		/*_ all new created faces which are not completely treated yet
 		*/
 		HashSet<RSFace*> new_faces_;
+
 		/*_ for each atom a list of the rsvertices of the atom
 		*/
 		std::vector< std::list<RSVertex*> > vertices_;
 	};
-
-
-   
 } // namespace BALL
 
 #endif  // BALL_STRUCTURE_REDUCEDSURFACE_H

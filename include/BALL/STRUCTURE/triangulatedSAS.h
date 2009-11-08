@@ -1,20 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSAS.h,v 1.12.18.1 2007/03/25 21:25:33 oliver Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSAS_H
 #define BALL_STRUCTURE_TRIANGULATEDSAS_H
-
-//#define with_indices
-//#define debug_triangulation
-#ifdef debug_triangulation
-#	define with_bonds
-//#	define with_normals
-#endif
-#ifdef with_indices
-#	define print_debug_info
-#endif
 
 #ifndef BALL_STRUCTURE_SASEDGE_H
 #	include <BALL/STRUCTURE/SASEdge.h>
@@ -75,10 +64,6 @@ namespace BALL
 		
 		public:
 
-		#ifdef debug_triangulation
-		void printToHINFile(string filename);
-		#endif
-
 		/** @name Class friends
 
 					- class SASTriangulator
@@ -95,30 +80,26 @@ namespace BALL
 		/**	Default constructor.
 				This method creates a new TriangulatedSAS object.
 		*/
-		TriangulatedSAS()
-			;
+		TriangulatedSAS();
 
 		/**	Copy constructor.
 				Create a new TriangulatedSAS object from another.
 				@param	surface	the TriangulatedSAS object to be copied
 				@param	bool		ignored - just for interface consistency
 		*/
-		TriangulatedSAS(const TriangulatedSAS& surface, bool = true)
-			;
+		TriangulatedSAS(const TriangulatedSAS& surface, bool = true);
 
 		/** Detailed constructor.
 				Create a new empty TriangulatedSAS object and set its SAS.
 				@param	sas			a pointer to the corresponding SAS
 				@param	density	the density to use by triangulation
 		*/
-		TriangulatedSAS(SolventAccessibleSurface* sas, const double& density)
-			;
+		TriangulatedSAS(SolventAccessibleSurface* sas, const double& density);
 
 		/**	Destructor.
 				Destructs the TriangulatedSAS object.
 		*/
-		virtual ~TriangulatedSAS()
-			;
+		virtual ~TriangulatedSAS();
 		//@}
 
 		/**	@name	Assignment
@@ -129,14 +110,12 @@ namespace BALL
 				@param	surface	the TriangulatedSAS object to assign from
 				@param	bool		ignored - just for interface consistency
 		*/
-		void set(const TriangulatedSAS& surface, bool = true)
-			;
+		void set(const TriangulatedSAS& surface, bool = true);
 
 		/**	Assign from another TriangulatedSAS.
 				@param	surface	the TriangulatedSAS object to assign from
 		*/
-		TriangulatedSAS& operator = (const TriangulatedSAS& surface)
-			;
+		TriangulatedSAS& operator = (const TriangulatedSAS& surface);
 
 		//@}
 
@@ -146,18 +125,15 @@ namespace BALL
 
 		/** Set the density used by triangulation.
 		*/
-		void setDensity(const double& density)
-			;
+		void setDensity(const double& density);
 
 		/** Get the density used by triangulation.
 		*/
-		double getDensity() const
-			;
+		double getDensity() const;
 
 		/** Compute the solvent-accessible surface
 		*/
-		void compute()
-			;
+		void compute();
 
 		//@}
 
@@ -174,8 +150,6 @@ namespace BALL
 		//@}
 
 	};
-
-
 
 	/** Generic SASTriangulator Class.
 			 \par
@@ -203,87 +177,57 @@ namespace BALL
 		/**	Default constructor.
 				This method creates a new SASTriangulator object.
 		*/
-		SASTriangulator()
-			;
+		SASTriangulator();
 
 		/** Detailed constructor.
 				Create a new empty SASTriangulator object and set its SAS.
 				@param	tsas			a pointer to the corresponding SAS
 		*/
-		SASTriangulator(TriangulatedSAS* tsas)
-			;
+		SASTriangulator(TriangulatedSAS* tsas);
 
 		/**	Destructor.
 				Destructs the SASTriangulator object.
 		*/
-		virtual ~SASTriangulator()
-			;
+		virtual ~SASTriangulator();
 		//@}
 
 		/** @name Accessors
 		*/
 		//@{
 
-		void run()
-			;
+		void run();
 
 		private:
 
-		void triangulateFace(SASFace* face)
-			;
+		void triangulateFace(SASFace* face);
 
-		void createPlanes
-				(SASFace* face,
-				 std::list< std::pair<TPlane3<double>,double> >& planes)
-			;
+		void createPlanes(SASFace* face,
+		                  std::list< std::pair<TPlane3<double>,double> >& planes);
 
-		void tagPoints
-				(TriangulatedSurface& part,
-				 const std::list< std::pair<TPlane3<double>,double> >& planes)
-			;
+		void tagPoints(TriangulatedSurface& part,
+		               const std::list< std::pair<TPlane3<double>,double> >& planes);
 
-		void removeInsideTriangles(TriangulatedSurface& part)
-			;
+		void removeInsideTriangles(TriangulatedSurface& part);
 
-		HashGrid3<TrianglePoint*> createHashGrid(const TriangulatedSurface& part)
-			;
+		HashGrid3<TrianglePoint*> createHashGrid(const TriangulatedSurface& part);
 
-		void createPoints
-				(TriangulatedSurface& part,
-				 const std::list< std::pair<TPlane3<double>,double> >& planes,
-				 HashGrid3<TrianglePoint*>& grid)
-			;
+		void createPoints(TriangulatedSurface& part,
+		                  const std::list< std::pair<TPlane3<double>,double> >& planes,
+		                  HashGrid3<TrianglePoint*>& grid);
 
-		void createNewTriangles
-				(TriangulatedSurface& part,
-				 HashGrid3<TrianglePoint*>& grid)
-			;
+		void createNewTriangles(TriangulatedSurface& part, HashGrid3<TrianglePoint*>& grid);
 
-		void onePointOutside
-				(Index outside,
-				 Triangle* t,
-				 TriangulatedSurface& part,
-				 HashGrid3<TrianglePoint*>& grid)
-			;
+		void onePointOutside(Index outside, Triangle* t,
+		                     TriangulatedSurface& part, HashGrid3<TrianglePoint*>& grid);
 
-		void twoPointsOutside
-				(Position outside1,
-				 Position outside2,
-				 Triangle* t,
-				 TriangulatedSurface& part,
-				 HashGrid3<TrianglePoint*>& grid)
-			;
+		void twoPointsOutside(Position outside1, Position outside2,
+		                      Triangle* t, TriangulatedSurface& part, HashGrid3<TrianglePoint*>& grid);
 
-		TrianglePoint* vertexExists
-				(const TVector3<double>& point,
-				 HashGrid3<TrianglePoint*>& grid)
-			;
+		TrianglePoint* vertexExists(const TVector3<double>& point, HashGrid3<TrianglePoint*>& grid);
 
-		Size numberOfRefinements(const double& density, const double& radius)
-			;
+		Size numberOfRefinements(const double& density, const double& radius);
 
-		void buildTemplateSpheres()
-			;
+		void buildTemplateSpheres();
 
 		//@}
 
@@ -294,15 +238,17 @@ namespace BALL
 		//@{
 
 		TriangulatedSAS* tsas_;
+
 		double sqrt_density_;
+
 		std::vector< std::list< TVector3<double> > > edge_;
+
 		HashMap<Size,TriangulatedSurface> template_spheres_;
 
 		//@}
 
 	};
 
-   
 }	// namespace BALL
 
 

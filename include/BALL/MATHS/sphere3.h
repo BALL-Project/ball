@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere3.h,v 1.39 2004/05/27 19:49:42 oliver Exp $
-//
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -46,9 +44,8 @@ namespace BALL
 				are initialized to <tt>(T)0</tt>.
 		*/
 		TSphere3()
-			
-			: p(),
-				radius(0)
+		 : p(),
+		   radius(0)
 		{
 		}
 
@@ -57,9 +54,8 @@ namespace BALL
 				@param sphere the Sphere3 object to be copied
 		*/	
 		TSphere3(const TSphere3& sphere)
-			
-			: p(sphere.p),
-				radius(sphere.radius)
+		 : p(sphere.p),
+		   radius(sphere.radius)
 		{
 		}
 
@@ -69,9 +65,8 @@ namespace BALL
 				@param	radius assigned to the radius
 		*/
 		TSphere3(const TVector3<T>& point, const T& radius)
-			
-			: p(point),
-				radius(radius)
+		 : p(point),
+		   radius(radius)
 		{
 		}
 
@@ -79,14 +74,12 @@ namespace BALL
 				As there are no dynamic data structures, nothing happens.
 		*/
 		virtual ~TSphere3()
-			
 		{
 		}
 
 		/** Default initialisation
 		 */
 		virtual void clear()
-			
 		{
 			p.clear();
 			radius = (T) 0;
@@ -101,7 +94,6 @@ namespace BALL
 				@param	sphere the Sphere3 to swap contents with
 		*/
 		void swap(TSphere3& sphere)
-			
 		{
 			TVector3<T> temp_point(p);
 			p = sphere.p;
@@ -116,7 +108,6 @@ namespace BALL
 				@param sphere	the Sphere3 object to assign from
 		*/
 		void set(const TSphere3& sphere)
-			
 		{
 			p = sphere.p;
 			radius = sphere.radius;
@@ -128,7 +119,6 @@ namespace BALL
 
 		*/
 		void set(const TVector3<T>& point, const T& r)
-			
 		{
 			p = point;
 			radius = r;
@@ -139,7 +129,6 @@ namespace BALL
 				@param sphere the sphere to assign from
 		**/
 		TSphere3& operator = (const TSphere3& sphere)
-			
 		{
 			p = sphere.p;
 			radius = sphere.radius;
@@ -151,7 +140,6 @@ namespace BALL
 				@param sphere	the sphere to be assigned to
 		*/
 		void get(TSphere3& sphere) const
-			
 		{
 			sphere.p = p;
 			sphere.radius = radius;
@@ -162,7 +150,6 @@ namespace BALL
 				@param	r the radius component
 		*/
 		void get(TVector3<T>& point, T& r) const
-			
 		{
 			point = p;
 			r = radius;
@@ -177,7 +164,6 @@ namespace BALL
 				@return bool, <b>true</b> if all components are equal, <b>false</b> otherwise
 		*/
 		bool operator == (const TSphere3& sphere) const
-			
 		{
 			return (p == sphere.p && Maths::isEqual(radius, sphere.radius));
 		}
@@ -186,19 +172,17 @@ namespace BALL
 				@return bool, <b>true</b> if the two Sphere3 differ in at least one component, <b>false</b> otherwise
 		*/
 		bool operator != (const TSphere3& sphere) const
-			
 		{
 			return (p != sphere.p || Maths::isNotEqual(radius, sphere.radius));
 		}
 
 		/**	Test whether a given point is a member of the Sphere.
-				Optional it can be testet, if the point lies on the surface.
+				Optional it can be tested if the point lies on the surface.
 				@param point the point to be tested
 				@param on_surface true to test the surface (default = false)
 				@return bool, <b>true</b> or <b>false</b>
 		*/
 		bool has(const TVector3<T>& point, bool on_surface = false) const
-			
 		{
 			if (on_surface)
 			{

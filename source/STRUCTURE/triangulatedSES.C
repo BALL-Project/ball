@@ -850,11 +850,7 @@ namespace BALL
 		}
 	}
 
-
-	bool SESTriangulator::triangulateSphericFace
-			(SESFace*				face,
-			 const TSphere3<double>&	sphere)
-		
+	bool SESTriangulator::triangulateSphericFace(SESFace* face, const TSphere3<double>& sphere)
 	{
 		TriangulatedSES part;
 		bool ok = buildSphericTriangles(face,part,sphere,false);
