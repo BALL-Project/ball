@@ -140,9 +140,14 @@ namespace BALL
 			}
 			sl << set->getType().c_str();
 
- 			QTreeWidgetItem* item = getDatasetControl()->addRow(sl);
+			DatasetControl* dc = getDatasetControl();
+ 			QTreeWidgetItem* item = dc->addRow(sl);
 			item_to_dataset_[item] = set;
 			dataset_to_item_[set]  = item;
+
+			// Make sure that DatasetControl dockwidget is visible after loading a data set. Else people will wonder what happened to the data set they just tried to load ...
+			dc->show();
+			dc->raise();
 
 			return true;
 		}
