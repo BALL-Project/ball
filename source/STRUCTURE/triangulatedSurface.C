@@ -624,6 +624,16 @@ namespace BALL
 		}
 	}
 
+	void TriangulatedSurface::setDensity(const double& density)
+	{
+		density_ = density;
+	}
+	
+	double TriangulatedSurface::getDensity() const
+	{
+		return density_;
+	}
+	
 	void TriangulatedSurface::cut(const TPlane3<double>& plane, const double& fuzzy)
 	{
 		// delete all points on the wrong side of the plane

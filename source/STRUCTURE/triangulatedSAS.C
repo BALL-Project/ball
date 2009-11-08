@@ -1,13 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSAS.C,v 1.5 2004/02/18 19:03:30 oliver Exp $
 
 #	include <BALL/KERNEL/atom.h>
 #	include <BALL/KERNEL/molecule.h>
 #	include <BALL/KERNEL/system.h>
 #	include <BALL/KERNEL/PTE.h>
-#	include <BALL/FORMAT/HINFile.h>
 #	include <BALL/DATATYPE/string.h>
 
 #include <BALL/STRUCTURE/solventAccessibleSurface.h>
@@ -22,182 +20,63 @@
 #include <BALL/MATHS/quaternion.h>
 #include <BALL/MATHS/vector3.h>
 #include <BALL/MATHS/vector4.h>
+
 #include <list>
 #include <vector>
 
 namespace BALL
 {
 
-void PartitionOfCircle(const TCircle3<double>& circle, std::list<Vector3>& partition)
-{
-	Size density = 64;
-	Vector3 center(circle.p.x,circle.p.y,circle.p.z);
-	Vector3 normal(circle.n.x,circle.n.y,circle.n.z);
-	Vector4 p;
-	p.set(normal.y,-normal.x,0.0,0.0);
-	if (p == Vector4::getZero())
+	void PartitionOfCircle(const TCircle3<double>& circle, std::list<Vector3>& partition)
 	{
-		p.set(normal.z,0.0,-normal.x,0.0);
-	}
-	p.normalize();
-	p *= circle.radius;
-	Quaternion rotate(normal,Angle(Constants::PI/density,true));
-	Matrix4x4 rotation;
-	rotate.getRotationMatrix(rotation);
-	partition.push_back(Vector3(p.x,p.y,p.z)+center);
-	for (Size i = 0; i < 2*density+1; i++)
-	{
-		p = rotation*p;
+		Size density = 64;
+		Vector3 center(circle.p.x,circle.p.y,circle.p.z);
+		Vector3 normal(circle.n.x,circle.n.y,circle.n.z);
+		Vector4 p;
+		p.set(normal.y,-normal.x,0.0,0.0);
+		if (p == Vector4::getZero())
+		{
+			p.set(normal.z,0.0,-normal.x,0.0);
+		}
+		p.normalize();
+		p *= circle.radius;
+		Quaternion rotate(normal,Angle(Constants::PI/density,true));
+		Matrix4x4 rotation;
+		rotate.getRotationMatrix(rotation);
 		partition.push_back(Vector3(p.x,p.y,p.z)+center);
-	}
-}
-
-void Circle2HIN(const TCircle3<double>& circle, const String& file)
-{
-	std::list<Vector3> points;
-	PartitionOfCircle(circle,points);
-	Molecule* molecule = new Molecule;
-	Atom* a1;
-	Atom* a2;
-	a1 = new Atom;
-	a1->setPosition(points.front());
-	a1->setElement(PTE[Element::H]);
-	molecule->insert(*a1);
-	std::list<Vector3>::iterator p;
-	for (p = points.begin(); p != points.end(); p++)
-	{
-		a2 = new Atom;
-		a2->setPosition(*p);
-		a2->setElement(PTE[Element::H]);
-		a1->createBond(*a2);
-		a1 = a2;
-		molecule->insert(*a1);
-	}
-	a1 = new Atom;
-	a1->setPosition(Vector3(circle.p.x,circle.p.y,circle.p.z));
-	a1->setElement(PTE[Element::H]);
-	a2 = new Atom;
-	a2->setPosition(Vector3(circle.p.x,circle.p.y,circle.p.z)+Vector3(circle.n.x,circle.n.y,circle.n.z));
-	a2->setElement(PTE[Element::H]);
-	a1->createBond(*a2);
-	molecule->insert(*a1);
-	molecule->insert(*a2);
-	System* system = new System;
-	system->insert(*molecule);
-	HINFile output(file,std::ios::out);
-	output << *system;
-	output.close();
-	delete system;
-}
-
-void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size = 20)
-{
-	std::vector<Atom*> atom;
-	Vector3 d1;
-	Vector3 d2;
-	Vector3 origin(plane.p.x,plane.p.y,plane.p.z);
-	if (Maths::isZero(plane.n.x))
-	{
-		d1.set(0,plane.n.z,-plane.n.y);
-	}
-	else
-	{
-		d1.set(plane.n.y,-plane.n.x,0);
-	}
-	d2 = Vector3(plane.n.x,plane.n.y,plane.n.z)%d1;
-	d1.normalize();
-	d2.normalize();
-	origin -= d1*(size/2);
-	origin -= d2*(size/2);
-	Molecule* molecule = new Molecule;
-	for (Position i = 0; i < size; i++)
-	{
-		for (Position j = 0; j < size; j++)
+		for (Size i = 0; i < 2*density+1; i++)
 		{
-			Atom* a = new Atom;
-			a->setPosition(origin+(d1*i)+(d2*j));
-			a->setElement(PTE[Element::H]);
-			atom.push_back(a);
-			molecule->insert(*a);
+			p = rotation*p;
+			partition.push_back(Vector3(p.x,p.y,p.z)+center);
 		}
 	}
-	for (Position i = 0; i < size*(size-1); i++)
-	{
-		atom[i]->createBond(*atom[i+size]);
-	}
-	for (Position i = 0; i < size*size; i++)
-	{
-		if ((i%size) != 0)
-		{
-			atom[i]->createBond(*atom[i-1]);
-		}
-	}
-	origin += d1*(size/2);
-	origin += d2*(size/2);
-	Vector3 normal(plane.n.x,plane.n.y,plane.n.z);
-	normal.normalize();
-	Atom* a1 = new Atom;
-	a1->setPosition(origin+normal);
-	a1->setElement(PTE[Element::H]);
-	Atom* a2 = new Atom;
-	a2->setPosition(origin);
-	a2->setElement(PTE[Element::H]);
-	a2->createBond(*a1);
-	molecule->insert(*a1);
-	molecule->insert(*a2);
-	System* system = new System;
-	system->insert(*molecule);
-	HINFile hinfile(file,std::ios::out);
-	hinfile << *system;
-	hinfile.close();
-	delete system;
-}
-
-
-
-
-
-
-
-
 
 	TriangulatedSAS::TriangulatedSAS()
-		
-		:	TriangulatedSurface(),
-			sas_(NULL),
-			density_(4.5)
+	 : TriangulatedSurface(),
+	   sas_(NULL),
+	   density_(4.5)
 	{
 	}
-
 
 	TriangulatedSAS::TriangulatedSAS(const TriangulatedSAS& surface, bool deep)
-		
-		:	TriangulatedSurface(surface,deep),
-			sas_(surface.sas_),
-			density_(surface.density_)
+	 : TriangulatedSurface(surface,deep),
+	   sas_(surface.sas_),
+	   density_(surface.density_)
 	{
 	}
 
-
-	TriangulatedSAS::TriangulatedSAS
-			(SolventAccessibleSurface* sas,
-			 const double& density)
-		
-		:	TriangulatedSurface(),
-			sas_(sas),
-			density_(density)
+	TriangulatedSAS::TriangulatedSAS(SolventAccessibleSurface* sas, const double& density)
+	 : TriangulatedSurface(),
+	   sas_(sas),
+	   density_(density)
 	{
 	}
-
 
 	TriangulatedSAS::~TriangulatedSAS()
-		
 	{
 	}
 
-
 	void TriangulatedSAS::set(const TriangulatedSAS& surface, bool)
-		
 	{
 		if (this != &surface)
 		{
@@ -207,10 +86,7 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 		}
 	}
 
-
-	TriangulatedSAS& TriangulatedSAS::operator =
-			(const TriangulatedSAS& surface)
-		
+	TriangulatedSAS& TriangulatedSAS::operator = (const TriangulatedSAS& surface)
 	{
 		if (this != &surface)
 		{
@@ -218,147 +94,84 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 			sas_ = surface.sas_;
 			density_ = surface.density_;
 		}
+
 		return *this;
 	}
 
-
 	void TriangulatedSAS::setDensity(const double& density)
-		
 	{
 		density_ = density;
 	}
 
-
 	double TriangulatedSAS::getDensity() const
-		
 	{
 		return density_;
 	}
 
-
 	void TriangulatedSAS::compute()
-		
 	{
 		SASTriangulator sast(this);
 		sast.run();
 	}
 
-
-	#ifdef debug_triangulation
-	void TriangulatedSAS::printToHIN(const string& filename)
-		
-	{
-		Molecule* molecule = new Molecule;
-		std::list<Triangle*>::iterator t;
-		for (t = triangles_.begin(); t != triangles_.end(); t++)
-		{
-			TVector3<double> norm(((*t)->vertex_[0]->point_-(*t)->vertex_[1]->point_) %
-									 ((*t)->vertex_[0]->point_-(*t)->vertex_[2]->point_)	);
-			norm.normalize();
-			norm /= 4;
-			Atom* atom1 = new Atom;
-			Atom* atom2 = new Atom;
-			Atom* atom3 = new Atom;
-			Atom* atom4 = new Atom;
-			Atom* atom5 = new Atom;
-			Atom* atom6 = new Atom;
-			atom1->setElement(PTE[Element::H]);
-			atom2->setElement(PTE[Element::H]);
-			atom3->setElement(PTE[Element::H]);
-			atom4->setElement(PTE[Element::H]);
-			atom5->setElement(PTE[Element::H]);
-			atom6->setElement(PTE[Element::H]);
-			atom1->setPosition((*t)->vertex_[0]->point_);
-			atom2->setPosition((*t)->vertex_[1]->point_);
-			atom3->setPosition((*t)->vertex_[2]->point_);
-			atom4->setPosition((*t)->vertex_[0]->point_+norm);
-			atom5->setPosition((*t)->vertex_[1]->point_+norm);
-			atom6->setPosition((*t)->vertex_[2]->point_+norm);
-			#ifdef with_bonds
-			atom1->createBond(*atom2);
-			atom2->createBond(*atom3);
-			atom3->createBond(*atom1);
-			atom1->createBond(*atom4);
-			atom2->createBond(*atom5);
-			atom3->createBond(*atom6);
-			#endif
-			molecule->insert(*atom1);
-			molecule->insert(*atom2);
-			molecule->insert(*atom3);
-			molecule->insert(*atom4);
-			molecule->insert(*atom5);
-			molecule->insert(*atom6);
-		}
-		System* system = new System;
-		system->insert(*molecule);
-		HINFile hinfile(filename,ios::out);
-		hinfile << *system;
-		hinfile.close();
-		delete system;
-	}
-	#endif
-
 //////////////////////////////////////////////////
 
 	SASTriangulator::SASTriangulator()
-		
-		:	tsas_(NULL),
-			sqrt_density_(0.0),
-			edge_(),
-			template_spheres_()
+	 : tsas_(NULL),
+	   sqrt_density_(0.0),
+	   edge_(),
+	   template_spheres_()
 	{
 	}
-
 
 	SASTriangulator::SASTriangulator(TriangulatedSAS* tsas)
-		
-		:	tsas_(tsas),
-			sqrt_density_(sqrt(tsas->density_)),
-			edge_(tsas_->sas_->number_of_edges_),
-			template_spheres_()
+	 : tsas_(tsas),
+	   sqrt_density_(sqrt(tsas->density_)),
+	   edge_(tsas_->sas_->number_of_edges_),
+	   template_spheres_()
 	{
 	}
-
 
 	SASTriangulator::~SASTriangulator()
-		
 	{
 	}
 
-
 	void SASTriangulator::run()
-		
 	{
 		// build template spheres with different densities and outside normal vectors
 		buildTemplateSpheres();
-		// use tese to triangulete the sas faces
+
+		// use these to triangulate the sas faces
 		for (Position i = 0; i < tsas_->sas_->number_of_faces_; i++)
 		{
 			triangulateFace(tsas_->sas_->faces_[i]);
 		}
 	}
 
-
 	void SASTriangulator::triangulateFace(SASFace* face)
-		
 	{
 		// store the planes of the SAS edges
-		std::list< std::pair<TPlane3<double>,double> > planes;
+		std::list< std::pair<TPlane3<double>, double> > planes;
 		createPlanes(face,planes);
+
 		// get template sphere
 		TSphere3<double>* sphere = &face->sphere_;
-		HashMap<Size,TriangulatedSurface>::ConstIterator s
-			= template_spheres_.find(numberOfRefinements(tsas_->density_,
-																									 sphere->radius));
+		HashMap<Size,TriangulatedSurface>::ConstIterator s;
+		
+		s	= template_spheres_.find(numberOfRefinements(tsas_->density_, sphere->radius));
+
 		TriangulatedSurface part = s->second;
 		part.blowUp(sphere->radius);
 		part.shift(sphere->p);
+
 		// tag inside points
-		tagPoints(part,planes);
+		tagPoints(part, planes);
+
 		// remove inside triangles and then isolated edges and points
 		removeInsideTriangles(part);
 		part.deleteIsolatedEdges();
 		part.deleteIsolatedPoints();
+
 		// create HashGrid of triangle points
 //		HashGrid3<TrianglePoint*> point_grid(createHashGrid(part));
 		// create points on the cutting planes
@@ -372,13 +185,10 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 		tsas_->join(part);
 	}
 
-
-	void SASTriangulator::createPlanes
-			(SASFace* face,
-			 std::list< std::pair<TPlane3<double>,double> >& planes)
-		
+	void SASTriangulator::createPlanes(SASFace* face,
+	     std::list< std::pair<TPlane3<double>, double> >& planes)
 	{
-		std::pair<TPlane3<double>,double> plane;
+		std::pair<TPlane3<double>, double> plane;
 		std::list<SASEdge*>::iterator edge;
 		std::list<bool>::iterator o = face->orientation_.begin();
 		for (edge = face->edge_.begin(); edge != face->edge_.end(); edge++)
@@ -398,44 +208,35 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 		}
 	}
 
-
-	void SASTriangulator::tagPoints
-			(TriangulatedSurface& part,
-			 const std::list< std::pair<TPlane3<double>,double> >& planes)
-		
+	void SASTriangulator::tagPoints(TriangulatedSurface& part,
+	     const std::list< std::pair<TPlane3<double>, double> >& planes)
 	{
-		TriangulatedSurface::PointIterator p;
-		std::list< std::pair<TPlane3<double>,double> >::const_iterator plane;
-		for (p = part.beginPoint(); p != part.endPoint(); p++)
+		for (TriangulatedSurface::PointIterator p = part.beginPoint(); 
+		     p != part.endPoint(); 
+		     p++)
 		{
 			(*p)->index_ = 0;
-			plane = planes.begin();
-			while (plane != planes.end())
+			std::list< std::pair<TPlane3<double>, double> >::const_iterator plane = planes.begin();
+			for (; plane != planes.end(); ++plane)
 			{
-				if (Maths::isLessOrEqual(plane->first.n*(*p)->point_,plane->second))
+				if (Maths::isLessOrEqual(plane->first.n*(*p)->point_, plane->second))
 				{
 					(*p)->index_ = 1;
-					plane = planes.end();
-				}
-				else
-				{
-					plane++;
+					break;
 				}
 			}
 		}
 	}
 
-
 	void SASTriangulator::removeInsideTriangles(TriangulatedSurface& part)
-		
 	{
-		TriangulatedSurface::TriangleIterator t1;
-		TriangulatedSurface::TriangleIterator t2;
+		TriangulatedSurface::TriangleIterator t1, t2;
+		
 		t1 = part.beginTriangle();
 		while (t1 != part.endTriangle())
 		{
-			if ((*t1)->vertex_[0]->index_+
-			    (*t1)->vertex_[1]->index_+
+			if ((*t1)->vertex_[0]->index_ +
+			    (*t1)->vertex_[1]->index_ +
 			    (*t1)->vertex_[2]->index_  == 3)
 			{
 				t2 = t1;
@@ -458,9 +259,7 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 		}
 	}
 
-
 	HashGrid3<TrianglePoint*> SASTriangulator::createHashGrid(const TriangulatedSurface& part)
-		
 	{
 		double x_min = (*(part.beginPoint()))->point_.x;
 		double y_min = (*(part.beginPoint()))->point_.y;
@@ -495,12 +294,9 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 		return grid;
 	}
 
-
-	void SASTriangulator::createPoints
-			(TriangulatedSurface& part,
+	void SASTriangulator::createPoints(TriangulatedSurface& part,
 			 const std::list< std::pair<TPlane3<double>,double> >& planes,
 			 HashGrid3<TrianglePoint*>& grid)
-		
 	{
 		TriangulatedSurface::EdgeIterator edge = part.beginEdge();
 		std::list< std::pair<TPlane3<double>,double> >::const_iterator plane;
@@ -571,11 +367,7 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 		}
 	}
 
-
-	void SASTriangulator::createNewTriangles
-			(TriangulatedSurface& part,
-			 HashGrid3<TrianglePoint*>& grid)
-		
+	void SASTriangulator::createNewTriangles(TriangulatedSurface& part, HashGrid3<TrianglePoint*>& grid)
 	{
 		TriangulatedSurface::TriangleIterator t = part.beginTriangle();
 		while (t != part.endTriangle())
@@ -608,15 +400,9 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 		}
 	}
 
-
-	void SASTriangulator::onePointOutside
-			(Index outside,
-			 Triangle* t,
-			 TriangulatedSurface& part,
-			 HashGrid3<TrianglePoint*>& grid)
-		
+	void SASTriangulator::onePointOutside(Index outside, Triangle* t,
+	                                      TriangulatedSurface& part, HashGrid3<TrianglePoint*>& grid)
 	{
-std::cout << "onePointOutside ...\n";
 		// get the relative indices of the intersected edges
 		Position edge[3];
 		Position i = 0;
@@ -709,19 +495,12 @@ std::cout << "onePointOutside ...\n";
 			new_point->faces_.insert(third_triangle);
 			part.insert(third_triangle);
 		}
-std::cout << "... ok\n";
 	}
 
-
-	void SASTriangulator::twoPointsOutside
-			(Position outside1,
-			 Position outside2,
-			 Triangle* t,
-			 TriangulatedSurface& part,
-			 HashGrid3<TrianglePoint*>& grid)
-		
+	void SASTriangulator::twoPointsOutside(Position outside1, Position outside2,
+	                                       Triangle* t, TriangulatedSurface& part,
+	                                       HashGrid3<TrianglePoint*>& grid)
 	{
-std::cout << "twoPointsOutside ...\n";
 		// get the relative indices of the intersected edges
 		Position edge[3];
 		Position i = 0;
@@ -788,14 +567,10 @@ std::cout << "twoPointsOutside ...\n";
 			new_point->faces_.insert(new_triangle);
 			part.insert(new_triangle);
 		}
-std::cout << "... ok\n";
 	}
 
-
-	TrianglePoint* SASTriangulator::vertexExists
-			(const TVector3<double>& point,
+	TrianglePoint* SASTriangulator::vertexExists(const TVector3<double>& point,
 			 HashGrid3<TrianglePoint*>& grid)
-		
 	{
 		double epsilon = Constants::EPSILON;
 		Constants::EPSILON = 0.001;
@@ -821,9 +596,7 @@ std::cout << "... ok\n";
 		return NULL;
 	}
 
-
 	Size SASTriangulator::numberOfRefinements(const double& density, const double& radius)
-		
 	{
 		double test0 = (4.0*density*Constants::PI*radius*radius-12.0)/30.0;
 		Size n = 0;
@@ -849,9 +622,7 @@ std::cout << "... ok\n";
 		return n;
 	}
 
-
 	void SASTriangulator::buildTemplateSpheres()
-		
 	{
 		TriangulatedSphere sphere;
 		sphere.icosaeder(true);
@@ -870,230 +641,5 @@ std::cout << "... ok\n";
 		sphere.setIndices();
 		template_spheres_[4] = sphere;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	#ifdef debug_triangulation
-	void SASTriangulator::printToHINFile(string filename)
-	{
-		Molecule* molecule = new Molecule;
-		#ifdef with_bonds
-		std::list<Triangle*>::iterator t;
-		for (t = triangles_.begin(); t != triangles_.end(); t++)
-		{
-			Atom* atom1 = new Atom;
-			atom1->setPosition((*t)->vertex_[0]->point_);
-			atom1->setElement(PTE[Element::H]);
-			molecule->insert(*atom1);
-				#ifdef with_normals
-				Atom* normal1 = new Atom;
-				normal1->setPosition((*t)->vertex_[0]->point_+(*t)->vertex_[0]->normal_);
-				normal1->createBond(*atom1);
-				normal1->setElement(PTE[Element::O]);
-				molecule->insert(*normal1);
-				#endif
-			Atom* atom2 = new Atom;
-			atom2->setPosition((*t)->vertex_[1]->point_);
-			atom2->setElement(PTE[Element::H]);
-			molecule->insert(*atom2);
-				#ifdef with_normals
-				Atom* normal2 = new Atom;
-				normal2->setPosition((*t)->vertex_[1]->point_+(*t)->vertex_[1]->normal_);
-				normal2->createBond(*atom2);
-				normal2->setElement(PTE[Element::O]);
-				molecule->insert(*normal1);
-				#endif
-			Atom* atom3 = new Atom;
-			atom3->setPosition((*t)->vertex_[2]->point_);
-			atom3->setElement(PTE[Element::H]);
-			molecule->insert(*atom3);
-				#ifdef with_normals
-				Atom* normal3 = new Atom;
-				normal3->setPosition((*t)->vertex_[2]->point_+(*t)->vertex_[2]->normal_);
-				normal3->createBond(*atom3);
-				normal3->setElement(PTE[Element::O]);
-				molecule->insert(*normal1);
-				#endif
-			atom1->createBond(*atom3);
-			atom1->createBond(*atom2);
-			atom3->createBond(*atom2);
-		}
-		#else
-		std::list<TrianglePoint*>::iterator p;
-		for (p = points_.begin(); p != points_.end(); p++)
-		{
-			Atom* new_atom = new Atom;
-			new_atom->setPosition((*p)->point_);
-			new_atom->setElement(PTE[Element::H]);
-			atom.push_back(new_atom);
-			molecule->insert(*new_atom);
-				#ifdef with_normals
-				Atom* normal = new Atom;
-				normal->setPosition((*p)->point_+(*p)->normal_);
-				normal->createBond(*new_atom);
-				normal->setElement(PTE[Element::O]);
-				molecule->insert(*normal);
-				#endif
-		}
-		#endif
-		System* system = new System;
-		system->insert(*molecule);
-		HINFile hinfile(filename,std::ios::out);
-		hinfile << *system;
-		hinfile.close();
-		delete system;
-	}
-
-
-	void SASTriangulator::Contour2HIN(const std::list<TriangleEdge*>& contour, const string& file)
-	{
-		HashSet<TrianglePoint*> points;
-		std::list<TriangleEdge*>::const_iterator c;
-		for (c = contour.begin(); c != contour.end(); c++)
-		{
-			points.insert((*c)->vertex_[0]);
-			points.insert((*c)->vertex_[1]);
-		}
-		Molecule* molecule = new Molecule;
-		for (c = contour.begin(); c != contour.end(); c++)
-		{
-			Atom* atom1 = new Atom;
-			atom1->setPosition((*c)->vertex_[0]->point_);
-			atom1->setElement(PTE[Element::H]);
-			Atom* atom2 = new Atom;
-			atom2->setPosition((*c)->vertex_[1]->point_);
-			atom2->setElement(PTE[Element::H]);
-			atom1->createBond(*atom2);
-			molecule->insert(*atom1);
-			molecule->insert(*atom2);
-		}
-		System* system = new System;
-		system->insert(*molecule);
-		HINFile hinfile(file,std::ios::out);
-		hinfile << *system;
-		hinfile.close();
-		delete system;
-	}
-
-
-	void SASTriangulator::SASEdge2HIN(SASEdge* edge, const string& file)
-	{
-		std::list<TriangleEdge*> contour;
-		std::list<TrianglePoint*> contour_points;
-		if (edge->vertex_[0] == NULL)
-		{
-			TAngle<double> phi(2*Constants::PI,true);
-			Size number_of_segments
-					= (Size)Maths::round(phi.value*edge->circle_.radius*2.12);
-			if (number_of_segments == 0)
-			{
-				number_of_segments++;
-			}
-			TAngle<double> psi(phi.value/number_of_segments,true);
-			std::vector< TVector3<double> > points;
-			partitionOfCircle(edge->circle_,TVector3<double>::getZero(),psi,number_of_segments,points,false);
-			points.pop_back();
-			TrianglePoint* p0;
-			TrianglePoint* p1;
-			TrianglePoint* p2;
-			TriangleEdge* e;
-			p1 = new TrianglePoint;
-			p1->point_ = points[0];
-			p1->normal_ = edge->circle_.p-p1->point_;
-			contour_points.push_back(p1);
-			p0 = p1;
-			for (Position k = 1; k < points.size(); k++)
-			{
-				p2 = new TrianglePoint;
-				p2->point_ = points[k];
-				p2->normal_ = edge->circle_.p-p2->point_;
-				contour_points.push_back(p2);
-				e = new TriangleEdge;
-				e->vertex_[0] = p1;
-				e->vertex_[1] = p2;
-				contour.push_back(e);
-				p1->edges_.insert(e);
-				p2->edges_.insert(e);
-				p1 = p2;
-			}
-			e = new TriangleEdge;
-			e->vertex_[0] = p1;
-			e->vertex_[1] = p0;
-			contour.push_back(e);
-			p1->edges_.insert(e);
-			p0->edges_.insert(e);
-		}
-		else
-		{
-			TAngle<double> phi;
-			GetTAngle<double>(edge->vertex_[0]->point_-edge->circle_.p,
-							 edge->vertex_[1]->point_-edge->circle_.p,
-							 phi);
-			Size number_of_segments
-					= (Size)Maths::round(phi.value*edge->circle_.radius*2.12);
-			if (number_of_segments == 0)
-			{
-				number_of_segments++;
-			}
-			TAngle<double> psi(phi.value/number_of_segments,true);
-			TVector3<double> normal((edge->vertex_[0]->point_-edge->circle_.p)%
-												 (edge->vertex_[1]->point_-edge->circle_.p));
-			edge->circle_.n = normal;
-			std::vector< TVector3<double> > points;
-			partitionOfCircle(edge->circle_,edge->vertex_[0]->point_,psi,number_of_segments,
-												points);
-			points.pop_back();
-			points.push_back(edge->vertex_[1]->point_);
-			TrianglePoint* p1;
-			TrianglePoint* p2;
-			TriangleEdge* e;
-			p1 = new TrianglePoint;
-			p1->point_ = points[0];
-			p1->normal_ = edge->circle_.p-p1->point_;
-			contour_points.push_back(p1);
-			for (Position k = 1; k < points.size(); k++)
-			{
-				p2 = new TrianglePoint;
-				p2->point_ = points[k];
-				p2->normal_ = edge->circle_.p-p2->point_;
-				contour_points.push_back(p2);
-				e = new TriangleEdge;
-				e->vertex_[0] = p1;
-				e->vertex_[1] = p2;
-				contour.push_back(e);
-				p1->edges_.insert(e);
-				p2->edges_.insert(e);
-				p1 = p2;
-			}
-		}
-		Contour2HIN(contour,file);
-		std::list<TriangleEdge*>::iterator e;
-		for (e = contour.begin(); e != contour.end(); e++)
-		{
-			delete *e;
-		}
-		std::list<TrianglePoint*>::iterator p;
-		for (p = contour_points.begin(); p != contour_points.end(); p++)
-		{
-			delete *p;
-		}
-	}
-	#endif
-
 
 }	//namespace BALL

@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: solventAccessibleSurface.h,v 1.12 2005/12/23 17:02:04 amoll Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTACCESSIBLESURFACE_H
 #define BALL_STRUCTURE_SOLVENTACCESSIBLESURFACE_H
@@ -27,8 +26,6 @@
 #endif
 
 #include <vector>
-
-
 
 namespace BALL
 {
@@ -60,27 +57,23 @@ namespace BALL
 		/**	Default constructor.
 				This method creates a new SolventAccessibleSurface object.
 		*/
-		SolventAccessibleSurface()
-			;
+		SolventAccessibleSurface();
 
 		/**	Copy constructor.
 				Create a new SolventAccessibleSurface object from another.
 				@param	sas		the SolventAccessibleSurface object to be copied
 				@param	bool	ignored - just for interface consistency
 		*/
-		SolventAccessibleSurface(const SolventAccessibleSurface& sas, bool = false)
-			;
+		SolventAccessibleSurface(const SolventAccessibleSurface& sas, bool = false);
 
 		/** Detailed constructor
 		*/
-		SolventAccessibleSurface(ReducedSurface* reduced_surface)
-			;
+		SolventAccessibleSurface(ReducedSurface* reduced_surface);
 
 		/**	Destructor.
 				As there are no dynamic	data structures, nothing happens.
 		*/
-		virtual ~SolventAccessibleSurface()
-			;
+		virtual ~SolventAccessibleSurface();
 
 		//@}
 		/**	@name	Accessors
@@ -99,8 +92,7 @@ namespace BALL
 
 		/**
 		*/
-		Size numberOfVertices() const
-			;
+		Size numberOfVertices() const;
 		
 		/**
 		*/
@@ -114,8 +106,7 @@ namespace BALL
 
 		/**
 		*/
-		Size numberOfEdges() const
-			;
+		Size numberOfEdges() const;
 		
 		/**
 		*/
@@ -129,18 +120,15 @@ namespace BALL
 
 		/**
 		*/
-		Size numberOfFaces() const
-			;
+		Size numberOfFaces() const;
 
 		/**
 		*/
-		void setRS(ReducedSurface* rs)
-			;
+		void setRS(ReducedSurface* rs);
 
 		/**
 		*/
-		ReducedSurface* getRS() const
-			;
+		ReducedSurface* getRS() const;
 
 		/**
 		*/
@@ -148,8 +136,7 @@ namespace BALL
 
 		/**	Computes the solvent excluded surface from a ReducedSurface object
 		*/
-		void compute()
-			;
+		void compute();
 
 		//@}
 
@@ -159,20 +146,13 @@ namespace BALL
 		*/
 		//@{
 
-		void preProcessing()
-			;
+		void preProcessing();
 
-		void get()
-			;
+		void get();
 
-		void createFace(Position j)
-			;
-
-		void createVertex(Position j)
-			;
-
-		void createEdge(Position j)
-			;
+		void createFace(Position j);
+		void createVertex(Position j);
+		void createEdge(Position j);
 
 		//@}
 
@@ -180,15 +160,19 @@ namespace BALL
 		protected:
 
 		Position number_of_vertices_;
+
 		::std::vector<SASVertex*> vertices_;
+
 		Position number_of_edges_;
+
 		::std::vector<SASEdge*> edges_;
+
 		Position number_of_faces_;
+
 		::std::vector<SASFace*> faces_;
+
 		ReducedSurface* reduced_surface_;
-
 	};
-
 
 	/**	@name	Storers
 	*/
@@ -196,12 +180,10 @@ namespace BALL
 
 	/**	Output- Operator
 	*/
-	BALL_EXPORT std::ostream& operator << (std::ostream& s,
-														 const SolventAccessibleSurface& sas);
+	BALL_EXPORT std::ostream& operator << (std::ostream& s, const SolventAccessibleSurface& sas);
 
 	//@}
 
-   
 } // namespace BALL
 
 #endif  // BALL_STRUCTURE_SOLVENTACCESSIBLESURFACE_H
