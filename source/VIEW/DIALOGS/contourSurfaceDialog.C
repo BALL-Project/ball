@@ -48,6 +48,11 @@ double ContourSurfaceDialog::getThreshold() const
 	}
 }
 
+void ContourSurfaceDialog::setGrid(Dataset* grid)
+{
+	grid_ = grid;
+}
+
 Dataset* ContourSurfaceDialog::getGrid() 
 {
 	return grid_;
@@ -65,19 +70,19 @@ bool ContourSurfaceDialog::exec()
 	grids->clear();
 	vector<Dataset*> sets = controller_->getDatasets();
 	vector<Dataset*>::iterator it = sets.begin();
-	for (; it != sets.end(); it++)
+	uint index_selected_grid=0;
+	for (uint i=0; it != sets.end(); it++, i++)
 	{
 		grids->addItem((**it).getName().c_str());
+		if(*it==grid_) index_selected_grid=i;
 	}
+	grids->setCurrentIndex(index_selected_grid);
 
 	valuesChanged();
 	if (!QDialog::exec()) return false;
 	
-	if (grids->currentIndex() == -1)
-	{
-		grid_ = 0;
-		grid_ = sets[grids->currentIndex()];
-	}
+	if (grids->currentIndex() == -1) grid_ = 0;
+	else grid_ = sets[grids->currentIndex()];
 
 	return true;
 }

@@ -39,6 +39,7 @@ class BALL_VIEW_EXPORT ContourSurfaceDialog
     ContourSurfaceDialog( QWidget* parent = 0, const char* name = "ContourSurfaceDialog");
     ~ContourSurfaceDialog();
 
+	void setGrid(Dataset* grid);
     Dataset* getGrid();
     double getThreshold() const;
 		void setController(DatasetController* controller) {controller_ = controller;}

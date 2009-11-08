@@ -490,9 +490,10 @@ namespace BALL
 				dialog_->setController(this);
 				getDatasetControl()->registerForHelpSystem(dialog_, "datasetControl.html#isocontour_surfaces");
 			}
+			dialog_->setGrid(getSelectedDataset());
 			if (!dialog_->exec()) return;
 
-			Dataset* data = (Dataset*)getSelectedDataset();
+			Dataset* data = dialog_->getGrid();
 			if (data == 0) return;
 
 			if (!computeIsoContourSurface(
