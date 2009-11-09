@@ -326,7 +326,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 					menu = initPopupMenu(FILE)->addMenu("&Import");
 					break;
 				case FILE_EXPORT:
-					menu = initPopupMenu(FILE)->addMenu("&Export Image");
+					menu = initPopupMenu(FILE)->addMenu("&Export");
 					break;
 				case FILE_MONITOR:
 					menu = initPopupMenu(FILE)->addMenu("&Monitor File");
