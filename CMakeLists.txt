@@ -474,7 +474,7 @@ ENDIF()
 ##### targets list #####
 INCLUDE(cmake/BALLTargets.cmake)
 	
-##### Message after OpenMS has been built #####
+##### Message after BALL has been built #####
 INCLUDE(cmake/BALLFinishedMessage.cmake)
 
 ##### Messages at the end of cmake #####
