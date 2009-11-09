@@ -53,7 +53,7 @@ SET(CF_BALL_PACKAGE_VERSION "${BALL_PACKAGE_VERSION_MAJOR}.${BALL_PACKAGE_VERSIO
 # Initialize the various PREFIX variables. This has to happen before any files
 # using them are included.
 SET(CMAKE_INSTALL_PREFIX "" CACHE INTERNAL "This must be equal to INSTALL_PREFIX!" FORCE)
-SET(INSTALL_PREFIX ${CMAKE_BINARY_DIR} CACHE PATH "Installation prefix for BALL")
+SET(INSTALL_PREFIX ${CMAKE_BINARY_DIR}/install CACHE PATH "Installation prefix for BALL")
 
 ## default build type (for Makefile generators): Release
 ## TODO: 64 Bit builds etc for Windows
@@ -75,6 +75,9 @@ SET(CMAKE_PREFIX_PATH ${BALL_CONTRIB_PATH} ${CMAKE_PREFIX_PATH})
 SET(CMAKE_REQUIRED_INCLUDES ${BALL_CONTRIB_PATH}/include ${CMAKE_REQUIRED_INCLUDES})
 
 SET(BALL_TEST_DATA_PATH ${PROJECT_SOURCE_DIR}/source/TEST/data)
+
+# Should we build packages as well?
+OPTION(BALL_ENABLE_PACKAGING "Enable the building of binary packages" OFF)
 
 # Used for linking BALL dependent applications and libraries (BALLView, Python bindings, ...)
 SET(BALL_LIBRARIES optimized BALL debug BALLd)
@@ -348,14 +351,24 @@ ADD_SUBDIRECTORY(source/PYTHON/EXTENSIONS)
 ADD_SUBDIRECTORY(source/APPLICATIONS/BALLVIEW)
 
 ## Install the results to the desired places
-INSTALL(TARGETS BALL VIEW
+INCLUDE(cmake/BALLComponents.cmake)
+
+INSTALL(TARGETS BALL
 	RUNTIME DESTINATION bin
 	LIBRARY DESTINATION lib
 	ARCHIVE DESTINATION lib
+	COMPONENT ${COMPONENT_LIBBALL}
+)
+
+INSTALL(TARGETS VIEW
+	RUNTIME DESTINATION bin
+	LIBRARY DESTINATION lib
+	ARCHIVE DESTINATION lib
+	COMPONENT ${COMPONENT_LIBVIEW}
 )
 
 ## Install the data directories
-INSTALL(DIRECTORY data DESTINATION ${BALL_PATH}/share/BALL)
+INSTALL(DIRECTORY data DESTINATION share/BALL COMPONENT ${COMPONENT_LIBBALL_DEV})
 
 #if (NOT APPLE AND NOT MSVC) ##=Linux
 #	target_link_libraries(OpenMS ${OPENMS_DEP_LIBRARIES}) ## do not link OpenMS against QT on Linux
@@ -438,6 +451,10 @@ INSTALL(DIRECTORY data DESTINATION ${BALL_PATH}/share/BALL)
 #add_custom_target(doc_progs)
 #add_dependencies(doc_progs ${OpenMS_doc_executables} TOPP UTILS)
 
+##### Packaging #####
+IF (BALL_ENABLE_PACKAGING)
+	INCLUDE(cmake/BALLPackageConfig.cmake)
+ENDIF()
 
 ##### Tests #####
 #IF ("${PACKAGE_TYPE}" STREQUAL "none")
