@@ -293,7 +293,7 @@ namespace BALL
 		if(no_properties>0)
 		{
 			f << TRIPOS << "COMMENT"<<endl;
-			for(uint i=0; i<no_properties; i++)
+			for (Position i=0; i<no_properties; i++)
 			{
 				const NamedProperty& np(molecule.getNamedProperty(i));
 				f << np.getName() << "=" << np.toString() << endl;
@@ -430,7 +430,7 @@ namespace BALL
 	bool MOL2File::write(const System& system)
 		throw(File::CannotWrite)
 	{
-		for(MoleculeConstIterator mol_it=system.beginMolecule(); +mol_it; mol_it++)
+		for (MoleculeConstIterator mol_it=system.beginMolecule(); +mol_it; mol_it++)
 		{
 			if(!write(*mol_it))
 			{
@@ -950,7 +950,7 @@ namespace BALL
 		}
 
 		// create NamedProperties (if any)
-		for(uint i=0; i<comments_.size(); i++)
+		for (Position i=0; i<comments_.size(); i++)
 		{
 			molecule.setProperty(comments_[i].name, comments_[i].value);
 		}
