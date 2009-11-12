@@ -32,6 +32,7 @@ namespace BALL
 
 		GLRenderWindow::GLRenderWindow()
 			: QGLWidget(gl_format_),
+				m_screenTexID(0),
 			  FB_TEXTURE_TARGET(GL_TEXTURE_2D),
 			  FB_TEXTURE_FORMAT(GL_RGB),
 			  FB_INTERNAL_TEXTURE_FORMAT(GL_RGB),
@@ -39,7 +40,6 @@ namespace BALL
 			  ignore_events_(false),
 				down_sampling_factor_(1.)
 		{		
-			m_screenTexID = 0;
 			// we will swap buffers manually in the scene for synchronization
 			setAutoBufferSwap(false);
 			setAutoFillBackground(false);
@@ -47,6 +47,7 @@ namespace BALL
 
 		GLRenderWindow::GLRenderWindow(QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
 			: QGLWidget(gl_format_, parent_widget, (QGLWidget*)0, w_flags),
+				m_screenTexID(0),
 			  FB_TEXTURE_TARGET(GL_TEXTURE_2D),
 			  FB_TEXTURE_FORMAT(GL_RGB),
 			  FB_INTERNAL_TEXTURE_FORMAT(GL_RGB),
@@ -65,6 +66,7 @@ namespace BALL
 
 		GLRenderWindow::GLRenderWindow(const GLRenderWindow& window, QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
 			: QGLWidget(gl_format_, parent_widget, reinterpret_cast<QGLWidget const*>(&window), w_flags),
+				m_screenTexID(0),
 			  FB_TEXTURE_TARGET(GL_TEXTURE_2D),
 			  FB_TEXTURE_FORMAT(GL_RGB),
 			  FB_INTERNAL_TEXTURE_FORMAT(GL_RGB),
