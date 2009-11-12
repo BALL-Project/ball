@@ -17,16 +17,10 @@ class DockWidget
 	static Size countInstances();
 	static DockWidget* getInstance(Position /index/);
 
+	DockWidget();
   ~DockWidget() throw();
 
 	void applyPreferences() throw();				
 
 	void setWidgetVisible(bool);
-
-	protected:
-		DockWidget();
-		DockWidget(const DockWidget&);
-
-	private:
-		const DockWidget& operator=(const DockWidget&);
 };

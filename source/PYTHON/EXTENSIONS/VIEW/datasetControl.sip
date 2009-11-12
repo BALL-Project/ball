@@ -28,7 +28,4 @@ class DatasetControl
 	Size getSelectionSize();
 	PyDatasetVector getDatasets(const String& type);
 	DatasetController* getController(const String& /type/);
-
-	protected:
-		DatasetControl(const DatasetControl&);
 };

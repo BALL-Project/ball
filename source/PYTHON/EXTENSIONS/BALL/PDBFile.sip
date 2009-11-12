@@ -31,6 +31,4 @@ class PDBFile
   void operator << (const Molecule& /molecule/);
   void operator << (const System& /system/);
 	void close();
-	private:
-	const PDBFile& operator=(const PDBFile&);
 };
