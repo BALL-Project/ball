@@ -892,9 +892,9 @@ namespace BALL
 		double cut_on_vdw_2 = SQR(cut_on_vdw_);
 
 		SwitchingCutOnOff cutoffs_es 
-			= { cut_off_electrostatic_2, cut_on_electrostatic_2, inverse_distance_off_on_electrostatic_3_ };
+			= { (float)cut_off_electrostatic_2, (float)cut_on_electrostatic_2, (float)inverse_distance_off_on_electrostatic_3_ };
 		SwitchingCutOnOff cutoffs_vdw 
-			= { cut_off_vdw_2, cut_on_vdw_2, inverse_distance_off_on_vdw_3_ };
+			= { (float)cut_off_vdw_2, (float)cut_on_vdw_2, (float)inverse_distance_off_on_vdw_3_ };
 
 		// Define the different components of the non-bonded energy
 		double vdw_energy = 0.0;

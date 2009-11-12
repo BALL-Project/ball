@@ -579,7 +579,7 @@ type_atom2);
 		inverse_distance_off_on_vdw_3 *= SQR(inverse_distance_off_on_vdw_3);
 
 		SwitchingCutOnOff cutoffs_vdw
-			= { cut_off_vdw_2, cut_on_vdw_2, inverse_distance_off_on_vdw_3 };
+			= { (float)cut_off_vdw_2, (float)cut_on_vdw_2, (float)inverse_distance_off_on_vdw_3 };
 
 		double vdw_energy_1_4 = 0.0;
 		double vdw_energy = 0.0;
