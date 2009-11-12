@@ -410,7 +410,7 @@ CHECK(static bool isExecutable(String name) throw(Exception::FileNotFound))
 	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
 #ifndef BALL_COMPILER_MSVC
-	TEST_EQUAL(f.isExecutable(BALL_PATH "/source/configure"), true)	
+	TEST_EQUAL(f.isExecutable(BALL_TEST_DATA_PATH(File_test2.txt)), true)
 #endif
 	TEST_EQUAL(f.isExecutable(source_name), false)	
 
@@ -419,7 +419,7 @@ RESULT
 
 CHECK(bool isExecutable() const throw(Exception::FileNotFound))
 #ifndef BALL_COMPILER_MSVC
-	File f1(BALL_PATH "/source/configure");
+	File f1(BALL_TEST_DATA_PATH(File_test2.txt));
 	TEST_EQUAL(f1.isExecutable(), true)	
 #endif
 	File f2(source_name);
