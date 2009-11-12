@@ -40,4 +40,7 @@ class ModifyRepresentationDialog
 	void gridSelected();
 	void show();
 	void applySplit();
+
+	private:
+		ModifyRepresentationDialog(const ModifyRepresentationDialog&);
 };

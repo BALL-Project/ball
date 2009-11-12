@@ -18,7 +18,6 @@ class PyWidget
 	static PyWidget* getInstance(Position /index/);
 	
   PyWidget() throw();
-	PyWidget(const PyWidget& /widget/) throw();
   ~PyWidget() throw();
 	
 	virtual void initializeWidget(MainControl& /main_control/) throw();
@@ -33,4 +32,7 @@ class PyWidget
 	void clearScript();
 	void map(String, String, String);
 	void unmap(String, String);
+
+	private:
+		PyWidget(const PyWidget&);
 }; 

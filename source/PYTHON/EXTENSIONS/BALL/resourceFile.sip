@@ -92,7 +92,6 @@ class ResourceFile
   typedef ResourceEntry Entry;
   ResourceFile();
   ResourceFile(const String& /name/);
-	ResourceFile(const ResourceFile& /resource_file/);
   ~ResourceFile();
   void destroy();
   bool open(const String& /name/);
@@ -122,5 +121,7 @@ class ResourceFile
   // bool apply(UnaryProcessor<Entry>& processor);
   // static bool applyChildren(Entry& entry, UnaryProcessor<Entry>& processor);
   // typedef Entry::Iterator Iterator;
+	private:
+	ResourceFile(const ResourceFile& /resource_file/);
 };
   

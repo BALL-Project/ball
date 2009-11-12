@@ -34,4 +34,7 @@ class MolecularFileDialog
   bool writeMOLFile(String, const System&) throw();
   bool writeMOL2File(String, const System&) throw();
 	bool writeSDFile(String, const System&) throw();
+
+	private:
+		MolecularFileDialog(const MolecularFileDialog&);
 };
