@@ -257,7 +257,14 @@ namespace BALL
 		}
 
 		Stage::RaytracingMaterial::RaytracingMaterial()
-			: PersistentObject()
+			: PersistentObject(),
+				ambient_color(ColorRGBA(255, 255, 255, 255)),
+				ambient_intensity(0.),
+				specular_color(ColorRGBA(255, 255, 255, 255)),
+				specular_intensity(1.),
+				reflective_color(ColorRGBA(255, 255, 255, 255)),
+				shininess(60.),
+				transparency(0.)
 		{
 		}
 
@@ -335,7 +342,8 @@ namespace BALL
 				specular_(stage.specular_),
 				diffuse_(stage.diffuse_),
 				ambient_(stage.ambient_),
-				shininess_(stage.shininess_)
+				shininess_(stage.shininess_),
+				rt_material_(stage.rt_material_)
 		{
 		}
 
@@ -353,6 +361,7 @@ namespace BALL
 			diffuse_  = 0.2;
 			ambient_  = 0.0;
 			shininess_ = 128.0;
+			rt_material_ = RaytracingMaterial();
 		}
 
 		bool Stage::operator == (const Stage& stage) const
