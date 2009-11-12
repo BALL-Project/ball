@@ -323,14 +323,15 @@ namespace BALL
 		template <typename T>
 		bool readObjectPointer(T*& object, const char* name);
 
-		/** Register a smart pointer to a PersistentObject.
-				This method registers a shared pointer for later updating when
-				an object with corresponding this pointer has been read.
-				If s_ptr currently points to zero this method is a noop.
+		/** Read a smart pointer to a PersistentObject.
+				This method also checks header and trailer, and registers a 
+				shared pointer for later updating when an object with corresponding 
+				this pointer has been read.
 				@param s_ptr a mutable shared_ptr reference for later update
 				@param ptr the pointer stub for the this pointer
 		 */
-		void registerSmartPointer(boost::shared_ptr<PersistentObject>& s_ptr, PersistentObject* ptr);
+		template <typename T>
+		bool readObjectSmartPointer(boost::shared_ptr<T>& s_ptr, const char* name);
 
 		/** Write a reference to a PersistentObject. 
 				This method also writes the necessary header and trailer.
@@ -882,6 +883,25 @@ namespace BALL
 		}
 
 		object = reinterpret_cast<T*>(static_cast<PointerSizeUInt>(ptr));
+
+		return checkPrimitiveTrailer();
+	} 
+
+	template <typename T>
+	bool PersistenceManager::readObjectSmartPointer(boost::shared_ptr<T>& s_ptr, const char* name)
+	{
+		if (!checkObjectPointerHeader(RTTI::getStreamName<T>(), name))
+		{
+			return false;
+		}
+
+		LongSize ptr;
+		get(ptr);
+
+		if (ptr != 0)
+		{
+			smart_pointer_list_.push_back(std::make_pair((boost::shared_ptr<PersistentObject>*)&s_ptr, (LongSize)((PersistentObject*)ptr)));
+		}
 
 		return checkPrimitiveTrailer();
 	} 
