@@ -177,8 +177,8 @@ UIC_SOURCES=\
 	dockResultDialogData.C
 
 ifeq ($(BALL_HAS_FFTW),true)
-	CPP_SOURCES+=geometricFitDialog.C geometricFitDialogData.C
-	MOC_SOURCES+=geometricFitDialog_moc.C geometricFitDialogData_moc.C
+	CPP_SOURCES+=geometricFitDialog.C
+	MOC_SOURCES+=geometricFitDialog_moc.C
 	UIC_SOURCES+=geometricFitDialogData.C
 endif
 

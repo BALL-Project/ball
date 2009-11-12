@@ -855,6 +855,7 @@ BALL_INCLUDES
 BALL_PATH
 VALGRIND_OPTS
 VALGRIND
+BALL_SIP_VERSION_STR
 PYTHON_EXECUTABLE
 PYTHON_EXTRA_LDFLAGS
 PYTHON_EXTRA_LIBS
@@ -916,6 +917,7 @@ LEX_OUTPUT_ROOT
 LEX
 BALL_HAS_XDR
 BALL_HAS_HASH_MAP
+BALL_HAS_TR1_UNORDERED_MAP
 CXXCPP
 OBJEXT
 EXEEXT
@@ -10272,6 +10274,11 @@ $as_echo "found" >&6; }
 		cat >>confdefs.h <<\_ACEOF
 #define BALL_MAP_NAMESPACE tr1
 _ACEOF
+
+		cat >>confdefs.h <<\_ACEOF
+#define BALL_HAS_TR1_UNORDERED_MAP true
+_ACEOF
+
 
 		cat >>confdefs.h <<\_ACEOF
 #define BALL_MAP_NAME std::tr1::unordered_map<Key,T>
@@ -28458,6 +28465,8 @@ $as_echo_n "checking sip version... " >&6; }
 		SIP_VERSION=`$SIP -V`
 		{ $as_echo "$as_me:$LINENO: result: ${SIP_VERSION}" >&5
 $as_echo "${SIP_VERSION}" >&6; }
+		BALL_SIP_VERSION_STR=${SIP_VERSION}
+
 		if test "${SIP}" = "" ; then
 			{ $as_echo "$as_me:$LINENO: result: " >&5
 $as_echo "" >&6; }
@@ -29347,13 +29356,13 @@ if test "${lt_cv_nm_interface+set}" = set; then
 else
   lt_cv_nm_interface="BSD nm"
   echo "int some_variable = 0;" > conftest.$ac_ext
-  (eval echo "\"\$as_me:29350: $ac_compile\"" >&5)
+  (eval echo "\"\$as_me:29359: $ac_compile\"" >&5)
   (eval "$ac_compile" 2>conftest.err)
   cat conftest.err >&5
-  (eval echo "\"\$as_me:29353: $NM \\\"conftest.$ac_objext\\\"\"" >&5)
+  (eval echo "\"\$as_me:29362: $NM \\\"conftest.$ac_objext\\\"\"" >&5)
   (eval "$NM \"conftest.$ac_objext\"" 2>conftest.err > conftest.out)
   cat conftest.err >&5
-  (eval echo "\"\$as_me:29356: output\"" >&5)
+  (eval echo "\"\$as_me:29365: output\"" >&5)
   cat conftest.out >&5
   if $GREP 'External.*some_variable' conftest.out > /dev/null; then
     lt_cv_nm_interface="MS dumpbin"
@@ -30547,7 +30556,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 30550 "configure"' > conftest.$ac_ext
+  echo '#line 30559 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -32526,11 +32535,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:32529: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:32538: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:32533: \$? = $ac_status" >&5
+   echo "$as_me:32542: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -32865,11 +32874,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:32868: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:32877: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:32872: \$? = $ac_status" >&5
+   echo "$as_me:32881: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -32970,11 +32979,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:32973: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:32982: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:32977: \$? = $ac_status" >&5
+   echo "$as_me:32986: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -33025,11 +33034,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:33028: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:33037: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:33032: \$? = $ac_status" >&5
+   echo "$as_me:33041: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -35838,7 +35847,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<_LT_EOF
-#line 35841 "configure"
+#line 35850 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -35934,7 +35943,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<_LT_EOF
-#line 35937 "configure"
+#line 35946 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -37954,11 +37963,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:37957: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:37966: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:37961: \$? = $ac_status" >&5
+   echo "$as_me:37970: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -38053,11 +38062,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:38056: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:38065: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:38060: \$? = $ac_status" >&5
+   echo "$as_me:38069: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -38105,11 +38114,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:38108: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:38117: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:38112: \$? = $ac_status" >&5
+   echo "$as_me:38121: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -39226,7 +39235,7 @@ fi
 
 
 
-ac_config_files="$ac_config_files config.mak.tmp:config/config.mak.in rules.mak.tmp:config/rules.mak.in targets.mak.tmp:config/targets.mak.in common.mak.tmp:config/common.mak.in Makefile.tmp:config/Makefile.in"
+ac_config_files="$ac_config_files config.mak.tmp:config/config.mak.in rules.mak.tmp:config/rules.mak.in targets.mak.tmp:config/targets.mak.in common.mak.tmp:config/common.mak.in Makefile.tmp:config/Makefile.in BALLPythonConfig.h.tmp:config/BALLPythonConfig.h.in BALLTestConfig.h.tmp:config/BALLTestConfig.h.in"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -40187,6 +40196,8 @@ do
     "targets.mak.tmp") CONFIG_FILES="$CONFIG_FILES targets.mak.tmp:config/targets.mak.in" ;;
     "common.mak.tmp") CONFIG_FILES="$CONFIG_FILES common.mak.tmp:config/common.mak.in" ;;
     "Makefile.tmp") CONFIG_FILES="$CONFIG_FILES Makefile.tmp:config/Makefile.in" ;;
+    "BALLPythonConfig.h.tmp") CONFIG_FILES="$CONFIG_FILES BALLPythonConfig.h.tmp:config/BALLPythonConfig.h.in" ;;
+    "BALLTestConfig.h.tmp") CONFIG_FILES="$CONFIG_FILES BALLTestConfig.h.tmp:config/BALLTestConfig.h.in" ;;
 
   *) { { $as_echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 $as_echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
@@ -41645,6 +41656,8 @@ fi
 	${MV} config.mak.tmp config.mak
 	${MV} rules.mak.tmp rules.mak
 	${MV} targets.mak.tmp targets.mak
+	${MV} BALLPythonConfig.h.tmp $BALL_PATH/include/BALL/PYTHON/BALLPythonConfig.h
+	${MV} BALLTestConfig.h.tmp $BALL_PATH/source/TEST/BALLTestConfig.h
 
 					if test -f $BALL_PATH/include/BALL/CONFIG/config.h ; then
 		if test "`${DIFF} config.h $BALL_PATH/include/BALL/CONFIG/config.h`" != "" ; then

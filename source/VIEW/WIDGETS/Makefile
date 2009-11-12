@@ -57,6 +57,7 @@ MOC_SOURCES=\
 	testFramework_moc.C\
 	shortcutTableView_moc.C\
 	scene_moc.C\
+	SDWidget_moc.C
 #	canvasWidget_moc.C\
 #	regularData1DWidget_moc.C\
 #	regularData2DWidget_moc.C\
@@ -128,3 +129,6 @@ dockingController_moc.C:	$(HEADER_DIR)/dockingController.h
 
 testFramework_moc.C:	$(HEADER_DIR)/testFramework.h
 	$(MOC) $(HEADER_DIR)/testFramework.h -o $@
+
+SDWidget_moc.C:	$(HEADER_DIR)/SDWidget.h
+	$(MOC) $(HEADER_DIR)/SDWidget.h -o $@
