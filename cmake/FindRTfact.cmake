@@ -29,8 +29,8 @@ ELSE()
 
 	## And a possible debug version
 	FIND_LIBRARY(RTFACT_DEBUG_LIBRARY
-		NAMES RTfactRemoted
-		PATHS ${RTFACT_POSSIBLE_ROOT_DIRS}
+		NAMES RTfactRemoted RTfactRemote
+		PATHS ${RTFACT_POSSIBLE_ROOT_DIRS} ${RTFACT_POSSIBLE_ROOT_DIRS}/remote/build ${RTFACT_POSSIBLE_ROOT_DIRS}/remote/build/Debug
 		PATH_SUFFIXES lib
 		DOC "RTfact library, debug") 
 
