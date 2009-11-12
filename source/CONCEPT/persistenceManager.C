@@ -395,14 +395,14 @@ namespace BALL
 				result = false;
 			}
 		}
-		
+
 		SmartPointerList::iterator s_it = smart_pointer_list_.begin();
 		for (; s_it != smart_pointer_list_.end(); ++s_it) 
 		{
 			if (pointer_map_.has((*s_it).second)) 
 			{
 				// OK. We know the correct value for the pointer
-				(*(*s_it).first) = boost::shared_ptr<PersistentObject>((PersistentObject*)pointer_map_[(*s_it).second]);
+				*(s_it->first) = boost::shared_ptr<PersistentObject>((PersistentObject*)pointer_map_[(*s_it).second]);
 			} 
 			else 
 			{ 
@@ -414,14 +414,6 @@ namespace BALL
 		}
 		
 		return result;
-	}
-
-	void PersistenceManager::registerSmartPointer(boost::shared_ptr<PersistentObject>& s_ptr, PersistentObject* ptr)
-	{
-		if (ptr != 0)
-		{
-			smart_pointer_list_.push_back(std::make_pair((boost::shared_ptr<PersistentObject>*)&s_ptr, (LongSize)((PersistentObject*)ptr)));
-		}
 	}
 
 

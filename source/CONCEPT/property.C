@@ -130,11 +130,9 @@ namespace BALL
 
 			case	SMART_OBJECT:				
 				// the persistence manager will take care of
-				// reading the object and will set this pointer afterwards 
-				PersistentObject* ptr;
-				pm.readObjectPointer(ptr, "data_.smart_object"); 
+				// reading the object and will set this pointer afterwards
 				data_ = boost::shared_ptr<PersistentObject>();
-				pm.registerSmartPointer(*(boost::any_cast<boost::shared_ptr<PersistentObject> >(&data_)), ptr);
+				pm.readObjectSmartPointer(*(boost::any_cast<boost::shared_ptr<PersistentObject> >(&data_)), "data_.smart_object");
 				break;
 
 			default:
