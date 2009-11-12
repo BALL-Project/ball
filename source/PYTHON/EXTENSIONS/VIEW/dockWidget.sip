@@ -23,4 +23,7 @@ class DockWidget
 	void applyPreferences() throw();				
 
 	void setWidgetVisible(bool);
+
+	private:
+		DockWidget(const DockWidget&);
 };

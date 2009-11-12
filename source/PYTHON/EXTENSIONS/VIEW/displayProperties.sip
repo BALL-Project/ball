@@ -50,4 +50,7 @@ static DisplayProperties* getInstance(Position /index/);
   void precisionSliderChanged();
 	void coloringUpdatesChanged();
 	void modelUpdatesChanged();
+
+	private:
+		DisplayProperties(const DisplayProperties&);
 };
