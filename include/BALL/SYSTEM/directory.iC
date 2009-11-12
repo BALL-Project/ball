@@ -25,9 +25,9 @@ BALL_INLINE
 int Directory::chdir_(const String& new_dir)
 {
 	#ifdef BALL_COMPILER_MSVC
-		return ::_chdir(new_dir.data());
+		return ::_chdir(new_dir.c_str());
 	#else
-		return ::chdir(new_dir.data());
+		return ::chdir(new_dir.c_str());
 	#endif
 }
 
@@ -120,7 +120,7 @@ bool Directory::rename(String old_path, String new_path)
 	synchronize_();	
 	FileSystem::canonizePath(old_path);
 	FileSystem::canonizePath(new_path);
-	return desynchronize_((::rename(old_path.data(), new_path.data()) == 0));
+	return desynchronize_((::rename(old_path.c_str(), new_path.c_str()) == 0));
 }
 
 BALL_INLINE 
@@ -128,9 +128,9 @@ bool Directory::setCurrent(String directory_path)
 {
   FileSystem::canonizePath(directory_path);
 	#ifdef BALL_OS_WINDOWS
-		return (::_chdir(directory_path.data()) == 0);
+		return (::_chdir(directory_path.c_str()) == 0);
 	#else
-		return (::chdir(directory_path.data()) == 0);
+		return (::chdir(directory_path.c_str()) == 0);
 	#endif
 }
 
@@ -148,18 +148,18 @@ bool Directory::create(String directory_path, const mode_t& mode)
 		FileSystem::canonizePath(directory_path);
 		if ((directory_path[0] == FileSystem::PATH_SEPARATOR) || (directory_path[1] == ':' && directory_path[2] == FileSystem::PATH_SEPARATOR))
 		{
-			return (::_mkdir(directory_path.data()) ==0);
+			return (::_mkdir(directory_path.c_str()) ==0);
 		}
 		synchronize_();			
-		return desynchronize_(::_mkdir(directory_path.data()) ==0);
+		return desynchronize_(::_mkdir(directory_path.c_str()) ==0);
 	#else
 		FileSystem::canonizePath(directory_path);
 		if (directory_path[0] == FileSystem::PATH_SEPARATOR)
 		{
-			return (::mkdir(directory_path.data(), mode) == 0);
+			return (::mkdir(directory_path.c_str(), mode) == 0);
 		}
 		synchronize_();	
-		return desynchronize_((::mkdir(directory_path.data(), mode) == 0));
+		return desynchronize_((::mkdir(directory_path.c_str(), mode) == 0));
 	#endif
 }
 
@@ -174,12 +174,12 @@ bool Directory::remove(String directory_path)
 		char* buffer = ::_getcwd(NULL, MAX_PATH_LENGTH);
 		String old_dir(buffer);
 		free(buffer);
-		if(::_chdir(directory_path.data()) == 0)
+		if(::_chdir(directory_path.c_str()) == 0)
 		{	// determine absolute path
 			buffer = ::_getcwd(NULL,MAX_PATH_LENGTH);
 			directory_path = buffer;
 			free(buffer);
-			::_chdir(old_dir.data());
+			::_chdir(old_dir.c_str());
 		}
 		else
 		{
@@ -187,9 +187,9 @@ bool Directory::remove(String directory_path)
 			return desynchronize_(false);
 		}
 			
-		bool ok = desynchronize_((::_rmdir(directory_path.data()) == 0));
+		bool ok = desynchronize_((::_rmdir(directory_path.c_str()) == 0));
 	#else
-		bool ok = desynchronize_((::rmdir(directory_path.data()) == 0));
+		bool ok = desynchronize_((::rmdir(directory_path.c_str()) == 0));
 	#endif
 
 		if (directory_path == directory_path_) 

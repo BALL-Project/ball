@@ -81,7 +81,7 @@ namespace BALL
 		}
 		
 		#ifdef BALL_OS_WINDOWS
-			dir_ = CreateFile(_T(directory_path_.data()),
+			dir_ = CreateFile(_T(directory_path_.c_str()),
 												FILE_LIST_DIRECTORY,                // access (read/write) mode
 												FILE_SHARE_READ|FILE_SHARE_DELETE|FILE_SHARE_WRITE,  // share mode
 												NULL,                               // security descriptor
@@ -113,7 +113,7 @@ namespace BALL
 			{	
 				CloseHandle(dir_);
 			}
-			dir_ = CreateFile(_T(directory_path_.data()),
+			dir_ = CreateFile(_T(directory_path_.c_str()),
 												FILE_LIST_DIRECTORY,                // access (read/write) mode
 												FILE_SHARE_READ|FILE_SHARE_DELETE|FILE_SHARE_WRITE,  // share mode
 												NULL,                               // security descriptor
@@ -135,7 +135,7 @@ namespace BALL
 			WIN32_FIND_DATA fd;
 		
 	
-			dirent_ = FindFirstFile(_T(pat.data()),&fd);
+			dirent_ = FindFirstFile(_T(pat.c_str()),&fd);
 			if (dirent_ == INVALID_HANDLE_VALUE)
 			{
 				CloseHandle(dir_);
@@ -155,7 +155,7 @@ namespace BALL
 		{
 			::closedir(dir_);
 		}
-		dir_ = ::opendir(directory_path_.data());
+		dir_ = ::opendir(directory_path_.c_str());
 		if (dir_ == 0) 
 		{
 			return desynchronize_(false);	
@@ -183,7 +183,7 @@ namespace BALL
 		if (dir_ == INVALID_HANDLE_VALUE)
 		{
 			
-			dir_ = CreateFile(directory_path_.data(),
+			dir_ = CreateFile(directory_path_.c_str(),
 												FILE_LIST_DIRECTORY,                
 												FILE_SHARE_READ|FILE_SHARE_DELETE|FILE_SHARE_WRITE,  
 												NULL,                               
@@ -198,7 +198,7 @@ namespace BALL
 			String pat=directory_path_ + FileSystem::PATH_SEPARATOR + "*";
 			WIN32_FIND_DATA fd;
 			
-			dirent_=FindFirstFile(pat.data(),&fd);
+			dirent_=FindFirstFile(pat.c_str(),&fd);
 			
 			if (dirent_==INVALID_HANDLE_VALUE)
 			{
@@ -216,7 +216,7 @@ namespace BALL
 			// someone has forgot to call FirstEntry
 
 			String pat=directory_path_ + FileSystem::PATH_SEPARATOR + "*";
-			dirent_=FindFirstFile(pat.data(),&fd);
+			dirent_=FindFirstFile(pat.c_str(),&fd);
 			
 			if (dirent_==INVALID_HANDLE_VALUE)
 			{
@@ -238,7 +238,7 @@ namespace BALL
 		synchronize_();
 		if (dir_ == 0) 
 		{
-			dir_ = ::opendir(directory_path_.data());
+			dir_ = ::opendir(directory_path_.c_str());
 		}
 		if (dir_ == 0) 
 		{
@@ -264,7 +264,7 @@ namespace BALL
 
 		if (dir_ == INVALID_HANDLE_VALUE)
 		{
-			dir_ = CreateFile(directory_path_.data(),
+			dir_ = CreateFile(directory_path_.c_str(),
 												FILE_LIST_DIRECTORY,                
 												FILE_SHARE_READ|FILE_SHARE_DELETE|FILE_SHARE_WRITE,  
 												NULL,                               
@@ -285,7 +285,7 @@ namespace BALL
 		}
 		String pat = directory_path_ + "\\*";
 		WIN32_FIND_DATA fd;
-		dirent_ = FindFirstFile(pat.data(),&fd);
+		dirent_ = FindFirstFile(pat.c_str(),&fd);
 		if (dirent_ == INVALID_HANDLE_VALUE)
 		{
 			if (dir_ != INVALID_HANDLE_VALUE)
@@ -305,7 +305,7 @@ namespace BALL
 #else
 		synchronize_();
 		Size size = 0;
-		DIR* dir = ::opendir(directory_path_.data());
+		DIR* dir = ::opendir(directory_path_.c_str());
 		if (dir == 0)	
 		{	
 			desynchronize_();
@@ -325,7 +325,7 @@ namespace BALL
 		Size size =0;
 		if (dir_ == INVALID_HANDLE_VALUE)
 		{
-			dir_ = CreateFile(directory_path_.data(),
+			dir_ = CreateFile(directory_path_.c_str(),
 												FILE_LIST_DIRECTORY,                
 												FILE_SHARE_READ|FILE_SHARE_DELETE|FILE_SHARE_WRITE,  
 												NULL,                               
@@ -344,7 +344,7 @@ namespace BALL
 		WIN32_FIND_DATA fd;
 		
 		if (dirent_!=INVALID_HANDLE_VALUE) FindClose(dirent_);
-		dirent_=FindFirstFile(pat.data(),&fd);
+		dirent_=FindFirstFile(pat.c_str(),&fd);
 		if (dirent_==INVALID_HANDLE_VALUE)
 		{
 			CloseHandle(dir_);
@@ -366,7 +366,7 @@ namespace BALL
 		struct stat stats;
 		Size size = 0;
 		dirent* myDirent;
-		DIR* dir = ::opendir(directory_path_.data());
+		DIR* dir = ::opendir(directory_path_.c_str());
 		if (dir == 0)	
 		{	
 			desynchronize_();
@@ -390,7 +390,7 @@ namespace BALL
 		Size size = 0;
 		if (dir_ == INVALID_HANDLE_VALUE)
 		{
-			dir_ = CreateFile(directory_path_.data(),
+			dir_ = CreateFile(directory_path_.c_str(),
 												FILE_LIST_DIRECTORY,                
 												FILE_SHARE_READ|FILE_SHARE_DELETE|FILE_SHARE_WRITE,  
 												NULL,                               
@@ -409,7 +409,7 @@ namespace BALL
 		WIN32_FIND_DATA fd;
 		
 		if (dirent_!=INVALID_HANDLE_VALUE) FindClose(dirent_);
-		dirent_=FindFirstFile(pat.data(),&fd);
+		dirent_=FindFirstFile(pat.c_str(),&fd);
 		if (dirent_==INVALID_HANDLE_VALUE)
 		{
 			CloseHandle(dir_);
@@ -431,7 +431,7 @@ namespace BALL
 		struct stat stats;
 		Size size = 0;
 		dirent* myDirent;
-		DIR* dir = ::opendir(directory_path_.data());
+		DIR* dir = ::opendir(directory_path_.c_str());
 		if (dir == 0)	
 		{	
 			desynchronize_();
@@ -618,7 +618,7 @@ namespace BALL
 		}
 		if (set_current) 
 		{
-			return (::chdir(directory_path_.data()) == 0);
+			return (::chdir(directory_path_.c_str()) == 0);
 		}
 
 		return true;
@@ -631,7 +631,7 @@ namespace BALL
 		{
 			return desynchronize_(false);
 		}
-		bool result1 = (::rmdir(directory_path_.data()) == 0);
+		bool result1 = (::rmdir(directory_path_.c_str()) == 0);
 		bool result2 = true;
 		if (backup_path_ != "")
 		{
@@ -661,7 +661,7 @@ namespace BALL
 		FindClose(dirent_);
 		dir_ = dirent_ = INVALID_HANDLE_VALUE;
 #endif
-		if (::rename(directory_path_.data(), new_path.data()) == 0)
+		if (::rename(directory_path_.c_str(), new_path.c_str()) == 0)
 		{
 			directory_path_ = new_path;
 			return desynchronize_(true);
@@ -672,7 +672,7 @@ namespace BALL
 	bool Directory::isValid() const
 	{
 		#ifdef BALL_COMPILER_MSVC
-			HANDLE dir = CreateFile(const_cast<char*>(directory_path_.data()),
+			HANDLE dir = CreateFile(const_cast<char*>(directory_path_.c_str()),
 							FILE_LIST_DIRECTORY,                
 							FILE_SHARE_READ|FILE_SHARE_DELETE,  
 							NULL,                               
@@ -694,7 +694,7 @@ namespace BALL
 			{
 				return false;
 			}
-			DIR* dir = ::opendir(directory_path_.data());
+			DIR* dir = ::opendir(directory_path_.c_str());
 			if (dir == 0)
 			{
 				return false;
