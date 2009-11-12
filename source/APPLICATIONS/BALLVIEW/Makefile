@@ -35,26 +35,19 @@ MOC_SOURCES=\
 RCC_FILES=\
 	splashscreen.C
 
-UIC_FILES=\
-	aboutDialog.h\
-	demoTutorialDialogData.h
+UIC_SOURCES=\
+	aboutDialogData.C\
+	demoTutorialDialogData.C
+
+UIC_HDR=$(UIC_SOURCES:Data.C=.dh)
 
 BALLView:	$(OBJECTS)	$(SPECIAL_OBJECTS)
 	$(LINKER)	$(LDFLAGS) -L$(PREFIX)/$(LIBDIR) -L$(BALL_PATH)/$(LIBDIR) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(BALL_LIBS) $(PYTHON_LIBS)
 
-depend: $(UIC_FILES) $(MOC_SOURCES) $(RCC_FILES)
+depend: $(UIC_HDR) $(MOC_SOURCES) $(RCC_FILES)
 
 mainframe_moc.C:	mainframe.h
 	$(MOC) mainframe.h -o $@
-
-aboutDialog.h: aboutDialog.ui
-	$(UIC) aboutDialog.ui > aboutDialog.h
-				
-demoTutorialDialogData.h: demoTutorialDialog.ui
-	$(UIC) demoTutorialDialog.ui > demoTutorialDialogData.h
-				
-demoTutorialDialogData.C: demoTutorialDialogData.h
-	$(UIC) -impl demoTutorialDialogData.h demoTutorialDialog.ui > demoTutorialDialogData.C
 
 demoTutorialDialog_moc.C: demoTutorialDialog.h
 	$(MOC) demoTutorialDialog.h -o $@
