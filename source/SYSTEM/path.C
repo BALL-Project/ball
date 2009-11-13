@@ -90,7 +90,7 @@ namespace BALL
 #ifdef BALL_COMPILER_MSVC
 			// we may have additional path information in the registry
 			std::vector<unsigned char> regbuffer(MAX_PATH, 0);
-			DWORD valuesize;
+			DWORD valuesize = regbuffer.size();
 			DWORD regresult;
 
 			REGSAM dSam = KEY_QUERY_VALUE;
@@ -112,6 +112,8 @@ namespace BALL
 			}
 
 			// and also look in the system wide settings
+			valuesize = regbuffer.size();
+
 			base = HKEY_LOCAL_MACHINE;
 			reg_result = RegOpenKeyEx(base, "Software\\BALL", 0, dSam, &key);
 
