@@ -324,6 +324,29 @@ namespace BALL
 		{
 		}
 
+		bool RegularData3DController::write()
+		{
+			Dataset* set = getSelectedDataset();
+			if (set == 0) return 0;
+
+			QString file = QFileDialog::getSaveFileName(0,
+			QString("Save as ") + type_.c_str(),
+			getDatasetControl()->getWorkingDir().c_str(),
+			QString("( *.3dg)"));
+
+			if (file == QString::null) return false;
+
+			vector<String> fields;
+			String s(ascii(file));
+			s.split(fields, ".");
+			if (fields.size() == 0)
+			{
+				BALLVIEW_DEBUG
+				return false;
+			}
+
+			return write(set, fields[fields.size() - 1], ascii(file));
+		}
 
 		bool RegularData3DController::write(Dataset* set, String /*filetype*/, String filename)
 		{
@@ -335,36 +358,50 @@ namespace BALL
 		Dataset* RegularData3DController::open(String filetype, String filename)
 		{
 			RegularData3D* d3 = new RegularData3D;
-			RegularData3DDataset* set = new RegularData3DDataset;
+			RegularData3DDataset* set = 0;
+			bool read_success = false;
+			String type = type_;
+			String maptype = "3DG";
 			if(filetype == "ccp4" || filetype == "map")
 			{
 				CCP4File* ccp4file = new CCP4File(filename);
-				ccp4file->read(*d3);
+				read_success = ccp4file->read(*d3);
 				ccp4file->close();
-				set->setData(d3);
-				set->setName(getNameFromFileName_(filename));
-				set->setType("Electron Density");
+				type = "Electron Density";
+				maptype = "CCP4";
 			}
 			else if(filetype == "omap" || filetype == "dsn6")
 			{
 				DSN6File* dsn6file = new DSN6File(filename);
-				dsn6file->read(*d3);
+				read_success = dsn6file->read(*d3);
 				dsn6file->close();
-				set->setData(d3);
-				set->setName(getNameFromFileName_(filename));
-				set->setType("Electron Density");
+				type = "Electron Density";
+				maptype = "DSN6";
 			}
 			else
 			{
+				read_success = true;
 				(*d3).binaryRead(filename);
-				set->setData(d3);
-				set->setName(getNameFromFileName_(filename));
-				set->setType(type_);
 			}
-			float dens_mean = d3->calculateMean();
-			float dens_stddev = d3->calculateSD();
-      Log.info() << "Density Mean: " << dens_mean << endl; 
-      Log.info() << "Density Sigma: " << dens_stddev << endl; 
+
+
+			if (read_success)
+			{
+				set = new RegularData3DDataset;
+				set->setData(d3);
+				String mapname = getNameFromFileName_(filename);
+				set->setName(mapname);
+				set->setType(type);
+				float dens_mean = d3->calculateMean();
+				float dens_stddev = d3->calculateSD();
+				setStatusbarText("Successfully read " + type + " from " + maptype + " file: " + filename, true);
+				Log.info() << mapname << " Map Density Mean: " << dens_mean << endl;
+				Log.info() << mapname << " Map Density Sigma: " << dens_stddev << endl;
+			}
+			else
+			{
+				setStatusbarText("Error reading " + type + " from " + maptype + "file: " + filename, true);
+			}
 			return set;
 		}
 
@@ -386,14 +423,22 @@ namespace BALL
 		{
 			QMenu* menu = DatasetController::buildContextMenu(item);
 			if (menu == 0) return 0;
-			menu->addAction("Render Grid", this, SLOT(visualizeGrid()));
-			menu->addAction("Create Sphere", this, SLOT(createSphere()));
+			
+			// In case the dataset is a non-orthogonal RegData3D, for now only allow calculation of contour surfaces
+			bool is_ortho = true;
+			RegularData3D* data = getData(getSelectedDataset());
+			if (data != 0)
+			{
+				is_ortho = data->isOrthogonal();
+			}
+			menu->addAction("Render Grid", this, SLOT(visualizeGrid()))->setEnabled(is_ortho);
+			menu->addAction("Create Sphere", this, SLOT(createSphere()))->setEnabled(is_ortho);
 			menu->addAction("Render Contour Surface", this, SLOT(computeIsoContourSurface()));
-			menu->addAction("Resize for Rendering", this, SLOT(resizeGrid()));
+			menu->addAction("Resize for Rendering", this, SLOT(resizeGrid()))->setEnabled(is_ortho);
 			menu->addSeparator();
-			menu->addAction("Create normalized Grid", this, SLOT(createHistogramGrid()));
-			menu->addAction("Create Gradient Grid", this, SLOT(createVectorGrid()));
-
+			menu->addAction("Create normalized Grid", this, SLOT(createHistogramGrid()))->setEnabled(is_ortho);
+			menu->addAction("Create Gradient Grid", this, SLOT(createVectorGrid()))->setEnabled(is_ortho);
+			
 			// NOTE: raytraceable grids are deferred until 1.4/2.0
 			// menu->addAction("Create raytraceable Grid", this, SLOT(createRaytraceableGrid()));
 

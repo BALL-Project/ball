@@ -73,6 +73,9 @@ class BALL_VIEW_EXPORT RegularData3DController
 	virtual ~RegularData3DController();
 
 	///
+	virtual bool write();
+
+	///
 	virtual bool write(Dataset* set, String filetype, String filename);
 
 	///

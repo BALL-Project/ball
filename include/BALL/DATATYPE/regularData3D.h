@@ -164,6 +164,9 @@ namespace BALL
 		bool isInside(const CoordinateType& r) const;
 		//@}
 
+		/// State whether grid is orthogonal or not.
+		BALL_INLINE bool isOrthogonal() const { return is_orthogonal_;}
+
     /** @name Iterators
     */
     //@{

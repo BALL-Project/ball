@@ -283,7 +283,7 @@ namespace BALL
 			public slots:
 
 			/// Show a file dialog for writing the selected Dataset.
-			bool write();
+			virtual bool write();
 
 			/** Show a file dialog to open a data file.
 			 		Calls open(String, String).
