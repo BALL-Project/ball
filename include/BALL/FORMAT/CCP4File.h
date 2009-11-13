@@ -87,13 +87,19 @@ namespace BALL
 		*/
 		virtual bool readSymmetryRecords();
 
-		/** Read the file into a RegularData3D field. **/
+		/** Read the file into a RegularData3D field.
+		*/
 		virtual bool read(RegularData3D& map);
 		
 		/** Write a header
 				Return true if the header could be written successfully, false ow.
 		*/
 		virtual bool writeHeader();
+
+		/** Write a RegularData3D to a CCP4 File
+				Return true if the map could be written successfully, false ow.
+		*/
+		virtual bool write(RegularData3D& map);
 
 		//@}
 		/** @name Accessors 

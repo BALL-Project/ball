@@ -276,6 +276,13 @@ namespace BALL
 		return false;
 	}
 
+	bool CCP4File::write(RegularData3D& map)
+	{
+		// Write the content of a RegularData3D dataset to a CCP4 file.
+		// TODO: implement
+		return false;
+	}
+
 	bool CCP4File::read(RegularData3D& density_map)
 	{
 
@@ -311,7 +318,6 @@ namespace BALL
 		size.z = (Size) extent_.z;
 		
 		density_map = RegularData3D(origin_, xaxis_, yaxis_, zaxis_, size);
-		
 		density_map.setDimension(Vector3(xaxis_.x, yaxis_.y, zaxis_.z));
 		char* rowblock = new char[4*int(size_crs.x)];	
 		
