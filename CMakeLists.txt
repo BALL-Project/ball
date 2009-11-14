@@ -142,6 +142,8 @@ IF(FFTW_FOUND)
 ENDIF()
 
 ## lpsolve
+OPTION(USE_LPSOLVE "Compile with lpsolve support, if lpsolve can be found" ON)
+
 FIND_PACKAGE(LPSolve)
 IF (LPSOLVE_FOUND)
 	SET(BALL_HAS_LPSOLVE TRUE)

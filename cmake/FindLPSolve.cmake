@@ -2,8 +2,6 @@
 INCLUDE(CheckCXXSourceCompiles)
 
 ## first, search the headers
-OPTION(USE_LPSOLVE "Compile with lpsolve support, if lpsolve can be found" ON)
-
 OPTION(LPSOLVE_REQUIRED "Abort if lpsolve cannot be found" OFF)
 
 IF (USE_LPSOLVE)
@@ -70,16 +68,21 @@ IF (USE_LPSOLVE)
 				SET(CMAKE_REQUIRED_LIBRARIES "")
 
 				IF (NOT LPSOLVE_LINKS_WITH_EXTRA_LIBS)
-					MESSAGE(SEND_ERROR "Could not link against lpsolve55!")
+					MESSAGE(STATUS "Could not link against lpsolve55!")
 				ENDIF()
 			ENDIF()
 		ENDIF()
-	ELSE()
-		IF (LPSOLVE_REQUIRED)
-			MESSAGE(SEND_ERROR "lpsolve was requested, but could not be found!")
-		ELSE()
-			MESSAGE(STATUS "lpsolve was requested, but could not be found!")
-		ENDIF()
-
 	ENDIF()
+
+	IF (LPSOLVE_LINKS_ALONE OR LPSOLVE_LINKS_WITH_EXTRA_LIBS)
+		SET(LPSOLVE_LINKS)
+	ENDIF()
+
+	INCLUDE(FindPackageHandleStandardArgs)
+	FIND_PACKAGE_HANDLE_STANDARD_ARGS(LPSolve DEFAULT_MSG
+		LPSOLVE_LIBRARIES
+		LPSOLVE_INCLUDE_PATH
+		LPSOLVE_LINKS
+	)
+
 ENDIF()
