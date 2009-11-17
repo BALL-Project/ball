@@ -383,7 +383,7 @@ IF (NOT "${INSTALL_PREFIX}" STREQUAL ".")
 	INSTALL(DIRECTORY data DESTINATION share/BALL COMPONENT ${COMPONENT_LIBBALL})
 	
 	## Install the includes
-	INSTALL(DIRECTORY include DESTINATION include)
+	INSTALL(DIRECTORY include DESTINATION ${CMAKE_INSTALL_PREFIX})
 ENDIF()
 
 ## The configured files have to be copied in any case
