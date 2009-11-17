@@ -1,0 +1,96 @@
+#### Note: Currently (CMake 2.6.something), GET_PREREQUISITES is not really useable
+####       for us (it either drags in all system libraries, or it removes things like
+####       python if they are located in the system folder)
+####       So for now, this script is not used. To enable it again, put the code between
+####       the ## CMakeLists.txt ## lines into the main CMakeLists.txt in an appropriate
+####       place
+
+
+## CMakeLists.txt ##
+
+## This is a little weird... the detection of dependencies requires
+## the fully built targets, of course. So it can only run at install
+## time. For this to work, we have to configure a script that in turn
+## calls the necessary functions at install time 
+## (c.f. http://www.cmake.org/pipermail/cmake/2009-June/029975.html)
+
+GET_TARGET_PROPERTY(BALL_LOCATION BALL LOCATION)
+GET_TARGET_PROPERTY(VIEW_LOCATION VIEW LOCATION)
+GET_TARGET_PROPERTY(BALLVIEW_LOCATION BALLView LOCATION)
+GET_TARGET_PROPERTY(BALLCOREMODULE_LOCATION BALLCoremodule LOCATION)
+GET_TARGET_PROPERTY(VIEWMODULE_LOCATION VIEWmodule LOCATION)
+
+SET(DEPENDENCY_PATHS ${BALL_CONTRIB_PATH}/dlls ${QT_BINARY_DIR})
+CONFIGURE_FILE(
+	"cmake/BALLInstallScripts.cmake.in"
+	"${PROJECT_BINARY_DIR}/BALLInstallScripts.cmake"
+	@ONLY
+)
+INSTALL(SCRIPT "${PROJECT_BINARY_DIR}/BALLInstallScripts.cmake")
+
+## CMakeLists.txt ##
+
+INCLUDE(GetPrerequisites)
+
+### Resolve library dependencies
+MACRO(BALL_RESOLVE_DEPENDENCIES RESULT TARGET_FULL_PATH EXEPATH DEPENDENCY_PATHS)
+	GET_PREREQUISITES("${TARGET_FULL_PATH}" TMP_DEPENDENCIES 1 1 "${EXEPATH}" "${DEPENDENCY_PATHS}")
+
+	FOREACH(DEPENDENCY ${TMP_DEPENDENCIES})
+		# Resolve the dependency to a full path; get_prerequisites is a little strange...
+		GP_RESOLVE_ITEM(${TARGET_FULL_PATH} ${DEPENDENCY} ${EXEPATH} "${DEPENDENCY_PATHS}" DEPENDENCY_FULL_PATH)
+		# get_prerequisites is not only strange, but also broken: excluding system paths does not work,
+		# since it does not resolve the full path...
+		GP_FILE_TYPE(${TARGET_FULL_PATH} ${DEPENDENCY_FULL_PATH} DEPENDENCY_TYPE)
+		
+		GET_FILENAME_COMPONENT(DEPENDENCY_NAME "${DEPENDENCY_FULL_PATH}" NAME)
+		GET_FILENAME_COMPONENT(DEPENDENCY_ACTUAL "${DEPENDENCY_FULL_PATH}" REALPATH)
+		 IF (NOT DEPENDENCY_TYPE STREQUAL "system")
+			LIST(APPEND ${RESULT} ${DEPENDENCY_FULL_PATH})
+		 ENDIF()
+	ENDFOREACH()
+ENDMACRO()
+
+SET(EXEPATH @CMAKE_INSTALL_PREFIX@/bin)
+
+SET(CHECK_FOR_DEPENDENCIES 
+	@BALL_LOCATION@ 
+	@VIEW_LOCATION@ 
+	@BALLVIEW_LOCATION@ 
+	@BALLCOREMODULE_LOCATION@
+	@VIEWMODULE_LOCATION@
+)
+
+FOREACH(BIN ${CHECK_FOR_DEPENDENCIES})
+	GET_FILENAME_COMPONENT(BINARY_NAME ${BIN} NAME)
+	BALL_RESOLVE_DEPENDENCIES(ALL_DEPENDENCIES
+		"@CMAKE_INSTALL_PREFIX@/bin/${BINARY_NAME}"
+		"${EXEPATH}"
+		"@DEPENDENCY_PATHS@")
+ENDFOREACH()
+
+# filter the resulting components
+LIST(REMOVE_DUPLICATES ALL_DEPENDENCIES)
+
+FOREACH(DEPENDENCY ${ALL_DEPENDENCIES})
+	## first, try to find out if the file really exists
+	
+	GET_FILENAME_COMPONENT(DEPENDENCY_NAME "${DEPENDENCY}" NAME)
+	GET_FILENAME_COMPONENT(DEPENDENCY_PATH "${DEPENDENCY}" PATH)
+	GET_FILENAME_COMPONENT(DEPENDENCY_REALPATH "${DEPENDENCY}" REALPATH)
+
+	IF (EXISTS ${DEPENDENCY})
+		## filter out BALL, VIEW, and Visual Studio dlls
+		IF (NOT "${DEPENDENCY_NAME}" MATCHES "${BALL_LIB_NAME}|${VIEW_LIB_NAME}")
+			IF (NOT "${DEPENDENCY_PATH}" MATCHES "Visual Studio")
+				FILE(INSTALL
+					 DESTINATION "@CMAKE_INSTALL_PREFIX@/bin"
+					 TYPE EXECUTABLE
+#					 RENAME "${DEPENDENCY_NAME}"
+					 FILES "${DEPENDENCY}"
+			 )
+			MESSAGE(STATUS "Installing ${DEPENDENCY}")
+			ENDIF()
+		ENDIF()
+	ENDIF()
+ENDFOREACH()
