@@ -283,7 +283,7 @@ IF (BALL_HAS_VIEW)
 ENDIF()
 
 IF (MSVC)
-	## use OpenMSd.dll in debug mode
+	## use BALLd.dll, VIEWd.dll in debug mode
 	SET(CMAKE_DEBUG_POSTFIX d)
 ENDIF()
 
