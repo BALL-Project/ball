@@ -352,6 +352,11 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				case DISPLAY_ANIMATION:
 					menu = initPopupMenu(DISPLAY)->addMenu("&Animation");
 					break;
+#ifdef BALL_HAS_RTFACT	
+				case DISPLAY_CONTINUOUSLOOP:
+					menu = initPopupMenu(DISPLAY)->addMenu("&Continuous Loop");
+					break;
+#endif
 				case MOLECULARMECHANICS:
 					menu = menuBar()->addMenu("&Molecular Mechanics");
 					break;

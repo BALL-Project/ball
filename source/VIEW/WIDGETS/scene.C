@@ -177,6 +177,9 @@ namespace BALL
 				material_settings_(new MaterialSettings(this)),
 				animation_thread_(0),
 				stop_animation_(false),
+#ifdef BALL_HAS_RTFACT	
+			  continuous_loop_(false),
+#endif
 				want_to_use_vertex_buffer_(false),
 				mouse_button_is_pressed_(false),
 				preview_(false),
@@ -226,6 +229,9 @@ namespace BALL
 				material_settings_(new MaterialSettings(this)),
 				animation_thread_(0),
 				stop_animation_(false),
+#ifdef BALL_HAS_RTFACT	
+			  continuous_loop_(false),
+#endif
 				toolbar_view_controls_(new QToolBar("3D View Controls", this)),
 				mode_group_(new QActionGroup(this)),
 				main_display_(new GLRenderWindow(this)),
@@ -1446,7 +1452,6 @@ namespace BALL
 			setMenuHelp(help_url);
 			animation_export_POV_action_->setCheckable(true);
 
-
 			animation_repeat_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Repeat", this, 
 					SLOT(dummySlot()), "Shortcut|Display|Animation|Repeat");
 			setMenuHelp(help_url);
@@ -1477,6 +1482,27 @@ namespace BALL
 					"Shortcut|Display|Stereo|Side_by_Side_on_Different_Displays");
 			setMenuHelp("tips.html#3D");
 			dual_stereo_different_display_action_->setCheckable(true);
+
+#ifdef BALL_HAS_RTFACT	
+			// ======================== Display->Continuous Loop ===============================================
+			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
+			
+			String description_cl = "Shortcut|Display|ContinuousLoop|SwitchOnOff";
+
+			start_continuous_loop_action_ = insertMenuEntry(MainControl::DISPLAY_CONTINUOUSLOOP, "Start", this, 
+					SLOT(toggleContinuousLoop()), "Shortcut|Display|ContinuousLoop|Start");
+			setMenuHint("Switch the continuous loop on");
+
+			start_continuous_loop_action_->setEnabled(false);
+			//setMenuHelp(help_url); TODO
+
+			stop_continuous_loop_action_ = insertMenuEntry(MainControl::DISPLAY_CONTINUOUSLOOP, "Stop", this, 
+					SLOT(toggleContinuousLoop()), "Shortcut|Display|ContinuousLoop|Stop");	
+			setMenuHint("Switch the continuous loop off");
+
+			stop_continuous_loop_action_->setEnabled(true);
+			setMenuHelp(help_url);
+#endif
 
 			// ======================== Display->Viewpoint ===============================================
 			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT);
@@ -1580,7 +1606,23 @@ namespace BALL
 			toolbar_actions_view_controls_.push_back(switch_grid_);
 			shortcut_registry->registerShortcut(description, switch_grid_);
 
+			// and push the icons whose actions are defined somewhere else
+			// into the toolbar_actions_view 
 			toolbar_actions_view_controls_.push_back(screenshot_action);
+
+#ifdef BALL_HAS_RTFACT
+			description = "Shortcut|Display|ContinuousLoop|Toggle";
+			toggle_continuous_loop_action_ = new QAction("Toggle continuous loop", this);
+			toggle_continuous_loop_action_->setObjectName(toggle_continuous_loop_action_->text());
+			connect(toggle_continuous_loop_action_, SIGNAL(triggered()), this, SLOT(toggleContinuousLoop()));
+			toggle_continuous_loop_action_->setCheckable(true);
+			toggle_continuous_loop_action_->setChecked(false);
+			toggle_continuous_loop_action_->setIcon(loader.getIcon("actions/continuous-loop"));
+			toolbar_actions_view_controls_.push_back(toggle_continuous_loop_action_);
+			toggle_continuous_loop_action_->setShortcut(QKeySequence(Qt::Key_Space));
+			shortcut_registry->registerShortcut(description, toggle_continuous_loop_action_);
+#endif
+			// end of the toolbar entries
 
 			description = "Shortcut|File|Print";
 			insertMenuEntry(MainControl::FILE, "Print", this, SLOT(printScene()), description);
@@ -1619,6 +1661,11 @@ namespace BALL
 																!animation_running);
 			
 			clear_animation_action_->setEnabled(animation_points_.size() > 0 && !animation_running);
+
+#ifdef BALL_HAS_RTFACT	
+			stop_continuous_loop_action_->setEnabled(continuous_loop_);
+			start_continuous_loop_action_->setEnabled(!continuous_loop_);
+#endif
 
 			window_menu_entry_->setChecked(isVisible());
 		}
@@ -2163,22 +2210,6 @@ namespace BALL
 
 		void Scene::keyPressEvent(QKeyEvent* e)
 		{
-			// TEST
-			if (e->key() == Qt::Key_Space)
-			{
-				if (renderers_[0]->isContinuous())
-				{
-					renderers_[0]->useContinuousLoop(false);
-				}
-				else
-				{
-					renderers_[0]->useContinuousLoop(true);
-					renderers_[0]->loop_mutex.lock();
-					renderers_[0]->wait_for_render.wakeAll();
-					renderers_[0]->loop_mutex.unlock();
-				}
-			}
-
 			// TODO make keys configurable in shortcutRegistry 
 			if ((gl_renderer_->getStereoMode() == GLRenderer::NO_STEREO) &&
 			    (e->key() == Qt::Key_Escape))
@@ -2955,6 +2986,48 @@ return;
 		{
 			stop_animation_ = true;
 		}
+
+#ifdef BALL_HAS_RTFACT		
+		void Scene::startContinuousLoop()
+		{	
+			continuous_loop_ = true;
+			if (!renderers_[0]->isContinuous())
+			{
+				renderers_[0]->useContinuousLoop(true);
+				renderers_[0]->loop_mutex.lock();
+				renderers_[0]->wait_for_render.wakeAll();
+				renderers_[0]->loop_mutex.unlock();
+				stop_continuous_loop_action_->setEnabled(true);
+				start_continuous_loop_action_->setEnabled(false);	
+				setStatusbarText("Switched continuous loop on", true);
+			}
+		}
+
+		void Scene::stopContinuousLoop()
+		{		
+			continuous_loop_ = false;	
+			if (renderers_[0]->isContinuous())
+			{
+				renderers_[0]->useContinuousLoop(false);	
+				stop_continuous_loop_action_->setEnabled(false);
+				start_continuous_loop_action_->setEnabled(true);
+				setStatusbarText("Switched continuous loop off", true);
+			}
+		}
+
+		void Scene::toggleContinuousLoop()
+		{
+			if (continuous_loop_)
+			{
+				stopContinuousLoop();
+			}
+			else
+			{
+				startContinuousLoop();
+			}
+		}
+#endif
+
 
 		void Scene::animate_()
 		{
