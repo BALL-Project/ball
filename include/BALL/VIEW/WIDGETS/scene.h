@@ -622,6 +622,15 @@ namespace BALL
 			void restoreViewPoint();
 
 #ifdef BALL_HAS_RTFACT
+			///
+			void startContinuousLoop();
+			
+			///
+			void stopContinuousLoop();
+			
+			///
+			void toggleContinuousLoop();
+
 			RaytracingWindowPtr getWindow(WindowType aWindowType);
 #endif
 	
@@ -797,6 +806,10 @@ namespace BALL
 			QAction *no_stereo_action_, *active_stereo_action_, *dual_stereo_action_, *dual_stereo_different_display_action_;
 			QAction *record_animation_action_, *start_animation_action_, *clear_animation_action_, *cancel_animation_action_;
 			QAction *animation_export_POV_action_, *animation_export_VRML_action_, 	*animation_export_PNG_action_, *animation_repeat_action_;
+
+#ifdef BALL_HAS_RTFACT	
+			QAction *start_continuous_loop_action_, *stop_continuous_loop_action_, *toggle_continuous_loop_action_;
+#endif			
 			QAction *switch_grid_;
 			QMenu* create_coordinate_system_;
 			
@@ -852,6 +865,9 @@ namespace BALL
 			std::list<Camera> animation_points_;
 			AnimationThread* animation_thread_;
 			bool stop_animation_;
+#ifdef BALL_HAS_RTFACT				
+			bool continuous_loop_;
+#endif
 			bool want_to_use_vertex_buffer_;
 			bool mouse_button_is_pressed_;
 			bool preview_;
@@ -893,19 +909,19 @@ namespace BALL
 			///
 			virtual void run() {scene_->animate_();}
 
-				///
-				void mySleep(Size msec);
+			///
+			void mySleep(Size msec);
 
-				///
-				void setScene(Scene* scene) { scene_ = scene;}
+			///
+			void setScene(Scene* scene) { scene_ = scene;}
 
-				///
-				Scene* getScene() { return scene_;}
+			///
+			Scene* getScene() { return scene_;}
 
-			protected:
+		protected:
 
 				Scene* scene_;
-		};
+	};
 
 
 } } // namespaces

@@ -377,6 +377,11 @@ namespace BALL
 				case DISPLAY_ANIMATION:
 					menu = initPopupMenu(DISPLAY)->addMenu(tr("&Animation"));
 					break;
+#ifdef BALL_HAS_RTFACT	
+				case DISPLAY_CONTINUOUSLOOP:
+					menu = initPopupMenu(DISPLAY)->addMenu("&Continuous Loop");
+					break;
+#endif
 				case MOLECULARMECHANICS:
 					menu = menuBar()->addMenu(tr("&Molecular Mechanics"));
 					break;
