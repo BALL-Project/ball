@@ -44,11 +44,17 @@
 # include <hash_fun.h>
 #endif
 
-#ifdef BALL_HAS_UNORDERED_MAP
+#if defined(BALL_HAS_UNORDERED_MAP) && !defined(BALL_HAS_BOOST_UNORDERED_MAP)
+
+#ifdef BALL_EXTEND_HASH_IN_STD_NS
 namespace std
 {
+#endif // BALL_EXTEND_HASH_IN_STD_NS
+
+#ifdef BALL_HAS_TR1_UNORDERED_MAP
 	namespace tr1
 	{
+#endif // BALL_HAS_TR1_UNORDERED_MAP
 		
 		// borrowed from boost
 		template<typename T> 
@@ -126,9 +132,15 @@ namespace std
 				return h(s);
 			}
 		};
+#ifdef BALL_HAS_TR1_UNORDERED_MAP
 	}
+#endif // BALL_HAS_TR1_UNORDERED_MAP
+
+#ifdef BALL_EXTEND_HASH_IN_STD_NS
 }
-#endif
+#endif // BALL_EXTEND_HASH_IN_STD_NS
+
+#endif // if defined(BALL_HAS_UNORDERED_MAP) && !defined(BALL_HAS_BOOST_UNORDERED_MAP)
 
 #ifdef BALL_HAS_HASH_MAP
 namespace BALL_MAP_NAMESPACE
