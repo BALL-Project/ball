@@ -285,8 +285,10 @@ IF (BALL_HAS_VIEW)
 	FIND_PACKAGE(RTfact)
 	IF (RTFACT_FOUND)
 		## RTfact requires TBB
-		IF (NOT TBB_FOUND)
-			MESSAGE(SEND_ERROR "RTfact support requires TBB!")
+		IF (NOT CMAKE_COMPILER_IS_INTELCXX)
+			IF (NOT TBB_FOUND)
+				MESSAGE(SEND_ERROR "RTfact support requires TBB!")
+			ENDIF()
 		ENDIF()
 
 		SET(BALL_HAS_RTFACT TRUE)
