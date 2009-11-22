@@ -277,6 +277,9 @@
 // MPI
 #cmakedefine BALL_HAS_MPI
 
+// RTfact
+#cmakedefine BALL_HAS_RTFACT
+
 // Define for activated PYTHON support
 #cmakedefine BALL_PYTHON_SUPPORT
 
