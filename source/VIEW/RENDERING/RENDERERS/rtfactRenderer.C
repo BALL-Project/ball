@@ -1,6 +1,7 @@
 #include <BALL/STRUCTURE/triangulatedSurface.h>
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
+#include <BALL/VIEW/PRIMITIVES/twoColoredLine.h>
 
 #include <BALL/VIEW/RENDERING/RENDERERS/rtfactRenderer.h>
 
@@ -9,6 +10,8 @@
 #include <QtGui/QImage>
 
 #include <list>
+
+static const float LINE_RADIUS = 0.02;
 
 using RTfact::Vec3f;
 using RTfact::Remote::GroupHandle;
@@ -392,6 +395,82 @@ namespace BALL
 
 					rtfact_needs_update_ = true;
 				}
+
+				if (RTTI::isKindOf<TwoColoredLine>(**it))
+				{
+					TwoColoredLine const& old_line = *(const TwoColoredLine*)*it;
+
+					float const* vertices = reinterpret_cast<float const*>(&(tube_template_.vertex[0]));
+					float const* normals  = reinterpret_cast<float const*>(&(tube_template_.normal[0]));
+					Index const* indices  = reinterpret_cast<Index const*>(&(tube_template_.triangle[0]));
+
+					// we will produce two tubes using the same vertex/normal/color values, just with the correct offsets
+					ColorRGBA const& color1 = old_line.getColor();
+					ColorRGBA const& color2 = old_line.getColor2();
+
+					RTAppearanceHandle material_1 = m_renderer.createAppearance("PhongShader");
+					updateMaterialFromStage(material_1);
+
+					material_1->setParam("diffuseColor", float3(color1.getRed(), color1.getGreen(), color1.getBlue()));
+					material_1->setParam("useVertexColor", false);
+
+					GeoHandle handle_1 = m_renderer.createGeometry(vertices, normals, (const unsigned int*)indices, (unsigned int)tube_template_.triangle.size(), material_1);
+
+					if (color1 == color2)
+					{
+						GroupHandle tubeGroup = transformLine(old_line);
+						tubeGroup->add(handle_1);
+
+						m_renderer.getRoot()->add(tubeGroup);
+
+						rt_data.top_group_handles.push_back(tubeGroup);
+						rt_data.object_handles.push_back(handle_1);
+						rt_data.material_handles.push_back(material_1);
+					} 
+					else 
+					{
+						RTAppearanceHandle material_2 = m_renderer.createAppearance("PhongShader");
+						updateMaterialFromStage(material_2);
+
+						material_2->setParam("diffuseColor", float3(color2.getRed(), color2.getGreen(), color2.getBlue()));
+						material_2->setParam("useVertexColor", false);
+
+						GeoHandle handle_2 = m_renderer.createGeometry(vertices, normals, (const unsigned int*)indices, (unsigned int)tube_template_.triangle.size(), material_2);
+
+						// NOTE: Just copying tube would be highly dangerous; vertex2 can store pointers
+						//       to the vertices instead of using its own, and these are copied as well!
+						TwoColoredLine new_line_1, new_line_2;
+
+						new_line_1.setVertex1(old_line.getVertex1());
+						new_line_1.setVertex2(old_line.getMiddleVertex());
+						//new_line_1.setRadius(LINE_RADIUS);//old_line.getRadius());
+
+						new_line_2.setVertex1(old_line.getMiddleVertex());
+						new_line_2.setVertex2(old_line.getVertex2());
+						//new_line_2.setRadius(LINE_RADIUS);//old_line.getRadius());
+
+						GroupHandle all_group = m_renderer.createGroup(Transform::identity());
+
+						GroupHandle tubeGroup_1 = transformLine(new_line_1);
+						tubeGroup_1->add(handle_1);
+
+						GroupHandle tubeGroup_2 = transformLine(new_line_2);
+						tubeGroup_2->add(handle_2);
+
+						all_group->add(tubeGroup_1);
+						all_group->add(tubeGroup_2);
+
+						m_renderer.getRoot()->add(all_group);
+
+						rt_data.top_group_handles.push_back(all_group);
+						rt_data.object_handles.push_back(handle_1);
+						rt_data.object_handles.push_back(handle_2);
+						rt_data.material_handles.push_back(material_1);
+						rt_data.material_handles.push_back(material_2);
+					}
+
+					rtfact_needs_update_ = true;
+				}
 			}
 
 			if (rtfact_needs_update_ && use_continuous_loop_)
@@ -500,6 +579,38 @@ namespace BALL
 			Matrix4x4 matrix = Matrix4x4::getIdentity(); 
 			matrix.rotate(Angle(-angle), vec.y, -vec.x, 0);
 
+			Matrix4x4 temp;
+			temp.setScale(radius, radius, len);
+			matrix*=temp;
+
+			temp.setTranslation(midpoint);
+			matrix = temp*matrix;
+
+			//return m_renderer.createGroup(	Transform::translation(midpoint.x, midpoint.y, midpoint.z)
+			//															 *matrix*Transform::scale(Vec3f<1>(radius, radius, len)));
+			Transform trafo;
+			for (Position i=0; i<4; ++i)
+				for (Position j=0; j<4; ++j)
+					trafo.matrix[j][i] = matrix(i, j);
+			trafo.hasInverse = false;
+
+			return m_renderer.createGroup(trafo);
+		}
+		
+		GroupHandle RTfactRenderer::transformLine(const TwoColoredLine& line) 
+		{
+			Vector3 vec = line.getVertex2() - line.getVertex1();
+			const double len = vec.getLength();
+			const double angle = acos(vec.z / len); // the denominator accounts for the non-normalized rotation axis
+			const float radius = LINE_RADIUS;//line.getRadius();
+
+			Vector3 const& midpoint = line.getVertex1();
+			//Rotate the vector around the normal
+			vec /= sqrt(vec.x*vec.x + vec.y*vec.y);
+
+			Matrix4x4 matrix = Matrix4x4::getIdentity();
+			matrix.rotate(Angle(-angle), vec.y, -vec.x, 0);
+			
 			Matrix4x4 temp;
 			temp.setScale(radius, radius, len);
 			matrix*=temp;
