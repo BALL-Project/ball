@@ -2287,7 +2287,7 @@ namespace BALL
 				}
 			}
 
-			glGenTextures(1, &texname);
+			glGenTextures(1, (GLuint*)&texname);
 			glBindTexture(GL_TEXTURE_3D, texname);
 			glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, tex_size.x, tex_size.y, tex_size.z, 0, GL_RGBA, GL_UNSIGNED_BYTE, texels);
 			glBindTexture(GL_TEXTURE_3D, 0);
