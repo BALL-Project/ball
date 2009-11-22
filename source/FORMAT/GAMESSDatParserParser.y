@@ -3,7 +3,7 @@
 #include <BALL/FORMAT/GAMESSDatFile.h>
 
 #include <iostream>
-#include <malloc.h>
+#include <cstdlib>
 
 using namespace BALL;
 using namespace std;
