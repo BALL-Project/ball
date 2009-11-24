@@ -42,7 +42,7 @@ ELSE()
 #										COMMAND ${CMAKE_COMMAND} -E echo "                    make sure they are built using the 'test_build' target"
 #										COMMAND ${CMAKE_COMMAND} -E echo "    Tutorials_build builds the tutorials in source/EXAMPLES"
 #										COMMAND ${CMAKE_COMMAND} -E echo "    Tutorials_exec  executes the tutorials in source/EXAMPLES"
-#										COMMAND ${CMAKE_COMMAND} -E echo "    doc             builds the doxygen documentation and tutorials"
+ 										COMMAND ${CMAKE_COMMAND} -E echo "    doc             builds the doxygen documentation and tutorials"
 #										COMMAND ${CMAKE_COMMAND} -E echo "    doc_tutorials   builds the pdf tutorials"
 #										COMMAND ${CMAKE_COMMAND} -E echo "    help            list all available targets (very long)"
 #										COMMAND ${CMAKE_COMMAND} -E echo ""
