@@ -438,7 +438,13 @@ namespace BALL
 
 
 		InterpolateColorProcessor::InterpolateColorProcessor(const InterpolateColorProcessor& pro)
-			: ColorProcessor(pro)
+			: ColorProcessor(pro),
+				colors_(pro.colors_),
+				min_color_(pro.min_color_),
+				max_color_(pro.max_color_),
+				mode_(pro.mode_),
+				max_value_(pro.max_value_),
+				min_value_(pro.min_value_)
 		{
 		}
 
