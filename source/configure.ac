@@ -16,7 +16,7 @@ dnl
 dnl 
 dnl    Some initialization stuff...
 dnl 
-AC_INIT([BALL],[1.3],[ball-bugs@bioinf.uni-sb.de])
+AC_INIT([BALL],[1.3.1],[ball-bugs@bioinf.uni-sb.de])
 AC_CONFIG_MACRO_DIR([config/m4])
 AC_CONFIG_HEADER([
 	config.h:config/config.h.in
