@@ -96,7 +96,7 @@ ELSE()
 	MESSAGE(STATUS "Doxygen not found. Disabling all documentation targets!")
 ENDIF()
 
-IF (DOXYGEN_FOUND AND LATEX_COMPILER AND DVIPS_CONVERTER)
+IF (LATEX_COMPILER AND DVIPS_CONVERTER)
 	#######################################################################
 	# doc_tutorials target
 	ADD_CUSTOM_TARGET(doc_tutorial ${AUTO_BUILD_DOC}
