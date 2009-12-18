@@ -35,9 +35,9 @@
 	<key>LSEnvironment</key>
 	<dict>
 		<key>BALL_DATA_PATH</key>
-		<string>/Applications/BALLView.app/Contents/Resources/data</string>
+		<string>BALLView.app/Contents/Resources/data</string>
 		<key>PYTHONPATH</key>
-		<string>/Applications/BALLView.app/Contents/Frameworks:$PYTHONPATH</string>
+		<string>BALLView.app/Contents/Frameworks:$PYTHONPATH</string>
 		<key>LANG</key>
 		<string>en</string>
 	</dict>
