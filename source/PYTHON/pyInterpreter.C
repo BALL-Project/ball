@@ -120,6 +120,14 @@ namespace BALL
 
 #ifndef BALL_COMPILER_MSVC
 		runSingleString_("sys.path.append(\"" BALL_PATH "/lib/" "\")", Py_single_input);
+
+#ifdef BALL_OS_DARWIN
+	// on MacOS, try to find the python packages in the frameworks directory of our bundle
+	String site_path = String(p.find("../Frameworks"));
+	if (site_path != "")
+		sys_path_.push_back(site_path);
+#endif
+
 #else
 		// first, make sure that the site packages of our python installation will be found
 		String site_path = String(p.find("Python\\lib"));

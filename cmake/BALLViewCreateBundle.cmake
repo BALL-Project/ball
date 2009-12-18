@@ -1,0 +1,12 @@
+## try to detect macdeployqt
+## TODO: one of these days, we should really do this properly... :-)
+
+## Wow, what a *hack*...
+IF (${BALLVIEW_BUNDLE} MATCHES _CPack_Packages)
+	STRING(REGEX REPLACE "^(.*_CPack_Packages)/.*$" "\\1" BALLVIEW_BUNDLE_ROOT ${BALLVIEW_BUNDLE})
+ELSE()
+	SET(BALLVIEW_BUNDLE_ROOT ${BALLVIEW_BUNDLE})
+ENDIF()
+
+EXECUTE_PROCESS(COMMAND ${MACDEPLOYQT_EXECUTABLE} ${BALLVIEW_BUNDLE})
+EXECUTE_PROCESS(COMMAND ${FIXBUNDLE} ${BALLVIEW_BUNDLE_ROOT})
