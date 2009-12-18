@@ -350,6 +350,30 @@ namespace BALL
 		//_ Report an error and increase the error counter
 		std::ostream& error() throw(Exception::TooManyErrors);
 
+		/*_ Define the rules for considering a single atom 
+		 * for forcefield evaluations. 
+		 */	
+		BALL_INLINE
+		bool considerAtom(Atom* a1);
+
+		/*_ Define the rules for considering atom pairs 
+		 * for forcefield evaluations. 
+		 */	
+		BALL_INLINE
+		bool considerAtomPair(Atom* a1, Atom* a2);
+
+		/*_ Define the rules for considering atom triples 
+		 * for forcefield evaluations. 
+		 */	
+		BALL_INLINE
+		bool considerAtomTriple(Atom* a1, Atom* a2, Atom* a3);
+
+		/*_ Define the rules for considering atom quadruples 
+		 * for forcefield evaluations. 
+		 */	
+		BALL_INLINE
+		bool considerAtomQuadruple(Atom* a1, Atom* a2, Atom* a3, Atom* a4);
+
 		//@}
 		/**	@name	Public Attributes
 		*/
@@ -373,6 +397,7 @@ namespace BALL
 		/*_	Sort the atom vector wrt selection.
 		*/
 		void sortSelectedAtomVector_();
+		
 		
 		/*_	@name	Protected Attributes
 		*/

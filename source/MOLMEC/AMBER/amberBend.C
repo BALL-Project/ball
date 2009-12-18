@@ -165,15 +165,11 @@ namespace BALL
 		}
 
 		Vector3 v1, v2;
-		bool use_selection = getForceField()->getUseSelection();
 		QuadraticAngleBend::Data* bend_it = &(bend_[0]);
 		QuadraticAngleBend::Data* bend_end = &(bend_[bend_.size() - 1]);
 		for (; bend_it <= bend_end ; ++bend_it) 
 		{
-			if (use_selection == false ||
-					(bend_it->atom1->ptr->isSelected() 
-					 || bend_it->atom2->ptr->isSelected() 
-					 || bend_it->atom3->ptr->isSelected()))
+			if (getForceField()->considerAtomTriple(bend_it->atom1->ptr, bend_it->atom2->ptr, bend_it->atom3->ptr))
 			{
 				v1 = bend_it->atom1->position - bend_it->atom2->position;
 				v2 = bend_it->atom3->position - bend_it->atom2->position;
@@ -218,10 +214,7 @@ namespace BALL
 		bool use_selection = getForceField()->getUseSelection();
 		for (Size i = 0; i < bend_.size(); i++) 
 		{
-			if ((use_selection == false) 
-					|| bend_[i].atom1->ptr->isSelected() 
-					|| bend_[i].atom2->ptr->isSelected() 
-					|| bend_[i].atom3->ptr->isSelected())
+			if (getForceField()->considerAtomTriple(bend_[i].atom1->ptr, bend_[i].atom2->ptr, bend_[i].atom3->ptr))
 			{
 
 				// Calculate the vector between atom1 and atom2,
@@ -283,29 +276,18 @@ namespace BALL
 				n1 *= factor * inverse_length_v1;
 				n2 *= factor * inverse_length_v2;
 
-				if (use_selection == false)
+				if (getForceField()->considerAtom(bend_[i].atom1->ptr))
 				{
 					bend_[i].atom1->force -= n1;
+				}
+				if (getForceField()->considerAtom(bend_[i].atom2->ptr))
+				{
 					bend_[i].atom2->force += n1;
 					bend_[i].atom2->force -= n2;
-					bend_[i].atom3->force += n2;
-				} 
-				else 
+				}	
+				if (getForceField()->considerAtom(bend_[i].atom3->ptr))
 				{
-					if (bend_[i].atom1->ptr->isSelected()) 
-					{
-						bend_[i].atom1->force -= n1;
-					}
-	
-					if (bend_[i].atom2->ptr->isSelected())
-					{
-						bend_[i].atom2->force += n1;
-						bend_[i].atom2->force -= n2;
-					}
-					if (bend_[i].atom3->ptr->isSelected())
-					{
-						bend_[i].atom3->force += n2;
-					}
+					bend_[i].atom3->force += n2;
 				}
 			}
 		}

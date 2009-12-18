@@ -67,4 +67,63 @@ const AtomVector& ForceField::getAtoms() const
 	return atoms_;
 }
 
+BALL_INLINE
+bool ForceField::considerAtom(Atom* a1)
+{
+	bool result = false;
+	//TODO Does this criterion make any sense??
+	if (    !use_selection_
+		  || (	 !a1->hasProperty("ExcludeFromFFEvaluation")
+			    && a1->isSelected()
+				 )
+			)
+		result = true;
+	return result;
+}	
+
+BALL_INLINE
+bool ForceField::considerAtomPair(Atom* a1, Atom* a2)
+{
+	bool result = false;
+	if (    !use_selection_
+		  || (	!(   a1->hasProperty("ExcludeFromFFEvaluation")
+			 	 	    || a2->hasProperty("ExcludeFromFFEvaluation")
+				     )	
+			    && (a1->isSelected() || a2->isSelected())
+					)
+			)
+		result = true;
+	return result;
+}	
+
+BALL_INLINE
+bool ForceField::considerAtomTriple(Atom* a1, Atom* a2, Atom* a3)
+{
+	bool result = false;
+	if (   !use_selection_
+      || (  !(   a1->hasProperty("ExcludeFromFFEvaluation")
+			 	  	  || a2->hasProperty("ExcludeFromFFEvaluation")
+			 	  	  || a3->hasProperty("ExcludeFromFFEvaluation"))	
+		      && (a1->isSelected() || a2->isSelected() || a3->isSelected())
+			   )
+		 )
+		result = true;
+	return result;
+}
+
+BALL_INLINE
+bool ForceField::considerAtomQuadruple(Atom* a1, Atom* a2, Atom* a3, Atom* a4)
+{
+	bool result = false;
+	if (   !use_selection_
+      || (  !(   a1->hasProperty("ExcludeFromFFEvaluation")
+			 	  	  || a2->hasProperty("ExcludeFromFFEvaluation")
+			 	  	  || a3->hasProperty("ExcludeFromFFEvaluation")
+			 	  	  || a4->hasProperty("ExcludeFromFFEvaluation"))	
+		      && (a1->isSelected() || a2->isSelected() || a3->isSelected() || a4->isSelected())
+			   )
+		 )
+		result = true;
+	return result;
+}	
 

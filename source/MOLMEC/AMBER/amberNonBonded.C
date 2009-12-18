@@ -706,9 +706,13 @@ namespace BALL
      bool is_hydrogen_bond, 
 		 bool use_periodic_boundary, 
 		 bool use_dist_depend,
-		 bool use_selection)
+		 ForceField* force_field)
 		
 	{
+		//TODO before computing anything check, if the atoms have 
+		//to considered at all if(force_field->considerAtom(atom1.ptr) || force_field->considerAtom(atom2.ptr) )
+ 
+
     // calculate the difference vector between the two atoms
 		// useful aliases
 		Atom::StaticAtomAttributes& atom1(*LJ_data.atom1);
@@ -870,11 +874,11 @@ namespace BALL
 		// now apply the force to the atoms
 		Vector3 force = (float)factor * direction; 
 
-		if (!use_selection || atom1.ptr->isSelected()) 
+		if (force_field->considerAtom(atom1.ptr))
 		{
 			atom1.force += force;
-		}
-		if (!use_selection || atom2.ptr->isSelected())
+		}	
+		if (force_field->considerAtom(atom2.ptr))
 		{
 			atom2.force -= force;
 		}
@@ -1064,7 +1068,6 @@ namespace BALL
 	// This method AMBERcalculates the current forces resulting from
 	// van-der-Waals and electrostatic interactions 
 	void AmberNonBonded::updateForces()
-		
 	{
 		if (getForceField() == 0)
 		{
@@ -1098,7 +1101,6 @@ namespace BALL
 		Vector3 period; 
 
 		bool use_periodic_boundary = force_field_->periodic_boundary.isEnabled(); 
-		bool use_selection = getForceField()->getUseSelection() && getForceField()->getSystem()->containsSelection();
 
 		// calculate forces arising from 1-4 interaction pairs
 		// and remaining non-bonded interaction pairs
@@ -1117,7 +1119,7 @@ namespace BALL
 			{
 				AMBERcalculateNBForce
 					(*it, FORCE_PARAMETERS,
-					 e_scaling_factor_1_4, vdw_scaling_factor_1_4, false, true, true, use_selection);
+					 e_scaling_factor_1_4, vdw_scaling_factor_1_4, false, true, true, getForceField());
 			}
 
 			// now deal with 'real' non-bonded pairs (in the same vector non_bonded_) 
@@ -1125,7 +1127,7 @@ namespace BALL
 			{
 				AMBERcalculateNBForce
 					(*it, FORCE_PARAMETERS, e_scaling_factor, 
-					 vdw_scaling_factor, (bool)(is_hydrogen_bond_[i] != 0), true, true, use_selection);
+					 vdw_scaling_factor, (bool)(is_hydrogen_bond_[i] != 0), true, true, getForceField());
 			}
 		}
 		else
@@ -1145,7 +1147,7 @@ namespace BALL
 				{
 						AMBERcalculateNBForce
 							(*it, FORCE_PARAMETERS, e_scaling_factor_1_4, 
-							 vdw_scaling_factor_1_4, false, true, false, use_selection);
+							 vdw_scaling_factor_1_4, false, true, false, getForceField());
 				}
 
 				// now deal with 'real' non-bonded pairs (in the same vector
@@ -1154,7 +1156,7 @@ namespace BALL
 				{
 					AMBERcalculateNBForce
 						(*it, FORCE_PARAMETERS, e_scaling_factor, 
-						 vdw_scaling_factor, (is_hydrogen_bond_[i] != 0), true, false, use_selection);
+						 vdw_scaling_factor, (is_hydrogen_bond_[i] != 0), true, false, getForceField());
 				}
 			}
 			else
@@ -1170,7 +1172,7 @@ namespace BALL
 					{
 						AMBERcalculateNBForce
 							(*it, FORCE_PARAMETERS, e_scaling_factor_1_4, 
-							 vdw_scaling_factor_1_4, false, false, true, use_selection);
+							 vdw_scaling_factor_1_4, false, false, true, getForceField());
 					}
 
 					// now deal with 'real' non-bonded pairs (in the same vector
@@ -1179,7 +1181,7 @@ namespace BALL
 					{
 						AMBERcalculateNBForce
 							(*it, FORCE_PARAMETERS, e_scaling_factor, 
-							 vdw_scaling_factor, (is_hydrogen_bond_[i] != 0), false, true, use_selection);
+							 vdw_scaling_factor, (is_hydrogen_bond_[i] != 0), false, true, getForceField());
 					}
 				}
 				else
@@ -1191,7 +1193,7 @@ namespace BALL
 					{
 						AMBERcalculateNBForce
 							(*it, FORCE_PARAMETERS, e_scaling_factor_1_4, 
-							 vdw_scaling_factor_1_4, false, false, false, use_selection);
+							 vdw_scaling_factor_1_4, false, false, false, getForceField());
 					}
 
 					// now deal with 'real' non-bonded pairs (in the same vector
@@ -1200,7 +1202,7 @@ namespace BALL
 					{
 						AMBERcalculateNBForce
 							(*it, FORCE_PARAMETERS, e_scaling_factor, 
-							 vdw_scaling_factor, (is_hydrogen_bond_[i] != 0), false, false, use_selection);
+							 vdw_scaling_factor, (is_hydrogen_bond_[i] != 0), false, false, getForceField());
 					}
 				}
 			}

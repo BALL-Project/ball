@@ -174,13 +174,11 @@ namespace BALL
 		// initial energy is zero
 		energy_ = 0;
 
-		bool use_selection = getForceField()->getUseSelection();
-
 		// iterate over all bonds, sum up the energies
 		for (Size i = 0; i < stretch_.size(); i++)
 		{
 			double distance = (stretch_[i].atom1->position).getDistance(stretch_[i].atom2->position);
-			if (!use_selection || stretch_[i].atom1->ptr->isSelected() || stretch_[i].atom2->ptr->isSelected())
+			if (getForceField()->considerAtomPair(stretch_[i].atom1->ptr, stretch_[i].atom2->ptr))
 			{
 				energy_ += stretch_[i].values.k * (distance - stretch_[i].values.r0) * (distance - stretch_[i].values.r0);
 			}
@@ -197,8 +195,6 @@ namespace BALL
 			return;
 		}
 
-		bool use_selection = getForceField()->getUseSelection();
-
 		// iterate over all bonds, update the forces
 		for (Size i = 0 ; i < stretch_.size(); i++)
 		{
@@ -214,12 +210,12 @@ namespace BALL
 				//   A  -> m: 1e10
 				//   J/mol -> J: Avogadro
 				direction *= 1e13 / Constants::AVOGADRO * 2 * stretch_[i].values.k * (distance - stretch_[i].values.r0) / distance;
-
-				if (!use_selection || atom1.ptr->isSelected()) 
+	
+				if (getForceField()->considerAtom(atom1.ptr))
 				{
 					atom1.force -= direction;
-				}
-				if (!use_selection || atom2.ptr->isSelected()) 
+				}	
+				if (getForceField()->considerAtom(atom2.ptr))
 				{
 					atom2.force += direction;
 				}
