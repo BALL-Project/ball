@@ -19,14 +19,13 @@ ENDIF()
 
 ## define some directories
 ## TODO: I'm not sure what will be the most sensible approach here for BALL...
-IF ("${INSTALL_PREFIX}" STREQUAL ".")
+MESSAGE(STATUS install "${CMAKE_INSTALL_PREFIX}")
+IF ("${CMAKE_INSTALL_PREFIX}" STREQUAL ".")
 	SET(BALL_PATH ${PROJECT_SOURCE_DIR} CACHE STRING "Path to the top level install location." FORCE)
 	SET(BALL_DATA_PATH ${BALL_PATH}/data CACHE STRING "Path to the BALL data directory." FORCE)
-	SET(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR})
 ELSE()
-	SET(BALL_PATH ${INSTALL_PREFIX} CACHE STRING "Path to the top level install location." FORCE)
+	SET(BALL_PATH ${CMAKE_INSTALL_PREFIX} CACHE STRING "Path to the top level install location." FORCE)
 	SET(BALL_DATA_PATH ${BALL_PATH}/share/BALL/data CACHE STRING "Path to the BALL data directory." FORCE)
-	SET(CMAKE_INSTALL_PREFIX ${INSTALL_PREFIX})
 ENDIF()
 
 ## some information about the processor and system type
