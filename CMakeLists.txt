@@ -258,12 +258,6 @@ CONFIGURE_FILE(cmake/BALLTestConfig.h.in ${PROJECT_BINARY_DIR}/source/TEST/BALLT
 ADD_DEFINITIONS(${BALL_DEFINITIONS})
 
 ########################################################
-###    Documentation    														 ###
-########################################################
-
-INCLUDE(cmake/BALLDoc.cmake)
-
-########################################################
 ###    BUILD the lib																 ###
 ########################################################
 
@@ -282,19 +276,21 @@ IF (NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 	SET(BALL_ARCHIVE_INSTALL_DIRECTORY "lib")
 	SET(BALL_HEADER_INSTALL_DIRECTORY   ".")
 	SET(BALL_DATA_INSTALL_DIRECTORY    "share/BALL")
+	SET(BALL_DOCUMENTATION_INSTALL_DIRECTORY    "share/BALL/doc")
 	IF(WIN32)
 		SET(BALL_PYTHON_INSTALL_DIRECTORY  "bin")
 	ELSE()
 		SET(BALL_PYTHON_INSTALL_DIRECTORY  "lib")
 	ENDIF()
 ELSE()
-	SET(BALL_BUNDLE_INSTALL_DIRECTORY  "Applications")
-	SET(BALL_RUNTIME_INSTALL_DIRECTORY "Applications/BALLView.app/Contents/Frameworks")
-	SET(BALL_LIBRARY_INSTALL_DIRECTORY "Applications/BALLView.app/Contents/Frameworks")
-	SET(BALL_ARCHIVE_INSTALL_DIRECTORY "Applications/BALLView.app/Contents/Frameworks")
-	SET(BALL_DATA_INSTALL_DIRECTORY    "Applications/BALLView.app/Contents/Resources")
-	SET(BALL_HEADER_INSTALL_DIRECTORY  "Applications/BALLView.app/Contents/Frameworks")
-	SET(BALL_PYTHON_INSTALL_DIRECTORY  "Applications/BALLView.app/Contents/Frameworks")
+	SET(BALL_BUNDLE_INSTALL_DIRECTORY  					"Applications")
+	SET(BALL_RUNTIME_INSTALL_DIRECTORY 					"Applications/BALLView.app/Contents/Frameworks")
+	SET(BALL_LIBRARY_INSTALL_DIRECTORY 					"Applications/BALLView.app/Contents/Frameworks")
+	SET(BALL_ARCHIVE_INSTALL_DIRECTORY 					"Applications/BALLView.app/Contents/Frameworks")
+	SET(BALL_DATA_INSTALL_DIRECTORY    					"Applications/BALLView.app/Contents/Resources")
+	SET(BALL_DOCUMENTATION_INSTALL_DIRECTORY    "Applications/BALLView.app/Contents/Resources/doc")
+	SET(BALL_HEADER_INSTALL_DIRECTORY  					"Applications/BALLView.app/Contents/Frameworks")
+	SET(BALL_PYTHON_INSTALL_DIRECTORY  					"Applications/BALLView.app/Contents/Frameworks")
 ENDIF()
 
 ## big include file for headers and C files, which fills the BALL_sources variable
@@ -376,6 +372,12 @@ ADD_SUBDIRECTORY(source/PYTHON/EXTENSIONS)
 
 ## add BALLView target
 ADD_SUBDIRECTORY(source/APPLICATIONS/BALLVIEW)
+
+########################################################
+###    Documentation    														 ###
+########################################################
+
+INCLUDE(cmake/BALLDoc.cmake)
 
 ######################################################################
 ####        Installation Routines                                  ###
