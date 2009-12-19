@@ -25,6 +25,12 @@ IF(SIP_VERSION)
   SET(SIP_FOUND TRUE)
 ELSE(SIP_VERSION)
 
+	# determine the version of python we use
+	EXECUTE_PROCESS ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_version; print get_python_version()"
+		OUTPUT_VARIABLE PYTHON_VERSION
+		OUTPUT_STRIP_TRAILING_WHITESPACE
+	)
+
   # (a) Try to find the sip headers:
 
   # Use the path to the python installation as a hint for finding sip
@@ -44,6 +50,7 @@ ELSE(SIP_VERSION)
 
   # Use the path to the python installation as a hint for finding sip
   GET_FILENAME_COMPONENT(SIP_POSSIBLE_LIB_DIRS "${PYTHON_LIBRARIES}"  ABSOLUTE)
+	LIST(APPEND SIP_POSSIBLE_LIB_DIRS "/usr/lib/pyshared/python${PYTHON_VERSION}")
 
 	SET(OLD_CMAKE_FIND_LIBRARY_PREFIXES "${CMAKE_FIND_LIBRARY_PREFIXES}" CACHE INTERNAL "")
 	SET(CMAKE_FIND_LIBRARY_PREFIXES "")
