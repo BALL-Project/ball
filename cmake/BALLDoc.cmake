@@ -1,23 +1,29 @@
 #######################################################################
 #create Doxyfiles for html documentation
-set(CF_BALL_BIN_PATH ${PROJECT_BINARY_DIR})
-set(CF_BALL_SRC_PATH ${PROJECT_SOURCE_DIR})
+SET(CF_BALL_BIN_PATH ${PROJECT_BINARY_DIR})
+SET(CF_BALL_SRC_PATH ${PROJECT_SOURCE_DIR})
 
-find_package(Doxygen)
-find_package(LATEX)
+FIND_PACKAGE(Doxygen)
+FIND_PACKAGE(LATEX)
 
-if (DOXYGEN_FOUND)
-	configure_file(${PROJECT_SOURCE_DIR}/doc/Doxyfile.in ${PROJECT_BINARY_DIR}/doc/Doxyfile)
-	#configure_file(${PROJECT_SOURCE_DIR}/doc/doxygen/Doxyfile_internal.in ${PROJECT_BINARY_DIR}/doc/doxygen/Doxyfile_internal)
-	configure_file(${PROJECT_SOURCE_DIR}/doc/Doxyfile_dot.in ${PROJECT_BINARY_DIR}/doc/Doxyfile_dot)
-	#configure_file(${PROJECT_SOURCE_DIR}/doc/doxygen/Doxyfile_noclass.in ${PROJECT_BINARY_DIR}/doc/doxygen/Doxyfile_noclass)
-	#configure_file(${PROJECT_SOURCE_DIR}/doc/doxygen/Doxyfile_xml.in ${PROJECT_BINARY_DIR}/doc/doxygen/Doxyfile_xml)
-	#configure_file(${PROJECT_SOURCE_DIR}/doc/BALLView/Doxyfile.in ${PROJECT_BINARY_DIR}/doc/BALLView/Doxyfile)
-	#configure_file(${PROJECT_SOURCE_DIR}/doc/TUTORIAL/Doxyfile.in ${PROJECT_BINARY_DIR}/doc/TUTORIAL/Doxyfile)
+IF (BALL_ENABLE_PACKAGING)
+	SET(AUTO_BUILD_DOC "ALL")
+ELSE()
+	SET(AUTO_BUILD_DOC "")
+ENDIF()
+
+IF (DOXYGEN_FOUND)
+	CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/Doxyfile.in ${PROJECT_BINARY_DIR}/doc/Doxyfile)
+	#CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/doxygen/Doxyfile_internal.in ${PROJECT_BINARY_DIR}/doc/doxygen/Doxyfile_internal)
+	CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/Doxyfile_dot.in ${PROJECT_BINARY_DIR}/doc/Doxyfile_dot)
+	#CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/doxygen/Doxyfile_noclass.in ${PROJECT_BINARY_DIR}/doc/doxygen/Doxyfile_noclass)
+	#CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/doxygen/Doxyfile_xml.in ${PROJECT_BINARY_DIR}/doc/doxygen/Doxyfile_xml)
+	#CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/BALLView/Doxyfile.in ${PROJECT_BINARY_DIR}/doc/BALLView/Doxyfile)
+	#CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/TUTORIAL/Doxyfile.in ${PROJECT_BINARY_DIR}/doc/TUTORIAL/Doxyfile)
 	
 	#######################################################################
 	## doc
-	add_custom_target(doc
+	ADD_CUSTOM_TARGET(doc ${AUTO_BUILD_DOC}
 										COMMAND ${CMAKE_COMMAND} -E echo ""
 										COMMAND ${CMAKE_COMMAND} -E echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
 										COMMAND ${CMAKE_COMMAND} -E echo "Creating html documentation";
@@ -30,11 +36,17 @@ if (DOXYGEN_FOUND)
 										COMMAND ${CMAKE_COMMAND} -E echo "You can now open 'doc/html/index.html' in a web browser.";
 										COMMAND ${CMAKE_COMMAND} -E echo ""
 										COMMENT "Build the doxygen documentation"
+										COMPONENT "${COMPONENT_DOCUMENTATION_HTML}"
 										VERBATIM)
+
+	INSTALL(DIRECTORY   "${PROJECT_BINARY_DIR}/doc/html/"
+	        DESTINATION "${BALL_DOCUMENTATION_INSTALL_DIRECTORY}/BALL"
+					COMPONENT   "${COMPONENT_DOCUMENTATION_HTML}"
+  )
 	
 	#######################################################################
 	## doc_tidy
-	add_custom_target(doc_tidy
+	ADD_CUSTOM_TARGET(doc_tidy
 										COMMAND ${CMAKE_COMMAND} -E echo ""
 										COMMAND ${CMAKE_COMMAND} -E echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
 										COMMAND ${CMAKE_COMMAND} -E echo "Creating html documentation";
@@ -51,10 +63,10 @@ if (DOXYGEN_FOUND)
 										COMMENT "Build the doxygen documentation"
 										VERBATIM)
 	
-	if (DOXYGEN_DOT_FOUND OR DOXYGEN_DOT_EXECUTABLE)
+	IF (DOXYGEN_DOT_FOUND OR DOXYGEN_DOT_EXECUTABLE)
 		#######################################################################
 		## doc_dot target
-		add_custom_target(doc_dot
+		ADD_CUSTOM_TARGET(doc_dot
 											COMMAND ${CMAKE_COMMAND} -E echo ""
 											COMMAND ${CMAKE_COMMAND} -E echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
 											COMMAND ${CMAKE_COMMAND} -E echo "Creating DOT html documentation";
@@ -68,19 +80,19 @@ if (DOXYGEN_FOUND)
 											COMMAND ${CMAKE_COMMAND} -E echo ""
 											COMMENT "Build the doxygen documentation"
 											VERBATIM)
-	else()
-		Message(STATUS "DOT not found. Disabling target 'doc_dot'!")
-	endif()
+	ELSE()
+		MESSAGE(STATUS "DOT not found. Disabling target 'doc_dot'!")
+	ENDIF()
 		
 
-else()
-	Message(STATUS "Doxygen not found. Disabling all documentation targets!")
-endif()
+ELSE()
+	MESSAGE(STATUS "Doxygen not found. Disabling all documentation targets!")
+ENDIF()
 
-if (DOXYGEN_FOUND AND LATEX_COMPILER AND DVIPS_CONVERTER)
+IF (DOXYGEN_FOUND AND LATEX_COMPILER AND DVIPS_CONVERTER)
 	#######################################################################
 	# doc_tutorials target
-	add_custom_target(doc_tutorial
+	ADD_CUSTOM_TARGET(doc_tutorial ${AUTO_BUILD_DOC}
 										COMMAND ${CMAKE_COMMAND} -E echo ""
 										COMMAND ${CMAKE_COMMAND} -E echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
 										COMMAND ${CMAKE_COMMAND} -E echo "Creating BALL pdf tutorial";
@@ -97,6 +109,12 @@ if (DOXYGEN_FOUND AND LATEX_COMPILER AND DVIPS_CONVERTER)
 										COMMAND ${CMAKE_COMMAND} -E echo ""; 
 										COMMENT "Build the BALL pdf tutorial"
 										VERBATIM)
-else()
-	Message(STATUS "Doxygen or Latex missing. Disabling 'tutorial' target!")
-endif()
+
+	INSTALL(FILES   ${PROJECT_BINARY_DIR}/doc/tutorial.pdf
+	        DESTINATION "${BALL_DOCUMENTATION_INSTALL_DIRECTORY}/doc"
+					COMPONENT   "${COMPONENT_DOCUMENTATION_PDF}"
+  )
+
+ELSE()
+	MESSAGE(STATUS "Doxygen or Latex missing. Disabling 'tutorial' target!")
+ENDIF()
