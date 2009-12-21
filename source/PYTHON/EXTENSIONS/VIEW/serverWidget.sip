@@ -45,4 +45,6 @@ class ServerWidget
 	virtual bool isValid() const throw();
 	//virtual void dump(std::ostream& s = std::cout, Size = 0) const throw();
 
+	private:
+		void operator = (const ServerWidget&);
 };
