@@ -477,6 +477,17 @@ namespace BALL
 			FormatUnsupported(const char* file, int line);
 		};
 
+		/**
+		 * NotInitialized Exception
+		 *
+		 * Objects may throw this exception if they have not been sufficiently initialized.
+		 */
+		class BALL_EXPORT NotInitialized : public Exception::GeneralException
+		{
+			public:
+				NotInitialized(const char* file, int line, const String& reason);
+		};
+
 		/** Class handling uncaught exception globally.
 		*/
 		class BALL_EXPORT GlobalExceptionHandler
