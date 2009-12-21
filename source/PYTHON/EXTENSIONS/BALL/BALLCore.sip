@@ -277,6 +277,7 @@
 %Include atomBijection.sip
 %Include connectedComponentsProcessor.sip
 %Include defaultProcessors.sip
+%Include DNAMutator.sip
 %Include fragmentDB.sip
 %Include HBondProcessor.sip
 %Include reconstructFragmentProcessor.sip
