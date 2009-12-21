@@ -285,6 +285,7 @@
 %Include pyAtomHashGrid.sip
 %Include peptides.sip
 %Include numericalSAS.sip 
+%Include nucleotideMapping.sip
 %Include residueChecker.sip
 %Include RMSDMinimizer.sip
 // %Include rotamerLibrary.sip
