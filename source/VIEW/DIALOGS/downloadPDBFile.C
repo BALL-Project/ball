@@ -115,10 +115,12 @@ bool DownloadPDBFile::threadedDownload_(const String& url)
 
 	if (aborted_) return false;
 
+	TCPTransfer::Status status = thread_->getTCPTransfer().getStatusCode();
+
 	if (thread_->getTCPTransfer().getReceivedBytes() == 0 ||
-			thread_->getTCPTransfer().getStatusCode() != TCPTransfer::OK) 
+			status != TCPTransfer::OK)
 	{
-		if (thread_->getTCPTransfer().getReceivedBytes() == 0)
+		if (status!=TCPTransfer::CONNECT__ERROR && status!=TCPTransfer::PROXY__ERROR)
 		{
 			setStatusbarText(String("Could not download the given file. Maybe it does not exist on pdb.org? ") +
 											 thread_->getTCPTransfer().getErrorCode() + " occured.", true);
