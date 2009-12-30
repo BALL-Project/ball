@@ -280,6 +280,11 @@ namespace BALL
 				return PROXY__ERROR;
 			}
 
+			if(status==302 || status==404)
+			{
+				return FILENOTFOUND__ERROR;
+			}
+
 			if (status != 200)
 			{
 				return status;
