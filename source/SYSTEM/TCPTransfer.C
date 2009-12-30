@@ -455,9 +455,25 @@ namespace BALL
 		struct sockaddr_in host;  
 		host.sin_family = AF_INET;
 		host.sin_port	  = htons(port);
-		host.sin_addr 	= *(struct in_addr*)ht->h_addr;  
+		host.sin_addr 	= *(struct in_addr*)ht->h_addr;
 
-		if (connect(socket_, (struct sockaddr*)&host, sizeof(struct sockaddr)) == -1)
+		setBlock_(socket_, false);
+		Timer timer;
+		timer.start();
+		bool connected = 0;
+		while (!connected && timer.getClockTime()<TIMEOUT)
+		{
+			if (connect(socket_, (struct sockaddr*)&host, sizeof(struct sockaddr)) == -1)
+			{
+				connected = 0;
+			}
+			else connected=1;
+
+			if(!connected) usleep(200000); // sleep 0.2 seconds
+		}
+		setBlock_(socket_, true);
+
+		if(!connected)
 		{
 			if (!usingProxy()) status_ = CONNECT__ERROR;
 			else 					     status_ = PROXY__ERROR;
@@ -742,13 +758,27 @@ namespace BALL
 		host.sin_addr 	= *(struct in_addr*)ht->h_addr;  
 
 		// now connecting to passive ftp port
-		if(connect(socket2, (struct sockaddr*)&host, sizeof(struct sockaddr)) == -1)
+		setBlock_(socket2, false);
+		Timer timer;
+		timer.start();
+		bool connected = 0;
+		while (!connected && timer.getClockTime()<TIMEOUT)
+		{
+			if (connect(socket2, (struct sockaddr*)&host, sizeof(struct sockaddr)) == -1)
+			{
+				connected = 0;
+			}
+			else connected=1;
+
+			if(!connected) usleep(200000); // sleep 0.2 seconds
+		}
+		if(!connected)
 		{
 			GLOBAL_CLOSE(socket2);
 			status_ = CONNECT__ERROR;
 			return status_;
 		}
-		setBlock_(socket2, false);
+
 		// ----------------------------------- setting binary mode
 		query = "TYPE I\n";
 		sendData_(query, socket_);	
@@ -870,7 +900,7 @@ namespace BALL
 		while (received_bytes<0 && timer.getClockTime()<TIMEOUT)
 		{
 			received_bytes = getReceivedBytes_(socket); // returns -1 if there was an error (e.g. no connection)
-			if(received_bytes<0) sleep(0.2);
+			if(received_bytes<0) usleep(200000); // sleep 0.2 seconds
 		}
 		
 		setBlock_(socket, true);
