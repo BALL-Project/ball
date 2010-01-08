@@ -60,8 +60,7 @@ namespace BALL
 
 	string Path::getDefaultDataPath()
 	{	
-		string path = BALL_PATH;
-		path = path + FileSystem::PATH_SEPARATOR + "data" + FileSystem::PATH_SEPARATOR;
+		string path = BALL_DATA_PATH;
 		return path;
 	}
 

@@ -18,6 +18,7 @@
 
 // The path to the directory where BALL is installed.
 #undef BALL_PATH ""
+#define BALL_DATA_PATH BALL_PATH"/data/";
 
 // The string describes the binary format.
 #undef BALL_BINFMT ""

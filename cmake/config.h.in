@@ -18,6 +18,7 @@
 
 // The path to the directory where BALL is installed.
 #cmakedefine BALL_PATH "@BALL_PATH@"
+#cmakedefine BALL_DATA_PATH "@BALL_DATA_PATH@"
 
 // The string describes the binary format.
 #cmakedefine BALL_BINFMT "@BALL_BINFMT@"
