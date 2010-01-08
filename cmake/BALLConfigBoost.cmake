@@ -1,17 +1,20 @@
-FIND_PACKAGE(Boost COMPONENTS system thread iostreams asio)
+SET(BALL_BOOST_COMPONENTS system thread iostreams asio)
+FIND_PACKAGE(Boost COMPONENTS ${BALL_BOOST_COMPONENTS} QUIET)
 
 IF (NOT Boost_VERSION) ## we cannot test for Boost_FOUND since this requires all components
 	MESSAGE(SEND_ERROR "Could not find a suitable boost installation! This is a required dependency for BALL! Try setting BOOST_ROOT in ccmake!")
 ELSE()
-	IF (Boost_SYSTEM_FOUND)
-		SET(BALL_HAS_BOOST_SYSTEM TRUE)
-	ENDIF()
-	IF (Boost_THREAD_FOUND)
-		SET(BALL_HAS_BOOST_THREAD TRUE)
-	ENDIF()
-	IF (Boost_IOSTREAMS_FOUND)
-		SET(BALL_HAS_BOOST_IOSTREAMS TRUE)
-	ENDIF()
+	SET(BOOST_LIBRARIES "")
+	FOREACH(COMPONENT ${BALL_BOOST_COMPONENTS})
+		STRING(TOUPPER ${COMPONENT} COMPONENT)
+		
+		IF (Boost_${COMPONENT}_FOUND)
+			SET(BALL_HAS_BOOST_${COMPONENT} TRUE)
+			LIST(APPEND BOOST_LIBRARIES ${Boost_${COMPONENT}_LIBRARY})
+		ENDIF()
+	ENDFOREACH()
+	
+	## For asio, we have some more work to do...
 	IF (Boost_ASIO_FOUND)
 		SET(BALL_HAS_BOOST_ASIO TRUE)
 		SET(BALL_HAS_ASIO TRUE)
@@ -31,4 +34,3 @@ ELSE()
 		SET(BOOST_INCLUDE_DIRS ${ASIO_INCLUDE_DIR})
 	ENDIF()
 ENDIF()
-
