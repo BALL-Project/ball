@@ -43,18 +43,13 @@ AC_DEFUN([CF_GSL], [
 	dnl
 
 	AC_MSG_CHECKING(for libgsl)
-	if test "${GSL_LIBDIR}" != "" ; then
-		if test -a "${GSL_LIBDIR}/libgsl.a" ; then
-			GSL_LIBDIR="${GSL_LIBDIR}/"
-		fi
-	fi	
 	CF_FIND_LIB(GSL_LIBDIR, libgsl, ${GSL_LIBPATH})
 	
 	if test "${GSL_LIBDIR}" = "" ; then
 		AC_MSG_RESULT((not found!))
 		AC_MSG_RESULT()
-		AC_MSG_RESULT([The GSL library could not be found. Please specify the path to libgsl.a])
-		AC_MSG_RESULT([by passing the option --with-gsl-libs=DIR to configure.])
+		AC_MSG_RESULT([The GSL library could not be found. Please specify the path to libgsl.${SHARED_LIBRARY_SUFFIX}])
+		AC_MSG_RESULT([by passing the option --with-gsl-lib=DIR to configure.])
 		AC_MSG_RESULT([You may also set the environment variable GSL_LIBDIR to the correct])
 		AC_MSG_RESULT([path - configure will recognize this, too.])
 		AC_MSG_RESULT()
@@ -64,13 +59,13 @@ AC_DEFUN([CF_GSL], [
 	else
 		AC_MSG_CHECKING(for libgslcblas)
 		if test "${GSL_LIBDIR}" != "" ; then
-			if test -a "${GSL_LIBDIR}/libgslcblas.a" ; then
-				AC_MSG_RESULT(${GSL_LIBDIR}/libgslcblas.a)
-			else
+			CF_FIND_LIB(GSLCBLAS_LIBDIR, libgslcblas, ${GSL_LIBPATH})
+
+			if test "${GSLCBLAS_LIBDIR}" = "" ; then
 				AC_MSG_RESULT((not found!))
 				AC_MSG_RESULT()
 				AC_MSG_RESULT([The GSL library could not be found. Please specify the path to <libgsl.${SHARED_LIB_SUFFIX}>])
-				AC_MSG_RESULT([by passing the option --with-gsl-libs=DIR to configure.])
+				AC_MSG_RESULT([by passing the option --with-gsl-lib=DIR to configure.])
 				AC_MSG_RESULT([You may also set the environment variable GSL_LIB_DIR to the correct])
 				AC_MSG_RESULT([path - configure will recognize this, too.])
 				AC_MSG_RESULT()
