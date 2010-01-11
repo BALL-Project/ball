@@ -7,6 +7,7 @@ SET(SOURCES_LIST
 	assignShiftProcessor.C
 	clearShiftProcessor.C
 	EFShiftProcessor.C
+	empiricalHSShiftProcessor.C
 	experiment.C
 	HBondShiftProcessor.C
 	haighMallionShiftProcessor.C

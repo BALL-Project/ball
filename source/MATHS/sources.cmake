@@ -6,6 +6,8 @@ SET(SOURCES_LIST
 	angle.C
 	box3.C
 	circle3.C
+	cubicSpline1D.C
+	cubicSpline2D.C
 	function.C
 	line3.C
 	matrix44.C
