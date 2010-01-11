@@ -1536,27 +1536,6 @@ namespace BALL
 			setMenuHelp("tips.html#3D");
 			dual_stereo_different_display_action_->setCheckable(true);
 
-#ifdef BALL_HAS_RTFACT	
-			// ======================== Display->Continuous Loop ===============================================
-			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
-			
-			String description_cl = "Shortcut|Display|ContinuousLoop|SwitchOnOff";
-
-			start_continuous_loop_action_ = insertMenuEntry(MainControl::DISPLAY_CONTINUOUSLOOP, "Start", this, 
-					SLOT(toggleContinuousLoop()), "Shortcut|Display|ContinuousLoop|Start");
-			setMenuHint("Switch the continuous loop on");
-
-			start_continuous_loop_action_->setEnabled(false);
-			//setMenuHelp(help_url); TODO
-
-			stop_continuous_loop_action_ = insertMenuEntry(MainControl::DISPLAY_CONTINUOUSLOOP, "Stop", this, 
-					SLOT(toggleContinuousLoop()), "Shortcut|Display|ContinuousLoop|Stop");	
-			setMenuHint("Switch the continuous loop off");
-
-			stop_continuous_loop_action_->setEnabled(true);
-			setMenuHelp(help_url);
-#endif
-
 			// ======================== Display->Viewpoint ===============================================
 			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT);
 
@@ -1706,11 +1685,6 @@ namespace BALL
 			                                    !busy && !animation_running);
 			
 			clear_animation_action_->setEnabled(animation_points_.size() > 0 && !animation_running);
-
-#ifdef BALL_HAS_RTFACT	
-			stop_continuous_loop_action_->setEnabled(continuous_loop_);
-			start_continuous_loop_action_->setEnabled(!continuous_loop_);
-#endif
 
 			window_menu_entry_->setChecked(isVisible());
 		}
@@ -2866,7 +2840,7 @@ namespace BALL
 			// first clean up
 			exitStereo();
 
-			return;
+			return; // TODO: reactivate
 			// AKD: what is happening here?
 			GLRenderWindow* new_widget = new GLRenderWindow(0, String(tr("blubb")).c_str(), Qt::Window);
 			new_widget->makeCurrent();
@@ -3054,8 +3028,11 @@ namespace BALL
 				renderers_[0]->loop_mutex.lock();
 				renderers_[0]->wait_for_render.wakeAll();
 				renderers_[0]->loop_mutex.unlock();
-				stop_continuous_loop_action_->setEnabled(true);
-				start_continuous_loop_action_->setEnabled(false);	
+				// set the menu buttons correctly
+				//stop_continuous_loop_action_->setEnabled(true);
+				//start_continuous_loop_action_->setEnabled(false);	
+				// set the icon
+				//toggle_continuous_loop_action_->setChecked(true);
 				setStatusbarText("Switched continuous loop on", true);
 			}
 		}
@@ -3065,9 +3042,12 @@ namespace BALL
 			continuous_loop_ = false;	
 			if (renderers_[0]->isContinuous())
 			{
-				renderers_[0]->useContinuousLoop(false);	
-				stop_continuous_loop_action_->setEnabled(false);
-				start_continuous_loop_action_->setEnabled(true);
+				renderers_[0]->useContinuousLoop(false);
+				// set the menu buttons correctly
+				//stop_continuous_loop_action_->setEnabled(false);
+				//start_continuous_loop_action_->setEnabled(true);
+				// set the icon
+				//toggle_continuous_loop_action_->setChecked(false);
 				setStatusbarText("Switched continuous loop off", true);
 			}
 		}
