@@ -103,9 +103,9 @@ GENERATE_LATEX         = NO
 
 LATEX_OUTPUT           = latex
 
-LATEX_CMD_NAME         = latex
+LATEX_CMD_NAME         = "@LATEX_COMPILER@"
 
-MAKEINDEX_CMD_NAME     = makeindex
+MAKEINDEX_CMD_NAME     = "@MAKEINDEX_COMPILER@"
 
 COMPACT_LATEX          = NO
 
@@ -117,7 +117,7 @@ LATEX_HEADER           =
 
 PDF_HYPERLINKS         = NO
 
-USE_PDFLATEX           = NO
+USE_PDFLATEX           = YES
 
 LATEX_BATCHMODE        = NO
 
@@ -231,7 +231,7 @@ DIRECTORY_GRAPH        = YES
 
 DOT_IMAGE_FORMAT       = png
 
-DOT_PATH               = @CF_BALL_SRC_PATH@/doc
+DOT_PATH               = "@DOXYGEN_DOT_PATH@"
 
 DOTFILE_DIRS           = 
 

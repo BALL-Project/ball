@@ -29,7 +29,7 @@ IF (DOXYGEN_FOUND)
 										COMMAND ${CMAKE_COMMAND} -E echo "Creating html documentation";
 										COMMAND ${CMAKE_COMMAND} -E echo "";   
 										COMMAND ${CMAKE_COMMAND} -E remove_directory doc/html
-										COMMAND ${CMAKE_COMMAND} -E chdir doc doxygen Doxyfile
+										COMMAND ${CMAKE_COMMAND} -E chdir doc ${DOXYGEN_EXECUTABLE} Doxyfile
 										COMMAND ${CMAKE_COMMAND} -E echo "";
 										COMMAND ${CMAKE_COMMAND} -E echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
 										COMMAND ${CMAKE_COMMAND} -E echo "The documentation has been successfully created.";
@@ -55,7 +55,7 @@ IF (DOXYGEN_FOUND)
 										COMMAND ${CMAKE_COMMAND} -E echo "Creating html documentation";
 										COMMAND ${CMAKE_COMMAND} -E echo "";   
 										COMMAND ${CMAKE_COMMAND} -E remove_directory doc/html
-										COMMAND ${CMAKE_COMMAND} -E chdir doc doxygen Doxyfile
+										COMMAND ${CMAKE_COMMAND} -E chdir doc ${DOXYGEN_EXECUTABLE} Doxyfile
 										COMMAND ${CMAKE_COMMAND} -E echo "Running tidy...";
 										COMMAND ${CMAKE_COMMAND} -E chdir doc/html tidy -m -i -asxml -q -bare -clean *htm* 2>/dev/null | true
 										COMMAND ${CMAKE_COMMAND} -E echo "Finshed Tunning tidy...";
@@ -75,7 +75,7 @@ IF (DOXYGEN_FOUND)
 											COMMAND ${CMAKE_COMMAND} -E echo "Creating DOT html documentation";
 											COMMAND ${CMAKE_COMMAND} -E echo "";   
 											COMMAND ${CMAKE_COMMAND} -E remove_directory doc/html-dot
-											COMMAND ${CMAKE_COMMAND} -E chdir doc doxygen Doxyfile_dot
+											COMMAND ${CMAKE_COMMAND} -E chdir doc ${DOXYGEN_EXECUTABLE} Doxyfile_dot
 											COMMAND ${CMAKE_COMMAND} -E echo "";
 											COMMAND ${CMAKE_COMMAND} -E echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
 											COMMAND ${CMAKE_COMMAND} -E echo "The documentation has been successfully created.";
@@ -100,11 +100,11 @@ IF (DOXYGEN_FOUND AND LATEX_COMPILER AND DVIPS_CONVERTER)
 										COMMAND ${CMAKE_COMMAND} -E echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
 										COMMAND ${CMAKE_COMMAND} -E echo "Creating BALL pdf tutorial";
 										COMMAND ${CMAKE_COMMAND} -E echo "";   
-										COMMAND ${CMAKE_COMMAND} -E chdir ${PROJECT_SOURCE_DIR}/doc/TUTORIAL/	pdflatex tutorial.tex
-										COMMAND ${CMAKE_COMMAND} -E chdir ${PROJECT_SOURCE_DIR}/doc/TUTORIAL/	bibtex tutorial
-										COMMAND ${CMAKE_COMMAND} -E chdir ${PROJECT_SOURCE_DIR}/doc/TUTORIAL/	makeindex tutorial.idx
-										COMMAND ${CMAKE_COMMAND} -E chdir ${PROJECT_SOURCE_DIR}/doc/TUTORIAL/	pdflatex tutorial.tex
-										COMMAND ${CMAKE_COMMAND} -E chdir ${PROJECT_SOURCE_DIR}/doc/TUTORIAL/	pdflatex tutorial.tex
+										COMMAND ${CMAKE_COMMAND} -E chdir ${PROJECT_SOURCE_DIR}/doc/TUTORIAL/	${PDFLATEX_COMPILER} tutorial.tex
+										COMMAND ${CMAKE_COMMAND} -E chdir ${PROJECT_SOURCE_DIR}/doc/TUTORIAL/	${BIBTEX_COMPILER} tutorial
+										COMMAND ${CMAKE_COMMAND} -E chdir ${PROJECT_SOURCE_DIR}/doc/TUTORIAL/	${MAKEINDEX_COMPILER} tutorial.idx
+										COMMAND ${CMAKE_COMMAND} -E chdir ${PROJECT_SOURCE_DIR}/doc/TUTORIAL/	${PDFLATEX_COMPILER} tutorial.tex
+										COMMAND ${CMAKE_COMMAND} -E chdir ${PROJECT_SOURCE_DIR}/doc/TUTORIAL/	${PDFLATEX_COMPILER} tutorial.tex
 										COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/doc/TUTORIAL/tutorial.pdf doc/tutorial.pdf
 										COMMAND ${CMAKE_COMMAND} -E echo "";
 										COMMAND ${CMAKE_COMMAND} -E echo "The BALL tutorial in PDF format has been successfully created:"; 
