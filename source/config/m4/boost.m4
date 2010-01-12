@@ -12,10 +12,10 @@ AC_DEFUN([CF_BOOST], [
 		AC_DEFINE(PROJECT[]_HAS_BOOST_THREAD)
 	fi
 
-	AX_BOOST_IOSTREAMS()
-	if test "$ax_cv_boost_iostreams" = yes; then
-		AC_DEFINE(PROJECT[]_HAS_BOOST_IOSTREAMS)
-	fi
+dnl	AX_BOOST_IOSTREAMS()
+dnl	if test "$ax_cv_boost_iostreams" = yes; then
+dnl		AC_DEFINE(PROJECT[]_HAS_BOOST_IOSTREAMS)
+dnl	fi
 
 	PROJECT[]_INCLUDES="${PROJECT[]_INCLUDES}"
 	BOOST_CPPFLAGS=$(echo ${BOOST_CPPFLAGS} | ${SED} "s_-I\s*/usr/include\(\s\|$\)_ _g")
