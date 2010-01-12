@@ -2,8 +2,8 @@
    BALL is a C++ framework for molecular modeling and structural 
    bioinformatics.
 
-   Copyright (C) Oliver Kohlbacher, Hans-Peter Lenhof, Andreas
-	 Hildebrandt and others 1996-2009
+   Copyright (C) Andreas Hildebrandt, Oliver Kohlbacher, Hans-Peter 
+   Lenhof, and others 1996-2010
 
    
    This library is free software; you can redistribute it and/or
@@ -23,11 +23,11 @@
 
    You can contact the authors by electronic mail
 
+     Andreas Hildebrandt: anhi@bioinf.uni-sb.de
+
      Oliver Kohlbacher: oliver.kohlbacher@uni-tuebingen.de 
 
      Hans-Peter Lenhof: len@bioinf.uni-sb.de
-     
-		 Andreas Hildebrandt: anhi@bioinf.uni-sb.de
 
    or visit our website at
 
