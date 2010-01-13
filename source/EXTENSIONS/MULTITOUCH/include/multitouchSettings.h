@@ -6,11 +6,11 @@
 # include <BALL/COMMON/global.h>
 #endif
 
-#ifdef BALL_COMPILER_MSVC
-# include "../include/ui_multitouchSettings.h"
-#else
-# include "../include/multitouchSettingsData.h"
-#endif
+//#ifdef BALL_COMPILER_MSVC
+# include "ui_multitouchSettings.h"
+//#else
+//# include "../include/multitouchSettingsData.h"
+//#endif
 
 // TODO: register as a preferencesentry
 #ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY

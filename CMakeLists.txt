@@ -377,6 +377,9 @@ ADD_SUBDIRECTORY(source/PYTHON/EXTENSIONS)
 ## add BALLView target
 ADD_SUBDIRECTORY(source/APPLICATIONS/BALLVIEW)
 
+## add the plugins
+ADD_SUBDIRECTORY(source/EXTENSIONS)
+
 ########################################################
 ###    Documentation    														 ###
 ########################################################
