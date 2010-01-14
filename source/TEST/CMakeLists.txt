@@ -3,10 +3,7 @@ PROJECT("BALL_tests")
 
 ENABLE_TESTING()
 
-## TODO: we want to set up a CDash or Dart ASAP...
-#INCLUDE(Dart)
-
-OPTION(BALL_TEST_VERBOSE "Use verbose output for the tests" OFF)
+OPTION(BALL_TEST_VERBOSE "Use verbose output for the tests" ON)
 
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 INCLUDE_DIRECTORIES(${PROJECT_BINARY_DIR})
