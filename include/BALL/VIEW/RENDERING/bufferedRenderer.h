@@ -32,7 +32,10 @@ namespace BALL
 		public:
 			BufferedRenderer()
 			 : Renderer(), 
-			 	 bufferFormat() { }
+			 	 bufferFormat(),
+				 offset_(0),
+				 stride_(0)
+		 { }
 
 			virtual ~BufferedRenderer() throw() { }
 
@@ -42,10 +45,11 @@ namespace BALL
 			 */
 			bool setFrameBufferFormat(const FrameBufferFormat &format)
 			{
-				if( supports(format) )
+				if ( supports(format) )
 				{
 					bufferFormat = format;
-                    formatUpdated();					
+					formatUpdated();					
+
 					return true;
 				}
 
@@ -88,6 +92,14 @@ namespace BALL
 				const PixelFormat &format) const
                 throw(BALL::Exception::FormatUnsupported) = 0;
 
+			/** Set an offset into the data buffer 
+			 */
+			virtual void setOffset(Size offset) {offset_ = offset;}
+			
+			/** Set a stride for the data buffer
+			 */
+			virtual void setStride(Size stride) {stride_ = stride;}
+
 		protected:
 
 			/** Checks if a particular FrameBufferFormat is supported by the renderer.
@@ -97,7 +109,7 @@ namespace BALL
 			 */
 			virtual bool supports(const FrameBufferFormat &format) const = 0;
 
-            /** This is called once the FrameBufferFormat has been set so the renderer
+			/** This is called once the FrameBufferFormat has been set so the renderer
 			 *  can perform any initialization steps that are needed.
 			 */
 			virtual void formatUpdated() = 0;
@@ -115,6 +127,9 @@ namespace BALL
 			/** Returns the current FrameBufferFormat. */
 			const FrameBufferFormat &getFrameBufferFormat() const
 			{ return bufferFormat; }
+
+			Size offset_;
+			Size stride_;
 
 		private:
 
