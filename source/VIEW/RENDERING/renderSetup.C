@@ -347,20 +347,75 @@ namespace BALL
 
 		bool RenderSetup::exportPNG(const String& filename)
 		{
-			if (!gl_target_)
-				return false;
+			// is the target a glRenderWindow?
+			if (gl_target_)
+			{
+				// Yes => grab its frame buffer
+				render_mutex_.lock();
 
-			render_mutex_.lock();
+				makeCurrent();
+				QImage image(gl_target_->grabFrameBuffer(true));
 
-			makeCurrent();
+				render_mutex_.unlock();
 
-			QImage image(gl_target_->grabFrameBuffer(true));
+				bool ok = image.save(filename.c_str(), "PNG");
 
-			render_mutex_.unlock();
+				return ok;
+			}
+			else
+			{
+				// let's see...
 
-			bool ok = image.save(filename.c_str(), "PNG");
+				// Nope. Let's try to export the buffer directly
+				render_mutex_.lock();
 
-			return ok;
+				bool ok = false;
+
+				FrameBufferPtr buffer = target->getBuffer();
+				if (buffer->getFormat().getPixelFormat() == PixelFormat::RGBF_96)
+				{
+					// Unfortunately, we will have to convert the data pixel by pixel, since QImage does
+					// not seem to support anything like RGBF_96
+
+					float *data = (float*)(buffer->getData());
+
+					Size width  = (Size)renderer->getWidth();
+					Size height = (Size)renderer->getHeight();
+
+					QImage image(width, height, QImage::Format_RGB888);
+
+					Size line_width = width*3;
+
+					QRgb value;
+					for (Position current_line = 0; current_line < height; ++current_line)
+					{
+						for (Position current_col = 0; current_col < width; ++current_col)
+						{
+							Position current_offset = 3*(width*current_line + current_col);
+
+							int red   = std::min((int)(data[current_offset  ]*255.), 255);
+							int green = std::min((int)(data[current_offset+1]*255.), 255);
+							int blue  = std::min((int)(data[current_offset+2]*255.), 255);
+
+							value = qRgb(red, green, blue);
+
+							image.setPixel(current_col, current_line, value);
+						}
+					}
+
+					render_mutex_.unlock();
+
+					ok = image.save(filename.c_str(), "PNG");
+				} 
+				else 
+				{
+					Log.error() << "RenderSetup::exportPNG(): Frame Buffer format not supported!" << std::endl;
+				}
+
+				target->releaseBuffer(buffer);
+
+				return ok;
+			}
 		}
 
 		void RenderSetup::bufferRepresentation(const Representation& rep)
