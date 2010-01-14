@@ -219,12 +219,14 @@ namespace BALL
 
 			description = "Shortcut|EditMode|SetElement";
 			QIcon icon3(path.find("graphics/element.png").c_str());
-			element_action_ = new QAction(icon3, "Set element", this);
+			element_action_ = new QAction(icon3, "Set &Editor Element", this);
 			element_action_->setToolTip("Edit mode: Choose element for next atom, to modify atom under cursor: Double left click");
 			element_action_->setObjectName(element_action_->text());
 			registerForHelpSystem(element_action_, "scene.html#choose_element");
 			connect(element_action_, SIGNAL(triggered()), this, SLOT(changeElement_()));
 			getMainControl()->getShortcutRegistry().registerShortcut(description, element_action_);
+			QMenu* qmenu = getMainControl()->initPopupMenu(MainControl::BUILD);
+			qmenu->addAction(element_action_);
 
 			new_molecule_action_ = insertMenuEntry(MainControl::BUILD, "Create new molecule", 
 												this, SLOT(createNewMolecule()), "Shortcut|Build|Create_new_molecule");
