@@ -1684,7 +1684,34 @@ namespace BALL
 					if (RTTI::isKindOf<GLRenderWindow>(*(renderer->target)))
 						static_cast<GLRenderWindow*>(renderer->target)->swapBuffers();
 
-					if (renderer->isContinuous())
+					// has the renderer reached the end of its live span?
+					if (renderer->getTimeToLive() == 0)
+					{
+						renderer->useContinuousLoop(false);
+						renderer->stop();
+
+						renderer->loop_mutex.lock();
+						renderer->wait_for_render.wakeAll();
+						renderer->loop_mutex.unlock();
+
+						renderer->wait(100);
+
+						std::vector<boost::shared_ptr<RenderSetup> >::iterator it;
+
+						for (it = renderers_.begin(); it != renderers_.end(); ++it)
+						{
+							if (it->get() == renderer)
+							{
+								delete((*it)->renderer);
+								delete((*it)->target);
+
+								renderers_.erase(it);
+								
+								break;
+							}
+						}
+					} 
+					else if (renderer->isContinuous())
 					{
 						renderer->loop_mutex.lock();
 						renderer->wait_for_render.wakeAll();
