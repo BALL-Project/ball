@@ -218,6 +218,24 @@ namespace BALL {
 				 */
 				bool isContinuous() { return use_continuous_loop_; }
 
+				/** Sets the number of render operations this renderer should perform.
+				 *
+				 *  Every render operation will decrease the time to live of this RenderSetup.
+				 *  If ttl == 0, the owner of this RenderSetup (e.g., the Scene), will usually
+				 *  destroy this instance.
+				 *
+				 *  To represent an infinite live time, set ttl = -1 (this is also the default).
+				 */
+				void setTimeToLive(int ttl) { ttl_ = ttl; }
+
+				/** Returns the time to live for this renderer.
+				 */
+				int getTimeToLive() const { return ttl_; }
+
+				/** Export rendered image to PNG after time to live has expired.
+				 */
+				void exportPNGAfterTTL(String filename) { export_after_ttl_ = true; export_after_ttl_filename_ = filename; }
+
 				/** Ensure correct current rendering context.
 				 		
 					  If the target type uses a GL context, this is made current if
@@ -268,6 +286,12 @@ namespace BALL {
 				// This pointer is used to avoid uneccessary RTTI calls and casting. If the renderer is not a
 				// GLRenderer or one of its derived classes, this pointer will simply be NULL
 				GLRenderer* gl_renderer_;
+
+				// The number of render operations to perform before destruction
+				int ttl_;
+
+				bool export_after_ttl_;
+				String export_after_ttl_filename_;
 		};
 
 		/** This class is used for communication of render events over thread boundaries.

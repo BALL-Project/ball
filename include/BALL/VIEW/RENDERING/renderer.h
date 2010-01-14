@@ -166,7 +166,7 @@ namespace BALL
 			bool hasStage() const;
 
 			/// Set the size of the display
-			virtual void setSize(float width, float height) { width_ = width; height_ = height;}
+			virtual void setSize(float width, float height) {width_ = width; height_ = height;}
 
 			///
 			virtual float getWidth() const { return width_;}
@@ -275,10 +275,10 @@ namespace BALL
 			//_
 			const Stage*		stage_;
 
-			//_
+			//_The width of the render area
 			float 					width_;
 
-			//_
+			//_The height of the render area
 			float 					height_;
 
 			//_

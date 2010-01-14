@@ -37,7 +37,10 @@ namespace BALL
 				scene_(scene),
 				stage_(stage),
 				render_mutex_(true),
-				show_ruler_(false)
+				show_ruler_(false),
+				ttl_(-1),
+				export_after_ttl_(false),
+				export_after_ttl_filename_()
 		{
 			gl_target_   = dynamic_cast<GLRenderWindow*>(target);
 			gl_renderer_ = dynamic_cast<GLRenderer*>(renderer);
@@ -58,7 +61,10 @@ namespace BALL
 				scene_(rs.scene_),
 				stage_(rs.stage_),
 				render_mutex_(true),
-				show_ruler_(rs.show_ruler_)
+				show_ruler_(rs.show_ruler_),
+				ttl_(rs.ttl_),
+				export_after_ttl_(rs.export_after_ttl_),
+				export_after_ttl_filename_(rs.export_after_ttl_filename_)
 		{
 			gl_target_   = dynamic_cast<GLRenderWindow*>(target);
 			gl_renderer_ = dynamic_cast<GLRenderer*>(renderer);
@@ -80,6 +86,9 @@ namespace BALL
 			use_continuous_loop_ = rs.use_continuous_loop_;
 			scene_ = rs.scene_;
 			stage_ = rs.stage_;
+			ttl_ = rs.ttl_;
+			export_after_ttl_ = rs.export_after_ttl_;
+			export_after_ttl_filename_ = rs.export_after_ttl_filename_;
 
 			show_ruler_ = rs.show_ruler_;
 
@@ -147,7 +156,6 @@ namespace BALL
 				}
 			}
 
-			renderer->setSize(width, height);
 			render_mutex_.unlock();
 
 			updateCamera();
@@ -301,6 +309,9 @@ namespace BALL
 
 			render_mutex_.lock();
 
+			// reduce the ttl
+			if (ttl_ > 0) --ttl_;
+
 			renderer->setPreviewMode(scene_->use_preview_ && scene_->preview_);
 			renderer->showLightSources(scene_->show_light_sources_);
 
@@ -329,6 +340,9 @@ namespace BALL
 				renderer->renderRuler();
 
 			render_mutex_.unlock();
+
+			if (ttl_ == 0 && export_after_ttl_)
+				exportPNG(export_after_ttl_filename_);
 		}
 
 		bool RenderSetup::exportPNG(const String& filename)
