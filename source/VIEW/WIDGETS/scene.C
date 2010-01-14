@@ -2682,35 +2682,71 @@ namespace BALL
 				return renderers_[0]->exportPNG(filename);
 
 			// ok, we have to do this the hard way...	
-			GLOffscreenTarget* new_widget = new GLOffscreenTarget(main_display_, filename);
-			new_widget->init();
-			new_widget->resize(width(), height());
-			new_widget->prepareRendering();
 
-			GLRenderer* gr = new GLRenderer;
-			gr->init(*this);
-			gr->enableVertexBuffers(want_to_use_vertex_buffer_);
-			gr->setSize(width(), height());
+			// What kind of renderer do we have to encapsulate?
+			if (RTTI::isKindOf<GLRenderer>(*(renderers_[0]->renderer)))
+			{
+				// it's a GLRenderer => use tiling
+				GLOffscreenTarget* new_widget = new GLOffscreenTarget(main_display_, filename);
+				new_widget->init();
+				new_widget->resize(width(), height());
+				new_widget->prepareRendering();
 
-			TilingRenderer *trenderer = new TilingRenderer(gr, offscreen_factor_*width(), offscreen_factor_*height());
-			trenderer->init(*this);
-			trenderer->setSize(width(), height());
+				GLRenderer* gr = new GLRenderer;
+				gr->init(*this);
+				gr->enableVertexBuffers(want_to_use_vertex_buffer_);
+				gr->setSize(width(), height());
 
-			boost::shared_ptr<RenderSetup> tr_rs(new RenderSetup(trenderer, new_widget, this, stage_));
-			resetRepresentationsForRenderer_(*tr_rs);
+				TilingRenderer *trenderer = new TilingRenderer(gr, offscreen_factor_*width(), offscreen_factor_*height());
+				trenderer->init(*this);
+				trenderer->setSize(width(), height());
 
-			renderers_.push_back(tr_rs);
-			updateGL();
-			renderers_.pop_back();
+				boost::shared_ptr<RenderSetup> tr_rs(new RenderSetup(trenderer, new_widget, this, stage_));
 
-			delete(trenderer);
-			delete(gr);
-			delete(new_widget);
+				resetRepresentationsForRenderer_(*tr_rs);
 
-			// TODO: we should not rely on the first renderer being the one
-			// related to the main_display_!
-			renderers_[0]->resize(width(), height());
-			updateGL();
+				renderers_.push_back(tr_rs);
+				updateGL();
+				renderers_.pop_back();
+
+				delete(trenderer);
+				delete(gr);
+				delete(new_widget);
+
+				// TODO: we should not rely on the first renderer being the one
+				// related to the main_display_!
+				renderers_[0]->resize(width(), height());
+				updateGL();
+
+			}
+			else if (RTTI::isKindOf<t_RaytracingRenderer>(*(renderers_[0]->renderer)))
+			{
+				// create a new renderer
+				t_RaytracingRenderer* renderer = new t_RaytracingRenderer;
+
+				// build a new offscreen target for our renderer
+				RenderWindow<BALL_DEFAULT_PIXEL_TYPE>* target = new RenderWindow<BALL_DEFAULT_PIXEL_TYPE>;
+
+				// and combine it into a new render setup
+				boost::shared_ptr<RenderSetup> tr_rs(new RenderSetup(renderer, target, this, stage_));
+				renderers_.push_back(tr_rs);
+
+				tr_rs->init();
+
+				applyPreferences();
+
+				resetRepresentationsForRenderer_(*tr_rs);
+
+				// iterate 10 times for antialiasing
+				tr_rs->useContinuousLoop(true);
+				tr_rs->setTimeToLive(20);
+				tr_rs->exportPNGAfterTTL(filename);
+
+				tr_rs->resize(offscreen_factor_ * width(), offscreen_factor_ * height());
+				tr_rs->start();
+
+				updateGL();
+			}
 
 			ok = true;
 
