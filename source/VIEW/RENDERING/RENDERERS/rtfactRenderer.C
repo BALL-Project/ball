@@ -529,19 +529,24 @@ namespace BALL
 			if (objects_.size() != 0)
 			{
 				if (fmt.getPixelFormat() == PixelFormat::RGBF_96)
-					m_renderer.attachFrameBuffer((float*)buffer->getData(), 3, fmt.getWidth(), fmt.getHeight(), fmt.getWidth());
+				{
+ 					m_renderer.attachFrameBuffer((float*)buffer->getData()+offset_, 3, width_, height_, width_+stride_);
+				}
 				else if (fmt.getPixelFormat() == PixelFormat::RGBA_32)
 				{
-					printf("using char buffer\n");
-					m_renderer.attachFrameBuffer((unsigned char*)buffer->getData(), 4, fmt.getWidth(), fmt.getHeight(), fmt.getWidth());
+ 					m_renderer.attachFrameBuffer((unsigned char*)buffer->getData()+offset_, 4, width_, height_, width_+stride_);
 				}
 				else
+				{
 					return;
+				}
 
 				m_renderer.renderToBuffer();
 
 				if (use_continuous_loop_)
+				{
 					m_renderer.pauseAnimation(true);
+				}
 			}
 		}
 
