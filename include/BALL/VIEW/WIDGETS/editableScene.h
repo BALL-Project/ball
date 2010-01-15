@@ -140,7 +140,7 @@ class BALL_VIEW_EXPORT EditableScene
 	///
 	void setElementCursor();
 
-	////////////////////////////////////////
+	/////////////////////////////////////////
 	public slots:
 
 	virtual void mousePressEvent(QMouseEvent* e);
@@ -162,6 +162,7 @@ class BALL_VIEW_EXPORT EditableScene
 	virtual void editMode_();
 	void deleteAtom_();
 	void changeElement_();
+	void createBond_();
 	void deleteBond_();
 	void changeBondOrder_();
 	void activatedOrderItem_(QAction* action);
@@ -217,7 +218,7 @@ class BALL_VIEW_EXPORT EditableScene
 	void renderGrid_();
 
 	QAction* edit_id_, *new_molecule_action_, *optimize_action_, *add_hydrogens_action_, *element_action_;	
-	QAction* bondorders_action_;
+	QAction* bondorders_action_, *bond_action_;
 	
 	Atom* current_atom_;
 	Bond* current_bond_;

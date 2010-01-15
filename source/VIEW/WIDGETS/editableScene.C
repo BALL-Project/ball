@@ -191,7 +191,7 @@ namespace BALL
 			description = "Shortcut|QuicklyAssignBondOrders";
 			bondorders_action_ = new QAction(loader.getIcon("actions/molecule-assign-bond-orders"), "Quickly optimize bond orders", this);
 			bondorders_action_->setObjectName(bondorders_action_->text());
-			bondorders_action_->setToolTip("Compute the highlighted structures bond orders");
+			bondorders_action_->setToolTip("Compute the bond orders of the highlighted structures");
 			//TODO
 			//registerForHelpSystem(bondorders_action_, "scene.html#bondorders");
 			connect(bondorders_action_, SIGNAL(triggered()), this, SLOT(computeBondOrders()));
@@ -207,7 +207,7 @@ namespace BALL
 
 			description = "Shortcut|SaturateWithHydrogens";
 			add_hydrogens_action_ = new QAction(loader.getIcon("actions/molecule-add-hydrogens"), "Saturate with Hydrogens", this);
-			add_hydrogens_action_->setToolTip("Saturate the highlighted structure with hydrogens (with regards to formal charges).");
+			add_hydrogens_action_->setToolTip("Saturate the highlighted structure with hydrogens (with regards to formal charges)");
 			add_hydrogens_action_->setObjectName(add_hydrogens_action_->text());
 			registerForHelpSystem(add_hydrogens_action_, "scene.html#saturate");
 			connect(add_hydrogens_action_, SIGNAL(triggered()), this, SLOT(saturateWithHydrogens()));
@@ -225,10 +225,22 @@ namespace BALL
 			QMenu* qmenu = getMainControl()->initPopupMenu(MainControl::BUILD);
 			qmenu->addAction(element_action_);
 
+			description = "Shortcut|EditMode|CreateBond";
+			bond_action_ = new QAction(loader.getIcon("actions/create-bond"), "Create Bond", this);
+			bond_action_->setToolTip("Edit mode: If two atoms are selected, create a single bond between them");
+			bond_action_->setObjectName(bond_action_->text());
+			registerForHelpSystem(bond_action_, "scene.html#create_bond");
+			//TODO registerForHelpSystem not done yet
+			connect(bond_action_, SIGNAL(triggered()), this, SLOT(createBond_()));
+			getMainControl()->getShortcutRegistry().registerShortcut(description, bond_action_);
+// 			qmenu = getMainControl()->initPopupMenu(MainControl::BUILD);
+			qmenu->addAction(bond_action_);
+
+
+			//TODO create an icon
 			new_molecule_action_ = insertMenuEntry(MainControl::BUILD, "Create new molecule", 
 												this, SLOT(createNewMolecule()), "Shortcut|Build|Create_new_molecule");
 			setMenuHint("Create a new molecule for editing");
-			//TODO create an icon
 
 			toolbar_edit_controls_->setObjectName("Edit Control toolbar");
 			toolbar_edit_controls_->setIconSize(QSize(23,23));
@@ -604,7 +616,7 @@ namespace BALL
 				emit newEditOperation(eo);
 
 				//set the bond
-				Bond* c = new Bond("Bond", *current_atom_, *a, bond_order_);		
+				Bond* c = new Bond("Bond", *current_atom_, *a, Bond::ORDER__SINGLE);		
 
 				// tell about the new undo operation
 				String bond_string = getBondOrderString_(bond_order_);
@@ -1090,6 +1102,163 @@ void EditableScene::changeElement_()
 		current_atom_->setName(new_name);
 		deselect_();
 		getMainControl()->update(*current_atom_);
+	}
+}
+
+void EditableScene::createBond_()
+{
+	//TODO:check if in edit mode ??
+	
+	//check if two atoms are selected
+	HashSet<Composite*> selection = getMainControl()->getSelection();
+	Atom* first_atom = 0;
+	Atom* second_atom = 0;
+	Log.info()<< "selection size:" << selection.size() << endl; 
+	//one system with two atoms selected
+	if (selection.size() == 1)
+	{
+		Log.info() << "selection size is 1" << endl;
+		HashSet<Composite*>::Iterator it = selection.begin();
+		for (; +it; ++it)
+		{
+			if (RTTI::isKindOf<AtomContainer>(**it))
+			{
+				AtomContainer* atom_cont = reinterpret_cast<AtomContainer*>(*it);
+				if (atom_cont->countAtoms() == 2)
+				{
+					Log.info()<< "countAtoms = 2" << endl;
+					AtomIterator atom_it = atom_cont->beginAtom();
+					for(; +atom_it; ++atom_it)
+					{
+						if (!first_atom)
+						{
+							first_atom = &*atom_it;
+						}
+						else if (!second_atom)
+						{
+							second_atom = &*atom_it;
+						}
+						else 
+						{
+							Log.error() << "Internal error! Too many atoms set" << endl; 
+						}
+					}
+				}
+				else 
+				{
+					Log.error() << "Please select exactly two atoms" << endl; 
+				}
+			}
+			else 
+			{
+				Log.error() << "Please select exactly two atoms" << endl; 
+			}
+		}
+	}
+	//two atoms selected
+	else if (selection.size() == 2)
+	{
+		Log.info()<< "selection size is 2" << endl; 
+		HashSet<Composite*>::Iterator it = selection.begin();
+		for (; +it; ++it)
+		{
+			if (RTTI::isKindOf<Atom>(**it))
+			{
+				Log.info()<< "Atom type" << endl; 
+				if (!first_atom)
+				{
+					Log.info()<< "first atom not set -> Atom" << endl; 
+					first_atom = reinterpret_cast<Atom*>(*it);
+				}
+				else if (!second_atom)
+				{
+					Log.info()<< "second atom not set -> Atom" << endl; 
+					second_atom = reinterpret_cast<Atom*>(*it);
+				}
+			}
+			//two molecules containing one atom each are selected
+			else if (RTTI::isKindOf<AtomContainer>(**it))
+			{
+				Log.info()<< "AtomContainer type" << endl; 
+				AtomContainer* atom_cont = reinterpret_cast<AtomContainer*>(*it);
+				if (atom_cont->countAtoms() == 1)
+				{
+					Log.info()<< "countAtoms = 1" << endl; 
+					if (!first_atom)
+					{
+						Log.info()<< "first atom not set" << endl; 
+						first_atom = &*atom_cont->beginAtom();
+					}
+					else if (!second_atom)
+					{
+						Log.info()<< "second atom not set" << endl; 
+						second_atom = &*atom_cont->beginAtom();
+					}
+				}
+			}
+// 			else 
+// 			{
+// 				Log.error() << "Please select exactly two atoms" << endl; 
+// 			}
+		}
+	}
+	else 
+	{
+		Log.error() << "Please select exactly two atoms" << endl; 
+	}
+
+	//assign bond if two selected atoms are found
+	if (first_atom && second_atom)
+	{
+		Log.info()<< "assign bond" << endl; 
+		Bond* bond = new Bond("Bond", *first_atom, *second_atom, Bond::ORDER__SINGLE);		
+	
+// 		TODO:for undo -operation
+// 		EditOperation eo(0, bond, "Added bond of type single" , EditOperation::ADDED__BOND);
+// 		undo_.push_back(eo);
+// 
+// 		// tell about the new undo operation
+// 		emit newEditOperation(eo);
+		
+		Log.info()<< "countBonds: " << first_atom->countBonds() << " - " << second_atom->countBonds() << endl;
+		Log.info() << "start merge" << endl; 
+		//if the bond is between two molecules, merge them
+		merge_(first_atom, second_atom);
+		Log.info() << "merged" << endl;
+
+		//update representation
+		getMainControl()->update(*first_atom, true);
+		getMainControl()->update(*second_atom, true);
+		setStatusbarText("Added bond");
+
+		Log.info()<< "deselect" << endl; 
+		//deselect and delete recursively from the selection set
+		HashSet<Composite*>::Iterator it = selection.begin();
+		for (; +it; ++it)
+		{
+			if (!(**it).containsSelection()) continue;
+			getMainControl()->deselectCompositeRecursive(*it, true);
+			getMainControl()->update(**it, false);
+		}
+		first_atom->deselect();
+		second_atom->deselect();
+		//update representation
+		getMainControl()->update(*first_atom, true);
+		getMainControl()->update(*second_atom, true);
+		Log.info()<< "selection size am Ende:" << getMainControl()->getSelection().size() << endl; 
+	}
+	else
+	{	
+		//deselect and delete recursively from the selection set
+		HashSet<Composite*>::Iterator it = selection.begin();
+		for (; +it; ++it)
+		{
+			if (!(**it).containsSelection()) continue;
+			getMainControl()->deselectCompositeRecursive(*it, true);
+			getMainControl()->update(**it, false);
+		}
+		setStatusbarText("Please select exactly two atoms.");
+		Log.info()<< "selection size am Ende:" << getMainControl()->getSelection().size() << endl; 
 	}
 }
 
@@ -1636,6 +1805,7 @@ void EditableScene::addToolBarEntries(QToolBar* tb)
 	
 	toolbar_actions_edit_controls_.push_back(edit_id_);
 	toolbar_actions_edit_controls_.push_back(element_action_);
+	toolbar_actions_edit_controls_.push_back(bond_action_);
 	toolbar_actions_edit_controls_.push_back(add_hydrogens_action_);
 	toolbar_actions_edit_controls_.push_back(optimize_action_);
 	toolbar_actions_edit_controls_.push_back(bondorders_action_);	
@@ -1744,6 +1914,7 @@ void EditableScene::merge_(Composite* a1, Composite* a2)
 			a1->getParent() == 0 || 
 			a2->getParent() == 0)
 	{
+		Log.info() << "kill 1" << endl;
 	 	return;
 	}
 
@@ -1768,27 +1939,35 @@ void EditableScene::merge_(Composite* a1, Composite* a2)
 	Molecule* m1 = a1->getAncestor(dummy_mol);
 	Molecule* m2 = a2->getAncestor(dummy_mol);
 
-	if (m1 == 0 || m1 == 0) return;
+	if (m1 == 0 || m2 == 0)
+	{
+		Log.info() << "kill 2" << endl;
+		return;
+	}
 
 	Composite* anchestor = a1->getLowestCommonAncestor(*a2);
 	if (anchestor == 0)
 	{
 		m1->spliceBefore(*m2);
 		getMainControl()->remove(*s2);
+		Log.info() << "already finished" << endl;
 		return;
 	}
 
 	if (m1 == p1)
 	{
 		p2->appendChild(*a1);
+		Log.info() << "m1 == p1" << endl;
 	}
 	else
 	{
 		if (m2 == p2)
 		{
 			p1->appendChild(*a2);
+			Log.info() << "m2 == p2" << endl;
 		}
 	}
+	Log.info() << "finished" << endl;
 }
 
 	}//end of namespace 
