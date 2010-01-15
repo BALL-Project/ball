@@ -19,7 +19,10 @@ namespace BALL
 			: invalid_(new QIcon())
 		{
 			Path p;
-			icon_dirs_.append(QString(p.getDataPath().c_str()) + "/graphics/icons");
+			QStringList splitpaths = QString(p.getDataPath().c_str()).split("\n");
+			foreach(QString str, splitpaths) {
+				icon_dirs_.append(str + "/graphics/icons");
+			}
 
 			setup_();
 		}
@@ -121,7 +124,7 @@ namespace BALL
 				QDir base_dir(*it);
 
 				if(!base_dir.exists()) {
-					Log.error() << "Could not locate the icon directory!" << std::endl;
+					Log.error() << "Could not locate the icon directory: " << it->toAscii().data() << std::endl;
 					return 0;
 				}
 
