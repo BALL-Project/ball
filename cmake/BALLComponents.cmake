@@ -92,6 +92,10 @@ ELSE()
 	SET(COMPONENT_BALLVIEW "BALLView${BALL_PACKAGE_VERSION_MAJOR}.${BALL_PACKAGE_VERSION_MINOR}")
 ENDIF()
 
+INCLUDE(source/EXTENSIONS/BALLPluginComponents.cmake)
+
+## Note: On MacOS X, it is necessary to have COMPONENT_BALLVIEW at the *end* of this list; otherwise, the
+##       automatic fixing of import library names will omit all components that come after it
 SET(BALL_COMPONENTS
  ${COMPONENT_LIBBALL} 
  ${COMPONENT_LIBVIEW} 
@@ -101,6 +105,7 @@ SET(BALL_COMPONENTS
  ${COMPONENT_PYTHON_BINDINGS_VIEW}
  ${COMPONENT_DOCUMENTATION_HTML}
  ${COMPONENT_DOCUMENTATION_PDF}
+ ${COMPONENT_PLUGINS}
  ${COMPONENT_BALLVIEW}
 )
 
