@@ -23,11 +23,16 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 	)
 	STRING(STRIP ${CXX_COMPILER_VERSION} CXX_COMPILER_VERSION)
 
-	STRING(REGEX REPLACE "([0-9])\\.([0-9])\\.([0-9])" "\\1"
+	## just to make sure that the compiler version has 3 numbers and 2 dots
+	## (sometimes, g++ gives, e.g., 4.4 instead of 4.4.0)
+	STRING(REGEX REPLACE "^([0-9])\\.([0-9])$" "\\1.\\2.0"
+		CXX_COMPILER_VERSION ${CXX_COMPILER_VERSION})
+
+	STRING(REGEX REPLACE "([0-9])\\.([0-9])\\.([0-9])$" "\\1"
 		CXX_COMPILER_VERSION_MAJOR ${CXX_COMPILER_VERSION})
-	STRING(REGEX REPLACE "([0-9])\\.([0-9])\\.([0-9])" "\\2"
+	STRING(REGEX REPLACE "([0-9])\\.([0-9])\\.([0-9])$" "\\2"
 		CXX_COMPILER_VERSION_MINOR ${CXX_COMPILER_VERSION})
-	STRING(REGEX REPLACE "([0-9])\\.([0-9])\\.([0-9])" "\\3"
+	STRING(REGEX REPLACE "([0-9])\\.([0-9])\\.([0-9])$" "\\3"
 		CXX_COMPILER_VERSION_MINOR_MINOR ${CXX_COMPILER_VERSION})
 
 	## tr1 support in g++ often requires -std=c++0x
