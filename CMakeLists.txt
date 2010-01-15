@@ -280,8 +280,10 @@ IF (NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 	SET(BALL_DOCUMENTATION_INSTALL_DIRECTORY    "share/BALL/doc")
 	IF(WIN32)
 		SET(BALL_PYTHON_INSTALL_DIRECTORY  "bin")
+		SET(BALL_PLUGIN_INSTALL_DIRECTORY  "bin")
 	ELSE()
 		SET(BALL_PYTHON_INSTALL_DIRECTORY  "lib")
+		SET(BALL_PLUGIN_INSTALL_DIRECTORY  "lib")
 	ENDIF()
 ELSE()
 	SET(BALL_BUNDLE_INSTALL_DIRECTORY  					"Applications")
@@ -292,6 +294,7 @@ ELSE()
 	SET(BALL_DOCUMENTATION_INSTALL_DIRECTORY    "Applications/BALLView.app/Contents/Resources/doc")
 	SET(BALL_HEADER_INSTALL_DIRECTORY  					"Applications/BALLView.app/Contents/Frameworks")
 	SET(BALL_PYTHON_INSTALL_DIRECTORY  					"Applications/BALLView.app/Contents/Frameworks")
+	SET(BALL_PLUGIN_INSTALL_DIRECTORY           "Applications/BALLView.app/Contents/plugins")
 ENDIF()
 
 ## big include file for headers and C files, which fills the BALL_sources variable
@@ -373,6 +376,9 @@ TARGET_LINK_LIBRARIES(VIEW BALL
 
 ## add targets for Python modules
 ADD_SUBDIRECTORY(source/PYTHON/EXTENSIONS)
+
+## add the plugins
+ADD_SUBDIRECTORY(source/EXTENSIONS)
 
 ## add BALLView target
 ADD_SUBDIRECTORY(source/APPLICATIONS/BALLVIEW)
