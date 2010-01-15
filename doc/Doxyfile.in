@@ -100,7 +100,7 @@ INPUT                  = @CF_BALL_SRC_PATH@/include/BALL/ \
 #												 @CF_BALL_SRC_PATH@/doc/install/
 FILE_PATTERNS          = *.C \
                          *.h \
-                         *.doxygen
+                         *.doc
 RECURSIVE              = YES
 EXCLUDE                = 
 EXCLUDE_SYMLINKS       = NO
