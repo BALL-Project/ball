@@ -49,7 +49,7 @@ INPUT                  = @CF_BALL_SRC_PATH@/include/BALL/ \
 
 FILE_PATTERNS          = *.C \
                          *.h \
-                         *.doxygen
+                         *.doc
 
 RECURSIVE              = YES
 
