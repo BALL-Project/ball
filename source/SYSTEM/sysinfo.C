@@ -37,8 +37,7 @@ namespace BALL
 	namespace SysInfo
 	{
 
-
-#ifdef BALL_HAS_SYS_SYSINFO_H
+#if defined(BALL_OS_LINUX) && defined(BALL_HAS_SYS_SYSINFO_H)
 
 		LongIndex getAvailableMemory()
 		{
