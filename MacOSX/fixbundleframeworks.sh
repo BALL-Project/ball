@@ -6,7 +6,7 @@
 
 search_path=$1
 
-for lib in $(find "$search_path" -name \*.dylib); do
+for lib in $(find "$search_path" -name \*.dylib -o -name \*.so); do
 	for cur_name in $(otool -L $lib | awk '{if (NR >= 2) print $1}' | grep -v @executable_path); do
 		cur_base_name=$(basename $cur_name)	
 		in_bundle_name=$(find "$search_path" -name $cur_base_name)
