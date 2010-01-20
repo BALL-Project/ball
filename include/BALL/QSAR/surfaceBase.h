@@ -44,6 +44,12 @@ namespace BALL
 		/** Destructor
 		*/
 		virtual ~SurfaceBase();
+		//@}	
+		
+		/** @name Accessors
+		*/
+		//@{
+		void computeAllDescriptors(AtomContainer& ac);
 		//@}
 
 		/** @name Assignment

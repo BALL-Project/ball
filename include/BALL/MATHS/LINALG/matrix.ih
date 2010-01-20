@@ -1,0 +1,820 @@
+#ifndef BALL_LINALG_MATRIX_IH
+#define BALL_LINALG_MATRIX_IH
+
+#ifndef BALL_LINALG_GLOBAL_H
+# include <BALL/MATHS/LINALG/global.h>
+#endif
+
+#ifndef BALL_LINALG_CONFIG_H
+# include <BALL/MATHS/LINALG/config.h>
+#endif
+
+#ifndef BALL_LINALG_EXCEPTION_H
+# include <BALL/MATHS/LINALG/linalgException.h>
+#endif
+
+#ifndef BALL_LINALG_MATRIXTRAITS_H
+# include <BALL/MATHS/LINALG/matrixTraits.h>
+#endif
+
+#ifndef BALL_LINALG_REVERSEITERATOR_H
+#	include <BALL/MATHS/LINALG/reverseIterator.h>
+#endif
+
+#ifndef BALL_LINALG_ROWITERATOR_H
+# include <BALL/MATHS/LINALG/rowIterator.h>
+#endif
+
+#ifndef BALL_LINALG_ELEMENTROWITERATOR_H
+# include <BALL/MATHS/LINALG/elementRowIterator.h>
+#endif
+
+#ifndef BALL_LINALG_COLUMNITERATOR_H
+# include <BALL/MATHS/LINALG/columnIterator.h>
+#endif
+
+#ifndef BALL_LINALG_ELEMENTCOLUMNITERATOR_H
+# include <BALL/MATHS/LINALG/elementColumnIterator.h>
+#endif
+
+#ifndef BALL_LINALG_DIAGONALITERATOR_H
+# include <BALL/MATHS/LINALG/diagonalIterator.h>
+#endif
+
+#ifdef HAS_BLAS
+extern "C"
+{
+# include "cblas.h"
+}
+#endif
+
+#ifdef HAS_LAPACK
+extern "C"
+{
+# include "lapack.h"
+}
+#endif
+
+
+#include <vector>
+#include <iostream>
+#include <complex>
+
+namespace BALL {
+
+	typedef std::complex<float>  ComplexFloat;
+	typedef std::complex<double> ComplexDouble;
+
+	
+	template <class valuetype, class mtraits>
+	class Matrix
+	{
+		/**
+		*/
+		typedef valuetype ValueType;
+
+		/**
+		*/
+		typedef valuetype* PointerType;
+		
+		
+		public:
+			
+			static double MACHINE_EPSILON;
+	
+			/**
+			 *  Default constructor, creating a matrix of size 0x0 in
+			 *  row_major format.
+			 */
+			Matrix();
+
+			/** 
+			 *  Explicit constructor of a matrix of size n x m.
+			 *  With the flag row_major, the storage order of the matrix can
+			 *  be set to either row_major (default) or column major.
+			 */
+			Matrix(size_t n, size_t m, bool row_major = true);
+
+			/** 
+			 *  Explicit constructor of a matrix of size n x m.
+			 *  With the flag row_major, the storage order of the matrix can
+			 *  be set to either row_major (default) or column major.
+			 *  initial_value can be used to initialize all values of the matrix.
+			 */
+			Matrix(size_t n, size_t m, const valuetype& initial_value, bool row_major = true);
+
+			/**
+			 *  Copy constructor.
+			 */
+			Matrix(const Matrix& m);
+			
+			/**
+			 *  Destructor.
+			 */
+			virtual ~Matrix();
+			
+			/** Clear method.
+			 *  Puts the matrix into the same state as a default constructed one.
+			 */
+			virtual void clear();
+
+			/** 
+			 * Output operator, in-class version.
+			 */
+			std::ostream& operator>> (std::ostream& stream) const;
+
+			/**
+			 * Input operator, in-class version.
+			 */
+			std::istream& operator<< (std::istream& stream);
+
+			/** Convenient access to the matrix elements.
+			 *  To be consistent with mathematical usage, the indices
+			 *  start at 1, not at 0 as would be common for an array.
+			 */
+			valuetype& operator () (size_t i, size_t j);
+
+			/** Convenient access to the matrix elements, const version.
+			 *  To be consistent with mathematical usage, the indices
+			 *  start at 1, not at 0 as would be common for an array.
+			 */
+			const valuetype& operator () (size_t i, size_t j) const;
+
+			valuetype& operator [] (size_t position);
+			const valuetype& operator [] (size_t position) const;
+
+			/** Assignment operator
+			 *  
+			 */
+			Matrix& operator = (const Matrix& B);
+
+			/** Checks for equality.
+			 *  If two matrices differ only by their storage order, but represent
+			 *  the same matrix, they are considered equal.
+			 */
+			bool operator == (const Matrix& B) const;
+
+			/** Checks for inequality.
+			 *  If two matrices differ only by their storage order, but represent
+			 *  the same matrix, they are considered equal.
+			 */
+			bool operator != (const Matrix& B) const;
+			
+			/** Adds the matrix B on this matrix.
+			 * 	If the dimensions of both matrices do not match, an
+			 * 	Exception::MatrixHasWrongDimension is thrown.
+			 */
+			inline Matrix& operator+= (const Matrix& B)
+				throw(Exception::MatrixHasWrongDimension);
+			
+			/** Subtracts the matrix B from this matrix.
+			 * 	If the dimensions of both matrices do not match, an
+			 * 	Exception::MatrixHasWrongDimension is thrown.
+			 */
+			inline Matrix& operator-= (const Matrix& B)
+				throw(Exception::MatrixHasWrongDimension);
+			
+			/** Returns the sum of this matrix and the matrix B.
+			 * 	If the dimensions of both matrices do not match, an
+			 * 	Exception::MatrixHasWrongDimension is thrown.
+			 *  The storage order of the result depends on the storage orders of the input matrices.
+			 *  If both inputs have the same storage order, the output will have the same as well.
+			 *  If the inputs differ in their storage, the output will have the default storage order
+			 *  (row major).
+			 */
+			inline Matrix operator+ (const Matrix& B) const
+				throw(Exception::MatrixHasWrongDimension);
+
+			/** Returns the difference of this matrix and the matrix B.
+			 * 	If the dimensions of both matrices do not match, an
+			 * 	Exception::MatrixHasWrongDimension is thrown.
+			 *  The storage order of the result depends on the storage orders of the input matrices.
+			 *  If both inputs have the same storage order, the output will have the same as well.
+			 *  If the inputs differ in their storage, the output will have the default storage order
+			 *  (row major).
+			 */
+			inline Matrix operator- (const Matrix& B) const
+				throw(Exception::MatrixHasWrongDimension);
+
+			/** Returns a matrix with containing the entries of this matrix
+			 *  multiplied with the factor a. The storage order of the new
+			 *  matrix is the same as that of this matrix.
+			 */
+			inline Matrix operator* (const valuetype& a) const
+				throw();
+
+			/** Multiplies the entries of this matrix by the factor a.
+			 */
+			inline Matrix& operator*= (const valuetype& a)
+				throw();
+
+			/** Returns the product of this matrix and the matrix B.
+			 * 	If the dimensions of both matrices are incompatible, an
+			 * 	Exception::MatrixHasWrongDimension is thrown.
+			 *  The storage order of the result depends on the storage orders of the input matrices.
+			 *  If both inputs have the same storage order, the output will have the same as well.
+			 *  If the inputs differ in their storage, the output will have the default storage order
+			 *  (row major).
+			 */
+			inline Matrix operator* (const Matrix& B) const
+				throw(Exception::MatrixHasWrongDimension);
+
+
+			/** Returns a vector containing the entries of this matrix
+			 *  rightmultiplied with the Vector X.
+			 */
+			inline Vector<valuetype> operator* (const Vector<valuetype>& X) const
+				throw(Exception::VectorHasWrongDimension);
+
+			/** "fast" and unchecked version of matrix addition, native version.
+			 *  The storage order of the result depends on the storage orders of the input matrices.
+			 *  If both inputs have the same storage order, the output will have the same as well.
+			 *  If the inputs differ in their storage, the output will have the default storage order
+			 *  (row major).
+			 */
+			void add_native(Matrix& result, const Matrix& B) const;
+
+			/** "fast" and unchecked version of matrix addition, BLAS implementation version.
+			 *  This can be significantly slower if at least one of the matrices is shallow
+			 *  transposed.
+			 *  The storage order of the result depends on the storage orders of the input matrices.
+			 *  If both inputs have the same storage order, the output will have the same as well.
+			 *  If the inputs differ in their storage, the output will have the default storage order
+			 *  (row major).
+			 */
+			void add_blas(Matrix& result, const Matrix& B) const;
+
+			/** "fast" and unchecked inline version of matrix addition, native version.
+			 *  This can be significantly slower if at least one of the matrices is shallow
+			 *  transposed.
+			 *  The storage order of matrix will not be changed.
+			 */
+			void add_inline_native(const Matrix& B);
+
+			/** "fast" and unchecked version of matrix addition, BLAS implementation version.
+			 *  This can be significantly slower if at least one of the matrices is shallow
+			 *  transposed.
+			 *  The storage order of the matrix will not be changed.
+			 */
+			void add_inline_blas(const Matrix& B);
+
+			/** "fast" and unchecked version of matrix subtraction, native version.
+			 *  The storage order of the result depends on the storage orders of the input matrices.
+			 *  If both inputs have the same storage order, the output will have the same as well.
+			 *  If the inputs differ in their storage, the output will have the default storage order
+			 *  (row major).
+			 */
+			void subtract_native(Matrix& result, const Matrix& B) const;
+
+			/** "fast" and unchecked version of matrix subtraction, BLAS implementation version.
+			 *  This can be significantly slower if at least one of the matrices is shallow
+			 *  transposed.
+			 *  The storage order of the result depends on the storage orders of the input matrices.
+			 *  If both inputs have the same storage order, the output will have the same as well.
+			 *  If the inputs differ in their storage, the output will have the default storage order
+			 *  (row major).
+			 */
+			void subtract_blas(Matrix& result, const Matrix& B) const;
+
+			/** "fast" and unchecked inline version of matrix subtraction, native version.
+			 *  This can be significantly slower if at least one of the matrices is shallow
+			 *  transposed.
+			 *  The storage order of matrix will not be changed.
+			 */
+			void subtract_inline_native(const Matrix& B);
+
+			/** "fast" and unchecked version of matrix subtraction, BLAS implementation version.
+			 *  This can be significantly slower if at least one of the matrices is shallow
+			 *  transposed.
+			 *  The storage order of the matrix will not be changed.
+			 */
+			void subtract_inline_blas(const Matrix& B);
+
+			/** "fast" and unchecked version of multiplication with a scalar, native implementation.
+			 *  The storage order of the result equals the storage order of this matrix.
+			 */
+			void multiply_native(Matrix& result, const valuetype& a) const;
+
+			/** "fast" and unchecked version of multiplication with a scalar, BLAS implementation.
+			 *  The storage order of the result equals the storage order of this matrix.
+			 */
+			void multiply_blas(Matrix& result, const valuetype& a) const;
+
+			/** "fast" and unchecked version of inline multiplication with a scalar, 
+			 *  native implementation. The storage order remains unchanged.
+			 */
+			void multiply_inline_native(const valuetype& a);
+
+			/** "fast" and unchecked version of inline multiplication with a scalar, BLAS implementation 
+			 *  native implementation. The storage order remains unchanged.
+			 */
+			void multiply_inline_blas(const valuetype& a);
+
+			/** "fast" and unchecked version of matrix multiplication, native version.
+			 *  The storage order of the result depends on the storage orders of the input matrices.
+			 *  If both inputs have the same storage order, the output will have the same as well.
+			 *  If the inputs differ in their storage, the output will have the default storage order
+			 *  (row major).
+			 */
+			void multiply_native(Matrix& result, const Matrix& B) const;
+
+			/** "fast" and unchecked version of matrix multiplication, BLAS version.
+			 *  The storage order of the result depends on the storage orders of the input matrices.
+			 *  If both inputs have the same storage order, the output will have the same as well.
+			 *  If the inputs differ in their storage, the output will have the default storage order
+			 *  (row major).
+			 */
+			inline void multiply_blas(Matrix& result, const Matrix& B) const;
+
+			/**
+			 *  element row iterator
+			 *
+			 */
+
+			friend class ElementRowIteratorTraits<valuetype>;
+
+			/** Random access iterator for b.
+			*/
+			typedef RandomAccessIterator<Matrix, ValueType, PointerType, ElementRowIteratorTraits<valuetype> > ElementRowIterator;
+			
+			/// Return a element row iterator pointing to the first element in the matrix
+			ElementRowIterator beginElementRow()
+				throw()
+			{
+				return ElementRowIterator::begin(*this);
+			}
+
+			/// Return a past-the-end element row iterator
+			ElementRowIterator endElementRow()
+				throw()
+			{
+				return ElementRowIterator::end(*this);
+			}
+
+			/// Constant random access iterator for elements
+			typedef ConstRandomAccessIterator<Matrix, ValueType, PointerType, ElementRowIteratorTraits<valuetype> > ElementRowConstIterator;
+
+			/// Return a constant element row iterator pointing to the first element in the matrix
+			ElementRowConstIterator beginElementRow() const
+				throw()
+			{
+				return ElementRowConstIterator::begin(*this);
+			}
+
+			/// Return a constant past-the-end element row iterator.
+			ElementRowConstIterator endElementRow() const
+				throw()
+			{
+				return ElementRowConstIterator::end(*this);
+			}
+		
+			/// Reverse random access iterator for row elements.
+			typedef ReverseIterator<Matrix, ValueType, PointerType, ElementRowIteratorTraits<valuetype> >	ElementRowReverseIterator;
+
+			/// Return a reverse row elements iterator pointing to the first element.
+			ElementRowReverseIterator rbeginElementRow()
+				throw()
+			{
+				return ElementRowReverseIterator::begin(*this);
+			}
+
+			/// Return a past-the-end element row iterator for reverse traversal.
+			ElementRowReverseIterator rendElementRow()
+				throw()
+			{
+				return ElementRowReverseIterator::end(*this);
+			}
+
+			/// Constant reverse random access iterator for row elements.
+			typedef ConstReverseIterator<Matrix, ValueType, PointerType, ElementRowIteratorTraits<valuetype> > ElementRowConstReverseIterator;
+
+			/// Return a constant reverse element row iterator pointing to the first element
+			ElementRowConstReverseIterator rbeginElementRow() const
+				throw()
+			{
+				return ElementRowConstReverseIterator::begin(*this);
+			}
+
+			/// Return a constant past-the-end element row iterator for reverse traversal
+			ElementRowConstReverseIterator rendElementRow() const
+				throw()
+			{
+				return ElementRowConstReverseIterator::end(*this);
+			}
+
+			/**
+			 *  element column iterator
+			 *
+			 */
+			friend class ElementColumnIteratorTraits<valuetype>;
+
+			/** Random access iterator for b.
+			*/
+			typedef RandomAccessIterator<Matrix, ValueType, PointerType, ElementColumnIteratorTraits<valuetype> > ElementColumnIterator;
+			
+			/// Return a element column iterator pointing to the first element in the matrix
+			ElementColumnIterator beginElementColumn()
+				throw()
+			{
+				return ElementColumnIterator::begin(*this);
+			}
+
+			/// Return a past-the-end element column iterator
+			ElementColumnIterator endElementColumn()
+				throw()
+			{
+				return ElementColumnIterator::end(*this);
+			}
+
+			/// Constant random access iterator for elements
+			typedef ConstRandomAccessIterator<Matrix, ValueType, PointerType, ElementColumnIteratorTraits<valuetype> > ElementColumnConstIterator;
+
+			/// Return a constant element column iterator pointing to the first element in the matrix
+			ElementColumnConstIterator beginElementColumn() const
+				throw()
+			{
+				return ElementColumnConstIterator::begin(*this);
+			}
+
+			/// Return a constant past-the-end element column iterator.
+			ElementColumnConstIterator endElementColumn() const
+				throw()
+			{
+				return ElementColumnConstIterator::end(*this);
+			}
+		
+			/// Reverse random access iterator for column elements.
+			typedef ReverseIterator<Matrix, ValueType, PointerType, ElementColumnIteratorTraits<valuetype> >	ElementColumnReverseIterator;
+
+			/// Return a reverse row elements iterator pointing to the first element.
+			ElementColumnReverseIterator rbeginElementColumn()
+				throw()
+			{
+				return ElementColumnReverseIterator::begin(*this);
+			}
+
+			/// Return a past-the-end element column iterator for reverse traversal.
+			ElementColumnReverseIterator rendElementColumn()
+				throw()
+			{
+				return ElementColumnReverseIterator::end(*this);
+			}
+
+			/// Constant reverse random access iterator for column elements.
+			typedef ConstReverseIterator<Matrix, ValueType, PointerType, ElementColumnIteratorTraits<valuetype> > ElementColumnConstReverseIterator;
+
+			/// Return a constant reverse element column iterator pointing to the first element
+			ElementColumnConstReverseIterator rbeginElementColumn() const
+				throw()
+			{
+				return ElementColumnConstReverseIterator::begin(*this);
+			}
+
+			/// Return a constant past-the-end element column iterator for reverse traversal
+			ElementColumnConstReverseIterator rendElementColumn() const
+				throw()
+			{
+				return ElementColumnConstReverseIterator::end(*this);
+			}
+
+			/**
+			 *  row iterator
+			 *
+			 */
+			friend class RowIteratorTraits<valuetype>;
+
+			/** Random access iterator for b.
+			*/
+			typedef RandomAccessIterator<Matrix, Vector<valuetype>, Vector<valuetype>*, RowIteratorTraits<valuetype> > RowIterator;
+			
+			/// Return a row iterator pointing to the first element in the matrix
+			RowIterator beginRow()
+				throw()
+			{
+				return RowIterator::begin(*this);
+			}
+
+			/// Return a past-the-end row iterator
+			RowIterator endRow()
+				throw()
+			{
+				return RowIterator::end(*this);
+			}
+
+			/// Constant random access iterator for elements
+			typedef ConstRandomAccessIterator<Matrix, Vector<valuetype>, Vector<valuetype>*, RowIteratorTraits<valuetype> > RowConstIterator;
+
+			/// Return a constant row iterator pointing to the first element in the matrix
+			RowConstIterator beginRow() const
+				throw()
+			{
+				return RowConstIterator::begin(*this);
+			}
+
+			/// Return a constant past-the-end row iterator.
+			RowConstIterator endRow() const
+				throw()
+			{
+				return RowConstIterator::end(*this);
+			}
+		
+			/// Reverse random access iterator for row.
+			typedef ReverseIterator<Matrix, Vector<valuetype>, Vector<valuetype>*, RowIteratorTraits<valuetype> >	RowReverseIterator;
+
+			/// Return a reverse row iterator pointing to the first element.
+			RowReverseIterator rbeginRow()
+				throw()
+			{
+				return RowReverseIterator::begin(*this);
+			}
+
+			/// Return a past-the-end row iterator for reverse traversal.
+			RowReverseIterator rendRow()
+				throw()
+			{
+				return RowReverseIterator::end(*this);
+			}
+
+			/// Constant reverse random access iterator for rows.
+			typedef ConstReverseIterator<Matrix, Vector<valuetype>, Vector<valuetype>*, RowIteratorTraits<valuetype> > RowConstReverseIterator;
+
+			/// Return a constant reverse row iterator pointing to the first element
+			RowConstReverseIterator rbeginRow() const
+				throw()
+			{
+				return RowConstReverseIterator::begin(*this);
+			}
+
+			/// Return a constant past-the-end row iterator for reverse traversal
+			RowConstReverseIterator rendRow() const
+				throw()
+			{
+				return RowConstReverseIterator::end(*this);
+			}
+
+			/**
+			 *  column iterator
+			 *
+			 */
+			friend class ColumnIteratorTraits<valuetype>;
+
+			/** Random access iterator for b.
+			*/
+			typedef RandomAccessIterator<Matrix, Vector<valuetype>, Vector<valuetype>*, ColumnIteratorTraits<valuetype> > ColumnIterator;
+			
+			/// Return a row iterator pointing to the first element in the matrix
+			ColumnIterator beginColumn()
+				throw()
+			{
+				return ColumnIterator::begin(*this);
+			}
+
+			/// Return a past-the-end row iterator
+			ColumnIterator endColumn()
+				throw()
+			{
+				return ColumnIterator::end(*this);
+			}
+
+			/// Constant random access iterator for elements
+			typedef ConstRandomAccessIterator<Matrix, Vector<valuetype>, Vector<valuetype>*, ColumnIteratorTraits<valuetype> > ColumnConstIterator;
+
+			/// Return a constant row iterator pointing to the first element in the matrix
+			ColumnConstIterator beginColumn() const
+				throw()
+			{
+				return ColumnConstIterator::begin(*this);
+			}
+
+			/// Return a constant past-the-end row iterator.
+			ColumnConstIterator endColumn() const
+				throw()
+			{
+				return ColumnConstIterator::end(*this);
+			}
+		
+			/// Reverse random access iterator for row.
+			typedef ReverseIterator<Matrix, Vector<valuetype>, Vector<valuetype>*, ColumnIteratorTraits<valuetype> >	ColumnReverseIterator;
+
+			/// Return a reverse row iterator pointing to the first element.
+			ColumnReverseIterator rbeginColumn()
+				throw()
+			{
+				return ColumnReverseIterator::begin(*this);
+			}
+
+			/// Return a past-the-end row iterator for reverse traversal.
+			ColumnReverseIterator rendColumn()
+				throw()
+			{
+				return ColumnReverseIterator::end(*this);
+			}
+
+			/// Constant reverse random access iterator for rows.
+			typedef ConstReverseIterator<Matrix, Vector<valuetype>, Vector<valuetype>*, ColumnIteratorTraits<valuetype> > ColumnConstReverseIterator;
+
+			/// Return a constant reverse row iterator pointing to the first element
+			ColumnConstReverseIterator rbeginColumn() const
+				throw()
+			{
+				return ColumnConstReverseIterator::begin(*this);
+			}
+
+			/// Return a constant past-the-end row iterator for reverse traversal
+			ColumnConstReverseIterator rendColumn() const
+				throw()
+			{
+				return ColumnConstReverseIterator::end(*this);
+			}
+
+			/**
+			 *  diagonal iterator
+			 *
+			 */
+			friend class DiagonalIteratorTraits<valuetype>;
+
+			/** Random access iterator for b.
+			*/
+			typedef RandomAccessIterator<Matrix, Vector<valuetype>, Vector<valuetype>*, DiagonalIteratorTraits<valuetype> > DiagonalIterator;
+			
+			/// Return a row iterator pointing to the first element in the matrix
+			DiagonalIterator beginDiagonal()
+				throw()
+			{
+				return DiagonalIterator::begin(*this);
+			}
+
+			/// Return a past-the-end row iterator
+			DiagonalIterator endDiagonal()
+				throw()
+			{
+				return DiagonalIterator::end(*this);
+			}
+
+			/// Constant random access iterator for elements
+			typedef ConstRandomAccessIterator<Matrix, Vector<valuetype>, Vector<valuetype>*, DiagonalIteratorTraits<valuetype> > DiagonalConstIterator;
+
+			/// Return a constant row iterator pointing to the first element in the matrix
+			DiagonalConstIterator beginDiagonal() const
+				throw()
+			{
+				return DiagonalConstIterator::begin(*this);
+			}
+
+			/// Return a constant past-the-end row iterator.
+			DiagonalConstIterator endDiagonal() const
+				throw()
+			{
+				return DiagonalConstIterator::end(*this);
+			}
+		
+			/// Reverse random access iterator for row.
+			typedef ReverseIterator<Matrix, Vector<valuetype>, Vector<valuetype>*, DiagonalIteratorTraits<valuetype> >	DiagonalReverseIterator;
+
+			/// Return a reverse row iterator pointing to the first element.
+			DiagonalReverseIterator rbeginDiagonal()
+				throw()
+			{
+				return DiagonalReverseIterator::begin(*this);
+			}
+
+			/// Return a past-the-end row iterator for reverse traversal.
+			DiagonalReverseIterator rendDiagonal()
+				throw()
+			{
+				return DiagonalReverseIterator::end(*this);
+			}
+
+			/// Constant reverse random access iterator for rows.
+			typedef ConstReverseIterator<Matrix, Vector<valuetype>, Vector<valuetype>*, DiagonalIteratorTraits<valuetype> > DiagonalConstReverseIterator;
+
+			/// Return a constant reverse row iterator pointing to the first element
+			DiagonalConstReverseIterator rbeginDiagonal() const
+				throw()
+			{
+				return DiagonalConstReverseIterator::begin(*this);
+			}
+
+			/// Return a constant past-the-end row iterator for reverse traversal
+			DiagonalConstReverseIterator rendDiagonal() const
+				throw()
+			{
+				return DiagonalConstReverseIterator::end(*this);
+			}
+
+			/** Transpose this matrix.
+			 *  If deep is set to true, elements are exchanged in the array. Otherwise, we just
+			 *	swap n and m and invert row_major.
+			 */
+			bool transpose(bool deep=true);
+
+			/** Return a transposed version of this matrix.
+			 */
+			Matrix t() const;
+
+			//valuetype trace() const;
+
+			bool isQuadratic() const;
+
+			/** Return a copy of our raw data vector.
+       */
+			std::vector<valuetype> getData() const
+				throw();
+
+			/** Set the raw data vector of this class to a copy of the input vector.
+			 *  If the new vector is incompatible with the size of this matrix,
+			 *  an exception MatrixHasWrongDimension is thrown.
+			 */
+			void setData(const std::vector<valuetype>& new_data)
+				throw(Exception::MatrixHasWrongDimension);
+
+			inline size_t getRowCount() const;
+			inline size_t getColumnCount() const;
+			inline size_t getSize() const;
+			
+			
+	// -----------------------------------		
+			
+			int Nrows() const;
+			int Ncols() const;
+			
+			void ReSize(int n, int m) {resize(n,m);};
+			void resize(int n, int m);
+			
+			/** sets all cells of row <id> to the given value */
+			void setRow(size_t id, valuetype value);
+			
+			/** sets all cells of column <id> to the given value */
+			void setCol(size_t id, valuetype value);
+			
+			/** resize and copy value from another matrix */
+			void operator=(Matrix<valuetype, mtraits>&);
+			
+			/** multiplies this matrix with the given matrix */
+			void operator*=(Matrix<valuetype, mtraits>& B);
+			
+			/** set all cell of the matrix to the same value */
+			void operator=(valuetype v);
+			
+			/** substracts a scalar from the current matrix */
+			void operator-=(valuetype v);
+			
+			/** adds a scalar to the current matrix */
+			void operator+=(valuetype v);
+			
+			/** returns the sum over all elements of the specified column */
+			valuetype colSum(size_t column);
+			
+			/** returns the sum over all elements of the specified row */
+			valuetype rowSum(size_t row);
+			
+			/** return the inverse of this matrix.\n
+			Inversion is done by use of SVD */
+			Matrix<valuetype, mtraits> i();
+			
+			/** returns the Moore-Penrose Pseudo-Inverse of this matrix.\n
+			Inversion is done by use of SVD */
+			Matrix<valuetype, mtraits> pseudoInverse();
+			
+			/** convenience-function that resize the current matrix and sets the diagonal elements to 1 and all other elements to zero */
+			void setToIdentity(size_t rows);
+			
+			void addColumn(Vector<valuetype>& column);
+			
+			void copyVectorToRow(Vector<valuetype>& vector, size_t row);
+			
+			void copyRowToVector(Vector<valuetype>& vector, size_t row);
+			
+	// -----------------------------------	
+			
+			
+			bool isRowMajor() const;
+			void setRowMajor(bool is_row_major);
+
+			size_t convertIndicesToOffset(size_t i, size_t j) const;
+			void convertOffsetToIndices(size_t offset, size_t& i, size_t& j) const;
+
+			/** Copy the contents of column to_copy into vector, where to_copy starts from 1, not 0.
+			 *  TODO: throw an exception if out of bounds
+			 */
+			void copyColumnToVector(Vector<valuetype>& vector, size_t to_copy); 
+
+			/** Copy the contents of vector into column to_copy, where to_copy starts from 1, not 0.
+			 *  TODO: throw an exception if out of bounds
+			 */
+			void copyVectorToColumn(Vector<valuetype>& vector, size_t to_copy); 
+
+		protected:
+			std::vector<valuetype> data_;
+			
+			bool row_major_; 
+
+			size_t n_;
+			size_t m_;
+
+			mtraits traits_;
+	};
+
+}
+
+#endif

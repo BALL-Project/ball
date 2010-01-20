@@ -1,0 +1,51 @@
+#ifndef BALL_LINALG_VECTORIO_IC
+#define BALL_LINALG_VECTORIO_IC
+
+namespace BALL {
+
+// Output Operator
+template <typename valuetype>
+std::ostream& Vector<valuetype>::operator >> (std::ostream& stream) const
+{
+	char separator = (is_column_vector_) ? '\n' : ' ';
+
+	for (size_t i=0; i<n_; i++)
+		stream << (*this)[i] << separator;
+
+	if (!is_column_vector_)
+		stream << std::endl;
+
+	return stream;
+}
+
+// External definition of output operator
+template <typename valuetype>
+std::ostream& operator<< (std::ostream& stream, const Vector<valuetype>& v)
+{
+	return (v >> stream);
+}
+
+// Input Operator
+template <typename valuetype>
+std::istream& Vector<valuetype>::operator<< (std::istream& stream)
+{
+	valuetype dummy;
+	for (size_t i=0; i<n_; i++)
+	{
+		stream >> dummy;
+		(*this)[i] = dummy;
+	}
+
+	return stream;
+}
+
+// External definition of our input operator
+template <typename valuetype>
+std::istream& operator>> (std::istream& stream, Vector<valuetype>& m)
+{
+	return (m<<stream);
+}
+
+}
+
+#endif

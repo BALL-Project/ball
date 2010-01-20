@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceBase.C,v 1.2.28.1 2007/03/16 00:06:50 bertsch Exp $
+// $Id: surfaceBase.C,v 1.2.28.1 2007-03-16 00:06:50 bertsch Exp $
 //
 
 #include <BALL/QSAR/surfaceBase.h>
@@ -75,6 +75,13 @@ namespace BALL
 		}
 	}
 
+	void SurfaceBase::computeAllDescriptors(AtomContainer& ac)
+	{	
+		if (!isValid_(ac))
+		{
+			calculate_(ac);
+		}
+	}
 
 	void SurfaceBase::calculate_(AtomContainer& ac)
 	{

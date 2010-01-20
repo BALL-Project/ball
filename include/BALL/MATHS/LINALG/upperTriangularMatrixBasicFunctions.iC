@@ -1,0 +1,674 @@
+#ifndef BALL_LINALG_UPPERTRIANGULARMATRIXBASICFUNCTIONS_IC
+#define BALL_LINALG_UPPERTRIANGULARMATRIXBASICFUNCTIONS_IC
+
+namespace BALL {
+	
+	//#define DEBUG
+	
+	typedef std::complex<float>  ComplexFloat;
+	typedef std::complex<double> ComplexDouble;
+	
+	template <class valuetype>
+	void Matrix<valuetype, UpperTriangularTraits>::clear()
+	{
+		data_.clear();
+		row_major_ = true;
+		n_ = 0;
+		m_ = 0;
+	}
+
+	template <class valuetype>
+	bool Matrix<valuetype, UpperTriangularTraits>::isQuadratic() const
+	{
+		return true;
+	}
+
+	template <class valuetype>
+	std::vector<valuetype> Matrix<valuetype, UpperTriangularTraits>::getData() const
+		throw()
+	{
+		return data_;
+	}
+
+	template <class valuetype>
+	void Matrix<valuetype, UpperTriangularTraits>::setData(const std::vector<valuetype>& new_data)
+		throw(Exception::MatrixHasWrongDimension)
+	{
+		if (new_data.size() != n_*(n_+1)/2)
+		{
+			Exception::MatrixHasWrongDimension e;
+			throw(e);
+		}
+		else
+			data_ = new_data;
+	}
+
+	template <class valuetype>
+	int Matrix<valuetype, UpperTriangularTraits>::getRowCount() const
+	{
+		return n_;
+	}
+	
+	template <class valuetype>
+	int Matrix<valuetype, UpperTriangularTraits>::getColumnCount() const
+	{
+		return m_;
+	}
+	
+	template <class valuetype>
+	size_t Matrix<valuetype, UpperTriangularTraits>::getSize() const
+	{
+		return data_.size();
+	}
+	
+	template <class valuetype>
+	bool Matrix<valuetype, UpperTriangularTraits>::isUpper() const
+	{
+		return true;
+	}
+	
+	template <class valuetype>
+	bool Matrix<valuetype, UpperTriangularTraits>::isRowMajor() const
+	{
+		return row_major_;
+	}
+	
+	template <class valuetype>
+	void Matrix<valuetype, UpperTriangularTraits>::setRowMajor(bool is_row_major)
+	{
+		row_major_ = is_row_major;
+	}
+
+	template <class valuetype>
+	size_t Matrix<valuetype, UpperTriangularTraits>::convertIndicesToOffset(size_t i, size_t j) const
+	{
+		// which storage order do we use?
+		if (row_major_)
+			return (j-1) + (2*n_-i)*(i-1)/2;
+		else // we are column major
+			return (i-1) + j*(j-1)/2;	
+	}
+
+	template <class valuetype>
+	void Matrix<valuetype, UpperTriangularTraits>::convertOffsetToIndices(size_t offset, size_t& i, size_t& j) const
+	{
+		// which storage order to we use?
+		if (row_major_)
+		{
+			// i = \floor{(2n+3)/2 - \sqrt{n(n+1) - 2 offset + 1/4}}
+			// j = offset - (2n-i)(i-1)/2 + 1
+			i = (int)(1.5 + n_ - sqrt(n_*(n_+1)-2*offset+.25));
+			j = offset - (2*n_-i)*(i-1)/2 + 1;
+		}
+		else // column major
+		{
+			// j = \floor{\sqrt{2*offset+1/2} + 1/2}
+			// i = offset - j*(j - 1)/2 + 1
+			j = (int)(sqrt(2*offset + .5) + .5);
+			i = offset - j*(j-1)/2 + 1;
+		}
+	}
+
+	template <class valuetype>
+	valuetype& Matrix<valuetype, UpperTriangularTraits>::operator() (size_t i, size_t j)
+	{
+		// we need to distinguish four cases:
+		//   -- storage order employed
+		//   -- inside or outside the triangle
+		if (row_major_)
+		{
+			if (i>j)
+			{
+				zero_ = (valuetype)0;
+				return zero_;
+			}
+			else
+				return data_[(j-1) + (2*n_-i)*(i-1)/2];
+		} 
+		else
+		{
+			if (i>j)
+			{
+				zero_ = (valuetype)0;
+				return zero_;
+			}
+			else
+				return data_[(i-1) + j*(j-1)/2];
+		}
+	}
+
+	template <class valuetype>
+	const valuetype& Matrix<valuetype, UpperTriangularTraits>::operator() (size_t i, size_t j) const
+	{
+		// we need to distinguish four cases:
+		//   -- storage order employed
+		//   -- inside or outside the triangle
+		if (row_major_)
+		{
+			if (i>j)
+			{
+				zero_ = (valuetype)0;
+				return zero_;
+			}
+			else
+				return data_[(j-1) + (2*n_-i)*(i-1)/2];
+		} 
+		else
+		{
+			if (i>j)
+			{
+				zero_ = (valuetype)0;
+				return zero_;
+			}
+			else
+				return data_[(i-1) + j*(j-1)/2];
+		}
+	}
+
+	template <class valuetype>
+	valuetype& Matrix<valuetype, UpperTriangularTraits>::operator [] (size_t position)
+	{
+		return data_[position];
+	}
+
+	template <class valuetype>
+	const valuetype& Matrix<valuetype, UpperTriangularTraits>::operator [] (size_t position) const
+	{
+		return data_[position];
+	}
+
+	template <class valuetype>
+	Matrix<valuetype, LowerTriangularTraits> Matrix<valuetype, UpperTriangularTraits>::t() const
+	{
+		Matrix<valuetype, LowerTriangularTraits> result(n_, !row_major_);
+
+		// since the storage order is the opposite of ours, we can just copy the data vector
+		result.setData(data_);	
+
+		return result;
+	}
+
+	template <class valuetype>
+	Matrix<valuetype, UpperTriangularTraits> Matrix<valuetype, UpperTriangularTraits>::operator + (const Matrix<valuetype, UpperTriangularTraits>& B) const
+		throw(Exception::MatrixHasWrongDimension)
+	{
+		if ( (getRowCount() != B.getRowCount()) || (getColumnCount() != B.getColumnCount()) )
+		{
+			Exception::MatrixHasWrongDimension e;
+			throw (e);
+		}	
+
+		Matrix<valuetype, UpperTriangularTraits> result(getRowCount());
+	#ifdef USE_BLAS
+	#ifdef DEBUG
+		std::cout << "Info: using add_blas" << std::endl;
+	#endif
+	        // TODO
+		//add_blas(result, B);
+		add_native(result, B);
+	#ifdef DEBUG
+		std::cout << "Info: using add_native" << std::endl;
+	#endif
+		add_native(result, B);
+	#endif
+
+		return result;
+	}
+
+	template <class valuetype>
+	void Matrix<valuetype, UpperTriangularTraits>::add_native(Matrix<valuetype, UpperTriangularTraits>& result, const Matrix<valuetype, UpperTriangularTraits>& B) const
+	{
+		/** At least try to gain some speed... **/
+		valuetype* result_ptr 			= &result[0];
+		valuetype const* this_ptr   = &data_[0];
+		valuetype const* b_ptr			= &B[0];
+
+		bool B_row_major = B.isRowMajor();
+	
+		// we have to take care of possible shallow transposal
+		if (row_major_ == B_row_major)
+		{
+			size_t size = data_.size();
+			for (size_t i=0; i<size; i++)
+			{
+				*result_ptr = *this_ptr++ + *b_ptr++;
+				result_ptr++;
+			}
+
+			// and set the correct storage mode
+			result.setRowMajor(row_major_);
+		}
+		else
+		{
+			if (row_major_) // matrix B is in column order
+			{
+				// take one row at a time
+				for (size_t i=0; i<n_; i++)
+				{
+					// advance to the next row
+					b_ptr = &B[i*(i+3)/2];
+					for (size_t j=0; j<n_-i; j++)
+					{
+						*result_ptr = *this_ptr++ + *b_ptr;
+						b_ptr += i+j+1;
+						result_ptr++;
+					}
+				}
+			}
+			else // only our matrix is in column order
+			{
+				// take one row at a time
+				for (size_t i=0; i<n_; i++)
+				{
+					// advance to the next row
+					this_ptr = &data_[i*(i+3)/2];
+					for (size_t j=0; j<n_-i; j++)
+					{
+						*result_ptr = *this_ptr + *b_ptr++;
+						this_ptr += i+j+1;
+						result_ptr++;
+					}
+				}
+			}
+		}
+	}
+
+
+	template <class valuetype>
+	Matrix<valuetype, UpperTriangularTraits>& Matrix<valuetype, UpperTriangularTraits>::operator += (const Matrix<valuetype, UpperTriangularTraits>& B)
+		throw(Exception::MatrixHasWrongDimension)
+	{
+		if ( (getRowCount() != B.getRowCount()) || (getColumnCount() != B.getColumnCount()) )
+		{
+			Exception::MatrixHasWrongDimension e;
+			throw (e);
+		}
+
+	#ifdef USE_BLAS
+	#ifdef DEBUG
+		std::cout << "Info: using add_inline_blas" << std::endl;
+	#endif
+	        // TODO
+		//add_inline_blas(B);
+		add_inline_native(B);	
+	#else
+	#ifdef DEBUG
+		std::cout << "Info: using add_native" << std::endl;
+	#endif
+		add_inline_native(B);
+	#endif
+		
+		return *this;
+	}
+
+	template <class valuetype>
+	void Matrix<valuetype, UpperTriangularTraits>::add_inline_native(const Matrix<valuetype, UpperTriangularTraits>& B)
+	{
+		/** At least try to gain some speed... **/
+		valuetype* this_ptr   = &data_[0];
+		valuetype const* b_ptr			= &B[0];
+
+		bool B_row_major = B.isRowMajor();
+
+		// we have to take care of possible shallow transposal
+		if (row_major_ == B_row_major)
+		{
+			size_t size = data_.size();
+			for (size_t i=0; i<size; i++)
+			{
+				*this_ptr = *this_ptr + *b_ptr++;
+				this_ptr++;
+			}
+		}
+		else
+		{
+			if (row_major_) // matrix B is in column order
+			{
+				// take one row at a time
+				for (size_t i=0; i<n_; i++)
+				{
+					// advance to the next row
+					b_ptr = &B[i*(i+3)/2];
+					for (size_t j=0; j<n_-i; j++)
+					{
+						*this_ptr = *this_ptr + *b_ptr;
+						b_ptr += i+j+1;
+						this_ptr++;
+					}
+				}
+			}
+			else // only our matrix is in column order
+			{
+				// take one row at a time
+				for (size_t i=0; i<m_; i++)
+				{
+					// advance to the next row
+					b_ptr = &B[i];
+					for (size_t j=0; j<=i; j++)
+					{
+						*this_ptr = *this_ptr + *b_ptr;
+						b_ptr += n_-1-j;
+						this_ptr++;
+					}
+				}
+			}
+		}
+	}
+
+
+
+	template <class valuetype>
+	Matrix<valuetype, UpperTriangularTraits> Matrix<valuetype, UpperTriangularTraits>::operator - (const Matrix<valuetype, UpperTriangularTraits>& B) const
+		throw(Exception::MatrixHasWrongDimension)
+	{
+		if ( (getRowCount() != B.getRowCount()) || (getColumnCount() != B.getColumnCount()) )
+		{
+			Exception::MatrixHasWrongDimension e;
+			throw (e);
+		}	
+
+		Matrix<valuetype, UpperTriangularTraits> result(getRowCount());
+	#ifdef USE_BLAS
+	#ifdef DEBUG
+		std::cout << "Info: using subtract_blas" << std::endl;
+	#endif
+	        // TODO
+		//subtract_blas(result, B);
+		subtract_native(result, B);
+	#ifdef DEBUG
+		std::cout << "Info: using subtract_native" << std::endl;
+	#endif
+		subtract_native(result, B);
+	#endif
+
+		return result;
+	}
+
+	template <class valuetype>
+	void Matrix<valuetype, UpperTriangularTraits>::subtract_native(Matrix<valuetype, UpperTriangularTraits>& result, const Matrix<valuetype, UpperTriangularTraits>& B) const
+	{
+		/** At least try to gain some speed... **/
+		valuetype* result_ptr 			= &result[0];
+		valuetype const* this_ptr   = &data_[0];
+		valuetype const* b_ptr			= &B[0];
+
+		bool B_row_major = B.isRowMajor();
+	
+		// we have to take care of possible shallow transposal
+		if (row_major_ == B_row_major)
+		{
+			size_t size = data_.size();
+			for (size_t i=0; i<size; i++)
+			{
+				*result_ptr = *this_ptr++ - *b_ptr++;
+				result_ptr++;
+			}
+
+			// and set the correct storage mode
+			result.setRowMajor(row_major_);
+		}
+		else
+		{
+			if (row_major_) // matrix B is in column order
+			{
+				// take one row at a time
+				for (size_t i=0; i<n_; i++)
+				{
+					// advance to the next row
+					b_ptr = &B[i*(i+3)/2];
+					for (size_t j=0; j<n_-i; j++)
+					{
+						*result_ptr = *this_ptr++ - *b_ptr;
+						b_ptr += i+j+1;
+						result_ptr++;
+					}
+				}
+			}
+			else // only our matrix is in column order
+			{
+				// take one row at a time
+				for (size_t i=0; i<n_; i++)
+				{
+					// advance to the next row
+					this_ptr = &data_[i*(i+3)/2];
+					for (size_t j=0; j<n_-i; j++)
+					{
+						*result_ptr = *this_ptr - *b_ptr++;
+						this_ptr += i+j+1;
+						result_ptr++;
+					}
+				}
+			}
+		}
+	}
+
+
+	template <class valuetype>
+	Matrix<valuetype, UpperTriangularTraits>& Matrix<valuetype, UpperTriangularTraits>::operator -= (const Matrix<valuetype, UpperTriangularTraits>& B)
+		throw(Exception::MatrixHasWrongDimension)
+	{
+		if ( (getRowCount() != B.getRowCount()) || (getColumnCount() != B.getColumnCount()) )
+		{
+			Exception::MatrixHasWrongDimension e;
+			throw (e);
+		}
+
+	#ifdef USE_BLAS
+	#ifdef DEBUG
+		std::cout << "Info: using subtract_inline_blas" << std::endl;
+	#endif
+	        // TODO
+		//subtract_inline_blas(B);
+		subtract_inline_native(B);	
+	#else
+	#ifdef DEBUG
+		std::cout << "Info: using subtract_native" << std::endl;
+	#endif
+		subtract_inline_native(B);
+	#endif
+		
+		return *this;
+	}
+
+	template <class valuetype>
+	void Matrix<valuetype, UpperTriangularTraits>::subtract_inline_native(const Matrix<valuetype, UpperTriangularTraits>& B)
+	{
+		/** At least try to gain some speed... **/
+		valuetype* this_ptr   = &data_[0];
+		valuetype const* b_ptr			= &B[0];
+
+		bool B_row_major = B.isRowMajor();
+
+		// we have to take care of possible shallow transposal
+		if (row_major_ == B_row_major)
+		{
+			size_t size = data_.size();
+			for (size_t i=0; i<size; i++)
+			{
+				*this_ptr = *this_ptr - *b_ptr++;
+				this_ptr++;
+			}
+		}
+		else
+		{
+			if (row_major_) // matrix B is in column order
+			{
+				// take one row at a time
+				for (size_t i=0; i<n_; i++)
+				{
+					// advance to the next row
+					b_ptr = &B[i*(i+3)/2];
+					for (size_t j=0; j<n_-i; j++)
+					{
+						*this_ptr = *this_ptr - *b_ptr;
+						b_ptr += i+j+1;
+						this_ptr++;
+					}
+				}
+			}
+			else // only our matrix is in column order
+			{
+				// take one row at a time
+				for (size_t i=0; i<m_; i++)
+				{
+					// advance to the next row
+					b_ptr = &B[i];
+					for (size_t j=0; j<=i; j++)
+					{
+						*this_ptr = *this_ptr - *b_ptr;
+						b_ptr += n_-1-j;
+						this_ptr++;
+					}
+				}
+			}
+		}
+	}
+
+
+	template <class valuetype>
+	Matrix<valuetype, UpperTriangularTraits> Matrix<valuetype, UpperTriangularTraits>::operator* (const valuetype& a) const
+		throw()
+	{
+		Matrix<valuetype, UpperTriangularTraits> result(*this);
+
+	#ifdef USE_BLAS
+	#ifdef DEBUG
+		std::cout << "Info: using multiply_blas" << std::endl;
+	#endif
+		multiply_blas(result, a);	
+	#else
+	#ifdef DEBUG
+		std::cout << "Info: using multiply_native" << std::endl;
+	#endif
+		multiply_native(result, a);
+	#endif
+
+		return result;
+	}
+
+	template <class valuetype>
+	void Matrix<valuetype, UpperTriangularTraits>::multiply_native(Matrix<valuetype, UpperTriangularTraits>& result, const valuetype& a) const
+	{
+		valuetype* v_ptr = const_cast<valuetype*>(&result[0]);
+
+		for (size_t i=0; i<result.getSize(); i++)
+			*v_ptr++ *= a;
+	}
+
+	template <class valuetype>
+	Matrix<valuetype, UpperTriangularTraits>& Matrix<valuetype, UpperTriangularTraits>::operator*= (const valuetype& a)
+		throw()
+	{
+	#ifdef USE_BLAS
+	#ifdef DEBUG
+		std::cout << "Info: using multiply_inline_blas" << std::endl;
+	#endif
+		multiply_inline_blas(a);	
+	#else
+	#ifdef DEBUG
+		std::cout << "Info: using multiply_inline_native" << std::endl;
+	#endif
+		multiply_inline_native(a);
+	#endif
+
+		return *this;
+	}
+
+	template <class valuetype>
+	void Matrix<valuetype, UpperTriangularTraits>::multiply_inline_native(const valuetype& a)
+	{
+		valuetype* v_ptr = &data_[0];
+		size_t size = data_.size();
+
+		for (size_t i=0; i<size; i++)
+			*v_ptr++ *= a;
+	}
+
+
+
+	template <> inline
+	void Matrix<float, UpperTriangularTraits>::multiply_blas(Matrix<float, UpperTriangularTraits>& result, const float& a) const
+	{
+	#ifdef HAS_BLAS
+		cblas_sscal(result.getSize(), a, &result[0], 1);
+	#else
+		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
+	#endif
+	}
+	
+	template <> inline
+	void Matrix<double, UpperTriangularTraits>::multiply_blas(Matrix<double, UpperTriangularTraits>& result, const double& a) const
+	{
+	#ifdef HAS_BLAS
+		cblas_dscal(result.getSize(), a, &result[0], 1);
+	#else	
+		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
+	#endif
+	}
+
+	/** TODO: multiplication by float instead of ComplexFloat **/
+	template <> inline
+	void Matrix<ComplexFloat, UpperTriangularTraits>::multiply_blas(Matrix<ComplexFloat, UpperTriangularTraits>& result, const ComplexFloat& a) const
+	{
+	#ifdef HAS_BLAS
+		cblas_cscal(result.getSize(), reinterpret_cast<const void*>(&a), &result[0], 1);
+	#else
+		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
+	#endif
+	}
+
+	template <> inline
+	void Matrix<ComplexDouble, UpperTriangularTraits>::multiply_blas(Matrix<ComplexDouble, UpperTriangularTraits>& result, const ComplexDouble& a) const
+	{
+	#ifdef HAS_BLAS
+		cblas_zscal(result.getSize(), reinterpret_cast<const void*>(&a), &result[0], 1);
+	#else
+		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
+	#endif
+	}
+
+
+
+	template <> inline
+	void Matrix<float, UpperTriangularTraits>::multiply_inline_blas(const float& a)
+	{
+	#ifdef HAS_BLAS
+		cblas_sscal(data_.size(), a, &data_[0], 1);
+	#else
+		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
+	#endif
+	}
+
+	template <> inline
+	void Matrix<double, UpperTriangularTraits>::multiply_inline_blas(const double& a)
+	{
+	#ifdef HAS_BLAS
+		cblas_dscal(data_.size(), a, &data_[0], 1);
+	#else
+		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
+	#endif
+	}
+	
+	template <> inline
+	void Matrix<ComplexFloat, UpperTriangularTraits>::multiply_inline_blas(const ComplexFloat& a)
+	{
+	#ifdef HAS_BLAS
+		cblas_cscal(data_.size(), reinterpret_cast<const void*>(&a), &data_[0], 1);
+	#else
+		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
+	#endif
+	}
+
+	template <> inline
+	void Matrix<ComplexDouble, UpperTriangularTraits>::multiply_inline_blas(const ComplexDouble& a)
+	{
+	#ifdef HAS_BLAS
+		cblas_zscal(data_.size(), reinterpret_cast<const void*>(&a), &data_[0], 1);
+	#else
+		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
+	#endif
+	}
+
+}
+
+#endif

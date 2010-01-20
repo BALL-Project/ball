@@ -1,0 +1,127 @@
+#ifndef BALL_LINALG_VECTORCONSTRUCTORS_IC
+#define BALL_LINALG_VECTORCONSTRUCTORS_IC
+
+namespace BALL {
+	template <typename valuetype>
+	Vector<valuetype>::Vector()
+		throw()
+		: data_(0),
+			is_column_vector_(true),
+			n_(0)
+	{
+	}
+
+	template <typename valuetype>
+	Vector<valuetype>::Vector(size_t n, bool is_column_vector)
+		throw()
+		: data_(),
+			is_column_vector_(is_column_vector),
+			n_(n)
+	{
+		// Try to catch allocation errors and rethrow them as OutOfMemory
+		try
+		{
+			data_.resize(n_);
+		}
+		catch (std::bad_alloc&)
+		{
+			throw Exception::OutOfMemory(__FILE__, __LINE__, n_*sizeof(valuetype));
+		}
+	}
+
+	template <typename valuetype>
+	Vector<valuetype>::Vector(size_t n, const valuetype& initial_value, bool is_column_vector)
+		throw()
+		: data_(),
+			is_column_vector_(is_column_vector),
+			n_(n)
+	{
+		// Try to catch allocation errors and rethrow them as OutOfMemory
+		try
+		{
+			data_.resize(n_, initial_value);
+		}
+		catch (std::bad_alloc&)
+		{
+			throw Exception::OutOfMemory(__FILE__, __LINE__, n_*sizeof(valuetype));
+		}
+	}
+
+	template <typename valuetype>
+	Vector<valuetype>::Vector(const Vector<valuetype>& v)
+		throw(Exception::OutOfMemory)
+		: data_(),
+			is_column_vector_(v.is_column_vector_),
+			n_(v.n_)
+	{
+		try
+		{
+			data_ = v.data_;
+		}
+		catch (std::bad_alloc&)
+		{
+			throw Exception::OutOfMemory(__FILE__, __LINE__, data_.size() * sizeof(valuetype));
+		}
+	}
+
+	template <typename valuetype>
+	Vector<valuetype>::~Vector()
+		throw()
+	{
+	}
+
+	template <typename valuetype>
+	Vector<valuetype>& Vector<valuetype>::operator = (const Vector<valuetype>& v)
+		throw(Exception::OutOfMemory)
+	{
+		is_column_vector_ = v.is_column_vector_;
+		n_ = v.n_;
+
+		try
+		{
+			data_ = v.data_;
+		}
+		catch (std::bad_alloc&)
+		{
+			throw Exception::OutOfMemory(__FILE__, __LINE__, data_.size() * sizeof(valuetype));
+		}
+
+		return *this;
+	}
+
+	template <typename valuetype>
+	bool Vector<valuetype>::operator == (const Vector<valuetype>& B) const
+		throw()
+	{
+		if (&B == this)
+			return true;
+	
+		if ((n_ != B.n_) || (is_column_vector_ != B.is_column_vector_))
+			return false;
+
+		valuetype const*	this_ptr = &(data_[0]);
+		valuetype const* 	b_ptr    = &(B[0]);
+		bool equals = true;
+
+		for (size_t i=0; i<n_; i++)
+		{
+			if (*this_ptr++ != *b_ptr++)
+			{
+				equals = false;
+				break;
+			}
+		}
+
+		return equals;	
+	}
+
+	template <typename valuetype>
+	bool Vector<valuetype>::operator != (const Vector<valuetype>& B) const
+		throw()
+	{
+		return !(*this == B);
+	}
+
+}
+
+#endif

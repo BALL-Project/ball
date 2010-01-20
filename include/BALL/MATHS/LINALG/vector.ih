@@ -1,0 +1,481 @@
+#ifndef BALL_LINALG_VECTOR_IH
+#define BALL_LINALG_VECTOR_IH
+
+#ifndef BALL_LINALG_GLOBAL_H
+#	include <BALL/MATHS/LINALG/global.h>
+#endif
+
+#ifndef BALL_LINALG_CONFIG_H
+# include <BALL/MATHS/LINALG/config.h>
+#endif
+
+#ifndef BALL_COMMON_EXCEPTION_H
+#	include <BALL/COMMON/exception.h>
+#endif
+
+#ifndef BALL_LINALG_VECTORITERATOR_H
+# include <BALL/MATHS/LINALG/vectorIterator.h>
+#endif
+
+#ifndef BALL_LINALG_REVERSEITERATOR_H
+# include <BALL/MATHS/LINALG/reverseIterator.h>
+#endif
+
+#ifdef HAS_BLAS
+extern "C"
+{
+# include "cblas.h"
+}
+#endif
+
+#include <vector>
+#include <iostream>
+
+namespace BALL {
+	
+	typedef std::complex<float> ComplexFloat;
+	typedef std::complex<double> ComplexDouble;
+		
+	template <typename valuetype>
+	class Vector
+	{
+
+		/**
+		*/
+		typedef valuetype ValueType;
+
+		/**
+		*/
+		typedef valuetype* PointerType;
+
+		public:
+			/**
+			 * 	Default constructor, creating a column vector of size 0.
+			 */
+			Vector()
+				throw();
+
+			/**
+			 *  Explicit constructor, creating a vector of size n. The
+			 *  vector can be a column (default) or a row vector, depending on the
+			 *  flag is_column_vector.
+			 */
+			Vector(size_t n, bool is_column_vector = true)
+				throw();
+
+			/**
+			 *  Explicit constructor, creating a vector of size n. The
+			 *  vector can be a column (default) or a row vector, depending on the
+			 *  flag is_column_vector.
+			 *  initial_value can be used to initialize all values of the vector.
+			 */
+			Vector(size_t n, const valuetype& initial_value, bool is_column_vector = true)
+				throw();
+
+			/**
+			 *  Copy constructor.
+			 */
+			Vector(const Vector& v)
+				throw(Exception::OutOfMemory);
+
+			/**
+			 * 	Destructor.
+			 */
+			virtual ~Vector()
+				throw();
+
+			/** Clear method.
+			 *  Puts the vector in the same state as a default constructed one.
+			 */
+			virtual void clear();
+
+			/** 
+			 * Output operator, in-class version.
+			 */
+			std::ostream& operator>> (std::ostream& stream) const;
+
+			/**
+			 * Input operator, in-class version.
+			 */
+			std::istream& operator<< (std::istream& stream);
+
+			/** Convenient access to the vector elements.
+			 *  To be consistent with mathematical usage, the indices
+			 *  start at 1, not at 0 as would be common for an array.
+			 */
+			valuetype& operator () (size_t i);
+
+			/** Convenient access to the vector elements, const version.
+			 *  To be consistent with mathematical usage, the indices
+			 *  start at 1, not at 0 as would be common for an array.
+			 */
+			const valuetype& operator () (size_t i) const;
+
+			valuetype& operator [] (size_t position);
+			const valuetype& operator [] (size_t position) const;
+			
+			/** return the transposed of this vector */
+			virtual Vector<valuetype> t() 
+			{ 
+				Vector<valuetype> v;
+				v = *this;
+				v.is_column_vector_ = !is_column_vector_;
+				return v;
+			};
+			
+			/** set all cells of this vector to the given value */
+			void operator=(valuetype value);
+			
+			valuetype sum();
+			
+			/** calculates the dot product between this vector and the specified vector and saves the result to the given matrix.\n
+			The resulting matrix will always have the dimensions this->getSize() x a.getSize() */
+			template <class mvaluetype, class mtraits>
+			void dotProduct(const Vector<valuetype>& a, Matrix<mvaluetype, mtraits>& result) const;
+
+			/**
+			 *  Assignment operator
+			 */
+			Vector<valuetype>& operator = (const Vector<valuetype>& B)
+				throw(Exception::OutOfMemory);
+
+			/**
+			 *  Checks for equality.
+			 *  Please note that two vectors with the same entries but differing
+			 *  type (row or column vector) are /not/ considered equal!
+			 */
+			bool operator == (const Vector<valuetype>& B) const
+				throw();
+
+			/**
+			 *  Checks for inequality.
+			 *  Please note that two vectors with the same entries but differing
+			 *  type (row or column vector) are /not/ considered equal!
+			 */
+			bool operator != (const Vector<valuetype>& B) const
+				throw();
+
+			/**
+			 *  Adds the vector B to this vector.
+			 *  If the sizes of the vectors don't match, an Exception::VectorHasWrongDimension
+			 *  is thrown. Note that no distinction is made between row and column vectors.
+			 */
+			inline Vector<valuetype>& operator += (const Vector<valuetype>& B)
+				throw(Exception::VectorHasWrongDimension);
+
+			/**
+			 *  Returns the sum of this vector and the vector B.
+			 *  If the sizes of the vectors do not match, an
+			 *  Exception::MatrixHasWrongDimension is thrown.
+			 *  The type of the vector (i.e. row or column) depends on the type of the
+			 *  input vectors. If both inputs have the same type, the output will have
+			 *  the same type as well. If the inputs differ in type, the output will have
+			 *  the default type (column vector).
+			 */
+			inline Vector<valuetype> operator+ (const Vector<valuetype>& B) const
+				throw(Exception::VectorHasWrongDimension);
+			
+			/**
+			 *  Subtracts the vector B from this vector.
+			 *  If the sizes of the vectors don't match, an Exception::VectorHasWrongDimension
+			 *  is thrown. Note that no distinction is made between row and column vectors.
+			 */
+			inline Vector<valuetype>& operator -= (const Vector<valuetype>& B)
+				throw(Exception::VectorHasWrongDimension);
+
+			/**
+			 *  Returns the difference of this vector and the vector B.
+			 *  If the sizes of the vectors do not match, an
+			 *  Exception::MatrixHasWrongDimension is thrown.
+			 *  The type of the vector (i.e. row or column) depends on the type of the
+			 *  input vectors. If both inputs have the same type, the output will have
+			 *  the same type as well. If the inputs differ in type, the output will have
+			 *  the default type (column vector).
+			 */
+			inline Vector<valuetype> operator- (const Vector<valuetype>& B) const
+				throw(Exception::VectorHasWrongDimension);
+
+			/** Returns a vector containing the entries of this vector
+			 *  multiplied with the factor a. The type of the vector (row or
+			 *  column) is the same as that of this vector.
+			 */
+			inline Vector<valuetype> operator* (const valuetype& a) const
+				throw();
+
+			/** Multiplies the entries of this vector by the factor a.
+			 */
+			inline Vector<valuetype>& operator*= (const valuetype& a)
+				throw();
+
+			/** Returns a vector containing the entries of this vector
+			 *  divided by the factor a. The type of the vector (row or
+			 *  column) is the same as that of this vector.
+			 */
+			inline Vector<valuetype> operator/ (const valuetype& a) const;
+
+			/** Divides the entries of this vector by the factor a.
+			 */
+			inline Vector<valuetype>& operator/= (const valuetype& a);
+
+			/** Returns the scalar product of this vector with the vector a.
+			 *  NOTE: for complex vectors, the scalar product is defined as
+			 *        a^' * b
+			 *        where ^' denotes Hermite transposal (i.e. transposition
+			 *        and complex conjugation)
+			 */
+			inline valuetype operator* (const Vector<valuetype>& a) const
+				throw(Exception::VectorHasWrongDimension);
+
+			/** Build the cross product of this vector and the vector a.
+			 *  Note: this is currently only implemented for the 3D case.
+			 */
+			inline Vector<valuetype> operator % (const Vector<valuetype>& a) const
+				throw(Exception::VectorHasWrongDimension);
+
+			/** "fast" and unchecked inline version of vector addition, native version.
+			 *  The type of the vector, i.e. row or column, will not be changed, independent
+			 *  of the type of B.
+			 */
+			void add_inline_native(const Vector<valuetype>& B)
+				throw();
+
+			/** "fast" and unchecked inline version of vector addition, BLAS version.
+			 *  The type of the vector, i.e. row or column, will not be changed, independent
+			 *  of the type of B.
+			 */
+			void add_inline_blas(const Vector<valuetype>& B);
+
+			/**
+			 *  "fast" and unchecked version of vector addition, native implementation.
+			 *  The type of the vector (i.e. row or column) depends on the type of the
+			 *  input vectors. If both inputs have the same type, the output will have
+			 *  the same type as well. If the inputs differ in type, the output will have
+			 *  the default type (column vector).
+			 */
+			void add_native(Vector<valuetype>& result, const Vector<valuetype>& B) const
+				throw();
+
+			/**
+			 *  "fast" and unchecked version of vector addition, BLAS implementation.
+			 *  The type of the vector (i.e. row or column) depends on the type of the
+			 *  input vectors. If both inputs have the same type, the output will have
+			 *  the same type as well. If the inputs differ in type, the output will have
+			 *  the default type (column vector).
+			 */
+			void add_blas(Vector<valuetype>& result, const Vector<valuetype>& B) const;
+
+			/** "fast" and unchecked inline version of vector subtraction, native version.
+			 *  The type of the vector, i.e. row or column, will not be changed, independent
+			 *  of the type of B.
+			 */
+			void subtract_inline_native(const Vector<valuetype>& B)
+				throw();
+
+			/** "fast" and unchecked inline version of vector subtraction, BLAS version.
+			 *  The type of the vector, i.e. row or column, will not be changed, independent
+			 *  of the type of B.
+			 */
+			void subtract_inline_blas(const Vector<valuetype>& B);
+
+			/**
+			 *  "fast" and unchecked version of vector subtraction, native implementation.
+			 *  The type of the vector (i.e. row or column) depends on the type of the
+			 *  input vectors. If both inputs have the same type, the output will have
+			 *  the same type as well. If the inputs differ in type, the output will have
+			 *  the default type (column vector).
+			 */
+			void subtract_native(Vector<valuetype>& result, const Vector<valuetype>& B) const
+				throw();
+
+			/**
+			 *  "fast" and unchecked version of vector subtraction, BLAS implementation.
+			 *  The type of the vector (i.e. row or column) depends on the type of the
+			 *  input vectors. If both inputs have the same type, the output will have
+			 *  the same type as well. If the inputs differ in type, the output will have
+			 *  the default type (column vector).
+			 */
+			void subtract_blas(Vector<valuetype>& result, const Vector<valuetype>& B) const;
+
+			/** "fast" and unchecked version of multiplication with a scalar, native implementation.
+			 *  The type of the resulting vector equals the type of this one.
+			 */
+			void multiply_native(Vector<valuetype>& result, const valuetype& a) const;
+
+			/** "fast" and unchecked version of multiplication with a scalar, BLAS implementation.
+			 *  The type of the resulting vector equals the type of this one.
+			 */
+			void multiply_blas(Vector<valuetype>& result, const valuetype& a) const;
+
+			/** "fast" and unchecked version of inline multiplication with a scalar, 
+			 *  native implementation. The type of the vector remains unchanged.
+			 */
+			void multiply_inline_native(const valuetype& a);
+
+			/** "fast" and unchecked version of inline multiplication with a scalar, BLAS implementation 
+			 *  native implementation. The type of the vector remains unchanged.
+			 */
+			void multiply_inline_blas(const valuetype& a);
+
+			/** "fast" and unchecked version of scalar product computation,
+			 *  native implementation.
+			 */
+			valuetype scalarproduct_native(const Vector<valuetype>& a) const;
+
+			/** "fast" and unchecked version of scalar product computation,
+			 *  BLAS implementation.
+			 */
+			valuetype scalarproduct_blas(const Vector<valuetype>& a) const;
+
+			/** Returns a vector containing the entries of this vector
+			 *  right multiplied with the Matrix A.
+			 */
+			template <class mvaluetype, class mtraits>
+			inline Vector<valuetype> operator* (const Matrix<mvaluetype, mtraits>& A) const
+				throw(Exception::VectorHasWrongDimension);
+
+			/** "fast" and unchecked version of multiplication with a Matrix, native implementation.
+			 *  The type of the resulting vector equals the type of this one.
+			 */
+			template <class mvaluetype, class mtraits>
+			void multiply_native(Vector<valuetype>& result, const Matrix<mvaluetype, mtraits>& A, bool right = true) const;
+
+			/** "fast" and unchecked version of multiplication with a Matrix, BLAS implementation.
+			 *  The type of the resulting vector equals the type of this one.
+			 */
+			template <class mvaluetype, class mtraits>
+			void multiply_blas(Vector& result, const Matrix<mvaluetype, mtraits>& A, bool right = true) const;
+
+			/** Returns the 2-norm of the vector.
+			 *  Note: for the complex datatypes, we return a _complex_ norm, but with
+ 			 *        vanishing imaginary part
+			 **/
+			void normalize();
+
+			/** Returns the 1-norm of the vector.
+			 *  Note: for the complex datatypes, we return a _complex_ norm, but with
+ 			 *        vanishing imaginary part
+			 **/
+			inline valuetype get1Norm() const
+				throw();
+
+			/** Returns the infinity-norm of the vector.
+			 *  Note: for the complex datatypes, we return a _complex_ norm, but with
+ 			 *        vanishing imaginary part
+			 **/
+			inline valuetype getInftyNorm() const
+				throw();
+
+			/** Returns the 2-norm of the vector.
+			 *  Note: for the complex datatypes, we return a _complex_ norm, but with
+ 			 *        vanishing imaginary part
+			 **/
+			inline valuetype get2Norm() const
+				throw();
+
+			/** Returns the 2-norm of the vector.
+			 *  Note: for the complex datatypes, we return a _complex_ norm, but with
+ 			 *        vanishing imaginary part
+			 **/
+			inline valuetype getLength() const
+				throw();
+
+			/** "fast" and unchecked version of length (2-Norm) computation, native implementation **/
+			valuetype compute_length_native() const
+				throw();
+
+			/** "fast" and unchecked version of length (2-Norm) computation, BLAS implementation **/
+			valuetype compute_length_blas() const;
+
+			/**
+			 *  element iterator
+			 *
+			 */
+
+			friend class VectorIteratorTraits<valuetype>;
+
+			/** Random access iterator for b.
+			*/
+			typedef RandomAccessIterator<Vector<valuetype>, ValueType, PointerType, 
+																	 VectorIteratorTraits<valuetype> > Iterator;
+			
+			/// Return a iterator pointing to the first element in the vector
+			Iterator begin()
+				throw()
+			{
+				return Iterator::begin(*this);
+			}
+
+			/// Return a past-the-end iterator
+			Iterator end()
+				throw()
+			{
+				return Iterator::end(*this);
+			}
+
+			/// Constant random access iterator for the elements
+			typedef ConstRandomAccessIterator<Vector<valuetype>, ValueType, PointerType, VectorIteratorTraits<valuetype> > ConstIterator;
+
+			/// Return a constant element row iterator pointing to the first element in the vector
+			ConstIterator begin() const
+				throw()
+			{
+				return ConstIterator::begin(*this);
+			}
+
+			/// Return a constant past-the-end element row iterator.
+			ConstIterator end() const
+				throw()
+			{
+				return ConstIterator::end(*this);
+			}
+		
+			/// Reverse random access iterator for the elements.
+			typedef ReverseIterator<Vector<valuetype>, ValueType, PointerType, VectorIteratorTraits<valuetype> >	Reverse_Iterator;
+
+			/// Return a reverse iterator pointing to the first element.
+			Reverse_Iterator rbegin()
+				throw()
+			{
+				return Reverse_Iterator::begin(*this);
+			}
+
+			/// Return a past-the-end iterator for reverse traversal.
+			Reverse_Iterator rend()
+				throw()
+			{
+				return Reverse_Iterator::end(*this);
+			}
+
+			/// Constant reverse random access iterator for the elements.
+			typedef ConstReverseIterator<Vector<valuetype>, ValueType, PointerType, VectorIteratorTraits<valuetype> > ConstReverse_Iterator;
+
+			/// Return a constant reverse iterator pointing to the first element
+			ConstReverse_Iterator rbegin() const
+				throw()
+			{
+				return ConstReverse_Iterator::begin(*this);
+			}
+
+			/// Return a constant past-the-end iterator for reverse traversal
+			ConstReverse_Iterator rend() const
+				throw()
+			{
+				return ConstReverse_Iterator::end(*this);
+			}
+
+			inline size_t getSize() const throw();
+			inline bool isColumnVector() const throw();
+			inline void setVectorType(bool column_vector) throw();
+			inline void transpose() throw();
+
+			void resize(size_t size);
+
+		protected:
+			std::vector<valuetype> data_;
+
+			bool is_column_vector_;
+			size_t n_;
+	};
+
+}
+#endif

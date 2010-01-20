@@ -1,0 +1,128 @@
+#ifndef BALL_LINALG_SVDSOLVER_IC
+#define BALL_LINALG_SVDSOLVER_IC
+
+namespace BALL {
+
+	typedef std::complex<float>  ComplexFloat;
+	typedef std::complex<double> ComplexDouble;
+
+	template <class valuetype, class mtraits>
+	SVDSolver<valuetype, mtraits>::SVDSolver()
+		: matrix_(0)
+	{
+	}
+
+	template <class valuetype, class mtraits>
+	SVDSolver<valuetype, mtraits>::SVDSolver(const Matrix<valuetype, mtraits>& matrix)
+		: matrix_(&matrix)
+	{
+	}
+
+	template <class valuetype, class mtraits>
+	bool SVDSolver<valuetype, mtraits>::setup(const Matrix<valuetype, mtraits>& matrix)
+	{
+		 left_singular_vectors_.clear();
+		right_singular_vectors_.clear();
+
+    singular_values_.clear();
+
+		matrix_ = &matrix;
+
+		return true;
+	}
+
+	template <>
+	bool SVDSolver<float, StandardTraits>::computeSVD_lapack()
+		throw(Exception::OutOfMemory);
+
+	template <>
+	bool SVDSolver<double, StandardTraits>::computeSVD_lapack()
+		throw(Exception::OutOfMemory);
+
+	template <>
+	bool SVDSolver<ComplexFloat, StandardTraits>::computeSVD_lapack()
+		throw(Exception::OutOfMemory);
+
+	template <>
+	bool SVDSolver<ComplexDouble, StandardTraits>::computeSVD_lapack()
+		throw(Exception::OutOfMemory);
+
+	template <class valuetype, class mtraits> 
+	bool SVDSolver<valuetype, mtraits>::computeSVD_lapack()
+		throw(Exception::OutOfMemory)
+	{
+		std::cerr << "Sorry, no LAPACK-based SVD computation for this valuetype/storage type combination!" << std::endl;
+		std::cerr << "Aborting!" << std::endl;
+
+		return false;
+	}
+
+	template <class valuetype, class mtraits> 
+	bool SVDSolver<valuetype, mtraits>::computeSVD()
+		throw(Exception::OutOfMemory, Exception::Uninitialized)
+	{
+		if (!matrix_)
+		{
+			Exception::Uninitialized e;
+			throw (e);
+		}
+
+#ifdef USE_LAPACK
+#ifdef DEBUG
+		std::cout << "Info: using computeSVD_lapack" << std::endl;
+#endif
+		return computeSVD_lapack();
+#else
+#ifdef DEBUG
+		std::cout << "Info: using computeSVD_native" << std::endl;
+#endif
+		return computeSVD_native();
+#endif
+	}
+
+	template <class valuetype, class mtraits>
+	bool SVDSolver<valuetype, mtraits>::computeSVD_native()
+		throw(Exception::OutOfMemory)
+	{
+		std::cout << "Error: computeSVD_native not implemented yet! Sorry!" << std::endl;
+		
+		return false;
+	}
+
+	template <class valuetype, class mtraits>
+	Matrix<typename SVDSolver<valuetype, mtraits>::SingularVectorType, StandardTraits>& SVDSolver<valuetype, mtraits>::getLeftSingularVectors()
+	{
+		return left_singular_vectors_;
+	}
+
+	template <class valuetype, class mtraits>
+	const Matrix<typename SVDSolver<valuetype, mtraits>::SingularVectorType, StandardTraits>& SVDSolver<valuetype, mtraits>::getLeftSingularVectors() const
+	{
+		return left_singular_vectors_;
+	}
+
+	template <class valuetype, class mtraits>
+	Matrix<typename SVDSolver<valuetype, mtraits>::SingularVectorType, StandardTraits>& SVDSolver<valuetype, mtraits>::getRightSingularVectors()
+	{
+		return right_singular_vectors_;
+	}
+
+	template <class valuetype, class mtraits>
+	const Matrix<typename SVDSolver<valuetype, mtraits>::SingularVectorType, StandardTraits>& SVDSolver<valuetype, mtraits>::getRightSingularVectors() const
+	{
+		return right_singular_vectors_;
+	}
+
+	template <class valuetype, class mtraits>
+	Vector<typename SVDSolver<valuetype, mtraits>::SingularValueType>& SVDSolver<valuetype, mtraits>::getSingularValues()
+	{
+		return singular_values_;
+	}
+
+	template <class valuetype, class mtraits>
+	const Vector<typename SVDSolver<valuetype, mtraits>::SingularValueType>& SVDSolver<valuetype, mtraits>::getSingularValues() const
+	{
+		return singular_values_;
+	}
+}
+#endif

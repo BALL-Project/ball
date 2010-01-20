@@ -1,0 +1,58 @@
+#ifndef BALL_LINALG_SYMMETRICMATRIXIO_IC
+#define BALL_LINALG_SYMMETRICMATRIXIO_IC
+
+namespace BALL {
+	
+	template <class valuetype>
+	std::ostream& Matrix<valuetype, SymmetricTraits>::operator>> (std::ostream& stream) const
+	{
+		// This is the most simple implementation possible... we should provide a
+		// more sophisticated implementation as soon as possible.
+		for (size_t i=1; i<=n_; i++)
+		{
+			for (size_t j=1; j<=m_; j++)
+			{
+				stream << Matrix<valuetype, SymmetricTraits>::operator() (i,j) << '\t';
+			}
+			stream << std::endl;
+		}
+		return stream;
+	}
+	
+	// External definition of output operator
+	template <class valuetype>
+	std::ostream& operator<< (std::ostream& stream, 
+														const Matrix<valuetype, SymmetricTraits>& m)
+	{
+		return (m >> stream);
+	}
+	
+	// Input Operator
+	template <class valuetype>
+	std::istream& Matrix<valuetype, SymmetricTraits>::operator<< (std::istream& stream)
+	{
+		// This is the most simple implementation possible... we should provide a
+		// more sophisticated implementation as soon as possible.
+		valuetype dummy;
+		for (size_t i=1; i<=n_; i++)
+		{
+			for (size_t j=1; j<=m_; j++)
+			{
+				stream >> dummy;
+				if (i<=j)
+					Matrix<valuetype, SymmetricTraits>::operator() (i,j) = dummy;
+			}
+		}
+		return stream;
+	}
+	
+	// External definition of our input operator
+	template <class valuetype>
+	std::istream& operator>> (std::istream& stream, Matrix<valuetype, SymmetricTraits>& m)
+	{
+		return(m << stream);
+	}
+	
+}
+
+#endif // BALL_LINALG_SYMMETRICMATRIXIO_IC
