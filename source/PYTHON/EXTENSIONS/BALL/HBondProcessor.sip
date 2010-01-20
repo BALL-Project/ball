@@ -1,0 +1,19 @@
+  
+	class HBondProcessor 
+		:	CompositeProcessor
+  {
+%TypeHeaderCode
+	#include <BALL/STRUCTURE/HBondProcessor.h>
+	#include "sipAPIBALL.h"
+	using namespace BALL;
+	typedef UnaryProcessor<Composite> CompositeProcessor;
+%End
+		public:
+    HBondProcessor();
+    Processor::Result operator() (Composite& /composite/);
+%MethodCode
+  sipRes = sipCpp->operator () (*a0);
+%End
+
+	Options options;
+};
