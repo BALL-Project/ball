@@ -30,7 +30,6 @@
 #include <BALL/QSAR/mlrModel.h>
 #include <BALL/QSAR/plsModel.h>
 #include <BALL/QSAR/oplsModel.h>
-#include <BALL/QSAR/libsvmModel.h>
 #include <BALL/QSAR/kplsModel.h>
 #include <BALL/QSAR/allModel.h>
 #include <BALL/QSAR/svrModel.h>
@@ -44,6 +43,10 @@
 #include <BALL/QSAR/rrModel.h>
 #include <BALL/QSAR/snBModel.h>
 #include <BALL/QSAR/nBModel.h>
+
+#ifdef BALL_HAS_LIBSVM
+# include <BALL/QSAR/libsvmModel.h>
+#endif
 
 namespace BALL
 {

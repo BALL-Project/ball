@@ -110,6 +110,7 @@ Registry::Registry()
 	r6.parameterDefaults.push_back(0.03);
 	addEntry(r6,9);
 	
+#ifdef BALL_HAS_LIBSVM
 	RegistryEntry r9(1,1,"Support Vector Regression","SVR",(CreateKernel1) &ModelFactory<LibsvmModel>::createKernel1, NULL);
 	r9.parameterNames.push_back("use nu-SVR (else epsilon-SVR)?");
 	r9.parameterNames.push_back("use shrinking heuristic?");
@@ -124,6 +125,7 @@ Registry::Registry()
 	r9.parameterDefaults.push_back(1e-3);
 	r9.parameterDefaults.push_back(1);
 	addEntry(r9,10);
+#endif
 	
 	RegistryEntry r7(0,0,"Linear Discriminant Analysis","LDA",(CreateMethod) &ModelFactory<LDAModel>::create);
 	r7.parameterNames.push_back("lambda");

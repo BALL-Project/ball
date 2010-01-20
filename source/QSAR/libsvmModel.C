@@ -44,7 +44,6 @@ LibsvmModel::LibsvmModel(const QSARData& q, int k_type, double p1, double p2) : 
 
 LibsvmModel::~LibsvmModel()
 {
-	delete svm_train_result_;
 	delete x_space_;
 }
 
