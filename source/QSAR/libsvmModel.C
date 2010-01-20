@@ -64,7 +64,7 @@ void LibsvmModel::train()
 	for(int act=1; act<=Y_.Ncols(); act++)
 	{
 		prob = createProblem(act);
-		svm_train_result_ = svm_train(prob,&parameters_);
+		svm_train_result_ = (LibsvmModel::svm_model*)svm_train(prob,&parameters_);
 		free(prob->y);free(prob->x);free(prob);
 		
 		const double* const *sv_coef = svm_train_result_->sv_coef;
@@ -82,7 +82,7 @@ void LibsvmModel::train()
 		
 		//free(prob);
 		//free(prob->y); free(prob->x);
-		svm_destroy_model(svm_train_result_);
+		svm_destroy_model((::svm_model*)svm_train_result_);
 	}
 }
 
