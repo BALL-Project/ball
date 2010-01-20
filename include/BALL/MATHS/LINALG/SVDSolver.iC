@@ -67,7 +67,7 @@ namespace BALL {
 			throw (e);
 		}
 
-#ifdef USE_LAPACK
+#ifdef BALL_HAS_LAPACK
 #ifdef DEBUG
 		std::cout << "Info: using computeSVD_lapack" << std::endl;
 #endif

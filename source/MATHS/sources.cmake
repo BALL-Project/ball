@@ -1,3 +1,5 @@
+INCLUDE(source/MATHS/LINALG/sources.cmake)
+
 ### list all filenames of the directory here ###
 SET(SOURCES_LIST
 	analyticalGeometry.C

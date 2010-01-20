@@ -25,7 +25,7 @@ namespace BALL
 			n_(m.n_),
 			m_(m.m_) 
 	{
-		#ifdef USE_BLAS
+		#ifdef BALL_HAS_BLAS
 		#ifdef DEBUG
 			std::cout << "Info: using blas for copy constructor" << std::endl;
 		#endif // DEBUG
@@ -46,7 +46,7 @@ namespace BALL
 			n_(m.n_),
 			m_(m.m_) 
 	{
-		#ifdef USE_BLAS
+		#ifdef BALL_HAS_BLAS
 		#ifdef DEBUG
 			std::cout << "Info: using blas for copy constructor" << std::endl;
 		#endif // DEBUG
@@ -66,7 +66,7 @@ namespace BALL
 	template <>
 	Matrix<float, StandardTraits>& Matrix<float, StandardTraits>::operator = (const Matrix<float, StandardTraits>& m) 
 	{
-		#ifdef USE_BLAS
+		#ifdef BALL_HAS_BLAS
 		#ifdef DEBUG
 			std::cout << "Info: using blas for assignment constructor" << std::endl;
 		#endif // DEBUG
@@ -87,7 +87,7 @@ namespace BALL
 	template <>
 	Matrix<double, StandardTraits>& Matrix<double, StandardTraits>::operator = (const Matrix<double, StandardTraits>& m) 
 	{
-		#ifdef USE_BLAS
+		#ifdef BALL_HAS_BLAS
 		#ifdef DEBUG
 			std::cout << "Info: using blas for assignment constructor" << std::endl;
 		#endif // DEBUG
@@ -210,7 +210,7 @@ namespace BALL
 	template <>
 	void Matrix<float, StandardTraits>::add_blas(Matrix<float, StandardTraits>& result, const Matrix<float, StandardTraits>& B) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		size_t size = data_.size();
 		
 		// We have to take care of possible shallow transposal
@@ -262,7 +262,7 @@ namespace BALL
 	template <>
 	void Matrix<double, StandardTraits>::add_blas(Matrix<double, StandardTraits>& result, const Matrix<double, StandardTraits>& B) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		size_t size = data_.size();
 		
 		// We have to take care of possible shallow transposal
@@ -314,7 +314,7 @@ namespace BALL
 	template <> 
 	void Matrix<ComplexFloat, StandardTraits>::add_blas(Matrix<ComplexFloat, StandardTraits>& result, const Matrix<ComplexFloat, StandardTraits>& B) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		size_t size = data_.size();
 		
 		// We have to take care of possible shallow transposal
@@ -373,7 +373,7 @@ namespace BALL
 	template <>
 	void Matrix<ComplexDouble, StandardTraits>::add_blas(Matrix<ComplexDouble, StandardTraits>& result, const Matrix<ComplexDouble, StandardTraits>& B) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		size_t size = data_.size();
 		
 		// We have to take care of possible shallow transposal
@@ -433,7 +433,7 @@ namespace BALL
 	template <>
 	void Matrix<float, StandardTraits>::add_inline_blas(const Matrix<float, StandardTraits>& B)
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		size_t size = data_.size();
 		
 		// We have to take care of possible shallow transposal
@@ -471,7 +471,7 @@ namespace BALL
 	template <>
 	void Matrix<double, StandardTraits>::add_inline_blas(const Matrix<double, StandardTraits>& B) 
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		size_t size = data_.size();
 		
 		// We have to take care of possible shallow transposal
@@ -509,7 +509,7 @@ namespace BALL
 	template <>
 	void Matrix<ComplexFloat, StandardTraits>::add_inline_blas(const Matrix<ComplexFloat, StandardTraits>& B)
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		size_t size = data_.size();
 
 		// We'll need that one for the axpy
@@ -551,7 +551,7 @@ namespace BALL
 	template <>
 	void Matrix<ComplexDouble, StandardTraits>::add_inline_blas(const Matrix<ComplexDouble, StandardTraits>& B)
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		size_t size = data_.size();
 
 		// We'll need that one for the axpy
@@ -594,7 +594,7 @@ namespace BALL
 	template <>
 	void Matrix<float, StandardTraits>::subtract_blas(Matrix<float, StandardTraits>& result, const Matrix<float, StandardTraits>& B) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		size_t size = data_.size();
 		
 		// We have to take care of possible shallow transposal
@@ -652,7 +652,7 @@ namespace BALL
 	template <>
 	void Matrix<double, StandardTraits>::subtract_blas(Matrix<double, StandardTraits>& result, const Matrix<double, StandardTraits>& B) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		size_t size = data_.size();
 		
 		// We have to take care of possible shallow transposal
@@ -710,7 +710,7 @@ namespace BALL
 	template <>
 	void Matrix<ComplexFloat, StandardTraits>::subtract_blas(Matrix<ComplexFloat, StandardTraits>& result, const Matrix<ComplexFloat, StandardTraits>& B) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		size_t size = data_.size();
 		
 		// We have to take care of possible shallow transposal
@@ -772,7 +772,7 @@ namespace BALL
 	template <>
 	void Matrix<ComplexDouble, StandardTraits>::subtract_blas(Matrix<ComplexDouble, StandardTraits>& result, const Matrix<ComplexDouble, StandardTraits>& B) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		size_t size = data_.size();
 		
 		// We have to take care of possible shallow transposal
@@ -835,7 +835,7 @@ namespace BALL
 	template <>
 	void Matrix<float, StandardTraits>::subtract_inline_blas(const Matrix<float, StandardTraits>& B)
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		size_t size = data_.size();
 		
 		// We have to take care of possible shallow transposal
@@ -873,7 +873,7 @@ namespace BALL
 	template <>
 	void Matrix<double, StandardTraits>::subtract_inline_blas(const Matrix<double, StandardTraits>& B) 
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		size_t size = data_.size();
 		
 		// We have to take care of possible shallow transposal
@@ -911,7 +911,7 @@ namespace BALL
 	template <>
 	void Matrix<ComplexFloat, StandardTraits>::subtract_inline_blas(const Matrix<ComplexFloat, StandardTraits>& B)
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		size_t size = data_.size();
 
 		// We'll need that one for the axpy
@@ -953,7 +953,7 @@ namespace BALL
 	template <>
 	void Matrix<ComplexDouble, StandardTraits>::subtract_inline_blas(const Matrix<ComplexDouble, StandardTraits>& B)
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		size_t size = data_.size();
 
 		// We'll need that one for the axpy
@@ -996,7 +996,7 @@ namespace BALL
 	template <>
 	void Matrix<float, StandardTraits>::multiply_blas(Matrix<float, StandardTraits>& result, const float& a) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		cblas_sscal(result.getSize(), a, &result[0], 1);
 #else
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
@@ -1006,7 +1006,7 @@ namespace BALL
 	template <>
 	void Matrix<double, StandardTraits>::multiply_blas(Matrix<double, StandardTraits>& result, const double& a) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		cblas_dscal(result.getSize(), a, &result[0], 1);
 #else
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
@@ -1017,7 +1017,7 @@ namespace BALL
 	template <>
 	void Matrix<ComplexFloat, StandardTraits>::multiply_blas(Matrix<ComplexFloat, StandardTraits>& result, const ComplexFloat& a) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		cblas_cscal(result.getSize(), reinterpret_cast<const void*>(&a), &result[0], 1);
 #else
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
@@ -1027,7 +1027,7 @@ namespace BALL
 	template <>
 	void Matrix<ComplexDouble, StandardTraits>::multiply_blas(Matrix<ComplexDouble, StandardTraits>& result, const ComplexDouble& a) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		cblas_zscal(result.getSize(), reinterpret_cast<const void*>(&a), &result[0], 1);
 #else
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
@@ -1038,7 +1038,7 @@ namespace BALL
 	template <>
 	void Matrix<float, StandardTraits>::multiply_inline_blas(const float& a)
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		cblas_sscal(data_.size(), a, &data_[0], 1);
 #else
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
@@ -1048,7 +1048,7 @@ namespace BALL
 	template <>
 	void Matrix<double, StandardTraits>::multiply_inline_blas(const double& a)
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		cblas_dscal(data_.size(), a, &data_[0], 1);
 #else
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
@@ -1058,7 +1058,7 @@ namespace BALL
 	template <>
 	void Matrix<ComplexFloat, StandardTraits>::multiply_inline_blas(const ComplexFloat& a)
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		cblas_cscal(data_.size(), reinterpret_cast<const void*>(&a), &data_[0], 1);
 #else
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
@@ -1068,7 +1068,7 @@ namespace BALL
 	template <>
 	void Matrix<ComplexDouble, StandardTraits>::multiply_inline_blas(const ComplexDouble& a)
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		cblas_zscal(data_.size(), reinterpret_cast<const void*>(&a), &data_[0], 1);
 #else
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
@@ -1079,7 +1079,7 @@ namespace BALL
 	template <>
 	void Matrix<float, StandardTraits>::multiply_blas(Matrix<float, StandardTraits>& result, const Matrix<float, StandardTraits>& B) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		// we'll need that one more than once...
 		size_t B_n = B.getRowCount();
 		size_t B_m = B.getColumnCount();
@@ -1141,7 +1141,7 @@ namespace BALL
 	template <>
 	void Matrix<double, StandardTraits>::multiply_blas(Matrix<double, StandardTraits>& result, const Matrix<double, StandardTraits>& B) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		// we'll need that one more than once...
 		size_t B_n = B.getRowCount();
 		size_t B_m = B.getColumnCount();
@@ -1203,7 +1203,7 @@ namespace BALL
 	template <>
 	void Matrix<ComplexFloat, StandardTraits>::multiply_blas(Matrix<ComplexFloat, StandardTraits>& result, const Matrix<ComplexFloat, StandardTraits>& B) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		// we'll need that one more than once...
 		size_t B_n = B.getRowCount();
 		size_t B_m = B.getColumnCount();
@@ -1271,7 +1271,7 @@ namespace BALL
 	template <>
 	void Matrix<ComplexDouble, StandardTraits>::multiply_blas(Matrix<ComplexDouble, StandardTraits>& result, const Matrix<ComplexDouble, StandardTraits>& B) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		// we'll need that one more than once...
 		size_t B_n = B.getRowCount();
 		size_t B_m = B.getColumnCount();

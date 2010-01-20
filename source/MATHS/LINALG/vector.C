@@ -10,7 +10,7 @@ namespace BALL {
 	:	data_(),
 		is_column_vector_(v.is_column_vector_),
 		n_(v.n_) {
-	#ifdef USE_BLAS
+	#ifdef BALL_HAS_BLAS
 	#ifdef DEBUG
 		std::cout << "Info: using blas for copy constructor" << std::endl;
 	#endif // DEBUG
@@ -38,7 +38,7 @@ namespace BALL {
 	:	data_(),
 		is_column_vector_(v.is_column_vector_),
 		n_(v.n_) {
-	#ifdef USE_BLAS
+	#ifdef BALL_HAS_BLAS
 	#ifdef DEBUG
 		std::cout << "Info: using blas for copy constructor" << std::endl;
 	#endif // DEBUG
@@ -64,7 +64,7 @@ namespace BALL {
     throw(Exception::OutOfMemory)
 	:	data_(),
 		is_column_vector_(v.is_column_vector_),n_(v.n_) {
-	#ifdef USE_BLAS
+	#ifdef BALL_HAS_BLAS
 	#ifdef DEBUG
 		std::cout << "Info: using blas for copy constructor" << std::endl;
 	#endif // DEBUG
@@ -90,7 +90,7 @@ namespace BALL {
 		throw(Exception::OutOfMemory)
 	:	data_(),
 		is_column_vector_(v.is_column_vector_),n_(v.n_) {
-	#ifdef USE_BLAS
+	#ifdef BALL_HAS_BLAS
 	#ifdef DEBUG
 		std::cout << "Info: using blas for copy constructor" << std::endl;
 	#endif // DEBUG
@@ -118,7 +118,7 @@ namespace BALL {
 	is_column_vector_ = v.is_column_vector_;
 	n_ = v.n_;
 
-	#ifdef USE_BLAS
+	#ifdef BALL_HAS_BLAS
 	#ifdef DEBUG
 		std::cout << "Info: using blas for assignment" << std::endl;
 	#endif // DEBUG
@@ -147,7 +147,7 @@ namespace BALL {
 	is_column_vector_ = v.is_column_vector_;
 	n_ = v.n_;
 
-	#ifdef USE_BLAS
+	#ifdef BALL_HAS_BLAS
 	#ifdef DEBUG
 		std::cout << "Info: using blas for assignment" << std::endl;
 	#endif // DEBUG
@@ -176,7 +176,7 @@ namespace BALL {
         is_column_vector_ = v.is_column_vector_;
 	n_ = v.n_;
 
-	#ifdef USE_BLAS
+	#ifdef BALL_HAS_BLAS
 	#ifdef DEBUG
 		std::cout << "Info: using blas for assignment" << std::endl;
 	#endif // DEBUG
@@ -206,7 +206,7 @@ namespace BALL {
 		is_column_vector_ = v.is_column_vector_;
 		n_ = v.n_;
 
-		#ifdef USE_BLAS
+		#ifdef BALL_HAS_BLAS
 		#ifdef DEBUG
 			std::cout << "Info: using blas for assignment" << std::endl;
 		#endif // DEBUG
@@ -233,7 +233,7 @@ namespace BALL {
 	template <> 
 	void Vector<float>::add_inline_blas(const Vector<float>& B)
 	{ 
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		cblas_saxpy(n_, 1., &B[0], 1, &data_[0], 1);
 #else
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
@@ -243,7 +243,7 @@ namespace BALL {
 	template <>
 	void Vector<double>::add_inline_blas(const Vector<double>& B)
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		cblas_daxpy(n_, 1., &B[0], 1, &data_[0], 1);
 #else
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
@@ -253,7 +253,7 @@ namespace BALL {
 	template <>
 	void Vector<ComplexFloat>::add_inline_blas(const Vector<ComplexFloat>& B)
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		ComplexFloat unity(1.,0);
 		cblas_caxpy(n_, &unity, &B[0], 1, &data_[0], 1);
 #else
@@ -264,7 +264,7 @@ namespace BALL {
 	template <>
 	void Vector<ComplexDouble>::add_inline_blas(const Vector<ComplexDouble>& B)
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		ComplexDouble unity(1.,0);
 		cblas_zaxpy(n_, &unity, &B[0], 1, &data_[0], 1);
 #else
@@ -276,7 +276,7 @@ namespace BALL {
 	template <>
 	void Vector<float>::add_blas(Vector<float>& result, const Vector<float>& B) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		// copy the content of B into result
 		cblas_scopy(n_, &B[0], 1, &result[0], 1);
 
@@ -297,7 +297,7 @@ namespace BALL {
 	template <>
 	void Vector<double>::add_blas(Vector<double>& result, const Vector<double>& B) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		// copy the content of B into result
 		cblas_dcopy(n_, &B[0], 1, &result[0], 1);
 
@@ -318,7 +318,7 @@ namespace BALL {
 	template <>
 	void Vector<ComplexFloat>::add_blas(Vector<ComplexFloat>& result, const Vector<ComplexFloat>& B) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		ComplexFloat unity(1.,0);
 
 		// copy the content of B into result
@@ -341,7 +341,7 @@ namespace BALL {
 	template <>
 	void Vector<ComplexDouble>::add_blas(Vector<ComplexDouble>& result, const Vector<ComplexDouble>& B) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		ComplexDouble unity(1.,0);
 
 		// copy the content of B into result
@@ -365,7 +365,7 @@ namespace BALL {
 	template <>
 	void Vector<float>::subtract_inline_blas(const Vector<float>& B)
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		cblas_saxpy(n_, -1., &B[0], 1, &data_[0], 1);
 #else
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
@@ -375,7 +375,7 @@ namespace BALL {
 	template <>
 	void Vector<double>::subtract_inline_blas(const Vector<double>& B)
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		cblas_daxpy(n_, -1., &B[0], 1, &data_[0], 1);
 #else
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
@@ -385,7 +385,7 @@ namespace BALL {
 	template <>
 	void Vector<ComplexFloat>::subtract_inline_blas(const Vector<ComplexFloat>& B)
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		ComplexFloat neg_unity(-1.,0);
 		cblas_caxpy(n_, &neg_unity, &B[0], 1, &data_[0], 1);
 #else
@@ -396,7 +396,7 @@ namespace BALL {
 	template <>
 	void Vector<ComplexDouble>::subtract_inline_blas(const Vector<ComplexDouble>& B)
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		ComplexDouble neg_unity(-1.,0);
 		cblas_zaxpy(n_, &neg_unity, &B[0], 1, &data_[0], 1);
 #else
@@ -408,7 +408,7 @@ namespace BALL {
 	template <>
 	void Vector<float>::subtract_blas(Vector<float>& result, const Vector<float>& B) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		// copy the content of this vector into result
 		cblas_scopy(n_, &data_[0], 1, &result[0], 1);
 
@@ -429,7 +429,7 @@ namespace BALL {
 	template <>
 	void Vector<double>::subtract_blas(Vector<double>& result, const Vector<double>& B) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		// copy the content of this vector into result
 		cblas_dcopy(n_, &data_[0], 1, &result[0], 1);
 
@@ -450,7 +450,7 @@ namespace BALL {
 	template <>
 	void Vector<ComplexFloat>::subtract_blas(Vector<ComplexFloat>& result, const Vector<ComplexFloat>& B) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		ComplexFloat neg_unity(-1.,0);
 
 		// copy the content of this vector into result
@@ -473,7 +473,7 @@ namespace BALL {
 	template <>
 	void Vector<ComplexDouble>::subtract_blas(Vector<ComplexDouble>& result, const Vector<ComplexDouble>& B) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		ComplexDouble neg_unity(-1.,0);
 
 		// copy the content of this vector into result
@@ -497,7 +497,7 @@ namespace BALL {
 	template <>
 	void Vector<float>::multiply_inline_blas(const float& a)
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		cblas_sscal(n_, a, &data_[0], 1);
 #else
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
@@ -507,7 +507,7 @@ namespace BALL {
 	template <>
 	void Vector<double>::multiply_inline_blas(const double& a)
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		cblas_dscal(n_, a, &data_[0], 1);
 #else
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
@@ -517,7 +517,7 @@ namespace BALL {
 	template <>
 	void Vector<ComplexFloat>::multiply_inline_blas(const ComplexFloat& a)
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		cblas_cscal(n_, reinterpret_cast<const void*>(&a), &data_[0], 1);
 #else
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
@@ -527,7 +527,7 @@ namespace BALL {
 	template <>
 	void Vector<ComplexDouble>::multiply_inline_blas(const ComplexDouble& a)
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		cblas_zscal(n_, reinterpret_cast<const void*>(&a), &data_[0], 1);
 #else
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
@@ -538,7 +538,7 @@ namespace BALL {
 	template <>
 	void Vector<float>::multiply_blas(Vector<float>& result, const float& a) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		cblas_sscal(n_, a, &result[0], 1);
 #else
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
@@ -548,7 +548,7 @@ namespace BALL {
 	template <>
 	void Vector<double>::multiply_blas(Vector<double>& result, const double& a) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		cblas_dscal(n_, a, &result[0], 1);
 #else
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
@@ -559,7 +559,7 @@ namespace BALL {
 	template <>
 	void Vector<ComplexFloat>::multiply_blas(Vector<ComplexFloat>& result, const ComplexFloat& a) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		cblas_cscal(n_, reinterpret_cast<const void*>(&a), &result[0], 1);
 #else
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
@@ -569,7 +569,7 @@ namespace BALL {
 	template <>
 	void Vector<ComplexDouble>::multiply_blas(Vector<ComplexDouble>& result, const ComplexDouble& a) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		cblas_zscal(n_, reinterpret_cast<const void*>(&a), &result[0], 1);
 #else
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
@@ -634,7 +634,7 @@ namespace BALL {
 	template <> template <> 
 	void Vector<float>::multiply_blas(Vector<float>& result, const Matrix<float, StandardTraits>& A, bool right) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		size_t A_n = A.getRowCount();
 		size_t A_m = A.getColumnCount();
 		if (A.isRowMajor()) // A is row major
@@ -667,7 +667,7 @@ namespace BALL {
 	template <> template <>
 	void Vector<double>::multiply_blas(Vector<double>& result, const Matrix<double, StandardTraits>& A, bool right) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		size_t A_n = A.getRowCount();
 		size_t A_m = A.getColumnCount();
 		if (A.isRowMajor()) // A is row major
@@ -700,7 +700,7 @@ namespace BALL {
 	template <> template <>
 	void Vector<ComplexFloat>::multiply_blas(Vector<ComplexFloat>& result, const Matrix<ComplexFloat, StandardTraits>& A, bool right) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		size_t A_n = A.getRowCount();
 		size_t A_m = A.getColumnCount();
 
@@ -737,7 +737,7 @@ namespace BALL {
 	template <> template <>
 	void Vector<ComplexDouble>::multiply_blas(Vector<ComplexDouble>& result, const Matrix<ComplexDouble, StandardTraits>& A, bool right) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		size_t A_n = A.getRowCount();
 		size_t A_m = A.getColumnCount();
 
@@ -774,7 +774,7 @@ namespace BALL {
 	template <> template <> 
 	void Vector<float>::multiply_blas(Vector<float>& result, const Matrix<float, SymmetricTraits>& A, bool right) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		size_t A_n = A.getRowCount();
 
 		// since the matrix is symmetric, we do not need to distinguish between right and left multiplication
@@ -794,7 +794,7 @@ namespace BALL {
 	template <> template <> 
 	void Vector<double>::multiply_blas(Vector<double>& result, const Matrix<double, SymmetricTraits>& A, bool right) const
 	{
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 		size_t A_n = A.getRowCount();
 
 		// since the matrix is symmetric, we do not need to distinguish between right and left multiplication
@@ -818,7 +818,7 @@ namespace BALL {
 		ComplexFloat norm(1.,0);
 		norm /=  get2Norm();
 
-#ifdef USE_BLAS
+#ifdef BALL_HAS_BLAS
 #ifdef DEBUG
 		std::cout << "Info: using multiply_inline_blas" << std::endl;
 #endif
@@ -837,7 +837,7 @@ namespace BALL {
 		ComplexDouble norm(1.,0);
 		norm /=  get2Norm();
 
-#ifdef USE_BLAS
+#ifdef BALL_HAS_BLAS
 #ifdef DEBUG
 		std::cout << "Info: using multiply_inline_blas" << std::endl;
 #endif

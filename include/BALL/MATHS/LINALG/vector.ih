@@ -5,10 +5,6 @@
 #	include <BALL/MATHS/LINALG/global.h>
 #endif
 
-#ifndef BALL_LINALG_CONFIG_H
-# include <BALL/MATHS/LINALG/config.h>
-#endif
-
 #ifndef BALL_COMMON_EXCEPTION_H
 #	include <BALL/COMMON/exception.h>
 #endif
@@ -21,7 +17,7 @@
 # include <BALL/MATHS/LINALG/reverseIterator.h>
 #endif
 
-#ifdef HAS_BLAS
+#ifdef BALL_HAS_BLAS
 extern "C"
 {
 # include "cblas.h"

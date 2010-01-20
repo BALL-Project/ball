@@ -148,7 +148,7 @@ void Matrix<valuetype, mtraits>::operator*=(Matrix<valuetype, mtraits>& B)
 	
 	Matrix<valuetype, mtraits> result(getRowCount(), B.getColumnCount(), (valuetype)0);
 	
-#ifdef USE_BLAS
+#ifdef BALL_HAS_BLAS
 #ifdef DEBUG
 	std::cout << "Info: using multiply_blas" << std::endl;
 #endif
@@ -516,7 +516,7 @@ Matrix<valuetype, mtraits> Matrix<valuetype, mtraits>::operator + (const Matrix<
 	}
 
 	Matrix<valuetype, mtraits> result(getRowCount(), getColumnCount());
-#ifdef USE_BLAS
+#ifdef BALL_HAS_BLAS
 #ifdef DEBUG
 	std::cout << "Info: using add_blas" << std::endl;
 #endif
@@ -599,7 +599,7 @@ Matrix<valuetype, mtraits>& Matrix<valuetype, mtraits>::operator += (const Matri
 		throw (e);
 	}
 
-#ifdef USE_BLAS
+#ifdef BALL_HAS_BLAS
 #ifdef DEBUG
 	std::cout << "Info: using add_inline_blas" << std::endl;
 #endif
@@ -679,7 +679,7 @@ Matrix<valuetype, mtraits> Matrix<valuetype, mtraits>::operator - (const Matrix<
 	}
 
 	Matrix<valuetype, mtraits> result(getRowCount(), getColumnCount());
-#ifdef USE_BLAS
+#ifdef BALL_HAS_BLAS
 #ifdef DEBUG
 	std::cout << "Info: using subtract_blas" << std::endl;
 #endif
@@ -763,7 +763,7 @@ Matrix<valuetype, mtraits>& Matrix<valuetype, mtraits>::operator -= (const Matri
 		throw (e);
 	}
 
-#ifdef USE_BLAS
+#ifdef BALL_HAS_BLAS
 #ifdef DEBUG
 	std::cout << "Info: using add_blas" << std::endl;
 #endif
@@ -839,7 +839,7 @@ Matrix<valuetype, mtraits> Matrix<valuetype, mtraits>::operator* (const valuetyp
 {
 	Matrix<valuetype, mtraits> result(*this);
 
-#ifdef USE_BLAS
+#ifdef BALL_HAS_BLAS
 #ifdef DEBUG
 	std::cout << "Info: using multiply_blas" << std::endl;
 #endif
@@ -867,7 +867,7 @@ template <class valuetype, class mtraits>
 Matrix<valuetype, mtraits>& Matrix<valuetype, mtraits>::operator*= (const valuetype& a)
 	throw()
 {
-#ifdef USE_BLAS
+#ifdef BALL_HAS_BLAS
 #ifdef DEBUG
 	std::cout << "Info: using multiply_inline_blas" << std::endl;
 #endif
@@ -903,7 +903,7 @@ Matrix<valuetype, mtraits> Matrix<valuetype, mtraits>::operator* (const Matrix<v
 	}
 
 	Matrix<valuetype, mtraits> result(getRowCount(), B.getColumnCount(), (valuetype)0);
-#ifdef USE_BLAS
+#ifdef BALL_HAS_BLAS
 #ifdef DEBUG
 	std::cout << "Info: using multiply_blas" << std::endl;
 #endif
@@ -1139,7 +1139,7 @@ Vector<valuetype> Matrix<valuetype, mtraits>::operator* (const Vector<valuetype>
 
 	Vector<valuetype> result(getRowCount());
 
-#ifdef USE_BLAS
+#ifdef BALL_HAS_BLAS
 #ifdef DEBUG
 	std::cout << "Info: using multiply_blas" << std::endl;
 #endif

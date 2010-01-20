@@ -83,7 +83,7 @@ Vector<valuetype>& Vector<valuetype>::operator+= (const Vector<valuetype>& B)
 		throw (e);
 	}
 
-#ifdef USE_BLAS
+#ifdef BALL_HAS_BLAS
 #ifdef DEBUG
 	std::cout << "Info: using add_inline_blas" << std::endl;
 #endif
@@ -145,7 +145,7 @@ Vector<valuetype> Vector<valuetype>::operator + (const Vector<valuetype>& B) con
 	}
 
 	Vector<valuetype> result(n_);
-#ifdef USE_BLAS
+#ifdef BALL_HAS_BLAS
 #ifdef DEBUG
 	std::cout << "Info: using add_blas" << std::endl;
 #endif
@@ -179,7 +179,7 @@ Vector<valuetype>& Vector<valuetype>::operator-= (const Vector<valuetype>& B)
 		throw (e);
 	}
 
-#ifdef USE_BLAS
+#ifdef BALL_HAS_BLAS
 #ifdef DEBUG
 	std::cout << "Info: using subtract_inline_blas" << std::endl;
 #endif
@@ -214,7 +214,7 @@ Vector<valuetype> Vector<valuetype>::operator - (const Vector<valuetype>& B) con
 	}
 
 	Vector<valuetype> result(n_);
-#ifdef USE_BLAS
+#ifdef BALL_HAS_BLAS
 #ifdef DEBUG
 	std::cout << "Info: using subtract_blas" << std::endl;
 #endif
@@ -244,7 +244,7 @@ Vector<valuetype> Vector<valuetype>::operator* (const valuetype& a) const
 {
 	Vector<valuetype> result(*this);
 
-#ifdef USE_BLAS
+#ifdef BALL_HAS_BLAS
 #ifdef DEBUG
 	std::cout << "Info: using multiply_blas" << std::endl;
 #endif
@@ -280,7 +280,7 @@ template <typename valuetype>
 Vector<valuetype>& Vector<valuetype>::operator*= (const valuetype& a)
 	throw()
 {
-#ifdef USE_BLAS
+#ifdef BALL_HAS_BLAS
 #ifdef DEBUG
 	std::cout << "Info: using multiply_inline_blas" << std::endl;
 #endif
@@ -529,7 +529,7 @@ template <typename valuetype> inline
 valuetype Vector<valuetype>::getLength() const
 	throw()
 {
-#ifdef USE_BLAS
+#ifdef BALL_HAS_BLAS
 #ifdef DEBUG
 	std::cout << "Info: using compute_length_blas" << std::endl;
 #endif
@@ -593,7 +593,7 @@ valuetype Vector<valuetype>::operator* (const Vector<valuetype>& a) const
 		Exception::VectorHasWrongDimension e;
 		throw (e);
 	}
-#ifdef USE_BLAS
+#ifdef BALL_HAS_BLAS
 #ifdef DEBUG
 	std::cout << "Info: using scalarproduct_blas" << std::endl;
 #endif
@@ -666,7 +666,7 @@ Vector<valuetype> Vector<valuetype>::operator* (const Matrix<mvaluetype, mtraits
 
 	Vector<valuetype> result(A.getColumnCount());
 
-#ifdef USE_BLAS
+#ifdef BALL_HAS_BLAS
 #ifdef DEBUG
 	std::cout << "Info: using multiply_blas" << std::endl;
 #endif
@@ -803,7 +803,7 @@ void Vector<valuetype>::normalize()
 	valuetype norm =  1.; 
 	norm /= get2Norm();
 
-#ifdef USE_BLAS
+#ifdef BALL_HAS_BLAS
 #ifdef DEBUG
 	std::cout << "Info: using multiply_inline_blas" << std::endl;
 #endif

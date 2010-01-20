@@ -6,6 +6,7 @@ namespace BALL
 	bool SVDSolver<float, StandardTraits>::computeSVD_lapack()
 		throw(Exception::OutOfMemory)
 	{
+#if defined(BALL_HAS_BLAS) && defined(BALL_HAS_LAPACK)
 		// we need a copy of the bound matrix since lapack overwrites the memory.
 		// NOTE: we could probably use either U or V_transposed for this task! We just
 		//       would have to resize the matrix accordingly after the computation to make
@@ -116,6 +117,11 @@ namespace BALL
 
 		// done.
 		return true;
+#else
+		Log.error() << "SVDSolver.C: Can not compute SVD! BALL was configured without BLAS or LAPACK support!" << std::endl;
+
+		return false;
+#endif
 	}
 			
 					
@@ -123,6 +129,7 @@ namespace BALL
 	bool SVDSolver<double, StandardTraits>::computeSVD_lapack()
 		throw(Exception::OutOfMemory)
 	{
+#if defined(BALL_HAS_BLAS) && defined(BALL_HAS_LAPACK)
 		// we need a copy of our matrix since lapack overwrites the memory.
 		// NOTE: we could probably use either U or V_transposed for this task! We just
 		//       would have to resize the matrix accordingly after the computation to make
@@ -243,12 +250,18 @@ namespace BALL
 
 		// done.
 		return true;
+#else
+		Log.error() << "SVDSolver.C: Can not compute SVD! BALL was configured without BLAS or LAPACK support!" << std::endl;
+
+		return false;
+#endif
 	}
 
 	template <>
 	bool SVDSolver<ComplexFloat, StandardTraits>::computeSVD_lapack()
 		throw(Exception::OutOfMemory)
 	{
+#if defined(BALL_HAS_BLAS) && defined(BALL_HAS_LAPACK)
 		// we need a copy of our matrix since lapack overwrites the memory.
 		// NOTE: we could probably use either U or V_transposed for this task! We just
 		//       would have to resize the matrix accordingly after the computation to make
@@ -361,12 +374,18 @@ namespace BALL
 
 		// done.
 		return true;
+#else
+		Log.error() << "SVDSolver.C: Can not compute SVD! BALL was configured without BLAS or LAPACK support!" << std::endl;
+
+		return false;
+#endif
 	}
 
 	template <>
 	bool SVDSolver<ComplexDouble, StandardTraits>::computeSVD_lapack()
 		throw(Exception::OutOfMemory)
 	{
+#if defined(BALL_HAS_BLAS) && defined(BALL_HAS_LAPACK)
 		// we need a copy of our matrix since lapack overwrites the memory.
 		// NOTE: we could probably use either U or V_transposed for this task! We just
 		//       would have to resize the matrix accordingly after the computation to make
@@ -479,5 +498,10 @@ namespace BALL
 
 		// done.
 		return true;
+#else
+		Log.error() << "SVDSolver.C: Can not compute SVD! BALL was configured without BLAS or LAPACK support!" << std::endl;
+
+		return false;
+#endif
 	}
 }

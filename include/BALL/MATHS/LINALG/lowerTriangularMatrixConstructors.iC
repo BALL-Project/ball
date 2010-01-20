@@ -32,7 +32,7 @@ namespace BALL {
 	{
 	}
 
-	// TODO: use cblas_xcopy if HAS_BLAS && USE_BLAS
+	// TODO: use cblas_xcopy if BALL_HAS_BLAS
 	template <class valuetype>
 	Matrix<valuetype, LowerTriangularTraits>::Matrix(const Matrix<valuetype, LowerTriangularTraits>& m)
 		: data_(m.data_),
@@ -48,7 +48,7 @@ namespace BALL {
 	{
 	}
 
-	// TODO: use cblas_xcopy if HAS_BLAS && USE_BLAS
+	// TODO: use cblas_xcopy if BALL_HAS_BLAS
 	template <class valuetype>
 	Matrix<valuetype, LowerTriangularTraits>& Matrix<valuetype, LowerTriangularTraits>::operator = (const Matrix<valuetype, LowerTriangularTraits>& m)
 	{

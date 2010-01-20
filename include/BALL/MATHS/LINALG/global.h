@@ -1,7 +1,13 @@
 #ifndef MALL_GLOBAL_H
 #define MALL_GLOBAL_H
 
-#include <complex>
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
+
+#ifndef BALL_MATHS_COMPLEX_H
+# include <BALL/MATHS/complex.h>
+#endif
 
 
 // rename BLAS-functions in order to match the ones within

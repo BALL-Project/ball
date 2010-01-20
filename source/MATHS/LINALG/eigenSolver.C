@@ -11,6 +11,7 @@ namespace BALL {
 	bool EigenSolver<float, StandardTraits>::solveRightEigenProblem_lapack()
 		throw(Exception::OutOfMemory)
 	{
+#if defined(BALL_HAS_BLAS) && defined(BALL_HAS_LAPACK)
 		// we need a copy of the bound matrix since lapack overwrites the memory.
 		// also, we need a _complex_ matrix and can do this quite simply here
 		size_t size = matrix_->getSize();
@@ -90,12 +91,18 @@ namespace BALL {
 
 		// done.
 		return true;
+#else
+		Log.error() << "eigenSolver.C: Can not compute eigenvalues / eigenvectors! BALL was configured without BLAS or LAPACK support!" << std::endl;
+
+		return false;
+#endif
 	}
 
 	template <> 
 	bool EigenSolver<double, StandardTraits>::solveRightEigenProblem_lapack()
 		throw(Exception::OutOfMemory)
 	{
+#if defined(BALL_HAS_BLAS) && defined(BALL_HAS_LAPACK)
 		// we need a copy of our matrix since lapack overwrites the memory.
 		// also, we need a _complex_ matrix and can do this quite simply here
 		size_t size = matrix_->getSize();
@@ -175,12 +182,18 @@ namespace BALL {
 
 		// done.
 		return true;
+#else
+		Log.error() << "eigenSolver.C: Can not compute eigenvalues / eigenvectors! BALL was configured without BLAS or LAPACK support!" << std::endl;
+
+		return false;
+#endif
 	}
 
 	template <>
 	bool EigenSolver<ComplexFloat, StandardTraits>::solveRightEigenProblem_lapack()
 		throw(Exception::OutOfMemory)
 	{
+#if defined(BALL_HAS_BLAS) && defined(BALL_HAS_LAPACK)
 		// we need a copy of our matrix since lapack overwrites the memory.
 		size_t size = matrix_->getSize();
 		std::vector<ComplexFloat> matrix_copy(size);
@@ -258,12 +271,18 @@ namespace BALL {
 
 		// done.
 		return true;
+#else
+		Log.error() << "eigenSolver.C: Can not compute eigenvalues / eigenvectors! BALL was configured without BLAS or LAPACK support!" << std::endl;
+
+		return false;
+#endif
 	}
 
 	template <>
 	bool EigenSolver<ComplexDouble, StandardTraits>::solveRightEigenProblem_lapack()
 		throw(Exception::OutOfMemory)
 	{
+#if defined(BALL_HAS_BLAS) && defined(BALL_HAS_LAPACK)
 		// we need a copy of our matrix since lapack overwrites the memory.
 		size_t size = matrix_->getSize();
 		std::vector<ComplexDouble> matrix_copy(size);
@@ -341,12 +360,18 @@ namespace BALL {
 
 		// done.
 		return true;
+#else
+		Log.error() << "eigenSolver.C: Can not compute eigenvalues / eigenvectors! BALL was configured without BLAS or LAPACK support!" << std::endl;
+
+		return false;
+#endif
 	} 
 
 	template <> 
 	bool EigenSolver<float, SymmetricTraits>::solveRightEigenProblem_lapack()
 		throw(Exception::OutOfMemory)
 	{
+#if defined(BALL_HAS_BLAS) && defined(BALL_HAS_LAPACK)
 		// we need a copy of the bound matrix since lapack overwrites the memory.
 		size_t size = matrix_->getSize();
 		std::vector<float> matrix_copy(size);
@@ -428,12 +453,18 @@ namespace BALL {
 
 		// done.
 		return true;
+#else
+		Log.error() << "eigenSolver.C: Can not compute eigenvalues / eigenvectors! BALL was configured without BLAS or LAPACK support!" << std::endl;
+
+		return false;
+#endif
 	}
 
 	template <> 
 	bool EigenSolver<double, SymmetricTraits>::solveRightEigenProblem_lapack()
 		throw(Exception::OutOfMemory)
 	{
+#if defined(BALL_HAS_BLAS) && defined(BALL_HAS_LAPACK)
 		// we need a copy of the bound matrix since lapack overwrites the memory.
 		size_t size = matrix_->getSize();
 		std::vector<double> matrix_copy(size);
@@ -515,6 +546,11 @@ namespace BALL {
 
 		// done.
 		return true;
+#else
+		Log.error() << "eigenSolver.C: Can not compute eigenvalues / eigenvectors! BALL was configured without BLAS or LAPACK support!" << std::endl;
+
+		return false;
+#endif
 	}
 
 	// ----- EigenSolver::sort ----- //

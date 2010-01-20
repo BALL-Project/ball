@@ -199,7 +199,7 @@ namespace BALL {
 		}	
 
 		Matrix<valuetype, LowerTriangularTraits> result(getRowCount());
-	#ifdef USE_BLAS
+	#ifdef BALL_BALL_HAS_BLAS
 	#ifdef DEBUG
 		std::cout << "Info: using add_blas" << std::endl;
 	#endif
@@ -284,7 +284,7 @@ namespace BALL {
 			throw (e);
 		}
 
-	#ifdef USE_BLAS
+	#ifdef BALL_BALL_HAS_BLAS
 	#ifdef DEBUG
 		std::cout << "Info: using add_inline_blas" << std::endl;
 	#endif
@@ -368,7 +368,7 @@ namespace BALL {
 		}	
 
 		Matrix<valuetype, LowerTriangularTraits> result(getRowCount());
-	#ifdef USE_BLAS
+	#ifdef BALL_BALL_HAS_BLAS
 	#ifdef DEBUG
 		std::cout << "Info: using subtract_blas" << std::endl;
 	#endif
@@ -453,7 +453,7 @@ namespace BALL {
 			throw (e);
 		}
 
-	#ifdef USE_BLAS
+	#ifdef BALL_BALL_HAS_BLAS
 	#ifdef DEBUG
 		std::cout << "Info: using subtract_inline_blas" << std::endl;
 	#endif
@@ -531,7 +531,7 @@ namespace BALL {
 	{
 		Matrix<valuetype, LowerTriangularTraits> result(*this);
 
-	#ifdef USE_BLAS
+	#ifdef BALL_BALL_HAS_BLAS
 	#ifdef DEBUG
 		std::cout << "Info: using multiply_blas" << std::endl;
 	#endif
@@ -559,7 +559,7 @@ namespace BALL {
 	Matrix<valuetype, LowerTriangularTraits>& Matrix<valuetype, LowerTriangularTraits>::operator*= (const valuetype& a)
 		throw()
 	{
-	#ifdef USE_BLAS
+	#ifdef BALL_BALL_HAS_BLAS
 	#ifdef DEBUG
 		std::cout << "Info: using multiply_inline_blas" << std::endl;
 	#endif
@@ -589,7 +589,7 @@ namespace BALL {
 	template <> inline
 	void Matrix<float, LowerTriangularTraits>::multiply_blas(Matrix<float, LowerTriangularTraits>& result, const float& a) const
 	{
-	#ifdef HAS_BLAS
+	#ifdef BALL_HAS_BLAS
 		cblas_sscal(result.getSize(), a, &result[0], 1);
 	#else
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
@@ -599,7 +599,7 @@ namespace BALL {
 	template <> inline
 	void Matrix<double, LowerTriangularTraits>::multiply_blas(Matrix<double, LowerTriangularTraits>& result, const double& a) const
 	{
-	#ifdef HAS_BLAS
+	#ifdef BALL_HAS_BLAS
 		cblas_dscal(result.getSize(), a, &result[0], 1);
 	#else	
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
@@ -610,7 +610,7 @@ namespace BALL {
 	template <> inline
 	void Matrix<ComplexFloat, LowerTriangularTraits>::multiply_blas(Matrix<ComplexFloat, LowerTriangularTraits>& result, const ComplexFloat& a) const
 	{
-	#ifdef HAS_BLAS
+	#ifdef BALL_HAS_BLAS
 		cblas_cscal(result.getSize(), reinterpret_cast<const void*>(&a), &result[0], 1);
 	#else
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
@@ -620,7 +620,7 @@ namespace BALL {
 	template <> inline
 	void Matrix<ComplexDouble, LowerTriangularTraits>::multiply_blas(Matrix<ComplexDouble, LowerTriangularTraits>& result, const ComplexDouble& a) const
 	{
-	#ifdef HAS_BLAS
+	#ifdef BALL_HAS_BLAS
 		cblas_zscal(result.getSize(), reinterpret_cast<const void*>(&a), &result[0], 1);
 	#else
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
@@ -632,7 +632,7 @@ namespace BALL {
 	template <> inline
 	void Matrix<float, LowerTriangularTraits>::multiply_inline_blas(const float& a)
 	{
-	#ifdef HAS_BLAS
+	#ifdef BALL_HAS_BLAS
 		cblas_sscal(data_.size(), a, &data_[0], 1);
 	#else
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
@@ -642,7 +642,7 @@ namespace BALL {
 	template <> inline
 	void Matrix<double, LowerTriangularTraits>::multiply_inline_blas(const double& a)
 	{
-	#ifdef HAS_BLAS
+	#ifdef BALL_HAS_BLAS
 		cblas_dscal(data_.size(), a, &data_[0], 1);
 	#else
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
@@ -652,7 +652,7 @@ namespace BALL {
 	template <> inline
 	void Matrix<ComplexFloat, LowerTriangularTraits>::multiply_inline_blas(const ComplexFloat& a)
 	{
-	#ifdef HAS_BLAS
+	#ifdef BALL_HAS_BLAS
 		cblas_cscal(data_.size(), reinterpret_cast<const void*>(&a), &data_[0], 1);
 	#else
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
@@ -662,7 +662,7 @@ namespace BALL {
 	template <> inline
 	void Matrix<ComplexDouble, LowerTriangularTraits>::multiply_inline_blas(const ComplexDouble& a)
 	{
-	#ifdef HAS_BLAS
+	#ifdef BALL_HAS_BLAS
 		cblas_zscal(data_.size(), reinterpret_cast<const void*>(&a), &data_[0], 1);
 	#else
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
