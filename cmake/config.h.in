@@ -253,6 +253,12 @@
 // the namespace to use for asio
 #cmakedefine BALL_ASIO_NAMESPACE @BALL_ASIO_NAMESPACE@
 
+// Define whether the BLAS library is available
+#cmakedefine BALL_HAS_BLAS
+
+// Define whether LAPACK is available
+#cmakedefine BALL_HAS_LAPACK
+
 // Define whether the FFTW library/header is available.
 #cmakedefine BALL_HAS_FFTW
 #cmakedefine BALL_HAS_FFTW_H
@@ -267,6 +273,9 @@
 
 // Define whether BALL was built with lpsolve support
 #cmakedefine BALL_HAS_LPSOLVE
+
+// Define whether BALL was built with libsvm support
+#cmakedefine BALL_HAS_LIBSVM
 
 // VIEW related options
 #cmakedefine BALL_HAS_VIEW
