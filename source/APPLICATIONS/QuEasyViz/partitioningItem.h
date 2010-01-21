@@ -21,8 +21,8 @@
 #ifndef PARTITIONINGITEM_H
 #define PARTITIONINGITEM_H
 
-#include <BALL/APPLICATIONS/QuEasyViz/dataItem.h>
-#include <BALL/APPLICATIONS/QuEasyViz/inputDataItem.h>
+#include <dataItem.h>
+#include <inputDataItem.h>
 
 namespace BALL
 {

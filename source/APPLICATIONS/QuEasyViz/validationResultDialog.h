@@ -22,7 +22,7 @@
 #define VALRESDIALOG_H
 
 #include <QtGui/QDialog>
-#include <BALL/APPLICATIONS/QuEasyViz/validationItem.h>
+#include <validationItem.h>
 
 namespace BALL
 {

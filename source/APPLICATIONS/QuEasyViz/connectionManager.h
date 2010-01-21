@@ -25,11 +25,11 @@
 #include <QtGui/QPushButton>
 #include <QtGui/QListWidgetItem>
 
-#include <BALL/APPLICATIONS/QuEasyViz/modelConfigurationDialog.h>
-#include <BALL/APPLICATIONS/QuEasyViz/inputDataItem.h>
-#include <BALL/APPLICATIONS/QuEasyViz/featureSelectionItem.h>
-#include <BALL/APPLICATIONS/QuEasyViz/validationItem.h>
-#include <BALL/APPLICATIONS/QuEasyViz/predictionItem.h>
+#include <modelConfigurationDialog.h>
+#include <inputDataItem.h>
+#include <featureSelectionItem.h>
+#include <validationItem.h>
+#include <predictionItem.h>
 
 namespace BALL
 {

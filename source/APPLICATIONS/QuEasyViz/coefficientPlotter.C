@@ -18,7 +18,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <BALL/APPLICATIONS/QuEasyViz/coefficientPlotter.h>
+#include <coefficientPlotter.h>
 #include <qwt_plot_curve.h>
 #include <qwt_plot_marker.h>
 #include <qwt_plot_zoomer.h>

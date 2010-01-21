@@ -18,7 +18,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <BALL/APPLICATIONS/QuEasyViz/modelConfigurationDialogPages.h>
+#include <modelConfigurationDialogPages.h>
 #include <QtGui/QLabel>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QVBoxLayout>

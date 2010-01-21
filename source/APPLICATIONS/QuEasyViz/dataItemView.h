@@ -24,7 +24,7 @@
 #include <QtGui/QGraphicsView>
 #include <QtGui/QGraphicsScene>
 
-#include <BALL/APPLICATIONS/QuEasyViz/dataItemScene.h>
+#include <dataItemScene.h>
 
 
 

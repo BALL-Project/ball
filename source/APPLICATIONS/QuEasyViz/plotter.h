@@ -22,7 +22,7 @@
 #define PLOTTER_H
 
 #include <qwt_plot.h>
-#include <BALL/APPLICATIONS/QuEasyViz/dataItem.h>
+#include <dataItem.h>
 #include <list>
 #include <QString>
 #include <QtGui/QDialog>

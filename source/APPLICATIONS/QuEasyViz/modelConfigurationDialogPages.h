@@ -30,9 +30,9 @@
 #include <QtGui/QTextEdit>
 #include <QtGui/QTableWidget>
 
-#include <BALL/APPLICATIONS/QuEasyViz/modelConfigurationDialog.h>
-#include <BALL/APPLICATIONS/QuEasyViz/connectionManager.h>
-#include <BALL/APPLICATIONS/QuEasyViz/mainWindow.h>
+#include <modelConfigurationDialog.h>
+#include <connectionManager.h>
+#include <mainWindow.h>
 #include <BALL/QSAR/sortedList.h>
 
 

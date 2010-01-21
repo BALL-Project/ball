@@ -21,11 +21,11 @@
 #ifndef PREDICTIONITEM_H
 #define PREDICTIONITEM_H
 
-#include <BALL/APPLICATIONS/QuEasyViz/validationItem.h>
-#include <BALL/APPLICATIONS/QuEasyViz/modelItem.h>
-#include <BALL/APPLICATIONS/QuEasyViz/inputDataItem.h>
-#include <BALL/APPLICATIONS/QuEasyViz/dottedEdge.h>
-#include <BALL/APPLICATIONS/QuEasyViz/inputPartitionItem.h>
+#include <validationItem.h>
+#include <modelItem.h>
+#include <inputDataItem.h>
+#include <dottedEdge.h>
+#include <inputPartitionItem.h>
 
 
 namespace BALL

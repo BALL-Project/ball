@@ -21,8 +21,8 @@
 #ifndef SDFInputDataItem_H
 #define SDFInputDataItem_H
 
-#include <BALL/APPLICATIONS/QuEasyViz/inputDataItem.h>
-#include <BALL/APPLICATIONS/QuEasyViz/CSVInputDataItem.h>
+#include <inputDataItem.h>
+#include <CSVInputDataItem.h>
 
 #include <QtGui/QGraphicsSceneMouseEvent>
 

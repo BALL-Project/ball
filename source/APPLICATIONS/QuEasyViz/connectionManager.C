@@ -18,7 +18,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <BALL/APPLICATIONS/QuEasyViz/connectionManager.h>
+#include <connectionManager.h>
 #include <QtGui/QGridLayout>
 #include <QtGui/QVBoxLayout>
 

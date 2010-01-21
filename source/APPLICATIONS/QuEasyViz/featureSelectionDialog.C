@@ -18,11 +18,11 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <BALL/APPLICATIONS/QuEasyViz/featureSelectionDialog.h>
+#include <featureSelectionDialog.h>
 #include <iostream>
 #include <BALL/QSAR/exception.h>
-#include <BALL/APPLICATIONS/QuEasyViz/exception.h>
-#include <BALL/APPLICATIONS/QuEasyViz/mainWindow.h>
+#include <exception.h>
+#include <mainWindow.h>
 #include <QtGui/QMessageBox>
 #include <QtGui/QPushButton>
 #include <iterator>

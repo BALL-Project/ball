@@ -18,9 +18,9 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <BALL/APPLICATIONS/QuEasyViz/modelConfigurationDialog.h>
+#include <modelConfigurationDialog.h>
 #include <BALL/QSAR/exception.h>
-#include <BALL/APPLICATIONS/QuEasyViz/exception.h>
+#include <exception.h>
 #include <BALL/MATHS/parsedFunction.h>
 
 

@@ -18,10 +18,10 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <BALL/APPLICATIONS/QuEasyViz/fileBrowser.h>
+#include <fileBrowser.h>
 #include <QtGui/QHeaderView>
 #include <BALL/DATATYPE/string.h>
-#include <BALL/APPLICATIONS/QuEasyViz/mainWindow.h>
+#include <mainWindow.h>
 
 using namespace BALL::VIEW;
 

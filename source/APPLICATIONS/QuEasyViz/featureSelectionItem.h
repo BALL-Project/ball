@@ -21,8 +21,8 @@
 #ifndef FEATURESELECTIONITEM_H
 #define FEATURESELECTIONITEM_H
 
-#include <BALL/APPLICATIONS/QuEasyViz/dataItem.h>
-#include <BALL/APPLICATIONS/QuEasyViz/modelItem.h>
+#include <dataItem.h>
+#include <modelItem.h>
 #include <BALL/QSAR/featureSelection.h>
 
 namespace BALL

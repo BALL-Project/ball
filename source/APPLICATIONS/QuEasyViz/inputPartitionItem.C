@@ -18,8 +18,8 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <BALL/APPLICATIONS/QuEasyViz/inputPartitionItem.h>
-#include <BALL/APPLICATIONS/QuEasyViz/mainWindow.h>
+#include <inputPartitionItem.h>
+#include <mainWindow.h>
 #include <QtGui/QMessageBox>
 #include <QtGui/QDrag>
 

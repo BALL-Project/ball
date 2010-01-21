@@ -18,19 +18,19 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <BALL/APPLICATIONS/QuEasyViz/modelItem.h>
+#include <modelItem.h>
 #include <QtGui/QDrag>
 #include <QtCore/QMimeData>
-#include <BALL/APPLICATIONS/QuEasyViz/mainWindow.h>
+#include <mainWindow.h>
 #include <BALL/QSAR/exception.h>
-#include <BALL/APPLICATIONS/QuEasyViz/exception.h>
+#include <exception.h>
 #include <QtGui/QMessageBox>
 #include <QtGui/QFileDialog>
 #include <BALL/QSAR/configIO.h>
-#include <BALL/APPLICATIONS/QuEasyViz/coefficientPlotter.h>
-#include <BALL/APPLICATIONS/QuEasyViz/bayesPlotter.h>
-#include <BALL/APPLICATIONS/QuEasyViz/featurePlotter.h>
-#include <BALL/APPLICATIONS/QuEasyViz/componentPlotter.h>
+#include <coefficientPlotter.h>
+#include <bayesPlotter.h>
+#include <featurePlotter.h>
+#include <componentPlotter.h>
 
 using namespace BALL::QSAR;
 using namespace BALL::QSAR::Exception;

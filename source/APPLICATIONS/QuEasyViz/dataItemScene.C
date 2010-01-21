@@ -18,11 +18,11 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <BALL/APPLICATIONS/QuEasyViz/dataItemScene.h>
-#include <BALL/APPLICATIONS/QuEasyViz/edge.h>
-#include <BALL/APPLICATIONS/QuEasyViz/mainWindow.h>
-#include <BALL/APPLICATIONS/QuEasyViz/exception.h>
-#include <BALL/APPLICATIONS/QuEasyViz/inputPartitionItem.h>
+#include <dataItemScene.h>
+#include <edge.h>
+#include <mainWindow.h>
+#include <exception.h>
+#include <inputPartitionItem.h>
 
 #include <QtCore/QMimeData>
 #include <QtCore/QUrl>

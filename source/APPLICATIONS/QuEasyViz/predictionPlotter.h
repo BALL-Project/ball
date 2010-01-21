@@ -21,7 +21,7 @@
 #ifndef PRED_PLOTTER
 #define PRED_PLOTTER
 
-#include <BALL/APPLICATIONS/QuEasyViz/plotter.h>
+#include <plotter.h>
 #include <BALL/QSAR/QSARData.h>
 
 

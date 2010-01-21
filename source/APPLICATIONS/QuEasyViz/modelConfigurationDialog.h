@@ -30,10 +30,10 @@
 #include <QtGui/QStackedWidget>
 #include <QtGui/QDialogButtonBox>
 
-#include <BALL/APPLICATIONS/QuEasyViz/modelConfigurationDialogPages.h>
-#include <BALL/APPLICATIONS/QuEasyViz/mainWindow.h>
-#include <BALL/APPLICATIONS/QuEasyViz/modelItem.h>
-#include <BALL/APPLICATIONS/QuEasyViz/inputDataItem.h>
+#include <modelConfigurationDialogPages.h>
+#include <mainWindow.h>
+#include <modelItem.h>
+#include <inputDataItem.h>
 
 using namespace BALL::QSAR;
 

@@ -18,7 +18,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <BALL/APPLICATIONS/QuEasyViz/modelPropertiesDialog.h>
+#include <modelPropertiesDialog.h>
 #include <QtGui/QPushButton>
 #include <QtGui/QMessageBox>
 #include <QtGui/QCheckBox>

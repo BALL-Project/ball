@@ -18,9 +18,9 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <BALL/APPLICATIONS/QuEasyViz/validationDialog.h>
-#include <BALL/APPLICATIONS/QuEasyViz/exception.h>
-#include <BALL/APPLICATIONS/QuEasyViz/mainWindow.h>
+#include <validationDialog.h>
+#include <exception.h>
+#include <mainWindow.h>
 #include <BALL/QSAR/exception.h>
 #include <QtGui/QMessageBox>
 #include <QtGui/QPushButton>

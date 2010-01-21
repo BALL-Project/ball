@@ -21,10 +21,10 @@
 #ifndef VALIDATIONITEM_H
 #define VALIDATIONITEM_H
 
-#include <BALL/APPLICATIONS/QuEasyViz/dataItem.h>
-#include <BALL/APPLICATIONS/QuEasyViz/modelItem.h>
-#include <BALL/APPLICATIONS/QuEasyViz/predictionPlotter.h>
-#include <BALL/APPLICATIONS/QuEasyViz/partitioningItem.h>
+#include <dataItem.h>
+#include <modelItem.h>
+#include <predictionPlotter.h>
+#include <partitioningItem.h>
 
 namespace BALL
 {

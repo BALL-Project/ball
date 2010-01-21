@@ -18,7 +18,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <BALL/APPLICATIONS/QuEasyViz/inputDataDialog.h>
+#include <inputDataDialog.h>
 
 #include <QtGui/QDialogButtonBox>
 #include <QtGui/QFileDialog>

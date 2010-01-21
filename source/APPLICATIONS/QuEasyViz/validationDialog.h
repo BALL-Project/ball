@@ -29,7 +29,7 @@
 #include <QtGui/QLabel>
 #include <QtGui/QComboBox>
 
-#include <BALL/APPLICATIONS/QuEasyViz/validationItem.h>
+#include <validationItem.h>
 
 namespace BALL
 {

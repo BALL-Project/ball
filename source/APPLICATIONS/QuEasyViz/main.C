@@ -18,8 +18,8 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <BALL/APPLICATIONS/QuEasyViz/mainWindow.h>
-#include <BALL/APPLICATIONS/QuEasyViz/connectionManager.h>
+#include <mainWindow.h>
+#include <connectionManager.h>
 #include <QtGui/QApplication>
 
 

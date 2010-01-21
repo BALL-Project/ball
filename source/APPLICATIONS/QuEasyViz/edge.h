@@ -25,7 +25,7 @@
 #include <QtGui/QPainter>
 #include <QtGui/QStyleOptionGraphicsItem>
 
-#include <BALL/APPLICATIONS/QuEasyViz/dataItem.h>
+#include <dataItem.h>
 
 #include <iostream>
 

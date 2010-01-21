@@ -18,12 +18,12 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <BALL/APPLICATIONS/QuEasyViz/CSVInputDataItem.h>
-#include <BALL/APPLICATIONS/QuEasyViz/mainWindow.h>
+#include <CSVInputDataItem.h>
+#include <mainWindow.h>
 
 #include <BALL/QSAR/exception.h>
-#include <BALL/APPLICATIONS/QuEasyViz/exception.h>
-#include <BALL/APPLICATIONS/QuEasyViz/inputDataDialog.h>
+#include <exception.h>
+#include <inputDataDialog.h>
 
 #include <QtGui/QDialog>
 #include <QtGui/QDrag>

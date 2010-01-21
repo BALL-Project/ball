@@ -28,7 +28,7 @@
 #include <QtGui/QGridLayout>
 #include <QtGui/QLabel>
 
-#include <BALL/APPLICATIONS/QuEasyViz/SDFInputDataItem.h>
+#include <SDFInputDataItem.h>
 
 namespace BALL
 {

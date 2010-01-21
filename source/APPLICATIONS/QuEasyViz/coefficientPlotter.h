@@ -21,8 +21,8 @@
 #ifndef COEFF_PLOTTER
 #define COEFF_PLOTTER
 
-#include  <BALL/APPLICATIONS/QuEasyViz/plotter.h>
-#include  <BALL/APPLICATIONS/QuEasyViz/modelItem.h>
+#include  <plotter.h>
+#include  <modelItem.h>
 
 
 namespace BALL

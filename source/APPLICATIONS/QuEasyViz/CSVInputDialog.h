@@ -29,7 +29,7 @@
 #include <QtGui/QLabel>
 #include <QtGui/QComboBox>
 
-#include <BALL/APPLICATIONS/QuEasyViz/CSVInputDataItem.h>
+#include <CSVInputDataItem.h>
 
 namespace BALL
 {

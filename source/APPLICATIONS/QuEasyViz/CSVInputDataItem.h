@@ -21,7 +21,7 @@
 #ifndef CVS_INPUTDATAITEM_H
 #define CVS_INPUTDATAITEM_H
 
-#include <BALL/APPLICATIONS/QuEasyViz/inputDataItem.h>
+#include <inputDataItem.h>
 #include <BALL/QSAR/QSARData.h>
 
 #include <QtGui/QGraphicsSceneMouseEvent>

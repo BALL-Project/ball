@@ -18,10 +18,10 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <BALL/APPLICATIONS/QuEasyViz/dataItemView.h>
-#include <BALL/APPLICATIONS/QuEasyViz/edge.h>
-#include <BALL/APPLICATIONS/QuEasyViz/dataItem.h>
-#include <BALL/APPLICATIONS/QuEasyViz/mainWindow.h>
+#include <dataItemView.h>
+#include <edge.h>
+#include <dataItem.h>
+#include <mainWindow.h>
 
 #include <QtGui/QWheelEvent>
 #include <QtGui/QMenu>

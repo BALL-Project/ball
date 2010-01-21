@@ -29,7 +29,7 @@
 #include <QtGui/QLabel>
 #include <QtGui/QComboBox>
 
-#include <BALL/APPLICATIONS/QuEasyViz/featureSelectionItem.h>
+#include <featureSelectionItem.h>
 
 namespace BALL
 {

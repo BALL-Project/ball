@@ -23,7 +23,7 @@
 
 #include <QtGui/QDialog>
 #include <QtGui/QTableWidget>
-#include <BALL/APPLICATIONS/QuEasyViz/predictionItem.h>
+#include <predictionItem.h>
 
 
 namespace BALL

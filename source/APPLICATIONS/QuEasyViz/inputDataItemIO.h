@@ -21,10 +21,10 @@
 #ifndef INPUTDATAITEMIO_H
 #define INPUTDATAITEMIO_H
 
-#include <BALL/APPLICATIONS/QuEasyViz/dataItemView.h>
-#include <BALL/APPLICATIONS/QuEasyViz/CSVInputDataItem.h>
-#include <BALL/APPLICATIONS/QuEasyViz/SDFInputDataItem.h>
-#include <BALL/APPLICATIONS/QuEasyViz/partitioningItem.h>
+#include <dataItemView.h>
+#include <CSVInputDataItem.h>
+#include <SDFInputDataItem.h>
+#include <partitioningItem.h>
 #include <BALL/DATATYPE/string.h>
 #include <map>
 #include <set>

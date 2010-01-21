@@ -18,7 +18,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <BALL/APPLICATIONS/QuEasyViz/bayesPlotter.h>
+#include <bayesPlotter.h>
 #include <qwt_plot_zoomer.h>
 #include <qwt_scale_widget.h>
 

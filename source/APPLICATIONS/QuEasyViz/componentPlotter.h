@@ -21,8 +21,8 @@
 #ifndef COMP_PLOTTER
 #define COMP_PLOTTER
 
-#include  <BALL/APPLICATIONS/QuEasyViz/plotter.h>
-#include  <BALL/APPLICATIONS/QuEasyViz/modelItem.h>
+#include  <plotter.h>
+#include  <modelItem.h>
 #include <QtGui/QComboBox>
 
 

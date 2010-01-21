@@ -28,8 +28,8 @@
 #include <QtCore/QPointer>
 #include <QtCore/QTextStream>
 
-#include <BALL/APPLICATIONS/QuEasyViz/edge.h>
-#include <BALL/APPLICATIONS/QuEasyViz/dataItemView.h>
+#include <edge.h>
+#include <dataItemView.h>
 #include <BALL/DATATYPE/string.h>
 #include <set>
 

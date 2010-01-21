@@ -18,7 +18,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <BALL/APPLICATIONS/QuEasyViz/SDFInputDialog.h>
+#include <SDFInputDialog.h>
 #include <BALL/QSAR/exception.h>
 #include <QtGui/QMessageBox>
 #include <QtGui/QPushButton>

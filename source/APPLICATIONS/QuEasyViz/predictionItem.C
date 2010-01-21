@@ -18,11 +18,11 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <BALL/APPLICATIONS/QuEasyViz/predictionItem.h>
-#include <BALL/APPLICATIONS/QuEasyViz/exception.h>
-#include <BALL/APPLICATIONS/QuEasyViz/mainWindow.h>
-#include <BALL/APPLICATIONS/QuEasyViz/predictionPlotter.h>
-#include <BALL/APPLICATIONS/QuEasyViz/predictionResultDialog.h>
+#include <predictionItem.h>
+#include <exception.h>
+#include <mainWindow.h>
+#include <predictionPlotter.h>
+#include <predictionResultDialog.h>
 #include <BALL/QSAR/configIO.h>
 
 #include <QtGui/QDrag>

@@ -21,9 +21,9 @@
 #ifndef MODELITEM_H
 #define MODELITEM_H
 
-#include <BALL/APPLICATIONS/QuEasyViz/dataItem.h>
-#include <BALL/APPLICATIONS/QuEasyViz/inputDataItem.h>
-#include <BALL/APPLICATIONS/QuEasyViz/plotter.h>
+#include <dataItem.h>
+#include <inputDataItem.h>
+#include <plotter.h>
 #include <BALL/QSAR/Model.h>
 #include <BALL/QSAR/registry.h>
 

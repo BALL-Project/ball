@@ -21,8 +21,8 @@
 #ifndef INPUT_PLOTTER
 #define INPUT_PLOTTER
 
-#include  <BALL/APPLICATIONS/QuEasyViz/plotter.h>
-#include  <BALL/APPLICATIONS/QuEasyViz/inputDataItem.h>
+#include  <plotter.h>
+#include  <inputDataItem.h>
 
 
 namespace BALL

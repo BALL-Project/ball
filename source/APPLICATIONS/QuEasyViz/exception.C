@@ -23,7 +23,7 @@
 //
 //
 
-#include <BALL/APPLICATIONS/QuEasyViz/exception.h>
+#include <exception.h>
 #include <BALL/DATATYPE/string.h>
 
 using namespace BALL::VIEW::Exception;

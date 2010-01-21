@@ -18,10 +18,10 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <BALL/APPLICATIONS/QuEasyViz/validationItem.h>
-#include <BALL/APPLICATIONS/QuEasyViz/exception.h>
-#include <BALL/APPLICATIONS/QuEasyViz/mainWindow.h>
-#include <BALL/APPLICATIONS/QuEasyViz/validationResultDialog.h>
+#include <validationItem.h>
+#include <exception.h>
+#include <mainWindow.h>
+#include <validationResultDialog.h>
 #include <BALL/QSAR/configIO.h>
 
 #include <QtGui/QDrag>

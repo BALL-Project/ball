@@ -18,9 +18,9 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <BALL/APPLICATIONS/QuEasyViz/dataItem.h>
-#include <BALL/APPLICATIONS/QuEasyViz/edge.h>
-#include <BALL/APPLICATIONS/QuEasyViz/mainWindow.h>
+#include <dataItem.h>
+#include <edge.h>
+#include <mainWindow.h>
 
 #include <QtGui/QDrag>
 #include <QtCore/QMimeData>

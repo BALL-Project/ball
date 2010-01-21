@@ -19,7 +19,8 @@
  */
 
  
-#include <BALL/APPLICATIONS/QuEasyViz/componentPlotter.h>
+#include <componentPlotter.h>
+
 #include <qwt_plot_curve.h>
 #include <qwt_plot_marker.h>
 #include <qwt_plot_zoomer.h>
@@ -32,8 +33,6 @@
 #include <QColor>
 
 using namespace BALL::VIEW;
-
-
 
 ComponentPlotter::ComponentPlotter(ModelItem* model_item, bool plot_loadings)
 	: Plotter(model_item)

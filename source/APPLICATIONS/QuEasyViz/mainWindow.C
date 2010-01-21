@@ -18,13 +18,13 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <BALL/APPLICATIONS/QuEasyViz/mainWindow.h>
+#include <mainWindow.h>
 #include <BALL/QSAR/exception.h>
-#include <BALL/APPLICATIONS/QuEasyViz/exception.h>
-#include <BALL/APPLICATIONS/QuEasyViz/inputDataDialog.h>
-#include <BALL/APPLICATIONS/QuEasyViz/CSVInputDialog.h>
-#include <BALL/APPLICATIONS/QuEasyViz/dottedEdge.h>
-#include <BALL/APPLICATIONS/QuEasyViz/inputDataItemIO.h>
+#include <exception.h>
+#include <inputDataDialog.h>
+#include <CSVInputDialog.h>
+#include <dottedEdge.h>
+#include <inputDataItemIO.h>
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/FORMAT/INIFile.h>
 
@@ -508,7 +508,8 @@ PredictionItem* MainWindow::createPrediction(InputDataItem* input, ModelItem* mo
 
  void MainWindow::about()
 {
-	String s = "Version "+String(QUEASY_VERSION)+"\nbuild "+String(__DATE__);
+//	String s = "Version "+String(QUEASY_VERSION)+"\nbuild "+String(__DATE__);
+	String s = "Version "+String(BALL_RELEASE_STRING)+"\nbuild "+String(__DATE__);
 	QMessageBox::information(this, tr("About QuEasyViz"), tr(s.c_str()),
 	QMessageBox::Ok);
 }

@@ -18,8 +18,8 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <BALL/APPLICATIONS/QuEasyViz/inputDataItemIO.h>
-#include <BALL/APPLICATIONS/QuEasyViz/mainWindow.h>
+#include <inputDataItemIO.h>
+#include <mainWindow.h>
 #include <BALL/QSAR/configIO.h>
 
 #include <QtGui/QMessageBox>

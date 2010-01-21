@@ -23,8 +23,8 @@
 
 #include <qwt_plot_spectrogram.h>
 
-#include  <BALL/APPLICATIONS/QuEasyViz/plotter.h>
-#include  <BALL/APPLICATIONS/QuEasyViz/modelItem.h>
+#include  <plotter.h>
+#include  <modelItem.h>
 #include <qwt_raster_data.h>
 
 namespace BALL

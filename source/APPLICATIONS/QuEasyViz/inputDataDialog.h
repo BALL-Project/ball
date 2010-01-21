@@ -23,7 +23,7 @@
 
 #include <QtGui/QDialog>
 
-#include <BALL/APPLICATIONS/QuEasyViz/inputDataItem.h>
+#include <inputDataItem.h>
 
 namespace BALL
 {

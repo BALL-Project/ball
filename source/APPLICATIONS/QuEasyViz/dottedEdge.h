@@ -23,8 +23,8 @@
 
 #include <QtGui/QPainter>
 
-#include <BALL/APPLICATIONS/QuEasyViz/dataItem.h>
-#include <BALL/APPLICATIONS/QuEasyViz/edge.h>
+#include <dataItem.h>
+#include <edge.h>
 
 namespace BALL
 {

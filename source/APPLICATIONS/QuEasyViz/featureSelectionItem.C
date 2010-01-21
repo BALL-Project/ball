@@ -20,9 +20,9 @@
 
 #include <BALL/QSAR/exception.h>
 
-#include <BALL/APPLICATIONS/QuEasyViz/exception.h>
-#include <BALL/APPLICATIONS/QuEasyViz/featureSelectionItem.h>
-#include <BALL/APPLICATIONS/QuEasyViz/mainWindow.h>
+#include <exception.h>
+#include <featureSelectionItem.h>
+#include <mainWindow.h>
 #include <BALL/QSAR/configIO.h>
 
 #include <QtGui/QDrag>

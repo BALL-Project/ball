@@ -18,9 +18,9 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <BALL/APPLICATIONS/QuEasyViz/predictionPlotter.h>
-#include <BALL/APPLICATIONS/QuEasyViz/validationItem.h>
-#include <BALL/APPLICATIONS/QuEasyViz/predictionItem.h>
+#include <predictionPlotter.h>
+#include <validationItem.h>
+#include <predictionItem.h>
 
 #include <qwt_plot_curve.h>
 #include <qwt_plot_marker.h>

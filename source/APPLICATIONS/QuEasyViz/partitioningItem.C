@@ -18,10 +18,10 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <BALL/APPLICATIONS/QuEasyViz/partitioningItem.h>
-#include <BALL/APPLICATIONS/QuEasyViz/exception.h>
-#include <BALL/APPLICATIONS/QuEasyViz/mainWindow.h>
-#include <BALL/APPLICATIONS/QuEasyViz/inputPartitionItem.h>
+#include <partitioningItem.h>
+#include <exception.h>
+#include <mainWindow.h>
+#include <inputPartitionItem.h>
 
 
 #include <QtGui/QDrag>

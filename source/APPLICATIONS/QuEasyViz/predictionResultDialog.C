@@ -19,8 +19,8 @@
  */
 
 
-#include <BALL/APPLICATIONS/QuEasyViz/predictionResultDialog.h>
-#include <BALL/APPLICATIONS/QuEasyViz/mainWindow.h>
+#include <predictionResultDialog.h>
+#include <mainWindow.h>
 
 #include <QtGui/QDialogButtonBox>
 #include <QtGui/QFileDialog>

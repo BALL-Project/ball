@@ -21,7 +21,7 @@
 #ifndef INPUTDATAITEM_H
 #define INPUTDATAITEM_H
 
-#include <BALL/APPLICATIONS/QuEasyViz/dataItem.h>
+#include <dataItem.h>
 #include <BALL/QSAR/QSARData.h>
 
 #include <QtGui/QGraphicsSceneMouseEvent>
