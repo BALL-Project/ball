@@ -7,6 +7,11 @@
 %ModuleCode
 	#include <BALL/STRUCTURE/numericalSAS.h>
 	using namespace BALL;
+	#if SIP_VERSION >= 0x040a00
+		#define PARSE_ARG sipParseErr
+	#else
+		#define PARSE_ARG sipArgsParsed
+	#endif
 %End
 
 float calculateSASArea
@@ -20,7 +25,7 @@ PyAtomDict& calculateSASAtomAreas
 	float a1 = 1.5;
 	Size a2 = 400;
 
-	if (sipParseArgs(&sipArgsParsed,sipArgs,"J1|fi",BALL_SIP_TYPE(AtomContainer),&a0,&a1,&a2))
+	if (sipParseArgs(&PARSE_ARG,sipArgs,"J1|fi",BALL_SIP_TYPE(AtomContainer),&a0,&a1,&a2))
 	{
 		PyAtomDict *res;
  
@@ -41,7 +46,7 @@ Surface& calculateSASPoints
 	float a1 = 1.5;
 	Size a2 = 400;
 
-	if (sipParseArgs(&sipArgsParsed,sipArgs,"J1|fi",BALL_SIP_TYPE(AtomContainer), &a0, &a1, &a2))
+	if (sipParseArgs(&PARSE_ARG,sipArgs,"J1|fi",BALL_SIP_TYPE(AtomContainer), &a0, &a1, &a2))
 	{
 		Surface* res = new Surface;
 		calculateSASPoints(*a0, *res, a1, a2);
