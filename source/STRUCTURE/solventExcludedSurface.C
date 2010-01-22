@@ -191,9 +191,7 @@ namespace BALL
 	}
 
 
-	bool SolventExcludedSurface::cleanSingularToricFace
-			(SESFace* face,
-			 const double&			sqrt_density)
+	bool SolventExcludedSurface::cleanSingularToricFace(SESFace* face, const double& sqrt_density)
 	{
 		face->normalize(true);
 		std::list<SESEdge*>::iterator e = face->edge_.begin();
@@ -442,7 +440,6 @@ namespace BALL
 
 
 	void SolventExcludedSurface::deleteSmallToricFace(SESFace* face)
-		
 	{
 		SESEdge* edge[4];
 		std::list<SESEdge*>::iterator e = face->edge_.begin();
@@ -942,8 +939,7 @@ namespace BALL
 	}
 
 
-	std::ostream& operator <<
-			(std::ostream& s, const SolventExcludedSurface& ses)
+	std::ostream& operator << (std::ostream& s, const SolventExcludedSurface& ses)
 	{
 		s << "Vertices:\n";
 		SolventExcludedSurface::ConstVertexIterator v;
@@ -1317,10 +1313,7 @@ namespace BALL
 	}
 
 
-	SESEdge* SESComputer::createConvexEdge
-		(SESFace*		face,
-		 RSVertex*	rsvertex)
-		
+	SESEdge* SESComputer::createConvexEdge(SESFace*	face, RSVertex*	rsvertex)
 	{
 		SESEdge* edge = new SESEdge;
 		Index atom = rsvertex->atom_;
@@ -1616,7 +1609,6 @@ namespace BALL
 
 
 	SESSingularityCleaner::SESSingularityCleaner()
-		
 		:	ses_(),
 			vertex_grid_(),
 			probe_intersections_()
@@ -1624,10 +1616,7 @@ namespace BALL
 	}
 
 
-	SESSingularityCleaner::SESSingularityCleaner
-			(SolventExcludedSurface* ses,
-			 HashGrid3<Index>*			 vertex_grid)
-		
+	SESSingularityCleaner::SESSingularityCleaner(SolventExcludedSurface* ses, HashGrid3<Index>* vertex_grid)
 		:	ses_(ses),
 			vertex_grid_(vertex_grid),
 			probe_intersections_()
@@ -1636,7 +1625,6 @@ namespace BALL
 
 
 	SESSingularityCleaner::~SESSingularityCleaner()
-		
 	{
 		// delete probe_intersections
 		HashMap< Position,
@@ -1678,10 +1666,10 @@ namespace BALL
 
 
 	bool SESSingularityCleaner::treatFirstCategory()
-		
 	{
 		std::list<SESFace*> first_category_faces;
 		getFirstCategoryFaces(first_category_faces);
+
 		SESFace* face1(0);
 		SESFace* face2(0);
 		bool modified = false;
@@ -1718,12 +1706,11 @@ namespace BALL
 	}
 
 
-	void SESSingularityCleaner::getFirstCategoryFaces
-		(std::list<SESFace*>& first_category_faces)
-		
+	void SESSingularityCleaner::getFirstCategoryFaces(std::list<SESFace*>& first_category_faces)
 	{
 		std::list<SESFace*> singular_faces;
 		getSingularFaces(singular_faces);
+
 		while (!singular_faces.empty())
 		{
 			SESFace* current = singular_faces.front();
@@ -1736,7 +1723,8 @@ namespace BALL
 					first_category_faces.push_back(current);
 					first_category_faces.push_back(*i);
 					singular_faces.erase(i);
-					i = singular_faces.end();
+
+					break;
 				}
 				else
 				{
@@ -1747,9 +1735,7 @@ namespace BALL
 	}
 
 
-	void SESSingularityCleaner::getSingularFaces
-			(std::list<SESFace*>& faces)
-		
+	void SESSingularityCleaner::getSingularFaces(std::list<SESFace*>& faces)
 	{
 		for (Position i = 0; i < ses_->number_of_spheric_faces_; i++)
 		{
@@ -1761,9 +1747,7 @@ namespace BALL
 	}
 
 
-	void SESSingularityCleaner::noCut
-			(SESFace* face1, SESFace* face2)
-		
+	void SESSingularityCleaner::noCut(SESFace* face1, SESFace* face2)
 	{
 		TCircle3<double> circle;
 		double probe_radius = ses_->reduced_surface_->probe_radius_;
@@ -1970,7 +1954,6 @@ namespace BALL
 
 
 	void SESSingularityCleaner::treatSecondCategory()
-		
 	{
 		double x_min = ses_->spheric_faces_[0]->rsface_->center_.x;
 		double y_min = ses_->spheric_faces_[0]->rsface_->center_.y;
@@ -1978,31 +1961,24 @@ namespace BALL
 		double x_max = ses_->spheric_faces_[0]->rsface_->center_.x;
 		double y_max = ses_->spheric_faces_[0]->rsface_->center_.y;
 		double z_max = ses_->spheric_faces_[0]->rsface_->center_.z;
+
 		for (Position i = 1; i != ses_->number_of_spheric_faces_; i++)
 		{
-			x_min = ((x_min > ses_->spheric_faces_[i]->rsface_->center_.x)
-											? ses_->spheric_faces_[i]->rsface_->center_.x
-											: x_min);
-			y_min = ((y_min > ses_->spheric_faces_[i]->rsface_->center_.y)
-											? ses_->spheric_faces_[i]->rsface_->center_.y
-											: y_min);
-			z_min = ((z_min > ses_->spheric_faces_[i]->rsface_->center_.z)
-											? ses_->spheric_faces_[i]->rsface_->center_.z
-											: z_min);
-			x_max = ((x_max < ses_->spheric_faces_[i]->rsface_->center_.x)
-											? ses_->spheric_faces_[i]->rsface_->center_.x
-											: x_max);
-			y_max = ((y_max < ses_->spheric_faces_[i]->rsface_->center_.y)
-											? ses_->spheric_faces_[i]->rsface_->center_.y
-											: y_max);
-			z_max = ((z_max < ses_->spheric_faces_[i]->rsface_->center_.z)
-											? ses_->spheric_faces_[i]->rsface_->center_.z
-											: z_max);
+			x_min = std::min(x_min, ses_->spheric_faces_[i]->rsface_->center_.x);
+			y_min = std::min(y_min, ses_->spheric_faces_[i]->rsface_->center_.y);
+			z_min = std::min(z_min, ses_->spheric_faces_[i]->rsface_->center_.z);
+
+			x_max = std::max(x_max, ses_->spheric_faces_[i]->rsface_->center_.x);
+			y_max = std::max(y_max, ses_->spheric_faces_[i]->rsface_->center_.y);
+			z_max = std::max(z_max, ses_->spheric_faces_[i]->rsface_->center_.z);
 		}
+
 		double dist = 2*ses_->reduced_surface_->probe_radius_;
+
 		Position nx = (Position)((x_max-x_min)/dist+5);
 		Position ny = (Position)((y_max-y_min)/dist+5);
 		Position nz = (Position)((z_max-z_min)/dist+5);
+
 		Vector3 origin(x_min-2*dist,y_min-2*dist,z_min-2*dist);
 		HashGrid3<Position> grid(origin,nx,ny,nz,dist);
 		Vector3 pos;
@@ -2013,14 +1989,16 @@ namespace BALL
 							ses_->spheric_faces_[i]->rsface_->center_.z);
 			grid.insert(pos,i);
 		}
+
 		std::list<SESEdge*>::iterator edge;
 		std::list<SESEdge*> deletable_edges;
-		for (edge = ses_->singular_edges_.begin();
+		for (edge  = ses_->singular_edges_.begin();
 				 edge != ses_->singular_edges_.end();
 				 edge++)
 		{
-			treatSingularEdge(*edge,grid,deletable_edges);
+			treatSingularEdge(*edge, grid, deletable_edges);
 		}
+
 		for (edge = deletable_edges.begin(); edge != deletable_edges.end(); edge++)
 		{
 			(*edge)->face_[0]->edge_.remove(*edge);
@@ -2033,12 +2011,8 @@ namespace BALL
 		}
 	}
 
-
-	void SESSingularityCleaner::treatSingularEdge
-		(SESEdge*							edge,
-		 HashGrid3<Position>&			grid,
-		 std::list<SESEdge*>&	deletable_edges)
-		
+	void SESSingularityCleaner::treatSingularEdge(SESEdge* edge, HashGrid3<Position>& grid,
+	                                              std::list<SESEdge*>& deletable_edges)
 	{
 		if (edge->vertex_[0] == NULL)
 		{
