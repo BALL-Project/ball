@@ -1647,27 +1647,35 @@ namespace BALL
 	{
 		Index atom1 = vertex1->atom_;
 		Index atom2 = vertex2->atom_;
-		TCircle3<double> circle1;
-		TCircle3<double> circle2;
-		TCircle3<double> circle3;
-		if (getCircles(atom1, atom2, circle1, circle2, circle3) &&
-				Maths::isGreater(circle1.radius,rs_->probe_radius_))
+
+		TCircle3<double> circle1, circle2, circle3;
+
+		// compute the three circles describing the toric face
+		if (getCircles(atom1, atom2, circle1, circle2, circle3) && // the probe hulls intersect
+				Maths::isGreater(circle1.radius,rs_->probe_radius_))   // the radius of the toric edge is > 0 
 		{
-			TPlane3<double> plane(circle1.p,circle1.n);
+			TPlane3<double> plane(circle1.p, circle1.n);
+
 			::std::list<Index>::const_iterator i;
 			TCircle3<double> test_circle;
 			TSphere3<double> sphere;
-			double dist;
+
+			// find the mutual neighbours of both atoms
 			for (i = neighbours_of_two_[atom1][atom2].begin();
 					 i != neighbours_of_two_[atom1][atom2].end();
 					 i++)
 			{
-				sphere.set(rs_->atom_[*i].p,rs_->atom_[*i].radius+rs_->probe_radius_);
+				// put a sphere into the neighbour
+				sphere.set(rs_->atom_[*i].p, rs_->atom_[*i].radius+rs_->probe_radius_);
+
 				if (GetIntersection(sphere,plane,test_circle))
 				{
-					dist = test_circle.radius-circle1.radius;
-					if (Maths::isLessOrEqual(dist*dist,
-																	 test_circle.p.getSquareDistance(circle1.p)))
+					double radius_dist = test_circle.radius-circle1.radius;
+					double radius_sum  = test_circle.radius+circle1.radius;
+					double center_dist = test_circle.p.getSquareDistance(circle1.p);
+
+					if (   Maths::isLessOrEqual(radius_dist*radius_dist,  center_dist) 
+							&& Maths::isGreaterOrEqual(radius_sum*radius_sum, center_dist) ) // the circles intersect										 
 					{
 						return NULL;
 					}
@@ -1684,6 +1692,9 @@ namespace BALL
 		return NULL;
 	}
 
+	// circle1 will be the circle of the edge of the probe sphere along a toric edge
+	// circle2 will be the rim of the cut sphere around atom1
+	// circle3 will be the rim of the cut sphere around atom2
 	bool RSComputer::getCircles(Index atom1,  Index atom2, TCircle3<double>& circle1,
 	                            TCircle3<double>& circle2, TCircle3<double>& circle3)
 	{
@@ -1693,8 +1704,10 @@ namespace BALL
 		sphere1.radius += rs_->probe_radius_;
 		sphere2.radius += rs_->probe_radius_;
 
+		// intersect the spheres surrounding the atoms to yield circle1
 		if (GetIntersection(sphere1, sphere2, circle1))
 		{
+			// the intercept theorem yields a simple relationship between the radii
 			double ratio = rs_->atom_[atom1].radius/sphere1.radius;
 
 			circle2.radius = circle1.radius*ratio;
@@ -2025,7 +2038,7 @@ namespace BALL
 						double max_dist = next_atom.radius+offset;
 
 						max_dist *= max_dist;
-						if (Maths::isLess(dist, max_dist))
+						if (!Maths::isGreater(dist, max_dist))
 						{
 							neighbours_[i].push_back(*d);
 							neighbours_[*d].push_back(i);
