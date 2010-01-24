@@ -53,8 +53,9 @@ macro(check_lapack_libraries DEFINITIONS LIBRARIES _prefix _name _flags _list _b
       # search first in ${_path}
       find_library(${_prefix}_${_library}_LIBRARY
                   NAMES ${_library}
-                  PATHS ${_path} NO_DEFAULT_PATH
+                  PATHS ${_path}
                   )
+
       # if not found, search in environment variables and system
       if ( WIN32 )
         find_library(${_prefix}_${_library}_LIBRARY
@@ -112,8 +113,9 @@ macro(check_lapack_libraries DEFINITIONS LIBRARIES _prefix _name _flags _list _b
     set(${LIBRARIES}   ${_libraries_found})
     set(CMAKE_REQUIRED_DEFINITIONS "")
     set(CMAKE_REQUIRED_LIBRARIES   ${_flags} ${${LIBRARIES}} ${_blas})
-    #message("DEBUG: CMAKE_REQUIRED_LIBRARIES = ${CMAKE_REQUIRED_LIBRARIES}")
+    message("DEBUG: CMAKE_REQUIRED_LIBRARIES = ${CMAKE_REQUIRED_LIBRARIES}")
     check_function_exists(${_name} ${_prefix}_${_name}${_combined_name}_WORKS)
+    MESSAGE(STATUS ${${_prefix}_${_name}${_combined_name}_WORKS})
     set(CMAKE_REQUIRED_LIBRARIES "")
     mark_as_advanced(${_prefix}_${_name}${_combined_name}_WORKS)
     set(_libraries_work ${${_prefix}_${_name}${_combined_name}_WORKS})
@@ -228,8 +230,9 @@ else()
       cheev
       ""
       "lapack"
-      "${BLAS_LIBRARIES}"
-      "${CGAL_TAUCS_LIBRARIES_DIR} ENV LAPACK_LIB_DIR"
+      #     "${BLAS_LIBRARIES}"
+      "c:/BALL_devel/Windows/Contrib/lib/blas.lib"
+      "ENV LAPACK_LIB_DIR"
       )
     endif()
 

@@ -54,7 +54,7 @@ macro(check_fortran_libraries DEFINITIONS LIBRARIES _prefix _name _flags _list _
       # search first in ${_path}
       find_library(${_prefix}_${_library}_LIBRARY
                   NAMES ${_library}
-                  PATHS ${_path} NO_DEFAULT_PATH
+                  PATHS ${_path}
                   )
       # if not found, search in environment variables and system
       if ( WIN32 )
@@ -164,6 +164,27 @@ else()
       "${CGAL_TAUCS_LIBRARIES_DIR} ENV BLAS_LIB_DIR"
       )
     endif()
+
+    # NOTE: Changed for BALL!
+    IF (NOT BLAS_LIBRARIES)
+			check_fortran_libraries(
+					BLAS_DEFINITIONS
+					BLAS_LIBRARIES
+					BLAS
+					cblas_sgemm
+					""
+					"cblas"
+					"ENV BLAS_LIB_DIR"
+	)
+	ENDIF()	
+
+	# NOTE: BALL:
+	# If we have not found cblas by now, we will use the GSL cblas
+	MESSAGE(STATUS "Falling back to gsl cblas!")
+	SET(BLAS_DEFINITIONS "")
+	SET(BLAS_LIBRARIES ${GSL_GSLCBLAS_LIBRARY})
+	SET(BLAS_FOUND TRUE)
+
 
     # BLAS in PhiPACK libraries? (requires generic BLAS lib, too)
     if(NOT BLAS_LIBRARIES)
