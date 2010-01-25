@@ -56,6 +56,8 @@ namespace BALL
 				return pixel_buffer_->toImage();
 			else if (share_from_)
 				return share_from_->grabFrameBuffer();
+
+			return QImage();
 		}
 
 		void GLOffscreenTarget::prepareUpscaling(Size final_width, Size final_height)
