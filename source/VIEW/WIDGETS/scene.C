@@ -115,6 +115,7 @@ namespace BALL
 		Scene::Scene()
 			:	QWidget(),
 				ModularWidget("<Scene>"),
+				update_running_(false),
 				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
 				stage_(new Stage()),
 				renderers_(),
@@ -129,8 +130,7 @@ namespace BALL
 				mode_group_(new QActionGroup(this)),
 				main_display_(new GLRenderWindow(this)),
 				stereo_left_eye_(-1),
-				stereo_right_eye_(-1),
-				update_running_(false)
+				stereo_right_eye_(-1)
 		{
 			stage_settings_=new StageSettings(this);
 #ifndef ENABLE_RAYTRACING
@@ -157,6 +157,7 @@ namespace BALL
 				picking_action_(0),
 				system_origin_(0.0, 0.0, 0.0),
 				need_update_(false),
+				update_running_(false),
 				x_window_pos_old_(0),
 				y_window_pos_old_(0),
 				x_window_pos_new_(0),
@@ -183,8 +184,7 @@ namespace BALL
 				mode_group_(new QActionGroup(this)),
 				main_display_(new GLRenderWindow(this)),
 				stereo_left_eye_(-1),
-				stereo_right_eye_(-1),
-				update_running_(false)
+				stereo_right_eye_(-1)
 		{
 			stage_settings_=new StageSettings(this);
 #ifdef BALL_VIEW_DEBUG
@@ -210,6 +210,7 @@ namespace BALL
 			:	QWidget(parent_widget, w_flags),
 				ModularWidget(scene),
 				system_origin_(scene.system_origin_),
+				update_running_(false),
 				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
 				stage_(new Stage(*scene.stage_)),
 				renderers_(),
@@ -225,8 +226,7 @@ namespace BALL
 				mode_group_(new QActionGroup(this)),
 				main_display_(new GLRenderWindow(this)),
 				stereo_left_eye_(-1),
-				stereo_right_eye_(-1),
-				update_running_(false)
+				stereo_right_eye_(-1)
 		{
 			stage_settings_=new StageSettings(this);
 #ifdef BALL_VIEW_DEBUG
@@ -1718,11 +1718,11 @@ namespace BALL
 			updateGL();
 		}
 		
-		void Scene::buttonPressEvent(ButtonEvent* evt)
+		void Scene::buttonPressEvent(ButtonEvent* /*evt*/)
 		{
 		}
 
-		void Scene::buttonReleaseEvent(ButtonEvent* evt)
+		void Scene::buttonReleaseEvent(ButtonEvent* /*evt*/)
 		{
 		}
 
@@ -3024,8 +3024,8 @@ return;
 			offscreen_factor_ = factor;
 		}
 
-		void Scene::showText(const String& text, Size font_size) 
-		{ 
+		void Scene::showText(const String& /*text*/, Size /*font_size*/)
+		{
 			// TODO: reactivate!
 			/*
 			info_text_ = text; 
