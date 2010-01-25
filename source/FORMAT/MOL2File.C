@@ -327,7 +327,7 @@ namespace BALL
 		}
 
 		String name = getName(); // set system-name to file-name
-		int pos = name.find_last_of('/');
+		unsigned int pos = name.find_last_of('/');
 		if(pos!=string::npos && name.size()>pos)
 		{
 			name = name.substr(pos+1);
