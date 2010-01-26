@@ -20,32 +20,36 @@
 
 #include <BALL/QSAR/latentVariableModel.h>
 #include <iostream>
-using namespace BALL::QSAR;
 
-
-
-LatentVariableModel::LatentVariableModel()
+namespace BALL
 {
-	latent_variables_.resize(0,0);
-	loadings_.resize(0,0);
-	weights_.resize(0,0);
+	namespace QSAR
+	{
+
+		LatentVariableModel::LatentVariableModel()
+		{
+			latent_variables_.resize(0,0);
+			loadings_.resize(0,0);
+			weights_.resize(0,0);
+		}
+
+
+		const BALL::Matrix<double>* LatentVariableModel::getLoadings()
+		{
+			return &loadings_;
+		}
+
+
+		const BALL::Matrix<double>* LatentVariableModel::getLatentVariables()
+		{
+			return &latent_variables_;
+		}
+
+
+		const BALL::Matrix<double>* LatentVariableModel::getWeights()
+		{
+			return &weights_;
+		}
+
+	}
 }
-
-
-const BALL::Matrix<double>* LatentVariableModel::getLoadings()
-{
-	return &loadings_;
-}
-
-
-const BALL::Matrix<double>* LatentVariableModel::getLatentVariables()
-{
-	return &latent_variables_;
-}
-
-
-const BALL::Matrix<double>* LatentVariableModel::getWeights()
-{
-	return &weights_;
-}
-

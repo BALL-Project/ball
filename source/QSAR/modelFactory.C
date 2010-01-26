@@ -23,7 +23,3 @@
 //
 
 #include <BALL/QSAR/modelFactory.h>
-
-
-
-

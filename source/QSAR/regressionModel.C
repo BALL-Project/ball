@@ -25,295 +25,299 @@
 
 #include <BALL/QSAR/regressionModel.h>
 
-using namespace BALL::QSAR;
-
-
-RegressionModel::RegressionModel(const QSARData& q) : Model(q) 
+namespace BALL
 {
-	validation=new RegressionValidation(this);
-	model_val=validation;
-	offsets_.resize(0);
-}
-
-RegressionModel::~RegressionModel() 
-{
-	delete validation;
-}
-
-
-const BALL::Matrix<double>* RegressionModel::getTrainingResult() const
-{
-	return &training_result_;
-}
-
-
-
-void RegressionModel::show()
-{
-// 	if(training_result_.Nrows()==0)
-// 	{
-// 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must have been trained before the results can be saved displayed!");
-// 	}
-	
-	const Matrix<double>* coeffErrors = validation->getCoefficientStdErrors();
-	bool stderr=0;
-	if(coeffErrors->Ncols()!=0)
+	namespace QSAR
 	{
-		stderr=1;
-	}
-	cout<<type_<<"\t"<<data->getNoDescriptors()<<"\n";
-	
-	
-	if(type_=="ALL")
-	{
-		descriptor_IDs_.front();
-		for(int i=0;descriptor_IDs_.hasNext();i++)
+
+
+		RegressionModel::RegressionModel(const QSARData& q) : Model(q) 
 		{
-			cout<<descriptor_IDs_.next()<<"  "<<descriptor_names_[i]<<endl;
+			validation=new RegressionValidation(this);
+			model_val=validation;
+			offsets_.resize(0);
 		}
-	}
-	else if(!descriptor_IDs_.empty())
-	{
-		descriptor_IDs_.front();
-		for(int i=0; i<training_result_.Nrows();i++)
+
+		RegressionModel::~RegressionModel() 
 		{
-			if(type_!="KPLS" && type_!="KPCR" && type_!="KPLS" && type_!="GP")
+			delete validation;
+		}
+
+
+		const BALL::Matrix<double>* RegressionModel::getTrainingResult() const
+		{
+			return &training_result_;
+		}
+
+
+
+		void RegressionModel::show()
+		{
+		// 	if(training_result_.Nrows()==0)
+		// 	{
+		// 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must have been trained before the results can be saved displayed!");
+		// 	}
+			
+			const Matrix<double>* coeffErrors = validation->getCoefficientStdErrors();
+			bool sterr=0;
+			if(coeffErrors->Ncols()!=0)
 			{
-				cout<<String(descriptor_IDs_.next())<<"\t"<<descriptor_names_[i]<<"\t";
+				sterr=1;
+			}
+			cout<<type_<<"\t"<<data->getNoDescriptors()<<"\n";
+			
+			
+			if(type_=="ALL")
+			{
+				descriptor_IDs_.front();
+				for(int i=0;descriptor_IDs_.hasNext();i++)
+				{
+					cout<<descriptor_IDs_.next()<<"  "<<descriptor_names_[i]<<endl;
+				}
+			}
+			else if(!descriptor_IDs_.empty())
+			{
+				descriptor_IDs_.front();
+				for(int i=0; i<training_result_.Nrows();i++)
+				{
+					if(type_!="KPLS" && type_!="KPCR" && type_!="KPLS" && type_!="GP")
+					{
+						cout<<String(descriptor_IDs_.next())<<"\t"<<descriptor_names_[i]<<"\t";
+					}
+					else
+					{
+						cout<<String(i)<<"    "<<substance_names_[i]<<"    ";
+					}
+					for(int j=1; j<=training_result_.Ncols();j++) 
+					{
+						cout<<training_result_(i+1,j)<<"\t";
+					}
+					for(int j=1; j<=coeffErrors->Ncols();j++)
+					{
+						cout<<(*coeffErrors)(i+1,j)<<"\t";
+					}
+					cout <<"\n";
+				}
 			}
 			else
 			{
-				cout<<String(i)<<"    "<<substance_names_[i]<<"    ";
+				for(int i=0; i<training_result_.Nrows();i++)
+				{
+					if(type_!="KPLS" && type_!="KPCR" && type_!="KPLS" && type_!="GP")
+					{
+						cout<<String(i)<<"\t"<<descriptor_names_[i]<<"\t";
+					}
+					else
+					{
+						cout<<String(i)<<"\t"<<substance_names_[i]<<"\t";cout.flush();
+					}
+					for(int j=1; j<=training_result_.Ncols();j++) 
+					{
+						cout<<training_result_(i+1,j)<<"\t";
+					}
+					for(int j=1; j<=coeffErrors->Ncols();j++)
+					{
+						cout<<(*coeffErrors)(i+1,j)<<"\t";
+					}
+					cout <<"\n";
+				}
 			}
-			for(int j=1; j<=training_result_.Ncols();j++) 
-			{
-				cout<<training_result_(i+1,j)<<"\t";
-			}
-			for(int j=1; j<=coeffErrors->Ncols();j++)
-			{
-				cout<<(*coeffErrors)(i+1,j)<<"\t";
-			}
-			cout <<"\n";
+
 		}
-	}
-	else
-	{
-		for(int i=0; i<training_result_.Nrows();i++)
+
+		void RegressionModel::saveToFile(string filename)
 		{
-			if(type_!="KPLS" && type_!="KPCR" && type_!="KPLS" && type_!="GP")
+			if(data==0)
 			{
-				cout<<String(i)<<"\t"<<descriptor_names_[i]<<"\t";
+				cout<<"Error: no QSARData object assigned to model! Can not save model!"<<endl;
+				return;
+			}	
+			
+			bool trained = 1;
+			if(training_result_.Nrows()==0) trained = 0;
+			
+			ofstream out(filename.c_str());
+			
+			const Matrix<double>* coeffErrors = validation->getCoefficientStdErrors();
+			bool sterr=0;
+			if(coeffErrors->Ncols()!=0)
+			{
+				sterr=1;
+			}
+			bool centered_data = 0;
+			bool centered_y = 0;
+			if(descriptor_transformations_.Ncols()!=0)
+			{
+				centered_data=1;
+				if(y_transformations_.Ncols()!=0)
+				{
+					centered_y=1;
+				}
+			}
+			
+			int sel_features=descriptor_IDs_.size();
+			if(sel_features==0)
+			{
+				sel_features = data->getNoDescriptors();
+			}
+			
+			int no_y = training_result_.Ncols();
+			if(no_y==0) no_y = y_transformations_.Ncols(); // correct no because transformation information will have to by read anyway when reading this model later ...
+			
+			out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tcentered response?\ttrained?"<<endl;
+			out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<no_y<<"\t"<<centered_data<<"\t"<<centered_y<<"\t"<<trained<<"\n\n";
+			
+			saveModelParametersToFile(out);
+			saveResponseTransformationToFile(out);
+			RegressionModel::saveDescriptorInformationToFile(out);
+			out<<"# offsets"<<endl;
+			out<<offsets_<<endl;
+			
+			out.close();
+		}
+
+
+		void RegressionModel::readFromFile(string filename)
+		{
+			ifstream input(filename.c_str());
+			if(!input)
+			{
+				throw BALL::Exception::FileNotFound(__FILE__,__LINE__,filename);
+			}	
+			
+			String line0;
+			getline(input,line0);  // skip comment line 
+			getline(input,line0);  // read read line containing model specification
+			
+			if(line0.getField(0,"\t")!=type_)
+			{	
+				String e = "Wrong input data! Use training data file generated by a ";
+				e = e + type_ + " model !";
+				throw Exception::WrongDataType(__FILE__,__LINE__,e.c_str());
+			}
+			
+			int no_descriptors = line0.getField(2,"\t").toInt();
+			int no_y = line0.getField(3,"\t").toInt();
+			bool centered_data = line0.getField(4,"\t").toInt();
+			bool centered_y = line0.getField(5,"\t").toInt();
+			bool trained = line0.getField(6,"\t").toInt();
+			
+			getline(input,line0);  // skip empty line
+			readModelParametersFromFile(input);
+			if(centered_y)
+			{
+				readResponseTransformationFromFile(input, no_y);
+			}
+			readDescriptorInformationFromFile(input, no_descriptors, centered_data, no_y*trained);
+			getline(input,line0);  // skip empty line 
+			getline(input,line0);  // skip comment line 
+			if(input.eof()) offsets_.resize(0);
+			else readVector(offsets_,input,1,no_y);
+			
+			input.close();
+		}
+
+
+		void RegressionModel::readDescriptorInformationFromFile(ifstream& input, int no_descriptors, bool transformation, int no_coefficients)
+		{
+			descriptor_names_.clear();
+			if(transformation) descriptor_transformations_.resize(2,no_descriptors);
+			else descriptor_transformations_.resize(0,0);
+			if(no_coefficients>0) training_result_.ReSize(no_descriptors,no_coefficients);
+			else training_result_.ReSize(0,0);
+			String line;
+			getline(input,line);  // skip comment line
+			
+			for(int i=1; i<=no_descriptors; i++)
+			{
+				getline(input,line);
+				unsigned int id = (unsigned int) line.getField(0,"\t").toInt();
+				descriptor_IDs_.push_back(id);
+				descriptor_names_.push_back(line.getField(1,"\t"));
+				int j=2;
+				for(; j<2+no_coefficients; j++)
+				{	
+					training_result_(i,j-1) = line.getField(j,"\t").toDouble();
+				}
+				if(transformation)
+				{
+					descriptor_transformations_(1,i)= line.getField(j,"\t").toDouble();
+					descriptor_transformations_(2,i)=line.getField(j+1,"\t").toDouble();
+				}
+			}
+			getline(input,line);  // skip empty line	
+		}
+
+		void RegressionModel::saveDescriptorInformationToFile(ofstream& out)
+		{
+			out<<"# ID\tdescriptor-name\tcoefficient(s)\t";
+			
+			bool centered_data = (descriptor_transformations_.Ncols()>0);
+			
+			if(centered_data)
+			{
+				out<<"mean of desc.\tstddev of desc.\t";
+			}
+			if(stderr)
+			{
+				out<<"stderr(s) of coeff.";
+			}
+			out<<endl;
+			
+			const Matrix<double>* coeffErrors = validation->getCoefficientStdErrors();
+			
+			if(!descriptor_IDs_.empty())  // write descriptors and information about their transformation
+			{
+				descriptor_IDs_.front();
+				bool trained = (training_result_.getRowCount()==descriptor_IDs_.size());
+				
+				for(uint i=0; i<descriptor_IDs_.size();i++)
+				{
+					out<<String(descriptor_IDs_.next())<<"\t"<<descriptor_names_[i]<<"\t";
+					if(trained)
+					{
+						for(int j=1; j<=training_result_.Ncols();j++) 
+						{
+							out<<training_result_(i+1,j)<<"\t";
+						}
+					}
+					if(centered_data)
+					{
+						out<<descriptor_transformations_(1,i+1)<<"\t"<<descriptor_transformations_(2,i+1)<<"\t";
+					}
+					for(int j=1; j<=coeffErrors->Ncols();j++)
+					{
+						out<<(*coeffErrors)(i+1,j)<<"\t";
+					}
+					out <<"\n";
+				}
 			}
 			else
 			{
-				cout<<String(i)<<"\t"<<substance_names_[i]<<"\t";cout.flush();
-			}
-			for(int j=1; j<=training_result_.Ncols();j++) 
-			{
-				cout<<training_result_(i+1,j)<<"\t";
-			}
-			for(int j=1; j<=coeffErrors->Ncols();j++)
-			{
-				cout<<(*coeffErrors)(i+1,j)<<"\t";
-			}
-			cout <<"\n";
-		}
-	}
-
-}
-
-void RegressionModel::saveToFile(string filename)
-{
-	if(data==0)
-	{
-		cout<<"Error: no QSARData object assigned to model! Can not save model!"<<endl;
-		return;
-	}	
-	
-	bool trained = 1;
-	if(training_result_.Nrows()==0) trained = 0;
-	
-	ofstream out(filename.c_str());
-	
-	const Matrix<double>* coeffErrors = validation->getCoefficientStdErrors();
-	bool stderr=0;
-	if(coeffErrors->Ncols()!=0)
-	{
-		stderr=1;
-	}
-	bool centered_data = 0;
-	bool centered_y = 0;
-	if(descriptor_transformations_.Ncols()!=0)
-	{
-		centered_data=1;
-		if(y_transformations_.Ncols()!=0)
-		{
-			centered_y=1;
-		}
-	}
-	
-	int sel_features=descriptor_IDs_.size();
-	if(sel_features==0)
-	{
-		sel_features = data->getNoDescriptors();
-	}
-	
-	int no_y = training_result_.Ncols();
-	if(no_y==0) no_y = y_transformations_.Ncols(); // correct no because transformation information will have to by read anyway when reading this model later ...
-	
-	out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tcentered response?\ttrained?"<<endl;
-	out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<no_y<<"\t"<<centered_data<<"\t"<<centered_y<<"\t"<<trained<<"\n\n";
-	
-	saveModelParametersToFile(out);
-	saveResponseTransformationToFile(out);
-	RegressionModel::saveDescriptorInformationToFile(out);
-	out<<"# offsets"<<endl;
-	out<<offsets_<<endl;
-	
-	out.close();
-}
-
-
-void RegressionModel::readFromFile(string filename)
-{
-	ifstream input(filename.c_str());
-	if(!input)
-	{
-		throw BALL::Exception::FileNotFound(__FILE__,__LINE__,filename);
-	}	
-	
-	String line0;
-	getline(input,line0);  // skip comment line 
-	getline(input,line0);  // read read line containing model specification
-	
-	if(line0.getField(0,"\t")!=type_)
-	{	
-		String e = "Wrong input data! Use training data file generated by a ";
-		e = e + type_ + " model !";
-		throw Exception::WrongDataType(__FILE__,__LINE__,e.c_str());
-	}
-	
-	int no_descriptors = line0.getField(2,"\t").toInt();
-	int no_y = line0.getField(3,"\t").toInt();
-	bool centered_data = line0.getField(4,"\t").toInt();
-	bool centered_y = line0.getField(5,"\t").toInt();
-	bool trained = line0.getField(6,"\t").toInt();
-	
-	getline(input,line0);  // skip empty line
-	readModelParametersFromFile(input);
-	if(centered_y)
-	{
-		readResponseTransformationFromFile(input, no_y);
-	}
-	readDescriptorInformationFromFile(input, no_descriptors, centered_data, no_y*trained);
-	getline(input,line0);  // skip empty line 
-	getline(input,line0);  // skip comment line 
-	if(input.eof()) offsets_.resize(0);
-	else readVector(offsets_,input,1,no_y);
-	
-	input.close();
-}
-
-
-void RegressionModel::readDescriptorInformationFromFile(ifstream& input, int no_descriptors, bool transformation, int no_coefficients)
-{
-	descriptor_names_.clear();
-	if(transformation) descriptor_transformations_.resize(2,no_descriptors);
-	else descriptor_transformations_.resize(0,0);
-	if(no_coefficients>0) training_result_.ReSize(no_descriptors,no_coefficients);
-	else training_result_.ReSize(0,0);
-	String line;
-	getline(input,line);  // skip comment line
-	
-	for(int i=1; i<=no_descriptors; i++)
-	{
-		getline(input,line);
-		unsigned int id = (unsigned int) line.getField(0,"\t").toInt();
-		descriptor_IDs_.push_back(id);
-		descriptor_names_.push_back(line.getField(1,"\t"));
-		int j=2;
-		for(; j<2+no_coefficients; j++)
-		{	
-			training_result_(i,j-1) = line.getField(j,"\t").toDouble();
-		}
-		if(transformation)
-		{
-			descriptor_transformations_(1,i)= line.getField(j,"\t").toDouble();
-			descriptor_transformations_(2,i)=line.getField(j+1,"\t").toDouble();
-		}
-	}
-	getline(input,line);  // skip empty line	
-}
-
-void RegressionModel::saveDescriptorInformationToFile(ofstream& out)
-{
-	out<<"# ID\tdescriptor-name\tcoefficient(s)\t";
-	
-	bool centered_data = (descriptor_transformations_.Ncols()>0);
-	
-	if(centered_data)
-	{
-		out<<"mean of desc.\tstddev of desc.\t";
-	}
-	if(stderr)
-	{
-		out<<"stderr(s) of coeff.";
-	}
-	out<<endl;
-	
-	const Matrix<double>* coeffErrors = validation->getCoefficientStdErrors();
-	
-	if(!descriptor_IDs_.empty())  // write descriptors and information about their transformation
-	{
-		descriptor_IDs_.front();
-		bool trained = (training_result_.getRowCount()==descriptor_IDs_.size());
-		
-		for(uint i=0; i<descriptor_IDs_.size();i++)
-		{
-			out<<String(descriptor_IDs_.next())<<"\t"<<descriptor_names_[i]<<"\t";
-			if(trained)
-			{
-				for(int j=1; j<=training_result_.Ncols();j++) 
+				bool trained = (training_result_.getRowCount()==descriptor_names_.size());
+				for(uint i=0; i<descriptor_names_.size();i++)
 				{
-					out<<training_result_(i+1,j)<<"\t";
+					out<<String(i)<<"\t"<<descriptor_names_[i]<<"\t";
+
+					if(trained)
+					{
+						for(int j=1; j<=training_result_.Ncols();j++) 
+						{
+							out<<training_result_(i+1,j)<<"\t";
+						}
+					}
+					if(centered_data)
+					{
+						out<<descriptor_transformations_(1,i+1)<<"\t"<<descriptor_transformations_(2,i+1)<<"\t";
+					}
+					for(int j=1; j<=coeffErrors->Ncols();j++)
+					{
+						out<<(*coeffErrors)(i+1,j)<<"\t";
+					}
+					out <<"\n";
 				}
 			}
-			if(centered_data)
-			{
-				out<<descriptor_transformations_(1,i+1)<<"\t"<<descriptor_transformations_(2,i+1)<<"\t";
-			}
-			for(int j=1; j<=coeffErrors->Ncols();j++)
-			{
-				out<<(*coeffErrors)(i+1,j)<<"\t";
-			}
-			out <<"\n";
+			out<<endl;
 		}
 	}
-	else
-	{
-		bool trained = (training_result_.getRowCount()==descriptor_names_.size());
-		for(uint i=0; i<descriptor_names_.size();i++)
-		{
-			out<<String(i)<<"\t"<<descriptor_names_[i]<<"\t";
-
-			if(trained)
-			{
-				for(int j=1; j<=training_result_.Ncols();j++) 
-				{
-					out<<training_result_(i+1,j)<<"\t";
-				}
-			}
-			if(centered_data)
-			{
-				out<<descriptor_transformations_(1,i+1)<<"\t"<<descriptor_transformations_(2,i+1)<<"\t";
-			}
-			for(int j=1; j<=coeffErrors->Ncols();j++)
-			{
-				out<<(*coeffErrors)(i+1,j)<<"\t";
-			}
-			out <<"\n";
-		}
-	}
-	out<<endl;
 }
-

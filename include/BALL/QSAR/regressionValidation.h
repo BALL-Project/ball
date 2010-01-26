@@ -39,6 +39,11 @@
 #include <iterator>
 
 
+#include <BALL/MATHS/LINALG/matrix.h>
+#include <BALL/MATHS/LINALG/vector.h>
+
+
+
 namespace BALL
 {	
 	namespace QSAR

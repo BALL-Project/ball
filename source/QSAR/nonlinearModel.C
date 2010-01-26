@@ -25,16 +25,16 @@
 
 #include <BALL/QSAR/nonlinearModel.h>
 
-using namespace BALL::QSAR;
-
-
-
-NonLinearModel::NonLinearModel(const QSARData& q) : RegressionModel(q) { }
-
-NonLinearModel::~NonLinearModel()
+namespace BALL
 {
+	namespace QSAR
+			{
+
+		NonLinearModel::NonLinearModel(const QSARData& q) : RegressionModel(q) { }
+
+		NonLinearModel::~NonLinearModel()
+		{
+		}
+
+	}
 }
-
-
-
-

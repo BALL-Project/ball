@@ -24,13 +24,18 @@
 //
 
 #include <BALL/QSAR/svmModel.h>
-using namespace BALL::QSAR;
 
-
-SVMModel::SVMModel(const QSARData& q) : ClassificationModel(q)
+namespace BALL
 {
-}
+	namespace QSAR
+	{
+			
+		SVMModel::SVMModel(const QSARData& q) : ClassificationModel(q)
+		{
+		}
 
-SVMModel::~SVMModel()
-{
+		SVMModel::~SVMModel()
+		{
+		}
+	}
 }

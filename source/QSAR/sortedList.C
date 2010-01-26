@@ -25,14 +25,3 @@
 
 
 #include <BALL/QSAR/sortedList.h>
-
-
- 
- 
- 
-
-	
-	
-	
-	
-	
