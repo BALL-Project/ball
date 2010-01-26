@@ -21,4 +21,12 @@ namespace BALL {
 #include <BALL/MATHS/LINALG/matrixBasicFunctions.iC>
 #include <BALL/MATHS/LINALG/matrixIO.iC>
 
+namespace BALL {
+	// explicit instantiation to save the compiler some work (and to *make* it work on Windows)
+	template class BALL_EXPORT Vector<float>;
+	template class BALL_EXPORT Vector<double>;
+	template class BALL_EXPORT Vector<ComplexFloat>;
+	template class BALL_EXPORT Vector<ComplexDouble>;
+}
+
 #endif // BALL_LINALG_VECTOR_H

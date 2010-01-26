@@ -4,7 +4,6 @@
 namespace BALL {
 	template <typename valuetype>
 	Vector<valuetype>::Vector()
-		throw()
 		: data_(0),
 			is_column_vector_(true),
 			n_(0)
@@ -13,7 +12,6 @@ namespace BALL {
 
 	template <typename valuetype>
 	Vector<valuetype>::Vector(size_t n, bool is_column_vector)
-		throw()
 		: data_(),
 			is_column_vector_(is_column_vector),
 			n_(n)
@@ -31,7 +29,6 @@ namespace BALL {
 
 	template <typename valuetype>
 	Vector<valuetype>::Vector(size_t n, const valuetype& initial_value, bool is_column_vector)
-		throw()
 		: data_(),
 			is_column_vector_(is_column_vector),
 			n_(n)
@@ -47,6 +44,19 @@ namespace BALL {
 		}
 	}
 
+	////////////////////////////////////////////////////////////
+  template <> 
+  Vector<float>::Vector(const Vector<float>& v) throw(Exception::OutOfMemory);
+  
+	template <> 
+	Vector<double>::Vector(const Vector<double>& v) throw(Exception::OutOfMemory);
+	
+	template <> 
+	Vector<ComplexFloat>::Vector(const Vector<ComplexFloat>& v) throw(Exception::OutOfMemory);
+	
+	template <> 
+	Vector<ComplexDouble>::Vector(const Vector<ComplexDouble>& v) throw(Exception::OutOfMemory);
+	
 	template <typename valuetype>
 	Vector<valuetype>::Vector(const Vector<valuetype>& v)
 		throw(Exception::OutOfMemory)
@@ -63,13 +73,25 @@ namespace BALL {
 			throw Exception::OutOfMemory(__FILE__, __LINE__, data_.size() * sizeof(valuetype));
 		}
 	}
+	////////////////////////////////////////////////////////////
 
 	template <typename valuetype>
 	Vector<valuetype>::~Vector()
-		throw()
 	{
 	}
 
+	template <>
+	Vector<float>& Vector<float>::operator = (const Vector<float>& v);
+
+	template <>
+	Vector<double>& Vector<double>::operator = (const Vector<double>& v);
+
+	template <>
+	Vector<ComplexFloat>& Vector<ComplexFloat>::operator = (const Vector<ComplexFloat>& v);
+	
+	template <>
+	Vector<ComplexDouble>& Vector<ComplexDouble>::operator = (const Vector<ComplexDouble>& v);
+	
 	template <typename valuetype>
 	Vector<valuetype>& Vector<valuetype>::operator = (const Vector<valuetype>& v)
 		throw(Exception::OutOfMemory)
@@ -91,7 +113,6 @@ namespace BALL {
 
 	template <typename valuetype>
 	bool Vector<valuetype>::operator == (const Vector<valuetype>& B) const
-		throw()
 	{
 		if (&B == this)
 			return true;
@@ -117,7 +138,6 @@ namespace BALL {
 
 	template <typename valuetype>
 	bool Vector<valuetype>::operator != (const Vector<valuetype>& B) const
-		throw()
 	{
 		return !(*this == B);
 	}

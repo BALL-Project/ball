@@ -2,7 +2,6 @@
 # include <BALL/MATHS/LINALG/matrix.h>
 #endif
 
-
 #ifndef BALL_LINALG_SVDSOLVER_H
 #include <BALL/MATHS/LINALG/SVDSolver.h>
 #endif
@@ -1338,10 +1337,10 @@ namespace BALL
 	
 /// BasicFunctions
 
-template class Matrix<float>;
-template class Matrix<double>;
-template class Matrix<ComplexFloat>;
-template class Matrix<ComplexDouble>;
+//template class Matrix<float>;
+//template class Matrix<double>;
+//template class Matrix<ComplexFloat>;
+//template class Matrix<ComplexDouble>;
 
 
 } // namespace BALL

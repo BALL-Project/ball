@@ -165,8 +165,8 @@ namespace BALL {
 
 	template <class valuetype, class mtraits>
 	bool EigenSolver<valuetype, mtraits>::EigenValueComparator_::operator () 
-		(const std::pair<EigenSolver<valuetype, mtraits>::EigenValueType, Index>& a,
-		 const std::pair<EigenSolver<valuetype, mtraits>::EigenValueType, Index>& b) const
+		(const std::pair<typename EigenSolver<valuetype, mtraits>::EigenValueType, Index>& a,
+		 const std::pair<typename EigenSolver<valuetype, mtraits>::EigenValueType, Index>& b) const
 	{
 		return a.first.real() < b.first.real();
 	}

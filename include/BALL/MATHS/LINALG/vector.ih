@@ -48,16 +48,14 @@ namespace BALL {
 			/**
 			 * 	Default constructor, creating a column vector of size 0.
 			 */
-			Vector()
-				throw();
+			Vector();
 
 			/**
 			 *  Explicit constructor, creating a vector of size n. The
 			 *  vector can be a column (default) or a row vector, depending on the
 			 *  flag is_column_vector.
 			 */
-			Vector(size_t n, bool is_column_vector = true)
-				throw();
+			Vector(size_t n, bool is_column_vector = true);
 
 			/**
 			 *  Explicit constructor, creating a vector of size n. The
@@ -65,8 +63,7 @@ namespace BALL {
 			 *  flag is_column_vector.
 			 *  initial_value can be used to initialize all values of the vector.
 			 */
-			Vector(size_t n, const valuetype& initial_value, bool is_column_vector = true)
-				throw();
+			Vector(size_t n, const valuetype& initial_value, bool is_column_vector = true);
 
 			/**
 			 *  Copy constructor.
@@ -77,8 +74,7 @@ namespace BALL {
 			/**
 			 * 	Destructor.
 			 */
-			virtual ~Vector()
-				throw();
+			virtual ~Vector();
 
 			/** Clear method.
 			 *  Puts the vector in the same state as a default constructed one.
@@ -140,16 +136,14 @@ namespace BALL {
 			 *  Please note that two vectors with the same entries but differing
 			 *  type (row or column vector) are /not/ considered equal!
 			 */
-			bool operator == (const Vector<valuetype>& B) const
-				throw();
+			bool operator == (const Vector<valuetype>& B) const;
 
 			/**
 			 *  Checks for inequality.
 			 *  Please note that two vectors with the same entries but differing
 			 *  type (row or column vector) are /not/ considered equal!
 			 */
-			bool operator != (const Vector<valuetype>& B) const
-				throw();
+			bool operator != (const Vector<valuetype>& B) const;
 
 			/**
 			 *  Adds the vector B to this vector.
@@ -195,13 +189,11 @@ namespace BALL {
 			 *  multiplied with the factor a. The type of the vector (row or
 			 *  column) is the same as that of this vector.
 			 */
-			inline Vector<valuetype> operator* (const valuetype& a) const
-				throw();
+			inline Vector<valuetype> operator* (const valuetype& a) const;
 
 			/** Multiplies the entries of this vector by the factor a.
 			 */
-			inline Vector<valuetype>& operator*= (const valuetype& a)
-				throw();
+			inline Vector<valuetype>& operator*= (const valuetype& a);
 
 			/** Returns a vector containing the entries of this vector
 			 *  divided by the factor a. The type of the vector (row or
@@ -232,8 +224,7 @@ namespace BALL {
 			 *  The type of the vector, i.e. row or column, will not be changed, independent
 			 *  of the type of B.
 			 */
-			void add_inline_native(const Vector<valuetype>& B)
-				throw();
+			void add_inline_native(const Vector<valuetype>& B);
 
 			/** "fast" and unchecked inline version of vector addition, BLAS version.
 			 *  The type of the vector, i.e. row or column, will not be changed, independent
@@ -248,8 +239,7 @@ namespace BALL {
 			 *  the same type as well. If the inputs differ in type, the output will have
 			 *  the default type (column vector).
 			 */
-			void add_native(Vector<valuetype>& result, const Vector<valuetype>& B) const
-				throw();
+			void add_native(Vector<valuetype>& result, const Vector<valuetype>& B) const;
 
 			/**
 			 *  "fast" and unchecked version of vector addition, BLAS implementation.
@@ -264,8 +254,7 @@ namespace BALL {
 			 *  The type of the vector, i.e. row or column, will not be changed, independent
 			 *  of the type of B.
 			 */
-			void subtract_inline_native(const Vector<valuetype>& B)
-				throw();
+			void subtract_inline_native(const Vector<valuetype>& B);
 
 			/** "fast" and unchecked inline version of vector subtraction, BLAS version.
 			 *  The type of the vector, i.e. row or column, will not be changed, independent
@@ -280,8 +269,7 @@ namespace BALL {
 			 *  the same type as well. If the inputs differ in type, the output will have
 			 *  the default type (column vector).
 			 */
-			void subtract_native(Vector<valuetype>& result, const Vector<valuetype>& B) const
-				throw();
+			void subtract_native(Vector<valuetype>& result, const Vector<valuetype>& B) const;
 
 			/**
 			 *  "fast" and unchecked version of vector subtraction, BLAS implementation.
@@ -351,33 +339,28 @@ namespace BALL {
 			 *  Note: for the complex datatypes, we return a _complex_ norm, but with
  			 *        vanishing imaginary part
 			 **/
-			inline valuetype get1Norm() const
-				throw();
+			inline valuetype get1Norm() const;
 
 			/** Returns the infinity-norm of the vector.
 			 *  Note: for the complex datatypes, we return a _complex_ norm, but with
  			 *        vanishing imaginary part
 			 **/
-			inline valuetype getInftyNorm() const
-				throw();
+			inline valuetype getInftyNorm() const;
 
 			/** Returns the 2-norm of the vector.
 			 *  Note: for the complex datatypes, we return a _complex_ norm, but with
  			 *        vanishing imaginary part
 			 **/
-			inline valuetype get2Norm() const
-				throw();
+			inline valuetype get2Norm() const;
 
 			/** Returns the 2-norm of the vector.
 			 *  Note: for the complex datatypes, we return a _complex_ norm, but with
  			 *        vanishing imaginary part
 			 **/
-			inline valuetype getLength() const
-				throw();
+			inline valuetype getLength() const;
 
 			/** "fast" and unchecked version of length (2-Norm) computation, native implementation **/
-			valuetype compute_length_native() const
-				throw();
+			valuetype compute_length_native() const;
 
 			/** "fast" and unchecked version of length (2-Norm) computation, BLAS implementation **/
 			valuetype compute_length_blas() const;
@@ -396,14 +379,12 @@ namespace BALL {
 			
 			/// Return a iterator pointing to the first element in the vector
 			Iterator begin()
-				throw()
 			{
 				return Iterator::begin(*this);
 			}
 
 			/// Return a past-the-end iterator
 			Iterator end()
-				throw()
 			{
 				return Iterator::end(*this);
 			}
@@ -413,14 +394,12 @@ namespace BALL {
 
 			/// Return a constant element row iterator pointing to the first element in the vector
 			ConstIterator begin() const
-				throw()
 			{
 				return ConstIterator::begin(*this);
 			}
 
 			/// Return a constant past-the-end element row iterator.
 			ConstIterator end() const
-				throw()
 			{
 				return ConstIterator::end(*this);
 			}
@@ -430,14 +409,12 @@ namespace BALL {
 
 			/// Return a reverse iterator pointing to the first element.
 			Reverse_Iterator rbegin()
-				throw()
 			{
 				return Reverse_Iterator::begin(*this);
 			}
 
 			/// Return a past-the-end iterator for reverse traversal.
 			Reverse_Iterator rend()
-				throw()
 			{
 				return Reverse_Iterator::end(*this);
 			}
@@ -447,22 +424,20 @@ namespace BALL {
 
 			/// Return a constant reverse iterator pointing to the first element
 			ConstReverse_Iterator rbegin() const
-				throw()
 			{
 				return ConstReverse_Iterator::begin(*this);
 			}
 
 			/// Return a constant past-the-end iterator for reverse traversal
 			ConstReverse_Iterator rend() const
-				throw()
 			{
 				return ConstReverse_Iterator::end(*this);
 			}
 
-			inline size_t getSize() const throw();
-			inline bool isColumnVector() const throw();
-			inline void setVectorType(bool column_vector) throw();
-			inline void transpose() throw();
+			inline size_t getSize() const;
+			inline bool isColumnVector() const;
+			inline void setVectorType(bool column_vector);
+			inline void transpose();
 
 			void resize(size_t size);
 

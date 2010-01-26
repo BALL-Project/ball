@@ -48,7 +48,7 @@ class SVDSolverTraits
 		typedef valuetype SingularVectorType;
 };
 
-template <> template <class mtraits>
+template <class mtraits>
 class SVDSolverTraits<ComplexFloat, mtraits>
 {
 	public:
@@ -61,7 +61,7 @@ class SVDSolverTraits<ComplexFloat, mtraits>
 		typedef ComplexFloat SingularVectorType;
 };
 
-template <> template <class mtraits>
+template <class mtraits>
 class SVDSolverTraits<ComplexDouble, mtraits>
 {
 	public:

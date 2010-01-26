@@ -48,7 +48,7 @@ class EigenSolverTraits
 		typedef std::complex<valuetype> EigenVectorType;
 };
 
-template <> template <class mtraits>
+template <class mtraits>
 class EigenSolverTraits<ComplexFloat, mtraits>
 {
 	public:
@@ -61,7 +61,7 @@ class EigenSolverTraits<ComplexFloat, mtraits>
 		typedef ComplexFloat EigenVectorType;
 };
 
-template <> template <class mtraits>
+template <class mtraits>
 class EigenSolverTraits<ComplexDouble, mtraits>
 {
 	public:

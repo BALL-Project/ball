@@ -1,6 +1,10 @@
 #ifndef BALL_LINALG_MATRIX_H
 #define BALL_LINALG_MATRIX_H
 
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
+
 namespace BALL {
 
 	class StandardTraits;
@@ -10,10 +14,12 @@ namespace BALL {
 
   template <class valuetype, class mtraits=StandardTraits>
   class Matrix;
+
 }
 
 #include <BALL/MATHS/LINALG/matrix.ih>
 #include <BALL/MATHS/LINALG/vector.ih>
+
 
 #include <BALL/MATHS/LINALG/upperTriangularMatrix.ih>
 #include <BALL/MATHS/LINALG/upperTriangularMatrixConstructors.iC>
@@ -38,5 +44,13 @@ namespace BALL {
 #include <BALL/MATHS/LINALG/vectorConstructors.iC>
 #include <BALL/MATHS/LINALG/vectorIO.iC>
 #include <BALL/MATHS/LINALG/vectorBasicFunctions.iC>
+
+namespace BALL {
+	// explicit instantiation to save the compiler some work (and to *make* it work on Windows)
+	template class BALL_EXPORT Matrix<float, StandardTraits>;
+	template class BALL_EXPORT Matrix<double, StandardTraits>;
+	template class BALL_EXPORT Matrix<ComplexFloat, StandardTraits>;
+	template class BALL_EXPORT Matrix<ComplexDouble, StandardTraits>;
+}
 
 #endif // MALL_KERNEL_MATRIX_H
