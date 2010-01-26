@@ -14,6 +14,7 @@
 
 #include <BALL/SYSTEM/TCPTransfer.h>
 #include <BALL/SYSTEM/timer.h>
+#include <BALL/SYSTEM/systemCalls.h>
 
 #ifdef BALL_HAS_SYS_SOCKET_H
 #	include <sys/socket.h>		// socket
@@ -474,7 +475,7 @@ namespace BALL
 			}
 			else connected=1;
 
-			if(!connected) usleep(200000); // sleep 0.2 seconds
+			if(!connected) sleepFor(200000); // sleep 0.2 seconds
 		}
 		setBlock_(socket_, true);
 
@@ -775,7 +776,7 @@ namespace BALL
 			}
 			else connected=1;
 
-			if(!connected) usleep(200000); // sleep 0.2 seconds
+			if(!connected) sleepFor(200000); // sleep 0.2 seconds
 		}
 		if(!connected)
 		{
@@ -905,7 +906,7 @@ namespace BALL
 		while (received_bytes<0 && timer.getClockTime()<TIMEOUT)
 		{
 			received_bytes = getReceivedBytes_(socket); // returns -1 if there was an error (e.g. no connection)
-			if(received_bytes<0) usleep(200000); // sleep 0.2 seconds
+			if(received_bytes<0) sleepFor(200000); // sleep 0.2 seconds
 		}
 		
 		setBlock_(socket, true);
