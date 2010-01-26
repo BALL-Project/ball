@@ -88,6 +88,13 @@ namespace BALL
 	};
   /** @} */
 
+	template <>	ParsedFunction<float>::~ParsedFunction();
+	template <> double ParsedFunction<float>::operator() (float);
+	template <> double ParsedFunction<double>::operator() (double);
+
+	template class BALL_EXPORT ParsedFunction<float>;
+	template class BALL_EXPORT ParsedFunction<double>;
+
 	template <typename arg>
 	ParsedFunction<arg>::ParsedFunction()
 		:	constants_(),
@@ -150,11 +157,6 @@ namespace BALL
 		functions_[""] = 0;
 	}
 
-// required for visual studio
-#ifdef BALL_COMPILER_MSVC
-template class BALL_EXPORT ParsedFunction<float>;
-template class BALL_EXPORT ParsedFunction<double>;
-#endif
 }
 
 #endif // BALL_MATHS_PARSEDFUNCTION_H
