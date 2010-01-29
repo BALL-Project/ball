@@ -52,7 +52,7 @@ namespace BALL
 	
 	namespace QSAR
 	{	
-		class Model
+		class BALL_EXPORT Model
 		{	
 			public:
 				/** @name Constructors and Destructors

@@ -42,7 +42,7 @@ namespace BALL
 		class Model;
 		
 		/** interface class for validation of QSAR-models */
-		class Validation
+		class BALL_EXPORT Validation
 		{
 			public:
 				/** @name Constructors and Destructors

@@ -41,7 +41,7 @@ namespace BALL
 	namespace QSAR
 	{
 		/** kernel partial-least-squares class */
-		class KPLSModel : public KernelModel, public LatentVariableModel
+		class BALL_EXPORT KPLSModel : public KernelModel, public LatentVariableModel
 		{
 			public:
 				/** @name Constructors and Destructors

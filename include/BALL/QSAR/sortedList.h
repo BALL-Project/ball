@@ -53,6 +53,7 @@ namespace BALL
 				 */
 				//@{
 				SortedList()
+					: std::list<X>()
 				{
 					out_It = std::list<X>::begin();
 					search_it = std::list<X>::begin();

@@ -75,7 +75,7 @@ namespace BALL
 		typedef vector<Column> VMatrix;
 		
 		/** QSAR */
-		class QSARData 
+		class BALL_EXPORT QSARData 
 		{
 			public:
 				

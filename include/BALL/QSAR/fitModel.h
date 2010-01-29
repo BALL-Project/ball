@@ -41,7 +41,7 @@ namespace BALL
 {
 	namespace QSAR
 	{
-		class FitModel : public NonLinearModel
+		class BALL_EXPORT FitModel : public NonLinearModel
 		{ 
 			public:
 				/** @name Constructors and Destructors

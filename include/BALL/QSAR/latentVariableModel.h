@@ -37,7 +37,7 @@ namespace BALL
 	{
 		/** Interface-class for all latente variable models (PLS, PCR, ...). 
 		It is used to store and access the latente variables (PLS/PCR components), the loading matrix and the weight matrix in the same way for all such models.*/
-		class LatentVariableModel
+		class BALL_EXPORT LatentVariableModel
 		{ 
 			public:
 				LatentVariableModel();				

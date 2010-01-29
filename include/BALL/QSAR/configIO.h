@@ -30,7 +30,7 @@ namespace BALL
 {
 	namespace QSAR
 	{
-		struct InputConfiguration
+		struct BALL_EXPORT InputConfiguration
 		{
 			InputConfiguration();
 			
@@ -52,7 +52,7 @@ namespace BALL
 			bool done;
 		};
 		
-		struct InputPartitioningConfiguration
+		struct BALL_EXPORT InputPartitioningConfiguration
 		{
 			InputPartitioningConfiguration(); 
 			
@@ -63,7 +63,7 @@ namespace BALL
 			bool done;
 		};
 		
-		struct ModelConfiguration
+		struct BALL_EXPORT ModelConfiguration
 		{
 			ModelConfiguration();
 			
@@ -85,7 +85,7 @@ namespace BALL
 			bool no_training;
 		};
 		
-		struct FeatureSelectionConfiguration
+		struct BALL_EXPORT FeatureSelectionConfiguration
 		{
 			FeatureSelectionConfiguration();
 			
@@ -111,7 +111,7 @@ namespace BALL
 			int opt_k_fold;
 		};
 		
-		struct ValidationConfiguration
+		struct BALL_EXPORT ValidationConfiguration
 		{
 			ValidationConfiguration();
 			
@@ -130,7 +130,7 @@ namespace BALL
 			bool done;
 		};
 		
-		struct PredictionConfiguration
+		struct BALL_EXPORT PredictionConfiguration
 		{
 			PredictionConfiguration();
 			
@@ -144,7 +144,7 @@ namespace BALL
 		};
 		
 		
-		class ConfigIO
+		class BALL_EXPORT ConfigIO
 		{
 			public:
 				

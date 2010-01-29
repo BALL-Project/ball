@@ -31,7 +31,6 @@
 #include <QtGui/QGridLayout>
 #include <QtGui/QLabel>
 
-using namespace BALL::QSAR;
 
 namespace BALL
 {

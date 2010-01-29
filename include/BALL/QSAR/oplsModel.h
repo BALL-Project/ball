@@ -36,7 +36,7 @@ namespace BALL
 {
 	namespace QSAR
 	{
-		class OPLSModel : public PLSModel
+		class BALL_EXPORT OPLSModel : public PLSModel
 		{
 			public:
 				/** @name Constructors and Destructors

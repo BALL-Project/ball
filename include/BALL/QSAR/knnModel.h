@@ -36,7 +36,7 @@ namespace BALL
 	{
 
 		/** class for automated lazy learning (ALL-QSAR) */
-		class KNNModel : public ALLModel
+		class BALL_EXPORT KNNModel : public ALLModel
 		{ 
 			public:
 				/** @name Constructors and Destructors

@@ -36,7 +36,7 @@ namespace BALL
 {
 	namespace QSAR
 	{
-		class NonLinearModel : public RegressionModel
+		class BALL_EXPORT NonLinearModel : public RegressionModel
 		{
 			public:
 				/** @name Constructors and Destructors

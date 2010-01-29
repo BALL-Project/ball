@@ -45,7 +45,7 @@ namespace BALL
 {
 	namespace QSAR
 	{	
-		class PLSModel : public LinearModel, public LatentVariableModel
+		class BALL_EXPORT PLSModel : public LinearModel, public LatentVariableModel
 		{
 			public:
 				/** @name Constructors and Destructors

@@ -59,7 +59,7 @@ namespace BALL
 		
 		class Registry;
 		
-		class RegistryEntry
+		class BALL_EXPORT RegistryEntry
 		{
 			public:
 			
@@ -105,7 +105,7 @@ namespace BALL
 		
 		typedef map<int,RegistryEntry>::iterator RegistryEntryIterator;
 		
-		class Registry
+		class BALL_EXPORT Registry
 		{
 			public:
 				Registry();

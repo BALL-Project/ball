@@ -50,7 +50,7 @@ namespace BALL
 {
 	namespace QSAR
 	{
-		class Kernel
+		class BALL_EXPORT Kernel
 		{	
 			
 		

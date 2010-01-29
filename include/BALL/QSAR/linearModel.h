@@ -34,7 +34,7 @@ namespace BALL
 {
 	namespace QSAR
 	{
-		class LinearModel : public RegressionModel
+		class BALL_EXPORT LinearModel : public RegressionModel
 		{
 		
 			public: 

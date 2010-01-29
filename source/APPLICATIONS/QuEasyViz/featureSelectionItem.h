@@ -53,7 +53,7 @@ namespace BALL
 				/** start features selection */
 				bool execute();
 
-				FeatureSelection* featureSelection();
+				BALL::QSAR::FeatureSelection* featureSelection();
 				int getType();
 				void setK(int k);
 				bool opt();
@@ -90,7 +90,7 @@ namespace BALL
 				
 			private:
 			
-				FeatureSelection* feature_selection_;
+				BALL::QSAR::FeatureSelection* feature_selection_;
 				ModelItem* model_item_;
 				ModelItem* input_model_item_;
 				int type_;

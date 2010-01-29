@@ -47,7 +47,7 @@ namespace BALL
 	namespace QSAR
 	{
 
-		class FeatureSelection
+		class BALL_EXPORT FeatureSelection
 		{
 			public:
 				/** @name Constructors and Destructors

@@ -35,9 +35,6 @@
 #include <modelItem.h>
 #include <inputDataItem.h>
 
-using namespace BALL::QSAR;
-
-
 namespace BALL
 {
 	namespace VIEW
@@ -85,7 +82,7 @@ namespace BALL
 				ModelItem* modelItem();
 
 				/** returns the registry entry */
-				RegistryEntry* entry();
+				BALL::QSAR::RegistryEntry* entry();
 
 				/** returns the first string of an individual kernel*/
 				std::string KernelString1();
@@ -130,7 +127,7 @@ namespace BALL
 
 				ModelItem* model_item_;
 				InputDataItem* input_;
-				RegistryEntry* entry_;
+				BALL::QSAR::RegistryEntry* entry_;
 
 				string individual_kernel_string1_;
 				string individual_kernel_string2_;

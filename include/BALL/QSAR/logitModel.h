@@ -36,7 +36,7 @@ namespace BALL{
 	namespace QSAR {
 
 		/** class for logistic regression */
-		class LogitModel : public ClassificationModel
+		class BALL_EXPORT LogitModel : public ClassificationModel
 		{ 
 			public:
 				/** @name Constructors and Destructors

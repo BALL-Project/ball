@@ -38,7 +38,7 @@ namespace BALL
 	namespace QSAR
 	{
 		/** class for statistical correction of input-data */
-		class Statistics
+		class BALL_EXPORT Statistics
 		{
 			public:
 				/** @name Constructors and Destructors

@@ -43,7 +43,7 @@ namespace BALL
 {
 	namespace QSAR
 	{
-		class PCRModel : public LinearModel, public LatentVariableModel
+		class BALL_EXPORT PCRModel : public LinearModel, public LatentVariableModel
 		{
 			public:
 

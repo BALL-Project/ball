@@ -45,7 +45,7 @@ namespace BALL
 				
 			private:
 				InputDataItem* input_item_;
-				QSARData* data_;
+				BALL::QSAR::QSARData* data_;
 				
 				QCheckBox* sort_checkbox_;
 				

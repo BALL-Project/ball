@@ -42,7 +42,7 @@ namespace BALL{
 	namespace QSAR {
 
 		/** class for support vector classification */
-		class SVMModel : public ClassificationModel
+		class BALL_EXPORT SVMModel : public ClassificationModel
 		{ 
 			public:
 				/** @name Constructors and Destructors
@@ -50,9 +50,8 @@ namespace BALL{
 				//@{
 				SVMModel(const QSARData& q);
 
-				~SVMModel();
-				//@}
-				
+				virtual ~SVMModel();
+				//@}			
 				
 				
 		};

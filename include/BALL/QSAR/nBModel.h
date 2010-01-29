@@ -45,7 +45,7 @@ namespace BALL
 	{
 
 		/** class for Naive Bayes */
-		class NBModel : public BayesModel
+		class BALL_EXPORT NBModel : public BayesModel
 		{ 
 			public:
 				/** @name Constructors and Destructors

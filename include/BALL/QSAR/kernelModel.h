@@ -44,7 +44,7 @@ namespace BALL
 {
 	namespace QSAR
 	{
-		class KernelModel : public NonLinearModel
+		class BALL_EXPORT KernelModel : public NonLinearModel
 		{
 			public:
 				/** @name Constructors and Destructors

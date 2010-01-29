@@ -36,7 +36,7 @@ namespace BALL
 		class SpectrogramData : public QwtRasterData
 		{
 			public:
-				SpectrogramData(BayesModel* snb,  const double& max_x, const double& min_y, const double& max_y, const double& y_resolution, BayesPlotter* plotter, bool copy=0);
+				SpectrogramData(BALL::QSAR::BayesModel* snb,  const double& max_x, const double& min_y, const double& max_y, const double& y_resolution, BayesPlotter* plotter, bool copy=0);
 
 				virtual QwtRasterData* copy() const;
 				virtual QwtDoubleInterval range() const;
@@ -54,7 +54,7 @@ namespace BALL
 				double min_z_;
 				double max_z_;
 				double y_resolution_;
-				BayesModel* snb_;
+				BALL::QSAR::BayesModel* snb_;
 				BayesPlotter* plotter_;
 		};
 		

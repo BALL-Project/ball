@@ -43,7 +43,7 @@ namespace BALL{
 	namespace QSAR {
 
 		/** class for simple naive Bayes */
-		class SNBModel : public BayesModel
+		class BALL_EXPORT SNBModel : public BayesModel
 		{ 
 			public:
 				/** @name Constructors and Destructors

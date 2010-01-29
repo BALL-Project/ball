@@ -88,12 +88,13 @@ namespace BALL
 	};
   /** @} */
 
-	template <>	ParsedFunction<float>::~ParsedFunction();
+	template class BALL_EXPORT ParsedFunction<float>;
+	template class BALL_EXPORT ParsedFunction<double>;
+
+	template <> ParsedFunction<float>::~ParsedFunction();
 	template <> double ParsedFunction<float>::operator() (float);
 	template <> double ParsedFunction<double>::operator() (double);
 
-	template class BALL_EXPORT ParsedFunction<float>;
-	template class BALL_EXPORT ParsedFunction<double>;
 
 	template <typename arg>
 	ParsedFunction<arg>::ParsedFunction()

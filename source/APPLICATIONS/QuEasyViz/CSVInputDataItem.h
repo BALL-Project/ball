@@ -26,8 +26,6 @@
 
 #include <QtGui/QGraphicsSceneMouseEvent>
 
-using namespace BALL::QSAR;
-
 namespace BALL
 {
 	namespace VIEW
@@ -41,7 +39,7 @@ namespace BALL
 				CSVInputDataItem(QString filename, DataItemView* view);	
 				~CSVInputDataItem();
 				CSVInputDataItem(CSVInputDataItem& item);
-				CSVInputDataItem(QSARData* data, DataItemView* view);
+				CSVInputDataItem(BALL::QSAR::QSARData* data, DataItemView* view);
 				
 				/** read the input data */
 				bool execute();

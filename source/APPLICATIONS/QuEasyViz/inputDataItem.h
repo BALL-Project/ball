@@ -32,8 +32,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		using namespace BALL::QSAR;
-		
 		class InputPlotter;
 		
 		/** @class InputDataItem
@@ -110,7 +108,7 @@ namespace BALL
 				bool nonnumeric_class_names_;
 				
 				/** the IDs of PartitioningItems that are connected to this item */
-				SortedList<int> partitioner_IDs_;
+				BALL::QSAR::SortedList<int> partitioner_IDs_;
 				
 				InputPlotter* input_plotter_;
 				

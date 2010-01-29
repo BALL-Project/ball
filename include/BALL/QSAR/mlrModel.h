@@ -39,7 +39,7 @@ namespace BALL
 {
 	namespace QSAR
 	{
-		class MLRModel : public LinearModel
+		class BALL_EXPORT MLRModel : public LinearModel
 		{
 			public:
 				/** @name Constructors and Destructors

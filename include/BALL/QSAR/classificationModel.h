@@ -43,7 +43,7 @@ namespace BALL
 {
 	namespace QSAR
 	{
-		class ClassificationModel : public Model
+		class BALL_EXPORT ClassificationModel : public Model
 		{
 			public:
 				/** @name Constructors and Destructors

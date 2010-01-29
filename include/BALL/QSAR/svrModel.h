@@ -39,7 +39,7 @@ namespace BALL
 {
 	namespace QSAR
 	{
-		class SVRModel : public KernelModel
+		class BALL_EXPORT SVRModel : public KernelModel
 		{
 			public:
 				/** @name Constructors and Destructors

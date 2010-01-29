@@ -26,8 +26,6 @@
 
 #include <QtGui/QGraphicsSceneMouseEvent>
 
-using namespace BALL::QSAR;
-
 namespace BALL
 {
 	namespace VIEW
@@ -44,7 +42,7 @@ namespace BALL
 				/** @name Constructors and Destructors
 				*/
 				
-				SDFInputDataItem(QString filename,SortedList<int> act, bool cdv, bool crv, DataItemView* view);
+				SDFInputDataItem(QString filename,BALL::QSAR::SortedList<int> act, bool cdv, bool crv, DataItemView* view);
 				
 				SDFInputDataItem(QString filename, DataItemView* view);
 				
@@ -58,8 +56,8 @@ namespace BALL
 		
 				/** Returns the type of the item as an int. This type information is used by qgraphicsitem_cast() to distinguish between types. */
 				int type() const { return Type; }
-				SortedList<int> activityValues();
-				void setActivityValues(SortedList<int> act);
+				BALL::QSAR::SortedList<int> activityValues();
+				void setActivityValues(BALL::QSAR::SortedList<int> act);
 				bool checkForDiscreteY();
 				
 				/** specifies whether or not properties of the SD-file should be used as descriptors */
@@ -87,7 +85,7 @@ namespace BALL
 				
 				/** @name Attributes
 				*/
-				SortedList<int> activity_values_;
+				BALL::QSAR::SortedList<int> activity_values_;
 				
 				bool use_SD_properties_;
 				

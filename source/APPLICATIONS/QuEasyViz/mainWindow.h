@@ -86,7 +86,7 @@ namespace BALL
 				/** creation of items*/
 				SDFInputDataItem* createSDFInput(QString filename);
 				CSVInputDataItem* createCSVInput(QString filename);
-				CSVInputDataItem* createCSVInput(QSARData* data);
+				CSVInputDataItem* createCSVInput(BALL::QSAR::QSARData* data);
 				
 				ModelItem* createModel(ModelItem* model, InputDataItem* input=NULL);
 				FeatureSelectionItem* createFeatureSelection(FeatureSelectionItem* fs, ModelItem* model=0, ModelItem* in_model=0);
@@ -97,7 +97,7 @@ namespace BALL
 				
 				//void changeModelItem(ModelItem* model, InputDataItem* input);
 
-				Registry* registry();
+				BALL::QSAR::Registry* registry();
 				Pipeline<ModelItem*> getModelPipeline();
 
 				/**add items to pipeline */
@@ -284,7 +284,7 @@ namespace BALL
 				
 				
 				/**registry including all available models */	
-				Registry* reg_;
+				BALL::QSAR::Registry* reg_;
 				//Path* path_;
 
 				QProgressBar* progress_bar_;

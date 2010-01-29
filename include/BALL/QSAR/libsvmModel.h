@@ -38,7 +38,7 @@ namespace BALL
 {
 	namespace QSAR
 	{
-		class LibsvmModel : public SVRModel
+		class BALL_EXPORT LibsvmModel : public SVRModel
 		{
 			public:
 				/** @name Constructors and Destructors
@@ -46,7 +46,7 @@ namespace BALL
 				//@{
 				LibsvmModel(const QSARData& q, int k_type, double p1, double p2=-1);
 
-				~LibsvmModel();
+				virtual ~LibsvmModel();
 				//@}
 				
 				
@@ -59,7 +59,7 @@ namespace BALL
 				
 				void setParameters(vector<double>& v);
 				
-				vector<double> getParameters() const;
+				virtual vector<double> getParameters() const;
 				//@}
 				
 				

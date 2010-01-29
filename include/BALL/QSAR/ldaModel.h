@@ -43,7 +43,7 @@ namespace BALL{
 	namespace QSAR {
 
 		/** class for support vector classification */
-		class LDAModel : public ClassificationModel
+		class BALL_EXPORT LDAModel : public ClassificationModel
 		{ 
 			public:
 				/** @name Constructors and Destructors

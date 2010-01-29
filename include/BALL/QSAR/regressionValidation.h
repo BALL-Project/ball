@@ -50,7 +50,7 @@ namespace BALL
 	{
 		class RegressionModel;
 		/** class for validation of QSAR regression models */
-		class RegressionValidation : public Validation
+		class BALL_EXPORT RegressionValidation : public Validation
 		{	
 			public:
 				/** @name Constructors and Destructors

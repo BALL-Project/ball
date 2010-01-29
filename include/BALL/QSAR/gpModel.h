@@ -38,7 +38,7 @@ namespace BALL
 {
 	namespace QSAR
 	{	/** class for gaussian process regression */
-		class GPModel : public KernelModel
+		class BALL_EXPORT GPModel : public KernelModel
 		{
 			public:
 				/** @name Constructors and Destructors

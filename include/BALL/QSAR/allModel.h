@@ -37,7 +37,7 @@ namespace BALL
 	{
 
 		/** class for automated lazy learning (ALL-QSAR) */
-		class ALLModel : public NonLinearModel
+		class BALL_EXPORT ALLModel : public NonLinearModel
 		{ 
 			public:
 				/** @name Constructors and Destructors

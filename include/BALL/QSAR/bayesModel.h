@@ -35,7 +35,7 @@ namespace BALL
 	namespace QSAR 
 	{
 		/** interface class for all Bayes classification models */
-		class BayesModel : public ClassificationModel
+		class BALL_EXPORT BayesModel : public ClassificationModel
 		{ 
 			public: 
 				

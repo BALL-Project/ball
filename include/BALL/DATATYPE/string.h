@@ -840,6 +840,7 @@ namespace BALL
 		std::istream& getline(std::istream& s = std::cin, char delimiter = '\n');
 
 		///
+		BALL_EXPORT
 		friend std::istream& getline(std::istream& s,  String& string,  char delimiter = '\n');
 
 		//@}

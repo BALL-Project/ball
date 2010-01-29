@@ -24,6 +24,8 @@
 #include <QFileDialog>
 #include <QPrintDialog>
 #include <qwt_plot_zoomer.h>
+
+#include <BALL/MATHS/common.h>
  
 using namespace BALL::VIEW;
 using namespace std;
@@ -231,7 +233,7 @@ void Plotter::printToFile(QString& file)
 
 QColor Plotter::generateColor(int no_colors, int current_no)
 {
-	int k = round(pow(no_colors,1/3.));
+	int k = BALL::Maths::round(pow(no_colors,1/3.));
 	int n = pow(3.,k)-1;
 	int width = 255./k;
 	

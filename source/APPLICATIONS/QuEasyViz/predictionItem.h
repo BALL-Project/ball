@@ -85,7 +85,7 @@ namespace BALL
 				void addTrainingsPartition(InputPartitionItem* item);
 				void addTestPartition(InputPartitionItem* item);
 				
-				const QSARData* getTestData();
+				const BALL::QSAR::QSARData* getTestData();
 				
 				/** save the prediction results to a file */
 				void saveToFile(String filename);

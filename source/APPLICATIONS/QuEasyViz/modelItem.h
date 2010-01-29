@@ -27,8 +27,6 @@
 #include <BALL/QSAR/Model.h>
 #include <BALL/QSAR/registry.h>
 
-using namespace BALL::QSAR;
-
 namespace BALL
 {
 	namespace VIEW
@@ -49,14 +47,14 @@ namespace BALL
 				* @param entry pointer to the registry entry of this model
 				* @param miv pointer to the item's DataItemView
 				*/
-				ModelItem(RegistryEntry* entry, DataItemView* miv);
+				ModelItem(BALL::QSAR::RegistryEntry* entry, DataItemView* miv);
 
 				/** constructor 
 				* @param inputdata pointer to the item's InputDataItem
 				* @param entry pointer to the RegistryEntry of this model
 				* @param miv pointer to the item's DataItemView	
 				*/
-				ModelItem(InputDataItem* inputdata, RegistryEntry* entry, DataItemView* miv);
+				ModelItem(InputDataItem* inputdata, BALL::QSAR::RegistryEntry* entry, DataItemView* miv);
 
 	 			/** constructor 
 				* @param inputdata pointer to the item's InputDataItem
@@ -66,7 +64,7 @@ namespace BALL
 				* @param parameter2 kernel parameter 2
 				* @param miv pointer to the item's DataItemView	
 				*/
-				ModelItem(InputDataItem* inputdata, RegistryEntry* entry, int kernelType, double parameter1, double parameter2, DataItemView* miv);
+				ModelItem(InputDataItem* inputdata, BALL::QSAR::RegistryEntry* entry, int kernelType, double parameter1, double parameter2, DataItemView* miv);
 
 				/** constructor 
 				* @param inputdata pointer to the item's InputDataItem
@@ -75,7 +73,7 @@ namespace BALL
 				* @param s2 kernel string2
 				* @param miv pointer to the item's DataItemView	
 				*/
-				ModelItem(InputDataItem* inputdata, RegistryEntry* entry, String s1, String s2, DataItemView* miv);
+				ModelItem(InputDataItem* inputdata, BALL::QSAR::RegistryEntry* entry, String s1, String s2, DataItemView* miv);
 
 				/** copy constructor 
 				* @param item the ModelItem that is to be copied
@@ -115,21 +113,21 @@ namespace BALL
 				/** sets the item's model
 			 	* @param model pointer to the model
 				*/
-				void setModel(Model* model);
+				void setModel(BALL::QSAR::Model* model);
 
 				/** sets the item's registry entry*
 				* @param entry pointer to the entry
 				*/
-				void setEntry(RegistryEntry* entry);
+				void setEntry(BALL::QSAR::RegistryEntry* entry);
 				
 				/** returns a pointer to the item's Model */
-				Model* model();	
+				BALL::QSAR::Model* model();	
 				
 				/** returns a pointer to the item's InputDataItem */
 				InputDataItem* inputDataItem();	
 				
 				/** returns a pointer to the item's RegistryEntry */
-				RegistryEntry* getRegistryEntry();
+				BALL::QSAR::RegistryEntry* getRegistryEntry();
 				
 				/** trains the item's model */
 				bool execute();
@@ -206,10 +204,10 @@ namespace BALL
 				ModelItem* descriptor_source_model_;
 
 				/** pointer to the item's model */
-				Model* model_;
+				BALL::QSAR::Model* model_;
 
 				/** pointer to the item's RegistryEntry */
-				RegistryEntry* entry_;
+				BALL::QSAR::RegistryEntry* entry_;
 
 				/** determines, if the item has to be exported upon saving */
 				bool save_attribute_;
