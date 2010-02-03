@@ -1395,9 +1395,12 @@ namespace BALL
 			
 			readMatrix(descriptor_matrix_, in, '\t', no_subst, no_desc); /// read descriptor matrix
 			getline(in,line); // skip empty line
-			
-			readMatrix(Y_, in, '\t', no_subst, no_y);  /// read response values
-			getline(in,line); // skip empty line
+
+			if(no_y>0)
+			{
+				readMatrix(Y_, in, '\t', no_subst, no_y);  /// read response values
+				getline(in,line); // skip empty line
+			}
 			
 			getline(in,line);
 			for(unsigned int i=0; i<no_desc;i++) /// read names of descriptors
