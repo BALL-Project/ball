@@ -66,14 +66,13 @@ namespace BALL
 			
 			bool show_expected=0;
 			const QSARData* test_data = 0;
-			uint no_y=0;
-			if(item->getTestData()!=0) no_y=item->getTestData()->getNoResponseVariables();
-			else if(results_->size()==0) return; // no prediction=>nothing to be displayed
-			
+			if(item->getTestData()==0 || results_->size()==0) return; // no prediction=>nothing to be displayed
+
+			test_data = item->getTestData();
+			Size no_y=test_data->getNoResponseVariables();
 			if(no_y>=1)
 			{
 				show_expected=1;
-				test_data = item->getTestData();
 				if(no_y==1) labels<<"Prediction"<<"Expected";
 				else
 				{
@@ -87,33 +86,38 @@ namespace BALL
 			}
 			else
 			{
-				labels<<"Prediction";
+				for(Size act=0; act<results_->front().getSize(); act++)
+				{
+					String p = "Prediction"+String(act);
+					labels<<p.c_str();
+				}
 			}
 			
 			compound_names_ = test_data->getSubstanceNames();
-			
-			table_ = new QTableWidget(results_->size(), 1+no_y*(1+show_expected), this);	
+			Size no_columns = 1;
+			if(no_y>=1) no_columns+=2*no_y;
+			else no_columns+=results_->front().getSize();
+			table_ = new QTableWidget(results_->size(), no_columns, this);
 			table_->verticalHeader()->hide();
 			table_->setHorizontalHeaderLabels (labels);
 			table_->setAlternatingRowColors(true);					
 			table_->setDragDropMode(QAbstractItemView::NoDragDrop);		
 			table_->setEditTriggers(QAbstractItemView::NoEditTriggers);
-			table_->horizontalHeader()->setResizeMode(QHeaderView::Custom);
 
-			if(((uint)results_->size()) == compound_names_->size())
-			{	
+			if(results_->size()==compound_names_->size())
+			{
 				int i = 0;
 				for (list<Vector<double> >::const_iterator it = results_->begin(); it != results_->end(); it++)
 				{
 					QTableWidgetItem* name = new QTableWidgetItem(QString(compound_names_->at(i).c_str()));
-    					table_->setItem(i, 0, name);
+					table_->setItem(i, 0, name);
 					vector<double>* e = 0;
 					if(show_expected) e = test_data->getActivity(i);
 					
-					for(uint act=0; act<e->size(); act++)
+					for(uint act=0; act<it->getSize(); act++)
 					{
 						QTableWidgetItem* pred = new QTableWidgetItem(QString((((String)(*it)(1+act)).c_str())));
-						table_->setItem(i, 1+2*act, pred);
+						table_->setItem(i, 1+(1+show_expected)*act, pred);
 						
 						if(show_expected)
 						{
@@ -141,6 +145,7 @@ namespace BALL
 			mainLayout->addWidget(buttons);
 			setLayout(mainLayout);	
 			setWindowTitle("Predicted Activity Values for " + item->name());
+			table_->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 			
 			uint width = 0;
 			for(int i=0; i<table_->columnCount();i++)
