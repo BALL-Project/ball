@@ -361,10 +361,13 @@ namespace BALL
 					else
 					{
 						// Compute the quaternion form of the rotation that maps tw3 onto tv3
-						double angle = acos(axis_w * axis_v);
+						double product = axis_w * axis_v;
+						product = std::min(1., std::max(-1., product));
+
+						double angle = acos(product);
 						if (angle > EPSILON)
 						{
-							rotation_quat.fromAxisAngle(rotation_axis, acos(axis_w * axis_v));
+							rotation_quat.fromAxisAngle(rotation_axis, angle);
 
 							// Compute the matrix4x4 form of the rotation
 							// and add it to the transformation
