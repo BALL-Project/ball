@@ -52,7 +52,7 @@ SET(CF_BALL_PACKAGE_VERSION "${BALL_PACKAGE_VERSION_MAJOR}.${BALL_PACKAGE_VERSIO
 
 # Initialize the various PREFIX variables. This has to happen before any files
 # using them are included.
-#SET(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/install CACHE PATH "Installation prefix for BALL")
+SET(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/install CACHE PATH "Installation prefix for BALL")
 
 ## default build type (for Makefile generators): Release
 ## TODO: 64 Bit builds etc for Windows
