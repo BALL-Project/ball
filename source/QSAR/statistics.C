@@ -24,6 +24,7 @@
 // 
 
 #include <BALL/QSAR/statistics.h>
+#include <BALL/COMMON/limits.h>
 #include <iostream>
 
 namespace BALL
@@ -43,7 +44,10 @@ namespace BALL
 		void Statistics::scaling(vector<double>& v)
 		{
 			double std=sqrt(getVariance(v));
-			if (std==0) {return;} // if all values==0, do not change anything
+	
+			// standard deviation=0, i.e. all values of this vector are identical, so do nothing!
+			if(std<5*std::numeric_limits<double>::epsilon()) return;
+	
 			for(unsigned int i=0; i<v.size(); i++)
 			{
 				v[i]/=std;
@@ -64,7 +68,10 @@ namespace BALL
 		{
 			double mean=getMean(v);
 			double std=sqrt(getVariance(v,mean));
-			if (std==0) {return;} // if all values==0, do not change anything
+
+			// standard deviation=0, i.e. all values of this vector are identical, so do nothing!
+			if(std<5*std::numeric_limits<double>::epsilon()) return;
+	
 			for(unsigned int i=0; i<v.size(); i++)
 			{
 				v[i]=(v[i]-mean)/std;
@@ -76,7 +83,10 @@ namespace BALL
 		{
 			mean=getMean(v);
 			std=sqrt(getVariance(v,mean));
-			if (std==0) {return;} // if all values==0, do not change anything
+
+			// standard deviation=0, i.e. all values of this vector are identical, so do nothing!
+			if(std<5*std::numeric_limits<double>::epsilon()) return;
+
 			for(unsigned int i=0; i<v.size(); i++)
 			{
 				v[i]=(v[i]-mean)/std;
@@ -218,7 +228,10 @@ namespace BALL
 		{
 			double mean=getMean(m, col);
 			double std=sqrt(getVariance(m, col, mean));
-			if (std==0) {return;} // if all values==0, do not change anything
+	
+			// standard deviation=0, i.e. all values of this column are identical, so do nothing!
+			if(std<5*std::numeric_limits<double>::epsilon()) return;
+	
 			for(int i=1; i<=m.Nrows(); i++)
 			{
 				m(i,col)=(m(i,col)-mean)/std;
