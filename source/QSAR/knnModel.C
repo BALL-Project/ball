@@ -43,19 +43,20 @@ namespace BALL
 			w.resize(dist.getColumnCount());
 			w=1;
 			
-			SortedList<pair<double,int> > ranking;
+			std::multiset<pair<double,int> > ranking;
 			for(int i=1; i<=dist.Ncols();i++)
 			{
 				ranking.insert(make_pair(dist(1,i),i));
 			}
-			ranking.front();
-			for(int i=0; i<k_ && ranking.hasNext(); i++)
-			{
-				ranking.next();  // skip the k nearest neighbors
-			}
-			while(ranking.hasNext()) 
+			
+			std::multiset<pair<double,int> >::iterator r_it = ranking.begin();
+			
+			for(int i=0; i<k_ && r_it != ranking.end(); i++, ++r_it)
+			{ }			// skip the k nearest neighbors
+			
+			for(; r_it != ranking.end(); ++r_it)
 			{			  
-				w(ranking.next().second) = 0;
+				w(r_it->second) = 0;
 			}
 		}
 

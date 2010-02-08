@@ -850,8 +850,8 @@ namespace BALL
 			{
 				message+="\n  ";
 				const vector<double>& par = model_->getParameters();
-				SortedList<int>& opt_par = entry_->optimizableParameters;
-				SortedList<int>::iterator it = opt_par.begin();
+				std::multiset<int>& opt_par = entry_->optimizableParameters;
+				std::multiset<int>::iterator it = opt_par.begin();
 				for(uint i=0; i<entry_->parameterNames.size()&&i<par.size(); i++)
 				{
 					message+=entry_->parameterNames[i];

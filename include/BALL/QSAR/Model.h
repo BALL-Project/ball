@@ -26,6 +26,7 @@
 #define MODEL
 
 #include <vector>
+#include <set>
 
 #include <BALL/MATHS/LINALG/matrix.h>
 
@@ -35,10 +36,6 @@
 
 #ifndef QSARH
 #include <BALL/QSAR/QSARData.h>
-#endif
-
-#ifndef SORTEDLIST
-#include <BALL/QSAR/sortedList.h>
 #endif
 
 #ifndef QSAR_EXCEPTION
@@ -118,7 +115,7 @@ namespace BALL
 				virtual vector<double> getParameters() const;			
 
 				/** returns a const pointer to the descriptor IDs of this model */
-				SortedList<unsigned int>* getDescriptorIDs();
+				std::multiset<unsigned int>* getDescriptorIDs();
 				
 				void setDataSource(const QSARData* q);
 				
@@ -141,7 +138,7 @@ namespace BALL
 				const Matrix<double>* getY();
 				
 				/** manually specify a set of descriptors */
-				void setDescriptorIDs(const SortedList<unsigned int>& sl);
+				void setDescriptorIDs(const std::multiset<unsigned int>& sl);
 				
 				/** returns the type of the current model, e.g. "MLR", "PLS", ... */
 				const string* getType();
@@ -243,7 +240,7 @@ namespace BALL
 				/** list containing the IDs of the selected descriptors (=features); with IDs >= 0 \n
 				If this list is empty, it is assumed that no feature selection was done, i.e. that all descriptors are to be considered for cross-validation and prediction of activity. \n
 				If it is not empty, only the descriptors in this list are used for cross-validation and prediction of activity. */
-				SortedList<unsigned int> descriptor_IDs_;			
+				std::multiset<unsigned int> descriptor_IDs_;			
 				//@}				
 				
 				friend class Validation;

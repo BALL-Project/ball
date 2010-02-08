@@ -61,7 +61,7 @@ namespace BALL
 			
 			double explained_var=0;
 			uint cols=0; 
-			if(complete_var < 5*Matrix<double>::MACHINE_EPSILON)
+			if(complete_var < 5*std::numeric_limits<double>::epsilon())
 			{
 				throw Exception::NoPCAVariance(__FILE__,__LINE__,"No variance present to be explained by PCA!");
 			}

@@ -26,6 +26,8 @@
 
 #include <QColor>
 
+#include <set>
+
 using namespace BALL::QSAR;
 
 namespace BALL
@@ -98,12 +100,12 @@ namespace BALL
 				
 				uint feature_ID = it->second;
 				
-				SortedList<uint>* features = model_item_->model()->getDescriptorIDs();
+				std::multiset<uint>* features = model_item_->model()->getDescriptorIDs();
 				if(features->size()==0)
 				{
 					for(uint i=0; i<feature_combobox_->count()-1; i++)
 					{
-						if(i!=feature_ID) features->push_back(i);
+						if(i!=feature_ID) features->insert(i);
 					}
 				}
 				else
@@ -175,14 +177,16 @@ namespace BALL
 				feature_combobox_->addItem("All features",0);
 				map_names_to_ID_.clear();
 				
-				SortedList<uint>* features = model_item_->model()->getDescriptorIDs();
+				std::multiset<uint>* features = model_item_->model()->getDescriptorIDs();
+
 				if(features->size()>0) // features have already been selected
 				{
-					features->front();
-					for(uint i=0;features->hasNext();i++)
+					std::multiset<uint>::iterator f_it = features->begin();
+
+					for(uint i=0;f_it != features->end();i++, ++f_it)
 					{
 						feature_combobox_->addItem((*feature_names)[i].c_str(),i+1);
-						map_names_to_ID_.insert(make_pair((*feature_names)[i],features->next()));
+						map_names_to_ID_.insert(make_pair((*feature_names)[i],*f_it));
 					}
 				}
 				else
@@ -214,7 +218,7 @@ namespace BALL
 				if(feature_index==0) continue;
 				
 				// sort ascendingly according to activity value
-				SortedList<pair<double,pair<double,uint> > > values;
+				std::multiset<pair<double,pair<double,uint> > > values;
 				for(uint j=1; j<=no_compounds; j++)
 				{
 					double feature_value, response_value;
@@ -223,14 +227,14 @@ namespace BALL
 					values.insert(make_pair(feature_value,make_pair(response_value,j)));
 				}
 				
-				values.front();
+				std::multiset<pair<double, pair<double, uint> > >::iterator v_it = values.begin();
 				QwtPlotCurve* curve_i = new QwtPlotCurve;
 				double* x = new double[no_compounds];
 				double* y = new double[no_compounds];
 				
-				for(uint j=1; j<=no_compounds; j++)
+				for(uint j=1; j<=no_compounds; j++, ++v_it)
 				{
-					const pair<double,pair<double,uint> >& p = values.next();
+					const pair<double,pair<double,uint> >& p = *v_it;
 					double x_ji = p.first;
 					double y_j = p.second.first;
 					x[j-1] = x_ji;

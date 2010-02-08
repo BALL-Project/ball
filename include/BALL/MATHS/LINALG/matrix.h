@@ -18,8 +18,6 @@ namespace BALL {
 }
 
 #include <BALL/MATHS/LINALG/matrix.ih>
-#include <BALL/MATHS/LINALG/vector.ih>
-
 namespace BALL {
 	// explicit instantiation to save the compiler some work (and to *make* it work on Windows)
 	template class BALL_EXPORT Matrix<float, StandardTraits>;
@@ -27,6 +25,8 @@ namespace BALL {
 	template class BALL_EXPORT Matrix<ComplexFloat, StandardTraits>;
 	template class BALL_EXPORT Matrix<ComplexDouble, StandardTraits>;
 }
+
+#include <BALL/MATHS/LINALG/vector.ih>
 
 #include <BALL/MATHS/LINALG/upperTriangularMatrix.ih>
 #include <BALL/MATHS/LINALG/upperTriangularMatrixConstructors.iC>

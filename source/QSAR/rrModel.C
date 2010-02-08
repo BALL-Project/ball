@@ -25,6 +25,7 @@
 
 #include <BALL/QSAR/rrModel.h>
 //#include <BALL/SYSTEM/timer.h>
+#include <BALL/MATHS/LINALG/matrixInverter.h>
 
 namespace BALL
 {
@@ -71,7 +72,10 @@ namespace BALL
 			try
 			{
 			//	Timer timer; timer.start();
-				training_result_ = m.i()*descriptor_matrix_.t()*Y_;
+				MatrixInverter<double, StandardTraits> inverter(m);
+				inverter.computeInverse();
+
+				training_result_ = inverter.getInverse()*descriptor_matrix_.t()*Y_;
 			//	timer.stop(); cout<<timer.getClockTime()<<endl;
 				
 		// 		timer.start();

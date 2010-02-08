@@ -356,7 +356,13 @@ namespace BALL
 			if(((String)filename).hasSuffix("nB2.mod")) 
 			{
 				cout<<descriptor_IDs_.size()<<endl<<flush;
-				cout<<descriptor_IDs_.toStr()<<endl<<flush;
+
+				std::multiset<unsigned int>::iterator d_it = descriptor_IDs_.begin();
+				for (; d_it != descriptor_IDs_.end(); ++d_it)
+				{
+					cout << String(*d_it) << " ";
+				}
+				cout << endl;
 				cout<<descriptor_IDs_.size()<<endl<<flush;
 			}
 		}

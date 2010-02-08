@@ -25,6 +25,7 @@
 
 #include <BALL/QSAR/kpcrModel.h>
 #include <BALL/QSAR/pcrModel.h>
+#include <BALL/MATHS/LINALG/matrixInverter.h>
 
 namespace BALL
 {
@@ -84,7 +85,10 @@ namespace BALL
 
 			//result of RR is a linear combination of latente variables 
 			// = column with length=no of latente variables => matrix for more than one modelled activity
-			weights_ = (latent_variables_.t()*latent_variables_).pseudoInverse()*latent_variables_.t()*Y_;
+			MatrixInverter<double, StandardTraits> inverter(latent_variables_.t()*latent_variables_);
+			inverter.computePseudoInverse();
+
+			weights_ = inverter.getPseudoInverse()*latent_variables_.t()*Y_;
 			training_result_ = loadings_*weights_;
 			
 			calculateOffsets();

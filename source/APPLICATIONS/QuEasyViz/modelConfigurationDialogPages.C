@@ -63,11 +63,12 @@ namespace BALL
 			/// mark which parameters are optimizable
 			if (parent->isOptimizable)
 			{
-				parent->entry()->optimizableParameters.front();
-				while(parent->entry()->optimizableParameters.hasNext())
+				std::multiset<int>::iterator o_it = parent->entry()->optimizableParameters.begin();
+				
+				for(; o_it != parent->entry()->optimizableParameters.end(); ++o_it)
 				{
 					QLabel* label = new QLabel(QString("*"), this);
-					layout->addWidget(label,parent->entry()->optimizableParameters.next(), 3);
+					layout->addWidget(label,*o_it, 3);
 				}
 				QLabel* label = new QLabel("*: can be automatically optimized\n    by cross validation", this);
 				layout->addWidget(label,parent->entry()->parameterNames.size()+1,1,1,-1);
@@ -290,13 +291,13 @@ namespace BALL
 				groupboxes.push_back(modelConfigGroup);
 				QGridLayout* layout1 = new QGridLayout;
 			
-				parent->entry()->optimizableParameters.front();
+				std::multiset<int>::iterator o_it = parent->entry()->optimizableParameters.end();
 				int i = 0;
 
-				while(parent->entry()->optimizableParameters.hasNext())
+				for (; o_it != parent->entry()->optimizableParameters.end(); ++o_it)
 				{
 					QLabel* label = new QLabel(this);
-					label->setText(QString(parent->entry()->parameterNames[parent->entry()->optimizableParameters.next()].c_str()));
+					label->setText(QString(parent->entry()->parameterNames[*o_it].c_str()));
 					label_ = new QLabel(this);
 					labels_.push_back(label_);
 					layout1->addWidget(label, i+2,1);

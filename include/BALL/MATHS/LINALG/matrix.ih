@@ -75,9 +75,7 @@ namespace BALL {
 		
 		
 		public:
-			
-			static double MACHINE_EPSILON;
-	
+
 			/**
 			 *  Default constructor, creating a matrix of size 0x0 in
 			 *  row_major format.
@@ -763,14 +761,6 @@ namespace BALL {
 			
 			/** returns the sum over all elements of the specified row */
 			valuetype rowSum(size_t row);
-			
-			/** return the inverse of this matrix.\n
-			Inversion is done by use of SVD */
-			Matrix<valuetype, mtraits> i();
-			
-			/** returns the Moore-Penrose Pseudo-Inverse of this matrix.\n
-			Inversion is done by use of SVD */
-			Matrix<valuetype, mtraits> pseudoInverse();
 			
 			/** convenience-function that resize the current matrix and sets the diagonal elements to 1 and all other elements to zero */
 			void setToIdentity(size_t rows);

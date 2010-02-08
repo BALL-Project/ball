@@ -11,7 +11,6 @@ namespace BALL {
 }
 
 #include <BALL/MATHS/LINALG/vector.ih>
-#include <BALL/MATHS/LINALG/matrix.ih>	
 
 namespace BALL {
 	// explicit instantiation to save the compiler some work (and to *make* it work on Windows)
@@ -20,6 +19,8 @@ namespace BALL {
 	template class BALL_EXPORT Vector<ComplexFloat>;
 	template class BALL_EXPORT Vector<ComplexDouble>;
 }
+
+#include <BALL/MATHS/LINALG/matrix.ih>	
 
 #include <BALL/MATHS/LINALG/vectorConstructors.iC>
 #include <BALL/MATHS/LINALG/vectorIO.iC>

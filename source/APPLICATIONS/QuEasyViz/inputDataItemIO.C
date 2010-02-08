@@ -41,12 +41,12 @@ namespace BALL
 		{
 			String activity_string;
 			String tmp;
-			SortedList<int> activities = sd_item->activityValues();
-			activities.front();
-			while(activities.hasNext())
+			std::multiset<int> activities = sd_item->activityValues();
+			
+			std::multiset<int>::iterator a_it = activities.begin();
+			for (; a_it != activities.end(); ++a_it)
 			{
-				int a = activities.next();
-				activity_string += " "+ String(a);
+				activity_string += " "+ String(*a_it);
 			}
 			out << "[InputReader]" << "\n";
 			if(sd_item->isDone()) out<<"done = "<<1<<endl;

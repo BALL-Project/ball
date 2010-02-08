@@ -24,6 +24,7 @@
 //
 
 #include <BALL/QSAR/plsModel.h>
+#include <BALL/MATHS/LINALG/matrixInverter.h>
 
 namespace BALL
 {
@@ -128,7 +129,10 @@ namespace BALL
 		// 		loadings_ = loadings_*(P.t()*loadings_+I).i();
 		// 	}
 			
-			loadings_ = loadings_*(P.t()*loadings_).pseudoInverse();
+			MatrixInverter<double, StandardTraits> inverter(P.t()*loadings_);
+			inverter.computePseudoInverse();
+
+			loadings_ = loadings_*inverter.getPseudoInverse();
 			
 			weights_=weights_.t(); // transform, so that one column contains the importances of all latent variables for modelling the response (-> weights_ will have more than one column in case of more than one modelled response variable)
 			training_result_=loadings_*weights_;

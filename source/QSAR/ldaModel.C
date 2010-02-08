@@ -24,6 +24,7 @@
 //
 
 #include <BALL/QSAR/ldaModel.h>
+#include <BALL/MATHS/LINALG/matrixInverter.h>
 
 namespace BALL
 {
@@ -68,7 +69,11 @@ namespace BALL
 			Matrix<double> I; I.setToIdentity(sigma_.Ncols());
 			I*=lambda_;
 			sigma_+=I;
-			sigma_=sigma_.i();
+
+			MatrixInverter<double, StandardTraits> inverter(sigma_);
+			inverter.computeInverse();
+
+			sigma_=inverter.getInverse();
 
 			mean_vectors_.resize(Y_.Ncols());
 			no_substances_.clear();

@@ -62,7 +62,7 @@ namespace BALL
 			RegistryEntry r1(0,1,"Partial Least Squares","PLS",(CreateMethod) &ModelFactory<PLSModel>::create);
 			r1.parameterNames.push_back("number of PLS components");
 			r1.parameterDefaults.push_back(10);
-			r1.optimizableParameters.push_back(0);
+			r1.optimizableParameters.insert(0);
 			r1.latent_variables=1;
 			addEntry(r1,3);
 
@@ -71,8 +71,8 @@ namespace BALL
 			r2.parameterNames.push_back("number of PLS components");
 			r2.parameterDefaults.push_back(5);
 			r2.parameterDefaults.push_back(10);
-			r2.optimizableParameters.push_back(0);
-			r2.optimizableParameters.push_back(1);
+			r2.optimizableParameters.insert(0);
+			r2.optimizableParameters.insert(1);
 			r2.latent_variables=1;
 			addEntry(r2,4);
 			
@@ -81,7 +81,7 @@ namespace BALL
 			r3.parameterNames.push_back("lambda");
 			r3.parameterDefaults.push_back(6);
 			r3.parameterDefaults.push_back(0.003);
-			r3.optimizableParameters.push_back(0);
+			r3.optimizableParameters.insert(0);
 			addEntry(r3,5);
 			
 			RegistryEntry r31(0,1,"k Nearest Neighbor Regression","KNN",(CreateMethod) &ModelFactory<KNNModel>::create);
@@ -89,13 +89,13 @@ namespace BALL
 			r31.parameterNames.push_back("lambda");
 			r31.parameterDefaults.push_back(3);
 			r31.parameterDefaults.push_back(0.003);
-			r31.optimizableParameters.push_back(0);
+			r31.optimizableParameters.insert(0);
 			addEntry(r31,6);
 			
 			RegistryEntry r4(1,1,"Kernel Partial Least Squares","KPLS",(CreateKernel1) &ModelFactory<KPLSModel>::createKernel1, (CreateKernel2) &ModelFactory<KPLSModel>::createKernel2);
 			r4.parameterNames.push_back("number of PLS components");
 			r4.parameterDefaults.push_back(10);
-			r4.optimizableParameters.push_back(0);
+			r4.optimizableParameters.insert(0);
 			r4.latent_variables=1;
 			addEntry(r4,7);
 			

@@ -88,11 +88,11 @@ namespace BALL
 		{
 			unsigned int columns=model_->data->descriptor_matrix_.size();
 			unsigned int lines=model_->data->descriptor_matrix_[0].size();
-			SortedList<unsigned int>* irrelevantDescriptors = findIrrelevantDescriptors();
+			std::multiset<unsigned int>* irrelevantDescriptors = findIrrelevantDescriptors();
 			
 			// ------ Q2 value for regression using all descriptors  --- //
 			double q2_allDes=0;
-			SortedList<unsigned int> old_descr=model_->descriptor_IDs_;
+			std::multiset<unsigned int> old_descr = model_->descriptor_IDs_;
 			int col=model_->descriptor_matrix_.Ncols();
 			if(model_->descriptor_IDs_.size()!=0)
 			{
@@ -120,8 +120,8 @@ namespace BALL
 			// do while there is an increase of Q^2 (and no of columns < no of lines)
 			int crossValidation_lines = (int)(((double)lines/k)*(k-1));
 			
-			SortedList<unsigned int>::Iterator des_it;
-			SortedList<unsigned int>::Iterator irr_it;
+			std::multiset<unsigned int>::iterator des_it;
+			std::multiset<unsigned int>::iterator irr_it;
 
 			for(int d=0; d<crossValidation_lines; d++)
 			{
@@ -150,7 +150,7 @@ namespace BALL
 						continue;
 					}
 					
-					model_->descriptor_IDs_.insert(des_it,i);
+					std::multiset<unsigned int>::iterator last_insert = model_->descriptor_IDs_.insert(des_it,i);
 					
 					if(weights_!=NULL && weights_->getSize()>0)
 					{
@@ -167,7 +167,7 @@ namespace BALL
 					catch(Exception::NoPCAVariance e)
 					{   
 						// if selected descriptor(s) yield no PCA eigenvectors, ignore this combination of descriptors!
-						model_->descriptor_IDs_.deleteLastInsertion();
+						model_->descriptor_IDs_.erase(last_insert);
 						continue;
 					}
 					if(model_->model_val->getCVRes() > best_q2)
@@ -175,7 +175,7 @@ namespace BALL
 						best_q2=model_->model_val->getCVRes();
 						best_col=i;
 					}
-					model_->descriptor_IDs_.deleteLastInsertion();
+					model_->descriptor_IDs_.erase(last_insert);
 				}
 			
 				// if Q^2 with the new descriptor is not larger than before, it is not selected and feature selection is stopped.
@@ -235,9 +235,11 @@ namespace BALL
 		{
 			int columns=model_->data->descriptor_matrix_.size();
 
-			SortedList<unsigned int>* irrelevantDescriptors = findIrrelevantDescriptors();
-			SortedList<unsigned int> old_descr=model_->descriptor_IDs_;
+			std::multiset<unsigned int>* irrelevantDescriptors = findIrrelevantDescriptors();
+			std::multiset<unsigned int> old_descr=model_->descriptor_IDs_;
 			
+			std::multiset<unsigned int>::iterator last_insertion;
+
 			// ------ Q2 value for regression using all descriptors  --- //
 			double q2_allDes=0;
 			int col=model_->descriptor_matrix_.Ncols();
@@ -266,12 +268,12 @@ namespace BALL
 			{
 				for (int i=0; i<columns;i++)
 				{
-					model_->descriptor_IDs_.push_back(i);
+					last_insertion = model_->descriptor_IDs_.insert(i);
 				}
 			}
 			double old_q2=q2_allDes;
-			SortedList<unsigned int>::Iterator des_it;
-			SortedList<unsigned int>::Iterator irr_it;
+			std::multiset<unsigned int>::iterator des_it;
+			std::multiset<unsigned int>::iterator irr_it;
 			
 			// the quality of the model must always be larger than this value;
 			// if a negative quality_increase_cutoff_ is specified, minimal reduction of
@@ -322,7 +324,7 @@ namespace BALL
 					}
 					catch(Exception::NoPCAVariance e)
 					{   // if selected descriptor(s) yield no PCA eigenvectors, ignore this combination of descriptors!
-						model_->descriptor_IDs_.deleteLastInsertion();
+						model_->descriptor_IDs_.erase(last_insertion);
 						continue;
 					}
 					
@@ -332,7 +334,7 @@ namespace BALL
 						best_col=i;
 					}
 				
-					model_->descriptor_IDs_.insert(des_it,i);
+					last_insertion = model_->descriptor_IDs_.insert(des_it,i);
 				}
 			
 				// if Q^2 is not larger than before, no descriptor is removed and feature selection is stopped.
@@ -343,7 +345,7 @@ namespace BALL
 				//if(best_q2 > old_q2)
 				else
 				{
-					model_->descriptor_IDs_.remove(best_col);
+					model_->descriptor_IDs_.erase(best_col);
 					//cout << "  removed no"<<best_col<<endl;
 					old_q2=best_q2;
 				}
@@ -419,11 +421,13 @@ namespace BALL
 		{
 			unsigned int columns=model_->data->descriptor_matrix_.size();
 			unsigned int lines=model_->data->descriptor_matrix_[0].size();
-			SortedList<unsigned int>* irrelevantDescriptors = findIrrelevantDescriptors();
+			std::multiset<unsigned int>* irrelevantDescriptors = findIrrelevantDescriptors();
+
+			std::multiset<unsigned int>::iterator last_insertion;
 			
 			// ------ Q2 value for regression using all descriptors  --- //
 			double q2_allDes=0;
-			SortedList<unsigned int> old_descr=model_->descriptor_IDs_;
+			std::multiset<unsigned int> old_descr=model_->descriptor_IDs_;
 			int col=model_->descriptor_matrix_.Ncols();
 			if(model_->descriptor_IDs_.size()!=0)
 			{
@@ -450,8 +454,8 @@ namespace BALL
 			// do while there is an increase of Q^2 (and no of columns < no of lines)
 			// int crossValidation_lines = (int)(((double)lines/k)*(k-1));
 			
-			SortedList<unsigned int>::Iterator des_it;
-			SortedList<unsigned int>::Iterator irr_it;
+			std::multiset<unsigned int>::iterator des_it;
+			std::multiset<unsigned int>::iterator irr_it;
 
 			/// find the best feature to be selected first
 			int best_col=0; 
@@ -459,9 +463,9 @@ namespace BALL
 			des_it = model_->descriptor_IDs_.begin();
 			irr_it = irrelevantDescriptors->begin();
 			
-			SortedList<pair<double,uint> > potential_descriptors; // sorted descendingly by their increase of prediction quality during the first scan
+			std::multiset<pair<double,uint> > potential_descriptors; // sorted descendingly by their increase of prediction quality during the first scan
 			
-			SortedList<pair<double,uint> >::Iterator it_to_best=potential_descriptors.end();
+			std::multiset<pair<double,uint> >::iterator it_to_best=potential_descriptors.end();
 			
 			for(uint i=0; i<columns; i++)
 			{	
@@ -482,7 +486,7 @@ namespace BALL
 					continue;
 				}
 				
-				model_->descriptor_IDs_.insert(des_it,i);
+				last_insertion = model_->descriptor_IDs_.insert(des_it,i);
 				
 				if(weights_!=NULL && weights_->getSize()>0)
 				{
@@ -499,11 +503,11 @@ namespace BALL
 				catch(Exception::NoPCAVariance e)
 				{   
 					// if selected descriptor(s) yield no PCA eigenvectors, ignore this combination of descriptors!
-					model_->descriptor_IDs_.deleteLastInsertion();
+					model_->descriptor_IDs_.erase(last_insertion);
 					continue;
 				}
 				
-				SortedList<pair<double,uint> >::Iterator it = potential_descriptors.insert(make_pair(1-model_->model_val->getCVRes(),i));
+				std::multiset< pair<double, uint> >::iterator it = potential_descriptors.insert(make_pair(1-model_->model_val->getCVRes(),i));
 				
 				if(model_->model_val->getCVRes() > best_q2)
 				{
@@ -511,20 +515,20 @@ namespace BALL
 					best_col=i;
 					it_to_best = it;
 				}
-				model_->descriptor_IDs_.deleteLastInsertion();
+				model_->descriptor_IDs_.erase(last_insertion);
 			}
 			
-			model_->descriptor_IDs_.insert(best_col);
+			last_insertion = model_->descriptor_IDs_.insert(best_col);
 			potential_descriptors.erase(it_to_best);
 			
 			/// now check ONCE for each remaining (non-empty) descriptor, whether it can increase the prediction quality
  			double old_q2=best_q2;
 			
-			potential_descriptors.front();
-			while(potential_descriptors.hasNext())
+			std::multiset< pair<double, uint> >::iterator p_it = potential_descriptors.begin();
+			for(; p_it != potential_descriptors.end(); ++p_it)
 			{
-				uint i = potential_descriptors.next().second;
-				model_->descriptor_IDs_.insert(i);
+				uint i = p_it->second;
+				last_insertion = model_->descriptor_IDs_.insert(i);
 			
 				try
 				{
@@ -536,13 +540,13 @@ namespace BALL
 				catch(Exception::NoPCAVariance e)
 				{ 
 					// if selected descriptor(s) yield no PCA eigenvectors, ignore this combination of descriptors!
-					model_->descriptor_IDs_.deleteLastInsertion();
+					model_->descriptor_IDs_.erase(last_insertion);
 					continue;
 				}
 				
 				if(model_->model_val->getCVRes()<=old_q2+quality_increase_cutoff_) // delete descriptor if no quality increase
 				{
-					model_->descriptor_IDs_.deleteLastInsertion();
+					model_->descriptor_IDs_.erase(last_insertion);
 				}
 				else
 				{
@@ -697,9 +701,9 @@ namespace BALL
 		*/
 
 
-		SortedList<unsigned int>* FeatureSelection::findIrrelevantDescriptors()
+		std::multiset<unsigned int>* FeatureSelection::findIrrelevantDescriptors()
 		{
-			SortedList<unsigned int>* irrelevantDescriptors=new SortedList<unsigned int>();
+			std::multiset<unsigned int>* irrelevantDescriptors = new std::multiset<unsigned int>();
 			for (int i=0; i<(int)model_->data->descriptor_matrix_.size();i++)
 			{
 				bool empty=1;
@@ -712,9 +716,9 @@ namespace BALL
 					}
 				}
 				// if column is empty or not already selected, add it to the list
-				if(empty || (!model_->descriptor_IDs_.empty() && !model_->descriptor_IDs_.contains(i)) )
+				if(empty || (!model_->descriptor_IDs_.empty() && (model_->descriptor_IDs_.find(i) == model_->descriptor_IDs_.end())) )
 				{
-					irrelevantDescriptors->push_back(i);
+					irrelevantDescriptors->insert(i);
 				}
 			}
 			return irrelevantDescriptors;
@@ -725,10 +729,10 @@ namespace BALL
 		{
 			if(model_->descriptor_IDs_.size()!=0)  // if a feature selection method has already been applied
 			{
-				model_->descriptor_IDs_.front();
-				while(model_->descriptor_IDs_.hasNext())
+				std::multiset<unsigned int>::iterator d_it = model_->descriptor_IDs_.begin();
+				for(; d_it != model_->descriptor_IDs_.end(); ++d_it)
 				{
-					int col=model_->descriptor_IDs_.next();
+					int col = *d_it;
 					bool empty=1;
 					for(int j=0; j<(int)model_->data->descriptor_matrix_[col].size();j++)
 					{
@@ -792,9 +796,9 @@ namespace BALL
 				
 			double abs_cor_threshold = abs(cor_threshold);
 			
-			for(SortedList<uint>::iterator it1 = model_->descriptor_IDs_.begin(); it1!=model_->descriptor_IDs_.end(); it1++)
+			for(std::multiset<uint>::iterator it1 = model_->descriptor_IDs_.begin(); it1!=model_->descriptor_IDs_.end(); it1++)
 			{	
-				for(SortedList<uint>::iterator it2 = model_->descriptor_IDs_.begin(); it2!=model_->descriptor_IDs_.end(); it2++)
+				for(std::multiset<uint>::iterator it2 = model_->descriptor_IDs_.begin(); it2!=model_->descriptor_IDs_.end(); it2++)
 				{
 					if(*it1==*it2) continue;
 					
@@ -851,7 +855,7 @@ namespace BALL
 			double abs_cor_threshold = abs(min_correlation);
 			
 			/// check correlation of each feature with each response variable
-			for(SortedList<uint>::iterator it = model_->descriptor_IDs_.begin(); it!=model_->descriptor_IDs_.end(); it++)
+			for(std::multiset<uint>::iterator it = model_->descriptor_IDs_.begin(); it!=model_->descriptor_IDs_.end(); it++)
 			{	
 				double max_abs_cor = 0;
 				
@@ -875,7 +879,7 @@ namespace BALL
 
 		void FeatureSelection::implicitSelection(LinearModel& lm, int act, double d)
 		{
-			SortedList<unsigned int> newIDs;
+			std::multiset<unsigned int> newIDs;
 			const Matrix<double>* training_result=lm.getTrainingResult();
 			const Matrix<double>* coeff_errors=lm.validation->getCoefficientStdErrors();
 			
@@ -887,15 +891,15 @@ namespace BALL
 			
 			if(!lm.descriptor_IDs_.empty())
 			{
-				lm.descriptor_IDs_.front(); 
-				for(int i=1; i<=training_result->Nrows() && lm.descriptor_IDs_.hasNext(); i++)
+				std::multiset<unsigned int>::iterator d_it = lm.descriptor_IDs_.begin(); 
+				for(int i=1; i<=training_result->Nrows() && (d_it != lm.descriptor_IDs_.end()); i++, d_it++)
 				{	
-					int id=lm.descriptor_IDs_.next();
+					int id=*d_it;
 					// consider only those descriptors that are already part of BOTH models AND that have a coefficient outside of 0 +/- stddev
-					if (  (model_->descriptor_IDs_.empty() || model_->descriptor_IDs_.contains(id))
+					if (  (model_->descriptor_IDs_.empty() || (model_->descriptor_IDs_.find(id) != model_->descriptor_IDs_.end()))
 							&&  ((*training_result)(i,act)>(*coeff_errors)(i,act)*d || (*training_result)(i,act)< -(*coeff_errors)(i,act)*d) )
 					{
-						newIDs.push_back(id); //cout<<"  added "<<id<<endl;
+						newIDs.insert(id); //cout<<"  added "<<id<<endl;
 					}
 				
 				}
@@ -905,10 +909,10 @@ namespace BALL
 				for(int i=0; i<training_result->Nrows();i++)
 				{		
 					// consider only those descriptors that are already part of BOTH models AND that have a coefficient outside of 0 +/- stddev
-					if (  (model_->descriptor_IDs_.empty() || model_->descriptor_IDs_.contains(i))
+					if (  (model_->descriptor_IDs_.empty() || (model_->descriptor_IDs_.find(i) != model_->descriptor_IDs_.end()))
 										&&  ((*training_result)(i+1,act)>(*coeff_errors)(i+1,act)*d || (*training_result)(i+1,act)< -(*coeff_errors)(i+1,act)*d) )
 					{
-						newIDs.push_back(i); //cout<<"  added "<<i-1<<endl;
+						newIDs.insert(i); //cout<<"  added "<<i-1<<endl;
 					}
 				
 				}	
@@ -926,11 +930,11 @@ namespace BALL
 		}
 
 
-		void FeatureSelection::updateWeights(SortedList<unsigned int>& oldDescIDs, SortedList<unsigned int>& newDescIDs, Vector<double>& oldWeights)
+		void FeatureSelection::updateWeights(std::multiset<unsigned int>& oldDescIDs, std::multiset<unsigned int>& newDescIDs, Vector<double>& oldWeights)
 		{
 			weights_->resize(newDescIDs.size());
 			
-			SortedList<unsigned int>::Iterator it = newDescIDs.begin();
+			std::multiset<unsigned int>::iterator it = newDescIDs.begin();
 			int posNew=1;
 			
 			// if a previous feature selection was done, find the position of all relevant weights_ by getting the position of each relevant descriptor within the old list
@@ -939,7 +943,7 @@ namespace BALL
 				while(it!=newDescIDs.end())
 				{
 					unsigned int value=*it;
-					SortedList<unsigned int>::Iterator it1 = oldDescIDs.begin();
+					std::multiset<unsigned int>::iterator it1 = oldDescIDs.begin();
 					int posOld=1;
 					// search position of current descriptor ID in oldDescIDs
 					while(*it1<value && it1!=oldDescIDs.end())

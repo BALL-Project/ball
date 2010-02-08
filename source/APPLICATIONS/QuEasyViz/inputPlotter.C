@@ -162,7 +162,7 @@ namespace BALL
 			}
 			if(names->size()==0) show_data_labels=0;
 			
-			SortedList<pair<double,uint> > act;
+			std::multiset<pair<double,uint> > act;
 			for(uint i=0; i<data_->getNoSubstances();i++)
 			{
 				vector<double>* y0 = data_->getActivity(i);
@@ -172,12 +172,12 @@ namespace BALL
 				
 			double min_y=1e10;
 			double max_y=-1e10;
-			act.front();
-			for(uint i=0; i<data_->getNoSubstances();i++)
+			std::multiset<pair<double, uint> >::iterator a_it = act.begin();
+			for(uint i=0; i<data_->getNoSubstances();i++, ++a_it)
 			{
 				QwtPlotMarker* marker= new QwtPlotMarker;
 				marker->setSymbol(data_symbol);
-				const pair<double,uint>& pair = act.next();
+				const pair<double,uint>& pair = *a_it;
 				double y=pair.first;
 				if(y<min_y) min_y=y;
 				if(y>max_y) max_y=y;

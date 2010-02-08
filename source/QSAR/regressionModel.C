@@ -69,20 +69,21 @@ namespace BALL
 			
 			if(type_=="ALL")
 			{
-				descriptor_IDs_.front();
-				for(int i=0;descriptor_IDs_.hasNext();i++)
+				std::multiset<unsigned int>::iterator d_it = descriptor_IDs_.begin();
+				for(int i=0; d_it != descriptor_IDs_.end(); ++d_it, ++i)
 				{
-					cout<<descriptor_IDs_.next()<<"  "<<descriptor_names_[i]<<endl;
+					cout<<*d_it<<"  "<<descriptor_names_[i]<<endl;
 				}
 			}
 			else if(!descriptor_IDs_.empty())
 			{
-				descriptor_IDs_.front();
+				std::multiset<unsigned int>::iterator d_it = descriptor_IDs_.begin();
 				for(int i=0; i<training_result_.Nrows();i++)
 				{
 					if(type_!="KPLS" && type_!="KPCR" && type_!="KPLS" && type_!="GP")
 					{
-						cout<<String(descriptor_IDs_.next())<<"\t"<<descriptor_names_[i]<<"\t";
+						cout<<String(*d_it)<<"\t"<<descriptor_names_[i]<<"\t";
+						++d_it;
 					}
 					else
 					{
@@ -232,7 +233,7 @@ namespace BALL
 			{
 				getline(input,line);
 				unsigned int id = (unsigned int) line.getField(0,"\t").toInt();
-				descriptor_IDs_.push_back(id);
+				descriptor_IDs_.insert(id);
 				descriptor_names_.push_back(line.getField(1,"\t"));
 				int j=2;
 				for(; j<2+no_coefficients; j++)
@@ -268,12 +269,13 @@ namespace BALL
 			
 			if(!descriptor_IDs_.empty())  // write descriptors and information about their transformation
 			{
-				descriptor_IDs_.front();
+				descriptor_IDs_.begin();
 				bool trained = (training_result_.getRowCount()==descriptor_IDs_.size());
 				
-				for(uint i=0; i<descriptor_IDs_.size();i++)
+				std::multiset<unsigned int>::iterator d_it = descriptor_IDs_.begin();
+				for(uint i=0; i<descriptor_IDs_.size();i++, ++d_it)
 				{
-					out<<String(descriptor_IDs_.next())<<"\t"<<descriptor_names_[i]<<"\t";
+					out<<String(*d_it)<<"\t"<<descriptor_names_[i]<<"\t";
 					if(trained)
 					{
 						for(int j=1; j<=training_result_.Ncols();j++) 

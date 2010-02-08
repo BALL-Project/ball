@@ -87,7 +87,7 @@ namespace BALL
 
 		void Model::deleteDescriptorIDs()
 		{
-			SortedList<unsigned int> s;
+			std::multiset<unsigned int> s;
 			descriptor_IDs_=s;
 		}
 
@@ -104,7 +104,7 @@ namespace BALL
 			{
 				fs=1;
 			}
-			SortedList<unsigned int>::Iterator it=descriptor_IDs_.begin();
+			std::multiset<unsigned int>::iterator it=descriptor_IDs_.begin();
 
 			int col=data->descriptor_matrix_.size();
 			if(fs)
@@ -215,7 +215,7 @@ namespace BALL
 			}
 				
 			int t=0; // index in line of training data
-			SortedList<unsigned int>::Iterator it=descriptor_IDs_.begin();
+			std::multiset<unsigned int>::iterator it=descriptor_IDs_.begin();
 			// copy selected descriptors, their names and the information about their transformations (mean and stddev of each descriptor)
 			for(unsigned int j=0; j<data->descriptor_matrix_.size() && (!fs || it!=descriptor_IDs_.end()); j++)
 			{	
@@ -249,14 +249,14 @@ namespace BALL
 				//throw Exception::InconsistentUsage(__FILE__,__LINE__,"Transformation of test data requested although no scaling of training data was done!!");
 			}
 			
-			if( (data!=NULL && data->getNoDescriptors()!=substance.size()) || (data==NULL&&substance.size()<=descriptor_IDs_.back()) )	
+			if( (data!=NULL && data->getNoDescriptors()!=substance.size()) || (data==NULL&&substance.size()<=*(descriptor_IDs_.end()--)) )	
 			{
 				String message="For compounds whose activity is to be predicted, the same features must be available as for the training data!\n";
 				message+="No of features of given compound: ";
 				message+=String(substance.size())+"\n";
 				message+="No of required features: ";
 				if(data) message+=String(data->getNoDescriptors());
-				else message+=String(descriptor_IDs_.back());
+				else message+=String(*(descriptor_IDs_.end()--));
 				throw Exception::InconsistentUsage(__FILE__,__LINE__,message.c_str());
 			}
 
@@ -265,7 +265,7 @@ namespace BALL
 			{
 				fs=1;
 			}
-			list<unsigned int>::iterator it=descriptor_IDs_.begin();
+			std::multiset<unsigned int>::iterator it=descriptor_IDs_.begin();
 
 			int t=0; // index in line of test data
 			int length=descriptor_matrix_.Ncols();
@@ -332,14 +332,14 @@ namespace BALL
 			{
 				throw Exception::InconsistentUsage(__FILE__,__LINE__,"Transformation of test data requested although no scaling of training data was done!!");
 			}
-			if( (data!=NULL && data->getNoDescriptors()!=substance.getSize()) || (data==NULL&&substance.getSize()<=descriptor_IDs_.back()) )
+			if( (data!=NULL && data->getNoDescriptors()!=substance.getSize()) || (data==NULL&&substance.getSize()<=*(descriptor_IDs_.end()--)) )
 			{
 				String message="For compounds whose activity is to be predicted, the same number of features must be present than within the training data!\n";
 				message+="No of features of given compound: ";
 				message+=String(substance.getSize())+"\n";
 				message+="No of required features: ";
 				if(data) message+=String(data->getNoDescriptors());
-				else message+=String(descriptor_IDs_.back());
+				else message+=String(*(descriptor_IDs_.end()--));
 				throw Exception::InconsistentUsage(__FILE__,__LINE__,message.c_str());
 			}
 			
@@ -348,7 +348,7 @@ namespace BALL
 			{
 				fs=1;
 			}
-			list<unsigned int>::iterator it=descriptor_IDs_.begin();
+			std::multiset<unsigned int>::iterator it=descriptor_IDs_.begin();
 
 			int t=0; // index in line of test data
 			int length=descriptor_matrix_.Ncols();
@@ -440,13 +440,13 @@ namespace BALL
 		}
 
 
-		void Model::setDescriptorIDs(const SortedList<unsigned int>& sl)
+		void Model::setDescriptorIDs(const std::multiset<unsigned int>& sl)
 		{
 			descriptor_IDs_=sl;
 		}
 
 
-		SortedList<unsigned int>* Model::getDescriptorIDs()
+		std::multiset<unsigned int>* Model::getDescriptorIDs()
 		{
 			return &descriptor_IDs_;
 		}
@@ -546,7 +546,7 @@ namespace BALL
 			{
 				getline(input,line);
 				unsigned int id = (unsigned int) line.getField(0,"\t").toInt();
-				descriptor_IDs_.push_back(id);
+				descriptor_IDs_.insert(id);
 				descriptor_names_.push_back(line.getField(1,"\t"));
 				if(transformation)
 				{
@@ -576,10 +576,10 @@ namespace BALL
 			
 			if(!descriptor_IDs_.empty())  // write information about transformation of descriptors
 			{
-				descriptor_IDs_.front();
-				for(uint i=0; i<descriptor_IDs_.size();i++)
+				std::multiset<unsigned int>::iterator d_it = descriptor_IDs_.begin();
+				for(uint i=0; i<descriptor_IDs_.size();i++, ++d_it)
 				{
-					out<<String(descriptor_IDs_.next())<<"\t"<<descriptor_names_[i]<<"\t";
+					out<<String(*d_it)<<"\t"<<descriptor_names_[i]<<"\t";
 					if(centered_data)
 					{
 						out<<descriptor_transformations_(1,i+1)<<"\t"<<descriptor_transformations_(2,i+1)<<"\t";

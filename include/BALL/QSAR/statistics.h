@@ -31,7 +31,8 @@
 #include <BALL/MATHS/LINALG/matrix.h>
 #include <cmath>
 #include <BALL/MATHS/parsedFunction.h>
-#include <BALL/QSAR/sortedList.h>
+
+#include <set>
 
 namespace BALL 
 {
@@ -90,19 +91,19 @@ namespace BALL
 				
 				/** calculates covarianve between two rows of the given matrix 
 				@param features_to_use if specified, only the contained features are used for calculation of the covariance */
-				static double getRowCovariance(const vector<vector<double> >& v, int row1, int row2, double mean1=-1, double mean2=-1, SortedList<int>* features_to_use=0);
+				static double getRowCovariance(const vector<vector<double> >& v, int row1, int row2, double mean1=-1, double mean2=-1, std::multiset<int>* features_to_use=0);
 				
 				/** calculates mean of a row of the given matrix 
 				@param features_to_use if specified, only the contained features are used for calculation of the mean */
-				static double getRowMean(const vector<vector<double> >& v, int row, SortedList<int>* features_to_use=0);
+				static double getRowMean(const vector<vector<double> >& v, int row, std::multiset<int>* features_to_use=0);
 				
 				/** calculates variance of a row of the given matrix 
 				@param features_to_use if specified, only the contained features are used for calculation of the variance */
-				static double getRowVariance(const vector<vector<double> >& v, int row, double mean=-1, SortedList<int>* features_to_use=0);
+				static double getRowVariance(const vector<vector<double> >& v, int row, double mean=-1, std::multiset<int>* features_to_use=0);
 				
 				/** calculates standard deviation of a row of the given matrix 
 				@param features_to_use if specified, only the contained features are used for calculation of the standard deviation */
-				static double getRowStddev(const vector<vector<double> >& v, int row, double mean=-1, SortedList<int>* features_to_use=0);
+				static double getRowStddev(const vector<vector<double> >& v, int row, double mean=-1, std::multiset<int>* features_to_use=0);
 								
 				//  ------------------------
 				

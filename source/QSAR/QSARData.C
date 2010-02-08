@@ -113,7 +113,7 @@ namespace BALL
 				}
 				if(n==0)
 				{
-					SortedList<int> l;
+					std::multiset<int> l;
 					setDescriptorNames(m, l);
 				}
 	 			calculateBALLDescriptors(m);
@@ -177,7 +177,7 @@ namespace BALL
 				if(n==0)
 				{
 					no_properties = m.countNamedProperties();
-					SortedList<int> l;
+					std::multiset<int> l;
 					setDescriptorNames(m, l);
 					descriptor_matrix_.resize(60+no_properties);
 				}
@@ -203,22 +203,21 @@ namespace BALL
 		}
 
 
-		void QSARData::checkActivityIDs(SortedList<int>& act, int no_properties)
+		void QSARData::checkActivityIDs(std::multiset<int>& act, int no_properties)
 		{	
-			act.front();
+			std::multiset<int>::iterator a_it = act.begin();
 			// No response variable in case of data set whose activity is to be predicted
-			if(act.size()==0 || (act.front()==-1&&act.size()==1)) 
+			if((act.size() == 0) || ((*a_it == -1) && (act.size()==1))) 
 			{									
 				return;
 				//throw Exception::InvalidActivityID(__FILE__,__LINE__);
 			}
 			
-			while(act.hasNext())
+			for (; a_it != act.end(); ++a_it)
 			{
-				int a = act.next();
-				if(a<0 || a>=no_properties)
+				if((*a_it)<0 || (*a_it)>=no_properties)
 				{
-					throw Exception::InvalidActivityID(__FILE__,__LINE__,a,no_properties);
+					throw Exception::InvalidActivityID(__FILE__,__LINE__,(*a_it),no_properties);
 				}
 			}
 		}
@@ -244,7 +243,7 @@ namespace BALL
 		}
 
 
-		void QSARData::readSDFile(const char* file, SortedList<int>& activity_IDs, bool useExDesc, bool append, bool translate_class_labels)
+		void QSARData::readSDFile(const char* file, std::multiset<int>& activity_IDs, bool useExDesc, bool append, bool translate_class_labels)
 		{
 			if(!append)
 			{
@@ -265,9 +264,9 @@ namespace BALL
 			int no_properties=0; // no of descriptors as determined by the first substance in the sd-file
 			int no_descriptors=0;
 			//int no_substances=(int)input.getSize();
-			SortedList<int> newInvalidDescriptors; // invalid descriptors of the current input file only; save no. of columns
-			SortedList<int> newInvalidSubstances; 
-			SortedList<int> tmp; // invalid descriptors of the current input file; save no. of external descriptor
+			std::multiset<int> newInvalidDescriptors; // invalid descriptors of the current input file only; save no. of columns
+			std::multiset<int> newInvalidSubstances; 
+			std::multiset<int> tmp; // invalid descriptors of the current input file; save no. of external descriptor
 			
 			// read all molecules in the sd-file
 			for(int n=0; input.getSize()!=0; n++) 
@@ -325,8 +324,8 @@ namespace BALL
 				
 				int act=0; // no of current activity
 				int des=60; // no of column for current external descriptors within descriptor_matrix_
-				SortedList<int>::Iterator act_it = activity_IDs.begin();
-				SortedList<int>::Iterator inv_it = invalidDescriptors_.begin();
+				std::multiset<int>::iterator act_it = activity_IDs.begin();
+				std::multiset<int>::iterator inv_it = invalidDescriptors_.begin();
 				
 				for(int i=0; i<no && i<no_properties;i++) // create descriptors and activities for current molecule
 				{	 
@@ -342,11 +341,11 @@ namespace BALL
 							catch(BALL::Exception::InvalidFormat g)
 							{
 								descriptor_matrix_[des].push_back(0);
-								if(!tmp.contains(i))
+								if(tmp.find(i) == tmp.end())
 								{
 									tmp.insert(i);
 								}
-								if(!newInvalidDescriptors.contains(des))
+								if(newInvalidDescriptors.find(des) == newInvalidDescriptors.end())
 								{
 									newInvalidDescriptors.insert(des);
 								}
@@ -373,7 +372,7 @@ namespace BALL
 								//a = a + m.getNamedProperty(i).getString() + "' is no numerical value!";
 								//throw Exception::PropertyError(__FILE__,__LINE__, file, n, a.c_str());
 								Y_[act].push_back(0);
-								if(!invalidSubstances_.contains(n))
+								if(invalidSubstances_.find(n) == invalidSubstances_.end())
 								{
 									newInvalidSubstances.insert(n);
 								}
@@ -408,17 +407,17 @@ namespace BALL
 		}
 
 
-		void QSARData::removeInvalidDescriptors(SortedList<int>& inv)
+		void QSARData::removeInvalidDescriptors(std::multiset<int>& inv)
 		{
-			inv.front();
+			std::multiset<int>::iterator inv_it = inv.begin();
 			
 			bool rm_names=0;
 			if(column_names_.size()==descriptor_matrix_.size()) rm_names=1;
 			else cout<<column_names_.size()<<"  "<<descriptor_matrix_.size()<<endl;
 			
-			for(int i=0;inv.hasNext();i++)
+			for(int i=0;inv_it != inv.end();++i, ++inv_it)
 			{
-				int pos=inv.next()-i; // i already deleted columns --> descriptor_matrix_ is i columns shorter
+				int pos=*inv_it-i; // i already deleted columns --> descriptor_matrix_ is i columns shorter
 				vector<vector<double> >::iterator del = descriptor_matrix_.begin()+pos;
 				descriptor_matrix_.erase(del);
 				
@@ -434,12 +433,12 @@ namespace BALL
 		}
 
 
-		void QSARData::removeInvalidSubstances(SortedList<int>& inv)
+		void QSARData::removeInvalidSubstances(std::multiset<int>& inv)
 		{    
-			inv.front();
-			for(int i=0;inv.hasNext();i++)
+			std::multiset<int>::iterator inv_it = inv.begin();
+			for(int i=0;inv_it != inv.end(); ++i, ++inv_it)
 			{
-				int pos=inv.next()-i; // i already deleted rows --> descriptor_matrix_ is i rows shorter
+				int pos=*inv_it - i; // i already deleted rows --> descriptor_matrix_ is i rows shorter
 			
 				for(unsigned int j=0; j<descriptor_matrix_.size();j++)
 				{
@@ -457,7 +456,7 @@ namespace BALL
 		}
 
 
-		void QSARData::setDescriptorNames(const Molecule& m, SortedList<int>& activity_IDs, bool useExDesc)
+		void QSARData::setDescriptorNames(const Molecule& m, std::multiset<int>& activity_IDs, bool useExDesc)
 		{
 			if(useExDesc)
 			{
@@ -474,7 +473,7 @@ namespace BALL
 				int p=0;
 				for(int i=60; i<cols;)
 				{
-					if(activity_IDs.contains(p))
+					if(activity_IDs.find(p) != activity_IDs.end())
 					{ 
 						p++;
 						continue;
@@ -878,8 +877,8 @@ namespace BALL
 			}
 			
 			int line=1;
-			SortedList<int> newInvalidDescriptors; 
-			SortedList<int> tmp;
+			std::multiset<int> newInvalidDescriptors; 
+			std::multiset<int> tmp;
 					
 			for(int i=0; !input.eof(); i++)
 			{
@@ -894,7 +893,7 @@ namespace BALL
 
 				int compound_id = i;
 				if(xlabels) compound_id--;
-				if(invalidSubstances_.contains(compound_id))
+				if(invalidSubstances_.find(compound_id) != invalidSubstances_.end())
 				{
 					continue;
 				}
@@ -965,11 +964,11 @@ namespace BALL
 						catch(BALL::Exception::InvalidFormat g) 
 						{
 							descriptor_matrix_[no].push_back(0);
-							if(!tmp.contains(i))
+							if(tmp.find(i) == tmp.end())
 							{
 								tmp.insert(i);
 							}
-							if(!newInvalidDescriptors.contains(no))
+							if(newInvalidDescriptors.find(no) == newInvalidDescriptors.end())
 							{
 								newInvalidDescriptors.insert(no);
 							}
@@ -1203,7 +1202,7 @@ namespace BALL
 			
 			gsl_rng * r = gsl_rng_alloc (gsl_rng_ranlxd2);
 			
-			SortedList<unsigned int> val;
+			std::multiset<unsigned int> val;
 			set<uint> map_val;
 			unsigned int no_val = static_cast<unsigned int>(descriptor_matrix_[0].size()*fraction);
 			
@@ -1225,7 +1224,7 @@ namespace BALL
 			}
 			
 			/// all compounds not drawn before make up the training set
-			SortedList<unsigned int>::Iterator it = val.begin();
+			std::multiset<unsigned int>::iterator it = val.begin();
 			for(unsigned int i=0;i<descriptor_matrix_[0].size();i++)
 			{
 				if(*it!=i)
@@ -1503,7 +1502,7 @@ namespace BALL
 
 
 
-		bool QSARData::checkforDiscreteY(const char* file, SortedList<int>& activity_IDs) const
+		bool QSARData::checkforDiscreteY(const char* file, std::multiset<int>& activity_IDs) const
 		{
 			SDFile sd(file);
 			sd.disableAtoms();
@@ -1512,10 +1511,10 @@ namespace BALL
 			{
 				Molecule m;
 				sd >> m;
-				activity_IDs.front();
-				while(activity_IDs.hasNext())
+				std::multiset<int>::iterator a_it = activity_IDs.begin();
+				for (; a_it != activity_IDs.end(); ++a_it)
 				{
-					double y = String(m.getNamedProperty(activity_IDs.next()).getString()).toDouble();
+					double y = String(m.getNamedProperty(*a_it).getString()).toDouble();
 				
 					if(y!=(int)y)
 					{
@@ -1535,7 +1534,7 @@ namespace BALL
 			}
 			
 			/// use only those features that do not have identical values for all compounds
-			SortedList<int> features_to_use;
+			std::multiset<int> features_to_use;
 			for(uint i=0; i<descriptor_matrix_.size();i++) // descriptors
 			{
 				bool identical_values=1;
@@ -1549,15 +1548,15 @@ namespace BALL
 				}
 				if(!identical_values)
 				{
-					features_to_use.push_back(i);
+					features_to_use.insert(i);
 				}
 			}
 			/// check remaining features for correlaton to each other !
-			features_to_use.front();
-			while(features_to_use.hasNext())
+			std::multiset<int>::iterator f_it = features_to_use.begin();
+			for(; f_it != features_to_use.end(); ++f_it)
 			{
 				list<pair<uint,String> > similar_descriptor_IDs;
-				getSimilarDescriptors(features_to_use.next(),feature_cor_threshold,similar_descriptor_IDs);
+				getSimilarDescriptors(*f_it,feature_cor_threshold,similar_descriptor_IDs);
 				for(list<pair<uint,String> >::iterator it=similar_descriptor_IDs.begin(); it!=similar_descriptor_IDs.end(); it++)
 				{
 					features_to_use.erase(it->first);
@@ -1578,18 +1577,18 @@ namespace BALL
 				
 			double abs_cor_threshold = abs(compound_cor_threshold);
 			bool discrete_response = checkforDiscreteY();
-			SortedList<int> to_be_deleted;
+			std::multiset<int> to_be_deleted;
 			
 			/// find highly correlated compounds
 			for(uint i=0; i<descriptor_matrix_[0].size(); i++)
 			{	
-				if(to_be_deleted.contains(i)) continue;
+				if(to_be_deleted.find(i) != to_be_deleted.end()) continue;
 				int no=1;
 				
 				for(uint j=0; j<descriptor_matrix_[0].size(); j++)
 				{
 					if(i==j) continue;
-					if(to_be_deleted.contains(j)) continue;
+					if(to_be_deleted.find(j) != to_be_deleted.end()) continue;
 					
 					double covar = Statistics::getRowCovariance(descriptor_matrix_,i,j, mean[i],mean[j],&features_to_use);
 					

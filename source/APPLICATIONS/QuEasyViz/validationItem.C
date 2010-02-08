@@ -27,6 +27,7 @@
 #include <QtGui/QDrag>
 #include <QtCore/QMimeData>
 
+#include <BALL/MATHS/LINALG/matrix.h>
 
 using namespace BALL::QSAR;
 using namespace BALL::Exception;
@@ -326,8 +327,11 @@ namespace BALL
 				
 				// calculate&display average stddev
 				double mean_stddev=0;
-				uint rows=coeff_stddev_.getRowCount();
-				uint cols=coeff_stddev_.getColumnCount();
+				Size rows=coeff_stddev_.getRowCount();
+				Size cols=coeff_stddev_.getColumnCount();
+
+				double epsilon = std::numeric_limits<double>::epsilon();
+
 				if(training_result->getColumnCount()==cols && training_result->getRowCount()==rows)
 				{
 					for(uint i=1; i<=rows;i++) // for each feature
@@ -337,7 +341,7 @@ namespace BALL
 							double t_ij = (*training_result)(i,j);
 							double s_ij = coeff_stddev_(i,j);
 							
-							if(abs(t_ij)>Matrix<double>::MACHINE_EPSILON && abs(s_ij)>Matrix<double>::MACHINE_EPSILON)
+							if(abs(t_ij) > epsilon && abs(s_ij) > epsilon)
 							{
 								cout<<s_ij/t_ij;
 								mean_stddev += abs(s_ij/t_ij);

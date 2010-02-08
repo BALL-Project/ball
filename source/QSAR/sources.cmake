@@ -45,7 +45,6 @@ SET(SOURCES_LIST
 	simpleBase.C
 	simpleDescriptors.C
 	snBModel.C
-	sortedList.C
 	statistics.C
 	surfaceBase.C
 	surfaceDescriptors.C

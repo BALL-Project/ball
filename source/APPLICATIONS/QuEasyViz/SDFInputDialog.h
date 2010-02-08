@@ -55,7 +55,7 @@ namespace BALL
 		
 			/** returns the activity numbers
 			*/ 
-			BALL::QSAR::SortedList<int> numbers();
+			std::multiset<int> numbers();
 		
 			bool centerDescriptorValues();
 			bool centerResponseValues();
@@ -74,7 +74,7 @@ namespace BALL
 			QCheckBox* center_descriptor_values_;
 			QCheckBox* center_response_values_;
 			QCheckBox* class_names_checkbox_;
-			BALL::QSAR::SortedList<int> numbers_;
+			std::multiset<int> numbers_;
 			bool input_ok_;
 			SDFInputDataItem* input_item_;
 			vector<String>* property_names_;

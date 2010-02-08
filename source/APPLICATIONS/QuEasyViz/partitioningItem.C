@@ -47,14 +47,14 @@ namespace BALL
 			
 			if(ID==-1) // if this item is _not_ been restored from an archive (i.e. no ID was set for this item)
 			{
-				if(!input->partitioner_IDs_.empty()) id_=input->partitioner_IDs_.back()+1;
+				if(!input->partitioner_IDs_.empty()) id_=(*(input->partitioner_IDs_.end()--))+1;
 				else id_=0;
 			}
 			else
 			{
 				id_ = ID;
 			}
-			input->partitioner_IDs_.push_back(id_);
+			input->partitioner_IDs_.insert(id_);
 		}
 
 

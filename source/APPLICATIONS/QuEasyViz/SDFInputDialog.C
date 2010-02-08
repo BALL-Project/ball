@@ -173,7 +173,7 @@ namespace BALL
 			input_item_->setNonNumericClassNames(class_names_checkbox_->isChecked());
 		}
 
-		SortedList<int> SDFInputDialog::numbers()
+		std::multiset<int> SDFInputDialog::numbers()
 		{
 			return numbers_;
 		}

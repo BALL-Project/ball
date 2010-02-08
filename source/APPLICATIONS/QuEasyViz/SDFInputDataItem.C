@@ -39,7 +39,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		SDFInputDataItem::SDFInputDataItem(QString filename,SortedList<int> act, bool cdv, bool crv, DataItemView* view)
+		SDFInputDataItem::SDFInputDataItem(QString filename,std::multiset<int> act, bool cdv, bool crv, DataItemView* view)
 		 : InputDataItem(filename, cdv, crv, view)
 		{
 			//set pixmap
@@ -159,14 +159,14 @@ namespace BALL
 			return discrete_y_;
 		}
 
-		SortedList<int> SDFInputDataItem::activityValues()
+		std::multiset<int> SDFInputDataItem::activityValues()
 		{
 			return activity_values_;
 		}
 
-		void SDFInputDataItem::setActivityValues(SortedList<int> act)
+		void SDFInputDataItem::setActivityValues(std::multiset<int> act)
 		{
-			activity_values_.assign(act.begin(), act.end());
+			activity_values_ = act;
 		}
 
 

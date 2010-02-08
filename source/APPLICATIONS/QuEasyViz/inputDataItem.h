@@ -108,7 +108,7 @@ namespace BALL
 				bool nonnumeric_class_names_;
 				
 				/** the IDs of PartitioningItems that are connected to this item */
-				BALL::QSAR::SortedList<int> partitioner_IDs_;
+				std::multiset<int> partitioner_IDs_;
 				
 				InputPlotter* input_plotter_;
 				

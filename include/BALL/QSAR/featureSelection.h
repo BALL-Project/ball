@@ -38,9 +38,7 @@
 #include <BALL/QSAR/linearModel.h>
 #endif
 
-#ifndef SORTEDLIST
-#include <BALL/QSAR/sortedList.h>
-#endif
+#include <set>
 
 namespace BALL 
 {
@@ -120,7 +118,7 @@ namespace BALL
 				/** @name Accessors
 				 */
 				//@{
-				void updateWeights(SortedList<unsigned int>& oldDescIDs, SortedList<unsigned int>& newDescIDs, Vector<double>& oldWeights);
+				void updateWeights(std::multiset<unsigned int>& oldDescIDs, std::multiset<unsigned int>& newDescIDs, Vector<double>& oldWeights);
 				//@}
 				
 				
@@ -129,7 +127,7 @@ namespace BALL
 				//@{
 				/** searches for empty or irrelevant descriptors and returns a sorted list containing their IDs.
 				\n If more than one feature selection method is applied, all descriptors that have not been selected by the previous method are considered to be irrelevant.*/
-				SortedList<unsigned int>* findIrrelevantDescriptors();
+				std::multiset<unsigned int>* findIrrelevantDescriptors();
 				
 				/** pointer to the model, for which feature selection is to be done */
 				Model* model_;

@@ -24,6 +24,7 @@
 //
 
 #include <BALL/QSAR/logitModel.h>
+#include <BALL/MATHS/LINALG/matrixInverter.h>
 
 namespace BALL
 {
@@ -82,7 +83,10 @@ namespace BALL
 					{
 						p(i) = Y_(c,i)-p(i);
 					}
-					beta += xwx.i()*descriptor_matrix_.t()*p;
+					MatrixInverter<double, StandardTraits> inverter(xwx);
+					inverter.computeInverse();
+
+					beta += inverter.getInverse()*descriptor_matrix_.t()*p;
 					//beta = xwx.i()*descriptor_matrix_.t()*W*(descriptor_matrix_*beta+W.i()*(Y_.Column(c)-p));
 					
 					if (Statistics::euclDistance(beta,beta_old)/Statistics::euclNorm(beta)<0.01) 
@@ -172,10 +176,10 @@ namespace BALL
 			
 			if(!descriptor_IDs_.empty())  /// write descriptors and information about their transformation
 			{
-				descriptor_IDs_.front();
-				for(int i=0; i<training_result_.Nrows();i++)
+				std::multiset<unsigned int>::iterator d_it = descriptor_IDs_.begin();
+				for(int i=0; i<training_result_.Nrows();i++, ++d_it)
 				{
-					out<<String(descriptor_IDs_.next())<<"\t"<<descriptor_names_[i]<<"\t";
+					out<<String(*d_it)<<"\t"<<descriptor_names_[i]<<"\t";
 				
 					for(int j=1; j<=training_result_.Ncols();j++) 
 					{
@@ -287,7 +291,7 @@ namespace BALL
 				getline(input,line);
 				if(line==""){break;}
 				unsigned int id = line.getField(0,"\t").toInt();
-				descriptor_IDs_.push_back(id);
+				descriptor_IDs_.insert(id);
 				descriptor_names_.push_back(line.getField(1,"\t"));
 				int j=2;
 				for(; j<2+no_y; j++)

@@ -25,6 +25,7 @@
 
 #include <BALL/QSAR/kplsModel.h>
 #include <BALL/QSAR/mlrModel.h>
+#include <BALL/MATHS/LINALG/matrixInverter.h>
 
 namespace BALL
 {
@@ -179,8 +180,10 @@ namespace BALL
 		// 		I*=0.001;
 		// 		loadings_ = loadings_*(P.t()*loadings_+I).i();
 		// 	}
-			
-			loadings_ = loadings_*(P.t()*loadings_).pseudoInverse();
+			MatrixInverter<double, StandardTraits> inverter(P.t()*loadings_);
+			inverter.computePseudoInverse();
+
+			loadings_ = loadings_*inverter.getPseudoInverse();
 			
 			training_result_=loadings_*weights_.t();
 			

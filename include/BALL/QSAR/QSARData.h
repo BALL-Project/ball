@@ -34,6 +34,7 @@
 #include <BALL/FORMAT/MOLFile.h>
 #include <vector>
 #include <list>
+#include <set>
 #include <math.h>
 #include <sstream>
 #include <fstream>
@@ -45,10 +46,6 @@
 #include <BALL/QSAR/surfaceDescriptors.h>
 #include <BALL/COMMON/exception.h>
 #include <string.h>
-
-#ifndef SORTEDLIST
-#include <BALL/QSAR/sortedList.h>
-#endif
 
 #ifndef STATISTICS
 #include <BALL/QSAR/statistics.h>
@@ -113,7 +110,7 @@ namespace BALL
 				@param file the sd-file containing the input 
 				@param useExDesc if set to 1, descriptors read from the sd-file will be used in addition to those calculated by BALL internally 
 				@param append if set to 1, the substances read from the sd-file will be appended as new lines to the current descriptor_matrix */
-				void readSDFile(const char* file, SortedList<int>& act, bool useExDesc=1, bool append=0, bool translate_class_labels=0);
+				void readSDFile(const char* file, std::multiset<int>& act, bool useExDesc=1, bool append=0, bool translate_class_labels=0);
 	
 				/** 
 				Calculates descriptors for one molecule and saves them into one new line of descriptor_matrix 
@@ -187,7 +184,7 @@ namespace BALL
 				
 				
 				/** checks whether the response variables of a specified file contain only discrete values. */
-				bool checkforDiscreteY(const char* file, SortedList<int>& activity_IDs) const;
+				bool checkforDiscreteY(const char* file, std::multiset<int>& activity_IDs) const;
 				
 				/** allows to set the data-folder neccessary for computation of descriptors without using BALL_DATA_PATH enviroment variable, which is useful for standalone applications */
 				void setDataFolder(const char* folder);
@@ -210,20 +207,20 @@ namespace BALL
 				 */
 				//@{
 				/** writes the names of all external descriptors into column_names */
-				void setDescriptorNames(const Molecule& m, SortedList<int>& activity_IDs, bool useExDesc=1);
+				void setDescriptorNames(const Molecule& m, std::multiset<int>& activity_IDs, bool useExDesc=1);
 				
 				/** removes columns of invalid descriptor from descriptor_matrix 
 				@param invalidDescriptors list containing the IDs of the columns to be deleted */
-				void removeInvalidDescriptors(SortedList<int>& invalidDescriptors);
+				void removeInvalidDescriptors(std::multiset<int>& invalidDescriptors);
 				
-				void removeInvalidSubstances(SortedList<int>& inv);
+				void removeInvalidSubstances(std::multiset<int>& inv);
 				
 				/** reconstructs a vector based matrix from a file */
 				void readMatrix(VMatrix& mat, ifstream& in, char seperator, unsigned int lines, unsigned int col);
 				
 				/** checks whether the given list of activity IDs contains any values <0 or values that are larger than the number of properties in the current input file.\n
 				If such values are found, an Exception of type InvalidActivityID is thrown. */
-				void checkActivityIDs(SortedList<int>& act, int no_properties);
+				void checkActivityIDs(std::multiset<int>& act, int no_properties);
 				
 				/** appends compound no <s> taken from the given source to the data of this object.
 				@param backtransformation if set to true, all features of the compound are back-transformed after adding them to this object. */
@@ -255,9 +252,9 @@ namespace BALL
 				vector<string> substance_names_;
 	
 				/** contains the numbers of external descriptors for which invalid values (e.g. strings instead numerical values) were encountered in some molecules */
-				SortedList<int> invalidDescriptors_;
+				std::multiset<int> invalidDescriptors_;
 				
-				SortedList<int> invalidSubstances_;
+				std::multiset<int> invalidSubstances_;
 				
 				String data_folder_;
 				

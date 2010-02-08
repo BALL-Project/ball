@@ -33,8 +33,8 @@
 #include <modelConfigurationDialog.h>
 #include <connectionManager.h>
 #include <mainWindow.h>
-#include <BALL/QSAR/sortedList.h>
 
+#include <set>
 
 namespace BALL
 {
@@ -170,7 +170,7 @@ namespace BALL
 			
 			private:
 				const vector<string>* descriptor_names_;
-				BALL::QSAR::SortedList<unsigned int>* descriptor_ids_;
+				std::multiset<unsigned int>* descriptor_ids_;
 				
 				QTableWidget* table_;
 				QTextEdit* descriptor_explanation_;

@@ -24,6 +24,7 @@
 // 
 
 #include <BALL/QSAR/mlrModel.h>
+#include <BALL/MATHS/LINALG/matrixInverter.h>
 
 namespace BALL
 {
@@ -61,7 +62,10 @@ namespace BALL
 				
 			try
 			{
-				training_result_ = m.i()*descriptor_matrix_.t()*Y_;
+				MatrixInverter<double, StandardTraits> inverter(m);
+				inverter.computeInverse();
+
+				training_result_ = inverter.getInverse()*descriptor_matrix_.t()*Y_;
 			}
 			catch(BALL::Exception::GeneralException e)
 			{

@@ -23,8 +23,8 @@
 
 #include <istream>
 #include <BALL/DATATYPE/string.h>
-#include <BALL/QSAR/sortedList.h>
-#include <istream> 
+#include <istream>
+#include <set>
  
 namespace BALL
 {
@@ -35,7 +35,7 @@ namespace BALL
 			InputConfiguration();
 			
 			String sd_file;
-			SortedList<int> activities;
+			std::multiset<int> activities;
 			bool read_sd_descriptors;
 			bool center_data;
 			bool center_y;

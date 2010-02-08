@@ -45,7 +45,7 @@ namespace BALL
 
 		void ClassificationModel::readLabels()
 		{
-			SortedList<int> l;
+			std::multiset<int> l;
 			for(int i=1; i<=Y_.Nrows();i++)
 			{
 				for(int j=1;j<=Y_.Ncols();j++)
@@ -55,7 +55,7 @@ namespace BALL
 					{
 						throw Exception::WrongDataType(__FILE__,__LINE__,"Some class labels are not discrete values!! Creation of a classification model is therefore not possible!");
 					}
-					if(!l.contains(label))  // for classification experiments, Y will contain only ints
+					if(l.find(label) == l.end())  // for classification experiments, Y will contain only ints
 					{
 						l.insert(label);
 					}
@@ -63,10 +63,10 @@ namespace BALL
 			}
 			
 			labels_.clear();
-			l.front();
-			while(l.hasNext())
+			std::multiset<int>::iterator l_it = l.begin();
+			for (; l_it != l.end(); ++l_it)
 			{
-				labels_.push_back(l.next());
+				labels_.push_back(*l_it);
 			}
 		}
 

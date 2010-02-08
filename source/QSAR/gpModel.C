@@ -24,6 +24,7 @@
 // 
 
 #include <BALL/QSAR/gpModel.h>
+#include <BALL/MATHS/LINALG/matrixInverter.h>
 
 namespace BALL
 {
@@ -75,7 +76,10 @@ namespace BALL
 				I(i,i)=1;
 			}
 			
-			L_ = K_.pseudoInverse();  // dim: nxn
+			MatrixInverter<double, StandardTraits> inverter(K_);
+			inverter.computePseudoInverse();
+
+			L_ = inverter.getPseudoInverse();  // dim: nxn
 
 			training_result_ = L_*Y_; // B: one coefficient for each substance; dim: nxc
 			

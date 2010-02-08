@@ -142,13 +142,13 @@ namespace BALL
 		//---------------- methods for calculating mean, covar, var of matrix-ROWS  ----------
 
 
-		double Statistics::getRowCovariance(const vector<vector<double> >& v, int row1, int row2, double mean1, double mean2, SortedList<int>* features_to_use)
+		double Statistics::getRowCovariance(const vector<vector<double> >& v, int row1, int row2, double mean1, double mean2, std::multiset<int>* features_to_use)
 		{
 			if (mean1==-1) {mean1=getRowMean(v,row1,features_to_use);}
 			if (mean2==-1) {mean2=getRowMean(v,row2,features_to_use);}
 			double sum_of_squares=0;
 			int size=v.size();
-			SortedList<int>::iterator it;
+			std::multiset<int>::iterator it;
 			if(features_to_use!=0) 
 			{
 				it=features_to_use->begin();
@@ -164,11 +164,11 @@ namespace BALL
 			return sum_of_squares/(size-1);
 		}
 
-		double Statistics::getRowMean(const vector<vector<double> >& v, int row, SortedList<int>* features_to_use)
+		double Statistics::getRowMean(const vector<vector<double> >& v, int row, std::multiset<int>* features_to_use)
 		{
 			double sum=0;
 			int size=v.size();
-			SortedList<int>::iterator it;
+			std::multiset<int>::iterator it;
 			if(features_to_use!=0) 
 			{
 				it=features_to_use->begin();
@@ -184,12 +184,12 @@ namespace BALL
 			return sum/size;
 		}
 
-		double Statistics::getRowVariance(const vector<vector<double> >& v, int row, double mean, SortedList<int>* features_to_use)
+		double Statistics::getRowVariance(const vector<vector<double> >& v, int row, double mean, std::multiset<int>* features_to_use)
 		{
 			if (mean==-1) {	mean=getRowMean(v,row,features_to_use); }
 			double sum_of_squares=0;
 			int size=v.size();
-			SortedList<int>::iterator it;
+			std::multiset<int>::iterator it;
 			if(features_to_use!=0) 
 			{
 				it=features_to_use->begin();
@@ -205,7 +205,7 @@ namespace BALL
 			return sum_of_squares/(size-1);
 		}
 
-		double Statistics::getRowStddev(const vector<vector<double> >& v, int row, double mean, SortedList<int>* features_to_use)
+		double Statistics::getRowStddev(const vector<vector<double> >& v, int row, double mean, std::multiset<int>* features_to_use)
 		{
 			double var = getRowVariance(v,row,mean,features_to_use);
 			return sqrt(var);

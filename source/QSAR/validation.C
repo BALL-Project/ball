@@ -54,7 +54,7 @@ namespace BALL
 			{
 				fs=1;
 			}
-			list<unsigned int>::iterator it=model_->descriptor_IDs_.begin();
+			std::multiset<unsigned int>::iterator it=model_->descriptor_IDs_.begin();
 
 			int t=0; // index in line of training data
 			

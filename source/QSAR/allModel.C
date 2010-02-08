@@ -24,6 +24,7 @@
 //
 
 #include <BALL/QSAR/allModel.h>
+#include <BALL/MATHS/LINALG/matrixInverter.h>
 
 namespace BALL
 {
@@ -101,7 +102,11 @@ namespace BALL
 			Matrix<double> im; im.setToIdentity(XX.Nrows());
 			im*=lambda_;
 			XX+=im;
-			Matrix<double> train = XX.i();
+
+			MatrixInverter<double, StandardTraits> inverter(XX);
+			inverter.computeInverse();
+
+			Matrix<double> train = inverter.getInverse();
 			
 			train*=XY;
 			

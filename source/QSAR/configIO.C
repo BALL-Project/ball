@@ -112,7 +112,7 @@ namespace BALL
 					uint no=act.countFields(" ");
 					for(uint i=0; i<no;i++)
 					{
-						conf.activities.push_back(act.getField(i).toInt());
+						conf.activities.insert(act.getField(i).toInt());
 					}
 				}
 				else if(line.hasPrefix("center_data"))

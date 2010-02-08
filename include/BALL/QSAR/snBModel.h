@@ -30,10 +30,6 @@
 #include <BALL/QSAR/statistics.h>
 #endif
 
-#ifndef SORTEDLIST
-#include <BALL/QSAR/sortedList.h>
-#endif
-
 #ifndef BAYESMODEL
 #include <BALL/QSAR/bayesModel.h>
 #endif
