@@ -166,9 +166,9 @@ int main(int argc, char* argv[])
 			else break;
 		}
 		if(!line.hasPrefix("[FeatureSelector]")) break; // there are no (more) FS-sections!
-		ConfigIO::putbackLine(&in,line,NULL,NULL);
+		ConfigIO::putbackLine(&in,line);
 		
-		startFeatureSelection(in);
+		startFeatureSelection(in, NULL, NULL);
 	}
 }
 #endif

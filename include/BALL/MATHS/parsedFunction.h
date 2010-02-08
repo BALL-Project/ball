@@ -92,8 +92,8 @@ namespace BALL
 	template class BALL_EXPORT ParsedFunction<double>;
 
 	template <> ParsedFunction<float>::~ParsedFunction();
-	template <> double ParsedFunction<float>::operator() (float);
-	template <> double ParsedFunction<double>::operator() (double);
+	template <> double ParsedFunction<float>::operator() (float) throw(Exception::ParseError);
+	template <> double ParsedFunction<double>::operator() (double) throw(Exception::ParseError);
 
 
 	template <typename arg>

@@ -1811,7 +1811,7 @@ namespace BALL
 		}
 
 
-		BALL::String BALL::VIEW::valueToString(double value)
+		BALL::String valueToString(double value)
 		{
 			BALL::String t(value);
 			int index = (uint)t.find_last_not_of("0");

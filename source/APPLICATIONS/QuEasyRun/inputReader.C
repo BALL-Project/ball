@@ -119,7 +119,7 @@ int main(int argc, char* argv[])
 		if(!line.hasPrefix("[InputReader]")) break; // there are no (more) input-sections!
 		ConfigIO::putbackLine(&in,line);
 		
-		startInputReading(in,argv[0]);
+		startInputReading(in,argv[0], NULL, NULL);
 	}
 }
 #endif

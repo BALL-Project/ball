@@ -510,6 +510,9 @@ IF (BALL_BUILD_QUEASY)
 	
 	SET(QWT_LIBRARIES Qwt5-Qt4-LIBRARY)
 
+	## add QuEasyRun target
+	ADD_SUBDIRECTORY(source/APPLICATIONS/QuEasyRun)
+
 	## add QuEasyViz target
 	ADD_SUBDIRECTORY(source/APPLICATIONS/QuEasyViz)
 ENDIF()

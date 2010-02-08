@@ -883,9 +883,4 @@ namespace BALL {
 
 ////////////////////////////////////////////////////////////
 
-template class Vector<float>;
-template class Vector<double>;
-template class Vector<ComplexFloat>;
-template class Vector<ComplexDouble>;
-
 } // namespace BALL

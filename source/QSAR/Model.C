@@ -673,7 +673,7 @@ namespace BALL
 		}
 
 
-		Model* QSAR::createNewModelFromFile(String model_file, const QSARData& q)
+		Model* createNewModelFromFile(String model_file, const QSARData& q)
 		{
 			Registry reg;
 			Model* m;

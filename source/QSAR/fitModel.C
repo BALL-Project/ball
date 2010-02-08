@@ -29,7 +29,7 @@
 namespace BALL
 {
 	namespace QSAR
-			{
+	{
 
 		FitModel::FitModel(const QSARData& q) : NonLinearModel(q) 
 		{
@@ -51,7 +51,7 @@ namespace BALL
 		}
 
 
-		BALL::Vector<double> FitModel::predict(const vector<double>& substance, bool transform)
+		Vector<double> FitModel::predict(const vector<double>& substance, bool transform)
 		{
 			if(training_result_.Ncols()==0)
 			{
@@ -198,13 +198,13 @@ namespace BALL
 		}
 
 
-		double BALL::QSAR::getFunctionValue(double X, void* /*params*/)
+		double getFunctionValue(double X, void* /*params*/)
 		{
 			return (*f)(X);	
 		}
 
 
-		int BALL::QSAR::setF(const gsl_vector* x, void* /*params*/, gsl_vector* f)
+		int setF(const gsl_vector* x, void* /*params*/, gsl_vector* f)
 		{
 			ParsedFunction<float> f0 = (*equation);
 			f0(0);
@@ -235,7 +235,7 @@ namespace BALL
 		}
 
 
-		int BALL::QSAR::setDf(const gsl_vector * x, void* /*params*/, gsl_matrix * df)
+		int setDf(const gsl_vector * x, void* /*params*/, gsl_matrix * df)
 		{
 			ParsedFunction<float> f0 = (*equation);
 			f0(0);
@@ -336,7 +336,7 @@ namespace BALL
 
 
 		gsl_multifit_function_fdf
-		BALL::QSAR::make_fdf (int (* f) (const gsl_vector *, void *, gsl_vector *),
+		make_fdf (int (* f) (const gsl_vector *, void *, gsl_vector *),
 							int (* df) (const gsl_vector *, void *, gsl_matrix *),
 							int (* fdf) (const gsl_vector *, void *, gsl_vector *, gsl_matrix *),
 							size_t n,
@@ -354,7 +354,7 @@ namespace BALL
 
 
 
-		int BALL::QSAR::setFdf(const gsl_vector * x, void *params, gsl_vector * f, gsl_matrix * df)
+		int setFdf(const gsl_vector * x, void *params, gsl_vector * f, gsl_matrix * df)
 		{	
 			BALL::QSAR::setF(x, params, f);
 			BALL::QSAR::setDf(x, params, df);

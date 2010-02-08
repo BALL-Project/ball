@@ -40,8 +40,8 @@ namespace BALL {
 	template <class valuetype, class mtraits>
 	bool MatrixInverter<valuetype, mtraits>::computeInverse()
 	{
-		typedef SVDSolver<valuetype, mtraits>::SingularValueType  SingularValueType;
-		typedef SVDSolver<valuetype, mtraits>::SingularVectorType SingularVectorType;
+		typedef typename SVDSolver<valuetype, mtraits>::SingularValueType  SingularValueType;
+		typedef typename SVDSolver<valuetype, mtraits>::SingularVectorType SingularVectorType;
 
 		if (!matrix_)
 		{
@@ -118,8 +118,8 @@ namespace BALL {
 	template <class valuetype, class mtraits>
 	bool MatrixInverter<valuetype, mtraits>::computePseudoInverse()
 	{
-		typedef SVDSolver<valuetype, mtraits>::SingularValueType  SingularValueType;
-		typedef SVDSolver<valuetype, mtraits>::SingularVectorType SingularVectorType;
+		typedef typename SVDSolver<valuetype, mtraits>::SingularValueType  SingularValueType;
+		typedef typename SVDSolver<valuetype, mtraits>::SingularVectorType SingularVectorType;
 
 		if (!matrix_)
 		{

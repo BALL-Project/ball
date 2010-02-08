@@ -2,13 +2,13 @@ PROJECT(QueEasyRun)
 
 ### list all filenames of the directory here ###
 SET(SOURCES_LIST
-	featureSelector.C
-	inputPartitioner.C
-	inputReader.C
+#	featureSelector.C
+#	inputPartitioner.C
+#	inputReader.C
 	main.C
-	modelCreator.C
-	predictor.C
-	validator.C
+#	modelCreator.C
+#	predictor.C
+#	validator.C
 )
 
 IF (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -20,6 +20,8 @@ IF (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 ENDIF()
 
 INCLUDE_DIRECTORIES(${PROJECT_BINARY_DIR})
+
+ADD_DEFINITIONS(-DEXT_MAIN)
 
 ADD_EXECUTABLE(QuEasyRun
 	${SOURCES_LIST}
