@@ -155,23 +155,22 @@ namespace BALL
 		// This is required because otherwise, an empty line on the end of a file will
 		// lead our parser to try and read another MOLFile, which won't succeed.
 		Index line_number = getLineNumber();
+		int no_chars = 0;
 		if (good())
 		{
 			readLine();
+			no_chars += getLine().size()+1; // +1 for new-line character
 			while(good() && (getLine().trim() == ""))
 			{
 				readLine();
+				no_chars += getLine().size()+1;
 			}
 		}
 
 		// if the file is still good, we read too far.
 		if (good())
 		{
-			unget(); // putback line-break
-
-			// put the last line, i.e. the non-empty line, back
-			int no_chars = getLine().size();
-			for(uint i=0;i<no_chars;i++)
+			for(Position i=0; i<no_chars; i++)
 			{
 				unget();
 			}
