@@ -12,13 +12,15 @@ namespace BALL {
 
 #include <BALL/MATHS/LINALG/vector.ih>
 
-namespace BALL {
-	// explicit instantiation to save the compiler some work (and to *make* it work on Windows)
-	template class BALL_EXPORT Vector<float>;
-	template class BALL_EXPORT Vector<double>;
-	template class BALL_EXPORT Vector<ComplexFloat>;
-	template class BALL_EXPORT Vector<ComplexDouble>;
-}
+#ifdef BALL_OS_WINDOWS
+	namespace BALL {
+		// explicit instantiation to save the compiler some work (and to *make* it work on Windows)
+		template class BALL_EXPORT Vector<float>;
+		template class BALL_EXPORT Vector<double>;
+		template class BALL_EXPORT Vector<ComplexFloat>;
+		template class BALL_EXPORT Vector<ComplexDouble>;
+	}
+#endif
 
 #include <BALL/MATHS/LINALG/matrix.ih>	
 
