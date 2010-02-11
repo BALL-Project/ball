@@ -94,7 +94,7 @@ namespace BALL
 		String description = "Shortcut|Display|Toggle_Fullscreen";
 		insertMenuEntry(MainControl::DISPLAY, "Toggle Fullscreen", this, 
 										SLOT(toggleFullScreen()), description,
-										QKeySequence(tr("Alt+X", description.c_str())));
+										QKeySequence("Alt+X"));
 
 		insertPopupMenuSeparator(DISPLAY);
 		initPopupMenu(DISPLAY_VIEWPOINT);
@@ -194,7 +194,7 @@ namespace BALL
 		description = "Shortcut|MolecularMechanics|Abort_Calculation";
 		stop_simulation_action_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Abort Calculation", this, 
 																							SLOT(stopSimulation()), description,
-																							QKeySequence(tr("Alt+C", description.c_str())));
+																							QKeySequence("Alt+C"));
 		stop_simulation_action_->setEnabled(false);
 		insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
 		setMenuHint(stop_simulation_action_, "Abort a running simulation");

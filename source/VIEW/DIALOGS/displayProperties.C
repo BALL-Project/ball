@@ -123,7 +123,7 @@ void DisplayProperties::initializeWidget(MainControl& main_control)
 	String description = "Shortcut|Display|Display_Properties";
 	id_ = insertMenuEntry(MainControl::DISPLAY, "D&isplay Properties", this, 
 																		 SLOT(show()), description,
-																		 QKeySequence(tr("Ctrl+I", description.c_str())));
+																		 QKeySequence("Ctrl+I"));
 
 	setMenuHint("Create a new representation or modify an existing one");
 	setMenuHelp("displayProperties.html");

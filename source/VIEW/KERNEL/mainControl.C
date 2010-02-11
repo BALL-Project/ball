@@ -488,7 +488,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			String description = "Shortcut|File|Quit";
 			insertMenuEntry(MainControl::FILE, "&Quit", qApp, 
 											SLOT(quit()), description,
-											QKeySequence(tr("Ctrl+Q", description.c_str())));
+											QKeySequence("Ctrl+Q"));
 
 			// if the preferences dialog has any tabs then show it
 			if (preferences_dialog_->hasPages())
@@ -498,7 +498,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				String description = "Shortcut|Edit|Preferences";
 				preferences_action_ = insertMenuEntry(MainControl::EDIT, "Preferences", preferences_dialog_, 
 																							SLOT(show()), description,
-																							QKeySequence(tr("Ctrl+Z", description.c_str())));
+																							QKeySequence("Ctrl+Z"));
 
 				preferences_action_->setIcon(IconLoader::instance().getIcon("categories/preferences"));
 			}

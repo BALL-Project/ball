@@ -1467,13 +1467,13 @@ namespace BALL
 
 			String description("Shortcut|Display|Viewpoint|Show_Viewpoint");
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, 
-					SLOT(showViewPoint_()), description, QKeySequence(tr("Ctrl+W", description.c_str()))); 
+					SLOT(showViewPoint_()), description, QKeySequence("Ctrl+W"));
 			setMenuHint("Print the coordinates of the current viewpoint");
 
 
 			description = "Shortcut|Display|Viewpoint|Set_Viewpoint";
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, 
-					SLOT(setViewPoint_()), description, QKeySequence(tr("Ctrl+N", description.c_str())));
+					SLOT(setViewPoint_()), description, QKeySequence("Ctrl+N"));
 			setMenuHint("Move the viewpoint to the given coordinates");
 
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, 
@@ -1486,13 +1486,13 @@ namespace BALL
 
 			description = "Shortcut|File|Export|PNG";
 			QAction* screenshot_action = insertMenuEntry(MainControl::FILE_EXPORT, "PNG...", this, 
-					SLOT(showExportPNGDialog()), description, QKeySequence(tr("Alt+P", description.c_str())));
+					SLOT(showExportPNGDialog()), description, QKeySequence("Alt+P"));
 			setMenuHint("Export a PNG image file from the Scene");
 			setIcon("actions/screenshot", false);
 
 			description = "Shortcut|File|Export|POVRay";
 			insertMenuEntry(MainControl::FILE_EXPORT, "POVRa&y scene", this, 
-					SLOT(exportPOVRay()), description, QKeySequence(tr("Ctrl+Y", description.c_str())));
+					SLOT(exportPOVRay()), description, QKeySequence("Ctrl+Y"));
 			setIcon("mimetype/text-x-povray", false);
 			setMenuHint("tips.html#povray");
 
@@ -1505,7 +1505,7 @@ namespace BALL
 			description = "Shortcut|Display|Rotate_Mode";
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 			rotate_action_ = insertMenuEntry(MainControl::DISPLAY, "&Rotate Mode", this, 
-					SLOT(rotateMode_()), description, QKeySequence(tr("Ctrl+R", description.c_str())));
+					SLOT(rotateMode_()), description, QKeySequence("Ctrl+R"));
 
 			setMenuHint("Switch to rotate/zoom mode");
 			setMenuHelp("scene.html#rotate_mode");
@@ -1516,7 +1516,7 @@ namespace BALL
 
 			description = "Shortcut|Display|Picking_Mode";
 			picking_action_ = insertMenuEntry(MainControl::DISPLAY, "&Picking Mode", this, 
-					SLOT(pickingMode_()), description, QKeySequence(tr("Ctrl+P", description.c_str())));
+					SLOT(pickingMode_()), description, QKeySequence("Ctrl+P"));
 
 			setMenuHint("Switch to picking mode, e.g. to identify single atoms or groups");
 			setMenuHelp("scene.html#identify_atoms");

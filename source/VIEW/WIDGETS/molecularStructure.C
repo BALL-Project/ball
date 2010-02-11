@@ -73,7 +73,7 @@ namespace BALL
 			String description = "Shortcut|Display|Viewpoint|Focus_Camera";
 			center_camera_id_ = insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "&Focus Camera", this, 
 																												SLOT(centerCamera()), description,
-																												QKeySequence(tr("Ctrl+F", description.c_str())));
+																												QKeySequence("Ctrl+F"));
 			setMenuHint("Focus the camera on one or multiple objects.");
 			setIcon("actions/object-focus", true);
 
@@ -85,13 +85,13 @@ namespace BALL
 			description = "Shortcut|Build|Build_Peptide";
 			build_peptide_id_ = insertMenuEntry(MainControl::BUILD, "B&uild Peptide", this, 
 			                                    SLOT(buildPeptide()), description,
-			                                    QKeySequence(tr("Ctrl+Alt+U", description.c_str())));
+			                                    QKeySequence("Ctrl+Alt+U"));
 			setMenuHint("Build a peptide from selected amino acids.");
 
 			description = "Shortcut|Build|Build_Bonds";
 			build_bonds_id_ = insertMenuEntry(MainControl::BUILD, "&Build Bonds", this, 
 																				SLOT(buildBonds()), description,
-																				QKeySequence(tr("Ctrl+B", description.c_str())));
+																				QKeySequence("Ctrl+B"));
 			setMenuHint("Add missing bonds to a selected structure.");
 
 			description = "Shortcut|Build|Assign_Bond_Orders";
@@ -103,13 +103,13 @@ namespace BALL
 			description = "Shortcut|Build|Check_Structure";
 			check_structure_id_ = insertMenuEntry(MainControl::BUILD, "Chec&k Structure against FragmentDB", this, 
 																						SLOT(checkResidue()), description,
-																						QKeySequence(tr("Ctrl+K", description.c_str())));
+																						QKeySequence("Ctrl+K"));
 			setMenuHint("Check a structure against the fragment database.");
 		
 			description = "Shortcut|Build|Add_Hydrogens";
 			add_hydrogens_id_ = insertMenuEntry(MainControl::BUILD, "Add &Hydrogens", this, 
 																					SLOT(addHydrogens()), description,
-																					QKeySequence(tr("Ctrl+H", description.c_str())));
+																					QKeySequence("Ctrl+H"));
 			setMenuHint("Add missing atoms to a selected structure by using the fragment database.");
 			
 			// MOLECULARMECHANICS Menu -------------------------------------------------------------------
@@ -117,7 +117,7 @@ namespace BALL
 			description = "Shortcut|MolecularMechanics|Single_Point_Calculation";
 			energy_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Single Point Calculation", this, 
 																	 SLOT(calculateForceFieldEnergy()), description,
-																	 QKeySequence(tr("Ctrl+A", description.c_str())));
+																	 QKeySequence("Ctrl+A"));
 			setMenuHint("Calculate the energy of a System with the selected force field.");
 			setMenuHelp("mm.html#single_point");
 				
@@ -130,7 +130,7 @@ namespace BALL
 			description = "Shortcut|MolecularMechanics|Molecular_Dynamics";
 			mdsimulation_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Molecular &Dynamics", this, 
 																				 SLOT(MDSimulation()), description,
-																				 QKeySequence(tr("Ctrl+M", description.c_str())));
+																				 QKeySequence("Ctrl+M"));
 			setMenuHint("To perform a MD simulation , first select the molecular structures.");
 			setMenuHelp("mm.html#md");
 
@@ -176,7 +176,7 @@ namespace BALL
 			description = "Shortcut|Tools|Calculate_SecondaryStructure";
 			calculate_ss_id_ = insertMenuEntry(MainControl::TOOLS, "Calculate Sec&ondary Structure", this,
 																				 SLOT(calculateSecondaryStructure()), description,
-																				 QKeySequence(tr("Alt+O", description.c_str())));
+																				 QKeySequence("Alt+O"));
 			setMenuHint("Recalculate the secondary structure for a structure");
 
 //   			calculate_ramachandran_ = insertMenuEntry(MainControl::TOOLS, "Ramachandran Plot", this,
@@ -186,7 +186,7 @@ namespace BALL
 			description = "Shortcut|Tools|Calculate_HBonds";
 			calculate_hbonds_id_ = insertMenuEntry(MainControl::TOOLS, "Calculate H-B&onds", this, 
 																		SLOT(calculateHBonds()), description,
-																		QKeySequence(tr("Alt+N", description.c_str())));
+																		QKeySequence("Alt+N"));
 			setMenuHint("To assign H-bonds, one System has to be selected.");
 
 			description = "Shortcut|Tools|FDPB";

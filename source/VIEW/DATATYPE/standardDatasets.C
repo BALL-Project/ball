@@ -394,7 +394,7 @@ namespace BALL
 			description = "Shortcut|Tools|Grid|Render_Contour_Surface";
 			insertMenuEntry_(MainControl::TOOLS_GRID, "Render Contour S&urface", 
 											 SLOT(computeIsoContourSurface()), description,
-											 QKeySequence(tr("Ctrl+U", description.c_str())));
+											 QKeySequence("Ctrl+U"));
 			getDatasetControl()->setMenuHint("Calculate an isocontour surface from a 3D grid. The grid has to be loaded in the DatasetControl.");
 			getDatasetControl()->setMenuHelp("datasetControl.html#isocontour_surfaces");
 

@@ -120,7 +120,7 @@ namespace BALL
 					{
 						if (!shortcut_keys_.has(fields[1]))
 						{
-							action->setShortcut(QKeySequence(action->parent()->tr(fields[1].c_str(), fields[0].c_str())));
+							action->setShortcut(QKeySequence(fields[1].c_str()));
 							shortcut_keys_.insert(fields[1]);
 						}
 						else

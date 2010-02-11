@@ -175,7 +175,7 @@ namespace BALL
 			
 			String description = "Shortcut|Display|Edit_Mode";
 			edit_id_ = insertMenuEntry(MainControl::DISPLAY, "Edit Mode", this, 
-																 SLOT(editMode_()), description, QKeySequence(tr("Ctrl+E", description.c_str())));
+																 SLOT(editMode_()), description, QKeySequence("Ctrl+E"));
 			setMenuHint("Create and modify molecular structures");	
 			edit_id_->setToolTip("Switch to edit mode, e.g. draw your own molecule");
 
