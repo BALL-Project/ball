@@ -12,6 +12,9 @@
 #	include <GL/glew.h>
 #endif
 
+#include <QtCore/QLocale>
+#include <QtCore/QTranslator>
+
 #include <QtGui/qmessagebox.h>
 #include <QtGui/QSplashScreen>
 #include <QtOpenGL/qgl.h>
@@ -19,6 +22,8 @@
 #include "mainframe.h"
 #include <BALL/SYSTEM/path.h>
 #include <BALL/SYSTEM/directory.h>
+#include <BALL/FORMAT/INIFile.h>
+#include <BALL/SYSTEM/fileSystem.h>
 #include <BALL/COMMON/logStream.h>
 
 #include <iostream>
@@ -84,9 +89,38 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 		return -1;
 	}
 
-	// =============== testing if we can write in current directoy =====================
 	BALL::String home_dir = BALL::Directory::getUserHomeDir();
 
+	// =============== load translations =====================
+	BALL::INIFile f(home_dir + BALL::FileSystem::PATH_SEPARATOR + ".BALLView");
+	f.read();
+
+	if(f.hasEntry("GENERAL", "language")) {
+		QString str = f.getValue("GENERAL", "language").c_str();
+
+		if(!(str == "Default")) {
+			QString loc = "BALLView.";
+			if(str == "System") {
+				loc += QLocale::system().name();
+			} else {
+				loc += str;
+			}
+
+			BALL::Path p;
+			QStringList dpaths = QString(p.getDataPath().c_str()).split("\n");
+
+			QTranslator* translator = new QTranslator(&application);
+			foreach(QString str, dpaths) {
+				translator->load(loc, str + "BALLView/translations");
+				if(!translator->isEmpty()) {
+					QCoreApplication::installTranslator(translator);
+					break;
+				}
+			}
+		}
+	}
+
+	// =============== testing if we can write in current directoy =====================
 	if (home_dir == "")
 	{
 		try

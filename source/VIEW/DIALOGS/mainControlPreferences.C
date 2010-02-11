@@ -7,9 +7,13 @@
 #include <BALL/VIEW/DIALOGS/mainControlPreferences.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
-#include <QtGui/qcheckbox.h>
-#include <QtGui/qstylefactory.h>
-#include <QtGui/qfontdialog.h>
+#include <QtCore/QDir>
+
+#include <QtGui/QCheckBox>
+#include <QtGui/QStyleFactory>
+#include <QtGui/QFontDialog>
+
+#include <BALL/SYSTEM/path.h>
 
 namespace BALL
 {
@@ -24,6 +28,20 @@ MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name
 	setupUi(this);
 	setObjectName(name);
 	setINIFileSectionName("GENERAL");
+
+	Path p;
+	QStringList dpaths = QString(p.getDataPath().c_str()).split("\n");
+
+	foreach(QString str, dpaths) {
+		QDir dir(str + "BALLView/translations");
+		QStringList tList = dir.entryList(QStringList("BALLView.*.qm"));
+		foreach(QString entry, tList) {
+			entry.replace("BALLView.", "");
+			entry.replace(".qm", "");
+			languageComboBox_->addItem(entry);
+		}
+	}
+
 	style_box_->addItems(QStyleFactory::keys());
 	QString prefered_style = "Plastique";
 #ifdef BALL_OS_WINDOWS
@@ -39,6 +57,7 @@ MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name
 	setWidgetStackName("General");
 	registerWidgets_();
 	unregisterObject_(style_box_);
+	unregisterObject_(languageComboBox_);
 
 	connect( font_button, SIGNAL( clicked() ), this, SLOT( selectFont() ) );
 }
@@ -94,6 +113,7 @@ void MainControlPreferences::writePreferenceEntries(INIFile& inifile)
 {
 	PreferencesEntry::writePreferenceEntries(inifile);
 	inifile.insertValue(inifile_section_name_, "style", ascii(style_box_->currentText()));
+	inifile.insertValue(inifile_section_name_, "language", ascii(languageComboBox_->currentText()));
 }
 
 void MainControlPreferences::readPreferenceEntries(const INIFile& inifile)
@@ -106,6 +126,16 @@ void MainControlPreferences::readPreferenceEntries(const INIFile& inifile)
 		if (e == -1) return;
 
 		style_box_->setCurrentIndex(e);
+	}
+
+	if (inifile.hasEntry(inifile_section_name_, "language"))
+	{
+		String value = inifile.getValue(inifile_section_name_, "language");
+		int e = languageComboBox_->findText(value.c_str());
+		if (e == -1) return;
+
+		last_index_ = e;
+		languageComboBox_->setCurrentIndex(e);
 	}
 }
 

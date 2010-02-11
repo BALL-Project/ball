@@ -66,6 +66,14 @@ class BALL_VIEW_EXPORT MainControlPreferences
 	///
 	QFont getFont();
 
+	bool getLanguageChanged() {
+		return last_index_ != languageComboBox_->currentIndex();
+	}
+
+	void resetLanguageChanged() {
+		last_index_ = languageComboBox_->currentIndex();
+	}
+
 	///
 	void writePreferenceEntries(INIFile& inifile);
 
@@ -83,6 +91,7 @@ class BALL_VIEW_EXPORT MainControlPreferences
 	protected:
 
 	QFont font_;
+	int last_index_;
 };
   
 } } // namespace

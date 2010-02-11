@@ -893,6 +893,13 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			{
 				QApplication::setStyle(main_control_preferences_->getStyle());
 				QApplication::setFont(main_control_preferences_->getFont());
+
+				if(main_control_preferences_->getLanguageChanged()) {
+					main_control_preferences_->resetLanguageChanged();
+					QMessageBox::information(this, tr("Language Changed"),
+					                               tr("Changing the language only takes effect after restarting BALLView."));
+				}
+
 				QWidget::update();
 
 				if (!main_control_preferences_->loggingToFileEnabled()) 
