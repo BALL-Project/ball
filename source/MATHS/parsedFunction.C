@@ -45,6 +45,17 @@ namespace BALL
 		initTable();
 	}
 
+	template <>
+	ParsedFunction<double>::ParsedFunction(const String& expression)
+
+		: constants_(),
+			functions_(),
+			expression_(expression)
+
+	{
+		initTable();
+	}
+
 	template <typename arg>
 	ParsedFunction<arg>::ParsedFunction(const ParsedFunction& func)	
 	{
@@ -62,6 +73,11 @@ namespace BALL
 	/** Strange... gcc-3.0.1 needs this destructor in a non-template version... **/
 	template <>
 	ParsedFunction<float>::~ParsedFunction()
+	{
+	}
+
+	template <>
+	ParsedFunction<double>::~ParsedFunction()
 	{
 	}
 
@@ -93,6 +109,19 @@ namespace BALL
 		return ParsedFunctionResult;
 	}
 
+	template <>
+	double ParsedFunction<double>::operator () (double argument)
+		throw(Exception::ParseError)
+	{
+		double arg = argument;
+		constants_["X"] = &arg;
+		ParsedFunctionConstants = &constants_;
+		ParsedFunctionFunctions = &functions_;
+		ParsedFunction_initBuffer(expression_.c_str());
+		ParsedFunctionparse();
+		ParsedFunction_delBuffer();
+		return ParsedFunctionResult;
+	}
 
 	template <typename arg>
 	void ParsedFunction<arg>::initTable()
