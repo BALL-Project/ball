@@ -326,7 +326,7 @@ namespace BALL
 				int des=60; // no of column for current external descriptors within descriptor_matrix_
 				std::multiset<int>::iterator act_it = activity_IDs.begin();
 				std::multiset<int>::iterator inv_it = invalidDescriptors_.begin();
-				cout<<"TEST1"<<endl<<flush;
+				
 				for(int i=0; i<no && i<no_properties;i++) // create descriptors and activities for current molecule
 				{	 
 					if(useExDesc && (act_it==activity_IDs.end() || *act_it!=i)) // read external descriptors from molecule
@@ -399,7 +399,7 @@ namespace BALL
 				calculateBALLDescriptors(*m); // calculate BALL-descriptors
 				delete m; // delete the completly processed molecule!
 			}
-cout<<"TEST2"<<endl<<flush;
+
 			removeInvalidDescriptors(newInvalidDescriptors);
 			removeInvalidSubstances(newInvalidSubstances);
 			invalidDescriptors_=tmp;
