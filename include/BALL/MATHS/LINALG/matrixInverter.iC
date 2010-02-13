@@ -110,7 +110,7 @@ namespace BALL {
 
 		// getRightSingularVectors() returns V.t() NOT V, so that we need to transpose back to V here !!
 		inverse_ = solver.getRightSingularVectors().t()*S_i*solver.getLeftSingularVectors().t();
-
+		
 		// done.
 		return true;
 	}
@@ -157,6 +157,21 @@ namespace BALL {
 		SingularValueType max_sv = singular_values(1);
 		SingularValueType min_sv = singular_values(number_of_singular_values);
 
+		for(Size i=1; i<=m; i++)
+		{
+			for(Size j=1; j<=n; j++)
+			{
+				if (i!=j)
+				{
+					S_i(i,j)=(SingularValueType)0;
+				}
+				else
+				{
+					S_i(i,j) = ((SingularValueType)1)/singular_values(i);
+				}
+			}
+		}
+
 		SingularValueType epsilon = std::numeric_limits<SingularValueType>::epsilon();
 
 		if (min_sv/max_sv < 5*epsilon)
@@ -170,7 +185,7 @@ namespace BALL {
 		}
 
 		// getRightSingularVectors() returns V.t() NOT V, so that we need to transpose back to V here !!
-		inverse_ = solver.getRightSingularVectors().t()*S_i*solver.getLeftSingularVectors().t();
+		pseudo_inverse_ = solver.getRightSingularVectors().t()*S_i*solver.getLeftSingularVectors().t();
 
 		// done.
 		return true;
