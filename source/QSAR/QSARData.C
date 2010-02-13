@@ -267,7 +267,7 @@ namespace BALL
 			std::multiset<int> newInvalidDescriptors; // invalid descriptors of the current input file only; save no. of columns
 			std::multiset<int> newInvalidSubstances; 
 			std::multiset<int> tmp; // invalid descriptors of the current input file; save no. of external descriptor
-			
+
 			// read all molecules in the sd-file
 			for(int n=0; input.getSize()!=0; n++) 
 			{	
@@ -313,7 +313,7 @@ namespace BALL
 						Y_.resize(activity_IDs.size());
 					}
 				}
-				
+
 				substance_names_.push_back(m->getName());
 
 				// if some substance has not the same number of properties as the first substance
@@ -326,12 +326,12 @@ namespace BALL
 				int des=60; // no of column for current external descriptors within descriptor_matrix_
 				std::multiset<int>::iterator act_it = activity_IDs.begin();
 				std::multiset<int>::iterator inv_it = invalidDescriptors_.begin();
-				
+				cout<<"TEST1"<<endl<<flush;
 				for(int i=0; i<no && i<no_properties;i++) // create descriptors and activities for current molecule
 				{	 
-					if(useExDesc && *act_it!=i) // read external descriptors from molecule
+					if(useExDesc && (act_it==activity_IDs.end() || *act_it!=i)) // read external descriptors from molecule
 					{
-						if(invalidDescriptors_.empty() || *inv_it!=i) // do not add values of descriptors indentified as invalid by the *last* run of getData()
+						if(invalidDescriptors_.empty() || inv_it==invalidDescriptors_.end() || *inv_it!=i) // do not add values of descriptors indentified as invalid by the *last* run of getData()
 						{	
 							try				
 							{	
@@ -352,12 +352,12 @@ namespace BALL
 							}
 							des++;
 						}
-						else if(*inv_it==i)
+						else if(inv_it!=invalidDescriptors_.end() && *inv_it==i)
 						{
 							inv_it++;
 						}
 					}
-					else if(*act_it==i) // read activities
+					else if(act_it!=activity_IDs.end() && *act_it==i) // read activities
 					{
 						if(!translate_class_labels)
 						{
@@ -399,7 +399,7 @@ namespace BALL
 				calculateBALLDescriptors(*m); // calculate BALL-descriptors
 				delete m; // delete the completly processed molecule!
 			}
-
+cout<<"TEST2"<<endl<<flush;
 			removeInvalidDescriptors(newInvalidDescriptors);
 			removeInvalidSubstances(newInvalidSubstances);
 			invalidDescriptors_=tmp;
