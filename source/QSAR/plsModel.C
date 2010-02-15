@@ -128,8 +128,9 @@ namespace BALL
 		// 		I*=0.0001;
 		// 		loadings_ = loadings_*(P.t()*loadings_+I).i();
 		// 	}
-			
-			MatrixInverter<double, StandardTraits> inverter(P.t()*loadings_);
+
+			Matrix<double> m = P.t()*loadings_;
+			MatrixInverter<double, StandardTraits> inverter(m);
 			inverter.computePseudoInverse();
 
 			loadings_ = loadings_*inverter.getPseudoInverse();
