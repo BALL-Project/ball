@@ -119,38 +119,23 @@ namespace BALL
 			double old_q2=0;
 			// do while there is an increase of Q^2 (and no of columns < no of lines)
 			int crossValidation_lines = (int)(((double)lines/k)*(k-1));
-			
-			std::multiset<unsigned int>::iterator des_it;
-			std::multiset<unsigned int>::iterator irr_it;
 
 			for(int d=0; d<crossValidation_lines; d++)
 			{
 				int best_col=0; 
 				double best_q2=0;
-				des_it = model_->descriptor_IDs_.begin();
-				irr_it = irrelevantDescriptors->begin();
 			
 				// find the descriptor that leads to the largest increase of Q^2
 				for(unsigned int i=0; i<columns; i++)
 				{	
 					// do not insert a descriptor more than one time and do not use irrelevant descriptors
-					bool c=0;
-					if(*des_it==i) 
-					{
-						des_it++;
-						c=1;
-					}
-					if(*irr_it==i)
-					{
-						irr_it++;
-						c=1;
-					}
-					if(c==1)
+					if(model_->descriptor_IDs_.find(i)!=model_->descriptor_IDs_.end()
+						|| irrelevantDescriptors->find(i)!=irrelevantDescriptors->end())
 					{
 						continue;
 					}
 					
-					std::multiset<unsigned int>::iterator last_insert = model_->descriptor_IDs_.insert(des_it,i);
+					std::multiset<unsigned int>::iterator last_insert = model_->descriptor_IDs_.insert(i);
 					
 					if(weights_!=NULL && weights_->getSize()>0)
 					{
@@ -273,7 +258,6 @@ namespace BALL
 			}
 			double old_q2=q2_allDes;
 			std::multiset<unsigned int>::iterator des_it;
-			std::multiset<unsigned int>::iterator irr_it;
 			
 			// the quality of the model must always be larger than this value;
 			// if a negative quality_increase_cutoff_ is specified, minimal reduction of
@@ -290,7 +274,6 @@ namespace BALL
 				int best_col=0; 
 				double best_q2=0;
 				des_it = model_->descriptor_IDs_.begin();
-				irr_it = irrelevantDescriptors->begin();
 				
 				// find the descriptor whose removal leads to the largest increase of Q^2
 				while(des_it!=model_->descriptor_IDs_.end())
@@ -298,16 +281,14 @@ namespace BALL
 					unsigned int i = *des_it;
 				
 					// do not use empty descriptors
-					if(*irr_it==i)
+					if(irrelevantDescriptors->find(i)!=irrelevantDescriptors->end())
 					{
-						des_it++;
-						irr_it++;
 						continue;
 					}
 					
-					//SortedList<int>::Iterator tmp=des_it; tmp++;
+					std::multiset<unsigned int>::iterator tmp=des_it; tmp++;
 					model_->descriptor_IDs_.erase(des_it); //erase element and move des_it to next element
-					//des_it=tmp;
+					des_it=tmp;
 					
 					
 					if(weights_!=NULL && weights_->getSize()>0)
@@ -334,7 +315,7 @@ namespace BALL
 						best_col=i;
 					}
 				
-					last_insertion = model_->descriptor_IDs_.insert(des_it,i);
+					last_insertion = model_->descriptor_IDs_.insert(i);
 				}
 			
 				// if Q^2 is not larger than before, no descriptor is removed and feature selection is stopped.
@@ -453,40 +434,23 @@ namespace BALL
 			model_->descriptor_IDs_.clear();
 			// do while there is an increase of Q^2 (and no of columns < no of lines)
 			// int crossValidation_lines = (int)(((double)lines/k)*(k-1));
-			
-			std::multiset<unsigned int>::iterator des_it;
-			std::multiset<unsigned int>::iterator irr_it;
 
 			/// find the best feature to be selected first
-			int best_col=0; 
+			int best_col=0;
 			double best_q2=0;
-			des_it = model_->descriptor_IDs_.begin();
-			irr_it = irrelevantDescriptors->begin();
 			
 			std::multiset<pair<double,uint> > potential_descriptors; // sorted descendingly by their increase of prediction quality during the first scan
-			
-			std::multiset<pair<double,uint> >::iterator it_to_best=potential_descriptors.end();
 			
 			for(uint i=0; i<columns; i++)
 			{	
 				// do not insert a descriptor more than one time and do not use irrelevant descriptors
-				bool c=0;
-				if(*des_it==i) 
-				{
-					des_it++;
-					c=1;
-				}
-				if(*irr_it==i)
-				{
-					irr_it++;
-					c=1;
-				}
-				if(c==1)
+				if(model_->descriptor_IDs_.find(i)!=model_->descriptor_IDs_.end()
+					|| irrelevantDescriptors->find(i)!=irrelevantDescriptors->end())
 				{
 					continue;
 				}
 				
-				last_insertion = model_->descriptor_IDs_.insert(des_it,i);
+				last_insertion = model_->descriptor_IDs_.insert(i);
 				
 				if(weights_!=NULL && weights_->getSize()>0)
 				{
@@ -513,13 +477,12 @@ namespace BALL
 				{
 					best_q2=model_->model_val->getCVRes();
 					best_col=i;
-					it_to_best = it;
 				}
 				model_->descriptor_IDs_.erase(last_insertion);
 			}
 			
 			last_insertion = model_->descriptor_IDs_.insert(best_col);
-			potential_descriptors.erase(it_to_best);
+			potential_descriptors.erase(potential_descriptors.begin());
 			
 			/// now check ONCE for each remaining (non-empty) descriptor, whether it can increase the prediction quality
  			double old_q2=best_q2;
@@ -555,7 +518,6 @@ namespace BALL
 			}
 			
 			delete irrelevantDescriptors;
-			
 			
 			// if feature selection leads to no increase of Q^2, use old descriptors and weights_.
 			// Also use old descriptors, if no better combination of descriptors could be found by this feature selection run, since features not selected by the previous feature selection may not be used!!
