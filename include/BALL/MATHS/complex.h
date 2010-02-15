@@ -12,7 +12,9 @@
 
 #include <complex>
 
-#include <fftw3.h>
+#ifdef BALL_HAS_FFTW_H
+	#include <fftw3.h>
+#endif
 
 namespace BALL 
 {
