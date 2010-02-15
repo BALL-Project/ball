@@ -12,14 +12,20 @@
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
-#include <BALL/VIEW/KERNEL/threads.h>
 
-#include <QtGui/qlineedit.h> 
-#include <QtGui/qradiobutton.h>
-#include <QtGui/qcheckbox.h>
-#include <QtGui/qimage.h>
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qapplication.h>
+#include <QtGui/QLineEdit> 
+#include <QtGui/QRadioButton>
+#include <QtGui/QCheckBox>
+#include <QtGui/QImage>
+#include <QtGui/QPushButton>
+#include <QtGui/QApplication>
+#include <QtGui/QProgressBar>
+
+#include <QtCore/QUrl>
+#include <QtCore/QFile>
+
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkReply>
 
 #ifdef BALL_HAS_SSTREAM
 # include <sstream>
@@ -32,283 +38,253 @@ namespace BALL
 	namespace VIEW
 	{
 
-DownloadPDBFile::DownloadPDBFile(QWidget* parent, const char* name, bool, Qt::WFlags fl)
-	: QDialog(parent, fl),
-		Ui_DownloadPDBFileData(),
-		ModularWidget(name),
-		thread_(0),
-		aborted_(false),
-		error_(false),
-		prefix_("http://www.rcsb.org/pdb/files/"),
-		suffix_(".pdb")
-{
+		DownloadPDBFile::DownloadPDBFile(QWidget* parent, const char* name, bool, Qt::WFlags fl)
+			: QDialog(parent, fl),
+				Ui_DownloadPDBFileData(),
+				ModularWidget(name),
+				aborted_(false),
+				error_(false),
+				prefix_("http://www.rcsb.org/pdb/files/"),
+				suffix_(".pdb"),
+				progress_bar_(0)
+		{
 #ifdef BALL_VIEW_DEBUG
-	Log.error() << "new DownloadPDBFile" << this << std::endl;
+			Log.error() << "new DownloadPDBFile" << this << std::endl;
 #endif
-	setupUi(this);
-	setObjectName(name);
-	
-	// signals and slots connections
-	connect( buttonClose, SIGNAL( clicked() ), this, SLOT( close() ) );
-	connect( download, SIGNAL( clicked() ), this, SLOT( slotDownload() ) );
-	connect( button_abort, SIGNAL( clicked() ), this, SLOT( abort() ) );
-	connect( pdbId, SIGNAL( editTextChanged(const QString&) ), this, SLOT( idChanged() ) );
+			setupUi(this);
+			setObjectName(name);
+			
+			// signals and slots connections
+			connect( buttonClose, SIGNAL( clicked() ), this, SLOT( close() ) );
+			connect( download, SIGNAL( clicked() ), this, SLOT( slotDownload() ) );
+			connect( button_abort, SIGNAL( clicked() ), this, SLOT( abort() ) );
+			connect( pdbId, SIGNAL( editTextChanged(const QString&) ), this, SLOT( idChanged() ) );
 
-	// register the widget with the MainControl
-	registerWidget(this);
-	hide();
-	pdbId->setFocus();
+			// register the widget with the MainControl
+			registerWidget(this);
+			hide();
+			pdbId->setFocus();
+		}
 
-	thread_ = new FetchHTMLThread();
-	thread_->setMainControl(getMainControl());
-}
-
-DownloadPDBFile::~DownloadPDBFile()
-{
+		DownloadPDBFile::~DownloadPDBFile()
+		{
 #ifdef BALL_VIEW_DEBUG
-	Log.info() << "Destructing object " << this << " of class DownloadPDBFile" << std::endl; 
+			Log.info() << "Destructing object " << this << " of class DownloadPDBFile" << std::endl; 
 #endif 
 
-	if (thread_ != 0) 
-	{
-		if (thread_->isRunning())
-		{
-			thread_->terminate();
-			thread_->wait();
-		}
-		delete thread_;
-	}
-}
+			if (current_reply_)
+			{
+				current_reply_->abort();
+				delete(current_reply_);
+			}
 
-void DownloadPDBFile::initializeWidget(MainControl&)
-{
-	String description = "Shortcut|File|Open|Download_PDB";
-	menu_id_ = insertMenuEntry(MainControl::FILE_OPEN, "Download PDB", this,
-															 SLOT(show()), description,
-															 QKeySequence("Ctrl+T"));
-
-	setMenuHint("Download a PDB file from www.rcsb.org");
-	setMenuHelp("tips.html#download_pdb");
-	setIcon("actions/download-pdb", true);
-}
-
-bool DownloadPDBFile::threadedDownload_(const String& url)
-{
-	error_ = false;
-	downloadStarted_();
-	thread_->setURL(url);
-	thread_->start();
-	Size last_bytes = 0;
-	while (thread_->isRunning())
-	{
-		qApp->processEvents();
-		
-		Size bytes = thread_->getTCPTransfer().getReceivedBytes();
-		if (bytes != last_bytes)
-		{
-			setStatusbarText("received " + String(bytes) + " bytes", true);
-			last_bytes = bytes;
-		}
-		
-		thread_->wait(200);
-	}
-
-	if (aborted_) return false;
-
-	TCPTransfer::Status status = thread_->getTCPTransfer().getStatusCode();
-
-	if (thread_->getTCPTransfer().getReceivedBytes() == 0 ||
-			status != TCPTransfer::OK)
-	{
-		if (status!=TCPTransfer::CONNECT__ERROR && status!=TCPTransfer::PROXY__ERROR)
-		{
-			setStatusbarText(String("Could not download the given file. Maybe it does not exist on pdb.org? ") +
-											 thread_->getTCPTransfer().getErrorCode() + " occured.", true);
-		}
-		else
-		{
-			setStatusbarText(String("Failed to download file, an ") + 
-											 thread_->getTCPTransfer().getErrorCode() + " occured. " +
-											 "Maybe you need a proxy?" , true);
-		}
-		error_ = true;
-		return false;
-	}
-
-	return true;
-}
-
-void DownloadPDBFile::slotDownload()
-{
-	System *system = new System();
-
-	try
-	{
-		String id = ascii(pdbId->currentText());
-		String url = prefix_;
-		url += id;
-		url += suffix_;
-		String temp_filename = VIEW::createTemporaryFilename();
-		thread_->setFilename(temp_filename);
-		bool ok = threadedDownload_(url);
-		downloadEnded_();
-
-		if (!ok) 
-		{
-			delete system;
-			return;
+			if (progress_bar_)
+				delete progress_bar_;
 		}
 
-		PDBFile pdb_file(temp_filename);
-
-		pdb_file >> *system;
-		pdb_file.close();
-
- 		removeFile_(temp_filename);
-
-		if (system->countAtoms() == 0)
+		void DownloadPDBFile::initializeWidget(MainControl&)
 		{
-			delete system;
-			show();
-			setStatusbarText("Could not fetch the given PDBFile", true);
-			return;
-		}
-		else
-		{
-			setStatusbarText(String("read ") + String(system->countAtoms()) + " atoms for:  " + id, true);
+			String description = "Shortcut|File|Open|Download_PDB";
+			menu_id_ = insertMenuEntry(MainControl::FILE_OPEN, "Download PDB", this,
+																	 SLOT(show()), description,
+																	 QKeySequence("Ctrl+T"));
+
+			setMenuHint("Download a PDB file from www.rcsb.org");
+			setMenuHelp("tips.html#download_pdb");
+			setIcon("actions/download-pdb", true);
 		}
 
-		if (system->getName() == "")
+		void DownloadPDBFile::slotDownload()
 		{
-			system->setName(ascii(pdbId->currentText()));
+			String id = ascii(pdbId->currentText());
+			String url = prefix_;
+			url += id;
+			url += suffix_;
+
+			if (progress_bar_)
+				delete(progress_bar_);
+
+			progress_bar_ = new QProgressBar(progress_label);
+			progress_bar_->resize(progress_label->size());
+			progress_bar_->show();
+
+			current_reply_ = global_network_manager.get(QNetworkRequest(QUrl(url.c_str())));
+			connect(current_reply_, SIGNAL(finished()), this, SLOT(downloadFinished()));
+			connect(current_reply_, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(downloadProgress(qint64, qint64)));
 		}
 
-		system->setProperty("FROM_FILE", url);
-		close();
-		pdbId->clearEditText();
-		getMainControl()->insert(*system, ascii(pdbId->currentText()));
-		
-		notify_(new CompositeMessage(*system, CompositeMessage::CENTER_CAMERA));
-		
-		download->setDefault(true);
-		pdbId->setFocus();
-	}
-	catch(...)
-	{
-		setStatusbarText("download PDB file failed", true);
-		delete system;
-	}
-}
-
-void DownloadPDBFile::idChanged()
-{
-	download->setEnabled(pdbId->currentText() != "");
-}
-
-void DownloadPDBFile::abort()
-{
-	if (thread_ == 0) return;
-	aborted_ = true;
-
-	thread_->abort();
-	thread_->wait(5500);
-
-	if (thread_->isRunning())
-	{
-		thread_->terminate();
-		thread_->wait();
-	}
-	removeFile_(thread_->getFilename());
-	
-	downloadEnded_();
-}
-
-void DownloadPDBFile::downloadStarted_()
-{
-	aborted_ = false;
-	error_   = false;
-	setStatusbarText("Started download, please wait...", true);
-	button_abort->setEnabled(true);
-	download->setEnabled(false);
-	pdbId->setEnabled(false);
-	buttonClose->setEnabled(false);
-}
-
-void DownloadPDBFile::downloadEnded_()
-{
-	if (!aborted_ && !error_)
-	{
-		setStatusbarText("Finished downloading, please wait...", true);
-	}
-	button_abort->setEnabled(false);
-	download->setEnabled(true);
-	pdbId->setEnabled(true);
-	buttonClose->setEnabled(true);
-	idChanged();
-	qApp->processEvents();
-	pdbId->setFocus();
-
-	if (error_)
-	{
-		removeFile_(thread_->getFilename());
-	}
-}
-
-void DownloadPDBFile::removeFile_(const String& filename)
-{
-	try
-	{
- 		File::remove(filename);
-	}
-	catch(...) {}
-}
-
-void DownloadPDBFile::setProxyAndTransfer_(TCPTransfer& tcp)
-{
-	MainControl* mc = getMainControl();
- 	tcp.setProxy(mc->getProxy(), mc->getProxyPort());
-	tcp.transfer();
-}
-
-void DownloadPDBFile::fetchPreferences(INIFile& inifile)
-{
-	if (!inifile.hasSection("PDBFiles") ||
-			!inifile.hasEntry("PDBFiles", "History"))
-	{
-		return;
-	}
-
-	String files = inifile.getValue("PDBFiles", "History");
-	vector<String> fields;
-	files.split(fields, "# ");
-	for (Position p = 0; p < fields.size(); p++)
-	{
-		QString file(fields[p].c_str());
-		if (pdbId->findText(file) == -1)
+		void DownloadPDBFile::downloadFinished()
 		{
-			pdbId->addItem(file);
+			String id = ascii(pdbId->currentText());
+			String url = prefix_;
+			url += id;
+			url += suffix_;
+
+			if (current_reply_->error() != QNetworkReply::NoError)
+			{
+				Log.error() << "Could not download PDBFile! Reason given was \"" + (String)(current_reply_->errorString()) + "\""<< std::endl;
+				setStatusbarText("Could not download PDBFile! Reason given was \"" + (String)(current_reply_->errorString()) + "\"");
+
+				error_ = true;
+			}
+			else
+			{
+				System *system = new System();
+
+				try {
+					String temp_filename = VIEW::createTemporaryFilename();
+
+					QFile outfile(temp_filename.c_str());
+					outfile.open(QIODevice::ReadWrite);
+
+					outfile.write(current_reply_->readAll());
+					outfile.close();
+
+					PDBFile pdb_file(temp_filename);
+
+					pdb_file >> *system;
+					pdb_file.close();
+
+					removeFile_(temp_filename);
+
+					if (system->countAtoms() == 0)
+					{
+						delete system;
+						show();
+						setStatusbarText("Could not fetch the given PDBFile", true);
+						return;
+					}
+					else
+					{
+						setStatusbarText(String("read ") + String(system->countAtoms()) + " atoms for:  " + id, true);
+					}
+
+					if (system->getName() == "")
+					{
+						system->setName(ascii(pdbId->currentText()));
+					}
+
+					system->setProperty("FROM_FILE", url);
+					close();
+					pdbId->clearEditText();
+					getMainControl()->insert(*system, ascii(pdbId->currentText()));
+					
+					notify_(new CompositeMessage(*system, CompositeMessage::CENTER_CAMERA));
+					
+					download->setDefault(true);
+					pdbId->setFocus();
+				}
+				catch(...)
+				{
+					setStatusbarText("download PDB file failed", true);
+					delete system;
+				}
+			}
+
+			delete(current_reply_);
+			current_reply_ = 0;
+
+			delete(progress_bar_);
+			progress_bar_ = 0;
+
+			downloadEnded_();
 		}
-	}
-}
 
-void DownloadPDBFile::writePreferences(INIFile& inifile)
-{
-	String files;
-	for (Index p = 0; p < pdbId->count(); p++)
-	{
-		String s = ascii(pdbId->itemText(p));
-		if (s == "") continue;
-		files += s + "#";
-	}
+		void DownloadPDBFile::downloadProgress(qint64 received, qint64 total)
+		{
+			progress_bar_->setRange(0, total);
+			progress_bar_->setValue(received);
 
-	inifile.appendSection("PDBFiles");
-	inifile.insertValue("PDBFiles", "History", files);
-}
+			setStatusbarText("received " + String((unsigned int)received) + " / " + String((unsigned int)total) + " bytes", true);
+		}
 
-void DownloadPDBFile::checkMenu(MainControl& mc)
-{
-	menu_id_->setEnabled(!mc.compositesAreLocked());
-}
+		void DownloadPDBFile::idChanged()
+		{
+			download->setEnabled(pdbId->currentText() != "");
+		}
+
+		void DownloadPDBFile::abort()
+		{
+			if (current_reply_)
+				current_reply_->abort();
+
+			downloadEnded_();
+		}
+
+		void DownloadPDBFile::downloadStarted_()
+		{
+			aborted_ = false;
+			error_   = false;
+			setStatusbarText("Started download, please wait...", true);
+			button_abort->setEnabled(true);
+			download->setEnabled(false);
+			pdbId->setEnabled(false);
+			buttonClose->setEnabled(false);
+		}
+
+		void DownloadPDBFile::downloadEnded_()
+		{
+			if (!aborted_ && !error_)
+			{
+				setStatusbarText("Finished downloading, please wait...", true);
+			}
+			button_abort->setEnabled(false);
+			download->setEnabled(true);
+			pdbId->setEnabled(true);
+			buttonClose->setEnabled(true);
+			idChanged();
+			qApp->processEvents();
+			pdbId->setFocus();
+		}
+
+		void DownloadPDBFile::removeFile_(const String& filename)
+		{
+			try
+			{
+				File::remove(filename);
+			}
+			catch(...) {}
+		}
+
+		void DownloadPDBFile::fetchPreferences(INIFile& inifile)
+		{
+			if (!inifile.hasSection("PDBFiles") ||
+					!inifile.hasEntry("PDBFiles", "History"))
+			{
+				return;
+			}
+
+			String files = inifile.getValue("PDBFiles", "History");
+			vector<String> fields;
+			files.split(fields, "# ");
+			for (Position p = 0; p < fields.size(); p++)
+			{
+				QString file(fields[p].c_str());
+				if (pdbId->findText(file) == -1)
+				{
+					pdbId->addItem(file);
+				}
+			}
+		}
+
+		void DownloadPDBFile::writePreferences(INIFile& inifile)
+		{
+			String files;
+			for (Index p = 0; p < pdbId->count(); p++)
+			{
+				String s = ascii(pdbId->itemText(p));
+				if (s == "") continue;
+				files += s + "#";
+			}
+
+			inifile.appendSection("PDBFiles");
+			inifile.insertValue("PDBFiles", "History", files);
+		}
+
+		void DownloadPDBFile::checkMenu(MainControl& mc)
+		{
+			menu_id_->setEnabled(!mc.compositesAreLocked());
+		}
 
 	} // namespace VIEW
 } // namespace BALL

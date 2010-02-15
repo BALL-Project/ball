@@ -22,33 +22,42 @@ namespace BALL
 	namespace VIEW
 	{
 
-/** NeworkPreferences is a widget that will be inserted into the
-		tab dialog Preferences.
-		\ingroup ViewDialogs
-*/
-class BALL_VIEW_EXPORT NetworkPreferences 
-	: public QWidget,
-		public Ui_NetworkPreferencesData,
-		public PreferencesEntry
-{
-	Q_OBJECT
+		/** NeworkPreferences is a widget that will be inserted into the
+				tab dialog Preferences.
+				\ingroup ViewDialogs
+		*/
+		class BALL_VIEW_EXPORT NetworkPreferences 
+			: public QWidget,
+				public Ui_NetworkPreferencesData,
+				public PreferencesEntry
+		{
+			Q_OBJECT
 
-	public:
-	
-	/// Default Constructor.
-	NetworkPreferences(QWidget *parent = NULL, const char *name = "NetworkPreferences", 
-										 Qt::WFlags fl=0);
-	
-	/// Destructor.
-	virtual ~NetworkPreferences();
+			public:
+			
+				/// Default Constructor.
+				NetworkPreferences(QWidget *parent = NULL, const char *name = "NetworkPreferences", Qt::WFlags fl=0);
+				
+				/// Destructor.
+				virtual ~NetworkPreferences();
 
-	///
-	void applySettings();
+				///
+				void applySettings();
 
-	///
-	void getSettings();
-};
-  
-} } // namespace
+				///
+				void getSettings();
+
+				///
+				bool proxyEnabled();
+
+				public slots:
+
+				///
+				void proxyModeChanged(int proxy_mode);
+
+		};
+			
+	} 
+} // namespace
 
 #endif // BALL_VIEW_DIALOGS_NETWORKPREFERENCES_H

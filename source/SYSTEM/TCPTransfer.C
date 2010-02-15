@@ -50,6 +50,8 @@
 
 namespace BALL
 {
+	QNetworkAccessManager global_network_manager;
+
 	const int TCPTransfer::TIMEOUT = 3;  // 3 seconds timeout
 	
 	

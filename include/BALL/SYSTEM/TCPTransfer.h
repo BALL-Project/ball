@@ -17,10 +17,16 @@
 
 #include <fstream>
 
+#include <QNetworkAccessManager>
+
 #define BUFFER_SIZE 1024
 
 namespace BALL
 {
+	/** A static global QNetworkAccessManager for all of BALL.
+	 */
+	extern BALL_EXPORT QNetworkAccessManager global_network_manager;
+
 	/** Class for TCPTransfers.
 	 * 	You can use http and ftp protocol to transfer files
 	 * 	from the internet and store them in an ostream.

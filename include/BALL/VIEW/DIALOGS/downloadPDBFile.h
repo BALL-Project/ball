@@ -19,15 +19,16 @@
 
 #include <BALL/VIEW/UIC/ui_downloadPDBFile.h>
 
+#include <QtNetwork/QNetworkReply>
+
+class QProgressBar;
+
 namespace BALL
 {
 	class TCPTransfer;
 
 	namespace VIEW
 	{
-
- 		class FetchHTMLThread;
-
 		/** Dialog to search for and download structure files from the <a href="http://www.rcsb.org/">PDB data bank</a>.
 				\ingroup ViewDialogs
 		*/
@@ -80,6 +81,12 @@ namespace BALL
 				/// 
 				virtual void abort();
 
+				///
+				void downloadFinished();
+
+				///
+				void downloadProgress(qint64 received, qint64 total);
+
 			protected:
 
 				//_
@@ -91,9 +98,6 @@ namespace BALL
 				bool threadedDownload_(const String& url);
 				void removeFile_(const String& filename);
 
-				void setProxyAndTransfer_(TCPTransfer& tcp);
-				
-				FetchHTMLThread 				*thread_;
 				bool 										aborted_;
 				bool 										error_;
 
@@ -104,6 +108,12 @@ namespace BALL
 
 				QAction* menu_id_;
 				String   prefix_, suffix_;
+
+				// the current network reply
+				QNetworkReply* current_reply_;
+
+				// the current progress bar
+				QProgressBar*  progress_bar_;
 		};
 
 	} 

@@ -656,15 +656,6 @@ namespace BALL
 			/// See above
 			const String& getLoggingFilename() const;
 
-			/// Set the proxy for HTTP and FTP operations
-			void setProxy(const String& host, Position port);
-
-			/// Get the hostname for the proxy
-			String getProxy() const { return proxy_;}
-
-			/// Get the port for the proxy
-			Position getProxyPort() const { return proxy_port_;}
-			
 			///
 			bool isAboutToQuit() { return about_to_quit_;}
 		
@@ -911,9 +902,6 @@ namespace BALL
 			QTimer 							timer_;
 			QTimer 							render_timer_;
 			Mutex 							composites_locked_mutex_;
-
-			String 							proxy_;
-			Position 						proxy_port_;
 
 			QAction* stop_simulation_action_;
 			QAction* complement_selection_action_;

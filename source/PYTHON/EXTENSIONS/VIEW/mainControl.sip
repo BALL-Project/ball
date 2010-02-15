@@ -133,9 +133,6 @@ class MainControl
 	void disableLoggingToFile() throw();
 	void setLoggingFilename(const String&) throw();
 	const String& getLoggingFilename() const throw();
-	void setProxy(const String&, Position);
-	String getProxy() const; 
-	Position getProxyPort() const;
 	bool useMultithreading() throw();
 	void setMultithreading(bool) throw();
 	// void dump(std::ostream& /s/ = std::cout, Size /depth/ = 0) const throw();

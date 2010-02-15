@@ -9,87 +9,88 @@
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
+#include <BALL/SYSTEM/TCPTransfer.h>
+
 #include <QtGui/qcheckbox.h>
 #include <QtGui/qlineedit.h>
+
+#include <QtNetwork/QNetworkProxy>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-NetworkPreferences::NetworkPreferences(QWidget* parent, const char* name, Qt::WFlags fl)
-	: QWidget(parent, fl),
-		Ui_NetworkPreferencesData(),
-		PreferencesEntry()
-{
-	setINIFileSectionName("NETWORK");
-	setupUi(this);
- 	setObjectName(name);
-	setWidgetStackName("Network");
-	registerWidgets_();
-	
-  // signals and slots connections
-  connect( enable_proxy, SIGNAL( toggled(bool) ), host_edit, SLOT( setEnabled(bool) ) );
-  connect( enable_proxy, SIGNAL( toggled(bool) ), port_edit, SLOT( setEnabled(bool) ) );
-}
+		NetworkPreferences::NetworkPreferences(QWidget* parent, const char* name, Qt::WFlags fl)
+			: QWidget(parent, fl),
+				Ui_NetworkPreferencesData(),
+				PreferencesEntry()
+		{
+			setINIFileSectionName("NETWORK");
+			setupUi(this);
 
-NetworkPreferences::~NetworkPreferences()
-{
-	#ifdef BALL_VIEW_DEBUG
-		Log.error() << "Destructing object " << (void *)this 
-								<< " of class NetworkPreferences" << endl;
-	#endif 
-}
+			setObjectName(name);
 
-void NetworkPreferences::getSettings()
-{
-	MainControl* mc = getMainControl();
-	if (mc == 0) return;
+			// signals and slots connections
+			connect(proxy_type_box, SIGNAL(currentIndexChanged(int)), this, SLOT(proxyModeChanged(int)));
 
-	if (mc->getProxy() == "")
-	{
-		enable_proxy->setChecked(false);
-		return;
+			setWidgetStackName("Network");
+			registerWidgets_();
+
+			if (!proxyEnabled())
+				proxy_settings_group->setEnabled(false);	
+		}
+
+		NetworkPreferences::~NetworkPreferences()
+		{
+			#ifdef BALL_VIEW_DEBUG
+				Log.error() << "Destructing object " << (void *)this 
+										<< " of class NetworkPreferences" << endl;
+			#endif 
+		}
+
+		void NetworkPreferences::proxyModeChanged(int proxy_mode)
+		{
+			if (proxy_mode == 0)
+			{
+				proxy_settings_group->setEnabled(false);
+			}
+			else
+			{
+				proxy_settings_group->setEnabled(true);
+			}
+		}
+
+		void NetworkPreferences::applySettings()
+		{
+			DownloadPDBFile* df = DownloadPDBFile::getInstance(0);
+			if (df == 0) return;
+
+			df->setPrefix(ascii(pdb_prefix->text()));
+			df->setSuffix(ascii(pdb_suffix->text()));
+
+			MainControl* mc = getMainControl();
+			if (mc == 0) return;
+
+			bool valid_port;
+			unsigned int port = port_edit->text().toUInt(&valid_port);
+
+			if (!valid_port && proxyEnabled())
+			{
+				Log.error() << "Proxy port invalid!" << std::endl;
+				return;
+			}
+
+			QNetworkProxy new_proxy((QNetworkProxy::ProxyType)proxy_type_box->currentIndex(),
+															host_edit->text(), port, login_edit->text(), password_edit->text());
+
+			global_network_manager.setProxy(new_proxy);
+		}
+
+		bool NetworkPreferences::proxyEnabled()
+		{
+			return (proxy_type_box->currentIndex() != 0);
+		}
+
 	}
-
-	host_edit->setText(mc->getProxy().c_str());
-	port_edit->setText(String(mc->getProxyPort()).c_str());
-
-	bool use_proxy = host_edit->text() != "" && port_edit->text() != "";
-
-	enable_proxy->setChecked(use_proxy);
-}
-
-void NetworkPreferences::applySettings()
-{
-	DownloadPDBFile* df = DownloadPDBFile::getInstance(0);
-	if (df == 0) return;
-
-	df->setPrefix(ascii(pdb_prefix->text()));
-	df->setSuffix(ascii(pdb_suffix->text()));
-
-	MainControl* mc = getMainControl();
-	if (mc == 0) return;
-
-	if (!enable_proxy->isChecked() ||
-			host_edit->text() == "" ||
-			port_edit->text() == "")
-	{
-		mc->setProxy("", 0);
-		return;
-	}
-
-	Position port = 0;
-	try
-	{
-		port = ascii(port_edit->text()).toUnsignedInt();
-	}
-	catch(...)
-	{
-		return;
-	}
-		
-	mc->setProxy(ascii(host_edit->text()), port);
-}
-
-} } // namespaces
+} // namespaces

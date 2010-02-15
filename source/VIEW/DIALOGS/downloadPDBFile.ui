@@ -1,132 +1,140 @@
-<ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>DownloadPDBFileData</class>
- <widget class="QDialog" name="DownloadPDBFileData" >
-  <property name="geometry" >
+ <widget class="QDialog" name="DownloadPDBFileData">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>351</width>
-    <height>77</height>
+    <height>142</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Download a structure file from www.rcsb.org</string>
   </property>
-  <layout class="QGridLayout" >
-   <property name="margin" >
-    <number>9</number>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>21</y>
+     <width>321</width>
+     <height>101</height>
+    </rect>
    </property>
-   <property name="spacing" >
-    <number>6</number>
-   </property>
-   <item row="0" column="0" >
-    <widget class="QLabel" name="textLabel1" >
-     <property name="text" >
-      <string>PDB ID</string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1" colspan="2" >
-    <widget class="QComboBox" name="pdbId" >
-     <property name="toolTip" >
-      <string>Enter PDB ID</string>
-     </property>
-     <property name="editable" >
-      <bool>true</bool>
-     </property>
-     <property name="maxVisibleItems" >
-      <number>100</number>
-     </property>
-     <property name="insertPolicy" >
-      <enum>QComboBox::InsertAtTop</enum>
-     </property>
-     <property name="minimumContentsLength" >
-      <number>4</number>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" >
-    <widget class="QPushButton" name="download" >
-     <property name="enabled" >
-      <bool>false</bool>
-     </property>
-     <property name="minimumSize" >
-      <size>
-       <width>0</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="toolTip" >
-      <string>Download PDB file</string>
-     </property>
-     <property name="text" >
-      <string>Download</string>
-     </property>
-     <property name="shortcut" >
-      <string/>
-     </property>
-     <property name="default" >
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="2" >
-    <widget class="QPushButton" name="buttonClose" >
-     <property name="minimumSize" >
-      <size>
-       <width>0</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="toolTip" >
-      <string>Close window</string>
-     </property>
-     <property name="text" >
-      <string>C&amp;ancel</string>
-     </property>
-     <property name="shortcut" >
-      <string>Alt+A</string>
-     </property>
-     <property name="autoDefault" >
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1" >
-    <widget class="QPushButton" name="button_abort" >
-     <property name="enabled" >
-      <bool>false</bool>
-     </property>
-     <property name="minimumSize" >
-      <size>
-       <width>0</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="toolTip" >
-      <string>Abort download</string>
-     </property>
-     <property name="text" >
-      <string>&amp;Abort</string>
-     </property>
-     <property name="shortcut" >
-      <string>Alt+A</string>
-     </property>
-     <property name="autoDefault" >
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-  </layout>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QLabel" name="textLabel1">
+      <property name="text">
+       <string>PDB ID</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1" colspan="2">
+     <widget class="QComboBox" name="pdbId">
+      <property name="toolTip">
+       <string>Enter PDB ID</string>
+      </property>
+      <property name="editable">
+       <bool>true</bool>
+      </property>
+      <property name="maxVisibleItems">
+       <number>100</number>
+      </property>
+      <property name="insertPolicy">
+       <enum>QComboBox::InsertAtTop</enum>
+      </property>
+      <property name="minimumContentsLength">
+       <number>4</number>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0" colspan="3">
+     <widget class="QLabel" name="progress_label">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QPushButton" name="download">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="toolTip">
+       <string>Download PDB file</string>
+      </property>
+      <property name="text">
+       <string>Download</string>
+      </property>
+      <property name="shortcut">
+       <string/>
+      </property>
+      <property name="default">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QPushButton" name="button_abort">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="toolTip">
+       <string>Abort download</string>
+      </property>
+      <property name="text">
+       <string>&amp;Abort</string>
+      </property>
+      <property name="shortcut">
+       <string>Alt+A</string>
+      </property>
+      <property name="autoDefault">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="2">
+     <widget class="QPushButton" name="buttonClose">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="toolTip">
+       <string>Close window</string>
+      </property>
+      <property name="text">
+       <string>C&amp;ancel</string>
+      </property>
+      <property name="shortcut">
+       <string>Alt+A</string>
+      </property>
+      <property name="autoDefault">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
  </widget>
- <layoutdefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
+ <layoutdefault spacing="6" margin="11"/>
  <tabstops>
   <tabstop>pdbId</tabstop>
   <tabstop>download</tabstop>
@@ -134,7 +142,7 @@
   <tabstop>buttonClose</tabstop>
  </tabstops>
  <includes>
-  <include location="global" >BALL/COMMON/global.h</include>
+  <include location="global">BALL/COMMON/global.h</include>
  </includes>
  <resources/>
  <connections/>

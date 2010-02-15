@@ -119,46 +119,6 @@ namespace VIEW
 			Composite* 		composite_;
 		};
 
-	
-	/** Thread to fetch a file over TCP network traffic.
-	 		The result can either be stored in a file or in a stringstream.
-			This is the default, if no filename is given.
-	*/
-	class BALL_VIEW_EXPORT FetchHTMLThread
-		: public BALLThread
-	{
-		public:
-			///
-			FetchHTMLThread();
-
-			///
-			void setURL(const String& text);
-
-			///
-			virtual void run();
-
-			///
-			virtual void abort() { tcp_.abort();}
-
-			///
-			void setFilename(const String& file_name) { file_name_ = file_name;}
-
-			///
-			const String& getFilename() const { return file_name_;}
-
-			///
-			TCPTransfer& getTCPTransfer() { return tcp_;}
-
-			///
-			std::stringstream& getStream() { return stream_;}
-
-			protected:
-			String url_;
-			String file_name_;
-			TCPTransfer tcp_;
-			std::stringstream stream_;
-	};
-	
 	///
 	class BALL_VIEW_EXPORT CalculateFDPBThread
 		: public BALLThread

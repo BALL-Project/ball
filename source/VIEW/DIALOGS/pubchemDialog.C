@@ -6,13 +6,17 @@
 #include <BALL/VIEW/DIALOGS/pubchemDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/STRUCTURE/sdGenerator.h>
+#include <BALL/SYSTEM/TCPTransfer.h>
 
 #include <QtGui/QPushButton>
 #include <QtGui/QTreeWidget>
 #include <QtGui/QProgressBar>
 
 #include <QtCore/QUrl>
+
 #include <QtXml/QDomDocument>
+
+#include <QtNetwork/QNetworkProxy>
 
 #include <algorithm>
 
@@ -162,11 +166,7 @@ namespace BALL
 
 			// we do the proxy settings here, not in the constructor, since the
 			// user might have changed them since the last download
-			MainControl* mc = getMainControl();
-			if (mc->getProxy() != "")
-			{
-				esearch_connector_.setProxy(mc->getProxy().c_str(), mc->getProxyPort());
-			}
+			esearch_connector_.setProxy(global_network_manager.proxy());
 
 			// first, perform the search
 			QUrl search_url(esearch_base_url_.c_str());
@@ -384,11 +384,7 @@ namespace BALL
 		{
 			// we do the proxy settings here, not in the constructor, since the
 			// user might have changed them since the last download
-			MainControl* mc = getMainControl();
-			if (mc->getProxy() != "")
-			{
-				esummary_connector_.setProxy(mc->getProxy().c_str(), mc->getProxyPort());
-			}
+			esummary_connector_.setProxy(global_network_manager.proxy());
 
 			// now prepare the download
 			QUrl summary_url(esummary_base_url_.c_str());

@@ -2006,18 +2006,6 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		preferences_dialog_->setApplyEnabled(state);
 	}
 
-
-	void MainControl::setProxy(const String& host, Position port)
-	{
-		proxy_ = host;
-		proxy_port_ = port;
-
-		if (network_preferences_ != 0)
-		{
-			network_preferences_->getSettings();
-		}
-	}
-
 	void MainControl::resize(int w, int h)
 	{
 		QMainWindow::resize(w, h);
