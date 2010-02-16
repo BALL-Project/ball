@@ -181,10 +181,10 @@ namespace BALL
 				}
 			}
 
-			delete(current_reply_);
+			current_reply_->deleteLater();
 			current_reply_ = 0;
 
-			delete(progress_bar_);
+			progress_bar_->deleteLater();
 			progress_bar_ = 0;
 
 			downloadEnded_();
