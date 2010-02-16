@@ -402,6 +402,7 @@ ENDIF()
 TARGET_LINK_LIBRARIES(BALL ${BALL_DEP_LIBRARIES}
                            ${QT_QTCORE_LIBRARY}
                            ${QT_QTSQL_LIBRARY}
+                           ${QT_QTNETWORK_LIBRARY}
                            ${QT_QTXML_LIBRARY})
 
 
