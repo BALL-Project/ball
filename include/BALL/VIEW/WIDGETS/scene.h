@@ -567,6 +567,9 @@ namespace BALL
 
 				/// Export to POVRay whithout showing file dialog
 				void exportNextPOVRay();
+			
+				///
+				void exportXML3D();
 
 				///
 				void printScene();

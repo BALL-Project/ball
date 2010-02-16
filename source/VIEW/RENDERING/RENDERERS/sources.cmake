@@ -7,6 +7,7 @@ SET(SOURCES_LIST
 	tilingRenderer.C
 	VRMLRenderer.C
 	raytracingRenderer.C
+	XML3DRenderer.C
 )
 ### the list of all files requiring a moc run ###
 SET(MOC_SOURCES_LIST "")
