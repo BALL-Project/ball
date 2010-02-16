@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.18.8.2 2007/08/06 16:13:26 oliver Exp $
+# $Id: Makefile,v 1.16.2.3 2006/03/02 18:52:58 anhi Exp $
 #
 # Author:
 #   Oliver Kohlbacher
@@ -13,7 +13,7 @@ include ../../common.mak
 
 default: all
 
-EXECUTABLES =\
+EXECUTABLES = $(FFT_SOURCES)\
 	add_hydrogens\
 	assign_charges_from_rules\
 	assign_radii_from_rules\
@@ -34,7 +34,11 @@ EXECUTABLES =\
 	solvent_accessibility
 
 ifeq ($(BALL_HAS_FFTW),true)
-	EXECUTABLES+=rigid_docking
+	EXECUTABLES+=rigid_docking 
+	
+ifeq ($(BALL_HAS_MPI),true)
+	EXECUTABLES+=geometricFit_slave
+endif
 endif
 
 # default target

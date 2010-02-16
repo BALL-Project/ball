@@ -105,7 +105,12 @@ namespace BALL
 				// Default value for static protein is -15, for mobile protein 1
 				static const String PENALTY_STATIC;
 				static const String PENALTY_MOBILE;
+
+				// Number of processes in total for a parallel run
+				static const String NUMBER_OF_PROCESSES;
 				
+        // Full path to the slave to spawn
+        static const String SLAVE_PATH;
 			};
     
       struct BALL_EXPORT Default
@@ -165,6 +170,12 @@ namespace BALL
 				// Default value for static protein is -15, for mobile protein 1
 				static const int PENALTY_STATIC;
 				static const int PENALTY_MOBILE;
+
+				// number of processes for a parallel run
+				static const int NUMBER_OF_PROCESSES;
+
+        // Full path to the slave to spawn
+        static const String SLAVE_PATH;
 			};
 
       /**
@@ -242,12 +253,14 @@ namespace BALL
 						return psi_[n];
 					}
 
-				private:
-					int max_rotation_;
-					int  ang_num_;
+					// TODO: This class is a bit strange...
 					vector<int> phi_;
 					vector<int> theta_;
 					vector<int> psi_;
+
+				private:
+					int ang_num_;
+					int max_rotation_;
 			};
 
       // PROTEIN_A is the static protein, i.e., the bigger one;
@@ -304,6 +317,11 @@ namespace BALL
 			 */
 			void start()
 				;
+
+#ifdef BALL_HAS_MPI
+			/** This is the main loop of the geometric fit algorithm for the slaves of a parallel run **/
+			void MPI_Slave_start(int argc, char**argv);
+#endif
 
       // return the overall docking progress as a percentage
       float getProgress() const

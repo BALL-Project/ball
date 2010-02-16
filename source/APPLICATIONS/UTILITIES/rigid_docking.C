@@ -2,6 +2,7 @@
 #include <set> 
 #include <list>
 
+#include <BALL/SYSTEM/directory.h>
 #include <BALL/SYSTEM/timer.h>
 
 #include <BALL/COMMON/exception.h>
@@ -54,6 +55,13 @@ int main( int argc, char **argv )
   // after all rotations
   int BEST_NUM = 1000;
 
+	// how many processes should be spawned?
+	int NUMBER_OF_PROCESSES = 1;
+
+  // full path to the slave process
+  Directory d(".");
+  string SLAVE_PATH = d.getPath()+"/geometricFit_slave";
+
   // PDB file name
   string PDB_file_name_a = "";
   string PDB_file_name_b = "";
@@ -76,17 +84,19 @@ int main( int argc, char **argv )
   string USAGE     = "\
 usage: docking -a <PDB File name for protein A>\n\
                -b <PDB File name for protein B>\n\
-							[-c <chain name protein A>]\n\
-							[-z <chain name protein B>]\n\
+              [-c <chain name protein A>]\n\
+              [-z <chain name protein B>]\n\
               [-r <NEAR_RADIUS>]\n\
-						 	[-s <GRID_SPACING>]\n\
-							[-t <SURFACE_THICKNESS>]\n\
-						 	[-y <SURFACE_TYPE>]\n\
-							[-i <DEGREE_INTERVAL>]\n\
-							[-n <TOP_N>]\n\
-						 	[-e <GRID_SIZE>]\n\
+              [-s <GRID_SPACING>]\n\
+              [-t <SURFACE_THICKNESS>]\n\
+              [-y <SURFACE_TYPE>]\n\
+              [-i <DEGREE_INTERVAL>]\n\
+              [-n <TOP_N>]\n\
+              [-e <GRID_SIZE>]\n\
               [-x <output_number>]\n\
-							[-v <verbosity level>]\n";
+              [-v <verbosity level>]\n\
+              [-p <number of slaves to spawn>]\n\
+              [-P <full path to the slave process to spawn>]\n";
 
   string SEPARATOR = "--------------------------------------------------";
 
@@ -98,20 +108,22 @@ usage: docking -a <PDB File name for protein A>\n\
     {
       switch (argv[arg_count][1])
 			{
-				case 'a':  PDB_file_name_a   = string( argv[++arg_count] ); break;
-				case 'c':  CHAIN_A           = string( argv[++arg_count] ); break;
-				case 'b':  PDB_file_name_b   = string( argv[++arg_count] ); break;
-				case 'z':  CHAIN_B           = string( argv[++arg_count] ); break;
-				case 'r':  NEAR_RADIUS       = atof( argv[++arg_count] );   break;
-				case 's':  GRID_SPACING      = atof( argv[++arg_count] );   break;
-				case 'e':  GRID_SIZE         = atoi( argv[++arg_count] );   break;
-				case 't':  SURFACE_THICKNESS = atof( argv[++arg_count] );   break;
-				case 'y':  SURFACE_TYPE      = atoi( argv[++arg_count] );   break;
-				case 'i':  DEGREE_INTERVAL   = atof( argv[++arg_count] );   break;
-				case 'g':  ADD_HYDROGENS     = true;                        break;
-				case 'x':  BEST_NUM          = atoi( argv[++arg_count] );   break;
-				case 'n':  TOP_N             = atoi( argv[++arg_count] );   break;
-				case 'v':  VERBOSITY         = atoi( argv[++arg_count] );   break;
+				case 'a':  PDB_file_name_a   		= string( argv[++arg_count] ); break;
+				case 'c':  CHAIN_A           		= string( argv[++arg_count] ); break;
+				case 'b':  PDB_file_name_b   		= string( argv[++arg_count] ); break;
+				case 'z':  CHAIN_B           		= string( argv[++arg_count] ); break;
+				case 'r':  NEAR_RADIUS       		= atof( argv[++arg_count] );   break;
+				case 's':  GRID_SPACING      		= atof( argv[++arg_count] );   break;
+				case 'e':  GRID_SIZE         		= atoi( argv[++arg_count] );   break;
+				case 't':  SURFACE_THICKNESS 		= atof( argv[++arg_count] );   break;
+				case 'y':  SURFACE_TYPE      		= atoi( argv[++arg_count] );   break;
+				case 'i':  DEGREE_INTERVAL   		= atof( argv[++arg_count] );   break;
+				case 'g':  ADD_HYDROGENS        = true;                        break;
+				case 'x':  BEST_NUM             = atoi( argv[++arg_count] );   break;
+				case 'n':  TOP_N             	  = atoi( argv[++arg_count] );   break;
+				case 'v':  VERBOSITY         		= atoi( argv[++arg_count] );   break;
+				case 'p':  NUMBER_OF_PROCESSES  = atoi( argv[++arg_count] );   break;
+				case 'P':  SLAVE_PATH           = string( argv[++arg_count] ); break;
 
 				case 'h': 
 									 cout << USAGE << endl;
@@ -249,6 +261,8 @@ usage: docking -a <PDB File name for protein A>\n\
 	geo_fit.options[GeometricFit::Option::TOP_N] = TOP_N;
 	geo_fit.options[GeometricFit::Option::BEST_NUM] = BEST_NUM;
 	geo_fit.options[GeometricFit::Option::VERBOSITY] = VERBOSITY;
+	geo_fit.options[GeometricFit::Option::NUMBER_OF_PROCESSES] = NUMBER_OF_PROCESSES;
+	geo_fit.options[GeometricFit::Option::SLAVE_PATH] = SLAVE_PATH;
 
   // keep the larger protein in System A and the smaller one in System B
   if ( pro_sys_a.countAtoms() < pro_sys_b.countAtoms() )
