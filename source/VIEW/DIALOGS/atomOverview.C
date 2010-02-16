@@ -174,8 +174,8 @@ Processor::Result AtomOverview::OverviewProcessor::operator() (Composite& compos
 
 void AtomOverview::itemChanged(QTableWidgetItem* item)
 {
-	if (ignore_ | item == 0) return;
-  Index c = table->column(item);
+	if (ignore_ || (item == 0)) return;
+	Index c = table->column(item);
 
 	String s = ascii(item->text());
 	if (c == 1)
