@@ -260,9 +260,11 @@ SET(BALL_QSAR_TESTS
 	ConnectivityBase_test
 	ConnectivityDescriptors_test
 	Descriptor_test
+	QSAR_test
 	PartialChargeProcessor_test
 	PartialChargeBase_test
 	PartialChargeDescriptors_test
+	Regression_test
 	RingPerceptionProcessor_test
 	SimpleBase_test
 	SimpleDescriptors_test
