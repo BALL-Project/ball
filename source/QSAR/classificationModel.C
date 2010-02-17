@@ -42,6 +42,10 @@ namespace BALL
 			delete validation;
 		}
 
+		void ClassificationModel::operator=(ClassificationModel& m)
+		{
+			Model::operator=(m);
+		}
 
 		void ClassificationModel::readLabels()
 		{

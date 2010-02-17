@@ -47,7 +47,7 @@ namespace BALL
 		
 				~LinearModel();
 				
-				virtual void operator=(const Model& m);
+				virtual void operator=(const LinearModel& m);
 				
 				//@}
 				

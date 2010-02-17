@@ -43,6 +43,10 @@ namespace BALL
 			delete validation;
 		}
 
+		void RegressionModel::operator=(const RegressionModel& m)
+		{
+			Model::operator=(m);
+		}
 
 		const BALL::Matrix<double>* RegressionModel::getTrainingResult() const
 		{

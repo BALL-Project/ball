@@ -51,6 +51,8 @@ namespace BALL
 				RegressionModel(const QSARData& q);
 				
 				~RegressionModel();
+
+				virtual void operator=(const RegressionModel& m);
 				//@}
 				
 				

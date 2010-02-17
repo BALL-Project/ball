@@ -36,10 +36,10 @@ namespace BALL
 		{
 		}
 
-		void LinearModel::operator=(const Model& m)
+		void LinearModel::operator=(const LinearModel& m)
 		{
-			Model::operator=(m);
-			validation->setCoefficientStdErrors(((LinearModel*) &m)->validation->getCoefficientStdErrors());
+			RegressionModel::operator=(m);
+			validation->setCoefficientStdErrors(m.validation->getCoefficientStdErrors());
 		}
 
 

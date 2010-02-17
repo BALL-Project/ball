@@ -54,6 +54,8 @@ namespace BALL
 				ClassificationModel(const QSARData& q);
 				
 				~ClassificationModel();
+
+				virtual void operator=(ClassificationModel& m);
 				//@}
 				
 				
