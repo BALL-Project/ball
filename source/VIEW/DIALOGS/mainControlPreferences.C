@@ -23,7 +23,8 @@ namespace BALL
 MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name, Qt::WFlags fl)
 	: QWidget(parent, fl),
 		Ui_MainControlPreferencesData(),
-		PreferencesEntry()
+		PreferencesEntry(),
+		last_index_(0)
 {
 	setupUi(this);
 	setObjectName(name);
