@@ -231,7 +231,8 @@ namespace BALL
 			
 			//Quaternion orientation;
 			//orientation.setIdentity();
-			Vector3 direction = stage.getCamera().getLookAtPosition() - stage.getCamera().getViewPoint();
+			Vector3 direction = stage.getCamera().getViewVector();
+			//Vector3 direction = Vector3(0,1,0);
 			cout << "Direction " << direction << endl;
 			if (direction.getSquareLength() < 1e-6)
 			{
@@ -242,8 +243,9 @@ namespace BALL
 			cout << "Direction norm. " << direction << endl;
 
 			Vector3 d_null = Vector3(0,0,-1);
-			Vector3 screw_axis(-direction.y,-direction.x,0);
-			//Vector3 screw_axis = direction % d_null;
+			//Vector3 screw_axis(-direction.y,-direction.x,0);
+			//Vector3 screw_axis(direction.y,direction.x,0);
+			Vector3 screw_axis = (d_null % direction);
 			cout << "screw_axis " << screw_axis << endl;
 			float angle = 0.;
 			if ((fabs(direction.x) < 1e-6) && (fabs(direction.y) < 1e-6))
@@ -263,7 +265,7 @@ namespace BALL
 			{
 				screw_axis.normalize();
 				cout << "screw_axis norm. " << screw_axis << endl;
-				angle = -cos(direction * d_null);
+				angle = acos(direction * d_null);
 				cout << "angle " << angle << endl;
 				//orientation.fromAxisAngle(screw_axis, angle);
 			}
@@ -278,13 +280,80 @@ namespace BALL
 			Vector3 testergebnis = blubb * Vector3(0,0,-1);
 			cout << "testergebnis " << testergebnis << endl;
 			cout << "alte direction " << direction<< endl;
-
 			
+			Vector3 upvector = stage.getCamera().getLookUpVector();
+			upvector.normalize();
+			//Vector3 u_null = Vector3(0,1,0);
+			//cout << "Upvector " << upvector << endl;
+			//cout << "Blubb " << blubb << endl;
+			//Quaternion directionrot(screw_axis, angle);
+			//Matrix4x4 drotmat;
+			//Vector3 u_rotated = directionrot.getRotationMatrix(drotmat) * upvector; 
+			//u_rotated.normalize();
+			
+			//cout << "U_rotated " << u_rotated << endl;
+			//Vector3 screw_axis2 = u_rotated % u_null;
+			//Vector3 screw_axis2 = Vector3(0,0,-1);
+			Vector3 blablubb = blubb * Vector3(0,1,0);
+			//Vector3 screw_axis2 = blablubb % Vector3(0,1,0);
+			Vector3 screw_axis2 = upvector % blablubb;
+			float new_angle = 0.;	
+			if (screw_axis2.getSquareLength() < 1e-6)
+			{
+				if (blablubb.y < 1e-6)
+				{
+					new_angle = M_PI;	
+				}
+			}
+			//if ((fabs(.x) < 1e-6) && (fabs(u_rotated.y) < 1e-6))
+			//{
+			//	screw_axis2 = Vector3(1,0,0);
+			//	if (u_rotated.z > 0)
+			//	{
+			//		//orientation.fromAxisAngle(Vector3(1,0,0), M_PI);
+			//		new_angle = M_PI; 
+			//	}
+			//	else
+			//	{
+			//		new_angle = 0;
+			//	}
+			//}
+			//else
+			//{
+			////screw_axis2.normalize();
+			////cout << "screw_axis2 norm. " << screw_axis2 << endl;
+			////new_angle = acos(u_rotated * u_null);
+			//cout << "new_angle " << new_angle << endl;
+			////orientation.fromAxisAngle(screw_axis, angle);
+			//}
+			
+			new_angle = acos(upvector * blablubb);
+			//Quaternion test2(screw_axis2, -new_angle);
+			Quaternion test2(screw_axis2, -new_angle);
+			//Quaternion test2(Vector3(0,1,0), M_PI/2);
+			Quaternion q3 = test2 * test;
+			//Quaternion q3 = test;
+			Vector3 final_axis;
+			float final_angle;
+			q3.toAxisAngle(final_axis, final_angle);
+			
+			Matrix4x4 blubb3;
+			q3.getRotationMatrix(blubb3);
+			Vector3 testergebnis2 = blubb3 * Vector3(0,0,-1);
+			cout << "testergebnis2 " << testergebnis2 << endl;
+			cout << "alte direction " << direction<< endl;
+			Vector3 testergebnis3 = blubb3 * Vector3(0,1,0);
+			cout << "testergebnis3 " << testergebnis3 << endl;
+			cout << "old upvector " << upvector << endl;
 
-			out << " orientation=\""<< screw_axis.x << " "
-															<< screw_axis.y << " "
-															<< screw_axis.z << " "
-															<< angle << "\"" ;
+			//out << " orientation=\""<< screw_axis.x << " "
+			//												<< screw_axis.y << " "
+			//												<< screw_axis.z << " "
+			//												<< (-angle) << "\"" ;
+			out << " orientation=\""<< final_axis.x << " "
+															<< final_axis.y << " "
+															<< final_axis.z << " "
+															<< final_angle << "\"" ;
 			out << " >";
 			out << "</view>" << endl;
 
