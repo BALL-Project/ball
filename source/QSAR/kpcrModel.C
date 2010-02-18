@@ -85,7 +85,8 @@ namespace BALL
 
 			//result of RR is a linear combination of latente variables 
 			// = column with length=no of latente variables => matrix for more than one modelled activity
-			MatrixInverter<double, StandardTraits> inverter(latent_variables_.t()*latent_variables_);
+			Matrix<double> m = latent_variables_.t()*latent_variables_;
+			MatrixInverter<double, StandardTraits> inverter(m);
 			inverter.computePseudoInverse();
 
 			weights_ = inverter.getPseudoInverse()*latent_variables_.t()*Y_;
