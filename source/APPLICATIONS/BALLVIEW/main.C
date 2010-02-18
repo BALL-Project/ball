@@ -99,12 +99,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 		QString str = f.getValue("GENERAL", "language").c_str();
 
 		if(!(str == "Default")) {
-			QString loc = "BALLView.";
-			if(str == "System") {
-				loc += QLocale::system().name();
-			} else {
-				loc += str;
-			}
+			QString loc = "BALLView." + str;
 
 			BALL::Path p;
 			QStringList dpaths = QString(p.getDataPath().c_str()).split("\n");

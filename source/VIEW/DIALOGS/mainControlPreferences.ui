@@ -144,11 +144,6 @@
           <string>Default</string>
          </property>
         </item>
-        <item>
-         <property name="text">
-          <string>System</string>
-         </property>
-        </item>
        </widget>
       </item>
      </layout>
