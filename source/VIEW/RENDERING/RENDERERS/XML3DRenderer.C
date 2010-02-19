@@ -60,6 +60,17 @@ namespace BALL
 			outfile_ = new File(name, std::ios::out);
 		}
 
+		XML3DRenderer::XML3DRenderer(std::ostream& out_stream)
+			: Renderer(),
+				human_readable_(true)
+		{
+			if (outfile_ != 0 && RTTI::isKindOf<File>(*outfile_)) 
+			{
+				delete outfile_;
+			}
+			outfile_ = &out_stream;
+		}
+		
 		XML3DRenderer::~XML3DRenderer()
 		{
 			#ifdef BALL_VIEW_DEBUG

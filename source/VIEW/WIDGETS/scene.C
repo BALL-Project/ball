@@ -2442,7 +2442,29 @@ namespace BALL
 
 		void Scene::dumpXML3D(String& xml3ddump)
 		{
+			std::ostringstream result(xml3ddump);	
 			
+			bool ok = false;
+
+			try
+			{
+				main_display_->makeCurrent();
+				XML3DRenderer pr(result);
+
+				if (exportScene(pr)) ok = true;
+			}
+			catch(...)
+			{
+			}
+
+			if (!ok)
+			{
+				setStatusbarText("Could not export XML3D/XHTML to string", true);
+			}
+			else
+			{
+				setStatusbarText("Dumped XML3D/XHTML to string");
+			}
 		}
 
 		void Scene::switchShowWidget()

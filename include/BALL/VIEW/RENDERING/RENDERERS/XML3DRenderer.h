@@ -63,6 +63,8 @@ namespace BALL
 			XML3DRenderer(const String& name)
 				throw(Exception::FileNotFound);
 			
+			XML3DRenderer(std::ostream& name);
+			
 			// Only for Python
 			XML3DRenderer(const XML3DRenderer& renderer);
 
