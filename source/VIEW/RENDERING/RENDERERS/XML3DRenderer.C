@@ -204,7 +204,7 @@ namespace BALL
 
 			if (!Renderer::init(stage, width, height)) return false;
 
-//			createXHTMLHeader();
+			createXHTMLHeader();
 
 			// initialize xml3d environment	
 			out << "<xml3d id=\"MyXml3d\"" << endl;
@@ -329,8 +329,35 @@ namespace BALL
 			out << " >";
 			out << "</view>" << endl;
 
+			//Add support for point light sources in general
+			out << "<script id=\"pointlight\">PointLight</script>" << endl;
+				
+			list<LightSource>::const_iterator it = stage_->getLightSources().begin();
+			for (int i=0; it!=stage_->getLightSources().end(); ++it, ++i)
+			{
+				if (it->getType() == LightSource::POSITIONAL)
+				{
+					Vector3 pos = it->getPosition();
+					float intensity = it->getIntensity() ;
+					ColorRGBA color = it->getColor();
+					Vector3 attenuation = it->getAttenuation();
+					if (it->isRelativeToCamera())
+					{
+						pos = stage_->calculateAbsoluteCoordinates(pos) + stage_->getCamera().getViewPoint();
+					}
+					out << "<lightshader id=\"point" << i << "\" script=\"#pointlight\" >" << endl; 
+					out << "<bind semantic=\"position\"><float3>" << pos.x << " " << pos.y << " " << pos.z << "</float3></bind>" << endl;
+					out << "<bind semantic=\"intensity\"><float3>" << (float) color.getRed() * intensity << " " 
+																												<< (float) color.getGreen() * intensity << " "
+																												<< (float) color.getBlue() * intensity <<   "</float3></bind>" << endl;
+					out << "<bind semantic=\"attenuation\"><float3>" << attenuation.x << " " << attenuation.y << " " << attenuation.z << "</float3></bind>" << endl;
+					out << "</lightshader>" << endl;
+					out << "<light shader=\"#point" << i << "\" id=\"mypoint" << i << "\" />" << endl;
+				}
+			}
 
-
+			out << "<script id=\"ORTPhong-fs\" src=\"scripts/phong.fs\" type=\"x-shader/x-vertex\" ></script>" << endl;
+			out << "<script id=\"ORTPhong-vs\" src=\"scripts/phong.vs\" type=\"x-shader/x-vertex\" ></script>" << endl;
 			return true;
 		}
 
@@ -377,7 +404,7 @@ namespace BALL
 			out << "<script type=\"text/javascript\" src=\"../../../local/nicste/xml3d-dev/org.xml3d.renderer.webgl/script/xml3d.js\"></script>" << endl;
 			
 			
-//			createXHTMLFooter();	
+			createXHTMLFooter();	
 
 			if (outfile_ != 0 && RTTI::isKindOf<File>(*outfile_))
 			{
