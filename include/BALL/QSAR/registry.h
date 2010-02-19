@@ -32,13 +32,11 @@
 #include <BALL/QSAR/oplsModel.h>
 #include <BALL/QSAR/kplsModel.h>
 #include <BALL/QSAR/allModel.h>
-#include <BALL/QSAR/svrModel.h>
 #include <BALL/QSAR/gpModel.h>
 #include <BALL/QSAR/kpcrModel.h>
 #include <BALL/QSAR/ldaModel.h>
 #include <BALL/QSAR/svmModel.h>
 #include <BALL/QSAR/logitModel.h>
-#include <BALL/QSAR/libsvmModel.h>
 #include <BALL/QSAR/knnModel.h>
 #include <BALL/QSAR/rrModel.h>
 #include <BALL/QSAR/snBModel.h>
