@@ -2440,16 +2440,14 @@ namespace BALL
 			}
 		}
 
-		void Scene::dumpXML3D(String& xml3ddump)
+		void Scene::dumpXML3D(std::ostream& xml3ddump)
 		{
-			std::ostringstream result(xml3ddump);	
-			
 			bool ok = false;
 
 			try
 			{
 				main_display_->makeCurrent();
-				XML3DRenderer pr(result);
+				XML3DRenderer pr(xml3ddump);
 
 				if (exportScene(pr)) ok = true;
 			}

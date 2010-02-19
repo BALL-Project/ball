@@ -24,17 +24,18 @@ namespace BALL
 		{
 			Scene* scene = dynamic_cast<Scene*>(getReceiver());
 
-			String result;
 			if (!scene)
 			{
-				Log.error() << "Error: receiver for XML3D events is not a scene!" << std::endl;	
+				String result = "Error: receiver for XML3D events is not a scene!";
+				connected_stream_ << result.length() << " " << result << std::endl;
 			}
 			else
 			{
-				scene->dumpXML3D(result);
-			}
+				std::ostringstream result;
 
-			connected_stream_ << result.length() << " " << result << std::endl;
+				scene->dumpXML3D(result);
+				connected_stream_ << result.str().length() << " " << result.str() << std::endl;
+			}
 		}
 
 		bool XML3DDriver::setUp()

@@ -572,7 +572,7 @@ namespace BALL
 				void exportXML3D();
 
 				///
-				void dumpXML3D(String& xml3ddump);
+				void dumpXML3D(std::ostream& xml3ddump);
 				
 				///
 				void printScene();

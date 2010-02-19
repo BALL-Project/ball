@@ -64,10 +64,6 @@ namespace BALL
 			: Renderer(),
 				human_readable_(true)
 		{
-			if (outfile_ != 0 && RTTI::isKindOf<File>(*outfile_)) 
-			{
-				delete outfile_;
-			}
 			outfile_ = &out_stream;
 		}
 		
@@ -208,7 +204,7 @@ namespace BALL
 
 			if (!Renderer::init(stage, width, height)) return false;
 
-			createXHTMLHeader();
+//			createXHTMLHeader();
 
 			// initialize xml3d environment	
 			out << "<xml3d id=\"MyXml3d\"" << endl;
@@ -381,7 +377,7 @@ namespace BALL
 			out << "<script type=\"text/javascript\" src=\"../../../local/nicste/xml3d-dev/org.xml3d.renderer.webgl/script/xml3d.js\"></script>" << endl;
 			
 			
-			createXHTMLFooter();	
+//			createXHTMLFooter();	
 
 			if (outfile_ != 0 && RTTI::isKindOf<File>(*outfile_))
 			{
