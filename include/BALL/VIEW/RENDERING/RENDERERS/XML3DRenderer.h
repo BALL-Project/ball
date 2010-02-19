@@ -97,7 +97,7 @@ namespace BALL
 			bool isHumanReadable() const
 				{ return human_readable_;}
 
-			/** Converts a ColorRGBA into a String in XML3DRay format.
+			/** Converts a ColorRGBA into a String in XML3D format.
 			 */
 			String XML3DColorRGBA(const ColorRGBA& input);
 
@@ -108,6 +108,10 @@ namespace BALL
 			/** Converts a Vector3 into a String in XML3DRay format.
 			 */
 			String XML3DVector3(Vector3 input);
+
+			/** Prepare Strings for XML3D
+			 */
+			String XML3DString(const String& input);
 
 			virtual bool renderOneRepresentation(const Representation& representation);
 
@@ -130,6 +134,10 @@ namespace BALL
 			 		This method writes the ending of the file and closes it.
 			 */
 			virtual bool finish();
+			
+			void createXHTMLHeader();
+
+			void createXHTMLFooter();
 
 			void renderSphere_(const Sphere& sphere);
 			
