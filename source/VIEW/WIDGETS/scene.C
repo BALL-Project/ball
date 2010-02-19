@@ -2440,6 +2440,11 @@ namespace BALL
 			}
 		}
 
+		void Scene::dumpXML3D(String& xml3ddump)
+		{
+			
+		}
+
 		void Scene::switchShowWidget()
 		{
 			if (window_menu_entry_ == 0) return;
