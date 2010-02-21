@@ -641,6 +641,5 @@ namespace BALL
 				}
 			}
 		}
-
 	}
 }
