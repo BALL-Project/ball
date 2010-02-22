@@ -23,6 +23,10 @@
 # include <BALL/MATHS/matrix44.h>
 #endif
 
+#ifndef BALL_MATHS_SURFACE_H
+# include <BALL/MATHS/surface.h>
+#endif
+
 namespace BALL
 {
 	namespace VIEW
@@ -182,9 +186,11 @@ namespace BALL
 				vector<const Representation*> representations_;
 				HashSet<const Mesh*> wireframes_;
 				HashSet<String> color_strings_;
-				String font_file_;
 				double m_[12];
 				Position color_index_;
+
+				Surface sphere_template_;
+				Surface tube_template_;
 		};
   
 	} // namespace BALL

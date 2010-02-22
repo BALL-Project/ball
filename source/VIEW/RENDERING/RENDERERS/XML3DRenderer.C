@@ -16,6 +16,7 @@
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/PRIMITIVES/point.h>
 #include <BALL/VIEW/PRIMITIVES/box.h>
+#include <BALL/STRUCTURE/triangulatedSurface.h>
 #include <BALL/VIEW/PRIMITIVES/simpleBox.h>
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
@@ -38,8 +39,7 @@ namespace BALL
 		XML3DRenderer::XML3DRenderer()
 			: Renderer(),
 				outfile_(&std::cout),
-				human_readable_(true),
-				font_file_("/local/amoll/povray-3.5/include/crystal.ttf")
+				human_readable_(true)
 		{
 		}
 
@@ -54,8 +54,7 @@ namespace BALL
 		XML3DRenderer::XML3DRenderer(const String& name)
 			throw(Exception::FileNotFound)
 			: Renderer(),
-				human_readable_(true),
-				font_file_("/local/amoll/povray-3.5/include/crystal.ttf")
+				human_readable_(true)
 		{
 			outfile_ = new File(name, std::ios::out);
 		}
@@ -200,6 +199,18 @@ namespace BALL
 			color_strings_.clear();
 			color_index_ = 0;
 
+    // prepare the sphere template
+      TriangulatedSphere sphere_template;
+      sphere_template.pentakisDodecaeder();
+      sphere_template.refine(1, true);
+
+      sphere_template.exportSurface(sphere_template_);
+
+      // prepare the tube template
+      TriangulatedSurface* tube_template = TriangulatedSurface::createTube(18, 0, false, true);
+      tube_template->exportSurface(tube_template_);
+      delete (tube_template);
+
 			std::ostream& out = *outfile_;
 
 			if (!Renderer::init(stage, width, height)) return false;
@@ -328,7 +339,10 @@ namespace BALL
 			out << " fieldOfView=\"" << 1.2 << "\"";
 			out << " >";
 			out << "</view>" << endl;
-
+			
+			// Add support for phong shaders
+			out << "<script id=\"X3DPhong\">ORTPhong</script>" << endl;
+			
 			//Add support for point light sources in general
 			out << "<script id=\"pointlight\">PointLight</script>" << endl;
 				
@@ -341,6 +355,7 @@ namespace BALL
 					float intensity = it->getIntensity() ;
 					ColorRGBA color = it->getColor();
 					Vector3 attenuation = it->getAttenuation();
+					attenuation = attenuation*2.;
 					if (it->isRelativeToCamera())
 					{
 						pos = stage_->calculateAbsoluteCoordinates(pos) + stage_->getCamera().getViewPoint();
@@ -355,9 +370,10 @@ namespace BALL
 					out << "<light shader=\"#point" << i << "\" id=\"mypoint" << i << "\" />" << endl;
 				}
 			}
-
-			out << "<script id=\"ORTPhong-fs\" src=\"scripts/phong.fs\" type=\"x-shader/x-vertex\" ></script>" << endl;
-			out << "<script id=\"ORTPhong-vs\" src=\"scripts/phong.vs\" type=\"x-shader/x-vertex\" ></script>" << endl;
+			
+			// Only matters for WebGL
+			//out << "<script id=\"ORTPhong-fs\" src=\"scripts/phong.fs\" type=\"x-shader/x-vertex\" ></script>" << endl;
+			//out << "<script id=\"ORTPhong-vs\" src=\"scripts/phong.vs\" type=\"x-shader/x-vertex\" ></script>" << endl;
 			return true;
 		}
 
@@ -444,16 +460,109 @@ namespace BALL
 		
 		void XML3DRenderer::renderSphere_(const Sphere& sphere)
 		{
-			//std::ostream& out = *outfile_;
+			std::ostream& out = *outfile_;
 
-			//const ColorRGBA& color = getColor_(sphere);
 
-			//if ((Size) color.getAlpha() == 255) out << "Sphere(";
-			//else 																out << "SphereT(";
 
-		  //out << XML3DVector3(sphere.getPosition()) << ", "
-			//		<< sphere.getRadius() << ", "
-			//		<< getColorIndex_(color) << ")" << endl;
+      Vector3 const& sphere_pos = sphere.getPosition();
+      float radius = sphere.getRadius();
+			
+			//define a shader for each Tube elment
+
+      ColorRGBA const& color = sphere.getColor();
+			out << "<shader id=\"" << &sphere << "shader\" script=\"#X3DPhong\" >" << endl;
+      out << "<bind semantic=\"diffuseColor\">" << endl;
+     	out << "   <float3>" << (float)color.getRed() << " " << (float)color.getGreen() << " " << (float)color.getBlue() << "</float3>" << endl;
+			out << "</bind>" << endl;
+      
+			//out << "<bind semantic=\"specularColor\">" << endl;
+      //out << "   <float3>0 0 0</float3>" << endl;
+      //out << "</bind>" << endl;
+      //out << "<bind semantic=\"emissiveColor\">" << endl;
+      //out << "   <float3>0 0 0</float3>" << endl;
+      //out << "</bind>" << endl;
+      //out << "<bind semantic=\"transparency\">" << endl; 
+      //out << "   <float>0</float>" << endl;
+      //out << "</bind>" << endl;
+      //out << "<bind semantic=\"shininess\">" << endl;
+      //out << "   <float>0.2</float>" << endl;
+      //out << "</bind>" << endl;
+      //out << "<bind semantic=\"ambientIntensity\">" << endl; 
+      //out << "   <float>0.2</float>" << endl;
+      //out << "</bind>" << endl;
+      out << "</shader>" << endl;
+			
+			//define a transform for each Tube element
+			out << "<transform ";
+			out << "id=\"" << &sphere_pos << "\" ";
+			out << "translation=\"" << sphere_pos.x << " " << sphere_pos.y << " " << sphere_pos.z << "\" ";  
+			out << "scale=\"" << radius << " " << radius << " " << radius << "\" ";  
+			out << "/>" << endl;
+			
+			out << "<group ";
+			out << "transform=\"#" << &sphere_pos << "\" "; 
+			out << "shader=\"#" << &sphere << "shader\" >" << endl; 
+			
+			//if (mesh.vertex.size() == 0 ||
+			//    mesh.normal.size() == 0 ||
+			//		mesh.triangle.size() == 0)
+			//{
+			//	return;
+			//}
+
+			//if (mesh.vertex.size() != mesh.normal.size())
+			//{
+			//	BALLVIEW_DEBUG;
+			//	return;
+			//}
+
+			// Start a triangle env	
+			out << "<mesh "; 
+			out << "type=\"triangles\"";
+			out << ">" << endl; 
+
+			// First the indices
+			out << "<bind semantic=\"index\">" << endl;
+			out << "<int>" << endl;
+ 			vector<Surface::Triangle>::const_iterator itt = sphere_template_.triangle.begin();
+ 			
+			for (; itt != sphere_template_.triangle.end(); itt++)
+   		{
+				out << (*itt).v1 << " " << (*itt).v2 << " " << (*itt).v3 << " ";
+			}	
+			
+			out << "</int>" << endl;
+			out << "</bind>" << endl;
+
+			// then then position vectors
+			out << "<bind semantic=\"position\">" << endl;
+			out << "<float3>" << endl;
+ 			
+			vector<Surface::Vertex>::const_iterator itv = sphere_template_.vertex.begin();
+ 			for (; itv != sphere_template_.vertex.end(); itv++)
+   		{
+				out << (*itv).x << " " << (*itv).y << " " << (*itv).z << endl;
+			}	
+			
+			out << "</float3>" << endl;;
+			out << "</bind>" << endl;
+			
+			// then then position normals
+			out << "<bind semantic=\"normal\">" << endl;
+			out << "<float3>" << endl;
+ 			
+			vector<Surface::Normal>::const_iterator itn = sphere_template_.normal.begin();
+ 			for (; itn != sphere_template_.normal.end(); itn++)
+   		{
+				out << (*itn).x << " " << (*itn).y << " " << (*itn).z << endl;
+			}	
+			
+			out << "</float3>" << endl;
+			out << "</bind>" << endl;
+			
+			out << "</mesh>" << endl;
+			out << "</group>" << endl; 
+
 		}
 
 		void XML3DRenderer::renderDisc_(const Disc& disc)
@@ -571,8 +680,90 @@ namespace BALL
 
 		void XML3DRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
 		{
-			//std::ostream& out = *outfile_;
+			std::ostream& out = *outfile_;
 
+     	Vector3 vec = tube.getVertex2() - tube.getVertex1();
+      const double len = vec.getLength();
+      const double angle = acos(vec.z / len); // the denominator accounts for the non-normalized rotation axis
+      const float radius = tube.getRadius();
+
+      Vector3 const& midpoint = tube.getVertex1();
+      //Rotate the vector around the normal
+      vec /= sqrt(vec.x*vec.x + vec.y*vec.y);
+
+      Matrix4x4 matrix = Matrix4x4::getIdentity();
+      matrix.rotate(Angle(-angle), vec.y, -vec.x, 0);
+
+      Matrix4x4 temp;
+      temp.setScale(radius, radius, len);
+      matrix*=temp;
+
+      temp.setTranslation(midpoint);
+      matrix = temp*matrix;
+
+			
+			out << "<transform ";
+			out << "id=\"" << &tube << "\" ";
+			out << "translation=\"" << midpoint.x << " " << midpoint.y << " " << midpoint.z << "\" ";  
+			//out << "center=\"" << midpoint.x << " " << midpoint.y << " " << midpoint.z << "\" ";  
+			out << "rotation=\"" << vec.y  << " " << vec.x << " " << 0 << " " << angle << "\" ";  
+			//Quaternion rotation(Vector3(vec.y, vec.x, 0), -angle);
+			//Vector3 rot_axis;
+			//float rot_angle;
+			//rotation.fromAxisAngle(rot_axis, rot_angle);
+			//out << "rotation=\"" << rot_axis.x  << " " << rot_axis.y << " " << rot_axis.z << " " << -rot_angle << "\" ";  
+			out << "scale=\"" << radius << " " << radius << " " << len << "\" ";  
+			out << "/>" << endl;
+
+
+			out << "<group transform=\"#" << &tube << "\" >" << endl; 
+			
+			// Start a triangle env	
+			out << "<mesh "; 
+			out << "type=\"triangles\"";
+			out << ">" << endl; 
+
+			// First the indices
+			out << "<bind semantic=\"index\">" << endl;
+			out << "<int>" << endl;
+ 			vector<Surface::Triangle>::const_iterator itt = tube_template_.triangle.begin();
+ 			
+			for (; itt != tube_template_.triangle.end(); itt++)
+   		{
+				out << (*itt).v1 << " " << (*itt).v2 << " " << (*itt).v3 << " ";
+			}	
+			
+			out << "</int>" << endl;
+			out << "</bind>" << endl;
+
+			// then then position vectors
+			out << "<bind semantic=\"position\">" << endl;
+			out << "<float3>" << endl;
+ 			
+			vector<Surface::Vertex>::const_iterator itv = tube_template_.vertex.begin();
+ 			for (; itv != tube_template_.vertex.end(); itv++)
+   		{
+				out << (*itv).x << " " << (*itv).y << " " << (*itv).z << endl;
+			}	
+			
+			out << "</float3>" << endl;;
+			out << "</bind>" << endl;
+			
+			// then then position normals
+			out << "<bind semantic=\"normal\">" << endl;
+			out << "<float3>" << endl;
+ 			
+			vector<Surface::Normal>::const_iterator itn = tube_template_.normal.begin();
+ 			for (; itn != tube_template_.normal.end(); itn++)
+   		{
+				out << (*itn).x << " " << (*itn).y << " " << (*itn).z << endl;
+			}	
+			
+			out << "</float3>" << endl;
+			out << "</bind>" << endl;
+			
+			out << "</mesh>" << endl;
+			out << "</group>" << endl; 
 			//const ColorRGBA& color1 = tube.getColor();
 			//const ColorRGBA& color2 = tube.getColor2();
 
@@ -621,7 +812,45 @@ namespace BALL
 			}
 
 			std::ostream& out = *outfile_;
-			// Start a triangle env	
+			
+			if (mesh.colors.size() == 1)
+			{
+
+				ColorRGBA const &c = (mesh.colors.size() == 1) ? mesh.colors[0] : ColorRGBA(1., 1., 1., 1.);
+    		
+				out << "<shader id=\"" << &mesh << "shader\" script=\"#X3DPhong\" >" << endl;
+      	out << "<bind semantic=\"diffuseColor\">" << endl;
+     		out << "   <float3>" << (float)c.getRed() << " " << (float)c.getGreen() << " " << (float)c.getBlue() << "</float3>" << endl;
+				out << "</bind>" << endl;
+      	
+				out << "<bind semantic=\"specularColor\">" << endl;
+      	out << "   <float3>0 0 0</float3>" << endl;
+      	out << "</bind>" << endl;
+      	out << "<bind semantic=\"emissiveColor\">" << endl;
+      	out << "   <float3>0 0 0</float3>" << endl;
+      	out << "</bind>" << endl;
+      	out << "<bind semantic=\"transparency\">" << endl; 
+      	out << "   <float>0</float>" << endl;
+      	out << "</bind>" << endl;
+      	out << "<bind semantic=\"shininess\">" << endl;
+      	out << "   <float>0.2</float>" << endl;
+      	out << "</bind>" << endl;
+      	out << "<bind semantic=\"ambientIntensity\">" << endl; 
+      	out << "   <float>0.2</float>" << endl;
+      	out << "</bind>" << endl;
+      	out << "</shader>" << endl;
+				
+			}		
+
+			out << "<group "; 
+			out << "id=\"" << &mesh << "\" ";
+			
+			if (mesh.colors.size() == 1)
+			{
+				out << "shader=\"" << &mesh << "shader\" ";
+			}
+			out << ">" << endl; 
+			
 			out << "<mesh "; 
 			out << "type=\"triangles\"";
 			out << ">" << endl; 
@@ -665,145 +894,31 @@ namespace BALL
 			out << "</float3>" << endl;
 			out << "</bind>" << endl;
 			
+			// export Vertex Colors if necessary	
+			if (mesh.colors.size() > 1)
+			{
+				out << "<bind semantic=\"color\">" << endl;
+				out << "<float3>" << endl;
+
+				vector<ColorRGBA>::const_iterator itc = mesh.colors.begin();
+				for (; itc != mesh.colors.end(); itc++)
+				{
+					out << (float)(*itc).getRed() << " " << (float)(*itc).getGreen() << " " << (float)(*itc).getBlue() << endl;
+				}	
+
+				out << "</float3>" << endl;
+				out << "</bind>" << endl;
+			}
+ 			
+			
 			out << "</mesh>" << endl;
+			
+			out << "</group>" << endl; 
 
 			// then then position texcoord
 			//out << "<bind semantic=\"texcoord\">" << endl;
 			//out << "<\bind>" << endl;
 
-
-
-
-			//// is this a mesh in wireframe mode?
-			//if (wireframes_.has(&mesh))
-			//{
-			//	if (mesh.colors.size() == 0) return;
-
-			//	String pre = "Wire(";
-
-			//	String color_index = getColorIndex_(mesh.colors[0]);
-
-			//	for (Position tri = 0; tri < mesh.triangle.size(); tri++)
-			//	{
-			//		String v1 = XML3DVector3(mesh.vertex[mesh.triangle[tri].v1]);
-			//		String v2 = XML3DVector3(mesh.vertex[mesh.triangle[tri].v2]);
-			//		String v3 = XML3DVector3(mesh.vertex[mesh.triangle[tri].v3]);
-
-			//		if (v1 == v2 || v2 == v3 || v3 == v1) continue;
-
-			//		out << pre << v1 << ", " << v2 << ", " << v3 << ", ";
-
-			//		if (mesh.colors.size() > 1)
-			//		{
-			//			out	<< getColorIndex_(mesh.colors[mesh.triangle[tri].v1]) << ","
-			//					<< getColorIndex_(mesh.colors[mesh.triangle[tri].v2]) << ","
-			//					<< getColorIndex_(mesh.colors[mesh.triangle[tri].v3]) << ")" << endl;
-			//		}
-			//		else
-			//		{
-			//			out << color_index << "," << color_index << "," << color_index <<")" << std::endl;
-			//		}
-			//	}
-			//	return;
-			//}
-
-			//
-			//// draw BALL Mesh as XML3DRay mesh2
-			//
-			//out << "\tmesh2 {" << endl;
-			//// write vertices ---->
-			//out << "\t\tvertex_vectors {" << endl;
-			//out << "\t\t\t" << mesh.vertex.size() << ","  << endl;
-			//out << "\t\t\t";
-			//for (Position i = 0; i < mesh.vertex.size() - 1; i++)
-			//{
-			//	out << XML3DVector3(mesh.vertex[i]) << ", ";
-			//}
-			//out << XML3DVector3(mesh.vertex[mesh.vertex.size() - 1]) << endl;
-			//out << "\t\t}" << endl;
-
-			//// write normals ---->
-			//out << "\t\tnormal_vectors {" << endl;
-			//out << "\t\t\t" << mesh.normal.size() << "," << endl;
-			//out << "\t\t\t";
-			//for (Position i = 0; i < mesh.normal.size() - 1; i++)
-			//{
-			//	out << XML3DVector3(mesh.normal[i]) << ", ";
-			//}
-			//out << XML3DVector3(mesh.normal[mesh.normal.size() - 1]) << endl;
-			//out << "\t\t}" << endl;
-
-			///////////////////////////////////////////////////
-			//// calculate a hashset of all colors in the mesh
-			///////////////////////////////////////////////////
-			//
-      //ColorMap colors;
-      //vector<const ColorRGBA*> color_vector;
-      //String color_string;
-      //for (Position i = 0; i < mesh.colors.size(); i++)
-      //{
-      //  mesh.colors[i].get(color_string);
-      //  if (!colors.has(color_string))
-      //  {
-      //    colors.insert(ColorMap::ValueType(color_string, colors.size()));
-      //    color_vector.push_back(&mesh.colors[i]);
-      //  }
-      //}
-
-			//// write colors of vertices ---->
-			//out << "\t\ttexture_list{" << endl;
-			//out << "\t\t\t" << colors.size()<< ","<< endl;
-
-			//for (Position p = 0; p < colors.size(); p++)
-			//{
-			//	out << "texture { pigment { " << getColorIndex_(*color_vector[p]) << " }"
-			//			<< " finish { BALLFinishMesh } }";
-
-			//	if (p < colors.size() - 1) out << ",";
-
-			//	out << endl;
-			//}
-
-			//out << "\t\t}" << endl;
-			//
-			//// write vertex indices ---->
-			//out << "\t\tface_indices {" << endl;
-			//out << "\t\t\t" << mesh.triangle.size() << ","<<  endl;
-			//if (mesh.colors.size() == 1)
-			//{
-			//	out << "\t\t\t";
-			//	for (Position i = 0; i < mesh.triangle.size(); i++)
-			//	{
-			//		out << "<";
-			//		out << mesh.triangle[i].v1 << ", ";
-			//		out << mesh.triangle[i].v2 << ", ";
-			//		out << mesh.triangle[i].v3 << ", ";
-			//		// color index
-			//		out << "> " << 0 << endl;
-			//	}
-			//}
-			//else
-			//{
-			//	String color_temp;
-			//	for (Position i = 0; i < mesh.triangle.size(); i++)
-			//	{
-			//		out << "<";
-			//		out << mesh.triangle[i].v1 << ", ";
-			//		out << mesh.triangle[i].v2 << ", ";
-			//		out << mesh.triangle[i].v3 << ">, ";
-			//		// color index
-			//		mesh.colors[mesh.triangle[i].v1].get(color_temp);
-			//		out << colors[color_temp] << ", ";
-			//		mesh.colors[mesh.triangle[i].v2].get(color_temp);
-			//		out << colors[color_temp] << ", ";
-			//		mesh.colors[mesh.triangle[i].v3].get(color_temp);
-			//		out << colors[color_temp] << endl;
-			//	}
-			//}
-			//out << "\t\t}" << endl;
-			//out << "\t inside_vector <0, 0, 1>" << endl;
-			//out << "hollow" << endl;
-			//out << "\t}" << endl;
 		}
 				
 		const ColorRGBA& XML3DRenderer::getColor_(const GeometricObject& object)
