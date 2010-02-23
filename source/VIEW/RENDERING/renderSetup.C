@@ -160,7 +160,7 @@ namespace BALL
 
 			updateCamera();
 
-			renderToBuffer_();
+			//renderToBuffer_();
 
 			render_mutex_.lock();
 
@@ -177,6 +177,7 @@ namespace BALL
 			camera_ = (camera == 0) ? stage.getCamera() : *camera;
 
 			render_mutex_.lock();
+			
 
 			if (stereo_setup_ != NONE)
 			{
@@ -184,7 +185,59 @@ namespace BALL
 				eye_separation *= (stereo_setup_ == LEFT_EYE) ? -1. : 1.;
 				eye_separation *= stage.swapSideBySideStereo() ? -1. : 1.;
 
+#ifndef BALL_HAS_RTFACT
 				renderer->setupStereo(eye_separation, stage.getFocalDistance());
+#else
+				float delta = 0; 
+				float width = renderer->getWidth();
+				float height = renderer->getHeight();
+				float aperture = 60.;
+
+				delta = (eye_separation * width) / (2. * stage.getFocalDistance() * tan(Angle(aperture, false).toRadian())); 
+				delta *= stage.swapSideBySideStereo() ? -1. : 1.;
+				static_cast<GLRenderWindow*>(target)->setStereoDelta(delta);
+
+				if (stereo_setup_ == LEFT_EYE)
+				{
+					std::cout << "<<<Left Eye: ";
+				}
+				else if (stereo_setup_ == RIGHT_EYE)
+				{
+					std::cout << ">>>Right Eye: ";
+				}
+				else std::cout << "---No Eye:   " << delta << std::endl;
+				std::cout << "Aper: " << aperture;
+				std::cout << " WxH: " << width;
+				std::cout << "x" << height;
+				std::cout << " FD: " << stage.getFocalDistance();
+				std::cout << " ES: " << stage.getEyeDistance();
+				std::cout << " d: " << delta;
+				std::cout << "---" << std::endl;
+				//resize(width+delta, height);
+				//makeCurrent();
+
+				//if(!target->resize(width+delta, height))
+				//{
+				//	Log.error() << "Cannot resize window. Size " 
+				//							<< width  << " x " 
+				//							<< height << " is not supported" << std::endl;
+				//}
+
+				//renderer->setSize(width, height);
+				//if (RTTI::isKindOf<BufferedRenderer>(*renderer))
+				//{
+				//	if(!(((BufferedRenderer*)renderer)->setFrameBufferFormat(target->getFormat())))
+				//	{
+				//		Log.error() << "Raytracing render does not support window framebuffer format. Seems to be configuration error" << std::endl;
+
+				//		//render_mutex_.unlock();
+
+				//		throw Exception::GeneralException(__FILE__, __LINE__);
+				//	}
+				//}
+
+				//renderer->setSize(width, height);
+#endif
 
 				camera_offset_  = Vector3(eye_separation, 0., 0.);
 
