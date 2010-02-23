@@ -13,8 +13,9 @@ namespace BALL {
 #include <BALL/MATHS/LINALG/vector.ih>
 
 #ifdef BALL_OS_WINDOWS
-	namespace BALL {
-		// explicit instantiation to save the compiler some work (and to *make* it work on Windows)
+	namespace BALL
+	{
+		// explicit instantiation to make it work on Windows
 		template class BALL_EXPORT Vector<float>;
 		template class BALL_EXPORT Vector<double>;
 		template class BALL_EXPORT Vector<ComplexFloat>;

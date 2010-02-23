@@ -20,8 +20,9 @@ namespace BALL {
 #include <BALL/MATHS/LINALG/matrix.ih>
 
 #ifdef BALL_OS_WINDOWS
-	namespace BALL {
-		// explicit instantiation to save the compiler some work (and to *make* it work on Windows)
+	namespace BALL
+	{
+		// explicit instantiation to make it work on Windows
 		template class BALL_EXPORT Matrix<float, StandardTraits>;
 		template class BALL_EXPORT Matrix<double, StandardTraits>;
 		template class BALL_EXPORT Matrix<ComplexFloat, StandardTraits>;
