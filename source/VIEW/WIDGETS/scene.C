@@ -2962,7 +2962,7 @@ return; //TODO Why??
 			left_renderer->setFrameBufferFormat(left_widget->getFormat());
 #endif
 
-			left_widget->show/*FullScreen*/();
+			left_widget->show();
 			left_renderer->setSize(left_widget->width(), left_widget->height());
 
 			boost::shared_ptr<RenderSetup> left_rs(new RenderSetup(left_renderer, left_widget, this, stage_));
@@ -2989,7 +2989,7 @@ return; //TODO Why??
 			right_renderer->setFrameBufferFormat(right_widget->getFormat());
 #endif
 
-			right_widget->show/*FullScreen*/();
+			right_widget->show();
 			right_renderer->setSize(right_widget->width(), right_widget->height());
 
 			boost::shared_ptr<RenderSetup> right_rs(new RenderSetup(right_renderer, right_widget, this, stage_));
