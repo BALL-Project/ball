@@ -38,7 +38,8 @@ namespace BALL
 			  FB_INTERNAL_TEXTURE_FORMAT(GL_RGB),
 			  FB_TEXTURE_DATATYPE(GL_FLOAT),
 			  ignore_events_(false),
-				down_sampling_factor_(1.)
+				down_sampling_factor_(1.),
+				stereo_delta_(0.)
 		{		
 			// we will swap buffers manually in the scene for synchronization
 			setAutoBufferSwap(false);
@@ -53,7 +54,8 @@ namespace BALL
 			  FB_INTERNAL_TEXTURE_FORMAT(GL_RGB),
 			  FB_TEXTURE_DATATYPE(GL_FLOAT),
 			  ignore_events_(false),
-				down_sampling_factor_(1.)
+				down_sampling_factor_(1.),
+				stereo_delta_(0.)
 		{
 			if (!QGLWidget::isValid())
 			{
@@ -72,7 +74,8 @@ namespace BALL
 			  FB_INTERNAL_TEXTURE_FORMAT(GL_RGB),
 			  FB_TEXTURE_DATATYPE(GL_FLOAT),
 			  ignore_events_(false),
-				down_sampling_factor_(1.)
+				down_sampling_factor_(1.),
+				stereo_delta_(0.)
 		{
 			// we will swap buffers manually in the scene for synchronization
 			setAutoBufferSwap(false);
@@ -162,20 +165,50 @@ namespace BALL
 			glViewport(0, 0, down_sampling_factor_*m_fmt.getWidth(), down_sampling_factor_*m_fmt.getHeight());
 			float aspectRatio = static_cast<float>(m_fmt.getWidth()) / m_fmt.getHeight();
 			glOrtho(-aspectRatio, aspectRatio, -1.0f, 1.0f, -1.0f, 1.0f);
+			
+			
+			float origWidth = static_cast<float>(m_fmt.getWidth());
+			float newWidth = (origWidth + fabs(stereo_delta_));
+			float newRatio = origWidth / newWidth;
+			float deltaRatio = 1. - newRatio;
+			if (newRatio != 1.)
+			{
+				std::cout << newRatio << std::endl;
+			}
+			
 
+				
 			glBegin(GL_QUADS);
+			
+			if (stereo_delta_ <= 0.)
+			{
+				glTexCoord2f(0.0f+deltaRatio, 0.0f);
+				glVertex2f(-aspectRatio, -1.0f);
+			
+				glTexCoord2f(1.0f, 0.0f );
+				glVertex2f(aspectRatio, -1.0f);	
 
-			glTexCoord2f(0.0f, 0.0f);
-			glVertex2f(-aspectRatio, -1.0f);
+				glTexCoord2f(1.0f, 1.0f );
+				glVertex2f(aspectRatio, 1.0f);	
 
-			glTexCoord2f(1.0f, 0.0f );
-			glVertex2f(aspectRatio, -1.0f);	
+				glTexCoord2f(0.0f+deltaRatio, 1.0f);
+				glVertex2f(-aspectRatio, 1.0f);
+			}
+			else
+			{
+				glTexCoord2f(0.0f, 0.0f);
+				glVertex2f(-aspectRatio, -1.0f);
+			
+				glTexCoord2f(1.0f-deltaRatio, 0.0f );
+				glVertex2f(aspectRatio, -1.0f);	
 
-			glTexCoord2f(1.0f, 1.0f );
-			glVertex2f(aspectRatio, 1.0f);	
+				glTexCoord2f(1.0f-deltaRatio, 1.0f );
+				glVertex2f(aspectRatio, 1.0f);	
 
-			glTexCoord2f(0.0f, 1.0f);
-			glVertex2f(-aspectRatio, 1.0f);
+				glTexCoord2f(0.0f, 1.0f);
+				glVertex2f(-aspectRatio, 1.0f);
+			}
+
 
 			glEnd();
 #endif

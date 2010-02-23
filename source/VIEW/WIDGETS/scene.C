@@ -1676,9 +1676,9 @@ namespace BALL
 
 					renderer->makeCurrent();
 					// NOTE: GLRenderers currently render in the GUI thread!
-					if (RTTI::isKindOf<GLRenderer>(*(renderer->renderer)))
-						renderer->renderToBuffer();
-					else
+					//if (RTTI::isKindOf<GLRenderer>(*(renderer->renderer)))
+					//	renderer->renderToBuffer();
+					//else
 						renderer->target->refresh();
 
 					if (RTTI::isKindOf<GLRenderWindow>(*(renderer->target)))
@@ -2820,21 +2820,35 @@ namespace BALL
 		void Scene::addGlWindow()
 		{
 			GLRenderWindow* new_widget = new GLRenderWindow(0, "Scene", Qt::Window);
-			new_widget->makeCurrent();
 			new_widget->init();
+			new_widget->makeCurrent();
 			new_widget->resize(width(), height());
 
 			new_widget->installEventFilter(this);
 
-			GLRenderer*   new_renderer = new GLRenderer;
-			new_renderer->init(*this);
-			new_renderer->enableVertexBuffers(want_to_use_vertex_buffer_);
+///////// Variante 1 ////
+//			//GLRenderer*   new_renderer = new GLRenderer;
+//			//new_renderer->init(*this);
+//			//new_renderer->enableVertexBuffers(want_to_use_vertex_buffer_);
+//
+//			new_widget->show();
+//
+//			boost::shared_ptr<RenderSetup> new_rs(new RenderSetup(&*rt_renderer_, new_widget, this, stage_));
+//			new_rs->setReceiveBufferUpdates(false);	
+//
+//			//resetRepresentationsForRenderer_(*new_rs);
 
-			new_widget->show();
+
+///////// Variante 2 ////
+			t_RaytracingRenderer* new_renderer = new t_RaytracingRenderer();
+			new_renderer->init(*this);
+			new_renderer->setFrameBufferFormat(new_widget->getFormat());
 
 			boost::shared_ptr<RenderSetup> new_rs(new RenderSetup(new_renderer, new_widget, this, stage_));
-
+			new_rs->setReceiveBufferUpdates(true);	
 			resetRepresentationsForRenderer_(*new_rs);
+			new_widget->show();
+
 
 			renderers_.push_back(new_rs);
 			// NOTE: *don't* try to start new_rs, since this is an automatic variable
@@ -2938,11 +2952,17 @@ return; //TODO Why??
 			left_widget->init();
 			left_widget->resize(QApplication::desktop()->screen(0)->width(), QApplication::desktop()->screen(0)->height());
 
+#ifndef BALL_HAS_RTFACT
 			GLRenderer*   left_renderer = new GLRenderer;
 			left_renderer->init(*this);
 			left_renderer->enableVertexBuffers(want_to_use_vertex_buffer_);
+#else
+			t_RaytracingRenderer*  left_renderer = new t_RaytracingRenderer();
+			left_renderer->init(*this);
+			left_renderer->setFrameBufferFormat(left_widget->getFormat());
+#endif
 
-			left_widget->showFullScreen();
+			left_widget->show/*FullScreen*/();
 			left_renderer->setSize(left_widget->width(), left_widget->height());
 
 			boost::shared_ptr<RenderSetup> left_rs(new RenderSetup(left_renderer, left_widget, this, stage_));
@@ -2959,11 +2979,17 @@ return; //TODO Why??
 			right_widget->init();
 			right_widget->resize(QApplication::desktop()->screen(1)->width(), QApplication::desktop()->screen(1)->height());
 
+#ifndef BALL_HAS_RTFACT
 			GLRenderer*   right_renderer = new GLRenderer;
 			right_renderer->init(*this);
 			right_renderer->enableVertexBuffers(want_to_use_vertex_buffer_);
+#else
+			t_RaytracingRenderer*  right_renderer = new t_RaytracingRenderer();
+			right_renderer->init(*this);
+			right_renderer->setFrameBufferFormat(right_widget->getFormat());
+#endif
 
-			right_widget->showFullScreen();
+			right_widget->show/*FullScreen*/();
 			right_renderer->setSize(right_widget->width(), right_widget->height());
 
 			boost::shared_ptr<RenderSetup> right_rs(new RenderSetup(right_renderer, right_widget, this, stage_));

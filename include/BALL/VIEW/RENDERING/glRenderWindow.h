@@ -69,6 +69,10 @@ namespace BALL
 			void setDownsamplingFactor(float dsfactor)
 				{down_sampling_factor_ = dsfactor;}
 			
+			/// Set the stereo delta for raytracing in pixels.
+			void setStereoDelta(float delta)
+				{stereo_delta_ = delta;}
+			
 			/// Get the window's downsampling factor.
 			float getDownsamplingFactor() const
 				{return down_sampling_factor_;}
@@ -107,6 +111,7 @@ namespace BALL
 			mutable Mutex contex_mutex_;
 			bool ignore_events_;
 			float down_sampling_factor_;
+			float stereo_delta_;
 		};
 
 	} // namespace VIEW
