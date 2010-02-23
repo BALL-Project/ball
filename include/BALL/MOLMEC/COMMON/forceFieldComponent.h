@@ -6,8 +6,8 @@
 
 // Molecular Mechanics: general force field component class
 
-#ifndef BALL_MOLMEC_FORCEFIELDCOMPONENT_H
-#define BALL_MOLMEC_FORCEFIELDCOMPONENT_H
+#ifndef BALL_MOLMEC_COMMON_FORCEFIELDCOMPONENT_H
+#define BALL_MOLMEC_COMMON_FORCEFIELDCOMPONENT_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -19,6 +19,10 @@
 
 #ifndef BALL_KERNEL_ATOM_H
 #	include	<BALL/KERNEL/atom.h>
+#endif
+
+#ifndef BALL_SYSTEM_FILE_H
+# include <BALL/SYSTEM/file.h>
 #endif
 
 namespace BALL 
@@ -136,6 +140,10 @@ namespace BALL
 		virtual void update()
 			throw(Exception::TooManyErrors);
 
+		/** Write the parameters in Parm-file format
+		 */
+		virtual bool exportParmFile(File& /*outfile*/) const {return true;};
+
 		protected:
 
 		//@}
@@ -169,4 +177,4 @@ namespace BALL
 	};
 } // namespace BALL
 
-#endif // BALL_MOLMEC_FORCEFIELDCOMPONENT_H
+#endif // BALL_MOLMEC_COMMON_FORCEFIELDCOMPONENT_H

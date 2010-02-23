@@ -16,7 +16,9 @@ namespace BALL
 		:	ParameterSection(),
 			number_of_atom_types_(0),
 			torsions_(),
-			torsion_hash_map_()
+			torsion_hash_map_(),
+			comment_(),
+			force_field_parameters_(0)
 	{
 	}
 
@@ -24,7 +26,9 @@ namespace BALL
 		:	ParameterSection(rhs),
 			number_of_atom_types_(rhs.number_of_atom_types_),
 			torsions_(rhs.torsions_),
-			torsion_hash_map_(rhs.torsion_hash_map_)
+			torsion_hash_map_(rhs.torsion_hash_map_),
+			comment_(rhs.comment_),
+			force_field_parameters_(rhs.force_field_parameters_)
 	{
 	}
 
@@ -35,10 +39,12 @@ namespace BALL
 
 	void CosineTorsion::clear() 
 	{
-		ParameterSection::clear();
 		number_of_atom_types_ = 0;
 		torsions_.clear();
 		torsion_hash_map_.clear();
+		comment_.clear();
+		force_field_parameters_ = 0;
+		ParameterSection::clear();
 	}
 
 	bool CosineTorsion::extractSection(Parameters& parameters, const String& section_name)
@@ -76,6 +82,9 @@ namespace BALL
 		Size	i;
 		const AtomTypes&	atom_types = parameters.getAtomTypes();
 		number_of_atom_types_ = atom_types.getNumberOfTypes();
+	
+		// store a pointer to the corresponding atom types
+		force_field_parameters_ = &parameters;
 
 		// clear all old torsions
 		//	- torsions_ is a vector containing Values objects
@@ -83,7 +92,8 @@ namespace BALL
 		//		to a the index in torsions_
 		torsions_.clear();
 		torsion_hash_map_.clear();
-		
+		comment_.clear();
+
 		// determine the units of the phase and potential wall
 		// (if given in options)
 		float factor_phase = 1.0;
@@ -104,13 +114,14 @@ namespace BALL
 			}
 		}
 
-
 		Atom::Type		type_I;
 		Atom::Type		type_J;
 		Atom::Type		type_K;
 		Atom::Type		type_L;
 		String				key;
 		String				fields[5];
+
+		bool has_commments = hasVariable("comment");
 
 		StringHashMap<Index>::Iterator it;
 		for (it = section_entries_.begin(); it != section_entries_.end(); ++it)
@@ -137,11 +148,11 @@ namespace BALL
 					} 
 					else 
 					{
-
 						// create a new torsion and store 
 						// it in the vector of torsions
-						Size array_idx = (Size)torsions_.size();	
+						Size array_idx = (Size)torsions_.size();
 						torsions_.push_back(Values(n));
+						vector<String> comments;
 						
 						// try to find the torsion terms
 						for (i = 0; i < n; i++)
@@ -155,7 +166,18 @@ namespace BALL
 							torsions_[array_idx].values[i].phase	= getValue(term_key, "phi0").toFloat() * factor_phase;
 							torsions_[array_idx].values[i].f			= getValue(term_key, "f").toFloat();
 							torsions_[array_idx].values[i].V			= getValue(term_key, "V").toFloat() * factor_V;
-						}
+							
+							if (has_commments)
+							{
+								comments.push_back(getValue(term_key, "comment"));
+							}
+							else
+							{
+								comments.push_back("");
+							}
+						}	
+							
+						comment_.push_back(comments);
 						
 						// insert the array index and the atom type key into the
 						// hash map
@@ -316,6 +338,83 @@ namespace BALL
 
 		return result;
 	}
+	
+	bool CosineTorsion::exportParmFile(File& outfile) const
+	{ 
+		if (!force_field_parameters_)
+			return false;
+
+		// TODO: in AMBER torsion_parameters_ demands a format slightly different 
+		// from improper_parameters_ (for which this method originally was designed)! 
+
+		AtomTypes& atom_types = force_field_parameters_->getAtomTypes();
+			
+		// convert from BALL standart units into AMBER standard units
+		float factor_phase = 1.;
+		float factor_V = Constants::CAL_PER_JOULE;
+		String atom_I;
+		String atom_J;
+		String atom_K;
+		String atom_L;
+
+		Index	 index     = 0;
+		
+		// a string buffer for snprintf
+		char buffer[1024];
+		
+		for (Size i=0; i < number_of_atom_types_; i++)
+		{	
+			atom_I = atom_types.getTypeName(i);
+			atom_I = (atom_I =="?") ? "X " : atom_I;
+
+			for (Size j=0; j < number_of_atom_types_; j++)
+			{
+				atom_J = atom_types.getTypeName(j);
+				atom_J = (atom_J=="?") ? "X " : atom_J;
+
+				for (Size k=0; k < number_of_atom_types_; k++)
+				{	
+					atom_K = atom_types.getTypeName(k);
+					atom_K = (atom_K=="?") ? "X " : atom_K;
+
+					for (Size l=0; l < number_of_atom_types_; l++)
+					{	
+						// calculate the index into the torsions_
+						index = i + j * number_of_atom_types_ 
+							+ k * number_of_atom_types_ * number_of_atom_types_ 
+							+ l * number_of_atom_types_ * number_of_atom_types_ * number_of_atom_types_;
+
+						if (torsion_hash_map_.find(index) != torsion_hash_map_.end())
+						{	
+							index = torsion_hash_map_[index];
+							
+							atom_L = atom_types.getTypeName(l);
+							atom_L = (atom_L=="?") ? "X " : atom_L;
+
+							Values const& torsion_value = torsions_[index];
+
+							for (Size i = 0; i < torsion_value.n; i++)
+							{			
+								float f_prefactor = (i==(torsion_value.n-1)) ? +1.f : -1.f;
+								
+								//emulate format:  X -C -CA-X    4   14.50        180.0             2.         intrpol.bsd.on C6H6
+								snprintf(buffer, 1024, "%-2s-%-2s-%-2s-%-2s   %d    %2.3f       %3.1f          %2.0f        %s",
+										atom_I.c_str(), atom_J.c_str(), atom_K.c_str(), atom_L.c_str(),
+										(int)torsion_value.values[i].n, torsion_value.values[i].V*factor_V, 
+										torsion_value.values[i].phase*factor_phase, f_prefactor*torsion_value.values[i].f, 
+										comment_[index][i].c_str());
+
+								outfile << buffer << endl;
+							} 
+						}
+					}
+				}
+			}	
+		}
+		// Terminate by blank card
+		outfile << endl;
+		return true;
+	}
 
 
 
@@ -325,9 +424,11 @@ namespace BALL
 		if (this != &rhs)
 		{
 			ParameterSection::operator = (rhs);
-			number_of_atom_types_ = rhs.number_of_atom_types_;
-			torsions_ = rhs.torsions_;
-			torsion_hash_map_ = rhs.torsion_hash_map_;
+			number_of_atom_types_	 	= rhs.number_of_atom_types_;
+			torsions_ 							= rhs.torsions_;
+			torsion_hash_map_ 			= rhs.torsion_hash_map_;	
+			comment_ 								= rhs.comment_;
+			force_field_parameters_ = rhs.force_field_parameters_; 
 		}
 
 		return *this;
@@ -337,8 +438,9 @@ namespace BALL
 	{
 		// There's no real need to compare the hash map -- it should contain
 		// nothing that is not already contained in torsions_.
-		return ((number_of_atom_types_ == cosine_torsion.number_of_atom_types_)
-						&& (torsions_ == cosine_torsion.torsions_));
+		return (   (number_of_atom_types_ 	== cosine_torsion.number_of_atom_types_)
+						&& (torsions_             	== cosine_torsion.torsions_)
+						&& (force_field_parameters_ == cosine_torsion.force_field_parameters_) );
 	}
 
 	 

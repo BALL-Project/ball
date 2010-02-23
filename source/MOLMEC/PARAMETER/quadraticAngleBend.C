@@ -13,7 +13,11 @@ namespace BALL
 
 	QuadraticAngleBend::QuadraticAngleBend()
 		:	ParameterSection(),
-			number_of_atom_types_(0)
+			number_of_atom_types_(0),
+			values_(),
+			value_index_(),
+			comment_(),
+			force_field_parameters_(0)
 	{
 	}
 
@@ -24,10 +28,12 @@ namespace BALL
 
 	void QuadraticAngleBend::clear() 
 	{
-		// clear allocatd parameter fields
+		// clear allocated parameter fields
+		number_of_atom_types_ = 0;
 		values_.clear();
 		value_index_.clear();
-
+		comment_.clear();
+		force_field_parameters_ = 0;
 		ParameterSection::clear();
 	}
 
@@ -62,10 +68,14 @@ namespace BALL
 		number_of_atom_types_ = atom_types.getNumberOfTypes();
 		Size number_of_entries = number_of_atom_types_ * number_of_atom_types_ * number_of_atom_types_;
 		
+		// store a pointer to the corresponding atom types
+		force_field_parameters_ = &parameters;
+
 		// clear internal data structures
 		values_.clear();
 		value_index_.clear();
 		value_index_.resize(number_of_entries);
+		comment_.clear();
 
 		// set the value_index_ array to -1 (= parameter undefined)
 		Size	i;
@@ -115,6 +125,7 @@ namespace BALL
 		// get the column indices of the different table variables
 		Size index_k			= getColumnIndex("k");
 		Size index_theta0	= getColumnIndex("theta0");
+		Size index_comment	= getColumnIndex("comment");
 
 		String	fields[4];
 		Values	values;
@@ -149,6 +160,7 @@ namespace BALL
 					values.k = getValue(i, index_k).toFloat() * factor_k;
 					values.theta0 = getValue(i, index_theta0).toFloat() * factor_theta0;
 					values_.push_back(values);
+					comment_.push_back(getValue(i, index_comment));
 				} 
 				else 
 				{
@@ -163,7 +175,60 @@ namespace BALL
 
 		return true;
 	}
+	
+	bool QuadraticAngleBend::exportParmFile(File& outfile) const
+	{	
+		
+		if (!force_field_parameters_)
+			return false;
 
+		AtomTypes& atom_types = force_field_parameters_->getAtomTypes();
+
+		// Amber requires kcal/mol/rad^2 and degree
+		// while BALL uses kjoule/mol/degree^2 and degree
+		double factor_k      = Constants::CAL_PER_JOULE; 
+		double factor_theta0 = Constants::DEG_PER_RAD; 
+		
+		Index	 index     = 0;
+		Values  value;
+
+		// a string buffer for snprintf
+		char buffer[1024];
+		
+		for (Size i=1; i < number_of_atom_types_; i++)
+		{	
+			String atom_I =  atom_types.getTypeName(i);
+
+			for (Size j=0; j < number_of_atom_types_; j++)
+			{
+				String atom_J =  atom_types.getTypeName(j);
+
+				for (Size k=i; k < number_of_atom_types_; k++)
+				{
+					index =(Index)(i + number_of_atom_types_ * j + number_of_atom_types_ * number_of_atom_types_ * k);
+					if (value_index_[index] > -1)
+					{
+						String atom_K = atom_types.getTypeName(k);
+
+						// calculate the index into the in value_index_ array
+						index = value_index_[(Index)(i + number_of_atom_types_ * j + number_of_atom_types_ * number_of_atom_types_ * k)];
+						value = values_[index];
+
+						//emulate format: O -C -O     80.0      126.00    AA COO- terminal residues
+						snprintf(buffer, 1024, "%-2s-%-2s-%-2s  %-3.1f    %-3.2f    %s",	
+								atom_I.c_str(), atom_J.c_str(), atom_K.c_str(),  
+								value.k * factor_k, value.theta0 * factor_theta0, 
+								comment_[index].c_str());
+						outfile << buffer << endl;
+					}
+				}
+			}	
+		}
+
+		// Terminate by blank card
+		outfile << endl;
+		return true;
+	}
 
 	bool QuadraticAngleBend::hasParameters(Atom::Type I, Atom::Type J, Atom::Type K) const 
 	{

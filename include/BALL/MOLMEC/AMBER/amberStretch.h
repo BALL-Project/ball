@@ -89,6 +89,10 @@ namespace BALL
 		virtual void update()
 			throw(Exception::TooManyErrors);
 
+		/** Write the parameters in Parm-file format
+		 */	
+		bool exportParmFile(File& outfile) const;
+
 		//@} 
 
 		private:

@@ -87,6 +87,10 @@ namespace BALL
 		*/
 		virtual void updateForces();
 
+		/** Write the parameters in Parm-file format
+		 */	
+		bool exportParmFile(File& outfile) const;
+
 		//@}
 
 		private:

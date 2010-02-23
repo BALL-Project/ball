@@ -15,12 +15,18 @@
 #	include <BALL/KERNEL/atom.h>
 #endif
 
-#define	BALL_ATOM_WILDCARD_NAME "*"
+#ifndef BALL_SYSTEM_FILE_H
+# include <BALL/SYSTEM/file.h>
+#endif
+
+#define	BALL_ATOM_WILDCARD_NAME "*" 
 #define	BALL_ATOM_UNKNOWN_NAME "?"
+#define	BALL_ATOM_UNKNOWN_MASS 0.0
 
 namespace BALL 
 {
 	class ForceFieldParameters;
+	class ForceField;
 
 	/**	Force Field Atom Type Class. 
 			
@@ -31,22 +37,22 @@ namespace BALL
 		:	public ParameterSection
 	{
 		public:
-
+			
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
 		
-		/**	Default constructor.
-		*/
-		AtomTypes() ;
-
+		/** Default constructor
+		 */
+		AtomTypes(ForceField* force_field = 0);
+		
 		/**	Copy constructor.
 		*/
-		AtomTypes(const AtomTypes& atom_types) ;
+		AtomTypes(const AtomTypes& atom_types);
 
 		/**	Destructor.
 		*/
-		virtual ~AtomTypes() ;
+		virtual ~AtomTypes();
 
 		//@}
 		/**	Parameter extraction
@@ -76,6 +82,14 @@ namespace BALL
 		/**	
 		*/
 		Size getNumberOfTypes() const ;
+	
+		/** Return a pointer to the forcefield
+		 */
+		ForceField* getForceField();
+
+		/** Write the force field parameter in Parm-file format
+		 */
+		virtual bool exportParmFile(File& outfile) const;
 
 		//@}
 		/**	@name	Assignment
@@ -103,7 +117,6 @@ namespace BALL
 		//@}
 
 		protected:
-		
 		/*_	Contains the numeric types for each atom type string.
 		*/
 		StringHashMap<Atom::Type>	type_map_;
@@ -111,6 +124,18 @@ namespace BALL
 		/*_ Contains the symbolic names of the atom types.
 		*/
 		vector<String>						names_;
+		
+		/*_ Contains the mass of the atom types.
+		*/
+		vector<float>						  masses_;
+		
+		/*_ Contains the comments of the atom types.
+		*/
+		vector<String>						comments_;
+		
+		/*_ A Pointer to the forcefield
+		*/
+		ForceField* 							force_field_;
 	};
 } // namespace BALL
 

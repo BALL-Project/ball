@@ -51,23 +51,19 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		AmberNonBonded()
-			;
+		AmberNonBonded();
 
 		/**	Constructor.
 		*/
-		AmberNonBonded(ForceField& force_field)
-			;
+		AmberNonBonded(ForceField& force_field);
 
 		/**	Copy constructor
 		*/
-		AmberNonBonded(const AmberNonBonded& amber_non_bonded)
-			;
+		AmberNonBonded(const AmberNonBonded& amber_non_bonded);
 
 		/**	Destructor.
 		*/
-		virtual ~AmberNonBonded()
-			;
+		virtual ~AmberNonBonded();
 		//@}
 
 		/** Assignment
@@ -76,13 +72,11 @@ namespace BALL
 		
 		/** Assignment operator
 		*/
-		const AmberNonBonded& operator = (const AmberNonBonded& anb)
-			;
+		const AmberNonBonded& operator = (const AmberNonBonded& anb);
 
 		/** Clear method
 		*/
-		virtual void clear()
-			;
+		virtual void clear();
 
 		//@}
 		/** Predicates
@@ -111,13 +105,11 @@ namespace BALL
 
 		/**	Calculates and returns the component's energy.
 		*/
-		virtual double updateEnergy()
-			;
+		virtual double updateEnergy();
 
 		/**	Calculates and returns the component's forces.
 		*/
-		virtual void updateForces()
-			;
+		virtual void updateForces();
 
 		/**	Update the pair list.
 				This method is called by the force field whenever
@@ -129,14 +121,16 @@ namespace BALL
 
 		/**	Return the electrostatic energy.
 		*/
-		virtual double getElectrostaticEnergy() const
-			;
+		virtual double getElectrostaticEnergy() const;
 
 		/**	Return the Van-der-Waals energy.
 		*/
-		virtual double getVdwEnergy() const
-			;
-
+		virtual double getVdwEnergy() const;
+	
+		bool exportParmFile(File& outfile) const;
+		bool exportHBondParmFile(File& outfile) const;
+		bool exportVdWParmFile(File& outfile) const;
+		
 		//@}
 		/**	@name Neighbourhood and Parameter calculations
 		*/

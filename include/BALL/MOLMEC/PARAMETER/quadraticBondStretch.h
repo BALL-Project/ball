@@ -69,6 +69,10 @@ namespace BALL
 
 		///
 		virtual bool extractSection(Parameters& parameters, const String& section_name);
+	
+		/** Write the parameters in Parm-file format
+		 */
+		virtual bool exportParmFile(File& outfile) const;
 
 		/** Queries whether a parameter set is defined for the given atom types.
 		*/
@@ -97,7 +101,9 @@ namespace BALL
 
 		bool*									is_defined_;
 			
-		String*								names_;
+		ForceFieldParameters* force_field_parameters_; 
+
+		String* 							comment_;
 	};
 } // namespace BALL
 

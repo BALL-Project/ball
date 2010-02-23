@@ -206,6 +206,10 @@ namespace BALL
 		*/
 		bool assignParameters(CosineTorsion::Values& parameters, Atom::Type I, 
 													Atom::Type J, Atom::Type K, Atom::Type L) const;
+		
+		/** Write the parameters in Parm-file format
+		*/
+		virtual bool exportParmFile(File& outfile) const;
 
 		//@}
 		/** @name Assignment 
@@ -230,11 +234,15 @@ namespace BALL
 
 		protected:
 
-		Size									number_of_atom_types_;
+		Size											number_of_atom_types_;
 
-		vector<Values>				torsions_;
+		vector<Values>						torsions_;
 		
-		HashMap<Size, Size>		torsion_hash_map_;
+		HashMap<Size, Size>				torsion_hash_map_;	
+		
+		vector< vector<String> > 	comment_;
+
+		ForceFieldParameters* 		force_field_parameters_; 
 	};
 
 } // namespace BALL

@@ -17,8 +17,9 @@ namespace BALL
 			number_of_atom_types_(0),
 			A_(0),
 			B_(0),
-			is_defined_(0),
-			names_(0)
+			is_defined_(0),	
+			comment_(),
+			force_field_parameters_(0)
 	{
 	}
 
@@ -28,8 +29,9 @@ namespace BALL
 			number_of_atom_types_(pot1210.number_of_atom_types_),
 			A_(pot1210.A_),
 			B_(pot1210.B_),
-			is_defined_(pot1210.is_defined_),
-			names_(pot1210.names_)
+			is_defined_(pot1210.is_defined_),	
+			comment_(pot1210.comment_),
+			force_field_parameters_(pot1210.force_field_parameters_)
 	{
 	}
 
@@ -49,8 +51,8 @@ namespace BALL
 		A_.clear();
 		B_.clear();
 		is_defined_.clear();
-		names_.clear();
-
+		comment_.clear();
+		force_field_parameters_ = 0;
 		ParameterSection::clear();
 	}
 
@@ -64,7 +66,6 @@ namespace BALL
 		A_ = pot1210.A_;
 		B_ = pot1210.B_;
 		is_defined_ = pot1210.is_defined_;
-		names_ = pot1210.names_;
 
 		return *this;
 	}
@@ -76,8 +77,7 @@ namespace BALL
 			&& (number_of_atom_types_ == pot1210.number_of_atom_types_)
 			&& (A_ == pot1210.A_)
 			&& (B_ == pot1210.B_)
-			&& (is_defined_ == pot1210.is_defined_)
-			&& (names_ == pot1210.names_));
+			&& (is_defined_ == pot1210.is_defined_));
 	}
 
 
@@ -91,9 +91,7 @@ namespace BALL
 	bool Potential1210::extractSection
 		(ForceFieldParameters& parameters, const String& section_name) 
 	{
-
 		// clear the fields first
-
 		clear();
 
 		// check whether the parameters are valid
@@ -101,7 +99,6 @@ namespace BALL
 		{
 			return false;
 		}
-			
 
 		// extract the basis information
 		ParameterSection::extractSection(parameters, section_name);
@@ -119,10 +116,14 @@ namespace BALL
 		AtomTypes& atom_types = parameters.getAtomTypes();
 		number_of_atom_types_ = atom_types.getNumberOfTypes();
 		
+		// store a pointer to the corresponding atom types
+		force_field_parameters_ = &parameters;
+
 		// allocate two onedimensional fields for the two parameters
 		A_.resize(number_of_atom_types_ * number_of_atom_types_);
 		B_.resize(number_of_atom_types_ * number_of_atom_types_);
 		is_defined_.resize(number_of_atom_types_ * number_of_atom_types_);
+		comment_.resize(number_of_atom_types_ * number_of_atom_types_);
 
 		for (i = 0; i < number_of_atom_types_ * number_of_atom_types_; i++) 
 		{
@@ -159,7 +160,6 @@ namespace BALL
 			}
 		}	
 		
-
 		Atom::Type		type_I;
 		Atom::Type		type_J;
 		String				type_name_I;
@@ -180,12 +180,14 @@ namespace BALL
 					type_J = atom_types.getType(type_name_J);
 					index = (Index)(type_I * number_of_atom_types_ + type_J);
 					is_defined_[index] = true;
-					A_ [index] = getValue(key, "A").toFloat() * factor_A;
-					B_ [index] = getValue(key, "B").toFloat() * factor_B;
+					A_[index] = getValue(key, "A").toFloat() * factor_A;
+					B_[index] = getValue(key, "B").toFloat() * factor_B;
+					comment_[index] = getValue(key, "comment");
 					index = (Index)(type_I + number_of_atom_types_ * type_J);
 					is_defined_[index] = true;
-					A_ [index] = getValue(key, "A").toFloat() * factor_A;
-					B_ [index] = getValue(key, "B").toFloat() * factor_B;
+					A_[index] = getValue(key, "A").toFloat() * factor_A;
+					B_[index] = getValue(key, "B").toFloat() * factor_B;
+					comment_[index] = getValue(key, "comment");
 				}
 			}
 		}
@@ -229,6 +231,53 @@ namespace BALL
 		}
 
 		return false;
+	}
+
+	bool  Potential1210::exportParmFile(File& outfile) const
+	{
+		if (!force_field_parameters_)
+			return false;
+
+		AtomTypes& atom_types = force_field_parameters_->getAtomTypes();
+
+		String atom_I;
+		String atom_J;
+		
+		double factor_A = Constants::CAL_PER_JOULE;
+		double factor_B = Constants::CAL_PER_JOULE;
+		
+		Index	 index     = 0;
+
+		// a string buffer for snprintf
+		char buffer[1024];
+
+		for (Size i=0; i < number_of_atom_types_; i++)
+		{	
+			atom_I = atom_types.getTypeName(i);
+			atom_I = (atom_I =="?") ? "X " : atom_I;
+
+			for (Size j=i; j < number_of_atom_types_; j++)
+			{
+				index = (Index)(i* number_of_atom_types_ + j);
+				if (is_defined_[index])
+				{
+					atom_J = atom_types.getTypeName(j);
+					atom_J = (atom_J=="?") ? "X " : atom_J;
+					
+			  	//emulate format: HW  OW  0000.     0000.                                4.  flag for fast water
+					snprintf(buffer, 1024, "  %-2s  %-2s   %4.1f     %4.1f                       %s",
+										atom_I.c_str(), atom_J.c_str(), 
+										A_[index] * factor_A,  B_[index] * factor_B, 
+										comment_[index].c_str());
+
+					outfile << buffer << endl;
+				}
+			}
+		}
+		
+		// Terminate by blank card
+		outfile << endl;
+		return true;
 	}
 
 	 

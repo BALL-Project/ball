@@ -70,7 +70,13 @@ namespace BALL
 				the format, and builds some datastructures for fast and easy acces this data.
 		*/
 		virtual bool extractSection(ForceFieldParameters& parameters, const String& section_name);
+		
+		///
 		virtual bool extractSection(Parameters& parameters, const String& section_name);
+
+		/** Write the parameters in Parm-file format
+		*/
+		virtual bool exportParmFile(File& outfile) const;
 
 		/** Queries whether a parameter set is defined for the given atom types.
 		*/
@@ -91,11 +97,16 @@ namespace BALL
 		
 		protected:
 
-		Size						number_of_atom_types_;
+		Size						number_of_atom_types_; 
 
 		vector<Values>	values_;
 
 		vector<Index>		value_index_;
+
+		vector<String> 	comment_;
+
+		ForceFieldParameters* force_field_parameters_; 
+
 	};
 } // namespace BALL
 

@@ -146,10 +146,16 @@ namespace BALL
 	}
 
 
-	bool INIFile::write()
+	bool INIFile::write(const String& filename)
 	{
+		String f_name(filename);
+		// if no filename is given write to 
+		// the original file
+		if (filename == "")
+			f_name = filename_;
+
 		// try to open the file
-		ofstream out(filename_.c_str(), ios::out);
+		ofstream out(f_name.c_str(), ios::out);
 		
 		if (out.bad())
 		{
@@ -166,6 +172,11 @@ namespace BALL
 		out.close();
 		valid_ = true;
 		return true;
+	}
+	
+	bool INIFile::exportToFile(const String& filename)
+	{
+		return write(filename);
 	}
 
 	INIFile::LineIterator INIFile::getLine(Size line_number)

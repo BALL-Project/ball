@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amber.h,v 1.26 2005/12/23 17:01:49 amoll Exp $ 
+// $Id: amber.h,v 1.26 2010/02/08 15:22:13 dehof Exp $ 
 //
 
 // Molecular Mechanics: Amber force field class
@@ -260,8 +260,11 @@ namespace BALL
 		Size getUpdateFrequency() const;
 
 		/// Get the current results in String form
-		virtual String getResults() const
-			;
+		virtual String getResults() const;
+
+		/// Write the forcefield parameters into a file
+		void exportParmFile(String outfilename) const	
+			throw(Exception::FileNotFound);
 
 		//@}
 

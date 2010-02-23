@@ -503,5 +503,13 @@ namespace BALL
 			}
 		}
 	}
+	
+	bool AmberTorsion::exportParmFile(File& outfile) const
+	{
+		bool ret_value 	= torsion_parameters_.exportParmFile(outfile);
+		ret_value 		 &= improper_parameters_.exportParmFile(outfile);
+		return ret_value;
+	}
+
 
 } // namespace BALL

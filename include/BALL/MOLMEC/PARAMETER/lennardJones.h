@@ -86,19 +86,19 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		LennardJones() ;
+		LennardJones();
 
 		/** Copy constructor. 
 		*/
-		LennardJones(const LennardJones& lj) ;
+		LennardJones(const LennardJones& lj);
 
 		/**	Destructor.
 		*/
-		virtual ~LennardJones() ;
+		virtual ~LennardJones();
 
 		/**	Clear method. 
 		*/
-		virtual void clear() ;
+		virtual void clear();
 
 		//@}
 		
@@ -109,11 +109,11 @@ namespace BALL
 				datastructures for fast and easy access to this data.
 		*/
 		virtual bool extractSection(ForceFieldParameters& parameters, 
-				const String& section_name) ;
+				const String& section_name);
 
 		///
 		virtual bool extractSection(Parameters& parameters, 
-				const String& section_name) ;
+				const String& section_name);
 
 		/** Queries whether a parameter set is defined for the given atom types.
 		*/
@@ -127,8 +127,12 @@ namespace BALL
 				If no parameters are defined for this combination, false is
 				returned and nothing is changed.
 		*/
-		bool assignParameters(Values& parameters, Atom::Type I, Atom::Type J)
-			const ;
+		bool assignParameters(Values& parameters, Atom::Type I, Atom::Type J) const ;
+
+		/** Write the parameters in Parm-file format
+		*/
+		virtual bool exportParmFile(File& outfile) const;
+
 
 		/** @name Assignment 
 		*/
@@ -136,7 +140,7 @@ namespace BALL
 
 		/** Assignment operator 
 		*/
-		const LennardJones& operator = (const LennardJones& lj) ;
+		const LennardJones& operator = (const LennardJones& lj);
 
 		//@}
 		/** @name Predicates 
@@ -167,7 +171,11 @@ namespace BALL
 
 		FormatType						format_;
 			
-		std::vector<String>		names_;
+		std::vector<String>		names_; //TODO: do we need this??
+		
+		std::vector<String>		comment_;
+		
+		ForceFieldParameters* 		force_field_parameters_; 
 	};
 } // namespace BALL
 

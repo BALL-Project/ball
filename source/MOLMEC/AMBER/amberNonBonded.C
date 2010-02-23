@@ -25,7 +25,6 @@ namespace BALL
 
 	// default constructor
 	AmberNonBonded::AmberNonBonded()
-		
 		:	ForceFieldComponent(),
 			electrostatic_energy_(0.0),
 			vdw_energy_(0.0),
@@ -1220,5 +1219,25 @@ namespace BALL
 	{
 		return vdw_energy_;
 	}
+	
+	bool AmberNonBonded::exportParmFile(File& outfile) const
+	{
+		bool ret_value 	 = hydrogen_bond_.exportParmFile(outfile);
+				 ret_value  &= van_der_waals_.exportParmFile(outfile); 
+		return ret_value;
+	}	
+
+	bool AmberNonBonded::exportHBondParmFile(File& outfile) const
+	{
+		bool ret_value 	= hydrogen_bond_.exportParmFile(outfile);
+		return ret_value;
+	}
+
+	bool AmberNonBonded::exportVdWParmFile(File& outfile) const
+	{
+		bool ret_value = van_der_waals_.exportParmFile(outfile); 
+		return ret_value;
+	}
+
 
 } // namespace BALL

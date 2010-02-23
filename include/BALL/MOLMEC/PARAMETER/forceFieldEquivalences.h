@@ -1,13 +1,7 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id: forceFieldParameters.h,v 1.20 2005/12/23 17:01:54 amoll Exp $
-//
-
 // Molecular Mechanics: general force field parameter class
 
-#ifndef BALL_MOLMEC_PARAMETER_FORCEFIELDPARAMETERS_H
-#define BALL_MOLMEC_PARAMETER_FORCEFIELDPARAMETERS_H
+#ifndef BALL_MOLMEC_PARAMETER_FORCEFIELDEQUIVALENCES_H
+#define BALL_MOLMEC_PARAMETER_FORCEFIELDEQUIVALENCES_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -17,8 +11,8 @@
 # include <BALL/FORMAT/parameters.h>
 #endif
 
-#ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
-# include <BALL/MOLMEC/PARAMETER/atomTypes.h>
+#ifndef BALL_MOLMEC_PARAMETER_ATOMEQUIVALENCES_H
+# include <BALL/MOLMEC/PARAMETER/atomEquivalences.h>
 #endif
 
 #ifndef BALL_SYSTEM_FILE_H
@@ -28,18 +22,17 @@
 
 namespace BALL 
 {
-	class AtomTypes;
+	class AtomEquivalences;
 	
-	/**	Force field parameter class.
+	/**	Force field equivalence class.
 			
 			\ingroup  MolmecParameters
 	*/
-	class BALL_EXPORT ForceFieldParameters
+	class BALL_EXPORT ForceFieldEquivalences
 		:	public Parameters
 	{
 		public:
-
-		BALL_CREATE(ForceFieldParameters)
+		BALL_CREATE(ForceFieldEquivalences)
 
 		friend class ForceField;
 
@@ -49,19 +42,19 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		ForceFieldParameters(ForceField* force_field=0);
+		ForceFieldEquivalences(ForceField* force_field=0);
 
 		/**	Constructor.
 		*/
-		ForceFieldParameters(const String& filename, ForceField* force_field=0);
+		ForceFieldEquivalences(const String& filename, ForceField* force_field=0);
 
 		/**	Copy constructor
 		*/
-		ForceFieldParameters(const ForceFieldParameters& force_field_parameter);
+		ForceFieldEquivalences(const ForceFieldEquivalences& force_field_parameter);
 
 		/**	Destructor.
 		*/
-		virtual ~ForceFieldParameters();
+		virtual ~ForceFieldEquivalences();
 
 		//@}
 		/** @name Assignment 
@@ -74,7 +67,7 @@ namespace BALL
 
 		/** Assignment operator 
 		*/
-		const ForceFieldParameters& operator = (const ForceFieldParameters& param);
+		const ForceFieldEquivalences& operator = (const ForceFieldEquivalences& param);
 		
 		//@}
 		/**@name	Accessors 	
@@ -83,7 +76,7 @@ namespace BALL
 
 		/**	Return a reference to the atom type parameter section
 		*/
-		AtomTypes&	getAtomTypes();
+		AtomEquivalences&	getAtomEquivalences();
 
 		/** Return a pointer to the forcefield
 		 */
@@ -112,7 +105,7 @@ namespace BALL
 
 		/** Equality operator 
 		*/
-		bool operator == (const ForceFieldParameters& param) const;
+		bool operator == (const ForceFieldEquivalences& param) const;
 
 		//@}
 
@@ -121,16 +114,18 @@ namespace BALL
 		/*_@name	Protected Members 
 		*/
 		//_@{ 
-
-		/*_	the atom types section
+	
+		/*_	the equivalent atom types section
 		*/
-		AtomTypes	   atom_types_;
+		AtomEquivalences	atom_type_equivalences_;
 
 		/*_ the forcefield defined by these parameters
 		 */
 		ForceField*  force_field_;
+
 		//_@} 
 	};
 } // namespace BALL
 
-#endif // BALL_MOLMEC_PARAMETER_FORCEFIELDPARAMETERS_H
+#endif // BALL_MOLMEC_PARAMETER_FORCEFIELDEQUIVALENCES_H
+

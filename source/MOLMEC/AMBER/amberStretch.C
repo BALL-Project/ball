@@ -161,6 +161,11 @@ namespace BALL
 		return true;
 	}
 
+	bool AmberStretch::exportParmFile(File& outfile) const
+	{
+		return stretch_parameters_.exportParmFile(outfile);
+	}
+
 	// update bond lists if the selection has changed
 	void AmberStretch::update()
 		throw(Exception::TooManyErrors)

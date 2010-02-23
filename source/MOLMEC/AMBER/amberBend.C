@@ -71,12 +71,11 @@ namespace BALL
 			}
 		}
 
-		static QuadraticAngleBend bend_parameters;
 		static bool result = false;
 		AmberFF* amber_force_field = dynamic_cast<AmberFF*>(force_field_);
 		if ((amber_force_field == 0) || !amber_force_field->hasInitializedParameters())
 		{
-			result = bend_parameters.extractSection(getForceField()->getParameters(), "QuadraticAngleBend");
+			result = bend_parameters_.extractSection(getForceField()->getParameters(), "QuadraticAngleBend");
 
 			if (result == false) 
 			{
@@ -115,10 +114,10 @@ namespace BALL
 						Atom::Type atom_type_a3 = this_bend.atom3->type;
 
 						// check for parameters
-						if (!bend_parameters.assignParameters(this_bend.values, atom_type_a1, atom_type_a2, atom_type_a3))
+						if (!bend_parameters_.assignParameters(this_bend.values, atom_type_a1, atom_type_a2, atom_type_a3))
 						{
 							// handle wildcards: if the atom type is not known, try to match *-A2-* 
-							if (!bend_parameters.assignParameters(this_bend.values, Atom::ANY_TYPE, atom_type_a2, Atom::ANY_TYPE))
+							if (!bend_parameters_.assignParameters(this_bend.values, Atom::ANY_TYPE, atom_type_a2, Atom::ANY_TYPE))
 							{
 								// complain if nothing was found
 								getForceField()->error() << "AmberBend::setup: cannot find bend parameters for atom types:"
@@ -211,7 +210,6 @@ namespace BALL
 			return;
 		}
 
-		bool use_selection = getForceField()->getUseSelection();
 		for (Size i = 0; i < bend_.size(); i++) 
 		{
 			if (getForceField()->considerAtomTriple(bend_[i].atom1->ptr, bend_[i].atom2->ptr, bend_[i].atom3->ptr))
@@ -292,5 +290,11 @@ namespace BALL
 			}
 		}
 	}
+
+	bool AmberBend::exportParmFile(File& outfile) const
+	{
+		return bend_parameters_.exportParmFile(outfile);
+	}
+
 
 } // namespace BALL 

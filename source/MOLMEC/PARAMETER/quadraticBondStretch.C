@@ -16,7 +16,9 @@ namespace BALL
 		:	ParameterSection(),
 			k_(0),
 			r0_(0),
-			is_defined_(0)
+			is_defined_(0),
+			force_field_parameters_(0),
+			comment_(0)
 	{
 	}
 
@@ -31,11 +33,14 @@ namespace BALL
 		delete [] k_;
 		delete [] r0_;
 		delete [] is_defined_;
-
+		delete [] comment_;
+		
 		k_ = 0;
 		r0_ = 0;
 		is_defined_ = 0;
-
+		force_field_parameters_ = 0;
+		comment_ = 0;
+		
 		ParameterSection::clear();
 	}
 
@@ -53,7 +58,9 @@ namespace BALL
 		{
 			return false;
 		}
-			
+		
+		// store a pointer to the corresponding atom types
+		force_field_parameters_ = &parameters;
 
 		// extract the basis information
 		ParameterSection::extractSection(parameters, section_name);
@@ -80,10 +87,13 @@ namespace BALL
 			delete [] r0_;
 		if (is_defined_)
 			delete [] is_defined_;
+		if (comment_)
+			delete [] comment_;
 
 		k_  = new float[number_of_atom_types_ * number_of_atom_types_];
 		r0_ = new float[number_of_atom_types_ * number_of_atom_types_];
 		is_defined_ = new bool[number_of_atom_types_ * number_of_atom_types_];
+		comment_ = new String[number_of_atom_types_ * number_of_atom_types_];
 
 		for (i = 0; i < number_of_atom_types_ * number_of_atom_types_; i++) 
 		{
@@ -118,7 +128,7 @@ namespace BALL
 		{
 			if (options["unit_r0"] == "pm")
 			{
-				factor_k = 0.1;
+				factor_r0 = 0.1;
 			}
 		}	
 		
@@ -141,21 +151,75 @@ namespace BALL
 				{
 					type_I = atom_types.getType(type_name_I);
 					type_J = atom_types.getType(type_name_J);
-					index = (Index)(type_I * number_of_atom_types_ + type_J);
+					index = (Index)((type_I * number_of_atom_types_) + type_J);
 					is_defined_[index] = true;
 					k_ [index] = getValue(key, "k").toFloat() * factor_k;
 					r0_ [index] = getValue(key, "r0").toFloat() * factor_r0;
+					comment_[index] = getValue(key, "comment");
 					index = (Index)(type_I + number_of_atom_types_ * type_J);
 					is_defined_[index] = true;
 					k_ [index] = getValue(key, "k").toFloat() * factor_k;
-					r0_ [index] = getValue(key, "r0").toFloat() * factor_r0;
+					r0_ [index] = getValue(key, "r0").toFloat() * factor_r0;	
+					comment_[index] = getValue(key, "comment");
 				}
 			}
 		}
 
 		return true;
 	}
+	
+	bool QuadraticBondStretch::exportParmFile(File& outfile) const
+	{
+		if (!force_field_parameters_)
+			return false;
+		
+		// get the atom_types
+		AtomTypes& atom_types = force_field_parameters_->getAtomTypes();
+		
+		// Amber requires kcal/mol and Angstroem
+		double factor_k = Constants::CAL_PER_JOULE;
+	
+		// a string buffer for snprintf
+		char buffer[1024];
 
+		// the first line has to be handled differently
+		bool first_line = true;
+
+		for (Size i=1; i < number_of_atom_types_; i++)
+		{	
+			String atom_A =  atom_types.getTypeName(i);
+
+			for (Size j=i; j < number_of_atom_types_; j++)
+			{
+				Size index = (i*number_of_atom_types_)+j;
+				if (is_defined_[index])
+				{	
+					String atom_B = atom_types.getTypeName(j);
+
+					if (first_line)
+					{	
+						// emulate the format: C -CA  469.0    1.409       JCC,7,(1986),230; TYR
+						snprintf(buffer, 1024, "%-2s-%-2s  %-3.1f    %-1.4f     ! %s", 
+										atom_A.c_str(), atom_B.c_str(), 
+										(k_[index] * factor_k), r0_[index], 
+										comment_[index].c_str()); 
+						first_line = false;
+					}
+					else
+					{
+						// emulate the format: C -CA  469.0    1.409       JCC,7,(1986),230; TYR
+						snprintf(buffer, 1024, "%-2s-%-2s  %-3.1f    %-1.4f       %s", 
+										atom_A.c_str(), atom_B.c_str(), 
+										(k_[index] * factor_k), r0_[index], 
+										comment_[index].c_str()); 
+					}
+					outfile << buffer << endl;
+				}
+			}
+		}
+		outfile << endl;
+		return true;
+	}
 
 	bool QuadraticBondStretch::hasParameters(Atom::Type I, Atom::Type J) const 
 	{

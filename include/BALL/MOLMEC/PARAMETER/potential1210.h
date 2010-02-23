@@ -101,6 +101,10 @@ namespace BALL
 		bool assignParameters
 			(Potential1210::Values& parameters, 
 			 Atom::Type I, Atom::Type J) const ;
+		
+		/** Write the parameters in Parm-file format
+		*/
+		virtual bool exportParmFile(File& outfile) const;
 
 		//@}
 		/** @name Assignment 
@@ -132,7 +136,11 @@ namespace BALL
 
 		std::vector<bool>			is_defined_;
 			
-		std::vector<String>		names_;
+		vector<String> 				comment_;
+
+		//the forcefield defined by these parameters
+		ForceFieldParameters* force_field_parameters_; 
+
 	};
 } // namespace BALL
 

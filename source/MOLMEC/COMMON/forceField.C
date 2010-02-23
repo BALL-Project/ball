@@ -23,7 +23,8 @@ namespace BALL
 			periodic_boundary(*this),
 			system_(0),
 			atoms_(),
-			parameters_(),
+			parameters_(this),
+			equivalent_types_(this),
 			valid_(false),
 			name_("Force Field"),
 			energy_(0.0),
@@ -39,7 +40,6 @@ namespace BALL
 	}
 
 	void ForceField::clear()
-		
 	{
 		options.clear();
 		periodic_boundary.clear();
@@ -50,6 +50,7 @@ namespace BALL
 		atoms_.clear();
 		number_of_movable_atoms_ = 0;
 		parameters_.clear();
+		equivalent_types_.clear();
 		use_selection_ = false;
 		selection_enabled_ = true;
 		valid_ = true;
@@ -78,6 +79,7 @@ namespace BALL
 			system_(force_field.system_),
 			atoms_(force_field.atoms_),
 			parameters_(force_field.parameters_),
+			equivalent_types_(force_field.equivalent_types_),
 			valid_(force_field.valid_),
 			name_(force_field.name_),
 			energy_(force_field.energy_),
@@ -110,7 +112,8 @@ namespace BALL
 			energy_ = force_field.energy_;
 			options = force_field.options;
 			system_ = force_field.system_;
-			parameters_ = force_field.parameters_;
+			parameters_ = force_field.parameters_;	
+			equivalent_types_ = force_field.equivalent_types_;
 			periodic_boundary = force_field.periodic_boundary;
 			use_selection_ = force_field.use_selection_;
 			selection_enabled_ = force_field.selection_enabled_;
@@ -140,7 +143,8 @@ namespace BALL
 			periodic_boundary(*this),
 			system_(0),
 			atoms_(),
-			parameters_(),
+			parameters_(this),	
+			equivalent_types_(this),
 			valid_(false),
 			name_("Force Field"),
 			energy_(0.0),
@@ -168,7 +172,8 @@ namespace BALL
 			periodic_boundary(*this),
 			system_(0),
 			atoms_(),
-			parameters_(),
+			parameters_(),	
+			equivalent_types_(),
 			valid_(false),
 			name_("Force Field"),
 			energy_(0.0),
@@ -374,6 +379,11 @@ namespace BALL
   ForceFieldParameters& ForceField::getParameters()
 	{
 		return parameters_;
+	}
+ 
+	ForceFieldEquivalences& ForceField::getEquivalences()
+	{
+		return equivalent_types_;
 	}
 
 	// Returns the name of the force field

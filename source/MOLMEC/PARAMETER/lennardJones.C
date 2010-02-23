@@ -21,7 +21,9 @@ namespace BALL
 			Bij_(0),
 			is_defined_(0),
 			format_(EPSILON_R_FORMAT),
-			names_()
+			names_(),
+			comment_(),
+			force_field_parameters_(0)
 	{
 	}
 
@@ -35,7 +37,9 @@ namespace BALL
 			Bij_(lj.Bij_),
 			is_defined_(lj.is_defined_),
 			format_(lj.format_),
-			names_(lj.names_)
+			names_(lj.names_),
+			comment_(lj.comment_),
+			force_field_parameters_(lj.force_field_parameters_)
 	{
 	}
 
@@ -56,14 +60,15 @@ namespace BALL
 		Bij_.clear();
 		is_defined_.clear();
 		format_ = EPSILON_R_FORMAT;
-		names_.clear();
+		names_.clear();	
+		comment_.clear();
+		force_field_parameters_ = 0;
 
 		ParameterSection::clear();
 	}
 
 
 	const LennardJones& LennardJones::operator = (const LennardJones& lj)
-		
 	{
 		ParameterSection::operator = (lj);
 		A_ = lj.A_;
@@ -74,6 +79,8 @@ namespace BALL
 		is_defined_ = lj.is_defined_;
 		format_ = lj.format_;
 		names_ = lj.names_;
+		comment_ = lj.comment_;
+		force_field_parameters_ = lj.force_field_parameters_;
 
 		return *this;
 	}
@@ -155,14 +162,19 @@ namespace BALL
 		Size	i;
 		const AtomTypes&	atom_types = parameters.getAtomTypes();
 		number_of_atom_types_ = atom_types.getNumberOfTypes();
-		
+			
+		// store a pointer to the corresponding atom types
+		force_field_parameters_ = &parameters;
+
 		// allocate two onedimensional fields for the two parameters
 		A_.resize(number_of_atom_types_);
 		B_.resize(number_of_atom_types_);
 		Aij_.resize(number_of_atom_types_ * number_of_atom_types_);
 		Bij_.resize(number_of_atom_types_ * number_of_atom_types_);
 		is_defined_.resize(number_of_atom_types_);
-
+		comment_.clear();
+		comment_.resize(number_of_atom_types_);
+		
 		for (i = 0; i < number_of_atom_types_; i++) 
 		{
 			is_defined_[i] = false;
@@ -171,6 +183,7 @@ namespace BALL
 		// the indices of the columns containing the values
 		Size index_A = 0;
 		Size index_B = 0;
+
 		if (format_ == A_B_FORMAT)
 		{
 			index_A = getColumnIndex("A");
@@ -195,7 +208,7 @@ namespace BALL
 		if (format_ == A_B_FORMAT)
 		{
 			if (options.has("unit_A"))
-			{ //?????
+			{ //TODO
 			}
 		}
 		// in EPSILON_R_FORMAT epsilon is in A and R is in B
@@ -241,12 +254,11 @@ namespace BALL
 				float A = getValue(i, index_A).toFloat() * factor_A;
 				float B = getValue(i, index_B).toFloat() * factor_B;
 
-
 				// store the values
 				is_defined_[atom_type] = true;
 				A_[atom_type] = A;
 				B_[atom_type] = B;
-
+				comment_[atom_type] = getValue(key, "comment");
 
 				// check for the sign of the parameters: they have to be positive!
 				if ((A < 0) || (B < 0))
@@ -326,7 +338,6 @@ namespace BALL
 
 
 	bool LennardJones::hasParameters(Atom::Type I, Atom::Type J) const
-		
 	{
 		if (I < 0 || I >= (Index)number_of_atom_types_)
 		{
@@ -351,7 +362,6 @@ namespace BALL
 
 
 	bool LennardJones::assignParameters(LennardJones::Values& parameters, Atom::Type I, Atom::Type J) const 
-		
 	{
 		if (hasParameters(I, J)) 
 		{
@@ -363,11 +373,52 @@ namespace BALL
 
 		return false;
 	}
+	
+	bool LennardJones::exportParmFile(File& outfile) const
+	{
+		if (!force_field_parameters_)
+			return false;
+
+		AtomTypes& atom_types = force_field_parameters_->getAtomTypes();
+
+		// in EPSILON_R_FORMAT epsilon is in A and R is in B
+
+		// convert from BALL standart units into AMBER standard units
+		float factor_A = Constants::CAL_PER_JOULE;
+		double factor_B = 1.0;
+
+		String atom_I;
+		String atom_J;
+
+		// a string buffer for snprintf
+		char buffer[1024];
+
+		outfile << "MOD4      RE " << endl;
+		for (Size i=0; i < number_of_atom_types_; i++)
+		{	
+			atom_I = atom_types.getTypeName(i);
+			atom_I = (atom_I =="?") ? "X " : atom_I;
+
+			if (is_defined_[i])
+			{
+				//MOD4      RE
+				//  H            0.6000  0.0157            !Ferguson base pair geom.
+				snprintf(buffer, 1024, "  %2s         %1.4f  %1.4f            %s",
+						atom_I.c_str(), B_[i]*factor_B, A_[i]*factor_A, comment_[i].c_str());
+
+				outfile << buffer << endl;
+			}
+		}
+		outfile << "END" << endl;
+	}
 
 
 	bool LennardJones::operator == (const LennardJones& lj) const 
 	{
+		// There is no need to compare the format,
+		//    the comments, the forcefield pointer.
 		return (ParameterSection::operator == (lj)
+						&& (number_of_atom_types_ == lj.number_of_atom_types_) 
 						&& (A_ 		== lj.A_) 
 						&& (B_ 		== lj.B_)
 						&& (Aij_ 	== lj.Aij_) 

@@ -161,7 +161,15 @@ namespace BALL
 					- <b>true</b> if the file could be succesfully written
 					- <b>false</b> otherwise
 		*/	
-		bool write();
+		bool write(const String& filename = "");
+
+		/**	Writes the buffer contents to a given file.
+				If the file could not be written, valid_ is set to false, ow true.
+				@return	bool
+					- <b>true</b> if the file could be succesfully written
+					- <b>false</b> otherwise
+		*/	
+		bool exportToFile(const String& filename);
 
 		/**	Returns the current filename.
 		*/	

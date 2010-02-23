@@ -27,6 +27,10 @@
 #	include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
 #endif
 
+#ifndef BALL_MOLMEC_PARAMETER_FORCEFIELDEQUIVALENCESS_H
+#	include  <BALL/MOLMEC/PARAMETER/forceFieldEquivalences.h>
+#endif
+
 #ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
 #	include <BALL/MOLMEC/PARAMETER/atomTypes.h>
 #endif
@@ -204,7 +208,7 @@ namespace BALL
 		String getName() const;
 		
 		/**	Returns the number of atoms stored in the force field
-		*/
+		*/ 
 		Size getNumberOfAtoms() const;
 
 		/**	Returns the number of non-fixed atoms stored in the force field.
@@ -253,6 +257,10 @@ namespace BALL
 		/**	Returns a pointer to the parameter file
 		*/
 		ForceFieldParameters& getParameters();
+
+		/**	Returns a pointer to the equivalence file
+		*/
+		ForceFieldEquivalences& getEquivalences();
 
 		/**	Returns the number of components registered by the force field.
 		*/
@@ -413,7 +421,11 @@ namespace BALL
 
 		/*_ An object containing the force field parameters read from a file
 		*/
-		ForceFieldParameters	parameters_;	
+		ForceFieldParameters	  parameters_;	
+
+		/*_ An object containing the force field equivalences read from a file
+		*/
+		ForceFieldEquivalences	equivalent_types_;	
 
 		/*_	The boolean variable indicates if the setup of the force field was successful
 		*/
