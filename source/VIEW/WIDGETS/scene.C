@@ -3112,34 +3112,42 @@ namespace BALL
 		void Scene::startContinuousLoop()
 		{	
 			continuous_loop_ = true;
-			if (!renderers_[0]->isContinuous())
+
+			for (Position i=0; i<renderers_.size(); ++i)
 			{
-				renderers_[0]->useContinuousLoop(true);
-				renderers_[0]->loop_mutex.lock();
-				renderers_[0]->wait_for_render.wakeAll();
-				renderers_[0]->loop_mutex.unlock();
-				// set the menu buttons correctly
-				//stop_continuous_loop_action_->setEnabled(true);
-				//start_continuous_loop_action_->setEnabled(false);	
-				// set the icon
-				//toggle_continuous_loop_action_->setChecked(true);
-				setStatusbarText("Switched continuous loop on", true);
+				if (!renderers_[i]->isContinuous())
+				{
+					renderers_[i]->useContinuousLoop(true);
+					renderers_[i]->loop_mutex.lock();
+					renderers_[i]->wait_for_render.wakeAll();
+					renderers_[i]->loop_mutex.unlock();
+					// set the menu buttons correctly
+					//stop_continuous_loop_action_->setEnabled(true);
+					//start_continuous_loop_action_->setEnabled(false);	
+					// set the icon
+					//toggle_continuous_loop_action_->setChecked(true);
+				}
 			}
+			setStatusbarText("Switched continuous loop on", true);
 		}
 
 		void Scene::stopContinuousLoop()
 		{		
 			continuous_loop_ = false;	
-			if (renderers_[0]->isContinuous())
+
+			for (Position i=0; i<renderers_.size(); ++i)
 			{
-				renderers_[0]->useContinuousLoop(false);
-				// set the menu buttons correctly
-				//stop_continuous_loop_action_->setEnabled(false);
-				//start_continuous_loop_action_->setEnabled(true);
-				// set the icon
-				//toggle_continuous_loop_action_->setChecked(false);
-				setStatusbarText("Switched continuous loop off", true);
+				if (renderers_[i]->isContinuous())
+				{
+					renderers_[i]->useContinuousLoop(false);
+					// set the menu buttons correctly
+					//stop_continuous_loop_action_->setEnabled(false);
+					//start_continuous_loop_action_->setEnabled(true);
+					// set the icon
+					//toggle_continuous_loop_action_->setChecked(false);
+				}
 			}
+			setStatusbarText("Switched continuous loop off", true);
 		}
 
 		void Scene::toggleContinuousLoop()
