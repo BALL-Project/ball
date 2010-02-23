@@ -39,14 +39,16 @@ namespace BALL
 		XML3DRenderer::XML3DRenderer()
 			: Renderer(),
 				outfile_(&std::cout),
-				human_readable_(true)
+				human_readable_(true),
+				create_XHTML_(false)
 		{
 		}
 
 		XML3DRenderer::XML3DRenderer(const XML3DRenderer& renderer)
 			: Renderer(renderer),
 				outfile_(&std::cout),
-				human_readable_(renderer.human_readable_)
+				human_readable_(renderer.human_readable_),
+				create_XHTML_(renderer.create_XHTML_)
 		{
 		}
 
@@ -54,14 +56,16 @@ namespace BALL
 		XML3DRenderer::XML3DRenderer(const String& name)
 			throw(Exception::FileNotFound)
 			: Renderer(),
-				human_readable_(true)
+				human_readable_(true),
+				create_XHTML_(true)
 		{
 			outfile_ = new File(name, std::ios::out);
 		}
 
 		XML3DRenderer::XML3DRenderer(std::ostream& out_stream)
 			: Renderer(),
-				human_readable_(true)
+				human_readable_(true),
+				create_XHTML_(false)
 		{
 			outfile_ = &out_stream;
 		}
@@ -93,6 +97,7 @@ namespace BALL
 		void XML3DRenderer::setFileName(const String& name)
 			throw(Exception::FileNotFound)
 		{
+			create_XHTML_ = true;
 			if (outfile_ == 0 || !RTTI::isKindOf<File>(*outfile_)) 
 			{
 				outfile_ = new File();
@@ -102,6 +107,7 @@ namespace BALL
 
 		void XML3DRenderer::setOstream(std::ostream& out_stream)
 		{
+			create_XHTML_ = false;
 			if (outfile_ != 0 && RTTI::isKindOf<File>(*outfile_)) 
 			{
 				delete outfile_;
@@ -215,7 +221,7 @@ namespace BALL
 
 			if (!Renderer::init(stage, width, height)) return false;
 
-			createXHTMLHeader();
+			if (create_XHTML_) {createXHTMLHeader();};
 
 			// initialize xml3d environment	
 			out << "<xml3d id=\"MyXml3d\"" << endl;
@@ -420,7 +426,7 @@ namespace BALL
 			out << "<script type=\"text/javascript\" src=\"../../../local/nicste/xml3d-dev/org.xml3d.renderer.webgl/script/xml3d.js\"></script>" << endl;
 			
 			
-			createXHTMLFooter();	
+			if (create_XHTML_) {createXHTMLFooter();};	
 
 			if (outfile_ != 0 && RTTI::isKindOf<File>(*outfile_))
 			{

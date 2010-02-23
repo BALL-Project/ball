@@ -188,6 +188,7 @@ namespace BALL
 				HashSet<String> color_strings_;
 				double m_[12];
 				Position color_index_;
+				bool create_XHTML_;
 
 				Surface sphere_template_;
 				Surface tube_template_;
