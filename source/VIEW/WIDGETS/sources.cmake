@@ -9,6 +9,7 @@ SET(SOURCES_LIST
  	genericControl.C
 	geometricControl.C
 	helpViewer.C
+	hotkeyTable.C
 	logView.C
 	molecularControl.C
 	molecularStructure.C
