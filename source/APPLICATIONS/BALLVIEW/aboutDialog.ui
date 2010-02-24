@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>228</width>
-    <height>415</height>
+    <width>271</width>
+    <height>479</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -494,84 +494,14 @@
   <property name="windowTitle">
    <string>About BALLView</string>
   </property>
-  <layout class="QGridLayout">
-   <property name="margin">
-    <number>9</number>
-   </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>6</number>
    </property>
-   <item row="5" column="0">
-    <widget class="QLabel" name="TextLabel1">
-     <property name="text">
-      <string>Andreas Hildebrandt
-Anna Katharina Dehof
-Stefan Nickels
-Daniel Stöckel
-Andreas Moll
-Oliver Kohlbacher</string>
-     </property>
-     <property name="textFormat">
-      <enum>Qt::AutoText</enum>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0">
-    <widget class="QPushButton" name="PushButton1">
-     <property name="text">
-      <string>O&amp;K</string>
-     </property>
-     <property name="shortcut">
-      <string>Alt+K</string>
-     </property>
-     <property name="default">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="qt_version_label">
-     <property name="text">
-      <string>QT Version</string>
-     </property>
-     <property name="textFormat">
-      <enum>Qt::AutoText</enum>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="BALL_version_label">
-     <property name="text">
-      <string>(BALL 1.0)</string>
-     </property>
-     <property name="textFormat">
-      <enum>Qt::AutoText</enum>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="BALLView_version_label">
-     <property name="text">
-      <string>&lt;h1&gt;&lt;b&gt;BALLView 1.0&lt;/b&gt;&lt;/h1&gt;</string>
-     </property>
-     <property name="textFormat">
-      <enum>Qt::AutoText</enum>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
+   <property name="margin">
+    <number>9</number>
+   </property>
+   <item>
     <widget class="QLabel" name="BALLView_logo_label">
      <property name="focusPolicy">
       <enum>Qt::StrongFocus</enum>
@@ -587,7 +517,46 @@ Oliver Kohlbacher</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
+   <item>
+    <widget class="QLabel" name="BALLView_version_label">
+     <property name="text">
+      <string notr="true">&lt;h1&gt;&lt;b&gt;BALLView 1.0&lt;/b&gt;&lt;/h1&gt;</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::AutoText</enum>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="BALL_version_label">
+     <property name="text">
+      <string notr="true">(BALL 1.0)</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::AutoText</enum>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="qt_version_label">
+     <property name="text">
+      <string notr="true">QT Version</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::AutoText</enum>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -600,28 +569,68 @@ Oliver Kohlbacher</string>
      </property>
     </spacer>
    </item>
+   <item>
+    <widget class="QLabel" name="TextLabel1">
+     <property name="text">
+      <string notr="true">Andreas Hildebrandt
+Anna Katharina Dehof
+Stefan Nickels
+Daniel Stöckel
+Andreas Moll
+Oliver Kohlbacher</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::AutoText</enum>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Ok</set>
+     </property>
+     <property name="centerButtons">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
   <tabstop>BALLView_logo_label</tabstop>
-  <tabstop>PushButton1</tabstop>
  </tabstops>
  <resources/>
  <connections>
   <connection>
-   <sender>PushButton1</sender>
-   <signal>clicked()</signal>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
    <receiver>AboutDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>151</x>
-     <y>346</y>
+     <x>182</x>
+     <y>392</y>
     </hint>
     <hint type="destinationlabel">
-     <x>224</x>
-     <y>369</y>
+     <x>225</x>
+     <y>310</y>
     </hint>
    </hints>
   </connection>
