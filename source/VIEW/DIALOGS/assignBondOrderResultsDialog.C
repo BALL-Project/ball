@@ -41,11 +41,8 @@ namespace BALL
 			connect(cancel_button, SIGNAL(clicked()), this, SLOT(hide()));
 			connect(computeNextSolution_button, SIGNAL(clicked()), this, SLOT(computeNextSolution()));
 			connect(queries, SIGNAL(itemActivated(QTreeWidgetItem*, int)), this, SLOT(switchView(QTreeWidgetItem*, int)));
-	
-			queries->setColumnCount(1);
-			queries->headerItem()->setText(0, "Results"); 
 		}
-	
+
 		AssignBondOrderResultsDialog::~AssignBondOrderResultsDialog()
 		{
 #ifdef BALL_VIEW_DEBUG
