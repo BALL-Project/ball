@@ -21,13 +21,12 @@
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 # include <BALL/VIEW/DATATYPE/colorRGBA.h>
-#endif 
+#endif
 
 #include <BALL/VIEW/UIC/ui_coloringSettingsDialog.h>
 
-#include <QtGui/QTableWidget>
 #include <vector>
-			
+
 namespace BALL
 {
 	class PTE;
@@ -35,50 +34,6 @@ namespace BALL
 	namespace VIEW
 	{
 		class ColorProcessor;
-
-		/** Class for storing colors in a GUI table
-				\ingroup ViewDialogs
-		*/
-		class BALL_VIEW_EXPORT QColorTable
-			:	public QTableWidget,
-				public PreferencesEntry::ExtendedPreferencesObject
-		{
-				Q_OBJECT
-
-			public:
-				QColorTable(QWidget* parent = 0, const char* name = 0);
-				
-				void setNamesTitle(const String& string);
-
-				String getNamesTitle() const;
-				
-				void setContent(const vector<String>& names, const vector<ColorRGBA>& colors);
-
-				void setColors(const vector<ColorRGBA>& colors);
-
-				const vector<ColorRGBA>& getColors() const
-					{ return colors_;}
-
-				const vector<String>& getNames() const
-					{ return names_;}
-
-				///
-				virtual bool getValue(String&) const;
-
-				///
-				virtual bool setValue(const String& value);
-
-			private slots:
-				
-				void beginEdit(int row, int col);
-
-				virtual void mousePressEvent(QMouseEvent* event);
-				
-			private:
-				vector<ColorRGBA> colors_;
-				vector<String>    names_;
-				bool 							setting_content_;
-		};
 
 
 		/** Dialog for the molecular model coloring settings.
@@ -162,11 +117,6 @@ namespace BALL
 			protected:
 
 			virtual void setDefaultValues_();
-
-			QColorTable* element_table_;
-			QColorTable* residue_table_;
-			QColorTable* chain_table_;
-			QColorTable* molecule_table_;
 		};
 
 } }

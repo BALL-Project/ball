@@ -1,5 +1,6 @@
 ### list all filenames of the directory here ###
 SET(SOURCES_LIST
+	colorTable.C
 	datasetControl.C
 	dockingController.C
 	dockWidget.C
