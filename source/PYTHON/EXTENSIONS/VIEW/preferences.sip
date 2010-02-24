@@ -26,7 +26,7 @@ class Preferences
 	//void showEntry(QWidget* page);
 	//void entrySelected(QListViewItem* item);
 	void setDefaultValues();
-	void cancelPreferences();
+	void reject();
 	void applyPreferences();
 	void showHelp();
 };

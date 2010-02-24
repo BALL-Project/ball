@@ -461,10 +461,10 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		void MainControl::init_()
 		{
 			// connect ok button in Preferences dialog to slot
-			connect(preferences_dialog_->ok_button, SIGNAL(clicked()), this, SLOT(okPreferencesClicked_()));
+			connect(preferences_dialog_, SIGNAL(accepted()), this, SLOT(okPreferencesClicked_()));
 			
 			// connect apply button in Preferences dialog to slot
-			connect(preferences_dialog_->apply_button, SIGNAL(clicked()), this, SLOT(applyPreferencesClicked_()));
+			connect(preferences_dialog_, SIGNAL(applied()), this, SLOT(applyPreferencesClicked_()));
 
 			// initialize own preferences tab
 			initializePreferencesTab_();
@@ -2003,8 +2003,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 	void MainControl::setPreferencesEnabled_(bool state)
 	{
-		preferences_dialog_->ok_button->setEnabled(state);
-		preferences_dialog_->apply_button->setEnabled(state);
+		preferences_dialog_->setApplyEnabled(state);
 	}
 
 

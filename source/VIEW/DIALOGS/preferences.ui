@@ -1,294 +1,156 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>PreferencesData</class>
- <widget class="QDialog" name="PreferencesData" >
-  <property name="geometry" >
+ <widget class="QDialog" name="PreferencesData">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>850</width>
-    <height>470</height>
+    <width>841</width>
+    <height>487</height>
    </rect>
   </property>
-  <property name="sizePolicy" >
-   <sizepolicy>
-    <hsizetype>0</hsizetype>
-    <vsizetype>0</vsizetype>
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
-  </property>
-  <property name="minimumSize" >
-   <size>
-    <width>850</width>
-    <height>470</height>
-   </size>
-  </property>
-  <property name="maximumSize" >
-   <size>
-    <width>7800</width>
-    <height>470</height>
-   </size>
-  </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Preferences</string>
   </property>
-  <property name="sizeGripEnabled" >
+  <property name="sizeGripEnabled">
    <bool>false</bool>
   </property>
-  <widget class="QTreeWidget" name="entries_listview" >
-   <property name="geometry" >
-    <rect>
-     <x>9</x>
-     <y>9</y>
-     <width>221</width>
-     <height>452</height>
-    </rect>
-   </property>
-   <column>
-    <property name="text" >
-     <string>Entries</string>
-    </property>
-   </column>
-  </widget>
-  <widget class="QWidget" name="layoutWidget" >
-   <property name="geometry" >
-    <rect>
-     <x>260</x>
-     <y>430</y>
-     <width>546</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" >
-    <property name="margin" >
-     <number>0</number>
-    </property>
-    <property name="spacing" >
-     <number>6</number>
-    </property>
-    <item>
-     <widget class="QPushButton" name="ok_button" >
-      <property name="minimumSize" >
-       <size>
-        <width>110</width>
-        <height>30</height>
-       </size>
-      </property>
-      <property name="maximumSize" >
-       <size>
-        <width>32767</width>
-        <height>30</height>
-       </size>
-      </property>
-      <property name="toolTip" >
-       <string>Apply new settings</string>
-      </property>
-      <property name="text" >
-       <string>O&amp;K</string>
-      </property>
-      <property name="shortcut" >
-       <string>Alt+K</string>
-      </property>
-      <property name="autoDefault" >
-       <bool>true</bool>
-      </property>
-      <property name="default" >
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="apply_button" >
-      <property name="windowModality" >
-       <enum>Qt::NonModal</enum>
-      </property>
-      <property name="minimumSize" >
-       <size>
-        <width>100</width>
-        <height>30</height>
-       </size>
-      </property>
-      <property name="maximumSize" >
-       <size>
-        <width>32767</width>
-        <height>30</height>
-       </size>
-      </property>
-      <property name="toolTip" >
-       <string>Apply new settings</string>
-      </property>
-      <property name="text" >
-       <string>&amp;Apply</string>
-      </property>
-      <property name="shortcut" >
-       <string>Alt+A</string>
-      </property>
-      <property name="autoDefault" >
-       <bool>true</bool>
-      </property>
-      <property name="default" >
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="cancel_button" >
-      <property name="minimumSize" >
-       <size>
-        <width>100</width>
-        <height>30</height>
-       </size>
-      </property>
-      <property name="maximumSize" >
-       <size>
-        <width>32767</width>
-        <height>30</height>
-       </size>
-      </property>
-      <property name="toolTip" >
-       <string>Discard changes</string>
-      </property>
-      <property name="text" >
-       <string>&amp;Cancel</string>
-      </property>
-      <property name="shortcut" >
-       <string>Alt+C</string>
-      </property>
-      <property name="autoDefault" >
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="defaults_button" >
-      <property name="minimumSize" >
-       <size>
-        <width>100</width>
-        <height>30</height>
-       </size>
-      </property>
-      <property name="maximumSize" >
-       <size>
-        <width>32767</width>
-        <height>30</height>
-       </size>
-      </property>
-      <property name="toolTip" >
-       <string>Set settings to default values</string>
-      </property>
-      <property name="text" >
-       <string>&amp;Defaults</string>
-      </property>
-      <property name="shortcut" >
-       <string>Alt+D</string>
-      </property>
-      <property name="autoDefault" >
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="help_button" >
-      <property name="minimumSize" >
-       <size>
-        <width>100</width>
-        <height>30</height>
-       </size>
-      </property>
-      <property name="maximumSize" >
-       <size>
-        <width>32767</width>
-        <height>30</height>
-       </size>
-      </property>
-      <property name="toolTip" >
-       <string>Set settings to default values</string>
-      </property>
-      <property name="text" >
-       <string>&amp;Help</string>
-      </property>
-      <property name="shortcut" >
-       <string>Alt+H</string>
-      </property>
-      <property name="autoDefault" >
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QStackedWidget" name="widget_stack" >
-   <property name="geometry" >
-    <rect>
-     <x>236</x>
-     <y>9</y>
-     <width>610</width>
-     <height>416</height>
-    </rect>
-   </property>
-   <property name="minimumSize" >
-    <size>
-     <width>610</width>
-     <height>16</height>
-    </size>
-   </property>
-   <property name="maximumSize" >
-    <size>
-     <width>610</width>
-     <height>16777215</height>
-    </size>
-   </property>
-   <property name="frameShape" >
-    <enum>QFrame::NoFrame</enum>
-   </property>
-   <property name="frameShadow" >
-    <enum>QFrame::Plain</enum>
-   </property>
-   <property name="lineWidth" >
-    <number>0</number>
-   </property>
-   <property name="currentIndex" >
-    <number>0</number>
-   </property>
-   <widget class="QWidget" name="WStackPage" >
-    <widget class="QLabel" name="label" >
-     <property name="geometry" >
-      <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>521</width>
-       <height>23</height>
-      </rect>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QTreeWidget" name="entries_listview">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
-     <property name="font" >
-      <font>
-       <family>Sans Serif</family>
-       <pointsize>12</pointsize>
-       <weight>50</weight>
-       <italic>false</italic>
-       <bold>false</bold>
-       <underline>false</underline>
-       <strikeout>false</strikeout>
-      </font>
-     </property>
-     <property name="text" >
-      <string>Please select an (child) entry on the left side!</string>
-     </property>
+     <column>
+      <property name="text">
+       <string>Entries</string>
+      </property>
+     </column>
     </widget>
-   </widget>
-  </widget>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="stackLayout">
+     <item>
+      <widget class="QStackedWidget" name="widget_stack">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="lineWidth">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="WStackPage">
+        <widget class="QLabel" name="label">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>286</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Please select an (child) entry on the left side!</string>
+         </property>
+        </widget>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::Ok|QDialogButtonBox::RestoreDefaults</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
+ <layoutdefault spacing="6" margin="11"/>
  <tabstops>
   <tabstop>entries_listview</tabstop>
-  <tabstop>ok_button</tabstop>
-  <tabstop>cancel_button</tabstop>
-  <tabstop>defaults_button</tabstop>
-  <tabstop>help_button</tabstop>
  </tabstops>
  <includes>
-  <include location="global" >BALL/COMMON/global.h</include>
+  <include location="global">BALL/COMMON/global.h</include>
  </includes>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>clicked(QAbstractButton*)</signal>
+   <receiver>PreferencesData</receiver>
+   <slot>dialogButtonsClicked_(QAbstractButton*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>479</x>
+     <y>472</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>504</x>
+     <y>484</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>PreferencesData</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>538</x>
+     <y>468</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>585</x>
+     <y>627</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>PreferencesData</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>383</x>
+     <y>464</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>389</x>
+     <y>567</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>helpRequested()</signal>
+   <receiver>PreferencesData</receiver>
+   <slot>showHelp()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>332</x>
+     <y>467</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>330</x>
+     <y>596</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <signal>applied()</signal>
+  <slot>dialogButtonsClicked_(QAbstractButton*)</slot>
+  <slot>showHelp()</slot>
+  <slot>cancelPreferences()</slot>
+ </slots>
 </ui>

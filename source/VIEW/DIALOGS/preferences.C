@@ -33,10 +33,7 @@ namespace BALL
 			setObjectName(name);
 			
 			// signals and slots connections
-			connect( cancel_button, SIGNAL( clicked() ), this, SLOT( cancelPreferences() ) );
-			connect( defaults_button, SIGNAL( clicked() ), this, SLOT( setDefaultValues() ) );
 			connect( entries_listview, SIGNAL(itemSelectionChanged()), this, SLOT(entrySelected()));
-			connect( help_button, SIGNAL( clicked() ), this, SLOT( showHelp() ) );
 			//for some reason the ok_button and the apply button is connected in VIEW/KERNEL/mainControl.C
 		}
 
@@ -62,12 +59,6 @@ namespace BALL
 				return;
 			
 			}
-
- 			QWidget* widget = dynamic_cast<QWidget*>(child);
-
- 			widget->setMinimumSize(widget_stack->width(), widget_stack->height());
- 			widget->setMaximumSize(widget_stack->width(), widget_stack->height());
- 			widget->resize(widget_stack->width(), widget_stack->height());
 
 			if (child->getStackPages().size() == 0) 
 			{
@@ -173,7 +164,7 @@ namespace BALL
 
 			// enable or disable help button
 			HelpViewer* hv = HelpViewer::getInstance(0);
-			if (hv != 0) help_button->setEnabled(hv->hasHelpFor(child));
+			if (hv != 0) buttonBox->button(QDialogButtonBox::Help)->setEnabled(hv->hasHelpFor(child));
 
 			// set the listview entry 
 			QTreeWidgetItem* item = widget_to_item_[child];
@@ -281,7 +272,7 @@ namespace BALL
 			}
 		}
 
-		void Preferences::cancelPreferences()
+		void Preferences::reject()
 		{
 			HashSet<PreferencesEntry*>::Iterator it = entries_.begin();
 			for (; +it; ++it)
@@ -289,7 +280,7 @@ namespace BALL
 				(**it).restoreValues(true);
 			}
 
-			close();
+			QDialog::reject();
 		}
 
 		void Preferences::applyPreferences()
@@ -299,6 +290,31 @@ namespace BALL
 			{
 				(**it).storeValues();
 			}
+		}
+
+		void Preferences::setApplyEnabled(bool enabled)
+		{
+			buttonBox->button(QDialogButtonBox::Ok)->setEnabled(enabled);
+			buttonBox->button(QDialogButtonBox::Apply)->setEnabled(enabled);
+		}
+
+		void Preferences::dialogButtonsClicked_(QAbstractButton* button)
+		{
+			if(!button) {
+				return;
+			}
+
+			switch(buttonBox->buttonRole(button)) {
+				case QDialogButtonBox::ApplyRole:
+					emit applied();
+					break;
+				case QDialogButtonBox::ResetRole:
+					setDefaultValues();
+					break;
+				default:
+					return;
+			}
+
 		}
 
 	} // namespace VIEW

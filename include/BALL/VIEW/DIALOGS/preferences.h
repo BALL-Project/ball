@@ -112,6 +112,12 @@ namespace BALL
 			///
 			const QWidget* currentPage() const;
 
+			/// Activate or deactivate the apply and ok buttons
+			void setApplyEnabled(bool enabled);
+
+			signals:
+				void applied();
+
 			public slots:
 
 			//@}
@@ -133,13 +139,16 @@ namespace BALL
 			void setDefaultValues();
 
 			///
-			void cancelPreferences();
+			void reject();
 
 			/// Store the last applied values for undo
 			void applyPreferences();
 
 			///
 			void showHelp();
+
+			protected slots:
+				void dialogButtonsClicked_(QAbstractButton* button);
 
 			protected:
 
