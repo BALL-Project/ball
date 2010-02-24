@@ -265,13 +265,7 @@ void LightSettings::typeSelected_(Position type)
 	relative->setEnabled(!is_ambient);
 	not_relative->setEnabled(!is_ambient);
 
-	attenuation_p_1->setEnabled(pos_enabled);
-	attenuation_p_2->setEnabled(pos_enabled);
-	attenuation_p_3->setEnabled(pos_enabled);
-	textLabel1_4->setEnabled(pos_enabled);
-	label->setEnabled(pos_enabled);
-	label_2->setEnabled(pos_enabled);
-	label_3->setEnabled(pos_enabled);
+	attenuationGroup->setEnabled(pos_enabled);
 }
 
 void LightSettings::getValues_(Index current)
