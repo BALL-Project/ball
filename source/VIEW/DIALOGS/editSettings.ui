@@ -1,41 +1,47 @@
-<ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>EditSettingsData</class>
- <widget class="QWidget" name="EditSettingsData" >
-  <property name="geometry" >
+ <widget class="QWidget" name="EditSettingsData">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>563</width>
-    <height>435</height>
+    <width>525</width>
+    <height>414</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Editing</string>
   </property>
-  <widget class="QCheckBox" name="only_highlighted" >
-   <property name="geometry" >
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>379</width>
-     <height>24</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>only select atoms in highlighted container</string>
-   </property>
-   <property name="checked" >
-    <bool>true</bool>
-   </property>
-  </widget>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QCheckBox" name="only_highlighted">
+     <property name="text">
+      <string>only select atoms in highlighted container</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>376</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
+ <layoutdefault spacing="6" margin="11"/>
  <includes>
-  <include location="global" >BALL/COMMON/global.h</include>
+  <include location="global">BALL/COMMON/global.h</include>
  </includes>
  <resources/>
  <connections/>
