@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>541</width>
-    <height>602</height>
+    <width>530</width>
+    <height>645</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -47,7 +47,7 @@
       </size>
      </property>
      <property name="title">
-      <string>Amber Options</string>
+      <string>AMBER Parameters</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignHCenter</set>
@@ -181,7 +181,7 @@
          </size>
         </property>
         <property name="text">
-         <string>Å</string>
+         <string notr="true">Å</string>
         </property>
         <property name="buddy">
          <cstring>nonbonded_cutoff_line_edit</cstring>
@@ -209,7 +209,7 @@
          </size>
         </property>
         <property name="text">
-         <string>Å</string>
+         <string notr="true">Å</string>
         </property>
         <property name="buddy">
          <cstring>nonbonded_cutoff_line_edit</cstring>
@@ -225,7 +225,7 @@
          </size>
         </property>
         <property name="text">
-         <string>13.0</string>
+         <string notr="true">13.0</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight</set>
@@ -241,7 +241,7 @@
          </size>
         </property>
         <property name="text">
-         <string>13.0</string>
+         <string notr="true">13.0</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight</set>
@@ -269,7 +269,7 @@
          </size>
         </property>
         <property name="text">
-         <string>Å /</string>
+         <string notr="true">Å /</string>
         </property>
         <property name="buddy">
          <cstring>nonbonded_cutoff_line_edit</cstring>
@@ -297,7 +297,7 @@
          </size>
         </property>
         <property name="text">
-         <string>Å /</string>
+         <string notr="true">Å /</string>
         </property>
         <property name="buddy">
          <cstring>nonbonded_cutoff_line_edit</cstring>
@@ -325,7 +325,7 @@
          </size>
         </property>
         <property name="text">
-         <string>Å</string>
+         <string notr="true">Å</string>
         </property>
         <property name="buddy">
          <cstring>nonbonded_cutoff_line_edit</cstring>
@@ -335,7 +335,7 @@
       <item row="4" column="1">
        <widget class="QLineEdit" name="scaling_vdw_1_4_line_edit">
         <property name="text">
-         <string>2.0</string>
+         <string notr="true">2.0</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight</set>
@@ -345,7 +345,7 @@
       <item row="3" column="1">
        <widget class="QLineEdit" name="scaling_electrostatic_1_4_line_edit">
         <property name="text">
-         <string>1.2</string>
+         <string notr="true">1.2</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight</set>
@@ -355,7 +355,7 @@
       <item row="2" column="1">
        <widget class="QLineEdit" name="electrostatic_cutoff_line_edit">
         <property name="text">
-         <string>15.0</string>
+         <string notr="true">15.0</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight</set>
@@ -383,7 +383,7 @@
          </size>
         </property>
         <property name="text">
-         <string>15.0</string>
+         <string notr="true">15.0</string>
         </property>
         <property name="frame">
          <bool>true</bool>
@@ -417,7 +417,7 @@
          </size>
         </property>
         <property name="text">
-         <string>20.0</string>
+         <string notr="true">20.0</string>
         </property>
         <property name="maxLength">
          <number>32767</number>
@@ -669,7 +669,7 @@
          </size>
         </property>
         <property name="text">
-         <string>10</string>
+         <string notr="true">10</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight</set>
@@ -737,7 +737,7 @@
          <enum>Qt::StrongFocus</enum>
         </property>
         <property name="text">
-         <string>Amber/amber96.ini</string>
+         <string notr="true">Amber/amber96.ini</string>
         </property>
         <property name="maxLength">
          <number>32767</number>
