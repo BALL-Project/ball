@@ -4,67 +4,13 @@
 <context>
     <name>AboutDialog</name>
     <message>
-        <location filename="APPLICATIONS/BALLVIEW/aboutDialog.h" line="187"/>
         <location filename="APPLICATIONS/BALLVIEW/aboutDialog.ui" line="495"/>
-        <location filename="APPLICATIONS/BALLVIEW/aboutDialogData.h" line="187"/>
         <source>About BALLView</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message utf8="true">
-        <location filename="APPLICATIONS/BALLVIEW/aboutDialog.h" line="188"/>
-        <location filename="APPLICATIONS/BALLVIEW/aboutDialogData.h" line="188"/>
-        <source>Andreas Hildebrandt
-Anna Katharina Dehof
-Stefan Nickels
-Daniel StÃ¶ckel
-Andreas Moll
-Oliver Kohlbacher</source>
-        <translation type="unfinished"></translation>
+        <translation>Über BALLView</translation>
     </message>
     <message>
-        <location filename="APPLICATIONS/BALLVIEW/aboutDialog.h" line="194"/>
-        <location filename="APPLICATIONS/BALLVIEW/aboutDialog.ui" line="525"/>
-        <location filename="APPLICATIONS/BALLVIEW/aboutDialogData.h" line="194"/>
         <source>O&amp;K</source>
-        <translation type="unfinished">OK</translation>
-    </message>
-    <message>
-        <location filename="APPLICATIONS/BALLVIEW/aboutDialog.h" line="195"/>
-        <location filename="APPLICATIONS/BALLVIEW/aboutDialog.ui" line="528"/>
-        <location filename="APPLICATIONS/BALLVIEW/aboutDialogData.h" line="195"/>
-        <source>Alt+K</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="APPLICATIONS/BALLVIEW/aboutDialog.h" line="196"/>
-        <location filename="APPLICATIONS/BALLVIEW/aboutDialog.ui" line="538"/>
-        <location filename="APPLICATIONS/BALLVIEW/aboutDialogData.h" line="196"/>
-        <source>QT Version</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="APPLICATIONS/BALLVIEW/aboutDialog.h" line="197"/>
-        <location filename="APPLICATIONS/BALLVIEW/aboutDialog.ui" line="551"/>
-        <location filename="APPLICATIONS/BALLVIEW/aboutDialogData.h" line="197"/>
-        <source>(BALL 1.0)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="APPLICATIONS/BALLVIEW/aboutDialog.h" line="198"/>
-        <location filename="APPLICATIONS/BALLVIEW/aboutDialog.ui" line="564"/>
-        <location filename="APPLICATIONS/BALLVIEW/aboutDialogData.h" line="198"/>
-        <source>&lt;h1&gt;&lt;b&gt;BALLView 1.0&lt;/b&gt;&lt;/h1&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="APPLICATIONS/BALLVIEW/aboutDialog.ui" line="507"/>
-        <source>Andreas Hildebrandt
-Anna Katharina Dehof
-Stefan Nickels
-Daniel Stöckel
-Andreas Moll
-Oliver Kohlbacher</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">O&amp;K</translation>
     </message>
 </context>
 <context>
@@ -72,22 +18,23 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="32"/>
         <source>AMBER Options</source>
-        <translation type="unfinished"></translation>
+        <translation>AMBER Optionen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="50"/>
-        <source>Amber Options</source>
-        <translation type="unfinished"></translation>
+        <source>AMBER Parameters</source>
+        <oldsource>Amber Options</oldsource>
+        <translation>AMBER Parameter</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="77"/>
         <source>van der Waals 1-4 scaling factor</source>
-        <translation type="unfinished"></translation>
+        <translation>van der Waals 1-4 Skalierungsfaktor</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="96"/>
         <source>Electrostatic 1-4 scaling factor</source>
-        <translation type="unfinished"></translation>
+        <translation>Elektrostatik 1-4 Skalierungsfaktor</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="115"/>
@@ -105,164 +52,114 @@ Oliver Kohlbacher</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="184"/>
-        <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="212"/>
-        <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="328"/>
-        <source>Å</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="228"/>
-        <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="244"/>
-        <source>13.0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="272"/>
-        <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="300"/>
-        <source>Å /</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="338"/>
-        <source>2.0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="348"/>
-        <source>1.2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="358"/>
-        <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="386"/>
-        <source>15.0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="420"/>
-        <source>20.0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="454"/>
         <source>Dielectric Constant</source>
-        <translation type="unfinished"></translation>
+        <translation>Dielektrizitätskonstante</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="487"/>
         <source>constant</source>
-        <translation type="unfinished"></translation>
+        <translation>konstant</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="509"/>
         <source>distance dependent</source>
-        <translation type="unfinished"></translation>
+        <translation>abstandsabhängig</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="525"/>
         <source>Charge and Type Assignment</source>
-        <translation type="unfinished"></translation>
+        <translation>Ladungs- und Typzuweisung</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="546"/>
         <source>Assign charges</source>
-        <translation type="unfinished"></translation>
+        <translation>Ladungen zuweisen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="562"/>
         <source>Assign type names</source>
-        <translation type="unfinished"></translation>
+        <translation>Typnamen zuweisen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="578"/>
         <source>Assign (numeric) types</source>
-        <translation type="unfinished"></translation>
+        <translation>Numerische Typen zuweisen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="594"/>
         <source>Overwrite charges</source>
-        <translation type="unfinished"></translation>
+        <translation>Ladungen überschreiben</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="610"/>
         <source>Overwrite type names</source>
-        <translation type="unfinished"></translation>
+        <translation>Typnamen überschreiben</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="623"/>
         <source>Setup Error Handling</source>
-        <translation type="unfinished"></translation>
+        <translation>Setup Fehlerbehandlung</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="650"/>
         <source>Maximum number of unassigned atoms before aborting setup</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="672"/>
-        <source>10</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximale Anzahl nicht zugewiesener Atome bevor Setup Abbruch</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="685"/>
         <source>Parameter Set</source>
-        <translation type="unfinished"></translation>
+        <translation>Parametersatz</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="718"/>
         <source>Filename</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="740"/>
-        <source>Amber/amber96.ini</source>
-        <translation type="unfinished"></translation>
+        <translation>Dateiname</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="768"/>
         <source>Browse your computer for amber file</source>
-        <translation type="unfinished"></translation>
+        <translation>Computer nach AMBER-Datei durchsuchen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="771"/>
         <source>Browse</source>
-        <translation type="unfinished"></translation>
+        <translation>Durchsuchen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="804"/>
         <source>Close and save options</source>
-        <translation type="unfinished"></translation>
+        <translation>Schließen und Optionen speichern</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="807"/>
         <source>O&amp;K</source>
-        <translation type="unfinished">OK</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="832"/>
         <source>Close window and discard changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Fenster schließen und Änderungen verwerfen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="835"/>
         <source>C&amp;ancel</source>
-        <translation type="unfinished">Schließen</translation>
+        <translation>&amp;Abbrechen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="857"/>
         <source>Reset all settings to default values</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle Einstellungen auf Standardeinstellungen zurücksetzen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="860"/>
         <source>Defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Standardeinstellungen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="872"/>
         <source>Components</source>
-        <translation type="unfinished"></translation>
+        <translation>Komponenten</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="887"/>
@@ -277,12 +174,12 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="907"/>
         <source>Torsions</source>
-        <translation type="unfinished"></translation>
+        <translation>Torsionen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/amberConfigurationDialog.ui" line="917"/>
         <source>NonBonded</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungebundene Wechselwirkungen</translation>
     </message>
 </context>
 <context>
@@ -290,204 +187,177 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="32"/>
         <source>Bond Order Assignment Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Bindungsordnungszuweisungsoptionen</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="51"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="42"/>
         <source>Basic</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Grundlegend</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="63"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="211"/>
         <source>Bond Order Assignment</source>
-        <translation type="unfinished"></translation>
+        <translation>Bindungsordnungszuweisung</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="75"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="223"/>
         <source>In Addition to Unknown Bond Orders:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zusätzlich zu unbekannten Bindungsordnungen:</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="82"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="230"/>
         <source>Overwrite Bond Order Single</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Einfachbindungen überschreiben</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="92"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="240"/>
         <source>Overwrite Bond Order Double</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zweifachbindungen überschreiben</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="102"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="250"/>
         <source>Overwrite Bond Order Triple</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dreifachbindungen überschreiben</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="115"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="263"/>
         <source>Overwrite Selected Bonds</source>
-        <translation type="unfinished"></translation>
+        <translation>Selektierte Bindungen überschreiben</translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="48"/>
+        <source>Number of Solutions</source>
+        <translation>Anzahl an Lösungen</translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="71"/>
+        <source>single solution</source>
+        <translation>eine Lösung</translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="90"/>
+        <source>all optimal solutions</source>
+        <translation>alle optimalen Lösungen</translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="121"/>
+        <source>all optimal solutions but max.</source>
+        <translation>alle optimalen Lösungen jedoch max.</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="134"/>
-        <source>Number of Solutions</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="168"/>
-        <source>single solution</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="187"/>
-        <source>all optimal solutions</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="218"/>
-        <source>all optimal solutions but max.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="231"/>
         <source>all solutions but max.</source>
-        <translation type="unfinished"></translation>
+        <translation>alle Lösungen jedoch max.</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="266"/>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="291"/>
-        <source>25</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="333"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="276"/>
         <source>Aromatic Rings</source>
-        <translation type="unfinished"></translation>
+        <translation>Aromatische Ringe</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="348"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="291"/>
         <source>Kekulize Bonds</source>
-        <translation type="unfinished"></translation>
+        <translation>Bindungen kekulisieren</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="358"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="301"/>
         <source>Assign Bond Order Aromatic</source>
-        <translation type="unfinished"></translation>
+        <translation>Aromatische Bindungsordnung zuweisen</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="405"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="323"/>
         <source>Hydrogens</source>
-        <translation type="unfinished"></translation>
+        <translation>Wasserstoffe</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="423"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="341"/>
         <source>Add Hydrogens</source>
-        <translation type="unfinished"></translation>
+        <translation>Wasserstoffe hinzufügen</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="451"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="368"/>
         <source>Advanced</source>
-        <translation type="unfinished"></translation>
+        <translation>Erweitert</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="466"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="374"/>
         <source>Parameter Set</source>
-        <translation type="unfinished"></translation>
+        <translation>Parametersatz</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="493"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="401"/>
         <source>Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Pfad</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="515"/>
-        <source>bond_lengths/BondOrder.xml</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="546"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="454"/>
         <source>Browse your computer for amber file</source>
-        <translation type="unfinished"></translation>
+        <translation>Computer nach AMBER-Datei durchsuchen</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="549"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="457"/>
         <source>Browse</source>
-        <translation type="unfinished"></translation>
+        <translation>Durchsuchen</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="562"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="470"/>
         <source>Algorithm</source>
-        <translation type="unfinished"></translation>
+        <translation>Algorithmus</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="577"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="485"/>
         <source>A-Star</source>
-        <translation type="unfinished"></translation>
+        <translation>A-Stern</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="587"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="495"/>
         <source>ILP</source>
-        <translation type="unfinished"></translation>
+        <translation>ILP</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="600"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="508"/>
         <source>Penalty Balance Factor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Strafbalancefaktor</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="631"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="531"/>
         <source>Atom type</source>
-        <translation type="unfinished"></translation>
+        <translation>Atomtyp</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="657"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="557"/>
         <source>Bond Length</source>
-        <translation type="unfinished"></translation>
+        <translation>Bindungslänge</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="674"/>
-        <source>100</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="684"/>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="723"/>
-        <source>%</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="710"/>
-        <source>0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="768"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="665"/>
         <source>close window, save options and start assignment</source>
-        <translation type="unfinished"></translation>
+        <translation>Fenster schließen, Optionen speichern und Zuweisung starten</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="771"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="668"/>
         <source>O&amp;K</source>
-        <translation type="unfinished">OK</translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="796"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="693"/>
         <source>Reset all settings to default values</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle Einstellungen auf Standardeinstellungen zurücksetzen</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="799"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="696"/>
         <source>Defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Standardeinstellungen</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="821"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="718"/>
         <source>Close window and discard changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Fenster schließen und Änderungen verwerfen</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="824"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="721"/>
         <source>C&amp;ancel</source>
-        <translation type="unfinished">Schließen</translation>
+        <translation>&amp;Abbrechen</translation>
     </message>
 </context>
 <context>
@@ -495,338 +365,114 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="14"/>
         <source>Bond Order Assignment Results</source>
-        <translation type="unfinished"></translation>
+        <translation>Ergebnisse: Bindungsordnungszuweisung</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="138"/>
-        <source>1</source>
-        <translation type="unfinished"></translation>
+        <location filename="VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="27"/>
+        <source>Results</source>
+        <translation>Ergebnisse</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="173"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="148"/>
         <source>Apply to selected System</source>
-        <translation type="unfinished"></translation>
+        <translation>Auf ausgewähltes System anwenden</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="199"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="174"/>
         <source>Add as new</source>
-        <translation type="unfinished"></translation>
+        <translation>Als neu hinzufügen</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="212"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="187"/>
         <source>Compute Next Solution</source>
-        <translation type="unfinished"></translation>
+        <translation>Nächste Lösung berechnen</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="225"/>
+        <location filename="VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="200"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Schließen</translation>
     </message>
 </context>
 <context>
     <name>AtomOverviewData</name>
     <message>
-        <location filename="VIEW/DIALOGS/atomOverview.ui" line="16"/>
-        <source>Atom Overiew</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/DIALOGS/atomOverview.ui" line="67"/>
-        <source>OK</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/DIALOGS/atomOverview.ui" line="82"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>BALL::Mainframe</name>
-    <message>
-        <location filename="APPLICATIONS/BALLVIEW/mainframe.C" line="96"/>
-        <source>Alt+X</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Abbrechen</translation>
     </message>
     <message>
-        <location filename="APPLICATIONS/BALLVIEW/mainframe.C" line="197"/>
-        <source>Alt+C</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>BALL::VIEW::DisplayProperties</name>
-    <message>
-        <location filename="VIEW/DIALOGS/displayProperties.C" line="128"/>
-        <source>Ctrl+I</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>BALL::VIEW::DownloadPDBFile</name>
-    <message>
-        <location filename="VIEW/DIALOGS/downloadPDBFile.C" line="88"/>
-        <source>Ctrl+T</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>BALL::VIEW::EditableScene</name>
-    <message>
-        <location filename="VIEW/WIDGETS/editableScene.C" line="177"/>
-        <location filename="VIEW/WIDGETS/editableScene.C.orig" line="177"/>
-        <source>Ctrl+E</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>BALL::VIEW::LabelDialog</name>
-    <message>
-        <location filename="VIEW/DIALOGS/labelDialog.C" line="124"/>
-        <source>Ctrl+L</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>BALL::VIEW::MainControl</name>
-    <message>
-        <location filename="VIEW/KERNEL/mainControl.C" line="496"/>
-        <source>Ctrl+Q</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/KERNEL/mainControl.C" line="506"/>
-        <source>Ctrl+Z</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>BALL::VIEW::MolecularStructure</name>
-    <message>
-        <location filename="VIEW/WIDGETS/molecularStructure.C" line="76"/>
-        <source>Ctrl+F</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/WIDGETS/molecularStructure.C" line="88"/>
-        <source>Ctrl+Alt+U</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/WIDGETS/molecularStructure.C" line="94"/>
-        <source>Ctrl+B</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/WIDGETS/molecularStructure.C" line="106"/>
-        <source>Ctrl+K</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/WIDGETS/molecularStructure.C" line="112"/>
-        <source>Ctrl+H</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/WIDGETS/molecularStructure.C" line="120"/>
-        <source>Ctrl+A</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/WIDGETS/molecularStructure.C" line="133"/>
-        <source>Ctrl+M</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/WIDGETS/molecularStructure.C" line="179"/>
-        <source>Alt+O</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/WIDGETS/molecularStructure.C" line="189"/>
-        <source>Alt+N</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>BALL::VIEW::RegularData3DController</name>
-    <message>
-        <location filename="VIEW/DATATYPE/standardDatasets.C" line="397"/>
-        <source>Ctrl+U</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>BALL::VIEW::Scene</name>
-    <message>
-        <location filename="VIEW/WIDGETS/scene.C" line="1510"/>
-        <location filename="VIEW/WIDGETS/scene.C.BASE.4966.C" line="1497"/>
-        <location filename="VIEW/WIDGETS/scene.C.BASE.5053.C" line="1497"/>
-        <location filename="VIEW/WIDGETS/scene.C.BASE.5095.C" line="1497"/>
-        <location filename="VIEW/WIDGETS/scene.C.LOCAL.4966.C" line="1498"/>
-        <location filename="VIEW/WIDGETS/scene.C.LOCAL.5053.C" line="1498"/>
-        <location filename="VIEW/WIDGETS/scene.C.LOCAL.5095.C" line="1498"/>
-        <location filename="VIEW/WIDGETS/scene.C.REMOTE.4966.C" line="1497"/>
-        <location filename="VIEW/WIDGETS/scene.C.REMOTE.5053.C" line="1497"/>
-        <location filename="VIEW/WIDGETS/scene.C.REMOTE.5095.C" line="1497"/>
-        <location filename="VIEW/WIDGETS/scene.C.orig" line="1498"/>
-        <source>Ctrl+W</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/WIDGETS/scene.C" line="1516"/>
-        <location filename="VIEW/WIDGETS/scene.C.BASE.4966.C" line="1503"/>
-        <location filename="VIEW/WIDGETS/scene.C.BASE.5053.C" line="1503"/>
-        <location filename="VIEW/WIDGETS/scene.C.BASE.5095.C" line="1503"/>
-        <location filename="VIEW/WIDGETS/scene.C.LOCAL.4966.C" line="1504"/>
-        <location filename="VIEW/WIDGETS/scene.C.LOCAL.5053.C" line="1504"/>
-        <location filename="VIEW/WIDGETS/scene.C.LOCAL.5095.C" line="1504"/>
-        <location filename="VIEW/WIDGETS/scene.C.REMOTE.4966.C" line="1503"/>
-        <location filename="VIEW/WIDGETS/scene.C.REMOTE.5053.C" line="1503"/>
-        <location filename="VIEW/WIDGETS/scene.C.REMOTE.5095.C" line="1503"/>
-        <location filename="VIEW/WIDGETS/scene.C.orig" line="1504"/>
-        <source>Ctrl+N</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/WIDGETS/scene.C" line="1529"/>
-        <location filename="VIEW/WIDGETS/scene.C.BASE.4966.C" line="1516"/>
-        <location filename="VIEW/WIDGETS/scene.C.BASE.5053.C" line="1516"/>
-        <location filename="VIEW/WIDGETS/scene.C.BASE.5095.C" line="1516"/>
-        <location filename="VIEW/WIDGETS/scene.C.LOCAL.4966.C" line="1517"/>
-        <location filename="VIEW/WIDGETS/scene.C.LOCAL.5053.C" line="1517"/>
-        <location filename="VIEW/WIDGETS/scene.C.LOCAL.5095.C" line="1517"/>
-        <location filename="VIEW/WIDGETS/scene.C.REMOTE.4966.C" line="1516"/>
-        <location filename="VIEW/WIDGETS/scene.C.REMOTE.5053.C" line="1516"/>
-        <location filename="VIEW/WIDGETS/scene.C.REMOTE.5095.C" line="1516"/>
-        <location filename="VIEW/WIDGETS/scene.C.orig" line="1517"/>
-        <source>Alt+P</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/WIDGETS/scene.C" line="1535"/>
-        <location filename="VIEW/WIDGETS/scene.C.BASE.4966.C" line="1522"/>
-        <location filename="VIEW/WIDGETS/scene.C.BASE.5053.C" line="1522"/>
-        <location filename="VIEW/WIDGETS/scene.C.BASE.5095.C" line="1522"/>
-        <location filename="VIEW/WIDGETS/scene.C.LOCAL.4966.C" line="1523"/>
-        <location filename="VIEW/WIDGETS/scene.C.LOCAL.5053.C" line="1523"/>
-        <location filename="VIEW/WIDGETS/scene.C.LOCAL.5095.C" line="1523"/>
-        <location filename="VIEW/WIDGETS/scene.C.REMOTE.4966.C" line="1522"/>
-        <location filename="VIEW/WIDGETS/scene.C.REMOTE.5053.C" line="1522"/>
-        <location filename="VIEW/WIDGETS/scene.C.REMOTE.5095.C" line="1522"/>
-        <location filename="VIEW/WIDGETS/scene.C.orig" line="1523"/>
-        <source>Ctrl+Y</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/WIDGETS/scene.C" line="1548"/>
-        <location filename="VIEW/WIDGETS/scene.C.BASE.4966.C" line="1535"/>
-        <location filename="VIEW/WIDGETS/scene.C.BASE.5053.C" line="1535"/>
-        <location filename="VIEW/WIDGETS/scene.C.BASE.5095.C" line="1535"/>
-        <location filename="VIEW/WIDGETS/scene.C.LOCAL.4966.C" line="1536"/>
-        <location filename="VIEW/WIDGETS/scene.C.LOCAL.5053.C" line="1536"/>
-        <location filename="VIEW/WIDGETS/scene.C.LOCAL.5095.C" line="1536"/>
-        <location filename="VIEW/WIDGETS/scene.C.REMOTE.4966.C" line="1535"/>
-        <location filename="VIEW/WIDGETS/scene.C.REMOTE.5053.C" line="1535"/>
-        <location filename="VIEW/WIDGETS/scene.C.REMOTE.5095.C" line="1535"/>
-        <location filename="VIEW/WIDGETS/scene.C.orig" line="1536"/>
-        <source>Ctrl+R</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/WIDGETS/scene.C" line="1559"/>
-        <location filename="VIEW/WIDGETS/scene.C.BASE.4966.C" line="1546"/>
-        <location filename="VIEW/WIDGETS/scene.C.BASE.5053.C" line="1546"/>
-        <location filename="VIEW/WIDGETS/scene.C.BASE.5095.C" line="1546"/>
-        <location filename="VIEW/WIDGETS/scene.C.LOCAL.4966.C" line="1547"/>
-        <location filename="VIEW/WIDGETS/scene.C.LOCAL.5053.C" line="1547"/>
-        <location filename="VIEW/WIDGETS/scene.C.LOCAL.5095.C" line="1547"/>
-        <location filename="VIEW/WIDGETS/scene.C.REMOTE.4966.C" line="1546"/>
-        <location filename="VIEW/WIDGETS/scene.C.REMOTE.5053.C" line="1546"/>
-        <location filename="VIEW/WIDGETS/scene.C.REMOTE.5095.C" line="1546"/>
-        <location filename="VIEW/WIDGETS/scene.C.orig" line="1547"/>
-        <source>Ctrl+P</source>
-        <translation type="unfinished"></translation>
+        <location filename="VIEW/DIALOGS/atomOverview.ui" line="14"/>
+        <source>Atom Overview</source>
+        <translation>Atomübersicht</translation>
     </message>
 </context>
 <context>
     <name>BondPropertiesData</name>
     <message>
-        <location filename="VIEW/DIALOGS/bondProperties.ui" line="16"/>
+        <location filename="VIEW/DIALOGS/bondProperties.ui" line="14"/>
         <source>Bond Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Bindungseigenschaften</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/bondProperties.ui" line="63"/>
+        <location filename="VIEW/DIALOGS/bondProperties.ui" line="59"/>
         <source>O&amp;K</source>
-        <translation type="unfinished">OK</translation>
+        <translation>O&amp;K</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/bondProperties.ui" line="66"/>
-        <source>Alt+K</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/DIALOGS/bondProperties.ui" line="90"/>
+        <location filename="VIEW/DIALOGS/bondProperties.ui" line="81"/>
         <source>C&amp;ancel</source>
-        <translation type="unfinished">Schließen</translation>
+        <translation>&amp;Abbrechen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/bondProperties.ui" line="93"/>
-        <source>Alt+A</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/DIALOGS/bondProperties.ui" line="105"/>
         <source>atom</source>
-        <translation type="unfinished"></translation>
+        <translation>Atom</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/bondProperties.ui" line="149"/>
+        <location filename="VIEW/DIALOGS/bondProperties.ui" line="137"/>
         <source>select bond</source>
-        <translation type="unfinished"></translation>
+        <translation>Bindung selektieren</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/bondProperties.ui" line="156"/>
+        <location filename="VIEW/DIALOGS/bondProperties.ui" line="144"/>
         <source>partner atom</source>
-        <translation type="unfinished"></translation>
+        <translation>Partneratom</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/bondProperties.ui" line="163"/>
+        <location filename="VIEW/DIALOGS/bondProperties.ui" line="151"/>
         <source>bond order</source>
-        <translation type="unfinished"></translation>
+        <translation>Bindungsordnung</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/bondProperties.ui" line="170"/>
+        <location filename="VIEW/DIALOGS/bondProperties.ui" line="158"/>
         <source>bond type</source>
-        <translation type="unfinished"></translation>
+        <translation>Bindungstyp</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/bondProperties.ui" line="177"/>
+        <location filename="VIEW/DIALOGS/bondProperties.ui" line="165"/>
         <source>name</source>
-        <translation type="unfinished"></translation>
+        <translation>Name</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/bondProperties.ui" line="184"/>
+        <location filename="VIEW/DIALOGS/bondProperties.ui" line="172"/>
         <source>length</source>
-        <translation type="unfinished"></translation>
+        <translation>Länge</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/bondProperties.ui" line="205"/>
+        <location filename="VIEW/DIALOGS/bondProperties.ui" line="193"/>
         <source>Select bond type</source>
-        <translation type="unfinished"></translation>
+        <translation>Bindungstyp auswählen</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/bondProperties.ui" line="218"/>
-        <location filename="VIEW/DIALOGS/bondProperties.ui" line="234"/>
+        <location filename="VIEW/DIALOGS/bondProperties.ui" line="206"/>
+        <location filename="VIEW/DIALOGS/bondProperties.ui" line="222"/>
         <source>focus and select atom</source>
-        <translation type="unfinished"></translation>
+        <translation>Zentrieren und Atom auswählen</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/bondProperties.ui" line="221"/>
-        <location filename="VIEW/DIALOGS/bondProperties.ui" line="237"/>
+        <location filename="VIEW/DIALOGS/bondProperties.ui" line="209"/>
+        <location filename="VIEW/DIALOGS/bondProperties.ui" line="225"/>
         <source>Select</source>
-        <translation type="unfinished"></translation>
+        <translation>Auswählen</translation>
     </message>
 </context>
 <context>
@@ -849,7 +495,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="76"/>
         <source>Close window and discard changes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fenster schließen und Änderungen verwerfen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="79"/>
@@ -864,7 +510,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="98"/>
         <source>Defaults</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Standard</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="116"/>
@@ -874,7 +520,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="137"/>
         <source>Electrostatic 1-4 scaling factor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Elektrostatik 1-4 Skalierungsfaktor</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="159"/>
@@ -890,7 +536,7 @@ Oliver Kohlbacher</source>
         <source>9.0</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message utf8="true">
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="211"/>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="583"/>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="613"/>
@@ -903,7 +549,7 @@ Oliver Kohlbacher</source>
         <source>1.0</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message utf8="true">
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="285"/>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="363"/>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="477"/>
@@ -918,7 +564,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="317"/>
         <source>van der Waals 1-4 scaling factor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">van der Waals 1-4 Skalierungsfaktor</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="333"/>
@@ -948,22 +594,22 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="656"/>
         <source>Dielectric Constant</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dielektrizitätskonstante</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="674"/>
         <source>constant</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">konstant</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="690"/>
         <source>distance dependent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">abstandsabhängig</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="703"/>
         <source>Components</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Komponenten</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="718"/>
@@ -973,7 +619,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="728"/>
         <source>NonBonded</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ungebundene Wechselwirkungen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="738"/>
@@ -983,7 +629,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="748"/>
         <source>Torsions</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Torsionen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="758"/>
@@ -998,22 +644,22 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="781"/>
         <source>Charge and Type Assignment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ladungs- und Typzuweisung</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="796"/>
         <source>Overwrite type names</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Typnamen überschreiben</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="806"/>
         <source>Assign charges</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ladungen zuweisen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="816"/>
         <source>Assign type names</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Typnamen zuweisen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="826"/>
@@ -1023,17 +669,17 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="836"/>
         <source>Overwrite charges</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ladungen überschreiben</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="849"/>
         <source>Parameter Set</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Parametersatz</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="876"/>
         <source>Filename</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dateiname</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="898"/>
@@ -1053,7 +699,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="942"/>
         <source>Setup Error Handling</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Setup Fehlerbehandlung</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="969"/>
@@ -1063,7 +709,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/charmmConfigurationDialog.ui" line="993"/>
         <source>Maximum number of unassigned atoms before aborting setup</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maximale Anzahl nicht zugewiesener Atome bevor Setup Abbruch</translation>
     </message>
 </context>
 <context>
@@ -1144,7 +790,7 @@ Oliver Kohlbacher</source>
         <location filename="VIEW/DIALOGS/coloringSettingsDialog.ui" line="8162"/>
         <location filename="VIEW/DIALOGS/coloringSettingsDialog.ui" line="9174"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bearbeiten</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/coloringSettingsDialog.ui" line="740"/>
@@ -1373,19 +1019,19 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/compositeProperties.ui" line="68"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">O&amp;K</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/compositeProperties.ui" line="90"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schließen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/compositeProperties.ui" line="99"/>
         <source>Atoms</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message utf8="true">
         <location filename="VIEW/DIALOGS/compositeProperties.ui" line="131"/>
         <source>Position (Å)</source>
         <translation type="unfinished"></translation>
@@ -1405,12 +1051,12 @@ Oliver Kohlbacher</source>
         <source>Force (pN)</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message utf8="true">
         <location filename="VIEW/DIALOGS/compositeProperties.ui" line="260"/>
         <source>Velocity (Å/ps)</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message utf8="true">
         <location filename="VIEW/DIALOGS/compositeProperties.ui" line="306"/>
         <source>Radius (Å)</source>
         <translation type="unfinished"></translation>
@@ -1486,7 +1132,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/contourSurfaceDialog.ui" line="171"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bearbeiten</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/contourSurfaceDialog.ui" line="504"/>
@@ -1495,22 +1141,73 @@ Oliver Kohlbacher</source>
     </message>
 </context>
 <context>
+    <name>DNABuilderDialog</name>
+    <message>
+        <location filename="VIEW/DIALOGS/DNABuilderDialog.ui" line="14"/>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/DNABuilderDialog.ui" line="22"/>
+        <source>Special:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/DNABuilderDialog.ui" line="29"/>
+        <source>Build complementary strand</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/DNABuilderDialog.ui" line="42"/>
+        <source>Abasic Site</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/DNABuilderDialog.ui" line="50"/>
+        <source>Add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/DNABuilderDialog.ui" line="59"/>
+        <source>GroupBox</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/DNABuilderDialog.ui" line="65"/>
+        <source>A-DNA</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/DNABuilderDialog.ui" line="72"/>
+        <source>B-DNA</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/DNABuilderDialog.ui" line="82"/>
+        <source>Z-DNA</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/DNABuilderDialog.ui" line="99"/>
+        <location filename="VIEW/DIALOGS/DNABuilderDialog.ui" line="106"/>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DemoTutorialDialogData</name>
     <message>
         <location filename="APPLICATIONS/BALLVIEW/demoTutorialDialog.ui" line="22"/>
-        <location filename="APPLICATIONS/BALLVIEW/demoTutorialDialogData.h" line="83"/>
         <source>Form1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="APPLICATIONS/BALLVIEW/demoTutorialDialog.ui" line="51"/>
-        <location filename="APPLICATIONS/BALLVIEW/demoTutorialDialogData.h" line="84"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schließen</translation>
     </message>
     <message>
         <location filename="APPLICATIONS/BALLVIEW/demoTutorialDialog.ui" line="64"/>
-        <location filename="APPLICATIONS/BALLVIEW/demoTutorialDialogData.h" line="85"/>
         <source>Next</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1556,7 +1253,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/displayProperties.ui" line="162"/>
         <source>Close window and discard changes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fenster schließen und Änderungen verwerfen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/displayProperties.ui" line="165"/>
@@ -1576,7 +1273,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/displayProperties.ui" line="212"/>
         <source>Transparency</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Transparenz</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/displayProperties.ui" line="262"/>
@@ -1598,7 +1295,7 @@ Oliver Kohlbacher</source>
         <location filename="VIEW/DIALOGS/displayProperties.ui" line="827"/>
         <location filename="VIEW/DIALOGS/displayProperties.ui" line="877"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bearbeiten</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/displayProperties.ui" line="847"/>
@@ -1653,7 +1350,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/displayProperties.ui" line="1586"/>
         <source>Resolution</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bildauflösung</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/displayProperties.ui" line="1601"/>
@@ -1936,12 +1633,12 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/dockDialog.ui" line="799"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">O&amp;K</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/dockDialog.ui" line="809"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schließen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/dockDialog.ui" line="816"/>
@@ -2012,7 +1709,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/dockResultDialog.ui" line="186"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schließen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/dockResultDialog.ui" line="201"/>
@@ -2075,7 +1772,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/downloadPDBFile.ui" line="88"/>
         <source>Close window</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fenster schließen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/downloadPDBFile.ui" line="91"/>
@@ -2174,7 +1871,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/exportGeometryDialog.ui" line="41"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Exportieren</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/exportGeometryDialog.ui" line="44"/>
@@ -2239,12 +1936,12 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/exportGeometryDialog.ui" line="283"/>
         <source>Filename</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dateiname</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/exportGeometryDialog.ui" line="333"/>
         <source>Browse your computer for filedestination of the export</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Computer nach Zielort für den Export durchsuchen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/exportGeometryDialog.ui" line="336"/>
@@ -2459,17 +2156,17 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/FDPBDialog.ui" line="719"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">O&amp;K</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/FDPBDialog.ui" line="749"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schließen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/FDPBDialog.ui" line="776"/>
         <source>Defaults</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Standard</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/FDPBDialog.ui" line="809"/>
@@ -2570,7 +2267,7 @@ Oliver Kohlbacher</source>
         <source>number of start points per atom (12^X)</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message utf8="true">
         <location filename="VIEW/DIALOGS/fieldLinesDialog.ui" line="192"/>
         <source>distance from atoms (0.1 Å * X)</source>
         <translation type="unfinished"></translation>
@@ -2593,6 +2290,150 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/fieldLinesDialog.ui" line="275"/>
         <source>Cancel</source>
+        <translation type="unfinished">Schließen</translation>
+    </message>
+</context>
+<context>
+    <name>FragmentEditor</name>
+    <message>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="14"/>
+        <source>FragmentDB Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="36"/>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="70"/>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="77"/>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="138"/>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="145"/>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="95"/>
+        <source>Parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="103"/>
+        <source>Type:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="126"/>
+        <source>Properties:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="173"/>
+        <source>File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="184"/>
+        <source>Edit</source>
+        <translation type="unfinished">Bearbeiten</translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="198"/>
+        <source>&amp;Open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="201"/>
+        <source>Ctrl+O</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="206"/>
+        <source>&amp;New</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="209"/>
+        <source>Ctrl+N</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="214"/>
+        <source>E&amp;xit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="217"/>
+        <source>Ctrl+Q</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="222"/>
+        <source>&amp;Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="225"/>
+        <source>Ctrl+S</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="230"/>
+        <source>Add Fragment/Variant</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="233"/>
+        <source>Ctrl+A</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="238"/>
+        <source>Duplicate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="241"/>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="276"/>
+        <source>Ctrl+D</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="246"/>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="249"/>
+        <source>Ctrl+C</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="254"/>
+        <source>Cut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="257"/>
+        <source>Ctrl+X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="262"/>
+        <source>Paste</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="265"/>
+        <source>Ctrl+V</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="270"/>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="273"/>
+        <source>Delete Fragment/Variant</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/fragmentEditor.ui" line="281"/>
+        <source>Save As</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2697,12 +2538,12 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/geometricFitDialog.ui" line="417"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">O&amp;K</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/geometricFitDialog.ui" line="441"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schließen</translation>
     </message>
 </context>
 <context>
@@ -2739,7 +2580,7 @@ Oliver Kohlbacher</source>
         <location filename="VIEW/DIALOGS/gridVisualizationDialog.ui" line="2279"/>
         <location filename="VIEW/DIALOGS/gridVisualizationDialog.ui" line="2298"/>
         <source>Select</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Auswählen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/gridVisualizationDialog.ui" line="1098"/>
@@ -2974,7 +2815,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/gridVisualizationDialog.ui" line="3489"/>
         <source>Misc</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sonstiges</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/gridVisualizationDialog.ui" line="3501"/>
@@ -3038,7 +2879,7 @@ Oliver Kohlbacher</source>
         <location filename="VIEW/DIALOGS/labelDialog.ui" line="140"/>
         <location filename="VIEW/DIALOGS/labelDialog.ui" line="223"/>
         <source>Select</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Auswählen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/labelDialog.ui" line="150"/>
@@ -3048,7 +2889,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/labelDialog.ui" line="187"/>
         <source>Font Preview</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schriftart Vorschau</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/labelDialog.ui" line="196"/>
@@ -3149,216 +2990,216 @@ Oliver Kohlbacher</source>
 <context>
     <name>LightSettingsData</name>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="32"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="31"/>
         <source>LightSettings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="65"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="64"/>
         <source>Create a new light</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="68"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="67"/>
         <source>&amp;Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="71"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="70"/>
         <source>Alt+A</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="96"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="95"/>
         <source>Lights list. Max 8 lights supported</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="124"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="123"/>
         <source>Remove a light</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="127"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="126"/>
         <source>&amp;Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="130"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="129"/>
         <source>Alt+R</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="143"/>
-        <source>Light Sources</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="159"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="158"/>
         <source>Light Source Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="180"/>
-        <source>Intensity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="218"/>
-        <source>Color</source>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="217"/>
+        <source>p1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/lightSettings.ui" line="249"/>
+        <source>p2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="281"/>
+        <source>p3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="331"/>
+        <source>Intensity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="369"/>
+        <source>Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="400"/>
         <source>Color of the light</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="280"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="431"/>
         <source>open a color dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="283"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="434"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bearbeiten</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="318"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="469"/>
         <source>factor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="349"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="500"/>
         <source>Select intensity of light source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="394"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="545"/>
         <source>0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="409"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="560"/>
         <source>Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="427"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="578"/>
         <source>Light from an infinite distance (position needed for angle of rays)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="430"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="581"/>
         <source>Directional</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="446"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="597"/>
         <source>Light from a specific position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="449"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="600"/>
         <source>Point</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Punkt</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="462"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="613"/>
         <source>Ambient light doesnt have a specific position source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="465"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="616"/>
         <source>Ambient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="484"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="635"/>
         <source>Orientation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="514"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="665"/>
         <source>Keep lightsource relative to camera</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="517"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="668"/>
         <source>relative to camera</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="545"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="696"/>
         <source>Keep lightsource static</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="548"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="699"/>
         <source>absolute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="573"/>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="881"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="306"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="724"/>
         <source>Position z</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="598"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="142"/>
+        <source>Select Light</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="749"/>
         <source>Position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="623"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="774"/>
         <source>Direction y</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">y-Richtung</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="648"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="799"/>
         <source>Direction z</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">z-Richtung</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="673"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="824"/>
         <source>Direction x</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">x-Richtung</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="698"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="274"/>
         <location filename="VIEW/DIALOGS/lightSettings.ui" line="849"/>
         <source>Position y</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="723"/>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="817"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="242"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="874"/>
         <source>Position x</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="748"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="899"/>
         <source>Direction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="764"/>
+        <location filename="VIEW/DIALOGS/lightSettings.ui" line="197"/>
         <source>Attenuation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="792"/>
-        <source>const</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="824"/>
-        <source>linear</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="VIEW/DIALOGS/lightSettings.ui" line="856"/>
-        <source>quadr</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3372,7 +3213,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="67"/>
         <source>Close and save options</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schließen und Optionen speichern</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="70"/>
@@ -3382,7 +3223,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="97"/>
         <source>Close window and discard changes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fenster schließen und Änderungen verwerfen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="100"/>
@@ -3392,12 +3233,12 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="124"/>
         <source>Reset all settings to default values</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alle Einstellungen auf Standardeinstellungen zurücksetzen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="127"/>
         <source>Defaults</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Standard</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="145"/>
@@ -3415,14 +3256,14 @@ Oliver Kohlbacher</source>
         <source>15.0</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message utf8="true">
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="265"/>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="381"/>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="411"/>
         <source>Å</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message utf8="true">
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="295"/>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="325"/>
         <source>Å /</source>
@@ -3452,27 +3293,27 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="507"/>
         <source>Dielectric Constant</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dielektrizitätskonstante</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="542"/>
         <source>constant</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">konstant</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="566"/>
         <source>distance dependent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">abstandsabhängig</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="576"/>
         <source>Setup Error Handling</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Setup Fehlerbehandlung</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="605"/>
         <source>Maximum number of unassigned atoms before aborting setup</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maximale Anzahl nicht zugewiesener Atome bevor Setup Abbruch</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="627"/>
@@ -3482,7 +3323,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="640"/>
         <source>Parameter Set</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Parametersatz</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="675"/>
@@ -3497,7 +3338,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="725"/>
         <source>Browse your computer for amber file</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Computer nach AMBER-Dateien durchsuchen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="728"/>
@@ -3507,7 +3348,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="741"/>
         <source>Components</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Komponenten</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="756"/>
@@ -3527,7 +3368,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="786"/>
         <source>Torsions</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Torsionen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="796"/>
@@ -3547,85 +3388,108 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="835"/>
         <source>Charge and Type Assignment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ladungs- und Typzuweisung</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="856"/>
         <source>Assign charges</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ladungen zuweisen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="872"/>
         <source>Assign type names</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Typnamen zuweisen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="888"/>
         <source>Assign (numeric) types</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Numerische Typen zuweisen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="904"/>
         <source>Overwrite charges</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ladungen überschreiben</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="920"/>
         <source>Overwrite type names</source>
+        <translation type="unfinished">Typnamen überschreiben</translation>
+    </message>
+</context>
+<context>
+    <name>MainControl</name>
+    <message>
+        <location filename="VIEW/KERNEL/mainControl.C" line="899"/>
+        <source>Language Changed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/KERNEL/mainControl.C" line="900"/>
+        <source>Changing the language only takes effect after restarting BALLView.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MainControlPreferencesData</name>
     <message>
-        <location filename="VIEW/DIALOGS/mainControlPreferences.ui" line="36"/>
+        <location filename="VIEW/DIALOGS/mainControlPreferences.ui" line="32"/>
         <source>MainControlPreferences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/mainControlPreferences.ui" line="68"/>
+        <location filename="VIEW/DIALOGS/mainControlPreferences.ui" line="137"/>
+        <source>Language Preferences</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/mainControlPreferences.ui" line="144"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/mainControlPreferences.ui" line="173"/>
         <source>Writes the information from the Logs window into a file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/mainControlPreferences.ui" line="71"/>
+        <location filename="VIEW/DIALOGS/mainControlPreferences.ui" line="176"/>
         <source>enable logging to file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/mainControlPreferences.ui" line="101"/>
+        <location filename="VIEW/DIALOGS/mainControlPreferences.ui" line="38"/>
         <source>GUI Style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/mainControlPreferences.ui" line="119"/>
+        <location filename="VIEW/DIALOGS/mainControlPreferences.ui" line="50"/>
         <source>Select a GUI style to alter the appearance of BALLView</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/mainControlPreferences.ui" line="135"/>
+        <location filename="VIEW/DIALOGS/mainControlPreferences.ui" line="60"/>
         <source>General font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/mainControlPreferences.ui" line="172"/>
+        <location filename="VIEW/DIALOGS/mainControlPreferences.ui" line="91"/>
         <source>Font Preview</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schriftart Vorschau</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/mainControlPreferences.ui" line="181"/>
+        <location filename="VIEW/DIALOGS/mainControlPreferences.ui" line="100"/>
         <source>Font Test label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/mainControlPreferences.ui" line="205"/>
+        <location filename="VIEW/DIALOGS/mainControlPreferences.ui" line="122"/>
         <source>Select the font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/mainControlPreferences.ui" line="208"/>
+        <location filename="VIEW/DIALOGS/mainControlPreferences.ui" line="125"/>
         <source>Select</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Auswählen</translation>
     </message>
 </context>
 <context>
@@ -3642,24 +3506,24 @@ Oliver Kohlbacher</source>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/materialSettings.ui" line="78"/>
-        <location filename="VIEW/DIALOGS/materialSettings.ui" line="865"/>
-        <location filename="VIEW/DIALOGS/materialSettings.ui" line="1562"/>
+        <location filename="VIEW/DIALOGS/materialSettings.ui" line="862"/>
+        <location filename="VIEW/DIALOGS/materialSettings.ui" line="1559"/>
         <source>color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/materialSettings.ui" line="97"/>
-        <location filename="VIEW/DIALOGS/materialSettings.ui" line="884"/>
-        <location filename="VIEW/DIALOGS/materialSettings.ui" line="1581"/>
+        <location filename="VIEW/DIALOGS/materialSettings.ui" line="881"/>
+        <location filename="VIEW/DIALOGS/materialSettings.ui" line="1578"/>
         <source>Select</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Auswählen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/materialSettings.ui" line="635"/>
-        <location filename="VIEW/DIALOGS/materialSettings.ui" line="1422"/>
-        <location filename="VIEW/DIALOGS/materialSettings.ui" line="2119"/>
-        <location filename="VIEW/DIALOGS/materialSettings.ui" line="2250"/>
-        <location filename="VIEW/DIALOGS/materialSettings.ui" line="2383"/>
+        <location filename="VIEW/DIALOGS/materialSettings.ui" line="1419"/>
+        <location filename="VIEW/DIALOGS/materialSettings.ui" line="2116"/>
+        <location filename="VIEW/DIALOGS/materialSettings.ui" line="2247"/>
+        <location filename="VIEW/DIALOGS/materialSettings.ui" line="2380"/>
         <source>factor</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3689,48 +3553,48 @@ Oliver Kohlbacher</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/materialSettings.ui" line="813"/>
+        <location filename="VIEW/DIALOGS/materialSettings.ui" line="810"/>
         <source>Ambient Intensity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/materialSettings.ui" line="1493"/>
+        <location filename="VIEW/DIALOGS/materialSettings.ui" line="1490"/>
         <source>0.1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/materialSettings.ui" line="1516"/>
+        <location filename="VIEW/DIALOGS/materialSettings.ui" line="1513"/>
         <source>Reflectiveness</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/materialSettings.ui" line="2181"/>
-        <location filename="VIEW/DIALOGS/materialSettings.ui" line="2451"/>
+        <location filename="VIEW/DIALOGS/materialSettings.ui" line="2178"/>
+        <location filename="VIEW/DIALOGS/materialSettings.ui" line="2448"/>
         <source>0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/materialSettings.ui" line="2204"/>
+        <location filename="VIEW/DIALOGS/materialSettings.ui" line="2201"/>
         <source>Shininess</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/materialSettings.ui" line="2318"/>
+        <location filename="VIEW/DIALOGS/materialSettings.ui" line="2315"/>
         <source>77</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/materialSettings.ui" line="2344"/>
+        <location filename="VIEW/DIALOGS/materialSettings.ui" line="2341"/>
         <source>Transparency</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Transparenz</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/materialSettings.ui" line="2479"/>
+        <location filename="VIEW/DIALOGS/materialSettings.ui" line="2476"/>
         <source>%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/materialSettings.ui" line="2502"/>
+        <location filename="VIEW/DIALOGS/materialSettings.ui" line="2499"/>
         <source>automatic update</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3745,7 +3609,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/minimizationDialog.ui" line="45"/>
         <source>Algorithm</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Algorithmus</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/minimizationDialog.ui" line="57"/>
@@ -3775,7 +3639,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="VIEW/DIALOGS/minimizationDialog.ui" line="109"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schließen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/minimizationDialog.ui" line="137"/>
@@ -3832,7 +3696,7 @@ Oliver Kohlbacher</source>
         <source>Options</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message utf8="true">
         <location filename="VIEW/DIALOGS/minimizationDialog.ui" line="259"/>
         <source>kJ/(mol Å)</source>
         <translation type="unfinished"></translation>
@@ -4140,7 +4004,7 @@ Oliver Kohlbacher</source>
         <location filename="VIEW/DIALOGS/modifyRepresentationDialog.ui" line="3065"/>
         <location filename="VIEW/DIALOGS/modifyRepresentationDialog.ui" line="3738"/>
         <source>Select</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Auswählen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/modifyRepresentationDialog.ui" line="1375"/>
@@ -4222,7 +4086,7 @@ Oliver Kohlbacher</source>
         <location filename="VIEW/DIALOGS/modifyRepresentationDialog.ui" line="3791"/>
         <location filename="VIEW/DIALOGS/modifyRepresentationDialog.ui" line="3857"/>
         <source>Transparency</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Transparenz</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/modifyRepresentationDialog.ui" line="3807"/>
@@ -4286,7 +4150,7 @@ Oliver Kohlbacher</source>
         <source>1</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message utf8="true">
         <location filename="VIEW/DIALOGS/modifyRepresentationDialog.ui" line="4046"/>
         <source>Å</source>
         <translation type="unfinished"></translation>
@@ -4925,7 +4789,7 @@ p, li { white-space: pre-wrap; }
         <source>Beta sheet</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message utf8="true">
         <location filename="VIEW/DIALOGS/peptideDialog.ui" line="1101"/>
         <location filename="VIEW/DIALOGS/peptideDialog.ui" line="1166"/>
         <location filename="VIEW/DIALOGS/peptideDialog.ui" line="1187"/>
@@ -5116,7 +4980,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="VIEW/DIALOGS/pubchemDialog.ui" line="69"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schließen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/pubchemDialog.ui" line="182"/>
@@ -5180,7 +5044,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="VIEW/DIALOGS/pythonSettings.ui" line="183"/>
         <source>Select</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Auswählen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/pythonSettings.ui" line="222"/>
@@ -6074,354 +5938,345 @@ p, li { white-space: pre-wrap; }
         <translation>Stage-Einstellungen</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="44"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="470"/>
         <source>Set the background color of the Scene.</source>
         <translation>Hintergrundfarbe der Scene festlegen.</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="47"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="473"/>
         <source>Background Color</source>
         <translation>Hintergrundfarbe</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="98"/>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="159"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="417"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="530"/>
         <source>Edit</source>
         <translation>Bearbeiten</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="110"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="385"/>
         <source>Capping planes work almost like clipping planes, but create a solid volume.</source>
         <translation>Capping-Ebenen ähneln Clipping-Ebenen, erzeugen aber ein abgeschlossenes Volumen.</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="113"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="388"/>
         <source>Capping</source>
         <translation>Capping</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="134"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="436"/>
         <source>Color for Caping planes</source>
         <translation>Farbe der Capping-Ebenen</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="166"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="410"/>
         <source>Transparency</source>
         <translation>Transparenz</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="189"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="633"/>
         <source>Misc</source>
         <translation>Sonstiges</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="210"/>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="220"/>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="230"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="664"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="680"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="696"/>
         <source>Show the lightsources in the 3D view for easier positioning.</source>
         <translation type="unfinished">Anzeigen der Lichtquellen in der 3D-Ansicht zur leichteren Ausrichtung.</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="213"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="667"/>
         <source>Show lightsources in Scene</source>
         <translation>Lichtquellen in der Scene anzeigen</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="223"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="683"/>
         <source>Show frames per second (FPS)</source>
         <translation>Bildrate (FPS) anzeigen</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="233"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="699"/>
         <source>Use faster preview models</source>
         <translation type="unfinished">Schnellere Vorschaumodelle verwenden</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="243"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="648"/>
         <source>Should simple lines be smoothed by OpenGL? Enabling this options can lead to cluttered wireframe and line representations.</source>
         <translation>Sollen linienbasierte Modelle (Drahtgitter- und Linienmodell) durch OpenGL geglättet werden? Das Aktivieren dieser Option kann zu Unübersichtlichkeit führen.</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="246"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="651"/>
         <source>Smooth Lines</source>
         <translation>Linien glätten</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="272"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="60"/>
         <source>The fog is currently not exported to POVRay</source>
         <translation>Hinweis: Der Nebel wird derzeit nicht nach POVRay exportiert</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="275"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="63"/>
         <source>Use Fog</source>
         <translation>Nebel verwenden</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="292"/>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="295"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="101"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="104"/>
         <source>Intensity of fog</source>
         <translation>Nebelintensität</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="316"/>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="395"/>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="776"/>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="849"/>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="981"/>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1084"/>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1886"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="81"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="597"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="781"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="854"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="986"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1089"/>
         <source>min</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="323"/>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="415"/>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="783"/>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="839"/>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="971"/>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1021"/>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1893"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="88"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="610"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="788"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="844"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="976"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1026"/>
         <source>max</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="349"/>
         <source>Downsampling factor</source>
-        <translation>Downsampling-Faktor</translation>
+        <translation type="obsolete">Downsampling-Faktor</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="362"/>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1859"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="566"/>
         <source>Smoothness of the interpolation between stored 3D positions.</source>
         <translation type="unfinished">Glattheitsgrad der Interpolation zwischen gespeicherten 3D-Positionen.</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="441"/>
-        <source>1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="459"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="129"/>
         <source>Use Environment Maps</source>
         <translation>Benutze Environment Maps</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="500"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="236"/>
         <source>up-direction</source>
         <translation type="unfinished">oben (x,y,z)</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="525"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="261"/>
         <source>Direction x</source>
         <translation>x-Richtung</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="550"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="286"/>
         <source>Direction y</source>
         <translation>y-Richtung</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="575"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="311"/>
         <source>Direction z</source>
         <translation>z-Richtung</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="601"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="167"/>
         <source>texture</source>
         <translation>Textur</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="629"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="195"/>
         <source>Browse your computer for amber file</source>
         <translation>Computer nach AMBER-Dateien durchsuchen</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="632"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="198"/>
         <source>Browse</source>
         <translation>Durchsuchen</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="653"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="323"/>
         <source>Screenshots can also be created through offscreen rendering, which enables images larger than the screen resolution. Uncheck this if there are poblems with the resulting images.</source>
         <translation>Screenshots können auch via Offscreen-Rendering erstellt werden, was Bilder oberhalb der Bildschirmauflösung ermöglicht. Deaktivieren Sie diese Option, wenn es Probleme mit den resultierenden Bildern gibt.</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="656"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="326"/>
         <source>Use offscreen rendering for PNGs</source>
         <translation>Benutze Offscreen-Rendering für PNGs</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="677"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="366"/>
         <source>resolution factor</source>
         <translation>Bildauflösungsfaktor</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="745"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="750"/>
         <source>Change sensitivity of mouse wheel. Higher sensitivity means more movement with less moving the wheel.</source>
         <translation type="unfinished">Einstellung der Mausradempfindlichkeit. Höhere Empfindlichkeit führt zu mehr Bewegung beim Scrollen.</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="748"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="753"/>
         <source>Mouse wheel sensitivity</source>
         <translation>Mausradempfindlichkeit</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="808"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="813"/>
         <source>Change the mouse sensitivity. Greater sensitivity means greater mouse movement on the screen with less movement of the mouse.</source>
         <translation type="unfinished">Einstellung der Mausempfindlichkeit. Höhere Empfindlichkeit führt zu größeren Bewegungen bei gleicher Maushandhabung.</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="811"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="816"/>
         <source>Mouse sensitivity</source>
         <translation>Mausempfindlichkeit</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="903"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="908"/>
         <source>Stereo: Eye points distance</source>
         <translation type="unfinished">Stereo: Augenabstand</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="918"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="923"/>
         <source>The greater the eye point distance is the greater is the stereo effect.</source>
         <translation>Je größer der Augenabstand ist, desto größer ist der Stereoeffekt.</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="961"/>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1049"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="966"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1054"/>
         <source>99.9</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1006"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1011"/>
         <source>Stereo: focal distance</source>
         <translation>Stereo: Brennweite</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1094"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1099"/>
         <source>Swap side by side stereo</source>
         <translation type="unfinished">Rechtes und linkes Auge vertauschen</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1133"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1138"/>
         <source>eye level: </source>
         <translation>Augenhöhe:</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1158"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1163"/>
         <source>180</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1174"/>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1238"/>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1302"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1179"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1243"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1307"/>
         <source>cm</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1197"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1202"/>
         <source>eye distance: </source>
         <translation>Augenabstand:</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1222"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1227"/>
         <source>6</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1261"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1266"/>
         <source>distance to screen: </source>
         <translation>Abstand zum Bildschirm:</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1286"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1291"/>
         <source>150</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1347"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1352"/>
         <source>compute default</source>
         <translation type="unfinished">sinnvolle Ausgangswerte berechnen</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1401"/>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1411"/>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1443"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1406"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1416"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1448"/>
         <source>undefined</source>
         <translation>undefiniert</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1433"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1438"/>
         <source>Renderer:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1465"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1470"/>
         <source>Version:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1487"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1492"/>
         <source>Vendor:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1499"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1504"/>
         <source>Extensions supported by your graphics card</source>
         <translation type="unfinished">Erweiterungen, die von Ihrer Grafikkarte unterstützt werden</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1514"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1519"/>
         <source>Select to use OpenGL vertex buffer. Results in greater performance.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1517"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1522"/>
         <source>Use OpenGL Vertex Buffer Objects</source>
         <translation type="unfinished">Benutze OpenGL Vertex Buffer Objekte</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1535"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1543"/>
         <source>Projection Transformations:</source>
         <translation>Projektions-Transformationen:</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1550"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1561"/>
         <source>perspective projection</source>
         <translation>Perspektivische Projektion</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1560"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1574"/>
         <source>orthographic projection</source>
         <translation>Orthographische Projektion</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1601"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1615"/>
         <source>Resolution</source>
         <translation>Bildauflösung</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1647"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1661"/>
         <source>spheres detail level</source>
         <translation>Feinheit der Triangulationsdichte</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1672"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1686"/>
         <source>tube points</source>
         <translation type="unfinished">Röhrenpunkte</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1764"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1778"/>
         <source>3</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1789"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1803"/>
         <source>20</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stageSettings.ui" line="1850"/>
+        <location filename="VIEW/DIALOGS/stageSettings.ui" line="551"/>
         <source>Animation Smoothness</source>
         <translation>Glattheitsgrad der Animation</translation>
     </message>
@@ -6429,96 +6284,110 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>StereoSettingsDialogData</name>
     <message>
-        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="26"/>
+        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="25"/>
         <source>Set Camera</source>
         <translation>Kameraeinstellungen</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="41"/>
+        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="40"/>
         <source>Screen Size</source>
         <translation>Bildschirmgröße</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="53"/>
+        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="52"/>
         <source>height</source>
         <translation>Höhe</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="66"/>
+        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="65"/>
         <source>width</source>
         <translation>Breite</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="123"/>
+        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="98"/>
+        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="111"/>
+        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="144"/>
+        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="157"/>
+        <source>cm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="122"/>
         <source>Viewer Position</source>
         <translation>Position des Betrachters</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="171"/>
+        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="170"/>
         <source>height relative to screen</source>
         <translation>Augenhöhe relativ zur Bildschirmunterkante</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="194"/>
+        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="193"/>
         <source>distance from screen</source>
         <translation>Bildschirmabstand</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="202"/>
+        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="201"/>
         <source>Stereo Settings</source>
         <translation>Steroskopische Einstellungen</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="214"/>
+        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="213"/>
         <source>eye separation</source>
         <translation>Augenabstand</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="250"/>
+        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="226"/>
+        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="272"/>
+        <source>A</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="249"/>
         <source>focal distance</source>
         <translation>Brennweite</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="286"/>
+        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="285"/>
         <source>Reset to Standard</source>
         <translation>Standardeinstellungen</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="320"/>
+        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="321"/>
         <source>Set camera to new coordinates</source>
         <translation>Anwenden und Schließen</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="323"/>
+        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="324"/>
         <source>O&amp;K</source>
         <translation>O&amp;K</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="326"/>
+        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="327"/>
         <source>Alt+K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="336"/>
+        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="337"/>
         <source>&amp;Apply</source>
         <translation>&amp;Anwenden</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="361"/>
         <source>Close window without resetting camera</source>
-        <translation>Schließen und Einstellungen verwerfen</translation>
-    </message>
-    <message>
-        <source>Close window without reseting camera</source>
         <translation type="obsolete">Schließen und Einstellungen verwerfen</translation>
     </message>
     <message>
         <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="364"/>
+        <source>Close window without reseting camera</source>
+        <translation type="unfinished">Schließen und Einstellungen verwerfen</translation>
+    </message>
+    <message>
+        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="367"/>
         <source>C&amp;ancel</source>
         <translation>&amp;Schließen</translation>
     </message>
     <message>
-        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="367"/>
+        <location filename="VIEW/DIALOGS/stereoSettingsDialog.ui" line="370"/>
         <source>Alt+A</source>
         <translation type="unfinished"></translation>
     </message>
