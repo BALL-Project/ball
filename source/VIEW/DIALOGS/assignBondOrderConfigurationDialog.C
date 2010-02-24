@@ -36,9 +36,6 @@ namespace BALL
 			hide();
 
 			// signals and slots connections
-			connect( close_button, SIGNAL( clicked() ), this, SLOT( accept() ) );
-			connect( cancel_button, SIGNAL( clicked() ), this, SLOT( reject() ) );
-			connect( reset_button, SIGNAL( clicked() ), this, SLOT( resetOptions() ) );
 			connect( browse_button, SIGNAL( clicked() ), this, SLOT( browseParameterFiles_() ) );	
 			connect( penalty_balance_slider, SIGNAL( valueChanged(int) ), this, SLOT( balanceParameterChanged_() ) );
 
@@ -132,6 +129,21 @@ namespace BALL
 
 		void  AssignBondOrderConfigurationDialog::initializeWidget(MainControl&)
 		{
+		}
+
+		void AssignBondOrderConfigurationDialog::dialogButtonClicked_(QAbstractButton* button)
+		{
+			if(!button) {
+				return;
+			}
+
+			switch(buttonBox->buttonRole(button)){
+				case QDialogButtonBox::ResetRole:
+					resetOptions();
+					break;
+				default:
+					return;
+			}
 		}
 
 		void AssignBondOrderConfigurationDialog::resetOptions()

@@ -73,6 +73,8 @@ namespace BALL
 
 				virtual void validateBOBoxes_();
 
+				virtual void dialogButtonClicked_(QAbstractButton* button);
+
 			protected:
 
 			private:
