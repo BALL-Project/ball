@@ -1,10 +1,8 @@
-<ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>BondPropertiesData</class>
- <widget class="QDialog" name="BondPropertiesData" >
-  <property name="geometry" >
+ <widget class="QDialog" name="BondPropertiesData">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -12,22 +10,159 @@
     <height>290</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Bond Properties</string>
   </property>
-  <layout class="QGridLayout" >
-   <property name="margin" >
-    <number>4</number>
-   </property>
-   <property name="spacing" >
-    <number>6</number>
-   </property>
-   <item row="7" column="1" >
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="TextLabel1">
+       <property name="text">
+        <string>atom</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="atom_edit">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QPushButton" name="focus_atom">
+       <property name="minimumSize">
+        <size>
+         <width>36</width>
+         <height>23</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>focus and select atom</string>
+       </property>
+       <property name="text">
+        <string>Select</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="TextLabel2">
+       <property name="text">
+        <string>select bond</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="bond_box">
+       <property name="toolTip">
+        <string>Select bond type</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="TextLabel2_2">
+       <property name="text">
+        <string>partner atom</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="partner_edit">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QPushButton" name="focus_partner">
+       <property name="minimumSize">
+        <size>
+         <width>36</width>
+         <height>23</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>focus and select atom</string>
+       </property>
+       <property name="text">
+        <string>Select</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="TextLabel8">
+       <property name="text">
+        <string>bond order</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="order_edit">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="TextLabel4">
+       <property name="text">
+        <string>bond type</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLineEdit" name="type_edit">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="TextLabel7">
+       <property name="text">
+        <string>name</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QLineEdit" name="name_edit">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="TextLabel5">
+       <property name="text">
+        <string>length</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QLineEdit" name="length_edit">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
     <spacer>
-     <property name="orientation" >
+     <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
        <height>11</height>
@@ -35,213 +170,16 @@
      </property>
     </spacer>
    </item>
-   <item row="8" column="0" colspan="3" >
-    <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <item>
-      <widget class="QPushButton" name="ok_button" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>7</hsizetype>
-         <vsizetype>0</vsizetype>
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize" >
-        <size>
-         <width>120</width>
-         <height>26</height>
-        </size>
-       </property>
-       <property name="text" >
-        <string>O&amp;K</string>
-       </property>
-       <property name="shortcut" >
-        <string>Alt+K</string>
-       </property>
-       <property name="default" >
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="cancel_button" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>7</hsizetype>
-         <vsizetype>0</vsizetype>
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize" >
-        <size>
-         <width>120</width>
-         <height>26</height>
-        </size>
-       </property>
-       <property name="text" >
-        <string>C&amp;ancel</string>
-       </property>
-       <property name="shortcut" >
-        <string>Alt+A</string>
-       </property>
-       <property name="default" >
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="0" column="0" >
-    <widget class="QLabel" name="TextLabel1" >
-     <property name="text" >
-      <string>atom</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1" >
-    <widget class="QLineEdit" name="name_edit" >
-     <property name="enabled" >
-      <bool>false</bool>
-     </property>
-     <property name="text" >
-      <string/>
-     </property>
-     <property name="readOnly" >
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1" >
-    <widget class="QLineEdit" name="partner_edit" >
-     <property name="readOnly" >
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1" >
-    <widget class="QLineEdit" name="order_edit" >
-     <property name="readOnly" >
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="1" >
-    <widget class="QLineEdit" name="length_edit" >
-     <property name="enabled" >
-      <bool>false</bool>
-     </property>
-     <property name="readOnly" >
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" >
-    <widget class="QLabel" name="TextLabel2" >
-     <property name="text" >
-      <string>select bond</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0" >
-    <widget class="QLabel" name="TextLabel2_2" >
-     <property name="text" >
-      <string>partner atom</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0" >
-    <widget class="QLabel" name="TextLabel8" >
-     <property name="text" >
-      <string>bond order</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0" >
-    <widget class="QLabel" name="TextLabel4" >
-     <property name="text" >
-      <string>bond type</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0" >
-    <widget class="QLabel" name="TextLabel7" >
-     <property name="text" >
-      <string>name</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0" >
-    <widget class="QLabel" name="TextLabel5" >
-     <property name="text" >
-      <string>length</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1" >
-    <widget class="QLineEdit" name="atom_edit" >
-     <property name="readOnly" >
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="1" >
-    <widget class="QLineEdit" name="type_edit" >
-     <property name="readOnly" >
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1" >
-    <widget class="QComboBox" name="bond_box" >
-     <property name="toolTip" >
-      <string>Select bond type</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="2" >
-    <widget class="QPushButton" name="focus_atom" >
-     <property name="minimumSize" >
-      <size>
-       <width>36</width>
-       <height>23</height>
-      </size>
-     </property>
-     <property name="toolTip" >
-      <string>focus and select atom</string>
-     </property>
-     <property name="text" >
-      <string>Select</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="2" >
-    <widget class="QPushButton" name="focus_partner" >
-     <property name="minimumSize" >
-      <size>
-       <width>36</width>
-       <height>23</height>
-      </size>
-     </property>
-     <property name="toolTip" >
-      <string>focus and select atom</string>
-     </property>
-     <property name="text" >
-      <string>Select</string>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
+ <layoutdefault spacing="6" margin="11"/>
  <tabstops>
   <tabstop>atom_edit</tabstop>
   <tabstop>focus_atom</tabstop>
@@ -252,12 +190,96 @@
   <tabstop>type_edit</tabstop>
   <tabstop>name_edit</tabstop>
   <tabstop>length_edit</tabstop>
-  <tabstop>ok_button</tabstop>
-  <tabstop>cancel_button</tabstop>
  </tabstops>
  <includes>
-  <include location="global" >BALL/COMMON/global.h</include>
+  <include location="global">BALL/COMMON/global.h</include>
  </includes>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>BondPropertiesData</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>281</x>
+     <y>271</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>222</x>
+     <y>337</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>BondPropertiesData</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>372</x>
+     <y>273</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>341</x>
+     <y>357</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>focus_partner</sender>
+   <signal>clicked()</signal>
+   <receiver>BondPropertiesData</receiver>
+   <slot>focusPartner()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>390</x>
+     <y>80</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>169</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>focus_atom</sender>
+   <signal>clicked()</signal>
+   <receiver>BondPropertiesData</receiver>
+   <slot>focusAtom()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>390</x>
+     <y>21</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>566</x>
+     <y>81</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bond_box</sender>
+   <signal>activated(int)</signal>
+   <receiver>BondPropertiesData</receiver>
+   <slot>bondSelected()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>231</x>
+     <y>49</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>449</x>
+     <y>216</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>focusPartner()</slot>
+  <slot>focusAtom()</slot>
+  <slot>bondSelected()</slot>
+ </slots>
 </ui>

@@ -20,13 +20,6 @@ BondProperties::BondProperties( Atom* atom, QWidget* parent,  const char* name, 
 {
 	setupUi(this);
 
-	// signals and slots connections
-	connect( ok_button, SIGNAL( clicked() ), this, SLOT( accept() ) );
-	connect( bond_box, SIGNAL( activated(int) ), this, SLOT( bondSelected() ) );
-	connect( focus_atom, SIGNAL( clicked() ), this, SLOT( focusAtom() ) );
-	connect( focus_partner, SIGNAL( clicked() ), this, SLOT( focusPartner() ) );
-	connect( cancel_button, SIGNAL( clicked() ), this, SLOT( reject() ) );
-
 	setObjectName(name);
 
 	if (atom->countBonds() == 0)
