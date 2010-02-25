@@ -192,7 +192,7 @@ namespace BALL
 	{
 		// check whether the parameters are defined
 		Index index = (Index)(I + number_of_atom_types_ * J + number_of_atom_types_ * number_of_atom_types_ * K);
-		if (value_index_[index] >= 0) 
+		if ((index > 0) && (value_index_[index] >= 0)) 
 		{	
 			// retrieve and assign the parameters
 			parameters = values_[value_index_[index]];
