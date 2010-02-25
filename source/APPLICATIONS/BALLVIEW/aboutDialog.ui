@@ -509,6 +509,9 @@
      <property name="pixmap">
       <pixmap>logo.png</pixmap>
      </property>
+     <property name="toolTip">
+      <string notr="true"/>
+     </property>
      <property name="scaledContents">
       <bool>false</bool>
      </property>
@@ -519,6 +522,12 @@
    </item>
    <item>
     <widget class="QLabel" name="BALLView_version_label">
+     <property name="toolTip">
+      <string notr="true"/>
+     </property>
+     <property name="toolTip">
+      <string notr="true"/>
+     </property>
      <property name="text">
       <string notr="true">&lt;h1&gt;&lt;b&gt;BALLView 1.0&lt;/b&gt;&lt;/h1&gt;</string>
      </property>
@@ -532,6 +541,9 @@
    </item>
    <item>
     <widget class="QLabel" name="BALL_version_label">
+     <property name="toolTip">
+      <string notr="true"/>
+     </property>
      <property name="text">
       <string notr="true">(BALL 1.0)</string>
      </property>
@@ -545,6 +557,9 @@
    </item>
    <item>
     <widget class="QLabel" name="qt_version_label">
+     <property name="toolTip">
+      <string notr="true"/>
+     </property>
      <property name="text">
       <string notr="true">QT Version</string>
      </property>
@@ -560,6 +575,9 @@
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
+     </property>
+     <property name="toolTip">
+      <string notr="true"/>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
