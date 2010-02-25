@@ -801,7 +801,7 @@
         </size>
        </property>
        <property name="toolTip">
-        <string>Close and save options</string>
+        <string>Close and save options.</string>
        </property>
        <property name="text">
         <string>O&amp;K</string>
@@ -829,7 +829,7 @@
         </size>
        </property>
        <property name="toolTip">
-        <string>Close window and discard changes</string>
+        <string>Close window and discard changes.</string>
        </property>
        <property name="text">
         <string>C&amp;ancel</string>
@@ -854,7 +854,7 @@
         </size>
        </property>
        <property name="toolTip">
-        <string>Reset all settings to default values</string>
+        <string>Reset all settings to default values.</string>
        </property>
        <property name="text">
         <string>Defaults</string>
