@@ -2,8 +2,15 @@
 
 #include <XML3DDriver.h>
 #include <XML3DSettings.h>
+#include <XMPPWidget.h>
 
 #include <QtGui/QDialog>
+
+#ifndef BALL_VIEW_WIDGETS_DOCKWIDGET_H
+# include <BALL/VIEW/WIDGETS/dockWidget.h>
+#endif
+
+#include <BALL/VIEW/KERNEL/mainControl.h>
 
 Q_EXPORT_PLUGIN2(pluginXML3D, BALL::VIEW::XML3DPlugin)
 
@@ -75,6 +82,14 @@ namespace BALL
 		bool XML3DPlugin::activate()
 		{
 			bool is_active_ = (bool)startDriver();
+
+			XMPPWidget* chat_widget = new XMPPWidget;
+			DockWidget* dock_widget = new DockWidget(MainControl::getInstance(0), "Chat Window");
+
+			dock_widget->setGuest(*chat_widget);
+			dock_widget->registerWidget(dock_widget);
+
+			MainControl::getInstance(0)->addDockWidget(Qt::BottomDockWidgetArea, dock_widget);
 
 			return is_active_;
 		}
