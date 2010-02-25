@@ -11,7 +11,6 @@
 namespace BALL 
 {
 	GenericMolFile::GenericMolFile()
-		
 		:	LineBasedFile()
 	{
 	}
@@ -30,7 +29,6 @@ namespace BALL
 	}
  
 	GenericMolFile::~GenericMolFile()
-		
 	{
 	}
 
@@ -92,7 +90,6 @@ namespace BALL
 		{
 			if (!write(*molecule)) return false;
 		}
-		
 		return true;
 	}
 
