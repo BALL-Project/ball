@@ -116,17 +116,17 @@ namespace BALL
 		}
 
 
-		String XML3DRenderer::XML3DColorRGBA(const ColorRGBA& input)
+		String XML3DRenderer::XML3DColorRGBA(const ColorRGBA& color, const String& name)
 		{
-			String output = "<";
- 			output += trimFloatValue_(input.getRed()) + ", ";
- 			output += trimFloatValue_(input.getGreen()) + ", ";
- 			output += trimFloatValue_(input.getBlue()) + ", ";
-			// TODO: sensible parameter for "filter"
-			output += "0., ";
-			// TODO: transmit seems not to be linear in alpha
-			output += trimFloatValue_(1. - (float) input.getAlpha());
-			output += ">";
+			// NOTE: XML3D currently does not use the alpha value => use float3
+			String output = "<bind semantic=\"" + name + "\">\n";
+
+			output += String("   <float3>") + String((float)color.getRed())   + " "
+																	    + String((float)color.getBlue())  + " "
+																		  + String((float)color.getGreen())
+																		  + "</float3>\n";
+
+			output += "</bind>\n";
 
 			return output;
 		}
@@ -150,13 +150,53 @@ namespace BALL
 			return output;
 		}
 		
+		String XML3DRenderer::XML3DRaytracingMaterial(const Stage::RaytracingMaterial& input)
+		{
+			String result;
+      	
+			ColorRGBA old_specular = rt_material_.specular_color;
+			ColorRGBA specular((float)old_specular.getRed()   * rt_material_.specular_intensity,
+			                   (float)old_specular.getBlue()  * rt_material_.specular_intensity,
+											   (float)old_specular.getGreen() * rt_material_.specular_intensity, 1.);
+
+      result += XML3DColorRGBA(specular, "specularColor");
+//      result += XML3DColorRGBA(rt_material_.emissive_color,  "emissiveColor");
+
+			ColorRGBA old_reflect = rt_material_.reflective_color;
+			ColorRGBA reflect((float)old_reflect.getRed()   * rt_material_.reflective_intensity,
+			                  (float)old_reflect.getBlue()  * rt_material_.reflective_intensity,
+											  (float)old_reflect.getGreen() * rt_material_.reflective_intensity, 1.);
+
+      result += XML3DColorRGBA(reflect, "reflective");
+
+      result += "<bind semantic=\"transparency\">\n";
+      result += "   <float>"+String(rt_material_.transparency)+"</float>\n";
+      result += "</bind>\n";
+
+      result += "<bind semantic=\"transparent\">\n";
+      result += "   <float>" + String(rt_material_.transparency) + " "
+			                       + String(rt_material_.transparency) + " "
+														 + String(rt_material_.transparency) + "</float>\n";
+      result += "</bind>\n";
+
+      result += "<bind semantic=\"shininess\">\n";
+      result += "   <float>"+String(rt_material_.shininess)+"</float>\n";
+      result += "</bind>\n";
+
+      result += "<bind semantic=\"ambientIntensity\">\n";
+      result += "   <float>"+String(rt_material_.ambient_intensity)+"</float>\n";
+      result += "</bind>\n";
+
+      result += "<bind semantic=\"Intensity\">\n";
+      result += "   <float>"+String(rt_material_.ambient_intensity)+"</float>\n";
+      result += "</bind>\n";
+
+			return result;
+		}
+
 		String XML3DRenderer::XML3DVector3(Vector3 input)
 		{
-			String output = "<";
-			output += trimFloatValue_(input.x) + ", ";
-			output += trimFloatValue_(input.y) + ", ";
-			output += trimFloatValue_(input.z);
-			output += ">";
+			String output = String("<float3>") + input.x + " " + input.y + " " + input.z + "</float3>\n";
 			return output;
 		}
 
@@ -258,18 +298,16 @@ namespace BALL
 			// Calculate rotation to align BALLview camera with standard XML3D camera
 			Vector3 direction = stage.getCamera().getViewVector();
 			
-			cout << "Direction " << direction << endl;
 			if (direction.getSquareLength() < 1e-6)
 			{
 				Log.error() << "Mist" << endl;
 				return false;
 			}
 			direction.normalize();
-			cout << "Direction norm. " << direction << endl;
 
 			Vector3 d_null = Vector3(0,0,-1);
 			Vector3 dir_rotation_axis = (d_null % direction);
-			cout << "dir_rotation_axis " << dir_rotation_axis << endl;
+
 			float dir_rotation_angle = 0.;
 			if ((fabs(direction.x) < 1e-6) && (fabs(direction.y) < 1e-6))
 			{
@@ -286,21 +324,17 @@ namespace BALL
 			else
 			{
 				dir_rotation_axis.normalize();
-				cout << "dir_rotation_axis norm. " << dir_rotation_axis << endl;
 				dir_rotation_angle = acos(direction * d_null);
-				cout << "angle " << dir_rotation_angle << endl;
 			}
 			
 			Quaternion dir_rotation(dir_rotation_axis, dir_rotation_angle);
 			Vector3 quataxis;
 			float quatangle;
 			dir_rotation.toAxisAngle(quataxis, quatangle);
-			cout << "quattest " << quataxis << " " << quatangle << endl; 
+
 			Matrix4x4 dir_rotation_matrix;
 			dir_rotation.getRotationMatrix(dir_rotation_matrix);
 			Vector3 testergebnis = dir_rotation_matrix * Vector3(0,0,-1);
-			cout << "testergebnis " << testergebnis << endl;
-			cout << "alte direction " << direction<< endl;
 			
 			// Correct the position of the new upvector as introduced by the first rotation
 			Vector3 upvector = stage.getCamera().getLookUpVector();
@@ -326,12 +360,6 @@ namespace BALL
 			
 			Matrix4x4 final_rotation_matrix;
 			final_rotation.getRotationMatrix(final_rotation_matrix);
-			Vector3 testergebnis2 = final_rotation_matrix * Vector3(0,0,-1);
-			cout << "testergebnis2 " << testergebnis2 << endl;
-			cout << "alte direction " << direction<< endl;
-			Vector3 testergebnis3 = final_rotation_matrix * Vector3(0,1,0);
-			cout << "testergebnis3 " << testergebnis3 << endl;
-			cout << "old upvector " << upvector << endl;
 
 			//out << " orientation=\""<< screw_axis.x << " "
 			//												<< screw_axis.y << " "
@@ -387,11 +415,18 @@ namespace BALL
 		{
 			std::ostream& out = *outfile_;
 
-				
+			rt_material_ = stage_->getRTMaterial();
 
 			vector<const Representation*>::iterator rit = representations_.begin();
 			for (; rit != representations_.end(); rit++)
 			{
+				if ((*rit)->hasProperty("RTFact::Material"))
+				{
+					NamedProperty rt_mat_property = (*rit)->getProperty("RTFact::Material");
+					boost::shared_ptr<PersistentObject> mat_ptr = rt_mat_property.getSmartObject();
+					rt_material_ = *dynamic_cast<Stage::RaytracingMaterial*>(mat_ptr.get());
+				}
+
 				out << "<group ";
 				out << "id=\"" << XML3DString((*rit)->getName()) << "\"";
 				out << ">" << endl;
@@ -477,9 +512,8 @@ namespace BALL
 
       ColorRGBA const& color = sphere.getColor();
 			out << "<shader id=\"" << &sphere << "shader\" script=\"#X3DPhong\" >" << endl;
-      out << "<bind semantic=\"diffuseColor\">" << endl;
-     	out << "   <float3>" << (float)color.getRed() << " " << (float)color.getGreen() << " " << (float)color.getBlue() << "</float3>" << endl;
-			out << "</bind>" << endl;
+     	out << XML3DColorRGBA(color, "diffuseColor");
+			out << XML3DRaytracingMaterial(rt_material_);
       
 			//out << "<bind semantic=\"specularColor\">" << endl;
       //out << "   <float3>0 0 0</float3>" << endl;
@@ -819,42 +853,26 @@ namespace BALL
 
 			std::ostream& out = *outfile_;
 			
+			ColorRGBA const &c = (mesh.colors.size() == 1) ? mesh.colors[0] : ColorRGBA(1., 1., 1., 1.);
+    		
+			out << "<shader id=\"" << &mesh << "shader\" script=\"#X3DPhong\" >" << endl;
+
 			if (mesh.colors.size() == 1)
 			{
+				out << XML3DColorRGBA(c, "diffuseColor");
+			}
+			else
+			{
+				out << "<bind semantic=\"useVertexColor\">\n<bool>true</bool>\n</bind>\n";
+			}
 
-				ColorRGBA const &c = (mesh.colors.size() == 1) ? mesh.colors[0] : ColorRGBA(1., 1., 1., 1.);
-    		
-				out << "<shader id=\"" << &mesh << "shader\" script=\"#X3DPhong\" >" << endl;
-      	out << "<bind semantic=\"diffuseColor\">" << endl;
-     		out << "   <float3>" << (float)c.getRed() << " " << (float)c.getGreen() << " " << (float)c.getBlue() << "</float3>" << endl;
-				out << "</bind>" << endl;
-      	
-				out << "<bind semantic=\"specularColor\">" << endl;
-      	out << "   <float3>0 0 0</float3>" << endl;
-      	out << "</bind>" << endl;
-      	out << "<bind semantic=\"emissiveColor\">" << endl;
-      	out << "   <float3>0 0 0</float3>" << endl;
-      	out << "</bind>" << endl;
-      	out << "<bind semantic=\"transparency\">" << endl; 
-      	out << "   <float>0</float>" << endl;
-      	out << "</bind>" << endl;
-      	out << "<bind semantic=\"shininess\">" << endl;
-      	out << "   <float>0.2</float>" << endl;
-      	out << "</bind>" << endl;
-      	out << "<bind semantic=\"ambientIntensity\">" << endl; 
-      	out << "   <float>0.2</float>" << endl;
-      	out << "</bind>" << endl;
-      	out << "</shader>" << endl;
-				
-			}		
+			out << XML3DRaytracingMaterial(rt_material_);
+			out << "</shader>" << endl;
 
 			out << "<group "; 
 			out << "id=\"" << &mesh << "\" ";
 			
-			if (mesh.colors.size() == 1)
-			{
-				out << "shader=\"" << &mesh << "shader\" ";
-			}
+			out << "shader=\"" << &mesh << "shader\" ";
 			out << ">" << endl; 
 			
 			out << "<mesh "; 
@@ -987,7 +1005,7 @@ namespace BALL
 			std::ostream& out = *outfile_;
 
 			out << "text{ ttf BALLLabelFont, \"" << label.getExpandedText() << "\",0.2, 0" << std::endl;
-			out << "  texture{ pigment{color rgb" << 	XML3DColorRGBA(label.getColor()) << " }"<< std::endl;
+			//out << "  texture{ pigment{color rgb" << 	XML3DColorRGBA(label.getColor()) << " }"<< std::endl;
 			out << "  finish{ambient 0.15 diffuse 0.85} } " << std::endl;
 			out << "  matrix < ";
 			for (Position pos = 0; pos < 9; pos++)

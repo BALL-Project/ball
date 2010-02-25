@@ -103,11 +103,15 @@ namespace BALL
 
 			/** Converts a ColorRGBA into a String in XML3D format.
 			 */
-			String XML3DColorRGBA(const ColorRGBA& input);
+			String XML3DColorRGBA(const ColorRGBA& input, const String& name);
 
 			/** Returns the corresponding BALLFinish declaration
 			 */
 			String XML3DFinish(const String& object, const ColorRGBA& input);
+
+			/** Converts an RaytracingMaterial into the corresponding shader properties.
+			 */
+			String XML3DRaytracingMaterial(const Stage::RaytracingMaterial& input);
 
 			/** Converts a Vector3 into a String in XML3DRay format.
 			 */
@@ -192,6 +196,8 @@ namespace BALL
 
 				Surface sphere_template_;
 				Surface tube_template_;
+
+				Stage::RaytracingMaterial rt_material_;	
 		};
   
 	} // namespace BALL
