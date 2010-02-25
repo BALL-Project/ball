@@ -18,7 +18,7 @@
     <message>
         <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="32"/>
         <source>AMBER Options</source>
-        <translation>AMBER Optionen</translation>
+        <translation>Amber Einstellungen</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="50"/>
@@ -39,17 +39,17 @@
     <message>
         <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="115"/>
         <source>Electrostatic cutoff/cuton distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Elektrostatik cutoff/cuton Distanz</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="134"/>
         <source>van der Waals cutoff/cuton distance</source>
-        <translation type="unfinished"></translation>
+        <translation>van der Waals cutoff/cuton Distanz</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="156"/>
         <source>Nonbonded cutoff distance</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="454"/>
@@ -109,7 +109,7 @@
     <message>
         <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="685"/>
         <source>Parameter Set</source>
-        <translation>Parametersatz</translation>
+        <translation>Parameterdatei</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="718"/>
@@ -164,12 +164,12 @@
     <message>
         <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="887"/>
         <source>Stretches</source>
-        <translation type="unfinished"></translation>
+        <translation>Stretches (Bindungslängen)</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="897"/>
         <source>Bends</source>
-        <translation type="unfinished"></translation>
+        <translation>Bends (Bindungswinkel)</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="907"/>
@@ -187,12 +187,12 @@
     <message>
         <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="32"/>
         <source>Bond Order Assignment Options</source>
-        <translation>Bindungsordnungszuweisungsoptionen</translation>
+        <translation>Optionen zur Zuweisung von Bindungsordnungen</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="42"/>
         <source>Basic</source>
-        <translation type="unfinished">Grundlegend</translation>
+        <translation>Allgemein</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="171"/>
@@ -207,17 +207,17 @@
     <message>
         <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="190"/>
         <source>Overwrite Bond Order Single</source>
-        <translation type="unfinished">Einfachbindungen überschreiben</translation>
+        <translation>Einfachbindungen überschreiben</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="200"/>
         <source>Overwrite Bond Order Double</source>
-        <translation type="unfinished">Zweifachbindungen überschreiben</translation>
+        <translation>Zweifachbindungen überschreiben</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="210"/>
         <source>Overwrite Bond Order Triple</source>
-        <translation type="unfinished">Dreifachbindungen überschreiben</translation>
+        <translation>Dreifachbindungen überschreiben</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="223"/>
@@ -317,7 +317,7 @@
     <message>
         <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="468"/>
         <source>Penalty Balance Factor</source>
-        <translation type="unfinished">Strafbalancefaktor</translation>
+        <translation>Strafterm-Skalierung</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="491"/>
@@ -355,7 +355,7 @@
     <message>
         <location filename="../../../source/VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="14"/>
         <source>Bond Order Assignment Results</source>
-        <translation>Ergebnisse: Bindungsordnungszuweisung</translation>
+        <translation>Ergebnisse der Bindungsordnungszuweisung</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="27"/>
@@ -400,12 +400,12 @@
     <message>
         <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="899"/>
         <source>Language Changed</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Sprache wurde geändert.</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="900"/>
         <source>Changing the language only takes effect after restarting BALLView.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein Wechsel der Sprache ist erst nach einem Neustart von BALLView wirksam.</translation>
     </message>
 </context>
 <context>
@@ -481,47 +481,48 @@
     <message>
         <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="28"/>
         <source>CHARMM Options</source>
-        <translation type="unfinished"></translation>
+        <translation>CHARMM Einstellungen</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="54"/>
         <source>Close window and save changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Schließen und Einstellungen speichern</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="57"/>
         <source>O&amp;K</source>
-        <translation type="unfinished">OK</translation>
+        <translation>O&amp;K</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="76"/>
         <source>Close window and discard changes</source>
-        <translation type="unfinished">Fenster schließen und Änderungen verwerfen</translation>
+        <translation>Fenster schließen und Änderungen verwerfen</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="79"/>
         <source>C&amp;ancel</source>
-        <translation type="unfinished">Schließen</translation>
+        <translation>&amp;Abbrechen</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="95"/>
         <source>Reset settings to default values</source>
-        <translation type="unfinished"></translation>
+        <translation>Auf Standardwerte zurücksetzten</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="98"/>
         <source>Defaults</source>
-        <translation type="unfinished">Standard</translation>
+        <translation>Standardwerte</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="116"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Einstellungen</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="137"/>
         <source>Electrostatic 1-4 scaling factor</source>
-        <translation type="unfinished">Elektrostatik 1-4 Skalierungsfaktor</translation>
+        <translatorcomment>Elektrostatik 1-4 Skalierungsfaktor</translatorcomment>
+        <translation>Elektrostatik 1-4 Skalierungsfaktor</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="159"/>
