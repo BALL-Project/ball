@@ -179,6 +179,8 @@ namespace BALL
 				String trimFloatValue_(float value);
 				void storeColor_(const GeometricObject& object);
 				String getColorIndex_(const ColorRGBA& color);
+				void createTubeTransform_(const TwoColoredTube& tube);
+
 
 				Vector3   origin_;
 				Matrix4x4 rotation_;

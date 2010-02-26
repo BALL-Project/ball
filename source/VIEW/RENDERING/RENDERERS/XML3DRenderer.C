@@ -387,6 +387,7 @@ namespace BALL
 				{
 					Vector3 pos = it->getPosition();
 					float intensity = it->getIntensity() ;
+					intensity = intensity * 100;
 					ColorRGBA color = it->getColor();
 					Vector3 attenuation = it->getAttenuation();
 					attenuation = attenuation*2.;
@@ -498,7 +499,8 @@ namespace BALL
 			out << "  </body>" << endl;
 			out << "</html>" << endl;
 		}
-		
+	
+
 		void XML3DRenderer::renderSphere_(const Sphere& sphere)
 		{
 			std::ostream& out = *outfile_;
@@ -721,118 +723,197 @@ namespace BALL
 		void XML3DRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
 		{
 			std::ostream& out = *outfile_;
-
-     	Vector3 vec = tube.getVertex2() - tube.getVertex1();
-      const double len = vec.getLength();
-      const double angle = acos(vec.z / len); // the denominator accounts for the non-normalized rotation axis
-      const float radius = tube.getRadius();
-
-      Vector3 const& midpoint = tube.getVertex1();
-      //Rotate the vector around the normal
-      vec /= sqrt(vec.x*vec.x + vec.y*vec.y);
-
-      Matrix4x4 matrix = Matrix4x4::getIdentity();
-      matrix.rotate(Angle(-angle), vec.y, -vec.x, 0);
-
-      Matrix4x4 temp;
-      temp.setScale(radius, radius, len);
-      matrix*=temp;
-
-      temp.setTranslation(midpoint);
-      matrix = temp*matrix;
-
 			
-			out << "<transform ";
-			out << "id=\"" << &tube << "\" ";
-			out << "translation=\"" << midpoint.x << " " << midpoint.y << " " << midpoint.z << "\" ";  
-			//out << "center=\"" << midpoint.x << " " << midpoint.y << " " << midpoint.z << "\" ";  
-			out << "rotation=\"" << vec.y  << " " << vec.x << " " << 0 << " " << angle << "\" ";  
-			//Quaternion rotation(Vector3(vec.y, vec.x, 0), -angle);
-			//Vector3 rot_axis;
-			//float rot_angle;
-			//rotation.fromAxisAngle(rot_axis, rot_angle);
-			//out << "rotation=\"" << rot_axis.x  << " " << rot_axis.y << " " << rot_axis.z << " " << -rot_angle << "\" ";  
-			out << "scale=\"" << radius << " " << radius << " " << len << "\" ";  
-			out << "/>" << endl;
+			ColorRGBA const& color1 = tube.getColor();
+			ColorRGBA const& color2 = tube.getColor2();
 
+			if (color1 == color2)
+			{
+				out << "<shader id=\"" << &tube << "shader\" script=\"#X3DPhong\" >" << endl;
+     		out << XML3DColorRGBA(color1, "diffuseColor");
+				out << XML3DRaytracingMaterial(rt_material_);
+				out << "</shader>" << endl;
+				createTubeTransform_(tube);
 
-			out << "<group transform=\"#" << &tube << "\" >" << endl; 
-			
-			// Start a triangle env	
-			out << "<mesh "; 
-			out << "type=\"triangles\"";
-			out << ">" << endl; 
+				out << "<group ";
+				out << "transform=\"#" << &tube << "trafo\" "; 
+				out << "shader=\"#" << &tube << "shader\" >" << endl; 
+				
+				// Start a triangle env	
+				out << "<mesh "; 
+				out << "type=\"triangles\"";
+				out << ">" << endl; 
 
-			// First the indices
-			out << "<bind semantic=\"index\">" << endl;
-			out << "<int>" << endl;
- 			vector<Surface::Triangle>::const_iterator itt = tube_template_.triangle.begin();
- 			
-			for (; itt != tube_template_.triangle.end(); itt++)
-   		{
-				out << (*itt).v1 << " " << (*itt).v2 << " " << (*itt).v3 << " ";
-			}	
-			
-			out << "</int>" << endl;
-			out << "</bind>" << endl;
+				// First the indices
+				out << "<bind semantic=\"index\">" << endl;
+				out << "<int>" << endl;
+ 				vector<Surface::Triangle>::const_iterator itt = tube_template_.triangle.begin();
+ 				
+				for (; itt != tube_template_.triangle.end(); itt++)
+   			{
+					out << (*itt).v1 << " " << (*itt).v2 << " " << (*itt).v3 << " ";
+				}	
+				
+				out << "</int>" << endl;
+				out << "</bind>" << endl;
 
-			// then then position vectors
-			out << "<bind semantic=\"position\">" << endl;
-			out << "<float3>" << endl;
- 			
-			vector<Surface::Vertex>::const_iterator itv = tube_template_.vertex.begin();
- 			for (; itv != tube_template_.vertex.end(); itv++)
-   		{
-				out << (*itv).x << " " << (*itv).y << " " << (*itv).z << endl;
-			}	
-			
-			out << "</float3>" << endl;;
-			out << "</bind>" << endl;
-			
-			// then then position normals
-			out << "<bind semantic=\"normal\">" << endl;
-			out << "<float3>" << endl;
- 			
-			vector<Surface::Normal>::const_iterator itn = tube_template_.normal.begin();
- 			for (; itn != tube_template_.normal.end(); itn++)
-   		{
-				out << (*itn).x << " " << (*itn).y << " " << (*itn).z << endl;
-			}	
-			
-			out << "</float3>" << endl;
-			out << "</bind>" << endl;
-			
-			out << "</mesh>" << endl;
-			out << "</group>" << endl; 
-			//const ColorRGBA& color1 = tube.getColor();
-			//const ColorRGBA& color2 = tube.getColor2();
+				// then then position vectors
+				out << "<bind semantic=\"position\">" << endl;
+				out << "<float3>" << endl;
+ 				
+				vector<Surface::Vertex>::const_iterator itv = tube_template_.vertex.begin();
+ 				for (; itv != tube_template_.vertex.end(); itv++)
+   			{
+					out << (*itv).x << " " << (*itv).y << " " << (*itv).z << endl;
+				}	
+				
+				out << "</float3>" << endl;;
+				out << "</bind>" << endl;
+				
+				// then then position normals
+				out << "<bind semantic=\"normal\">" << endl;
+				out << "<float3>" << endl;
+ 				
+				vector<Surface::Normal>::const_iterator itn = tube_template_.normal.begin();
+ 				for (; itn != tube_template_.normal.end(); itn++)
+   			{
+					out << (*itn).x << " " << (*itn).y << " " << (*itn).z << endl;
+				}	
+				
+				out << "</float3>" << endl;
+				out << "</bind>" << endl;
+				
+				out << "</mesh>" << endl;
+				out << "</group>" << endl; 
+			}
+			else
+			{
+				TwoColoredTube new_tube_1, new_tube_2;
+				out << "<shader id=\"" << &new_tube_1 << "shader\" script=\"#X3DPhong\" >" << endl;
+     		out << XML3DColorRGBA(color1, "diffuseColor");
+				out << XML3DRaytracingMaterial(rt_material_);
+				out << "</shader>" << endl;
 
-			//String p1 = XML3DVector3(tube.getVertex1());
-			//String p2 = XML3DVector3(tube.getMiddleVertex());
+				out << "<shader id=\"" << &new_tube_2 << "shader\" script=\"#X3DPhong\" >" << endl;
+     		out << XML3DColorRGBA(color2, "diffuseColor");
+				out << XML3DRaytracingMaterial(rt_material_);
+				out << "</shader>" << endl;
 
-			//if (p1 != p2)
-			//{
-			//	if ((Size) color1.getAlpha() == 255) out << "Tube(";
-			//	else 																 out << "TubeT(";
-			//	
-			//	out << p1 << ", "
-			//			<< p2 << ", "
-			//			<< tube.getRadius() << ", "
-			//			<< getColorIndex_(color1) << ")" << endl;
-			//}
+				new_tube_1.setVertex1(tube.getVertex1());
+				new_tube_1.setVertex2(tube.getMiddleVertex());
+				new_tube_1.setRadius(tube.getRadius());
 
-			//p1 = XML3DVector3(tube.getMiddleVertex());
-			//p2 = XML3DVector3(tube.getVertex2());
+				new_tube_2.setVertex1(tube.getMiddleVertex());
+				new_tube_2.setVertex2(tube.getVertex2());
+				new_tube_2.setRadius(tube.getRadius());
+				
+				createTubeTransform_(new_tube_1);
+				createTubeTransform_(new_tube_2);
+				
+				out << "<group ";
+				out << "transform=\"#" << &new_tube_1 << "trafo\" "; 
+				out << "shader=\"#" << &new_tube_1 << "shader\" >" << endl; 
+				
+				// Start a triangle env	
+				out << "<mesh "; 
+				out << "type=\"triangles\"";
+				out << ">" << endl; 
 
-			//if (p1 == p2) return;
+				// First the indices
+				out << "<bind semantic=\"index\">" << endl;
+				out << "<int>" << endl;
+ 				vector<Surface::Triangle>::const_iterator itt = tube_template_.triangle.begin();
+ 				
+				for (; itt != tube_template_.triangle.end(); itt++)
+   			{
+					out << (*itt).v1 << " " << (*itt).v2 << " " << (*itt).v3 << " ";
+				}	
+				
+				out << "</int>" << endl;
+				out << "</bind>" << endl;
 
-  		//if ((Size) color1.getAlpha() == 255) out << "Tube(";
-			//else 																 out << "TubeT(";
-			//
-		  //out << p1 << ", "
-		  //    << p2 << ", "
-			//		<< tube.getRadius() << ", "
-			//		<< getColorIndex_(color2) << ")" << endl;
+				// then then position vectors
+				out << "<bind semantic=\"position\">" << endl;
+				out << "<float3>" << endl;
+ 				
+				vector<Surface::Vertex>::const_iterator itv = tube_template_.vertex.begin();
+ 				for (; itv != tube_template_.vertex.end(); itv++)
+   			{
+					out << (*itv).x << " " << (*itv).y << " " << (*itv).z << endl;
+				}	
+				
+				out << "</float3>" << endl;;
+				out << "</bind>" << endl;
+				
+				// then then position normals
+				out << "<bind semantic=\"normal\">" << endl;
+				out << "<float3>" << endl;
+ 				
+				vector<Surface::Normal>::const_iterator itn = tube_template_.normal.begin();
+ 				for (; itn != tube_template_.normal.end(); itn++)
+   			{
+					out << (*itn).x << " " << (*itn).y << " " << (*itn).z << endl;
+				}	
+				
+				out << "</float3>" << endl;
+				out << "</bind>" << endl;
+				
+				out << "</mesh>" << endl;
+				out << "</group>" << endl; 
+				
+				// the second tube
+				out << "<group ";
+				out << "transform=\"#" << &new_tube_2 << "trafo\" "; 
+				out << "shader=\"#" << &new_tube_2 << "shader\" >" << endl; 
+				
+				// Start a triangle env	
+				out << "<mesh "; 
+				out << "type=\"triangles\"";
+				out << ">" << endl; 
+
+				// First the indices
+				out << "<bind semantic=\"index\">" << endl;
+				out << "<int>" << endl;
+ 				vector<Surface::Triangle>::const_iterator itt2 = tube_template_.triangle.begin();
+ 				
+				for (; itt2 != tube_template_.triangle.end(); itt2++)
+   			{
+					out << (*itt2).v1 << " " << (*itt2).v2 << " " << (*itt2).v3 << " ";
+				}	
+				
+				out << "</int>" << endl;
+				out << "</bind>" << endl;
+
+				// then then position vectors
+				out << "<bind semantic=\"position\">" << endl;
+				out << "<float3>" << endl;
+ 				
+				vector<Surface::Vertex>::const_iterator itv2 = tube_template_.vertex.begin();
+ 				for (; itv2 != tube_template_.vertex.end(); itv2++)
+   			{
+					out << (*itv2).x << " " << (*itv2).y << " " << (*itv2).z << endl;
+				}	
+				
+				out << "</float3>" << endl;;
+				out << "</bind>" << endl;
+				
+				// then then position normals
+				out << "<bind semantic=\"normal\">" << endl;
+				out << "<float3>" << endl;
+ 				
+				vector<Surface::Normal>::const_iterator itn2 = tube_template_.normal.begin();
+ 				for (; itn2 != tube_template_.normal.end(); itn2++)
+   			{
+					out << (*itn2).x << " " << (*itn2).y << " " << (*itn2).z << endl;
+				}	
+				
+				out << "</float3>" << endl;
+				out << "</bind>" << endl;
+				
+				out << "</mesh>" << endl;
+				out << "</group>" << endl; 
+			}
+
 		}
 
 		void XML3DRenderer::renderMesh_(const Mesh& mesh)
@@ -998,6 +1079,45 @@ namespace BALL
 			color.get(color_temp);
 
 			return String("c") + String(color_map_[color_temp]);
+		}
+		
+		void XML3DRenderer::createTubeTransform_(const TwoColoredTube& tube)
+		{
+		
+     	Vector3 vec = tube.getVertex2() - tube.getVertex1();
+      const double len = vec.getLength();
+      const double angle = acos(vec.z / len); // the denominator accounts for the non-normalized rotation axis
+      const float radius = tube.getRadius();
+
+      Vector3 const& midpoint = tube.getVertex1();
+      //Rotate the vector iround the normal
+      vec /= sqrt(vec.x*vec.x + vec.y*vec.y);
+
+      Matrix4x4 matrix = Matrix4x4::getIdentity();
+      matrix.rotate(Angle(-angle), vec.y, -vec.x, 0);
+
+      Matrix4x4 temp;
+      temp.setScale(radius, radius, len);
+      matrix*=temp;
+
+      temp.setTranslation(midpoint);
+      matrix = temp*matrix;
+
+			
+			std::ostream& out = *outfile_;
+			
+			out << "<transform ";
+			out << "id=\"" << &tube << "trafo\" ";
+			out << "translation=\"" << midpoint.x << " " << midpoint.y << " " << midpoint.z << "\" ";  
+			//out << "center=\"" << midpoint.x << " " << midpoint.y << " " << midpoint.z << "\" ";  
+			out << "rotation=\"" << vec.y  << " " << -vec.x << " " << 0 << " " << -angle << "\" ";  
+			//Quaternion rotation(Vector3(vec.y, -vec.x, 0), -angle);
+			//Vector3 rot_axis;
+			//float rot_angle;
+			//rotation.fromAxisAngle(rot_axis, rot_angle);
+			//out << "rotation=\"" << rot_axis.x  << " " << rot_axis.y << " " << rot_axis.z << " " << -rot_angle << "\" ";  
+			out << "scale=\"" << radius << " " << radius << " " << len << "\" ";  
+			out << "/>" << endl;
 		}
 
 		void XML3DRenderer::renderLabel_(const Label& label)
