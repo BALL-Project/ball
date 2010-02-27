@@ -494,6 +494,8 @@ namespace BALL
 
 				objects_.erase(&rep);
 
+				rtfact_needs_update_ = true;
+
 				if (use_continuous_loop_)
 					m_renderer.pauseAnimation(false);
 			}
