@@ -1498,7 +1498,7 @@ namespace BALL
 																						SLOT(exportXML3D()), description, QKeySequence(""),
 																						tr("Export a XML3D/XHTML file from the Scene"), 
 																						UIOperationMode::MODE_KIOSK);
-			setMenuHelp(pov_action, "tips.html#xml3d");
+			setMenuHelp(pov_action, "tips.html#XML3D");
 			
 			description = "Shortcut|File|Export|VRML";
 			insertMenuEntry(MainControl::FILE_EXPORT, tr("3D Prototyping Export"), this, 
@@ -2446,7 +2446,7 @@ namespace BALL
 
 			try
 			{
-				main_display_->makeCurrent();
+//				main_display_->makeCurrent();
 				XML3DRenderer pr(xml3ddump);
 
 				if (exportScene(pr)) ok = true;

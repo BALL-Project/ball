@@ -100,8 +100,8 @@ namespace BALL
 			LmMessage* m;
 			GError *error = NULL;
 
-			gchar recipient[1024] = "testuser2@pinguin.bioinf.uni-sb.de";
-			m = lm_message_new(recipient, LM_MESSAGE_TYPE_MESSAGE);
+			gchar recipient[1024] = "testuser4@pinguin.bioinf.uni-sb.de";
+			m = lm_message_new_with_sub_type(recipient, LM_MESSAGE_TYPE_MESSAGE, LM_MESSAGE_SUB_TYPE_CHAT);
 			lm_message_node_add_child(m->node, "body", ((String)current_message).c_str());
 
 			lm_connection_send(xmpp_connection_, m, &error);

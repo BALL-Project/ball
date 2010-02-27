@@ -452,14 +452,6 @@ namespace BALL
 
 			//close xml3d environment
 			out << "		</xml3d>" << endl;
-			//add some javascripts, caution relative paths
-
-  		out << "<script type=\"text/javascript\" src=\"../../../local/nicste/xml3d-dev/org.xml3d.renderer.webgl/script/xml3d_scene_controller.js\"></script>" << endl; 
-			out << "<script type=\"text/javascript\" src=\"../../../local/nicste/xml3d-dev/org.xml3d.renderer.webgl/script/xml3d_util.js\"></script>" << endl;
-			out << "<script type=\"text/javascript\" src=\"../../../local/nicste/xml3d-dev/org.xml3d.renderer.webgl/script/xml3d_renderer.js\"></script>" << endl;
-			out << "<script type=\"text/javascript\" src=\"../../../local/nicste/xml3d-dev/org.xml3d.renderer.webgl/script/xml3d_datatypes.js\"></script>" << endl;
-			out << "<script type=\"text/javascript\" src=\"../../../local/nicste/xml3d-dev/org.xml3d.renderer.webgl/script/xml3d_classes.js\"></script>" << endl;
-			out << "<script type=\"text/javascript\" src=\"../../../local/nicste/xml3d-dev/org.xml3d.renderer.webgl/script/xml3d.js\"></script>" << endl;
 			
 			
 			if (create_XHTML_) {createXHTMLFooter();};	
@@ -494,6 +486,15 @@ namespace BALL
 		void XML3DRenderer::createXHTMLFooter()
 		{
 			std::ostream& out = *outfile_;
+
+			//add some javascripts, caution relative paths
+
+  		out << "<script type=\"text/javascript\" src=\"../../../local/nicste/xml3d-dev/org.xml3d.renderer.webgl/script/xml3d_scene_controller.js\"></script>" << endl; 
+			out << "<script type=\"text/javascript\" src=\"../../../local/nicste/xml3d-dev/org.xml3d.renderer.webgl/script/xml3d_util.js\"></script>" << endl;
+			out << "<script type=\"text/javascript\" src=\"../../../local/nicste/xml3d-dev/org.xml3d.renderer.webgl/script/xml3d_renderer.js\"></script>" << endl;
+			out << "<script type=\"text/javascript\" src=\"../../../local/nicste/xml3d-dev/org.xml3d.renderer.webgl/script/xml3d_datatypes.js\"></script>" << endl;
+			out << "<script type=\"text/javascript\" src=\"../../../local/nicste/xml3d-dev/org.xml3d.renderer.webgl/script/xml3d_classes.js\"></script>" << endl;
+			out << "<script type=\"text/javascript\" src=\"../../../local/nicste/xml3d-dev/org.xml3d.renderer.webgl/script/xml3d.js\"></script>" << endl;
 			
 			// End XHTML Body
 			out << "  </body>" << endl;
