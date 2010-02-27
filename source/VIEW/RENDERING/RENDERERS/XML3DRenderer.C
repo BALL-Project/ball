@@ -122,8 +122,8 @@ namespace BALL
 			String output = "<bind semantic=\"" + name + "\">\n";
 
 			output += String("   <float3>") + String((float)color.getRed())   + " "
-																	    + String((float)color.getBlue())  + " "
-																		  + String((float)color.getGreen())
+																	    + String((float)color.getGreen()) + " "
+																		  + String((float)color.getBlue())
 																		  + "</float3>\n";
 
 			output += "</bind>\n";
