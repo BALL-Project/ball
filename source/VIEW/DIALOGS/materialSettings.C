@@ -45,7 +45,8 @@ namespace BALL
 			connect (radioButton_RTFact, SIGNAL(clicked()), this, SLOT (rendererChanged()));
 
 			connect( ambient_color_button, SIGNAL( clicked() ), this, SLOT( editAmbientColor() ) );
-			connect( specularity_color_button, SIGNAL(clicked()), this, SLOT( editSpecularityColor() ) ); connect( reflectiveness_color_button, SIGNAL(clicked()), this, SLOT( editReflectivenessColor() ) );
+			connect( specularity_color_button, SIGNAL(clicked()), this, SLOT( editSpecularityColor() ) );
+			connect( reflectiveness_color_button, SIGNAL(clicked()), this, SLOT( editReflectivenessColor() ) );
 
 			registerWidgets_();
 
@@ -92,7 +93,7 @@ namespace BALL
 					rt_material.specular_intensity   = specularity_factor_label->text().toFloat();
 					rt_material.reflective_intensity = reflectiveness_factor_label->text().toFloat();
 
-					rt_material.shininess          = shininess_factor_label->text().toFloat()+0.1;
+					rt_material.shininess          = std::max(shininess_factor_label->text().toFloat(), 0.1f);
 					rt_material.transparency			 = transparency_factor_label->text().toFloat();
 
 					if (objectName() == "MaterialSettingsForRepresentation")
@@ -160,7 +161,7 @@ namespace BALL
 			reflectiveness_factor_slider->setValue(rt_material.reflective_intensity*(float)reflectiveness_factor_slider->maximum());
 
 			setLabel_(*shininess_factor_label, rt_material.shininess);
-			shininess_factor_slider->setValue(rt_material.shininess);
+			shininess_factor_slider->setValue(sqrt(rt_material.shininess*(float)shininess_factor_slider->maximum()));
 
 			setLabel_(*transparency_factor_label, rt_material.transparency);
 			transparency_factor_slider->setValue(rt_material.transparency);
