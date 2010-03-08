@@ -2034,10 +2034,10 @@ namespace BALL
 			for (Position p = 0; p < 8; p++)
 			{
 				renderers_[0].pickObjects(pos_x - p, pos_y - p, pos_x + p, pos_y + p, objects);
-				if (objects.size() != 0) break;
+				if (!objects.empty()) break;
 			}
 
-			if (objects.size() == 0)
+			if (objects.empty())
 			{
 				unlockComposites();
 				return;
@@ -3118,7 +3118,7 @@ return;
 			renderers_[0].pickObjects((Position) p.x(), (Position) p.y(), 
 																(Position) p.x(), (Position) p.y(), objects);
 
-			if (objects.size() == 0) return;
+			if (objects.empty()) return;
 		
 			Composite* composite = 	(Composite*)(**objects.begin()).getComposite();
 			if (composite == 0) return;
