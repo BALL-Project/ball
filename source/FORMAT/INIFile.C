@@ -109,8 +109,8 @@ namespace BALL
 			line.trimLeft();
 
 			// check for comment lines or empty line
-			if ((line.size() == 0) || (line[0] == '!') || 
-					(line[0] == ';')   || (line[0] == '#'))
+			if (line.empty()     || (line[0] == '!') ||
+			   (line[0] == ';')  || (line[0] == '#'))
 			{
 				section_it->lines_.push_back(&(buffer[0]));
 				continue;
@@ -635,7 +635,7 @@ namespace BALL
 			return appendSection(data);
 		}
 
-		if (sections_.size() == 0) return false;
+		if (sections_.empty()) return false;
 		return appendLine((*sections_.rbegin()).name_, data);
 	}
 	
