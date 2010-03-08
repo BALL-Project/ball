@@ -219,76 +219,55 @@ namespace BALL
 				break;
 			case PURE_SINGLE_BOND:
 				return hasBond_(&atom, NULL, GAFFTypeProcessor::SB, aps.feature_number);
-				break;
 			case PURE_SINGLE_BOND_TO_PARENT:
 				return hasBond_(&atom, &predecessor, GAFFTypeProcessor::SB, aps.feature_number);
-				break;
 			case NO_PURE_SINGLE_BOND_TO_PARENT:
 				return !hasBond_(&atom, &predecessor, GAFFTypeProcessor::SB, aps.feature_number);
-				break;
 			case SINGLE_BOND:
-				return ( (hasBond_(&atom, NULL, GAFFTypeProcessor::sb, aps.feature_number)) 
+				return ( (hasBond_(&atom, NULL, GAFFTypeProcessor::sb, aps.feature_number))
 								|| (hasBond_(&atom, NULL, GAFFTypeProcessor::SB, aps.feature_number)));
-				break;
 			case SINGLE_BOND_TO_PARENT:
 				return ((hasBond_(&atom, &predecessor, GAFFTypeProcessor::sb, aps.feature_number))
 								||(hasBond_(&atom, &predecessor, GAFFTypeProcessor::SB, aps.feature_number)));
-				break;
 			case NO_SINGLE_BOND_TO_PARENT:
 				return ((!hasBond_(&atom, &predecessor, GAFFTypeProcessor::sb, aps.feature_number))
- 								&& (!hasBond_(&atom, &predecessor, GAFFTypeProcessor::SB, aps.feature_number)));
-				break;
+								&& (!hasBond_(&atom, &predecessor, GAFFTypeProcessor::SB, aps.feature_number)));
 			case PURE_DOUBLE_BOND:
 				return hasBond_(&atom, NULL, GAFFTypeProcessor::DB, aps.feature_number);
-				break;
 			case PURE_DOUBLE_BOND_TO_PARENT:
 				return hasBond_(&atom, &predecessor, GAFFTypeProcessor::DB, aps.feature_number);
-				break;
 			case NO_PURE_DOUBLE_BOND_TO_PARENT:
 				return !hasBond_(&atom, &predecessor, GAFFTypeProcessor::DB, aps.feature_number);
-				break;
 			case DOUBLE_BOND:
-				return ( (hasBond_(&atom, NULL, GAFFTypeProcessor::db, aps.feature_number)) 
+				return ( (hasBond_(&atom, NULL, GAFFTypeProcessor::db, aps.feature_number))
 								|| (hasBond_(&atom, NULL, GAFFTypeProcessor::DB, aps.feature_number)));
-				break;
 			case DOUBLE_BOND_TO_PARENT:
 				return ((hasBond_(&atom, &predecessor, GAFFTypeProcessor::db, aps.feature_number))
 								||(hasBond_(&atom, &predecessor, GAFFTypeProcessor::DB, aps.feature_number)));
 				break;
 			case NO_DOUBLE_BOND_TO_PARENT:
 				return ((!hasBond_(&atom, &predecessor, GAFFTypeProcessor::db, aps.feature_number))
- 								&& (!hasBond_(&atom, &predecessor, GAFFTypeProcessor::DB, aps.feature_number)));
-				break;
+								&& (!hasBond_(&atom, &predecessor, GAFFTypeProcessor::DB, aps.feature_number)));
 			case TRIPLE_BOND:
 				return hasBond_(&atom, NULL, GAFFTypeProcessor::TB, aps.feature_number);
-				break;
 			case TRIPLE_BOND_TO_PARENT:
 				return hasBond_(&atom, &predecessor, GAFFTypeProcessor::TB, aps.feature_number);
-				break;
 			case NO_TRIPLE_BOND_TO_PARENT:
 				return !hasBond_(&atom, &predecessor, GAFFTypeProcessor::TB, aps.feature_number);
-				break;
 			case DELOCALIZED_BOND:
 				return hasBond_(&atom, NULL, GAFFTypeProcessor::DL, aps.feature_number);
-				break;
 			case DELOCALIZED_BOND_TO_PARENT:
 				return hasBond_(&atom, &predecessor, GAFFTypeProcessor::DL, aps.feature_number);
-				break;
 			case NO_DELOCALIZED_BOND_TO_PARENT:
 				return !hasBond_(&atom, &predecessor, GAFFTypeProcessor::DL, aps.feature_number);
-				break;
 			case AROMATIC_BOND:
 				return hasBond_(&atom, NULL, GAFFTypeProcessor::AB, aps.feature_number);
-				break;
 			case AROMATIC_BOND_TO_PARENT:
 				return hasBond_(&atom, &predecessor, GAFFTypeProcessor::AB, aps.feature_number);
-				break;
 			case NO_AROMATIC_BOND_TO_PARENT:
 				return !hasBond_(&atom, &predecessor, GAFFTypeProcessor::AB, aps.feature_number);
-				break;
 			case APS_TRUE:
 				return true;
-				break;
 		}
 
 		return result;
