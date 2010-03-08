@@ -454,12 +454,12 @@ namespace BALL
 
 	// add a TruePredicate to "predicate tree"; since this is equivalent to not testing
 	// a predicate at all, we just do nothing
-	void GAFFCESParser::CESPredicate::addTruePredicate()
+	void GAFFCESParser::CESPredicate::addTruePredicate() const
 	{
 	}
 
 	//check if atom matches "predicates in predicate-tree"
-	bool GAFFCESParser::match(Atom& atom)
+	bool GAFFCESParser::match(Atom& atom) const
 	{
 		return (*root_predicate)(atom);
 	}

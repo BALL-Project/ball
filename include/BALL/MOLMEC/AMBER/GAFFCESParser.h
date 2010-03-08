@@ -153,7 +153,7 @@ namespace BALL
 					//add an CESelementConnectionPredicate to "predicate tree"
 					void addCESelementConnectionPredicate(Size partners, String name);
 					// add a TruePredicate to "predicate tree"
-					void addTruePredicate();
+					void addTruePredicate() const;
 
 					//check if atom and its environment match predicates
 					virtual bool operator () (Atom& atom);
@@ -284,7 +284,7 @@ namespace BALL
 			};
 
 			//Parser-match-Function checking if atom's environment matches the "predicate tree"
-			bool match(Atom& atom);
+			bool match(Atom& atom) const;
 
 			//initialize Set of Elementsymbols
 			void initElementSymbols();
