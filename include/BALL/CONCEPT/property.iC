@@ -133,15 +133,15 @@ bool NamedProperty::operator == (const NamedProperty& np) const
 
 	switch (type_)
 	{
-		case	BOOL:				  return(boost::any_cast<bool>(data_) == boost::any_cast<bool>(np.data_)); break;
-		case	INT:				  return(boost::any_cast<int> (data_) == boost::any_cast<int> (np.data_)); break;
-		case	UNSIGNED_INT: return(boost::any_cast<unsigned int> (data_) == boost::any_cast<unsigned int> (np.data_)); break;
-		case	FLOAT:        return(boost::any_cast<float> (data_) == boost::any_cast<float> (np.data_)); break;
-		case	DOUBLE:       return(boost::any_cast<double> (data_) == boost::any_cast<double> (np.data_)); break;
-		case	NONE:					return(true);	break;
-		case	STRING:				return(*boost::any_cast<string*>(data_) == *boost::any_cast<string*>(np.data_)); break;
-		case	OBJECT:				return(boost::any_cast<PersistentObject*>(data_) == boost::any_cast<PersistentObject*>(np.data_)); break;
-		case	SMART_OBJECT:	return(boost::any_cast<boost::shared_ptr<PersistentObject> >(data_) == boost::any_cast<boost::shared_ptr<PersistentObject> >(np.data_)); break;
+		case	BOOL:         return(boost::any_cast<bool>(data_) == boost::any_cast<bool>(np.data_));
+		case	INT:          return(boost::any_cast<int> (data_) == boost::any_cast<int> (np.data_));
+		case	UNSIGNED_INT: return(boost::any_cast<unsigned int> (data_) == boost::any_cast<unsigned int> (np.data_));
+		case	FLOAT:        return(boost::any_cast<float> (data_) == boost::any_cast<float> (np.data_));
+		case	DOUBLE:       return(boost::any_cast<double> (data_) == boost::any_cast<double> (np.data_));
+		case	NONE:         return(true);
+		case	STRING:       return(*boost::any_cast<string*>(data_) == *boost::any_cast<string*>(np.data_));
+		case	OBJECT:       return(boost::any_cast<PersistentObject*>(data_) == boost::any_cast<PersistentObject*>(np.data_));
+		case	SMART_OBJECT: return(boost::any_cast<boost::shared_ptr<PersistentObject> >(data_) == boost::any_cast<boost::shared_ptr<PersistentObject> >(np.data_));
 		default:
 			Log.error() << "property.C: can not cast type!" << std::endl;
 	}
