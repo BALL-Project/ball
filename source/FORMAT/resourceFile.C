@@ -774,7 +774,7 @@ namespace BALL
 				if (tag[0] == '/')
 				{
 					// closing tag -- check the stack
-					if (tag_stack.size() == 0)
+					if (tag_stack.empty())
 					{
 						Log.error() << "ResourceFile: no opening tag for " << tag << endl;
 						return s;
