@@ -176,7 +176,7 @@ namespace BALL
 			 * 	to operator() and only if area computation has not been
 			 * 	disabled through the options.
 			 */
-			float getTotalArea() {return total_area_;}
+			float getTotalArea() const {return total_area_;}
 
 			/** Returns the area per atom of the fragment.
 			 *
@@ -200,7 +200,7 @@ namespace BALL
 			 * 	to operator() and only if volume computation has not been
 			 * 	disabled through the options.
 			 */
-			float getTotalVolume() {return total_volume_;}
+			float getTotalVolume() const {return total_volume_;}
 
 			/** Returns the volume per atom of the fragment.
 			 *
