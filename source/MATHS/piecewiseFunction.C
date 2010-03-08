@@ -157,7 +157,7 @@ namespace BALL
 	const std::vector<Coefficients>& PiecewiseFunction::getCoefficients()
 		const  
 	{
-		if (coefficients_.size() == 0)
+		if (coefficients_.empty())
 		{
 			Log.warn() << "PiecewiseFunction::getCoefficients(): "
 				<< "No coefficients defined." << endl;
@@ -193,7 +193,7 @@ namespace BALL
 	{
 
 		// ?????: ist das vollst�ndig?
-		if ((coefficients_.size() == 0) || (intervals_.size() == 0))
+		if (coefficients_.empty() || intervals_.empty())
 		{
 			return false;
 		}
@@ -277,7 +277,7 @@ namespace BALL
 
 	void PiecewiseFunction::calculateRange() 
 	{
-		if (intervals_.size() == 0)
+		if (intervals_.empty())
 		{
 			range_.first = range_.second = 0.0;
 		}
