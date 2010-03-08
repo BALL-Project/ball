@@ -110,25 +110,6 @@ namespace BALL
 	*/
 	typedef BALL_SIZE_TYPE 	Size;
 
-	/**	Long index type.
-			Use this type to represent very long (64 bit) indices.
-			Theses indices may be signed, contrary to the  \link ::LongSize LongSize \endlink  type.
-			 \par
-			<b>Size:</b> 64 bit \par
-			<b>persistent</b>
-	*/
-	typedef BALL_LONG64_TYPE LongIndex;
-
-
-	/**	Long size type.
-			Use this type to represent sizes of containers, sequences or alike.
-			Variables of type LongSize are unsigned.
-			 \par
-			<b>Size:</b> 64 bit \par
-			<b>persistent</b>
-	*/
-	typedef BALL_ULONG64_TYPE LongSize;
-
 	/**	Time type.
 			Use this type to represent a point in time
 			(as a replaecement for time_t).
