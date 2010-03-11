@@ -236,7 +236,9 @@ $(TEST_PREFIX)RSConstructor_test$(EXEEXT)\
 $(TEST_PREFIX)RingAnalyser_test$(EXEEXT)\
 $(TEST_PREFIX)RingClusterer_test$(EXEEXT)\
 $(TEST_PREFIX)ResidueRotamerSet_test$(EXEEXT)\
-$(TEST_PREFIX)RotamerLibrary_test$(EXEEXT)
+$(TEST_PREFIX)RotamerLibrary_test$(EXEEXT)\
+$(TEST_PREFIX)ConnectedComponentsProcessor_test$(EXEEXT)\
+$(TEST_PREFIX)AssignBondOrderProcessor_test$(EXEEXT)
 
 EXECUTABLES_SOLVATION = \
 $(TEST_PREFIX)PoissonBoltzmann_test$(EXEEXT)\
@@ -288,5 +290,4 @@ $(TEST_PREFIX)DBInterface_test$(EXEEXT)
 ifeq ($(BALL_HAS_VIEW),true)
 	ASIO_DEPENDENT_EXECUTABLES= \
 	$(TEST_PREFIX)Socket_test$(EXEEXT)
-	EXECUTABLES_STRUCTURE+=$(TEST_PREFIX)AssignBondOrderProcessor_test$(EXEEXT)
 endif
