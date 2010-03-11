@@ -208,6 +208,7 @@ SET(BALL_STRUCTURE_TESTS
 	AssignBondOrderProcessor_test
 	AtomBijection_test
 	BindingPocketProcessor_test
+	ConnectedComponentsProcessor_test
 	Enumerator_test
 	EnumeratorIndex_test
 	MolecularGraph_test
