@@ -3,6 +3,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -33,26 +34,43 @@ RESULT
 CHECK( operator() )
 	ConnectedComponentsProcessor ccp;
 	System sys;	
-	MOL2File mol("data/ConnectedComponentsProcessor_test.mol2", std::ios::in);
+	MOL2File mol(BALL_TEST_DATA_PATH(ConnectedComponentsProcessor_test.mol2), std::ios::in);
 	mol >> sys;
 	
 	sys.apply(ccp);
 RESULT
 
-CHECK( getNumberOfConnectedComponents() )
+//New
+CHECK( applied on empty System )
 	ConnectedComponentsProcessor ccp;
 	System sys;	
-	MOL2File mol("data/ConnectedComponentsProcessor_test.mol2", std::ios::in);
+	sys.apply(ccp);
+	
+	TEST_EQUAL(ccp.getNumberOfConnectedComponents(), 0)
+	
+	ccp.splitIntoMolecules(sys);
+	
+	ConnectedComponentsProcessor::ComponentVector components = ccp.getComponents();
+	TEST_EQUAL(components.size(), 0)
+
+RESULT
+
+
+CHECK( getNumberOfConnectedComponents() )
+	ConnectedComponentsProcessor ccp;
+	System sys;
+	MOL2File mol(BALL_TEST_DATA_PATH(ConnectedComponentsProcessor_test.mol2), std::ios::in);	
 	mol >> sys;
 	
 	sys.apply(ccp);
 	TEST_EQUAL(ccp.getNumberOfConnectedComponents(), 2)
 RESULT
 
+
 CHECK( splitIntoMolecules() )
 	ConnectedComponentsProcessor ccp;
 	System sys;	
-	MOL2File mol("data/ConnectedComponentsProcessor_test.mol2", std::ios::in);
+	MOL2File mol(BALL_TEST_DATA_PATH(ConnectedComponentsProcessor_test.mol2), std::ios::in);	
 	mol >> sys;
 	
 	sys.apply(ccp);
@@ -65,11 +83,34 @@ CHECK( splitIntoMolecules() )
 	}
 RESULT
 
+CHECK( splitIntoMolecules() twice )
+	ConnectedComponentsProcessor ccp;
+	System sys;	
+	MOL2File mol(BALL_TEST_DATA_PATH(ConnectedComponentsProcessor_test.mol2), std::ios::in);	
+	mol >> sys;
+
+	sys.apply(ccp);
+
+	ccp.splitIntoMolecules(sys);
+
+	sys.apply(ccp);
+
+	ccp.splitIntoMolecules(sys);
+
+
+	for (MoleculeIterator m_it = sys.beginMolecule(); +m_it; ++m_it)
+	{
+		TEST_EQUAL(m_it->countAtoms(), 10)
+	}
+RESULT
+
+
+
 
 CHECK( getComponents() )
 	ConnectedComponentsProcessor ccp;
 	System sys;	
-	MOL2File mol("data/ConnectedComponentsProcessor_test.mol2", std::ios::in);
+	MOL2File mol(BALL_TEST_DATA_PATH(ConnectedComponentsProcessor_test.mol2), std::ios::in);	
 	mol >> sys;
 	
 	sys.apply(ccp);
