@@ -58,7 +58,7 @@ namespace BALL
 			precomputeAtomProperties_(mol);
 
 			AtomIterator atom_it = mol->beginAtom();
-			for(;+atom_it;++atom_it)
+			for ( ;+atom_it; ++atom_it)
 			{
 				value = assignAtomtype_(*atom_it);
 			}	
@@ -86,14 +86,14 @@ namespace BALL
 		String filename = path.find(options.get(Option::ATOMTYPE_FILENAME));
 
 		atomfile.open(filename.c_str());
-		if(!atomfile)
+		if (!atomfile)
 		{
 			Log.error() << "atomtype table could not be read!" << std::endl;
 			throw(Exception::FileNotFound(__FILE__, __LINE__, filename));
 		}
 	
 		String table_line;
-		while(getline(atomfile,table_line))
+		while (getline(atomfile,table_line))
 		{
 			TypeDefinition typeDefinition;
 			typeDefinition.atom_type = table_line.getField(0);
@@ -151,8 +151,7 @@ namespace BALL
 		annotatePlanarRingAtoms_();
 
 		AtomIterator atom_it = molecule->beginAtom();
-		
-		for(;+atom_it;++atom_it)
+		for ( ; +atom_it; ++atom_it)
 		{
 			int connectivity = (atom_it->countBonds());
  			atom_it->setProperty("connectivity", connectivity);
@@ -163,11 +162,11 @@ namespace BALL
 			String electron_withdrawal_atoms; 
 
 			Atom::BondIterator bond_it = atom_it->beginBond();
-			for(;+bond_it;++bond_it)
+			for ( ; +bond_it; ++bond_it)
 			{
 
 				const Atom& partner_atom = *(bond_it->getBoundAtom(*atom_it));
-				if(partner_atom.getElement() == PTE[Element::H])
+				if (partner_atom.getElement() == PTE[Element::H])
 				{
 					++attached_hydrogens_int;
 				}
@@ -181,7 +180,7 @@ namespace BALL
 
 						const Atom& partner_partner_atom = *(constBond_it->getBoundAtom(partner_atom));
 
-						if(   (partner_partner_atom.getElement()== PTE[Element::N])
+						if (  (partner_partner_atom.getElement()== PTE[Element::N])
 								||(partner_partner_atom.getElement()== PTE[Element::O]) 
 								||(partner_partner_atom.getElement()== PTE[Element::F]) 
 								||(partner_partner_atom.getElement()== PTE[Element::Cl]) 
@@ -238,10 +237,10 @@ namespace BALL
 		// we know that the selected atoms only have one bond each. so we only need to make sure it really is a double bond
 		list<Atom*> selected_atoms = select.getSelectedAtoms();
 		list<Atom*>::iterator it = selected_atoms.begin();
-		for(;it != selected_atoms.end(); ++it)
+		for ( ; it != selected_atoms.end(); ++it)
 		{
 			Atom::BondIterator bond_it = (*it)->beginBond();
-			for(;+bond_it;++bond_it)
+			for( ; +bond_it; ++bond_it)
 			{
 				if (bond_it->getOrder() == Bond::ORDER__DOUBLE)
 					bond_it->setProperty("GAFFBondType", DL);
@@ -261,7 +260,8 @@ namespace BALL
 		BALL_FOREACH_BOND(*current_molecule_, a_it, b_it)
 		{
 			// b_it is no delocalized bond 
-			if(!b_it->hasProperty("GAFFBondType") || (b_it->getProperty("GAFFBondType").getInt() != DL))
+			if (    !b_it->hasProperty("GAFFBondType") 
+					 || (b_it->getProperty("GAFFBondType").getInt() != DL))
 			{
 				switch(b_it->getOrder())
 				{
@@ -299,7 +299,7 @@ namespace BALL
 	void GAFFTypeProcessor::annotateRingSizes_()
 	{
 		std::vector<std::vector<Atom* > >::iterator ring_it = sssr_.begin();
-		for(;ring_it != sssr_.end();++ring_it)
+		for ( ; ring_it != sssr_.end(); ++ring_it)
 		{
 			String in_ring_property;
 			String num_rings_property;
@@ -351,7 +351,7 @@ namespace BALL
 			// set property to current in ring for every atom
 			// note: we count the occurence of the property within an atom
 			std::vector<Atom*>::iterator atom_it = ring_it->begin();
-			for(;atom_it != ring_it->end();++atom_it)
+			for ( ; atom_it != ring_it->end(); ++atom_it)
 			{
 				 occurence = ((*atom_it)->getProperty(num_rings_property).getInt()) + occurence;
 				(*atom_it)->setProperty(in_ring_property, (bool) in_ring);
@@ -365,14 +365,14 @@ namespace BALL
 	void GAFFTypeProcessor::annotateAliphaticAndAromaticRingAtoms_()	
 	{
 		std::vector<std::vector<Atom* > >::iterator ring_it = sssr_.begin();
-		for(;ring_it != sssr_.end();++ring_it)
+		for ( ; ring_it != sssr_.end(); ++ring_it)
 		{
 			bool purely_aliphatic = true;
 			bool purely_aromatic  = true;
 			bool has_sp3_carbon   = false;
 
 			vector<Atom*>::iterator atom_it = ring_it->begin();
-			for(;atom_it != ring_it->end();++atom_it)
+			for ( ; atom_it != ring_it->end(); ++atom_it)
 			{
 				if( ((*atom_it)->getElement() == PTE[Element::C]) && ((*atom_it)->countBonds() == 4))
 					has_sp3_carbon = true;
@@ -390,7 +390,7 @@ namespace BALL
 				}
 			}
 
-			for(atom_it = ring_it->begin();atom_it != ring_it->end();++atom_it)
+			for (atom_it = ring_it->begin(); atom_it != ring_it->end(); ++atom_it)
 			{
 				// do not overwrite the property if we have already detected a suitable ring!
 				if (  !(*atom_it)->hasProperty("IsPureAliphatic")
@@ -407,15 +407,15 @@ namespace BALL
 	void GAFFTypeProcessor::annotatePlanarRingAtoms_()
 	{
 		std::vector<std::vector<Atom* > >::iterator ring_it = sssr_.begin();
-		for(;ring_it != sssr_.end();++ring_it)
+		for( ; ring_it != sssr_.end(); ++ring_it)
 		{
 			bool is_planar = true;
 			bool has_db_to_non_ring = false;
 			vector<Atom*>::iterator atom_it = ring_it->begin();
-			for(;atom_it != ring_it->end();++atom_it)
+			for ( ; atom_it != ring_it->end(); ++atom_it)
 			{
 				// if one atom isn't planar, the whole ring isn't.
-				if( !planarAtom_(**atom_it) )
+				if ( !planarAtom_(**atom_it) )
 				{
 					is_planar = false;
 					break;
@@ -425,11 +425,12 @@ namespace BALL
 				if (!has_db_to_non_ring) // otherwise, we don't need to look for another one!
 				{
 					Atom::BondConstIterator constBond_it = (*atom_it)->beginBond();
-					for(;+constBond_it;++constBond_it)
+					for ( ; +constBond_it; ++constBond_it)
 					{
-						if(    (constBond_it->hasProperty("GAFFBondType")) && 
-									((constBond_it->getProperty("GAFFBondType").getInt() == DB)
-								|| (constBond_it->getProperty("GAFFBondType").getInt() == db)))
+						if (    (constBond_it->hasProperty("GAFFBondType")) 
+								 && (    (constBond_it->getProperty("GAFFBondType").getInt() == DB)
+								      || (constBond_it->getProperty("GAFFBondType").getInt() == db))
+								)
 						{
 							const Atom* partner_atom = constBond_it->getBoundAtom(**atom_it);
 							if (!partner_atom->getProperty("InRing").getBool())
@@ -442,7 +443,7 @@ namespace BALL
 			// if the ring is planar 
 			if (is_planar)
 			{
-				for(atom_it = ring_it->begin();atom_it != ring_it->end();++atom_it)
+				for (atom_it = ring_it->begin(); atom_it != ring_it->end(); ++atom_it)
 				{
 					(*atom_it)->setProperty("IsPlanarRingAtom", true);
 					if (has_db_to_non_ring)
@@ -461,19 +462,24 @@ namespace BALL
 		Element element = atom.getElement();
 		int num_bonds   = atom.countBonds();
 		// C(X2) or C(X3)
-		if(		 (element == PTE[Element::C]) &&((num_bonds == 2) ||(num_bonds == 3)))
+		if (   (element == PTE[Element::C]) 
+				&& ((num_bonds == 2) || (num_bonds == 3)))
 			return true;
 		// N(X2) or N(X3)
-		if(	(element == PTE[Element::N]) &&((num_bonds == 2) || (num_bonds == 3)))
+		if (   (element == PTE[Element::N]) 
+				&& ((num_bonds == 2) || (num_bonds == 3)))
 			return true;
 		// P(X2) or P(X3)
-		if(	(element == PTE[Element::P]) &&((num_bonds == 2) || (num_bonds == 3)))
+		if (   (element == PTE[Element::P]) 
+				&& ((num_bonds == 2) || (num_bonds == 3)))
 			return true;
 		// O(X2)
-		if((element == PTE[Element::O]) && (num_bonds == 2))
+		if (   (element == PTE[Element::O])
+			 	&& (num_bonds == 2))
 			return true;
 		// S(X2)
-		if((element == PTE[Element::S]) && (num_bonds == 2))
+		if (   (element == PTE[Element::S]) 
+				&& (num_bonds == 2))
 			return true;		
 
 		return false;
@@ -481,77 +487,83 @@ namespace BALL
 
 	bool GAFFTypeProcessor::assignAtomtype_(Atom& atom)
 	{
-		// do we have a chance to match this atom at all?
+		// can we match this atom at all?
 		if (atom_types_.find(atom.getElement().getAtomicNumber()) == atom_types_.end())
 		{
-			Log.error() << "GAFFTypeProcessor: Could not assign atom type for " << atom.getFullName() << std::endl;
-			Log.error() << "GAFFTypeProcessor: Reason: no type definition for atomic number " << atom.getElement().getAtomicNumber() << " available!" << std::endl;
+			Log.error() << "GAFFTypeProcessor: could not assign atom type for " << atom.getFullName() << std::endl;
+			Log.error() << "                   Reason: no type definition for atomic number " << atom.getElement().getAtomicNumber() << " available!" << std::endl;
 			
 			return false;
 		}
-
 
 		std::vector<TypeDefinition>& type_defs = atom_types_[atom.getElement().getAtomicNumber()];
 		for (Position i=0; i<type_defs.size(); i++)
 		{
 			TypeDefinition& typeDefinition = type_defs[i];
 #ifdef DEBUG
-			Log.info() << "GAFFTypeProcessor: trying to match atom " << atom.getFullName() << " against type " << typeDefinition.atom_type << std::endl;
-			Log.info() << "GAFFTypeProcessor: connectivity is " << atom.getProperty("connectivity").getInt() << " should be " << typeDefinition.connectivity
+			Log.info() << "GAFFTypeProcessor: match atom " << atom.getFullName() << " against type " << typeDefinition.atom_type << std::endl;
+			Log.info() << "GAFFTypeProcessor: connectivity is " << atom.getProperty("connectivity").getInt() << " but should be " << typeDefinition.connectivity
 								 << std::endl;
 #endif
 
-			//all fields with "*" are invalid and therefore considered as True
-			if((typeDefinition.connectivity < 0) || (atom.getProperty("connectivity").getInt() == typeDefinition.connectivity))
+			// all fields with "*" are invalid and therefore considered as True
+			if (   (typeDefinition.connectivity < 0) 
+					 ||(atom.getProperty("connectivity").getInt() == typeDefinition.connectivity))
 			{
 #ifdef DEBUG
 				Log.info() << "GAFFTypeProcessor: number of attached hydrogens is " << atom.getProperty("attached hydrogens").getString() 
-									 << " should be " << typeDefinition.attached_hydrogens
+									 << " but should be " << typeDefinition.attached_hydrogens
 									 << std::endl;
 #endif
-				if(		(atom.getProperty("attached hydrogens").getString() == typeDefinition.attached_hydrogens) 
-						||(typeDefinition.attached_hydrogens == "*"))
+				if (	 (atom.getProperty("attached hydrogens").getString() == typeDefinition.attached_hydrogens) 
+						 ||(typeDefinition.attached_hydrogens == "*"))
 				{
 #ifdef DEBUG
 				Log.info() << "GAFFTypeProcessor: number of electron withdrawal atoms is " << atom.getProperty("electron withdrawal atoms").getString() 
 									 << " should be " << typeDefinition.electron_withdrawal_atoms
 									 << std::endl;
 #endif
-					if(		(atom.getProperty("electron withdrawal atoms").getString() == typeDefinition.electron_withdrawal_atoms) 
-							||(typeDefinition.electron_withdrawal_atoms == "*"))
+					if (	 (atom.getProperty("electron withdrawal atoms").getString() == typeDefinition.electron_withdrawal_atoms) 
+							 ||(typeDefinition.electron_withdrawal_atoms == "*"))
 					{
 						String atomic_property = typeDefinition.atomic_property;
 
-						//add aps string to ces string for parsing
+						// add aps string to ces string for parsing
 						String to_match = "";
 						if (typeDefinition.atomic_property != "*")
+						{	
 							to_match = typeDefinition.atomic_property;
+						}
 						else 
+						{
 							// for our parser to work, we need to convert the GAFF 
 							// wildcard * to a grammatically correct APS
 							to_match = "[*]";
+						}	
 						to_match += typeDefinition.chemical_environment;
 
 #ifdef DEBUG
 						Log.info() << "GAFFTypeProcessor: combined APS/CES to match is " << to_match << std::endl;
 #endif
 
-						if(		 (ces_parsers_.find(to_match) != ces_parsers_.end())
+						if (	 (ces_parsers_.find(to_match) != ces_parsers_.end())
 								&& (ces_parsers_[to_match]->match(atom)))
 						{
-							atom.setProperty("atomtype", typeDefinition.atom_type);
 #ifdef DEBUG
 							Log.info() << "atom name: " << atom.getName() << " atomtype:" << typeDefinition.atom_type << endl;
 #endif
-
+							atom.setProperty("atomtype", typeDefinition.atom_type);
 							return true;	
 						}
 					}
 				}	
 			}
 		}
-		std::cout << "could not assing a type for atom " << atom.getFullName() << "! Setting type to DU" << std::endl;
-		atom.setProperty("atomtype", String("DU"));
+
+		// if no type could be assigned return false
+		Log.error() << "GAFFTypeProcessor: could not assing a type for atom " << atom.getFullName() 
+								<< "! Setting type to DU" << std::endl;
+		atom.setProperty("atomtype", String("DU")); //ANNE 
 
 		return false;
 	}
