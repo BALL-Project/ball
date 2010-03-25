@@ -18,6 +18,7 @@
 #endif
 
 #include <string>
+#include <cstring>
 
 #ifdef BALL_DEBUG
 
@@ -25,7 +26,7 @@
 	if (!(condition))\
 	{\
 		Exception::Precondition e(__FILE__, __LINE__, #condition);\
-		if (message != "")\
+		if (strcmp(message, "") != 0)\
 		{\
       ::std::string tmp(e.getMessage());\
 			tmp += ::std::string(message);\
@@ -38,7 +39,7 @@
 	if (!(condition))\
 	{\
 		Exception::Postcondition e(__FILE__, __LINE__, #condition);\
-		if (message != "")\
+		if (strcmp(message, "") != 0)\
 		{\
       std::string tmp(e.getMessage());\
 			tmp += std::string(message);\
