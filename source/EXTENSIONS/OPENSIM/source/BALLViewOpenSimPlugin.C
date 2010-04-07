@@ -27,8 +27,9 @@ namespace BALL
 		***********************************************************************************/
 
 		BALLViewOpenSimPlugin::BVWorkerThread::BVWorkerThread(BALLViewOpenSimPlugin* plugin)
+			: bvplugin_(plugin),
+				terminate_requested_(false)
 		{
-			bvplugin_ =  plugin;
 		}
 
 		
@@ -90,11 +91,17 @@ namespace BALL
 				// should we uSleep here?	
 			}
 		}
+
+		void BALLViewOpenSimPlugin::BVWorkerThread::deactivate()
+		{
+			terminate_requested_ = true;
+		}
 		
 		void BALLViewOpenSimPlugin::BVWorkerThread::run()
 		{
+			terminate_requested_ = false;
 
-			for(;;)
+			while (!terminate_requested_)
 			{
 				while( !bvplugin_->server_->incomingmessage_queue_.empty() ) {
 
@@ -133,16 +140,34 @@ namespace BALL
 			  rwLock_(),
 			  plugin_(plugin)
 		{
-			 funcThread_ = new BVWorkerThread(plugin_);
-			 funcThread_->start();
 		}
 
 		
 		BALLViewOpenSimPlugin::BVOSServer::~BVOSServer()
 		{
+			funcThread_->deactivate();
+			funcThread_->wait();
+			delete(funcThread_);
 		}
 
-		
+		void BALLViewOpenSimPlugin::BVOSServer::run()
+		{
+			funcThread_ = new BVWorkerThread(plugin_);
+			funcThread_->start();
+
+			TCPServerThread::run();	
+		}
+
+		void BALLViewOpenSimPlugin::BVOSServer::deactivate()
+		{
+			funcThread_->deactivate();
+			funcThread_->wait();
+
+			delete(funcThread_);
+
+			TCPServerThread::deactivate();
+		}
+
 		void BALLViewOpenSimPlugin::BVOSServer::handleAsyncConnection()
 		{
 			// here I can cehck the status of the opensim client and set (server_->is_acknowledged to true ??

@@ -45,8 +45,11 @@ namespace BALL
 						BVWorkerThread(BALLViewOpenSimPlugin* plugin);
 						~BVWorkerThread();
 
+						void deactivate();
+
 					protected:
 						BALLViewOpenSimPlugin* bvplugin_;
+						bool terminate_requested_;
 				};
 
 
@@ -123,8 +126,9 @@ namespace BALL
 					
 						~BVOSServer();
 
+						virtual void run();
 						virtual void handleAsyncConnection();
-
+						virtual void deactivate();
 			
 						void checkClientStatus();
 
@@ -136,8 +140,6 @@ namespace BALL
 						BALLViewOpenSimPlugin* plugin_;
 						
 						BVWorkerThread* funcThread_;
-
-						
 
 				};
 
