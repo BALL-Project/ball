@@ -1,4 +1,5 @@
-#include "../include/BALLViewPluginConfiguration.h"
+#include <OpenSimPluginConfiguration.h>
+
 #include <QtCore/QObject>
 
 #include <BALL/PLUGIN/BALLPlugin.h>
@@ -14,8 +15,6 @@
 #include "../include/MolecularStructureContainer.h"
 #include "../include/MolecularModelingContainer.h"
 #include "../include/MolecularDynamicsContainer.h"
-
-
 
 
 namespace BALL
@@ -40,38 +39,30 @@ namespace BALL
 
 				class BVWorkerThread: public QThread
 				{
-
-					
 					public:
 						void run();
 	
 						BVWorkerThread(BALLViewOpenSimPlugin* plugin);
-
 						~BVWorkerThread();
 
 					protected:
 						BALLViewOpenSimPlugin* bvplugin_;
-						
-
-
 				};
 
 
 				class BVCommandExecutionThread: public QThread
 				{
-
-					
 					public:
 						void run();
 	
 						BVCommandExecutionThread(BALLViewOpenSimPlugin* plugin);
-
 						~BVCommandExecutionThread();
+
+						void deactivate();
 
 					protected:
 						BALLViewOpenSimPlugin* bvcmdplugin_;
-						
-
+						bool terminate_requested_;
 				};
 
 
@@ -222,6 +213,8 @@ namespace BALL
 
 			
 				BALLViewOpenSimPlugin();
+				~BALLViewOpenSimPlugin();
+
 				const char* configFilePath_;
 
 				BVCommandExecutionThread* const cmdThread_;
@@ -235,10 +228,10 @@ namespace BALL
 				virtual bool activate();
 				virtual bool deactivate();
 
-				virtual QPixmap* getIcon() const { return NULL; }
-				virtual QDialog* getConfigDialog() { return NULL; }
+				virtual const QPixmap* getIcon() const;
+				virtual QDialog* getConfigDialog(); 
 
-				virtual void setReceiver(QWidget*) { }
+				virtual void setReceiver(QWidget*);
 
 				virtual InputDeviceDriver* startDriver() { return NULL; }
 
@@ -257,17 +250,33 @@ namespace BALL
 				
 				void handleRepresentation(BallviewMessage message);
 
+				bool hasMessage();
+
+				bool checkConfig();
+
+				void demandConfig();
+
+				const String& getRemoteHost() const { return remote_host_; }
+				const String& getLocalHost()  const { return local_host_;  }
+
+				Size getRemotePort() const { return remote_port_; }
+				Size getLocalPort()  const { return local_port_;  }
 				
-				
-			   
+			public slots:
+				virtual void settingsChanged();
 
 			protected:
 				
+				OpenSimPluginConfiguration* settings_;
+
 				bool is_active_;
 
 				BVOSServer*  server_;
 
 				ElementColorProcessor ecp_;
+
+				QPixmap icon_;
+				QWidget* receiver_;		
 
 				MolecularStructureContainer* const molStructPlugin_;
 
@@ -276,15 +285,10 @@ namespace BALL
 				MolecularDynamicsContainer* const molDynamicsPlugin_;
 
 			
-				CommunicationConfiguration*  config_;
-
-
-				
-
-				
-				
-
-				
+				String remote_host_;
+				Size   remote_port_;
+				String local_host_;
+				Size   local_port_;
 		};
 	}
 

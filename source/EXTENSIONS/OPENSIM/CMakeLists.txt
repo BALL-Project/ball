@@ -2,22 +2,27 @@ PROJECT(OPENSIM)
 
 SET(DIRECTORY source)
 ### list all filenames of the directory here ###
+SET(UI_SOURCES_LIST
+	${DIRECTORY}/OpenSimPluginConfiguration.ui
+)
+
 SET(SOURCES_LIST
 	${DIRECTORY}/BALLViewOpenSimPlugin.C
-	${DIRECTORY}/BALLViewPluginConfiguration.C
+	${DIRECTORY}/OpenSimPluginConfiguration.C
 	${DIRECTORY}/MolecularDynamicsContainer.C
 	${DIRECTORY}/MolecularModelingContainer.C
 	${DIRECTORY}/MolecularStructureContainer.C
 )
 
-#SET(RCC_SOURCES_LIST
-#	${DIRECTORY}/logo.qrc
-#)
+SET(RCC_SOURCES_LIST
+	${DIRECTORY}/logo.qrc
+)
 
 SET(DIRECTORY include)
 ### the list of all files requiring a moc run ###
 SET(MOC_SOURCES_LIST
 	${DIRECTORY}/BALLViewOpenSimPlugin.h
+	${DIRECTORY}/OpenSimPluginConfiguration.h
 	${DIRECTORY}/MolecularDynamicsContainer.h
 	${DIRECTORY}/MolecularModelingContainer.h
 	${DIRECTORY}/MolecularStructureContainer.h

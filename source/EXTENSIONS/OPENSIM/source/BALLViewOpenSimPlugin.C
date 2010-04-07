@@ -1,6 +1,7 @@
 #include <BALL/COMMON/global.h>
 
-#include "../include/BALLViewOpenSimPlugin.h"
+#include <BALLViewOpenSimPlugin.h>
+#include <OpenSimPluginConfiguration.h>
 
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -13,36 +14,14 @@
 
 #include <BALL/DATATYPE/hashMap.h>
 
-
-// localhost for :  Gromacs in local machine
-// 136.187.33.109 : Gromacs in Main server 
-
-#define REMOTE_IP "136.187.33.109"  
-
-#define REMOTE_PORT "4712"
-
-#define LOCAL_PORT "4711"
-
-// Only when we run ballview from VS IDE:
-//#define CONFIG_PATH ".\\..\\Release\\ballviewplugin.configuration.txt"
-#define CONFIG_PATH "/home/andreas/BALL/build_opensim/ballviewplugin.configuration.txt"
-
-
-// Only when we release the code:
-//#define CONFIG_PATH "\\ballviewplugin.configuration.txt"
-
+#include <QtGui/QMessageBox>
 
 Q_EXPORT_PLUGIN2(pluginOpenSimPlugin, BALL::VIEW::BALLViewOpenSimPlugin)
-
-
 
 namespace BALL
 {
 	namespace VIEW
 	{
-
-
-
 		/***********************************************************************************
 		*********************** Start Multi Threading Implementation*****************************
 		***********************************************************************************/
@@ -50,39 +29,36 @@ namespace BALL
 		BALLViewOpenSimPlugin::BVWorkerThread::BVWorkerThread(BALLViewOpenSimPlugin* plugin)
 		{
 			bvplugin_ =  plugin;
-			
 		}
 
 		
 		BALLViewOpenSimPlugin::BVWorkerThread::~BVWorkerThread()
 		{
-			 
 		}
 
-
-	
 		BALLViewOpenSimPlugin::BVCommandExecutionThread::BVCommandExecutionThread(BALLViewOpenSimPlugin* plugin/*,Message* message*/)
+			: bvcmdplugin_(plugin),
+				terminate_requested_(false)
 		{
-			bvcmdplugin_ =  plugin;
-			
 		}
 
 		
 		BALLViewOpenSimPlugin::BVCommandExecutionThread::~BVCommandExecutionThread()
 		{
-			 
 		}
 
-
+		void BALLViewOpenSimPlugin::BVCommandExecutionThread::deactivate()
+		{
+			terminate_requested_ = true;
+		}
 		
 		void BALLViewOpenSimPlugin::BVCommandExecutionThread::run()
 		{
-		
-			
+			terminate_requested_ = false;
 
-			for(;;)
+			while (!terminate_requested_)
 			{
-				while( !bvcmdplugin_->ballviewmessage_queue_.empty() )
+				while( !bvcmdplugin_->hasMessage() )
 				{
 					bvcmdplugin_->pluginrwLock_.lockForRead();
 
@@ -110,11 +86,9 @@ namespace BALL
 					
 				
 					bvcmdplugin_->pluginrwLock_.unlock();
-
 				}
-			
+				// should we uSleep here?	
 			}
-	
 		}
 		
 		void BALLViewOpenSimPlugin::BVWorkerThread::run()
@@ -122,7 +96,7 @@ namespace BALL
 
 			for(;;)
 			{
-			while( !bvplugin_->server_->incomingmessage_queue_.empty() ) {
+				while( !bvplugin_->server_->incomingmessage_queue_.empty() ) {
 
 					std::vector<String> data;
 
@@ -158,26 +132,19 @@ namespace BALL
 			  is_Process_Done_(true),
 			  rwLock_(),
 			  plugin_(plugin)
-
-
 		{
 			 funcThread_ = new BVWorkerThread(plugin_);
 			 funcThread_->start();
-			 
 		}
 
 		
 		BALLViewOpenSimPlugin::BVOSServer::~BVOSServer()
 		{
-			 
 		}
 
 		
 		void BALLViewOpenSimPlugin::BVOSServer::handleAsyncConnection()
 		{
-			
-
-
 			// here I can cehck the status of the opensim client and set (server_->is_acknowledged to true ??
 			// this should be done only once (first time connection is made)
 
@@ -242,12 +209,11 @@ namespace BALL
 		
 		void BALLViewOpenSimPlugin::BVOSServer::checkClientStatus()
 		{
-
 			// Todo
 			// first need to check if connection exist?
 			// Not sure how to do that
 			
-			TCPIOStream outstream(plugin_->config_->remote_ip_, plugin_->config_->remote_port_);
+			TCPIOStream outstream(plugin_->getRemoteHost(), plugin_->getRemotePort());
 
 			if (outstream.good())
 			{
@@ -258,12 +224,12 @@ namespace BALL
 		
 		void BALLViewOpenSimPlugin::BVOSServer::sendMessageString(const String& to_send)
 		{
-
-
-			TCPIOStream outstream(plugin_->config_->remote_ip_, plugin_->config_->remote_port_);
+			printf("send message\n");
+			TCPIOStream outstream(plugin_->getRemoteHost(), plugin_->getRemotePort());
 
 			if (outstream.good())
 			{
+			printf("send message %s\n", to_send.c_str());
 				outstream << to_send << std::endl;
 
 				outstream.flush();
@@ -281,68 +247,84 @@ namespace BALL
 		***********************************************************************************/
 	
 		BALLViewOpenSimPlugin::BALLViewOpenSimPlugin()
-			 : QObject(VIEW::getMainControl()),
-			  ModularWidget(),
-			  cmdThread_(new BVCommandExecutionThread(this)),
-			  pluginrwLock_ (),
-			  is_active_(false),
-			  molStructPlugin_ (new MolecularStructureContainer()),
-			  molModelingPlugin_(new MolecularModelingContainer()),
-			  molDynamicsPlugin_(new MolecularDynamicsContainer())
+			: QObject(VIEW::getMainControl()),
+				ModularWidget(),
+				cmdThread_(new BVCommandExecutionThread(this)),
+				pluginrwLock_(),
+				settings_(new OpenSimPluginConfiguration(NULL)),
+				is_active_(false),
+				server_(0),
+				icon_(":opensim_logo.png"),
+				molStructPlugin_ (new MolecularStructureContainer()),
+				molModelingPlugin_(new MolecularModelingContainer()),
+				molDynamicsPlugin_(new MolecularDynamicsContainer())
 		{
 			registerWidget(this);
 
-			config_ = new CommunicationConfiguration();
+			remote_host_ = (String)(settings_->remote_address->text());
+			remote_port_ = settings_->remote_port->text().toInt();
+			local_host_  = (String)(settings_->local_address->text());
+			local_port_  = settings_->local_port->text().toInt();
 
+			// try to implement some sane defaults for the settings
+			if (local_host_ == "")
+				local_host_ = "0.0.0.0";
+			if (local_port_ == 0)
+				local_port_ = 4711;
+			if (remote_port_ == 0)
+				remote_port_ = 4712;
 
+			settings_->setLocalServer( local_host_,  local_port_ );
+			settings_->setRemoteServer(remote_host_, remote_port_);
 
-			
-			
-			// Only when we release the code: this does not work on all OS?
-			/*
-			
-			char* buffer = NULL;
-			char* path = NULL;
+			connect(settings_, SIGNAL(accepted()), this, SLOT(settingsChanged()));
+		}
 
-			
-		    if( (buffer = _getcwd( NULL, 0 )) == NULL )
-			{
-			  perror( "_getcwd error" );
-			}
-			else
-		    {
-			  path = strcat(buffer , CONFIG_PATH);
+		BALLViewOpenSimPlugin::~BALLViewOpenSimPlugin()
+		{
+			deactivate();
+		}
 
-		    }
+		void BALLViewOpenSimPlugin::settingsChanged()
+		{
+			remote_host_ = (String)(settings_->remote_address->text());
+			remote_port_ = settings_->remote_port->text().toInt();
+			local_host_  = (String)(settings_->local_address->text());
+			local_port_  = settings_->local_port->text().toInt();
 
-			config_->ParseXmlFile(path);
+			if (!checkConfig())
+				demandConfig();
+		}
 
-			*/
+		bool BALLViewOpenSimPlugin::checkConfig()
+		{
+			if (    (remote_host_ == "") || (remote_port_ == 0)
+					 || (local_host_  == "") || (local_port_  == 0) )
+				return false;
 
-			config_->ParseXmlFile(CONFIG_PATH);
-		
-			server_ =  new BVOSServer(config_->local_port_, this);
+			return true;
+		}
 
-			//Log.info() << "CONFIG_PATH : " <<CONFIG_PATH<< std::endl;
-			
-			Log.info() << "config_->localip : " <<config_->local_ip_<< std::endl;
-			
-			Log.info() << "config_->remoteip : " <<config_->remote_ip_<< std::endl;
-			
+		void BALLViewOpenSimPlugin::demandConfig()
+		{
+			QMessageBox msgBox;
+			msgBox.setText("The OpenSim plugin has not been configured correctly.");
+			msgBox.setInformativeText("Please provide correct addresses and ports");
+			msgBox.exec();
 
-			Log.info() << "config_->local_port_ : " <<config_->local_port_<< std::endl;
-			
-
-			Log.info() << "config_->remoteport : " <<config_->remote_port_<< std::endl;
-			
-		
-			
+			settings_->show();
 		}
 
 		bool BALLViewOpenSimPlugin::activate()
 		{
 			is_active_ = true;
-			
+
+			if (!checkConfig())
+			{
+				demandConfig();
+			}
+
+			server_ =  new BVOSServer(local_port_, this);
 			server_->start();
 
 			cmdThread_->start();
@@ -355,19 +337,52 @@ namespace BALL
 		{
 			is_active_ = false;
 
-			deactivate();
-			
-			getMainControl()->clearData();
+			// TODO: this is still fishy... sometimes,
+			//       it seems to hang...
+			server_->deactivate();
+			server_->terminate();
+			server_->wait();
+
+			delete(server_);
+			server_ = 0;
+
+			cmdThread_->deactivate();
+			cmdThread_->wait();
 
 			return true;
 		}
 
+		void BALLViewOpenSimPlugin::setReceiver(QWidget* receiver)
+		{
+			receiver_ = receiver;
+		}
 
+		const QPixmap* BALLViewOpenSimPlugin::getIcon() const
+		{
+			return &icon_;
+		}
+
+		QDialog* BALLViewOpenSimPlugin::getConfigDialog()
+		{
+			settings_->setRemoteServer(remote_host_, remote_port_);
+			settings_->setLocalServer(local_host_,   local_port_ );
+
+			return static_cast<QDialog*>(settings_);
+		}
 		
+		bool BALLViewOpenSimPlugin::hasMessage()
+		{
+			bool result;
+
+			pluginrwLock_.lockForRead();
+			result = ballviewmessage_queue_.empty();
+			pluginrwLock_.unlock();
+
+			return result;
+		}
+
 		void BALLViewOpenSimPlugin::onNotify(Message* message)
 		{
-			
-
 			// Here I need to put the messsages in a queue,
 			// lock it
 			// then, access the queue from different thread as show below
@@ -483,18 +498,11 @@ namespace BALL
 							
 							if(cm->getType() == CompositeMessage::NEW_COMPOSITE)
 							{
-
 								bwMessage.bwmessageEnum = NEW_COMPOSITE;
 
-								
 								pluginrwLock_.lockForWrite();
-
 								ballviewmessage_queue_.push(bwMessage);
-
 								pluginrwLock_.unlock();
-
-
-								
 
 							}else if(cm->getType() == CompositeMessage::CHANGED_COMPOSITE_HIERARCHY) 
 							{
@@ -693,18 +701,12 @@ namespace BALL
 		
 		void BALLViewOpenSimPlugin::sendAcknowledgement(const String& message)
 		{
-			
-			
 			server_->sendMessageString(message);
-
-
 		}
 
 		
 		void BALLViewOpenSimPlugin::handleMolecularModeling(std::vector<String> message)
 		{
-
-
 			if(message.empty())
 			{
 				Log.error()<<"Damnit! This is an empty message! " <<std::endl;
