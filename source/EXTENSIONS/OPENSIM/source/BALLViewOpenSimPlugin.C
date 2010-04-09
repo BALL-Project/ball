@@ -151,7 +151,7 @@ namespace BALL
 			bool result;
 
 			pluginrwLock_.lockForRead();
-			result = ballviewmessage_queue_.empty();
+			result = !(ballviewmessage_queue_.empty());
 			pluginrwLock_.unlock();
 
 			return result;
@@ -165,29 +165,24 @@ namespace BALL
 			// but this thread can not be created here , because everytime, there will be more threads
 			// create a thread out side.
 
-			if(message)
+			if (message)
 			{
-				if(RTTI::isKindOf<CompositeMessage>(*message))
+				if (RTTI::isKindOf<CompositeMessage>(*message))
 				{
 					CompositeMessage *cm = RTTI::castTo<CompositeMessage>(*message);
 					
-					if(cm != NULL)
+					if (cm != NULL)
 					{
 						AtomContainer* container = dynamic_cast<AtomContainer*>(cm->getComposite());
 
-						if(container != NULL)
+						if (container != NULL)
 						{
 						
 							HashMap<Handle, const Atom*> tmp_handle_to_atom;
-							
-				
 							HashMap<Handle, OpenSimTask::BondStruct> tmp_handle_to_bond;
-									
 
 							for (AtomIterator at_it = container->beginAtom(); +at_it; ++at_it)
 							{
-
-								
 								//Copy the atom's content into a new variable.
 								const Atom* atom_one = &*at_it;
 								
@@ -202,13 +197,10 @@ namespace BALL
 									{
 										// store the handle of original atom and map with copied atom
 										tmp_handle_to_atom[atom_one_handle]= copy_atom_one;
-										
 									}
-
 
 									for (Atom::BondIterator b_it = at_it->beginBond(); +b_it; ++b_it)
 									{
-										
 										const Atom* atom_two = b_it->getPartner(*atom_one);
 										
 										if(atom_two != NULL)
@@ -276,7 +268,6 @@ namespace BALL
 								pluginrwLock_.lockForWrite();
 								ballviewmessage_queue_.push(task);
 								pluginrwLock_.unlock();
-
 							}
 							else if(cm->getType() == CompositeMessage::CHANGED_COMPOSITE_HIERARCHY) 
 							{

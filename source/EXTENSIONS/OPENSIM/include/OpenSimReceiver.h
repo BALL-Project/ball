@@ -69,8 +69,6 @@ namespace BALL
 				};
 
 				OpenSimReceiver(Size port, BALLViewOpenSimPlugin* plugin);
-
-
 				~OpenSimReceiver();
 
 				virtual void run();
@@ -79,8 +77,9 @@ namespace BALL
 
 				void checkClientStatus();
 
-
 				void sendMessageString(const String& to_send);
+
+				bool hasMessage();
 
 			protected:
 

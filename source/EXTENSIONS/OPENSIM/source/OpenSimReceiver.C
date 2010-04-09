@@ -14,13 +14,15 @@ namespace BALL
 			  plugin_(plugin)
 		{
 		}
-
 		
 		OpenSimReceiver::~OpenSimReceiver()
 		{
-			funcThread_->deactivate();
-			funcThread_->wait();
-			delete(funcThread_);
+			if (funcThread_)
+			{
+				funcThread_->deactivate();
+				funcThread_->wait();
+				delete(funcThread_);
+			}
 		}
 
 		void OpenSimReceiver::run()
@@ -37,6 +39,7 @@ namespace BALL
 			funcThread_->wait();
 
 			delete(funcThread_);
+			funcThread_ = 0;
 
 			TCPServerThread::deactivate();
 		}
@@ -116,7 +119,6 @@ namespace BALL
 			}
 		}
 
-		
 		void OpenSimReceiver::sendMessageString(const String& to_send)
 		{
 			printf("send message\n");
@@ -129,6 +131,17 @@ namespace BALL
 
 				outstream.flush();
 			}
+		}
+
+		bool OpenSimReceiver::hasMessage()
+		{
+			bool result;
+
+			rwLock_.lockForRead();
+			result = !(incomingmessage_queue_.empty());
+			rwLock_.unlock();
+
+			return result;
 		}
 	}
 }

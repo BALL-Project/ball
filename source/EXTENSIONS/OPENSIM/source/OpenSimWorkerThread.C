@@ -26,16 +26,13 @@ namespace BALL
 
 			while (!terminate_requested_)
 			{
-				while( !bvplugin_->server_->incomingmessage_queue_.empty() ) {
-
+				if (bvplugin_->server_->hasMessage()) 
+				{
 					std::vector<String> data;
 
-					bvplugin_->server_->rwLock_.lockForRead();
-								
+					bvplugin_->server_->rwLock_.lockForWrite();
 					data = 	bvplugin_->server_->incomingmessage_queue_.front();		
-
 					bvplugin_->server_->incomingmessage_queue_.pop();
-								
 					bvplugin_->server_->rwLock_.unlock();
 
 					bvplugin_->handleMolecularModeling(data);
