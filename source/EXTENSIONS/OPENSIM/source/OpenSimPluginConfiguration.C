@@ -3,6 +3,7 @@
 #include <QtGui/qlineedit.h>
 
 #include <BALL/VIEW/KERNEL/common.h>
+#include <BALL/VIEW/DIALOGS/pluginDialog.h>
 
 namespace BALL
 {
@@ -17,6 +18,8 @@ namespace BALL
 			setObjectName(name);
 			setINIFileSectionName("OPENSIM_PLUGIN");
 			registerWidgets_();
+
+			PluginDialog::getInstance(0)->registerChildEntry(this);
 		}
 
 		OpenSimPluginConfiguration::~OpenSimPluginConfiguration()
@@ -33,6 +36,12 @@ namespace BALL
 		{
 			local_address->setText(address.c_str());
 			local_port->setText(QString::number(port, 10));
+		}
+
+		void OpenSimPluginConfiguration::readPreferenceEntries(const INIFile& ini)
+		{
+			PreferencesEntry::readPreferenceEntries(ini);
+			emit(accepted());
 		}
 	}
 }

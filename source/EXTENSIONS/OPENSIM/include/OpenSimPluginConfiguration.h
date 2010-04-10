@@ -38,6 +38,8 @@ namespace BALL
 				/// Destructor
 				virtual ~OpenSimPluginConfiguration();
 
+				virtual void readPreferenceEntries(const INIFile& ini);
+
 				void setRemoteServer(const String& address, Size port);	
 				void setLocalServer(const String& address,  Size port);	
 		};
