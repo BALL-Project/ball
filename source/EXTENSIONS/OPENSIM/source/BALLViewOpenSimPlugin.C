@@ -58,7 +58,10 @@ namespace BALL
 
 		BALLViewOpenSimPlugin::~BALLViewOpenSimPlugin()
 		{
-			deactivate();
+			if (is_active_)
+				deactivate();
+
+			delete(settings_);
 		}
 
 		void BALLViewOpenSimPlugin::settingsChanged()
@@ -107,7 +110,6 @@ namespace BALL
 
 			return true;
 		}
-
 		
 		bool BALLViewOpenSimPlugin::deactivate()
 		{
@@ -116,7 +118,6 @@ namespace BALL
 			// TODO: this is still fishy... sometimes,
 			//       it seems to hang...
 			server_->deactivate();
-			server_->terminate();
 			server_->wait();
 
 			delete(server_);
@@ -408,7 +409,6 @@ namespace BALL
 											pluginrwLock_.lockForWrite();
 											ballviewmessage_queue_.push(task);
 											pluginrwLock_.unlock();
-											
 										}
 									}
 								}

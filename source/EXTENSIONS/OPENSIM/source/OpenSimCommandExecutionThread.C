@@ -13,6 +13,7 @@ namespace BALL
 		
 		OpenSimCommandExecutionThread::~OpenSimCommandExecutionThread()
 		{
+			deactivate();
 		}
 
 		void OpenSimCommandExecutionThread::deactivate()

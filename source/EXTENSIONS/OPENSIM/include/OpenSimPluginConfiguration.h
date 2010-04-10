@@ -9,7 +9,7 @@
 # include <BALL/COMMON/global.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
+#ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY_H
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
 

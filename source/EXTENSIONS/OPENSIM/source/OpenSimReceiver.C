@@ -17,12 +17,8 @@ namespace BALL
 		
 		OpenSimReceiver::~OpenSimReceiver()
 		{
-			if (funcThread_)
-			{
-				funcThread_->deactivate();
-				funcThread_->wait();
-				delete(funcThread_);
-			}
+			if (is_running_)
+				deactivate();
 		}
 
 		void OpenSimReceiver::run()
@@ -35,13 +31,16 @@ namespace BALL
 
 		void OpenSimReceiver::deactivate()
 		{
-			funcThread_->deactivate();
-			funcThread_->wait();
-
-			delete(funcThread_);
-			funcThread_ = 0;
-
 			TCPServerThread::deactivate();
+
+			if (funcThread_)
+			{
+				funcThread_->deactivate();
+				funcThread_->wait();
+
+				delete(funcThread_);
+				funcThread_ = 0;
+			}
 		}
 
 		void OpenSimReceiver::handleAsyncConnection()
@@ -49,14 +48,13 @@ namespace BALL
 			// here I can cehck the status of the opensim client and set (server_->is_acknowledged to true ??
 			// this should be done only once (first time connection is made)
 
-			while (connected_stream_.good())
+			while (connected_stream_.good() && isRunning())
 			{
 				String buffer;
 				buffer.getline(connected_stream_);
 
 				if(!buffer.isEmpty())
 				{
-
 					std::vector<String> split;
 
 					buffer.split(split, ";");
@@ -121,12 +119,10 @@ namespace BALL
 
 		void OpenSimReceiver::sendMessageString(const String& to_send)
 		{
-			printf("send message\n");
 			TCPIOStream outstream(plugin_->getRemoteHost(), plugin_->getRemotePort());
 
 			if (outstream.good())
 			{
-			printf("send message %s\n", to_send.c_str());
 				outstream << to_send << std::endl;
 
 				outstream.flush();
