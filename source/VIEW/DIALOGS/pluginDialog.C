@@ -151,6 +151,16 @@ namespace BALL
 			PluginManager::instance().unloadAllPlugins();
 		}
 
+		void PluginDialog::writePreferenceEntries(INIFile& inifile)
+		{
+			PreferencesEntry::writePreferenceEntries(inifile);
+
+			for (std::list<PreferencesEntry*>::iterator child_it = child_entries_.begin(); child_it != child_entries_.end(); ++child_it)
+			{
+				(*child_it)->writePreferenceEntries(inifile);
+			}
+		}
+
 		void PluginDialog::readPreferenceEntries(const INIFile& inifile)
 		{
 			PreferencesEntry::readPreferenceEntries(inifile);
@@ -161,6 +171,11 @@ namespace BALL
 			for (Size i=0; i<plugin_dirs.size(); i++)
 			{
 				plugin_directories_view->addItem(plugin_dirs[i]);
+			}
+
+			for (std::list<PreferencesEntry*>::iterator child_it = child_entries_.begin(); child_it != child_entries_.end(); ++child_it)
+			{
+				(*child_it)->readPreferenceEntries(inifile);
 			}
 
 			if (activate_all_plugins_check_box->isChecked())
@@ -283,6 +298,17 @@ namespace BALL
 				PluginManager::instance().startPlugin(active_plugin);
 				plugin_toggle_button->setText("Deactivate");
 			}
+		}
+
+		void PluginDialog::registerChildEntry(PreferencesEntry* child)
+		{
+			child_entries_.push_back(child);
+		}
+
+		void PluginDialog::unregisterChildEntry(PreferencesEntry* child)
+		{
+			std::list<PreferencesEntry*>::iterator child_it = std::find(child_entries_.begin(), child_entries_.end(), child);
+			child_entries_.erase(child_it);
 		}
 
 	}
