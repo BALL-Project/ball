@@ -108,6 +108,7 @@ namespace BALL
 			virtual void deactivate();
 			virtual void activate_async();
 			virtual void handleAsyncConnection();
+			virtual void handleClose();
 
 			/** Returns the state of the server. **/
 			bool isRunning();
