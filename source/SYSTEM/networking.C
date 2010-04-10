@@ -90,7 +90,7 @@ namespace BALL
 
 				activate_async();
 
-				while (restart_)
+				while (restart_ && is_running_)
 				{
 					activate_async();
 				}
@@ -108,7 +108,14 @@ namespace BALL
 	void TCPServerThread::deactivate()
 	{
 		is_running_ = false;
+		io_service_.post(boost::bind(&TCPServerThread::handleClose, this));
+	}
+
+	void TCPServerThread::handleClose()
+	{
 		acceptor_.close();
+		connected_stream_.close();
+		io_service_.stop();
 	}
 
 	void TCPServerThread::activate_async()
