@@ -56,10 +56,11 @@ namespace BALL
 				public PreferencesEntry
 		{
 			Q_OBJECT
-
-			BALL_EMBEDDABLE(PluginDialog, ModularWidget)
 			
 			public:
+
+				BALL_EMBEDDABLE(PluginDialog, ModularWidget)
+
 				PluginDialog(QWidget* parent, const char *name = "PluginDialog");
 				virtual ~PluginDialog() {}
 
@@ -76,7 +77,11 @@ namespace BALL
 			*/
 			virtual void finalizeWidget(MainControl& main_control);
 
+			virtual void writePreferenceEntries(INIFile& inifile);
 			virtual void readPreferenceEntries(const INIFile& inifile);
+
+			virtual void registerChildEntry(PreferencesEntry* child);
+			virtual void unregisterChildEntry(PreferencesEntry* child);
 
 			protected slots:
 				virtual void addPluginDirectory();
@@ -90,6 +95,8 @@ namespace BALL
 			private:
 				QModelIndex active_index_;
 				PluginModel model_;
+
+				std::list<PreferencesEntry*> child_entries_;
 		};
 
 	}
