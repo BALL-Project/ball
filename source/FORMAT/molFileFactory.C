@@ -1,6 +1,7 @@
 #include <BALL/FORMAT/molFileFactory.h>
 
 #include <BALL/FORMAT/genericMolFile.h>
+#include <BALL/FORMAT/antechamberFile.h>
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/FORMAT/MOLFile.h>
@@ -17,8 +18,10 @@ namespace BALL
 	{
 		String tmp = name.right(5);
 		tmp.toLower(0, 5);
-
-		if(tmp.hasSuffix(".pdb") || tmp.hasSuffix(".ent") || tmp.hasSuffix(".brk")) {
+		
+		if (tmp.hasSuffix(".ac")) {
+			return new AntechamberFile(name, open_mode);
+		} else if(tmp.hasSuffix(".pdb") || tmp.hasSuffix(".ent") || tmp.hasSuffix(".brk")) {
 			return new PDBFile(name, open_mode);
 		} else if(tmp.hasSuffix(".hin")) {
 			return new HINFile(name, open_mode);

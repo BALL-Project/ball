@@ -14,6 +14,7 @@
 #include <BALL/FORMAT/MOLFile.h>
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/FORMAT/SDFile.h>
+#include <BALL/FORMAT/antechamberFile.h>
 #include <BALL/FORMAT/XYZFile.h>
 #include <BALL/MATHS/simpleBox3.h>
 #include <BALL/KERNEL/system.h>
@@ -83,18 +84,19 @@ void MolecularFileDialog::readFiles()
 
 String MolecularFileDialog::getSupportedFileFormats() const
 {
-	return String("*.pdb *.brk *.ent *.hin *.mol *.mol2 *.sdf *.xyz");
+	return String("*.pdb *.brk *.ent *.hin *.mol *.mol2 *.sdf  *.ac *.xyz");
 }
 
 String MolecularFileDialog::getSupportedFileFormatsList() const
 {
 	String sl;
-	sl += "Molecular files (*.pdb *.hin *.mol *.mol2 *.sdf)\n";
+	sl += "Molecular files (*.pdb *.hin *.mol *.mol2 *.sdf *.ac)\n";
 	sl += "PDB files (*.*)\n";
 	sl += "HIN files (*.*)\n";
 	sl += "MOL files (*.*)\n";
 	sl += "MOL2 files (*.*)\n";
 	sl += "SD files (*.*)\n";
+	sl += "AC files (*.*)\n";
 	sl += "XYZ files (*.*)";
 	return sl;
 }
@@ -135,6 +137,7 @@ System* MolecularFileDialog::openMolecularFile(const String& filename,
 		return 0;
 	}
 
+	// TODO substitue by GenericMolFile* file = MolFileFactory::open(filename);
 	if (filetype.hasSubstring("pdb") || filetype.hasSubstring("PDB") ||
 			filetype.hasSubstring("brk") || filetype.hasSubstring("BRK") ||
 			filetype.hasSubstring("ent") || filetype.hasSubstring("ENT"))
@@ -160,6 +163,11 @@ System* MolecularFileDialog::openMolecularFile(const String& filename,
 					 filetype.hasSubstring("sdf"))
 	{
 		return readSDFile(filename, system_name);
+	}	
+	else if (filetype.hasSubstring("AC") ||
+					 filetype.hasSubstring("ac"))
+	{
+		return readACFile(filename, system_name);
 	}
 	else if (filetype.hasSubstring("XYZ") ||
 					 filetype.hasSubstring("xyz"))
@@ -239,6 +247,10 @@ bool MolecularFileDialog::writeFile()
 	else if (filter.hasSubstring("SDF") || filter.hasSubstring("sdf"))
 	{
 		result = writeSDFile(filename, system);
+	}	
+	else if (filter.hasSubstring("AC") || filter.hasSubstring("ac"))
+	{
+		result = writeACFile(filename, system);
 	}
 	else if (filter.hasSubstring("XYZ") || filter.hasSubstring("xyz"))
 	{
@@ -354,6 +366,24 @@ bool MolecularFileDialog::writeSDFile(String filename, const System& system)
 	{
 		Log.error() << e << std::endl;
 		setStatusbarText("Writing of SD file failed, see logs!", true);
+		return false;
+	}
+
+	return true;		
+}
+
+bool MolecularFileDialog::writeACFile(String filename, const System& system)
+{
+	try
+	{
+		AntechamberFile file(filename, std::ios::out);
+		file << system;
+		file.close();
+	}
+	catch(Exception::GeneralException& e)
+	{
+		Log.error() << e << std::endl;
+		setStatusbarText("Writing of AC file failed, see logs!", true);
 		return false;
 	}
 
@@ -531,6 +561,30 @@ System* MolecularFileDialog::readSDFile(String filename, String system_name)
 	return system;
 }
 
+
+System* MolecularFileDialog::readACFile(String filename, String system_name)
+{
+	setStatusbarText("reading AC file...", true);
+
+	System* system = new System();
+
+	try
+	{
+		AntechamberFile ac_file(filename);
+		ac_file >> *system;
+		ac_file.close();
+	}
+	catch(Exception::GeneralException& e)
+	{
+		setStatusbarText("Reading of AC file failed, see logs!", true);
+		delete system;
+		return 0;
+	}
+
+	if (!finish_(filename, system_name, system)) return 0;
+	return system;
+}
+
 System* MolecularFileDialog::readXYZFile(String filename, String system_name)
 {
 	setStatusbarText("reading XYZ file...", true);
@@ -651,6 +705,11 @@ System* MolecularFileDialog::openMOL2File()
 System* MolecularFileDialog::openSDFile()
 {
 	return openFile_("SDF");
+}
+
+System* MolecularFileDialog::openACFile()
+{
+	return openFile_("AC");
 }
 
 System* MolecularFileDialog::openXYZFile()

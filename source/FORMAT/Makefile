@@ -23,6 +23,7 @@ PARSER_SOURCES= \
 
 
 CPP_SOURCES=\
+	antechamberFile.C\
 	bruker1DFile.C\
 	bruker2DFile.C\
 	DCDFile.C\

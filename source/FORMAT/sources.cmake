@@ -1,5 +1,6 @@
 ### list all filenames of the directory here ###
 SET(SOURCES_LIST
+	antechamberFile.C
 	bruker1DFile.C
 	bruker2DFile.C
 	DCDFile.C

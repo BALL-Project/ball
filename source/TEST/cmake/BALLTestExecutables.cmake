@@ -170,6 +170,7 @@ SET(BALL_NMR_TESTS
 )
 
 SET(BALL_FORMATS_TESTS
+	AntechamberFile_test
 	LineBasedFile_test
 	BinaryFileAdaptor_test
 	Bruker1DFile_test

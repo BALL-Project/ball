@@ -109,6 +109,9 @@ namespace BALL
 
 			///
 			System* openSDFile();
+			
+			///
+			System* openACFile();
 
 			///
 			System* openXYZFile();
@@ -132,7 +135,11 @@ namespace BALL
 			/** Read a SD file
 			 */
 			System* readSDFile(String filename, String system_name);
-
+			
+			/** Read an AC file
+			 */
+			System* readACFile(String filename, String system_name);
+			
 			/** Read a XYZ file
 			 */
 			System* readXYZFile(String filename, String system_name);
@@ -156,6 +163,10 @@ namespace BALL
 			/** Write a SD file
 			 */
 			bool writeSDFile(String filename, const System& system);
+
+			/** Write an AC file
+			 */
+			bool writeACFile(String filename, const System& system);
 
 			/** Write a XYZ file
 			 */
