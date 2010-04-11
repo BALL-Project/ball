@@ -19,12 +19,15 @@ SET(EXECUTABLES_LIST
 	pdb2dcd
 	pdb2hin
 	reconstruct_fragment
-	rigid_docking
 	solvent_accessibility
 )	
 
-IF (BALL_HAS_MPI)
-	LIST(APPEND EXECUTABLES_LIST geometricFit_slave)
+IF (BALL_HAS_FFTW)
+	LIST(APPEND EXECUTABLES_LIST rigid_docking)
+
+	IF (BALL_HAS_MPI)
+		LIST(APPEND EXECUTABLES_LIST geometricFit_slave)
+	ENDIF()
 ENDIF()
 
 SET(UTILITIES_EXECUTABLES ${UTILITIES_EXECUTABLES} ${EXECUTABLES_LIST})
