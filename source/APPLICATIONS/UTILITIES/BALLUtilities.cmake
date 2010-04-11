@@ -15,6 +15,7 @@ SET(EXECUTABLES_LIST
 	create_random_numbers
 	dcd2dcd
 	export_fragment
+	file_converter
 	hin2mol2
 	pdb2amber_naming
 	pdb2dcd
