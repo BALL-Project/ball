@@ -1,0 +1,2229 @@
+#include <BALL/COMMON/global.h>
+
+#include "../include/BALLViewOpenSimPlugin.h"
+
+
+#include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/SYSTEM/path.h>
+#include <BALL/VIEW/KERNEL/shortcutRegistry.h>
+
+#include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/VIEW/KERNEL/threads.h>
+#include <BALL/VIEW/PLUGIN/inputDevPluginHandler.h>
+
+#include <BALL/DATATYPE/hashMap.h>
+
+
+// localhost for :  Gromacs in local machine
+// 136.187.33.109 : Gromacs in Main server 
+
+#define REMOTE_IP "136.187.33.109"  
+
+#define REMOTE_PORT "4712"
+
+#define LOCAL_PORT "4711"
+
+// Only when we run ballview from VS IDE:
+//#define CONFIG_PATH ".\\..\\Release\\ballviewplugin.configuration.txt"
+#define CONFIG_PATH "/home/andreas/BALL/build_opensim/ballviewplugin.configuration.txt"
+
+
+// Only when we release the code:
+//#define CONFIG_PATH "\\ballviewplugin.configuration.txt"
+
+
+Q_EXPORT_PLUGIN2(pluginOpenSimPlugin, BALL::VIEW::BALLViewOpenSimPlugin)
+
+
+
+namespace BALL
+{
+	namespace VIEW
+	{
+
+
+
+		/***********************************************************************************
+		*********************** Start Multi Threading Implementation*****************************
+		***********************************************************************************/
+
+		BALLViewOpenSimPlugin::BVWorkerThread::BVWorkerThread(BALLViewOpenSimPlugin* plugin)
+		{
+			bvplugin_ =  plugin;
+			
+		}
+
+		
+		BALLViewOpenSimPlugin::BVWorkerThread::~BVWorkerThread()
+		{
+			 
+		}
+
+
+	
+		BALLViewOpenSimPlugin::BVCommandExecutionThread::BVCommandExecutionThread(BALLViewOpenSimPlugin* plugin/*,Message* message*/)
+		{
+			bvcmdplugin_ =  plugin;
+			
+		}
+
+		
+		BALLViewOpenSimPlugin::BVCommandExecutionThread::~BVCommandExecutionThread()
+		{
+			 
+		}
+
+
+		
+		void BALLViewOpenSimPlugin::BVCommandExecutionThread::run()
+		{
+		
+			
+
+			for(;;)
+			{
+				while( !bvcmdplugin_->ballviewmessage_queue_.empty() )
+				{
+					bvcmdplugin_->pluginrwLock_.lockForRead();
+
+					BallviewMessage message = bvcmdplugin_->ballviewmessage_queue_.front();		
+
+					bvcmdplugin_->ballviewmessage_queue_.pop();	
+					
+					if(message.bwmessageEnum == NEW_COMPOSITE)
+					{		
+						bvcmdplugin_->handleNewComposite(message);
+
+					}else if(message.bwmessageEnum == CHANGED_COMPOSITE_HIERARCH) 
+					{
+						// Dont use this 
+						//bvcmdplugin_->handleChangedComposite(message);
+
+					}else if(message.bwmessageEnum == REMOVED_COMPOSITE )
+					{
+						bvcmdplugin_->handleRemovedComposite(message);
+
+					}else if(message.bwmessageEnum == REPRESENTATION)
+					{
+						bvcmdplugin_->handleRepresentation(message);
+					}
+					
+				
+					bvcmdplugin_->pluginrwLock_.unlock();
+
+				}
+			
+			}
+	
+		}
+		
+		void BALLViewOpenSimPlugin::BVWorkerThread::run()
+		{
+
+			for(;;)
+			{
+			while( !bvplugin_->server_->incomingmessage_queue_.empty() ) {
+
+					std::vector<String> data;
+
+					bvplugin_->server_->rwLock_.lockForRead();
+								
+					data = 	bvplugin_->server_->incomingmessage_queue_.front();		
+
+					bvplugin_->server_->incomingmessage_queue_.pop();
+								
+					bvplugin_->server_->rwLock_.unlock();
+
+					bvplugin_->handleMolecularModeling(data);
+				}
+			}
+				 
+		}
+
+
+
+		
+		/***********************************************************************************
+		*********************** End Multi Threading Implementation*****************************
+		***********************************************************************************/
+
+
+		/***********************************************************************************
+		*********************** Start BVOSServer Implementation*****************************
+		***********************************************************************************/
+
+		BALLViewOpenSimPlugin::BVOSServer::BVOSServer(Size port, BALLViewOpenSimPlugin* plugin)
+			: TCPServerThread(port),
+			  is_acknowledged_(false),
+			  is_Process_Done_(true),
+			  rwLock_(),
+			  plugin_(plugin)
+
+
+		{
+			 funcThread_ = new BVWorkerThread(plugin_);
+			 funcThread_->start();
+			 
+		}
+
+		
+		BALLViewOpenSimPlugin::BVOSServer::~BVOSServer()
+		{
+			 
+		}
+
+		
+		void BALLViewOpenSimPlugin::BVOSServer::handleAsyncConnection()
+		{
+			
+
+
+			// here I can cehck the status of the opensim client and set (server_->is_acknowledged to true ??
+			// this should be done only once (first time connection is made)
+
+			while (connected_stream_.good())
+			{
+				String buffer;
+				buffer.getline(connected_stream_);
+
+				if(!buffer.isEmpty())
+				{
+
+					std::vector<String> split;
+
+					buffer.split(split, ";");
+
+					if (split.size() == 0)
+						continue;
+
+					Size command_index(split[0].trim().toInt());
+
+
+					if(command_index == ACKNOWLEDGEMENT )
+					{
+						if (split.size() != 2)
+							{
+								Log.error() << "Damnit! This is not an acknowledgement!";
+								break;
+							}
+						
+						is_acknowledged_ = true;
+					}
+					else 
+					{
+						//ADD_ATOM, ADD_BOND, REMOVE_ATOM, REMOVE_BOND, 
+						//SATURATE_FULL_WITH_HYDROGENS
+						//RUN_MINIMIZATION,CHANGE_FORCE_FIELD,ADD_MOLECULE
+
+						
+
+						rwLock_.lockForWrite();
+						
+						incomingmessage_queue_.push(split);
+						
+						rwLock_.unlock();
+
+						
+					}
+					
+					
+					
+				}else
+				{
+					Log.error() << "Damnit! An empty buffer recieved!";
+					break;
+
+				}
+
+				
+			}
+		}
+
+		
+		void BALLViewOpenSimPlugin::BVOSServer::checkClientStatus()
+		{
+
+			// Todo
+			// first need to check if connection exist?
+			// Not sure how to do that
+			
+			TCPIOStream outstream(plugin_->config_->remote_ip_, plugin_->config_->remote_port_);
+
+			if (outstream.good())
+			{
+				outstream << CHECK_STATUS  << std::endl	;
+			}
+		}
+
+		
+		void BALLViewOpenSimPlugin::BVOSServer::sendMessageString(const String& to_send)
+		{
+
+
+			TCPIOStream outstream(plugin_->config_->remote_ip_, plugin_->config_->remote_port_);
+
+			if (outstream.good())
+			{
+				outstream << to_send << std::endl;
+
+				outstream.flush();
+			}
+		}
+		
+		
+		/***********************************************************************************
+		****************************End BVOSServer Implementation***************************
+		***********************************************************************************/
+
+		
+		/***********************************************************************************
+		****************************Start BALLViewOpenSimPlugin Implementation**************
+		***********************************************************************************/
+	
+		BALLViewOpenSimPlugin::BALLViewOpenSimPlugin()
+			 : QObject(VIEW::getMainControl()),
+			  ModularWidget(),
+			  cmdThread_(new BVCommandExecutionThread(this)),
+			  pluginrwLock_ (),
+			  is_active_(false),
+			  molStructPlugin_ (new MolecularStructureContainer()),
+			  molModelingPlugin_(new MolecularModelingContainer()),
+			  molDynamicsPlugin_(new MolecularDynamicsContainer())
+		{
+			registerWidget(this);
+
+			config_ = new CommunicationConfiguration();
+
+
+
+			
+			
+			// Only when we release the code: this does not work on all OS?
+			/*
+			
+			char* buffer = NULL;
+			char* path = NULL;
+
+			
+		    if( (buffer = _getcwd( NULL, 0 )) == NULL )
+			{
+			  perror( "_getcwd error" );
+			}
+			else
+		    {
+			  path = strcat(buffer , CONFIG_PATH);
+
+		    }
+
+			config_->ParseXmlFile(path);
+
+			*/
+
+			config_->ParseXmlFile(CONFIG_PATH);
+		
+			server_ =  new BVOSServer(config_->local_port_, this);
+
+			//Log.info() << "CONFIG_PATH : " <<CONFIG_PATH<< std::endl;
+			
+			Log.info() << "config_->localip : " <<config_->local_ip_<< std::endl;
+			
+			Log.info() << "config_->remoteip : " <<config_->remote_ip_<< std::endl;
+			
+
+			Log.info() << "config_->local_port_ : " <<config_->local_port_<< std::endl;
+			
+
+			Log.info() << "config_->remoteport : " <<config_->remote_port_<< std::endl;
+			
+		
+			
+		}
+
+		bool BALLViewOpenSimPlugin::activate()
+		{
+			is_active_ = true;
+			
+			server_->start();
+
+			cmdThread_->start();
+
+			return true;
+		}
+
+		
+		bool BALLViewOpenSimPlugin::deactivate()
+		{
+			is_active_ = false;
+
+			deactivate();
+			
+			getMainControl()->clearData();
+
+			return true;
+		}
+
+
+		
+		void BALLViewOpenSimPlugin::onNotify(Message* message)
+		{
+			
+
+			// Here I need to put the messsages in a queue,
+			// lock it
+			// then, access the queue from different thread as show below
+			// but this thread can not be created here , because everytime, there will be more threads
+			// create a thread out side.
+
+			if(message)
+			{
+				if(RTTI::isKindOf<CompositeMessage>(*message))
+				{
+					CompositeMessage *cm = RTTI::castTo<CompositeMessage>(*message);
+					
+					if(cm != NULL)
+					{
+						AtomContainer* container = dynamic_cast<AtomContainer*>(cm->getComposite());
+
+						if(container != NULL)
+						{
+						
+							HashMap<Handle, const Atom*> tmp_handle_to_atom;
+							
+				
+							HashMap<Handle, bondStructType> tmp_handle_to_bond;
+									
+
+							for (AtomIterator at_it = container->beginAtom(); +at_it; ++at_it)
+							{
+
+								
+								//Copy the atom's content into a new variable.
+								const Atom* atom_one = &*at_it;
+								
+								if(atom_one != NULL)
+								{
+									//get the handle of original atom, before copying
+									Handle atom_one_handle = atom_one->getHandle();
+
+									const Atom* copy_atom_one = new Atom(*atom_one,true);
+
+									if(!tmp_handle_to_atom.has(atom_one_handle) && copy_atom_one != NULL)
+									{
+										// store the handle of original atom and map with copied atom
+										tmp_handle_to_atom[atom_one_handle]= copy_atom_one;
+										
+									}
+
+
+									for (Atom::BondIterator b_it = at_it->beginBond(); +b_it; ++b_it)
+									{
+										
+										const Atom* atom_two = b_it->getPartner(*atom_one);
+										
+										if(atom_two != NULL)
+										{
+											//get the handle of original atom
+											Handle atom_two_handle = atom_two->getHandle();
+
+											const Atom* copy_atom_two = new Atom(*atom_two,true);
+
+											if(!tmp_handle_to_atom.has(atom_two_handle) && copy_atom_two != NULL)
+											{
+												// store the handle of original atom and map with copied atom
+												tmp_handle_to_atom[atom_two_handle]= copy_atom_two;
+											}
+
+											const Bond* bond = atom_one->getBond(*atom_two);
+
+											
+											Handle bond_handle = -1;
+
+											if(bond != NULL)
+											{
+												//get the handle of original bond
+												bond_handle = bond->getHandle();
+
+												const Bond* copy_bond = new Bond(*bond,true);
+
+											
+												BondStruct bondStruct = BondStruct();
+
+												// copied bond
+												bondStruct.bond = copy_bond;
+
+												bondStruct.atom_one_handle = atom_one_handle;
+
+												bondStruct.atom_two_handle = atom_two_handle;
+												
+
+												if(!tmp_handle_to_bond.has(bond_handle) && bond_handle != -1)
+												{
+													// store the handle of original bond and map with copied bond
+													tmp_handle_to_bond[bond_handle] = bondStruct;
+
+												}
+											}
+										}
+
+
+									}
+								}
+
+							}
+
+
+							BallviewMessage bwMessage = BallviewMessage();
+
+							// ToDo validation if hashmap isempty?
+
+							bwMessage.handle_to_atom_ = tmp_handle_to_atom;
+
+							bwMessage.handle_to_bond_ = tmp_handle_to_bond;
+
+							
+							if(cm->getType() == CompositeMessage::NEW_COMPOSITE)
+							{
+
+								bwMessage.bwmessageEnum = NEW_COMPOSITE;
+
+								
+								pluginrwLock_.lockForWrite();
+
+								ballviewmessage_queue_.push(bwMessage);
+
+								pluginrwLock_.unlock();
+
+
+								
+
+							}else if(cm->getType() == CompositeMessage::CHANGED_COMPOSITE_HIERARCHY) 
+							{
+
+								bwMessage.bwmessageEnum = CHANGED_COMPOSITE_HIERARCH;
+
+								pluginrwLock_.lockForWrite();
+
+								ballviewmessage_queue_.push(bwMessage);
+
+								pluginrwLock_.unlock();
+
+							}
+							else if(cm->getType() == CompositeMessage::REMOVED_COMPOSITE )
+							{
+
+								bwMessage.bwmessageEnum = REMOVED_COMPOSITE;
+						
+								pluginrwLock_.lockForWrite();
+
+								ballviewmessage_queue_.push(bwMessage);
+
+								pluginrwLock_.unlock();
+							}
+							
+								
+
+							
+						}
+					}
+
+
+
+				}else if (RTTI::isKindOf<RepresentationMessage>(*message))
+				{
+
+					RepresentationMessage* rm = RTTI::castTo<RepresentationMessage>(*message);
+
+					if (rm->getType() == RepresentationMessage::FINISHED_UPDATE)
+					{
+						if(rm != NULL)
+						{
+							Representation* r = rm->getRepresentation();
+						
+							if(r != NULL &&  !r->isHidden())
+							{
+								Composite const * composite = NULL;
+
+							
+								if (r->getComposites().size() > 0)
+								{
+
+									composite = *(r->getComposites().begin());
+
+								}
+
+
+								if(composite != NULL)
+								{
+									
+									if (RTTI::isKindOf<const AtomContainer>(*composite))
+									{
+
+										AtomContainer* container = RTTI::castTo<AtomContainer>(*composite);
+
+										if(container != NULL)
+										{
+											HashMap<Handle, const Atom*> tmp_handle_to_atom;
+										
+											HashMap<Handle, bondStructType> tmp_handle_to_bond;
+										
+											
+											for (AtomIterator at_it = container->beginAtom(); +at_it; ++at_it)
+											{
+
+												
+												//Copy the atom's content into a new variable.
+												const Atom* atom_one = &*at_it;
+												
+												if(atom_one != NULL)
+												{
+													//get the handle of original atom
+													Handle atom_one_handle = atom_one->getHandle();
+
+													const Atom* copy_atom_one = new Atom(*atom_one,true);
+
+													if(!tmp_handle_to_atom.has(atom_one_handle) && copy_atom_one != NULL)
+													{
+														// store the handle of original atom and map with copied atom
+														tmp_handle_to_atom[atom_one_handle]= copy_atom_one;
+														
+													}
+
+
+													for (Atom::BondIterator b_it = at_it->beginBond(); +b_it; ++b_it)
+													{
+														
+														const Atom* atom_two = b_it->getPartner(*atom_one);
+
+														
+
+														if(atom_two != NULL)
+														{
+															//get the handle of original atom
+															Handle atom_two_handle = atom_two->getHandle();
+
+															const Atom* copy_atom_two = new Atom(*atom_two,true);
+
+															if(!tmp_handle_to_atom.has(atom_two_handle) && copy_atom_two != NULL)
+															{
+																// store the handle of original atom and map with copied atom
+																tmp_handle_to_atom[atom_two_handle]= copy_atom_two;
+															}
+
+															const Bond* bond = atom_one->getBond(*atom_two);
+
+															
+															Handle bond_handle = -1;
+
+															if(bond != NULL)
+															{
+
+																//get the handle of original bond	
+																bond_handle = bond->getHandle();
+															
+																const Bond* copy_bond = new Bond(*bond,true);
+
+
+																if(!tmp_handle_to_bond.has(bond_handle) && bond_handle != -1)
+																{
+
+																	BondStruct bondStruct = BondStruct();
+
+																	// copied bond
+																	bondStruct.bond = copy_bond;
+
+																	bondStruct.atom_one_handle = atom_one_handle;
+
+																	bondStruct.atom_two_handle = atom_two_handle;
+
+																	
+																	if(!tmp_handle_to_bond.has(bond_handle) && bond_handle != -1)
+																	{
+																		// store the handle of original bond and map with copied bond
+																		tmp_handle_to_bond[bond_handle] = bondStruct;
+
+																	}
+																	
+																}
+															}
+														}
+
+
+													}
+												}
+
+											}
+
+
+										
+											
+											
+											BallviewMessage bwMessage = BallviewMessage();
+
+											bwMessage.bwmessageEnum = REPRESENTATION;
+
+											// ToDo validation if hashmap isempty?
+
+											bwMessage.handle_to_atom_ = tmp_handle_to_atom;
+
+											bwMessage.handle_to_bond_ = tmp_handle_to_bond;
+
+									
+											pluginrwLock_.lockForWrite();
+
+											ballviewmessage_queue_.push(bwMessage);
+
+											pluginrwLock_.unlock();
+
+											
+										}
+									}
+								}
+							}
+						}
+					}
+
+				}
+				
+			}
+						
+			
+		
+		}
+
+		
+		void BALLViewOpenSimPlugin::sendAcknowledgement(const String& message)
+		{
+			
+			
+			server_->sendMessageString(message);
+
+
+		}
+
+		
+		void BALLViewOpenSimPlugin::handleMolecularModeling(std::vector<String> message)
+		{
+
+
+			if(message.empty())
+			{
+				Log.error()<<"Damnit! This is an empty message! " <<std::endl;
+				return;
+			}
+
+			Size command_index(message[0].trim().toInt());
+					
+			server_->is_Process_Done_ = false;
+
+			switch (command_index)
+			{
+				
+				case(BVOSServer::ADD_ATOM):
+				{
+						if (message.size() != 9)
+						{
+							Log.error() << "Damnit! This is not an add atom command!";
+							break;
+						}	
+
+						String element(message[1]);
+
+						Vector3 position(message[2].toFloat(),
+										 message[3].toFloat(),
+										 message[4].toFloat());
+
+						float radius(message[5].toFloat());
+
+						
+						ColorRGBA color(message[6].toInt(), 
+										message[7].toInt(), 
+										message[8].trim().toInt());
+
+
+					
+						Index atom_index_ = molStructPlugin_->addAtom( element, position, radius, color);
+
+
+				
+						if( atom_index_ != -1)
+						{
+							String acknowledgement_string(BVOSServer::ACKNOWLEDGE_ADD_ATOM);
+
+
+							acknowledgement_string +=  String(";") +  String(atom_index_) 
+													  + String(";") + String(element) 
+													  + String(";" )+ String(position.x) 
+													  + String(";") + String(position.y) 
+													  + String(";") + String(position.z) 
+													  + String(";") + String(radius) 
+													  + String(";") + String((int)color.getRed())
+													  + String(";") + String((int)color.getBlue())
+													  + String(";") + String((int)color.getGreen());
+
+							Log.info() << "ADD_ATOM:acknowledgement_string Message @handleMolecularModeling from OpenSim to BALLView  : "<<acknowledgement_string<<std::endl;
+
+
+							sendAcknowledgement(acknowledgement_string);
+						}
+						else
+						{
+							Log.info() << "ADD_ATOM: Failed"<<std::endl;
+							// what message should we send to OpenMol
+						}
+					break;
+				}
+				case (BVOSServer::ADD_BOND):
+				{
+
+						if(message.size() != 4)
+						{
+							Log.error()<<"Damnit! This is not an add bond command"<<std::endl;
+							break;
+						}
+
+						
+
+						Index atom_one_index = message[1].toInt();
+						Index atom_two_index = message[2].toInt();
+
+						
+
+						Size bond_order = message[3].trim().toInt();
+
+						Index bond_index_  = molStructPlugin_->addBondByAtomIndex(atom_one_index, atom_two_index, bond_order);
+					
+						if(bond_index_ != -1)
+						{
+					
+							String acknowledgement_string(BVOSServer::ACKNOWLEDGE_ADD_BOND);
+
+							acknowledgement_string +=	String(";") + String(bond_index_) 
+													  + String(";") + String(atom_one_index)
+													  + String(";") + String(atom_two_index) 
+													  + String(";")+ String(bond_order);
+
+							Log.info() << "ADD_BOND:acknowledgement_string Message @handleMolecularModeling from OpenSim to BALLView  : "<<acknowledgement_string<<std::endl;
+
+
+							sendAcknowledgement(acknowledgement_string);
+						}
+						else
+						{
+							Log.info() << "ADD_BOND: Failed "<<std::endl;
+							// what message should we send to OpenMol
+						}
+					break;
+				}
+				case (BVOSServer::REMOVE_ATOM):
+				{
+						if(message.size()!= 2)
+						{
+							Log.error()<<"Damnit! This is not an atom remval command"<<std::endl;
+							break;
+						}
+
+						Index atom_index_ = message[1].trim().toInt();
+
+						molStructPlugin_->removeAtomByIndex(atom_index_);
+
+
+						String acknowledgement_string(BVOSServer::ACKNOWLEDGE_REMOVE_ATOM);
+
+						acknowledgement_string += String(";") + String(atom_index_)  ;
+
+						Log.info() << "REMOVE_ATOM:acknowledgement_string Message @handleMolecularModeling from OpenSim to BALLView  : "<<acknowledgement_string<<std::endl;
+
+
+						sendAcknowledgement(acknowledgement_string);
+					}
+					break;
+
+				case (BVOSServer::REMOVE_BOND):
+				{
+
+						if(message.size()!= 4)
+						{
+							Log.error()<<"Damnit! This is not a bond removal command"<<std::endl;
+							break;
+						}
+
+						Index bond_index_ = message[1].trim().toInt();
+						Index atom_index_one_ = message[2].trim().toInt();
+						Index atom_index_two_ = message[3].trim().toInt();
+
+						molStructPlugin_->removeBondByAtomIndex(bond_index_,atom_index_one_,atom_index_two_);
+					
+					
+						String acknowledgement_string(BVOSServer::ACKNOWLEDGE_REMOVE_BOND);
+
+						acknowledgement_string += String(";") + String(bond_index_) ;
+
+						Log.info() << "REMOVE_BOND:acknowledgement_string Message @handleMolecularModeling from OpenSim to BALLView  : "<<acknowledgement_string<<std::endl;
+
+
+						sendAcknowledgement(acknowledgement_string);
+						break;
+				}
+				case (BVOSServer::UPDATE_ATOM):
+				{
+						if (message.size() != 6)
+						{
+							Log.error() << "Damnit! This is not an update atom command!";
+							break;
+						}
+
+						Index atom_index = message[1].toInt();
+
+						String element(message[2]);
+
+						
+
+						Vector3 position(message[3].toFloat(),
+										 message[4].toFloat(),
+										 message[5].toFloat());
+
+
+						molStructPlugin_->updateAtomByIndex(atom_index, element, position /*, radius, charge, velocity,force*/);
+
+						String acknowledgement_string(BVOSServer::ACKNOWLEDGE_UPDATE_ATOM);
+
+						acknowledgement_string += String(";") + String(atom_index) ;
+
+						sendAcknowledgement(acknowledgement_string);
+
+						break;
+				}
+				case (BVOSServer::UPDATE_BOND):
+				{
+
+						if (message.size() != 5)
+						{
+							Log.error() << "Damnit! This is not an update bond command!";
+							break;
+						}
+
+
+						Index bond_index = message[1].toInt();
+
+						Index atom_index_one_ =  message[2].toInt();
+						
+						Index atom_index_two_ =  message[3].toInt();
+							
+						Size order_ =  message[4].trim().toInt();
+
+						molStructPlugin_->updateBondByAtomIndex(atom_index_one_,atom_index_two_,order_ );
+
+						String acknowledgement_string(BVOSServer::ACKNOWLEDGE_UPDATE_BOND);
+
+						acknowledgement_string += String(";") + String(bond_index) ;
+
+						sendAcknowledgement(acknowledgement_string);
+
+						break;
+				}
+				case (BVOSServer::SATURATE_FULL_WITH_HYDROGENS):
+				{
+						if (message.size() != 1)
+						{
+							Log.error() << "Damnit! This is not a command to run the saturation with hydrogen!";
+							break;
+						}
+
+						molModelingPlugin_->saturateFullWithHydrogens();
+
+						String acknowledgement_string(BVOSServer::ACKNOWLEDGE_SATURATE_F_HYD);
+
+						acknowledgement_string += String(";") + String("done");
+
+						sendAcknowledgement(acknowledgement_string);
+
+						break;
+
+				}
+				case(BVOSServer::RUN_MINIMIZATION):
+				{
+						if (message.size() != 1)
+						{
+							Log.error() << "Damnit! This is not a command to run the minization!";
+							break;
+						}
+						molDynamicsPlugin_->minimize();
+
+						String acknowledgement_string(BVOSServer::ACKNOWLEDGE_RUN_MINI);
+
+						acknowledgement_string += String(";") + String("done");
+
+						sendAcknowledgement(acknowledgement_string);
+
+						break;
+				}
+				case(BVOSServer::CHANGE_FORCE_FIELD):
+				{
+
+						if (message.size() != 2)
+						{
+							Log.error() << "Damnit! This is not a command to change the force field!";
+							break;
+						}
+
+						Size force_field_ = message[1].trim().toInt();
+
+						molModelingPlugin_->ChangeForceField(force_field_);
+
+						String acknowledgement_string(BVOSServer::ACKNOWLEDGE_CHANGE_FF);
+
+						acknowledgement_string += String(";") + String("done");
+
+						sendAcknowledgement(acknowledgement_string);
+
+						break;
+				}
+					
+
+				case(BVOSServer::SINGLE_POINT_CALCULATION):
+				{
+						if (message.size() != 1)
+						{
+							Log.error() << "Damnit! This is not a command to run md simulation!";
+							break;
+						}
+						molDynamicsPlugin_->runSinglePointCalculation();
+
+						String acknowledgement_string(BVOSServer::ACKNOWLEDGE_S_PNT_CAL);
+
+						acknowledgement_string += String(";") + String("done");
+
+						sendAcknowledgement(acknowledgement_string);
+
+						break;
+				}
+				case(BVOSServer::MD_SIMULATION):
+				{
+
+						if (message.size() != 1)
+						{
+							Log.error() << "Damnit! This is not a command to run md simulation!";
+							break;
+						}
+						
+						molDynamicsPlugin_->runMDSimulation();
+
+						String acknowledgement_string(BVOSServer::ACKNOWLEDGE_MD_SIMULATION);
+
+						acknowledgement_string += String(";") + String("done");
+
+						sendAcknowledgement(acknowledgement_string);
+
+						break;
+				}
+				case(BVOSServer::ADD_MOLECULE):
+				{
+
+						if (message.size() != 1)
+						{
+							Log.error() << "Damnit! This is not a command to add molecule!";
+							break;
+						}
+						
+						molModelingPlugin_->runCreateNewMolecule();
+
+						String acknowledgement_string(BVOSServer::ACKNOWLEDGE_ADD_MOLECULE);
+
+						acknowledgement_string += String(";") + String("done");
+
+						sendAcknowledgement(acknowledgement_string);
+
+						break;
+				}	
+				case(BVOSServer::STOP_SIMULATION):
+				{
+
+						if (message.size() != 1)
+						{
+							Log.error() << "Damnit! This is not a command to stop simulation!";
+							break;
+						}
+
+						molDynamicsPlugin_->stopSimulation();
+
+						String acknowledgement_string(BVOSServer::ACKNOWLEDGE_STOP_SIMULATION);
+
+						acknowledgement_string += String(";") + String("done");
+
+						sendAcknowledgement(acknowledgement_string);
+
+						break;
+				}
+				default:
+					break;
+
+			}
+
+		
+			server_->is_Process_Done_ = true;
+		}
+
+	
+		void BALLViewOpenSimPlugin::handleNewComposite(BallviewMessage bvmessage)
+		{ 
+
+			  HashMap<Handle, const Atom *>::ConstIterator atom_it;	
+
+			  for (atom_it= bvmessage.handle_to_atom_.begin(); atom_it!= bvmessage.handle_to_atom_.end() ;++atom_it)
+			  {
+					Handle atom_identifier = atom_it->first;
+
+					const Atom* atom = atom_it->second;
+
+					// ToDo if "atom_identifier != -1" is required
+					if(atom !=  NULL  && atom_identifier != -1)
+					{
+
+						Index atom_index = -1;
+
+						//Log.info() << "new atom_identifier at handlenew : " << atom_identifier << std::endl; 
+				
+						if(!molStructPlugin_->atom_to_index_.has(atom_identifier))
+						{
+						
+							String element = atom->getElement().getSymbol();
+							
+							const Vector3& position = atom->getPosition();
+							
+							float radius = atom->getRadius();
+							
+							ColorRGBA& color = ecp_.getColorMap()[atom->getElement().getAtomicNumber()];
+
+							String add_atom_string(BVOSServer::ADD_ATOM);
+
+							add_atom_string =	add_atom_string 
+											   + String(";") + String(molStructPlugin_->next_atom_index_) 
+											   + String(";") + String(element) 
+											   + String(";" )+ String(position.x) 
+											   + String(";") + String(position.y) 
+											   + String(";") + String(position.z) 
+											   + String(";") + String(radius) 
+											   + String(";") + String((int)color.getRed()) 
+											   + String(";") + String((int)color.getBlue())
+											   + String(";") + String((int)color.getGreen());
+			
+							server_->sendMessageString(add_atom_string);
+
+							
+							Log.info() << "Add_atom_string Message @handleNewComposite from BALLView to OpenSim : "<<add_atom_string<<std::endl;
+
+
+							// Note
+							// when atom added in BALLView or OpenSim, The hashmaps atom_to_index_ and index_to_atom_ should be updated
+							// The newly added atom will have index from next_atom_index_;
+							// this index is used within plugin and opensim; do not confuse this index with index created in BALLview itself 
+							if (molStructPlugin_)
+							{
+
+								molStructPlugin_->readWriteLock_.lockForWrite();
+
+								molStructPlugin_->atom_to_index_[atom_identifier] = molStructPlugin_->next_atom_index_;
+								
+								molStructPlugin_->index_to_atom_[molStructPlugin_->next_atom_index_] = atom_identifier;
+						
+								molStructPlugin_->handle_to_atom_[atom_identifier] =  new Atom(*atom,true);
+
+								molStructPlugin_->next_atom_index_++;
+
+								while (molStructPlugin_->index_to_atom_.has(molStructPlugin_->next_atom_index_)) 
+								{
+									++molStructPlugin_->next_atom_index_;
+								}
+
+								molStructPlugin_->readWriteLock_.unlock();
+
+
+							}
+							else
+							{
+								Log.info() << "Could not initialize instance of MolecularStructureContainer" <<std::endl;
+								break;
+							}
+
+						}else
+						{
+							Log.info() << " molStructPlugin_->atom_to_index_ does have  atom_identifier " <<  atom_identifier << std::endl;
+
+						}
+
+
+
+					} //if(atom !=  NULL)
+
+		
+			}
+
+		
+			
+			HashMap<Handle, bondStructType>::ConstIterator bond_it;
+				
+			for (bond_it= bvmessage.handle_to_bond_ .begin(); bond_it!= bvmessage.handle_to_bond_ .end() ;++bond_it)
+			{
+
+				Handle new_bond_identifier = bond_it->first;
+
+				const Bond* bond = bond_it->second.bond;
+
+				if(bond != NULL  && new_bond_identifier != -1)
+				{
+					Size bond_order =  bond->getOrder();
+
+					if(!molStructPlugin_->bond_to_index_.has(new_bond_identifier))
+					{
+
+						
+						Handle atom_one_handle = -1;
+
+						Handle atom_two_handle = -1;
+
+						Index atom_one_index = -1;
+
+						Index atom_two_index = -1;
+
+						if(bvmessage.handle_to_bond_.has(new_bond_identifier))
+						{
+							BondStruct bondStruct = bvmessage.handle_to_bond_[new_bond_identifier];
+							atom_one_handle = bondStruct.atom_one_handle;
+							atom_two_handle = bondStruct.atom_two_handle;
+
+						}
+
+						if(molStructPlugin_->atom_to_index_.has(atom_one_handle))
+						{
+								atom_one_index = molStructPlugin_->atom_to_index_[atom_one_handle];
+						}
+					
+						if(molStructPlugin_->atom_to_index_.has(atom_two_handle))
+						{
+								atom_two_index = molStructPlugin_->atom_to_index_[atom_two_handle];
+						}
+
+						
+
+
+
+						if(atom_one_index != -1 && atom_two_index != -1)
+						{
+							//Log.info() << " new bond_identifier at newcomp : " << new_bond_identifier << std::endl;
+
+							String add_bond_string(BVOSServer::ADD_BOND);
+	
+							add_bond_string =   add_bond_string 
+											  + String(";") + String(molStructPlugin_->next_bond_index_)
+											  + String(";")+ String(atom_one_index) 
+											  + String(";") + String(atom_two_index)
+											  + String(";") + String(bond_order);
+								
+							server_->sendMessageString(add_bond_string);
+									
+							
+							Log.info() << "Add_bond_string Messagge @ handleNewComposite from BALLView to OpenSim : "<<add_bond_string<<std::endl;
+		
+							if (molStructPlugin_)
+							{
+							
+								molStructPlugin_->readWriteLock_.lockForWrite();
+
+								molStructPlugin_->bond_to_index_[new_bond_identifier] = molStructPlugin_->next_bond_index_;
+								
+								molStructPlugin_->index_to_bond_[molStructPlugin_->next_bond_index_] = new_bond_identifier;
+
+								molStructPlugin_->handle_to_bond_[new_bond_identifier] =  new Bond(*bond,true);
+
+
+								molStructPlugin_->next_bond_index_++;
+
+								while (molStructPlugin_->index_to_bond_.has(molStructPlugin_->next_bond_index_))
+								{
+									++molStructPlugin_->next_bond_index_;
+								}
+								molStructPlugin_->readWriteLock_.unlock();
+							}
+							else
+							{
+								Log.info() << "Could not initialize instance of MolecularStructureContainer" <<std::endl;
+								break;
+							}
+						}
+						
+					}
+				
+				}
+
+			}
+
+			
+		}
+
+
+	
+		void BALLViewOpenSimPlugin::handleRemovedComposite(BallviewMessage bvmessage)
+		{
+			
+			 HashMap<Handle, const Atom *>::ConstIterator atom_it;	
+
+			 for (atom_it= bvmessage.handle_to_atom_.begin(); atom_it!= bvmessage.handle_to_atom_.end() ;++atom_it)
+			 {
+
+
+				Handle atom_identifier = atom_it->first;
+
+				const Atom* atom = atom_it->second;
+
+
+				if(atom != NULL && atom_identifier != -1)
+				{
+					Index atom_index= -1;
+
+					if(molStructPlugin_->atom_to_index_.has(atom_identifier))
+					{
+
+						atom_index = molStructPlugin_->atom_to_index_[atom_identifier];
+					}
+
+
+					if(molStructPlugin_->atom_to_index_.has(atom_identifier) && atom_index != -1)
+					{
+								
+						String remove_atom_string (BVOSServer::REMOVE_ATOM);
+					
+						remove_atom_string +=  String(";") + String(atom_index) ;
+						
+						server_->sendMessageString(remove_atom_string);
+
+						Log.info() << "Remove_atom_string Messagge from BALLView to OpenSim @ handleRemovedComposite : "<<remove_atom_string<<std::endl;
+			
+						
+						if(molStructPlugin_ )
+						{
+							
+							molStructPlugin_->readWriteLock_.lockForWrite();
+
+							molStructPlugin_->atom_to_index_[atom_identifier] = -1;
+							
+							molStructPlugin_->readWriteLock_.unlock();
+						}
+					}
+				}
+
+				
+			 }
+
+			HashMap<Handle, bondStructType>::ConstIterator bond_it;
+				
+			for (bond_it= bvmessage.handle_to_bond_ .begin(); bond_it!= bvmessage.handle_to_bond_ .end() ;++bond_it)
+			{
+
+				Handle bond_identifier = bond_it->first;
+
+				const Bond* bond = bond_it->second.bond;
+
+				if(bond != NULL)
+				{
+					Size bond_order =  bond->getOrder();
+
+					Index bondIndex  = -1;
+
+					if( molStructPlugin_->bond_to_index_.has(bond_identifier))
+					{
+						bondIndex = molStructPlugin_->bond_to_index_[bond_identifier];
+
+					}
+
+					if( molStructPlugin_->bond_to_index_.has(bond_identifier) && bondIndex != -1 )
+					{
+						
+						
+						 String remove_bond_string (BVOSServer::REMOVE_BOND);
+
+						 remove_bond_string +=  String(";") + String(bondIndex);
+					
+						 server_->sendMessageString(remove_bond_string);
+
+						 Log.info() << "Remove_bond_string Messagge from BALLView to OpenSim : "<<remove_bond_string<<std::endl;
+
+						 if(molStructPlugin_ )
+						 {
+
+							molStructPlugin_->readWriteLock_.lockForWrite();
+
+							molStructPlugin_->bond_to_index_[bond_identifier] = -1;
+										
+							molStructPlugin_->readWriteLock_.unlock();
+
+
+
+						}
+						
+					}
+				}
+
+			}
+
+			molStructPlugin_->index_to_atom_.clear();
+			molStructPlugin_->atom_to_index_.clear();
+			molStructPlugin_->index_to_bond_.clear();
+			molStructPlugin_->bond_to_index_.clear();
+
+			molStructPlugin_->handle_to_atom_.clear();
+			molStructPlugin_->handle_to_bond_.clear();
+
+			
+
+			
+		}
+
+		
+		//void BALLViewOpenSimPlugin::handleChangedComposite(BallviewMessage bvmessage)
+		//{
+
+
+		//	HashMap<Handle, const Atom *>::ConstIterator atom_it;	
+
+		//	for (atom_it= bvmessage.handle_to_atom_.begin(); atom_it!= bvmessage.handle_to_atom_.end() ;++atom_it)
+		//	{
+
+		//		Index atom_index= -1;
+
+		//		Handle atom_identifier = atom_it->first;
+
+		//		const Atom* atom = atom_it->second;
+
+		//		if(atom != NULL && atom_identifier != -1)
+		//		{
+
+		//			String element = atom->getElement().getSymbol();
+
+		//			const Vector3& position = atom->getPosition();
+
+		//			float radius = atom->getRadius();
+
+		//			ColorRGBA& color = ecp_.getColorMap()[atom->getElement().getAtomicNumber()];
+	
+
+		//			if(!molStructPlugin_->atom_to_index_.has(atom_identifier))
+		//			{
+
+		//				atom_index = molStructPlugin_->next_atom_index_ ;
+		//							
+		//						
+		//				String add_atom_string(BVOSServer::ADD_ATOM);
+
+		//			
+		//				add_atom_string = add_atom_string + String(";") + String(atom_index) + String(";") + String(element) + String(";" )+ String(position.x) + String(";") + String(position.y) + String(";") + String(position.z) + String(";") + String(radius) + String(";") + String((int)color.getRed())+ String(";") + String((int)color.getBlue())+ String(";") + String((int)color.getGreen()) ;
+		//
+		//		
+		//				server_->sendMessageString(add_atom_string);
+
+		//				Log.info() << "Add_atom_string Message @ handleChangedComposite from BALLView to OpenSim : "<<add_atom_string<<std::endl;
+
+
+		//				if(!molStructPlugin_ == NULL )
+		//				{
+		//					molStructPlugin_->readWriteLock_.lockForWrite();
+
+		//					molStructPlugin_->index_to_atom_[atom_index] = atom_identifier;
+		//					molStructPlugin_->atom_to_index_[atom_identifier]  = atom_index;
+
+		//					molStructPlugin_->next_atom_index_ ++;
+
+		//					while (molStructPlugin_->index_to_atom_.has(molStructPlugin_->next_atom_index_))
+		//					{
+		//						++molStructPlugin_->next_atom_index_;
+		//					}
+		//			
+		//					molStructPlugin_->readWriteLock_.unlock();
+
+		//				}
+		//				
+
+		//			}else if(molStructPlugin_->atom_to_index_.has(atom_identifier))
+		//			{
+
+		//				
+		//				atom_index =  molStructPlugin_->atom_to_index_[atom_identifier]; 
+
+		//				if(atom_index != -1)
+		//				{
+		//					// Check if atom is really changed by comparing to the existing atom in the store
+		//					bool isAtomChanged = false;
+
+		//					molStructPlugin_->readWriteLock_.lockForWrite();
+
+		//					if(molStructPlugin_->handle_to_atom_.has(atom_identifier))
+		//					{
+		//						Atom * atom_in_store =  molStructPlugin_->handle_to_atom_[atom_identifier];
+
+		//						if(atom_in_store != NULL)
+		//						{
+		//						
+		//							String atms_store_element = atom_in_store->getElement().getSymbol();
+
+		//							Vector3& atms_store_position = atom_in_store->getPosition();
+
+		//							float atoms_store_radius = atom_in_store->getRadius();
+
+		//							ColorRGBA& atoms_store_color = ecp_.getColorMap()[atom_in_store->getElement().getAtomicNumber()];
+
+		//							
+
+		//							if(element != atms_store_element)
+		//							{
+
+		//								Element newelement = Element();
+
+		//								newelement.setSymbol(element);
+
+		//								atom_in_store->setElement(newelement);
+
+		//								isAtomChanged = true;
+		//							}
+		//							if((position.x != atms_store_position.x) || (position.y != atms_store_position.y) || (position.z != atms_store_position.z))
+		//							{
+		//								atom_in_store->setPosition(position);
+
+		//								isAtomChanged = true;
+		//							}
+		//							if(radius != atoms_store_radius)
+		//							{
+		//								atom_in_store->setRadius(radius);
+
+		//								isAtomChanged = true;
+		//							}
+
+		//							// Ne need to check for color changes. since there is no method "setColor()".
+
+		//							/*if(color != atoms_store_color)
+		//							{
+
+		//								atom_in_store->setColor(color);
+		//								isAtomChanged = true;
+		//							}*/
+		//							/*if((int)color.getBlue() != (int)atoms_store_color.getBlue())
+		//							{
+		//								isAtomChanged = true;
+		//							}
+		//							if((int)color.getGreen() != (int)atoms_store_color.getGreen())
+		//							{
+		//								isAtomChanged = true;
+		//							}
+		//							if((int)color.getRed() != (int)atoms_store_color.getRed())
+		//							{
+		//								isAtomChanged = true;
+		//							}*/
+
+		//							molStructPlugin_->readWriteLock_.unlock();
+
+		//							if(isAtomChanged)
+		//							{
+		//								String update_atom_string(BVOSServer::UPDATE_ATOM);
+
+		//								update_atom_string = update_atom_string + String(";") + String(atom_index) + String(";") + String(element) + String(";") + String(position.x) + String(";") + String(position.y) + String(";") + String(position.z) + String(";") + String(radius) + String(";") + String((int)color.getRed())+ String(";") + String((int)color.getBlue())+ String(";") + String((int)color.getGreen()) ;
+
+
+		//								server_->sendMessageString(update_atom_string);
+
+		//								Log.info() << "Update_atom_string Messagge from BALLView to OpenSim : "<<update_atom_string<<std::endl;
+		//							}
+		//						}
+		//					}
+		//				}
+		//					
+		//			}
+		//		}
+		//	}
+
+		//	HashMap<Handle, bondStructType>::ConstIterator bond_it;
+		//		
+		//	for (bond_it= bvmessage.handle_to_bond_ .begin(); bond_it!= bvmessage.handle_to_bond_ .end() ;++bond_it)
+		//	{
+
+		//		Handle bond_identifier = bond_it->first;
+
+		//		const Bond* bond = bond_it->second.bond;
+
+		//		if(bond != NULL && bond_identifier != -1)
+		//		{
+		//			Size bond_order =  bond->getOrder();
+
+		//			Index bond_index = -1;
+
+		//			Handle atom_one_handle = -1;
+
+		//			Handle atom_two_handle = -1;
+
+		//			Index atom_one_index = -1;
+
+		//			Index atom_two_index = -1;
+
+		//			if(bvmessage.handle_to_bond_.has(bond_identifier))
+		//			{
+		//				BondStruct bondStruct = bvmessage.handle_to_bond_[bond_identifier];
+		//				atom_one_handle = bondStruct.atom_one_handle;
+		//				atom_two_handle = bondStruct.atom_two_handle;
+
+		//			}
+
+		//			if(molStructPlugin_->atom_to_index_.has(atom_one_handle))
+		//			{
+		//					atom_one_index = molStructPlugin_->atom_to_index_[atom_one_handle];
+		//			}
+		//		
+		//			if(molStructPlugin_->atom_to_index_.has(atom_two_handle))
+		//			{
+		//					atom_two_index = molStructPlugin_->atom_to_index_[atom_two_handle];
+		//			}
+
+
+		//			if(!molStructPlugin_->bond_to_index_.has(bond_identifier))
+		//			{
+
+		//				if(atom_one_index != -1 && atom_two_index != -1)
+		//				{
+		//					String add_bond_string(BVOSServer::ADD_BOND);
+	
+		//					add_bond_string = add_bond_string + String(";") + String(molStructPlugin_->next_bond_index_)+ String(";")+ String(atom_one_index) + String(";") + String(atom_two_index) + String(";") + String(bond_order) ;
+		//						
+		//					server_->sendMessageString(add_bond_string);
+		//							
+		//					
+		//					Log.info() << "Add_bond_string Messagge @ handleNewComposite from BALLView to OpenSim : "<<add_bond_string<<std::endl;
+		//
+		//					if (!molStructPlugin_ == NULL )
+		//					{
+		//					
+		//						molStructPlugin_->readWriteLock_.lockForWrite();
+
+		//						molStructPlugin_->bond_to_index_[bond_identifier] = molStructPlugin_->next_bond_index_;
+		//						
+		//						molStructPlugin_->index_to_bond_[molStructPlugin_->next_bond_index_] = bond_identifier;
+
+		//						molStructPlugin_->next_bond_index_++;
+		//						while (molStructPlugin_->index_to_bond_.has(molStructPlugin_->next_bond_index_)) ++molStructPlugin_->next_bond_index_;
+		//				
+		//						molStructPlugin_->readWriteLock_.unlock();
+		//					}
+		//					else
+		//					{
+		//						Log.info() << "Could not initialize instance of MolecularStructureContainer" <<std::endl;
+		//						break;
+		//					}
+		//				}
+
+
+		//			}else if(molStructPlugin_->bond_to_index_.has(bond_identifier))
+		//			{
+
+		//				bond_index = molStructPlugin_->bond_to_index_[bond_identifier];
+
+
+
+		//				if(bond_index != -1)
+		//				{
+		//					if(atom_one_index != -1 && atom_two_index != -1)
+		//					{
+
+		//						// Check if bond is really changed by comparing to the existing atom in the store
+		//						bool isBondChanged = false;
+
+		//						molStructPlugin_->readWriteLock_.lockForWrite();
+
+		//						if(molStructPlugin_->handle_to_bond_.has(bond_identifier))
+		//						{
+		//							Bond * bond_in_store =  molStructPlugin_->handle_to_bond_[bond_identifier];
+
+		//							if(bond_in_store)
+		//							{
+		//							
+
+		//								if(bond_order != bond_in_store->getOrder())
+		//								{
+		//									bond_in_store->setOrder(bond_order);
+
+		//									isBondChanged = true;
+
+		//								}
+
+		//								if(isBondChanged)
+		//								{
+
+		//									String update_bond_string(BVOSServer::UPDATE_BOND);
+
+		//									update_bond_string = update_bond_string + String(";")+ String(bond_index) + String(";") + String(atom_one_index) + String(";") + String(atom_two_index) + String(";") + String(bond_order) ;
+		//									
+		//									server_->sendMessageString(update_bond_string);
+
+		//									Log.info() << "update_bond_string Messagge from BALLView to OpenSim : "<<update_bond_string<<std::endl;
+		//								}
+		//							}
+		//						}
+
+		//						molStructPlugin_->readWriteLock_.unlock();
+		//					}
+		//				}
+		//			}
+
+		//		}
+		//	}
+
+		//	//ToDo 
+		//	// Should I need to handle the removed bonds that attached to  the removed atoms 
+		//	
+		//
+		//}
+
+
+		
+		void BALLViewOpenSimPlugin::handleRepresentation(BallviewMessage bvmessage)
+		{
+	
+			String new_positions(NULL);
+
+			Size number_of_changed_atoms = 0;
+
+
+			HashMap<Handle, const Atom *>::ConstIterator atom_it;	
+
+			for (atom_it= bvmessage.handle_to_atom_.begin(); atom_it!= bvmessage.handle_to_atom_.end() ;++atom_it)
+			{
+
+				const Atom* atom =  atom_it->second;
+				
+				// Dont use atom->getHandle() since we need to know stored handle
+				Handle atom_identifier = atom_it->first ;
+			
+			
+				if(atom != NULL && atom_identifier != -1)
+				{
+					Index atom_index = -1;	
+
+					String element = atom->getElement().getSymbol();
+						
+					const Vector3& position = atom->getPosition();
+					
+					float radius = atom->getRadius();
+					
+					ColorRGBA& color = ecp_.getColorMap()[atom->getElement().getAtomicNumber()];
+
+	
+					if (!molStructPlugin_->atom_to_index_.has(atom_identifier))
+					{
+
+						//Log.info() << " new atom_identifier at handlerep : " << atom_identifier << std::endl; 
+
+						atom_index =  molStructPlugin_->next_atom_index_;
+					
+						String add_atom_string(BVOSServer::ADD_ATOM);
+
+    					add_atom_string = add_atom_string + String(";") + String(atom_index) + String(";") + String(element) + String(";" )+ String(position.x) + String(";") + String(position.y) + String(";") + String(position.z) + String(";") + String(radius) + String(";") + String((int)color.getRed())+ String(";") + String((int)color.getBlue())+ String(";") + String((int)color.getGreen()) ;
+		
+						server_->sendMessageString(add_atom_string);
+
+						Log.info() << "Add_atom_string @ handleRepresentation "  << add_atom_string << std::endl;
+					
+
+						if(molStructPlugin_)
+						{
+							molStructPlugin_->readWriteLock_.lockForWrite();
+
+							molStructPlugin_->index_to_atom_[atom_index] = atom_identifier;
+
+							molStructPlugin_->atom_to_index_[atom_identifier]  = atom_index;
+
+							molStructPlugin_->handle_to_atom_[atom_identifier] =  new Atom(*atom,true);
+
+							molStructPlugin_->next_atom_index_++;
+
+							while (molStructPlugin_->index_to_atom_.has(molStructPlugin_->next_atom_index_))
+							{
+								++molStructPlugin_->next_atom_index_;
+							}
+					
+							molStructPlugin_->readWriteLock_.unlock();
+
+						}
+
+					}
+					else if (molStructPlugin_->atom_to_index_.has(atom_identifier))
+					{
+
+						atom_index = molStructPlugin_->atom_to_index_[atom_identifier]; 
+								
+						if (atom_index != -1 )
+						{
+
+							// Would this slow down the process?
+
+							// Check if atom is really changed by comparing to the existing atom in the store
+							bool isAtomChanged = false;
+							bool isAtomPositionChanged = false;
+
+
+							molStructPlugin_->readWriteLock_.lockForWrite();
+
+							if(molStructPlugin_->handle_to_atom_.has(atom_identifier))
+							{
+								Atom * atom_in_store =  molStructPlugin_->handle_to_atom_[atom_identifier];
+
+								if( atom_in_store != NULL)
+								{
+									String atms_store_element = atom_in_store->getElement().getSymbol();
+
+									Vector3& atms_store_position = atom_in_store->getPosition();
+
+									float atoms_store_radius = atom_in_store->getRadius();
+
+									ColorRGBA& atoms_store_color = ecp_.getColorMap()[atom_in_store->getElement().getAtomicNumber()];
+
+									
+									if(element != atms_store_element)
+									{
+
+										Element newelement = Element();
+
+										newelement.setSymbol(element);
+										
+										atom_in_store->setElement(newelement);
+
+										isAtomChanged = true;
+									}
+									if((position.x != atms_store_position.x) || (position.y != atms_store_position.y) || (position.z != atms_store_position.z))
+									{
+										atom_in_store->setPosition(position);
+
+										isAtomChanged = true;
+									}
+									if(radius != atoms_store_radius)
+									{
+										atom_in_store->setRadius(radius);
+
+										isAtomChanged = true;
+									}
+									/*if((int)color.getBlue() != (int)atoms_store_color.getBlue())
+									{
+										isAtomChanged = true;
+									}
+									if((int)color.getGreen() != (int)atoms_store_color.getGreen())
+									{
+										isAtomChanged = true;
+									}
+									if((int)color.getRed() != (int)atoms_store_color.getRed())
+									{
+										isAtomChanged = true;
+									}*/
+
+									
+
+									if(isAtomChanged)
+									{
+
+										String update_atom_string(BVOSServer::UPDATE_ATOM);
+
+										update_atom_string = update_atom_string + String(";") + String(atom_index) + String(";") + String(element) + String(";") + String(position.x) + String(";") + String(position.y) + String(";") + String(position.z) + String(";") + String(radius) + String(";") + String((int)color.getRed())+ String(";") + String((int)color.getBlue())+ String(";") + String((int)color.getGreen()) ;
+
+
+										server_->sendMessageString(update_atom_string);
+
+										Log.info() << "Update_atom_string Messagge @ handleRepresentation from BALLView to OpenSim : "<<update_atom_string<<std::endl;
+						
+
+										
+									}
+									if(isAtomPositionChanged)
+									{
+
+										// Update the position later as a batch.
+
+										number_of_changed_atoms++;
+
+										const Vector3& pos = atom->getPosition();
+										
+										new_positions += String(";") + String(atom_index) + String(";")+ String(pos.x)+ String(";")
+													   + String(pos.y)+ String(";")
+													   + String(pos.z);
+
+										//Log.info() << "Update representation for atom " << atom_index << "  " << pos.x << "  " << pos.y << "  "<< pos.z << std::endl;
+
+									}
+							    }
+							}
+
+							molStructPlugin_->readWriteLock_.unlock();
+
+						
+						}
+
+					}
+
+				
+				}
+			}
+
+			if ((number_of_changed_atoms > 0) &&  (!new_positions.isEmpty()))
+			{
+				String update_string(BVOSServer::UPDATE_POSITIONS);
+
+				update_string =	  update_string + String(";") 
+								+ String(number_of_changed_atoms) 
+								+ new_positions;
+
+				server_->sendMessageString(update_string);
+
+		
+				Log.info() << "Update representation Message for atoms @ handleRepresentation ,  from BALLView to OpenSim : "<<update_string<<std::endl;
+
+			}
+	
+			// Note : This code should be here. Can not be moved up, since the logic
+			// Check for removed atoms here
+
+			HashMap<Handle, Index>::ConstIterator it;
+
+			
+			for (it= molStructPlugin_->atom_to_index_.begin(); it!= molStructPlugin_->atom_to_index_.end() ;++it)
+			{
+
+				Handle atomTobeChecked_identifier = it->first;
+	
+				bool isAtomfound = false ;
+
+				Index atom_index = -1;
+
+				if(bvmessage.handle_to_atom_.has(atomTobeChecked_identifier) && atomTobeChecked_identifier != -1)
+				{
+					if(bvmessage.handle_to_atom_[atomTobeChecked_identifier] != NULL)
+					{
+						
+						isAtomfound = true;
+					
+					}
+
+				}
+				
+
+				if(!isAtomfound) 
+				{
+					
+					if(molStructPlugin_->atom_to_index_.has(atomTobeChecked_identifier))
+						atom_index = molStructPlugin_->atom_to_index_[atomTobeChecked_identifier]; 
+
+
+					//Log.info() << "atomTobeChecked_identifier : "<<atomTobeChecked_identifier<<std::endl;
+
+					//Log.info() << "atom_index : "<<atom_index<<std::endl;	
+
+
+					//Log.info() << "atom_index to be removed : "<< atom_index<<std::endl;	
+
+					if(atom_index != -1 ) 
+					{
+						// This means the perticulr atom with 'index' is removed from the structure
+						String remove_atom_string(BVOSServer::REMOVE_ATOM);
+						
+						// use "atm_index"  only
+						remove_atom_string = remove_atom_string +  String(";") + String(atom_index) ;
+						
+						server_->sendMessageString(remove_atom_string);
+
+						Log.info() << "Remove_atom_string Message @ handleRepresentation from BALLView to OpenSim : "<<remove_atom_string<<std::endl;	
+
+
+						// Note
+						// I can not remove atoms or atom_index from the hashmaps 
+						// I get exception
+						// with out removing then.. it works fine, but conceptuallty..they shouuld be removed  
+						// whent they are removed  from the structure
+						// I think , when atoms are removed in BALLView , since their reference are stored in hashmap 
+						// hashmap looses atoms' references
+						if(molStructPlugin_)
+						{
+
+							molStructPlugin_->readWriteLock_.lockForWrite();
+						
+							molStructPlugin_->atom_to_index_[atomTobeChecked_identifier] = -1;
+
+							molStructPlugin_->handle_to_atom_[atomTobeChecked_identifier] = NULL;
+							
+							molStructPlugin_->readWriteLock_.unlock();
+							
+						}
+
+					}
+
+
+				}
+
+				
+
+			}
+
+
+			HashMap<Handle, bondStructType>::ConstIterator bond_it;
+				
+			for (bond_it = bvmessage.handle_to_bond_.begin(); bond_it!= bvmessage.handle_to_bond_.end() ;++bond_it)
+			{
+
+				const Bond* bond = bond_it->second.bond;
+
+				// Dont use bond->getHandle()
+				Handle bond_identifier = bond_it->first ;
+				
+				if(bond != NULL)
+				{
+					
+
+					if(!molStructPlugin_->bond_to_index_.has(bond_identifier))
+					{
+
+						// Create a bond code here since it was not found in the bond_to_index_
+
+					
+						Size bond_order =  bond->getOrder();
+
+						Handle atom_one_handle = -1;
+
+						Handle atom_two_handle = -1;
+
+						Index atom_one_index = -1;
+
+						Index atom_two_index = -1;
+
+						if(bvmessage.handle_to_bond_.has(bond_identifier))
+						{
+							BondStruct bondStruct = bvmessage.handle_to_bond_[bond_identifier];
+							atom_one_handle = bondStruct.atom_one_handle;
+							atom_two_handle = bondStruct.atom_two_handle;
+
+						}
+
+						if(molStructPlugin_->atom_to_index_.has(atom_one_handle))
+						{
+							atom_one_index = molStructPlugin_->atom_to_index_[atom_one_handle];
+						}
+					
+						if(molStructPlugin_->atom_to_index_.has(atom_two_handle))
+						{
+							atom_two_index = molStructPlugin_->atom_to_index_[atom_two_handle];
+						}
+
+						if(atom_one_index != -1 && atom_two_index != -1 )
+						{
+							//Log.info() << " new_bond_identifier at handlerep : " << bond_identifier << std::endl;
+
+							String add_bond_string(BVOSServer::ADD_BOND);
+
+							add_bond_string = add_bond_string + String(";")+ String(molStructPlugin_->next_bond_index_)+ String(";") + String(atom_one_index) + String(";") + String(atom_two_index) + String(";") + String(bond_order) ;
+								
+							server_->sendMessageString(add_bond_string);
+									
+							Log.info() << "Add_bond_string Message @ handleRepresentation from BALLView to OpenSim : "<<add_bond_string<<std::endl;
+		
+						
+							// Note
+							// I can not add bond  from the hashmaps 
+							// I get exception as the atoms are already removed
+							if(molStructPlugin_)
+							{
+								molStructPlugin_->readWriteLock_.lockForWrite();
+
+								molStructPlugin_->bond_to_index_[bond_identifier] = molStructPlugin_->next_bond_index_;
+								molStructPlugin_->index_to_bond_[molStructPlugin_->next_bond_index_] = bond_identifier;
+
+								molStructPlugin_->handle_to_bond_[bond_identifier] =  new Bond(*bond,true);
+
+								molStructPlugin_->next_bond_index_++;
+
+								while (molStructPlugin_->index_to_bond_.has(molStructPlugin_->next_bond_index_)) 
+								{
+									++molStructPlugin_->next_bond_index_;
+								}
+				
+								molStructPlugin_->readWriteLock_.unlock();
+
+							}
+						}
+						
+
+
+					}else if(molStructPlugin_->bond_to_index_.has(bond_identifier))
+					{
+
+						
+						// NOw I know "bond" is in molStructPlugin_->bond_to_index_
+						// update bond information should be here
+
+						Index bondIndex = molStructPlugin_->bond_to_index_[bond_identifier]; 
+
+						
+						if(bondIndex != -1)
+						{
+
+						
+							Size bond_order =  bond->getOrder();
+						
+						
+							Handle atom_one_handle = -1;
+
+							Handle atom_two_handle = -1;
+
+							Index atom_one_index = -1;
+
+							Index atom_two_index = -1;
+
+							if(bvmessage.handle_to_bond_.has(bond_identifier))
+							{
+								BondStruct bondStruct = bvmessage.handle_to_bond_[bond_identifier];
+								atom_one_handle = bondStruct.atom_one_handle;
+								atom_two_handle = bondStruct.atom_two_handle;
+
+							}
+
+							if(molStructPlugin_->atom_to_index_.has(atom_one_handle))
+							{
+									atom_one_index = molStructPlugin_->atom_to_index_[atom_one_handle];
+							}
+						
+							if(molStructPlugin_->atom_to_index_.has(atom_two_handle))
+							{
+									atom_two_index = molStructPlugin_->atom_to_index_[atom_two_handle];
+							}
+
+
+							if(atom_one_index != -1 && atom_two_index != -1)
+							{
+
+								// Check if bond is really changed by comparing to the existing atom in the store
+								bool isBondChanged = false;
+
+
+								molStructPlugin_->readWriteLock_.lockForWrite();
+
+								if( molStructPlugin_->handle_to_bond_.has(bond_identifier))
+								{
+									Bond * bond_in_store =  molStructPlugin_->handle_to_bond_[bond_identifier];
+
+
+									if(bond_in_store != NULL)
+									{
+										if(bond_order != bond_in_store->getOrder())
+										{
+											bond_in_store->setOrder(bond_order);
+											isBondChanged = true;
+
+										}
+										molStructPlugin_->readWriteLock_.unlock();
+
+										if(isBondChanged)
+										{
+											String update_bond_string(BVOSServer::UPDATE_BOND);
+
+											// Note : Bond index in the commnad string
+											update_bond_string =  update_bond_string 
+																 + String(";") + String(bondIndex) 
+																 + String(";") + String(atom_one_index) 
+																 + String(";") + String(atom_two_index) 
+																 + String(";") + String(bond_order) ;
+																					
+											server_->sendMessageString(update_bond_string);
+
+											Log.info() << "Update_bond_string Message @ handleRepresentation from BALLView to OpenSim : "<<update_bond_string<<std::endl;
+										}
+									}
+
+								}
+							}
+
+						
+						}
+					
+						
+						
+					}
+					
+				}
+
+
+				
+			}
+
+			// The code for removing bonds  should be here
+			
+			HashMap<Handle, Index>::ConstIterator bit;
+				
+				
+			for (bit= molStructPlugin_->bond_to_index_.begin(); bit!= molStructPlugin_->bond_to_index_.end() ;++bit)
+			{
+
+				Handle bondTobeChecked_identifier = bit->first;
+
+				
+				bool isBondfound = false ;
+
+				
+				if(bvmessage.handle_to_bond_.has(bondTobeChecked_identifier))
+				{
+					if(bvmessage.handle_to_bond_[bondTobeChecked_identifier].bond != NULL )
+					{
+						isBondfound = true;
+						//break;
+
+					}
+				}
+
+				if(!isBondfound) 
+				{
+					Index bond_index =  -1;
+
+					if(molStructPlugin_->bond_to_index_.has(bondTobeChecked_identifier))
+					{
+						bond_index = molStructPlugin_->bond_to_index_[bondTobeChecked_identifier];
+					}
+
+					if( bond_index != -1)
+					{
+						// This means the perticulr bond with 'index' is removed from the structure
+						String remove_bond_string(BVOSServer::REMOVE_BOND);
+
+						//atom index has to be from bond : this is not correct to use in the following way
+						remove_bond_string = remove_bond_string + String(";")+ String(bond_index);
+						
+						server_->sendMessageString(remove_bond_string);
+
+						Log.info() << "Remove_bond_string Message @ handleRepresentation from BALLView to OpenSim : "<<remove_bond_string<<std::endl;
+			
+						if(molStructPlugin_)
+						{
+						
+							molStructPlugin_->readWriteLock_.lockForWrite();
+
+							molStructPlugin_->bond_to_index_[bondTobeChecked_identifier] = -1;
+
+							molStructPlugin_->handle_to_bond_[bondTobeChecked_identifier] = NULL;
+										
+							molStructPlugin_->readWriteLock_.unlock();
+						}
+					}
+
+				
+				}
+		
+
+
+			}
+			
+					
+					
+		}// End of function
+			
+		
+		/***********************************************************************************
+		************************End BALLViewOpenSimPlugin Implementation********************
+		***********************************************************************************/
+
+	}
+}
