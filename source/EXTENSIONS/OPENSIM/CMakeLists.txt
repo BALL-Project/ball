@@ -7,7 +7,7 @@ SET(UI_SOURCES_LIST
 )
 
 SET(SOURCES_LIST
-	${DIRECTORY}/BALLViewOpenSimPlugin.C
+	${DIRECTORY}/OpenSimPlugin.C
 	${DIRECTORY}/OpenSimCommandExecutionThread.C
 	${DIRECTORY}/OpenSimPluginConfiguration.C
 	${DIRECTORY}/OpenSimReceiver.C
@@ -25,7 +25,7 @@ SET(RCC_SOURCES_LIST
 SET(DIRECTORY include)
 ### the list of all files requiring a moc run ###
 SET(MOC_SOURCES_LIST
-	${DIRECTORY}/BALLViewOpenSimPlugin.h
+	${DIRECTORY}/OpenSimPlugin.h
 	${DIRECTORY}/OpenSimCommandExecutionThread.h
 	${DIRECTORY}/OpenSimPluginConfiguration.h
 	${DIRECTORY}/OpenSimReceiver.h

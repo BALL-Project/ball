@@ -10,34 +10,19 @@
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
-
 		class MolecularDynamicsContainer
 		{
-			
-
-		 protected:
-
-				
 			public:
 
 				MolecularDynamicsContainer();
 
 
 				void minimize();
-
 				void runMDSimulation();
-
 				void stopSimulation();
-
 				void runSinglePointCalculation();
-
-				
 		};
-		
 	}
 }
-
-

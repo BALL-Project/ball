@@ -11,14 +11,14 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		class BALLViewOpenSimPlugin;
+		class OpenSimPlugin;
 
 		class OpenSimCommandExecutionThread: public QThread
 		{
 			Q_OBJECT
 
 			public:
-				OpenSimCommandExecutionThread(BALLViewOpenSimPlugin* plugin);
+				OpenSimCommandExecutionThread(OpenSimPlugin* plugin);
 				~OpenSimCommandExecutionThread();
 
 				void run();
@@ -26,7 +26,7 @@ namespace BALL
 				void deactivate();
 
 			protected:
-				BALLViewOpenSimPlugin* bvcmdplugin_;
+				OpenSimPlugin* bvcmdplugin_;
 				bool terminate_requested_;
 		};
 

@@ -1,12 +1,11 @@
 #include <OpenSimReceiver.h>
-
-#include <BALLViewOpenSimPlugin.h>
+#include <OpenSimPlugin.h>
 
 namespace BALL
 {
 	namespace VIEW
 	{
-		OpenSimReceiver::OpenSimReceiver(Size port, BALLViewOpenSimPlugin* plugin)
+		OpenSimReceiver::OpenSimReceiver(Size port, OpenSimPlugin* plugin)
 			: TCPServerThread(port),
 			  is_acknowledged_(false),
 			  is_Process_Done_(true),

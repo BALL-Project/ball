@@ -12,7 +12,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		class BALLViewOpenSimPlugin;
+		class OpenSimPlugin;
 
 		class OpenSimReceiver : public TCPServerThread
 		{
@@ -68,7 +68,7 @@ namespace BALL
 
 				};
 
-				OpenSimReceiver(Size port, BALLViewOpenSimPlugin* plugin);
+				OpenSimReceiver(Size port, OpenSimPlugin* plugin);
 				~OpenSimReceiver();
 
 				virtual void run();
@@ -83,7 +83,7 @@ namespace BALL
 
 			protected:
 
-				BALLViewOpenSimPlugin* plugin_;
+				OpenSimPlugin* plugin_;
 
 				OpenSimWorkerThread* funcThread_;
 

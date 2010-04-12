@@ -1,11 +1,11 @@
 #include <OpenSimCommandExecutionThread.h>
-#include <BALLViewOpenSimPlugin.h>
+#include <OpenSimPlugin.h>
 
 namespace BALL
 {
 	namespace VIEW
 	{
-		OpenSimCommandExecutionThread::OpenSimCommandExecutionThread(BALLViewOpenSimPlugin* plugin/*,Message* message*/)
+		OpenSimCommandExecutionThread::OpenSimCommandExecutionThread(OpenSimPlugin* plugin/*,Message* message*/)
 			: bvcmdplugin_(plugin),
 				terminate_requested_(false)
 		{

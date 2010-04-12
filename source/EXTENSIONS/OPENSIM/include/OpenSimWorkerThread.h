@@ -9,7 +9,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		class BALLViewOpenSimPlugin;
+		class OpenSimPlugin;
 
 		class OpenSimWorkerThread: public QThread
 		{
@@ -18,13 +18,13 @@ namespace BALL
 			public:
 				void run();
 
-				OpenSimWorkerThread(BALLViewOpenSimPlugin* plugin);
+				OpenSimWorkerThread(OpenSimPlugin* plugin);
 				~OpenSimWorkerThread();
 
 				void deactivate();
 
 			protected:
-				BALLViewOpenSimPlugin* bvplugin_;
+				OpenSimPlugin* bvplugin_;
 				bool terminate_requested_;
 		};
 	}

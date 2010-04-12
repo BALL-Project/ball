@@ -1,6 +1,6 @@
 #include <BALL/COMMON/global.h>
 
-#include <BALLViewOpenSimPlugin.h>
+#include <OpenSimPlugin.h>
 #include <OpenSimPluginConfiguration.h>
 
 
@@ -16,13 +16,13 @@
 
 #include <QtGui/QMessageBox>
 
-Q_EXPORT_PLUGIN2(pluginOpenSimPlugin, BALL::VIEW::BALLViewOpenSimPlugin)
+Q_EXPORT_PLUGIN2(pluginOpenSimPlugin, BALL::VIEW::OpenSimPlugin)
 
 namespace BALL
 {
 	namespace VIEW
 	{
-		BALLViewOpenSimPlugin::BALLViewOpenSimPlugin()
+		OpenSimPlugin::OpenSimPlugin()
 			: QObject(VIEW::getMainControl()),
 				ModularWidget(),
 				cmdThread_(new OpenSimCommandExecutionThread(this)),
@@ -50,13 +50,13 @@ namespace BALL
 			if (remote_port_ == 0)
 				remote_port_ = 4712;
 
-			settings_->setLocalServer( local_host_,  local_port_ );
+			settings_->setLocalServer ( local_host_,  local_port_);
 			settings_->setRemoteServer(remote_host_, remote_port_);
 
 			connect(settings_, SIGNAL(accepted()), this, SLOT(settingsChanged()));
 		}
 
-		BALLViewOpenSimPlugin::~BALLViewOpenSimPlugin()
+		OpenSimPlugin::~OpenSimPlugin()
 		{
 			if (is_active_)
 				deactivate();
@@ -64,7 +64,7 @@ namespace BALL
 			delete(settings_);
 		}
 
-		void BALLViewOpenSimPlugin::settingsChanged()
+		void OpenSimPlugin::settingsChanged()
 		{
 			remote_host_ = (String)(settings_->remote_address->text());
 			remote_port_ = settings_->remote_port->text().toInt();
@@ -75,7 +75,7 @@ namespace BALL
 				demandConfig();
 		}
 
-		bool BALLViewOpenSimPlugin::checkConfig()
+		bool OpenSimPlugin::checkConfig()
 		{
 			if (    (remote_host_ == "") || (remote_port_ == 0)
 					 || (local_host_  == "") || (local_port_  == 0) )
@@ -84,17 +84,17 @@ namespace BALL
 			return true;
 		}
 
-		void BALLViewOpenSimPlugin::demandConfig()
+		void OpenSimPlugin::demandConfig()
 		{
 			QMessageBox msgBox;
 			msgBox.setText("The OpenSim plugin has not been configured correctly.");
-			msgBox.setInformativeText("Please provide correct addresses and ports");
+			msgBox.setInformativeText("Please provide correct addresses and ports.");
 			msgBox.exec();
 
 			settings_->show();
 		}
 
-		bool BALLViewOpenSimPlugin::activate()
+		bool OpenSimPlugin::activate()
 		{
 			is_active_ = true;
 
@@ -111,12 +111,10 @@ namespace BALL
 			return true;
 		}
 		
-		bool BALLViewOpenSimPlugin::deactivate()
+		bool OpenSimPlugin::deactivate()
 		{
 			is_active_ = false;
 
-			// TODO: this is still fishy... sometimes,
-			//       it seems to hang...
 			server_->deactivate();
 			server_->wait();
 
@@ -129,25 +127,25 @@ namespace BALL
 			return true;
 		}
 
-		void BALLViewOpenSimPlugin::setReceiver(QWidget* receiver)
+		void OpenSimPlugin::setReceiver(QWidget* receiver)
 		{
 			receiver_ = receiver;
 		}
 
-		const QPixmap* BALLViewOpenSimPlugin::getIcon() const
+		const QPixmap* OpenSimPlugin::getIcon() const
 		{
 			return &icon_;
 		}
 
-		QDialog* BALLViewOpenSimPlugin::getConfigDialog()
+		QDialog* OpenSimPlugin::getConfigDialog()
 		{
 			settings_->setRemoteServer(remote_host_, remote_port_);
-			settings_->setLocalServer(local_host_,   local_port_ );
+			settings_->setLocalServer ( local_host_, local_port_ );
 
 			return static_cast<QDialog*>(settings_);
 		}
 		
-		bool BALLViewOpenSimPlugin::hasMessage()
+		bool OpenSimPlugin::hasMessage()
 		{
 			bool result;
 
@@ -158,280 +156,231 @@ namespace BALL
 			return result;
 		}
 
-		void BALLViewOpenSimPlugin::onNotify(Message* message)
+		void OpenSimPlugin::onNotify(Message* message)
 		{
-			// Here I need to put the messsages in a queue,
-			// lock it
+			// Here I need to put the messsages in a queue, lock it
 			// then, access the queue from different thread as show below
-			// but this thread can not be created here , because everytime, there will be more threads
-			// create a thread out side.
-
-			if (message)
+			// but this thread can not be created here, because everytime, 
+			// there will be more threads create a thread out side.
+			if (RTTI::isKindOf<CompositeMessage>(*message))
 			{
-				if (RTTI::isKindOf<CompositeMessage>(*message))
+				CompositeMessage *cm = RTTI::castTo<CompositeMessage>(*message);
+
+				OpenSimTask task;
+				bool task_type_supported = false;
+
+				if (cm->getType() == CompositeMessage::NEW_COMPOSITE)
 				{
-					CompositeMessage *cm = RTTI::castTo<CompositeMessage>(*message);
-					
-					if (cm != NULL)
-					{
-						AtomContainer* container = dynamic_cast<AtomContainer*>(cm->getComposite());
-
-						if (container != NULL)
-						{
-						
-							HashMap<Handle, const Atom*> tmp_handle_to_atom;
-							HashMap<Handle, OpenSimTask::BondStruct> tmp_handle_to_bond;
-
-							for (AtomIterator at_it = container->beginAtom(); +at_it; ++at_it)
-							{
-								//Copy the atom's content into a new variable.
-								const Atom* atom_one = &*at_it;
-								
-								if(atom_one != NULL)
-								{
-									//get the handle of original atom, before copying
-									Handle atom_one_handle = atom_one->getHandle();
-
-									const Atom* copy_atom_one = new Atom(*atom_one,true);
-
-									if(!tmp_handle_to_atom.has(atom_one_handle) && copy_atom_one != NULL)
-									{
-										// store the handle of original atom and map with copied atom
-										tmp_handle_to_atom[atom_one_handle]= copy_atom_one;
-									}
-
-									for (Atom::BondIterator b_it = at_it->beginBond(); +b_it; ++b_it)
-									{
-										const Atom* atom_two = b_it->getPartner(*atom_one);
-										
-										if(atom_two != NULL)
-										{
-											//get the handle of original atom
-											Handle atom_two_handle = atom_two->getHandle();
-
-											const Atom* copy_atom_two = new Atom(*atom_two,true);
-
-											if(!tmp_handle_to_atom.has(atom_two_handle) && copy_atom_two != NULL)
-											{
-												// store the handle of original atom and map with copied atom
-												tmp_handle_to_atom[atom_two_handle]= copy_atom_two;
-											}
-
-											const Bond* bond = atom_one->getBond(*atom_two);
-
-											
-											Handle bond_handle = -1;
-
-											if (bond != NULL)
-											{
-												//get the handle of original bond
-												bond_handle = bond->getHandle();
-
-												const Bond* copy_bond = new Bond(*bond,true);
-
-											
-												OpenSimTask::BondStruct bondStruct;
-
-												// copied bond
-												bondStruct.bond = copy_bond;
-
-												bondStruct.atom_one_handle = atom_one_handle;
-
-												bondStruct.atom_two_handle = atom_two_handle;
-												
-
-												if (!tmp_handle_to_bond.has(bond_handle) && (bond_handle != -1))
-												{
-													// store the handle of original bond and map with copied bond
-													tmp_handle_to_bond[bond_handle] = bondStruct;
-
-												}
-											}
-										}
-
-
-									}
-								}
-
-							}
-
-
-							OpenSimTask task;
-
-							// ToDo validation if hashmap isempty?
-							task.handle_to_atom_ = tmp_handle_to_atom;
-							task.handle_to_bond_ = tmp_handle_to_bond;
-							
-							if(cm->getType() == CompositeMessage::NEW_COMPOSITE)
-							{
-								task.type = OpenSimTask::NEW_COMPOSITE;
-
-								pluginrwLock_.lockForWrite();
-								ballviewmessage_queue_.push(task);
-								pluginrwLock_.unlock();
-							}
-							else if(cm->getType() == CompositeMessage::CHANGED_COMPOSITE_HIERARCHY) 
-							{
-								task.type = OpenSimTask::CHANGED_COMPOSITE_HIERARCH;
-
-								pluginrwLock_.lockForWrite();
-								ballviewmessage_queue_.push(task);
-								pluginrwLock_.unlock();
-							}
-							else if(cm->getType() == CompositeMessage::REMOVED_COMPOSITE )
-							{
-								task.type = OpenSimTask::REMOVED_COMPOSITE;
-						
-								pluginrwLock_.lockForWrite();
-								ballviewmessage_queue_.push(task);
-								pluginrwLock_.unlock();
-							}
-							
-						}
-					}
-
+					task.type = OpenSimTask::NEW_COMPOSITE;
+					task_type_supported = true;
 				}
-				else if (RTTI::isKindOf<RepresentationMessage>(*message))
+				else if (cm->getType() == CompositeMessage::CHANGED_COMPOSITE_HIERARCHY) 
 				{
-					RepresentationMessage* rm = RTTI::castTo<RepresentationMessage>(*message);
+					task.type = OpenSimTask::CHANGED_COMPOSITE_HIERARCH;
+					task_type_supported = true;
+				}
+				else if (cm->getType() == CompositeMessage::REMOVED_COMPOSITE)
+				{
+					task.type = OpenSimTask::REMOVED_COMPOSITE;
+					task_type_supported = true;
+				}
 
-					if (rm->getType() == RepresentationMessage::FINISHED_UPDATE)
+				if (!task_type_supported)
+					return;
+
+				AtomContainer* container = dynamic_cast<AtomContainer*>(cm->getComposite());
+
+				if (container)
+				{
+					HashMap<Handle, const Atom*> tmp_handle_to_atom;
+					HashMap<Handle, OpenSimTask::BondStruct> tmp_handle_to_bond;
+
+					for (AtomIterator at_it = container->beginAtom(); +at_it; ++at_it)
 					{
-						if(rm != NULL)
+						//get the handle of original atom, before copying
+						Handle atom_one_handle = at_it->getHandle();
+						const Atom* copy_atom_one = new Atom(*at_it, true);
+
+						if(!tmp_handle_to_atom.has(atom_one_handle) && copy_atom_one)
 						{
-							Representation* r = rm->getRepresentation();
-						
-							if(r != NULL &&  !r->isHidden())
+							// store the handle of original atom and map with copied atom
+							tmp_handle_to_atom[atom_one_handle]= copy_atom_one;
+						}
+
+						for (Atom::BondIterator b_it = at_it->beginBond(); +b_it; ++b_it)
+						{
+							const Atom* atom_two = b_it->getPartner(*at_it);
+
+							//get the handle of original atom
+							Handle atom_two_handle = atom_two->getHandle();
+
+							const Atom* copy_atom_two = new Atom(*atom_two,true);
+
+							if(!tmp_handle_to_atom.has(atom_two_handle) && copy_atom_two != NULL)
 							{
-								Composite const * composite = NULL;
+								// store the handle of original atom and map with copied atom
+								tmp_handle_to_atom[atom_two_handle]= copy_atom_two;
+							}
 
-								if (r->getComposites().size() > 0)
+							const Bond* bond = at_it->getBond(*atom_two);
+
+							Handle bond_handle = -1;
+
+							if (bond != NULL)
+							{
+								//get the handle of original bond
+								bond_handle = bond->getHandle();
+
+								const Bond* copy_bond = new Bond(*bond,true);
+
+								OpenSimTask::BondStruct bondStruct;
+
+								// copied bond
+								bondStruct.bond = copy_bond;
+
+								bondStruct.atom_one_handle = atom_one_handle;
+								bondStruct.atom_two_handle = atom_two_handle;
+
+								if (!tmp_handle_to_bond.has(bond_handle) && (bond_handle != -1))
 								{
-									composite = *(r->getComposites().begin());
-								}
-
-								if(composite != NULL)
-								{
-									
-									if (RTTI::isKindOf<const AtomContainer>(*composite))
-									{
-
-										AtomContainer* container = RTTI::castTo<AtomContainer>(*composite);
-
-										if(container != NULL)
-										{
-											HashMap<Handle, const Atom*> tmp_handle_to_atom;
-											HashMap<Handle, OpenSimTask::BondStruct> tmp_handle_to_bond;
-											
-											for (AtomIterator at_it = container->beginAtom(); +at_it; ++at_it)
-											{
-												//Copy the atom's content into a new variable.
-												const Atom* atom_one = &*at_it;
-												
-												if(atom_one != NULL)
-												{
-													//get the handle of original atom
-													Handle atom_one_handle = atom_one->getHandle();
-
-													const Atom* copy_atom_one = new Atom(*atom_one,true);
-
-													if(!tmp_handle_to_atom.has(atom_one_handle) && copy_atom_one != NULL)
-													{
-														// store the handle of original atom and map with copied atom
-														tmp_handle_to_atom[atom_one_handle]= copy_atom_one;
-													}
-
-													for (Atom::BondIterator b_it = at_it->beginBond(); +b_it; ++b_it)
-													{
-														const Atom* atom_two = b_it->getPartner(*atom_one);
-
-														if(atom_two != NULL)
-														{
-															//get the handle of original atom
-															Handle atom_two_handle = atom_two->getHandle();
-
-															const Atom* copy_atom_two = new Atom(*atom_two,true);
-
-															if(!tmp_handle_to_atom.has(atom_two_handle) && copy_atom_two != NULL)
-															{
-																// store the handle of original atom and map with copied atom
-																tmp_handle_to_atom[atom_two_handle]= copy_atom_two;
-															}
-
-															const Bond* bond = atom_one->getBond(*atom_two);
-
-															Handle bond_handle = -1;
-
-															if(bond != NULL)
-															{
-																//get the handle of original bond	
-																bond_handle = bond->getHandle();
-															
-																const Bond* copy_bond = new Bond(*bond,true);
-
-																if(!tmp_handle_to_bond.has(bond_handle) && bond_handle != -1)
-																{
-
-																	OpenSimTask::BondStruct bondStruct;
-
-																	// copied bond
-																	bondStruct.bond = copy_bond;
-
-																	bondStruct.atom_one_handle = atom_one_handle;
-																	bondStruct.atom_two_handle = atom_two_handle;
-
-																	
-																	if(!tmp_handle_to_bond.has(bond_handle) && bond_handle != -1)
-																	{
-																		// store the handle of original bond and map with copied bond
-																		tmp_handle_to_bond[bond_handle] = bondStruct;
-																	}
-																	
-																}
-															}
-														}
-
-
-													}
-												}
-
-											}
-
-											OpenSimTask task;
-
-											task.type = OpenSimTask::REPRESENTATION;
-
-											// ToDo validation if hashmap isempty?
-
-											task.handle_to_atom_ = tmp_handle_to_atom;
-											task.handle_to_bond_ = tmp_handle_to_bond;
-									
-											pluginrwLock_.lockForWrite();
-											ballviewmessage_queue_.push(task);
-											pluginrwLock_.unlock();
-										}
-									}
+									// store the handle of original bond and map with copied bond
+									tmp_handle_to_bond[bond_handle] = bondStruct;
 								}
 							}
 						}
 					}
 
+					// ToDo validation if hashmap isempty?
+					task.handle_to_atom_ = tmp_handle_to_atom;
+					task.handle_to_bond_ = tmp_handle_to_bond;
+
+					// finally, store the message in the queue for later processing
+					pluginrwLock_.lockForWrite();
+					ballviewmessage_queue_.push(task);
+					pluginrwLock_.unlock();
 				}
-				
 			}
-						
-			
-		
+			else if (RTTI::isKindOf<RepresentationMessage>(*message))
+			{
+				RepresentationMessage* rm = RTTI::castTo<RepresentationMessage>(*message);
+
+				if (rm->getType() == RepresentationMessage::FINISHED_UPDATE)
+				{
+					Representation* r = rm->getRepresentation();
+
+					if (r && !(r->isHidden()))
+					{
+						Composite const * composite = NULL;
+
+						if (r->getComposites().size() > 0)
+						{
+							composite = *(r->getComposites().begin());
+						}
+
+						if(composite != NULL)
+						{
+							if (RTTI::isKindOf<const AtomContainer>(*composite))
+							{
+								AtomContainer* container = RTTI::castTo<AtomContainer>(*composite);
+
+								HashMap<Handle, const Atom*> tmp_handle_to_atom;
+								HashMap<Handle, OpenSimTask::BondStruct> tmp_handle_to_bond;
+
+								for (AtomIterator at_it = container->beginAtom(); +at_it; ++at_it)
+								{
+									//Copy the atom's content into a new variable.
+									const Atom* atom_one = &*at_it;
+
+									if(atom_one != NULL)
+									{
+										//get the handle of original atom
+										Handle atom_one_handle = atom_one->getHandle();
+
+										const Atom* copy_atom_one = new Atom(*atom_one,true);
+
+										if(!tmp_handle_to_atom.has(atom_one_handle) && copy_atom_one != NULL)
+										{
+											// store the handle of original atom and map with copied atom
+											tmp_handle_to_atom[atom_one_handle]= copy_atom_one;
+										}
+
+										for (Atom::BondIterator b_it = at_it->beginBond(); +b_it; ++b_it)
+										{
+											const Atom* atom_two = b_it->getPartner(*atom_one);
+
+											if(atom_two != NULL)
+											{
+												//get the handle of original atom
+												Handle atom_two_handle = atom_two->getHandle();
+
+												const Atom* copy_atom_two = new Atom(*atom_two,true);
+
+												if(!tmp_handle_to_atom.has(atom_two_handle) && copy_atom_two != NULL)
+												{
+													// store the handle of original atom and map with copied atom
+													tmp_handle_to_atom[atom_two_handle]= copy_atom_two;
+												}
+
+												const Bond* bond = atom_one->getBond(*atom_two);
+
+												Handle bond_handle = -1;
+
+												if(bond != NULL)
+												{
+													//get the handle of original bond	
+													bond_handle = bond->getHandle();
+
+													const Bond* copy_bond = new Bond(*bond,true);
+
+													if(!tmp_handle_to_bond.has(bond_handle) && bond_handle != -1)
+													{
+
+														OpenSimTask::BondStruct bondStruct;
+
+														// copied bond
+														bondStruct.bond = copy_bond;
+
+														bondStruct.atom_one_handle = atom_one_handle;
+														bondStruct.atom_two_handle = atom_two_handle;
+
+
+														if(!tmp_handle_to_bond.has(bond_handle) && bond_handle != -1)
+														{
+															// store the handle of original bond and map with copied bond
+															tmp_handle_to_bond[bond_handle] = bondStruct;
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+
+								OpenSimTask task;
+
+								task.type = OpenSimTask::REPRESENTATION;
+
+								// ToDo validation if hashmap isempty?
+
+								task.handle_to_atom_ = tmp_handle_to_atom;
+								task.handle_to_bond_ = tmp_handle_to_bond;
+
+								pluginrwLock_.lockForWrite();
+								ballviewmessage_queue_.push(task);
+								pluginrwLock_.unlock();
+							}
+						}
+					}
+				}
+			}
 		}
 
-		
-		void BALLViewOpenSimPlugin::sendAcknowledgement(const String& message)
+		void OpenSimPlugin::sendAcknowledgement(const String& message)
 		{
 			server_->sendMessageString(message);
 		}
 
-		
-		void BALLViewOpenSimPlugin::handleMolecularModeling(std::vector<String> message)
+		void OpenSimPlugin::handleMolecularModeling(std::vector<String> message)
 		{
 			if(message.empty())
 			{
@@ -445,61 +394,59 @@ namespace BALL
 
 			switch (command_index)
 			{
-				
 				case(OpenSimReceiver::ADD_ATOM):
 				{
-						if (message.size() != 9)
-						{
-							Log.error() << "Damnit! This is not an add atom command!";
-							break;
-						}	
+					if (message.size() != 9)
+					{
+						Log.error() << "Damnit! This is not an add atom command!";
+						break;
+					}	
 
-						String element(message[1]);
+					String element(message[1]);
 
-						Vector3 position(message[2].toFloat(),
-										 message[3].toFloat(),
-										 message[4].toFloat());
+					Vector3 position(message[2].toFloat(),
+					                 message[3].toFloat(),
+													 message[4].toFloat());
 
-						float radius(message[5].toFloat());
-
-						
-						ColorRGBA color(message[6].toInt(), 
-										message[7].toInt(), 
-										message[8].trim().toInt());
-
-
+					float radius(message[5].toFloat());
 					
-						Index atom_index_ = molStructPlugin_->addAtom( element, position, radius, color);
+					ColorRGBA color(message[6].toInt(), 
+									message[7].toInt(), 
+									message[8].trim().toInt());
 
 
 				
-						if( atom_index_ != -1)
-						{
-							String acknowledgement_string(OpenSimReceiver::ACKNOWLEDGE_ADD_ATOM);
+					Index atom_index_ = molStructPlugin_->addAtom( element, position, radius, color);
 
 
-							acknowledgement_string +=  String(";") +  String(atom_index_) 
-													  + String(";") + String(element) 
-													  + String(";" )+ String(position.x) 
-													  + String(";") + String(position.y) 
-													  + String(";") + String(position.z) 
-													  + String(";") + String(radius) 
-													  + String(";") + String((int)color.getRed())
-													  + String(";") + String((int)color.getBlue())
-													  + String(";") + String((int)color.getGreen());
-
-							Log.info() << "ADD_ATOM:acknowledgement_string Message @handleMolecularModeling from OpenSim to BALLView  : "<<acknowledgement_string<<std::endl;
+			
+					if( atom_index_ != -1)
+					{
+						String acknowledgement_string(OpenSimReceiver::ACKNOWLEDGE_ADD_ATOM);
 
 
-							sendAcknowledgement(acknowledgement_string);
-						}
-						else
-						{
-							Log.info() << "ADD_ATOM: Failed"<<std::endl;
-							// what message should we send to OpenMol
-						}
-					break;
-				}
+						acknowledgement_string +=  String(";") +  String(atom_index_) 
+													+ String(";") + String(element) 
+													+ String(";" )+ String(position.x) 
+													+ String(";") + String(position.y) 
+													+ String(";") + String(position.z) 
+													+ String(";") + String(radius) 
+													+ String(";") + String((int)color.getRed())
+													+ String(";") + String((int)color.getBlue())
+													+ String(";") + String((int)color.getGreen());
+
+						Log.info() << "ADD_ATOM:acknowledgement_string Message @handleMolecularModeling from OpenSim to BALLView  : "<<acknowledgement_string<<std::endl;
+
+
+						sendAcknowledgement(acknowledgement_string);
+					}
+					else
+					{
+						Log.info() << "ADD_ATOM: Failed"<<std::endl;
+						// what message should we send to OpenMol
+					}
+				break;
+			}
 				case (OpenSimReceiver::ADD_BOND):
 				{
 
@@ -791,7 +738,7 @@ namespace BALL
 			server_->is_Process_Done_ = true;
 		}
 
-		void BALLViewOpenSimPlugin::handleNewComposite(OpenSimTask task)
+		void OpenSimPlugin::handleNewComposite(OpenSimTask task)
 		{ 
 			HashMap<Handle, const Atom *>::ConstIterator atom_it;	
 
@@ -964,7 +911,7 @@ namespace BALL
 			}
 		}
 
-		void BALLViewOpenSimPlugin::handleRemovedComposite(OpenSimTask task)
+		void OpenSimPlugin::handleRemovedComposite(OpenSimTask task)
 		{
 			 HashMap<Handle, const Atom *>::ConstIterator atom_it;	
 
@@ -1057,7 +1004,7 @@ namespace BALL
 		}
 
 		
-		//void BALLViewOpenSimPlugin::handleChangedComposite(BallviewMessage bvmessage)
+		//void OpenSimPlugin::handleChangedComposite(BallviewMessage bvmessage)
 		//{
 
 
@@ -1355,7 +1302,7 @@ namespace BALL
 		//
 		//}
 
-		void BALLViewOpenSimPlugin::handleRepresentation(OpenSimTask task)
+		void OpenSimPlugin::handleRepresentation(OpenSimTask task)
 		{
 			String new_positions(NULL);
 

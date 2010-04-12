@@ -1,11 +1,11 @@
 #include <OpenSimWorkerThread.h>
-#include <BALLViewOpenSimPlugin.h>
+#include <OpenSimPlugin.h>
 
 namespace BALL
 {
 	namespace VIEW
 	{
-		OpenSimWorkerThread::OpenSimWorkerThread(BALLViewOpenSimPlugin* plugin)
+		OpenSimWorkerThread::OpenSimWorkerThread(OpenSimPlugin* plugin)
 			: bvplugin_(plugin),
 				terminate_requested_(false)
 		{

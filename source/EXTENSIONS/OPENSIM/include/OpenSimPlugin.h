@@ -28,7 +28,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		class BALLViewOpenSimPlugin
+		class OpenSimPlugin
 			: public QObject,
 			  public ModularWidget,
 			  public BALLPlugin,
@@ -38,7 +38,7 @@ namespace BALL
 			Q_OBJECT
 			Q_INTERFACES(BALL::BALLPlugin BALL::VIEW::VIEWPlugin BALL::VIEW::InputPlugin)
 
-			BALL_EMBEDDABLE(BALLViewOpenSimPlugin, ModularWidget)
+			BALL_EMBEDDABLE(OpenSimPlugin, ModularWidget)
 
 
 			public:
@@ -48,16 +48,16 @@ namespace BALL
 
 				queue<OpenSimTask> ballviewmessage_queue_;
 			
-				BALLViewOpenSimPlugin();
-				~BALLViewOpenSimPlugin();
+				OpenSimPlugin();
+				~OpenSimPlugin();
 
 				OpenSimCommandExecutionThread* const cmdThread_;
 
 				ReadWriteLock pluginrwLock_;
 
 
-				virtual QString getName() const { return "BALLViewOpenSimPlugin"; }
-				virtual QString getDescription() const { return "An interesting plugin"; }
+				virtual QString getName() const { return "OpenSimPlugin"; }
+				virtual QString getDescription() const { return "Connects BALLView to modified OpenSim servers."; }
 				virtual bool isActive() { return is_active_; };
 				virtual bool activate();
 				virtual bool deactivate();
@@ -113,10 +113,8 @@ namespace BALL
 				QWidget* receiver_;		
 
 				MolecularStructureContainer* const molStructPlugin_;
-
-				MolecularModelingContainer* const molModelingPlugin_;
-
-				MolecularDynamicsContainer* const molDynamicsPlugin_;
+				MolecularModelingContainer*  const molModelingPlugin_;
+				MolecularDynamicsContainer*  const molDynamicsPlugin_;
 
 			
 				String remote_host_;
