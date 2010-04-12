@@ -43,6 +43,7 @@ namespace BALL
 			delete (tube_template);
 				
 			objects_.clear();
+
 			rtfact_needs_update_ = false;
 
 			return true;
@@ -207,13 +208,47 @@ namespace BALL
 
 		void RTfactRenderer::bufferRepresentation(const Representation& rep)
 		{
+			if (rep.isHidden())
+			{
+				if (rep.needsUpdate())
+				{
+					// if the representation has been changed while it was hidden, we need
+					// to recreate it from scratch the next time it is enabled
+					//
+					// NOTE: it is safe to call removeRepresentation even if the representation
+					//       has not yet been added
+					removeRepresentation(rep);
+				}
+				return;
+			}
+
 			if (objects_.find(&rep) != objects_.end())
 			{
-				// TODO: handle the update more gracefully!
-				removeRepresentation(rep);
+				// was the representation previously disabled and now just needs enabling?
+				if (objects_[&rep].has_been_disabled)
+				{
+					RTfactData& rt_data = objects_[&rep];
+
+					// iterate over all top group handles and add them to the root again to make them visible
+					for (Position i=0; i<rt_data.top_group_handles.size(); ++i)
+					{
+						m_renderer.getRoot()->add(rt_data.top_group_handles[i]);
+					}
+
+					objects_[&rep].has_been_disabled = false;
+					rtfact_needs_update_ = true;
+
+					return;
+				}
+				else
+				{
+					// TODO: handle the update more gracefully!
+					removeRepresentation(rep);
+				}
 			}
 
 			RTfactData rt_data;
+			rt_data.has_been_disabled = false;
 
 			Stage::RaytracingMaterial rt_material = scene_->getStage()->getRTMaterial();
 			if (rep.hasProperty("RTFact::Material"))
@@ -262,7 +297,9 @@ namespace BALL
 
 					GroupHandle meshGroup = m_renderer.createGroup(Transform::identity());
 					meshGroup->add(handle);                
-					m_renderer.getRoot()->add(meshGroup);
+
+					if (!rep.isHidden())
+						m_renderer.getRoot()->add(meshGroup);
 
 					rt_data.top_group_handles.push_back(meshGroup);
 					rt_data.object_handles.push_back(handle);
@@ -311,7 +348,8 @@ namespace BALL
 					GroupHandle sphereGroup = m_renderer.createGroup(trafo);
 
 					sphereGroup->add(handle);
-					m_renderer.getRoot()->add(sphereGroup);
+					if (!rep.isHidden())
+						m_renderer.getRoot()->add(sphereGroup);
 
 					rt_data.top_group_handles.push_back(sphereGroup);
 					rt_data.object_handles.push_back(handle);
@@ -345,7 +383,8 @@ namespace BALL
 						GroupHandle tubeGroup = transformTube(old_tube);
 						tubeGroup->add(handle_1);
 
-						m_renderer.getRoot()->add(tubeGroup);
+						if (!rep.isHidden())
+							m_renderer.getRoot()->add(tubeGroup);
 
 						rt_data.top_group_handles.push_back(tubeGroup);
 						rt_data.object_handles.push_back(handle_1);
@@ -384,7 +423,8 @@ namespace BALL
 						all_group->add(tubeGroup_1);
 						all_group->add(tubeGroup_2);
 
-						m_renderer.getRoot()->add(all_group);
+						if (!rep.isHidden())
+							m_renderer.getRoot()->add(all_group);
 
 						rt_data.top_group_handles.push_back(all_group);
 						rt_data.object_handles.push_back(handle_1);
@@ -421,7 +461,8 @@ namespace BALL
 						GroupHandle tubeGroup = transformLine(old_line);
 						tubeGroup->add(handle_1);
 
-						m_renderer.getRoot()->add(tubeGroup);
+						if (!rep.isHidden())
+							m_renderer.getRoot()->add(tubeGroup);
 
 						rt_data.top_group_handles.push_back(tubeGroup);
 						rt_data.object_handles.push_back(handle_1);
@@ -460,7 +501,8 @@ namespace BALL
 						all_group->add(tubeGroup_1);
 						all_group->add(tubeGroup_2);
 
-						m_renderer.getRoot()->add(all_group);
+						if (!rep.isHidden())
+							m_renderer.getRoot()->add(all_group);
 
 						rt_data.top_group_handles.push_back(all_group);
 						rt_data.object_handles.push_back(handle_1);
@@ -483,7 +525,7 @@ namespace BALL
 		{
 			if (objects_.find(&rep) != objects_.end())
 			{
-				// 	     - find out if this also deletes the geometries and materials
+				// TODO: find out if this also deletes the geometries and materials
 				RTfactData& rt_data = objects_[&rep];
 				GroupHandle root = m_renderer.getRoot();
 
@@ -492,12 +534,12 @@ namespace BALL
 					root->remove(rt_data.top_group_handles[i]);
 				}
 
-				objects_.erase(&rep);
-
 				rtfact_needs_update_ = true;
 
-				if (use_continuous_loop_)
+				if (use_continuous_loop_ && !rep.isHidden())
 					m_renderer.pauseAnimation(false);
+
+				objects_.erase(&rep);
 			}
 		}
 
@@ -512,13 +554,26 @@ namespace BALL
 		{		    
 			Stage const& stage = *(scene_->getStage());
 
-			// deactivate hidden representations
+			// deactivate hidden representations (we need no reactivation code,
+			// since reactivated representations will simply be buffered again)
 			for (HashMap<Representation const*, RTfactData>::iterator it = objects_.begin(); it != objects_.end(); ++it)
 			{
-				if (it->first->isHidden())
-					continue; // TODO: code for deactivation
-				else
-					continue; // TODO: code for reactivation
+				if (it->first->isHidden() && !it->second.has_been_disabled)
+				{
+					// It is safe to remove a group multiple times from RTfact. It may not be
+					// *fast*, but it should be safe.
+					RTfactData& rt_data = it->second;
+					GroupHandle root = m_renderer.getRoot();
+
+					for (Position i=0; i<rt_data.top_group_handles.size(); ++i)
+					{
+						root->remove(rt_data.top_group_handles[i]);
+					}
+
+					it->second.has_been_disabled = true;
+
+					rtfact_needs_update_ = true;
+				}
 			}
 
 			if (rtfact_needs_update_)

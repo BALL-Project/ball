@@ -48,6 +48,9 @@ namespace BALL
 
 						/// The materials
 						std::vector<RTfact::Remote::RTAppearanceHandle> material_handles;
+
+						/// Mark previously disabled representations
+						bool has_been_disabled;
 				};
 
 				/// Default Constructor.
