@@ -448,14 +448,14 @@ namespace BALL
 			throw (Exception::FileNotFound);
 			
 		/**	Create a temporary filename.
-				This method creates strings, starting at _AAAAAAA.TMP and tries if a 
+				This method creates strings, starting at _AAAAAAA, adds the suffix
+				/suffix/ which defaults to .TMP and tries if a 
 				file with this name exists. If not, the string is returned. If a file
-				with this name exists, it continues to create names up to _ZZZZZZZ.TMP.
+				with this name exists, it continues to create names up to _ZZZZZZZ.
 				@param temporary reference to the temporary filename
 				@return bool true if a temporary filename could be found
 		*/
-		static bool createTemporaryFilename(String& temporary)
-			;
+		static bool createTemporaryFilename(String& temporary, const String& suffix = ".TMP");
 
     /** Return the stream associated with this file.
 				Implemented just for convenience.
