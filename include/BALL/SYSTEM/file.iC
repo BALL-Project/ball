@@ -6,22 +6,19 @@
 
 BALL_INLINE 
 void File::clear()
-	
 {
 	File::close();
   name_ = "";
 }
 
 BALL_INLINE 
-const String& File::getName()
-	const	
+const String& File::getName() const	
 {
   return name_;
 }
 
 BALL_INLINE 
 void File::setName(const String& name)
-	
 {
 	File::close();
   name_ = name;
@@ -30,8 +27,7 @@ void File::setName(const String& name)
 
 
 BALL_INLINE 
-File::OpenMode File::getOpenMode()
-	const	
+File::OpenMode File::getOpenMode() const	
 {
   return open_mode_;
 }
@@ -52,7 +48,6 @@ bool File::copyTo(const String& destination_name, Size buffer_size)
 
 BALL_INLINE 
 bool File::remove(String name)
-	
 {
   FileSystem::canonizePath(name);
 #ifdef BALL_COMPILER_MSVC
@@ -64,7 +59,6 @@ bool File::remove(String name)
 
 BALL_INLINE 
 bool File::remove() 
-	
 {
 #ifdef BALL_COMPILER_MSVC
   File::close();
@@ -99,11 +93,8 @@ bool File::moveTo(const String& destination_name)
   return false;
 }
 
-
-
 BALL_INLINE 
 bool File::isAccessible(String name)
-	
 {
   FileSystem::canonizePath(name);
 #ifdef BALL_COMPILER_MSVC
@@ -191,22 +182,19 @@ bool File::truncate(Size size)
 }
 
 BALL_INLINE 
-bool File::operator == (const File &file)
-	const	
+bool File::operator == (const File &file) const	
 {
   return (name_ == file.name_);
 }
 
 BALL_INLINE 
-bool File::operator != (const File &file)
-	const	
+bool File::operator != (const File &file) const	
 {
   return (name_ != file.name_);
 }
 
 BALL_INLINE 
 const File& File::operator = (const File& file)
-	
 {
   name_ = file.name_;
 	open_mode_ = file.open_mode_;
@@ -223,14 +211,12 @@ bool File::isValid() const
 
 BALL_INLINE 
 bool File::isOpen()	const	
-	
 {
   return is_open_;
 }
 
 BALL_INLINE 
 bool File::isClosed() const	
-	
 {
   return !is_open_;
 }
@@ -278,8 +264,8 @@ bool File::isWritable(String name)
 }
 
 BALL_INLINE 
-bool File::isWritable()
-	const throw (Exception::FileNotFound)
+bool File::isWritable() const 
+	throw (Exception::FileNotFound)
 {
   return File::isWritable(name_);
 }
@@ -299,8 +285,8 @@ bool File::isExecutable(String name)
 }
 
 BALL_INLINE 
-bool File::isExecutable()
-	const throw (Exception::FileNotFound)
+bool File::isExecutable() const 
+	throw (Exception::FileNotFound)
 {
   return File::isExecutable(name_);
 }
@@ -321,8 +307,6 @@ std::fstream& File::getFileStream()
 
 BALL_INLINE 
 const String& File::getOriginalName()	const	
-	
 {
   return original_name_;
 }
-
