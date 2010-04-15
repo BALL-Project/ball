@@ -43,10 +43,7 @@
 
 #include "ui_aboutDialog.h"
 
-// NOTE: this does not yet work correctly on windows
-#ifndef BALL_COMPILER_MSVC
 #include <BALL/VIEW/DIALOGS/pluginDialog.h>
-#endif
 
 using namespace std;
 //#define BALL_VIEW_DEBUG
@@ -102,10 +99,9 @@ namespace BALL
 		new MolecularFileDialog(this, "MolecularFileDialog");
 		new DownloadPDBFile(		this, "DownloadPDBFile", false);
 		new PubChemDialog(this, "PubChemDialog");
-#ifndef BALL_COMPILER_MSVC
 		new PluginDialog(this, "PluginDialog");
-#endif
- 		addDockWidget(Qt::LeftDockWidgetArea, new MolecularControl(this, "Structures"));
+ 		
+		addDockWidget(Qt::LeftDockWidgetArea, new MolecularControl(this, "Structures"));
 		addDockWidget(Qt::LeftDockWidgetArea, new GeometricControl(this, "Representations"));
 		addDockWidget(Qt::TopDockWidgetArea,  new DatasetControl(this, "Datasets"));
 		DatasetControl* dc = DatasetControl::getInstance(0);

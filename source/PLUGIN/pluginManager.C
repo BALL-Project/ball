@@ -59,10 +59,12 @@ namespace BALL
 		if (to_load_it == loaded_plugin_dirs_.end())
 		{
 			vector<BALLPlugin*> loaded_plugins;
-#ifndef BALL_OS_DARWIN
-			QDir plugin_dir(dir, "plugin*.so", QDir::Name | QDir::IgnoreCase, QDir::Files);
-#else
+#if defined(BALL_OS_WINDOWS)
+			QDir plugin_dir(dir, "plugin*.dll", QDir::Name | QDir::IgnoreCase, QDir::Files);
+#elif defined(BALL_OS_DARWIN)
 			QDir plugin_dir(dir, "plugin*.dylib", QDir::Name | QDir::IgnoreCase, QDir::Files);
+#else
+			QDir plugin_dir(dir, "plugin*.so", QDir::Name | QDir::IgnoreCase, QDir::Files);
 #endif
 
 			// collect the loaded plugins in this dir
