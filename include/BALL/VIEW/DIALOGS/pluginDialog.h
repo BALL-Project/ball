@@ -30,7 +30,7 @@ namespace BALL
 				void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 		};
 */
-		class PluginModel : 
+		class BALL_VIEW_EXPORT PluginModel : 
 			public QAbstractListModel	
 		{
 			Q_OBJECT
@@ -49,7 +49,7 @@ namespace BALL
 		
 		/** Dialog for handling the BALLView plugins
 		*/
-		class PluginDialog 
+		class BALL_VIEW_EXPORT PluginDialog 
 			: public QDialog, 
 				private Ui_PluginDialogData,
 				public ModularWidget,

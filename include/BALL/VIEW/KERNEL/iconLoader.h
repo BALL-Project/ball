@@ -25,7 +25,7 @@ namespace BALL
 		 * are essentially two ways to use this class: Use it in a singleton wise fashion or
 		 * create an specialized instance.
 		 */
-		class IconLoader
+		class BALL_VIEW_EXPORT IconLoader
 		{
 			public:
 				/**

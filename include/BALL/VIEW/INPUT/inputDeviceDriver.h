@@ -1,6 +1,10 @@
 #ifndef INPUTDEVICEDRIVER_H
 #define INPUTDEVICEDRIVER_H
 
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
+
 #include <QtCore/QMutex>
 
 class QWidget;
@@ -11,7 +15,7 @@ namespace BALL
 	{
 		class Scene;
 
-		class InputDeviceDriver
+		class BALL_VIEW_EXPORT InputDeviceDriver
 		{
 			public:
 				InputDeviceDriver(QWidget* reciever);
