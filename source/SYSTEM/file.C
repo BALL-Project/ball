@@ -31,7 +31,6 @@ namespace BALL
 	const File::OpenMode File::MODE_TRUNC = std::ios::trunc;
  
 	File::CannotWrite::CannotWrite(const char* file, int line, const String& filename)
-		
 		:	Exception::GeneralException(file, line, "File::CannotWrite", ""),
 			filename_(filename)
 	{
@@ -45,7 +44,6 @@ namespace BALL
 	}
 
 	String File::CannotWrite::getFilename() const
-		
 	{
 		return filename_;
 	}
@@ -184,8 +182,6 @@ namespace BALL
 	
 	TransformationManager File::transformation_manager_;
 
-
-
 	const String File::TRANSFORMATION_EXEC_PREFIX = "exec:";
 	const String File::TRANSFORMATION_FILE_PREFIX = "file:";
 	const String File::TRANSFORMATION_HTTP_PREFIX = "http://";
@@ -196,7 +192,6 @@ namespace BALL
 																				| BALL_BIT(File::TRANSFORMATION__URL);
 
 	File::File()
-		
 		:	std::fstream(),
 			name_(),
 			open_mode_(std::ios::in),
@@ -234,7 +229,6 @@ namespace BALL
 	}
 
 	File::~File()
-		
 	{
 		close();
 	}
@@ -393,7 +387,6 @@ namespace BALL
 	}
 
 	void File::close()
-		
 	{
 		if (is_open_ == true)
 		{
