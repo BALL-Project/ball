@@ -346,7 +346,25 @@ int main(int argc, char **argv)\
 						std::cout << "  creating new temporary file '" << filename << "' (line " << __LINE__ << ")" << std::endl;\
 					}\
 	
-	
+/**	Create a temporary filename with given suffix.
+		This macro assigns a new temporary filename to the string variable given as
+		its argument. The filename is created using  \link BALL::File::createTemporaryFilename File::createTemporaryFilename \endlink .
+		All temporary files are deleted if  \link #END_TEST END_TEST \endlink  is called.
+		@param	filename String will contain the filename on completion of the macro
+		\ingroup ClassTest
+*/
+#define NEW_TMP_FILE_WITH_SUFFIX(filename, suffix)\
+					::BALL::File::createTemporaryFilename(filename, suffix);\
+					TEST::tmp_file_list.push_back(filename);\
+					if (TEST::verbose > 1)\
+					{\
+						if (!TEST::newline) \
+						{\
+							TEST::newline = true;\
+							std::cout << std::endl;\
+						}\
+						std::cout << "  creating new temporary file '" << filename << "' (line " << __LINE__ << ")" << std::endl;\
+					}\
 	
 /**	Floating point equality macro.
 		Checks whether the absolute value of the difference of the two floating point

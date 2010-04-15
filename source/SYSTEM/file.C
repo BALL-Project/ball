@@ -512,10 +512,9 @@ namespace BALL
 		return File::TYPE__UNKNOWN;
 	}
 
-	bool File::createTemporaryFilename(String& temporary)
-		
+	bool File::createTemporaryFilename(String& temporary, const String& suffix)
 	{
-		temporary = "_1234567.TMP";
+		temporary = "_1234567" + suffix;
 		
 		char a, b, c, d, e, f, g;
 		
