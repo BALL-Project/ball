@@ -100,11 +100,9 @@ namespace BALL
 		///
 		DataType& getData();
 		
-		const vector<float>& getHuInvariants() const
-			throw();
+		const vector<float>& getHuInvariants() const;
 		
-		vector<float>& getHuInvariants()
-			throw();
+		vector<float>& getHuInvariants();
 
 		//@}
 
@@ -120,11 +118,14 @@ namespace BALL
 
 		virtual void setSpacing(const PositionType& spacing);
 		virtual PositionType getSpacing() const;
+
 		virtual void setSticks(std::vector<PeakType> sticks) {sticks_ = sticks;};
+		virtual std::vector<PeakType> getSticks() const {return sticks_;};
 		
+	
 		// computes the integral over the fabs() of the spectrum
 		virtual double getAbsIntegral() const;
-		virtual void computeHuInvariants() throw();
+		virtual void computeHuInvariants();
 		virtual vector<float> computeHuInvariantsDifferences(vector<Spectrum<DataT, PeakT, PositionT> >& spectra);
 
 		/** Computes the difference between the spectra in Fourier space. max_freq and min_freq can be used to
@@ -149,12 +150,18 @@ namespace BALL
 		/// precomputed standardized moments
 		std::vector<float> standardized_moments;
 	
+		/// This function requires that DataT has a binaryWrite method
+		void binaryWrite(const String& filename);
+
+		/// This function requires that DataT has a binaryRead method
+		void binaryRead(const String& filename);
+
 		protected:
 			DataType							data_;
 			std::vector<PeakType> sticks_;
-			PositionType					spacing_;
-			PositionType					min_;
-			PositionType					max_;
+			PositionType					spacing_; // rausschmeissen , wie auch immer 
+			PositionType					min_;     // rausschmeissen , wie auch immer 
+			PositionType					max_;     // rausschmeissen , wie auch immer 
 			std::vector<float>	 	Hu_invariants_;
 	};
 
@@ -257,32 +264,27 @@ namespace BALL
 	
 	template <typename DataT, typename PeakT, typename PositionT>
 	const DataT& Spectrum<DataT, PeakT, PositionT>::getData() const
-	throw()
 	{
 		return data_;
 	}
 	
 	template <typename DataT, typename PeakT, typename PositionT>
 	DataT& Spectrum<DataT, PeakT, PositionT>::getData()
-	throw()
 	{
 		return data_;
 	}
 /*	
-	const vector<float>& getHuInvariants()
-			throw();
+	const vector<float>& getHuInvariants();
 */
 
 	template <typename DataT, typename PeakT, typename PositionT>
 	const vector<float>& Spectrum<DataT, PeakT, PositionT>::getHuInvariants() const
-	throw()
 	{
 		return Hu_invariants_;
 	}
 
 	template <typename DataT, typename PeakT, typename PositionT>
 	vector<float>& Spectrum<DataT, PeakT, PositionT>::getHuInvariants() 
-	throw()
 	{
 		return Hu_invariants_;
 	}
@@ -291,7 +293,6 @@ namespace BALL
 	
 	template <typename DataT, typename PeakT, typename PositionT>
 	void Spectrum<DataT, PeakT, PositionT>::computeHuInvariants()
-	throw()
 	{
 		Log.error()<< "computeHuInvariants() only implemented in 2D" << std::endl;
 		return;
@@ -328,6 +329,9 @@ namespace BALL
   
 	template <typename DataT, typename PeakT, typename PositionT>
 	std::ostream& operator << (std::ostream& os, const Spectrum<DataT, PeakT, PositionT>& spectrum);
+	
+	template <typename DataT, typename PeakT, typename PositionT>
+	std::istream& operator >> (std::istream& is, Spectrum<DataT, PeakT, PositionT>& spectrum);
 
 # ifndef BALL_NO_INLINE_FUNCTIONS
 #   include <BALL/NMR/spectrum.iC>

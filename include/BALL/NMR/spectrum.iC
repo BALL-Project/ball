@@ -16,8 +16,11 @@ Spectrum<RegularData1D, Peak1D>::Spectrum(const std::vector<Peak1D>& peaks, cons
 		} 
 		catch (Exception::OutOfGrid e)
 		{
-			Log.error() << "Error in Spectrum(): point " << sticks_[i].getPosition() 
-								  << " outside the grid. Consider decreasing origin / increasing dimension!" << std::endl;
+			if (sticks_[i].getPosition() != 0)
+			{
+				Log.error() << "Error in Spectrum(): point " << sticks_[i].getPosition() 
+								  << " outside the grid. Consider decreasing origin(" << origin <<")/increasing dimension("<< dimension <<")!" << std::endl;
+			}
 			continue;
 		}
 	}
@@ -180,8 +183,19 @@ std::cout << "CMP myInt : " << integral << " their int: " << their_integral << s
 	return total_difference;
 }
 
+template <typename DataT, typename PeakT, typename PositionT>
+BALL_INLINE
+void Spectrum<DataT, PeakT, PositionT>::binaryWrite(const String& filename)
+{
+	data_.binaryWrite(filename);
+}
 
-
+template <typename DataT, typename PeakT, typename PositionT>
+BALL_INLINE
+void Spectrum<DataT, PeakT, PositionT>::binaryRead(const String& filename)
+{
+	data_.binaryRead(filename);
+}
 
 template <>
 BALL_INLINE
@@ -191,10 +205,11 @@ std::ostream& operator << (std::ostream& os, const Spectrum<RegularData1D, Peak1
 	// e.g. Spectrum2D spec; ...; File f("plot.dat", std::ios::out); f << spec;
 	// gnuplot -persist plot.dat
 	const RegularData1D& data = spectrum.getData();
+	os << data;
 
 //	os << "set xrange [" << data.getOrigin().x << ":" << data.getOrigin().x+data.getDimension().x << "]" << std::endl;
 //	os << "set yrange [" << data.getOrigin().y << ":" << data.getOrigin().y+data.getDimension().y << "]" << std::endl;
-
+/*
 	RegularData1D::IndexType index;
 	RegularData1D::IndexType size = data.getSize();
 	
@@ -203,10 +218,9 @@ std::ostream& operator << (std::ostream& os, const Spectrum<RegularData1D, Peak1
 			RegularData1D::CoordinateType pos = data.getCoordinates(index);
 			os << pos << " "  << data(pos) << std::endl;
 	}
-
+*/
 	return os;
 }
-
 
 template <>
 BALL_INLINE
@@ -216,12 +230,14 @@ std::ostream& operator << (std::ostream& os, const Spectrum<RegularData2D, Peak2
 	// e.g. Spectrum2D spec; ...; File f("plot.dat", std::ios::out); f << spec;
 	// gnuplot -persist plot.dat
 	const RegularData2D& data = spectrum.getData();
-
+	os << data;
+	/*
 //	os << "set xrange [" << data.getOrigin().x << ":" << data.getOrigin().x+data.getDimension().x << "]" << std::endl;
 //	os << "set yrange [" << data.getOrigin().y << ":" << data.getOrigin().y+data.getDimension().y << "]" << std::endl;
 
 	RegularData2D::IndexType index;
 	RegularData2D::IndexType size = data.getSize();
+	os << size.x << " " << size.y << std::endl;
 	
 	for (index.x = 0; index.x < size.x; index.x++)
 	{
@@ -233,9 +249,30 @@ std::ostream& operator << (std::ostream& os, const Spectrum<RegularData2D, Peak2
 		}
 		os << std::endl;
 	}
-
+	*/
 	return os;
 }
+
+
+template <>
+BALL_INLINE
+std::istream& operator >> (std::istream& is, Spectrum<RegularData1D, Peak1D>& spectrum)
+{
+	RegularData1D& data = spectrum.getData();
+	is >> data;
+	return is;
+}
+
+
+template <>
+BALL_INLINE
+std::istream& operator >> (std::istream& is, Spectrum<RegularData2D, Peak2D>& spectrum)
+{
+	RegularData2D& data = spectrum.getData();
+	is >> data;
+	return is;
+}
+
 
 template <>
 BALL_INLINE
@@ -553,7 +590,6 @@ Spectrum<RegularData2D, Peak2D> Spectrum<RegularData2D, Peak2D>::differenceSpect
 template <>
 BALL_INLINE
 void Spectrum<RegularData2D, Peak2D>::computeHuInvariants()
-	throw()
 {
 	// compute the geometric moments
 	float m_0_0 = 0.;
