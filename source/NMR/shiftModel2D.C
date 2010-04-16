@@ -17,12 +17,13 @@ namespace BALL
 			type_(),
 			parameters_(),
 			system_(NULL),
-			valid_(false)		
+			valid_(false),
+			compute_shifts_(true)
 	{// ?? should we do this? 
 			//	registerStandardModules_();
 	}
 
-	ShiftModel2D::ShiftModel2D(const String& filename, SPECTRUM_TYPE st) 
+	ShiftModel2D::ShiftModel2D(const String& filename, SPECTRUM_TYPE st, bool compute_shifts) 
 		throw()
 		:	ShiftModule(),
 			peaks_(),
@@ -32,14 +33,15 @@ namespace BALL
 			type_(st),
 			parameters_(filename),
 			system_(NULL),
-			valid_(false)		
+			valid_(false),
+			compute_shifts_(compute_shifts)
 	{
 		//?? should we do this? 
 		//registerStandardModules_();
 		init_();
 	}
 
-	ShiftModel2D::ShiftModel2D(const String& filename,SPECTRUM_TYPE st, Vector2 origin, Vector2 dimension, Vector2 spacing) 
+	ShiftModel2D::ShiftModel2D(const String& filename,SPECTRUM_TYPE st, Vector2 origin, Vector2 dimension, Vector2 spacing, bool compute_shifts) 
 		throw()
 		:	ShiftModule(),
 			peaks_(),
@@ -49,7 +51,8 @@ namespace BALL
 			type_(st),
 			parameters_(filename),
 			system_(NULL),
-			valid_(false)		
+			valid_(false),
+			compute_shifts_(compute_shifts)
 	{
 		//?? should we do this? 
 		//registerStandardModules_();
@@ -66,7 +69,8 @@ namespace BALL
 			type_(model.type_),
 			parameters_(model.parameters_),
 			system_(NULL),
-			valid_(false)		
+			valid_(false),
+			compute_shifts_(model.compute_shifts_)
 	{
 		init_();
 	}
@@ -140,9 +144,12 @@ namespace BALL
 			return false;
 		}
 		
-		// compute the shift model
-		BALL::ShiftModel sm(parameters_.getFilename());
-		system_->apply(sm);
+		// compute the shift model if necessary
+		if (compute_shifts_)
+		{
+			BALL::ShiftModel sm(parameters_.getFilename());
+			system_->apply(sm);
+		}
 		
 		if (type_== HSQC_NH  ||  type_ ==  HSQC_CH)
 		{
@@ -190,8 +197,9 @@ namespace BALL
 				// do we have atom in this residue? 
 				for (BALL::AtomIterator at_it = r_it->beginAtom(); +at_it; ++at_it)
 				{
-					
-					if (at_it->getElement() == element_type2)
+					//we just allow backbone's
+					//if (at_it->getElement() == element_type2)
+					if (at_it->getName() == "N" || at_it->getName() == "C")
 					{
 						atom = &(*at_it);
 						
@@ -294,7 +302,7 @@ namespace BALL
 						atom2 = &(*at_it);
 					}
 
-					if (atom1 && atom2)  
+					if (atom1 && atom2 )  
 					{
 						createPeak_(atom1, atom2,	peakwidth_atom1, 	peakwidth_atom2 );
 					}
@@ -310,15 +318,23 @@ namespace BALL
 		// we have, get the shift
 		float shift1 = atom1->getProperty(BALL::ShiftModule::PROPERTY__SHIFT).getFloat();
 		float shift2 = atom2->getProperty(BALL::ShiftModule::PROPERTY__SHIFT).getFloat();
-
+		
+/*		//do we have to exlcude Prolines?
+		if (type_ == HSQC_NH && atom2->getResidue()->getName() == "PRO" && atom2->getName() == "N")
+		{ 
+ 			shift2 = 0.;
+		} */
+		
 		//store the shift in the peak list
-		Peak2D<Vector2> peak;
-		Vector2<float> pos(shift1, shift2); 
+		Peak2D peak;
+		Vector2 pos(shift1, shift2); 
 		peak.setPosition(pos);
 
+	//std::cout << " halo " << atom2->getName() << " " << atom2->getResidue()->getName() << ": " <<  shift2  << "     "<< atom1->getName() << " " << atom1->getResidue()->getName() << ": " <<  shift1  << std::endl;
 		peak.setWidth(Vector2(peakwidth_atom1,peakwidth_atom2));
 		//TODO: macht das Sinn, wenn er gerade neu erzeugt wurde?? 
-		peak.setIntensity(peak.getIntensity()+1);
+//		peak.setIntensity(peak.getIntensity()+1);
+		peak.setIntensity(1);
 		//setAtom();
 		peaks_.push_back(peak);
 	}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: haighMallionShiftProcessor.C,v 1.17.18.8 2006/10/04 13:49:43 anne Exp $
+// $Id: haighMallionShiftProcessor.C,v 1.17.18.9 2007/01/14 16:34:04 anne Exp $
 //
 
 #include <BALL/NMR/haighMallionShiftProcessor.h>
@@ -50,7 +50,7 @@ namespace BALL
 
 	void HaighMallionShiftProcessor::init()
 	{
-std::cout << " ******************* HM-Shift *******************" << std::endl;
+//std::cout << " ******************* HM-Shift *******************" << std::endl;
 		valid_ = false;
 		if (parameters_ == 0)
 		{
@@ -177,62 +177,11 @@ std::cout << " ******************* HM-Shift *******************" << std::endl;
 		
 // print the parameter set
 //		printParameters_();
-
-		/*std::cout << "\teffector_names" << std::endl;
-vector< BALL::String >::const_iterator effector_names_it = effector_names_.begin();
-for(;effector_names_it != effector_names_.end(); ++effector_names_it)
-{
-	std::cout <<(*effector_names_it) << "  " << std::endl;
-}
-std::cout << "\tintensity_factors" << std::endl;
-StringHashMap<float>::ConstIterator int_it = intensity_factors_.begin();
-for(;int_it != intensity_factors_.end(); ++int_it)
-{
-	std::cout <<int_it->first << "  " << int_it->second << std::endl;
-}
-
-std::cout << "\tring_atoms: " << std::endl;
-vector< vector<BALL::String> >::const_iterator ring_it = ring_atoms_.begin();
-for(;ring_it != ring_atoms_.end(); ++ring_it)
-{
-		vector<BALL::String>::const_iterator atom_it = ring_it->begin();
-		for(;atom_it != ring_it->end(); ++atom_it )
-		{
-			std::cout << (*atom_it)<< "  ";
-		}
-		std::cout << " " << std::endl;
-}
-
-std::cout << "\ttarget names: " << std::endl;
-vector< BALL::String >::const_iterator targets_it = target_names_.begin();
-for(;targets_it != target_names_.end(); ++targets_it)
-{
-	std::cout <<(*targets_it) << "  " << std::endl;
-}
-
-
-
-std::cout << "\tH_influenced_by_all_effectors_= " << H_influenced_by_all_effectors_ << std::endl;
-std::cout << "\tHA_influenced_by_all_effectors_ = " <<	HA_influenced_by_all_effectors_ << std::endl;
-std::cout << "\tuse_cut_off_= " << use_cut_off_<< std::endl;
-std::cout << "\tcut_off2_ = " << cut_off2_ << std::endl;
-std::cout << "\tall_hydrogen_are_targets_ = " << all_hydrogen_are_targets_ << std::endl;
-std::cout << "\tproject_target_to_ring_plane = " << project_target_to_ring_plane_ << std::endl;
-std::cout << "\tdefault_hydrogen_target_nucleus_factor = " << default_hydrogen_target_nucleus_factor_ << std::endl;
-
-std::cout << "\ttarget nucleus factors: " << std::endl;
-StringHashMap<float>::ConstIterator t_it = target_nucleus_factors_.begin();
-for(;+t_it; ++t_it)
-{
-	std::cout <<t_it->first << "  " << t_it->second << std::endl;
-}
-*/
 	}
 
 	
 	bool HaighMallionShiftProcessor::start ()
 	{
-std::cout << "-------------- HM-start() --------------- "<< std::endl;	
 		// if the module is invalid, abort
 		if (!isValid())
 		{
@@ -249,7 +198,6 @@ std::cout << "-------------- HM-start() --------------- "<< std::endl;
 	bool HaighMallionShiftProcessor::finish()
 		
 	{
-std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 		//printEffectors_();
 		//printTargets_();
 
@@ -306,9 +254,6 @@ std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 			// over all targets
 			for (Position t = 0; t < targets_.size(); t++ )
 			{
-//if (targets_[t]->getName() == "CA")
-//	std::cout << "ring normal" << ring_normal << ", target" << targets_[t]->getPosition(); 
-				
 				// can H and HA influenced by all effectors or just by effectors of the same residue? 
 				if (    (targets_[t]->getName() == "H") 
 						&& (!H_influenced_by_all_effectors_)
@@ -321,7 +266,6 @@ std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 						&& (!HA_influenced_by_all_effectors_)
 						&& (targets_[t]->getResidue() == effectors_[e][0]->getResidue()))
 				{
-		std::cout << "Mist! " << std::endl;
 					continue;
 				}
 
@@ -330,10 +274,6 @@ std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 						(project_target_to_ring_plane_) ? 	 targets_[t]->getPosition() 
 																							+ ((targets_[t]->getPosition()-effectors_[e][0]->getPosition())*ring_normal)*ring_normal
 																						:    targets_[t]->getPosition();
-//std::cout << ", projection" << atom_projection << std::endl;
-				
-//if (targets_[t]->getResidue()->getName() == "HIS" && targets_[t]->getName() == "HA")
-//	std::cout << targets_[t]->getResidue()->getID() << " " << ring_normal << " " << targets_[t]->getPosition() << std::endl;
 
 				if (use_cut_off_)
 				{
@@ -382,10 +322,6 @@ std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 						area = r_i * (r_j % ring_normal) / 2.;
 					}
 
-//std::cout << "r_i: " << effectors_[e][(pos ) % (ring_size)]->getName()  << " " << effectors_[e][(pos ) % (ring_size)]->getPosition() << "--rj: "<< effectors_[e][(pos + 1) % (ring_size)]->getName() <<" "<< effectors_[e][(pos + 1) % (ring_size)]->getPosition()  << " area :"  << area << " , dist:" << pow((r_i + atom_projection - targets_[t]->getPosition()).getLength(),-3) 
-//						   +  pow((r_j + atom_projection - targets_[t]->getPosition()).getLength(), -3) << std::endl;
-
-					//area *= 1.0 / (r_i.getSquareLength() * r_i.getLength()) +  1.0 / (r_j.getSquareLength() * r_j.getLength());
 					area *= pow((r_i + atom_projection - targets_[t]->getPosition()).getLength(),-3) 
 						   +  pow((r_j + atom_projection - targets_[t]->getPosition()).getLength(), -3);
 							
@@ -397,26 +333,15 @@ std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 
 				float target_nucleus_factor = 0.;
 
-//std::cout << "ElementSymbol: " <<  targets_[t]->getElement().getSymbol() << " Group: " << targets_[t]->getElement().getGroup()  << " Name: " << targets_[t]->getName();
-				
 				if (target_nucleus_factors_.has(targets_[t]->getName()))
 						target_nucleus_factor = target_nucleus_factors_[targets_[t]->getName()];
-			/*	else if (targets_[t]->getElement().getSymbol() == PTE[Element::H].getSymbol())
-				{
-						target_nucleus_factor = default_hydrogen_target_nucleus_factor_;
-						std::cout << __FILE__ << "hier" << __LINE__ << "" << std::endl;
-				}*/
-//std::cout <<  " Factor: " << target_nucleus_factor  <<  std::endl;
 
 				float new_rc_shift  = intensity_factors_[effector_types_[e]] * target_nucleus_factor * geometrical_factor;
 				
 				// negative ring current correction a la ShitX
 				if (new_rc_shift < 0.)
 					new_rc_shift *= negative_ringcurrent_factor_;
-//	if (targets_[t]->getResidue()->getName() == "HIS" && targets_[t]->getName() == "HA")
-//		std::cout << targets_[t]->getResidue()->getID() << " " << ring_normal << " " << targets_[t]->getPosition() << " " << new_rc_shift<< std::endl;
 
-	
 				float old_rc_shift = 0.;
 				if (targets_[t]->hasProperty(PROPERTY__RING_CURRENT_SHIFT))
 					old_rc_shift = targets_[t]->getProperty(PROPERTY__RING_CURRENT_SHIFT).getFloat();
@@ -438,11 +363,9 @@ std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 					}
 				}
 				*/
-				//new_rc_shift += old_rc_shift;
 				
 				float shift = targets_[t]->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
-//if (targets_[t]->getName() == "CA")
-//	std::cout << "shift: " << new_rc_shift << " ,NukleusFactor: " << target_nucleus_factor << " ,IntensityFactor: " << intensity_factors_[effector_types_[e]]  << std::endl;
+
 				targets_[t]->setProperty(ShiftModule::PROPERTY__SHIFT, shift + new_rc_shift);
 			  targets_[t]->setProperty(PROPERTY__RING_CURRENT_SHIFT, new_rc_shift + old_rc_shift );			
 			}
@@ -463,21 +386,15 @@ std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 		Residue* residue = dynamic_cast<Residue*>(&composite);
 		if (residue != 0)
 		{	
-//std::cout << " **** " << residue->getName() << std::endl;
-
 			// It is! Check whether its name matches any of our list
 			// of aromatic residue names.
-			//To Think: perhaps it makes sense to use a string hash map for fast lookup 
+			// To Think: perhaps it makes sense to use a string hash map for fast lookup 
 			for (Position i = 0; i < effector_names_.size(); i++)
 			{
-//std::cout << "Effektortype " << residue->getName()<< " " << effector_names_[i] << std::endl;
 				// Important Note! We want to allow names like TRP1 and TRP2 to denote the 2 rings
 				// of tryptophane, so we can't test for equality of the name of the effector and the residue!
 				if (effector_names_[i].hasPrefix(residue->getName()))
 				{
-
-//std::cout << "Effektortype " << residue->getName()<< " " << effector_names_[i] << std::endl;
-				
 					effector_types_.push_back(effector_names_[i]);
 
 					vector <BALL::Atom*> atoms;
@@ -507,6 +424,7 @@ std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 		Atom* atom = dynamic_cast<Atom*>(&composite);
 		if (atom != 0)
 		{
+			atom->clearProperty(PROPERTY__RING_CURRENT_SHIFT);
 			// TO DO: Logik ueberdenken! 
 			if (all_hydrogen_are_targets_  && atom->getName().hasSubstring("H"))
 			{
@@ -612,7 +530,6 @@ std::cout << "-------------- HM-finish() --------------- "<< std::endl;
 		{
 			if  (RTTI::isKindOf<System>(	targets_[i]->getRoot()))
 			{	
-				std::cout << " das war also tatsaechlich ein system!!!!!" << std::endl;
 				system = dynamic_cast<System*>(&(targets_[i]->getRoot()));
 			}
 		}

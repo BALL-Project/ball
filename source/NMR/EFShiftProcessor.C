@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: EFShiftProcessor.C,v 1.14.20.6 2006/09/28 09:30:29 anne Exp $
+// $Id: EFShiftProcessor.C,v 1.14.20.7 2007/01/14 16:34:04 anne Exp $
 
 #include<BALL/NMR/EFShiftProcessor.h>
 #include <BALL/COMMON/limits.h>
@@ -48,7 +48,7 @@ namespace BALL
 	void EFShiftProcessor::init()
 		
 	{
-std::cout << "******************* EF-Shift ******************* " << std::endl;
+//std::cout << "******************* EF-Shift ******************* " << std::endl;
 		// by default, we assume the worst...
 		valid_ = false;
 
@@ -161,7 +161,7 @@ std::cout << "******************* EF-Shift ******************* " << std::endl;
 			}
 		}
 
-		printParameters_();
+		//printParameters_();
 
 		// mark the module as initialized
 		valid_ = true;
@@ -461,7 +461,6 @@ std::cout << "******************* EF-Shift ******************* " << std::endl;
 		{
 			if  (RTTI::isKindOf<System>(tbond_it->first->getRoot()))
 			{	
-				std::cout << " das war also tatsaechlich ein system!!!!!" << std::endl;
 				system = dynamic_cast<System*>(&(tbond_it->first->getRoot()));
 				break;
 			}

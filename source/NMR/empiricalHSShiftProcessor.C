@@ -17,6 +17,8 @@
 #define STRING_VALUE_NA "BADVAL"
 #define CHAR_VALUE_NA  '?'
 
+#define DEBUG 1
+
 using namespace std;
 
 namespace BALL 
@@ -45,7 +47,6 @@ namespace BALL
 	void EmpiricalHSShiftProcessor::init()
 		throw()
 	{	
-		std::cout << "******************* EHS-Shift ******************* " << std::endl;
 		// by default, we assume the worst...
 		valid_ = false;
 
@@ -55,6 +56,28 @@ namespace BALL
 			return;
 		}
 
+		// Do we have correction factors for SSBonds?
+		ParameterSection parameter_section_ssbond;
+		parameter_section_ssbond.extractSection(*parameters_, "SSBondCorrection");
+		if (   !parameter_section_ssbond.hasVariable("atomtype")
+				 ||!parameter_section_ssbond.hasVariable("correction") )
+		{
+			return;
+		}
+		
+		// extract the column indices
+		Position atomtype_column =  parameter_section_ssbond.getColumnIndex("atomtype");
+		Position correction_column =  parameter_section_ssbond.getColumnIndex("correction");
+
+		int index = -1;
+		for (Position counter = 0; counter < parameter_section_ssbond.getNumberOfKeys(); counter++)
+		{
+			String atomtype   = parameter_section_ssbond.getValue(counter, atomtype_column);
+			float  correction = parameter_section_ssbond.getValue(counter, correction_column).toFloat();
+
+			ssbond_correction_[atomtype] = correction;
+		}
+	
 		// check that the parameter file contains the correct section...
 		ParameterSection parameter_section;
 		parameter_section.extractSection(*parameters_, "EmpiricalShiftHyperSurfaces");
@@ -96,14 +119,13 @@ namespace BALL
 		// - file1 in a map with the key pair (PHI,PSI) (for CA)
 		// - and the pair (PHI, PSI)   (for CA)
 		
-		int index = -1;
+		index = -1;
 		String old_target_name = "";
 		for (Position counter = 0; counter < parameter_section.getNumberOfKeys(); counter++)
 		{
 			String target_name = parameter_section.getValue(counter, name_column);
 			
 			//create a new vector entry for each new targetatom
-//std::cout << "index" << index << " target: " << target_name << std::endl;
 			if (target_name != old_target_name)
 			{
 				index +=1;
@@ -158,7 +180,6 @@ namespace BALL
 				String atom_type = target_names_[i];
 				String first_property = (*it).first.first ;
 				String second_property = (*it).first.second;
-//std::cout<< "~~~~" <<(*it).first.first << " " << (*it).first.second  << ":  " <<(*it).second << std::endl;
 				ShiftHyperSurface_ shs( (*it).second, atom_type, first_property, second_property); 
 										
 				if (shs.isvalid())
@@ -177,7 +198,6 @@ namespace BALL
 	bool EmpiricalHSShiftProcessor::start()
 		throw()
 	{	
-		std::cout << "******************* EHS-Shift start ******************* " << std::endl;
 		// if the module is invalid, abort
 		if (!isValid())
 		{
@@ -186,7 +206,7 @@ namespace BALL
 
 		// clear the target list
 		targets_.clear();
-std::cout << "******************* EHS-Shift start-end" << std::endl; 
+
 		return true;
 	}
 
@@ -194,7 +214,6 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 	bool EmpiricalHSShiftProcessor::finish()
 		throw()
 	{
-		std::cout << "******************* EHS-Shift finish******************* " << std::endl;
 		// if the module is in an invalid state, abort
 		if (!isValid())
 		{
@@ -238,21 +257,23 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 			// for all property pairs of the targets atom type
 			for (Position j = 0; j < property_pairs_[atom_type].size(); j++) 
 			{
-				if (atom_type == "CA")
-				{
-				//	std::cout << "hs: " << property_pairs_[atom_type][j].first << " " << property_pairs_[atom_type][j].second << " " 
-					//	        << hypersurfaces_[atom_type][property_pairs_[atom_type][j]](target) << std::endl;
-				}		
 				if (hypersurfaces_[atom_type][property_pairs_[atom_type][j]].isvalid())
 				EHS_shift += hypersurfaces_[atom_type][property_pairs_[atom_type][j]](target);
 			}
+	
+			// correction for ssbonds
+			if (target.atom->getResidue()->hasProperty(Residue::PROPERTY__HAS_SSBOND))
+			{
+				if (ssbond_correction_.find(atom_type) != ssbond_correction_.end())
+					EHS_shift+=ssbond_correction_[atom_type];
+			}
+			
 			// set the shift contribution by empiricalHSShiftProcessor
 			target.atom->setProperty(PROPERTY__EHS_SHIFT, EHS_shift);
 			 
 			// add it to the total shift
 			float old_shift = target.atom->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat(); 
 			target.atom->setProperty(ShiftModule::PROPERTY__SHIFT, (old_shift + EHS_shift)); 
-// std::cout << "EHS SHIft: "<< EHS_shift << std::endl;
 		}
 
 		//printTargets_();
@@ -266,7 +287,7 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 		
 	Processor::Result  EmpiricalHSShiftProcessor::operator () (Composite& composite)
 		throw()
-	{
+	{	
 		// Here, we collect all target atoms, specified in the section 
 		// "EmpiricalShiftHyperSurfaces" of the ShiftX.ini file,
 		// and the corresponding properties which are likewise specified 
@@ -278,8 +299,9 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 		if (RTTI::isKindOf<Atom>(composite))
 		{
 			Atom* atom = dynamic_cast<Atom*>(&composite);
-			//std::cout << atom->getName()<< "!!!!" << atom->getFullName()  << std::endl ;
 			
+			atom->clearProperty(PROPERTY__EHS_SHIFT);
+
 			for (Position i = 0; i < target_names_.size(); i++) 
 			{
 				if (atom->getName() == target_names_[i])
@@ -353,6 +375,10 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 		// store the out of bound behaviour flag 
 		return_average_ =  return_average;
 		
+		// store the lower and upper bounds
+		lower_bound_ = sample_positions[0];
+		upper_bound_ = sample_positions[sample_positions.size()-1];
+
 		// do we have reasonable data?
 		if (sample_values.size() != sample_positions.size())
 		{	
@@ -389,7 +415,6 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 
 		for (int i=1;i < n-1;i++) 
 		{
-//			std::cout << "i" <<  i << " " << sample_positions_.size() << " " << sample_values.size() << std::endl;
 			//This is the decomposition loop of the tridiagonal algorithm.
 			//curvature_ and u are used for temporary
 			//storage of the decomposed factors.
@@ -422,25 +447,21 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 
 	vector<float>& EmpiricalHSShiftProcessor::CubicSpline1D_::getCurvature()
 	{
-//	std::cout <<"getCurvature" << std::endl;
 		return curvature_;
 	}				
 
 	void EmpiricalHSShiftProcessor::CubicSpline1D_::setCurvature(std::vector<float> curvature)
 	{
-//std::cout <<"setCurvature" << std::endl;
 		curvature_ = curvature;
 	}
 	
 	void EmpiricalHSShiftProcessor::CubicSpline1D_::setValues(std::vector<float> values)
 	{
-//std::cout << "setValues"<< std::endl;
 		sample_values_ = values;
 	}
 	
 	void EmpiricalHSShiftProcessor::CubicSpline1D_::setPositions(std::vector<float> positions)
 	{
-//std::cout <<"setPositions" << std::endl;
 		sample_positions_= positions;
 	}
 
@@ -449,7 +470,7 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 		unsigned int n=sample_positions_.size();
 		// is this x position inside the boundaries?
 
-		if ((sample_positions_.size() > 0) && ((x < sample_positions_[0]) || (x>sample_positions_[n-1])))
+		if ((sample_positions_.size() > 0) && ((x < lower_bound_) || (x>upper_bound_)))
 		{
 			// something _really_ bad happened
 			if (!return_average_)
@@ -471,27 +492,27 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 		}
 			
 		// first, we find the indices bracketing the value x. we use bisection here
-		int lower_bound=0, upper_bound=n-1;
+		int lower_index=0, upper_index=n-1;
 		int index;
-		while (upper_bound - lower_bound > 1) 
+		while (upper_index - lower_index > 1) 
 		{
-			index=(upper_bound + lower_bound)/2;
-			if (sample_positions_[index] > x) upper_bound=index;
-			else lower_bound=index;
+			index=(upper_index + lower_index)/2;
+			if (sample_positions_[index] > x) upper_index=index;
+			else lower_index=index;
 		} 
 		
-		float spacing=sample_positions_[upper_bound]-sample_positions_[lower_bound];
+		float spacing=sample_positions_[upper_index]-sample_positions_[lower_index];
 		if (spacing == 0.0)
 		{
 			std::cerr << "Zero length interval" << std::endl;
 			return std::numeric_limits<float>::min();
 		}
 
-		float a = (sample_positions_[upper_bound]-x)/spacing; 
-		float b = (x-sample_positions_[lower_bound])/spacing;
+		float a = (sample_positions_[upper_index]-x)/spacing; 
+		float b = (x-sample_positions_[lower_index])/spacing;
 
-		float result = a*sample_values_[lower_bound]+b*sample_values_[upper_bound]
-			+((a*a*a-a)*curvature_[lower_bound]+(b*b*b-b)*curvature_[upper_bound])*(spacing*spacing)/6.0;
+		float result = a*sample_values_[lower_index]+b*sample_values_[upper_index]
+						 +((a*a*a-a)*curvature_[lower_index]+(b*b*b-b)*curvature_[upper_index])*(spacing*spacing)/6.0;
 
 		return result;
 	}
@@ -513,7 +534,9 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 																				const std::vector<float>& sample_positions_y, 
 																			  const std::vector<std::vector<float> >& sample_values) 
 	{
-//std::cout <<"createBICubicSpline" << std::endl;
+		// store the upper and lower bounds
+		y_lower_bound_ = sample_positions_y[0];
+		y_upper_bound_ = sample_positions_y[sample_positions_y.size()-1];
 
 		sample_positions_x_ = sample_positions_x;
 		sample_positions_y_ = sample_positions_y;
@@ -550,16 +573,12 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 
 		// construct a new spline at these positions
 		cs.createSpline(sample_positions_y_, values, true);
-
-		// TEST!
-//		for (Position i=0; i<sample_positions_y_.size(); i++)
-//			std::cout << "last spline BALL: " << sample_positions_y_[i] << " " << values[i] << std::endl;
+		cs.setLowerBound(y_lower_bound_);
+		cs.setUpperBound(y_upper_bound_);
 
 		//evaluate the new spline at position y
 		return cs(y);
 	}
-
-
 
 // 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~:PropertiesForShift_:~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1107,6 +1126,7 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 		for (; r_it != residue->endAtom(); ++r_it)
 		{	
 			if (r_it->getElement() == PTE[Element::O])
+			//if (r_it->getName() == "O")
 			{
 				O = &(*r_it);
 				Atom::BondIterator bi = O->beginBond();
@@ -1130,31 +1150,7 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 	bool 		EmpiricalHSShiftProcessor::PropertiesForShift_::hasDisulfidBond_(Residue* residue)
 		throw()
 	{
-		bool ret = false;
-		Atom* SG = 0;
-		
-		AtomIterator r_it = residue->beginAtom();
-		for (; r_it != residue->endAtom(); ++r_it)
-		{	
-			String name = r_it->getName();
-			if (name == "SG")
-			{
-				SG = &(*r_it);
-			}
-		}
-		
-		if (SG)
-		{
-			Atom::BondIterator bi = SG->beginBond();
-			for (;+bi;++bi)
-			{	
-				if(bi->getType() == Bond::TYPE__DISULPHIDE_BRIDGE)
-				{
-					ret = true;
-				}
-			}
-		}	
-		return ret; 
+		return residue->hasProperty(Residue::PROPERTY__HAS_SSBOND);
 	}
 	
 	bool EmpiricalHSShiftProcessor::PropertiesForShift_::hasHA_HBond_(Residue* residue) 
@@ -1167,7 +1163,7 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 		for (; r_it != residue->endAtom(); ++r_it)
 		{	
 			String name = r_it->getName();
-			if (name == "HA")
+			if ( (name == "HA") || (name == "1HA") || (name == "HA1") )
 			{
 				HA = &(*r_it);
 			}
@@ -1273,8 +1269,6 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 		for (std::set<String>::iterator it = properties.begin();
 				it != properties.end(); it++)
 		{	
-			//std::cout << "property" << (*it)<< std::endl;
-
 			if (!prev_residue)
 			{
 					properties_real_[("PSI_P")]  = FLOAT_VALUE_NA;
@@ -1507,10 +1501,10 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 					properties_real_[(*it)]   = getChi2Angle_(next_residue);
 					if (properties_real_[(*it)] == FLOAT_VALUE_NA)
 					{
-						if (   (prev_residue->getName() == "ALA") 
-							|| (prev_residue->getName() == "GLY")	
-							|| (prev_residue->getName() == "SER") 	
-							|| (prev_residue->getName() == "CYS")  )
+						if ( (next_residue->getName() == "ALA") 
+							|| (next_residue->getName() == "GLY")	
+							|| (next_residue->getName() == "SER") 	
+							|| (next_residue->getName() == "CYS")  )
 						{
 							properties_string_[(*it)] = ("ALA");
 						}
@@ -1624,10 +1618,10 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 				properties_real_[(*it)]   = getChi2Angle_(residue);	
 				if (properties_real_[(*it)] == FLOAT_VALUE_NA)
 				{
-					if (   (prev_residue->getName() == "ALA") 
-							|| (prev_residue->getName() == "GLY")	
-							|| (prev_residue->getName() == "SER") 	
-							|| (prev_residue->getName() == "CYS")  )
+					if (   (residue->getName() == "ALA") 
+							|| (residue->getName() == "GLY")	
+							|| (residue->getName() == "SER") 	
+							|| (residue->getName() == "CYS")  )
 					{	
 						properties_string_[(*it)] = ("ALA");
 					}
@@ -1690,7 +1684,6 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 				properties_string_[(*it)][1] = (hasHA2_HBond_(residue)? 'Y': 'N');
 				properties_string_[(*it)][2] = (hasHN_HBond_(residue)? 'Y': 'N');
 				properties_string_[(*it)][3] = (getO_HBondLen_(residue) != FLOAT_VALUE_IGNORE) ? 'Y': 'N';
-				std::cout << "***************************" << properties_string_[(*it)]<< std::endl;
 			}
 		} 
 		return true;
@@ -1772,7 +1765,6 @@ std::cout << "******************* EHS-Shift start-end" << std::endl;
 			s1d_(),
 			table_()
 	{			
-std::cout << filename <<  std::endl;
 		// find the data file
 		BALL::Path p;
 		String file_name = p.find("NMR/"+filename) ;// "NMR/splinedata/hat_PSI_DISULFIDE-1.dat");
@@ -1803,7 +1795,7 @@ std::cout << filename <<  std::endl;
 
 		// parse the data file
 		parseDataFile_(file, filename);
-		std::cout << type_ << std::endl;
+
 		if (type_ == SINGLE__REAL) // we have a single spline
 		{  
 			// create a spline	
@@ -1812,6 +1804,12 @@ std::cout << filename <<  std::endl;
 			convertToReal_(x_axis_values_[0], x_axis);
 			s.createSpline(x_axis, sample_values_[0], true);
 			s.setAverage(average_);
+
+      if (row_spacing_ != FLOAT_VALUE_NA)
+      {
+        s.setLowerBound(x_axis[0]-row_spacing_);
+        s.setUpperBound(x_axis[x_axis.size()-1]+row_spacing_);
+      }
 			
 			// store him in the map
 			s1d_[first_property_] = s;
@@ -1824,8 +1822,6 @@ std::cout << filename <<  std::endl;
 				// in order to save storage, the data is compressed into a single line
 				table_[first_property_][x_axis_values_[0][i]] = sample_values_[i][i];
 			}
-			//std::cout << String(atoi("60.000000"))<< "single CHI: bei 60 " << table_[first_property_]["60.000000"]<< "soll:" << sample_values_[0][0] <<  std::endl;
-
 		}
 		else   // if we have a normal "table", 
 		{
@@ -1848,6 +1844,26 @@ std::cout << filename <<  std::endl;
 
 				// a bicubic spline is stored
 				s2d_.createBiCubicSpline(x_axis, y_axis, sample_values_);
+
+				// build the lower and upper bounds like SHIFTX
+				for (Position i=0; i<s2d_.getNumberOfSplines(); i++)
+				{
+					CubicSpline1D_& cs = s2d_.getSpline(i);
+
+          if (row_spacing_ != FLOAT_VALUE_NA)
+          {
+            cs.setLowerBound(x_axis[i][0]-row_spacing_);
+            cs.setUpperBound(x_axis[i][x_axis[i].size()-1]+row_spacing_);
+          }
+
+					cs.setAverage(row_averages_[y_axis_values_[i]]);
+				}
+
+        if (col_spacing_ != FLOAT_VALUE_NA)
+        {
+          s2d_.setLowerBound(y_axis[0]-col_spacing_);
+          s2d_.setUpperBound(y_axis[y_axis.size()-1]+col_spacing_);
+        }
 			}
 			else if (type_ == REAL__DISCRETE) 
 			{
@@ -1861,8 +1877,18 @@ std::cout << filename <<  std::endl;
 					vector<float> x_axis;
 					convertToReal_(x_axis_values_[i], x_axis);
 
-					s.createSpline(x_axis, sample_values_[i], true);
-					s.setAverage(row_averages_[i]);
+					s.createSpline(x_axis, sample_values_[i], true);	
+				
+          if (row_spacing_ != FLOAT_VALUE_NA)
+          {
+            s.setLowerBound(x_axis[0]-row_spacing_);
+            s.setUpperBound(x_axis[x_axis.size()-1]+row_spacing_);
+//            s.setUpperBound(x_axis[x_axis.size()-1]+0.5*(x_axis[x_axis.size()-1] - x_axis[x_axis.size()-2] ));
+            //s.setUpperBound(x_axis[x_axis.size()-1]+0.5*(10));
+          }
+
+					s.setAverage(row_averages_[y_axis_values_[i]]);
+					
 					// store him in the map
 					s1d_[y_axis_values_[i]] = s;
 				}
@@ -1880,6 +1906,11 @@ std::cout << filename <<  std::endl;
 					convertToReal_(x_axis_values_[i], x_axis);
 
 					s.createSpline(x_axis, sample_values_[i], true);
+          if (row_spacing_ != FLOAT_VALUE_NA)
+          {
+            s.setLowerBound(x_axis[0]-row_spacing_);
+            s.setUpperBound(x_axis[x_axis.size()-1]+row_spacing_);
+          }
 
 					// store him in the map
 					s1d_[y_axis_values_[i]] = s;
@@ -1887,12 +1918,10 @@ std::cout << filename <<  std::endl;
 			}
 			else if (type_ == DISCRETE__REAL)
 			{ 
-std::cout << "DISCRETE__REAL not implemented" << std::endl;
+				Log.error() << "DISCRETE__REAL not implemented" << std::endl;
 			}
 			else if ( (type_ == DISCRETE__DISCRETE) || (type_ == CHI__DISCRETE)|| (type_ == DISCRETE__CHI) || (type_ == CHI__CHI) )
 			{
-		std::cout << "DISCRETE__DISCRETE" <<  std::endl;
-
 				if (x_axis_values_.size() != y_axis_values_.size())
 				{
 					std::cerr << "Tried to read an invalid table in file"<< filename <<  std::endl;
@@ -1910,12 +1939,12 @@ std::cout << "DISCRETE__REAL not implemented" << std::endl;
 			}	
 			else if (type_ == CHI__REAL)
 			{
-std::cout << "CHI__REAL not implemented" << std::endl;
+				Log.error() << "CHI__REAL not implemented" << std::endl;
 			}		
 			else if (type_ == CHI__CHI)
 			{
 				// Fortunately this case does not occur
-				std::cerr << "The case CHI__CHI is not implemented" <<std::endl; 
+				Log.error() << "The case CHI__CHI is not implemented" <<std::endl; 
 			}
 		}
 	}
@@ -1943,7 +1972,6 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 			else if (PropertiesForShift_::isDiscrete(secondproperty))
 			{
 				type_ = CHI__DISCRETE;
-//std::cout << "first pro: " << firstproperty << " :second pro" << secondproperty << std::endl;
 			}
 			else  // second is real
 			{	
@@ -1999,6 +2027,8 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 	// total_average
 	// (row_average_1;row_average_2;...;row_average_n|N/A)
 	// (col_averages_1;col_averages_2;...;col_averages_n|N/A)
+  // (row_spacing|N/A)
+  // (col_spacing|N/A)
 	// (y_axis_1;...;y_axis_n|N/A)
 	// x_axis_11;...;x_axis_1m
 	// value_11;...;value_1m
@@ -2050,6 +2080,26 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 					col_average_values.push_back(fields[i].toFloat());
 			}
 
+			// test for row spacing
+			line.getline(file);
+			testline = line;
+			testline.toUpper();
+
+			if (!testline.hasSubstring("N/A"))
+        row_spacing_ = testline.toFloat();
+      else
+        row_spacing_ = FLOAT_VALUE_NA;
+      
+      // test for col spacing
+			line.getline(file);
+			testline = line;
+			testline.toUpper();
+
+			if (!testline.hasSubstring("N/A"))
+        col_spacing_ = testline.toFloat();
+      else
+        col_spacing_ = FLOAT_VALUE_NA;
+
 			// test for y_axis
 			line.getline(file);
 			testline = line;
@@ -2092,7 +2142,7 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 			for (Position i=0; i<col_average_values.size(); i++)
 				col_averages_[x_axis_values_[0][i]] = col_average_values[i];
 
-		} catch (...)
+    } catch (...)
 		{
 			std::cerr<< "format error in " <<  filename << std::endl;
 		}
@@ -2128,8 +2178,6 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 		// special case1 : CHI
 		if (PropertiesForShift_::isMixed(first_property_))
 		{	
-//std::cout << "chi1: " << properties[first_property_].first << "|" << properties[first_property_].second<< std::endl;
-			
 			string1 = properties[first_property_].second;
 			string1.toUpper();
 			
@@ -2151,8 +2199,6 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 		
 		if (PropertiesForShift_::isMixed(second_property_))
 		{
-//std::cout << "chi2: " << properties[first_property_].first << "|" << properties[first_property_].second<< std::endl;
-
 			string2 = properties[second_property_].second; 
 			string2.toUpper();
 			// is the property numeric or alphanumeric? 
@@ -2190,7 +2236,6 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 			tabletype::iterator first_it = table_.find(string1);
 			if (first_it != table_.end())
 			{  
-				std::cout << "blubbi: " << string1 << " " << string2 << " " << std::endl;
 				// yes it is :-)
 				// check if the second property is contained in the table
 				std::map<String, float>::iterator second_it = first_it->second.find(string2);
@@ -2198,28 +2243,19 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 					// so both accessors are valid: we can just return the value
 					shift = second_it->second; //  table_[string1][string2];	
 				else
-//					shift = row_averages_[string1];
 						shift = average_;
-					// average over the row we already found
-					//shift = getTableXAverage(properties[first_property_].second);// getTableRowAverage_(first_it->second);
 			}
 			else // the first accessor is not valid! 
 			{	
 				// does the second property occur at all?
 				if (tableHasColumn_(string2))
 				{	// return the column average
-//					shift = getTableYAverage(properties[second_property_].second);//getTableColumnAverage_(string2);
 						shift = average_;
-						//shift = col_averages_[string2];
 				}
 				else
 				{
 					// we don't have the value at all... average over the whole table
 					shift = average_; //getTableAverage_(); 
-					Log.info() << "Took the average because of invalid properties of atom " << properties.atom->getResidue()->getID() 
-					<< properties.atom->getResidue()->getName()
-					<< "-" << properties.atom->getName() << "   : " << first_property_ <<"/" << second_property_ 
-					<< " =  " << string1 << "/"  << string2 << std::endl;
 				}
 			}
 		}
@@ -2235,7 +2271,6 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 			}
 			else 
 				shift = 0.;
-			//std::cout << "single spline for " << first_property_ << " " << shift << " " << properties.atom->getFullName() << std::endl;
 		}
 		else if (type_ == REAL__REAL)
 		{		
@@ -2246,9 +2281,6 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 			}
 			else 
 				shift = s2d_(properties[first_property_].first, properties[second_property_].first);
-			
-//std::cout << properties.atom->getName() << "  " << first_property_ << ":" << second_property_<< " -- " << properties[first_property_].first<< "::" << properties[second_property_].first << " -- " << shift << std::endl;
-		
 		}
 		else if (type_ == REAL__DISCRETE)
 		{
@@ -2265,7 +2297,6 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 		}
 		else if (type_ == DISCRETE__REAL)
 		{
-//std::cerr<< "Discrete Real should NEVER be called!! "<< std::endl;
 			// This simulates SHIFTX behaviour: if only one factor is out of bounds, we return the all-values average
 			if (   (properties[second_property_].first == FLOAT_VALUE_NA)
 					 ||(properties[first_property_].second == STRING_VALUE_NA) )
@@ -2279,39 +2310,9 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 			else
 				shift = s1d_[properties[first_property_].second](properties[second_property_].first);
 		}
-	/*	else if (type_ == DISCRETE__DISCRETE) 
-		{
-			// find out if the second property is contained in the table
-			tabletype::iterator second_it = table_.find(properties[second_property_].second);
-
-			if (second_it != table_.end())
-			{
-				// find out if the first property is contained in the table
-				std::map<String, float>::iterator first_it = second_it->second.find(properties[first_property_].second);
-
-				if (first_it != second_it->second.end())
-					// we can just return the value
-					shift = first_it->second;
-				else
-					// average over the row we already found
-					shift = getTableRowAverage_(second_it->second);
-			}
-			else
-			{	
-				// does the column property occur at all?
-				if (tableHasColumn_(properties[first_property_].second))
-					// return the column average
-					shift = getTableColumnAverage_(properties[first_property_].second);
-				else
-					// we don't have the value at all... average over the whole table
-					shift = getTableAverage_();
-			}
-		
-		//	std::cout << "shift: " << shift<< std::endl;
-		}*/
 		else if (type_ == CHI__REAL)
 		{	
-			std::cout << "CHI REAL should NEVER be called " << std::endl;
+			Log.error() << "CHI REAL should NEVER be called " << std::endl;
 		}
 		else if (type_ == REAL__CHI)
 		{	
@@ -2324,10 +2325,6 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 					shift = s1d_[string2](properties[first_property_].first);	
 				else
 				{
-					std::cerr << "Tried to access the hypersurface for atom " << properties.atom->getResidue()->getID() 	
-						<< properties.atom->getResidue()->getName()
-						<< "-" << properties.atom->getName() << "'s properties " << first_property_ <<"/" << second_property_ 
-						<< " with " << properties[first_property_].first << "/"  << string2<< std::endl;
 					shift = average_; // is this the correct thing to do?
 				}
 			}
@@ -2341,9 +2338,10 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 		if ( 		 (properties[first_property_].first == FLOAT_VALUE_IGNORE) 
 					|| (properties[second_property_].first == FLOAT_VALUE_IGNORE) )
 			shift = 0.;
-
+#ifdef DEBUG
 		std::cout << "_operator (): ";
 		std::cout <<properties.atom->getName() << " " << properties.atom->getResidue()->getID()<<  "  " <<properties.atom->getResidue()->getName()<< "  " << first_property_ << ":" << second_property_<< " -- " << properties[first_property_].first << "/" << properties[first_property_].second<< ":" << properties[second_property_].first << "/" << properties[second_property_].second <<  " -- " << shift << std::endl;
+#endif
 
 		return shift;
 	} 
@@ -2424,32 +2422,6 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 		return false;
 	}
 	
-/*	
-	float EmpiricalHSShiftProcessor::ShiftHyperSurface_::getTableXAverage(const String& name) 
-		throw()
-	{
-		tabletype::iterator it = table_.find(name);
-		if (it != table_.end())
-		{
-			Log.info() << "Not yet implemented!" << std::endl;
-		}
-		else
-		{
-			Log.info() << "Invalid value for X average determination" << std::endl;
-			return 0.0;
-		}
-	}
-	
-	float EmpiricalHSShiftProcessor::ShiftHyperSurface_::getTableYAverage(const String& name) 
-		throw()
-	{
-		Log.info() << "Not yet implemented!" << std::endl;
-	}
-*/
-
-				
-				
-				
 	void  EmpiricalHSShiftProcessor::postprocessing_()
 		throw()
 	{
@@ -2493,11 +2465,8 @@ std::cout << "CHI__REAL not implemented" << std::endl;
 		}
 		else
 		{
-			std::cerr << "found no system -> could not perform a postprocessing for EFShiftProcessor" << std::endl;
+			Log.error() << "found no system -> could not perform a postprocessing for EFShiftProcessor" << std::endl;
 		}
 	}
-
-
-
 	
 } // namespace BALL

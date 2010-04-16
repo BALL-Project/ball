@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondShiftProcessor.C,v 1.6.18.6 2006/10/14 13:14:05 anne Exp $
+// $Id: HBondShiftProcessor.C,v 1.6.18.7 2007/01/14 16:34:04 anne Exp $
 //
 
 #include <BALL/NMR/HBondShiftProcessor.h>
@@ -276,6 +276,9 @@ namespace BALL
 					// put the HBond into the hydrogen bond distance list
 					std::pair<Atom*, Atom*> bond(donors_[d], acceptors_[a]);
 					hbonds_.insert(std::pair<float, std::pair<Atom*, Atom*> >(distance, bond));
+/*	std::cout << "DN:"<< donors_[d]->getResidue()->getID()<< " RN:" << acceptors_[a]->getResidue()->getID()<< " DT:" << 
+		 donors_[d]->getName() << " RT:" <<acceptors_[a]->getName() << " " << distance  << std::endl;
+		 */
 				}
 			}
 			
@@ -370,7 +373,6 @@ namespace BALL
 			// where r denotes the distance between donor and acceptor of the 
 			// hydrogen bond under consideration
 			//
-	
 			if (donor->getName() == "H") 
 			{
 				new_hb_shift = (amide_proton_factor_ /(pow(distance, 3.)) ) - amide_proton_subtrahend_ ;
@@ -409,7 +411,7 @@ namespace BALL
 			}	
 		}
 		// we have to perform some postcorrection to be conform with ShiftX
-		postprocessing_();
+		//postprocessing_();
 
     return true;
   }
@@ -420,6 +422,8 @@ namespace BALL
 		if (RTTI::isKindOf<Atom>(object))
 		{
 			Atom* atom = RTTI::castTo<Atom>(object);
+
+			atom->clearProperty(PROPERTY__HBOND_SHIFT);
 
 			// we store the hydrogen bond acceptors
 			for (Position i = 0; i < 	acceptor_types_.size(); i++)
