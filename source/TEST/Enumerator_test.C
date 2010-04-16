@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Enumerator_test.C,v 1.16.30.1 2007/03/25 21:47:04 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -17,7 +16,7 @@ void char_assign(char& c1, const char& c2)
 	c1 = c2;
 }
 
-START_TEST(Enumerator, "$Id: Enumerator_test.C,v 1.16.30.1 2007/03/25 21:47:04 oliver Exp $")
+START_TEST(Enumerator, "$Id: Enumerator_test.C $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -25,24 +24,24 @@ START_TEST(Enumerator, "$Id: Enumerator_test.C,v 1.16.30.1 2007/03/25 21:47:04 o
 using namespace BALL;
 
 Enumerator<string, string::iterator, char>* enumerator_ptr;
-CHECK(Enumerator() throw())
+CHECK(Enumerator())
   enumerator_ptr = new Enumerator<string, string::iterator, char>;
 	TEST_NOT_EQUAL(enumerator_ptr, 0);
 RESULT
 
-CHECK(~Enumerator() throw())
+CHECK(~Enumerator())
   delete enumerator_ptr;
 RESULT
 
 String s;
-CHECK(Size countVariants() throw())
+CHECK(Size countVariants())
 	Enumerator<String, String::iterator, char> enumerator(s, char_assign);	
   TEST_EQUAL(enumerator.countVariants(), 1);
 RESULT
 
 s = "12345";
 Enumerator<String, String::iterator, char> enumerator(s, char_assign);
-CHECK(void addVariants(const SiteIterator& it, const VariantVector& variants) throw())
+CHECK(void addVariants(const SiteIterator& it, const VariantVector& variants))
 	vector<char> variants; 
 	variants.push_back('0');
 	variants.push_back('1');
@@ -92,7 +91,7 @@ CHECK(void createCombination(const EnumeratorIndex& index) throw(EnumeratorIndex
 	}
 RESULT
 
-CHECK(void deleteVariants(const SiteIterator& it, const VariantVector& variants) throw())
+CHECK(void deleteVariants(const SiteIterator& it, const VariantVector& variants))
 	vector<char> variants; 
 	variants.push_back('0');
 	variants.push_back('1');
@@ -117,38 +116,38 @@ CHECK(void deleteVariants(const SiteIterator& it, const VariantVector& variants)
 	}
 RESULT
 
-CHECK(Iterator begin() throw())
+CHECK(Iterator begin())
 	Enumerator<String, String::iterator, char>::Iterator it = enumerator.begin();
 	TEST_EQUAL(it.isValid(), true)
 RESULT
 
-CHECK(Iterator end() throw())
+CHECK(Iterator end())
 	Size counter = 0;
 	Enumerator<String, String::iterator, char>::Iterator it = enumerator.begin();
-	for (; it != enumerator.end(); ++it, counter++);
+	for ( ; it != enumerator.end(); ++it, counter++)  ; // just count
 	TEST_EQUAL(enumerator.countVariants(), 10000);
 	
 	TEST_EQUAL(counter, 10000)
 RESULT
 
-CHECK(ConstIterator begin() const throw())
+CHECK(ConstIterator begin() const )
 	Enumerator<String, String::iterator, char>& c_enumerator(enumerator);
 	Enumerator<String, String::iterator, char>::ConstIterator it = c_enumerator.begin();
 	TEST_EQUAL(it.isValid(), true)
 RESULT
 
-CHECK(ConstIterator end() const throw())
+CHECK(ConstIterator end() const )
 	Size counter = 0;
 	Enumerator<String, String::iterator, char>& c_enumerator(enumerator);
 	Enumerator<String, String::iterator, char>::ConstIterator it = c_enumerator.begin();
-	for (; it != c_enumerator.end(); ++it, counter++);
+	for ( ; it != c_enumerator.end(); ++it, counter++)  ; // just count
 	TEST_EQUAL(counter, 10000)
 RESULT
 
 CHECK([EXTRA] Enumerator iteration)
 	Size counter = 0;
 	Enumerator<String, String::iterator, char>::Iterator it = enumerator.begin();
-	for (; it != enumerator.end(); ++it, counter++)
+	for ( ; it != enumerator.end(); ++it, counter++)
 	{
 		String p = (*it)(1);
 		p.reverse();
@@ -156,15 +155,15 @@ CHECK([EXTRA] Enumerator iteration)
 	}
 RESULT
 
-CHECK(Container& getCurrent() throw())
+CHECK(Container& getCurrent())
   // ???
 RESULT
 
-CHECK(Enumerator(Container& container) throw())
+CHECK(Enumerator(Container& container))
   // ???
 RESULT
 
-CHECK(Enumerator(Container& container, MutatorFunction mutator) throw())
+CHECK(Enumerator(Container& container, MutatorFunction mutator))
   // ???
 RESULT
 
