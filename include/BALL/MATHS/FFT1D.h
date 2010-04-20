@@ -558,7 +558,7 @@ namespace BALL
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}
 		
-		return operator [] (internalPos);
+		return operator [] ((Position)internalPos);
 	}
 
 	template <typename ComplexTraits>
