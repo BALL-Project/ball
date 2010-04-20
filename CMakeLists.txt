@@ -85,7 +85,7 @@ SET(VIEW_LIBRARIES optimized VIEW debug VIEWd)
 # some of our own macros (BALL_CHECKLIB, QT4_WRAP_UI_OWN, ...)
 INCLUDE(cmake/BALLMacros.cmake)
 INCLUDE(cmake/BALLCompilerSpecific.cmake)
-INCLUDE(cmake/BALLConfig.cmake)
+INCLUDE(cmake/BALLConfiguration.cmake)
 INCLUDE(cmake/BALLComponents.cmake)
 
 ## additional include directories
@@ -421,6 +421,7 @@ IF (WIN32)
 ENDIF()
 
 INSTALL(TARGETS BALL
+	EXPORT BALLExportGroup
 	COMPONENT "${COMPONENT_LIBBALL}"
 	RUNTIME DESTINATION "${BALL_RUNTIME_INSTALL_DIRECTORY}"
 	LIBRARY DESTINATION "${BALL_LIBRARY_INSTALL_DIRECTORY}"
@@ -428,6 +429,7 @@ INSTALL(TARGETS BALL
 )
 
 INSTALL(TARGETS VIEW
+	EXPORT BALLExportGroup
 	COMPONENT "${COMPONENT_LIBVIEW}"
 	RUNTIME DESTINATION "${BALL_RUNTIME_INSTALL_DIRECTORY}"
 	LIBRARY DESTINATION "${BALL_LIBRARY_INSTALL_DIRECTORY}"
@@ -583,4 +585,41 @@ MESSAGE(STATUS "")
 MESSAGE(STATUS "-----------------------------------------------------------------")
 MESSAGE(STATUS "")
 
-## TODO: CPack
+######################################################
+#### build settings and configs for external code ####
+######################################################
+
+## grep definitions (-D<XXX>) that were set using 'add_definitions()'
+GET_PROPERTY(BALL_ADDED_COMPILE_DEFINITIONS DIRECTORY . PROPERTY COMPILE_DEFINITIONS)
+## convert to CXX flags
+FOREACH(CURRENT_DEFINITION ${BALL_ADDED_COMPILE_DEFINITIONS})
+	LIST(APPEND CF_BALL_ADDCXX_FLAGS "-D${CURRENT_DEFINITION}")
+ENDFOREACH()
+
+## for add_definition commands (currently empty, but who knows...)
+SET(CF_BALL_ADD_DEFINITIONS)
+
+## the filename for library settings (this file will be included in BALLConfig.cmake)
+SET(CF_BALLExport ${PROJECT_BINARY_DIR}/cmake/BALLExport.cmake)
+
+## create code that allows to call find_package()
+## (must come after the above code that sets the variables!)
+GET_DIRECTORY_PROPERTY(BALL_INCLUDE_DIRS  INCLUDE_DIRECTORIES)
+CONFIGURE_FILE(
+	"${PROJECT_SOURCE_DIR}/cmake/BALLConfig.cmake.in"
+	"${PROJECT_BINARY_DIR}/cmake/BALLConfig.cmake"
+	@ONLY
+)
+
+## Create BALLExport.cmake
+STRING(COMPARE LESS ${CMAKE_MINOR_VERSION} "8" CMAKE_DEPRECATED_VERSION)
+IF (${CMAKE_DEPRECATED_VERSION})
+	MESSAGE(STATUS "Cannot register BALL with CMake! For external code, set the path to BALL during find_package() manually.")
+ELSE()
+	## register BALL with CMake so that it can be found easily
+	EXPORT(PACKAGE BALL)
+ENDIF()
+## export our libs
+EXPORT(TARGETS BALL VIEW FILE ${CF_BALLExport})
+
+INSTALL(EXPORT BALLExportGroup DESTINATION cmake/ FILE BALLExport.cmake)
