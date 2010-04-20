@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editableScene.C,v 1.21.14.7 2007/08/08 11:12:28 anhi Exp $
-//
 
 #include <BALL/VIEW/WIDGETS/editableScene.h>
 
@@ -580,7 +578,7 @@ namespace BALL
 
 				//update representation
 				getMainControl()->update(*atom, true);
-				setStatusbarText("Added bond");
+				setStatusbarText("Added a bond");
 			}
 			else // no atom found -> create one
 			{
@@ -625,7 +623,7 @@ namespace BALL
 				emit newEditOperation(eo2);
 
 				getMainControl()->update(*a->getParent(), true);
-				setStatusbarText("Added bond and atom");
+				setStatusbarText("Added a bond and an atom");
 			}
 
 			deselect_();
@@ -1107,132 +1105,115 @@ void EditableScene::changeElement_()
 
 void EditableScene::createBond_()
 {
-	//TODO:check if in edit mode ??
-	
-	//check if two atoms are selected
+	// this functionaltiy shall be independent from the edit mode	
+	// check if two atoms are selected
 	HashSet<Composite*> selection = getMainControl()->getSelection();
-	Atom* first_atom = 0;
+
+	// by switching into the edit mode recursive selection 
+	// has already cleaned up
+	Atom*  first_atom = 0;
 	Atom* second_atom = 0;
-	Log.info()<< "selection size:" << selection.size() << endl; 
-	//one system with two atoms selected
+
+	// case 1: one system with exactly two atoms 
 	if (selection.size() == 1)
 	{
-		Log.info() << "selection size is 1" << endl;
-		HashSet<Composite*>::Iterator it = selection.begin();
-		for (; +it; ++it)
+		if (RTTI::isKindOf<AtomContainer>(**selection.begin()))
 		{
-			if (RTTI::isKindOf<AtomContainer>(**it))
+			AtomContainer* ac = reinterpret_cast<AtomContainer*>(*selection.begin());
+			if (ac->countAtoms() == 2)
 			{
-				AtomContainer* atom_cont = reinterpret_cast<AtomContainer*>(*it);
-				if (atom_cont->countAtoms() == 2)
+				AtomIterator atom_it = ac->beginAtom();
+				for(; +atom_it; ++atom_it)
 				{
-					Log.info()<< "countAtoms = 2" << endl;
-					AtomIterator atom_it = atom_cont->beginAtom();
-					for(; +atom_it; ++atom_it)
+					if (!first_atom)
 					{
-						if (!first_atom)
-						{
-							first_atom = &*atom_it;
-						}
-						else if (!second_atom)
-						{
-							second_atom = &*atom_it;
-						}
-						else 
-						{
-							Log.error() << "Internal error! Too many atoms set" << endl; 
-						}
+						first_atom = &*atom_it;
 					}
-				}
-				else 
-				{
-					Log.error() << "Please select exactly two atoms" << endl; 
+					else if (!second_atom)
+					{
+						second_atom = &*atom_it;
+					}
+					else 
+					{
+						Log.error() << "Internal error! Too many atoms selected." << endl; 
+					}
 				}
 			}
 			else 
 			{
-				Log.error() << "Please select exactly two atoms" << endl; 
+				setStatusbarText("Please select exactly two atoms.", true);
 			}
 		}
+		else 
+		{
+			setStatusbarText("Please select exactly two atoms.", true);
+		}
 	}
-	//two atoms selected
+	// case 2: two selected atoms with unselected in 
+	//             either distinct atom containers 
+	//             or with unselected in the same container
 	else if (selection.size() == 2)
 	{
-		Log.info()<< "selection size is 2" << endl; 
 		HashSet<Composite*>::Iterator it = selection.begin();
 		for (; +it; ++it)
 		{
 			if (RTTI::isKindOf<Atom>(**it))
 			{
-				Log.info()<< "Atom type" << endl; 
 				if (!first_atom)
 				{
-					Log.info()<< "first atom not set -> Atom" << endl; 
 					first_atom = reinterpret_cast<Atom*>(*it);
 				}
 				else if (!second_atom)
 				{
-					Log.info()<< "second atom not set -> Atom" << endl; 
 					second_atom = reinterpret_cast<Atom*>(*it);
 				}
 			}
-			//two molecules containing one atom each are selected
+			// case 3: a single atom in selected atomcontainer 
 			else if (RTTI::isKindOf<AtomContainer>(**it))
 			{
-				Log.info()<< "AtomContainer type" << endl; 
-				AtomContainer* atom_cont = reinterpret_cast<AtomContainer*>(*it);
-				if (atom_cont->countAtoms() == 1)
+				AtomContainer* ac = reinterpret_cast<AtomContainer*>(*it);
+				if (ac->countAtoms() == 1)
 				{
-					Log.info()<< "countAtoms = 1" << endl; 
 					if (!first_atom)
 					{
-						Log.info()<< "first atom not set" << endl; 
-						first_atom = &*atom_cont->beginAtom();
+						first_atom = &*ac->beginAtom();
 					}
 					else if (!second_atom)
 					{
-						Log.info()<< "second atom not set" << endl; 
-						second_atom = &*atom_cont->beginAtom();
+						second_atom = &*ac->beginAtom();	
 					}
 				}
+				else
+				{	
+					Log.error() << "EditableScene: Internal error! " << __LINE__ << endl; 
+				}
 			}
-// 			else 
-// 			{
-// 				Log.error() << "Please select exactly two atoms" << endl; 
-// 			}
 		}
 	}
-	else 
-	{
-		Log.error() << "Please select exactly two atoms" << endl; 
-	}
-
-	//assign bond if two selected atoms are found
+	
+	// we found two atoms
 	if (first_atom && second_atom)
 	{
-		Log.info()<< "assign bond" << endl; 
-		Bond* bond = new Bond("Bond", *first_atom, *second_atom, Bond::ORDER__SINGLE);		
-	
-// 		TODO:for undo -operation
-// 		EditOperation eo(0, bond, "Added bond of type single" , EditOperation::ADDED__BOND);
-// 		undo_.push_back(eo);
-// 
-// 		// tell about the new undo operation
-// 		emit newEditOperation(eo);
-		
-		Log.info()<< "countBonds: " << first_atom->countBonds() << " - " << second_atom->countBonds() << endl;
-		Log.info() << "start merge" << endl; 
-		//if the bond is between two molecules, merge them
-		merge_(first_atom, second_atom);
-		Log.info() << "merged" << endl;
+		// create a bond
+		Bond* bond = first_atom->createBond(*second_atom);
+		bond->setOrder(Bond::ORDER__SINGLE); //TODO single bond or current edit mode default bond order? 
 
-		//update representation
+		// 		TODO:for undo -operation
+		// 		EditOperation eo(0, bond, "Added bond of type single" , EditOperation::ADDED__BOND);
+		// 		undo_.push_back(eo);
+		// 
+		// 		// tell about the new undo operation
+		// 		emit newEditOperation(eo);
+
+		// if the bond is between two molecules, merge them
+		merge_(first_atom, second_atom);
+
+		// update representation
 		getMainControl()->update(*first_atom, true);
 		getMainControl()->update(*second_atom, true);
-		setStatusbarText("Added bond");
+		setStatusbarText("Added a bond");
 
-		Log.info()<< "deselect" << endl; 
-		//deselect and delete recursively from the selection set
+		// deselect and delete recursively from the selection set
 		HashSet<Composite*>::Iterator it = selection.begin();
 		for (; +it; ++it)
 		{
@@ -1242,23 +1223,14 @@ void EditableScene::createBond_()
 		}
 		first_atom->deselect();
 		second_atom->deselect();
-		//update representation
+
+		// update representation
 		getMainControl()->update(*first_atom, true);
 		getMainControl()->update(*second_atom, true);
-		Log.info()<< "selection size am Ende:" << getMainControl()->getSelection().size() << endl; 
 	}
 	else
-	{	
-		//deselect and delete recursively from the selection set
-		HashSet<Composite*>::Iterator it = selection.begin();
-		for (; +it; ++it)
-		{
-			if (!(**it).containsSelection()) continue;
-			getMainControl()->deselectCompositeRecursive(*it, true);
-			getMainControl()->update(**it, false);
-		}
-		setStatusbarText("Please select exactly two atoms.");
-		Log.info()<< "selection size am Ende:" << getMainControl()->getSelection().size() << endl; 
+	{		
+		setStatusbarText("Please select exactly two atoms.", true);
 	}
 }
 
@@ -1474,7 +1446,7 @@ bool EditableScene::reactToKeyEvent_(QKeyEvent* e)
 
 	String text("Setting element to ");
 	text += PTE[atomic_number_].getName();
-	setStatusbarText(text, true);
+	setStatusbarText(text);
 
 	return true;
 }
@@ -1713,9 +1685,9 @@ void EditableScene::computeBondOrders()
 			stream_description.precision(2);
 
 			stream_description  << "      Solution " << i 
-						 						 << " has penalty " << abop.getTotalPenalty(i)
+						 						 << " has penalty " << abop.getTotalPenalty(i);
 			//			 						 << ", charge " << abop.getTotalCharge(i)
-												 << ", " <<  abop.getNumberOfAddedHydrogens(i) << " added hydrogens.";
+			//									 << ", " <<  abop.getNumberOfAddedHydrogens(i) << " added hydrogens.";
  
 			String description = stream_description.str();
 
@@ -1851,13 +1823,15 @@ void EditableScene::mouseDoubleClickEvent(QMouseEvent* e)
 	{
 		Atom* a1 = (Atom*)current_bond_->getFirstAtom();
 		Atom* a2 = (Atom*)current_bond_->getSecondAtom();
-		if (a1->getParent() != a2->getParent() || a1->getParent() == 0) return;
+		
+		if (!a1->getParent() || (a1->getParent() != a2->getParent())) 
+			return;
 		
 		RingPerceptionProcessor rpp;
 		vector<vector<Atom*> > rings;
 		Composite* comp = a1->getParent();
 		AtomContainer* ac = static_cast<AtomContainer*>(comp);
-		if (ac == 0) return;
+		if (!ac) return;
 		rpp.calculateSSSR(rings, *ac);
 		rings = rpp.getAllSmallRings();
 		vector<Position> rings_to_modify;
@@ -1866,8 +1840,8 @@ void EditableScene::mouseDoubleClickEvent(QMouseEvent* e)
 			Size found = 0;
 			for (Position a = 0; a < rings[r].size(); a++)
 			{
-				if (rings[r][a] == a1 ||
-				    rings[r][a] == a2)
+				if (   (rings[r][a] == a1) 
+						|| (rings[r][a] == a2))
 				{
 					found++;
 				}
@@ -1909,12 +1883,8 @@ void EditableScene::mouseDoubleClickEvent(QMouseEvent* e)
 
 void EditableScene::merge_(Composite* a1, Composite* a2)
 {
-	if (a1 == 0 || 
-			a2 == 0 ||
-			a1->getParent() == 0 || 
-			a2->getParent() == 0)
+	if ( !a1 || !a2 || !a1->getParent() || !a2->getParent() )
 	{
-		Log.info() << "kill 1" << endl;
 	 	return;
 	}
 
@@ -1925,7 +1895,7 @@ void EditableScene::merge_(Composite* a1, Composite* a2)
 
 	Size silb1 = p1->getDegree();
 	Size silb2 = p2->getDegree();
-
+	
 	if (silb1 == 1)
 	{
 		p2->appendChild(*a1);
@@ -1939,35 +1909,33 @@ void EditableScene::merge_(Composite* a1, Composite* a2)
 	Molecule* m1 = a1->getAncestor(dummy_mol);
 	Molecule* m2 = a2->getAncestor(dummy_mol);
 
-	if (m1 == 0 || m2 == 0)
-	{
-		Log.info() << "kill 2" << endl;
+	if (!m1 || !m2)
+	{	
+		Log.error() << "Internal error! " << __FILE__ << " " << __LINE__ << endl; 
 		return;
 	}
 
 	Composite* anchestor = a1->getLowestCommonAncestor(*a2);
-	if (anchestor == 0)
+	if (!anchestor)
 	{
-		m1->spliceBefore(*m2);
+ 		m1->spliceBefore(*m2);
 		getMainControl()->remove(*s2);
-		Log.info() << "already finished" << endl;
 		return;
 	}
 
 	if (m1 == p1)
 	{
 		p2->appendChild(*a1);
-		Log.info() << "m1 == p1" << endl;
+	}
+	else if (m2 == p2)
+	{
+		p1->appendChild(*a2);
 	}
 	else
 	{
-		if (m2 == p2)
-		{
-			p1->appendChild(*a2);
-			Log.info() << "m2 == p2" << endl;
-		}
+		Log.error() << "Internal error! " << __FILE__ << " " << __LINE__ << endl; 
 	}
-	Log.info() << "finished" << endl;
+	
 }
 
 	}//end of namespace 
