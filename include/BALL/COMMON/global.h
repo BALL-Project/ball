@@ -32,6 +32,7 @@
 #endif
 
 #ifdef BALL_COMPILER_MSVC
+# define BALL_HIDE
 #	ifdef BALL_BUILD_DLL
 #		define BALL_EXPORT __declspec(dllexport)
 #		define BALL_EXTERN_VARIABLE __declspec(dllexport) extern
@@ -45,8 +46,9 @@
 #		define BALL_VIEW_EXPORT __declspec(dllimport)
 #	endif
 #else
-# define BALL_EXPORT
-# define BALL_VIEW_EXPORT
+# define BALL_EXPORT __attribute((visibility ("default")))
+# define BALL_HIDE __attribute((visibility ("hidden")))
+# define BALL_VIEW_EXPORT __attribute((visibility ("default")))
 # define BALL_EXTERN_VARIABLE extern
 #endif
 
