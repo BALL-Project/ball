@@ -259,7 +259,6 @@ namespace BALL
 		
 		void SDWidget::setDefaultOptions()
 		{		
-	
 	 		options.setDefaultBool(SDWidget::Option::SHOW_HYDROGENS,
 	 												 	 SDWidget::Default::SHOW_HYDROGENS);
 		}

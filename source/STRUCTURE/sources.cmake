@@ -36,7 +36,6 @@ SET(SOURCES_LIST
 	reducedSurface.C
 	residueChecker.C
 	ringAnalyser.C
-	ringClusterer.C
 	rsConstructor.C
 	RSEdge.C
 	RSFace.C

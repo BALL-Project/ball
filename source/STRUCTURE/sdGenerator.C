@@ -1,15 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sdGenerator.C,v 1.7.6.2 2007/04/03 13:29:33 bertsch Exp $
-//
-// Author:
-//   Holger Franken
-//
 
 #include <BALL/STRUCTURE/sdGenerator.h>
 #include <BALL/STRUCTURE/ringAnalyser.h>
-#include <BALL/STRUCTURE/ringClusterer.h>
 #include <BALL/STRUCTURE/rsConstructor.h>
 #include <BALL/STRUCTURE/chainBuilder.h>
 #include <BALL/STRUCTURE/moleculeAssembler.h>
@@ -20,18 +14,20 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 
+#include <BALL/KERNEL/forEach.h>
+
+#define BALL_DEBUG_SDGENERATOR
+
 #ifdef BALL_DEBUG_SDGENERATOR
 # define DEBUG(a) Log.info() << a << endl;
 #else
 # define DEBUG(a) 
 #endif
 
-using namespace std;
-
 namespace BALL
 {
 	const char* SDGenerator::Option::SHOW_HYDROGENS = "sd_generator_show_hydrogens";
-	const bool  SDGenerator::Default::SHOW_HYDROGENS = false;
+	const bool  SDGenerator::Default::SHOW_HYDROGENS = true;
  
 	SDGenerator::SDGenerator(bool show_hydrogens)
 	{
@@ -39,15 +35,13 @@ namespace BALL
 		options[SDGenerator::Option::SHOW_HYDROGENS] = show_hydrogens;
 	}
 
-
-
 	SDGenerator::~SDGenerator()
-	{}
-
-	void SDGenerator::checkAtoms(System& molecule_sys)
 	{
+	}
 
-		// check, if all Hydrogen-Atoms should be deleted from the System
+	void SDGenerator::prepare_(System& molecule_sys)
+	{
+		// check if all hydrogen atoms should be deleted from the System
 		bool show_H = options.getBool(Option::SHOW_HYDROGENS);
 
 		if (!show_H)
@@ -61,89 +55,72 @@ namespace BALL
 			DEBUG("all H's removed")
 		}
 
+		// compute the smallest set of smallest rings
+		// NOTE: the RingPerceptionProcessor sets the "InRing" property for us
+		RingPerceptionProcessor rrp;
+		rrp.calculateSSSR(sssr_, molecule_sys);
 
-		AtomIterator atom_it;
+		AtomIterator at_it;
 
-
-		//      distinguish between ring-atoms and core-chain-atoms
-		for (atom_it = molecule_sys.beginAtom(); atom_it != molecule_sys.endAtom(); ++atom_it)
+		// distinguish between ring-atoms and core-chain-atoms
+		BALL_FOREACH_ATOM(molecule_sys, at_it)
 		{
-			//      finding the ring-atoms
-			RingFinder is_cyclic;
-
-			if (is_cyclic(*atom_it))
-			{
-				atom_it -> setProperty(SDGenerator::IN_RING);
-			}
-
-			//      declare atoms as core-chain if they fulfil the following conditions:
-			//              -       acylic
-			//              -       have at least two neighbours, at least one of which is acyclic
-			//              - do not have an adjacent triple bond, or two adjacent double-bonds
-
-			else
+			//  declare atoms as core-chain if they fulfil the following conditions:
+			//   - acylic
+			//   - have at least two neighbours, at least one of which is acyclic
+			//   - do not have an adjacent triple bond, or two adjacent double-bonds
+			if (!at_it->getProperty("InRing").getBool())
 			{
 				Size acyclic_neighbours = 0;
 				Size num_triple_bonds = 0;
 				Size num_double_bonds = 0;
 
-				//              -       have at least two neighbours
-				if (atom_it -> Atom::countBonds() > 1)
+				// - have at least two neighbours
+				if (at_it->countBonds() > 1)
 				{
-					for (Atom::BondIterator bond_it = atom_it -> beginBond(); bond_it != atom_it -> endBond(); ++bond_it)
+					Atom::BondIterator bond_it;
+					BALL_FOREACH_ATOM_BOND(*at_it, bond_it)
 					{
-						if (bond_it -> getOrder() == 2)
+						if (bond_it->getOrder() == 2)
 							num_double_bonds++;
 
-						else if (bond_it -> getOrder() == 3)
+						else if (bond_it->getOrder() == 3)
 							num_triple_bonds++;
 
-						//      -       at least one of the neighbours must be acyclic
-						RingFinder is_cyclic2;
-						if (bond_it -> getFirstAtom() == &*atom_it)
-						{
-							if (!(is_cyclic2(*(bond_it -> getSecondAtom()))))
-							{
-								acyclic_neighbours++;
-							}
-						}
-						else if (!(is_cyclic2(*(bond_it -> getFirstAtom()))))
-						{
-							acyclic_neighbours++;
-						}
+						// - at least one of the neighbours must be acyclic
+						Atom* partner = bond_it->getPartner(*at_it);
 
+						if (!(partner->getProperty("InRing").getBool()))
+						{
+							++acyclic_neighbours;
+						}
 					}
 
 					// - check for all of the conditions and decide whether the atom might be core-chain or not
-					if ((acyclic_neighbours > 0) && ((num_double_bonds < 2) ||( num_double_bonds == 0)))
+					if ((acyclic_neighbours > 0) && ((num_double_bonds < 2) || (num_triple_bonds == 0)))
 					{
-						atom_it -> setProperty(SDGenerator::PRE_CORE_CHAIN);
+						at_it->setProperty(SDGenerator::PRE_CORE_CHAIN);
 					}
 				}
 			}
 		}
 
 
-		// - core-chain-atoms must have at least one neighbour, that is a core-chain-atom, too
-		for (atom_it = molecule_sys.beginAtom(); atom_it != molecule_sys.endAtom(); ++atom_it)
+		// - core-chain-atoms must have at least one neighbour that is a core-chain-atom, too
+		BALL_FOREACH_ATOM(molecule_sys, at_it)
 		{
-			for (Atom::BondIterator bond_it = atom_it -> beginBond(); bond_it != atom_it -> endBond(); ++bond_it)
+			if (at_it->hasProperty(SDGenerator::PRE_CORE_CHAIN))
 			{
-				if (atom_it -> hasProperty(SDGenerator::PRE_CORE_CHAIN))
+				Atom::BondIterator bond_it;
+				BALL_FOREACH_ATOM_BOND(*at_it, bond_it)
 				{
-					if (bond_it -> getFirstAtom() == &*atom_it)
+					Atom* partner = bond_it->getPartner(*at_it);
+
+					if (partner->hasProperty(SDGenerator::PRE_CORE_CHAIN))
 					{
-						if (bond_it -> getSecondAtom() -> hasProperty(SDGenerator::PRE_CORE_CHAIN))
-						{
-							atom_it -> setProperty(SDGenerator::CORE_CHAIN);
-							atom_it -> setProperty(SDGenerator::FXAS);                           //      Property, later used in chain analysis
-							continue;
-						}
-					}
-					else if (bond_it -> getFirstAtom() -> hasProperty(SDGenerator::PRE_CORE_CHAIN))
-					{
-						atom_it -> setProperty(SDGenerator::CORE_CHAIN);
-						atom_it -> setProperty(SDGenerator::FXAS);                           //      Property, later used in chain analysis
+						at_it->setProperty(SDGenerator::CORE_CHAIN);
+						at_it->setProperty(SDGenerator::FXAS);                           //      Property, later used in chain analysis
+						break;
 					}
 				}
 			}
@@ -152,21 +129,19 @@ namespace BALL
 		DEBUG("\t-*-[checkAtoms]:\tRing-atoms and core-chain-atoms found." << endl)
 	}
 
-
-	//      find an atom's neighbours inside a certain ring
-
-	pair<Atom*, Atom*> SDGenerator::getNeighbours(vector<Atom*>& ring, Atom*& atom)
+	// find an atom's neighbours inside a certain ring
+	pair<Atom*, Atom*> SDGenerator::getNeighbours(vector<Atom*>& ring, Atom* atom)
 	{
-		//      a ring must contain at least 3 Atoms
+		// a ring must contain at least 3 Atoms
 		if (ring.size() < 3)
 		{
 			throw Exception::InvalidRange(__FILE__, __LINE__, ring.size());
 		}
 
-		//      clear Properties, that have possibly been set in a previuos call
+		// clear properties that have possibly been set in a previuos call
 		for (vector<Atom*>::size_type i = 0; i != ring.size(); i++)
 		{
-			ring[i] -> clearProperty(SDGenerator::FIRSTNEIGHBOUR);
+			ring[i]->clearProperty(SDGenerator::FIRSTNEIGHBOUR);
 		}
 
 		//      declare the pair of neighbours that is to be returned
@@ -198,174 +173,86 @@ namespace BALL
 		return neighbours;
 	}
 
-	//      using  Figueras algorithm to calculate the smallest set of smallest rings
-	vector <vector<Atom*> > SDGenerator::getSSSR(System& molecule_sys)
+	void SDGenerator::sequenceRings_(std::vector<std::vector<Atom*> >& ringsystem, std::vector<std::vector<Atom*> >& sequenced_rings)
 	{
+		// make room for the reordered rings
+		sequenced_rings.resize(ringsystem.size());
 
-		vector<vector<Atom*> > sssr;
-
-		DEBUG("\t-*-[getSSSR]:\t\t"  << "searching SSSR.")
-
-		//      call the implementation of  Figueras algorithm
-		RingPerceptionProcessor getRings;
-
-		getRings.RingPerceptionProcessor::calculateSSSR(sssr, molecule_sys);
-
-		DEBUG("\t-*-[getSSSR]:\t\t" << sssr.size() << " Rings found." << endl)
-
-		return sssr;
-	}
-
-
-	vector<vector<Atom*> > SDGenerator::sequenceRings(vector<vector<Atom*> >& ringsystem)
-	{
-
-		//      sequencing the rings in the sssr to prepare them for anaylis and construction
-		vector<vector<Atom*> >  sequenced_rings;
-
-		for (vector<vector<Atom*> >::size_type j = 0; j != ringsystem.size(); j++)
+		// sequencing the rings in the sssr to prepare them for analysis and construction
+		for (Position j = 0; j < ringsystem.size(); j++)
 		{
-			//      create a new vector for each ring to hold the sequenced atoms
-			vector<Atom*> seq_ring;
+			// create a new vector for each ring to hold the sequenced atoms
+			std::vector<Atom*>& seq_ring = sequenced_rings[j];
 
-			//      create the start-atom
-			Atom* a1;
+			// the atom we start with
+			Atom* start_atom = ringsystem[j][0];
+			seq_ring.push_back(start_atom);
 
-			//      clear Properties, that have possibly been set in a previuos call
-			for (vector<Atom*>::size_type k = 0; k != ringsystem[j].size(); k++)
+			// put all other atoms into a list
+			std::list<Atom*> ring_atoms;
+			for (Position k = 1; k < ringsystem[j].size(); k++)
 			{
-				ringsystem[j][k] ->  clearProperty(SDGenerator::SEQUENCED);
+				ring_atoms.push_back(ringsystem[j][k]);
 			}
 
-			//      set the first atom in the unsequenced ring as start-atom of the new sequenced one
-			a1 = ringsystem[j][0];
-			seq_ring.push_back(a1);
-			a1 -> setProperty(SDGenerator::SEQUENCED);
-
-			//      find the start-atom's neighbours in the ring
-			SDGenerator sdg;
-			pair<Atom*, Atom*> a1_neighbours = sdg.getNeighbours(ringsystem[j], a1);
-
-			Atom* next_a = new Atom;   //      the next atom to be considered
-			Atom* curr_a = new Atom;   //      the atom that is currently beeing considered
-
-			//      continue with the first neighbour
-
-			curr_a = a1_neighbours.first;
-
-			while(1)
+			Atom* last_atom = start_atom;
+			while(!ring_atoms.empty())
 			{
-				//      get the current atom's neighbours Size he ring
-
-				pair<Atom*, Atom*> neighbours = sdg.getNeighbours(ringsystem[j], curr_a);
-
-				//      if one of the neighbours was the start-atom and the other neighbour has already been sequenced, the complete ring has been sequenced
-				if ((neighbours.first == a1) ||(neighbours.second == a1))
+				for (std::list<Atom*>::iterator ring_it = ring_atoms.begin(); ring_it != ring_atoms.end(); ++ring_it)
 				{
-
-					if (neighbours.first == a1)
+					if (last_atom->isBoundTo(**ring_it))
 					{
-
-						if (neighbours.second -> hasProperty(SDGenerator::SEQUENCED))
-						{
-							seq_ring.push_back(curr_a);
-
-							break;
-						}
-					}
-
-					else if (neighbours.second == a1)
-					{
-
-						if (neighbours.first -> hasProperty(SDGenerator::SEQUENCED))
-						{
-							seq_ring.push_back(curr_a);
-
-							break;
-						}
+						seq_ring.push_back(*ring_it);
+						last_atom = *ring_it;
+						ring_atoms.erase(ring_it);
+						break;
 					}
 				}
-
-				// otherwise find the neighbour that has not been sequenced, yet
-				if ((!(neighbours.first -> hasProperty(SDGenerator::SEQUENCED))) && (neighbours.second -> hasProperty(SDGenerator::SEQUENCED)))
-				{
-					next_a = neighbours.first;
-				}
-				else if ((!(neighbours.second -> hasProperty(SDGenerator::SEQUENCED))) && (neighbours.first -> hasProperty(SDGenerator::SEQUENCED)))
-				{
-					next_a = neighbours.second;
-				}
-
-				//      append the current atom to the sequenced ring
-				seq_ring.push_back(curr_a);
-
-				//      declare it as sequenced
-				curr_a -> setProperty(SDGenerator::SEQUENCED);
-
-				// proceed to the next atom
-				curr_a = next_a;
-
 			}
-
-			//      append the completely sequenced ring to the set of sequenced rings
-			sequenced_rings.push_back(seq_ring);
-
 		}
 		DEBUG("\t-*-[sequenceRings]:\tRings have been sequenced." << endl)
-		return sequenced_rings;
 	}
-
 
 	void SDGenerator::generateSD(System& molecule_sys)
 	{
+		// distinguish between core-chain-atoms, ring-atoms, and others
+		prepare_(molecule_sys);
 
-		//      distinguish between core-chain-atoms, ring-atoms and others
-		checkAtoms(molecule_sys);
+		// sequence the atoms in each ring
+		std::vector<vector<Atom*> > seq_rings;
+		sequenceRings_(sssr_, seq_rings);
 
-		//      get the "smallest set of smallest rings" (SSSR)
-		vector<vector<Atom*> > rings = getSSSR(molecule_sys);
+		// cluster the rings into connected ringsystems
+		RingAnalyser ra;
+		std::vector<std::vector<std::vector<Atom*> > > ringsystems = ra.clusterRings(seq_rings);
 
-		//      sequence the atoms in each ring
-		vector<vector<Atom*> > seq_rings = sequenceRings(rings);
+		// analyse the way the rings are connected and construct each ringsystem in the suitable way
+		std::vector<RingAnalyser::RingInfo> analysed_rings;
 
-
-		//      cluster the rings Sizeo connected ringsystems
-		RingClusterer riclu;
-		vector<vector<vector<Atom*> > > ringsystems = riclu.clusterRings(seq_rings);
-
-
-		//      analyse the way the rings are connected and construct each ringsystem in the suitable way
-		vector<RingAnalyser::RingInfo> analysed_rings;
-
-		for (Size i = 0; i != ringsystems.size(); i++)
+		for (Size i = 0; i < ringsystems.size(); i++)
 		{
-			//      analyse the way the rings are connected
-			RingAnalyser ra;
+			// analyse the way the rings are connected
 			analysed_rings = ra.analyseRings(ringsystems[i]);
 
-			//      construct each ringsystem in the suitable way
+			// construct each ringsystem in the suitable way
 			RSConstructor rsc;
 			rsc.constructRS(analysed_rings, i);
 
-			for (vector<vector<Atom*> >::size_type j = 0; j != ringsystems[i].size(); j++)
+			for (Position j = 0; j < ringsystems[i].size(); j++)
 			{
 				for (vector<Atom*>::size_type k = 0; k != ringsystems[i][j].size(); k++)
 				{
-					ringsystems[i][j][k] -> setProperty(SDGenerator::DEPOSITED);
-					ringsystems[i][j][k] -> setProperty(SDGenerator::PRE_ASSEMBLED);
+					ringsystems[i][j][k]->setProperty(SDGenerator::DEPOSITED);
+					ringsystems[i][j][k]->setProperty(SDGenerator::PRE_ASSEMBLED);
 				}
 			}
-
 		}
 
-
-		//      find all chains and sort them by their length
+		// find all chains and sort them by their length
 		ChainBuilder cb;
 		vector<vector<Atom*> > chains = cb.buildChains(molecule_sys);
 
-
-
-		//      assemble the Structure Diagram from the prepared Fragments
+		// assemble the Structure Diagram from the prepared Fragments
 		MoleculeAssembler ma;
 		ma.assembleMolecule(molecule_sys, ringsystems, chains);
 
@@ -374,7 +261,6 @@ namespace BALL
 	
 	void SDGenerator::setDefaultOptions()
 	{		
-	
 	 	options.setDefaultBool(SDGenerator::Option::SHOW_HYDROGENS,
 	 												 SDGenerator::Default::SHOW_HYDROGENS);
 	}
