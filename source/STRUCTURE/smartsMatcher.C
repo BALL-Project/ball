@@ -417,7 +417,7 @@ namespace BALL
 							new_rs.visited_atoms.push_back(matched_atoms);
 							map<const SPNode*, const Atom*> mapped_atoms;
 							mapped_atoms[start_node] = start_atom;
-							new_rs.first_matches.push_back(make_pair<const SPNode*, const Atom*>(start_node, start_atom));
+							new_rs.first_matches.push_back(make_pair(start_node, start_atom));
 							new_rs.mapped_atoms.push_back(mapped_atoms);
 							set<const SPEdge*> visited_edges;
 							new_rs.visited_edges.push_back(visited_edges);
@@ -699,7 +699,7 @@ namespace BALL
 					map<const SPNode*, const Atom*> mapped_atom;
 					mapped_atom[start_node] = start_atom;
 					new_rs.mapped_atoms.push_back(mapped_atom);
-					new_rs.first_matches.push_back(make_pair<const SPNode*, const Atom*>(start_node, start_atom));
+					new_rs.first_matches.push_back(make_pair(start_node, start_atom));
 					new_rs.visited_atoms.push_back(matched_atom);
 					set<const Bond*> visited_bond;
 					new_rs.visited_bonds.push_back(visited_bond);
