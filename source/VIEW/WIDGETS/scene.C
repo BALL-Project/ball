@@ -1681,8 +1681,44 @@ namespace BALL
 					//else
 						renderer->target->refresh();
 
-					if (RTTI::isKindOf<GLRenderWindow>(*(renderer->target)))
-						static_cast<GLRenderWindow*>(renderer->target)->swapBuffers();
+					renderer->setBufferReady(true);
+
+					// implements a trivial synchronization mechanism: if
+					// two renderers depend on one another, their images will
+					// be swapped in at the same time
+					std::deque<boost::shared_ptr<RenderSetup> >& dependent_renderers = renderer->getDependentRenderers();
+
+					// if no renderer depends on this one, things are simple
+					if (dependent_renderers.size() == 0)
+					{
+						if (RTTI::isKindOf<GLRenderWindow>(*(renderer->target)))
+							static_cast<GLRenderWindow*>(renderer->target)->swapBuffers();
+					}
+					else
+					{
+						// find out if all renderers are ready
+						bool ready_to_swap = true;
+
+						for (std::deque<boost::shared_ptr<RenderSetup> >::iterator render_it  = dependent_renderers.begin(); 
+						                                                           render_it != dependent_renderers.end(); ++render_it)
+						{
+							ready_to_swap &= (*render_it)->bufferIsReady();
+						}
+
+						if (ready_to_swap)
+						{
+							// paint all buffers
+							if (RTTI::isKindOf<GLRenderWindow>(*(renderer->target)))
+								static_cast<GLRenderWindow*>(renderer->target)->swapBuffers();
+
+							for (std::deque<boost::shared_ptr<RenderSetup> >::iterator render_it  = dependent_renderers.begin();
+							                                                           render_it != dependent_renderers.end(); ++render_it)
+							{
+								if (RTTI::isKindOf<GLRenderWindow>(*((*render_it)->target)))
+									static_cast<GLRenderWindow*>((*render_it)->target)->swapBuffers();
+							}
+						}
+					}
 
 					// has the renderer reached the end of its live span?
 					if (renderer->getTimeToLive() == 0)
@@ -2962,7 +2998,7 @@ return; //TODO Why??
 			left_renderer->setFrameBufferFormat(left_widget->getFormat());
 #endif
 
-			left_widget->show();
+			left_widget->showFullScreen();
 			left_renderer->setSize(left_widget->width(), left_widget->height());
 
 			boost::shared_ptr<RenderSetup> left_rs(new RenderSetup(left_renderer, left_widget, this, stage_));
@@ -2989,7 +3025,7 @@ return; //TODO Why??
 			right_renderer->setFrameBufferFormat(right_widget->getFormat());
 #endif
 
-			right_widget->show();
+			right_widget->showFullScreen();
 			right_renderer->setSize(right_widget->width(), right_widget->height());
 
 			boost::shared_ptr<RenderSetup> right_rs(new RenderSetup(right_renderer, right_widget, this, stage_));
@@ -3002,6 +3038,9 @@ return; //TODO Why??
 			right_rs->start();
 
 			gl_renderer_->setStereoMode(GLRenderer::DUAL_VIEW_DIFFERENT_DISPLAY_STEREO);
+
+			right_rs->makeDependentOn(left_rs);
+			left_rs->makeDependentOn(right_rs);
 
 			setFullScreen(false);
 			applyPreferences();
