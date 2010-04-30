@@ -1738,34 +1738,40 @@ namespace BALL
 					// be swapped in at the same time
 					std::deque<boost::shared_ptr<RenderSetup> >& dependent_renderers = renderer->getDependentRenderers();
 
-					// if no renderer depends on this one, things are simple
-					if (dependent_renderers.size() == 0)
+					// find out if all renderers are ready
+					bool ready_to_swap = true;
+					for (std::deque<boost::shared_ptr<RenderSetup> >::iterator render_it  = dependent_renderers.begin(); 
+																																		 render_it != dependent_renderers.end(); ++render_it)
 					{
+						ready_to_swap &= (*render_it)->bufferIsReady();
+					}
+
+					if (ready_to_swap)
+					{
+						// paint all buffers
 						if (RTTI::isKindOf<GLRenderWindow>(*(renderer->target)))
 							static_cast<GLRenderWindow*>(renderer->target)->swapBuffers();
-					}
-					else
-					{
-						// find out if all renderers are ready
-						bool ready_to_swap = true;
 
-						for (std::deque<boost::shared_ptr<RenderSetup> >::iterator render_it  = dependent_renderers.begin(); 
-						                                                           render_it != dependent_renderers.end(); ++render_it)
+						if (renderer->isContinuous() && (renderer->getTimeToLive() != 0))
 						{
-							ready_to_swap &= (*render_it)->bufferIsReady();
+							renderer->loop_mutex.lock();
+							renderer->wait_for_render.wakeAll();
+							renderer->loop_mutex.unlock();
 						}
 
-						if (ready_to_swap)
+						for (std::deque<boost::shared_ptr<RenderSetup> >::iterator render_it  = dependent_renderers.begin();
+																																			 render_it != dependent_renderers.end(); ++render_it)
 						{
-							// paint all buffers
-							if (RTTI::isKindOf<GLRenderWindow>(*(renderer->target)))
-								static_cast<GLRenderWindow*>(renderer->target)->swapBuffers();
+							(*render_it)->makeCurrent();
 
-							for (std::deque<boost::shared_ptr<RenderSetup> >::iterator render_it  = dependent_renderers.begin();
-							                                                           render_it != dependent_renderers.end(); ++render_it)
+							if (RTTI::isKindOf<GLRenderWindow>(*((*render_it)->target)))
+								static_cast<GLRenderWindow*>((*render_it)->target)->swapBuffers();
+
+							if ((*render_it)->isContinuous() && ((*render_it)->getTimeToLive() != 0))
 							{
-								if (RTTI::isKindOf<GLRenderWindow>(*((*render_it)->target)))
-									static_cast<GLRenderWindow*>((*render_it)->target)->swapBuffers();
+								(*render_it)->loop_mutex.lock();
+								(*render_it)->wait_for_render.wakeAll();
+								(*render_it)->loop_mutex.unlock();
 							}
 						}
 					}
@@ -1797,12 +1803,6 @@ namespace BALL
 							}
 						}
 					} 
-					else if (renderer->isContinuous())
-					{
-						renderer->loop_mutex.lock();
-						renderer->wait_for_render.wakeAll();
-						renderer->loop_mutex.unlock();
-					}
 					break;
 				default:
 				  break;
