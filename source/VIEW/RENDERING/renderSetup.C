@@ -325,6 +325,9 @@ namespace BALL
 
 			render_mutex_.lock();
 
+			// we are working on a new buffer... so let people know...
+			buffer_is_ready_ = false;
+
 			// reduce the ttl
 			if (ttl_ > 0) --ttl_;
 

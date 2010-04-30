@@ -24,6 +24,8 @@
 #include <QtCore/QThread>
 #include <QtCore/QWaitCondition>
 
+#include <deque>
+
 class QImage;
 
 namespace BALL {
@@ -255,6 +257,18 @@ namespace BALL {
 				// locks the renderer before the next render call
 				mutable Mutex loop_mutex;
 
+				/// Returns true if the buffer has been filled and just waits for painting
+				bool bufferIsReady() { return buffer_is_ready_; }
+
+				///
+				void setBufferReady(bool is_ready) { buffer_is_ready_ = is_ready; }
+
+				///
+				std::deque<boost::shared_ptr<RenderSetup> >& getDependentRenderers() { return keep_in_sync_; }
+
+				///
+				void makeDependentOn(boost::shared_ptr<RenderSetup>& partner) { keep_in_sync_.push_back(partner); }
+
 			protected:
 				// does the hard work and can be called from a continuous loop as well as from event-based rendering
 				void renderToBuffer_();
@@ -294,6 +308,12 @@ namespace BALL {
 
 				bool export_after_ttl_;
 				String export_after_ttl_filename_;
+
+				// a list of render setups that should be synchronized with this one so that buffer
+				// swaps only happen simulatneously
+				std::deque<boost::shared_ptr<RenderSetup> > keep_in_sync_;
+
+				bool buffer_is_ready_;
 		};
 
 		/** This class is used for communication of render events over thread boundaries.
