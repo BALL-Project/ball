@@ -192,6 +192,31 @@ MACRO(ADD_BALL_MOCFILES GROUP INPUT_DIRECTORY MOC_LIST)
 	ENDFOREACH()
 ENDMACRO()
 
+MACRO(ADD_BALL_CORE_MOCFILES GROUP INPUT_DIRECTORY MOC_LIST)
+	SET(DIRECTORY source/${GROUP})
+
+	### for out of source builds, the output directory might not yet exist ###
+	FILE(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/${DIRECTORY})
+
+	### iterate over the moc files ###
+	FOREACH(i ${MOC_LIST})
+		GET_FILENAME_COMPONENT(NAME_BASE ${i} NAME_WE)
+
+		SET(MOC_FILE ${INPUT_DIRECTORY}/${NAME_BASE}.h)
+		SET(OUTFILE  ${PROJECT_BINARY_DIR}/${DIRECTORY}/moc_${NAME_BASE}.C)
+
+		### generate the corresponding moc files ###
+		QT4_GENERATE_MOC(${MOC_FILE} ${OUTFILE})
+
+		### and add them to the sources ###
+		SET(BALL_sources ${BALL_sources} ${OUTFILE})
+
+		### source group definition ###
+		STRING(REGEX REPLACE "/" "\\\\" S_GROUP ${GROUP})
+		SOURCE_GROUP("Source Files\\\\${S_GROUP}" FILES ${OUTFILE})
+	ENDFOREACH()
+ENDMACRO()
+
 MACRO(BALL_COMBINE_LIBS RESULT OPTIMIZED_LIBS DEBUG_LIBS)
 	SET(OPTIMIZED_LIBS "${OPTIMIZED_LIBS}")
 	SET(DEBUG_LIBS "${DEBUG_LIBS}")
