@@ -14,6 +14,7 @@ SET(UI_LIST
 	dockProgressDialog.ui
 	dockResultDialog.ui
 	downloadPDBFile.ui
+	downloadElectronDensity.ui
 	editSettings.ui
 	editSingleShortcut.ui
 	displayProperties.ui
@@ -63,6 +64,7 @@ SET(SOURCES_LIST
 	dockProgressDialog.C
 	dockResultDialog.C
 	downloadPDBFile.C
+	downloadElectronDensity.C
 	editSettings.C
 	editSingleShortcut.C
 	displayProperties.C

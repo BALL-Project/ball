@@ -4,7 +4,7 @@
 #ifndef BALL_VIEW_DIALOGS_DOWNLOADELECTRONDENSITY_H
 #define BALL_VIEW_DIALOGS_DOWNLOADELECTRONDENSITY_H
 
-#include <BALL/VIEW/UIC/downloadElectronDensityData.h>
+#include <BALL/VIEW/UIC/ui_downloadElectronDensity.h>
 
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
 # include <BALL/VIEW/KERNEL/modularWidget.h>

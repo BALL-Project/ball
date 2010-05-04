@@ -56,7 +56,7 @@ namespace BALL
 			thread_(0),
 			aborted_(false),
 			error_(false),
-			eds_prefix_("http://eds.bmc.uu.se/eds/sfd/"),
+			eds_prefix_("http://eds.bmc.uu.se/eds/dfs/"),
 			eds_infix_("/"),
 			eds_suffix_(".omap"),
 			emdb_prefix_("ftp://ftp1.ebi.ac.uk/pub/databases/emdb/structures/EMD-"),
@@ -173,6 +173,8 @@ namespace BALL
 				if(server->currentIndex() == 0) //if EDS
 				{
 					url += eds_prefix_;
+					url += id(1,2);
+					url += eds_infix_;
 					url += id;
 					url += eds_infix_;
 					if(eds_maptype->currentIndex() == 1)//diff map
@@ -194,6 +196,7 @@ namespace BALL
 					url += filename_onserver;
 				}
 				thread_->setFilename(temp_filename);
+				cout << url << endl;
 				bool ok = threadedDownload_(url);
 				downloadEnded_();
 			
