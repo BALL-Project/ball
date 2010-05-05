@@ -179,15 +179,18 @@ namespace BALL
 		// make sure that we found the correct sip version
 		valid_ = true;
 
-		String imported_sip_version = run("import sip", valid_);
-		imported_sip_version = run("print(sip.SIP_VERSION_STR)", valid_).trim();
+		unsigned int module_sip_version;
+		run("import sip", valid_);
+		module_sip_version = run("print(sip.SIP_VERSION)", valid_).trim().toUnsignedInt();
+		String module_sip_version_str = run("print(sip.SIP_VERSION_STR)", valid_).trim();
 
-		if (imported_sip_version != BALL_SIP_VERSION_STR)
+
+		if ((module_sip_version & 0xFFFFFF00) != (BALL_SIP_VERSION & 0xFFFFFF00))
 		{
 			String sip_module_path = run("print(sip)", valid_).trim();
 
-			error_message_ += "ERROR: Version of imported sip module does not match the expected version!\n";
-			error_message_ += "got (from " + sip_module_path + ") " + imported_sip_version + ", expected " + BALL_SIP_VERSION_STR +"\n";
+			error_message_ += "ERROR: Version of imported sip module differ in major/minor version!\n";
+			error_message_ += "got (from " + sip_module_path + ") " + module_sip_version_str + ", expected " + BALL_SIP_VERSION_STR +"\n";
 			
 			Log.error() << error_message_ << std::endl;
 
