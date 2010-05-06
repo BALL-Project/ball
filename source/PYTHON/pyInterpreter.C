@@ -179,19 +179,24 @@ namespace BALL
 		// make sure that we found the correct sip version
 		valid_ = true;
 
-		unsigned int module_sip_version;
 		run("import sip", valid_);
-		module_sip_version = run("print(sip.SIP_VERSION)", valid_).trim().toUnsignedInt();
-		String module_sip_version_str = run("print(sip.SIP_VERSION_STR)", valid_).trim();
+		const unsigned int module_sip_version = run("print(sip.SIP_VERSION)", valid_).trim().toUnsignedInt();
+		const String module_sip_version_str = run("print(sip.SIP_VERSION_STR)", valid_).trim();
 
+		const unsigned int module_major_minor = module_sip_version & 0xFFFFFF00;
+		const unsigned int module_bugfix      = module_sip_version & 0x000000FF;
+		const unsigned int ball_major_minor   = BALL_SIP_VERSION   & 0xFFFFFF00;
+		const unsigned int ball_bugfix        = BALL_SIP_VERSION   & 0x000000FF;
 
-		if ((module_sip_version & 0xFFFFFF00) != (BALL_SIP_VERSION & 0xFFFFFF00))
+		if ((module_major_minor != ball_major_minor) || (module_bugfix < ball_bugfix))
 		{
 			String sip_module_path = run("print(sip)", valid_).trim();
 
-			error_message_ += "ERROR: Version of imported sip module differ in major/minor version!\n";
-			error_message_ += "got (from " + sip_module_path + ") " + module_sip_version_str + ", expected " + BALL_SIP_VERSION_STR +"\n";
-			
+			error_message_ += "ERROR: Version of imported sip module is not compatible with the version BALL was built against.\n"
+			                  "If BALL was compiled using SIP version x.y.z then it can be used with any SIP version x.y.z' where "
+												"z' >= z.\n";
+			error_message_ += "Got (from " + sip_module_path + ") " + module_sip_version_str + "; Expected " + BALL_SIP_VERSION_STR +"\n";
+
 			Log.error() << error_message_ << std::endl;
 
 			start_log_ += error_message_;
