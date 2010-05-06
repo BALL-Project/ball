@@ -49,7 +49,7 @@ namespace BALL
 				String chemical_environment;
 			};
 
-			struct Option
+			struct BALL_EXPORT Option
 			{
 				/// path to the file containing the atom type definitions
 				static const String ATOMTYPE_FILENAME;
@@ -58,7 +58,7 @@ namespace BALL
 				static const String GAFF_ATOMTYPE_POSTPROCESSING;
 			};
 			
-			struct Default
+			struct BALL_EXPORT Default
 			{
 				/// path to the file containing the atom type definitions
 				static const String ATOMTYPE_FILENAME;
@@ -67,7 +67,7 @@ namespace BALL
 				static const bool GAFF_ATOMTYPE_POSTPROCESSING;
 			};
 
-			enum BOND_TYPES
+			enum BALL_EXPORT BOND_TYPES
 			{
 				sb,
 				SB,
