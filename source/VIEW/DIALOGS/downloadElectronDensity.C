@@ -80,7 +80,6 @@ namespace BALL
 			registerWidget(this);
 			hide();
 			entryId->setFocus();
-
 		}
 
 		DownloadElectronDensity::~DownloadElectronDensity()
@@ -143,7 +142,6 @@ namespace BALL
 					url += filename_onserver;
 				}
 				//thread_->setFilename(temp_filename);
-				cout << url << endl;
 				//bool ok = threadedDownload_(url);
 				//downloadEnded_();
 			
