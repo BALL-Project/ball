@@ -1,7 +1,7 @@
 
                     BALL  -  Biochemical ALgorithm Library
                     --------------------------------------
-                                Release 1.3.2
+                                Release 1.3.3
 	
 
 To install BALL on most platforms, it is sufficient to type the following
@@ -13,7 +13,7 @@ Compilation instructions on Windows can be found in BALL/Windows/README.txt.
 
 For further details of the build process, please refer to the
 installation section of the tutorial found on our website
-(http://www.ball-projects.org/Documentation/1.3.2/BALL-Tutorial-1.3.2.pdf).
+(http://www.ball-projects.org/Documentation/1.3.3/BALL-Tutorial-1.3.3.pdf).
 
 Please help us to improve the quality of this library by sending all the
 problems you ran into, all criticism, encouragements, improvements, bug

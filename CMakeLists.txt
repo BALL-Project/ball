@@ -30,7 +30,7 @@ PROJECT("BALL")
 
 SET(BALL_PACKAGE_VERSION_MAJOR "1")
 SET(BALL_PACKAGE_VERSION_MINOR "3")
-SET(BALL_PACKAGE_VERSION_PATCH "2")
+SET(BALL_PACKAGE_VERSION_PATCH "3")
 
 ########################################################
 ###    end manual	entries													   ###

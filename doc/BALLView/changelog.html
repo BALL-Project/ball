@@ -17,9 +17,46 @@
 <a href="index.html"><img src="images/right.png" width="58" height="28" border=0 align="absmiddle"></a>
 </h2> <hr width=550>
 
-	<H2 align=center>BALL and BALLView 1.3.2 Changelog</H2>
+	<H2 align=center>BALL and BALLView 1.3.3 Changelog</H2>
 	<table width="700" border="0" cellpadding="5">
 	  <tr><td>
+
+<h2 align=center>06.05.2010 BALL 1.3.3 (Changes since BALL 1.3.2): </h2>
+ <ul>
+  <li> Buildsystem:
+	 <ul>
+    <li>Added utilities and benchmarks to CMake
+		<li>Fixed build system for 2 digit versions of gcc
+		<li>Export CMake targets for easy use in external projects
+	 </ul>
+	<li>Core:
+	 <ul>
+    <li>Compatibility fixes for GCC 4.5 and icpc v 11
+		<li>Added wrapper classes for MPI-based parallelization
+		<li>Allow to parse alternative location indicators different from 'A'
+		<li>Deprecated BALL::List (replaced by std::list)
+		<li>Simplify conversion between BALL::String and QString
+		<li>Loads of style fixes and removals of dead code
+		<li>Added convenience functions to obtain residues with given ID from a protein
+		<li>Fixed several issues with our handling of sockets
+		<li>Dramatic speed increases when reading SDFiles
+		<li>Added a processor to compute connected components of molecular systems
+	 </ul>
+	<li>VIEW:
+		<ul>
+			<li>Added a proper icon loader class, updated and added some icons
+			<li>Added a "createBond" method and menu entries to BALLView
+		</ul>
+	<li>Plugins:
+		<ul>
+			<li>Allow plugins to store their preferences
+		</ul>
+	<li>Python:
+	 <ul>
+	  <li>Updated some of the SIP files
+		<li>Follow the same rules as SIP to determine which modules can be loaded
+	 </ul>
+ </ul>
 
 <h2 align=center>05.02.2010 BALL 1.3.2 (Changes since BALL 1.3.1): </h2>
  <ul>

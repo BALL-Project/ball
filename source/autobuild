@@ -248,9 +248,7 @@ then
 	exit $0
 else
 	echo
-	echo This is the automatic BALL installer, using this script is
-	echo only allowed if you have read and accepted the BALL licence
-	echo file under BALL/source/.licence.
+	echo This is the automatic BALL installer.
 	echo 
 	echo Please note that the build process of the contrib packages
 	echo requires about 2Gb of disk space and can take several hours,

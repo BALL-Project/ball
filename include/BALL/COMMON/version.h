@@ -18,7 +18,7 @@
 //
 //  master data for all revisions is stored in this define!
 //
-#define BALL_RELEASE_STRING             "1.3.2"
+#define BALL_RELEASE_STRING             "1.3.3"
 
 namespace BALL
 {
