@@ -22,11 +22,10 @@
 #include <QtNetwork/QNetworkReply>
 
 class QProgressBar;
+class QNetworkAccessManager;
 
 namespace BALL
 {
-	class TCPTransfer;
-
 	namespace VIEW
 	{
 		/** Dialog to search for and download structure files from the <a href="http://www.rcsb.org/">PDB data bank</a>.
@@ -114,6 +113,7 @@ namespace BALL
 
 				// the current progress bar
 				QProgressBar*  progress_bar_;
+				QNetworkAccessManager* network_manager_;
 		};
 
 	} 

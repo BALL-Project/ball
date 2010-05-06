@@ -44,7 +44,6 @@ $(TEST_PREFIX)File_test$(EXEEXT)\
 $(TEST_PREFIX)Path_test$(EXEEXT)\
 $(TEST_PREFIX)PreciseTime_test$(EXEEXT)\
 $(TEST_PREFIX)Sysinfo_test$(EXEEXT)\
-$(TEST_PREFIX)TCPTransfer_test$(EXEEXT)\
 $(TEST_PREFIX)Timer_test$(EXEEXT)\
 $(TEST_PREFIX)TimeStamp_test$(EXEEXT)\
 $(TEST_PREFIX)TransformationManager_test$(EXEEXT)

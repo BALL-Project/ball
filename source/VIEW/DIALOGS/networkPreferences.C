@@ -9,8 +9,6 @@
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
-#include <BALL/SYSTEM/TCPTransfer.h>
-
 #include <QtGui/qcheckbox.h>
 #include <QtGui/qlineedit.h>
 
@@ -84,7 +82,7 @@ namespace BALL
 			QNetworkProxy new_proxy((QNetworkProxy::ProxyType)proxy_type_box->currentIndex(),
 															host_edit->text(), port, login_edit->text(), password_edit->text());
 
-			global_network_manager.setProxy(new_proxy);
+			QNetworkProxy::setApplicationProxy(new_proxy);
 		}
 
 		bool NetworkPreferences::proxyEnabled()

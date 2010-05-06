@@ -37,7 +37,6 @@ SET(BALL_SYSTEM_TESTS
 	Path_test
 	PreciseTime_test
 	Sysinfo_test
-	TCPTransfer_test
 	Timer_test
 	TimeStamp_test
 	TransformationManager_test

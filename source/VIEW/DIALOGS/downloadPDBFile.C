@@ -6,7 +6,6 @@
 
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
 
-#include <BALL/SYSTEM/TCPTransfer.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/FORMAT/PDBFile.h>
@@ -24,6 +23,7 @@
 #include <QtCore/QUrl>
 #include <QtCore/QFile>
 
+#include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
 
@@ -46,7 +46,8 @@ namespace BALL
 				error_(false),
 				prefix_("http://www.rcsb.org/pdb/files/"),
 				suffix_(".pdb"),
-				progress_bar_(0)
+				progress_bar_(0),
+				network_manager_(0)
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new DownloadPDBFile" << this << std::endl;
@@ -108,7 +109,8 @@ namespace BALL
 			progress_bar_->resize(progress_label->size());
 			progress_bar_->show();
 
-			current_reply_ = global_network_manager.get(QNetworkRequest(QUrl(url.c_str())));
+			network_manager_ = new QNetworkAccessManager(this);
+			current_reply_ = network_manager_->get(QNetworkRequest(QUrl(url.c_str())));
 			connect(current_reply_, SIGNAL(finished()), this, SLOT(downloadFinished()));
 			connect(current_reply_, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(downloadProgress(qint64, qint64)));
 		}
@@ -183,6 +185,9 @@ namespace BALL
 
 			current_reply_->deleteLater();
 			current_reply_ = 0;
+
+			network_manager_->deleteLater();
+			network_manager_ = 0;
 
 			progress_bar_->deleteLater();
 			progress_bar_ = 0;

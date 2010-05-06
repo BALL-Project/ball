@@ -6,7 +6,6 @@
 #include <BALL/VIEW/DIALOGS/pubchemDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/STRUCTURE/sdGenerator.h>
-#include <BALL/SYSTEM/TCPTransfer.h>
 
 #include <QtGui/QPushButton>
 #include <QtGui/QTreeWidget>
@@ -163,10 +162,6 @@ namespace BALL
 		{
 			String qt = ascii(pubchem_label->displayText());
 			if (qt == "") return;
-
-			// we do the proxy settings here, not in the constructor, since the
-			// user might have changed them since the last download
-			esearch_connector_.setProxy(global_network_manager.proxy());
 
 			// first, perform the search
 			QUrl search_url(esearch_base_url_.c_str());
@@ -382,10 +377,6 @@ namespace BALL
 
 		void PubChemDialog::callESummary(QString const& entry_id, QTreeWidgetItem* current_item)
 		{
-			// we do the proxy settings here, not in the constructor, since the
-			// user might have changed them since the last download
-			esummary_connector_.setProxy(global_network_manager.proxy());
-
 			// now prepare the download
 			QUrl summary_url(esummary_base_url_.c_str());
 			summary_url.addQueryItem("db", "pcsubstance");

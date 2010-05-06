@@ -5,10 +5,6 @@
 #include <BALL/VIEW/KERNEL/common.h>
 #endif
 
-#ifndef BALL_SYSTEM_TCPTRANSFER
-# include <BALL/SYSTEM/TCPTransfer.h>
-#endif
-
 #include <QtCore/QThread>
 #include <QtCore/QEvent>
 

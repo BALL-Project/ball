@@ -8,7 +8,6 @@ SET(SOURCES_LIST
 	simpleDownloader.C
 	sysinfo.C
 	systemCalls.C
-	TCPTransfer.C
 	timer.C
 )
 

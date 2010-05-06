@@ -5,9 +5,10 @@
 //
 
 #include <BALL/SYSTEM/file.h>
+#include <BALL/SYSTEM/simpleDownloader.h>
+
 #include <BALL/DATATYPE/regularExpression.h>
 
-#include <BALL/SYSTEM/TCPTransfer.h>
 #include <BALL/DATATYPE/regularExpression.h>
 
 #include <stdlib.h>     // 'getenv'
@@ -256,26 +257,23 @@ namespace BALL
 
 			// check for the FTP and HTTP transformation prefix
 			if (name_.hasPrefix(TRANSFORMATION_FTP_PREFIX) ||
-				 	name_.hasPrefix(TRANSFORMATION_HTTP_PREFIX))
+			    name_.hasPrefix(TRANSFORMATION_HTTP_PREFIX))
 			{
-				// create a temporary file and redirect the file-transfer to that file
+				SimpleDownloader dl(name_);
+
 				String tmp_file;
 				createTemporaryFilename(tmp_file);
-				std::ofstream os(tmp_file.c_str(), std::ios::out);
-				try
-				{
-					TCPTransfer tcp_t(os, name_);
+
+				int err;
+				if((err = dl.downloadToFile(tmp_file)) != 0) {
+					throw Exception::FileNotFound(__FILE__, __LINE__,
+									name_ + String(" from network."));
 				}
-				catch(TCPTransfer::TransferFailed& exception)
-				{
-					throw Exception::FileNotFound(__FILE__, __LINE__, 
-									name_ + String(" from network. TCP transfer failed: ") 
-									+ exception.getMessage());
-				}
+
 				name_ = tmp_file;
 				is_temporary_ = true;
 			}
-				
+
 			// check for the EXEC transformation prefix
 			if (name_.hasPrefix(TRANSFORMATION_EXEC_PREFIX))
 			{
