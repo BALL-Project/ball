@@ -5,6 +5,7 @@ SET(SOURCES_LIST
 	fileSystem.C
 	mutex.C
 	path.C
+	simpleDownloader.C
 	sysinfo.C
 	systemCalls.C
 	TCPTransfer.C
@@ -19,4 +20,8 @@ IF (BALL_HAS_MPI)
 	SET(SOURCES_LIST ${SOURCES_LIST} MPISupport.C)
 ENDIF()
 
+SET(MOC_SOURCES_LIST "simpleDownloader.C")
+
 ADD_BALL_SOURCES("SYSTEM" "${SOURCES_LIST}")
+
+ADD_BALL_CORE_MOCFILES("SYSTEM" "include/BALL/SYSTEM" "${MOC_SOURCES_LIST}")
