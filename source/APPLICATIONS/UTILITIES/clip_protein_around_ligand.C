@@ -26,6 +26,7 @@
 #include <BALL/MOLMEC/COMMON/typenameRuleProcessor.h>
 #include <BALL/MOLMEC/COMMON/chargeRuleProcessor.h>
 #include <BALL/SYSTEM/path.h>
+#include <BALL/MATHS/common.h>
 
 using namespace BALL;
 using namespace std;
@@ -696,7 +697,7 @@ int main(int argc, char** argv)
 		charge += c;
 	}
 
-	cout << "CHARGE=" << round(charge) << endl;
+	cout << "CHARGE=" << Maths::round(charge) << endl;
 
 	ResidueChecker check(db);
 	cut_protein->apply(check);

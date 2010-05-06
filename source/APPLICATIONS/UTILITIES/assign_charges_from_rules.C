@@ -12,6 +12,7 @@
 #include <BALL/SYSTEM/path.h>
 #include <BALL/MOLMEC/COMMON/chargeRuleProcessor.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
+#include <BALL/MATHS/common.h>
 
 using namespace BALL;
 using namespace std;
@@ -89,7 +90,7 @@ int main(int argc, char** argv)
 			charge += c;
 		}
 
-		if (fabs(charge - roundf(charge)) > 0.05)
+		if (fabs(charge - Maths::round(charge)) > 0.05)
 		{
 			Log.warn() << "WARNING: residue " << res_it->getName() << ":" 
 				<< res_it->getID() << " has non-integral charge "
