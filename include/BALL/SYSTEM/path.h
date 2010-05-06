@@ -18,11 +18,13 @@
 # include <BALL/COMMON/global.h>
 #endif
 
-#include <string>
-#include <vector>
-using std::string;
-using std::vector;
+#ifndef BALL_DATATYPE_STRING_H
+# include <BALL/DATATYPE/string.h>
+#endif
 
+#include <vector>
+
+using std::vector;
 
 namespace BALL 
 {
@@ -63,24 +65,24 @@ namespace BALL
 				The path contains a newline ("\n") separated list of paths that are searched 
 				in the order of occurence. \par
 		*/		
-		string getDataPath();
+		String getDataPath();
 
 		/**	Modify the data path.
 				This method accepts a newline separated list of paths to
 				specify data paths.
 		*/
-		void setDataPath(const string& path);
+		void setDataPath(const String& path);
 
 		/**	Add a single path to the list of paths.
 				@param	path the path to be added to the path list
 		*/
-		void addDataPath(const string& path);
+		void addDataPath(const String& path);
 
 		/**	Returns the default data path compiled into the library.
 				This method ignores possible contents of the environment
 				variable "BALL\_DATA".
 		*/
-		string getDefaultDataPath();
+		String getDefaultDataPath();
 
 		/**	Returns the full path to a file residing in one of the data directories.
 				If a file that matches the name is not found, an empty string is returned.
@@ -94,12 +96,12 @@ namespace BALL
 				for a file named <b>test.dat</b> in each of the directories. \par
 				If this behaviour is not desired, try  \link Path::findStrict findStrict \endlink  instead. \par
 		*/
-		string find(const string& name);
+		String find(const String& name);
 
 		/**	Returns the full path to a file residing in one of the data directories.
 				@see find
 		*/
-		string findStrict(const string& name);
+		String findStrict(const String& name);
 
 		/// Reset the path variable to its default state (as it was a the start of the application).
 		void reset();
@@ -109,10 +111,10 @@ namespace BALL
 				
 		void buildPathArray_();
 
-		static string path_;
+		static String path_;
 		static bool path_array_valid_;
 		static bool environment_checked_;
-		static std::vector<std::string>	path_array_;
+		static std::vector<String>	path_array_;
 		static bool initialized_;
 	};
   

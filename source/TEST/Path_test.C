@@ -28,10 +28,15 @@ CHECK(Path())
 RESULT
 
 Path p;
-string data_suffix1("/data/");
-string data_suffix2("/data/");
+String data_suffix1("/data/");
+String data_suffix2("/data/");
 data_suffix2[0] = FileSystem::PATH_SEPARATOR;
 data_suffix2[5] = FileSystem::PATH_SEPARATOR;
+
+String x_test("XXXXX");
+x_test += FileSystem::PATH_SEPARATOR + "XXXXX";
+
+String x_test_quoted(x_test + FileSystem::PATH_SEPARATOR);
 
 CHECK(string getDataPath())
 	STATUS(p.getDataPath())
@@ -40,15 +45,15 @@ CHECK(string getDataPath())
 RESULT
 
 CHECK(void setDataPath(const string& path))
-	p.setDataPath("XXXXX/XXXXX");
-	TEST_EQUAL(p.getDataPath(),"XXXXX/XXXXX")
+	p.setDataPath(x_test);
+	TEST_EQUAL(p.getDataPath(), x_test_quoted);
 RESULT
 
 CHECK(void addDataPath(const string& path))
-	p.addDataPath("XXXXX/XXXXX");
+	p.addDataPath(x_test);
 	STATUS(p.getDataPath())
-	TEST_EQUAL(String(p.getDataPath()).hasSubstring("XXXXX/XXXXX"), true)
-	TEST_EQUAL(String(p.getDataPath()).hasSuffix("XXXXX/XXXXX"), true)
+	TEST_EQUAL(String(p.getDataPath()).hasSubstring(x_test_quoted), true)
+	TEST_EQUAL(String(p.getDataPath()).hasSuffix(x_test_quoted), true)
 RESULT
 
 CHECK(string getDefaultDataPath())
@@ -90,9 +95,9 @@ CHECK([extra]Singleton)
 	STATUS(p1.getDataPath())
 	TEST_EQUAL(String(p1.getDataPath()).hasSuffix(data_suffix1)
 	 		|| String(p1.getDataPath()).hasSuffix(data_suffix2), true)
-	p1.setDataPath("XXXXX/XXXXX");
-	TEST_EQUAL(p1.getDataPath(), "XXXXX/XXXXX")
-	TEST_EQUAL(p2.getDataPath(), "XXXXX/XXXXX")
+	p1.setDataPath(x_test);
+	TEST_EQUAL(p1.getDataPath(), x_test_quoted)
+	TEST_EQUAL(p2.getDataPath(), x_test_quoted)
 RESULT
 
 /////////////////////////////////////////////////////////////
