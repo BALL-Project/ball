@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>386</width>
-    <height>268</height>
+    <width>376</width>
+    <height>291</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -19,7 +19,7 @@
    <property name="geometry" >
     <rect>
      <x>9</x>
-     <y>225</y>
+     <y>250</y>
      <width>117</width>
      <height>30</height>
     </rect>
@@ -47,7 +47,7 @@
    <property name="geometry" >
     <rect>
      <x>255</x>
-     <y>225</y>
+     <y>250</y>
      <width>117</width>
      <height>30</height>
     </rect>
@@ -78,7 +78,7 @@
    <property name="geometry" >
     <rect>
      <x>132</x>
-     <y>225</y>
+     <y>250</y>
      <width>117</width>
      <height>30</height>
     </rect>
@@ -240,6 +240,19 @@
      <string>Electron Microscopy Data Bank</string>
     </property>
    </item>
+  </widget>
+  <widget class="QLabel" name="progress_label" >
+   <property name="geometry" >
+    <rect>
+     <x>20</x>
+     <y>210</y>
+     <width>341</width>
+     <height>36</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string/>
+   </property>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11" />
