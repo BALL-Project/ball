@@ -107,7 +107,7 @@ namespace BALL
 			
 			setMenuHint("Download an electron density map from EDS or EMDB");
 			setMenuHelp("tips.html#download_edmap");
-			setIcon("download.png", true);
+			setIcon("actions/download-electrondensity", true);
 		}
 
 		void DownloadElectronDensity::slotDownload()
