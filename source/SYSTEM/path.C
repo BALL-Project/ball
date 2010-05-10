@@ -108,7 +108,7 @@ namespace BALL
 			// if we found BALL_DATA_PATH in the registry keys, reg_result will equal ERROR_SUCCESS
 			if ((reg_result == ERROR_SUCCESS) && (valuesize > 0))
 			{
-				String bdp(reinterpret_cast<char*>(&(regbuffer[0])), valuesize-1);
+				String bdp(reinterpret_cast<char*>(&(regbuffer[0])), 0, valuesize-1);
 				addDataPath(bdp);
 			}
 
@@ -123,7 +123,7 @@ namespace BALL
 			
 			if ((reg_result == ERROR_SUCCESS) && (valuesize > 0))
 			{
-				String bdp(reinterpret_cast<char*>(&(regbuffer[0])), valuesize-1);
+				String bdp(reinterpret_cast<char*>(&(regbuffer[0])), 0, valuesize-1);
 				addDataPath(bdp);
 			}
 #endif
@@ -156,7 +156,6 @@ namespace BALL
 					path_ += "\n";
 			}
 		}
-
 
 		// remember we don't have to do this again - computation on demand!
 		path_array_valid_ = true;
