@@ -740,6 +740,9 @@ namespace BALL
 
 		void OpenSimPlugin::handleNewComposite(OpenSimTask task)
 		{ 
+			String command(OpenSimReceiver::ADD_ATOM_CONTAINER);
+			command += String(";") + String(task.handle_to_atom_.size()) + ";" + String(task.handle_to_bond_.size());
+
 			HashMap<Handle, const Atom *>::ConstIterator atom_it;	
 
 			for (atom_it= task.handle_to_atom_.begin(); atom_it!= task.handle_to_atom_.end() ;++atom_it)
@@ -767,7 +770,7 @@ namespace BALL
 
 						ColorRGBA& color = ecp_.getColorMap()[atom->getElement().getAtomicNumber()];
 
-						String add_atom_string(OpenSimReceiver::ADD_ATOM);
+						String add_atom_string;
 
 						add_atom_string =	add_atom_string 
 							+ String(";") + String(molStructPlugin_->next_atom_index_) 
@@ -780,10 +783,10 @@ namespace BALL
 							+ String(";") + String((int)color.getBlue())
 							+ String(";") + String((int)color.getGreen());
 
-						server_->sendMessageString(add_atom_string);
+						command += add_atom_string;
 
 
-						Log.info() << "Add_atom_string Message @handleNewComposite from BALLView to OpenSim : "<<add_atom_string<<std::endl;
+//						Log.info() << "Add_atom_string Message @handleNewComposite from BALLView to OpenSim : "<<add_atom_string<<std::endl;
 
 
 						// Note
@@ -868,7 +871,7 @@ namespace BALL
 						{
 							//Log.info() << " new bond_identifier at newcomp : " << new_bond_identifier << std::endl;
 
-							String add_bond_string(OpenSimReceiver::ADD_BOND);
+							String add_bond_string;
 
 							add_bond_string =   add_bond_string 
 								+ String(";") + String(molStructPlugin_->next_bond_index_)
@@ -876,9 +879,7 @@ namespace BALL
 								+ String(";") + String(atom_two_index)
 								+ String(";") + String(bond_order);
 
-							server_->sendMessageString(add_bond_string);
-
-							Log.info() << "Add_bond_string Messagge @ handleNewComposite from BALLView to OpenSim : "<<add_bond_string<<std::endl;
+							command += add_bond_string;
 
 							if (molStructPlugin_)
 							{
@@ -909,6 +910,8 @@ namespace BALL
 				}
 
 			}
+
+			server_->sendMessageString(command);
 		}
 
 		void OpenSimPlugin::handleRemovedComposite(OpenSimTask task)
