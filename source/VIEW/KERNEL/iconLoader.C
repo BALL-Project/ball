@@ -5,6 +5,7 @@
 #include <QtGui/QIcon>
 
 #include <BALL/SYSTEM/path.h>
+#include <BALL/SYSTEM/fileSystem.h>
 #include <BALL/DATATYPE/string.h>
 
 namespace BALL
@@ -21,7 +22,8 @@ namespace BALL
 			Path p;
 			QStringList splitpaths = QString(p.getDataPath().c_str()).split("\n");
 			foreach(QString str, splitpaths) {
-				icon_dirs_.append(str + "/graphics/icons");
+				icon_dirs_.append(str + FileSystem::PATH_SEPARATOR + "graphics" 
+				                      + FileSystem::PATH_SEPARATOR + "icons");
 			}
 
 			setup_();
@@ -132,7 +134,7 @@ namespace BALL
 				QIcon* result = 0;
 
 				for(std::list<int>::iterator sit = sizes_.begin(); sit != sizes_.end(); ++sit) {
-					QDir size_dir = *it + "/" + QString::number(*sit) + "x" + QString::number(*sit);
+					QDir size_dir = *it + FileSystem::PATH_SEPARATOR + QString::number(*sit) + "x" + QString::number(*sit);
 
 					if(!size_dir.exists()) {
 						continue;
@@ -142,7 +144,7 @@ namespace BALL
 						if(!result) {
 							result = new QIcon();
 						}
-						result->addFile(size_dir.path() + "/" + filename);
+						result->addFile(size_dir.path() + FileSystem::PATH_SEPARATOR + filename);
 					}
 				}
 
