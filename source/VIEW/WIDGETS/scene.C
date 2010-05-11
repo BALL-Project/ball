@@ -2110,7 +2110,7 @@ namespace BALL
 
 			qmouse_event->accept();
 
-			y_window_pos_new_ = (Position)(y_window_pos_old_ + (qmouse_event->delta() / 120 * mouse_wheel_sensitivity_));
+			y_window_pos_new_ = (Position)(y_window_pos_old_ + (qmouse_event->delta() / 120. * mouse_wheel_sensitivity_));
 			zoomSystem_();
 			y_window_pos_old_ = y_window_pos_new_;
 		}
