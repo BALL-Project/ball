@@ -466,16 +466,45 @@ namespace BALL
 		setBlock_(socket_, false);
 		Timer timer;
 		timer.start();
-		bool connected = 0;
-		while (!connected && timer.getClockTime()<TIMEOUT)
-		{
-			if (connect(socket_, (struct sockaddr*)&host, sizeof(struct sockaddr)) == -1)
-			{
-				connected = 0;
-			}
-			else connected=1;
+		bool connected, try_connect;
 
-			if(!connected) sleepFor(200000); // sleep 0.2 seconds
+		// try to connect in non-blocking mode; usually, this will not directly succeed
+		if (connect(socket_, (struct sockaddr*)&host, sizeof(struct sockaddr)) == -1)
+		{
+			connected = false;
+			try_connect = false;
+
+			// if we have to wait for a bit, errno will tell us
+			if (errno == EINPROGRESS)
+				try_connect = true;
+		}
+		else 
+		{
+			connected = true;
+			try_connect = false;
+		}
+
+		struct timeval timeout;
+		timeout.tv_sec = 1;
+		timeout.tv_usec = 0;
+
+		fd_set socket_set;
+		FD_ZERO(&socket_set);
+		FD_SET(socket_, &socket_set);
+
+		while (try_connect && timer.getClockTime()<TIMEOUT)
+		{
+			int result = select(FD_SETSIZE, NULL, &socket_set, NULL, &timeout);
+			if (result == -1)
+			{
+				connected = false;
+				try_connect = false;
+			}
+			else if (result == 1)
+			{
+				connected = true;
+				try_connect = false;
+			}
 		}
 		setBlock_(socket_, true);
 
@@ -767,17 +796,47 @@ namespace BALL
 		setBlock_(socket2, false);
 		Timer timer;
 		timer.start();
-		bool connected = 0;
-		while (!connected && timer.getClockTime()<TIMEOUT)
-		{
-			if (connect(socket2, (struct sockaddr*)&host, sizeof(struct sockaddr)) == -1)
-			{
-				connected = 0;
-			}
-			else connected=1;
+		bool connected, try_connect;
 
-			if(!connected) sleepFor(200000); // sleep 0.2 seconds
+		// try to connect in non-blocking mode; usually, this will not directly succeed
+		if (connect(socket2, (struct sockaddr*)&host, sizeof(struct sockaddr)) == -1)
+		{
+			connected = false;
+			try_connect = false;
+
+			// if we have to wait for a bit, errno will tell us
+			if (errno == EINPROGRESS)
+				try_connect = true;
 		}
+		else 
+		{
+			connected = true;
+			try_connect = false;
+		}
+
+		struct timeval timeout;
+		timeout.tv_sec = 1;
+		timeout.tv_usec = 0;
+
+		fd_set socket_set;
+		FD_ZERO(&socket_set);
+		FD_SET(socket2, &socket_set);
+
+		while (try_connect && timer.getClockTime()<TIMEOUT)
+		{
+			int result = select(FD_SETSIZE, NULL, &socket_set, NULL, &timeout);
+			if (result == -1)
+			{
+				connected = false;
+				try_connect = false;
+			}
+			else if (result == 1)
+			{
+				connected = true;
+				try_connect = false;
+			}
+		}
+
 		if(!connected)
 		{
 			GLOBAL_CLOSE(socket2);
