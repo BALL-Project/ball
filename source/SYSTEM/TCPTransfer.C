@@ -473,9 +473,13 @@ namespace BALL
 		{
 			connected = false;
 			try_connect = false;
-
 			// if we have to wait for a bit, errno will tell us
+#ifndef BALL_OS_WINDOWS
 			if (errno == EINPROGRESS)
+#else
+			int error = WSAGetLastError();
+			if (error == WSAEWOULDBLOCK || error == WSAEINPROGRESS)
+#endif
 				try_connect = true;
 		}
 		else 
@@ -520,6 +524,7 @@ namespace BALL
 		{
 			sendData_(query, socket_);
 		}
+
 		received_bytes_ = readInputFromSocket_(socket_);
 
 		if (received_bytes_ < 0)
@@ -805,7 +810,11 @@ namespace BALL
 			try_connect = false;
 
 			// if we have to wait for a bit, errno will tell us
+#ifndef BALL_OS_WINDOWS
 			if (errno == EINPROGRESS)
+#else
+			if (errno == WSAEWOULDBLOCK || errno == WSAEINPROGRESS)
+#endif
 				try_connect = true;
 		}
 		else 
@@ -965,7 +974,7 @@ namespace BALL
 		while (received_bytes<0 && timer.getClockTime()<TIMEOUT)
 		{
 			received_bytes = getReceivedBytes_(socket); // returns -1 if there was an error (e.g. no connection)
-			if(received_bytes<0) sleepFor(200000); // sleep 0.2 seconds
+			if(received_bytes<0) sleepFor(200); // sleep 0.2 seconds
 		}
 		
 		setBlock_(socket, true);
