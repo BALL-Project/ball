@@ -20,11 +20,9 @@ namespace BALL
 			: invalid_(new QIcon())
 		{
 			Path p;
-			QStringList splitpaths = QString(p.getDataPath().c_str()).split("\n");
-			foreach(QString str, splitpaths) {
-				icon_dirs_.append(str + FileSystem::PATH_SEPARATOR + "graphics" 
-				                      + FileSystem::PATH_SEPARATOR + "icons");
-			}
+			String found = p.find("graphics/icons");
+			if (found != "")
+				icon_dirs_.append(found.c_str());
 
 			setup_();
 		}
