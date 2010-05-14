@@ -62,6 +62,3 @@ ELSEIF (BALL_LONG_SIZE MATCHES "4")
 ELSE()
 	MESSAGE(SEND_ERROR "Could not find appropriate numeric type for 32bit int")
 ENDIF()
-
-## The default complex precision
-SET(BALL_COMPLEX_PRECISION float CACHE STRING "The default precision for complex values")
