@@ -9,20 +9,21 @@ IF (FFTWL_FOUND)
 	SET(BALL_HAS_FFTW_LONG_DOUBLE TRUE)
 	SET(FFTW_LIBRARIES ${FFTWL_LIB} ${FFTW_LIBRARIES})
 	SET(BALL_FFTW_DEFAULT_TRAITS LongDoubleTraits)
+	MESSAGE(STATUS "FFTW: Found long double precision")
 ENDIF()
 
 IF (FFTWD_FOUND)
 	SET(BALL_HAS_FFTW_DOUBLE TRUE)
 	SET(FFTW_LIBRARIES ${FFTWD_LIB} ${FFTW_LIBRARIES})
 	SET(BALL_FFTW_DEFAULT_TRAITS DoubleTraits)
-	MESSAGE(STATUS "Falling back to double complex precision")
+	MESSAGE(STATUS "FFTW: Found double precision")
 ENDIF()
 
 IF (FFTWF_FOUND)
 	SET(BALL_HAS_FFTW_FLOAT TRUE)
 	SET(FFTW_LIBRARIES ${FFTWF_LIB} ${FFTW_LIBRARIES})
 	SET(BALL_FFTW_DEFAULT_TRAITS FloatTraits)
-	MESSAGE(STATUS "Falling back to long double complex precision")
+	MESSAGE(STATUS "FFTW: Found float precision")
 ENDIF()
 
 #The user may override these settings

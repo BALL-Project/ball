@@ -142,6 +142,12 @@ IF(FFTW_FOUND)
 	INCLUDE(cmake/BALLConfigFFTW.cmake)
 ENDIF()
 
+#Set the default complex precision to float if the setting for this value
+#could not be determined earlier
+IF(NOT BALL_COMPLEX_PRECISION)
+	SET(BALL_COMPLEX_PRECISION "float")
+ENDIF()
+
 ## lpsolve
 OPTION(USE_LPSOLVE "Compile with lpsolve support, if lpsolve can be found" ON)
 
