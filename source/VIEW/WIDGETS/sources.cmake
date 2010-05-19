@@ -9,7 +9,6 @@ SET(SOURCES_LIST
  	genericControl.C
 	geometricControl.C
 	helpViewer.C
-	hotkeyTable.C
 	logView.C
 	molecularControl.C
 	molecularStructure.C
@@ -23,7 +22,7 @@ SET(SOURCES_LIST
 )
 
 IF(BALL_PYTHON_SUPPORT)
-	SET(SOURCES_LIST ${SOURCES_LIST} pyWidget.C)
+	SET(SOURCES_LIST ${SOURCES_LIST} pyWidget.C hotkeyTable.C)
 ENDIF()
 
 ### the list of all files requiring a moc run ###
