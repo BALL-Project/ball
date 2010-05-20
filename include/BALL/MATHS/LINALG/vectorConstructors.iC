@@ -81,16 +81,20 @@ namespace BALL {
 	}
 
 	template <>
-	Vector<float>& Vector<float>::operator = (const Vector<float>& v);
+	Vector<float>& Vector<float>::operator = (const Vector<float>& v)
+		throw(Exception::OutOfMemory);
 
 	template <>
-	Vector<double>& Vector<double>::operator = (const Vector<double>& v);
+	Vector<double>& Vector<double>::operator = (const Vector<double>& v)
+		throw(Exception::OutOfMemory);
 
 	template <>
-	Vector<ComplexFloat>& Vector<ComplexFloat>::operator = (const Vector<ComplexFloat>& v);
+	Vector<ComplexFloat>& Vector<ComplexFloat>::operator = (const Vector<ComplexFloat>& v)
+		throw(Exception::OutOfMemory);
 	
 	template <>
-	Vector<ComplexDouble>& Vector<ComplexDouble>::operator = (const Vector<ComplexDouble>& v);
+	Vector<ComplexDouble>& Vector<ComplexDouble>::operator = (const Vector<ComplexDouble>& v)
+		throw(Exception::OutOfMemory);
 	
 	template <typename valuetype>
 	Vector<valuetype>& Vector<valuetype>::operator = (const Vector<valuetype>& v)
