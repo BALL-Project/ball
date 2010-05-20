@@ -1,15 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyResidueDict.sip,v 1.6 2003/12/18 19:03:20 oliver Exp $
-//
 
 %MappedType PyResidueDict
 {
 %TypeHeaderCode
 	#include <BALL/DATATYPE/hashMap.h>
-	#include "sipBALLResidue.h"
   #include <BALL/PYTHON/pyBALLSipHelper.h>
+	#include <BALL/KERNEL/residue.h>
 	typedef HashMap<const Residue*, float> PyResidueDict;
 %End
 

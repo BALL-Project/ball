@@ -4,7 +4,6 @@
   {
 %TypeHeaderCode
 	#include <BALL/STRUCTURE/HBondProcessor.h>
-	#include "sipAPIBALL.h"
 	using namespace BALL;
 	typedef UnaryProcessor<Composite> CompositeProcessor;
 %End

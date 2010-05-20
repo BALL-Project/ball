@@ -1,15 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyChainDict.sip,v 1.6 2003/12/18 19:03:20 oliver Exp $
-//
 
 %MappedType PyChainDict
 {
 %TypeHeaderCode
 	#include <BALL/DATATYPE/hashMap.h>
-	#include "sipBALLChain.h"
   #include <BALL/PYTHON/pyBALLSipHelper.h>
+	#include <BALL/KERNEL/chain.h>
 	typedef HashMap<const Chain*, float> PyChainDict;
 %End
 
