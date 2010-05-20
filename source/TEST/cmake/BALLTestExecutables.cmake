@@ -21,6 +21,7 @@ SET(BALL_MATHS_TESTS
 	Line3_test
 	Circle3_test
 	SimpleBox3_test
+	SVDSolver_test
 	Box3_test
 	Plane3_test
 	Sphere3_test
