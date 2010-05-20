@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AssignShiftProcessor_test.C,v 1.16.28.1 2007/03/25 21:46:45 oliver Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -28,17 +26,13 @@ CHECK(preparations)
 	f >> s;
 RESULT
 
-FragmentDB db("fragments/Fragments.db");
-
 CHECK(AssignShiftProcessor::AssignShiftProcessor(const vector<NMRAtomData*>& atom_data)/apply())
 	NMRStarFile rs(BALL_TEST_DATA_PATH(AssignShiftProcessor_test.str));
-	TEST_EQUAL(rs.getData()[0].atom_data.size(), 797)
+	TEST_EQUAL(rs.getNMRData()[0].atom_data.size(), 797)
 	TEST_EQUAL(rs.getNumberOfAtoms(), 797)
 	TEST_EQUAL(s.countAtoms(), 1944)
 
-	AssignShiftProcessor asp(rs.getData()[0].atom_data);
-	asp.setFragmentDB(&db);
-	s.apply(asp);
+	AssignShiftProcessor asp(rs.getNMRData()[0].atom_data);
 RESULT
 
 CHECK(results)

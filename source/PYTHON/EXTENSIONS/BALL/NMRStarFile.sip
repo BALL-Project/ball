@@ -59,7 +59,7 @@ class NMRStarFile
 					String type;
 					String details;
 
-//					vector <NMRStarFile::Sample::Component> components;
+//					vector <Component> components;
 
 			};
 

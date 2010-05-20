@@ -437,7 +437,7 @@ namespace BALL
 
 			/** Get the maiximum number of atoms in all shift sets
 			*/
-			Size getNumberOfAtoms()    
+			Size getNumberOfAtoms() const ;
 
 			Size getNumberOfShiftsAssigned() {return number_of_assigned_shifts_;};
 
