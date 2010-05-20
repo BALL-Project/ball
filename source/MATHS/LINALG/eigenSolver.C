@@ -79,7 +79,7 @@ namespace BALL {
 		// if we have used the transpose for the eigenvector computation, we need to conjugate it back
 		if (matrix_->isRowMajor())
 			for (size_t i=0; i<right_eigenvectors_.getSize(); i++)
-				right_eigenvectors_[i].imag()*=-1;
+				*(reinterpret_cast<float*>(&right_eigenvectors_[i])+1) *=-1; // this hack gives us the imaginary part...
 
 		// clean up
 		if (workspace)
@@ -170,7 +170,7 @@ namespace BALL {
 		// if we have used the transpose for the eigenvector computation, we need to conjugate it back
 		if (matrix_->isRowMajor())
 			for (size_t i=0; i<right_eigenvectors_.getSize(); i++)
-				right_eigenvectors_[i].imag()*=-1;
+				*(reinterpret_cast<double*>(&right_eigenvectors_[i])+1) *=-1; // this hack gives us the imaginary part...
 
 		// clean up
 		if (workspace)
@@ -259,7 +259,7 @@ namespace BALL {
 		// if we have used the transpose for the eigenvector computation, we need to conjugate it back
 		if (matrix_->isRowMajor())
 			for (size_t i=0; i<right_eigenvectors_.getSize(); i++)
-				right_eigenvectors_[i].imag()*=-1;
+				*(reinterpret_cast<float*>(&right_eigenvectors_[i])+1) *=-1; // this hack gives us the imaginary part...
 
 		// clean up
 		if (workspace)
@@ -348,7 +348,7 @@ namespace BALL {
 		// if we have used the transpose for the eigenvector computation, we need to conjugate it back
 		if (matrix_->isRowMajor())
 			for (size_t i=0; i<right_eigenvectors_.getSize(); i++)
-				right_eigenvectors_[i].imag()*=-1;
+				*(reinterpret_cast<double*>(&right_eigenvectors_[i])+1) *=-1; // this hack gives us the imaginary part...
 
 		// clean up
 		if (workspace)
