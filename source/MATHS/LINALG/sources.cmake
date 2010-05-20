@@ -3,6 +3,7 @@ SET(SOURCES_LIST
 	eigenSolver.C
 	linalgException.C
 	matrix.C
+	matrixInverter.C
 	SVDSolver.C
 	vector.C
 )
