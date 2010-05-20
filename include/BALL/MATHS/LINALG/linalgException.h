@@ -11,7 +11,7 @@ namespace BALL
 {
 	namespace Exception 
 	{
-		class MatrixHasWrongDimension : public BALL::Exception::GeneralException
+		class BALL_EXPORT MatrixHasWrongDimension : public BALL::Exception::GeneralException
 		{
 			public:
 				MatrixHasWrongDimension() 
@@ -24,7 +24,7 @@ namespace BALL
 					throw();
 		};
 
-		class VectorHasWrongDimension : public BALL::Exception::GeneralException
+		class BALL_EXPORT VectorHasWrongDimension : public BALL::Exception::GeneralException
 		{
 			public:
 				VectorHasWrongDimension()
@@ -37,7 +37,7 @@ namespace BALL
 					throw();
 		};
 
-		class MatrixNotRegular : public BALL::Exception::GeneralException
+		class BALL_EXPORT MatrixNotRegular : public BALL::Exception::GeneralException
 		{
 			public:
 				MatrixNotRegular() 
@@ -47,7 +47,7 @@ namespace BALL
 					throw();
 		};
 
-		class MatrixNotQuadratic : public BALL::Exception::GeneralException
+		class BALL_EXPORT MatrixNotQuadratic : public BALL::Exception::GeneralException
 		{
 			public:
 				MatrixNotQuadratic() 
@@ -57,7 +57,7 @@ namespace BALL
 					throw();
 		};
 		
-		class MatrixIsSingular : public BALL::Exception::GeneralException
+		class BALL_EXPORT MatrixIsSingular : public BALL::Exception::GeneralException
 		{
 			public:
 				MatrixIsSingular(const char* file, unsigned long line) 
@@ -67,7 +67,7 @@ namespace BALL
 						throw();
 		};		
 
-// 		class OutOfMemory : public std::bad_alloc
+// 		class BALL_EXPORT OutOfMemory : public std::bad_alloc
 // 		{
 // 			public:
 // 				OutOfMemory(const char* file, int line, size_t n = 0)
@@ -80,7 +80,7 @@ namespace BALL
 // 					size_t size_;
 // 		};
 
-// 		class OutOfRange 
+// 		class BALL_EXPORT OutOfRange 
 // 		{
 // 			public:
 // 
@@ -95,7 +95,7 @@ namespace BALL
 // 				size_t index_;
 // 		};
 
-		class SingularIterator : public BALL::Exception::GeneralException
+		class BALL_EXPORT SingularIterator : public BALL::Exception::GeneralException
 		{
 			public:
 				SingularIterator() 
@@ -105,7 +105,7 @@ namespace BALL
 					throw();
 		};
 
-// 		class InvalidIterator
+// 		class BALL_EXPORT InvalidIterator
 // 		{
 // 			public:
 // 				InvalidIterator() 
@@ -115,7 +115,7 @@ namespace BALL
 // 					throw();
 // 		};
 
-// 		class Precondition
+// 		class BALL_EXPORT Precondition
 // 		{
 // 			public:
 // 				Precondition() 
@@ -125,7 +125,7 @@ namespace BALL
 // 					throw();
 // 		};
 
-// 		class IncompatibleIterators
+// 		class BALL_EXPORT IncompatibleIterators
 // 		{
 // 			public:
 // 				IncompatibleIterators() 
@@ -135,7 +135,7 @@ namespace BALL
 // 					throw();
 // 		};
 
-		class Uninitialized : public BALL::Exception::GeneralException
+		class BALL_EXPORT Uninitialized : public BALL::Exception::GeneralException
 		{
 			public:
 				Uninitialized() throw();
