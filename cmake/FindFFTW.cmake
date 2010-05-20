@@ -43,6 +43,8 @@ IF(USE_FFTWD OR USE_FFTWF OR USE_FFTWL)
     ${FFTW_INSTALL_BASE_PATH}/lib
     /usr/lib/fftw
     /usr/local/lib/fftw
+		/opt/lib/fftw
+		/opt/local/lib/fftw
   )
 
   IF(USE_FFTWD)
