@@ -17,6 +17,7 @@ IF (USE_LPSOLVE)
 		/usr/include
 		/usr/local/include
 		/opt/include
+		/opt/local/include
 	)
 
 	FIND_PATH(LPSOLVE_INCLUDE_PATH lpsolve/lp_lib.h ${LPSOLVE_INCLUDE_PATH} ${LPSOLVE_INCLUDE_TRIAL_PATH})
@@ -41,7 +42,7 @@ IF (USE_LPSOLVE)
 		SET(LPSOLVE_LIBRARIES ${TMP_LPSOLVE_LIBRARIES} CACHE STRING "Full path to the lpsolve55 library (including the library)" FORCE)
 		IF (LPSOLVE_LIBRARIES)
 			SET(LPSOLVE_FOUND TRUE)
-
+		
 			## Try to find out if lpsolve can link standalone
 			SET(LPSOLVE_TRY_CODE "#include <lpsolve/lp_lib.h>
 				int main(int /*argc*/, char** /*argv*/)
@@ -52,10 +53,12 @@ IF (USE_LPSOLVE)
 					return 0;
 				}")
 
+			SET(CMAKE_REQUIRED_INCLUDES ${LPSOLVE_INCLUDE_DIR})
 			SET(CMAKE_REQUIRED_LIBRARIES ${LPSOLVE_LIBRARIES})
 			CHECK_CXX_SOURCE_COMPILES("${LPSOLVE_TRY_CODE}" LPSOLVE_LINKS_ALONE)
 			SET(CMAKE_REQUIRED_LIBRARIES "")
-			
+			SET(CMAKE_REQUIRED_INCLUDES "")
+
 			## Try to find out if lpsolve can link with some extra libs
 			IF (NOT LPSOLVE_LINKS_ALONE)
 				FIND_LIBRARY(LPSOLVE_LIB_DL "dl")
@@ -73,7 +76,7 @@ IF (USE_LPSOLVE)
 			ENDIF()
 		ENDIF()
 	ENDIF()
-
+	
 	IF (LPSOLVE_LINKS_ALONE OR LPSOLVE_LINKS_WITH_EXTRA_LIBS)
 		SET(LPSOLVE_LINKS TRUE)
 	ENDIF()
