@@ -22,7 +22,7 @@ class NMRStarFile
 			class SampleCondition
 			{
 				public:
-					SampleCondition() throw(); 
+					SampleCondition(); 
 	
 					String	name;
 					vector<String> types;
@@ -30,8 +30,8 @@ class NMRStarFile
 					StringHashMap<float>  errors;
 					StringHashMap<String> units;
 				
-	//				void clear() throw(); 
-//					ostream& operator >> (ostream& s)	throw();
+	//				void clear(); 
+//					ostream& operator >> (ostream& s);
 			};
 	
 			class Sample
@@ -41,9 +41,9 @@ class NMRStarFile
 					class Component
 					{
 						public:
-							Component() throw();
-			//				void clear() throw(); 
-			//				ostream& operator >> (ostream& s)	throw();
+							Component();
+			//				void clear(); 
+			//				ostream& operator >> (ostream& s);
 							
 							String label;
 							float concentration_value;
@@ -53,9 +53,9 @@ class NMRStarFile
 							String isotopic_labeling;
 					};
 
-					Sample() throw(); 
-//					void clear() throw(); 
-//					ostream& operator >> (ostream& s)	throw();
+					Sample(); 
+//					void clear(); 
+//					ostream& operator >> (ostream& s);
 
 					String label;
 					String type;
@@ -66,7 +66,7 @@ class NMRStarFile
 			class ShiftReferenceElement
 			{
 				public:
-					ShiftReferenceElement() throw();
+					ShiftReferenceElement();
 
 					String		mol_common_name;
 					char			atom_type;
@@ -78,28 +78,28 @@ class NMRStarFile
 					char			reference_type;
 					float			indirect_shift_ratio;
 
-		//			void clear() throw(); 
+		//			void clear(); 
 
-			//		ostream& operator >> (ostream& s) throw();
+			//		ostream& operator >> (ostream& s);
 			};
 
 			class ShiftReferenceSet
 			{
 				public:	
-					ShiftReferenceSet() throw();
+					ShiftReferenceSet();
 				
 					String name;  
 					vector<NMRStarFile::ShiftReferenceElement> elements;
 
-			//		void clear() throw(); 
+			//		void clear(); 
 
-				//	ostream& operator >> (ostream& s)	throw();
+				//	ostream& operator >> (ostream& s);
 			};
 
 			class NMRAtomData
 			{
 				public:
-					NMRAtomData() throw();
+					NMRAtomData();
 
 					Position	atom_ID;
 					Position	residue_seq_code;
@@ -110,16 +110,16 @@ class NMRStarFile
 					float			error_value;
 					Position	ambiguity_code;
 
-			//		void clear() throw(); 
+			//		void clear(); 
 
-		//			ostream& operator >> (ostream& s)	throw();
+		//			ostream& operator >> (ostream& s);
 			};
 
 						
 			class NMRAtomDataSet
 			{
 				public:
-					NMRAtomDataSet(NMRStarFile* parent) throw();
+					NMRAtomDataSet(NMRStarFile* parent);
 
 					String										name;
 					vector<NMRStarFile::NMRAtomData> 	atom_data;
@@ -127,17 +127,17 @@ class NMRStarFile
 					String										reference;  
 					vector<String>						samples;   
 
-			//		void clear() throw(); 
-			//		ostream& operator >> (ostream& s)	throw();
+			//		void clear(); 
+			//		ostream& operator >> (ostream& s);
 			};
 			
 			class EntryInformation
 			{
 				public:
-					EntryInformation() throw();
-					~EntryInformation() throw();
-			//		ostream& operator >> (ostream& s)	throw();
-		  //			void clear() throw(); 
+					EntryInformation();
+					~EntryInformation();
+			//		ostream& operator >> (ostream& s);
+		  //			void clear(); 
 
 					String entry_type;
 					String BMRB_accession_code;
@@ -151,9 +151,9 @@ class NMRStarFile
 					class HomologDB 
 					{
 						public:
-							HomologDB() throw();
-			//				ostream& operator >> (ostream& s)	throw(); 
-							void clear() throw(); 
+							HomologDB();
+			//				ostream& operator >> (ostream& s); 
+							void clear(); 
 
 							String name;
 							String accession_code;
@@ -166,9 +166,9 @@ class NMRStarFile
 					};
 
 
-						MonomericPolymer() throw(); 
-//						ostream& operator >> (ostream& s)	throw(); 
-						void clear() throw(); 
+						MonomericPolymer(); 
+//						ostream& operator >> (ostream& s); 
+						void clear(); 
 
 						String label_name;
 						String type;
@@ -191,9 +191,9 @@ class NMRStarFile
 					class RelatedDB
 					{
 						public:
-							RelatedDB() throw();
-			//				ostream& operator >> (ostream& s)	throw(); 
-							void clear() throw(); 
+							RelatedDB();
+			//				ostream& operator >> (ostream& s); 
+							void clear(); 
 
 							String name;
 							String accession_code;
@@ -206,9 +206,9 @@ class NMRStarFile
 					class ChemicalUnit
 					{
 						public:
-							ChemicalUnit() throw();  
-					//		ostream& operator >> (ostream& s)	throw();  
-							void clear() throw();  
+							ChemicalUnit();  
+					//		ostream& operator >> (ostream& s);  
+							void clear();  
 
 							String component_name;
 							String label;
@@ -217,8 +217,8 @@ class NMRStarFile
 					};
 
 
-					MolecularSystem() throw(); 
-					~MolecularSystem() throw(); 
+					MolecularSystem(); 
+					~MolecularSystem(); 
 
 					String system_name;
 					String abbreviation_common;
@@ -230,8 +230,8 @@ class NMRStarFile
 					float system_molecular_weight;	
 
 					vector<NMRStarFile::MolecularSystem::RelatedDB> related_database_entries;
-					//ostream& operator >> (ostream& s)	throw(); 
-					void clear() throw(); 
+					//ostream& operator >> (ostream& s); 
+					void clear(); 
 			};
 
 
@@ -242,7 +242,7 @@ class NMRStarFile
 					String manufacturer;
 					String model;
 					float  field_strength;
-//					ostream& operator >> (ostream& s)	throw();
+//					ostream& operator >> (ostream& s);
 			};
 			
 			class BALLToBMRBMapping
@@ -270,8 +270,7 @@ class NMRStarFile
 
 			};
 
-			NMRStarFile()
-				throw();
+			NMRStarFile();
 			
 			NMRStarFile(const NMRStarFile& f)
 				throw(FileNotFound);
