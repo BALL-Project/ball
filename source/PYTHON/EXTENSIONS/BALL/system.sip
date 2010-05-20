@@ -36,7 +36,6 @@ class System
 	Size countResidues() const;
 	Size countChains() const;
 	Size countProteins() const;
-	Molecule* getMolecule(Position);
 
   void prepend(Molecule& /Transfer/);
   void append(Molecule& /Transfer/);
