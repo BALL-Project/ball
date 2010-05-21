@@ -14,6 +14,7 @@ SET(CXX_COMPILER_VERSION_MINOR_MINOR "0" CACHE INTERNAL STRING "The C++ compiler
 SET(CXX_USE_TR1 TRUE CACHE STRING "Use tr1 support if available")
 
 OPTION(USE_HIDDEN_VISIBILITY "Set the default symbol visibility to hidden" OFF)
+OPTION(USE_AS_NEEDED "Use the --as-needed linker flag of ld" OFF)
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
 
