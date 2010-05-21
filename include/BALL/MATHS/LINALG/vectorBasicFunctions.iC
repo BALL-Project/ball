@@ -755,19 +755,19 @@ void Vector<valuetype>::multiply_native(Vector<valuetype>& result, const Matrix<
 }
 
 ////////////////////////////////////////////////////////////
-template <> template <>
+template <> template <> BALL_EXPORT
 void Vector<float>::multiply_blas(Vector<float>& result, const Matrix<float, StandardTraits>& A, bool right) const;
 
-template <> template <>
+template <> template <> BALL_EXPORT
 void Vector<double>::multiply_blas(Vector<double>& result, const Matrix<double, StandardTraits>& A, bool right) const;
 
-template <> template <>
+template <> template <> BALL_EXPORT
 void Vector<ComplexFloat>::multiply_blas(Vector<ComplexFloat>& result, const Matrix<ComplexFloat, StandardTraits>& A, bool right) const;
 
-template <> template <>
+template <> template <> BALL_EXPORT
 void Vector<ComplexDouble>::multiply_blas(Vector<ComplexDouble>& result, const Matrix<ComplexDouble, StandardTraits>& A, bool right) const;
 
-template <> template <>
+template <> template <> BALL_EXPORT
 void Vector<float>::multiply_blas(Vector<float>& result, const Matrix<float, SymmetricTraits>& A, bool right) const;
 ////////////////////////////////////////////////////////////
 template <>
