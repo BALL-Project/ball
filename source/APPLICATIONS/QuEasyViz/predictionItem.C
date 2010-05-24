@@ -24,6 +24,7 @@
 #include <predictionPlotter.h>
 #include <predictionResultDialog.h>
 #include <BALL/QSAR/configIO.h>
+#include <BALL/VIEW/KERNEL/iconLoader.h>
 
 #include <QtGui/QDrag>
 #include <QtCore/QMimeData>
@@ -42,7 +43,7 @@ namespace BALL
 		{
 			model_item_ = model_item;
 			String dir = view_->data_scene->main_window->getImageDirectory();
-			setPixmap(QPixmap((dir+"prediction.png").c_str()).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
+			setPixmap(QPixmap(IconLoader::instance().getIcon("actions/prediction.png")).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
 			name_ = "Prediction for " + input_item->name();
 			plotter_ = NULL;
 			dotted_edge_ = NULL;
@@ -115,7 +116,7 @@ namespace BALL
 			view_->data_scene->addItem(edge2);
 			
 			String dir = view_->data_scene->main_window->getImageDirectory();
-			setPixmap(QPixmap((dir+"prediction.png").c_str()).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
+			setPixmap(QPixmap(IconLoader::instance().getIcon("actions/prediction.png")).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
 			name_ = "Prediction for " + test_data_item_->name();
 			view_->data_scene->addItem(this);
 			addToPipeline();

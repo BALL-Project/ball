@@ -24,6 +24,7 @@
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QLineEdit>
 #include <QtGui/QHeaderView>
+#include <BALL/VIEW/KERNEL/iconLoader.h>
 
 using namespace BALL::QSAR;
 
@@ -235,16 +236,16 @@ namespace BALL
 			{
 				case 0: 
 					function_string = "Funktion1";
-					function_label_->setPixmap(QPixmap((dir+"polynomial_kernel.png").c_str()));
+					function_label_->setPixmap(QPixmap(IconLoader::instance().getIcon("actions/polynomial_kernel.png")));
 					break;
 				case 1:
 					function_string = "Funktion2";
-					function_label_->setPixmap(QPixmap((dir+"radial_basis_kernel.png").c_str()));
+					function_label_->setPixmap(QPixmap(IconLoader::instance().getIcon("actions/radial_basis_kernel.png")));
 					kernel_param_edit1_->setText(QString(((String)(registry_->default_rbf_par)).c_str()));
 					break;
 				case 2: 
 					function_string = "Funktion3";
-					function_label_->setPixmap(QPixmap((dir+"sigmoid_kernel.png").c_str()));
+					function_label_->setPixmap(QPixmap(IconLoader::instance().getIcon("actions/sigmoid_kernel.png")));
 					break;
 				case 3:
 					function_string = "Funktion4";

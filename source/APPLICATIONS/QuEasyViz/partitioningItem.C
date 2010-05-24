@@ -23,6 +23,7 @@
 #include <mainWindow.h>
 #include <inputPartitionItem.h>
 
+#include <BALL/VIEW/KERNEL/iconLoader.h>
 
 #include <QtGui/QDrag>
 #include <QtCore/QMimeData>
@@ -40,7 +41,7 @@ namespace BALL
 			input_(input)
 		{
 			String dir = view_->data_scene->main_window->getImageDirectory();
-			setPixmap(QPixmap((dir+"partitioning.png").c_str()).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
+			setPixmap(QPixmap(IconLoader::instance().getIcon("actions/partitioning.png")).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
 			name_ = "Partitioning of "+ input_->name();
 			no_folds_ = folds;
 			val_fraction_ = fraction;

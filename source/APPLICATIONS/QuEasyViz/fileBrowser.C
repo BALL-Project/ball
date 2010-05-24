@@ -18,6 +18,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <BALL/VIEW/KERNEL/iconLoader.h>
 #include <fileBrowser.h>
 #include <QtGui/QHeaderView>
 #include <BALL/DATATYPE/string.h>
@@ -98,11 +99,11 @@ namespace BALL
 			String dir = file_browser_->main_window->getImageDirectory();
 			if(file.hasSuffix("sdf"))
 			{
-				return QIcon((dir+"sdf_icon.png").c_str());
+				return QIcon(IconLoader::instance().getIcon("actions/sdf_icon.png"));
 			}
 			else if(file.hasSuffix("csv") || file.hasSuffix("txt") )
 			{
-				return QIcon((dir+"csv_icon.png").c_str());
+				return QIcon(IconLoader::instance().getIcon("actions/csv_icon.png"));
 			}
 			else
 			{

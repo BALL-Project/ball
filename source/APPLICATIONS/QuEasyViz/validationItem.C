@@ -28,6 +28,7 @@
 #include <QtCore/QMimeData>
 
 #include <BALL/MATHS/LINALG/matrix.h>
+#include <BALL/VIEW/KERNEL/iconLoader.h>
 
 using namespace BALL::QSAR;
 using namespace BALL::Exception;
@@ -181,7 +182,7 @@ namespace BALL
 			result_color_ = QColor(205,225,205);
 			initName();
 			String dir = view_->data_scene->main_window->getImageDirectory();
-			setPixmap(QPixmap((dir+"validation.png").c_str()).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
+			setPixmap(QPixmap(IconLoader::instance().getIcon("actions/validation.png")).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
 			createActions();
 			coeff_stderr_ratio_ = 0;
 			plotter_ = NULL;

@@ -30,6 +30,7 @@
 #include <QtCore/QMimeData>
 #include <QtGui/QApplication>
 #include <QtGui/QMessageBox>
+#include <BALL/VIEW/KERNEL/iconLoader.h>
 
 using namespace BALL::QSAR;
 using namespace BALL::Exception;
@@ -44,7 +45,7 @@ namespace BALL
 		{
 			//set pixmap
 			String dir = view_->data_scene->main_window->getImageDirectory();
-			QPixmap pm = QPixmap((dir+"sdf_icon.png").c_str()).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
+			QPixmap pm = QPixmap(IconLoader::instance().getIcon("actions/sdf_icon.png")).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
 			setPixmap(pm);
 
 			QStringList list = filename_.split("/");
@@ -61,7 +62,7 @@ namespace BALL
 			InputDataItem(filename, false, false, view)
 		{
 			String dir = view_->data_scene->main_window->getImageDirectory();
-			QPixmap pm = QPixmap((dir+"sdf_icon.png").c_str()).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
+			QPixmap pm = QPixmap(IconLoader::instance().getIcon("actions/sdf_icon.png")).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
 			setPixmap(pm);
 
 			QStringList list = filename_.split("/");

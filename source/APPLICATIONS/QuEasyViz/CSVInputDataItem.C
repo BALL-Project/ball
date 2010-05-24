@@ -22,6 +22,7 @@
 #include <mainWindow.h>
 
 #include <BALL/QSAR/exception.h>
+#include <BALL/VIEW/KERNEL/iconLoader.h>
 #include <exception.h>
 #include <inputDataDialog.h>
 
@@ -42,7 +43,7 @@ namespace BALL
 			InputDataItem(filename, view)
 		{
 			String dir = view_->data_scene->main_window->getImageDirectory();
-			QPixmap pm = QPixmap((dir+"csv_icon.png").c_str()).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
+			QPixmap pm = QPixmap(IconLoader::instance().getIcon("actions/csv_icon.png")).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
 			setPixmap(pm);
 
 			QStringList list = filename_.split("/");

@@ -18,6 +18,8 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <BALL/VIEW/KERNEL/iconLoader.h>
+
 #include <featurePlotter.h>
 #include <mainWindow.h>
 #include <qwt_plot_curve.h>
@@ -43,7 +45,7 @@ namespace BALL
 			buttonsLayout_->addWidget(feature_combobox_);
 			connect(feature_combobox_,SIGNAL(currentIndexChanged(int)),this,SLOT(selectedFeatureChanged()));
 			String dir=model_item->view()->data_scene->main_window->getImageDirectory();
-			QIcon icon((dir+"delete_item.png").c_str());
+			QIcon icon(IconLoader::instance().getIcon("actions/delete_item.png"));
 			delete_feature_button_ = new QPushButton(icon,"",this);
 			buttonsLayout_->addWidget(delete_feature_button_);
 			connect(delete_feature_button_,SIGNAL(pressed()),this,SLOT(deleteCurrentFeature()));

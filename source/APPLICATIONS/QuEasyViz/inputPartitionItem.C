@@ -18,6 +18,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <BALL/VIEW/KERNEL/iconLoader.h>
 #include <inputPartitionItem.h>
 #include <mainWindow.h>
 #include <QtGui/QMessageBox>
@@ -58,12 +59,12 @@ namespace BALL
 			String dir = view_->data_scene->main_window->getImageDirectory();
 			if(test_partition)
 			{
-				pm = QPixmap((dir+"test_part.png").c_str()).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation);
+				pm = QPixmap(IconLoader::instance().getIcon("actions/test_part.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation);
 				name_ = "validation";
 			}
 			else
 			{
-				pm = QPixmap((dir+"train_part.png").c_str()).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation);
+				pm = QPixmap(IconLoader::instance().getIcon("actions/train_part.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation);
 				name_ = "train";
 			}
 			setPixmap(pm);

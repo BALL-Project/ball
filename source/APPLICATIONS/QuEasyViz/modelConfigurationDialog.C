@@ -22,6 +22,7 @@
 #include <BALL/QSAR/exception.h>
 #include <exception.h>
 #include <BALL/MATHS/parsedFunction.h>
+#include <BALL/VIEW/KERNEL/iconLoader.h>
 
 
 #include <QtGui/QLabel>
@@ -182,13 +183,13 @@ namespace BALL
 			///add button for this page to the ListWidget
 			QListWidgetItem *propertyButton = new QListWidgetItem(contentsWidget);
 			String dir = model_item_->view()->data_scene->main_window->getImageDirectory();
-			propertyButton->setIcon(QIcon((dir+"modelproperties.png").c_str()));
+			propertyButton->setIcon(QIcon(IconLoader::instance().getIcon("actions/modelproperties.png")));
 			propertyButton->setText(tr("Model Properties"));
 			propertyButton->setTextAlignment(Qt::AlignHCenter);
 			propertyButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
 			QListWidgetItem *dataButton = new QListWidgetItem(contentsWidget);
-			dataButton->setIcon(QIcon((dir+"sdf_icon.png").c_str()));
+			dataButton->setIcon(QIcon(IconLoader::instance().getIcon("actions/sdf_icon.png")));
 			dataButton->setText(tr("Descriptors"));
 			dataButton->setTextAlignment(Qt::AlignHCenter);
 			dataButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -239,7 +240,7 @@ namespace BALL
 			if (entryHasParameters)
 			{
 				QListWidgetItem* modelParamButton = new QListWidgetItem(contentsWidget);
-				modelParamButton->setIcon(QIcon((dir+"modelparameters.png").c_str()));
+				mIconLoader::instance().getIcon("actions/modelparameters.png")));
 				modelParamButton->setText(tr("Model Parameters"));
 				modelParamButton->setTextAlignment(Qt::AlignHCenter);
 				modelParamButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -249,7 +250,7 @@ namespace BALL
 			if(entryHasKernel)
 			{
 				QListWidgetItem* kernelParamButton = new QListWidgetItem(contentsWidget);
-				kernelParamButton->setIcon(QIcon((dir+"kernelparameters.png").c_str()));
+				kernelParamButton->setIcon(QIcon(IconLoader::instance().getIcon("actions/kernelparameters.png")));
 				kernelParamButton->setText(tr("Kernel Parameters"));
 				kernelParamButton->setTextAlignment(Qt::AlignHCenter);
 				kernelParamButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);

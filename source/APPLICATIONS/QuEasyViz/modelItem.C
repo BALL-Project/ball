@@ -31,6 +31,7 @@
 #include <bayesPlotter.h>
 #include <featurePlotter.h>
 #include <componentPlotter.h>
+#include <BALL/VIEW/KERNEL/iconLoader.h>
 
 using namespace BALL::QSAR;
 using namespace BALL::Exception;
@@ -522,22 +523,22 @@ namespace BALL
 			{
 				if (entry_->kernel)
 				{
-					pm = QPixmap((dir+"kernel_model.png").c_str()).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
+					pm = QPixmap(IconLoader::instance().getIcon("actions/kernel_model.png")).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
 				}
 				else 
 				{
-					pm = QPixmap((dir+"model.png").c_str()).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
+					pm = QPixmap(IconLoader::instance().getIcon("actions/model.png")).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
 				}
 			}
 			else
 			{	
 				if (entry_->kernel)
 				{
-					pm = QPixmap((dir+"kernel_model_deactivated.png").c_str()).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
+					pm = QPixmap(IconLoader::instance().getIcon("actions/kernel_model_deactivated.png")).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
 				}
 				else 
 				{
-					pm = QPixmap((dir+"model_deactivated.png").c_str()).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
+					pm = QPixmap(IconLoader::instance().getIcon("actions/model_deactivated.png")).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
 				}
 			}
 			QGraphicsPixmapItem::setPixmap(pm);
@@ -582,15 +583,15 @@ namespace BALL
 		{
 			String dir = view_->data_scene->main_window->getImageDirectory();
 			
-			QAction* save_action = new QAction(QIcon((dir+"save_desktop.png").c_str()),tr("Save model"), this);
+			QAction* save_action = new QAction(QIcon(IconLoader::instance().getIcon("actions/save_desktop.png")),tr("Save model"), this);
 			connect(save_action, SIGNAL(triggered()), this, SLOT(saveModel()));
 			context_menu_actions_.push_back(save_action);
 
-			QAction* load_action = new QAction(QIcon((dir+"save_desktop.png").c_str()),tr("Load model"), this);
+			QAction* load_action = new QAction(QIcon(IconLoader::instance().getIcon("actions/save_desktop.png")),tr("Load model"), this);
 			connect(load_action, SIGNAL(triggered()), this, SLOT(loadModel()));
 			context_menu_actions_.push_back(load_action);
 
-			QAction* properties_action = new QAction(QIcon((dir+"save_desktop.png").c_str()),tr("Show Properties"), this);
+			QAction* properties_action = new QAction(QIcon(IconLoader::instance().getIcon("actions/save_desktop.png")),tr("Show Properties"), this);
 			connect(properties_action, SIGNAL(triggered()), this, SLOT(showProperties()));
 			context_menu_actions_.push_back(properties_action);
 			

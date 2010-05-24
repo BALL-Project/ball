@@ -18,6 +18,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <BALL/VIEW/KERNEL/iconLoader.h>
 #include <BALL/QSAR/exception.h>
 
 #include <exception.h>
@@ -39,7 +40,7 @@ namespace BALL
 			DataItem(miv)
 		{
 			String dir = view_->data_scene->main_window->getImageDirectory();
-			setPixmap(QPixmap((dir+"feature_selection.png").c_str()).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
+			setPixmap(IconLoader::instance().getIcon("actions/feature_selection.png")).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
 
 			feature_selection_ = NULL;
 			validation_statistic_ = 0;
@@ -156,7 +157,7 @@ namespace BALL
 			setSavedAs(conf.output.c_str());
 			filenames_map.insert(make_pair(conf.output,model_item_));
 			String dir = view_->data_scene->main_window->getImageDirectory();
-			setPixmap(QPixmap((dir+"feature_selection.png").c_str()).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
+			setPixmap(QPixmap(IconLoader::instance().getIcon("feature_selection.png")).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
 			
 			done_ = 0;
 		}

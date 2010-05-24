@@ -26,6 +26,7 @@
 #include <qwt_plot_zoomer.h>
 
 #include <BALL/MATHS/common.h>
+#include <BALL/VIEW/KERNEL/iconLoader.h>
  
 using namespace BALL::VIEW;
 using namespace std;
