@@ -18,7 +18,6 @@
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/WIDGETS/editableScene.h>
 #include <BALL/VIEW/WIDGETS/fileObserver.h>
-#include <BALL/VIEW/WIDGETS/testFramework.h>
 #include <BALL/VIEW/DIALOGS/pubchemDialog.h>
 #include <BALL/VIEW/DIALOGS/undoManagerDialog.h>
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
@@ -29,6 +28,7 @@
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
 #ifdef BALL_PYTHON_SUPPORT
 #	include <BALL/VIEW/WIDGETS/pyWidget.h>
+# include <BALL/VIEW/WIDGETS/testFramework.h>
 #endif
 
 #include <BALL/SYSTEM/path.h>
@@ -163,9 +163,8 @@ namespace BALL
 		server->registerObjectCreator(*object_creator);
 		#endif
 
-		new TestFramework(this, "Test Framework");
-
 		#ifdef BALL_PYTHON_SUPPORT
+			new TestFramework(this, "Test Framework");
 			addDockWidget(Qt::BottomDockWidgetArea, new PyWidget(this, "Python Interpreter"));
 		#endif
 
