@@ -32,18 +32,35 @@
 #include "validator.C"
 #include "predictor.C"
 
+#ifdef BALL_COMPILER_MSVC
+#define WINDOWS_LEAN_AND_MEAN
+#include <windows.h>
+#endif
+
 using namespace BALL::QSAR;
 using namespace BALL;
 
 
 void set_fpu (unsigned int mode)
 {
+#if defined(BALL_COMPILER_GXX)
 	asm ("fldcw %0" : : "m" (*&mode));
+#elif defined(BALL_COMPILER_MSVC)
+	// TODO: implement!
+	//__asm ("fldcw %0" : : "m" (*&mode));
+#endif
 }
 
 
-int main(int argc, char* argv[])
-{ 
+#ifndef BALL_OS_WINDOWS
+int main(int argc, char **argv)
+{
+#else
+int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
+{
+	int argc = __argc;
+	char** argv = __argv;
+#endif
 	if(argc<2)
 	{
 		cout<<"Please specify configuration file!"<<endl; 
