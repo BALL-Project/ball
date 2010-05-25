@@ -533,7 +533,7 @@ namespace BALL
 		*/
 		void MainWindow::createActions()
 		 {
-			exitAct_ = new QAction(QIcon(IconLoader::instance().getIcon("actions/exit.png")),tr("E&xit"), this);
+			exitAct_ = new QAction(QIcon(IconLoader::instance().getIcon("actions/exit")),tr("E&xit"), this);
 			exitAct_->setShortcut(tr("Ctrl+Q"));
 			exitAct_->setStatusTip(tr("Exit the application"));
 			connect(exitAct_, SIGNAL(triggered()), this, SLOT(close()));
@@ -542,12 +542,12 @@ namespace BALL
 			aboutAct_->setStatusTip(tr("Show the application's About box"));
 			connect(aboutAct_, SIGNAL(triggered()), this, SLOT(about()));
 
-			clearAct_ = new QAction(QIcon(IconLoader::instance().getIcon("actions/clear_desktop.png")),tr("&Clear Desktop"), this);
+			clearAct_ = new QAction(QIcon(IconLoader::instance().getIcon("actions/clear_desktop")),tr("&Clear Desktop"), this);
 			clearAct_->setShortcut(tr("Ctrl+C"));
 			clearAct_->setStatusTip(tr("Clear the desktop"));
 			connect(clearAct_, SIGNAL(triggered()), this, SLOT(clearDesktop()));
 
-			delAct_ = new QAction(QIcon(IconLoader::instance().getIcon("actions/delete_item.png")),tr("&Delete Selection"), this);
+			delAct_ = new QAction(QIcon(IconLoader::instance().getIcon("actions/delete_item")),tr("&Delete Selection"), this);
 			delAct_->setStatusTip(tr("Delete the selected Item from the pipeline"));
 			delAct_->setShortcut(tr("Ctrl+D"));
 			connect(delAct_, SIGNAL(triggered()), this, SLOT(deleteItem()));
@@ -555,17 +555,17 @@ namespace BALL
 			QShortcut* del_shortcut = new QShortcut(QKeySequence::Delete,this);
 			connect(del_shortcut,SIGNAL(activated()),this,SLOT(deleteItem()));
 
-			executeAct_ = new QAction(QIcon(IconLoader::instance().getIcon("actions/run_pipeline.png")),tr("&Execute Pipeline"), this);
+			executeAct_ = new QAction(QIcon(IconLoader::instance().getIcon("actions/run_pipeline")),tr("&Execute Pipeline"), this);
 			executeAct_->setShortcut(tr("Ctrl+E"));
 			executeAct_->setStatusTip(tr("Execute the Pipeline"));
 			connect(executeAct_, SIGNAL(triggered()), this, SLOT(executePipeline()));
 
-			restoreAct_ = new QAction(QIcon(IconLoader::instance().getIcon("actions/restore_desktop.png")),tr("&Restore Pipeline"), this);
+			restoreAct_ = new QAction(QIcon(IconLoader::instance().getIcon("actions/restore_desktop")),tr("&Restore Pipeline"), this);
 			restoreAct_->setShortcut(tr("Ctrl+R"));
 			restoreAct_->setStatusTip(tr("Restore a Pipeline"));
 			connect(restoreAct_, SIGNAL(triggered()), this, SLOT(restoreDesktop()));
 
-			exportAct_ = new QAction(QIcon(IconLoader::instance().getIcon("actions/save.png")),tr("Save Pipeline"), this);
+			exportAct_ = new QAction(QIcon(IconLoader::instance().getIcon("actions/save")),tr("Save Pipeline"), this);
 			exportAct_->setStatusTip(tr("Save the Pipeline"));
 			exportAct_->setShortcut(tr("Ctrl+S"));
 			connect(exportAct_, SIGNAL(triggered()), this, SLOT(exportPipeline()));
@@ -728,27 +728,27 @@ namespace BALL
 			fileToolBar_->addSeparator();
 			fileToolBar_->addAction(exportAct_);
 			fileToolBar_->addAction(restoreAct_);
-			QAction* print = new QAction(QIcon(IconLoader::instance().getIcon("actions/printer1.png")),"Print",this);
+			QAction* print = new QAction(QIcon(IconLoader::instance().getIcon("actions/printer1")),"Print",this);
 			fileToolBar_->addAction(print);
 			
 			fileToolBar_->addSeparator();
 
-			fullscreen_action_ = new QAction(QIcon(IconLoader::instance().getIcon("actions/window_fullscreen.png")),"Fullscreen",this);
+			fullscreen_action_ = new QAction(QIcon(IconLoader::instance().getIcon("actions/window_fullscreen")),"Fullscreen",this);
 			fileToolBar_->addAction(fullscreen_action_);
 			fullscreen_action_->setShortcut(tr("Ctrl+F"));
 			connect(fullscreen_action_, SIGNAL(triggered()), this, SLOT(fullscreen()));
-			QAction* zoom_in_action = new QAction(QIcon(IconLoader::instance().getIcon("actions/zoom_in.png")),"zoom in",this);
+			QAction* zoom_in_action = new QAction(QIcon(IconLoader::instance().getIcon("actions/zoom_in")),"zoom in",this);
 			zoom_in_action->setShortcut(tr("+"));
 			connect(zoom_in_action, SIGNAL(triggered()), this, SLOT(zoomIn()));
 			fileToolBar_->addAction(zoom_in_action);
-			QAction* zoom_out_action = new QAction(QIcon(IconLoader::instance().getIcon("actions/zoom_out.png")),"zoom out",this);
+			QAction* zoom_out_action = new QAction(QIcon(IconLoader::instance().getIcon("actions/zoom_out")),"zoom out",this);
 			zoom_out_action->setShortcut(tr("-"));
 			connect(zoom_out_action, SIGNAL(triggered()), this, SLOT(zoomOut()));
 			fileToolBar_->addAction(zoom_out_action);
 
 			fileToolBar_->addSeparator();
 			
-			QAction* submit_action = new QAction(QIcon(IconLoader::instance().getIcon("actions/cluster.png")),"Submit job",this);
+			QAction* submit_action = new QAction(QIcon(IconLoader::instance().getIcon("actions/cluster")),"Submit job",this);
 			fileToolBar_->addAction(executeAct_);
 			connect(print, SIGNAL(triggered()), this, SLOT(print()));
 			fileToolBar_->addAction(submit_action);
@@ -779,8 +779,8 @@ namespace BALL
 					}
 				}		
 			}
-			if(fullscreen_) fullscreen_action_->setIcon(QIcon(IconLoader::instance().getIcon("actions/window_nofullscreen.png")));
-			else fullscreen_action_->setIcon(QIcon(IconLoader::instance().getIcon("actions/window_fullscreen.png")));
+			if(fullscreen_) fullscreen_action_->setIcon(QIcon(IconLoader::instance().getIcon("actions/window_nofullscreen")));
+			else fullscreen_action_->setIcon(QIcon(IconLoader::instance().getIcon("actions/window_fullscreen")));
 		}
 		 
 

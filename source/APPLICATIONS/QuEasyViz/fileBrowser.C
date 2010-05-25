@@ -98,11 +98,11 @@ namespace BALL
 			String file = info.absoluteFilePath().toStdString();
 			if(file.hasSuffix("sdf"))
 			{
-				return QIcon(IconLoader::instance().getIcon("actions/sdf_icon.png"));
+				return QIcon(IconLoader::instance().getIcon("actions/sdf_icon"));
 			}
 			else if(file.hasSuffix("csv") || file.hasSuffix("txt") )
 			{
-				return QIcon(IconLoader::instance().getIcon("actions/csv_icon.png"));
+				return QIcon(IconLoader::instance().getIcon("actions/csv_icon"));
 			}
 			else
 			{

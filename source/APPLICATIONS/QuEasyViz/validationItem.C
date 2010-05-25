@@ -181,7 +181,7 @@ namespace BALL
 		{
 			result_color_ = QColor(205,225,205);
 			initName();
-			setPixmap(findPixmap("validation.png"));
+			setPixmap(findPixmap("validation"));
 			createActions();
 			coeff_stderr_ratio_ = 0;
 			plotter_ = NULL;

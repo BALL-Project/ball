@@ -182,19 +182,19 @@ namespace BALL
 
 			///add button for this page to the ListWidget
 			QListWidgetItem *propertyButton = new QListWidgetItem(contentsWidget);
-			propertyButton->setIcon(QIcon(IconLoader::instance().getIcon("actions/modelproperties.png")));
+			propertyButton->setIcon(QIcon(IconLoader::instance().getIcon("actions/modelproperties")));
 			propertyButton->setText(tr("Model Properties"));
 			propertyButton->setTextAlignment(Qt::AlignHCenter);
 			propertyButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
 			QListWidgetItem *dataButton = new QListWidgetItem(contentsWidget);
-			dataButton->setIcon(QIcon(IconLoader::instance().getIcon("actions/sdf_icon.png")));
+			dataButton->setIcon(QIcon(IconLoader::instance().getIcon("actions/sdf_icon")));
 			dataButton->setText(tr("Descriptors"));
 			dataButton->setTextAlignment(Qt::AlignHCenter);
 			dataButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
 		// 	QListWidgetItem *connectionsButton = new QListWidgetItem(contentsWidget);
-		// 	connectionsButton->setIcon(QIcon("./images/connections.png"));
+		// 	connectionsButton->setIcon(QIcon("./images/connections"));
 		// 	connectionsButton->setText(tr("Edit Connections"));
 		// 	connectionsButton->setTextAlignment(Qt::AlignHCenter);
 		// 	connectionsButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -237,7 +237,7 @@ namespace BALL
 			if (entryHasParameters)
 			{
 				QListWidgetItem* modelParamButton = new QListWidgetItem(contentsWidget);
-				modelParamButton->setIcon(IconLoader::instance().getIcon("actions/modelparameters.png"));
+				modelParamButton->setIcon(IconLoader::instance().getIcon("actions/modelparameters"));
 				modelParamButton->setText(tr("Model Parameters"));
 				modelParamButton->setTextAlignment(Qt::AlignHCenter);
 				modelParamButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -247,7 +247,7 @@ namespace BALL
 			if(entryHasKernel)
 			{
 				QListWidgetItem* kernelParamButton = new QListWidgetItem(contentsWidget);
-				kernelParamButton->setIcon(IconLoader::instance().getIcon("actions/kernelparameters.png"));
+				kernelParamButton->setIcon(IconLoader::instance().getIcon("actions/kernelparameters"));
 				kernelParamButton->setText(tr("Kernel Parameters"));
 				kernelParamButton->setTextAlignment(Qt::AlignHCenter);
 				kernelParamButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -257,14 +257,14 @@ namespace BALL
 			if(isOptimizable || entryHasKernel)
 			{
 				QListWidgetItem* optimizeButton = new QListWidgetItem(contentsWidget);
-				optimizeButton->setIcon(IconLoader::instance().getIcon("actions/modeloptimization.png"));
+				optimizeButton->setIcon(IconLoader::instance().getIcon("actions/modeloptimization"));
 				optimizeButton->setText(tr("Optimize Parameters"));
 				optimizeButton->setTextAlignment(Qt::AlignHCenter);
 				optimizeButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 			}
 
 		// 	QListWidgetItem* connectionsButton = new QListWidgetItem(contentsWidget);
-		// 	connectionsButton->setIcon(QIcon("./images/connections.png"));
+		// 	connectionsButton->setIcon(QIcon("./images/connections"));
 		// 	connectionsButton->setText(tr("Edit Connections"));
 		// 	connectionsButton->setTextAlignment(Qt::AlignHCenter);
 		// 	connectionsButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);

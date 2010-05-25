@@ -245,16 +245,16 @@ namespace BALL
 			{
 				case 0: 
 					function_string = "Funktion1";
-					function_label_->setPixmap(findPixmap("polynomial_kernel.png"));
+					function_label_->setPixmap(findPixmap("polynomial_kernel"));
 					break;
 				case 1:
 					function_string = "Funktion2";
-					function_label_->setPixmap(findPixmap("radial_basis_kernel.png"));
+					function_label_->setPixmap(findPixmap("radial_basis_kernel"));
 					kernel_param_edit1_->setText(QString(((String)(registry_->default_rbf_par)).c_str()));
 					break;
 				case 2: 
 					function_string = "Funktion3";
-					function_label_->setPixmap(findPixmap("sigmoid_kernel.png"));
+					function_label_->setPixmap(findPixmap("sigmoid_kernel"));
 					break;
 				case 3:
 					function_string = "Funktion4";

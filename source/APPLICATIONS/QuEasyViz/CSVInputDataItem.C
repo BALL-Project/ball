@@ -42,7 +42,7 @@ namespace BALL
 		CSVInputDataItem::CSVInputDataItem(QString filename, DataItemView* view):
 			InputDataItem(filename, view)
 		{
-			setPixmap(findPixmap("csv_icon.png"));
+			setPixmap(findPixmap("csv_icon"));
 
 			QStringList list = filename_.split("/");
 			setName(list[list.size()-1]);
@@ -55,7 +55,7 @@ namespace BALL
 		{
 			view_ = view;
 			append_ = true;
-			setPixmap(findPixmap("csv_icon.png"));
+			setPixmap(findPixmap("csv_icon"));
 			data_ = data;
 		}
 

@@ -58,12 +58,12 @@ namespace BALL
 			QPixmap pm;
 			if(test_partition)
 			{
-				pm = findPixmap("test_part.png");
+				pm = findPixmap("test_part");
 				name_ = "validation";
 			}
 			else
 			{
-				pm = findPixmap("train_part.png");
+				pm = findPixmap("train_part");
 				name_ = "train";
 			}
 			setPixmap(pm);

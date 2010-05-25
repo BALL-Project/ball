@@ -42,7 +42,7 @@ namespace BALL
 			dotted_edge_(NULL)
 		{
 			model_item_ = model_item;
-			setPixmap(findPixmap("prediction.png"));
+			setPixmap(findPixmap("prediction"));
 			name_ = "Prediction for " + input_item->name();
 			plotter_ = NULL;
 			dotted_edge_ = NULL;
@@ -113,7 +113,7 @@ namespace BALL
 			view_->data_scene->addItem(edge);
 			Edge* edge2 = new Edge(model_item_,this);
 			view_->data_scene->addItem(edge2);
-			setPixmap(findPixmap("prediction.png"));
+			setPixmap(findPixmap("prediction"));
 			name_ = "Prediction for " + test_data_item_->name();
 			view_->data_scene->addItem(this);
 			addToPipeline();

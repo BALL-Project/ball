@@ -40,7 +40,7 @@ namespace BALL
 			DataItem(miv),
 			input_(input)
 		{
-			setPixmap(findPixmap("partitioning.png"));
+			setPixmap(findPixmap("partitioning"));
 			name_ = "Partitioning of "+ input_->name();
 			no_folds_ = folds;
 			val_fraction_ = fraction;

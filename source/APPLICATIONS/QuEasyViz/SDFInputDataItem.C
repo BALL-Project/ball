@@ -44,7 +44,7 @@ namespace BALL
 		 : InputDataItem(filename, cdv, crv, view)
 		{
 			//set pixmap
-			setPixmap(findPixmap("sdf_icon.png"));
+			setPixmap(findPixmap("sdf_icon"));
 
 			QStringList list = filename_.split("/");
 			setName(list[list.size()-1]);
@@ -59,7 +59,7 @@ namespace BALL
 		SDFInputDataItem::SDFInputDataItem(QString filename, DataItemView* view):
 			InputDataItem(filename, false, false, view)
 		{
-			setPixmap(findPixmap("sdf_icon.png"));
+			setPixmap(findPixmap("sdf_icon"));
 
 			QStringList list = filename_.split("/");
 			setName(list[list.size()-1]);

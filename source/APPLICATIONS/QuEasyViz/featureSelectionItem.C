@@ -39,7 +39,7 @@ namespace BALL
 		FeatureSelectionItem::FeatureSelectionItem(int type, DataItemView* miv):
 			DataItem(miv)
 		{
-			setPixmap(findPixmap("feature_selection.png"));
+			setPixmap(findPixmap("feature_selection"));
 
 			feature_selection_ = NULL;
 			validation_statistic_ = 0;
@@ -155,7 +155,7 @@ namespace BALL
 			
 			setSavedAs(conf.output.c_str());
 			filenames_map.insert(make_pair(conf.output,model_item_));
-			setPixmap(findPixmap("feature_selection.png"));
+			setPixmap(findPixmap("feature_selection"));
 			
 			done_ = 0;
 		}
