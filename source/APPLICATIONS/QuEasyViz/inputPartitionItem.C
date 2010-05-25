@@ -56,15 +56,14 @@ namespace BALL
 			
 			/// set pixmap and name of this item
 			QPixmap pm;
-			String dir = view_->data_scene->main_window->getImageDirectory();
 			if(test_partition)
 			{
-				pm = QPixmap(IconLoader::instance().getIcon("actions/test_part.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation);
+				pm = findPixmap("test_part.png");
 				name_ = "validation";
 			}
 			else
 			{
-				pm = QPixmap(IconLoader::instance().getIcon("actions/train_part.png").scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation);
+				pm = findPixmap("train_part.png");
 				name_ = "train";
 			}
 			setPixmap(pm);

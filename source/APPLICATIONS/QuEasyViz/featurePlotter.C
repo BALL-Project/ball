@@ -44,7 +44,6 @@ namespace BALL
 			feature_combobox_ = new QComboBox(this);
 			buttonsLayout_->addWidget(feature_combobox_);
 			connect(feature_combobox_,SIGNAL(currentIndexChanged(int)),this,SLOT(selectedFeatureChanged()));
-			String dir=model_item->view()->data_scene->main_window->getImageDirectory();
 			QIcon icon(IconLoader::instance().getIcon("actions/delete_item.png"));
 			delete_feature_button_ = new QPushButton(icon,"",this);
 			buttonsLayout_->addWidget(delete_feature_button_);

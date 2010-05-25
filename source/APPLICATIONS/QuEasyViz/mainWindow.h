@@ -114,9 +114,6 @@ namespace BALL
 				/** submits the pipeline that was saved into configfile to a cluster */
 				void submitToCluster(String configfile);
 				
-				/** get the directory where the icons for this program are located */
-				String getImageDirectory();
-				
 				String getDataDirectory();
 				
 				/** @name Attributes */

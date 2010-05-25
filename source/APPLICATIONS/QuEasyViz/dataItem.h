@@ -188,7 +188,7 @@ namespace BALL
 			void setPos(double x, double y);
 			void setPos(QPointF point);
 			
-			
+			QPixmap findPixmap(const String& name);
 			
 		public slots:
 			/** this slot calls change() and updates the QGraphicsScene afterwards */

@@ -39,8 +39,7 @@ namespace BALL
 		FeatureSelectionItem::FeatureSelectionItem(int type, DataItemView* miv):
 			DataItem(miv)
 		{
-			String dir = view_->data_scene->main_window->getImageDirectory();
-			setPixmap(IconLoader::instance().getIcon("actions/feature_selection.png")).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
+			setPixmap(findPixmap("feature_selection.png"));
 
 			feature_selection_ = NULL;
 			validation_statistic_ = 0;
@@ -156,8 +155,7 @@ namespace BALL
 			
 			setSavedAs(conf.output.c_str());
 			filenames_map.insert(make_pair(conf.output,model_item_));
-			String dir = view_->data_scene->main_window->getImageDirectory();
-			setPixmap(QPixmap(IconLoader::instance().getIcon("feature_selection.png")).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
+			setPixmap(findPixmap("feature_selection.png"));
 			
 			done_ = 0;
 		}

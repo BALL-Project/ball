@@ -76,6 +76,8 @@ namespace BALL
 				QLineEdit* kernel_string_edit2_;
 				QLabel* function_label_;
 
+				QPixmap findPixmap(const String& name);
+
 			public slots:
 				void showKernelFunction(int id);
 				void showExtensions(int id);

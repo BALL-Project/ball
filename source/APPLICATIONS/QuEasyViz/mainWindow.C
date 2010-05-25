@@ -140,7 +140,6 @@ namespace BALL
 			drag_start_time = drag_start_time.now();
 			min_drag_time=0.3;
 			
-			Path p;
 			String file = "QSAR"+settings.path_separator+"atomic_electron_affinities.data";
 			String dir = p.find(file);
 			if(dir=="")
@@ -534,8 +533,6 @@ namespace BALL
 		*/
 		void MainWindow::createActions()
 		 {
-			String dir = getImageDirectory();
-			 
 			exitAct_ = new QAction(QIcon(IconLoader::instance().getIcon("actions/exit.png")),tr("E&xit"), this);
 			exitAct_->setShortcut(tr("Ctrl+Q"));
 			exitAct_->setStatusTip(tr("Exit the application"));
@@ -723,7 +720,6 @@ namespace BALL
 		*/
 		 void MainWindow::createToolBars()
 		 {	
-			String dir = getImageDirectory();
 			fileToolBar_ = addToolBar(tr("File"));
 			fileToolBar_->addAction(exitAct_);
 			fileToolBar_->addSeparator();
@@ -763,7 +759,6 @@ namespace BALL
 		// SLOT 
 		void MainWindow::fullscreen()
 		{
-			String dir = getImageDirectory();
 			fullscreen_ = !fullscreen_;
 			if(dockwidget_enabled_.size()!=dockwidgets_.size()) dockwidget_enabled_.resize(dockwidgets_.size(),0);
 			
@@ -1801,12 +1796,6 @@ namespace BALL
 			bool ok = dialog.exec();
 			if(ok) return statistic_box.currentIndex();
 			else return 0;	
-		}
-
-
-		BALL::String MainWindow::getImageDirectory()
-		{
-			return executable_directory_+settings.path_separator+"images"+settings.path_separator;
 		}
 
 		BALL::String MainWindow::getDataDirectory()

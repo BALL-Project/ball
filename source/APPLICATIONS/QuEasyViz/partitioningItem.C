@@ -40,8 +40,7 @@ namespace BALL
 			DataItem(miv),
 			input_(input)
 		{
-			String dir = view_->data_scene->main_window->getImageDirectory();
-			setPixmap(QPixmap(IconLoader::instance().getIcon("actions/partitioning.png")).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
+			setPixmap(findPixmap("partitioning.png"));
 			name_ = "Partitioning of "+ input_->name();
 			no_folds_ = folds;
 			val_fraction_ = fraction;

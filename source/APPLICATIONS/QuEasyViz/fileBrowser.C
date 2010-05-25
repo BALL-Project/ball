@@ -96,7 +96,6 @@ namespace BALL
 		QIcon FileIconProvider::icon (const QFileInfo& info) const
 		{
 			String file = info.absoluteFilePath().toStdString();
-			String dir = file_browser_->main_window->getImageDirectory();
 			if(file.hasSuffix("sdf"))
 			{
 				return QIcon(IconLoader::instance().getIcon("actions/sdf_icon.png"));

@@ -228,24 +228,33 @@ namespace BALL
 			}
 		}
 
+		QPixmap KernelParameterPage::findPixmap(const String& name)
+		{
+			QIcon const& icon  = IconLoader::instance().getIcon(String("actions/")+name);
+			QList<QSize> sizes = icon.availableSizes();
+
+			QPixmap result = icon.pixmap(sizes.last());
+
+			return result;
+		}
+
 		void KernelParameterPage::showKernelFunction(int id)
 		{
 			QString function_string = "";
-			String dir = dialog_->modelItem()->view()->data_scene->main_window->getImageDirectory();
 			switch (id) 
 			{
 				case 0: 
 					function_string = "Funktion1";
-					function_label_->setPixmap(QPixmap(IconLoader::instance().getIcon("actions/polynomial_kernel.png")));
+					function_label_->setPixmap(findPixmap("polynomial_kernel.png"));
 					break;
 				case 1:
 					function_string = "Funktion2";
-					function_label_->setPixmap(QPixmap(IconLoader::instance().getIcon("actions/radial_basis_kernel.png")));
+					function_label_->setPixmap(findPixmap("radial_basis_kernel.png"));
 					kernel_param_edit1_->setText(QString(((String)(registry_->default_rbf_par)).c_str()));
 					break;
 				case 2: 
 					function_string = "Funktion3";
-					function_label_->setPixmap(QPixmap(IconLoader::instance().getIcon("actions/sigmoid_kernel.png")));
+					function_label_->setPixmap(findPixmap("sigmoid_kernel.png"));
 					break;
 				case 3:
 					function_string = "Funktion4";

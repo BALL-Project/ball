@@ -181,8 +181,7 @@ namespace BALL
 		{
 			result_color_ = QColor(205,225,205);
 			initName();
-			String dir = view_->data_scene->main_window->getImageDirectory();
-			setPixmap(QPixmap(IconLoader::instance().getIcon("actions/validation.png")).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation ));
+			setPixmap(findPixmap("validation.png"));
 			createActions();
 			coeff_stderr_ratio_ = 0;
 			plotter_ = NULL;

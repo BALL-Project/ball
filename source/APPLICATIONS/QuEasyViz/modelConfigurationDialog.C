@@ -182,7 +182,6 @@ namespace BALL
 
 			///add button for this page to the ListWidget
 			QListWidgetItem *propertyButton = new QListWidgetItem(contentsWidget);
-			String dir = model_item_->view()->data_scene->main_window->getImageDirectory();
 			propertyButton->setIcon(QIcon(IconLoader::instance().getIcon("actions/modelproperties.png")));
 			propertyButton->setText(tr("Model Properties"));
 			propertyButton->setTextAlignment(Qt::AlignHCenter);
@@ -233,14 +232,12 @@ namespace BALL
 
 		///function for setting up the icon box to the left of the dialog
 		void ModelConfigurationDialog::createIcons()
-		{
-			String dir = model_item_->view()->data_scene->main_window->getImageDirectory();
-			
+		{			
 			///add button for model parameter page
 			if (entryHasParameters)
 			{
 				QListWidgetItem* modelParamButton = new QListWidgetItem(contentsWidget);
-				mIconLoader::instance().getIcon("actions/modelparameters.png")));
+				modelParamButton->setIcon(IconLoader::instance().getIcon("actions/modelparameters.png"));
 				modelParamButton->setText(tr("Model Parameters"));
 				modelParamButton->setTextAlignment(Qt::AlignHCenter);
 				modelParamButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -250,7 +247,7 @@ namespace BALL
 			if(entryHasKernel)
 			{
 				QListWidgetItem* kernelParamButton = new QListWidgetItem(contentsWidget);
-				kernelParamButton->setIcon(QIcon(IconLoader::instance().getIcon("actions/kernelparameters.png")));
+				kernelParamButton->setIcon(IconLoader::instance().getIcon("actions/kernelparameters.png"));
 				kernelParamButton->setText(tr("Kernel Parameters"));
 				kernelParamButton->setTextAlignment(Qt::AlignHCenter);
 				kernelParamButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -260,7 +257,7 @@ namespace BALL
 			if(isOptimizable || entryHasKernel)
 			{
 				QListWidgetItem* optimizeButton = new QListWidgetItem(contentsWidget);
-				optimizeButton->setIcon(QIcon((dir+"modeloptimization.png").c_str()));
+				optimizeButton->setIcon(IconLoader::instance().getIcon("actions/modeloptimization.png"));
 				optimizeButton->setText(tr("Optimize Parameters"));
 				optimizeButton->setTextAlignment(Qt::AlignHCenter);
 				optimizeButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);

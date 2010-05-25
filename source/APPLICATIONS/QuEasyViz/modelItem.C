@@ -518,27 +518,26 @@ namespace BALL
 		void ModelItem::setPixmap()
 		{
 			QPixmap pm;
-			String dir = view_->data_scene->main_window->getImageDirectory();
 			if(!no_training_)
 			{
 				if (entry_->kernel)
 				{
-					pm = QPixmap(IconLoader::instance().getIcon("actions/kernel_model.png")).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
+					pm = findPixmap("kernel_model.png");
 				}
 				else 
 				{
-					pm = QPixmap(IconLoader::instance().getIcon("actions/model.png")).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
+					pm = findPixmap("model.png");
 				}
 			}
 			else
 			{	
 				if (entry_->kernel)
 				{
-					pm = QPixmap(IconLoader::instance().getIcon("actions/kernel_model_deactivated.png")).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
+					pm = findPixmap("kernel_model_deactivated.png");
 				}
 				else 
 				{
-					pm = QPixmap(IconLoader::instance().getIcon("actions/model_deactivated.png")).scaled(QSize(width(), height()), Qt::KeepAspectRatio,Qt::FastTransformation );
+					pm = findPixmap("model_deactivated.png");
 				}
 			}
 			QGraphicsPixmapItem::setPixmap(pm);
@@ -580,9 +579,7 @@ namespace BALL
 
 
 		void ModelItem::createActions()
-		{
-			String dir = view_->data_scene->main_window->getImageDirectory();
-			
+		{			
 			QAction* save_action = new QAction(QIcon(IconLoader::instance().getIcon("actions/save_desktop.png")),tr("Save model"), this);
 			connect(save_action, SIGNAL(triggered()), this, SLOT(saveModel()));
 			context_menu_actions_.push_back(save_action);

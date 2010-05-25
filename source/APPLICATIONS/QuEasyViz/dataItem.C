@@ -22,6 +22,8 @@
 #include <edge.h>
 #include <mainWindow.h>
 
+#include <BALL/VIEW/KERNEL/iconLoader.h>
+
 #include <QtGui/QDrag>
 #include <QtCore/QMimeData>
 #include <QtGui/QApplication>
@@ -483,6 +485,16 @@ namespace BALL
 				}
 				menu.exec(event->screenPos());
 			}
+		}
+
+		QPixmap DataItem::findPixmap(const String& name)
+		{
+			QIcon const& icon  = IconLoader::instance().getIcon(String("actions/")+name);
+			QList<QSize> sizes = icon.availableSizes();
+
+			QPixmap result = icon.pixmap(sizes.last()).scaled(width(), height(), Qt::KeepAspectRatio);
+
+			return result;
 		}
 	}
 }
