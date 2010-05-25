@@ -134,11 +134,13 @@ namespace BALL
 	}
 
 	template <>
-	double ParsedFunction<float>::operator () (float argument);
+	double ParsedFunction<float>::operator () (float argument)
+		throw(Exception::ParseError);
 
   template <>
-	double ParsedFunction<double>::operator () (double argument);
-
+	double ParsedFunction<double>::operator () (double argument)
+		throw(Exception::ParseError);
+ 
 	template <typename arg>
 	void ParsedFunction<arg>::initTable()
 	{
