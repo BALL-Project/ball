@@ -16,13 +16,15 @@
 ## OPTION(USE_FFTW_THREADS "Try to find FFTW with thread support" ON)
 
 IF(USE_FFTWD OR USE_FFTWF OR USE_FFTWL)
-
+	MESSAGE(STATUS "Checking for libfftw.")
   SET(FFTW_INC_SEARCHPATH
     /sw/include
     /usr/include
     /usr/local/include
     /usr/include/fftw
     /usr/local/include/fftw
+		/opt/include/fftw
+		/opt/local/include/fftw
   )
 
   FIND_PATH(FFTW_INCLUDE_PATH fftw3.h ${FFTW_INC_SEARCHPATH})
