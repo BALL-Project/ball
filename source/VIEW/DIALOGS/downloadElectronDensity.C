@@ -103,7 +103,7 @@ namespace BALL
 			String description = "Shortcut|File|Open|Download_Electron_Density";
 			menu_id_ = insertMenuEntry(MainControl::FILE_OPEN, "Download Electron Density", this,
 																	 SLOT(show()), description,
-																	 QKeySequence("Ctrl+T"));
+																	 QKeySequence("Ctrl+D"));
 			
 			setMenuHint("Download an electron density map from EDS or EMDB");
 			setMenuHelp("tips.html#download_edmap");

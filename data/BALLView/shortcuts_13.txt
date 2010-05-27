@@ -55,6 +55,7 @@ Shortcut|File|Open|Dataset|Raytraceable_Grid
 Shortcut|File|Open|Dataset|Trajectory	
 Shortcut|File|Open|Dataset|Vector_Grid	
 Shortcut|File|Open|Download_PDB	Ctrl+T
+Shortcut|File|Open|Download_Electron_Density	Ctrl+D
 Shortcut|File|Open|Project	
 Shortcut|File|Open|PubChem	
 Shortcut|File|Print	Ctrl+P

@@ -53,6 +53,7 @@ Shortcut|Build|Build_Peptide	Alt+U
 Shortcut|Tools|Calculate_RMSD	
 Shortcut|Tools|Python|Export_history	
 Shortcut|File|Open|Download_PDB	Ctrl+T
+Shortcut|File|Open|Download_Electron Density	Ctrl+D
 Shortcut|Build|Check_Structure	Ctrl+K
 Shortcut|Display|Viewpoint|Store	
 Shortcut|Display|Viewpoint|Focus_Camera	Ctrl+F
