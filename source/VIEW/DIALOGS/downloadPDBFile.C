@@ -46,6 +46,7 @@ namespace BALL
 				error_(false),
 				prefix_("http://www.rcsb.org/pdb/files/"),
 				suffix_(".pdb"),
+				current_reply_(0),
 				progress_bar_(0),
 				network_manager_(0)
 		{
