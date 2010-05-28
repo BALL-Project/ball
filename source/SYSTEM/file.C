@@ -358,7 +358,6 @@ namespace BALL
 			throw (Exception::FileNotFound(__FILE__, __LINE__, source_name));
 		}
 
-		char* buffer = new char[buffer_size];
 		std::ifstream source(source_name.c_str(), std::ios::in);
 		std::ofstream destination(destination_name.c_str(), std::ios::out | std::ios::trunc);
 
@@ -366,7 +365,9 @@ namespace BALL
 		{
 			return false;
 		}
-		
+
+		char* buffer = new char[buffer_size];
+
 		while(source)
 		{
 			source.read(buffer, (int)buffer_size);
