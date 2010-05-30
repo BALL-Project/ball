@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amber.doc,v 1.4 2003/08/26 08:04:23 oliver Exp $
-//
 
 /**	\defgroup AMBER	AMBER Force Field.
 		\ingroup Molmec	

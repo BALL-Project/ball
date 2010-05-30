@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberNonBonded.h,v 1.30.18.1 2007/03/25 21:23:47 oliver Exp $
-//
 
 // Molecular Mechanics: Amber force field, non-bonded component
 

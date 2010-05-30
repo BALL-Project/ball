@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberBend.C,v 1.27.26.1 2007/03/25 22:00:25 oliver Exp $
-//
 
 #include <BALL/MOLMEC/AMBER/amberBend.h>
 #include <BALL/MOLMEC/AMBER/amber.h>

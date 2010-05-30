@@ -1,9 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberBend.h,v 1.20.18.1 2007/03/25 21:23:46 oliver Exp $
-//
-
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_AMBERBEND_H
