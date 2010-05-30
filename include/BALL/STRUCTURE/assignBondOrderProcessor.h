@@ -49,7 +49,7 @@
 
 namespace BALL 
 {
-	/**	Bond Order assignment processor
+	/**	Bond Order Assignment Processor
 			\ingroup StructureMiscellaneous
 	*/
 	
