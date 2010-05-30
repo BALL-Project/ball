@@ -1,13 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RMSDMinimizer.C,v 1.4.18.1 2007/03/22 11:48:16 oliver Exp $
+
 //
 // Compute RMSD-optimal transformation for two structures
 // Coutsalis et al, J. Comput. Chem., 25(15), 1849 (2004)
-//
-// Author: 
-//  Oliver Kohlbacher
 //
 
 #include <BALL/STRUCTURE/RMSDMinimizer.h>

@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SASFace.C,v 1.1 2002/12/17 17:14:22 anker Exp $
 
 #include <BALL/STRUCTURE/SASEdge.h>
 #include <BALL/STRUCTURE/SASFace.h>

@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.C,v 1.69 2006/01/26 20:42:40 oliver Exp $
-//
-// Author:
-//   Oliver Kohlbacher
-//
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 

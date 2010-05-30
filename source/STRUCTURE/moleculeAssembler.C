@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeAssembler.C,v 1.5.6.2 2007/04/03 13:29:35 bertsch Exp $
-//
-// Author:
-//   Holger Franken
-//
 
 #include <BALL/MATHS/matrix44.h>
 #include <BALL/KERNEL/bond.h>

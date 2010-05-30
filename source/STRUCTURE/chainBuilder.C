@@ -1,12 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chainBuilder.C,v 1.4.10.3 2007/08/08 10:25:04 oliver Exp $
-//
-// Author:
-//   Holger Franken
-//
-
 
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/system.h>

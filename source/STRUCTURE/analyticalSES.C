@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: analyticalSES.C,v 1.13.30.1 2007/06/18 06:27:31 oliver Exp $
-// 
-// Author:
-//   Oliver Kohlbacher
-//
 
 #include <BALL/STRUCTURE/analyticalSES.h>
 #include <BALL/KERNEL/atom.h>

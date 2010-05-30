@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomTyper.C,v 1.1.4.2 2007/04/24 23:19:08 amoll Exp $
-//
 
 #include <BALL/STRUCTURE/atomTyper.h>
 

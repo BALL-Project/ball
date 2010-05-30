@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSurface.C,v 1.5.28.1 2007/03/22 11:48:23 oliver Exp $
 
 #include <BALL/STRUCTURE/triangulatedSurface.h>
 

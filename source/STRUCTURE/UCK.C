@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: UCK.C,v 1.7.20.1 2007/04/03 13:29:38 bertsch Exp $
-//
 
 #include <BALL/STRUCTURE/UCK.h>
 

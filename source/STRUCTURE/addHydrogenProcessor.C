@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: addHydrogenProcessor.C,v 1.1.4.2 2007/05/28 13:25:15 amoll Exp $
-//
 
 #include <BALL/STRUCTURE/addHydrogenProcessor.h>
 #include <BALL/KERNEL/bond.h>

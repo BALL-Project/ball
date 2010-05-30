@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SESFace.C,v 1.4.32.1 2007/04/03 13:29:39 bertsch Exp $
 
 #include <BALL/STRUCTURE/SESEdge.h>
 #include <BALL/STRUCTURE/SESFace.h>

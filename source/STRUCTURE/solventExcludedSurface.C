@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: solventExcludedSurface.C,v 1.3.32.1 2007/04/03 13:29:31 bertsch Exp $
 
 #include <BALL/STRUCTURE/solventExcludedSurface.h>
 #include <BALL/STRUCTURE/SESEdge.h>

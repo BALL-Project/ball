@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RSEdge.C,v 1.4 2002/12/17 14:13:19 anker Exp $
 
 #include <BALL/STRUCTURE/RSEdge.h>
 #include <BALL/STRUCTURE/RSFace.h>

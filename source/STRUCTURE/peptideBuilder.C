@@ -1,8 +1,6 @@
 /// -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peptideBuilder.C
-//
 
 #include <BALL/STRUCTURE/peptideBuilder.h>
 

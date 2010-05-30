@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricProperties.C,v 1.21 2004/02/24 13:33:38 amoll Exp $
-//
 
 #include <BALL/STRUCTURE/geometricProperties.h>
 

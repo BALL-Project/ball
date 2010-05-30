@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueChecker.C,v 1.27.30.1 2007/05/25 09:36:28 oliver Exp $
-//
-// Author:
-//   Oliver Kohlbacher
-//
 
 #include <BALL/STRUCTURE/residueChecker.h>
 

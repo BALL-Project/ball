@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsMatcher.C,v 1.13.8.3 2007/04/16 09:23:49 bertsch Exp $
-//
 
 #include <BALL/STRUCTURE/smartsMatcher.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>

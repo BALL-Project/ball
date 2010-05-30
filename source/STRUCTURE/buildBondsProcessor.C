@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: buildBondsProcessor.C,v 1.12.20.2 2007/04/03 13:29:37 bertsch Exp $
-//
 
 #include <BALL/STRUCTURE/buildBondsProcessor.h>
 #include <BALL/KERNEL/PTE.h>

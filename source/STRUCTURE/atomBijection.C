@@ -1,11 +1,6 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBijection.C,v 1.2.18.4 2007/03/27 21:16:49 amoll Exp $
-//
-// Author:
-//   Oliver Kohlbacher
-//
 
 #include <BALL/STRUCTURE/atomBijection.h>
 

@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondProcessor.C,v 1.13.18.1 2007/03/22 11:48:15 oliver Exp $
-//
 
 #include <BALL/STRUCTURE/HBondProcessor.h>
 #include <BALL/DATATYPE/hashGrid.h>

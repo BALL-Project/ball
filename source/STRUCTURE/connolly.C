@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: connolly.C,v 1.13 2006/09/05 11:49:46 anhi Exp $
 
 #ifdef _WIN32
 #	define _USE_MATH_DEFINES

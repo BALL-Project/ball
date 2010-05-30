@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SESVertex.C,v 1.4 2002/12/17 14:13:20 anker Exp $
 
 #include <BALL/STRUCTURE/SESEdge.h>
 #include <BALL/STRUCTURE/SESFace.h>

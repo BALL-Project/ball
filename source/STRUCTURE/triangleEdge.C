@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangleEdge.C,v 1.3 2002/12/17 14:13:21 anker Exp $
 
 #include <BALL/STRUCTURE/triangleEdge.h>
 #include <BALL/STRUCTURE/triangle.h>
