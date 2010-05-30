@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueRotamerSet.h,v 1.1.2.5 2007/08/07 07:27:37 toussaint Exp $
-//
 
 #ifndef BALL_STRUCTURE_RESIDUEROTAMERSET_H
 #define BALL_STRUCTURE_RESIDUEROTAMERSET_H

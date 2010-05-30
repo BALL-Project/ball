@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smartsMatcher.h,v 1.11.8.5 2007/03/28 16:07:35 bertsch Exp $
-//
-// Author:
-//   Andreas Bertsch
-//
 
 #ifndef BALL_STRUCTURE_SMARTSMATCHER_H
 #define BALL_STRUCTURE_SMARTSMATCHER_H

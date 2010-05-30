@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: defaultProcessors.h,v 1.17.10.1 2007/03/25 21:25:25 oliver Exp $
-//
 
 #ifndef BALL_STRUCTURE_DEFAULTPROCESSORS_H
 #define BALL_STRUCTURE_DEFAULTPROCESSORS_H

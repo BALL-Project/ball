@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangleEdge.h,v 1.11.18.1 2007/03/25 21:25:33 oliver Exp $
-//
 
 #ifndef BALL_STRUCTURE_TRIANGLEEDGE_H
 #define BALL_STRUCTURE_TRIANGLEEDGE_H

@@ -1,12 +1,5 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id: moleculeAssembler.h,v 1.3.10.1 2007/03/25 21:25:28 oliver Exp $
-//
-// Author:
-//   Holger Franken
 //
 
 #ifndef BALL_STRUCTURE_MOLECULEASSEMBLER_H

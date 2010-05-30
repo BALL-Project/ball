@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructureProcessor.h,v 1.10.18.1 2007/03/25 21:25:30 oliver Exp $
-//
 
 #ifndef BALL_SECONDARY_STRUCTURE_PROCESSOR_H
 #define BALL_SECONDARY_STRUCTURE_PROCESSOR_H

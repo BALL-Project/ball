@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceProcessor.h,v 1.40 2005/12/23 17:02:05 amoll Exp $
-//
 
 #ifndef BALL_STRUCTURE_SURFACE_PROCESSOR_H
 #define BALL_STRUCTURE_SURFACE_PROCESSOR_H

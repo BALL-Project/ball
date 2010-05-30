@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularGraph.h,v 1.12.6.1 2007/03/25 21:25:28 oliver Exp $
-//
 
 #ifndef BALL_STRUCTURE_MOLECULARGRAPH_H
 #define BALL_STRUCTURE_MOLECULARGRAPH_H

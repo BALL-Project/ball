@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: addHydrogenProcessor.h,v 1.1.4.1 2007/03/25 21:25:23 oliver Exp $
-//
 
 #ifndef BALL_STRUCTURE_ADDHYDROGENPROCESSOR_H
 #define BALL_STRUCTURE_ADDHYDROGENPROCESSOR_H

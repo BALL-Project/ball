@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rsConstructor.h,v 1.4.10.2 2007/04/03 13:29:41 bertsch Exp $
-//
-// Author:
-//   Holger Franken
-//
 
 #ifndef BALL_STRUCTURE_RSCONSTRUCTOR_H
 #define BALL_STRUCTURE_RSCONSTRUCTOR_H

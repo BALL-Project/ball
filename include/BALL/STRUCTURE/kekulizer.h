@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: kekulizer.h,v 1.1.4.4 2007/04/22 11:46:12 amoll Exp $
-//
 
 #ifndef BALL_STRUCTURE_KEKULIZER_H
 #define BALL_STRUCTURE_KEKULIZER_H

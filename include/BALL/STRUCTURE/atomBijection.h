@@ -1,13 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBijection.h,v 1.3.18.1 2007/03/25 21:25:23 oliver Exp $
-//
-// $Id: atomBijection.h,v 1.3.18.1 2007/03/25 21:25:23 oliver Exp $
-//
-// Author:
-//   Oliver Kohlbacher
-//
 
 #ifndef BALL_STRUCTURE_ATOMBIJECTION_H
 #define BALL_STRUCTURE_ATOMBIJECTION_H

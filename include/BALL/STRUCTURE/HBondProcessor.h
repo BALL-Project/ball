@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondProcessor.h,v 1.7.18.1 2007/03/25 21:25:22 oliver Exp $
-//
 
 #ifndef BALL_STRUCTURE_HBONDPROCESSOR_H
 #define BALL_STRUCTURE_HBONDPROCESSOR_H

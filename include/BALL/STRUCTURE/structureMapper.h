@@ -1,12 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: structureMapper.h,v 1.29.8.1 2007/03/25 21:25:32 oliver Exp $
-//
-// Author:
-//   Oliver Kohlbacher
-//   Hans-Peter Lenhof
-//
 
 #ifndef BALL_STRUCTURE_STRUCTUREMAPPER_H
 #define BALL_STRUCTURE_STRUCTUREMAPPER_H

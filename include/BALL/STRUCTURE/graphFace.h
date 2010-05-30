@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: graphFace.h,v 1.14.26.2 2007/06/17 07:02:20 oliver Exp $
-//
-// Author:
-// 
-//
 
 #ifndef BALL_STRUCTURE_GRAPHFACE_H
 #define BALL_STRUCTURE_GRAPHFACE_H

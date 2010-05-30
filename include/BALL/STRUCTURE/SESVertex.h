@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SESVertex.h,v 1.22 2005/12/23 17:02:02 amoll Exp $
-//
 
 #ifndef BALL_STRUCTURE_SESVERTEX_H
 #define BALL_STRUCTURE_SESVERTEX_H
