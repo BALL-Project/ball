@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lennardJones.C,v 1.19 2005/02/18 13:06:53 amoll Exp $
-//
 
 #include <BALL/MOLMEC/PARAMETER/lennardJones.h>
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>

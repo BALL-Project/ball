@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: templates.C,v 1.19 2005/12/23 17:02:44 amoll Exp $
-//
 
 #include <BALL/MOLMEC/PARAMETER/templates.h>
 #include <BALL/KERNEL/residue.h>

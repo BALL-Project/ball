@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quadraticImproperTorsion.C,v 1.9 2005/01/18 21:32:27 amoll Exp $
-//
 
 #include <BALL/MOLMEC/PARAMETER/quadraticImproperTorsion.h>
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>

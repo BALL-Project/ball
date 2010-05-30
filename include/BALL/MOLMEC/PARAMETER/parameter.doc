@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: parameter.doc,v 1.4 2003/08/26 08:04:28 oliver Exp $
-//
 
 /**	\defgroup MolmecParameters	Force Field Parameters
 * 	\ingroup Molmec

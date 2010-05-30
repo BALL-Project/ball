@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cosineTorsion.h,v 1.21 2005/12/23 17:01:54 amoll Exp $
-//
  
 #ifndef BALL_MOLMEC_PARAMETER_COSINETORSION_H
 #define BALL_MOLMEC_PARAMETER_COSINETORSION_H

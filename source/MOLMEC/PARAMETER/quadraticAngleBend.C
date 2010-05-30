@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quadraticAngleBend.C,v 1.13 2002/12/12 10:44:37 oliver Exp $
 
 #include <BALL/MOLMEC/PARAMETER/quadraticAngleBend.h>
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>

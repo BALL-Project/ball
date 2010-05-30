@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quadraticBondStretch.C,v 1.10 2003/08/26 09:17:54 oliver Exp $
-//
 
 #include <BALL/MOLMEC/PARAMETER/quadraticBondStretch.h>
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>

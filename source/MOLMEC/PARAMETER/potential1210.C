@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: potential1210.C,v 1.10 2005/01/18 21:33:52 amoll Exp $
-//
 
 #include <BALL/MOLMEC/PARAMETER/potential1210.h>
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>

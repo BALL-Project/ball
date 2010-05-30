@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueTorsions.C,v 1.9 2005/12/23 17:02:44 amoll Exp $
-//
 
 #include <BALL/MOLMEC/PARAMETER/residueTorsions.h>
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>

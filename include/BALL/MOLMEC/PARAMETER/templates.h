@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: templates.h,v 1.15 2005/12/23 17:01:55 amoll Exp $
-//
 
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
 
