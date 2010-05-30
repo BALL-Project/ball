@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmm.C,v 1.25.26.1 2007/03/25 22:00:27 oliver Exp $
-//
 
 // Molecular Mechanics: Charmm force field class
 

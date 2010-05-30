@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmm.doc,v 1.4 2003/08/26 08:04:23 oliver Exp $
-//
 
 /**	\defgroup CHARMM	CHARMM Force Field.
 * 	\ingroup Molmec

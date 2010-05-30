@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmImproperTorsion.C,v 1.15.26.1 2007/03/25 22:00:28 oliver Exp $
-//
 
 #include <BALL/MOLMEC/CHARMM/charmmImproperTorsion.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>

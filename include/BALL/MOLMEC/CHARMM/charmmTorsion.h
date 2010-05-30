@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmTorsion.h,v 1.20.18.1 2007/03/25 21:23:49 oliver Exp $
-//
 
 // Molecular Mechanics: CHARMM force field, proper torsion component
 
