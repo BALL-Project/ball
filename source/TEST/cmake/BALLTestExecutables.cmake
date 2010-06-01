@@ -175,6 +175,7 @@ SET(BALL_FORMATS_TESTS
 	BinaryFileAdaptor_test
 	Bruker1DFile_test
 	Bruker2DFile_test
+	CCP4File_test
 	INIFile_test
 	JCAMPFile_test
 	KCFFile_test
