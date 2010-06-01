@@ -771,7 +771,6 @@ namespace BALL
 		}
 
 		// 1. perform gaussian elimination
-		vector<BitVector> tmp_matrix = matrix_;
 		//tmp_matrix.push_back(beer);
 		BitVector new_beer = beer;
 		Size hi_bit(0);
@@ -780,11 +779,11 @@ namespace BALL
 		{
 			if (new_beer[i])
 			{
-				for (Size r = r_begin; r < tmp_matrix.size(); ++r)
+				for (Size r = r_begin; r < matrix_.size(); ++r)
 				{
-					for (Size c = 0; c != tmp_matrix[r].getSize(); ++c)
+					for (Size c = 0; c != matrix_[r].getSize(); ++c)
 					{
-						if (tmp_matrix[r][c])
+						if (matrix_[r][c])
 						{
 							hi_bit = c;
 							break;
@@ -793,7 +792,7 @@ namespace BALL
 					if (i == hi_bit)
 					{
 						r_begin = r + 1;
-						new_beer ^= tmp_matrix[r];
+						new_beer ^= matrix_[r];
 						break;
 					}
 				}
@@ -807,25 +806,29 @@ namespace BALL
 		
 		// if linearly independent add to the matrix
 		// sort matrix w.r.t highest bit (= maintain echelon format)
-		tmp_matrix = matrix_;
-		vector<BitVector> new_matrix;
-		vector<BitVector> processed;
-		tmp_matrix.push_back(new_beer);
-		for (Size i = 0; i != tmp_matrix[0].getSize(); ++i)
+		Size beer_index = 0;
+		while(!new_beer[beer_index]) {
+			++beer_index;
+		}
+
+		Size cur_col = 0;
+		std::vector<BitVector>::iterator it = matrix_.begin();
+		for(; it != matrix_.end(); ++it)
 		{
-			for (Size j = 0; j != tmp_matrix.size(); ++j)
-			{
-				if (find(processed.begin(), processed.end(), tmp_matrix[j]) == processed.end() && tmp_matrix[j][i])
-				{
-					new_matrix.push_back(tmp_matrix[j]);
-					processed.push_back(tmp_matrix[j]);
-				}
+			while(!(*it)[cur_col]) {
+				++cur_col;
+			}
+
+			if(cur_col > beer_index) {
+				break;
 			}
 		}
-	
+
+		matrix_.insert(it, new_beer);
+
 #ifdef BALL_QSAR_RINGPERCEPTIONPROCESSOR_DEBUG	
-		cerr << "sorted matrix: " << new_matrix.size() << endl;
-		for (vector<BitVector>::const_iterator it = new_matrix.begin(); it != new_matrix.end(); ++it)
+		cerr << "sorted matrix: " << matrix_.size() << endl;
+		for (vector<BitVector>::const_iterator it = matrix_.begin(); it != matrix_.end(); ++it)
 		{
 			cerr << *it << " (" << it->countValue(true) << ")" << endl;
 		}
@@ -858,8 +861,7 @@ namespace BALL
 			}			
 		}
 */
-		
-		matrix_ = new_matrix;
+
 		rings_.push_back(beer);
 	}
 
