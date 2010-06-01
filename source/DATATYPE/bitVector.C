@@ -428,7 +428,8 @@ namespace BALL
 
 		for (Index i = 0; i < (Index)size_; i++) 
 		{
-			if ((*this)[i] != bit_vector[i])
+			const Index sh_i = i >> BALL_BLOCK_SHIFT;
+			if ((bitset_[sh_i] & mask_(i)) != (bit_vector.bitset_[sh_i] & bit_vector.mask_(i)))
 			{
 				return false;
 			}
