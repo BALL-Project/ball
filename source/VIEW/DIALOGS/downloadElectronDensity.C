@@ -61,6 +61,7 @@ namespace BALL
 				emdb_infix_("/map/"),
 				emdb_suffix_(".map.gz"),
 				progress_bar_(0),
+				current_reply_(0),
 				network_manager_(0)
 		{
 #ifdef BALL_VIEW_DEBUG
@@ -161,6 +162,10 @@ namespace BALL
 		void DownloadElectronDensity::downloadFinished()
 		{
 			String id = ascii(entryId->currentText());
+			if(eds_maptype->currentIndex() == 1)//diff map
+			{
+				id += "_diff";
+			}
 			
 			if (current_reply_->error() != QNetworkReply::NoError)
 			{
