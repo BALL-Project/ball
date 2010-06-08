@@ -175,7 +175,7 @@ else()
       ""
       "mkl_lapack"
       "${BLAS_LIBRARIES}"
-      "${CGAL_TAUCS_LIBRARIES_DIR} ENV LAPACK_LIB_DIR"
+      "ENV LAPACK_LIB_DIR"
       )
     endif()
 
@@ -189,7 +189,7 @@ else()
       ""
       "acml"
       "${BLAS_LIBRARIES}"
-      "${CGAL_TAUCS_LIBRARIES_DIR} ENV LAPACK_LIB_DIR"
+      "ENV LAPACK_LIB_DIR"
       )
     endif()
 
@@ -203,7 +203,7 @@ else()
       ""
       "Accelerate"
       "${BLAS_LIBRARIES}"
-      "${CGAL_TAUCS_LIBRARIES_DIR} ENV LAPACK_LIB_DIR"
+      "ENV LAPACK_LIB_DIR"
       )
     endif()
 
@@ -216,24 +216,41 @@ else()
       ""
       "vecLib"
       "${BLAS_LIBRARIES}"
-      "${CGAL_TAUCS_LIBRARIES_DIR} ENV LAPACK_LIB_DIR"
+      "ENV LAPACK_LIB_DIR"
       )
     endif ( NOT LAPACK_LIBRARIES )
 
     # Generic LAPACK library?
     # This configuration *must* be the last try as this library is notably slow.
     if ( NOT LAPACK_LIBRARIES )
-      check_lapack_libraries(
-      LAPACK_DEFINITIONS
-      LAPACK_LIBRARIES
-      LAPACK
-      cheev
-      ""
-      "lapack"
-      #     "${BLAS_LIBRARIES}"
-      "c:/BALL_devel/Windows/Contrib/lib/blas.lib"
-      "ENV LAPACK_LIB_DIR"
-      )
+      if (NOT WIN32)
+				check_lapack_libraries(
+				LAPACK_DEFINITIONS
+				LAPACK_LIBRARIES
+				LAPACK
+				cheev
+				""
+				"lapack"
+				"${BLAS_LIBRARIES}"
+				"ENV LAPACK_LIB_DIR"
+				)
+			else ()
+# lapack_win32 needs blas_win32
+			find_library(BLAS_WIN32_LIBRARY blas_win32)
+			check_lapack_libraries(
+				LAPACK_DEFINITIONS
+				LAPACK_LIBRARIES
+				LAPACK
+				cheev
+				""
+				"lapack_win32"
+				"${BLAS_WIN32_LIBRARIES}"
+				"ENV LAPACK_LIB_DIR"
+				)
+			IF (LAPACK_LIBRARIES)
+				LIST(APPEND LAPACK_LIBRARIES ${BLAS_WIN32_LIBRARY})
+			ENDIF()
+			endif()	
     endif()
 
   if(LAPACK_LIBRARIES_DIR OR LAPACK_LIBRARIES)
