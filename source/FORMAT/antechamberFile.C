@@ -6,6 +6,7 @@
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/forEach.h>
+#include <BALL/MATHS/common.h>
 
 #include <vector>
 
@@ -48,7 +49,7 @@ namespace BALL
 			total_charge += at_it->getCharge();
 		}
 
-		int rounded_charge = (int) round(total_charge);
+		int rounded_charge = (int) Maths::round(total_charge);
 
 		String charge_line(255, "CHARGE      %.2f ( %d )", total_charge, rounded_charge);
 		(File&)(*this) << charge_line << endl;
