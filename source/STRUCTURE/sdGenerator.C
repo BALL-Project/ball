@@ -274,7 +274,7 @@ namespace BALL
 		float phi_0 = ((center_to_start.x > 0) ? +1. : -1.) * acos(std::min(center_to_start.y/l, 1.));
 
 		pos = 1;
-		for (int i = (second_anchor_index + 1) % N; i != first_anchor_index; i = (i + 1) % N, ++pos)
+		for (int i = (second_anchor_index + 1) % N; i != (int)first_anchor_index; i = (i + 1) % N, ++pos)
 		{
 			Vector3 new_position(center.x + l*sin(phi_0 + pos*alpha), center.y + l*cos(phi_0 +pos*alpha), 0);
 			ring.atoms[i]->setPosition(new_position);
@@ -429,7 +429,7 @@ namespace BALL
 
 			// find the bond in the old ring that will be taken for the correct direction of the bonds 
 			// in the new ring, i.e. the bond between the second shared atom and the next atom in the old ring
-			Position first_atom_index, second_atom_index;
+			Position first_atom_index=0, second_atom_index=0;
 			for (Position i=0; i<ring.size(); ++i)
 			{
 				if (ring[i] == first_atom)
@@ -541,7 +541,7 @@ namespace BALL
 		std::vector<Atom*>& atoms = ring.atoms;
 
 		//Make sure the ring contains at least two deposited atoms
-		int counter = 0;
+		Position counter = 0;
 		for(Position j = 0; j < atoms.size(); ++j)
 		{
 			if(atoms[j]->hasProperty(SDGenerator::DEPOSITED))
