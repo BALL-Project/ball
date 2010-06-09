@@ -7,6 +7,7 @@
 
 #include <QtCore/QThread>
 #include <QtCore/QFile>
+
 #include <QtNetwork/QNetworkReply>
 
 class QByteArray;
@@ -112,7 +113,9 @@ namespace BALL
 
 			public slots:
 				void error(QNetworkReply::NetworkError error);
+#ifndef QT_NO_OPENSSL
 				void sslErrors(const QList<QSslError>& errors);
+#endif
 				virtual void finished() = 0;
 
 			protected:

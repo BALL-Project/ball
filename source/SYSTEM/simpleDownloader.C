@@ -48,8 +48,10 @@ namespace BALL
 												this,   SLOT(finished()));
 			QObject::connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
 												this,   SLOT(error(QNetworkReply::NetworkError)));
+#ifndef QT_NO_OPENSSL
 			QObject::connect(reply, SIGNAL(sslErrors(const QList<QSslError>&)),
 												this,   SLOT(sslErrors(const QList<QSslError>&)));
+#endif
 		}
 
 		void BasicHelper::error(QNetworkReply::NetworkError error)
@@ -58,16 +60,19 @@ namespace BALL
 			caller_->exit(error);
 		}
 
+#ifndef QT_NO_OPENSSL
 		void BasicHelper::sslErrors(const QList<QSslError>& errors)
 		{
 			Log.error() << "SSL error(s) while downloading. Errors are:\n";
-			QSslError error;
-			foreach(error, errors) {
-				Log.error() << error.errorString().toAscii().data() << "\n";
+
+			QSslError ssl_error;
+			foreach(ssl_error, errors) {
+				Log.error() << ssl_error.errorString().toAscii().data() << "\n";
 			}
 
 			caller_->exit(-1);
 		}
+#endif
 
 		DLHelper::DLHelper(DLThread* caller, QNetworkReply* reply, const String& path)
 			: BasicHelper(caller, reply), file_(path.c_str())
