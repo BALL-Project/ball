@@ -1,0 +1,95 @@
+<node>MSE
+	<node>Names
+		<node>Selenomethionine</node>
+		<node>Selenomethionin</node>
+		<node>Mse</node>
+	</node>
+	<node>Atoms
+		<node>N<value>N 0.0654056 1.215812 -0.06949145</value></node>
+		<node>3H<value>H 0.9974914 1.608735 -0.04203663</value></node>
+		<node>CA<value>C -0.6988745 1.893029 -1.131979</value></node>
+		<node>HA<value>H -0.1911148 1.68141 -2.074138</value></node>
+		<node>C<value>C -0.6694928 3.410054 -0.9194202</value></node>
+		<node>O<value>O 0.4107355 3.973423 -1.201833</value></node>
+		<node>CB<value>C -2.121216 1.317703 -1.225039</value></node>
+		<node>1HB<value>H -2.050125 0.2325057 -1.312704</value></node>
+		<node>2HB<value>H -2.682049 1.549083 -0.318349</value></node>
+		<node>CG<value>C -2.887041 1.8377 -2.448318</value></node>
+		<node>1HG<value>H -2.99595 2.919347 -2.383954</value></node>
+		<node>2HG<value>H -2.322049 1.593525 -3.347709</value></node>
+		<node>SE<value>Se -4.546617 1.137771 -2.634913</value></node>
+		<node>CE<value>C -5.081393 1.965263 -4.148402</value></node>
+		<node>1HE<value>H -6.08969 1.634787 -4.393987</value></node>
+		<node>2HE<value>H -5.078839 3.043304 -3.993342</value></node>
+		<node>3HE<value>H -4.404794 1.706412 -4.961773</value></node>
+		<node>OXT<value>O -1.565656 3.902471 -0.1992161</value></node>
+		<node>1H<value>H -0.3889995 1.363342 0.8203897</value></node>
+		<node>2H<value>H 0.1172404 0.226119 -0.264187</value></node>
+	</node>
+  <node>Bonds
+    <node>5<value>3H N s</value></node>
+    <node>6<value>CA N s</value></node>
+    <node>10<value>HA CA s</value></node>
+    <node>11<value>C CA s</value></node>
+    <node>14<value>O C d</value></node>
+    <node>15<value>CB CA s</value></node>
+    <node>19<value>1HB CB s</value></node>
+    <node>20<value>2HB CB s</value></node>
+    <node>21<value>CG CB s</value></node>
+    <node>25<value>1HG CG s</value></node>
+    <node>26<value>2HG CG s</value></node>
+    <node>27<value>SE CG s</value></node>
+    <node>33<value>CE SE s</value></node>
+    <node>37<value>1HE CE s</value></node>
+    <node>38<value>2HE CE s</value></node>
+    <node>39<value>3HE CE s</value></node>
+    <node>40<value>OXT C s</value></node>
+    <node>41<value>1H N s</value></node>
+    <node>42<value>2H N s</value></node>
+  </node>
+	<node>Connections
+		<node>N-term<value>N C-term s 1.33 0.5</value></node>
+		<node>C-term<value>C N-term s 1.33 0.5</value></node>
+	</node>
+	<node>Properties
+		<node>AMINO_ACID</node>
+	</node>
+	<node>Variants
+		<node>Default
+			<node>Delete
+				<node>OXT</node>
+				<node>1H</node>
+				<node>2H</node>
+			</node>
+			<node>Rename
+				<node>3H<value>H</value></node>
+			</node>
+		</node>
+		<node>MET-M
+			<node>Properties
+				<node>N_TERMINAL</node>
+				<node>C_TERMINAL</node>
+			</node>
+		</node>
+		<node>MET-C
+			<node>Delete
+				<node>1H</node>
+				<node>2H</node>
+			</node>
+			<node>Rename
+				<node>3H<value>H</value></node>
+			</node>
+			<node>Properties
+				<node>C_TERMINAL</node>
+			</node>
+		</node>
+		<node>MET-N
+			<node>Delete
+				<node>OXT</node>
+			</node>
+			<node>Properties
+				<node>N_TERMINAL</node>
+			</node>
+		</node>
+	</node>
+</node>
