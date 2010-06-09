@@ -630,9 +630,9 @@ namespace BALL
 		Size t = 0;
 		val[k] = ++id;
 
-		for (t = 0; t <= nodes; ++t)
+		for (t = 0; t < nodes; ++t)
 		{
-			if (adj_matrix[k + t*nodes])
+			if (adj_matrix[k + t*core_chain_atoms.size()])
 			{
 				if (val[t] == 0)
 				{
@@ -781,7 +781,7 @@ namespace BALL
 			
 			Size id = 0, k = 0;
 
-			for (k = 0; k <= core_chain_atoms.size(); k++)
+			for (k = 0; k < core_chain_atoms.size(); k++)
 			{
 				if (val[k] == 0)
 				{
