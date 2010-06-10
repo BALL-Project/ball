@@ -130,7 +130,8 @@ PythonValidator::~PythonValidator()
 
 QValidator::State PythonValidator::validate(QString& input, int& pos) const
 {
-	input.replace(QRegExp("\\r\\n"), "\n");
+	// the following is just meant as an instructive example...
+	// input.replace(QRegExp("i"), "o");
 	
 	return Acceptable;
 }
@@ -391,6 +392,7 @@ PyWidget::PyWidget(QWidget *parent, const char *name)
 	script_edit_->setTabStopWidth((Position)(script_edit_->tabStopWidth() / 3.0));
 	script_edit_->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
 	script_edit_->setPyWidget(this);
+	script_edit_->setAcceptRichText(false);
 	connect(script_edit_, SIGNAL(cursorPositionChanged()), this, SLOT(printCursorPosition_()));
 //   	script_edit_->setToolTip("Editor for Python scripts, for blue printed capital words, a BALL documentation entry is available. Press right mouse button for a context menu.");
 	splitter->addWidget(script_edit_);
