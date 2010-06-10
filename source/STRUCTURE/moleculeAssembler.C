@@ -414,11 +414,18 @@ namespace BALL
 		}
 
 		//      if necessary, correct the orientation of the ring system
+		Position assemble_atom_index = 0;
+		for (; assemble_atom_index < ringsystems[keep_i][keep_j].size(); ++assemble_atom_index)
+		{
+			if (ringsystems[keep_i][keep_j][assemble_atom_index] == assemble_atom)
+				break;
+		}
 
-		SDGenerator sdg;
-		//pair<Atom*, Atom*> neighbours = sdg.getNeighbours(ringsystems[keep_i][keep_j], assemble_atom);
-// TODO: replace
+		Size num_atoms = ringsystems[keep_i][keep_j].size();
+
 		pair<Atom*, Atom*> neighbours;
+		neighbours.first = ringsystems[keep_i][keep_j][(assemble_atom_index - 1 + num_atoms) % num_atoms];
+		neighbours.second = ringsystems[keep_i][keep_j][(assemble_atom_index + 1) % num_atoms];
 
 		Vector3 ass_at_neighb_1;
 		Vector3 ass_at_neighb_2;
