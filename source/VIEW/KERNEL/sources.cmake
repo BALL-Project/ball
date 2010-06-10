@@ -14,6 +14,7 @@ SET(SOURCES_LIST
 	representationManager.C
 	representation.C
 	shortcutRegistry.C
+	snapshotManagerInterface.C
 	stage.C
 	threads.C
 )

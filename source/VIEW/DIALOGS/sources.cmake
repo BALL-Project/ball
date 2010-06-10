@@ -46,6 +46,7 @@ SET(UI_LIST
 	snapShotVisualisation.ui
 	stageSettings.ui
 	stereoSettingsDialog.ui
+	undoManagerDialog.ui
 )
 
 ### list all filenames of the directory here ###
@@ -98,6 +99,7 @@ SET(SOURCES_LIST
 	snapShotVisualisation.C
 	stageSettings.C
 	stereoSettingsDialog.C
+	undoManagerDialog.C
 )
 
 IF(BALL_PYTHON_SUPPORT)

@@ -20,6 +20,7 @@
 #include <BALL/VIEW/WIDGETS/fileObserver.h>
 #include <BALL/VIEW/WIDGETS/testFramework.h>
 #include <BALL/VIEW/DIALOGS/pubchemDialog.h>
+#include <BALL/VIEW/DIALOGS/undoManagerDialog.h>
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
 #include <BALL/VIEW/DIALOGS/downloadElectronDensity.h>
 #include <BALL/VIEW/DIALOGS/labelDialog.h>
@@ -102,6 +103,7 @@ namespace BALL
 		new DownloadElectronDensity(		this, "DownloadElectronDensity", false);
 		new PubChemDialog(this, "PubChemDialog");
 		new PluginDialog(this, "PluginDialog");
+		new UndoManagerDialog(this, "UndoManagerDialog");
  		
 		addDockWidget(Qt::LeftDockWidgetArea, new MolecularControl(this, "Structures"));
 		addDockWidget(Qt::LeftDockWidgetArea, new GeometricControl(this, "Representations"));
@@ -322,6 +324,7 @@ namespace BALL
 		DownloadPDBFile::getInstance(0)->addToolBarEntries(tb);
 		DownloadElectronDensity::getInstance(0)->addToolBarEntries(tb);
 		PubChemDialog::getInstance(0)->addToolBarEntries(tb);
+		UndoManagerDialog::getInstance(0)->addToolBarEntries(tb);
 		Path path;
 
 		IconLoader& loader = IconLoader::instance();

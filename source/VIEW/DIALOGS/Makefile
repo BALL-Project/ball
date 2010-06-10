@@ -68,6 +68,7 @@ CPP_SOURCES=\
 	stageSettings.C\
 	stereoSettingsDialog.C\
 	downloadElectronDensity.C
+	undoManagerDialog.C
 #	openBruker1DFile.C\
 #	openBruker2DFile.C
 
@@ -122,7 +123,11 @@ MOC_SOURCES=\
 	snapShotVisualisation_moc.C\
 	stageSettings_moc.C\
 	stereoSettingsDialog_moc.C\
+<<<<<<< HEAD
 	downloadElectronDensity_moc.C
+=======
+	undoManagerDialog_mol.C
+>>>>>>> Added a dialog for managing snapshots for undo functionality
 #	openBruker1DFile_moc.C\
 #	openBruker2DFile_moc.C\
 
