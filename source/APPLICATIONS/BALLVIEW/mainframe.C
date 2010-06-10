@@ -203,6 +203,11 @@ namespace BALL
 		complement_selection_action_ = insertMenuEntry(MainControl::EDIT, "Invert Selection", this, 
 																									 SLOT(complementSelection()), description);
 
+		description = "Shortcut|Edit|Clear_Selection";
+		clear_selection_action_ = insertMenuEntry(MainControl::EDIT, "Clear Selection", this, 
+																							SLOT(clearSelection()), description);
+
+
  		qApp->installEventFilter(this);
 
 		setStatusbarText("Ready.");

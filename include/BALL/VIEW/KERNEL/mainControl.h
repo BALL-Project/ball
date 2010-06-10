@@ -349,11 +349,6 @@ namespace BALL
 			/// Select a Composite recursive and add all Atom and AtomContainer objects to the selection.
 			void deselectCompositeRecursive(Composite* composite, bool first_call=false);
 
-			/** Clear Selection
-			 		Deselect all Composites and clear the selection list in the MainControl
-			*/
-			void clearSelection();
-
 			/** Print some informations for the selection in the statusbar.
 					Called by selectComposites_().
 					If one Atom is selected, its position is printed.
@@ -725,6 +720,11 @@ namespace BALL
 			///
 			void complementSelection();
 
+			/** Clear Selection
+			 		Deselect all Composites and clear the selection list in the MainControl
+			*/
+			void clearSelection();
+
 			/** Last second cleanup.
 					This method will be called internally if the MainControl is about to be destroyed.
 					This method stores the preferences and finalizes all ModularWidget objects
@@ -905,6 +905,7 @@ namespace BALL
 
 			QAction* stop_simulation_action_;
 			QAction* complement_selection_action_;
+			QAction* clear_selection_action_;
 			QAction* open_action_;
 			QAction* save_project_action_;
 			QAction* preferences_action_;

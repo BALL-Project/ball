@@ -128,6 +128,7 @@ namespace BALL
 				important_text_in_statusbar_(false),
 				stop_simulation_action_(0),
 				complement_selection_action_(0),
+				clear_selection_action_(0),
 				open_action_(0),
 				save_project_action_(0),
 				preferences_action_(0),
@@ -283,6 +284,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				locking_widget_(0),
 				stop_simulation_action_(0),
 				complement_selection_action_(0),
+				clear_selection_action_(0),
 				open_action_(0),
 				save_project_action_(0),
 				preferences_action_(0),
@@ -536,6 +538,11 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			if (complement_selection_action_ != 0)
 			{
 				complement_selection_action_->setEnabled(!composites_locked_);
+			}
+
+			if (clear_selection_action_ != 0)
+			{
+				clear_selection_action_->setEnabled(!composites_locked_);
 			}
 
 			if (id_to_menu_.has(FILE_OPEN))
