@@ -2,6 +2,7 @@
 // vi: set ts=2:
 
 #include <BALL/VIEW/DIALOGS/downloadElectronDensity.h>
+#include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
 
 #include <BALL/KERNEL/system.h>
 #include <BALL/FORMAT/lineBasedFile.h>
@@ -244,6 +245,7 @@ namespace BALL
 					{
 						rcon.computeIsoContourSurface(*set, ColorRGBA(0,100,255), d3->calculateSD());
 					}
+					if((server->currentIndex() == 0) && eds_downloadpdb->isChecked()) pdbDownloadChecked();
 
 					close();
 					entryId->clearEditText();
@@ -288,7 +290,9 @@ namespace BALL
 
 		void DownloadElectronDensity::pdbDownloadChecked()
 		{
-			//TODO: Implement
+			DownloadPDBFile* dpf = DownloadPDBFile::getInstance(0);
+			dpf->pdbId->setEditText(entryId->currentText());	
+			dpf->slotDownload();
 		}
 
 		void DownloadElectronDensity::downloadProgress(qint64 received, qint64 total)
