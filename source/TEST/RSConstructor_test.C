@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RSConstructor_test.C,v 1.3.8.2 2007/04/03 13:29:30 bertsch Exp $
-//
-// Author:
-//   Holger Franken
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -14,7 +9,7 @@
 
 #include <BALL/STRUCTURE/rsConstructor.h>
 #include <BALL/STRUCTURE/sdGenerator.h>
-#include <BALL/STRUCTURE/ringClusterer.h>
+#include <BALL/STRUCTURE/ringAnalyser.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/FORMAT/PDBFile.h>
@@ -62,12 +57,13 @@ RingPerceptionProcessor getRings;
 getRings.RingPerceptionProcessor::calculateSSSR(sssr, molecule_sys);
 
 SDGenerator sdg;
+RingAnalyser ra;
 //	sequence the atoms in each ring
-	vector<vector<Atom*> > seq_rings = sdg.sequenceRings(sssr);
+	vector<vector<Atom*> > seq_rings; 
+	ra.sequenceRings(sssr, seq_rings);
 
 //	cluster the rings Sizeo connected ringsystems
-RingClusterer riclu;
-vector<vector<vector<Atom*> > > ringsystems = riclu.clusterRings(seq_rings);
+vector<vector<vector<Atom*> > > ringsystems = ra.clusterRings(seq_rings);
 
 
 //	analyse the way the rings are connected and construct each ringsystem in the suitable way

@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SDGenerator_test.C,v 1.7.4.2 2007/04/03 13:29:27 bertsch Exp $
-//
-// Author:
-//   Holger Franken
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -14,6 +9,7 @@
 
 #include <BALL/STRUCTURE/sdGenerator.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
+#include <BALL/STRUCTURE/ringAnalyser.h>
 #include <BALL/FORMAT/MOLFile.h>
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -75,9 +71,11 @@ RingPerceptionProcessor getRings;
 getRings.RingPerceptionProcessor::calculateSSSR(sssr, molecule_sys);
 
 vector<vector<Atom*> > unseq_ringsys = sssr;
+RingAnalyser ra;
 CHECK(vector<vector<Atom*> sequenceRings(vector<vector<Atom*> >& ringsystem))
 
-	vector<vector<Atom*> > seq_ringsys = sdg_2.sequenceRings(sssr);
+	vector<vector<Atom*> > seq_ringsys;
+	ra.sequenceRings(sssr, seq_ringsys);
 
 	for (Size i = 0; i != seq_ringsys[0].size(); i++)
 	{

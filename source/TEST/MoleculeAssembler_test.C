@@ -15,7 +15,6 @@
 #include <BALL/STRUCTURE/moleculeAssembler.h>
 #include <BALL/KERNEL/selector.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
-#include <BALL/STRUCTURE/ringClusterer.h>
 #include <BALL/STRUCTURE/ringAnalyser.h>
 #include <BALL/STRUCTURE/rsConstructor.h>
 #include <BALL/STRUCTURE/chainBuilder.h>
@@ -136,22 +135,19 @@ for(AtomIterator atom_it = molecule_sys.beginAtom(); atom_it != molecule_sys.end
 		getRings.RingPerceptionProcessor::calculateSSSR(rings, molecule_sys);
 
 		//      sequence the atoms in each ring
-		vector<vector<Atom*> > seq_rings = sdg.sequenceRings(rings);
-
+		RingAnalyser ra;
+		vector<vector<Atom*> > seq_rings;
+		ra.sequenceRings(rings, seq_rings);
 
 		//      cluster the rings Sizeo connected ringsystems
-		RingClusterer riclu;
-		vector<vector<vector<Atom*> > > ringsystems = riclu.clusterRings(seq_rings);
-
+		vector<vector<vector<Atom*> > > ringsystems = ra.clusterRings(seq_rings);
 
 		//      analyse the way the rings are connected and construct each ringsystem in the suitable way
 		vector<RingAnalyser::RingInfo> analysed_rings;
 
 		for (Size i = 0; i != ringsystems.size(); i++)
 		{
-
 			//      analyse the way the rings are connected
-			RingAnalyser ra;
 			analysed_rings = ra.analyseRings(ringsystems[i]);
 
 			//      construct each ringsystem in the suitable way
@@ -162,12 +158,10 @@ for(AtomIterator atom_it = molecule_sys.beginAtom(); atom_it != molecule_sys.end
 			{
 				for (vector<Atom*>::size_type k = 0; k != ringsystems[i][j].size(); k++)
 				{
-					ringsystems[i][j][k] -> setProperty(SDGenerator::DEPOSITED);
-					ringsystems[i][j][k] -> setProperty(SDGenerator::PRE_ASSEMBLED);
-
+					ringsystems[i][j][k]->setProperty(SDGenerator::DEPOSITED);
+					ringsystems[i][j][k]->setProperty(SDGenerator::PRE_ASSEMBLED);
 				}
 			}
-
 		}
 
 

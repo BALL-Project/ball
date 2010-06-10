@@ -235,10 +235,7 @@ SET(BALL_STRUCTURE_TESTS
 	DockResult_test
 	MoleculeAssembler_test
 	SDGenerator_test
-	ChainBuilder_test
-	RSConstructor_test
 	RingAnalyser_test
-	RingClusterer_test
 	ResidueRotamerSet_test
 	RotamerLibrary_test
 )

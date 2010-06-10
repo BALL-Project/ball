@@ -230,10 +230,7 @@ $(TEST_PREFIX)BuildBondsProcessor_test$(EXEEXT)\
 $(TEST_PREFIX)DockResult_test$(EXEEXT)\
 $(TEST_PREFIX)MoleculeAssembler_test$(EXEEXT)\
 $(TEST_PREFIX)SDGenerator_test$(EXEEXT)\
-$(TEST_PREFIX)ChainBuilder_test$(EXEEXT)\
-$(TEST_PREFIX)RSConstructor_test$(EXEEXT)\
 $(TEST_PREFIX)RingAnalyser_test$(EXEEXT)\
-$(TEST_PREFIX)RingClusterer_test$(EXEEXT)\
 $(TEST_PREFIX)ResidueRotamerSet_test$(EXEEXT)\
 $(TEST_PREFIX)RotamerLibrary_test$(EXEEXT)\
 $(TEST_PREFIX)ConnectedComponentsProcessor_test$(EXEEXT)\

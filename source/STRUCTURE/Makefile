@@ -28,7 +28,6 @@ CPP_SOURCES=\
 	atomTyper.C\
 	bindingPocketProcessor.C\
 	buildBondsProcessor.C\
-	chainBuilder.C\
 	connectedComponentsProcessor.C\
 	connolly.C\
 	defaultProcessors.C\
@@ -55,7 +54,6 @@ CPP_SOURCES=\
 	residueChecker.C\
 	ringAnalyser.C\
 	ringClusterer.C\
-	rsConstructor.C\
 	RSEdge.C\
 	RSFace.C\
 	RSVertex.C\

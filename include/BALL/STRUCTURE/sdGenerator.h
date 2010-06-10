@@ -9,7 +9,9 @@
 # include <BALL/DATATYPE/options.h>
 #endif
 
-#include <BALL/common.h>
+#ifndef BALL_STRUCTURE_RINGANALYSER_H
+# include <BALL/STRUCTURE/ringAnalyser.h>
+#endif
 
 #include <vector>
 
@@ -48,7 +50,9 @@ namespace BALL
 				ROTATED,
 				ZIG,
 				ZAG,
-				STRAIGHT
+				STRAIGHT,
+				NEGATIVE_ANGLE,
+				CLOCKWISE
 			};
 
 			/** @name Constant Definitions
@@ -60,12 +64,19 @@ namespace BALL
 				/**	show hydrogen atoms.
 				*/
 		 		static const char* SHOW_HYDROGENS;
+
+				/** the standard bond length for structure
+				 *  diagrams
+				 */
+				static const char* STANDARD_BOND_LENGTH;
 			};
 
 			/// Default values for options
 			struct BALL_EXPORT Default
 			{
 				static const bool SHOW_HYDROGENS;
+
+				static const float STANDARD_BOND_LENGTH;
 			};
 			//@}
 			
@@ -105,23 +116,13 @@ namespace BALL
       */
       void generateSD(System& molecule_sys);
 
-      /**
-      * \brief finds an atom's neighbours inside a certain ring
-      * \param ring   the ring that shall be searched for the neighbours
-      * \param atom   the atom, whos neighbours shall be found
-      * @return atom's neighbours inside of ring
-      */
-      std::pair<Atom*, Atom*> getNeighbours(std::vector<Atom*>& ring, Atom* atom);
+		  /**
+			 * Clear all internal data structures.
+			 */
+			void clear();
 
   	protected:
 
-      /**
-      * \brief Puts the Atoms in each ring of the input ringsystem into the correct order
-      * @param ringsystem
-      * @return the ringsystem with sorted atoms
-      */
-      void sequenceRings_(std::vector<std::vector<Atom*> >& ringsystem, std::vector<std::vector<Atom*> >& sequenced_rings);
-      
       /**
       * \brief Distinguishes between ring-atoms and core-chain-atoms, removes all H-Atoms from the System
       * @param molecule_sys
@@ -129,10 +130,83 @@ namespace BALL
       void prepare_(System& molecule_sys);
 
 			/**
-			 *  The smallest set of smallest rings.
-			 */
-			std::vector<std::vector<Atom*> > sssr_;
+			* \brief Constructs a ringsystem, providing the atoms with relative 2D-coordinates, starting in the point of origin
+			* @param current_ring_system consecutive numbering of the molecule's ringsystems
+			*/
+			void constructRingSystem_(Position current_ring_system);
 
+			/** Build a regular polygon for a ring with two fixed points.
+			 */
+			void buildRegularPolygon_(RingAnalyser::Ring& ring, Position first_anchor_index, bool clockwise);
+
+			/** Build an open polygon for a ring with two fixed points.
+			 */
+			void buildOpenPolygon_(RingAnalyser::Ring& ring, Position first_anchor_index, Position second_anchor_index);
+
+			/**
+			* \brief construct the core-ring as a regular polygon
+			* @param current_ring the index of the ring to attach
+			* @param current_system the ring system
+			* @param x_start the ring is created in (x_start, 0, 0)
+			*/
+			void attachCore_(Position current_ring, std::vector<RingAnalyser::Ring>& current_system, float x_start);
+
+			/**
+			* \brief attach a ring template to a (partially) constructed ringsystem (no functionality yet)
+			* @param current_ring the index of the ring to attach
+			* @param current_system the ring system
+			*/
+			void attachTemplate_(Position current_ring, std::vector<RingAnalyser::Ring>& current_system);
+
+			/**
+			 * \brief attach a fused ring to a (partially) constructed ringsystem
+			 * @param current_ring the index of the ring to attach
+			 * @param current_system the index of the ring system
+			 */
+			void attachFused_(Position current_ring, std::vector<RingAnalyser::Ring>& current_system);
+
+			/**
+			 * \brief attach a bridged ring to a (partially) constructed ringsystem
+			 * @param current_ring the index of the ring to attach
+			 * @param current_system the index of the ring system
+			 */
+			void attachBridged_(Position current_ring, std::vector<RingAnalyser::Ring>& current_system);
+
+			/**
+ 			 * \brief attach a spiro ring to a (partially) constructed ringsystem
+			 * @param current_ring the index of the ring to attach
+			 * @param current_system the index of the ring system
+			 */
+			void attachSpiro_(Position current_ring, std::vector<RingAnalyser::Ring>& current_system);
+
+			/// Compute adjacency matrix of the given atoms
+			void computeAdjacencyMatrix_(std::vector<Atom*>& chain, std::vector<bool>& result);
+
+			/// Comparator for chains of atoms
+			static bool compareChains_(const vector<Atom*>& x, const vector<Atom*>& y);
+
+			/// recursively determine chain areas
+			void visitChainAreas_(Size k, std::vector<bool>& adj_matrix, std::vector<int>& val, Size nodes, 
+			                      Size id, std::vector<Atom*>& core_chain_atoms, std::vector<Atom*>& chain_area);
+
+			///
+			void visitChains_(Size& k, std::vector<bool>& adj_matrix, std::vector<int>& val, Size& id, 
+			                  std::vector<Atom*>& chain_area, Size& end, bool& breaker, Size& t, std::vector<Atom*>& prev_nodes);
+
+			/// 
+			std::vector<Atom*> findPath_(Atom*& first_edge, Atom*& second_edge, std::vector<Atom*>& chain_area, 
+			                             std::vector<bool>& adj_matrix);
+
+			/**
+			 * \brief cluster and arrange all chains in the system
+			 */
+			void treatChains_(AtomContainer& ac);
+
+			/// The ring analyser containing all information about ring systems
+			RingAnalyser ring_analyser_;
+
+			/// all chains
+			std::vector<std::vector<Atom*> > chains_;
 	};
 
 } // namepspace BALL

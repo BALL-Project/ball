@@ -9,7 +9,6 @@ SET(SOURCES_LIST
 	atomTyper.C
 	bindingPocketProcessor.C
 	buildBondsProcessor.C
-	chainBuilder.C
 	connectedComponentsProcessor.C
 	connolly.C
 	defaultProcessors.C
@@ -36,7 +35,6 @@ SET(SOURCES_LIST
 	reducedSurface.C
 	residueChecker.C
 	ringAnalyser.C
-	rsConstructor.C
 	RSEdge.C
 	RSFace.C
 	RSVertex.C

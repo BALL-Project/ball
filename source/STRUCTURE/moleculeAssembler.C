@@ -413,11 +413,12 @@ namespace BALL
 			}
 		}
 
-
 		//      if necessary, correct the orientation of the ring system
 
 		SDGenerator sdg;
-		pair<Atom*, Atom*> neighbours = sdg.getNeighbours(ringsystems[keep_i][keep_j], assemble_atom);
+		//pair<Atom*, Atom*> neighbours = sdg.getNeighbours(ringsystems[keep_i][keep_j], assemble_atom);
+// TODO: replace
+		pair<Atom*, Atom*> neighbours;
 
 		Vector3 ass_at_neighb_1;
 		Vector3 ass_at_neighb_2;
