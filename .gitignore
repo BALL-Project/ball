@@ -8,6 +8,8 @@ moc_*.C
 .Dependencies
 lib/*
 build/*
+build*/*
+CMakeFiles/*
 source/autom4te.cache
 source/Makefile
 source/config.lic
