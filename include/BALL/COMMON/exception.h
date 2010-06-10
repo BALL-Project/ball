@@ -63,22 +63,18 @@ namespace BALL
 			//@{
 
 			/// Default constructor
-			GeneralException()
-				;
+			GeneralException();
 			
 			/// Constructor
-			GeneralException(const char* file, int line)
-				;
+			GeneralException(const char* file, int line);
 
 			/// Constructor
 			GeneralException
 				(const char* file, int line,
-				 const String& name , const String& message)
-				;
+				 const String& name , const String& message);
 
 			/// Copy constructor
-			GeneralException(const GeneralException& exception)
-				;
+			GeneralException(const GeneralException& exception);
 
 			/// Destructor
 			virtual ~GeneralException() throw();
@@ -89,24 +85,19 @@ namespace BALL
 			//@{
 	
 			///	Returns the name of the exception 
-			const char* getName() const
-				;
+			const char* getName() const;
 
 			///	Returns the error message of the exception
-			const char* getMessage() const
-				;
+			const char* getMessage() const;
 
 			/// Modify the exception's error message
-			void setMessage(const std::string& message)
-				;
+			void setMessage(const std::string& message);
 
 			/// Returns the line number where it occured
-			int getLine() const
-				;
+			int getLine() const;
 	
 			/// Returns the file where it occured
-			const char* getFile() const
-				;
+			const char* getFile() const;
 			//@}
 
 			protected:
@@ -130,8 +121,7 @@ namespace BALL
 		{
 			public:
 
-			IndexUnderflow(const char* file, int line, Index index = 0, Size size = 0)
-				;
+			IndexUnderflow(const char* file, int line, Index index = 0, Size size = 0);
 
 
 			protected:
@@ -152,8 +142,7 @@ namespace BALL
 		{
 			public:
 
-			SizeUnderflow(const char* file, int line, Size size = 0)
-				;
+			SizeUnderflow(const char* file, int line, Size size = 0);
 
 			protected:
 			Size size_;
@@ -171,8 +160,7 @@ namespace BALL
 			: public GeneralException
 		{
 			public:
-			IndexOverflow(const char* file, int line, Index index = 0, Size size = 0)
-				;
+			IndexOverflow(const char* file, int line, Index index = 0, Size size = 0);
 
 			protected:
 
@@ -197,8 +185,7 @@ namespace BALL
 			: public GeneralException
 		{
 			public:
-			InvalidRange(const char* file, int line, float value)
-				;
+			InvalidRange(const char* file, int line, float value);
 		};
 
 
@@ -213,8 +200,7 @@ namespace BALL
 		{
 			public:
 
-			InvalidSize(const char* file, int line, Size size = 0)
-				;
+			InvalidSize(const char* file, int line, Size size = 0);
 
 			protected:
 			Size size_;
@@ -229,8 +215,7 @@ namespace BALL
 			: public GeneralException
 		{
 			public:
-			OutOfRange(const char* file, int line)
-				;
+			OutOfRange(const char* file, int line);
 		};
 
 		/**	Invalid format.
@@ -242,8 +227,7 @@ namespace BALL
 			: public GeneralException
 		{
 			public:
-			InvalidFormat(const char* file, int line, const String& s)
-				;
+			InvalidFormat(const char* file, int line, const String& s);
 			
 			~InvalidFormat()
 				throw();
@@ -262,8 +246,7 @@ namespace BALL
 			: public GeneralException
 		{
 			public:
-			IllegalSelfOperation(const char* file, int line)
-				;
+			IllegalSelfOperation(const char* file, int line);
 		};
 
 		/**	Null pointer argument is invalid.
@@ -274,8 +257,7 @@ namespace BALL
 			: public GeneralException
 		{
 			public:
-			NullPointer(const char* file, int line)
-				;
+			NullPointer(const char* file, int line);
 		};
 
 		/**	Invalid iterator.
@@ -285,8 +267,7 @@ namespace BALL
 			: public GeneralException
 		{
 			public:
-			InvalidIterator(const char* file, int line)
-				;
+			InvalidIterator(const char* file, int line);
 		};
 
 		/**	Incompatible iterator.
@@ -297,8 +278,7 @@ namespace BALL
 			: public GeneralException
 		{
 			public:
-			IncompatibleIterators(const char* file, int line)
-				;
+			IncompatibleIterators(const char* file, int line);
 		};
 
 		/**	Not implemented exception. 
@@ -311,8 +291,7 @@ namespace BALL
 			: public GeneralException
 		{
 			public:
-			NotImplemented(const char* file, int line)
-				;
+			NotImplemented(const char* file, int line);
 		};
 
 		/** Illegal tree operation.
@@ -323,8 +302,7 @@ namespace BALL
 			: public GeneralException
 		{
 			public:
-			IllegalTreeOperation(const char* file, int line)
-				;
+			IllegalTreeOperation(const char* file, int line);
 		};
 
 		/**	Out of memory.
@@ -337,8 +315,7 @@ namespace BALL
 			: public GeneralException, public std::bad_alloc
 		{
 			public:
-			OutOfMemory(const char* file, int line, Size size = 0)
-				;
+			OutOfMemory(const char* file, int line, Size size = 0);
 			
 			virtual ~OutOfMemory() 
 				throw();
@@ -353,8 +330,7 @@ namespace BALL
 			: public GeneralException
 		{
 			public:
-			BufferOverflow(const char* file, int line)
-				;
+			BufferOverflow(const char* file, int line);
 		};
 
 		/**	Division by zero error.
@@ -363,8 +339,7 @@ namespace BALL
 			: public GeneralException
 		{
 			public:
-			DivisionByZero(const char* file, int line)
-				;
+			DivisionByZero(const char* file, int line);
 		};
 
 		/**	Out of grid error.
@@ -373,8 +348,7 @@ namespace BALL
 			: public GeneralException
 		{
 			public:
-			OutOfGrid(const char* file, int line)
-				;
+			OutOfGrid(const char* file, int line);
 		};
 
 		/**	File not found.
@@ -384,13 +358,11 @@ namespace BALL
 			: public GeneralException
 		{
 			public:
-			FileNotFound(const char* file, int line, const String& filename)
-				;
+			FileNotFound(const char* file, int line, const String& filename);
 
 			~FileNotFound()
 				throw();
-			String getFilename() const
-				;
+			String getFilename() const;
 
 			protected:
 			std::string filename_;
@@ -403,8 +375,7 @@ namespace BALL
 			: public GeneralException
 		{
 			public:
-			IllegalPosition(const char* file, int line, float x, float y, float z)
-				;
+			IllegalPosition(const char* file, int line, float x, float y, float z);
 		};
 
 		/**	Parse Error.
@@ -416,8 +387,7 @@ namespace BALL
 			public:
 			///
 			ParseError(const char* file, int line, const String& expression,
-					const String& message)
-				;
+					const String& message);
 		};
 
 		/**	Precondition failed.
@@ -428,7 +398,7 @@ namespace BALL
 		{
 			public:
 			///
-			Precondition(const char* file, int line, const char* condition)	;
+			Precondition(const char* file, int line, const char* condition);
 		};
 
 		/**	Postcondition failed.
@@ -439,7 +409,7 @@ namespace BALL
 		{
 			public:
 			///
-			Postcondition(const char* file, int line, const char* condition) ;
+			Postcondition(const char* file, int line, const char* condition);
 		};
 
 		/// Exception to be thrown if an invalid option is given
@@ -448,8 +418,7 @@ namespace BALL
 			public:
 
 				///
-				InvalidOption(const char* file, int line, String option)
-					;
+				InvalidOption(const char* file, int line, String option);
 		};
 		
 		/// Exception to be thrown if too many errors occur, e.g. in ForceField
@@ -458,7 +427,7 @@ namespace BALL
 		{
 			public:
 			///
-			TooManyErrors(const char* file, int line)	;
+			TooManyErrors(const char* file, int line);
 		};
 		 
 		/// Exception to be thrown if too many bonds for one atom
@@ -467,7 +436,7 @@ namespace BALL
 		{
 			public:
 			///
-			TooManyBonds(const char* file, int line, const String& error) ;
+			TooManyBonds(const char* file, int line, const String& error);
 		};
 		
 		/**	CUDA Error
@@ -477,7 +446,7 @@ namespace BALL
 			: public Exception::GeneralException
 		{
 			public:
-			CUDAError(const char* file, int line, const String& error) ;									
+			CUDAError(const char* file, int line, const String& error);									
 		};
 
 		/**
@@ -491,7 +460,7 @@ namespace BALL
 			: public Exception::GeneralException
 		{
 		public:
-			NoBufferAvailable(const char* file, int line, const String& reason) ;
+			NoBufferAvailable(const char* file, int line, const String& reason);
 		};
 
 		/**
@@ -503,7 +472,7 @@ namespace BALL
 			: public Exception::GeneralException
 		{
 		public:
-			FormatUnsupported(const char* file, int line) ;
+			FormatUnsupported(const char* file, int line);
 		};
 
 		/** Class handling uncaught exception globally.
@@ -531,7 +500,7 @@ namespace BALL
 					<tt>bad_alloc</tt> (the default behaviour defined in the ANSI C++ 
 					standard).
 			*/
-			GlobalExceptionHandler() ;
+			GlobalExceptionHandler();
 			//@}
 			
 			/**	@name	Accessors
@@ -539,28 +508,27 @@ namespace BALL
 			//@{
 				
 			/// Assign the name of the exception. This should agree with the class name.
-			static void setName(const String& name)	;
+			static void setName(const String& name);
 				
 			/// Set the error message
-			static void setMessage(const String& message) ;
+			static void setMessage(const String& message);
 
 			/// Set the line number the exception was thrown. Should be set to __LINE__ in most cases.
-			static void setLine(int line)	;
+			static void setLine(int line);
 
 			/// The source file name where the exception was thrown
-			static void setFile(const String& file)	;
+			static void setFile(const String& file);
 
 			/// Set all exception attributes
 			static void set
 				(const String& file, int line, 
-				 const String& name, const String& message)
-				;
+				 const String& name, const String& message);
 			//@}	
 			
 			protected:
 
 			/// The BALL replacement for terminate
-			static void terminate()	;
+			static void terminate();
 
 			/// The BALL new handler
 			static void newHandler() throw(Exception::OutOfMemory);
