@@ -285,7 +285,7 @@
 %Include RMSDMinimizer.sip
 // %Include rotamerLibrary.sip
 // %Include rules.sip
-// %Include structureMapper.sip
+%Include structureMapper.sip
 //%Include smilesParser.sip
 %Include peptideBuilder.sip
 %Include secondaryStructureProcessor.sip
