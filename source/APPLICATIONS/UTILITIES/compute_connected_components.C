@@ -6,7 +6,10 @@
 #include <BALL/FORMAT/genericMolFile.h>
 #include <BALL/FORMAT/molFileFactory.h>
 
+#include <iostream>
+
 using namespace BALL;
+using namespace std;
 
 int main(int argc, char** argv)
 {

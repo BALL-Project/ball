@@ -242,7 +242,7 @@ namespace BALL
 		return blocks_[new_blockname].data[new_key];
 	}	
 
-	void GAMESSDatFile::block::operator >> (ostream& os) const
+	void GAMESSDatFile::block::operator >> (std::ostream& os) const
 	{
 		String result = " " + blockname + " ";
 

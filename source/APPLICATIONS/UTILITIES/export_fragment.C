@@ -38,7 +38,7 @@ int main(int argc, char** argv)
 		PDBFile infile(infilename);	
 		if (!infile)
 		{
-			Log.error() << "error opening " << argv[1] << " for input." << endl;
+			Log.error() << "error opening " << argv[1] << " for input." << std::endl;
 			return 2;
 		}
 
@@ -53,7 +53,7 @@ int main(int argc, char** argv)
 			HINFile infile(infilename);	
 			if (!infile)
 			{
-				Log.error() << "error opening " << argv[1] << " for input." << endl;
+				Log.error() << "error opening " << argv[1] << " for input." << std::endl;
 				return 2;
 			}
 
