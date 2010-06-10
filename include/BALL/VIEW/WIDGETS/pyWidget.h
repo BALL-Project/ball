@@ -27,6 +27,7 @@
 #include <QtGui/QComboBox>
 #include <QtGui/QTabWidget>
 #include <QtGui/QSyntaxHighlighter>
+#include <QtGui/QValidator>
 #include <QtCore/QStringList>
 
 #include <QtCore/qthread.h>
@@ -69,6 +70,19 @@ class BALL_VIEW_EXPORT PythonHighlighter
 	vector<QRegExp> BALL_patterns;
 	QRegExp 				string_pattern;
 	QRegExp 				comment_pattern;
+};
+
+/** Class for validating (and potentially fixing) entered python code.
+		\ingroup ViewWidgets
+*/
+class BALL_VIEW_EXPORT PythonValidator
+	: public QValidator
+{
+	public:
+		PythonValidator(QObject* parent = 0);
+		virtual ~PythonValidator();
+		
+		virtual State validate(QString& input, int& pos) const;		
 };
 
 class BALL_VIEW_EXPORT RunPythonThread
@@ -406,6 +420,7 @@ class BALL_VIEW_EXPORT PyWidget
 	MyTextEdit* 			script_edit_;
 	QTabWidget* 			tab_widget_;
 	PythonHighlighter highlighter_1_, highlighter_2_;
+	PythonValidator   validator_;
 	MyLineEdit* 			line_edit_;
 	QComboBox* 				combo_box_, *editor_combo_box_;
 	std::list<Hotkey>	hotkeys_;

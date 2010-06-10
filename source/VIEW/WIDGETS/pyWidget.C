@@ -119,6 +119,22 @@ void PythonHighlighter::highlightBlock(const QString& text)
 
 }
 
+PythonValidator::PythonValidator(QObject* parent)
+	: QValidator(parent)
+{
+}
+
+PythonValidator::~PythonValidator()
+{
+}
+
+QValidator::State PythonValidator::validate(QString& input, int& pos) const
+{
+	input.replace(QRegExp("\\r\\n"), "\n");
+	
+	return Acceptable;
+}
+
 #ifdef BALL_QT_HAS_THREADS
 		RunPythonThread::RunPythonThread()
 			: QThread(),
@@ -337,6 +353,7 @@ PyWidget::PyWidget(QWidget *parent, const char *name)
 	BALL_ASSIGN_NAME(line_edit_)
 	line_edit_->setPyWidget(this);
 	line_edit_->setToolTip("Enter a Python command and press return for execution. Cursor right at end of line for completion, Enter or Shift-F1 for documentation.");
+	line_edit_->setValidator(&validator_);
 	combo_box_ = new QComboBox(widget);
 	BALL_ASSIGN_NAME(combo_box_)
 	combo_box_->setMaxVisibleItems(30);
@@ -1656,7 +1673,10 @@ void PyWidget::fetchPreferences(INIFile& inifile)
 
 QString PyWidget::getCurrentScript()
 {
-	return script_edit_->document()->toPlainText();
+	QString result = script_edit_->document()->toPlainText();
+	result.replace(QRegExp("\\r\\n"), "\n");
+
+	return result;
 }
 
 bool PyWidget::storeScript_()
