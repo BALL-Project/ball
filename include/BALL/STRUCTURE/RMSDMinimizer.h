@@ -56,6 +56,10 @@ namespace BALL
 
 		static Result computeTransformation(const PointVector& X, const PointVector& Y)
 			throw(RMSDMinimizer::IncompatibleCoordinateSets, RMSDMinimizer::TooFewCoordinates);
+
+		static double minimizeRMSD(AtomContainer& a, AtomContainer& b)
+			throw(RMSDMinimizer::IncompatibleCoordinateSets, RMSDMinimizer::TooFewCoordinates);
+
  };
 
 }	// namespace BALL

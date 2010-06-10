@@ -8,6 +8,7 @@
 //
 
 #include <BALL/STRUCTURE/RMSDMinimizer.h>
+#include <BALL/STRUCTURE/structureMapper.h>
 
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/MATHS/matrix44.h>
@@ -158,4 +159,17 @@ namespace BALL
 		return make_pair(T, rmsd);
 	}
 
+	double RMSDMinimizer::minimizeRMSD(AtomContainer& a, AtomContainer& b)
+		throw(RMSDMinimizer::IncompatibleCoordinateSets, RMSDMinimizer::TooFewCoordinates)
+	{
+		StructureMapper sm(a, b);
+		sm.calculateDefaultBijection();
+
+		Result transform = computeTransformation(sm.getBijection());
+
+		TransformationProcessor tp(transform.first);
+		a.apply(tp);
+
+		return transform.second;
+	}
 } // namespace BALL

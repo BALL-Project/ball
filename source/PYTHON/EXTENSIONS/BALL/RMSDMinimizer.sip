@@ -28,6 +28,10 @@ class RMSDMinimizer
 		static Result computeTransformation(const AtomBijection& ab)
 			throw(RMSDMinimizer::IncompatibleCoordinateSets, RMSDMinimizer::TooFewCoordinates);
 
-		static pair<Matrix4x4, double> computeTransformation(const PointVector& X, const PointVector& Y)
+		static Result computeTransformation(const PointVector& X, const PointVector& Y)
 			throw(RMSDMinimizer::IncompatibleCoordinateSets, RMSDMinimizer::TooFewCoordinates);
+
+		static double minimizeRMSD(AtomContainer& a, AtomContainer& b)
+			throw(RMSDMinimizer::IncompatibleCoordinateSets, RMSDMinimizer::TooFewCoordinates);
+
 };
