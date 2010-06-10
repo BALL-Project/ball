@@ -1674,7 +1674,9 @@ void PyWidget::fetchPreferences(INIFile& inifile)
 QString PyWidget::getCurrentScript()
 {
 	QString result = script_edit_->document()->toPlainText();
-	result.replace(QRegExp("\\r\\n"), "\n");
+
+	int pos = 0;
+	validator_.validate(result, pos);
 
 	return result;
 }
