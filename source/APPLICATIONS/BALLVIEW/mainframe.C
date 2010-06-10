@@ -197,8 +197,8 @@ namespace BALL
 		
 		stop_simulation_action_->setIcon(IconLoader::instance().getIcon("actions/process-stop"));
 		
-		description = "Shortcut|Edit|Toggle_Selection";
-		complement_selection_action_ = insertMenuEntry(MainControl::EDIT, "Toggle Selection", this, 
+		description = "Shortcut|Edit|Invert_Selection";
+		complement_selection_action_ = insertMenuEntry(MainControl::EDIT, "Invert Selection", this, 
 																									 SLOT(complementSelection()), description);
 
  		qApp->installEventFilter(this);

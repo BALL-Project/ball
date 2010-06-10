@@ -44,7 +44,7 @@ Shortcut|Edit|Deselect
 Shortcut|Edit|Paste	Ctrl+V
 Shortcut|Edit|Preferences	Ctrl+Z
 Shortcut|Edit|Select	
-Shortcut|Edit|Toggle_Selection	
+Shortcut|Edit|Invert_Selection	
 Shortcut|File|Export|PNG	
 Shortcut|File|Export|POVRay	
 Shortcut|File|Export|VRML	

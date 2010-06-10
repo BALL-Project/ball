@@ -37,7 +37,7 @@ Shortcut|Tools|Grid|Visualize_Field_Lines
 Shortcut|ToggleFullscreen	
 Shortcut|MolecularMechanics|Choose_ForceField|Charmm	
 Shortcut|Display|Edit_Mode	Ctrl+E
-Shortcut|Edit|Toggle_Selection	
+Shortcut|Edit|Invert_Selection	
 Shortcut|Tools|Python|Load_script	
 Shortcut|Display|Move_Mode	
 Shortcut|Tools|Python|Run_current_script	

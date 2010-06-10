@@ -73,7 +73,7 @@ I°0.026723°Mainframe|MainMenuBar|°5|0|1|0|0|0|53|26|
 I°0.172776°Mainframe|MainMenuBar|°2|0|1|0|1|1|53|11|
 I°0.080434°Mainframe|MainMenuBar|°3|0|1|0|1|0|53|11|
 I°0.180693°Mainframe|MainMenuBar|&Edit|&Select|°5|0|1|0|0|0|43|14|
-I°0.16765°Mainframe|MainMenuBar|&Edit|Toggle Selection|°2|0|1|0|1|1|61|18|
-I°0.066626°Mainframe|MainMenuBar|&Edit|Toggle Selection|°3|0|1|0|1|0|61|18|
+I°0.16765°Mainframe|MainMenuBar|&Edit|Invert Selection|°2|0|1|0|1|1|61|18|
+I°0.066626°Mainframe|MainMenuBar|&Edit|Invert Selection|°3|0|1|0|1|0|61|18|
 T°0.1°len(getMainControl().getSelection())°12°
 X°
