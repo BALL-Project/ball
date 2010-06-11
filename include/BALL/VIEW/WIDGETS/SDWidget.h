@@ -79,6 +79,9 @@ namespace BALL
 				///
 				void clear();
 
+				///
+				void setResizeToParent(bool flag);
+
 			protected:
 				void paintEvent(QPaintEvent *event);
 

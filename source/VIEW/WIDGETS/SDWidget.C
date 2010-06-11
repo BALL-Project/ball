@@ -257,6 +257,11 @@ namespace BALL
 			update();
 		}
 		
+		void SDWidget::setResizeToParent(bool flag)
+		{
+			resize_to_parent_ = flag;
+		}
+
 		void SDWidget::setDefaultOptions()
 		{		
 	 		options.setDefaultBool(SDWidget::Option::SHOW_HYDROGENS,

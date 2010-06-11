@@ -17,7 +17,7 @@
    <item row="0" column="0" rowspan="2">
     <widget class="QTreeWidget" name="queries">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+      <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -30,12 +30,24 @@
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="QFrame" name="SDFrame">
+    <widget class="BALL::VIEW::SDWidget" name="sd_widget" native="true">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
-       <horstretch>0</horstretch>
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>30</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>300</width>
+       <height>300</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>300</width>
+       <height>300</height>
+      </size>
      </property>
      <property name="palette">
       <palette>
@@ -104,18 +116,12 @@
      <property name="autoFillBackground">
       <bool>true</bool>
      </property>
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
     </widget>
    </item>
    <item row="1" column="1">
     <widget class="QTextEdit" name="text_field">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -207,6 +213,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>BALL::VIEW::SDWidget</class>
+   <extends>QWidget</extends>
+   <header>BALL/VIEW/WIDGETS/SDWidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>addAsNew_button</tabstop>
   <tabstop>computeNextSolution_button</tabstop>

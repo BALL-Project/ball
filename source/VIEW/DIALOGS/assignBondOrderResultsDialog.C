@@ -21,7 +21,6 @@ namespace BALL
 			: QDialog(parent),
 				Ui_AssignBondOrderResultsDialogData(),
 				ModularWidget(name),
-				sdwidget_(0,true),
 				bond_order_processor_(0),
 				root_(NULL), 
 				activated_item_(NULL)
@@ -33,7 +32,8 @@ namespace BALL
 			setupUi(this);
 			setObjectName(name);
 
-			sdwidget_.setParent(SDFrame);
+			sd_widget->setResizeToParent(false);
+
 			// register the widget with the MainControl
 			ModularWidget::registerWidget(this);
 			hide();
@@ -133,7 +133,6 @@ namespace BALL
 				queries->update();
 
 				// now update the view
-				sdwidget_.plot(S, true, false); 
 				switchView(current_item, num_of_sol-1);
 			}	
 			else
@@ -245,7 +244,7 @@ namespace BALL
 			solution_systems_.clear();
 			solution_number_.clear();
 			descriptions_.clear();
-			sdwidget_.clear();
+			sd_widget->clear();
 			queries->clear();
 		}
 
@@ -262,7 +261,7 @@ namespace BALL
 			{
 				activated_item_ = item; 
 				
-				sdwidget_.plot(*sd_systems_[item], true, false);
+				sd_widget->plot(*sd_systems_[item], true, false);
 				if (applyToSelected_checkBox->isChecked())
 				{
 					bond_order_processor_->apply(solution_number_[item]);
