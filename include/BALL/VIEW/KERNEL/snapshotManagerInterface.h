@@ -23,6 +23,7 @@ namespace BALL
 				void rename(unsigned int i, const String& name);
 
 			protected:
+				unsigned int num_snapshots_;
 				std::vector<boost::shared_ptr<SnapShotManager> > managers_;
 				std::deque<String> names_;
 		};

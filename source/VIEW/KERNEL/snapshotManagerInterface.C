@@ -17,6 +17,7 @@ namespace BALL
 		{
 			typedef HashSet<Composite*> Comps;
 
+			num_snapshots_ = 0;
 			managers_.clear();
 
 			if(!MainControl::getInstance(0))
@@ -37,6 +38,8 @@ namespace BALL
 
 		void SnapshotManagerInterface::takeSnapshot(const String& name)
 		{
+			++num_snapshots_;
+
 			for(size_t i = 0; i < managers_.size(); ++i)
 			{
 				managers_[i]->takeSnapShot();
@@ -52,7 +55,7 @@ namespace BALL
 				return;
 			}
 
-			if(index > managers_[0]->getCurrentSnapshotNumber())
+			if(index >= num_snapshots_)
 			{
 				return;
 			}
