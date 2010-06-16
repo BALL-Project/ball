@@ -48,6 +48,11 @@ class Molecule
 	//  virtual void read(istream& s);
 	//  virtual void write(ostream& s) const;
 
+	FragmentIterator iterfragments();
+%MethodCode
+	return sipConvertFromType(new FragmentIterator(sipCpp->beginFragment()), sipType_FragmentIterator, Py_None);
+%End
+
   SIP_PYOBJECT __repr__();
 %MethodCode
 	sipRes = PyString_FromString(String(String("Molecule ") + sipCpp->getName() 

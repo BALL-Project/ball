@@ -52,6 +52,31 @@ class System
 	//  template <typename T>
 	//  bool apply(UnaryProcessor<T>& processor)
 
+	FragmentIterator iterfragments();
+%MethodCode
+	return sipConvertFromType(new FragmentIterator(sipCpp->beginFragment()), sipType_FragmentIterator, Py_None);
+%End
+
+	ChainIterator iterchains();
+%MethodCode
+	return sipConvertFromType(new ChainIterator(sipCpp->beginChain()), sipType_ChainIterator, Py_None);
+%End
+
+	ResidueIterator iterresidues();
+%MethodCode
+	return sipConvertFromType(new ResidueIterator(sipCpp->beginResidue()), sipType_ResidueIterator, Py_None);
+%End
+
+	MoleculeIterator itermolecules();
+%MethodCode
+	return sipConvertFromType(new MoleculeIterator(sipCpp->beginMolecule()), sipType_MoleculeIterator, Py_None);
+%End
+
+	ProteinIterator iterproteins();
+%MethodCode
+	return sipConvertFromType(new ProteinIterator(sipCpp->beginProtein()), sipType_ProteinIterator, Py_None);
+%End
+
 	SIP_PYOBJECT __str__();
 %MethodCode
 	sipRes = PyString_FromString(String(String("System ") + sipCpp->getName() 

@@ -27,6 +27,7 @@
 %Include list.sip
 %Include vector.sip
 %Include pair.sip
+%Include iterators.sip
 
 // COMMON
 %Include constants.sip

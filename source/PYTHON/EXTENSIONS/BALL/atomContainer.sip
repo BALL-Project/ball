@@ -80,7 +80,11 @@ class AtomContainer
 	bool apply(FragmentProcessor& /processor/);
 	bool apply(ResidueProcessor& /processor/);
 
-	
+	AtomIterator iteratoms();
+%MethodCode
+	return sipConvertFromType(new AtomIterator(sipCpp->beginAtom()), sipType_AtomIterator, Py_None);
+%End
+
   SIP_PYOBJECT __str__();
 %MethodCode
 	sipRes = PyString_FromString(String(String("AtomContainer ") + sipCpp->getName() 

@@ -54,6 +54,28 @@ class Protein
 	//  virtual void read(istream& s);
 	//  virtual void write(ostream& s) const;
 
+	PDBAtomIterator iterpdbatoms();
+%MethodCode
+	return sipConvertFromType(new PDBAtomIterator(sipCpp->beginPDBAtom()), sipType_PDBAtomIterator, Py_None);
+%End
+
+	SecondaryStructureIterator itersecondarystructure();
+%MethodCode
+	return sipConvertFromType(new SecondaryStructureIterator(sipCpp->beginSecondaryStructure()),
+	                          sipType_SecondaryStructureIterator,
+	                          Py_None);
+%End
+
+	ChainIterator iterchains();
+%MethodCode
+	return sipConvertFromType(new ChainIterator(sipCpp->beginChain()), sipType_ChainIterator, Py_None);
+%End
+
+	ResidueIterator iterresidues();
+%MethodCode
+	return sipConvertFromType(new ResidueIterator(sipCpp->beginResidue()), sipType_ResidueIterator, Py_None);
+%End
+
 
   SIP_PYOBJECT __str__();
 %MethodCode
