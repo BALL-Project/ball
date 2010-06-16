@@ -82,7 +82,7 @@ class AtomContainer
 
 	AtomIterator iteratoms();
 %MethodCode
-	return sipConvertFromType(new AtomIterator(sipCpp->beginAtom()), sipType_AtomIterator, Py_None);
+	return BALL_CONVERT_FROM_INSTANCE(new AtomIterator(sipCpp->beginAtom()), AtomIterator, Py_None);
 %End
 
   SIP_PYOBJECT __str__();

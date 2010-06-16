@@ -50,7 +50,7 @@ class Molecule
 
 	FragmentIterator iterfragments();
 %MethodCode
-	return sipConvertFromType(new FragmentIterator(sipCpp->beginFragment()), sipType_FragmentIterator, Py_None);
+	return BALL_CONVERT_FROM_INSTANCE(new FragmentIterator(sipCpp->beginFragment()), FragmentIterator, Py_None);
 %End
 
   SIP_PYOBJECT __repr__();

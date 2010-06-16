@@ -54,27 +54,27 @@ class System
 
 	FragmentIterator iterfragments();
 %MethodCode
-	return sipConvertFromType(new FragmentIterator(sipCpp->beginFragment()), sipType_FragmentIterator, Py_None);
+	return BALL_CONVERT_FROM_INSTANCE(new FragmentIterator(sipCpp->beginFragment()), FragmentIterator, Py_None);
 %End
 
 	ChainIterator iterchains();
 %MethodCode
-	return sipConvertFromType(new ChainIterator(sipCpp->beginChain()), sipType_ChainIterator, Py_None);
+	return BALL_CONVERT_FROM_INSTANCE(new ChainIterator(sipCpp->beginChain()), ChainIterator, Py_None);
 %End
 
 	ResidueIterator iterresidues();
 %MethodCode
-	return sipConvertFromType(new ResidueIterator(sipCpp->beginResidue()), sipType_ResidueIterator, Py_None);
+	return BALL_CONVERT_FROM_INSTANCE(new ResidueIterator(sipCpp->beginResidue()), ResidueIterator, Py_None);
 %End
 
 	MoleculeIterator itermolecules();
 %MethodCode
-	return sipConvertFromType(new MoleculeIterator(sipCpp->beginMolecule()), sipType_MoleculeIterator, Py_None);
+	return BALL_CONVERT_FROM_INSTANCE(new MoleculeIterator(sipCpp->beginMolecule()), MoleculeIterator, Py_None);
 %End
 
 	ProteinIterator iterproteins();
 %MethodCode
-	return sipConvertFromType(new ProteinIterator(sipCpp->beginProtein()), sipType_ProteinIterator, Py_None);
+	return BALL_CONVERT_FROM_INSTANCE(new ProteinIterator(sipCpp->beginProtein()), ProteinIterator, Py_None);
 %End
 
 	SIP_PYOBJECT __str__();

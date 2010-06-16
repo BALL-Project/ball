@@ -56,24 +56,24 @@ class Protein
 
 	PDBAtomIterator iterpdbatoms();
 %MethodCode
-	return sipConvertFromType(new PDBAtomIterator(sipCpp->beginPDBAtom()), sipType_PDBAtomIterator, Py_None);
+	return BALL_CONVERT_FROM_INSTANCE(new PDBAtomIterator(sipCpp->beginPDBAtom()), PDBAtomIterator, Py_None);
 %End
 
 	SecondaryStructureIterator itersecondarystructure();
 %MethodCode
-	return sipConvertFromType(new SecondaryStructureIterator(sipCpp->beginSecondaryStructure()),
-	                          sipType_SecondaryStructureIterator,
+	return BALL_CONVERT_FROM_INSTANCE(new SecondaryStructureIterator(sipCpp->beginSecondaryStructure()),
+	                          SecondaryStructureIterator,
 	                          Py_None);
 %End
 
 	ChainIterator iterchains();
 %MethodCode
-	return sipConvertFromType(new ChainIterator(sipCpp->beginChain()), sipType_ChainIterator, Py_None);
+	return BALL_CONVERT_FROM_INSTANCE(new ChainIterator(sipCpp->beginChain()), ChainIterator, Py_None);
 %End
 
 	ResidueIterator iterresidues();
 %MethodCode
-	return sipConvertFromType(new ResidueIterator(sipCpp->beginResidue()), sipType_ResidueIterator, Py_None);
+	return BALL_CONVERT_FROM_INSTANCE(new ResidueIterator(sipCpp->beginResidue()), ResidueIterator, Py_None);
 %End
 
 
