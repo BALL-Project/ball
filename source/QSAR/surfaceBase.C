@@ -93,8 +93,14 @@ namespace BALL
 		}
 		
 		// calc the areas for each atom
-		HashMap<const Atom*, float> atom_areas;
-		calculateSASAtomAreas(ac, atom_areas, 0, 400);
+		NumericalSAS sas;
+		sas.options.setInteger(NumericalSAS::Option::NUMBER_OF_POINTS, 400);
+		sas.options.setReal(NumericalSAS::Option::PROBE_RADIUS,         0.);
+
+		sas(ac);
+
+		HashMap<const Atom*, float> atom_areas = sas.getAtomAreas();
+
 		double tot_pos(0), tot_neg(0), tot_pos_pol(0), tot_neg_pol(0), tot_hyd(0), tot_pol(0), tot(0);
 		
 		// add the atom areas
@@ -119,7 +125,7 @@ namespace BALL
 			tot += area;
 		}
 
-		double vol = calculateSASVolume(ac, 0, 400);
+		double vol = sas.getTotalVolume();
 		double rho(0);
 		if (vol != 0)
 		{
