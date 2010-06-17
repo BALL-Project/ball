@@ -230,6 +230,13 @@ namespace BALL
 		{
 			public:
 
+			/// Enumeration of different projection modes
+			enum ProjectionMode
+			{
+				PERSPECTIVE = 0,
+				ORTHOGRAPHIC
+			};
+
 			/**	@name	Constructors and Destructors
 			*/	
 			//@{
@@ -240,7 +247,7 @@ namespace BALL
 			/// Copy Constructor
 			Camera(const Camera& camera);
 
-			Camera(const Vector3& view_point, const Vector3& look_at, const Vector3& look_up_vector);
+			Camera(const Vector3& view_point, const Vector3& look_at, const Vector3& look_up_vector, const ProjectionMode& mode = PERSPECTIVE);
 
 			/// Destructor
 			virtual ~Camera(){}
@@ -320,6 +327,14 @@ namespace BALL
 			virtual void clear()
 				{ *this = Camera();}
 
+			/// Set the projection mode
+			void setProjectionMode(ProjectionMode const& mode)
+			{ projection_mode_ = mode; }
+
+			/// Get the projection mode
+			ProjectionMode getProjectionMode() const
+			{ return projection_mode_; }
+
 			///
 			String toString() const;
 
@@ -370,6 +385,10 @@ namespace BALL
 			 		Stored only for better performance in the scene.
 			*/
 			Vector3 					right_vector_;
+
+			/* The projection mode used by this camera.
+			 */
+			ProjectionMode    projection_mode_;
 		};
 
 		/** A Stage has a Camera, LightSources and a background color.

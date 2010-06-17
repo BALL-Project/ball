@@ -193,6 +193,10 @@ namespace BALL {
 				 */
 				void showRuler(bool show);
 
+				/** Notifies the renderer that the projection mode has changed.
+				 */
+				void projectionModeChanged();
+
 				/** Decide between event based and (threaded) continuous loop rendering.
 				 */
 				void useContinuousLoop(bool use_loop);

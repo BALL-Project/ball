@@ -435,6 +435,9 @@ namespace BALL
 			virtual void setMode(ModeType mode);
 
 			///
+			virtual void projectionModeChanged();
+
+			///
 			static void setScreenShotNumber(Position pos) { screenshot_nr_ = pos;}
 
 			///

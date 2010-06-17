@@ -476,5 +476,13 @@ namespace BALL
 			MutexLocker ml(&render_mutex_);
 			show_ruler_ = show;
 		}
+
+		void RenderSetup::projectionModeChanged()
+		{
+			if (RTTI::isKindOf<GLRenderer>(*renderer))
+			{
+				static_cast<GLRenderer*>(renderer)->initPerspective();
+			}
+		}
 	}
 }

@@ -281,6 +281,9 @@ namespace BALL
 			///
 			void initPerspective();
 
+			///
+			void setProjection();
+
 			//_
 			void setColorRGBA_(const ColorRGBA& color);
 
@@ -424,6 +427,12 @@ namespace BALL
 			void initGLU_(DrawingMode mode);
 
 			//_
+			void setOrthographicZoom(float orthographic_zoom);
+
+			//_
+			float getOrthographicZoom(void);
+
+			//_
 			void generateIlluminationTexture_(float ka, float kd, float kr, float shininess);
 
 			inline Position getTextureIndex_(Position x, Position y, Position z, Size width, Size height);
@@ -490,6 +499,8 @@ namespace BALL
 			GLUquadricObj*  GLU_quadric_obj_;
 			HashMap<const RegularData3D*, Position> grid_to_texture_;
 			GLuint       						cel_texture_;
+
+			float                   orthographic_zoom_;
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

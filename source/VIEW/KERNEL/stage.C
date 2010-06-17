@@ -103,7 +103,8 @@ namespace BALL
 		Camera::Camera()
 			: view_point_(0, 0, 0),
 				look_at_(0, 0, -1),
-				look_up_vector_(0, -1, 0)
+				look_up_vector_(0, -1, 0),
+				projection_mode_(PERSPECTIVE)
 		{
 			calculateVectors_();
 		}
@@ -113,14 +114,17 @@ namespace BALL
 				look_at_(camera.look_at_),
 				look_up_vector_(camera.look_up_vector_),
 				view_vector_(camera.view_vector_),
-				right_vector_(camera.right_vector_)
+				right_vector_(camera.right_vector_),
+				projection_mode_(camera.projection_mode_)
 		{
 		}
 
-		Camera::Camera(const Vector3& view_point, const Vector3& look_at, const Vector3& look_up_vector)
+		Camera::Camera(const Vector3& view_point, const Vector3& look_at, const Vector3& look_up_vector, const ProjectionMode& mode)
 			: view_point_(view_point),
 				look_at_(look_at),
-				look_up_vector_(look_up_vector)
+				look_up_vector_(look_up_vector),
+				projection_mode_(mode)
+
 		{
 			calculateVectors_();
 		}
@@ -132,6 +136,7 @@ namespace BALL
 			 look_up_vector_ = camera.look_up_vector_;
 					view_vector_ = camera.view_vector_;
 				 right_vector_ = camera.right_vector_;
+			projection_mode_ = camera.projection_mode_;
 
 			return *this;
 		}
@@ -145,9 +150,10 @@ namespace BALL
 
 		bool Camera::operator == (const Camera& camera) const
 		{
-			return 	view_point_ 		== camera.view_point_ &&
-							look_at_ 				== camera.look_at_ 		&&
-							look_up_vector_ == camera.look_up_vector_;
+			return 	view_point_ 		 == camera.view_point_     &&
+							look_at_ 				 == camera.look_at_ 		   &&
+							look_up_vector_  == camera.look_up_vector_ &&
+							projection_mode_ == camera.projection_mode_;
 		}
 
 		void Camera::calculateVectors_()
@@ -172,7 +178,6 @@ namespace BALL
 			else right_vector_.set(1,0,0);
 		}
 
-
 		void Camera::dump(std::ostream& s, Size depth) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -189,20 +194,26 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			s << "Look up vector: " << look_up_vector_ << endl;
 
+			BALL_DUMP_DEPTH(s, depth);
+			s << "Projection mode: " << ((projection_mode_ == PERSPECTIVE) ? "perspective" : "orthographic") << endl;
+
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
 		String Camera::toString() const
 		{
-			return vector3ToString(view_point_) + " " +
-						 vector3ToString(look_at_) + " " +
+			// NOTE: we do *not* store the projection mode when we write the current camera.
+			//       Instead, it is extracted from the stage settings dialog. If we would store
+			//       it here, we would break backwards compatibility severely.
+			return vector3ToString(view_point_)     + " " +
+						 vector3ToString(look_at_)        + " " +
 						 vector3ToString(look_up_vector_);
 		}
 
 		bool Camera::readFromString(const String& data)
 		{
 			vector<String> fields;
-			if (data.split(fields) != 3) return false;
+			if (data.split(fields) == 3) return false;
 
 			Vector3 results[3];
 			for (Position p = 0; p < 3; p++)
@@ -294,7 +305,6 @@ namespace BALL
 			shininess_ = 128.0;
 		}
 
-
 		bool Stage::operator == (const Stage& stage) const
 		{
 			return light_sources_ 					== stage.light_sources_ 		&&
@@ -309,8 +319,6 @@ namespace BALL
 						 ambient_ 								== stage.ambient_  &&
 						 shininess_ 							== stage.shininess_;
 		}
-
-
 
 		void Stage::dump(std::ostream& s, Size depth) const
 		{

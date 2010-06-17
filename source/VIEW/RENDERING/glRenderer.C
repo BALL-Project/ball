@@ -107,7 +107,8 @@ namespace BALL
 				model_type_(MODEL_LINES),
 				drawed_other_object_(false),
 				drawed_mesh_(false),
-				GLU_quadric_obj_(0)
+				GLU_quadric_obj_(0),
+				orthographic_zoom_(10.f)
 		{
 		}
 
@@ -132,6 +133,8 @@ namespace BALL
 				delete it->second;
 			}
 			display_lists_.clear();
+
+			orthographic_zoom_ = 10.f;
 		}
 
 		void GLRenderer::setAntialiasing(bool state)
@@ -2000,9 +2003,10 @@ namespace BALL
 			gluPickMatrix(center_x, viewport[3] - center_y, width, height, viewport);
 
 			// prepare camera
-			initPerspective();
+			setProjection();
 
 			glMatrixMode(GL_MODELVIEW);
+
 			updateCamera();
 		}
 
@@ -2093,10 +2097,7 @@ namespace BALL
 
 			glViewport(0, 0, (int)width_, (int)height_);
 
-			glMatrixMode(GL_PROJECTION);
-			glLoadIdentity();
 			initPerspective();
-			glMatrixMode(GL_MODELVIEW);
 		}
 
 
@@ -2140,7 +2141,13 @@ namespace BALL
 			glMatrixMode(GL_PROJECTION);
 
 			glLoadIdentity();
-			glFrustum(new_left, new_right, bottom_, top_, near_, far_);
+
+			if (stage_->getCamera().getProjectionMode() == Camera::PERSPECTIVE)
+				glFrustum(new_left, new_right, bottom_, top_, near_, far_);
+			else
+				glOrtho(new_left * orthographic_zoom_, new_right * orthographic_zoom_, 
+				         bottom_ * orthographic_zoom_,      top_ * orthographic_zoom_, near_, far_);
+
 			glViewport(0, 0, width_, height_);
 
 			glMatrixMode(GL_MODELVIEW);
@@ -2350,12 +2357,40 @@ namespace BALL
 				return;
 			}
 
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
+
+			setProjection();
+
+			glMatrixMode(GL_MODELVIEW);
+		}
+
+		void GLRenderer::setProjection()
+		{
 			left_   = -2.0 * x_scale_;
 			right_  =  2.0 * x_scale_;
 			bottom_ = -2.0 * y_scale_;
 			top_    =  2.0 * y_scale_;
 
-			glFrustum(left_, right_, bottom_, top_, near_, far_);
+			if (stage_->getCamera().getProjectionMode() == Camera::PERSPECTIVE)
+			{
+				glFrustum(left_, right_, bottom_, top_, near_, far_);
+			}
+			else
+			{
+				glOrtho(left_   * orthographic_zoom_, right_ * orthographic_zoom_, 
+				        bottom_ * orthographic_zoom_,   top_ * orthographic_zoom_, near_, far_);
+			}
+		}
+
+		void GLRenderer::setOrthographicZoom(float orthographic_zoom)
+		{
+			orthographic_zoom_ = orthographic_zoom;
+		}
+
+		float GLRenderer::getOrthographicZoom()
+		{
+			return orthographic_zoom_;
 		}
 
 		void GLRenderer::generateIlluminationTexture_(float ka, float kd, float kr, float shininess)

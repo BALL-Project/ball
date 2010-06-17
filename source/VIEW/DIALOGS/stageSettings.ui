@@ -17,7 +17,7 @@
    <item>
     <widget class="QStackedWidget" name="widget_stack">
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="Main">
       <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -1032,7 +1032,7 @@
             <item>
              <widget class="QRadioButton" name="radioButton_perspectiveProjection">
               <property name="enabled">
-               <bool>false</bool>
+               <bool>true</bool>
               </property>
               <property name="text">
                <string>perspective projection</string>
@@ -1045,7 +1045,7 @@
             <item>
              <widget class="QRadioButton" name="radioButton_orthographicProjection">
               <property name="enabled">
-               <bool>false</bool>
+               <bool>true</bool>
               </property>
               <property name="text">
                <string>orthographic projection</string>

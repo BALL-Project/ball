@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stageSettings.C,v 1.30.16.1 2007/03/25 22:02:19 oliver Exp $
-//
 
 #include <BALL/VIEW/DIALOGS/stageSettings.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -209,8 +207,9 @@ namespace BALL
 				stage_->setFogIntensity(0);
 			}
 
-			//TODO see projectionTransformationChanged() for code examples.
-			//stage_->setPerspectiveProjection(radioButton_perspectiveProjection->isChecked());
+			Camera::ProjectionMode projection_mode = radioButton_perspectiveProjection->isChecked() ? Camera::PERSPECTIVE
+			                                                                                        : Camera::ORTHOGRAPHIC;
+			stage_->getCamera().setProjectionMode(projection_mode);
 
 			Scene::setShowLightSources(show_lights_->isChecked());
 			Scene::setAnimationSmoothness(((float)animation_smoothness->value()) / 10.0);
@@ -358,21 +357,18 @@ namespace BALL
 	
 		void StageSettings::projectionTransformationChanged()
 		{
+			Camera::ProjectionMode projection_mode;
 			if (radioButton_perspectiveProjection->isChecked())
 			{
-				Log.info() << "Switched to perspective projection." << std::endl;
-					// glMatrixMode(GL_PROJECTION);
-					// glLoadIdentity();
-					// glFrustrum(left, right, bottom, top, near, far);	
-					//stage_->setPerspectiveProjection(radioButton_perspectiveProjection->isChecked());
+				projection_mode = Camera::PERSPECTIVE;
 			}
-			else if (radioButton_orthographicProjection->isChecked())
+			else
 			{
-				Log.info() << "Switched to orthographic projection." << std::endl;
-				// glMatrixMode(GL_PROJECTION);
-				// glLoadIdentity();
-				// glOrtho(left, right, bottom, top, near, far);
+				projection_mode = Camera::ORTHOGRAPHIC;
 			}	
+
+			stage_->getCamera().setProjectionMode(projection_mode);
+			scene_->projectionModeChanged();
 		}
 
 		// TODO: rewrite to allow more than one renderer

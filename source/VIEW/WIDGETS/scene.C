@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.174.16.3 2007-04-11 12:06:25 amoll Exp $
-//
 
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -842,7 +840,19 @@ namespace BALL
 		{
 			float y = getYDiff_() * ZOOM_FACTOR;
 
-			move(Vector3(0, 0, y));
+			if (stage_->getCamera().getProjectionMode() == Camera::PERSPECTIVE)
+			{
+				move(Vector3(0, 0, y));
+			}
+			else
+			{
+				float scale = std::max(0.05, 1.-y);
+	
+				gl_renderer_->setOrthographicZoom(gl_renderer_->getOrthographicZoom() * scale);
+				gl_renderer_->initPerspective();
+
+				updateGL();
+			}
 		}
 
 
@@ -2259,6 +2269,16 @@ namespace BALL
 			else if (mode == MOVE__MODE) 		moveMode_();
 		}
 
+		void Scene::projectionModeChanged()
+		{
+			for (Position i=0; i<renderers_.size(); ++i)
+			{
+				renderers_[i].projectionModeChanged();
+			}
+
+			updateGL();
+		}
+
 		void Scene::rotateMode_()
 		{
 			if (current_mode_ == ROTATE__MODE) return;
@@ -2659,10 +2679,7 @@ namespace BALL
 			gl_renderer_->setStereoMode(GLRenderer::NO_STEREO);
 			gl_renderer_->setSize(width(), height());
 
-			glMatrixMode(GL_PROJECTION);
-			glLoadIdentity();
 			gl_renderer_->initPerspective();
-			glMatrixMode(GL_MODELVIEW);
 
 			setFullScreen(false);
 		}
