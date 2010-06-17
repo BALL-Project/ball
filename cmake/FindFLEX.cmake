@@ -1,7 +1,11 @@
 # - Find flex executable and provides a macro to generate custom build rules
+#
 # The module defines the following variables:
 #  FLEX_FOUND - true is flex executable is found
+#  FLEX_EXECUTABLE - the path to the flex executable
 #  FLEX_VERSION - the version of flex
+#  FLEX_LIBRARIES - The flex libraries
+#
 # If flex is found on the system, the module provides the macro:
 #  FLEX_TARGET(Name FlexInput FlexOutput [COMPILE_FLAGS <string>])
 # which creates a custom command  to generate the <FlexOutput> file from
@@ -22,52 +26,47 @@
 # where  <FlexTarget>  and <BisonTarget>  are  the  first parameters  of
 # respectively FLEX_TARGET and BISON_TARGET macros.
 #
-# Example:
-#  FIND_PACKAGE(BISON)
-#  FIND_PACKAGE(FLEX)
-#  BISON_TARGET(MyParser parser.y ${PROJECT_BINARY_DIR}/parser.cpp
-#  FLEX_TARGET(MyScanner lexer.l ${PROJECT_BINARY_DIR}/lexer.cpp)
-#  ADD_FLEX_BISON_DEPENDENCY(MyScanner MyParser)
+#  ====================================================================
+#  Example:
 #
-
-# Copyright (c) 2006, Tristan Carel
-# All rights reserved.
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are met:
+#   find_package(BISON)
+#   find_package(FLEX)
 #
-#     * Redistributions of source code must retain the above copyright
-#       notice, this list of conditions and the following disclaimer.
-#     * Redistributions in binary form must reproduce the above copyright
-#       notice, this list of conditions and the following disclaimer in the
-#       documentation and/or other materials provided with the distribution.
-#     * Neither the name of the University of California, Berkeley nor the
-#       names of its contributors may be used to endorse or promote products
-#       derived from this software without specific prior written permission.
+#   BISON_TARGET(MyParser parser.y ${CMAKE_CURRENT_BINARY_DIR}/parser.cpp
+#   FLEX_TARGET(MyScanner lexer.l  ${CMAKE_CURRENT_BIANRY_DIR}/lexer.cpp)
+#   ADD_FLEX_BISON_DEPENDENCY(MyScanner MyParser)
 #
-# THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND ANY
-# EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-# DISCLAIMED. IN NO EVENT SHALL THE REGENTS AND CONTRIBUTORS BE LIABLE FOR ANY
-# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#   include_directories(${CMAKE_CURRENT_BINARY_DIR})
+#   add_executable(Foo
+#      Foo.cc
+#      ${BISON_MyParser_OUTPUTS}
+#      ${FLEX_MyScanner_OUTPUTS}
+#   )
+#  ====================================================================
 
-# $Id:: FindFLEX.cmake 3 2006-11-03 02:42:02Z ken                             $
-
-SET(FLEX_FOUND FALSE)
+#=============================================================================
+# Copyright 2009 Kitware, Inc.
+# Copyright 2006 Tristan Carel
+#
+# Distributed under the OSI-approved BSD License (the "License");
+# see accompanying file Copyright.txt for details.
+#
+# This software is distributed WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the License for more information.
+#=============================================================================
+# (To distributed this file outside of CMake, substitute the full
+#  License text for the above reference.)
 
 FIND_PROGRAM(FLEX_EXECUTABLE flex DOC "path to the flex executable")
 MARK_AS_ADVANCED(FLEX_EXECUTABLE)
 
 FIND_LIBRARY(FL_LIBRARY NAMES fl
-  PATHS /usr/lib DOC "path to the fl library")
+  DOC "path to the fl library")
+MARK_AS_ADVANCED(FL_LIBRARY)
 SET(FLEX_LIBRARIES ${FL_LIBRARY})
 
 IF(FLEX_EXECUTABLE)
-  SET(FLEX_FOUND TRUE)
 
   EXECUTE_PROCESS(COMMAND ${FLEX_EXECUTABLE} --version
     OUTPUT_VARIABLE FLEX_version_output
@@ -76,25 +75,30 @@ IF(FLEX_EXECUTABLE)
     OUTPUT_STRIP_TRAILING_WHITESPACE)
   IF(NOT ${FLEX_version_result} EQUAL 0)
     MESSAGE(SEND_ERROR "Command \"${FLEX_EXECUTABLE} --version\" failed with output:\n${FLEX_version_error}")
-  ELSE(NOT ${FLEX_version_result} EQUAL 0)
+  ELSE()
     STRING(REGEX REPLACE "^flex (.*)$" "\\1"
       FLEX_VERSION "${FLEX_version_output}")
-  ENDIF(NOT ${FLEX_version_result} EQUAL 0)
+  ENDIF()
 
+  #============================================================
+  # FLEX_TARGET (public macro)
+  #============================================================
+  #
   MACRO(FLEX_TARGET Name Input Output)
     SET(FLEX_TARGET_usage "FLEX_TARGET(<Name> <Input> <Output> [COMPILE_FLAGS <string>]")
     IF(${ARGC} GREATER 3)
       IF(${ARGC} EQUAL 5)
-	IF("${ARGV3}" STREQUAL "COMPILE_FLAGS")
-	  SET(FLEX_EXECUTABLE_opts  "${ARGV4}")
-	  SEPARATE_ARGUMENTS(FLEX_EXECUTABLE_opts)
-	ELSE("${ARGV3}" STREQUAL "COMPILE_FLAGS")
-	  MESSAGE(SEND_ERROR ${FLEX_TARGET_usage})
-	ENDIF("${ARGV3}" STREQUAL "COMPILE_FLAGS")
-      ELSE(${ARGC} EQUAL 5)
-	MESSAGE(SEND_ERROR ${FLEX_TARGET_usage})
-      ENDIF(${ARGC} EQUAL 5)
-    ENDIF(${ARGC} GREATER 3)
+        IF("${ARGV3}" STREQUAL "COMPILE_FLAGS")
+          SET(FLEX_EXECUTABLE_opts  "${ARGV4}")
+          SEPARATE_ARGUMENTS(FLEX_EXECUTABLE_opts)
+        ELSE()
+          MESSAGE(SEND_ERROR ${FLEX_TARGET_usage})
+        ENDIF()
+      ELSE()
+        MESSAGE(SEND_ERROR ${FLEX_TARGET_usage})
+      ENDIF()
+    ENDIF()
+
     ADD_CUSTOM_COMMAND(OUTPUT ${Output}
       COMMAND ${FLEX_EXECUTABLE}
       ARGS ${FLEX_EXECUTABLE_opts} -o${Output} ${Input}
@@ -107,29 +111,31 @@ IF(FLEX_EXECUTABLE)
     SET(FLEX_${Name}_INPUT ${Input})
     SET(FLEX_${Name}_COMPILE_FLAGS ${FLEX_EXECUTABLE_opts})
   ENDMACRO(FLEX_TARGET)
+  #============================================================
 
+
+  #============================================================
+  # ADD_FLEX_BISON_DEPENDENCY (public macro)
+  #============================================================
+  #
   MACRO(ADD_FLEX_BISON_DEPENDENCY FlexTarget BisonTarget)
+
     IF(NOT FLEX_${FlexTarget}_OUTPUTS)
       MESSAGE(SEND_ERROR "Flex target `${FlexTarget}' does not exists.")
-    ENDIF(NOT FLEX_${FlexTarget}_OUTPUTS)
+    ENDIF()
+
     IF(NOT BISON_${BisonTarget}_OUTPUT_HEADER)
       MESSAGE(SEND_ERROR "Bison target `${BisonTarget}' does not exists.")
-    ENDIF(NOT BISON_${BisonTarget}_OUTPUT_HEADER)
+    ENDIF()
 
     SET_SOURCE_FILES_PROPERTIES(${FLEX_${FlexTarget}_OUTPUTS}
       PROPERTIES OBJECT_DEPENDS ${BISON_${BisonTarget}_OUTPUT_HEADER})
   ENDMACRO(ADD_FLEX_BISON_DEPENDENCY)
+  #============================================================
 
 ENDIF(FLEX_EXECUTABLE)
 
-IF(NOT FLEX_FOUND)
-  IF(NOT FLEX_FIND_QUIETLY)
-    MESSAGE(STATUS "FLEX was not found.")
-  ELSE(NOT FLEX_FIND_QUIETLY)
-    IF(FLEX_FIND_REQUIRED)
-      MESSAGE(FATAL_ERROR "FLEX was not found.")
-    ENDIF(FLEX_FIND_REQUIRED)
-  ENDIF(NOT FLEX_FIND_QUIETLY)
-ENDIF(NOT FLEX_FOUND)
+INCLUDE(FindPackageHandleStandardArgs)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(FLEX DEFAULT_MSG FLEX_EXECUTABLE)
 
 # FindFLEX.cmake ends here
