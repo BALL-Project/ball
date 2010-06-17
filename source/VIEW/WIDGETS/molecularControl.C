@@ -329,6 +329,7 @@ namespace BALL
 			{
 				NewSelectionMessage* nsm = (NewSelectionMessage*) message;
 				setSelection_(true, nsm->openItems());
+				highlightSelection();
 				return true;
 			}
 
