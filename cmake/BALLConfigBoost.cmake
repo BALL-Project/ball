@@ -1,5 +1,9 @@
-SET(BALL_BOOST_COMPONENTS system thread iostreams asio)
-FIND_PACKAGE(Boost COMPONENTS ${BALL_BOOST_COMPONENTS} QUIET)
+SET(BALL_BOOST_COMPONENTS system thread iostreams)
+SET(Boost_USE_STATIC_LIBS ON)
+SET(Boost_ADDITIONAL_VERSIONS "1.39" "1.39.0" "1.40" "1.40.0" "1.41" "1.41.0"
+	"1.42" "1.42.0" "1.43" "1.43.0")
+SET(Boost_DETAILED_FAILURE_MSG ON)
+FIND_PACKAGE(Boost COMPONENTS ${BALL_BOOST_COMPONENTS})
 
 IF (NOT Boost_VERSION) ## we cannot test for Boost_FOUND since this requires all components
 	MESSAGE(SEND_ERROR "Could not find a suitable boost installation! This is a required dependency for BALL! Try setting BOOST_ROOT in ccmake!")
