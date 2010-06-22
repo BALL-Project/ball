@@ -156,7 +156,7 @@ namespace BALL
 		bool has(const String& fragment_name) const;
 
 		///
-		const std::vector<Residue*>&	getFragments() { return fragments_;}
+		const std::vector<Residue*>& getFragments() const { return fragments_;}
 		
 		/**	Return a fragment.
 		*/
