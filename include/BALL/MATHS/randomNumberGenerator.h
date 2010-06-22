@@ -103,7 +103,7 @@ namespace BALL
 			double randomDouble(double lower, double upper);
 
 			///
-			bool isValid()
+			bool isValid() const
 				
 			{
 				return(valid_);
