@@ -55,7 +55,7 @@ namespace BALL
 			{
 			}
 
-			bool operator == (const SingleValues& rhs)
+			bool operator == (const SingleValues& rhs) const
 			{
 				return ((phase == rhs.phase) && (V == rhs.V) 
 								&& (f == rhs.f) && (n == rhs.n));
