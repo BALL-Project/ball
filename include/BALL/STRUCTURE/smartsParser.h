@@ -537,7 +537,7 @@ namespace BALL
 				void setComponentNumber(int no) { component_no_ = no; }
 
 				/// returns the component number
-				Size getComponentNumber() { return component_no_; }
+				Size getComponentNumber() const { return component_no_; }
 			
 				/// returns the associated SPAtom
 				SPAtom* getSPAtom() const { return sp_atom_; }
