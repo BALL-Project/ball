@@ -15,10 +15,8 @@ class AminoAcidDescriptor
 
 	 AminoAcidDescriptor();
 	 
-	 AminoAcidDescriptor(const String& , const Angle&, const Angle& , const Angle&);
-
-//	 AminoAcidDescriptor(const String& , const Angle& =Angle(-47.,false),
-//					 const Angle& = Angle(-58.,false), const Angle& = Angle(180.,false));
+	 AminoAcidDescriptor(const String& , const Angle& =Angle(-47.,false),
+					 const Angle& = Angle(-58.,false), const Angle& = Angle(180.,false));
 
 	 virtual ~AminoAcidDescriptor();
 	 
@@ -60,21 +58,21 @@ class PeptideBuilder
 
 	   PeptideBuilder();
 	   
-	   //PeptideBuilder(const std::vector<AminoAcidDescriptor>& sequence);
+//	   PeptideBuilder(const vector<AminoAcidDescriptor>& sequence);
 
-		 PeptideBuilder(const String&, const Angle&, const Angle&, const Angle&);
+		 //PeptideBuilder(const String&, const Angle&, const Angle&, const Angle&);
 	   
-		 //PeptideBuilder(const String&, const Angle& = Angle(-47., false),
-			//							const Angle& = Angle(-58., false), const Angle& = Angle(180., false));
+		 PeptideBuilder(const String&, const Angle& = Angle(-47., false),
+									const Angle& = Angle(-58., false), const Angle& = Angle(180., false));
 	   
 	   PeptideBuilder(const PeptideBuilder&);
 
 	   virtual ~PeptideBuilder();
 	   
-	   void addAminoAcid(const String&, const Angle&, const Angle&, const Angle&);
+	   //void addAminoAcid(const String&, const Angle&, const Angle&, const Angle&);
 	   
-	   //void addAminoAcid(const String&, const Angle& =Angle(-47.,false),
-			//     const Angle& =Angle(-58.,false), const Angle& =Angle(180.,false));
+	   void addAminoAcid(const String&, const Angle& =Angle(-47.,false),
+			     const Angle& =Angle(-58.,false), const Angle& =Angle(180.,false));
 	   
 	   void addAminoAcid(const AminoAcidDescriptor&);
 
