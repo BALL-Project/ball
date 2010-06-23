@@ -25,6 +25,9 @@
 #	include <BALL/MATHS/vector3.h>
 #endif
 
+#include <deque>
+#include <algorithm>
+
 namespace BALL 
 {
 	/**	\defgroup GenericHash3D Three-dimensional Hash Grid
@@ -172,28 +175,6 @@ namespace BALL
 		/** @name	External Iterators 
 		*/
 		//@{
-
-		/// ?????
-		class DataItem
-		{
-			public:
-		
-			DataItem(const Item& item, DataItem* next)
-			:	item_(item),
-				previous_(0),
-				next_(next)
-			{
-				if (next_ != 0)
-				{
-					next_->previous_ = this;
-				}
-			}
-
-			Item 			item_;
-			DataItem* previous_;
-			DataItem* next_;
-		};
-
 		typedef Position BoxIteratorPosition;
 		
 		class BoxIteratorTraits
@@ -364,9 +345,9 @@ namespace BALL
 		}
 
 
-		typedef DataItem* DataIteratorPosition;
+		typedef typename std::deque<Item>::iterator DataIteratorPosition;
 		
-	class DataIteratorTraits
+		class DataIteratorTraits
 		{
 			public:
 
@@ -376,13 +357,13 @@ namespace BALL
 
 			DataIteratorTraits()
 			:	bound_(0),
-				position_(0)
+				position_()
 			{
 			}
 				
 			DataIteratorTraits(const HashGridBox3& box)
 			:	bound_((HashGridBox3 *)&box),
-				position_(0)
+				position_(bound_->data.begin())
 			{
 			}
 				
@@ -436,48 +417,48 @@ namespace BALL
 
 			bool isValid() const
 			{
-				return (bound_ != 0 && position_ != 0);
+				return (bound_ != 0 && position_ != bound_->data.end());
 			}
 
 			void invalidate()
 			{
 				bound_ = 0;
-				position_ = 0;
+				position_ = bound_->data.end();
 			}
 
 			void toBegin()
 			{
-				position_ = bound_->first_item_;
+				position_ = bound_->data.begin();
 			}
 
 			bool isBegin() const
 			{
-				return (position_ == bound_->first_item_);
+				return (position_ == bound_->data.begin());
 			}
 
 			void toEnd()
 			{
-				position_ = 0;
+				position_ = bound_->data.end();
 			}
 
 			bool isEnd() const
 			{
-				return (position_ == 0);
+				return (position_ == bound_->data.end());
 			}
 
 			Item& getData()
 			{
-				return position_->item_;
+				return *position_;
 			}
 
 			const Item& getData() const
 			{
-				return position_->item_;
+				return *position_;
 			}
 
 			void forward()
 			{
-				position_ = position_->next_;
+				++position_;
 			}
 	
 			private:
@@ -535,19 +516,19 @@ namespace BALL
 		HashGridBox3* neighbours[27];
 		//  private:
 	
-		DataItem* 					first_item_;
+		std::deque<Item> data;
 	};
 
 	template<typename Item>  
 	HashGridBox3<Item>::HashGridBox3()
-		:	first_item_(0)
+		: data()
 	{
 		memset(neighbours, 0, 27*sizeof(HashGridBox3*));
 	}
 
 	template<typename Item>  
 	HashGridBox3<Item>::HashGridBox3(const HashGridBox3<Item>& box, bool deep)
-		:	first_item_(0)
+		: data(box.data)
 	{
 		set(box, deep);
 	}
@@ -561,11 +542,7 @@ namespace BALL
 	template<typename Item>  
 	void HashGridBox3<Item>::clear()
 	{
-		for (DataItem* next_item = 0; first_item_ != 0; first_item_ = next_item)
-		{
-			next_item = first_item_->next_;
-			delete first_item_;
-		}
+		data.clear();
 	}
 
 	template<typename Item>  
@@ -576,7 +553,7 @@ namespace BALL
 	}
 
 	template<typename Item>  
-	void HashGridBox3<Item>::set(const HashGridBox3<Item>& box,  bool deep)
+	void HashGridBox3<Item>::set(const HashGridBox3<Item>& /*box*/,  bool /*deep*/)
 		throw(Exception::NotImplemented)
   { 
 		// ????? - not implemented
@@ -596,12 +573,11 @@ namespace BALL
 	template<typename Item>  
 	Item* HashGridBox3<Item>::find(const Item& item)
 	{
-		for (DataItem* item_ptr= first_item_; item_ptr != 0; item_ptr = item_ptr->next_)
+		typename std::deque<Item>::iterator found = std::find(data.begin(), data.end(), item);
+
+		if (found != data.end())
 		{
-			if (item_ptr->item_ == item)
-			{
-				return &(item_ptr->item_);
-			}
+			return &(*found);
 		}
 
 		return 0;
@@ -617,89 +593,47 @@ namespace BALL
 	template<typename Item>  
 	Size HashGridBox3<Item>::getSize() const
 	{
-		Size size = 0;
-
-		// count all items in the box
-		for (const DataItem* item = first_item_; item != 0; item = item->next_, size++) {};
-		
-		return size;
+		return data.size();
 	}
 
 	template<typename Item>  
 	BALL_INLINE 
 	void HashGridBox3<Item>::insert(const Item& item)
 	{
-		first_item_ = new DataItem(item, first_item_);
+		data.push_back(item);
 	}
 
 	template<typename Item>  
 	bool HashGridBox3<Item>::remove(const Item& item)
 	{
-		for (DataItem* item_ptr = first_item_; item_ptr != 0; item_ptr = item_ptr->next_)
+		typename std::deque<Item>::iterator pos = std::find(data.begin(), data.end(), item);
+
+		if (pos != data.end())
 		{
-			if (item_ptr->item_ == item)
-			{
-				if (item_ptr == first_item_)
-				{
-					first_item_ = first_item_->next_;
-				}
-			
-				if (item_ptr->next_ != 0)
-				{
-					item_ptr->next_->previous_ = item_ptr->previous_;
-				}
-			
-				if (item_ptr->previous_ != 0)
-				{
-					item_ptr->previous_->next_ = item_ptr->next_;
-				}
-			
-				delete item_ptr;
-				
-				return true;
-			}
+			data.erase(pos);
+
+			return true;
 		}
-		
+
 		return false;
 	}
 
 	template<typename Item>  
 	bool HashGridBox3<Item>::removeAll(const Item& item)
 	{
-		bool found = false;
-		DataItem* next_item = 0;
-		DataItem* item_ptr = first_item_;
-		
-		while(item_ptr != 0)
-		{
-			next_item = item_ptr->next_;
+		bool result = false;
 
-			if (item_ptr->item_ == item)
-			{
-				if (item_ptr == first_item_)
-				{
-					first_item_ = first_item_->next_;
-				}
-				
-				if (item_ptr->next_ != 0)
-				{
-					item_ptr->next_->previous_ = item_ptr->previous_;
-				}
-			
-				if (item_ptr->previous_ != 0)
-				{
-					item_ptr->previous_->next_ = item_ptr->next_;
-				}
-			
-				delete item_ptr;
-				
-				found = true;
-			}
-			
-			item_ptr = next_item;
+		typename std::deque<Item>::iterator pos = std::find(data.begin(), data.end(), item);
+
+		while (pos != data.end())
+		{
+			data.erase(pos);
+			pos = std::find(data.begin(), data.end(), item);
+
+			result = true;
 		}
 
-		return found;
+		return result;
 	}
 
 	template <typename Item>
@@ -712,18 +646,7 @@ namespace BALL
 	template<typename Item>  
 	bool HashGridBox3<Item>::operator == (const HashGridBox3<Item>& box) const
 	{
-		const DataItem* a = first_item_;
-		const DataItem* b = box.first_item_;
-		
-		for (; a != 0 && b != 0; a = a->next_, b = b->next_)
-		{
-			if (a->item_ != b->item_)
-			{
-				return false;
-			}
-		}
-		
-		return (a == b);
+		return (data == box.data);
 	}
 
 	template<typename Item>  
@@ -737,35 +660,21 @@ namespace BALL
 	BALL_INLINE 
 	bool HashGridBox3<Item>::has(const Item& item) const
 	{
-		return (find(item) != 0);
+		return (std::find(data.begin(), data.end(), item) != data.end());
 	}
 
 	template<typename Item>  
 	BALL_INLINE 
 	bool HashGridBox3<Item>::isEmpty() const
 	{
-		return (first_item_ == 0);
+		return data.empty();
 	}
 
 	template<typename Item>  
 	bool HashGridBox3<Item>::isValid() const
 	{
-		Size size = 0;
-		DataItem* item = 0;
-		
-		for (item = first_item_; item != 0; item = item->next_)
-		{
-			++size;
-			
-			if (item->next_ == 0)
-			{
-				break;
-			}
-		}
-		
-		for (; item != 0; item = item->previous_, --size) {};
-		
-		return (size == 0);
+		// this is no longer required...
+		return true;
 	}
 
 	template<typename Item>  
@@ -780,10 +689,10 @@ namespace BALL
 		
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  data:" << std::endl;
-		for (DataItem *item = first_item_; item != 0; item = item->next_)
+		for (typename std::deque<Item>::const_iterator d_it = data.begin(); d_it != data.end(); ++d_it)
 		{
 			BALL_DUMP_DEPTH(s, depth);
-			s << "    " << item->item_ << std::endl;
+			s << "    " << *d_it << std::endl;
 		}
 		
 		BALL_DUMP_DEPTH(s, depth);
@@ -807,9 +716,9 @@ namespace BALL
 
 		Processor::Result result;
 			
-		for (DataItem *item = first_item_; item != 0; item = item->next_)
+		for (typename std::deque<Item>::iterator d_it = data.begin(); d_it != data.end(); ++d_it)
 		{
-			result = processor(item->item_);
+			result = processor(*d_it);
 
 			if (result <= Processor::BREAK)
 			{
@@ -1433,11 +1342,11 @@ namespace BALL
 		
 		for (; sourcebox < endbox; ++sourcebox, ++targetbox)
 		{
-			if (sourcebox->isEmpty() == false)
+			if (!sourcebox->isEmpty())
 			{
-				for (typename HashGridBox3<Item>::DataItem* item  = sourcebox->first_item_; item != 0; item = item->next_)
+				for (typename HashGridBox3<Item>::ConstDataIterator item = sourcebox->beginData(); +item; ++item)
 				{
-					targetbox->insert(item->item_);
+					targetbox->insert(*item);
 				}
 			}
 		}
@@ -1845,9 +1754,9 @@ namespace BALL
 		for (Position i=0; i<27; ++i)
 		{
 			HashGridBox3<Item>* box = &box_[i];
-			for (typename HashGridBox3<Item>::DataItem *item = box->first_item_; item != 0; item = item->next_)
+			for (typename HashGridBox3<Item>::DataIterator *item = box->beginData(); +item; ++item)
 			{
-				result = processor(item->item_);
+				result = processor(*item);
 
 				if (result <= Processor::BREAK)
 				{

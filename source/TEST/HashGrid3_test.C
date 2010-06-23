@@ -246,7 +246,7 @@ CHECK(calculateMinSpacing)
 	float spacing = HashGrid3<float>::calculateMinSpacing(memory, size);
  	STATUS("spacing: " << spacing)	
 	HashGrid3<float> hg(Vector3(0.0), size, spacing);
-	TEST_EQUAL((spacing < 30.), true)
+	TEST_EQUAL((spacing < 35.), true)
 RESULT
 
 /////////////////////////////////////////////////////////////
