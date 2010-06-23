@@ -24,6 +24,7 @@
 
 %Include copying.sip
 
+%Include deque.sip
 %Include list.sip
 %Include vector.sip
 %Include pair.sip
