@@ -282,6 +282,7 @@
 %Include reconstructFragmentProcessor.sip
 %Include geometricProperties.sip
 %Include geometricTransformations.sip
+%Include peptides.sip
 %Include numericalSAS.sip 
 %Include residueChecker.sip
 %Include RMSDMinimizer.sip
