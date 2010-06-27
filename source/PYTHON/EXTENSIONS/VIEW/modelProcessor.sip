@@ -8,8 +8,10 @@ class ModelProcessor
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/MODELS/modelProcessor.h>
+	#include <list>
 	using namespace BALL;
 	using namespace BALL::VIEW;
+	using namespace std;
 %End
   public:
 
@@ -21,8 +23,8 @@ class ModelProcessor
 	virtual void clearComposites() throw();
 	//virtual void dump(std::ostream& /*s = std::cout*/, Size /*depth = 0*/) const throw();
 
-	GeometricObjectList& getGeometricObjects() throw();
-	// const GeometricObjectList& getGeometricObjects() const throw();
+	list<GeometricObject*>& getGeometricObjects() throw();
+	// const list<GeometricObject*>& getGeometricObjects() const throw();
 
 	void setDrawingPrecision(Index) throw();
 	Index getDrawingPrecision() const throw();

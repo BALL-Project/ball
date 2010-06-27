@@ -8,12 +8,14 @@ class RepresentationManager
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/KERNEL/representationManager.h>
+	#include <list>
 	using namespace BALL;
 	using namespace VIEW;
+	using namespace std;
 %End
   public:
   // BALL_CREATE(RepresentationManager);
-  // RepresentationList changedComposite(const Composite& /composite/) throw();
+  // list<Representation*> changedComposite(const Composite& /composite/) throw();
   
 	RepresentationManager(MainControl* = 0) throw();
   RepresentationManager(const RepresentationManager& /pm/) throw();
@@ -24,7 +26,7 @@ class RepresentationManager
   void clear() throw();
   void remove(Representation& /representation/, bool = true) throw();
   void insert(Representation& /representation/, bool = true) throw();
-  const RepresentationList& getRepresentations() const throw();
+  const list<Representation*>& getRepresentations() const throw();
   Size getNumberOfRepresentations() const throw();
   Representation* createRepresentation() throw();
   bool has(const Representation& /representation/) const throw();
@@ -34,8 +36,8 @@ class RepresentationManager
   // RepresentationsConstIterator end() const throw();
   // RepresentationsIterator begin() throw();
   // RepresentationsIterator end() throw();
-	RepresentationList removedComposite(const Composite&, bool = true) throw();
-  RepresentationList getRepresentationsOf(const Composite&) throw();
+	list<Representation*> removedComposite(const Composite&, bool = true) throw();
+  list<Representation*> getRepresentationsOf(const Composite&) throw();
 	void rebuildAllRepresentations() throw();
 	//const vector<ClippingPlane*>& getClippingPlanes() const;
 	bool removeClippingPlane(ClippingPlane*);

@@ -9,8 +9,10 @@ class Representation
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/KERNEL/representation.h>
+	#include <list>
 	using namespace BALL;
 	using namespace BALL::VIEW;
+	using namespace std;
 %End
   public:
 	// BALL_CREATE(Representation);
@@ -41,10 +43,10 @@ class Representation
 	Size getTransparency() const throw();
 	void setTransparency(Size /value/) throw();
 
-	GeometricObjectList& getGeometricObjects() throw();
-	// const GeometricObjectList& getGeometricObjects() const throw();
+	list<GeometricObject*>& getGeometricObjects() throw();
+	// const list<GeometricObject*>& getGeometricObjects() const throw();
 
-	void setGeometricObjects(GeometricObjectList&) throw();
+	void setGeometricObjects(list<GeometricObject*>&) throw();
 	void insert(GeometricObject& /Transfer/) throw();
 
 	PyCompositeList getComposites() const throw();

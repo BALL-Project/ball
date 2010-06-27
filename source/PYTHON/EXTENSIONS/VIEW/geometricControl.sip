@@ -10,8 +10,10 @@ class GeometricControl
 %TypeHeaderCode
 	#include <BALL/VIEW/WIDGETS/geometricControl.h>
 	#include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
+	#include <list>
 	using namespace BALL;
 	using namespace BALL::VIEW;
+	using namespace std;
 %End
   public:
 
@@ -21,7 +23,7 @@ class GeometricControl
 	GeometricControl() throw();
   ~GeometricControl() throw();
 
-	RepresentationList getHighlightedRepresentations() const throw();
+	list<Representation*> getHighlightedRepresentations() const throw();
 			
 	virtual void selectAtoms();
 //	virtual void selectedRepresentation(Representation& representation, bool state);

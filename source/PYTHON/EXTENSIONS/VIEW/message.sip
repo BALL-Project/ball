@@ -8,8 +8,10 @@ class Message
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/KERNEL/message.h>
+	#include <list>
 	using namespace BALL;
 	using namespace BALL::VIEW;
+	using namespace std;
 %End
   public:
 
@@ -164,8 +166,8 @@ class GeometricObjectSelectionMessage
 	public:
 	GeometricObjectSelectionMessage() throw();
 	//virtual ~GeometricObjectSelectionMessage() throw();
-	void setSelection(const GeometricObjectList& ) throw();
-	const GeometricObjectList& getSelection() const throw();
+	void setSelection(const list<GeometricObject*>& ) throw();
+	const list<GeometricObject*>& getSelection() const throw();
 	void setSelected(bool ) throw();
 	bool isSelected() const throw();
 };

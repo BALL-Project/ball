@@ -13,7 +13,6 @@
 
 %Import BALL/BALLCore.sip
 
-%Include pyLists.sip
 %Include pyDatasetVector.sip
 %Include pyCompositeList.sip
 
