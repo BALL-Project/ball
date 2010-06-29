@@ -95,6 +95,12 @@ namespace BALL
 		*/
 		BALL_EXPORT OneLetterAASequence GetSequence(const Chain& chain);
 
+		/**	Get amino acid sequence from an iterator.
+				This method iterates over all residues starting with it, calls
+				 \link OneLetterCode OneLetterCode \endlink  for each of the residue names, and returns
+				the concatenation of all results.
+		*/
+		BALL_EXPORT OneLetterAASequence GetSequence(ResidueConstIterator it);
 		//@}
 	 
 //////////////////////////////////////////////////////////////////////////

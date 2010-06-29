@@ -61,6 +61,5 @@ namespace Peptides
 
 	};
 
-
 };
 

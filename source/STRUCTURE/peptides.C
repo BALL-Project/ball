@@ -88,24 +88,18 @@ namespace BALL
 
 		OneLetterAASequence GetSequence(const Protein& protein)
 		{
-			// iterate over all residues in the protein
-			OneLetterAASequence tmp;
-			ResidueConstIterator it(protein.beginResidue());
-			for (; +it; ++it)
-			{
-				//...and add the corresponding one-letter code to the sequence
-				tmp += OneLetterCode(it->getName());
-			}
-
-			// return the sequence
-			return tmp;
+			return GetSequence(protein.beginResidue());
 		}
-		
+
 		OneLetterAASequence GetSequence(const Chain& chain)
+		{
+			return GetSequence(chain.beginResidue());
+		}
+
+		OneLetterAASequence GetSequence(ResidueConstIterator it)
 		{
 			// iterate over all residues in the protein
 			OneLetterAASequence tmp;
-			ResidueConstIterator it(chain.beginResidue());
 			for (; +it; ++it)
 			{
 				//...and add the corresponding one-letter code to the sequence
@@ -115,7 +109,6 @@ namespace BALL
 			// return the sequence
 			return tmp;
 		}
-			
 
 		/***************************************
 		 *          Name Converter class
