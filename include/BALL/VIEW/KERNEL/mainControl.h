@@ -904,6 +904,7 @@ namespace BALL
 			Mutex 							composites_locked_mutex_;
 
 			QAction* stop_simulation_action_;
+			QAction* fullscreen_action_;
 			QAction* complement_selection_action_;
 			QAction* clear_selection_action_;
 			QAction* open_action_;
@@ -914,7 +915,6 @@ namespace BALL
 
 			QAction* last_highlighted_menu_entry_;
 			HashMap<Position, QMenu*> id_to_menu_;
-			bool 					fullscreen_;
 			QPoint 				last_point_;
 			QSize 				last_size_;
 			QByteArray 		last_state_;

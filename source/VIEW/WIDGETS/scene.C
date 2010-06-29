@@ -1546,14 +1546,6 @@ namespace BALL
 			toolbar_actions_view_controls_.push_back(move_action_);
 			mode_group_->addAction(move_action_);
 
-			description = "Shortcut|ToggleFullscreen";
-			fullscreen_action_ = new QAction("Fullscreen", this);
-			fullscreen_action_->setObjectName(fullscreen_action_->text());
-			connect(fullscreen_action_, SIGNAL(triggered()), getMainControl(), SLOT(toggleFullScreen()));
-			fullscreen_action_->setIcon(loader.getIcon("actions/view-fullscreen"));
-			toolbar_actions_view_controls_.push_back(fullscreen_action_);
-			shortcut_registry->registerShortcut(description, fullscreen_action_);
-
 			description = "Shortcut|ShowRuler";
 			switch_grid_ = new QAction("Show ruler", this);
 			switch_grid_->setObjectName(switch_grid_->text());
@@ -2995,7 +2987,6 @@ return;
 			 if (event->mimeData()->hasUrls()) event->acceptProposedAction();
 		}
 
-
 		bool Scene::stereoBufferSupportTest()
 		{
 			// TODO: push into renderTarget!
@@ -3055,7 +3046,7 @@ return;
 		void Scene::addToolBarEntries(QToolBar* tb)
 		{
 			toolbar_view_controls_->addActions(toolbar_actions_view_controls_);
-			toolbar_view_controls_->insertSeparator(fullscreen_action_);
+			toolbar_view_controls_->insertSeparator(switch_grid_);
 			getMainControl()->addToolBar(Qt::TopToolBarArea, toolbar_view_controls_);
 			ModularWidget::addToolBarEntries(tb);
 			getMainControl()->initPopupMenu(MainControl::WINDOWS)->addAction(toolbar_view_controls_->toggleViewAction());	

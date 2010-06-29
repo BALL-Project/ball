@@ -91,9 +91,11 @@ namespace BALL
 		
 		// Display Menu
 		String description = "Shortcut|Display|Toggle_Fullscreen";
-		insertMenuEntry(MainControl::DISPLAY, "Toggle Fullscreen", this, 
-										SLOT(toggleFullScreen()), description,
-										QKeySequence("Alt+X"));
+		fullscreen_action_ = insertMenuEntry(MainControl::DISPLAY, "Toggle Fullscreen", this,
+		                      SLOT(toggleFullScreen()), description,
+		                      QKeySequence("Alt+X"));
+
+		fullscreen_action_->setIcon(IconLoader::instance().getIcon("actions/view-fullscreen"));
 
 		insertPopupMenuSeparator(DISPLAY);
 		initPopupMenu(DISPLAY_VIEWPOINT);
@@ -325,6 +327,7 @@ namespace BALL
 		DownloadElectronDensity::getInstance(0)->addToolBarEntries(tb);
 		PubChemDialog::getInstance(0)->addToolBarEntries(tb);
 		UndoManagerDialog::getInstance(0)->addToolBarEntries(tb);
+		tb->addAction(fullscreen_action_);
 		Path path;
 
 		IconLoader& loader = IconLoader::instance();
@@ -381,6 +384,18 @@ namespace BALL
 			about.BALLView_logo_label->setPixmap(QPixmap(logo_path.c_str()));
 
 		w.exec(); 
+	}
+
+	void Mainframe::changeEvent(QEvent* evt)
+	{
+		if(evt->type() == QEvent::WindowStateChange) {
+			if (isFullScreen())
+			{
+				fullscreen_action_->setIcon(IconLoader::instance().getIcon("actions/view-restore"));
+			} else {
+				fullscreen_action_->setIcon(IconLoader::instance().getIcon("actions/view-fullscreen"));
+			}
+		}
 	}
 
 }

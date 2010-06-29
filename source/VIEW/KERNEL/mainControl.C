@@ -132,8 +132,7 @@ namespace BALL
 				open_action_(0),
 				save_project_action_(0),
 				preferences_action_(0),
-				delete_action_(0),
-				fullscreen_(false)
+				delete_action_(0)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new MainControl " << this << std::endl;
@@ -2122,32 +2121,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 	void MainControl::toggleFullScreen()
 	{
-		if (!fullscreen_)
-		{
-			last_state_ = saveState();
-			// This call is needed because showFullScreen won't work
-			// correctly if the widget already considers itself to be fullscreen.
-			last_size_ = size();
-			last_point_ = pos();
-			list<ModularWidget*>::iterator it = modular_widgets_.begin();
-			for (; it != modular_widgets_.end(); ++it)
-			{
-				DockWidget* widget = dynamic_cast<DockWidget*>(*it);
-				if (widget == 0) continue;
-				widget->hide();
-			}
-
-			showNormal();	
-			showFullScreen();
-		}
-		else
-		{
-			showNormal();
-			resize(last_size_.width(), last_size_.height());
-			move(last_point_);
-			restoreState(last_state_);
-		}
-		fullscreen_ = !fullscreen_;
+		setWindowState(windowState() ^ Qt::WindowFullScreen);
 	}
 
 	void MainControl::openFile(const String& file) 

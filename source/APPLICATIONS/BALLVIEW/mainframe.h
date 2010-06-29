@@ -55,8 +55,9 @@ namespace BALL
 		void howToCite();
 
 		protected:
+			void changeEvent(QEvent* evt);
 
-		Scene*				scene_;
+			Scene* scene_;
 	};
 
 } // namespace BALL
