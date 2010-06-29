@@ -166,6 +166,12 @@ IF(FFTW_FOUND)
 	INCLUDE(cmake/BALLConfigFFTW.cmake)
 ENDIF()
 
+FIND_PACKAGE(SeqAn)
+IF(SEQAN_FOUND)
+	INCLUDE_DIRECTORIES(${SEQAN_INCLUDE_PATH})
+	SET(BALL_HAS_SEQAN TRUE)
+ENDIF()
+
 #Set the default complex precision to float if the setting for this value
 #could not be determined earlier
 IF(NOT BALL_COMPLEX_PRECISION)

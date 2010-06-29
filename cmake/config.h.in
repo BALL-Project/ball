@@ -307,6 +307,9 @@
 // Glew
 #cmakedefine BALL_HAS_GLEW
 
+// SeqAn
+#cmakedefine BALL_HAS_SEQAN
+
 // MPI
 #cmakedefine BALL_HAS_MPI
 
