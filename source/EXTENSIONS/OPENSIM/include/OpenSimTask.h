@@ -27,7 +27,7 @@ namespace BALL
 				enum OpenSimTaskTypes
 				{
 					NEW_COMPOSITE,
-					CHANGED_COMPOSITE_HIERARCH,
+					CHANGED_COMPOSITE_HIERARCHY,
 					REMOVED_COMPOSITE,
 					REPRESENTATION
 				};

@@ -44,18 +44,16 @@ namespace BALL
 
 		void OpenSimReceiver::handleAsyncConnection()
 		{
-			// here I can cehck the status of the opensim client and set (server_->is_acknowledged to true ??
+			// here I can check the status of the opensim client and set (server_->is_acknowledged to true ??
 			// this should be done only once (first time connection is made)
-
 			while (connected_stream_.good() && isRunning())
 			{
 				String buffer;
 				buffer.getline(connected_stream_);
 
-				if(!buffer.isEmpty())
+				if (!buffer.isEmpty())
 				{
 					std::vector<String> split;
-
 					buffer.split(split, ";");
 
 					if (split.size() == 0)
@@ -63,8 +61,7 @@ namespace BALL
 
 					Size command_index(split[0].trim().toInt());
 
-
-					if(command_index == ACKNOWLEDGEMENT )
+					if (command_index == ACKNOWLEDGEMENT)
 					{
 						if (split.size() != 2)
 							{
@@ -80,31 +77,22 @@ namespace BALL
 						//SATURATE_FULL_WITH_HYDROGENS
 						//RUN_MINIMIZATION,CHANGE_FORCE_FIELD,ADD_MOLECULE
 
-						
-
 						rwLock_.lockForWrite();
-						
 						incomingmessage_queue_.push(split);
-						
 						rwLock_.unlock();
-
-						
 					}
-					
-					
-					
-				}else
+				}
+				else
 				{
-					Log.error() << "Damnit! An empty buffer recieved!";
+					Log.error() << "Damnit! An empty buffer recieved!" << std::endl;
 					break;
-
 				}
 			}
 		}
 		
 		void OpenSimReceiver::checkClientStatus()
 		{
-			// Todo
+			// TODO:
 			// first need to check if connection exist?
 			// Not sure how to do that
 			
@@ -112,7 +100,7 @@ namespace BALL
 
 			if (outstream.good())
 			{
-				outstream << CHECK_STATUS  << std::endl	;
+				outstream << CHECK_STATUS  << std::endl;
 			}
 		}
 
@@ -123,7 +111,6 @@ namespace BALL
 			if (outstream.good())
 			{
 				outstream << to_send << std::endl;
-
 				outstream.flush();
 			}
 		}

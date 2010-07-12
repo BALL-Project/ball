@@ -33,22 +33,25 @@ namespace BALL
 					OpenSimTask task = bvcmdplugin_->ballviewmessage_queue_.front();		
 					bvcmdplugin_->ballviewmessage_queue_.pop();	
 					
-					if(task.type == OpenSimTask::NEW_COMPOSITE)
+					if (task.type == OpenSimTask::NEW_COMPOSITE)
 					{		
 						bvcmdplugin_->handleNewComposite(task);
 					}
-					else if(task.type == OpenSimTask::CHANGED_COMPOSITE_HIERARCH) 
+					else if (task.type == OpenSimTask::CHANGED_COMPOSITE_HIERARCHY) 
 					{
-						// Dont use this 
-						//bvcmdplugin_->handleChangedComposite(message);
+						bvcmdplugin_->handleChangedComposite(task);
 					}
-					else if(task.type == OpenSimTask::REMOVED_COMPOSITE )
+					else if (task.type == OpenSimTask::REMOVED_COMPOSITE)
 					{
 						bvcmdplugin_->handleRemovedComposite(task);
 					}
-					else if(task.type == OpenSimTask::REPRESENTATION)
+					else if (task.type == OpenSimTask::REPRESENTATION)
 					{
 						bvcmdplugin_->handleRepresentation(task);
+					}
+					else
+					{
+						Log.info() << "OpenSimCommandExecutionThread::run(): Unknown task type " << task.type << ". " << __FILE__ <<  " " << __LINE__<< std::endl;
 					}
 				
 					bvcmdplugin_->pluginrwLock_.unlock();

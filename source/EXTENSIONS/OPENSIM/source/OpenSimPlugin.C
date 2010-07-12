@@ -3,7 +3,6 @@
 #include <OpenSimPlugin.h>
 #include <OpenSimPluginConfiguration.h>
 
-
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/VIEW/KERNEL/shortcutRegistry.h>
@@ -158,10 +157,10 @@ namespace BALL
 
 		void OpenSimPlugin::onNotify(Message* message)
 		{
-			// Here I need to put the messsages in a queue, lock it
+			// Here we need to put the messages in a queue, lock it
 			// then, access the queue from different thread as show below
 			// but this thread can not be created here, because everytime, 
-			// there will be more threads create a thread out side.
+			// there will be more threads create a thread outside.
 			if (RTTI::isKindOf<CompositeMessage>(*message))
 			{
 				CompositeMessage *cm = RTTI::castTo<CompositeMessage>(*message);
@@ -176,7 +175,7 @@ namespace BALL
 				}
 				else if (cm->getType() == CompositeMessage::CHANGED_COMPOSITE_HIERARCHY) 
 				{
-					task.type = OpenSimTask::CHANGED_COMPOSITE_HIERARCH;
+					task.type = OpenSimTask::CHANGED_COMPOSITE_HIERARCHY;
 					task_type_supported = true;
 				}
 				else if (cm->getType() == CompositeMessage::REMOVED_COMPOSITE)
@@ -201,7 +200,7 @@ namespace BALL
 						Handle atom_one_handle = at_it->getHandle();
 						const Atom* copy_atom_one = new Atom(*at_it, true);
 
-						if(!tmp_handle_to_atom.has(atom_one_handle) && copy_atom_one)
+						if (!tmp_handle_to_atom.has(atom_one_handle) && copy_atom_one)
 						{
 							// store the handle of original atom and map with copied atom
 							tmp_handle_to_atom[atom_one_handle]= copy_atom_one;
@@ -216,7 +215,7 @@ namespace BALL
 
 							const Atom* copy_atom_two = new Atom(*atom_two,true);
 
-							if(!tmp_handle_to_atom.has(atom_two_handle) && copy_atom_two != NULL)
+							if (!tmp_handle_to_atom.has(atom_two_handle) && copy_atom_two != NULL)
 							{
 								// store the handle of original atom and map with copied atom
 								tmp_handle_to_atom[atom_two_handle]= copy_atom_two;
@@ -226,11 +225,10 @@ namespace BALL
 
 							Handle bond_handle = -1;
 
-							if (bond != NULL)
+							if (bond)
 							{
-								//get the handle of original bond
+								// get the handle of original bond
 								bond_handle = bond->getHandle();
-
 								const Bond* copy_bond = new Bond(*bond,true);
 
 								OpenSimTask::BondStruct bondStruct;
@@ -241,7 +239,7 @@ namespace BALL
 								bondStruct.atom_one_handle = atom_one_handle;
 								bondStruct.atom_two_handle = atom_two_handle;
 
-								if (!tmp_handle_to_bond.has(bond_handle) && (bond_handle != -1))
+								if (!tmp_handle_to_bond.has(bond_handle) && (bond_handle != INVALID_HANDLE))
 								{
 									// store the handle of original bond and map with copied bond
 									tmp_handle_to_bond[bond_handle] = bondStruct;
@@ -250,11 +248,11 @@ namespace BALL
 						}
 					}
 
-					// ToDo validation if hashmap isempty?
+					// TODO: validation if hashmap is empty?
 					task.handle_to_atom_ = tmp_handle_to_atom;
 					task.handle_to_bond_ = tmp_handle_to_bond;
 
-					// finally, store the message in the queue for later processing
+					// Finally, store the message in the queue for later processing
 					pluginrwLock_.lockForWrite();
 					ballviewmessage_queue_.push(task);
 					pluginrwLock_.unlock();
@@ -277,7 +275,7 @@ namespace BALL
 							composite = *(r->getComposites().begin());
 						}
 
-						if(composite != NULL)
+						if (composite)
 						{
 							if (RTTI::isKindOf<const AtomContainer>(*composite))
 							{
@@ -291,14 +289,14 @@ namespace BALL
 									//Copy the atom's content into a new variable.
 									const Atom* atom_one = &*at_it;
 
-									if(atom_one != NULL)
+									if (atom_one)
 									{
 										//get the handle of original atom
 										Handle atom_one_handle = atom_one->getHandle();
 
 										const Atom* copy_atom_one = new Atom(*atom_one,true);
 
-										if(!tmp_handle_to_atom.has(atom_one_handle) && copy_atom_one != NULL)
+										if (!tmp_handle_to_atom.has(atom_one_handle) && (copy_atom_one))
 										{
 											// store the handle of original atom and map with copied atom
 											tmp_handle_to_atom[atom_one_handle]= copy_atom_one;
@@ -308,33 +306,30 @@ namespace BALL
 										{
 											const Atom* atom_two = b_it->getPartner(*atom_one);
 
-											if(atom_two != NULL)
+											if (atom_two)
 											{
 												//get the handle of original atom
 												Handle atom_two_handle = atom_two->getHandle();
 
 												const Atom* copy_atom_two = new Atom(*atom_two,true);
 
-												if(!tmp_handle_to_atom.has(atom_two_handle) && copy_atom_two != NULL)
+												if (!tmp_handle_to_atom.has(atom_two_handle) && (copy_atom_two))
 												{
 													// store the handle of original atom and map with copied atom
 													tmp_handle_to_atom[atom_two_handle]= copy_atom_two;
 												}
 
 												const Bond* bond = atom_one->getBond(*atom_two);
+												Handle bond_handle = INVALID_HANDLE;
 
-												Handle bond_handle = -1;
-
-												if(bond != NULL)
+												if (bond)
 												{
-													//get the handle of original bond	
+													// get the handle of original bond	
 													bond_handle = bond->getHandle();
-
 													const Bond* copy_bond = new Bond(*bond,true);
 
-													if(!tmp_handle_to_bond.has(bond_handle) && bond_handle != -1)
+													if (!tmp_handle_to_bond.has(bond_handle) && bond_handle != INVALID_HANDLE)
 													{
-
 														OpenSimTask::BondStruct bondStruct;
 
 														// copied bond
@@ -343,8 +338,7 @@ namespace BALL
 														bondStruct.atom_one_handle = atom_one_handle;
 														bondStruct.atom_two_handle = atom_two_handle;
 
-
-														if(!tmp_handle_to_bond.has(bond_handle) && bond_handle != -1)
+														if (!tmp_handle_to_bond.has(bond_handle) && bond_handle != INVALID_HANDLE)
 														{
 															// store the handle of original bond and map with copied bond
 															tmp_handle_to_bond[bond_handle] = bondStruct;
@@ -360,8 +354,7 @@ namespace BALL
 
 								task.type = OpenSimTask::REPRESENTATION;
 
-								// ToDo validation if hashmap isempty?
-
+								// TODO validation if hashmap isempty?
 								task.handle_to_atom_ = tmp_handle_to_atom;
 								task.handle_to_bond_ = tmp_handle_to_bond;
 
@@ -515,8 +508,7 @@ namespace BALL
 
 				case (OpenSimReceiver::REMOVE_BOND):
 				{
-
-						if(message.size()!= 4)
+						if (message.size()!= 4)
 						{
 							Log.error()<<"Damnit! This is not a bond removal command"<<std::endl;
 							break;
@@ -527,7 +519,6 @@ namespace BALL
 						Index atom_index_two_ = message[3].trim().toInt();
 
 						molStructPlugin_->removeBondByAtomIndex(bond_index_,atom_index_one_,atom_index_two_);
-					
 					
 						String acknowledgement_string(OpenSimReceiver::ACKNOWLEDGE_REMOVE_BOND);
 
@@ -570,13 +561,11 @@ namespace BALL
 				}
 				case (OpenSimReceiver::UPDATE_BOND):
 				{
-
 						if (message.size() != 5)
 						{
 							Log.error() << "Damnit! This is not an update bond command!";
 							break;
 						}
-
 
 						Index bond_index = message[1].toInt();
 
@@ -615,7 +604,7 @@ namespace BALL
 						break;
 
 				}
-				case(OpenSimReceiver::RUN_MINIMIZATION):
+				case (OpenSimReceiver::RUN_MINIMIZATION):
 				{
 						if (message.size() != 1)
 						{
@@ -632,9 +621,8 @@ namespace BALL
 
 						break;
 				}
-				case(OpenSimReceiver::CHANGE_FORCE_FIELD):
+				case (OpenSimReceiver::CHANGE_FORCE_FIELD):
 				{
-
 						if (message.size() != 2)
 						{
 							Log.error() << "Damnit! This is not a command to change the force field!";
@@ -655,7 +643,7 @@ namespace BALL
 				}
 					
 
-				case(OpenSimReceiver::SINGLE_POINT_CALCULATION):
+				case (OpenSimReceiver::SINGLE_POINT_CALCULATION):
 				{
 						if (message.size() != 1)
 						{
@@ -672,9 +660,8 @@ namespace BALL
 
 						break;
 				}
-				case(OpenSimReceiver::MD_SIMULATION):
+				case (OpenSimReceiver::MD_SIMULATION):
 				{
-
 						if (message.size() != 1)
 						{
 							Log.error() << "Damnit! This is not a command to run md simulation!";
@@ -691,9 +678,8 @@ namespace BALL
 
 						break;
 				}
-				case(OpenSimReceiver::ADD_MOLECULE):
+				case (OpenSimReceiver::ADD_MOLECULE):
 				{
-
 						if (message.size() != 1)
 						{
 							Log.error() << "Damnit! This is not a command to add molecule!";
@@ -710,9 +696,8 @@ namespace BALL
 
 						break;
 				}	
-				case(OpenSimReceiver::STOP_SIMULATION):
+				case (OpenSimReceiver::STOP_SIMULATION):
 				{
-
 						if (message.size() != 1)
 						{
 							Log.error() << "Damnit! This is not a command to stop simulation!";
@@ -731,10 +716,8 @@ namespace BALL
 				}
 				default:
 					break;
-
 			}
 
-		
 			server_->is_Process_Done_ = true;
 		}
 
@@ -744,38 +727,26 @@ namespace BALL
 			command += String(";") + String(task.handle_to_atom_.size()) + ";" + String(task.handle_to_bond_.size());
 
 			HashMap<Handle, const Atom *>::ConstIterator atom_it;	
-
 			for (atom_it= task.handle_to_atom_.begin(); atom_it!= task.handle_to_atom_.end() ;++atom_it)
 			{
-				Handle atom_identifier = atom_it->first;
+				Handle atom_identifier 	= atom_it->first;
+				const Atom* atom 				= atom_it->second;
 
-				const Atom* atom = atom_it->second;
-
-				// ToDo if "atom_identifier != -1" is required
-				if(atom !=  NULL  && atom_identifier != -1)
+				// ToDo if "atom_identifier != INVALID_HANDLE" is required
+				if (atom && (atom_identifier != INVALID_HANDLE))
 				{
-
-					Index atom_index = -1;
-
 					//Log.info() << "new atom_identifier at handlenew : " << atom_identifier << std::endl; 
 
-					if(!molStructPlugin_->atom_to_index_.has(atom_identifier))
+					if (!molStructPlugin_->atom_to_index_.has(atom_identifier))
 					{
-
-						String element = atom->getElement().getSymbol();
-
+						String element 					= atom->getElement().getSymbol();
+						float radius 						= atom->getRadius();
+						ColorRGBA& color 				= ecp_.getColorMap()[atom->getElement().getAtomicNumber()];
 						const Vector3& position = atom->getPosition();
 
-						float radius = atom->getRadius();
-
-						ColorRGBA& color = ecp_.getColorMap()[atom->getElement().getAtomicNumber()];
-
-						String add_atom_string;
-
-						add_atom_string =	add_atom_string 
-							+ String(";") + String(molStructPlugin_->next_atom_index_) 
+						String add_atom_string = String(";") + String(molStructPlugin_->next_atom_index_) 
 							+ String(";") + String(element) 
-							+ String(";" )+ String(position.x) 
+							+ String(";")+ String(position.x) 
 							+ String(";") + String(position.y) 
 							+ String(";") + String(position.z) 
 							+ String(";") + String(radius) 
@@ -785,68 +756,58 @@ namespace BALL
 
 						command += add_atom_string;
 
+//						Log.info() << "Add_atom_string Message @handleNewComposite from BALLView to OpenSim : " << add_atom_string << std::endl;
 
-//						Log.info() << "Add_atom_string Message @handleNewComposite from BALLView to OpenSim : "<<add_atom_string<<std::endl;
-
-
-						// Note
-						// when atom added in BALLView or OpenSim, The hashmaps atom_to_index_ and index_to_atom_ should be updated
-						// The newly added atom will have index from next_atom_index_;
-						// this index is used within plugin and opensim; do not confuse this index with index created in BALLview itself 
+						// NOTE:
+						// When one atom was added in BALLView or OpenSim, the hashmaps 
+						// atom_to_index_ and index_to_atom_ should be updated.
+						// The newly added atom will have index from next_atom_index_.
+						// This index is used within plugin and opensim; do not confuse 
+						// this index with index created in BALLview itself. 
 						if (molStructPlugin_)
 						{
-
 							molStructPlugin_->readWriteLock_.lockForWrite();
-
 							molStructPlugin_->atom_to_index_[atom_identifier] = molStructPlugin_->next_atom_index_;
-
 							molStructPlugin_->index_to_atom_[molStructPlugin_->next_atom_index_] = atom_identifier;
-
 							molStructPlugin_->handle_to_atom_[atom_identifier] =  new Atom(*atom,true);
-
 							molStructPlugin_->next_atom_index_++;
 
 							while (molStructPlugin_->index_to_atom_.has(molStructPlugin_->next_atom_index_)) 
 							{
 								++molStructPlugin_->next_atom_index_;
 							}
-
+							
 							molStructPlugin_->readWriteLock_.unlock();
-
-
 						}
 						else
 						{
-							Log.info() << "Could not initialize instance of MolecularStructureContainer" <<std::endl;
+							Log.info() << "Could not initialize instance of MolecularStructureContainer" << std::endl;
 							break;
 						}
-
-					}else
+					}
+					else
 					{
 						Log.info() << " molStructPlugin_->atom_to_index_ does have  atom_identifier " <<  atom_identifier << std::endl;
-
 					}
-
-				} //if(atom !=  NULL)
+				}
 			}
 
+			// now iterate over all bonds
 			HashMap<Handle, OpenSimTask::BondStruct>::ConstIterator bond_it;
-
 			for (bond_it = task.handle_to_bond_.begin(); bond_it!= task.handle_to_bond_.end(); ++bond_it)
 			{
 				Handle new_bond_identifier = bond_it->first;
-
 				const Bond* bond = bond_it->second.bond;
 
-				if (bond != NULL  && new_bond_identifier != -1)
+				if (bond && (new_bond_identifier != INVALID_HANDLE))
 				{
-					Size bond_order =  bond->getOrder();
+					Size bond_order = bond->getOrder();
 
 					if (!molStructPlugin_->bond_to_index_.has(new_bond_identifier))
 					{
-						Handle atom_one_handle = -1;
-						Handle atom_two_handle = -1;
-
+						Handle atom_one_handle = INVALID_HANDLE; 
+						Handle atom_two_handle = INVALID_HANDLE; 
+						
 						Index atom_one_index = -1;
 						Index atom_two_index = -1;
 
@@ -862,19 +823,16 @@ namespace BALL
 							atom_one_index = molStructPlugin_->atom_to_index_[atom_one_handle];
 						}
 
-						if(molStructPlugin_->atom_to_index_.has(atom_two_handle))
+						if (molStructPlugin_->atom_to_index_.has(atom_two_handle))
 						{
 							atom_two_index = molStructPlugin_->atom_to_index_[atom_two_handle];
 						}
 
-						if(atom_one_index != -1 && atom_two_index != -1)
+						if ((atom_one_index != -1) && (atom_two_index != -1))
 						{
 							//Log.info() << " new bond_identifier at newcomp : " << new_bond_identifier << std::endl;
 
-							String add_bond_string;
-
-							add_bond_string =   add_bond_string 
-								+ String(";") + String(molStructPlugin_->next_bond_index_)
+							String add_bond_string = String(";") + String(molStructPlugin_->next_bond_index_)
 								+ String(";")+ String(atom_one_index) 
 								+ String(";") + String(atom_two_index)
 								+ String(";") + String(bond_order);
@@ -889,7 +847,6 @@ namespace BALL
 								molStructPlugin_->index_to_bond_[molStructPlugin_->next_bond_index_] = new_bond_identifier;
 								molStructPlugin_->handle_to_bond_[new_bond_identifier] =  new Bond(*bond,true);
 
-
 								molStructPlugin_->next_bond_index_++;
 
 								while (molStructPlugin_->index_to_bond_.has(molStructPlugin_->next_bond_index_))
@@ -900,102 +857,89 @@ namespace BALL
 							}
 							else
 							{
-								Log.info() << "Could not initialize instance of MolecularStructureContainer" <<std::endl;
+								Log.info() << "Could not initialize instance of MolecularStructureContainer" << std::endl;
 								break;
 							}
 						}
-
 					}
-
 				}
-
 			}
 
+			// communicate the action
 			server_->sendMessageString(command);
 		}
 
 		void OpenSimPlugin::handleRemovedComposite(OpenSimTask task)
-		{
-			 HashMap<Handle, const Atom *>::ConstIterator atom_it;	
+		{	
+			String command(OpenSimReceiver::REMOVE_ATOM_CONTAINER);
+			command += String(";") + String(task.handle_to_atom_.size()) + ";" + String(task.handle_to_bond_.size());
 
-			 for (atom_it = task.handle_to_atom_.begin(); atom_it != task.handle_to_atom_.end() ;++atom_it)
-			 {
-				 Handle atom_identifier = atom_it->first;
+			HashMap<Handle, const Atom *>::ConstIterator atom_it;	
+			for (atom_it = task.handle_to_atom_.begin(); atom_it != task.handle_to_atom_.end() ;++atom_it)
+			{
+				Handle atom_identifier = atom_it->first;
+				const Atom* atom = atom_it->second;
 
-				 const Atom* atom = atom_it->second;
+				if (atom && (atom_identifier != INVALID_HANDLE))
+				{
+					Index atom_index= -1;
 
+					if (molStructPlugin_->atom_to_index_.has(atom_identifier))
+					{
+						atom_index = molStructPlugin_->atom_to_index_[atom_identifier];
+					}
 
-				 if(atom != NULL && atom_identifier != -1)
-				 {
-					 Index atom_index= -1;
+					if (molStructPlugin_->atom_to_index_.has(atom_identifier) && (atom_index != -1))
+					{
+						String remove_atom_string = String(";") + String(atom_index);
+						command += remove_atom_string;
+						
+						//Log.info() << "Remove_atom_string Messagge from BALLView to OpenSim @ handleRemovedComposite : " << remove_atom_string << std::endl;
 
-					 if(molStructPlugin_->atom_to_index_.has(atom_identifier))
-					 {
-						 atom_index = molStructPlugin_->atom_to_index_[atom_identifier];
-					 }
-
-					 if(molStructPlugin_->atom_to_index_.has(atom_identifier) && atom_index != -1)
-					 {
-						 String remove_atom_string (OpenSimReceiver::REMOVE_ATOM);
-
-						 remove_atom_string +=  String(";") + String(atom_index) ;
-
-						 server_->sendMessageString(remove_atom_string);
-
-						 Log.info() << "Remove_atom_string Messagge from BALLView to OpenSim @ handleRemovedComposite : "<<remove_atom_string<<std::endl;
-
-
-						 if(molStructPlugin_ )
-						 {
-							 molStructPlugin_->readWriteLock_.lockForWrite();
-							 molStructPlugin_->atom_to_index_[atom_identifier] = -1;
-							 molStructPlugin_->readWriteLock_.unlock();
-						 }
-					 }
-				 }
-
-
-			 }
+						if (molStructPlugin_)
+						{
+							molStructPlugin_->readWriteLock_.lockForWrite();
+							molStructPlugin_->atom_to_index_[atom_identifier] = -1;
+							molStructPlugin_->readWriteLock_.unlock();
+						}
+					}
+				}
+			}
 
 			HashMap<Handle, OpenSimTask::BondStruct>::ConstIterator bond_it;
-				
 			for (bond_it = task.handle_to_bond_.begin(); bond_it != task.handle_to_bond_.end(); ++bond_it)
 			{
 				Handle bond_identifier = bond_it->first;
-
 				const Bond* bond = bond_it->second.bond;
 
-				if(bond != NULL)
+				if (bond)
 				{
-					Size bond_order =  bond->getOrder();
+					Index bondIndex = -1;
 
-					Index bondIndex  = -1;
-
-					if( molStructPlugin_->bond_to_index_.has(bond_identifier))
+					if (molStructPlugin_->bond_to_index_.has(bond_identifier))
 					{
 						bondIndex = molStructPlugin_->bond_to_index_[bond_identifier];
 					}
 
-					if( molStructPlugin_->bond_to_index_.has(bond_identifier) && bondIndex != -1 )
+					if (molStructPlugin_->bond_to_index_.has(bond_identifier) && (bondIndex != -1))
 					{
-						 String remove_bond_string (OpenSimReceiver::REMOVE_BOND);
-						 remove_bond_string +=  String(";") + String(bondIndex);
-					
-						 server_->sendMessageString(remove_bond_string);
+						String remove_bond_string = String(";") + String(bondIndex);
+						command += remove_bond_string;
 
-						 Log.info() << "Remove_bond_string Messagge from BALLView to OpenSim : "<<remove_bond_string<<std::endl;
-
-						 if(molStructPlugin_ )
-						 {
-							 molStructPlugin_->readWriteLock_.lockForWrite();
-							 molStructPlugin_->bond_to_index_[bond_identifier] = -1;
-							 molStructPlugin_->readWriteLock_.unlock();
-						 }
+						//Log.info() << "Remove_bond_string Messagge from BALLView to OpenSim : " << remove_bond_string << std::endl;
 						
+						if (molStructPlugin_)
+						{
+							molStructPlugin_->readWriteLock_.lockForWrite();
+							molStructPlugin_->bond_to_index_[bond_identifier] = -1;
+							molStructPlugin_->readWriteLock_.unlock();
+						}
 					}
 				}
-
 			}
+	
+			// communicate the action
+			server_->sendMessageString(command);
 
 			molStructPlugin_->index_to_atom_.clear();
 			molStructPlugin_->atom_to_index_.clear();
@@ -1007,348 +951,322 @@ namespace BALL
 		}
 
 		
-		//void OpenSimPlugin::handleChangedComposite(BallviewMessage bvmessage)
-		//{
+		void OpenSimPlugin::handleChangedComposite(OpenSimTask task)
+		{
+			String command(OpenSimReceiver::UPDATE_ATOM_CONTAINER);
+			command += String(";") + String(task.handle_to_atom_.size()) + ";" + String(task.handle_to_bond_.size());
 
-
-		//	HashMap<Handle, const Atom *>::ConstIterator atom_it;	
-
-		//	for (atom_it= bvmessage.handle_to_atom_.begin(); atom_it!= bvmessage.handle_to_atom_.end() ;++atom_it)
-		//	{
-
-		//		Index atom_index= -1;
-
-		//		Handle atom_identifier = atom_it->first;
-
-		//		const Atom* atom = atom_it->second;
-
-		//		if(atom != NULL && atom_identifier != -1)
-		//		{
-
-		//			String element = atom->getElement().getSymbol();
-
-		//			const Vector3& position = atom->getPosition();
-
-		//			float radius = atom->getRadius();
-
-		//			ColorRGBA& color = ecp_.getColorMap()[atom->getElement().getAtomicNumber()];
+			HashMap<Handle, const Atom *>::ConstIterator atom_it;	
+			for (atom_it= task.handle_to_atom_.begin(); atom_it != task.handle_to_atom_.end() ;++atom_it)
+			{
+				Handle atom_identifier 	= atom_it->first;
+				const Atom* atom 				= atom_it->second;
 	
-
-		//			if(!molStructPlugin_->atom_to_index_.has(atom_identifier))
-		//			{
-
-		//				atom_index = molStructPlugin_->next_atom_index_ ;
-		//							
-		//						
-		//				String add_atom_string(OpenSimReceiver::ADD_ATOM);
-
-		//			
-		//				add_atom_string = add_atom_string + String(";") + String(atom_index) + String(";") + String(element) + String(";" )+ String(position.x) + String(";") + String(position.y) + String(";") + String(position.z) + String(";") + String(radius) + String(";") + String((int)color.getRed())+ String(";") + String((int)color.getBlue())+ String(";") + String((int)color.getGreen()) ;
-		//
-		//		
-		//				server_->sendMessageString(add_atom_string);
-
-		//				Log.info() << "Add_atom_string Message @ handleChangedComposite from BALLView to OpenSim : "<<add_atom_string<<std::endl;
-
-
-		//				if(!molStructPlugin_ == NULL )
-		//				{
-		//					molStructPlugin_->readWriteLock_.lockForWrite();
-
-		//					molStructPlugin_->index_to_atom_[atom_index] = atom_identifier;
-		//					molStructPlugin_->atom_to_index_[atom_identifier]  = atom_index;
-
-		//					molStructPlugin_->next_atom_index_ ++;
-
-		//					while (molStructPlugin_->index_to_atom_.has(molStructPlugin_->next_atom_index_))
-		//					{
-		//						++molStructPlugin_->next_atom_index_;
-		//					}
-		//			
-		//					molStructPlugin_->readWriteLock_.unlock();
-
-		//				}
-		//				
-
-		//			}else if(molStructPlugin_->atom_to_index_.has(atom_identifier))
-		//			{
-
-		//				
-		//				atom_index =  molStructPlugin_->atom_to_index_[atom_identifier]; 
-
-		//				if(atom_index != -1)
-		//				{
-		//					// Check if atom is really changed by comparing to the existing atom in the store
-		//					bool isAtomChanged = false;
-
-		//					molStructPlugin_->readWriteLock_.lockForWrite();
-
-		//					if(molStructPlugin_->handle_to_atom_.has(atom_identifier))
-		//					{
-		//						Atom * atom_in_store =  molStructPlugin_->handle_to_atom_[atom_identifier];
-
-		//						if(atom_in_store != NULL)
-		//						{
-		//						
-		//							String atms_store_element = atom_in_store->getElement().getSymbol();
-
-		//							Vector3& atms_store_position = atom_in_store->getPosition();
-
-		//							float atoms_store_radius = atom_in_store->getRadius();
-
-		//							ColorRGBA& atoms_store_color = ecp_.getColorMap()[atom_in_store->getElement().getAtomicNumber()];
-
-		//							
-
-		//							if(element != atms_store_element)
-		//							{
-
-		//								Element newelement = Element();
-
-		//								newelement.setSymbol(element);
-
-		//								atom_in_store->setElement(newelement);
-
-		//								isAtomChanged = true;
-		//							}
-		//							if((position.x != atms_store_position.x) || (position.y != atms_store_position.y) || (position.z != atms_store_position.z))
-		//							{
-		//								atom_in_store->setPosition(position);
-
-		//								isAtomChanged = true;
-		//							}
-		//							if(radius != atoms_store_radius)
-		//							{
-		//								atom_in_store->setRadius(radius);
-
-		//								isAtomChanged = true;
-		//							}
-
-		//							// Ne need to check for color changes. since there is no method "setColor()".
-
-		//							/*if(color != atoms_store_color)
-		//							{
-
-		//								atom_in_store->setColor(color);
-		//								isAtomChanged = true;
-		//							}*/
-		//							/*if((int)color.getBlue() != (int)atoms_store_color.getBlue())
-		//							{
-		//								isAtomChanged = true;
-		//							}
-		//							if((int)color.getGreen() != (int)atoms_store_color.getGreen())
-		//							{
-		//								isAtomChanged = true;
-		//							}
-		//							if((int)color.getRed() != (int)atoms_store_color.getRed())
-		//							{
-		//								isAtomChanged = true;
-		//							}*/
-
-		//							molStructPlugin_->readWriteLock_.unlock();
-
-		//							if(isAtomChanged)
-		//							{
-		//								String update_atom_string(OpenSimReceiver::UPDATE_ATOM);
-
-		//								update_atom_string = update_atom_string + String(";") + String(atom_index) + String(";") + String(element) + String(";") + String(position.x) + String(";") + String(position.y) + String(";") + String(position.z) + String(";") + String(radius) + String(";") + String((int)color.getRed())+ String(";") + String((int)color.getBlue())+ String(";") + String((int)color.getGreen()) ;
-
-
-		//								server_->sendMessageString(update_atom_string);
-
-		//								Log.info() << "Update_atom_string Messagge from BALLView to OpenSim : "<<update_atom_string<<std::endl;
-		//							}
-		//						}
-		//					}
-		//				}
-		//					
-		//			}
-		//		}
-		//	}
-
-		//	HashMap<Handle, bondStructType>::ConstIterator bond_it;
-		//		
-		//	for (bond_it= bvmessage.handle_to_bond_ .begin(); bond_it!= bvmessage.handle_to_bond_ .end() ;++bond_it)
-		//	{
-
-		//		Handle bond_identifier = bond_it->first;
-
-		//		const Bond* bond = bond_it->second.bond;
-
-		//		if(bond != NULL && bond_identifier != -1)
-		//		{
-		//			Size bond_order =  bond->getOrder();
-
-		//			Index bond_index = -1;
-
-		//			Handle atom_one_handle = -1;
-
-		//			Handle atom_two_handle = -1;
-
-		//			Index atom_one_index = -1;
-
-		//			Index atom_two_index = -1;
-
-		//			if(bvmessage.handle_to_bond_.has(bond_identifier))
-		//			{
-		//				BondStruct bondStruct = bvmessage.handle_to_bond_[bond_identifier];
-		//				atom_one_handle = bondStruct.atom_one_handle;
-		//				atom_two_handle = bondStruct.atom_two_handle;
-
-		//			}
-
-		//			if(molStructPlugin_->atom_to_index_.has(atom_one_handle))
-		//			{
-		//					atom_one_index = molStructPlugin_->atom_to_index_[atom_one_handle];
-		//			}
-		//		
-		//			if(molStructPlugin_->atom_to_index_.has(atom_two_handle))
-		//			{
-		//					atom_two_index = molStructPlugin_->atom_to_index_[atom_two_handle];
-		//			}
-
-
-		//			if(!molStructPlugin_->bond_to_index_.has(bond_identifier))
-		//			{
-
-		//				if(atom_one_index != -1 && atom_two_index != -1)
-		//				{
-		//					String add_bond_string(OpenSimReceiver::ADD_BOND);
-	
-		//					add_bond_string = add_bond_string + String(";") + String(molStructPlugin_->next_bond_index_)+ String(";")+ String(atom_one_index) + String(";") + String(atom_two_index) + String(";") + String(bond_order) ;
-		//						
-		//					server_->sendMessageString(add_bond_string);
-		//							
-		//					
-		//					Log.info() << "Add_bond_string Messagge @ handleNewComposite from BALLView to OpenSim : "<<add_bond_string<<std::endl;
-		//
-		//					if (!molStructPlugin_ == NULL )
-		//					{
-		//					
-		//						molStructPlugin_->readWriteLock_.lockForWrite();
-
-		//						molStructPlugin_->bond_to_index_[bond_identifier] = molStructPlugin_->next_bond_index_;
-		//						
-		//						molStructPlugin_->index_to_bond_[molStructPlugin_->next_bond_index_] = bond_identifier;
-
-		//						molStructPlugin_->next_bond_index_++;
-		//						while (molStructPlugin_->index_to_bond_.has(molStructPlugin_->next_bond_index_)) ++molStructPlugin_->next_bond_index_;
-		//				
-		//						molStructPlugin_->readWriteLock_.unlock();
-		//					}
-		//					else
-		//					{
-		//						Log.info() << "Could not initialize instance of MolecularStructureContainer" <<std::endl;
-		//						break;
-		//					}
-		//				}
-
-
-		//			}else if(molStructPlugin_->bond_to_index_.has(bond_identifier))
-		//			{
-
-		//				bond_index = molStructPlugin_->bond_to_index_[bond_identifier];
-
-
-
-		//				if(bond_index != -1)
-		//				{
-		//					if(atom_one_index != -1 && atom_two_index != -1)
-		//					{
-
-		//						// Check if bond is really changed by comparing to the existing atom in the store
-		//						bool isBondChanged = false;
-
-		//						molStructPlugin_->readWriteLock_.lockForWrite();
-
-		//						if(molStructPlugin_->handle_to_bond_.has(bond_identifier))
-		//						{
-		//							Bond * bond_in_store =  molStructPlugin_->handle_to_bond_[bond_identifier];
-
-		//							if(bond_in_store)
-		//							{
-		//							
-
-		//								if(bond_order != bond_in_store->getOrder())
-		//								{
-		//									bond_in_store->setOrder(bond_order);
-
-		//									isBondChanged = true;
-
-		//								}
-
-		//								if(isBondChanged)
-		//								{
-
-		//									String update_bond_string(OpenSimReceiver::UPDATE_BOND);
-
-		//									update_bond_string = update_bond_string + String(";")+ String(bond_index) + String(";") + String(atom_one_index) + String(";") + String(atom_two_index) + String(";") + String(bond_order) ;
-		//									
-		//									server_->sendMessageString(update_bond_string);
-
-		//									Log.info() << "update_bond_string Messagge from BALLView to OpenSim : "<<update_bond_string<<std::endl;
-		//								}
-		//							}
-		//						}
-
-		//						molStructPlugin_->readWriteLock_.unlock();
-		//					}
-		//				}
-		//			}
-
-		//		}
-		//	}
-
-		//	//ToDo 
-		//	// Should I need to handle the removed bonds that attached to  the removed atoms 
-		//	
-		//
-		//}
+				if (atom && (atom_identifier != INVALID_HANDLE))
+				{
+					Index atom_index = -1;
+					
+					String element 					= atom->getElement().getSymbol();
+					const Vector3& position = atom->getPosition();
+					ColorRGBA& color 				= ecp_.getColorMap()[atom->getElement().getAtomicNumber()];
+					float radius 						= atom->getRadius();
+
+					// new atom
+					if (!molStructPlugin_->atom_to_index_.has(atom_identifier))
+					{
+						atom_index = molStructPlugin_->next_atom_index_;
+						
+						String add_atom_string =  String(";") + String(atom_index) 
+										+ String(";") + String(element) 
+										+ String(";" )+ String(position.x) 
+										+ String(";") + String(position.y) 
+										+ String(";") + String(position.z) 
+										+ String(";") + String(radius) 
+										+ String(";") + String((int)color.getRed())
+										+ String(";") + String((int)color.getBlue())
+										+ String(";") + String((int)color.getGreen());
+		
+						command += add_atom_string;
+
+						Log.info() << "Add_atom_string Message @ handleChangedComposite from BALLView to OpenSim : " << add_atom_string << std::endl;
+						if (molStructPlugin_)
+						{
+							molStructPlugin_->readWriteLock_.lockForWrite();
+							molStructPlugin_->atom_to_index_[atom_identifier]  = atom_index;
+							molStructPlugin_->index_to_atom_[atom_index] = atom_identifier;
+							
+							//TODO why not the following?
+							//molStructPlugin_->handle_to_atom_[atom_identifier] =  new Atom(*atom,true);
+
+							molStructPlugin_->next_atom_index_ ++;
+
+							while (molStructPlugin_->index_to_atom_.has(molStructPlugin_->next_atom_index_))
+							{
+								++molStructPlugin_->next_atom_index_;
+							}
+
+							molStructPlugin_->readWriteLock_.unlock();
+						}
+						else
+						{
+							Log.info() << "Could not initialize instance of MolecularStructureContainer" << std::endl;
+							break;
+						}
+					}
+					else //if (molStructPlugin_->atom_to_index_.has(atom_identifier))
+					{ 
+						// we already know this atom
+						atom_index =  molStructPlugin_->atom_to_index_[atom_identifier]; 
+						if (atom_index != -1)
+						{
+							// Check if the current atom has really changed by 
+							// comparing to the corresponding atom in OpenSim
+							bool atom_has_changed = false;
+							molStructPlugin_->readWriteLock_.lockForWrite();
+
+							if (molStructPlugin_->handle_to_atom_.has(atom_identifier))
+							{
+								//TODO: AKD: what is store? -->rename 
+								Atom * stored_atom = molStructPlugin_->handle_to_atom_[atom_identifier];
+								if (stored_atom)
+								{
+									String 		 stored_atom_element 	= stored_atom->getElement().getSymbol();
+									Vector3& 	 stored_atom_position = stored_atom->getPosition();
+									float 		 stored_atom_radius 	= stored_atom->getRadius();
+									//ColorRGBA& stored_atom_color 	  = ecp_.getColorMap()[stored_atom->getElement().getAtomicNumber()];
+									
+									if (element != stored_atom_element)
+									{
+										Element new_element(atom->getElement());
+										stored_atom->setElement(new_element);
+										atom_has_changed = true;
+									}
+		
+									if ( 	(position.x != stored_atom_position.x) 
+											||(position.y != stored_atom_position.y) 
+											||(position.z != stored_atom_position.z))
+									{
+										stored_atom->setPosition(position);
+										atom_has_changed = true;
+									}
+		
+									if (radius != stored_atom_radius)
+									{
+										stored_atom->setRadius(radius);
+										atom_has_changed = true;
+									}
+
+									// TODO: We need to check for color changes. since there is no method "setColor()".
+									/*if(color != stored_atom_color)
+									{
+										stored_atom->setColor(color);
+										atom_has_changed = true;
+									}*/
+									/*if((int)color.getBlue() != (int)stored_color.getBlue())
+									{
+										atom_has_changed = true;
+									}
+									if((int)color.getGreen() != (int)stored_color.getGreen())
+									{
+										atom_has_changed = true;
+									}
+									if((int)color.getRed() != (int)stored_color.getRed())
+									{
+										atom_has_changed = true;
+									}*/
+
+									molStructPlugin_->readWriteLock_.unlock();
+
+									if (atom_has_changed)
+									{
+										String update_atom_string = String(";") + String(atom_index) 
+												+ String(";") + String(element) 
+												+ String(";") + String(position.x) 
+												+ String(";") + String(position.y) 
+												+ String(";") + String(position.z) 
+												+ String(";") + String(radius) 
+												+ String(";") + String((int)color.getRed())
+												+ String(";") + String((int)color.getBlue())
+												+ String(";") + String((int)color.getGreen());
+										
+										command += update_atom_string;
+
+										Log.info() << "Update_atom_string Messagge from BALLView to OpenSim : "<<update_atom_string<<std::endl;
+									}
+								}
+							}
+						}				
+					} // end of known atom
+				}
+			} // end of all atoms
+
+
+			// now lets iterate over all bonds
+			HashMap<Handle, OpenSimTask::BondStruct>::ConstIterator bond_it;
+			for (bond_it = task.handle_to_bond_.begin(); bond_it != task.handle_to_bond_.end(); ++bond_it)
+			{
+				Handle bond_identifier = bond_it->first;
+				const Bond* bond = bond_it->second.bond;
+
+				if (bond && (bond_identifier != INVALID_HANDLE))
+				{
+					short bond_order  = bond->getOrder();
+					Index bond_index = -1;
+
+					// both atoms connected by that current bond
+					Handle atom_one_handle = INVALID_HANDLE;
+					Handle atom_two_handle = INVALID_HANDLE;
+
+					Index atom_one_index = -1;
+					Index atom_two_index = -1;
+
+					if (task.handle_to_bond_.has(bond_identifier))
+					{
+						OpenSimTask::BondStruct bondStruct = task.handle_to_bond_[bond_identifier];
+						atom_one_handle = bondStruct.atom_one_handle;
+						atom_two_handle = bondStruct.atom_two_handle;
+					}
+
+					if (molStructPlugin_->atom_to_index_.has(atom_one_handle))
+					{
+						atom_one_index = molStructPlugin_->atom_to_index_[atom_one_handle];
+					}
+
+					if (molStructPlugin_->atom_to_index_.has(atom_two_handle))
+					{
+						atom_two_index = molStructPlugin_->atom_to_index_[atom_two_handle];
+					}
+
+					// the bond is a sofar unknown 
+					if (!molStructPlugin_->bond_to_index_.has(bond_identifier))
+					{
+						if ((atom_one_index != -1) && (atom_two_index != -1))
+						{
+							String add_bond_string = String(";") + String(molStructPlugin_->next_bond_index_)
+								+ String(";")+ String(atom_one_index) 
+								+ String(";") + String(atom_two_index) 
+								+ String(";") + String(bond_order);
+
+							command += add_bond_string;
+
+							Log.info() << "Add_bond_string Messagge @ handleNewComposite from BALLView to OpenSim : " << add_bond_string << std::endl;
+
+							if (molStructPlugin_)
+							{
+								molStructPlugin_->readWriteLock_.lockForWrite();
+								molStructPlugin_->bond_to_index_[bond_identifier] = molStructPlugin_->next_bond_index_;
+								molStructPlugin_->index_to_bond_[molStructPlugin_->next_bond_index_] = bond_identifier;
+								molStructPlugin_->next_bond_index_++;
+								while (molStructPlugin_->index_to_bond_.has(molStructPlugin_->next_bond_index_)) ++molStructPlugin_->next_bond_index_;
+								molStructPlugin_->readWriteLock_.unlock();
+							}
+							else
+							{
+								Log.info() << "Could not initialize instance of MolecularStructureContainer" << std::endl;
+								break;
+							}
+						}
+					}
+					else //if (molStructPlugin_->bond_to_index_.has(bond_identifier))
+					{  
+						// we know this bond already
+						bond_index = molStructPlugin_->bond_to_index_[bond_identifier];
+
+						if (bond_index != -1)
+						{
+							if ((atom_one_index != -1) && (atom_two_index != -1))
+							{
+								// Check if the current bond is really changed 
+								// by comparing to the existing bond in the store
+								//TODO AKD: what is store?
+
+								bool bond_has_changed = false;
+
+								molStructPlugin_->readWriteLock_.lockForWrite();
+
+								if (molStructPlugin_->handle_to_bond_.has(bond_identifier))
+								{
+									Bond * bond_in_store =  molStructPlugin_->handle_to_bond_[bond_identifier];
+									if (bond_in_store)
+									{
+										if (bond_order != bond_in_store->getOrder())
+										{
+											bond_in_store->setOrder(bond_order);
+											bond_has_changed = true;
+										}
+
+										// TODO: AKD: shouldn we check the bond length also?
+										if (bond_has_changed)
+										{
+											String update_bond_string = String(";")+ String(bond_index) 
+												+ String(";") + String(atom_one_index) 
+												+ String(";") + String(atom_two_index) 
+												+ String(";") + String(bond_order);
+
+											command += update_bond_string;
+
+											Log.info() << "update_bond_string Messagge from BALLView to OpenSim : "<<update_bond_string<<std::endl;
+										}
+									}
+								}
+								molStructPlugin_->readWriteLock_.unlock();
+							}
+						}
+					}
+				}
+			}
+			
+			// communicate the action
+			server_->sendMessageString(command);
+
+			// TODO: Should we need to handle the removed bonds that attached to removed atoms?
+			// AKD: I dont think so! BALLView directly deletes bonds to deleted atoms!
+		}
 
 		void OpenSimPlugin::handleRepresentation(OpenSimTask task)
 		{
 			String new_positions(NULL);
-
 			Size number_of_changed_atoms = 0;
-
-
 			HashMap<Handle, const Atom *>::ConstIterator atom_it;	
 
 			for (atom_it = task.handle_to_atom_.begin(); atom_it != task.handle_to_atom_.end(); ++atom_it)
 			{
 				const Atom* atom =  atom_it->second;
 				
-				// Dont use atom->getHandle() since we need to know stored handle
-				Handle atom_identifier = atom_it->first ;
+				// Don't use atom->getHandle() since we need to know stored handle
+				Handle atom_identifier = atom_it->first;
 			
-				if(atom != NULL && atom_identifier != -1)
+				if (atom && (atom_identifier != INVALID_HANDLE))
 				{
 					Index atom_index = -1;	
 
-					String element = atom->getElement().getSymbol();
-						
+					String 				 element 	= atom->getElement().getSymbol();
 					const Vector3& position = atom->getPosition();
-					
-					float radius = atom->getRadius();
-					
-					ColorRGBA& color = ecp_.getColorMap()[atom->getElement().getAtomicNumber()];
+					float  				 radius 	= atom->getRadius();
+					ColorRGBA& 		 color 		= ecp_.getColorMap()[atom->getElement().getAtomicNumber()];
 
 					if (!molStructPlugin_->atom_to_index_.has(atom_identifier))
 					{
 						//Log.info() << " new atom_identifier at handlerep : " << atom_identifier << std::endl; 
 
 						atom_index =  molStructPlugin_->next_atom_index_;
-					
 						String add_atom_string(OpenSimReceiver::ADD_ATOM);
 
-    					add_atom_string = add_atom_string + String(";") + String(atom_index) + String(";") + String(element) + String(";" )+ String(position.x) + String(";") + String(position.y) + String(";") + String(position.z) + String(";") + String(radius) + String(";") + String((int)color.getRed())+ String(";") + String((int)color.getBlue())+ String(";") + String((int)color.getGreen()) ;
+    				add_atom_string +=  String(";") + String(atom_index) 
+								+ String(";") + String(element) 
+								+ String(";" )+ String(position.x) 
+								+ String(";") + String(position.y) 
+								+ String(";") + String(position.z) 
+								+ String(";") + String(radius) 
+								+ String(";") + String((int)color.getRed())
+								+ String(";") + String((int)color.getBlue())
+								+ String(";") + String((int)color.getGreen());
 		
 						server_->sendMessageString(add_atom_string);
 
-						Log.info() << "Add_atom_string @ handleRepresentation "  << add_atom_string << std::endl;
+						//Log.info() << "Add_atom_string @ handleRepresentation "  << add_atom_string << std::endl;
 					
-
-						if(molStructPlugin_)
+						if (molStructPlugin_)
 						{
 							molStructPlugin_->readWriteLock_.lockForWrite();
 							molStructPlugin_->index_to_atom_[atom_index] = atom_identifier;
@@ -1364,113 +1282,105 @@ namespace BALL
 							molStructPlugin_->readWriteLock_.unlock();
 						}
 					}
-					else if (molStructPlugin_->atom_to_index_.has(atom_identifier))
+					else //if (molStructPlugin_->atom_to_index_.has(atom_identifier))
 					{
-
 						atom_index = molStructPlugin_->atom_to_index_[atom_identifier]; 
 								
-						if (atom_index != -1 )
+						if (atom_index != -1)
 						{
-
-							// Would this slow down the process?
+							// TODO: Would this slow down the process?
 
 							// Check if atom is really changed by comparing to the existing atom in the store
-							bool isAtomChanged = false;
-							bool isAtomPositionChanged = false;
-
+							bool atom_has_changed 			= false;
+							bool atom_position_changed 	= false;
 
 							molStructPlugin_->readWriteLock_.lockForWrite();
 
-							if(molStructPlugin_->handle_to_atom_.has(atom_identifier))
+							if (molStructPlugin_->handle_to_atom_.has(atom_identifier))
 							{
-								Atom * atom_in_store =  molStructPlugin_->handle_to_atom_[atom_identifier];
+								Atom* stored_atom =  molStructPlugin_->handle_to_atom_[atom_identifier];
 
-								if( atom_in_store != NULL)
+								if (stored_atom)
 								{
-									String atms_store_element = atom_in_store->getElement().getSymbol();
+									String 			stored_element 	= stored_atom->getElement().getSymbol();
+									Vector3& 		stored_position = stored_atom->getPosition();
+									float 			stored_radius 	= stored_atom->getRadius();
+									//ColorRGBA& 	stored_color 	= ecp_.getColorMap()[stored_atom->getElement().getAtomicNumber()];
 
-									Vector3& atms_store_position = atom_in_store->getPosition();
-
-									float atoms_store_radius = atom_in_store->getRadius();
-
-									ColorRGBA& atoms_store_color = ecp_.getColorMap()[atom_in_store->getElement().getAtomicNumber()];
-
-									
-									if(element != atms_store_element)
+									if (element != stored_element)
 									{
-
-										Element newelement = Element();
-
-										newelement.setSymbol(element);
-										
-										atom_in_store->setElement(newelement);
-
-										isAtomChanged = true;
+										Element newelement(atom->getElement());
+										stored_atom->setElement(newelement);
+										atom_has_changed = true;
 									}
-									if((position.x != atms_store_position.x) || (position.y != atms_store_position.y) || (position.z != atms_store_position.z))
-									{
-										atom_in_store->setPosition(position);
 
-										isAtomChanged = true;
-									}
-									if(radius != atoms_store_radius)
+									if (   (position.x != stored_position.x) 
+											|| (position.y != stored_position.y) 
+											|| (position.z != stored_position.z))
 									{
-										atom_in_store->setRadius(radius);
-
-										isAtomChanged = true;
+										stored_atom->setPosition(position);
+										atom_has_changed = true;
 									}
-									/*if((int)color.getBlue() != (int)atoms_store_color.getBlue())
+									if (radius != stored_radius)
 									{
-										isAtomChanged = true;
+										stored_atom->setRadius(radius);
+										atom_has_changed = true;
 									}
-									if((int)color.getGreen() != (int)atoms_store_color.getGreen())
+									/*if((int)color.getBlue() != (int)stored_color.getBlue())
 									{
-										isAtomChanged = true;
+										atom_has_changed = true;
 									}
-									if((int)color.getRed() != (int)atoms_store_color.getRed())
+									if((int)color.getGreen() != (int)stored_color.getGreen())
 									{
-										isAtomChanged = true;
+										atom_has_changed = true;
+									}
+									if((int)color.getRed() != (int)stored_color.getRed())
+									{
+										atom_has_changed = true;
 									}*/
 
-									
-
-									if(isAtomChanged)
+									if (atom_has_changed)
 									{
 										String update_atom_string(OpenSimReceiver::UPDATE_ATOM);
 
-										update_atom_string = update_atom_string + String(";") + String(atom_index) + String(";") + String(element) + String(";") + String(position.x) + String(";") + String(position.y) + String(";") + String(position.z) + String(";") + String(radius) + String(";") + String((int)color.getRed())+ String(";") + String((int)color.getBlue())+ String(";") + String((int)color.getGreen()) ;
-
+										update_atom_string =   update_atom_string + String(";") 
+											 									 + String(atom_index) + String(";") 
+											                   + String(element) + String(";") 
+																				 + String(position.x) + String(";") 
+																				 + String(position.y) + String(";") 
+																				 + String(position.z) + String(";") 
+																				 + String(radius) + String(";") 
+																				 + String((int)color.getRed())+ String(";") 
+																				 + String((int)color.getBlue())+ String(";") 
+																				 + String((int)color.getGreen());
 
 										server_->sendMessageString(update_atom_string);
 
-										Log.info() << "Update_atom_string Messagge @ handleRepresentation from BALLView to OpenSim : "<<update_atom_string<<std::endl;
-										
+										Log.info() << "Update_atom_string Messagge @ handleRepresentation from BALLView to OpenSim : " << update_atom_string << std::endl;	
 									}
-									if(isAtomPositionChanged)
+
+									if (atom_position_changed)
 									{
 										// Update the position later as a batch.
-
 										number_of_changed_atoms++;
-
 										const Vector3& pos = atom->getPosition();
 										
-										new_positions += String(";") + String(atom_index) + String(";")+ String(pos.x)+ String(";")
-													   + String(pos.y)+ String(";")
-													   + String(pos.z);
+										new_positions += String(";") + String(atom_index) 
+												+ String(";")+ String(pos.x)
+												+ String(";") + String(pos.y)
+												+ String(";") + String(pos.z);
 
 										//Log.info() << "Update representation for atom " << atom_index << "  " << pos.x << "  " << pos.y << "  "<< pos.z << std::endl;
-
 									}
 								}
 							}
-
 							molStructPlugin_->readWriteLock_.unlock();
 						}
 					}
 				}
 			}
 
-			if ((number_of_changed_atoms > 0) &&  (!new_positions.isEmpty()))
+			if ((number_of_changed_atoms > 0) && (!new_positions.isEmpty()))
 			{
 				String update_string(OpenSimReceiver::UPDATE_POSITIONS);
 
@@ -1479,47 +1389,42 @@ namespace BALL
 								+ new_positions;
 
 				server_->sendMessageString(update_string);
-
 		
 				Log.info() << "Update representation Message for atoms @ handleRepresentation ,  from BALLView to OpenSim : "<<update_string<<std::endl;
-
 			}
 	
 			// Note : This code should be here. Can not be moved up, since the logic
 			// Check for removed atoms here
 
 			HashMap<Handle, Index>::ConstIterator it;
-
 			for (it = molStructPlugin_->atom_to_index_.begin(); it != molStructPlugin_->atom_to_index_.end(); ++it)
 			{
 				Handle atomTobeChecked_identifier = it->first;
-	
-				bool isAtomfound = false ;
-
+				bool  atom_found = false ;
 				Index atom_index = -1;
 
-				if (task.handle_to_atom_.has(atomTobeChecked_identifier) && atomTobeChecked_identifier != -1)
+				if (   task.handle_to_atom_.has(atomTobeChecked_identifier) 
+						&& (atomTobeChecked_identifier != INVALID_HANDLE))
 				{
-					if (task.handle_to_atom_[atomTobeChecked_identifier] != NULL)
+					if (task.handle_to_atom_[atomTobeChecked_identifier])
 					{
-						isAtomfound = true;
+						atom_found = true;
 					}
 				}
 				
-				if(!isAtomfound) 
+				if (!atom_found) 
 				{
 					
-					if(molStructPlugin_->atom_to_index_.has(atomTobeChecked_identifier))
+					if (molStructPlugin_->atom_to_index_.has(atomTobeChecked_identifier))
+					{
 						atom_index = molStructPlugin_->atom_to_index_[atomTobeChecked_identifier]; 
+					}
 
 					//Log.info() << "atomTobeChecked_identifier : "<<atomTobeChecked_identifier<<std::endl;
-
 					//Log.info() << "atom_index : "<<atom_index<<std::endl;	
-
-
 					//Log.info() << "atom_index to be removed : "<< atom_index<<std::endl;	
 
-					if(atom_index != -1 ) 
+					if (atom_index != -1) 
 					{
 						// This means the perticulr atom with 'index' is removed from the structure
 						String remove_atom_string(OpenSimReceiver::REMOVE_ATOM);
@@ -1531,15 +1436,14 @@ namespace BALL
 
 						Log.info() << "Remove_atom_string Message @ handleRepresentation from BALLView to OpenSim : "<<remove_atom_string<<std::endl;	
 
-
-						// Note
+						// NOTE: //TODO
 						// I can not remove atoms or atom_index from the hashmaps 
 						// I get exception
 						// with out removing then.. it works fine, but conceptuallty..they shouuld be removed  
 						// whent they are removed  from the structure
 						// I think , when atoms are removed in BALLView , since their reference are stored in hashmap 
 						// hashmap looses atoms' references
-						if(molStructPlugin_)
+						if (molStructPlugin_)
 						{
 							molStructPlugin_->readWriteLock_.lockForWrite();
 							molStructPlugin_->atom_to_index_[atomTobeChecked_identifier] = -1;
@@ -1559,11 +1463,10 @@ namespace BALL
 				// Dont use bond->getHandle()
 				Handle bond_identifier = bond_it->first ;
 				
-				if(bond != NULL)
+				if (bond)
 				{
-					if(!molStructPlugin_->bond_to_index_.has(bond_identifier))
+					if (!molStructPlugin_->bond_to_index_.has(bond_identifier))
 					{
-
 						// Create a bond code here since it was not found in the bond_to_index_
 						Size bond_order =  bond->getOrder();
 
@@ -1580,17 +1483,17 @@ namespace BALL
 							atom_two_handle = bondStruct.atom_two_handle;
 						}
 
-						if(molStructPlugin_->atom_to_index_.has(atom_one_handle))
+						if (molStructPlugin_->atom_to_index_.has(atom_one_handle))
 						{
 							atom_one_index = molStructPlugin_->atom_to_index_[atom_one_handle];
 						}
 					
-						if(molStructPlugin_->atom_to_index_.has(atom_two_handle))
+						if (molStructPlugin_->atom_to_index_.has(atom_two_handle))
 						{
 							atom_two_index = molStructPlugin_->atom_to_index_[atom_two_handle];
 						}
 
-						if(atom_one_index != -1 && atom_two_index != -1 )
+						if (atom_one_index != -1 && atom_two_index != -1 )
 						{
 							//Log.info() << " new_bond_identifier at handlerep : " << bond_identifier << std::endl;
 
@@ -1601,12 +1504,11 @@ namespace BALL
 							server_->sendMessageString(add_bond_string);
 									
 							Log.info() << "Add_bond_string Message @ handleRepresentation from BALLView to OpenSim : "<<add_bond_string<<std::endl;
-		
 						
-							// Note
+							// Note //TODO
 							// I can not add bond  from the hashmaps 
 							// I get exception as the atoms are already removed
-							if(molStructPlugin_)
+							if (molStructPlugin_)
 							{
 								molStructPlugin_->readWriteLock_.lockForWrite();
 
@@ -1633,14 +1535,11 @@ namespace BALL
 
 						Index bondIndex = molStructPlugin_->bond_to_index_[bond_identifier]; 
 
-						if(bondIndex != -1)
+						if (bondIndex != -1)
 						{
-							Size bond_order =  bond->getOrder();
-						
-						
-							Handle atom_one_handle = -1;
-							Handle atom_two_handle = -1;
-
+							Bond::Order bond_order =  bond->getOrder();
+							Handle atom_one_handle = INVALID_HANDLE;
+							Handle atom_two_handle = INVALID_HANDLE;
 							Index atom_one_index = -1;
 							Index atom_two_index = -1;
 
@@ -1651,39 +1550,36 @@ namespace BALL
 								atom_two_handle = bondStruct.atom_two_handle;
 							}
 
-							if(molStructPlugin_->atom_to_index_.has(atom_one_handle))
+							if (molStructPlugin_->atom_to_index_.has(atom_one_handle))
 							{
 									atom_one_index = molStructPlugin_->atom_to_index_[atom_one_handle];
 							}
 						
-							if(molStructPlugin_->atom_to_index_.has(atom_two_handle))
+							if (molStructPlugin_->atom_to_index_.has(atom_two_handle))
 							{
 									atom_two_index = molStructPlugin_->atom_to_index_[atom_two_handle];
 							}
 
-							if(atom_one_index != -1 && atom_two_index != -1)
+							if ((atom_one_index != -1) && (atom_two_index != -1))
 							{
 								// Check if bond is really changed by comparing to the existing atom in the store
-								bool isBondChanged = false;
-
+								bool bond_has_changed = false;
 
 								molStructPlugin_->readWriteLock_.lockForWrite();
 
-								if( molStructPlugin_->handle_to_bond_.has(bond_identifier))
+								if (molStructPlugin_->handle_to_bond_.has(bond_identifier))
 								{
 									Bond * bond_in_store =  molStructPlugin_->handle_to_bond_[bond_identifier];
-
-									if(bond_in_store != NULL)
+									if (bond_in_store)
 									{
-										if(bond_order != bond_in_store->getOrder())
+										if (bond_order != bond_in_store->getOrder())
 										{
 											bond_in_store->setOrder(bond_order);
-											isBondChanged = true;
-
+											bond_has_changed = true;
 										}
 										molStructPlugin_->readWriteLock_.unlock();
 
-										if(isBondChanged)
+										if (bond_has_changed)
 										{
 											String update_bond_string(OpenSimReceiver::UPDATE_BOND);
 
@@ -1699,7 +1595,6 @@ namespace BALL
 											Log.info() << "Update_bond_string Message @ handleRepresentation from BALLView to OpenSim : "<<update_bond_string<<std::endl;
 										}
 									}
-
 								}
 							}
 						}

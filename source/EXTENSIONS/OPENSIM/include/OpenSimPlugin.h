@@ -76,13 +76,13 @@ namespace BALL
 				void sendAcknowledgement(const String& message);
 
 
-				void handleNewComposite(OpenSimTask message);
+				void handleNewComposite(OpenSimTask task);
 
-				void handleChangedComposite(OpenSimTask message);
+				void handleChangedComposite(OpenSimTask task);
 				
-				void handleRemovedComposite(OpenSimTask message);
+				void handleRemovedComposite(OpenSimTask task);
 				
-				void handleRepresentation(OpenSimTask message);
+				void handleRepresentation(OpenSimTask task);
 
 				bool hasMessage();
 
