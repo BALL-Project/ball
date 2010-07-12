@@ -104,10 +104,14 @@ namespace BALL
 
 			server_ =  new OpenSimReceiver(local_port_, this);
 			server_->start();
-
 			cmdThread_->start();
-
-			return true;
+			
+			if (!server_->isRunning() || !cmdThread_->isRunning())
+			{
+				Log.error() << "Activation of OpenSimPlugin Server was not successfull!" << endl;
+				is_active_ = false;
+			}
+			return is_active_;
 		}
 		
 		bool OpenSimPlugin::deactivate()
@@ -375,19 +379,18 @@ namespace BALL
 
 		void OpenSimPlugin::handleMolecularModeling(std::vector<String> message)
 		{
-			if(message.empty())
+			if (message.empty())
 			{
-				Log.error()<<"Damnit! This is an empty message! " <<std::endl;
+				Log.error() << "Damnit! This is an empty message! " << endl;
 				return;
 			}
 
 			Size command_index(message[0].trim().toInt());
-					
 			server_->is_Process_Done_ = false;
 
 			switch (command_index)
 			{
-				case(OpenSimReceiver::ADD_ATOM):
+				case (OpenSimReceiver::ADD_ATOM):
 				{
 					if (message.size() != 9)
 					{
@@ -407,16 +410,12 @@ namespace BALL
 									message[7].toInt(), 
 									message[8].trim().toInt());
 
-
 				
 					Index atom_index_ = molStructPlugin_->addAtom( element, position, radius, color);
-
-
 			
 					if( atom_index_ != -1)
 					{
 						String acknowledgement_string(OpenSimReceiver::ACKNOWLEDGE_ADD_ATOM);
-
 
 						acknowledgement_string +=  String(";") +  String(atom_index_) 
 													+ String(";") + String(element) 
@@ -428,65 +427,61 @@ namespace BALL
 													+ String(";") + String((int)color.getBlue())
 													+ String(";") + String((int)color.getGreen());
 
-						Log.info() << "ADD_ATOM:acknowledgement_string Message @handleMolecularModeling from OpenSim to BALLView  : "<<acknowledgement_string<<std::endl;
+						Log.info() << "ADD_ATOM:acknowledgement_string Message @handleMolecularModeling from OpenSim to BALLView  : " 
+											<< acknowledgement_string << endl;
+
+						sendAcknowledgement(acknowledgement_string);
+					}
+					else
+					{
+						Log.info() << "ADD_ATOM: Failed" << endl;
+						// what message should we send to OpenMol
+					}
+					break;
+				}
+				case (OpenSimReceiver::ADD_BOND):
+				{
+					if (message.size() != 4)
+					{
+						Log.error() << "Damnit! This is not an add bond command" << endl;
+						break;
+					}
+
+					Index atom_one_index = message[1].toInt();
+					Index atom_two_index = message[2].toInt();
+
+					Size bond_order = message[3].trim().toInt();
+
+					Index bond_index_  = molStructPlugin_->addBondByAtomIndex(atom_one_index, atom_two_index, bond_order);
+					
+					if(bond_index_ != -1)
+					{
+					
+						String acknowledgement_string(OpenSimReceiver::ACKNOWLEDGE_ADD_BOND);
+
+						acknowledgement_string +=	String(";") + String(bond_index_) 
+												  + String(";") + String(atom_one_index)
+												  + String(";") + String(atom_two_index) 
+												  + String(";")+ String(bond_order);
+
+						Log.info() << "ADD_BOND:acknowledgement_string Message @handleMolecularModeling from OpenSim to BALLView  : "
+											 << acknowledgement_string << endl;
 
 
 						sendAcknowledgement(acknowledgement_string);
 					}
 					else
 					{
-						Log.info() << "ADD_ATOM: Failed"<<std::endl;
+						Log.info() << "ADD_BOND: Failed " << endl;
 						// what message should we send to OpenMol
 					}
-				break;
-			}
-				case (OpenSimReceiver::ADD_BOND):
-				{
-
-						if(message.size() != 4)
-						{
-							Log.error()<<"Damnit! This is not an add bond command"<<std::endl;
-							break;
-						}
-
-						
-
-						Index atom_one_index = message[1].toInt();
-						Index atom_two_index = message[2].toInt();
-
-						
-
-						Size bond_order = message[3].trim().toInt();
-
-						Index bond_index_  = molStructPlugin_->addBondByAtomIndex(atom_one_index, atom_two_index, bond_order);
-					
-						if(bond_index_ != -1)
-						{
-					
-							String acknowledgement_string(OpenSimReceiver::ACKNOWLEDGE_ADD_BOND);
-
-							acknowledgement_string +=	String(";") + String(bond_index_) 
-													  + String(";") + String(atom_one_index)
-													  + String(";") + String(atom_two_index) 
-													  + String(";")+ String(bond_order);
-
-							Log.info() << "ADD_BOND:acknowledgement_string Message @handleMolecularModeling from OpenSim to BALLView  : "<<acknowledgement_string<<std::endl;
-
-
-							sendAcknowledgement(acknowledgement_string);
-						}
-						else
-						{
-							Log.info() << "ADD_BOND: Failed "<<std::endl;
-							// what message should we send to OpenMol
-						}
 					break;
 				}
 				case (OpenSimReceiver::REMOVE_ATOM):
 				{
-						if(message.size()!= 2)
+						if (message.size()!= 2)
 						{
-							Log.error()<<"Damnit! This is not an atom remval command"<<std::endl;
+							Log.error() << "Damnit! This is not an atom remval command" << endl;
 							break;
 						}
 
@@ -494,13 +489,10 @@ namespace BALL
 
 						molStructPlugin_->removeAtomByIndex(atom_index_);
 
-
 						String acknowledgement_string(OpenSimReceiver::ACKNOWLEDGE_REMOVE_ATOM);
-
 						acknowledgement_string += String(";") + String(atom_index_)  ;
 
 						Log.info() << "REMOVE_ATOM:acknowledgement_string Message @handleMolecularModeling from OpenSim to BALLView  : "<<acknowledgement_string<<std::endl;
-
 
 						sendAcknowledgement(acknowledgement_string);
 					}
@@ -521,11 +513,9 @@ namespace BALL
 						molStructPlugin_->removeBondByAtomIndex(bond_index_,atom_index_one_,atom_index_two_);
 					
 						String acknowledgement_string(OpenSimReceiver::ACKNOWLEDGE_REMOVE_BOND);
-
 						acknowledgement_string += String(";") + String(bond_index_) ;
 
 						Log.info() << "REMOVE_BOND:acknowledgement_string Message @handleMolecularModeling from OpenSim to BALLView  : "<<acknowledgement_string<<std::endl;
-
 
 						sendAcknowledgement(acknowledgement_string);
 						break;
@@ -542,19 +532,14 @@ namespace BALL
 
 						String element(message[2]);
 
-						
-
 						Vector3 position(message[3].toFloat(),
 										 message[4].toFloat(),
 										 message[5].toFloat());
 
-
 						molStructPlugin_->updateAtomByIndex(atom_index, element, position /*, radius, charge, velocity,force*/);
 
 						String acknowledgement_string(OpenSimReceiver::ACKNOWLEDGE_UPDATE_ATOM);
-
-						acknowledgement_string += String(";") + String(atom_index) ;
-
+						acknowledgement_string += String(";") + String(atom_index);
 						sendAcknowledgement(acknowledgement_string);
 
 						break;
@@ -563,62 +548,48 @@ namespace BALL
 				{
 						if (message.size() != 5)
 						{
-							Log.error() << "Damnit! This is not an update bond command!";
+							Log.error() << "Damnit! This is not an update bond command!" << endl;
 							break;
 						}
 
 						Index bond_index = message[1].toInt();
-
 						Index atom_index_one_ =  message[2].toInt();
-						
 						Index atom_index_two_ =  message[3].toInt();
-							
 						Size order_ =  message[4].trim().toInt();
-
 						molStructPlugin_->updateBondByAtomIndex(atom_index_one_,atom_index_two_,order_ );
 
 						String acknowledgement_string(OpenSimReceiver::ACKNOWLEDGE_UPDATE_BOND);
-
 						acknowledgement_string += String(";") + String(bond_index) ;
-
 						sendAcknowledgement(acknowledgement_string);
-
 						break;
 				}
 				case (OpenSimReceiver::SATURATE_FULL_WITH_HYDROGENS):
 				{
 						if (message.size() != 1)
 						{
-							Log.error() << "Damnit! This is not a command to run the saturation with hydrogen!";
+							Log.error() << "Damnit! This is not a command to run the saturation with hydrogen!" << endl;;
 							break;
 						}
 
 						molModelingPlugin_->saturateFullWithHydrogens();
 
 						String acknowledgement_string(OpenSimReceiver::ACKNOWLEDGE_SATURATE_F_HYD);
-
 						acknowledgement_string += String(";") + String("done");
-
 						sendAcknowledgement(acknowledgement_string);
-
 						break;
-
 				}
 				case (OpenSimReceiver::RUN_MINIMIZATION):
 				{
 						if (message.size() != 1)
 						{
-							Log.error() << "Damnit! This is not a command to run the minization!";
+							Log.error() << "Damnit! This is not a command to run the minization!" << endl;
 							break;
 						}
 						molDynamicsPlugin_->minimize();
 
 						String acknowledgement_string(OpenSimReceiver::ACKNOWLEDGE_RUN_MINI);
-
 						acknowledgement_string += String(";") + String("done");
-
 						sendAcknowledgement(acknowledgement_string);
-
 						break;
 				}
 				case (OpenSimReceiver::CHANGE_FORCE_FIELD):
@@ -630,50 +601,39 @@ namespace BALL
 						}
 
 						Size force_field_ = message[1].trim().toInt();
-
 						molModelingPlugin_->ChangeForceField(force_field_);
 
 						String acknowledgement_string(OpenSimReceiver::ACKNOWLEDGE_CHANGE_FF);
-
 						acknowledgement_string += String(";") + String("done");
-
 						sendAcknowledgement(acknowledgement_string);
-
 						break;
 				}
-					
-
 				case (OpenSimReceiver::SINGLE_POINT_CALCULATION):
 				{
 						if (message.size() != 1)
 						{
-							Log.error() << "Damnit! This is not a command to run md simulation!";
+							Log.error() << "Damnit! This is not a command to run md simulation!" << endl;;
 							break;
 						}
 						molDynamicsPlugin_->runSinglePointCalculation();
 
 						String acknowledgement_string(OpenSimReceiver::ACKNOWLEDGE_S_PNT_CAL);
-
 						acknowledgement_string += String(";") + String("done");
-
 						sendAcknowledgement(acknowledgement_string);
-
 						break;
 				}
 				case (OpenSimReceiver::MD_SIMULATION):
 				{
 						if (message.size() != 1)
 						{
-							Log.error() << "Damnit! This is not a command to run md simulation!";
+							Log.error() << "Damnit! This is not a command to run md simulation!" << endl;
 							break;
 						}
 						
 						molDynamicsPlugin_->runMDSimulation();
 
 						String acknowledgement_string(OpenSimReceiver::ACKNOWLEDGE_MD_SIMULATION);
-
 						acknowledgement_string += String(";") + String("done");
-
 						sendAcknowledgement(acknowledgement_string);
 
 						break;
@@ -682,16 +642,14 @@ namespace BALL
 				{
 						if (message.size() != 1)
 						{
-							Log.error() << "Damnit! This is not a command to add molecule!";
+							Log.error() << "Damnit! This is not a command to add molecule!" << endl;
 							break;
 						}
 						
 						molModelingPlugin_->runCreateNewMolecule();
 
 						String acknowledgement_string(OpenSimReceiver::ACKNOWLEDGE_ADD_MOLECULE);
-
 						acknowledgement_string += String(";") + String("done");
-
 						sendAcknowledgement(acknowledgement_string);
 
 						break;
@@ -707,9 +665,7 @@ namespace BALL
 						molDynamicsPlugin_->stopSimulation();
 
 						String acknowledgement_string(OpenSimReceiver::ACKNOWLEDGE_STOP_SIMULATION);
-
 						acknowledgement_string += String(";") + String("done");
-
 						sendAcknowledgement(acknowledgement_string);
 
 						break;
@@ -717,7 +673,6 @@ namespace BALL
 				default:
 					break;
 			}
-
 			server_->is_Process_Done_ = true;
 		}
 
