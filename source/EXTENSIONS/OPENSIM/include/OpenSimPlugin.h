@@ -71,10 +71,10 @@ namespace BALL
 
 				virtual void onNotify(Message* message);
 
-				void handleMolecularModeling(std::vector<String> message);
-
 				void sendAcknowledgement(const String& message);
-
+				
+				//TODO AKD: why is that not a task??
+				void handleMolecularModeling(std::vector<String> message);
 
 				void handleNewComposite(OpenSimTask task);
 
@@ -100,7 +100,6 @@ namespace BALL
 				virtual void settingsChanged();
 
 			protected:
-				
 				OpenSimPluginConfiguration* settings_;
 
 				bool is_active_;
@@ -115,7 +114,6 @@ namespace BALL
 				MolecularStructureContainer* const molStructPlugin_;
 				MolecularModelingContainer*  const molModelingPlugin_;
 				MolecularDynamicsContainer*  const molDynamicsPlugin_;
-
 			
 				String remote_host_;
 				Size   remote_port_;
