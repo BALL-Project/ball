@@ -234,9 +234,9 @@ SET(BALL_STRUCTURE_TESTS
 	UCK_test
 	BuildBondsProcessor_test
 	DockResult_test
-	MoleculeAssembler_test
-	SDGenerator_test
-	RingAnalyser_test
+#	MoleculeAssembler_test
+#	SDGenerator_test
+#	RingAnalyser_test
 	ResidueRotamerSet_test
 	RotamerLibrary_test
 )
