@@ -225,7 +225,7 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);  
 		}
 
-		istream& operator >> (istream& s, ColorRGBA& color)
+		BALL_VIEW_EXPORT istream& operator >> (istream& s, ColorRGBA& color)
 		{
 			char dummy[20];
 			s >> dummy >> color.red_ 
@@ -237,7 +237,7 @@ namespace BALL
 			return s;
 		}
 
-		ostream& operator << (ostream& s, const ColorRGBA& color)
+		BALL_VIEW_EXPORT ostream& operator << (ostream& s, const ColorRGBA& color)
 		{
 			s << "(" << (short)color.red_ << ","
 					 << (short)color.green_ << ","
