@@ -37,8 +37,6 @@ ExportGeometryDialog::ExportGeometryDialog(QWidget* parent, const char* name)
 
   // signals and slots connections
 	QObject::connect( browse_button, SIGNAL( clicked() ), this, SLOT( browseFiles() ) );
-  QObject::connect( buttonOk, SIGNAL( clicked() ), this, SLOT( accept() ) );
-  QObject::connect( buttonCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
   QObject::connect( prototyping_radio, SIGNAL( clicked() ), this, SLOT( protomode() ) );
   QObject::connect( view_radio, SIGNAL( clicked() ), this, SLOT( viewmode() ) );
 
