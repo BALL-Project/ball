@@ -432,7 +432,7 @@ void DemoTutorialDialog::nextStepDemo_()
 		cdialog->setGrid(grid_);
 		cdialog->setMinValue(-0.7);
 		cdialog->setMaxValue(0.7);
-		cdialog->applyPressed();
+		cdialog->accept();
 
 		getMainControl()->update(*rep);
 	}

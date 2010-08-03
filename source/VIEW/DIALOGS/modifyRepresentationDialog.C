@@ -60,11 +60,10 @@ namespace BALL
 
 			// NOTE: we *rely* on the object name "MaterialSettingsForRepresentation" to be able to
 			//       distinguish between the dialog used here and the one used in the preferences
-			material_settings_ = new MaterialSettings(material_setting, "MaterialSettingsForRepresentation");
+			material_settings_ = new MaterialSettings(material_settings_, "MaterialSettingsForRepresentation");
+			material_setting->layout()->addWidget(material_settings_);
 
 			// signals and slots connections
-			connect( apply_button, SIGNAL( clicked() ), this, SLOT( applyPressed() ) );
-			connect( cancel_button, SIGNAL( clicked() ), this, SLOT( cancelPressed() ) );
 			connect( surface_tab, SIGNAL( currentChanged(int) ), this, SLOT( tabChanged() ) );
 			connect( autoscale, SIGNAL( clicked() ), this, SLOT( autoScale() ) );
 			connect( grids, SIGNAL( activated(int) ), this, SLOT( gridSelected() ) );
@@ -99,7 +98,7 @@ namespace BALL
 		}
 
 		// ------------------------- SLOTS ------------------------------------------------
-		void ModifyRepresentationDialog::applyPressed() 
+		void ModifyRepresentationDialog::accept()
 		{
 			if (surface_tab->currentWidget() == by_grid)
 			{
@@ -147,15 +146,8 @@ namespace BALL
 
 			getMainControl()->update(*rep_);
 
-			accept();
+			QDialog::accept();
 		}
-
-
-		void ModifyRepresentationDialog::cancelPressed()
-		{
-			hide();
-		}
-
 
 		void ModifyRepresentationDialog::choosePressed()
 		{
@@ -322,7 +314,7 @@ namespace BALL
 				mid_value_ = (max_value_ - min_value_) * 0.5 + min_value_;
 			}
 
-			apply_button->setEnabled(true);
+			buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
 			autoscale->setEnabled(true);
 			min_box->setText(String(min_value_).c_str());
 			mid_box->setText(String(mid_value_).c_str());
@@ -560,19 +552,19 @@ namespace BALL
 			if (!rep_)
 			{
 				autoscale->setEnabled(false);
-				apply_button->setEnabled(false);
+				buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 				return;
 			}
 
 			if (surface_tab->currentWidget() == by_grid)
 			{
-				apply_button->setEnabled(grid_ != 0);
+				buttonBox->button(QDialogButtonBox::Ok)->setEnabled(grid_ != 0);
 				autoscale->setEnabled(grid_ != 0);
 				return;
 			}
 
 			// if coloring by selected color, always enabled
-			apply_button->setEnabled(true);
+			buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
 		}
 
 		void ModifyRepresentationDialog::onNotify(Message *message)
@@ -644,7 +636,7 @@ namespace BALL
 			if (rep == 0 ||
 					rep->getGeometricObjects().size() == 0)
 			{
-				apply_button->setEnabled(false);
+				buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 				return;
 			}
 			else

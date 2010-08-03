@@ -27,8 +27,8 @@ class ModifyRepresentationDialog
 	void setMidValue(float);
 	void setSplitRadius(float);
 
-	void applyPressed();
-	void cancelPressed();
+	void accept();
+	void reject();
 	void maxPressed();
 	void midPressed();
 	void minPressed();

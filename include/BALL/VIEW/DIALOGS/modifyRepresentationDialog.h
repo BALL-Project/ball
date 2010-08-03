@@ -92,8 +92,7 @@ namespace BALL
 				
 			public slots:
 			
-			void applyPressed();
-			void cancelPressed();
+			void accept();
 			void maxPressed();
 			void midPressed();
 			void minPressed();
