@@ -314,8 +314,6 @@ namespace BALL
 		QToolBar* tb = new QToolBar("Main Toolbar", this);
 		tb->setObjectName("Main Toolbar");
 		tb->setIconSize(QSize(22,22));
-		tb->layout()->setMargin(2);
-		tb->layout()->setSpacing(2);
 		addToolBar(Qt::TopToolBarArea, tb);
 		
 		MainControl::show();
