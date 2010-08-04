@@ -20,6 +20,7 @@ SET(UI_LIST
 	displayProperties.ui
 	fieldLinesDialog.ui
 	FDPBDialog.ui
+	gridColorWidget.ui
 	gridVisualizationDialog.ui
 	labelDialog.ui
 	lightSettings.ui

@@ -9,6 +9,7 @@ SET(SOURCES_LIST
 	fileObserver.C
  	genericControl.C
 	geometricControl.C
+	gridColorWidget.C
 	helpViewer.C
 	logView.C
 	molecularControl.C

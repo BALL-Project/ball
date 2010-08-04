@@ -1,0 +1,591 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GridColorWidget</class>
+ <widget class="QWidget" name="GridColorWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>571</width>
+    <height>167</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="1">
+      <widget class="QLabel" name="TextLabel14_3">
+       <property name="text">
+        <string>&lt; min</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="TextLabel14">
+       <property name="text">
+        <string>min</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QLabel" name="TextLabel14_2">
+       <property name="text">
+        <string>mid</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="4">
+      <widget class="QLabel" name="TextLabel15">
+       <property name="text">
+        <string>max</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="5">
+      <widget class="QLabel" name="TextLabel13">
+       <property name="text">
+        <string>&gt; max</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="TextLabel1">
+       <property name="text">
+        <string>colors to interpolate</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="BALL::VIEW::ColorButton" name="min_min_button">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="BALL::VIEW::ColorButton" name="min_button">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3">
+      <widget class="BALL::VIEW::ColorButton" name="mid_button">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="4">
+      <widget class="BALL::VIEW::ColorButton" name="max_button">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="5">
+      <widget class="BALL::VIEW::ColorButton" name="max_max_button">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="TextLabel1_2">
+       <property name="text">
+        <string>opaqueness (0-255)</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QSpinBox" name="min_min_alpha">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="toolTip">
+        <string>Opaqueness for colors for values out of the interpolation range</string>
+       </property>
+       <property name="maximum">
+        <number>255</number>
+       </property>
+       <property name="value">
+        <number>255</number>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QSpinBox" name="min_alpha">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="toolTip">
+        <string>Opaqueness for min color</string>
+       </property>
+       <property name="maximum">
+        <number>255</number>
+       </property>
+       <property name="value">
+        <number>90</number>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="3">
+      <widget class="QSpinBox" name="mid_alpha">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="toolTip">
+        <string>Opaqueness for mid color</string>
+       </property>
+       <property name="maximum">
+        <number>255</number>
+       </property>
+       <property name="value">
+        <number>0</number>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="4">
+      <widget class="QSpinBox" name="max_alpha">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="toolTip">
+        <string>Opaqueness for max color</string>
+       </property>
+       <property name="maximum">
+        <number>255</number>
+       </property>
+       <property name="value">
+        <number>90</number>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="5">
+      <widget class="QSpinBox" name="max_max_alpha">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="toolTip">
+        <string>Opaqueness for colors for values out of the interpolation range</string>
+       </property>
+       <property name="maximum">
+        <number>255</number>
+       </property>
+       <property name="value">
+        <number>255</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="TextLabel7_2">
+       <property name="text">
+        <string>interpolation range</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLineEdit" name="min_box">
+       <property name="toolTip">
+        <string>Value for min color</string>
+       </property>
+       <property name="text">
+        <string>-1.0</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="QLineEdit" name="mid_box">
+       <property name="toolTip">
+        <string>Value for mid color</string>
+       </property>
+       <property name="text">
+        <string>0.0</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="4">
+      <widget class="QLineEdit" name="max_box">
+       <property name="toolTip">
+        <string>Value for max color</string>
+       </property>
+       <property name="text">
+        <string>1.0</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="6">
+      <widget class="QPushButton" name="autoscale">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="toolTip">
+        <string>Calculate the min, mid and max values from the grid</string>
+       </property>
+       <property name="text">
+        <string>Auto</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="TextLabel7">
+       <property name="text">
+        <string>Number of color steps</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QSpinBox" name="levels_box">
+       <property name="toolTip">
+        <string>Number of interpolated colors</string>
+       </property>
+       <property name="maximum">
+        <number>999</number>
+       </property>
+       <property name="value">
+        <number>99</number>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="4" colspan="3">
+      <widget class="QCheckBox" name="normalization">
+       <property name="text">
+        <string>perform histogram equalization</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="4" colspan="3">
+      <widget class="QCheckBox" name="grid_transparency">
+       <property name="text">
+        <string>enable transparency</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>BALL::VIEW::ColorButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">BALL/VIEW/WIDGETS/colorButton.h</header>
+   <slots>
+    <signal>colorChanged(QColor)</signal>
+   </slots>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>grid_transparency</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>GridColorWidget</receiver>
+   <slot>transparencyToggled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>554</x>
+     <y>154</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>570</x>
+     <y>166</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>normalization</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>GridColorWidget</receiver>
+   <slot>normalizationToggled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>443</x>
+     <y>120</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>570</x>
+     <y>166</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>min_box</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>GridColorWidget</receiver>
+   <slot>validateText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>244</x>
+     <y>40</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>262</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mid_box</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>GridColorWidget</receiver>
+   <slot>validateText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>329</x>
+     <y>40</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>349</x>
+     <y>248</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>max_box</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>GridColorWidget</receiver>
+   <slot>validateText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>411</x>
+     <y>45</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>430</x>
+     <y>191</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>min_min_button</sender>
+   <signal>colorChanged(QColor)</signal>
+   <receiver>GridColorWidget</receiver>
+   <slot>minMinColorChanged(QColor)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>191</x>
+     <y>62</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>185</x>
+     <y>204</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>min_button</sender>
+   <signal>colorChanged(QColor)</signal>
+   <receiver>GridColorWidget</receiver>
+   <slot>minColorChanged(QColor)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>234</x>
+     <y>74</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>248</x>
+     <y>216</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mid_button</sender>
+   <signal>colorChanged(QColor)</signal>
+   <receiver>GridColorWidget</receiver>
+   <slot>midColorChanged(QColor)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>315</x>
+     <y>69</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>324</x>
+     <y>228</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>max_button</sender>
+   <signal>colorChanged(QColor)</signal>
+   <receiver>GridColorWidget</receiver>
+   <slot>maxColorChanged(QColor)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>383</x>
+     <y>69</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>683</x>
+     <y>104</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>max_max_button</sender>
+   <signal>colorChanged(QColor)</signal>
+   <receiver>GridColorWidget</receiver>
+   <slot>maxMaxColorChanged(QColor)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>482</x>
+     <y>65</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>621</x>
+     <y>151</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>min_min_alpha</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>GridColorWidget</receiver>
+   <slot>minMinAlphaChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>171</x>
+     <y>99</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>178</x>
+     <y>237</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>min_alpha</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>GridColorWidget</receiver>
+   <slot>minAlphaChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>223</x>
+     <y>85</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>226</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mid_alpha</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>GridColorWidget</receiver>
+   <slot>midAlphaChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>294</x>
+     <y>93</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>325</x>
+     <y>253</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>max_alpha</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>GridColorWidget</receiver>
+   <slot>maxAlphaChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>366</x>
+     <y>99</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-66</x>
+     <y>143</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>max_max_alpha</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>GridColorWidget</receiver>
+   <slot>maxMaxAlphaChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>458</x>
+     <y>94</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>624</x>
+     <y>111</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <signal>autoScaleRequested()</signal>
+  <slot>transparencyToggled(bool)</slot>
+  <slot>normalizationToggled(bool)</slot>
+  <slot>validateText(QString)</slot>
+  <slot>minMinColorChanged(QColor)</slot>
+  <slot>minColorChanged(QColor)</slot>
+  <slot>midColorChanged(QColor)</slot>
+  <slot>maxColorChanged(QColor)</slot>
+  <slot>maxMaxColorChanged(QColor)</slot>
+  <slot>minMinAlphaChanged(int)</slot>
+  <slot>minAlphaChanged(int)</slot>
+  <slot>midAlphaChanged(int)</slot>
+  <slot>maxAlphaChanged(int)</slot>
+  <slot>maxMaxAlphaChanged(int)</slot>
+ </slots>
+</ui>
