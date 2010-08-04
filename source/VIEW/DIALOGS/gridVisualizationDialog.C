@@ -49,18 +49,8 @@ namespace BALL
 			setupUi(this);
 
 			// signals and slots connections
-			connect( apply_button, SIGNAL( clicked() ), this, SLOT( accept() ) );
-			connect( cancel_button, SIGNAL( clicked() ), this, SLOT( reject() ) );
-			connect( autoscale, SIGNAL( clicked() ), this, SLOT( autoScale() ) );
+			connect( gridColorWidget, SIGNAL( autoScaleRequested() ), this, SLOT( autoScale() ) );
 			connect( grids, SIGNAL( activated(int) ), this, SLOT( gridSelected() ) );
-			connect( transparency, SIGNAL( stateChanged(int) ), this, SLOT(gridTransparencyChanged()));
-			connect( normalization, SIGNAL( clicked() ), this, SLOT(normalizationChanged()));
-			connect( min_min_button, SIGNAL( clicked() ), this, SLOT( minMinPressed() ) );
-			connect( min_button, SIGNAL( clicked() ), this, SLOT( minPressed() ) );
-			connect( mid_button, SIGNAL( clicked() ), this, SLOT( midPressed() ) );
-			connect( max_button, SIGNAL( clicked() ), this, SLOT( maxPressed() ) );
-			connect( max_max_button, SIGNAL( clicked() ), this, SLOT( maxMaxPressed() ) );
-			connect( mode_tab, SIGNAL( currentChanged(int) ), this, SLOT(gridTransparencyChanged()));
 
 			setObjectName(name);
 
@@ -68,54 +58,11 @@ namespace BALL
 			msg->setObject(this);
 			msg->setURL("datasetControl.html#volume");
 			getMainControl()->sendMessage(*msg);
-
-			VIEW::setColor(min_min_label, ColorRGBA(255,0,0));
-			VIEW::setColor(min_label, ColorRGBA(255,0,0));
-			VIEW::setColor(mid_label, ColorRGBA(255,255,255));
-			VIEW::setColor(max_label, ColorRGBA(0,0, 255));
-			VIEW::setColor(max_max_label, ColorRGBA(0,0, 255));
-		}
-
-		void GridVisualizationDialog::normalizationChanged()
-		{
-			if (normalization->checkState() != Qt::Checked) return;
-
-			min_box->setText("0.0");
-			mid_box->setText("0.5");
-			max_box->setText("1.0");
 		}
 
 		GridVisualizationDialog::~GridVisualizationDialog()
 		{
 		}
-
-		// ------------------------- SLOTS ------------------------------------------------
-
-		void GridVisualizationDialog::maxPressed()
-		{
-			max_color.set(chooseColor(max_label));
-		}
-
-		void GridVisualizationDialog::midPressed()
-		{
-			mid_color.set(chooseColor(mid_label));
-		}
-
-		void GridVisualizationDialog::minPressed()
-		{
-			min_color.set(chooseColor(min_label));
-		}
-
-		void GridVisualizationDialog::minMinPressed()
-		{
-			min_min_color.set(chooseColor(min_min_label));
-		}
-
-		void GridVisualizationDialog::maxMaxPressed()
-		{
-			max_max_color.set(chooseColor(max_max_label));
-		}
-
 
 		//--------------------- Helper functions ----------------------------------
 		bool GridVisualizationDialog::insertGrid_(RegularData3D& grid, const String& name)
@@ -144,7 +91,7 @@ namespace BALL
 			
 			grid_ = *it;
 
-			apply_button->setEnabled(true);
+			buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
 		}
 
 		void GridVisualizationDialog::setGrid(RegularData3D* grid)
@@ -170,82 +117,48 @@ namespace BALL
 		{
 			if (grid_ == 0) return;
 
-			if (normalization->checkState() == Qt::Checked)
+			if (gridColorWidget->isNormalizationEnabled())
 			{
-				min_box->setText("0.0");
-				mid_box->setText("0.5");
-				max_box->setText("1.0");
+				gridColorWidget->setMinValue(0.0f);
+				gridColorWidget->setMidValue(0.5f);
+				gridColorWidget->setMaxValue(1.0f);
 				return;
 			}
 			const vector<float>& values = grid_->getData();
 
-			float mid_value_ = 0;
-			float min_value_ = values[0];
-			float max_value_ = values[0];
+			float mid_value = 0;
+			float min_value = values[0];
+			float max_value = values[0];
 
 			for (Position p = 1; p < values.size(); p++)
 			{
-				min_value_ = std::min(min_value_, values[p]);
-				max_value_ = std::max(max_value_, values[p]);
+				min_value = std::min(min_value, values[p]);
+				max_value = std::max(max_value, values[p]);
 			}
 		
-			mid_value_ = (max_value_ - min_value_) * 0.5 + min_value_;
+			mid_value = (max_value - min_value) * 0.5 + min_value;
 
-			apply_button->setEnabled(true);
-			autoscale->setEnabled(true);
-			min_box->setText(String(min_value_).c_str());
-			mid_box->setText(String(mid_value_).c_str());
-			max_box->setText(String(max_value_).c_str());
-		}
-
-
-		void GridVisualizationDialog::setColor_(ColorRGBA& color, const QLabel* label, const QSpinBox* box)
-		{
-			color = VIEW::getColor(label);
-
-			if (mode_tab->currentIndex() == 0 &&
-					transparency->checkState() != Qt::Checked)
-			{
-				color.setAlpha(255);
-			}
-			else
-			{
-				color.setAlpha(box->value());
-			}
-		}
-
-		void GridVisualizationDialog::getColor_(const ColorRGBA& color, QLabel* label, QSpinBox* box)
-		{
-			VIEW::setColor(label, color);
-			box->setValue(color.getAlpha());
+			buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+			gridColorWidget->setEnabled(true);
+			gridColorWidget->setMinValue(min_value);
+			gridColorWidget->setMidValue(mid_value);
+			gridColorWidget->setMaxValue(max_value);
 		}
 
 		void GridVisualizationDialog::accept()
 		{
-			try
-			{
-				ascii(mid_box->text()).toFloat();
-				ascii(min_box->text()).toFloat();
-				ascii(max_box->text()).toFloat();
-			}
-			catch(...)
-			{
-				getMainControl()->setStatusbarText("Invalid value for min, mid or max value!", true);
-				return;
-			}
-
 			QDialog::accept();
 
-			setColor_(min_min_color, min_min_label, min_min_alpha);
-			setColor_(min_color, min_label, min_alpha);
-			setColor_(mid_color, mid_label, mid_alpha);
-			setColor_(max_color, max_label, max_alpha);
-			setColor_(max_max_color, max_max_label, max_max_alpha);
+			ColorRGBA min_min_color = gridColorWidget->getMinMinColor();
+			ColorRGBA min_color = gridColorWidget->getMinColor();
+			ColorRGBA mid_color = gridColorWidget->getMidColor();
+			ColorRGBA max_color = gridColorWidget->getMaxColor();
+			ColorRGBA max_max_color = gridColorWidget->getMaxMaxColor();
 
 			// now do the colorizing stuff...
-			float min_value = ascii(min_box->text()).toFloat();
-			float mid_value = ascii(mid_box->text()).toFloat();
-			float max_value = ascii(max_box->text()).toFloat();
+			float min_value = gridColorWidget->getMinValue();
+			float mid_value = gridColorWidget->getMidValue();
+			float max_value = gridColorWidget->getMaxValue();
 
 			ColorRGBA list[3];
 			list[0] = min_color;
@@ -255,7 +168,7 @@ namespace BALL
 			ColorMap cm(list, 3);
 			cm.setMinMaxColors(min_min_color, max_max_color);
 			cm.setAlphaBlending(true);
-			cm.setNumberOfColors(levels_box->value());
+			cm.setNumberOfColors(gridColorWidget->getNumLevels());
 			cm.setRange(min_value, max_value);
 
 			std::vector<Vector4> interpolation_points(3);
@@ -268,7 +181,7 @@ namespace BALL
 
 			vector<float> values;
 
-			if (normalization->checkState() == Qt::Checked)
+			if (gridColorWidget->isNormalizationEnabled())
 			{
 				grid_ = controller_->createHistogramGrid(*grid_);
 			}
@@ -363,8 +276,8 @@ namespace BALL
 
 		void GridVisualizationDialog::checkApplyButton_()
 		{
-			apply_button->setEnabled(grid_ != 0);
-			autoscale->setEnabled(grid_ != 0);
+			buttonBox->button(QDialogButtonBox::Ok)->setEnabled(grid_ != 0);
+			gridColorWidget->setEnabled(grid_ != 0);
 		}
 
 		bool GridVisualizationDialog::exec()
@@ -392,29 +305,19 @@ namespace BALL
 			return QDialog::exec();
 		}
 
-		void GridVisualizationDialog::gridTransparencyChanged()
-		{
- 			bool enabled = mode_tab->currentIndex() != 0 || transparency->checkState() == Qt::Checked;
-			min_min_alpha->setEnabled(enabled);
-					min_alpha->setEnabled(enabled);
-					mid_alpha->setEnabled(enabled);
-					max_alpha->setEnabled(enabled);
-			max_max_alpha->setEnabled(enabled);
-		}
-
 		void GridVisualizationDialog::setMinValue(float value)
 		{
-			min_label->setText(String(value).c_str());
+			gridColorWidget->setMinValue(value);
 		}
 
 		void GridVisualizationDialog::setMaxValue(float value)
 		{
-			max_label->setText(String(value).c_str());
+			gridColorWidget->setMaxValue(value);
 		}
 
 		void GridVisualizationDialog::setMidValue(float value)
 		{
-			mid_label->setText(String(value).c_str());
+			gridColorWidget->setMidValue(value);
 		}
 
 		void GridVisualizationDialog::setController(RegularData3DController* controller)

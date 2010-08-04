@@ -63,33 +63,19 @@ namespace BALL
 			public slots:
 			
 			void accept();
-			void maxPressed();
-			void midPressed();
-			void minPressed();
-			void minMinPressed();
-			void maxMaxPressed();
 			void autoScale();
 			void gridSelected();
 			bool exec();
-
-			protected slots:
-
-			void gridTransparencyChanged();
-			void normalizationChanged();
 
 			protected:
 
 			GridVisualizationDialog(const GridVisualizationDialog& dialog);
 
 			bool insertGrid_(RegularData3D& grid, const String& name);
-			void setColor_(ColorRGBA& color, const QLabel* label, const QSpinBox* box);
-			void getColor_(const ColorRGBA& color, QLabel* label, QSpinBox* box);
 			void checkApplyButton_();
 
 			RegularData3D* grid_;
 			RegularData3DController* controller_;
-
-			ColorRGBA	 	min_min_color, min_color, mid_color, max_color, max_max_color;	
 
 			std::list<RegularData3D*> grid_list_;
 		};
