@@ -59,6 +59,11 @@ namespace BALL
 		{
 		}
 
+		ColorRGBA::ColorRGBA(const QColor& color)
+		{
+			set(color);
+		}
+
 		ColorRGBA::ColorRGBA(const QColor& color, const ColorUnit& alpha)
 		{
 			set(color);
@@ -194,7 +199,7 @@ namespace BALL
 		{
 			if (!color.isValid()) return false;
 
-			set(color.red(), color.green(), color.blue());
+			set(color.red(), color.green(), color.blue(), color.alphaF());
 			return false;
 		}
 

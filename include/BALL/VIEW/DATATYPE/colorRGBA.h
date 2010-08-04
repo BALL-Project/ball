@@ -95,7 +95,10 @@ namespace BALL
 				 const ColorUnit& blue_value, const ColorUnit& alpha_value = (float)1);
 
 			/// Assignment from a QT QColor
-			ColorRGBA(const QColor& color, const ColorUnit& alpha = (float)1);
+			ColorRGBA(const QColor& color);
+
+			/// Assignment from a QT QColor
+			ColorRGBA(const QColor& color, const ColorUnit& alpha);
 
 			//@}
 			/** @name Destructors 
