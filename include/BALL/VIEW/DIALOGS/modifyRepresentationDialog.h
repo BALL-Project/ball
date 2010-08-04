@@ -93,11 +93,6 @@ namespace BALL
 			public slots:
 			
 			void accept();
-			void maxPressed();
-			void midPressed();
-			void minPressed();
-			void minMinPressed();
-			void maxMaxPressed();
 			void tabChanged();		
 			void autoScale();
 			void choosePressed();
@@ -107,11 +102,9 @@ namespace BALL
 
 			protected slots:
 
-			void gridTransparencyChanged();
 			void customColorTransparencyChanged();
 			void changeDrawingModeTransparencyChanged();
 			void splitMethodChanged();
-			void normalizationChanged();
 
 			protected:
 
@@ -123,8 +116,6 @@ namespace BALL
 			bool colorByGrid_();
 			bool insertGrid_(RegularData3D& grid, const String& name);
 			void removeGrid_(RegularData3D& grid);
-			void setColor_(ColorRGBA& color, const QLabel* label, const QSpinBox* box);
-			void getColor_(const ColorRGBA& color, QLabel* label, QSpinBox* box);
 			void invalidateGrid_();
 			void invalidateMesh_();
 			void changeDrawingMode_();
@@ -134,9 +125,6 @@ namespace BALL
 			inline bool checkInclude_(const AtomGrid& atom_grid, const Vector3& point) const;
 
 			RegularData3D* grid_;
-			float min_value_;
-			float mid_value_;
-			float max_value_;
 			float square_distance_;
 
 			ColorRGBA	 	selected_color, min_min_color, min_color, mid_color, max_color, max_max_color;	

@@ -65,15 +65,8 @@ namespace BALL
 
 			// signals and slots connections
 			connect( surface_tab, SIGNAL( currentChanged(int) ), this, SLOT( tabChanged() ) );
-			connect( autoscale, SIGNAL( clicked() ), this, SLOT( autoScale() ) );
+			connect( gridColorWidget, SIGNAL( autoScaleRequested() ), this, SLOT( autoScale() ) );
 			connect( grids, SIGNAL( activated(int) ), this, SLOT( gridSelected() ) );
-			connect( grid_transparency, SIGNAL( stateChanged(int) ), this, SLOT(gridTransparencyChanged()));
-			connect( normalization, SIGNAL( clicked() ), this, SLOT(normalizationChanged()));
-			connect( min_min_button, SIGNAL( clicked() ), this, SLOT( minMinPressed() ) );
-			connect( min_button, SIGNAL( clicked() ), this, SLOT( minPressed() ) );
-			connect( mid_button, SIGNAL( clicked() ), this, SLOT( midPressed() ) );
-			connect( max_button, SIGNAL( clicked() ), this, SLOT( maxPressed() ) );
-			connect( max_max_button, SIGNAL( clicked() ), this, SLOT( maxMaxPressed() ) );
 			connect( choose_button, SIGNAL( clicked() ), this, SLOT( choosePressed() ) );
 			connect( split_by_selection, SIGNAL( clicked() ), this, SLOT( splitMethodChanged() ) );
 			connect( split_by_distance, SIGNAL( clicked() ), this, SLOT( splitMethodChanged() ) );
@@ -82,15 +75,6 @@ namespace BALL
 
 			registerWidget(this);
 			setObjectName(name);
-		}
-
-		void ModifyRepresentationDialog::normalizationChanged()
-		{
-			if (normalization->checkState() != Qt::Checked) return;
-
-			min_box->setText("0.0");
-			mid_box->setText("0.5");
-			max_box->setText("1.0");
 		}
 
 		ModifyRepresentationDialog::~ModifyRepresentationDialog()
@@ -154,33 +138,6 @@ namespace BALL
 			QColor qcolor = chooseColor(custom_color_label);
 			selected_color.set(qcolor);
 		}
-
-
-		void ModifyRepresentationDialog::maxPressed()
-		{
-			max_color.set(chooseColor(max_label));
-		}
-
-		void ModifyRepresentationDialog::midPressed()
-		{
-			mid_color.set(chooseColor(mid_label));
-		}
-
-		void ModifyRepresentationDialog::minPressed()
-		{
-			min_color.set(chooseColor(min_label));
-		}
-
-		void ModifyRepresentationDialog::minMinPressed()
-		{
-			min_min_color.set(chooseColor(min_min_label));
-		}
-
-		void ModifyRepresentationDialog::maxMaxPressed()
-		{
-			max_max_color.set(chooseColor(max_max_label));
-		}
-
 
 		void ModifyRepresentationDialog::tabChanged()
 		{
@@ -256,6 +213,14 @@ namespace BALL
 		{
 			if (grid_ == 0 || rep_ == 0) return;
 
+			if (gridColorWidget->isNormalizationEnabled())
+			{
+				gridColorWidget->setMinValue(0.0f);
+				gridColorWidget->setMidValue(0.5f);
+				gridColorWidget->setMaxValue(1.0f);
+				return;
+			}
+
 			if (vertices_.size() == 0)
 			{
 				const GeometricObjectList& ls = rep_->getGeometricObjects();
@@ -267,11 +232,15 @@ namespace BALL
 				}
 			}
 
+			float min_value = 0.0f;
+			float mid_value = 0.0f;
+			float max_value = 0.0f;
+
 			if (vertices_.size() == 0)
 			{
-				mid_value_ = 0;
-				min_value_ = 0;
-				max_value_ = 0;
+				mid_value = 0;
+				min_value = 0;
+				max_value = 0;
 			}
 			else
 			{
@@ -279,17 +248,17 @@ namespace BALL
 
 				try
 				{
-					min_value_  = grid_->getInterpolatedValue(vertices_[0]);
-					max_value_  = grid_->getInterpolatedValue(vertices_[0]);
+					min_value  = grid_->getInterpolatedValue(vertices_[0]);
+					max_value  = grid_->getInterpolatedValue(vertices_[0]);
 				}
 				catch(...)
 				{
-					min_value_ = FLT_MAX;
-					max_value_ = FLT_MIN;
+					min_value = FLT_MAX;
+					max_value = FLT_MIN;
 					error = true;
 				}
 
-				mid_value_  = 0;
+				mid_value  = 0;
 				float value;
 
 				for(Position p = 1; p < vertices_.size(); p++)
@@ -297,8 +266,8 @@ namespace BALL
 					try
 					{
 						value = grid_->getInterpolatedValue(vertices_[p]);
-						min_value_ = std::min(min_value_, value);
-						max_value_ = std::max(max_value_, value);
+						min_value = std::min(min_value, value);
+						max_value = std::max(max_value, value);
 					}
 					catch(...)
 					{
@@ -311,35 +280,14 @@ namespace BALL
 					setStatusbarText("Warning the geometric object has points outside the grid!", true);
 				}
 
-				mid_value_ = (max_value_ - min_value_) * 0.5 + min_value_;
+				mid_value = (max_value - min_value) * 0.5 + min_value;
 			}
 
 			buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
-			autoscale->setEnabled(true);
-			min_box->setText(String(min_value_).c_str());
-			mid_box->setText(String(mid_value_).c_str());
-			max_box->setText(String(max_value_).c_str());
-		}
-
-
-		void ModifyRepresentationDialog::setColor_(ColorRGBA& color, const QLabel* label, const QSpinBox* box)
-		{
-			color = VIEW::getColor(label);
-
-			if (grid_transparency->checkState() == Qt::Checked)
-			{
-				color.setAlpha(box->value());
-			}
-			else
-			{
-				color.setAlpha(255);
-			}
-		}
-
-		void ModifyRepresentationDialog::getColor_(const ColorRGBA& color, QLabel* label, QSpinBox* box)
-		{
-			VIEW::setColor(label, color);
-			box->setValue(color.getAlpha());
+			gridColorWidget->setEnabled(true);
+			gridColorWidget->setMinValue(min_value);
+			gridColorWidget->setMidValue(mid_value);
+			gridColorWidget->setMaxValue(max_value);
 		}
 
 		void ModifyRepresentationDialog::colorByCustomColor_()
@@ -400,28 +348,16 @@ namespace BALL
 				return false;
 			}
 
-			try
-			{
-				ascii(mid_box->text()).toFloat();
-				ascii(min_box->text()).toFloat();
-				ascii(max_box->text()).toFloat();
-			}
-			catch(...)
-			{
-				setStatusbarText("Invalid value for min, mid or max value!", true);
-				return false;
-			}
-
-			setColor_(min_min_color, min_min_label, min_min_alpha);
-			setColor_(min_color, min_label, min_alpha);
-			setColor_(mid_color, mid_label, mid_alpha);
-			setColor_(max_color, max_label, max_alpha);
-			setColor_(max_max_color, max_max_label, max_max_alpha);
+			min_min_color = gridColorWidget->getMinMinColor();
+			min_color = gridColorWidget->getMinColor();
+			mid_color = gridColorWidget->getMidColor();
+			max_color = gridColorWidget->getMaxColor();
+			max_max_color = gridColorWidget->getMaxMaxColor();
 
 			// now do the colorizing stuff...
-			float min_value = ascii(min_box->text()).toFloat();
-			float mid_value = ascii(mid_box->text()).toFloat();
-			float max_value = ascii(max_box->text()).toFloat();
+			float min_value = gridColorWidget->getMinValue();
+			float mid_value = gridColorWidget->getMidValue();
+			float max_value = gridColorWidget->getMaxValue();
 
 			rep_->setTransparency(0);
 
@@ -444,7 +380,7 @@ namespace BALL
 			ColorMap cm(list, 3);
 			cm.setMinMaxColors(min_min_color, max_max_color);
 			cm.setAlphaBlending(true);
-			cm.setNumberOfColors(levels_box->value());
+			cm.setNumberOfColors(gridColorWidget->getNumLevels());
 			cm.setRange(min_value, max_value);
 
 			std::vector<Vector4> interpolation_points(3);
@@ -488,7 +424,7 @@ namespace BALL
 				error = true;
 			}
 
-			if (normalization->checkState() == Qt::Checked)
+			if (gridColorWidget->isNormalizationEnabled())
 			{
 				calculateHistogramEqualization(values, values);
 			}
@@ -551,7 +487,7 @@ namespace BALL
 		{
 			if (!rep_)
 			{
-				autoscale->setEnabled(false);
+				gridColorWidget->setEnabled(false);
 				buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 				return;
 			}
@@ -559,7 +495,7 @@ namespace BALL
 			if (surface_tab->currentWidget() == by_grid)
 			{
 				buttonBox->button(QDialogButtonBox::Ok)->setEnabled(grid_ != 0);
-				autoscale->setEnabled(grid_ != 0);
+				gridColorWidget->setEnabled(grid_ != 0);
 				return;
 			}
 
@@ -676,29 +612,19 @@ namespace BALL
 			raise();
 		}
 
-		void ModifyRepresentationDialog::gridTransparencyChanged()
-		{
-			bool enabled = grid_transparency->checkState() == Qt::Checked;
-			min_min_alpha->setEnabled(enabled);
-					min_alpha->setEnabled(enabled);
-					mid_alpha->setEnabled(enabled);
-					max_alpha->setEnabled(enabled);
-			max_max_alpha->setEnabled(enabled);
-		}
-
 		void ModifyRepresentationDialog::setMinValue(float value)
 		{
-			min_box->setText(String(value).c_str());
+			gridColorWidget->setMinValue(value);
 		}
 
 		void ModifyRepresentationDialog::setMaxValue(float value)
 		{
-			max_box->setText(String(value).c_str());
+			gridColorWidget->setMaxValue(value);
 		}
 
 		void ModifyRepresentationDialog::setMidValue(float value)
 		{
-			mid_box->setText(String(value).c_str());
+			gridColorWidget->setMidValue(value);
 		}
 
 		void ModifyRepresentationDialog::splitMethodChanged()

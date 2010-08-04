@@ -29,11 +29,6 @@ class ModifyRepresentationDialog
 
 	void accept();
 	void reject();
-	void maxPressed();
-	void midPressed();
-	void minPressed();
-	void minMinPressed();
-	void maxMaxPressed();
 	void tabChanged();		
 	void autoScale();
 	void choosePressed();
