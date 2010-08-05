@@ -35,19 +35,19 @@ namespace BALL
 					
 					if (task.type == OpenSimTask::NEW_COMPOSITE)
 					{		
-						bvcmdplugin_->handleNewComposite(task);
+						bvcmdplugin_->sendNewComposite(task);
 					}
 					else if (task.type == OpenSimTask::CHANGED_COMPOSITE_HIERARCHY) 
 					{
-						bvcmdplugin_->handleChangedComposite(task);
+						bvcmdplugin_->sendChangedComposite(task);
 					}
 					else if (task.type == OpenSimTask::REMOVED_COMPOSITE)
 					{
-						bvcmdplugin_->handleRemovedComposite(task);
+						bvcmdplugin_->sendRemovedComposite(task);
 					}
 					else if (task.type == OpenSimTask::REPRESENTATION)
 					{
-						bvcmdplugin_->handleRepresentation(task);
+						bvcmdplugin_->sendRepresentation(task);
 					}
 					else
 					{

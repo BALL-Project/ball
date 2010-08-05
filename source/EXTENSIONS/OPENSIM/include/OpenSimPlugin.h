@@ -76,13 +76,10 @@ namespace BALL
 				//TODO AKD: why is that not a task??
 				void handleMolecularModeling(std::vector<String> message);
 
-				void handleNewComposite(OpenSimTask task);
-
-				void handleChangedComposite(OpenSimTask task);
-				
-				void handleRemovedComposite(OpenSimTask task);
-				
-				void handleRepresentation(OpenSimTask task);
+				void sendNewComposite(OpenSimTask task);
+				void sendChangedComposite(OpenSimTask task);
+				void sendRemovedComposite(OpenSimTask task);
+				void sendRepresentation(OpenSimTask task);
 
 				bool hasMessage();
 

@@ -3,8 +3,10 @@
 #include <OpenSimPlugin.h>
 #include <OpenSimPluginConfiguration.h>
 
-#include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/SYSTEM/path.h>
+#include <BALL/SYSTEM/systemCalls.h>
+
+#include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/shortcutRegistry.h>
 
 #include <BALL/VIEW/KERNEL/message.h>
@@ -104,13 +106,27 @@ namespace BALL
 
 			server_ =  new OpenSimReceiver(local_port_, this);
 			server_->start();
-			cmdThread_->start();
-			
-			if (!server_->isRunning() || !cmdThread_->isRunning())
+
+			// give the server a few milliseconds to start up
+			sleepFor(200);
+
+			if (!server_->isRunning())
 			{
-				Log.error() << "Activation of OpenSimPlugin Server was not successfull!" << endl;
+				Log.error() << "Activation of OpenSimPlugin server was not successful!" << endl;
 				is_active_ = false;
 			}
+
+			cmdThread_->start();
+
+			// give the thread a few milliseconds to start up
+			sleepFor(200);
+
+			if (!cmdThread_->isRunning())
+			{
+				Log.error() << "Creation of worker thread was not successful!" << endl;
+				is_active_ = false;
+			}
+
 			return is_active_;
 		}
 		
@@ -676,7 +692,7 @@ namespace BALL
 			server_->is_Process_Done_ = true;
 		}
 
-		void OpenSimPlugin::handleNewComposite(OpenSimTask task)
+		void OpenSimPlugin::sendNewComposite(OpenSimTask task)
 		{ 
 			String command(OpenSimReceiver::ADD_ATOM_CONTAINER);
 			command += String(";") + String(task.handle_to_atom_.size()) + ";" + String(task.handle_to_bond_.size());
@@ -824,7 +840,7 @@ namespace BALL
 			server_->sendMessageString(command);
 		}
 
-		void OpenSimPlugin::handleRemovedComposite(OpenSimTask task)
+		void OpenSimPlugin::sendRemovedComposite(OpenSimTask task)
 		{	
 			String command(OpenSimReceiver::REMOVE_ATOM_CONTAINER);
 			command += String(";") + String(task.handle_to_atom_.size()) + ";" + String(task.handle_to_bond_.size());
@@ -905,8 +921,7 @@ namespace BALL
 			molStructPlugin_->handle_to_bond_.clear();
 		}
 
-		
-		void OpenSimPlugin::handleChangedComposite(OpenSimTask task)
+		void OpenSimPlugin::sendChangedComposite(OpenSimTask task)
 		{
 			String command(OpenSimReceiver::UPDATE_ATOM_CONTAINER);
 			command += String(";") + String(task.handle_to_atom_.size()) + ";" + String(task.handle_to_bond_.size());
@@ -1178,7 +1193,7 @@ namespace BALL
 			// AKD: I dont think so! BALLView directly deletes bonds to deleted atoms!
 		}
 
-		void OpenSimPlugin::handleRepresentation(OpenSimTask task)
+		void OpenSimPlugin::sendRepresentation(OpenSimTask task)
 		{
 			String new_positions(NULL);
 			Size number_of_changed_atoms = 0;
@@ -1586,7 +1601,7 @@ namespace BALL
 
 					if (bond_index != -1)
 					{
-						// This means the perticulr bond with 'index' is removed from the structure
+						// This means the perticular bond with 'index' is removed from the structure
 						String remove_bond_string(OpenSimReceiver::REMOVE_BOND);
 
 						//atom index has to be from bond : this is not correct to use in the following way
