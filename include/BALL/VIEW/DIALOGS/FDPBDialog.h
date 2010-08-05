@@ -98,14 +98,14 @@ namespace BALL
 			virtual void browseRadiiRules();
 
 			///
-			virtual void cancelPressed();
-
-			///
-			virtual void okPressed();
+			virtual void accept();
 
 			///
 			virtual void resetPressed();
-			
+
+		protected slots:
+			virtual void clicked(QAbstractButton* button);
+
 		protected:
 
 			void calculate_();

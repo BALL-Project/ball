@@ -45,9 +45,6 @@ namespace BALL
 			// signals and slots connections
 			connect( radii_data_browse, SIGNAL( clicked() ), this, SLOT( browseRadiiData() ) );
 			connect( radii_rules_browse, SIGNAL( clicked() ), this, SLOT( browseRadiiRules() ) );
-			connect( ok_button, SIGNAL( clicked() ), this, SLOT( okPressed() ) );
-			connect( cancel_button, SIGNAL( clicked() ), this, SLOT( cancelPressed() ) );
-			connect( reset_button, SIGNAL( clicked() ), this, SLOT( resetPressed() ) );
 			connect( charges_rules_browse, SIGNAL( pressed() ), this, SLOT( browseChargesRules() ) );
 			connect( charges_data_browse, SIGNAL( clicked() ), this, SLOT( browseChargesData() ) );
 			registerWidgets_();
@@ -90,15 +87,18 @@ namespace BALL
 			selectFile_(*radii_rules_lineedit);
 		}
 
-		void FDPBDialog::cancelPressed()
+		void FDPBDialog::accept()
 		{
-			hide();
+			QDialog::accept();
+			calculate();
 		}
 
-		void FDPBDialog::okPressed()
+		void FDPBDialog::clicked(QAbstractButton* button)
 		{
-			hide();
-			calculate();
+			if(buttonBox->buttonRole(button) == QDialogButtonBox::ResetRole)
+			{
+				resetPressed();
+			}
 		}
 
 		void FDPBDialog::resetPressed()
