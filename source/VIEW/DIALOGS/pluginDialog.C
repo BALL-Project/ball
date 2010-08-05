@@ -291,12 +291,18 @@ namespace BALL
 			if (active_plugin->isActive()) 
 			{
 				PluginManager::instance().stopPlugin(active_plugin);
-				plugin_toggle_button->setText("Activate");
+
+				// make sure that the deactivation was successful
+				if (!active_plugin->isActive())
+					plugin_toggle_button->setText("Activate");
 			} 
 			else 
 			{
 				PluginManager::instance().startPlugin(active_plugin);
-				plugin_toggle_button->setText("Deactivate");
+
+				// make sure that the activation was successful
+				if (active_plugin->isActive())
+					plugin_toggle_button->setText("Deactivate");
 			}
 		}
 
