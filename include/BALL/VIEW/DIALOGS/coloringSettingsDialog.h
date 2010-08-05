@@ -73,42 +73,6 @@ namespace BALL
 
 			protected slots:
 
-			void middleResidueColorPressed() 	{ chooseColor(middle_residue_label); }
-			void lastResidueColorPressed() 		{ chooseColor(last_residue_label); }
-			void firstResidueColorPressed() 	{ chooseColor(first_residue_label); }
-
-			void negativeChargeColorPressed() { chooseColor(negative_charge_label); }
-			void neutralChargeColorPressed() 	{ chooseColor(neutral_charge_label); }
-			void positiveChargeColorPressed() { chooseColor(positive_charge_label);}
-			
-			void nullDistanceColorPressed() 	{ chooseColor(null_distance_label); }
-			void maxDistanceColorPressed() 		{ chooseColor(max_distance_label); }
-			
-			void minimumTFColorPressed() 			{ chooseColor(minimum_tf_label); }
-			void maximumTFColorPressed() 			{ chooseColor(maximum_tf_label); }
-			void unassignedTFColorPressed() 	{ chooseColor(unassigned_tf_label); }
-			
-			void minimumOccupancyColorPressed() 		{ chooseColor(minimum_o_label); }
-			void maximumOccupancyColorPressed() 		{ chooseColor(maximum_o_label); }
-			void unassignedOccupancyColorPressed() 	{ chooseColor(unassigned_o_label); }
-			
-			void helixColorPressed() 		{ chooseColor(helix_color_label); }
-			void turnColorPressed() 		{ chooseColor(turn_color_label); }
-			void strandColorPressed() 	{ chooseColor(strand_color_label);}
-			void coilColorPressed() 		{ chooseColor(coil_color_label); }
-			
-			void forceMaxColorPressed() { chooseColor(force_max_color_label); }
-			void forceMinColorPressed() { chooseColor(force_min_color_label); }
-			
-			// residue types ===============================
-			void acidicColorPressed() 			{ chooseColor(acidic_color_label); }
-			void aromaticColorPressed() 		{ chooseColor(aromatic_color_label); }
-			void basicColorPressed() 				{ chooseColor(basic_color_label); }
-			void otherColorPressed() 				{ chooseColor(other_color_label); }
-			void polarColorPressed() 				{ chooseColor(polar_color_label); }
-			void hydrophobicColorPressed() 	{ chooseColor(hydrophobic_color_label); }
-			// ---------------------------------------------
-
 			virtual void maxDistanceChanged();
 			virtual void maxTFChanged();
 			virtual void forceMaxValueChanged();

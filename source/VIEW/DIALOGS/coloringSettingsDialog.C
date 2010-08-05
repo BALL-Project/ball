@@ -37,36 +37,10 @@ namespace BALL
 			setWidgetStack(widget_stack);
 
 			// signals and slots connections
-			connect( coil_color_button, SIGNAL( clicked() ), this, SLOT( coilColorPressed() ) );
-			connect( first_residue_button, SIGNAL( clicked() ), this, SLOT( firstResidueColorPressed() ) );
-			connect( force_max_color_button, SIGNAL( clicked() ), this, SLOT( forceMaxColorPressed() ) );
 			connect( force_max_value_slider, SIGNAL( valueChanged(int) ), this, SLOT( forceMaxValueChanged() ) );
-			connect( force_min_color_button, SIGNAL( clicked() ), this, SLOT( forceMinColorPressed() ) );
 			connect( force_min_value_slider, SIGNAL( valueChanged(int) ), this, SLOT( forceMinValueChanged() ) );
-			connect( helix_color_button, SIGNAL( clicked() ), this, SLOT( helixColorPressed() ) );
-			connect( max_distance_button, SIGNAL( clicked() ), this, SLOT( maxDistanceColorPressed() ) );
 			connect( max_distance_slider, SIGNAL( valueChanged(int) ), this, SLOT( maxDistanceChanged() ) );
 			connect( max_tf_slider, SIGNAL( valueChanged(int) ), this, SLOT( maxTFChanged() ) );
-			connect( maximum_o_button, SIGNAL( clicked() ), this, SLOT( maximumOccupancyColorPressed() ) );
-			connect( maximum_tf_button, SIGNAL( clicked() ), this, SLOT( maximumTFColorPressed() ) );
-			connect( middle_residue_button, SIGNAL( clicked() ), this, SLOT( middleResidueColorPressed() ) );
-			connect( minimum_o_button, SIGNAL( clicked() ), this, SLOT( minimumOccupancyColorPressed() ) );
-			connect( minimum_tf_button, SIGNAL( clicked() ), this, SLOT( minimumTFColorPressed() ) );
-			connect( negative_charge_color_button, SIGNAL( clicked() ), this, SLOT( negativeChargeColorPressed() ) );
-			connect( neutral_charge_color_button, SIGNAL( clicked() ), this, SLOT( neutralChargeColorPressed() ) );
-			connect( null_distance_button, SIGNAL( clicked() ), this, SLOT( nullDistanceColorPressed() ) );
-			connect( positive_charge_color_button, SIGNAL( clicked() ), this, SLOT( positiveChargeColorPressed() ) );
-			connect( strand_color_button, SIGNAL( clicked() ), this, SLOT( strandColorPressed() ) );
-			connect( turn_color_button, SIGNAL( clicked() ), this, SLOT( turnColorPressed() ) );
-			connect( unassigned_o_button, SIGNAL( clicked() ), this, SLOT( unassignedOccupancyColorPressed() ) );
-			connect( unassigned_tf_button, SIGNAL( clicked() ), this, SLOT( unassignedTFColorPressed() ) );
-			connect( last_residue_button, SIGNAL( clicked() ), this, SLOT( lastResidueColorPressed() ) );
-			connect( acidic_color_button, SIGNAL( clicked() ), this, SLOT( acidicColorPressed() ) );
-			connect( basic_color_button, SIGNAL( clicked() ), this, SLOT( basicColorPressed() ) );
-			connect( polar_color_button, SIGNAL( clicked() ), this, SLOT( polarColorPressed() ) );
-			connect( hydrophobic_color_button, SIGNAL( clicked() ), this, SLOT( hydrophobicColorPressed() ) );
-			connect( aromatic_color_button, SIGNAL( clicked() ), this, SLOT( aromaticColorPressed() ) );
-			connect( other_color_button, SIGNAL( clicked() ), this, SLOT( otherColorPressed() ) );
 
 			registerWidgets_();
 		}
@@ -186,26 +160,26 @@ namespace BALL
 			if (RTTI::isKindOf<ResidueNumberColorProcessor>(cp))
 			{
 				ResidueNumberColorProcessor& dp = (*(ResidueNumberColorProcessor*)&cp);
-				dp.setFirstColor(getColor(first_residue_label));
-				dp.setMiddleColor(getColor(middle_residue_label));
-				dp.setLastColor(getColor(last_residue_label));
+				dp.setFirstColor(first_residue_button->getColor());
+				dp.setMiddleColor(middle_residue_button->getColor());
+				dp.setLastColor(last_residue_button->getColor());
 				return;
 			}
 
 			if (RTTI::isKindOf<AtomChargeColorProcessor>(cp))
 			{
 				AtomChargeColorProcessor& dp = (*(AtomChargeColorProcessor*)&cp);
-				dp.getColors()[0] = (getColor(negative_charge_label));
-				dp.getColors()[1] = (getColor(neutral_charge_label));
-				dp.getColors()[2] = (getColor(positive_charge_label));
+				dp.getColors()[0] = negative_charge_button->getColor();
+				dp.getColors()[1] = neutral_charge_button->getColor();
+				dp.getColors()[2] = positive_charge_button->getColor();
 				return;
 			}
 
 			if (RTTI::isKindOf<AtomDistanceColorProcessor>(cp))
 			{
 				AtomDistanceColorProcessor& dp = (*(AtomDistanceColorProcessor*)&cp);
-				dp.setNullDistanceColor(getColor(null_distance_label));
-				dp.setMaxDistanceColor(getColor(max_distance_label));
+				dp.setNullDistanceColor(null_distance_button->getColor());
+				dp.setMaxDistanceColor(max_distance_button->getColor());
 				dp.setDistance(((float)max_distance_slider->value()) / 10.0);
  				dp.setShowSelected(distance_show_selected->isChecked());
 				return;
@@ -214,8 +188,8 @@ namespace BALL
 			if (RTTI::isKindOf<OccupancyColorProcessor>(cp))
 			{
 				OccupancyColorProcessor& dp = (*(OccupancyColorProcessor*)&cp);
-				dp.getColors()[0] = (getColor(minimum_o_label));
-				dp.getColors()[1] = (getColor(maximum_o_label));
+				dp.getColors()[0] = minimum_o_button->getColor();
+				dp.getColors()[1] = maximum_o_button->getColor();
 				return;
 			}
 
@@ -223,10 +197,10 @@ namespace BALL
 			{
 				SecondaryStructureColorProcessor& dp = (*(SecondaryStructureColorProcessor*)&cp);
 
-				dp.setHelixColor(getColor(helix_color_label));
-				dp.setCoilColor(getColor(coil_color_label));
-				dp.setStrandColor(getColor(strand_color_label));
-				dp.setTurnColor(getColor(turn_color_label));
+				dp.setHelixColor(helix_color_button->getColor());
+				dp.setCoilColor(coil_color_button->getColor());
+				dp.setStrandColor(strand_color_button->getColor());
+				dp.setTurnColor(turn_color_button->getColor());
 
 				return;
 			}
@@ -234,10 +208,10 @@ namespace BALL
 			if (RTTI::isKindOf<TemperatureFactorColorProcessor>(cp))
 			{
 				TemperatureFactorColorProcessor& dp = (*(TemperatureFactorColorProcessor*)&cp);
-				dp.setMinColor(getColor(unassigned_tf_label));
-				dp.getColors()[0] = (getColor(minimum_tf_label));
-				dp.getColors()[1] = (getColor(maximum_tf_label));
-				dp.setMaxColor(getColor(unassigned_tf_label));
+				dp.setMinColor(unassigned_tf_button->getColor());
+				dp.getColors()[0] = minimum_tf_button->getColor();
+				dp.getColors()[1] = maximum_tf_button->getColor();
+				dp.setMaxColor(unassigned_tf_button->getColor());
 				dp.setMaxValue(((float)max_tf_slider->value()) / 10.0);
 				return;
 			}
@@ -245,8 +219,8 @@ namespace BALL
 			if (RTTI::isKindOf<ForceColorProcessor>(cp))
 			{
 				ForceColorProcessor& dp = (*(ForceColorProcessor*)&cp);
-				dp.getColors()[0] = (getColor(force_min_color_label));
-				dp.getColors()[1] = (getColor(force_max_color_label));
+				dp.getColors()[0] = force_min_color_button->getColor();
+				dp.getColors()[1] = force_max_color_button->getColor();
 				dp.setMaxValue(((float)force_max_value_slider->value()) / 10.0);
 				dp.setMinValue(((float)force_min_value_slider->value()) / 10.0);
 				return;
@@ -255,12 +229,12 @@ namespace BALL
 			if (RTTI::isKindOf<ResidueTypeColorProcessor>(cp))
 			{
 				ResidueTypeColorProcessor& dp = (*(ResidueTypeColorProcessor*)&cp);
-				dp.setBasicColor(getColor(basic_color_label));
-				dp.setAcidicColor(getColor(acidic_color_label));
-				dp.setAromaticColor(getColor(aromatic_color_label));
-				dp.setPolarColor(getColor(polar_color_label));
-				dp.setHydrophobicColor(getColor(hydrophobic_color_label));
-				dp.setOtherColor(getColor(other_color_label));
+				dp.setBasicColor(basic_color_button->getColor());
+				dp.setAcidicColor(acidic_color_button->getColor());
+				dp.setAromaticColor(aromatic_color_button->getColor());
+				dp.setPolarColor(polar_color_button->getColor());
+				dp.setHydrophobicColor(hydrophobic_color_button->getColor());
+				dp.setOtherColor(other_color_button->getColor());
 				return;
 			}
 
@@ -397,24 +371,24 @@ namespace BALL
 			if (RTTI::isKindOf<ResidueNumberColorProcessor>(cp))
 			{
 				ResidueNumberColorProcessor& dp = (*(ResidueNumberColorProcessor*)&cp);
-				setColor(first_residue_label, dp.getFirstColor());
-				setColor(middle_residue_label, dp.getMiddleColor());
-				setColor(last_residue_label, dp.getLastColor());
+				first_residue_button->setColor(dp.getFirstColor());
+				middle_residue_button->setColor(dp.getMiddleColor());
+				last_residue_button->setColor(dp.getLastColor());
 			} else
 
 			if (RTTI::isKindOf<AtomChargeColorProcessor>(cp))
 			{
 				AtomChargeColorProcessor& dp = (*(AtomChargeColorProcessor*)&cp);
-				setColor(negative_charge_label, dp.getColors()[0]);
-				setColor(neutral_charge_label, dp.getColors()[1]);
-				setColor(positive_charge_label, dp.getColors()[2]);
+				negative_charge_button->setColor( dp.getColors()[0]);
+				neutral_charge_button->setColor(dp.getColors()[1]);
+				positive_charge_button->setColor( dp.getColors()[2]);
 			} else
 
 			if (RTTI::isKindOf<AtomDistanceColorProcessor>(cp))
 			{
 				AtomDistanceColorProcessor& dp = (*(AtomDistanceColorProcessor*)&cp);
-				setColor(null_distance_label, dp.getNullDistanceColor());
-				setColor(max_distance_label, dp.getMaxDistanceColor());
+				null_distance_button->setColor( dp.getNullDistanceColor());
+				max_distance_button->setColor(dp.getMaxDistanceColor());
 				max_distance_slider->setValue((Size)(dp.getDistance() * 10.0));
  				distance_show_selected->setChecked(dp.showSelected());
 			} else
@@ -422,33 +396,33 @@ namespace BALL
 			if (RTTI::isKindOf<OccupancyColorProcessor>(cp))
 			{
 				OccupancyColorProcessor& dp = (*(OccupancyColorProcessor*)&cp);
-				setColor(minimum_o_label, dp.getColors()[0]);
-				setColor(maximum_o_label, dp.getColors()[1]);
+				minimum_o_button->setColor(dp.getColors()[0]);
+				maximum_o_button->setColor(dp.getColors()[1]);
 			} else
 
 			if (RTTI::isKindOf<SecondaryStructureColorProcessor>(cp))
 			{
 				SecondaryStructureColorProcessor& dp = (*(SecondaryStructureColorProcessor*)&cp);
-				setColor(helix_color_label, dp.getHelixColor());
-				setColor(coil_color_label, dp.getCoilColor());
-				setColor(strand_color_label, dp.getStrandColor());
-				setColor(turn_color_label, dp.getTurnColor());
+				helix_color_button->setColor(dp.getHelixColor());
+				coil_color_button->setColor(dp.getCoilColor());
+				strand_color_button->setColor(dp.getStrandColor());
+				turn_color_button->setColor(dp.getTurnColor());
 			} else
 
 			if (RTTI::isKindOf<TemperatureFactorColorProcessor>(cp))
 			{
 				TemperatureFactorColorProcessor& dp = (*(TemperatureFactorColorProcessor*)&cp);
-				setColor(unassigned_tf_label, dp.getDefaultColor());
-				setColor(minimum_tf_label, dp.getColors()[0]);
-				setColor(maximum_tf_label, dp.getColors()[1]);
+				unassigned_tf_button->setColor( dp.getDefaultColor());
+				minimum_tf_button->setColor(dp.getColors()[0]);
+				maximum_tf_button->setColor(dp.getColors()[1]);
 				max_tf_slider->setValue((Size)(dp.getMaxValue() * 10.0));
 			} else
 
 			if (RTTI::isKindOf<ForceColorProcessor>(cp))
 			{
 				ForceColorProcessor& dp = (*(ForceColorProcessor*)&cp);
-				setColor(force_min_color_label, dp.getColors()[0]);
-				setColor(force_max_color_label, dp.getColors()[1]);
+				force_min_color_button->setColor(dp.getColors()[0]);
+				force_max_color_button->setColor(dp.getColors()[1]);
 				force_max_value_slider->setValue((Size)(dp.getMaxValue() * 10.0));
 				force_min_value_slider->setValue((Size)(dp.getMinValue() * 10.0));
 			} else
@@ -456,12 +430,12 @@ namespace BALL
 			if (RTTI::isKindOf<ResidueTypeColorProcessor>(cp))
 			{
  				ResidueTypeColorProcessor& dp = (*(ResidueTypeColorProcessor*)&cp);
-				setColor(acidic_color_label, dp.getAcidicColor());
-				setColor(aromatic_color_label, dp.getAromaticColor());
-				setColor(basic_color_label, dp.getBasicColor());
-				setColor(hydrophobic_color_label, dp.getHydrophobicColor());
-				setColor(other_color_label, dp.getOtherColor());
-				setColor(polar_color_label, dp.getPolarColor());
+				acidic_color_button->setColor(dp.getAcidicColor());
+				aromatic_color_button->setColor(dp.getAromaticColor());
+				basic_color_button->setColor(dp.getBasicColor());
+				hydrophobic_color_button->setColor(dp.getHydrophobicColor());
+				other_color_button->setColor(dp.getOtherColor());
+				polar_color_button->setColor(dp.getPolarColor());
 			} else
 
 			if (RTTI::isKindOf<ChainColorProcessor>(cp))
