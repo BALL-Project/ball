@@ -215,15 +215,10 @@ namespace BALL
 			*/
 			virtual void apply();
 			
-			/** Opens the dialog for editing the custom color.
-					Opens a QColorDialog from the QT-library.
-			 */ 
-			void editColor();
-
 			/** Opens the color dialog for the color of selected items.
 					\see BALL_SELECTED_COLOR
 			*/
-			void editSelectionColor();
+			void editSelectionColor(QColor color);
 
 			///
 			void coloringOptionsPressed();
@@ -279,6 +274,7 @@ namespace BALL
 			
 			// the menu entry id of the dialog
 			QAction*        id_;
+			QPushButton* create_button_;
 			
 			// used by GeometricControl to modify an existing representation
 			Representation* rep_;

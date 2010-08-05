@@ -75,29 +75,27 @@ DisplayProperties::DisplayProperties(QWidget* parent, const char* name)
 		coloring_method_combobox->addItem(model_information_->getColoringName((VIEW::ColoringMethod)p).c_str());
 	}
 
+	create_button_ = buttonBox->addButton(tr("Create"), QDialogButtonBox::AcceptRole);
+
 	createRepresentationMode();
 
-	setColor(selection_color_label, ColorRGBA(1.0, 1.0, 0));
-	setColor(custom_color_label, ColorRGBA(.0, .0, 1.0));
+	selection_color_button->setColor(QColor(255, 255, 0));
+	custom_color_button->setColor(QColor(0, 0, 255));
 
 	setINIFileSectionName("REPRESENTATION");
 	registerWidgets_();
 
 	connect( coloring_method_combobox, SIGNAL( currentIndexChanged(int) ), this, SLOT( selectColoringMethod(int) ) );
+	connect( buttonBox->button(QDialogButtonBox::Apply), SIGNAL( clicked() ), this, SLOT( apply() ) );
 	connect( mode_combobox, SIGNAL( activated(int) ), this, SLOT( selectMode(int) ) );
 	connect( model_type_combobox, SIGNAL( currentIndexChanged(int) ), this, SLOT( selectModel(int) ) );
 	connect( precision_combobox, SIGNAL( currentIndexChanged(int) ), this, SLOT( precisionBoxChanged(int) ) );
-	connect( create_button, SIGNAL( clicked() ), this, SLOT( apply() ) );
-	connect( close_button, SIGNAL( clicked() ), this, SLOT( accept() ) );
 	connect( coloring_options, SIGNAL( clicked() ), this, SLOT( coloringOptionsPressed() ) );
-	connect( custom_button, SIGNAL( clicked() ), this, SLOT( editColor() ) );
-	connect( edit_selection, SIGNAL( clicked() ), this, SLOT( editSelectionColor() ) );
 	connect( model_options, SIGNAL( clicked() ), this, SLOT( modelOptionsPressed() ) );
 	connect( precision_slider, SIGNAL( valueChanged(int) ), this, SLOT( precisionSliderChanged() ) );
 	connect( transparency_slider, SIGNAL( valueChanged(int) ), this, SLOT( transparencySliderChanged() ) );
 	connect( model_updates_enabled, SIGNAL( stateChanged(int) ), this, SLOT( modelUpdatesChanged() ) );
 	connect( coloring_updates_enabled, SIGNAL( stateChanged(int) ), this, SLOT( coloringUpdatesChanged() ) );
-	connect( modify_button, SIGNAL( clicked() ), this, SLOT( apply() ) );
 }
 
 DisplayProperties::DisplayProperties(const DisplayProperties& /*dp*/)
@@ -174,14 +172,14 @@ void DisplayProperties::checkMenu(MainControl& main_control)
 
 	if (busy)
 	{
-		modify_button->setEnabled(false);
-		create_button->setEnabled(false);
+		buttonBox->button(QDialogButtonBox::Apply)->setEnabled(false);
+		create_button_->setEnabled(false);
 		return;
 	}
 
 	bool has_mcs = main_control.getMolecularControlSelection().size() > 0;
-	create_button->setEnabled(has_mcs);
-	create_button->setDefault(has_mcs);
+	create_button_->setEnabled(has_mcs);
+	create_button_->setEnabled(has_mcs);
 
 	GeometricControl* gc = GeometricControl::getInstance(0);
 	bool has_gcs = gc != 0 && gc->getHighlightedRepresentations().size() > 0;
@@ -194,11 +192,11 @@ void DisplayProperties::checkMenu(MainControl& main_control)
 		rep_ = 0;
 	}
 
-	modify_button->setEnabled(rep_ != 0);
-	modify_button->setDefault(rep_ != 0);
+	buttonBox->button(QDialogButtonBox::Apply)->setEnabled(rep_ != 0);
+	buttonBox->button(QDialogButtonBox::Apply)->setEnabled(rep_ != 0);
 
-	create_button->setEnabled(has_mcs);
-	create_button->setDefault(has_mcs);
+	create_button_->setEnabled(has_mcs);
+	create_button_->setEnabled(has_mcs);
 }
 
 
@@ -248,7 +246,6 @@ void DisplayProperties::modifyRepresentationMode(Representation* rep)
 	if (rep_->getColorProcessor() != 0)
 	{
 		custom_color_ = rep_->getColorProcessor()->getDefaultColor();
-		setColor(custom_color_label, custom_color_);
 	}
 
 	transparency_slider->setValue(rep_->getTransparency());
@@ -416,8 +413,8 @@ void DisplayProperties::apply()
 		getMainControl()->getRepresentationManager().rebuildAllRepresentations();
 	}
 
-	create_button->setEnabled(false);
-	modify_button->setEnabled(false);
+	buttonBox->button(QDialogButtonBox::Apply)->setEnabled(false);
+	create_button_->setEnabled(false);
 
 	if (rep_ == 0)
 	{
@@ -428,18 +425,12 @@ void DisplayProperties::apply()
 		applyTo_(rep_);
 	}
 
-	modify_button->setEnabled(!getMainControl()->isBusy());
+	buttonBox->button(QDialogButtonBox::Apply)->setEnabled(!getMainControl()->isBusy());
 }
 
-
-void DisplayProperties::editColor()
+void DisplayProperties::editSelectionColor(QColor color)
 {
-	custom_color_.set(chooseColor(custom_color_label));
-}
-
-void DisplayProperties::editSelectionColor()
-{
-	BALL_SELECTED_COLOR.set(chooseColor(selection_color_label));
+	BALL_SELECTED_COLOR.set(color);
 	changed_selection_color_ = true;
 }
 
@@ -501,8 +492,8 @@ void DisplayProperties::applyColoringSettings_(Representation& rep)
 	}
 
 	Size transparency = transparency_slider->value();
-	custom_color_ = getColor(custom_color_label);
-	custom_color_.setAlpha(255 - transparency);
+	QColor custom_color = custom_color_button->getColor();
+	custom_color.setAlpha(255 - transparency);
 	rep.setTransparency(transparency);
 
 	ColorProcessor* cp = rep.getColorProcessor();
@@ -517,7 +508,7 @@ void DisplayProperties::applyColoringSettings_(Representation& rep)
 		min_spacing = 2.62 + ((AddSurfaceModel*)rep.getModelProcessor())->getProbeRadius();
 	}
 	cp->setMinGridSpacing(min_spacing);
-	cp->setDefaultColor(custom_color_);
+	cp->setDefaultColor(custom_color);
 }
 
 
@@ -907,8 +898,7 @@ void DisplayProperties::setTransparency(int value)
 
 void DisplayProperties::setCustomColor(const ColorRGBA& color)
 {
-	custom_color_ = color;
-	setColor(custom_color_label, custom_color_);
+	custom_color_button->setColor(color);
 }
 	
 void DisplayProperties::coloringUpdatesChanged()
@@ -916,7 +906,7 @@ void DisplayProperties::coloringUpdatesChanged()
 	bool enabled = coloring_updates_enabled->isChecked();
 
 	coloring_method_combobox->setEnabled(enabled);
-	custom_button->setEnabled(enabled);
+	custom_color_button->setEnabled(enabled);
 	coloring_options->setEnabled(enabled);
 }
 

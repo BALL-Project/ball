@@ -41,8 +41,6 @@ static DisplayProperties* getInstance(Position /index/);
 	void setTransparency(int);
 	void setCustomColor(const ColorRGBA&);
   void apply();
-  void editColor();
-  void editSelectionColor();
   void coloringOptionsPressed();
   void modelOptionsPressed();
   void precisionBoxChanged(int);
