@@ -8,11 +8,11 @@ SET(UI_SOURCES_LIST
 
 SET(SOURCES_LIST
 	${DIRECTORY}/OpenSimPlugin.C
-	${DIRECTORY}/OpenSimCommandExecutionThread.C
 	${DIRECTORY}/OpenSimPluginConfiguration.C
 	${DIRECTORY}/OpenSimReceiver.C
 	${DIRECTORY}/OpenSimTask.C
-	${DIRECTORY}/OpenSimWorkerThread.C
+	${DIRECTORY}/handleCommandFromBALLViewThread.C
+	${DIRECTORY}/handleCommandToBALLViewThread.C
 	${DIRECTORY}/MolecularDynamicsContainer.C
 	${DIRECTORY}/MolecularModelingContainer.C
 	${DIRECTORY}/MolecularStructureContainer.C
@@ -26,10 +26,10 @@ SET(DIRECTORY include)
 ### the list of all files requiring a moc run ###
 SET(MOC_SOURCES_LIST
 	${DIRECTORY}/OpenSimPlugin.h
-	${DIRECTORY}/OpenSimCommandExecutionThread.h
 	${DIRECTORY}/OpenSimPluginConfiguration.h
 	${DIRECTORY}/OpenSimReceiver.h
-	${DIRECTORY}/OpenSimWorkerThread.h
+	${DIRECTORY}/handleCommandFromBALLViewThread.h
+	${DIRECTORY}/handleCommandToBALLViewThread.h
 	${DIRECTORY}/MolecularDynamicsContainer.h
 	${DIRECTORY}/MolecularModelingContainer.h
 	${DIRECTORY}/MolecularStructureContainer.h

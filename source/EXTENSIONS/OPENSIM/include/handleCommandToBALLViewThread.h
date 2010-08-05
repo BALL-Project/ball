@@ -1,5 +1,5 @@
-#ifndef BALL_EXTENSIONS_OPENSIM_OPENSIMWORKERTHREAD_H
-#define BALL_EXTENSIONS_OPENSIM_OPENSIMWORKERTHREAD_H
+#ifndef BALL_EXTENSIONS_OPENSIM_HANDLECOMMANDTOBALLVIEWTHREAD_H
+#define BALL_EXTENSIONS_OPENSIM_HANDLECOMMANDTOBALLVIEWTHREAD_H
 
 #include <BALL/COMMON/global.h>
 
@@ -11,15 +11,15 @@ namespace BALL
 	{
 		class OpenSimPlugin;
 
-		class OpenSimWorkerThread: public QThread
+		class HandleCommandToBALLViewThread: public QThread
 		{
 			Q_OBJECT
 
 			public:
 				void run();
 
-				OpenSimWorkerThread(OpenSimPlugin* plugin);
-				~OpenSimWorkerThread();
+				HandleCommandToBALLViewThread(OpenSimPlugin* plugin);
+				~HandleCommandToBALLViewThread();
 
 				void deactivate();
 

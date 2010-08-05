@@ -1,26 +1,26 @@
-#include <OpenSimWorkerThread.h>
+#include <handleCommandToBALLViewThread.h>
 #include <OpenSimPlugin.h>
 
 namespace BALL
 {
 	namespace VIEW
 	{
-		OpenSimWorkerThread::OpenSimWorkerThread(OpenSimPlugin* plugin)
+		HandleCommandToBALLViewThread::HandleCommandToBALLViewThread(OpenSimPlugin* plugin)
 			: bvplugin_(plugin),
 				terminate_requested_(false)
 		{
 		}
 		
-		OpenSimWorkerThread::~OpenSimWorkerThread()
+		HandleCommandToBALLViewThread::~HandleCommandToBALLViewThread()
 		{
 		}
 
-		void OpenSimWorkerThread::deactivate()
+		void HandleCommandToBALLViewThread::deactivate()
 		{
 			terminate_requested_ = true;
 		}
 		
-		void OpenSimWorkerThread::run()
+		void HandleCommandToBALLViewThread::run()
 		{
 			terminate_requested_ = false;
 
@@ -38,7 +38,6 @@ namespace BALL
 					bvplugin_->handleMolecularModeling(data);
 				}
 			}
-				 
 		}
 	
 	}

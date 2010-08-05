@@ -1,27 +1,27 @@
-#include <OpenSimCommandExecutionThread.h>
+#include <handleCommandFromBALLViewThread.h>
 #include <OpenSimPlugin.h>
 
 namespace BALL
 {
 	namespace VIEW
 	{
-		OpenSimCommandExecutionThread::OpenSimCommandExecutionThread(OpenSimPlugin* plugin/*,Message* message*/)
+		HandleCommandFromBALLViewThread::HandleCommandFromBALLViewThread(OpenSimPlugin* plugin/*,Message* message*/)
 			: bvcmdplugin_(plugin),
 				terminate_requested_(false)
 		{
 		}
 		
-		OpenSimCommandExecutionThread::~OpenSimCommandExecutionThread()
+		HandleCommandFromBALLViewThread::~HandleCommandFromBALLViewThread()
 		{
 			deactivate();
 		}
 
-		void OpenSimCommandExecutionThread::deactivate()
+		void HandleCommandFromBALLViewThread::deactivate()
 		{
 			terminate_requested_ = true;
 		}
 		
-		void OpenSimCommandExecutionThread::run()
+		void HandleCommandFromBALLViewThread::run()
 		{
 			terminate_requested_ = false;
 
@@ -51,7 +51,7 @@ namespace BALL
 					}
 					else
 					{
-						Log.info() << "OpenSimCommandExecutionThread::run(): Unknown task type " << task.type << ". " << __FILE__ <<  " " << __LINE__<< std::endl;
+						Log.info() << "HandleCommandFromBALLViewThread::run(): Unknown task type " << task.type << ". " << __FILE__ <<  " " << __LINE__<< std::endl;
 					}
 				
 					bvcmdplugin_->pluginrwLock_.unlock();

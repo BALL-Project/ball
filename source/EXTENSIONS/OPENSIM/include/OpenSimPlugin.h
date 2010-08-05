@@ -4,8 +4,8 @@
 #include <OpenSimPluginConfiguration.h>
 #include <OpenSimReceiver.h>
 #include <OpenSimTask.h>
-#include <OpenSimWorkerThread.h>
-#include <OpenSimCommandExecutionThread.h>
+#include <handleCommandFromBALLViewThread.h>
+#include <handleCommandToBALLViewThread.h>
 
 #include <QtCore/QObject>
 
@@ -43,15 +43,15 @@ namespace BALL
 
 			public:
 
-				friend class OpenSimWorkerThread;
-				friend class OpenSimCommandExecutionThread;
+				friend class HandleCommandToBALLViewThread;
+				friend class HandleCommandFromBALLViewThread;
 
 				queue<OpenSimTask> ballviewmessage_queue_;
 			
 				OpenSimPlugin();
 				~OpenSimPlugin();
 
-				OpenSimCommandExecutionThread* const cmdThread_;
+				HandleCommandFromBALLViewThread* const cmdThread_;
 
 				ReadWriteLock pluginrwLock_;
 

@@ -24,7 +24,7 @@ namespace BALL
 		OpenSimPlugin::OpenSimPlugin()
 			: QObject(VIEW::getMainControl()),
 				ModularWidget(),
-				cmdThread_(new OpenSimCommandExecutionThread(this)),
+				cmdThread_(new HandleCommandFromBALLViewThread(this)),
 				pluginrwLock_(),
 				settings_(new OpenSimPluginConfiguration(NULL)),
 				is_active_(false),

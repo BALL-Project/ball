@@ -4,7 +4,7 @@
 #include <BALL/SYSTEM/networking.h>
 #include <BALL/SYSTEM/mutex.h>
 
-#include <OpenSimWorkerThread.h>
+#include <handleCommandToBALLViewThread.h>
 
 #include <queue>
 
@@ -87,8 +87,7 @@ namespace BALL
 
 				OpenSimPlugin* plugin_;
 
-				OpenSimWorkerThread* funcThread_;
-
+				HandleCommandToBALLViewThread* funcThread_;
 		};
 	}
 }

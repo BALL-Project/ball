@@ -22,7 +22,7 @@ namespace BALL
 
 		void OpenSimReceiver::run()
 		{
-			funcThread_ = new OpenSimWorkerThread(plugin_);
+			funcThread_ = new HandleCommandToBALLViewThread(plugin_);
 			funcThread_->start();
 
 			TCPServerThread::run();	
