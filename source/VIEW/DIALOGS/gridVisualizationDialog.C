@@ -243,7 +243,7 @@ namespace BALL
 			rep->setTransparency(trans);
 			rep->setModelType(MODEL_GRID_VOLUME);
 
-			if (mode_tab->currentIndex() == 0)
+			if (mode_box->currentIndex() == 0)
 			{
 				vol.type = GridVisualisation::PLANE; 
 				Vector3 point = origin + (vol.x + vol.y + vol.z) / 2.0;
@@ -254,7 +254,7 @@ namespace BALL
 		    normal.normalize();
 				vol.setNormal(normal);
 			}
-			else if (mode_tab->currentIndex() == 1)
+			else if (mode_box->currentIndex() == 1)
 			{
 				vol.setDotSize(dot_size->value());
 				vol.type = GridVisualisation::DOTS;
