@@ -178,7 +178,7 @@ namespace BALL
 		void OpenSimPlugin::onNotify(Message* message)
 		{
 			// Here we need to put the messages in a queue, lock it
-			// then, access the queue from different thread as show below
+			// then, access the queue from a different thread as shown below
 			// but this thread can not be created here, because everytime, 
 			// there will be more threads create a thread outside.
 			if (RTTI::isKindOf<CompositeMessage>(*message))
