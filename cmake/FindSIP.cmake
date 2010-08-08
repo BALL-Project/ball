@@ -62,12 +62,20 @@ ELSE(SIP_VERSION)
 	SET(CMAKE_FIND_LIBRARY_PREFIXES "${OLD_CMAKE_FIND_LIBRARY_PREFIXES}")
 
   # (c) Try to find the sip executable:
-
+  
+  # let's try the configured binary directory anyway, in case, you know, it's actually correct...
+  EXECUTE_PROCESS ( COMMAND ${PYTHON_EXECUTABLE} -c "import sipconfig; print sipconfig.Configuration().sip_bin"
+		OUTPUT_VARIABLE SIP_CONFIG_EXECUTABLE
+		OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+  GET_FILENAME_COMPONENT(SIP_CONFIG_BIN_DIRS "${SIP_CONFIG_EXECUTABLE}" PATH)
+  
   # Use the path to the python installation as a hint for finding sip
-  GET_FILENAME_COMPONENT(SIP_POSSIBLE_BIN_DIRS "${PYTHON_EXECUTABLE}" ABSOLUTE)
+  GET_FILENAME_COMPONENT(SIP_POSSIBLE_BIN_DIRS "${PYTHON_EXECUTABLE}" PATH)
   FIND_PROGRAM(SIP_EXECUTABLE sip
     ${SIP_POSSIBLE_BIN_DIRS}
     /usr/bin/
+    ${SIP_CONFIG_BIN_DIRS}
   )
 
   # (d) Try to extract version information from sip.h:
