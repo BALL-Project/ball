@@ -20,6 +20,21 @@ namespace BALL
 	{
 	}
 
+	NamedProperty::NamedProperty(const NamedProperty& property, const std::string& name)
+		: PersistentObject(property),
+			type_(property.type_),
+			name_(name)
+	{
+		if (type_ != STRING)
+		{
+			data_ = property.data_;
+		}
+		else
+		{
+			data_ = new string(*(boost::any_cast<std::string*>(property.data_)));
+		}
+	}
+
 	NamedProperty::NamedProperty(const NamedProperty& property) 
 		: PersistentObject(property),
 			type_(property.type_),

@@ -185,6 +185,11 @@ namespace BALL
 		*/
 		NamedProperty(const NamedProperty&);
 
+		/**
+		 * Copy constructor with renaming
+		 */
+		NamedProperty(const NamedProperty&, const string& name);
+
 		/**	Destructor .
 				The destructor destructs the contained data in the case of STRING-type 
 				properties only.
