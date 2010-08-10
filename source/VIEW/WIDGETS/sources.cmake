@@ -14,6 +14,7 @@ SET(SOURCES_LIST
 	logView.C
 	molecularControl.C
 	molecularStructure.C
+	propertyEditor.C
 	scene.C
 	shortcutTableView.C
 	SDWidget.C

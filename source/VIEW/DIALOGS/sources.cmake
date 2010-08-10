@@ -37,6 +37,8 @@ SET(UI_LIST
 	peptideDialog.ui
 	pluginDialog.ui
 	preferences.ui
+	propEditorWidget.ui
+	propertyEditor.ui
 	exportGeometryDialog.ui
 	PTEDialog.ui
 	pubchemDialog.ui
