@@ -18,17 +18,6 @@ namespace BALL
 	{
 	}
 
-	CCP4File::CCP4File(const CCP4File& file)
-		throw(Exception::FileNotFound)
-		:	File(file),
-			swap_bytes_(file.swap_bytes_),
-			offset_symops_(0),
-			col_axis_(1),
-			row_axis_(2),
-			sec_axis_(3)
-	{
-	}
-
 	CCP4File::CCP4File(const String& name, File::OpenMode open_mode)
 		throw(Exception::FileNotFound)
 		: File(name, open_mode),
@@ -276,7 +265,7 @@ namespace BALL
 		return false;
 	}
 
-	bool CCP4File::write(RegularData3D& map)
+	bool CCP4File::write(RegularData3D& /*map*/)
 	{
 		// Write the content of a RegularData3D dataset to a CCP4 file.
 		// TODO: implement

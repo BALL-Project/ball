@@ -29,18 +29,12 @@ namespace BALL
 
 		public:
 
-		BALL_CREATE(CCP4File)
-
 		/** @name Constructors and Destructor
 		*/
 		//@{
 
 		/// Default constructor
 		CCP4File();
-
-		/// Copy constructor
-		CCP4File(const CCP4File& file)
-			throw(Exception::FileNotFound);
 
 		/// Detailed constructor
 		CCP4File(const String& name, File::OpenMode open_mode = std::ios::in)
