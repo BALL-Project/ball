@@ -260,10 +260,6 @@ namespace VIEW
 				///
 				DockingThread();
 				
-				/** Copy constructor.
-					*/
-				DockingThread(const DockingThread& dock_thread);
-					
 				///
 				virtual ~DockingThread();
 				
