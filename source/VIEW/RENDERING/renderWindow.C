@@ -56,7 +56,7 @@ namespace BALL
 			}
 
 		template<typename taPixelDatatype>
-			void RenderWindow<taPixelDatatype>::releaseBuffer(FrameBufferPtr buffer)
+			void RenderWindow<taPixelDatatype>::releaseBuffer(FrameBufferPtr /*buffer*/)
 			{
 				m_bufferLocked = false;
 			}		
