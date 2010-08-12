@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.C,v 1.36.18.1 2007/03/25 22:00:16 oliver Exp $
-//
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -15,7 +13,6 @@ namespace BALL
 {
 
 	DCDFile::DCDFile()
-		
 		: TrajectoryFile(),
 			verbosity_(0),
 			swap_bytes_(false),
@@ -30,25 +27,6 @@ namespace BALL
 	{
 		init();
 	}
-
-
-	DCDFile::DCDFile(const DCDFile& file)
-		throw(Exception::FileNotFound)
-		:	TrajectoryFile(file),
-			verbosity_(0),
-			swap_bytes_(file.swap_bytes_),
-			has_velocities_(file.has_velocities_),
-			charmm_extra_block_A_(file.charmm_extra_block_A_),
-			charmm_extra_block_B_(file.charmm_extra_block_B_),
-			CORD_("CORD"),
-			step_number_of_starting_time_(file.step_number_of_starting_time_),
-			steps_between_saves_(file.steps_between_saves_),
-			time_step_length_(file.time_step_length_),
-			number_of_comments_(file.number_of_comments_)
-	{
-		init();
-	}
-
 
 	DCDFile::DCDFile(const String& name, File::OpenMode open_mode)
 		throw(Exception::FileNotFound)

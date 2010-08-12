@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.h,v 1.33.18.1 2007/03/25 21:23:41 oliver Exp $
-//
 
 #ifndef BALL_FORMAT_DCDFILE_H
 #define BALL_FORMAT_DCDFILE_H
@@ -35,30 +33,21 @@ namespace BALL
 	class BALL_EXPORT DCDFile
 		:	public TrajectoryFile
 	{
-
 		public:
-
-		BALL_CREATE(DCDFile)
 
 		/** @name Constructors and Destructor
 		*/
 		//@{
 
 		/// Default constructor
-		DCDFile()
-			;
-
-		/// Copy constructor
-		DCDFile(const DCDFile& file)
-			throw(Exception::FileNotFound);
+		DCDFile();
 
 		/// Detailed constructor
 		DCDFile(const String& name, File::OpenMode open_mode = std::ios::in)
 			throw(Exception::FileNotFound);
 
 		/// Destructor
-		virtual ~DCDFile()
-			;
+		virtual ~DCDFile();
 
 		//@}
 		/** @name Assignment
@@ -66,12 +55,10 @@ namespace BALL
 		//@{
 
 		/// Assignment operator
-		const DCDFile& operator = (const DCDFile& file)
-			;
+		const DCDFile& operator = (const DCDFile& file);
 
 		/// Clear method
-		virtual void clear()
-			;
+		virtual void clear();
 
 		//@}
 		/** @name Predicates
@@ -79,16 +66,13 @@ namespace BALL
 		//@{
 
 		/// Equality operator
-		bool operator == (const DCDFile& file) const
-			;
+		bool operator == (const DCDFile& file) const;
 
 		///
-		bool isSwappingBytes() const
-			;
+		bool isSwappingBytes() const;
 
 		///
-		bool hasVelocities() const
-			;
+		bool hasVelocities() const;
 
 		//@}
 		/// @name Public methods for file handling
@@ -101,25 +85,21 @@ namespace BALL
 
 		/** Initialize this instance, i. e. read the header and update members
 		*/
-		bool init()
-			;
+		bool init();
 
 		/** Read the header of an existing file.
 				Return true if the header could be read successfully, false ow.
 		*/
-		virtual bool readHeader()
-			;
+		virtual bool readHeader();
 
 		/** Write a header
 				Return true if the header could be written successfully, false ow.
 		*/
-		virtual bool writeHeader()
-			;
+		virtual bool writeHeader();
 
 		/** 
 		*/
-		virtual bool seekAndWriteHeader()
-			;
+		virtual bool seekAndWriteHeader();
 
 		// ?????:
 		// should append() also write the header? what is more intuitive?
@@ -128,15 +108,13 @@ namespace BALL
 				@param snapshot the snapshot we want to save
 				@return true, if writing was successful
 		*/
-		virtual bool append(const SnapShot& snapshot)
-			;
+		virtual bool append(const SnapShot& snapshot);
 
 		/** Read the next snapshot from the file
 				@param snapshot a buffer for result delivery
 				@return true, if a snapshot could be read, false ow.
 		*/
-		virtual bool read(SnapShot& snapshot)
-			;
+		virtual bool read(SnapShot& snapshot);
 
 		/**
 		*/
@@ -149,12 +127,10 @@ namespace BALL
 		//@{
 
 		/// 
-		void enableVelocityStorage()
-			;
+		void enableVelocityStorage();
 
 		/// 
-		void disableVelocityStorage()
-			;
+		void disableVelocityStorage();
 
 		//@}
 
@@ -169,24 +145,19 @@ namespace BALL
 			 { *this << BinaryFileAdaptor<float>(data);}
 
 		//_
-		void writeVector_(const vector<Vector3>& v)
-			;
+		void writeVector_(const vector<Vector3>& v);
 		
 		//_
- 		float readFloat_()
-			; 
+ 		float readFloat_(); 
 
 		//_
-		Size readSize_()
-			;
+		Size readSize_();
 
 		//_
-		bool readSize_(Size expected_size, const String& what)
-			;
+		bool readSize_(Size expected_size, const String& what);
 
 		//_
-		bool readVector_(vector<Vector3>& v)
-			;
+		bool readVector_(vector<Vector3>& v);
 
 		//_
 		Size verbosity_;
