@@ -526,7 +526,7 @@ namespace BALL
 		}
 
 		// TODO: do we need the mode???
-		void GLRenderer::renderToBuffer(RenderTarget* renderTarget, BufferMode mode)
+		void GLRenderer::renderToBuffer(RenderTarget* /*renderTarget*/, BufferMode mode)
 		{
 			if (show_preview_)
 				setAntialiasing(false);
