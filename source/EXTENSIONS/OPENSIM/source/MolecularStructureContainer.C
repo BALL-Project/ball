@@ -39,7 +39,7 @@ namespace BALL
 		/*
 		* Adds atom into an existing ballview molecular structure(system)which is an atom container
 		* All parameters are required.
-		* Note : Currently , atom indices are kept track in hash map,but
+		* Note : Currently, atom indices are kept track in hash map,but
 		* there is a problem when removing atom indices from the hashmaps.
 		*/
 		Index MolecularStructureContainer::addAtom( const String& element,
@@ -198,7 +198,7 @@ namespace BALL
 				}
 
 			}
-Log.info() << "Needs update? " << result << std::endl;
+			
 			readWriteLock_.unlock();
 
 			return result;

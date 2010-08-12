@@ -202,6 +202,10 @@ namespace BALL
 				}
 				else if (cm->getType() == CompositeMessage::REMOVED_COMPOSITE)
 				{
+					// AKD: The problem with deleting entire Composites like Residues, Chains, etc is
+					// that a CompositeMessage::CHANGED_COMPOSITE_HIERARCHY is thrown. 
+					// So we just know whose hirarchy changend but not which atoms are deleted...
+					// TODO!!
 					task.type = OpenSimTask::REMOVED_COMPOSITE;
 					task_type_supported = true;
 				}
@@ -225,12 +229,23 @@ namespace BALL
 					{
 						task.affected_bonds.push_back(&*b_it);
 					}
-
-					// Finally, store the message in the queue for later processing
-					pluginrwLock_.lockForWrite();
-					ballviewmessage_queue_.push(task);
-					pluginrwLock_.unlock();
 				}
+				else
+				{
+					Atom* atom = dynamic_cast<Atom*>(cm->getComposite());
+
+					task.affected_atoms.push_back(atom);
+
+					Atom::BondIterator b_it;
+					BALL_FOREACH_ATOM_BOND(*atom, b_it)
+					{
+						task.affected_bonds.push_back(&*b_it);
+					}
+				}
+				// Finally, store the message in the queue for later processing
+				pluginrwLock_.lockForWrite();
+				ballviewmessage_queue_.push(task);
+				pluginrwLock_.unlock();
 			}
 			else if (RTTI::isKindOf<RepresentationMessage>(*message))
 			{
@@ -773,7 +788,6 @@ namespace BALL
 				if (bond_index == -1)
 				{
 					// this is a new bond
-
 					if ( (atom_one_index != -1) && (atom_two_index != -1) )
 					{
 						bond_index = molStructPlugin_->hashBond(*bond_it);
