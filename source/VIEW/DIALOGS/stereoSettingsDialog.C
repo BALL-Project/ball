@@ -146,7 +146,7 @@ void StereoSettingsDialog::okPressed()
 	//TODO
 	//compute the focal plane and eye distance
 
-	Camera& camera = Scene::getInstance(0)->getStage()->getCamera();
+	//Camera& camera = Scene::getInstance(0)->getStage()->getCamera();
 	//camera.setViewPoint(vp);
 	//camera.setLookAtPosition(lp);
 	std::cout << " neue focal plane" << std::endl;
