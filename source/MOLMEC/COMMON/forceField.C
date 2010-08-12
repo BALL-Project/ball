@@ -39,7 +39,6 @@ namespace BALL
 	}
 
 	void ForceField::clear()
-		
 	{
 		options.clear();
 		periodic_boundary.clear();
