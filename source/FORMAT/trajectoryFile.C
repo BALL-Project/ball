@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryFile.C,v 1.13.18.1 2007/03/25 22:00:21 oliver Exp $
-//
 
 #include <BALL/FORMAT/trajectoryFile.h>
 
@@ -12,22 +10,11 @@ namespace BALL
 {
 
 	TrajectoryFile::TrajectoryFile()
-		
 		:	File(),
 			number_of_snapshots_(0),
 			number_of_atoms_(0)
 	{
 	}
-
-
-	TrajectoryFile::TrajectoryFile(const TrajectoryFile& file)
-		
-		:	File(file),
-			number_of_snapshots_(file.number_of_snapshots_),
-			number_of_atoms_(file.number_of_atoms_)
-	{
-	}
-
 
 	TrajectoryFile::TrajectoryFile(const String& filename, File::OpenMode open_mode)
 		throw(Exception::FileNotFound)
@@ -37,18 +24,13 @@ namespace BALL
 	{
 	}
 
-
-	TrajectoryFile::~TrajectoryFile
-		()
-		
+	TrajectoryFile::~TrajectoryFile()
 	{
 		clear();
 	}
 
-
 	const TrajectoryFile& TrajectoryFile::operator =
 		(const TrajectoryFile& file)
-		
 	{
 		File::operator = (file);
 
@@ -58,9 +40,7 @@ namespace BALL
 		return *this;
 	}
 
-
 	void TrajectoryFile::clear()
-		
 	{
 		File::clear();
 
@@ -69,66 +49,51 @@ namespace BALL
 
 	}
 
-
 	bool TrajectoryFile::operator ==
 		(const TrajectoryFile& file) const
-		
 	{
 		return((File::operator == (file))
 				&& (number_of_snapshots_ == number_of_snapshots_)
 				&& (number_of_atoms_ == file.number_of_atoms_));
 	}
 
-
 	bool TrajectoryFile::readHeader()
-		
 	{
 		Log.error() << "TrajectoryFile::readHeader(): " 
 			<< "This method should not be called" << endl;
 		return false;
 	}
 
-
 	bool TrajectoryFile::writeHeader()
-		
 	{
 		Log.error() << "TrajectoryFile::writeHeader(): " 
 			<< "This method should not be called" << endl;
 		return false;
 	}
 
-
 	bool TrajectoryFile::append(const SnapShot& /* snapshot */)
-		
 	{
 		Log.error() << "TrajectoryFile::append(): " 
 			<< "This method should not be called" << endl;
 		return false;
 	}
 
-
 	bool TrajectoryFile::read(SnapShot& /* snapshot */)
-		
 	{
 		Log.error() << "TrajectoryFile::read(): " 
 			<< "This method should not be called" << endl;
 		return false;
 	}
 
-
 	Size TrajectoryFile::getNumberOfSnapShots() const
-		
 	{
 		return number_of_snapshots_;
 	}
 
-
 	Size TrajectoryFile::getNumberOfAtoms() const
-		
 	{
 		return number_of_atoms_;
 	}
-
 
 	bool TrajectoryFile::flushToDisk(const std::vector<SnapShot>& /* buffer */)
 		throw(File::CannotWrite)

@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryFile.h,v 1.21.18.1 2007/03/25 21:23:42 oliver Exp $
-//
 
 #ifndef BALL_FORMAT_TRAJECTORYFILE_H
 #define BALL_FORMAT_TRAJECTORYFILE_H
@@ -37,12 +35,7 @@ namespace BALL
 		//@{
 
 		/// Default constructor
-		TrajectoryFile()
-			;
-
-		/// Copy constructor
-		TrajectoryFile(const TrajectoryFile& file)
-			;
+		TrajectoryFile();
 
 		/** Detailed constructor requiring a filename and the mode in which
 				this file should be opened.
@@ -55,28 +48,24 @@ namespace BALL
 			throw(Exception::FileNotFound);
 
 		/// Destructor
-		virtual ~TrajectoryFile()
-			;
+		virtual ~TrajectoryFile();
 
 		//@}
 		/// @name Assignment
 		//@{
 		
 		/// Assignment operator
-		const TrajectoryFile& operator = (const TrajectoryFile& file)
-			;
+		const TrajectoryFile& operator = (const TrajectoryFile& file);
 
 		/// Clear method
-		virtual void clear()
-			;
+		virtual void clear();
 
 		//@}
 		/// @name Predicates
 		//@{
 
 		/// Equality operator
-		bool operator == (const TrajectoryFile& file) const
-			;
+		bool operator == (const TrajectoryFile& file) const;
 
 		//@}
 		/// @name Accessors
@@ -85,14 +74,12 @@ namespace BALL
 		/** get the number of snapshots stored in this instance.
 				@return the number of snapshots of this instance
 		*/
-		Size getNumberOfSnapShots() const
-			;
+		Size getNumberOfSnapShots() const;
 
 		/** get the number of atoms coverd by each snapshot.
 				@return the number of atoms 
 		*/
-		Size getNumberOfAtoms() const
-			;
+		Size getNumberOfAtoms() const;
 
 		//@}
 		/// @name Public methods for file handling
@@ -101,29 +88,25 @@ namespace BALL
 		/** Read the header of an existing file.
 				@return true if the header could be read successfully, false ow.
 		*/
-		virtual bool readHeader()
-			;
+		virtual bool readHeader();
 
 		/** Write a header.
 				@return true if the header could be written successfully, false ow.
 		*/
-		virtual bool writeHeader()
-			;
+		virtual bool writeHeader();
 
 		/** Append a SnapShot to an existing file. <b>Note</b> that this method
 				does <b>note</b> update the header.
 				@param snapshot the SnapShot we want to save
 				@return true, if writing was successful
 		*/
-		virtual bool append(const SnapShot& snapshot)
-			;
+		virtual bool append(const SnapShot& snapshot);
 
 		/** Read the next SnapShot from the file.
 				@param snapshot a buffer for result delivery
 				@return true if a snapshot could be read, <tt>false</tt> ow.
 		*/
-		virtual bool read(SnapShot& snapshot)
-			;
+		virtual bool read(SnapShot& snapshot);
 
 		/** Write several SnapShots to disk.
 				@param buffer a vector of snapshots
