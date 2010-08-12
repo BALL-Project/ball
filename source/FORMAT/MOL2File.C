@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File.C,v 1.27.18.3 2007/05/29 09:58:24 anhi Exp $
-//
 
 #include <BALL/FORMAT/MOL2File.h>
 
@@ -35,16 +33,7 @@ namespace BALL
 	{
 	}
 
-	MOL2File::MOL2File(const MOL2File& file)
-		throw(Exception::FileNotFound)
-		: GenericMolFile(file),
-		  number_of_lines_(0),
-		  found_next_header_(0)
-	{
-	}
-
 	MOL2File::~MOL2File()
-
 	{
 	}
 
@@ -289,10 +278,11 @@ namespace BALL
 				f << endl;
 			}
 		}
-		int no_properties=molecule.countNamedProperties();
+		Size no_properties=molecule.countNamedProperties();
 		if(no_properties>0)
 		{
 			f << TRIPOS << "COMMENT"<<endl;
+
 			for (Position i=0; i<no_properties; i++)
 			{
 				const NamedProperty& np(molecule.getNamedProperty(i));
@@ -327,8 +317,9 @@ namespace BALL
 		}
 
 		String name = getName(); // set system-name to file-name
-		unsigned int pos = name.find_last_of('/');
-		if(pos!=string::npos && name.size()>pos)
+
+		size_t pos = name.find_last_of('/');
+		if((pos != string::npos) && (name.size() > pos))
 		{
 			name = name.substr(pos+1);
 		}
@@ -336,8 +327,6 @@ namespace BALL
 
 		return true;
 	}
-
-
 
 	Molecule* MOL2File::read()
 		throw(Exception::ParseError)
@@ -646,7 +635,6 @@ namespace BALL
 		}
 	}
 
-
 	void MOL2File::readSubstructureSection_()
 	{
 		while (readLine() && (getLine().countFields() > 0) && !getLine().hasPrefix(TRIPOS))
@@ -714,7 +702,6 @@ namespace BALL
 			substructures_.push_back(sub);
 		}
 	}
-
 
 	void MOL2File::readCommentSection_()
 	{
@@ -991,7 +978,6 @@ namespace BALL
 	}
 
 	const MOL2File& MOL2File::operator = (const MOL2File& file)
-
 	{
 		atoms_		     = file.atoms_;
 		bonds_		     = file.bonds_;

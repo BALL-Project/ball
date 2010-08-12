@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File.h,v 1.23 2005/12/23 17:01:44 amoll Exp $
-//
 
 #ifndef BALL_FORMAT_MOL2FILE_H
 #define BALL_FORMAT_MOL2FILE_H
@@ -64,22 +62,15 @@ namespace BALL
 
 		/**	Default constructor
 		*/
-		MOL2File()
-			;
+		MOL2File();
 
 		/** Detailed constructor
 		*/
 		MOL2File(const String& filename, File::OpenMode open_mode = std::ios::in)
 			throw(Exception::FileNotFound);
 
-		/**	Copy constructor
-		*/
-		MOL2File(const MOL2File& file)
-			throw(Exception::FileNotFound);
-
 		/// Destructor
-		virtual ~MOL2File()
-			;
+		virtual ~MOL2File();
 
 		//@}
 
@@ -108,7 +99,7 @@ namespace BALL
 			throw(File::CannotWrite);
 
 		///
-		const MOL2File& operator = (const MOL2File& file) ;
+		const MOL2File& operator = (const MOL2File& file);
 
 		/// Return the number of TRIPOS-Sets defined in this instance
 		Size getNumberOfSets() const { return sets_.size(); }
