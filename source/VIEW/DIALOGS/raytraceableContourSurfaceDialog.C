@@ -154,7 +154,7 @@ void RaytraceableContourSurfaceDialog::changedEditThreshold()
 	
 }
 
-void RaytraceableContourSurfaceDialog::addModel_(float threshold)
+void RaytraceableContourSurfaceDialog::addModel_(float /*threshold*/)
 {
 	// TODO: create a new model and add it to the representationlist
 }
