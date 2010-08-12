@@ -220,8 +220,9 @@ namespace BALL
     Position layer_;
     
     /** output operator for Sphere
+		 *  TODO: implement!
      */
-    friend std::ostream& operator<<(std::ostream& os, const BindingPocketProcessor::Sphere_& sp) {return os;};
+    friend std::ostream& operator<<(std::ostream& os, const BindingPocketProcessor::Sphere_& /*sp*/) {return os;};
     
     /** store all spheres
      */
