@@ -117,7 +117,7 @@ namespace BALL
 			Matrix4x4& getNCS(Position p)
 				throw(Exception::IndexOverflow);
 			
-			const bool isgivenNCS(Position p) const
+			bool isgivenNCS(Position p) const
 				throw(Exception::IndexOverflow);
 			
 			bool isgivenNCS(Position p)

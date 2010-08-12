@@ -221,7 +221,7 @@ namespace BALL
 		return ncs_symops_[p];				
 	}
 	
-	const bool CrystalInfo::isgivenNCS(Position p) const
+	bool CrystalInfo::isgivenNCS(Position p) const
 		throw(Exception::IndexOverflow)
 	{
 		if (p >= (ncs_symops_.size()))
