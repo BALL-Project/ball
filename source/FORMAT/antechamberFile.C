@@ -24,12 +24,6 @@ namespace BALL
 		GenericMolFile::open(name, open_mode);
 	}
 
-	AntechamberFile::AntechamberFile(const AntechamberFile& file)
-		throw(Exception::FileNotFound)
-		: GenericMolFile(file)
-	{
-	}
-
 	AntechamberFile::~AntechamberFile()
 	{
 	}

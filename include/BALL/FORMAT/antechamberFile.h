@@ -38,11 +38,6 @@ namespace BALL
 			AntechamberFile(const String& filename, File::OpenMode open_mode = std::ios::in)
 				throw(Exception::FileNotFound);
 
-			/**	Copy constructor
-			*/
-			AntechamberFile(const AntechamberFile& file)
-				throw(Exception::FileNotFound);
-
 			/// Destructor
 			virtual ~AntechamberFile();
 			//@}
