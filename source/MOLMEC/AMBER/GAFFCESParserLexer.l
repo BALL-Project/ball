@@ -18,6 +18,7 @@ using namespace BALL;
 %}
 
 %option noyywrap
+%option nounput
 
 %x APS
 
