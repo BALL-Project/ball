@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TRRFile.C,v 1.9 2005/12/23 17:02:40 amoll Exp $
-//
 
 #include <BALL/FORMAT/TRRFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -14,8 +12,7 @@ using namespace std;
 namespace BALL
 {
   TRRFile::TRRFile()
-		
-		:TrajectoryFile(),
+	 : TrajectoryFile(),
 		 header_(),
 		 precision_(4),
 		 has_velocities_(false),
@@ -29,24 +26,7 @@ namespace BALL
 		init();
 	}
 
-	TRRFile::TRRFile(const TRRFile& file)
-		throw(Exception::FileNotFound)
-		: TrajectoryFile(file),
-			header_(file.header_),
-			precision_(file.precision_),
-			has_velocities_(file.has_velocities_),
-			has_forces_(file.has_forces_),
-			timestep_index_(file.timestep_index_),
-			timestep_(file.timestep_),
-			box1_(file.box1_),
-			box2_(file.box2_),
-			box3_(file.box3_)
-	{
-		init();
-	}
-
 	TRRFile::TRRFile(const String& name, File::OpenMode open_mode)
-		
 		: TrajectoryFile(name, open_mode),
 			header_(),
 			precision_(4),
@@ -66,14 +46,12 @@ namespace BALL
 	}
 
 	TRRFile::~TRRFile()
-		
 	{
 		close();
 		clear();
 	}
 
 	const TRRFile& TRRFile::operator = (const TRRFile& file)
-		
 	{
 		TrajectoryFile::operator = (file);
 		header_ = file.header_;
@@ -90,7 +68,6 @@ namespace BALL
 	}
 
 	void TRRFile::clear()
-		
 	{
 		header_ = TRRHeader();
 		precision_ = 4;
@@ -105,7 +82,6 @@ namespace BALL
 	}
 
 	bool TRRFile::operator == (const TRRFile& file) const
-		
 	{
 		return ((TrajectoryFile::operator == (file)) && (timestep_index_ == file.timestep_index_)
 						&& (timestep_ == file.timestep_) && (precision_ == file.precision_)
@@ -113,37 +89,31 @@ namespace BALL
 	}
 
 	bool TRRFile::hasVelocities() const
-		
 	{
 		return has_velocities_;
 	}
 
 	void TRRFile::setVelocityStorage(bool storage)
-		
 	{
 		has_velocities_ = storage;
 	}
 
 	bool TRRFile::hasForces() const
-		
 	{
 		return has_forces_;
 	}
 
 	void TRRFile::setForceStorage(bool storage)
-		
 	{
 		has_forces_ = storage;
 	}
 
 	Size TRRFile::getPrecision() const
-		
 	{
 		return precision_;
 	}
 
 	bool TRRFile::setPrecision(const Size newprecision)
-		
 	{
 		if ((newprecision == 4) || (newprecision == 8))
 		{
@@ -155,37 +125,31 @@ namespace BALL
 	}
 
 	float TRRFile::getTimestep() const
-		
 	{
 		return timestep_;
 	}
 
 	void TRRFile::setTimestep(float timestep)
-		
 	{
 		timestep_ = timestep;
 	}
 
 	Vector3 TRRFile::getBoundingBoxX() const
-		
 	{
 		return box1_;
 	}
 
 	Vector3 TRRFile::getBoundingBoxY() const
-		
 	{
 		return box2_;
 	}
 
 	Vector3 TRRFile::getBoundingBoxZ() const
-		
 	{
 		return box3_;
 	}
 
 	void TRRFile::setBoundingBox(const Vector3& x, const Vector3& y, const Vector3& z)
-		
 	{
 		box1_ = x;
 		box2_ = y;
@@ -193,7 +157,6 @@ namespace BALL
 	}
 
 	bool TRRFile::writeNextHeader(const TRRHeader& header)
-		
 	{
 		Size i;
 
@@ -226,7 +189,6 @@ namespace BALL
 	}
 
 	bool TRRFile::readNextHeader(TRRHeader &header)
-		
 	{
 		Size i;
 
@@ -303,7 +265,6 @@ namespace BALL
 
 
 	bool TRRFile::append(const SnapShot& snapshot)
-		
 	{
 		Size noa = snapshot.getNumberOfAtoms();
 		header_.number_of_atoms = noa;
@@ -475,7 +436,6 @@ namespace BALL
 	}
 
 	bool TRRFile::read(SnapShot& snapshot)
-		
 	{
  		if (!readNextHeader(header_)) return false;
 
@@ -672,7 +632,6 @@ namespace BALL
 	}
 
 	TRRFile& TRRFile::operator >> (SnapShotManager& ssm)
-		
 	{
 			System S = *(ssm.getSystem());
 			SnapShot sn;
@@ -688,7 +647,6 @@ namespace BALL
 		  
 			return *this;
 	}
-	
 
 	bool TRRFile::flushToDisk(const std::vector<SnapShot>& buffer)
 		throw(File::CannotWrite)
@@ -709,7 +667,6 @@ namespace BALL
 	}
 
 	bool TRRFile::init()
-		
 	{
 		if (sizeof(Size) != 4)
 		{

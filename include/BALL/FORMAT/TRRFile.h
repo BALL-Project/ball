@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TRRFile.h,v 1.13 2005/12/23 17:01:45 amoll Exp $
-//
 
 #ifndef BALL_FORMAT_TRRFILE_H
 #define BALL_FORMAT_TRRFILE_H
@@ -41,7 +39,6 @@ namespace BALL
 		*/
 		class BALL_EXPORT TRRHeader
 		{
-
 			public: 
 
 			/// Magic number for the TRR format. This must be equal to 1993.
@@ -131,7 +128,6 @@ namespace BALL
 			float       lambda;
 
 			TRRHeader()
-				
 				: MAGIC(1993),
 					VERSION(13),
 	  			title_string_length(24),
@@ -154,23 +150,18 @@ namespace BALL
 
 		//@}
 
-		BALL_CREATE(TRRFile)
-
 		/** @name Constructors and Destructor
 		*/
 		//@{
 
 		/// Default constructor
-		TRRFile() ;
-
-		/// Copy constructor
-		TRRFile(const TRRFile& file) throw(Exception::FileNotFound);
+		TRRFile();
 
 		/// Construct and open a file
-		TRRFile(const String& name, File::OpenMode open_mode = std::ios::in) ;
+		TRRFile(const String& name, File::OpenMode open_mode = std::ios::in);
 
 		/// Destructor
-		virtual ~TRRFile() ;
+		virtual ~TRRFile();
 		//@}
 
 		/** @name Assignment
@@ -178,10 +169,10 @@ namespace BALL
 		//@{
 
 		/// Assignment operator
-		const TRRFile& operator = (const TRRFile& file) ;
+		const TRRFile& operator = (const TRRFile& file);
 
 		/// Clear method
-		virtual void clear() ;
+		virtual void clear();
 		//@}
 
 		/** @name Predicates
@@ -189,42 +180,42 @@ namespace BALL
 		//@{
 
 		/// Equality operator
-		bool operator == (const TRRFile& file) const ;
+		bool operator == (const TRRFile& file) const;
 		//@}
 
 		/// @name Public methods for file handling
 		//@{
 
 		/// Initialize the file for usage
-		virtual bool init() ;
+		virtual bool init();
 
 		/** Writes the next header that shall preceed the next
 				data block.
 				@param header the TRRHeader we want to write
 				@return true, if a header could be written, false ow.
 		*/
-		virtual bool writeNextHeader(const TRRHeader& header) ;
+		virtual bool writeNextHeader(const TRRHeader& header);
 
 		/** Reads the next header preceding the next data block.
 				@param header a buffer for result delivery
 				@return true, if a header could be read, false ow.
 		*/
-		virtual bool readNextHeader(TRRHeader& header) ;
+		virtual bool readNextHeader(TRRHeader& header);
 		
 		/** Append a SnapShot to an existing file
 				@param snapshot the SnapShot we want to store
 				@return true, if writing was successful
 		*/
-		virtual bool append(const SnapShot& snapshot) ;
+		virtual bool append(const SnapShot& snapshot);
 
 		/** Read the next snapshot from the file
 				@param snapshot a buffer for result delivery
  				@return true, if a snapshot could be read, false otherwise.
 		*/
-		virtual bool read(SnapShot& snapshot) ;
+		virtual bool read(SnapShot& snapshot);
 
 		/// Read the whole file into a SnapShotManager
-		virtual TRRFile& operator >> (SnapShotManager& ssm) ;
+		virtual TRRFile& operator >> (SnapShotManager& ssm);
 		
 		/**
 		*/
@@ -237,40 +228,40 @@ namespace BALL
 		//@{
 
 		///
-		bool hasVelocities() const ;
+		bool hasVelocities() const;
 
 		///
-		void setVelocityStorage(bool storage)	;
+		void setVelocityStorage(bool storage);
 
 		///
-		bool hasForces() const ;
+		bool hasForces() const;
 
 		///
-		void setForceStorage(bool storage) ;
+		void setForceStorage(bool storage);
 
 		///
-		Size getPrecision() const ;
+		Size getPrecision() const;
 
 		///
-		bool setPrecision(const Size precision) ;
+		bool setPrecision(const Size precision);
 
 		///
-		float getTimestep() const	;
+		float getTimestep() const;
 
 		///
-		void setTimestep(float timestep) ;
+		void setTimestep(float timestep);
 
 		///
-		Vector3 getBoundingBoxX() const	;
+		Vector3 getBoundingBoxX() const;
 
 		///
-		Vector3 getBoundingBoxY() const	;
+		Vector3 getBoundingBoxY() const;
 
 		///
-		Vector3 getBoundingBoxZ() const	;
+		Vector3 getBoundingBoxZ() const;
 
 		///
-		void setBoundingBox(const Vector3& x, const Vector3& y, const Vector3& z) ;
+		void setBoundingBox(const Vector3& x, const Vector3& y, const Vector3& z);
 
 		//@}
 
