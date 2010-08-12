@@ -281,7 +281,12 @@ namespace BALL
 				String command = String("exec ") + name_ + " >" + tmp_file;
 				
 				// execute the command
-				system(command.c_str());
+				int system_result = system(command.c_str());
+
+				if (system_result < 0)
+				{
+					Log.info() << "Warning: system returned " << system_result << std::endl;
+				}
 		
 				// remember the current file is a temporary file!
 				name_ = tmp_file;
