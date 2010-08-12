@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker2DFile.C,v 1.25.20.1 2007/03/25 22:00:21 oliver Exp $
-//
 
 #include <BALL/FORMAT/bruker2DFile.h>
 
@@ -31,15 +29,7 @@ namespace BALL
 		read();
 	}
 
-	Bruker2DFile::Bruker2DFile(const Bruker2DFile& file) 
-		throw(Exception::FileNotFound)
-		: File(file)
-	{
-		//????
-	}
-
 	Bruker2DFile::~Bruker2DFile()
-		
 	{
 	}
 

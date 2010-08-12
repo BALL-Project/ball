@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker2DFile.h,v 1.26 2005/12/23 17:01:46 amoll Exp $
-//
 
 #ifndef BALL_FORMAT_BRUKER2DFILE_H
 #define BALL_FORMAT_BRUKER2DFILE_H
@@ -38,15 +36,9 @@ namespace BALL
 		Bruker2DFile(const String& name, OpenMode open_mode = std::ios::in | std::ios::binary)
 			throw(Exception::FileNotFound);
 
-		/**	Copy-Constructor.
-		*/
-		Bruker2DFile(const Bruker2DFile& file)
-			throw(Exception::FileNotFound);
-
 		/**	Destructor.
 		*/
-		virtual ~Bruker2DFile()
-			;
+		virtual ~Bruker2DFile();
 
 		/** Read a spectrum. 
 				It will be stored in spectrum_;
