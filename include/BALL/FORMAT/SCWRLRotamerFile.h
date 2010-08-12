@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SCWRLRotamerFile.h,v 1.1.2.2 2007/08/07 07:28:37 toussaint Exp $
-//
 
 #ifndef BALL_FORMAT_SCWRLROTAMERFILE_H
 #define BALL_FORMAT_SCWRLROTAMERFILE_H
@@ -21,25 +19,22 @@ namespace BALL
 			backbone independent rotamers. Currently only files with the same format
 			as <b>bbdep02.May.lib</b> or <b>bbind02.May.lib</b> are supported. 
 	*/
-	class BALL_EXPORT SCWRLRotamerFile : public LineBasedFile
+	class BALL_EXPORT SCWRLRotamerFile 
+		: public LineBasedFile
 	{
-
 		public:
 
 		/** @name Constructors and Destructor
 		*/
 		//@{
 		/// Default constructor
-		SCWRLRotamerFile() ;
-
-		/// Copy constructor
-		SCWRLRotamerFile(const SCWRLRotamerFile& file) ;
+		SCWRLRotamerFile();
 
 		/// Detailed constructor
-		SCWRLRotamerFile(const String& name, File::OpenMode open_mode = std::ios::in) ;
+		SCWRLRotamerFile(const String& name, File::OpenMode open_mode = std::ios::in);
 
 		/// Destructor
-		virtual ~SCWRLRotamerFile() ;
+		virtual ~SCWRLRotamerFile();
 		//@}
 
 

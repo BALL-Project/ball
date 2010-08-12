@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SCWRLRotamerFile.C,v 1.1.2.4 2007/08/07 09:27:20 toussaint Exp $
-//
 
 #include <BALL/FORMAT/SCWRLRotamerFile.h>
 #include <BALL/STRUCTURE/rotamerLibrary.h>
@@ -13,11 +11,6 @@ namespace BALL
 {
 		SCWRLRotamerFile::SCWRLRotamerFile() 
 			:	LineBasedFile()
-		{
-		}
-
-		SCWRLRotamerFile::SCWRLRotamerFile(const SCWRLRotamerFile& file) 
-			: LineBasedFile(file)
 		{
 		}
 
@@ -162,4 +155,3 @@ namespace BALL
 		}
 
 } // namespace BALL
-
