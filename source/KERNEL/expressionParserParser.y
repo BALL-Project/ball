@@ -7,14 +7,8 @@ using namespace BALL;
 using namespace std;
 
 extern int ExpressionParserlex();
-extern void ExpressionParsererror(char* s)
+extern void ExpressionParsererror(char const* s)
 	throw(Exception::ParseError);
-
-/* ??? */
-/* There is some nasty problem with alloca under Intel/icc/Linux */
-/* so we use (inefficient) malloc instead. */
-#undef alloca
-#define alloca malloc
 
 %}
 %union {
@@ -128,8 +122,7 @@ something:
 	;
 
 %%
-
-void ExpressionParsererror(char* s)
+void ExpressionParsererror(char const* s)
 	throw(Exception::ParseError)
 {
 	throw Exception::ParseError(__FILE__, 0, 
