@@ -42,7 +42,7 @@ namespace BALL
 			setAutoFillBackground(false);
 		}
 
-		GLRenderWindow::GLRenderWindow(QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
+		GLRenderWindow::GLRenderWindow(QWidget* parent_widget, const char* /*name*/, Qt::WFlags w_flags)
 			: QGLWidget(gl_format_, parent_widget, (QGLWidget*)0, w_flags),
 			  FB_TEXTURE_TARGET(GL_TEXTURE_2D),
 			  FB_TEXTURE_FORMAT(GL_RGB),
@@ -59,7 +59,7 @@ namespace BALL
 			setAutoFillBackground(false);
 		}
 
-		GLRenderWindow::GLRenderWindow(const GLRenderWindow& window, QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
+		GLRenderWindow::GLRenderWindow(const GLRenderWindow& window, QWidget* parent_widget, const char* /*name*/, Qt::WFlags w_flags)
 			: QGLWidget(gl_format_, parent_widget, reinterpret_cast<QGLWidget const*>(&window), w_flags),
 			  FB_TEXTURE_TARGET(GL_TEXTURE_2D),
 			  FB_TEXTURE_FORMAT(GL_RGB),
