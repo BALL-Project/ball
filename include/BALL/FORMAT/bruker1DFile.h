@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker1DFile.h,v 1.26 2005/12/23 17:01:45 amoll Exp $
-//
 
 #ifndef BALL_FORMAT_BRUKER1DFILE_H
 #define BALL_FORMAT_BRUKER1DFILE_H
@@ -40,13 +38,8 @@ namespace BALL
 		Bruker1DFile(const String& name, OpenMode open_mode = std::ios::in | std::ios::binary)
 			throw(Exception::FileNotFound);
 
-		/// Copy constructor
-		Bruker1DFile(const Bruker1DFile& file)
-			throw(Exception::FileNotFound);
-
 		/// Destructor
-		virtual ~Bruker1DFile()
-			;
+		virtual ~Bruker1DFile();
 
 		//@}
 		/**	@name Accessors

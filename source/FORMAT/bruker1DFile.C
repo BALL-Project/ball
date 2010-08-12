@@ -32,17 +32,7 @@ namespace BALL
 		read();
 	}
 
-	Bruker1DFile::Bruker1DFile(const Bruker1DFile& file) 
-		throw(Exception::FileNotFound)
-		: File(file),
-			min_(file.min_),
-			max_(file.max_),
-			pars_(file.pars_)
-	{
-	}
-
 	Bruker1DFile::~Bruker1DFile()
-		
 	{
 	}
 
