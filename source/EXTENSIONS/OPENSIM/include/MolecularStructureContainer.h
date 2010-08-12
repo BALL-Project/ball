@@ -28,11 +28,21 @@ namespace BALL
 				Index addAtom(const String& Element, const Vector3& position, 
 				              float radius, const ColorRGBA& color);
 
+				Index hashAtom(Atom* new_atom);
+				Index hashBond(Bond* new_bond);
+
+				Index getAtomIndex(Atom const* atom) const;
+				Index getBondIndex(Bond const* bond) const;
+
 				Index addBondByAtomIndex(Index atom1, Index atom2, Size order);
 
 				
-				void removeAtomByIndex(Index atom_index);
+				void unhashAtom(Index atom_index);
+				void unhashBond(Index bond_index);
 
+				bool needsUpdate(Index atom_index);
+
+				void removeAtomByIndex(Index atom_index);
 			
 				void removeBondByAtomIndex( Index bond_index,
 											Index atom_index_one, 
@@ -53,24 +63,19 @@ namespace BALL
 				void deselectBond(Index atom_index_one,Index atom_index_two);
 
 		 protected:
-				HashMap<Index, Handle> index_to_atom_;
-				HashMap<Handle, Index> atom_to_index_;
+				HashMap<Index, Atom*> index_to_atom_;
+				HashMap<Atom*, Index> atom_to_index_;
 
-				HashMap<Handle, Atom *> handle_to_atom_;
+				HashMap<Index, Bond*> index_to_bond_;
+				HashMap<Bond*, Index> bond_to_index_;
 
-				HashMap<Index, Handle> index_to_bond_;
-				HashMap<Handle, Index> bond_to_index_;
-
-				HashMap<Handle, Bond *> handle_to_bond_;
-
-								
 				Index next_atom_index_;
 				Index next_bond_index_;
 
-				ReadWriteLock readWriteLock_;
+				HashMap<Index, PreciseTime> atom_hash_times_;
+
+				mutable ReadWriteLock readWriteLock_;
 		};
 		
 	}
 }
-
-

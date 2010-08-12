@@ -110,6 +110,10 @@ namespace BALL
 
 			if (outstream.good())
 			{
+				Log.info() << "Sending " << std::endl;
+				Log.info() << to_send << std::endl;
+				Log.info() << " to " << plugin_->getRemoteHost() << " " << plugin_->getRemotePort() << std::endl;
+
 				outstream << to_send << std::endl;
 				outstream.flush();
 			}

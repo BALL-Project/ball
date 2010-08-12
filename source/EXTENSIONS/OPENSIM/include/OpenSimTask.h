@@ -12,6 +12,8 @@
 # include <BALL/DATATYPE/hashMap.h>
 #endif
 
+#include <list>
+
 namespace BALL
 {
 	class Atom;
@@ -32,30 +34,12 @@ namespace BALL
 					REPRESENTATION
 				};
 
-				struct BondStruct
-				{
-					const Bond* bond;
-					Handle atom_one_handle;
-					Handle atom_two_handle;
-
-					BondStruct(const Bond* bond_,Handle atom_one_handle_,Handle atom_two_handle_);
-
-					BondStruct();
-				};
-
-				OpenSimTask(OpenSimTaskTypes type_, AtomContainer* container_,
-								HashMap<Handle, const Atom*> handle_to_atom,
-								HashMap<const Atom*, Handle> atom_to_handle,
-								HashMap<Handle, BondStruct> handle_to_bond);
-
-				OpenSimTask();
-
 				OpenSimTaskTypes type;
 				AtomContainer* container;
 				
-				HashMap<Handle, const Atom*> handle_to_atom_;
-				HashMap<Handle, BondStruct> handle_to_bond_;
-				
+				// TODO: this should be all we need
+				std::list<Atom*> affected_atoms;
+				std::list<Bond*> affected_bonds;
 		};
 	}
 }

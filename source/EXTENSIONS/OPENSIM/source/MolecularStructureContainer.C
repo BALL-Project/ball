@@ -1,7 +1,5 @@
 #include "../include/MolecularStructureContainer.h"
 
-
-
 namespace BALL
 {
 	namespace VIEW
@@ -45,7 +43,7 @@ namespace BALL
 		* there is a problem when removing atom indices from the hashmaps.
 		*/
 		Index MolecularStructureContainer::addAtom( const String& element,
-				                       const Vector3& position, float radius, const ColorRGBA& color)
+				                       const Vector3& position, float radius, const ColorRGBA& /*color*/)
 		{
 			if (radius < 0)
 			{
@@ -81,13 +79,12 @@ namespace BALL
 					if (atom)
 					{
 						readWriteLock_.lockForWrite();
-						Handle atom_identifier = atom->getHandle();
 						atom_index_ = next_atom_index_;
 
 						// Keep track of atom indices
-						index_to_atom_[atom_index_] = atom_identifier;
-						atom_to_index_[atom_identifier]  = atom_index_;
-						handle_to_atom_[atom_identifier] =  new Atom(*atom,true);
+						index_to_atom_[atom_index_] = atom;
+						atom_to_index_[atom]        = atom_index_;
+
 						next_atom_index_++;
 						
 						while (index_to_atom_.has(next_atom_index_))
@@ -103,121 +100,190 @@ namespace BALL
 			return atom_index_;
 		}
 
+		/* Adds a new atom into the hash map and returns its index.
+		 */
+		Index MolecularStructureContainer::hashAtom(Atom* new_atom)
+		{
+			readWriteLock_.lockForWrite();
+
+			Index atom_index = next_atom_index_;
+
+			index_to_atom_[atom_index] = new_atom;
+			atom_to_index_[new_atom]   = atom_index;
+
+			atom_hash_times_[next_atom_index_] = PreciseTime::now();
+
+			while (index_to_atom_.has(next_atom_index_))
+			{
+				++next_atom_index_;
+			}
+
+			readWriteLock_.unlock();
+
+			return atom_index;
+		}
+
+		/* Adds a new bond into the hash map and returns its index.
+		 */
+		Index MolecularStructureContainer::hashBond(Bond* new_bond)
+		{
+			readWriteLock_.lockForWrite();
+
+			Index bond_index = next_bond_index_;
+
+			index_to_bond_[bond_index] = new_bond;
+			bond_to_index_[new_bond]   = bond_index;
+
+			while (index_to_bond_.has(next_bond_index_))
+			{
+				++next_bond_index_;
+			}
+
+			readWriteLock_.unlock();
+
+			return bond_index;
+		}
+
+		Index MolecularStructureContainer::getAtomIndex(Atom const* atom) const
+		{
+			Index result = -1;
+
+			readWriteLock_.lockForRead();
+
+			// ugly, but necessary
+			if (atom_to_index_.has(const_cast<Atom*>(atom)))
+				result = atom_to_index_[const_cast<Atom*>(atom)];
+
+			readWriteLock_.unlock();
+
+			return result;
+		}
+
+		Index MolecularStructureContainer::getBondIndex(Bond const* bond) const
+		{
+			Index result = -1;
+
+			readWriteLock_.lockForRead();
+
+			// ugly, but necessary
+			if (bond_to_index_.has(const_cast<Bond*>(bond)))
+				result = bond_to_index_[const_cast<Bond*>(bond)];
+
+			readWriteLock_.unlock();
+
+			return result;
+		}
+
+		bool MolecularStructureContainer::needsUpdate(Index atom_index)
+		{
+			Index result = false;
+
+			readWriteLock_.lockForWrite();
+
+			if (atom_hash_times_.has(atom_index))
+			{
+				PreciseTime hash_time = atom_hash_times_[atom_index];
+
+				if (index_to_atom_[atom_index]->getModificationTime() > hash_time)
+				{
+					result = true;
+					// we assume the update will follow right after this call
+					atom_hash_times_[atom_index] = PreciseTime::now();
+				}
+			}
+Log.info() << "Needs update? " << result << std::endl;
+			readWriteLock_.unlock();
+
+			return result;
+		}
+
 		/*
 		* Adds a bond between two existing atoms into an existing ballview molecular structure(system)which is an atom container
 		* Required parameters are atom indices and bond information
 		*/
 		Index MolecularStructureContainer::addBondByAtomIndex(/*Index bond_index,*/ Index atom_index_one, Index atom_index_two, Size order)
 		{
-			// Note
-			// Not sure if this works
-			// If  no datastructure is used, then these condition need be removed
-			if ((!index_to_atom_.has(atom_index_one)) && (!index_to_atom_.has(atom_index_two)))
+			if (!(index_to_atom_.has(atom_index_one) && index_to_atom_.has(atom_index_two)))
 			{
 				Log.error() << "MolecularStructureContainer : Cannot build a bond between non-existing  atoms!" << std::endl;
 				return -1;
 			}
-
-			// Note
-			// Not sure if this works
-			// If  no datastructure is used, then these condition need be removed
-			/*if (!index_to_bond_.has(bond_index))
-			{
-				Log.error() << "MolecularStructureContainer : bond already existing between specified atoms!" << std::endl;
-				return;
-			}*/
 
 			AtomContainer* ai = getAtomContainer();
 
 			if (!ai) 
 				return -1;
 
-			Atom* atom_one_  = NULL;
-			Atom* atom_two_  = NULL;
-			Index bond_index_ =  -1;
+			Atom* atom_one = index_to_atom_[atom_index_one];
+			Atom* atom_two = index_to_atom_[atom_index_two];
 
-			if (ai)
+			Index bond_index = -1;
+
+			if (!atom_one->isBoundTo(*atom_two))
 			{
-				for (AtomIterator at_it = ai->beginAtom(); +at_it; ++at_it)
+				Bond* new_bond = atom_one->createBond(*atom_two);
+
+				// set the order for the added bond
+				new_bond->setOrder(order);	
+				CompositeMessage *cm = new CompositeMessage(*ai, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY, true);
+				qApp->postEvent(MainControl::getInstance(0), new MessageEvent(cm));
+
+				readWriteLock_.lockForWrite();
+				bond_index = next_bond_index_;
+
+				// Keep track of added bond indices after bond addition
+				index_to_bond_[bond_index] = new_bond;
+				bond_to_index_[new_bond]   = bond_index;
+
+				next_bond_index_++;
+				while (index_to_bond_.has(next_bond_index_))
 				{
-					//Note
-					// This does not work as I wanted
-					//Index atom_index_ = at_it->getIndex();
-
-					Atom* atom = &*at_it;
-
-					if (atom)
-					{
-						Handle atom_identifier = atom->getHandle();
-						Index atom_index_  = -1;
-
-						if (atom_to_index_.has(atom_identifier))
-						{
-							atom_index_ = atom_to_index_[atom_identifier];
-						}
-
-						if (atom_index_ != -1)
-						{
-							if (atom_index_ == atom_index_one)
-							{
-								atom_one_ = &*at_it;
-							}
-							else if (atom_index_ == atom_index_two )
-							{
-								atom_two_ = &*at_it;
-							}
-						}
-					}
+					++next_bond_index_;
 				}
 
-				if (atom_one_ && atom_two_)
-				{
-					// ToDo - validate if they are null
-					Bond* new_bond_ = atom_one_->createBond(*atom_two_);
-
-					if (new_bond_)
-					{
-						// set the order for the added bond
-						new_bond_->setOrder(order);	
-						CompositeMessage *cm = new CompositeMessage(*ai, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY, true);
-						qApp->postEvent(MainControl::getInstance(0), new MessageEvent(cm));
-
-						// Do I need it again? yes -> again check after inserted into BALLView
-						// How to check if bond inserted?
-						if (new_bond_)
-						{
-							readWriteLock_.lockForWrite();
-							Handle bond_identifier = new_bond_->getHandle();
-							bond_index_ = next_bond_index_;
-
-							// Keep track of added bond indices after bond addition
-							index_to_bond_[bond_index_] = bond_identifier;
-							bond_to_index_[bond_identifier]  = bond_index_;
-							handle_to_bond_[bond_identifier] =  new Bond(*new_bond_,true);
-
-							next_bond_index_++;
-							while (index_to_bond_.has(next_bond_index_))
-							{
-								++next_bond_index_;
-							}
-
-							readWriteLock_.unlock();
-						}
-					}
-				}
+				readWriteLock_.unlock();
 			}
-			return bond_index_;
+
+			return bond_index;
+		}
+		
+		void MolecularStructureContainer::unhashAtom(Index atom_index)
+		{
+			readWriteLock_.lockForWrite();
+
+			if (index_to_atom_.has(atom_index))
+			{
+				Atom* atom = index_to_atom_[atom_index];
+
+				index_to_atom_.erase(atom_index);
+				atom_hash_times_.erase(atom_index);
+				atom_to_index_.erase(atom);
+			}
+
+			readWriteLock_.unlock();
 		}
 
-		
+		void MolecularStructureContainer::unhashBond(Index bond_index)
+		{
+			readWriteLock_.lockForWrite();
+
+			if (index_to_bond_.has(bond_index))
+			{
+				Bond* bond = index_to_bond_[bond_index];
+
+				index_to_bond_.erase(bond_index);
+				bond_to_index_.erase(bond);
+			}
+
+			readWriteLock_.unlock();
+		}
+
 		/*
 		* Removes an existing atom from an existing ballview molecular structure(system)which is an atom container
 		* Required parameter is atom index
 		*/
-		void MolecularStructureContainer::removeAtomByIndex(Index atom_toberemoved_index)
+		void MolecularStructureContainer::removeAtomByIndex(Index atom_index)
 		{
-			bool atomRemoved = false;
-
 			AtomContainer* ai = getAtomContainer();
 
 			if (!ai) return;
@@ -225,83 +291,36 @@ namespace BALL
 			// Note
 			// Not sure if this works
 			// If  no datastructure is used, then these condition need be removed
-			if (!index_to_atom_.has(atom_toberemoved_index))
+			if (!index_to_atom_.has(atom_index))
 			{
 				Log.error() << "MolecularStructureContainer: cannot remove a non-existing atom!" << std::endl;
 				return;
 			}
 
-			if (ai)
-			{
-				for (AtomIterator at_it = ai->beginAtom(); +at_it; ++at_it)
-				{
-					//Note TODO
-					// This does not work as I wanted
-					//Index atom_index_ = at_it->getIndex();
+			Atom* atom = index_to_atom_[atom_index];
 
-					Atom* atom = &*at_it;
-					if (atom)
-					
-					{
-						Handle atom_identifier = atom->getHandle();
-						Index atom_index_ = -1;
+			getMainControl()->remove(*atom);
 
-						if (atom_to_index_.has(atom_identifier))
-						{
-							atom_index_ = atom_to_index_[atom_identifier];
-						}
+			CompositeMessage *cm = new CompositeMessage(*ai, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY, true);
+			qApp->postEvent(MainControl::getInstance(0), new MessageEvent(cm));
 
-						if (atom_index_ != -1)
-						{
-							if (atom_index_ == atom_toberemoved_index)
-							{
-								getMainControl()->remove(*atom);
-								
-								CompositeMessage *cm = new CompositeMessage(*ai, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY, true);
-								qApp->postEvent(MainControl::getInstance(0), new MessageEvent(cm));
-								
-								readWriteLock_.lockForWrite();
-								
-								//Take care keep tracking of atom removal
+			readWriteLock_.lockForWrite();
 
-								//atom_to_index_.erase(atom_to_index_.find(atom_identifier));
-								atom_to_index_[atom_identifier] = -1;
+			//Take care keep tracking of atom removal
 
-								handle_to_atom_[atom_identifier] =  NULL;
+			atom_to_index_.erase(atom);
+			index_to_atom_.erase(atom_index);
 
-								// Note
-								// Not sure if this works
-								//index_to_atom_.erase(index_to_atom_.find(atom_index));
-								//index_to_atom_[atom_index] = NULL ; // is this needed ?
-
-								readWriteLock_.unlock();
-								atomRemoved = true;
-								break;
-								
-							}
-						}
-					}
-				}
-			}
-			if (!atomRemoved)
-			{
-				Log.error() << "MolecularStructureContainer: cannot remove a non-existing atom!" << std::endl;
-				return;
-			}
+			readWriteLock_.unlock();
 		}
 	
-
 		/*
 		* Removes an existing bond between existing atoms from an existing ballview molecular structure(system)which is an atom container
 		* Required parameter is bond index, indices of atoms
 		*/
 		void MolecularStructureContainer::removeBondByAtomIndex(Index bond_index, Index atom_index_one, Index atom_index_two)
 		{
-
-			// Note
-			// Not sure if this works
-			// If  no datastructure is used, then these condition need be removed
-			if ((!index_to_atom_.has(atom_index_one)) && (!index_to_atom_.has(atom_index_two)))
+			if (!(index_to_atom_.has(atom_index_one) && index_to_atom_.has(atom_index_two)))
 			{
 				Log.error() << "MolecularStructureContainer : Cannot remove the bond between non-existing  atoms!" << std::endl;
 				return;
@@ -311,88 +330,38 @@ namespace BALL
 
 			if (!ai) return;
 
-			Atom* atom_one_  = NULL;
-			Atom* atom_two_ = NULL;
+			Atom* atom_one = index_to_atom_[atom_index_one];
+			Atom* atom_two = index_to_atom_[atom_index_two];
 
-			if (ai)
+			Bond* bond = atom_one->getBond(*atom_two);
+
+			Bond* bond_by_index = 0;
+			if (index_to_bond_.has(bond_index))
 			{
-				for (AtomIterator at_it = ai->beginAtom(); +at_it; ++at_it)
+				bond_by_index = index_to_bond_[bond_index];
+			}
+
+			if (bond != bond_by_index)
+			{
+				Log.error() << "MolecularStructureContainer: inconsistency between OpenSim indices and BALLView indices detected!" << std::endl;
+			}
+
+			if (bond)
+			{
+				atom_one->destroyBond(*atom_two);
+
+				CompositeMessage *cm = new CompositeMessage(*ai, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY, true);
+				qApp->postEvent(MainControl::getInstance(0), new MessageEvent(cm));
+				readWriteLock_.lockForWrite();
+
+				if (bond_by_index)
 				{
-					//Note
-					// This does not work as I wanted
-					//Index atom_index_ = at_it->getIndex();
-
-					Atom* atom = &*at_it;
-					Index atom_index_ = -1;
-
-					if (atom)
-					{
-						Handle atom_identifer = atom->getHandle();
-
-						if (atom_to_index_.has(atom_identifer))
-						{
-							atom_index_ = atom_to_index_[atom_identifer];
-						}
-					}
-					 
-					if (atom_index_ != -1)
-					{
-						if (atom_index_ == atom_index_one)
-						{
-							atom_one_ = &*at_it;
-						}
-						else if (atom_index_ == atom_index_two)
-						{
-							atom_two_ = &*at_it;
-						}
-					}
-
-				}
-
-				if (atom_one_ && atom_two_)
-				{
-					// Take care keep tracking of bond removal
-					// should be done before the bond is actually removed
-					// Note : when removing bonds how to handle the atoms ?
-
-					Bond * bond = atom_one_->getBond(*atom_two_);
-
-					if (bond)
-					{
-						Handle bond_identifier = -1;
-						if (index_to_bond_.has(bond_index))
-						{
-							bond_identifier = index_to_bond_[bond_index];
-						}
-
-						Index bondIndex = -1;
-
-						if (bond_to_index_.has(bond_identifier) )  
-						{
-							bondIndex = bond_to_index_[bond_identifier];
-						}
-
-						if (bondIndex!= -1)
-						{
-							// ToDo - validate if they are null
-							atom_one_->destroyBond(*atom_two_);
-
-							CompositeMessage *cm = new CompositeMessage(*ai, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY, true);
-							qApp->postEvent(MainControl::getInstance(0), new MessageEvent(cm));
-							readWriteLock_.lockForWrite();
-
-							//bond_to_index_.erase(bond_to_index_.find(bond));
-							
-							bond_to_index_[bond_identifier] = -1;
-							handle_to_bond_[bond_identifier] =  NULL;
-
-							//index_to_bond_.erase(index_to_bond_.find(bond_index));
-
-							readWriteLock_.unlock();
-						}
-					}
+					bond_to_index_.erase(bond_by_index);
+					index_to_bond_.erase(bond_index);
 				}
 			}
+
+			readWriteLock_.unlock();
 		}
 
 		
@@ -400,99 +369,47 @@ namespace BALL
 		* Updates an existing atom in an existing ballview molecular structure(system)which is an atom container
 		* Required parameter is atom index and necessary information of atoms to be updated.
 		*/
-		void MolecularStructureContainer::updateAtomByIndex(Index atom_tobeupdate_index, const String& element,
+		void MolecularStructureContainer::updateAtomByIndex(Index atom_index, const String& /*element*/,
 					const Vector3& position /* ,float radius, float charge,  const Vector3& velocity,const Vector3& force*/)
-
 		{
-
-			// Note
-			// Not sure if this works
-			// If  no datastructure is used, then these condition need be removed
-			if (!index_to_atom_.has(atom_tobeupdate_index))
+			if (!index_to_atom_.has(atom_index))
 			{
 				Log.error() << "MolecularStructureContainer: cannot update a non-existing atom!" << std::endl;
 				return;
 			}
 
-			/*if(radius < 0)
-			{
-				Log.error() << " MolecularStructureContainer: Please provide radius greter than zero !" << std::endl;
-				return ;
-			}*/
-
 			AtomContainer* ai = getAtomContainer();
 
 			if (!ai) return;
 
-			if (ai)
-			{
-				for (AtomIterator at_it = ai->beginAtom(); +at_it; ++at_it)
-				{
-					//Note
-					// This does not work as I wanted
-					//Index atom_index_ = at_it->getIndex();
+			Atom* atom = index_to_atom_[atom_index];
+			atom->setPosition(position);
+			
+			// TODO: why are these commented out???
 
-					Atom* atom = &*at_it;
+			//atom->setRadius(radius);
+			//set charge
+			//atom->setCharge(charge);
+			//set velocity
+			//atom->setVelocity(velocity);
+			//set force
+			//atom->setForce(force);
+			//No way to change the color
+			//atom->setColor(color);
 
-					if (atom)
-					{
-						Handle atom_identifier = atom->getHandle();
-						Index atom_index_ = -1;
-
-						if (atom_to_index_.has(atom_identifier))
-						{
-							atom_index_ = atom_to_index_[atom_identifier];
-						}
-
-						if ((atom_index_ == atom_tobeupdate_index) && (atom_index_ != -1))
-						{
-							//Atom* atom = index_to_atom_[atom_index];	
-
-							//ToDo
-							//setType 
-							//setTypeName
-							
-							atom->setPosition(position);
-							
-							//atom->setRadius(radius);
-
-							//set charge
-							//atom->setCharge(charge);
-
-							//set velocity
-							//atom->setVelocity(velocity);
-
-							//set force
-							//atom->setForce(force);
-
-							//No way to change the color
-							//atom->setColor(color);
-
-							CompositeMessage *cm = new CompositeMessage(*ai, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY, true);
-							qApp->postEvent(MainControl::getInstance(0), new MessageEvent(cm));
-
-							break;
-						}
-					}
-				}
-			}
+			CompositeMessage *cm = new CompositeMessage(*ai, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY, true);
+			qApp->postEvent(MainControl::getInstance(0), new MessageEvent(cm));
 		}
 
-
-		
-		
 		/*
 		* Updates a bond  between existing atoms in an existing ballview molecular structure(system)which is an atom container
 		* Required parameter is atom indices and necessary information of bond to be updated.
 		*/
 		void MolecularStructureContainer::updateBondByAtomIndex(Index atom_index_one, Index atom_index_two,Size order)
 		{
-
-			// Note 
-			// Not sure if this works
-			if ((!index_to_atom_.has(atom_index_one)) && (!index_to_atom_.has(atom_index_two)))
+			if (!(index_to_atom_.has(atom_index_one) && index_to_atom_.has(atom_index_two)))
 			{
-				Log.error() << "MolecularStructureContainer : Cannot update the bond between non-existing  atoms!" << std::endl;
+				Log.error() << "MolecularStructureContainer : Cannot remove the bond between non-existing  atoms!" << std::endl;
 				return;
 			}
 
@@ -500,126 +417,41 @@ namespace BALL
 
 			if (!ai) return;
 
-			Atom* atom_one_  = NULL;
-			Atom* atom_two_ = NULL;
+			Atom* atom_one = index_to_atom_[atom_index_one];
+			Atom* atom_two = index_to_atom_[atom_index_two];
 
-			if (ai)
+			Bond* bond = atom_one->getBond(*atom_two);
+
+			if (bond)
 			{
-				for (AtomIterator at_it = ai->beginAtom(); +at_it; ++at_it)
-				{
-					//Note
-					// This does not work as I wanted
-					//Index atom_index_ = at_it->getIndex();
-
-					Atom* atom = &*at_it;
-					if (atom)
-					{
-						Index  atom_index_ = -1;
-						Handle atom_identifier = atom->getHandle();
-						if (atom_to_index_.has(atom_identifier))
-						{
-							atom_index_ = atom_to_index_[atom_identifier];
-						}
-
-						if (atom_index_ != -1)
-						{
-							if (atom_index_ == atom_index_one)
-							{
-								atom_one_ = &*at_it;
-							}
-							else if (atom_index_ == atom_index_two)
-							{
-								atom_two_ = &*at_it;
-							}
-						}
-					}
-				}
-
-				if (atom_one_ && atom_two_)
-				{
-					// ToDo - validate if they are null
-					Bond* bond = atom_one_->getBond(*atom_two_);
-
-					if (bond)
-					{
-						// ToDo
-						//bond->setType(Type bond_type);
-						
-						bond->setOrder(order);
-						CompositeMessage *cm = new CompositeMessage(*ai, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY, true);
-						qApp->postEvent(MainControl::getInstance(0), new MessageEvent(cm));
-					}
-				}
+				bond->setOrder(order);
+				CompositeMessage *cm = new CompositeMessage(*ai, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY, true);
+				qApp->postEvent(MainControl::getInstance(0), new MessageEvent(cm));
 			}
-		}
 
-		
+			readWriteLock_.unlock();
+		}
 
 		/*
 		* Selects an existing atom in an existing ballview molecular structure(system)which is an atom container
 		* Required parameter is atom index 
 		* Note : functioanlity not tested 
 		*/
-		void MolecularStructureContainer::selectAtom(Index atom_tobeselected_index)
+		void MolecularStructureContainer::selectAtom(Index atom_index)
 		{
-
-			// Note
-			// Not sure if this works
-			// If  no datastructure is used, then these condition need be removed
-			if (!index_to_atom_.has(atom_tobeselected_index))
+			if (!index_to_atom_.has(atom_index))
 			{
 				Log.error() << "MolecularStructureContainer: cannot select a non-existing atom!" << std::endl;
 				return;
 			}
 
-			bool atomSelected = false;
+			Atom* atom = index_to_atom_[atom_index];
 
 			AtomContainer* container = getAtomContainer();
 
-			if (!container) return;
-		
-			if (container)
-			{
-				for (AtomIterator at_it = container->beginAtom(); +at_it; ++at_it)
-				{
-					//Note
-					// This does not work as I wanted
-					//Index atom_index_ = at_it->getIndex();
-
-					Atom* atom = &*at_it;
-					Index atom_index_ =  -1;
-
-					if (atom)
-					{
-						Handle atom_identifer = atom->getHandle();
-						if (atom_to_index_.has(atom_identifer))
-						{
-							atom_index_ = atom_to_index_[atom_identifer];
-						}
-					}
-
-					if ((atom_index_ != -1) && atom)
-					{
-						if (atom_index_ == atom_tobeselected_index )
-						{
-							getMainControl()->selectCompositeRecursive((Composite *)atom);
-							CompositeMessage *cm = new CompositeMessage(*container, CompositeMessage::SELECTED_COMPOSITE, true);
-							qApp->postEvent(MainControl::getInstance(0), new MessageEvent(cm));
-							atomSelected = true;
-							break;
-						}
-					}
-					//ToDo
-					//Take care keep tracking of atom selection
-					//Indroduce another hashmap for keeping track of selected atoms
-				}
-			}
-			
-			if (!atomSelected)
-			{
-				Log.error() << "MolecularStructureContainer: cannot select a non-existing atom!" << std::endl;
-				return;
-			}
+			getMainControl()->selectCompositeRecursive((Composite *)atom);
+			CompositeMessage *cm = new CompositeMessage(*container, CompositeMessage::SELECTED_COMPOSITE, true);
+			qApp->postEvent(MainControl::getInstance(0), new MessageEvent(cm));
 		}
 
 		
@@ -628,178 +460,31 @@ namespace BALL
 		* Required parameter is atom index 
 		* Note : functioanlity not tested 
 		*/
-		void MolecularStructureContainer::deselectAtom(Index atom_tobedeselect_index)
+		void MolecularStructureContainer::deselectAtom(Index atom_index)
 		{
-
-			// Note
-			// Not sure if this works
-			// If  no datastructure is used, then these condition need be removed
-			if (!index_to_atom_.has(atom_tobedeselect_index))
+			if (!index_to_atom_.has(atom_index))
 			{
-				Log.error() << "MolecularStructureContainer: cannot deselect a non-existing atom!" << std::endl;
+				Log.error() << "MolecularStructureContainer: cannot select a non-existing atom!" << std::endl;
 				return;
 			}
 
-			bool atomDeselected = false;
+			Atom* atom = index_to_atom_[atom_index];
+
 			AtomContainer* container = getAtomContainer();
-			
-			if (!container) 
-				return;
-			else
-			{
-				for (AtomIterator at_it = container->beginAtom(); +at_it; ++at_it)
-				{
-					//Note
-					// This does not work as I wanted
-					//Index atom_index_ = at_it->getIndex();
 
-					Atom* atom = &*at_it;
-					Index atom_index_ = -1;
-
-					if (atom)
-					{
-						Handle atom_identifier = atom->getHandle();
-
-						if (atom_to_index_.has(atom_identifier))
-						{
-							atom_index_ = atom_to_index_[atom_identifier];
-						}
-					}
-					
-					if ((atom_index_ != -1) && atom)
-					{
-						if (atom_index_ == atom_tobedeselect_index )
-						{
-							getMainControl()->deselectCompositeRecursive((Composite *)atom);
-							CompositeMessage *cm = new CompositeMessage(*container, CompositeMessage::DESELECTED_COMPOSITE, true);
-							qApp->postEvent(MainControl::getInstance(0), new MessageEvent(cm));
-							atomDeselected = true;
-						}
-					}
-					//ToDo
-					//Take care keep tracking of atom deselection
-					//Indroduce another hashmap for keeping track of deselected atoms
-				}
-			}
-		
-			if (!atomDeselected)
-			{
-				Log.error() << "MolecularStructureContainer: cannot deselect a non-existing atom!" << std::endl;
-				return;
-			}
+			getMainControl()->deselectCompositeRecursive((Composite *)atom);
+			CompositeMessage *cm = new CompositeMessage(*container, CompositeMessage::SELECTED_COMPOSITE, true);
+			qApp->postEvent(MainControl::getInstance(0), new MessageEvent(cm));
 		}
 
-
-		
 		/*
 		* Selects a bond between existing atoms in an existing ballview molecular structure(system)which is an atom container
 		* Required parameter is atom indices 
 		* Note : functioanlity not tested 
 		*/
-		void MolecularStructureContainer::selectBond(Index atom_index_one,Index atom_index_two)
+		void MolecularStructureContainer::selectBond(Index /*atom_index_one*/, Index /*atom_index_two*/)
 		{
-			// Note
-			// Not sure if this works
-			// If  no datastructure is used, then these condition need be removed
-			if ((!index_to_atom_.has(atom_index_one)) && (!index_to_atom_.has(atom_index_two)))
-			{
-				Log.error() << "MolecularStructureContainer : Cannot select the bond between non-existing  atoms!" << std::endl;
-				return;
-			}
-
-			bool bondSelected = false;
-			AtomContainer* container = getAtomContainer();
-			
-			if (!container) 
-				return;
-			else
-			{
-				Atom* atom_one;
-				Atom* atom_two;
-
-				for (AtomIterator at_it = container->beginAtom(); +at_it; ++at_it)
-				{
-					//Note
-					// This does not work as I wanted
-					//Index atom_index_ = at_it->getIndex();
-
-					Atom* atom = &*at_it;
-					Index atom_index_ = -1;
-
-					if (atom)
-					{
-						Handle atom_identifer = atom->getHandle();
-
-						if (atom_to_index_.has(atom_identifer))
-						{
-							atom_index_ = atom_to_index_[atom_identifer];
-						}
-					}
-
-					if (atom_index_ != -1)
-					{
-						if (atom_index_ == atom_index_one)
-						{
-							atom_one = &*at_it;
-						}
-						else if(atom_index_ == atom_index_two)
-						{
-							atom_two = &*at_it;
-						}
-					}
-				}
-
-				if (atom_one && atom_two)
-				{
-					//Need to check this :
-					Bond* bond_selected = atom_one->getBond(*atom_two);
-
-					if (bond_selected)
-					{
-						getMainControl()->selectCompositeRecursive((Composite *)bond_selected);
-						CompositeMessage *cm = new CompositeMessage(*container, CompositeMessage::SELECTED_COMPOSITE, true);
-						qApp->postEvent(MainControl::getInstance(0), new MessageEvent(cm));
-					}
-				}
-
-				//bondSelected = true;
-				
-				//ToDo
-				//Take care keep tracking of bond selection
-				//Indroduce another hashmap
-
-				//for (AtomIterator at_it = container->beginAtom(); +at_it; ++at_it)
-				//{
-					//Note
-					// This does not work as I wanted
-				//	Index atom_index_one_ = at_it->getIndex();
-
-				//	if (atom_index_one_ == atom_index_one)
-				//	{
-				//		// is the correct to have at_it->beginBond()
-				//		for (Atom::BondIterator b_it = at_it->beginBond(); +b_it; ++b_it)
-				//		{
-				//			Bond* bond = &*b_it;
-				//			if(bond_selected->getFirstAtom()->getIndex()== bond->getFirstAtom()->getIndex()
-				//				&& bond_selected->getSecondAtom()->getIndex() == bond->getSecondAtom()->getIndex())
-				//			{
-				//				getMainControl()->selectCompositeRecursive((Composite *)bond);
-				//				CompositeMessage *cm = new CompositeMessage(*container, CompositeMessage::SELECTED_COMPOSITE, true);
-				//				qApp->postEvent(MainControl::getInstance(0), new MessageEvent(cm));
-				//				bondSelected = true;
-				//				break;
-				//			}
-				//		}
-				//	}
-				//}
-				//	
-				//if (!bondSelected)
-				//{
-				//	Log.error() << "MolecularStructureContainer: cannot select a non-existing bond!" << std::endl;
-				//	return;
-				//}
-			}
-
+			// ?? We cannot select bonds in BALLView, can we?
 		}
 
 		
@@ -808,108 +493,9 @@ namespace BALL
 		* Required parameter is atom indices 
 		* Note : functioanlity not tested 
 		*/
-		void MolecularStructureContainer::deselectBond(Index atom_index_one,Index atom_index_two)
+		void MolecularStructureContainer::deselectBond(Index /*atom_index_one*/, Index /*atom_index_two*/)
 		{
-			// Note
-			// Not sure if this works
-			// If  no datastructure is used, then these condition need be removed
-			if ((!index_to_atom_.has(atom_index_one)) && (!index_to_atom_.has(atom_index_two)))
-			{
-				Log.error() << "MolecularStructureContainer : Cannot deselect the bond between non-existing  atoms!" << std::endl;
-				return;
-			}
-
-			bool bondDeselected = false;
-			AtomContainer* container = getAtomContainer();
-			
-			if (!container) 
-				return;
-			else
-			{
-				Atom* atom_one;
-				Atom* atom_two;
-				for (AtomIterator at_it = container->beginAtom(); +at_it; ++at_it)
-				{
-					//Note
-					// This does not work as I wanted
-					//Index atom_index_ = at_it->getIndex();
-
-					Atom* atom = &*at_it;
-					Index atom_index_ = -1;
-
-					if (atom)
-					{
-						Handle atom_identifier = atom->getHandle();
-						if (atom_to_index_.has(atom_identifier))
-						{
-							atom_index_ = atom_to_index_[atom_identifier];
-						}
-					}
-
-					if (atom_index_ == atom_index_one)
-					{
-						atom_one = &*at_it;
-					}
-					else if(atom_index_ == atom_index_two)
-					{
-						atom_two = &*at_it;
-					}
-				}
-
-				if (atom_one && atom_two)
-				{
-					//Need to check this :
-					Bond* bond_deselected = atom_one->getBond(*atom_two);
-					if (bond_deselected)
-					{
-						//validate if  bond exist
-						getMainControl()->deselectCompositeRecursive((Composite *)bond_deselected);
-						CompositeMessage *cm = new CompositeMessage(*container, CompositeMessage::DESELECTED_COMPOSITE, true);
-						qApp->postEvent(MainControl::getInstance(0), new MessageEvent(cm));
-					}
-				}
-
-				//bondDeselected = true;
-
-				//ToDo
-				//Take care keep tracking of bond deselection
-				//Indroduce another hashmap
-
-				//I dont need to do this < i think > if i know exactly which bond is selected
-				//by knowing the atoms  that are connected by this bond
-				//thne I don't need lo search for bond as followed
-				//for (AtomIterator at_it = container->beginAtom(); +at_it; ++at_it)
-				//{
-					//Note
-					// This does not work as I wanted
-				//	Index atom_index_one_ = at_it->getIndex();
-				//	if (atom_index_one_ == atom_index_one)
-				//	{
-				//		// is the correct to have at_it->beginBond()
-				//		for (Atom::BondIterator b_it = at_it->beginBond(); +b_it; ++b_it)
-				//		{
-				//			Bond* bond = &*b_it;
-				//			if(bond_deselected->getFirstAtom()->getIndex()== bond->getFirstAtom()->getIndex()
-				//				&& bond_deselected->getSecondAtom()->getIndex() == bond->getSecondAtom()->getIndex())
-				//			{
-				//				
-				//				getMainControl()->deselectCompositeRecursive((Composite *)bond);
-				//				CompositeMessage *cm = new CompositeMessage(*container, CompositeMessage::DESELECTED_COMPOSITE, true);
-				//				
-				//				qApp->postEvent(MainControl::getInstance(0), new MessageEvent(cm));
-				//				bondDeselected = true;
-				//				break;
-				//			}
-				//		}
-				//	}
-				//	
-				//}
-				/*if (!bondDeselected)
-				{
-					Log.error() << "MolecularStructureContainer: cannot select a non-existing bond!" << std::endl;
-					return;
-				}*/
-			}
+			// ?? We cannot select bonds in BALLView, can we?
 		}
 	}
 }
