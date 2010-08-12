@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: NMRStarFile.h,v 1.29 2005/12/23 17:01:44 amoll Exp $
-//
 
 #ifndef BALL_NMR_READ_STAR_H
 #define BALL_NMR_READ_STAR_H
@@ -28,7 +26,7 @@ namespace BALL
 	*/
 	struct BALL_EXPORT NMRAtomData
 	{
-		NMRAtomData() ;
+		NMRAtomData();
 
 		Position	atom_ID;
 		Position	residue_seq_code;
@@ -47,7 +45,7 @@ namespace BALL
 	*/
 	struct BALL_EXPORT SampleCondition
 	{
-		SampleCondition() ;
+		SampleCondition();
 
 		String	name;
 		float		temperature;
@@ -62,7 +60,7 @@ namespace BALL
 	*/
 	struct BALL_EXPORT ShiftReferenceElement
 	{
-		ShiftReferenceElement() ;
+		ShiftReferenceElement();
 
 		String		mol_common_name;
 		char			atom_type;
@@ -82,14 +80,14 @@ namespace BALL
 	*/
 	struct BALL_EXPORT ShiftReferenceSet
 	{
-		ShiftReferenceSet() ;
+		ShiftReferenceSet();
 		String name;
 		std::vector<ShiftReferenceElement> elements;
 	};
 
 	struct BALL_EXPORT NMRAtomDataSet
 	{
-		NMRAtomDataSet() ;
+		NMRAtomDataSet();
 
 		String										name;
 		std::vector<NMRAtomData> atom_data;
@@ -118,25 +116,14 @@ namespace BALL
 	{
 		public:
 
-			BALL_CREATE(NMRStarFile)
-
 			/**	@name	Constructors and Destructors
 			*/
 			//@{
 
 			/** Standard constructor
 			*/
-			NMRStarFile()
-				;
+			NMRStarFile();
 			
-			/** Copy constructor.
-					If the file was open, it is closed.
-					Then the file of f will be opend.
-					All data already extracted in f is copied to this instance.
-			*/
-			NMRStarFile(const NMRStarFile& f)
-				throw(Exception::FileNotFound);
-
 			/** Detailed constuctor.
 					Opens the given file and extracts all usefull data.
 			*/
@@ -146,16 +133,13 @@ namespace BALL
 			/** Assignment operator.
 					@see NMRStarFile(const NMRStarFile& f)
 			*/
-			const NMRStarFile& operator = (const NMRStarFile& f)  
-				;
+			const NMRStarFile& operator = (const NMRStarFile& f);
 
-			~NMRStarFile()
-				;
+			~NMRStarFile();
 				
 			/** Clear the object.
 			*/
-			void clear() 
-				;
+			void clear();
 
 			//@}
 
@@ -166,13 +150,11 @@ namespace BALL
 
 			/** Get the maiximum number of atoms in all shift sets
 			*/
-			Size getNumberOfAtoms() 
-				const ;
+			Size getNumberOfAtoms() const;
 
 			/** Get the extracted data for the atoms.
 			*/
-			const std::vector<NMRAtomDataSet>& getData()
-				const ;
+			const std::vector<NMRAtomDataSet>& getData() const;
 
 			//@}
 			/**	@name	Equality
@@ -182,12 +164,12 @@ namespace BALL
 			/** Equality operator.
 					Test if both instances point to the same file.
 			*/
-			bool operator == (const NMRStarFile& f)  ;
+			bool operator == (const NMRStarFile& f);
 
 			/** Inequality operator
 					Test if both instances point to different files.
 			*/
-			bool operator != (const NMRStarFile& f)  ;
+			bool operator != (const NMRStarFile& f);
 
 			//@}
 			/**	@name	Enums
@@ -227,24 +209,20 @@ namespace BALL
 				throw(Exception::ParseError, Exception::InvalidFormat);
 
 			/// reads the molecular system name
-			void readMolSystem_()
-				;
+			void readMolSystem_();
 
 			/// reads the sample conditions
-			void readSampleConditions_()
-				;
+			void readSampleConditions_();
 
 			/// reads the shift references
-			void readShiftReferences_()
-				;
+			void readShiftReferences_();
 
 			/// reads the shift datas
 			void readShifts_()
 				throw (Exception::ParseError);
 
 			/// initialize the referenceOptions
-			static void initializeReferenceOptions_()
-				;
+			static void initializeReferenceOptions_();
 
 			//_@}
 			/*_	@name	NMR-Star specific attributes
