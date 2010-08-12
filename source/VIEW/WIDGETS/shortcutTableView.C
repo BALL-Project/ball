@@ -32,12 +32,12 @@ namespace BALL
 			}
 		}
 
-		int ShortcutTableModel::rowCount(const QModelIndex& parent) const
+		int ShortcutTableModel::rowCount(const QModelIndex& /*parent*/) const
 		{
 				return registry_->size();
 		}
 
-		int ShortcutTableModel::columnCount(const QModelIndex& parent) const
+		int ShortcutTableModel::columnCount(const QModelIndex& /*parent*/) const
 		{
 			return 2;
 		}
@@ -90,7 +90,7 @@ namespace BALL
 			}
 		}
 
-		Qt::ItemFlags ShortcutTableModel::flags(const QModelIndex& index) const
+		Qt::ItemFlags ShortcutTableModel::flags(const QModelIndex& /*index*/) const
 		{
 			return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 		}
