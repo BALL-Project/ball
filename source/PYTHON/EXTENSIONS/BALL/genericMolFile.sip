@@ -16,8 +16,6 @@
 		GenericMolFile() throw();
 		GenericMolFile(const String& /filename/, OpenMode /open_mode/ = std::ios::in)
 			throw(FileNotFound);
-		GenericMolFile(const GenericMolFile& /file/)
-			throw(FileNotFound);
 		virtual ~GenericMolFile()	throw();
 
 		// const GenericMolFile& operator = (const GenericMolFile& rhs)
