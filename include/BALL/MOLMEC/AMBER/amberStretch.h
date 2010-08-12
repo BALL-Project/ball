@@ -7,29 +7,20 @@
 #define BALL_MOLMEC_AMBER_AMBERSTRETCH_H
 
 #ifndef BALL_COMMON_H
-#	include <BALL/common.h>
+# include <BALL/common.h>
 #endif
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELDCOMPONENT_H
-#	include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
+# include <BALL/MOLMEC/COMMON/stretchComponent.h>
 #endif
 
-#ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
-#	include <BALL/MOLMEC/COMMON/forceField.h>
-#endif
-
-#ifndef BALL_MOLMEC_PARAMETER_QUADRATICBONDSTRETCH_H
-#	include <BALL/MOLMEC/PARAMETER/quadraticBondStretch.h>
-#endif
-
-namespace BALL 
+namespace BALL
 {
 	/**	Amber bond stretch component
 			
     	\ingroup  AMBER
 	*/
-	class BALL_EXPORT AmberStretch 
-		: public ForceFieldComponent
+	class BALL_EXPORT AmberStretch : public StretchComponent
 	{
 		public:
 
@@ -50,10 +41,6 @@ namespace BALL
 		*/
 		AmberStretch(ForceField& force_field);
 
-		/**	Copy constructor
-		*/
-		AmberStretch(const AmberStretch& amber_stretch);
-
 		/**	Destructor.
 		*/
 		virtual ~AmberStretch();
@@ -65,45 +52,9 @@ namespace BALL
 
 		/**	Setup method.
 		*/
-		virtual bool setup()
-			throw(Exception::TooManyErrors);
+		virtual bool setup() throw(Exception::TooManyErrors);
 
 		//@}
-		/**	@name Accessors		
-		*/
-		//@{
-
-		/**	Calculates and returns the component's energy.
-		*/
-		virtual double updateEnergy();
-
-		/**	Calculates and returns the component's forces.
-		*/
-		virtual void updateForces();
-
-		/**	Update the bond list.
-		*/
-		virtual void update()
-			throw(Exception::TooManyErrors);
-
-		//@} 
-
-		private:
-
-		/*_	@name	Private Attributes	
-		*/
-		//_@{
-
-		/*_
-		*/
-		std::vector<QuadraticBondStretch::Data>	stretch_;
-
-		/*_	The stretch parameters section
-		*/
-		QuadraticBondStretch  stretch_parameters_;
-
-		//_@}
-		
 	};
 } // namespace BALL
 

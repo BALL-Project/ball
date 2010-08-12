@@ -16,6 +16,7 @@ SET(SOURCES_LIST
 	snapShot.C
 	snapShotManager.C
 	support.C
+	stretchComponent.C
 	typenameRuleProcessor.C
 	typeRuleProcessor.C
 )	
