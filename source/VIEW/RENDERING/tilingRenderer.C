@@ -1,9 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
 
 #include <BALL/VIEW/RENDERING/tilingRenderer.h>
 
@@ -146,7 +143,6 @@ namespace BALL
 						glViewport(0, 0, tile_width, tile_height);
 
 						// save current matrix mode
-						matrix_mode;
 						glGetIntegerv(GL_MATRIX_MODE, &matrix_mode);
 						
 						// move to projection matrix
