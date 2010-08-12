@@ -9,12 +9,8 @@ using namespace BALL;
 using namespace std;
 
 extern int yylex();
-extern void yyerror(char* s);
+extern void yyerror(char const* s);
 
-/* There is some nasty problem with alloca under Intel/icc/Linux */
-/* so we use (inefficient) malloc instead. */
-#undef alloca
-#define alloca malloc
 %}
 
 %union {

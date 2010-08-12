@@ -25,6 +25,7 @@ using namespace BALL;
 %s in_bond_block
 
 %option noyywrap
+%option nounput
 %option case-insensitive
 
 INT		[+-]?[0-9]+
