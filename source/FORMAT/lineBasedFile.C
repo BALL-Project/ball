@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineBasedFile.C,v 1.30 2005/12/23 17:02:40 amoll Exp $
-//
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/COMMON/exception.h>
@@ -14,24 +12,10 @@ namespace BALL
 {
 
 	LineBasedFile::LineBasedFile()
-		
 		:	File(),
 			line_number_(0),
 			trim_whitespaces_(false)
 	{
-	}
-
-	LineBasedFile::LineBasedFile(const LineBasedFile& f)
-	 throw(Exception::FileNotFound)
-		: File(),
-			line_number_(0),
-			trim_whitespaces_(f.trim_whitespaces_)
-	{
-			if (f.getName() != "")
-			{
-				open(f.getName());
-				skipLines(f.line_number_ - 1);
-			}
 	}
 
 	LineBasedFile::LineBasedFile(const String& filename, File::OpenMode open_mode, bool trim_whitespaces)
@@ -204,7 +188,6 @@ namespace BALL
 	}
 
 	void LineBasedFile::clear()
-		
 	{
 		line_ = "";
 		line_number_ = 0;
@@ -232,8 +215,7 @@ namespace BALL
 		return line_.getFieldQuoted(pos, delimiters.c_str(), quotes.c_str());
 	}
 
-	Index LineBasedFile::switchString(const vector<String>& data)
-		const 
+	Index LineBasedFile::switchString(const vector<String>& data) const 
 	{
 		for (Index i = 0; i < (Index) data.size(); i++)
 		{
@@ -245,14 +227,12 @@ namespace BALL
 		return (-1);
 	}
 
-	bool LineBasedFile::startsWith(const String& text)
-		const 
+	bool LineBasedFile::startsWith(const String& text) const 
 	{
 		return line_.hasPrefix(text);
 	}
 
-	bool LineBasedFile::has(const String& text) 
-		const 
+	bool LineBasedFile::has(const String& text) const 
 	{
 		return line_.hasSubstring(text);
 	}
@@ -287,22 +267,17 @@ namespace BALL
 	}
 
 	void LineBasedFile::enableTrimWhitespaces(bool state)
-		
 	{
 		trim_whitespaces_ = state;
 	}
 
 	bool LineBasedFile::trimWhiteSpacesEnabled() const
-		
 	{
 		return trim_whitespaces_;
 	}
 
-
 # ifdef BALL_NO_INLINE_FUNCTIONS
 #   include <BALL/FORMAT/lineBasedFile.iC>
 # endif
-
-
 
 } // namespace BALL

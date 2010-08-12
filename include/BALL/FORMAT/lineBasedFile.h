@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineBasedFile.h,v 1.32.20.1 2007/03/28 08:23:44 bertsch Exp $
-//
 
 #ifndef BALL_FORMAT_LINEBASEDFILE_H
 #define BALL_FORMAT_LINEBASEDFILE_H
@@ -24,15 +22,12 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(LineBasedFile)
-
 		/**	@name Constructors and Destructors
 		*/
 		//@{
 
 		/// Default constructor
-		LineBasedFile()
-			;
+		LineBasedFile();
 			
 		/** Detailed constuctor.
 		 		@param trim_whitespaces - sets wheter leading and trailing whitespaces 
@@ -42,16 +37,9 @@ namespace BALL
 		LineBasedFile(const String& filename, File::OpenMode open_mode = std::ios::in, bool trim_whitespaces = false)
 			throw(Exception::FileNotFound);
 
-		/** Copy constructor
-				The file is opened and the same position in it is seeked.
-		*/
-		LineBasedFile(const LineBasedFile& f)
-			throw(Exception::FileNotFound);
-
 		/**	Clear method.
 		*/
-		void clear() 
-			;
+		void clear();
 
 		//@}
 		/**	@name Equality operators
@@ -60,11 +48,11 @@ namespace BALL
 
 		/** Equality operator
 		*/
-		bool operator == (const LineBasedFile& f)  ;
+		bool operator == (const LineBasedFile& f);
 
 		/** Inequality operator
 		*/
-		bool operator != (const LineBasedFile& f)  ;
+		bool operator != (const LineBasedFile& f);
 		//@}
 
 		/**	@name Assignment
@@ -83,16 +71,13 @@ namespace BALL
 		//@{
 
 		/// Get the last line number in the file.
-		Position getLineNumber() 
-			const	;
+		Position getLineNumber() const;
 
 		/// Return the current line
-		const String& getLine() 
-			const ;
+		const String& getLine() const;
 
 		/// Return the current line
-		String& getLine() 
-			;
+		String& getLine();
 
 		//@}
 		/**	@name	Help-Methods for File Acces
@@ -157,18 +142,15 @@ namespace BALL
 			const	throw(Exception::IndexUnderflow);
 
 		/// Test if the current line starts with text
-		bool startsWith(const String& text) 
-			const ;
+		bool startsWith(const String& text) const;
 
 		/// Return true if the current line contains text
-		bool has(const String& text) 
-			const ;
+		bool has(const String& text) const;
 
 		/** Switch method of the current line.
 				Return the position of the current line in data or -1 if it does not exist.
 		*/
-		Index switchString(const std::vector<String>& data) 
-			const ;
+		Index switchString(const std::vector<String>& data) const;
 
 		/**	Parse column based formats.
 				Copy the subsection of the current line defined by <tt>index</tt> and <tt>length</tt> into a buffer
@@ -177,12 +159,10 @@ namespace BALL
 		bool parseColumnFormat(const char* format, Position index, Size length, void* arg);
 
 		/// Set wheter leading and trailing whitespaces in lines shall be removed
-		void enableTrimWhitespaces(bool state)
-			;
+		void enableTrimWhitespaces(bool state);
 		
 		///
-		bool trimWhiteSpacesEnabled() const
-			;
+		bool trimWhiteSpacesEnabled() const;
 
 		protected:
 		//@}
