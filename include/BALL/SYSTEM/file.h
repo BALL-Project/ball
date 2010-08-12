@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.68.14.1 2007/03/25 21:25:38 oliver Exp $
-//
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -257,14 +255,6 @@ namespace BALL
 				@see    open
 		*/
 		File(const String& name, OpenMode open_mode = std::ios::in)
-			throw(Exception::FileNotFound);
-
-		/** Copy constructor.
-				The file is not opend.
-				@param  file the File object to be copied (cloned)
-				@see    open
-		*/
-		File(const File& file)
 			throw(Exception::FileNotFound);
 
 		/** Destructor.

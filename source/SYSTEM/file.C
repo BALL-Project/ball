@@ -218,17 +218,6 @@ namespace BALL
 		if (!isOpen()) throw(Exception::FileNotFound(__FILE__, __LINE__, name));
 	}
 
-	File::File(const File& file)
-		throw (Exception::FileNotFound)
-		: std::fstream(),
-			name_(file.name_),
-			open_mode_(file.open_mode_),
-			is_open_(file.is_open_),
-			is_temporary_(file.is_temporary_)
-	{
-		open(name_, open_mode_);
-	}
-
 	File::~File()
 	{
 		close();
