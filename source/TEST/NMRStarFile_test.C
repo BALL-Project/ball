@@ -27,18 +27,6 @@ CHECK(~NMRStarFile() throw())
 	delete(f);
 RESULT
 
-CHECK(NMRStarFile(const NMRStarFile& f) throw(Exception::FileNotFound))
-	NMRStarFile f1;
-	NMRStarFile* f2 = new NMRStarFile(f1);
-	TEST_NOT_EQUAL(f2, 0)
-	delete f2;
-RESULT
-
-CHECK(const NMRStarFile& operator = (const NMRStarFile& f) throw())
-	NMRStarFile f1;
-	NMRStarFile f2 = f1;
-RESULT
-
 NMRStarFile rs;
 
 CHECK(NMRStarFile(const String& file_name) throw(Exception::FileNotFound, Exception::ParseError))
@@ -115,14 +103,6 @@ CHECK(void clear() throw())
 	f2.clear();
 	TEST_EQUAL(f2.getData().size(), 0)
 	TEST_EQUAL(f2.getNumberOfAtoms(), 0)
-RESULT
-
-CHECK(BALL_CREATE(NMRStarFile))
-	NMRStarFile* v_ptr = (NMRStarFile*)rs.create();
-	TEST_NOT_EQUAL(v_ptr, 0)
-	TEST_EQUAL(v_ptr->getNumberOfAtoms(), 1914)
-	TEST_EQUAL(v_ptr->getData()[0].reference.elements[0].mol_common_name, "DSS")
-	delete v_ptr;
 RESULT
 
 

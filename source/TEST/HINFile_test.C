@@ -165,28 +165,6 @@ CHECK(Molecule* read() throw(Exception::ParseError))
 	TEST_EXCEPTION(Exception::ParseError, f.read())
 RESULT
 
-CHECK(BALL_CREATE(HINFile))
-	HINFile f(BALL_TEST_DATA_PATH(HINFile_test4.hin));
-	HINFile* ptr = (HINFile*) f.create();
-	TEST_NOT_EQUAL(ptr, 0)
-	TEST_EQUAL(ptr->getName(), BALL_TEST_DATA_PATH(HINFile_test4.hin))
-	delete ptr;
-RESULT
-
-CHECK(HINFile(const HINFile& file) throw(Exception::FileNotFound))
-	HINFile f(BALL_TEST_DATA_PATH(HINFile_test4.hin));
-	HINFile f2(f);
-	TEST_EQUAL(f2.getName(), BALL_TEST_DATA_PATH(HINFile_test4.hin))
-	HINFile f3;
-	f3.setName("asddasddddddasdasdasdasd");
-	HINFile* f4 = 0;
-	f4 = new HINFile(f3);
-	TEST_NOT_EQUAL(f4, 0)
-	TEST_EQUAL(f4->isOpen(), false)
-	delete f4;
-RESULT
-
-	
 CHECK(const HINFile& operator = (const HINFile& rhs) throw(Exception::FileNotFound))
 	HINFile f(BALL_TEST_DATA_PATH(HINFile_test4.hin));
 	HINFile f2;

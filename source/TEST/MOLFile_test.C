@@ -191,19 +191,6 @@ CHECK(bool write(const Molecule& molecule) throw(File::CannotWrite))
 	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(MOLFile_test2.mol))
 RESULT
 
-CHECK(BALL_CREATE(MOLFile))
-  MOLFile f(BALL_TEST_DATA_PATH(MOLFile_test1.mol));
-	MOLFile* f_ptr = (MOLFile*) f.create();
-	TEST_EQUAL(f_ptr->getName(), BALL_TEST_DATA_PATH(MOLFile_test1.mol))
-	delete f_ptr;
-RESULT
-
-CHECK(MOLFile(const MOLFile& file) throw(Exception::FileNotFound))
-  MOLFile f(BALL_TEST_DATA_PATH(MOLFile_test1.mol));
-	MOLFile f2(f);
-	TEST_EQUAL(f2.getName(), BALL_TEST_DATA_PATH(MOLFile_test1.mol))
-RESULT
-
 CHECK([EXTRA]bool read(System& system) throw(Exception::ParseError))
 	MOLFile f(BALL_TEST_DATA_PATH(MOLFile_test5.mol));
 	System system;

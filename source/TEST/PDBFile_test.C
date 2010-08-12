@@ -334,12 +334,6 @@ NEW_TMP_FILE(filename);
 PDBFile empty;
 Options options;
 
-CHECK(PDBFile(const PDBFile& file) throw())
-	PDBFile pdb(empty);
-	TEST_EQUAL(pdb.getName(), empty.getName())
-	TEST_EQUAL(pdb.getOpenMode(), empty.getOpenMode())
-RESULT
-
 CHECK(PDBFile(const Options& new_options))
 	PDBFile pdb(options);
 RESULT
@@ -373,8 +367,7 @@ CHECK(Size countRecords(bool from_begin_of_file = true))
 RESULT
 
 CHECK(bool hasFormat())
-	PDBFile c_p(empty);
-  TEST_EQUAL(c_p.hasFormat(), false)
+  TEST_EQUAL(empty.hasFormat(), false)
 	PDBFile f(BALL_TEST_DATA_PATH(PDBFile_test2.pdb));
 	TEST_EQUAL(f.hasFormat(), true)
 RESULT

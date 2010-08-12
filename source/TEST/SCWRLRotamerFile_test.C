@@ -40,14 +40,6 @@ CHECK(SCWRLRotamerFile::SCWRLRotamerFile(const String& filename, File::OpenMode 
   delete f;
 RESULT
 
-CHECK(SCWRLRotamerFile::SCWRLRotamerFile(const SCWRLRotamerFile& file) throw())
-  SCWRLRotamerFile f(BALL_TEST_DATA_PATH(SCWRLRotamerFile_test2.lib)); // bb indep file
-  SCWRLRotamerFile copy_of_f(f);
-  RotamerLibrary lib;
-  copy_of_f >> lib;
-  TEST_EQUAL(lib.getNumberOfRotamers(), 110);
-RESULT
-
 CHECK(void SCWRLRotamerFile::operator >> (RotamerLibrary& library) throw())
   SCWRLRotamerFile f(BALL_TEST_DATA_PATH(SCWRLRotamerFile_test1.lib)); // bb dep file
 	RotamerLibrary lib;

@@ -50,17 +50,6 @@ CHECK(File(const String& name, OpenMode open_mode = std::ios::in) throw(Exceptio
 	TEST_EXCEPTION(Exception::FileNotFound, f2 = new File("sdffsdf"))
 RESULT
 
-CHECK(File(const File& file) throw(Exception::FileNotFound))
-	File  file(BALL_TEST_DATA_PATH(File_test.txt));
-	const File& f  = file;
-	File f1(f);
-	TEST_EQUAL(f1 == f, true)
-
-	File f2;
-	File* f3 = 0;
-	TEST_EXCEPTION(Exception::FileNotFound, f3 = new File(f2))
-RESULT
-
 CHECK(void close() throw())
 	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
@@ -76,9 +65,6 @@ CHECK(bool open(const String& name, File::OpenMode open_mode = std::ios::in) thr
 	file.open(BALL_TEST_DATA_PATH(File_test.txt));
 	TEST_EQUAL(f.isOpen(), true)
 	TEST_EQUAL(file.getSize(), 100)
-
-	File f1(f);
-	TEST_EXCEPTION(Exception::FileNotFound, f1.open(""))
 RESULT
 
 CHECK(bool reopen() throw(Exception::FileNotFound))
@@ -228,7 +214,7 @@ RESULT
 CHECK(bool remove() throw())
 	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	file.copyTo("XXX");
-	File f1 = File("XXX");
+	File f1("XXX");
 	TEST_EQUAL(f1.remove(), true)
 	TEST_EQUAL(f1.remove(), false)
 	TEST_EQUAL(f1.isAccessible(), false)
@@ -310,8 +296,10 @@ RESULT
 CHECK(bool operator == (const File& file) const throw())
 	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
+/* TODO: we can't copy files!
 	File f1(f);
 	TEST_EQUAL(f1 == f, true)	
+*/
 	file.copyTo("XXX");
 	File f2("XXX");
 	TEST_EQUAL(f2 == f, false)	
@@ -321,8 +309,10 @@ RESULT
 CHECK(bool operator != (const File& file) const throw())
 	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
+	/* TODO: we can't copy files!
 	File f1(f);
 	TEST_EQUAL(f1 != f, false)	
+	*/
 	file.copyTo("XXX");
 	File f2("XXX");
 	TEST_EQUAL(f2 != f, true)	

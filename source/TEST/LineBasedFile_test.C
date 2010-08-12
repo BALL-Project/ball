@@ -31,13 +31,6 @@ CHECK(~LineBasedFile() throw())
 	delete fl;
 RESULT
 
-CHECK(BALL_CREATE(LineBasedFile))
-	LineBasedFile c;
-	LineBasedFile* ptr = (LineBasedFile*)c.create(false, true);
-	TEST_NOT_EQUAL(ptr, 0)
-	delete ptr;
-RESULT
-
 CHECK(LineBasedFile(const String& filename, File::OpenMode open_mode = std::ios::in)
 			throw(Exception::FileNotFound))
 	LineBasedFile f1(BALL_TEST_DATA_PATH(LineBasedFile_test.txt));
@@ -59,27 +52,6 @@ CHECK(LineBasedFile(const String& filename, File::OpenMode open_mode = std::ios:
 RESULT
 
 LineBasedFile fx;
-
-CHECK(LineBasedFile(const LineBasedFile& f) throw())
-	LineBasedFile f1(BALL_TEST_DATA_PATH(LineBasedFile_test.txt));
-	bool result = f1.readLine();
-	TEST_EQUAL(result, true)
-	String line = f1.getLine();
-	TEST_EQUAL(line, "line1")
-	f1.close();
-
-	LineBasedFile f2(f1);
-	TEST_EQUAL(f2.getLineNumber(), 1)
-	line = f2.getLine();
-	TEST_EQUAL(line, "line1")
-	result = f2.readLine();
-	TEST_EQUAL(result, true)
-	line = f2.getLine();
-	TEST_EQUAL(line, "/0/ /1/ /2 2//3/")
-
-	LineBasedFile f3;
-	LineBasedFile f4(f3);
-RESULT
 
 CHECK(LineBasedFile& operator = (const LineBasedFile& file) throw())
 	LineBasedFile f1(BALL_TEST_DATA_PATH(LineBasedFile_test.txt));

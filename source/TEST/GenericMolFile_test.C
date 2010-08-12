@@ -81,14 +81,6 @@ CHECK(GenericMolFile& operator >> (Molecule& molecule) throw(Exception::ParseErr
 	mol >> m;
 RESULT
 
-CHECK(GenericMolFile(const GenericMolFile& file))
-  String filename;
-  NEW_TMP_FILE(filename)
-  GenericMolFile mol(filename, std::ios::out);
-	GenericMolFile mol2(mol);
-	TEST_EQUAL(mol2.getName(), filename)
-RESULT
-
 CHECK(Molecule* read() throw(Exception::ParseError))
 	TEST_EQUAL(mol.read(), 0)
 RESULT
@@ -97,7 +89,8 @@ CHECK(const GenericMolFile& operator = (const GenericMolFile& rhs) throw(Excepti
   String filename;
   NEW_TMP_FILE(filename)
   GenericMolFile mol(filename, std::ios::out);
-	GenericMolFile mol2 = mol;
+	GenericMolFile mol2;
+	mol2 = mol;
 	TEST_EQUAL(mol2.getName(), filename)
 RESULT
 

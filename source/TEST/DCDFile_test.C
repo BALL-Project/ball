@@ -36,14 +36,6 @@ CHECK(~DCDFile() throw())
 RESULT
 
 
-CHECK(DCDFile(const DCDFile& file) throw(Exception::FileNotFound))
-  DCDFile first_file(dcd_test_file);
-	DCDFile second_file(first_file);
-	bool test = (first_file == second_file);
-	TEST_EQUAL(test, true)
-RESULT
-
-
 CHECK(DCDFile(const String& name, File::OpenMode open_mode = std::ios::in) throw())
   DCDFile test_file(dcd_test_file, std::ios::in);
 	TEST_EQUAL(test_file.isOpen(), true)
@@ -224,14 +216,6 @@ CHECK(bool flushToDisk(const std::vector<SnapShot>& buffer) throw(File::CannotWr
 
 	DCDFile empty;
 	TEST_EXCEPTION(File::CannotWrite, empty.flushToDisk(v))
-RESULT
-
-CHECK(BALL_CREATE(DCDFile))
-	DCDFile dcd(filename);
-	DCDFile* dcd_ptr = (DCDFile*)dcd.create();
-	TEST_NOT_EQUAL(dcd_ptr, 0)
-	TEST_EQUAL(dcd_ptr->getName(), filename)
-	delete dcd_ptr;
 RESULT
 
 CHECK(bool init() throw())

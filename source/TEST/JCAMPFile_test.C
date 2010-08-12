@@ -35,11 +35,6 @@ CHECK(JCAMPFile(const String& name, OpenMode open_mode = std::ios::in) throw(Exc
 	JCAMPFile jcamp(BALL_TEST_DATA_PATH(JCAMPFile_test.dat));
 RESULT
 
-CHECK(JCAMPFile(const JCAMPFile& file) throw(Exception::FileNotFound))
-	JCAMPFile jcamp(BALL_TEST_DATA_PATH(JCAMPFile_test.dat));
-	JCAMPFile f2(jcamp);
-RESULT
-
 CHECK(void read() throw(Exception::ParseError))
 	JCAMPFile jcamp(BALL_TEST_DATA_PATH(JCAMPFile_test.dat));
 	jcamp.read();

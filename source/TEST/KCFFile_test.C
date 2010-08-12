@@ -182,19 +182,6 @@ CHECK(bool write(const Molecule& molecule) throw(File::CannotWrite))
 	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(KCFFile_test2.kcf))
 RESULT
 
-CHECK(BALL_CREATE(KCFFile))
-  KCFFile f(BALL_TEST_DATA_PATH(KCFFile_test1.kcf));
-	KCFFile* f_ptr = (KCFFile*) f.create();
-	TEST_EQUAL(f_ptr->getName(), BALL_TEST_DATA_PATH(KCFFile_test1.kcf))
-	delete f_ptr;
-RESULT
-
-CHECK(KCFFile(const KCFFile& file) throw(Exception::FileNotFound))
-  KCFFile f(BALL_TEST_DATA_PATH(KCFFile_test1.kcf));
-	KCFFile f2(f);
-	TEST_EQUAL(f2.getName(), BALL_TEST_DATA_PATH(KCFFile_test1.kcf))
-RESULT
-
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST
