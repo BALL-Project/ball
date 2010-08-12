@@ -608,7 +608,7 @@ namespace BALL
 			update_running_ = false;
 		}
 
-		void Scene::paintEvent(QPaintEvent* e)
+		void Scene::paintEvent(QPaintEvent* /*e*/)
 		{
 			paintGL();
 		}
@@ -1625,6 +1625,8 @@ namespace BALL
 					break;
 				case BUTTON_PRESS_EVENT:
 					buttonPressEvent(static_cast<ButtonEvent*>(evt));
+					break;
+				default:
 					break;
 			}
 		}
