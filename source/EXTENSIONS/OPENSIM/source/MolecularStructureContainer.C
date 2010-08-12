@@ -101,6 +101,7 @@ namespace BALL
 		}
 
 		/* Adds a new atom into the hash map and returns its index.
+		 * AKD: TODO: shouldnt we rename this method to addAtom??
 		 */
 		Index MolecularStructureContainer::hashAtom(Atom* new_atom)
 		{
@@ -111,7 +112,8 @@ namespace BALL
 			index_to_atom_[atom_index] = new_atom;
 			atom_to_index_[new_atom]   = atom_index;
 
-			atom_hash_times_[next_atom_index_] = PreciseTime::now();
+			Atom atom_copy(*new_atom);
+			reference_atoms_[next_atom_index_] = atom_copy;
 
 			while (index_to_atom_.has(next_atom_index_))
 			{
@@ -180,16 +182,21 @@ namespace BALL
 
 			readWriteLock_.lockForWrite();
 
-			if (atom_hash_times_.has(atom_index))
+			if (reference_atoms_.has(atom_index))
 			{
-				PreciseTime hash_time = atom_hash_times_[atom_index];
-
-				if (index_to_atom_[atom_index]->getModificationTime() > hash_time)
+				Atom* ref_atom 			= &reference_atoms_[atom_index];
+				Atom* opensim_atom 	= index_to_atom_[atom_index];
+				
+				if (!ref_atom || !opensim_atom)
+				{
+					Log.info() << "MolecularStructureContainer: Unknown index! " << endl;
+				}
+				else if (	   (ref_atom->getPosition() != opensim_atom->getPosition())
+					      	|| (ref_atom->getElement()  != opensim_atom->getElement()))
 				{
 					result = true;
-					// we assume the update will follow right after this call
-					atom_hash_times_[atom_index] = PreciseTime::now();
 				}
+
 			}
 Log.info() << "Needs update? " << result << std::endl;
 			readWriteLock_.unlock();
@@ -256,7 +263,7 @@ Log.info() << "Needs update? " << result << std::endl;
 				Atom* atom = index_to_atom_[atom_index];
 
 				index_to_atom_.erase(atom_index);
-				atom_hash_times_.erase(atom_index);
+				reference_atoms_.erase(atom_index);
 				atom_to_index_.erase(atom);
 			}
 

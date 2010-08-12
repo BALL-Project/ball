@@ -72,7 +72,7 @@ namespace BALL
 				Index next_atom_index_;
 				Index next_bond_index_;
 
-				HashMap<Index, PreciseTime> atom_hash_times_;
+				HashMap<Index, Atom> reference_atoms_;
 
 				mutable ReadWriteLock readWriteLock_;
 		};
