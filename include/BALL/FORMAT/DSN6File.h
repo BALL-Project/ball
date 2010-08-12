@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DSN6File.h,v 1.1.4.1 2007/03/25 21:23:41 oliver Exp $
-//
 
 #ifndef BALL_FORMAT_DSN6FILE_H
 #define BALL_FORMAT_DSN6FILE_H
@@ -28,27 +26,18 @@ namespace BALL
 
 		public:
 
-		BALL_CREATE(DSN6File)
-
 		/** @name Constructors and Destructor
 		*/
 		//@{
 
 		/// Default constructor
-		DSN6File()
-			;
-
-		/// Copy constructor
-		DSN6File(const DSN6File& file)
-			throw(Exception::FileNotFound);
+		DSN6File();
 
 		/// Detailed constructor
-		DSN6File(const String& name, File::OpenMode open_mode = std::ios::in)
-			;
+		DSN6File(const String& name, File::OpenMode open_mode = std::ios::in);
 
 		/// Destructor
-		virtual ~DSN6File()
-			;
+		virtual ~DSN6File();
 
 		//@}
 		/** @name Assignment
@@ -56,12 +45,10 @@ namespace BALL
 		//@{
 
 		/// Assignment operator
-		const DSN6File& operator = (const DSN6File& file)
-			;
+		const DSN6File& operator = (const DSN6File& file);
 
 		/// Clear method
-		virtual void clear()
-			;
+		virtual void clear();
 
 		//@}
 		/** @name Predicates
@@ -69,12 +56,10 @@ namespace BALL
 		//@{
 
 		/// Equality operator
-		bool operator == (const DSN6File& file) const
-			;
+		bool operator == (const DSN6File& file) const;
 
 		///
-		bool isSwappingBytes() const
-			;
+		bool isSwappingBytes() const;
 
 		//@}
 		/// @name Public methods for file handling
@@ -88,18 +73,15 @@ namespace BALL
 		/** Read the header of an existing file.
 				Return true if the header could be read successfully, false ow.
 		*/
-		virtual bool readHeader()
-			;
+		virtual bool readHeader();
 
 		/** Read the file into a RegularData3D field. **/
-		virtual bool read(RegularData3D& map)
-			;
+		virtual bool read(RegularData3D& map);
 
 		/** Write a header
 				Return true if the header could be written successfully, false ow.
 		*/
-		virtual bool writeHeader()
-			;
+		virtual bool writeHeader();
 
 		//@}
 		/** @name Accessors 
@@ -110,11 +92,9 @@ namespace BALL
 
 		protected:
 
-			short int readHeaderValue_(char* header, Position pos)
-				;
+			short int readHeaderValue_(char* header, Position pos);
 
-			void convertBrick_(char* brick)
-				;
+			void convertBrick_(char* brick);
 
 			/// a flag indicating that we have to swap bytes when reading header values
 			bool swap_bytes_;

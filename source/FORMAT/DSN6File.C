@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DSN6File.C,v 1.1.4.1 2007/03/25 22:00:16 oliver Exp $
-//
 
 #include <BALL/FORMAT/DSN6File.h>
 
@@ -10,21 +8,12 @@ namespace BALL
 {
 
 	DSN6File::DSN6File()
-		
 	: File(),
 		swap_bytes_(false)
 	{
 	}
 
-	DSN6File::DSN6File(const DSN6File& file)
-		throw(Exception::FileNotFound)
-		:	File(file),
-			swap_bytes_(file.swap_bytes_)
-	{
-	}
-
 	DSN6File::DSN6File(const String& name, File::OpenMode open_mode)
-		
 		: File(name, open_mode),
 			swap_bytes_(false)
 	{
@@ -37,14 +26,12 @@ namespace BALL
 	}
 
 	DSN6File::~DSN6File()
-		
 	{
 		close();
 		clear();
 	}
 
 	const DSN6File& DSN6File::operator = (const DSN6File& file)
-		
 	{
 		File::operator = (file);
 		swap_bytes_ = file.swap_bytes_;
@@ -53,7 +40,6 @@ namespace BALL
 	}
 
 	void DSN6File::clear()
-		
 	{
 		File::clear();
 		swap_bytes_ = false;
@@ -61,15 +47,12 @@ namespace BALL
 
 
 	bool DSN6File::operator == (const DSN6File& file) const
-		
 	{
 		return (   (File::operator == (file))
 						 &&(swap_bytes_    == file.swap_bytes_));
 	}
 
-
 	bool DSN6File::isSwappingBytes() const
-		
 	{
 		return swap_bytes_;
 	}
@@ -92,7 +75,6 @@ namespace BALL
 	}
 
 	bool DSN6File::readHeader()
-		
 	{
 		// first read the complete 512 bytes of header information
 		char header[512];
@@ -213,7 +195,6 @@ namespace BALL
 	}
 
 	short int DSN6File::readHeaderValue_(char* header, Position pos)
-		
 	{
 		short int val = *((short int*)(header + 2*pos));
 
@@ -224,7 +205,6 @@ namespace BALL
 	}
 			
 	bool DSN6File::writeHeader()
-		
 	{
 		// construct a correct header array and write it.
 //		char header[512];
@@ -234,7 +214,6 @@ namespace BALL
 	}
 
 	bool DSN6File::read(RegularData3D& density_map)
-		
 	{
 
 		// first read the header
@@ -350,7 +329,6 @@ namespace BALL
 	}
 
 	void DSN6File::convertBrick_(char* brick)
-		
 	{
 		for (Size i=0; i<512; i+=2)
 		{
