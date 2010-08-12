@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: GAMESSDatFile.C,v 1.2 2005/10/05 10:08:20 anhi Exp $
-//
 
 #include <BALL/FORMAT/GAMESSDatFile.h>
 #include <BALL/KERNEL/system.h>
@@ -22,27 +20,6 @@ namespace BALL
 			molecule_(0),
 			symmetry_group_("C1")
 	{
-	}
-
-	/** Todo: What to do with the molecule_ **/
-	GAMESSDatFile::GAMESSDatFile(const GAMESSDatFile& file)
-		throw(Exception::FileNotFound)
-		:	GenericMolFile(),
-			molecule_(file.molecule_),
-			current_block_(file.current_block_),
-			blocks_(file.blocks_),
-			symmetry_group_(file.symmetry_group_)
-	{
-		if (file.getName() != "")
-		{
-			try
-			{	
-				open(file.getName());
-			}
-			catch (Exception::FileNotFound&)
-			{
-			}
-		}
 	}
 
 	GAMESSDatFile::GAMESSDatFile(const String& name, File::OpenMode open_mode)
@@ -187,9 +164,8 @@ namespace BALL
 		}
 
 		/** What to do with the charge given by GAMESSDat??? **/
-		// a->setCharge(charge);
+		a->setCharge(charge);
 		a->setPosition(Vector3(x, y, z));
-
 	}
 		
 	void GAMESSDatFile::insertBond(Index a1, Index a2)

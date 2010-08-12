@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: GAMESSDatFile.h,v 1.2 2005/10/05 09:59:45 anhi Exp $
-//
 
 #ifndef BALL_FORMAT_GAMESSDATFILE_H
 #define BALL_FORMAT_GAMESSDATFILE_H
@@ -27,8 +25,6 @@ namespace BALL
 	{
 		public:
 
-			BALL_CREATE(GAMESSDatFile)
-
 			/** Nested class for the data blocks of the GAMESSFile **/
 			class block
 			{
@@ -38,8 +34,7 @@ namespace BALL
 					/** Stores the data in key - value format **/
 					StringHashMap<String> data;
 
-					void operator >> (std::ostream& os) const
-						;
+					void operator >> (std::ostream& os) const;
 					
 			};
 			
@@ -55,13 +50,7 @@ namespace BALL
 			
 			/** Default constructor
 			 */
-			GAMESSDatFile()
-				;
-
-			/** Copy constructor
-			 */
-			GAMESSDatFile(const GAMESSDatFile& file)
-				throw(Exception::FileNotFound);
+			GAMESSDatFile();
 
 			/** Detailed constructor
 			 */
@@ -70,8 +59,7 @@ namespace BALL
 
 			/** Destructor
 			 */
-			virtual ~GAMESSDatFile()
-				;
+			virtual ~GAMESSDatFile();
 			
 			//@}
 			/** @name Assignment.
@@ -122,35 +110,25 @@ namespace BALL
 			/** @name Accessors
 			 */
 			//@{
-			void newMolecule()
-				;
+			void newMolecule();
 
-			void setMoleculeName(char* name)
-				;			
+			void setMoleculeName(char* name);			
 			
-			void insertAtom(char* element, float charge, float x, float y, float z)
-				;
+			void insertAtom(char* element, float charge, float x, float y, float z);
 
-			void insertBond(Index a1, Index a2)
-				;
+			void insertBond(Index a1, Index a2);
 			
-			void inBlock(const char* blockname)
-				;
+			void inBlock(const char* blockname);
 
-			void insertBlockedData(const char* key, const char* value)
-				;
+			void insertBlockedData(const char* key, const char* value);
 
-			void insertBlockedData(const String& key, const String& value)
-				;
+			void insertBlockedData(const String& key, const String& value);
 
-			String& getBlockedData(const String& block, const String& key)
-				;
+			String& getBlockedData(const String& block, const String& key);
 
-			const String& getBlockedData(const String& block, const String& key) const
-				;
+			const String& getBlockedData(const String& block, const String& key) const;
 
-			void clearParameters()
-				;
+			void clearParameters();
 			//@}
 			
 			static State state;
