@@ -6,7 +6,7 @@ using namespace BALL;
 using namespace std;
 
 extern int ParsedFunctionlex();
-extern void ParsedFunctionerror(char* s);
+extern void ParsedFunctionerror(char const* s);
 
 double ParsedFunctionResult;
 %}
@@ -54,9 +54,8 @@ exp:     NUM               { $$ = $1;                         			        			}
 
 %%
 
-void ParsedFunctionerror(char* /* s */)
+void ParsedFunctionerror(char const* s)
 {
 	//throw Exception::ParseError(__FILE__, 0,
-	cerr << "Parse Error!" << endl;
+	cerr << "Parse Error! (" << String(s) << ")" << endl;
 }
-															
