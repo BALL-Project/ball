@@ -213,7 +213,7 @@ void LightSettings::saveSettingsToLight_()
 }
 	
 
-void LightSettings::lightSelected(QListWidgetItem* current_item, QListWidgetItem* previous_item)
+void LightSettings::lightSelected(QListWidgetItem* /*current_item*/, QListWidgetItem* /*previous_item*/)
 {
 	if (!ignore_) saveSettingsToLight_();
 	current_light_ = lights_list->currentRow();
