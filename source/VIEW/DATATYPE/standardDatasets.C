@@ -1193,7 +1193,7 @@ namespace BALL
 				delete rt_contour_surface_dialog_;
 		}
 
-		bool RaytraceableGridController::write(Dataset* set, String filetype, String filename)
+		bool RaytraceableGridController::write(Dataset* set, String /*filetype*/, String filename)
 		{
 			RaytraceableGrid* grid = getData(set);
 			if (grid == NULL)
