@@ -350,12 +350,6 @@ namespace BALL
 				dock_alg_(0)
 		{} 
 		
-		// Copy constructor.
-		DockingThread::DockingThread(const DockingThread& dock_thread)
-			: BALLThread(),
-				dock_alg_(dock_thread.dock_alg_)
-		{}
-		
 		///
 		DockingThread::~DockingThread()
 		{
