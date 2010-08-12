@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFileGeneral.C,v 1.6 2005/02/28 12:43:27 oliver Exp $
-//
 
 // This file contains the more or less "general" portion of PDBFile.
 // It covers the methods doing the generic parsing of records.
@@ -119,44 +117,6 @@ namespace BALL
 			parse_partial_charges_(false)	
 	{
 		init_();
-	}
-
-	PDBFile::PDBFile(const PDBFile& file)
-		throw(Exception::FileNotFound)
-		:	GenericMolFile(),
-			PropertyManager(file),
-			options(file.options),
-			info(file.info),
-			residue_name_(file.residue_name_),
-			residue_sequence_number_(file.residue_sequence_number_),
-			current_model_(file.current_model_),
-			current_record_(file.current_record_),
-			record_fields_(file.record_fields_),
-			current_record_type_(file.current_record_type_),
-
-			insertion_code_(file.insertion_code_),
-			chain_ID_(file.chain_ID_),
-			sequence_number_(file.sequence_number_),
-			code_(file.code_),
-			current_protein_(0),
-			current_const_protein_(0),
-			current_chain_(0),
-			current_const_chain_(0),
-			current_residue_(0),
-			current_const_residue_(0),
-			current_PDB_atom_(0),
-			current_const_atom_(0),
-			name_(file.name_),
-			verbosity_(file.verbosity_),
-			strict_line_checking_(file.strict_line_checking_),
-			selected_model_(file.selected_model_),
-			store_skipped_records_(file.store_skipped_records_),
-			ignore_xplor_pseudo_atoms_(file.ignore_xplor_pseudo_atoms_),
-			parse_partial_charges_(file.parse_partial_charges_)
-	{
-		init_();
-		setName(file.getName());
-		alternate_location_indicator_ = file.alternate_location_indicator_;
 	}
 
 	PDBFile::PDBFile(const String& filename, File::OpenMode open_mode)

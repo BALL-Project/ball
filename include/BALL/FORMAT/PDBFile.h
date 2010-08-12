@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.h,v 1.35 2005/12/23 17:01:45 amoll Exp $
-//
 
 #ifndef BALL_FORMAT_PDBFILE_H
 #define BALL_FORMAT_PDBFILE_H
@@ -192,12 +190,8 @@ namespace BALL
 		/// Construct with options.
 		PDBFile(const Options& new_options);
 
-		/// Copy constructor
-		PDBFile(const PDBFile& file) throw(Exception::FileNotFound);
-		
 		/// Destructor
-		virtual ~PDBFile()
-			;
+		virtual ~PDBFile();
 		//@}
 
 		/** @name Assignment.
