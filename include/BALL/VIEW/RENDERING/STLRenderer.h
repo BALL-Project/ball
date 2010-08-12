@@ -32,11 +32,10 @@ namespace BALL
 		\ingroup ViewRendering
 */
 
-class BALL_VIEW_EXPORT STLRenderer : public Renderer
+class BALL_VIEW_EXPORT STLRenderer 
+	: public Renderer
 {
 	public:
-
-	BALL_CREATE(STLRenderer)
 
 	/** @name Constructors and Destructors.
 	 */
