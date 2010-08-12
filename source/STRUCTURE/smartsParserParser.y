@@ -8,13 +8,7 @@ using namespace BALL;
 using namespace std;
 
 extern int yylex();
-extern void yyerror(char* s);
-
-/* ??? */
-/* There is some nasty problem with alloca under Intel/icc/Linux */
-/* so we use (inefficient) malloc instead. */
-#undef alloca
-#define alloca malloc
+extern void yyerror(char const* s);
 
 #define YYDEBUG 1
 
@@ -781,12 +775,10 @@ chirality:
 
 %%
 
-void yyerror(char* s)
+void yyerror(char const* s)
 {
 	throw Exception::ParseError(__FILE__, 0, 
 															SmartsParser::state.buffer, 
 															String(s) + String(" (at position ") 
 																+ String(SmartsParser::state.char_count) + String(")"));
 }
-
-
