@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XYZFile.h,v 1.17.18.1 2007/03/25 21:23:42 oliver Exp $
-//
 
 #ifndef BALL_FORMAT_XYZFILE_H
 #define BALL_FORMAT_XYZFILE_H
@@ -54,14 +52,8 @@ namespace BALL
 		XYZFile(const String& filename, File::OpenMode open_mode = std::ios::in)
 			throw(Exception::FileNotFound);
 
-		/**	Copy constructor
-		*/
-		XYZFile(const XYZFile& file)
-			throw(Exception::FileNotFound);
-
 		/// Destructor
-		virtual ~XYZFile()
-			;
+		virtual ~XYZFile();
 		
 		//@}
 		/**	@name Reading and Writing of Kernel Datastructures

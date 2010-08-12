@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XYZFile.C,v 1.7.28.1 2007/03/25 22:00:20 oliver Exp $
-//
 
 #include <BALL/FORMAT/XYZFile.h>
 #include <BALL/DATATYPE/string.h>
@@ -31,14 +29,7 @@ namespace BALL
 		GenericMolFile::open(name, open_mode);
 	}
 
-	XYZFile::XYZFile(const XYZFile& file)
-		throw(Exception::FileNotFound)
-		: GenericMolFile(file)
-	{
-	}
-
 	XYZFile::~XYZFile()
-		
 	{
 	}
 	
@@ -261,5 +252,4 @@ namespace BALL
 
 		return mol;
 	}
-				
 } // namespace BALL
