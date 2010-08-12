@@ -111,7 +111,7 @@ namespace	BALL
 
 /* Common Block Declarations */
 
-	struct
+	struct atoms_struct_
 	{
 		double x[CONNOLLY_STATIC_SIZE], y[CONNOLLY_STATIC_SIZE], z__[CONNOLLY_STATIC_SIZE];
 		int n;
@@ -120,7 +120,7 @@ namespace	BALL
 
 #define atoms_1 atoms_
 
-	struct
+	struct face01_struct_
 	{
 		double a[3 * CONNOLLY_STATIC_SIZE], // contains the atoms coordinates 											[R]
 					 ar[CONNOLLY_STATIC_SIZE], 		// contains the atoms radii 														[R]
@@ -131,7 +131,7 @@ namespace	BALL
 
 #define face01_1 face01_
 	// stores antom properties.
-	struct
+	struct face02_struct_
 	{
 		bool skip[CONNOLLY_STATIC_SIZE],		//should this atom be skipped? set by neighbor_()						[0:1]
 				 nosurf[CONNOLLY_STATIC_SIZE],	//is this atom on the surface																[0:1]
@@ -143,7 +143,7 @@ namespace	BALL
 #define face02_1 face02_
 
 	// neighborhood structure. Stores linked lists to neighbors for all atoms, and torus pointers 
-	struct
+	struct face03_struct_
 	{
 		int anbr[2 * CONNOLLY_STATIC_SIZE], 						// stores two pointer to nbr.begin and end of the neighbor list
 																										// [1:CONNOLLY_STATIC_NEIGHBOR_PAIRS_SIZE]		
@@ -157,7 +157,7 @@ namespace	BALL
 #define face03_1 face03_
 
 	//Torus related structure... mostly used in torus_() function
-	struct
+	struct face04_struct_
 	{
 		int ntt,	//number of torii stored [1:CONNOLLY_STATIC_TORI_SIZE]
 				tta[2 * CONNOLLY_STATIC_TORI_SIZE],		//contains pointers to atoms forming a face [1:CONNOLLY_STATIC_SIZE]
@@ -173,7 +173,7 @@ namespace	BALL
 #define face04_1 face04_
 
 	// stores the number of nonburied tori
-	struct
+	struct face05_struct_
 	{
 		double	t[3 * CONNOLLY_STATIC_TORI_SIZE], 
 						tr[CONNOLLY_STATIC_TORI_SIZE], 
@@ -188,7 +188,7 @@ namespace	BALL
 #define face05_1 face05_
 
 	// stores probe informations generated in face()_ 
-	struct
+	struct face06_struct_
 	{
 		double p[3 * CONNOLLY_STATIC_PROBES_SIZE]; 		// stores positions of probes [R]
 		int np, 																			// [1:CONNOLLY_STATIC_PROBES_SIZE]
@@ -199,7 +199,7 @@ namespace	BALL
 
 #define face06_1 face06_
 
-	struct
+	struct face07_struct_
 	{
 		double v[3 * 3 * CONNOLLY_STATIC_FACES_SIZE + 9]; //stores?!?
 		int nv, 																//[1:9 * CONNOLLY_STATIC_FACES_SIZE]
@@ -211,7 +211,7 @@ namespace	BALL
 
 #define face07_1 face07_
 
-	struct
+	struct face08_struct_
 	{
 		int nen, 
 				env[3 * 2 * CONNOLLY_STATIC_FACES_SIZE], //stores pointers to edges [1:3*CONNOLLY_STATIC_FACES_SIZE]
@@ -223,7 +223,7 @@ namespace	BALL
 #define face08_1 face08_
 
 	// stores information about circles used in saddle_
-	struct
+	struct face09_struct_
 	{
 		double c__[2 * 3 * CONNOLLY_STATIC_TORI_SIZE], //stores circle centers
 					 cr[2 * CONNOLLY_STATIC_TORI_SIZE]; //the circle radius
@@ -235,7 +235,7 @@ namespace	BALL
 
 #define face09_1 face09_
 
-	struct
+	struct face10_struct_
 	{
 		int nep, // [1:CONNOLLY_STATIC_TORI_SIZE] 
 				epc[CONNOLLY_STATIC_TORI_SIZE],  //stores circle pointers? [1:2*CONNOLLY_STATIC_TORI_SIZE]
@@ -248,7 +248,7 @@ namespace	BALL
 
 #define face10_1 face10_
 
-	struct
+	struct face11_struct_
 	{
 		int nfs,
 			 	fsen[2 * CONNOLLY_STATIC_TORI_SIZE], //stores edge pointers [1:3*CONNOLLY_STATIC_FACES_SIZE]
@@ -258,7 +258,7 @@ namespace	BALL
 
 #define face11_1 face11_
 // stores the ?cycles? generated in contact_()
-	struct
+	struct face12_struct_
 	{
 		int ncy, //[1:CONNOLLY_STATIC_CYCLES_GLOBAL_SIZE]
 			 	cynep[2 * CONNOLLY_STATIC_CYCLES_GLOBAL_SIZE], //[1:CONNOLLY_STATIC_EDGES_PER_CYCLE_SIZE]
@@ -269,7 +269,7 @@ namespace	BALL
 #define face12_1 face12_
 
 	//stores the ?convex faces? generated in contact_
-	struct
+	struct face13_struct_
 	{
 		int nfp, //[1:CONNOLLY_STATIC_CONVEX_FACES_SIZE]
 				fpa[CONNOLLY_STATIC_CONVEX_FACES_SIZE], // [1:CONNOLLY_STATIC_SIZE]
