@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.h,v 1.30 2005/12/23 17:01:44 amoll Exp $
-//
 
 #ifndef BALL_FORMAT_HINFILE_H
 #define BALL_FORMAT_HINFILE_H
@@ -27,21 +25,13 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(HINFile)
-
 		/** @name Constructors and Destructors
 		*/
 		//@{
 		
 		/** Default constructor
 		*/
-		HINFile()
-			;
-
-		/** Copy constructor
-		*/
-		HINFile(const HINFile& file)
-			throw(Exception::FileNotFound);
+		HINFile();
 
 		/** Detailed constructor
 		*/
@@ -50,8 +40,7 @@ namespace BALL
 
 		/**	Destructor
 		*/
-		virtual ~HINFile()
-			;
+		virtual ~HINFile();
 
 		//@}
 		/**	@name Assignment.

@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.C,v 1.64.28.1 2007/08/06 15:57:39 oliver Exp $
-//
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -27,7 +25,6 @@ namespace BALL
 	};
  
 	HINFile::HINFile()
-		
 		:	GenericMolFile(),
 			box_(0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
 			temperature_(0.0)
@@ -43,26 +40,8 @@ namespace BALL
 		open(name, open_mode);
 	}
 
-	HINFile::HINFile(const HINFile& file)
-		throw(Exception::FileNotFound)
-		: GenericMolFile(),
-			box_(0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
-			temperature_(0.0)
-	{
-		if (file.getName() != "")
-		{
-			try
-			{	
-				open(file.getName());
-			}
-			catch (Exception::FileNotFound&)
-			{
-			}
-		}
-	}
 
 	HINFile::~HINFile()
-		
 	{
 	}
 	
@@ -76,8 +55,6 @@ namespace BALL
 		
 		return *this;
 	}
-
-	
 
 	void HINFile::writeAtom_(const Atom& atom, Size number, Size atom_offset)
 	{
