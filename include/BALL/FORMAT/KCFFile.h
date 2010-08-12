@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: KCFFile.h,v 1.2 2005/12/23 17:01:44 amoll Exp $
-//
 
 #ifndef BALL_FORMAT_KCFFILE_H
 #define BALL_FORMAT_KCFFILE_H
@@ -31,9 +29,6 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(KCFFile)
-
-
 		/**	@name Constants */
 		//@{
 		static const char* ENTRY_TAG;
@@ -54,7 +49,7 @@ namespace BALL
 		//@{
 
 		///
-		KCFFile() ;
+		KCFFile();
 
 		////
 		KCFFile(const String& filename, File::OpenMode open_mode = std::ios::in)
@@ -64,7 +59,7 @@ namespace BALL
 		KCFFile(const KCFFile& file) throw(Exception::FileNotFound);
 
 		///
-		virtual ~KCFFile() ;
+		virtual ~KCFFile();
 		//@}
 
 		/**	@name Reading and Writing of Kernel Datastructures
@@ -91,8 +86,7 @@ namespace BALL
 		virtual Molecule* read() throw(Exception::ParseError);
 
 		///
-		const KCFFile& operator = (const KCFFile& file)
-			;
+		const KCFFile& operator = (const KCFFile& file);
 
 		//@}
 

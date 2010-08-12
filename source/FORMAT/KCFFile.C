@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: KCFFile.C,v 1.5 2005/12/23 17:02:39 amoll Exp $
-//
 
 #include <BALL/FORMAT/KCFFile.h>
 
@@ -36,11 +34,6 @@ namespace BALL
 		: GenericMolFile()
 	{
 		GenericMolFile::open(name, open_mode);
-	}
-
-	KCFFile::KCFFile(const KCFFile& file)	throw(Exception::FileNotFound)
-		: GenericMolFile(file)
-	{
 	}
 
 	KCFFile::~KCFFile() 
@@ -294,7 +287,6 @@ namespace BALL
 	
 
 	const KCFFile& KCFFile::operator = (const KCFFile& file)
-		
 	{
 		GenericMolFile::operator = (file);
 		return *this;
