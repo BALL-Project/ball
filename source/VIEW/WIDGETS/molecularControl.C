@@ -1523,7 +1523,8 @@ namespace BALL
 			showAngle(atoms[0], atoms[1], atoms[2], atoms[3]);
 		}
 
-		void MolecularControl::showAngle(Atom* a1, Atom* a2, Atom* a3, Atom* a4)
+		// TODO: why a4??
+		void MolecularControl::showAngle(Atom* a1, Atom* a2, Atom* a3, Atom* /*a4*/)
 		{
 			if (!a1 || !a2 || !a3) return;
 			
