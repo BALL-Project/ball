@@ -456,31 +456,8 @@ namespace BALL
 		{
 			(*it)->setForce(RTTI::getDefault<Vector3>());
 		}
-		
-		// check whether the selection changed since the last call
-		// to update and call update otherwise
-		if (update_time_stamp_.isOlderThan(system_->getSelectionTime()))
-		{
-			// Call update if the selection time stamp changed since
-			// the last call to update. This ensures consistency of
-			// the selection information in pair lists, bond lists, etc.
-			// Also make sure the movable atoms are still in the front
-			// of the atom vevtor.
-			sortSelectedAtomVector_();
-			update();
 
-			// Update the use_selection_ flag.
-			use_selection_ = (selection_enabled_ && system_->containsSelection());
-		}
-
-		if (setup_time_stamp_.isOlderThan(system_->getModificationTime()))
-		{
-			// complain if someone meddled with the system while simulating it
-			Log.error() << "ForceField::updateForces: Error! System topology was modified (i.e., atoms, residues" << endl
-									<< "or the like were inserted or removed) after ForceField::Setup was called for the last" << endl
-									<< "time. The results obtained from this simulation might be erroneous." << endl;
-								
-		}
+		performRequiredUpdates_();
 
 		// call each component - they will add their forces...
 		vector<ForceFieldComponent*>::iterator		component_it = components_.begin();
@@ -523,28 +500,7 @@ namespace BALL
 		// clear the total energy
 		energy_ = 0;
 
-		// check whether the selection changed since the last call
-		// to update and call update oterwise
-		if (update_time_stamp_.isOlderThan(system_->getSelectionTime()))
-		{
-			// Call update if the selection time stamp changed since
-			// the last call to update. This ensures consistency of
-			// the selection information in pair lists, bond lists, etc.
-			sortSelectedAtomVector_();
-			update();
-
-			// Update the use_selection_ flag.
-			use_selection_ = (selection_enabled_ && system_->containsSelection());
-		}
-
-		if (setup_time_stamp_.isOlderThan(system_->getModificationTime()))
-		{
-			// complain if someone meddled with the system while simulating it
-			Log.error() << "ForceField::updateEnergy: Error! System topology was modified (i.e., atoms, residues" << endl
-									<< "or the like were inserted or removed) after ForceField::Setup was called for the last" << endl
-									<< "time. The results obtained from this simulation might be erroneous." << endl;
-								
-		}
+		performRequiredUpdates_();
 
 		// call each component and add their energies
 		vector<ForceFieldComponent*>::iterator		it;
@@ -694,6 +650,34 @@ namespace BALL
 		}
 		return Log.error();
 	 } 
+
+	void ForceField::performRequiredUpdates_()
+	{
+		// check whether the selection changed since the last call
+		// to update and call update otherwise
+		if (update_time_stamp_.isOlderThan(system_->getSelectionTime()))
+		{
+			// Call update if the selection time stamp changed since
+			// the last call to update. This ensures consistency of
+			// the selection information in pair lists, bond lists, etc.
+			// Also make sure the movable atoms are still in the front
+			// of the atom vevtor.
+			sortSelectedAtomVector_();
+			update();
+
+			// Update the use_selection_ flag.
+			use_selection_ = (selection_enabled_ && system_->containsSelection());
+		}
+
+		if (setup_time_stamp_.isOlderThan(system_->getModificationTime()))
+		{
+			// complain if someone meddled with the system while simulating it
+			Log.error() << "ForceField::updateForces: Error! System topology was modified (i.e., atoms, residues"
+			               "or the like were inserted or removed) after ForceField::Setup was called for the last"
+			               "time. The results obtained from this simulation might be erroneous.\n";
+		}
+
+	}
 
 # ifdef BALL_NO_INLINE_FUNCTIONS
 #   include <BALL/MOLMEC/COMMON/forceField.iC>

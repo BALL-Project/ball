@@ -373,7 +373,12 @@ namespace BALL
 		/*_	Sort the atom vector wrt selection.
 		*/
 		void sortSelectedAtomVector_();
-		
+
+		/**
+		 * Check whether the force field needs to be updated and perform the necessary steps
+		 */
+		virtual void performRequiredUpdates_();
+
 		/*_	@name	Protected Attributes
 		*/
 		//_@{
