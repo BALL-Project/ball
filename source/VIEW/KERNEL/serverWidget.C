@@ -72,7 +72,7 @@ namespace BALL
 			connect(this, SIGNAL(lockRequested(bool)), this, SLOT(handleLocking(bool)));
 		}
 
-		ServerWidget::ServerWidget(const ServerWidget& s)
+		ServerWidget::ServerWidget(const ServerWidget& /*s*/)
 			: QObject(),
 				ModularWidget(),
 				server_(this, VIEW_DEFAULT_PORT, true)
