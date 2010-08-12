@@ -8,21 +8,24 @@ class VRMLRenderer
 %End
   public:
 
-	VRMLRenderer() throw();
+	VRMLRenderer();
 	VRMLRenderer(const String&); //throw(Exception::FileNotFound);
-	~VRMLRenderer() throw();
-	virtual void clear() throw();
+	~VRMLRenderer();
+	virtual void clear();
 	void setFileName(const String&); //throw(Exception::FileNotFound);
-	String VRMLColorRGBA(const ColorRGBA&) throw();
-	String VRMLVector3(Vector3)	throw();
-	void VRMLColor(const ColorRGBA&) throw();
-	virtual bool init(const Stage&) throw();
-	virtual bool finish() throw();
-	void renderSphere_(const Sphere&) throw();
-	void renderMesh_(const Mesh&) throw();
-	void renderTube_(const Tube&) throw();
-	void renderTwoColoredTube_(const TwoColoredTube&) throw();
-	void out_(const String&) throw();
-	void outheader_(const String&) throw();
-	void outfinish_(const String&) throw();
+	String VRMLColorRGBA(const ColorRGBA&);
+	String VRMLVector3(Vector3);
+	void VRMLColor(const ColorRGBA&);
+	virtual bool init(const Stage&);
+	virtual bool finish();
+	void renderSphere_(const Sphere&);
+	void renderMesh_(const Mesh&);
+	void renderTube_(const Tube&);
+	void renderTwoColoredTube_(const TwoColoredTube&);
+	void out_(const String&);
+	void outheader_(const String&);
+	void outfinish_(const String&);
+
+	private:
+	VRMLRenderer(const VRMLRenderer&);
 };

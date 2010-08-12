@@ -57,7 +57,6 @@ class File
   File();
 	// default open mode: IN
   File(const String&, OpenMode /openmode/ = std::ios::in);
-  File(const File& /filename/);
   ~File();
 	// default open mode: IN
   bool open(const String&, OpenMode /openmode/ = std::ios::in);
@@ -84,6 +83,9 @@ class File
   bool isWritable() const;
   bool isExecutable() const;
   bool isValid() const;
+
+	private:
+  File(const File& /filename/);
 };
 
 

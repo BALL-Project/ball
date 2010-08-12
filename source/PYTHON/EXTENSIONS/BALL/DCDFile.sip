@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id$
-//
 
 class DCDFile
 	: TrajectoryFile
@@ -15,40 +13,25 @@ class DCDFile
 				public:
 
 				// BALL_CREATE(DCDFile)
-				DCDFile()
-								throw();
-				DCDFile(const DCDFile& /file/)
-								throw(FileNotFound);
-				DCDFile(const String& /name/, OpenMode /open_mode/ = std::ios::in)
-								throw(FileNotFound);
-				~DCDFile()
-								throw();
-				//const DCDFile& operator = (const DCDFile& /file/)
-				//				throw();
-				virtual void clear()
-								throw();
-				bool operator == (const DCDFile& /file/) const
-								throw();
-				bool isSwappingBytes() const
-								throw();
-				bool hasVelocities() const
-								throw();
+				DCDFile();
+				DCDFile(const String& /name/, OpenMode /open_mode/ = std::ios::in) throw(FileNotFound);
+				~DCDFile();
+				//const DCDFile& operator = (const DCDFile& /file/);
+				virtual void clear();
+				bool operator == (const DCDFile& /file/) const;
+				bool isSwappingBytes() const;
+				bool hasVelocities() const;
 
-				bool init()
-								throw();
-				virtual bool readHeader()
-								throw();
-				virtual bool writeHeader()
-								throw();
-				virtual bool append(const SnapShot& /snapshot/)
-								throw();
-				virtual bool read(SnapShot& /snapshot/)
-								throw();
-				//virtual bool flushToDisk(const vector<SnapShot> buffer)
-				//				throw();
-				void enableVelocityStorage()
-								throw();
-				void disableVelocityStorage()
-								throw();
-		void close();
+				bool init();
+				virtual bool readHeader();
+				virtual bool writeHeader();
+				virtual bool append(const SnapShot& /snapshot/);
+				virtual bool read(SnapShot& /snapshot/);
+				//virtual bool flushToDisk(const vector<SnapShot> buffer);
+				void enableVelocityStorage();
+				void disableVelocityStorage();
+				void close();
+
+				private:
+				DCDFile(const DCDFile& /file/);
 };

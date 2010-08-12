@@ -13,35 +13,22 @@ class TrajectoryFile
 	using namespace BALL::Exception;
 %End
 				public:
-				TrajectoryFile()
-								throw();
-				TrajectoryFile(const TrajectoryFile& /file/)
-								throw();
+				TrajectoryFile();
 				TrajectoryFile(const String& /filename/,
-											 OpenMode /open_mode/ = std::ios::in)
-								throw(FileNotFound);
-				~TrajectoryFile()
-								throw();
-				//const TrajectoryFile& operator = (const TrajectoryFile& /file/)
-				//				throw();
-				virtual void clear()
-								throw();
-				bool operator == (const TrajectoryFile& /file/) const
-								throw();
+											 OpenMode /open_mode/ = std::ios::in) throw(FileNotFound);
+				~TrajectoryFile();
+				//const TrajectoryFile& operator = (const TrajectoryFile& /file/);
+				virtual void clear();
+				bool operator == (const TrajectoryFile& /file/) const;
 
-				Size getNumberOfSnapShots() const
-								throw();
-				Size getNumberOfAtoms() const
-								throw();
+				Size getNumberOfSnapShots() const;
+				Size getNumberOfAtoms() const;
 
-				virtual bool readHeader()
-								throw();
-				virtual bool writeHeader()
-								throw();
-				virtual bool append(const SnapShot& /snapshot/)
-								throw();
-				virtual bool read(SnapShot& /snapshot/)
-								throw();
-				//virtual bool flushToDisk(const ::std::vector<SnapShot> buffer)
-				//				throw();
+				virtual bool readHeader();
+				virtual bool writeHeader();
+				virtual bool append(const SnapShot& /snapshot/);
+				virtual bool read(SnapShot& /snapshot/);
+				//virtual bool flushToDisk(const ::std::vector<SnapShot> buffer);
+				private:
+				TrajectoryFile(const TrajectoryFile& /file/);
 };

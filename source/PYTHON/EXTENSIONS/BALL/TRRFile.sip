@@ -40,8 +40,6 @@
 		};
 
 		TRRFile()	throw();
-		TRRFile(const TRRFile& /file/)
-			throw(FileNotFound);
 		TRRFile(const String& /name/, OpenMode /open_mode/ = std::ios::in) throw();
 		virtual ~TRRFile() throw();
 
@@ -69,4 +67,6 @@
 		Vector3 getBoundingBoxY() const	throw();
 		Vector3 getBoundingBoxZ() const	throw();
 		void setBoundingBox(const Vector3& /x/, const Vector3& /y/, const Vector3& /z/) throw();
+		private:
+		TRRFile(const TRRFile& /file/);
 	};

@@ -18,8 +18,6 @@ class LineBasedFile
 								throw();
 				LineBasedFile(const String& /filename/, OpenMode /open_mode/ = std::ios::in)
 								throw(FileNotFound);
-				LineBasedFile(const LineBasedFile& /f/)
-								throw(FileNotFound);
 				void clear()
 								throw();
 
@@ -67,4 +65,7 @@ class LineBasedFile
 				//				const throw();
 
 				// bool parseColumnFormat(const char* /format/, Position /index/, Size /length/, void* /arg/);
+
+			private:
+				LineBasedFile(const LineBasedFile&);
 };

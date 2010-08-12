@@ -20,4 +20,6 @@ class XYZFile
   virtual bool write(const System&) throw(File::CannotWrite);
   virtual bool read(System&) throw(ParseError);
 	const String& getComment();
+	private:
+		XYZFile(const XYZFile&);
 };
