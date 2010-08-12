@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SDFile.h,v 1.15 2005/12/23 17:01:45 amoll Exp $
-//
 
 #ifndef BALL_FORMAT_SDFILE_H
 #define BALL_FORMAT_SDFILE_H
@@ -26,30 +24,21 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(SDFile)
-
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
 
 		/**	Default constructor
 		*/
-		SDFile()
-			;
+		SDFile();
 
 		/** Detailed constructor.
 		*/
 		SDFile(const String& filename, File::OpenMode open_mode = std::ios::in)
 			throw(Exception::FileNotFound);
 
-		/**	Copy constructor
-		*/
-		SDFile(const SDFile& file)
-			throw(Exception::FileNotFound);
-
 		/// Destructor
-		virtual ~SDFile()
-			;
+		virtual ~SDFile();
 		
 		//@}
 
@@ -90,18 +79,15 @@ namespace BALL
 				However, the  \link NamedProperties NamedProperties \endlink  of the molecules contain
 				the optional information contained in the SD file.
 		*/
-		void disableAtoms()
-			;
+		void disableAtoms();
 
 		/** Read atoms and bonds.
 				@see disableAtoms
 		*/
-		void enableAtoms()
-			;
+		void enableAtoms();
 
 		///
-		const SDFile& operator = (const SDFile& file)
-			;
+		const SDFile& operator = (const SDFile& file);
 
 		//@}
 

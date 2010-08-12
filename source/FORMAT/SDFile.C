@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SDFile.C,v 1.12.20.2 2007/05/30 15:17:34 anhi Exp $
-//
 
 #include <BALL/FORMAT/SDFile.h>
 #include <BALL/KERNEL/atom.h>
@@ -14,7 +12,6 @@ namespace BALL
 {
 
 	SDFile::SDFile()
-		
 		:	MOLFile()
 	{
 	}
@@ -26,15 +23,7 @@ namespace BALL
 	{
 	}
 
-	SDFile::SDFile(const SDFile& file)
-		throw(Exception::FileNotFound)
-		: MOLFile(file),
-			read_atoms_(true)
-	{
-	}
-
 	SDFile::~SDFile()
-		
 	{
 	}
 
@@ -154,7 +143,6 @@ namespace BALL
 		// Happily munch empty lines at the end of a file after the properties block. 
 		// This is required because otherwise, an empty line on the end of a file will
 		// lead our parser to try and read another MOLFile, which won't succeed.
-		Index line_number = getLineNumber();
 		int no_chars = 0;
 		if (good())
 		{
@@ -170,7 +158,7 @@ namespace BALL
 		// if the file is still good, we read too far.
 		if (good())
 		{
-			for(Position i=0; i<no_chars; i++)
+			for(int i=0; i<no_chars; i++)
 			{
 				unget();
 			}
@@ -210,13 +198,10 @@ namespace BALL
 	}
 
 	const SDFile& SDFile::operator = (const SDFile& file)
-		
 	{
 		read_atoms_ = file.read_atoms_;
 		MOLFile::operator = (file);
 
 		return *this;
 	}
-
-	
 } // namespace BALL
