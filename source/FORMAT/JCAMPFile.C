@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.C,v 1.19.20.1 2007/03/25 22:00:17 oliver Exp $
-//
 
 
 #include <BALL/FORMAT/JCAMPFile.h>
@@ -13,7 +11,6 @@ namespace BALL
 {
 
 	bool JCAMPFile::JCAMPValue::operator == (const JCAMPValue& value) const
-		
 	{
 		return string_value  	== value.string_value &&
 					 numeric_value  == value.numeric_value && 
@@ -21,7 +18,6 @@ namespace BALL
 	}
 
 	bool JCAMPFile::JCAMPValue::operator != (const JCAMPValue& value) const
-		
 	{
 		return !(*this == value);
 	}
@@ -34,14 +30,6 @@ namespace BALL
 	{
 		LineBasedFile::open(name, open_mode);
 		enableTrimWhitespaces(true);
-	}
-
-	JCAMPFile::JCAMPFile(const JCAMPFile& file) 
-		throw(Exception::FileNotFound)
-		: LineBasedFile(file), 
-			header_(file.header_),
-			entries_(file.entries_)
-	{
 	}
 
 	void JCAMPFile::read()
@@ -302,7 +290,6 @@ namespace BALL
 	}
 
 	const JCAMPFile& JCAMPFile::operator = (const JCAMPFile& file)
-		
 	{
 		header_  = file.header_;
 		entries_ = file.entries_;
@@ -322,6 +309,5 @@ namespace BALL
 	{
 		return ! (*this == f);
 	}
-			
 
 } // namespace BALL

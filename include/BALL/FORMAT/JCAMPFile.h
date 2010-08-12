@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.h,v 1.20 2005/12/23 17:01:44 amoll Exp $
-//
 
 #ifndef BALL_FORMAT_JCAMPFILE_H
 #define BALL_FORMAT_JCAMPFILE_H
@@ -59,11 +57,9 @@ namespace BALL
 			
 			JCAMPValue() : string_value(""), numeric_value(), type(STRING) {}
 			
-			bool operator == (const JCAMPValue& value) const
-				;
+			bool operator == (const JCAMPValue& value) const;
 
-			bool operator != (const JCAMPValue& value) const
-				;
+			bool operator != (const JCAMPValue& value) const;
 		};
 
 		/// a key-value pair
@@ -85,10 +81,6 @@ namespace BALL
 
 		///
 		JCAMPFile(const String& name, OpenMode open_mode = std::ios::in)
-			throw(Exception::FileNotFound);
-
-		/// Copy constructor.
-		JCAMPFile(const JCAMPFile& file)
 			throw(Exception::FileNotFound);
 
 		///	Destructor.
@@ -146,11 +138,11 @@ namespace BALL
 
 		/** Equality operator
 		*/
-		bool operator == (const JCAMPFile& f)  const ;
+		bool operator == (const JCAMPFile& f)  const;
 
 		/** Inequality operator
 		*/
-		bool operator != (const JCAMPFile& f)  const ;
+		bool operator != (const JCAMPFile& f)  const;
 		//@}
 
 		
