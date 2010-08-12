@@ -5,6 +5,7 @@ SET(DIRECTORY source/MOLMEC/COMMON)
 SET(SOURCES_LIST
 	assignTypes.C
 	atomVector.C
+	bendComponent.C
 	chargeRuleProcessor.C
 	forceField.C
 	forceFieldComponent.C

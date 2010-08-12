@@ -9,32 +9,22 @@
 
 using namespace std;
 
-namespace BALL 
+namespace BALL
 {
 
 	// default constructor
 	CharmmBend::CharmmBend()
-		:	ForceFieldComponent()
-	{	
+	{
 		// set component name
 		setName("CHARMM Bend");
 	}
 
-
 	// constructor
 	CharmmBend::CharmmBend(ForceField& force_field)
-		:	ForceFieldComponent(force_field)
+		: BendComponent(force_field)
 	{
 		// set component name
 		setName( "CHARMM Bend" );
-	}
-
-
-	// copy constructor
-	CharmmBend::CharmmBend(const CharmmBend&	component)
-		:	ForceFieldComponent(component)
-	{
-		bend_ = component.bend_;
 	}
 
 	// destructor
@@ -132,7 +122,6 @@ namespace BALL
 							values.k = 0.0;
 							values.theta0 = 0.0;
 						}
-
 						this_bend.values = values;
 						bend_.push_back(this_bend);
 					}
@@ -142,157 +131,6 @@ namespace BALL
 
 		// everything went well
 		return true;
-	}
-
-	// calculates the current energy of this component
-	double CharmmBend::updateEnergy()
-	{
-		double length;
-		energy_ = 0;
-
-		for (Size i = 0 ; i < bend_.size() ; i++) 
-		{
-
-			if (getForceField()->getUseSelection() == false ||
-					(getForceField()->getUseSelection() == true  &&
-					(bend_[i].atom1->ptr->isSelected() 
-					 || bend_[i].atom2->ptr->isSelected() 
-					 || bend_[i].atom3->ptr->isSelected())))
-			{
-
-				Vector3 v1 = bend_[i].atom1->position - bend_[i].atom2->position;
-				length = v1.getLength();
-
-				if (length == 0) 
-				{
-					continue;
-				}
-
-				double inverse_length = 1 / length;
-				v1 *= inverse_length;
-				Vector3 v2 = bend_[i].atom3->position - bend_[i].atom2->position;
-				length = v2.getLength();
-
-				if (length == 0) 
-				{
-					continue;
-				}
-
-				inverse_length = 1/length;
-				v2 *= inverse_length;
-
-				double costheta = v1 * v2;
-				double theta;
-				if (costheta > 1.0) 
-				{	
-					theta = 0.0;
-				}
-				else if (costheta < -1.0) 
-				{
-					theta = Constants::PI;
-				}
-				else 
-				{
-					theta = acos(costheta);
-				}
-			
-
-				energy_ += bend_[i].values.k * (theta - bend_[i].values.theta0) * (theta - bend_[i].values.theta0);
-			}
-
-		}
-
-		return energy_;
-	}
-
-	// calculates and adds its forces to the current forces of the force field
-	void CharmmBend::updateForces()
-	{
-
-		double length;
-
-		for (Size i = 0; i < bend_.size(); i++) 
-		{
-			if (getForceField()->getUseSelection() == false ||
-					(getForceField()->getUseSelection()  == true  &&
-					(bend_[i].atom1->ptr->isSelected() 
-					 || bend_[i].atom2->ptr->isSelected() || bend_[i].atom3->ptr->isSelected())))
-			{
-				// Calculate the vector between atom1 and atom2,
-				// test if the vector has length larger than 0 and normalize it
-
-				Vector3 v1 = bend_[i].atom1->position - bend_[i].atom2->position;
-				length = v1.getLength();
-				if (length == 0) continue;
-				double inverse_length_v1 = 1/length;
-				v1 *= inverse_length_v1 ;
-
-				// Calculate the vector between atom3 and atom2,
-				// test if the vector has length larger than 0 and normalize it
-
-				Vector3 v2 = bend_[i].atom3->position - bend_[i].atom2->position;
-				length = v2.getLength();
-				if (length == 0) continue;
-				double inverse_length_v2 = 1/length;
-				v2 *= inverse_length_v2;
-
-				// Calculate the cos of theta and then theta
-				double costheta = v1 * v2;
-				double theta;
-				if (costheta > 1.0) theta = 0.0;
-				else if (costheta < -1.0) theta = Constants::PI;
-				else theta = acos(costheta);
-
-				// unit conversion: kJ/(mol A) -> N
-				// kJ -> J: 1e3
-				// A -> m : 1e10
-				// J/mol -> mol: Avogadro
-				double factor = 1e13 / Constants::AVOGADRO * 2 * bend_[i].values.k * (theta - bend_[i].values.theta0);
-
-				// Calculate the cross product of v1 and v2, test if it has length unequal 0,
-				// and normalize it.
-
-				Vector3 cross = v1 % v2;
-				if ((length = cross.getLength()) != 0) 
-				{
-					cross *= (1/length);
-				} 
-				else 
-				{
-					continue;
-				}
-
-				Vector3 n1 = v1 % cross;
-				Vector3 n2 = v2 % cross; 
-				n1 *= factor * inverse_length_v1;
-				n2 *= factor * inverse_length_v2;
-
-				if (getForceField()->getUseSelection() == false)
-				{
-					bend_[i].atom1->force -= n1;
-					bend_[i].atom2->force += n1;
-					bend_[i].atom2->force -= n2;
-					bend_[i].atom3->force += n2;
-				} 
-				else 
-				{
-					if (bend_[i].atom1->ptr->isSelected()) 
-					{
-						bend_[i].atom1->force -= n1;
-					}
-	
-					if (bend_[i].atom2->ptr->isSelected())
-					{
-						bend_[i].atom2->force += n1;
-						bend_[i].atom2->force -= n2;
-					}
-					if (bend_[i].atom3->ptr->isSelected())
-					{
-						bend_[i].atom3->force += n2;
-					}
-				}
-			}
-		}
 	}
 
 } // namespace BALL 

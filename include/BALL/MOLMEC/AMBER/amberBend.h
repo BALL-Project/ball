@@ -7,19 +7,11 @@
 #define BALL_MOLMEC_AMBER_AMBERBEND_H
 
 #ifndef BALL_COMMON_H
-#	include <BALL/common.h>
+# include <BALL/common.h>
 #endif
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELDCOMPONENT_H
-#	include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
-#endif
-
-#ifndef BALL_MOLMEC_PARAMETER_QUADRATICANGLEBEND_H
-#	include <BALL/MOLMEC/PARAMETER/quadraticAngleBend.h>
-#endif
-
-#ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
-#	include <BALL/MOLMEC/COMMON/forceField.h>
+# include <BALL/MOLMEC/COMMON/bendComponent.h>
 #endif
 
 namespace BALL 
@@ -28,8 +20,7 @@ namespace BALL
 			
     	\ingroup  AMBER
 	*/
-	class BALL_EXPORT AmberBend 
-		: public ForceFieldComponent
+	class BALL_EXPORT AmberBend : public BendComponent
 	{
 		public:
 
@@ -50,10 +41,6 @@ namespace BALL
 		*/
 		AmberBend(ForceField& force_field);
 
-		/**	Copy constructor
-		*/
-		AmberBend(const AmberBend& amber_stretch);
-
 		/**	Destructor.
 		*/
 		virtual ~AmberBend();
@@ -70,36 +57,6 @@ namespace BALL
 			throw(Exception::TooManyErrors);
 
 		//@}
-
-
-		/**	@name	Accessors	
-		*/
-		//@{
-
-		/**	Calculates and returns the component's energy.
-		*/
-		virtual double updateEnergy();
-
-		/**	Calculates and returns the component's forces.
-		*/
-		virtual void updateForces();
-
-		//@}
-
-		private:
-
-		/*_	@name	Private Attributes	
-		*/
-		//_@{
-
-		/*_	pointer to the array of bends
-		*/	
-		vector<QuadraticAngleBend::Data>	bend_;
-
-		QuadraticAngleBend								bend_parameters_;
-
-		//_@}
-	 
 	};
 } // namespace BALL
 
