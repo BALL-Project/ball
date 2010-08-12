@@ -199,10 +199,10 @@ namespace BALL
 			value = "";
 			for (Position p = 0; p < (Position)rowCount(); p++)
 			{
-				value += ascii(item(p, 0)->text()) + '°';
-				value += ascii(item(p, 1)->text()) + '°';
-				value += ascii(item(p, 2)->text()) + '°';
-				value += ascii(item(p, 3)->text()) + '°';
+				value += ascii(item(p, 0)->text()) + "°";
+				value += ascii(item(p, 1)->text()) + "°";
+				value += ascii(item(p, 2)->text()) + "°";
+				value += ascii(item(p, 3)->text()) + "°";
 				value += '@';
 			}
 			return true;
