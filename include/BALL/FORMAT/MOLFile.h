@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile.h,v 1.14 2005/12/23 17:01:44 amoll Exp $
-//
 
 #ifndef BALL_FORMAT_MOLFILE_H
 #define BALL_FORMAT_MOLFILE_H
@@ -30,8 +28,6 @@ namespace BALL
 		: public GenericMolFile
 	{
 		public:
-
-		BALL_CREATE(MOLFile)
 
 		/**	@name	Structs
 		*/
@@ -129,22 +125,15 @@ namespace BALL
 
 		/**	Default constructor
 		*/
-		MOLFile()
-			;
+		MOLFile();
 
 		/** Detailed constructor.
 		*/
 		MOLFile(const String& filename, File::OpenMode open_mode = std::ios::in)
 			throw(Exception::FileNotFound);
 
-		/**	Copy constructor
-		*/
-		MOLFile(const MOLFile& file)
-			throw(Exception::FileNotFound);
-
 		/// Destructor
-		virtual ~MOLFile()
-			;
+		virtual ~MOLFile();
 		
 		//@}
 
@@ -174,7 +163,7 @@ namespace BALL
 			throw(Exception::ParseError);
 			
 		///
-		const MOLFile& operator = (const MOLFile& file) ;
+		const MOLFile& operator = (const MOLFile& file);
 
 		//@}
 

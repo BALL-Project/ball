@@ -1,9 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile.C,v 1.26 2005/12/23 17:02:39 amoll Exp $
-//
-
 
 #include <BALL/FORMAT/MOLFile.h>
 #include <BALL/KERNEL/atom.h>
@@ -60,7 +57,6 @@ namespace BALL
 
 
 	MOLFile::MOLFile()
-		
 		:	GenericMolFile()
 	{
 	}
@@ -72,14 +68,7 @@ namespace BALL
 		GenericMolFile::open(name, open_mode);
 	}
 
-	MOLFile::MOLFile(const MOLFile& file)
-		throw(Exception::FileNotFound)
-		: GenericMolFile(file)
-	{
-	}
-
 	MOLFile::~MOLFile()
-		
 	{
 	}
 
@@ -748,7 +737,6 @@ namespace BALL
 	}
 
 	const MOLFile& MOLFile::operator = (const MOLFile& file)
-		
 	{
 		GenericMolFile::operator = (file);
 		return *this;
