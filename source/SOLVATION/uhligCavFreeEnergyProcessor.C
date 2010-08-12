@@ -101,7 +101,12 @@ namespace BALL
 		// an additive constant [ J/mol ]
 		double C = options.getReal(Option::CONSTANT);
 		
-		double A = calculateSASArea(*fragment_, solvent_radius);
+		NumericalSAS sas_computer;
+		sas_computer.options[NumericalSAS::Option::PROBE_RADIUS  ] = solvent_radius;
+		sas_computer.options[NumericalSAS::Option::COMPUTE_VOLUME] = false;
+
+		sas_computer(*fragment_);
+		double A = sas_computer.getTotalArea();
 		
 		if (verbosity > 0)
 		{

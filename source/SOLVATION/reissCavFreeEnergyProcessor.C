@@ -133,8 +133,12 @@ namespace BALL
 			Log.info() << "y_frac = " << y_frac << endl;
 		}
 
-		HashMap<const Atom*,float> atom_areas;
-		calculateSASAtomAreas(*fragment_, atom_areas, solvent_radius);
+		NumericalSAS sas_computer;
+		sas_computer.options[NumericalSAS::Option::PROBE_RADIUS  ] = solvent_radius;
+		sas_computer.options[NumericalSAS::Option::COMPUTE_VOLUME] = false;
+
+		sas_computer(*fragment_);
+		HashMap<const Atom*,float> atom_areas = sas_computer.getAtomAreas();
 		
 		// R is the sum of atom radius and probe radius [ m ]
 		double R; 

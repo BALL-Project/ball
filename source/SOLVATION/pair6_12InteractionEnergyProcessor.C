@@ -341,6 +341,7 @@ namespace BALL
 
 			// now compute the surface for the integration
 
+			NumericalSAS sas_computer;
 			switch (surface_type)
 			{
 				case SURFACE__SAS:
@@ -349,14 +350,22 @@ namespace BALL
 					{
 						Log.info() << "Using SAS surface" << endl;
 					}
-					calculateSASAtomPoints(*fragment_, surface_map, R_s);
+
+					sas_computer.options[NumericalSAS::Option::COMPUTE_AREA     	 ] = true;
+					sas_computer.options[NumericalSAS::Option::COMPUTE_VOLUME   	 ] = false;
+					sas_computer.options[NumericalSAS::Option::COMPUTE_SURFACE_MAP ] = true;
+					sas_computer.options[NumericalSAS::Option::PROBE_RADIUS        ] = R_s;
+
+					sas_computer(*fragment_);
+
+					surface_map = sas_computer.getSurfaceMap();
 					break;
 
 				case SURFACE__SES:
 
 					if (verbosity > 0)
 					{
-						Log.info() << "Using SES surface" << endl;
+						Log.info() << "Using SES surface (NOTE: not implemented!)" << endl;
 					}
 					// calculateSESAtomPoints(*fragment_, surface_map, R_s);
 					break;

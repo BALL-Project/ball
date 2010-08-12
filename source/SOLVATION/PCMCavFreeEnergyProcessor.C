@@ -124,11 +124,18 @@ namespace BALL
 			Log.info() << "y_frac = " << y_frac << endl;
 		}
 		
-		HashMap<const Atom*,float> atom_areas;
-		calculateSASAtomAreas(*fragment_, atom_areas, solvent_radius);
-		HashMap<const Atom*,float> atom_areas_reduced;
-		// ?????: Hier stand vorher SES? Warum?
-		calculateSASAtomAreas(*fragment_, atom_areas_reduced, 0.0);
+		NumericalSAS sas_computer;
+
+		sas_computer.options[NumericalSAS::Option::PROBE_RADIUS  ] = solvent_radius;
+		sas_computer.options[NumericalSAS::Option::COMPUTE_VOLUME] = false;
+
+		sas_computer(*fragment_);
+		HashMap<const Atom*,float> atom_areas = sas_computer.getAtomAreas();
+
+		sas_computer.options[NumericalSAS::Option::PROBE_RADIUS] = 0.0f;
+
+		sas_computer(*fragment_);
+		HashMap<const Atom*,float> atom_areas_reduced = sas_computer.getAtomAreas();
 		
 		// R is two times ( atom radius + probe radius ) [ m ]
 		double R; 
