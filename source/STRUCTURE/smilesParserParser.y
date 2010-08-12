@@ -6,13 +6,7 @@ using namespace BALL;
 using namespace std;
 
 extern int yylex();
-extern void yyerror(char* s);
-
-/* ??? */
-/* There is some nasty problem with alloca under Intel/icc/Linux */
-/* so we use (inefficient) malloc instead. */
-#undef alloca
-#define alloca malloc
+extern void yyerror(char const* s);
 
 %}
 %union {
@@ -249,11 +243,10 @@ opt_chirality:
 	
 %%
 
-void yyerror(char* s)
+void yyerror(char const* s)
 {
 	throw Exception::ParseError(__FILE__, 0, 
 															SmilesParser::state.buffer, 
 															String(s) + String(" (at position ") 
 																+ String(SmilesParser::state.char_count) + String(")"));
 }
-
