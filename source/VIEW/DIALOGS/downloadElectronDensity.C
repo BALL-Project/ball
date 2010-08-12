@@ -61,8 +61,8 @@ namespace BALL
 				emdb_prefix_("ftp://ftp1.ebi.ac.uk/pub/databases/emdb/structures/EMD-"),
 				emdb_infix_("/map/"),
 				emdb_suffix_(".map.gz"),
-				progress_bar_(0),
 				current_reply_(0),
+				progress_bar_(0),
 				network_manager_(0)
 		{
 #ifdef BALL_VIEW_DEBUG
