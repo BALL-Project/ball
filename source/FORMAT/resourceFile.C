@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: resourceFile.C,v 1.31 2005/12/23 17:02:40 amoll Exp $
-//
 
 #include <BALL/FORMAT/resourceFile.h>
 
@@ -61,7 +59,6 @@ namespace BALL
 	}
 
 	ResourceEntry::~ResourceEntry()
-		
 	{
 		ResourceEntry::clear();
 	}
@@ -625,15 +622,12 @@ namespace BALL
 		return ((lower_index == upper_index) && (child_[lower_index]->key_ == key));
 	}      
 
-
-
 	ResourceFile::ResourceFile()
 		:	File(),
 			root_()
 	{
 	}
 
-	
 	ResourceFile::ResourceFile(const String& name)
 		throw(Exception::FileNotFound)
 		:	File(),
@@ -642,35 +636,15 @@ namespace BALL
 		open(name);
 	}
 
-	
-	ResourceFile::ResourceFile(const ResourceFile& resource_file)
-		throw(Exception::FileNotFound)
-		:	File(resource_file),
-			root_()
-	{
-		if (good())
-		{
-			*this >> *this;
-			if (eof())
-			{
-				::std::fstream::clear();
-			}
-		}
-	}
-
-	
 	ResourceFile::~ResourceFile()
-		
 	{
 		close();
 	}
-
 
 	void ResourceFile::clear() 
 	{
 		root_.clear();
 	}
-
 
 	bool ResourceFile::open(const String& name)
 	{

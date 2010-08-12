@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: resourceFile.h,v 1.27 2005/12/23 17:01:46 amoll Exp $
-//
 
 #ifndef BALL_FORMAT_RESOURCEFILE_H
 #define BALL_FORMAT_RESOURCEFILE_H
@@ -75,8 +73,7 @@ namespace BALL
 
 		/**	
 		*/
-		virtual ~ResourceEntry()
-			;
+		virtual ~ResourceEntry();
 
 		/**	
 		*/
@@ -536,7 +533,7 @@ namespace BALL
 			IteratorPosition		position_;
 			Index*							stack_index_;
 			Size								stack_capacity_;
-			Size								stack_size_ ;
+			Size								stack_size_;
 		};
 
 		friend class IteratorTraits_;
@@ -625,15 +622,9 @@ namespace BALL
 		ResourceFile(const String& name)
 			throw(Exception::FileNotFound);
 
-		/**	Copy constructor
-		*/
-		ResourceFile(const ResourceFile& file)
-			throw(Exception::FileNotFound);
-
 		/**	Destructor
 		*/
-		virtual ~ResourceFile()
-			;
+		virtual ~ResourceFile();
 
 		/**	Destroy method
 		*/
@@ -641,7 +632,7 @@ namespace BALL
 
 		/**	Clear method
 		*/
-		virtual void clear() ;
+		virtual void clear();
 
 		//@}
 
