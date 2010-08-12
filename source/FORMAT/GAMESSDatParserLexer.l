@@ -23,6 +23,7 @@ using namespace BALL;
 %s in_coord_line
 
 %option noyywrap
+%option nounput
 
 COMMENT	!
 BLOCK_END		[[:space:]]*$[eE][nN][dD]
