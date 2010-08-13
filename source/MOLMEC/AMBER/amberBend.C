@@ -88,20 +88,20 @@ namespace BALL
 				for (it1 = it2, ++it1; +it1 ; ++it1) 
 				{
 					if (it1->getType() == Bond::TYPE__HYDROGEN) continue; // Skip H-Bonds;
-					this_bend.atom1 = &Atom::getAttributes()[it2->getPartner(**atom_it)->getIndex()];
-					this_bend.atom2 = &Atom::getAttributes()[(*atom_it)->getIndex()];
-					this_bend.atom3 = &Atom::getAttributes()[it1->getPartner(**atom_it)->getIndex()];
+					this_bend.atom1 = it2->getPartner(**atom_it);
+					this_bend.atom2 = (*atom_it);
+					this_bend.atom3 = it1->getPartner(**atom_it);
 
 					if ((use_selection == false) ||
-					   (use_selection == true && 
-					   (this_bend.atom1->ptr->isSelected() 
-							&& this_bend.atom2->ptr->isSelected() 
-							&& this_bend.atom3->ptr->isSelected())))
+					   (use_selection == true &&
+					   (   this_bend.atom1->isSelected()
+							&& this_bend.atom2->isSelected()
+							&& this_bend.atom3->isSelected())))
 					{ 
 
-						Atom::Type atom_type_a1 = this_bend.atom1->type;
-						Atom::Type atom_type_a2 = this_bend.atom2->type;
-						Atom::Type atom_type_a3 = this_bend.atom3->type;
+						Atom::Type atom_type_a1 = this_bend.atom1->getType();
+						Atom::Type atom_type_a2 = this_bend.atom2->getType();
+						Atom::Type atom_type_a3 = this_bend.atom3->getType();
 
 						// check for parameters
 						if (!bend_parameters.assignParameters(this_bend.values, atom_type_a1, atom_type_a2, atom_type_a3))
@@ -114,9 +114,9 @@ namespace BALL
 									<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a1) << "-"
 									<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a2) << "-"
 									<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a3) 
-									<< " (atoms are: " << this_bend.atom1->ptr->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << "/" 
-									<< this_bend.atom2->ptr->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << "/" 
-									<< this_bend.atom3->ptr->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << ")" << endl;
+									<< " (atoms are: " << this_bend.atom1->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << "/" 
+									                   << this_bend.atom2->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << "/" 
+									                   << this_bend.atom3->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << ")" << endl;
 
 								getForceField()->getUnassignedAtoms().insert(it2->getPartner(**atom_it));
    							getForceField()->getUnassignedAtoms().insert(*atom_it);

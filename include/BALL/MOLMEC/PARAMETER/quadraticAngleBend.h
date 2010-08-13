@@ -43,9 +43,9 @@ namespace BALL
 
 		struct BALL_EXPORT Data
 		{
-			Atom::StaticAtomAttributes*	atom1;
-			Atom::StaticAtomAttributes*	atom2;
-			Atom::StaticAtomAttributes*	atom3;
+			Atom* atom1;
+			Atom* atom2;
+			Atom* atom3;
 			Values values;
 		};
 

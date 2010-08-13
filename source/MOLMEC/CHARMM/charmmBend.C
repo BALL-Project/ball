@@ -87,20 +87,20 @@ namespace BALL
 				for (it1 = it2, ++it1; +it1 ; ++it1 ) 
 				{
 					if (it1->getType() == Bond::TYPE__HYDROGEN) continue; // Skip H-bonds!				
-					this_bend.atom1 = &Atom::getAttributes()[(*it2).getPartner(**atom_it)->getIndex()];
-					this_bend.atom2 = &Atom::getAttributes()[(*atom_it)->getIndex()];
-					this_bend.atom3 = &Atom::getAttributes()[(*it1).getPartner(**atom_it)->getIndex()];
+					this_bend.atom1 = (*it2).getPartner(**atom_it);
+					this_bend.atom2 = (*atom_it);
+					this_bend.atom3 = (*it1).getPartner(**atom_it);
 
 					if (getForceField()->getUseSelection() == false ||
 					   (getForceField()->getUseSelection() == true && 
-					   (this_bend.atom1->ptr->isSelected() 
-							&& this_bend.atom2->ptr->isSelected() 
-							&& this_bend.atom3->ptr->isSelected())))
+					   (   this_bend.atom1->isSelected()
+							&& this_bend.atom2->isSelected()
+							&& this_bend.atom3->isSelected())))
 					{ 
 
-						Atom::Type atom_type_a1 = this_bend.atom1->type;
-						Atom::Type atom_type_a2 = this_bend.atom2->type;
-						Atom::Type atom_type_a3 = this_bend.atom3->type;
+						Atom::Type atom_type_a1 = this_bend.atom1->getType();
+						Atom::Type atom_type_a2 = this_bend.atom2->getType();
+						Atom::Type atom_type_a3 = this_bend.atom3->getType();
 
 						// retrieve the parameters. QuadraticAngleBend assumes
 						// that the second atom is the central atom, the order
@@ -109,8 +109,9 @@ namespace BALL
 						if (!bend_parameters_.assignParameters(values, atom_type_a1, atom_type_a2, atom_type_a3))
 						{
 							getForceField()->error() << "cannot find bend parameters for atoms "
-								<< this_bend.atom1->ptr->getFullName() << ", " << this_bend.atom2->ptr->getFullName() 
-								<< ", and " << this_bend.atom3->ptr->getFullName() << " (types are " 
+		            << this_bend.atom1->getFullName() << ", "
+								<< this_bend.atom2->getFullName() << ", and "
+								<< this_bend.atom3->getFullName() << " (types are "
 								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a1) << "-"
 								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a2) << "-"
 								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a3) << ")" << endl;

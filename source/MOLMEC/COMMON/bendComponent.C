@@ -35,13 +35,16 @@ namespace BALL
 		QuadraticAngleBend::Data* bend_end = &(bend_[bend_.size() - 1]);
 		for (; bend_it <= bend_end ; ++bend_it)
 		{
+			const Atom* atom1 = bend_it->atom1;
+			const Atom* atom2 = bend_it->atom2;
+			const Atom* atom3 = bend_it->atom3;
 			if (use_selection == false ||
-					(bend_it->atom1->ptr->isSelected()
-					 || bend_it->atom2->ptr->isSelected()
-					 || bend_it->atom3->ptr->isSelected()))
+					(   atom1->isSelected()
+					 || atom2->isSelected()
+					 || atom3->isSelected()))
 			{
-				v1 = bend_it->atom1->position - bend_it->atom2->position;
-				v2 = bend_it->atom3->position - bend_it->atom2->position;
+				v1 = atom1->getPosition() - atom2->getPosition();
+				v2 = atom3->getPosition() - atom2->getPosition();
 				double square_length = v1.getSquareLength() * v2.getSquareLength();
 
 				if (square_length == 0.0)
@@ -83,17 +86,21 @@ namespace BALL
 		bool use_selection = getForceField()->getUseSelection();
 		for (Size i = 0; i < bend_.size(); i++)
 		{
+			Atom* atom1 = bend_[i].atom1;
+			Atom* atom2 = bend_[i].atom2;
+			Atom* atom3 = bend_[i].atom3;
+
 			if ((use_selection == false)
-					|| bend_[i].atom1->ptr->isSelected()
-					|| bend_[i].atom2->ptr->isSelected()
-					|| bend_[i].atom3->ptr->isSelected())
+					|| atom1->isSelected()
+					|| atom2->isSelected()
+					|| atom3->isSelected())
 			{
 
 				// Calculate the vector between atom1 and atom2,
 				// test if the vector has length larger than 0 and normalize it
 
-				Vector3 v1 = bend_[i].atom1->position - bend_[i].atom2->position;
-				Vector3 v2 = bend_[i].atom3->position - bend_[i].atom2->position;
+				Vector3 v1 = atom1->getPosition() - atom2->getPosition();
+				Vector3 v2 = atom3->getPosition() - atom2->getPosition();
 				double length = v1.getLength();
 
 				if (length == 0.0) continue;
@@ -150,26 +157,26 @@ namespace BALL
 
 				if (use_selection == false)
 				{
-					bend_[i].atom1->force -= n1;
-					bend_[i].atom2->force += n1;
-					bend_[i].atom2->force -= n2;
-					bend_[i].atom3->force += n2;
+					atom1->getForce() -= n1;
+					atom2->getForce() += n1;
+					atom2->getForce() -= n2;
+					atom3->getForce() += n2;
 				}
 				else
 				{
-					if (bend_[i].atom1->ptr->isSelected())
+					if (atom1->isSelected())
 					{
-						bend_[i].atom1->force -= n1;
+						atom1->getForce() -= n1;
 					}
 
-					if (bend_[i].atom2->ptr->isSelected())
+					if (atom2->isSelected())
 					{
-						bend_[i].atom2->force += n1;
-						bend_[i].atom2->force -= n2;
+						atom2->getForce() += n1;
+						atom2->getForce() -= n2;
 					}
-					if (bend_[i].atom3->ptr->isSelected())
+					if (atom3->isSelected())
 					{
-						bend_[i].atom3->force += n2;
+						atom3->getForce() += n2;
 					}
 				}
 			}
