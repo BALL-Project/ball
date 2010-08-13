@@ -42,10 +42,10 @@ namespace BALL
 
 		struct SingleAmberTorsion 
 		{
-			Atom::StaticAtomAttributes*	atom1;
-			Atom::StaticAtomAttributes*	atom2;
-			Atom::StaticAtomAttributes*	atom3;
-			Atom::StaticAtomAttributes*	atom4;
+			Atom* atom1;
+			Atom* atom2;
+			Atom* atom3;
+			Atom* atom4;
 
 			float					V;
 			unsigned char	f;
@@ -65,10 +65,10 @@ namespace BALL
 
 			SingleAmberTorsion(CosineTorsion::SingleData& t)
 			{
-				atom1 = &Atom::getAttributes()[t.atom1->getIndex()];
-				atom2 = &Atom::getAttributes()[t.atom2->getIndex()];
-				atom3 = &Atom::getAttributes()[t.atom3->getIndex()];
-				atom4 = &Atom::getAttributes()[t.atom4->getIndex()];
+				atom1 = t.atom1;
+				atom2 = t.atom2;
+				atom3 = t.atom3;
+				atom4 = t.atom4;
 
 				V = t.values.V / t.values.n;
 				f = (unsigned char)t.values.f;

@@ -390,14 +390,19 @@ namespace BALL
 
 		for (; it != torsion_.end(); it++) 
 		{
+			const Atom* atom1 = it->atom1;
+			const Atom* atom2 = it->atom2;
+			const Atom* atom3 = it->atom3;
+			const Atom* atom4 = it->atom4;
+
 			if ((use_selection == false) ||
 					((use_selection == true) &&
-					(it->atom1->ptr->isSelected() || it->atom2->ptr->isSelected() 
-					 || it->atom3->ptr->isSelected() || it->atom4->ptr->isSelected())))
+					(   atom1->isSelected() || atom2->isSelected()
+					 || atom3->isSelected() || atom4->isSelected())))
 			{
-				a21 = it->atom1->position - it->atom2->position;
-				a23 = it->atom3->position - it->atom2->position;
-				a34 = it->atom4->position - it->atom3->position;
+				a21 = atom1->getPosition() - atom2->getPosition();
+				a23 = atom3->getPosition() - atom2->getPosition();
+				a34 = atom4->getPosition() - atom3->getPosition();
 
 				cross2321 = a23 % a21;
 				cross2334 = a23 % a34;
@@ -445,17 +450,22 @@ namespace BALL
 
 		for ( ; it != torsion_.end(); it++) 
 		{
+			Atom* atom1 = it->atom1;
+			Atom* atom2 = it->atom2;
+			Atom* atom3 = it->atom3;
+			Atom* atom4 = it->atom4;
+
 			if ((use_selection == false) ||
  					((use_selection == true) &&
-					(it->atom1->ptr->isSelected() || it->atom2->ptr->isSelected() 
-					 || it->atom3->ptr->isSelected() || it->atom4->ptr->isSelected())))
+					(   atom1->isSelected() || atom2->isSelected()
+					 || atom3->isSelected() || atom4->isSelected())))
 			{
-				ab = it->atom1->position - it->atom2->position;
+				ab = atom1->getPosition() - atom2->getPosition();
 				double length_ab = ab.getLength();
-				Vector3 ba = it->atom2->position - it->atom1->position;
-				cb = it->atom3->position - it->atom2->position;
+				Vector3 ba = atom2->getPosition() - atom1->getPosition();
+				cb = atom3->getPosition() - atom2->getPosition();
 				double length_cb = cb.getLength();
-				dc = it->atom4->position - it->atom3->position;
+				dc = atom4->getPosition() - atom3->getPosition();
 				double length_dc = dc.getLength();
 
 				if (length_ab != 0 && length_cb != 0 && length_dc != 0) 
@@ -493,25 +503,25 @@ namespace BALL
 							dEdphi = -dEdphi;
 						}
 
-						Vector3 ca = it->atom3->position - it->atom1->position;
-						Vector3 db = it->atom4->position - it->atom2->position;
+						Vector3 ca = atom3->getPosition() - atom1->getPosition();
+						Vector3 db = atom4->getPosition() - atom2->getPosition();
 						Vector3 dEdt =   (float)(dEdphi / (length_t2 * cb.getLength())) * (t % cb);
 						Vector3 dEdu = - (float)(dEdphi / (length_u2 * cb.getLength())) * (u % cb);
 	
 
 						if (use_selection == false)
 						{
-							it->atom1->force += dEdt % cb;
-							it->atom2->force += ca % dEdt + dEdu % dc;
-							it->atom3->force += dEdt % ba + db % dEdu;
-							it->atom4->force += dEdu % cb; 
-						} 
-						else 
+							atom1->getForce() += dEdt % cb;
+							atom2->getForce() += ca % dEdt + dEdu % dc;
+							atom3->getForce() += dEdt % ba + db % dEdu;
+							atom4->getForce() += dEdu % cb;
+						}
+						else
 						{
-							if (it->atom1->ptr->isSelected()) it->atom1->force += dEdt % cb;
-							if (it->atom2->ptr->isSelected()) it->atom2->force += ca % dEdt + dEdu % dc;
-							if (it->atom3->ptr->isSelected()) it->atom3->force += dEdt % ba + db % dEdu;
-							if (it->atom4->ptr->isSelected()) it->atom4->force += dEdu % cb;
+							if (atom1->isSelected()) atom1->getForce() += dEdt % cb;
+							if (atom2->isSelected()) atom2->getForce() += ca % dEdt + dEdu % dc;
+							if (atom3->isSelected()) atom3->getForce() += dEdt % ba + db % dEdu;
+							if (atom4->isSelected()) atom4->getForce() += dEdu % cb;
 						}
 					}
 				}
