@@ -101,8 +101,6 @@ SET(BALL_CONCEPTS_TEST
 SET(BALL_KERNEL_TESTS
 	PTE_test
 	Atom_test
-	AtomStaticAtomAttributes_test
-	AtomAttributeVector_test
 	Bond_test
 	AtomContainer_test
 	Fragment_test

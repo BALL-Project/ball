@@ -19,92 +19,38 @@ using namespace::std;
 
 namespace BALL
 {
-
-	Atom::AttributeVector Atom::static_attributes_;
-	Atom::AtomIndexList   Atom::free_list_;
-	PreciseTime           Atom::attributes_changed_time_;
-
-	Atom::AttributeVector::~AttributeVector()
-	{
-	}
-
-	void Atom::StaticAtomAttributes::clear()
-	{
-		formal_charge = BALL_ATOM_DEFAULT_FORMAL_CHARGE;
-		charge = BALL_ATOM_DEFAULT_CHARGE;
-		type = BALL_ATOM_DEFAULT_TYPE;
-		position.set(BALL_ATOM_DEFAULT_POSITION);
-		velocity.set(BALL_ATOM_DEFAULT_VELOCITY);
-		force.set(BALL_ATOM_DEFAULT_FORCE);
-	}
-
-	void Atom::StaticAtomAttributes::swap(Atom::StaticAtomAttributes& attr)
-	{
-		std::swap(formal_charge, attr.formal_charge);
-		std::swap(charge, attr.charge);
-		std::swap(type, attr.type);
-		std::swap(ptr, attr.ptr);
-		position.swap(attr.position);
-		velocity.swap(attr.velocity);
-		force.swap(attr.force);
-	}
-
-	void Atom::StaticAtomAttributes::set(Atom::StaticAtomAttributes& attr)
-	{
-		formal_charge = attr.formal_charge;
-		charge = attr.charge;
-		type = attr.type;
-		// Do not assign the back pointer!
-		// ptr = attr.ptr;
-		position = attr.position;
-		velocity = attr.velocity;
-		force = attr.force;
-	}
-
-
-	Atom::StaticAtomAttributes& Atom::StaticAtomAttributes::operator =
-		(const Atom::StaticAtomAttributes& attr)
-	{
-		formal_charge = attr.formal_charge;
-		charge = attr.charge;
-		type = attr.type;
-		// Do not assign the back pointer!
-		// ptr = attr.ptr;
-		position = attr.position;
-		velocity = attr.velocity;
-		force = attr.force;
-
-		return *this;
-	}
-
 	Atom::Atom()
-		:	Composite(),
-			PropertyManager(),
-			index_(Atom::nextIndex_()),
-			element_(BALL_ATOM_DEFAULT_ELEMENT),
-			name_(BALL_ATOM_DEFAULT_NAME),
-			type_name_(BALL_ATOM_DEFAULT_TYPE_NAME),
-			radius_(BALL_ATOM_DEFAULT_RADIUS),
-			number_of_bonds_(0)
+		: Composite(),
+		  PropertyManager(),
+		  name_(BALL_ATOM_DEFAULT_NAME),
+		  type_name_(BALL_ATOM_DEFAULT_TYPE_NAME),
+		  element_(BALL_ATOM_DEFAULT_ELEMENT),
+		  radius_(BALL_ATOM_DEFAULT_RADIUS),
+		  type_(BALL_ATOM_DEFAULT_TYPE),
+		  number_of_bonds_(0),
+		  formal_charge_(BALL_ATOM_DEFAULT_FORMAL_CHARGE),
+		  position_(BALL_ATOM_DEFAULT_POSITION),
+		  charge_(BALL_ATOM_DEFAULT_CHARGE),
+		  velocity_(BALL_ATOM_DEFAULT_VELOCITY),
+		  force_(BALL_ATOM_DEFAULT_FORCE)
 	{
-		// set the static attributes to their default values
-		static_attributes_[index_].clear();
-		static_attributes_[index_].ptr = this;
 	}
 
 	Atom::Atom(const Atom& atom, bool deep)
-		:	Composite(atom, deep),
-			PropertyManager(atom),
-			index_(Atom::nextIndex_()),
-			element_(atom.element_),
-			name_(atom.name_),
-			type_name_(atom.type_name_),
-			radius_(atom.radius_),
-			number_of_bonds_(0)
+		: Composite(atom, deep),
+		  PropertyManager(atom),
+		  name_(atom.name_),
+		  type_name_(atom.type_name_),
+		  element_(atom.element_),
+		  radius_(atom.radius_),
+		  type_(atom.type_),
+			number_of_bonds_(0),
+		  formal_charge_(atom.formal_charge_),
+		  position_(atom.position_),
+		  charge_(atom.charge_),
+		  velocity_(atom.velocity_),
+		  force_(atom.force_)
 	{
-		// copy the static attributes
-		static_attributes_[index_] = atom.static_attributes_[atom.index_];
-		static_attributes_[index_].ptr = this;
 	}
 
 	Atom::Atom
@@ -112,58 +58,25 @@ namespace BALL
 			 const String& type_name, Atom::Type type,
 			 const Vector3& position, const Vector3& velocity,
 			 const Vector3& force, float charge, float radius, Index formal_charge)
-		:	Composite(),
-			PropertyManager(),
-			index_(Atom::nextIndex_()),
-			element_(&element),
-			name_(name),
-			type_name_(type_name),
-			radius_(radius),
-			number_of_bonds_(0)
+		: Composite(),
+		  PropertyManager(),
+		  name_(name),
+		  type_name_(type_name),
+		  element_(&element),
+		  radius_(radius),
+		  type_(type),
+		  number_of_bonds_(0),
+		  formal_charge_(formal_charge),
+		  position_(position),
+		  charge_(charge),
+		  velocity_(velocity),
+		  force_(force)
 	{
-		static_attributes_[index_].formal_charge = formal_charge;
-		static_attributes_[index_].charge = charge;
-		static_attributes_[index_].type = type;
-		static_attributes_[index_].force = force;
-		static_attributes_[index_].velocity = velocity;
-		static_attributes_[index_].position = position;
-		static_attributes_[index_].ptr = this;
 	}
 
 	Atom::~Atom()
 	{
 		destroy();
-		freeIndex_(index_);
-	}
-
-	Position Atom::nextIndex_()
-	{
-		if (free_list_.empty() || static_attributes_.empty())
-		{
-			// mark time of last resize of the attributes vector
-			attributes_changed_time_ = PreciseTime::now();
-			// double the size of the array
-			size_t i = static_attributes_.size();
-			static_attributes_.resize(std::max((size_t)10000, 2 * i));
-
-			// add the free indices to the free list
-			for (; i < static_attributes_.size(); ++i)
-			{
-				free_list_.push_back((Position)i);
-				static_attributes_[i].ptr = 0;
-			}
-		}
-
-		// return the next free index
-		Position index = free_list_.front();
-		free_list_.pop_front();
-		return index;
-	}
-
-	void Atom::freeIndex_(Position index)
-	{
-		free_list_.push_front(index);
-		static_attributes_[index].ptr = 0;
 	}
 
 	void Atom::clear()
@@ -193,16 +106,16 @@ namespace BALL
 														 "PropertyManager");
 
 			pm.writePrimitive((String)element_->getSymbol(), "element_");
-			pm.writePrimitive(static_attributes_[index_].formal_charge, "formal_charge_");
-			pm.writePrimitive(static_attributes_[index_].charge, "charge_");
+			pm.writePrimitive(formal_charge_, "formal_charge_");
+			pm.writePrimitive(charge_, "charge_");
 			pm.writePrimitive(radius_, "radius_");
 			pm.writePrimitive(name_, "name_");
 			pm.writePrimitive(type_name_, "type_name_");
-			pm.writePrimitive((Index)static_attributes_[index_].type, "type_");
+			pm.writePrimitive((Index)type_, "type_");
 
-			pm.writeStorableObject(static_attributes_[index_].position, "position_");
-			pm.writeStorableObject(static_attributes_[index_].velocity, "velocity_");
-			pm.writeStorableObject(static_attributes_[index_].force, "force_");
+			pm.writeStorableObject(position_, "position_");
+			pm.writeStorableObject(velocity_, "velocity_");
+			pm.writeStorableObject(force_, "force_");
 
 			pm.writePrimitive(number_of_bonds_, "number_of_bonds_");
 			pm.writeObjectPointerArray((Bond**)bond_, "bond_", (Size)number_of_bonds_);
@@ -222,18 +135,18 @@ namespace BALL
 		String s;
 		pm.readPrimitive(s, "element_");
 		element_ = &PTE[s];
-		pm.readPrimitive(static_attributes_[index_].formal_charge, "formal_charge_");
-		pm.readPrimitive(static_attributes_[index_].charge, "charge_");
+		pm.readPrimitive(formal_charge_, "formal_charge_");
+		pm.readPrimitive(charge_, "charge_");
 		pm.readPrimitive(radius_, "radius_");
 		pm.readPrimitive(name_, "name_");
 		pm.readPrimitive(type_name_, "type_name_");
 		Index tmp_type;
 		pm.readPrimitive(tmp_type, "type_");
-		static_attributes_[index_].type = (Atom::Type)tmp_type;
+		type_ = (Atom::Type)tmp_type;
 
-		pm.readStorableObject(static_attributes_[index_].position, "position_");
-		pm.readStorableObject(static_attributes_[index_].velocity, "velocity_");
-		pm.readStorableObject(static_attributes_[index_].force, "force_");
+		pm.readStorableObject(position_, "position_");
+		pm.readStorableObject(velocity_, "velocity_");
+		pm.readStorableObject(force_, "force_");
 
 		pm.readPrimitive(number_of_bonds_, "number_of_bonds_");
 		Size n;
@@ -254,10 +167,13 @@ namespace BALL
     name_ = atom.name_;
     type_name_ = atom.type_name_;
     radius_ = atom.radius_;
+		type_ = atom.type_;
     number_of_bonds_ = 0;
-
-		// copy static attributes
-    static_attributes_[index_] = static_attributes_[atom.index_];
+		formal_charge_ = atom.formal_charge_;
+		position_ = atom.position_;
+		charge_ = atom.charge_;
+		velocity_ = atom.velocity_;
+		force_ = atom.force_;
   }
 
 	Atom& Atom::operator = (const Atom& atom)
@@ -265,14 +181,17 @@ namespace BALL
 		Composite::operator =(atom);
 		PropertyManager::operator = (atom);
 
-		element_ = atom.element_;
 		name_ = atom.name_;
 		type_name_ = atom.type_name_;
+		element_ = atom.element_;
 		radius_ = atom.radius_;
 		number_of_bonds_ = 0;
-
-		// copy static attributes
-		static_attributes_[index_] = static_attributes_[atom.index_];
+		type_ = atom.type_;
+		formal_charge_ = atom.formal_charge_;
+		position_ = atom.position_;
+		charge_ = atom.charge_;
+		velocity_ = atom.velocity_;
+		force_ = atom.force_;
 
 		return *this;
 	}
@@ -301,14 +220,13 @@ namespace BALL
 			atom.bond_[i] = temp_bond;
 		}
 
-		char temp_c = number_of_bonds_;
-		number_of_bonds_ = atom.number_of_bonds_;
-		atom.number_of_bonds_ = temp_c;
-
-		// swap static attributes by swapping the indices
-		Position tmp_index = index_;
-		index_ = atom.index_;
-		atom.index_ = tmp_index;
+		std::swap(type_, atom.type_);
+		std::swap(number_of_bonds_, atom.number_of_bonds_);
+		std::swap(formal_charge_, atom.formal_charge_);
+		std::swap(position_, atom.position_);
+		std::swap(charge_, atom.charge_);
+		std::swap(velocity_, atom.velocity_);
+		std::swap(force_, atom.force_);
 	}
 
 	Molecule* Atom::getMolecule()
@@ -634,10 +552,10 @@ namespace BALL
 		s << "  element: " << *element_ << endl;
 
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  formal charge: " << static_attributes_[index_].formal_charge << endl;
+		s << "  formal charge: " << formal_charge_ << endl;
 
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  charge: " << static_attributes_[index_].charge << endl;
+		s << "  charge: " << charge_ << endl;
 
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  name: " << name_ << endl;
@@ -646,19 +564,19 @@ namespace BALL
 		s << "  type name: " << type_name_ << endl;
 
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  position: " << static_attributes_[index_].position << endl;
+		s << "  position: " << position_ << endl;
 
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  radius: " << radius_ << endl;
 
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  type: " << static_attributes_[index_].type << endl;
+		s << "  type: " << type_ << endl;
 
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  velocity: " << static_attributes_[index_].velocity << endl;
+		s << "  velocity: " << velocity_ << endl;
 
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  force: " << static_attributes_[index_].force << endl;
+		s << "  force: " << force_ << endl;
 
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  number of bonds: " << (int)number_of_bonds_ << endl;
@@ -699,12 +617,16 @@ namespace BALL
 
 	void Atom::clear_()
 	{
-		element_ = BALL_ATOM_DEFAULT_ELEMENT;
 		name_ = BALL_ATOM_DEFAULT_NAME;
 		type_name_ = BALL_ATOM_DEFAULT_TYPE_NAME;
+		element_ = BALL_ATOM_DEFAULT_ELEMENT;
 		radius_ = BALL_ATOM_DEFAULT_RADIUS;
-
-		static_attributes_[index_].clear();
+		type_ = BALL_ATOM_DEFAULT_TYPE;
+		formal_charge_ = BALL_ATOM_DEFAULT_FORMAL_CHARGE;
+		position_.set(BALL_ATOM_DEFAULT_POSITION);
+		charge_ = BALL_ATOM_DEFAULT_CHARGE;
+		velocity_.set(BALL_ATOM_DEFAULT_VELOCITY);
+		force_.set(BALL_ATOM_DEFAULT_FORCE);
 
 		destroyBonds();
 	}
@@ -721,71 +643,6 @@ namespace BALL
 			}
 		}
 	}
-
-	Position Atom::compact(const Atom::AtomIndexList& indices)
-		throw(Exception::OutOfRange)
-	{
-		// create a sorted copy of the indices
-		AtomIndexList sorted_indices(indices);
-		sorted_indices.sort();
-
-		// Remove all indices in the range of [i...i+indices.size()],
-		// where i is the smalles index in the list. Those entries
-		// are already in the correct range and won't have to be
-		// reassigned.
-		Position first_pos = sorted_indices.front();
-
-
-		// sort the free list to achieve higher locality 
-		free_list_.sort();
-
-		Atom::AtomIndexList::const_iterator idx_it = indices.begin();
-		Atom::AtomIndexList::iterator free_it = free_list_.begin();
-		for (Position i = first_pos; (idx_it != indices.end()) && (i < static_attributes_.size()); ++i, ++idx_it)
-		{
-			// The atom is already where it's supposed to be. Fine.
-			if (*idx_it == i)
-			{
-				continue;
-			}
-
-			if (*idx_it >= static_attributes_.size())
-			{
-				throw Exception::OutOfRange(__FILE__, __LINE__);
-			}
-
-			// Make sure that we are at the right position in the free list.
-			while (free_it != free_list_.end() && (*free_it < i))
-			{
-				++free_it;
-			}
-
-			// 
-			if ((free_it != free_list_.end()) && (i == *free_it))
-			{
-				// Copy the contents of the next atom to the current
-				// position (which is free) and adjust the atom's index.
-				static_attributes_[i].set(static_attributes_[*idx_it]);
-				static_attributes_[i].ptr->index_ = i;
-
-				// Mark the old position as free.
-				*free_it = *idx_it;
-
-				// Resort the free_list and re-initialize the invalidated iterator.
-				free_list_.sort();
-				free_it = free_list_.begin();
-			}
-			else
-			{
-				// Default case: we just swap the atoms and their index_ attributes.
-				static_attributes_[i].swap(static_attributes_[*idx_it]);
-				std::swap(static_attributes_[i].ptr->index_, static_attributes_[*idx_it].ptr->index_);
-			}
-		}
-
-		return first_pos;
-	}
-
 
 # ifdef BALL_NO_INLINE_FUNCTIONS
 #   include <BALL/KERNEL/atom.iC>

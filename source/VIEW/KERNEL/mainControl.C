@@ -650,20 +650,13 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			{
 				Representation* rep = *reps_it;
 
-				if (rep->getModelBuildTime() < Atom::getAttributesModificationTime())
+				if (model_information_->modelMustBeRebuild(rep->getModelType()) || force)
 				{
-					rep->update(true);
+					rep->update(rebuild);
 				}
-				else 
+				else
 				{
-					if (model_information_->modelMustBeRebuild(rep->getModelType()) || force)
-					{
-						rep->update(rebuild);
-					}
-					else
-					{
-						rep->update(false);
-					}
+					rep->update(false);
 				}
 			}
 

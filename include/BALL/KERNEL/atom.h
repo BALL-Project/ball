@@ -476,6 +476,11 @@ namespace BALL
 			/** Return the atom velocity.
 					BALL uses units of \f$ {\AA}/ps \f$ for the velocity.
 			*/
+			Vector3& getVelocity();
+
+			/** Return the atom velocity.
+					BALL uses units of \f$ {\AA}/ps \f$ for the velocity.
+			*/
 			const Vector3& getVelocity() const;
 
 			/** Assign the atom's force vevtor.
@@ -929,83 +934,10 @@ namespace BALL
 		//@{
 
 		///
-		class BALL_EXPORT StaticAtomAttributes
-		{
-			public:
-			///
-			Index           formal_charge;
-			///
-			float           charge;
-			///
-			Vector3         position;
-			///
-			Type            type;
-			///
-			Vector3         velocity;
-			///
-			Vector3         force;
-			///
-			Atom*           ptr;
-
-			/// Set the attributes to their default values
-			void clear();
-
-			/** Swap the contents of the two attributes.
-					Adjusts the <tt>ptr</tt> and <tt>index_</tt> members of
-					\link StaticAtomAttributes StaticAtomAttributes \endlink  and  
-					\link Atom Atom \endlink .
-			*/
-			void swap(StaticAtomAttributes& attr);
-
-			/** Assign the contents from a different atom attribute.
-			*/
-			void set(StaticAtomAttributes& attr);
-
-			/** Assign the contents from a different atom attribute.
-			*/
-			StaticAtomAttributes& operator = (const StaticAtomAttributes& attr);
-		};
-
-		///
-		class BALL_EXPORT AttributeVector
-			:	public std::vector<StaticAtomAttributes>
-		{
-			public:
-			~AttributeVector();
-		};
-
-		///
 		typedef std::list<Atom*> AtomPtrList;
 
 		///
 		typedef std::list<Position> AtomIndexList;
-
-		/**	Compact memory for a list of atoms.
-				This method packs the static attributes of the atom in the given 
-				range into a contiguous memory segment in order to increase 
-				locality.
-		*/
-		static Position compact(const AtomIndexList& indices)
-			throw(Exception::OutOfRange);
-
-		/** Access to the static attribute array
-		*/
-		static AttributeVector& getAttributes();
-
-		/** Return the index in the static attribute array
-		*/
-		Position getIndex() const;
-
-		StaticAtomAttributes* getAttributePtr();
-		const StaticAtomAttributes* getAttributePtr() const;
-
-		/** Get the time, when the attributes vector was last modified.
-		 		This needed for the GeometricObject 's in VIEW, because they
-				store pointer to the position of atoms. These have to be updated,
-				after a resize of the vector.
-		*/
-		static const PreciseTime& getAttributesModificationTime()
-			{ return attributes_changed_time_;}
 
 		protected:
 
@@ -1015,37 +947,37 @@ namespace BALL
 		//@{
 
 		///
-		static AttributeVector	static_attributes_;
-
-		///
 		static AtomIndexList		free_list_;
 
-		/// time of the last resize of the attributes vector
-		static PreciseTime attributes_changed_time_;
-
-		///
-		Position        index_;
-		///
-		const Element*  element_;
 		///
 		String          name_;
 		///
 		String          type_name_;
 		///
+		const Element*  element_;
+		///
 		float           radius_;
+		///
+		Type            type_;
 		///
 		unsigned char		number_of_bonds_;
 		///
 		Bond*						bond_[MAX_NUMBER_OF_BONDS];
+		///
+		Index           formal_charge_;
+		///
+		Vector3         position_;
+		///
+		float           charge_;
+		///
+		Vector3         velocity_;
+		///
+		Vector3         force_;
+		///
 		//@}
 
+
 		private:
-
-		/// Return the next unallocated index in the static attribute array
-		static Position nextIndex_();
-
-		/// Free an index in the static attribute array
-		static void freeIndex_(Position index);
 
 		///
 		void clear_();

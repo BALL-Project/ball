@@ -311,8 +311,7 @@ namespace BALL
 					list<const Composite*>::const_iterator it = composites_.begin();
 					for (; it!= composites_.end(); it++)
 					{
-						if (   ((*it)->getModificationTime() > model_build_time_)
-						    || (Atom::getAttributesModificationTime() > model_build_time_))
+						if ((*it)->getModificationTime() > model_build_time_)
 						{
 							rebuild_ = true;
 							break;
@@ -518,9 +517,7 @@ namespace BALL
 
 		bool Representation::needsUpdate() const
 		{
-			if (needs_update_ || 
-					changed_color_processor_ ||
-					getModelBuildTime() < Atom::getAttributesModificationTime())
+			if (needs_update_ || changed_color_processor_)
 			{
 				return true;
 			}

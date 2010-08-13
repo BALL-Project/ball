@@ -137,32 +137,6 @@ CHECK(Vector3& getForce() throw())
 	TEST_EQUAL(a.getForce(), Vector3(1,2,3))
 RESULT
 
-// the static attributes
-CHECK(Position getIndex() const)
-	Atom* a1_ptr = new Atom;
-	Atom* a2_ptr = new Atom;
-	TEST_NOT_EQUAL(a1_ptr->getIndex(), a2_ptr->getIndex())
-	delete a1_ptr;
-	delete a2_ptr;
-RESULT
-
-CHECK(StaticAtomAttributes* getAttributePtr())
-	Atom* a1_ptr = new Atom;
-	Atom* a2_ptr = new Atom;
-	TEST_NOT_EQUAL(a1_ptr->getAttributePtr(), 0)
-	TEST_NOT_EQUAL(a2_ptr->getAttributePtr(), 0)
-	TEST_NOT_EQUAL(a2_ptr->getAttributePtr(), a1_ptr->getAttributePtr())
-	TEST_EQUAL(a1_ptr->getAttributePtr(), &(Atom::getAttributes()[a1_ptr->getIndex()]))
-	TEST_EQUAL(a2_ptr->getAttributePtr(), &(Atom::getAttributes()[a2_ptr->getIndex()]))
-	TEST_EQUAL((a1_ptr->getIndex() < Atom::getAttributes().size()), true)
-	TEST_EQUAL((a2_ptr->getIndex() < Atom::getAttributes().size()), true)
-
-	TEST_EQUAL(a1_ptr->getAttributePtr()->ptr, a1_ptr)
-	TEST_EQUAL(a2_ptr->getAttributePtr()->ptr, a2_ptr)
-	delete a1_ptr;
-	delete a2_ptr;
-RESULT
-			
 CHECK(Size countBonds() const throw())
 	TEST_EQUAL(atom->countBonds(), 0)
 RESULT
@@ -247,7 +221,6 @@ CHECK(BALL_CREATE_DEEP(Atom))
 	TEST_EQUAL(atom2->getType(), atom->getType())
 	TEST_EQUAL(atom2->countBonds(), atom->countBonds())
 	TEST_NOT_EQUAL(atom2->getHandle(), atom->getHandle())
-	TEST_NOT_EQUAL(atom2->getAttributePtr(), atom->getAttributePtr())
 RESULT
 
 CHECK(void destroy() throw())
@@ -277,8 +250,6 @@ CHECK(void set(const Atom& atom, bool deep = true) throw())
 	TEST_EQUAL(atom2->getType(), atom->getType())
 	TEST_EQUAL(atom2->countBonds(), atom->countBonds())
 	TEST_NOT_EQUAL(atom2->getHandle(), atom->getHandle())
-	TEST_NOT_EQUAL(atom2->getAttributePtr(), atom->getAttributePtr())
-	TEST_NOT_EQUAL(atom2->getAttributePtr()->ptr, atom->getAttributePtr()->ptr)
 RESULT
 
 CHECK(Atom& operator = (const Atom& atom) throw())
@@ -294,8 +265,6 @@ CHECK(Atom& operator = (const Atom& atom) throw())
 	TEST_EQUAL(atom2->getType(), atom->getType())
 	TEST_EQUAL(atom2->countBonds(), atom->countBonds())
 	TEST_NOT_EQUAL(atom2->getHandle(), atom->getHandle())
-	TEST_NOT_EQUAL(atom2->getAttributePtr(), atom->getAttributePtr())
-	TEST_NOT_EQUAL(atom2->getAttributePtr()->ptr, atom->getAttributePtr()->ptr)
 RESULT
 
 CHECK(void get(Atom& atom, bool deep = true) const throw())
@@ -311,8 +280,6 @@ CHECK(void get(Atom& atom, bool deep = true) const throw())
 	TEST_EQUAL(atom2->getType(), atom->getType())
 	TEST_EQUAL(atom2->countBonds(), atom->countBonds())
 	TEST_NOT_EQUAL(atom2->getHandle(), atom->getHandle())
-	TEST_NOT_EQUAL(atom2->getAttributePtr(), atom->getAttributePtr())
-	TEST_NOT_EQUAL(atom2->getAttributePtr()->ptr, atom->getAttributePtr()->ptr)
 RESULT
 delete atom2;
 atom2 = 0;
@@ -507,44 +474,6 @@ CHECK(bool operator != (const Atom& atom) const throw())
 
 	TEST_EQUAL(a2 != a2, false)
 RESULT
-
-CHECK(static Position compact(const AtomIndexList& indices) throw(Exception::OutOfRange))
-	Atom::AtomIndexList block;
-	Atom::AtomPtrList ptrs;
-	std::list<Atom*> atoms;
-
-	// create 50 atoms and remember the index of every second of those
-	Position min_idx = Atom::getAttributes().size();
-	for (Position i = 0; i < 50; i += 2)
-	{
-		atoms.push_back(new Atom);
-		atoms.back()->setType(i);
-		atoms.push_back(new Atom);
-		atoms.back()->setType(i + 1);
-		block.push_back(atoms.back()->getIndex());
-		ptrs.push_back(atoms.back());
-		min_idx = std::min(min_idx, atoms.back()->getIndex());
-		STATUS(atoms.back()->getType() << " - " << atoms.back()->getIndex())
-	}
-	
-	Position first_pos = Atom::compact(block);
-	TEST_EQUAL((first_pos < Atom::getAttributes().size()), true)
-	Atom::AtomPtrList::const_iterator ptr_it = ptrs.begin();	
-	for (; ptr_it != ptrs.end(); ++ptr_it)
-	{
-		TEST_EQUAL((*ptr_it)->getIndex() >= first_pos, true)
-		TEST_EQUAL((*ptr_it)->getIndex() < (first_pos + block.size()), true)
-		STATUS((*ptr_it)->getType() << " - " << (*ptr_it)->getIndex())
-	}
-	std::list<Atom*>::iterator it = atoms.begin();
-	for (; it != atoms.end(); ++it)
-	{
-		delete *it;
-	}
-RESULT
-delete atom3;
-delete atom4;
-
 
 CHECK([EXTRA] bond iteration)
 	Atom* a1 = new Atom;
@@ -741,18 +670,6 @@ CHECK(const SecondaryStructure* getSecondaryStructure() const throw())
 	ss.insert(r);
 	r.append(*(PDBAtom*) &a);
 	TEST_EQUAL(a.getSecondaryStructure(), &ss)
-RESULT
-
-CHECK(const StaticAtomAttributes* getAttributePtr() const)
-	Atom a;
-	a.setCharge(1.23);
-	TEST_NOT_EQUAL(a.getAttributePtr(), 0)
-	TEST_REAL_EQUAL(a.getAttributePtr()->charge, 1.23)
-RESULT
-
-CHECK(static AttributeVector& getAttributes())
-	Atom a;
-	TEST_EQUAL(a.getAttributes().size() > 0, true)
 RESULT
 
 CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
