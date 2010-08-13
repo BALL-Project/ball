@@ -452,6 +452,17 @@ ENDFOREACH(i)
 ADD_CUSTOM_TARGET(UTILITIES EXCLUDE_FROM_ALL)
 ADD_DEPENDENCIES(UTILITIES ${UTILITIES_EXECUTABLES})
 
+###### add MMFF94 test targets ##########
+SET(MMFF94_EXECUTABLES)
+INCLUDE(source/APPLICATIONS/MMFF94/BALLMMFF94.cmake)
+
+FOREACH(i ${MMFF94_EXECUTABLES})
+	ADD_EXECUTABLE(${i} source/APPLICATIONS/MMFF94/${i}.C)
+	TARGET_LINK_LIBRARIES(${i} BALL VIEW)
+ENDFOREACH(i)
+ADD_CUSTOM_TARGET(MMFF94 EXCLUDE_FROM_ALL)
+ADD_DEPENDENCIES(MMFF94 ${MMFF94_EXECUTABLES})
+
 ########################################################
 ###    Documentation    														 ###
 ########################################################
