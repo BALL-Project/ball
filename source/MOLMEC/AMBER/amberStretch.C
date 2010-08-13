@@ -98,8 +98,8 @@ namespace BALL
 						Atom::Type atom_type_A = bond.getFirstAtom()->getType();
 						Atom::Type atom_type_B = bond.getSecondAtom()->getType();
 						stretch_.push_back(QuadraticBondStretch::Data());
-						stretch_.back().atom1 = bond.getFirstAtom()->getIndex();
-						stretch_.back().atom2 = bond.getSecondAtom()->getIndex();
+						stretch_.back().atom1 = bond.getFirstAtom();
+						stretch_.back().atom2 = bond.getSecondAtom();
 			
 						// Pay attention to the symmetric database input
 						if (stretch_parameters_.hasParameters(atom_type_A, atom_type_B)) 
@@ -124,8 +124,8 @@ namespace BALL
 								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_A) << "-" 
 								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_B)
 								<< " (atoms are: " 
-								<< Atom::getAttributes()[stretch_.back().atom1].ptr->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) 
-								<< "/" << Atom::getAttributes()[stretch_.back().atom2].ptr->getFullName(
+								<< stretch_.back().atom1->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) 
+								<< "/" << stretch_.back().atom2->getFullName(
 										Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << ")" << endl;
 
 							// we don't want to get any force or energy component

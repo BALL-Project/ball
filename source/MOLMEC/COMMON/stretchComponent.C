@@ -28,11 +28,11 @@ namespace BALL
 		// iterate over all bonds, sum up the energies
 		for (Size i = 0; i < stretch_.size(); i++)
 		{
-			const Atom::StaticAtomAttributes& at1 = Atom::getAttributes()[stretch_[i].atom1];
-			const Atom::StaticAtomAttributes& at2 = Atom::getAttributes()[stretch_[i].atom2];
-			if (!use_selection || at1.ptr->isSelected() || at2.ptr->isSelected())
+			const Atom* atom1 = stretch_[i].atom1;
+			const Atom* atom2 = stretch_[i].atom2;
+			if (!use_selection || atom1->isSelected() || atom2->isSelected())
 			{
-				double distance = at1.position.getDistance(at2.position);
+				double distance = atom1->getDistance(*atom2);
 				energy_ += stretch_[i].values.k * (distance - stretch_[i].values.r0) * (distance - stretch_[i].values.r0);
 			}
 		}
@@ -53,9 +53,9 @@ namespace BALL
 		// iterate over all bonds, update the forces
 		for (Size i = 0 ; i < stretch_.size(); i++)
 		{
-			Atom::StaticAtomAttributes& at1 = Atom::getAttributes()[stretch_[i].atom1];
-			Atom::StaticAtomAttributes& at2 = Atom::getAttributes()[stretch_[i].atom2];
-			Vector3 direction(at1.position - at2.position);
+			Atom* atom1 = stretch_[i].atom1;
+			Atom* atom2 = stretch_[i].atom2;
+			Vector3 direction(atom1->getPosition() - atom2->getPosition());
 			double distance = direction.getLength();
 
 			if (distance != 0.0)
@@ -66,13 +66,13 @@ namespace BALL
 				//   J/mol -> J: Avogadro
 				direction *= 1e13 / Constants::AVOGADRO * 2 * stretch_[i].values.k * (distance - stretch_[i].values.r0) / distance;
 
-				if (!use_selection || at1.ptr->isSelected())
+				if (!use_selection || atom1->isSelected())
 				{
-					at1.force -= direction;
+					atom1->getForce() -= direction;
 				}
-				if (!use_selection || at2.ptr->isSelected())
+				if (!use_selection || atom2->isSelected())
 				{
-					at2.force += direction;
+					atom2->getForce() += direction;
 				}
 			}
 		}

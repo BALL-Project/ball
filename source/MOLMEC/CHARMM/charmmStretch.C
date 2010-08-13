@@ -128,8 +128,8 @@ namespace BALL
 						Atom::Type atom_type_A = bond.getFirstAtom()->getType();
 						Atom::Type atom_type_B = bond.getSecondAtom()->getType();
 			
-						stretch_[i].atom1 = bond.getFirstAtom()->getIndex();
-						stretch_[i].atom2 = bond.getSecondAtom()->getIndex();
+						stretch_[i].atom1 = bond.getFirstAtom();
+						stretch_[i].atom2 = bond.getSecondAtom();
 			
 						// when retrieving the parameters, order does not matter
 						// first, we try an exact match, than we try wildcards
@@ -142,8 +142,8 @@ namespace BALL
 									if (!stretch_parameters_.assignParameters(values, Atom::ANY_TYPE, Atom::ANY_TYPE))
 									{
 										getForceField()->error() << "cannot find stretch parameters for atoms " 
-															 << Atom::getAttributes()[stretch_[i].atom1].ptr->getFullName() << " and " 
-															 << Atom::getAttributes()[stretch_[i].atom2].ptr->getFullName() << " (types are "
+															 << stretch_[i].atom1->getFullName() << " and " 
+															 << stretch_[i].atom2->getFullName() << " (types are "
 															 << force_field_->getParameters().getAtomTypes().getTypeName(atom_type_A) << "-" 
 															 << force_field_->getParameters().getAtomTypes().getTypeName(atom_type_B) << ")" << endl;
 

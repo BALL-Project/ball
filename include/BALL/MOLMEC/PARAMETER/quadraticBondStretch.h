@@ -40,8 +40,8 @@ namespace BALL
 
 		struct BALL_EXPORT Data
 		{
-			unsigned int atom1;
-			unsigned int atom2;
+			Atom* atom1;
+			Atom* atom2;
 			Values values;
 		};
 
