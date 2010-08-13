@@ -31,7 +31,7 @@ namespace BALL
 
 		struct BALL_EXPORT OutOfPlaneBend
 		{
-			Atom::StaticAtomAttributes *i, *j, *k, *l;
+			Atom *i, *j, *k, *l;
 			double k_oop;
 			// debug
 			double energy;  

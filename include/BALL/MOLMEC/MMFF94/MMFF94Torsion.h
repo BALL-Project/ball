@@ -35,10 +35,10 @@ namespace BALL
 			Torsion();
 
 			Index type;
-			Atom::StaticAtomAttributes*	atom1;
-			Atom::StaticAtomAttributes*	atom2;
-			Atom::StaticAtomAttributes*	atom3;
-			Atom::StaticAtomAttributes*	atom4;
+			Atom* atom1;
+			Atom* atom2;
+			Atom* atom3;
+			Atom* atom4;
 			double v1, v2, v3;
 			// for debugging:
 			double energy; 

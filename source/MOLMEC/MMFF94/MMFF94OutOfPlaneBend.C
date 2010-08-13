@@ -154,10 +154,10 @@ namespace BALL
 			}
 
 
-			this_bend.i = &Atom::getAttributes()[partners[0]->getIndex()];
-			this_bend.j = &Atom::getAttributes()[central_atom.getIndex()];
-			this_bend.k = &Atom::getAttributes()[partners[1]->getIndex()];
-			this_bend.l = &Atom::getAttributes()[partners[2]->getIndex()];
+			this_bend.i = partners[0];
+			this_bend.j = &central_atom;
+			this_bend.k = partners[1];
+			this_bend.l = partners[2];
 
 			const Position type_j = central_atom.getType();
 			const Index tp0 = partners[0]->getType();
@@ -207,18 +207,18 @@ namespace BALL
 		for (; bend_it != bends_.end(); ++bend_it) 
 		{
 			OutOfPlaneBend& b = *bend_it;
-			if (use_selection && (!b.i->ptr->isSelected() &&
-														!b.j->ptr->isSelected() &&
-														!b.k->ptr->isSelected() &&
-														!b.l->ptr->isSelected()))
+			if (use_selection && (!b.i->isSelected() &&
+			                      !b.j->isSelected() &&
+			                      !b.k->isSelected() &&
+			                      !b.l->isSelected()))
 			{
 				continue;
 			}
 
-			const Vector3& vi = b.i->position;
-			const Vector3& vj = b.j->position;
-			const Vector3& vk = b.k->position;
-			const Vector3& vl = b.l->position;
+			const Vector3& vi = b.i->getPosition();
+			const Vector3& vj = b.j->getPosition();
+			const Vector3& vk = b.k->getPosition();
+			const Vector3& vl = b.l->getPosition();
 
 			vs[0].set(vj.x - vi.x, vj.y - vi.y, vj.z - vi.z);
 			vs[1].set(vj.x - vk.x, vj.y - vk.y, vj.z - vk.z);
@@ -309,10 +309,10 @@ namespace BALL
 		{
 			// the current bend
 			const OutOfPlaneBend& bend = bends_[t];
-			Atom& ta1 = *bend.i->ptr;
-			Atom& ta2 = *bend.j->ptr;
-			Atom& ta3 = *bend.k->ptr;
-			Atom& ta4 = *bend.l->ptr;
+			Atom& ta1 = *bend.i;
+			Atom& ta2 = *bend.j;
+			Atom& ta3 = *bend.k;
+			Atom& ta4 = *bend.l;
 
 			// if using selection and no atom is selected: ignore this bend:
 			if (us && !ta1.isSelected() &&

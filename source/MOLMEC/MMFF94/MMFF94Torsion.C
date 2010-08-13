@@ -261,10 +261,10 @@ namespace BALL
 						}
 
 						// finaly: we really have a valid torsion: store it
-						this_torsion.atom1 = &Atom::getAttributes()[atoms[0]->getIndex()];
-						this_torsion.atom2 = &Atom::getAttributes()[atoms[1]->getIndex()];
-						this_torsion.atom3 = &Atom::getAttributes()[atoms[2]->getIndex()];
-						this_torsion.atom4 = &Atom::getAttributes()[atoms[3]->getIndex()];
+						this_torsion.atom1 = atoms[0];
+						this_torsion.atom2 = atoms[1];
+						this_torsion.atom3 = atoms[2];
+						this_torsion.atom4 = atoms[3];
 
 						torsions_.push_back(this_torsion);
 
@@ -296,14 +296,14 @@ namespace BALL
 		for (; it != torsions_.end(); it++) 
 		{
 			if (!use_selection ||
-					(it->atom1->ptr->isSelected() || 
-					 it->atom2->ptr->isSelected() || 
-					 it->atom3->ptr->isSelected() || 
-					 it->atom4->ptr->isSelected()))
+					(it->atom1->isSelected() || 
+					 it->atom2->isSelected() || 
+					 it->atom3->isSelected() || 
+					 it->atom4->isSelected()))
 			{
-				a21 = it->atom1->position - it->atom2->position;
-				a23 = it->atom3->position - it->atom2->position;
-				a34 = it->atom4->position - it->atom3->position;
+				a21 = it->atom1->getPosition() - it->atom2->getPosition();
+				a23 = it->atom3->getPosition() - it->atom2->getPosition();
+				a34 = it->atom4->getPosition() - it->atom3->getPosition();
 
 				cross2321 = a23 % a21;
 				cross2334 = a23 % a34;
@@ -363,10 +363,10 @@ namespace BALL
 		for (Position t = 0; t < torsions_.size(); t++)
 		{
 			const Torsion& torsion = torsions_[t];
-			Atom& a1 = *torsion.atom1->ptr;
-			Atom& a2 = *torsion.atom2->ptr;
-			Atom& a3 = *torsion.atom3->ptr;
-			Atom& a4 = *torsion.atom4->ptr;
+			Atom& a1 = *torsion.atom1;
+			Atom& a2 = *torsion.atom2;
+			Atom& a3 = *torsion.atom3;
+			Atom& a4 = *torsion.atom4;
 
 			if (us && !a1.isSelected() &&
 								!a2.isSelected() &&
