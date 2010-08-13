@@ -303,9 +303,13 @@ namespace BALL
 
 		/// Return a pointer to the first atom
 		const Atom* getFirstAtom() const;
+		/// Return a pointer to the first atom
+		Atom* getFirstAtom();
 
 		/// Return a pointer to the second atom.
 		const Atom* getSecondAtom() const;
+		/// Return a pointer to the second atom.
+		Atom* getSecondAtom();
 
 		/**	Return the partner atom of an atom.
 				If the given <tt>atom</tt> is part of this bond, the other atom

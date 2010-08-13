@@ -55,6 +55,12 @@ const Atom* Bond::getFirstAtom() const
 }
 
 BALL_INLINE	 
+Atom* Bond::getFirstAtom()
+{
+	return first_;
+}
+
+BALL_INLINE	 
 Atom* Bond::getPartner(const Atom& atom) const
 {
 	Atom* partner = 0;
@@ -80,6 +86,12 @@ void Bond::setSecondAtom(Atom* atom)
 
 BALL_INLINE	 
 const Atom* Bond::getSecondAtom() const
+{
+	return second_;
+}
+
+BALL_INLINE	 
+Atom* Bond::getSecondAtom()
 {
 	return second_;
 }
@@ -135,8 +147,7 @@ Real Bond::getLength() const
 		throw NotBound(__FILE__, __LINE__);
 	}
 	
-	return Atom::static_attributes_[first_->index_].position.getDistance
-		(Atom::static_attributes_[second_->index_].position);
+	return first_->getDistance(*second_);
 }
 
 BALL_INLINE
