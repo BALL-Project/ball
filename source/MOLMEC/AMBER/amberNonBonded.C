@@ -443,8 +443,8 @@ namespace BALL
 			{
 				type_atom1 = atom1->getType();
 				type_atom2 = atom2->getType();
-				tmp.atom1 = &(Atom::getAttributes()[atom1->getIndex()]);
-				tmp.atom2 = &(Atom::getAttributes()[atom2->getIndex()]);
+				tmp.atom1 = atom1;
+				tmp.atom2 = atom2;
 
 				if (!lennard_jones.assignParameters(tmp.values, type_atom1, type_atom2)) 
 				{
@@ -478,8 +478,8 @@ namespace BALL
 
 			type_atom1 = atom1->getType();
 			type_atom2 = atom2->getType();
-			tmp.atom1 = &(Atom::getAttributes()[atom1->getIndex()]);
-			tmp.atom2 = &(Atom::getAttributes()[atom2->getIndex()]);
+			tmp.atom1 = atom1;
+			tmp.atom2 = atom2;
 
 			if (lennard_jones.hasParameters(type_atom1, type_atom2)) 
 			{
@@ -494,8 +494,8 @@ namespace BALL
 					<< getForceField()->getParameters().getAtomTypes().getTypeName(type_atom2) 
 					<< " (" << atom1->getFullName() << "-" << atom2->getFullName() << ")"
 					<< endl;
-				tmp.atom1 = &(Atom::getAttributes()[atom1->getIndex()]);
-				tmp.atom2 = &(Atom::getAttributes()[atom2->getIndex()]);
+				tmp.atom1 = atom1;
+				tmp.atom2 = atom2;
 				tmp.values.A = 0;
 				tmp.values.B = 0;
 			}
@@ -513,8 +513,8 @@ namespace BALL
 		for (Position i = number_of_1_4_; i < first_h_bond; )
 		{
 			// Retrieve the two atom types...
-			type_atom1 = non_bonded_[i].atom1->type;
-			type_atom2 = non_bonded_[i].atom2->type;
+			type_atom1 = non_bonded_[i].atom1->getType();
+			type_atom2 = non_bonded_[i].atom2->getType();
 
 			// and figure out whether we have suitable H-bond parameters.
 			bool is_hydrogen_bond = hydrogen_bond.hasParameters(type_atom1,	type_atom2);	
@@ -595,8 +595,8 @@ namespace BALL
 
 	struct NBStruct
 	{
-		Atom::StaticAtomAttributes* atom1;
-		Atom::StaticAtomAttributes* atom2;
+		Atom* atom1;
+		Atom* atom2;
 		float charge_product;
 		float A;
 		float B;
@@ -641,9 +641,9 @@ namespace BALL
 		for (; ptr != end_ptr; ++ptr)
 		{
 			// compute the square distance
-			double square_distance(ptr->atom1->position.getSquareDistance(ptr->atom2->position));
+			double square_distance(ptr->atom1->getPosition().getSquareDistance(ptr->atom2->getPosition()));
 			double inverse_square_distance(1.0 / square_distance);
-			es_energy += ESEnergy(inverse_square_distance, ptr->atom1->charge * ptr->atom2->charge) * Switch(square_distance, switching_es);
+			es_energy += ESEnergy(inverse_square_distance, ptr->atom1->getCharge() * ptr->atom2->getCharge()) * Switch(square_distance, switching_es);
 			vdw_energy += VdwEnergy(inverse_square_distance, ptr->values.A, ptr->values.B) * Switch(square_distance, switching_vdw);
 		}
 	}
@@ -672,14 +672,14 @@ namespace BALL
 		Vector3 difference;
 		for (; ptr != end_ptr; ++ptr)
 		{
-			difference = ptr->atom1->position - ptr->atom2->position;
+			difference = ptr->atom1->getPosition() - ptr->atom2->getPosition();
 			AMBERcalculateMinimumImage(difference, period);
 
 			// compute the square distance and correct for periodic boundary if necessary
 			double square_distance(difference.getSquareLength());
 			double inverse_square_distance(1.0 / square_distance);
 
-			es_energy += ESEnergyFct(inverse_square_distance, ptr->atom1->charge * ptr->atom2->charge) * SwitchFct(square_distance, es_switching);
+			es_energy += ESEnergyFct(inverse_square_distance, ptr->atom1->getCharge() * ptr->atom2->getCharge()) * SwitchFct(square_distance, es_switching);
 			vdw_energy += VdwEnergyFct(inverse_square_distance, ptr->values.A, ptr->values.B) * SwitchFct(square_distance, vdw_switching);
 		}
 	}
@@ -709,10 +709,10 @@ namespace BALL
 	{
     // calculate the difference vector between the two atoms
 		// useful aliases
-		Atom::StaticAtomAttributes& atom1(*LJ_data.atom1);
-		Atom::StaticAtomAttributes& atom2(*LJ_data.atom2);
+		Atom* atom1 = LJ_data.atom1;
+		Atom* atom2 = LJ_data.atom2;
 
-    Vector3 direction(atom1.position - atom2.position);
+    Vector3 direction(atom1->getPosition() - atom2->getPosition());
 
     // choose the nearest image if period boundary is enabled 
     if (use_periodic_boundary == true)
@@ -732,7 +732,7 @@ namespace BALL
 			if (distance_2 <= cut_off_electrostatic_2) 
 			{ 
 				// the product of the charges
-				double q1q2 = atom1.charge * atom2.charge;
+				double q1q2 = atom1->getCharge() * atom2->getCharge();
 				factor = q1q2 * inverse_distance_2 * e_scaling_factor;
 				// distinguish between constant and distance dependent dielectric 
 				if (use_dist_depend)
@@ -868,13 +868,13 @@ namespace BALL
 		// now apply the force to the atoms
 		Vector3 force = (float)factor * direction; 
 
-		if (!use_selection || atom1.ptr->isSelected()) 
+		if (!use_selection || atom1->isSelected()) 
 		{
-			atom1.force += force;
+			atom1->getForce() += force;
 		}
-		if (!use_selection || atom2.ptr->isSelected())
+		if (!use_selection || atom2->isSelected())
 		{
-			atom2.force -= force;
+			atom2->getForce() -= force;
 		}
 	} // end of function 	AMBERcalculateNBForce()
 

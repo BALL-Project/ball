@@ -260,8 +260,8 @@ namespace BALL
       {
         type_atom1 = atom1->getType();
         type_atom2 = atom2->getType();
-        lj_tmp.atom1 = &(Atom::getAttributes()[atom1->getIndex()]);
-        lj_tmp.atom2 = &(Atom::getAttributes()[atom2->getIndex()]);
+        lj_tmp.atom1 = atom1;
+        lj_tmp.atom2 = atom2;
 
         if (!lennard_jones_.assignParameters(lj_tmp.values, type_atom1,
 type_atom2))
@@ -297,8 +297,8 @@ type_atom2))
 
       type_atom1 = atom1->getType();
       type_atom2 = atom2->getType();
-      lj_tmp.atom1 = &(Atom::getAttributes()[atom1->getIndex()]);
-      lj_tmp.atom2 = &(Atom::getAttributes()[atom2->getIndex()]);
+      lj_tmp.atom1 = atom1;
+      lj_tmp.atom2 = atom2;
 
       if (lennard_jones_.hasParameters(type_atom1, type_atom2))
       {
@@ -315,8 +315,8 @@ type_atom2))
           << "cannot find Lennard Jones parameters for types "
           << " (" << atom1->getFullName() << "-" << atom2->getFullName() << ")"
           << std::endl;
-        lj_tmp.atom1 = &(Atom::getAttributes()[atom1->getIndex()]);
-        lj_tmp.atom2 = &(Atom::getAttributes()[atom2->getIndex()]);
+        lj_tmp.atom1 = atom1;
+        lj_tmp.atom2 = atom2;
         lj_tmp.values.A = 0;
         lj_tmp.values.B = 0;
       }
@@ -335,8 +335,8 @@ type_atom2))
     for (Position i = number_of_1_4_; i < first_h_bond; )
     {
       // Retrieve the two atom types...
-      type_atom1 = non_bonded_[i].atom1->type;
-      type_atom2 = non_bonded_[i].atom2->type;
+      type_atom1 = non_bonded_[i].atom1->getType();
+      type_atom2 = non_bonded_[i].atom2->getType();
 
       // and figure out whether we have suitable H-bond parameters.
       bool is_hydrogen_bond = hydrogen_bond_.hasParameters(type_atom1,
@@ -524,7 +524,7 @@ type_atom2);
 		for (; ptr != end_ptr; ++ptr)
 		{
 			// compute the square distance
-			double square_distance(ptr->atom1->position.getSquareDistance(ptr->atom2->position));
+			double square_distance(ptr->atom1->getPosition().getSquareDistance(ptr->atom2->getPosition()));
 			double inverse_square_distance(1.0 / square_distance);
 
 			vdw_energy += VdwEnergy(inverse_square_distance, ptr->values.A,
