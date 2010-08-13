@@ -541,10 +541,10 @@ bool testTorsions(MMFF94& mmff, const String& filename, bool compare, long& wron
 
 		vector<double> constants, constants_ours;
 
-		String n1 = t.atom1->ptr->getName();
-		String n2 = t.atom2->ptr->getName();
-		String n3 = t.atom3->ptr->getName();
-		String n4 = t.atom4->ptr->getName();
+		String n1 = t.atom1->getName();
+		String n2 = t.atom2->getName();
+		String n3 = t.atom3->getName();
+		String n4 = t.atom4->getName();
 
 		Index found = -1;
 		bool swap = false;
@@ -605,9 +605,9 @@ bool testTorsions(MMFF94& mmff, const String& filename, bool compare, long& wron
 
 		Log.error() << std::endl
 								<< "Problem Torsion :   " << filename << " "
-								<< t.atom1->ptr->getName() << " " << t.atom2->ptr->getName() << " "
-								<< t.atom3->ptr->getName() << " " << t.atom4->ptr->getName() << "   "
-								<< t.atom1->type << " " << t.atom2->type << " " << t.atom3->type << " " << t.atom4->type
+								<< t.atom1->getName() << " " << t.atom2->getName() << " "
+								<< t.atom3->getName() << " " << t.atom4->getName() << "   "
+								<< t.atom1->getType() << " " << t.atom2->getType() << " " << t.atom3->getType() << " " << t.atom4->getType()
 								<< " got type " << t.type << " was " << type[found] << std::endl
 								<< "got " << t.v1 << " " << t.v2 << " " << t.v3 << " angle " << t.angle << "   E: " << t.energy<< std::endl
 								<< "was " << v1[found] << " " << v2[found] << " " << v3[found] << " angle " << angle[found] << "   E: " << energy[found] << std::endl;
@@ -695,10 +695,10 @@ bool testPlanes(MMFF94& mmff, const String& filename, bool compare)
 	{
 		const MMFF94OutOfPlaneBend::OutOfPlaneBend& t = comp->getOutOfPlaneBends()[poss];
 
-		String n1 = t.i->ptr->getName();
-		String n2 = t.j->ptr->getName();
-		String n3 = t.k->ptr->getName();
-		String n4 = t.l->ptr->getName();
+		String n1 = t.i->getName();
+		String n2 = t.j->getName();
+		String n3 = t.k->getName();
+		String n4 = t.l->getName();
 
 		Index found = -1;
 
@@ -729,7 +729,7 @@ bool testPlanes(MMFF94& mmff, const String& filename, bool compare)
 		Log.error() << std::endl
 								<< "Problem Plane:   " << filename << " "
 								<< n1 << " " << n2 << " " << n3 << " " << n4 << "   "
-								<< t.i->type << " " << t.j->type << " " << t.k->type << " " << t.l->type << std::endl
+								<< t.i->getType() << " " << t.j->getType() << " " << t.k->getType() << " " << t.l->getType() << std::endl
 								<< "got " << t.k_oop << t.energy<< std::endl
 								<< "was " << k[found] << "   E: " << energy[found] << std::endl;
 	}
