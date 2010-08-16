@@ -70,19 +70,6 @@ namespace BALL
 		clear();
 	}
 
-
-	const DCDFile& DCDFile::operator = (const DCDFile& file)
-		
-	{
-		TrajectoryFile::operator = (file);
-		verbosity_ = file.verbosity_;
-		swap_bytes_ = file.swap_bytes_;
-		has_velocities_ = file.has_velocities_;
-
-		return *this;
-	}
-
-
 	void DCDFile::clear()
 		
 	{

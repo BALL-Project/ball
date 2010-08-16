@@ -54,9 +54,6 @@ namespace BALL
 		*/
 		//@{
 
-		/// Assignment operator
-		const DCDFile& operator = (const DCDFile& file);
-
 		/// Clear method
 		virtual void clear();
 
@@ -133,6 +130,9 @@ namespace BALL
 		void disableVelocityStorage();
 
 		//@}
+
+		private:
+			const DCDFile& operator = (const DCDFile& file);
 
 		protected:
 

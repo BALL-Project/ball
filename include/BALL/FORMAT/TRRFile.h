@@ -168,9 +168,6 @@ namespace BALL
 		*/
 		//@{
 
-		/// Assignment operator
-		const TRRFile& operator = (const TRRFile& file);
-
 		/// Clear method
 		virtual void clear();
 		//@}
@@ -264,6 +261,9 @@ namespace BALL
 		void setBoundingBox(const Vector3& x, const Vector3& y, const Vector3& z);
 
 		//@}
+
+		private:
+			const TRRFile& operator = (const TRRFile& file);
 
 		protected:
 

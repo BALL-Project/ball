@@ -85,13 +85,6 @@ namespace BALL
 		virtual Molecule* read()
 			throw(Exception::ParseError);
 
-		const XYZFile& operator = (const XYZFile& file)
-		{
-			File::operator = (file);
-
-			return *this;
-		}
-
 		///@deprecated Instead of this method use XYZFile::getComment()
 		BALL_DEPRECATED const String& getComent() const { return comment_; }
 		
@@ -99,6 +92,7 @@ namespace BALL
 		const String& getComment() const { return comment_; }
 
 		private:
+			const XYZFile& operator = (const XYZFile& file);
 
 		String comment_;
 		

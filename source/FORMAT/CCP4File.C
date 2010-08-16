@@ -41,18 +41,6 @@ namespace BALL
 		clear();
 	}
 
-	const CCP4File& CCP4File::operator = (const CCP4File& file)
-	{
-		File::operator = (file);
-		swap_bytes_ = file.swap_bytes_;
-		offset_symops_ = file.offset_symops_;
-
-		col_axis_ = file.col_axis_; 
-		row_axis_ = file.row_axis_;
-		sec_axis_ = file.sec_axis_;
-		return *this;
-	}
-
 	void CCP4File::clear()
 	{
 		File::clear();

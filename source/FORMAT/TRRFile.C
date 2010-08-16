@@ -51,22 +51,6 @@ namespace BALL
 		clear();
 	}
 
-	const TRRFile& TRRFile::operator = (const TRRFile& file)
-	{
-		TrajectoryFile::operator = (file);
-		header_ = file.header_;
-		precision_ = file.precision_;
-		has_velocities_ = file.has_velocities_;
-		has_forces_ = file.has_forces_;
-		timestep_index_ = file.timestep_index_;
-		timestep_ = file.timestep_;
-		box1_ = file.box1_;
-		box2_ = file.box2_;
-		box3_ = file.box3_;
-
-		return *this;
-	}
-
 	void TRRFile::clear()
 	{
 		header_ = TRRHeader();

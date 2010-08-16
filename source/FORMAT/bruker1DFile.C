@@ -117,19 +117,4 @@ namespace BALL
 			actpos++;
 		}
 	}
-
-
-	const Bruker1DFile& Bruker1DFile::operator = (const Bruker1DFile& file)
-		
-	{
-		min_  = file.min_;
-		max_  = file.max_;
-		pars_ = file.pars_;
-		spectrum_ = file.spectrum_;
-
-		File::operator = (file);
-
-		return *this;
-	}
-
 }

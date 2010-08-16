@@ -245,28 +245,4 @@ read_counter += 4;
 		*/
   }
 
-  const Bruker2DFile& Bruker2DFile::operator = (const Bruker2DFile& file)
-	  
-  {
-		parsf1_    = file.parsf1_;
-		parsf2_    = file.parsf2_;
-		minx_      = file.minx_;
-		maxx_      = file.maxx_;
-		miny_      = file.miny_;
-		maxy_      = file.maxy_;
-		dat_       = file.dat_;
-		soffsetf1_ = file.soffsetf1_;
-		soffsetf2_ = file.soffsetf2_;
-		swidthf1_  = file.swidthf1_;	
-		swidthf2_  = file.swidthf2_;
-		bfreqf1_   = file.bfreqf1_;
-		bfreqf2_   = file.bfreqf2_;
-		spointnumf1_ = file.spointnumf1_;
-		spointnumf2_ = file.spointnumf2_;
-		spectrum_  = file.spectrum_;
-
-		File::operator = (file);
-		return *this;
-  }
-
 }

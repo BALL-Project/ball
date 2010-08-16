@@ -193,16 +193,7 @@ bool File::operator != (const File &file) const
   return (name_ != file.name_);
 }
 
-BALL_INLINE 
-const File& File::operator = (const File& file)
-{
-  name_ = file.name_;
-	open_mode_ = file.open_mode_;
-
-  return *this;
-}
-
-BALL_INLINE 
+BALL_INLINE
 bool File::isValid() const	
 	
 {

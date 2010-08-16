@@ -64,10 +64,10 @@ namespace BALL
 		///
 		const JCAMPFile::HeaderMap& getHeader() const { return pars_.getHeader();}
 
-		///
-		const Bruker1DFile& operator = (const Bruker1DFile& file) ;
-
 		//@}
+
+		private:
+			const Bruker1DFile& operator = (const Bruker1DFile& file) ;
 
 		protected:
 

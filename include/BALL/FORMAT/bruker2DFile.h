@@ -72,8 +72,8 @@ namespace BALL
 		void setShiftRange(double offsetf1, double offsetf2, double swidthf1, double swidthf2, 
 											 double bfreqf1, double bfreqf2, double spointnumf1, double spointnumf2);
 
-		///
-		const Bruker2DFile& operator = (const Bruker2DFile& file) ;
+		private:
+			const Bruker2DFile& operator = (const Bruker2DFile& file);
 
 	  protected:
 		/// These classes give access to the parameters used in aqcuiring the spectrum.

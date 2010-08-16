@@ -31,14 +31,6 @@ namespace BALL
 		clear();
 	}
 
-	const DSN6File& DSN6File::operator = (const DSN6File& file)
-	{
-		File::operator = (file);
-		swap_bytes_ = file.swap_bytes_;
-
-		return *this;
-	}
-
 	void DSN6File::clear()
 	{
 		File::clear();

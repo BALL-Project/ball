@@ -44,9 +44,6 @@ namespace BALL
 		*/
 		//@{
 
-		/// Assignment operator
-		const DSN6File& operator = (const DSN6File& file);
-
 		/// Clear method
 		virtual void clear();
 
@@ -89,6 +86,9 @@ namespace BALL
 		//@{
 
 		//@}
+
+		private:
+			const DSN6File& operator = (const DSN6File& file);
 
 		protected:
 

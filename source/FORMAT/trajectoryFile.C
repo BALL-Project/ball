@@ -29,17 +29,6 @@ namespace BALL
 		clear();
 	}
 
-	const TrajectoryFile& TrajectoryFile::operator =
-		(const TrajectoryFile& file)
-	{
-		File::operator = (file);
-
-		number_of_snapshots_ = file.number_of_snapshots_;
-		number_of_atoms_ = file.number_of_atoms_;
-
-		return *this;
-	}
-
 	void TrajectoryFile::clear()
 	{
 		File::clear();

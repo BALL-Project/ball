@@ -53,9 +53,6 @@ namespace BALL
 		//@}
 		/// @name Assignment
 		//@{
-		
-		/// Assignment operator
-		const TrajectoryFile& operator = (const TrajectoryFile& file);
 
 		/// Clear method
 		virtual void clear();
@@ -115,6 +112,9 @@ namespace BALL
 		virtual bool flushToDisk(const std::vector<SnapShot>& buffer)
 			throw(File::CannotWrite);
 		//@}
+
+		private:
+			const TrajectoryFile& operator = (const TrajectoryFile& file);
 
 		protected:
 

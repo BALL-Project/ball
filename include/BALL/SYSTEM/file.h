@@ -275,7 +275,7 @@ namespace BALL
 				Assign the filename from <b>  file </b>.
 				The file is not opend.
 		*/
-		const File& operator = (const File& file);
+//		const File& operator = (const File& file);
 
 		//@}
 
@@ -593,6 +593,9 @@ namespace BALL
 		bool isValid() const;
 
 		//@}
+
+		private:
+			const File& operator = (const File& file);
 
 		protected:
 

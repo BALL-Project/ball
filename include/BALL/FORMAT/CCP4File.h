@@ -48,9 +48,6 @@ namespace BALL
 		*/
 		//@{
 
-		/// Assignment operator
-		const CCP4File& operator = (const CCP4File& file);
-
 		/// Clear method
 		virtual void clear();
 
@@ -101,6 +98,9 @@ namespace BALL
 		//@{
 
 		//@}
+
+		private:
+			const CCP4File& operator = (const CCP4File& file);
 
 		protected:
 
