@@ -1108,12 +1108,12 @@ namespace BALL
 		double x_max = ses_->reduced_surface_->bounding_box_.b.x;
 		double y_max = ses_->reduced_surface_->bounding_box_.b.y;
 		double z_max = ses_->reduced_surface_->bounding_box_.b.z;
-		double dist = ses_->reduced_surface_->r_max_/3;
+		double dist = ses_->reduced_surface_->r_max_;
 		Position nx = (Position)((x_max-x_min)/dist+5);
 		Position ny = (Position)((y_max-y_min)/dist+5);
 		Position nz = (Position)((z_max-z_min)/dist+5);
 		Vector3 origin(x_min-2*dist,y_min-2*dist,z_min-2*dist);
-		vertex_grid_ = HashGrid3<Index>(origin,nx,ny,nz,dist);
+		vertex_grid_.set(origin, Vector3(dist), nx, ny, nz);
 	}
 
 
