@@ -663,7 +663,7 @@ namespace BALL
 	RSComputer::~RSComputer()
 	{
 		// delete probe_positions
-		HashMap<SortedPosition, ProbePosition*>::Iterator pp1;
+		HashMap<SortedPosition3, ProbePosition*>::Iterator pp1;
 		for (pp1 = probe_positions_.begin(); pp1 != probe_positions_.end(); ++pp1)
 		{
 			delete pp1->second;
@@ -1011,18 +1011,16 @@ namespace BALL
 			RSVertex* vertex1 = *new_vertices_.begin();
 			new_vertices_.erase(new_vertices_.begin());
   		Index atom1(vertex1->atom_);
-			std::list<Index>::const_iterator i;
-			i = neighbours_[atom1].begin();
+			std::deque<Index>::const_iterator i = neighbours_[atom1].begin();
 			bool stop = false;
 			while (!stop && i != neighbours_[atom1].end())
 			{
 				if (atom_status_[*i] == STATUS_UNKNOWN)
 				{
 					Index atom2 = *i;
-					neighboursOfTwoAtoms(atom1,atom2);
-					std::list< std::pair< Index,TSphere3<double> > > candidates;
-					findThirdAtom(atom1,atom2,neighbours_of_two_[atom1][atom2],
-												candidates);
+					const std::deque<Index>& s = neighboursOfTwoAtoms(SortedPosition2(atom1,atom2));
+					std::deque< std::pair< Index,TSphere3<double> > > candidates;
+					findThirdAtom(atom1, atom2, s, candidates);
 					if (candidates.size() == 0)
 					{
 						RSVertex* vertex2 = new RSVertex(atom2);
@@ -1042,14 +1040,14 @@ namespace BALL
 					}
 					else
 					{
-						std::list< std::pair< Index,TSphere3<double> > >::iterator j = candidates.begin();
+						std::deque< std::pair< Index,TSphere3<double> > >::iterator j = candidates.begin();
 						while (j != candidates.end())
 						{
 							if (atom_status_[j->first] == STATUS_UNKNOWN)
 							{
 								Index atom3 = j->first;
 								TSphere3<double> probe = j->second;
-								if (checkProbe(probe,SortedPosition(atom1,atom2,atom3)) == true)
+								if (checkProbe(probe,SortedPosition3(atom1,atom2,atom3)) == true)
 								{
 									face = new RSFace;
 									RSEdge* edge1 = new RSEdge;
@@ -1098,10 +1096,10 @@ namespace BALL
 		// If no atom can be found an exception is thrown.
 		Index atom1(vertex1->atom_);
 		Index atom2(vertex2->atom_);
-		neighboursOfTwoAtoms(atom1,atom2);
-		std::list<std::pair<Index,TSphere3<double> > > candidates;
-		findThirdAtom(atom1,atom2,neighbours_of_two_[atom1][atom2],candidates);
-		std::list<std::pair<Index,TSphere3<double> > >::iterator k;
+		const std::deque<Index>& s = neighboursOfTwoAtoms(SortedPosition2(atom1,atom2));
+		std::deque<std::pair<Index,TSphere3<double> > > candidates;
+		findThirdAtom(atom1, atom2, s, candidates);
+		std::deque<std::pair<Index,TSphere3<double> > >::iterator k;
 		TAngle<double> old_angle(3*Constants::PI,true);
 		TAngle<double> new_angle;
 		TAngle<double> two_pi(2*Constants::PI,true);
@@ -1122,7 +1120,7 @@ namespace BALL
 		TVector3<double> start_probe = face->center_;
 		TVector3<double> v1 = start_probe-circle.p;
 		TVector3<double> face_normal = face->normal_;
-		std::list<std::pair<Index,TSphere3<double> > > third;
+		std::deque<std::pair<Index,TSphere3<double> > > third;
 		for (k = candidates.begin(); k != candidates.end(); k++)
 		{
 			if ((k->first != third_face_atom) || (k->second.p != start_probe))
@@ -1142,7 +1140,7 @@ namespace BALL
 					if (new_angle < old_angle)
 					{
 						old_angle = new_angle;
-						std::list<std::pair<Index,TSphere3<double> > >::iterator t;
+						std::deque<std::pair<Index,TSphere3<double> > >::iterator t;
 						for (t = third.begin(); t != third.end(); t++)
 						{
 							if (atom_status_[t->first] == STATUS_UNKNOWN)
@@ -1268,15 +1266,15 @@ namespace BALL
 			return NULL;
 		}
 
-		neighboursOfTwoAtoms(a1, a2);
-		std::list<std::pair<Index,TSphere3<double> > > candidates;
-		findThirdAtom(a1,a2,neighbours_of_two_[a1][a2],candidates);
+		const std::deque<Index>& s = neighboursOfTwoAtoms(SortedPosition2(a1, a2));
+		std::deque<std::pair<Index,TSphere3<double> > > candidates;
+		findThirdAtom(a1, a2, s, candidates);
 		if (candidates.size() == 0)
 		{
 			return NULL;
 		}
 		
-		std::list<std::pair<Index,TSphere3<double> > >::iterator i = candidates.begin();
+		std::deque<std::pair<Index,TSphere3<double> > >::iterator i = candidates.begin();
 		Index a3 = -1;
 		TSphere3<double> probe;
 		bool found = false;
@@ -1285,7 +1283,7 @@ namespace BALL
 			a3 = i->first;
 			probe = i->second;
 			found = (atom_status_[a3] == STATUS_UNKNOWN) &&
-							checkProbe(probe,SortedPosition(a1,a2,a3));
+							checkProbe(probe,SortedPosition3(a1,a2,a3));
 			i++;
 		}
 		if (found)
@@ -1333,7 +1331,7 @@ namespace BALL
 
 		RSVertex* vertex1 = new RSVertex(a1);
 		RSVertex* vertex2 = new RSVertex(a2);
-		neighboursOfTwoAtoms(a1,a2);
+		neighboursOfTwoAtoms(SortedPosition2(a1,a2));
 
 		RSEdge* edge = createFreeEdge(vertex1,vertex2);
 		if (edge != NULL)
@@ -1348,8 +1346,8 @@ namespace BALL
 		{
 			delete vertex1;
 			delete vertex2;
-			neighbours_[a1].remove(a2);
-			neighbours_[a2].remove(a1);
+			neighbours_[a1].erase(std::remove(neighbours_[a1].begin(), neighbours_[a1].end(), a2), neighbours_[a1].end());
+			neighbours_[a2].erase(std::remove(neighbours_[a2].begin(), neighbours_[a2].end(), a1), neighbours_[a2].end());
 
 			return NULL;
 		}
@@ -1406,7 +1404,7 @@ namespace BALL
 	{
 		Index second_atom = -1;
 		// find the first neighbour atom of unknown status
-		std::list<Index>::const_iterator i = neighbours_[atom].begin();
+		std::deque<Index>::const_iterator i = neighbours_[atom].begin();
 		bool found = false;
 		while ((found == false) && (i != neighbours_[atom].end()))
 		{
@@ -1454,20 +1452,20 @@ namespace BALL
 		return second_atom;
 	}
 
-	void RSComputer::findThirdAtom(Index atom1, Index atom2, const std::list<Index>& third,
-	                               std::list<std::pair<Index,TSphere3<double> > >& atoms)
+	void RSComputer::findThirdAtom(Index atom1, Index atom2, const std::deque<Index>& third,
+	                               std::deque<std::pair<Index,TSphere3<double> > >& atoms)
 	{
 		// This function computes a list of all atoms (with its probe positions)
 		// which can be touched by the probe sphere when it touches the two given
 		// atoms
 		std::pair<Index, TSphere3<double> > candidate;
-		std::list<Index>::const_iterator i = third.begin();
+		std::deque<Index>::const_iterator i = third.begin();
 		TVector3<double> center1, center2;
 		TSphere3<double> probe;
 		probe.radius = rs_->probe_radius_;
 		while (i != third.end())
 		{
-			if (centerOfProbe(SortedPosition(atom1,atom2,*i),center1,center2))
+			if (centerOfProbe(SortedPosition3(atom1,atom2,*i),center1,center2))
 			{
 				if (!(Maths::isNan(center1.x) || Maths::isNan(center1.y) || Maths::isNan(center1.z)))
 				{
@@ -1489,83 +1487,32 @@ namespace BALL
 		}
 	}
 
-	void RSComputer::neighboursOfTwoAtoms(Index atom1, Index atom2)
+	const std::deque<Index>& RSComputer::neighboursOfTwoAtoms(const SortedPosition2& pos)
 	{
-		bool found = false;
-		HashMap<Position,
-            HashMap<Position, std::list<Index> > >::Iterator n1 = neighbours_of_two_.find(atom1);
+		HashMap<SortedPosition2, std::deque<Index> >::Iterator n1 = neighbours_of_two_.find(pos);
 
-		if (n1 != neighbours_of_two_.end())
+		if (n1 == neighbours_of_two_.end())
 		{
-			HashMap<Position, std::list<Index> >::Iterator n2 = n1->second.find(atom2);
-			found = (n2 != n1->second.end());
+			n1 = neighbours_of_two_.insert(std::make_pair(pos, std::deque<Index>())).first;
+
+			std::set_intersection(neighbours_[pos.a].begin(), neighbours_[pos.a].end(),
+			                      neighbours_[pos.b].begin(), neighbours_[pos.b].end(),
+			                      std::back_inserter(n1->second));
 		}
 
-		if (found == false)
-		{
-			std::list<Index> empty;
-			neighbours_of_two_[atom1][atom2] = empty;
-			neighbours_of_two_[atom2][atom1] = empty;
-
-			std::list<Index>::iterator i1 = neighbours_[atom1].begin();
-			std::list<Index>::iterator i2 = neighbours_[atom2].begin();
-			while ((i1 != neighbours_[atom1].end()) && (i2 != neighbours_[atom2].end()))
-			{
-				if (*i1 == *i2)
-				{
-					neighbours_of_two_[atom1][atom2].push_back(*i1);
-					neighbours_of_two_[atom2][atom1].push_back(*i1);
-					i1++;
-					i2++;
-				}
-				else
-				{
-					if (*i1 < *i2)
-					{
-						i1++;
-					}
-					else
-					{
-						i2++;
-					}
-				}
-			}
-		}
+		return n1->second;
 	}
 
 	void RSComputer::neighboursOfThreeAtoms(Index atom1, Index atom2, Index atom3,
-	                                        ::std::list<Index>& output_list)
+	                                        std::deque<Index>& output_list)
 	{
-		neighboursOfTwoAtoms(atom1,atom2);
-		neighboursOfTwoAtoms(atom1,atom3);
-		HashMap<Position, HashMap<Position,std::list<Index> > >::Iterator n1
-			= neighbours_of_two_.find(atom1);
-		HashMap<Position, std::list<Index> >::Iterator n2 = n1->second.find(atom2);
-		HashMap<Position, std::list<Index> >::Iterator n3 = n1->second.find(atom3);
+		SortedPosition2 pos12(atom1, atom2);
+		SortedPosition2 pos13(atom1, atom3);
 
-		std::list<Index>::iterator i2 = n2->second.begin();
-		// fixed by Andreas Moll, 19.7.06: i3 used to work on n2->second.begin()
-		std::list<Index>::iterator i3 = n3->second.begin();
-		while ((i2 != n2->second.end()) && (i3 != n3->second.end()))
-		{
-			if (*i2 == *i3)
-			{
-				output_list.push_back(*i2);
-				i2++;
-				i3++;
-			}
-			else
-			{
-				if (*i2 < *i3)
-				{
-					i2++;
-				}
-				else
-				{
-					i3++;
-				}
-			}
-		}
+		const std::deque<Index>& s1 = neighboursOfTwoAtoms(pos12);
+		const std::deque<Index>& s2 = neighboursOfTwoAtoms(pos13);
+
+		std::set_intersection(s1.begin(), s1.end(), s2.begin(), s2.end(), std::back_inserter(output_list));
 	}
 
 	double RSComputer::getCircleExtremum(const TCircle3<double>& circle,
@@ -1646,14 +1593,14 @@ namespace BALL
 		{
 			TPlane3<double> plane(circle1.p, circle1.n);
 
-			::std::list<Index>::const_iterator i;
+			std::deque<Index>::const_iterator i;
 			TCircle3<double> test_circle;
 			TSphere3<double> sphere;
 
+			const std::deque<Index>& s = neighboursOfTwoAtoms(SortedPosition2(atom1, atom2));
+
 			// find the mutual neighbours of both atoms
-			for (i = neighbours_of_two_[atom1][atom2].begin();
-					 i != neighbours_of_two_[atom1][atom2].end();
-					 i++)
+			for (i = s.begin(); i != s.end(); i++)
 			{
 				// put a sphere into the neighbour
 				sphere.set(rs_->atom_[*i].p, rs_->atom_[*i].radius+rs_->probe_radius_);
@@ -1770,11 +1717,11 @@ namespace BALL
 		return NULL;
 	}
 
-	bool RSComputer::centerOfProbe(const SortedPosition& pos, TVector3<double>& c1, TVector3<double>& c2)
+	bool RSComputer::centerOfProbe(const SortedPosition3& pos, TVector3<double>& c1, TVector3<double>& c2)
 	{
 
 		bool back = false;
-		HashMap<SortedPosition, ProbePosition* >::Iterator pp = probe_positions_.find(pos);
+		HashMap<SortedPosition3, ProbePosition* >::Iterator pp = probe_positions_.find(pos);
 		if (pp != probe_positions_.end())
 		{
 			if (pp->second != NULL)
@@ -1811,7 +1758,7 @@ namespace BALL
 		return back;
 	}
 
-	bool RSComputer::checkProbe(const TSphere3<double>& probe, const SortedPosition& pos)
+	bool RSComputer::checkProbe(const TSphere3<double>& probe, const SortedPosition3& pos)
 	{
 		Position index;
 		ProbePosition* position = probe_positions_[pos];
@@ -1827,10 +1774,10 @@ namespace BALL
 		if (position->status[index] == STATUS_NOT_TESTED)
 		{
 			bool ok = true;
-			std::list<Index> atom_list;
+			std::deque<Index> atom_list;
 			neighboursOfThreeAtoms(pos.a, pos.b, pos.c, atom_list);
 			double dist;
-			std::list<Index>::iterator i = atom_list.begin();
+			std::deque<Index>::iterator i = atom_list.begin();
 			while (ok && (i != atom_list.end()))
 			{
 				dist = probe.radius+rs_->atom_[*i].radius;
@@ -1851,7 +1798,7 @@ namespace BALL
 
 	void RSComputer::correctProbePosition(Position atom)
 	{
-		HashMap<SortedPosition, ProbePosition* >::Iterator pp;
+		HashMap<SortedPosition3, ProbePosition* >::Iterator pp;
 		for (pp = probe_positions_.begin(); pp != probe_positions_.end(); ++pp)
 		{
 			if ((pp->first.a == atom) || (pp->first.b == atom) || (pp->first.c == atom))
@@ -1861,7 +1808,7 @@ namespace BALL
 		}
 	}
 
-	void RSComputer::correctProbePosition(const SortedPosition& pos)
+	void RSComputer::correctProbePosition(const SortedPosition3& pos)
 	{
 		TSphere3<double> s1(rs_->atom_[pos.a]);
 		s1.radius += rs_->probe_radius_;
@@ -1968,7 +1915,7 @@ namespace BALL
 				}
 			}
 
-			neighbours_[i].sort();
+			sort(neighbours_[i].begin(), neighbours_[i].end());
 		}
 	}
 

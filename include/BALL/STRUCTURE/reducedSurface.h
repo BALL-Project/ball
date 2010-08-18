@@ -49,14 +49,33 @@
 #	include <BALL/STRUCTURE/RSVertex.h>
 #endif
 
+#include <set>
 #include <list>
+#include <deque>
 #include <vector>
 
 namespace BALL
 {
-	struct SortedPosition
+	struct SortedPosition2
 	{
-		SortedPosition(Position a1, Position a2, Position a3)
+		SortedPosition2(Position a1, Position a2)
+			: a(a1), b(a2)
+		{
+			if (a > b) std::swap(a, b);
+		}
+
+		bool operator==(const SortedPosition2& pos) const
+		{
+			return (a == pos.a) && (b == pos.b);
+		}
+
+		Position a;
+		Position b;
+	};
+
+	struct SortedPosition3
+	{
+		SortedPosition3(Position a1, Position a2, Position a3)
 			: a(a1), b(a2), c(a3)
 		{
 			if (a > b) std::swap(a, b);
@@ -64,7 +83,7 @@ namespace BALL
 			if (b > c) std::swap(b, c);
 		}
 
-		bool operator==(const SortedPosition& pos) const
+		bool operator==(const SortedPosition3& pos) const
 		{
 			return (a == pos.a) && (b == pos.b) && (c == pos.c);
 		}
@@ -85,9 +104,18 @@ namespace std
 	{
 #endif // BALL_HAS_TR1_UNORDERED_MAP
 		template<>
-		struct hash<BALL::SortedPosition> : public std::unary_function<BALL::SortedPosition, size_t>
+		struct hash<BALL::SortedPosition2> : public std::unary_function<BALL::SortedPosition2, size_t>
 		{
-			inline size_t operator()(const BALL::SortedPosition& p) const
+			inline size_t operator()(const BALL::SortedPosition2& p) const
+			{
+				return 5323 * p.a + 1847 * p.b;
+			}
+		};
+
+		template<>
+		struct hash<BALL::SortedPosition3> : public std::unary_function<BALL::SortedPosition3, size_t>
+		{
+			inline size_t operator()(const BALL::SortedPosition3& p) const
 			{
 				return 5323 * p.a + 1847 * p.b + 2347 * p.c;
 			}
@@ -639,8 +667,8 @@ namespace BALL
 			@return	::std::list< ::std::pair< Index,TSphere3<double> > >
 												a list of all candidates with their probe spheres
 		*/
-		void findThirdAtom(Index atom1, Index atom2, const std::list<Index>& third,
-		                   std::list< std::pair< Index,TSphere3<double> > >& atoms);
+		void findThirdAtom(Index atom1, Index atom2, const std::deque<Index>& third,
+		                   std::deque< std::pair< Index,TSphere3<double> > >& atoms);
 
 		//@}
 		/*_ @name Some utilities
@@ -654,7 +682,7 @@ namespace BALL
 			@param	atom2				the index of the second given atom
 			@param	output_list	list of all atoms close enougth to the given atoms
 		*/
-		void neighboursOfTwoAtoms(Index atom1, Index atom2);
+		const std::deque<Index>& neighboursOfTwoAtoms(const SortedPosition2& pos);
 
 		/*_ Find all atoms close enougth to three given atoms.
 			The indices of all atoms which can be touched by the probe sphere when
@@ -665,7 +693,7 @@ namespace BALL
 			@param	output_list	list of all atoms close enougth to the given atoms
 		*/
 		void neighboursOfThreeAtoms(Index atom1, Index atom2, Index atom3,
-		                            std::list<Index>& output_list);
+		                            std::deque<Index>& output_list);
 
     /*_ Get the extrem coordinate of a circle in a given direction
     	@param	circle		the circle
@@ -748,14 +776,14 @@ namespace BALL
 			@return	bool	true, if the probe sphere can touch the three atoms,
 										false, otherwise
 		*/
-		bool centerOfProbe(const SortedPosition& pos, TVector3<double>& c1, TVector3<double>& c2);
+		bool centerOfProbe(const SortedPosition3& pos, TVector3<double>& c1, TVector3<double>& c2);
 
 		/*_ Check,weather a probe sphere is inside an atom
 			@param	probe	the probe sphere to be tested
 			@return	bool	true, if the probe sphere is not intersecting any atom
 										false, otherwise
 		*/
-		bool checkProbe(const TSphere3<double>& probe, const SortedPosition& pos);
+		bool checkProbe(const TSphere3<double>& probe, const SortedPosition3& pos);
 
 		/*_
 		*/
@@ -763,7 +791,7 @@ namespace BALL
 
 		/*_
 		*/
-		void correctProbePosition(const SortedPosition& pos);
+		void correctProbePosition(const SortedPosition3& pos);
 
 		/*_
 		*/
@@ -788,7 +816,7 @@ namespace BALL
 
 		/*_ for each atom a list of its neighbours
 		*/
-		std::vector< std::list<Index> > neighbours_;
+		std::vector< std::deque<Index> > neighbours_;
 
 		/*_ for each atom a status
 		*/
@@ -796,11 +824,11 @@ namespace BALL
 
 		/*_ for each pair of atoms a list of its neighbours
 		*/
-		HashMap< Position, HashMap< Position, std::list<Index> > > neighbours_of_two_;
+		HashMap< SortedPosition2, std::deque<Index> > neighbours_of_two_;
 
 		/*_ for each triple of atoms its probe positions
 		*/
-		HashMap< SortedPosition, ProbePosition* > probe_positions_;
+		HashMap< SortedPosition3, ProbePosition* > probe_positions_;
 
 		/*_ all new created vertices which are not yet checked for extensions
 		*/
