@@ -54,6 +54,54 @@
 
 namespace BALL
 {
+	struct SortedPosition
+	{
+		SortedPosition(Position a1, Position a2, Position a3)
+			: a(a1), b(a2), c(a3)
+		{
+			if (a > b) std::swap(a, b);
+			if (a > c) std::swap(a, c);
+			if (b > c) std::swap(b, c);
+		}
+
+		bool operator==(const SortedPosition& pos) const
+		{
+			return (a == pos.a) && (b == pos.b) && (c == pos.c);
+		}
+
+		Position a;
+		Position b;
+		Position c;
+	};
+}
+
+#ifdef BALL_EXTEND_HASH_IN_STD_NS
+namespace std
+{
+#endif // BALL_EXTEND_HASH_IN_STD_NS
+
+#ifdef BALL_HAS_TR1_UNORDERED_MAP
+	namespace tr1
+	{
+#endif // BALL_HAS_TR1_UNORDERED_MAP
+		template<>
+		struct hash<BALL::SortedPosition> : public std::unary_function<BALL::SortedPosition, size_t>
+		{
+			inline size_t operator()(const BALL::SortedPosition& p) const
+			{
+				return 5323 * p.a + 1847 * p.b + 2347 * p.c;
+			}
+		};
+#ifdef BALL_HAS_TR1_UNORDERED_MAP
+	}
+#endif // BALL_HAS_TR1_UNORDERED_MAP
+
+#ifdef BALL_EXTEND_HASH_IN_STD_NS
+}
+#endif // BALL_EXTEND_HASH_IN_STD_NS
+
+namespace BALL
+{
 	class RSComputer;
 	class SolventExcludedSurface;
 	class SESComputer;
@@ -694,24 +742,20 @@ namespace BALL
 		//@{
 
 		/*_ Get the centers of the probe sphere when it lies on three atoms
-			@param	a1		the first atom
-			@param	a2		the second atom
-			@param	a3		the third atom
+			@param	pos		the three atom's indices
 			@param	c1		the first center
 			@param	c2		the second center
 			@return	bool	true, if the probe sphere can touch the three atoms,
 										false, otherwise
 		*/
-		bool centerOfProbe(Index a1, Index a2, Index a3,
-		                   TVector3<double>& c1, TVector3<double>& c2);
+		bool centerOfProbe(const SortedPosition& pos, TVector3<double>& c1, TVector3<double>& c2);
 
 		/*_ Check,weather a probe sphere is inside an atom
 			@param	probe	the probe sphere to be tested
 			@return	bool	true, if the probe sphere is not intersecting any atom
 										false, otherwise
 		*/
-		bool checkProbe(const TSphere3<double>& probe,
-		                Index atom1, Index atom2, Index atom3);
+		bool checkProbe(const TSphere3<double>& probe, const SortedPosition& pos);
 
 		/*_
 		*/
@@ -719,12 +763,7 @@ namespace BALL
 
 		/*_
 		*/
-		void sort(Index  u1, Index  u2, Index  u3,
-		          Index& s1, Index& s2, Index& s3);
-
-		/*_
-		*/
-		void correctProbePosition(Position a1, Position a2, Position a3);
+		void correctProbePosition(const SortedPosition& pos);
 
 		/*_
 		*/
@@ -741,6 +780,7 @@ namespace BALL
 		//@}
 
 		protected:
+
 
 		/*_ a pointer to the reduced surface to compute
 		*/
@@ -760,8 +800,7 @@ namespace BALL
 
 		/*_ for each triple of atoms its probe positions
 		*/
-		HashMap< Position, 
-		         HashMap< Position, HashMap< Position, ProbePosition* > > > probe_positions_;
+		HashMap< SortedPosition, ProbePosition* > probe_positions_;
 
 		/*_ all new created vertices which are not yet checked for extensions
 		*/

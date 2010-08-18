@@ -663,20 +663,10 @@ namespace BALL
 	RSComputer::~RSComputer()
 	{
 		// delete probe_positions
-		HashMap< Position,
-						 HashMap< Position,
-						 					HashMap< Position,ProbePosition* > > >::Iterator pp1;
-		HashMap< Position,HashMap< Position,ProbePosition* > >::Iterator pp2;
-		HashMap< Position,ProbePosition* >::Iterator pp3;
-		for (pp1 = probe_positions_.begin(); pp1 != probe_positions_.end(); pp1++)
+		HashMap<SortedPosition, ProbePosition*>::Iterator pp1;
+		for (pp1 = probe_positions_.begin(); pp1 != probe_positions_.end(); ++pp1)
 		{
-			for (pp2 = pp1->second.begin(); pp2 != pp1->second.end(); pp2++)
-			{
-				for (pp3 = pp2->second.begin(); pp3 != pp2->second.end(); pp3++)
-				{
-					delete pp3->second;
-				}
-			}
+			delete pp1->second;
 		}
 	}
 
@@ -1059,7 +1049,7 @@ namespace BALL
 							{
 								Index atom3 = j->first;
 								TSphere3<double> probe = j->second;
-								if (checkProbe(probe,atom1,atom2,atom3) == true)
+								if (checkProbe(probe,SortedPosition(atom1,atom2,atom3)) == true)
 								{
 									face = new RSFace;
 									RSEdge* edge1 = new RSEdge;
@@ -1295,7 +1285,7 @@ namespace BALL
 			a3 = i->first;
 			probe = i->second;
 			found = (atom_status_[a3] == STATUS_UNKNOWN) &&
-							checkProbe(probe,a1,a2,a3);
+							checkProbe(probe,SortedPosition(a1,a2,a3));
 			i++;
 		}
 		if (found)
@@ -1477,7 +1467,7 @@ namespace BALL
 		probe.radius = rs_->probe_radius_;
 		while (i != third.end())
 		{
-			if (centerOfProbe(atom1,atom2,*i,center1,center2))
+			if (centerOfProbe(SortedPosition(atom1,atom2,*i),center1,center2))
 			{
 				if (!(Maths::isNan(center1.x) || Maths::isNan(center1.y) || Maths::isNan(center1.z)))
 				{
@@ -1780,46 +1770,23 @@ namespace BALL
 		return NULL;
 	}
 
-	bool RSComputer::centerOfProbe(Index a1, Index a2, Index a3,
-	                               TVector3<double>& c1, TVector3<double>& c2)
+	bool RSComputer::centerOfProbe(const SortedPosition& pos, TVector3<double>& c1, TVector3<double>& c2)
 	{
-		sort(a1, a2, a3, a1, a2, a3);
-
-		HashMap<Position,
-						HashMap<Position,	HashMap<Position,ProbePosition* > > >::Iterator pp1;
-		HashMap<Position, HashMap<Position,ProbePosition* > >::Iterator pp2;
-		HashMap<Position, ProbePosition* >::Iterator pp3;
 
 		bool back = false;
-		bool found = false;
-		pp1 = probe_positions_.find(a1);
-		if (pp1 != probe_positions_.end())
+		HashMap<SortedPosition, ProbePosition* >::Iterator pp = probe_positions_.find(pos);
+		if (pp != probe_positions_.end())
 		{
-			pp2 = pp1->second.find(a2);
-			if (pp2 != pp1->second.end())
+			if (pp->second != NULL)
 			{
-				pp3 = pp2->second.find(a3);
-				if (pp3 != pp2->second.end())
-				{
-					found = true;
-					if (pp3->second == NULL)
-					{
-						back = false;
-					}
-					else
-					{
-						c1 = pp3->second->point[0];
-						c2 = pp3->second->point[1];
-						back = true;
-					}
-				}
+				c1 = pp->second->point[0];
+				c2 = pp->second->point[1];
+				back = true;
 			}
-		}
-		if (found == false)
-		{
-			TSphere3<double> s1(rs_->atom_[a1]);
-			TSphere3<double> s2(rs_->atom_[a2]);
-			TSphere3<double> s3(rs_->atom_[a3]);
+		} else {
+			TSphere3<double> s1(rs_->atom_[pos.a]);
+			TSphere3<double> s2(rs_->atom_[pos.b]);
+			TSphere3<double> s3(rs_->atom_[pos.c]);
 
 			s1.radius += rs_->probe_radius_;
 			s2.radius += rs_->probe_radius_;
@@ -1832,25 +1799,22 @@ namespace BALL
 				position->status[1] = STATUS_NOT_TESTED;
 				position->point[0] = c1;
 				position->point[1] = c2;
-				probe_positions_[a1][a2][a3] = position;
+				probe_positions_[pos] = position;
 				back = true;
 			}
 			else
 			{
-				probe_positions_[a1][a2][a3] = NULL;
-				back = false;
+				probe_positions_[pos] = NULL;
 			}
 		}
+
 		return back;
 	}
 
-	bool RSComputer::checkProbe(const TSphere3<double>& probe,
-	                            Index atom1, Index atom2, Index atom3)
+	bool RSComputer::checkProbe(const TSphere3<double>& probe, const SortedPosition& pos)
 	{
-		sort(atom1, atom2, atom3, atom1, atom2, atom3);
-
 		Position index;
-		ProbePosition* position = probe_positions_[atom1][atom2][atom3];
+		ProbePosition* position = probe_positions_[pos];
 		if (probe.p == position->point[0])
 		{
 			index = 0;
@@ -1864,7 +1828,7 @@ namespace BALL
 		{
 			bool ok = true;
 			std::list<Index> atom_list;
-			neighboursOfThreeAtoms(atom1,atom2,atom3,atom_list);
+			neighboursOfThreeAtoms(pos.a, pos.b, pos.c, atom_list);
 			double dist;
 			std::list<Index>::iterator i = atom_list.begin();
 			while (ok && (i != atom_list.end()))
@@ -1887,77 +1851,34 @@ namespace BALL
 
 	void RSComputer::correctProbePosition(Position atom)
 	{
-		HashMap<Position,
-						HashMap<Position,
-						 					HashMap<Position,ProbePosition* > > >::Iterator pp1;
-		HashMap<Position,HashMap<Position,ProbePosition* > >::Iterator pp2;
-		HashMap<Position,ProbePosition* >::Iterator pp3;
-		for (pp1 = probe_positions_.begin(); pp1 != probe_positions_.end(); pp1++)
+		HashMap<SortedPosition, ProbePosition* >::Iterator pp;
+		for (pp = probe_positions_.begin(); pp != probe_positions_.end(); ++pp)
 		{
-			if (pp1->first < atom)
+			if ((pp->first.a == atom) || (pp->first.b == atom) || (pp->first.c == atom))
 			{
-				for (pp2 = pp1->second.begin(); pp2 != pp1->second.end(); pp2++)
-				{
-					if (pp2->first < atom)
-					{
-						if (pp2->second.has(atom))
-						{
-							correctProbePosition(pp1->first,pp2->first,atom);
-						}
-					}
-					else
-					{
-						if (pp2->first == atom)
-						{
-							for (pp3 = pp2->second.begin(); pp3 != pp2->second.end(); pp3++)
-							{
-								correctProbePosition(pp1->first,atom,pp3->first);
-							}
-						}
-					}
-				}
-			}
-			else
-			{
-				if (pp1->first == atom)
-				{
-					for (pp2 = pp1->second.begin(); pp2 != pp1->second.end(); pp2++)
-					{
-						for (pp3 = pp2->second.begin(); pp3 != pp2->second.end(); pp3++)
-						{
-							correctProbePosition(atom,pp2->first,pp3->first);
-						}
-					}
-				}
+				correctProbePosition(pp->first);
 			}
 		}
 	}
 
-	void RSComputer::correctProbePosition(Position a1, Position a2, Position a3)
+	void RSComputer::correctProbePosition(const SortedPosition& pos)
 	{
-		Index ai1 = (Index)a1;
-		Index ai2 = (Index)a2;
-		Index ai3 = (Index)a3;
-
-		sort(ai1, ai2, ai3, ai1, ai2, ai3);
-
-		TSphere3<double> s1(rs_->atom_[ai1]);
+		TSphere3<double> s1(rs_->atom_[pos.a]);
 		s1.radius += rs_->probe_radius_;
 
-		TSphere3<double> s2(rs_->atom_[ai2]);
+		TSphere3<double> s2(rs_->atom_[pos.b]);
 		s2.radius += rs_->probe_radius_;
 
-		TSphere3<double> s3(rs_->atom_[ai3]);
+		TSphere3<double> s3(rs_->atom_[pos.c]);
 		s3.radius += rs_->probe_radius_;
 
 		TVector3<double> c1, c2;
 		if (GetIntersection(s1, s2, s3, c1, c2))
 		{
-			ProbePosition* position = probe_positions_[ai1][ai2][ai3];
+			ProbePosition* position = probe_positions_[pos];
 			if (position == NULL)
 			{
-				probe_positions_[ai1][ai2][ai3] = new ProbePosition;
-				position = probe_positions_[ai1][ai2][ai3];
+				position = probe_positions_[pos] = new ProbePosition;
 			}
 			position->status[0] = STATUS_NOT_TESTED;
 			position->status[1] = STATUS_NOT_TESTED;
@@ -1966,8 +1887,8 @@ namespace BALL
 		}
 		else
 		{
-			delete probe_positions_[ai1][ai2][ai3];
-			probe_positions_[ai1][ai2][ai3] = NULL;
+			delete probe_positions_[pos];
+			probe_positions_[pos] = NULL;
 		}
 	}
 
@@ -2086,16 +2007,6 @@ namespace BALL
 		edge = face->edge_[2];
 		edge->vertex_[0]->edges_.insert(edge);
 		edge->vertex_[1]->edges_.insert(edge);
-	}
-
-	void RSComputer::sort(Index  u1, Index u2,  Index u3,
-	                      Index& s1, Index& s2, Index& s3)
-	{
-		s1 = u1; s2 = u2; s3 = u3;
-
-		if (s1 > s2) std::swap(s1, s2);
-		if (s1 > s3) std::swap(s1, s3);
-		if (s2 > s3) std::swap(s2, s3);
 	}
 
 } // namespace BALL
