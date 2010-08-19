@@ -189,6 +189,9 @@ CHECK_CXX_SOURCE_COMPILES("template <int i>
 ## Find a suitable hash map implementation (or fall back to map)
 INCLUDE(cmake/BALLConfigHashMap.cmake)
 
+## Check for the presence of the slist extension
+INCLUDE(cmake/BALLConfigSList.cmake)
+
 ## Test whether vsnprintf is available
 CHECK_FUNCTION_EXISTS(vsnprintf BALL_HAVE_VSNPRINTF)
 
