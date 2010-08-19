@@ -25,7 +25,12 @@
 #	include <BALL/MATHS/vector3.h>
 #endif
 
-#include <deque>
+#ifdef BALL_HAS_GNU_SLIST
+#include <ext/slist>
+#else
+#include <list>
+#endif
+
 #include <algorithm>
 
 namespace BALL 
@@ -344,8 +349,13 @@ namespace BALL
 			return ConstBoxIterator::end(*this);
 		}
 
+#ifdef BALL_HAS_GNU_SLIST
+		typedef typename __gnu_cxx::slist<Item> DataContainer;
+#else
+		typedef typename std::list<Item> DataContainer;
+#endif
 
-		typedef typename std::deque<Item>::iterator DataIteratorPosition;
+		typedef typename DataContainer::iterator DataIteratorPosition;
 		
 		class DataIteratorTraits
 		{
@@ -516,7 +526,7 @@ namespace BALL
 		HashGridBox3* neighbours[27];
 		//  private:
 	
-		std::deque<Item> data;
+		DataContainer data;
 	};
 
 	template<typename Item>  
@@ -573,7 +583,7 @@ namespace BALL
 	template<typename Item>  
 	Item* HashGridBox3<Item>::find(const Item& item)
 	{
-		typename std::deque<Item>::iterator found = std::find(data.begin(), data.end(), item);
+		typename DataContainer::iterator found = std::find(data.begin(), data.end(), item);
 
 		if (found != data.end())
 		{
@@ -600,13 +610,34 @@ namespace BALL
 	BALL_INLINE 
 	void HashGridBox3<Item>::insert(const Item& item)
 	{
-		data.push_back(item);
+		data.push_front(item);
 	}
 
 	template<typename Item>  
 	bool HashGridBox3<Item>::remove(const Item& item)
 	{
-		typename std::deque<Item>::iterator pos = std::find(data.begin(), data.end(), item);
+#ifdef BALL_HAS_GNU_SLIST
+		if(*data.begin() == item)
+		{
+			data.pop_front();
+			return true;
+		}
+
+		DataIteratorPosition prev = data.begin();
+		DataIteratorPosition pos = prev;
+		for(++pos; pos != data.end(); ++pos)
+		{
+			if(*pos == item)
+			{
+				data.erase_after(prev);
+				return true;
+			}
+
+			prev = pos;
+		}
+		return false;
+#else
+		DataIteratorPosition pos = std::find(data.begin(), data.end(), item);
 
 		if (pos != data.end())
 		{
@@ -616,24 +647,15 @@ namespace BALL
 		}
 
 		return false;
+#endif
 	}
 
 	template<typename Item>  
 	bool HashGridBox3<Item>::removeAll(const Item& item)
 	{
-		bool result = false;
+		data.remove(item);
 
-		typename std::deque<Item>::iterator pos = std::find(data.begin(), data.end(), item);
-
-		while (pos != data.end())
-		{
-			data.erase(pos);
-			pos = std::find(data.begin(), data.end(), item);
-
-			result = true;
-		}
-
-		return result;
+		return true;
 	}
 
 	template <typename Item>
@@ -689,7 +711,7 @@ namespace BALL
 		
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  data:" << std::endl;
-		for (typename std::deque<Item>::const_iterator d_it = data.begin(); d_it != data.end(); ++d_it)
+		for (typename DataContainer::const_iterator d_it = data.begin(); d_it != data.end(); ++d_it)
 		{
 			BALL_DUMP_DEPTH(s, depth);
 			s << "    " << *d_it << std::endl;
@@ -716,7 +738,7 @@ namespace BALL
 
 		Processor::Result result;
 			
-		for (typename std::deque<Item>::iterator d_it = data.begin(); d_it != data.end(); ++d_it)
+		for (typename DataContainer::iterator d_it = data.begin(); d_it != data.end(); ++d_it)
 		{
 			result = processor(*d_it);
 

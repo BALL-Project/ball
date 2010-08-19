@@ -50,8 +50,6 @@ class AtomHashGridBox3
 
 	//bool apply(UnaryProcessor<Item> processor);
 	//bool apply(UnaryProcessor< HashGridBox3<Item> > processor);
-
-	deque<Atom*> data;
 };
 
 class AtomHashGrid3
