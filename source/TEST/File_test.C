@@ -421,7 +421,7 @@ CHECK(bool isValid() const throw())
 	TEST_EQUAL(f.isValid(), false)	
 
 	File f1;
-	TEST_EXCEPTION(Exception::FileNotFound, f1 = File("XXY"))
+	TEST_EXCEPTION(Exception::FileNotFound, f1.open("XXY"))
 	TEST_EQUAL(f1.isValid(), false)	
 
 	File f2(source_name);
@@ -471,14 +471,6 @@ CHECK(void clear() throw())
 	File file(filename);
 	file.clear();
 	TEST_EQUAL(file.getName(), "")
-RESULT
-
-CHECK(const File& operator = (const File& file) throw())
-	File file(filename);
-	File file2;
-	file2 = file;
-	TEST_EQUAL(file2 == file, true)
-	TEST_EQUAL(file2.getName(), file.getName())
 RESULT
 
 CHECK(bool reopen(File::OpenMode open_mode) throw(Exception::FileNotFound))

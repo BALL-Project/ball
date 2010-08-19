@@ -52,16 +52,6 @@ CHECK(DCDFile(const String& name, File::OpenMode open_mode = std::ios::in) throw
 	TEST_EQUAL(test_file2.isOpen(), false)
 RESULT
 
-
-CHECK(const DCDFile& operator = (const DCDFile& file) throw())
-  DCDFile one(dcd_test_file, std::ios::in);
-	DCDFile two;
-	two = one;
-	bool test = (one == two);
-	TEST_EQUAL(test, true)
-RESULT
-
-
 CHECK(void clear() throw())
 	DCDFile file(dcd_test_file, std::ios::in);
 	file.clear();
