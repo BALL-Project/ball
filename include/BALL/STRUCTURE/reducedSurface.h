@@ -94,6 +94,11 @@ namespace BALL
 	};
 }
 
+#ifdef BALL_HAS_BOOST_UNORDERED_MAP
+namespace boost
+{
+#endif
+
 #ifdef BALL_EXTEND_HASH_IN_STD_NS
 namespace std
 {
@@ -127,6 +132,10 @@ namespace std
 #ifdef BALL_EXTEND_HASH_IN_STD_NS
 }
 #endif // BALL_EXTEND_HASH_IN_STD_NS
+
+#ifdef BALL_HAS_BOOST_UNORDERED_MAP
+}
+#endif
 
 namespace BALL
 {
