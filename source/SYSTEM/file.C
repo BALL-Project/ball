@@ -239,6 +239,7 @@ namespace BALL
 			{
 				if (BALL_BIT_IS_CLEARED(transformation_methods_, File::TRANSFORMATION__FILTER))
 				{		
+					setstate(std::ios_base::failbit);
 					throw Exception::FileNotFound(__FILE__, __LINE__, name_ + " (using " + transformation_command + ")");
 				}
 				name_ = transformation_manager_.transform(name);
@@ -255,6 +256,7 @@ namespace BALL
 
 				int err;
 				if((err = dl.downloadToFile(tmp_file)) != 0) {
+					setstate(std::ios_base::failbit);
 					throw Exception::FileNotFound(__FILE__, __LINE__,
 									name_ + String(" from network."));
 				}
@@ -269,6 +271,7 @@ namespace BALL
 				// is the EXEC transformation enabled?
 				if (BALL_BIT_IS_CLEARED(transformation_methods_, File::TRANSFORMATION__EXEC))
 				{
+					setstate(std::ios_base::failbit);
 					throw Exception::FileNotFound(__FILE__, __LINE__, name);
 				}
 				
@@ -305,6 +308,7 @@ namespace BALL
 				FileSystem::canonizePath(name_);
 				if (!File::isAccessible(name_))
 				{
+					setstate(std::ios_base::failbit);
 					throw Exception::FileNotFound(__FILE__, __LINE__, name_);
 				}
 			}	
