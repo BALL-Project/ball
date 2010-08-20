@@ -26,7 +26,7 @@ using namespace BALL;
 HashGridBox3<int>* hbox3 = 0;
 
 CHECK(HashGridBox3() throw())
-	hbox3 = new HashGridBox3<int>;
+	hbox3 = new HashGridBox3<int>(0);
 	TEST_NOT_EQUAL(hbox3, 0)
 RESULT
 
@@ -36,7 +36,7 @@ CHECK(~HashGridBox3() throw())
 RESULT
 
 CHECK(void clear() throw())
-	HashGridBox3<int> hbox;
+	HashGridBox3<int> hbox(0);
 	for (int i = 0; i < 5; ++i)
 	{
 		hbox.insert(i);
@@ -47,7 +47,7 @@ RESULT
 
 
 CHECK(void destroy() throw())
-	HashGridBox3<int> hbox;
+	HashGridBox3<int> hbox(0);
 	for (int i = 0; i < 5; ++i)
 	{
 		hbox.insert(i);
@@ -58,7 +58,7 @@ RESULT
 
 
 CHECK(Item* find(const Item &item) throw())
-	HashGridBox3<int> hbox;
+	HashGridBox3<int> hbox(0);
 	for (int i = 0; i < 5; ++i)
 	{
 		hbox.insert(i);
@@ -73,7 +73,7 @@ RESULT
 
 
 CHECK(const Item* find(const Item& item) const throw())
-	HashGridBox3<int> hbox;
+	HashGridBox3<int> hbox(0);
 	for (int i = 0; i < 5; ++i)
 	{
 		hbox.insert(i);
@@ -88,7 +88,7 @@ RESULT
 
 
 CHECK(Size getSize() const throw())
-	HashGridBox3<int> hbox;
+	HashGridBox3<int> hbox(0);
 	int size = hbox.getSize();
 	TEST_EQUAL(size, 0)
 	int test_int = 5;
@@ -99,7 +99,7 @@ RESULT
 
 
 CHECK(void insert(const Item& item) throw())
-	HashGridBox3<int> hbox;
+	HashGridBox3<int> hbox(0);
 	hbox.insert(567);
 	bool test = (*hbox.find(567) == 567);
 	TEST_EQUAL(test, true)
@@ -107,7 +107,7 @@ RESULT
 
 
 CHECK(bool remove(const Item& item) throw())
-	HashGridBox3<int> hbox;
+	HashGridBox3<int> hbox(0);
 	for (int i = 0; i < 5; i++)
 	{
 		hbox.insert(i);
@@ -120,7 +120,7 @@ RESULT
 
 
 CHECK(bool removeAll(const Item& item) throw())
-	HashGridBox3<int> hbox;
+	HashGridBox3<int> hbox(0);
 	for (int i = 0; i < 5; i++)
 	{
 		hbox.insert(i);
@@ -137,12 +137,12 @@ RESULT
 
 
 CHECK(bool operator == (const HashGridBox3& box) const throw())
-	HashGridBox3<int> hbox1;
+	HashGridBox3<int> hbox1(0);
 	for (int i = 0; i < 5; i++)
 	{
 		hbox1.insert(i);
 	}
-	HashGridBox3<int> hbox2;
+	HashGridBox3<int> hbox2(0);
 	bool test = (hbox1 == hbox2);
 	TEST_NOT_EQUAL(test, true);
 	for (int i = 0; i < 5; i++)
@@ -155,12 +155,12 @@ RESULT
 
 
 CHECK(bool operator != (const HashGridBox3& box) const throw())
-	HashGridBox3<int> hbox1;
+	HashGridBox3<int> hbox1(0);
 	for (int i = 0; i < 5; i++)
 	{
 		hbox1.insert(i);
 	}
-	HashGridBox3<int> hbox2;
+	HashGridBox3<int> hbox2(0);
 	bool test = (hbox1 != hbox2);
 	TEST_EQUAL(test, true);
 	for (int i = 0; i < 5; i++)
@@ -173,7 +173,7 @@ RESULT
 
 
 CHECK(bool has(const Item& item) const throw())
-	HashGridBox3<int> hbox;
+	HashGridBox3<int> hbox(0);
 	for (int i = 0; i < 5; i++)
 	{
 		hbox.insert(i);
@@ -190,7 +190,7 @@ RESULT
 
 
 CHECK(bool isEmpty() const throw())
-	HashGridBox3<int> hbox;
+	HashGridBox3<int> hbox(0);
 	bool test = hbox.isEmpty();
 	TEST_EQUAL(test, true)
 	for (int i = 0; i < 5; i++)
@@ -203,7 +203,7 @@ RESULT
 
 
 CHECK(bool isValid() const throw())
-	HashGridBox3<int> hbox;
+	HashGridBox3<int> hbox(0);
 	for (int i = 0; i < 5; i++)
 	{
 		hbox.insert(i);
@@ -214,7 +214,7 @@ RESULT
 
 
 CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
-	HashGridBox3<int> hbox;
+	HashGridBox3<int> hbox(0);
 	for (int i = 0; i < 5; i++)
 	{
 		hbox.insert(i);
@@ -232,7 +232,7 @@ RESULT
 
 CHECK(bool apply(UnaryProcessor<Item>& processor) throw())
 	TestProcessor proc;
-	HashGridBox3<int> hbox;
+	HashGridBox3<int> hbox(0);
 	hbox.insert(5);
 	hbox.apply(proc);
 	int* result = hbox.find(6);

@@ -18,17 +18,10 @@ class AtomHashGridBox3
 %End
 	public:
 
-	AtomHashGridBox3();
-	AtomHashGridBox3(const AtomHashGridBox3 /grid_box/, bool /deep/);
+	AtomHashGridBox3(AtomHashGrid3* parent);
 	~AtomHashGridBox3();
 	void clear();
 	void destroy();
-
-	void set(const AtomHashGridBox3 /box/, bool / deep /)
-		throw(NotImplemented);
-
-//	const AtomHashGridBox3& operator = (const AtomHashGridBox3& /box/)
-//		throw(NotImplemented);
 
 	//Item* find(const Item &/item/);
 	//const Item* find(const Item& /item/) const;
