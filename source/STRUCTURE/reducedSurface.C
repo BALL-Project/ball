@@ -1005,11 +1005,14 @@ namespace BALL
 					Exception::DivisionByZero,
 					Exception::IndexOverflow)
 	{
-		while (new_vertices_.size() > 0)
+		std::deque<RSVertex*> new_vertices;
+		std::copy(new_vertices_.begin(), new_vertices_.end(), std::back_inserter(new_vertices));
+
+		while(!new_vertices.empty())
 		{
 			RSFace* face = NULL;
-			RSVertex* vertex1 = *new_vertices_.begin();
-			new_vertices_.erase(new_vertices_.begin());
+			RSVertex* vertex1 = new_vertices.front();
+			new_vertices.pop_front();
   		Index atom1(vertex1->atom_);
 			std::deque<Index>::const_iterator i = neighbours_[atom1].begin();
 			bool stop = false;
@@ -1021,7 +1024,7 @@ namespace BALL
 					const std::deque<Index>& s = neighboursOfTwoAtoms(SortedPosition2(atom1,atom2));
 					std::deque< std::pair< Index,TSphere3<double> > > candidates;
 					findThirdAtom(atom1, atom2, s, candidates);
-					if (candidates.size() == 0)
+					if (candidates.empty())
 					{
 						RSVertex* vertex2 = new RSVertex(atom2);
 						RSEdge* edge = createFreeEdge(vertex1,vertex2);
@@ -1029,7 +1032,8 @@ namespace BALL
 						{
 							insert(edge);
 							insert(vertex2);
-							new_vertices_.insert(vertex1);
+							new_vertices.push_back(vertex1);
+							new_vertices.push_back(vertex2);
 							// i = neighbours_[atom1].end()--; ???
 							break;
 						}
@@ -1061,7 +1065,9 @@ namespace BALL
 									insert(face);
 									insert(vertex2);
 									insert(vertex3);
-									new_vertices_.insert(vertex1);
+									new_vertices.push_back(vertex1);
+									new_vertices.push_back(vertex2);
+									new_vertices.push_back(vertex3);
 									// i = neighbours_[atom1].end()--;
 									// j = candidates.end()--;
 									// ????
@@ -1069,17 +1075,19 @@ namespace BALL
 									break;
 								}
 							}
-							j++;
+							++j;
 						} // while j
 					}
 				}
-				i++;
+				++i;
 			} // while i
 			if (face != NULL)
 			{
 				getRSComponent();
 			}
 		}
+
+		new_vertices_.clear();
 	}
 
 	Index RSComputer::thirdAtom(RSVertex*	vertex1, RSVertex* vertex2,
