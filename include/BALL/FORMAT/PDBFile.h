@@ -201,7 +201,7 @@ namespace BALL
 		/// Clear the stream state.
 		virtual void clear(int state);
 
-		/// Clear all members and close the file.
+		/// Clear all members.
 		virtual void clear();
 
 		//@}
