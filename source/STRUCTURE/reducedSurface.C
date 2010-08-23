@@ -1746,12 +1746,12 @@ namespace BALL
 				position->status[1] = STATUS_NOT_TESTED;
 				position->point[0] = c1;
 				position->point[1] = c2;
-				probe_positions_[pos] = position;
+				probe_positions_.insert(std::make_pair(pos, position));
 				back = true;
 			}
 			else
 			{
-				probe_positions_[pos] = NULL;
+				probe_positions_.insert(std::make_pair(pos, (ProbePosition*)NULL));
 			}
 		}
 
