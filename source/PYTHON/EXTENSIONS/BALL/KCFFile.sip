@@ -25,7 +25,6 @@
 		KCFFile() throw();
 		KCFFile(const String& /filename/, OpenMode /open_mode/ = File::MODE_IN)
 			throw(FileNotFound);
-		KCFFile(const KCFFile& /file/) throw(FileNotFound);
 		virtual ~KCFFile() throw();
 
 		virtual bool write(const Molecule& /molecule/) throw(File::CannotWrite);
@@ -33,6 +32,7 @@
 		virtual bool read(System& /system/) throw(ParseError);
 		virtual Molecule* read() throw(ParseError);
 
-		// const KCFFile& operator = (const KCFFile& file)throw();
+		private:
+			KCFFile(const KCFFile&);
 	};
 	
