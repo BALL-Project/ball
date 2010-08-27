@@ -375,7 +375,13 @@ void MMFF94AtomTyper::assignTo(System& s)
 			if ((element != "C" && element != "N") ||
 					hetero_atom_types_.has(atom.getType()))
 			{
-				hetero_atom = &atom;
+				//Other hetero atoms should get precedence over nitrogen
+				//Otherwise structures with hetero 5-rings like GESCIQ randomly assign bogus types
+				//Note: This is a hack, but seems to work. A proper fix would be to figure out
+				//the correct order in which hetero atoms need to be examined.
+				if(!hetero_atom || hetero_atom->getElement().getAtomicNumber() == 7) {
+					hetero_atom = &atom;
+				}
 			}
 
 			if (cation_atoms_.has(atom.getTypeName())) cation_atom = &atom;
