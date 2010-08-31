@@ -89,6 +89,12 @@ namespace BALL
 			Py_Finalize();
 		}
 
+		// on some platforms, we have to point the system to our own python packages
+#ifdef BALL_OS_WINDOWS
+		// TODO: decide through a registry key which python version to use
+		Py_SetProgramName(BALL_PATH "/bin/python.exe");
+#endif
+
 		// initialize the interpreter
 		Py_Initialize();
 
