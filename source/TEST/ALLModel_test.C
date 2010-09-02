@@ -1,28 +1,27 @@
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/QSAR/QSARData.h>
-#include <BALL/QSAR/ldaModel.h>
+#include <BALL/QSAR/allModel.h>
 
 using namespace BALL;
 using namespace BALL::QSAR;
 
 
-START_TEST(LDA-model, "$Id: LDA_test.C$")
+START_TEST(ALL-model, "$Id: ALL_test.C$")
 
 PRECISION(1E-7)
 
 QSARData data;
 data.readCSVFile("data/Regression_test.csv",1,1,1,"	",0,0);
 
-CHECK(LDA-model)
-	LDAModel model(data);
+CHECK(ALL-model)
+	ALLModel model(data,3);
 	model.readTrainingData();
 	model.train();
 	model.validation->testInputData();
-	double quality=model.validation->getFitRes();
-	TEST_REAL_EQUAL(quality,0.25)
+	double r2=model.validation->getFitRes();
+	TEST_REAL_EQUAL(r2,0.4702708)
 RESULT
 
 
 END_TEST
-

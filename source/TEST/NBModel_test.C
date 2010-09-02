@@ -1,28 +1,27 @@
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/QSAR/QSARData.h>
-#include <BALL/QSAR/allModel.h>
+#include <BALL/QSAR/nBModel.h>
 
 using namespace BALL;
 using namespace BALL::QSAR;
 
 
-START_TEST(ALL-model, "$Id: ALL_test.C$")
+START_TEST(NB-model, "$Id: NB_test.C$")
 
 PRECISION(1E-7)
 
 QSARData data;
 data.readCSVFile("data/Regression_test.csv",1,1,1,"	",0,0);
 
-CHECK(ALL-model)
-	ALLModel model(data,3);
+CHECK(NB-model)
+	NBModel model(data);
 	model.readTrainingData();
 	model.train();
 	model.validation->testInputData();
-	double r2=model.validation->getFitRes();
-	TEST_REAL_EQUAL(r2,0.4702708)
+	double quality=model.validation->getFitRes();
+	TEST_REAL_EQUAL(quality,1)
 RESULT
 
 
 END_TEST
-

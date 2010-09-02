@@ -27,4 +27,3 @@ CHECK(RR-model training)
 RESULT
 
 END_TEST
-

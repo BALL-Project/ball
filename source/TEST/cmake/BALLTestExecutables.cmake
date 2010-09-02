@@ -269,18 +269,18 @@ SET(BALL_QSAR_TESTS
 	SimpleDescriptors_test
 	SurfaceBase_test
 	SurfaceDescriptors_test
-	MLR_test
-	RR_test
-	PCR_test
-	PLS_test
-	KPLS_test
-	KPCR_test
-	GP_test
-	KNN_test
-	ALL_test
-	NB_test
-	SNB_test
-	LDA_test
+	MLRModel_test
+	RRModel_test
+	PCRModel_test
+	PLSModel_test
+	KPLSModel_test
+	KPCRModel_test
+	GPModel_test
+	KNNModel_test
+	ALLModel_test
+	NBModel_test
+	SNBModel_test
+	LDAModel_test
 	FeatureSelection_test
 )
 

@@ -25,4 +25,3 @@ RESULT
 
 
 END_TEST
-
