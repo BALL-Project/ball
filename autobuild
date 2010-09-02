@@ -5,23 +5,17 @@
 BUILD_VIEW=true
 BUILD_PYTHON=true
 
-#CDEBUG="--enable-debuginfo"
-CDEBUG="--disable-debuginfo"
+#CDEBUG="Release"
+CDEBUG="Debug"
 
-COPTI="--enable-optimization"
-#COPTI="--disable-optimization"
+CPYTHON="On"
+#CPYTHON="Off"
 
-CPYTHON="--enable-python"
-#CPYTHON="--disable-python"
+CVIEW="On"
+#CVIEW="Off"
 
-CVIEW=""
-#CVIEW="--disable-VIEW"
-
-CGSL="--enable-gsl"
-#CGSL="--disable-gsl"
-
-CLPSOLVE="--enable-lpsolve"
-#CLPSOLVE="--disable-lpsolve"
+CLPSOLVE="On"
+#CLPSOLVE="Off"
 #######################################
 
 # ignore below
@@ -107,94 +101,56 @@ askContrib()
 automaticInstaller()
 {
 	echo 
-	echo Running configure ...
-	cd $BALL_PATH/source
+	echo Running CMake ...
+	cd $BALL_PATH
+	mkdir build
+	cd build
 	touch config.lic
-	./bootstrap || true
 	if [ "${BUILD_VIEW}" = "true" ]; then
-		VIEW_STRING="--with-qt-incl=$INCDIR --with-qt-libs=$LIBDIR --with-glew-incl=$INCDIR --with-glew-libs=$LIBDIR --with-moc=$BINDIR/moc --with-uic=$BINDIR/uic --with-rcc=$BINDIR/rcc"
-		if [ "${BUILD_PYTHON}" = "true" ]; then
-			PYTHON_STRING="--with-sip=$BINDIR/sip --with-sip-incl=$INCDIR --with-sip-lib=$LIBDIR --enable-python"
-		else
-			PYTHON_STRING="--disable-python"
-		fi
-
+		CVIEW="On"
 	else
-		VIEW_STRING="--disable-VIEW"
-		PYTHON_STRING="--disable-python"
+		CVIEW="Off"
 	fi
 
- ./configure 	$CDEBUG\
-							$COPTI\
-							$CGSL\
-							"--with-boost=$CDIR"\
-						  "--with-gsl-lib=$LIBDIR"\
-							"--with-gsl-incl=$INCDIR"\
-							$CLPSOLVE\
-							"--with-lpsolve-lib=$LIBDIR"\
-							"--with-lpsolve-incl=$INCDIR"\
-							"--enable-fftw"\
-							"--disable-fftw-float"\
-							"--disable-fftw-longdbl"\
-							"--enable-double-cplx"\
-							"--with-fftw-lib=$LIBDIR"\
-							"--with-fftw-incl=$INCDIR"\
-							"--with-boost=$CDIR"\
-							${VIEW_STRING}\
-							${PYTHON_STRING} || exit
-	make depend || exit
+	cmake .. -DBALL_RELEASE_TYPE=$CDEBUG\
+	         -DBALL_HAS_VIEW=$CVIEW\
+	         -DBALL_PYTHON_SUPPOR=$CPYTHON\
+	         -DUSE_LPSOLVE=$CLPSOLVE\
+	         -DBALL_CONTRIB_PATH=$CDIR\
+	         -DUSE_FIND_SIP_PY=Off\
+	         -DSIP_EXECUTABLE="$CDIR/bin/sip"\
+	         -DSIP_LIBRARY="$CDIR/lib/sip.so"\
+	         -DSIP_INCLUDE_DIR="$CDIR/include" || exit
 	make || exit
-	make install || exit
-	if [ "${BUILD_VIEW}" = "true" ]; then
-		cd $BALL_PATH/source/APPLICATIONS/BALLVIEW
-		make || exit
-	fi
-	if [ "${BUILD_PYTHON}" = "true" -a  "${BUILD_VIEW}" = "true" ]; then
-		cd $BALL_PATH/source/PYTHON/EXTENSIONS
-		make depend || exit
-		make || exit
-		make install || exit
-	fi
-	cd $BALL_PATH/source
-	LLPATH=$BALL_PATH/lib/`cat config.mak | grep "BINFMT   =" | sed "s/BINFMT   =//" `
-	LPATH=$LIBDIR:$LLPATH
-	if test ${BUILD_VIEW} = true ; then
-		rm -f $LLPATH/sip.so
-		cp $LIBDIR/sip.so $LLPATH
-	fi
-	echo "====================================================================="
-	echo 
-	echo
-	echo
+	cd $BALL_PATH
+
+	LPATH="$BALL_PATH/build/lib/"
+
 	LPATHN="LD_LIBRARY_PATH"
 	if [ "$OS" == Darwin ] ; then
 		LPATHN=DYLD_LIBRARY_PATH
 	fi
 
-	echo Don\'t forget to add the following directories to your $LPATHN:
-	echo
-	echo $LPATH
-	echo 
-	echo On most platforms, this can be done by the following lines:
-	echo "export $LPATHN=$LPATH"
-	echo "export PYTHONPATH=$LPATH"
 	if test ${BUILD_VIEW} = true ; then
-	    SFILE="$BALL_PATH/source/startBALLView"
-			echo "#!/bin/bash"
-	    echo "PYTHONPATH=$LPATH" > $SFILE
-	    echo "export PYTHONPATH" >> $SFILE
-	    echo "$LPATHN=$LPATH" >> $SFILE
-	    echo "export $LPATHN" >> $SFILE
-	    echo "__GL_FSAA_MODE=6" >> $SFILE
-	    echo "export __GL_FSAA_MODE=6" >> $SFILE
-			echo "export LANG=C"
-	    echo "$BALL_PATH/source/APPLICATIONS/BALLVIEW/BALLView" >> $SFILE
-	    chmod +x $SFILE
+		SFILE="$BALL_PATH/build/bin/startBALLView"
+		echo "#!/bin/bash" > $SFILE
+		echo "PYTHONPATH=$LPATH:$CDIR/lib" >> $SFILE
+		echo "export PYTHONPATH" >> $SFILE
+		echo "BALL_DATA_PATH=$BALL_PATH/data" >> $SFILE
+		echo "export BALL_DATA_PATH" >> $SFILE
+		echo "$LPATHN=$LPATH" >> $SFILE
+		echo "export $LPATHN" >> $SFILE
+		echo "__GL_FSAA_MODE=6" >> $SFILE
+		echo "export __GL_FSAA_MODE=6" >> $SFILE
+		echo "export LANG=C" >> $SFILE
+		echo "$BALL_PATH/build/bin/BALLView" >> $SFILE
+		chmod +x $SFILE
 
-	    echo
-	    echo To start BALLView, just run $SFILE
-	    echo
+		echo
+		echo To start BALLView, just run $SFILE
+		echo
 	fi
+
 	echo Build finished successfully!
 }
 
