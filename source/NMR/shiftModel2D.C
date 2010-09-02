@@ -8,7 +8,6 @@ using namespace std;
 namespace BALL
 {	
 	ShiftModel2D::ShiftModel2D() 
-		throw()
 		:	ShiftModule(),
 			peaks_(),
 			origin_(),
@@ -24,7 +23,6 @@ namespace BALL
 	}
 
 	ShiftModel2D::ShiftModel2D(const String& filename, SPECTRUM_TYPE st, bool compute_shifts) 
-		throw()
 		:	ShiftModule(),
 			peaks_(),
 			origin_(),
@@ -42,7 +40,6 @@ namespace BALL
 	}
 
 	ShiftModel2D::ShiftModel2D(const String& filename,SPECTRUM_TYPE st, Vector2 origin, Vector2 dimension, Vector2 spacing, bool compute_shifts) 
-		throw()
 		:	ShiftModule(),
 			peaks_(),
 			origin_(origin),
@@ -60,7 +57,6 @@ namespace BALL
 	}
 
 	ShiftModel2D::ShiftModel2D(const ShiftModel2D& model)
-		throw()
 		:	ShiftModule(),
 			peaks_(model.peaks_),
 			origin_(model.origin_),
@@ -76,14 +72,12 @@ namespace BALL
 	}
 	
 	ShiftModel2D::~ShiftModel2D()
-		throw()
 	{
 		clear();
 	}
 	
 			
 	void ShiftModel2D::clear()
-		throw()
 	{
 		// model is invalid
 		valid_ = false;
@@ -117,21 +111,18 @@ namespace BALL
 	}
 	
 	bool ShiftModel2D::isValid() const
-		throw()
 	{
 		return valid_;
 	}
 
 
 	bool ShiftModel2D::start()
-		throw()
 	{	
 		peaks_.clear();
 		return true;
 	}
 	
 	bool ShiftModel2D::finish()
-		throw()
 	{
 		if (!isValid())
 		{
@@ -376,7 +367,6 @@ std::ofstream outfile("/home/HPL/anne/DEVELOP/NMR/2DSPECTRA/1z0r/1z0r.peaks");
 
 	
 	Processor::Result ShiftModel2D::operator () (Composite& composite)
-			throw()
 	{
 		Processor::Result result = Processor::CONTINUE;
 
@@ -392,7 +382,6 @@ std::ofstream outfile("/home/HPL/anne/DEVELOP/NMR/2DSPECTRA/1z0r/1z0r.peaks");
 	}
 
 	void ShiftModel2D::operator >> (Spectrum2D& spectrum)
-		throw()
   {
      // this overwrites the parameter
      spectrum = Spectrum2D(peaks_, origin_, dimension_, spacing_);
@@ -400,7 +389,6 @@ std::ofstream outfile("/home/HPL/anne/DEVELOP/NMR/2DSPECTRA/1z0r/1z0r.peaks");
 			
 
 	std::ostream& operator << (std::ostream& os, const BALL::ShiftModel2D& shiftmodel)
-		throw()
 	{
 		// output the data in gnuplottable format :-)
 		// e.g. ShiftModel sm; ...; File f("plot.dat", std::ios::out); f << sm;

@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.C,v 1.47.24.1 2007/03/25 22:00:31 oliver Exp $
-//
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/MATHS/common.h>

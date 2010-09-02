@@ -1668,7 +1668,8 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 										{
 											has_H_shifts_ = true;
 										
-										}if (!has_C_shifts_ && (String(atom_data.atom_type) == "C"))
+										}
+										if (!has_C_shifts_ && (String(atom_data.atom_type) == "C"))
 										{	
 											has_C_shifts_ = true;
 										}
