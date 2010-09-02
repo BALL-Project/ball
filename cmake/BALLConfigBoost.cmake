@@ -1,5 +1,7 @@
 SET(BALL_BOOST_COMPONENTS system thread iostreams)
-SET(Boost_USE_STATIC_LIBS ON)
+if ( WIN32 )
+	SET(Boost_USE_STATIC_LIBS ON)
+endif()
 SET(Boost_ADDITIONAL_VERSIONS "1.39" "1.39.0" "1.40" "1.40.0" "1.41" "1.41.0"
 	"1.42" "1.42.0" "1.43" "1.43.0")
 SET(Boost_DETAILED_FAILURE_MSG ON)
