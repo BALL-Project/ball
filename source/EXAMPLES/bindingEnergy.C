@@ -35,7 +35,7 @@ int main(int argc, char** argv)
 	pdb >> A;
 	pdb.close();
 
-	// open the first PDB file
+	// open the second PDB file
 	pdb.open(argv[2]);
 	if (pdb.bad())
 	{
