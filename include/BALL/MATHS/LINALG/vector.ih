@@ -33,7 +33,7 @@ namespace BALL {
 	typedef std::complex<double> ComplexDouble;
 		
 	template <typename valuetype>
-	class Vector
+	class BALL_EXPORT Vector
 	{
 
 		/**
