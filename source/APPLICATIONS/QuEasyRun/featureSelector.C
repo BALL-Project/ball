@@ -114,11 +114,10 @@ void startFeatureSelection(ifstream& in, QSARData* q, String* data_filename)
 	{
 		m->optimizeParameters(conf.opt_k_fold);
 	}
-	if(conf.opt_kernel_after_fs)
+	KernelModel* km = dynamic_cast<KernelModel*>(m);
+	if(km && conf.opt_kernel_after_fs)
 	{
-			/// search locally around current kernel parameters
-		KernelModel* km = (KernelModel*)m;
-			
+		/// search locally around current kernel parameters
 		try
 		{
 			// specifing start-values for grid search now obsolete; grid search will automatically search locally around current kernel parameter(s)
