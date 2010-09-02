@@ -314,6 +314,10 @@ namespace BALL
 		while((mol=read()))
 		{
 			system.insert(*mol);
+
+			// Make sure not to call read() again after reading the last molecule of the file.
+			// This way, correct information about TRIPOS-Sets of the last molecule can be obtained later (otherwise this information would be deleted).
+			if(!found_next_header_) break;
 		}
 
 		String name = getName(); // set system-name to file-name
@@ -364,7 +368,6 @@ namespace BALL
 					{
 						Molecule* mol = new Molecule;
 						bool ok = buildAll_(*mol);
-						clear_();
 						if(!ok)
 						{
 							delete mol;
@@ -406,7 +409,6 @@ namespace BALL
 		if(molecule_.type=="PROTEIN") mol = new Protein;
 		else mol = new Molecule;
 		bool ok = buildAll_(*mol);
-		clear_();
 		if(!ok)
 		{
 			delete mol;
