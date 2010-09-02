@@ -1,3 +1,4 @@
+#include <BALLTestConfig.h>
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/QSAR/QSARData.h>
@@ -12,7 +13,7 @@ START_TEST(PLS-model, "$Id: PLS_test.C$")
 PRECISION(1E-7)
 
 QSARData data;
-data.readCSVFile("data/Regression_test.csv",1,1,1,"	",0,0);
+data.readCSVFile(BALL_TEST_DATA_PATH(Regression_test.csv),1,1,1,"	",0,0);
 
 CHECK(PLS-model)
 	PLSModel pls(data);
