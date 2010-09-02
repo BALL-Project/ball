@@ -415,7 +415,7 @@ namespace BALL
 					\param  s input stream from where to restore the color of this colorRGBA
 					\param  color the colorRGBA to which the color will be restored
 			*/
-			friend std::istream& operator >> (std::istream& s, ColorRGBA& color);
+			friend BALL_VIEW_EXPORT std::istream& operator >> (std::istream& s, ColorRGBA& color);
 
 			/** Friendly stream output.
 					Writes colorRGBA data to the output stream <b> s</b> and store the color of this.
@@ -425,7 +425,7 @@ namespace BALL
 					\param  s output stream to where the color of this colorRGBA will be stored
 					\param  color the colorRGBA from which the color will be stored
 			*/
-			friend std::ostream& operator << (std::ostream& s, const ColorRGBA& color);
+			friend BALL_VIEW_EXPORT std::ostream& operator << (std::ostream& s, const ColorRGBA& color);
 
 			//@}
 
