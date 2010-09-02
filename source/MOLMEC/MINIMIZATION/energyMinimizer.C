@@ -405,8 +405,9 @@ namespace BALL
 	{
 		// Remember the Snapshot manager and call the 
 		// standard setup.
-		snapshot_ = ssm; 
-		return setup(force_field);
+		bool result = setup(force_field);
+		snapshot_ = ssm;
+		return result;
 	}
 	
 	// Setup with a force field and a snapshot manager and options 
