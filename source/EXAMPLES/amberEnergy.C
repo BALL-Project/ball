@@ -16,7 +16,8 @@ int main(int argc, char** argv)
 {
 	Log.setPrefix(cout, "[%T]: ");
 	Log.setPrefix(cerr, "[%T]: ERROR: ");
-	
+
+	// issue a usage hint if called without parameters
 	if ((argc < 2) || (argc > 4))
 	{
 		Log.error() << argv[0] << " <pdb file> [<option file>]" << endl;
