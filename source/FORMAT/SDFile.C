@@ -158,12 +158,7 @@ namespace BALL
 		// if the file is still good, we read too far.
 		if (good())
 		{
-			unget(); // putback line-break
-
-			// put the last line, i.e. the non-empty line, back
-			int no_chars = getLine().size();
-
-			for(Position i=0; i<no_chars; i++)
+			for(int i=0; i<no_chars; i++)
 			{
 				unget();
 			}
