@@ -3,7 +3,7 @@
 //
 // $Id: FragmentDB_bench.C,v 1.6 2004/05/27 19:49:57 oliver Exp $
 //
-
+#include <BALLBenchmarkConfig.h>
 #include <BALL/CONCEPT/benchmark.h>
 
 ///////////////////////////
@@ -36,7 +36,7 @@ END_SECTION
 STATUS("Creating fragment DB")
 FragmentDB db("");
 STATUS("Readig PDB file")
-PDBFile f("data/AmberFF_bench.pdb");
+PDBFile f(BALL_BENCHMARK_DATA_PATH(AmberFF_bench.pdb));
 System original;
 f >> original;
 f.close();

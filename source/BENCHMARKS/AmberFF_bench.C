@@ -2,7 +2,7 @@
 // vi: set ts=2:
 //
 // $Id: AmberFF_bench.C,v 1.5 2002/06/16 19:12:55 oliver Exp $
-
+#include <BALLBenchmarkConfig.h>
 #include <BALL/CONCEPT/benchmark.h>
 
 ///////////////////////////
@@ -20,7 +20,7 @@ START_BENCHMARK(AmberFF, 1.0, "$Id: AmberFF_bench.C,v 1.5 2002/06/16 19:12:55 ol
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
-PDBFile pdb("data/AmberFF_bench.pdb");
+PDBFile pdb(BALL_BENCHMARK_DATA_PATH(AmberFF_bench.pdb));
 System S;
 pdb >> S;
 

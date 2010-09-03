@@ -74,6 +74,7 @@ SET(CMAKE_PREFIX_PATH ${BALL_CONTRIB_PATH} ${CMAKE_PREFIX_PATH})
 SET(CMAKE_REQUIRED_INCLUDES ${BALL_CONTRIB_PATH}/include ${CMAKE_REQUIRED_INCLUDES})
 
 SET(BALL_TEST_DATA_PATH ${PROJECT_SOURCE_DIR}/source/TEST/data)
+SET(BALL_BENCHMARK_DATA_PATH ${PROJECT_SOURCE_DIR}/source/BENCHMARKS/data)
 
 # Should we build packages as well?
 OPTION(BALL_ENABLE_PACKAGING "Enable the building of binary packages" OFF)
@@ -319,6 +320,9 @@ CONFIGURE_FILE(cmake/BALLPythonConfig.h.in ${PROJECT_BINARY_DIR}/include/BALL/PY
 
 ## build a config.h file for our tests to not disturb the rest of BALL
 CONFIGURE_FILE(cmake/BALLTestConfig.h.in ${PROJECT_BINARY_DIR}/source/TEST/BALLTestConfig.h)
+
+## build a config.h file for our benchmarks to not disturb the rest of BALL
+CONFIGURE_FILE(cmake/BALLBenchmarkConfig.h.in ${PROJECT_BINARY_DIR}/source/BENCHMARKS/BALLBenchmarkConfig.h)
 
 ADD_DEFINITIONS(${BALL_DEFINITIONS})
 

@@ -2,6 +2,7 @@
 // vi: set ts=2:
 //
 // $Id: KernelIteration_bench.C,v 1.3 2002/02/27 12:20:32 sturm Exp $
+#include <BALLBenchmarkConfig.h>
 #include <BALL/CONCEPT/benchmark.h>
 
 ///////////////////////////
@@ -18,7 +19,7 @@ START_BENCHMARK(KernelIteration, 1.0, "$Id: KernelIteration_bench.C,v 1.3 2002/0
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
-PDBFile infile("data/AmberFF_bench.pdb");
+PDBFile infile(BALL_BENCHMARK_DATA_PATH(AmberFF_bench.pdb));
 System S;
 infile >> S;
 infile.close();

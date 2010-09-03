@@ -2,6 +2,7 @@
 // vi: set ts=2:
 //
 // $Id: KernelClone_bench.C,v 1.4 2002/12/21 16:46:18 oliver Exp $
+#include <BALLBenchmarkConfig.h>
 #include <BALL/CONCEPT/benchmark.h>
 
 ///////////////////////////
@@ -19,7 +20,7 @@ START_BENCHMARK(KernelIteration, 1.0, "$Id: KernelClone_bench.C,v 1.4 2002/12/21
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
-PDBFile infile("data/AmberFF_bench.pdb");
+PDBFile infile(BALL_BENCHMARK_DATA_PATH(AmberFF_bench.pdb));
 System S1;
 infile >> S1;
 infile.close();

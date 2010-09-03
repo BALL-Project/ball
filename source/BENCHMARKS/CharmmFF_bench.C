@@ -2,7 +2,7 @@
 // vi: set ts=2:
 //
 // $Id: CharmmFF_bench.C,v 1.7 2002/12/22 15:04:49 anker Exp $
-
+#include <BALLBenchmarkConfig.h>
 #include <BALL/CONCEPT/benchmark.h>
 
 ///////////////////////////
@@ -21,7 +21,7 @@ START_BENCHMARK(CharmmFF, 1.0, "$Id: CharmmFF_bench.C,v 1.7 2002/12/22 15:04:49 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
-HINFile hin("data/CharmmFF_bench.hin");
+HINFile hin(BALL_BENCHMARK_DATA_PATH(CharmmFF_bench.hin));
 System S;
 hin >> S;
 
