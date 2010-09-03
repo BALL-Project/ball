@@ -53,6 +53,12 @@ IF(SIP_VERSION)
   # Already in cache, be silent
   SET(SIP_FOUND TRUE)
 ELSE(SIP_VERSION)
+	# determine the version of python we use
+	EXECUTE_PROCESS ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_version; print get_python_version()"
+		OUTPUT_VARIABLE PYTHON_VERSION
+		OUTPUT_STRIP_TRAILING_WHITESPACE
+	)
+
 	IF(USE_FIND_SIP_PY)
 		FIND_FILE(_find_sip_py FindSIP.py PATHS ${CMAKE_MODULE_PATH})
 
@@ -75,12 +81,6 @@ ELSE(SIP_VERSION)
 ENDIF(SIP_VERSION)
 
 IF(NOT SIP_VERSION)
-	# determine the version of python we use
-	EXECUTE_PROCESS ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_version; print get_python_version()"
-		OUTPUT_VARIABLE PYTHON_VERSION
-		OUTPUT_STRIP_TRAILING_WHITESPACE
-	)
-
   # (a) Try to find the sip headers:
 
   # Use the path to the python installation as a hint for finding sip
@@ -142,7 +142,7 @@ IF(NOT SIP_LIBRARIES)
 	)
 
   # Use the path to the python installation as a hint for finding sip
-  GET_FILENAME_COMPONENT(SIP_POSSIBLE_LIB_DIRS "${PYTHON_LIBRARIES}"  ABSOLUTE)
+  GET_FILENAME_COMPONENT(SIP_POSSIBLE_LIB_DIRS "${PYTHON_LIBRARIES}"  PATH)
 	LIST(APPEND SIP_POSSIBLE_LIB_DIRS "/usr/lib/pyshared/python${PYTHON_VERSION}")
 
 	SET(OLD_CMAKE_FIND_LIBRARY_PREFIXES "${CMAKE_FIND_LIBRARY_PREFIXES}" CACHE INTERNAL "")
