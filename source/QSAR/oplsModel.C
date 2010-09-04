@@ -162,10 +162,9 @@ namespace BALL
 				}
 			}
 			no_components_=best_no;
-			best_q2=validation->getQ2();
 			
 			//then try to remove orthogonal variance by use of OPLS components
-			for(int i=0; i<=no_steps && i<=cols;i++)
+			for(int i=0; i<=no_steps && i<=cols && i<no_components_;i++)
 			{	
 				no_ortho_components_=i;
 					
@@ -182,7 +181,6 @@ namespace BALL
 				}
 			}
 			no_ortho_components_=best_o_no;
-			best_q2=validation->getQ2();
 
 			//finally, try to reduce the number of PLS components (since orthogonal variance has been removed, less PLS components should be neccessary)
 			for(int i=no_components_; i>=1 ;i--)
