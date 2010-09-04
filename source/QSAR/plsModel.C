@@ -146,7 +146,7 @@ namespace BALL
 		{
 			double best_q2=0;
 			int best_no=1;
-			for(int i=1; i<=no_steps && i<=(int)data->getNoDescriptors() && (descriptor_IDs_.empty() || i<(int)descriptor_IDs_.size()); i++)
+			for(int i=1; i<=no_steps && i<=(int)data->getNoDescriptors() && (descriptor_IDs_.empty() || i<=(int)descriptor_IDs_.size()); i++)
 			{
 				no_components_=i;
 				validation->crossValidation(k);
