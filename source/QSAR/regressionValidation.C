@@ -235,7 +235,7 @@ namespace BALL
 					test_col=model_->data->getNoDescriptors();
 				}
 				
-				if(test_col!=res_rows && kernel_test_col!=res_rows)
+				if(!transform && test_col!=res_rows && kernel_test_col!=res_rows)
 				{
 					throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must be trained before its fit to the input data can be evaluated!");
 				}
