@@ -1106,6 +1106,63 @@ namespace BALL
 			return v;	
 		}
 
+		vector<QSARData*> QSARData::evenSplit(int no_test_splits, int current_test_split_id, int response_id) const
+		{
+			if(current_test_split_id<0 || current_test_split_id>=no_test_splits)
+			{
+				throw BALL::Exception::GeneralException(__FILE__,__LINE__,"QSARData::evenSplit() error", "Make sure that 0<=current_test_split_id<no_test_splits !");
+			}
+
+			vector<QSARData*> v(2);
+			v[0] = new QSARData;  // training set
+			v[1] = new QSARData;  // external validation set
+
+			v[0]->descriptor_transformations_.clear();
+			v[0]->y_transformations_.clear();
+			v[0]->column_names_ = column_names_;
+			v[0]->descriptor_matrix_.resize(descriptor_matrix_.size());
+			v[0]->Y_.resize(Y_.size());
+			v[0]->class_names_ = class_names_;
+			v[1]->descriptor_transformations_.clear();
+			v[1]->y_transformations_.clear();
+			v[1]->column_names_ = column_names_;
+			v[1]->descriptor_matrix_.resize(descriptor_matrix_.size());
+			v[1]->Y_.resize(Y_.size());
+			v[1]->class_names_ = class_names_;
+
+			std::multiset<unsigned int> val;
+			//unsigned int no_val = static_cast<unsigned int>(descriptor_matrix_[0].size()*fraction);
+
+			/// Sort reponse values
+			multimap<double,Size> response_map;
+			for(Size i=0; i<Y_[0].size(); i++)
+			{
+				response_map.insert(make_pair(Y_[response_id][i],i));
+			}
+
+			/// Create the test partition
+			Size i=0;
+			for(multimap<double,Size>::iterator it=response_map.begin(); it!=response_map.end(); it++, i++)
+			{
+				if(i%no_test_splits==current_test_split_id)
+				{
+					v[1]->insertSubstance(this,it->second,1); // features are backtransformated to original space
+					val.insert(it->second);
+				}
+			}
+
+			/// All compounds not drawn before make up the training partition
+			for(unsigned int i=0;i<descriptor_matrix_[0].size();i++)
+			{
+				if(val.find(i)==val.end())
+				{
+					v[0]->insertSubstance(this,i,1);  // features are backtransformated to original space
+				}
+			}
+
+			return v;
+		}
+
 
 		vector<QSARData*> QSARData::generateExternalSet(double fraction) const
 		{

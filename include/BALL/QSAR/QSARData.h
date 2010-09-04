@@ -162,6 +162,12 @@ namespace BALL
 				/** generates a training and an external validation set from the current QSARData object 
 				@param fraction the fraction of this current coumpounds that should be used as external validation set (by random drawing) */
 				vector<QSARData*> generateExternalSet(double fraction) const;
+
+				/** Split this data set into a training set and a test set.
+				In contrast to generateExternalSet(), compounds for the test set are *not* randomly selected. Instead, this data set is first sorted according to response values (in order to ensure equal response value ranges) and then split regularly into training and test set.
+				@param no_test_splits the total number of splits you want to create by successive calls of this function
+				@param current_test_split_id the split to be produced, with 0<=current_test_split_id<no_test_splits */
+				vector<QSARData*> evenSplit(int no_test_splits, int current_test_split_id, int response_id=0) const;
 				
 				/** returns a pointer to a new vector containing the UNcentered descriptor values for the s'th substance of the current data set */
 				vector<double>* getSubstance(int s) const;
