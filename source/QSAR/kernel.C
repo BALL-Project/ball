@@ -204,7 +204,7 @@ namespace BALL
 		//  	output *= I;
 		}
 
-		#define BALL_DEBUG
+
 		void Kernel::gridSearch(double step_width, int steps, int recursions, int k, bool opt)
 		{
 			bool first_rec=1;
