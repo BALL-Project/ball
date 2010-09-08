@@ -632,40 +632,6 @@ RESULT
 // other classes
 // ============================================================
 
-// BinaryFileAdaptor
-
-BinaryFileAdaptor<float>* bfa = 0;
-CHECK(BinaryFileAdaptor() throw())
-	bfa = new BinaryFileAdaptor<float>;
-	TEST_NOT_EQUAL(bfa, 0)
-RESULT
-
-CHECK(~BinaryFileAdaptor())
-	delete bfa;
-RESULT
-
-CHECK(BinaryFileAdaptor(const T& data) throw())
-	BinaryFileAdaptor<float> bf(1.2345);
-	TEST_REAL_EQUAL(bf.getData(), 1.2345)
-RESULT
-
-CHECK(T& getData() throw())
-	BinaryFileAdaptor<float> bfa;
-	bfa.getData() = 2.345;
-	TEST_REAL_EQUAL(bfa.getData(), 2.345)
-RESULT
-
-CHECK(const T& getData() const throw())
-	BinaryFileAdaptor<float> bfa;
-	TEST_REAL_EQUAL(bfa.getData(), 0)
-RESULT
-
-CHECK(void setData(const T& data) throw())
-	BinaryFileAdaptor<float> bfa;
-	bfa.setData(2.345);
-	TEST_REAL_EQUAL(bfa.getData(), 2.345)
-RESULT
-
 // TransformationManager
 
 TransformationManager* m_ptr = 0;

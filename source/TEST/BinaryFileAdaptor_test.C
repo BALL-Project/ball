@@ -35,20 +35,157 @@ CHECK(detailed constructor / accessors)
 	TEST_EQUAL(double_bfa.getData(), 9.87)
 RESULT
 
+CHECK(T& getData())
+	BinaryFileAdaptor<float> bfa;
+	bfa.getData() = 2.345;
+	TEST_REAL_EQUAL(bfa.getData(), 2.345)
+RESULT
+
+CHECK(const T& getData() const)
+	BinaryFileAdaptor<float> bfa;
+	TEST_REAL_EQUAL(bfa.getData(), 0)
+RESULT
+
+CHECK(void setData(const T& data) throw())
+	BinaryFileAdaptor<float> bfa;
+	bfa.setData(2.345);
+	TEST_REAL_EQUAL(bfa.getData(), 2.345)
+RESULT
+
 CHECK(streams)
 	String outfile_name;
 	NEW_TMP_FILE(outfile_name)
 	File outfile(outfile_name, ::std::ios::out);
 	double test = 95.92;
 	BinaryFileAdaptor<double> double_bfa;
-	outfile << double_bfa << test;
+	double_bfa.setData(test);
+	outfile << double_bfa;
 	outfile.close();
 
 	File infile(outfile_name);
 	BinaryFileAdaptor<double> double_bfa2;
-	double test2 = 0.0;
-	infile >> double_bfa2 >> test2;
+	infile >> double_bfa2;
 	TEST_EQUAL(double_bfa2.getData(), double_bfa.getData())
+RESULT
+
+CHECK(Byte Swapping (short))
+	short x = 0x1122;
+	swapBytes(x);
+	TEST_EQUAL(x, 0x2211);
+	swapBytes(x);
+	TEST_EQUAL(x, 0x1122);
+RESULT
+
+CHECK(Byte Swapping (unsigned short))
+	unsigned short x = 0xAABB;
+	swapBytes(x);
+	TEST_EQUAL(x, 0xBBAA);
+	swapBytes(x);
+	TEST_EQUAL(x, 0xAABB);
+RESULT
+
+CHECK(Byte Swapping (uint32_t))
+	uint32_t x = 0xAABBCCDD;
+	swapBytes(x);
+	TEST_EQUAL(x, 0xDDCCBBAA);
+	swapBytes(x);
+	TEST_EQUAL(x, 0xAABBCCDD);
+RESULT
+
+CHECK(Byte Swapping (int32_t))
+	int32_t x = 0x11223344;
+	swapBytes(x);
+	TEST_EQUAL(x, 0x44332211);
+	swapBytes(x);
+	TEST_EQUAL(x, 0x11223344);
+RESULT
+
+CHECK(Byte Swapping (uint64_t))
+	uint64_t x = 0xAAABACADBABBBCBD;
+	swapBytes(x);
+	TEST_EQUAL(x, 0xBDBCBBBAADACABAA);
+	swapBytes(x);
+	TEST_EQUAL(x, 0xAAABACADBABBBCBD);
+RESULT
+
+CHECK(Byte Swapping (int64_t))
+	int64_t x = 0x0011223344556677;
+	swapBytes(x);
+	TEST_EQUAL(x, 0x7766554433221100);
+	swapBytes(x);
+	TEST_EQUAL(x, 0x0011223344556677);
+RESULT
+
+CHECK(Byte Swapping (float))
+	__private::U32 tmp(0.0f);
+	tmp.u = 0xAABBCCDD;
+	swapBytes(tmp.f);
+	TEST_EQUAL(tmp.u, 0xDDCCBBAA);
+	swapBytes(tmp.f);
+	TEST_EQUAL(tmp.u, 0xAABBCCDD);
+RESULT
+
+CHECK(Byte Swapping (double))
+	__private::U64 tmp(0.0);
+	tmp.u = 0xAAABACADBABBBCBD;
+	swapBytes(tmp.f);
+	TEST_EQUAL(tmp.u, 0xBDBCBBBAADACABAA);
+	swapBytes(tmp.f);
+	TEST_EQUAL(tmp.u, 0xAAABACADBABBBCBD);
+RESULT
+
+CHECK(Byte Swapping (arbitrary))
+	char bytes[10] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'};
+	swapBytes(bytes);
+	TEST_EQUAL(bytes[0], 'j');
+	TEST_EQUAL(bytes[1], 'i');
+	TEST_EQUAL(bytes[2], 'h');
+	TEST_EQUAL(bytes[3], 'g');
+	TEST_EQUAL(bytes[4], 'f');
+	TEST_EQUAL(bytes[5], 'e');
+	TEST_EQUAL(bytes[6], 'd');
+	TEST_EQUAL(bytes[7], 'c');
+	TEST_EQUAL(bytes[8], 'b');
+	TEST_EQUAL(bytes[9], 'a');
+	swapBytes(bytes);
+	TEST_EQUAL(bytes[0], 'a');
+	TEST_EQUAL(bytes[1], 'b');
+	TEST_EQUAL(bytes[2], 'c');
+	TEST_EQUAL(bytes[3], 'd');
+	TEST_EQUAL(bytes[4], 'e');
+	TEST_EQUAL(bytes[5], 'f');
+	TEST_EQUAL(bytes[6], 'g');
+	TEST_EQUAL(bytes[7], 'h');
+	TEST_EQUAL(bytes[8], 'i');
+	TEST_EQUAL(bytes[9], 'j');
+RESULT
+
+CHECK(swapEndianess)
+	BinaryFileAdaptor<uint32_t> a;
+	a.setSwapEndian(false);
+
+	String outfile_name;
+	NEW_TMP_FILE(outfile_name)
+	File outfile(outfile_name, ::std::ios::out | ::std::ios::binary);
+
+	a.setData(0xAABBCCDD);
+	outfile << a;
+
+	outfile.close();
+
+	File infile(outfile_name, ::std::ios::in | ::std::ios::binary);
+
+
+	infile >> a;
+	TEST_EQUAL(a.getData(), 0xAABBCCDD)
+
+	infile.seekg(0, ::std::ios::beg);
+
+	a.setSwapEndian(true);
+	infile >> a;
+	TEST_EQUAL(a.getData(), 0xDDCCBBAA)
+
+	infile.close();
 RESULT
 
 /////////////////////////////////////////////////////////////
