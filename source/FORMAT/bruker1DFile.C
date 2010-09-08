@@ -48,70 +48,34 @@ namespace BALL
 
   void Bruker1DFile::read()
 	{
-	  char c[4];
-	  signed long int &numdum = *(signed long int*) (&c[0]);
-	  Position actpos = 0;
-	  File& f = static_cast<File&> (*this);
-	  bool littleEndian;
-	  
 	  // first we will have to find out whether we are using big or little
 	  // endian on this machine.
-	  int endTest = 1;
-	  if (*(char *) &endTest == 1)
-	  {
-	  	littleEndian = true;
-	  } 
-	  else 
-	  {
-	    littleEndian = false;
-	  }
-	  
+		unsigned int endTest = 1;
+		BinaryFileAdaptor<BALL_INT32> adapt_int32_t_;
+		adapt_int32_t_.setSwapEndian((*(char*)&endTest == 1) != (pars_.getDoubleValue("BYTORDP") == 1.0));
+
 	  spectrum_.resize( (Size)pars_.getDoubleValue("SI"));
 	  spectrum_.setOrigin(pars_.getDoubleValue("YMIN_p"));
 		spectrum_.setDimension(pars_.getDoubleValue("YMAX_p") - pars_.getDoubleValue("YMIN_p"));
 
 	  // back to beginning of file
-	  f.reopen();
+	  this->reopen();
 	  
 	  // read data
-	  for (Position i = 0; i < (Size)pars_.getDoubleValue("SI"); i++)
+	  for (Position i = 0; i < spectrum_.size(); ++i)
 		{
-		  if (!f.good())
+		  if (!this->good())
 		  {
 				// ?????: here should be a warning or exception
 				return;
 			}
-			
-		  f.get(c[0]); f.get(c[1]); f.get(c[2]); f.get(c[3]);
-		  if (pars_.getDoubleValue("BYTORDP") == 1.0L) 
-			{
-			 	if (littleEndian == false)
-			 	{ // conversion from little to big
-				 	numdum = (signed long) ( ((numdum & 0x000000FFL) << 24)
-					|((numdum & 0x0000FF00L) << 16)
-				 	|((numdum & 0x00FF0000L) >> 16)
-				 	|((numdum & 0xFF000000L) >> 24));
-			 	}
-				// else no conversion needed
-			} 
-		  else 
-			{
-				if (littleEndian == true) // conversion from big to little
-			 	{
-			    numdum = (signed long) ( ((numdum & 0x000000FFL) << 24)
-					|((numdum & 0x0000FF00L) << 16)
-					|((numdum & 0x00FF0000L) >> 16)
-					|((numdum & 0xFF000000L) >> 24));
-			   } 
-			  // else no conversion needed
-			}
-		      
+
+			(*this) >> adapt_int32_t_;
+
 		  if ((max_ - min_) != 0) 
 			{
-				spectrum_[actpos] = ((double) (numdum - min_)) / (max_ - min_);
+				spectrum_[i] = ((double) (adapt_int32_t_.getData() - min_)) / (max_ - min_);
 			}
-		    
-			actpos++;
 		}
 	}
 }
