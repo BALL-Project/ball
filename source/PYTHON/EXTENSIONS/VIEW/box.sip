@@ -15,14 +15,32 @@ class Box
 %End
   public:
 
-  Box() throw();
-  Box(const Box&) throw();
-  Box(const Vector3&, const Vector3&, const Vector3&, float) throw();
-  Box(const Vector3&, const Vector3& = Vector3( 0, 1, 0), const Vector3& = Vector3(1, 0, 0), const Vector3& = Vector3(0, 0, 1)) throw();
-  bool isValid() const throw();
+  Box();
+  Box(const Box&);
+  Box(const Vector3&, const Vector3&, const Vector3&, float);
+  Box(const Vector3&, const Vector3& = Vector3( 0, 1, 0), const Vector3& = Vector3(1, 0, 0), const Vector3& = Vector3(0, 0, 1));
+  bool isValid() const;
 //  const Box& operator = (const Box&) throw();
-  void clear() throw();
+  void clear();
 //  void dump(std::ostream& = std::cout, Size = 0) const throw();
-  void set(const Box&) throw();
-  ~Box() throw();
+  void set(const Box&);
+  ~Box();
+
+	void getVertices(vector<Vector3>& vertices) const;
+
+	void setColor(const ColorRGBA& color);
+
+	ColorRGBA& getColor();
+
+	void setWidth(float w);
+	float getWidth() const;
+
+	void setHeight(float h);
+	float getHeight() const;
+
+	void setDepth(float d);
+	float getDepth() const;
+
+	void setPoint(const Vector3& p);
+	Vector3 getPoint() const;
 };
