@@ -775,7 +775,90 @@ namespace BALL
 		char* tmp = reinterpret_cast<char*>(&t);
 		std::reverse(tmp, tmp + sizeof(T));
 	}
-	
+
+	//In the following some specialisations of swapBytes are provided for efficiency reasons
+#define BALL_SWAP_BYTES_16(x)\
+	x = ((x >> 8)  & 0x00FF) | ((x << 8)  & 0xFF00)
+
+#define BALL_SWAP_BYTES_32(x)\
+	x = ((x >> 8)  & 0x00FF00FF) | ((x << 8)  & 0xFF00FF00);\
+	x = ((x >> 16) & 0x0000FFFF) | ((x << 16) & 0xFFFF0000)
+
+#define BALL_SWAP_BYTES_64(x)\
+	x = ((x >> 8)  & 0x00FF00FF00FF00FF) | ((x << 8)  & 0xFF00FF00FF00FF00);\
+	x = ((x >> 16) & 0x0000FFFF0000FFFF) | ((x << 16) & 0xFFFF0000FFFF0000);\
+	x = ((x >> 32) & 0x00000000FFFFFFFF) | ((x << 32) & 0xFFFFFFFF00000000)
+
+	template <>
+	BALL_INLINE void swapBytes(unsigned short& t)
+	{
+		BALL_SWAP_BYTES_16(t);
+	}
+
+	template <>
+	BALL_INLINE void swapBytes(short& t)
+	{
+		BALL_SWAP_BYTES_16(t);
+	}
+
+	template <>
+	BALL_INLINE void swapBytes(uint32_t& t)
+	{
+		BALL_SWAP_BYTES_32(t);
+	}
+
+	template <>
+	BALL_INLINE void swapBytes(int32_t& t)
+	{
+		BALL_SWAP_BYTES_32(t);
+	}
+
+	template <>
+	BALL_INLINE void swapBytes(uint64_t& t)
+	{
+		BALL_SWAP_BYTES_64(t);
+	}
+
+	namespace __private
+	{
+		union U32
+		{
+			U32(float f_)
+				: f(f_)
+			{
+			}
+
+			uint32_t u;
+			float f;
+		};
+
+		union U64
+		{
+			U64(double f_)
+				: f(f_)
+			{
+			}
+
+			uint64_t u;
+			double f;
+		};
+	}
+
+	template <>
+	BALL_INLINE void swapBytes(float& f)
+	{
+		__private::U32 u(f);
+		BALL_SWAP_BYTES_32(u.u);
+		f = u.f;
+	}
+
+	template <>
+	BALL_INLINE void swapBytes(double& f)
+	{
+		__private::U64 u(f);
+		BALL_SWAP_BYTES_64(u.u);
+		f = u.f;
+	}
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/SYSTEM/file.iC>
