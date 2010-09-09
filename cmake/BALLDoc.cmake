@@ -15,13 +15,9 @@ ELSE()
 ENDIF()
 
 IF (DOXYGEN_FOUND)
+	CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/Doxyfile_inc.in ${PROJECT_BINARY_DIR}/doc/Doxyfile_inc)
 	CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/Doxyfile.in ${PROJECT_BINARY_DIR}/doc/Doxyfile)
-	#CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/doxygen/Doxyfile_internal.in ${PROJECT_BINARY_DIR}/doc/doxygen/Doxyfile_internal)
 	CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/Doxyfile_dot.in ${PROJECT_BINARY_DIR}/doc/Doxyfile_dot)
-	#CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/doxygen/Doxyfile_noclass.in ${PROJECT_BINARY_DIR}/doc/doxygen/Doxyfile_noclass)
-	#CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/doxygen/Doxyfile_xml.in ${PROJECT_BINARY_DIR}/doc/doxygen/Doxyfile_xml)
-	#CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/BALLView/Doxyfile.in ${PROJECT_BINARY_DIR}/doc/BALLView/Doxyfile)
-	#CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/TUTORIAL/Doxyfile.in ${PROJECT_BINARY_DIR}/doc/TUTORIAL/Doxyfile)
 	
 	#######################################################################
 	## doc
