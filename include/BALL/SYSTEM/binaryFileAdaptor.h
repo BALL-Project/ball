@@ -180,50 +180,120 @@ namespace BALL
 	template <>
 	BALL_INLINE void swapBytes(unsigned short& t)
 	{
-		BALL_SWAP_BYTES_16(t);
+#if   BALL_USHORT_SIZE == 2
+			BALL_SWAP_BYTES_16(t);
+#elif BALL_USHORT_SIZE == 4
+			BALL_SWAP_BYTES_32(t);
+#elif BALL_USHORT_SIZE == 8
+			BALL_SWAP_BYTES_64(t);
+#else
+	#error "Unknown unsigned short size, refusing to compile."
+#endif
 	}
 
 	template <>
 	BALL_INLINE void swapBytes(short& t)
 	{
-		BALL_SWAP_BYTES_16(t);
+#if   BALL_SHORT_SIZE == 2
+			BALL_SWAP_BYTES_16(t);
+#elif BALL_SHORT_SIZE == 4
+			BALL_SWAP_BYTES_32(t);
+#elif BALL_SHORT_SIZE == 8
+			BALL_SWAP_BYTES_64(t);
+#else
+	#error "Unknown short size, refusing to compile."
+#endif
 	}
 
 	template <>
-	BALL_INLINE void swapBytes(uint32_t& t)
+	BALL_INLINE void swapBytes(unsigned int& t)
 	{
-		BALL_SWAP_BYTES_32(t);
+#if   BALL_UINT_SIZE == 2
+			BALL_SWAP_BYTES_16(t);
+#elif BALL_UINT_SIZE == 4
+			BALL_SWAP_BYTES_32(t);
+#elif BALL_UINT_SIZE == 8
+			BALL_SWAP_BYTES_64(t);
+#else
+	#error "Unknown unsigned int size, refusing to compile."
+#endif
 	}
 
 	template <>
-	BALL_INLINE void swapBytes(int32_t& t)
+	BALL_INLINE void swapBytes(int& t)
 	{
-		BALL_SWAP_BYTES_32(t);
+#if   BALL_INT_SIZE == 2
+			BALL_SWAP_BYTES_16(t);
+#elif BALL_INT_SIZE == 4
+			BALL_SWAP_BYTES_32(t);
+#elif BALL_INT_SIZE == 8
+			BALL_SWAP_BYTES_64(t);
+#else
+	#error "Unknown int size, refusing to compile."
+#endif
 	}
 
 	template <>
-	BALL_INLINE void swapBytes(uint64_t& t)
+	BALL_INLINE void swapBytes(long& t)
 	{
-		BALL_SWAP_BYTES_64(t);
+#if   BALL_LONG_SIZE == 2
+			BALL_SWAP_BYTES_16(t);
+#elif BALL_LONG_SIZE == 4
+			BALL_SWAP_BYTES_32(t);
+#elif BALL_LONG_SIZE == 8
+			BALL_SWAP_BYTES_64(t);
+#else
+	#error "Unknown long size, refusing to compile."
+#endif
+	}
+
+	template <>
+	BALL_INLINE void swapBytes(unsigned long& t)
+	{
+#if   BALL_ULONG_SIZE == 2
+			BALL_SWAP_BYTES_16(t);
+#elif BALL_ULONG_SIZE == 4
+			BALL_SWAP_BYTES_32(t);
+#elif BALL_ULONG_SIZE == 8
+			BALL_SWAP_BYTES_64(t);
+#else
+	#error "Unknown unsigned long size, refusing to compile."
+#endif
 	}
 
 	namespace __private
 	{
 		//We need these unions to provide a safe cast (without violating strict aliasing)
 		//from float/double to a bitfield
-		union U32
+		union UFloat
 		{
-			U32(float f_) : f(f_) { }
+			UFloat(float f_) : f(f_) { }
 
+#if   BALL_FLOAT_SIZE == 2
+			uint16_t u;
+#elif BALL_FLOAT_SIZE == 4
 			uint32_t u;
+#elif BALL_FLOAT_SIZE == 8
+			uint64_t u;
+#else
+	#error "Unknown double size, refusing to compile."
+#endif
 			float f;
 		};
 
-		union U64
+		union UDouble
 		{
-			U64(double f_) : f(f_) { }
+			UDouble(double f_) : f(f_) { }
 
+#if   BALL_DOUBLE_SIZE == 2
+			uint16_t u;
+#elif BALL_DOUBLE_SIZE == 4
+			uint32_t u;
+#elif BALL_DOUBLE_SIZE == 8
 			uint64_t u;
+#else
+	#error "Unknown double size, refusing to compile."
+#endif
 			double f;
 		};
 	}
@@ -231,16 +301,32 @@ namespace BALL
 	template <>
 	BALL_INLINE void swapBytes(float& f)
 	{
-		__private::U32 u(f);
+		__private::UFloat u(f);
+#if   BALL_FLOAT_SIZE == 2
+		BALL_SWAP_BYTES_16(u.u);
+#elif BALL_FLOAT_SIZE == 4
 		BALL_SWAP_BYTES_32(u.u);
+#elif BALL_FLOAT_SIZE == 8
+		BALL_SWAP_BYTES_64(u.u);
+#else
+	#error "Unknown float size, refusing to compile."
+#endif
 		f = u.f;
 	}
 
 	template <>
 	BALL_INLINE void swapBytes(double& f)
 	{
-		__private::U64 u(f);
+		__private::UDouble u(f);
+#if   BALL_DOUBLE_SIZE == 2
+		BALL_SWAP_BYTES_16(u.u);
+#elif BALL_DOUBLE_SIZE == 4
+		BALL_SWAP_BYTES_32(u.u);
+#elif BALL_DOUBLE_SIZE == 8
 		BALL_SWAP_BYTES_64(u.u);
+#else
+	#error "Unknown double size, refusing to compile."
+#endif
 		f = u.f;
 	}
 

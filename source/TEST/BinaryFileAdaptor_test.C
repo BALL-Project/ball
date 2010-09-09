@@ -118,7 +118,7 @@ CHECK(Byte Swapping (int64_t))
 RESULT
 
 CHECK(Byte Swapping (float))
-	__private::U32 tmp(0.0f);
+	__private::UFloat tmp(0.0f);
 	tmp.u = 0xAABBCCDD;
 	swapBytes(tmp.f);
 	TEST_EQUAL(tmp.u, 0xDDCCBBAA);
@@ -127,7 +127,7 @@ CHECK(Byte Swapping (float))
 RESULT
 
 CHECK(Byte Swapping (double))
-	__private::U64 tmp(0.0);
+	__private::UDouble tmp(0.0);
 	tmp.u = 0xAAABACADBABBBCBD;
 	swapBytes(tmp.f);
 	TEST_EQUAL(tmp.u, 0xBDBCBBBAADACABAA);
