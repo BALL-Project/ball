@@ -4,18 +4,19 @@
 #include <BALL/SYSTEM/path.h>
 #include <BALL/XRAY/crystalInfo.h>
 #include <BALL/FORMAT/lineBasedFile.h>
+#include <BALL/FORMAT/parameters.h>
+#include <BALL/FORMAT/parameterSection.h>
 
 using namespace std;
 
 namespace BALL
 {
-	const char* CrystalInfo::Option::SPACE_GROUP_FILE = "filename";
-	const char* CrystalInfo::Default::SPACE_GROUP_FILE = "XRAY/spacegroups-details.dat";
-	const char* CrystalInfo::Option::SPACE_GROUP_LIST_FILE = "filename";
-	const char* CrystalInfo::Default::SPACE_GROUP_LIST_FILE = "XRAY/spacegroups-list.dat";
+	const string CrystalInfo::Option::SPACE_GROUP_FILE = "filename";
+	const string CrystalInfo::Default::SPACE_GROUP_FILE = "XRAY/spacegroups.dat";
 
 	CrystalInfo::CrystalInfo()
-		:	space_group_("P 1"),
+		:	options(),
+			space_group_("P 1"),
 			cell_dimensions_(1.0, 1.0, 1.0),
 			alpha_(90, false),
 			beta_(90, false),
@@ -33,7 +34,8 @@ namespace BALL
 	}
 
 	CrystalInfo::CrystalInfo(const CrystalInfo& ci)
-		:	space_group_(ci.space_group_),
+		:	options(ci.options),
+			space_group_(ci.space_group_),
 			cell_dimensions_(ci.cell_dimensions_),
 			alpha_(ci.alpha_),
 			beta_(ci.beta_),
@@ -51,7 +53,8 @@ namespace BALL
 	}
 	
 	CrystalInfo::CrystalInfo(String group, Vector3 dim, Angle alpha, Angle beta, Angle gamma)
-		:	space_group_(group),
+		:	options(),
+			space_group_(group),
 			cell_dimensions_(dim.x, dim.y, dim.z),
 			alpha_(alpha),
 			beta_(beta),
@@ -271,6 +274,12 @@ namespace BALL
 	const Matrix4x4& CrystalInfo::getFrac2Cart() const
 	{
 		return frac2cart_;
+	}
+
+	void CrystalInfo::setDefaultOptions()
+	{
+		options.setDefault(CrystalInfo::Option::SPACE_GROUP_FILE,
+												CrystalInfo::Default::SPACE_GROUP_FILE);
 	}
 
 	

@@ -16,6 +16,10 @@
 #include <BALL/DATATYPE/string.h>
 #endif
 
+#ifndef BALL_DATATYPE_OPTIONS_H
+#include <BALL/DATATYPE/options.h>
+#endif
+
 #ifndef BALL_COMMON_EXCEPTION_H
 # include <BALL/COMMON/exception.h>
 #endif
@@ -48,8 +52,7 @@ namespace BALL
 			{
 				/** The file name for the space group to symmetry operations mappings file
 				 */
-				static const char* SPACE_GROUP_FILE;
-				static const char* SPACE_GROUP_LIST_FILE;
+				static const string SPACE_GROUP_FILE;
 			};
 			
 			/** Default Names
@@ -58,8 +61,7 @@ namespace BALL
 			{
 				/** The default filename for the space group mappings file
 				 */
-				static const char* SPACE_GROUP_FILE;
-				static const char* SPACE_GROUP_LIST_FILE;
+				static const string SPACE_GROUP_FILE;
 			};
 
 			//@}
@@ -148,6 +150,18 @@ namespace BALL
 
 			const Matrix4x4& getCart2Frac() const;	
 			const Matrix4x4& getFrac2Cart() const;	
+			
+			/** Resets the options to default values.
+			*/
+			void setDefaultOptions();
+			
+			/** @name Public Attributes
+			*/
+			//@
+			/// options
+			Options options;
+
+			//@}
 
 			/** @name Storable Interface
 			*/
@@ -170,6 +184,13 @@ namespace BALL
 
 			void calculateMatrices_();
 			bool retrieveSymOps_(const String& sg);
+			
+			/** Reads, checks and stores the options.   
+		  	*
+				* @return bool - false if one of the options got an invalid value.
+				* @return bool - true otherwise
+				*/
+			//bool readOptions_();
 
 			String space_group_;
 			Vector3 cell_dimensions_;
