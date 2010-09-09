@@ -15,11 +15,17 @@
 
 namespace BALL 
 {
-	/**	HyperChem file class.
-			This class enables BALL to read and write HyperChem HIN files.  \par
-			
-    	\ingroup  StructureFormats
-	*/
+	/**
+	 * HyperChem file class.
+	 * This class enables BALL to read and write HyperChem HIN files.  \par
+	 *
+	 * Note: HIN defines a Molecule as a connected component in the molecule graph
+	 *       If you read e.g. a protein from a PDBFile, such that no bonds are set
+	 *       each atom will be placed into its own molecule. To prevent this from
+	 *       happening use the \link FragmentDB FragmentDB to build missing bonds.
+	 *
+	 * \ingroup  StructureFormats
+	 */
 	class BALL_EXPORT HINFile
 		: public GenericMolFile
 	{
