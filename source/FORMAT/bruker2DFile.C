@@ -3,6 +3,7 @@
 //
 
 #include <BALL/FORMAT/bruker2DFile.h>
+#include <BALL/SYSTEM/binaryFileAdaptor.h>
 
 using namespace std;
 

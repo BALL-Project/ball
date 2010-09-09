@@ -9,6 +9,10 @@
 #	include <BALL/FORMAT/trajectoryFile.h>
 #endif
 
+#ifndef BALL_SYSTEM_BINARYFILEADAPTOR_H
+# include <BALL/SYSTEM/binaryFileAdaptor.h>
+#endif
+
 namespace BALL
 {
 	/** TRR Trajectory file format. 

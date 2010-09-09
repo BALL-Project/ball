@@ -13,6 +13,10 @@
 #	include <BALL/SYSTEM/file.h>
 #endif
 
+#ifndef BALL_SYSTEM_BINARYFILEADAPTOR_H
+# include <BALL/SYSTEM/binaryFileAdaptor.h>
+#endif
+
 #ifndef BALL_MATHS_COMMON_H
 # include <BALL/MATHS/common.h>
 #endif

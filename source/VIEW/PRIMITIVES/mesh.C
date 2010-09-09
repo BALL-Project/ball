@@ -5,6 +5,7 @@
 
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/SYSTEM/file.h>
+#include <BALL/SYSTEM/binaryFileAdaptor.h>
 
 using namespace std;
 

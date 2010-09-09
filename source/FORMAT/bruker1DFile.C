@@ -3,6 +3,7 @@
 //
 
 #include <BALL/FORMAT/bruker1DFile.h>
+#include <BALL/SYSTEM/binaryFileAdaptor.h>
 
 namespace BALL 
 {

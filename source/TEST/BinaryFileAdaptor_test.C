@@ -7,6 +7,7 @@
 ///////////////////////////
 
 #include <BALL/SYSTEM/file.h>
+#include <BALL/SYSTEM/binaryFileAdaptor.h>
 
 ///////////////////////////
 
