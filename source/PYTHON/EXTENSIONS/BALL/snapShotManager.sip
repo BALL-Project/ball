@@ -22,42 +22,37 @@ class SnapShotManager
      static const unsigned int FLUSH_TO_DISK_FREQUENCY;
     };
 
-    SnapShotManager() throw();
-    SnapShotManager(System*, const ForceField*, TrajectoryFile*) throw();
-    SnapShotManager
-			(System* /my_system/, const ForceField* /my_force_field/,
-			 const Options& /my_options/, TrajectoryFile* /file/)
-			throw();
-    SnapShotManager(const SnapShotManager& /manager/) throw();
-    ~SnapShotManager() throw();
+    SnapShotManager();
+    SnapShotManager(System*, const ForceField*, TrajectoryFile*);
+    SnapShotManager(System*, TrajectoryFile* file = 0);
+    SnapShotManager(System*, const ForceField*, const Options&, TrajectoryFile*);
+    SnapShotManager(const SnapShotManager& /manager/);
+    ~SnapShotManager();
 
-		bool setup(System* /my_system/, const ForceField* /my_forcefield/,
-								TrajectoryFile* /my_snapshot_file/) throw();
+		bool setup(System*, TrajectoryFile*);
+		bool setup(System*, const ForceField*, TrajectoryFile*);
 
-    virtual bool setup() throw();
+    virtual bool setup();
 
-    // const SnapShotManager& operator = (const SnapShotManager&)
-		//	throw();
+		virtual void clear();
+    virtual bool isValid() const;
 
-		virtual void clear() throw();
-    virtual bool isValid() const throw();
-
-		void setSystem(System* /my_system/) throw();
-		System* getSystem() const throw();
-		void setForceField(const ForceField* /my_ff/) throw();
-		const ForceField* getForceField() const throw();
-		void setTrajectoryFile(TrajectoryFile* /my_file/) throw();
-		TrajectoryFile* getTrajectoryFile() const throw();
-    void setFlushToDiskFrequency(Size /number/) throw();
-    Size getFlushToDiskFrequency() const throw();
+		void setSystem(System* /my_system/);
+		System* getSystem() const;
+		void setForceField(const ForceField* /my_ff/);
+		const ForceField* getForceField() const;
+		void setTrajectoryFile(TrajectoryFile* /my_file/);
+		TrajectoryFile* getTrajectoryFile() const;
+    void setFlushToDiskFrequency(Size /number/);
+    Size getFlushToDiskFrequency() const;
     virtual void takeSnapShot() throw(File::CannotWrite);
-		virtual bool applySnapShot(Size /number/) throw();
-		virtual bool applyFirstSnapShot() throw();
-		virtual bool applyNextSnapShot() throw();
-		virtual bool applyLastSnapShot() throw();
+		virtual bool applySnapShot(Size /number/);
+		virtual bool applyFirstSnapShot();
+		virtual bool applyNextSnapShot();
+		virtual bool applyLastSnapShot();
     virtual void flushToDisk() throw(File::CannotWrite);
-		Size getNumberOfSnapShotsInBuffer() throw();
-		bool readFromFile() throw();
-		void clearBuffer() throw();
+		Size getNumberOfSnapShotsInBuffer();
+		bool readFromFile();
+		void clearBuffer();
     Options options;
 };

@@ -61,15 +61,22 @@ class BALL_EXPORT SnapShotManager
 	//@{
 
 	/// Default constructor
-	SnapShotManager()
-		;
+	SnapShotManager();
+
+	/**
+	 * Constructor for a system and trajectory file. The internal reference
+	 * to a force field will be set to NULL
+	 * @param my_system the system to bind this manager to
+	 * @param my_snapshot_file an optional file containing a trajectory for the my_system's atoms
+	 */
+	SnapShotManager(System* my_system, TrajectoryFile* my_snapshot_file = 0);
 
 	/** This constructor expects a valid system, a valid force field
 			and the name of a snapshot file. 
 			Any existing file of the given name will be overwritten.
 			@param my_system the system to bind this manager to
 			@param my_force_field the force field that is bound to the system
-			@param my_snapshot_file 
+			@param my_snapshot_file a file containing a trajectory for the my_system's atoms
 	*/
 	SnapShotManager(System* my_system, const ForceField* my_force_field, TrajectoryFile* my_snapshot_file);
 
@@ -102,6 +109,14 @@ class BALL_EXPORT SnapShotManager
 			@return true, if the setup was succesful, false ow.
 	*/
 	bool setup(System* my_system, const ForceField* my_forcefield, TrajectoryFile* my_snapshot_file);
+
+	/** This setup method sets all necessary members and calls setup afterwards. The internal
+			force field reference is set to NULL.
+			@param my_system the System to which we want to bind this SnapShotManager
+			@param my_snapshot_file the trajectory file we want to use
+			@return true, if the setup was succesful, false ow.
+	*/
+	bool setup(System* my_system, TrajectoryFile* my_snapshot_file);
 
 	/** The setup method does all preparations necessary for using the
 			SnapshotManager.

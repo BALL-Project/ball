@@ -61,6 +61,22 @@ namespace BALL
 		setup();
 	}
 
+	SnapShotManager::SnapShotManager(System* my_system, TrajectoryFile* file)
+		: options(),
+		  system_ptr_(my_system),
+		  force_field_ptr_(0),
+		  snapshot_buffer_(0),
+		  trajectory_file_ptr_(file),
+		  flush_to_disk_frequency_(0),
+		  buffer_counter_(0),
+		  current_snapshot_(0)
+	{
+		options.setDefaultInteger(SnapShotManager::Option::FLUSH_TO_DISK_FREQUENCY,
+		                          SnapShotManager::Default::FLUSH_TO_DISK_FREQUENCY);
+
+		// call the setup method
+		setup();
+	}
 
 	// The constructor of the SnapshotManager.
 	// It expects a valid system and force field, a filename  of a snapshot
@@ -180,6 +196,14 @@ namespace BALL
 		return setup();
 	}
 
+	// The setup method does the actual preparations
+	bool SnapShotManager::setup(System* my_system, TrajectoryFile* my_snapshot_file)
+	{
+		setSystem(my_system);
+		setForceField(0);
+		setTrajectoryFile(my_snapshot_file);
+		return setup();
+	}
 
 	// The setup method does the actual preparations
 	bool SnapShotManager::setup()
