@@ -58,7 +58,7 @@ namespace BALL
 				eds_prefix_("http://eds.bmc.uu.se/eds/dfs/"),
 				eds_infix_("/"),
 				eds_suffix_(".omap"),
-				emdb_prefix_("ftp://ftp1.ebi.ac.uk/pub/databases/emdb/structures/EMD-"),
+				emdb_prefix_("ftp://emdb.rutgers.edu/structures/EMD-"),
 				emdb_infix_("/map/"),
 				emdb_suffix_(".map.gz"),
 				current_reply_(0),
