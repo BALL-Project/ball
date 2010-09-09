@@ -17,6 +17,8 @@ CHECK_TYPE_SIZE("unsigned short"     BALL_USHORT_SIZE)
 CHECK_TYPE_SIZE("unsigned int"       BALL_UINT_SIZE)
 CHECK_TYPE_SIZE("unsigned long"      BALL_ULONG_SIZE)
 CHECK_TYPE_SIZE("unsigned long long" BALL_ULONGLONG_SIZE)
+CHECK_TYPE_SIZE("float"              BALL_FLOAT_SIZE)
+CHECK_TYPE_SIZE("double"             BALL_DOUBLE_SIZE)
 
 ## Find a suitable integer types of 64 bit length
 CHECK_TYPE_SIZE("uint64_t" BALL_UINT64_T_SIZE)

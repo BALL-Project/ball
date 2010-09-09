@@ -82,6 +82,8 @@
 #cmakedefine BALL_ULONG_SIZE @BALL_ULONG_SIZE@
 #cmakedefine BALL_SIZE_T_SIZE @BALL_SIZE_T_SIZE@
 #cmakedefine BALL_POINTER_SIZE @BALL_POINTER_SIZE@
+#cmakedefine BALL_FLOAT_SIZE @BALL_FLOAT_SIZE@
+#cmakedefine BALL_DOUBLE_SIZE @BALL_DOUBLE_SIZE@
 
 // define platform independant types for unsigned 16|32|64 bit numbers
 #cmakedefine BALL_UINT16 @BALL_UINT16@
