@@ -52,28 +52,23 @@ namespace BALL
 
 	void Bruker2DFile::read()
 	{
-	  char c[4];
-		signed long int &numdum = *(signed long int*) (&c[0]);
-	  File& f = static_cast<File&> (*this);
-	  bool littleEndian;
-
 		// first we will have to find out whether we are using big or little
 		// endian on this machine.
-	  int endTest = 1;
-	  if (*(char *) &endTest == 1)
-	  {
-	    littleEndian = true;
-	  } 	
-		else
-		{
-	    littleEndian = false;
-	  }
+		unsigned int endTest = 1;
+		BinaryFileAdaptor<BALL_INT32> adapt_int32_t_;
+		adapt_int32_t_.setSwapEndian((*(char*)&endTest == 1) != (parsf1_.getDoubleValue("BYTORDP") == 1.0));
 
 	  int SIF1_   = (int) parsf1_.getIntValue( "SI"   ); // Y - spacing
 	  int SIF2_   = (int) parsf2_.getIntValue( "SI"   ); // X - spacing
 	  int XDIMF1_ = (int) parsf1_.getIntValue( "XDIM" );
 	  int XDIMF2_ = (int) parsf2_.getIntValue( "XDIM" );
 
+#ifdef BALL_DEBUG
+		Log.info() << "SIF1: " << SIF1_ << "--" << parsf1_.getIntValue("SI") << parsf1_.getDoubleValue("SI")
+		           << " SIF2: " << SIF2_ << "--" << parsf2_.getIntValue( "SI") << parsf2_.getDoubleValue( "SI")
+		           << " XDIMF1: " <<  XDIMF1_<<"--"<< parsf1_.getIntValue( "XDIM" )  << parsf1_.getDoubleValue( "XDIM" )
+		           << " XDIMF2: " << XDIMF2_<<"--"<< parsf2_.getIntValue( "XDIM" ) <<  parsf2_.getDoubleValue( "XDIM" )  << std::endl;
+#endif
 	  // prepare the regularData
 	  //spectrum_.setXSize(SIF2_);
 	  //spectrum_.setYSize(SIF1_);
@@ -82,11 +77,19 @@ namespace BALL
 	  double a = parsf2_.getDoubleValue( "OFFSET" );
 	  double b = parsf2_.getDoubleValue( "OFFSET" ) - (parsf2_.getDoubleValue( "SW_p" ) / parsf2_.getDoubleValue( "SF" ));
 
+#ifdef BALL_DEBUG
+		Log.info() << "parsf2: Offset: " << a << " b: " << b << " SW_P: " <<parsf2_.getDoubleValue( "SW_p" ) << " SF: " <<  parsf2_.getDoubleValue( "SF" ) << std::endl;
+#endif
+
 		double lower_x = (a<b) ? a : b;
 		double upper_x = (a>b) ? a : b;
 		
 	  a = parsf1_.getDoubleValue( "OFFSET" );
 	  b = parsf1_.getDoubleValue( "OFFSET" ) - (parsf1_.getDoubleValue( "SW_p" ) / parsf1_.getDoubleValue( "SF" ));
+
+#ifdef BALL_DEBUG
+		Log.info() <<"parsf1: Offset: " << a << " SW_P: " << parsf1_.getDoubleValue( "SW_p" ) << " SF: " <<  parsf1_.getDoubleValue("SF") << std::endl;
+#endif
 
 		double lower_y = (a<b) ? a : b;
 		double upper_y = (a>b) ? a : b;
@@ -99,51 +102,23 @@ namespace BALL
 															Vector2(upper_x, upper_y) - Vector2(lower_x, lower_y)); 
 
 	  // Back to the beginning of the file.
-	  f.reopen( );
+	  this->reopen( );
 	  
 	  int matNumF2 = (int) (SIF2_ / XDIMF2_); // Number of matrices in x - direction
 	  int matNumF1 = (int) (SIF1_ / XDIMF1_); // Number of matrices in y - direction
-		int byte_order = (int) parsf1_.getIntValue("BYTORDP");
 
-		int read_counter = 0;
 		for (int actMat=0; actMat < matNumF2 * matNumF1; actMat++ ) 
 		{ // Walk through all submatrices
 			for (int f1 = 0; f1 < XDIMF1_; f1++ ) 
 			{   // for each matrix: look at every row
 				for (int f2 = 0; f2 < XDIMF2_; f2++ ) 
 				{ // look at every column
-					if (!f.good()) 
+					if (!this->good())
 					{
 						break;
 					}
 
-					//						 "XDIM1: " << XDIMF1_ << " XDIM2: " << XDIMF2_ <<
-					//						 " numMats " << matNumF2*matNumF1 << std::endl;
-
-read_counter += 4;
-//std::cout << read_counter << std::endl;
-					f.read(c, 4);
-					if (byte_order == 1) 
-					{
-						if (littleEndian == false)
-						{
-							// conversion from little to big
-							numdum = (signed long) ( ((numdum & 0x000000FFL) << 24)
-									|((numdum & 0x0000FF00L) << 8)
-									|((numdum & 0x00FF0000L) >> 8)
-									|((numdum & 0xFF000000L) >> 24));
-						}
-					} 
-					else 
-					{
-						if (littleEndian == true) // conversion from big to little
-						{
-							numdum = (signed long) ( ((numdum & 0x000000FFL) << 24)
-									|((numdum & 0x0000FF00L) << 8)
-									|((numdum & 0x00FF0000L) >> 8)
-									|((numdum & 0xFF000000L) >> 24));
-						} 
-					}
+					(*this) >> adapt_int32_t_;
 
 					// We need to know the number of the matrix we are looking at
 					// right now.
@@ -151,10 +126,15 @@ read_counter += 4;
 					int actMatF1 = (actMat / matNumF2); // y - coordinate of submatrix
 
 					spectrum_[ f2 + XDIMF2_ * actMatF2 + ( ( f1 + XDIMF1_ * actMatF1 ) * SIF2_ ) ] 
-						= (float) numdum;
+						= (float) adapt_int32_t_.getData();
 				}
 			}
 		}
+
+#ifdef BALL_DEBUG
+		Log.info() << "end of read" << std::endl;
+#endif
+
 	}
 
   /** Returns the shift corresponding to a position in the bitmap.
