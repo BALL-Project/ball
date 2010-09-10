@@ -134,11 +134,11 @@ namespace BALL
 	}
 
 	template <>
-	double ParsedFunction<float>::operator () (float argument)
+	BALL_EXPORT double ParsedFunction<float>::operator () (float argument)
 		throw(Exception::ParseError);
 
-  template <>
-	double ParsedFunction<double>::operator () (double argument)
+	template <>
+	BALL_EXPORT double ParsedFunction<double>::operator () (double argument)
 		throw(Exception::ParseError);
  
 	template <typename arg>
@@ -156,7 +156,6 @@ namespace BALL
 		functions_[""] = 0;
 	}
 
-	template class BALL_EXPORT ParsedFunction<float>;
   /** @} */
 }
 
