@@ -40,9 +40,6 @@
 
 // This allows us to switch raytracing on and off. Later, we might add this flag
 // to config.h or remove it completely and always raytracing always.
-#undef BALL_HAS_RTFACT
-#define BALL_HAS_RTFACT
-			 
 #ifdef BALL_HAS_RTFACT 
 
 #ifndef BALL_VIEW_RENDERING_RAYTRACINGRENDERER_H

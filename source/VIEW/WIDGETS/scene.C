@@ -1720,8 +1720,7 @@ namespace BALL
 					onNotify(static_cast<NotificationEvent*>(evt)->getMessage());
 					notify_(static_cast<NotificationEvent*>(evt)->getMessage());
 					break;
-				default:
-				case RENDER_TO_BUFFER_FINISHED_EVENT:
+				case RENDER_TO_BUFFER_FINISHED_EVENT: {
 					RenderSetup* renderer = static_cast<RenderToBufferFinishedEvent*>(evt)->getRenderer();
 
 					renderer->makeCurrent();
@@ -1804,6 +1803,7 @@ namespace BALL
 						}
 					} 
 					break;
+				}
 				default:
 				  break;
 			}
@@ -2755,6 +2755,7 @@ namespace BALL
 				updateGL();
 
 			}
+#ifdef BALL_HAS_RTFACT
 			else if (RTTI::isKindOf<t_RaytracingRenderer>(*(renderers_[0]->renderer)))
 			{
 				// create a new renderer
@@ -2783,6 +2784,7 @@ namespace BALL
 
 				updateGL();
 			}
+#endif
 
 			ok = true;
 
@@ -2918,26 +2920,25 @@ namespace BALL
 
 			new_widget->installEventFilter(this);
 
-///////// Variante 1 ////
-//			//GLRenderer*   new_renderer = new GLRenderer;
-//			//new_renderer->init(*this);
-//			//new_renderer->enableVertexBuffers(want_to_use_vertex_buffer_);
-//
-//			new_widget->show();
-//
-//			boost::shared_ptr<RenderSetup> new_rs(new RenderSetup(&*rt_renderer_, new_widget, this, stage_));
-//			new_rs->setReceiveBufferUpdates(false);	
-//
-//			//resetRepresentationsForRenderer_(*new_rs);
+#ifndef BALL_HAS_RTFACT
+			GLRenderer*   new_renderer = new GLRenderer;
+			new_renderer->init(*this);
+			new_renderer->enableVertexBuffers(want_to_use_vertex_buffer_);
+
+			new_widget->show();
+
+			boost::shared_ptr<RenderSetup> new_rs(new RenderSetup(new_renderer, new_widget, this, stage_));
+			new_rs->setReceiveBufferUpdates(false);
 
 
-///////// Variante 2 ////
+#else
 			t_RaytracingRenderer* new_renderer = new t_RaytracingRenderer();
 			new_renderer->init(*this);
 			new_renderer->setFrameBufferFormat(new_widget->getFormat());
 
 			boost::shared_ptr<RenderSetup> new_rs(new RenderSetup(new_renderer, new_widget, this, stage_));
-			new_rs->setReceiveBufferUpdates(true);	
+			new_rs->setReceiveBufferUpdates(true);
+#endif
 			resetRepresentationsForRenderer_(*new_rs);
 			new_widget->show();
 

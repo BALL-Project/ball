@@ -18,6 +18,8 @@
 #endif
 #endif
 
+#include <QtGui/QApplication>
+
 namespace BALL
 {
 	namespace VIEW
@@ -300,7 +302,7 @@ namespace BALL
 					fps = 0.;
 				}
 				loop_mutex.lock();
-				qApp->postEvent(scene_, new RenderToBufferFinishedEvent(this));
+				QApplication::instance()->postEvent(scene_, new RenderToBufferFinishedEvent(this));
 				wait_for_render.wait(&loop_mutex);
 				loop_mutex.unlock();
 				t.reset();
@@ -477,6 +479,7 @@ namespace BALL
 		}
 		void RenderSetup::updateMaterialForRepresentation(const Representation* rep)
 		{
+#ifdef BALL_HAS_RTFACT
 			if (RTTI::isKindOf<RTfactRenderer>(*renderer))
 			{
 			render_mutex_.lock();
@@ -491,6 +494,7 @@ namespace BALL
 			{
 				return;
 			}
+#endif
 		}
 		
 		void RenderSetup::updateBackgroundColor()
