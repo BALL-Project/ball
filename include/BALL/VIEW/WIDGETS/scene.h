@@ -75,6 +75,7 @@ namespace BALL
 
 	namespace VIEW
 	{
+		class ColorMap;
 		class Preferences;
 		class LightSettings;
 		class StageSettings;

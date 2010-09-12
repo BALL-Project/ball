@@ -31,6 +31,7 @@ class QImage;
 namespace BALL {
 	namespace VIEW {
 
+		class ColorMap;
 		class Scene;
 
 		/** This class encapsulates a (renderer, target) pair for Scene.
