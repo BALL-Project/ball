@@ -31,10 +31,8 @@ namespace BALL
 		{
 		public:
 			BufferedRenderer()
-			 : Renderer(), 
-			 	 bufferFormat(),
-				 offset_(0),
-				 stride_(0)
+				: offset_(0),
+				  stride_(0)
 		 { }
 
 			virtual ~BufferedRenderer() throw() { }
