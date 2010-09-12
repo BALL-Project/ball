@@ -172,11 +172,6 @@ namespace BALL
 			return smooth_lines_;
 		}
 
-		bool GLRenderer::init(Scene& scene)
-		{
-			return Renderer::init(scene);
-		}
-
 		bool GLRenderer::init(const Stage& stage, float width, float height)
 		{
 			Renderer::init(stage, width, height);

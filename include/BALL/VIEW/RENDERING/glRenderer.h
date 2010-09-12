@@ -147,7 +147,7 @@ namespace BALL
 			///
 			GeometricObject* getObject(GLRenderer::Name name) const;
 
-			virtual bool init(Scene& scene);
+			using Renderer::init;
 
 			/// Initialise the renderer, e.g. the display lists.
 			virtual bool init(const Stage& stage, float width, float height);
