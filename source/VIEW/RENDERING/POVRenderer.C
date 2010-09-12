@@ -165,11 +165,6 @@ namespace BALL
 			return output;
 		}
 
-		bool POVRenderer::init(Scene& scene)
-		{
-			return Renderer::init(scene);
-		}
-
 		// init must be called right before the rendering starts, since
 		// we need to fix the camera, light sources, etc...
 		bool POVRenderer::init(const Stage& stage, float width, float height)

@@ -115,9 +115,7 @@ namespace BALL
 			 */
 			//@{
 
-			/** Initialization routine.
-			*/
-			virtual bool init(Scene& scene);
+			using Renderer::init;
 
 			/** Start method. 
 			    This method creates the file and writes the header.
