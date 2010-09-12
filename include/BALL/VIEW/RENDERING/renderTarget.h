@@ -270,7 +270,7 @@ namespace BALL
 			 *  eye_separation denotes the distance along the right vector used
 			 *  by this "eye".
 			 */
-		  virtual void setupStereo(float eye_separation, float focal_length) {};
+		  virtual void setupStereo(float /*eye_separation*/, float /*focal_length*/) {};
 		};
 
 	} //namespace VIEW
