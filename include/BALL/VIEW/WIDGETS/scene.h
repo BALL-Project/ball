@@ -788,7 +788,9 @@ namespace BALL
 			inline Vector3 getTranslationVector_(const Vector3& v);
 			
 			void createCoordinateSystem_(bool at_origin);
-	
+
+			void registerRenderers_();
+
 			/// Estimate current fps and convert into a string
 			String createFPSInfo_();
 

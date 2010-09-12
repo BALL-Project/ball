@@ -139,11 +139,8 @@ namespace BALL
 				stereo_right_eye_(-1)
 		{
 			stage_settings_=new StageSettings(this);
-#ifndef BALL_HAS_RTFACT
-			renderers_.push_back(boost::shared_ptr<RenderSetup>(new RenderSetup(gl_renderer_, main_display_, this, stage_)));
-#else
-			renderers_.push_back(boost::shared_ptr<RenderSetup>(new RenderSetup(&*rt_renderer_, main_display_, this, stage_)));
-#endif
+
+			registerRenderers_();
 
 			init();
 			renderers_[0]->resize(width(), height());
@@ -201,11 +198,7 @@ namespace BALL
 			Log.error() << "new Scene (2) " << this << std::endl;
 #endif
 
-#ifndef BALL_HAS_RTFACT
-			renderers_.push_back(boost::shared_ptr<RenderSetup>(new RenderSetup(gl_renderer_, main_display_, this, stage_)));
-#else
-			renderers_.push_back(boost::shared_ptr<RenderSetup>(new RenderSetup(&*rt_renderer_, main_display_, this, stage_)));
-#endif
+			registerRenderers_();
 
 			// the widget with the MainControl
 			registerWidget(this);
@@ -247,12 +240,7 @@ namespace BALL
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (3) " << this << std::endl;
 #endif
-
-#ifndef BALL_HAS_RTFACT
-			renderers_.push_back(boost::shared_ptr<RenderSetup>(new RenderSetup(gl_renderer_, main_display_, this, stage_)));
-#else
-			renderers_.push_back(boost::shared_ptr<RenderSetup>(new RenderSetup(&*rt_renderer_, main_display_, this, stage_)));
-#endif
+			registerRenderers_();
 
 			setObjectName(name);
 
@@ -294,6 +282,15 @@ namespace BALL
 			//rt_renderer_ & rt_render_window are smart pointers
 
 			if (animation_thread_ != 0) delete animation_thread_;
+		}
+
+		void Scene::registerRenderers_()
+		{
+#ifndef BALL_HAS_RTFACT
+			renderers_.push_back(boost::shared_ptr<RenderSetup>(new RenderSetup(gl_renderer_, main_display_, this, stage_)));
+#else
+			renderers_.push_back(boost::shared_ptr<RenderSetup>(new RenderSetup(&*rt_renderer_, main_display_, this, stage_)));
+#endif
 		}
 
 		void Scene::clear()
