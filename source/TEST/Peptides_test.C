@@ -78,6 +78,64 @@ CHECK(ThreeLetterCode(char aa))
 	TEST_EQUAL(ThreeLetterCode('W'), "TRP")
 	TEST_EQUAL(ThreeLetterCode('Y'), "TYR")
 RESULT
+ 	
+CHECK(IsOneLetterCode(char aa))
+	TEST_EQUAL(IsOneLetterCode('b'), false)
+	TEST_EQUAL(IsOneLetterCode('?'), false)
+	TEST_EQUAL(IsOneLetterCode('a'), true)
+	TEST_EQUAL(IsOneLetterCode('A'), true)
+	TEST_EQUAL(IsOneLetterCode('C'), true)
+	TEST_EQUAL(IsOneLetterCode('D'), true)
+	TEST_EQUAL(IsOneLetterCode('E'), true)
+	TEST_EQUAL(IsOneLetterCode('F'), true)
+	TEST_EQUAL(IsOneLetterCode('G'), true)
+	TEST_EQUAL(IsOneLetterCode('H'), true)
+	TEST_EQUAL(IsOneLetterCode('I'), true)
+	TEST_EQUAL(IsOneLetterCode('K'), true)
+	TEST_EQUAL(IsOneLetterCode('L'), true)
+	TEST_EQUAL(IsOneLetterCode('M'), true)
+	TEST_EQUAL(IsOneLetterCode('N'), true)
+	TEST_EQUAL(IsOneLetterCode('P'), true)
+	TEST_EQUAL(IsOneLetterCode('Q'), true)
+	TEST_EQUAL(IsOneLetterCode('R'), true)
+	TEST_EQUAL(IsOneLetterCode('S'), true)
+	TEST_EQUAL(IsOneLetterCode('T'), true)
+	TEST_EQUAL(IsOneLetterCode('V'), true)
+	TEST_EQUAL(IsOneLetterCode('W'), true)
+	TEST_EQUAL(IsOneLetterCode('Y'), true)
+RESULT
+ 		
+CHECK(IsThreeLetterCode(const String& aa))
+	TEST_EQUAL(IsThreeLetterCode("ALAALA"), false)
+	TEST_EQUAL(IsThreeLetterCode(""), false)
+	TEST_EQUAL(IsThreeLetterCode("alalys"), false)
+	TEST_EQUAL(IsThreeLetterCode("ala@arg@"), false)
+	TEST_EQUAL(IsThreeLetterCode("A@A"), false)
+
+	TEST_EQUAL(IsThreeLetterCode("ala"), true)
+	TEST_EQUAL(IsThreeLetterCode("ALA"), true)
+	TEST_EQUAL(IsThreeLetterCode("Ala"), true)
+	TEST_EQUAL(IsThreeLetterCode("ARG"), true)
+	TEST_EQUAL(IsThreeLetterCode("ASN"), true)
+	TEST_EQUAL(IsThreeLetterCode("ASP"), true)
+	TEST_EQUAL(IsThreeLetterCode("CYS"), true)
+	TEST_EQUAL(IsThreeLetterCode("GLN"), true)
+	TEST_EQUAL(IsThreeLetterCode("GLU"), true)
+	TEST_EQUAL(IsThreeLetterCode("GLY"), true)
+	TEST_EQUAL(IsThreeLetterCode("HIS"), true)
+	TEST_EQUAL(IsThreeLetterCode("his"), true)
+	TEST_EQUAL(IsThreeLetterCode("ILE"), true)
+	TEST_EQUAL(IsThreeLetterCode("LEU"), true)
+	TEST_EQUAL(IsThreeLetterCode("LYS"), true)
+	TEST_EQUAL(IsThreeLetterCode("MET"), true)
+	TEST_EQUAL(IsThreeLetterCode("PHE"), true)
+	TEST_EQUAL(IsThreeLetterCode("PRO"), true)
+	TEST_EQUAL(IsThreeLetterCode("SER"), true)
+	TEST_EQUAL(IsThreeLetterCode("THR"), true)
+	TEST_EQUAL(IsThreeLetterCode("TRP"), true)
+	TEST_EQUAL(IsThreeLetterCode("TYR"), true)
+	TEST_EQUAL(IsThreeLetterCode("VAL"), true)
+RESULT
 
 CHECK(ThreeLetterToOneLetter(const ThreeLetterAASequence& sequence))
 	ThreeLetterAASequence seq;
@@ -115,6 +173,64 @@ CHECK(GetSequence(const Protein& protein))
 	OneLetterAASequence seq = GetSequence(*S.beginProtein());
 	TEST_EQUAL(seq, "AGS")
 RESULT
+
+CHECK(GetSequence(const Chain& chain))
+	HINFile f(BALL_TEST_DATA_PATH(AlaGlySer__CysHisMet.hin));
+	System S;
+	f >> S;
+	TEST_EQUAL(S.countResidues(), 6)
+	ChainIterator chain_it = S.beginChain();
+	OneLetterAASequence seq = GetSequence(*chain_it);
+	TEST_EQUAL(seq, "AGS")
+	chain_it++;
+	seq = GetSequence(*chain_it);
+	TEST_EQUAL(seq, "CHM")
+RESULT
+
+////////////////////////////////////////////////
+//         class NameConverter
+////////////////////////////////////////////////
+NameConverter* converter_p;
+
+CHECK(NameConverter())
+	converter_p = new NameConverter();	
+	TEST_NOT_EQUAL(converter_p, 0)
+RESULT
+			
+CHECK(~NameConverter())
+	delete converter_p;
+RESULT
+			
+CHECK(setDefaultOptions())
+	NameConverter converter;
+	converter.setDefaultOptions();
+	TEST_EQUAL(converter.options.get(NameConverter::Option::INIFile), NameConverter::Default::INIFile)		
+RESULT
+
+CHECK(supportsNamingScheme(const String& scheme_name) const)	
+	NameConverter converter;
+	TEST_EQUAL(converter.supportsNamingScheme("BMRB"), true)
+	TEST_EQUAL(converter.supportsNamingScheme("bmrb"), true)
+	TEST_EQUAL(converter.supportsNamingScheme("PDB"), true)
+	TEST_EQUAL(converter.supportsNamingScheme("SYBYL"), true)
+	TEST_EQUAL(converter.supportsNamingScheme("xplor"), true)
+RESULT
+
+
+CHECK(convertName(const String& amino_acid, const String& old_atom_name, const String& old_naming_scheme, const String& new_naming_scheme) const)
+	NameConverter converter;
+	if (converter.supportsNamingScheme("BMRB") && converter.supportsNamingScheme("PDB") )
+	{
+		TEST_EQUAL(converter.convertName("LYS", "HB2", "BMRB", "PDB"), "1HB")
+		TEST_EQUAL(converter.convertName("K", "HB2", "BMRB", "PDB"), "1HB")
+		TEST_EQUAL(converter.convertName("k", "1hb", "PDB", "BMRB"), "HB2")
+	}
+RESULT
+
+
+
+
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
