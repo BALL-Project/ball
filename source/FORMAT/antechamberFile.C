@@ -46,7 +46,7 @@ namespace BALL
 		int rounded_charge = (int) Maths::round(total_charge);
 
 		String charge_line(255, "CHARGE      %.2f ( %d )", total_charge, rounded_charge);
-		(File&)(*this) << charge_line << endl;
+		(File&)(*this) << charge_line << std::endl;
 
 		// next, we need the element counts
 		HashMap<String, Size> element_counts;
@@ -67,7 +67,7 @@ namespace BALL
 		{
 			formula_line += element_iterator->first + String(element_iterator->second) + " ";
 		}
-		(File&)(*this) << formula_line << endl;
+		(File&)(*this) << formula_line << std::endl;
 
 		// write all atoms
 		String atom_format("ATOM%7d  %-4s%-4s%5d%12.3f%8.3f%8.3f%10.6lf%10s");
@@ -123,7 +123,7 @@ namespace BALL
 														residue_id, at_it->getPosition().x, at_it->getPosition().y, at_it->getPosition().z,
 														at_it->getCharge(), atom_type.c_str());
 
-			(File&)(*this) << atom_line << endl;
+			(File&)(*this) << atom_line << std::endl;
 		}
 
 		// and finally, write out all bonds
@@ -138,7 +138,7 @@ namespace BALL
 			                      atom_indices[bit->getSecondAtom()], bit->getOrder(),
 														atom_names[bit->getFirstAtom()].c_str(), atom_names[bit->getSecondAtom()].c_str());
 
-			(File&)(*this) << bond_line << endl;
+			(File&)(*this) << bond_line << std::endl;
 
 			++current_bond;
 		}
@@ -213,7 +213,7 @@ namespace BALL
 				// TODO: currently, we ignore the residue name and the residue number!
 				if (split.size() < 10)
 				{
-					Log.error() << "AntechamberFile::read: illegal atom line in ac file " << getName() << endl;
+					Log.error() << "AntechamberFile::read: illegal atom line in ac file " << getName() << std::endl;
 					continue;
 				}
 				// create a new atom, fill it with information, and put it where it belongs
@@ -250,7 +250,7 @@ namespace BALL
 				// TODO: currently, we ignore the bonds atom types
 				if (split.size() < 7)
 				{
-					Log.error() << "AntechamberFile::read: illegal bond line in ac file " << getName() << endl;
+					Log.error() << "AntechamberFile::read: illegal bond line in ac file " << getName() << std::endl;
 					continue;
 				}
 				
@@ -276,7 +276,7 @@ namespace BALL
 				}
 				else
 				{
-					Log.error() << "AntechamberFile::read: illegal bond line in ac file " << getName() << endl;
+					Log.error() << "AntechamberFile::read: illegal bond line in ac file " << getName() << std::endl;
 					continue;
 				}
 			}	
@@ -295,7 +295,7 @@ namespace BALL
 		{
 			if (line_length < 74)
 			{	
-				Log.error() << "AntechamberFile::read: illegal atom line in ac file " << getName() << endl;
+				Log.error() << "AntechamberFile::read: illegal atom line in ac file " << getName() << std::endl;
 				return;
 			}
 			else
