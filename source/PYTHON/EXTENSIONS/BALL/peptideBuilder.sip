@@ -58,7 +58,7 @@ class PeptideBuilder
 
 	   PeptideBuilder();
 	   
-//	   PeptideBuilder(const vector<AminoAcidDescriptor>& sequence);
+		 //PeptideBuilder(const vector<AminoAcidDescriptor>& sequence);
 
 		 //PeptideBuilder(const String&, const Angle&, const Angle&, const Angle&);
 	   
@@ -86,9 +86,7 @@ class PeptideBuilder
 
 	   Protein* construct();
 
-		 void setFragmentDB(const FragmentDB*)
-			 throw();
+		 void setFragmentDB(const FragmentDB*);
 
-		 const FragmentDB* getFragmentDB() const
-			 throw();
+		 const FragmentDB* getFragmentDB() const;
 };
