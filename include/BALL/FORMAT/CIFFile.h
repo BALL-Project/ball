@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: CIFFile.h,v 1.2 2007/08/22 09:59:45 anne Exp $
-//
 
 #ifndef BALL_FORMAT_CIFFILE_H
 #define BALL_FORMAT_CIFFILE_H
@@ -35,7 +33,6 @@ namespace BALL
 		: public File
 	{
 		public:
-			BALL_CREATE(CIFFile)
 	
 			/** Nested class for the dataitems of the CIFFile **/
 			class Item
@@ -219,11 +216,6 @@ namespace BALL
 			 */
 			CIFFile();
 
-			/** Copy constructor
-			 */
-			CIFFile(const CIFFile& file)
-				throw(Exception::FileNotFound);
-
 			/** Detailed constructor
 			 */
 			CIFFile(const String& filename, File::OpenMode open_mode = std::ios::in)
@@ -234,19 +226,8 @@ namespace BALL
 			virtual ~CIFFile();
 			
 			//@}
-			/** @name Assignment.
-			 */
-			//@{
-			
-			/** Assignment operator.
-			 */
 
-			const CIFFile& operator = (const CIFFile& rhs)
-				throw(Exception::FileNotFound);
-
-			//@}
-			
-			/** @name Reading and Writing of Crytallsographic Information
+			/** @name Reading and Writing of Crytallographic Information
 			 */
 			//@{
 			

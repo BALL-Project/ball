@@ -17,11 +17,6 @@ CIFFile::SaveFrame current_saveframe;
 
 bool first_datablock;
 
-/* There is some nasty problem with alloca under Intel/icc/Linux */
-/* so we use (inefficient) malloc instead. */
-#undef alloca
-#define alloca malloc
-
 %}
 /*         bison declarations      */
 %union {

@@ -1,17 +1,19 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: CIFFile.C,v 1.2 2007/08/22 10:08:20 anne Exp $
-//
 
 #include <BALL/FORMAT/CIFFile.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/PTE.h>
 
+#include <utility>
+
 // defined in the lexer (CIFParserLexer.l)
 extern void CIFParser_initBuffer(const char* buf);
 extern void CIFParser_delBuffer();
 extern int  CIFParserparse();
+
+//extern int CIFParserdebug;
 
 namespace BALL
 {
@@ -26,28 +28,6 @@ namespace BALL
 	{
 	}
 
-	CIFFile::CIFFile(const CIFFile& file)
-		throw(Exception::FileNotFound)
-		:	File(),
-			molecule_(file.molecule_),
-			current_datablock_(file.current_datablock_),
-			current_saveframe_(file.current_saveframe_),
-			current_item_(file.current_item_),
-			datablocks_hash_(file.datablocks_hash_),
-			datablocks_(file.datablocks_)
-	{
-		if (file.getName() != "")
-		{
-			try
-			{	
-				open(file.getName());
-			}
-			catch (Exception::FileNotFound)
-			{
-			}
-		}
-	}
-	
 	CIFFile::CIFFile(const String& name, File::OpenMode open_mode)
 		throw(Exception::FileNotFound)
 		: File(),
@@ -59,25 +39,13 @@ namespace BALL
 			datablocks_()
 	{
 		open(name, open_mode);
-		// TO THink
-	//	read();
+		// To Think:
+		//	(if we just enable it here, we run into problems with derived classes...)
+		//	read();
 	}
 
 	CIFFile::~CIFFile()
 	{
-	}
-
-	const CIFFile& CIFFile::operator = (const CIFFile& rhs)
-		throw(Exception::FileNotFound)
-	{
-		File::operator = (rhs);
-
-		molecule_ = rhs.molecule_;
-		current_datablock_ = rhs.current_datablock_;
-		datablocks_ = rhs.datablocks_;
-		datablocks_hash_ = rhs.datablocks_hash_;
-
-		return *this;
 	}
 
 	bool CIFFile::write()
@@ -108,6 +76,7 @@ namespace BALL
 	
 		try {
 			state.current_parser = this;
+			//CIFParserdebug = 1;
 			CIFParserparse();
 		}
 		catch (Exception::ParseError& e)
@@ -239,7 +208,7 @@ namespace BALL
 		return datablocks_[datablocks_hash_[name]];
 	}
 
-	std::ostream& CIFFile::Item::operator >> (ostream& os) const
+	std::ostream& CIFFile::Item::operator >> (std::ostream& os) const
 	{
 		if (is_loop)
 		{
@@ -278,7 +247,7 @@ namespace BALL
 		
 	///////////////////////// SaveFrame  ///////////////
 
-	std::ostream& CIFFile::SaveFrame::operator >> (ostream& os) const
+	std::ostream& CIFFile::SaveFrame::operator >> (std::ostream& os) const
 	{	
 		String tmp = "\nsave_" + framename + "\n";
 		os << tmp;
@@ -382,7 +351,7 @@ namespace BALL
 	
 	///////////////////////// Datacontent  ///////////////
 
-	std::ostream& CIFFile::Datacontent::operator >> (ostream& os) const
+	std::ostream& CIFFile::Datacontent::operator >> (std::ostream& os) const
 	{	
 		if (is_saveframe)
 		{
@@ -420,7 +389,7 @@ namespace BALL
 		///////////////////////// Datablock  ///////////////
 	
 	
-	std::ostream& CIFFile::Datablock::operator >> (ostream& os) const
+	std::ostream& CIFFile::Datablock::operator >> (std::ostream& os) const
 	{
 		String result = "data_" + name + "\n";	
 		os << result;
@@ -474,7 +443,7 @@ namespace BALL
 				saveframe_names.insert(content.saveframe.framename, data.size()-1);
 		//	saveframe_categories.insert(content.saveframe.category,data.size()-1);
 			}
-			saveframe_categories.insert(pair<String, Index>( content.saveframe.category, data.size()-1));
+			saveframe_categories.insert(std::pair<String, Index>( content.saveframe.category, data.size()-1));
 			//std::cout << "insertDatacontent(): category " << content.saveframe.category << " has now " << saveframe_categories.count(content.saveframe.category) << " entries"  <<  std::endl;
 			/*if (saveframe_categories.count(content.saveframe.category) == 0)
 			{
@@ -554,10 +523,10 @@ namespace BALL
 		std::vector<SaveFrame> tmp; 
 		if (saveframe_categories.count(name)>0)
 		{
-			std::pair<multimap<String, Index>::const_iterator, 
-								multimap<String, Index>::const_iterator> range = saveframe_categories.equal_range(name);
+			std::pair<std::multimap<String, Index>::const_iterator, 
+								std::multimap<String, Index>::const_iterator> range = saveframe_categories.equal_range(name);
 
-			for (multimap<String, Index>::const_iterator it = range.first; it != range.second; it++)
+			for (std::multimap<String, Index>::const_iterator it = range.first; it != range.second; it++)
 			{
 				tmp.push_back(data[it->second].saveframe);
 			}
@@ -576,10 +545,10 @@ namespace BALL
 		if (saveframe_categories.count(name)>0)
 		{
 			std::vector<Index> tmp;
-			std::pair<multimap<String, Index>::const_iterator, 
-								multimap<String, Index>::const_iterator> range = saveframe_categories.equal_range(name);
+			std::pair<std::multimap<String, Index>::const_iterator, 
+								std::multimap<String, Index>::const_iterator> range = saveframe_categories.equal_range(name);
 
-			for (multimap<String, Index>::const_iterator it = range.first; it != range.second; it++)
+			for (std::multimap<String, Index>::const_iterator it = range.first; it != range.second; it++)
 			{
 				tmp.push_back(it->second);
 			}
@@ -599,10 +568,10 @@ namespace BALL
 		if (saveframe_categories.count(name)>0)
 		{
 			std::vector<Index> tmp;
-			std::pair<multimap<String, Index>::iterator, 
-								multimap<String, Index>::iterator> range = saveframe_categories.equal_range(name);
+			std::pair<std::multimap<String, Index>::iterator, 
+								std::multimap<String, Index>::iterator> range = saveframe_categories.equal_range(name);
 
-			for (multimap<String, Index>::iterator it = range.first; it != range.second; it++)
+			for (std::multimap<String, Index>::iterator it = range.first; it != range.second; it++)
 			{
 				tmp.push_back(it->second);
 			}
