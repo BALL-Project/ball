@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: assignShiftProcessor.h,v 1.24 2005/12/23 17:01:55 amoll Exp $
-//
 
 #ifndef BALL_NMR_ASSIGNSHIFTPROCESSOR_H
 #define BALL_NMR_ASSIGNSHIFTPROCESSOR_H
@@ -94,11 +92,11 @@ namespace BALL
 		
 		protected:
 		
-		StringHashMap<float> shift_table_;
-		const std::vector<NMRStarFile::NMRAtomData>&		atom_data_;
-		const Molecule*	molecule_;
-		Position number_of_fragment_;
-		FragmentDB fragment_db_;
+		StringHashMap<float>  shift_table_;
+		const std::vector<NMRStarFile::NMRAtomData>&	atom_data_;
+		const Molecule*       molecule_;
+		Position              number_of_fragment_;
+		FragmentDB            fragment_db_;
 	};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

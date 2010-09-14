@@ -27,7 +27,7 @@ CHECK(preparations)
 RESULT
 
 CHECK(AssignShiftProcessor::AssignShiftProcessor(const vector<NMRAtomData*>& atom_data)/apply())
-	NMRStarFile rs(BALL_TEST_DATA_PATH(AssignShiftProcessor_test.str));
+	NMRStarFile rs(BALL_TEST_DATA_PATH(AssignShiftProcessor_test.bmr));
 	TEST_EQUAL(rs.getNMRData()[0].atom_data.size(), 797)
 	TEST_EQUAL(rs.getNumberOfAtoms(), 797)
 	TEST_EQUAL(s.countAtoms(), 1944)
