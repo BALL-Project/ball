@@ -116,11 +116,18 @@ namespace BALL
 	 	  	\code
 					NameConverter converter();
 					if (   converter.supportsNamingScheme("BMRB")
-					    && converter.supportsNamingScheme("PDB"))
+					    && converter.supportsNamingScheme("PDB")
+							&& converter.supportsNamingScheme("NMRSTAR"))
 					{
 						...
 						String atom_name = "HB2";
 						String pdb_name = converter.convertName("ALA", atom_name, "BMRB", "PDB");
+						...
+					}	
+					if (converter.supportsPseudoAtomNamingScheme("NMRSTAR")
+					{	
+						std::vector<String> result = converter.resolvePseudoAtoms("R", "HB", "NMRSTAR", "PDB");
+						...
 					}
  	 	  		
  				\endcode
@@ -144,12 +151,18 @@ namespace BALL
 					/** The conversion table file
 					*/
 					static const char* INIFile;	
+					
+					/** The pseudo atoms conversion table file
+					*/
+					static const char* PSEUDO_ATOMS_INIFile;	
+
 				};
 
 				/// Default values for options
 				struct BALL_EXPORT Default
 				{
 					static const String INIFile;
+					static const String PSEUDO_ATOMS_INIFile;
 				};
 		
 				/** Standard constructor
@@ -162,14 +175,6 @@ namespace BALL
 				/** Reset the options to default values.
 				*/
 				void setDefaultOptions();
-	
-				/** Convert atom name between two naming schemes.
-				 *
-				 *  If one of the naming schemes is unknown, or the name
-				 *  was not found, the old name is returned.
-				 */
-				String convertName(const String& amino_acid, const String& old_atom_name,
-				                   const String& old_naming_scheme, const String& new_naming_scheme) const;
 
 				/** Determine whether the Converter supports the naming scheme scheme_name.
 				 *
@@ -178,6 +183,49 @@ namespace BALL
 				 */
 				bool supportsNamingScheme(const String& scheme_name) const;
 
+				/** Determine whether the Converter supports the naming scheme scheme_name for pseudo atoms.
+				 *
+				 *  @param 	scheme_name	naming scheme in question
+				 * 	@return bool - true if the naming scheme is supported, false otherwise 
+				 */
+				bool supportsPseudoAtomNamingScheme(const String& scheme_name) const;
+	
+				/** Convert atom name between two naming schemes.
+				 *
+				 *  If one of the naming schemes is unknown, or the name
+				 *  was not found, the old name is returned.
+				 *		
+				 *  @return String - the converted name. 
+				 */
+				String convertName(const String& amino_acid, const String& old_atom_name,
+													 const String& old_naming_scheme, const String& new_naming_scheme) const;
+					
+				/** Test whether two names for an atom are equivalent in different naming schemes.
+				 *   
+				 *	The match can either be according the the conversion as defined in 
+				 *	the \link INIFile INIFile \endlink
+				 * 	 or one atom is a pseudo atom and matches the other one according the 
+				 *	\link PSEUDO_ATOMS_INIFile PSEUDO_ATOMS_INIFile \endlink.
+				 *
+				 * 	@return bool - true if the atom names can be matched, false otherwise. 
+				 */
+				bool matches(const String& amino_acid, const String& old_atom_name,
+											 const String& old_naming_scheme, const String& new_atom_name,
+				               const String& new_naming_scheme) const;
+
+				/** Resolve pseudo atoms among naming schemes.
+				 *
+				 *  If the input is a pseudo atom in the given naming scheme, convert it into the list of
+				 *  atoms in the desired naming scheme.
+				 *
+				 *  @param amino_acid the amino acid type of the atom
+				 *  @param atom_name the atom name to test
+				 *  @param old_naming_scheme the naming scheme of the input
+				 *  @param new_naming_scheme the desired naming scheme
+				 *  @return const std::vector<String>& - the list of atoms this atom resolves to
+				 */
+				std::vector<String> resolvePseudoAtoms(const String& amino_acid, const String& atom_name, 
+				                                       const String& old_naming_scheme, const String& new_naming_scheme) const;
 
 				/** @name Public Attributes
 				*/
@@ -192,9 +240,19 @@ namespace BALL
 				 */
 				void readConversionTable_()
 					throw (Exception::FileNotFound());
+			
+				/** Read the pseudo atoms conversion table from file.
+				 */
+				void readPseudoAtomsConversionTable_()
+					throw (Exception::FileNotFound());
 
 				std::vector<String> 								conventions_;
-				std::vector< std::vector <String> > conversion_table_;
+				std::vector< std::vector <String> > conversion_table_;	
+				
+				std::vector<String> 								pseudo_conventions_;
+				std::vector< std::vector <std::vector <String> > > pseudo_conversion_table_;
+
+				//TODO: unse a StringHashMap of amino acid names to simplify the access
 		};
 
 	}  // namespace Peptides

@@ -187,9 +187,11 @@ CHECK(GetSequence(const Chain& chain))
 	TEST_EQUAL(seq, "CHM")
 RESULT
 
+
 ////////////////////////////////////////////////
 //         class NameConverter
 ////////////////////////////////////////////////
+
 NameConverter* converter_p;
 
 CHECK(NameConverter())
@@ -205,28 +207,93 @@ CHECK(setDefaultOptions())
 	NameConverter converter;
 	converter.setDefaultOptions();
 	TEST_EQUAL(converter.options.get(NameConverter::Option::INIFile), NameConverter::Default::INIFile)		
+	TEST_EQUAL(converter.options.get(NameConverter::Option::PSEUDO_ATOMS_INIFile), NameConverter::Default::PSEUDO_ATOMS_INIFile)		
 RESULT
 
 CHECK(supportsNamingScheme(const String& scheme_name) const)	
 	NameConverter converter;
 	TEST_EQUAL(converter.supportsNamingScheme("BMRB"), true)
 	TEST_EQUAL(converter.supportsNamingScheme("bmrb"), true)
+	TEST_EQUAL(converter.supportsNamingScheme("SC"), true)
 	TEST_EQUAL(converter.supportsNamingScheme("PDB"), true)
-	TEST_EQUAL(converter.supportsNamingScheme("SYBYL"), true)
+	TEST_EQUAL(converter.supportsNamingScheme("UCSF"), true)
+	TEST_EQUAL(converter.supportsNamingScheme("MSI"), true)
 	TEST_EQUAL(converter.supportsNamingScheme("xplor"), true)
+	TEST_EQUAL(converter.supportsNamingScheme("SYBYL"), true)
+	TEST_EQUAL(converter.supportsNamingScheme("MIDAS"), true)
+	TEST_EQUAL(converter.supportsNamingScheme("DIANA"), true)
+	TEST_EQUAL(converter.supportsNamingScheme("NMRSTAR"), true)
 RESULT
 
+CHECK(supportsPseudoAtomNamingScheme(const String& scheme_name) const)	
+	NameConverter converter;
+	TEST_EQUAL(converter.supportsPseudoAtomNamingScheme("BMRB"), true)
+	TEST_EQUAL(converter.supportsPseudoAtomNamingScheme("bmrb"), true)
+	TEST_EQUAL(converter.supportsPseudoAtomNamingScheme("UCSF"), true)
+	TEST_EQUAL(converter.supportsPseudoAtomNamingScheme("xplor"), true)
+	TEST_EQUAL(converter.supportsPseudoAtomNamingScheme("NMRSTAR"), true)
+	TEST_EQUAL(converter.supportsPseudoAtomNamingScheme("PDB"), true)
+RESULT
 
 CHECK(convertName(const String& amino_acid, const String& old_atom_name, const String& old_naming_scheme, const String& new_naming_scheme) const)
 	NameConverter converter;
+	TEST_EQUAL(converter.supportsNamingScheme("BMRB"), true)
+	TEST_EQUAL(converter.supportsNamingScheme("PDB"), true)
 	if (converter.supportsNamingScheme("BMRB") && converter.supportsNamingScheme("PDB") )
 	{
 		TEST_EQUAL(converter.convertName("LYS", "HB2", "BMRB", "PDB"), "1HB")
 		TEST_EQUAL(converter.convertName("K", "HB2", "BMRB", "PDB"), "1HB")
-		TEST_EQUAL(converter.convertName("k", "1hb", "PDB", "BMRB"), "HB2")
+		TEST_EQUAL(converter.convertName("k", "1hb", "PDB", "BMRB"), "1hb")
 	}
 RESULT
 
+
+CHECK(resolvePseudoAtoms(const String& amino_acid, const String& atom_name, 
+			                   const String& old_naming_scheme, const String& new_naming_scheme) const)
+	NameConverter converter;
+	std::vector<String> true_result1(1);
+	true_result1[0] = "X";
+
+	std::vector<String> result1 = converter.resolvePseudoAtoms("A", "X", "BMRB", "UCSF");
+
+	TEST_EQUAL(result1.size(), true_result1.size())
+	for (Position i=0; i<result1.size(); ++i)
+		TEST_EQUAL(result1[i], true_result1[i])
+
+	std::vector<String> true_result2(2);
+	true_result2[0] = "1HB";
+	true_result2[1] = "2HB";
+
+	std::vector<String> result2 = converter.resolvePseudoAtoms("R", "HB", "NMRSTAR", "PDB");
+
+	TEST_EQUAL(result2.size(), true_result2.size())
+	for (Position i=0; i<result2.size(); ++i)
+		TEST_EQUAL(result2[i], true_result2[i])
+RESULT
+
+
+
+CHECK(matches(const String& amino_acid, const String& old_atom_name,
+											 const String& old_naming_scheme, const String& new_atom_name,
+				               const String& new_naming_scheme) const)
+
+	NameConverter converter;	
+	TEST_EQUAL(converter.supportsNamingScheme("NMRSTAR"), true)
+	TEST_EQUAL(converter.supportsNamingScheme("BMRB"), true)
+	TEST_EQUAL(converter.supportsNamingScheme("PDB"), true)
+
+	if (   converter.supportsNamingScheme("BMRB") && converter.supportsNamingScheme("PDB")
+			&& converter.supportsNamingScheme("NMRSTAR") )
+	{
+		TEST_EQUAL(converter.matches("LYS", "HB2", "BMRB", "1HB", "PDB"), true)
+		TEST_EQUAL(converter.matches("K",   "HB2", "BMRB", "1HB", "PDB"), true)
+		TEST_EQUAL(converter.matches("k",   "1hb", "PDB",  "HB2", "BMRB"), false)
+
+		TEST_EQUAL(converter.matches("T", "1HG2", "PDB",     "HG2", "NMRSTAR"), true)
+		TEST_EQUAL(converter.matches("A", "HB",   "NMRSTAR", "1HB", "PDB"), true)
+	}
+
+RESULT
 
 
 

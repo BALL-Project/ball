@@ -1,0 +1,88 @@
+## This table is taken from the BMRB (Biological Magnetic Resonance Data Bank).
+## We introduced the symbol '$' to denote empty entries.
+## Also, we added two colums 'NMRSTAR' and 'PDB' to account for matching NMRStar file 
+## atoms to PDB naming conventions.
+##
+## The original file starts here:
+#
+#  Amino Acid Pseudoatom Nomenclature
+#  Correlation of hydrogen pseudoatom naming systems.
+#  (The original table was prepared by Jane Caldwell)
+#  
+#  BMRB = BioMagResBank, derived from IUPAC recommendations
+#  UCSF = Mardigras and Corma, based on 1993 manual (still current, summer 1995)
+#  XPLOR= X-PLOR 3.1f
+#  
+#  
+ AA  AA   BMRB UCSF XPLOR               NMRSTAR   PDB
+#--- ---  ---- ---- -----               -------   ----
+
+A    Ala  MB   MB   HB*,HB#,HB%,HB+				HB				1HB,2HB,3HB
+
+R    Arg  QB   QB   HB*,HB#,HB%,HB+				HB				1HB,2HB
+R    Arg  QG   QG   HG*,HG#,HG%,HG+				HG				1HG,2HG
+R    Arg  QD   QD   HD*,HD#,HD%,HD+				HD				1HD,2HD
+R    Arg  QH1  QH1  HH1*,HH1#,HH1%,HH1+		HH1				1HH1,2HH1
+R    Arg  QH2  QH2  HH2*,HH2#,HH2%,HH2+		HH2				1HH2,2HH2
+R    Arg  QH   $    HH*,HH#								HH 				1HH1,1HH2,2HH1,2HH2
+
+D    Asp  QB   QB   HB*,HB#,HB%,HB+				HB				1HB,2HB
+
+N    Asn  QB   QB   HB*,HB#,HB%,HB+				HB				1HB,2HB
+N    Asn  QD   QD   HD2*,HD2#,HD2%,HD2+,HD*,HD#	HD2	1HD2,2HD2
+
+C    Cys  QB   QB   HB*,HB#,HB%,HB+				HB				1HB,2HB
+
+E    Glu  QB   QB   HB*,HB#,HB%,HB+				HB				1HB,2HB
+E    Glu  QG   QG   HG*,HG#,HG%,HG+				HG				1HG,2HG
+
+Q    Gln  QB   QB   HB*,HB#,HB%,HB+				HB				1HB,2HB
+Q    Gln  QG   QG   HG*,HG#,HG%,HG+				HG				1HG,2HG
+Q    Gln  QE   QE   HE2*,HE2#,HE2%,HE2+,HE*,HE#	HE2	1HE2,2HE2
+
+G    Gly  QA   QA   HA*,HA#,HA%,HA+				HA				1HA,2HA
+
+H    His  QB   QB   HB*,HB#,HB%,HB+				HB				1HB,2HB
+
+I    Ile  MG   MG2  HG2*,HG2#,HG2%,HG2+		HG2				1HG2,2HG2,3HG2
+I    Ile  MD   MD1  HD1*,HD1#,HD1%,HD1+,HD*,HD#		HD1	1HD1,2HD1,3HD1
+I    Ile  QG   QG   HG1*,HG1#,HG1%,HG1+		HG1				1HG1,2HG1
+
+L    Leu  MD1  MD1  HD1*,HD1#,HD1%,HD1+		HD1				1HD1,2HD1,3HD1
+L    Leu  MD2  MD2  HD2*,HD2#,HD2%,HD2+		HD2				1HD2,2HD2,3HD2
+L    Leu  QB   QB   HB*,HB#,HB%,HB+				HB				1HB,2HB
+L    Leu  QD   $    HD*,HD#								HD				1HD1,2HD1,3HD1,1HD2,2HD2,3HD2
+
+K    Lys  QB   QB   HB*,HB#,HB%,HB+				HB				1HB,2HB
+K    Lys  QG   QG   HG*,HG#,HG%,HG+				HG				1HG,2HG
+K    Lys  QD   QD   HD*,HD#,HD%,HD+				HD				1HD,2HD
+K    Lys  QE   QE   HE*,HE#,HE%,HE+				HE				1HE,2HE
+K    Lys  QZ   QZ   HZ*,HZ#,HZ%,HZ+				HZ				1HZ,2HZ,3HZ
+
+M    Met  QB   QB   HB*,HB#,HB%,HB+				HB				1HB,2HB
+M    Met  QG   QG   HG*,HG#,HG%,HG+				HG				1HG,2HG
+M    Met  ME   ME   HE*,HE#,HE%,HE+				HE				1HE,2HE,3HE
+
+F    Phe  QB   QB   HB*,HB#,HB%,HB+				HB				1HB,2HB
+F    Phe  QD   RD   HD*,HD#,HD%,HD+				HD				HD1,HD2
+F    Phe  QE   RE   HE*,HE#,HE%,HE+				HE				HE1,HE2
+F    Phe  QR	 $		$											$					$   
+
+P    Pro  QB   QB   HB*,HB#,HB%,HB+				HB				1HB,2HB
+P    Pro  QG   QG   HG*,HG#,HG%,HG+				HG				1HG,2HG
+P    Pro  QD   QD   HD*,HD#,HD%,HD+				HD				1HD,2HD
+
+S    Ser  QB   QB   HB*,HB#,HB%,HB+				HB				1HB,2HB
+
+T    Thr  MG   MG2  HG2*,HG2#,HG2%,HG2+,HG*,HG#	HG2	1HG2,2HG2,3HG2
+
+W    Trp  QB   QB   HB*,HB#,HB%,HB+				HB				1HB,2HB
+
+Y    Tyr  QB   QB   HB*,HB#,HB%,HB+				HB				1HB,2HB
+Y    Tyr  QD   RD   HD*,HD#,HD%,HD+				HD				HD1,HD2
+Y    Tyr  QE   RE   HE*,HE#,HE%,HE+				HE				HE1,HE2
+Y    Tyr  QR   $		$											$					$     
+
+V    Val  MG1  MG1  HG1*,HG1#,HG1%,HG1+		HG1				1HG1,2HG1,3HG1
+V    Val  MG2  MG2  HG2*,HG2#,HG2%,HG2+		HG2				1HG2,2HG2,3HG2
+V    Val  QG   $    HG*,HG#								HG				1HG1,2HG1,3HG1,1HG2,2HG2,3HG2
