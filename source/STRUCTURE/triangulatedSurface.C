@@ -63,7 +63,8 @@ namespace BALL
 		for(unsigned int i = 0; i < num_vertices; ++i) {
 			for(unsigned int j = 0; j < subdiv + 2; ++j) {
 				TVector3<double> coords(cos(i*angle), sin(i*angle), j*spacing);
-				points[i + j*num_vertices] = new TrianglePoint(coords, out ? coords : -coords);
+				TVector3<double> normal(cos(i*angle), sin(i*angle), 0);
+				points[i + j*num_vertices] = new TrianglePoint(coords, out ? normal : -normal);
 			}
 		}
 
