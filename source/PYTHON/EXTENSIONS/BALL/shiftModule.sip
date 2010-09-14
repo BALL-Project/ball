@@ -8,6 +8,7 @@ class ShiftModule
 		#include <BALL/NMR/shiftModule.h>
 		using namespace BALL;
 		using namespace BALL::Exception;
+		typedef UnaryProcessor<Composite> CompositeProcessor;
 %End
 		public:	
 

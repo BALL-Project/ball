@@ -252,6 +252,7 @@
 
 
 // NMR
+%Include shiftModule.sip
 // %Include johnsonBovey.sip // ??
 
 // PYTHON
