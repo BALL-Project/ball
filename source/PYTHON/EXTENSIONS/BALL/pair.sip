@@ -2,7 +2,7 @@ template<FIRSTTYPE, SECONDTYPE>
 %MappedType pair<FIRSTTYPE, SECONDTYPE>
 {
 %TypeHeaderCode
-	#include <pair>
+	#include <utility>
 	using namespace std;
 %End
 
@@ -23,7 +23,7 @@ template<FIRSTTYPE, SECONDTYPE>
 		}
 		PyTuple_SET_ITEM(t, 0, tmp);
 
-		SECONDTYPE* second = new B(sipCpp->second);
+		SECONDTYPE* second = new SECONDTYPE(sipCpp->second);
 		if ((tmp = BALL_CONVERT_FROM_INSTANCE(second, SECONDTYPE, sipTransferObj)) == NULL)
 		{
 			Py_DECREF(t);
@@ -46,13 +46,14 @@ template<FIRSTTYPE, SECONDTYPE>
 				return false;
     }
 
+		int state;
 		if(!BALL_CAN_CONVERT_TO_INSTANCE(PyTuple_GET_ITEM(sipPy, 0), FIRSTTYPE))
 		{
 			PyErr_Format(PyExc_TypeError, "Object 0 in tuple cannot be converted to FIRSTTYPE");
 			*sipIsErr = 1;
 			return 0;
 		}
-		FIRSTTYPE* first  = BALL_CONVERT_TO_INSTANCE(PyTuple_GET_ITEM(sipPy, 0), FIRSTTYPE);
+		FIRSTTYPE* first  = BALL_CONVERT_TO_INSTANCE(PyTuple_GET_ITEM(sipPy, 0), FIRSTTYPE, state);
 
 		if(!BALL_CAN_CONVERT_TO_INSTANCE(PyTuple_GET_ITEM(sipPy, 1), SECONDTYPE))
 		{
@@ -60,9 +61,9 @@ template<FIRSTTYPE, SECONDTYPE>
 			*sipIsErr = 1;
 			return 0;
 		}
-		SECONDTYPE* second = BALL_CONVERT_TO_INSTANCE(PyTuple_GET_ITEM(sipPy, 1), SECONDTYPE);
+		SECONDTYPE* second = BALL_CONVERT_TO_INSTANCE(PyTuple_GET_ITEM(sipPy, 1), SECONDTYPE, state);
 
-		std::pair<FIRSTTYPE, SECONDTYPE>* result;
+		std::pair<FIRSTTYPE, SECONDTYPE>* result = NULL;
 
 		if(!*sipIsErr) {
 			result = new std::pair<FIRSTTYPE, SECONDTYPE>(*first, *second);
