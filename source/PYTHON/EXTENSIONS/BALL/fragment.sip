@@ -20,7 +20,7 @@ class Fragment
   Fragment();
   Fragment(const Fragment& /fragment/, bool /deep/ = true);
   Fragment(const String& /name/);
-  ~Fragment() throw();
+  ~Fragment();
   // void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
   // void persistentRead(PersistenceManager& pm);
   // Fragment& operator = (const Fragment& fragment);
