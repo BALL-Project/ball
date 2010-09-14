@@ -79,7 +79,7 @@ namespace BALL
 			return labels_;	
 		}
 
-		void ClassificationModel::readClassInformationFromFile(ifstream& input, int no_classes)
+		void ClassificationModel::readClassInformationFromFile(std::ifstream& input, int no_classes)
 		{
 			labels_.clear();
 			no_substances_.clear();
@@ -103,21 +103,21 @@ namespace BALL
 		}
 
 
-		void ClassificationModel::saveClassInformationToFile(ofstream& out)
+		void ClassificationModel::saveClassInformationToFile(std::ofstream& out)
 		{
 			out<<"# class-labels_\n";
 			for(unsigned int i=0; i<labels_.size();i++) // write class-labels_
 			{
 				out<<labels_[i]<<"\t";
 			}
-			out<<endl<<endl;
+			out<<std::endl<<std::endl;
 			
 			out<<"# no of substances of each class\n";
 			for(unsigned int i=0;i<no_substances_.size();i++)  // write numbers of substances of each class
 			{
 				out<<no_substances_[i]<<"\t";
 			}
-			out<<endl<<endl;
+			out<<std::endl<<std::endl;
 		}
 
 

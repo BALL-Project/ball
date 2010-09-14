@@ -25,6 +25,8 @@
 
 #include <BALL/QSAR/regressionModel.h>
 
+using namespace std;
+
 namespace BALL
 {
 	namespace QSAR

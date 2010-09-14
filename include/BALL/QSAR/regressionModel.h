@@ -97,9 +97,9 @@ namespace BALL
 				//@{
 				virtual void calculateOffsets() = 0;
 				
-				void readDescriptorInformationFromFile(ifstream& in, int no_descriptors, bool transformation, int no_coefficients);
+				void readDescriptorInformationFromFile(std::ifstream& in, int no_descriptors, bool transformation, int no_coefficients);
 				
-				void saveDescriptorInformationToFile(ofstream& out);
+				void saveDescriptorInformationToFile(std::ofstream& out);
 				//@}
 				
 				

@@ -94,10 +94,10 @@ namespace BALL
 				//@{
 				void calculateOffsets();
 				
-				void readKernelParametersFromFile(ifstream& in);
-				void saveKernelParametersToFile(ofstream& out);
-				void saveTrainingResult(ofstream& out);
-				void readTrainingResult(ifstream& input, int no_substances, int no_y);
+				void readKernelParametersFromFile(std::ifstream& in);
+				void saveKernelParametersToFile(std::ofstream& out);
+				void saveTrainingResult(std::ofstream& out);
+				void readTrainingResult(std::ifstream& input, int no_substances, int no_y);
 				
 				friend class RegressionValidation;
 				//}@

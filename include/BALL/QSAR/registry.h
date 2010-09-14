@@ -42,6 +42,8 @@
 #include <BALL/QSAR/snBModel.h>
 #include <BALL/QSAR/nBModel.h>
 
+#include <map>
+
 #ifdef BALL_HAS_LIBSVM
 # include <BALL/QSAR/libsvmModel.h>
 #endif
@@ -77,7 +79,7 @@ namespace BALL
 				
 				~RegistryEntry();
 				
-				const map<uint,String>* getStatistics();
+				const std::map<uint,String>* getStatistics();
 				String getStatName(int s);
 
 				bool kernel;
@@ -101,7 +103,7 @@ namespace BALL
 		};
 		
 		
-		typedef map<int,RegistryEntry>::iterator RegistryEntryIterator;
+		typedef std::map<int,RegistryEntry>::iterator RegistryEntryIterator;
 		
 		class BALL_EXPORT Registry
 		{
@@ -158,8 +160,8 @@ namespace BALL
 				String getRegressionStatisticName(uint no);
 				String getFeatureSelectionName(uint no);
 				String getValidationName(uint no);
-				const map<uint,String>* getClassificationStatistics();
-				const map<uint,String>* getRegressionStatistics();
+				const std::map<uint,String>* getClassificationStatistics();
+				const std::map<uint,String>* getRegressionStatistics();
 				
 				/** returns an iterator to the first model in model_map */
 				RegistryEntryIterator beginEntry();
@@ -169,15 +171,15 @@ namespace BALL
 				
 				
 			private:
-				map<int,RegistryEntry> registered_models;
+				std::map<int,RegistryEntry> registered_models;
 				
 				/** enable fast finding of a RegistryEntry for a given model name */
-				map<String,int> model_map;
+				std::map<String,int> model_map;
 				
-				map<uint,String> classification_statistics;
-				map<uint,String> regression_statistics;
-				map<uint,String> feature_selection_names;
-				map<uint,String> validation_names;
+				std::map<uint,String> classification_statistics;
+				std::map<uint,String> regression_statistics;
+				std::map<uint,String> feature_selection_names;
+				std::map<uint,String> validation_names;
 				
 				friend class RegistryEntry;
 		};

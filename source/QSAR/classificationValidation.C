@@ -27,6 +27,8 @@
 #include <BALL/QSAR/classificationModel.h>
 #include <BALL/QSAR/registry.h>
 
+using namespace std;
+
 namespace BALL
 {
 	namespace QSAR

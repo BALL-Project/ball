@@ -30,6 +30,8 @@
 #include <BALL/QSAR/registry.h>
 #include <gsl/gsl_rng.h>
 
+using namespace std;
+
 namespace BALL
 {
 	namespace QSAR

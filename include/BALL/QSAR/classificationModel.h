@@ -65,7 +65,7 @@ namespace BALL
 				/** a ClassificationValidation object, that is used to validate this model and that will contain the results of the validations */
 				ClassificationValidation* validation;
 				
-				vector<int> getClassLabels();
+				std::vector<int> getClassLabels();
 				//@}
 				
 				
@@ -78,14 +78,14 @@ namespace BALL
 				void readLabels();
 				
 				/** the number of substances in each class of the training data */
-				vector<int> no_substances_;
+				std::vector<int> no_substances_;
 				//@}
 				
 				/** @name Input and Output. The following methods can be used to implement the functions saveToFile() and readFromFile() in final classes derived from this base-class 
 				 */
 				//@{
-				void readClassInformationFromFile(ifstream& input, int no_classes);
-				void saveClassInformationToFile(ofstream& out);
+				void readClassInformationFromFile(std::ifstream& input, int no_classes);
+				void saveClassInformationToFile(std::ofstream& out);
 				//@}
 				
 				
@@ -120,7 +120,7 @@ namespace BALL
 				 */
 				//@{
 				/** labels for the different classes */
-				vector<int> labels_;
+				std::vector<int> labels_;
 				//@}
 				
 				friend class ClassificationValidation;

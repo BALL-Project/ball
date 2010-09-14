@@ -25,6 +25,8 @@
 
 #include <BALL/QSAR/kernelModel.h>
 
+using namespace std;
+
 namespace BALL
 {
 	namespace QSAR

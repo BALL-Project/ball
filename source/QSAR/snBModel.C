@@ -25,6 +25,8 @@
 
 #include <BALL/QSAR/snBModel.h>
 
+using namespace std;
+
 namespace BALL
 {
 	namespace QSAR

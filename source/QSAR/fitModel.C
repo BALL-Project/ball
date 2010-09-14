@@ -26,6 +26,8 @@
 #include <BALL/QSAR/fitModel.h>
 #include <BALL/COMMON/exception.h>
 
+using namespace std;
+
 namespace BALL
 {
 	namespace QSAR

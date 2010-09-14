@@ -26,6 +26,8 @@
 #include <BALL/QSAR/logitModel.h>
 #include <BALL/MATHS/LINALG/matrixInverter.h>
 
+using namespace std;
+
 namespace BALL
 {
 	namespace QSAR

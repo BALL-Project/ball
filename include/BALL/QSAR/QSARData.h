@@ -35,6 +35,7 @@
 #include <vector>
 #include <list>
 #include <set>
+#include <map>
 #include <math.h>
 #include <sstream>
 #include <fstream>
@@ -197,7 +198,7 @@ namespace BALL
 				@param descriptor_ID the ID of the descriptor for which similar features should be searched
 				@param similarity the desired minimal correlation 
 				@param similar_descriptor_IDs list to which the IDs of the found descriptors will be saved as pairs of descriptor ID and descriptor name */
-				void getSimilarDescriptors(int descriptor_ID, double correlation, list<pair<uint,String> >& similar_descriptor_IDs);
+				void getSimilarDescriptors(int descriptor_ID, double correlation, std::list<std::pair<uint,String> >& similar_descriptor_IDs);
 				//@}
 				
 				
@@ -216,7 +217,7 @@ namespace BALL
 				void removeInvalidSubstances(std::multiset<int>& inv);
 				
 				/** reconstructs a vector based matrix from a file */
-				void readMatrix(VMatrix& mat, ifstream& in, char seperator, unsigned int lines, unsigned int col);
+				void readMatrix(VMatrix& mat, std::ifstream& in, char seperator, unsigned int lines, unsigned int col);
 				
 				/** checks whether the given list of activity IDs contains any values <0 or values that are larger than the number of properties in the current input file.\n
 				If such values are found, an Exception of type InvalidActivityID is thrown. */
@@ -227,7 +228,7 @@ namespace BALL
 				void insertSubstance(const QSARData* source, int s, bool backtransformation=0);
 				
 				/** prints a vector-based matrix to a file */
-				void printMatrix(VMatrix& mat, ostream& out);
+				void printMatrix(VMatrix& mat, std::ostream& out);
 				//@}
 				
 				/** @name Attributes
@@ -259,7 +260,7 @@ namespace BALL
 				String data_folder_;
 				
 				/** in case of classification data sets with non-numeric class labels, this member maps the names of the individual classes to their assigned id. */ 
-				map<String,int> class_names_;
+				std::map<String,int> class_names_;
 				//@}
 
 				

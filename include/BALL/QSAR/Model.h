@@ -193,20 +193,20 @@ namespace BALL
 				 */
 				//@{
 				/** reconstructs a Matrix<double> from a given input stream after resizing the given Matrix<double> as specified */
-				void readMatrix(Matrix<double>& mat, ifstream& in, uint lines, uint col);
+				void readMatrix(Matrix<double>& mat, std::ifstream& in, uint lines, uint col);
 				
-				void readVector(Vector<double>& vec, ifstream& in, uint no_cells, bool column_vector);
+				void readVector(Vector<double>& vec, std::ifstream& in, uint no_cells, bool column_vector);
 				
-				void readModelParametersFromFile(ifstream& in);
-				void saveModelParametersToFile(ofstream& out);
+				void readModelParametersFromFile(std::ifstream& in);
+				void saveModelParametersToFile(std::ofstream& out);
 				
 				
 				/** overloaded by class RegressionModel, whose member function can also save coefficients and coefficient-errors */
-				virtual void saveDescriptorInformationToFile(ofstream& out);
-				virtual void readDescriptorInformationFromFile(ifstream& in, int no_descriptors, bool transformation);
+				virtual void saveDescriptorInformationToFile(std::ofstream& out);
+				virtual void readDescriptorInformationFromFile(std::ifstream& in, int no_descriptors, bool transformation);
 				
-				void readResponseTransformationFromFile(ifstream& in, int no_y);
-				void saveResponseTransformationToFile(ofstream& out);
+				void readResponseTransformationFromFile(std::ifstream& in, int no_y);
+				void saveResponseTransformationToFile(std::ofstream& out);
 				//@}	
 				
 				

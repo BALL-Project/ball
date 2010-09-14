@@ -26,6 +26,8 @@
 #include <BALL/QSAR/ldaModel.h>
 #include <BALL/MATHS/LINALG/matrixInverter.h>
 
+using namespace std;
+
 namespace BALL
 {
 	namespace QSAR

@@ -27,6 +27,8 @@
 #include <set>
 #include <algorithm>
 
+using namespace std;
+
 namespace BALL
 {
 	namespace QSAR

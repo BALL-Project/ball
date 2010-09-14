@@ -25,6 +25,8 @@
 
 #include <BALL/QSAR/featureSelection.h>
 
+using namespace std;
+
 namespace BALL
 {
 	namespace QSAR
