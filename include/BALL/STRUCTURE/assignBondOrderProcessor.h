@@ -80,7 +80,7 @@ namespace BALL
 	 *    	  i++;
 	 *      	bop.apply(i);
 	 *  	}
-	 *  	\endcode
+	 *  \endcode
 	 */
 	class BALL_EXPORT AssignBondOrderProcessor 
 		: public UnaryProcessor<AtomContainer> 
@@ -358,10 +358,10 @@ namespace BALL
 			 */
 			const System& getSolution(Position i) throw(Exception::IndexOverflow);
 
-			/**Returns the total charge of solution i.
+			/** Returns the total charge of solution i.
 			
-			 * @param   i index of the solution, whose charge should be computed. 
-				 @return  float - total charge of solution i.  
+			 	 	@param   i index of the solution, whose charge should be computed. 
+				 	@return  float - total charge of solution i.  
 			 */
 			float getTotalCharge(Position i)
 			{
@@ -378,9 +378,9 @@ namespace BALL
 			
 			/** Returns the total penalty of solution i.
 			 *
-			 * @param    i  index of the solution, whose penalty should be returned. 
-			 * @return  float -  total penalty of solution i.  
-			 * @see  Option:: BOND_LENGTH_WEIGHTING;
+			 * 	@param   i  	 index of the solution, whose penalty should be returned. 
+			 * 	@return  float -  total penalty of solution i.  
+			 * 	@see Option:: BOND_LENGTH_WEIGHTING;
 			 */
 			float getTotalPenalty(Position i)
 			{
@@ -453,7 +453,7 @@ namespace BALL
 			 *
 			 *  Ignores the options  \link MAX_NUMBER_OF_SOLUTIONS MAX_NUMBER_OF_SOLUTIONS \endlink and
 			 *											 \link COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS\endlink .
-			 * @return bool - false if no further solution can be found.
+			 *  @return bool - false if no further solution can be found.
 			 */
 			bool computeNextSolution(bool apply_solution = true);
 
