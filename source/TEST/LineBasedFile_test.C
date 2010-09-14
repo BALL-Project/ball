@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: LineBasedFile_test.C,v 1.20.20.1 2007/03/25 21:47:16 oliver Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -22,12 +20,12 @@ String PS = FileSystem::PATH_SEPARATOR;
 
 LineBasedFile* fl;
 
-CHECK(LineBasedFile() throw())
+CHECK(LineBasedFile() )
 	fl = new LineBasedFile;
 	TEST_NOT_EQUAL(fl, 0)
 RESULT
 
-CHECK(~LineBasedFile() throw())
+CHECK(~LineBasedFile() )
 	delete fl;
 RESULT
 
@@ -53,7 +51,7 @@ RESULT
 
 LineBasedFile fx;
 
-CHECK(LineBasedFile& operator = (const LineBasedFile& file) throw())
+CHECK(LineBasedFile& operator = (const LineBasedFile& file) )
 	LineBasedFile f1(BALL_TEST_DATA_PATH(LineBasedFile_test.txt));
 	f1.readLine();
 	String line = f1.getLine();
@@ -66,7 +64,7 @@ CHECK(LineBasedFile& operator = (const LineBasedFile& file) throw())
 	TEST_EQUAL(line, "line1")
 RESULT
 
-CHECK(clear() throw())
+CHECK(clear() )
 	LineBasedFile f1(BALL_TEST_DATA_PATH(LineBasedFile_test.txt));
 	f1.readLine();
 	f1.clear();
@@ -77,7 +75,7 @@ CHECK(clear() throw())
 	fx.clear();
 RESULT
 
-CHECK(getLineNumber() const  throw())
+CHECK(getLineNumber() const )
 	LineBasedFile f1(BALL_TEST_DATA_PATH(LineBasedFile_test.txt));
 	TEST_EQUAL(f1.getLineNumber(), 0)
 	f1.readLine();
@@ -87,7 +85,7 @@ RESULT
 
 LineBasedFile f1(BALL_TEST_DATA_PATH(LineBasedFile_test.txt));
 
-CHECK(getLine() const  throw())
+CHECK(getLine() const )
 	String line = f1.getLine();
 	TEST_EQUAL(line, "")
 	f1.readLine();
@@ -98,7 +96,7 @@ CHECK(getLine() const  throw())
 	TEST_EQUAL(line, "")
 RESULT
 
-CHECK(getLine() throw())	
+CHECK(getLine())	
 	String line = f1.getLine();
 	TEST_EQUAL(line, "line1")
 	f1.getLine() = "test";
@@ -129,7 +127,7 @@ CHECK(getField(Position pos = 0, const String& quotes = "",
 	TEST_EQUAL(fx.getField(), "")
 RESULT
 
-CHECK(startsWith(const String& text) const  throw())
+CHECK(startsWith(const String& text) const )
 	TEST_EQUAL(f1.startsWith("/0/"), true)
 	TEST_EQUAL(f1.startsWith("/0/ /1/ /2 2//3/"), true)
 	TEST_EQUAL(f1.startsWith("/0/ /1/ /2 2//3/X"), false)
@@ -137,7 +135,7 @@ CHECK(startsWith(const String& text) const  throw())
 	TEST_EQUAL(fx.startsWith(""), true)
 RESULT
 
-CHECK(has(const String& text) const  throw())
+CHECK(has(const String& text) const )
 	TEST_EQUAL(f1.has("/0/"), true)
 	TEST_EQUAL(f1.has("/"), true)
 	TEST_EQUAL(f1.has("/1/"), true)
@@ -148,7 +146,7 @@ CHECK(has(const String& text) const  throw())
 	TEST_EQUAL(fx.has(""), true)
 RESULT
 
-CHECK(search(const String& text, bool return_to_point) throw())
+CHECK(search(const String& text, bool return_to_point) )
 	bool result = f1.search("line3");
 	TEST_EQUAL(result, true)
 	result = f1.search("line4-");
@@ -176,7 +174,7 @@ CHECK(search(const String& text, bool return_to_point) throw())
 	TEST_EXCEPTION(Exception::ParseError, fx.search("line4-"))
 RESULT
 
-CHECK(search(const String& text, const String& stop, bool return_to_point) throw())
+CHECK(search(const String& text, const String& stop, bool return_to_point) )
   f1.rewind();
 	bool result = f1.search("line3", "line4", true);
 	TEST_EQUAL(result, true)
@@ -239,7 +237,7 @@ CHECK(search(const String& text, const String& stop, bool return_to_point) throw
 	TEST_EXCEPTION(Exception::ParseError, fx.search("line4", "line3"))
 RESULT
 
-CHECK(switchString(const std::vector<String>& data) const  throw())
+CHECK(switchString(const std::vector<String>& data) const )
   f1.rewind();
 	f1.readLine();
 
@@ -341,12 +339,12 @@ CHECK([EXTRA] triming whitespaces)
 	TEST_EQUAL(line, "line 3")
 RESULT
 
-CHECK(bool trimWhiteSpacesEnabled() const throw())
+CHECK(bool trimWhiteSpacesEnabled() const )
 	LineBasedFile f1;
 	TEST_EQUAL(f1.trimWhiteSpacesEnabled(), false)
 RESULT
 
-CHECK(void enableTrimWhitespaces(bool state) throw())
+CHECK(void enableTrimWhitespaces(bool state) )
 	LineBasedFile f1;
 	TEST_EQUAL(f1.trimWhiteSpacesEnabled(), false)
 	f1.enableTrimWhitespaces(true);
