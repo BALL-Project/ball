@@ -14,7 +14,7 @@ START_TEST(Regression, "$Id: QSAR_test.C$")
 PRECISION(1E-5)
 
 QSARData data;
-multiset<int> activities;
+std::multiset<int> activities;
 activities.insert(0);
 data.readSDFile(BALL_TEST_DATA_PATH(QSAR_test.sdf),activities,0,0);
 data.centerData(true);
