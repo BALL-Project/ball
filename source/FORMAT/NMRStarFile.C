@@ -3,6 +3,7 @@
 //
 
 #include <BALL/FORMAT/NMRStarFile.h>
+#include <BALL/FORMAT/lineBasedFile.h>
 #include <iostream> 
 #include <fstream>
 
@@ -10,6 +11,7 @@
 #include <BALL/KERNEL/protein.h>
 #include <BALL/STRUCTURE/peptides.h>
 #include <BALL/NMR/shiftModule.h>
+#include <BALL/SYSTEM/path.h>
 
 //#define NMRSTAR_DEBUG 1
 #undef NMRSTAR_DEBUG
@@ -35,6 +37,21 @@ namespace BALL
 			error_value(0),
 			ambiguity_code(0)
 	{
+	}
+
+	bool NMRStarFile::NMRAtomData::operator == (const NMRStarFile::NMRAtomData& atom) const
+	{
+		bool ret_value = true;
+		ret_value &= (atom_ID          == atom.atom_ID          );
+		ret_value &= (residue_seq_code == atom.residue_seq_code );
+		ret_value &= (residue_label    == atom.residue_label    );
+		ret_value &= (atom_name        == atom.atom_name        );
+		ret_value &= (atom_type        == atom.atom_type        );
+		ret_value &= (shift_value      == atom.shift_value      );
+		ret_value &= (error_value      == atom.error_value      );
+		ret_value &= (ambiguity_code   == atom.ambiguity_code   );
+
+		return ret_value;
 	}
 
 
@@ -234,6 +251,7 @@ namespace BALL
 	NMRStarFile::EntryInformation::~EntryInformation() 
 	{
 	}
+
 	ostream& NMRStarFile::EntryInformation::operator >> (std::ostream& s)
 	{	
 		// TODO: if POSITION_VALUE_NA, FLOAT_VALUE_NA ... -> NA ausgeben
@@ -246,6 +264,15 @@ namespace BALL
 		return s;
 	}
 	
+	void NMRStarFile::EntryInformation::clear()
+	{	
+		entry_type.clear();
+		BMRB_accession_code.clear();
+		NMR_STAR_version.clear();
+		experimental_method.clear();
+	}
+		
+
 	NMRStarFile::MolecularSystem::ChemicalUnit::ChemicalUnit()
 		: component_name(),
 			label(),
@@ -405,23 +432,60 @@ namespace BALL
 	{
 	}
 
+	NMRStarFile::MonomericPolymer& NMRStarFile::getMonomericPolymer(const String& name)
+		throw(Exception::OutOfRange)
+	{	
+		for (Size i=0; i<monomeric_polymers_.size(); i++)
+		{
+			if (name == monomeric_polymers_[i].label_name)
+				return monomeric_polymers_[i];
+		}	
+
+		throw(Exception::OutOfRange(__FILE__, __LINE__));
+	}
+	
+	const NMRStarFile::MonomericPolymer& NMRStarFile::getMonomericPolymer(const String& name) const
+		throw(Exception::OutOfRange)
+	{	
+		for (Size i=0; i<monomeric_polymers_.size(); i++)
+		{
+			if (name == monomeric_polymers_[i].label_name)
+				return monomeric_polymers_[i];
+		}	
+
+		throw(Exception::OutOfRange(__FILE__, __LINE__));
+	}
+
+	bool NMRStarFile::hasMonomericPolymer(String name) const
+	{	
+		bool found = false;
+		for (Size i=0; i<monomeric_polymers_.size(); i++)
+		{
+			if (name == monomeric_polymers_[i].label_name)
+				found = true;
+		}
+		return found;
+	}
+
+
 	bool NMRStarFile::isMonomericPolymer(String chemical_unit_label) 
-	{
-		return monomeric_polymer_indices_.has(chemical_unit_label); 
+	{	
+		bool found = false;
+		for (Size i=0; i<monomeric_polymers_.size(); i++)
+		{
+			if (chemical_unit_label == monomeric_polymers_[i].label_name)
+				found = true;
+		}
+		return found;
 	}
  
 	void NMRStarFile::addMonomericPolymer(NMRStarFile::MonomericPolymer mp) 
 	{
 		if (hasMonomericPolymer(mp.label_name))
 		{
-			Log.warn() << "NMRStarFile::addMonomericPolymer(): Warning: A Monomer with that name was overwritten!" << std::endl;  
-			// delete the old entry
-			vector<NMRStarFile::MonomericPolymer>::iterator mpi = monomeric_polymers_.begin() + monomeric_polymer_indices_[mp.label_name] ;
-			monomeric_polymers_.erase(mpi);
-			//monomeric_polymers_.erase(monomeric_polymer_indices_[mp.label_name]);
+			Log.warn() << "NMRStarFile::addMonomericPolymer(): Warning: A monomer with name " << mp.label_name << " was overwritten!" << endl;  
 		}	
 		monomeric_polymers_.push_back(mp);
-		monomeric_polymer_indices_[mp.label_name] = monomeric_polymers_.size()-1;
 	}
 
 	void NMRStarFile::MolecularSystem::clear()
@@ -438,7 +502,7 @@ namespace BALL
 		related_database_entries.clear();
 	}
 	
-// TODO :	monomeric_polymers
+	// TODO :	monomeric_polymers
 	ostream& NMRStarFile::MolecularSystem::operator >> (std::ostream& s)
 	{	
 		// TODO: if POSITION_VALUE_NA, FLOAT_VALUE_NA ... -> NA ausgeben
@@ -476,6 +540,7 @@ namespace BALL
 	ostream& NMRStarFile::NMRSpectrometer::operator >> (std::ostream& s)
 	{	
 		s << endl<< "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << endl;
+		s << "name:	"						<< name 					<< endl;
 		s << "manufacturer: " 	<< manufacturer 	<< endl;
 		s << "model: " 					<< model 					<< endl;
 		s << "field strength: " << field_strength << endl; 
@@ -484,54 +549,79 @@ namespace BALL
 	}
 
 
-	
- 	NMRStarFile::BALLToBMRBMapping::BALLToBMRBMapping(Protein* protein, const NMRStarFile* nmr_data)
-		: ball_to_bmrb_map_(),
-			protein_(protein),
-			chain_(0),
-			nmr_data_(nmr_data),
+	NMRStarFile::BALLToBMRBMapper::BALLToBMRBMapper(Chain const& chain, const NMRStarFile& nmr_data)
+		: name_converter_(), 
+			ball_to_bmrb_map_(),
+			bmrb_to_ball_map_(), 
+			chain_(&chain),
+			nmr_data_(&nmr_data),
 			mismatches_(0)
-	{ }
-	
-	NMRStarFile::BALLToBMRBMapping::BALLToBMRBMapping(Chain* chain, const NMRStarFile* nmr_data)
-		: ball_to_bmrb_map_(),
-			protein_(0),
-			chain_(chain),
-			nmr_data_(nmr_data),
-			mismatches_(0)
-	{ }
+	{
+ 	}
 
-	bool NMRStarFile::BALLToBMRBMapping::hasAtom(Atom* atom)
+	bool NMRStarFile::BALLToBMRBMapper::isMapped(Atom const* atom) const
 	{
 		return (ball_to_bmrb_map_.find(atom) != ball_to_bmrb_map_.end());
 	}
-	
-	const Atom* NMRStarFile::BALLToBMRBMapping::findNMRAtomInProtein(const NMRAtomData& atom)
+
+
+	bool NMRStarFile::BALLToBMRBMapper::isMapped(const NMRAtomData& nmr_atom) const
 	{
-		// get the residue corresponding to the one we found in the NMRFile
-		if (atom.residue_seq_code <= protein_->countResidues())
+		return (bmrb_to_ball_map_.find(&nmr_atom) != bmrb_to_ball_map_.end());
+	}
+
+	const Atom* NMRStarFile::BALLToBMRBMapper::getBALLAtom(const NMRAtomData& nmr_atom) const
+	{
+		const Atom* atom = NULL;
+		if (isMapped(nmr_atom))
 		{
-			const Residue* residue = protein_->getResidue(atom.residue_seq_code-1);
+			atom = bmrb_to_ball_map_.find(&nmr_atom)->second;
+		}
+		return atom;
+	}	
+		
+	NMRStarFile::BALLToBMRBMapper::BMRBIndex NMRStarFile::BALLToBMRBMapper::operator() (Atom* atom)
+	{
+		NMRStarFile::BALLToBMRBMapper::BMRBIndex mapping(0,0);
+		if (isMapped(atom))
+		{
+			mapping = ball_to_bmrb_map_.find(atom)->second;
+		}
+		return mapping;
+	}
+
+	Atom const* NMRStarFile::BALLToBMRBMapper::findNMRAtom_(const NMRAtomData& atom) const
+	{
+		// get the atom corresponding to the given NMRFile atom
+		if (atom.residue_seq_code <= chain_->countResidues())
+		{
+			// first find the residue
+			Residue const* residue = chain_->getResidue(atom.residue_seq_code-1);
 			
-			// TODO: decide whether to map using a class option
+			// TODO: decide whether to map in such a case anyway using a class option
 			if (residue->getName() != atom.residue_label)
 			{
-				Log.warn() << "NMRStarFile::findNMRAtomInProtein(): Warning: Residues have different types in NMRStarFile and BALL sequence!" << std::endl;
+				Log.warn() << "NMRStarFile::findNMRAtom_(): Warning: Residues have different types in NMRStarFile and BALL sequence!" << std::endl;
 				Log.warn() << "             NMRStarFile: " << atom.residue_label << std::endl;
 				Log.warn() << "             BALL:        " << residue->getName() << std::endl;
 			}
-
+			
+			// then find the atom
 			for (AtomConstIterator at_it = residue->beginAtom(); +at_it; ++at_it)
 			{
-				if (at_it->getName() == atom.atom_name)
-					return &*at_it;
+				// does the name converter supports NMRSHIFT and PDB?
+				if (name_converter_.supportsNamingScheme("NMRSHIFT") && name_converter_.supportsNamingScheme("PDB"))
+				{
+					if (at_it->getName() == name_converter_.convertName(atom.residue_label, atom.atom_name, "NMRSHIFT", "PDB"))
+						return &*at_it;
+				}
 			}
 		}
-
 		return NULL;
 	}
-	
-	bool  NMRStarFile::BALLToBMRBMapping::createTrivialMapping()
+
+
+	bool  NMRStarFile::BALLToBMRBMapper::createTrivialMapping()
 	{
 		// walk over the NMRAtomData sets of the nmr data file
 		// NOTE: currently, we walk only over the first of those data sets
@@ -539,14 +629,14 @@ namespace BALL
 
 		if (nmr_data_sets.size() == 0)
 		{
-			Log.error() << "NMRStarFile::BALLToBMRBMapping::createTrivialMapping(): no atom data sets found!" << std::endl;
+			Log.error() << "NMRStarFile::BALLToBMRBMapper::createTrivialMapping(): no atom data sets found!" << std::endl;
 
 			return false;
 		}
 
 		if (nmr_data_sets.size() > 1)
 		{
-			Log.error() << "NMRStarFile::BALLToBMRBMapping::createTrivialMapping(): can't compute mapping for more than one data set!" << std::endl;
+			Log.error() << "NMRStarFile::BALLToBMRBMapper::createTrivialMapping(): can't compute mapping for more than one data set!" << std::endl;
 
 			return false;
 		}
@@ -556,41 +646,48 @@ namespace BALL
 				current_nmr_atom < nmr_data_sets[0].atom_data.size(); 
 				++current_nmr_atom)
 		{
-			const Atom* ball_atom = findNMRAtomInProtein(nmr_data_sets[0].atom_data[current_nmr_atom]);
+			const Atom* ball_atom = findNMRAtom_(nmr_data_sets[0].atom_data[current_nmr_atom]);
 
 			BMRBIndex b_index(0, current_nmr_atom);
 
 			if (ball_atom)
+			{
 				ball_to_bmrb_map_[ball_atom] = b_index;
+				bmrb_to_ball_map_[&(nmr_data_sets[0].atom_data[current_nmr_atom])] = ball_atom;
+			}
 		}
 
 		return true;
 	}
 	
-	bool NMRStarFile::BALLToBMRBMapping::createMapping(const String& aligned_ball_sequence,
-																											const String& aligned_nmrstar_sequence)
+	bool NMRStarFile::BALLToBMRBMapper::createMapping(const String& aligned_ball_sequence,
+																										const String& aligned_nmrstar_sequence)
 	{	
-		bool result = true;
-		int matches = 0;
+		int  matches = 0;
+    mismatches_  = 0;
+	
+		String chain_seq = Peptides::GetSequence(*chain_);
+
+		String squeezed_align_seq(aligned_ball_sequence);
+		squeezed_align_seq.substitute("-", "");
+		if (chain_seq != squeezed_align_seq)
+		{
+			Log.warn() << "BALLToBMRBMapper::createMapping(): Alignment sequence cannnot be matched to chosen chain!" << endl;
+			return false;
+		}
 
 		// check whether the alignment is valid
-		if ((aligned_ball_sequence.size()==0) || (aligned_nmrstar_sequence.size() ==0) )
+		if ((aligned_ball_sequence.size()==0) || (aligned_nmrstar_sequence.size()==0) )
 		{	
-			Log.warn() << "BALLToBMRBMapping::createMapping(): Warning one of the aligned strings has length zero!" << endl;
+			Log.warn() << "BALLToBMRBMapper::createMapping(): Warning one of the aligned strings has length zero!" << endl;
 			return false;
 		}	
 
 		if (aligned_ball_sequence.size() != aligned_nmrstar_sequence.size())
 		{
-			Log.error() << "BALLToBMRBMapping::createMapping(): There was no correct alignment" << std::endl;
+			Log.error() << "BALLToBMRBMapper::createMapping(): There was no correct alignment" << std::endl;
 			return false;
 		}
-
-		// to speed up the mapping, we store all NMRAtomData in a hashmap:
-		// (residue_id,atom_name) ----> index of the corresponding NMRAtomData 
-		// We might want to change it into a HashMap, but HashMap cant cope with 
-		// the pair of Position and String as index!
-		std::map< std::pair<Position, String>, Position> indices;
 
 		// get the NMR data
 		// NOTE: we take the zero's dataset!
@@ -598,98 +695,111 @@ namespace BALL
 		{
 			return false;
 		}
-		std::vector<NMRAtomData> nmr_data = nmr_data_->atom_data_sets_[0].atom_data;
+		std::vector<NMRAtomData> const& nmr_data = nmr_data_->atom_data_sets_[0].atom_data;
 
-		// fill the map storing all indices
-		for (Position i = 0; i < nmr_data.size(); i++)
-		{	
-			std::pair<Position, String> tuple(nmr_data[i].residue_seq_code , nmr_data[i].atom_name);
-			indices[tuple] = i;	
+		// get the actual length of the nmr sequence
+		// NOTE: unfortunately this information is not provided by getResidueSequence().size !!!
+		Size len_sequence = 0;
+		for (Position i=0; i<aligned_nmrstar_sequence.size(); ++i)
+		{
+			if (aligned_nmrstar_sequence[i] != '-')
+			{
+				++len_sequence;
+			}
 		}
 
-		// the actual residue indices for the following loop
-		Position ball_residue_idx = 0;
-		Position nmr_residue_idx = 0;
+		std::vector<std::list<Position> > atoms_per_nmr_residue(len_sequence);
 
-		// now create BALLToBMRBMappings for the given alignment
-		for (Position i=0; i < aligned_ball_sequence.size(); i++)	
+		for (Position i=0; i<nmr_data.size(); i++)
+		{	
+			atoms_per_nmr_residue[nmr_data[i].residue_seq_code-1].push_back(i);
+		}
+
+	
+		ResidueConstIterator res_it = chain_->beginResidue();
+		Position num_nmr_alig_gaps  = 0;
+
+		// now create BALLToBMRBMappers for the given alignment
+		for (Position i=0; (i < aligned_nmrstar_sequence.size()) && (res_it != chain_->endResidue()); i++)	
 		{
-			if (   (aligned_ball_sequence[i] == '-') 
-					&& (aligned_nmrstar_sequence == '-'))
+			if (   (aligned_ball_sequence[i]    == '-') 
+					&& (aligned_nmrstar_sequence[i] == '-'))
 			{
-				Log.warn() << "BALLToBMRBMapping::createMapping(): Warning: gaps in both aligned sequences!" << endl;
-				return false;
+				Log.warn() << "BALLToBMRBMapper::createMapping(): Warning: gaps in both aligned sequences!" << endl;
 			}
 			else
 			{
 				if (aligned_ball_sequence[i] == '-')
 				{
 					// this NMR residue has no assigned BALL residue 
-					nmr_residue_idx++;
+					// nothing to do!
+
 #if defined NMRSTAR_DEBUG || defined NMRSTAR_DEBUG_MAPPING
-					Log.warn() << "BALLToBMRBMapping::createMapping(): Warning: nmr residue nr" << i << " " 
+					Log.warn() << "BALLToBMRBMapper::createMapping(): Warning: nmr residue nr" << i << " " 
 						<< aligned_nmrstar_sequence[i] << " has no assigned ball residue!" << endl; 
 #endif
 
 				}
 				else if (aligned_nmrstar_sequence[i] == '-')
-				{
+				{	
 					// this BALL residue has no assigned NMR residue
-					ball_residue_idx++;	
+					// the current residue cannot be assigned any shifts!
+					res_it++;
+					num_nmr_alig_gaps++;
 
 #if defined NMRSTAR_DEBUG || defined NMRSTAR_DEBUG_MAPPING					
-					Log.warn() << "BALLToBMRBMapping::createMapping(): Warning: ball residue nr " << i << " " 
+					Log.warn() << "BALLToBMRBMapper::createMapping(): Warning: ball residue nr " << i << " " 
 						<< aligned_ball_sequence[i] << " has no assigned nmr residue!" << endl; 
 #endif
 				}
 				else //if (aligned_ball_sequence[i] == aligned_nmrstar_sequence[i])
-				{         
+				{   
+					
 					// there is a correspondence found between nmr and ball 
-					nmr_residue_idx++;
-					ball_residue_idx++;
+					if (Peptides::OneLetterCode(res_it->getName()) != aligned_nmrstar_sequence[i])
+					{
+						Log.warn() << "NMRStarFile::BALLToBMRBMapper::createMapping(): Incorrect mapping! "   
+											 << Peptides::OneLetterCode(res_it->getName()) << " " << aligned_nmrstar_sequence[i] << std::endl;
 
-					// find for all atoms the corresponding NMRAtomData
-					Residue* residue = 0;
-					if (protein_)
-						residue = protein_->getResidue(ball_residue_idx);
-					else if (chain_)
-						residue = chain_->getResidue(ball_residue_idx);
-
-					for (AtomIterator at_it = residue->beginAtom(); +at_it; ++at_it)
-					{	
-						std::pair<Position, String> tuple(nmr_residue_idx, at_it->getName());
-						// find the correct entry-index of the NMRAtomData
-						if (indices.find(tuple) != indices.end())
-						{
-							// and store them in the mapping
-							Position nmr_atom = indices[tuple];
-							BALLToBMRBMapping::BMRBIndex b_index(0, nmr_atom);
-							ball_to_bmrb_map_[&*at_it] = b_index;
-						}
-						else
-						{
-
-#if defined NMRSTAR_DEBUG || defined NMRSTAR_DEBUG_MAPPING
-							Log.warn()<< "BALLToBMRBMapping::createMapping(): Warning: Could'n find ball atom "
-								<< at_it->getName() << " " << at_it->getResidue()->getName()
-								<< " in nmr residue nr " << nmr_residue_idx << endl;
-#endif
-						}
+						mismatches_++; 
 					}
-
-					if (aligned_ball_sequence[i] != aligned_nmrstar_sequence[i])
+					else if (aligned_ball_sequence[i] != aligned_nmrstar_sequence[i])
 					{
 						mismatches_++; 
-
 #if defined NMRSTAR_DEBUG || defined NMRSTAR_DEBUG_MAPPING
-						Log.warn() << "BALLToBMRBMapping::createMapping(): Warning: assigned ball residue " 
+						Log.warn() << "BALLToBMRBMapper::createMapping(): Warning: assigned ball residue " 
 							<< aligned_ball_sequence[i] << " to nmr residue " << aligned_nmrstar_sequence[i] << endl;
 #endif
 					}
-					else
+					else // we got a match
 					{
 						matches++;
-					}
+
+						//try to match the atoms
+						std::list<Position>& nmr_atoms = atoms_per_nmr_residue[i-num_nmr_alig_gaps];
+
+						for (std::list<Position>::iterator nmr_atom = nmr_atoms.begin(); nmr_atom != nmr_atoms.end(); ++nmr_atom)
+						{
+							bool mapped_me=false;
+							for (AtomConstIterator at_it = res_it->beginAtom(); +at_it && !mapped_me; ++at_it)
+							{
+								String full_name = at_it->getName();
+
+								if (name_converter_.matches(nmr_data[*nmr_atom].residue_label, nmr_data[*nmr_atom].atom_name, 
+								                           "NMRSTAR", full_name, "PDB"))
+								{
+									// and store in the mappings
+									BALLToBMRBMapper::BMRBIndex b_index(0, *nmr_atom);
+									ball_to_bmrb_map_[&*at_it] = b_index;
+									bmrb_to_ball_map_[&(nmr_data[*nmr_atom])] = &*at_it;	
+									mapped_me = true;
+								}
+							}	
+						}
+						
+						// get the next residue 
+						res_it++;
+					}	
 				} // end of else no gaps
 			}// end of else not '-''-'
 		} // end of for all alignment positions
@@ -697,7 +807,7 @@ namespace BALL
 #if defined NMRSTAR_DEBUG || defined NMRSTAR_DEBUG_MAPPING
 	Log.info() << " Mapping matches:  " << matches << endl;
 #endif
-		return result;
+		return true;
 	}
 	
 ////////////////////////////////////////////////////////////////
@@ -713,8 +823,7 @@ namespace BALL
 			sample_conditions_(),
 			samples_(),
 			shift_references_(), 
-			nmr_spectrometer_(),
-			monomeric_polymer_indices_(),
+			nmr_spectrometers_(),
 			monomeric_polymers_(),
 			has_H_shifts_(false),
 			has_C_shifts_(false),
@@ -723,28 +832,12 @@ namespace BALL
 			dummy_sample_condition_(),
 			dummy_sample_(),
 			dummy_shift_reference_set_(),
+			dummy_NMR_spectrometer_(),
+			dummy_monomeric_polymer_(),
 			special_characters_(".?@")
 	{
 	}
 
-		:	CIFFile(f),
-			valid_(f.valid_),
-			number_of_shift_sets_		(f.number_of_shift_sets_),
-			number_of_assigned_shifts_(f.number_of_assigned_shifts_),
-			entry_information_  (f.entry_information_),	
-			molecular_system_   (f.	molecular_system_),
-			samples_						(f.samples_),
-			nmr_spectrometer_		(f.nmr_spectrometer_),
-			monomeric_polymer_indices_(f.monomeric_polymer_indices_),
-			monomeric_polymers_	(f.monomeric_polymers_),
-			has_H_shifts_				(f.has_H_shifts_),
-			has_C_shifts_				(f.has_C_shifts_),
-			has_N_shifts_				(f.has_N_shifts_),
-			dummy_saveframe_		(f.dummy_saveframe_),
-			dummy_sample_condition_(f.dummy_sample_condition_),
-			dummy_sample_				(f.dummy_sample_),
-			dummy_shift_reference_set_(f.dummy_shift_reference_set_),
-			special_characters_	(f.special_characters_)
 	NMRStarFile::NMRStarFile(const String& file_name, File::OpenMode open_mode)
 		throw (Exception::FileNotFound)
 		:	CIFFile(file_name, open_mode),
@@ -757,8 +850,7 @@ namespace BALL
 			sample_conditions_(),
 			samples_(),
 			shift_references_(),
-			nmr_spectrometer_(),	
-			monomeric_polymer_indices_(),
+			nmr_spectrometers_(),	
 			monomeric_polymers_(),
 			has_H_shifts_(false),
 			has_C_shifts_(false),
@@ -767,39 +859,15 @@ namespace BALL
 			dummy_sample_condition_(),
 			dummy_sample_(),
 			dummy_shift_reference_set_(),
+			dummy_NMR_spectrometer_(),
+			dummy_monomeric_polymer_(),
 			special_characters_(".?@")
 	{
+		read();
 	}
 
 	NMRStarFile::~NMRStarFile()		
 	{
-	}
-
-	const NMRStarFile& NMRStarFile::operator = (const NMRStarFile& f)		
-	{
-		CIFFile::operator = (f);
-		valid_ = f.valid_;
-		number_of_shift_sets_		= f.number_of_shift_sets_;
-		number_of_assigned_shifts_ = f.number_of_assigned_shifts_;
-		entry_information_  = f.entry_information_;
-		molecular_system_   = f.molecular_system_; 
-		atom_data_sets_			= f.atom_data_sets_;
-		sample_conditions_  = f.sample_conditions_ ;
-		samples_						= f.samples_;
-		shift_references_   = f.shift_references_;
-		nmr_spectrometer_		= f.nmr_spectrometer_;	
-		monomeric_polymer_indices_ 	= f.monomeric_polymer_indices_;
-		monomeric_polymers_ 				= f.monomeric_polymers_;
-		has_H_shifts_       = f.has_H_shifts_;
-		has_C_shifts_       = f.has_C_shifts_;
-		has_N_shifts_       = f.has_N_shifts_;
-		dummy_saveframe_						= f.dummy_saveframe_;
-		dummy_sample_condition_			= f.dummy_sample_condition_;
-		dummy_sample_								= f.dummy_sample_;
-		dummy_shift_reference_set_	= f.dummy_shift_reference_set_;	
-		special_characters_	 				= f.special_characters_;
-	
-		return *this;
 	}
 
 	bool NMRStarFile::read() 
@@ -871,38 +939,41 @@ namespace BALL
 		// ... if valid try to assign to the AtomContainer's atoms 
 		if (result)
 		{
-			// first check, if the given AtomContainer is a valid protein
-			Protein* protein;
-   		if (RTTI::isKindOf<Protein>(ac))
+			Chain* chain;
+
+			// first check, if the given AtomContainer is a valid chain
+			if (RTTI::isKindOf<Chain>(ac))
     	{
-      	protein = RTTI::castTo<Protein>(ac);
+      	chain = RTTI::castTo<Chain>(ac);
     	}
-    	else if (RTTI::isKindOf<System>(ac))
+    	else  
+
+			if (RTTI::isKindOf<System>(ac))
     	{
 				System* system =  RTTI::castTo<System>(ac);
-      	if (system->countProteins() > 0)
+      	if (system->countChains() > 0)
       	{	 
-        	ProteinIterator pit = system->beginProtein();
+        	ChainIterator cit = system->beginChain();
         	
-					// NOTE: we take the first protein of the system
-        	protein = RTTI::castTo<Protein>(*pit);
+					// NOTE: we take the first chain of the system
+        	chain = RTTI::castTo<Chain>(*cit);
      		}
 				else
 				{
-					Log.error() << "NMRStarfile::read(): No protein found in the given AtomContainer." << endl;
+					Log.error() << "NMRStarfile::read(): No chain found in the given AtomContainer." << endl;
 					return false;
 				}
     	} 
     	else
     	{
-      	Log.error() << "NMRStarfile::read(): Cannot assign shifts to a non-protein." << endl;
+      	Log.error() << "NMRStarfile::read(): Cannot assign shifts to a non-chain." << endl;
       	return false;
     	}
 			
 			// Since no explicit mapping AtomContainer-->BMRB
 			// is given, we try to find a trivial mapping 
 			// by exactly matching residues and atom names
-			BALLToBMRBMapping pdb_to_bmrb_mapping(protein, this);
+			BALLToBMRBMapper pdb_to_bmrb_mapping(*chain, *this);
 			pdb_to_bmrb_mapping.createTrivialMapping();
 
 			// now assign the shifts via the mapping
@@ -918,16 +989,11 @@ namespace BALL
 		// read the NMRStarFile's information
 		bool result = valid_;
 		
-		Protein* prot = 0;
 		Chain* chain = 0;	
 		if (result)
 		{	
-			// check, if the AtomContainer is a protein
-			// first check, if the given AtomContainer is a valid protein
-			if (RTTI::isKindOf<Protein>(ac))
-			{
-				prot = RTTI::castTo<Protein>(ac);
-			}	
+			// check, if the AtomContainer is a chain
+			// first check, if the given AtomContainer is a valid chain
 			if (RTTI::isKindOf<Chain>(ac))
 			{
 				chain = RTTI::castTo<Chain>(ac);
@@ -935,30 +1001,30 @@ namespace BALL
 			else if (RTTI::isKindOf<System>(ac))
 			{
 				System* system =  RTTI::castTo<System>(ac);
-				if (system->countProteins() > 0)
+				if (system->countChains() > 0)
 				{	 
-					ProteinIterator pit = system->beginProtein();
+					ChainIterator cit = system->beginChain();
 
-					// NOTE: we take the first protein of the system
-					prot = RTTI::castTo<Protein>(*pit);
+					// NOTE: we take the first chain of the system
+					chain = RTTI::castTo<Chain>(*cit);
 				}
 				else
 				{
-					Log.error() << "NMRStarfile::assignShifts(): No protein found in the given AtomContainer." << endl;
+					Log.error() << "NMRStarfile::assignShifts(): No chain found in the given AtomContainer." << endl;
 					result = false;
 				}
 			} 
 			else
 			{
-				Log.error() << "NMRStarfile::assignShifts(): Cannot assign shifts to a non-protein." << endl;
+				Log.error() << "NMRStarfile::assignShifts(): Cannot assign shifts to a non-chain." << endl;
 				result = false;
 			}
 		}		
 		// ... if valid try to assign to the AtomContainer's atoms 
-		if (result && prot)
+		if (result && chain)
 		{
 			// create a mapping
-			BALLToBMRBMapping pdb_to_bmrb_mapping(prot, this);
+			BALLToBMRBMapper pdb_to_bmrb_mapping(*chain, *this);
 			pdb_to_bmrb_mapping.createMapping(aligned_ball_sequence, aligned_nmrstar_sequence);
 
 #if defined NMRSTAR_DEBUG_MAPPING
@@ -971,7 +1037,7 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 		else if (result && chain)
 		{
 			// create a mapping
-			BALLToBMRBMapping chain_to_bmrb_mapping(chain, this);
+			BALLToBMRBMapper chain_to_bmrb_mapping(*chain, *this);
 			chain_to_bmrb_mapping.createMapping(aligned_ball_sequence, aligned_nmrstar_sequence);
 
 #if defined NMRSTAR_DEBUG_MAPPING
@@ -980,12 +1046,11 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 #endif
 			// now assign the shifts via the mapping
 			result = assignShifts_(chain_to_bmrb_mapping);
-
 		}
 		return result;
 	}
 
-	bool NMRStarFile::assignShifts(BALLToBMRBMapping& ball_to_bmrb_mapping)
+	bool NMRStarFile::assignShifts(BALLToBMRBMapper& ball_to_bmrb_mapping)
 	{	
 		// do we have a valid NMRStarFile's instance?
 		bool result = valid_;
@@ -1001,25 +1066,24 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 
   //  Apply the shifts read into to the AtomContainer as denoted in the mapping.
 	//  We assume, that the file was already read!
-	bool NMRStarFile::assignShifts_(BALLToBMRBMapping& ball_to_bmrb_mapping)
+	bool NMRStarFile::assignShifts_(BALLToBMRBMapper& ball_to_bmrb_mapping)
 	{
 		number_of_assigned_shifts_ = 0;
 
 		ResidueIterator r_it;
-		if (ball_to_bmrb_mapping.getProtein())
-			r_it =  ball_to_bmrb_mapping.getProtein()->beginResidue();
-		else if (ball_to_bmrb_mapping.getChain())
-			r_it =  ball_to_bmrb_mapping.getChain()->beginResidue();
+		if (ball_to_bmrb_mapping.getChain())
+			r_it = const_cast<Chain*>(ball_to_bmrb_mapping.getChain())->beginResidue();
+		else
+			return false;
 
 		// map the shifts via the pdb_bmrb_mapping into the given AtomContainer
-		for (;//ResidueIterator r_it = ball_to_bmrb_mapping.getProtein()->beginResidue(); 
-				 +r_it; r_it++)
+		for ( ; +r_it; r_it++)
 		{
 			for (AtomIterator a_it = r_it->beginAtom(); +a_it; a_it++)
 			{
-				if (ball_to_bmrb_mapping.hasAtom(&*a_it))
+				if (ball_to_bmrb_mapping.isMapped(&*a_it))
 				{
-					BALLToBMRBMapping::BMRBIndex& bindex = ball_to_bmrb_mapping(&*a_it);
+					BALLToBMRBMapper::BMRBIndex bindex = ball_to_bmrb_mapping(&*a_it);
 					NMRAtomData& nmr_atom = atom_data_sets_[bindex.first].atom_data[bindex.second];
 
 					a_it->setProperty(ShiftModule::PROPERTY__EXPERIMENTAL__SHIFT,	nmr_atom.shift_value);
@@ -1027,11 +1091,11 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 				}
 			}
 		}
-
 		return true;
 	}
 
 
+	Size NMRStarFile::getNumberOfAtoms() const
 	{
 		Size max = 0;
 		
@@ -1046,25 +1110,21 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 		return max;
 	}
 
-	String NMRStarFile::getResidueSequence()
+	String NMRStarFile::getResidueSequence(Position i) const
 	{	
 		if (monomeric_polymers_.size() > 0)
 		{				
-			if (monomeric_polymers_.size() > 1)
-			{ 
-				Log.warn() << "NMRStarFile::getResidueSequence(): Warning: more than one monomeric polymer!" << endl;
-			}
-			
-			if (atom_data_sets_.size()>0)
+			if (atom_data_sets_.size() > i)
 			{	
 				bool identical_sequences = true;
 
 				std::vector<NMRAtomData> atom_data = atom_data_sets_[0].atom_data;
-				String residue_sequence = monomeric_polymers_[0].residue_sequence;
+				String residue_sequence = monomeric_polymers_[i].residue_sequence;
 
-				for (Position j=0; identical_sequences && (j < atom_data.size()); j++)
+				for (Position j=0; identical_sequences && (j<atom_data.size()); j++)
 				{
-					if (residue_sequence[atom_data[j].residue_seq_code - 1] != Peptides::OneLetterCode(atom_data[j].residue_label))
+					if (   residue_sequence[atom_data[j].residue_seq_code - 1] 
+							!= Peptides::OneLetterCode(atom_data[j].residue_label))
 					{
 						identical_sequences = false;
 						Log.warn() << "NMRStarFile::getResidueSequence(): Warning: Inconsistent residue sequence information." << endl;
@@ -1073,7 +1133,7 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 		
 				if (identical_sequences)
 				{
-					return monomeric_polymers_[0].residue_sequence;
+					return monomeric_polymers_[i].residue_sequence;
 				}
 			}
 		}
@@ -1126,9 +1186,9 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 		return false;
 	}
 
-	NMRStarFile::Sample NMRStarFile::getSample(Index i) const 
+	NMRStarFile::Sample NMRStarFile::getSample(Position i) const 
 	{
-		if (i < (Index)samples_.size())
+		if (i < samples_.size())
 			return samples_[i];
 		else
 		{	
@@ -1176,8 +1236,79 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 			}
 		}
 		Log.warn() << "NMRStarFile::getShiftReferenceSetByName(): Warning: Returned a dummy shift reference set!" << std::endl;
-
 		return dummy_shift_reference_set_;
+	}
+
+	NMRStarFile::NMRSpectrometer& NMRStarFile::getNMRSpectrometer(Position i) 
+	{
+		if (i < nmr_spectrometers_.size())
+		{
+			return nmr_spectrometers_[i];
+		}
+		else
+		{	
+			Log.warn() << "NMRStarFile::getNMRSpectrometer(): Warning: Returned a dummy spectrometer!" << std::endl;
+			return dummy_NMR_spectrometer_;
+		}
+	}
+	
+	const NMRStarFile::NMRSpectrometer& NMRStarFile::getNMRSpectrometer(Position i) const 
+	{	
+		if (i < nmr_spectrometers_.size())
+		{
+			return nmr_spectrometers_[i];
+		}
+		else
+		{
+			Log.warn() << "NMRStarFile::getNMRSpectrometer(): Warning: Returned a dummy spectrometer!" << std::endl;
+			return dummy_NMR_spectrometer_;
+		}
+	}
+
+	NMRStarFile::NMRSpectrometer& NMRStarFile::getNMRSpectrometerByName(String name)
+	{
+		for (Size i=0; i < nmr_spectrometers_.size(); i++)
+		{
+			if (nmr_spectrometers_[i].name == name)
+			{
+				return nmr_spectrometers_[i]; 
+			}
+		}
+		Log.warn() << "NMRStarFile::gettNMRSpectrometerByName(): Warning: Returned a dummy spectrometer!" << std::endl;
+		return dummy_NMR_spectrometer_;
+	}
+	
+	const NMRStarFile::NMRSpectrometer& NMRStarFile::getNMRSpectrometerByName(String name) const
+	{
+		for (Size i=0; i < nmr_spectrometers_.size(); i++)
+		{
+			if (nmr_spectrometers_[i].name == name)
+			{
+				return nmr_spectrometers_[i]; 
+			}
+		}
+		Log.warn() << "NMRStarFile::gettNMRSpectrometerByName(): Warning: Returned a dummy spectrometer!" << std::endl;
+		return dummy_NMR_spectrometer_;
+	}
+	
+	String NMRStarFile::getNMRSpectrometerManufacturer(Position i) const 
+	{	
+		if (i < nmr_spectrometers_.size())
+		{
+			return nmr_spectrometers_[i].manufacturer;
+		}
+		else 
+			return "";
+	}
+			
+	float NMRStarFile::getNMRSpectrometerFieldStrength(Position i) const 
+	{
+		if (i < nmr_spectrometers_.size())
+		{
+			return nmr_spectrometers_[i].field_strength;
+		}
+		else
+			return FLOAT_VALUE_NA;
 	}
 
 
@@ -1187,12 +1318,12 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 		for (Size db=0; db < datablocks_.size(); db++)
 		{
 			// find the category
-			if  (datablocks_[db].hasSaveframeCategory("entry_information"))
+			if (datablocks_[db].hasSaveframeCategory("entry_information"))
 			{
 				vector<CIFFile::SaveFrame> saveframes = datablocks_[db].getSaveframesByCategory("entry_information");
 				if (saveframes.size() > 1)
 					Log.warn() << "NMRStarFile::readEntryInformation_(): Warning: NMRFile has more than one entry information saveframe! " << std::endl; 
-				for (Size sf = 0; sf < saveframes.size(); sf++)
+				for (Size sf=0; sf<saveframes.size(); sf++)
 				{
 					if (saveframes[sf].hasItem("_Entry_type"))
 						entry_information_.entry_type = saveframes[sf].getItemValue("_Entry_type");
@@ -1209,9 +1340,7 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 						entry_information_.experimental_method = saveframes[sf].getItemValue("_Experimental_method");	
 					else  entry_information_.experimental_method = "";
 				}
-
 			}
-
 		}
 	}
 
@@ -1221,7 +1350,7 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 		for (Size db=0; db < datablocks_.size(); db++)
 		{
 			// find the category
-			if  (datablocks_[db].hasSaveframeCategory("molecular_system"))
+			if (datablocks_[db].hasSaveframeCategory("molecular_system"))
 			{
 				vector<CIFFile::SaveFrame> saveframes = datablocks_[db].getSaveframesByCategory("molecular_system");
 				if (saveframes.size() > 1)
@@ -1257,7 +1386,7 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 					// in dalton
 					if (saveframes[sf].hasItem("_System_molecular_weight"))
 						molecular_system_.system_molecular_weight = 
-							( valueIsValid(saveframes[sf].getItemValue("_System_molecular_weight")) 
+							( isValidSingleValue_(saveframes[sf].getItemValue("_System_molecular_weight")) 
 								? saveframes[sf].getItemValue("_System_molecular_weight").toFloat()
 								:  FLOAT_VALUE_NA  );
 					else  molecular_system_.system_molecular_weight = FLOAT_VALUE_NA;
@@ -1265,7 +1394,7 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 					//
 					// read the loop entries
 					//
-					for (Size loop=0; loop < saveframes[sf].items.size(); loop++)
+					for (Size loop = 0; loop < saveframes[sf].items.size(); loop++)
 					{
 						if (saveframes[sf].items[loop].is_loop)
 						{	
@@ -1276,22 +1405,21 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 							// second: label
 
 							// we check the first key :-)
-							if (saveframes[sf].items[loop].keys[0]== "_Mol_system_component_name")
+							if (saveframes[sf].items[loop].keys[0] == "_Mol_system_component_name")
 							{
 								// we have found the component name table :-)
 								// store the data
 								MolecularSystem::ChemicalUnit cu;
-								for (Size line = 0; line < current_loop->values.size(); line++ )
+								for (Size line = 0; line < current_loop->values.size(); line++)
 								{	
 									cu.component_name  = current_loop->values[line][0];
 									cu.label = current_loop->values[line][1];
 									molecular_system_.chemical_units.push_back(cu);
 								}
 							}
-
+							
 							// read the related DB entries
-
-							if (saveframes[sf].items[loop].keys[0]== "_Database_name")
+							if (saveframes[sf].items[loop].keys[0] == "_Database_name")
 							{
 								NMRStarFile::MolecularSystem::RelatedDB db;
 								for (Size line = 0; line < current_loop->values.size(); line++ )
@@ -1301,7 +1429,7 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 									if ( pos > -1) db.accession_code = current_loop->values[line][pos];
 									
 									pos = current_loop->getKeyIndex("_Database_entry_mol_name");
-									if ( pos > -1) db.entry_mol_name = current_loop->values[line][pos];
+									if ( pos > -1) db.entry_mol_name = current_loop->values[line][pos].trim("; \n");
 									
 									pos = current_loop->getKeyIndex("_Database_entry_relation_type");
 									if ( pos > -1) db.relation_type = current_loop->values[line][pos];
@@ -1309,7 +1437,7 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 									pos = current_loop->getKeyIndex("_Database_entry_details");
 									if ( pos > -1) db.details = current_loop->values[line][pos];
 								}
-									molecular_system_.related_database_entries.push_back(db);
+								molecular_system_.related_database_entries.push_back(db);
 							}
 
 						} // if loop
@@ -1326,7 +1454,7 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 		for (Size db=0; db < datablocks_.size(); db++)
 		{
 			// find the category
-			if  (datablocks_[db].hasSaveframeCategory("monomeric_polymer"))
+			if (datablocks_[db].hasSaveframeCategory("monomeric_polymer"))
 			{
 				vector<CIFFile::SaveFrame> saveframes = datablocks_[db].getSaveframesByCategory("monomeric_polymer");
 				if (saveframes.size() > 1)
@@ -1337,7 +1465,6 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 					mp.label_name = saveframes[sf].framename;
 
 					// read the paired entries	
-				
 					if (saveframes[sf].hasItem("_Mol_type"))
 						mp.type = saveframes[sf].getItemValue("_Mol_type");
 					else   mp.type = "";
@@ -1356,17 +1483,17 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 					
 					if (saveframes[sf].hasItem("_Molecular_mass"))
 						mp.molecular_mass = 
-							( valueIsValid(saveframes[sf].getItemValue("_Molecular_mass")) 
+							( isValidSingleValue_(saveframes[sf].getItemValue("_Molecular_mass")) 
 								? saveframes[sf].getItemValue("_Molecular_mass").toFloat() :  FLOAT_VALUE_NA );
-					else  mp.molecular_mass = 0;
+					else  mp.molecular_mass = 0.f;
 					
 					if (saveframes[sf].hasItem("_Details"))
-						mp.details = saveframes[sf].getItemValue("_Details");
+						mp.details = saveframes[sf].getItemValue("_Details").trim(";\n");
 					else   mp.details = "";
 
 					if (saveframes[sf].hasItem("_Residue_count"))
 						mp.number_of_residues = 
-							( valueIsValid(saveframes[sf].getItemValue("_Residue_count")) 
+							( isValidSingleValue_(saveframes[sf].getItemValue("_Residue_count")) 
 								? saveframes[sf].getItemValue("_Residue_count").toInt() : INT_VALUE_NA );
 					else  mp.number_of_residues  = 0;
 
@@ -1414,25 +1541,24 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 									if ( pos > -1) hdb.entry_mol_name = current_loop->values[line][pos];
 
 									pos = current_loop->getKeyIndex("_Sequence_query_to_submitted_percentage");
-									hdb.seq_to_submitted_percentage  = (((pos>-1 ) && valueIsValid(current_loop->values[line][pos])) 
+									hdb.seq_to_submitted_percentage  = (((pos>-1 ) && isValidSingleValue_(current_loop->values[line][pos])) 
 																				? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
 
 									pos = current_loop->getKeyIndex("_Sequence_subject_length");
-									hdb.subject_length  = (((pos>-1 ) && valueIsValid(current_loop->values[line][pos])) 
+									hdb.subject_length  = (((pos>-1 ) && isValidSingleValue_(current_loop->values[line][pos])) 
 																				? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
 			
 									pos = current_loop->getKeyIndex("_Sequence_identity");
-									hdb.seq_identity  = (((pos>-1 ) && valueIsValid(current_loop->values[line][pos])) 
+									hdb.seq_identity  = (((pos>-1 ) && isValidSingleValue_(current_loop->values[line][pos])) 
 																				? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
 
 									pos = current_loop->getKeyIndex("_Sequence_positive");
-									hdb.seq_positive  = (((pos>-1 ) && valueIsValid(current_loop->values[line][pos])) 
+									hdb.seq_positive  = (((pos>-1 ) && isValidSingleValue_(current_loop->values[line][pos])) 
 																				? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
 
-									pos = current_loop->getKeyIndex("_Sequence_homology_eypectation_value");
-									hdb.homology_expectation_value  = (((pos>-1 ) && valueIsValid(current_loop->values[line][pos])) 
+									pos = current_loop->getKeyIndex("_Sequence_homology_expectation_value");
+									hdb.homology_expectation_value  = (((pos>-1 ) && isValidSingleValue_(current_loop->values[line][pos])) 	
 																				? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
-									
 									mp.homolog_database_entries.push_back(hdb);
 								}
 							}
@@ -1441,7 +1567,7 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 					// store this Monomer
 					addMonomericPolymer(mp);
 					
-				/*	// check, to which chemical unit this monomer belongs
+				/*	// check, to which chemical unit this monomer belongs TODO!
 					for (Size j=0; j < chemical_units.size(); j++)
 					{
 						if (chemical_units[j].label.trim("$") = mp.label_name)
@@ -1487,13 +1613,13 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 									if ( current_loop->keys[1] == "_Variable_value")
 									{
 										tmp.values[current_loop->values[line][0]] = 
-											( valueIsValid(current_loop->values[line][1])
+											( isValidSingleValue_(current_loop->values[line][1])
 											 ? current_loop->values[line][1].toFloat() : FLOAT_VALUE_NA );
 									}
 									if ( current_loop->keys[2] == "_Variable_value_error")
 									{
 										tmp.errors[current_loop->values[line][0]] = 
-											( valueIsValid(current_loop->values[line][2])
+											( isValidSingleValue_(current_loop->values[line][2])
 												? current_loop->values[line][2].toFloat() : FLOAT_VALUE_NA );
 									}
 									if ( current_loop->keys[3] == "_Variable_value_units")
@@ -1541,63 +1667,64 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 								NMRStarFile::ShiftReferenceSet reference_set;
 								reference_set.name = saveframes[sf].framename;							
 						
-								for (Size line = 0; line < current_loop->values.size(); line++ )
+								for (Size line = 0; line < current_loop->values.size(); line++)
 								{	
 									NMRStarFile::ShiftReferenceElement ref_element;
 									Index pos = current_loop->getKeyIndex("_Mol_common_name");
-									if ( pos > -1)
+									if (pos > -1)
 									{
 										ref_element.mol_common_name =  current_loop->values[line][pos];
 									}
 									
 									pos = current_loop->getKeyIndex("_Atom_type");
-									if ( pos > -1)
+									if (pos > -1)
 									{
-										ref_element.atom_type  =  current_loop->values[line][pos].toChar();
+										ref_element.atom_type  =  current_loop->values[line][pos];//.toChar();
 									}
 									
 									pos = current_loop->getKeyIndex("_Atom_isotope_number");
-									if ( pos > 1)
+									if (pos > 1)
 									{
-											ref_element.isotope_number  = ( valueIsValid(current_loop->values[line][pos]) 
-													                         ? (Position)current_loop->values[line][pos].toInt() : INT_VALUE_NA );
+											ref_element.isotope_number = ( isValidSingleValue_(current_loop->values[line][pos]) 
+													                          ? (Position)current_loop->values[line][pos].toInt() : INT_VALUE_NA );
 									}
 									
 									pos = current_loop->getKeyIndex("_Atom_group");
-									if ( pos > 1)
+									if (pos > 1)
 									{
 										ref_element.atom_group   =  current_loop->values[line][pos];
 									}
+
 									pos = current_loop->getKeyIndex("_Chem_shift_units");
-									if ( pos > -1)
+									if (pos > -1)
 									{
 										ref_element.shift_units  =  current_loop->values[line][pos];
 									}
 									
 									pos = current_loop->getKeyIndex("_Chem_shift_value");
-									if ( pos > -1)
+									if (pos > -1)
 									{
-											ref_element.shift_value  = ( valueIsValid(current_loop->values[line][pos]) 
+											ref_element.shift_value  = ( isValidSingleValue_(current_loop->values[line][pos]) 
 												 												 ?  current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);	
 									}
 									
 									pos = current_loop->getKeyIndex("_Reference_method");
-									if ( pos > -1)
+									if (pos > -1)
 									{
-										ref_element.reference_method  = current_loop->values[line][pos].toChar();
+										ref_element.reference_method  = current_loop->values[line][pos];//.toChar();
 									}
 
 									pos = current_loop->getKeyIndex("_Reference_type");
-									if ( pos > -1)
+									if (pos > -1)
 									{
-										ref_element.reference_type  = current_loop->values[line][pos].toChar();
+										ref_element.reference_type  = current_loop->values[line][pos];//.toChar();
 									}
 									
 									pos = current_loop->getKeyIndex("_Indirect_shift_ratio");
-									if ( pos > -1)
+									if (pos > -1)
 									{
 										ref_element.indirect_shift_ratio  = 
-											(valueIsValid(current_loop->values[line][pos]) 
+											(isValidSingleValue_(current_loop->values[line][pos]) 
 											 ? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA); 
 									}
 									
@@ -1621,7 +1748,6 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 			// find the category
 			if  (datablocks_[db].hasSaveframeCategory("assigned_chemical_shifts"))
 			{
-
 				vector<CIFFile::SaveFrame> saveframes = datablocks_[db].getSaveframesByCategory("assigned_chemical_shifts");
 				if (saveframes.size() > 1)
 					Log.warn() << "NMRStarfile::readShifts(): Warning: File has more than one assigned_chemical_shifts saveframe! " << std::endl; 
@@ -1648,10 +1774,10 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 
 									// empty values are denoted by '.' what shall we do?
 									Index pos = current_loop->getKeyIndex("_Atom_shift_assign_ID");
-									atom_data.atom_ID = (((pos > -1) && valueIsValid(current_loop->values[line][0]) )
+									atom_data.atom_ID = (((pos > -1) && isValidSingleValue_(current_loop->values[line][0]) )
 																			?  current_loop->values[line][0].toUnsignedInt() : POSITION_VALUE_NA);
 									pos = current_loop->getKeyIndex("_Residue_seq_code");
-									atom_data.residue_seq_code = (((pos > -1) && valueIsValid(current_loop->values[line][pos]))
+									atom_data.residue_seq_code = (((pos > -1) && isValidSingleValue_(current_loop->values[line][pos]))
 																								? current_loop->values[line][1].toUnsignedInt() : POSITION_VALUE_NA);
 									pos = current_loop->getKeyIndex("_Residue_label");
 									if (pos > -1) atom_data.residue_label = current_loop->values[line][pos];
@@ -1667,7 +1793,6 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 										if (!has_H_shifts_ && (String(atom_data.atom_type) == "H"))
 										{
 											has_H_shifts_ = true;
-										
 										}
 										if (!has_C_shifts_ && (String(atom_data.atom_type) == "C"))
 										{	
@@ -1680,19 +1805,18 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 									}
 
 									pos = current_loop->getKeyIndex("_Chem_shift_value");
-									atom_data.shift_value = ( (pos > -1) && valueIsValid(current_loop->values[line][pos]) 
+									atom_data.shift_value = ( (pos > -1) && isValidSingleValue_(current_loop->values[line][pos]) 
 										 												? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
-									
+								
 									pos = current_loop->getKeyIndex("_Chem_shift_value_error");
-									atom_data.error_value = ( (pos > -1) && valueIsValid(current_loop->values[line][pos])
+									atom_data.error_value = ( (pos > -1) && isValidSingleValue_(current_loop->values[line][pos])
 																						?  current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
 
 									pos = current_loop->getKeyIndex("_Chem_shift_ambiguity_code");
-									atom_data.ambiguity_code = ( (pos > -1) && valueIsValid(current_loop->values[line][pos])
+									atom_data.ambiguity_code = ( (pos > -1) && isValidSingleValue_(current_loop->values[line][pos])
 																							?  current_loop->values[line][pos].toUnsignedInt() : INT_VALUE_NA);
-									// store in the NMRdataset
+									// store in the NMRDataSet
 									atom_data_set.atom_data.push_back(atom_data);
-
 								}
 
 								// look for the sample conditions
@@ -1701,7 +1825,6 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 									//store the name
 									atom_data_set.condition = (saveframes[sf].getItemValue("_Sample_conditions_label")).trim("$");
 									//atom_data_set.condition = getSampleConditionByName(condition);
-		
 								}
 
 								// look for the chemical shift reference
@@ -1709,10 +1832,16 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 								{		
 									//store the name
 									atom_data_set.reference = (saveframes[sf].getItemValue("_Chem_shift_reference_set_label")).trim("$");
-									
 									//atom_data_set.reference = getShiftReferenceSetByName(reference);
 								}
-							
+						
+								// look for the molecular systems component name
+								if (saveframes[sf].hasItem("_Mol_system_component_name"))
+								{		
+									//store the name
+									atom_data_set.name = (saveframes[sf].getItemValue("_Mol_system_component_name")).trim("$");
+								}
+
 								// look for the samples
 								for (Size loop=0; loop < saveframes[sf].items.size(); loop++)
 								{
@@ -1725,11 +1854,10 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 											for (Size line = 0; line < current_loop->values.size(); line++ )
 											{	
 												//store the labels
-												atom_data_set.samples.push_back(current_loop->values[line][0]);
+												atom_data_set.samples.push_back(current_loop->values[line][0].trim("$"));
 											}
 										}	
 									}	
-
 								}
 								// store this set 
 								atom_data_sets_.push_back(atom_data_set);
@@ -1752,13 +1880,10 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 			if  (datablocks_[db].hasSaveframeCategory("sample"))
 			{
 				vector<CIFFile::SaveFrame> saveframes = datablocks_[db].getSaveframesByCategory("sample");
-				if (saveframes.size() > 1)
-					Log.warn() << "NMRStarFile::readSamples_(): Warning: NMRFile has more than one sample saveframe! " << std::endl; 
-
 				for (Size sf = 0; sf < saveframes.size(); sf++)
 				{
 					NMRStarFile::Sample sample;
-					sample.label = saveframes[sf].framename;
+					sample.label = saveframes[sf].framename.trim("$");
 					if (saveframes[sf].hasItem("_Sample_type"))
 						sample.type = (saveframes[sf].getDataItemValue("_Sample_type"));
 					if (saveframes[sf].hasItem("_Details"))
@@ -1775,12 +1900,12 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 								for (Size line = 0; line < current_loop->values.size(); line++ )
 								{
 									NMRStarFile::Sample::Component component;
-									component.label = current_loop->values[line][0];
+									component.label = current_loop->values[line][0].trim("$");
 										
 									Index pos = current_loop->getKeyIndex("_Concentration_value");
 									if ( pos > -1) 
 									{ 
-										component.concentration_value =  (valueIsValid(current_loop->values[line][pos]) 
+										component.concentration_value =  (isValidSingleValue_(current_loop->values[line][pos]) 
 																										? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
 									}	
 
@@ -1790,14 +1915,14 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 									pos = current_loop->getKeyIndex("_Concentration_min_value");
 									if ( pos > -1)
 									{
-										component.concentration_min =  (valueIsValid(current_loop->values[line][pos]) 
+										component.concentration_min =  (isValidSingleValue_(current_loop->values[line][pos]) 
 																									? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
 									}
 									
 									pos = current_loop->getKeyIndex("_Concentration_max_value");
 									if ( pos > -1) 
 									{
-										component.concentration_max  =  (valueIsValid(current_loop->values[line][pos]) 
+										component.concentration_max  =  (isValidSingleValue_(current_loop->values[line][pos]) 
 																									? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
 									}
 
@@ -1826,18 +1951,20 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 			if  (datablocks_[db].hasSaveframeCategory("NMR_spectrometer"))
 			{
 				vector<CIFFile::SaveFrame> saveframes = datablocks_[db].getSaveframesByCategory("NMR_spectrometer");
-				if (saveframes.size() > 1)
-					Log.warn() << "NMRStarFile::readNMRSpectrometer_(): Warning: NMRFile has more than one NMR spectrometer  saveframe! " << std::endl; 
-
-				for (Size sf = 0; sf < saveframes.size(); sf++)
+				for (Size sf=0; sf < saveframes.size(); sf++)
 				{
+					NMRStarFile::NMRSpectrometer spectrometer;
+					spectrometer.name = saveframes[sf].framename;		
+						
 					if (saveframes[sf].hasItem("_Manufacturer"))
-						nmr_spectrometer_.manufacturer = (saveframes[sf].getDataItemValue("_Manufacturer"));
+						spectrometer.manufacturer = (saveframes[sf].getDataItemValue("_Manufacturer"));
 					if (saveframes[sf].hasItem("_Model"))
-						nmr_spectrometer_.model = saveframes[sf].getDataItemValue("_Model");
+						spectrometer.model = saveframes[sf].getDataItemValue("_Model");
 					if (saveframes[sf].hasItem("_Field_strength"))
-						nmr_spectrometer_.field_strength = (valueIsValid(saveframes[sf].getDataItemValue("_Field_strength")) 
+						spectrometer.field_strength = (isValidSingleValue_(saveframes[sf].getDataItemValue("_Field_strength")) 
 											?  saveframes[sf].getDataItemValue("_Field_strength").toFloat() : FLOAT_VALUE_NA);
+					// store
+					nmr_spectrometers_.push_back(spectrometer);
 				}
 			}
 		}
@@ -1854,17 +1981,19 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 		// check all chemical units, to which monomer they belong 
 		for (Size j=0; j < molecular_system_.chemical_units.size(); j++)
 		{
-			if ( monomeric_polymer_indices_.has(molecular_system_.chemical_units[j].label.trim("$")) )
+			for (Size i=0; i < monomeric_polymers_.size(); i++)
 			{
-				molecular_system_.chemical_units[j].monomeric_polymer = &(monomeric_polymers_[monomeric_polymer_indices_[molecular_system_.chemical_units[j].label.trim("$")]]);
+				if (molecular_system_.chemical_units[j].label.trim("$") == monomeric_polymers_[i].label_name)
+					molecular_system_.chemical_units[j].monomeric_polymer = &(monomeric_polymers_[i]);
 			}
 		}
+
 		// set the shifts
-		for (Size j=0; j < 	molecular_system_.chemical_units.size(); j++)
+		for (Size j=0; j < molecular_system_.chemical_units.size(); j++)
 		{
 			for (Size i=0; i < atom_data_sets_.size(); i++)
 			{
-				if (atom_data_sets_[i].name == molecular_system_.chemical_units[j].component_name)
+				if (atom_data_sets_[i].name == molecular_system_.chemical_units[j].label)//component_name)
 				{
 					molecular_system_.chemical_units[j].shifts = &atom_data_sets_[i];
 				}
@@ -1882,11 +2011,11 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 		special_characters_ = characters;
 	}
 
-	bool NMRStarFile::valueIsValid(String value)
+	bool NMRStarFile::isValidSingleValue_(String value)
 	{
 		if (value.size()==1)
 		{
-			for (Size i=0; i < special_characters_.size(); i ++)
+			for (Size i=0; i<special_characters_.size(); i++)
 			{
 				if (value == special_characters_[i])
 					return false;
@@ -1897,34 +2026,31 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 
 	bool NMRStarFile::operator == (const NMRStarFile& f)  
 	{
-		// TODO: reicht das??
 		return File::operator == (f);
 	}
 
 	bool NMRStarFile::operator != (const NMRStarFile& f)  
 	{
-		// TODO: reicht das??
-		return !(File::operator == (f));
+		return !(*this == f);
 	}
 
-	void NMRStarFile::clear() // TODO
+	void NMRStarFile::clear() 
 	{
 		CIFFile::clear();
+		valid_ = true;
 		number_of_shift_sets_ = 0;
 		number_of_assigned_shifts_ = 0;
-		//entry_information_.clear();
-		//molecular_system_.clear();
+		entry_information_.clear();
+		molecular_system_.clear();
 		atom_data_sets_.clear();
-		sample_conditions_.clear();
+		sample_conditions_.clear(); 
+		samples_.clear();
 		shift_references_.clear();
-		//nmr_spectrometer_.clear();
+		nmr_spectrometers_.clear();
 		monomeric_polymers_.clear();
 		has_H_shifts_ = false;
 	 	has_C_shifts_ = false;
 	 	has_N_shifts_ = false;
-		dummy_saveframe_.clear();	
-		//dummy_sample_condition_.clear();
-		//dummy_shift_reference_set_.clear();
 	}
 	
 	

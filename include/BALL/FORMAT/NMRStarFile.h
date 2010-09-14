@@ -17,32 +17,66 @@
 #	include <BALL/KERNEL/protein.h>
 #endif
 
+#ifndef BALL_STRUCTURE_PEPTIDES_H
+#	include <BALL/STRUCTURE/peptides.h>
+#endif
+
 #include <vector>
 
 namespace BALL 
 {
-	
+	/** NMRStarFile class. 
+	    This class 
+
+	    <br>
+	    Example code: <br> 
+	 	  \code  
+	 		
+				BALL::System S;
+				pdb >> S;
+				Chain& chain = *(S.beginChain());
+
+				NMRStarFile nmr_file("NMRStarFile_test.bmr");
+				std::cout << nmr_file.getNumberOfSamples() << " " << mr_file.getNumberOfAtoms() << std::endl;
+					
+				std::cout << Peptides::GetSequence(chain)  << std::endl;
+				std::cout << nmr_file.getResidueSequence() << std::endl;
+
+				NMRStarFile::BALLToBMRBMapper mapper(chain, nmr_file);
+				
+				mapper.createMapping("MKSTGIVRKVDELGRVVIPIELRRTLGIAEKDALEIYVDDEKIIL-KKYKPNMT", 
+														 "AKSTGIVRKVDELGRVVIPIELRRTLGIAEKDALEIYVDDEKIILKK-YKPNMT");		
+				std::cout << mapper.getNumberOfMismatches() << std::endl;
+			
+				nmr_file.assignShifts(mapper);
+				
+				...
+				   std::cout << atom->getProperty(ShiftModule::PROPERTY__EXPERIMENTAL__SHIFT).getFloat() << std::endl;
+			  ...
+	    \endcode
+	*/
 	class BALL_EXPORT NMRStarFile
 		: public CIFFile
 	{
 		public:
-			BALL_CREATE(NMRStarFile)
 
 			// constant variables to denote unknown values
-			static const float FLOAT_VALUE_NA;
-			static const int INT_VALUE_NA;
+			static const float    FLOAT_VALUE_NA;
+			static const int   	  INT_VALUE_NA;
 
 			static const Position POSITION_VALUE_NA;
 			
-			/** name nested Data classes.
-				These classes represent the data extracted from NMR-Star-Files.
+			/** nested data classes
+			 
+				  These classes represent the data extracted from NMRStar files.
 			*/
 			
 			//@{
 
-		/** SampleConditions.
-				This class includes all information for a set of samples
-				delivered by a NMR-Star-File.
+			/** SampleConditions.
+			 	  This class includes all information for a set of samples
+				  delivered by a NMRStar file.
+				  All members are public for easy access.
 			*/
 			class BALL_EXPORT SampleCondition
 			{
@@ -50,7 +84,7 @@ namespace BALL
 					SampleCondition();
 	
 					// saveframe name -- referenced in the sample_condition_label 
-					// of saveFrame assigned_chemical_shifts   
+					// of  the saveframe "assigned_chemical_shifts"   
 					String	name;
 					// Accoring to the NMRStarFile 2.1 documentation 
 					// the first entry MUST BE "_Variable_type".
@@ -60,19 +94,19 @@ namespace BALL
 					StringHashMap<float>  errors;
 					StringHashMap<String> units;
 				
-					//void clear(); 
 					std::ostream& operator >> (std::ostream& s);
 			};
 	
 			/** Samples.
-				This class includes all information of  a sample.
+					This class includes all information of a NMRStar file sample.
 			*/
 			class Sample
 			{
 				public:
 				
 					/** Component.
-					This class includes all information of a sample component.
+					    This class includes all information of a sample component.
+				  	  All members are public for easy access.
 					*/
 					class Component
 					{
@@ -80,12 +114,13 @@ namespace BALL
 							Component();
 							void clear(); 
 							
-							String label;
-							float concentration_value;
-							String value_unit;
-							float concentration_min;
-							float concentration_max;
-							String isotopic_labeling;
+							String   label;
+							float    concentration_value;
+							String   value_unit;
+							float    concentration_min;
+							float    concentration_max;
+							String   isotopic_labeling;
+
 							std::ostream& operator >> (std::ostream& s);
 					};
 
@@ -101,8 +136,9 @@ namespace BALL
 			};
 
 			/** ShiftReferenceElement.
-				This class includes all information for a shift reference element
-				for one atom type delivered by a NMR-Star-File.
+			  	This class includes all information for a shift reference element
+				  for one atom type delivered by a NMRStar file.
+				  All members are public for easy access.
 			*/
 			class BALL_EXPORT ShiftReferenceElement
 			{
@@ -110,42 +146,39 @@ namespace BALL
 					ShiftReferenceElement();
 
 					String		mol_common_name;
-					char			atom_type;
+					String		atom_type;
 					Position	isotope_number;
 					String		atom_group;
 					String		shift_units;
 					float			shift_value;
-					char			reference_method;
-					char			reference_type;
+					String		reference_method;
+					String		reference_type;
 					float			indirect_shift_ratio;
 
 					std::ostream& operator >> (std::ostream& s);
-					//void clear(); 
-
 			};
 
 			/** ShiftReferenceSet.
-				This class includes all information for all sets of shift references
-				for several atom types delivered by a NMR-Star-File.
+				  This class includes all information for all sets of shift references
+				  for several atom types delivered by a NMRStar file.
+				  All members are public for easy access.
 			*/
 			class BALL_EXPORT ShiftReferenceSet
 			{
 				public:	
 					ShiftReferenceSet();
 				
-					// The saveFrames name = set name
-					// can be referenced in SaveFrame assigned_chemical_shifts
-					String name;  
+					// The saveframe's name = set name
+					// can be referenced in the saveframe "assigned_chemical_shifts"
+					String                             name;  
 					std::vector<ShiftReferenceElement> elements;
 
 					std::ostream& operator >> (std::ostream& s);
-					//void clear(); 
-
 			};
 
 			/**	NMRAtomData
 					This class includes all information for one atom 
-					delivered by a NMR-Star-File.
+					delivered by a NMRStar file.
 					All members are public for easy access.
 			*/
 			class NMRAtomData
@@ -161,99 +194,104 @@ namespace BALL
 					float			shift_value;
 					float			error_value;
 					Position	ambiguity_code;
-
+					
+					bool operator == (const NMRAtomData& atom) const;
 					std::ostream& operator >> (std::ostream& s);
-					//void clear(); 
-
 			};
 
 						
 			/** NMRAtomDataSet
-				This class includes all NMR information concerning a 
-				dataset of atoms delivered by a NMR-Star-File.
-				The corresponding condition, reference set and samples can be look up with getSampleConditionByName(), getShiftReferenceSetByName(), getSample(samples[i])
-				All members are public for easy access.
+				  This class includes all NMR information concerning a 
+				  dataset of atoms delivered by a NMRStar file.
+				  The corresponding condition, reference set and samples can be looked 
+				  up with getSampleConditionByName(), 
+				          getShiftReferenceSetByName(), and 
+						  		getSample(). 
+				  All members are public for easy access.
 			*/
 			class BALL_EXPORT NMRAtomDataSet
 			{
 				public:
 					NMRAtomDataSet(NMRStarFile* parent);
 
-					String										name;
+					String										name; 
 					std::vector<NMRAtomData> 	atom_data;
 					String 										condition;  
 					String										reference;  
-					vector<String>						samples;   
+					std::vector<String>				samples;   
 
 					std::ostream& operator >> (std::ostream& s);
-					//void clear();
+	
 				protected: 
-					NMRStarFile* parent_;
+					NMRStarFile* 							parent_;
 			};
 
 			/** EntryInformation
-				This class includes all "entry" information of
-				a NMRStar-File datablock.
-				All members are public for easy access.
+				 This class includes all "entry" information of
+				 a NMRStar file datablock.
+				 All members are public for easy access.
 			*/
 			class BALL_EXPORT EntryInformation
 			{
 				public:
 					EntryInformation();
 					~EntryInformation();
-					std::ostream& operator >> (std::ostream& s);
-					//void clear(); 
 
-					String entry_type;
-					String BMRB_accession_code;
-					String NMR_STAR_version;
-					String experimental_method;
+					std::ostream& operator >> (std::ostream& s);
+					void clear(); 
+
+					String   entry_type;
+					String   BMRB_accession_code;
+					String   NMR_STAR_version;
+					String   experimental_method;
 			};
-	/** Monomeric Polymer
+			
+			/** Monomeric Polymer
 			 * 	This class includes all Monomeric Polymers occuring in this file.
 			 * 	All members are public for easy access.
 			 */
 			class MonomericPolymer
 			{
 				public:
-					/// Database with homolog entry
+					/// Database with homolog entries
 					class HomologDB 
 					{
 						public:
 							HomologDB();
+							
 							std::ostream& operator >> (std::ostream& s); 
 							void clear(); 
 
-							String name;
-							String accession_code;
-							String entry_mol_name;
-							float  seq_to_submitted_percentage;
-							float  subject_length;
-							float  seq_identity;
-							float  seq_positive;
-							float  homology_expectation_value;  
+							String  name;
+							String  accession_code;
+							String  entry_mol_name;
+							float   seq_to_submitted_percentage;
+							float   subject_length;
+							float   seq_identity;
+							float   seq_positive;
+							float   homology_expectation_value;  
 					};
 
 
-						MonomericPolymer(); 
-						std::ostream& operator >> (std::ostream& s); 
-						void clear(); 
+					MonomericPolymer(); 
 
-						String label_name;
-						String type;
-						String polymer_class;
-						String common_name;
-						String name_variant;
-						float  molecular_mass;
-						String details;  	
-						//	polymer residue sequence information
-						int number_of_residues;
-						String residue_sequence; 
-						// we want to allow things like resid 137A, so we cannot use Index
-						// key: index -- value: aminoacidname
-						StringHashMap<String> residues_by_index;
-
-						vector<HomologDB> homolog_database_entries; 
+					String   label_name;
+					String   type;
+					String   polymer_class;
+					String   common_name;
+					String   name_variant;
+					float    molecular_mass;
+					String   details;  	
+					//	polymer residue sequence information
+					int      number_of_residues;
+					String   residue_sequence; 
+					// we want to allow things like resid 137A, so we cannot use Index
+					// key: index -- value: aminoacidname
+					StringHashMap<String>   residues_by_index;
+					vector<HomologDB>       homolog_database_entries; 	
+					
+					std::ostream& operator >> (std::ostream& s); 
+					void clear(); 
 			};
 
 
@@ -263,118 +301,201 @@ namespace BALL
 			 */
 			class MolecularSystem
 			{	
-				/// System related information
+				// System related information
 				public:
 					class RelatedDB
 					{
 						public:
 							RelatedDB();
+
 							std::ostream& operator >> (std::ostream& s); 
 							void clear(); 
 
-							String name;
-							String accession_code;
-							String entry_mol_name;
-							String relation_type;
-							String details;
+							String    name;
+							String    accession_code;
+							String    entry_mol_name;
+							String    relation_type;
+							String    details;
 					};
 					
 													
-					/// Central class for convenience
+					// Central class for convenience
 					class ChemicalUnit
 					{
 						public:
 							ChemicalUnit();  
-							std::ostream& operator >> (std::ostream& s);  //TODO check
+							std::ostream& operator >> (std::ostream& s); 
 							void clear();  
 
-							String component_name;
-							String label;
-							NMRStarFile::MonomericPolymer* monomeric_polymer; 
-							NMRAtomDataSet* shifts;             
+							String            component_name;
+							String            label;
+							MonomericPolymer* monomeric_polymer; 
+							NMRAtomDataSet*   shifts;             
 					};
 
 
 					MolecularSystem(); 
 					~MolecularSystem(); 
 
-					/// Name of the molecular system
-					String system_name;
-					String abbreviation_common;
-					vector<ChemicalUnit> chemical_units;  
-					String system_physical_state;
-					String system_oligomer_state;
-					String system_paramagnetic;
-					String system_thiol_state;
+					// Name of the molecular system
+					String                system_name;
+					String                abbreviation_common;
+					vector<ChemicalUnit>  chemical_units;  
+					String                system_physical_state;
+					String                system_oligomer_state;
+					String                system_paramagnetic;
+					String                system_thiol_state;
 					/// The systems molecular weigth in dalton
-					float system_molecular_weight;	
-
+					float                 system_molecular_weight;	
 					// related entries in various DB's
-					vector<RelatedDB> related_database_entries;
+					vector<RelatedDB>     related_database_entries;
 					
-					/// ligand information
-					
+					/// ligand information //TODO
+
 					std::ostream& operator >> (std::ostream& s); 
 					void clear(); 
 			};
 
 
 			/** NMRSpectrometer
-			 * 	This class includes all NMR-Spectrometer information.
+			 * 	This class includes all NMR spectrometer information.
 			 * 	All members are public for easy access.
 			 */
 			class NMRSpectrometer
 			{
 				public:
-					String manufacturer;
-					String model;
-					float  field_strength;
+					String    name;
+					String    manufacturer;
+					String    model;
+					float     field_strength;
+
 					std::ostream& operator >> (std::ostream& s);
 			};
-	
-			/** Mapping class between BALL atoms and NMR-Star-File atom entries.
+
+			
+			/** Mapper class between BALL atoms and NMRStar file atom entries.
 			 *  
 			 *  The main reason for the existence of this class (instead of maps to atompointer,position,position)
 			 *  is the python interface, which is greatly simplified.
 			 */
-			class BALLToBMRBMapping
+			class BALLToBMRBMapper
 			{
 				public:
-					//<saveframe_id, atom_id_in_nmr_atom_data_set>
-					typedef std::pair<Position, Position> BMRBIndex;
-						
-					/** constructor
-					*/
-					BALLToBMRBMapping(Protein* protein, const NMRStarFile* nmr_data);
-					BALLToBMRBMapping(Chain* chain, const NMRStarFile* nmr_data);
-
-					bool hasAtom(Atom* atom);
-				
-					BMRBIndex& operator() (Atom* atom){return ball_to_bmrb_map_[atom];}
-
-					Protein* getProtein() 						{return protein_;}
-					const Protein* getProtein() const {return protein_;}
-					void setProtein(Protein* protein) {protein_ = protein;}
 					
-					Chain* getChain() 						{return chain_;}
+					/** @name Type definitions 
+          */
+          //@{
+					/** BMRMIndex stores the savaframe id and 
+					    the index of the atom in the NMRAtomDataSet. 	
+					*/
+					//<saveframe_id, atom_id_in_nmr_atom_data_set>
+					typedef std::pair<Position, Position>             BMRBIndex;
+					typedef std::map<Atom const* , BMRBIndex>         BALLToBMRBMapping; 
+					typedef std::map<const NMRAtomData*, Atom const*> BMRBToBALLMapping;
+					//TODO: Dont use pointer but something more sophisticated!
+
+					//@}
+
+					/**	@name	Constructors and Destructors 
+					*/
+					//@{
+					//
+									
+					/// Detailed constructor
+					BALLToBMRBMapper(Chain const& chain, const NMRStarFile& nmr_data);	
+					
+					/// Destructor
+					virtual ~BALLToBMRBMapper() {}
+					//@}
+
+				
+					/// Set the chain
 					const Chain* getChain() const {return chain_;}
-					void setChain(Chain* chain)   {chain_ = chain;}
+					
+					/// Set the chain
+					void setChain(Chain const& chain) {chain_ = &chain;}
+					
+					/// Set the NMRStar file
+					void setNMRStarFile(NMRStarFile const& nmrfile) {nmr_data_ = &nmrfile;}
 
-					const Atom* findNMRAtomInProtein(const NMRAtomData& atom);
+					/// Get the NMRStar file
+					const NMRStarFile* getNMRStarFile() const {return nmr_data_;} 
 
-					bool createTrivialMapping();
-					bool createMapping(	const String& aligned_ball_sequence,
-															const String& aligned_nmrstar_sequence);
+					/// Return the mapping	
+					BALLToBMRBMapping& getBALLToBMRBMapping() {return ball_to_bmrb_map_;}
 
+					/// Return the mapping	
+					const BALLToBMRBMapping& getBALLToBMRBMapping() const {return ball_to_bmrb_map_;}
+					
+					/// Return the mapping	
+					BMRBToBALLMapping& getBMRBToBALLMapping() {return bmrb_to_ball_map_;}
+
+					/// Return the mapping	
+					const BMRBToBALLMapping& getBMRBToBALLMapping() const {return bmrb_to_ball_map_;}
+
+					/// Return the number of mismatches in the current mapping
 					int getNumberOfMismatches(){return mismatches_;}
-				protected:
-					std::map<const Atom*, BMRBIndex> ball_to_bmrb_map_;
+					
+					/// Return true if the given nmr atom data is mapped to a BALL atom 
+					bool isMapped(const NMRAtomData& nmr_atom) const;
+
+					/** Return the atom mapped to the given NMRAtom.
+
+							@param  atom the NMRAtom 
+              @return the mapped BALL atom. If no atom can be matched a NULL pointer is returned.
+					*/
+					const Atom* getBALLAtom(const NMRAtomData& nmr_atom) const;
+
+					/// Return true if the given atom is mapped to an atom in the NMRStar file
+					bool isMapped(Atom const* atom) const;
+					
+					///	Return the mapping of the given atom
+					BMRBIndex operator () (Atom* atom);
+
+					//@}
+					
+					/** Create a trivial mapping between the given chain and the NMRStar file atoms.
+					 		
+							NOTE: this mapping only works for very simple cases as we assume no gabs.
+
+							@return bool - <tt>true</tt> if creating the mapping was possible 
+					*/
+					bool createTrivialMapping();
+					
+					/** Create a mapping between the given chain and the NMRStar file 
+					    atoms based on the given alignment.
+							The alignmed sequences should be given in OneLetterCode, where '-' denotes a gap.
+
+						  @param  aligned_ball_sequence    the aligned protein or chain aminoacid sequence 
+						  @param  aligned_nmrstar_sequence the aligned aminoacid sequence of the NMRStar atoms 
+						  @return bool - <tt>true</tt> if creating the mapping was possible 
+					*/
+					bool createMapping(const String& aligned_ball_sequence,
+														 const String& aligned_nmrstar_sequence);
+
+				protected:	
+					
+					Peptides::NameConverter name_converter_;
+
+					/**     @name Atributes
+          */
+          //@{
+					
+					/// map BALL atoms to NMR atom data
+					BALLToBMRBMapping       ball_to_bmrb_map_;
+
+					/// map NMR atom data to BALL atoms
+					BMRBToBALLMapping       bmrb_to_ball_map_;
 
 					// NOTE: do *not* attempt to delete these pointers!
-					Protein* 					 protein_;
-					Chain* 				 		 chain_;
-					const NMRStarFile* nmr_data_;
-					int                mismatches_;
+					const Chain*            chain_;
+					const NMRStarFile*      nmr_data_;
+					int                     mismatches_; 
+					//@}
+
+				private:
+					const Atom* findNMRAtom_(const NMRAtomData& atom) const;
+
 			};
 			
 			//@}
@@ -385,41 +506,47 @@ namespace BALL
 			/** Standard constructor
 			*/
 			NMRStarFile();
-					Then the file of f will be openeed.
 			
 			/** Detailed constuctor.
-					Opens the given file and extracts all usefull data.
+					Opens the given file and extracts all usefull data (Calls  \link read read \endlink). 
 			*/
 			NMRStarFile(const String& file_name, File::OpenMode open_mode = std::ios::in)
 				throw(Exception::FileNotFound);
-
+			
+			/// Destructor.
 			~NMRStarFile();
 
-			/** Assignment operator.
-					@see NMRStarFile(const NMRStarFile& f)
-			*/
-			const NMRStarFile& operator = (const NMRStarFile& f);
-			
 			/** Read an NMRStarFile.
 			 */
 			bool read()
 				throw(Exception::ParseError);
 
 			/** Read an NMRStarFile and assign the shifts to the
-			 * given AtomContainer using a trivial standard mapping.
-			 * 	If the AtomContainer is a system, the first protein in choosen. 
+			    given AtomContainer using a trivial standard mapping.
+			   	If the AtomContainer is a system, the first chain in chosen.  
+			 
+			 		@param  ac AtomContainer to which the NMRStarfile's shift should be assigned.
+          @return bool - <tt>true</tt> if reading the file was successful 
 			 */
 			bool read(AtomContainer& ac);
 
 			/** Assign the shifts to the given AtomContainer as 
-			 * denoted in the given {\b ball_to_bmrb_mapping}.
+			    denoted in the given {\b BALLToBMRBMapper}.
+					
+					@return bool - <tt>true</tt> if reading the file was successful 
+					@see   NMRStarFile::BALLToBMRBMapper
 			 */
-			bool assignShifts(BALLToBMRBMapping& ball_to_bmrb_mapping); 
+			bool assignShifts(BALLToBMRBMapper& ball_to_bmrb_mapping); 
 
 			/** Assign the shifts to the given
-			 *  AtomContainer as pointed out in the alignment.
-			 *  The alignmed sequences should be given in 
-			 *  OneLetterCode, where '-' denotes a gap.
+			    AtomContainer as pointed out in the alignment.
+			    The alignmed sequences should be given in 
+			    OneLetterCode, where '-' denotes a gap. 		
+					
+					@param  ac AtomContainer to which the NMRStarfile's shift should be assigned.	
+					@param  aligned_ball_sequence    the aligned AtomContainers aminoacid sequence 
+					@param  aligned_nmrstar_sequence the aligned aminoacid sequence of the NMRStar file atoms 
+          @return bool - <tt>true</tt> if reading the file was successful 
 			 */
 			bool assignShifts(AtomContainer& ac, const String& aligned_ball_sequence,
 												const String& aligned_nmrstar_sequence);  
@@ -435,32 +562,46 @@ namespace BALL
 			*/
 			//@{
 
-			/** Get the maiximum number of atoms in all shift sets
+			/** Return the maximum number of atoms in all shift sets
 			*/
-			Size getNumberOfAtoms() const ;
+			Size getNumberOfAtoms() const;
 
-			Size getNumberOfShiftsAssigned() {return number_of_assigned_shifts_;};
+			/** Return the number of atoms assigned a chemical shift
+			*/
+			Size getNumberOfShiftsAssigned() const {return number_of_assigned_shifts_;};
 
-			/** Get the extracted data for the atoms.
+			/** Get the extracted data for the atoms
 			*/
 			const std::vector<NMRAtomDataSet>& getNMRData()	const;
-
+			
+			/** Get the entry information
+			 */
 			const EntryInformation& getEntryInformation() const {return entry_information_;};
 
+			/** Get the molecular information
+			 */
 			const MolecularSystem& getMolecularInformation() const {return molecular_system_;};
 
-			/// Get a SampleCondition by its SaveFrame name
+			/** Get a SampleCondition by its SaveFrame name
+			 */
 			SampleCondition& getSampleConditionByName(String name);
-			/// Get a SampleCondition by its SaveFrame name 
+
+			/** Get a SampleCondition by its SaveFrame name 
+			 */
 			const SampleCondition& getSampleConditionByName(String name) const;
+
 			/// Get the i-th  SampleCondition 
 			SampleCondition& getSampleCondition(Position i) {return sample_conditions_[i];};
+
 			/// Get the i-th  SampleCondition 
 			const SampleCondition& getSampleCondition(Position i) const {return sample_conditions_[i];};
+
 			/// Get the number of sample conditions
 			Size getNumberOfSampleConditions() const {return sample_conditions_.size();};
+
 			/// Get the sample conditions
 			const std::vector<SampleCondition>& getSampleConditions() const {return sample_conditions_;};
+
 			/// Get the sample conditions
 			std::vector<SampleCondition>& getSampleConditions() {return sample_conditions_;};
 
@@ -469,105 +610,137 @@ namespace BALL
 			/// Get the samples
 			std::vector<Sample> getSamples()  const {return samples_;};
 			//const std::vector<Sample>& getSamples() const {return samples_;};
-
+			
+			/// Get the number of samples
 			Size getNumberOfSamples() const {return samples_.size();};
 			
-			/// Returns true if the file contains a sample named label, false otherwise
+			/// Return true if the file contains a sample named label, false otherwise
 			bool hasSample(String label) const;
 			
-			/// Get the i-th sample. 
-			/// if i is out of size a dummy sample is returned.
-			Sample getSample(Index i) const;
-			
-			/// Get the sample with name label. 
-			/// if no sample with name label exist a dummy sample is returned.
+			/** Get the i-th sample. 
+			    If i is out of size a dummy sample is returned.
+			*/
+			Sample getSample(Position i) const;
+
+			/** Get the sample with name label. 
+			    If no sample with name label exist a dummy sample is returned.
+			*/
 			Sample getSample(String label) const;
 
 			/// Get the shift reference sets
 			std::vector<ShiftReferenceSet>& getShiftReferenceSets() {return shift_references_;}; 
+			/// Get the shift reference sets
 			const std::vector<ShiftReferenceSet>& getShiftReferenceSets() const  {return shift_references_;}; 
 
 			/// Get the number of shift reference sets
-			Size getNumberOfShiftReferenceSets() const  {return shift_references_.size();};
-
+			Size getNumberOfShiftReferenceSets() const {return shift_references_.size();};
+	
+			/// Get the i-th shift reference set
+			ShiftReferenceSet& getShiftReferenceSet(Position i) {return shift_references_[i];}; 	
 			/// Get the i-th shift reference set
 			const ShiftReferenceSet& getShiftReferenceSet(Position i) const {return shift_references_[i];}; 
-			/// Get the i-th shift reference set
-			ShiftReferenceSet& getShiftReferenceSet(Position i) {return shift_references_[i];}; 
-
+		
 			/// Get a ShiftReferenceSet by its SaveFrame name
-			const ShiftReferenceSet& getShiftReferenceSetByName(String name) const;
+			const ShiftReferenceSet& getShiftReferenceSetByName(String name) const;	
+			/// Get a ShiftReferenceSet by its SaveFrame name
 			ShiftReferenceSet& getShiftReferenceSetByName(String name);
-			NMRSpectrometer& getNMRSpectrometer() {return nmr_spectrometer_;};
-			const NMRSpectrometer& getNMRSpectrometer() const {return nmr_spectrometer_;};
 			
-			String getNMRSpectrometerManufacturer() {return  nmr_spectrometer_.manufacturer;};
-			float getNMRSpectrometerFieldStrength() {return nmr_spectrometer_.field_strength;};
+
+			/// Get the spectrometers 
+			std::vector<NMRSpectrometer>& getNMRSpectrometers() {return nmr_spectrometers_;};
+			/// Get the spectrometers 
+			const std::vector<NMRSpectrometer>& getNMRSpectrometers() const {return nmr_spectrometers_;};
 		
-			/// Get the MonomericPolymer-information of name.
-			/// Throws exception IllegalKey 
+			/// Get the number of nmr spectrometers
+			Size getNumberOfNMRSpectrometers() const  {return nmr_spectrometers_.size();};
+
+			/// Get the i-th spectrometer
+			NMRSpectrometer& getNMRSpectrometer(Position i);
+			/// Get the i-th spectrometer
+			const NMRSpectrometer& getNMRSpectrometer(Position i) const;
+			
+			/// Get the spectrometer by its SaveFrame name
+			NMRSpectrometer& getNMRSpectrometerByName(String name);
+			/// Get the spectrometer by its SaveFrame name
+			const NMRSpectrometer& getNMRSpectrometerByName(String name) const;
+
+			/// Get the spectrometer manufacturer
+			String getNMRSpectrometerManufacturer(Position i) const;
+		
+			/// Get the spectrometer field strength 
+			float getNMRSpectrometerFieldStrength(Position i) const;
+		
+
+			/** Get the MonomericPolymer-information by name
+			 		Throws exception OutOfRange
+			*/
+			NMRStarFile::MonomericPolymer& getMonomericPolymer(const String& name) throw(Exception::OutOfRange);
+			const NMRStarFile::MonomericPolymer& getMonomericPolymer(const String& name) const throw(Exception::OutOfRange);
+			
+			/// Get the number of monomeric polymers in the file
 			Size getNumberOfMonomericPolymers() const {return monomeric_polymers_.size();};
-
-			NMRStarFile::MonomericPolymer getMonomericPolymer(String name) { return monomeric_polymers_[monomeric_polymer_indices_[name]];}
 		
-			// Get all Monomeric Polymers
-			vector<NMRStarFile::MonomericPolymer> getMonomericPolymers() const {return monomeric_polymers_;};
-			
-			//const vector<NMRStarFile::MonomericPolymer> & getMonomericPolymers() const {return monomeric_polymers_;};
+			/// Get all Monomeric Polymers
+			vector<MonomericPolymer> getMonomericPolymers() const {return monomeric_polymers_;};
 
+			///	Check if polymer name is already stored is a monomeric polymer
+			bool hasMonomericPolymer(String name) const; 
 
-			//NMRStarFile::MonomericPolymer& getMonomericPolymer(String name) { return monomeric_polymers_[name];}
-			bool hasMonomericPolymer(String name) { return monomeric_polymer_indices_.has(name);}; 
-		
-			/// returns true if a monomer with name chemical_unit_label exists,
-			/// false otherwise
+			/** Check if label is a monomeric polymer.
+			 
+			    Returns true if a monomer with name chemical_unit_label exists,
+			    false otherwise.
+			*/
 			bool isMonomericPolymer(String chemical_unit_label); 
 
-			//TODO: Änderungen/Hinzufügungen als Saveframes auch im CIFFile vermerken!
-			/// adds a Monomeric Polymer
-			/// if a poymer with the same name already exists, it will be overwritten! 
-			void addMonomericPolymer(NMRStarFile::MonomericPolymer mp);
+			/** Add a Monomeric Polymer
+				 	NOTE: if a poymer with the same name already exists, it will be overwritten! 
+			*/
+			//TODO: Store changes/additions as Saveframes also in CIFFile
+			void addMonomericPolymer(MonomericPolymer mp);
 		
 
-			// get the sequence of residues of the 0-th monomeric polymer in the file
-			// Compares the 0-th monomeric_polymers residue sequence with the actual stored
-			// NMR shifts. If there is a mismatch, a warning is given!
-			// If there is a mismatch or there is no monomeric_polymers residue sequence an empty 
-			// String is returned.
-			String getResidueSequence();
+			/** Get the sequence of residues of the i-th monomeric polymer in the file.
+					
+			 		This method automatically compares the i-th monomeric_polymers' residue sequence 
+			 		with the actual stored NMR shift data. If there is a mismatch, a warning is given!
+					If there is a mismatch or there is no monomeric_polymers residue sequence an empty. 
+					
+					@return String amino acid sequence
+			*/
+			String getResidueSequence(Position i=0) const;
 			
+			/// Check, whether this NMRFile provides hydrogen shifts 
 			bool hasHshifts() const {return has_H_shifts_;};
+			
+			/// Check, whether this NMRFile provides carbon shifts 
 			bool hasCshifts() const {return has_C_shifts_;};
+			
+			/// Check, whether this NMRFile provides nitrogen shifts 
 			bool hasNshifts() const {return has_N_shifts_;};
 
-		//@}
+			//@}
 
 
 			/**	@name	Equality
-			 */
+			*/
 			//@{
 
 			/** Equality operator.
-				Test if both instances point to the same file.
+				  Test if both instances point to the same file.
 			 */
 			bool operator == (const NMRStarFile& f);
 
 			/** Inequality operator
-				Test if both instances point to different files.
+				  Test if both instances point to different files.
 			 */
 			bool operator != (const NMRStarFile& f);
 
 			//@}
-			/**	@name	Enums
-			 */
-			//@{
-
-
-			//@}
-
+			
 		private:
 
-			/*_	@name	NMR-Star specific Help-Methods
+			/*_	@name	NMRStar file specific Help-Methods
 			 */
 			//_@{
 
@@ -599,21 +772,21 @@ namespace BALL
 			/// find dependencies for the ChemicalUnits
 			void findDependiencies_();
 
-			/// set the characters denoting non-available values
+			/// set the characters denoting single non-available values
 			void setSpecialCharacters_(String characters);
 
 			/// check whether the given String denotes a non-available value
-			bool valueIsValid(String value);
+			bool isValidSingleValue_(String value);
 			
 			/** Apply the shifts read into the AtomContainer as denoted in the mapping.
 			 * 	We assume, that the file was already read!
 			 * 	The shifts are stored as a property under the key 
 			 * 	{\b BALL::ShiftModule::PROPERTY__EXPERIMENTAL__SHIFT}
 			 */
-			bool assignShifts_(BALLToBMRBMapping& pdb_to_bmrb_mapping);
+			bool assignShifts_(BALLToBMRBMapper& pdb_to_bmrb_mapping);
 
 			//_@}
-			/*_	@name	NMR-Star specific attributes
+			/*_	@name	NMRStar file specific attributes
 			*/
 			//_@{
 
@@ -646,16 +819,11 @@ namespace BALL
 			/// the data for shift references
 			std::vector<ShiftReferenceSet> shift_references_;
 
-			/// the data of nmr spectrometer 
-			NMRSpectrometer nmr_spectrometer_; 
+			/// the data of nmr spectrometers 
+			std::vector<NMRSpectrometer> nmr_spectrometers_; 
 
 			/// Monomeric Polymer information 
-			// stored per label_name
-			// a MonomericPolymer can be referenced in chemical_units
-			StringHashMap< Index> monomeric_polymer_indices_; 
 			vector<MonomericPolymer> monomeric_polymers_; 
-			/// name of the molecular system
-			//	String system_name_;  // TODO wo kommt der her?
 			
 			/// stores, which shifts are given in the file
 			bool has_H_shifts_;
@@ -673,7 +841,13 @@ namespace BALL
 
 			// a dummy shift reference set
 			ShiftReferenceSet dummy_shift_reference_set_; 
-			
+		
+			// a dummy nmr spectrometer
+			NMRSpectrometer dummy_NMR_spectrometer_; 
+
+			// a dummy nmr spectrometer
+			MonomericPolymer dummy_monomeric_polymer_; 
+
 			/// characters, that denote non-available values
 			String special_characters_;
 			//_@}
