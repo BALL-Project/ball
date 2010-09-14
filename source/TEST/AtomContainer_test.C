@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AtomContainer_test.C,v 1.11.30.1 2007/03/25 21:46:46 oliver Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -30,26 +28,26 @@ NEW_TMP_FILE(filename)
 
 
 AtomContainer*	ac;
-CHECK(AtomContainer() throw())
+CHECK(AtomContainer())
 	ac = new AtomContainer;
 	TEST_NOT_EQUAL(ac, 0)
 RESULT
 
-CHECK(~AtomContainer() throw())
+CHECK(~AtomContainer())
 	delete ac;
 RESULT
 
-CHECK(void setName(const String& name) throw())
+CHECK(void setName(const String& name))
 	ac = new AtomContainer;
 	ac->setName("testname");
 RESULT
 
-CHECK(const String& getName() const throw())
+CHECK(const String& getName() const)
 	TEST_EQUAL(ac->getName(), "testname")
 	delete ac;
 RESULT
 
-CHECK(AtomContainer(const AtomContainer& atom_container, bool deep = true) throw())
+CHECK(AtomContainer(const AtomContainer& atom_container, bool deep = true))
 	AtomContainer* ac1 = new AtomContainer;
 	ac1->setName("testname");
 	Atom a;
@@ -99,7 +97,7 @@ CHECK(AtomContainer(const AtomContainer& atom_container, bool deep = true) throw
 	delete ac1;
 RESULT
 
-CHECK(AtomContainer(const String& name) throw())
+CHECK(AtomContainer(const String& name))
 	AtomContainer* ac1 = new AtomContainer("hello");
 	TEST_NOT_EQUAL(ac1, 0)
 	if (ac1 != 0)
@@ -109,20 +107,20 @@ CHECK(AtomContainer(const String& name) throw())
 	}
 RESULT
 
-CHECK(void insert(AtomContainer& atom_container) throw())
+CHECK(void insert(AtomContainer& atom_container))
 	AtomContainer ac1;
 	AtomContainer ac2;
 	ac1.insert(ac2);
 RESULT
 
-CHECK(bool remove(AtomContainer& atom_container) throw())
+CHECK(bool remove(AtomContainer& atom_container))
 	AtomContainer ac1;
 	AtomContainer ac2;
 	ac1.insert(ac2);
 	ac1.remove(ac2);
 RESULT
 
-CHECK(Size countAtomContainers() const throw())
+CHECK(Size countAtomContainers() const)
 	AtomContainer ac1;
 	AtomContainer ac2;
 	TEST_EQUAL(ac1.countAtomContainers(), 0)
@@ -145,7 +143,7 @@ CHECK(Size countAtomContainers() const throw())
 	TEST_EQUAL(ac2.countAtomContainers(), 0)
 RESULT
 
-CHECK(AtomContainer* getAtomContainer(Position position) throw())
+CHECK(AtomContainer* getAtomContainer(Position position))
 	AtomContainer ac1("ac1");
 	AtomContainer ac2("ac2");
 	AtomContainer* ac3;
@@ -162,7 +160,7 @@ CHECK(AtomContainer* getAtomContainer(Position position) throw())
 	TEST_EQUAL(ac3, 0)
 RESULT
 
-CHECK(const AtomContainer* getAtomContainer(Position position) const throw())
+CHECK(const AtomContainer* getAtomContainer(Position position) const)
 	AtomContainer ac1("ac1");
 	AtomContainer ac2("ac2");
 	const AtomContainer* ac3;
@@ -179,7 +177,7 @@ CHECK(const AtomContainer* getAtomContainer(Position position) const throw())
 	TEST_EQUAL(ac3, 0)
 RESULT
 
-CHECK(void clear() throw())
+CHECK(void clear())
 	AtomContainer ac1("ac1");
 	AtomContainer ac2("ac2");
 	AtomContainer ac3("ac2");
@@ -193,7 +191,7 @@ CHECK(void clear() throw())
 	TEST_EQUAL(ac2.countAtomContainers(), 0)
 RESULT
 
-CHECK(void destroy() throw())
+CHECK(void destroy())
 	AtomContainer ac1("ac1");
 	AtomContainer ac2("ac2");
 	AtomContainer ac3("ac2");
@@ -207,7 +205,7 @@ CHECK(void destroy() throw())
 	TEST_EQUAL(ac2.countAtomContainers(), 0)
 RESULT
 
-CHECK([EXTRA] void* clone(bool deep = true) throw())
+CHECK([EXTRA] void* clone(bool deep = true))
 	AtomContainer* ac1 = new AtomContainer;
 	Composite*	composite = (Composite*)ac1;
 	ac1->setName("hello");
@@ -284,7 +282,7 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 	}
 RESULT
 
-CHECK(void set(const AtomContainer& atom_container, bool deep = true) throw())
+CHECK(void set(const AtomContainer& atom_container, bool deep = true))
 	AtomContainer ac1("name1");
 	AtomContainer ac2;
 	ac1.insert(ac2);
@@ -298,7 +296,7 @@ CHECK(void set(const AtomContainer& atom_container, bool deep = true) throw())
 	TEST_EQUAL(ac3.countAtomContainers(), 1);
 RESULT
 
-CHECK(AtomContainer& operator = (const AtomContainer& atom_container) throw())
+CHECK(AtomContainer& operator = (const AtomContainer& atom_container))
 	AtomContainer ac1("name1");
 	Atom a;
 	ac1.insert(a);
@@ -308,7 +306,7 @@ CHECK(AtomContainer& operator = (const AtomContainer& atom_container) throw())
 	TEST_EQUAL(ac2.countAtoms(), 1);
 RESULT
 
-CHECK(void get(AtomContainer& atom_container, bool deep = true) const throw())
+CHECK(void get(AtomContainer& atom_container, bool deep = true) const)
 	AtomContainer ac1("name1");
 	AtomContainer ac2;
 	ac1.insert(ac2);
@@ -322,7 +320,7 @@ CHECK(void get(AtomContainer& atom_container, bool deep = true) const throw())
 	TEST_EQUAL(ac3.countAtomContainers(), 1);
 RESULT
 
-CHECK(void swap(AtomContainer& atom_container) throw())
+CHECK(void swap(AtomContainer& atom_container))
 	AtomContainer ac1("ac1");
 	AtomContainer ac2("ac2");
 	AtomContainer ac3("ac3");
@@ -345,7 +343,7 @@ CHECK(void swap(AtomContainer& atom_container) throw())
 	TEST_EQUAL(ac3.getAtomContainer(0), &ac4)
 RESULT
 
-CHECK(AtomContainer* getSuperAtomContainer() throw())
+CHECK(AtomContainer* getSuperAtomContainer())
 	AtomContainer ac1("ac1");
 	AtomContainer* ptr = ac1.getSuperAtomContainer();
 	TEST_EQUAL(ptr, 0)
@@ -359,7 +357,7 @@ CHECK(AtomContainer* getSuperAtomContainer() throw())
 	TEST_EQUAL(ptr, &ac1)
 RESULT
 
-CHECK(const AtomContainer* getSuperAtomContainer() const throw())
+CHECK(const AtomContainer* getSuperAtomContainer() const)
 	AtomContainer ac1("ac1");
 	const AtomContainer* ptr = ac1.getSuperAtomContainer();
 	TEST_EQUAL(ptr, 0)
@@ -373,20 +371,20 @@ CHECK(const AtomContainer* getSuperAtomContainer() const throw())
 	TEST_EQUAL(ptr, &ac1)
 RESULT
 
-CHECK(void insert(Atom& atom) throw())
+CHECK(void insert(Atom& atom))
 	AtomContainer ac1;
 	Atom a;
 	ac1.insert(a);
 RESULT
 
-CHECK(bool remove(Atom& atom) throw())
+CHECK(bool remove(Atom& atom))
 	AtomContainer ac1;
 	Atom a;
 	ac1.insert(a);
 	ac1.remove(a);
 RESULT
 
-CHECK(Atom* getAtom(Position position) throw())
+CHECK(Atom* getAtom(Position position))
 	AtomContainer ac1;
 	Atom a;
 	Atom* ptr = ac1.getAtom(0);
@@ -401,7 +399,7 @@ CHECK(Atom* getAtom(Position position) throw())
 	TEST_EQUAL(ptr, 0)
 RESULT
 
-CHECK(const Atom* getAtom(Position position) const throw())
+CHECK(const Atom* getAtom(Position position) const)
 	AtomContainer ac1;
 	Atom a;
 	TEST_EQUAL(ac1.getAtom(0), 0)
@@ -412,7 +410,7 @@ CHECK(const Atom* getAtom(Position position) const throw())
 	TEST_EQUAL(ac1.getAtom(24), 0)
 RESULT
 
-CHECK(Size countAtoms() const throw())
+CHECK(Size countAtoms() const)
 	AtomContainer ac1;
 	AtomContainer ac2;
 	ac1.insert(ac2);
@@ -467,7 +465,7 @@ CHECK(Size countAtoms() const throw())
 
 RESULT
 
-CHECK(Size countBonds() const throw())
+CHECK(Size countBonds() const)
 	AtomContainer ac1;
 	AtomContainer ac2;
 	Atom a1;
@@ -488,7 +486,7 @@ CHECK(Size countBonds() const throw())
 	TEST_EQUAL(ac2.countBonds(), 3);
 RESULT
 
-CHECK(Size countInterBonds() const throw())
+CHECK(Size countInterBonds() const)
 	AtomContainer ac1;
 	AtomContainer ac2;
 	Atom a1;
@@ -508,7 +506,7 @@ CHECK(Size countInterBonds() const throw())
 	TEST_EQUAL(ac2.countInterBonds(), 1);
 RESULT
 
-CHECK(Size countIntraBonds() const throw())
+CHECK(Size countIntraBonds() const)
 	AtomContainer ac1;
 	AtomContainer ac2;
 	Atom a1;
@@ -528,7 +526,7 @@ CHECK(Size countIntraBonds() const throw())
 	TEST_EQUAL(ac2.countIntraBonds(), 1);
 RESULT
 
-CHECK(void prepend(Atom& atom) throw())
+CHECK(void prepend(Atom& atom))
 	AtomContainer ac1;
 	Atom a1;
 	Atom a2;
@@ -539,7 +537,7 @@ CHECK(void prepend(Atom& atom) throw())
 	TEST_EQUAL(ac1.getAtom(1), &a1)
 RESULT
 
-CHECK(void insert(Atom& atom) throw())
+CHECK(void insert(Atom& atom))
 	AtomContainer ac1;
 	Atom a1;
 	Atom a2;
@@ -550,7 +548,7 @@ CHECK(void insert(Atom& atom) throw())
 	TEST_EQUAL(ac1.getAtom(1), &a2)
 RESULT
 
-CHECK(void append(Atom& atom) throw())
+CHECK(void append(Atom& atom))
 	AtomContainer ac1;
 	Atom a1;
 	Atom a2;
@@ -560,7 +558,7 @@ CHECK(void append(Atom& atom) throw())
 	TEST_EQUAL(ac1.getAtom(1), &a2)
 RESULT
 
-CHECK(void insertBefore(Atom& atom, Composite& before) throw())
+CHECK(void insertBefore(Atom& atom, Composite& before))
 	AtomContainer ac1;
 	Atom a1;
 	Atom a2;
@@ -573,7 +571,7 @@ CHECK(void insertBefore(Atom& atom, Composite& before) throw())
 	TEST_EQUAL(ac1.getAtom(2), &a2)
 RESULT
 
-CHECK(void insertAfter(Atom& atom, Composite& after) throw())
+CHECK(void insertAfter(Atom& atom, Composite& after))
 	AtomContainer ac1;
 	Atom a1;
 	Atom a2;
@@ -586,7 +584,7 @@ CHECK(void insertAfter(Atom& atom, Composite& after) throw())
 	TEST_EQUAL(ac1.getAtom(2), &a2)
 RESULT
 
-CHECK(void prepend(AtomContainer& atom_container) throw())
+CHECK(void prepend(AtomContainer& atom_container))
 	AtomContainer ac1;
 	AtomContainer ac2;
 	AtomContainer ac3;
@@ -596,7 +594,7 @@ CHECK(void prepend(AtomContainer& atom_container) throw())
 	TEST_EQUAL(ac1.getAtomContainer(0), &ac3)
 RESULT
 
-CHECK(void append(AtomContainer& atom_container) throw())
+CHECK(void append(AtomContainer& atom_container))
 	AtomContainer ac1;
 	AtomContainer ac2;
 	AtomContainer ac3;
@@ -606,7 +604,7 @@ CHECK(void append(AtomContainer& atom_container) throw())
 	TEST_EQUAL(ac1.getAtomContainer(1), &ac3)
 RESULT
 
-CHECK(void insertBefore(AtomContainer& atom_container, Composite& before) throw())
+CHECK(void insertBefore(AtomContainer& atom_container, Composite& before))
 	AtomContainer ac1;
 	AtomContainer ac2;
 	AtomContainer ac3;
@@ -619,7 +617,7 @@ CHECK(void insertBefore(AtomContainer& atom_container, Composite& before) throw(
 	TEST_EQUAL(ac1.getAtomContainer(2), &ac3)
 RESULT
 
-CHECK(void insertAfter(AtomContainer& atom_container, Composite& after) throw())
+CHECK(void insertAfter(AtomContainer& atom_container, Composite& after))
 	AtomContainer ac1;
 	AtomContainer ac2;
 	AtomContainer ac3;
@@ -632,7 +630,7 @@ CHECK(void insertAfter(AtomContainer& atom_container, Composite& after) throw())
 	TEST_EQUAL(ac1.getAtomContainer(2), &ac3)
 RESULT
 
-CHECK(void spliceBefore(AtomContainer& atom_container) throw())
+CHECK(void spliceBefore(AtomContainer& atom_container))
 	AtomContainer ac1;
 	AtomContainer ac2;
 	AtomContainer ac3;
@@ -648,7 +646,7 @@ CHECK(void spliceBefore(AtomContainer& atom_container) throw())
 	TEST_EQUAL(ac4.getAtomContainer(1), &ac3)
 RESULT
 
-CHECK(void spliceAfter(AtomContainer& atom_container) throw())
+CHECK(void spliceAfter(AtomContainer& atom_container))
 	AtomContainer ac1;
 	AtomContainer ac2;
 	AtomContainer ac3;
@@ -664,7 +662,7 @@ CHECK(void spliceAfter(AtomContainer& atom_container) throw())
 	TEST_EQUAL(ac4.getAtomContainer(0), &ac3)
 RESULT
 
-CHECK(void splice(AtomContainer& atom_container) throw())
+CHECK(void splice(AtomContainer& atom_container))
 	AtomContainer ac1;
 	AtomContainer ac2;
 	AtomContainer ac3;
@@ -686,7 +684,7 @@ CHECK(void splice(AtomContainer& atom_container) throw())
 	TEST_EQUAL(ac1.getAtomContainer(1), &ac2)
 RESULT
 
-CHECK(void destroyBonds() throw())
+CHECK(void destroyBonds())
 	AtomContainer ac1;
 	Atom a1, a2, a3, a4;
 	a1.createBond(a2);
@@ -701,7 +699,7 @@ CHECK(void destroyBonds() throw())
 	TEST_EQUAL(a3.countBonds(), 1)	
 RESULT
 
-CHECK(bool isSubAtomContainerOf(const AtomContainer& atom_container) const throw())
+CHECK(bool isSubAtomContainerOf(const AtomContainer& atom_container) const)
 	AtomContainer ac1;
 	AtomContainer ac2;
 	AtomContainer ac3;
@@ -713,7 +711,7 @@ CHECK(bool isSubAtomContainerOf(const AtomContainer& atom_container) const throw
 	TEST_EQUAL(ac3.isSubAtomContainerOf(ac1), true)	
 RESULT
 
-CHECK(bool isSuperAtomContainerOf(const AtomContainer& atom_container) const throw())
+CHECK(bool isSuperAtomContainerOf(const AtomContainer& atom_container) const)
 	AtomContainer ac1;
 	AtomContainer ac2;
 	AtomContainer ac3;
@@ -726,7 +724,7 @@ CHECK(bool isSuperAtomContainerOf(const AtomContainer& atom_container) const thr
 	TEST_EQUAL(ac3.isSuperAtomContainerOf(ac1), false)	
 RESULT
 
-CHECK(bool isValid() const throw())
+CHECK(bool isValid() const)
 	AtomContainer ac1;
 	AtomContainer ac2;
 	AtomContainer ac3;
@@ -745,7 +743,7 @@ CHECK(bool isValid() const throw())
 	TEST_EQUAL(ac3.isValid(), true)	
 RESULT
 
-CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
+CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const)
 	AtomContainer ac1;
 	AtomContainer ac2;
 	ac1.setName("BF1");
@@ -760,7 +758,7 @@ CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(AtomContainer_test.txt))
 RESULT
 
-CHECK(bool operator == (const AtomContainer& atom_container) const throw())
+CHECK(bool operator == (const AtomContainer& atom_container) const)
 	AtomContainer c1, c2;
 	TEST_EQUAL(c1 == c2, false)
 
@@ -770,7 +768,7 @@ CHECK(bool operator == (const AtomContainer& atom_container) const throw())
 	TEST_EQUAL(c2 == c2, true)
 RESULT
 
-CHECK(bool operator != (const AtomContainer& atom_container) const throw())
+CHECK(bool operator != (const AtomContainer& atom_container) const)
 	AtomContainer c1, c2;
 	TEST_EQUAL(c1 != c2, true)
 
@@ -818,21 +816,21 @@ CHECK(BALL_KERNEL_DEFINE_ITERATOR_CREATORS (Atom)(AtomContainer))
   // ???
 RESULT
 
-CHECK(bool applyInterBond(UnaryProcessor<Bond>& processor) throw())
+CHECK(bool applyInterBond(UnaryProcessor<Bond>& processor))
 	ItemCollector<Bond> myproc;
 	ac1.applyInterBond(myproc);
 	TEST_EQUAL(myproc.getList().size(), 1)
 	TEST_EQUAL(*myproc.getList().begin(), &b2)
 RESULT
 
-CHECK(bool applyIntraBond(UnaryProcessor<Bond>& processor) throw())
+CHECK(bool applyIntraBond(UnaryProcessor<Bond>& processor))
 	ItemCollector<Bond> myproc;
 	ac1.applyIntraBond(myproc);
 	TEST_EQUAL(myproc.getList().size(), 1)
 	TEST_EQUAL(*myproc.getList().begin(), &b1)
 RESULT
 
-CHECK(const Atom* getAtom(const String& name) const throw())
+CHECK(const Atom* getAtom(const String& name) const)
 	const AtomContainer& ac2 = ac1;
 	TEST_EQUAL(ac2.getAtom("A1"), &a1)
 	TEST_EQUAL(ac2.getAtom("A2"), &a2)
@@ -843,7 +841,7 @@ CHECK(const Atom* getAtom(const String& name) const throw())
 	TEST_EQUAL(ac2.getAtom("A2"), &a2)
 RESULT
 
-CHECK(Atom* getAtom(const String& name) throw())
+CHECK(Atom* getAtom(const String& name))
 	ac1.getAtom("A1")->setPosition(Vector3(1,2,4));
 	TEST_EQUAL(a1.getPosition(), Vector3(1,2,4))
 RESULT
