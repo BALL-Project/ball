@@ -1,4 +1,7 @@
 #include <math.h> 
+#include <vector>
+
+#include <BALL/NMR/peak.h>
 
 template <>
 BALL_INLINE
