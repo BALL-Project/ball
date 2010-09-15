@@ -84,20 +84,20 @@ void MolecularFileDialog::readFiles()
 
 String MolecularFileDialog::getSupportedFileFormats() const
 {
-	return String("*.pdb *.brk *.ent *.hin *.mol *.mol2 *.sdf  *.ac *.xyz");
+	return String("*.pdb *.brk *.ent *.hin *.mol *.mol2 *.sdf *.ac *.xyz");
 }
 
 String MolecularFileDialog::getSupportedFileFormatsList() const
 {
 	String sl;
-	sl += "Molecular files (*.pdb *.hin *.mol *.mol2 *.sdf *.ac)\n";
-	sl += "PDB files (*.*)\n";
-	sl += "HIN files (*.*)\n";
-	sl += "MOL files (*.*)\n";
-	sl += "MOL2 files (*.*)\n";
-	sl += "SD files (*.*)\n";
-	sl += "AC files (*.*)\n";
-	sl += "XYZ files (*.*)";
+	sl += "Molecular files (*.pdb *.brk *.ent *.hin *.mol *.mol2 *.sdf *.ac *.xyz);;";
+	sl += "PDB files (*.pdb *.brk *.ent);;";
+	sl += "HIN files (*.hin);;";
+	sl += "MOL files (*.mol);;";
+	sl += "MOL2 files (*.mol2);;";
+	sl += "SD files (*.sdf);;";
+	sl += "AC files (*.ac);;";
+	sl += "XYZ files (*.xyz)";
 	return sl;
 }
 
