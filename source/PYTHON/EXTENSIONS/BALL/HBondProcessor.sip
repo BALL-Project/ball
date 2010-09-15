@@ -15,4 +15,6 @@
 %End
 
 	Options options;
+	private:
+		const HBondProcessor& operator=(const HBondProcessor&);
 };
