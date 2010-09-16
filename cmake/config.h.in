@@ -205,6 +205,10 @@
 // This is useful for e.g. an efficient HashGrid implementation
 #cmakedefine BALL_HAS_GNU_SLIST
 
+// Defines whether the compiler supports c++0x-style rvalue references
+// (int&&, ...)
+#cmakedefine BALL_HAS_RVALUE_REFERENCES
+
 // This define is used in string.C and enables a workaround
 // on those poor systems that do not define vsnprintf.
 #cmakedefine BALL_HAVE_VSNPRINTF

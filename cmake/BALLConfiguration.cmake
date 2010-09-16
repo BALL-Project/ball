@@ -192,6 +192,9 @@ INCLUDE(cmake/BALLConfigHashMap.cmake)
 ## Check for the presence of the slist extension
 INCLUDE(cmake/BALLConfigSList.cmake)
 
+## Check for rvalue reference
+INCLUDE(cmake/BALLConfigRValueReferences.cmake)
+
 ## Test whether vsnprintf is available
 CHECK_FUNCTION_EXISTS(vsnprintf BALL_HAVE_VSNPRINTF)
 
