@@ -12,5 +12,5 @@ CHECK_CXX_SOURCE_COMPILES(
 IF(BALL_HAS_GNU_SLIST)
 	MESSAGE(STATUS "Checking for gnu slist - Found")
 ELSE()
-	MESSAGE(STATUS "Checking for gnu slist - Found")
+	MESSAGE(STATUS "Checking for gnu slist - Not found")
 ENDIF()
