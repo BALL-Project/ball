@@ -33,13 +33,13 @@ CHECK(~GenericMolFile() throw())
   delete ptr;
 RESULT
 
-GenericMolFile mol;
 
 CHECK(GenericMolFile(const String& filename, File::OpenMode open_mode = std::ios::in) throw(Exception::FileNotFound))
-  mol = GenericMolFile(BALL_TEST_DATA_PATH(GenericMolFile_test.dat));
+  GenericMolFile mol(BALL_TEST_DATA_PATH(GenericMolFile_test.dat));
   TEST_EQUAL(mol.isValid(), true)
 RESULT
 
+GenericMolFile mol(BALL_TEST_DATA_PATH(GenericMolFile_test.dat));
 System system;
 CHECK(bool read(System& system) throw(Exception::ParseError))
   TEST_EQUAL(mol.read(system), false)
@@ -58,7 +58,7 @@ RESULT
 
 CHECK(GenericMolFile& operator >> (System& system) throw(Exception::ParseError))
 	System system2;
-  mol >> system2;
+	mol >> system2;
 RESULT
 
 
