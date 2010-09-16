@@ -149,3 +149,50 @@ template<FIRSTTYPE, double>
 		return sipGetState(sipTransferObj);
 %End
 };
+
+//
+// Specialization for Position, Position
+//
+
+%MappedType pair<Position, Position>
+{
+%TypeHeaderCode
+	#include <utility>
+	using namespace std;
+%End
+
+%ConvertFromTypeCode
+    PyObject *t;
+
+    // Create the Python list of the correct length.
+    if ((t = PyTuple_New(2)) == NULL)
+        return NULL;
+
+		PyTuple_SET_ITEM(t, 0, PyInt_FromLong(sipCpp->first));
+		PyTuple_SET_ITEM(t, 1, PyInt_FromLong(sipCpp->second));
+
+    return t;
+%End
+
+%ConvertToTypeCode
+    // Check if type is compatible
+    if (sipIsErr == NULL)
+    {
+				return    PyTuple_Check(sipPy) 
+				       && (PyTuple_Size(sipPy) == 2) 
+				       && PyNumber_Check(PyTuple_GET_ITEM(sipPy, 0))
+				       && PyNumber_Check(PyTuple_GET_ITEM(sipPy, 1));
+    }
+
+		std::pair<Position,Position>* result = 0;
+
+		if(!*sipIsErr) {
+			result = new std::pair<Position, Position>(PyInt_AsLong(PyNumber_Int(PyTuple_GET_ITEM(sipPy, 0))), PyInt_AsLong(PyNumber_Int(PyTuple_GET_ITEM(sipPy, 1))));
+		}
+
+
+		*sipCppPtr = result;
+
+		return sipGetState(sipTransferObj);
+%End
+};
