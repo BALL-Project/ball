@@ -250,8 +250,10 @@ class NMRStarFile
 			{
 %TypeHeaderCode
 					#include <BALL/KERNEL/chain.h>
+  				#include <BALL/COMMON/exception.h>
 					
 					using namespace BALL;
+					using namespace BALL::Exception;
 					using namespace std;
 					typedef pair<Position, Position>             BMRBIndex;
 					typedef map<Atom const* , BMRBIndex>         BALLToBMRBMapping; 
