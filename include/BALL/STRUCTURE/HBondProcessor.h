@@ -89,13 +89,13 @@ namespace BALL
 			// 4.2 Angstrom is an upper bound for the distance between N and O in the same
 			// residue. Therefore, if two residues are farther apart than MAX_LENGTH, N and O
 			// are farther apart than 5.2 Angstroms and there will be no hydrogen bond.
-			const float MAX_LENGTH;
-			const float BOND_LENGTH_N_H;
-			const float BOND_LENGTH_C_O;
+			float MAX_LENGTH;
+			float BOND_LENGTH_N_H;
+			float BOND_LENGTH_C_O;
 
 			// constants for Wishard et al
-			const float AMIDE_PROTON_OXYGEN_SEPARATION_DISTANCE; // = 3.5;
-			const float ALPHA_PROTON_OXYGEN_SEPARATION_DISTANCE; // = 2.77208;
+			float AMIDE_PROTON_OXYGEN_SEPARATION_DISTANCE; // = 3.5;
+			float ALPHA_PROTON_OXYGEN_SEPARATION_DISTANCE; // = 2.77208;
 
 			
    	 	///
