@@ -34,26 +34,26 @@ CHECK(~HINFile() throw())
   delete ptr;
 RESULT
 
-HINFile hin;
 HINFile empty;
 
 CHECK(float getTemperature() const)
-  TEST_REAL_EQUAL(hin.getTemperature(), 0.0)
+  TEST_REAL_EQUAL(empty.getTemperature(), 0.0)
 RESULT
 
 CHECK(SimpleBox3 getPeriodicBoundary() const)
 	SimpleBox3 box3(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-	TEST_EQUAL(hin.getPeriodicBoundary(), box3)
+	TEST_EQUAL(empty.getPeriodicBoundary(), box3)
 RESULT
 
 
 CHECK(HINFile(const String& filename, File::OpenMode open_mode = std::ios::in) throw(Exception::FileNotFound))
-  hin = HINFile(BALL_TEST_DATA_PATH(HINFile_test.hin));
+  HINFile hin(BALL_TEST_DATA_PATH(HINFile_test.hin));
   TEST_EQUAL(hin.isValid(), true)
 	TEST_EXCEPTION(Exception::FileNotFound, HINFile f2("asddasdcasdasdasddwad"))
 RESULT
 
 System system;
+HINFile hin(BALL_TEST_DATA_PATH(HINFile_test.hin));
 CHECK(bool read(System& system) throw(Exception::ParseError))
   hin.read(system);
 	hin.reopen();
@@ -145,7 +145,7 @@ CHECK([EXTRA]robust reading)
 RESULT
 
 CHECK(Molecule* read() throw(Exception::ParseError))
-  hin = HINFile(BALL_TEST_DATA_PATH(HINFile_test.hin));
+	HINFile hin(BALL_TEST_DATA_PATH(HINFile_test.hin));
 	Molecule* m = 0;
 	m = hin.read();
 	TEST_NOT_EQUAL(m, 0)
