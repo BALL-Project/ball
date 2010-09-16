@@ -92,12 +92,6 @@ namespace BALL
 				/** @name Accessors
 				 */
 				//@{
-				/**
-				Method for reading input from multiple structure files (one file for each substance) and from one file containing the activities of all structures sorted in ascending order. \n
-				Calculates descriptors for all given structure files, saves them to descriptor_matrix and fetches the activities for all substances from file activity.txt 
-				@param directory the directory, where the structure files and activity.txt can be found */
-				void readFiles(char* directory);
-				
 				/** reads the names of the properties from the first molecule in the given sd-file */
 				vector<String>* readPropertyNames(String sd_file);
 
