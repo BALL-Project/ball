@@ -152,11 +152,22 @@ namespace BALL
 		/// Default Constructor
 		String();
 
-		/// Copy constructor 
-		String(const String& string);
-
 		/// STL string copy constructor
 		String(const string& string);
+
+#ifdef BALL_HAS_RVALUE_REFERENCES
+		/// Move constructor
+		String(String&& s);
+
+		/// Move constructor for STL string
+		String(string&& s);
+
+		/// Move assigment operator
+		String& operator=(String&& s);
+
+		/// Move assignment operator for STL string
+		String& operator=(string&& s);
+#endif
 
 		/// QString copy constructor
 		explicit String(const QString& string);
@@ -562,23 +573,81 @@ namespace BALL
 		/**	@name	String Operations  
 		*/
 		//@{
+		
+		// NOTE: please, please, pretty please, only try to optimize away operator+ definitions
+		//       if you *really* know what you are doing. We didn't, and we definitely don't want
+		//       to touch this stinking heap of C++ garbage ever again!
+    //       (dstoeckel & anhi)
+		///	Concatenates two strings
+		BALL_EXPORT
+		friend String operator + (const String& s1, const string& s2);
+		
+		///	Concatenates two strings
+		BALL_EXPORT
+		friend String operator + (const string& s1, const String& s2);
 
 		///	Concatenates two strings
-		String operator + (const string& string) const;
-
+		BALL_EXPORT
+		friend String operator + (const String& s1, const String& s2);
+		
 		/// Concatenates a string and a C type string
-		String operator + (const char* char_ptr) const;
-
-		/// Concatenates a string and a character
-		String operator + (char c) const;
+		BALL_EXPORT
+		friend String operator + (const String& s1, const char* char_ptr);
 
 		/// Concatenates a C type string and a string
 		BALL_EXPORT
 		friend String operator + (const char* char_ptr, const String& s);
 
+		/// Concatenates a string and a character
+		BALL_EXPORT
+		friend String operator + (const String& s, char c);
+		
 		/// Concatenates a character and a string
 		BALL_EXPORT
 		friend String operator + (char c, const String& s);
+
+#ifdef BALL_HAS_RVALUE_REFERENCES
+		///	Concatenates two strings
+		BALL_EXPORT
+		friend String operator + (String&& s1, const string& s2);
+	
+		///	Concatenates two strings
+		BALL_EXPORT
+		friend String operator + (String&& s1, const String& s2);
+	
+		///	Concatenates two strings
+		BALL_EXPORT
+		friend String operator + (String&& s1, String&& s2);
+
+		BALL_EXPORT
+		friend String operator + (const String& s1, string&& s2);
+
+		BALL_EXPORT
+		friend String operator + (string&& s1, const String& s2);
+
+		BALL_EXPORT
+		friend String operator + (const string& s1, String&& s2);
+
+		///	Concatenates two strings
+		BALL_EXPORT
+		friend String operator + (const String& s1, String&& s2);
+
+		/// Concatenates a string and a C type string
+		BALL_EXPORT
+		friend String operator + (String&& s1, const char* char_ptr);
+
+		/// Concatenates a C type string and a string
+		BALL_EXPORT
+		friend String operator + (const char* char_ptr, String&& s);
+
+		/// Concatenates a string and a character
+		BALL_EXPORT
+		friend String operator + (String&& s, char c);
+		
+		/// Concatenates a character and a string
+		BALL_EXPORT
+		friend String operator + (char c, String&& s);
+#endif
 
 		/// Swaps the contents with another String
 		void swap(String& s);

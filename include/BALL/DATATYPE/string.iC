@@ -10,11 +10,41 @@ String::String()
 {
 }
 
-BALL_INLINE 
-String::String(const String& s)
-	: string(s.c_str())
+#ifdef BALL_HAS_RVALUE_REFERENCES
+BALL_INLINE
+String::String(String&& s)
+	: string(std::move(s))
 {
 }
+
+BALL_INLINE
+String::String(string&& s)
+	: string(std::move(s))
+{
+}
+
+BALL_INLINE
+String& String::operator=(String&& s)
+{
+	if (this != &s)
+	{
+		string::operator=(std::move(s));
+	}
+
+	return *this;
+}
+
+BALL_INLINE
+String& String::operator=(string&& s)
+{
+	if (this != &s)
+	{
+		string::operator=(std::move(s));
+	}
+
+	return *this;
+}
+#endif
 
 BALL_INLINE 
 String::String(const unsigned char c)
@@ -549,35 +579,119 @@ Substring String::instr(const String& patterns, Index from) const
 }
 
 BALL_INLINE 
-String String::operator + (const string& s) const
-	
+String operator + (const String& s1, const string& s2)
 {
-  String result(*this);
-  result.append(s);
+  String result(s1);
+  result.append(s2);
+  return result;
+}
+
+BALL_INLINE
+String operator + (const String& s1, const String& s2)
+{
+  String result(s1);
+  result.append(s2);
   return result;
 }
 
 BALL_INLINE 
-String String::operator +(const char* char_ptr) const
-	
+String operator +(const String& s1, const char* char_ptr) 
 {
-  String result(*this);
+  String result(s1);
   result.append(char_ptr);
   return result;
 }
 
 BALL_INLINE 
-String String::operator + (char c) const
-	
+String operator + (const String& s1, char c)
 {
-  String result(*this);
+  String result(s1);
   result.append(1, c);
   return result;
 }
 
+#ifdef BALL_HAS_RVALUE_REFERENCES
+///	Concatenates two strings
+BALL_INLINE
+String operator + (String&& s1, const string& s2)
+{
+	s1.append(s2);
+	return std::move(s1);
+}
+
+BALL_INLINE
+String operator + (String&& s1, const String& s2)
+{
+	s1.append(s2);
+	return std::move(s1);
+}
+
+BALL_INLINE
+String operator + (String&& s1, String&& s2)
+{
+	s1.append(s2);
+	return std::move(s1);
+}
+
+BALL_INLINE
+String operator + (const String& s1, string&& s2)
+{
+	return std::move(std::operator+(s1, std::move(s2)));
+}
+
+BALL_INLINE
+String operator + (const String& s1, String&& s2)
+{
+	return std::move(std::operator+(s1, std::move(s2)));
+}
+
+BALL_INLINE
+String operator + (string&& s1, const String& s2)
+{
+	s1.append(s2);
+	return std::move(s1);
+}
+
+BALL_INLINE
+String operator + (const string& s1, String&& s2)
+{
+	return std::move(std::operator+(s1, std::move(s2)));
+}
+
+/// Concatenates a string and a C type string
+BALL_INLINE
+String operator + (String&& s1, const char* char_ptr)
+{
+	s1 += char_ptr;
+	return std::move(s1);
+}
+
+/// Concatenates a C type string and a string
+BALL_INLINE
+String operator + (const char* char_ptr, String&& s)
+{
+	return std::move(std::operator+(char_ptr,std::move(s)));
+}
+
+/// Concatenates a string and a character
+BALL_INLINE
+String operator + (String&& s, char c)
+{
+	s += c;
+	return std::move(s);
+}
+
+/// Concatenates a character and a string
+BALL_INLINE
+String operator + (char c, String&& s)
+{
+	return std::move(std::operator+(c, std::move(s)));
+}
+
+#endif
+
 BALL_INLINE 
 void String::destroy()
-	
 {
   assign("");
 }
