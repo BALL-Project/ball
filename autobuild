@@ -90,6 +90,7 @@ askContrib()
 				# rm $PACKAGE
 				export CDIR="$BALL_PATH/contrib"
 				cd $CDIR
+				export BALL_BUILD_CONTRIB_CLEANUP="true"
 				./build_contrib
 				return $?
 			fi
