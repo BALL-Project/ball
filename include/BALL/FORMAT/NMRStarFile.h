@@ -399,7 +399,7 @@ namespace BALL
 					/**	@name	Constructors and Destructors 
 					*/
 					//@{
-					//
+					BALLToBMRBMapper();
 									
 					/// Detailed constructor
 					BALLToBMRBMapper(Chain const& chain, const NMRStarFile& nmr_data);	
@@ -546,13 +546,14 @@ namespace BALL
 			bool read()
 				throw(Exception::ParseError);
 
-			/** Read an NMRStarFile and assign the shifts to the
+			/*  Read an NMRStarFile and assign the shifts to the
 			    given AtomContainer using a trivial standard mapping.
 			   	If the AtomContainer is a system, the first chain in chosen.  
 			 
 			 		@param  ac AtomContainer to which the NMRStarfile's shift should be assigned.
           @return bool - <tt>true</tt> if reading the file was successful 
 			 */
+			//TODO to be able to use this function, further functions getMapping() and assign() are needed.
 			bool read(AtomContainer& ac);
 
 			/** Assign the shifts to the given AtomContainer as 

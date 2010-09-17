@@ -548,6 +548,17 @@ namespace BALL
 		return s;
 	}
 
+	NMRStarFile::BALLToBMRBMapper::BALLToBMRBMapper()
+		: name_converter_(), 
+			ball_to_bmrb_map_(),
+			bmrb_to_ball_map_(), 
+			chain_(NULL),
+			nmr_data_(NULL),
+			num_mismatches_(0),
+			num_gabs_(0)
+	{
+ 	}
+
 
 	NMRStarFile::BALLToBMRBMapper::BALLToBMRBMapper(Chain const& chain, const NMRStarFile& nmr_data)
 		: name_converter_(), 
@@ -1011,7 +1022,7 @@ namespace BALL
 		return result;
 	}
 	
-	bool NMRStarFile::assignShifts( AtomContainer& ac,
+	bool NMRStarFile::assignShifts(AtomContainer& ac,
 													const String& aligned_ball_sequence,
 													const String& aligned_nmrstar_sequence)
 	{
