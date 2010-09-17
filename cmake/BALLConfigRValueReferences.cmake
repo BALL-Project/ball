@@ -1,5 +1,3 @@
-MESSAGE(STATUS "Checking for rvalue reference support")
-
 CHECK_CXX_SOURCE_COMPILES(
 	"int main(int, char**)
 	{
@@ -7,8 +5,26 @@ CHECK_CXX_SOURCE_COMPILES(
 	}" BALL_HAS_RVALUE_REFERENCES
 )
 
-IF (BALL_HAS_RVALUE_REFERENCES)
-	MESSAGE(STATUS "Checking for rvalue reference support - Found")
-ELSE()
-	MESSAGE(STATUS "Checking for rvalue reference support - Not found")
-ENDIF()
+CHECK_CXX_SOURCE_COMPILES(
+	"#include <string>
+
+	class Bla : std::string
+	{
+		public:
+			Bla(const char* str)
+				: std::string(str)
+			{
+			}
+	};
+
+	Bla operator+(std::string&& a, const Bla& blubb)
+	{
+		return Bla(\"blubb\");
+	}
+
+	int main()
+	{
+		std::string(\"Hiho\") + \"sdfsdf\";
+		return 0;
+	}" BALL_STD_STRING_HAS_RVALUE_REFERENCES
+)
