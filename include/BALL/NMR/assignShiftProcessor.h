@@ -27,7 +27,7 @@ namespace BALL
 {
 	class FragmentDB;
 
-	/**	Set a property called chemical_shift.
+	/**	Set a property called ShiftModule::PROPERTY__EXPERIMENTAL__SHIFT.
 	 		You have to set the FragmentDB after you create an instance of this processor.
 		\ingroup Spectra		
 	*/
