@@ -30,7 +30,7 @@ p.read(S)
 
 # get the sequences to compute an alignment
 print BALL.Peptides.GetSequence(chains(S)[0])
-print f.getResidueSequence()
+print f.getResidueSequence(0)
 
 # create a mapping based on an alignment
 mapper = BALL.NMRStarFile.BALLToBMRBMapper(chains(S)[0], f)
