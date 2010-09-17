@@ -53,7 +53,7 @@ namespace BALL
 			\ingroup StructureMiscellaneous
 	*/
 	
-	/** Assignment of bond orders from topology information.
+	/** \brief Assignment of bond orders from topology information.
 	 *  
 	 *  Called with default options the processor computes up to 
 	 *  \link Default::MAX_NUMBER_OF_SOLUTIONS Default::MAX_NUMBER_OF_SOLUTIONS\endlink 
