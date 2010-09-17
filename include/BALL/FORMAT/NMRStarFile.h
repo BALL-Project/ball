@@ -26,8 +26,16 @@
 namespace BALL 
 {
 	/** NMRStarFile class. 
-	    This class 
-
+	    
+			\brief This class provides methods for reading and assigning chemical shifts.
+		 
+			This class provides methods for reading and assigning experimental 
+			chemical shifts from NMRStar files to peptides. 
+			The nested class BALLToBMRPMapper creates a mapping between NMRStar file atoms and
+		 	atoms of a chain either based on a trivial mapping @see createTrivialMapping()
+			or based on a given alignment @see createMapping().
+			Access to information other than the shifts is provided as well.
+		
 	    <br>
 	    Example code: <br> 
 	 	  \code  
