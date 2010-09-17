@@ -15,8 +15,10 @@ namespace BALL
 	class AtomContainer;
 	class System;
 
-	/**	Antechamber ac-file class.
-			This class is used to read and write antechamber input/output files.	 \par
+	/**	Antechamber file format (ac-file) class.
+			
+			This class is used to read and write antechamber input/output files.	 
+			\par
 
     	\ingroup  StructureFormats
 	*/
