@@ -1713,7 +1713,8 @@ CHECK(getSolution(Position i))
 		bool no_exception = true;
 		try {
 			sys = testbop.getSolution(i);
-			const System& ref_sys = testbop.getSolution(i);
+			const System& ref_sys = testbop.getSolution(i);	
+			TEST_EQUAL(ref_sys.countBonds(), 8);
 		} catch (...)	{
 			no_exception = false;
 		}
