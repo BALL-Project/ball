@@ -16,17 +16,21 @@
 
 namespace BALL
 {
-	/**	Processor method to detect aromaticity of AtomContainers. If it is called
-			as a processor with the operator (), the RingPerceptionProcessor is 
-			called before, to calculate a ring set. It can be called explicitely
-			with aromatize with a ringset as parameter.
+	/** Aromaticity Processor 
+	  	
+		\brief	This processor provides methods for detection and assignment of aromaticity.
+
+	   Processor method to detect aromaticity of AtomContainers. If it is called
+		 as a processor with the operator (), the RingPerceptionProcessor is 
+		 called before, to calculate a ring set. It can be called explicitely
+		 with aromatize with a ringset as parameter.
 	*/
 	class BALL_EXPORT AromaticityProcessor
 		:	public UnaryProcessor<AtomContainer>
 	{
 		public:
 
-			/** @name Constant Definitions
+		/** @name Constant Definitions
 		*/
 		//@{
 		/// Option names
