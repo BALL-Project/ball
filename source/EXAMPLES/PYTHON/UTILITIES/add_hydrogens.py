@@ -69,7 +69,7 @@ FF.setup(system)
 selector = Selector("element(H)")
 system.apply(selector)
 
-#just for curiosity: check how many atoms we are going
+# just for curiosity: check how many atoms we are going
 # to optimize
 print "optimizing ", FF.getNumberOfMovableAtoms(), " out of ", system.countAtoms(), " atoms"	
 
