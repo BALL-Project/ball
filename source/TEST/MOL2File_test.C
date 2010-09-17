@@ -199,7 +199,7 @@ CHECK([Extra]Handling of static sets)
 
 	TEST_EQUAL(set.number_of_members, 16)
 	for (Position i=0; i<set.number_of_members; i++)
-		TEST_EQUAL(set.static_members[i], i+1)
+		TEST_EQUAL((Position)set.static_members[i], i+1)
 RESULT
 
 
