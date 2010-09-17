@@ -107,7 +107,7 @@ class NMRStarFile
 					float			error_value;
 					Position	ambiguity_code;
 		
-					bool operator == (const NMRAtomData& ) const;
+//					bool operator == (const NMRAtomData& ) const;
 
 //					void clear(); 
 //					ostream& operator >> (ostream& s);
@@ -259,7 +259,7 @@ class NMRStarFile
 				
 					BALLToBMRBMapper();	
 
-					BALLToBMRBMapper(const Chain&, const NMRStarFile&);	
+					BALLToBMRBMapper(const Chain& , const NMRStarFile& );	
 					virtual ~BALLToBMRBMapper();
 
 					const Chain* getChain() const;
@@ -278,7 +278,7 @@ class NMRStarFile
 
 					int getNumberOfMismatches();
 					int getNumberOfGabs();
-					bool isMapped(const NMRStarFile::NMRAtomData&) const;
+					bool isMapped(const NMRStarFile::NMRAtomData&) const; // TODO!
 					const Atom* getBALLAtom(const NMRStarFile::NMRAtomData&) const;
 
 					bool isMapped(const Atom*) const;
@@ -306,8 +306,9 @@ class NMRStarFile
 			
 			Size getNumberOfAtoms() const;
 			Size getNumberOfShiftsAssigned();
-			
-			const vector<NMRStarFile::NMRAtomDataSet>& getNMRData() const;
+	
+			// TODO!		
+//			const vector<NMRStarFile::NMRAtomDataSet>& getNMRData() const;
 
 			const EntryInformation& getEntryInformation() const;
 
