@@ -406,17 +406,24 @@ namespace BALL
 					
 					/// Destructor
 					virtual ~BALLToBMRBMapper() {}
+					
 					//@}
+					/**	@name	Access methods
+					*/
+					//@{
 
-				
-					/// Set the chain
+					/// Get the chain
 					const Chain* getChain() const {return chain_;}
 					
 					/// Set the chain
-					void setChain(Chain const& chain) {chain_ = &chain;}
+					void setChain(Chain const& chain) { chain_ = &chain; 
+				                                      num_mismatches_ = -1; 
+					                                    num_gabs_ = -1;}
 					
 					/// Set the NMRStar file
-					void setNMRStarFile(NMRStarFile const& nmrfile) {nmr_data_ = &nmrfile;}
+					void setNMRStarFile(NMRStarFile const& nmrfile) {nmr_data_ = &nmrfile;
+						                                               num_mismatches_ = -1; 
+					                                                 num_gabs_ = -1;}
 
 					/// Get the NMRStar file
 					const NMRStarFile* getNMRStarFile() const {return nmr_data_;} 
@@ -434,11 +441,14 @@ namespace BALL
 					const BMRBToBALLMapping& getBMRBToBALLMapping() const {return bmrb_to_ball_map_;}
 
 					/// Return the number of mismatches in the current mapping
-					int getNumberOfMismatches(){return mismatches_;}
+					int getNumberOfMismatches(){return num_mismatches_;}
 					
-					/// Return true if the given nmr atom data is mapped to a BALL atom 
-					bool isMapped(const NMRAtomData& nmr_atom) const;
+					/// Return the number of mismatches in the current mapping
+					int getNumberOfGabs(){return num_gabs_;}
 
+					/// Test whether the given nmr atom data is mapped to a structure atom 
+					bool isMapped(const NMRAtomData& nmr_atom) const;
+					
 					/** Return the atom mapped to the given NMRAtom.
 
 							@param  atom the NMRAtom 
@@ -446,13 +456,14 @@ namespace BALL
 					*/
 					const Atom* getBALLAtom(const NMRAtomData& nmr_atom) const;
 
-					/// Return true if the given atom is mapped to an atom in the NMRStar file
+					/** Test, whether an atom is matched to NMRAtom data entry
+
+						 @return true if the given atom is mapped to an atom in the NMRStar file,else otherwise
+					*/
 					bool isMapped(Atom const* atom) const;
 					
 					///	Return the mapping of the given atom
-					BMRBIndex operator () (Atom* atom);
-
-					//@}
+					BMRBIndex operator () (const Atom* atom);
 					
 					/** Create a trivial mapping between the given chain and the NMRStar file atoms.
 					 		
@@ -473,6 +484,12 @@ namespace BALL
 					bool createMapping(const String& aligned_ball_sequence,
 														 const String& aligned_nmrstar_sequence);
 
+					/** Clear the object.
+					*/
+					void clear();
+
+					//@}
+
 				protected:	
 					
 					Peptides::NameConverter name_converter_;
@@ -490,7 +507,9 @@ namespace BALL
 					// NOTE: do *not* attempt to delete these pointers!
 					const Chain*            chain_;
 					const NMRStarFile*      nmr_data_;
-					int                     mismatches_; 
+					int                     num_mismatches_; 
+					int                     num_gabs_; 
+
 					//@}
 
 				private:
@@ -515,6 +534,12 @@ namespace BALL
 			
 			/// Destructor.
 			~NMRStarFile();
+			//@}
+	
+
+			/**	@name	Access methods
+			*/
+			//@{
 
 			/** Read an NMRStarFile.
 			 */
@@ -550,17 +575,6 @@ namespace BALL
 			 */
 			bool assignShifts(AtomContainer& ac, const String& aligned_ball_sequence,
 												const String& aligned_nmrstar_sequence);  
-
-			/** Clear the object.
-			*/
-			void clear();
-
-			//@}
-
-
-			/**	@name	Access methods
-			*/
-			//@{
 
 			/** Return the maximum number of atoms in all shift sets
 			*/
@@ -735,6 +749,10 @@ namespace BALL
 				  Test if both instances point to different files.
 			 */
 			bool operator != (const NMRStarFile& f);
+	
+			/** Clear the object.
+			 */
+			void clear();
 
 			//@}
 			

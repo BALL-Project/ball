@@ -415,11 +415,39 @@ namespace BALL
 		bool NameConverter::matches(const String& amino_acid, const String& old_atom_name,
 											 const String& old_naming_scheme, const String& new_atom_name,
 				               const String& new_naming_scheme) const
-		{
+		{	
+			// check if the name converter supports the naming scheme		
+			if ( !supportsNamingScheme(old_naming_scheme)) 
+			{
+				Log.error() << "NameConverter does not support naming scheme " << old_naming_scheme << "." << std::endl;
+				Log.error() << "Consider extending file" <<  options[Option::INIFile] << "." << std::endl;
+				return false;
+			}
+			if (!supportsNamingScheme(new_naming_scheme))
+			{
+				Log.error() << "NameConverter does not support naming scheme " << new_naming_scheme << "." << std::endl;
+				Log.error() << "Consider extending file" <<  options[Option::INIFile] << "." << std::endl;
+				return false;
+			}
+
 			String converted_name = convertName(amino_acid, old_atom_name, old_naming_scheme, new_naming_scheme);
 
 			if (converted_name == new_atom_name)
 				return true; // we found a match
+
+			if (!supportsPseudoAtomNamingScheme(old_naming_scheme))
+			{	
+				Log.error() << "NameConverter does not support naming scheme " << old_naming_scheme << "." << std::endl;
+				Log.error() << "Consider extending file " <<  options[Option::PSEUDO_ATOMS_INIFile] << "." << std::endl;
+				return false;
+			}
+			
+			if (!supportsPseudoAtomNamingScheme(new_naming_scheme))
+			{	
+				Log.error() << "NameConverter does not support naming scheme " << new_naming_scheme << "." << std::endl;
+				Log.error() << "Consider extending file " <<  options[Option::PSEUDO_ATOMS_INIFile] << "." << std::endl;
+				return false;
+			}
 
 			// if we arrive here, we need to look for pseudo atoms, too
 			std::vector<String> pseudos = resolvePseudoAtoms(amino_acid, old_atom_name, old_naming_scheme, new_naming_scheme);

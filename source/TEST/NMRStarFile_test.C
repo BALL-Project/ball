@@ -331,81 +331,85 @@ RESULT
 
 
 
-// ab hier
-/*
 CHECK(BALLToBMRBMapper)
 	PDBFile pdb(BALL_TEST_DATA_PATH(NMRStarFile_test_1z0r.pdb));
 
 	BALL::System S;
 	pdb >> S;
-	Protein& protein = *(S.beginProtein());
+	Chain& chain = *(S.beginChain());
 
 	NMRStarFile nmr_file(BALL_TEST_DATA_PATH(NMRStarFile_test_1z0r.bmr));
 	
-	NMRStarFile::BALLToBMRBMapper mapper(protein, nmr_file);
-	TEST_EQUAL(*mapper.getProtein() == protein, true)
+	NMRStarFile::BALLToBMRBMapper mapper(chain, nmr_file);
+	TEST_EQUAL(*mapper.getChain() == chain, true)
 	TEST_EQUAL(*mapper.getNMRStarFile() == nmr_file, true)
 	
-	String ball_seq = Peptides::GetSequence(protein);
-//	std::cout << ball_seq << std::endl;
-//	std::cout << nmr_file.getResidueSequence() << std::endl;
+	NMRStarFile nmr_file2(BALL_TEST_DATA_PATH(NMRStarFile_test.bmr));
+	Chain& chain2 = *(S.beginChain()++);
+	NMRStarFile::BALLToBMRBMapper mapper2(chain, nmr_file2);
+	
+	TEST_EQUAL(*mapper2.getChain() == chain2, true)	
+	TEST_EQUAL(*mapper.getNMRStarFile() == nmr_file2, true)
+	mapper2.setChain(chain);
+	mapper2.setNMRStarFile(nmr_file);
+	TEST_EQUAL(*mapper.getChain() == *mapper2.getChain(), true)
+	TEST_EQUAL(*mapper.getNMRStarFile() == *mapper2.getNMRStarFile(), true)
+
+	/*
+	String ball_seq = Peptides::GetSequence(chain);
+		std::cout << std::endl << ball_seq << std::endl;
+		std::cout << nmr_file.getResidueSequence() << std::endl;
+	*/
 
 	TEST_EQUAL(mapper.createTrivialMapping(), true)
 	TEST_EQUAL(mapper.getNumberOfMismatches(), 0)
-
-	TEST_EQUAL(mapper.createMapping("MKSTGIVRKVDELGRVVIPIELRRTLGIAEKDALEIYVDDEKIIL-KKYKPNMT", "AKSTGIVRKVDELGRVVIPIELRRTLGIAEKDALEIYVDDEKIILKK-YKPNMT"), true)		
-	TEST_EQUAL(mapper.getNumberOfMismatches(), 1)
-	
+	TEST_EQUAL(mapper.getNumberOfGabs(), 0)
 	
 	NMRStarFile:: BALLToBMRBMapper::BALLToBMRBMapping& all_mappings = mapper.getBALLToBMRBMapping();
-	TEST_EQUAL(all_mappings.size(), 427)
+	TEST_EQUAL(all_mappings.size(), 617)
 	
+	TEST_EQUAL(mapper.createMapping("MKSTGIVRKVDELGRVVIPIELRRTLGIAEKDALEIYVDDEKIIL-KKYKPNMT", "AKSTGIVRKVDELGRVVIPIELRRTLGIAEKDALEIYVDDEKIILKK-YKPNMT"), true)		
+	TEST_EQUAL(mapper.getNumberOfMismatches(), 1)
+	TEST_EQUAL(mapper.getNumberOfGabs(),2)
+
 	NMRStarFile:: BALLToBMRBMapper::BMRBToBALLMapping& all_mappings2 = mapper.getBMRBToBALLMapping();
-	TEST_EQUAL(all_mappings2.size(), 427)
+	TEST_EQUAL(all_mappings2.size(), 617)
 
-
-	NMRStarFile::NMRAtomData nmr_atom = nmr_file.getNMRData()[0].atom_data[2];
-	Atom const* atom = mapper.getBALLAtom(nmr_atom) //findNMRAtomInProtein(nmr_atom);	
+	NMRStarFile::NMRAtomData const& nmr_atom = nmr_file.getNMRData()[0].atom_data[18];
+	TEST_EQUAL(mapper.isMapped(nmr_atom), true)
 	
+	Atom const* atom = mapper.getBALLAtom(nmr_atom);
+	TEST_EQUAL(atom != NULL, true)
 
-	bool NMRStarFile::BALLToBMRBMapper::isMapped(const NMRAtomData& nmr_atom) const
+	if (atom)
 	{
-		return (bmrb_to_ball_map_.find(nmr_atom) != bmrb_to_ball_map_.end());
+		TEST_EQUAL(atom == mapper.getBALLAtom(nmr_atom), true)
+		NMRStarFile::BALLToBMRBMapper::BMRBIndex index_mapping = mapper(atom);
+		TEST_EQUAL(index_mapping.first, 0) 
+		TEST_EQUAL(index_mapping.second, 18)
 	}
-
-	const Atom* NMRStarFile::BALLToBMRBMapper::getBALLAtom(const NMRAtomData& nmr_atom) const
 
 	NMRStarFile::BALLToBMRBMapper::BMRBIndex mapping = all_mappings.find(atom)->second;
 	NMRStarFile::NMRAtomData nmr_atom2 = (nmr_file.getNMRData()[mapping.first]).atom_data[mapping.second]; 
 	TEST_EQUAL(nmr_atom == nmr_atom2, true)
 	
 RESULT
-*/
 
 
-/*
-CHECK(bool read(AtomContainer& ac))	
-	PDBFile pdb(BALL_TEST_DATA_PATH(NMRStarFile_test_2J4M.pdb));
+
+CHECK(read(AtomContainer& ac))	
+	PDBFile pdb(BALL_TEST_DATA_PATH(NMRStarFile_test_1z0r.pdb));
 	BALL::System S;
 	pdb >> S;
-	Protein* protein = RTTI::castTo<Protein>(*(S.getMolecule(0)));
-	String ball_seq = Peptides::GetSequence(*protein);
 
-	std::cout << ball_seq << std::endl;
-	std::cout << "GSCWAQSQGYNCCNNPSSTKVEYTDASGQWGVQNGQWCGIDYSYGQNQGNES" << std::endl;
-				 
-		bool assignShifts(BALLToBMRBMapper& ball_to_bmrb_mapping); 
-
-	 boool assignShifts(AtomContainer& ac, const String& aligned_ball_sequence,
-												const String& aligned_nmrstar_sequence);  
-
-
-//	Protein* protein = RTTI::castTo<Protein>(*(S.getMolecule(0)));
-					//ball_seq = Peptides::GetSequence(*protein);
-//	nmr.assignShifts(S, ball_seq, nmr_seq);	
-
+	NMRStarFile nmr_file(BALL_TEST_DATA_PATH(NMRStarFile_test_1z0r.bmr));
+	TEST_EQUAL(nmr_file.read(S), true)
+	
+	NMRStarFile::NMRAtomData const& nmr_atom = nmr_file.getNMRData()[0].atom_data[18];
+	//TODO get the Mapping and check if mapping was successful	
 RESULT
- */
+ 
+
 
  
 CHECK(bool assignShifts(BALLToBMRBMapper& ball_to_bmrb_mapping))
@@ -416,12 +420,9 @@ CHECK(bool assignShifts(BALLToBMRBMapper& ball_to_bmrb_mapping))
 	FragmentDB fdb("");
 	S.apply(fdb.normalize_names);
 	
-	//Protein& protein = *(S.beginProtein());
-	Chain&   chain   = *(S.beginChain());
+	Chain& chain = *(S.beginChain());
 	NMRStarFile nmr_file(BALL_TEST_DATA_PATH(NMRStarFile_test_1z0r.bmr));
 	NMRStarFile::BALLToBMRBMapper mapper(chain, nmr_file);
-
-	String ball_seq = Peptides::GetSequence(chain);
 
 	// NOTE: for testing, we artificially create a gap. this leads to a lower number of assigned shifts later on
 	//       (606 instead of 617)
@@ -448,7 +449,7 @@ CHECK(bool assignShifts(BALLToBMRBMapper& ball_to_bmrb_mapping))
 		}
 		
 		NMRStarFile::NMRAtomData const& nmr_atom2 = nmr_file.getNMRData()[0].atom_data[22];
-		Atom const* atom2 = mapper.getBALLAtom(nmr_atom2);//findNMRAtomInProtein(nmr_atom2);
+		Atom const* atom2 = mapper.getBALLAtom(nmr_atom2);
 
 		TEST_NOT_EQUAL(atom2, NULL)
 		TEST_EQUAL(atom2->getName(), "N")
@@ -464,13 +465,27 @@ CHECK(bool assignShifts(BALLToBMRBMapper& ball_to_bmrb_mapping))
 	}
 RESULT
 
-/*
-CHECK(bool assignShifts(AtomContainer& ac, const String& aligned_ball_sequence,
-												const String& aligned_nmrstar_sequence);
 
-			Size getNumberOfShiftsAssigned() 2J4M
+CHECK(assignShifts(AtomContainer& ac, const String& aligned_ball_sequence,
+												const String& aligned_nmrstar_sequence))
+	PDBFile pdb(BALL_TEST_DATA_PATH(NMRStarFile_test_1z0r.pdb));
+	BALL::System S;
+	pdb >> S;
+
+	FragmentDB fdb("");
+	S.apply(fdb.normalize_names);
+	
+	NMRStarFile nmr_file(BALL_TEST_DATA_PATH(NMRStarFile_test_1z0r.bmr));
+	
+	bool worked = nmr_file.assignShifts(S,"MKSTGIVRKVDELGR-VVIPIELRRTLGIAEKDALEIYVDDEKIILKKYKPNMT", 
+																		    "MKSTGIVRKVDELGRVV-IPIELRRTLGIAEKDALEIYVDDEKIILKKYKPNMT" );
+	TEST_EQUAL (worked, true)
+	if (worked)
+	{
+		TEST_EQUAL(nmr_file.getNumberOfShiftsAssigned(), 606)  
+	}
 RESULT
-*/
+
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST

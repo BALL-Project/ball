@@ -124,7 +124,7 @@ namespace BALL
 						String pdb_name = converter.convertName("ALA", atom_name, "BMRB", "PDB");
 						...
 					}	
-					if (converter.supportsPseudoAtomNamingScheme("NMRSTAR")
+					if (converter.supportsPseudoAtomNamingScheme("NMRSTAR"))
 					{	
 						std::vector<String> result = converter.resolvePseudoAtoms("R", "HB", "NMRSTAR", "PDB");
 						...
