@@ -155,7 +155,7 @@ namespace BALL
 		/// STL string copy constructor
 		String(const string& string);
 
-#ifdef BALL_HAS_RVALUE_REFERENCES
+#ifdef BALL_STD_STRING_HAS_RVALUE_REFERENCES
 		/// Move constructor
 		String(String&& s);
 
@@ -606,7 +606,7 @@ namespace BALL
 		BALL_EXPORT
 		friend String operator + (char c, const String& s);
 
-#ifdef BALL_HAS_RVALUE_REFERENCES
+#ifdef BALL_STD_STRING_HAS_RVALUE_REFERENCES
 		///	Concatenates two strings
 		BALL_EXPORT
 		friend String operator + (String&& s1, const string& s2);

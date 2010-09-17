@@ -10,7 +10,7 @@ String::String()
 {
 }
 
-#ifdef BALL_HAS_RVALUE_REFERENCES
+#ifdef BALL_STD_STRING_HAS_RVALUE_REFERENCES
 BALL_INLINE
 String::String(String&& s)
 	: string(std::move(s))
@@ -586,6 +586,14 @@ String operator + (const String& s1, const string& s2)
   return result;
 }
 
+BALL_INLINE 
+String operator + (const string& s1, const String& s2)
+{
+  String result(s1);
+  result.append(s2);
+  return result;
+}
+
 BALL_INLINE
 String operator + (const String& s1, const String& s2)
 {
@@ -610,7 +618,7 @@ String operator + (const String& s1, char c)
   return result;
 }
 
-#ifdef BALL_HAS_RVALUE_REFERENCES
+#ifdef BALL_STD_STRING_HAS_RVALUE_REFERENCES
 ///	Concatenates two strings
 BALL_INLINE
 String operator + (String&& s1, const string& s2)
