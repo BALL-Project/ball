@@ -69,6 +69,26 @@ namespace BALL
 			return (a == pos.a) && (b == pos.b);
 		}
 
+		bool operator<(const SortedPosition2& pos) const
+		{
+			bool result;
+
+			if (a < pos.a)
+			{
+				result = true;
+			}
+			else if (a > pos.a)
+			{
+				result = false;
+			}
+			else
+			{
+				result = b < pos.b;
+			}
+
+			return result;
+		}
+
 		Position a;
 		Position b;
 	};
@@ -88,26 +108,52 @@ namespace BALL
 			return (a == pos.a) && (b == pos.b) && (c == pos.c);
 		}
 
+		bool operator<(const SortedPosition3& pos) const
+		{
+			bool result;
+
+			if (a < pos.a)
+			{
+				result = true;
+			}
+			else if (a > pos.a)
+			{
+				result = false;
+			}
+			else
+			{
+				// a == pos.a, check b next
+				if (b < pos.b)
+				{
+					result = true;
+				}
+				else if ( b > pos.b)
+				{
+					result = false;
+				}
+				else
+				{
+					result = c < pos.c;
+				}
+			}
+
+			return result;
+		}
+
 		Position a;
 		Position b;
 		Position c;
 	};
 }
 
-#ifdef BALL_HAS_BOOST_UNORDERED_MAP
-namespace boost
-{
-#endif
+#if defined(BALL_HAS_UNORDERED_MAP) || defined(BALL_HAS_HASH_MAP)
 
 #ifdef BALL_EXTEND_HASH_IN_STD_NS
 namespace std
 {
 #endif // BALL_EXTEND_HASH_IN_STD_NS
 
-#ifdef BALL_HAS_TR1_UNORDERED_MAP
-	namespace tr1
-	{
-#endif // BALL_HAS_TR1_UNORDERED_MAP
+	namespace BALL_MAP_NAMESPACE {
 		template<>
 		struct hash<BALL::SortedPosition2> : public std::unary_function<BALL::SortedPosition2, size_t>
 		{
@@ -125,16 +171,12 @@ namespace std
 				return 5323 * p.a + 1847 * p.b + 2347 * p.c;
 			}
 		};
-#ifdef BALL_HAS_TR1_UNORDERED_MAP
 	}
-#endif // BALL_HAS_TR1_UNORDERED_MAP
 
 #ifdef BALL_EXTEND_HASH_IN_STD_NS
 }
 #endif // BALL_EXTEND_HASH_IN_STD_NS
 
-#ifdef BALL_HAS_BOOST_UNORDERED_MAP
-}
 #endif
 
 namespace BALL
