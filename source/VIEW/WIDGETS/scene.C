@@ -2445,7 +2445,7 @@ namespace BALL
 		{
 			for (Position i=0; i<renderers_.size(); ++i)
 			{
-				renderers_[i].projectionModeChanged();
+				renderers_[i]->projectionModeChanged();
 			}
 
 			updateGL();
