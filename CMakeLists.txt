@@ -108,6 +108,11 @@ IF (NOT BISON_FOUND)
 	MESSAGE(SEND_ERROR "Could not find bison parser generator!")
 ENDIF()
 
+IF (WIN32)
+	SET(BALL_BISON_BAT ${BISON_EXECUTABLE})
+	SET(BISON_EXECUTABLE "call")
+ENDIF()
+
 FIND_PACKAGE(FLEX)
 IF (NOT FLEX_FOUND)
 	MESSAGE(SEND_ERROR "Could not find flex scanner generator!")

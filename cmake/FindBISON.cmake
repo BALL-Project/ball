@@ -94,6 +94,8 @@ IF(BISON_EXECUTABLE)
   MACRO(BISON_TARGET Name BisonInput BisonOutput)
     SET(BISON_TARGET_output_header "")
     SET(BISON_TARGET_command_opt "")
+    SET(BISON_TARGET_cmdopt "")
+    SET(BISON_TARGET_option_extraopts "")
     SET(BISON_TARGET_outputs "${BisonOutput}")
     IF(NOT ${ARGC} EQUAL 3 AND NOT ${ARGC} EQUAL 5 AND NOT ${ARGC} EQUAL 7)
       MESSAGE(SEND_ERROR "Usage")
@@ -125,7 +127,7 @@ IF(BISON_EXECUTABLE)
       STRING(REGEX REPLACE "^(.*)(\\.[^.]*)$" "\\1${_fileext}" 
           BISON_${Name}_OUTPUT_HEADER "${ARGV2}")
       LIST(APPEND BISON_TARGET_outputs "${BISON_${Name}_OUTPUT_HEADER}")
-			LIST(REMOVE_DUPLICATES BISON_TARGET_outputs)        
+      LIST(REMOVE_DUPLICATES BISON_TARGET_outputs)
 
       ADD_CUSTOM_COMMAND(OUTPUT ${BISON_TARGET_outputs}
         ${BISON_TARGET_extraoutputs}
