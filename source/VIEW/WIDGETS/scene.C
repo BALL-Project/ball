@@ -3388,16 +3388,19 @@ namespace BALL
 			// first clean up
 			exitStereo();
 
-			GLRenderWindow* left_widget = new GLRenderWindow(0, String(tr("left eye")).c_str());
+			QWidget* screen = QApplication::desktop()->screen(1);
+
+			GLRenderWindow* left_widget = new GLRenderWindow(screen, "left eye", Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
 			left_widget->makeCurrent();
 			left_widget->init();
-			left_widget->resize(width(), height());
+			left_widget->resize(screen->width() / 2, screen->height());
+			left_widget->move(0, 0);
 
 			GLRenderer*   left_renderer = new GLRenderer;
 			left_renderer->init(*this);
 			left_renderer->enableVertexBuffers(want_to_use_vertex_buffer_);
 
-			left_widget->showFullScreen();
+			left_widget->show();
 			left_renderer->setSize(left_widget->width(), left_widget->height());
 
 			boost::shared_ptr<RenderSetup> left_rs(new RenderSetup(left_renderer, left_widget, this, stage_));
@@ -3409,16 +3412,17 @@ namespace BALL
 			stereo_left_eye_ = renderers_.size()-1;
 			left_rs->start();
 
-			GLRenderWindow* right_widget = new GLRenderWindow(0, String(tr("right eye")).c_str());
+			GLRenderWindow* right_widget = new GLRenderWindow(screen, "right eye", Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
 			right_widget->makeCurrent();
 			right_widget->init();
-			right_widget->resize(width(), height());
+			right_widget->resize(screen->width() / 2, screen->height());
+			right_widget->move(screen->width() / 2, 0);
 
 			GLRenderer*   right_renderer = new GLRenderer;
 			right_renderer->init(*this);
 			right_renderer->enableVertexBuffers(want_to_use_vertex_buffer_);
 
-			right_widget->showFullScreen();
+			right_widget->show();
 			right_renderer->setSize(right_widget->width(), right_widget->height());
 
 			boost::shared_ptr<RenderSetup> right_rs(new RenderSetup(right_renderer, right_widget, this, stage_));
