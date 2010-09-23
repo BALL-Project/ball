@@ -11,6 +11,9 @@
 #	include <BALL/common.h>
 #endif
 
+#ifdef BALL_HAS_BOOST_REGEX
+# include <boost/regex.h>
+#else
 // for SGI CC: turn of warnings #1174: function "regcomp" was declared but never referenced
 #if !defined(__GNUC__) && !defined(__KAI__) && defined(IRIX)
 #	pragma set woff 1174
@@ -31,6 +34,8 @@
 #	ifdef BALL_COMPILER_MSVC
 		}
 #	endif
+#endif
+
 #endif
 
 #if !defined(__GNUC__) && !defined(__KAI__) && defined(IRIX)

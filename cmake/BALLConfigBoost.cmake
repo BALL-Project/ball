@@ -1,9 +1,9 @@
-SET(BALL_BOOST_COMPONENTS system thread iostreams)
+SET(BALL_BOOST_COMPONENTS system thread iostreams regex)
 if ( WIN32 )
 	SET(Boost_USE_STATIC_LIBS ON)
 endif()
 SET(Boost_ADDITIONAL_VERSIONS "1.39" "1.39.0" "1.40" "1.40.0" "1.41" "1.41.0"
-	"1.42" "1.42.0" "1.43" "1.43.0")
+	"1.42" "1.42.0" "1.43" "1.43.0" "1.44.0")
 SET(Boost_DETAILED_FAILURE_MSG ON)
 FIND_PACKAGE(Boost COMPONENTS ${BALL_BOOST_COMPONENTS})
 
@@ -39,4 +39,10 @@ ELSE()
 	IF(ASIO_INCLUDE_DIR)
 		SET(BOOST_INCLUDE_DIRS ${ASIO_INCLUDE_DIR})
 	ENDIF()
+
+	## Can we use boost regex?
+	IF (Boost_REGEX_FOUND)
+		SET(BALL_HAS_BOOST_REGEX TRUE)	
+	ENDIF()
+
 ENDIF()

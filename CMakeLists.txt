@@ -294,15 +294,17 @@ IF (BALL_PYTHON_SUPPORT)
 	ENDIF()
 ENDIF()
 
-## On Windows, we need a seperate regex2-lib
+## On Windows, we might need a seperate regex2-lib
 IF (WIN32)
-	FIND_LIBRARY(REGEX_LIBRARIES
-		NAMES regex2 regex
-		PATH_SUFFIXES lib dlls
-		DOC "Regular expressions library")
+	IF (NOT BALL_HAS_BOOST_REGEX)
+		FIND_LIBRARY(REGEX_LIBRARIES
+			NAMES regex2 regex
+			PATH_SUFFIXES lib dlls
+			DOC "Regular expressions library")
 
-	IF (NOT REGEX_LIBRARIES)
-		MESSAGE(SEND_ERROR "Could not find required regex2.lib!")
+		IF (NOT REGEX_LIBRARIES)
+			MESSAGE(SEND_ERROR "Could not find required regex2.lib!")
+		ENDIF()
 	ENDIF()
 ENDIF()
 

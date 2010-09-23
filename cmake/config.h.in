@@ -251,6 +251,9 @@
 // defined if we have boost::thread support
 #cmakedefine BALL_HAS_BOOST_THREAD
 
+// defined if we have boost::regex support
+#cmakedefine BALL_HAS_BOOST_REGEX
+
 // defined if asio is taken from boost
 #cmakedefine BALL_HAS_BOOST_ASIO
 

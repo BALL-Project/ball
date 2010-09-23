@@ -129,9 +129,9 @@ CHECK_CXX_SOURCE_COMPILES("#include <limits>
 
 ## We *require* regex.h!
 CHECK_INCLUDE_FILE_CXX("regex.h" BALL_HAS_REGEX_H)
-IF (NOT BALL_HAS_REGEX_H)
-	MESSAGE(SEND_ERROR "Could not find regex.h! Regular expression support is required for BALL!")
-ENDIF()
+##IF (NOT BALL_HAS_REGEX_H)
+##	MESSAGE(SEND_ERROR "Could not find regex.h! Regular expression support is required for BALL!")
+##ENDIF()
 
 CHECK_INCLUDE_FILE_CXX("netinet/in.h" BALL_HAS_NETINET_IN_H)
 CHECK_INCLUDE_FILE_CXX("netdb.h" BALL_HAS_NETDB_H)
