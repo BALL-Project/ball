@@ -77,6 +77,8 @@ IF(WIN32)
   #  "GSL_GSLCBLAS_LIBRARY=${GSL_GSLCBLAS_LIBRARY}\n"
   #  "GSL_LIBRARIES=${GSL_LIBRARIES}")
 
+	# we want shared gsl libraries on windows
+	ADD_DEFINITIONS(-DGSL_DLL)
 
 ELSE(WIN32)
   
