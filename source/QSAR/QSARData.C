@@ -44,13 +44,13 @@ namespace BALL
 			
 		}
 
-		bool QSARData::isDataCentered()
+		bool QSARData::isDataCentered() const
 		{
 			if(descriptor_transformations_.size()>0) return 1;
 			return 0;
 		}
 
-		bool QSARData::isResponseCentered()
+		bool QSARData::isResponseCentered() const
 		{
 			if(y_transformations_.size()>0) return 1;
 			return 0;
@@ -1260,7 +1260,7 @@ namespace BALL
 		}
 
 
-		void QSARData::printMatrix(VMatrix& mat, ostream& out)
+		void QSARData::printMatrix(const VMatrix& mat, ostream& out) const
 		{
 			if(mat.size()==0)
 			{
@@ -1278,7 +1278,7 @@ namespace BALL
 			out<<endl;
 		}
 
-		void QSARData::saveToFile(string filename)
+		void QSARData::saveToFile(string filename) const
 		{
 			ofstream out(filename.c_str());
 			
@@ -1316,7 +1316,7 @@ namespace BALL
 			if(translated_class_labels) 
 			{
 				vector<String> ordered_names(class_names_.size(),"");
-				for(map<String,int>::iterator it=class_names_.begin();it!=class_names_.end();it++)
+				for(map<String,int>::const_iterator it=class_names_.begin();it!=class_names_.end();it++)
 				{
 					ordered_names[it->second]=it->first;
 				}
@@ -1625,7 +1625,7 @@ namespace BALL
 		}
 
 
-		void QSARData::getSimilarDescriptors(int descriptor_ID, double correlation, list<pair<uint,String> >& similar_descriptor_IDs)
+		void QSARData::getSimilarDescriptors(int descriptor_ID, double correlation, list<pair<uint,String> >& similar_descriptor_IDs) const
 		{
 			if(descriptor_ID<0 || descriptor_ID>=(int)descriptor_matrix_.size())
 			{
