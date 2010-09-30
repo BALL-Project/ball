@@ -19,8 +19,8 @@ IF (MSVC)
                     COMMAND ${CMAKE_COMMAND} -E echo ""
                     COMMAND ${CMAKE_COMMAND} -E echo "=========================================================================="
                     COMMAND ${CMAKE_COMMAND} -E echo ""
-                    COMMAND ${CMAKE_COMMAND} -E make_directory "${PROJECT_BINARY_DIR}/source/TEST/bin/$(OutDir)/"
-										COMMAND copy ${DLL_SOURCE} ${DLL_TARGET} /Y                    
+#                   COMMAND ${CMAKE_COMMAND} -E make_directory "${PROJECT_BINARY_DIR}/source/TEST/bin/$(OutDir)/"
+#                   COMMAND copy ${DLL_SOURCE} ${DLL_TARGET} /Y
                     COMMENT "message after library is built and copy BALL(d).dll to test binary dir"
                     VERBATIM)
 ELSE()
