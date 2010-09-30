@@ -1,6 +1,6 @@
 SET(BALL_BOOST_COMPONENTS system thread iostreams regex)
 if ( WIN32 )
-	SET(Boost_USE_STATIC_LIBS ON)
+	SET(BOOST_ALL_DYN_LINK TRUE)
 endif()
 SET(Boost_ADDITIONAL_VERSIONS "1.39" "1.39.0" "1.40" "1.40.0" "1.41" "1.41.0"
 	"1.42" "1.42.0" "1.43" "1.43.0" "1.44.0")
