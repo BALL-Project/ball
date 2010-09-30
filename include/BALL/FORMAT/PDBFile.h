@@ -129,6 +129,12 @@ namespace BALL
 					the element symbol and formal charges). 
 			*/
 			static const char* PARSE_PARTIAL_CHARGES;
+
+			/**	Write PDB-CONECT records according to the format guidelines of 1996.
+					default is supporting the current format from 2006. 
+					@see		Default::WRITE_PDBFORMAT_1996
+			*/
+			static const char* WRITE_PDBFORMAT_1996;
 		};
 
 		/** Default values for PDBFile options.  
@@ -167,6 +173,13 @@ namespace BALL
 					false -- stick to the standard.
 			*/
 			static const bool PARSE_PARTIAL_CHARGES;
+
+			/**	Enable writing PDB-CONECT records according to the format guidelines of 1996.
+					default is supporting the current format from 2006. 
+					@see		Default::WRITE_PDBFORMAT_1996
+			*/
+			static const bool WRITE_PDBFORMAT_1996;
+
 		};
 
 		/** @name Options
@@ -893,6 +906,9 @@ namespace BALL
 		
 		/// Read partial charges from cols 76-80?
 		bool parse_partial_charges_;
+
+		///write in the 1996-format?
+		bool write_pdbformat_1996_;
 	};
 
 

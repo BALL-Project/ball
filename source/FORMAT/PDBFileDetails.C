@@ -1662,7 +1662,7 @@ namespace BALL
 				// Write the old stuff if this is not the first record to be written.
 				if (ser_num > 0)
 				{
-					writeRecord_(sr);
+					 writeRecord_(sr);
 				}
 				sr.clear();
 
@@ -2053,48 +2053,120 @@ namespace BALL
 
 	void PDBFile::writeCONECTRecords_(PDB::Structure::ConectAtomList& cl)
 	{
-		cl.saltbridges.sort();
-		cl.bonds.sort();
-		cl.hbonds.sort();
-
-		while (!cl.saltbridges.empty() || !cl.hbonds.empty() || !cl.bonds.empty())
+		if (write_pdbformat_1996_)
 		{
-			PDB::RecordCONECT cr;
-			cr.clear();
-			cr.atom_serial_number = cl.serial_number;
-			Size i = 0;
-			while (!cl.bonds.empty() && (i < 4))
+			cl.saltbridges.sort();
+			cl.bonds.sort();
+			cl.hbonds.sort();
+
+			while (!cl.bonds.empty()|| !cl.saltbridges.empty() || !cl.hbonds.empty() || !cl.bonds.empty())
 			{
+				PDB::RecordCONECT cr;
+				cr.clear();
+				cr.atom_serial_number = cl.serial_number;
+				Size i = 0;
+				while (!cl.bonds.empty() && (i < 4))
+				{
 				cr.bond_atom[i++] = cl.bonds.front();
 				cl.bonds.pop_front();
-			}
-			i = 0;
-			while (!cl.hbonds.empty() && (i < 4))
-			{
-				cr.hbond_atom[i++] = cl.hbonds.front();
-				cl.hbonds.pop_front();
-			}
-			i = 0;
-			while (!cl.saltbridges.empty() && (i < 2))
-			{
-				cr.salt_bridge_atom[i++] = cl.saltbridges.front();
-				cl.saltbridges.pop_front();
-			}
+				}
+				i = 0;
+
+				while (!cl.hbonds.empty() && (i < 4))
+				{
+					cr.hbond_atom[i++] = cl.hbonds.front();
+					cl.hbonds.pop_front();
+				}
+				i = 0;
+				while (!cl.saltbridges.empty() && (i < 2))
+				{
+					cr.salt_bridge_atom[i++] = cl.saltbridges.front();
+					cl.saltbridges.pop_front();
+				}
+			
 			writeRecord_(cr);
+			}
+		}
+		else 
+		{
+			cl.bonds.sort();
+			while (!cl.bonds.empty())
+			{
+				PDB::RecordCONECT cr;
+				cr.clear();
+				cr.atom_serial_number = cl.serial_number;
+				Size i = 0;
+				while (!cl.bonds.empty() && (i < 4))
+				{
+					cr.bond_atom[i++] = cl.bonds.front();
+					cl.bonds.pop_front();
+				}
+				writeRecord_(cr);
+			}
 		}
 	}
 
 	void PDBFile::writeRecord_(const PDB::RecordCONECT& cr)
 	{
 		// ???? We should not write undefined atom numbers as 0 but as "" instead! // OK
-		writeRecord_(PDB::RECORD_TYPE__CONECT,
-								 cr.atom_serial_number,
-								 cr.bond_atom[0], cr.bond_atom[1],
-								 cr.bond_atom[2], cr.bond_atom[3],
-								 cr.hbond_atom[0], cr.hbond_atom[1],
-								 cr.salt_bridge_atom[0],
-								 cr.hbond_atom[2], cr.hbond_atom[3],
-								 cr.salt_bridge_atom[1]);
+		if(write_pdbformat_1996_)
+		{
+			writeRecord_(PDB::RECORD_TYPE__CONECT,
+			             cr.atom_serial_number,
+			             cr.bond_atom[0], cr.bond_atom[1],
+			             cr.bond_atom[2], cr.bond_atom[3],
+			             cr.hbond_atom[0], cr.hbond_atom[1],
+			             cr.salt_bridge_atom[0],
+			             cr.hbond_atom[2], cr.hbond_atom[3],
+			             cr.salt_bridge_atom[1]);
+		}
+		else
+		{
+			if (cr.bond_atom[0]==0)
+			{
+				writeRecord_(PDB::RECORD_TYPE__CON061,
+				             cr.atom_serial_number);
+			}
+			else
+			{
+				if (cr.bond_atom[1]==0)
+				{
+					writeRecord_(PDB::RECORD_TYPE__CON062,
+					             cr.atom_serial_number,
+					             cr.bond_atom[0]);
+				}
+				else
+				{
+					if (cr.bond_atom[2]==0)
+					{
+						writeRecord_(PDB::RECORD_TYPE__CON063,
+						             cr.atom_serial_number,
+						             cr.bond_atom[0], 
+					                     cr.bond_atom[1]);
+					}
+					else
+					{
+						if (cr.bond_atom[3]==0)
+						{
+							writeRecord_(PDB::RECORD_TYPE__CON064,
+							             cr.atom_serial_number,
+							             cr.bond_atom[0], 
+							             cr.bond_atom[1],
+							             cr.bond_atom[2]);
+						}
+						else
+						{
+							writeRecord_(PDB::RECORD_TYPE__CON06,
+							             cr.atom_serial_number,
+							             cr.bond_atom[0], cr.bond_atom[1],
+							             cr.bond_atom[2], cr.bond_atom[3]);
+						}					
+					}
+				}
+			}
+
+		}
+
 	}
 
 	void PDBFile::writeRecord_(const PDB::RecordCRYST1& cr)

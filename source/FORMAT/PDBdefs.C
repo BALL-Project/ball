@@ -21,6 +21,11 @@ namespace BALL
 		const char* FORMAT_CISPEP  = " %3ld %3.3s %c %4ld%c   %3.3s %c %4ld%c       %3ld       %6f";
 		const char* FORMAT_COMPND  = "  %2ld%-60.60s";
 		const char* FORMAT_CONECT  = "%5ld%5ld%5ld%5ld%5ld%5ld%5ld%5ld%5ld%5ld%5ld";
+		const char* FORMAT_CON06   = "%5ld%5ld%5ld%5ld%5ld";	
+		const char* FORMAT_CON061 = "%5ld";	
+		const char* FORMAT_CON062 = "%5ld%5ld";	
+		const char* FORMAT_CON063 = "%5ld%5ld%5ld";	
+		const char* FORMAT_CON064 = "%5ld%5ld%5ld%5ld";	
 		const char* FORMAT_CRYST1  = "%9.3f%9.3f%9.3f%7.2f%7.2f%7.2f %-11.11s%4ld";
 		const char* FORMAT_DBREF   = " %4.4s %c %4ld%c %4ld%c %6.6s %8.8s %12.12s %5ld%c %5ld%c";
 		const char* FORMAT_END     = "";
@@ -75,6 +80,11 @@ namespace BALL
 		const char* RECORD_TAG_CISPEP = "CISPEP";
 		const char* RECORD_TAG_COMPND = "COMPND";
 		const char* RECORD_TAG_CONECT = "CONECT";
+		const char* RECORD_TAG_CON061 = "CONECT";
+		const char* RECORD_TAG_CON062 = "CONECT";
+		const char* RECORD_TAG_CON063 = "CONECT";
+		const char* RECORD_TAG_CON064 = "CONECT";
+		const char* RECORD_TAG_CON06  = "CONECT";
 		const char* RECORD_TAG_CRYST1 = "CRYST1";
 		const char* RECORD_TAG_DBREF  = "DBREF ";
 		const char* RECORD_TAG_END    = "END   ";
@@ -132,6 +142,11 @@ namespace BALL
 			{ RECORD_TYPE__CISPEP, "CISPEP", FORMAT_CISPEP },
 			{ RECORD_TYPE__COMPND, "COMPND", FORMAT_COMPND },
 			{ RECORD_TYPE__CONECT, "CONECT", FORMAT_CONECT },
+			{ RECORD_TYPE__CON06,  "CONECT", FORMAT_CON06  },
+			{ RECORD_TYPE__CON061, "CONECT", FORMAT_CON061 },
+			{ RECORD_TYPE__CON062, "CONECT", FORMAT_CON062 },
+			{ RECORD_TYPE__CON063, "CONECT", FORMAT_CON063 },
+			{ RECORD_TYPE__CON064, "CONECT", FORMAT_CON064 },
 			{ RECORD_TYPE__CRYST1, "CRYST1", FORMAT_CRYST1 },
 			{ RECORD_TYPE__DBREF,  "DBREF ", FORMAT_DBREF  },
 			{ RECORD_TYPE__END,    "END   ", FORMAT_END    },

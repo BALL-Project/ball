@@ -45,6 +45,7 @@ namespace BALL
 	const char* PDBFile::Option::STORE_SKIPPED_RECORDS = "store_skipped_records";
 	const char* PDBFile::Option::IGNORE_XPLOR_PSEUDO_ATOMS = "ignore_xplor_pseudo_atoms";
 	const char* PDBFile::Option::PARSE_PARTIAL_CHARGES = "parse_partial_charges";
+	const char* PDBFile::Option::WRITE_PDBFORMAT_1996 = "write_pdbformat_1996";
 
 	const Index PDBFile::Default::VERBOSITY = 0;
 	const bool  PDBFile::Default::STRICT_LINE_CHECKING = false;
@@ -52,6 +53,7 @@ namespace BALL
 	const bool  PDBFile::Default::STORE_SKIPPED_RECORDS = true;
 	const bool  PDBFile::Default::IGNORE_XPLOR_PSEUDO_ATOMS = true;
 	const bool  PDBFile::Default::PARSE_PARTIAL_CHARGES = false;
+	const bool  PDBFile::Default::WRITE_PDBFORMAT_1996 = false;
 
 	PDBFile::PDBFile()
 		:	GenericMolFile(),
@@ -80,7 +82,8 @@ namespace BALL
 			selected_model_(1),
 			store_skipped_records_(true),
 			ignore_xplor_pseudo_atoms_(true),
-			parse_partial_charges_(false)
+			parse_partial_charges_(false),
+			write_pdbformat_1996_(false)
 	{
 		init_();
 	}
@@ -114,7 +117,8 @@ namespace BALL
 			selected_model_(1),
 			store_skipped_records_(true),
 			ignore_xplor_pseudo_atoms_(true),
-			parse_partial_charges_(false)	
+			parse_partial_charges_(false),	
+			write_pdbformat_1996_(false)
 	{
 		init_();
 	}
@@ -146,7 +150,8 @@ namespace BALL
 			selected_model_(1),
 			store_skipped_records_(true),
 			ignore_xplor_pseudo_atoms_(true),
-			parse_partial_charges_(false)
+			parse_partial_charges_(false),
+			write_pdbformat_1996_(false)
 	{
 		open(filename, open_mode);
 	}
@@ -278,6 +283,7 @@ namespace BALL
 		ignore_xplor_pseudo_atoms_ = options.setDefaultBool(Option::IGNORE_XPLOR_PSEUDO_ATOMS, Default::IGNORE_XPLOR_PSEUDO_ATOMS);
 		store_skipped_records_ = options.setDefaultBool(Option::STORE_SKIPPED_RECORDS, Default::STORE_SKIPPED_RECORDS);
 		parse_partial_charges_ = options.setDefaultBool(Option::PARSE_PARTIAL_CHARGES, Default::PARSE_PARTIAL_CHARGES);
+		write_pdbformat_1996_ = options.setDefaultBool(Option::WRITE_PDBFORMAT_1996, Default::WRITE_PDBFORMAT_1996);
 													 
 		// Clear the information in info and prepare it for the new stuff.
 		info.clear();
@@ -536,8 +542,11 @@ namespace BALL
 
 			case PDB::RECORD_TYPE__COMPND:
 				return parseRecordCOMPND(line, size);
-				
+
 			case PDB::RECORD_TYPE__CONECT:
+				return parseRecordCONECT(line, size);
+
+			case PDB::RECORD_TYPE__CON06:
 				return parseRecordCONECT(line, size);
 
 			case PDB::RECORD_TYPE__CRYST1:
@@ -1509,6 +1518,7 @@ namespace BALL
 
   void PDBFile::writeRecord_(PDB::RecordType record, ...)
   {
+
 		// Update book keeping records.
 		switch (record)
 		{
@@ -1551,6 +1561,9 @@ namespace BALL
 			case PDB::RECORD_TYPE__CONECT:
 				book_keeping_.conect_records++; break;
 
+			case PDB::RECORD_TYPE__CON06:
+				book_keeping_.conect_records++; break;
+
 			case PDB::RECORD_TYPE__SEQRES:
 				book_keeping_.seqres_records++; break;
 
@@ -1561,15 +1574,19 @@ namespace BALL
 
 		// Write the record using the appropriate format definitions
 		va_list var_args;
+;
 		va_start(var_args, record);		
+
     static char line_buffer[PDB::SIZE_OF_PDB_LINE_BUFFER];
 		vsprintf(line_buffer, PDB::RECORD_TYPE_FORMAT[record].format_string, var_args);
+
 		va_end(var_args);
 
     // Terminate each line with a line break and a zero to indicate
     // the string end.
     line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1 - 6] = '\0';
     
+
 		// Write the line to the stream. Don't flush it (yet).
     File::getFileStream() << PDB::RECORD_TYPE_FORMAT[record].string << line_buffer << '\n';
 	}
@@ -1625,6 +1642,9 @@ namespace BALL
 
 			case PDB::RECORD_TYPE__CONECT:
 				book_keeping_.conect_records += number; break;
+
+			case PDB::RECORD_TYPE__CON06:
+				book_keeping_.conect_records++; break;
 
 			case PDB::RECORD_TYPE__SEQRES:
 				book_keeping_.seqres_records += number; break;

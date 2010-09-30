@@ -67,6 +67,11 @@ namespace BALL
 			RECORD_TYPE__CISPEP,
 			RECORD_TYPE__COMPND,
 			RECORD_TYPE__CONECT,
+			RECORD_TYPE__CON06,
+			RECORD_TYPE__CON061,
+			RECORD_TYPE__CON062,
+			RECORD_TYPE__CON063,
+			RECORD_TYPE__CON064,
 			RECORD_TYPE__CRYST1,
 			RECORD_TYPE__DBREF,
 			RECORD_TYPE__END,
@@ -130,6 +135,11 @@ namespace BALL
 		BALL_EXPORT extern const char* FORMAT_CISPEP;
 		BALL_EXPORT extern const char* FORMAT_COMPND;
 		BALL_EXPORT extern const char* FORMAT_CONECT;
+		BALL_EXPORT extern const char* FORMAT_CON06;
+		BALL_EXPORT extern const char* FORMAT_CON06_1;
+		BALL_EXPORT extern const char* FORMAT_CON06_2;
+		BALL_EXPORT extern const char* FORMAT_CON06_3;
+		BALL_EXPORT extern const char* FORMAT_CON06_4;
 		BALL_EXPORT extern const char* FORMAT_CRYST1;
 		BALL_EXPORT extern const char* FORMAT_DBREF;
 		BALL_EXPORT extern const char* FORMAT_END;
@@ -187,6 +197,11 @@ namespace BALL
 		BALL_EXPORT extern const char* RECORD_TAG_CISPEP;
 		BALL_EXPORT extern const char* RECORD_TAG_COMPND;
 		BALL_EXPORT extern const char* RECORD_TAG_CONECT;
+		BALL_EXPORT extern const char* RECORD_TAG_CON06;
+		BALL_EXPORT extern const char* RECORD_TAG_CON061;
+		BALL_EXPORT extern const char* RECORD_TAG_CON062;
+		BALL_EXPORT extern const char* RECORD_TAG_CON063;
+		BALL_EXPORT extern const char* RECORD_TAG_CON064;
 		BALL_EXPORT extern const char* RECORD_TAG_CRYST1;
 		BALL_EXPORT extern const char* RECORD_TAG_DBREF;
 		BALL_EXPORT extern const char* RECORD_TAG_END;
@@ -462,6 +477,89 @@ namespace BALL
 				salt_bridge_atom[0] = salt_bridge_atom[1] = 0;
 			}
 		};
+
+		/**
+		*/
+		struct BALL_EXPORT RecordCON06
+		{
+			RecordType record_type;
+			RecordName record_name;
+			Integer    atom_serial_number;
+			Integer    bond_atom[4];
+			
+			void clear()
+			{
+				record_type = PDB::RECORD_TYPE__CON06;
+				record_name[0] = '\0';
+				atom_serial_number = 0;
+				bond_atom[0] = bond_atom[1] = bond_atom[2] = bond_atom[3] = 0;
+			}
+		};
+
+		struct BALL_EXPORT RecordCON061
+		{
+			RecordType record_type;
+			RecordName record_name;
+			Integer    atom_serial_number;
+			Integer    bond_atom[4];
+			
+			void clear()
+			{
+				record_type = PDB::RECORD_TYPE__CON061;
+				record_name[0] = '\0';
+				atom_serial_number = 0;
+				bond_atom[0] = bond_atom[1] = bond_atom[2] = bond_atom[3] = 0;
+			}
+		};
+
+		struct BALL_EXPORT RecordCON062
+		{
+			RecordType record_type;
+			RecordName record_name;
+			Integer    atom_serial_number;
+			Integer    bond_atom[1];
+			
+			void clear()
+			{
+				record_type = PDB::RECORD_TYPE__CON062;
+				record_name[0] = '\0';
+				atom_serial_number = 0;
+				bond_atom[0] = 0;
+			}
+		};
+
+		struct BALL_EXPORT RecordCON063
+		{
+			RecordType record_type;
+			RecordName record_name;
+			Integer    atom_serial_number;
+			Integer    bond_atom[2];
+			
+			void clear()
+			{
+				record_type = PDB::RECORD_TYPE__CON063;
+				record_name[0] = '\0';
+				atom_serial_number = 0;
+				bond_atom[0] = bond_atom[1] = 0;
+			}
+		};
+
+		struct BALL_EXPORT RecordCON064
+		{
+			RecordType record_type;
+			RecordName record_name;
+			Integer    atom_serial_number;
+			Integer    bond_atom[3];
+			
+			void clear()
+			{
+				record_type = PDB::RECORD_TYPE__CON064;
+				record_name[0] = '\0';
+				atom_serial_number = 0;
+				bond_atom[0] = bond_atom[1] = bond_atom[2]  = 0;
+			}
+		};
+
 
 		/**
 		*/
