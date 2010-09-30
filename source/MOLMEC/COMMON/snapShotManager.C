@@ -18,7 +18,7 @@ namespace BALL
 
 	// Definition of class-specific options and default values
 	const char *SnapShotManager::Option::FLUSH_TO_DISK_FREQUENCY = "flush_to_disk_frequency";
-	const unsigned int SnapShotManager::Default::FLUSH_TO_DISK_FREQUENCY = 10;
+	const Size SnapShotManager::Default::FLUSH_TO_DISK_FREQUENCY = 10;
 
 	SnapShotManager::SnapShotManager()
 		: options(),

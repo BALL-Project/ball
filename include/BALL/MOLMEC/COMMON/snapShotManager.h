@@ -51,7 +51,7 @@ class BALL_EXPORT SnapShotManager
 				before writing them to hard disk. Default is ...
 				@see Option::FLUSH_TO_DISK_FREQUENCY 
 		*/
-		static const unsigned int FLUSH_TO_DISK_FREQUENCY;
+		static const Size FLUSH_TO_DISK_FREQUENCY;
 	};
 
 

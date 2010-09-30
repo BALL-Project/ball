@@ -19,7 +19,7 @@ class SnapShotManager
     };
     struct Default
     {
-     static const unsigned int FLUSH_TO_DISK_FREQUENCY;
+     static const Size FLUSH_TO_DISK_FREQUENCY;
     };
 
     SnapShotManager();
