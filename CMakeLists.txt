@@ -305,7 +305,7 @@ IF (WIN32)
 		IF (NOT REGEX_LIBRARIES)
 			MESSAGE(SEND_ERROR "Could not find required regex2.lib!")
 		ENDIF()
-	ELSE
+	ELSE()
 		SET(REGEX_LIBRARIES "")
 	ENDIF()
 ENDIF()
