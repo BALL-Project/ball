@@ -108,7 +108,7 @@ namespace BALL
 			/** Samples.
 					This class includes all information of a NMRStar file sample.
 			*/
-			class Sample
+			class BALL_EXPORT Sample
 			{
 				public:
 				
@@ -116,7 +116,7 @@ namespace BALL
 					    This class includes all information of a sample component.
 				  	  All members are public for easy access.
 					*/
-					class Component
+					class BALL_EXPORT Component
 					{
 						public:
 							Component();
@@ -189,7 +189,7 @@ namespace BALL
 					delivered by a NMRStar file.
 					All members are public for easy access.
 			*/
-			class NMRAtomData
+			class BALL_EXPORT NMRAtomData
 			{
 				public:
 					NMRAtomData();
@@ -258,11 +258,11 @@ namespace BALL
 			 * 	This class includes all Monomeric Polymers occuring in this file.
 			 * 	All members are public for easy access.
 			 */
-			class MonomericPolymer
+			class BALL_EXPORT MonomericPolymer
 			{
 				public:
 					/// Database with homolog entries
-					class HomologDB 
+					class BALL_EXPORT HomologDB 
 					{
 						public:
 							HomologDB();
@@ -307,11 +307,11 @@ namespace BALL
 			 		This class includes all system relevant information.
 					All members are public for easy access.
 			 */
-			class MolecularSystem
+			class BALL_EXPORT MolecularSystem
 			{	
 				// System related information
 				public:
-					class RelatedDB
+					class BALL_EXPORT RelatedDB
 					{
 						public:
 							RelatedDB();
@@ -328,7 +328,7 @@ namespace BALL
 					
 													
 					// Central class for convenience
-					class ChemicalUnit
+					class BALL_EXPORT ChemicalUnit
 					{
 						public:
 							ChemicalUnit();  
@@ -369,7 +369,7 @@ namespace BALL
 			 * 	This class includes all NMR spectrometer information.
 			 * 	All members are public for easy access.
 			 */
-			class NMRSpectrometer
+			class BALL_EXPORT NMRSpectrometer
 			{
 				public:
 					String    name;
@@ -386,7 +386,7 @@ namespace BALL
 			 *  The main reason for the existence of this class (instead of maps to atompointer,position,position)
 			 *  is the python interface, which is greatly simplified.
 			 */
-			class BALLToBMRBMapper
+			class BALL_EXPORT BALLToBMRBMapper
 			{
 				public:
 					
