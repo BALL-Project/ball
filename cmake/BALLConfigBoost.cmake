@@ -1,4 +1,4 @@
-SET(BALL_BOOST_COMPONENTS system thread iostreams regex)
+SET(BALL_BOOST_COMPONENTS system thread iostreams regex zlib bzip2)
 if ( WIN32 )
 	ADD_DEFINITIONS(-DBOOST_ALL_DYN_LINK)
 	ADD_DEFINITIONS(-DBOOST_THREAD_USE_DLL)
