@@ -1,6 +1,6 @@
 // stringStub.h / stringStub.C are needed for VC2010!
 #include <string>
-#include <BALL/COMMON/common.h>
+#include <BALL/common.h>
 
 
 #ifdef BALL_COMPILER_MSVC
