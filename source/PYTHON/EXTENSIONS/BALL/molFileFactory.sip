@@ -6,5 +6,5 @@ class MolFileFactory
 	using namespace BALL;
 %End
 	public:
-		static GenericMolFile* open(const String& /name/, std__openmode open_mode = std::ios::in);
+		static GenericMolFile* open(const String& /name/, OpenMode open_mode = std::ios::in);
 };
