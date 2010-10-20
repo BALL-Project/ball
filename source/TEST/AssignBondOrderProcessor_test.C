@@ -209,7 +209,7 @@ CHECK(Option::ALGORITHM: A_STAR)
 	MOL2File mol6(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_COHKOZ_sol_5.mol2), std::ios::in);
 	mol6 >> sys6;
 	sys6.apply(abop);
-	TEST_REAL_EQUAL(abop.getTotalPenalty(1), 6 )
+	TEST_REAL_EQUAL(abop.getTotalPenalty(1), 6.f)
 RESULT
 
 #ifdef BALL_HAS_LPSOLVE
@@ -224,7 +224,7 @@ CHECK(Option::ALGORITHM: ILP - single solution)
 	MOL2File mol6(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_COHKOZ_sol_5.mol2), std::ios::in);
 	mol6 >> sys6;
 	sys6.apply(abop);
-	TEST_REAL_EQUAL(abop.getTotalPenalty(0), 0 )
+	TEST_REAL_EQUAL(abop.getTotalPenalty(0), 0.f)
 RESULT
 #endif
 
@@ -238,7 +238,7 @@ CHECK(ALGORITHM: K_GREEDY)
 	MOL2File mol6(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_COHKOZ_sol_5.mol2), std::ios::in);
 	mol6 >> sys6;
 	sys6.apply(abop);
-	TEST_REAL_EQUAL(abop.getTotalPenalty(1), 34)
+	TEST_REAL_EQUAL(abop.getTotalPenalty(1), 34.f)
 RESULT
 CHECK(Option::ALGORITHM: BRANCH_AND_BOUND)
   // There is really not much we can test here, so we just execute the processor
@@ -252,7 +252,7 @@ CHECK(Option::ALGORITHM: BRANCH_AND_BOUND)
 	MOL2File mol(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AAA.mol2), std::ios::in);
 	mol >> sys;
 	sys.apply(abop);
-	TEST_REAL_EQUAL(abop.getTotalPenalty(0), 64)
+	TEST_REAL_EQUAL(abop.getTotalPenalty(0), 64.f)
 RESULT
 
 
@@ -317,17 +317,17 @@ CHECK(evaluatePenalty(AtomContainer* ac))
 	System sys;
 	MOL2File mol_in(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMHTAR01.mol2), std::ios::in);
 	mol_in >> sys;
-	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys),0. )
+	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys), 0.f)
 	
 	System sys2;
 	MOL2File mol_in2(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AN06.mol2), std::ios::in);
 	mol_in2 >> sys2;
-	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys2), 2 )
+	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys2), 2.f)
 
 	System sys3;
 	MOL2File mol_in3(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_BEWCUB.mol2), std::ios::in);
 	mol_in3 >> sys3;
-	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys3), 33)
+	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys3), 33.f)
 RESULT
 
 
@@ -610,7 +610,7 @@ CHECK(getTotalPenalty(Position i) and operator() A* single solution)
 	MOL2File mol_in(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMHTAR01.mol2), std::ios::in);
 	mol_in >> sys;
 	sys.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.f)
 
 	//testbop.options.dump();
 
@@ -618,65 +618,65 @@ CHECK(getTotalPenalty(Position i) and operator() A* single solution)
 	MOL2File mol_in2(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AN06.mol2), std::ios::in);
 	mol_in2 >> sys2;
 	sys2.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 2)//0.00625) // 2.)	
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 2.f)//0.00625) // 2.)	
 
 
 	System sys3;
 	MOL2File mol_in3(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_BEWCUB.mol2), std::ios::in);
 	mol_in3 >> sys3;	
 	sys3.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.f)
 
 	
 	System sys15;
 	MOL2File mol15(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CUDJAM_sol_5.mol2), std::ios::in);
 	mol15 >> sys15;
 	sys15.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 2 ) //0.0015528 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 5 ) //0.00388199)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 7 ) //0.00543478)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 8 ) //0.00621118)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 10) //0.00776398)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 33) //0.0256211 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 2.f ) //0.0015528 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 5.f ) //0.00388199)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 7.f ) //0.00543478)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 8.f ) //0.00621118)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 10.f) //0.00776398)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 33.f) //0.0256211 )
 
 	System sys10;
 	MOL2File mol10(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CONFAM_sol_4.mol2), std::ios::in);
 	mol10 >> sys10;
 	sys10.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 3 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 33)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 34)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 36)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 66)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 66)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(7), 96)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(8), 96)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(9), 96)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 3.f )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 33.f)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 34.f)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 36.f)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 66.f)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 66.f)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(7), 96.f)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(8), 96.f)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(9), 96.f)
 	
 	System sys6;
 	MOL2File mol6(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_COHKOZ_sol_5.mol2), std::ios::in);
 	mol6 >> sys6;
 	sys6.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 6 )// 0.00802139)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 7 )// 0.00935829)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 8 )// 0.0106952 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 8 )// 0.0106952 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 15)// 0.0200535 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 34)// 0.0454545 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 6.f )// 0.00802139)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 7.f )// 0.00935829)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 8.f )// 0.0106952 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 8.f )// 0.0106952 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 15.f)// 0.0200535 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 34.f)// 0.0454545 )
 
 	System sys4;
 	MOL2File mol4(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CITSED10_sol_6.mol2), std::ios::in);
 	mol4 >> sys4;
 	sys4.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 1 )// 0.00195312)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 1 )// 0.00195312)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 32)// 0.0625    )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 34)// 0.0664062 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 34)// 0.0664062 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 34)// 0.0664062 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 66)// 0.125     )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(7), 66)// 0.128906  )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(8), 67)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 1.f )// 0.00195312)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 1.f )// 0.00195312)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 32.f)// 0.0625    )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 34.f)// 0.0664062 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 34.f)// 0.0664062 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 34.f)// 0.0664062 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 66.f)// 0.125     )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(7), 66.f)// 0.128906  )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(8), 67.f)
 
 RESULT
 
@@ -690,7 +690,7 @@ CHECK(getTotalPenalty(Position i) and operator() ILP single solution)
 	MOL2File mol_in(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMHTAR01.mol2), std::ios::in);
 	mol_in >> sys;
 	sys.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.f)
 
 	//testbop.options.dump();
 
@@ -698,65 +698,65 @@ CHECK(getTotalPenalty(Position i) and operator() ILP single solution)
 	MOL2File mol_in2(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AN06.mol2), std::ios::in);
 	mol_in2 >> sys2;
 	sys2.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 2)//0.00625) // 2.)	
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 2.f)//0.00625) // 2.)	
 
 
 	System sys3;
 	MOL2File mol_in3(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_BEWCUB.mol2), std::ios::in);
 	mol_in3 >> sys3;	
 	sys3.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.f)
 
 	
 	System sys15;
 	MOL2File mol15(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CUDJAM_sol_5.mol2), std::ios::in);
 	mol15 >> sys15;
 	sys15.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 2 ) //0.0015528 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 5 ) //0.00388199)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 7 ) //0.00543478)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 8 ) //0.00621118)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 10) //0.00776398)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 33) //0.0256211 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 2.f ) //0.0015528 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 5.f ) //0.00388199)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 7.f ) //0.00543478)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 8.f ) //0.00621118)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 10.f) //0.00776398)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 33.f) //0.0256211 )
 
 	System sys10;
 	MOL2File mol10(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CONFAM_sol_4.mol2), std::ios::in);
 	mol10 >> sys10;
 	sys10.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 3 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 33)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 34)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 36)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 66)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 66)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(7), 96)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(8), 96)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(9), 96)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 3.f )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 33.f)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 34.f)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 36.f)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 66.f)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 66.f)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(7), 96.f)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(8), 96.f)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(9), 96.f)
 	
 	System sys6;
 	MOL2File mol6(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_COHKOZ_sol_5.mol2), std::ios::in);
 	mol6 >> sys6;
 	sys6.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 6 )// 0.00802139)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 7 )// 0.00935829)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 8 )// 0.0106952 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 8 )// 0.0106952 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 15)// 0.0200535 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 34)// 0.0454545 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 6.f )// 0.00802139)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 7.f )// 0.00935829)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 8.f )// 0.0106952 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 8.f )// 0.0106952 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 15.f)// 0.0200535 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 34.f)// 0.0454545 )
 
 	System sys4;
 	MOL2File mol4(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CITSED10_sol_6.mol2), std::ios::in);
 	mol4 >> sys4;
 	sys4.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 1 )// 0.00195312)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 1 )// 0.00195312)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 32)// 0.0625    )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 34)// 0.0664062 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 34)// 0.0664062 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 34)// 0.0664062 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 66)// 0.125     )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(7), 66)// 0.128906  )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(8), 67)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 1.f )// 0.00195312)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 1.f )// 0.00195312)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 32.f)// 0.0625    )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 34.f)// 0.0664062 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 34.f)// 0.0664062 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 34.f)// 0.0664062 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 66.f)// 0.125     )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(7), 66.f)// 0.128906  )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(8), 67.f)
 
 RESULT
 #endif
@@ -772,30 +772,30 @@ CHECK(getTotalCharge(Position i))
 	MOL2File mol_in(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMHTAR01.mol2), std::ios::in);
 	mol_in >> sys;
 	sys.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalCharge(0), -1.)
-	TEST_REAL_EQUAL(testbop.getTotalCharge(1), -1)
-	TEST_REAL_EQUAL(testbop.getTotalCharge(2), 1)
+	TEST_REAL_EQUAL(testbop.getTotalCharge(0), -1.f)
+	TEST_REAL_EQUAL(testbop.getTotalCharge(1), -1.f)
+	TEST_REAL_EQUAL(testbop.getTotalCharge(2),  1.f)
 
 	System sys2;
 	MOL2File mol_in2(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AN06.mol2), std::ios::in);
 	mol_in2 >> sys2;
 	sys2.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalCharge(0), -1.)	
-	TEST_REAL_EQUAL(testbop.getTotalCharge(1), 1.)	
+	TEST_REAL_EQUAL(testbop.getTotalCharge(0), -1.f)	
+	TEST_REAL_EQUAL(testbop.getTotalCharge(1),  1.f)	
 
 	System sys3;
 	MOL2File mol_in3(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_BEWCUB.mol2), std::ios::in);
 	mol_in3 >> sys3;	
 	sys3.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalCharge(0), 4)
-	TEST_REAL_EQUAL(testbop.getTotalCharge(2), 2)
+	TEST_REAL_EQUAL(testbop.getTotalCharge(0), 4.f)
+	TEST_REAL_EQUAL(testbop.getTotalCharge(2), 2.f)
 	
 	System sys40;
 	MOL2File mol40(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_C3_input.mol2), std::ios::in);
 	mol40 >> sys40;	
 	sys40.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalCharge(0), 0.)
-	TEST_REAL_EQUAL(testbop.getTotalCharge(1), 2.)
+	TEST_REAL_EQUAL(testbop.getTotalCharge(0), 0.f)
+	TEST_REAL_EQUAL(testbop.getTotalCharge(1), 2.f)
 
 RESULT
 
@@ -808,11 +808,11 @@ CHECK(computeNextSolution() using A*)
 	mol_in >> sys;
 	sys.apply(testbop);
 	TEST_EQUAL(testbop.getNumberOfComputedSolutions(),1)	
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 2.)//0.00625)// 2.)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 2.f)//0.00625)// 2.)
 	TEST_EQUAL(testbop.computeNextSolution(), true)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 32)//0.1)//32.)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 32.f)//0.1)//32.)
 	TEST_EQUAL(testbop.computeNextSolution(), true)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 128)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 128.f)
 	TEST_EQUAL(testbop.computeNextSolution(), false)
 	TEST_EQUAL(testbop.getNumberOfComputedSolutions(),3)
 
@@ -820,47 +820,47 @@ CHECK(computeNextSolution() using A*)
 	MOL2File mol4(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CITSED10_sol_6.mol2), std::ios::in);
 	mol4 >> sys4;
 	sys4.apply(testbop);
-	TEST_EQUAL(testbop.getNumberOfComputedSolutions(),1)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 1.)
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 1)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 1.f)
 	TEST_EQUAL(testbop.computeNextSolution(), true)	
 
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 1.)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 1.f)
 	TEST_EQUAL(testbop.computeNextSolution(), true)
 
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 32)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 32.f)
 	TEST_EQUAL(testbop.computeNextSolution(), true)
 
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 34)// 0.0664062 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 34.f)// 0.0664062 )
 	TEST_EQUAL(testbop.computeNextSolution(), true)
 
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 34)// 0.0664062 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 34.f)// 0.0664062 )
 	TEST_EQUAL(testbop.computeNextSolution(), true)
 
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 34)// 0.0664062 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 34.f)// 0.0664062 )
 	TEST_EQUAL(testbop.computeNextSolution(), true)
 
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 66)// 0.125     )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 66.f)// 0.125     )
 	TEST_EQUAL(testbop.computeNextSolution(), true)
 
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(7), 66)// 0.128906  )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(7), 66.f)// 0.128906  )
 	TEST_EQUAL(testbop.computeNextSolution(), true)
 
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(8), 67)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(8), 67.f)
 	TEST_EQUAL(testbop.computeNextSolution(), true)
 
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(9), 67)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(9), 67.f)
 	TEST_EQUAL(testbop.computeNextSolution(), true)
 
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(10), 97)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(10), 97.f)
 	TEST_EQUAL(testbop.computeNextSolution(), true)
 
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(11), 99)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(11), 99.f)
 	TEST_EQUAL(testbop.computeNextSolution(), true)
 
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(12), 99)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(12), 99.f)
 	TEST_EQUAL(testbop.computeNextSolution(), true)
 	
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(13), 132)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(13), 132.f)
 	TEST_EQUAL(testbop.computeNextSolution(), false)
 
 RESULT
@@ -877,11 +877,11 @@ CHECK(computeNextSolution() using ILP)
 	mol_in >> sys;
 	sys.apply(testbop);
 	TEST_EQUAL(testbop.getNumberOfComputedSolutions(),1)	
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 2.)//0.00625)// 2.)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 2.f)//0.00625)// 2.)
 	TEST_EQUAL(testbop.computeNextSolution(), true)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 32)//0.1)//32.)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 32.f)//0.1)//32.)
 	TEST_EQUAL(testbop.computeNextSolution(), true)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 128)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 128.f)
 	TEST_EQUAL(testbop.computeNextSolution(), false)
 	TEST_EQUAL(testbop.getNumberOfComputedSolutions(),3)
 
@@ -890,46 +890,46 @@ CHECK(computeNextSolution() using ILP)
 	mol4 >> sys4;
 	sys4.apply(testbop);
 	TEST_EQUAL(testbop.getNumberOfComputedSolutions(),1)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 1.)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 1.f)
 	TEST_EQUAL(testbop.computeNextSolution(), true)	
 
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 1.)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 1.f)
 	TEST_EQUAL(testbop.computeNextSolution(), true)
 
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 32)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 32.f)
 	TEST_EQUAL(testbop.computeNextSolution(), true)
 
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 34)// 0.0664062 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 34.f)// 0.0664062 )
 	TEST_EQUAL(testbop.computeNextSolution(), true)
 
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 34)// 0.0664062 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 34.f)// 0.0664062 )
 	TEST_EQUAL(testbop.computeNextSolution(), true)
 
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 34)// 0.0664062 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 34.f)// 0.0664062 )
 	TEST_EQUAL(testbop.computeNextSolution(), true)
 
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 66)// 0.125     )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 66.f)// 0.125     )
 	TEST_EQUAL(testbop.computeNextSolution(), true)
 
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(7), 66)// 0.128906  )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(7), 66.f)// 0.128906  )
 	TEST_EQUAL(testbop.computeNextSolution(), true)
 
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(8), 67)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(8), 67.f)
 	TEST_EQUAL(testbop.computeNextSolution(), true)
 
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(9), 67)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(9), 67.f)
 	TEST_EQUAL(testbop.computeNextSolution(), true)
 
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(10), 97)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(10), 97.f)
 	TEST_EQUAL(testbop.computeNextSolution(), true)
 
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(11), 99)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(11), 99.f)
 	TEST_EQUAL(testbop.computeNextSolution(), true)
 
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(12), 99)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(12), 99.f)
 	TEST_EQUAL(testbop.computeNextSolution(), true)
 	
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(13), 132)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(13), 132.f)
 	TEST_EQUAL(testbop.computeNextSolution(), false)
 
 RESULT
@@ -991,44 +991,44 @@ CHECK(Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS and Option:: MAX_NUMBER_OF_SOLU
 	MOL2File mol_in2(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AN06.mol2), std::ios::in);
 	mol_in2 >> sys2;
 	sys2.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getNumberOfComputedSolutions(), 2)	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 2)	
 
 	System sys15;
 	MOL2File mol15(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CUDJAM_sol_5.mol2), std::ios::in);
 	mol15 >> sys15;
 	sys15.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getNumberOfComputedSolutions(), 2)	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 2)	
 
 	System sys10;
 	MOL2File mol10(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CONFAM_sol_4.mol2), std::ios::in);
 	mol10 >> sys10;
 	sys10.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getNumberOfComputedSolutions(), 2)	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 2)	
 
 	System sys6;
 	MOL2File mol6(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_COHKOZ_sol_5.mol2), std::ios::in);
 	mol6 >> sys6;
 	sys6.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getNumberOfComputedSolutions(), 2)	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 2)	
 
 	System sys4;
 	MOL2File mol4(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CITSED10_sol_6.mol2), std::ios::in);
 	mol4 >> sys4;
 	sys4.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getNumberOfComputedSolutions(), 3)	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 3)	
 
 
 	testbop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, true);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 0);
 
 	sys2.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getNumberOfComputedSolutions(), 3)	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 3)	
 	
 	sys10.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getNumberOfComputedSolutions(), 22)	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 22)	
 
 	sys4.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getNumberOfComputedSolutions(), 14)	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 14)	
 
 RESULT
 
@@ -1042,24 +1042,24 @@ CHECK(Option::BOND_LENGTH_WEIGHTING and getTotalPenalty())
 	System sys;
 	MOL2File mol_in(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMHTAR01.mol2), std::ios::in);
 	mol_in >> sys;
-	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys), 0.187165) //0.112424)
+	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys), 0.187165f) //0.112424)
 	
 	System sys2;
 	MOL2File mol_in2(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AN06.mol2), std::ios::in);
 	mol_in2 >> sys2;
-	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys2),0.00879483)// 0.416132)
+	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys2),0.00879483f)// 0.416132)
 	
 	System sys3;
 	MOL2File mol_in3(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_BEWCUB.mol2), std::ios::in);
 	mol_in3 >> sys3;
-	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys3),0.224469) // 0.084565)
+	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys3),0.224469f) // 0.084565)
 	
 	/// 0.5
 	testbop.options.setReal(AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING,0.5);
 	
-	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys),0.0935824)//  0.0562121)
-	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys2),0.0122099 )//	0.215878)
-	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys3),0.11981)// 0.0498582)
+	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys),0.0935824f)//  0.0562121)
+	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys2),0.0122099f )//	0.215878)
+	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys3),0.11981f)// 0.0498582)
 
 
 	testbop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, true);
@@ -1068,16 +1068,16 @@ CHECK(Option::BOND_LENGTH_WEIGHTING and getTotalPenalty())
 	MOL2File mol15(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CUDJAM_sol_5.mol2), std::ios::in);
 	mol15 >> sys15;
 	sys15.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.0527984)// 0.022713  )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 0.0782613)// 0.042013  )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 0.079033 )// 0.053144  )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 0.079033 )// 0.0559914 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 0.0805762)//0.0562938 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 0.0805762)// 0.0578149 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 0.0836669)// 0.0680484 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(7), 0.103724 )//0.0696795 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(8), 0.103724 )//0.0719661 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(9), 0.103724 ) //0.0722199 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.0527984f)// 0.022713  )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 0.0782613f)// 0.042013  )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 0.079033f )// 0.053144  )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 0.079033f )// 0.0559914 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 0.0805762f)//0.0562938 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 0.0805762f)// 0.0578149 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 0.0836669f)// 0.0680484 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(7), 0.103724f )//0.0696795 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(8), 0.103724f )//0.0719661 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(9), 0.103724f ) //0.0722199 )
 
 
 
@@ -1085,46 +1085,46 @@ CHECK(Option::BOND_LENGTH_WEIGHTING and getTotalPenalty())
 	MOL2File mol10(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CONFAM_sol_4.mol2), std::ios::in);
 	mol10 >> sys10;
 	sys10.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.182807)// 0.034702)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 0.240099)// 0.062828)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 0.29739 )//  0.101387)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 0.349474)// 0.107255)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 0.397803)// 0.219378)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 0.406765)// 0.245037)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 0.449641)//0.289464)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(7), 0.455095)// 0.291931)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(8), 0.50346 )//0.29904 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(9), 0.506933)//0.31759 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.182807f)// 0.034702)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 0.240099f)// 0.062828)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 0.29739f )//  0.101387)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 0.349474f)// 0.107255)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 0.397803f)// 0.219378)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 0.406765f)// 0.245037)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 0.449641f)//0.289464)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(7), 0.455095f)// 0.291931)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(8), 0.50346f )//0.29904 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(9), 0.506933f)//0.31759 )
 
 	System sys6;
 	MOL2File mol6(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_COHKOZ_sol_5.mol2), std::ios::in);
 	mol6 >> sys6;
 	sys6.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.260709)//0.0186741 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 0.266806)//0.04406   )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 0.295261)//0.0550543 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 0.295261)//0.0595762 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 0.295261)//0.064149  )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 0.295261)//0.0694856 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 0.297294)// 0.0707986 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(7), 0.297294)//0.0712783 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(8), 0.297294)//0.0727204 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(9), 0.297294)//0.0783781 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.260709f)//0.0186741 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 0.266806f)//0.04406   )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 0.295261f)//0.0550543 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 0.295261f)//0.0595762 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 0.295261f)//0.064149  )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 0.295261f)//0.0694856 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 0.297294f)// 0.0707986 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(7), 0.297294f)//0.0712783 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(8), 0.297294f)//0.0727204 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(9), 0.297294f)//0.0783781 )
 
 	System sys4;
 	MOL2File mol4(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CITSED10_sol_6.mol2), std::ios::in);
 	mol4 >> sys4;
 	sys4.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.175545)//0.0463171)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 0.2848  )//0.053751 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 0.306504)//0.109568 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 0.344816)//0.157167 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 0.45407 )//0.346593 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 0.475775)//0.365591 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 0.582425)//0.409844 )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(7), 0.671486)//0.421408 )	
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(8), 0.710181)//0.48037  )
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(9), 0.751696)//0.487804 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.175545f)//0.0463171)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 0.2848f  )//0.053751 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 0.306504f)//0.109568 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 0.344816f)//0.157167 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 0.45407f )//0.346593 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 0.475775f)//0.365591 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 0.582425f)//0.409844 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(7), 0.671486f)//0.421408 )	
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(8), 0.710181f)//0.48037  )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(9), 0.751696f)//0.487804 )
 
 RESULT
 
@@ -1138,15 +1138,15 @@ CHECK(Option::MAX_NUMBER_OF_SOLUTIONS  - Default and value  using A*)
 	MOL2File mol_in2(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMHTAR01.mol2), std::ios::in);
 	mol_in2 >> sys2;
 	sys2.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getNumberOfComputedSolutions(), AssignBondOrderProcessor::Default::MAX_NUMBER_OF_SOLUTIONS)
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), AssignBondOrderProcessor::Default::MAX_NUMBER_OF_SOLUTIONS)
 	
 	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 5);
 	sys2.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getNumberOfComputedSolutions(), 5)	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 5)	
 	
 	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 15);
 	sys2.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getNumberOfComputedSolutions(), 15)
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 15)
 
 	System sys6;
 	MOL2File mol6(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_COHKOZ_sol_5.mol2), std::ios::in);
@@ -1154,22 +1154,22 @@ CHECK(Option::MAX_NUMBER_OF_SOLUTIONS  - Default and value  using A*)
 
 	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 5);
 	sys6.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getNumberOfComputedSolutions(), 5)	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 5)	
 	
 	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 15);
 	sys6.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getNumberOfComputedSolutions(), 15)	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 15)	
 	
 	testbop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, false);
 	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 15);
 	sys6.apply(testbop);
 	// NOTE: the operator() has to compute all optimal +1 solutions 
 	// to get aware that all following solutions are not optimal any longer! 
-	TEST_REAL_EQUAL(testbop.getNumberOfComputedSolutions(), 2)	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 2)	
 	
 	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 1);
 	sys6.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getNumberOfComputedSolutions(), 1)
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 1)
 
 RESULT
 
@@ -1181,15 +1181,15 @@ CHECK(Option::MAX_NUMBER_OF_SOLUTIONS  - Default and value  using A*)
 	MOL2File mol_in2(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMHTAR01.mol2), std::ios::in);
 	mol_in2 >> sys2;
 	sys2.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getNumberOfComputedSolutions(), AssignBondOrderProcessor::Default::MAX_NUMBER_OF_SOLUTIONS)
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), AssignBondOrderProcessor::Default::MAX_NUMBER_OF_SOLUTIONS)
 	
 	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 5);
 	sys2.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getNumberOfComputedSolutions(), 5)	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 5)	
 	
 	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 15);
 	sys2.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getNumberOfComputedSolutions(), 15)
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 15)
 
 	System sys6;
 	MOL2File mol6(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_COHKOZ_sol_5.mol2), std::ios::in);
@@ -1197,22 +1197,22 @@ CHECK(Option::MAX_NUMBER_OF_SOLUTIONS  - Default and value  using A*)
 
 	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 5);
 	sys6.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getNumberOfComputedSolutions(), 5)	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 5)	
 	
 	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 15);
 	sys6.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getNumberOfComputedSolutions(), 15)	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 15)	
 	
 	testbop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, false);
 	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 15);
 	sys6.apply(testbop);
 	// NOTE: the operator() has to compute all optimal +1 solutions 
 	// to get aware that all following solutions are not optimal any longer! 
-	TEST_REAL_EQUAL(testbop.getNumberOfComputedSolutions(), 2)	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 2)	
 	
 	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 1);
 	sys6.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getNumberOfComputedSolutions(), 1)
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 1)
 
 RESULT
 
@@ -1286,13 +1286,13 @@ CHECK(getNumberOfAddedHydrogens() using A*)
 	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 4)
 
 	testbop.apply(0);
-	TEST_REAL_EQUAL(testbop.getNumberOfAddedHydrogens(0), 6)
+	TEST_EQUAL(testbop.getNumberOfAddedHydrogens(0), 6)
 	
 	testbop.apply(1);
-	TEST_REAL_EQUAL(testbop.getNumberOfAddedHydrogens(1), 4)
+	TEST_EQUAL(testbop.getNumberOfAddedHydrogens(1), 4)
 	
 	testbop.apply(2);
-	TEST_REAL_EQUAL(testbop.getNumberOfAddedHydrogens(2), 2)
+	TEST_EQUAL(testbop.getNumberOfAddedHydrogens(2), 2)
 	
 RESULT
 
@@ -1332,13 +1332,13 @@ CHECK(getNumberOfAddedHydrogens() using ILP)
 	TEST_EQUAL(testbop_ilp.getNumberOfComputedSolutions(), 3)
 
 	testbop_ilp.apply(0);
-	TEST_REAL_EQUAL(testbop_ilp.getNumberOfAddedHydrogens(0), 6)
+	TEST_EQUAL(testbop_ilp.getNumberOfAddedHydrogens(0), 6)
 	
 	testbop_ilp.apply(1);
-	TEST_REAL_EQUAL(testbop_ilp.getNumberOfAddedHydrogens(1), 2)
+	TEST_EQUAL(testbop_ilp.getNumberOfAddedHydrogens(1), 2)
 	
 	testbop_ilp.apply(2);
-	TEST_REAL_EQUAL(testbop_ilp.getNumberOfAddedHydrogens(2), 4)
+	TEST_EQUAL(testbop_ilp.getNumberOfAddedHydrogens(2), 4)
 RESULT
 #endif
 
@@ -1385,17 +1385,17 @@ CHECK(Option::OVERWRITE_SINGLE_BOND_ORDERS  using A* )
 	System sys40;
 	MOL2File mol40(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_C4_input.mol2), std::ios::in);
 	mol40 >> sys40;	
-	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys40), 128)
+	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys40), 128.f)
 	
 	sys40.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 64)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 64.f)
 
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS, true);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS, true);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS, true);
 	
 	sys40.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.f)
 
 RESULT
 
@@ -1414,17 +1414,17 @@ CHECK(Option::OVERWRITE_SINGLE_BOND_ORDERS  using ILP )
 	System sys40;
 	MOL2File mol40(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_C4_input.mol2), std::ios::in);
 	mol40 >> sys40;	
-	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys40), 128)
+	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys40), 128.f)
 	
 	sys40.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 64)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 64.f)
 
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS, true);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS, true);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS, true);
 	
 	sys40.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.f)
 
 RESULT
 #endif
@@ -1442,17 +1442,17 @@ CHECK(Option::OVERWRITE_DOUBLE_BOND_ORDERS using A* )
 	System sys40;
 	MOL2File mol40(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_C3_input.mol2), std::ios::in);
 	mol40 >> sys40;	
-	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys40), 128)
+	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys40), 128.f)
 	
 	sys40.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 64)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 64.f)
 
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS, true);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS, true);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS, true);
 	
 	sys40.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.f)
 
 RESULT
 
@@ -1471,17 +1471,17 @@ CHECK(Option::OVERWRITE_DOUBLE_BOND_ORDERS using ILP )
 	System sys40;
 	MOL2File mol40(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_C3_input.mol2), std::ios::in);
 	mol40 >> sys40;	
-	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys40), 128)
+	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys40), 128.f)
 	
 	sys40.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 64)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 64.f)
 
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS, true);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS, true);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS, true);
 	
 	sys40.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.f)
 
 RESULT
 #endif
@@ -1499,17 +1499,17 @@ CHECK(Option::OVERWRITE_TRIPLE_BOND_ORDERS using A* )
 	System sys40;
 	MOL2File mol40(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_C4_input.mol2), std::ios::in);
 	mol40 >> sys40;	
-	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys40), 128)
+	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys40), 128.f)
 	
 	sys40.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 64)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 64.f)
 
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS, true);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS, true);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS, true);
 	
 	sys40.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.f)
 RESULT
 
 
@@ -1522,7 +1522,7 @@ CHECK(Option::OVERWRITE_SELECTED_BONDS using A* )
 	System sys40;
 	MOL2File mol40(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_C4_input.mol2), std::ios::in);
 	mol40 >> sys40;	
-	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys40), 128)
+	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys40), 128.f)
 	
 	// now select 3 bonds
 	AtomIterator a_it;
@@ -1539,7 +1539,7 @@ CHECK(Option::OVERWRITE_SELECTED_BONDS using A* )
 
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_SELECTED_BONDS, true);
 	sys40.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.f)
 
 RESULT
 
@@ -1606,11 +1606,11 @@ CHECK(Option::MAX_BOND_ORDER)
 	MOL2File mol40(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_C4_input.mol2), std::ios::in);
 	mol40 >> sys40;		
 	sys40.apply(abop);
-	TEST_REAL_EQUAL(abop.evaluatePenalty(&sys40), 192)
+	TEST_REAL_EQUAL(abop.evaluatePenalty(&sys40), 192.f)
 	
 	abop.options.setInteger(AssignBondOrderProcessor::Option::MAX_BOND_ORDER,2);	
 	sys40.apply(abop);
-	TEST_REAL_EQUAL(abop.evaluatePenalty(&sys40), 0)
+	TEST_REAL_EQUAL(abop.evaluatePenalty(&sys40), 0.f)
 RESULT
 
 CHECK(Option::APPLY_FIRST_SOLUTION) 
@@ -1647,20 +1647,20 @@ CHECK(Option::GREEDY_K_SIZE)
 	MOL2File mol(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CUDJAM_sol_5.mol2), std::ios::in);
 	mol >> sys;
 	sys.apply(abop);
-	TEST_REAL_EQUAL(abop.getNumberOfComputedSolutions(), 1)
+	TEST_EQUAL(abop.getNumberOfComputedSolutions(), 1)
 
 	abop.options.setReal(AssignBondOrderProcessor::Option::GREEDY_K_SIZE, 2);
 	sys.apply(abop);
-	TEST_REAL_EQUAL(abop.getNumberOfComputedSolutions(), 2)
+	TEST_EQUAL(abop.getNumberOfComputedSolutions(), 2)
 
 	abop.options.setReal(AssignBondOrderProcessor::Option::GREEDY_K_SIZE, 5);
 	sys.apply(abop);
-	TEST_REAL_EQUAL(abop.getNumberOfComputedSolutions(), 5)
+	TEST_EQUAL(abop.getNumberOfComputedSolutions(), 5)
 	
 	CAPTURE_OUTPUT_LEVEL(1000)
 		abop.options.setReal(AssignBondOrderProcessor::Option::GREEDY_K_SIZE, -1);
 		sys.apply(abop);
-		TEST_REAL_EQUAL(abop.getNumberOfComputedSolutions(), 0)
+		TEST_EQUAL(abop.getNumberOfComputedSolutions(), 0)
 	COMPARE_OUTPUT("")
 RESULT
 
@@ -1675,7 +1675,7 @@ CHECK(Option::BRANCH_AND_BOUND_CUTOFF)
 	MOL2File mol(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_COHKOZ_sol_5.mol2), std::ios::in);
 	mol >> sys;
 	sys.apply(abop);
-	TEST_REAL_EQUAL(abop.getTotalPenalty(0), 0)
+	TEST_REAL_EQUAL(abop.getTotalPenalty(0), 0.f)
 RESULT
 
 
