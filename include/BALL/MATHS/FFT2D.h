@@ -308,7 +308,10 @@ namespace BALL
 			bool planCalculated_;
 			
 	};
-	
+
+	//explicit instantiation needed to export the template
+	template class BALL_EXPORT TFFT2D<BALL_FFTW_DEFAULT_TRAITS>;
+
 	/**	Default type
 	*/
 	typedef TFFT2D<BALL_FFTW_DEFAULT_TRAITS> FFT2D;
