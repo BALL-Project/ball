@@ -20,7 +20,7 @@ CHECK(GP-model)
 	model.readTrainingData();
 	model.train();
 	const Matrix<double>* res = model.getTrainingResult();
-	TEST_REAL_EQUAL(res->getRowCount(),5)
+	TEST_EQUAL(res->getRowCount(),5)
 	TEST_REAL_EQUAL((*res)[0],65.3125)
 	TEST_REAL_EQUAL((*res)[1],307.402)
 	TEST_REAL_EQUAL((*res)[2],-478.8941)
