@@ -11,18 +11,16 @@ namespace BALL {
 	class SVDSolver;
 }
 
+namespace BALL
+{
+	// explicit instantiation to make it work on Windows
+	template class BALL_EXPORT SVDSolver<float, StandardTraits>;
+	template class BALL_EXPORT SVDSolver<double, StandardTraits>;
+	template class BALL_EXPORT SVDSolver<ComplexFloat, StandardTraits>;
+	template class BALL_EXPORT SVDSolver<ComplexDouble, StandardTraits>;
+}
+
 #include <BALL/MATHS/LINALG/SVDSolver.ih>
 #include <BALL/MATHS/LINALG/SVDSolver.iC>
-
-#ifdef BALL_OS_WINDOWS
-	namespace BALL
-	{
-		// explicit instantiation to make it work on Windows
-		template class BALL_EXPORT SVDSolver<float, StandardTraits>;
-		template class BALL_EXPORT SVDSolver<double, StandardTraits>;
-		template class BALL_EXPORT SVDSolver<ComplexFloat, StandardTraits>;
-		template class BALL_EXPORT SVDSolver<ComplexDouble, StandardTraits>;
-	}
-#endif
 
 #endif
