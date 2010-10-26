@@ -8,9 +8,12 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/residue.h>
+#include <BALL/MATHS/matrix44.h>
 
-#include <stdio.h>
-#include <math.h>
+#include <cstdio>
+#include <cmath>
+#include <deque>
+#include <set>
 
 namespace BALL 
 {
@@ -292,7 +295,7 @@ namespace BALL
 		throw(Exception::IllegalPosition)
 	{
 		Vector3 a12(a2.getPosition() - a1.getPosition());
-		Vector3 a23(a3.getPosition() - a2.getPosition());
+Vector3 a23(a3.getPosition() - a2.getPosition());
 		Vector3 a34(a4.getPosition() - a3.getPosition());
 
 		Vector3 n12(a12 % a23);
@@ -327,6 +330,75 @@ namespace BALL
 		}
 
 		return a;
+	}
+
+	bool setTorsionAngle(const Atom& a1, const Atom& a2, Atom& a3, const Atom& a4, Angle angle)
+	{
+		//We first need to determine the part of the molecule which needs to be
+		//rotated. this will be done by a simple BFS.
+		std::deque<Atom*> bfs_queue;
+
+		//This set containes the atoms which should be rotated
+		std::set<Atom*> component;
+
+		//The starting point needs to be handled explicitly, as
+		//we may not consider a2
+		component.insert(&a3);
+
+		for(unsigned int i = 0; i < a3.countBonds(); ++i)
+		{
+			if(a3.getPartnerAtom(i) != &a2)
+			{
+				component.insert(a3.getPartnerAtom(i));
+				bfs_queue.push_back(a3.getPartnerAtom(i));
+			}
+		}
+
+		//Perform a the BFS
+		while(!bfs_queue.empty())
+		{
+			Atom* atom = bfs_queue.front();
+			bfs_queue.pop_front();
+
+			for(unsigned int i = 0; i < atom->countBonds(); ++i)
+			{
+				//If a2 is in the same connected component as a3, we cannot
+				//set the torision angle
+				if(atom->getPartnerAtom(i) == &a2)
+				{
+					return false;
+				}
+
+				if(component.find(atom->getPartnerAtom(i)) == component.end())
+				{
+					std::cout << atom->getPartnerAtom(i)->getFullName() << "\n";
+					component.insert(atom->getPartnerAtom(i));
+					bfs_queue.push_back(atom->getPartnerAtom(i));
+				}
+			}
+		}
+
+		//Now compute the current torsion angle and compute the residual rotation
+		angle -= calculateTorsionAngle(a1, a2, a3, a4);
+
+		//Setup the rotation. We first need to make a3 the origin
+		//of the selected component, then apply the rotation and
+		//subsequently translate a3 to its original position.
+		Matrix4x4 rotation;
+		rotation.rotate(angle, a3.getPosition() - a2.getPosition());
+		Matrix4x4 trans;
+		trans.setTranslation(-a3.getPosition());
+		rotation *= trans;
+		trans.setTranslation(a3.getPosition());
+		rotation = trans * rotation;
+
+
+		for(std::set<Atom*>::iterator it = component.begin(); it != component.end(); ++it)
+		{
+			(*it)->setPosition(rotation * (*it)->getPosition());
+		}
+
+		return true;
 	}
 
   // Calculate the bond angle between three atoms

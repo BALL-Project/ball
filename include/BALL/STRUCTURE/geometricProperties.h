@@ -300,6 +300,16 @@ namespace BALL
 	BALL_EXPORT Angle calculateTorsionAngle(const Atom& a1, const Atom& a2, const Atom& a3, const Atom& a4)
 		throw(Exception::IllegalPosition);
 
+	/**
+	 * Set the torsion angle defined by a1, a2, a3, a4. The atoms should be connected by bonds
+	 * The position of a1 and a2 is kept fix, while the connected component
+	 * containing a4 is rotated accordingly.
+	 *
+	 * @return false if the bond is not rotatable or if the molecule graph is not divided
+	 *         into two connected components upon removal of the bond (a2,a3)
+	 */
+	BALL_EXPORT bool setTorsionAngle(const Atom& a1, const Atom& a2, Atom& a3, const Atom& a4, Angle angle);
+
 	/**	Calculate the bond angle between three atoms
 	*/
 	BALL_EXPORT Angle calculateBondAngle(const Atom& a1, const Atom& a2, const Atom& a3)
