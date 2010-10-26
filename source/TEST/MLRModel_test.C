@@ -21,7 +21,7 @@ CHECK(MLR-model)
 	mlr.readTrainingData();
 	mlr.train();
 	const Matrix<double>* res = mlr.getTrainingResult();
-	TEST_REAL_EQUAL(res->getRowCount(),3)
+	TEST_EQUAL(res->getRowCount(),3)
 	TEST_REAL_EQUAL((*res)[0],0.1407737)
 	TEST_REAL_EQUAL((*res)[1],0.5902179)
 	TEST_REAL_EQUAL((*res)[2],0.4159182)
