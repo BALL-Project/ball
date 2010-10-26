@@ -54,7 +54,7 @@ namespace BALL
 			DNAMutator(EnergyMinimizer* mini = NULL, ForceField* ff = NULL, FragmentDB* frag = NULL);
 
 			/**
-			 * The destructor of the the DNAMutator must delete the FragmentDB instance
+			 * The destructor of the DNAMutator; Deletes the FragmentDB instance
 			 * iff it has been auto generated
 			 */
 			~DNAMutator();
@@ -62,7 +62,7 @@ namespace BALL
 			/**
 			 * Calling this method explicitly circumvents lazy loading of the FragmentDB.
 			 * This method has no effect if mutate has already been called or if valid instances
-			 * of the fragmentDB has been passed via the constructor.
+			 * of the FragmentDB has been passed via the constructor.
 			 *
 			 * @warning If you called setup() and then set the FragmentDB to NULL via setFragmentDB()
 			 *          you will need to call setup() again in order to prevent lazy loading.
