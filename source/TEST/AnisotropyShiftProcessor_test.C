@@ -22,12 +22,6 @@ START_TEST(AnisotropyShiftProcessor, "$Id: AnisotropyShiftProcessor_test.C,v 1.7
 using namespace BALL;
 using namespace std;
 
-// NOTE: this is currently needed for MSVC2010
-#ifdef BALL_COMPILER_MSVC
-template std::string::size_type std::string::npos;
-template std::wstring::size_type std::wstring::npos;
-#endif
-
 AnisotropyShiftProcessor* ap = 0;
 CHECK(AnisotropyShiftProcessor::AnisotropyShiftProcessor() throw())
 	ap = new AnisotropyShiftProcessor;

@@ -23,13 +23,6 @@ START_TEST(JohnsonBoveyShiftProcessor, "$Id: JohnsonBoveyShiftProcessor_test.C,v
 using namespace BALL;
 using namespace std;
 
-// NOTE: this is currently needed for MSVC2010
-#ifdef BALL_COMPILER_MSVC
-template std::string::size_type std::string::npos;
-template std::wstring::size_type std::wstring::npos;
-#endif
-
-
 JohnsonBoveyShiftProcessor* sp = 0;
 CHECK(JohnsonBoveyShiftProcessor::JohnsonBoveyShiftProcessor() throw())
 	sp = new JohnsonBoveyShiftProcessor;
