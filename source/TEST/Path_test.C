@@ -19,6 +19,10 @@ START_TEST(Path, "$Id: Path_test.C,v 1.12.30.3 2007/06/21 19:44:53 oliver Exp $"
 
 using namespace BALL;
 
+#ifdef BALL_COMPILER_MSVC
+# define chdir _chdir
+#endif
+
 ::chdir(BALL_TEST_DATA_PATH(..));
 
 CHECK(Path())
