@@ -4,8 +4,6 @@
 // $Id: list.h,v 1.23 2004/04/22 10:08:19 oliver Exp $
 //
 
-#warning "This header file is deprecated and should not be used in new code! As a replacement for BALL::List the use of std::list is strongly suggested."
-
 #ifndef BALL_DATATYPE_LIST_H
 #define BALL_DATATYPE_LIST_H
 
@@ -22,6 +20,10 @@
 #endif
 
 #include <list>
+
+#ifdef BALL_COMPILER_GXX
+#warning "This header file is deprecated and should not be used in new code! As a replacement for BALL::List the use of std::list is strongly suggested."
+#endif
 
 namespace BALL 
 {
