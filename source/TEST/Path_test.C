@@ -9,6 +9,7 @@
 ///////////////////////////
 
 #include <BALL/SYSTEM/path.h>
+#include <BALL/SYSTEM/directory.h>
 
 ///////////////////////////
 
