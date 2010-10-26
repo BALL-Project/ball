@@ -20,7 +20,7 @@ CHECK(KPCR-model)
 	model.readTrainingData();
 	model.train();
 	const Matrix<double>* res = model.getTrainingResult();
-	TEST_REAL_EQUAL(res->getRowCount(),5)
+	TEST_EQUAL(res->getRowCount(),5)
 	TEST_REAL_EQUAL((*res)[0],-23.62431)
 	TEST_REAL_EQUAL((*res)[1],14.25058)
 	TEST_REAL_EQUAL((*res)[2],1.784667)
