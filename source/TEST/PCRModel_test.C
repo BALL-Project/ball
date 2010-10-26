@@ -23,8 +23,8 @@ CHECK(PCR-model)
 	Matrix<double> eigenvectors;
 	Matrix<double> XX = pcr.getDescriptorMatrix()->t() * *pcr.getDescriptorMatrix();
 	pcr.calculateEigenvectors(XX,1.0,eigenvectors);
-	TEST_REAL_EQUAL(eigenvectors.getColumnCount(),3)
-	TEST_REAL_EQUAL(eigenvectors.getRowCount(),3)
+	TEST_EQUAL(eigenvectors.getColumnCount(),3)
+	TEST_EQUAL(eigenvectors.getRowCount(),3)
 	TEST_REAL_EQUAL(eigenvectors(1,1),-0.1998991)
 	TEST_REAL_EQUAL(eigenvectors(2,1),-0.5353127)
 	TEST_REAL_EQUAL(eigenvectors(3,1),-0.8206587)
