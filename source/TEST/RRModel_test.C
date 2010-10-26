@@ -21,7 +21,7 @@ CHECK(RR-model training)
 	model.readTrainingData();
 	model.train();
 	const Matrix<double>* res = model.getTrainingResult();
-	TEST_REAL_EQUAL(res->getRowCount(),3)
+	TEST_EQUAL(res->getRowCount(),3)
 	TEST_REAL_EQUAL((*res)[0],0.1407803)
 	TEST_REAL_EQUAL((*res)[1],0.5901905)
 	TEST_REAL_EQUAL((*res)[2],0.4159267)
