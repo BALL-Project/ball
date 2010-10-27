@@ -78,7 +78,7 @@ class SVDSolverTraits<ComplexDouble, mtraits>
  *  This class computes the singular value decomposition of a given matrix and stores the results.
  */
 template <class valuetype, class mtraits>
-class BALL_EXPORT SVDSolver
+class SVDSolver
 {
 	public:
 		/** Type of the singular values.
