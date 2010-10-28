@@ -221,6 +221,7 @@ SET(BALL_STRUCTURE_TESTS
 	ReconstructFragmentProcessor_test
 	ResidueChecker_test
 	RMSDMinimizer_test
+	SideChainPlacementProcessor_test
 	SmilesParser_test
 	SmartsParser_test
 	SmartsMatcher_test

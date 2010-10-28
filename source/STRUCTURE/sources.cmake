@@ -46,6 +46,7 @@ SET(SOURCES_LIST
 	SESFace.C
 	SESVertex.C
 	secondaryStructureProcessor.C
+	sideChainPlacementProcessor.C
 	smilesParser.C
 	smartsParser.C
 	smartsMatcher.C
