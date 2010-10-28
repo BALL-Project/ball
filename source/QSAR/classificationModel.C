@@ -126,7 +126,7 @@ namespace BALL
 			uint no_features = descriptor_matrix_.Ncols();
 			uint no_compounds = descriptor_matrix_.Nrows();
 			
-			discretization_information.ReSize(2,no_features);
+			discretization_information.resize(2,no_features);
 			discretization_information.setRow(1,1e10); // minimum of each feature in first row
 			discretization_information.setRow(2,-1e10); // maximum of each feature in second row
 			

@@ -57,7 +57,7 @@ void LibsvmModel::train()
 
 	kernel->calculateKernelMatrix(descriptor_matrix_, K_);
 	struct svm_problem* prob = NULL;
-	training_result_.ReSize(K_.Nrows(),Y_.Ncols());
+	training_result_.resize(K_.Nrows(),Y_.Ncols());
 	offsets_.resize(Y_.Ncols());
 	
 	for(int act=1; act<=Y_.Ncols(); act++)

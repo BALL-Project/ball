@@ -125,10 +125,10 @@ namespace BALL
 			{	
 				int test_size= (lines+i)/k;
 				int training_size=lines-test_size;
-				model_->Y_.ReSize(training_size,model_->data->Y_.size());
-				model_->descriptor_matrix_.ReSize(training_size,col); 
+				model_->Y_.resize(training_size,model_->data->Y_.size());
+				model_->descriptor_matrix_.resize(training_size,col); 
 				test_substances_.resize(test_size);
-				test_Y_.ReSize(test_size,model_->data->Y_.size());
+				test_Y_.resize(test_size,model_->data->Y_.size());
 				
 				int train_line=0;  // no of line in descriptor_matrix_ of model_
 				int test_line=0;
@@ -253,7 +253,7 @@ namespace BALL
 			R2_=0; ssE_=0; ssR_=0; std_err_=0; F_regr_=0;
 			int lines=model_->data->descriptor_matrix_[0].size();
 			test_substances_.resize(lines);
-			test_Y_.ReSize(lines,model_->data->Y_.size());
+			test_Y_.resize(lines,model_->data->Y_.size());
 			
 			bool back_transform=0;
 			if(transform && model_->data->descriptor_transformations_.size()!=0)
@@ -299,7 +299,7 @@ namespace BALL
 			{
 				no_descriptors=model_->descriptor_IDs_.size();
 			}
-			coefficient_stderr_.ReSize(no_descriptors, no_activities);
+			coefficient_stderr_.resize(no_descriptors, no_activities);
 			
 			if(b==1)
 			{
@@ -371,8 +371,8 @@ namespace BALL
 				vector<int> sample_substances(N,0); // numbers of occurences of substances within this sample
 				
 				/// create training matrix and train the model_
-				model_->descriptor_matrix_.ReSize(N,no_descriptors);
-				model_->Y_.ReSize(N,model_->data->Y_.size());
+				model_->descriptor_matrix_.resize(N,no_descriptors);
+				model_->Y_.resize(N,model_->data->Y_.size());
 				for(int j=0; j<N;j++)
 				{
 					int pos = gsl_rng_uniform_int(r,N);
@@ -393,7 +393,7 @@ namespace BALL
 					test_size++;
 				}
 				test_substances_.resize(test_size);
-				test_Y_.ReSize(test_size,model_->data->Y_.size());
+				test_Y_.resize(test_size,model_->data->Y_.size());
 				
 				
 				/// create test data set and calculate Q^2
@@ -412,7 +412,7 @@ namespace BALL
 				
 				/// create test data set and calculate R^2
 				test_substances_.resize(N);
-				test_Y_.ReSize(N,model_->data->Y_.size());
+				test_Y_.resize(N,model_->data->Y_.size());
 				test_line=0;
 				for(int j=0; j<N;j++)  
 				{

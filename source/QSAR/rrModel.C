@@ -90,7 +90,7 @@ namespace BALL
 			}
 			catch(BALL::Exception::GeneralException e)
 			{
-				training_result_.ReSize(0,0);
+				training_result_.resize(0,0);
 				throw Exception::SingularMatrixError(__FILE__,__LINE__,"Matrix for RR training is singular!! Check that descriptor_matrix_ does not contain empty columns and that lambda is not too small!");
 				return;
 			}

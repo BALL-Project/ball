@@ -378,7 +378,7 @@ namespace BALL
 
 		void Kernel::calculateKernelMatrix1(Matrix<double>& input, Matrix<double>& output) // polynomial kernel
 		{
-			output.ReSize(input.Nrows(),input.Nrows());
+			output.resize(input.Nrows(),input.Nrows());
 			//output=0;
 			for(int i=1; i<=input.Nrows();i++)
 			{
@@ -395,7 +395,7 @@ namespace BALL
 
 		void Kernel::calculateKernelMatrix1(Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output) // polynomial kernel
 		{
-			output.ReSize(m1.Nrows(),m2.Nrows());
+			output.resize(m1.Nrows(),m2.Nrows());
 			//output=0;
 			for(int i=1; i<=m1.Nrows();i++)
 			{
@@ -409,7 +409,7 @@ namespace BALL
 
 		void Kernel::calculateKernelMatrix2(Matrix<double>& input, Matrix<double>& output) // radial basis function kernel
 		{
-			output.ReSize(input.Nrows(),input.Nrows());
+			output.resize(input.Nrows(),input.Nrows());
 			for(int i=1; i<=input.Nrows();i++)
 			{
 				for(int j=i; j<=input.Nrows(); j++)
@@ -425,7 +425,7 @@ namespace BALL
 				
 		void Kernel::calculateKernelMatrix2(Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output) // radial basis function kernel
 		{
-			output.ReSize(m1.Nrows(),m2.Nrows());
+			output.resize(m1.Nrows(),m2.Nrows());
 			for(int i=1; i<=m1.Nrows();i++)
 			{
 				for(int j=1; j<=m2.Nrows(); j++)
@@ -438,7 +438,7 @@ namespace BALL
 				
 		void Kernel::calculateKernelMatrix3(Matrix<double>& input, Matrix<double>& output) // sigmoid kernel
 		{
-			output.ReSize(input.Nrows(),input.Nrows());
+			output.resize(input.Nrows(),input.Nrows());
 			for(int i=1; i<=input.Nrows();i++)
 			{
 				for(int j=i; j<=input.Nrows(); j++)
@@ -454,7 +454,7 @@ namespace BALL
 				
 		void Kernel::calculateKernelMatrix3(Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output) // sigmoid kernel
 		{
-			output.ReSize(m1.Nrows(),m2.Nrows());
+			output.resize(m1.Nrows(),m2.Nrows());
 			for(int i=1; i<=m1.Nrows();i++)
 			{
 				for(int j=1; j<=m2.Nrows(); j++)
@@ -468,7 +468,7 @@ namespace BALL
 				
 		void Kernel::calculateKernelMatrix4(Matrix<double>& input, Matrix<double>& output) // individual kernel
 		{
-			output.ReSize(input.Nrows(),input.Nrows());
+			output.resize(input.Nrows(),input.Nrows());
 			for(int i=1; i<=input.Nrows();i++)
 			{
 				for(int j=i; j<=input.Nrows(); j++)
@@ -483,7 +483,7 @@ namespace BALL
 				
 		void Kernel::calculateKernelMatrix4(Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output) // individual kernel
 		{
-			output.ReSize(m1.Nrows(),m2.Nrows());
+			output.resize(m1.Nrows(),m2.Nrows());
 			for(int i=1; i<=m1.Nrows();i++)
 			{
 				for(int j=1; j<=m2.Nrows(); j++)
@@ -501,7 +501,7 @@ namespace BALL
 				throw Exception::KernelParameterError(__FILE__,__LINE__, "Kernel.weights_ has wrong size! One weight for each column of the given matrix is needed in order to be able to calculate a weighted distance matrix!");
 			}
 			
-			output.ReSize(input.Nrows(),input.Nrows());
+			output.resize(input.Nrows(),input.Nrows());
 			output=0;
 			// for all substances, calculate their weighted cross-product
 			for(int i=1; i<=input.Nrows();i++)
@@ -521,7 +521,7 @@ namespace BALL
 
 		void Kernel::calculateWeightedKernelMatrix(Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output)
 		{
-			output.ReSize(m1.Nrows(),m2.Nrows());
+			output.resize(m1.Nrows(),m2.Nrows());
 			output=0;
 			// for all substances, calculate their weighted cross-product
 			for(int i=1; i<=m1.Nrows();i++)

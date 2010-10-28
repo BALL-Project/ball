@@ -59,7 +59,7 @@ namespace BALL
 			}
 
 			// calculate sigma_ = covariance matrix of descriptors
-			sigma_.ReSize(descriptor_matrix_.Ncols(),descriptor_matrix_.Ncols());
+			sigma_.resize(descriptor_matrix_.Ncols(),descriptor_matrix_.Ncols());
 			for(int i=1;i<=descriptor_matrix_.Ncols();i++)
 			{
 				double mi=Statistics::getMean(descriptor_matrix_,i);
@@ -261,7 +261,7 @@ namespace BALL
 			
 			if(!trained) 
 			{
-				sigma_.ReSize(0,0);
+				sigma_.resize(0,0);
 				return;
 			}
 			

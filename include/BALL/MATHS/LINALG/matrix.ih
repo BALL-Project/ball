@@ -732,7 +732,6 @@ namespace BALL {
 			int Nrows() const;
 			int Ncols() const;
 			
-			void ReSize(int n, int m) {resize(n,m);};
 			void resize(int n, int m);
 			
 			/** sets all cells of row <id> to the given value */

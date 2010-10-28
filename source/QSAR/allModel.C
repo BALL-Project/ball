@@ -36,7 +36,7 @@ namespace BALL
 			kw_ = kw;
 			type_ = "ALL";
 			lambda_ = 0.005;
-			training_result_.ReSize(0,0);
+			training_result_.resize(0,0);
 			default_no_opt_steps_ = 50;
 		}
 
@@ -57,7 +57,7 @@ namespace BALL
 
 		void ALLModel::calculateEuclDistanceMatrix(Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output)
 		{
-			output.ReSize(m1.Nrows(),m2.Nrows());
+			output.resize(m1.Nrows(),m2.Nrows());
 			output=0;
 			Statistics n;
 			for(int i=1; i<=m1.Nrows();i++)

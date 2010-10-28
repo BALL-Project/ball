@@ -70,8 +70,8 @@ namespace BALL
 			for(int act=0; act<Y_.Ncols();act++)
 			{
 				// calculate mean and stddev of each feature for _each_ class
-				mean_[act].ReSize(labels_.size(),descriptor_matrix_.Ncols());
-				stddev_[act].ReSize(labels_.size(),descriptor_matrix_.Ncols());
+				mean_[act].resize(labels_.size(),descriptor_matrix_.Ncols());
+				stddev_[act].resize(labels_.size(),descriptor_matrix_.Ncols());
 				mean_[act]=0; stddev_[act]=0;
 			
 				for(int i=1;i<=descriptor_matrix_.Ncols();i++)

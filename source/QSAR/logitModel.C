@@ -255,11 +255,11 @@ namespace BALL
 			int no_y = line0.getField(3,"\t").toInt();
 			bool centered_data = line0.getField(4,"\t").toInt();
 			bool centered_y = line0.getField(5,"\t").toInt();
-			training_result_.ReSize(no_descriptors,no_y);
+			training_result_.resize(no_descriptors,no_y);
 			descriptor_names_.clear();
 			if(centered_data)
 			{
-				descriptor_transformations_.ReSize(2,no_descriptors);
+				descriptor_transformations_.resize(2,no_descriptors);
 			}
 			getline(input,line0);  // skip empty line
 			getline(input,line0);  // skip comment line
@@ -276,7 +276,7 @@ namespace BALL
 			
 			if(centered_y)
 			{
-				y_transformations_.ReSize(2,no_y);
+				y_transformations_.resize(2,no_y);
 				for(int i=1; i<=no_y; i++)
 				{
 					getline(input,line0);

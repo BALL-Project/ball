@@ -104,10 +104,10 @@ namespace BALL
 			{	
 				int test_size= (lines+i)/k;
 				int training_size=lines-test_size;
-				model_->Y_.ReSize(training_size,model_->data->Y_.size());
-				model_->descriptor_matrix_.ReSize(training_size,col); 
+				model_->Y_.resize(training_size,model_->data->Y_.size());
+				model_->descriptor_matrix_.resize(training_size,col); 
 				test_substances_.resize(test_size);
-				test_Y_.ReSize(test_size,model_->data->Y_.size());
+				test_Y_.resize(test_size,model_->data->Y_.size());
 				
 				int train_line=0;  // no of line in descriptor_matrix_ of model_
 				int test_line=0;
@@ -148,7 +148,7 @@ namespace BALL
 
 		void ClassificationValidation::testAllSubstances(bool transform)
 		{	
-			confusion_matrix_.ReSize(4,clas_model->labels_.size());
+			confusion_matrix_.resize(4,clas_model->labels_.size());
 			confusion_matrix_=0;
 			class_results_.resize(clas_model->labels_.size());
 			class_results_ = 0;
@@ -200,7 +200,7 @@ namespace BALL
 		{	
 			int lines=model_->data->descriptor_matrix_[0].size();
 			test_substances_.resize(lines);
-			test_Y_.ReSize(lines,model_->data->Y_.size());
+			test_Y_.resize(lines,model_->data->Y_.size());
 			
 			class_results_.resize(clas_model->labels_.size());
 			class_results_ = 0;
@@ -267,8 +267,8 @@ namespace BALL
 				class_results_ = 0;
 			
 				/// create training matrix and train the model_
-				model_->descriptor_matrix_.ReSize(N,no_descriptors);
-				model_->Y_.ReSize(N,model_->data->Y_.size());
+				model_->descriptor_matrix_.resize(N,no_descriptors);
+				model_->Y_.resize(N,model_->data->Y_.size());
 				for(int j=0; j<N;j++)
 				{
 					//int pos = rand()%N;
@@ -290,7 +290,7 @@ namespace BALL
 					test_size++; 
 				}
 				test_substances_.resize(test_size);
-				test_Y_.ReSize(test_size,model_->data->Y_.size());
+				test_Y_.resize(test_size,model_->data->Y_.size());
 				
 			
 				/// create test data set and calculate quality_ of prediction
@@ -311,7 +311,7 @@ namespace BALL
 				
 				/// create test data set and calculate quality_ of fit to training data	
 				test_substances_.resize(N);
-				test_Y_.ReSize(N,model_->data->Y_.size());
+				test_Y_.resize(N,model_->data->Y_.size());
 				test_line=0;
 				for(int j=0; j<N;j++)
 				{	

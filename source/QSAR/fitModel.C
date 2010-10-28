@@ -138,7 +138,7 @@ namespace BALL
 				return;
 			}
 				
-			training_result_.ReSize(descriptor_matrix_.Ncols(),Y_.Ncols());
+			training_result_.resize(descriptor_matrix_.Ncols(),Y_.Ncols());
 			
 			for(c=0; c<(unsigned int)Y_.Ncols(); c++)
 			{	

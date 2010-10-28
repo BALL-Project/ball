@@ -192,8 +192,8 @@ namespace BALL
 			int no_substances = line0.getField(6,"\t").toInt();
 			bool trained = line0.getField(7,"\t").toInt();
 			
-			if(trained) training_result_.ReSize(no_substances,no_y);
-			else training_result_.ReSize(0,0);
+			if(trained) training_result_.resize(no_substances,no_y);
+			else training_result_.resize(0,0);
 			descriptor_names_.clear();
 			substance_names_.clear();
 			

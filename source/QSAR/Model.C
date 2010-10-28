@@ -114,21 +114,21 @@ namespace BALL
 				col=descriptor_IDs_.size();
 			}
 			int lines=data->descriptor_matrix_[0].size();
-			
-			descriptor_matrix_.ReSize(lines,col);
-			
+
+			descriptor_matrix_.resize(lines,col);
+
 			substance_names_=data->substance_names_;
 			descriptor_names_.resize(col);
-			Y_.ReSize(lines, data->Y_.size());
+			Y_.resize(lines, data->Y_.size());
 			bool transform=0; bool y_transform = 0;
 			
 			if(data->descriptor_transformations_.size()!=0)
 			{
 				transform=1;
-				descriptor_transformations_.ReSize(2,col);
+				descriptor_transformations_.resize(2,col);
 				if(data->y_transformations_.size()!=0)
 				{
-					y_transformations_.ReSize(2,data->Y_.size());
+					y_transformations_.resize(2,data->Y_.size());
 					y_transform=1;
 				}
 			}
@@ -203,10 +203,10 @@ namespace BALL
 			if(data->descriptor_transformations_.size()!=0)
 			{
 				transform=1;
-				descriptor_transformations_.ReSize(2,col);
+				descriptor_transformations_.resize(2,col);
 				if(data->y_transformations_.size()!=0)
 				{
-					y_transformations_.ReSize(2,data->Y_.size());
+					y_transformations_.resize(2,data->Y_.size());
 					y_transform=1;
 				}
 			}
@@ -479,7 +479,7 @@ namespace BALL
 			
 		void Model::readMatrix(Matrix<double>& mat, ifstream& in, uint lines, uint col)
 		{
-			mat.ReSize(lines,col);
+			mat.resize(lines,col);
 			String line;
 			
 			for(uint i=1;i<=lines;i++)
@@ -607,7 +607,7 @@ namespace BALL
 
 		void Model::readResponseTransformationFromFile(ifstream& input, int no_y)
 		{
-			y_transformations_.ReSize(2,no_y);
+			y_transformations_.resize(2,no_y);
 			String line;
 			for(int i=1; i<=no_y; i++)
 			{

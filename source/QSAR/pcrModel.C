@@ -75,7 +75,7 @@ namespace BALL
 			}
 			last_vector--;
 
-			output.ReSize(data.Nrows(),cols);
+			output.resize(data.Nrows(),cols);
 			
 			// getRightSingularVectors() returns V.t() NOT V, so we have to transform back to V here !!
 			Matrix<double> V = solver.getRightSingularVectors().t();

@@ -230,8 +230,8 @@ namespace BALL
 			descriptor_names_.clear();
 			if(transformation) descriptor_transformations_.resize(2,no_descriptors);
 			else descriptor_transformations_.resize(0,0);
-			if(no_coefficients>0) training_result_.ReSize(no_descriptors,no_coefficients);
-			else training_result_.ReSize(0,0);
+			if(no_coefficients>0) training_result_.resize(no_descriptors,no_coefficients);
+			else training_result_.resize(0,0);
 			String line;
 			getline(input,line);  // skip comment line
 			
