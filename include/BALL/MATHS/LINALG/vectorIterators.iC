@@ -1,3 +1,6 @@
+#ifndef BALL_MATHS_LINALG_VECTORITERATORS_H
+#define BALL_MATHS_LINALG_VECTORITERATORS_H
+
 namespace BALL
 {
 	template<typename valuetype>
@@ -48,3 +51,5 @@ namespace BALL
 		return ConstReverse_Iterator::end(*this);
 	}
 }
+
+#endif //BALL_MATHS_LINALG_VECTORITERATORS_H
