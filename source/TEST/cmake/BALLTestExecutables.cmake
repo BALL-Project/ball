@@ -21,7 +21,6 @@ SET(BALL_MATHS_TESTS
 	Line3_test
 	Circle3_test
 	SimpleBox3_test
-	SVDSolver_test
 	Box3_test
 	Plane3_test
 	Sphere3_test
@@ -30,7 +29,6 @@ SET(BALL_MATHS_TESTS
 	PiecewiseFunction_test
 	PiecewisePolynomial_test
 )
-
 SET(BALL_SYSTEM_TESTS
 	Directory_test
 	FileSystem_test
@@ -269,20 +267,29 @@ SET(BALL_QSAR_TESTS
 	SimpleDescriptors_test
 	SurfaceBase_test
 	SurfaceDescriptors_test
-	MLRModel_test
-	RRModel_test
-	PCRModel_test
-	PLSModel_test
-	KPLSModel_test
-	KPCRModel_test
-	GPModel_test
-	KNNModel_test
-	ALLModel_test
 	NBModel_test
 	SNBModel_test
-	LDAModel_test
-	FeatureSelection_test
 )
+
+IF(BALL_HAS_LAPACK)
+	LIST(APPEND BALL_MATHS_TESTS
+		SVDSolver_test
+	)
+
+	LIST(APPEND BALL_QSAR_TESTS
+		ALLModel_test
+		FeatureSelection_test
+		GPModel_test
+		KNNModel_test
+		KPCRModel_test
+		KPLSModel_test
+		LDAModel_test
+		MLRModel_test
+		PCRModel_test
+		PLSModel_test
+		RRModel_test
+	)
+ENDIF()
 
 SET(BALL_XDR_TESTS
 	XDRPersistenceManager_test

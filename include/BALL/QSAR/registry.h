@@ -25,23 +25,6 @@
 #include <BALL/QSAR/modelFactory.h>
 #endif
 
-#include <BALL/QSAR/QSARData.h>
-#include <BALL/QSAR/pcrModel.h>
-#include <BALL/QSAR/mlrModel.h>
-#include <BALL/QSAR/plsModel.h>
-#include <BALL/QSAR/oplsModel.h>
-#include <BALL/QSAR/kplsModel.h>
-#include <BALL/QSAR/allModel.h>
-#include <BALL/QSAR/gpModel.h>
-#include <BALL/QSAR/kpcrModel.h>
-#include <BALL/QSAR/ldaModel.h>
-#include <BALL/QSAR/svmModel.h>
-#include <BALL/QSAR/logitModel.h>
-#include <BALL/QSAR/knnModel.h>
-#include <BALL/QSAR/rrModel.h>
-#include <BALL/QSAR/snBModel.h>
-#include <BALL/QSAR/nBModel.h>
-
 #include <map>
 
 #ifdef BALL_HAS_LIBSVM
@@ -52,7 +35,8 @@ namespace BALL
 {
 	namespace QSAR
 	{
-		
+		class QSARData;
+
 		typedef Model* (*CreateMethod) (const QSARData& q);
 		typedef Model* (*CreateKernel1) (const QSARData& q, int k, double p1, double p2);
 		typedef Model* (*CreateKernel2) (const QSARData& q, String s1, String s2);

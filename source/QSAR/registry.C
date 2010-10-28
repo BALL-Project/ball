@@ -20,6 +20,26 @@
 
 #include <BALL/QSAR/registry.h>
 
+#include <BALL/QSAR/QSARData.h>
+#include <BALL/QSAR/svmModel.h>
+#include <BALL/QSAR/logitModel.h>
+#include <BALL/QSAR/snBModel.h>
+#include <BALL/QSAR/nBModel.h>
+
+#ifdef BALL_HAS_LAPACK
+	#include <BALL/QSAR/allModel.h>
+	#include <BALL/QSAR/gpModel.h>
+	#include <BALL/QSAR/knnModel.h>
+	#include <BALL/QSAR/kpcrModel.h>
+	#include <BALL/QSAR/kplsModel.h>
+	#include <BALL/QSAR/ldaModel.h>
+	#include <BALL/QSAR/mlrModel.h>
+	#include <BALL/QSAR/oplsModel.h>
+	#include <BALL/QSAR/pcrModel.h>
+	#include <BALL/QSAR/plsModel.h>
+	#include <BALL/QSAR/rrModel.h>
+#endif
+
 using namespace std;
 
 namespace BALL
@@ -46,7 +66,7 @@ namespace BALL
 			default_gridsearch_par2_start = -0.25;
 			
 			/// add new Model classes here:
-			
+#ifdef BALL_HAS_LAPACK
 			RegistryEntry r0(0,1,"Multiple Linear Regression", "MLR", (CreateMethod) &ModelFactory<MLRModel>::create);
 			addEntry(r0,0);
 			
@@ -77,7 +97,7 @@ namespace BALL
 			r2.optimizableParameters.insert(1);
 			r2.latent_variables=1;
 			addEntry(r2,4);
-			
+
 			RegistryEntry r3(0,1,"Automated Lazy Learning","ALL",(CreateMethod) &ModelFactory<ALLModel>::create);
 			r3.parameterNames.push_back("kernel width");
 			r3.parameterNames.push_back("lambda");
@@ -85,7 +105,7 @@ namespace BALL
 			r3.parameterDefaults.push_back(0.003);
 			r3.optimizableParameters.insert(0);
 			addEntry(r3,5);
-			
+
 			RegistryEntry r31(0,1,"k Nearest Neighbor Regression","KNN",(CreateMethod) &ModelFactory<KNNModel>::create);
 			r31.parameterNames.push_back("k (number of nearest neighbors)");
 			r31.parameterNames.push_back("lambda");
@@ -93,25 +113,26 @@ namespace BALL
 			r31.parameterDefaults.push_back(0.003);
 			r31.optimizableParameters.insert(0);
 			addEntry(r31,6);
-			
+
 			RegistryEntry r4(1,1,"Kernel Partial Least Squares","KPLS",(CreateKernel1) &ModelFactory<KPLSModel>::createKernel1, (CreateKernel2) &ModelFactory<KPLSModel>::createKernel2);
 			r4.parameterNames.push_back("number of PLS components");
 			r4.parameterDefaults.push_back(10);
 			r4.optimizableParameters.insert(0);
 			r4.latent_variables=1;
 			addEntry(r4,7);
-			
+
 			RegistryEntry r5(1,1,"Kernel Principal Component Regression","KPCR",(CreateKernel1) &ModelFactory<KPCRModel>::createKernel1, (CreateKernel2) &ModelFactory<KPCRModel>::createKernel2);
 			r5.parameterNames.push_back("Fraction of variance to be explained");
 			r5.parameterDefaults.push_back(0.95);
 			r5.latent_variables=1;
 			addEntry(r5,8);
-			
+
 			RegistryEntry r6(1,1,"Gausssian Process","GP",(CreateKernel1) &ModelFactory<GPModel>::createKernel1, (CreateKernel2) &ModelFactory<GPModel>::createKernel2);
 			r6.parameterNames.push_back("lambda");
 			r6.parameterDefaults.push_back(0.03);
 			addEntry(r6,9);
-			
+#endif
+
 		#ifdef BALL_HAS_LIBSVM
 			RegistryEntry r9(1,1,"Support Vector Regression","SVR",(CreateKernel1) &ModelFactory<LibsvmModel>::createKernel1, NULL);
 			r9.parameterNames.push_back("use nu-SVR (else epsilon-SVR)?");
@@ -128,12 +149,12 @@ namespace BALL
 			r9.parameterDefaults.push_back(1);
 			addEntry(r9,10);
 		#endif
-			
+#ifdef BALL_HAS_LAPACK
 			RegistryEntry r7(0,0,"Linear Discriminant Analysis","LDA",(CreateMethod) &ModelFactory<LDAModel>::create);
 			r7.parameterNames.push_back("lambda");
 			r7.parameterDefaults.push_back(0.03);
 			addEntry(r7,11);
-			
+#endif
 		// 	RegistryEntry r8(0,0,"Logistical Regression","Logit",(CreateMethod) &ModelFactory<LogitModel>::create);
 		// 	addEntry(r8,12);
 			
