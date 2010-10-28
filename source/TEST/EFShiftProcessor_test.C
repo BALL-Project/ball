@@ -11,6 +11,7 @@
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/STRUCTURE/defaultProcessors.h>
+#include <BALL/KERNEL/PTE.h>
 
 ///////////////////////////
 
@@ -163,15 +164,17 @@ CHECK(chemical shifts)
 					case  0: TEST_REAL_EQUAL(shift, -0.02835) break;
 					case  1: TEST_REAL_EQUAL(shift, -0.01370) break;
 					case  2: TEST_REAL_EQUAL(shift, -0.01314) break;
-					case  3: TEST_REAL_EQUAL(shift, -0.04398) break;
-					case  4: TEST_REAL_EQUAL(shift,  0.03422) break;
-					case  5: TEST_REAL_EQUAL(shift, -0.04594) break;
-					case  6: TEST_REAL_EQUAL(shift, -0.03188) break;
-					case  7: TEST_REAL_EQUAL(shift, -0.03139) break;
-					case  8: TEST_REAL_EQUAL(shift, -0.03043) break;
-					case  9: TEST_REAL_EQUAL(shift,  0.01749) break;
-					case 10: TEST_REAL_EQUAL(shift, -0.03506) break;
-					case 11: TEST_REAL_EQUAL(shift,  0.11131) break;
+					case  3: TEST_REAL_EQUAL(shift, -0.01759) break;
+					case  4: TEST_REAL_EQUAL(shift, -0.04398) break;
+					case  5: TEST_REAL_EQUAL(shift,  0.03422) break;
+					case  6: TEST_REAL_EQUAL(shift, -0.04594) break;
+					case  7: TEST_REAL_EQUAL(shift, -0.03188) break;
+					case  8: TEST_REAL_EQUAL(shift, -0.03139) break;
+					case  9: TEST_REAL_EQUAL(shift, -0.03043) break;
+					case 10: TEST_REAL_EQUAL(shift,  0.00699) break;
+					case 11: TEST_REAL_EQUAL(shift,  0.01749) break;
+					case 12: TEST_REAL_EQUAL(shift, -0.03506) break;
+					case 13: TEST_REAL_EQUAL(shift,  0.11131) break;
 				}
 			}
 		}
