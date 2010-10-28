@@ -17,12 +17,13 @@ class Selector
   Selector();
   Selector(const Selector& /selector/);
   Selector(const String& /expression_string/);
-  ~Selector() throw();
-  Processor::Result operator () (Composite& /composite/) throw();
+  ~Selector();
+  Processor::Result operator () (Composite& /composite/);
 %MethodCode
 	sipRes = sipCpp->operator () (*a0);
 %End
 
-  virtual bool start() throw();
+  virtual bool start();
   Size getNumberOfSelectedAtoms() const;
+	list<Atom*> getSelectedAtoms();
 };
