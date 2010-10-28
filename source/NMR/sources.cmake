@@ -4,7 +4,6 @@ SET(DIRECTORY source/NMR)
 ### list all filenames of the directory here ###
 SET(SOURCES_LIST
 	anisotropyShiftProcessor.C
-	assignShiftProcessor.C
 	clearShiftProcessor.C
 	EFShiftProcessor.C
 	empiricalHSShiftProcessor.C

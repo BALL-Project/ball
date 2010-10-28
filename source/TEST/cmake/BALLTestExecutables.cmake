@@ -151,7 +151,6 @@ SET(BALL_MOLMEC_TESTS
 )
 
 SET(BALL_NMR_TESTS
-	AssignShiftProcessor_test
 	RandomCoilShiftProcessor_test
 	AnisotropyShiftProcessor_test
 	ClearShiftProcessor_test
