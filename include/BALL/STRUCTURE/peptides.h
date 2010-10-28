@@ -67,7 +67,6 @@ namespace BALL
 		 		
 				@param 	aa   amino acid string in question
 				@return bool - true if aa is a valid amino acid three-letter code, false otherwise 
-
 		 */
 		BALL_EXPORT bool IsThreeLetterCode(const String& aa);
 
