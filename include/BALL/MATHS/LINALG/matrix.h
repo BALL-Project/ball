@@ -18,16 +18,18 @@ namespace BALL {
 
 #include <BALL/MATHS/LINALG/matrix.ih>
 
-namespace BALL
-{
-	// explicit instantiation needed to export the template
-	template class BALL_EXPORT Matrix<float, StandardTraits>;
-	template class BALL_EXPORT Matrix<double, StandardTraits>;
-	template class BALL_EXPORT Matrix<ComplexFloat, StandardTraits>;
-	template class BALL_EXPORT Matrix<ComplexDouble, StandardTraits>;
-}
+#ifdef BALL_OS_WINDOWS
+	namespace BALL
+	{
+		// explicit instantiation needed to export the template
+		template class BALL_EXPORT Matrix<float, StandardTraits>;
+		template class BALL_EXPORT Matrix<double, StandardTraits>;
+		template class BALL_EXPORT Matrix<ComplexFloat, StandardTraits>;
+		template class BALL_EXPORT Matrix<ComplexDouble, StandardTraits>;
+	}
+#endif
 
-#include <BALL/MATHS/LINALG/vector.h>
+#include <BALL/MATHS/LINALG/vector.ih>
 
 #include <BALL/MATHS/LINALG/upperTriangularMatrix.ih>
 #include <BALL/MATHS/LINALG/upperTriangularMatrixConstructors.iC>
@@ -48,5 +50,10 @@ namespace BALL
 #include <BALL/MATHS/LINALG/matrixBasicFunctions.iC>
 #include <BALL/MATHS/LINALG/matrixIO.iC>
 #include <BALL/MATHS/LINALG/matrixIterator.iC>
+
+#include <BALL/MATHS/LINALG/vectorConstructors.iC>
+#include <BALL/MATHS/LINALG/vectorIO.iC>
+#include <BALL/MATHS/LINALG/vectorBasicFunctions.iC>
+#include <BALL/MATHS/LINALG/vectorIterators.iC>
 
 #endif // MALL_KERNEL_MATRIX_H
