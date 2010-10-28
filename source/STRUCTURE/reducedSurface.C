@@ -1883,17 +1883,49 @@ namespace BALL
 		Vector3 origin(x_min - 2*dist, y_min - 2*dist, z_min - 2*dist);
 		HashGrid3<Position> grid(origin, nx, ny, nz, dist);
 
+		HashGridBox3<Position>* box;
+		HashGridBox3<Position>::ConstBoxIterator b;
+		HashGridBox3<Position>::ConstDataIterator d;
+
+		std::list<Position> to_delete;
 		Vector3 pos;
 		for (Position i = 0; i < rs_->number_of_atoms_; i++)
 		{
 			pos.set(rs_->atom_[i].p.x, rs_->atom_[i].p.y, rs_->atom_[i].p.z);
-			grid.insert(pos, i);
+
+			// remove atoms that are fully contained in another atom
+			double radius_i = rs_->atom_[i].radius;
+			bool too_close = false;
+			box = grid.getBox(pos);
+			for (b = box->beginBox(); b != box->endBox() && !too_close; b++)
+			{
+				for (d = b->beginData(); d != b->endData() && !too_close; d++)
+				{
+					double radius_d = rs_->atom_[*d].radius;
+					if (rs_->atom_[i].p.getSquareDistance(rs_->atom_[*d].p) <= std::max(radius_i, radius_d))
+					{
+						too_close = true;
+						to_delete.push_back(i);
+						if (radius_i > radius_d)
+						{
+							rs_->atom_[*d].p = rs_->atom_[i].p;
+							rs_->atom_[*d].radius = rs_->atom_[i].radius;
+						}
+					}
+				}
+			}
+			
+			if (!too_close)
+				grid.insert(pos, i);
+		}
+
+		for (std::list<Position>::reverse_iterator si = to_delete.rbegin(); si != to_delete.rend(); ++si)
+		{
+			rs_->atom_.erase(rs_->atom_.begin()+*si);
+			rs_->number_of_atoms_--;
 		}
 
 		double offset;
-		HashGridBox3<Position>* box;
-		HashGridBox3<Position>::ConstBoxIterator b;
-		HashGridBox3<Position>::ConstDataIterator d;
 		
 		for (Position i = 0; i < rs_->number_of_atoms_-1; i++)
 		{
