@@ -70,6 +70,15 @@ const valuetype& Vector<valuetype>::operator [] (size_t position) const
 }
 
 template <typename valuetype>
+Vector<valuetype> Vector<valuetype>::t()
+{
+	Vector<valuetype> v;
+	v = *this;
+	v.is_column_vector_ = !is_column_vector_;
+	return v;
+}
+
+template <typename valuetype>
 Vector<valuetype>& Vector<valuetype>::operator+= (const Vector<valuetype>& B)
 	throw(Exception::VectorHasWrongDimension)
 {

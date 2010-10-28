@@ -107,14 +107,8 @@ namespace BALL {
 			const valuetype& operator [] (size_t position) const;
 			
 			/** return the transposed of this vector */
-			virtual Vector<valuetype> t() 
-			{ 
-				Vector<valuetype> v;
-				v = *this;
-				v.is_column_vector_ = !is_column_vector_;
-				return v;
-			};
-			
+			virtual Vector<valuetype> t();
+
 			/** set all cells of this vector to the given value */
 			void operator=(valuetype value);
 			
