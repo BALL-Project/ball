@@ -78,4 +78,5 @@ class FragmentDistanceCollector
 	using namespace BALL;
 %End
 Angle calculateTorsionAngle(const Atom& /a1/, const Atom& /a2/, const Atom& /a3/, const Atom& /a4/);
-Angle calculateBondAngle(const Atom& /a1/, const Atom& /a2/, const Atom& /a3/); 
+Angle setTorsionAngle(const Atom& /a1/, const Atom& /a2/, Atom& /a3/, const Atom& /a4/, Angle a);
+Angle calculateBondAngle(const Atom& /a1/, const Atom& /a2/, const Atom& /a3/);
