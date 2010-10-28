@@ -13,6 +13,7 @@
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/FORMAT/PDBFile.h>
+#include <BALL/KERNEL/PTE.h>
 
 ///////////////////////////
 
@@ -23,6 +24,8 @@ START_TEST(HaighMallionShiftProcessor, "$Id: HaighMallionShiftProcessor_test.C,v
 
 using namespace BALL;
 using namespace std;
+
+PRECISION(1e-2)
 
 HaighMallionShiftProcessor* sp = 0;
 CHECK(HaighMallionShiftProcessor::HaighMallionShiftProcessor() throw())
@@ -119,7 +122,7 @@ CHECK(chemical shifts/with rings)
 			shifts.insert(name, shift);
 		}
 	}
-	TEST_EQUAL(shifts.size(), 97)
+	TEST_EQUAL(shifts.size(), 76)
 
 	HaighMallionShiftProcessor sp;
 	sp.setParameters(parameters);
@@ -151,7 +154,7 @@ CHECK(chemical shifts/with rings)
 				}
 			}
 		}
-		TEST_EQUAL(i, 97)
+		TEST_EQUAL(i, 76)
 		TEST_EQUAL(shifts.size(), 0)
 		if (shifts.size() != 0)
 		{

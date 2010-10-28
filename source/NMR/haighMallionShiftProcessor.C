@@ -144,6 +144,13 @@ namespace BALL
 		{
 			all_hydrogen_are_targets_ = parameter_section.options.getBool("all_hydrogens_are_targets");
 		}		
+
+		// Check whether CA shifts should be corrected by their HA shifts
+		correct_CA_shifts_ = false;
+		if (parameter_section.options.has("correct_CA_shifts"))
+		{
+			correct_CA_shifts_ = parameter_section.options.getBool("correct_CA_shifts");
+		}		
 		
 		// Read the default hydrogen target nucleus.
 		default_hydrogen_target_nucleus_factor_ = 5.13;
@@ -344,6 +351,8 @@ namespace BALL
 				// Find the right target factor.
 				if (target_nucleus_factors_.has(targets_[t]->getName()))
 						target_nucleus_factor = target_nucleus_factors_[targets_[t]->getName()];
+				else if (targets_[t]->getElement().getSymbol() == "H")
+					target_nucleus_factor = default_hydrogen_target_nucleus_factor_;
 
 				float new_rc_shift  = intensity_factors_[effector_types_[e]] * target_nucleus_factor * geometrical_factor;
 				
@@ -421,11 +430,18 @@ namespace BALL
 		{
 			atom->clearProperty(PROPERTY__RING_CURRENT_SHIFT);
 			
-			for (Position i = 0; i < target_names_.size(); i++)
+			if (all_hydrogen_are_targets_ && atom->getElement().getSymbol() == "H")
 			{
-				if (target_names_[i] == atom->getName())
+				targets_.push_back(atom);
+			}
+			else
+			{
+				for (Position i = 0; i < target_names_.size(); i++)
 				{
-						targets_.push_back(atom);
+					if (target_names_[i] == atom->getName())
+					{
+							targets_.push_back(atom);
+					}
 				}
 			}
 		}
@@ -522,6 +538,9 @@ namespace BALL
 
 	void  HaighMallionShiftProcessor::postprocessing_()
 	{
+		if (!correct_CA_shifts_)
+			return;
+
 		// Try to get the system.
 		System* system = NULL;
 		

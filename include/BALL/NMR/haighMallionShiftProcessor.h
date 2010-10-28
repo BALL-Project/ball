@@ -144,7 +144,7 @@ namespace BALL
 		*/
 		bool										HA_influenced_by_all_effectors_;
 
-		/*_	A fag indicating whether a cutoff for the ring current effect is used. 
+		/*_	A flag indicating whether a cutoff for the ring current effect is used. 
 		 		Set this flag by specifying the option {\tt		use_cut_off = true} in 
 				the HaighMallionRingCurrent section of the parameter file.
 				Default is false.
@@ -159,13 +159,18 @@ namespace BALL
 		*/
 		float										cut_off2_;					
 		
-		/*_	A fag indicating whether all hydrogens are targets. 
+		/*_	A flag indicating whether all hydrogens are targets. 
 		 		Set this flag by specifying the option {\tt	all_hydrogen_are_targets = true} in 
 				the HaighMallionRingCurrent section of the parameter file.
 				Default is false.
 		*/
 		bool										all_hydrogen_are_targets_;
 
+		/** A flag indicating whether CA shifts should be corrected by the HA shift values.
+		 
+				Default is false.
+			*/
+		bool                    correct_CA_shifts_;
 
 		/*_ A flag indicating whether for the computation of the ring current effect
 		 		the target has to be projected onto the effector ring plane or not.
