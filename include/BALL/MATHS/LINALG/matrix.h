@@ -47,5 +47,6 @@ namespace BALL
 #include <BALL/MATHS/LINALG/matrixConstructors.iC>
 #include <BALL/MATHS/LINALG/matrixBasicFunctions.iC>
 #include <BALL/MATHS/LINALG/matrixIO.iC>
+#include <BALL/MATHS/LINALG/matrixIterator.iC>
 
 #endif // MALL_KERNEL_MATRIX_H

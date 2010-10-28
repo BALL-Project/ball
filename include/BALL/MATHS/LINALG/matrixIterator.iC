@@ -1,0 +1,247 @@
+#ifndef BALL_LINALG_MATRIXITERATOR_IC
+#define BALL_LINALG_MATRIXITERATOR_IC
+
+namespace BALL
+{
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::ElementRowIterator Matrix<valuetype, mtraits>::beginElementRow()
+	{
+		return ElementRowIterator::begin(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::ElementRowIterator Matrix<valuetype, mtraits>::endElementRow()
+	{
+		return ElementRowIterator::end(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::ElementRowConstIterator Matrix<valuetype, mtraits>::beginElementRow() const
+	{
+		return ElementRowConstIterator::begin(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::ElementRowConstIterator Matrix<valuetype, mtraits>::endElementRow() const
+	{
+		return ElementRowConstIterator::end(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::ElementRowReverseIterator Matrix<valuetype, mtraits>::rbeginElementRow()
+	{
+		return ElementRowReverseIterator::begin(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::ElementRowReverseIterator Matrix<valuetype, mtraits>::rendElementRow()
+	{
+		return ElementRowReverseIterator::end(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::ElementRowConstReverseIterator Matrix<valuetype, mtraits>::rbeginElementRow() const
+	{
+		return ElementRowConstReverseIterator::begin(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::ElementRowConstReverseIterator Matrix<valuetype, mtraits>::rendElementRow() const
+	{
+		return ElementRowConstReverseIterator::end(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::ElementColumnIterator Matrix<valuetype, mtraits>::beginElementColumn()
+	{
+		return ElementColumnIterator::begin(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::ElementColumnIterator Matrix<valuetype, mtraits>::endElementColumn()
+	{
+		return ElementColumnIterator::end(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::ElementColumnConstIterator Matrix<valuetype, mtraits>::beginElementColumn() const
+	{
+		return ElementColumnConstIterator::begin(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::ElementColumnConstIterator Matrix<valuetype, mtraits>::endElementColumn() const
+	{
+		return ElementColumnConstIterator::end(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::ElementColumnReverseIterator Matrix<valuetype, mtraits>::rbeginElementColumn()
+	{
+		return ElementColumnReverseIterator::begin(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::ElementColumnReverseIterator Matrix<valuetype, mtraits>::rendElementColumn()
+	{
+		return ElementColumnReverseIterator::end(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::ElementColumnConstReverseIterator Matrix<valuetype, mtraits>::rbeginElementColumn() const
+	{
+		return ElementColumnConstReverseIterator::begin(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::ElementColumnConstReverseIterator Matrix<valuetype, mtraits>::rendElementColumn() const
+	{
+		return ElementColumnConstReverseIterator::end(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::RowIterator Matrix<valuetype, mtraits>::beginRow()
+	{
+		return RowIterator::begin(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::RowIterator Matrix<valuetype, mtraits>::endRow()
+	{
+		return RowIterator::end(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::RowConstIterator Matrix<valuetype, mtraits>::beginRow() const
+	{
+		return RowConstIterator::begin(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::RowConstIterator Matrix<valuetype, mtraits>::endRow() const
+	{
+		return RowConstIterator::end(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::RowReverseIterator Matrix<valuetype, mtraits>::rbeginRow()
+	{
+		return RowReverseIterator::begin(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::RowReverseIterator Matrix<valuetype, mtraits>::rendRow()
+	{
+		return RowReverseIterator::end(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::RowConstReverseIterator Matrix<valuetype, mtraits>::rbeginRow() const
+	{
+		return RowConstReverseIterator::begin(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::RowConstReverseIterator Matrix<valuetype, mtraits>::rendRow() const
+	{
+		return RowConstReverseIterator::end(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::ColumnIterator Matrix<valuetype, mtraits>::beginColumn()
+	{
+		return ColumnIterator::begin(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::ColumnIterator Matrix<valuetype, mtraits>::endColumn()
+	{
+		return ColumnIterator::end(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::ColumnConstIterator Matrix<valuetype, mtraits>::beginColumn() const
+	{
+		return ColumnConstIterator::begin(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::ColumnConstIterator Matrix<valuetype, mtraits>::endColumn() const
+	{
+		return ColumnConstIterator::end(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::ColumnReverseIterator Matrix<valuetype, mtraits>::rbeginColumn()
+	{
+		return ColumnReverseIterator::begin(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::ColumnReverseIterator Matrix<valuetype, mtraits>::rendColumn()
+	{
+		return ColumnReverseIterator::end(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::ColumnConstReverseIterator Matrix<valuetype, mtraits>::rbeginColumn() const
+	{
+		return ColumnConstReverseIterator::begin(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::ColumnConstReverseIterator Matrix<valuetype, mtraits>::rendColumn() const
+	{
+		return ColumnConstReverseIterator::end(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::DiagonalIterator Matrix<valuetype, mtraits>::beginDiagonal()
+	{
+		return DiagonalIterator::begin(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::DiagonalIterator Matrix<valuetype, mtraits>::endDiagonal()
+	{
+		return DiagonalIterator::end(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::DiagonalConstIterator Matrix<valuetype, mtraits>::beginDiagonal() const
+	{
+		return DiagonalConstIterator::begin(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::DiagonalConstIterator Matrix<valuetype, mtraits>::endDiagonal() const
+	{
+		return DiagonalConstIterator::end(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::DiagonalReverseIterator Matrix<valuetype, mtraits>::rbeginDiagonal()
+	{
+		return DiagonalReverseIterator::begin(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::DiagonalReverseIterator Matrix<valuetype, mtraits>::rendDiagonal()
+	{
+		return DiagonalReverseIterator::end(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::DiagonalConstReverseIterator Matrix<valuetype, mtraits>::rbeginDiagonal() const
+	{
+		return DiagonalConstReverseIterator::begin(*this);
+	}
+
+	template <class valuetype, class mtraits>
+	typename Matrix<valuetype, mtraits>::DiagonalConstReverseIterator Matrix<valuetype, mtraits>::rendDiagonal() const
+	{
+		return DiagonalConstReverseIterator::end(*this);
+	}
+}
+
+#endif //BALL_LINALG_MATRIXITERATOR_IC

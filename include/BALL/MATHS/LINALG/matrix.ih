@@ -332,69 +332,37 @@ namespace BALL {
 			typedef RandomAccessIterator<Matrix, ValueType, PointerType, ElementRowIteratorTraits<valuetype> > ElementRowIterator;
 			
 			/// Return a element row iterator pointing to the first element in the matrix
-			ElementRowIterator beginElementRow()
-				throw()
-			{
-				return ElementRowIterator::begin(*this);
-			}
+			ElementRowIterator beginElementRow();
 
 			/// Return a past-the-end element row iterator
-			ElementRowIterator endElementRow()
-				throw()
-			{
-				return ElementRowIterator::end(*this);
-			}
+			ElementRowIterator endElementRow();
 
 			/// Constant random access iterator for elements
 			typedef ConstRandomAccessIterator<Matrix, ValueType, PointerType, ElementRowIteratorTraits<valuetype> > ElementRowConstIterator;
 
 			/// Return a constant element row iterator pointing to the first element in the matrix
-			ElementRowConstIterator beginElementRow() const
-				throw()
-			{
-				return ElementRowConstIterator::begin(*this);
-			}
+			ElementRowConstIterator beginElementRow() const;
 
 			/// Return a constant past-the-end element row iterator.
-			ElementRowConstIterator endElementRow() const
-				throw()
-			{
-				return ElementRowConstIterator::end(*this);
-			}
+			ElementRowConstIterator endElementRow() const;
 		
 			/// Reverse random access iterator for row elements.
 			typedef ReverseIterator<Matrix, ValueType, PointerType, ElementRowIteratorTraits<valuetype> >	ElementRowReverseIterator;
 
 			/// Return a reverse row elements iterator pointing to the first element.
-			ElementRowReverseIterator rbeginElementRow()
-				throw()
-			{
-				return ElementRowReverseIterator::begin(*this);
-			}
+			ElementRowReverseIterator rbeginElementRow();
 
 			/// Return a past-the-end element row iterator for reverse traversal.
-			ElementRowReverseIterator rendElementRow()
-				throw()
-			{
-				return ElementRowReverseIterator::end(*this);
-			}
+			ElementRowReverseIterator rendElementRow();
 
 			/// Constant reverse random access iterator for row elements.
 			typedef ConstReverseIterator<Matrix, ValueType, PointerType, ElementRowIteratorTraits<valuetype> > ElementRowConstReverseIterator;
 
 			/// Return a constant reverse element row iterator pointing to the first element
-			ElementRowConstReverseIterator rbeginElementRow() const
-				throw()
-			{
-				return ElementRowConstReverseIterator::begin(*this);
-			}
+			ElementRowConstReverseIterator rbeginElementRow() const;
 
 			/// Return a constant past-the-end element row iterator for reverse traversal
-			ElementRowConstReverseIterator rendElementRow() const
-				throw()
-			{
-				return ElementRowConstReverseIterator::end(*this);
-			}
+			ElementRowConstReverseIterator rendElementRow() const;
 
 			/**
 			 *  element column iterator
@@ -407,69 +375,37 @@ namespace BALL {
 			typedef RandomAccessIterator<Matrix, ValueType, PointerType, ElementColumnIteratorTraits<valuetype> > ElementColumnIterator;
 			
 			/// Return a element column iterator pointing to the first element in the matrix
-			ElementColumnIterator beginElementColumn()
-				throw()
-			{
-				return ElementColumnIterator::begin(*this);
-			}
+			ElementColumnIterator beginElementColumn();
 
 			/// Return a past-the-end element column iterator
-			ElementColumnIterator endElementColumn()
-				throw()
-			{
-				return ElementColumnIterator::end(*this);
-			}
+			ElementColumnIterator endElementColumn();
 
 			/// Constant random access iterator for elements
 			typedef ConstRandomAccessIterator<Matrix, ValueType, PointerType, ElementColumnIteratorTraits<valuetype> > ElementColumnConstIterator;
 
 			/// Return a constant element column iterator pointing to the first element in the matrix
-			ElementColumnConstIterator beginElementColumn() const
-				throw()
-			{
-				return ElementColumnConstIterator::begin(*this);
-			}
+			ElementColumnConstIterator beginElementColumn() const;
 
 			/// Return a constant past-the-end element column iterator.
-			ElementColumnConstIterator endElementColumn() const
-				throw()
-			{
-				return ElementColumnConstIterator::end(*this);
-			}
+			ElementColumnConstIterator endElementColumn() const;
 		
 			/// Reverse random access iterator for column elements.
 			typedef ReverseIterator<Matrix, ValueType, PointerType, ElementColumnIteratorTraits<valuetype> >	ElementColumnReverseIterator;
 
 			/// Return a reverse row elements iterator pointing to the first element.
-			ElementColumnReverseIterator rbeginElementColumn()
-				throw()
-			{
-				return ElementColumnReverseIterator::begin(*this);
-			}
+			ElementColumnReverseIterator rbeginElementColumn();
 
 			/// Return a past-the-end element column iterator for reverse traversal.
-			ElementColumnReverseIterator rendElementColumn()
-				throw()
-			{
-				return ElementColumnReverseIterator::end(*this);
-			}
+			ElementColumnReverseIterator rendElementColumn();
 
 			/// Constant reverse random access iterator for column elements.
 			typedef ConstReverseIterator<Matrix, ValueType, PointerType, ElementColumnIteratorTraits<valuetype> > ElementColumnConstReverseIterator;
 
 			/// Return a constant reverse element column iterator pointing to the first element
-			ElementColumnConstReverseIterator rbeginElementColumn() const
-				throw()
-			{
-				return ElementColumnConstReverseIterator::begin(*this);
-			}
+			ElementColumnConstReverseIterator rbeginElementColumn() const;
 
 			/// Return a constant past-the-end element column iterator for reverse traversal
-			ElementColumnConstReverseIterator rendElementColumn() const
-				throw()
-			{
-				return ElementColumnConstReverseIterator::end(*this);
-			}
+			ElementColumnConstReverseIterator rendElementColumn() const;
 
 			/**
 			 *  row iterator
@@ -482,69 +418,37 @@ namespace BALL {
 			typedef RandomAccessIterator<Matrix, Vector<valuetype>, Vector<valuetype>*, RowIteratorTraits<valuetype> > RowIterator;
 			
 			/// Return a row iterator pointing to the first element in the matrix
-			RowIterator beginRow()
-				throw()
-			{
-				return RowIterator::begin(*this);
-			}
+			RowIterator beginRow();
 
 			/// Return a past-the-end row iterator
-			RowIterator endRow()
-				throw()
-			{
-				return RowIterator::end(*this);
-			}
+			RowIterator endRow();
 
 			/// Constant random access iterator for elements
 			typedef ConstRandomAccessIterator<Matrix, Vector<valuetype>, Vector<valuetype>*, RowIteratorTraits<valuetype> > RowConstIterator;
 
 			/// Return a constant row iterator pointing to the first element in the matrix
-			RowConstIterator beginRow() const
-				throw()
-			{
-				return RowConstIterator::begin(*this);
-			}
+			RowConstIterator beginRow() const;
 
 			/// Return a constant past-the-end row iterator.
-			RowConstIterator endRow() const
-				throw()
-			{
-				return RowConstIterator::end(*this);
-			}
+			RowConstIterator endRow() const;
 		
 			/// Reverse random access iterator for row.
 			typedef ReverseIterator<Matrix, Vector<valuetype>, Vector<valuetype>*, RowIteratorTraits<valuetype> >	RowReverseIterator;
 
 			/// Return a reverse row iterator pointing to the first element.
-			RowReverseIterator rbeginRow()
-				throw()
-			{
-				return RowReverseIterator::begin(*this);
-			}
+			RowReverseIterator rbeginRow();
 
 			/// Return a past-the-end row iterator for reverse traversal.
-			RowReverseIterator rendRow()
-				throw()
-			{
-				return RowReverseIterator::end(*this);
-			}
+			RowReverseIterator rendRow();
 
 			/// Constant reverse random access iterator for rows.
 			typedef ConstReverseIterator<Matrix, Vector<valuetype>, Vector<valuetype>*, RowIteratorTraits<valuetype> > RowConstReverseIterator;
 
 			/// Return a constant reverse row iterator pointing to the first element
-			RowConstReverseIterator rbeginRow() const
-				throw()
-			{
-				return RowConstReverseIterator::begin(*this);
-			}
+			RowConstReverseIterator rbeginRow() const;
 
 			/// Return a constant past-the-end row iterator for reverse traversal
-			RowConstReverseIterator rendRow() const
-				throw()
-			{
-				return RowConstReverseIterator::end(*this);
-			}
+			RowConstReverseIterator rendRow() const;
 
 			/**
 			 *  column iterator
@@ -557,69 +461,37 @@ namespace BALL {
 			typedef RandomAccessIterator<Matrix, Vector<valuetype>, Vector<valuetype>*, ColumnIteratorTraits<valuetype> > ColumnIterator;
 			
 			/// Return a row iterator pointing to the first element in the matrix
-			ColumnIterator beginColumn()
-				throw()
-			{
-				return ColumnIterator::begin(*this);
-			}
+			ColumnIterator beginColumn();
 
 			/// Return a past-the-end row iterator
-			ColumnIterator endColumn()
-				throw()
-			{
-				return ColumnIterator::end(*this);
-			}
+			ColumnIterator endColumn();
 
 			/// Constant random access iterator for elements
 			typedef ConstRandomAccessIterator<Matrix, Vector<valuetype>, Vector<valuetype>*, ColumnIteratorTraits<valuetype> > ColumnConstIterator;
 
 			/// Return a constant row iterator pointing to the first element in the matrix
-			ColumnConstIterator beginColumn() const
-				throw()
-			{
-				return ColumnConstIterator::begin(*this);
-			}
+			ColumnConstIterator beginColumn() const;
 
 			/// Return a constant past-the-end row iterator.
-			ColumnConstIterator endColumn() const
-				throw()
-			{
-				return ColumnConstIterator::end(*this);
-			}
+			ColumnConstIterator endColumn() const;
 		
 			/// Reverse random access iterator for row.
 			typedef ReverseIterator<Matrix, Vector<valuetype>, Vector<valuetype>*, ColumnIteratorTraits<valuetype> >	ColumnReverseIterator;
 
 			/// Return a reverse row iterator pointing to the first element.
-			ColumnReverseIterator rbeginColumn()
-				throw()
-			{
-				return ColumnReverseIterator::begin(*this);
-			}
+			ColumnReverseIterator rbeginColumn();
 
 			/// Return a past-the-end row iterator for reverse traversal.
-			ColumnReverseIterator rendColumn()
-				throw()
-			{
-				return ColumnReverseIterator::end(*this);
-			}
+			ColumnReverseIterator rendColumn();
 
 			/// Constant reverse random access iterator for rows.
 			typedef ConstReverseIterator<Matrix, Vector<valuetype>, Vector<valuetype>*, ColumnIteratorTraits<valuetype> > ColumnConstReverseIterator;
 
 			/// Return a constant reverse row iterator pointing to the first element
-			ColumnConstReverseIterator rbeginColumn() const
-				throw()
-			{
-				return ColumnConstReverseIterator::begin(*this);
-			}
+			ColumnConstReverseIterator rbeginColumn() const;
 
 			/// Return a constant past-the-end row iterator for reverse traversal
-			ColumnConstReverseIterator rendColumn() const
-				throw()
-			{
-				return ColumnConstReverseIterator::end(*this);
-			}
+			ColumnConstReverseIterator rendColumn() const;
 
 			/**
 			 *  diagonal iterator
@@ -632,69 +504,37 @@ namespace BALL {
 			typedef RandomAccessIterator<Matrix, Vector<valuetype>, Vector<valuetype>*, DiagonalIteratorTraits<valuetype> > DiagonalIterator;
 			
 			/// Return a row iterator pointing to the first element in the matrix
-			DiagonalIterator beginDiagonal()
-				throw()
-			{
-				return DiagonalIterator::begin(*this);
-			}
+			DiagonalIterator beginDiagonal();
 
 			/// Return a past-the-end row iterator
-			DiagonalIterator endDiagonal()
-				throw()
-			{
-				return DiagonalIterator::end(*this);
-			}
+			DiagonalIterator endDiagonal();
 
 			/// Constant random access iterator for elements
 			typedef ConstRandomAccessIterator<Matrix, Vector<valuetype>, Vector<valuetype>*, DiagonalIteratorTraits<valuetype> > DiagonalConstIterator;
 
 			/// Return a constant row iterator pointing to the first element in the matrix
-			DiagonalConstIterator beginDiagonal() const
-				throw()
-			{
-				return DiagonalConstIterator::begin(*this);
-			}
+			DiagonalConstIterator beginDiagonal() const;
 
 			/// Return a constant past-the-end row iterator.
-			DiagonalConstIterator endDiagonal() const
-				throw()
-			{
-				return DiagonalConstIterator::end(*this);
-			}
+			DiagonalConstIterator endDiagonal() const;
 		
 			/// Reverse random access iterator for row.
 			typedef ReverseIterator<Matrix, Vector<valuetype>, Vector<valuetype>*, DiagonalIteratorTraits<valuetype> >	DiagonalReverseIterator;
 
 			/// Return a reverse row iterator pointing to the first element.
-			DiagonalReverseIterator rbeginDiagonal()
-				throw()
-			{
-				return DiagonalReverseIterator::begin(*this);
-			}
+			DiagonalReverseIterator rbeginDiagonal();
 
 			/// Return a past-the-end row iterator for reverse traversal.
-			DiagonalReverseIterator rendDiagonal()
-				throw()
-			{
-				return DiagonalReverseIterator::end(*this);
-			}
+			DiagonalReverseIterator rendDiagonal();
 
 			/// Constant reverse random access iterator for rows.
 			typedef ConstReverseIterator<Matrix, Vector<valuetype>, Vector<valuetype>*, DiagonalIteratorTraits<valuetype> > DiagonalConstReverseIterator;
 
 			/// Return a constant reverse row iterator pointing to the first element
-			DiagonalConstReverseIterator rbeginDiagonal() const
-				throw()
-			{
-				return DiagonalConstReverseIterator::begin(*this);
-			}
+			DiagonalConstReverseIterator rbeginDiagonal() const;
 
 			/// Return a constant past-the-end row iterator for reverse traversal
-			DiagonalConstReverseIterator rendDiagonal() const
-				throw()
-			{
-				return DiagonalConstReverseIterator::end(*this);
-			}
+			DiagonalConstReverseIterator rendDiagonal() const;
 
 			/** Transpose this matrix.
 			 *  If deep is set to true, elements are exchanged in the array. Otherwise, we just
