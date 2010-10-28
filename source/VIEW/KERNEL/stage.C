@@ -213,7 +213,7 @@ namespace BALL
 		bool Camera::readFromString(const String& data)
 		{
 			vector<String> fields;
-			if (data.split(fields) == 3) return false;
+			if (data.split(fields) < 3) return false;
 
 			Vector3 results[3];
 			for (Position p = 0; p < 3; p++)
