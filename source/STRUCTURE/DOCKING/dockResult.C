@@ -13,14 +13,12 @@ namespace BALL
 {
 		// Default Constructor
 		DockResult::DockResult()
-			
 			: conformation_set_(0),
 				sorted_by_(0)
 		{}
 		
 		// Constructor
 		DockResult::DockResult(const String& docking_algorithm, ConformationSet* conformation_set, const Options& docking_options)
-			
 			: sorted_by_(0)
 		{
 			docking_algorithm_ = docking_algorithm;
@@ -30,7 +28,6 @@ namespace BALL
 		
 		// Copy constructor.
 		DockResult::DockResult(const DockResult& dock_res)
-			
 			: docking_algorithm_(dock_res.docking_algorithm_),
 				docking_options_(dock_res.docking_options_),
 				conformation_set_(dock_res.conformation_set_),
@@ -40,7 +37,6 @@ namespace BALL
 		
 		// Destructor
 		DockResult::~DockResult()
-			
 		{
 			if (conformation_set_)
 			{
@@ -50,7 +46,6 @@ namespace BALL
 		
 		// Assignment operator
 		const DockResult& DockResult::operator =(const DockResult& dock_res)
-			
 		{
 			if (&dock_res != this)
 			{
@@ -69,31 +64,26 @@ namespace BALL
 		
 		
 		void DockResult::setConformationSet(ConformationSet* conformation_set)
-			
 		{
 			conformation_set_ = conformation_set;
 		}
 		
 		const String& DockResult::getDockingAlgorithm() const
-			
 		{
 			return docking_algorithm_;
 		}
 		
 		const Options& DockResult::getDockingOptions() const
-			
 		{
 			return docking_options_;
 		}
 		
 		const ConformationSet* DockResult::getConformationSet() const
-			
 		{
 			return conformation_set_;
 		}
 		
 		ConformationSet* DockResult::getConformationSet()
-			
 		{
 			return conformation_set_;
 		}
@@ -116,7 +106,6 @@ namespace BALL
 		}
 
 		Index DockResult::isSortedBy() const
-			
 		{
 			return sorted_by_;
 		}
@@ -193,15 +182,14 @@ namespace BALL
 		
 		// returns the number of scorings
 		Size DockResult::numberOfScorings() const
-			
 		{
 			return scorings_.size();
 		}
 		
 		// add new Scoring_ to vector scorings_
 		// the score vector has to be sorted
-		void DockResult::addScoring(const String& name, const Options& options, vector<ConformationSet::Conformation> scores)
-			
+		void DockResult::addScoring(const String& name, 
+																const Options& options, vector<ConformationSet::Conformation> scores)
 		{
 			Compare_ compare_func = Compare_();
 			sort(scores.begin(), scores.end(), compare_func);
@@ -231,7 +219,6 @@ namespace BALL
 		
 		// store dock result in a file
 		bool DockResult::writeDockResult(const String& filename)
-			
 		{
 			File result(filename, std::ios::out | std::ios::binary);
 			bool successful = writeDockResult(result);
@@ -241,7 +228,6 @@ namespace BALL
 		
 		// store dock result in a file
 		bool DockResult::writeDockResult(std::ostream& result) const
-			
 		{
 			// first: store information about algorithm/ scoring function in temporary INIFile
 		 	String INI_temp;
@@ -338,7 +324,6 @@ namespace BALL
 		
 		// read dock result from file
 		bool DockResult::readDockResult(const String& filename)
-			
 		{
 			File file(filename, std::ios::in | std::ios::binary);
 			bool successful = readDockResult(file);
@@ -348,7 +333,6 @@ namespace BALL
 		
 		// read dock result from file
 		bool DockResult::readDockResult(std::istream& file)
-			
 		{
 			// read first two lines with line numbers of INIFile and PDBFile
 			Size INI_lines, PDB_lines;
@@ -524,7 +508,6 @@ namespace BALL
 			* Copy constructor.
 			*/
 		DockResult::Scoring_::Scoring_(const Scoring_& scoring)
-			
 			: name_(scoring.name_),
 				options_(scoring.options_),
 				scores_(scoring.scores_),
@@ -541,7 +524,6 @@ namespace BALL
 				Assignment operator
 		*/
 		const DockResult::Scoring_& DockResult::Scoring_::operator =(const Scoring_& scoring)
-			
 		{
 			if (&scoring != this)
 			{
@@ -580,7 +562,6 @@ namespace BALL
 		}
 
 		std::istream& operator >>(std::istream& in, DockResult& dock_res)
-			
 		{
 			if(!dock_res.readDockResult(in))
 			{
