@@ -372,61 +372,37 @@ namespace BALL {
 																	 VectorIteratorTraits<valuetype> > Iterator;
 			
 			/// Return a iterator pointing to the first element in the vector
-			Iterator begin()
-			{
-				return Iterator::begin(*this);
-			}
+			Iterator begin();
 
 			/// Return a past-the-end iterator
-			Iterator end()
-			{
-				return Iterator::end(*this);
-			}
+			Iterator end();
 
 			/// Constant random access iterator for the elements
 			typedef ConstRandomAccessIterator<Vector<valuetype>, ValueType, PointerType, VectorIteratorTraits<valuetype> > ConstIterator;
 
 			/// Return a constant element row iterator pointing to the first element in the vector
-			ConstIterator begin() const
-			{
-				return ConstIterator::begin(*this);
-			}
+			ConstIterator begin() const;
 
 			/// Return a constant past-the-end element row iterator.
-			ConstIterator end() const
-			{
-				return ConstIterator::end(*this);
-			}
+			ConstIterator end() const;
 		
 			/// Reverse random access iterator for the elements.
 			typedef ReverseIterator<Vector<valuetype>, ValueType, PointerType, VectorIteratorTraits<valuetype> >	Reverse_Iterator;
 
 			/// Return a reverse iterator pointing to the first element.
-			Reverse_Iterator rbegin()
-			{
-				return Reverse_Iterator::begin(*this);
-			}
+			Reverse_Iterator rbegin();
 
 			/// Return a past-the-end iterator for reverse traversal.
-			Reverse_Iterator rend()
-			{
-				return Reverse_Iterator::end(*this);
-			}
+			Reverse_Iterator rend();
 
 			/// Constant reverse random access iterator for the elements.
 			typedef ConstReverseIterator<Vector<valuetype>, ValueType, PointerType, VectorIteratorTraits<valuetype> > ConstReverse_Iterator;
 
 			/// Return a constant reverse iterator pointing to the first element
-			ConstReverse_Iterator rbegin() const
-			{
-				return ConstReverse_Iterator::begin(*this);
-			}
+			ConstReverse_Iterator rbegin() const;
 
 			/// Return a constant past-the-end iterator for reverse traversal
-			ConstReverse_Iterator rend() const
-			{
-				return ConstReverse_Iterator::end(*this);
-			}
+			ConstReverse_Iterator rend() const;
 
 			inline size_t getSize() const;
 			inline bool isColumnVector() const;

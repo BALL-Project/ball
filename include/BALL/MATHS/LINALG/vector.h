@@ -30,5 +30,6 @@ namespace BALL
 #include <BALL/MATHS/LINALG/vectorConstructors.iC>
 #include <BALL/MATHS/LINALG/vectorIO.iC>
 #include <BALL/MATHS/LINALG/vectorBasicFunctions.iC>
+#include <BALL/MATHS/LINALG/vectorIterators.iC>
 
 #endif // BALL_LINALG_VECTOR_H
