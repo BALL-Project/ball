@@ -16,6 +16,7 @@
 #include <BALL/NMR/anisotropyShiftProcessor.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/FORMAT/PDBFile.h>
+#include <BALL/KERNEL/PTE.h>
 
 ///////////////////////////
 
@@ -28,21 +29,21 @@ using namespace BALL;
 using namespace std;
 
 ShiftModel* sm = 0;
-CHECK(ShiftModel::ShiftModel() throw())
+CHECK(ShiftModel::ShiftModel())
   sm = new ShiftModel;
 	TEST_NOT_EQUAL(sm, 0)
 RESULT
 
-CHECK(ShiftModel::~ShiftModel() throw())
+CHECK(ShiftModel::~ShiftModel())
   delete sm;
 RESULT
 
-CHECK(ShiftModel::isValid() const  throw())
+CHECK(ShiftModel::isValid() const)
   ShiftModel sm;
 	TEST_EQUAL(sm.isValid(), false)
 RESULT
 
-CHECK(ShiftModel::isRegistered(const String& name) const  throw())
+CHECK(ShiftModel::isRegistered(const String& name) const)
   ShiftModel sm;
 	TEST_EQUAL(sm.isRegistered("UNNAMED MODULE X"), false)
 	TEST_EQUAL(sm.isRegistered(""), false)
@@ -53,7 +54,7 @@ CHECK(ShiftModel::isRegistered(const String& name) const  throw())
 	TEST_EQUAL(sm.isRegistered("ElectricField"), true)
 RESULT
 
-CHECK(ShiftModel::getParameters() throw())
+CHECK(ShiftModel::getParameters())
   ShiftModel sm;
 	TEST_NOT_EQUAL(&sm.getParameters(), 0)
 	TEST_EQUAL(sm.getParameters().isValid(), false)
@@ -69,7 +70,7 @@ CHECK(ShiftModel::setFilename(const String& filename))
 	TEST_EQUAL(sm.getParameters().isValid(), true)
 RESULT
 
-CHECK(ShiftModel::getFilename() const  throw())
+CHECK(ShiftModel::getFilename() const)
 	ShiftModel sm;
 	sm.setFilename("XXXXXX");
 	TEST_EQUAL(sm.isValid(), false)
@@ -79,7 +80,7 @@ CHECK(ShiftModel::getFilename() const  throw())
 	TEST_EQUAL(sm.getFilename(), BALL_TEST_DATA_PATH(ShiftModel_test.ini))
 RESULT
 
-CHECK(ShiftModel::getModuleList() throw())
+CHECK(ShiftModel::getModuleList())
 	ShiftModel sm;
 	TEST_EQUAL(sm.getModuleList().size(), 0)
 	
@@ -108,7 +109,7 @@ CHECK(ShiftModel::registerModule(const String& name, CreateMethod method) throw(
 	TEST_EQUAL(sm.isRegistered("TEST2"), false)
 RESULT
 
-CHECK(ShiftModel::unregisterModule(const String& name) throw())
+CHECK(ShiftModel::unregisterModule(const String& name))
 	ShiftModel sm;
 	using namespace RTTI;
 	ShiftModel::CreateMethod m = getNew<ShiftModule>;
@@ -121,7 +122,7 @@ CHECK(ShiftModel::unregisterModule(const String& name) throw())
 	TEST_EQUAL(sm.isRegistered("TEST"), false)	
 RESULT
 
-CHECK(ShiftModel::ShiftModel(const String& filename) throw())
+CHECK(ShiftModel::ShiftModel(const String& filename))
   ShiftModel sm(BALL_TEST_DATA_PATH(ShiftModel_test.ini));
 	TEST_EQUAL(sm.isValid(), true)
 	ShiftModel::ModuleList mod_list = sm.getModuleList();
@@ -132,7 +133,7 @@ CHECK(ShiftModel::ShiftModel(const String& filename) throw())
 	}
 RESULT
 
-CHECK(ShiftModel::clear() throw())
+CHECK(ShiftModel::clear())
   ShiftModel sm(BALL_TEST_DATA_PATH(ShiftModel_test.ini));
 	sm.clear();
 	TEST_EQUAL(sm.isValid(), false)
@@ -141,7 +142,7 @@ RESULT
 
 const ShiftModel smx(BALL_TEST_DATA_PATH(ShiftModel_test.ini));
 
-CHECK(ShiftModel::ShiftModel(const ShiftModel& model) throw())
+CHECK(ShiftModel::ShiftModel(const ShiftModel& model))
 	ShiftModel sm(smx);
 	TEST_EQUAL(sm.isValid(), true)
 	ShiftModel::ModuleList mod_list = sm.getModuleList();
@@ -152,7 +153,7 @@ CHECK(ShiftModel::ShiftModel(const ShiftModel& model) throw())
 	}
 RESULT
 
-CHECK(ShiftModel::ShiftModel& operator = (const ShiftModel& model) throw())
+CHECK(ShiftModel::ShiftModel& operator = (const ShiftModel& model))
 	ShiftModel sm = smx;
 	TEST_EQUAL(sm.isValid(), true)
 	ShiftModel::ModuleList mod_list = sm.getModuleList();
@@ -163,7 +164,7 @@ CHECK(ShiftModel::ShiftModel& operator = (const ShiftModel& model) throw())
 	}
 RESULT
 
-CHECK(ShiftModel::ShiftModel& operator = (const String& filename) throw())
+CHECK(ShiftModel::ShiftModel& operator = (const String& filename))
 	ShiftModel sm = String(BALL_TEST_DATA_PATH(ShiftModel_test.ini));
 	TEST_EQUAL(sm.isValid(), true)
 	ShiftModel::ModuleList mod_list = sm.getModuleList();
@@ -201,7 +202,7 @@ CHECK(chemical shift/BPTI)
       shifts.insert(name, shift);
 		}
 	}
-  TEST_EQUAL(shifts.size(), 438)
+  TEST_EQUAL(shifts.size(), 664)
  
 	Size i = 0;
 	AtomIterator atom = S.beginAtom();
@@ -219,12 +220,13 @@ CHECK(chemical shift/BPTI)
 			name += ":" + atom->getFullName();
 			
 			STATUS(name << ": " << shift)
+	
 			TEST_EQUAL(shifts.has(name), true)
 			TEST_REAL_EQUAL(shift, shifts[name])
 			i++;
 		}
 	}
-  TEST_EQUAL(i, 438)
+  TEST_EQUAL(i, 664)
 RESULT
 
 /////////////////////////////////////////////////////////////
