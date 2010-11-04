@@ -199,7 +199,8 @@ namespace BALL
        throw Exception::NullPointer(__FILE__, __LINE__);
 		}
  
-		char* buffer = new char[buffer_size];
+		char* buffer = new char[buffer_size+1];
+		memset(buffer, 0, buffer_size+1);
 
 		va_list var_arg_list;
 		va_start(var_arg_list, format);
