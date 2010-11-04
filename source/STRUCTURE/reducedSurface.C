@@ -1888,6 +1888,7 @@ namespace BALL
 		HashGridBox3<Position>::ConstDataIterator d;
 
 		std::list<Position> to_delete;
+		Size num_deleted = 0;
 		Vector3 pos;
 		for (Position i = 0; i < rs_->number_of_atoms_; i++)
 		{
@@ -1902,10 +1903,14 @@ namespace BALL
 				for (d = b->beginData(); d != b->endData() && !too_close; d++)
 				{
 					double radius_d = rs_->atom_[*d].radius;
-					if (rs_->atom_[i].p.getSquareDistance(rs_->atom_[*d].p) <= std::max(radius_i, radius_d))
+
+					// our algorithm becomes instable somewhere if two atoms are too close...
+					// TODO: fix it so this safe guard is no longer necessary
+					if (Maths::isLessOrEqual(rs_->atom_[i].p.getDistance(rs_->atom_[*d].p), 0.05*std::max(radius_d, radius_i)))
 					{
 						too_close = true;
 						to_delete.push_back(i);
+						num_deleted++;
 						if (radius_i > radius_d)
 						{
 							rs_->atom_[*d].p = rs_->atom_[i].p;
@@ -1916,7 +1921,7 @@ namespace BALL
 			}
 			
 			if (!too_close)
-				grid.insert(pos, i);
+				grid.insert(pos, i-num_deleted);
 		}
 
 		for (std::list<Position>::reverse_iterator si = to_delete.rbegin(); si != to_delete.rend(); ++si)
