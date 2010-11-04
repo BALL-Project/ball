@@ -122,7 +122,7 @@ CHECK(chemical shifts/with rings)
 			shifts.insert(name, shift);
 		}
 	}
-	TEST_EQUAL(shifts.size(), 76)
+	TEST_EQUAL(shifts.size(), 121)
 
 	HaighMallionShiftProcessor sp;
 	sp.setParameters(parameters);
@@ -154,7 +154,7 @@ CHECK(chemical shifts/with rings)
 				}
 			}
 		}
-		TEST_EQUAL(i, 76)
+		TEST_EQUAL(i, 121)
 		TEST_EQUAL(shifts.size(), 0)
 		if (shifts.size() != 0)
 		{
@@ -193,7 +193,7 @@ CHECK(chemical shifts -- PHE)
 			shifts.insert(name, shift);
 		}
 	}
-	TEST_EQUAL(shifts.size(), 2)
+	TEST_EQUAL(shifts.size(), 6)
 
 	HaighMallionShiftProcessor sp;
 	sp.setParameters(parameters);
@@ -228,7 +228,7 @@ CHECK(chemical shifts -- PHE)
 				}
 			}
 		}
-		TEST_EQUAL(i, 2)
+		TEST_EQUAL(i, 6)
 	}	
 RESULT
 
@@ -254,7 +254,7 @@ CHECK(chemical shifts -- TRP)
 			shifts.insert(name, shift);
 		}
 	}
-	TEST_EQUAL(shifts.size(), 2)
+	TEST_EQUAL(shifts.size(), 6)
 
 	HaighMallionShiftProcessor sp;
 	sp.setParameters(parameters);
@@ -289,7 +289,7 @@ CHECK(chemical shifts -- TRP)
 				}
 			}
 		}
-		TEST_EQUAL(i, 2)
+		TEST_EQUAL(i, 6)
 	}	
 RESULT
 
@@ -315,7 +315,7 @@ CHECK(chemical shifts -- TYR)
 			shifts.insert(name, shift);
 		}
 	}
-	TEST_EQUAL(shifts.size(), 2)
+	TEST_EQUAL(shifts.size(), 6)
 
 	HaighMallionShiftProcessor sp;
 	sp.setParameters(parameters);
@@ -350,7 +350,7 @@ CHECK(chemical shifts -- TYR)
 				}
 			}
 		}
-		TEST_EQUAL(i, 2)
+		TEST_EQUAL(i, 6)
 	}	
 RESULT
 
@@ -376,7 +376,7 @@ CHECK(chemical shifts -- HIS)
 			shifts.insert(name, shift);
 		}
 	}
-	TEST_EQUAL(shifts.size(), 2)
+	TEST_EQUAL(shifts.size(), 6)
 
 	HaighMallionShiftProcessor sp;
 	sp.setParameters(parameters);
@@ -411,7 +411,7 @@ CHECK(chemical shifts -- HIS)
 				}
 			}
 		}
-		TEST_EQUAL(i, 2)
+		TEST_EQUAL(i, 6)
 	}	
 RESULT
 
