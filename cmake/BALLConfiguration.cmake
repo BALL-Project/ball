@@ -186,9 +186,6 @@ CHECK_CXX_SOURCE_COMPILES("template <int i>
 		return 0;
 	}" BALL_HAS_INLINE_TPL_ARGS)
 
-## Find a suitable hash map implementation (or fall back to map)
-INCLUDE(cmake/BALLConfigHashMap.cmake)
-
 ## Check for the presence of the slist extension
 INCLUDE(cmake/BALLConfigSList.cmake)
 
