@@ -51,6 +51,12 @@ namespace BALL
         
    		   std::vector<std::vector<Position> > h_bond_indices = hbp.getBackboneHBondPairs();
 				 std::vector<HBondProcessor::HBond>  h_bonds        = hbp.getHBonds(); 
+				 for (Size i=0; i<h_bonds.size(); ++i)
+   			 {
+     				cout << h_bonds[i].getDonor()->getFullName()    << " bond to " 
+				         << h_bonds[i].getAcceptor()->getFullName() << ":" 
+            cout << h_bonds[i].getLength() << endl;
+         }
       \endcode
 
 	 * 	The artifical indices of method getBackboneHBondPairs() are 
