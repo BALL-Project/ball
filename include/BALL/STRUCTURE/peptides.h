@@ -101,7 +101,9 @@ namespace BALL
 //
 //////////////////////////////////////////////////////////////////////////
 
-		/**	Name Converter
+		/** Name Converter class.
+		   
+			 \brief This class provides conversion of atom names between naming schemata.
 		 
 				Converts hydrogen atom names between naming systems.
 				The original version of this table was created by Charles Hoogstraten.
@@ -116,18 +118,25 @@ namespace BALL
 	 	  	\code
 					NameConverter converter();
 					if (   converter.supportsNamingScheme("BMRB")
-					    && converter.supportsNamingScheme("PDB")
-							&& converter.supportsNamingScheme("NMRSTAR"))
+					    && converter.supportsNamingScheme("PDB"))
 					{
 						...
 						String atom_name = "HB2";
-						String pdb_name = converter.convertName("ALA", atom_name, "BMRB", "PDB");
+						String pdb_name  = converter.convertName("ALA", atom_name, "BMRB", "PDB");
 						...
 					}	
-					if (converter.supportsPseudoAtomNamingScheme("NMRSTAR"))
+					if (   converter.supportsPseudoAtomNamingScheme("NMRSTAR") 
+					    && converter.supportsPseudoAtomNamingScheme("PDB"))
 					{	
-						std::vector<String> result = converter.resolvePseudoAtoms("R", "HB", "NMRSTAR", "PDB");
-						...
+						std::vector<String> result = converter.resolvePseudoAtoms("R", "HB", "NMRSTAR", "PDB"); 
+						cout << "pseudo atom HB of residue R can be matched to " << result.size() << " PDB atoms." << endl;
+						
+
+						Atom* atom = ...;
+    				if (converter.matches(atom->getResidue()->getName(), atom->getName(), "PDB", "HG2", "NMRSTAR"))
+   	 				{
+       				cout << "atom " << atom->getName() << " is a HG2 pseudo atom." << endl;
+    				}
 					}
  	 	  		
  				\endcode
@@ -210,8 +219,8 @@ namespace BALL
 				 * 	@return bool - true if the atom names can be matched, false otherwise. 
 				 */
 				bool matches(const String& amino_acid, const String& old_atom_name,
-											 const String& old_naming_scheme, const String& new_atom_name,
-				               const String& new_naming_scheme) const;
+										 const String& old_naming_scheme, const String& new_atom_name,
+				             const String& new_naming_scheme) const;
 
 				/** Resolve pseudo atoms among naming schemes.
 				 *
