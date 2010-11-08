@@ -74,8 +74,7 @@ namespace BALL
 
 			static const Position POSITION_VALUE_NA;
 			
-			/** nested data classes
-			 
+			/** @name Nested classes
 				  These classes represent the data extracted from NMRStar files.
 			*/
 			
@@ -93,11 +92,11 @@ namespace BALL
 	
 					// saveframe name -- referenced in the sample_condition_label 
 					// of  the saveframe "assigned_chemical_shifts"   
-					String	name;
+					String	             name;
 					// Accoring to the NMRStarFile 2.1 documentation 
 					// the first entry MUST BE "_Variable_type".
 					// This is why we are allowed to map per type :-)
-					vector<String> types;
+					vector<String>        types;
 					StringHashMap<float>  values;
 					StringHashMap<float>  errors;
 					StringHashMap<String> units;
