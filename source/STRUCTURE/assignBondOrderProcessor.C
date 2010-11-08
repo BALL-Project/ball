@@ -2337,7 +2337,7 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 			{	
 				for (Size j=0; j < solutions_[last_applied_solution_].atoms_to_delete.size(); j++)
 				{
-					//NOTE: all adajacent bonds of these atoms will be deleted automatically
+					//NOTE: all adjacent bonds of these atoms will be deleted automatically
 					delete(solutions_[last_applied_solution_].atoms_to_delete[j]); 
 				}
 			}
@@ -2397,7 +2397,7 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 						}
 						solution.atoms_to_delete.push_back(hydrogen);
 
-						// TODO: set the Hydrogen's Positions correctly!
+						// TODO: set the hydrogen's positions correctly!
 						hydrogen->setPosition(a_it->getPosition() + pos[m] );
 
 						// and a bond
