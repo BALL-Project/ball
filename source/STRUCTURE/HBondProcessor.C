@@ -5,39 +5,60 @@
 #include <BALL/STRUCTURE/HBondProcessor.h>
 #include <BALL/DATATYPE/hashGrid.h>
 #include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/KERNEL/PTE.h>
 #include <map>
+#include <set>
 
 namespace BALL
 {
-	const String HBondProcessor::Option::PREDICTION_METHOD = "prediction_method";
+	const String HBondProcessor::Option::PREDICTION_METHOD       = "prediction_method";
 	const String HBondProcessor::PredictionMethod::KABSCH_SANDER = "Kabsch_Sander";
 	const String HBondProcessor::PredictionMethod::WISHART_ET_AL = "Wishart_et_al";
-	const String HBondProcessor::Default::PREDICTION_METHOD = HBondProcessor::PredictionMethod::KABSCH_SANDER;
-	
+	const String HBondProcessor::Default::PREDICTION_METHOD      = HBondProcessor::PredictionMethod::KABSCH_SANDER;
+
+	const String HBondProcessor::Option::ADD_HBONDS = "add_hydrogen_bonds";
+  const bool HBondProcessor::Default::ADD_HBONDS  = true;
+
+	const String HBondProcessor::Option::KABSCH_SANDER_ENERGY_CUTOFF = "kabsch_sander_energy_cutoff";
+  const float HBondProcessor::Default::KABSCH_SANDER_ENERGY_CUTOFF = -0.5;
+
+	float HBondProcessor::MAX_LENGTH = 5.2f + 4.2f;
+	float HBondProcessor::BOND_LENGTH_N_H = 1.020f;
+	float HBondProcessor::BOND_LENGTH_C_O = 1.240f;
+
+	float HBondProcessor::AMIDE_PROTON_OXYGEN_SEPARATION_DISTANCE = 3.5;
+	float HBondProcessor::ALPHA_PROTON_OXYGEN_SEPARATION_DISTANCE = 2.77208;
+
+	HBondProcessor::HBond::HBond()
+		: acceptor_(NULL),
+			donor_(NULL),
+			donor_is_hydrogen_(false)
+	{
+	}
+		
 	HBondProcessor::HBondProcessor()
-		:	MAX_LENGTH(5.2 + 4.2),
-			BOND_LENGTH_N_H(1.020),
-			BOND_LENGTH_C_O(1.240),
-			AMIDE_PROTON_OXYGEN_SEPARATION_DISTANCE(3.5),
-			ALPHA_PROTON_OXYGEN_SEPARATION_DISTANCE(2.77208),
-			residue_data_(),
-			backbone_h_bond_pairs_()
+		:	options(),
+		  residue_data_(),
+			backbone_h_bond_pairs_(),
+			donors_(),
+		 	acceptors_(),
+			residue_ptr_to_position_(),
+		 	h_bonds_()
 	{
 		setDefaultOptions();
 	}
 
 	HBondProcessor::HBondProcessor(Options& new_options)
-		:	MAX_LENGTH(5.2 + 4.2),
-			BOND_LENGTH_N_H(1.020),
-			BOND_LENGTH_C_O(1.240),	
-			AMIDE_PROTON_OXYGEN_SEPARATION_DISTANCE(3.5),
-			ALPHA_PROTON_OXYGEN_SEPARATION_DISTANCE(2.77208),
-			options(new_options),
+		:	options(new_options),
 			residue_data_(),
-			backbone_h_bond_pairs_()
+			backbone_h_bond_pairs_(),
+			donors_(),
+		 	acceptors_(),
+			residue_ptr_to_position_(),
+		 	h_bonds_()
 	{
 		// make sure to add all defaults that were missing in the options we got
 		setDefaultOptions();
@@ -48,22 +69,19 @@ namespace BALL
 	{
 	}
 		
-	void 	HBondProcessor::init()
-    throw()
+	void HBondProcessor::init() //TODO
   {
 	}
 	
-	bool 	HBondProcessor::start()
-    throw()
+	bool HBondProcessor::start()
   {
     // clear the donor list and the acceptor list
-    donors_.clear();
-    acceptors_.clear();
 		backbone_h_bond_pairs_.clear();
     residue_data_.clear();
-
+    donors_.clear();
+    acceptors_.clear();
 		residue_ptr_to_position_.clear();
-		
+		h_bonds_.clear();
   	return true;
 	}
 	
@@ -74,25 +92,25 @@ namespace BALL
 		BoundingBoxProcessor bp;
 
 		// What happens to ligands, water ...
-		ResidueIterator ri;
-
+		ResidueIterator    ri;
+	
 		// do we have a system?
 		if (RTTI::isKindOf<System>(composite))
 		{
 			System *s = RTTI::castTo<System>(composite);
 			s->apply(bp);
-      ri = s->beginResidue();
+			ri = s->beginResidue();
 		}
 		else if (RTTI::isKindOf<Protein>(composite))
 		{
 			Protein *s = RTTI::castTo<Protein>(composite);
 			s->apply(bp);
-      ri = s->beginResidue();
-		}
+			ri = s->beginResidue();
+    }
 		else if (RTTI::isKindOf<Chain>(composite))
 		{
 			Chain *s = RTTI::castTo<Chain>(composite);
-			s->apply(bp);
+			s->apply(bp);	
 			ri = s->beginResidue();
 		}
 		
@@ -102,10 +120,31 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 
+		// delete all previous hydrogen bonds
+		set< Bond* > to_delete;	
+		Atom::BondIterator bi;
+		AtomIterator       ai;
+		ResidueIterator    ri_del(ri);
+		for ( ; +ri_del; ++ri_del)
+		{
+			BALL_FOREACH_BOND(*ri_del, ai, bi)
+			{
+				if (bi->getType() == Bond::TYPE__HYDROGEN)
+				{
+					to_delete.insert(&*bi);
+				}
+			}
+		}
+		for (set< Bond* >::iterator sit = to_delete.begin(); 
+				 sit != to_delete.end(); 
+				 sit++)
+		{
+			(*sit)->destroy();
+		} 
 		
+		// compute the hydrogen bonds
 		if (options[HBondProcessor::Option::PREDICTION_METHOD] == PredictionMethod::KABSCH_SANDER)
 		{
-			
 			upper_ = bp.getUpper();
 			lower_ = bp.getLower();
 
@@ -113,11 +152,11 @@ namespace BALL
 			preComputeBonds_(ri);
 
 			//NOTE: This has to be a __BREAK__, since we want to allow
-			//to apply the HBondProcessor at system/protein and chain level! 
-			//Processors "selfcall" hierarchically, so in case of a system 
-			//the composite system is "subcalled" first and all residues 
-			//of the system were taken into account and than we have to break.
-			//Otherwise next selfcall would be the protein/chain...
+			//      to apply the HBondProcessor to system, protein, and chain level! 
+			// 	    Processors "selfcall" hierarchically, so in case of a system 
+			//      the composite system is "subcalled" first and all residues 
+			//      of the system were taken into account and than we have to break.
+			//      Otherwise next selfcall would be the protein/chain...
 			return Processor::BREAK;
 
 		}
@@ -159,9 +198,8 @@ namespace BALL
 			Log.error() << "HBondProcessor::Operator(): Unknown prediction method requested! Aborting!" << std::endl;
 			return Processor::ABORT;
 		}
-
+		
 		return Processor::CONTINUE;
-
 	}
 	
 	/*********************************************************
@@ -180,7 +218,7 @@ namespace BALL
 		// since the N-terminus is special, we treat it differently
 		// we also have to take care of residues with missing atoms 
 		// we find the first complete residue and use it instead 
-		for (; +resit ; ++resit)
+		for ( ; +resit ; ++resit)
 		{	
 			if (!resit->isAminoAcid()) continue;
 
@@ -193,17 +231,17 @@ namespace BALL
 			Size found = 0;
 			for (AtomIterator ai = resit->beginAtom(); +ai; ++ai)
 			{
-				if (ai->getName() ==  "C")
+				if (ai->getName() == "C")
 				{
 					pos.pos_C = ai->getPosition();
 					haveC = true;
 				}
-				else if (ai->getName() ==  "O")
+				else if (ai->getName() == "O")
 				{
 					pos.pos_O = ai->getPosition();
 					haveO = true;
 				}
-				else if (ai->getName() ==  "N")
+				else if (ai->getName() == "N")
 				{
 					pos.pos_N = ai->getPosition();
           haveN = true;
@@ -262,7 +300,7 @@ namespace BALL
 			Log.error() << "HBondProcessor::finish(): Unknown prediction method requested! Aborting!" << std::endl;
 			ret = false;
 		}
-		
+
 		return ret;
 	}
 
@@ -274,7 +312,7 @@ namespace BALL
 	bool HBondProcessor::finishKabschSander_()
 	{
 		if (residue_data_.size() == 0) return true;
-
+	
 		// matrix to save the existence of a HBond
 		backbone_h_bond_pairs_.resize(residue_data_.size()); 
 
@@ -289,101 +327,101 @@ namespace BALL
 				atom_grid.insert(residue_data_[i].pos_N, &residue_data_[i]);
 			}
 		}                   
-
-		const Index size_x = atom_grid.getSizeX();
-		const Index size_y = atom_grid.getSizeY();
-		const Index size_z = atom_grid.getSizeZ();
+		
+		float energy_cutoff  = options.getReal(Option::KABSCH_SANDER_ENERGY_CUTOFF);
+		bool  add_hbonds     = options.getBool(Option::ADD_HBONDS);
 
  		// now compute the energies and see whether we have a hydrogen bond
-		for (Size i = 0; i < residue_data_.size(); i++)
+		for (Size i=0; i<residue_data_.size(); i++)
 		{
 			const ResidueData& current_res = residue_data_[i];
 			if (!current_res.is_complete) continue;
 
 			HashGridBox3<ResidueData*>* const box = atom_grid.getBox(current_res.pos_N);
 
-			// We iterate over the grid ourselves, since the beginBox()... didn't work... :-(
-			Position x, y, z;                            // indices of the actual box
-			atom_grid.getIndices(*box, x, y, z);         // compute the indices of the actual box
-
-			// Iterate over all the neighbouring boxes
-			// for (box_it = box->beginBox(); +box_it; ++box_it) //as mentioned beginBox doesn't work
-			for (int nx = x-1; (nx < size_x) && (nx < (int)x+2); nx++)
+			// and iterate over all neighbouring boxes
+			for(HashGridBox3<ResidueData*>::BoxIterator bit = box->beginBox(); +bit; ++bit) 
 			{
-				if (nx < 0) continue;
-
-				for (int ny = y-1; (ny < size_y) && (ny < (int)y+2); ny++)
+				//iterate over all residues of the neighbouring box
+				HashGridBox3<ResidueData*>::DataIterator data_it;
+				for (data_it = bit->beginData(); +data_it; ++data_it)
 				{
-					if (ny < 0) continue;
+					// TODO: We don't want H-bonds between neighboring residues!
+					//       Does this criterion always work? We should check for
+					//       an existing bond between data_it and residue_data_[i] instead!
 
-					for (int nz = z-1; (nz < size_z) && (nz < (int)z+2); nz++)
+					// data from neighbouring residue
+					const ResidueData& ndata = **data_it;
+
+					if (   (abs((Index)ndata.number - (Index)(current_res.number)) <= 1)
+							|| (ndata.number == 0))
 					{
-						if (nz < 0) continue;
-
-						// compute the neighbour box
-						HashGridBox3<ResidueData*>* const nb = atom_grid.getBox(nx, ny, nz); 
-
-						//iterate over all residues of the neighbouring box
-						HashGridBox3<ResidueData*>::DataIterator data_it;
-						for (data_it = nb->beginData(); +data_it; ++data_it)
-						{
-							// TODO: We don't want H-bonds between neighboring residues!
-							//       Does this criterion always work? We should check for
-							//       an existing bond between data_it and residue_data_[i] instead!
-
-							// data from neighbouring residue
-							const ResidueData& ndata = **data_it;
-
-							if (abs((Index)ndata.number - (Index)(current_res.number)) <= 1 || 
-									ndata.number == 0)
-							{
-								continue;
-							}
-
-							// compute the distances between the relevant atoms
-							const float dist_ON = (current_res.pos_O - ndata.pos_N).getLength();
-							const float dist_CH = (current_res.pos_C - ndata.pos_H).getLength();
-							const float dist_OH = (current_res.pos_O - ndata.pos_H).getLength();
-							const float dist_CN = (current_res.pos_C - ndata.pos_N).getLength();
-
-							// compute the electrostatic energy of the bond-building groups
-							float energy  = 0.42 * 0.20 * 332.;
-							energy *=  (1./dist_ON + 1./dist_CH - 1./dist_OH - 1./dist_CN);
-
-							if (energy >= -0.5) continue;
-
-							Atom *acceptor = 0;
-							for (AtomIterator ai = current_res.res->beginAtom(); +ai; ++ai)
-							{
-								if (ai->getName() == "O") 
-								{
-									acceptor = &(*ai);
-									break;
-								}
-							}	
-
-							Atom* donor = 0; 
-							for (AtomIterator ai = ndata.res->beginAtom(); +ai; ++ai)
-							{
-								if (ai->getName() == "N") 
-								{
-									donor = &*ai;
-									break;
-								}
-							}		
-
-							if (!donor || !acceptor) continue;
-
-							backbone_h_bond_pairs_[current_res.number].push_back(ndata.number);
-
-							Bond* bond = donor->createBond(*acceptor);
-							bond->setType(Bond::TYPE__HYDROGEN);
-							bond->setOrder(1);
-							bond->setName("calculated H-Bond");
-
-							donor->setProperty("HBOND_DONOR", *acceptor);
-						}
+						continue;
 					}
+
+					// compute the distances between the relevant atoms
+					const float dist_ON = (current_res.pos_O - ndata.pos_N).getLength();
+					const float dist_CH = (current_res.pos_C - ndata.pos_H).getLength();
+					const float dist_OH = (current_res.pos_O - ndata.pos_H).getLength();
+					const float dist_CN = (current_res.pos_C - ndata.pos_N).getLength();
+
+					Vector3 OH = (current_res.pos_O - ndata.pos_H);
+					Vector3 NH = (ndata.pos_N - ndata.pos_H);
+
+					float angle = OH.getAngle(NH);
+
+					// compute the electrostatic energy of the bond-building groups
+					float energy  = 0.42 * 0.20 * 332.;
+					energy *=  (1./dist_ON + 1./dist_CH - 1./dist_OH - 1./dist_CN);
+
+					if (energy >= energy_cutoff) continue;
+
+					Atom* acceptor = 0;
+					for (AtomIterator ai = current_res.res->beginAtom(); +ai; ++ai)
+					{
+						if (ai->getName() == "O") 
+						{
+							acceptor = &(*ai);
+							break;
+						}
+					}	
+
+					Atom* donor = 0; 
+					for (AtomIterator ai = ndata.res->beginAtom(); +ai; ++ai)
+					{
+						if (ai->getName() == "N") 
+						{
+							donor = &*ai;
+							break;
+						}
+					}		
+
+					if (!donor || !acceptor) continue;
+
+					// store the bond:
+					//   - add it to the special secondary structure vector 
+					backbone_h_bond_pairs_[current_res.number].push_back(ndata.number);
+					
+					//   - add the hydrogen bond to the internal data structure
+					HBond new_bond(acceptor, donor, false);
+					h_bonds_.push_back(new_bond);
+
+					//   - add a real bond	
+					if (add_hbonds)
+					{
+						Bond* bond = donor->createBond(*acceptor);
+					  bond->setType(Bond::TYPE__HYDROGEN);
+					 	bond->setOrder(Bond::ORDER__ANY); 
+						bond->setName("calculated H-Bond");
+
+						bond->setProperty("HBOND_DONOR",  donor);
+						bond->setProperty("HBOND_ACCEPTOR", acceptor);
+
+						bond->setProperty("HBOND_HYDROGEN", (void*)NULL);
+						bond->setProperty("HBOND_LENGTH", dist_OH);
+						bond->setProperty("HBOND_ANGLE", angle);
+					}
+
 				}
 			}
 		}
@@ -393,10 +431,13 @@ namespace BALL
 
 	
 	bool HBondProcessor::finishWishartEtAl_()
-	{	
+	{
+	  // Please note, that in ShiftX notation donor denotes the hydrogen!!
+
 		backbone_h_bond_pairs_.resize(residue_ptr_to_position_.size());
-		/* distance, donor, acceptor for the ShiftXwise hydrogenbond determination*/
-		std::multimap<float, std::pair<Atom*, Atom*> >  hbonds;
+
+		/* map distance to (donor, acceptor) for the ShiftXwise hydrogen bond determination*/
+		std::multimap<float, std::pair<Atom*, Atom*> >  potential_shiftX_hbonds;
 		std::map<Atom*, bool> donor_occupied;
 		std::map<Atom*, bool> acceptor_occupied;
 
@@ -431,11 +472,12 @@ namespace BALL
 		// in donors_ and acceptors_
 
 		// we need a datastructure to collect the hydrogen bonds
-		for(Position d = 0; d < donors_.size(); ++d)
+		// --> fill potential_shiftX_hbonds
+		for (Position d=0; d<donors_.size(); ++d)
 		{
-			for(Position a = 0; a < acceptors_.size(); ++a)
+			for (Position a=0; a<acceptors_.size(); ++a)
 			{	
-				// does the bond fullfill all SHiftX criteria?
+				// does the bond fullfill all ShiftX criteria?
 				// exclude self interaction
 				if (donors_[d]->getResidue() == acceptors_[a]->getResidue())
 				{
@@ -445,17 +487,19 @@ namespace BALL
 				// HA does not form hydrogen bonds with its _neighbours_
 				if (donors_[d]->getName().hasSubstring("HA"))
 				{
-					bool adjacent_residues = 		 donors_[d]->getResidue()->isNextSiblingOf(*(acceptors_[a]->getResidue()))
+					bool adjacent_residues = 		 
+						   donors_[d]->getResidue()->isNextSiblingOf(*(acceptors_[a]->getResidue()))
 						|| donors_[d]->getResidue()->isPreviousSiblingOf(*(acceptors_[a]->getResidue()))
-						||(abs(  donors_[d]->getResidue()->getID().toInt() 
-									- acceptors_[a]->getResidue()->getID().toInt()) <= 1);
+						|| (   abs(  donors_[d]->getResidue()->getID().toInt() 
+								 - acceptors_[a]->getResidue()->getID().toInt())	<= 1);
 
 					if (adjacent_residues)
 						continue;
 				}
 
 				//  oxygen--hydrogen separation  
-				float distance =  (donors_[d]->getPosition() - acceptors_[a]->getPosition()).getLength();
+				float distance = (donors_[d]->getPosition() - acceptors_[a]->getPosition()).getLength();
+
 				if (   (  donors_[d]->getName().hasSubstring("HA") && (distance > ALPHA_PROTON_OXYGEN_SEPARATION_DISTANCE ))
 						|| ( (donors_[d]->getName() == "H")            && (distance > AMIDE_PROTON_OXYGEN_SEPARATION_DISTANCE )))
 					continue;
@@ -469,7 +513,7 @@ namespace BALL
 					// 								 the N to which the _donor_ H is bound 
 
 					// we can't use countBonds here because of the hydrogen bonds which we want to ignore
-					int bond_count_acceptor = 0;
+					int                bond_count_acceptor = 0;
 					Atom::BondIterator bi;
 					for (bi = acceptors_[a]->beginBond(); +bi; ++bi)
 					{
@@ -499,54 +543,87 @@ namespace BALL
 					BALL::Vector3 HN = N->getPosition() - donors_[d]->getPosition();
 
 					float bond_angle = CO.getAngle(HN);
-					if ( 		(bond_angle >= (Constants::PI/2.) // NOTE: this looks different from the SHIFTX paper, but is not :-) 
-								||	(distance >= 2.5 + cos(bond_angle))))
+					// NOTE: the following looks different from the SHIFTX paper, but is not :-)
+					if ( 	 (bond_angle >= (Constants::PI/2.)  
+							|| (distance >= 2.5 + cos(bond_angle))))
 						continue;
 
-					//hydrogen-oxygen distance < 3.5 A and hydrogen-oxygen distance < nitrogen - oxygen distance		
+					// hydrogen-oxygen distance < 3.5 A and hydrogen-oxygen distance < nitrogen - oxygen distance		
 					if ((distance > 3.5) || (distance >  (N->getPosition()- acceptors_[a]->getPosition()).getLength()))
 						continue;
 				}
 
 				std::pair<Atom*, Atom*> bond(donors_[d], acceptors_[a]);
-				hbonds.insert(std::pair<float, std::pair<Atom*, Atom*> >(distance, bond));
+				potential_shiftX_hbonds.insert(std::pair<float, std::pair<Atom*, Atom*> >(distance, bond));
 			}
 		}
 		
 		
-		// now  compute all hydrogen bonds.  
-		// to ensure that we assign only one (the smallest) bond for each donor and acceptor atom,
-		// we iterate over the bonds sorted by their distance. if a bond is assigned, we mark this
+		// now filter for all compatible hydrogen bonds.  
+		// To ensure that we assign only one (the smallest) bond for each donor and acceptor atom,
+		// we iterate over the bonds sorted by their distance. If a bond is assigned, we mark this
 		// in the occupied data structures
-		std::multimap<float, std::pair<Atom*, Atom*> >::iterator it_b = hbonds.begin();
+		std::multimap<float, std::pair<Atom*, Atom*> >::iterator it_b = potential_shiftX_hbonds.begin();
 
-		for (; it_b != hbonds.end(); it_b++)
+		for ( ; it_b != potential_shiftX_hbonds.end(); ++it_b)
 		{
 			//double distance = it_b->first;
 			Atom* donor    = it_b->second.first;
 			Atom* acceptor = it_b->second.second;
-
+					
 			// is this bond still allowed? i.e. are acceptor and donor still unoccupied?
 			if (   (donor_occupied.find(donor) != donor_occupied.end())
-					|| (acceptor_occupied.find(acceptor) != acceptor_occupied.end()))
+					|| (acceptor_occupied.find(acceptor)  != acceptor_occupied.end()))
+			{	
 				continue;
-
-			//create a hydrogen bond between acceptor:O and donor:H 
-			Bond* bond = donor->createBond(*acceptor);
-			bond->setType(Bond::TYPE__HYDROGEN);
-			bond->setOrder(1);
-			bond->setName("calculated H-Bond");
-			
-			donor->setProperty("HBOND_DONOR", *acceptor);
-
-			// store the HBond as index pair for the Secondary Structure Processor
+			}
+	
+			// store the bond:
+			//   - add it to the special secondary structure vector 
+			//     store the HBond as index pair for the Secondary Structure Processor
 			// Note: the index was created by iterating with the ResidueIterator and assigning an ascending number! 
-			if (acceptor->getName()=="O" && donor->getName()=="H")
+			if (   (acceptor->getName()== "O") 
+					&& (donor->getName()   == "H"))
 			{	
 				backbone_h_bond_pairs_[residue_ptr_to_position_[acceptor->getResidue()]].push_back(residue_ptr_to_position_[donor->getResidue()]);
 			}
 
-			// mark the current participants as occupied
+			//   - add a real bond	
+			bool add_hbonds = options.getBool(Option::ADD_HBONDS);
+
+			//   - add the hydrogen bond to the internal data structure
+			HBond new_bond(acceptor, donor, true);
+			h_bonds_.push_back(new_bond);
+
+			float bond_length = donor->getPosition().getDistance(acceptor->getPosition()); 
+
+			Atom const* partner = NULL;
+			for (Atom::BondIterator b_it = donor->beginBond(); +b_it; ++b_it)
+			{
+				if (b_it->getType() != Bond::TYPE__HYDROGEN)
+					partner = b_it->getPartner(*donor);
+			}
+
+			float bond_angle = Constants::PI;
+			if (partner)
+				bond_angle = (acceptor->getPosition() - donor->getPosition()).getAngle(partner->getPosition() - donor->getPosition());
+		
+			if (add_hbonds && donor)
+			{
+				Bond* bond = donor->createBond(*acceptor);
+			  bond->setType(Bond::TYPE__HYDROGEN);
+			 	bond->setOrder(Bond::ORDER__ANY); 
+				bond->setName("calculated H-Bond");
+
+				bond->setProperty("HBOND_DONOR",    donor);
+				bond->setProperty("HBOND_ACCEPTOR", acceptor);
+
+				bond->setProperty("HBOND_HYDROGEN", donor);
+				bond->setProperty("HBOND_LENGTH", bond_length);
+				bond->setProperty("HBOND_ANGLE", bond_angle);
+			}
+			
+			// finally mark the current participants as occupied
 			donor_occupied[donor] = true;
 			acceptor_occupied[acceptor] = true;
 		}
@@ -574,6 +651,12 @@ namespace BALL
 	{
 		options.setDefault(HBondProcessor::Option::PREDICTION_METHOD,
 											 HBondProcessor::Default::PREDICTION_METHOD);
+
+		options.setDefaultBool(HBondProcessor::Option::ADD_HBONDS,
+											     HBondProcessor::Default::ADD_HBONDS);	
+		
+		options.setDefaultReal(HBondProcessor::Option::KABSCH_SANDER_ENERGY_CUTOFF,
+											     HBondProcessor::Default::KABSCH_SANDER_ENERGY_CUTOFF);
 	}
 
 } //Namespace BALL
