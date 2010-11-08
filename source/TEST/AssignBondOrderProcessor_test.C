@@ -130,6 +130,7 @@ CHECK(~AssignBondOrderProcessor())
 	delete abop;
 RESULT
 
+
 CHECK(setDefaultOptions())
 	AssignBondOrderProcessor testbop;
 	testbop.setDefaultOptions();
@@ -203,7 +204,7 @@ CHECK(Option::ALGORITHM: A_STAR)
   // There is really not much we can test here, so we just execute the processor
 	// to have a chance of catching bugs with valgrind if they sneak in
 	AssignBondOrderProcessor abop;
-	abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM,AssignBondOrderProcessor::Algorithm::A_STAR);
+	abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM, AssignBondOrderProcessor::Algorithm::A_STAR);
 	
 	System sys6;
 	MOL2File mol6(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_COHKOZ_sol_5.mol2), std::ios::in);
