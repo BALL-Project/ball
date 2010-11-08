@@ -19,11 +19,16 @@ namespace BALL
 {
 	class SecondaryStructure;
 	  
-  /** Secondary structure extraction from 3D structure.
+  /** Secondary Structure Processor.
+	  
+	    \brief Secondary structure extraction from 3D structure.
+			
 			This class implements the DSSP algorithm described in
-			"Kabsch W & Sander C (1983). Dictionary of protein secondary structure: 
+			"Kabsch W & Sander C (1983). 
+			Dictionary of protein secondary structure: 
 			pattern recognition of hydrogen-bonded and geometrical features. 
 			Biopolymers, 22, 2577-2637."
+
 			When applied to a protein, it removes the instances of SecondaryStructure
 			from the protein, predicts the secondary structure elements based
 			(mostly) on H-bond patterns and backbone torsions and reinserts the
