@@ -406,7 +406,12 @@ CHECK(read(AtomContainer& ac))
 	TEST_EQUAL(nmr_file.read(S), true)
 	
 	NMRStarFile::NMRAtomData const& nmr_atom = nmr_file.getNMRData()[0].atom_data[18];
-	//TODO get the Mapping and check if mapping was successful	
+	TEST_EQUAL(nmr_atom.atom_ID, 19)
+	TEST_EQUAL(nmr_atom.residue_seq_code, 3)
+	TEST_EQUAL(nmr_atom.residue_label, "SER")
+	TEST_EQUAL(nmr_atom.atom_name, "HB3")
+	TEST_EQUAL(nmr_atom.atom_type, 'H')
+	TEST_REAL_EQUAL(nmr_atom.shift_value, 3.709)
 RESULT
  
 
