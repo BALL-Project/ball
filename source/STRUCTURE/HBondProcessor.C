@@ -121,7 +121,7 @@ namespace BALL
 		}
 
 		// delete all previous hydrogen bonds
-		set< Bond* > to_delete;	
+		std::set< Bond* > to_delete;	
 		Atom::BondIterator bi;
 		AtomIterator       ai;
 		ResidueIterator    ri_del(ri);
@@ -135,7 +135,7 @@ namespace BALL
 				}
 			}
 		}
-		for (set< Bond* >::iterator sit = to_delete.begin(); 
+		for (std::set< Bond* >::iterator sit = to_delete.begin(); 
 				 sit != to_delete.end(); 
 				 sit++)
 		{
