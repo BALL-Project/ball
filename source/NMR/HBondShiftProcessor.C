@@ -315,8 +315,8 @@ namespace BALL
 							// put the HBond into the hydrogen bond distance list.
 							if (		(    amide_protons_are_targets_ && (donor->getName() == "H") 
 									 			&& (distance < amide_proton_oxygen_hydrogen_separation_distance_) ) 
-									||  (    donor->getName().hasSubstring("HA")) 
-									      && (distance < alpha_proton_oxygen_hydrogen_separation_distance_ ))
+									||  (    donor->getName().hasSubstring("HA")
+									      && (distance < alpha_proton_oxygen_hydrogen_separation_distance_ )))
 							{
 								std::pair<Atom*, Atom*> bond(donors_[d], acceptors_[a]);
 								hbonds_.insert(std::pair<float, std::pair<Atom*, Atom*> >(distance, bond));
