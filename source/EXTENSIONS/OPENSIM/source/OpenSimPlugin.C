@@ -129,6 +129,9 @@ namespace BALL
 				is_active_ = false;
 			}
 
+			String init_opensim_string(OpenSimReceiver::INITIALIZE_OPENSIM);
+			server_->sendMessageString(init_opensim_string);
+
 			return is_active_;
 		}
 		
@@ -347,8 +350,8 @@ namespace BALL
 													+ String(";") + String(position.z) 
 													+ String(";") + String(radius) 
 													+ String(";") + String((int)color.getRed())
-													+ String(";") + String((int)color.getBlue())
-													+ String(";") + String((int)color.getGreen());
+													+ String(";") + String((int)color.getGreen())
+													+ String(";") + String((int)color.getBlue());
 
 						Log.info() << "ADD_ATOM:acknowledgement_string Message @handleMolecularModeling from OpenSim to BALLView  : " 
 											<< acknowledgement_string << endl;
@@ -623,8 +626,8 @@ namespace BALL
 																		+ String(";") + String(position.z) 
 																		+ String(";") + String(radius) 
 																		+ String(";") + String((int)color.getRed()) 
-																		+ String(";") + String((int)color.getBlue())
-																		+ String(";") + String((int)color.getGreen());
+																		+ String(";") + String((int)color.getGreen())
+																		+ String(";") + String((int)color.getBlue());
 
 					command += add_atom_string;
 

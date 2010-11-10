@@ -67,7 +67,11 @@ namespace BALL
 					ACKNOWLEDGE_STOP_SIMULATION,
 					ADD_ATOM_CONTAINER, 
 					REMOVE_ATOM_CONTAINER,
-					UPDATE_ATOM_CONTAINER
+					UPDATE_ATOM_CONTAINER,
+					ADD_HYDROGENS,
+					ACTIVATE_BALLVIEW,
+					RESET,
+					INITIALIZE_OPENSIM
 				};
 
 				OpenSimReceiver(Size port, OpenSimPlugin* plugin);
