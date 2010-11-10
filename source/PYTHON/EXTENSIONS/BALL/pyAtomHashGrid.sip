@@ -51,7 +51,7 @@ class AtomHashGrid3BoxDataIterator
 		return NULL;
 	}
 
-	sipRes = ***sipCpp;
+	sipRes = **sipCpp;
 
 	++*sipCpp;
 %End
