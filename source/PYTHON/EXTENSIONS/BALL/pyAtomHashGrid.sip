@@ -2,6 +2,61 @@
 // vi: set ts=2:
 //
 
+class AtomHashGrid3BoxIterator
+{
+%TypeHeaderCode
+	#include <BALL/DATATYPE/hashGrid.h>
+	#include <BALL/KERNEL/atom.h>
+
+	typedef HashGridBox3<Atom*> AtomHashGridBox3;
+	typedef HashGridBox3<Atom*>::BoxIterator AtomHashGrid3BoxIterator;
+%End
+	AtomHashGrid3BoxIterator& __iter__();
+%MethodCode
+	sipRes = sipCpp;
+%End
+
+	AtomHashGridBox3& __next__();
+%MethodCode
+	if(sipCpp->isEnd())
+	{
+		PyErr_SetNone(PyExc_StopIteration);
+		return NULL;
+	}
+
+	sipRes = &**sipCpp;
+
+	++*sipCpp;
+%End
+};
+
+class AtomHashGrid3BoxDataIterator
+{
+%TypeHeaderCode
+	#include <BALL/DATATYPE/hashGrid.h>
+	#include <BALL/KERNEL/atom.h>
+	typedef HashGridBox3<Atom*> AtomHashGridBox3;
+	typedef HashGridBox3<Atom*>::DataIterator AtomHashGrid3BoxDataIterator;
+%End
+	AtomHashGrid3BoxDataIterator& __iter__();
+%MethodCode
+	sipRes = sipCpp;
+%End
+
+	Atom& __next__();
+%MethodCode
+	if(sipCpp->isEnd())
+	{
+		PyErr_SetNone(PyExc_StopIteration);
+		return NULL;
+	}
+
+	sipRes = ***sipCpp;
+
+	++*sipCpp;
+%End
+};
+
 class AtomHashGridBox3
 {
 %TypeHeaderCode
@@ -39,6 +94,17 @@ class AtomHashGridBox3
 
 	bool isEmpty() const;
 	bool isValid() const;
+
+	AtomHashGrid3BoxIterator iterboxes();
+%MethodCode
+	return BALL_CONVERT_FROM_INSTANCE(new AtomHashGrid3BoxIterator(sipCpp->beginBox()), AtomHashGrid3BoxIterator, Py_None);
+%End
+
+	AtomHashGrid3BoxDataIterator iterdata();
+%MethodCode
+	return BALL_CONVERT_FROM_INSTANCE(new AtomHashGrid3BoxDataIterator(sipCpp->beginData()), AtomHashGrid3BoxDataIterator, Py_None);
+%End
+
 //	void dump(ostream /s/, Size /depth/) const;
 
 	//bool apply(UnaryProcessor<Item> processor);
