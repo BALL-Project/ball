@@ -4,7 +4,7 @@
 // $Id$
 //
 
-class PDBFile
+class PDBFile : GenericMolFile
 {
 %TypeHeaderCode
 	#include <BALL/FORMAT/PDBFile.h>
@@ -24,12 +24,17 @@ class PDBFile
   virtual bool write(const Protein& /protein/) throw(File::CannotWrite);
   virtual bool write(const Molecule& /protein/) throw(File::CannotWrite);
   virtual bool write(const System& /system/) throw(File::CannotWrite);
-  void operator >> (Protein& /protein/);
-  void operator >> (Molecule& /molecule/);
-  void operator >> (System& /system/);
-  void operator << (const Protein& /protein/);
-  void operator << (const Molecule& /molecule/);
-  void operator << (const System& /system/);
+
+	//Actually all of the following methods are non virtual
+	//However we need to declare them as virtual to trick sip into
+	//producing correct code
+  PDBFile& operator >> (Protein& /protein/) throw (ParseError);
+  virtual PDBFile& operator >> (Molecule& /molecule/) throw (ParseError);
+  virtual PDBFile& operator >> (System& /system/) throw (ParseError);
+  PDBFile& operator << (const Protein& /protein/) throw(File::CannotWrite);
+  virtual PDBFile& operator << (const Molecule& /molecule/) throw(File::CannotWrite);
+  virtual PDBFile& operator << (const System& /system/) throw(File::CannotWrite);
+
 	void close();
 	private:
 		PDBFile(const PDBFile&);

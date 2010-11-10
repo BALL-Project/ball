@@ -5,7 +5,7 @@
 //
 
 class XYZFile
-	: File
+	: GenericMolFile
 {
 %TypeHeaderCode
 	#include <BALL/FORMAT/XYZFile.h>

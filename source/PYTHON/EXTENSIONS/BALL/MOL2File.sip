@@ -5,7 +5,7 @@
 //
 
 class MOL2File
-  : File
+  : GenericMolFile
 {
 %TypeHeaderCode
 	#include <BALL/FORMAT/MOL2File.h>
