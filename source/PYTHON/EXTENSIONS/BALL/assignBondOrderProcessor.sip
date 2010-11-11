@@ -101,7 +101,6 @@ class AssignBondOrderProcessor
 	//	BALL_CREATE(AssignBondOrderProcessor);
 		
 		AssignBondOrderProcessor();
-		AssignBondOrderProcessor(const AssignBondOrderProcessor& /abop/);
 		virtual ~AssignBondOrderProcessor();
 		
 		void clear();
@@ -121,10 +120,12 @@ class AssignBondOrderProcessor
 		bool apply(Position /i/); 
 		void resetBondOrders();
 		bool computeNextSolution();
-		//AssignBondOrderProcessor& operator = (const AssignBondOrderProcessor& abop);
 		void setDefaultOptions();
 		float evaluatePenalty(AtomContainer* /ac/);
 		Options options;
 
+	private:
+		AssignBondOrderProcessor(const AssignBondOrderProcessor&);
+		AssignBondOrderProcessor& operator = (const AssignBondOrderProcessor&);
 		
 };
