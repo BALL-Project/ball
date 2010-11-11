@@ -1390,7 +1390,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			{
 				// the geometry of the main window
 				int x_pos = 0;
-                               int y_pos = 0;
+				int y_pos = 0;
 				int w = 1024;
 				int h = 800;
 				if (inifile.hasEntry("WINDOWS", "Main::x")) 		 x_pos = inifile.getValue("WINDOWS", "Main::x").toInt();
@@ -1400,11 +1400,11 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 				x_pos = BALL_MAX(-4, x_pos);
 				y_pos = BALL_MAX(-4, y_pos);
-                               if (BALL_OS == "Darwin") {
-                                   // Don't move the window under the menu bar per default on OSX.
-                                   // The menu bar has a fixed height of 22 pixels. Yes, always.
-                                   y_pos = BALL_MAX(22,y_pos);
-                               }
+				if (String(BALL_OS) == "Darwin") {
+					// Don't move the window under the menu bar per default on OSX.
+					// The menu bar has a fixed height of 22 pixels. Yes, always.
+					y_pos = BALL_MAX(22,y_pos);
+				}
 
 				resize(w,h);
 				move(QPoint(x_pos, y_pos));
