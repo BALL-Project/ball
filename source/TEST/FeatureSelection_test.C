@@ -30,7 +30,7 @@ CHECK(RemoveColinearFeatures)
 	TEST_EQUAL(pcr.getDescriptorIDs()->size(),26);
 	pcr.validation->crossValidation(5);
 	double q2 = pcr.validation->getQ2();
-	TEST_REAL_EQUAL(q2,0.654111);
+	TEST_REAL_EQUAL(q2,0.653379);
 	pcr.readTrainingData();
 	pcr.train();
 RESULT
@@ -53,10 +53,10 @@ CHECK(StepwiseSelection)
 	FeatureSelection fs(pcr1);
 	fs.setQualityIncreaseCutoff(cutoff);
 	fs.stepwiseSelection(5);
-	TEST_EQUAL(pcr1.getDescriptorIDs()->size(),9);
+	TEST_EQUAL(pcr1.getDescriptorIDs()->size(),5);
 	pcr1.validation->crossValidation(5);
 	double q2 = pcr1.validation->getQ2();
-	TEST_REAL_EQUAL(q2,0.716516);
+	TEST_REAL_EQUAL(q2,0.69725);
 RESULT
 
 
@@ -66,10 +66,10 @@ CHECK(ForwardSelection)
 	FeatureSelection fs(pcr1);
 	fs.setQualityIncreaseCutoff(cutoff);
 	fs.forwardSelection(5);
-	TEST_EQUAL(pcr1.getDescriptorIDs()->size(),9);
+	TEST_EQUAL(pcr1.getDescriptorIDs()->size(),5);
 	pcr1.validation->crossValidation(5);
 	double q2 = pcr1.validation->getQ2();
-	TEST_REAL_EQUAL(q2,0.716516);
+	TEST_REAL_EQUAL(q2,0.69725);
 RESULT
 
 
@@ -83,7 +83,7 @@ CHECK(RemoveLowResponseCorrelation)
 	TEST_EQUAL(pcr1.getDescriptorIDs()->size(),25);
 	pcr1.validation->crossValidation(5);
 	double q2 = pcr1.validation->getQ2();
-	TEST_REAL_EQUAL(q2,0.636714);
+	TEST_REAL_EQUAL(q2,0.635891);
 RESULT
 
 CHECK(TwinScan)
@@ -92,10 +92,10 @@ CHECK(TwinScan)
 	FeatureSelection fs(pcr1);
 	fs.setQualityIncreaseCutoff(cutoff);
 	fs.twinScan(5);
-	TEST_EQUAL(12,pcr1.getDescriptorIDs()->size());
+	TEST_EQUAL(pcr1.getDescriptorIDs()->size(), 10);
 	pcr1.validation->crossValidation(5);
 	double q2 = pcr1.validation->getQ2();
-	TEST_REAL_EQUAL(0.672437,q2);
+	TEST_REAL_EQUAL(q2, 0.672368);
 RESULT
 
 

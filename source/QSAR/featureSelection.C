@@ -772,8 +772,10 @@ namespace BALL
 					
 					if(abs_cor>abs_cor_threshold)
 					{
-						model_->descriptor_IDs_.erase(it2); // element at this position is deleted and it2 is automagically set to next element
-						it2--; // make sure also to check the next feature in the next iteration...
+						std::multiset<uint>::iterator tmp = it2;
+						--tmp; // make sure also to check the next feature in the next iteration...
+						model_->descriptor_IDs_.erase(it2); // element at this position
+						it2 = tmp;
 					}
 				}
 			}
@@ -833,8 +835,10 @@ namespace BALL
 				
 				if(max_abs_cor<abs_cor_threshold)
 				{
-					model_->descriptor_IDs_.erase(it); // element at this position is deleted and 'it' is automagically set to next element
-					it--; // make sure also to check the next feature in the next iteration...
+					std::multiset<uint>::iterator tmp = it;
+					--tmp; // make sure also to check the next feature in the next iteration...
+					model_->descriptor_IDs_.erase(it); // element at this position is deleted
+					it = tmp;
 				}
 			}	
 		}
