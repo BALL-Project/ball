@@ -184,67 +184,6 @@ namespace BALL
 		setDefaultOptions();
 	}
 
-	AssignBondOrderProcessor::AssignBondOrderProcessor(const AssignBondOrderProcessor& abop)
-		:	UnaryProcessor<AtomContainer>(abop),
-			options(abop.options),
-			valid_(abop.valid_),
-			evaluation_mode_(abop.evaluation_mode_),
-			bond_fixed_(abop.bond_fixed_),
-			free_bonds_(abop.free_bonds_),
-			bond_to_index_(abop.bond_to_index_),
-			index_to_bond_(abop.index_to_bond_),
-			number_of_virtual_hydrogens_(abop.number_of_virtual_hydrogens_),
-			virtual_bond_index_to_number_of_virtual_hydrogens_(abop.virtual_bond_index_to_number_of_virtual_hydrogens_),
-			num_of_virtual_bonds_(abop.num_of_virtual_bonds_),
-			virtual_bond_index_to_atom_(abop.virtual_bond_index_to_atom_),
-			atom_to_virtual_bond_index_(abop.atom_to_virtual_bond_index_),
-			virtual_bond_(abop.virtual_bond_), 
-			ilp_index_to_free_bond_(abop.ilp_index_to_free_bond_),
-			ilp_number_of_free_bonds_(abop.ilp_number_of_free_bonds_),
-			ilp_const_penalty_(abop.ilp_const_penalty_),
-			total_num_of_bonds_(abop.total_num_of_bonds_),
-			num_of_free_bonds_(abop.num_of_free_bonds_),
-			fixed_val_(abop.fixed_val_),
-			solutions_(abop.solutions_),
-			starting_configuration_(starting_configuration_),
-			atom_type_normalization_factor_(abop.atom_type_normalization_factor_),
-			bond_length_normalization_factor_(abop.bond_length_normalization_factor_),
-			last_applied_solution_(abop.last_applied_solution_),
-			ac_(abop.ac_),
-			max_bond_order_(abop.max_bond_order_),
-			alpha_(abop.alpha_),
-			max_number_of_solutions_(abop.max_number_of_solutions_),
-			compute_also_non_optimal_solutions_(abop.compute_also_non_optimal_solutions_),
-			add_missing_hydrogens_(abop.add_missing_hydrogens_),	
-			compute_also_connectivity_(abop.compute_also_connectivity_),
-			use_fine_penalty_(abop.use_fine_penalty_),	
-			heuristic_index_(abop.heuristic_index_),
-			greedy_atom_type_penalty_(abop.greedy_atom_type_penalty_),
-			greedy_bond_length_penalty_(abop.greedy_bond_length_penalty_),
-			greedy_node_expansions_(abop.greedy_node_expansions_),
-			queue_(abop.queue_),
-			penalties_(abop.penalties_),
-			block_to_start_idx_(abop.block_to_start_idx_),
-			block_to_length_(abop.block_to_length_),
-			block_to_start_valence_(abop.block_to_start_valence_),
-			block_definition_(abop.block_definition_),
-			atom_to_block_(abop.atom_to_block_),
-			bond_lengths_penalties_(abop.bond_lengths_penalties_),
-			step_(abop.step_),
-			timer_()
-	{
-#ifdef BALL_HAS_LPSOLVE
-		if (abop.ilp_)
-		{
-			ilp_ = copy_lp(abop.ilp_);
-		}
-		else
-		{
-			ilp_ = 0;
-		}
-#endif
-	}
-
 	AssignBondOrderProcessor::~AssignBondOrderProcessor()
 	{
 		clear();
@@ -257,81 +196,6 @@ namespace BALL
 			delete_lp(ilp_);
 		}
 #endif
-	}
-
-	AssignBondOrderProcessor& AssignBondOrderProcessor::operator = (const AssignBondOrderProcessor& abop)
-	{
-		// prevent self assignment
-		if (&abop == this)
-			return *this;
-		
-		options = abop.options;
-		valid_ = abop.valid_;
-		evaluation_mode_ = abop.evaluation_mode_;
-		bond_fixed_ = abop.bond_fixed_;
-		free_bonds_ = abop.free_bonds_;
-		bond_to_index_ = abop.bond_to_index_;
-		index_to_bond_ = abop.index_to_bond_;
-		number_of_virtual_hydrogens_ = abop.number_of_virtual_hydrogens_;
-		virtual_bond_index_to_number_of_virtual_hydrogens_ = abop.virtual_bond_index_to_number_of_virtual_hydrogens_;
-		num_of_virtual_bonds_ = abop.num_of_virtual_bonds_;
-		virtual_bond_index_to_atom_ = abop.virtual_bond_index_to_atom_;
-		atom_to_virtual_bond_index_ = abop.atom_to_virtual_bond_index_;
-
-		// if we already had a virtual bond, we need to get it out of the way
-		delete(virtual_bond_);
-		virtual_bond_ = abop.virtual_bond_; 
-
-		ilp_index_to_free_bond_ = abop.ilp_index_to_free_bond_;
-		ilp_number_of_free_bonds_ = abop.ilp_number_of_free_bonds_;
-		ilp_const_penalty_ = abop.ilp_const_penalty_;
-		total_num_of_bonds_ = abop.total_num_of_bonds_;
-		num_of_free_bonds_ = abop.num_of_free_bonds_;
-		fixed_val_ = abop.fixed_val_;
-		solutions_ = abop.solutions_;
-		starting_configuration_ = abop.starting_configuration_;
-		atom_type_normalization_factor_ = abop.atom_type_normalization_factor_;
-		bond_length_normalization_factor_ = abop.bond_length_normalization_factor_;
-		last_applied_solution_ = abop.last_applied_solution_;
-		ac_ = abop.ac_;
-		max_bond_order_ = abop.max_bond_order_;
-		alpha_ = abop.alpha_;
-		max_number_of_solutions_ = abop.max_number_of_solutions_;
-		compute_also_non_optimal_solutions_ = abop.compute_also_non_optimal_solutions_;
-		add_missing_hydrogens_ = abop.add_missing_hydrogens_;	
-		compute_also_connectivity_ = abop.compute_also_connectivity_;
-		use_fine_penalty_ = abop.use_fine_penalty_;	
-		heuristic_index_ = abop.heuristic_index_;	
-		greedy_atom_type_penalty_ = abop.greedy_atom_type_penalty_,
-		greedy_bond_length_penalty_ = abop.greedy_bond_length_penalty_,
-		greedy_node_expansions_ = abop.greedy_node_expansions_;
-		queue_ = abop.queue_;
-		penalties_ = abop.penalties_;
-		block_to_start_idx_ = abop.block_to_start_idx_;
-		block_to_length_ = abop.block_to_length_;
-		block_to_start_valence_ = abop.block_to_start_valence_;
-		block_definition_ = abop.block_definition_;
-		atom_to_block_ = abop.atom_to_block_;
-		bond_lengths_penalties_ = abop.bond_lengths_penalties_;
-		step_ = abop.step_;
-		timer_ = abop.timer_;
-
-#ifdef BALL_HAS_LPSOLVE
-		if (ilp_)
-		{
-			delete_lp(ilp_);
-		}
-		if (abop.ilp_)
-		{
-			ilp_ = copy_lp(abop.ilp_);
-		}
-		else
-		{
-			ilp_ = 0;
-		}
-#endif
-
-		return *this;
 	}
 
 	void AssignBondOrderProcessor::clear()
@@ -3102,15 +2966,6 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 	{
 	}
 
-	// Copy constructor
-	AssignBondOrderProcessor::PQ_Entry_::PQ_Entry_(const AssignBondOrderProcessor::PQ_Entry_& entry)
-		: estimated_atom_type_penalty(entry.estimated_atom_type_penalty),
-			estimated_bond_length_penalty(entry.estimated_bond_length_penalty),
-			bond_orders(entry.bond_orders),
-			last_bond(entry.last_bond)
-	{	
-	}
-	
 	// Destructor
 	AssignBondOrderProcessor::PQ_Entry_::~PQ_Entry_()
 	{

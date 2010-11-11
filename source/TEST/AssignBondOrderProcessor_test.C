@@ -1680,14 +1680,6 @@ CHECK(Option::BRANCH_AND_BOUND_CUTOFF)
 RESULT
 
 
-CHECK(AssignBondOrderProcessor(const AssignBondOrderProcessor& abop))
-  // There is really not much we can test here, so we just execute the copy constructor
-	// to have a chance of catching bugs with valgrind if they sneak in
-	AssignBondOrderProcessor abop1;
-	AssignBondOrderProcessor abop2(abop1);
-RESULT
-
-
 CHECK(AssignBondOrderProcessor& operator = (const AssignBondOrderProcessor& abop))
   // There is really not much we can test here, so we just execute the assignment
 	// to have a chance of catching bugs with valgrind if they sneak in

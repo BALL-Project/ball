@@ -252,17 +252,12 @@ namespace BALL
 
 			//@}
 		
-			BALL_CREATE(AssignBondOrderProcessor);
-
 			/** @name	Constructors and Destructors
 			*/
 			//@{
 					
 			///	Default Constructor
 			AssignBondOrderProcessor();
-		
-			/// Copy Construcor
-			AssignBondOrderProcessor(const AssignBondOrderProcessor& abop);
 		
 			// constructor with parameter filename //TODO
 			//AssignBondOrderProcessor(const String& file_name) throw(Exception::FileNotFound);
@@ -470,13 +465,6 @@ namespace BALL
 			float evaluatePenalty(AtomContainer* ac);
 			//@}
 			
-			/** @name Assignment
-			*/
-			//@{
-			/// assignment operator
-			AssignBondOrderProcessor& operator = (const AssignBondOrderProcessor& abop);
-			//@}
-
 			/** @name Public Attributes
 			*/
 			//@{
@@ -545,9 +533,6 @@ namespace BALL
 					// Default constructor
 					PQ_Entry_();
 								
-					// Copy constructor
-					PQ_Entry_(const PQ_Entry_& entry);
-
 					// Destructor
 					~PQ_Entry_();
 					
@@ -933,6 +918,8 @@ namespace BALL
 #ifdef BALL_HAS_LPSOLVE
 			lprec* ilp_;
 #endif
+			AssignBondOrderProcessor(const AssignBondOrderProcessor& abop);
+			AssignBondOrderProcessor& operator = (const AssignBondOrderProcessor& abop);
 		};
 
 } // namespace BALL 
