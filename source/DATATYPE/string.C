@@ -300,11 +300,15 @@ namespace BALL
 		}
  
 		char* buffer = new char[buffer_size];
+		memset(buffer, 0, buffer_size);
 
 		va_list var_arg_list;
 		va_start(var_arg_list, format);
 		vsnprintf(buffer, (Size)buffer_size, format, var_arg_list);
 		va_end(var_arg_list);
+
+		// this is a safeguard for strange vsnprintf implementations
+		buffer[buffer_size-1] = '\0';
 
 		assign(buffer);
 		
