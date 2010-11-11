@@ -1621,7 +1621,7 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 	
 	void NMRStarFile::readSampleConditions_()
 	{	
-		// in most cases we just have one datablock ...
+		// in most cases we just have one datablock ...	
 		for (Size db=0; db < datablocks_.size(); db++)
 		{
 			// find the category
@@ -1636,7 +1636,7 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 						if (saveframes[sf].items[loop].is_loop)
 						{
 							// we check the first key :-)
-							if (saveframes[sf].items[loop].keys[0]== "_Variable_type")
+							if (saveframes[sf].items[loop].keys[0] == "_Variable_type")
 							{
 								SampleCondition tmp;
 								tmp.name =  saveframes[sf].framename;
@@ -1646,25 +1646,30 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 
 								for (Size line = 0; line < current_loop->values.size(); line++ )
 								{
-									// accoring to the NMRStarFile 2.1 documentation, 
+									// according to the NMRStarFile 2.1 documentation, 
 									// naming the first entry "_Variable_type" is mandatory
 									// this is why we are allowed to map per type :-)
 									tmp.types.push_back(current_loop->values[line][0]);
-									if ( current_loop->keys[1] == "_Variable_value")
+									String insert_pos=current_loop->values[line][0];
+
+									Index pos = current_loop->getKeyIndex("_Variable_value");
+									if ( pos > -1) 
 									{
-										tmp.values[current_loop->values[line][0]] = 
-											( isValidSingleValue_(current_loop->values[line][1])
-											 ? current_loop->values[line][1].toFloat() : FLOAT_VALUE_NA );
+										tmp.values[insert_pos] = 
+												( isValidSingleValue_(current_loop->values[line][pos])
+												 ? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA );
 									}
-									if ( current_loop->keys[2] == "_Variable_value_error")
+									pos = current_loop->getKeyIndex("_Variable_value_error");
+									if ( pos > -1) 
 									{
-										tmp.errors[current_loop->values[line][0]] = 
-											( isValidSingleValue_(current_loop->values[line][2])
-												? current_loop->values[line][2].toFloat() : FLOAT_VALUE_NA );
+										tmp.errors[insert_pos] = 
+												( isValidSingleValue_(current_loop->values[line][pos])
+												 ? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA );
 									}
-									if ( current_loop->keys[3] == "_Variable_value_units")
+									pos = current_loop->getKeyIndex("_Variable_value_units");
+									if ( pos > -1) 
 									{
-										tmp.units[current_loop->values[line][0]] = current_loop->values[line][3];
+										tmp.units[insert_pos] = current_loop->values[line][pos];
 									}
 								}
 								sample_conditions_.push_back(tmp);
