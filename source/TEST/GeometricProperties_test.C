@@ -48,7 +48,7 @@ CHECK(setTorsionAngle successful)
 	a2.createBond(a3);
 	a3.createBond(a4);
 
-	PRECISION(1e-5)
+	PRECISION(1e-4)
 	float angle = 90.0f;
 	TEST_EQUAL(setTorsionAngle(a1, a2, a3, a4, Angle(angle, false)), true);
 	Angle result = calculateTorsionAngle(a1, a2, a3, a4);
