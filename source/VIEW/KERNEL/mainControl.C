@@ -961,9 +961,9 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			inifile.appendSection("MAIN");
 			VersionInfo version;
 			String version_string(version.getMajorRevision());
-			version_string += "." + version.getMinorRevision();
+			version_string += "." + String(version.getMinorRevision());
 			inifile.insertValue("MAIN", "Version", version_string);
-			
+
 			// the font 
 			if (main_control_preferences_ != 0)
 			{
