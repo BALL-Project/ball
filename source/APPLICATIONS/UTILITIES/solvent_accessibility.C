@@ -72,8 +72,14 @@ int main(int argc, char** argv)
 	Log.info() << "Residues will be marked as 'buried' if their accessible area is below " 
        << min_area << " A^2" << endl;
 
-	HashMap<const Atom*, float> atom_areas;
-	calculateSASAtomAreas(S, atom_areas);
+	Options options;
+	options[NumericalSAS::Option::NUMBER_OF_POINTS] = 400;
+	options[NumericalSAS::Option::PROBE_RADIUS    ] = 1.5;
+	options[NumericalSAS::Option::COMPUTE_VOLUME  ] = false;
+
+	NumericalSAS numerical_sas(options);
+	numerical_sas(S);
+	HashMap<const Atom*, float> atom_areas = numerical_sas.getAtomAreas();
 
 	Log.info() << "Residue solvent-accessible areas [A^2]:" << endl;
 	for (ResidueIterator ri = S.beginResidue(); +ri; ++ri)
