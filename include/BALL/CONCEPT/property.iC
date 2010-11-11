@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: property.iC,v 1.30 2003/08/26 08:04:08 oliver Exp $
-//
 
 using namespace std;
 

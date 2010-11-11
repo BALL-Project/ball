@@ -158,8 +158,8 @@ namespace BALL
 			return false;
 		}
 		
-		NamedProperty property("");
-		named_properties_.clear();
+		named_properties_.resize(1);
+		NamedProperty& property = named_properties_[0];
 		Size size = 0;
 		pm.readPrimitive(size, "size");
 		for (Size i = 0; i < size; i++)
@@ -167,7 +167,6 @@ namespace BALL
 			pm.checkObjectHeader(property, "");
 				property.persistentRead(pm);
 			pm.checkObjectTrailer("");
-			named_properties_.push_back(property);
 		}
 
 		return true;
