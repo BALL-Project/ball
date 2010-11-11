@@ -291,7 +291,7 @@ namespace BALL
 
 		void toExtendedRegularExpression_();
 
-			regex_t regex_;
+		regex_t regex_;
 		
 		String 	pattern_;
 		bool 		valid_pattern_;

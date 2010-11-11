@@ -31,6 +31,7 @@ namespace BALL
 		:	pattern_(BALL_REGULAR_EXPRESSION_DEFAULT_PATTERN),
 			valid_pattern_(false)
 	{
+		memset(&regex_, 0, sizeof(regex_t));
 		compilePattern_();
 	}
 
@@ -39,6 +40,7 @@ namespace BALL
 		:	pattern_(regular_expression.pattern_),
 			valid_pattern_(false)
 	{
+		memset(&regex_, 0, sizeof(regex_t));
 		compilePattern_();
 	}
 
@@ -46,6 +48,7 @@ namespace BALL
 		:	pattern_(pattern),
 			valid_pattern_(false)
 	{
+		memset(&regex_, 0, sizeof(regex_t));
 		if (wildcard_pattern == true)
 		{
 			toExtendedRegularExpression_();
@@ -69,6 +72,7 @@ namespace BALL
 		}
 			
 		regex_t regex;
+		memset(&regex, 0, sizeof(regex_t));
 
 		if (regcomp(&regex, pattern, compile_flags) != 0)
 		{
