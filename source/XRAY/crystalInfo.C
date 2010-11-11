@@ -305,8 +305,6 @@ namespace BALL
 
 		cart2frac_ = frac2cart_;
 		cart2frac_.invert();
-		//cout << "M" << frac2cart_ << endl;
-		//cout << "I" << cart2frac_ << endl;
 	}
 	
 	
@@ -325,25 +323,25 @@ namespace BALL
 			sg_symops_.clear();
 			
 			String curr_line = groupfile->getLine();
-			int curr_linenum = groupfile->getLineNumber();
-			
-			vector <String> tmp;
-			curr_line.split(tmp,"\t",0);
-			unsigned int num_symops = (tmp.back()).toInt();
-			
+			Position curr_linenum = groupfile->getLineNumber();
+
+			vector <String> jf_line; // A vector containing one line of the Jones Faithful notation
+			curr_line.split(jf_line,"\t",0);
+			Position num_symops = (jf_line.back()).toInt();
+
 			Matrix4x4 sym_mtrx;
-			
-			for (unsigned int j=1; j<=num_symops; j++)
+
+			for (Position j=1; j<=num_symops; j++)
 			{
 				sym_mtrx.clear();
 				groupfile->gotoLine(curr_linenum + j);
 				curr_line = groupfile->getLine();
 				curr_line.trim("()");
-				curr_line.split(tmp,",",0);
-				//cout << curr_line << endl;
+				curr_line.split(jf_line,",",0);
+
 				int comp, comp_add, sign, sign_add;
 				float divid, divis;
-				for (unsigned int i=0; i < tmp.size(); i++)
+				for (Position i=0; i < jf_line.size(); i++)
 				{
 					comp = 0;
 					comp_add = 0;
@@ -351,45 +349,45 @@ namespace BALL
 					sign_add = 0;
 					divid = 0;
 					divis = 1;
-					switch(tmp[i].length())
+					switch(jf_line[i].length())
 					{
 						case 1:
-							comp = int(tmp[i][0])-88;
+							comp = int(jf_line[i][0])-88;
 							break;
 
 						case 2:
-							sign = -(int(tmp[i][0])-44);
-							comp = int(tmp[i][1])-88;
+							sign = -(int(jf_line[i][0])-44);
+							comp = int(jf_line[i][1])-88;
 							break;
 
 						case 3:
-							comp = int(tmp[i][0])-88;
-							sign_add = -(int(tmp[i][1])-44);
-							comp_add = int(tmp[i][2])-88;
+							comp = int(jf_line[i][0])-88;
+							sign_add = -(int(jf_line[i][1])-44);
+							comp_add = int(jf_line[i][2])-88;
 							break;
 
 						case 5: 
-							if (isdigit(tmp[i][0]))
+							if (isdigit(jf_line[i][0]))
 							{
-								divid = float(tmp[i][0])-48;
-								divis = float(tmp[i][2])-48;
-								sign = -(int(tmp[i][3])-44);
-								comp = int(tmp[i][4])-88;
+								divid = float(jf_line[i][0])-48;
+								divis = float(jf_line[i][2])-48;
+								sign = -(int(jf_line[i][3])-44);
+								comp = int(jf_line[i][4])-88;
 							}
 							else
 							{
-								comp = int(tmp[i][0])-88;
-								sign = -(int(tmp[i][1])-44);
-								divid = float(tmp[i][2])-48;
-								divis = float(tmp[i][4])-48;
+								comp = int(jf_line[i][0])-88;
+								sign = -(int(jf_line[i][1])-44);
+								divid = float(jf_line[i][2])-48;
+								divis = float(jf_line[i][4])-48;
 							}
 							break;
 
 						case 6:
-							sign = -(int(tmp[i][0])-44);
-							comp = int(tmp[i][1])-88;
-							divid = float(tmp[i][3])-48;
-							divis = float(tmp[i][5])-48;
+							sign = -(int(jf_line[i][0])-44);
+							comp = int(jf_line[i][1])-88;
+							divid = float(jf_line[i][3])-48;
+							divis = float(jf_line[i][5])-48;
 							break;
 
 						default:
@@ -414,6 +412,153 @@ namespace BALL
 		return true;
 	}
 
+  void CrystalInfo::persistentWrite(PersistenceManager& pm, const char* name) const
+		throw (Exception::GeneralException)
+  {
+		pm.writeObjectHeader(this, name);
+
+			pm.writePrimitive(space_group_, "space_group_");
+			pm.writePrimitive(z_score_, "z_score_");
+			pm.writePrimitive(filename_, "filename_");
+
+			pm.writeStorableObject(cell_dimensions_, "cell_dimensions_");
+
+			// Serialize the angles
+			float alpha; bool alpha_flag = 0;
+			alpha_.get(alpha, alpha_flag);
+			pm.writePrimitive(alpha, "alpha_");
+			pm.writePrimitive(alpha_flag, "alpha_flag_");
+
+			float beta; bool beta_flag = 0;
+			beta_.get(beta, beta_flag);
+			pm.writePrimitive(beta, "beta_");
+			pm.writePrimitive(beta_flag, "beta_flag_");
+
+			float gamma; bool gamma_flag = 0;
+			gamma_.get(gamma, gamma_flag);
+			pm.writePrimitive(gamma, "gamma_");
+			pm.writePrimitive(gamma_flag, "gamma_flag_");
+
+			//Serialize the conversion matrix
+			String primitive_identifier = "";
+			for (Position i = 1; i<=4; i++)
+			{
+				for (Position j = 1; j<=4; j++)
+				{
+					primitive_identifier = "frac2cart_.m" + String(i) + String(j);
+					pm.writePrimitive(cart2frac_(i-1,j-1), primitive_identifier.c_str());
+				}
+			}
+
+			// Serialize the NCS SymOps as Matrix4x4, followed by the isGiven bit
+			pm.writePrimitive(getNumberOfNCSSymOps(), "ncs_symops_.size");
+
+			for (Position k = 1; k <= getNumberOfNCSSymOps(); k++)
+			{
+				for (Position i = 1; i <= 4; i++)
+				{
+					for (Position j = 1; j <= 4; j++)
+					{
+						primitive_identifier = "ncs_symops_(" + String(k) + ").m" + String(i) + String(j);
+						pm.writePrimitive(getNCS(k-1)(i-1,j-1), primitive_identifier.c_str());
+					}
+				}
+
+				primitive_identifier = "ncs_isgiven_(" + String(k) + ")";
+				pm.writePrimitive(isgivenNCS(k-1), primitive_identifier.c_str());
+
+			}
+
+			// Serialize the Space Group SymOps as Matrix4x4
+			//pm.writePrimitive(getNumberOfSymOps(), "sg_symops_.size");
+			//
+			//for (Position k = 1; k <= getNumberOfSymOps(); k++)
+			//{
+			//	for (Position i = 1; i <= 4; i++)
+			//	{
+			//		for (Position j = 1; j <= 4; j++)
+			//		{
+			//			primitive_identifier = "sg_symops_(" + String(k) + ").m" + String(i) + String(j);
+			//			pm.writePrimitive(getSymOp(k-1)(i-1,j-1), primitive_identifier.c_str());
+			//		}
+			//	}
+			//}
+
+		pm.writeObjectTrailer(name);
+	}
+  
+  void CrystalInfo::persistentRead(PersistenceManager& pm)
+		throw (Exception::GeneralException)
+  {
+		String space_group = "";
+		pm.readPrimitive(space_group, "space_group_");
+		if (!setSpaceGroup(space_group))
+		{
+			cout << "Could not read space group from project file, setting space group to P 1" << endl;
+			setSpaceGroup("P 1");
+		}
+
+		pm.readPrimitive(z_score_, "z_score_");
+		pm.readPrimitive(filename_, "filename_");
+
+		pm.readStorableObject(cell_dimensions_, "cell_dimensions_");
+
+		// Deserialize the angles
+		float alpha; bool alpha_flag = 0;
+		pm.readPrimitive(alpha, "alpha_");
+		pm.readPrimitive(alpha_flag, "alpha_flag_");
+		alpha_.set(alpha, alpha_flag);
+
+		float beta; bool beta_flag = 0;
+		pm.readPrimitive(beta, "beta_");
+		pm.readPrimitive(beta_flag, "beta_flag_");
+		beta_.set(beta, beta_flag);
+
+		float gamma; bool gamma_flag = 0;
+		pm.readPrimitive(gamma, "gamma_");
+		pm.readPrimitive(gamma_flag, "gamma_flag_");
+		gamma_.set(gamma, gamma_flag);
+
+		//Deserialize the conversion matrix
+		String primitive_identifier = "";
+		cart2frac_ = frac2cart_;
+		cart2frac_.invert();
+		for (Position i = 1; i<=4; i++)
+		{
+			for (Position j = 1; j<=4; j++)
+			{
+				primitive_identifier = "frac2cart_.m" + String(i) + String(j);
+				pm.readPrimitive(frac2cart_(i-1,j-1), primitive_identifier.c_str());
+			}
+		}
+		cart2frac_ = frac2cart_;
+		cart2frac_.invert();
+
+		// Deserialize the NCS SymOps as Matrix4x4, followed by the isGiven bit
+		Position ncs_symop_size;
+		pm.readPrimitive(ncs_symop_size, "ncs_symops_.size");
+
+		for (Position k = 1; k <= ncs_symop_size; k++)
+		{
+			Matrix4x4 temp_ncs = Matrix4x4::getZero();
+			bool temp_isgiven = false;
+
+			for (Position i = 1; i <= 4; i++)
+			{
+				for (Position j = 1; j <= 4; j++)
+				{
+					primitive_identifier = "ncs_symops_(" + String(k) + ").m" + String(i) + String(j);
+					pm.readPrimitive(temp_ncs(i-1,j-1), primitive_identifier.c_str());
+				}
+			}
+
+			primitive_identifier = "ncs_isgiven_(" + String(k) + ")";
+			pm.readPrimitive(temp_isgiven, primitive_identifier.c_str());
+			pushbackNCS(temp_ncs, temp_isgiven);
+
+		}
+
+	}
 }
 
 // namespace BALL

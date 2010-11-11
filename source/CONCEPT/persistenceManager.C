@@ -9,6 +9,7 @@
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/nucleicAcid.h>
 #include <BALL/KERNEL/bond.h>
+#include <BALL/XRAY/crystalInfo.h>
 
 // #define BALL_DEBUG_PERSISTENCE
 
@@ -125,6 +126,7 @@ namespace BALL
 		REGISTER_CLASS(SecondaryStructure)
 		REGISTER_CLASS(NucleicAcid)
 		REGISTER_CLASS(Nucleotide)
+		REGISTER_CLASS(CrystalInfo)
 		#undef REGISTER_CLASS
 	}
 

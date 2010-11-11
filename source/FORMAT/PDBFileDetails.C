@@ -1929,7 +1929,7 @@ namespace BALL
 		(const PDB::Structure& structure, const BALL::PDBInfo& info)
 	{
 		// --- CRYST1 ---
-		addAllRecords_(info, PDB::RECORD_TYPE__CRYST1);
+		writeCRYST1Section_(structure);
 		// --- ORIGX1 ---
 		addAllRecords_(info, PDB::RECORD_TYPE__ORIGX1);
 		// --- ORIGX2 ---

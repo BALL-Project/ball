@@ -20,6 +20,11 @@
 # include <BALL/COMMON/exception.h>
 #endif
 
+#ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
+#	include <BALL/CONCEPT/persistenceManager.h>
+#endif
+
+
 #include <string>
 
 namespace BALL
@@ -72,7 +77,8 @@ namespace BALL
 			/** Copy Constructor
 			 */
 			CrystalInfo(const CrystalInfo& ci);
-			
+		
+			BALL_CREATE(CrystalInfo)
 			/** Default Constructor
 			 */
 			~CrystalInfo() throw ();
@@ -133,6 +139,25 @@ namespace BALL
 
 			const Matrix4x4& getCart2Frac() const;	
 			const Matrix4x4& getFrac2Cart() const;	
+
+			/** @name Storable Interface
+			*/
+			//@{
+
+			/** Persistent stream writing.
+			*/
+			//void write(PersistenceManager& pm) const;
+			void persistentWrite(PersistenceManager& pm, const char* name) const
+				throw (Exception::GeneralException);
+
+			/** Persistent stream reading.
+			*/
+			//bool read(PersistenceManager& pm);
+			void persistentRead(PersistenceManager& pm)
+				throw (Exception::GeneralException);
+
+			//@}
+
 
 		protected:
 
