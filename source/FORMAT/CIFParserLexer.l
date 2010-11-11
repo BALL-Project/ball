@@ -23,20 +23,18 @@ using namespace BALL;
 %option noyywrap
 %option array
 
-EOL									\n
+EOL									[\n\r]
 AnyPrintChar				({OrdinaryChar}|[\"\'#$_\t[:blank:];\[\]])
-AnyPrintChar1				({OrdinaryChar}|[\'#$_\t[:blank:];\[\]])
-AnyPrintChar2				({OrdinaryChar}|[\"#$_\t[:blank:];\[\]])
 /*AnyPrintChar				[^\n]*/
 
 NonSQPrintChar			[^\n']
 NonDQPrintChar			[^\n"]
 COMMENT     				(#({AnyPrintChar})*{EOL})+
-TOKENIZED_COMMENT		[[:blank:]\n]*{COMMENT}
-WHITESPACE				  ([[:blank:]\n]|{TOKENIZED_COMMENT})+
+TOKENIZED_COMMENT		[[:blank:]\n\r]*{COMMENT}
+WHITESPACE				  ([[:blank:]\n\r]|{TOKENIZED_COMMENT})+
 DATA_								[dD][aA][tT][aA]_
 SAVE_               [sS][aA][vV][eE]_
-NBC									[^[:blank:]\n]
+NBC									[^[:blank:]\n\r]
 LOOP_								[lL][oO][oO][pP]_
 STOP_								[sS][tT][oO][pP]_
 TAG                 [[:blank:]]*_{NBC}+
@@ -45,8 +43,8 @@ OrdinaryChar        [0-9a-zA-Z!%&$()*+,\-./:<=>?@\\^`{|}\[\]~]
 
 /* NOTE: in the formal definition, UnquotedStrings are allowed to begin with a semicolon if they are not at the beginning of a line! We do not support this case yet! */
 UnquotedString      {OrdinaryChar}{NBC}* 
-SingleQuotedString  \'{AnyPrintChar2}*\'
-DoubleQuotedString 	\"{AnyPrintChar1}*\"
+SingleQuotedString  \'{AnyPrintChar}*\'
+DoubleQuotedString 	\"{AnyPrintChar}*\"
 
 TEXTLEADCHAR        {OrdinaryChar}|\"|#|$|\'|_|[[:blank:]]|\[|\] 
 CHARSTRING				 	({UnquotedString}|{SingleQuotedString}|{DoubleQuotedString})
