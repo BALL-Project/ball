@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fileSystem.C,v 1.20 2004/11/07 14:44:15 oliver Exp $
-//
 
 #include <BALL/SYSTEM/fileSystem.h>
 
@@ -33,31 +31,39 @@ namespace BALL
 
 		Index index = 0;
 
-		// replace all double occurences of a PATH_SEPARATOR with a single PATH_SEPARATOR
-		String s(FileSystem::PATH_SEPARATOR);
-		s += FileSystem::PATH_SEPARATOR;
-		for (; index != INVALID_INDEX; index = path.substitute(s, FileSystem::PATH_SEPARATOR)) { }
+		// If the path starts with a '\\', assume it's in UNC and return.
+		if (path.hasPrefix("\\\\"))
+			return;
+
+#ifdef BALL_OS_WINDOWS
+		// replace "\" by "/"
+		path.substitute("\\", "/");
+#endif
+
+		// replace all double occurences of a / with a single /
+		String s("//");
+		for (; index != INVALID_INDEX; index = path.substitute(s, "/")) { }
 		
 		// expand ~ to the user's home directory
 		FileSystem::expandTilde_(path);
 
 		// replace occurences of "/./" with "/"
-		s = FileSystem::PATH_SEPARATOR;
+		s = "/";
 		s += FileSystem::CURRENT_DIRECTORY;
-		s += FileSystem::PATH_SEPARATOR;
+		s += "/";
 		for (index = 0; index != INVALID_INDEX;
-				 index = path.substitute(s, FileSystem::PATH_SEPARATOR)) { }
+				 index = path.substitute(s, "/")) { }
 
 		// remove a leading "./"
 		s.set(FileSystem::CURRENT_DIRECTORY);
-		s += FileSystem::PATH_SEPARATOR;
+		s += "/";
 		while (path.hasPrefix(s) == true)
 		{
 			path.erase(0, s.size());	
 		}
 
 		// remove trailing "/."
-		s.set(FileSystem::PATH_SEPARATOR);
+		s.set("/");
 		s += FileSystem::CURRENT_DIRECTORY;
 		while (path.hasSuffix(s) == true)
 		{
@@ -67,33 +73,17 @@ namespace BALL
 		// remove intermediate reversals of path 
 		// (something like "/usr/local/../bin" 
 		//  would be reduced to "/usr/bin")
-#ifdef BALL_COMPILER_MSVC
 		s = "[^";
-		s += FileSystem::PATH_SEPARATOR;
-		s += FileSystem::PATH_SEPARATOR;
+		s += "/";
 		s += FileSystem::CURRENT_DIRECTORY;
 		s += "][^";
-		s += FileSystem::PATH_SEPARATOR;
-		s += FileSystem::PATH_SEPARATOR;
+		s += "/";
 		s += FileSystem::CURRENT_DIRECTORY;
 		s += "]*";
-		s += FileSystem::PATH_SEPARATOR;
-		s += FileSystem::PATH_SEPARATOR;
+		s += "/";
 		s += REGEXP_CONFORM_PARENT_DIRECTORY;
-		s += FileSystem::PATH_SEPARATOR;
-		s += FileSystem::PATH_SEPARATOR;
-#else
-		s = "[^";
-		s += FileSystem::PATH_SEPARATOR;
-		s += FileSystem::CURRENT_DIRECTORY;
-		s += "][^";
-		s += FileSystem::PATH_SEPARATOR;
-		s += FileSystem::CURRENT_DIRECTORY;
-		s += "]*";
-		s += FileSystem::PATH_SEPARATOR;
-		s += REGEXP_CONFORM_PARENT_DIRECTORY;
-		s += FileSystem::PATH_SEPARATOR;
-#endif
+		s += "/";
+
 		RegularExpression reg_exp(s);
 		Substring sub;
 		while (reg_exp.find(path, sub) == true)
@@ -104,8 +94,6 @@ namespace BALL
 
 	void FileSystem::expandTilde_(String& path)
 	{
-
-
 		#ifndef BALL_COMPILER_MSVC
 		if (path.isEmpty() == true)
 		{
@@ -117,7 +105,7 @@ namespace BALL
 			return;                
 		}
 		
-		Index index = (Index)path.find_first_not_of(FileSystem::PATH_SEPARATOR, 1);
+		Index index = (Index)path.find_first_not_of("/", 1);
 		
 		if (index == 2)
 		{
@@ -169,7 +157,7 @@ namespace BALL
 		endpwent();
 
 #else // Windows implementation
-		Index index = (Index)path.find_first_not_of(FileSystem::PATH_SEPARATOR, 1);
+		Index index = (Index)path.find_first_not_of("/", 1);
 		
 		if (index == 2)
 		{
@@ -225,6 +213,15 @@ namespace BALL
 	String FileSystem::path(const String& filename)
 	{
 		Position idx = (Position)filename.find_last_of(PATH_SEPARATOR);
+#		ifdef BALL_OS_WINDOWS
+		// this is an ugly hack to force similar behaviour of the
+		// TransformationManager for Windows and Unix
+		// this means that "/" and "\" are treated the same
+		Position idx2 = (Position)filename.find_last_of('/');
+		idx  = (idx  == String::EndPos) ? idx2 : idx;
+		idx2 = (idx2 == String::EndPos) ?  idx : idx2;
+		idx  = std::max(idx, idx2);
+#		endif
 		if (idx != String::EndPos)
 		{
 			return filename(0, idx + 1);

@@ -85,6 +85,10 @@ namespace BALL
 				It expands the user's homedirectory (<tt>'~'</tt>) and
 				duplicate or redundant separators, e.g.
         '//' is reduced to /'/' and '/./' is removed.
+				Also, all occurrences of \link FileSystem::PATH_SEPARATOR PATH_SEPARATOR \endlink 
+				are canonized to '/'.
+				NOTE: if the path starts with '\\', we do not canonize further and assume it to
+				      be a UNC path.
 		*/
 		static void canonizePath(String& path);
 
