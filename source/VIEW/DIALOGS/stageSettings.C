@@ -224,7 +224,7 @@ namespace BALL
 			scene_->setPreview(use_preview->isChecked());
 
 			// use vertex buffers ?
-			bool use_buffer = use_vertex_buffers->isChecked();
+			bool use_buffer = use_vertex_buffers->isChecked() && use_vertex_buffers->isEnabled();
 			GLRenderer& renderer = scene_->getGLRenderer();
 
 			if (use_buffer != renderer.vertexBuffersEnabled() &&
