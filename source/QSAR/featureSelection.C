@@ -762,9 +762,13 @@ namespace BALL
 			
 			for(std::multiset<uint>::iterator it1 = model_->descriptor_IDs_.begin(); it1!=model_->descriptor_IDs_.end(); it1++)
 			{	
-				for(std::multiset<uint>::iterator it2 = model_->descriptor_IDs_.begin(); it2!=model_->descriptor_IDs_.end(); it2++)
+				for(std::multiset<uint>::iterator it2 = model_->descriptor_IDs_.begin(); it2!=model_->descriptor_IDs_.end(); )
 				{
-					if(*it1==*it2) continue;
+					if(*it1==*it2)
+					{
+						it2++;
+						continue;
+					}
 					
 					double covar = Statistics::getCovariance(model_->data->descriptor_matrix_[*it1], model_->data->descriptor_matrix_[*it2],mean[*it1],mean[*it2]);
 					
@@ -773,10 +777,11 @@ namespace BALL
 					if(abs_cor>abs_cor_threshold)
 					{
 						std::multiset<uint>::iterator tmp = it2;
-						--tmp; // make sure also to check the next feature in the next iteration...
-						model_->descriptor_IDs_.erase(it2); // element at this position
+						tmp++;
+						model_->descriptor_IDs_.erase(it2);
 						it2 = tmp;
 					}
+					else it2++;
 				}
 			}
 		}
@@ -821,7 +826,7 @@ namespace BALL
 			double abs_cor_threshold = abs(min_correlation);
 			
 			/// check correlation of each feature with each response variable
-			for(std::multiset<uint>::iterator it = model_->descriptor_IDs_.begin(); it!=model_->descriptor_IDs_.end(); it++)
+			for(std::multiset<uint>::iterator it = model_->descriptor_IDs_.begin(); it!=model_->descriptor_IDs_.end(); )
 			{	
 				double max_abs_cor = 0;
 				
@@ -832,15 +837,16 @@ namespace BALL
 					double abs_cor = abs(covar/(desc_stddev[*it]*y_stddev[i]));
 					if(abs_cor>max_abs_cor) max_abs_cor=abs_cor;
 				}
-				
+
 				if(max_abs_cor<abs_cor_threshold)
 				{
 					std::multiset<uint>::iterator tmp = it;
-					--tmp; // make sure also to check the next feature in the next iteration...
-					model_->descriptor_IDs_.erase(it); // element at this position is deleted
+					tmp++;
+					model_->descriptor_IDs_.erase(it);
 					it = tmp;
 				}
-			}	
+				else it++;
+			}
 		}
 
 
