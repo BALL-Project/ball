@@ -8,11 +8,15 @@
 #include <BALL/STRUCTURE/sdGenerator.h>
 #include <BALL/STRUCTURE/moleculeAssembler.h>
 #include <BALL/KERNEL/system.h>
+#include <BALL/KERNEL/PTE.h>
+#include <BALL/KERNEL/forEach.h>
 
 #include <cmath>
 #include <utility>
 
 using namespace std;
+
+#define BALL_DEBUG_MOLECULEASSEMBLER
 
 #ifdef BALL_DEBUG_MOLECULEASSEMBLER
 # define DEBUG(a) Log.info() << a << std::endl;
@@ -38,100 +42,93 @@ namespace BALL
 		return x.size() > y.size();
 	}
 
-	//      determine the free space around an atom, remaining to attach further substituents
+	// determine the free space around an atom that remains for attaching further substituents
 	void MoleculeAssembler::updateCFS(Atom*& atom)
 	{ 
-		Vector3 atom_position = atom -> getPosition();
+		const Vector3& atom_position = atom->getPosition();
 
-		//      create vectors that will border the free space and the angle between them
-		Vector3 hi_vec;
-		Vector3 lo_vec;
+		// create vectors that will bound the free space and the angle between them
+		Vector3 hi_vec, lo_vec;
 		Angle free_angle;
 
-		//      variable that will temporarily hold the free angle
-		float temp = 360.0;
-
-		//      flag, indicating, whether the first of the bonds bordering the free angle has been found
+		// flag, indicating whether the first of the bonds bordering the free angle has been found
 		bool first_found = false;
 
-		for (Atom::BondIterator bond_it = atom -> beginBond(); bond_it != atom -> endBond(); bond_it++)
+		Atom::BondIterator bond_it;
+		BALL_FOREACH_ATOM_BOND(*atom, bond_it)
 		{
-			//      only check bonds to atoms, that already have been positioned
-			Atom*   partner = bond_it -> getPartner(*atom);
-			if (partner -> hasProperty(SDGenerator::PRE_ASSEMBLED) )
+			// only check bonds to atoms that have already been positioned
+			Atom* partner = bond_it->getPartner(*atom);
+
+			if (!partner->hasProperty(SDGenerator::PRE_ASSEMBLED))
+				continue;
+
+			// found the first bond
+			if (!first_found)
 			{
-				//      find the first bond
-				if (!first_found)
+				// get vector representing the bond
+				const Vector3& partner_position = partner->getPosition();
+				hi_vec = (partner_position - atom_position);
+
+				// as long as the second bond is not found, lo_vec and hi_vec are equal
+				lo_vec = hi_vec;
+
+				// in this case the free angle is 360° (the whole area around the atom is free)
+				free_angle.set(2.*M_PI);
+
+				first_found = true;
+			}
+			// when the first bond has already been found
+			else
+			{
+				// get vector representing the bond
+				Atom* partner = bond_it->getPartner(*atom);
+
+				const Vector3& partner_position = partner->getPosition();
+
+				Vector3 curr_vec = (partner_position - atom_position);
+
+				// get the opposite angle of that included by the two bonds
+				Angle new_angle(2.*M_PI - (free_angle - (hi_vec.getAngle(curr_vec))));;
+
+				// if the free angle has decreased, accept the latest found bond
+				if (new_angle < free_angle)
 				{
-					//      get vector, representing the bond
-					Vector3 partner_position = partner -> getPosition();
-					hi_vec = (partner_position - atom_position);
-
-					//      as long as the second bond is not found, lo_vec and hi_vec are equal
-					lo_vec = hi_vec;
-
-					//      in this case the free angle is 360° (the whole area around the atom is free)
-					temp = 360.0;
-					free_angle.set(temp, true);
-
-					first_found = true;
-				}
-				//      when the first bond has already been found
-				else
-				{
-																				//      get vector, representing another bond
-					Atom* partner = bond_it -> getPartner(*atom);
-					Vector3 partner_position = partner -> getPosition();
-					Vector3 curr_vec = (partner_position - atom_position);
-
-					//      get the opposite angle of that included by the two bonds
-					float temp2 = (free_angle - (hi_vec.getAngle(curr_vec)/(2 * Constants::PI)*359.9) );
-					Angle new_angle;
-					new_angle.set(temp2, true);
-
-					//      if the free angle has decreased, accept the latest found bond
-					if (new_angle < free_angle)
-					{
-						temp = temp2;
-						free_angle = new_angle;
-						lo_vec = curr_vec;
-					}
+					free_angle = new_angle;
+					lo_vec = curr_vec;
 				}
 			}
 		}
 
-		//      set the atom's Properties according to the results
-		atom -> setProperty("CFS_lo_x", lo_vec[0]);
-		atom -> setProperty("CFS_lo_y", lo_vec[1]);
+		// set the atom's Properties according to the results
+		atom->setProperty("CFS_lo_x", lo_vec[0]);
+		atom->setProperty("CFS_lo_y", lo_vec[1]);
 
-		atom -> setProperty("CFS_hi_x", hi_vec[0]);
-		atom -> setProperty("CFS_hi_y", hi_vec[1]);
+		atom->setProperty("CFS_hi_x", hi_vec[0]);
+		atom->setProperty("CFS_hi_y", hi_vec[1]);
 
-		atom -> setProperty("CFS_free", temp);
-
-		NamedProperty CFS_lo_x = atom -> getProperty("CFS_lo_x");
-		NamedProperty CFS_lo_y = atom -> getProperty("CFS_lo_y");
-		NamedProperty CFS_hi_x = atom -> getProperty("CFS_hi_x");
-		NamedProperty CFS_hi_y = atom -> getProperty("CFS_hi_y");
+		atom->setProperty("CFS_free", free_angle.toRadian());
 	}
 
-	//      attach a ringsystem to a partially constructed structure diagram
+	// attach a ringsystem to a partially constructed structure diagram
 	void MoleculeAssembler::assembleRS(Atom*& start_atom, Atom*& assemble_atom, vector<vector<vector<Atom*> > >& ringsystems)
 	{
 		DEBUG("\nMoleculeAssembler : assembleRS called.")
-
-
+DEBUG(start_atom->getElement().getSymbol() << " / " << assemble_atom->getElement().getSymbol());
+DEBUG(start_atom->hasProperty(SDGenerator::ASSEMBLED) << " / " << assemble_atom->hasProperty(SDGenerator::ASSEMBLED));
 		Size keep_i = 0;
 		Size keep_j = 0;
 
-		//      find the ring system, that is to be positioned
+		// TODO: this is *not* the way to do it
+		// find the ring system, that is to be positioned
 		for (Size i = 0; i != ringsystems.size(); i++)
 		{
 			for (Size j = 0; j != ringsystems[i].size(); j++)
 			{
 				for (Size k = 0; k != ringsystems[i][j].size(); k++)
 				{
-					if (ringsystems[i][j][k] == assemble_atom)      //      if the assemble-atom is part of the ringsystem, the correct one is found
+					// if the assemble-atom is part of the ringsystem, the correct one is found
+					if (ringsystems[i][j][k] == assemble_atom)      
 					{
 						keep_i = i;
 						keep_j = j;
@@ -141,44 +138,33 @@ namespace BALL
 			}
 		}
 
-		//      calculate the direction of an imaginary straight bond from the assembly-atom
+		// calculate the direction of an imaginary straight bond from the assembly-atom
 		Vector3 ref_vec(0.0, 1.0, 0.0);
 
-		//      get Circular Free Sweep - Data of the assemble-atom
-		Vector3 lo_vec;
-		Vector3 hi_vec;
+		// get Circular Free Sweep - Data of the assemble-atom
+		Vector3 lo_vec, hi_vec;
 
-		NamedProperty ass_CFS_lo_x = assemble_atom -> getProperty("CFS_lo_x");
-		NamedProperty ass_CFS_lo_y = assemble_atom -> getProperty("CFS_lo_y");
+		lo_vec.x = assemble_atom->getProperty("CFS_lo_x").getFloat();
+		lo_vec.y = assemble_atom->getProperty("CFS_lo_y").getFloat();
+		lo_vec.z = 0.0;
 
+		hi_vec.x = assemble_atom->getProperty("CFS_hi_x").getFloat();
+		hi_vec.y = assemble_atom->getProperty("CFS_hi_y").getFloat();
+		hi_vec.z = 0.0;
 
-		lo_vec[0] = ass_CFS_lo_x.getFloat();
-		lo_vec[1] = ass_CFS_lo_y.getFloat();
-		lo_vec[2] = 0.0;
+		// angles needed to determine the imaginary straight bond
+		Angle test_angle_lo = lo_vec.getAngle(ref_vec);
+		Angle test_angle_hi = hi_vec.getAngle(ref_vec);
 
+		// determine the angle by which either lo_vec or hi_vec must be rotated to get the imaginary straight bond
+		Angle dir_angle = Angle(M_PI - hi_vec.getAngle(lo_vec).toRadian()/2.);
 
-		NamedProperty ass_CFS_hi_x = assemble_atom -> getProperty("CFS_hi_x");
-		NamedProperty ass_CFS_hi_y = assemble_atom -> getProperty("CFS_hi_y");
-
-		hi_vec[0] = ass_CFS_hi_x.getFloat();
-		hi_vec[1] = ass_CFS_hi_y.getFloat();
-		hi_vec[2] = 0.0;
-
-		//      angles needed, to determine the imaginary straight bond
-		float test_angle_lo = lo_vec.getAngle(ref_vec)/(2 * Constants::PI)*359.9;
-		float test_angle_hi = hi_vec.getAngle(ref_vec)/(2 * Constants::PI)*359.9;
-
-		//      determine the angle by which either lo_vec or hi_vec must be rotated, to get the imaginary straight bond
-		float dir_temp = hi_vec.getAngle(lo_vec) /(2 * Constants::PI)*359.9 ;
-		Angle dir_angle;
-		dir_angle.set(180.0 - dir_temp/2, true);
-
-		//      determine, whether lo_vec or hi_vec must be rotated to get the imaginary straight bond
+		// determine whether lo_vec or hi_vec must be rotated to get the imaginary straight bond
 		TVector4<float> ass_straight;
-		ass_straight[0]  = hi_vec[0];
-		ass_straight[1]  = hi_vec[1];
-		ass_straight[2]  = 0.0;
-		ass_straight[3]  = 1.0;
+		ass_straight.x  = hi_vec[0];
+		ass_straight.y  = hi_vec[1];
+		ass_straight.z  = 0.0;
+		ass_straight.h  = 1.0;
 
 		if (lo_vec[0] < 0 && hi_vec[0] < 0)
 		{
@@ -192,14 +178,14 @@ namespace BALL
 		}
 		else if (lo_vec[0] < 0 && hi_vec[0] > 0)
 		{
-			if (test_angle_lo < 90.0 && test_angle_hi < 90.0)
+			if (test_angle_lo.toRadian() < M_PI/2. && test_angle_hi.toRadian() < M_PI/2.)
 			{
 				ass_straight[0]  = lo_vec[0];
 				ass_straight[1]  = lo_vec[1];
 				ass_straight[2]  = 0.0;
 				ass_straight[3]  = 1.0;
 			}
-			if (test_angle_lo + test_angle_hi < 180.0)
+			if ((test_angle_lo + test_angle_hi).toRadian() < M_PI)
 			{
 				ass_straight[0]  = lo_vec[0];
 				ass_straight[1]  = lo_vec[1];
@@ -209,7 +195,7 @@ namespace BALL
 		}
 		else if (lo_vec[0] > 0 && hi_vec[0] < 0)
 		{
-			if (test_angle_lo + test_angle_hi > 180.0)
+			if ((test_angle_lo + test_angle_hi).toRadian() > M_PI)
 			{
 				ass_straight[0]  = lo_vec[0];
 				ass_straight[1]  = lo_vec[1];
@@ -238,28 +224,20 @@ namespace BALL
 		TVector4<float> assemble_atom_pos_vec;
 
 		//      get Circular Free Sweep - Data of the assemble-atom
-		ass_CFS_lo_x = start_atom -> getProperty("CFS_lo_x");
-		ass_CFS_lo_y = start_atom -> getProperty("CFS_lo_y");
+		lo_vec.x = start_atom->getProperty("CFS_lo_x").getFloat();
+		lo_vec.y = start_atom->getProperty("CFS_lo_y").getFloat();
+		lo_vec.z = 0.0;
 
-		ass_CFS_hi_x = start_atom -> getProperty("CFS_hi_x");
-		ass_CFS_hi_y = start_atom -> getProperty("CFS_hi_y");
-
-
-		lo_vec[0] = ass_CFS_lo_x.getFloat();
-		lo_vec[1] = ass_CFS_lo_y.getFloat();
-		lo_vec[2] = 0.0;
-
-		hi_vec[0] = ass_CFS_hi_x.getFloat();
-		hi_vec[1] = ass_CFS_hi_y.getFloat();
-		hi_vec[2] = 0.0;
+		hi_vec.x = start_atom->getProperty("CFS_hi_x").getFloat();
+		hi_vec.y = start_atom->getProperty("CFS_hi_y").getFloat();
+		hi_vec.z = 0.0;
 
 		//      angles, needed to determine the direction of the bond between structure diagram and ringsystem
 		test_angle_lo = lo_vec.getAngle(ref_vec)/(2 * Constants::PI)*359.9;
 		test_angle_hi = hi_vec.getAngle(ref_vec)/(2 * Constants::PI)*359.9;
 
 		//      determine the angle by which either lo_vec or hi_vec must be rotated, to get the bond between structure diagram and ringsystem
-		dir_temp = hi_vec.getAngle(lo_vec) /(2 * Constants::PI)*359.9 ;
-		dir_angle.set(180.0 - dir_temp/2, true);
+		dir_angle.set(M_PI - hi_vec.getAngle(lo_vec) / 2.);
 
 		//      determine, whether lo_vec or hi_vec must be rotated to get the bond between structure diagram and ringsystem
 		assemble_atom_pos_vec[0]  = hi_vec[0];
@@ -279,7 +257,7 @@ namespace BALL
 		}
 		else if (lo_vec[0] < 0 && hi_vec[0] > 0)
 		{
-			if (test_angle_lo < 90.0 && test_angle_hi < 90.0)
+			if (test_angle_lo.toRadian() < M_PI/2. && test_angle_hi.toRadian() < M_PI/2.)
 			{
 				assemble_atom_pos_vec[0]  = lo_vec[0];
 				assemble_atom_pos_vec[1]  = lo_vec[1];
@@ -287,7 +265,7 @@ namespace BALL
 				assemble_atom_pos_vec[3]  = 1.0;
 			}
 
-			if (test_angle_lo + test_angle_hi < 180.0)
+			if ((test_angle_lo + test_angle_hi).toRadian() < M_PI)
 			{
 				assemble_atom_pos_vec[0]  = lo_vec[0];
 				assemble_atom_pos_vec[1]  = lo_vec[1];
@@ -297,7 +275,7 @@ namespace BALL
 		}
 		else if (lo_vec[0] > 0 && hi_vec[0] < 0)
 		{
-			if (test_angle_lo + test_angle_hi > 180.0)
+			if ((test_angle_lo + test_angle_hi).toRadian() > M_PI)
 			{
 				ass_straight[0]  = lo_vec[0];
 				ass_straight[1]  = lo_vec[1];
@@ -316,9 +294,7 @@ namespace BALL
 			}
 		}
 
-		NamedProperty CFS_free = start_atom -> getProperty("CFS_free");
-		dir_temp = (CFS_free.getFloat() / 2);
-
+		Angle half_cfs_angle(start_atom->getProperty("CFS_free").getFloat()/2.);
 
 		//      consider the continuation of the zig-zag-order of an adjacent chain
 		if (!(start_atom -> hasProperty(SDGenerator::IN_RING)))
@@ -328,23 +304,23 @@ namespace BALL
 				//      if the las t bond before the bond between structure diagram and ringsystem was a zag-bond, append a zig-bond
 				if (start_atom -> hasProperty(SDGenerator::ZAG))
 				{
-					dir_angle.set(dir_temp - 56.0, false);
+					dir_angle.set(half_cfs_angle.toDegree() - 56.0, false);
 				}
 				//      and vice versa
 				else
 				{
-					dir_angle.set(dir_temp + 56.0, false);
+					dir_angle.set(half_cfs_angle.toDegree() + 56.0, false);
 				}
 			}
 			else
 			{
-				dir_angle.set(dir_temp - 56.0, false);
+				dir_angle.set(half_cfs_angle.toDegree() - 56.0, false);
 			}
 		}
 		//      otherwise attach a straigth bond
 		else
 		{
-			dir_angle.set(dir_temp, false);
+			dir_angle.set(half_cfs_angle);
 		}
 
 		rot_matr.setRotationZ(dir_angle);
@@ -365,14 +341,16 @@ namespace BALL
 		shift_vec[1] = assemble_atom -> getPosition()[1] - assemble_atom_pos_vec[1];
 		shift_vec[2] = 0.0;
 
+	Log.info() << "loop 1" << std::endl;
 		//      shift each atom of the ringsystem by the determined distance an direction
 		for (Size i = 0; i != ringsystems[keep_i].size(); i++)
 		{
 			for (Size j = 0; j != ringsystems[keep_i][i].size(); j++)
 			{
-				if (!(ringsystems[keep_i][i][j] -> hasProperty(SDGenerator::SHIFTED)))
+				if (!(ringsystems[keep_i][i][j] -> hasProperty(SDGenerator::SHIFTED) || ringsystems[keep_i][i][j]->hasProperty(SDGenerator::ASSEMBLED)))
 				{
 					Vector3 new_pos = ringsystems[keep_i][i][j] -> getPosition() - shift_vec;
+			DEBUG("set position for " << ringsystems[keep_i][i][j]->getElement().getSymbol());
 					ringsystems[keep_i][i][j] -> setPosition(new_pos);
 					ringsystems[keep_i][i][j] -> setProperty(SDGenerator::SHIFTED);
 				}
@@ -407,6 +385,7 @@ namespace BALL
 
 					Vector3 new_pos(assemble_atom -> getPosition()[0] + rel_pos[0], assemble_atom -> getPosition()[1] + rel_pos[1], 0.0);
 
+			DEBUG("set position for " << ringsystems[keep_i][i][j]->getElement().getSymbol());
 					ringsystems[keep_i][i][j] -> setPosition(new_pos);
 					ringsystems[keep_i][i][j] -> setProperty(SDGenerator::ROTATED);
 				}
@@ -427,85 +406,52 @@ namespace BALL
 		neighbours.first = ringsystems[keep_i][keep_j][(assemble_atom_index - 1 + num_atoms) % num_atoms];
 		neighbours.second = ringsystems[keep_i][keep_j][(assemble_atom_index + 1) % num_atoms];
 
-		Vector3 ass_at_neighb_1;
-		Vector3 ass_at_neighb_2;
-		Vector3 con_vec;
+		Vector3 ass_at_neighb_1 = neighbours.first->getPosition()  - assemble_atom->getPosition();
+		Vector3 ass_at_neighb_2 = neighbours.second->getPosition() - assemble_atom->getPosition();
+		Vector3 con_vec         = start_atom->getPosition() - assemble_atom->getPosition();
 
-		ass_at_neighb_1[0] = neighbours.first -> getPosition()[0] - assemble_atom -> getPosition()[0];
-		ass_at_neighb_1[1] = neighbours.first -> getPosition()[1] - assemble_atom -> getPosition()[1];
-		ass_at_neighb_1[2] = 0.0;
-
-		ass_at_neighb_2[0] = neighbours.second -> getPosition()[0] - assemble_atom -> getPosition()[0];
-		ass_at_neighb_2[1] = neighbours.second -> getPosition()[1] - assemble_atom -> getPosition()[1];
-		ass_at_neighb_2[2] = 0.0;
-
-		con_vec[0] = start_atom -> getPosition()[0] - assemble_atom -> getPosition()[0];
-		con_vec[1] = start_atom -> getPosition()[1] - assemble_atom -> getPosition()[1];
-		con_vec[2] = 0.0;
-
-		float neigh_1_angle = con_vec.getAngle(ass_at_neighb_1) / (2 * Constants::PI)*360.0;
-		float neigh_2_angle = con_vec.getAngle(ass_at_neighb_2) / (2 * Constants::PI)*360.0;
-
-		//      if the angles between the new bond between ringsystem an structure diagram and the 2 adjacent bonds of the ringsystem are not equal, the ringsystem is rotated step by step until they fit
-		float diff = fabs(neigh_1_angle - neigh_2_angle);
-
-		while( diff > 2.1)
+		// if the angles between the new bond between ringsystem an structure diagram and the 2 adjacent bonds of the ringsystem are not equal, 
+		// the ringsystem is rotated step by step until they fit
+		Log.info() << "1: " << con_vec << " " << fabs((con_vec.getAngle(ass_at_neighb_1)- con_vec.getAngle(ass_at_neighb_2).toDegree())) << std::endl;
+		if (!((start_atom == neighbours.first) || (start_atom == neighbours.second)))
 		{
-
+		while(fabs(con_vec.getAngle(ass_at_neighb_1) - con_vec.getAngle(ass_at_neighb_2).toDegree()) > 2.1)
+		{
+		Log.info() << "2: " << fabs((con_vec.getAngle(ass_at_neighb_1)- con_vec.getAngle(ass_at_neighb_2).toDegree())) << std::endl;
 			rot_angle.set(2.0, false);
-
 			rot_matr.setRotationZ(rot_angle);
 
-			for (Size i = 0; i != ringsystems[keep_i].size(); i++)
+			for (Size i = 0; i < ringsystems[keep_i].size(); i++)
 			{
-				for (Size j = 0; j != ringsystems[keep_i][i].size(); j++)
+				for (Size j = 0; j < ringsystems[keep_i][i].size(); j++)
 				{
-					ringsystems[keep_i][i][j] -> clearProperty(SDGenerator::ROTATED);
+					TVector4<float> rel_pos;
+					rel_pos.x = ringsystems[keep_i][i][j]->getPosition().x - assemble_atom->getPosition().x;
+					rel_pos.y = ringsystems[keep_i][i][j]->getPosition().y - assemble_atom->getPosition().y;
+					rel_pos.z = 0.0;
+					rel_pos.h = 1.0;
+Log.info() << "vorher: " << rel_pos << std::endl;
+					rel_pos = rot_matr * rel_pos;
+Log.info() << "nachher: " << rel_pos << std::endl;
+
+					Vector3 new_pos(assemble_atom->getPosition().x + rel_pos.x, assemble_atom->getPosition().y + rel_pos.y, 0.0);
+Log.info() << "neue pos: " << new_pos << std::endl;
+
+			DEBUG("set position for " << ringsystems[keep_i][i][j]->getElement().getSymbol());
+					ringsystems[keep_i][i][j]->setPosition(new_pos);
+					ringsystems[keep_i][i][j]->setProperty(SDGenerator::ROTATED);
 				}
 			}
 
-			for (Size i = 0; i != ringsystems[keep_i].size(); i++)
-			{
-				for (Size j = 0; j != ringsystems[keep_i][i].size(); j++)
-				{
-					if (!(ringsystems[keep_i][i][j] -> hasProperty(SDGenerator::ROTATED)))
-					{
-						TVector4<float> rel_pos;
-						rel_pos[0] = ringsystems[keep_i][i][j] -> getPosition()[0] - assemble_atom -> getPosition()[0];
-						rel_pos[1] = ringsystems[keep_i][i][j] -> getPosition()[1] - assemble_atom -> getPosition()[1];
-						rel_pos[2] = 0.0;
-						rel_pos[3] = 1.0;
-
-						rel_pos = rot_matr * rel_pos;
-
-						Vector3 new_pos(assemble_atom -> getPosition()[0] + rel_pos[0], assemble_atom -> getPosition()[1] + rel_pos[1], 0.0);
-
-						ringsystems[keep_i][i][j] -> setPosition(new_pos);
-						ringsystems[keep_i][i][j] -> setProperty(SDGenerator::ROTATED);
-					}
-				}
-			}
-
-			ass_at_neighb_1[0] = neighbours.first -> getPosition()[0] - assemble_atom -> getPosition()[0];
-			ass_at_neighb_1[1] = neighbours.first -> getPosition()[1] - assemble_atom -> getPosition()[1];
-			ass_at_neighb_1[2] = 0.0;
-
-			ass_at_neighb_2[0] = neighbours.second -> getPosition()[0] - assemble_atom -> getPosition()[0];
-			ass_at_neighb_2[1] = neighbours.second -> getPosition()[1] - assemble_atom -> getPosition()[1];
-			ass_at_neighb_2[2] = 0.0;
-
-			con_vec[0] = start_atom -> getPosition()[0] - assemble_atom -> getPosition()[0];
-			con_vec[1] = start_atom -> getPosition()[1] - assemble_atom -> getPosition()[1];
-			con_vec[2] = 0.0;
-
-			neigh_1_angle = con_vec.getAngle(ass_at_neighb_1) / (2 * Constants::PI)*360.0;
-			neigh_2_angle = con_vec.getAngle(ass_at_neighb_2) / (2 * Constants::PI)*360.0;
-
-			diff =  std::abs(neigh_1_angle - neigh_2_angle);
+			ass_at_neighb_1 = neighbours.first->getPosition()  - assemble_atom->getPosition();
+			ass_at_neighb_2 = neighbours.second->getPosition() - assemble_atom->getPosition();
+Log.info() << con_vec << " / " << ass_at_neighb_1 << " / " << ass_at_neighb_2 << std::endl;
+			con_vec = start_atom->getPosition() - assemble_atom->getPosition();
 		}
-
+		}
+Log.info() << "loop 4 end" << std::endl;
 		//      if the ringsystem has been positioned in the wrong direction, it is rotated by 180°
-		if (neigh_1_angle < 90.0)
+		if (con_vec.getAngle(ass_at_neighb_1).toRadian() < M_PI/2.)
 		{
 
 			rot_angle.set(Constants::PI, true);
@@ -536,6 +482,7 @@ namespace BALL
 
 						Vector3 new_pos(assemble_atom -> getPosition()[0] + rel_pos[0], assemble_atom -> getPosition()[1] + rel_pos[1], 0.0);
 
+			DEBUG("set position for " << ringsystems[keep_i][i][j]->getElement().getSymbol());
 						ringsystems[keep_i][i][j] -> setPosition(new_pos);
 						ringsystems[keep_i][i][j] -> setProperty(SDGenerator::ROTATED);
 					}
@@ -548,34 +495,22 @@ namespace BALL
 		{
 			for (Size j = 0; j != ringsystems[keep_i][i].size(); j++)
 			{
+				ringsystems[keep_i][i][j] -> setProperty(SDGenerator::DEPOSITED);
+				ringsystems[keep_i][i][j] -> setProperty(SDGenerator::PRE_ASSEMBLED);
+				ringsystems[keep_i][i][j] -> setProperty(SDGenerator::ASSEMBLED);
 				for (Atom::BondIterator bond_it = ringsystems[keep_i][i][j] -> beginBond(); bond_it != ringsystems[keep_i][i][j] -> endBond(); bond_it++)
 				{
-					ringsystems[keep_i][i][j] -> setProperty(SDGenerator::DEPOSITED);
-					ringsystems[keep_i][i][j] -> setProperty(SDGenerator::PRE_ASSEMBLED);
-					ringsystems[keep_i][i][j] -> setProperty(SDGenerator::ASSEMBLED);
-
 					if ( !((bond_it -> getPartner(*(ringsystems[keep_i][i][j])) -> hasProperty(SDGenerator::ASSEMBLED))))
 					{
+			DEBUG("pushing back for ringsystem " << ringsystems[keep_i][i][j]->getElement().getSymbol());
 						aq_.push_back(ringsystems[keep_i][i][j]);
 						break;
 					}
 				}
+		 		// update the free space around the atoms that have been newly positioned
+				updateCFS(ringsystems[keep_i][i][j]);
 			}
 		}
-
-		//      update the free space around the atoms that have been newly positioned
-
-		for (Size i = 0; i != ringsystems[keep_i].size(); i++)
-		{
-			for (Size j = 0; j != ringsystems[keep_i][i].size(); j++)
-			{
-				for (Atom::BondIterator bond_it = ringsystems[keep_i][i][j] -> beginBond(); bond_it != ringsystems[keep_i][i][j] -> endBond(); bond_it++)
-				{
-					updateCFS(ringsystems[keep_i][i][j]);
-				}
-			}
-		}
-
 	}
 
 
@@ -885,6 +820,7 @@ namespace BALL
 			{
 				if ( !((bond_it -> getPartner(*(chains[keep_i][i])) -> hasProperty(SDGenerator::ASSEMBLED))))
 				{
+			DEBUG("pushing back for chain " << chains[keep_i][i]->getElement().getSymbol());
 					aq_.push_back(chains[keep_i][i]);
 					break;
 				}
@@ -1139,6 +1075,7 @@ namespace BALL
 			{
 				if (!(bond_it -> getPartner(*subs[i]) -> hasProperty(SDGenerator::ASSEMBLED)))
 				{
+			DEBUG("pushing back for substituent " << subs[i]->getElement().getSymbol());
 					aq_.push_back(subs[i]);
 					break;
 				}
@@ -1154,7 +1091,6 @@ namespace BALL
 	  DEBUG("MoleculeAssembler : assembleMolecule called.")
 
 		// if the molecule contains ringsystem(s) start the assembly with the largest of them
-
 		if (ringsystems.size() != 0)
 		{
 			sort(ringsystems.begin(), ringsystems.end(), MoleculeAssembler::compareRingsystems);
@@ -1168,6 +1104,7 @@ namespace BALL
 					for (k = 0; k != ringsystems[i][j].size(); k++)
 					{
 						ringsystems[i][j][k] -> setProperty(SDGenerator::PRE_ASSEMBLED);
+						ringsystems[i][j][k] -> setProperty(SDGenerator::IN_RING);
 					}
 				}
 			}
@@ -1223,6 +1160,7 @@ namespace BALL
 						{
 							if (bond_it -> getPartner(*(ringsystems[0][i][j])) -> hasProperty(SDGenerator::BUILT_IN_CHAIN))
 							{
+			DEBUG("pushing back for ringsystem " << ringsystems[0][i][j]->getElement().getSymbol());
 								aq_.push_back(ringsystems[0][i][j]);
 								break;
 							}
@@ -1310,6 +1248,7 @@ namespace BALL
 						{
 							if ((bond_it -> getPartner(*(chains[0][i])) -> hasProperty(SDGenerator::BUILT_IN_CHAIN)) || (bond_it -> getPartner(*(chains[0][i])) -> hasProperty(SDGenerator::IN_RING)))
 							{
+			DEBUG("pushing back for chain " << chains[0][i]->getElement().getSymbol());
 								aq_.push_back(chains[0][i]);
 								break;
 							}
@@ -1340,13 +1279,11 @@ namespace BALL
 
 					if (assemble_atom -> hasProperty(SDGenerator::IN_RING))
 					{
-
 						assembleRS(start_atom, assemble_atom, ringsystems);
 					}
 
 					else if (assemble_atom -> hasProperty(SDGenerator::BUILT_IN_CHAIN))
 					{
-
 						assembleChain(start_atom, assemble_atom, chains);
 					}
 				}
@@ -1364,6 +1301,7 @@ namespace BALL
 					if (!(bond_it -> getPartner(*atom_it) -> hasProperty(SDGenerator::ASSEMBLED)))
 					{
 						Atom* a = &*atom_it;
+			DEBUG("pushing back whatever " << a->getElement().getSymbol());
 						aq_.push_back(a);
 						break;
 					}
@@ -1385,6 +1323,7 @@ namespace BALL
 
 				if (!(assemble_atom -> hasProperty(SDGenerator::ASSEMBLED)))
 				{
+	
 					if (assemble_atom -> hasProperty(SDGenerator::IN_RING))
 					{
 						updateCFS(start_atom);

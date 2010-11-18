@@ -14,6 +14,7 @@
 #endif
 
 #include <vector>
+#include <queue>
 
 namespace BALL
 {
@@ -42,6 +43,8 @@ namespace BALL
 				DEPOSITED,
 				FIRSTNEIGHBOUR,
 				FXAS,
+				EQAS,
+				HEAD,
 				EDGE,
 				BUILT_IN_CHAIN,
 				ASSEMBLED,
@@ -52,7 +55,8 @@ namespace BALL
 				ZAG,
 				STRAIGHT,
 				NEGATIVE_ANGLE,
-				CLOCKWISE
+				CLOCKWISE,
+				INITIALIZED_HEAD_CFS
 			};
 
 			/** @name Constant Definitions
@@ -122,6 +126,20 @@ namespace BALL
 			void clear();
 
   	protected:
+			
+			/** A nested class for our atom priorization
+			 */
+			class AtomComparator
+			{
+				public:
+					bool operator() (Atom const* first, Atom const* second) const
+					{
+						Size first_value  =  first->getProperty("SDGenerator::PRIORITY").getUnsignedInt();
+						Size second_value = second->getProperty("SDGenerator::PRIORITY").getUnsignedInt();
+
+						return first_value < second_value;
+					}
+			};
 
       /**
       * \brief Distinguishes between ring-atoms and core-chain-atoms, removes all H-Atoms from the System
@@ -134,6 +152,37 @@ namespace BALL
 			* @param current_ring_system consecutive numbering of the molecule's ringsystems
 			*/
 			void constructRingSystem_(Position current_ring_system);
+
+			// Obtain the CFS from the properties of the atom...
+			Angle getCFS_(Atom const* atom, bool hi);
+
+			// Convert a vector into the corresponding CFS angle
+			Angle computeCFS_(Vector3 const& input);
+
+			// store the CFS for an atom
+			void setCFS_(Atom* atom, Angle cfs, bool high);
+
+			// push the CFS before it is overwritten
+			void pushCFS_(Atom* atom);
+
+			// retrieve backup CVS values
+			Angle getBackupCFS_(Atom const*, bool hi);
+
+			//  Compute the CFS values for a full regular polygon
+			void computeCoreCFS_(RingAnalyser::Ring& ring, bool clockwise);
+
+			//
+			Angle computeAngularSeparation_(Atom* seed);
+
+			//
+			Angle computeAngularDemand_(Atom* seed);
+
+			//
+			std::vector<Atom*> sequenceSubstituents_(Atom* seed);
+
+			/** Compute the Shelley priority values for each atom
+			 */
+			void computeShelleyPriorities_(AtomContainer& ac);
 
 			/** Build a regular polygon for a ring with two fixed points.
 			 */
@@ -185,28 +234,39 @@ namespace BALL
 			/// Comparator for chains of atoms
 			static bool compareChains_(const vector<Atom*>& x, const vector<Atom*>& y);
 
-			/// recursively determine chain areas
-			void visitChainAreas_(Size k, std::vector<bool>& adj_matrix, std::vector<int>& val, Size nodes, 
-			                      Size id, std::vector<Atom*>& core_chain_atoms, std::vector<Atom*>& chain_area);
-
-			///
-			void visitChains_(Size& k, std::vector<bool>& adj_matrix, std::vector<int>& val, Size& id, 
-			                  std::vector<Atom*>& chain_area, Size& end, bool& breaker, Size& t, std::vector<Atom*>& prev_nodes);
-
-			/// 
-			std::vector<Atom*> findPath_(Atom*& first_edge, Atom*& second_edge, std::vector<Atom*>& chain_area, 
-			                             std::vector<bool>& adj_matrix);
-
 			/**
 			 * \brief cluster and arrange all chains in the system
 			 */
 			void treatChains_(AtomContainer& ac);
 
+			//
+			void smoothCFSAngle_(Atom* seed);
+
+			//
+			void placeSubstituent_(Atom* seed, Atom* head, Atom* next);
+
+			//
+			void depositPFU_(Atom* seed_atom, Atom* next_neighbour);
+
+			//
+			void checkOverlap_(Atom* atom);
+
+			/**
+			 * Assemble the final structure diagram
+			 */
+			void assembleSD_(AtomContainer& ac);
+
+			// The backtracking for our Floyd-Warshall implementation
+			void findFloydWarshallPath_(std::vector<int>& path, std::vector<Index>& next, Size remaining_atoms, Position i, Position j, std::list<Index>& output);
+
 			/// The ring analyser containing all information about ring systems
 			RingAnalyser ring_analyser_;
 
 			/// all chains
-			std::vector<std::vector<Atom*> > chains_;
+			std::list<std::list<Atom*> > chains_;
+
+			/// our redraw queue
+			std::priority_queue<Atom*, std::vector<Atom*>, AtomComparator> redraw_queue_;
 	};
 
 } // namepspace BALL

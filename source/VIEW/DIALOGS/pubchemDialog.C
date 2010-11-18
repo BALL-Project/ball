@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id:
 
 #include <BALL/VIEW/DIALOGS/pubchemDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -181,6 +180,7 @@ namespace BALL
 			
 			try
 			{
+	Log.info() << "Trying to build " << pr.smiles << std::endl;
 				smiles_parser_.parse(pr.smiles);
 				S = smiles_parser_.getSystem();
 

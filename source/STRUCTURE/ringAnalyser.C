@@ -39,7 +39,7 @@ namespace BALL
 	{
 	}
 
-	Position RingAnalyser::Ring::predecessor(Position i)
+	Position RingAnalyser::Ring::predecessor(Position i) const
 	{
 		if (i >= atoms.size())
 			throw (Exception::IndexOverflow(__FILE__, __LINE__, i, atoms.size()));
@@ -47,7 +47,7 @@ namespace BALL
 		return ((i+atoms.size()-1) % atoms.size());
 	}
 
-	Position RingAnalyser::Ring::successor(Position i)
+	Position RingAnalyser::Ring::successor(Position i) const
 	{
 		if (i >= atoms.size())
 			throw (Exception::IndexOverflow(__FILE__, __LINE__, i, atoms.size()));
@@ -151,7 +151,7 @@ namespace BALL
 	}
 
 	// check, whether an atom is part of a certain ring
-	bool RingAnalyser::isInRing(const Atom* atom, vector<Atom*>& ring)
+	bool RingAnalyser::isInRing(const Atom* atom, vector<Atom*> const& ring) const
 	{
 		for (vector<Atom*>::size_type i = 0; i != ring.size(); i++)
 		{
@@ -159,6 +159,19 @@ namespace BALL
 			{
 				return true;
 			}
+		}
+
+		return false;
+	}
+
+	bool RingAnalyser::isInRingSystem(const Atom* atom, Index i) const
+	{
+		std::vector<Position> const& ring_system = ring_systems_[i];
+
+		for (Position j=0; j<ring_system.size(); ++j)
+		{
+			if (isInRing(atom, rings_[ring_system[j]].atoms))
+				return true;
 		}
 
 		return false;

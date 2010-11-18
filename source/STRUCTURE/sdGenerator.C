@@ -14,11 +14,15 @@
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 
 #include <BALL/KERNEL/forEach.h>
+#include <BALL/KERNEL/PTE.h>
+#include <BALL/COMMON/limits.h>
 
-//#define BALL_DEBUG_SDGENERATOR
+#include <algorithm>
+
+#define BALL_DEBUG_SDGENERATOR
 
 #ifdef BALL_DEBUG_SDGENERATOR
-# define DEBUG(a) Log.info() << a << endl;
+# define DEBUG(a) Log.info() << a << std::endl;
 #else
 # define DEBUG(a) 
 #endif
@@ -48,18 +52,38 @@ namespace BALL
 
 		if (!show_H)
 		{
-			Selector s("element(H)");
-			molecule_sys.apply(s);
+			std::list<Atom*> to_delete;
 
-			DEBUG(s.getNumberOfSelectedAtoms() << " atoms selected")
+			AtomIterator at_it;
+			BALL_FOREACH_ATOM(molecule_sys, at_it)
+			{
+				if (at_it->getElement().getSymbol() == "H")
+				{
+					to_delete.push_back(&*at_it);
+					Atom* partner = at_it->getBond(0)->getPartner(*at_it);
 
-			molecule_sys.removeSelected();
+					if (partner->hasProperty("SDGenerator::NUM_REMOVED_HYDROGENS"))
+					{
+						int num_removed = partner->getProperty("SDGenerator::NUM_REMOVED_HYDROGENS").getInt();
+						partner->setProperty("SDGenerator::NUM_REMOVED_HYDROGENS", ++num_removed);
+					}
+					else
+						partner->setProperty("SDGenerator::NUM_REMOVED_HYDROGENS", 1);
+				}
+			}
+
+			for (std::list<Atom*>::iterator d_it = to_delete.begin(); d_it != to_delete.end(); ++d_it)
+				delete(*d_it);
+
 			DEBUG("all H's removed")
 		}
 
 		// compute the smallest set of smallest rings and analyze them
 		// NOTE: the RingAnalyser sets the "InRing" property for us
 		molecule_sys.apply(ring_analyser_);
+
+		// compute the Shelley priorities for each atom
+		computeShelleyPriorities_(molecule_sys);
 
 		AtomIterator at_it;
 
@@ -69,12 +93,24 @@ namespace BALL
 			//  declare atoms as core-chain if they fulfil the following conditions:
 			//   - acylic
 			//   - have at least two neighbours, at least one of which is acyclic
+			//   - have at least one acyclic beta atom on the other side of an acyclic neighbour (??? TODO!)
 			//   - do not have an adjacent triple bond, or two adjacent double-bonds
+			//
+			// also, switch to equal angle distribution, if
+			//   - all substituents are heteroatoms
+			//   - three or more substituents are primary heteroatoms
+			//   - atom has four or more substituents, and at least one double bond
+			//   - two or more substituents have more than 6 beta atoms
 			if (!at_it->getProperty("InRing").getBool())
 			{
 				Size acyclic_neighbours = 0;
 				Size num_triple_bonds = 0;
 				Size num_double_bonds = 0;
+				bool has_acyclic_beta = false;
+
+				bool only_hetero_substituents = true;
+				Size num_primary_hetero_substituents = 0;
+				Size num_congested_substituents = 0;
 
 				// - have at least two neighbours
 				if (at_it->countBonds() > 1)
@@ -82,57 +118,82 @@ namespace BALL
 					Atom::BondIterator bond_it;
 					BALL_FOREACH_ATOM_BOND(*at_it, bond_it)
 					{
-						if (bond_it->getOrder() == 2)
+						if (bond_it->getOrder() == Bond::ORDER__DOUBLE)
 							num_double_bonds++;
 
-						else if (bond_it->getOrder() == 3)
+						else if (bond_it->getOrder() == Bond::ORDER__TRIPLE)
 							num_triple_bonds++;
 
 						// - at least one of the neighbours must be acyclic
 						Atom* partner = bond_it->getPartner(*at_it);
-
 						if (!(partner->getProperty("InRing").getBool()))
 						{
 							++acyclic_neighbours;
 						}
+						
+						const String& partner_element = partner->getElement().getSymbol();
+						if (partner_element == "H" || partner_element == "C")
+							only_hetero_substituents = false;
+						else if (partner->countBonds() == 1)
+							++num_primary_hetero_substituents;
+
+						if (partner->countBonds() >= 6)
+							++num_congested_substituents;
+
+						// - and have another acyclic neighbour
+						Atom::BondIterator next_bond_it;
+						BALL_FOREACH_ATOM_BOND(*partner, next_bond_it)
+						{
+							Atom* beta = next_bond_it->getPartner(*partner);
+
+							if (beta == &*at_it)
+								continue;
+
+							if (!beta->getProperty("InRing").getBool())
+							{
+								has_acyclic_beta = true;
+								break;
+							}
+						}
+
 					}
 
 					// - check for all of the conditions and decide whether the atom might be core-chain or not
-					if ((acyclic_neighbours > 0) && ((num_double_bonds < 2) || (num_triple_bonds == 0)))
+					if ((acyclic_neighbours > 0) && (num_double_bonds < 2) && (num_triple_bonds == 0) && has_acyclic_beta)
 					{
-						at_it->setProperty(SDGenerator::PRE_CORE_CHAIN);
+						// later used in the chain analysis
+						if (    only_hetero_substituents 
+							  || (num_primary_hetero_substituents >= 3)
+								|| ((at_it->countBonds() >= 4) && (num_double_bonds >= 1))
+								|| (num_congested_substituents >= 2))
+						{
+							at_it->setProperty(SDGenerator::EQAS);
+						}
+						else
+						{
+							at_it->setProperty(SDGenerator::CORE_CHAIN);
+							at_it->setProperty(SDGenerator::FXAS);
+						}
 					}
 				}
 			}
 		}
 
-		// - core-chain-atoms must have at least one neighbour that is a core-chain-atom, too
-		BALL_FOREACH_ATOM(molecule_sys, at_it)
-		{
-			if (at_it->hasProperty(SDGenerator::PRE_CORE_CHAIN))
-			{
-				Atom::BondIterator bond_it;
-				BALL_FOREACH_ATOM_BOND(*at_it, bond_it)
-				{
-					Atom* partner = bond_it->getPartner(*at_it);
-
-					if (partner->hasProperty(SDGenerator::PRE_CORE_CHAIN))
-					{
-						at_it->setProperty(SDGenerator::CORE_CHAIN);
-						at_it->setProperty(SDGenerator::FXAS);                           //      Property, later used in chain analysis
-						break;
-					}
-				}
-			}
-
-		}
-		DEBUG("\t-*-[checkAtoms]:\tRing-atoms and core-chain-atoms found." << endl)
+		DEBUG("\t-*-[checkAtoms]:\tRing-atoms and core-chain-atoms found.")
 	}
 
 	void SDGenerator::clear()
 	{
 		ring_analyser_.clear();
 		chains_.clear();
+
+		// priority_queue has no clear() function...
+		if (!redraw_queue_.empty())
+		{
+			Size to_pop = redraw_queue_.size();
+			for (Position i=0; i<to_pop; ++i)
+				redraw_queue_.pop();
+		}
 	}
 
 	void SDGenerator::generateSD(System& molecule_sys)
@@ -160,27 +221,101 @@ namespace BALL
 		treatChains_(molecule_sys);
 
 		// assemble the Structure Diagram from the prepared Fragments
-		MoleculeAssembler ma;
-// TODO: remove the MoleculeAssembler! This is just a hack...
-		std::vector<std::vector<std::vector<Atom*> > > ringsystems;
-		for (Position i=0; i<ring_analyser_.getNumberOfRingSystems(); ++i)
+		assembleSD_(molecule_sys);
+
+		// put the hydrogens back
+		std::list<Atom*> to_add;
+
+		AtomIterator at_it;
+		BALL_FOREACH_ATOM(molecule_sys, at_it)
 		{
-			ringsystems.push_back(std::vector<std::vector<Atom*> >());
-
-			std::vector<RingAnalyser::Ring> current_system = ring_analyser_.getRingSystem(i);
-
-			for (Position j = 0; j < current_system.size(); j++)
+			if (at_it->hasProperty("SDGenerator::NUM_REMOVED_HYDROGENS"))
 			{
-				ringsystems.back().push_back(current_system[j].atoms);
+				to_add.push_back(&*at_it);
 			}
 		}
 
-		ma.assembleMolecule(molecule_sys, ringsystems, chains_);
+		for (std::list<Atom*>::iterator at_it = to_add.begin(); at_it != to_add.end(); ++at_it)
+		{
+			// add them back
+			int num_hydrogens = (*at_it)->getProperty("SDGenerator::NUM_REMOVED_HYDROGENS").getInt();
 
-		// be nice and clear up old stuff
+			Angle cfs_low  = getCFS_(*at_it, false); 
+			Angle cfs_high = getCFS_(*at_it, true); 
+
+			Angle demand = cfs_high - cfs_low;
+			demand.normalize(Angle::RANGE__UNSIGNED);
+			if (demand.toRadian() == 0)
+				demand.set(2.*M_PI);
+
+			float new_beta = demand.toRadian() / (num_hydrogens+1);
+
+			for (Position i=0; i<num_hydrogens; ++i)
+			{
+				Atom *new_hydrogen   = new Atom(PTE["H"], "H");
+				Vector3 new_position = (*at_it)->getPosition();
+
+				new_position.x += cos(cfs_low.toRadian() + (i+1)*new_beta);
+				new_position.y += sin(cfs_low.toRadian() + (i+1)*new_beta);
+
+				new_hydrogen->setPosition(new_position);
+
+				(*at_it)->getMolecule()->insert(*new_hydrogen);
+				new_hydrogen->createBond(**at_it)->setOrder(Bond::ORDER__SINGLE);
+			}
+		}
+
+		// be nice and clean up old stuff
 		clear();
 
 		DEBUG("Structure Diagram has been generated.")
+	}
+
+	void SDGenerator::computeShelleyPriorities_(AtomContainer& ac)
+	{
+		// compute the Shelley score for each atom, which is defined as follows:
+		//
+		// S_a,0 = 1 + 2 \delta (\delta = 1 if a cyclic; 0 otherwise)
+		// S_a,n = 3S_a,n-1 + \sum_j S_j,n-1
+		//
+		// In the original formulation, the algorithm iterates until no new score
+		// classes are created. Here, we just use the heuristics given by Helson to
+		// iterate 5 times in practice.
+		//
+
+		std::map<Atom*, int> last_scores, new_scores;
+		
+		AtomIterator at_it;
+		BALL_FOREACH_ATOM(ac, at_it) 
+		{
+			last_scores[&*at_it] = (at_it->getProperty("InRing").getBool()) ? 2 : 0;
+		}
+
+		for (Position i=0; i<5; ++i)
+		{
+			BALL_FOREACH_ATOM(ac, at_it)
+			{
+				int& current_score = new_scores[&*at_it];
+				current_score = 3*last_scores[&*at_it];
+
+				Atom::BondIterator b_it;
+				BALL_FOREACH_ATOM_BOND(*at_it, b_it)
+				{
+					current_score += last_scores[b_it->getPartner(*at_it)];	
+				}
+			}
+
+			std::swap(last_scores, new_scores);
+		}
+
+		// save the values as properties in the atoms
+		// NOTE: we always swap new_scores and last_scores in the loop,
+		//       so after the algorithm terminates, last_scores contains
+		//       the final values... alright, alright, don't shout....
+		BALL_FOREACH_ATOM(ac, at_it)
+		{
+			at_it->setProperty("SDGenerator::PRIORITY", last_scores[&*at_it]);
+		}
 	}
 
 	void SDGenerator::buildRegularPolygon_(RingAnalyser::Ring& ring, Position first_anchor_index, bool clockwise)
@@ -221,6 +356,7 @@ namespace BALL
 			ring.atoms[current_atom_index]->setProperty(SDGenerator::DEPOSITED);
 			current_atom_index = (current_atom_index + 1) % ring.atoms.size();
 		}
+
 	}
 
 	void SDGenerator::buildOpenPolygon_(RingAnalyser::Ring& ring, Position first_anchor_index, Position second_anchor_index)
@@ -316,9 +452,105 @@ namespace BALL
 					attachBridged_(*ring_it, current_system);
 					break;
 				default:
-					Log.error() << "SDGenerator::constructRingSystem_(): Cannot attach unknown ring type" << std::endl;
+					Log.error() << "SDGenerator::constructRingSystem_(): Cannot attach unknown ring type!" << std::endl;
 					break;
 			}
+		}
+
+		// finally, compute the angular demands of each atom
+		for (Position i=0; i<current_system.size(); ++i)
+		{
+			RingAnalyser::Ring& current_ring = current_system[i];
+
+			for (Position j=0; j<current_ring.atoms.size(); ++j)
+			{
+				computeAngularDemand_(current_ring.atoms[j]);
+			}
+		}
+	}
+
+	Angle SDGenerator::getCFS_(Atom const* atom, bool high)
+	{
+		Angle result(atom->getProperty(high ? "SDGenerator::CFS_high" : "SDGenerator::CFS_low").getFloat(), true);
+
+		return result;
+	}
+
+	Angle SDGenerator::computeCFS_(Vector3 const& input)
+	{
+		float alpha = atan2(input.y, input.x);
+
+		if (alpha < 0.)
+		{
+			alpha += 2.*M_PI;
+		}
+
+		return Angle(alpha, true);
+	}
+
+	void SDGenerator::setCFS_(Atom* atom, Angle cfs, bool high)
+	{
+		cfs.normalize(Angle::RANGE__UNSIGNED);
+		atom->setProperty(high ? "SDGenerator::CFS_high" : "SDGenerator::CFS_low", cfs.toRadian());
+	}
+
+	void SDGenerator::pushCFS_(Atom* atom)
+	{
+		if (atom->hasProperty("SDGenerator::CFS_high") && atom->hasProperty("SDGenerator::CFS_low"))
+		{
+			atom->setProperty("SDGenerator::CFS_old_high", getCFS_(atom, true).toRadian());
+			atom->setProperty("SDGenerator::CFS_old_low", getCFS_(atom, false).toRadian());
+		}
+	}
+
+	Angle SDGenerator::getBackupCFS_(Atom const* atom, bool high)
+	{
+		Angle result(atom->getProperty(high ? "SDGenerator::CFS_old_high" : "SDGenerator::CFS_old_low").getFloat(), true);
+
+		return result;
+	}
+
+
+	Angle SDGenerator::computeAngularDemand_(Atom* seed)
+	{
+		// do we already know the angular demand?
+		if (seed->hasProperty("SDGenerator::AngularDemand"))
+		{
+			return (Angle(seed->getProperty("SDGenerator::AngularDemand").getFloat(), true));
+		}
+
+		// the angular demand is the angle covered by the PFU, so the opposite angle of the CFS
+		Angle CFS_hi = getCFS_(seed, true);
+		Angle CFS_lo = getCFS_(seed, false);
+
+		Angle demand = CFS_lo - CFS_hi;
+		demand.normalize(Angle::RANGE__UNSIGNED);
+
+		seed->setProperty("SDGenerator::AngularDemand", demand.toRadian());
+
+		return demand;
+	}
+
+	void SDGenerator::computeCoreCFS_(RingAnalyser::Ring& ring, bool clockwise)
+	{
+		// store the initial CFS values
+		for (Position i=0; i<ring.atoms.size(); ++i)
+		{
+			Atom* center_atom = ring.atoms[i];
+
+			Vector3& center = center_atom->getPosition();
+
+			Vector3 low  = ring.atoms[ring.successor(i)  ]->getPosition() - center;
+			Vector3 high = ring.atoms[ring.predecessor(i)]->getPosition() - center;
+
+			Angle cfs_low  = computeCFS_(low);
+			Angle cfs_high = computeCFS_(high);
+
+			if (!clockwise)
+				std::swap(cfs_low, cfs_high);
+
+			setCFS_(center_atom, cfs_high, true);
+			setCFS_(center_atom, cfs_low,  false);
 		}
 	}
 
@@ -349,7 +581,9 @@ namespace BALL
 		buildRegularPolygon_(current_system[core_index], 0, true);
 		current_system[core_index].setProperty(SDGenerator::DEPOSITED);
 
-		DEBUG("\t-*-[RSConstructor]:\t (attachCore_):\t done." << endl)
+		computeCoreCFS_(current_system[core_index], true);
+
+		DEBUG("\t-*-[RSConstructor]:\t (attachCore_):\t done.")
 	}
 
 	// interface for a Ring Template Database 
@@ -479,6 +713,48 @@ namespace BALL
 
 			buildRegularPolygon_(current_system[current_ring_index], first_atom_index, clockwise);
 
+			// store the old CFS of the shared atoms
+			Angle old_CFS_lo_first = getCFS_(ring[first_atom_index], false);
+			Angle old_CFS_hi_first = getCFS_(ring[first_atom_index], true);
+
+			Angle old_CFS_lo_second = getCFS_(ring[second_atom_index], false);
+			Angle old_CFS_hi_second = getCFS_(ring[second_atom_index], true);
+
+			computeCoreCFS_(current_system[current_ring_index], clockwise);
+
+			// and retrieve the new CFS values
+			Angle new_CFS_lo_first = getCFS_(ring[first_atom_index], false);
+			Angle new_CFS_hi_first = getCFS_(ring[first_atom_index], true);
+
+			Angle new_CFS_lo_second = getCFS_(ring[second_atom_index], false);
+			Angle new_CFS_hi_second = getCFS_(ring[second_atom_index], true);
+
+			Angle anchor_cfs = computeCFS_(anchor);
+
+			// test which of the vectors are collinear with the bond we attach to
+			if (fabs((old_CFS_hi_first - anchor_cfs).toRadian()) < 1e-3)
+			{
+				// in this case, we take the low vector from the first and the high from the second ring
+				// for the first atom, and for the second atom vice versa
+				setCFS_(ring[first_atom_index], old_CFS_lo_first, false);
+				setCFS_(ring[first_atom_index], new_CFS_hi_first, true);
+
+				setCFS_(ring[second_atom_index], new_CFS_lo_first, false);
+				setCFS_(ring[second_atom_index], old_CFS_hi_first, true);
+			}
+			else
+			{
+				// in this case, we take the high vector from the first and the low from the second ring
+				// for the first atom, and for the second atom vice versa
+				setCFS_(ring[first_atom_index], new_CFS_lo_first, false);
+				setCFS_(ring[first_atom_index], old_CFS_hi_first, true);
+
+				setCFS_(ring[second_atom_index], old_CFS_lo_first, false);
+				setCFS_(ring[second_atom_index], new_CFS_hi_first, true);
+			}
+			
+			// and determine, which of these is the new high and which the new low
+
 			current_system[current_ring_index].setProperty(SDGenerator::DEPOSITED);
 
 			DEBUG("\t-*-[SDGenerator]:\t (attachFused):\t done.")
@@ -523,10 +799,11 @@ namespace BALL
 			current_ring.atoms[i]->setPosition(current_ring.atoms[i]->getPosition() + translation);
 		}
 
+		// TODO: update the CFS correctly!
 		current_ring.setProperty(SDGenerator::DEPOSITED);
 	}
 
-	// attach a spiro-type ring to a (partially) prefabricated ringsystem
+	// attach a bridged ring to a (partially) prefabricated ringsystem
 	void SDGenerator::attachBridged_(Position current_ring_index, std::vector<RingAnalyser::Ring>& current_system)
 	{
 		// construct a BRIDGED ring by the open polygon - method
@@ -596,6 +873,32 @@ namespace BALL
 			buildOpenPolygon_(ring, first_anchor_point, second_anchor_point);
 		}
 
+		// store the old CFS values at the anchor
+		Angle first_CFS_old_low  = getCFS_(atoms[first_anchor_point], false);
+		Angle first_CFS_old_high = getCFS_(atoms[first_anchor_point], true);
+
+		Angle second_CFS_old_low  = getCFS_(atoms[second_anchor_point], false);
+		Angle second_CFS_old_high = getCFS_(atoms[second_anchor_point], true);
+
+		// now, update the circular free sweep
+		computeCoreCFS_(ring, true);
+
+		// and get the new CFS values at the anchor
+		Angle first_CFS_new_low  = getCFS_(atoms[first_anchor_point], false);
+		Angle first_CFS_new_high = getCFS_(atoms[first_anchor_point], true);
+
+		Angle second_CFS_new_low  = getCFS_(atoms[second_anchor_point], false);
+		Angle second_CFS_new_high = getCFS_(atoms[second_anchor_point], true);
+
+		// the correct CFS values are the intersection of the old ones
+		// TODO: this is most probably incorrect...
+
+		setCFS_(atoms[first_anchor_point], std::min(first_CFS_old_low,  first_CFS_new_low),  false);
+		setCFS_(atoms[first_anchor_point], std::max(first_CFS_old_high, first_CFS_new_high), true);
+
+		setCFS_(atoms[second_anchor_point], std::min(second_CFS_old_low,  second_CFS_new_low),  false);
+		setCFS_(atoms[second_anchor_point], std::max(second_CFS_old_high, second_CFS_new_high), true);
+
 		ring.setProperty(SDGenerator::DEPOSITED);
 	}
 
@@ -623,319 +926,798 @@ namespace BALL
 		return x.size() > y.size();
 	}
 
-	void SDGenerator::visitChainAreas_(Size k, std::vector<bool>& adj_matrix, std::vector<int>& val, Size nodes, 
-	                                   Size id, std::vector<Atom*>& core_chain_atoms, std::vector<Atom*>& chain_area)
+	void SDGenerator::findFloydWarshallPath_(std::vector<int>& path, std::vector<Index>& next, Size remaining_atoms, 
+	                                         Position i, Position j, std::list<Index>& output)
 	{
-		// recursive visit-procedure used in the depth-first-search for chain-areas
-		Size t = 0;
-		val[k] = ++id;
-
-		for (t = 0; t < nodes; ++t)
+		if (path[i+j*remaining_atoms] == Limits<int>::max())
 		{
-			if (adj_matrix[k + t*core_chain_atoms.size()])
-			{
-				if (val[t] == 0)
-				{
-					visitChainAreas_(t, adj_matrix, val, nodes, id,  core_chain_atoms, chain_area);
-				}
-			}
+			return;
 		}
-		chain_area.push_back(core_chain_atoms[k]);
-	}
 
-	void SDGenerator::visitChains_(Size& k, std::vector<bool>& adj_matrix, std::vector<int>& val, Size& id, 
-	                               std::vector<Atom*>& chain_area, Size& end, bool& breaker, Size& t, 
-																 std::vector<Atom*>& prev_nodes)
-	{
-		std::list<Size> queue;
+		Index intermediate = next[i+j*remaining_atoms];
 
-		queue.push_back(k);
-
-		while (!queue.empty() && !breaker)
+		if (intermediate == -1)
 		{
-			k = *queue.begin();
-			queue.erase(queue.begin());
-
-			val[k] = ++id;
-
-			// enqueue every atom that is bound to the current one and has not 
-			// been seen yet, and set its previous atom to the current one
-			for (t = 0; t < adj_matrix.size(); t++)
-			{
-				if (adj_matrix[k + t * chain_area.size()] && (k != t))
-				{
-					//      if the end atom is reached, stop the search and return
-					if (chain_area[t] == chain_area[end])
-					{
-						prev_nodes[t] = chain_area[k];
-						breaker = 1;
-						break;
-					}
-
-					if (val[t] == INT_MAX) 
-					{
-						prev_nodes[t] = chain_area[k];
-						queue.push_back(t);
-						val[t] = -1;
-					}
-				}
-			}
+			return;
+		}
+		else
+		{
+			findFloydWarshallPath_(path, next, remaining_atoms, i, intermediate, output);
+			output.push_back(intermediate);
+			findFloydWarshallPath_(path, next, remaining_atoms, intermediate, j, output);
 		}
 	}
-
-	std::vector<Atom*> SDGenerator::findPath_(Atom*& first_edge, Atom*& second_edge,
-	                                          std::vector<Atom*>& chain_area, std::vector<bool>& adj_matrix)
-	{
-		// breadth first search with traceback to find the path between every two edges in chain-area
-		std::vector<Atom*> path;
-
-		// vector to hold the order in which the atoms were visited
-		std::vector<int> val;
-
-		// vector to hold the previously visited atom for each atom
-		std::vector<Atom*> prev_nodes; 
-
-		Size id = 0;
-
-		// starting position for the traceback after the end atom has been found
-		Size t = 0;
-
-		// get the indices of the two edges between which the path shall be found
-		Position start = 0, end = 0;
-		for (Position i = 0; i < chain_area.size(); ++i)
-		{
-			if (chain_area[i] == first_edge)
-				start = i;
-			if (chain_area[i] == second_edge)
-				end = i;
-		}
-
-		// initialize the vectors val and prev_nodes
-		for (Size i = 0; i < chain_area.size(); i++)
-		{
-			val.push_back(INT_MAX);           
-			prev_nodes.push_back((Atom*)0);        
-		}
-
-		Size k = start;
-
-		// flag to indicate when the end is found and finish the search
-		bool breaker = 0;
-
-		while (!breaker)
-		{
-			if (val[k] == INT_MAX)
-			{
-				visitChains_(k, adj_matrix, val, id, chain_area, end, breaker, t, prev_nodes);
-			}
-		}
-
-		// traceback from the end of the path along the previously found atoms to the beginning of the path
-		Atom* traceback = chain_area[t];
-
-		while (traceback != chain_area[start])
-		{
-			path.push_back(traceback);
-
-			Position new_index = 0;
-			for (Position i=0; i<chain_area.size(); ++i)
-			{
-				if (chain_area[i] == traceback)
-					new_index = i;
-			}
-			traceback = prev_nodes[new_index];
-		}
-
-		path.push_back(chain_area[start]);
-
-		return path;
-	}
-
-
 
 	void SDGenerator::treatChains_(AtomContainer& ac)
 	{
-		// a vector holding all core-chain atoms
-		std::vector<Atom*> core_chain_atoms;
-		std::vector<Size> visited;
+		// A chain is defined as the longest continuous path between core chain atoms,
+		// plus two capping (arbitrarily chosen) substituents not on the path.
+		//
+		// To determine the paths, we use a Floyd-Warshall algorithm with unit positive
+		// edge weights. Since all core chain atoms are by definition acyclic, the graph
+		// connecting them will be acyclic also, so we can use the longest shortest path
+		// between arbitrary nodes as the longest path in the graph.
+		//
+		// We can have multiple chains in our molecule, possibly connected, so after
+		// each run of the algorithm we delete all atoms on the current path from the input
+		// and iterate.
+		//
 
+		std::list<Atom*> core_chain_atoms;
+
+		// initialize the core chain atoms with all candidates
 		AtomIterator at_it;
 		BALL_FOREACH_ATOM(ac, at_it)
 		{
 			if (at_it->hasProperty(SDGenerator::CORE_CHAIN))
+			{
 				core_chain_atoms.push_back(&*at_it);
+			}
 		}
 
-		// calculate an adjacency matrix for the core-chain atoms
-		if (core_chain_atoms.size() > 0)
+		// and iterate the Floyd-Warshall algorithm
+		Size remaining_atoms = core_chain_atoms.size();
+		while (remaining_atoms > 0)
 		{
-			std::vector<bool> adj_matrix;
-			computeAdjacencyMatrix_(core_chain_atoms, adj_matrix);
+			// working with indices in the backtracking is more convenient
+			std::vector<std::list<Atom*>::iterator> index_to_atom_list(remaining_atoms);
 
-			std::vector<std::vector<Atom*> > chain_areas;
-
-			// depth-first-search for chain areas
-
-			// vector to hold the order in which the atoms were visited
-			std::vector<int> val(core_chain_atoms.size(), 0);
-			
-			Size id = 0, k = 0;
-
-			for (k = 0; k < core_chain_atoms.size(); k++)
+			std::list<Atom*>::iterator l_it=core_chain_atoms.begin();
+			for (Position i=0; i<remaining_atoms; ++i, ++l_it)
 			{
-				if (val[k] == 0)
+				index_to_atom_list[i] = l_it;
+			}
+
+			// initialize the path matrix
+			std::vector<int> path(remaining_atoms*remaining_atoms, Limits<int>::max());
+			// and the backtracking matrix
+			std::vector<Index> next(remaining_atoms*remaining_atoms, -1);
+
+			// initialize the dp matrix
+			for (Position i=0; i<remaining_atoms; ++i)
+			{
+				Atom* first_atom = *index_to_atom_list[i];
+				path[i+i*remaining_atoms] = 0;
+
+				for (Position j=i+1; j<remaining_atoms; ++j)
 				{
-					std::vector<Atom*> chain_area;
-					// the recursive visit-function finds one connected chain-area each time it is called
-					visitChainAreas_(k, adj_matrix, val, core_chain_atoms.size(), id, core_chain_atoms, chain_area);
-					chain_areas.push_back(chain_area);
+					Atom* second_atom = *index_to_atom_list[j];
+
+					if (first_atom->isBoundTo(*second_atom))
+					{
+						path[i+j*remaining_atoms] = 1;
+						path[j+i*remaining_atoms] = 1;
+					}
 				}
 			}
 
-			DEBUG("\t-*-[buildChains]:\t" << chain_areas.size() << " chain areas found." << endl)
-
-			for (Position i = 0; i < chain_areas.size(); ++i)
+			// fill the dp matrix
+			for (Position k=0; k<remaining_atoms; ++k)
 			{
-				// find atoms that have only one adjacent core-chain atom (the edges of the chain area)
-				std::vector<Atom*>& chain_area = chain_areas[i];
-
-				std::deque<Atom*> edges;
-
-				for (Position j = 0; j < chain_area.size(); j++)
+				for (Position i=0; i<remaining_atoms; ++i)
 				{
-					Atom* current_atom = chain_area[j];
+					int& p_ik = path[i+k*remaining_atoms];
 
-					Size adjacent_core_chain_atoms = 0;
+					if (p_ik == Limits<int>::max())
+						continue;
 
-					Atom::BondIterator bond_it;
-					BALL_FOREACH_ATOM_BOND(*current_atom, bond_it)
+					for (Position j=0; j<remaining_atoms; ++j)
 					{
-						if (bond_it->getPartner(*current_atom)->hasProperty(SDGenerator::CORE_CHAIN))
+						int& p_kj = path[k+j*remaining_atoms];
+						int& p_ij = path[i+j*remaining_atoms];
+
+						if (p_kj == Limits<int>::max())
+							continue;
+
+						if (p_ik + p_kj < p_ij)
 						{
-							adjacent_core_chain_atoms++;
-						}
-					}
-
-					if (adjacent_core_chain_atoms < 2)
-					{
-						edges.push_back(current_atom);
-					}
-				}
-
-				// calculate the adjacency matrix for the chain-area
-				computeAdjacencyMatrix_(chain_area, adj_matrix);
-
-				// breadth-first search for all chains in the chain-area
-				std::vector<std::vector<Atom*> > found_chains;
-				// for every two edges of the chain-area, find the path beween them
-				for (std::deque<Atom*>::iterator edge_i = edges.begin(); edge_i != edges.end(); ++edge_i)
-				{
-					for (std::deque<Atom*>::iterator edge_j = edge_i + 1; edge_j != edges.end(); ++edge_j)
-					{
-						std::vector<Atom*> chain = findPath_(*edge_i, *edge_j, chain_area, adj_matrix);
-						found_chains.push_back(chain);
-					}
-				}
-
-				// sort the found chains by their length
-				std::sort(found_chains.begin(), found_chains.end(), SDGenerator::compareChains_);
-
-				std::vector<std::vector<Atom*> > new_chains;
-
-				Size max_adj_rings = 0;
-				Size keep_i = 0;
-				for (Size i = 0; i < found_chains.size(); i++)
-				{
-					Size adj_rings = 0;
-					if (found_chains[i].size() == found_chains[0].size())
-					{
-						Atom* current_atom = found_chains[i][0];
-						Atom::BondIterator bond_it;
-						BALL_FOREACH_ATOM_BOND(*current_atom, bond_it)
-						{
-							if (bond_it->getPartner(*current_atom)->hasProperty(SDGenerator::IN_RING))
-								adj_rings++;
-						}
-
-						current_atom = found_chains[i].back();
-						BALL_FOREACH_ATOM_BOND(*current_atom, bond_it)
-						{
-							if (bond_it->getPartner(*current_atom)->hasProperty(SDGenerator::IN_RING))
-								adj_rings++;
-						}
-
-						// if there is more than one chain of maximum length, chose the one 
-						// with the most adjacent rings as the main chain
-						if (adj_rings > max_adj_rings)
-						{
-							max_adj_rings = adj_rings;
-							keep_i = i;
+							p_ij = p_ik + p_kj;
+							next[i+j*remaining_atoms] = k;
 						}
 					}
 				}
+			}
 
-				// arrange all the other chains around the the main chain
-				for (Size i = 0; i < found_chains[keep_i].size(); i++)
+			// find the path of maximal minimum length
+			int max_value = Limits<int>::min();
+			Position max_i, max_j;
+
+			for (Position i=0; i<remaining_atoms; ++i)
+			{
+				for (Position j=0; j<remaining_atoms; ++j)
 				{
-					found_chains[keep_i][i]->setProperty(SDGenerator::BUILT_IN_CHAIN);
-				}
-
-				new_chains.push_back(found_chains[keep_i]);
-
-				// ??? TODO: what does this *DO* ???
-				bool pushbacked = 0;
-				bool increment_i = 0;
-				Size j = 0;
-				for (Size i = 1; i < found_chains.size(); ++i)
-				{
-					pushbacked = 0;
-					increment_i = 0;
-
-					std::vector<Atom*> new_chain;
-
-					while (!(increment_i))
-					{
-						if (!(found_chains[i][j]->hasProperty(SDGenerator::BUILT_IN_CHAIN)))
+						int current_value = path[i+j*remaining_atoms];
+						
+						if ((current_value != Limits<int>::max()) && (current_value > max_value ))
 						{
-							found_chains[i][j]->setProperty(SDGenerator::BUILT_IN_CHAIN);
-							new_chain.push_back(found_chains[i][j]);
+							max_value = path[i+j*remaining_atoms];
+							max_i = i;
+							max_j = j;
 						}
-						else
+				}
+			}
+
+			// and do the backtracking for the path from max_i to max_j.
+			chains_.push_back(std::list<Atom*>());
+
+			std::list<Index> longest_path;
+			longest_path.push_back(max_i);
+			findFloydWarshallPath_(path, next, remaining_atoms, max_i, max_j, longest_path);
+			longest_path.push_back(max_j);
+
+			// finally, remove all found atoms from the input
+			for (std::list<Index>::iterator l_it = longest_path.begin(); l_it != longest_path.end(); ++l_it)
+			{
+				chains_.back().push_back(*(index_to_atom_list[*l_it]));
+				core_chain_atoms.erase(index_to_atom_list[*l_it]);
+			}
+
+			// and add one capping substituent to the beggining of the chain
+			Atom::BondIterator b_it;
+			Atom* first_atom  = *(  chains_.back().begin());
+			Atom* second_atom = *(++chains_.back().begin());
+
+			BALL_FOREACH_ATOM_BOND(*first_atom, b_it)
+			{
+				if (b_it->getPartner(*first_atom) != second_atom)
+				{
+					chains_.back().push_front(b_it->getPartner(*first_atom));
+					break;
+				}
+			}
+
+			// and to the end
+			first_atom  = chains_.back().back();
+			second_atom = *(--(--chains_.back().end()));
+
+			BALL_FOREACH_ATOM_BOND(*first_atom, b_it)
+			{
+				if (b_it->getPartner(*first_atom) != second_atom)
+				{
+					chains_.back().push_back(b_it->getPartner(*first_atom));
+					break;
+				}
+			}
+
+			remaining_atoms = core_chain_atoms.size();
+		}
+	}
+
+	Angle SDGenerator::computeAngularSeparation_(Atom* seed)
+	{
+		Angle demand = computeAngularDemand_(seed);
+		Size num_sub = 0;
+
+		HashSet<Bond*> unplaced_PFU_bonds;
+
+		bool seed_in_ring = seed->getProperty("InRing").getBool();
+
+		Atom::BondIterator b_it;
+		BALL_FOREACH_ATOM_BOND(*seed, b_it)
+		{
+			Atom* partner = b_it->getPartner(*seed);
+			if (!partner->hasProperty(SDGenerator::ASSEMBLED))
+			{
+				Bond* b = &*b_it;
+
+				// does this bond belong to a previously placed PFU?
+				if (unplaced_PFU_bonds.find(b) != unplaced_PFU_bonds.end())
+					continue;
+
+				// is this bond part of a PFU at all?
+				if (seed_in_ring && partner->getProperty("InRing").getBool())
+				{
+					// find the ring system this bond belongs to
+					Position ring_system_index;
+					for (ring_system_index=0; ring_system_index<ring_analyser_.getNumberOfRingSystems(); ++ring_system_index)
+					{
+						if (   ring_analyser_.isInRingSystem(seed,    ring_system_index) 
+							  && ring_analyser_.isInRingSystem(partner, ring_system_index))
 						{
-							if (new_chain.size() > 0)
+							break;
+						}
+					}
+
+					// place all its bonds into the list
+					std::vector<RingAnalyser::Ring> ring_system = ring_analyser_.getRingSystem(ring_system_index);
+
+					for (Position current_ring_index = 0; current_ring_index < ring_system.size(); ++current_ring_index)
+					{
+						RingAnalyser::Ring const& current_ring = ring_system[current_ring_index];
+
+						for (Position atom=0; atom < current_ring.atoms.size(); ++atom)
+						{
+							Bond* b = current_ring.atoms[atom]->getBond(*(current_ring.atoms[current_ring.successor(atom)]));
+
+							unplaced_PFU_bonds.insert(b);
+						}
+					}
+				} 
+				else 
+				{
+					++num_sub;
+				}
+			}
+		}
+
+		if (seed->hasProperty(SDGenerator::HEAD))
+			--num_sub;
+		
+		if (seed->hasProperty(SDGenerator::FXAS))
+		{
+			--num_sub;
+			demand += Angle(2./3.*M_PI);
+		}
+
+		Angle free_CFS(2.*M_PI - demand.toRadian(), true);
+		free_CFS.normalize(Angle::RANGE__UNSIGNED);
+
+		return Angle((free_CFS.toRadian())/(num_sub + 1));
+	}
+
+	std::vector<Atom*> SDGenerator::sequenceSubstituents_(Atom* seed)
+	{
+		std::vector<Atom*> result;
+
+		// if this atom is a chain atom, find all its chains
+		bool in_chain = seed->hasProperty(SDGenerator::CORE_CHAIN);
+
+		std::list<Atom*> seed_chain;
+
+		bool found = false;
+		if (in_chain)
+		{
+			for (std::list<std::list<Atom*> >::iterator chains_it = chains_.begin(); 
+			     chains_it != chains_.end() && !found; ++chains_it)
+			{
+				for (std::list<Atom*>::iterator chain_it = chains_it->begin(); chain_it != chains_it->end(); ++chain_it)
+				{
+					if (*chain_it == seed)
+					{
+						seed_chain = *chains_it;
+						found = true;
+						break;
+					}
+				}
+			}
+		}
+
+		// we need the set of substituents to treat, and already treated ones
+		std::list<Atom*> left, done;
+		
+		Atom::BondIterator b_it;
+		BALL_FOREACH_ATOM_BOND(*seed, b_it)
+		{
+			Atom* partner = b_it->getPartner(*seed);
+			if (partner->hasProperty(SDGenerator::ASSEMBLED))
+				done.push_back(partner);
+			else
+				left.push_back(partner);
+		}
+
+		Atom* last_substituent = NULL;
+		while (!left.empty())
+		{
+			Atom* next_substituent = NULL;
+
+			// if the seed atom is in a chain...
+			if (in_chain)
+			{
+				// if the last atom was the CW chain neighbour and the CCW belongs to left...
+				if (   last_substituent 
+					  && last_substituent->hasProperty(SDGenerator::CORE_CHAIN))
+				{
+					bool found_cw = false;
+
+					for (std::list<Atom*>::iterator at_it = seed_chain.begin(); at_it != seed_chain.end(); ++at_it)
+					{
+						if (*at_it == last_substituent)
+						{
+							found_cw = true;
+							break;
+						}
+					}
+
+					if (found_cw)
+					{
+						// ok. now try to find the CCW neighbour in left
+						bool found_ccw = false;
+						std::list<Atom*>::iterator n_it;
+						for (n_it = left.begin(); n_it != left.end() && !found_ccw; ++n_it)
+						{
+							if ((*n_it)->hasProperty(SDGenerator::CORE_CHAIN))
 							{
-								new_chains.push_back(new_chain);
-								pushbacked = 1;
-
-								break;
+								for (std::list<Atom*>::iterator c_it = seed_chain.begin(); c_it != seed_chain.end(); ++c_it)
+								{
+									if (*c_it == *n_it)
+									{
+										found_ccw = true;
+										break;
+									}
+								}
 							}
 						}
 
-						j++;
-
-						if (j == found_chains[i].size())
+						if (found_ccw)
 						{
-							j = 0;
-							increment_i = 1;
+							next_substituent = *n_it;
 						}
-					}
-
-					if (new_chain.size() > 0 && !pushbacked)
-					{
-						new_chains.push_back(new_chain);
-					}
-
-					if (increment_i)
-					{
-						i++;
 					}
 				}
 
-				for (Position new_chain=0; new_chain<new_chains.size(); ++new_chain)
-					chains_.push_back(new_chains[new_chain]);
+				// otherwise, if done is empty, use the CW chain neigbour.
+				if (!next_substituent && done.empty())
+				{
+					// use one of the neighbours in one of the chains
+					for (std::list<Atom*>::iterator n_it = seed_chain.begin(); n_it != seed_chain.end(); ++n_it)
+					{
+						if (*n_it == seed)
+						{
+							if (n_it == seed_chain.begin())
+							{
+								next_substituent = seed_chain.back();
+							}
+							else
+							{
+								next_substituent = *(--n_it);
+							}
+							break;
+						}
+					}
+				}
 			}
 
-			std::sort(chains_.begin(), chains_.end(), SDGenerator::compareChains_);
+			if (!next_substituent)
+			{
+				// otherwise, set s to the highest priority atom of left
+				int max_value = Limits<int>::min();
+				for (std::list<Atom*>::iterator a_it = left.begin(); a_it != left.end(); ++a_it)
+				{
+					if ((*a_it)->getProperty("SDGenerator::PRIORITY").getInt() > max_value)
+					{
+						next_substituent = *a_it;
+						max_value = (*a_it)->getProperty("SDGenerator::PRIORITY").getInt();
+					}
+				}
+			}
+
+			// ensure that s is not from the wrong side of a PFU
+			if (seed->getProperty("InRing").getBool() && next_substituent->getProperty("InRing").getBool())
+			{
+				// get the atom's current CFS_hi
+				Angle seed_CFS_hi = getCFS_(seed, true);
+
+				Position i;
+				// find the PFU (the ring system) containing the bond
+				for (i=0; i<ring_analyser_.getNumberOfRingSystems(); ++i)
+				{
+					if (ring_analyser_.isInRingSystem(seed, i))
+					{
+						// every atom can only be a member of one ring system
+						break;
+					}
+				}
+				
+				// this should not happen if noone screwed up the properties from the outside
+				if (i >= ring_analyser_.getNumberOfRingSystems())
+				{
+					Log.error() << "SDGenerator::sequenceSubstituents_(): invalid ring system found!" << std::endl;
+				}
+				else
+				{
+					// find the bond in the PFU adjacent to seed_atom that equals seed_atom's CFS_hi 
+					// (this has to exist)
+					Atom::BondIterator b_it;
+					BALL_FOREACH_ATOM_BOND(*seed, b_it)
+					{
+						Atom* partner = b_it->getPartner(*seed);
+
+						if (ring_analyser_.isInRingSystem(partner, i))
+						{
+							Vector3 bond = partner->getPosition() - seed->getPosition();
+
+							Angle bond_CFS = computeCFS_(bond);
+							
+							if (fabs(bond_CFS - seed_CFS_hi) < 1e-3)
+							{
+								next_substituent = partner;
+								break;
+							}
+						}
+					}
+
+					// remove all pfu atoms from left and put them into done
+					std::vector<RingAnalyser::Ring> pfu = ring_analyser_.getRingSystem(i);
+
+					for (Position j=0; j<pfu.size(); ++j)
+					{
+						std::vector<Atom*> ring = pfu[j].atoms;
+
+						for (Position k=0; k<ring.size(); ++k)
+						{
+							std::list<Atom*>::iterator to_delete = std::find(left.begin(), left.end(), ring[k]);
+
+							if (to_delete != left.end())
+							{
+								done.push_back(*to_delete);
+								left.erase(to_delete);
+							}
+						}
+					}
+				}
+			}
+
+			result.push_back(next_substituent);
+
+			done.push_back(next_substituent);
+			left.remove(next_substituent);
+
+			last_substituent = next_substituent;
+		}
+
+		return result;
+	}
+
+	void SDGenerator::smoothCFSAngle_(Atom* seed)
+	{
+		// TODO: implement the individual bond alignment!!!
+	}
+
+	void SDGenerator::placeSubstituent_(Atom* seed, Atom* head, Atom* next)
+	{
+		bool is_in_pfu = seed->getProperty("InRing").getBool() && next->getProperty("InRing").getBool();
+
+		// if the seed atom equals the head atom initialize its CFS values if necessary
+		if (seed == head && !(seed->hasProperty(SDGenerator::INITIALIZED_HEAD_CFS)))
+		{
+			pushCFS_(seed);
+
+			// if the head atom is part of a PFU...
+			if (is_in_pfu)
+			{
+				// use the precomputed bond vector as the new CFS high and low
+				Vector3 old_head_pos;
+				old_head_pos.x = seed->getProperty("SDGenerator::PFU_x_pos").getFloat();
+				old_head_pos.y = seed->getProperty("SDGenerator::PFU_y_pos").getFloat();
+
+				Vector3 bond = next->getPosition() - old_head_pos;
+
+				setCFS_(seed, computeCFS_(bond), false);
+				setCFS_(seed, computeCFS_(bond), true);
+			}
+			else
+			{
+				if (next->hasProperty(SDGenerator::CORE_CHAIN))
+				{
+					setCFS_(seed, Angle(1./3.*M_PI, true), false);
+					setCFS_(seed, Angle(1./3.*M_PI, true), true);
+				}
+				else
+				{
+					// use an angle of zero => proceed in x direction
+					setCFS_(seed, Angle(0.f, true), false);
+					setCFS_(seed, Angle(0.f, true), true);
+				}
+			}
+
+			seed->setProperty(SDGenerator::INITIALIZED_HEAD_CFS);
+		}
+
+		// for the bond length, use the standard value ...
+		double bond_length = options.getReal(Option::STANDARD_BOND_LENGTH);
+
+		// ... or, if the bond is in a PFU, use the precomputed length
+		if (is_in_pfu)
+		{
+			// this is a little tricky, since the seed has already been moved
+			// => use the stored seed position instead
+			Vector3 old_seed_pos(0.f);
+			old_seed_pos.x = seed->getProperty("SDGenerator::PFU_x_pos").getFloat();
+			old_seed_pos.y = seed->getProperty("SDGenerator::PFU_y_pos").getFloat();
+
+			bond_length = next->getPosition().getDistance(old_seed_pos);
+		}
+
+		// perform individual bond alignment
+		smoothCFSAngle_(seed);
+
+		// and place the next atom the the correct distance and angle
+		Angle seed_CFS_lo = getCFS_(seed, false);
+
+		if (next->getProperty("InRing").getBool())
+		{
+			pushCFS_(next);
+
+			next->setProperty("SDGenerator::PFU_x_pos", next->getPosition().x);
+			next->setProperty("SDGenerator::PFU_y_pos", next->getPosition().y);
+		}
+		Vector3 new_position;
+
+		new_position.x = cos(seed_CFS_lo.toRadian())*bond_length;
+		new_position.y = sin(seed_CFS_lo.toRadian())*bond_length;
+
+		next->setPosition(seed->getPosition() + new_position);
+		next->setProperty(SDGenerator::ASSEMBLED);
+
+		// set up the next atom's CFS as pointing back towards the seed
+		setCFS_(next, Angle(getCFS_(seed, false).toRadian() - M_PI), false);
+		setCFS_(next, Angle(getCFS_(seed, false).toRadian() - M_PI), true);
+
+		// and take care of the zig-zagging
+		if (next->hasProperty(CORE_CHAIN))
+		{
+			if (!seed->hasProperty(CORE_CHAIN) || seed->hasProperty(ZIG))
+			{
+				next->setProperty(ZAG);
+			}
+			else
+			{
+				next->setProperty(ZIG);
+			}
+		}
+	}
+
+	void SDGenerator::depositPFU_(Atom* seed_atom, Atom* next_neighbour)
+	{
+		// we have encountered the first bond in a PFU (in our case: a ring system).
+		// the seed atom and the next neighbour have already been placed, so we
+		// will need their old and new coordinates
+		Vector3 seed_pos_new = seed_atom->getPosition();
+		Vector3 next_pos_new = next_neighbour->getPosition();
+
+		Vector3 seed_pos_old(0.f);
+		seed_pos_old.x = seed_atom->getProperty("SDGenerator::PFU_x_pos").getFloat();
+		seed_pos_old.y = seed_atom->getProperty("SDGenerator::PFU_y_pos").getFloat();
+
+		Vector3 next_pos_old(0.f);
+		next_pos_old.x = next_neighbour->getProperty("SDGenerator::PFU_x_pos").getFloat();
+		next_pos_old.y = next_neighbour->getProperty("SDGenerator::PFU_y_pos").getFloat();
+
+		// determine the shift
+		Vector3 translation = seed_pos_new - seed_pos_old;
+
+		//and the old and new bond vectors
+		Vector3 bond_new = next_pos_new - seed_pos_new;
+		Vector3 bond_old = next_pos_old - seed_pos_old;
+
+		// and the transformation matrix
+		Angle alpha = bond_old.getAngle(bond_new);
+
+		if ((bond_old % bond_new).z < 0)
+			alpha *= -1.f;
+
+		Matrix4x4 transform;
+		transform.setRotationZ(alpha);
+		transform.translate(translation);
+
+		// collect all other PFU atoms (excluding seed and next) and ensure we only
+		// transform each of them once
+		std::set<Atom*> to_transform;
+
+		Position pfu_index;
+		for (pfu_index = 0; pfu_index < ring_analyser_.getNumberOfRingSystems(); ++pfu_index)
+		{
+			if (ring_analyser_.isInRingSystem(seed_atom, pfu_index))
+				break;
+		}
+
+		std::vector<RingAnalyser::Ring> ringsystem = ring_analyser_.getRingSystem(pfu_index);
+
+		for (Position ring_index = 0; ring_index < ringsystem.size(); ++ring_index)
+		{
+			std::vector<Atom*>& ring_atoms = ringsystem[ring_index].atoms;
+
+			for (Position atom_index = 0; atom_index < ring_atoms.size(); ++atom_index)
+			{
+				Atom* atom = ring_atoms[atom_index];
+
+				if ((atom != seed_atom) && (atom != next_neighbour))
+				{
+					to_transform.insert(atom);
+				}
+			}
+		}
+
+		// and transform merrily away
+		for (std::set<Atom*>::iterator atom_it = to_transform.begin(); atom_it != to_transform.end(); ++atom_it)
+		{
+			(*atom_it)->setPosition(transform * (*atom_it)->getPosition());
+			(*atom_it)->setProperty(SDGenerator::ASSEMBLED);
+			setCFS_(*atom_it, getCFS_(*atom_it, false) + alpha, false);
+			setCFS_(*atom_it, getCFS_(*atom_it, true)  + alpha, true);
+			redraw_queue_.push(*atom_it);
+		}
+
+		// now, we just need to put the correct CFS values into seed and next
+		setCFS_(seed_atom, getBackupCFS_(seed_atom, false) + alpha, false);
+		setCFS_(next_neighbour, getBackupCFS_(next_neighbour, false) + alpha, false);
+	} 
+
+	void SDGenerator::checkOverlap_(Atom* next_neighbour)
+	{
+		// TODO: implement!!!
+	}
+
+	void SDGenerator::assembleSD_(AtomContainer& ac)
+	{
+
+		// find the atom with maximum priority
+		int max_value = Limits<int>::min();
+		Atom *head_atom;
+
+		AtomIterator at_it;
+		BALL_FOREACH_ATOM(ac, at_it)
+		{
+			int value = at_it->getProperty("SDGenerator::PRIORITY").getInt();		
+
+			if (value > max_value)
+			{
+				max_value = value;
+				head_atom = &*at_it;
+			}
+		}
+
+		// position the head atom (yay!)
+		if (head_atom->getProperty("InRing").getBool())
+		{
+			// if the head is part of a PFU, we need it's original position
+			// later to translate and rotate the ring accordingly
+			head_atom->setProperty("SDGenerator::PFU_x_pos", head_atom->getPosition().x);
+			head_atom->setProperty("SDGenerator::PFU_y_pos", head_atom->getPosition().y);
+		}
+		head_atom->setPosition(Vector3(0.f));
+
+		// and put it into the queue
+		redraw_queue_.push(head_atom);
+
+		head_atom->setProperty(SDGenerator::ASSEMBLED);
+
+		// now place all the atoms
+		while (!redraw_queue_.empty())
+		{
+			Atom* seed_atom = redraw_queue_.top();
+			redraw_queue_.pop();
+
+			Angle beta = computeAngularSeparation_(seed_atom);
+			std::vector<Atom*> sequence = sequenceSubstituents_(seed_atom);
+
+			// select the placement algorithm
+			if (seed_atom->getProperty("InRing").getBool())
+			{
+				// iterate over the unplaced substituents in the correct order
+				for (Position next_neighbour_index = 0; next_neighbour_index < sequence.size(); ++next_neighbour_index)
+				{
+					Atom* next_neighbour = sequence[next_neighbour_index];
+
+					if (!(next_neighbour->hasProperty(SDGenerator::ASSEMBLED)))
+					{
+						// rotate the CFS_lo of the seed by beta if the other atom is not in a ring
+
+						if (!next_neighbour->getProperty("InRing").getBool())
+						{
+							setCFS_(seed_atom, getCFS_(seed_atom, false) + beta, false);
+						}
+						placeSubstituent_(seed_atom, head_atom, next_neighbour);
+
+						redraw_queue_.push(next_neighbour);
+
+						// if the bond was part of a PFU, deposit it straight away
+						if (next_neighbour->getProperty("InRing").getBool())
+							depositPFU_(seed_atom, next_neighbour);
+
+						// finally, check for overlap (but don't fix it yet)
+						checkOverlap_(next_neighbour);
+					}
+				}
+			}
+			else if (seed_atom->hasProperty(SDGenerator::CORE_CHAIN))
+			{
+				// find the correct chain
+				std::list<Atom*> chain;
+
+				for (std::list<std::list<Atom*> >::iterator l_it = chains_.begin(); l_it != chains_.end(); ++l_it)
+				{
+					if (std::find(l_it->begin(), l_it->end(), seed_atom) != l_it->end())
+					{
+						chain = *l_it;
+						break;
+					}
+				}
+
+				// iterate over the unplaced substituents in the correct order
+				for (Position next_neighbour_index = 0; next_neighbour_index < sequence.size(); ++next_neighbour_index)
+				{
+					Atom* next_neighbour = sequence[next_neighbour_index];
+
+					if (!(next_neighbour->hasProperty(SDGenerator::ASSEMBLED)))
+					{
+						// is the next atom part of the same chain?
+						std::list<Atom*>::iterator atom_in_chain = std::find(chain.begin(), chain.end(), next_neighbour);
+						if (atom_in_chain != chain.end())
+						{
+							if (seed_atom->hasProperty(ZIG))
+							{
+								setCFS_(seed_atom, Angle(getCFS_(seed_atom, false).toRadian() + 4./3.*M_PI, true), false);
+							}
+							else
+							{
+								setCFS_(seed_atom, Angle(getCFS_(seed_atom, false).toRadian() + 2./3.*M_PI, true), false);
+							}
+						}
+						else
+							setCFS_(seed_atom, getCFS_(seed_atom, false) + beta, false);
+
+						placeSubstituent_(seed_atom, head_atom, next_neighbour);
+
+						redraw_queue_.push(next_neighbour);
+
+						// TODO: if the seed atom is in a completed double bond, ensure stereochemistry
+					}
+				}
+			}
+			else // it is neither in a ring nor in a core chain
+			{
+				Size num_double_bonds = 0;
+				Size num_triple_bonds = 0;
+
+				Atom::BondIterator b_it;
+				BALL_FOREACH_ATOM_BOND(*seed_atom, b_it)
+				{
+					if (b_it->getOrder() == Bond::ORDER__DOUBLE)
+						++num_double_bonds;
+					else if (b_it->getOrder() == Bond::ORDER__TRIPLE)
+						++num_triple_bonds;
+				}
+
+				if (    (seed_atom->countBonds() == 2)
+				     && (num_double_bonds <= 2)
+						 && (num_triple_bonds = 0) )
+				{
+					// the atom is pseudotrigonal
+					beta = Angle(2./3.*M_PI, true);
+				}
+
+				// iterate over the unplaced substituents in the correct order
+				for (Position next_neighbour_index = 0; next_neighbour_index < sequence.size(); ++next_neighbour_index)
+				{
+					Atom* next_neighbour = sequence[next_neighbour_index];
+
+					if (!(next_neighbour->hasProperty(SDGenerator::ASSEMBLED)))
+					{
+						if (seed_atom != head_atom)
+						{
+							// TODO: step (a), step (b)
+							setCFS_(seed_atom, getCFS_(seed_atom, false) + beta, false);
+						}
+
+						placeSubstituent_(seed_atom, head_atom, next_neighbour);
+
+						redraw_queue_.push(next_neighbour);
+
+						// TODO: ensure stereo chemistry
+					}
+				}
+			}
 		}
 	}
 

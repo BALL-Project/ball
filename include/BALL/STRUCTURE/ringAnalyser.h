@@ -59,10 +59,10 @@ namespace BALL
 					Ring(std::vector<Atom*> const& atoms_);
 
 					/// The predecessor of atom i in the ring
-					Position predecessor(Position i);
+					Position predecessor(Position i) const;
 
 					/// The successor of atom i in the ring
-					Position successor(Position i);
+					Position successor(Position i) const;
 
 					/// the atoms of this ring
 					std::vector<Atom*> atoms;
@@ -117,7 +117,15 @@ namespace BALL
 			 * @param ring the ring
 			 * @return true, if the atom is part of the ring, otherwise returns false
 			 */
-			bool isInRing(const Atom* atom, std::vector<Atom*>& ring);
+			bool isInRing(const Atom* atom, std::vector<Atom*> const& ring) const;
+
+			/**
+			 * \brief helper-function; determines, whether an atom is part of a certain ring
+			 * @param atom the atom
+			 * @param i the index of the ring system to test
+			 * @return true, if the atom is part of the ring system, otherwise returns false
+			 */
+			bool isInRingSystem(const Atom* atom, Index i) const;
 
       /**
       * Puts the Atoms in the input ring into the correct order
