@@ -107,7 +107,7 @@ namespace BALL
 		if (b_loweridx > b_upperidx) std::swap(b_loweridx, b_upperidx);		
 		if (c_loweridx > c_upperidx) std::swap(c_loweridx, c_upperidx);		
 
-		std::list<System*> crystal;
+		std::list<System*> crystal;	
 		for (Index a = a_loweridx; a <= a_upperidx; a++)
 		{
 			for (Index b = b_loweridx; b <= b_upperidx; b++)
@@ -248,7 +248,7 @@ namespace BALL
 		system_->apply(transformer_);
 		
 		// generate surrounding unitcell, if there are clashing asyymetric units and delete delete non-clashing
-		std::list<System*> crystal;
+		std::list<System*> crystal;	
 		System* current_unitcell = 0;
 		vector<BitVector>::iterator bit = boundingbits_vector.begin();
 		for (Index a = -1; a <= 1; a++)
