@@ -144,14 +144,21 @@ namespace BALL
 			QImage pm(filename.c_str());
 			p.begin(&pm);
 			p.setFont(QFont("Arial", 5, QFont::Bold));
+			
 			QColor color;
 			stage_->getBackgroundColor().getInverseColor().get(color);
 			color.setAlpha(255);
 			p.setRenderHint(QPainter::TextAntialiasing, true);
 			p.setRenderHint(QPainter::Antialiasing, true);
 			p.setPen(color);
-			p.drawText(12, 22, c.c_str());
-
+			int text_pos_x = 12;
+			int text_pos_y = 22;
+			if (c.size()==2)
+			{
+				text_pos_x = 0;
+				text_pos_y = 23;
+			}
+			p.drawText(text_pos_x, text_pos_y, c.c_str());
 			p.end();
 
 			pm.createAlphaMask();
@@ -714,7 +721,6 @@ namespace BALL
 		void EditableScene::setElementCursor()
 		{
 			String s = PTE[atomic_number_].getSymbol();
-			s.truncate(1);
 			setCursor(s.c_str());
 		}
 
