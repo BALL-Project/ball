@@ -26,7 +26,7 @@ For further details of the build process, please refer to our trac
 http://ball-trac.bioinf.uni-sb.de/wiki/DevelopmentEnvironment
 
 To build the documentation, run "make doc". Alternatively, you can refer
-to the online documentation at http://ball-docs.bioinf.uni-sb.de/Current/
+to the online documentation at http://www.ball-project.org/Documentation/
 
 Please help us to improve the quality of this library by sending all the
 problems you ran into, all criticism, encouragements, improvements, bug
