@@ -693,13 +693,17 @@ namespace BALL
 																										const String& aligned_nmrstar_sequence)
 	{	
 		int  matches     = 0;
-    num_mismatches_  = -1;	
+		num_mismatches_  = -1;	
 		num_gabs_        = -1;
 	
 		String chain_seq = Peptides::GetSequence(*chain_);
 
 		String squeezed_align_seq(aligned_ball_sequence);
-		squeezed_align_seq.substitute("-", "");
+		while(squeezed_align_seq.substitute("-", "")!=String::EndPos)
+		{
+			;
+		}
+
 		if (chain_seq != squeezed_align_seq)
 		{
 			Log.warn() << "BALLToBMRBMapper::createMapping(): Warning: Alignment sequence cannnot be matched to chosen chain!" << endl;
