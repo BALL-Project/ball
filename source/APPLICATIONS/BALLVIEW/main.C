@@ -95,19 +95,23 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 	BALL::INIFile f(home_dir + BALL::FileSystem::PATH_SEPARATOR + ".BALLView");
 	f.read();
 
-	if(f.hasEntry("GENERAL", "language")) {
+	if (f.hasEntry("GENERAL", "language")) 
+	{
 		QString str = f.getValue("GENERAL", "language").c_str();
 
-		if(!(str == "Default")) {
+		if (!(str == "Default")) 
+		{
 			QString loc = "BALLView." + str;
 
 			BALL::Path p;
 			QStringList dpaths = QString(p.getDataPath().c_str()).split("\n");
 
 			QTranslator* translator = new QTranslator(&application);
-			foreach(QString str, dpaths) {
+			foreach(QString str, dpaths) 
+			{
 				translator->load(loc, str + "BALLView/translations");
-				if(!translator->isEmpty()) {
+				if (!translator->isEmpty()) 
+				{
 					QCoreApplication::installTranslator(translator);
 					break;
 				}
