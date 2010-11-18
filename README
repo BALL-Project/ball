@@ -1,25 +1,50 @@
 
                     BALL  -  Biochemical ALgorithm Library
                     --------------------------------------
-                                Release 1.3.2
+                                Release 1.4
 	
 
-To install BALL on most platforms, it is sufficient to type the following
-command in the current directory:
-  
- ./autobuild
+To install BALL, use the CMake build system.
 
-Compilation instructions on Windows can be found in BALL/Windows/README.txt.
+  * Enter the toplevel directory of BALL (the one containing the
+    CMakeLists.txt file and the source and include folders) 
 
-For further details of the build process, please refer to the
-installation section of the tutorial found on our website
-(http://www.ball-projects.org/Documentation/1.3.2/BALL-Tutorial-1.3.2.pdf).
+  * Then create a folder "build" and change into it 
+
+  * Call "cmake .." (if you have a contrib directory for BALL, use
+	  "cmake .. -DBALL_CONTRIB_PATH=path_to_your_contrib")
+
+  * Type "make"
+
+If you want to build packages (currently mostly interesting on MacOS and
+Windows), add the flag "-DBALL_ENABLE_PACKAGING=true" to the cmake command
+line and run "make package" instead of a plain make.
+
+On Windows, make sure to run the commands in a Visual Studio command shell.
+
+For further details of the build process, please refer to our trac
+http://ball-trac.bioinf.uni-sb.de/wiki/DevelopmentEnvironment
+
+To build the documentation, run "make doc". Alternatively, you can refer
+to the online documentation at http://ball-docs.bioinf.uni-sb.de/Current/
 
 Please help us to improve the quality of this library by sending all the
 problems you ran into, all criticism, encouragements, improvements, bug
 reports, and wishes for further functionality to 
   
   ball-bugs@bioinf.uni-sb.de
+
+If you use BALL, please cite our recent publication:
+ 
+  Andreas Hildebrandt, Anna Katharina Dehof, Alexander Rurainski, 
+  Andreas Bertsch, Marcel Schumann, Nora C Toussaint, Andreas Moll, 
+  Daniel Stockel, Stefan Nickels, Sabine C Mueller, Hans-Peter Lenhof, 
+  Oliver Kohlbacher: 
+
+  "BALL - Biochemical Algorithms Library 1.3", 
+
+  2010, BMC Bioinformatics, 11:531
+
 
 Please have a look at our website as well: 
 
