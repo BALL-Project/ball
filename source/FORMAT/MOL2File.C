@@ -583,7 +583,7 @@ namespace BALL
 	{
 		Size number_of_fields = 1;
 		Size line_number = 0;
-		while (readLine() && (number_of_fields > 0) && !getLine().hasPrefix(TRIPOS) && (line_number <= 5))
+		while (readLine() && !getLine().hasPrefix(TRIPOS) && (line_number <= 5))
 		{
 			getLine().trim();
 			if (getLine().hasPrefix("#")) continue;
@@ -603,6 +603,10 @@ namespace BALL
 					break;
 
 				case 2:
+					if(number_of_fields==0)
+					{
+						throw Exception::ParseError(__FILE__, __LINE__, "", "Invalid molecule header! Line 2 of molecule header is empty but it should contain the number of atoms and bonds!");
+					}
 					// read the number of atoms, bonds, and substructures
 					molecule_.number_of_atoms = getLine().getField(0).toUnsignedInt();
 					if (number_of_fields > 1)
@@ -628,6 +632,10 @@ namespace BALL
 					break;
 
 				case 3:
+					if(number_of_fields==0)
+					{
+						throw Exception::ParseError(__FILE__, __LINE__, "", "Invalid molecule header! Line 3 of molecule header is empty but it should contain information about the molecule type!");
+					}
 					molecule_.type = getLine().getField(0);
 				case 4:
 				case 5:
