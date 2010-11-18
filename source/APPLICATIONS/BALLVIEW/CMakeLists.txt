@@ -81,3 +81,6 @@ IF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 ENDIF()
 
 TARGET_LINK_LIBRARIES(BALLView BALL VIEW)
+
+#Setup the translations
+INCLUDE(${CMAKE_SOURCE_DIR}/cmake/BALLViewTranslations.cmake)
