@@ -9,12 +9,15 @@
 namespace BALL
 {
 	CCP4File::CCP4File()
-	: File(),
-		swap_bytes_(false),
-		offset_symops_(0),
-		col_axis_(1),
-		row_axis_(2),
-		sec_axis_(3)
+		: File(),
+		  swap_bytes_(false),
+		  offset_symops_(0),
+		  col_axis_(1),
+		  row_axis_(2),
+		  sec_axis_(3),
+		  mean_density_(0),
+		  deviation_sigma_(0),
+		  space_group_(-1)
 	{
 	}
 
@@ -209,7 +212,7 @@ namespace BALL
 	
 		if(offset_symops_ != 0)
 		{
-			char *sym_record = new char[80];
+			char sym_record[80];
 			int sym_lines = 0;
 			Log.info() << "CCP4File::readSymmetryRecords(): File has the following symmetry information stored:" << std::endl;
 			while (sym_lines < offset_symops_/80)
