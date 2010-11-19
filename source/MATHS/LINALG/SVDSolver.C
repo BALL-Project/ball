@@ -75,20 +75,22 @@ namespace BALL
 		{
 			bool finished = false;
 			// try to half the size as long as the workspace is still large enough
-			while (workspace_dummy >= 2*(3*min_mn*min_mn +
-													std::max(max_mn,4*min_mn*min_mn+4*min_mn)) && !finished)
+			while (workspace_dummy >= 2*(3*min_mn*min_mn + std::max(max_mn,4*min_mn*min_mn+4*min_mn)))
 			{
 				workspace_dummy /= 2;
-				float *workspace = (float*) malloc((int)workspace_dummy*sizeof(float));
+				workspace = (float*) malloc((int)workspace_dummy*sizeof(float));
 				if (workspace != 0)
+				{
 					finished = true;
+					break;
+				}
 			}
 
 			if (!finished)
 			{
 				// try one last time
 				workspace_dummy = (3*min_mn*min_mn +std::max(max_mn,4*min_mn*min_mn+4*min_mn));
-				float *workspace = (float*) malloc((int)workspace_dummy*sizeof(float));
+				workspace = (float*) malloc((int)workspace_dummy*sizeof(float));
 
 				if (workspace == 0)
 					return false;
@@ -208,20 +210,22 @@ namespace BALL
 		{
 			bool finished = false;
 			// try to half the size as long as the workspace is still large enough
-			while (workspace_dummy >= 2*(3*min_mn*min_mn +
-													std::max(max_mn,4*min_mn*min_mn+4*min_mn)) && !finished)
+			while (workspace_dummy >= 2*(3*min_mn*min_mn + std::max(max_mn,4*min_mn*min_mn+4*min_mn)))
 			{
 				workspace_dummy /= 2;
-				double *workspace = (double*) malloc((int)workspace_dummy*sizeof(double));
+				workspace = (double*) malloc((int)workspace_dummy*sizeof(double));
 				if (workspace != 0)
+				{
 					finished = true;
+					break;
+				}
 			}
 
 			if (!finished)
 			{
 				// try one last time
 				workspace_dummy = (3*min_mn*min_mn +std::max(max_mn,4*min_mn*min_mn+4*min_mn));
-				double *workspace = (double*) malloc((int)workspace_dummy*sizeof(double));
+				workspace = (double*) malloc((int)workspace_dummy*sizeof(double));
 
 				if (workspace == 0)
 					return false;
@@ -333,19 +337,22 @@ namespace BALL
 		{
 			bool finished = false;
 			// try to half the size as long as the workspace is still large enough
-			while (workspace_dummy.real() >= (min_mn*min_mn+2*min_mn+max_mn) && !finished)
+			while (workspace_dummy.real() >= (min_mn*min_mn+2*min_mn+max_mn))
 			{
 				workspace_dummy /= 2;
-				ComplexFloat *workspace = (ComplexFloat*) malloc((int)workspace_dummy.real()*sizeof(ComplexFloat));
+				workspace = (ComplexFloat*) malloc((int)workspace_dummy.real()*sizeof(ComplexFloat));
 				if (workspace != 0)
+				{
 					finished = true;
+					break;
+				}
 			}
 
 			if (!finished)
 			{
 				// try one last time
 				workspace_dummy = ComplexFloat((min_mn*min_mn+2*min_mn+max_mn), 0);
-				ComplexFloat *workspace = (ComplexFloat*) malloc((int)workspace_dummy.real()*sizeof(ComplexFloat));
+				workspace = (ComplexFloat*) malloc((int)workspace_dummy.real()*sizeof(ComplexFloat));
 
 				if (workspace == 0)
 					return false;
@@ -457,19 +464,22 @@ namespace BALL
 		{
 			bool finished = false;
 			// try to half the size as long as the workspace is still large enough
-			while (workspace_dummy.real() >= (min_mn*min_mn+2*min_mn+max_mn) && !finished)
+			while (workspace_dummy.real() >= (min_mn*min_mn+2*min_mn+max_mn))
 			{
 				workspace_dummy /= 2;
-				ComplexDouble *workspace = (ComplexDouble*) malloc((int)workspace_dummy.real()*sizeof(ComplexDouble));
+				workspace = (ComplexDouble*) malloc((int)workspace_dummy.real()*sizeof(ComplexDouble));
 				if (workspace != 0)
+				{
 					finished = true;
+					break;
+				}
 			}
 
 			if (!finished)
 			{
 				// try one last time
 				workspace_dummy = ComplexDouble((min_mn*min_mn+2*min_mn+max_mn), 0);
-				ComplexDouble *workspace = (ComplexDouble*) malloc((int)workspace_dummy.real()*sizeof(ComplexDouble));
+				workspace = (ComplexDouble*) malloc((int)workspace_dummy.real()*sizeof(ComplexDouble));
 
 				if (workspace == 0)
 					return false;

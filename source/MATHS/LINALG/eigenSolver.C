@@ -59,13 +59,12 @@ namespace BALL {
 		{
 			// try four times to half the size... if that doesn't work, we give up and
 			// use no workspace at all
-			bool finished = false;
-			for (int i=0; i<4 && !finished; i++)
+			for (int i=0; i<4; i++)
 			{
 				workspace_dummy /= 2;
-				ComplexFloat *workspace = (ComplexFloat*) malloc((int)workspace_dummy.real()*sizeof(ComplexFloat));
+				workspace = (ComplexFloat*) malloc((int)workspace_dummy.real()*sizeof(ComplexFloat));
 				if (workspace != 0)
-					finished = true;
+					break;
 			}
 		}
 
@@ -150,13 +149,12 @@ namespace BALL {
 		{
 			// try four times to half the size... if that doesn't work, we give up and
 			// use no workspace at all
-			bool finished = false;
-			for (int i=0; i<4 && !finished; i++)
+			for (int i=0; i<4; i++)
 			{
 				workspace_dummy /= 2;
-				ComplexDouble *workspace = (ComplexDouble*) malloc((int)workspace_dummy.real()*sizeof(ComplexDouble));
+				workspace = (ComplexDouble*) malloc((int)workspace_dummy.real()*sizeof(ComplexDouble));
 				if (workspace != 0)
-					finished = true;
+					break;
 			}
 		}
 
@@ -239,13 +237,12 @@ namespace BALL {
 		{
 			// try four times to half the size... if that doesn't work, we give up and
 			// use no workspace at all
-			bool finished = false;
-			for (int i=0; i<4 && !finished; i++)
+			for (int i=0; i<4; i++)
 			{
 				workspace_dummy /= 2;
-				ComplexFloat *workspace = (ComplexFloat*) malloc((int)(workspace_dummy.real())*sizeof(ComplexFloat));
+				workspace = (ComplexFloat*) malloc((int)(workspace_dummy.real())*sizeof(ComplexFloat));
 				if (workspace != 0)
-					finished = true;
+					break;
 			}
 		}
 
@@ -328,13 +325,12 @@ namespace BALL {
 		{
 			// try four times to half the size... if that doesn't work, we give up and
 			// use no workspace at all
-			bool finished = false;
-			for (int i=0; i<4 && !finished; i++)
+			for (int i=0; i<4; i++)
 			{
 				workspace_dummy /= 2;
-				ComplexDouble *workspace = (ComplexDouble*) malloc((int)(workspace_dummy.real())*sizeof(ComplexDouble));
+				workspace = (ComplexDouble*) malloc((int)(workspace_dummy.real())*sizeof(ComplexDouble));
 				if (workspace != 0)
-					finished = true;
+					break;
 			}
 		}
 
@@ -411,13 +407,12 @@ namespace BALL {
 		{
 			// try four times to half the size... if that doesn't work, we give up and
 			// use no workspace at all
-			bool finished = false;
-			for (int i=0; i<4 && !finished; i++)
+			for (int i=0; i<4; i++)
 			{
 				real_workspace_dummy /= 2;
 				real_workspace = (float*) malloc((int)real_workspace_dummy*sizeof(float));
 				if (real_workspace != 0)
-					finished = true;
+					break;
 			}
 		}
 		real_worksize = (int)real_workspace_dummy;
@@ -427,13 +422,12 @@ namespace BALL {
 		{
 			// try four times to half the size... if that doesn't work, we give up and
 			// use no workspace at all
-			bool finished = false;
-			for (int i=0; i<4 && !finished; i++)
+			for (int i=0; i<4; i++)
 			{
 				int_workspace_dummy /= 2;
 				int_workspace = (int*) malloc((int)int_workspace_dummy*sizeof(int));
 				if (int_workspace != 0)
-					finished = true;
+					break;
 			}
 		}
 		int_worksize = (int)int_workspace_dummy;
@@ -504,13 +498,12 @@ namespace BALL {
 		{
 			// try four times to half the size... if that doesn't work, we give up and
 			// use no workspace at all
-			bool finished = false;
-			for (int i=0; i<4 && !finished; i++)
+			for (int i=0; i<4; i++)
 			{
 				real_workspace_dummy /= 2;
 				real_workspace = (double*) malloc((int)real_workspace_dummy*sizeof(double));
 				if (real_workspace != 0)
-					finished = true;
+					break;
 			}
 		}
 		real_worksize = (int)real_workspace_dummy;
@@ -520,13 +513,12 @@ namespace BALL {
 		{
 			// try four times to half the size... if that doesn't work, we give up and
 			// use no workspace at all
-			bool finished = false;
-			for (int i=0; i<4 && !finished; i++)
+			for (int i=0; i<4; i++)
 			{
 				int_workspace_dummy /= 2;
 				int_workspace = (int*) malloc((int)int_workspace_dummy*sizeof(int));
 				if (int_workspace != 0)
-					finished = true;
+					break;
 			}
 		}
 		int_worksize = (int)int_workspace_dummy;
