@@ -253,6 +253,16 @@ namespace BALL
 		return false;
 	}
 
+	NamedPropertyIterator PropertyManager::beginNamedProperty()
+	{
+		return named_properties_.begin();
+	}
+
+	NamedPropertyIterator PropertyManager::endNamedProperty()
+	{
+		return named_properties_.end();
+	}
+
 	void PropertyManager::dump(ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);

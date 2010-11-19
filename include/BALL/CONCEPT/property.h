@@ -309,6 +309,8 @@ namespace BALL
 
 	};
 
+	typedef std::vector<NamedProperty>::iterator NamedPropertyIterator;
+
 	/**	Property Manager class.
 			This class manages properties of a class.
 			A property can be seen as easy way to extend the
@@ -565,6 +567,12 @@ namespace BALL
 				@param	name the name of the proeprty to be retrieved
 		*/
 		const NamedProperty& getProperty(const string& name) const;
+
+		/** Return an iterator to the first NamedProperty stored in this container. */
+		NamedPropertyIterator beginNamedProperty();
+
+		/** Return an iterator past the last NamedProperty stored in this container. */
+		NamedPropertyIterator endNamedProperty();
 
 		/**	Remove a named property.
 				If the named property <tt>name</tt> does exist, it is remove from
