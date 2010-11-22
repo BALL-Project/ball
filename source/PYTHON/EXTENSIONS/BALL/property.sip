@@ -33,6 +33,49 @@ class NamedProperty
   PersistentObject* getObject() const;
   String getString() const;
   NamedProperty();
+
+	SIP_PYOBJECT __str__();
+%MethodCode
+	if(sipCpp == 0)
+	{
+		sipRes = PyString_FromString("");
+	}
+	else
+	{
+		BALL::String output = sipCpp->getName() + ", Type: ";
+		switch(sipCpp->getType())
+		{
+			case NamedProperty::BOOL:
+				output += BALL::String("Bool, Value: ") + (sipCpp->getBool() ? "True" : "False");
+				break;
+			case NamedProperty::INT:
+				output += BALL::String("Integer, Value: ") + BALL::String(sipCpp->getInt());
+				break;
+			case NamedProperty::UNSIGNED_INT:
+				output += BALL::String("Unsigned Integer, Value: ") + BALL::String(sipCpp->getUnsignedInt());
+				break;
+			case NamedProperty::FLOAT:
+				output += BALL::String("Float, Value: ") + BALL::String(sipCpp->getFloat());
+				break;
+			case NamedProperty::DOUBLE:
+				output += BALL::String("Double, Value: ") + BALL::String(sipCpp->getDouble());
+				break;
+			case NamedProperty::STRING:
+				output += BALL::String("String, Value: ") + sipCpp->getString();
+				break;
+			case NamedProperty::OBJECT:
+				output += BALL::String("Object, Value: ") + BALL::String((unsigned long) sipCpp->getObject());
+				break;
+			case NamedProperty::NONE:
+				output += BALL::String("None");
+				break;
+			case NamedProperty::SMART_OBJECT:
+				output += BALL::String("Smart Object, Value: ") + BALL::String((unsigned long) &*sipCpp->getSmartObject());
+				break;
+		}
+		sipRes = PyString_FromString(output.c_str());
+	}
+%End
 };
 
 class PropertyManager
