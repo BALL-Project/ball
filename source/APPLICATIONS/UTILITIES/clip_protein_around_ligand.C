@@ -119,6 +119,7 @@ Residue* transform_residue_to_cap(PDBAtom& atom, FragmentDB& fragment_db,
 		}
 		else
 		{
+			delete new_residue;
 			return(0);
 		}
 	}
