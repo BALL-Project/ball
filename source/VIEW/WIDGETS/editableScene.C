@@ -269,7 +269,7 @@ namespace BALL
 			list<Composite*> highl = getMainControl()->getMolecularControlSelection();
 			list<Composite*>::iterator lit = highl.begin();
 			bool selected_system_or_molecule =   (highl.size() == 1)
-																				&& (RTTI::isKindOf<System>(**lit) || RTTI::isKindOf<Molecule>(**lit) ) ;
+			                                  && (RTTI::isKindOf<System>(**lit) || RTTI::isKindOf<Molecule>(**lit) ) ;
 
 			bondorders_action_->setEnabled(selected_system_or_molecule && !busy);
 			optimize_action_->setEnabled(selected_system_or_molecule && !busy);
@@ -873,6 +873,7 @@ void EditableScene::showContextMenu(QPoint pos)
 {
 	menu_point_ = pos;
 	QMenu menu;
+	IconLoader& loader = IconLoader::instance();
 
 	QAction* rotate_mode = menu.addAction("Rotate Mode", this, SLOT(rotateMode_()));
 	rotate_mode->setCheckable(true);
@@ -897,7 +898,7 @@ void EditableScene::showContextMenu(QPoint pos)
 		menu.addAction("Atom Properties", this, SLOT(atomProperties_()))->setEnabled(current_atom_ != 0);
 		menu.addAction("Move Atom", this, SLOT(moveAtom_()))->setEnabled(current_atom_ != 0);
 		menu.addAction("Delete Atom", this, SLOT(deleteAtom_()))->setEnabled(current_atom_ != 0);
-		menu.addAction(element_action_);
+		menu.addAction(loader.getIcon("actions/molecule-set-element"), "Change Atom Element", this, SLOT(changeAtomElement_()))->setEnabled(current_atom_ != 0);
 
 		QMenu* charge = new QMenu();
 		QAction* change_charge = menu.addMenu(charge);
@@ -1094,8 +1095,19 @@ void EditableScene::changeElement_()
 
 	PTEDialog pte;
 	pte.exec();
+}
 
+void EditableScene::changeAtomElement_()
+{
 	if (current_atom_ != 0)
+	{
+		atomic_number_ = current_atom_->getElement().getAtomicNumber();
+	}
+
+	PTEDialog pte;
+	pte.exec();
+
+	if ((current_atom_ != 0))
 	{
 		current_atom_->setElement(PTE[atomic_number_]);
 		String new_name = PTE[atomic_number_].getSymbol();
@@ -1106,7 +1118,7 @@ void EditableScene::changeElement_()
 		current_atom_->setName(new_name);
 		deselect_();
 		getMainControl()->update(*current_atom_);
-	}
+	} 
 }
 
 void EditableScene::createBond_()
@@ -1430,8 +1442,7 @@ bool EditableScene::reactToKeyEvent_(QKeyEvent* e)
 	}
 
 	// TODO QShortcut* shortcut 
-	if (key < Qt::Key_A ||
-			key > Qt::Key_Z)
+	if (key < Qt::Key_A || key > Qt::Key_Z)
 	{
 		return false;
 	}
@@ -1629,10 +1640,10 @@ void EditableScene::computeBondOrders()
 	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS] 		= bond_order_dialog.overwrite_doubleBO_box->isChecked();
 	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS] 		= bond_order_dialog.overwrite_tripleBO_box->isChecked();
 	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_SELECTED_BONDS] 		= bond_order_dialog.overwrite_selected_bonds_box->isChecked();
-	abop.options[AssignBondOrderProcessor::Option::KEKULIZE_RINGS] 									= bond_order_dialog.kekulizeBonds_button->isChecked();
-	abop.options[AssignBondOrderProcessor::Option::ADD_HYDROGENS] 									= bond_order_dialog.add_hydrogens_checkBox->isChecked();
-	abop.options[AssignBondOrderProcessor::Option::ALGORITHM] 											= bond_order_dialog.ILP_button->isChecked() ? AssignBondOrderProcessor::Algorithm::ILP : AssignBondOrderProcessor::Algorithm::A_STAR;
-	abop.options[AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING]						= (bond_order_dialog.penalty_balance_slider->value()/100.);
+	abop.options[AssignBondOrderProcessor::Option::KEKULIZE_RINGS]                          = bond_order_dialog.kekulizeBonds_button->isChecked();
+	abop.options[AssignBondOrderProcessor::Option::ADD_HYDROGENS]                           = bond_order_dialog.add_hydrogens_checkBox->isChecked();
+	abop.options[AssignBondOrderProcessor::Option::ALGORITHM]                               = bond_order_dialog.ILP_button->isChecked() ? AssignBondOrderProcessor::Algorithm::ILP : AssignBondOrderProcessor::Algorithm::A_STAR;
+	abop.options[AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING]                   = (bond_order_dialog.penalty_balance_slider->value()/100.);
 	
 	// get the parameter folder
 	abop.options[AssignBondOrderProcessor::Option::INIFile] = ascii(bond_order_dialog.parameter_file_edit->text());
@@ -1647,22 +1658,22 @@ void EditableScene::computeBondOrders()
 	// get the limitations for number of bond order assignment
 	if (bond_order_dialog.single_solution_button->isChecked())
 	{
-		abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]						= 1;
+		abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]                       = 1;
 		abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS]= false;
 	}
 	else if (bond_order_dialog.all_optimal_solutions_button->isChecked())
 	{
-		abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]						= 0;
+		abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]                       = 0;
 		abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS]= false;
 	}
 	else if (bond_order_dialog.n_opt_solutions_button->isChecked())
 	{
-		abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]						= bond_order_dialog.max_n_opt_solutions->text().toInt();
+		abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]                       = bond_order_dialog.max_n_opt_solutions->text().toInt();
 		abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS]= false;
 	}
 	else if (bond_order_dialog.n_all_solutions_button->isChecked())
 	{
-		abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]						= bond_order_dialog.max_n_all_solutions->text().toInt();
+		abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]                       = bond_order_dialog.max_n_all_solutions->text().toInt();
 		abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS]= true;
 	}
 
@@ -1691,9 +1702,9 @@ void EditableScene::computeBondOrders()
 			stream_description.precision(2);
 
 			stream_description  << "      Solution " << i 
-						 						 << " has penalty " << abop.getTotalPenalty(i);
-			//			 						 << ", charge " << abop.getTotalCharge(i)
-			//									 << ", " <<  abop.getNumberOfAddedHydrogens(i) << " added hydrogens.";
+			                    << " has penalty " << abop.getTotalPenalty(i);
+			//                  << ", charge " << abop.getTotalCharge(i)
+			//                  << ", " <<  abop.getNumberOfAddedHydrogens(i) << " added hydrogens.";
  
 			String description = stream_description.str();
 
@@ -1737,8 +1748,8 @@ void EditableScene::optimizeStructure()
 	for (; +ait; ++ait)
 	{
 		ait->getPosition() += Vector3(rng.randomDouble(-range, range),
-																	rng.randomDouble(-range, range),
-																	rng.randomDouble(-range, range));
+          	                              rng.randomDouble(-range, range),
+		                              rng.randomDouble(-range, range));
 	}
 	ms->chooseMMFF94();
 

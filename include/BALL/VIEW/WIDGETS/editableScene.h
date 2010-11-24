@@ -1,10 +1,3 @@
-/*    THIS IS EXPERIMENTAL CODE  
- *
- *    WE GIVE NO WARRANTY
- *    
- *    USE AT YOUR OWN RISK!!!!!!
- */
-
 #ifndef BALL_VIEW_WIDGETS_EDITABLESCENE_H
 #define BALL_VIEW_WIDGETS_EDITABLESCENE_H
 
@@ -162,6 +155,7 @@ class BALL_VIEW_EXPORT EditableScene
 	virtual void editMode_();
 	void deleteAtom_();
 	void changeElement_();
+	void changeAtomElement_();
 	void createBond_();
 	void deleteBond_();
 	void changeBondOrder_();
