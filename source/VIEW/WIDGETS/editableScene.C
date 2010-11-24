@@ -98,7 +98,7 @@ namespace BALL
 
 		EditableScene::EditableScene()
 			:	Scene(),
-				toolbar_edit_controls_(new QToolBar("Edit Controls", this))
+				toolbar_edit_controls_(new QToolBar(tr("Edit Controls"), this))
 		{
 			init_();
 		}
@@ -107,7 +107,7 @@ namespace BALL
 			: Scene(parent_widget, name, w_flags),
 				fragment_db_(),
 				fragment_db_initialized_(false),
-				toolbar_edit_controls_(new QToolBar("Edit Controls", this))
+				toolbar_edit_controls_(new QToolBar(tr("Edit Controls"), this))
 
 		{	
 			registerWidget(this); 
@@ -117,7 +117,7 @@ namespace BALL
 		// undo_ is NOT copied, since we would run into trouble with the pointers to atoms and bonds it saves
 		EditableScene::EditableScene(const EditableScene& eScene, QWidget* parent_widget, const char* name , Qt::WFlags w_flags)
 			: Scene(eScene, parent_widget, name, w_flags),
-				toolbar_edit_controls_(new QToolBar("Edit Controls", this))
+				toolbar_edit_controls_(new QToolBar(tr("Edit Controls"), this))
 		{
 			init_();
 		}
@@ -179,10 +179,10 @@ namespace BALL
 			String help_url("scene.html#editing");
 			
 			String description = "Shortcut|Display|Edit_Mode";
-			edit_id_ = insertMenuEntry(MainControl::DISPLAY, "Edit Mode", this, 
+			edit_id_ = insertMenuEntry(MainControl::DISPLAY, (String)tr("Edit Mode"), this, 
 			                           SLOT(editMode_()), description, QKeySequence("Ctrl+E"));
-			setMenuHint("Create and modify molecular structures");	
-			edit_id_->setToolTip("Switch to edit mode, e.g. draw your own molecule");
+			setMenuHint((String)tr("Create and modify molecular structures"));	
+			edit_id_->setToolTip(tr("Switch to edit mode, e.g. draw your own molecule"));
 
 			edit_id_->setCheckable(true);
 			setIcon("actions/mode-edit", false);
@@ -194,25 +194,25 @@ namespace BALL
 			IconLoader& loader = IconLoader::instance();
 
 			description = "Shortcut|QuicklyAssignBondOrders";
-			bondorders_action_ = new QAction(loader.getIcon("actions/molecule-assign-bond-orders"), "Quickly optimize bond orders", this);
+			bondorders_action_ = new QAction(loader.getIcon("actions/molecule-assign-bond-orders"), tr("Quickly optimize bond orders"), this);
 			bondorders_action_->setObjectName(bondorders_action_->text());
-			bondorders_action_->setToolTip("Compute the bond orders of the highlighted structures");
+			bondorders_action_->setToolTip(tr("Compute the bond orders of the highlighted structures"));
 			//TODO
 			//registerForHelpSystem(bondorders_action_, "scene.html#bondorders");
 			connect(bondorders_action_, SIGNAL(triggered()), this, SLOT(computeBondOrders()));
 			getMainControl()->getShortcutRegistry().registerShortcut(description, bondorders_action_);
 
 			description = "Shortcut|QuicklyOptimizeStructure";
-			optimize_action_ = new QAction(loader.getIcon("actions/molecule-minimize"), "Quickly optimize structure", this);
+			optimize_action_ = new QAction(loader.getIcon("actions/molecule-minimize"), tr("Quickly optimize structure"), this);
 			optimize_action_->setObjectName(optimize_action_->text());
-			optimize_action_->setToolTip("Quickly optimize the highlighted structure");
+			optimize_action_->setToolTip(tr("Quickly optimize the highlighted structure"));
 			registerForHelpSystem(optimize_action_, "scene.html#optimize");
 			connect(optimize_action_, SIGNAL(triggered()), this, SLOT(optimizeStructure()));
 			getMainControl()->getShortcutRegistry().registerShortcut(description, optimize_action_);
 
 			description = "Shortcut|SaturateWithHydrogens";
-			add_hydrogens_action_ = new QAction(loader.getIcon("actions/molecule-add-hydrogens"), "Saturate with Hydrogens", this);
-			add_hydrogens_action_->setToolTip("Saturate the highlighted structure with hydrogens (with regards to formal charges)");
+			add_hydrogens_action_ = new QAction(loader.getIcon("actions/molecule-add-hydrogens"), tr("Saturate with Hydrogens"), this);
+			add_hydrogens_action_->setToolTip(tr("Saturate the highlighted structure with hydrogens (with regards to formal charges)"));
 			add_hydrogens_action_->setObjectName(add_hydrogens_action_->text());
 			registerForHelpSystem(add_hydrogens_action_, "scene.html#saturate");
 			connect(add_hydrogens_action_, SIGNAL(triggered()), this, SLOT(saturateWithHydrogens()));
@@ -221,8 +221,8 @@ namespace BALL
 			getMainControl()->initPopupMenu(MainControl::BUILD)->addAction(add_hydrogens_action_);
 
 			description = "Shortcut|EditMode|SetElement";
-			element_action_ = new QAction(loader.getIcon("actions/molecule-set-element"), "Set element", this);
-			element_action_->setToolTip("Edit mode: Choose element for next atom, to modify atom under cursor: Double left click");
+			element_action_ = new QAction(loader.getIcon("actions/molecule-set-element"), tr("Set element"), this);
+			element_action_->setToolTip(tr("Edit mode: Choose element for next atom, to modify atom under cursor: Double left click"));
 			element_action_->setObjectName(element_action_->text());
 			registerForHelpSystem(element_action_, "scene.html#choose_element");
 			connect(element_action_, SIGNAL(triggered()), this, SLOT(changeElement_()));
@@ -231,8 +231,8 @@ namespace BALL
 			qmenu->addAction(element_action_);
 
 			description = "Shortcut|EditMode|CreateBond";
-			bond_action_ = new QAction(loader.getIcon("actions/create-bond"), "Create Bond", this);
-			bond_action_->setToolTip("Edit mode: If two atoms are selected, create a single bond between them");
+			bond_action_ = new QAction(loader.getIcon("actions/create-bond"), tr("Create Bond"), this);
+			bond_action_->setToolTip(tr("Edit mode: If two atoms are selected, create a single bond between them"));
 			bond_action_->setObjectName(bond_action_->text());
 			registerForHelpSystem(bond_action_, "scene.html#create_bond");
 			//TODO registerForHelpSystem not done yet
@@ -243,11 +243,11 @@ namespace BALL
 
 
 			//TODO create an icon
-			new_molecule_action_ = insertMenuEntry(MainControl::BUILD, "Create new molecule", 
+			new_molecule_action_ = insertMenuEntry(MainControl::BUILD, (String)tr("Create new molecule"), 
 			                                       this, SLOT(createNewMolecule()), "Shortcut|Build|Create_new_molecule");
-			setMenuHint("Create a new molecule for editing");
+			setMenuHint((String)tr("Create a new molecule for editing"));
 
-			toolbar_edit_controls_->setObjectName("Edit Control toolbar");
+			toolbar_edit_controls_->setObjectName(tr("Edit Control toolbar"));
 			toolbar_edit_controls_->setIconSize(QSize(23,23));
 			toolbar_edit_controls_->layout()->setMargin(2);
 			toolbar_edit_controls_->layout()->setSpacing(2);
@@ -304,7 +304,7 @@ namespace BALL
 				if (only_highlighted_ &&
 						getMainControl()->getMolecularControlSelection().size() == 0)
 				{
-					setStatusbarText("Warning: no AtomContainer highlighted", true);
+					setStatusbarText((String)tr("Warning: no AtomContainer highlighted"), true);
 					return;
 				}
 			}
@@ -364,7 +364,7 @@ namespace BALL
 				//store the Operation in undo_
 				Vector3 atom_position = a->getPosition();
 				
-				EditOperation eo(a, NULL, "Added atom of type " + PTE[atomic_number_].getName() + " at position (" 
+				EditOperation eo(a, NULL, (String)tr("Added atom of type ") + PTE[atomic_number_].getName() + (String)tr(" at position (") 
 												+ String(atom_position.x) + ", "
 												+ String(atom_position.y) + ", "
 												+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
@@ -432,7 +432,7 @@ namespace BALL
 
 			current_bond_->setOrder(order);
 			getMainControl()->update(*(Atom*)current_bond_->getFirstAtom(), true);
-			String txt = "Set bond order to ";
+			String txt(tr("Set bond order to "));
 			txt += getBondOrderString_(order);
 			setStatusbarText(txt);
 		}
@@ -584,7 +584,7 @@ namespace BALL
 
 				//update representation
 				getMainControl()->update(*atom, true);
-				setStatusbarText("Added a bond");
+				setStatusbarText((String)tr("Added a bond"));
 			}
 			else // no atom found -> create one
 			{
@@ -595,7 +595,7 @@ namespace BALL
 				// test if the two atoms would have the same position
 				if (fabs((current_atom_->getPosition() - new_pos).getLength()) < 0.02)
 				{
-					setStatusbarText("Aborting, since both atoms would have the same location!", true);
+					setStatusbarText((String)tr("Aborting, since both atoms would have the same location!"), true);
 					return;
 				}
 
@@ -610,7 +610,7 @@ namespace BALL
 				//store the Operation in undo_
 				Vector3 atom_position = a->getPosition();
 
-				EditOperation eo(a, NULL, "Added atom of type " + PTE[atomic_number_].getName() + " at position (" 
+				EditOperation eo(a, NULL, (String)tr("Added atom of type ") + PTE[atomic_number_].getName() + (String)tr(" at position (") 
 												+ String(atom_position.x) + ", "
 												+ String(atom_position.y) + ", "
 												+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
@@ -624,12 +624,12 @@ namespace BALL
 
 				// tell about the new undo operation
 				String bond_string = getBondOrderString_(bond_order_);
-				EditOperation eo2(0, c, "Added bond of type " + bond_string, EditOperation::ADDED__BOND);
+				EditOperation eo2(0, c, (String)tr("Added bond of type ") + bond_string, EditOperation::ADDED__BOND);
 				undo_.push_back(eo2);
 				emit newEditOperation(eo2);
 
 				getMainControl()->update(*a->getParent(), true);
-				setStatusbarText("Added a bond and an atom");
+				setStatusbarText((String)tr("Added a bond and an atom"));
 			}
 
 			deselect_();
@@ -641,22 +641,22 @@ namespace BALL
 			switch (order)
 			{
 				case Bond::ORDER__SINGLE:
-					bond_string = "single";
+					bond_string = (String)tr("single");
 					break;
 				case Bond::ORDER__DOUBLE:
-					bond_string = "double";
+					bond_string = (String)tr("double");
 					break;
 				case Bond::ORDER__TRIPLE:						
-					bond_string = "triple";	
+					bond_string = (String)tr("triple");	
 					break;
 				case Bond::ORDER__QUADRUPLE:
-					bond_string = "quadruple";	
+					bond_string = (String)tr("quadruple");	
 					break;
 				case Bond::ORDER__AROMATIC:
-					bond_string = "aromatic";	
+					bond_string = (String)tr("aromatic");	
 					break;
 				default:					
-					bond_string = "unknown";	
+					bond_string = (String)tr("unknown");	
 					break;
 			}
 
@@ -705,7 +705,7 @@ namespace BALL
 			QPoint p(x,y);
 			list<GeometricObject*> objects;
 			renderers_[0].pickObjects((Position)p.x(), (Position)p.y(),
-															  (Position)p.x(), (Position)p.y(), objects);
+			                          (Position)p.x(), (Position)p.y(), objects);
 
 			if (objects.size() > 0)
 			{
@@ -779,7 +779,7 @@ namespace BALL
 			Size nr_high = composite_list.size();
 			if (nr_high > 1 || (only_highlighted_ && nr_high == 0))
 			{
-				setStatusbarText("Please highlight exactly one AtomContainer for insertion of the created atoms!", true);
+				setStatusbarText((String)tr("Please highlight exactly one AtomContainer for insertion of the created atoms!"), true);
 				return;
 			}
 
@@ -799,7 +799,7 @@ namespace BALL
 
 					if (ai == 0)
 					{
-						setStatusbarText("Please highlight exactly one AtomContainer for insertion of the created atoms!", true);
+						setStatusbarText((String)tr("Please highlight exactly one AtomContainer for insertion of the created atoms!"), true);
 						return;
 					}
 				}
@@ -874,19 +874,19 @@ void EditableScene::showContextMenu(QPoint pos)
 	QMenu menu;
 	IconLoader& loader = IconLoader::instance();
 
-	QAction* rotate_mode = menu.addAction("Rotate Mode", this, SLOT(rotateMode_()));
+	QAction* rotate_mode = menu.addAction(tr("Rotate Mode"), this, SLOT(rotateMode_()));
 	rotate_mode->setCheckable(true);
 	rotate_mode->setChecked(current_mode_ == (Scene::ModeType) MOVE__MODE);
 
-	QAction* picking_mode = menu.addAction("Picking Mode", this, SLOT(pickingMode_()));
+	QAction* picking_mode = menu.addAction(tr("Picking Mode"), this, SLOT(pickingMode_()));
 	picking_mode->setCheckable(true);
 	picking_mode->setChecked(current_mode_ == (Scene::ModeType) PICKING__MODE);
 	
-	QAction* move_mode = menu.addAction("Move Mode", this, SLOT(moveMode_()));
+	QAction* move_mode = menu.addAction(tr("Move Mode"), this, SLOT(moveMode_()));
 	move_mode->setCheckable(true);
 	move_mode->setChecked(current_mode_ == (Scene::ModeType) MOVE__MODE);
 	
-	QAction* edit_mode = menu.addAction("Edit Mode", this, SLOT(editMode_()));
+	QAction* edit_mode = menu.addAction(tr("Edit Mode"), this, SLOT(editMode_()));
 	edit_mode->setCheckable(true);
 	edit_mode->setChecked(current_mode_ == (Scene::ModeType) EDIT__MODE);
 
@@ -894,14 +894,14 @@ void EditableScene::showContextMenu(QPoint pos)
 
 	if (current_mode_ == (Scene::ModeType) EDIT__MODE)
 	{
-		menu.addAction("Atom Properties", this, SLOT(atomProperties_()))->setEnabled(current_atom_ != 0);
-		menu.addAction("Move Atom", this, SLOT(moveAtom_()))->setEnabled(current_atom_ != 0);
-		menu.addAction("Delete Atom", this, SLOT(deleteAtom_()))->setEnabled(current_atom_ != 0);
-		menu.addAction(loader.getIcon("actions/molecule-set-element"), "Change Atom Element", this, SLOT(changeAtomElement_()))->setEnabled(current_atom_ != 0);
+		menu.addAction(tr("Atom Properties"), this, SLOT(atomProperties_()))->setEnabled(current_atom_ != 0);
+		menu.addAction(tr("Move Atom"), this, SLOT(moveAtom_()))->setEnabled(current_atom_ != 0);
+		menu.addAction(tr("Delete Atom"), this, SLOT(deleteAtom_()))->setEnabled(current_atom_ != 0);
+		menu.addAction(loader.getIcon("actions/molecule-set-element"), tr("Change Atom Element"), this, SLOT(changeAtomElement_()))->setEnabled(current_atom_ != 0);
 
 		QMenu* charge = new QMenu();
 		QAction* change_charge = menu.addMenu(charge);
-		change_charge->setText("Set formal charge");
+		change_charge->setText(tr("Set formal charge"));
 		Index charge_value = 0;
 		if (current_atom_ != 0) charge_value = current_atom_->getFormalCharge();
 		for (Index p = +6; p > -7; p--)
@@ -917,19 +917,19 @@ void EditableScene::showContextMenu(QPoint pos)
 
 		menu.addSeparator();
 
-		menu.addAction("Delete Bond", this, SLOT(deleteBond_()))->setEnabled(current_bond_ != 0);
+		menu.addAction(tr("Delete Bond"), this, SLOT(deleteBond_()))->setEnabled(current_bond_ != 0);
 
 		QMenu* order = new QMenu();
 		QAction* change_order = menu.addMenu(order);
 		connect(order, SIGNAL(hovered(QAction*)), this, SLOT(activatedOrderItem_(QAction*)));
-		change_order->setText("Change bond order");
+		change_order->setText(tr("Change bond order"));
 		vector<QAction*> oas;
-		oas.push_back(order->addAction("Single",    this, SLOT(changeBondOrder_())));
-		oas.push_back(order->addAction("Double",    this, SLOT(changeBondOrder_())));
-		oas.push_back(order->addAction("Triple",    this, SLOT(changeBondOrder_())));
-		oas.push_back(order->addAction("Quadruple", this, SLOT(changeBondOrder_())));
-		oas.push_back(order->addAction("Aromatic",  this, SLOT(changeBondOrder_())));
-		oas.push_back(order->addAction("Unknown",   this, SLOT(changeBondOrder_())));
+		oas.push_back(order->addAction(tr("Single"),    this, SLOT(changeBondOrder_())));
+		oas.push_back(order->addAction(tr("Double"),    this, SLOT(changeBondOrder_())));
+		oas.push_back(order->addAction(tr("Triple"),    this, SLOT(changeBondOrder_())));
+		oas.push_back(order->addAction(tr("Quadruple"), this, SLOT(changeBondOrder_())));
+		oas.push_back(order->addAction(tr("Aromatic"),  this, SLOT(changeBondOrder_())));
+		oas.push_back(order->addAction(tr("Unknown"),   this, SLOT(changeBondOrder_())));
 
 		Index bo = 0;
 		if (current_bond_) bo = ((Index)current_bond_->getOrder());
@@ -966,7 +966,7 @@ void EditableScene::showContextMenu(QPoint pos)
 
 		QMenu* add_menu = new QMenu();
 		QAction* add_action = menu.addMenu(add_menu);
-		add_action->setText("Add");
+		add_action->setText(tr("Add"));
 		if (getContainers_().size() == 0)
 		{
 			add_action->setEnabled(false);
@@ -974,18 +974,18 @@ void EditableScene::showContextMenu(QPoint pos)
 
 		QMenu* rings = new QMenu();
 		QAction* ring_action = add_menu->addMenu(rings);
-		ring_action->setText("Aromatic rings");
-		rings->addAction("Pyrrole", this, SLOT(addStructure_()));
-		rings->addAction("Benzene", this, SLOT(addStructure_()));
-		rings->addAction("Indole", this, SLOT(addStructure_()));
+		ring_action->setText(tr("Aromatic rings"));
+		rings->addAction(tr("Pyrrole"), this, SLOT(addStructure_()));
+		rings->addAction(tr("Benzene"), this, SLOT(addStructure_()));
+		rings->addAction(tr("Indole"), this, SLOT(addStructure_()));
 
 		QMenu* aas = new QMenu();
 		QAction* aas_action = add_menu->addMenu(aas);
-		aas_action->setText("Amino acids");
+		aas_action->setText(tr("Amino acids"));
 
 		QMenu* nas = new QMenu();
 		QAction* nas_action = add_menu->addMenu(nas);
-		nas_action->setText("Nucleic acids");
+		nas_action->setText(tr("Nucleic acids"));
 
 		HashSet<String> names;
 		const std::vector<Residue*>& residues = fragment_db_.getFragments();
@@ -1003,11 +1003,11 @@ void EditableScene::showContextMenu(QPoint pos)
 			}
 		}
 		
-		nas->addAction("Alanine", this, SLOT(addStructure_()));
-		nas->addAction("Cytosine", this, SLOT(addStructure_()));
-		nas->addAction("Guanine", this, SLOT(addStructure_()));
-		nas->addAction("Thymine", this, SLOT(addStructure_()));
-		nas->addAction("Uracil", this, SLOT(addStructure_()));
+		nas->addAction(tr("Alanine"), this, SLOT(addStructure_()));
+		nas->addAction(tr("Cytosine"), this, SLOT(addStructure_()));
+		nas->addAction(tr("Guanine"), this, SLOT(addStructure_()));
+		nas->addAction(tr("Thymine"), this, SLOT(addStructure_()));
+		nas->addAction(tr("Uracil"), this, SLOT(addStructure_()));
 
 		menu.addSeparator();
 
@@ -1152,18 +1152,18 @@ void EditableScene::createBond_()
 					}
 					else 
 					{
-						Log.error() << "Internal error! Too many atoms selected." << endl; 
+						Log.error() << (String)tr("Internal error! Too many atoms selected.") << endl; 
 					}
 				}
 			}
 			else 
 			{
-				setStatusbarText("Please select exactly two atoms.", true);
+				setStatusbarText((String)tr("Please select exactly two atoms."), true);
 			}
 		}
 		else 
 		{
-			setStatusbarText("Please select exactly two atoms.", true);
+			setStatusbarText((String)tr("Please select exactly two atoms."), true);
 		}
 	}
 	// case 2: two selected atoms with unselected in 
@@ -1202,7 +1202,7 @@ void EditableScene::createBond_()
 				}
 				else
 				{	
-					Log.error() << "EditableScene: Internal error! " << __LINE__ << endl; 
+					Log.error() << (String)tr("EditableScene: Internal error! ") << __LINE__ << endl; 
 				}
 			}
 		}
@@ -1228,7 +1228,7 @@ void EditableScene::createBond_()
 		// update representation
 		getMainControl()->update(*first_atom, true);
 		getMainControl()->update(*second_atom, true);
-		setStatusbarText("Added a bond");
+		setStatusbarText((String)tr("Added a bond"));
 
 		// deselect and delete recursively from the selection set
 		HashSet<Composite*>::Iterator it = selection.begin();
@@ -1247,7 +1247,7 @@ void EditableScene::createBond_()
 	}
 	else
 	{		
-		setStatusbarText("Please select exactly two atoms.", true);
+		setStatusbarText((String)tr("Please select exactly two atoms."), true);
 	}
 }
 
@@ -1310,12 +1310,12 @@ void EditableScene::activatedOrderItem_(QAction* action)
 	if (action == 0) return;
 	String text = ascii(action->text());
 
-	if (text == "Single") bond_order_ = Bond::ORDER__SINGLE;
-	else if (text == "Double") bond_order_ = Bond::ORDER__DOUBLE;
-	else if (text == "Triple") bond_order_ = Bond::ORDER__TRIPLE;
-	else if (text == "Quadruple") bond_order_ = Bond::ORDER__QUADRUPLE;
-	else if (text == "Aromatic") bond_order_ = Bond::ORDER__AROMATIC;
-	else if (text == "Unknown") bond_order_ = Bond::ORDER__UNKNOWN;
+	if (text == (String)tr("Single")) bond_order_ = Bond::ORDER__SINGLE;
+	else if (text == (String)tr("Double")) bond_order_ = Bond::ORDER__DOUBLE;
+	else if (text == (String)tr("Triple")) bond_order_ = Bond::ORDER__TRIPLE;
+	else if (text == (String)tr("Quadruple")) bond_order_ = Bond::ORDER__QUADRUPLE;
+	else if (text == (String)tr("Aromatic")) bond_order_ = Bond::ORDER__AROMATIC;
+	else if (text == (String)tr("Unknown")) bond_order_ = Bond::ORDER__UNKNOWN;
 
 }
 
@@ -1357,7 +1357,7 @@ void EditableScene::setMode(ModeType mode)
 {
 	Scene::setMode(mode);
 
-	if (mode == (Scene::ModeType) EDIT__MODE)	editMode_();
+	if (mode == (Scene::ModeType) EDIT__MODE) editMode_();
 	update();
 }
 
@@ -1460,7 +1460,7 @@ bool EditableScene::reactToKeyEvent_(QKeyEvent* e)
 
 	setElementCursor();
 
-	String text("Setting element to ");
+	String text(tr("Setting element to "));
 	text += PTE[atomic_number_].getName();
 	setStatusbarText(text);
 
@@ -1592,7 +1592,7 @@ void EditableScene::saturateWithHydrogens()
 	ahp.setRings(rings);
 	ac->apply(ahp);
 	String nr = ahp.getNumberOfAddedHydrogens();
-	setStatusbarText(String("Added ") + nr + " hydrogens.", true);
+	setStatusbarText((String)tr("Added ") + nr + (String)tr(" hydrogens."), true);
 	getMainControl()->update(*ac, true);
 }
 
@@ -1625,7 +1625,7 @@ void EditableScene::computeBondOrders()
 
 	if (containers.size() != 1) 
 	{
-		setStatusbarText("Please highlight exactly one AtomContainer!", true);
+		setStatusbarText((String)tr("Please highlight exactly one AtomContainer!"), true);
 		return;
 	}
 
@@ -1686,14 +1686,14 @@ void EditableScene::computeBondOrders()
 	// give a message
 	if (abop.getNumberOfComputedSolutions() == 0)
 	{
-		setStatusbarText(String("Could not find a valid bond order assignment.", true));
+		setStatusbarText((String)tr("Could not find a valid bond order assignment."), true);
 	}
 	else
 	{	
 		String nr = abop.getNumberOfComputedSolutions();
-		setStatusbarText(String("Found ") + nr + " bond order assignments.", true);
+		setStatusbarText((String)tr("Found ") + nr + (String)tr(" bond order assignments."), true);
 	
-		Log.info()<< "  > Result AssignBondOrderProcessor: " << endl;
+		Log.info()<< (String)tr("  > Result AssignBondOrderProcessor: ") << endl;
 
 		for (Size i = 0; i < abop.getNumberOfComputedSolutions(); i++)
 		{
@@ -1701,8 +1701,8 @@ void EditableScene::computeBondOrders()
 			stream_description.setf(std::ios_base::fixed);
 			stream_description.precision(2);
 
-			stream_description  << "      Solution " << i 
-			                    << " has penalty " << abop.getTotalPenalty(i);
+			stream_description  << (String)tr("      Solution ") << i 
+			                    << (String)tr(" has penalty ") << abop.getTotalPenalty(i);
 			//                  << ", charge " << abop.getTotalCharge(i)
 			//                  << ", " <<  abop.getNumberOfAddedHydrogens(i) << " added hydrogens.";
  
@@ -1732,7 +1732,7 @@ void EditableScene::optimizeStructure()
 	AtomContainer* ac = *containers.begin();
 	System* system = (System*)&ac->getRoot();
 
-	setStatusbarText("Optimizing Structure...", true);
+	setStatusbarText((String)tr("Optimizing Structure..."), true);
 
 	// highlight System for minimization
 	ControlSelectionMessage* nsm =  new ControlSelectionMessage();
@@ -1928,7 +1928,7 @@ void EditableScene::merge_(Composite* a1, Composite* a2)
 
 	if (!m1 || !m2)
 	{	
-		Log.error() << "Internal error! " << __FILE__ << " " << __LINE__ << endl; 
+		Log.error() << (String)tr("Internal error! ") << __FILE__ << " " << __LINE__ << endl; 
 		return;
 	}
 
@@ -1950,7 +1950,7 @@ void EditableScene::merge_(Composite* a1, Composite* a2)
 	}
 	else
 	{
-		Log.error() << "Internal error! " << __FILE__ << " " << __LINE__ << endl; 
+		Log.error() << (String)tr("Internal error! ") << __FILE__ << " " << __LINE__ << endl; 
 	}
 	
 }
