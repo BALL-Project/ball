@@ -14,6 +14,8 @@
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/forEach.h>
 
+#include <BALL/MOLMEC/AMBER/GAFFTypeProcessor.h>
+
 using namespace std;
 
 namespace BALL
@@ -49,6 +51,15 @@ namespace BALL
 			throw (File::CannotWrite(__FILE__, __LINE__, name_));
 		}
 
+		// Assign Sybyl types. For this, we will need a copy of our molecule (sigh)
+		Molecule new_molecule(molecule, true);
+
+		Options options;
+		options[GAFFTypeProcessor::Option::ATOMTYPE_FILENAME] = "atomtyping/SYBYLTypes.dat";
+
+		GAFFTypeProcessor gt(options);
+		new_molecule.apply(gt);
+
 		// create a shorthand for the file of the MOL2File object
 		File& f = static_cast<File&>(*this);
 
@@ -57,7 +68,7 @@ namespace BALL
 		f << TRIPOS << "MOLECULE" << endl;
 
 		// if the system name is empty...
-		String name = molecule.getName();
+		String name = new_molecule.getName();
 		if (name == "")
 		{
 			// .. replace it by four stars
@@ -72,12 +83,12 @@ namespace BALL
 		HashMap<const AtomContainer*, Position> substructure_map;
 		vector<String>	substructure_name;
 		vector<const AtomContainer*> substructure_pointers;
-		AtomContainerConstIterator frag_it = molecule.beginAtomContainer();
+		AtomContainerConstIterator frag_it = new_molecule.beginAtomContainer();
 
 		// we will need to exclude atomcontainers that have only other atom containers as childs
 		for (; +frag_it; ++frag_it)
 		{
-			if(&*frag_it==&molecule) continue;
+			if(&*frag_it==&new_molecule) continue;
 
 			if(containsAtomChilds_(frag_it))
 			{
@@ -115,23 +126,23 @@ namespace BALL
 		Atom::BondConstIterator bond_it;
 		AtomConstIterator atom_it;
 		Size number_of_bonds = 0;
-		BALL_FOREACH_BOND(molecule, atom_it, bond_it)
+		BALL_FOREACH_BOND(new_molecule, atom_it, bond_it)
 		{
 			number_of_bonds++;
 		}
 
 		// write the number of atoms, bonds, and substructures
-		f << molecule.countAtoms() << " " << number_of_bonds << " " << substructure_name.size() << endl;
+		f << new_molecule.countAtoms() << " " << number_of_bonds << " " << substructure_name.size() << endl;
 
 		String mol_type = "SMALL";
 		// if we are in a protein, set the molecule type to PROTEIN
-		if (RTTI::isKindOf<Protein>(molecule))
+		if (RTTI::isKindOf<Protein>(new_molecule))
 		{
 			mol_type = "PROTEIN";
 		}
 		// if we are in an nucleic acid,
 		// set the type to NUCLEIC_ACID
-		else if (RTTI::isKindOf<NucleicAcid>(molecule))
+		else if (RTTI::isKindOf<NucleicAcid>(new_molecule))
 		{
 			mol_type = "PROTEIN";
 		}
@@ -150,7 +161,7 @@ namespace BALL
 
 		HashMap<const Atom*, Position> atom_map;
 		Size number_of_atoms = 0;
-		atom_it = molecule.beginAtom();
+		atom_it = new_molecule.beginAtom();
 		for (; +atom_it; ++atom_it)
 		{
 			number_of_atoms++;
@@ -200,7 +211,7 @@ namespace BALL
 		{
 			f << TRIPOS << "BOND" << endl;
 			number_of_bonds = 0;
-			BALL_FOREACH_BOND(molecule, atom_it, bond_it)
+			BALL_FOREACH_BOND(new_molecule, atom_it, bond_it)
 			{
 				number_of_bonds++;
 				// check whether both atoms were written
@@ -278,14 +289,14 @@ namespace BALL
 				f << endl;
 			}
 		}
-		Size no_properties=molecule.countNamedProperties();
+		Size no_properties=new_molecule.countNamedProperties();
 		if(no_properties>0)
 		{
 			f << TRIPOS << "COMMENT"<<endl;
 
 			for (Position i=0; i<no_properties; i++)
 			{
-				const NamedProperty& np(molecule.getNamedProperty(i));
+				const NamedProperty& np(new_molecule.getNamedProperty(i));
 				f << np.getName() << "=" << np.toString() << endl;
 			}
 		}
@@ -959,19 +970,7 @@ namespace BALL
 
 	String MOL2File::getSybylType_(const Atom& atom) const
 	{
-		// the basename of Sybyl name is always the element
-		// and a trailing dot
-		String name = atom.getElement().getSymbol();
-
-		// if there's more than one bond, add the number of
-		// bonds and a dot as separator
-		if (atom.countBonds() > 1)
-		{
-			name = name + ".";
-			name = name + String(atom.countBonds());
-		}
-
-		return name;
+		return atom.getProperty("atomtype").getString();
 	}
 
 	bool MOL2File::containsAtomChilds_(AtomContainerConstIterator& frag_it)
