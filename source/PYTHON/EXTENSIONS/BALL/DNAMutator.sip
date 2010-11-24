@@ -5,6 +5,8 @@ class DNAMutator
 	using namespace BALL;
 %End
 	public:
+		enum MatchingMode { MINIMUM_ANGLE, MATCH_TORSION };
+
 		DNAMutator(EnergyMinimizer* mini = NULL, ForceField* ff = NULL, FragmentDB* frag = NULL);
 
 		~DNAMutator();
@@ -27,4 +29,6 @@ class DNAMutator
 
 		void addMutation(Index i, const String& new_frag_name);
 		void clearMutations();
+
+		void setMatchingMode(MatchingMode mmode);
 };
