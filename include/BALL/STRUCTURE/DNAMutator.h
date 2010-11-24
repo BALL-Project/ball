@@ -31,6 +31,16 @@ namespace BALL
 		: public Mutator
 	{
 		public:
+			///This controls how a purine and pyrimidine base are matched onto
+			/// each other
+			enum MatchingMode
+			{
+				///Use a minimum angle criterion and try out which conformation fits best
+				MINIMUM_ANGLE,
+				///Set the torsion angle of the sugar-base connection in the new base
+				///to the torsion angle found in the second base
+				MATCH_TORSION
+			};
 			/**
 			 * Constructs a DNAMutator
 			 *
@@ -150,6 +160,12 @@ namespace BALL
 			 */
 			void clearMutations();
 
+			/**
+			 * Sets the matching heuristic used for aligning a pyrimidine to a purine base.
+			 * Default is MATCH_TORSION.
+			 */
+			void setMatchingMode(MatchingMode mmode);
+
 		protected:
 			virtual void mutate_impl_(MutatorOptions opt);
 
@@ -169,13 +185,14 @@ namespace BALL
 			Chain* second_strand_;
 
 			NucleotideMapping mapping_;
+			MatchingMode matching_mode_;
 
-			void mutateSingleBase_(Residue* res, const String& basename);
+			void mutateSingleBase_(Residue* res, const String& basename) const;
 
 			void freeFF_();
 
-			void mark_(AtomContainer* atoms);
-			void unmark_(AtomContainer* atoms);
+			void mark_(AtomContainer* atoms) const;
+			void unmark_(AtomContainer* atoms) const;
 
 			/**
 			 * Reoptimize the given fragment using the minimizer stored in minimizer_.
@@ -188,23 +205,27 @@ namespace BALL
 			 * This function returns a pointer to the nitrogen atom that attaches
 			 * a base to the sugar backbone
 			 */
-			Atom* getAttachmentAtom(AtomContainer* res);
+			Atom* getAttachmentAtom(AtomContainer* res) const;
 
 			/**
 			 * Selects the atoms in a base. If succesfull it returns
 			 * the pointer to the attachment nitrogen.
 			 */
-			Atom* markBaseAtoms_(AtomContainer* res);
+			Atom* markBaseAtoms_(AtomContainer* res) const;
 
-			void rotateBases_(AtomContainer* from, const Atom* from_at, const Atom* to_at,
-			                 const Vector3& from_connection, const Vector3& to_connection);
-			void rotateSameBases_(AtomContainer* from, AtomContainer* to);
+			void alignBases_(AtomContainer* from, const Vector3& from_connection, const Vector3& to_connection, Atom* from_at) const;
 
-			const Atom* getSecondNitro_(const std::vector<const Atom*>& ring_atoms, const Atom* base);
+			Atom* getTorsionDefiningAtom_(Atom* atom) const;
+			const Atom* getTorsionDefiningAtom_(const Atom* atom) const;
 
-			Vector3 getNormalVector_(const Atom* at);
-			Atom* getConnectionAtom_(Atom* at);
-			Vector3 getOrthogonalVector_(const Vector3& n, const Atom* base, const Atom* at);
+			void rotateBasesMatchTorsion_(AtomContainer* from, const Atom* to_connection_at, Atom* from_at, const Atom* to_at) const;
+			void rotateBasesMinAngle_    (AtomContainer* from, const Vector3& to_connection,   Atom* from_at, const Atom* to_at) const;
+			void rotateSameBases_(AtomContainer* from, AtomContainer* to) const;
+
+			Vector3 getNormalVector_(const Atom* at) const;
+			Atom* getConnectionAtom_(Atom* at) const;
+
+			String canonizeName_(const String& frag_name) const;
 
 			/**
 			 * The methods below decide whether a base is a Purine or a Pyrimidine.
@@ -217,7 +238,7 @@ namespace BALL
 			static const char* bases_[];
 			static const Size default_num_steps_;
 
-			String getComplement_(const String& s);
+			String getComplement_(const String& s) const;
 
 			std::map<Residue*, String> mutations_;
 			std::deque<Atom*> to_optimize_;

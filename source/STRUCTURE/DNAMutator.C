@@ -19,6 +19,7 @@
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/STRUCTURE/RMSDMinimizer.h>
+#include <BALL/STRUCTURE/geometricProperties.h>
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -39,7 +40,7 @@ namespace BALL
 	DNAMutator::DNAMutator(EnergyMinimizer* mini, ForceField* ff, FragmentDB* frag)
 		: Mutator(frag), keep_ff_(true), ff_(ff), minimizer_(mini),
 		  num_steps_(default_num_steps_), prop_(Atom::NUMBER_OF_PROPERTIES),
-		  first_strand_(0), second_strand_(0)
+		  first_strand_(0), second_strand_(0), matching_mode_(MATCH_TORSION)
 	{
 	}
 
@@ -99,12 +100,17 @@ namespace BALL
 			throw Exception::IndexOverflow(__FILE__, __LINE__, i, first_strand_->countResidues());
 		}
 
-		mutations_[to_mutate] = new_frag_name;
+		mutations_[to_mutate] = canonizeName_(new_frag_name);
 	}
 
 	void DNAMutator::clearMutations()
 	{
 		mutations_.clear();
+	}
+
+	void DNAMutator::setMatchingMode(DNAMutator::MatchingMode mmode)
+	{
+		matching_mode_ = mmode;
 	}
 
 	void DNAMutator::mutate_impl_(MutatorOptions)
@@ -122,11 +128,11 @@ namespace BALL
 		}
 	}
 
-	void DNAMutator::mutateSingleBase_(Residue* res, const String& basename)
+	void DNAMutator::mutateSingleBase_(Residue* res, const String& basename) const
 	{
 		Fragment* frag = db_->getFragmentCopy(basename);
 
-		//If we did not get a vaild fragment it is not present in the Fragment DB.
+		//If we did not get a valid fragment it is not present in the Fragment DB.
 		//Time to bail out.
 		if(!frag) {
 			throw Exception::InvalidArgument(__FILE__, __LINE__, "Could not find the specified base, please check your FragmentDB.");
@@ -162,18 +168,30 @@ namespace BALL
 			throw Exception::InvalidArgument(__FILE__, __LINE__, "Could not find the C1 carbon of the new base. Check your FragmentDB.");
 		}
 
-		frag_at->destroyBond(*frag_connection_at);
 		Vector3 frag_connection = frag_connection_at->getPosition() - frag_at->getPosition();
+		frag_at->destroyBond(*frag_connection_at);
 
 		//We do not need the atoms of the sugar backbone any longer, this is important
 		//for the RMSDMinimizer to work
 
 		frag->removeNotHavingProperty(prop_);
 
-		if(isPurine_(*frag_at) == isPurine_(*res_at)) {
+		if(isPurine_(*frag_at) == isPurine_(*res_at))
+		{
 			rotateSameBases_(frag, res);
-		} else {
-			rotateBases_(frag, frag_at, res_at, frag_connection, res_connection);
+		}
+		else
+		{
+			alignBases_(frag, frag_connection, res_connection, frag_at);
+
+			if(matching_mode_ == MINIMUM_ANGLE)
+			{
+				rotateBasesMinAngle_(frag, res_connection, frag_at, res_at);
+			}
+			else
+			{
+				rotateBasesMatchTorsion_(frag, res_connection_at, frag_at, res_at);
+			}
 		}
 
 		//Now it is save to delete the base atoms of the input residue
@@ -186,14 +204,14 @@ namespace BALL
 		frag_at->createBond(*res_connection_at);
 	}
 
-	void DNAMutator::mark_(AtomContainer* atoms)
+	void DNAMutator::mark_(AtomContainer* atoms) const
 	{
 		for(AtomIterator it = atoms->beginAtom(); +it; ++it) {
 			it->setProperty(prop_);
 		}
 	}
 
-	void DNAMutator::unmark_(AtomContainer* atoms)
+	void DNAMutator::unmark_(AtomContainer* atoms) const
 	{
 		for(AtomIterator it = atoms->beginAtom(); +it; ++it) {
 			it->clearProperty(prop_);
@@ -269,7 +287,7 @@ namespace BALL
 		second_strand_ = mapping_.getSecondStrand();
 	}
 
-	Atom* DNAMutator::getAttachmentAtom(AtomContainer* res)
+	Atom* DNAMutator::getAttachmentAtom(AtomContainer* res) const
 	{
 		for(AtomIterator it = res->beginAtom(); +it;  ++it) {
 			if(it->getElement().getSymbol() != "N") {
@@ -296,7 +314,7 @@ namespace BALL
 		return NULL;
 	}
 
-	Atom* DNAMutator::markBaseAtoms_(AtomContainer* res)
+	Atom* DNAMutator::markBaseAtoms_(AtomContainer* res) const
 	{
 		unmark_(res);
 		Atom* n = getAttachmentAtom(res);
@@ -341,7 +359,7 @@ namespace BALL
 		return n;
 	}
 
-	Vector3 DNAMutator::getNormalVector_(const Atom* at)
+	Vector3 DNAMutator::getNormalVector_(const Atom* at) const
 	{
 		Vector3 dists[2];
 
@@ -360,7 +378,7 @@ namespace BALL
 		return (dists[0] % dists[1]).normalize();
 	}
 
-	Atom* DNAMutator::getConnectionAtom_(Atom* at)
+	Atom* DNAMutator::getConnectionAtom_(Atom* at) const
 	{
 		for(AtomBondIterator it = at->beginBond(); +it; ++it) {
 			Atom* partner = it->getBoundAtom(*at);
@@ -372,7 +390,7 @@ namespace BALL
 		return NULL;
 	}
 
-	void DNAMutator::rotateSameBases_(AtomContainer* from, AtomContainer* to)
+	void DNAMutator::rotateSameBases_(AtomContainer* from, AtomContainer* to) const
 	{
 		AtomBijection bij;
 		bij.assignByName(*from, *to);
@@ -394,8 +412,7 @@ namespace BALL
 		}
 	}
 
-	void DNAMutator::rotateBases_(AtomContainer* from, const Atom* from_at, const Atom* to_at,
-	                              const Vector3& from_connection, const Vector3& to_connection)
+	void DNAMutator::alignBases_(AtomContainer* from, const Vector3& from_connection, const Vector3& to_connection, Atom* from_at) const
 	{
 		//First we have to align the bases with each other.
 		Vector3 rot = from_connection % to_connection;
@@ -408,13 +425,83 @@ namespace BALL
 
 		TransformationProcessor p(rotation*trans);
 		from->apply(p);
+	}
 
+	const Atom* DNAMutator::getTorsionDefiningAtom_(const Atom* atom) const
+	{
+		//Use a const cast to avoid reimplementing the exact same code as for the
+		//non const version.
+		return getTorsionDefiningAtom_(const_cast<Atom*>(atom));
+	}
+
+	Atom* DNAMutator::getTorsionDefiningAtom_(Atom* atom) const
+	{
+		const unsigned int neighbour_count = 3;
+
+		for(AtomBondIterator it = atom->beginBond(); +it; ++it)
+		{
+			Atom* partner = it->getPartner(*atom);
+			unsigned int atom_count = 0;
+
+			for(AtomBondIterator at = partner->beginBond(); +at; ++at)
+			{
+				if(at->getPartner(*partner)->getElement().getAtomicNumber() != 1)
+				{
+					++atom_count;
+				}
+			}
+			if(partner->hasProperty(prop_) && (atom_count == neighbour_count))
+			{
+				return partner;
+			}
+		}
+
+		return 0;
+	}
+
+
+	void DNAMutator::rotateBasesMatchTorsion_(AtomContainer* from, const Atom* to_connection_at, Atom* from_at, const Atom* to_at) const
+	{
+		//Move the base to its destination
+		Matrix4x4 trans = Matrix4x4::getIdentity();
+		trans.translate(to_at->getPosition());
+
+		TransformationProcessor p(trans);
+		from->apply(p);
+
+		const Atom* sugar_o_atom = NULL;
+
+		for(AtomBondConstIterator it = to_connection_at->beginBond(); +it; ++it)
+		{
+			const Atom* partner = it->getPartner(*to_connection_at);
+			//If the partner is an oxygen
+			if(partner->getElement().getAtomicNumber() == 8)
+			{
+				sugar_o_atom = partner;
+				break;
+			}
+		}
+
+		if(!sugar_o_atom) {
+			throw Exception::InvalidArgument(__FILE__, __LINE__, "Could not find oxygen sugar atom. Bailing out.");
+		}
+
+		Atom* from_torsion_defining_atom = getTorsionDefiningAtom_(from_at);
+		const Atom* to_torsion_defining_atom = getTorsionDefiningAtom_(to_at);
+
+		Angle torsion = calculateTorsionAngle(*sugar_o_atom, *to_connection_at, *to_at, *to_torsion_defining_atom);
+		setTorsionAngle(*sugar_o_atom, *to_connection_at, *from_at, *from_torsion_defining_atom, torsion);
+	}
+
+	void DNAMutator::rotateBasesMinAngle_(AtomContainer* from, const Vector3& to_connection, Atom* from_at, const Atom* to_at) const
+	{
 		/*
 		 * Now all that is left to do is to rotate around to_connection
 		 * Here the rotation that minimizes the distance between the bases
 		 * has to be chosen.
 		 */
-		trans.setIdentity();
+		Matrix4x4 trans = Matrix4x4::getIdentity();
+		Matrix4x4 rotation = Matrix4x4::getIdentity();
 		trans.translate(to_at->getPosition());
 
 		const Vector3 from_norm = getNormalVector_(from_at);
@@ -440,25 +527,9 @@ namespace BALL
 			rotation.rotate(a, to_connection);
 		}
 
+		TransformationProcessor p;
 		p.setTransformation(trans*rotation);
 		from->apply(p);
-	}
-
-	Vector3 DNAMutator::getOrthogonalVector_(const Vector3& n, const Atom* base, const Atom* at)
-	{
-		Vector3 dist = at->getPosition() - base->getPosition();
-		return dist - n * ((n * dist));
-	}
-
-	const Atom* DNAMutator::getSecondNitro_(const std::vector<const Atom*>& ring_atoms, const Atom* base)
-	{
-		for(size_t i = 0; i < ring_atoms.size(); ++i) {
-			if((ring_atoms[i] != base) && (ring_atoms[i]->getElement().getSymbol() == "N")) {
-				return ring_atoms[i];
-			}
-		}
-
-		return NULL;
 	}
 
 	bool DNAMutator::isPurine_(const Atom& baseNitrogen) const
@@ -474,22 +545,38 @@ namespace BALL
 		return f.getRingAtoms().size() == 6;
 	}
 
-	String DNAMutator::getComplement_(const String& s)
+	String DNAMutator::canonizeName_(const String& frag_name) const
 	{
-		if(s == "A" || s == "Adenine") {
+		unsigned int num_bases = 5;
+		const String bases[] = {"Adenine", "Thymine", "Guanine", "Cytosine", "Uracil"};
+
+		for(unsigned int i = 0; i < num_bases; ++i)
+		{
+			if(bases[i].hasPrefix(frag_name))
+			{
+				return bases[i];
+			}
+		}
+
+		throw Exception::InvalidArgument(__FILE__, __LINE__, "The passed string does not match any known base. Check for case sensitivity");
+	}
+
+	String DNAMutator::getComplement_(const String& s) const
+	{
+		if(s == "Adenine") {
 			return "Thymine";
 		}
-		if(s == "T" || s == "Thymine") {
+		if(s == "Thymine") {
 			return "Adenine";
 		}
-		if(s == "C" || s == "Cytosine") {
+		if(s == "Cytosine") {
 			return "Guanine";
 		}
-		if(s == "G" || s == "Guanine") {
+		if(s == "Guanine") {
 			return "Cytosine";
 		}
-		if(s == "U" || s == "Uracil") {
-			return "Thymine";
+		if(s == "Uracil") {
+			return "Adenine";
 		}
 
 		throw Exception::InvalidArgument(__FILE__, __LINE__, String("Unknown base: ") + s);
