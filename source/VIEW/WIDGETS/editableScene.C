@@ -180,7 +180,7 @@ namespace BALL
 			
 			String description = "Shortcut|Display|Edit_Mode";
 			edit_id_ = insertMenuEntry(MainControl::DISPLAY, "Edit Mode", this, 
-																 SLOT(editMode_()), description, QKeySequence("Ctrl+E"));
+			                           SLOT(editMode_()), description, QKeySequence("Ctrl+E"));
 			setMenuHint("Create and modify molecular structures");	
 			edit_id_->setToolTip("Switch to edit mode, e.g. draw your own molecule");
 
@@ -244,7 +244,7 @@ namespace BALL
 
 			//TODO create an icon
 			new_molecule_action_ = insertMenuEntry(MainControl::BUILD, "Create new molecule", 
-												this, SLOT(createNewMolecule()), "Shortcut|Build|Create_new_molecule");
+			                                       this, SLOT(createNewMolecule()), "Shortcut|Build|Create_new_molecule");
 			setMenuHint("Create a new molecule for editing");
 
 			toolbar_edit_controls_->setObjectName("Edit Control toolbar");
@@ -563,9 +563,8 @@ namespace BALL
 			if (current_atom_)
 			{
 				// is it the atom we started with?
-				if (atom == current_atom_ ||
-						// workaround against crashes:
-						&atom->getRoot() != &current_atom_->getRoot())
+				if (atom == current_atom_ || // workaround against crashes:
+				                             &atom->getRoot() != &current_atom_->getRoot())
 				{
 					// in this case, we assume that the user does not want to set a bond
 					deselect_();
@@ -594,7 +593,7 @@ namespace BALL
 				Vector3 new_pos = renderers_[0].mapViewportTo3D(e->x(), e->y());
 
 				// test if the two atoms would have the same position
-				if (current_atom_->getPosition() == new_pos)
+				if (fabs((current_atom_->getPosition() - new_pos).getLength()) < 0.02)
 				{
 					setStatusbarText("Aborting, since both atoms would have the same location!", true);
 					return;
