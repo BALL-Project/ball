@@ -44,7 +44,7 @@ namespace BALL
 		if (i >= atoms.size())
 			throw (Exception::IndexOverflow(__FILE__, __LINE__, i, atoms.size()));
 
-		return ((i-1+atoms.size()) % atoms.size());
+		return ((i+atoms.size()-1) % atoms.size());
 	}
 
 	Position RingAnalyser::Ring::successor(Position i)
