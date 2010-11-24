@@ -354,7 +354,7 @@ Vector3 a23(a3.getPosition() - a2.getPosition());
 			}
 		}
 
-		//Perform a the BFS
+		//Perform the BFS
 		while(!bfs_queue.empty())
 		{
 			Atom* atom = bfs_queue.front();
@@ -371,7 +371,6 @@ Vector3 a23(a3.getPosition() - a2.getPosition());
 
 				if(component.find(atom->getPartnerAtom(i)) == component.end())
 				{
-					std::cout << atom->getPartnerAtom(i)->getFullName() << "\n";
 					component.insert(atom->getPartnerAtom(i));
 					bfs_queue.push_back(atom->getPartnerAtom(i));
 				}
