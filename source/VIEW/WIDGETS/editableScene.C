@@ -1635,14 +1635,15 @@ void EditableScene::computeBondOrders()
 
 	// read the options from the dialog
 	// bond_order_dialog.setOptionsForProcessor(abop);
-	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS] 		= bond_order_dialog.overwrite_singleBO_box->isChecked();
-	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS] 		= bond_order_dialog.overwrite_doubleBO_box->isChecked();
-	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS] 		= bond_order_dialog.overwrite_tripleBO_box->isChecked();
-	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_SELECTED_BONDS] 		= bond_order_dialog.overwrite_selected_bonds_box->isChecked();
-	abop.options[AssignBondOrderProcessor::Option::KEKULIZE_RINGS]                          = bond_order_dialog.kekulizeBonds_button->isChecked();
-	abop.options[AssignBondOrderProcessor::Option::ADD_HYDROGENS]                           = bond_order_dialog.add_hydrogens_checkBox->isChecked();
-	abop.options[AssignBondOrderProcessor::Option::ALGORITHM]                               = bond_order_dialog.ILP_button->isChecked() ? AssignBondOrderProcessor::Algorithm::ILP : AssignBondOrderProcessor::Algorithm::A_STAR;
-	abop.options[AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING]                   = (bond_order_dialog.penalty_balance_slider->value()/100.);
+	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS] = bond_order_dialog.overwrite_singleBO_box->isChecked();
+	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS] = bond_order_dialog.overwrite_doubleBO_box->isChecked();
+	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS] = bond_order_dialog.overwrite_tripleBO_box->isChecked();
+	abop.options[AssignBondOrderProcessor::Option::OVERWRITE_SELECTED_BONDS]     = bond_order_dialog.overwrite_selected_bonds_box->isChecked();
+	abop.options[AssignBondOrderProcessor::Option::KEKULIZE_RINGS]               = bond_order_dialog.kekulizeBonds_button->isChecked();
+	abop.options[AssignBondOrderProcessor::Option::ADD_HYDROGENS]                = bond_order_dialog.add_hydrogens_checkBox->isChecked();
+	abop.options[AssignBondOrderProcessor::Option::ALGORITHM] = bond_order_dialog.ILP_button->isChecked() ? AssignBondOrderProcessor::Algorithm::ILP 
+	                                                                                                     : AssignBondOrderProcessor::Algorithm::A_STAR;
+	abop.options[AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING]        = (bond_order_dialog.penalty_balance_slider->value()/100.);
 	
 	// get the parameter folder
 	abop.options[AssignBondOrderProcessor::Option::INIFile] = ascii(bond_order_dialog.parameter_file_edit->text());
@@ -1657,23 +1658,23 @@ void EditableScene::computeBondOrders()
 	// get the limitations for number of bond order assignment
 	if (bond_order_dialog.single_solution_button->isChecked())
 	{
-		abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]                       = 1;
-		abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS]= false;
+		abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]            = 1;
+		abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS] = false;
 	}
 	else if (bond_order_dialog.all_optimal_solutions_button->isChecked())
 	{
-		abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]                       = 0;
-		abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS]= false;
+		abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]            = 0;
+		abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS] = false;
 	}
 	else if (bond_order_dialog.n_opt_solutions_button->isChecked())
 	{
-		abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]                       = bond_order_dialog.max_n_opt_solutions->text().toInt();
-		abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS]= false;
+		abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]            = bond_order_dialog.max_n_opt_solutions->text().toInt();
+		abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS] = false;
 	}
 	else if (bond_order_dialog.n_all_solutions_button->isChecked())
 	{
-		abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]                       = bond_order_dialog.max_n_all_solutions->text().toInt();
-		abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS]= true;
+		abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]            = bond_order_dialog.max_n_all_solutions->text().toInt();
+		abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS] = true;
 	}
 
 	// automatically applying a solution might confuse the user --> set to false

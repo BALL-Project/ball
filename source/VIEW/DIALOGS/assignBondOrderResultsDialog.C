@@ -96,6 +96,11 @@ namespace BALL
 				// generate the tree entry
 				QString name = bond_order_processor_->getSolution(0).getName().c_str();
 				
+				// This is a hack
+				if (name.trimmed() == "")
+				{
+					name = "<Molecule>";
+				}
 				Size num_of_sol = bond_order_processor_->getNumberOfComputedSolutions();
 					
 				std::ostringstream stream_name;
@@ -109,10 +114,10 @@ namespace BALL
 				stream_description.setf(std::ios_base::fixed);
 				stream_description.precision(2);
 
-				stream_description << "\n  " << ascii(name) 
-											 	 << " :\n\tsolution : " << num_of_sol 
-							 						 << "\n\tpenalty  : " << bond_order_processor_->getTotalPenalty(num_of_sol-1);
-				//			 						 << "\n\tcharge   : " << bond_order_processor_->getTotalCharge(num_of_sol-1);
+				stream_description << "\n" << ascii(name)
+				                             << ":\n\n      solution : " << num_of_sol 
+				                             <<  "\n      penalty  : " << bond_order_processor_->getTotalPenalty(num_of_sol-1);
+				// 			     << "\n  charge     : " << bond_order_processor_->getTotalCharge(num_of_sol-1);
 
 				String description = stream_description.str();
 
@@ -137,7 +142,9 @@ namespace BALL
 			}	
 			else
 			{
-					Log.info() << "There are no further solutions!" << std::endl;
+				Log.info() << "There are no further solutions!" << std::endl;		
+				setStatusbarText( "There are no further solutions!", true);
+
 			}
 		}
 		
@@ -158,6 +165,13 @@ namespace BALL
 				// first the root element
 				QList<QTreeWidgetItem *> query_results;
 				QString name = bond_order_processor_->getSolution(0).getName().c_str();
+				
+				// This is a hack
+ 				if (name.trimmed() == "")
+				{
+					name = "<Molecule>";
+				}
+
 				QTreeWidgetItem* query_item = new QTreeWidgetItem((QTreeWidget*)0, QStringList(name));
 				
 				query_results.append(query_item);
@@ -184,9 +198,9 @@ namespace BALL
 					stream_description.precision(2);
 
 					stream_description << "\n  " << ascii(name) 
-												 	 << " :\n\tsolution : " << i+1 
-								 						 << "\n\tpenalty  : " << bond_order_processor_->getTotalPenalty(i);
-	//							 						 << "\n\tcharge   : " << bond_order_processor_->getTotalCharge(i);
+					                   << ":\n\n      solution : " << i+1 
+					                   <<  "\n      penalty  : " << bond_order_processor_->getTotalPenalty(i);
+					//                 << "\n  charge   : " << bond_order_processor_->getTotalCharge(i);
 
 					String description = stream_description.str();
 
