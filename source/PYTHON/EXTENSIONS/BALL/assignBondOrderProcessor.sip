@@ -126,6 +126,6 @@ class AssignBondOrderProcessor
 
 	private:
 		AssignBondOrderProcessor(const AssignBondOrderProcessor&);
-		AssignBondOrderProcessor& operator = (const AssignBondOrderProcessor&);
+//		AssignBondOrderProcessor& operator = (const AssignBondOrderProcessor&);
 		
 };
