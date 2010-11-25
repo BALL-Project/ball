@@ -1640,13 +1640,13 @@ namespace BALL
 			Camera& camera = stage_->getCamera();
 
 			Quaternion q1;
-			q1.set(camera.getLookUpVector(), 0.3 * Angle(-evt->getRotation().y, false).toRadian());
+			q1.fromAxisAngle(camera.getLookUpVector(), 0.3 * Angle(-evt->getRotation().y, false).toRadian());
 
 			Quaternion q2;
-			q2.set(camera.getRightVector(),  0.3 * Angle(-evt->getRotation().x, false).toRadian());
+			q2.fromAxisAngle(camera.getRightVector(),  0.3 * Angle(-evt->getRotation().x, false).toRadian());
 
 			Quaternion q3;
-			q3.set(camera.getViewVector(),   0.3 * Angle(-evt->getRotation().z, false).toRadian());
+			q3.fromAxisAngle(camera.getViewVector(),   0.3 * Angle(-evt->getRotation().z, false).toRadian());
 
 			q1 += q2 + q3;
 
