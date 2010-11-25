@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: version.h,v 1.32.20.2 2007/08/03 03:27:07 oliver Exp $
-//
 
 #ifndef BALL_COMMON_VERSION_H
 #define BALL_COMMON_VERSION_H
@@ -18,7 +16,7 @@
 //
 //  master data for all revisions is stored in this define!
 //
-#define BALL_RELEASE_STRING             "1.3.2"
+#define BALL_RELEASE_STRING             "1.4.0"
 
 namespace BALL
 {
