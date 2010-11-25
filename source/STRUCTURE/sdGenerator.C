@@ -19,7 +19,7 @@
 
 #include <algorithm>
 
-#define BALL_DEBUG_SDGENERATOR
+//#define BALL_DEBUG_SDGENERATOR
 
 #ifdef BALL_DEBUG_SDGENERATOR
 # define DEBUG(a) Log.info() << a << std::endl;
@@ -250,7 +250,7 @@ namespace BALL
 
 			float new_beta = demand.toRadian() / (num_hydrogens+1);
 
-			for (Position i=0; i<num_hydrogens; ++i)
+			for (int i=0; i<num_hydrogens; ++i)
 			{
 				Atom *new_hydrogen   = new Atom(PTE["H"], "H");
 				Vector3 new_position = (*at_it)->getPosition();
@@ -1171,6 +1171,9 @@ namespace BALL
 
 		Angle free_CFS(2.*M_PI - demand.toRadian(), true);
 		free_CFS.normalize(Angle::RANGE__UNSIGNED);
+
+		if (fabs(free_CFS.toRadian()) < 1e-4)
+			free_CFS.set(2.*M_PI, true);
 
 		return Angle((free_CFS.toRadian())/(num_sub + 1));
 	}
