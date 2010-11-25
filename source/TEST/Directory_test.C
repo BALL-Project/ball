@@ -88,7 +88,9 @@ CHECK(Directory())
 	dd = new Directory();
 	TEST_NOT_EQUAL(dd, 0)
 	::getcwd(buffer, Directory::MAX_PATH_LENGTH);
-	TEST_EQUAL(dd->getPath(), String(buffer))
+	String s(buffer);
+	FileSystem::canonizePath(s);
+	TEST_EQUAL(dd->getPath(), s)
 	TEST_EQUAL(dd->isCurrent(), true)
 RESULT
 
@@ -108,6 +110,7 @@ CHECK(bool setCurrent(String directory_path))
 	TEST_EQUAL(result, true);
 	::getcwd(buffer, Directory::MAX_PATH_LENGTH);
 	path = buffer;
+	FileSystem::canonizePath(path);
 	
 	TEST_EQUAL(path, test_dir + "/dir_a")
 	result = d.setCurrent("c");

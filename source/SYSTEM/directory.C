@@ -459,7 +459,9 @@ namespace BALL
 #else
 		if ((buffer = ::getcwd(NULL, MAX_PATH_LENGTH)) == 0) return false;
 #endif
-		bool result = (buffer == directory_path_);
+		String s(buffer);
+		FileSystem::canonizePath(s);
+		bool result = (s == directory_path_);
 		free(buffer);
 		return result;
 	}
