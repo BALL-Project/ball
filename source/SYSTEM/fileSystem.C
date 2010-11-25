@@ -37,12 +37,13 @@ namespace BALL
 
 #ifdef BALL_OS_WINDOWS
 		// replace "\" by "/"
+		for (index = 0; index != INVALID_INDEX; index = path.substitute(s, "/")) { }
 		path.substitute("\\", "/");
 #endif
 
 		// replace all double occurences of a / with a single /
 		String s("//");
-		for (; index != INVALID_INDEX; index = path.substitute(s, "/")) { }
+		for (index = 0; index != INVALID_INDEX; index = path.substitute(s, "/")) { }
 		
 		// expand ~ to the user's home directory
 		FileSystem::expandTilde_(path);
