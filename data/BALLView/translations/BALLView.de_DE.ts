@@ -375,22 +375,22 @@
         <translation>Ergebnisse</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="154"/>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="152"/>
         <source>Apply to selected System</source>
         <translation>Auf ausgewähltes System anwenden</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="180"/>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="175"/>
         <source>Add as new</source>
         <translation>Als neu hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="193"/>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="188"/>
         <source>Compute Next Solution</source>
         <translation>Nächste Lösung berechnen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="206"/>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="201"/>
         <source>Close</source>
         <translation>Schließen</translation>
     </message>
@@ -2459,6 +2459,400 @@
     </message>
 </context>
 <context>
+    <name>EditableScene</name>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="101"/>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="110"/>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="120"/>
+        <source>Edit Controls</source>
+        <translation type="unfinished">Editierleiste</translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="182"/>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="889"/>
+        <source>Edit Mode</source>
+        <translation type="unfinished">Editiermodus</translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="184"/>
+        <source>Create and modify molecular structures</source>
+        <translation type="unfinished">Erzeugen und modifizieren molekularer Strukturen</translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="185"/>
+        <source>Switch to edit mode, e.g. draw your own molecule</source>
+        <translation type="unfinished">Wechsel zum Editiermodus, z.B. Zeichnen eines Moleküls</translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="197"/>
+        <source>Quickly optimize bond orders</source>
+        <translation type="unfinished">Schnelle Berechnung der Bindungsordnung</translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="199"/>
+        <source>Compute the bond orders of the highlighted structures</source>
+        <translation type="unfinished">Berechnung der Bindungsordnung der ausgewählten Struktur</translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="206"/>
+        <source>Quickly optimize structure</source>
+        <translation type="unfinished">Schnelle Optimierung der geometrischen Struktur</translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="208"/>
+        <source>Quickly optimize the highlighted structure</source>
+        <translation type="unfinished">Schnelle Optimierung der gewählten Struktur</translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="214"/>
+        <source>Saturate with Hydrogens</source>
+        <translation type="unfinished">Fülle freie Valenzen mit Wasserstoff auf</translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="215"/>
+        <source>Saturate the highlighted structure with hydrogens (with regards to formal charges)</source>
+        <translation type="unfinished">Fülle freie Valenzen der gewählten Struktur mit Wasserstoff auf (formale Ladungen werden berücksichtigt)</translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="224"/>
+        <source>Set element</source>
+        <translation type="unfinished">Wahl eines chemisches Elementes</translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="225"/>
+        <source>Edit mode: Choose element for next atom, to modify atom under cursor: Double left click</source>
+        <translation type="unfinished">Editiermodus: Wahl eines chemischen Elementes für das nächste Atom. Zum modifizieren eines Atoms</translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="234"/>
+        <source>Create Bond</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="235"/>
+        <source>Edit mode: If two atoms are selected, create a single bond between them</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="246"/>
+        <source>Create new molecule</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="248"/>
+        <source>Create a new molecule for editing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="250"/>
+        <source>Edit Control toolbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="307"/>
+        <source>Warning: no AtomContainer highlighted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="367"/>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="613"/>
+        <source>Added atom of type </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="367"/>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="613"/>
+        <source> at position (</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="435"/>
+        <source>Set bond order to </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="587"/>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1231"/>
+        <source>Added a bond</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="598"/>
+        <source>Aborting, since both atoms would have the same location!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="627"/>
+        <source>Added bond of type </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="632"/>
+        <source>Added a bond and an atom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="644"/>
+        <source>single</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="647"/>
+        <source>double</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="650"/>
+        <source>triple</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="653"/>
+        <source>quadruple</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="656"/>
+        <source>aromatic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="659"/>
+        <source>unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="782"/>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="802"/>
+        <source>Please highlight exactly one AtomContainer for insertion of the created atoms!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="877"/>
+        <source>Rotate Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="881"/>
+        <source>Picking Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="885"/>
+        <source>Move Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="897"/>
+        <source>Atom Properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="898"/>
+        <source>Move Atom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="899"/>
+        <source>Delete Atom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="900"/>
+        <source>Change Atom Element</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="904"/>
+        <source>Set formal charge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="920"/>
+        <source>Delete Bond</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="925"/>
+        <source>Change bond order</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="927"/>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1313"/>
+        <source>Single</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="928"/>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1314"/>
+        <source>Double</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="929"/>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1315"/>
+        <source>Triple</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="930"/>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1316"/>
+        <source>Quadruple</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="931"/>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1317"/>
+        <source>Aromatic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="932"/>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1318"/>
+        <source>Unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="969"/>
+        <source>Add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="977"/>
+        <source>Aromatic rings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="978"/>
+        <source>Pyrrole</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="979"/>
+        <source>Benzene</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="980"/>
+        <source>Indole</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="984"/>
+        <source>Amino acids</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="988"/>
+        <source>Nucleic acids</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1006"/>
+        <source>Alanine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1007"/>
+        <source>Cytosine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1008"/>
+        <source>Guanine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1009"/>
+        <source>Thymine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1010"/>
+        <source>Uracil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1155"/>
+        <source>Internal error! Too many atoms selected.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1161"/>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1166"/>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1250"/>
+        <source>Please select exactly two atoms.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1205"/>
+        <source>EditableScene: Internal error! </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1463"/>
+        <source>Setting element to </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1595"/>
+        <source>Added </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1595"/>
+        <source> hydrogens.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1628"/>
+        <source>Please highlight exactly one AtomContainer!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1689"/>
+        <source>Could not find a valid bond order assignment.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1694"/>
+        <source>Found </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1694"/>
+        <source> bond order assignments.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1696"/>
+        <source>  &gt; Result AssignBondOrderProcessor: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1704"/>
+        <source>      Solution </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1705"/>
+        <source> has penalty </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1735"/>
+        <source>Optimizing Structure...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1931"/>
+        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1953"/>
+        <source>Internal error! </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ExportGeometryDialogData</name>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/exportGeometryDialog.ui" line="14"/>
@@ -2479,9 +2873,8 @@
         <translation type="obsolete">&amp;Schließen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/exportGeometryDialog.ui" line="163"/>
         <source>All choesen representations can be exported into a common file but it is also possible to split the export espeacially if some of the representations shall be prototyped.</source>
-        <translation type="unfinished">Alle ausgewählten Repräsentationen können in eine gemeinsame Datei exportiert werden, aber der Export kann auch aufgeteilt werden, insbesondere, wenn  einige Repräsentationen zu Prototypen gemacht werden sollen</translation>
+        <translation type="obsolete">Alle ausgewählten Repräsentationen können in eine gemeinsame Datei exportiert werden, aber der Export kann auch aufgeteilt werden, insbesondere, wenn  einige Repräsentationen zu Prototypen gemacht werden sollen.</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/exportGeometryDialog.ui" line="166"/>
@@ -2497,6 +2890,11 @@
         <location filename="../../../source/VIEW/DIALOGS/exportGeometryDialog.ui" line="175"/>
         <source>split into several files</source>
         <translation>In mehrere Dateien aufteilen</translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/exportGeometryDialog.ui" line="163"/>
+        <source>All chosen representations can be exported into a common file but it is also possible to split the export espeacially if some of the representations shall be prototyped.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/exportGeometryDialog.ui" line="195"/>
@@ -5920,6 +6318,21 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="844"/>
         <source>Add Diffuse s Shell to Hydrogens</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Scene</name>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="127"/>
+        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="181"/>
+        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="223"/>
+        <source>3D View Controls</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="449"/>
+        <source>Unknown type of SceneMessage in </source>
         <translation type="unfinished"></translation>
     </message>
 </context>
