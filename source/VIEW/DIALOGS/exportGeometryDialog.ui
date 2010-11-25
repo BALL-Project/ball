@@ -160,7 +160,7 @@
        <item>
         <widget class="QGroupBox" name="groupBox12_3">
          <property name="toolTip">
-          <string>All choesen representations can be exported into a common file but it is also possible to split the export espeacially if some of the representations shall be prototyped.</string>
+          <string>All chosen representations can be exported into a common file but it is also possible to split the export espeacially if some of the representations shall be prototyped.</string>
          </property>
          <property name="title">
           <string>Split Representations</string>
