@@ -37,8 +37,7 @@ namespace BALL
 
 #ifdef BALL_OS_WINDOWS
 		// replace "\" by "/"
-		for (index = 0; index != INVALID_INDEX; index = path.substitute(s, "/")) { }
-		path.substitute("\\", "/");
+		for (index = 0; index != INVALID_INDEX; index = path.substitute("\\", "/")) { }
 #endif
 
 		// replace all double occurences of a / with a single /
