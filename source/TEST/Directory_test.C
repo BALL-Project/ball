@@ -102,19 +102,20 @@ CHECK(bool setCurrent(String directory_path))
 	TEST_EQUAL(result, true);
 	::getcwd(buffer, Directory::MAX_PATH_LENGTH);
 	String path  = buffer;
+	FileSystem::canonizePath(path);
 	TEST_EQUAL(path, test_dir)
 	result = d.setCurrent("dir_a");
 	TEST_EQUAL(result, true);
 	::getcwd(buffer, Directory::MAX_PATH_LENGTH);
 	path = buffer;
 	
-	const String PS = FileSystem::PATH_SEPARATOR;
-	TEST_EQUAL(path, test_dir + PS+"dir_a")
+	TEST_EQUAL(path, test_dir + "/dir_a")
 	result = d.setCurrent("c");
 	TEST_EQUAL(result, false);
 	::getcwd(buffer, Directory::MAX_PATH_LENGTH);
 	path = buffer;
-	TEST_EQUAL(path, test_dir + PS+ "dir_a")
+	FileSystem::canonizePath(path);
+	TEST_EQUAL(path, test_dir + "/dir_a")
 RESULT
 
 
@@ -124,15 +125,16 @@ CHECK(Directory(const String& directory_path, bool set_current = false))
 	TEST_EQUAL(d.isValid(), true)
 
 	::getcwd(buffer, Directory::MAX_PATH_LENGTH);
-	String s = String(buffer) + PS + "dir_a";
+	String s = String(buffer) + "/dir_a";
+	FileSystem::canonizePath(s);
 	TEST_EQUAL(d.getPath(), s)
 
-	Directory d1("dir_a"+PS, true);
+	Directory d1("dir_a/", true);
 	TEST_EQUAL(d1.isCurrent(), true)
 	TEST_EQUAL(d1.isValid(), true)
 	TEST_EQUAL(d.setCurrent(test_dir), true);
 
-	Directory d2("dir_a" + PS + "dir_c"+PS);
+	Directory d2("dir_a/dir_c/");
 	TEST_EQUAL(d2.isValid(), true)
 
 	Directory d3(test_dir);
@@ -143,64 +145,64 @@ CHECK(Directory(const String& directory_path, bool set_current = false))
 RESULT
 
 CHECK(Directory(const Directory& directory))
-	Directory d("dir_a"+PS);
+	Directory d("dir_a/");
 	Directory d1(d);
 	TEST_EQUAL(d1 == d, true)
 RESULT
 
 CHECK(void clear())
-	Directory d("dir_a"+PS);
+	Directory d("dir_a/");
 	d.clear();
 	TEST_EQUAL(d.getPath(), "")
 RESULT
 
 CHECK(void destroy())
-	Directory d1("dir_a"+PS);
+	Directory d1("dir_a/");
 	d1.destroy();
 RESULT
 
 CHECK(bool set(const String& directory_path, bool set_current = false))
 	Directory d;
-	d.set("dir_a" + PS + "dir_c" + PS);
-	TEST_EQUAL(d.getPath(), test_dir + PS + "dir_a" + PS + "dir_c")
+	d.set("dir_a/dir_c/");
+	TEST_EQUAL(d.getPath(), test_dir + "/dir_a/dir_c")
 	TEST_EQUAL(d.isCurrent(), false)
-	d.set("dir_a" + PS + "dir_c"+ PS, true);
+	d.set("dir_a/dir_c/", true);
 	TEST_EQUAL(d.isCurrent(), true)
 	d.setCurrent(test_dir);
 RESULT
 
 CHECK(void set(const Directory& directory))
-	Directory d("dir_a" + PS);
+	Directory d("dir_a/");
 	Directory d1;
 	d1.set(d);
-	TEST_EQUAL(d1.getPath(), test_dir + PS + "dir_a")
+	TEST_EQUAL(d1.getPath(), test_dir + "/dir_a")
 RESULT
 
 CHECK(Directory& operator = (const Directory& directory))
-	Directory d("dir_a" + PS);
+	Directory d("dir_a/");
 	Directory d1;
 	d1 = d;
-	TEST_EQUAL(d1.getPath(), test_dir + PS + "dir_a")	
+	TEST_EQUAL(d1.getPath(), test_dir + "/dir_a")	
 RESULT
 
 CHECK(const String& getPath() const)
 	STATUS("Creating directory")
-	Directory d1("dir_a" + PS);
+	Directory d1("dir_a/");
 	STATUS("Done.")
-	TEST_EQUAL(d1.getPath(), test_dir + PS + "dir_a")
+	TEST_EQUAL(d1.getPath(), test_dir + "/dir_a")
 RESULT
 
 CHECK(void get(Directory& directory) const)
-	Directory d("dir_a" + PS);
+	Directory d("dir_a/");
 	Directory d1;
 	d.get(d1);
-	TEST_EQUAL(d1.getPath(), test_dir + PS + "dir_a")
+	TEST_EQUAL(d1.getPath(), test_dir + "/dir_a")
 RESULT
 
 CHECK(bool create(String path, const mode_t& mode = 0777))
 	Directory d;
 	::chdir(test_dir.c_str());
-	Directory d1("dir_a" + PS + "dir_c"+ PS, true);
+	Directory d1("dir_a/dir_c/", true);
 	TEST_EQUAL(d1.isValid(), true)
 
 	bool ok = cleanup();
@@ -210,12 +212,12 @@ CHECK(bool create(String path, const mode_t& mode = 0777))
 	TEST_EQUAL(result, true)
 	TEST_EQUAL(d.setCurrent(test_dir), true)
 	Directory d2;
-	result = d2.create("dir_a" + PS + "dir_c" + PS + "test2");
+	result = d2.create("dir_a/dir_c/test2");
 	TEST_EQUAL(result, true)
 	TEST_EQUAL(d2.isCurrent(), true)
 	TEST_EQUAL(d.setCurrent(test_dir), true)
 	Directory d3;
-	TEST_EQUAL(d3.create(test_dir + PS +"dir_a" + PS + "dir_c" + PS + "test3"), true)
+	TEST_EQUAL(d3.create(test_dir + "/dir_a/dir_c/test3"), true)
 
 	ok = cleanup();
 	TEST_EQUAL(ok, true)
@@ -228,7 +230,7 @@ CHECK(bool getNextEntry(String& entry))
 	Directory d1(".", true);
 	TEST_EQUAL(d1.isValid(), true)
 	d1.create("test1");
-	d1.create("test1" + PS + "test2");
+	d1.create("test1/test2");
 
 	Directory d2("test1");
 	String s;	
@@ -258,10 +260,10 @@ RESULT
 
 CHECK(Size countItems())
 {
-	Directory d0(test_dir + PS + "dir_a" + PS + "dir_c");
+	Directory d0(test_dir + "/dir_a/dir_c");
 	d0.create("test1");
 
-	Directory d1(test_dir + PS + "dir_a" + PS + "dir_c" + PS + "test1");
+	Directory d1(test_dir + "/dir_a/dir_c/test1");
 	d1.create("test1");
 	d1.create("test2");
 	d1.create("test3");
@@ -274,13 +276,13 @@ RESULT
 
 
 CHECK(Size countFiles())
-	Directory d(test_dir + PS + "dir_a" + PS + "dir_c");
+	Directory d(test_dir + "/dir_a/dir_c");
 	TEST_EQUAL(d.countFiles(), 2)
 	
 	bool result = d.create("test1");
 	TEST_EQUAL(result, true)
 
-	Directory d1(test_dir + PS + "dir_a" + PS + "dir_c" + PS + "test1");
+	Directory d1(test_dir + "/dir_a/dir_c/test1");
 	TEST_EQUAL(d1.countFiles(), 0)
 RESULT
 
@@ -290,20 +292,20 @@ CHECK(Size countDirectories())
 	bool ok = cleanup();
 	TEST_EQUAL(ok, true)
 
-	Directory d(test_dir + PS + "dir_a" + PS + "dir_c");
+	Directory d(test_dir + "/dir_a/dir_c");
 	TEST_EQUAL(d.countFiles(), 2)
 	
 	bool result = d.create("test1");
 	TEST_EQUAL(result, true)
 
-	Directory d0(test_dir + PS + "dir_a" + PS + "dir_c");
+	Directory d0(test_dir + "/dir_a/dir_c");
 	Size nr_of_subdirs = 1;
 	if (d0.has("CVS"))
 	{
 		nr_of_subdirs ++;
 	}
 	TEST_EQUAL(d0.countDirectories(), nr_of_subdirs)
-	Directory d1(test_dir + PS + "dir_a" + PS + "dir_c" + PS + "test1");
+	Directory d1(test_dir + "/dir_a/dir_c/test1");
 	TEST_EQUAL(d1.countDirectories(), 0)
 }
 	bool ok = cleanup();
@@ -313,7 +315,7 @@ RESULT
 CHECK(bool remove(String old_path))
 	Directory d;
 	d.setCurrent(test_dir);
-	Directory d1("dir_a" + PS + "dir_c" + PS, true);
+	Directory d1("dir_a/dir_c", true);
 	d1.create("test1");
 	TEST_EQUAL(d1.isValid(), true)
 	bool result = d1.remove("test1");
@@ -327,7 +329,7 @@ CHECK(bool rename(String old_path, String new_path))
 
 	Directory d;
 	d.setCurrent(test_dir);
-	Directory d1("dir_a" + PS + "dir_c", true);
+	Directory d1("dir_a/dir_c", true);
 	TEST_EQUAL(d1.isValid(), true)
 	bool result = d1.create("test1");
 	TEST_EQUAL(result, true)	
@@ -343,12 +345,12 @@ RESULT
 
 CHECK(bool renameTo(String new_path))
 	Directory d;
-	Directory d1("dir_a" + PS + "dir_c");
+	Directory d1("dir_a/dir_c");
 	d1.remove("test1");
 	bool result = d1.create("test1");
 	TEST_EQUAL(result, true)
 	d.setCurrent(test_dir);
-	Directory d2("dir_a" + PS + "dir_c" + PS + "test1", true);
+	Directory d2("dir_a/dir_c/test1", true);
 	TEST_EQUAL(d2.isValid(), true)
   result = d2.renameTo("test2");
 	TEST_EQUAL(result, true)	  
@@ -359,7 +361,7 @@ RESULT
 
 CHECK(bool getFirstEntry(String& entry))
 	String s;
-	Directory d0(test_dir + PS + "dir_a" + PS + "dir_c");
+	Directory d0(test_dir + "/dir_a/dir_c");
 
 	d0.create("test1");
 
@@ -368,11 +370,11 @@ CHECK(bool getFirstEntry(String& entry))
 RESULT
 
 CHECK(bool find(const String& filename, String& filepath))
-	Directory d1(test_dir + PS + "dir_a");
+	Directory d1(test_dir + "/dir_a");
 	String s;
 	bool result = d1.find("dir_c", s);
 	TEST_EQUAL(result, true)
-	TEST_EQUAL(s, test_dir + PS + "dir_a");
+	TEST_EQUAL(s, test_dir + "/dir_a");
 		d1.set(test_dir);
 	result = d1.find("a", s);
 	TEST_EQUAL(result, true)
@@ -382,14 +384,14 @@ CHECK(bool find(const String& filename, String& filepath))
 RESULT
 
 CHECK(bool has(const String& item))
-	Directory d1("dir_a" + PS + "dir_c"+ PS);
+	Directory d1("dir_a/dir_c/");
 	TEST_EQUAL(d1.has("a"), true)
 	TEST_EQUAL(d1.has("x"), false)
 RESULT
 
 CHECK(bool isCurrent() const)
 	Directory d;
-	Directory d1("dir_a" + PS + "dir_c"+ PS);
+	Directory d1("dir_a/dir_c/");
 	TEST_EQUAL(d1.isCurrent(), false)
 	d1.setCurrent();
 	TEST_EQUAL(d1.isCurrent(), true)
@@ -397,19 +399,19 @@ CHECK(bool isCurrent() const)
 RESULT
 
 CHECK(bool isEmpty())
-	Directory d1(test_dir + PS + "dir_a" + PS + "dir_c");
+	Directory d1(test_dir + "/dir_a/dir_c");
 	d1.create("xxx");
-	Directory d2(test_dir + PS + "dir_a" + PS + "dir_c" + PS + "xxx");
+	Directory d2(test_dir + "/dir_a/dir_c/xxx");
 	TEST_EQUAL(d2.isEmpty(), true)
 	d1.remove("xxx");
 	TEST_EQUAL(d1.isEmpty(), false)
 RESULT
 
 CHECK(bool operator == (const Directory& directory) const)
-	Directory d("data" + PS);
+	Directory d("data/");
 	Directory d1(d);
 	TEST_EQUAL(d == d1, true)
-	d1.set("dir_a"+ PS + "dir_c"+ PS);
+	d1.set("dir_a/dir_c/");
 	TEST_EQUAL(d == d1, false)
 RESULT
 
@@ -417,19 +419,19 @@ CHECK(bool operator != (const Directory& directory) const)
 	Directory d("data" + PS);
 	Directory d1(d);
 	TEST_EQUAL(d != d1, false)
-	d1.set("dir_a" + PS + "dir_c" + PS);
+	d1.set("dir_a/dir_c/");
 	TEST_EQUAL(d != d1, true)
 RESULT
 
 CHECK(bool isValid() const)
 	Directory d("this_directory_should_not_exist");
 	TEST_EQUAL(d.isValid(), false)
-	Directory a(test_dir + PS);
+	Directory a(test_dir + "/");
 	TEST_EQUAL(a.isValid(), true)
 RESULT
 
 CHECK(bool remove())
-	Directory d(test_dir + PS); 
+	Directory d(test_dir + "/"); 
 	bool result = d.create("dir_x");
 	TEST_EQUAL(result, true)
 	d.set(test_dir + PS + "dir_x");
@@ -458,7 +460,7 @@ CHECK(bool changeToUserHomeDir())
 RESULT
 
 CHECK([Extra]cleanup)
-	Directory d(test_dir + PS + "dir_a" + PS + "dir_c");
+	Directory d(test_dir + "/dir_a/dir_c");
 	d.remove("test1");
 	d.remove("test2");
 	d.remove("test3");

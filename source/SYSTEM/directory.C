@@ -44,6 +44,7 @@ namespace BALL
 			if ((buffer = ::_getcwd(NULL, MAX_PATH_LENGTH)) != NULL)	
 			{
 				directory_path_ = buffer;
+				FileSystem::canonizePath(directory_path_);
 				dir_ = CreateFile(_T(buffer),
 													FILE_LIST_DIRECTORY,                // access (read/write) mode
 													FILE_SHARE_READ|FILE_SHARE_DELETE|FILE_SHARE_WRITE,  // share mode
@@ -62,6 +63,7 @@ namespace BALL
 			if ((buffer = ::getcwd(NULL, MAX_PATH_LENGTH)) != NULL)	
 			{
 				directory_path_ = buffer;
+				FileSystem::canonizePath(directory_path_);
 				free(buffer);
 			}
 			else 
@@ -131,7 +133,7 @@ namespace BALL
 				FindClose(dirent_);
 			}
 		
-			String pat = directory_path_+"\\*";
+			String pat = directory_path_+"/*";
 			WIN32_FIND_DATA fd;
 		
 	
@@ -195,7 +197,7 @@ namespace BALL
 			if (dir_ == INVALID_HANDLE_VALUE) return desynchronize_(false);
 			if (dirent_ != INVALID_HANDLE_VALUE) FindClose(dirent_);
 
-			String pat=directory_path_ + FileSystem::PATH_SEPARATOR + "*";
+			String pat=directory_path_ + "/*";
 			WIN32_FIND_DATA fd;
 			
 			dirent_=FindFirstFile(pat.c_str(),&fd);
@@ -215,7 +217,7 @@ namespace BALL
 		{
 			// someone has forgot to call FirstEntry
 
-			String pat=directory_path_ + FileSystem::PATH_SEPARATOR + "*";
+			String pat=directory_path_ + "/*";
 			dirent_=FindFirstFile(pat.c_str(),&fd);
 			
 			if (dirent_==INVALID_HANDLE_VALUE)
@@ -283,7 +285,7 @@ namespace BALL
 		{
 			FindClose(dirent_);
 		}
-		String pat = directory_path_ + "\\*";
+		String pat = directory_path_ + "/*";
 		WIN32_FIND_DATA fd;
 		dirent_ = FindFirstFile(pat.c_str(),&fd);
 		if (dirent_ == INVALID_HANDLE_VALUE)
@@ -340,7 +342,7 @@ namespace BALL
 			}
 		}
 		
-		String pat=directory_path_+"\\*";
+		String pat=directory_path_+"/*";
 		WIN32_FIND_DATA fd;
 		
 		if (dirent_!=INVALID_HANDLE_VALUE) FindClose(dirent_);
@@ -405,7 +407,7 @@ namespace BALL
 			}
 		}
 		
-		String pat=directory_path_+"\\*";
+		String pat=directory_path_+"/*";
 		WIN32_FIND_DATA fd;
 		
 		if (dirent_!=INVALID_HANDLE_VALUE) FindClose(dirent_);
@@ -599,7 +601,7 @@ namespace BALL
 		{
 			directory_path_ = buffer;
 			free(buffer);
-			directory_path_ += FileSystem::PATH_SEPARATOR;
+			directory_path_ += "/";
 			directory_path_ += directory_path;
 			FileSystem::canonizePath(directory_path_);
 			if (directory_path_.hasSuffix(String(FileSystem::PATH_SEPARATOR)))
@@ -664,6 +666,7 @@ namespace BALL
 		if (::rename(directory_path_.c_str(), new_path.c_str()) == 0)
 		{
 			directory_path_ = new_path;
+			FileSystem::canonizePath(directory_path_);
 			return desynchronize_(true);
 		}
 		return desynchronize_(false);
