@@ -1717,12 +1717,12 @@ namespace BALL
 
 				if (    (seed_atom->countBonds() == 2)
 				     && (num_double_bonds <= 2)
-						 && (num_triple_bonds = 0) )
+						 && (num_triple_bonds == 0) )
 				{
 					// the atom is pseudotrigonal
 					beta = Angle(2./3.*M_PI, true);
 				}
-
+s
 				// iterate over the unplaced substituents in the correct order
 				for (Position next_neighbour_index = 0; next_neighbour_index < sequence.size(); ++next_neighbour_index)
 				{
