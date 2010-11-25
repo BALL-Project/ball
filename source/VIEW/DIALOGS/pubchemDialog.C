@@ -180,7 +180,6 @@ namespace BALL
 			
 			try
 			{
-	Log.info() << "Trying to build " << pr.smiles << std::endl;
 				smiles_parser_.parse(pr.smiles);
 				S = smiles_parser_.getSystem();
 
@@ -329,7 +328,7 @@ namespace BALL
 					 num_total    =    num_total_node.firstChild().nodeValue().toInt();
 					 num_download = num_download_node.firstChild().nodeValue().toInt();
 
-					getMainControl()->setStatusbarText(String("Downloading ")+num_download+" of "+num_total+" entries");
+					getMainControl()->setStatusbarText(String("Downloading ")+String(num_download)+" of "+String(num_total)+" entries");
 				}
 
 				QDomNode idList = dom.elementsByTagName("IdList").item(0);
