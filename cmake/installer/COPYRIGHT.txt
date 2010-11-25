@@ -3,7 +3,7 @@
    bioinformatics.
 
    Copyright (C) Andreas Hildebrandt, Oliver Kohlbacher, Hans-Peter 
-   Lenhof, and others 1996-2010
+   Lenhof, Anna Katharina Dehof, and others 1996-2010
 
    
    This library is free software; you can redistribute it and/or
