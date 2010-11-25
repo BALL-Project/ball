@@ -108,7 +108,7 @@ namespace BALL
 		#define  ROTATE_FACTOR    50.
 		#define  ROTATE_FACTOR2   50.
 		#define  TRANSLATE_FACTOR 4.
-    #define  ZOOM_FACTOR      7.
+		#define  ZOOM_FACTOR      7.
 
 		Scene::Scene()
 			:	QWidget(),
@@ -124,7 +124,7 @@ namespace BALL
 				light_settings_(new LightSettings(this)),
 				material_settings_(new MaterialSettings(this)),
 				animation_thread_(0),
-				toolbar_view_controls_(new QToolBar("3D View Controls", this)),
+				toolbar_view_controls_(new QToolBar(tr("3D View Controls"), this)),
 				mode_group_(new QActionGroup(this)),
 				main_display_(new GLRenderWindow(this)),
 				stereo_left_eye_(-1),
@@ -178,7 +178,7 @@ namespace BALL
 				preview_(false),
 				use_preview_(true),
 				show_fps_(false),
-				toolbar_view_controls_(new QToolBar("3D View Controls", this)),
+				toolbar_view_controls_(new QToolBar(tr("3D View Controls"), this)),
 				mode_group_(new QActionGroup(this)),
 				main_display_(new GLRenderWindow(this)),
 				stereo_left_eye_(-1),
@@ -220,7 +220,7 @@ namespace BALL
 				material_settings_(new MaterialSettings(this)),
 				animation_thread_(0),
 				stop_animation_(false),
-				toolbar_view_controls_(new QToolBar("3D View Controls", this)),
+				toolbar_view_controls_(new QToolBar(tr("3D View Controls"), this)),
 				mode_group_(new QActionGroup(this)),
 				main_display_(new GLRenderWindow(this)),
 				stereo_left_eye_(-1),
@@ -446,7 +446,7 @@ namespace BALL
 					return;
 
 				case SceneMessage::UNDEFINED:
-					Log.error() << "Unknown type of SceneMessage in " << __FILE__ << __LINE__ << std::endl;
+					Log.error() << (String)tr("Unknown type of SceneMessage in ") << __FILE__ << __LINE__ << std::endl;
 			}
 		}
 
@@ -509,7 +509,7 @@ namespace BALL
 
 			fps_string = stream.str();
 
-			fps_string = String("FPS ") + fps_string;
+			fps_string = String(tr("FPS ")) + fps_string;
 
 			return fps_string;
 		}
@@ -869,7 +869,7 @@ namespace BALL
 
 			// draw the representations
 			renderers_[0].pickObjects((Position)p0.x(), (Position)p0.y(),
-															  (Position)p1.x(), (Position)p1.y(), objects);
+			                          (Position)p1.x(), (Position)p1.y(), objects);
 
 			// sent collected objects
 			GeometricObjectSelectionMessage* message = new GeometricObjectSelectionMessage;
@@ -892,15 +892,15 @@ namespace BALL
 		{
 			const Camera& camera = stage_->getCamera();
 
-			String text("ViewPoint: (" 
+			String text((String)tr("ViewPoint: (") 
 					+ String(camera.getViewPoint().x) + "|" 
 					+ String(camera.getViewPoint().y) + "|" 
 					+ String(camera.getViewPoint().z) 
-					+ ")   LookAt: (" 
+					+ (String)tr(")   LookAt: (") 
 					+ String(camera.getLookAtPosition().x) + "|" 
 					+ String(camera.getLookAtPosition().y) + "|" 
 					+ String(camera.getLookAtPosition().z) 
-					+ ")   LookUp: (" 
+					+ (String)tr(")   LookUp: (") 
 					+ String(camera.getLookUpVector().x) + "|" 
 					+ String(camera.getLookUpVector().y) + "|" 
 					+ String(camera.getLookUpVector().z) + ")");
@@ -1087,7 +1087,7 @@ namespace BALL
 				{
 					if (!er.renderOneRepresentation(**it))
 					{
-						getMainControl()->setStatusbarText("Error rendering representation...");
+						getMainControl()->setStatusbarText((String)tr("Error rendering representation..."));
 						return false;
 					}
 				}
@@ -1095,17 +1095,17 @@ namespace BALL
 				if (er.finish())
 				{
 					// cant call Scene::setStatusbarText(..), no idea why!!!
-					getMainControl()->setStatusbarText("Successfully exported Scene...");
+					getMainControl()->setStatusbarText((String)tr("Successfully exported Scene..."));
 					return true;
 				}
 			}
 
-			getMainControl()->setStatusbarText("Error while exporting Scene...");
+			getMainControl()->setStatusbarText((String)tr("Error while exporting Scene..."));
 			return false;
 		}
 
 		//##########################PREFERENCES#################################
-
+		// Preferences shall remain untranslated
 		void Scene::writePreferences(INIFile& inifile)
 		{
 			// workaround: otherwise the variable might not get set
@@ -1357,7 +1357,7 @@ namespace BALL
 			}
 			catch(Exception::GeneralException& e)
 			{
-				Log.error() << "Could not read lighting settings from Inifile" << std::endl;
+				Log.error() << (String)tr("Could not read lighting settings from Inifile") << std::endl;
 				Log.error() << e;
 			}
 
@@ -1384,54 +1384,54 @@ namespace BALL
 			QAction* new_action;
 
 			create_coordinate_system_ = getMainControl()->initPopupMenu(MainControl::DISPLAY)->
-				addMenu("Show Coordinate System");
-			setMenuHint("Show a coordinate system");
+				addMenu(tr("Show Coordinate System"));
+			setMenuHint((String)tr("Show a coordinate system"));
 
-			new_action = create_coordinate_system_->addAction("at origin", this, SLOT(createCoordinateSystemAtOrigin()));
+			new_action = create_coordinate_system_->addAction(tr("at origin"), this, SLOT(createCoordinateSystemAtOrigin()));
 			shortcut_registry->registerShortcut("Shortcut|Display|Show_Coordinate_System|at_origin", new_action);
 
-			new_action = create_coordinate_system_->addAction("here", this, SLOT(createCoordinateSystem()));
+			new_action = create_coordinate_system_->addAction(tr("here"), this, SLOT(createCoordinateSystem()));
 			shortcut_registry->registerShortcut("Shortcut|Display|Show_Coordinate_System|here", new_action);
 
-			insertMenuEntry(MainControl::DISPLAY, "Add new GL Window", this, SLOT(addGlWindow()), "Shortcut|Display|Add_new_GL_Window");
+			insertMenuEntry(MainControl::DISPLAY, (String)tr("Add new GL Window"), this, SLOT(addGlWindow()), "Shortcut|Display|Add_new_GL_Window");
 			// ======================== Display->Animation ===============================================
 			String help_url = "tips.html#animations";
 
-			record_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Record", this, 
+			record_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, (String)tr("Record"), this, 
 					SLOT(dummySlot()), "Shortcut|Display|Animation|Record");
-			setMenuHint("Record an animation for later processing");
+			setMenuHint((String)tr("Record an animation for later processing"));
 			setMenuHelp(help_url);
 			record_animation_action_->setCheckable(true);
 
-			clear_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Clear", this, 
+			clear_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, (String)tr("Clear"), this, 
 					SLOT(clearRecordedAnimation()), "Shortcut|Display|Animation|Clear");
 			setMenuHelp(help_url);
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
 
-			start_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Start", this, 
+			start_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, (String)tr("Start"), this, 
 					SLOT(startAnimation()), "Shortcut|Display|Animation|Start");
 			setMenuHelp(help_url);
 
-			cancel_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Stop", this, 
+			cancel_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, (String)tr("Stop"), this, 
 					SLOT(stopAnimation()), "Shortcut|Display|Animation|Stop");
 			cancel_animation_action_->setEnabled(false);
 			setMenuHelp(help_url);
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
 
-			animation_export_PNG_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export PNG", this, 
+			animation_export_PNG_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, (String)tr("Export PNG"), this, 
 					SLOT(dummySlot()), "Shortcut|Display|Animation|Export_PNG");
 			setMenuHelp(help_url);
 			animation_export_PNG_action_->setCheckable(true);
 
-			animation_export_POV_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export POV", this, 
+			animation_export_POV_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, (String)tr("Export POV"), this, 
 					SLOT(dummySlot()), "Shortcut|Display|Animation|Export_POV");
 			setMenuHelp(help_url);
 			animation_export_POV_action_->setCheckable(true);
 
 
-			animation_repeat_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Repeat", this, 
+			animation_repeat_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, (String)tr("Repeat"), this, 
 					SLOT(dummySlot()), "Shortcut|Display|Animation|Repeat");
 			setMenuHelp(help_url);
 			animation_repeat_action_->setCheckable(true);
@@ -1439,24 +1439,24 @@ namespace BALL
 			// ======================== Display->Stereo ===============================================
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
-			no_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, "No Stereo", this, 
+			no_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, (String)tr("No Stereo"), this, 
 					SLOT(exitStereo()), "Shortcut|Display|Stereo|No_Stereo");
 			no_stereo_action_->setCheckable(true);
 			no_stereo_action_->setChecked(true);
 			setMenuHelp("tips.html#3D");
 
-			active_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, "Shutter Glasses", this, 
+			active_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, (String)tr("Shutter Glasses"), this, 
 					SLOT(enterActiveStereo()), "Shortcut|Display|Stereo|Shutter_Glasses");
 			setMenuHelp("tips.html#3D");
 			active_stereo_action_->setCheckable(true);
 
-			dual_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, "Side by Side", this,
+			dual_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, (String)tr("Side by Side"), this,
 					SLOT(enterDualStereo()), "Shortcut|Display|Stereo|Side_by_Side");
 			setMenuHelp("tips.html#3D");
 			dual_stereo_action_->setCheckable(true);
 
 			dual_stereo_different_display_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, 
-					"Side by Side on Different Displays", this, 
+					(String)tr("Side by Side on Different Displays"), this, 
 					SLOT(enterDualStereoDifferentDisplays()),
 					"Shortcut|Display|Stereo|Side_by_Side_on_Different_Displays");
 			setMenuHelp("tips.html#3D");
@@ -1465,59 +1465,61 @@ namespace BALL
 			// ======================== Display->Viewpoint ===============================================
 			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT);
 
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "&Store Viewpoint", this, 
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, (String)tr("&Store Viewpoint"), this, 
 					SLOT(storeViewPoint()), "Shortcut|Display|Viewpoint|Store");
-			setMenuHint("Store the current viewpoint");
+			setMenuHint((String)tr("Store the current viewpoint"));
 
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "&Restore Viewpoint", this, 
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, (String)tr("&Restore Viewpoint"), this, 
 					SLOT(restoreViewPoint()), "Shortcut|Display|Viewpoint|Restore");
-			setMenuHint("Restore the viewpoint");
+			setMenuHint((String)tr("Restore the viewpoint"));
 
 			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT);
 
-			String description("Shortcut|Display|Viewpoint|Show_Viewpoint");
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, 
+			String description("Shortcut|Display|Viewpoint|Show_Vie&wpoint");
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, (String)tr("Show Viewpoint"), this, 
 					SLOT(showViewPoint_()), description, QKeySequence("Ctrl+W"));
-			setMenuHint("Print the coordinates of the current viewpoint");
+			setMenuHint((String)tr("Print the coordinates of the current viewpoint"));
 
 
 			description = "Shortcut|Display|Viewpoint|Set_Viewpoint";
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, 
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, (String)tr("Set Viewpoi&nt"), this, 
 					SLOT(setViewPoint_()), description, QKeySequence("Ctrl+N"));
-			setMenuHint("Move the viewpoint to the given coordinates");
+			setMenuHint((String)tr("Move the viewpoint to the given coordinates"));
 
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, 
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, (String)tr("Rese&t Camera"), this, 
 					SLOT(resetCamera_()), "Shortcut|Display|Viewpoint|Reset_Camera");
-			setMenuHint("Reset the camera to the orgin (0,0,0)");
+			setMenuHint((String)tr("Reset the camera to the orgin (0,0,0)"));
 
 			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT);
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Limit View Volume", this, 
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, (String)tr("Limit View Volume"), this, 
 					SLOT(setupViewVolume()), "Shortcut|Display|Viewpoint|Limit_View_Volume");
 
 			description = "Shortcut|File|Export|PNG";
-			QAction* screenshot_action = insertMenuEntry(MainControl::FILE_EXPORT, "PNG...", this, 
+			QAction* screenshot_action = insertMenuEntry(MainControl::FILE_EXPORT, (String)tr("PNG..."), this, 
 					SLOT(showExportPNGDialog()), description, QKeySequence("Alt+P"));
-			setMenuHint("Export a PNG image file from the Scene");
+			setMenuHint((String)tr("Export a PNG image file from the Scene"));
 			setIcon("actions/screenshot", false);
 
 			description = "Shortcut|File|Export|POVRay";
-			insertMenuEntry(MainControl::FILE_EXPORT, "POVRa&y scene", this, 
+			insertMenuEntry(MainControl::FILE_EXPORT, (String)tr("POVRa&y scene"), this, 
 					SLOT(exportPOVRay()), description, QKeySequence("Ctrl+Y"));
 			setIcon("mimetype/text-x-povray", false);
-			setMenuHint("tips.html#povray");
+			
+			setMenuHint((String)tr("Export a POVRay file from the Scene"));
+			setMenuHelp("tips.html#povray");
 
 			description = "Shortcut|File|Export|VRML";
-			insertMenuEntry(MainControl::FILE_EXPORT, "3D Prototyping Export", this, 
+			insertMenuEntry(MainControl::FILE_EXPORT, (String)tr("3D Prototyping Export"), this, 
 					SLOT(showExportVRMLDialog()), description);
-			setMenuHint("Export a VRML or stl file from the scene");
+			setMenuHint((String)tr("Export a VRML or stl file from the scene"));
 
 			// ====================================== MODES =====================================
 			description = "Shortcut|Display|Rotate_Mode";
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
-			rotate_action_ = insertMenuEntry(MainControl::DISPLAY, "&Rotate Mode", this, 
+			rotate_action_ = insertMenuEntry(MainControl::DISPLAY, (String)tr("&Rotate Mode"), this, 
 					SLOT(rotateMode_()), description, QKeySequence("Ctrl+R"));
 
-			setMenuHint("Switch to rotate/zoom mode");
+			setMenuHint((String)tr("Switch to rotate/zoom mode"));
 			setMenuHelp("scene.html#rotate_mode");
 			rotate_action_->setCheckable(true);
 			setIcon("actions/transform-rotate", false);
@@ -1525,10 +1527,10 @@ namespace BALL
 			mode_group_->addAction(rotate_action_);
 
 			description = "Shortcut|Display|Picking_Mode";
-			picking_action_ = insertMenuEntry(MainControl::DISPLAY, "&Picking Mode", this, 
+			picking_action_ = insertMenuEntry(MainControl::DISPLAY, (String)tr("&Picking Mode"), this, 
 					SLOT(pickingMode_()), description, QKeySequence("Ctrl+P"));
 
-			setMenuHint("Switch to picking mode, e.g. to identify single atoms or groups");
+			setMenuHint((String)tr("Switch to picking mode, e.g. to identify single atoms or groups"));
 			setMenuHelp("scene.html#identify_atoms");
 			setIcon("actions/select-rectangular", false);
 			picking_action_->setCheckable(true);
@@ -1536,10 +1538,10 @@ namespace BALL
 			mode_group_->addAction(picking_action_);
 
 			description = "Shortcut|Display|Move_Mode";
-			move_action_ = insertMenuEntry(MainControl::DISPLAY, "Move Mode", this, 
+			move_action_ = insertMenuEntry(MainControl::DISPLAY, (String)tr("Move Mode"), this, 
 					SLOT(moveMode_()), description);
 
-			setMenuHint("Switch to move mode, e.g. move selected items");
+			setMenuHint((String)tr("Switch to move mode, e.g. move selected items"));
 			setMenuHelp("molecularControl.html#move_molecule");
 			setIcon("actions/transform-move", false);
 			move_action_->setCheckable(true);
@@ -1547,7 +1549,7 @@ namespace BALL
 			mode_group_->addAction(move_action_);
 
 			description = "Shortcut|ShowRuler";
-			switch_grid_ = new QAction("Show ruler", this);
+			switch_grid_ = new QAction(tr("Show ruler"), this);
 			switch_grid_->setObjectName(switch_grid_->text());
 			connect(switch_grid_, SIGNAL(triggered()), this, SLOT(switchShowGrid()));
 			switch_grid_->setCheckable(true);
@@ -1559,9 +1561,9 @@ namespace BALL
 			toolbar_actions_view_controls_.push_back(screenshot_action);
 
 			description = "Shortcut|File|Print";
-			insertMenuEntry(MainControl::FILE, "Print", this, SLOT(printScene()), description);
+			insertMenuEntry(MainControl::FILE, (String)tr("Print"), this, SLOT(printScene()), description);
 
-			window_menu_entry_ = insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
+			window_menu_entry_ = insertMenuEntry(MainControl::WINDOWS, (String)tr("Scene"), this, SLOT(switchShowWidget()));
 			window_menu_entry_->setCheckable(true);
 			setMenuHelp("scene.html");
 
@@ -1570,7 +1572,7 @@ namespace BALL
 			setFocusPolicy(Qt::StrongFocus);
 			registerForHelpSystem(this, "scene.html");
 
-			toolbar_view_controls_->setObjectName("3D View Control toolbar");
+			toolbar_view_controls_->setObjectName(tr("3D View Control toolbar"));
 			toolbar_view_controls_->setIconSize(QSize(22,22));
 			toolbar_view_controls_->layout()->setMargin(2);
 			toolbar_view_controls_->layout()->setSpacing(2);
@@ -1589,10 +1591,8 @@ namespace BALL
 
 			bool animation_running = (animation_thread_ != 0 && animation_thread_->isRunning());
 			
-			start_animation_action_->setEnabled(
-																animation_points_.size() > 0 && 
-																!busy &&
-																!animation_running);
+			start_animation_action_->setEnabled(animation_points_.size() > 0 && 
+			                                    !busy && !animation_running);
 			
 			clear_animation_action_->setEnabled(animation_points_.size() > 0 && !animation_running);
 
@@ -1743,7 +1743,7 @@ namespace BALL
 			if (current_mode_ == PICKING__MODE)
 			{
 				if (e->buttons() == Qt::LeftButton  ||
-						e->buttons() == Qt::RightButton)
+				    e->buttons() == Qt::RightButton)
 				{
 					selectionPressedMoved_();
 				}
@@ -1783,8 +1783,8 @@ namespace BALL
 			if (current_mode_ == PICKING__MODE)
 			{		
 				if (e->modifiers() == Qt::NoModifier &&(
-						e->buttons() == Qt::LeftButton ||
-						e->buttons() == Qt::RightButton))
+				    e->buttons() == Qt::LeftButton ||
+				    e->buttons() == Qt::RightButton))
 				{
 					pick_select_ = (e->buttons() == Qt::LeftButton);
 					selectionPressed_();
@@ -1806,14 +1806,14 @@ namespace BALL
 			// TODO make keys configurable in shortcutRegistry 
 			if (e.modifiers() == Qt::NoModifier)
 			{
-				if (e.buttons() == Qt::LeftButton) 	return TRANSLATE_ACTION;
-				if (e.buttons() == Qt::MidButton) 	return ZOOM_ACTION;
+				if (e.buttons() == Qt::LeftButton)  return TRANSLATE_ACTION;
+				if (e.buttons() == Qt::MidButton)   return ZOOM_ACTION;
 				if (e.buttons() == Qt::RightButton) return ROTATE_ACTION;
 			}
 			else if (e.buttons() == Qt::LeftButton)
 			{
-				if (e.modifiers() == Qt::ShiftModifier) 											return ZOOM_ACTION;
-				if (e.modifiers() == Qt::ControlModifier) 										return ROTATE_ACTION;
+				if (e.modifiers() == Qt::ShiftModifier) return ZOOM_ACTION;
+				if (e.modifiers() == Qt::ControlModifier) return ROTATE_ACTION;
 				if (e.modifiers() == (Qt::ShiftModifier | Qt::ControlModifier)) return ROTATE_CLOCKWISE_ACTION;
 			}
 			else if (e.buttons() == (Qt::LeftButton | Qt::RightButton))
@@ -1953,7 +1953,7 @@ namespace BALL
 					float angle_total = fabs(delta_x) + fabs(delta_y);
 
 					Vector3 rotation_axis = (camera.getLookUpVector() * delta_x / angle_total) +
-																	(camera.getRightVector()  * delta_y / angle_total);
+					                        (camera.getRightVector()  * delta_y / angle_total);
 
 					m.rotate(Angle(angle_total, false), rotation_axis);
 					break;
@@ -2093,7 +2093,7 @@ namespace BALL
 
 			info_string_ = string;
 
-			String string2 = String("Object at cursor is ") + string;
+			String string2 = String(tr("Object at cursor is ")) + string;
 
 			if (getMainControl()->getStatusbarText() != string2) 
 			{
@@ -2482,7 +2482,7 @@ namespace BALL
 			QPrintDialog dialog(&printer, this);
 			if (!dialog.exec()) return;
 			
-			setStatusbarText("printing..");
+			setStatusbarText((String)tr("printing.."));
 
 			QPainter p;
 			if(!p.begin(&printer)) return; 
@@ -2492,19 +2492,19 @@ namespace BALL
 			p.drawImage(0,0, pic);	
 			p.end();
 
-			setStatusbarText("finished printing");
+			setStatusbarText((String)tr("finished printing"));
 		}
 
 
 		String Scene::exportPNG()
 		{
-			String filename = String("BALLView_screenshot" + String(screenshot_nr_) +".png");
+			String filename = String(tr("BALLView_screenshot")) + String(screenshot_nr_) +".png";
 			screenshot_nr_ ++;
 
 			exportPNG(filename);
-			Log.info() << "Exporting PNG to " 
-								 << Directory().getPath() << FileSystem::PATH_SEPARATOR
-								 << filename << std::endl;
+			Log.info() << (String)tr("Exporting PNG to ") 
+				   << Directory().getPath() << FileSystem::PATH_SEPARATOR
+				   << filename << std::endl;
 
 			return filename;
 		}
@@ -2513,11 +2513,9 @@ namespace BALL
 		{
 			String start = String(screenshot_nr_) + ".png";
 			screenshot_nr_ ++;
-			QString qresult = QFileDialog::getSaveFileName(
-												0,
-												"Export PNG File",
-												(getWorkingDir() + String(FileSystem::PATH_SEPARATOR) + start).c_str(),
-												"*.png");
+			QString qresult = QFileDialog::getSaveFileName( 0, tr("Export PNG File"),
+			                                               (getWorkingDir() + String(FileSystem::PATH_SEPARATOR) + start).c_str(),
+			                                                "*.png");
 
 			if (qresult == QString::null) return;
 
@@ -2535,7 +2533,7 @@ namespace BALL
 			bool ok = false;
 
 			// TODO: currently, we always use the first renderer in the list for exporting;
-			// 			 we should decide this in a sensible way instead
+			//       we should decide this in a sensible way instead
 
 			// first find out if we need to render offscreen or whether we can just use the current image
 			if (!offscreen_rendering_)
@@ -2552,18 +2550,18 @@ namespace BALL
 			gr->enableVertexBuffers(want_to_use_vertex_buffer_);
 			gr->setSize(width(), height());
 
-			TilingRenderer *tr = new TilingRenderer(gr, offscreen_factor_*width(), offscreen_factor_*height());
-			tr->init(*this);
-			tr->setSize(width(), height());
+			TilingRenderer *trenderer = new TilingRenderer(gr, offscreen_factor_*width(), offscreen_factor_*height());
+			trenderer->init(*this);
+			trenderer->setSize(width(), height());
 
-			RenderSetup tr_rs(tr, new_widget, this, stage_);
+			RenderSetup tr_rs(trenderer, new_widget, this, stage_);
 			resetRepresentationsForRenderer_(tr_rs);
 
 			renderers_.push_back(tr_rs);
 			updateGL();
 			renderers_.pop_back();
 
-			delete(tr);
+			delete(trenderer);
 			delete(gr);
 			delete(new_widget);
 
@@ -2576,31 +2574,30 @@ namespace BALL
 
 			setWorkingDirFromFilename_(filename);
 
-			if (ok) setStatusbarText("Saved PNG to " + filename);
-			else 		setStatusbarText("Could not save PNG", true);
+			if (ok) setStatusbarText((String)(tr("Saved PNG to ")) + filename);
+			else setStatusbarText((String)tr("Could not save PNG"), true);
 
 			return ok;
 		}
 
 		void Scene::exportNextPOVRay()
 		{
-			String filename = String("BALLView_pov_" + String(pov_nr_) +".pov");
+			String filename = String((String)tr("BALLView_pov_") + String(pov_nr_) +".pov");
 
 			POVRenderer pr(filename);
 			bool result = exportScene(pr);
 			pov_nr_ ++;
 
-			if (result) setStatusbarText("Saved POVRay to " + filename);
-			else 				setStatusbarText("Could not save POVRay to " + filename);
+			if (result) setStatusbarText((String)tr("Saved POVRay to ") + filename);
+			else setStatusbarText((String)tr("Could not save POVRay to ") + filename);
 		}
 
 		void Scene::exportPOVRay()
 		{
-			QString qresult = QFileDialog::getSaveFileName(
-												0,
-												"Export POVRay File",
-												getWorkingDir().c_str(),
-												"*.pov");
+			QString qresult = QFileDialog::getSaveFileName( 0,
+			                                                tr("Export POVRay File"),
+			                                                getWorkingDir().c_str(),
+			                                                "*.pov");
 
 			if (qresult == QString::null) return;
 
@@ -2625,11 +2622,11 @@ namespace BALL
 
 			if (!ok)
 			{
-				setStatusbarText("Could not export POV to " + result, true);
+				setStatusbarText((String)tr("Could not export POV to ") + result, true);
 			}
 			else
 			{
-				setStatusbarText("Exported POV to " + result);
+				setStatusbarText((String)tr("Exported POV to ") + result);
 				setWorkingDirFromFilename_(result);
 			}
 		}
@@ -2700,7 +2697,7 @@ namespace BALL
 
 		void Scene::addGlWindow()
 		{
-			GLRenderWindow* new_widget = new GLRenderWindow(0, "Scene", Qt::Window);
+			GLRenderWindow* new_widget = new GLRenderWindow(0, ((String)tr("Scene")).c_str(), Qt::Window);
 			new_widget->makeCurrent();
 			new_widget->init();
 			new_widget->resize(width(), height());
@@ -2725,8 +2722,9 @@ namespace BALL
 			// first clean up
 			exitStereo();
 
-return;
-			GLRenderWindow* new_widget = new GLRenderWindow(0, "blubb", Qt::Window);
+			return;
+			// AKD: what is happening here?
+			GLRenderWindow* new_widget = new GLRenderWindow(0, String(tr("blubb")).c_str(), Qt::Window);
 			new_widget->makeCurrent();
 			new_widget->init();
 			new_widget->resize(width(), height());
@@ -2753,7 +2751,7 @@ return;
 			// first clean up
 			exitStereo();
 
-			GLRenderWindow* left_widget = new GLRenderWindow(0, "left eye");
+			GLRenderWindow* left_widget = new GLRenderWindow(0, String(tr("left eye")).c_str());
 			left_widget->makeCurrent();
 			left_widget->init();
 			left_widget->resize(width(), height());
@@ -2773,7 +2771,7 @@ return;
 			renderers_.push_back(left_rs);
 			stereo_left_eye_ = renderers_.size()-1;
 
-			GLRenderWindow* right_widget = new GLRenderWindow(0, "right eye");
+			GLRenderWindow* right_widget = new GLRenderWindow(0, String(tr("right eye")).c_str());
 			right_widget->makeCurrent();
 			right_widget->init();
 			right_widget->resize(width(), height());
@@ -2809,7 +2807,7 @@ return;
 			// first clean up
 			exitStereo();
 
-			GLRenderWindow* left_widget = new GLRenderWindow(QApplication::desktop()->screen(0), "left eye");
+			GLRenderWindow* left_widget = new GLRenderWindow(QApplication::desktop()->screen(0), String(tr("left eye")).c_str());
 			left_widget->makeCurrent();
 			left_widget->init();
 			left_widget->resize(QApplication::desktop()->screen(0)->width(), QApplication::desktop()->screen(0)->height());
@@ -2829,7 +2827,7 @@ return;
 			renderers_.push_back(left_rs);
 			stereo_left_eye_ = renderers_.size()-1;
 
-			GLRenderWindow* right_widget = new GLRenderWindow(QApplication::desktop()->screen(1), "right eye");
+			GLRenderWindow* right_widget = new GLRenderWindow(QApplication::desktop()->screen(1), String(tr("right eye")).c_str());
 			right_widget->makeCurrent();
 			right_widget->init();
 			right_widget->resize(QApplication::desktop()->screen(1)->width(), QApplication::desktop()->screen(1)->height());
@@ -2915,9 +2913,9 @@ return;
 					if (*it == last_camera) continue;
 			 
 					Camera camera = last_camera;
-					Vector3 diff_viewpoint 	= (camera.getViewPoint() 			- (*it).getViewPoint());
-					Vector3 diff_up 				= (camera.getLookUpVector() 	- (*it).getLookUpVector());
-					Vector3 diff_look_at 		= (camera.getLookAtPosition() - (*it).getLookAtPosition());
+					Vector3 diff_viewpoint = (camera.getViewPoint()      - (*it).getViewPoint());
+					Vector3 diff_up        = (camera.getLookUpVector()   - (*it).getLookUpVector());
+					Vector3 diff_look_at   = (camera.getLookAtPosition() - (*it).getLookAtPosition());
 
 					Vector3 max = diff_viewpoint;
 					if (diff_look_at.getLength() > max.getLength()) max = diff_look_at;
@@ -2925,9 +2923,9 @@ return;
 					Size steps = (Size) (max.getLength() * animation_smoothness_);
 					if (steps == 0) steps = 1;
 					
-					diff_viewpoint 	/= steps;
-					diff_up 				/= steps;
-					diff_look_at 		/= steps;
+					diff_viewpoint  /= steps;
+					diff_up         /= steps;
+					diff_look_at    /= steps;
 
 					for (Size i = 0; i < steps && !stop_animation_; i++)
 					{
@@ -3013,7 +3011,7 @@ return;
 			
 			return supports;
 			*/
-            return false;
+			return false;
 		}
 
 		void Scene::setWidgetVisible(bool state)
@@ -3079,13 +3077,13 @@ return;
 		Position Scene::prepareGridTextures(const RegularData3D& grid, const ColorMap& map)
 		{
 			// NOTE: this implementation has a slight disadvantage:
-			// 			 if you want 3d textures for stereo with different
-			// 			 half images, you need to ensure that this function
-			// 			 is called *after* switching to stereo!
+			//       if you want 3d textures for stereo with different
+			//       half images, you need to ensure that this function
+			//       is called *after* switching to stereo!
 			//
 			// TODO: - change this to something more sensible!
-			// 			 - call something in RenderSetup instead!	
-			Position texname;
+			//       - call something in RenderSetup instead!	
+			Position texname = 0;
 
 			for (Position i=0; i<renderers_.size(); ++i)
 				texname = renderers_[i].prepareGridTextures(grid, map);
@@ -3126,7 +3124,7 @@ return;
 			ignore_pick_ = true;
 			list<GeometricObject*> objects;
 			renderers_[0].pickObjects((Position) p.x(), (Position) p.y(), 
-																(Position) p.x(), (Position) p.y(), objects);
+			                          (Position) p.x(), (Position) p.y(), objects);
 
 			if (objects.empty()) return;
 		
@@ -3169,9 +3167,7 @@ return;
 		void Scene::setupViewVolume()
 		{
 			bool ok;
-			float value = QInputDialog::getDouble(this, "Setup view volume",
-																						"Enter volume length:", 
-																						20, 5, 200, 1, &ok);
+			float value = QInputDialog::getDouble(this, tr("Setup view volume"), tr("Enter volume length:"),	20, 5, 200, 1, &ok);
 			if (!ok) return;
 
 			// find out if the visible viewing volume has to be cut
