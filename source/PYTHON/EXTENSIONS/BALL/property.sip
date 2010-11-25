@@ -61,7 +61,7 @@ class NamedProperty
 				output += BALL::String("Double, Value: ") + BALL::String(sipCpp->getDouble());
 				break;
 			case NamedProperty::STRING:
-				output += BALL::String("String, Value: ") + sipCpp->getString();
+				output += BALL::String("String, Value: ") + BALL::String(sipCpp->getString());
 				break;
 			case NamedProperty::OBJECT:
 				output += BALL::String("Object, Value: ") + BALL::String((unsigned long) sipCpp->getObject());
