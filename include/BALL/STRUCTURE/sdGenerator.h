@@ -13,6 +13,10 @@
 # include <BALL/STRUCTURE/ringAnalyser.h>
 #endif
 
+#ifndef BALL_KERNEL_PDBATOM_H
+# include <BALL/KERNEL/PDBAtom.h>
+#endif
+
 #include <vector>
 #include <queue>
 
@@ -35,28 +39,19 @@ namespace BALL
 			 */
 			enum Property
 			{
+				FIRST_SDGENERATOR_PROPERTY = PDBAtom::NUMBER_OF_PROPERTIES+1,
 				IN_RING,
-				PRE_CORE_CHAIN,
 				CORE_CHAIN,
-				FOUND,
-				INVALID,
 				DEPOSITED,
-				FIRSTNEIGHBOUR,
 				FXAS,
 				EQAS,
 				HEAD,
 				EDGE,
-				BUILT_IN_CHAIN,
 				ASSEMBLED,
-				SHIFTED,
-				PRE_ASSEMBLED,
-				ROTATED,
 				ZIG,
 				ZAG,
-				STRAIGHT,
-				NEGATIVE_ANGLE,
-				CLOCKWISE,
-				INITIALIZED_HEAD_CFS
+				INITIALIZED_HEAD_CFS,
+				LAST_SDGENERATOR_PROPERTY
 			};
 
 			/** @name Constant Definitions
@@ -145,7 +140,7 @@ namespace BALL
       * \brief Distinguishes between ring-atoms and core-chain-atoms, removes all H-Atoms from the System
       * @param molecule_sys
       */
-      void prepare_(System& molecule_sys);
+      void prepare_();
 
 			/**
 			* \brief Constructs a ringsystem, providing the atoms with relative 2D-coordinates, starting in the point of origin
@@ -182,7 +177,7 @@ namespace BALL
 
 			/** Compute the Shelley priority values for each atom
 			 */
-			void computeShelleyPriorities_(AtomContainer& ac);
+			void computeShelleyPriorities_();
 
 			/** Build a regular polygon for a ring with two fixed points.
 			 */
@@ -237,7 +232,7 @@ namespace BALL
 			/**
 			 * \brief cluster and arrange all chains in the system
 			 */
-			void treatChains_(AtomContainer& ac);
+			void treatChains_();
 
 			//
 			void smoothCFSAngle_(Atom* seed);
@@ -254,7 +249,7 @@ namespace BALL
 			/**
 			 * Assemble the final structure diagram
 			 */
-			void assembleSD_(AtomContainer& ac);
+			void assembleSD_();
 
 			// The backtracking for our Floyd-Warshall implementation
 			void findFloydWarshallPath_(std::vector<int>& path, std::vector<Index>& next, Size remaining_atoms, Position i, Position j, std::list<Index>& output);
@@ -267,6 +262,9 @@ namespace BALL
 
 			/// our redraw queue
 			std::priority_queue<Atom*, std::vector<Atom*>, AtomComparator> redraw_queue_;
+
+			/// the system we are working on
+			System* system_;
 	};
 
 } // namepspace BALL

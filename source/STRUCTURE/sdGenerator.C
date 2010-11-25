@@ -44,7 +44,7 @@ namespace BALL
 	{
 	}
 
-	void SDGenerator::prepare_(System& molecule_sys)
+	void SDGenerator::prepare_()
 	{
 		// check if all hydrogen atoms should be deleted from the System
 		bool show_H = options.getBool(Option::SHOW_HYDROGENS);
@@ -54,7 +54,7 @@ namespace BALL
 			std::list<Atom*> to_delete;
 
 			AtomIterator at_it;
-			BALL_FOREACH_ATOM(molecule_sys, at_it)
+			BALL_FOREACH_ATOM(*system_, at_it)
 			{
 				if (at_it->getElement().getSymbol() == "H")
 				{
@@ -79,15 +79,15 @@ namespace BALL
 
 		// compute the smallest set of smallest rings and analyze them
 		// NOTE: the RingAnalyser sets the "InRing" property for us
-		molecule_sys.apply(ring_analyser_);
+		system_->apply(ring_analyser_);
 
 		// compute the Shelley priorities for each atom
-		computeShelleyPriorities_(molecule_sys);
+		computeShelleyPriorities_();
 
 		AtomIterator at_it;
 
 		// distinguish between ring-atoms and core-chain-atoms
-		BALL_FOREACH_ATOM(molecule_sys, at_it)
+		BALL_FOREACH_ATOM(*system_, at_it)
 		{
 			//  declare atoms as core-chain if they fulfil the following conditions:
 			//   - acylic
@@ -193,40 +193,64 @@ namespace BALL
 			for (Position i=0; i<to_pop; ++i)
 				redraw_queue_.pop();
 		}
+
+		// now remove all properties we put in (apart from InRing - this one which 
+		// might come in handy later...)
+		AtomIterator at_it;
+		BALL_FOREACH_ATOM(*system_, at_it)
+		{
+			for (Position i=FIRST_SDGENERATOR_PROPERTY; i<=LAST_SDGENERATOR_PROPERTY; ++i)
+			{
+				if (at_it->hasProperty(i))
+					at_it->clearProperty(i);
+			}
+
+			// also, we had some named properties we need to erase
+			String properties[9] = {"SDGenerator::NUM_REMOVED_HYDROGENS",
+			                        "SDGenerator::PRIORITY",
+			                        "SDGenerator::CFS_high",
+			                        "SDGenerator::CFS_low",
+			                        "SDGenerator::CFS_old_high",
+			                        "SDGenerator::CFS_old_low",
+			                        "SDGenerator::AngularDemand",
+			                        "SDGenerator::PFU_x_pos",
+			                        "SDGenerator::PFU_y_pos"};
+
+			for (Position i=0; i<9; ++i)
+			{
+				if (at_it->hasProperty(properties[i]))
+					at_it->clearProperty(properties[i]);
+			}
+		}
 	}
 
 	void SDGenerator::generateSD(System& molecule_sys)
 	{
+		// store the system
+		system_ = &molecule_sys;
+
+		// make sure that there is no old crap lying around
+		clear();
+
 		// distinguish between core-chain-atoms, ring-atoms, and others
-		prepare_(molecule_sys);
+		prepare_();
 
 		for (Size i = 0; i < ring_analyser_.getNumberOfRingSystems(); i++)
 		{
 			// construct each ringsystem in the suitable way
 			constructRingSystem_(i);
-			// TODO: ?????? ??? ?????? ??? ???????
-		std::vector<RingAnalyser::Ring> current_system = ring_analyser_.getRingSystem(i);
-			for (Position j = 0; j < current_system.size(); j++)
-			{
-		// test
-				for (Position k = 0; k < current_system[j].atoms.size(); k++)
-				{
-					current_system[j].atoms[k]->setProperty(SDGenerator::DEPOSITED);
-					current_system[j].atoms[k]->setProperty(SDGenerator::PRE_ASSEMBLED);
-				}
-			}
 		}
 
-		treatChains_(molecule_sys);
+		treatChains_();
 
 		// assemble the Structure Diagram from the prepared Fragments
-		assembleSD_(molecule_sys);
+		assembleSD_();
 
 		// put the hydrogens back
 		std::list<Atom*> to_add;
 
 		AtomIterator at_it;
-		BALL_FOREACH_ATOM(molecule_sys, at_it)
+		BALL_FOREACH_ATOM(*system_, at_it)
 		{
 			if (at_it->hasProperty("SDGenerator::NUM_REMOVED_HYDROGENS"))
 			{
@@ -270,7 +294,7 @@ namespace BALL
 		DEBUG("Structure Diagram has been generated.")
 	}
 
-	void SDGenerator::computeShelleyPriorities_(AtomContainer& ac)
+	void SDGenerator::computeShelleyPriorities_()
 	{
 		// compute the Shelley score for each atom, which is defined as follows:
 		//
@@ -285,14 +309,14 @@ namespace BALL
 		std::map<Atom*, int> last_scores, new_scores;
 		
 		AtomIterator at_it;
-		BALL_FOREACH_ATOM(ac, at_it) 
+		BALL_FOREACH_ATOM(*system_, at_it) 
 		{
 			last_scores[&*at_it] = (at_it->getProperty("InRing").getBool()) ? 2 : 0;
 		}
 
 		for (Position i=0; i<5; ++i)
 		{
-			BALL_FOREACH_ATOM(ac, at_it)
+			BALL_FOREACH_ATOM(*system_, at_it)
 			{
 				int& current_score = new_scores[&*at_it];
 				current_score = 3*last_scores[&*at_it];
@@ -311,7 +335,7 @@ namespace BALL
 		// NOTE: we always swap new_scores and last_scores in the loop,
 		//       so after the algorithm terminates, last_scores contains
 		//       the final values... alright, alright, don't shout....
-		BALL_FOREACH_ATOM(ac, at_it)
+		BALL_FOREACH_ATOM(*system_, at_it)
 		{
 			at_it->setProperty("SDGenerator::PRIORITY", last_scores[&*at_it]);
 		}
@@ -947,7 +971,7 @@ namespace BALL
 		}
 	}
 
-	void SDGenerator::treatChains_(AtomContainer& ac)
+	void SDGenerator::treatChains_()
 	{
 		// A chain is defined as the longest continuous path between core chain atoms,
 		// plus two capping (arbitrarily chosen) substituents not on the path.
@@ -966,7 +990,7 @@ namespace BALL
 
 		// initialize the core chain atoms with all candidates
 		AtomIterator at_it;
-		BALL_FOREACH_ATOM(ac, at_it)
+		BALL_FOREACH_ATOM(*system_, at_it)
 		{
 			if (at_it->hasProperty(SDGenerator::CORE_CHAIN))
 			{
@@ -1380,7 +1404,7 @@ namespace BALL
 		return result;
 	}
 
-	void SDGenerator::smoothCFSAngle_(Atom* seed)
+	void SDGenerator::smoothCFSAngle_(Atom* /*seed*/)
 	{
 		// TODO: implement the individual bond alignment!!!
 	}
@@ -1555,12 +1579,12 @@ namespace BALL
 		setCFS_(next_neighbour, getBackupCFS_(next_neighbour, false) + alpha, false);
 	} 
 
-	void SDGenerator::checkOverlap_(Atom* next_neighbour)
+	void SDGenerator::checkOverlap_(Atom* /*next_neighbour*/)
 	{
 		// TODO: implement!!!
 	}
 
-	void SDGenerator::assembleSD_(AtomContainer& ac)
+	void SDGenerator::assembleSD_()
 	{
 
 		// find the atom with maximum priority
@@ -1568,7 +1592,7 @@ namespace BALL
 		Atom *head_atom;
 
 		AtomIterator at_it;
-		BALL_FOREACH_ATOM(ac, at_it)
+		BALL_FOREACH_ATOM(*system_, at_it)
 		{
 			int value = at_it->getProperty("SDGenerator::PRIORITY").getInt();		
 
