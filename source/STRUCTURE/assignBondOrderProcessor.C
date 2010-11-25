@@ -2111,19 +2111,22 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 
 	void AssignBondOrderProcessor::storeOriginalConfiguration_()
 	{
-		starting_configuration_.valid = true;
+		starting_configuration_.push_back(Solution_());
+		starting_configuration_.back().valid = true;
+		starting_configuration_.back().ac = ac_;
 
 		AtomIterator a_it = ac_->beginAtom();
 		Atom::BondIterator b_it;
 		BALL_FOREACH_BOND(*ac_, a_it, b_it)
 		{
-			starting_configuration_.bond_orders[&*b_it] = b_it->getOrder();
+			starting_configuration_.back().bond_orders[&*b_it] = b_it->getOrder();
 		}
 	}
 
 	void AssignBondOrderProcessor::resetBondOrders()
 	{
-		apply_(starting_configuration_);
+		for (Position i=0; i<starting_configuration_.size(); ++i)
+			apply_(starting_configuration_[i]);
 		last_applied_solution_ = -1;
 	}
 
@@ -2207,12 +2210,12 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 			}
 
 			// set all the original bonds to the assigned order
-			AtomIterator a_it = ac_->beginAtom();
+			AtomIterator a_it = solution.ac->beginAtom();
 			Atom::BondIterator b_it = a_it->beginBond();
 
 			HashMap<Bond*, int> tmp_bond_orders = solution.bond_orders;
 
-			BALL_FOREACH_BOND(*ac_, a_it, b_it)
+			BALL_FOREACH_BOND(*solution.ac, a_it, b_it)
 			{
 				HashMap<Bond*, int>::Iterator it = tmp_bond_orders.find(&*b_it);
 				if (it != solution.bond_orders.end())
@@ -2227,7 +2230,7 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 
 			HashMap<Atom*, int> tmp_virtual_hydrogens = solution.number_of_virtual_hydrogens;
 
-			int num_of_atoms = ac_->countAtoms()+1;
+			int num_of_atoms = solution.ac->countAtoms()+1;
 
 			vector<Vector3> pos;
 			pos.push_back(Vector3(1.,0.,0.));
@@ -2235,9 +2238,9 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 			pos.push_back(Vector3(0.,0.,1.));
 			pos.push_back(Vector3(0.7,0.,0.7));
 
-			a_it = ac_->beginAtom();
+			a_it = solution.ac->beginAtom();
 			b_it = a_it->beginBond();
-			BALL_FOREACH_ATOM(*ac_, a_it)
+			BALL_FOREACH_ATOM(*solution.ac, a_it)
 			{
 				HashMap<Atom*, int>::Iterator it = tmp_virtual_hydrogens.find(&*a_it);
 				if (it != tmp_virtual_hydrogens.end())
@@ -2293,12 +2296,12 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 					// find all rings
 					vector<vector<Atom*> > rings;
 					RingPerceptionProcessor rpp;
-					rpp.calculateSSSR(rings, *ac_);
+					rpp.calculateSSSR(rings, *solutions_[i].ac);
 
 					// set the aromatic rings	
 					AromaticityProcessor ap;
 					ap.options.setBool(AromaticityProcessor::Option::OVERWRITE_BOND_ORDERS, true); 
-					ap.aromatize(rings, *ac_);
+					ap.aromatize(rings, *solutions_[i].ac);
 				}
 				else
 				{
@@ -2329,13 +2332,13 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 			apply(i);
 
 			// What kind of composite do we have?
-			if (RTTI::isKindOf<System>(*ac_))
+			if (RTTI::isKindOf<System>(*solutions_[i].ac))
 			{
-				return *(RTTI::castTo<System>(*ac_));
+				return *(RTTI::castTo<System>(*solutions_[i].ac));
 			}
-			else if (RTTI::isKindOf<Molecule>(*ac_))
+			else if (RTTI::isKindOf<Molecule>(*solutions_[i].ac))
 			{
-				Molecule* m = RTTI::castTo<Molecule>(*ac_);
+				Molecule* m = RTTI::castTo<Molecule>(*solutions_[i].ac);
 				return *(m->getSystem());
 			}
 			else
@@ -2723,6 +2726,7 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 	bool AssignBondOrderProcessor::solveILP_()
 	{
 		Solution_ solution;
+		solution.ac = ac_;
 
 		// Let lp_solve solve our problem
 		int ret = solve(ilp_);
@@ -2834,7 +2838,8 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 			total_charge(0.),
 			node_expansions(0),
 			queue_size(0),
-			parent(NULL)
+			parent(NULL),
+			ac(NULL)
 	{
 	}
 
@@ -2845,6 +2850,7 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 		Size total_num_of_bonds = abop->total_num_of_bonds_;
 		Size num_of_virtual_bonds = abop->num_of_virtual_bonds_;
 		parent = abop;
+		ac = abop->ac_;
 		
 		if (entry.bond_orders.size() != (total_num_of_bonds + num_of_virtual_bonds))
 	 	{
@@ -2954,6 +2960,7 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 		node_expansions = 0;
 		queue_size = 0;
 		parent = NULL;
+		ac = NULL;
 	}
 	
 	//////////////////////////// the PQ_Entry_ - class

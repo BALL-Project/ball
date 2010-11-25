@@ -521,6 +521,7 @@ namespace BALL
 					int node_expansions;
 					int queue_size;
 					AssignBondOrderProcessor* parent;
+					AtomContainer* ac;
 			};
 			
 			// Nested class storing a priority queue entry for the A-STAR-Option
@@ -798,7 +799,8 @@ namespace BALL
 			vector<Solution_> solutions_;
 
 			// the original conformation before we computed anything
-			Solution_ starting_configuration_; 
+			// this is a vector because we can have multiple molecules...
+			vector<Solution_> starting_configuration_; 
 			
 			// the inverse of the atom type penalty normalization factor
 			float atom_type_normalization_factor_;
