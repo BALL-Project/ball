@@ -21,7 +21,7 @@
 			functionality provided by BALL.
 
 		 <center><h1>Biochemical Algorithms Library</h1><p>Reference Manual</center>
-		\version 1.3.2
+		\version 1.4.0
 		\author 
 				- Tim Aubertin
 				- Christian Bender
@@ -42,6 +42,7 @@
 				- Bettina Leonhardt
 				- Andreas Moll
 				- Peter M&uuml;ller
+				- Sabine M&uuml;ller
 				- Stefan Nickels
 				- Alexander Rurainski
 				- Lara Schneider
