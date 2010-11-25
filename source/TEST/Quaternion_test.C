@@ -129,7 +129,7 @@ RESULT
 CHECK(void set(const TVector3<T>& axis, const T& angle))
 	Quaternion q(v,angle);
 	Quaternion q1;
-	q1.set(v,angle);
+	q1.fromAxisAngle(v,angle);
 	TEST_EQUAL(q1, q)
 RESULT	
 
