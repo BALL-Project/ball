@@ -4,7 +4,6 @@
 
 #include <BALL/STRUCTURE/sdGenerator.h>
 #include <BALL/STRUCTURE/ringAnalyser.h>
-#include <BALL/STRUCTURE/moleculeAssembler.h>
 
 #include <BALL/MATHS/matrix44.h>
 #include <BALL/KERNEL/system.h>

@@ -22,7 +22,6 @@ SET(SOURCES_LIST
 	HBondProcessor.C
 	hybridisationProcessor.C
 	kekulizer.C
-	moleculeAssembler.C
 	molecularGraph.C
 	numericalSAS.C
 	peptides.C
