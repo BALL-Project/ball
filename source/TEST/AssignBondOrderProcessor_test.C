@@ -1139,7 +1139,7 @@ CHECK(Option::MAX_NUMBER_OF_SOLUTIONS  - Default and value  using A*)
 	MOL2File mol_in2(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMHTAR01.mol2), std::ios::in);
 	mol_in2 >> sys2;
 	sys2.apply(testbop);
-	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), AssignBondOrderProcessor::Default::MAX_NUMBER_OF_SOLUTIONS)
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), (Size)AssignBondOrderProcessor::Default::MAX_NUMBER_OF_SOLUTIONS)
 	
 	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 5);
 	sys2.apply(testbop);
@@ -1155,7 +1155,7 @@ CHECK(Option::MAX_NUMBER_OF_SOLUTIONS  - Default and value  using A*)
 
 	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 5);
 	sys6.apply(testbop);
-	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 5)	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), (Size)5)	
 	
 	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 15);
 	sys6.apply(testbop);
@@ -1182,7 +1182,7 @@ CHECK(Option::MAX_NUMBER_OF_SOLUTIONS  - Default and value  using A*)
 	MOL2File mol_in2(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMHTAR01.mol2), std::ios::in);
 	mol_in2 >> sys2;
 	sys2.apply(testbop);
-	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), AssignBondOrderProcessor::Default::MAX_NUMBER_OF_SOLUTIONS)
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), (Size)AssignBondOrderProcessor::Default::MAX_NUMBER_OF_SOLUTIONS)
 	
 	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 5);
 	sys2.apply(testbop);
