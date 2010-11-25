@@ -46,7 +46,6 @@ SET(BALL_DATATYPE_TESTS
 	BitVector_test
 	Contour_test
 	ContourLine_test
-	List_test
 	Hash_test
 	HashMap_test
 	StringHashMap_test
