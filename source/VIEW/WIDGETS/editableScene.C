@@ -470,11 +470,10 @@ namespace BALL
 
 			// have we found such an atom? if so, is it different from the one we started with?
 			// (self bonds make no sense)
-			if (last_atom && 
-					current_atom_ &&
-					last_atom != current_atom_ &&
-					// workaround against crashes:
-					&last_atom->getRoot() == &current_atom_->getRoot())
+			if (last_atom &&  current_atom_ &&
+			    last_atom != current_atom_ &&
+			    // workaround against crashes:
+			    &last_atom->getRoot() == &current_atom_->getRoot())
 			{
 				// if we are really close to an atom, the endpoints of the line we draw will be set to
 				// its center, so that the user has a drop in effect for the bonds
