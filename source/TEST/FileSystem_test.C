@@ -20,9 +20,9 @@ using namespace BALL;
 
 const String& PS = FileSystem::PATH_SEPARATOR;
 CHECK(canonizePath(String& path) -- expansion of tilde)
-	String path("~" + PS + "test.dat");
+	String path("~/test.dat");
 	FileSystem::canonizePath(path);
-	TEST_EQUAL(path.hasSuffix(PS + "test.dat"), true)
+	TEST_EQUAL(path.hasSuffix("/test.dat"), true)
 #ifdef BALL_COMPILER_MSVC
 	TEST_EQUAL(path[0],'C')
 #else
