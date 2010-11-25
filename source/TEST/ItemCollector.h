@@ -3,9 +3,9 @@
 //
 
 #include <BALL/CONCEPT/comparator.h>
-#include <BALL/DATATYPE/list.h>
 #include <BALL/KERNEL/fragment.h>
 
+#include <list>
 #include <iostream>
 
 using namespace BALL;
