@@ -517,7 +517,19 @@ namespace BALL
 			abop.options.setBool(AssignBondOrderProcessor::Option::APPLY_FIRST_SOLUTION, false);
 			
 			// get the parameter folder
-			abop.options[AssignBondOrderProcessor::Option::INIFile] = ascii(bond_order_dialog_.parameter_file_edit->text());
+			//
+			// does the given INIFile exist?
+			String param_edit_value = ascii(bond_order_dialog_.parameter_file_edit->text());
+
+			Directory param_dir(FileSystem::path(param_edit_value));
+			if (param_dir.isValid() && param_dir.has(FileSystem::baseName(param_edit_value)))
+			{
+				abop.options[AssignBondOrderProcessor::Option::INIFile] = param_edit_value;
+			}
+			else
+			{
+				setStatusbarText((String)tr("The given parameter file does not exist! Using default!"), true);
+			}
 
 			// check for valid input
 			if (bond_order_dialog_.max_n_opt_solutions->text().toInt() < 1)

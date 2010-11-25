@@ -5,6 +5,7 @@
 #include <BALL/VIEW/WIDGETS/editableScene.h>
 
 #include <BALL/SYSTEM/path.h>
+#include <BALL/SYSTEM/directory.h>
 #include <BALL/SYSTEM/systemCalls.h>
 
 #include <BALL/KERNEL/system.h>
@@ -1627,7 +1628,6 @@ void EditableScene::computeBondOrders()
 		setStatusbarText((String)tr("Please highlight exactly one AtomContainer!"), true);
 		return;
 	}
-
 	AssignBondOrderConfigurationDialog& bond_order_dialog = ms->getBondOrderDialog();
 
 	AssignBondOrderProcessor abop;
@@ -1645,7 +1645,19 @@ void EditableScene::computeBondOrders()
 	abop.options[AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING]        = (bond_order_dialog.penalty_balance_slider->value()/100.);
 	
 	// get the parameter folder
-	abop.options[AssignBondOrderProcessor::Option::INIFile] = ascii(bond_order_dialog.parameter_file_edit->text());
+	//
+	// does the given INIFile exist?
+	String param_edit_value = ascii(bond_order_dialog.parameter_file_edit->text());
+
+	Directory param_dir(FileSystem::path(param_edit_value));
+	if (param_dir.isValid() && param_dir.has(FileSystem::baseName(param_edit_value)))
+	{
+		abop.options[AssignBondOrderProcessor::Option::INIFile] = param_edit_value;
+	}
+	else
+	{
+		setStatusbarText((String)tr("The given parameter file does not exist! Using default!"), true);
+	}
 
 	// check for valid inputs
 	if (bond_order_dialog.max_n_opt_solutions->text().toInt() < 1)
