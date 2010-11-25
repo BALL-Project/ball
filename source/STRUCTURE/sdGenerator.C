@@ -1278,15 +1278,11 @@ namespace BALL
 									if (*c_it == *n_it)
 									{
 										found_ccw = true;
+										next_substituent = *n_it;
 										break;
 									}
 								}
 							}
-						}
-
-						if (found_ccw)
-						{
-							next_substituent = *n_it;
 						}
 					}
 				}
@@ -1722,7 +1718,7 @@ namespace BALL
 					// the atom is pseudotrigonal
 					beta = Angle(2./3.*M_PI, true);
 				}
-s
+
 				// iterate over the unplaced substituents in the correct order
 				for (Position next_neighbour_index = 0; next_neighbour_index < sequence.size(); ++next_neighbour_index)
 				{
