@@ -1,5 +1,6 @@
 SET(LANGUAGES
 	de_DE
+	zh_TW
 )
 
 SET(LUPDATE_OPTIONS 
