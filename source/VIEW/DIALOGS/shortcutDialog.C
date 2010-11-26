@@ -30,7 +30,7 @@ namespace BALL
 			setObjectName(name);
 
 			// defines the dialogs Entry name
-			setWidgetStackName("Shortcuts");
+			setWidgetStackName(String(tr("Shortcuts")));
 
 			registerWidgets_();
 
@@ -55,7 +55,6 @@ namespace BALL
 
 		void  ShortcutDialog::initializeWidget(MainControl&)
 		{
-			std::cout << "TODO: read last used shortcuts from preferences" << std::endl;
 			PreferencesEntry::restoreValues();
 		}
 
@@ -70,14 +69,14 @@ namespace BALL
 			String filename = p.find("shortcuts_13.txt");
 			QString s = QFileDialog::getOpenFileName(
 			                0,
-			                "Choose a file to import shortcuts from",
+			                tr("Choose a file to import shortcuts from"),
 			                filename.c_str(),
 			                "Text files (*)");
 
 			if (s.isEmpty())
 			{
 				// TODO this method should not occure if the dialog was canceled
-				Log.warn()<< "Could not import shortcuts from file " << ascii(s) << std::endl;
+				Log.warn()<< (String)tr("Could not import shortcuts from file ") << ascii(s) << std::endl;
 				return;
 			}
 			else
@@ -93,7 +92,7 @@ namespace BALL
 
 			QString s = QFileDialog::getSaveFileName(
 			                0,
-			                "Choose a File to export Shortcuts",
+			                tr("Choose a File to export Shortcuts"),
 			                filename.c_str(),
 			                "Text files (*.*)");
 
@@ -103,7 +102,7 @@ namespace BALL
 			if (!ret)
 			{
 				// TODO this method should not occure if the dialog was canceled
-				Log.warn()<< "Could not export shortcuts to file " << ascii(s) << std::endl;
+				Log.warn()<< (String)tr("Could not export shortcuts to file ") << ascii(s) << std::endl;
 			}
 		}
 
@@ -112,17 +111,22 @@ namespace BALL
 			Path p;
 			String filename;
 
-			if(entry == "Default Shortcuts (Version 1.3)") {
+			if (entry == tr("Default Shortcuts (Version 1.3)"))
+			{
 				filename = p.find("BALLView/shortcuts_13.txt");
-			} else if(entry == "Legacy Shortcuts (Version 1.2)") {
+			} 
+			else if (entry == tr("Legacy Shortcuts (Version 1.2)")) 
+			{
 				filename = p.find("BALLView/shortcuts_12.txt");
-			} else if(entry == "Custom") {
+			} 
+			else if (entry == tr("Custom")) 
+			{
 				return;
 			}
 
 			if (filename.isEmpty())
 			{
-				setStatusbarText("Could not load legacy shortcuts.");
+				setStatusbarText((String)tr("Could not load legacy shortcuts."));
 				return;
 			}
 
@@ -141,12 +145,12 @@ namespace BALL
 			bool ret = registry->readShortcutsFromFile(filename);
 			if (!ret)
 			{
-				String description = "Could not load shortcuts from file " + filename + ".";
+				String description = (String)tr("Could not load shortcuts from file ") + filename + ".";
 				setStatusbarText(description);
 			}
 			else
 			{
-				String description = "Successfully loaded shortcuts from file " + filename + ".";
+				String description = (String)tr("Successfully loaded shortcuts from file ") + filename + ".";
 				setStatusbarText(description);
 			}
 		}

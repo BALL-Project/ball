@@ -141,7 +141,7 @@ namespace BALL
 
 		void PluginDialog::initializeWidget(MainControl&)
 		{	
-			insertMenuEntry(MainControl::TOOLS, "Load Plugin", this, SLOT(show()), "Shortcut|Tools|Load_Plugin");	
+			insertMenuEntry(MainControl::TOOLS, (String)tr("Load Plugin"), this, SLOT(show()), "Shortcut|Tools|Load_Plugin");	
 			PreferencesEntry::restoreValues();
 		}
 
@@ -173,7 +173,9 @@ namespace BALL
 				plugin_directories_view->addItem(plugin_dirs[i]);
 			}
 
-			for (std::list<PreferencesEntry*>::iterator child_it = child_entries_.begin(); child_it != child_entries_.end(); ++child_it)
+			for (std::list<PreferencesEntry*>::iterator child_it = child_entries_.begin(); 
+					 child_it != child_entries_.end(); 
+					 ++child_it)
 			{
 				(*child_it)->readPreferenceEntries(inifile);
 			}
@@ -214,11 +216,11 @@ namespace BALL
 			plugin_toggle_button->setEnabled(true);
 			if (active_plugin->isActive()) 
 			{
-				plugin_toggle_button->setText("Deactivate");
+				plugin_toggle_button->setText(tr("Deactivate"));
 			} 
 			else 
 			{
-				plugin_toggle_button->setText("Activate");
+				plugin_toggle_button->setText(tr("Activate"));
 			}
 
 			VIEWPlugin* active_view_plugin = qobject_cast<VIEWPlugin*>(active_object);
@@ -245,7 +247,7 @@ namespace BALL
 			QString plugin_path(BALL_PATH);
 			plugin_path += "/plugins";
 
-			QString dir = QFileDialog::getExistingDirectory(0, "Select a plugin directory", plugin_path);
+			QString dir = QFileDialog::getExistingDirectory(0, tr("Select a plugin directory"), plugin_path);
 			PluginManager& man = PluginManager::instance();
 			man.addPluginDirectory(dir, activate_all_plugins_check_box->isChecked());
 			model_.pluginsLoaded();
@@ -291,12 +293,12 @@ namespace BALL
 			if (active_plugin->isActive()) 
 			{
 				PluginManager::instance().stopPlugin(active_plugin);
-				plugin_toggle_button->setText("Activate");
+				plugin_toggle_button->setText(tr("Activate"));
 			} 
 			else 
 			{
 				PluginManager::instance().startPlugin(active_plugin);
-				plugin_toggle_button->setText("Deactivate");
+				plugin_toggle_button->setText(tr("Deactivate"));
 			}
 		}
 

@@ -51,7 +51,7 @@ namespace BALL
 				compound_names_ = item->data()->getSubstanceNames();
 			}
 			QDialogButtonBox* buttons = new QDialogButtonBox(QDialogButtonBox::Ok,Qt::Horizontal, this);
-			QPushButton* print_button = new QPushButton("Save to File", buttons);
+			QPushButton* print_button = new QPushButton(tr("Save to File"), buttons);
 			QVBoxLayout* mainLayout = new QVBoxLayout();
 			QVBoxLayout* resultGroupLayout = new QVBoxLayout();
 			QGroupBox* resultGroup = new QGroupBox(tr("Compounds"),this);
@@ -87,7 +87,7 @@ namespace BALL
 			}
 			else
 			{
-				QLabel* label = new QLabel("No data available, execute pipeline first");
+				QLabel* label = new QLabel(tr("No data available, execute pipeline first"));
 				resultGroupLayout->addWidget(label);
 				resultGroup->setLayout(resultGroupLayout);
 			}
@@ -96,7 +96,7 @@ namespace BALL
 			mainLayout->addWidget(buttons);
 			mainLayout->addStretch(1);
 			setLayout(mainLayout);	
-			setWindowTitle("Descriptors in " + item->name());
+			setWindowTitle(tr("Descriptors in ") + item->name());
 
 			connect(buttons, SIGNAL(accepted()), this, SLOT(accept()));
 			connect(print_button, SIGNAL(clicked()), this, SLOT(saveToFile()));
@@ -108,7 +108,9 @@ namespace BALL
 
 		void InputDataDialog::saveToFile()
 		{
-			QString filename = QFileDialog::getSaveFileName(this, tr("Save File as"),file_name_ +"_compounds.txt",tr("text (*.txt)"));
+			QString filename = QFileDialog::getSaveFileName(this, tr("Save File as"), 
+					                                            file_name_ + "_compounds.txt",
+																											tr("text") + " (*.txt)");
 			if (filename.isEmpty())
 			{
 				return;
