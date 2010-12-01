@@ -87,7 +87,7 @@ namespace BALL
 			}
 			else
 			{
-				QLabel* label = new QLabel(tr("No data available, execute pipeline first"));
+				QLabel* label = new QLabel(tr("No data available, please execute pipeline first."));
 				resultGroupLayout->addWidget(label);
 				resultGroup->setLayout(resultGroupLayout);
 			}
@@ -109,7 +109,7 @@ namespace BALL
 		void InputDataDialog::saveToFile()
 		{
 			QString filename = QFileDialog::getSaveFileName(this, tr("Save File as"), 
-					                                            file_name_ + "_compounds.txt",
+					                                            file_name_ + tr("_compounds") + ".txt",
 																											tr("text") + " (*.txt)");
 			if (filename.isEmpty())
 			{

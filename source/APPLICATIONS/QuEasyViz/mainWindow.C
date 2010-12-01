@@ -135,16 +135,17 @@ namespace BALL
 			//just for style-reasons 
 			setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
-			if(settings.size_x==0 || settings.size_y==0) showMaximized();
+			if (settings.size_x==0 || settings.size_y==0) 
+				showMaximized();
 			
 			drag_start_time = drag_start_time.now();
 			min_drag_time=0.3;
 			
-			String file = "QSAR"+settings.path_separator+"atomic_electron_affinities.data";
+			String file = "QSAR" + settings.path_separator + "atomic_electron_affinities.data";
 			String dir = p.find(file);
-			if(dir=="")
+			if (dir=="")
 			{
-				data_directory_ = executable_directory_+settings.path_separator+"data"+settings.path_separator;
+				data_directory_ = executable_directory_ + settings.path_separator + "data"+settings.path_separator;
 			}
 			else
 			{
@@ -153,7 +154,8 @@ namespace BALL
 			
 			read_descriptor_explanations_=0;
 			documentation_= 0;
-			if(settings.show_documentation) showDocumentation();
+			if (settings.show_documentation) 
+				showDocumentation();
 		}
 
 
@@ -212,30 +214,40 @@ namespace BALL
 			{
 				INIFile ini(file);
 				ini.read();
-				if(ini.hasEntry("QuEasyViz","input_data_path")) input_data_path = ini.getValue("QuEasyViz","input_data_path");
-				if(ini.hasEntry("QuEasyViz","config_path")) config_path = ini.getValue("QuEasyViz","config_path");
-				if(ini.hasEntry("QuEasyViz","window_size")) 
+				if (ini.hasEntry("QuEasyViz","input_data_path")) input_data_path = ini.getValue("QuEasyViz","input_data_path");
+				if (ini.hasEntry("QuEasyViz","config_path")) config_path = ini.getValue("QuEasyViz","config_path");
+				if (ini.hasEntry("QuEasyViz","window_size")) 
 				{
 					String s = ini.getValue("QuEasyViz","window_size");
 					size_x=s.getField(0).toInt(); size_y=s.getField(1).toInt();
 					main_window->resize(size_x,size_y);
 				}
-				if(ini.hasEntry("QuEasyViz","window_position"))
+				if (ini.hasEntry("QuEasyViz","window_position"))
 				{
 					String position = ini.getValue("QuEasyViz","window_position");
 					pos_x=position.getField(0).toInt(); pos_y=position.getField(1).toInt();
 					main_window->move(pos_x,pos_y);
 				}
-				if(ini.hasEntry("QuEasyViz","submit_prefix")) submit_prefix = ini.getValue("QuEasyViz","submit_prefix");
-				if(ini.hasEntry("QuEasyViz","tools_path")) tools_path = ini.getValue("QuEasyViz","tools_path");
-				if(ini.hasEntry("QuEasyViz","send_email")) send_email = ini.getValue("QuEasyViz","email").toBool();
-				if(ini.hasEntry("QuEasyViz","email_address")) email_address = ini.getValue("QuEasyViz","email_address");
-				if(ini.hasEntry("QuEasyViz","tmp_folder")) tmp_folder = ini.getValue("QuEasyViz","tmp_folder");
-				if(ini.hasEntry("QuEasyViz","path_separator")) path_separator = ini.getValue("QuEasyViz","path_separator");
-				if(ini.hasEntry("QuEasyViz","show_documentation")) show_documentation = ini.getValue("QuEasyViz","show_documentation").toBool();
+				if (ini.hasEntry("QuEasyViz","submit_prefix")) 
+					submit_prefix = ini.getValue("QuEasyViz","submit_prefix");
+				if (ini.hasEntry("QuEasyViz","tools_path")) 
+					tools_path = ini.getValue("QuEasyViz","tools_path");
+				if (ini.hasEntry("QuEasyViz","send_email")) 
+					send_email = ini.getValue("QuEasyViz","email").toBool();
+				if (ini.hasEntry("QuEasyViz","email_address")) 
+					email_address = ini.getValue("QuEasyViz","email_address");
+				if (ini.hasEntry("QuEasyViz","tmp_folder")) 
+					tmp_folder = ini.getValue("QuEasyViz","tmp_folder");
+				if (ini.hasEntry("QuEasyViz","path_separator")) 
+					path_separator = ini.getValue("QuEasyViz","path_separator");
+				if (ini.hasEntry("QuEasyViz","show_documentation")) 
+					show_documentation = ini.getValue("QuEasyViz","show_documentation").toBool();
 			}
 			// if there are unacceptable entries in the ini-file, ignore the file
-			catch(BALL::Exception::GeneralException e) { }
+			catch (BALL::Exception::GeneralException e) 
+			{
+				// do nothing
+		 	}
 		}
 
 
@@ -257,7 +269,7 @@ namespace BALL
 					exec = inputDialog.exec();
 
 					///if user accepts
-					if(exec==1)
+					if (exec==1)
 					{
 						/// read in the given activity numbers
 						inputDialog.getNumbers(); 
@@ -268,10 +280,10 @@ namespace BALL
 						throw InvalidInputDataItem(__FILE__,__LINE__);
 					}
 				}
-				catch(BALL::QSAR::Exception::InvalidActivityID e)
+				catch (BALL::QSAR::Exception::InvalidActivityID e)
 				{
 					ok = false;
-					QMessageBox::about(this, tr("Error"),tr("Invalid activity ID"));
+					QMessageBox::about(this, tr("Error"), tr("Invalid activity ID"));
 				}
 			}
 			return input;
@@ -306,7 +318,7 @@ namespace BALL
 				catch(BALL::QSAR::Exception::InvalidActivityID e)
 				{
 					ok = false;
-					QMessageBox::about(this, tr("Error"),tr("Invalid activity ID"));
+					QMessageBox::about(this, tr("Error"), tr("Invalid activity ID"));
 				}
 			}
 			return input;
@@ -329,7 +341,7 @@ namespace BALL
 					exec = csvInputDialog.exec();
 
 					///if user accepts
-					if(exec==1)
+					if (exec==1)
 					{
 						csvInputDialog.readNumY(); 
 						ok= true;
@@ -339,10 +351,10 @@ namespace BALL
 						throw InvalidInputDataItem(__FILE__,__LINE__);
 					}
 				}
-				catch(BALL::QSAR::Exception::InvalidActivityID e)
+				catch (BALL::QSAR::Exception::InvalidActivityID e)
 				{
 					ok = false;
-					QMessageBox::about(this, tr("Error"),tr("Invalid activity ID"));
+					QMessageBox::about(this, tr("Error"), tr("Invalid activity ID"));
 				}
 			}
 			return input;
@@ -365,14 +377,15 @@ namespace BALL
 			{
 				if (!input->checkForDiscreteY())
 				{
-					QMessageBox::information(this," ","Some class labels of this input file are not discrete values! Creation of a classification model is therefore not possible.");
+					QMessageBox::information(this, " ", 
+							tr("Some class labels of this input file are not discrete values! Creation of a classification model is therefore not possible."));
 					throw InvalidModelItem(__FILE__,__LINE__);	
 				}
 			}
 
 			modelConfigurationDialog_ = new ModelConfigurationDialog(model, input, this);
 
-			if(entry->parameterNames.size()==0 && !entry->kernel)
+			if (entry->parameterNames.size()==0 && !entry->kernel)
 			{
 				modelConfigurationDialog_->createModel();
 				model = modelConfigurationDialog_->modelItem();
@@ -441,7 +454,7 @@ namespace BALL
 				catch(InvalidK)
 				{
 					ok=false;
-					QMessageBox::information(this, tr(""),tr("Invalid value"));
+					QMessageBox::information(this, tr(""), tr("Invalid value"));
 				}
 			}
 			return item;
@@ -484,10 +497,10 @@ namespace BALL
 							throw InvalidValidationItem(__FILE__,__LINE__);		
 						}
 					}
-					catch(InvalidK)
+					catch (InvalidK)
 					{
 						ok=false;
-						QMessageBox::information(this, tr(""),tr("Invalid value"));
+						QMessageBox::information(this, tr(""), tr("Invalid value"));
 					}
 				}
 			}
@@ -533,7 +546,7 @@ namespace BALL
 		*/
 		void MainWindow::createActions()
 		 {
-			exitAct_ = new QAction(QIcon(IconLoader::instance().getIcon("actions/exit")),tr("E&xit"), this);
+			exitAct_ = new QAction(QIcon(IconLoader::instance().getIcon("actions/exit")), tr("Close"), this);
 			exitAct_->setShortcut(tr("Ctrl+Q"));
 			exitAct_->setStatusTip(tr("Exit the application"));
 			connect(exitAct_, SIGNAL(triggered()), this, SLOT(close()));
@@ -542,12 +555,12 @@ namespace BALL
 			aboutAct_->setStatusTip(tr("Show the application's About box"));
 			connect(aboutAct_, SIGNAL(triggered()), this, SLOT(about()));
 
-			clearAct_ = new QAction(QIcon(IconLoader::instance().getIcon("actions/clear_desktop")),tr("&Clear Desktop"), this);
+			clearAct_ = new QAction(QIcon(IconLoader::instance().getIcon("actions/clear_desktop")), tr("&Clear Desktop"), this);
 			clearAct_->setShortcut(tr("Ctrl+C"));
 			clearAct_->setStatusTip(tr("Clear the desktop"));
 			connect(clearAct_, SIGNAL(triggered()), this, SLOT(clearDesktop()));
 
-			delAct_ = new QAction(QIcon(IconLoader::instance().getIcon("actions/delete_item")),tr("&Delete Selection"), this);
+			delAct_ = new QAction(QIcon(IconLoader::instance().getIcon("actions/delete_item")), tr("&Delete Selection"), this);
 			delAct_->setStatusTip(tr("Delete the selected Item from the pipeline"));
 			delAct_->setShortcut(tr("Ctrl+D"));
 			connect(delAct_, SIGNAL(triggered()), this, SLOT(deleteItem()));
@@ -586,7 +599,8 @@ namespace BALL
 		// SLOT
 		void MainWindow::print()
 		{
-			if(checkForEmptyPipelines()) return;
+			if (checkForEmptyPipelines()) 
+				return;
 			
 			 QPrinter printer(QPrinter::HighResolution);
 			 QPrintDialog print_dialog(&printer,this);
@@ -601,14 +615,19 @@ namespace BALL
 		// SLOT
 		void MainWindow::printToFile()
 		{
-			if(checkForEmptyPipelines()) return;
+			if(checkForEmptyPipelines()) 
+				return;
 			
-			 QString file = QFileDialog::getSaveFileName(this, tr("Save File as"),(settings.config_path+"pipeline.eps").c_str(),tr("Graphic (*.eps *.ps *.pdf)"));
-			 if(file=="") return;
-			 QPrinter printer(QPrinter::HighResolution);
-			 QPainter painter(&printer);
-			 printer.setOutputFileName(file);
-			 view_scene_.render(&painter);
+			QString file = QFileDialog::getSaveFileName(this,
+			                  tr("Save File as"),
+												(settings.config_path+"pipeline.eps").c_str(), 
+												tr("Graphic") + " (*.eps *.ps *.pdf)");
+			if (file=="") 
+				return;
+			QPrinter printer(QPrinter::HighResolution);
+			QPainter painter(&printer);
+			printer.setOutputFileName(file);
+			view_scene_.render(&painter);
 		}
 
 
@@ -655,7 +674,7 @@ namespace BALL
 			h4_layout.addWidget(&edit4);
 			layout1->addLayout(&h4_layout);
 			
-			QCheckBox doc_checkbox("show documentation at start-up?");
+			QCheckBox doc_checkbox(tr("Show documentation at start-up?"));
 			doc_checkbox.setChecked(settings.show_documentation);
 			layout1->addWidget(&doc_checkbox);
 			
@@ -667,7 +686,7 @@ namespace BALL
 			QGroupBox cluster_settins(tr("Cluster submit settings"));
 			
 			QHBoxLayout h_layout;
-			QLabel label("Queue submitting command");
+			QLabel label(tr("Queue submitting command"));
 			QLineEdit edit;
 			edit.setText(settings.submit_prefix.c_str());
 			h_layout.addWidget(&label);
@@ -675,19 +694,19 @@ namespace BALL
 			layout2->addLayout(&h_layout);
 			
 			QHBoxLayout h2_layout;
-			QLabel label2("Path to QuEasyRun");
+			QLabel label2(tr("Path to QuEasyRun"));
 			QLineEdit edit2;
 			edit2.setText(settings.tools_path.c_str());
 			h2_layout.addWidget(&label2);
 			h2_layout.addWidget(&edit2);
 			layout2->addLayout(&h2_layout);
 			
-			QCheckBox checkbox("send email when job is finished?");
+			QCheckBox checkbox(tr("Send email when job is finished?"));
 			checkbox.setChecked(settings.send_email);
 			layout2->addWidget(&checkbox);
 			
 			QHBoxLayout h3_layout;
-			QLabel label3("email address");
+			QLabel label3(tr("Email address"));
 			QLineEdit edit3;
 			edit3.setText(settings.email_address.c_str());
 			h3_layout.addWidget(&label3);
@@ -728,7 +747,7 @@ namespace BALL
 			fileToolBar_->addSeparator();
 			fileToolBar_->addAction(exportAct_);
 			fileToolBar_->addAction(restoreAct_);
-			QAction* print = new QAction(QIcon(IconLoader::instance().getIcon("actions/printer1")),"Print",this);
+			QAction* print = new QAction(QIcon(IconLoader::instance().getIcon("actions/printer1")),tr("Print"),this);
 			fileToolBar_->addAction(print);
 			
 			fileToolBar_->addSeparator();
@@ -737,18 +756,18 @@ namespace BALL
 			fileToolBar_->addAction(fullscreen_action_);
 			fullscreen_action_->setShortcut(tr("Ctrl+F"));
 			connect(fullscreen_action_, SIGNAL(triggered()), this, SLOT(fullscreen()));
-			QAction* zoom_in_action = new QAction(QIcon(IconLoader::instance().getIcon("actions/zoom_in")),"zoom in",this);
+			QAction* zoom_in_action = new QAction(QIcon(IconLoader::instance().getIcon("actions/zoom_in")),tr("zoom in"),this);
 			zoom_in_action->setShortcut(tr("+"));
 			connect(zoom_in_action, SIGNAL(triggered()), this, SLOT(zoomIn()));
 			fileToolBar_->addAction(zoom_in_action);
-			QAction* zoom_out_action = new QAction(QIcon(IconLoader::instance().getIcon("actions/zoom_out")),"zoom out",this);
+			QAction* zoom_out_action = new QAction(QIcon(IconLoader::instance().getIcon("actions/zoom_out")),tr("zoom out"),this);
 			zoom_out_action->setShortcut(tr("-"));
 			connect(zoom_out_action, SIGNAL(triggered()), this, SLOT(zoomOut()));
 			fileToolBar_->addAction(zoom_out_action);
 
 			fileToolBar_->addSeparator();
 			
-			QAction* submit_action = new QAction(QIcon(IconLoader::instance().getIcon("actions/cluster")),"Submit job",this);
+			QAction* submit_action = new QAction(QIcon(IconLoader::instance().getIcon("actions/cluster")),tr("Submit job"),this);
 			fileToolBar_->addAction(executeAct_);
 			connect(print, SIGNAL(triggered()), this, SLOT(print()));
 			fileToolBar_->addAction(submit_action);
@@ -820,9 +839,9 @@ namespace BALL
 			{
 				uint no_models=0;
 				QGraphicsTextItem* text0 = new QGraphicsTextItem;
-				if(a==0) text0->setPlainText("Linear regression models");
-				else if(a==1) text0->setPlainText("Nonlinear regression models");
-				else if(a==2) text0->setPlainText("Classification models");
+				if (a==0) text0->setPlainText(tr("Linear regression models"));
+				else if(a==1) text0->setPlainText(tr("Nonlinear regression models"));
+				else if(a==2) text0->setPlainText(tr("Classification models"));
 				QGraphicsRectItem* rect0 = new QGraphicsRectItem(0,0,text0->boundingRect().width()+20,text0->boundingRect().height(),text0);
 				model_list_scene_.addItem(text0);
 				rect0->setPen(pen);
@@ -912,7 +931,7 @@ namespace BALL
 		{
 			if(!documentation_)
 			{
-				documentation_ = new QDockWidget("Documentation",this);
+				documentation_ = new QDockWidget(tr("Documentation"),this);
 				QTextBrowser* browser = new QTextBrowser(documentation_);
 				documentation_->setWidget(browser);
 				
@@ -962,7 +981,7 @@ namespace BALL
 			}
 			else
 			{
-				QMessageBox::information(this, tr(" "),tr("No item selected"));
+				QMessageBox::information(this, tr(" "), tr("No item selected"));
 			}
 			updatePipelineScene(); // remove junk from screen
 		}
@@ -1019,8 +1038,9 @@ namespace BALL
 		// SLOT
 		void MainWindow::restoreDesktop()
 		{
-			QString filename = QFileDialog::getOpenFileName(this, tr("Open File"),settings.config_path.c_str(),tr("Pipeline (*.tar.gz *.conf)"));
-			if(filename=="") return;
+			QString filename = QFileDialog::getOpenFileName(this, tr("Open File"), settings.config_path.c_str(), tr("Pipeline") + " (*.tar.gz *.conf)");
+			if (filename=="") 
+				return;
 			String s = filename.toStdString();
 			settings.config_path = s.substr(0,s.find_last_of(settings.path_separator)+1);
 			try
@@ -1029,7 +1049,7 @@ namespace BALL
 			}
 			catch(InvalidPipeline)
 			{
-				QMessageBox::about(this, tr("Error"),tr("Invalid Pipeline"));
+				QMessageBox::about(this, tr("Error"), tr("Invalid Pipeline"));
 			}
 		}
 
@@ -1043,13 +1063,13 @@ namespace BALL
 
 		BALL::String MainWindow::exportPipeline(bool no_immediate_archiving)
 		{
-			if(checkForEmptyPipelines()) return "";
+			if (checkForEmptyPipelines()) return "";
 			
-			QString filename = QFileDialog::getSaveFileName(this, tr("Save File as"),(settings.config_path+"config.tar.gz").c_str(),tr("Pipeline (*.tar.gz *.conf)"));
+			QString filename = QFileDialog::getSaveFileName(this, tr("Save File as"),(settings.config_path+"config.tar.gz").c_str(), tr("Pipeline") + " (*.tar.gz *.conf)");
 			String s = filename.toStdString();
-			if(filename=="") return s;
+			if (filename=="") return s;
 			
-			if(no_immediate_archiving && s.hasSuffix(".tar.gz"))
+			if (no_immediate_archiving && s.hasSuffix(".tar.gz"))
 			{
 				String tmp = s.before(".tar.gz");
 				filename = tmp.c_str();
@@ -1065,7 +1085,8 @@ namespace BALL
 		void MainWindow::saveItemsToFiles(String directory, String archive, String configfile)
 		{
 			bool use_tmp=0;
-			if(archive!="" && settings.tmp_folder!="") use_tmp=1;
+			if (archive!="" && settings.tmp_folder!="") 
+				use_tmp=1;
 			String files;
 			try
 			{
@@ -1078,7 +1099,7 @@ namespace BALL
 					String f1 = (*it)->savedAs().toStdString();
 					if(f1=="")
 					{
-						throw GeneralException(__FILE__,__LINE__,"SDF data saving error ", "SDF Input must be assigned a file to be saved to!");
+						throw GeneralException(__FILE__,__LINE__, tr("SDF data saving error "), tr("SDF Input must be assigned a file to be saved to!"));
 					}
 					String file = directory+f1;
 					if(use_tmp) file = settings.tmp_folder+settings.path_separator+f1;
@@ -1088,29 +1109,32 @@ namespace BALL
 				for (Pipeline<CSVInputDataItem*>::iterator it = csv_input_pipeline_.begin(); it != csv_input_pipeline_.end(); it++)
 				{
 					// if input has not been read, there is nothing to be saved
-					if(!(*it)->isDone() || (*it)->append()) continue;
+					if (!(*it)->isDone() || (*it)->append()) 
+						continue;
 					
 					QSARData* data= (*it)->data();
 					String f1 = (*it)->savedAs().toStdString();
-					if(f1=="")
+					if (f1=="")
 					{
-						throw GeneralException(__FILE__,__LINE__,"CSV saving error ", "CSV Item must be assigned a file to be saved to!");
+						throw GeneralException(__FILE__,__LINE__, tr("CSV saving error "), tr("CSV Item must be assigned a file to be saved to!"));
 					}
 					String file = directory+f1;
-					if(use_tmp) file = settings.tmp_folder+settings.path_separator+f1;
+					if (use_tmp) 
+						file = settings.tmp_folder+settings.path_separator+f1;
 					files+=f1+" ";
 					data->saveToFile(file);
 				}
 				for (Pipeline<InputPartitionItem*>::iterator it = partition_pipeline_.begin(); it != partition_pipeline_.end(); it++)
 				{
 					// if input has not been read, there is nothing to be saved
-					if(!(*it)->isDone() || (*it)->append()) continue;
+					if (!(*it)->isDone() || (*it)->append()) 
+						continue;
 					
 					QSARData* data= (*it)->data();
 					String f1 = (*it)->savedAs().toStdString();
-					if(f1=="")
+					if (f1=="")
 					{
-						throw GeneralException(__FILE__,__LINE__,"Input-partition saving error ", "Item must be assigned a file to be saved to!");
+						throw GeneralException(__FILE__,__LINE__, tr("Input-partition saving error "), tr("Item must be assigned a file to be saved to!"));
 					}
 					String file = directory+f1;
 					if(use_tmp) file = settings.tmp_folder+settings.path_separator+f1;
@@ -1125,7 +1149,7 @@ namespace BALL
 					String f1 = (*it)->savedAs().toStdString();
 					if(f1=="")
 					{
-						throw GeneralException(__FILE__,__LINE__,"Model saving error ", "Model must be assigned a file to be saved to!");
+						throw GeneralException(__FILE__,__LINE__, tr("Model saving error "), tr("Model must be assigned a file to be saved to!"));
 					}
 					String file = directory+f1;
 					if(use_tmp) file = settings.tmp_folder+settings.path_separator+f1;
@@ -1140,7 +1164,7 @@ namespace BALL
 					String f1 = (*it)->savedAs().toStdString();
 					if(f1=="")
 					{
-						throw GeneralException(__FILE__,__LINE__,"Validation saving error ", "Validation must be assigned a file to be saved to!");
+						throw GeneralException(__FILE__,__LINE__, tr("Validation saving error "), tr("Validation must be assigned a file to be saved to!"));
 					}
 					String file = directory+f1;
 					if(use_tmp) file = settings.tmp_folder+settings.path_separator+f1;
@@ -1155,7 +1179,7 @@ namespace BALL
 					String f1 = (*it)->savedAs().toStdString();
 					if(f1=="")
 					{
-						throw GeneralException(__FILE__,__LINE__,"Prediction saving error ", "Prediction must be assigned a file to be saved to!");
+						throw GeneralException(__FILE__,__LINE__, tr("Prediction saving error "), tr("Prediction must be assigned a file to be saved to!"));
 					}
 					String file = directory+f1;
 					if(use_tmp) file = settings.tmp_folder+settings.path_separator+f1;
@@ -1294,7 +1318,7 @@ namespace BALL
 			
 			if (maximum == 0)
 			{
-				QMessageBox::about(this,"No pipeline","There is no pipeline to be excuted yet!");
+				QMessageBox::about(this, tr("No pipeline"), tr("There is no pipeline to be excuted yet!"));
 				return;
 			}
 
@@ -1320,13 +1344,14 @@ namespace BALL
 				setProgressValue(value);
 			}
 			
-			timer.stop(); cout<<"Time for executing pipeline: "<<timer.getClockTime()<<endl;
+			timer.stop(); 
+			cout<<"Time for executing pipeline: "<<timer.getClockTime()<<endl;
 
 			progress_bar_->reset();
-			if(!done)
+			if (!done)
 			{
 				QMessageBox a;
-				a.about(this,"Information","Pipeline has not changed,\nso there was nothing to be done!");
+				a.about(this, tr("Warning:"), tr("Pipeline has not changed,\nso there was nothing to be done!"));
 			}
 			
 			updatePipelineScene();
@@ -1363,48 +1388,49 @@ namespace BALL
 			
 			try
 			{
-				if(configfile.size()>7 && configfile.substr(configfile.size()-7)==".tar.gz")
+				if (configfile.size()>7 && configfile.substr(configfile.size()-7)==".tar.gz")
 				{
 					archive = 1;
 					String call;
-					if(settings.tmp_folder=="") call = "cd "+directory;
+					if (settings.tmp_folder=="") 
+						call = "cd "+directory;
 					else call = "cd "+settings.tmp_folder;
 					call+="; tar -xzvf "+configfile+" > archive_contents.tmp";
 					system(call.c_str());  // extrace files from archive
 					
 					configfile = configfile.substr(0,configfile.size()-7)+".conf"; //config-file within archive will always have extension ".conf"
 				
-					if(settings.tmp_folder!="")
+					if (settings.tmp_folder!="")
 					{
 						int s = configfile.find_last_of(settings.path_separator);
 						configfile = settings.tmp_folder+settings.path_separator+configfile.substr(s+1);
 						directory = settings.tmp_folder+settings.path_separator;
 					}
 					
-					if(!ifstream(configfile.c_str())) // find config-file if archive has been renamed
+					if (!ifstream(configfile.c_str())) // find config-file if archive has been renamed
 					{
 						ifstream archive_contents;
 						string contents_file = directory+"/archive_contents.tmp";
 						archive_contents.open(contents_file.c_str());
 						
 						uint no_conf_files=0;
-						while(archive_contents)
+						while (archive_contents)
 						{
 							String item;
 							archive_contents >> item;
-							if(item.hasSuffix(".conf")) 
+							if (item.hasSuffix(".conf")) 
 							{
 								configfile=directory+settings.path_separator+item;
 								no_conf_files++;
 							}
 						}
-						if(no_conf_files==0)
+						if (no_conf_files==0)
 						{
-							throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Pipeline-archive reading error","No conf-file found in archive!");
+							throw BALL::Exception::GeneralException(__FILE__,__LINE__,tr("Pipeline-archive reading error"),tr("No conf-file found in archive!"));
 						}
-						else if(no_conf_files>1)
+						else if (no_conf_files>1)
 						{
-							throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Pipeline-archive reading error","More than one conf-file found in archive!");
+							throw BALL::Exception::GeneralException(__FILE__,__LINE__,tr("Pipeline-archive reading error"),tr("More than one conf-file found in archive!"));
 						}
 					}
 				}	
@@ -1412,9 +1438,9 @@ namespace BALL
 				ifstream file(configfile.c_str());
 				if(!file)
 				{
-					string txt="config-file '";
-					txt+=configfile+"' can not be found!";
-					throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Pipeline reading error",txt.c_str());
+					string txt =  "config-file '";
+					txt        += configfile+"' can not be found!";
+					throw BALL::Exception::GeneralException(__FILE__,__LINE__,tr("Pipeline reading error") ,txt.c_str());
 				}
 			
 				bool input_section=0;
@@ -1430,20 +1456,20 @@ namespace BALL
 				/// first of all, read [ItemPositions] section:
 				list<pair<double,double> > item_positions;
 				bool within_pos_section=0;
-				for(int i=0;!file.eof();i++)
+				for (int i=0;!file.eof();i++)
 				{
 					String line="";
 					getline(file,line);
-					if(line=="" || line.hasPrefix("#") || line.hasPrefix("//") || line.hasPrefix("%"))
+					if (line=="" || line.hasPrefix("#") || line.hasPrefix("//") || line.hasPrefix("%"))
 					{
 						continue;
 					}
-					if(line.hasPrefix("["))
+					if (line.hasPrefix("["))
 					{
-						if(within_pos_section) break;
-						else if(line.hasPrefix("[ItemPositions]")) within_pos_section=1;
+						if (within_pos_section) break;
+						else if (line.hasPrefix("[ItemPositions]")) within_pos_section=1;
 					}
-					else if(within_pos_section)
+					else if (within_pos_section)
 					{
 						double x = line.getField(0).toDouble(); double y = line.getField(1).toDouble();
 						item_positions.push_back(make_pair(x,y));
@@ -1454,32 +1480,32 @@ namespace BALL
 				file.open(configfile.c_str());
 
 				/// read all other sections
-				for(int i=0;!file.eof();i++)
+				for (int i=0;!file.eof();i++)
 				{
 					String line="";
 					getline(file,line);
 					
-					if(line=="" || line.hasPrefix("#") || line.hasPrefix("//") || line.hasPrefix("%"))
+					if (line=="" || line.hasPrefix("#") || line.hasPrefix("//") || line.hasPrefix("%"))
 					{
 						continue;
 					}
-					if(line.hasPrefix("["))
+					if (line.hasPrefix("["))
 					{
-						if(input_section) input_reader.readConfigSection(section,filenames_map,&item_positions,input_directory);
-						if(partitioner_section) input_reader.readConfigSection(section,filenames_map,&item_positions,input_directory);
-						if(model_section) new ModelItem(section,filenames_map,&item_positions,view_);
- 						if(fs_section) new FeatureSelectionItem(section,filenames_map,&item_positions,view_);
- 						if(val_section) new ValidationItem(section,filenames_map,&item_positions,view_);
-						if(pred_section) new PredictionItem(section,filenames_map,&item_positions,view_);
+						if (input_section) input_reader.readConfigSection(section,filenames_map,&item_positions,input_directory);
+						if (partitioner_section) input_reader.readConfigSection(section,filenames_map,&item_positions,input_directory);
+						if (model_section) new ModelItem(section,filenames_map,&item_positions,view_);
+ 						if (fs_section) new FeatureSelectionItem(section,filenames_map,&item_positions,view_);
+ 						if (val_section) new ValidationItem(section,filenames_map,&item_positions,view_);
+						if (pred_section) new PredictionItem(section,filenames_map,&item_positions,view_);
 						
 						input_section=0;model_section=0;fs_section=0;
 						val_section=0;pred_section=0;partitioner_section=0;
-						if(line.hasPrefix("[InputReader]")) input_section=1;
-						else if(line.hasPrefix("[InputPartitioner]")) partitioner_section=1;
-						else if(line.hasPrefix("[ModelCreator]")) model_section=1;
-						else if(line.hasPrefix("[FeatureSelector]")) fs_section=1;
-						else if(line.hasPrefix("[Validator]")) val_section=1;
-						else if(line.hasPrefix("[Predictor]")) pred_section=1;
+						if (line.hasPrefix("[InputReader]")) input_section=1;
+						else if (line.hasPrefix("[InputPartitioner]")) partitioner_section=1;
+						else if (line.hasPrefix("[ModelCreator]")) model_section=1;
+						else if (line.hasPrefix("[FeatureSelector]")) fs_section=1;
+						else if (line.hasPrefix("[Validator]")) val_section=1;
+						else if (line.hasPrefix("[Predictor]")) pred_section=1;
 						
 						section=line+"\n"; // save section header
 						continue;
@@ -1487,24 +1513,24 @@ namespace BALL
 					
 					section+=line+"\n"; // store line of current section
 				}
- 				if(input_section) input_reader.readConfigSection(section,filenames_map,&item_positions,input_directory);
-				if(partitioner_section) input_reader.readConfigSection(section,filenames_map,&item_positions,input_directory);
- 				if(model_section) new ModelItem(section,filenames_map,&item_positions,view_);
- 				if(fs_section) new FeatureSelectionItem(section,filenames_map,&item_positions,view_);
- 				if(val_section) new ValidationItem(section,filenames_map,&item_positions,view_);
-				if(pred_section) new PredictionItem(section,filenames_map,&item_positions,view_);
+ 				if (input_section) input_reader.readConfigSection(section,filenames_map,&item_positions,input_directory);
+				if (partitioner_section) input_reader.readConfigSection(section,filenames_map,&item_positions,input_directory);
+ 				if (model_section) new ModelItem(section,filenames_map,&item_positions,view_);
+ 				if (fs_section) new FeatureSelectionItem(section,filenames_map,&item_positions,view_);
+ 				if (val_section) new ValidationItem(section,filenames_map,&item_positions,view_);
+				if (pred_section) new PredictionItem(section,filenames_map,&item_positions,view_);
 				
 				file.close();
 			}
 			catch(BALL::Exception::GeneralException e)
 			{
 				QMessageBox::warning(this,e.getName(),e.getMessage());
-				if(archive)
+				if (archive)
 				{	
 					string file = directory+"archive_contents.tmp";
 					ifstream in(file.c_str());
 					String files="";
-					while(in)
+					while (in)
 					{
 						String tmp;
 						in >> tmp;
@@ -1522,7 +1548,7 @@ namespace BALL
 			/// read all items if respec. files exist in the folder of the config-file	
 			loadItemsFromFiles(directory);
 			
-			if(archive)
+			if (archive)
 			{	
 				string file = directory+"archive_contents.tmp";
 				ifstream in(file.c_str());
@@ -1555,8 +1581,8 @@ namespace BALL
 
 			QString name;
 			String configfile = filename.toStdString(); // has full path
-			String archive="";
-			if(configfile.size()>7 && configfile.substr(configfile.size()-7)==".tar.gz")
+			String archive = "";
+			if (configfile.size()>7 && configfile.substr(configfile.size()-7)==".tar.gz")
 			{
 				archive = configfile;
 				configfile = configfile.substr(0,configfile.size()-7)+".conf";
@@ -1566,7 +1592,8 @@ namespace BALL
 			String file_prefix = configfile.substr(s+1,d-s-1)+"_"; // name of config-file as prefix for output-files
 			String directory = configfile.substr(0,s+1); // name of folder
 			
-			if(archive!="" && settings.tmp_folder!="") configfile = settings.tmp_folder+settings.path_separator+configfile.substr(s+1);
+			if (archive!="" && settings.tmp_folder!="") 
+				configfile = settings.tmp_folder+settings.path_separator+configfile.substr(s+1);
 			ofstream out(configfile.c_str());
 			
 			ostringstream positions;
@@ -1621,19 +1648,20 @@ namespace BALL
 				DataItem* item = *it;
 				int type = item->type();
 				
-				if(type==CSVInputDataItem::Type)
+				if (type==CSVInputDataItem::Type)
 				{
 					CSVInputDataItem* csv_item = (CSVInputDataItem*) item;
-					if(csv_item->append()) continue;
+					if (csv_item->append()) 
+						continue;
 					input_writer.writeConfigSection(csv_item,out,directory);
 				}
-				else if(type==SDFInputDataItem::Type)
+				else if (type==SDFInputDataItem::Type)
 				{
 					SDFInputDataItem* sdf_item = (SDFInputDataItem*) item;
 					input_writer.writeConfigSection(sdf_item,out,positions,directory);
 					continue;
 				}
-				else if(type==PartitioningItem::Type)
+				else if (type==PartitioningItem::Type)
 				{
 					PartitioningItem* partitioner = (PartitioningItem*) item;
 					input_writer.writeConfigSection(partitioner,out,positions);
@@ -1641,10 +1669,11 @@ namespace BALL
 				}
 				else
 				{
-					if(type==ModelItem::Type)
+					if (type==ModelItem::Type)
 					{
 						ModelItem* model_item = (ModelItem*) item;
-						if (!model_item->saveAttribute()) continue;
+						if (!model_item->saveAttribute()) 
+							continue;
 					}
 					item->writeConfigSection(out);
 				}
@@ -1674,15 +1703,15 @@ namespace BALL
 
 		bool MainWindow::itemExists(DataItem* item)
 		{
-			if(sdf_input_pipeline_.contains((SDFInputDataItem*)item)) return 1;
-			if(csv_input_pipeline_.contains((CSVInputDataItem*)item)) return 1;
-			if(model_pipeline_.contains((ModelItem*)item)) return 1;
-			if(fs_pipeline_.contains((FeatureSelectionItem*)item)) return 1;
-			if(val_pipeline_.contains((ValidationItem*)item)) return 1;
-			if(prediction_pipeline_.contains((PredictionItem*)item)) return 1;
-			if(disconnected_items_.contains(item)) return 1;
-			if(partitioning_pipeline_.contains((PartitioningItem*)(item))) return 1;
-			if(partition_pipeline_.contains((InputPartitionItem*)item)) return 1;
+			if (sdf_input_pipeline_.contains((SDFInputDataItem*)item)) return 1;
+			if (csv_input_pipeline_.contains((CSVInputDataItem*)item)) return 1;
+			if (model_pipeline_.contains((ModelItem*)item)) return 1;
+			if (fs_pipeline_.contains((FeatureSelectionItem*)item)) return 1;
+			if (val_pipeline_.contains((ValidationItem*)item)) return 1;
+			if (prediction_pipeline_.contains((PredictionItem*)item)) return 1;
+			if (disconnected_items_.contains(item)) return 1;
+			if (partitioning_pipeline_.contains((PartitioningItem*)(item))) return 1;
+			if (partition_pipeline_.contains((InputPartitionItem*)item)) return 1;
 			
 			return 0;
 		}
@@ -1708,7 +1737,7 @@ namespace BALL
 			
 			String directory = configfile.substr(0,s+1); // name of folder
 			bool archive = configfile.hasSuffix(".tar.gz");
-			if(archive)
+			if (archive)
 			{
 				file_prefix = configfile.before(".tar.gz");
 				short_file_prefix = configfile.substr(s+1);
@@ -1720,25 +1749,25 @@ namespace BALL
 			ofstream out(script.c_str());
 			
 			String prog="";
-			if(settings.tools_path!="")
+			if (settings.tools_path!="")
 			{
 				prog=settings.tools_path+settings.path_separator;
 			}
 			prog.append("QPipeStarter");
 				
-			if(settings.send_email && settings.email_address!="")
+			if (settings.send_email && settings.email_address!="")
 			{	
 				out<<"setenv start_time `date`"<<endl;
 			}
 			out<<"cd "<<directory<<endl;
 			out<<prog<<" "<<configfile<<endl<<endl;
 			
-			if(archive)
+			if (archive)
 			{
 				out<<"tar -cz "<<short_file_prefix<<"* -f "<<short_file_prefix<<".tar.gz"<<endl;
 				out<<"rm -f "<<short_file_prefix<<"*.dat "<<short_file_prefix<<"*.mod "<<short_file_prefix<<"*.conf "<<script<<endl<<endl;	
 			}
-			if(settings.send_email && settings.email_address!="")
+			if (settings.send_email && settings.email_address!="")
 			{
 				out<<"echo \"Subject: "<<short_file_prefix<<" is ready!\\"<<endl<<"Process '"<<script<<"' is ready!\\"<<endl<<"Start Time: $start_time\\"<<endl<<"End time: `date`\\"<<endl<<"\\"<<endl<<" \" | sendmail "<<settings.email_address<<endl;
 			}
@@ -1756,7 +1785,7 @@ namespace BALL
 			int maximum = sdf_input_pipeline_.size() + csv_input_pipeline_.size() + model_pipeline_.size() + val_pipeline_.size() + prediction_pipeline_.size() + disconnected_items_.size(); //all items - fs-items (model items automatically created by feature selection are not exported)
 			if (maximum == 0)
 			{
-				QMessageBox::about(this,"No pipeline","There is no pipeline yet!");
+				QMessageBox::about(this,tr("No pipeline"),tr("There is no pipeline yet!"));
 				return 1;
 			}
 			return 0;
@@ -1768,7 +1797,7 @@ namespace BALL
 			const map<uint,String>* statistics = modelitem->getRegistryEntry()->getStatistics();
 			
 			// if there is just one registered statistic, don't bother the user with a useless question! 
-			if(statistics->size()==1)
+			if (statistics->size()==1)
 			{
 				return statistics->begin()->first;
 			}
@@ -1777,10 +1806,10 @@ namespace BALL
 			QVBoxLayout main_layout;
 			
 			QHBoxLayout h_layout;
-			QLabel label("Desired quality statistic");
+			QLabel label(tr("Desired quality statistic"));
 			QComboBox statistic_box;
 				
-			for(map<uint,String>::const_iterator it=statistics->begin(); it!=statistics->end(); ++it)
+			for (map<uint,String>::const_iterator it=statistics->begin(); it!=statistics->end(); ++it)
 			{
 				statistic_box.addItem(it->second.c_str(),it->first);
 			}
@@ -1794,7 +1823,8 @@ namespace BALL
 			connect(&buttons, SIGNAL(rejected()), &dialog, SLOT(reject()));
 			
 			bool ok = dialog.exec();
-			if(ok) return statistic_box.currentIndex();
+			if (ok) 
+				return statistic_box.currentIndex();
 			else return 0;	
 		}
 
@@ -1808,10 +1838,11 @@ namespace BALL
 		{
 			BALL::String t(value);
 			int index = (uint)t.find_last_not_of("0");
-			if(index!=(int)string::npos)
+			if (index!=(int)string::npos)
 			{
-				if(index+1<=(int)t.size()&&t[index]!='.') index++;
-				t=t.substr(0,index);
+				if (index+1<=(int)t.size() && (t[index]!='.')) 
+					index++;
+				t =t.substr(0,index);
 			}
 			return t;
 		}
@@ -1821,17 +1852,18 @@ namespace BALL
 		{
 			Path p;
 			
-			for(list<String>::iterator it = settings.descriptor_explanation_files.begin();
+			for (list<String>::iterator it = settings.descriptor_explanation_files.begin();
 				it!=settings.descriptor_explanation_files.end(); it++)
 			{
 				String filename = data_directory_+settings.path_separator+*it;
 				String abs_filename = p.find(filename);
-				if(abs_filename=="") abs_filename=filename;
+				if (abs_filename=="") 
+					abs_filename=filename;
 			
 				ifstream in(abs_filename.c_str());
-				if(!in)
+				if (!in)
 				{
-					cout<<"Error: feature-description file '"<<abs_filename<<"' not found!"<<endl;
+					cout << "Error: feature-description file '" << abs_filename << "' not found!" << endl;
 					return;
 				}
 				string name;
@@ -1840,7 +1872,8 @@ namespace BALL
 				{
 					String line; 
 					getline(in,line);
-					if(line==""||line=="\n") break;
+					if (line==""||line=="\n") 
+						break;
 					
 					name = line.before("\t");
 					explanation = line.after("\t");
@@ -1854,18 +1887,20 @@ namespace BALL
 
 		const BALL::String* MainWindow::getDescriptorExplanation(String descriptor_name)
 		{
-			if(!read_descriptor_explanations_) readDescriptorExplanations();
+			if (!read_descriptor_explanations_) 
+				readDescriptorExplanations();
 			
 			map<String,String>::iterator it = descriptor_explanations_.find(descriptor_name);
 			
-			if(it!=descriptor_explanations_.end()) return &it->second;
+			if (it!=descriptor_explanations_.end()) 
+				return &it->second;
 			else return NULL;
 		}
 
 		void MainWindow::setProgressValue(int value)
 		{
-			if(progress_bar_) progress_bar_->setValue(value);
-			QApplication::instance()->processEvents(QEventLoop::AllEvents,500);
+			if (progress_bar_) progress_bar_->setValue(value);
+			QApplication::instance()->processEvents(QEventLoop::AllEvents, 500);
 		}
 	}
 }
