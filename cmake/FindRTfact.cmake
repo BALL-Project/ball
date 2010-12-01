@@ -23,7 +23,8 @@ ELSE()
 	## Now, try to find the rtfact library itself.
 	FIND_LIBRARY(RTFACT_OPT_LIBRARY 
 		NAMES RTfactRemote
-		PATHS ${RTFACT_POSSIBLE_ROOT_DIRS} ${RTFACT_POSSIBLE_ROOT_DIRS}/remote/build ${RTFACT_POSSIBLE_ROOT_DIRS}/remote/build/Release
+		PATHS ${RTFACT_POSSIBLE_ROOT_DIRS} ${RTFACT_POSSIBLE_ROOT_DIRS}/remote/build ${RTFACT_POSSIBLE_ROOT_DIRS} ${RTFACT_POSSIBLE_ROOT_DIRS}/remote/build/lib ${RTFACT_POSSIBLE_ROOT_DIRS}/remote/build/Release ${RTFACT_POSSIBLE_ROOT_DIRS}/remote/build/lib/Release
+
 		PATH_SUFFIXES lib
 		DOC "RTfact library, optimized") 
 
