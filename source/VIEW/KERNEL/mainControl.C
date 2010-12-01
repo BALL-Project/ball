@@ -114,7 +114,7 @@ namespace BALL
 				shortcut_registry_(),
 				main_control_preferences_(0),
 				network_preferences_(0),
-				preferences_dialog_(new Preferences(this, "BALLView Preferences")),
+				preferences_dialog_(new Preferences(this, ((String)tr("BALLView Preferences")).c_str())),
 				preferences_file_(),
 				composites_locked_(false),
 				locking_widget_(0),
@@ -201,7 +201,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				if (BALL_data_path!= 0) bdp = String(BALL_data_path);
 
 				QMessageBox::critical(0, "Critical error",
-						QString("Could not read the FragmentDB data!\n") + 
+						QString(tr("Could not read the FragmentDB data!\n")) + 
 						"Please check, that the BALL_DATA_PATH or BALLVIEW_DATA_PATH\n" + 
 						"environment variable is set to the directory containing the\n" + 
 						"BALL or BALLView data directory (e.g. to C:\\BALL\\data).\n"+
@@ -216,7 +216,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 						QMessageBox::Abort,  Qt::NoButton);
 				Log.error() << e << std::endl;
 
-				throw Exception::GeneralException(__FILE__, __LINE__, "Datapath Error", "Could not read the FragmentDB");
+				throw Exception::GeneralException(__FILE__, __LINE__, ((String)tr("Datapath Error")).c_str(), ((String)tr("Could not read the FragmentDB")).c_str());
 			}
 
 			preferences_file_.read();

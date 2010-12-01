@@ -892,15 +892,15 @@ namespace BALL
 		{
 			const Camera& camera = stage_->getCamera();
 
-			String text((String)tr("ViewPoint: (") 
+			String text((String)tr("ViewPoint:") + " ("
 					+ String(camera.getViewPoint().x) + "|" 
 					+ String(camera.getViewPoint().y) + "|" 
 					+ String(camera.getViewPoint().z) 
-					+ (String)tr(")   LookAt: (") 
+					+ ")   " + (String)tr("LookAt:") + " (" 
 					+ String(camera.getLookAtPosition().x) + "|" 
 					+ String(camera.getLookAtPosition().y) + "|" 
 					+ String(camera.getLookAtPosition().z) 
-					+ (String)tr(")   LookUp: (") 
+					+ ")   " + (String)tr("LookUp") + ": (" 
 					+ String(camera.getLookUpVector().x) + "|" 
 					+ String(camera.getLookUpVector().y) + "|" 
 					+ String(camera.getLookUpVector().z) + ")");

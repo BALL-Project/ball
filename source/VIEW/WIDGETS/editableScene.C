@@ -1704,7 +1704,7 @@ void EditableScene::computeBondOrders()
 		String nr = abop.getNumberOfComputedSolutions();
 		setStatusbarText((String)tr("Found ") + nr + (String)tr(" bond order assignments."), true);
 	
-		Log.info()<< (String)tr("  > Result AssignBondOrderProcessor: ") << endl;
+		Log.info()<< "  > " + (String)tr("Result AssignBondOrderProcessor: ") << endl;
 
 		for (Size i = 0; i < abop.getNumberOfComputedSolutions(); i++)
 		{
@@ -1712,8 +1712,8 @@ void EditableScene::computeBondOrders()
 			stream_description.setf(std::ios_base::fixed);
 			stream_description.precision(2);
 
-			stream_description  << (String)tr("      Solution ") << i 
-			                    << (String)tr(" has penalty ") << abop.getTotalPenalty(i);
+			stream_description  << String("      ") + (String)tr("Solution ") << i << " " 
+			                    << (String)tr("has penalty") << " " << abop.getTotalPenalty(i);
 			//                  << ", charge " << abop.getTotalCharge(i)
 			//                  << ", " <<  abop.getNumberOfAddedHydrogens(i) << " added hydrogens.";
  
