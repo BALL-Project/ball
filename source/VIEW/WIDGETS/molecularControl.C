@@ -531,7 +531,7 @@ namespace BALL
 			
 			if (ac != 0)
 			{
-				setStatusbarText((String)::BALL::VIEW::MolecularControl::tr("Composite is from file") + "  " + ac->getProperty("FROM_FILE").getString());
+				setStatusbarText((String)::BALL::VIEW::MolecularControl::tr("Composite is from file") + String("  ") + ac->getProperty("FROM_FILE").getString());
 			}
 			else
 			{
