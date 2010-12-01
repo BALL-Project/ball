@@ -2,6 +2,22 @@
 <!DOCTYPE TS>
 <TS version="2.0">
 <context>
+    <name>::BALL::VIEW::MainControl</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>::BALL::VIEW::MolecularControl</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
     <name>AboutDialog</name>
     <message>
         <source>About BALLView</source>
@@ -363,29 +379,6 @@ Oliver Kohlbacher</source>
         <source>Bond Length</source>
         <translation>鍵長</translation>
     </message>
-    <message>
-        <source>close window, save options and start assignment</source>
-        <translation type="obsolete">
-            </translation>
-    </message>
-    <message>
-        <source>Reset all settings to default values</source>
-        <translation type="obsolete">
-            </translation>
-    </message>
-    <message>
-        <source>Defaults</source>
-        <translation type="obsolete">預設</translation>
-    </message>
-    <message>
-        <source>Close window and discard changes</source>
-        <translation type="obsolete">
-            </translation>
-    </message>
-    <message>
-        <source>C&amp;ancel</source>
-        <translation type="obsolete">取消 (&amp;A)</translation>
-    </message>
 </context>
 <context>
     <name>AssignBondOrderResultsDialogData</name>
@@ -455,10 +448,6 @@ Oliver Kohlbacher</source>
     <message>
         <source>Save File as</source>
         <translation>另存新檔</translation>
-    </message>
-    <message>
-        <source>text (*.txt)</source>
-        <translation type="obsolete">文字 (*.txt)</translation>
     </message>
     <message>
         <source>Save to File</source>
@@ -552,13 +541,297 @@ Oliver Kohlbacher</source>
     <name>BALL::VIEW::MainControl</name>
     <message>
         <source>Language Changed</source>
-        <translation type="obsolete">
+        <translation type="unfinished">
             </translation>
     </message>
     <message>
         <source>Changing the language only takes effect after restarting BALLView.</source>
-        <translation type="obsolete">
+        <translation type="unfinished">
             </translation>
+    </message>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate.</comment>
+        <translation></translation>
+    </message>
+    <message>
+        <source>&amp;File</source>
+        <translation type="unfinished">檔案 (&amp;F)</translation>
+    </message>
+    <message>
+        <source>BALLView Preferences</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not read the FragmentDB data!
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Datapath Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not read the FragmentDB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MainMenuBar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>update of model running</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>simulation running</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Grids</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Import</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Monitor File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Edit</source>
+        <translation type="unfinished">編輯 (&amp;E)</translation>
+    </message>
+    <message>
+        <source>&amp;Build</source>
+        <translation type="unfinished">建立 (&amp;B)</translation>
+    </message>
+    <message>
+        <source>&amp;Display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Viewpoint</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Create</source>
+        <translation type="unfinished">
+            </translation>
+    </message>
+    <message>
+        <source>&amp;Stereo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Animation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Molecular Mechanics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Force Field</source>
+        <translation type="unfinished">
+            </translation>
+    </message>
+    <message>
+        <source>&amp;Tools</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Python</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Windows</source>
+        <translation type="unfinished">視窗(&amp;W)</translation>
+    </message>
+    <message>
+        <source>&amp;User</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Macros</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Help</source>
+        <translation type="unfinished">求助(&amp;H)</translation>
+    </message>
+    <message>
+        <source>&amp;Quit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preferences</source>
+        <translation type="unfinished">偏好設定</translation>
+    </message>
+    <message>
+        <source>Cant apply preferences while beeing busy!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> objects selected.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Properties of atom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">種類</translation>
+    </message>
+    <message>
+        <source>Typename</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Position</source>
+        <translation type="unfinished">位置</translation>
+    </message>
+    <message>
+        <source>Charge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Distance between atom </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>and</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bond order</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>aromatic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Angle between atoms </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Torsion angle between atoms </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not restore settings of main windows</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not delete Representation while update is running!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Terminating calculation ...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Calculation terminated.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Empty logging file name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can not write projectfile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not load project file, while update is running!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not open the project file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>it doesnt seem to exist.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error while reading project file, could not read INIFile.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error while reading project file, could not read molecule.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not read Camera position from project.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a project file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saved project to </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quickload</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want to quickload?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>quick saving...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>quick saving finished</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>quick loading...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>quick loading finished</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not open file </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>because no file extension exists.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Opening file </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dont know how to open </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>. This extension is not supported.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -582,10 +855,6 @@ Oliver Kohlbacher</source>
         <source>About QuEasyViz</source>
         <translation type="unfinished">
             </translation>
-    </message>
-    <message>
-        <source>E&amp;xit</source>
-        <translation type="obsolete">離開 (&amp;X)</translation>
     </message>
     <message>
         <source>Ctrl+Q</source>
@@ -680,11 +949,6 @@ Oliver Kohlbacher</source>
         <translation>另存新檔</translation>
     </message>
     <message>
-        <source>Graphic (*.eps *.ps *.pdf)</source>
-        <translation type="obsolete">
-            </translation>
-    </message>
-    <message>
         <source>&amp;File</source>
         <translation>檔案 (&amp;F)</translation>
     </message>
@@ -769,11 +1033,6 @@ Oliver Kohlbacher</source>
     <message>
         <source>Open File</source>
         <translation type="unfinished">
-            </translation>
-    </message>
-    <message>
-        <source>Pipeline (*.tar.gz *.conf)</source>
-        <translation type="obsolete">
             </translation>
     </message>
     <message>
@@ -1100,6 +1359,296 @@ so there was nothing to be done!</source>
         <source>Kernel Parameters</source>
         <translation type="unfinished">
             </translation>
+    </message>
+</context>
+<context>
+    <name>BALL::VIEW::MolecularControl</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate.</comment>
+        <translation></translation>
+    </message>
+    <message>
+        <source>MolecularControlList</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name [highlight]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">種類</translation>
+    </message>
+    <message>
+        <source>checked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished">清除</translation>
+    </message>
+    <message>
+        <source>Clear the selection.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation type="unfinished">
+            </translation>
+    </message>
+    <message>
+        <source>Show a help dialog.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select</source>
+        <translation type="unfinished">選擇</translation>
+    </message>
+    <message>
+        <source>Apply the current expression.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Paste a copied or cuted object into current selected object.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid Combination, cant paste into this entity.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>One item must be selected to paste into.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No copied/cuted object.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Simulation running, cant paste meanwhile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Update of Representation running, cant paste meanwhile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No item copied/cuted or simulation running</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear the items in the clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No item selected or simulation running</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ContextMenu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ModelMenu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom</source>
+        <translation type="unfinished">自訂</translation>
+    </message>
+    <message>
+        <source>ColorMenu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create Representation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deselect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Focus</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Count items</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Atom Overview</source>
+        <translation type="unfinished">
+            </translation>
+    </message>
+    <message>
+        <source>Atom Overview for Selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Properties</source>
+        <translation type="unfinished">性質</translation>
+    </message>
+    <message>
+        <source>Show Bonds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Collapse all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Expand all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Highlight Selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Secondary Structures</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Paste</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Atom has no bonds!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Composite is from file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Composite is not from file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No changes allowed, while simulation is running or creating new representations!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Select</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a molecular object to see its position in the scene or to mark it for a simulation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Deselect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deselect a molecular object.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cu&amp;t</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Paste</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear Clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Distance Label</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Render a label for the distance between two highlighted atoms</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Angle Label</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Render a label for the angle between three highlighted atoms</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>copied </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> objects</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pasted </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not paste, no or more than 1 item selected!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Composite </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> already added!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> Residues</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> Atoms</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> Bonds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid expression </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Selected </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> atoms.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot select items now!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2912,20 +3461,6 @@ so there was nothing to be done!</source>
             </translation>
     </message>
     <message>
-        <source>Export</source>
-        <translation type="obsolete">
-            </translation>
-    </message>
-    <message>
-        <source>C&amp;ancel</source>
-        <translation type="obsolete">取消 (&amp;A)</translation>
-    </message>
-    <message>
-        <source>All choesen representations can be exported into a common file but it is also possible to split the export espeacially if some of the representations shall be prototyped.</source>
-        <translation type="obsolete">
-            </translation>
-    </message>
-    <message>
         <source>Split Representations</source>
         <translation type="unfinished">
             </translation>
@@ -3299,13 +3834,6 @@ so there was nothing to be done!</source>
     <message>
         <source>Cancel</source>
         <translation>取消</translation>
-    </message>
-</context>
-<context>
-    <name>FragmentEditor</name>
-    <message>
-        <source>Edit</source>
-        <translation type="obsolete">編輯</translation>
     </message>
 </context>
 <context>
@@ -4332,298 +4860,6 @@ so there was nothing to be done!</source>
     </message>
 </context>
 <context>
-    <name>MainControl</name>
-    <message>
-        <source>Language Changed</source>
-        <translation type="unfinished">
-            </translation>
-    </message>
-    <message>
-        <source>Changing the language only takes effect after restarting BALLView.</source>
-        <translation type="unfinished">
-            </translation>
-    </message>
-    <message>
-        <source>MainMenuBar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>update of model running</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>simulation running</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>BALLView Preferences</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;File</source>
-        <translation type="unfinished">檔案 (&amp;F)</translation>
-    </message>
-    <message>
-        <source>&amp;Open</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Grids</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Import</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Export</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Monitor File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Edit</source>
-        <translation type="unfinished">編輯 (&amp;E)</translation>
-    </message>
-    <message>
-        <source>&amp;Build</source>
-        <translation type="unfinished">建立 (&amp;B)</translation>
-    </message>
-    <message>
-        <source>&amp;Display</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Viewpoint</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Create</source>
-        <translation type="unfinished">
-            </translation>
-    </message>
-    <message>
-        <source>&amp;Stereo</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Animation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Molecular Mechanics</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Force Field</source>
-        <translation type="unfinished">
-            </translation>
-    </message>
-    <message>
-        <source>&amp;Tools</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Python</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Windows</source>
-        <translation type="unfinished">視窗(&amp;W)</translation>
-    </message>
-    <message>
-        <source>&amp;User</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Macros</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Help</source>
-        <translation type="unfinished">求助(&amp;H)</translation>
-    </message>
-    <message>
-        <source>&amp;Quit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Preferences</source>
-        <translation type="unfinished">偏好設定</translation>
-    </message>
-    <message>
-        <source>Cant apply preferences while beeing busy!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source> objects selected.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Properties of atom</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation type="unfinished">種類</translation>
-    </message>
-    <message>
-        <source>Typename</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Position</source>
-        <translation type="unfinished">位置</translation>
-    </message>
-    <message>
-        <source>Charge</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Distance between atom </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>and</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bond order</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>aromatic</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Angle between atoms </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Torsion angle between atoms </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not restore settings of main windows</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not delete Representation while update is running!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Terminating calculation ...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Calculation terminated.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Empty logging file name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Can not write projectfile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not load project file, while update is running!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not open the project file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>it doesnt seem to exist.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Error while reading project file, could not read INIFile.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Error while reading project file, could not read molecule.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not read Camera position from project.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Select a project file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Quickload</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Do you really want to quickload?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>quick saving...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>quick saving finished</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>quick loading...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>quick loading finished</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not open file </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>because no file extension exists.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Opening file </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Dont know how to open </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>. This extension is not supported.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Saved project to </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not read the FragmentDB data!
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Datapath Error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not read the FragmentDB</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>MainControlPreferencesData</name>
     <message>
         <source>MainControlPreferences</source>
@@ -5282,287 +5518,6 @@ so there was nothing to be done!</source>
     </message>
     <message>
         <source>alpha</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>MolecularControl</name>
-    <message>
-        <source>MolecularControlList</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Name [highlight]</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation type="unfinished">種類</translation>
-    </message>
-    <message>
-        <source>checked</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Clear the selection.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Help</source>
-        <translation type="unfinished">
-            </translation>
-    </message>
-    <message>
-        <source>Show a help dialog.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Select</source>
-        <translation type="unfinished">選擇</translation>
-    </message>
-    <message>
-        <source>Apply the current expression.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Paste a copied or cuted object into current selected object.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid Combination, cant paste into this entity.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>One item must be selected to paste into.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No copied/cuted object.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Simulation running, cant paste meanwhile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Update of Representation running, cant paste meanwhile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No item copied/cuted or simulation running</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Clear the items in the clipboard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No item selected or simulation running</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ContextMenu</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ModelMenu</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Custom</source>
-        <translation type="unfinished">自訂</translation>
-    </message>
-    <message>
-        <source>ColorMenu</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Create Representation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Deselect</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Focus</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Count items</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Atom Overview</source>
-        <translation type="unfinished">
-            </translation>
-    </message>
-    <message>
-        <source>Atom Overview for Selection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Properties</source>
-        <translation type="unfinished">性質</translation>
-    </message>
-    <message>
-        <source>Show Bonds</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Collapse all</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Expand all</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Highlight Selection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show Secondary Structures</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cut</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Copy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Paste</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Move</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Atom has no bonds!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Composite is from file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Composite is not from file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No changes allowed, while simulation is running or creating new representations!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Select</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Select a molecular object to see its position in the scene or to mark it for a simulation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Deselect</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Deselect a molecular object.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cu&amp;t</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Clear Clipboard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Distance Label</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Render a label for the distance between two highlighted atoms</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Angle Label</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Render a label for the angle between three highlighted atoms</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>copied </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source> objects</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Pasted </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not paste, no or more than 1 item selected!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Composite </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source> already added!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source> Residues</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source> Atoms</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source> Bonds</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid expression </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Selected </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source> atoms.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cannot select items now!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6263,10 +6218,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>O&amp;K</source>
         <translation>O&amp;K</translation>
-    </message>
-    <message>
-        <source>&amp;Apply</source>
-        <translation type="obsolete">套用 (&amp;A)</translation>
     </message>
     <message>
         <source>Please select an (child) entry on the left side!</source>
@@ -7658,11 +7609,6 @@ p, li { white-space: pre-wrap; }
             </translation>
     </message>
     <message>
-        <source>Downsampling factor</source>
-        <translation type="obsolete">
-            </translation>
-    </message>
-    <message>
         <source>Smoothness of the interpolation between stored 3D positions.</source>
         <translation type="unfinished">
             </translation>
@@ -7966,11 +7912,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>&amp;Apply</source>
         <translation>套用 (&amp;A)</translation>
-    </message>
-    <message>
-        <source>Close window without resetting camera</source>
-        <translation type="obsolete">
-            </translation>
     </message>
     <message>
         <source>Close window without reseting camera</source>
