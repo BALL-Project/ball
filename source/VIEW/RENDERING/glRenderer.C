@@ -1188,20 +1188,24 @@ namespace BALL
 			QRect r = fm.boundingRect(text);
 
 			int border = 2;
-			QPixmap pm(r.size() + QSize(border * 2, border * 2));
+			QImage pm(r.size() + QSize(border * 2, border * 2), QImage::Format_ARGB32_Premultiplied);
 
 			QPainter p;
 			p.begin(&pm);
 				p.setFont(label.getFont());
-				pm.fill(scene_->getStage()->getBackgroundColor().getQColor());
+				p.setCompositionMode(QPainter::CompositionMode_Source);
+				p.fillRect(pm.rect(), Qt::transparent);
+				p.setCompositionMode(QPainter::CompositionMode_SourceOver);
 				p.setPen(label.getColor().getQColor());
 				p.drawText(-r.x() + border, -r.y() + border, text);
 			p.end();
 
-			QImage data = pm.toImage();
-			QImage gldata = QGLWidget::convertToGLFormat(data);
+			QImage gldata = QGLWidget::convertToGLFormat(pm);
 
-			glDrawPixels(data.width(), data.height(), GL_RGBA, GL_UNSIGNED_BYTE, gldata.bits());
+			glPushAttrib(GL_BLEND);
+			glEnable(GL_BLEND);
+			glDrawPixels(pm.width(), pm.height(), GL_RGBA, GL_UNSIGNED_BYTE, gldata.bits());
+			glPopAttrib();
 
 			glPopMatrix();
 			glEnable(GL_LIGHTING);
