@@ -130,7 +130,7 @@ namespace BALL
 				if (   ((last_camera_position - position   ).getSquareLength() > 1e-5)
 						 ||((last_camera_view_vec - view_vector).getSquareLength() > 1e-5)
 						 ||((last_camera_lookup   - look_up    ).getSquareLength() > 1e-5))
-						m_renderer.pauseAnimation(false);
+						m_renderer.useProgressiveRefinement(false);
 			}
 
 			m_renderer.setCameraPosition(float3(position.x, position.y, position.z),
@@ -516,7 +516,7 @@ namespace BALL
 			}
 
 			if (rtfact_needs_update_ && use_continuous_loop_)
-				m_renderer.pauseAnimation(false);
+				m_renderer.useProgressiveRefinement(false);
 
 			objects_[&rep] = rt_data;
 		}
@@ -537,7 +537,7 @@ namespace BALL
 				rtfact_needs_update_ = true;
 
 				if (use_continuous_loop_ && !rep.isHidden())
-					m_renderer.pauseAnimation(false);
+					m_renderer.useProgressiveRefinement(false);
 
 				objects_.erase(&rep);
 			}
@@ -547,7 +547,7 @@ namespace BALL
 		{
 			Renderer::useContinuousLoop(use_loop);
 
-			m_renderer.pauseAnimation(use_loop);
+			m_renderer.useProgressiveRefinement(use_loop);
 		}
 
 		void RTfactRenderer::renderToBufferImpl(FrameBufferPtr buffer)
@@ -602,7 +602,7 @@ namespace BALL
 
 				if (use_continuous_loop_)
 				{
-					m_renderer.pauseAnimation(true);
+					m_renderer.useProgressiveRefinement(true);
 				}
 			}
 		}
