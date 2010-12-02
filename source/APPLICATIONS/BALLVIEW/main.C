@@ -5,7 +5,7 @@
 //
 
 // order of includes is important: first qapplication, than BALL includes
-#include <QtGui/qapplication.h>
+#include <QtGui/QApplication>
 #include <BALL/CONFIG/config.h>
 
 #ifdef BALL_HAS_GLEW

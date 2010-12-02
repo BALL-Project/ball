@@ -11,7 +11,7 @@
 #	include <BALL/VIEW/WIDGETS/dockWidget.h>
 #endif
 
-#include <QtCore/qtimer.h>
+#include <QtCore/QTimer>
 #include <QtCore/QDateTime>
 
 class QAction;

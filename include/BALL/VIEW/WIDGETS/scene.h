@@ -29,8 +29,8 @@
 # include <BALL/VIEW/RENDERING/renderSetup.h>
 #endif
 
-#include <QtCore/qthread.h>
-#include <QtCore/qtimer.h>
+#include <QtCore/QThread>
+#include <QtCore/QTimer>
 #include <QtGui/QDragEnterEvent>
 #include <QtGui/QWheelEvent>
 #include <QtGui/QKeyEvent>

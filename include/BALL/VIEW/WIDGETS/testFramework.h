@@ -19,7 +19,7 @@
 # include <BALL/SYSTEM/timer.h>
 #endif
 
-#include <QtCore/qthread.h>
+#include <QtCore/QThread>
 
 class QAction;
 

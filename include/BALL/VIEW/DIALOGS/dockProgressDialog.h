@@ -18,8 +18,8 @@
 # include <BALL/STRUCTURE/DOCKING/dockingAlgorithm.h>
 #endif
 
-#include <QtCore/qtimer.h>
-#include <QtCore/qdatetime.h>
+#include <QtCore/QTimer>
+#include <QtCore/QDateTime>
 
 #include <BALL/VIEW/UIC/ui_dockProgressDialog.h>
 

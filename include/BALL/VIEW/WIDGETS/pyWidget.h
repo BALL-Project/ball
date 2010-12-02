@@ -30,7 +30,7 @@
 #include <QtGui/QValidator>
 #include <QtCore/QStringList>
 
-#include <QtCore/qthread.h>
+#include <QtCore/QThread>
 
 // currently doesnt work right
 #undef BALL_QT_HAS_THREADS

@@ -21,7 +21,7 @@
 # include <BALL/SYSTEM/mutex.h>
 #endif
 
-#include <QtCore/qthread.h>
+#include <QtCore/QThread>
 
 namespace BALL {
 	namespace VIEW {

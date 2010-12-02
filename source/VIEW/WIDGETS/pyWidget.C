@@ -17,7 +17,7 @@
 #include <BALL/SYSTEM/directory.h>
 
 #include <QtGui/QFileDialog>
-#include <QtGui/qapplication.h>
+#include <QtGui/QApplication>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QDropEvent>
 #include <QtGui/QTextCursor>

@@ -19,7 +19,7 @@
 #	include <BALL/VIEW/DIALOGS/editOperationDialog.h>
 #endif
 
-#include <QtGui/qtabwidget.h>
+#include <QtGui/QTabWidget>
 namespace BALL
 {
 	namespace VIEW

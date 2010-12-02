@@ -43,10 +43,10 @@
 
 #include <QtGui/QKeySequence>
 #include <QtGui/QMainWindow>
-#include <QtGui/qapplication.h>
-#include <QtGui/qmenubar.h> 
-#include <QtGui/qlabel.h>
-#include <QtCore/qtimer.h>
+#include <QtGui/QApplication>
+#include <QtGui/QMenuBar> 
+#include <QtGui/QLabel>
+#include <QtCore/QTimer>
 
 namespace BALL
 {

@@ -29,7 +29,7 @@
 # include <BALL/VIEW/KERNEL/threads.h>
 #endif
 
-#include <QtCore/qtimer.h>
+#include <QtCore/QTimer>
 #include <QtGui/QLabel>
 
 class QLabel;
