@@ -904,7 +904,7 @@ namespace BALL
 		Angle second_CFS_old_high = getCFS_(atoms[second_anchor_point], true);
 
 		// now, update the circular free sweep
-		computeCoreCFS_(ring, true);
+		computeCoreCFS_(ring, ringIsClockwise_(ring, second_anchor_point));
 
 		// and get the new CFS values at the anchor
 		Angle first_CFS_new_low  = getCFS_(atoms[first_anchor_point], false);
@@ -1578,6 +1578,15 @@ namespace BALL
 	void SDGenerator::checkOverlap_(Atom* /*next_neighbour*/)
 	{
 		// TODO: implement!!!
+	}
+
+	bool SDGenerator::ringIsClockwise_(const RingAnalyser::Ring& ring, Index start_index) const
+	{
+		const Atom* a = ring.atoms[(start_index + 0) % ring.atoms.size()];
+		const Atom* b = ring.atoms[(start_index + 1) % ring.atoms.size()];
+		const Atom* c = ring.atoms[(start_index + 2) % ring.atoms.size()];
+
+		return ((b->getPosition() - a->getPosition()) % (c->getPosition() - b->getPosition())).z < 0;
 	}
 
 	void SDGenerator::assembleSD_()

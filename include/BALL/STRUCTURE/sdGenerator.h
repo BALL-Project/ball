@@ -246,6 +246,9 @@ namespace BALL
 			//
 			void checkOverlap_(Atom* atom);
 
+			//Check whether the ring is clockwise or not
+			bool ringIsClockwise_(const RingAnalyser::Ring& ring, Index start_index = 0) const;
+
 			/**
 			 * Assemble the final structure diagram
 			 */
