@@ -531,7 +531,7 @@ namespace BALL
 			
 			if (ac != 0)
 			{
-				setStatusbarText((String)tr("Composite is from file") + String("  ") + ac->getProperty("FROM_FILE").getString());
+				setStatusbarText((String)tr("Composite is from file") + String("  ") + (String)ac->getProperty("FROM_FILE").getString());
 			}
 			else
 			{
