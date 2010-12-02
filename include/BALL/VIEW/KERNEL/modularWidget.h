@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.22.16.1 2007/03/25 21:26:01 oliver Exp $
-//
 
 #ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
 #define BALL_VIEW_WIDGETS_MODULARWIDGET_H

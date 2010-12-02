@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logView.h,v 1.14.16.2 2007/05/13 21:18:56 amoll Exp $
-//
 
 #ifndef BALL_VIEW_WIDGETS_LOGVIEW_H
 #define BALL_VIEW_WIDGETS_LOGVIEW_H

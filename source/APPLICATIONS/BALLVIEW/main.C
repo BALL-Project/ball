@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.20.8.3 2007/03/26 07:11:33 amoll Exp $
-//
 
 // order of includes is important: first qapplication, than BALL includes
 #include <QtGui/QApplication>

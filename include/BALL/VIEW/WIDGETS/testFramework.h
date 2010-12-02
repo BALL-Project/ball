@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: testFramework.h,v 1.1.4.1 2007/03/25 21:26:25 oliver Exp $
-//
 
 #ifndef BALL_VIEW_WIDGETS_TESTFRAMEWORK_H
 #define BALL_VIEW_WIDGETS_TESTFRAMEWORK_H

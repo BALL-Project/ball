@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.49.16.4 2007/08/07 12:54:24 bertsch Exp $
-//
 
 // This include has to be first in order to avoid collisions.
 #include <Python.h>

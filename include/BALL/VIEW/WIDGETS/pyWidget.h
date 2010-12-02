@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.27.16.2 2007/05/13 15:35:31 amoll Exp $
-//
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
 #define BALL_VIEW_WIDGETS_PYWIDGET_H

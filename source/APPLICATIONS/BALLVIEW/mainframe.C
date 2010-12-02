@@ -1,6 +1,5 @@
+// -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
-//
-// $Id: mainframe.C,v 1.62.8.6 2007/06/12 05:42:24 oliver Exp $
 //
 
 #include "mainframe.h"
