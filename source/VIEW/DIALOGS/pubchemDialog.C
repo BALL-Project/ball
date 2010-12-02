@@ -51,7 +51,7 @@ namespace BALL
 			connect(queries, SIGNAL(itemActivated(QTreeWidgetItem*, int)), this, SLOT(switchView(QTreeWidgetItem*, int)));
 
 			queries->setColumnCount(1);
-			queries->headerItem()->setText(0, "Results");
+			queries->headerItem()->setText(0, tr("Results"));
 
 			// connect the Http connectors...
 			connect(&esearch_connector_,  SIGNAL(requestFinished(int, bool)), this, SLOT( esearchFinished(int, bool)));
@@ -115,13 +115,13 @@ namespace BALL
 			}
 			catch(...)
 			{
-				setStatusbarText("Invalid SMILES expression!", true);
+				setStatusbarText((String)tr("Invalid SMILES expression!"), true);
 				return;
 			}
 
 			ParsedResult_ pr;
 			pr.smiles = SMILES;
-			pr.description = "Generated from SMILES "+SMILES;
+			pr.description = (String)tr("Generated from SMILES ")+SMILES;
 			pr.name = SMILES;
 			insert_(pr, 0, true);
 		}
@@ -190,7 +190,7 @@ namespace BALL
 			}
 			catch(...)
 			{
-				Log.info() << "Secondary structure plotting failed";
+				Log.info() << (String)tr("Secondary structure plotting failed");
 			}
 
 			if (plot)
@@ -272,12 +272,12 @@ namespace BALL
 
 		void PubChemDialog::initializeWidget(MainControl&)
 		{
-			action1_ = insertMenuEntry(MainControl::FILE_OPEN, "PubChem", this, SLOT(show()), "Shortcut|File|Open|PubChem");
-			setMenuHint("Download a file from pubchem");
+			action1_ = insertMenuEntry(MainControl::FILE_OPEN, (String)tr("PubChem"), this, SLOT(show()), "Shortcut|File|Open|PubChem");
+			setMenuHint((String)tr("Download a file from pubchem"));
 			setIcon("actions/download-pubchem", true);
 			
-			action2_ = insertMenuEntry(MainControl::BUILD, "Build from SMILES", this, SLOT(show()), "Shortcut|Build|Build_from_SMILES");
-			setMenuHint("Create a structure from a SMILES expression");
+			action2_ = insertMenuEntry(MainControl::BUILD, (String)tr("Build from SMILES"), this, SLOT(show()), "Shortcut|Build|Build_from_SMILES");
+			setMenuHint((String)tr("Create a structure from a SMILES expression"));
 		}
 
 		void PubChemDialog::checkMenu(MainControl& main_control)
@@ -292,7 +292,7 @@ namespace BALL
 			if (error)
 			{
 				Log.error() << "Error while contacting PubChem! Reason given was: " << ascii(esearch_connector_.errorString()) << std::endl;
-				getMainControl()->setStatusbarText("Error in connecting to PubChem!", true);
+				getMainControl()->setStatusbarText((String)tr("Error in connecting to PubChem!"), true);
 
 				return;
 			}
@@ -312,7 +312,7 @@ namespace BALL
 					Log.error() << "Error while parsing PubChem esearch results in line " << error_line << " col " << error_col << std::endl;
 					Log.error() << "Reason given was: " << ascii(error_msg) << std::endl;
 
-					getMainControl()->setStatusbarText("Error in parsing PubChem esearch results!", true);
+					getMainControl()->setStatusbarText((String)tr("Error in parsing PubChem esearch results!"), true);
 
 					return;
 				}
@@ -328,14 +328,14 @@ namespace BALL
 					 num_total    =    num_total_node.firstChild().nodeValue().toInt();
 					 num_download = num_download_node.firstChild().nodeValue().toInt();
 
-					getMainControl()->setStatusbarText(String("Downloading ")+String(num_download)+" of "+String(num_total)+" entries");
+					getMainControl()->setStatusbarText(String(tr("Downloading "))+String(num_download)+" of "+String(num_total)+(String)tr(" entries"));
 				}
 
 				QDomNode idList = dom.elementsByTagName("IdList").item(0);
 
 				if (idList.isNull())
 				{
-					Log.info() << "No entries found!" << std::endl;
+					Log.info() << (String)tr("No entries found!") << std::endl;
 
 					return;
 				}
@@ -431,7 +431,7 @@ namespace BALL
 
 				Log.error() << "Reason given was: " << ascii(error_msg) << std::endl;
 
-				getMainControl()->setStatusbarText("Error in parsing PubChem esummary results!", true);
+				getMainControl()->setStatusbarText((String)tr("Error in parsing PubChem esummary results!"), true);
 
 				return false;
 			}
@@ -451,7 +451,7 @@ namespace BALL
 				Log.error() << "Error: PubChem ESummary contains no CanonicalSmile! Skipping this entry!"
 				            << std::endl;
 
-				getMainControl()->setStatusbarText("Error in parsing PubChem esummary results!", true);
+				getMainControl()->setStatusbarText((String)tr("Error in parsing PubChem esummary results!"), true);
 
 				return false;
 			}

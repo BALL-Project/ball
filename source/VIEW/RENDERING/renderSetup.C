@@ -403,7 +403,7 @@ namespace BALL
 
 		Position RenderSetup::prepareGridTextures(const RegularData3D& grid, const ColorMap& map)
 		{
-			Position texname;
+			Position texname = 0;
 
 			if (RTTI::isKindOf<GLRenderer>(*renderer))
 			{

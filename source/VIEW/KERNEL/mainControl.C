@@ -100,7 +100,7 @@ namespace BALL
 		MainControl::MainControl(QWidget* parent, const char* name, String inifile)
 			:	QMainWindow(parent),
 				ConnectionObject(),
-				Embeddable("BALL::VIEW::MainControl"),
+				Embeddable("MainControl"),
 				about_to_quit_(false),
  				multi_threading_mode_(true),
 				fragment_db_(),

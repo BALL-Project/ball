@@ -10,10 +10,10 @@ namespace BALL
 		OpenSavePreferences::OpenSavePreferences(QWidget* parent, const char* name, Qt::WFlags fl)
 			: QWidget(parent, fl)
 		{
-			setINIFileSectionName("OpenSave");
+			setINIFileSectionName((String)tr("OpenSave"));
 			setupUi(this);
 			setObjectName(name);
-			setWidgetStackName("Open/Save");
+			setWidgetStackName((String)tr("Open/Save"));
 			registerWidgets_();
 		}
 

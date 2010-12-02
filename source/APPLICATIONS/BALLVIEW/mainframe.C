@@ -90,7 +90,7 @@ namespace BALL
 		
 		// Display Menu
 		String description = "Shortcut|Display|Toggle_Fullscreen";
-		fullscreen_action_ = insertMenuEntry(MainControl::DISPLAY, "Toggle Fullscreen", this,
+		fullscreen_action_ = insertMenuEntry(MainControl::DISPLAY, (String)tr("Toggle Fullscreen"), this,
 		                      SLOT(toggleFullScreen()), description,
 		                      QKeySequence("Alt+X"));
 
@@ -99,16 +99,16 @@ namespace BALL
 		insertPopupMenuSeparator(DISPLAY);
 		initPopupMenu(DISPLAY_VIEWPOINT);
 
-		new MolecularFileDialog(this, "MolecularFileDialog");
-		new DownloadPDBFile(		this, "DownloadPDBFile", false);
-		new DownloadElectronDensity(		this, "DownloadElectronDensity", false);
-		new PubChemDialog(this, "PubChemDialog");
-		new PluginDialog(this, "PluginDialog");
-		new UndoManagerDialog(this, "UndoManagerDialog");
+		new MolecularFileDialog(this, ((String)tr("MolecularFileDialog")).c_str());
+		new DownloadPDBFile(    this, ((String)tr("DownloadPDBFile")).c_str(), false);
+		new DownloadElectronDensity(this, ((String)tr("DownloadElectronDensity")).c_str(), false);
+		new PubChemDialog(      this, ((String)tr("PubChemDialog")).c_str());
+		new PluginDialog(       this, ((String)tr("PluginDialog")).c_str());
+		new UndoManagerDialog(  this, ((String)tr("UndoManagerDialog")).c_str());
  		
-		addDockWidget(Qt::LeftDockWidgetArea, new MolecularControl(this, "Structures"));
-		addDockWidget(Qt::LeftDockWidgetArea, new GeometricControl(this, "Representations"));
-		addDockWidget(Qt::TopDockWidgetArea,  new DatasetControl(this, "Datasets"));
+		addDockWidget(Qt::LeftDockWidgetArea, new MolecularControl(this, ((String)tr("Structures")).c_str()));
+		addDockWidget(Qt::LeftDockWidgetArea, new GeometricControl(this, ((String)tr("Representations")).c_str()));
+		addDockWidget(Qt::TopDockWidgetArea,  new DatasetControl(this, ((String)tr("Datasets")).c_str()));
 		DatasetControl* dc = DatasetControl::getInstance(0);
 		dc->registerController(new RegularData3DController());
 		dc->registerController(new TrajectoryController());
@@ -120,7 +120,7 @@ namespace BALL
 		
 		DatasetControl::getInstance(0)->hide();
 
-		new DemoTutorialDialog(this, "BALLViewDemo");
+		new DemoTutorialDialog(this, ((String)tr("BALLViewDemo")).c_str());
 
 		Path path;
 
@@ -130,7 +130,7 @@ namespace BALL
 
 		if (dirp != "")
 		{
-			HelpViewer* BALL_docu = new HelpViewer(this, "BALL Docu");
+			HelpViewer* BALL_docu = new HelpViewer(this, ((String)tr("BALL Docu")).c_str());
 			addDockWidget(Qt::BottomDockWidgetArea, BALL_docu);
 
 
@@ -142,17 +142,17 @@ namespace BALL
 		}
 
 		addDockWidget(Qt::BottomDockWidgetArea, new HelpViewer(this, "BALLView Docu"));
-		new LabelDialog(				this, "LabelDialog");
-		new MolecularStructure(	this, "MolecularStructure");
- 		addDockWidget(Qt::BottomDockWidgetArea, new LogView(this, "Logs"));
-		addDockWidget(Qt::BottomDockWidgetArea, new FileObserver(  this, "FileObserver"));
+		new LabelDialog(				this, ((String)tr("LabelDialog")).c_str());
+		new MolecularStructure(	this, ((String)tr("MolecularStructure")).c_str());
+ 		addDockWidget(Qt::BottomDockWidgetArea, new LogView(      this, ((String)tr("Logs")).c_str()));
+		addDockWidget(Qt::BottomDockWidgetArea, new FileObserver( this, ((String)tr("FileObserver")).c_str()));
 
 		Scene::stereoBufferSupportTest();
-		scene_ = new EditableScene(this, "3D View");
+		scene_ = new EditableScene(this, ((String)tr("3D View")).c_str());
 		setCentralWidget(scene_);
 		setAcceptDrops(true);
 
-		new DisplayProperties(	this, "DisplayProperties");
+		new DisplayProperties(this, ((String)tr("DisplayProperties")).c_str());
 
 		// setup the VIEW server
 		#ifdef BALL_HAS_ASIO
@@ -163,8 +163,8 @@ namespace BALL
 		#endif
 
 		#ifdef BALL_PYTHON_SUPPORT
-			new TestFramework(this, "Test Framework");
-			addDockWidget(Qt::BottomDockWidgetArea, new PyWidget(this, "Python Interpreter"));
+			new TestFramework(this, ((String)"Test Framework").c_str());
+			addDockWidget(Qt::BottomDockWidgetArea, new PyWidget(this, ((String)tr("Python Interpreter")).c_str()));
 		#endif
 
 		// ---------------------
@@ -172,47 +172,47 @@ namespace BALL
 		// ---------------------
 
 		description = "Shortcut|File|Open|Project";
-		insertMenuEntry(MainControl::FILE_OPEN, "Project", this, 
+		insertMenuEntry(MainControl::FILE_OPEN, ((String)tr("Project")).c_str(), this, 
 										SLOT(loadBALLViewProjectFile()), description);
 		
 		description = "Shortcut|File|Save_Project";
-		save_project_action_ = insertMenuEntry(MainControl::FILE, "Save Project", this, 
+		save_project_action_ = insertMenuEntry(MainControl::FILE, ((String)tr("Save Project")).c_str(), this, 
 											 										 SLOT(saveBALLViewProjectFile()), description);
 
-			// Help-Menu -------------------------------------------------------------------
+		// Help-Menu -------------------------------------------------------------------
 		QAction* action = 0;
 
 		description = "Shortcut|Help|About";
-		action = insertMenuEntry(MainControl::HELP, "About", this, SLOT(about()), description);
-		setMenuHint(action, "Show informations on this version of BALLView");
+		action = insertMenuEntry(MainControl::HELP, (String)tr("About"), this, SLOT(about()), description);
+		setMenuHint(action, (String)tr("Show informations on this version of BALLView"));
 
 		description = "Shortcut|Help|How_to_cite";
-		action = insertMenuEntry(MainControl::HELP, "How to cite", this, SLOT(howToCite()), description);
-		setMenuHint(action, "Show infos on how to cite BALL and BALLView");
+		action = insertMenuEntry(MainControl::HELP, (String)tr("How to cite"), this, SLOT(howToCite()), description);
+		setMenuHint(action, (String)tr("Show infos on how to cite BALL and BALLView"));
 
 		// TODO: why is this done here and not, e.g., in mainControl()???
 		description = "Shortcut|MolecularMechanics|Abort_Calculation";
-		stop_simulation_action_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Abort Calculation", this, 
+		stop_simulation_action_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, (String)tr("Abort Calculation"), this, 
 																							SLOT(stopSimulation()), description,
 																							QKeySequence("Alt+C"));
 		stop_simulation_action_->setEnabled(false);
 		insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
-		setMenuHint(stop_simulation_action_, "Abort a running simulation");
+		setMenuHint(stop_simulation_action_, (String)tr("Abort a running simulation"));
 		
 		stop_simulation_action_->setIcon(IconLoader::instance().getIcon("actions/process-stop"));
 		
 		description = "Shortcut|Edit|Invert_Selection";
-		complement_selection_action_ = insertMenuEntry(MainControl::EDIT, "Invert Selection", this, 
+		complement_selection_action_ = insertMenuEntry(MainControl::EDIT, (String)tr("Invert Selection"), this, 
 																									 SLOT(complementSelection()), description);
 
 		description = "Shortcut|Edit|Clear_Selection";
-		clear_selection_action_ = insertMenuEntry(MainControl::EDIT, "Clear Selection", this, 
+		clear_selection_action_ = insertMenuEntry(MainControl::EDIT, (String)tr("Clear Selection"), this, 
 																							SLOT(clearSelection()), description);
 
 
  		qApp->installEventFilter(this);
 
-		setStatusbarText("Ready.");
+		setStatusbarText((String)tr("Ready."));
 	}
 
 	Mainframe::~Mainframe()
@@ -296,7 +296,7 @@ namespace BALL
 	
 	void Mainframe::howToCite()
 	{
-		HelpViewer::getInstance("BALLView Docu")->showHelp("tips.html", "cite");
+		HelpViewer::getInstance("BALLView Docu")->showHelp("tips.html", (String)tr("cite"));
 	}
 
 	void Mainframe::show()
@@ -310,7 +310,7 @@ namespace BALL
 
 
 		QToolBar* tb = new QToolBar("Main Toolbar", this);
-		tb->setObjectName("Main Toolbar");
+		tb->setObjectName(tr("Main Toolbar"));
 		tb->setIconSize(QSize(22,22));
 		addToolBar(Qt::TopToolBarArea, tb);
 		
@@ -327,14 +327,14 @@ namespace BALL
 		Path path;
 
 		IconLoader& loader = IconLoader::instance();
-		qload_action_ = new QAction(loader.getIcon("actions/quickopen-file"), "quickload", this);
-		qload_action_->setObjectName("quickload");
+		qload_action_ = new QAction(loader.getIcon("actions/quickopen-file"), tr("quickload"), this);
+		qload_action_->setObjectName(tr("quickload"));
 		connect(qload_action_, SIGNAL(triggered()), this, SLOT(quickLoadConfirm()));
 		HelpViewer::getInstance("BALLView Docu")->registerForHelpSystem(qload_action_, "tips.html#quickload");
 		tb->addAction(qload_action_);
 
-		qsave_action_ = new QAction(loader.getIcon("actions/quicksave"), "quicksave", this);
-		qsave_action_->setObjectName("quicksave");
+		qsave_action_ = new QAction(loader.getIcon("actions/quicksave"), tr("quicksave"), this);
+		qsave_action_->setObjectName(tr("quicksave"));
 		connect(qsave_action_, SIGNAL(triggered()), this, SLOT(quickSave()));
 		HelpViewer::getInstance("BALLView Docu")->registerForHelpSystem(qsave_action_, "tips.html#quickload");
 		tb->addAction(qsave_action_);
@@ -361,7 +361,7 @@ namespace BALL
 		QDialog w;
  		Ui_AboutDialog about;
 		about.setupUi(&w);
-		QString version = QString("QT ") + qVersion();
+		QString version = QString(tr("QT ")) + qVersion();
 #ifdef BALL_QT_HAS_THREADS
 		version += "(mt)";
 #endif

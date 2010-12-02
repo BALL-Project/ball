@@ -1,3 +1,9 @@
+/* TRANSLATOR BALL::VIEW::DragLogView
+
+		Necessary for lupdate.
+*/
+
+
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
@@ -134,7 +140,7 @@ namespace BALL
 			text_edit_->setReadOnly(true);
 
 			DockWidget::initializeWidget(main_control);
-			insertMenuEntry(MainControl::EDIT, "Clear Logs", text_edit_, SLOT(clear()));
+			insertMenuEntry(MainControl::EDIT, (String)tr("Clear Logs"), text_edit_, SLOT(clear()));
 
 			registerForHelpSystem(this, "logView.html");
 		}
