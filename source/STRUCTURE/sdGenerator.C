@@ -368,7 +368,7 @@ namespace BALL
 		Vector3 center          = anchor_start + anchor*0.5 + orth_anchor*h;
 		Vector3 center_to_start = anchor_start - center;
 
-		float phi_0 = ((center_to_start.x > 0) ? +1. : -1.) * acos(std::min(center_to_start.y/r, 1.f));
+		float phi_0 = ((center_to_start.x > 0) ? +1. : -1.) * acos(std::max(std::min(center_to_start.y/r, 1.f), -1.f));
 
 		Position current_atom_index = (second_anchor_index + 1) % ring.atoms.size();
 
