@@ -1515,9 +1515,6 @@ namespace BALL
 		next_pos_old.x = next_neighbour->getProperty("SDGenerator::PFU_x_pos").getFloat();
 		next_pos_old.y = next_neighbour->getProperty("SDGenerator::PFU_y_pos").getFloat();
 
-		// determine the shift
-		Vector3 translation = seed_pos_new - seed_pos_old;
-
 		//and the old and new bond vectors
 		Vector3 bond_new = next_pos_new - seed_pos_new;
 		Vector3 bond_old = next_pos_old - seed_pos_old;
@@ -1528,9 +1525,18 @@ namespace BALL
 		if ((bond_old % bond_new).z < 0)
 			alpha *= -1.f;
 
-		Matrix4x4 transform;
-		transform.setRotationZ(alpha);
-		transform.translate(translation);
+		// the transform works as follows:
+		//
+		//   -- move the anchor of the old bond into the origin
+		//   -- rotate the old bond onto the direction of the new bond
+		//   -- translate the anchor of the rotated old bond to the new anchor position
+		//
+		Matrix4x4 transform, to_origin, rotate, translate;
+		to_origin.setTranslation(-seed_pos_old);
+		rotate.setRotationZ(alpha);
+		translate.setTranslation(seed_pos_new);
+
+		transform = translate * rotate * to_origin;
 
 		// collect all other PFU atoms (excluding seed and next) and ensure we only
 		// transform each of them once
@@ -1642,12 +1648,10 @@ namespace BALL
 
 					if (!(next_neighbour->hasProperty(SDGenerator::ASSEMBLED)))
 					{
-						// rotate the CFS_lo of the seed by beta if the other atom is not in a ring
-
-						if (!next_neighbour->getProperty("InRing").getBool())
-						{
+						// rotate the CFS_lo of the seed by beta
+						if (seed_atom != head_atom || (seed_atom->hasProperty(SDGenerator::INITIALIZED_HEAD_CFS)))
 							setCFS_(seed_atom, getCFS_(seed_atom, false) + beta, false);
-						}
+
 						placeSubstituent_(seed_atom, head_atom, next_neighbour);
 
 						redraw_queue_.push(next_neighbour);
@@ -1696,7 +1700,9 @@ namespace BALL
 							}
 						}
 						else
+						{
 							setCFS_(seed_atom, getCFS_(seed_atom, false) + beta, false);
+						}
 
 						placeSubstituent_(seed_atom, head_atom, next_neighbour);
 
