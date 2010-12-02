@@ -113,7 +113,7 @@ namespace BALL
 				shortcut_registry_(),
 				main_control_preferences_(0),
 				network_preferences_(0),
-				preferences_dialog_(new Preferences(this, ((String)::BALL::VIEW::MainControl::tr("BALLView Preferences")).c_str())),
+				preferences_dialog_(new Preferences(this, ((String)tr("BALLView Preferences")).c_str())),
 				preferences_file_(),
 				composites_locked_(false),
 				locking_widget_(0),
@@ -200,7 +200,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				if (BALL_data_path!= 0) bdp = String(BALL_data_path);
 
 				QMessageBox::critical(0, "Critical error",
-						QString(::BALL::VIEW::MainControl::tr("Could not read the FragmentDB data!\n")) + 
+						QString(tr("Could not read the FragmentDB data!\n")) + 
 						"Please check, that the BALL_DATA_PATH or BALLVIEW_DATA_PATH\n" + 
 						"environment variable is set to the directory containing the\n" + 
 						"BALL or BALLView data directory (e.g. to C:\\BALL\\data).\n"+
@@ -215,7 +215,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 						QMessageBox::Abort,  Qt::NoButton);
 				Log.error() << e << std::endl;
 
-				throw Exception::GeneralException(__FILE__, __LINE__, ((String)::BALL::VIEW::MainControl::tr("Datapath Error")).c_str(), ((String)::BALL::VIEW::MainControl::tr("Could not read the FragmentDB")).c_str());
+				throw Exception::GeneralException(__FILE__, __LINE__, ((String)tr("Datapath Error")).c_str(), ((String)tr("Could not read the FragmentDB")).c_str());
 			}
 
 			preferences_file_.read();
@@ -231,7 +231,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 			connect(qApp,	SIGNAL(aboutToQuit()), this, SLOT(aboutToExit()));
 			connect(menuBar(), SIGNAL(hovered(QAction*)), this, SLOT(menuItemHighlighted(QAction*)));
-			menuBar()->setObjectName(::BALL::VIEW::MainControl::tr("MainMenuBar"));
+			menuBar()->setObjectName(tr("MainMenuBar"));
 
 			font.setPointSize(14);
 			rep_label_ = new QLabel(statusBar());
@@ -242,7 +242,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			rep_label_->setMinimumSize(20,20);
 			rep_label_->setAlignment(Qt::AlignCenter);
 			rep_label_->hide();
-			rep_label_->setToolTip(::BALL::VIEW::MainControl::tr("update of model running"));
+			rep_label_->setToolTip(tr("update of model running"));
 			rep_label_->setText("M");
 			statusBar()->addPermanentWidget(rep_label_, false );
 			rep_label_nr_ = 0;
@@ -254,7 +254,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			simulation_icon_ = new QLabel(statusBar());
 			simulation_icon_->setMaximumSize(14,20);
 			simulation_icon_->setMinimumSize(14,20);
-			simulation_icon_->setToolTip(::BALL::VIEW::MainControl::tr("simulation running"));
+			simulation_icon_->setToolTip(tr("simulation running"));
 			statusBar()->addPermanentWidget(simulation_icon_, false );
 			QPixmap icon(simulation_running_xpm_);
 
@@ -277,7 +277,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				selection_(),
 				main_control_preferences_(0),
 				network_preferences_(0),
-				preferences_dialog_(new Preferences(this, ascii(::BALL::VIEW::MainControl::tr("BALLView Preferences")).c_str())),
+				preferences_dialog_(new Preferences(this, ascii(tr("BALLView Preferences")).c_str())),
 				composites_locked_(false),
 				locking_widget_(0),
 				stop_simulation_action_(0),
@@ -314,70 +314,70 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			switch (ID)
 			{
 				case FILE:
-					menu = menuBar()->addMenu(::BALL::VIEW::MainControl::tr("&File"));
+					menu = menuBar()->addMenu(tr("&File"));
 					break;
 				case FILE_OPEN:
-					menu = initPopupMenu(FILE)->addMenu(::BALL::VIEW::MainControl::tr("&Open"));
+					menu = initPopupMenu(FILE)->addMenu(tr("&Open"));
 					break;
 				case FILE_OPEN_GRID:
-					menu = initPopupMenu(FILE_OPEN)->addMenu(::BALL::VIEW::MainControl::tr("&Grids"));
+					menu = initPopupMenu(FILE_OPEN)->addMenu(tr("&Grids"));
 					break;
 				case FILE_IMPORT:
-					menu = initPopupMenu(FILE)->addMenu(::BALL::VIEW::MainControl::tr("&Import"));
+					menu = initPopupMenu(FILE)->addMenu(tr("&Import"));
 					break;
 				case FILE_EXPORT:
-					menu = initPopupMenu(FILE)->addMenu(::BALL::VIEW::MainControl::tr("&Export"));
+					menu = initPopupMenu(FILE)->addMenu(tr("&Export"));
 					break;
 				case FILE_MONITOR:
-					menu = initPopupMenu(FILE)->addMenu(::BALL::VIEW::MainControl::tr("&Monitor File"));
+					menu = initPopupMenu(FILE)->addMenu(tr("&Monitor File"));
 					break;
 				case EDIT:
-					menu = menuBar()->addMenu(::BALL::VIEW::MainControl::tr("&Edit"));
+					menu = menuBar()->addMenu(tr("&Edit"));
 					break;
 				case BUILD:
-					menu = menuBar()->addMenu(::BALL::VIEW::MainControl::tr("&Build"));
+					menu = menuBar()->addMenu(tr("&Build"));
 					break;
 				case DISPLAY:
-					menu = menuBar()->addMenu(::BALL::VIEW::MainControl::tr("&Display"));
+					menu = menuBar()->addMenu(tr("&Display"));
 					break;
 				case DISPLAY_VIEWPOINT:
-					menu = initPopupMenu(DISPLAY)->addMenu(::BALL::VIEW::MainControl::tr("&Viewpoint"));
+					menu = initPopupMenu(DISPLAY)->addMenu(tr("&Viewpoint"));
 					break;
 				case DISPLAY_CREATE:
-					menu = initPopupMenu(DISPLAY)->addMenu(::BALL::VIEW::MainControl::tr("&Create"));
+					menu = initPopupMenu(DISPLAY)->addMenu(tr("&Create"));
 					break;
 				case DISPLAY_STEREO:
-					menu = initPopupMenu(DISPLAY)->addMenu(::BALL::VIEW::MainControl::tr("&Stereo"));
+					menu = initPopupMenu(DISPLAY)->addMenu(tr("&Stereo"));
 					break;
 				case DISPLAY_ANIMATION:
-					menu = initPopupMenu(DISPLAY)->addMenu(::BALL::VIEW::MainControl::tr("&Animation"));
+					menu = initPopupMenu(DISPLAY)->addMenu(tr("&Animation"));
 					break;
 				case MOLECULARMECHANICS:
-					menu = menuBar()->addMenu(::BALL::VIEW::MainControl::tr("&Molecular Mechanics"));
+					menu = menuBar()->addMenu(tr("&Molecular Mechanics"));
 					break;
 				case CHOOSE_FF:
-					menu = initPopupMenu(MOLECULARMECHANICS)->addMenu(::BALL::VIEW::MainControl::tr("Force Field"));
+					menu = initPopupMenu(MOLECULARMECHANICS)->addMenu(tr("Force Field"));
 					break;
 				case TOOLS:
-					menu = menuBar()->addMenu(::BALL::VIEW::MainControl::tr("&Tools"));
+					menu = menuBar()->addMenu(tr("&Tools"));
 					break;
 				case TOOLS_PYTHON:
-					menu = initPopupMenu(TOOLS)->addMenu(::BALL::VIEW::MainControl::tr("&Python"));
+					menu = initPopupMenu(TOOLS)->addMenu(tr("&Python"));
 					break;
 				case TOOLS_GRID:
-					menu = initPopupMenu(TOOLS)->addMenu(::BALL::VIEW::MainControl::tr("&Grids"));
+					menu = initPopupMenu(TOOLS)->addMenu(tr("&Grids"));
 					break;
 				case WINDOWS:
-					menu = menuBar()->addMenu(::BALL::VIEW::MainControl::tr("&Windows"));
+					menu = menuBar()->addMenu(tr("&Windows"));
 					break;
 				case USER:
-					menu = menuBar()->addMenu(::BALL::VIEW::MainControl::tr("&User"));
+					menu = menuBar()->addMenu(tr("&User"));
 					break;
 				case MACRO:
-					menu = menuBar()->addMenu(::BALL::VIEW::MainControl::tr("Macros"));
+					menu = menuBar()->addMenu(tr("Macros"));
 					break;
 				case HELP:
-					menu = menuBar()->addMenu(::BALL::VIEW::MainControl::tr("&Help"));
+					menu = menuBar()->addMenu(tr("&Help"));
 					break;
 				default:
 					return 0;
@@ -486,7 +486,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			insertPopupMenuSeparator(MainControl::FILE);
 
 			String description = "Shortcut|File|Quit";
-			insertMenuEntry(MainControl::FILE, (String)::BALL::VIEW::MainControl::tr("&Quit"), qApp, 
+			insertMenuEntry(MainControl::FILE, (String)tr("&Quit"), qApp, 
 											SLOT(quit()), description,
 											QKeySequence("Ctrl+Q"));
 
@@ -496,7 +496,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				insertPopupMenuSeparator(MainControl::EDIT);
 
 				String description = "Shortcut|Edit|Preferences";
-				preferences_action_ = insertMenuEntry(MainControl::EDIT, (String)::BALL::VIEW::MainControl::tr("Preferences"), preferences_dialog_, 
+				preferences_action_ = insertMenuEntry(MainControl::EDIT, (String)tr("Preferences"), preferences_dialog_, 
 																							SLOT(show()), description,
 																							QKeySequence("Ctrl+Z"));
 
@@ -857,7 +857,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		{	
 			if (isBusy()) 
 			{
-				setStatusbarText((String)::BALL::VIEW::MainControl::tr("Cant apply preferences while beeing busy!"), true);
+				setStatusbarText((String)tr("Cant apply preferences while beeing busy!"), true);
 				return;
 			}
 
@@ -870,7 +870,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		{
 			if (isBusy()) 
 			{
-				setStatusbarText((String)::BALL::VIEW::MainControl::tr("Cant apply preferences while beeing busy!"), true);
+				setStatusbarText((String)tr("Cant apply preferences while beeing busy!"), true);
 				return;
 			}
 
@@ -894,8 +894,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 				if(main_control_preferences_->getLanguageChanged()) {
 					main_control_preferences_->resetLanguageChanged();
-					QMessageBox::information(this, ::BALL::VIEW::MainControl::tr("Language Changed"),
-					                               ::BALL::VIEW::MainControl::tr("Changing the language only takes effect after restarting BALLView."));
+					QMessageBox::information(this, tr("Language Changed"),
+					                               tr("Changing the language only takes effect after restarting BALLView."));
 				}
 
 				QWidget::update();
@@ -1082,7 +1082,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		{
 			if (selection_.size() > 4)
 			{
-				setStatusbarText(String(selection_.size()) + (String)::BALL::VIEW::MainControl::tr(" objects selected."), true);
+				setStatusbarText(String(selection_.size()) + (String)tr(" objects selected."), true);
 				return;
 			}
 
@@ -1126,12 +1126,12 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				{
 					// if one atom was picked, show its properties
 					Atom& atom = *atoms[0];
-					String text = String(::BALL::VIEW::MainControl::tr("Properties of atom")) + " " + atom.getFullName() + "  " + (String)::BALL::VIEW::MainControl::tr("Type") + ": " + 
-													 String(atom.getType()) + "  " + String(::BALL::VIEW::MainControl::tr("Typename")) + ": " + 
-													 String(atom.getTypeName()) + ":  " + String(::BALL::VIEW::MainControl::tr("Position")) + ": (" + 
+					String text = String(tr("Properties of atom")) + " " + atom.getFullName() + "  " + (String)tr("Type") + ": " + 
+													 String(atom.getType()) + "  " + String(tr("Typename")) + ": " + 
+													 String(atom.getTypeName()) + ":  " + String(tr("Position")) + ": (" + 
 													 String(atom.getPosition().x) + "|" +
 													 String(atom.getPosition().y) + "|" +
-													 String(atom.getPosition().z) + ")" + "  " + String(::BALL::VIEW::MainControl::tr("Charge")) + ": " + 
+													 String(atom.getPosition().z) + ")" + "  " + String(tr("Charge")) + ": " + 
 													 String(atom.getCharge());
 					setStatusbarText(text, true);
 					break;
@@ -1139,22 +1139,22 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				case 2:
 				{
 					// if two atoms were picked, show their distance
-					String text = String(::BALL::VIEW::MainControl::tr("Distance between atom ")) + 
-														atoms[0]->getFullName() + " " + String(::BALL::VIEW::MainControl::tr("and")) + " " + 
+					String text = String(tr("Distance between atom ")) + 
+														atoms[0]->getFullName() + " " + String(tr("and")) + " " + 
 														atoms[1]->getFullName() + ": " + 
 														String(GetDistance(atoms[0]->getPosition(), atoms[1]->getPosition()));
 
 					Bond* bond = atoms[0]->getBond(*atoms[1]);
 					if (bond != 0)
 					{
-						text += String(", ") + String(::BALL::VIEW::MainControl::tr("Bond order")) + ": ";
+						text += String(", ") + String(tr("Bond order")) + ": ";
 						if (bond->getOrder() != Bond::ORDER__AROMATIC) 
 						{
 							text += String(bond->getOrder());
 						}
 						else 
 						{
-							text += String(::BALL::VIEW::MainControl::tr("aromatic"));
+							text += String(tr("aromatic"));
 						}
 					}
 					setStatusbarText(text, true);
@@ -1166,7 +1166,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 					Vector3 vector2(ordered_atoms[1]->getPosition() - ordered_atoms[0]->getPosition());
 					Angle result;
 					GetAngle(vector1, vector2, result);
-					String text = String(::BALL::VIEW::MainControl::tr("Angle between atoms ")) + 
+					String text = String(tr("Angle between atoms ")) + 
 														atoms[0]->getFullName() + ", " + 
 														atoms[1]->getFullName() + ", " +
 														atoms[2]->getFullName() + ": " +
@@ -1183,7 +1183,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 							ordered_atoms[2]->getPosition().x, ordered_atoms[2]->getPosition().y, ordered_atoms[2]->getPosition().z,
 							ordered_atoms[3]->getPosition().x, ordered_atoms[3]->getPosition().y, ordered_atoms[3]->getPosition().z);
 
-					String text = String(::BALL::VIEW::MainControl::tr("Torsion angle between atoms ")) + 
+					String text = String(tr("Torsion angle between atoms ")) + 
 														ordered_atoms[0]->getFullName() + ", " + 
 														ordered_atoms[1]->getFullName() + ", " +
 														ordered_atoms[2]->getFullName() + ", " +
@@ -1419,7 +1419,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			}
 			catch(...)
 			{
-				Log.error() << (String)::BALL::VIEW::MainControl::tr("Could not restore settings of main windows") << std::endl;
+				Log.error() << (String)tr("Could not restore settings of main windows") << std::endl;
 			}
 		}
 
@@ -1498,7 +1498,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		{
 			if (getRepresentationManager().updateRunning())
 			{
-				setStatusbarText((String)::BALL::VIEW::MainControl::tr("Could not delete Representation while update is running!"), true);
+				setStatusbarText((String)tr("Could not delete Representation while update is running!"), true);
 				return false;
 			}
 
@@ -1552,7 +1552,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		{
 			if (delete_action_ == 0) 
 			{
-				delete_action_ = insertMenuEntry(MainControl::EDIT, (String)::BALL::VIEW::MainControl::tr("Delete"), this, 
+				delete_action_ = insertMenuEntry(MainControl::EDIT, (String)tr("Delete"), this, 
 												 SLOT(deleteClicked()), "Shortcut|Edit|Delete", QKeySequence::Delete);	
 			}
 		}
@@ -1581,7 +1581,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			if (simulation_thread_ == 0) return;
 
 			stop_simulation_ = true;
-			setStatusbarText((String)::BALL::VIEW::MainControl::tr("Terminating calculation ..."), true);
+			setStatusbarText((String)tr("Terminating calculation ..."), true);
 		}
 
 		// is called when the SimulationThread has finished
@@ -1596,7 +1596,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 			if (stop_simulation_)
 			{
-				setStatusbarText((String)::BALL::VIEW::MainControl::tr("Calculation terminated."), true);
+				setStatusbarText((String)tr("Calculation terminated."), true);
 			}
 			stop_simulation_ = false;
 			unlockCompositesFor(locking_widget_);
@@ -1675,7 +1675,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			if (logging_to_file_) return;
 			if (logging_file_name_ == "")
 			{
-				Log.error() << (String)::BALL::VIEW::MainControl::tr("Empty logging file name") << std::endl;
+				Log.error() << (String)tr("Empty logging file name") << std::endl;
 				return;
 			}
 
@@ -1779,7 +1779,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 		if (!ok)
 		{
-			setStatusbarText(String(::BALL::VIEW::MainControl::tr("Can not write projectfile")) + 
+			setStatusbarText(String(tr("Can not write projectfile")) + 
 											 filename + "!", true);
 			return;
 		}
@@ -1817,7 +1817,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 	{
 		if (isBusy())
 		{
-			setStatusbarText((String)::BALL::VIEW::MainControl::tr("Could not load project file, while update is running!"), true);
+			setStatusbarText((String)tr("Could not load project file, while update is running!"), true);
 			return; 
 		}
 
@@ -1828,8 +1828,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		}
 		catch(...)
 		{
-			setStatusbarText((String)::BALL::VIEW::MainControl::tr("Could not open the project file") 
-					             + " \"" + filename + "\", " + (String)::BALL::VIEW::MainControl::tr("it doesnt seem to exist."), true);
+			setStatusbarText((String)tr("Could not open the project file") 
+					             + " \"" + filename + "\", " + (String)tr("it doesnt seem to exist."), true);
 			return;
 		}
 
@@ -1842,14 +1842,14 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		{
 			if (!buffer.getline(file))
 			{
-				setStatusbarText((String)::BALL::VIEW::MainControl::tr("Error while reading project file, could not read INIFile."), true);
+				setStatusbarText((String)tr("Error while reading project file, could not read INIFile."), true);
 				BALLVIEW_DEBUG
 				return;
 			}
 
 			if (!in.appendLine(buffer)) 
 			{
-				setStatusbarText((String)::BALL::VIEW::MainControl::tr("Error while reading project file, could not read INIFile."), true);
+				setStatusbarText((String)tr("Error while reading project file, could not read INIFile."), true);
 				BALLVIEW_DEBUG
 				return;
 			}
@@ -1894,7 +1894,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			PersistentObject* po = pm->readObject();
 			if (!RTTI::isKindOf<System>(*po))
 			{
-				setStatusbarText((String)::BALL::VIEW::MainControl::tr("Error while reading project file, could not read molecule."), true);
+				setStatusbarText((String)tr("Error while reading project file, could not read molecule."), true);
 				if (has_dp)	DisplayProperties::getInstance(0)->enableCreationForNewMolecules(true);
 				return;
 			}
@@ -1936,7 +1936,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			Camera c;
 			if (!c.readFromString(in.getValue("BALLVIEW_PROJECT", "Camera")))
 			{
-				setStatusbarText((String)::BALL::VIEW::MainControl::tr("Could not read Camera position from project."), true);
+				setStatusbarText((String)tr("Could not read Camera position from project."), true);
 				return;
 			}
 			stage.setCamera(c);
@@ -1963,7 +1963,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 	{
 		QString qresult = QFileDialog::getSaveFileName(
 											0,
-											String(::BALL::VIEW::MainControl::tr("Select a project file")).c_str(),
+											String(tr("Select a project file")).c_str(),
 											getWorkingDir().c_str(), 
 											"*.bvp");
 
@@ -1975,7 +1975,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		if (!result.hasSuffix(".bvp")) result += ".bvp";
 
  		saveBALLViewProjectFile(result, open_save_preferences_->binaryProjectsEnabled());
-		setStatusbarText((String)::BALL::VIEW::MainControl::tr("Saved project to ") + result);
+		setStatusbarText((String)tr("Saved project to ") + result);
 	} 
 
 
@@ -1983,7 +1983,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 	{
 		QString result = QFileDialog::getOpenFileName(
 																		0,
-																		String(::BALL::VIEW::MainControl::tr("Select a project file")).c_str(),
+																		String(tr("Select a project file")).c_str(),
 																		getWorkingDir().c_str(), 
 																		"*.bvp");
 		if (result.isEmpty()) return;
@@ -1996,7 +1996,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 	{
 		if (isBusy()) return;
 
-		if (QMessageBox::question(this, ::BALL::VIEW::MainControl::tr("Quickload"), ::BALL::VIEW::MainControl::tr("Do you really want to quickload?"), 
+		if (QMessageBox::question(this, tr("Quickload"), tr("Do you really want to quickload?"), 
 					QMessageBox::Yes| QMessageBox::Default, QMessageBox::No|QMessageBox::Escape) 
 						== QMessageBox::Yes)
 		{
@@ -2027,7 +2027,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				
 	void MainControl::quickSave() 
 	{
-		setStatusbarText((String)::BALL::VIEW::MainControl::tr("quick saving..."), true);
+		setStatusbarText((String)tr("quick saving..."), true);
 		processEvents(500);
 
 		String file = Directory::getUserHomeDir();
@@ -2035,12 +2035,12 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		file += "quick.bvp";
 		saveBALLViewProjectFile(file);
 
-		setStatusbarText((String)::BALL::VIEW::MainControl::tr("quick saving finished"), true);
+		setStatusbarText((String)tr("quick saving finished"), true);
 	}
 
 	void MainControl::quickLoad()
 	{
-		setStatusbarText((String)::BALL::VIEW::MainControl::tr("quick loading..."), true);
+		setStatusbarText((String)tr("quick loading..."), true);
 		processEvents(500);
 
 		while (getCompositeManager().getComposites().size() > 0)
@@ -2057,7 +2057,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		file += FileSystem::PATH_SEPARATOR;
 		file += "quick.bvp";
 		loadBALLViewProjectFile(file);
-		setStatusbarText((String)::BALL::VIEW::MainControl::tr("quick loading finished"), true);
+		setStatusbarText((String)tr("quick loading finished"), true);
 	}
 
 	void MainControl::updateRepLabel_()
@@ -2141,14 +2141,14 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 		filename.split(fields, ". ");
 		if (fields.size() < 2) 
 		{
-			Log.error() << (String)::BALL::VIEW::MainControl::tr("Could not open file ") 
-									<< file << ", " + (String)::BALL::VIEW::MainControl::tr("because no file extension exists.") << std::endl;
+			Log.error() << (String)tr("Could not open file ") 
+									<< file << ", " + (String)tr("because no file extension exists.") << std::endl;
 			return;
 		}
 
 		if (composites_locked_) return;
 
-		setStatusbarText((String)::BALL::VIEW::MainControl::tr("Opening file ") + filename + "...");
+		setStatusbarText((String)tr("Opening file ") + filename + "...");
 
 		if (filename.hasSuffix(".bvp"))
 		{
@@ -2167,8 +2167,8 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			}
 		}
 
-		Log.error() << (String)::BALL::VIEW::MainControl::tr("Dont know how to open ")
-								<< file << (String)::BALL::VIEW::MainControl::tr(". This extension is not supported.") << std::endl;
+		Log.error() << (String)tr("Dont know how to open ")
+								<< file << (String)tr(". This extension is not supported.") << std::endl;
 	}
 
 	void MainControl::setModelInformation(ModelInformation* mi)

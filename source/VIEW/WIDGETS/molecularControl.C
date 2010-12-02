@@ -93,10 +93,10 @@ namespace BALL
  			QGridLayout* lay = new QGridLayout();
  			glay->addLayout(lay, 2, 0);
 
-			listview->setObjectName(::BALL::VIEW::MolecularControl::tr("MolecularControlList"));
-			listview->headerItem()->setText(0, ::BALL::VIEW::MolecularControl::tr("Name [highlight]"));
-			listview->headerItem()->setText(1, ::BALL::VIEW::MolecularControl::tr("Type"));
-			listview->headerItem()->setText(2, ::BALL::VIEW::MolecularControl::tr("checked"));
+			listview->setObjectName(tr("MolecularControlList"));
+			listview->headerItem()->setText(0, tr("Name [highlight]"));
+			listview->headerItem()->setText(1, tr("Type"));
+			listview->headerItem()->setText(2, tr("checked"));
 			listview->resizeColumnToContents(2);
 			listview->resizeColumnToContents(0);
  			lay->addWidget(listview,0, 0, 1, -1);
@@ -121,29 +121,29 @@ namespace BALL
 			BALL_ASSIGN_NAME(clear_button)
 			clear_button->resize(60, 25);
 			clear_button->setMinimumSize(40, 25);
-			clear_button->setText(::BALL::VIEW::MolecularControl::tr("Clear"));
+			clear_button->setText(tr("Clear"));
 			connect(clear_button, SIGNAL(clicked()), this, SLOT(clearSelector()));
- 			clear_button->setToolTip(::BALL::VIEW::MolecularControl::tr("Clear the selection."));
+ 			clear_button->setToolTip(tr("Clear the selection."));
 			lay->addWidget(clear_button,3, 0);
 
 			QPushButton* help_button = new QPushButton(this);
 			BALL_ASSIGN_NAME(help_button)
 			help_button->resize(60, 25);
 			help_button->setMinimumSize(40, 25);
-			help_button->setText(::BALL::VIEW::MolecularControl::tr("Help"));
+			help_button->setText(tr("Help"));
 			connect(help_button, SIGNAL(clicked()), this, SLOT(showSelectorHelp()));
-			help_button->setToolTip(::BALL::VIEW::MolecularControl::tr("Show a help dialog."));
+			help_button->setToolTip(tr("Show a help dialog."));
 			lay->addWidget(help_button,3, 1);
 
 			QPushButton* select_button = new QPushButton(this);
 			BALL_ASSIGN_NAME(select_button)
 			select_button->resize(60, 25);
-			select_button->setText(::BALL::VIEW::MolecularControl::tr("Select"));
+			select_button->setText(tr("Select"));
 			select_button->setDefault(true);
 			select_button->setMinimumSize(40, 25);
 			connect(select_button, SIGNAL(clicked()), this, SLOT(applySelector()));
 			connect(selector_edit_->lineEdit(), SIGNAL(returnPressed()), this, SLOT(applySelector()));
-			select_button->setToolTip(::BALL::VIEW::MolecularControl::tr("Apply the current expression."));
+			select_button->setToolTip(tr("Apply the current expression."));
 			lay->addWidget(select_button,3, 2);
 
 			resize(200,400);
@@ -178,24 +178,24 @@ namespace BALL
 												 !busy;
 			if (allow_paste)
 			{
-				hint = (String)::BALL::VIEW::MolecularControl::tr("Paste a copied or cuted object into current selected object.");
+				hint = (String)tr("Paste a copied or cuted object into current selected object.");
 				list<Composite*>::iterator it = copy_list_.begin();
 				for (; it != copy_list_.end(); it++)
 				{
 					if (!pasteAllowedFor_(**it)) 
 					{
 						allow_paste = false;
-						hint = (String)::BALL::VIEW::MolecularControl::tr("Invalid Combination, cant paste into this entity.");
+						hint = (String)tr("Invalid Combination, cant paste into this entity.");
 						break;
 					}
 				}
 			}
 			else
 			{
-				if (getSelection().size() != 1) 	hint = (String)::BALL::VIEW::MolecularControl::tr("One item must be selected to paste into.");
-				else if (copy_list_.size() == 0) 	hint = (String)::BALL::VIEW::MolecularControl::tr("No copied/cuted object.");
-				else if (main_control.isBusy()) 	hint = (String)::BALL::VIEW::MolecularControl::tr("Simulation running, cant paste meanwhile");
-				else 															hint = (String)::BALL::VIEW::MolecularControl::tr("Update of Representation running, cant paste meanwhile");
+				if (getSelection().size() != 1) 	hint = (String)tr("One item must be selected to paste into.");
+				else if (copy_list_.size() == 0) 	hint = (String)tr("No copied/cuted object.");
+				else if (main_control.isBusy()) 	hint = (String)tr("Simulation running, cant paste meanwhile");
+				else 															hint = (String)tr("Update of Representation running, cant paste meanwhile");
 			}
 			paste_id_->setEnabled(allow_paste);	
 			getMainControl()->setMenuHint(paste_id_, hint);
@@ -207,11 +207,11 @@ namespace BALL
 			clipboard_id_->setEnabled(copy_list_filled && !main_control.isBusy());
 			if (clipboard_id_->isEnabled())
 			{
-				hint = (String)::BALL::VIEW::MolecularControl::tr("No item copied/cuted or simulation running");
+				hint = (String)tr("No item copied/cuted or simulation running");
 			} 
 			else
 			{
-				hint = (String)::BALL::VIEW::MolecularControl::tr("Clear the items in the clipboard");
+				hint = (String)tr("Clear the items in the clipboard");
 			}
 			getMainControl()->setMenuHint(clipboard_id_, hint);
 
@@ -220,7 +220,7 @@ namespace BALL
 			bool list_filled = selected_.size() && !busy;
 			
 			if (list_filled) hint = "";
-			else hint = (String)::BALL::VIEW::MolecularControl::tr("No item selected or simulation running");
+			else hint = (String)tr("No item selected or simulation running");
 			
 			cut_id_->setEnabled(list_filled);
 			getMainControl()->setMenuHint(cut_id_, hint);
@@ -369,10 +369,10 @@ namespace BALL
 			// ===============================================================
 			// create representation context menu:
 			// ===============================================================
-			context_menu_.setObjectName(::BALL::VIEW::MolecularControl::tr("ContextMenu"));
-			model_menu_.setObjectName(::BALL::VIEW::MolecularControl::tr("ModelMenu"));
+			context_menu_.setObjectName(tr("ContextMenu"));
+			model_menu_.setObjectName(tr("ModelMenu"));
 
-			model_menu_.addAction(::BALL::VIEW::MolecularControl::tr("Custom"), this, SLOT(createRepresentation())); 
+			model_menu_.addAction(tr("Custom"), this, SLOT(createRepresentation())); 
 
 			const ModelInformation& mi = getMainControl()->getModelInformation();
 			QAction* action =	0;
@@ -381,7 +381,7 @@ namespace BALL
 			{
 				if (!mi.modelMuteableByDisplayProperties((ModelType)pos)) break;
 				action = model_menu_.addMenu(&color_menu_[p]);
-				color_menu_[p].setObjectName((String(::BALL::VIEW::MolecularControl::tr("ColorMenu")) + String(p)).c_str());
+				color_menu_[p].setObjectName((String(tr("ColorMenu")) + String(p)).c_str());
 				action->setText(mi.getModelName((ModelType)pos).c_str());
 				action->setObjectName(String(pos).c_str());
 				p++;
@@ -408,39 +408,39 @@ namespace BALL
 			// ===============================================================
 
 			QAction* cr = context_menu_.addMenu(&model_menu_);
-			cr->setText(::BALL::VIEW::MolecularControl::tr("Create Representation"));
+			cr->setText(tr("Create Representation"));
 			context_menu_.addSeparator();
 			cr = context_menu_.addMenu(&edit_menu_);
-			cr->setText(::BALL::VIEW::MolecularControl::tr("Edit"));
+			cr->setText(tr("Edit"));
 			context_menu_.addSeparator();
 
-			select_action_ = context_menu_.addAction(::BALL::VIEW::MolecularControl::tr("Select"), this, SLOT(select()));
-			deselect_action_ = context_menu_.addAction(::BALL::VIEW::MolecularControl::tr("Deselect"), this, SLOT(deselect()));
+			select_action_ = context_menu_.addAction(tr("Select"), this, SLOT(select()));
+			deselect_action_ = context_menu_.addAction(tr("Deselect"), this, SLOT(deselect()));
 
 			context_menu_.addSeparator();
-			center_camera_action_ = context_menu_.addAction(::BALL::VIEW::MolecularControl::tr("Focus"), this, SLOT(centerCamera()));
+			center_camera_action_ = context_menu_.addAction(tr("Focus"), this, SLOT(centerCamera()));
 			context_menu_.addSeparator();
 
 			// -----------------------------------> AtomContainer
-			count_items_action_ = context_menu_.addAction(::BALL::VIEW::MolecularControl::tr("Count items"), this, SLOT(countItems()), 0);
-			atom_overview_ = context_menu_.addAction(::BALL::VIEW::MolecularControl::tr("Atom Overview"), this, SLOT(showAtomOverview()), 0);
-			atom_overview_selection_ = context_menu_.addAction(::BALL::VIEW::MolecularControl::tr("Atom Overview for Selection"), this, 
+			count_items_action_ = context_menu_.addAction(tr("Count items"), this, SLOT(countItems()), 0);
+			atom_overview_ = context_menu_.addAction(tr("Atom Overview"), this, SLOT(showAtomOverview()), 0);
+			atom_overview_selection_ = context_menu_.addAction(tr("Atom Overview for Selection"), this, 
 																												SLOT(showAtomOverviewForSelection()), 0);
 			// <----------------------------------- AtomContainer
 			
 			context_menu_.addSeparator();
-			composite_properties_action_ = context_menu_.addAction(::BALL::VIEW::MolecularControl::tr("Properties"), this, SLOT(compositeProperties()));
+			composite_properties_action_ = context_menu_.addAction(tr("Properties"), this, SLOT(compositeProperties()));
 
 			// -----------------------------------> Atoms
-			bond_propertes_action_ = context_menu_.addAction(::BALL::VIEW::MolecularControl::tr("Show Bonds"), this, SLOT(bondProperties()));
+			bond_propertes_action_ = context_menu_.addAction(tr("Show Bonds"), this, SLOT(bondProperties()));
 			// <----------------------------------- Atoms
 
 			context_menu_.addSeparator();
-			context_menu_.addAction(::BALL::VIEW::MolecularControl::tr("Collapse all"), this, SLOT(collapseAll()));
-			context_menu_.addAction(::BALL::VIEW::MolecularControl::tr("Expand all"), this, SLOT(expandAll()));
-			context_menu_.addAction(::BALL::VIEW::MolecularControl::tr("Highlight Selection"), this, SLOT(highlightSelection()));
+			context_menu_.addAction(tr("Collapse all"), this, SLOT(collapseAll()));
+			context_menu_.addAction(tr("Expand all"), this, SLOT(expandAll()));
+			context_menu_.addAction(tr("Highlight Selection"), this, SLOT(highlightSelection()));
 			context_menu_.addSeparator();
-			show_ss_id_ = context_menu_.addAction(::BALL::VIEW::MolecularControl::tr("Show Secondary Structures"), this, 
+			show_ss_id_ = context_menu_.addAction(tr("Show Secondary Structures"), this, 
 																						SLOT(switchShowSecondaryStructure()));
 			show_ss_id_->setCheckable(true);
 
@@ -448,12 +448,12 @@ namespace BALL
 			// edit context menu:
 			// ===============================================================
 
-			edit_menu_.addAction(::BALL::VIEW::MolecularControl::tr("Cut"), this, SLOT(cut()));
-			edit_menu_.addAction(::BALL::VIEW::MolecularControl::tr("Copy"), this, SLOT(copy()));
-			edit_menu_.addAction(::BALL::VIEW::MolecularControl::tr("Paste"), this, SLOT(paste()));
-			edit_menu_.addAction(::BALL::VIEW::MolecularControl::tr("Delete"), this, SLOT(deleteCurrentItems()));
+			edit_menu_.addAction(tr("Cut"), this, SLOT(cut()));
+			edit_menu_.addAction(tr("Copy"), this, SLOT(copy()));
+			edit_menu_.addAction(tr("Paste"), this, SLOT(paste()));
+			edit_menu_.addAction(tr("Delete"), this, SLOT(deleteCurrentItems()));
 			edit_menu_.addSeparator();
-			edit_menu_.addAction(::BALL::VIEW::MolecularControl::tr("Move"), this, SLOT(moveItems()));
+			edit_menu_.addAction(tr("Move"), this, SLOT(moveItems()));
 		}
 
 		void MolecularControl::updateContextMenu(Composite& composite)
@@ -498,7 +498,7 @@ namespace BALL
 			if (atom == 0) return;
 			if (atom->countBonds() == 0) 
 			{
-				setStatusbarText((String)::BALL::VIEW::MolecularControl::tr("Atom has no bonds!"));
+				setStatusbarText((String)tr("Atom has no bonds!"));
 				return;
 			}
 			BondProperties bs(atom, this);
@@ -531,11 +531,11 @@ namespace BALL
 			
 			if (ac != 0)
 			{
-				setStatusbarText((String)::BALL::VIEW::MolecularControl::tr("Composite is from file") + String("  ") + ac->getProperty("FROM_FILE").getString());
+				setStatusbarText((String)tr("Composite is from file") + String("  ") + ac->getProperty("FROM_FILE").getString());
 			}
 			else
 			{
-				setStatusbarText((String)::BALL::VIEW::MolecularControl::tr("Composite is not from file"));
+				setStatusbarText((String)tr("Composite is not from file"));
 			}
 		}
 
@@ -589,7 +589,7 @@ namespace BALL
 		{
 			if (getMainControl()->isBusy())
 			{
-				setStatusbarText((String)::BALL::VIEW::MolecularControl::tr("No changes allowed, while simulation is running or creating new representations!"), true);
+				setStatusbarText((String)tr("No changes allowed, while simulation is running or creating new representations!"), true);
 				return;
 			}
 
@@ -625,34 +625,34 @@ namespace BALL
 		{
 			String hint;
 
-			select_id_ = insertMenuEntry(MainControl::EDIT, (String)::BALL::VIEW::MolecularControl::tr("&Select"), this, SLOT(select()), "Shortcut|Edit|Select");   
-			setMenuHint((String)::BALL::VIEW::MolecularControl::tr("Select a molecular object to see its position in the scene or to mark it for a simulation"));
+			select_id_ = insertMenuEntry(MainControl::EDIT, (String)tr("&Select"), this, SLOT(select()), "Shortcut|Edit|Select");   
+			setMenuHint((String)tr("Select a molecular object to see its position in the scene or to mark it for a simulation"));
 			setMenuHelp("molecularControl.html#selection_highlight");
-			deselect_id_ = insertMenuEntry(MainControl::EDIT, (String)::BALL::VIEW::MolecularControl::tr("&Deselect"), this, SLOT(deselect()), "Shortcut|Edit|Deselect");
-			setMenuHint((String)::BALL::VIEW::MolecularControl::tr("Deselect a molecular object."));
+			deselect_id_ = insertMenuEntry(MainControl::EDIT, (String)tr("&Deselect"), this, SLOT(deselect()), "Shortcut|Edit|Deselect");
+			setMenuHint((String)tr("Deselect a molecular object."));
 			setMenuHelp("molecularControl.html#selection_highlight");
 
 			main_control.insertPopupMenuSeparator(MainControl::EDIT);
 
 			String description = "Shortcut|Edit|Cut";
-			cut_id_ = main_control.insertMenuEntry(MainControl::EDIT, (String)::BALL::VIEW::MolecularControl::tr("Cu&t"), this, 
+			cut_id_ = main_control.insertMenuEntry(MainControl::EDIT, (String)tr("Cu&t"), this, 
 																						 SLOT(cut()), description, QKeySequence::Cut);
 
 			description = "Shortcut|Edit|Copy";
-			copy_id_ = main_control.insertMenuEntry(MainControl::EDIT, (String)::BALL::VIEW::MolecularControl::tr("&Copy"), this, 
+			copy_id_ = main_control.insertMenuEntry(MainControl::EDIT, (String)tr("&Copy"), this, 
 																						 SLOT(copy()), description, QKeySequence::Copy);
 
 			description = "Shortcut|Edit|Paste";
-			paste_id_ = main_control.insertMenuEntry(MainControl::EDIT, (String)::BALL::VIEW::MolecularControl::tr("&Paste"), this, 
+			paste_id_ = main_control.insertMenuEntry(MainControl::EDIT, (String)tr("&Paste"), this, 
 																							 SLOT(paste()), description, QKeySequence::Paste);
 
 			main_control.insertDeleteEntry();
 			main_control.insertPopupMenuSeparator(MainControl::EDIT);
 
 			description = "Shortcut|Edit|Clear_Clipboard";
-			clipboard_id_ = main_control.insertMenuEntry(MainControl::EDIT, (String)::BALL::VIEW::MolecularControl::tr("Clear Clipboard"), this, 
+			clipboard_id_ = main_control.insertMenuEntry(MainControl::EDIT, (String)tr("Clear Clipboard"), this, 
 																									 SLOT(clearClipboard()), description);
-			setMenuHint((String)::BALL::VIEW::MolecularControl::tr("Clear the items in the clipboard"));
+			setMenuHint((String)tr("Clear the items in the clipboard"));
 
 			GenericControl::initializeWidget(main_control);
 
@@ -660,14 +660,14 @@ namespace BALL
 			registerForHelpSystem(selector_edit_, "molecularControl.html#regular_expressions"); 
 
 			description = "Shortcut|Display|Create|Distance_Label";
-			distance_action_ = insertMenuEntry(MainControl::DISPLAY_CREATE, (String)::BALL::VIEW::MolecularControl::tr("Distance Label"), this, 
+			distance_action_ = insertMenuEntry(MainControl::DISPLAY_CREATE, (String)tr("Distance Label"), this, 
 																				 SLOT(showDistance()), description);
-			setMenuHint((String)::BALL::VIEW::MolecularControl::tr("Render a label for the distance between two highlighted atoms"));
+			setMenuHint((String)tr("Render a label for the distance between two highlighted atoms"));
 
 			description = "Shortcut|Display|Create|Angle_Label";
-			angle_action_ = insertMenuEntry(MainControl::DISPLAY_CREATE, (String)::BALL::VIEW::MolecularControl::tr("Angle Label"), this, 
+			angle_action_ = insertMenuEntry(MainControl::DISPLAY_CREATE, (String)tr("Angle Label"), this, 
 																			SLOT(showAngle()), description);
-			setMenuHint((String)::BALL::VIEW::MolecularControl::tr("Render a label for the angle between three highlighted atoms"));
+			setMenuHint((String)tr("Render a label for the angle between three highlighted atoms"));
 		}
 
 
@@ -881,7 +881,7 @@ namespace BALL
 			const list<Composite*> selection = getSelection();
 			if (selection.size() == 0) return;
 
-			setStatusbarText((String)::BALL::VIEW::MolecularControl::tr("copied ") + String(selection.size()) + (String)::BALL::VIEW::MolecularControl::tr(" objects") + " ...");
+			setStatusbarText((String)tr("copied ") + String(selection.size()) + (String)tr(" objects") + " ...");
 
 			// delete old cutted composites
 			clearClipboard();
@@ -901,7 +901,7 @@ namespace BALL
 
 			if (copy_list_.size() == 0) return;
 
-			setStatusbarText((String)::BALL::VIEW::MolecularControl::tr("Pasted ") + String(copy_list_.size()) + (String)::BALL::VIEW::MolecularControl::tr(" objects") + "...");
+			setStatusbarText((String)tr("Pasted ") + String(copy_list_.size()) + (String)tr(" objects") + "...");
 
 			HashSet<Composite*> changed_roots;
 			// copying composites
@@ -921,7 +921,7 @@ namespace BALL
 
 				if (selected_.size() != 1)
 				{
-					setStatusbarText((String)::BALL::VIEW::MolecularControl::tr("Could not paste, no or more than 1 item selected!"));
+					setStatusbarText((String)tr("Could not paste, no or more than 1 item selected!"));
 					continue;
 				}
 
@@ -971,7 +971,7 @@ namespace BALL
 			#ifdef BALL_VIEW_DEBUG
 			if (composite_to_item_.has(&composite))
 			{
-				Log.error() << (String)::BALL::VIEW::MolecularControl::tr("Composite ") << & composite << (String)::BALL::VIEW::MolecularControl::tr(" already added!") << std::endl;
+				Log.error() << (String)tr("Composite ") << & composite << (String)tr(" already added!") << std::endl;
 			}
 			#endif
 
@@ -1091,26 +1091,26 @@ namespace BALL
 			if (RTTI::isKindOf<System>(ac))
 			{
 				s+=String(((System*)&ac)->countResidues());
-				s+= (String)::BALL::VIEW::MolecularControl::tr(" Residues") + ", ";
+				s+= (String)tr(" Residues") + ", ";
 			}
 			else if (RTTI::isKindOf<Protein>(ac))
 			{
 				s+=String(((Protein*)&ac)->countResidues());
-				s+= (String)::BALL::VIEW::MolecularControl::tr(" Residues") + ", ";
+				s+= (String)tr(" Residues") + ", ";
 			}
 			else if (RTTI::isKindOf<Chain>(ac))
 			{
 				s+=String(((Chain*)&ac)->countResidues());
-				s+= (String)::BALL::VIEW::MolecularControl::tr(" Residues") + ", ";
+				s+= (String)tr(" Residues") + ", ";
 			}
 			if (RTTI::isKindOf<SecondaryStructure>(ac))
 			{
 				s+=String(((SecondaryStructure*)&ac)->countResidues());
-				s+= (String)::BALL::VIEW::MolecularControl::tr(" Residues") + ", ";
+				s+= (String)tr(" Residues") + ", ";
 			}
 
-			s += String(ac.countAtoms()) + (String)::BALL::VIEW::MolecularControl::tr(" Atoms") + ", ";
-			s += String(ac.countBonds()) + (String)::BALL::VIEW::MolecularControl::tr(" Bonds");
+			s += String(ac.countAtoms()) + (String)tr(" Atoms") + ", ";
+			s += String(ac.countBonds()) + (String)tr(" Bonds");
 			setStatusbarText(s, true);
 		}
 
@@ -1130,7 +1130,7 @@ namespace BALL
 			}
 			catch(Exception::ParseError& e)
 			{
-				setStatusbarText((String)::BALL::VIEW::MolecularControl::tr("Invalid expression ") + e.getMessage(), true);
+				setStatusbarText((String)tr("Invalid expression ") + e.getMessage(), true);
 				return 0;
 			}
 			catch(Exception::GeneralException& e)
@@ -1151,7 +1151,7 @@ namespace BALL
 				}
 				catch(Exception::GeneralException& e)
 				{
-					setStatusbarText((String)::BALL::VIEW::MolecularControl::tr("Invalid expression ") + e.getMessage(), true);
+					setStatusbarText((String)tr("Invalid expression ") + e.getMessage(), true);
 					return 0;
 				}
 
@@ -1174,7 +1174,7 @@ namespace BALL
 			nm->setOpenItems(true);
 			getMainControl()->sendMessage(*nm);
 
-			setStatusbarText((String)::BALL::VIEW::MolecularControl::tr("Selected ") + String(s.getNumberOfSelectedAtoms()) + (String)::BALL::VIEW::MolecularControl::tr(" atoms."));
+			setStatusbarText((String)tr("Selected ") + String(s.getNumberOfSelectedAtoms()) + (String)tr(" atoms."));
 			listview->setFocus();
 
 			return nr_of_atoms;
@@ -1423,7 +1423,7 @@ namespace BALL
 				if (checked) item->setCheckState(2, Qt::Unchecked);
 				else 				 item->setCheckState(2, Qt::Checked);
 
-				VIEW::getMainControl()->setStatusbarText((String)::BALL::VIEW::MolecularControl::tr("Cannot select items now!"), true);
+				VIEW::getMainControl()->setStatusbarText((String)tr("Cannot select items now!"), true);
 				return;
 			}
 
