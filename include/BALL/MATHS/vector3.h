@@ -89,7 +89,7 @@ namespace BALL
 				@param ptr the array to construct from
 				@exception NullPointer if <tt>ptr == 0</tt>
 		*/
-		TVector3(const T* ptr)
+		explicit TVector3(const T* ptr)
 			throw(Exception::NullPointer);
 
 		/**	Scalar constructor.
