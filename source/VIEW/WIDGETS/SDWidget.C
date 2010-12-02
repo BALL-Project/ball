@@ -6,6 +6,12 @@
 #include <BALL/STRUCTURE/sdGenerator.h>
 
 #include <QtGui/QPainter>
+#include <QtGui/QStyle>
+#include <QtGui/QStyleOption>
+#include <QtGui/QAction>
+
+#include <QtGui/QFileDialog>
+
 #include <set>
 
 namespace BALL
@@ -17,25 +23,32 @@ namespace BALL
 
 		SDWidget::SDWidget(QWidget *parent, bool show_hydrogens)
 			: QWidget(parent),
-				options(),
-				resize_to_parent_(true),
 				clear_(true)
 		{
-			setDefaultOptions();
+			setup_();
+
 			options[SDWidget::Option::SHOW_HYDROGENS] = show_hydrogens;
-			setBackgroundRole(QPalette::Base);
-			setAutoFillBackground(true);
 		}
 
-		SDWidget::SDWidget(const System& system, QWidget *parent, bool resize_to_parent)
+		SDWidget::SDWidget(const System& system, QWidget *parent)
 			: QWidget(parent),
-				resize_to_parent_(resize_to_parent),
 				clear_(true)
 		{
-			setBackgroundRole(QPalette::Base);
-			setAutoFillBackground(true);
+			setup_();
 
 			plot(system);
+		}
+
+		void SDWidget::setup_()
+		{
+			setDefaultOptions();
+			setBackgroundRole(QPalette::Base);
+
+			//Todo: Add a nice icon
+			QAction* export_image = new QAction(tr("Export image"), this);
+
+			addAction(export_image);
+			connect(export_image, SIGNAL(triggered()), this, SLOT(exportImage_()));
 		}
 
 		SDWidget::~SDWidget()
@@ -44,11 +57,6 @@ namespace BALL
 		void SDWidget::plot(const System& system, bool clear, bool create_sd)
 		{
 			clear_ = clear;
-			
-			// make sure to have the same size as our parent
-			if (resize_to_parent_ && parent())
-				resize(((QWidget*)parent())->size());
-
 			system_ = system;
 
 			if (create_sd)
@@ -62,12 +70,22 @@ namespace BALL
 
 		void SDWidget::paintEvent(QPaintEvent *)
 		{
+			renderSD_(this);
+		}
+
+		void SDWidget::renderSD_(QPaintDevice* pd)
+		{
+			if(!pd)
+			{
+				return;
+			}
+
 			if (clear_)
 			{
-				QPainter painter(this);
-				painter.eraseRect(0,0,width(),height());
+				QPainter painter(pd);
+				painter.eraseRect(0,0,pd->width(),pd->height());
 			}
-		
+
 			BoundingBoxProcessor bp;
 			system_.apply(bp);
 			Vector3 upper = bp.getUpper() + Vector3(5.,5.,5.);
@@ -77,19 +95,21 @@ namespace BALL
 			system_.apply(gcp);
 			Vector3 center = gcp.getCenter();
 	
-			float xscale = width()  / (upper.x - lower.x);
-			float yscale = height() / (upper.y - lower.y);
+			float xscale = pd->width()  / (upper.x - lower.x);
+			float yscale = pd->height() / (upper.y - lower.y);
 
-			QPainter painter(this);
+			xscale = yscale = std::min(xscale, yscale);
+
+			QPainter painter(pd);
 
 			QPen pen(Qt::black, 3, Qt::SolidLine, Qt::RoundCap, Qt::MiterJoin);
 			painter.setPen(pen);
 			painter.setRenderHint(QPainter::Antialiasing, true);
-			painter.translate(width()/2, height()/2);
+			painter.translate(pd->width()/2, pd->height()/2);
 
 		  QFont newFont = font();
  		  newFont.setPixelSize(12);
-			setFont(newFont);
+			painter.setFont(newFont);
  
 			QFontMetrics fontMetrics(newFont);
 			
@@ -256,17 +276,24 @@ namespace BALL
 			system_.clear();
 			update();
 		}
-		
-		void SDWidget::setResizeToParent(bool flag)
-		{
-			resize_to_parent_ = flag;
-		}
 
 		void SDWidget::setDefaultOptions()
-		{		
+		{
 	 		options.setDefaultBool(SDWidget::Option::SHOW_HYDROGENS,
 	 												 	 SDWidget::Default::SHOW_HYDROGENS);
 		}
 
+		void SDWidget::exportImage_()
+		{
+			QString file = QFileDialog::getSaveFileName(this, tr("Export image"), QString(), "Images (*.png *.xpm *.jpg)");
+
+			if(file != QString::null)
+			{
+				QPixmap image(width(), height());
+				renderSD_(&image);
+
+				image.save(file);
+			}
+		}
 	}
 }

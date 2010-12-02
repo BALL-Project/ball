@@ -39,15 +39,16 @@ namespace BALL
 			setupUi(this);
 			setObjectName(name);
 
-			sdwidget_.setParent(SDFrame);
 			// register the widget with the MainControl
 			ModularWidget::registerWidget(this);
 			hide();
+
+			add_button_ = buttonBox->addButton(tr("Add"), QDialogButtonBox::AcceptRole);
+			QPushButton* clear = buttonBox->addButton(tr("Clear Results"), QDialogButtonBox::ResetRole);
+
 			connect(generate_button, SIGNAL(clicked()), this, SLOT(generateButtonClicked()));
-			connect(cancel_button, SIGNAL(clicked()), this, SLOT(hide()));
 			connect(search_button, SIGNAL(clicked()), this, SLOT(queryPubChem()));
-			connect(clear_button, SIGNAL(clicked()), this, SLOT(clearEntries()));
-			connect(ok_button, SIGNAL(clicked()), this, SLOT(finished()));
+			connect(clear, SIGNAL(clicked()), this, SLOT(clearEntries()));
 			connect(queries, SIGNAL(itemActivated(QTreeWidgetItem*, int)), this, SLOT(switchView(QTreeWidgetItem*, int)));
 
 			queries->setColumnCount(1);
@@ -103,7 +104,7 @@ namespace BALL
 			original_systems_.clear();
 			descriptions_.clear();
 			queries->clear();
-			sdwidget_.clear();
+			sdwidget_->clear();
 			text_field->clear();
 		}
 
@@ -142,19 +143,16 @@ namespace BALL
 			// is this item connected with a system?
 			if (sd_systems_.find(item) != sd_systems_.end())
 			{
-				sdwidget_.plot(*sd_systems_[item], true, false);
+				sdwidget_->plot(*sd_systems_[item], true, false);
 			}
 
 			// do we have a description for it?
 			if (descriptions_.find(item) != descriptions_.end())
 			{
 				text_field->setText(QString(descriptions_[item].description.c_str()));
-				ok_button->setEnabled(true);
 			}
-			else
-			{
-				ok_button->setEnabled(true);
-			}
+
+			add_button_->setEnabled(true);
 		}
 
 		void PubChemDialog::queryPubChem()
@@ -195,7 +193,7 @@ namespace BALL
 
 			if (plot)
 			{
-				sdwidget_.plot(S, true, false);
+				sdwidget_->plot(S, true, false);
 				switchView(current_item, 0);
 			}
 

@@ -109,8 +109,6 @@ namespace BALL
 					
 					bool parseESummaryXml_(const QByteArray& data, ParsedResult_& result);
 
-					SDWidget sdwidget_;
-
 					std::map<QTreeWidgetItem*, System*> 				sd_systems_;
 					std::map<QTreeWidgetItem*, System*> 				original_systems_;
 					std::map<QTreeWidgetItem*, ParsedResult_>  	descriptions_;
@@ -130,6 +128,8 @@ namespace BALL
 					QHttp esummary_connector_;
 
 					QProgressBar *progress_;
+
+					QPushButton* add_button_;
 			};
 	}
 }

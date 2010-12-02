@@ -10,7 +10,8 @@
 #endif
 
 #include <BALL/KERNEL/system.h>
-#include <QtGui/qwidget.h>
+
+#include <QtGui/QWidget>
 
 namespace BALL
 {
@@ -48,7 +49,7 @@ namespace BALL
 				SDWidget(QWidget *parent = 0, bool show_hydrogens = false);
 
 				///
-				SDWidget(const System& system, QWidget *parent = 0, bool resize_to_parent = true);
+				SDWidget(const System& system, QWidget *parent = 0);
 	
       	///
       	virtual ~SDWidget();
@@ -79,11 +80,14 @@ namespace BALL
 				///
 				void clear();
 
-				///
-				void setResizeToParent(bool flag);
+			protected slots:
+				void exportImage_();
 
 			protected:
+				void setup_();
 				void paintEvent(QPaintEvent *event);
+
+				void renderSD_(QPaintDevice* paint_device);
 
 				QPointF getEndpoint_(QRectF& character_boundary, QPointF from, QPointF to);
 				System system_;

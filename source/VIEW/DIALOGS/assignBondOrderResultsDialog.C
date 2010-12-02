@@ -32,8 +32,6 @@ namespace BALL
 			setupUi(this);
 			setObjectName(name);
 
-			sd_widget->setResizeToParent(false);
-
 			// register the widget with the MainControl
 			ModularWidget::registerWidget(this);
 			hide();
