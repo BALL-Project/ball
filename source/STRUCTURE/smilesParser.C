@@ -29,7 +29,6 @@ namespace BALL
 	}
 	
 	SmilesParser::SPAtom::~SPAtom()
-		
 	{
 	}
 
@@ -56,19 +55,20 @@ namespace BALL
 
 	Size SmilesParser::SPAtom::countRealValences() const
 	{
-		Size count = 0;
+		Size count_non_aromatic = 0;
+		Size count_aromatic = 0;
 		for (Position i = 0; i < countBonds(); ++i)
 		{
-			count += abs(getBond(i)->getOrder());
+			Size order = getBond(i)->getOrder();
+
+			if (order == Bond::ORDER__AROMATIC)
+				count_aromatic += 3;
+			else 
+				count_non_aromatic += order;
 		}
 		
-		// if the atom is aromatic, we asume that
-		// two of the bonds were aromatic ("order" is still 1)
-		// and correct for the missing two "half-valences"
-		if (isAromatic())
-		{
-			count++;
-		}
+		// correct for the missing "half-valence" for each aromatic bond
+		Size count = count_non_aromatic + count_aromatic/2;
 		
 		return count;
 	}
@@ -190,11 +190,13 @@ namespace BALL
 			ze_type_(SmilesParser::NONE)
 	{
 		left->createBond(*this, *right);
-		setOrder(order);
+		if (left->isAromatic() && right->isAromatic())
+			setOrder(Bond::ORDER__AROMATIC);
+		else
+			setOrder(order);
 	}
 
 	SmilesParser::SPBond::~SPBond()
-		
 	{
 		destroy();
 	}
