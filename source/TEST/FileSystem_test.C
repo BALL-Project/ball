@@ -31,30 +31,30 @@ CHECK(canonizePath(String& path) -- expansion of tilde)
 RESULT
 
 CHECK(canonizePath(String& path) -- removal of duplicate path separators)
-	String path(PS + PS);
+	String path("//");
 	FileSystem::canonizePath(path);
-	TEST_EQUAL(path, PS)
+	TEST_EQUAL(path, "/")
 	path = PS + "usr" + PS + "local" + PS + PS;
 	FileSystem::canonizePath(path);
-	TEST_EQUAL(path, PS + "usr" + PS + "local" + PS)
+	TEST_EQUAL(path, "/usr/local/")
 RESULT
 
 CHECK(canonizePath(String& path) -- expansion of relative paths)
 	String path(PS + "usr" + PS + "local" + PS + ".." + PS + "bin" + PS);
 	FileSystem::canonizePath(path);
-	TEST_EQUAL(path, PS + "usr" + PS + "bin" + PS)
+	TEST_EQUAL(path, "/usr/bin/")
 	path = String("..") + PS + ".." + PS;
 	FileSystem::canonizePath(path);
-	TEST_EQUAL(path, String("..") + PS + ".." + PS)
+	TEST_EQUAL(path, String("../../"))
 	path = "..";
 	FileSystem::canonizePath(path);
 	TEST_EQUAL(path, "..")
 	path = String("..") + PS + "..";
 	FileSystem::canonizePath(path);
-	TEST_EQUAL(path, String("..") + PS + "..")
+	TEST_EQUAL(path, String("../.."))
 	path = String("..") + PS + "." + PS + "..";
 	FileSystem::canonizePath(path);
-	TEST_EQUAL(path, String("..") + PS + "..")
+	TEST_EQUAL(path, String("../.."))
 RESULT
 
 CHECK(baseName(const String& filename))

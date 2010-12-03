@@ -35,7 +35,7 @@ namespace BALL
 		if (path.hasPrefix("\\\\"))
 			return;
 
-#ifdef BALL_OS_WINDOWS
+#ifdef BALL_COMPILER_MSVC
 		// replace "\" by "/"
 		for (index = 0; index != INVALID_INDEX; index = path.substitute("\\", "/")) { }
 #endif
