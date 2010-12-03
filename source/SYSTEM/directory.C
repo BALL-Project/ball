@@ -733,6 +733,8 @@ namespace BALL
 			{
 				homedir = String(home_drive) + "\\" + home_path;
 			}
+
+			FileSystem::canonizePath(homedir);
 		}
 
 		if (homedir == "")
