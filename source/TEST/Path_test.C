@@ -35,13 +35,11 @@ RESULT
 Path p;
 String data_suffix1("/data/");
 String data_suffix2("/data/");
-data_suffix2[0] = FileSystem::PATH_SEPARATOR;
-data_suffix2[5] = FileSystem::PATH_SEPARATOR;
 
 String x_test("XXXXX");
-x_test += FileSystem::PATH_SEPARATOR + "XXXXX";
+x_test += "/XXXXX";
 
-String x_test_quoted(x_test + FileSystem::PATH_SEPARATOR);
+String x_test_quoted(x_test + "/");
 
 CHECK(string getDataPath())
 	STATUS(p.getDataPath())
@@ -69,15 +67,15 @@ RESULT
 CHECK(string find(const string& name))
 	Path p1;
 	p1.reset();
-	String file = String("fragments") + FileSystem::PATH_SEPARATOR + "Fragments.db";
+	String file = String("fragments/Fragments.db");
 	TEST_NOT_EQUAL(p1.find(file), "")
 	file = "Fragments.db";
 	TEST_EQUAL(p1.find(file), "")
 	file = "Path_test.C";
 	TEST_EQUAL(p1.find(file), "Path_test.C");
-	file = String("TEST") + FileSystem::PATH_SEPARATOR + "Path_test.C";
+	file = String("TEST/Path_test.C");
 	TEST_EQUAL(p1.find(file), "Path_test.C");	
-	file = String("xxx") + FileSystem::PATH_SEPARATOR + "Path_test.C";
+	file = String("xxx/Path_test.C");
 	TEST_EQUAL(p1.find(file), "Path_test.C");
 	file = "Path_testX.C";
 	TEST_EQUAL(p1.find(file), "");

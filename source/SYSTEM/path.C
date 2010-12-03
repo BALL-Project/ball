@@ -49,20 +49,25 @@ namespace BALL
 	{
 		path_array_valid_ = false;
 		path_ = path;
+		FileSystem::canonizePath(path_);
 	}
 
 	void Path::addDataPath(const String& path)
 	{
 		path_array_valid_ = false;
 		path_ += "\n";
-		path_ += path;
+
+		String canonical_path(path);
+		FileSystem::canonizePath(canonical_path);
+		path_ += canonical_path;
 	}
 
 	String Path::getDefaultDataPath()
 	{	
 		String path = BALL_DATA_PATH;
-		if (path[path.size()-1] != FileSystem::PATH_SEPARATOR)
-			path.append(String(FileSystem::PATH_SEPARATOR));
+		FileSystem::canonizePath(path);
+		if (path[path.size()-1] != '/')
+			path.append("/");
 		return path;
 	}
 
@@ -145,9 +150,9 @@ namespace BALL
 			if (current_path.trim() != "")
 			{
 				// append a '/' if neccessary (just to be sure...)
-				if (current_path[current_path.size()-1] != FileSystem::PATH_SEPARATOR)
+				if (current_path[current_path.size()-1] != '/')
 				{
-					current_path.append(String(FileSystem::PATH_SEPARATOR));
+					current_path.append("/");
 				}
 
 				path_ += current_path;
@@ -176,7 +181,7 @@ namespace BALL
 			// if the full (path-specified) name could not be found,
 			// only try the basename (remove leading directories)
 			String tmp = name;
-			tmp.erase(0, tmp.rfind(FileSystem::PATH_SEPARATOR) + 1);
+			tmp.erase(0, tmp.rfind('/') + 1);
 			if (tmp != name)
 			{
 				result = findStrict(tmp);
