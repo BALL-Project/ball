@@ -582,8 +582,10 @@ namespace BALL
 		dir_ = dirent_= INVALID_HANDLE_VALUE;
 		if (   (directory_path.size() > 0) 
 			&& ((directory_path[0] == FileSystem::PATH_SEPARATOR) || 
+			    (directory_path[0] == '/') ||
 				(directory_path[1] == ':' && 
-				 directory_path[2] == FileSystem::PATH_SEPARATOR)))
+				 (  (directory_path[2] == FileSystem::PATH_SEPARATOR)
+				  ||(directory_path[2] == '/')))))
 #else
 		dir_ = 0;
 		dirent_ = 0;
@@ -606,7 +608,7 @@ namespace BALL
 			directory_path_ += "/";
 			directory_path_ += directory_path;
 			FileSystem::canonizePath(directory_path_);
-			if (directory_path_.hasSuffix(String(FileSystem::PATH_SEPARATOR)))
+			if (directory_path_.hasSuffix("/"))
 			{
 				directory_path_.truncate((Size)directory_path_.size() - 1);
 			}
