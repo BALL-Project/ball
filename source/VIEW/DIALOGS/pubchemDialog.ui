@@ -13,19 +13,13 @@
   <property name="windowTitle">
    <string>Query PubChem or generate from SMILES</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="_2">
    <item>
     <widget class="QSplitter" name="splitter_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
      <widget class="QTreeWidget" name="queries">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
       <column>
        <property name="text">
         <string notr="true">1</string>
@@ -33,6 +27,12 @@
       </column>
      </widget>
      <widget class="QSplitter" name="splitter">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
@@ -43,81 +43,11 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="palette">
-        <palette>
-         <active>
-          <colorrole role="Base">
-           <brush brushstyle="SolidPattern">
-            <color alpha="255">
-             <red>255</red>
-             <green>255</green>
-             <blue>255</blue>
-            </color>
-           </brush>
-          </colorrole>
-          <colorrole role="Window">
-           <brush brushstyle="SolidPattern">
-            <color alpha="255">
-             <red>255</red>
-             <green>255</green>
-             <blue>255</blue>
-            </color>
-           </brush>
-          </colorrole>
-         </active>
-         <inactive>
-          <colorrole role="Base">
-           <brush brushstyle="SolidPattern">
-            <color alpha="255">
-             <red>255</red>
-             <green>255</green>
-             <blue>255</blue>
-            </color>
-           </brush>
-          </colorrole>
-          <colorrole role="Window">
-           <brush brushstyle="SolidPattern">
-            <color alpha="255">
-             <red>255</red>
-             <green>255</green>
-             <blue>255</blue>
-            </color>
-           </brush>
-          </colorrole>
-         </inactive>
-         <disabled>
-          <colorrole role="Base">
-           <brush brushstyle="SolidPattern">
-            <color alpha="255">
-             <red>255</red>
-             <green>255</green>
-             <blue>255</blue>
-            </color>
-           </brush>
-          </colorrole>
-          <colorrole role="Window">
-           <brush brushstyle="SolidPattern">
-            <color alpha="255">
-             <red>255</red>
-             <green>255</green>
-             <blue>255</blue>
-            </color>
-           </brush>
-          </colorrole>
-         </disabled>
-        </palette>
-       </property>
        <property name="contextMenuPolicy">
         <enum>Qt::ActionsContextMenu</enum>
        </property>
       </widget>
       <widget class="QTextEdit" name="text_field">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="acceptDrops">
         <bool>false</bool>
        </property>
@@ -166,6 +96,9 @@
        <property name="text">
         <string>Generate</string>
        </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
       </widget>
      </item>
      <item row="0" column="2">
@@ -184,6 +117,9 @@
        </property>
        <property name="text">
         <string>PubChem</string>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -208,7 +144,7 @@
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel</set>
+      <set>QDialogButtonBox::Close</set>
      </property>
     </widget>
    </item>
@@ -227,7 +163,9 @@
   <tabstop>search_button</tabstop>
   <tabstop>smiles_label</tabstop>
   <tabstop>generate_button</tabstop>
+  <tabstop>buttonBox</tabstop>
   <tabstop>queries</tabstop>
+  <tabstop>text_field</tabstop>
  </tabstops>
  <resources/>
  <connections>
@@ -238,8 +176,8 @@
    <slot>hide()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>406</x>
-     <y>704</y>
+     <x>410</x>
+     <y>560</y>
     </hint>
     <hint type="destinationlabel">
      <x>377</x>
@@ -248,18 +186,50 @@
    </hints>
   </connection>
   <connection>
-   <sender>PubChemDialogData</sender>
+   <sender>buttonBox</sender>
    <signal>accepted()</signal>
    <receiver>PubChemDialogData</receiver>
    <slot>finished()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>429</x>
-     <y>748</y>
+     <x>457</x>
+     <y>543</y>
     </hint>
     <hint type="destinationlabel">
-     <x>431</x>
-     <y>759</y>
+     <x>451</x>
+     <y>655</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pubchem_label</sender>
+   <signal>returnPressed()</signal>
+   <receiver>search_button</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>215</x>
+     <y>346</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>475</x>
+     <y>345</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>smiles_label</sender>
+   <signal>returnPressed()</signal>
+   <receiver>generate_button</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>245</x>
+     <y>454</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>429</x>
+     <y>455</y>
     </hint>
    </hints>
   </connection>

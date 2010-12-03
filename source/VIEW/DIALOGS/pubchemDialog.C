@@ -41,7 +41,6 @@ namespace BALL
 
 			// register the widget with the MainControl
 			ModularWidget::registerWidget(this);
-			hide();
 
 			add_button_ = buttonBox->addButton(tr("Add"), QDialogButtonBox::AcceptRole);
 			QPushButton* clear = buttonBox->addButton(tr("Clear Results"), QDialogButtonBox::ResetRole);
@@ -70,11 +69,11 @@ namespace BALL
 
 		void PubChemDialog::finished()
 		{
-			hide();
-			
 			QTreeWidgetItem* item = queries->currentItem();
 			// is this item connected with a system?
 			if (sd_systems_.find(item) == sd_systems_.end()) return;
+
+			hide();
 
 			ParsedResult_& res = descriptions_.find(item)->second;
 
@@ -131,6 +130,7 @@ namespace BALL
 		{
 			QDialog::show();
 			raise();
+			add_button_->setDefault(false);
 		}
 
 		void PubChemDialog::generateButtonClicked()
