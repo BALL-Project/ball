@@ -13,7 +13,7 @@
 #include <QtCore/QLocale>
 #include <QtCore/QTranslator>
 
-#include <QtGui/qmessagebox.h>
+#include <QtGui/QMessageBox>
 #include <QtGui/QSplashScreen>
 #include <QtOpenGL/qgl.h>
 
@@ -74,7 +74,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 	putenv("BALL_RETURN_VALUE=");
 	QApplication application(argc, argv);
 
-  QPixmap splash_pm(":BALLView-1.3-Splashscreen.png");
+  QPixmap splash_pm(":BALLView-1.4-Splashscreen.png");
   QSplashScreen* splash = new QSplashScreen(splash_pm);
   splash->show();
 
