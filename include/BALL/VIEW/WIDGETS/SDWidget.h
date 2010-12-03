@@ -66,7 +66,7 @@ namespace BALL
 				//@}
 
 				///
-				void plot(const System& system, bool clear = true, bool create_sd = true);
+				void plot(const System& system, bool create_sd = true);
 
 				///
 				System& getSystem() {return system_;};
@@ -88,12 +88,12 @@ namespace BALL
 				void paintEvent(QPaintEvent *event);
 
 				void renderSD_(QPaintDevice* paint_device);
+				void drawFrame_();
 
-				QPointF getEndpoint_(QRectF& character_boundary, QPointF from, QPointF to);
+				QPointF getEndpoint_(QRectF& character_boundary, QPointF from, QPointF to, bool character_is_from);
 				System system_;
 
 				bool resize_to_parent_;
-				bool clear_;
 		};
 
 	}

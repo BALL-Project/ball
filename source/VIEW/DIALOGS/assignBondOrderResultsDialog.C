@@ -273,7 +273,7 @@ namespace BALL
 			{
 				activated_item_ = item; 
 				
-				sd_widget->plot(*sd_systems_[item], true, false);
+				sd_widget->plot(*sd_systems_[item], false);
 				if (applyToSelected_checkBox->isChecked())
 				{
 					bond_order_processor_->apply(solution_number_[item]);

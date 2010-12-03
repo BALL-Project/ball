@@ -143,7 +143,7 @@ namespace BALL
 			// is this item connected with a system?
 			if (sd_systems_.find(item) != sd_systems_.end())
 			{
-				sdwidget_->plot(*sd_systems_[item], true, false);
+				sdwidget_->plot(*sd_systems_[item], false);
 			}
 
 			// do we have a description for it?
@@ -193,7 +193,7 @@ namespace BALL
 
 			if (plot)
 			{
-				sdwidget_->plot(S, true, false);
+				sdwidget_->plot(S, false);
 				switchView(current_item, 0);
 			}
 

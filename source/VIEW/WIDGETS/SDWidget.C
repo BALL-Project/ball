@@ -1,5 +1,7 @@
 #include <BALL/VIEW/WIDGETS/SDWidget.h>
 
+#include <BALL/VIEW/KERNEL/iconLoader.h>
+
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
@@ -7,10 +9,11 @@
 
 #include <QtGui/QPainter>
 #include <QtGui/QStyle>
-#include <QtGui/QStyleOption>
+#include <QtGui/QStyleOptionFocusRect>
 #include <QtGui/QAction>
 
 #include <QtGui/QFileDialog>
+#include <QtGui/QImageWriter>
 
 #include <set>
 
@@ -22,8 +25,7 @@ namespace BALL
 		const bool  SDWidget::Default::SHOW_HYDROGENS = false;
 
 		SDWidget::SDWidget(QWidget *parent, bool show_hydrogens)
-			: QWidget(parent),
-				clear_(true)
+			: QWidget(parent)
 		{
 			setup_();
 
@@ -31,8 +33,7 @@ namespace BALL
 		}
 
 		SDWidget::SDWidget(const System& system, QWidget *parent)
-			: QWidget(parent),
-				clear_(true)
+			: QWidget(parent)
 		{
 			setup_();
 
@@ -47,6 +48,8 @@ namespace BALL
 			//Todo: Add a nice icon
 			QAction* export_image = new QAction(tr("Export image"), this);
 
+			export_image->setIcon(IconLoader::instance().getIcon("actions/document-save"));
+
 			addAction(export_image);
 			connect(export_image, SIGNAL(triggered()), this, SLOT(exportImage_()));
 		}
@@ -54,9 +57,8 @@ namespace BALL
 		SDWidget::~SDWidget()
 		{}
 		
-		void SDWidget::plot(const System& system, bool clear, bool create_sd)
+		void SDWidget::plot(const System& system, bool create_sd)
 		{
-			clear_ = clear;
 			system_ = system;
 
 			if (create_sd)
@@ -70,7 +72,25 @@ namespace BALL
 
 		void SDWidget::paintEvent(QPaintEvent *)
 		{
+			drawFrame_();
 			renderSD_(this);
+		}
+
+		void SDWidget::drawFrame_()
+		{
+			QPainter p(this);
+
+			QStyleOptionFrame opt;
+			opt.initFrom(this);
+			opt.state |= QStyle::State_Sunken;
+			QRect erase_area = rect();
+
+			int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth, &opt, this) + 1;
+			erase_area.adjust(frameWidth, frameWidth, -frameWidth, -frameWidth);
+			p.eraseRect(erase_area);
+			style()->drawPrimitive(QStyle::PE_Frame, &opt, &p, this);
+
+			p.end();
 		}
 
 		void SDWidget::renderSD_(QPaintDevice* pd)
@@ -78,12 +98,6 @@ namespace BALL
 			if(!pd)
 			{
 				return;
-			}
-
-			if (clear_)
-			{
-				QPainter painter(pd);
-				painter.eraseRect(0,0,pd->width(),pd->height());
 			}
 
 			BoundingBoxProcessor bp;
@@ -94,7 +108,7 @@ namespace BALL
 			GeometricCenterProcessor gcp;
 			system_.apply(gcp);
 			Vector3 center = gcp.getCenter();
-	
+
 			float xscale = pd->width()  / (upper.x - lower.x);
 			float yscale = pd->height() / (upper.y - lower.y);
 
@@ -154,7 +168,8 @@ namespace BALL
 							QRectF bounding_box(to2d.x() - br.width()/2  - 3, 
 																	to2d.y() - br.height()/2 - 4, 
 																	br.width() + 6, br.height() + 6);
-							to2d = getEndpoint_(bounding_box, to2d, from2d);
+							to2d = getEndpoint_(bounding_box, to2d, from2d, false);
+
 						}
 
 						// and do we need to draw a character for the "from" atom?
@@ -165,7 +180,7 @@ namespace BALL
 							QRectF bounding_box(from2d.x() - br.width()/2  - 3, 
 																	from2d.y() - br.height()/2 - 4, 
 																	br.width() + 6, br.height() + 6);
-							shifted_from = getEndpoint_(bounding_box, to2d, from2d);
+							shifted_from = getEndpoint_(bounding_box, to2d, from2d, true);
 						}
 
 						// do we need to draw a double bond?
@@ -239,7 +254,7 @@ namespace BALL
 			}
 		}
 
-		QPointF SDWidget::getEndpoint_(QRectF& character_boundary, QPointF from, QPointF to)
+		QPointF SDWidget::getEndpoint_(QRectF& character_boundary, QPointF from, QPointF to, bool character_is_from)
 		{
 			// compute all relevant lines...
 
@@ -256,23 +271,23 @@ namespace BALL
 			QLineF left(character_boundary.bottomLeft(), character_boundary.topLeft());
 
 			// intersect them
-			QPointF result;
 			QPointF intersection_point;
 			if (line_from_to.intersect(upper, &intersection_point) == QLineF::BoundedIntersection)
-				result = intersection_point;
-			else if (line_from_to.intersect(right, &intersection_point) == QLineF::BoundedIntersection)
-				result = intersection_point;
-			else if (line_from_to.intersect(lower, &intersection_point) == QLineF::BoundedIntersection)
-				result = intersection_point;
-			else if (line_from_to.intersect(left, &intersection_point) == QLineF::BoundedIntersection)
-				result = intersection_point;
+				return intersection_point;
+			if (line_from_to.intersect(right, &intersection_point) == QLineF::BoundedIntersection)
+				return intersection_point;
+			if (line_from_to.intersect(lower, &intersection_point) == QLineF::BoundedIntersection)
+				return intersection_point;
+			if (line_from_to.intersect(left, &intersection_point) == QLineF::BoundedIntersection)
+				return intersection_point;
 
-			return result;
+			//If to and from are too close, the computed intersection is incorrect.
+			//In this case just return the point not having the character
+			return character_is_from ? from : to;
 		}
 
 		void SDWidget::clear()
 		{
-			clear_ = true;
 			system_.clear();
 			update();
 		}
@@ -285,11 +300,12 @@ namespace BALL
 
 		void SDWidget::exportImage_()
 		{
-			QString file = QFileDialog::getSaveFileName(this, tr("Export image"), QString(), "Images (*.png *.xpm *.jpg)");
+			QString file = QFileDialog::getSaveFileName(this, tr("Export image"), QString(), "Images (*.png *.xpm *.jpg *.bmp *.gif)");
 
 			if(file != QString::null)
 			{
-				QPixmap image(width(), height());
+				QImage image(width(), height(), QImage::Format_ARGB32);
+				image.fill(0);
 				renderSD_(&image);
 
 				image.save(file);
