@@ -38,7 +38,7 @@ RESULT
 String filename;
 NEW_TMP_FILE(filename)
 CHECK(XDRPersistenceManager(std::ostream& os) throw())
-	ofstream os(filename.c_str(), std::ios::out);
+	ofstream os(filename.c_str(), std::ios::out|std::ios::binary);
 	Composite comp;
 	XDRPersistenceManager pm(os);
 	comp >> pm;
@@ -61,7 +61,7 @@ CHECK(XDRPersistenceManager(std::istream& is, std::ostream& os) throw())
 	String outfilename;
 	NEW_TMP_FILE(outfilename);
 	ifstream is(filename.c_str());
-	ofstream os(outfilename.c_str(), std::ios::out);
+	ofstream os(outfilename.c_str(), std::ios::out|std::ios::binary);
 	XDRPersistenceManager pm(is, os);
 	PersistentObject* po = pm.readObject();
 	is.close();
@@ -76,7 +76,7 @@ RESULT
 CHECK(void writeHeader(const char* type_name, const char* name, PointerSizeUInt ptr) throw())
 	String outfilename;
 	NEW_TMP_FILE(outfilename);
-	ofstream os(outfilename.c_str(), std::ios::out);
+	ofstream os(outfilename.c_str(), std::ios::out|std::ios::binary);
 	XDRPersistenceManager pm(os);
 	Composite composite;
 	// composite >> pm;
@@ -216,7 +216,7 @@ RESULT
 
 
 NEW_TMP_FILE(filename)
-std::ofstream outfile(filename.c_str(), std::ios::out);
+std::ofstream outfile(filename.c_str(), std::ios::out|std::ios::binary);
 
 XDRPersistenceManager pm;
 pm.setOstream(outfile);
@@ -428,12 +428,12 @@ CHECK([Extra] full_test0)
 	Bond b1;
 
 	NEW_TMP_FILE(filename);
-	ofstream os(filename.c_str(), std::ios::out);
+	ofstream os(filename.c_str(), std::ios::out|std::ios::binary);
 	XDRPersistenceManager pm(os);
 	b1 >> pm;
 	os.close();
 
-	ifstream is(filename.c_str(), std::ios::in);
+	ifstream is(filename.c_str(), std::ios::in|std::ios::binary);
 	XDRPersistenceManager pm2(is);
 
 	PersistentObject* po =  0;
@@ -495,7 +495,7 @@ CHECK([Extra] full_test1)
 	os.close();
 	STATUS("wrote file")
 
-	ifstream is(filename.c_str(), std::ios::in);
+	ifstream is(filename.c_str(), std::ios::in|std::ios::binary);
 	XDRPersistenceManager pm2(is);
 	Fragment* f2 = (Fragment*) pm2.readObject();
 	is.close();
