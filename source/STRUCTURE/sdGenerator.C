@@ -1703,7 +1703,12 @@ namespace BALL
 						}
 						else
 						{
-							setCFS_(seed_atom, getCFS_(seed_atom, false) + beta, false);
+							if (seed_atom->hasProperty(ZIG))
+							{
+								setCFS_(seed_atom, Angle(getCFS_(seed_atom, false).toRadian() + 2 * beta, true), false);
+							} else {
+								setCFS_(seed_atom, Angle(getCFS_(seed_atom, false) + beta, true), false);
+							}
 						}
 
 						placeSubstituent_(seed_atom, head_atom, next_neighbour);
