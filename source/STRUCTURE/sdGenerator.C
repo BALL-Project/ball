@@ -1063,7 +1063,7 @@ namespace BALL
 
 			// find the path of maximal minimum length
 			int max_value = Limits<int>::min();
-			Position max_i, max_j;
+			Position max_i = 0, max_j = 0;
 
 			for (Position i=0; i<remaining_atoms; ++i)
 			{
