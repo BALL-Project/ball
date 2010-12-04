@@ -158,7 +158,7 @@ namespace BALL
 					}
 
 					// - check for all of the conditions and decide whether the atom might be core-chain or not
-					if ((acyclic_neighbours > 0) && (num_double_bonds < 2) && (num_triple_bonds == 0) && has_acyclic_beta)
+					if ((acyclic_neighbours > 0) && (num_double_bonds < 2) && (num_triple_bonds == 0))// && has_acyclic_beta)
 					{
 						// later used in the chain analysis
 						if (    only_hetero_substituents 
