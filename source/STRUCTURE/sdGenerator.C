@@ -1614,6 +1614,8 @@ namespace BALL
 			}
 		}
 
+		head_atom->setProperty(SDGenerator::HEAD);
+
 		// position the head atom (yay!)
 		if (head_atom->getProperty("InRing").getBool())
 		{
@@ -1741,7 +1743,7 @@ namespace BALL
 
 					if (!(next_neighbour->hasProperty(SDGenerator::ASSEMBLED)))
 					{
-						if (seed_atom != head_atom)
+						if ((seed_atom != head_atom) || seed_atom->hasProperty(SDGenerator::INITIALIZED_HEAD_CFS))
 						{
 							// TODO: step (a), step (b)
 							setCFS_(seed_atom, getCFS_(seed_atom, false) + beta, false);
