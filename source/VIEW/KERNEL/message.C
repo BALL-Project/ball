@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.32.16.1 2007/03/25 22:02:24 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/DATATYPE/dataset.h>
