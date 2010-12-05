@@ -1,7 +1,10 @@
+/* TRANSLATOR BALL::VIEW::ModelInformation
+
+		Necessary for lupdate.
+*/
+
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
-//
-// $Id: modelInformation.C,v 1.1.4.2 2007/04/04 15:02:48 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modelInformation.h>
@@ -32,45 +35,45 @@ namespace BALL
 			switch (type)
 			{
 				case MODEL_LINES:
-					return "Line";
+					return (String)qApp->tr("Line");
 				case MODEL_STICK:
-					return "Stick";
+					return (String)qApp->tr("Stick");
 				case MODEL_BALL_AND_STICK:
-					return "Ball and Stick";
+					return (String)qApp->tr("Ball and Stick");
 				case MODEL_VDW:
-					return "VDW";
+					return (String)qApp->tr("VDW");
 				case MODEL_SE_SURFACE:
-					return "SES";
+					return (String)qApp->tr("SES");
 				case MODEL_SA_SURFACE:
-					return "SAS";
+					return (String)qApp->tr("SAS");
 				case MODEL_CONTOUR_SURFACE:
-					return "Contour Surface";
+					return (String)qApp->tr("Contour Surface");
 				case MODEL_GRID_SLICE:
-					return "Grid Slice";
+					return (String)qApp->tr("Grid Slice");
 				case MODEL_GRID_VOLUME:
-					return "Grid Volume";
+					return (String)qApp->tr("Grid Volume");
 				case MODEL_FIELD_LINES:
-					return "Field Lines";
+					return (String)qApp->tr("Field Lines");
 				case MODEL_BACKBONE:
-					return "Backbone";
+					return (String)qApp->tr("Backbone");
 				case MODEL_CARTOON:
-					return "Cartoon";
+					return (String)qApp->tr("Cartoon");
 				case MODEL_RIBBON:
-					return "Ribbon";
+					return (String)qApp->tr("Ribbon");
 				case MODEL_HBONDS:
-					return "H-Bonds";
+					return (String)qApp->tr("H-Bonds");
 				case MODEL_FORCES:
-					return "Forces";
+					return (String)qApp->tr("Forces");
 				case MODEL_LABEL:
-					return "Label";
+					return (String)qApp->tr("Label");
 				case MODEL_INFORMATIONS:
-					return "Informations";
+					return (String)qApp->tr("Informations");
 				case MODEL_COORDINATE_SYSTEM:
-					return "Coordinate System";
+					return (String)qApp->tr("Coordinate System");
 				case MODEL_UNKNOWN:
-					return "Unknown";
+					return (String)qApp->tr("Unknown");
 			}
-			return "Unknown";
+			return (String)qApp->tr("Unknown");
 		}
 
 		String ModelInformation::getColoringName(ColoringMethod type) const
@@ -78,35 +81,35 @@ namespace BALL
 			switch (type)
 			{
 				case COLORING_ELEMENT:
-					return "by element";
+					return (String)qApp->tr("by element");
 				case COLORING_RESIDUE_INDEX:
-					return "by residue index";
+					return (String)qApp->tr("by residue index");
 				case COLORING_RESIDUE_NAME:
-					return "by residue name";
+					return (String)qApp->tr("by residue name");
 				case COLORING_SECONDARY_STRUCTURE:
-					return "by secondary structure";
+					return (String)qApp->tr("by secondary structure");
 				case COLORING_ATOM_CHARGE:
-					return "by atom charge";
+					return (String)qApp->tr("by atom charge");
 				case COLORING_DISTANCE:
-					return "by atom distance";
+					return (String)qApp->tr("by atom distance");
 				case COLORING_TEMPERATURE_FACTOR:
-					return "by temperature factor";
+					return (String)qApp->tr("by temperature factor");
 				case COLORING_OCCUPANCY:
-					return "by occupancy";
+					return (String)qApp->tr("by occupancy");
 				case COLORING_FORCES:
-					return "by forces";
+					return (String)qApp->tr("by forces");
 				case COLORING_RESIDUE_TYPE:
-					return "by residue type";
+					return (String)qApp->tr("by residue type");
 				case COLORING_CHAIN:
-					return "by chain";
+					return (String)qApp->tr("by chain");
 				case COLORING_MOLECULE:
-					return "by molecule";
+					return (String)qApp->tr("by molecule");
 				case COLORING_CUSTOM:
-					return "custom";
+					return (String)qApp->tr("custom");
 				case COLORING_UNKNOWN:
-					return "unknown";
+					return (String)qApp->tr("unknown");
 			}
-			return "unknown";
+			return (String)qApp->tr("unknown");
 		}
 
 

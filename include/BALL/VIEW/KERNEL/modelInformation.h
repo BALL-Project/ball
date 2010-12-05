@@ -25,8 +25,10 @@ namespace BALL
 		*/
 		class BALL_VIEW_EXPORT ModelInformation
 		{
+
 			public:
 			
+
 			//@{
 
 			/** Default Constructor.
