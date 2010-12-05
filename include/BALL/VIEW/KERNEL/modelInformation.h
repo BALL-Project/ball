@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelInformation.h,v 1.1.4.1 2007/03/25 21:26:01 oliver Exp $
 
 #ifndef BALL_VIEW_KERNEL_MODELINFORMATION_H
 #define BALL_VIEW_KERNEL_MODELINFORMATION_H
@@ -9,6 +8,8 @@
 #ifndef BALL_VIEW_KERNEL_COMMON_H
 # include <BALL/VIEW/KERNEL/common.h>
 #endif
+
+#include <QtCore/QCoreApplication>
 
 namespace BALL
 {
