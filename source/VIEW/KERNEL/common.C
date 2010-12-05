@@ -1,3 +1,7 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -10,7 +14,7 @@
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/MATHS/randomNumberGenerator.h>
 
-#include <QtGui/qapplication.h>
+#include <QtGui/QApplication>
 #include <QtCore/QUrl>
 
 #include <BALL/COMMON/init.h>
