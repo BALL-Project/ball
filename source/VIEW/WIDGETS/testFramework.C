@@ -519,11 +519,11 @@ void TestFramework::timeOut()
 				}
 			}
 		}
-#endif
 
 		processEvent_();
 		return;
 	}
+#endif
 
 	if (type_ == 0) 
 	{
