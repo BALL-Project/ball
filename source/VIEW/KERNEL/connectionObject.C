@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id:
 
 #include <BALL/VIEW/KERNEL/connectionObject.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -154,7 +153,7 @@ bool ConnectionObject::isValid() const
 		if (!(*list_iterator)->ConnectionObject::isValid()) return false;
 	}
 	
-	//has parent a connection to this child
+	// has parent a connection to this child
 	if (parent_)
 	{
 		return parent_->isConnectionObjectRegistered(*this);
