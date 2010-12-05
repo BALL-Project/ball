@@ -6,7 +6,6 @@
 
 #include <BALL/VIEW/WIDGETS/testFramework.h>
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
-#include <BALL/VIEW/WIDGETS/pyWidget.h>
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/KERNEL/system.h>
@@ -483,17 +482,17 @@ void TestFramework::timeOut()
 
 	if (timer_.getClockTime() < time_) return;
 
+#ifdef BALL_PYTHON_SUPPORT		
 	if (python_line_ != "")
 	{
 		PyWidget* pyw = 0;
-#ifdef BALL_PYTHON_SUPPORT		
+
 		pyw = PyWidget::getInstance(0);
-#endif
 		if (pyw == 0) 
 		{
 			Log.error() << "Can not exec Python in macro since no Python support available" << std::endl;
 		}
-#ifdef BALL_PYTHON_SUPPORT		
+
 		else
 		{
 			if (expected_result_ == "")
