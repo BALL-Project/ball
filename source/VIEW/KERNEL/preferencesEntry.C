@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferencesEntry.C,v 1.19.16.2 2007/05/30 20:14:15 amoll Exp $
-//
 
 #include <BALL/CONCEPT/preferencesObject.h>
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
@@ -10,12 +8,11 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 
-#include <QtGui/qslider.h>
-#include <QtGui/qspinbox.h>
-#include <QtGui/qlabel.h>
-#include <QtGui/qcheckbox.h>
-#include <QtGui/qlineedit.h>
-#include <QtGui/qslider.h>
+#include <QtGui/QSlider>
+#include <QtGui/QSpinBox>
+#include <QtGui/QLabel>
+#include <QtGui/QCheckBox>
+#include <QtGui/QLineEdit>
 #include <QtGui/QStackedWidget>
 #include <QtGui/QButtonGroup>
 #include <QtGui/QComboBox>
