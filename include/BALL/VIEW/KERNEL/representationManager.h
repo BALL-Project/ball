@@ -14,7 +14,8 @@
 #include <BALL/SYSTEM/mutex.h>
 #endif
 
-#include <QtCore/qwaitcondition.h>
+#include <QtCore/QCoreApplication>
+#include <QtCore/QWaitCondition>
 
 #include <vector>
 

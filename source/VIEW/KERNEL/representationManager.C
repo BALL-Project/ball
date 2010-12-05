@@ -1,7 +1,6 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representationManager.C,v 1.1.4.3 2007/05/28 13:41:59 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representationManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -12,7 +11,7 @@
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/FORMAT/INIFile.h>
 
-#include <QtGui/qapplication.h>
+#include <QtGui/QApplication>
 
 //   #define BALL_VIEW_DEBUG
 
@@ -355,7 +354,7 @@ void RepresentationManager::storeRepresentations(INIFile& out)
 
 		if (!ok) 
 		{	
-			Log.error() << "Can not store a representation for items of multiple systems." << std::endl;
+			Log.error() << (String)qApp->tr("Can not store a representation for items of multiple systems.") << std::endl;
 			continue;
 		}
 
@@ -514,7 +513,7 @@ void RepresentationManager::restoreRepresentations(const INIFile& in, const vect
 	}
 	catch(Exception::InvalidFormat& e)
 	{
-		Log.error() << "Error while reading project file! Aborting..." << std::endl;
+		Log.error() << (String)qApp->tr("Error while reading project file! Aborting...") << std::endl;
 		Log.error() << e << std::endl;
 		return;
 	}
