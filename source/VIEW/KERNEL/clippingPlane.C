@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clippingPlane.C,v 1.3.18.1 2007/03/25 22:02:21 oliver Exp $
-//
 
 
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
