@@ -1,7 +1,10 @@
+/* TRANSLATOR BALL::VIEW::MolecularStructure
+
+		Necessary for lupdate.
+*/
+
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
-//
-// $Id: molecularStructure.C,v 1.91.14.8 2007/08/09 17:22:20 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
