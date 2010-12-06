@@ -97,7 +97,6 @@ namespace BALL
 			// we may have additional path information in the registry
 			std::vector<unsigned char> regbuffer(MAX_PATH, 0);
 			DWORD valuesize = regbuffer.size();
-			DWORD regresult;
 
 			REGSAM dSam = KEY_QUERY_VALUE;
 			HKEY key;
