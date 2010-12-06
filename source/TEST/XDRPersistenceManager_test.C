@@ -47,7 +47,7 @@ RESULT
 
 
 CHECK(XDRPersistenceManager(std::istream& is) throw())
-	ifstream is(filename.c_str());
+ifstream is(filename.c_str(), std::ios::in|std::ios::binary);
 	XDRPersistenceManager pm(is);
 	PersistentObject* po = pm.readObject();
 	is.close();
@@ -60,7 +60,7 @@ RESULT
 CHECK(XDRPersistenceManager(std::istream& is, std::ostream& os) throw())
 	String outfilename;
 	NEW_TMP_FILE(outfilename);
-	ifstream is(filename.c_str());
+	ifstream is(filename.c_str(), std::ios::in|std::ios::binary);
 	ofstream os(outfilename.c_str(), std::ios::out|std::ios::binary);
 	XDRPersistenceManager pm(is, os);
 	PersistentObject* po = pm.readObject();
@@ -297,7 +297,7 @@ pm.writeStreamTrailer();
 pm.finalizeOutputStream();
 outfile.close();
 
-std::ifstream infile(filename.c_str());
+std::ifstream infile(filename.c_str(), std::ios::in|std::ios::binary);
 pm.setIstream(infile);
 pm.initializeInputStream();
 pm.checkStreamHeader();
