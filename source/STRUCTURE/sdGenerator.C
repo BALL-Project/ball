@@ -1577,8 +1577,10 @@ namespace BALL
 		}
 
 		// now, we just need to put the correct CFS values into seed and next
-		setCFS_(seed_atom, getBackupCFS_(seed_atom, false) + alpha, false);
-		setCFS_(next_neighbour, getBackupCFS_(next_neighbour, false) + alpha, false);
+		setCFS_(seed_atom, getCFS_(seed_atom, false) + alpha, false);
+		setCFS_(seed_atom, getCFS_(seed_atom, true) + alpha, true);
+		setCFS_(next_neighbour, getCFS_(next_neighbour, false) + alpha, false);
+		setCFS_(next_neighbour, getCFS_(next_neighbour, true) + alpha, true);
 	} 
 
 	void SDGenerator::checkOverlap_(Atom* /*next_neighbour*/)
