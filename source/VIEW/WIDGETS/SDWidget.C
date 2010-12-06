@@ -183,6 +183,10 @@ namespace BALL
 							shifted_from = getEndpoint_(bounding_box, to2d, from2d, true);
 						}
 
+						// don't draw if the points are too close to each other (Qt tends to crash if this happens...)
+						if ((to2d - shifted_from).toPoint().manhattanLength() == 0)
+							continue;
+
 						// do we need to draw a double bond?
 						if (b_it->getOrder() == Bond::ORDER__DOUBLE)
 						{
