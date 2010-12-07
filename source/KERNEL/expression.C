@@ -191,7 +191,7 @@ namespace BALL
 			}
 			else
 			{
-        root->setType(ExpressionTree::INVALID);
+				delete root;
 
 				throw Exception::ParseError(__FILE__, 0,
 																		String(t.predicate  + "(" + t.argument + ")"),
