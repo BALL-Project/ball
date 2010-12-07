@@ -1,5 +1,3 @@
-; $Id: amber_types.rul,v 1.3 2005/02/05 18:23:44 anker Exp $
-;
 ; first tentative rule firl for assigning AMBER and GlyCam atom types. This
 ; is still *ALPHA* code. Use at your own risk. Use this file with
 ; BALL/source/APPLICATIONS/UTILITIES/assign_typenames_from_rules.
