@@ -1,4 +1,3 @@
-# $Id: charmm2ini,v 1.3 2005/12/23 17:01:16 amoll Exp $
 #
 #  CHARMM parameter and topology file converter
 #  produces output for BALL force field INI files
