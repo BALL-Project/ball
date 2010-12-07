@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: concept.doc,v 1.14 2004/02/18 23:24:03 oliver Exp $
-//
 
 /** \defgroup	Concepts Concepts
  		\ingroup Foundation

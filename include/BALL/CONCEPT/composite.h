@@ -1,12 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.h,v 1.62.14.1 2007/03/25 21:23:37 oliver Exp $
-//
-// Author:
-//   Nicolas Boghossian
-//   Oliver Kohlbacher
-//
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H

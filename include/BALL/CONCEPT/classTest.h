@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: classTest.h,v 1.57 2005/01/18 22:26:14 amoll Exp $
-//
 
 #ifndef BALL_CONCEPT_AUTODELETABLE_H
 # include <BALL/CONCEPT/autoDeletable.h>

@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: enumerator.iC,v 1.4 2002/12/12 09:46:22 oliver Exp $
 
 BALL_INLINE
 const vector<Size>& EnumeratorIndex::getModulus() const

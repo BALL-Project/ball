@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: benchmark.h,v 1.14 2004/02/18 23:24:03 oliver Exp $
-//
 
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>

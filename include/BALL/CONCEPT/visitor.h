@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: visitor.h,v 1.14 2004/02/23 15:19:58 anhi Exp $
-//
 
 #ifndef BALL_CONCEPT_VISITOR_H
 #define BALL_CONCEPT_VISITOR_H

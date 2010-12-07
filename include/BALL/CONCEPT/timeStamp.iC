@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: timeStamp.iC,v 1.8 2002/02/27 12:18:29 sturm Exp $
 
 BALL_INLINE
 PreciseTime::PreciseTime(long secs, long usecs)

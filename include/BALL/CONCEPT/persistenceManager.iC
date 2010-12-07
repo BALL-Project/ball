@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: persistenceManager.iC,v 1.4 2005/02/06 09:44:54 oliver Exp $
 
 BALL_INLINE
 bool PersistenceManager::checkObjectHeader(const char* type_name)

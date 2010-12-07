@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeObjectCreator.h,v 1.1.4.1 2007/03/25 21:23:38 oliver Exp $
 
 #ifndef BALL_CONCEPT_MOLECULEOBJECTCREATOR_H
 #define BALL_CONCEPT_MOLECULEOBJECTCREATOR_H
