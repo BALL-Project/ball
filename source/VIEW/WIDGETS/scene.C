@@ -52,18 +52,18 @@
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 
-#include <QtGui/qmenubar.h>
-#include <QtGui/qprinter.h>
-#include <QtGui/qprintdialog.h>
-#include <QtGui/qpainter.h>
-#include <QtGui/qimage.h>
-#include <QtGui/qcursor.h>
-#include <QtGui/qapplication.h>
+#include <QtGui/QMenuBar>
+#include <QtGui/QPrinter>
+#include <QtGui/QPrintDialog>
+#include <QtGui/QPainter>
+#include <QtGui/QImage>
+#include <QtGui/QCursor>
+#include <QtGui/QApplication>
 #include <QtGui/QDesktopWidget>
 #include <QtGui/QFileDialog>
 #include <QtGui/QInputDialog>
 #include <QtOpenGL/QGLPixelBuffer>
-#include <QtGui/qmessagebox.h>
+#include <QtGui/QMessageBox>
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/DATATYPE/colorMap.h>
