@@ -94,7 +94,7 @@ namespace BALL
  			glay->addLayout(lay, 2, 0);
 
 			listview->setObjectName(tr("MolecularControlList"));
-			listview->headerItem()->setText(0, tr("Name [highlight]"));
+			listview->headerItem()->setText(0, tr("Name") + " ["+ tr("highlight") + "]");
 			listview->headerItem()->setText(1, tr("Type"));
 			listview->headerItem()->setText(2, tr("checked"));
 			listview->resizeColumnToContents(2);
