@@ -41,7 +41,7 @@ namespace BALL
 				context_menu_(this),
 				clipping_plane_context_menu_(this),
 				context_representation_(0),
-				modify_rep_dialog_(new ModifyRepresentationDialog(this, "ModifyRepresentationDialog")),
+				modify_rep_dialog_(new ModifyRepresentationDialog(this, ((String)tr("ModifyRepresentationDialog")).c_str())),
 				creating_representations_(false),
 				ignore_change_(false)
 		{
@@ -50,32 +50,32 @@ namespace BALL
 		#endif
 			
 			listview->setObjectName("MolecularControlList");
-			listview->headerItem()->setText(0, "[visible] Index");
-			listview->headerItem()->setText(1, "Model");
-			listview->headerItem()->setText(2, "Built from");
-			listview->headerItem()->setText(3, "Color");
-			listview->headerItem()->setText(4, "Properties");
+			listview->headerItem()->setText(0, tr("[visible] Index"));
+			listview->headerItem()->setText(1, tr("Model"));
+			listview->headerItem()->setText(2, tr("Built from"));
+			listview->headerItem()->setText(3, tr("Color"));
+			listview->headerItem()->setText(4, tr("Properties"));
 			listview->setSortingEnabled(false);
 
-			String txt = String("List of the representations: \n") +
-									"1.column: visible flag\n" +
-									"2.column: model type\n" +
-									"3.column: name of the molecular entity the model was created from\n" +
-									"4.column: used coloring method\n" +
-									"5.column: number of used molecular entities, number of geometric objects. ";
+			String txt = String(tr("List of the representations")) + ": \n" +
+									"1." + (String)tr("column") + ": " + (String)tr("visible flag") + "\n" +
+									"2." + (String)tr("column") + ": " + (String)tr("model type") + "\n" +
+									"3." + (String)tr("column") + ": " + (String)tr("name of the molecular entity the model was created from") + "\n" +
+									"4." + (String)tr("column") + ": " + (String)tr("used coloring method") + "\n" +
+									"5." + (String)tr("column") + ": " + (String)tr("number of used molecular entities, number of geometric objects") + ". ";
 
 			listview->setToolTip(txt.c_str());
 			
 			registerWidget(this);
 
-			clipping_plane_context_menu_.addAction("Hide/Show", this, SLOT(hideShowClippingPlane()));
-			clipping_plane_context_menu_.addAction("Flip", this, SLOT(flipClippingPlane()));	
-			clipping_plane_context_menu_.addAction("Set to position...", this, SLOT(setClippingPosition()));	
-			clipping_plane_context_menu_.addAction("Set to x axis", this, SLOT(setClippingPlaneX()));	
-			clipping_plane_context_menu_.addAction("Set to y axis", this, SLOT(setClippingPlaneY()));	
-			clipping_plane_context_menu_.addAction("Set to z axis", this, SLOT(setClippingPlaneZ()));	
-			clipping_plane_context_menu_.addAction("Clip <-> Cap", this, SLOT(flipClippingCapping()));	
-			clipping_plane_context_menu_.addAction("Select Representations", this, SLOT(selectClipRepresentations()));	
+			clipping_plane_context_menu_.addAction(tr("Hide/Show"), this, SLOT(hideShowClippingPlane()));
+			clipping_plane_context_menu_.addAction(tr("Flip"), this, SLOT(flipClippingPlane()));	
+			clipping_plane_context_menu_.addAction(tr("Set to position..."), this, SLOT(setClippingPosition()));	
+			clipping_plane_context_menu_.addAction(tr("Set to x axis"), this, SLOT(setClippingPlaneX()));	
+			clipping_plane_context_menu_.addAction(tr("Set to y axis"), this, SLOT(setClippingPlaneY()));	
+			clipping_plane_context_menu_.addAction(tr("Set to z axis"), this, SLOT(setClippingPlaneZ()));	
+			clipping_plane_context_menu_.addAction(tr("Clip <-> Cap"), this, SLOT(flipClippingCapping()));	
+			clipping_plane_context_menu_.addAction(tr("Select Representations"), this, SLOT(selectClipRepresentations()));	
 		}
 
 		GeometricControl::~GeometricControl()
@@ -89,7 +89,7 @@ namespace BALL
 		{
 			if (representation_to_item_.has(&rep)) 
 			{
-				Log.error() << "Tried to add an already inserted Representation in " 
+				Log.error() << (String)tr("Tried to add an already inserted Representation in ") 
 										<< __FILE__ << " " << __LINE__ << std::endl;
 				return;
 			}
@@ -202,7 +202,7 @@ namespace BALL
 					return;
 
 				default:
-					Log.error() << "Unknown Type of RepresentationMessage in " << __FILE__ << __LINE__ << std::endl;
+					Log.error() << (String)tr("Unknown Type of RepresentationMessage in ") << __FILE__ << __LINE__ << std::endl;
 			}
 		}
 
@@ -225,21 +225,21 @@ namespace BALL
 			context_menu_actions_.clear();
 			context_menu_.setObjectName("ContextMenu");
 
-			addItem_("Delete", SLOT(deleteCurrentItems()));
-			addItem_("Focus", SLOT(focus()));
-			addItem_("Duplicate", SLOT(duplicate()));
-			addItem_("Move", SLOT(enterMoveMode()));
+			addItem_((String)tr("Delete"), SLOT(deleteCurrentItems()));
+			addItem_((String)tr("Focus"), SLOT(focus()));
+			addItem_((String)tr("Duplicate"), SLOT(duplicate()));
+			addItem_((String)tr("Move"), SLOT(enterMoveMode()));
 			Size all_pos = context_menu_actions_.size() - 1;
 			context_menu_.addSeparator();
-			addItem_("Save Surface", SLOT(saveSurface()));
- 			addItem_("Select Atoms", SLOT(selectAtoms()));
-			addItem_("Modify Model", SLOT(modifyRepresentation_()));	
- 			addItem_("Modify Representation", SLOT(show()), modify_rep_dialog_);	
-			addItem_("Rename", SLOT(renameRepresentation()));
+			addItem_((String)tr("Save Surface"), SLOT(saveSurface()));
+ 			addItem_((String)tr("Select Atoms"), SLOT(selectAtoms()));
+			addItem_((String)tr("Modify Model"), SLOT(modifyRepresentation_()));	
+ 			addItem_((String)tr("Modify Representation"), SLOT(show()), modify_rep_dialog_);	
+			addItem_((String)tr("Rename"), SLOT(renameRepresentation()));
 			context_menu_.addSeparator();
 			Size acs = context_menu_actions_.size() - 1;
 			context_menu_actions_.push_back(context_menu_.addMenu(&clipping_plane_context_menu_));
-			context_menu_actions_[acs + 1]->setText("Clipping Plane");
+			context_menu_actions_[acs + 1]->setText(tr("Clipping Plane"));
 
 			// planes ->
 			if (plane != 0)
@@ -317,7 +317,7 @@ namespace BALL
 			if (getMainControl()->getRepresentationManager().updateRunning() ||
 			    creating_representations_) 
 			{
-				setStatusbarText("Could not delete Representation while update is running!", true);
+				setStatusbarText((String)tr("Could not delete Representation while update is running!"), true);
 				return;
 			}
 
@@ -329,7 +329,7 @@ namespace BALL
 				if (item_to_representation_.has(item))
 				{
 					getMainControl()->remove(*item_to_representation_[item]);
-					setStatusbarText("Deleted representation.");
+					setStatusbarText((String)tr("Deleted representation."));
 					continue;
 				}
 
@@ -338,7 +338,7 @@ namespace BALL
 				item_to_plane_.erase(item);
 				plane_to_item_.erase(plane);
 				getMainControl()->getRepresentationManager().removeClippingPlane(plane);
-				setStatusbarText("Deleted Clipping Plane.");
+				setStatusbarText((String)tr("Deleted Clipping Plane."));
 			}
 		}
 
@@ -361,7 +361,7 @@ namespace BALL
 		{
 			if (getMainControl()->isBusy())
 			{
-				setStatusbarText("No changes to representations allowed, while simulation is running or creating new representations!", true);
+				setStatusbarText((String)tr("No changes to representations allowed, while simulation is running or creating new representations!"), true);
 				return;
 			}
 
@@ -441,7 +441,7 @@ namespace BALL
 
 				if (rep->getComposites().size() > 1) name += "...";
 
-				setStatusbarText("Representation from " + name);
+				setStatusbarText((String)tr("Representation from ") + name);
 			}
 		}
 
@@ -503,13 +503,13 @@ namespace BALL
 			GenericControl::initializeWidget(main_control);
 
 			menu_clipping_plane_ = insertMenuEntry(MainControl::DISPLAY_CREATE, 
-																		"Clipping Plane", this, SLOT(createNewClippingPlane()));   
-			setMenuHint("Add an OpenGL Clipping Plane to the Scene");
+																		(String)tr("Clipping Plane"), this, SLOT(createNewClippingPlane()));   
+			setMenuHint((String)tr("Add an OpenGL Clipping Plane to the Scene"));
 			setMenuHelp("geometricControl.html#clipping_planes");
 
-			menu_load_surface_ = insertMenuEntry(MainControl::FILE_OPEN, "Surface", this,
+			menu_load_surface_ = insertMenuEntry(MainControl::FILE_OPEN, (String)tr("Surface"), this,
 																						SLOT(loadSurface()));
-			modify_surface_ = insertMenuEntry(MainControl::DISPLAY, "Modify Representation", 
+			modify_surface_ = insertMenuEntry(MainControl::DISPLAY, (String)tr("Modify Representation"), 
 																						modify_rep_dialog_, SLOT(show()));	
 			registerForHelpSystem(this, "geometricControl.html");
 		}
@@ -535,7 +535,7 @@ namespace BALL
 			updateSelection();
 
 			if (context_plane_ == 0) return;
-			SetClippingPlane sp(this, "Set plane", context_plane_);
+			SetClippingPlane sp(this, ((String)tr("Set plane")).c_str(), context_plane_);
 			sp.exec();
 
 			getMainControl()->redrawAllRepresentations();
@@ -711,13 +711,13 @@ namespace BALL
 					sl << "";
 					if (plane->cappingEnabled())
 					{
-						sl << "CappingPlane";
+						sl << tr("CappingPlane");
 					}
 					else
 					{
-						sl << "ClippingPlane";
+						sl << tr("ClippingPlane");
 					}
-					if (plane->isHidden()) sl << "[hidden]";
+					if (plane->isHidden()) sl << "[" << tr("hidden") << "]";
 					sl << " ";
 					QTreeWidgetItem* new_item = new QTreeWidgetItem(listview, sl);
 					new_item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
@@ -754,7 +754,7 @@ namespace BALL
 
 			if (context_item_ == 0) return;
 
-			context_item_->setText(2, hidden ? "[hidden]" : "");
+			context_item_->setText(2, hidden ? "[" + tr("hidden") + "]" : "");
 		}
 
 		void GeometricControl::duplicate()
@@ -801,7 +801,7 @@ namespace BALL
 				if (checked) item->setCheckState(0, Qt::Unchecked);
 				else 				 item->setCheckState(0, Qt::Checked);
 
-				VIEW::getMainControl()->setStatusbarText("Cannot switch Representation on/off now!", true);
+				VIEW::getMainControl()->setStatusbarText((String)tr("Cannot switch Representation on/off now!"), true);
 				return;
 			}
 
@@ -838,7 +838,7 @@ namespace BALL
 
 			if (context_item_ == 0) return;
 
-			context_item_->setText(0, capping ? "CappingPlane" : "ClippingPlane");
+			context_item_->setText(0, capping ? tr("CappingPlane") : tr("ClippingPlane"));
 		}
 
 		ModifyRepresentationDialog* GeometricControl::getModifySurfaceDialog()
@@ -857,7 +857,7 @@ namespace BALL
 
 			QString qresult = QFileDialog::getSaveFileName(
 												0,
-												"Export Surface",
+												tr("Export Surface"),
 												(getWorkingDir() + String(FileSystem::PATH_SEPARATOR) + 
 												 "surface.dat").c_str(),
 												"*.*");
@@ -872,7 +872,7 @@ namespace BALL
 		{
 			QString qresult = QFileDialog::getOpenFileName(
 												0,
-												"Read Surface",
+												tr("Read Surface"),
 												(getWorkingDir() + String(FileSystem::PATH_SEPARATOR)).c_str(),
 												"*.*");
 
@@ -903,8 +903,8 @@ namespace BALL
 			String name = context_representation_->getName();
 
 			bool ok;
-			QString text = QInputDialog::getText(this, "Rename a Representation",
-																						"Enter new name:", QLineEdit::Normal,
+			QString text = QInputDialog::getText(this, tr("Rename a Representation"),
+																						tr("Enter new name:"), QLineEdit::Normal,
 																						name.c_str(), &ok);
 			if (!ok) return;
 
