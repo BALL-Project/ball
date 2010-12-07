@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bitVector.iC,v 1.30 2004/10/22 21:32:09 amoll Exp $
-//
 
 BALL_INLINE 
 BALL::Size BitVector::getSize() const

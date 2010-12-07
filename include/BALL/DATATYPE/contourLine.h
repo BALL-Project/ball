@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourLine.h,v 1.16 2004/03/17 00:11:15 amoll Exp $
-//
 
 #ifndef BALL_DATATYPE_CONTOURLINE_H
 #define BALL_DATATYPE_CONTOURLINE_H
