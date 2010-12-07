@@ -1,3 +1,8 @@
+/* TRANSLATOR BALL::VIEW::Mainframe
+
+		Necessary for lupdate.
+*/
+
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
@@ -56,7 +61,7 @@ namespace BALL
 //   		Log.remove(std::cerr);
 		setLoggingFilename("BALLView.log");
 
-		HelpViewer* BALL_docu = new HelpViewer(this, "BALL Docu");
+		HelpViewer* BALL_docu = new HelpViewer(this, (String)tr("BALL Docu"));
 		addDockWidget(Qt::LeftDockWidgetArea, BALL_docu);
 
 		Path path;
@@ -69,7 +74,7 @@ namespace BALL
 
 		BALL_docu->setBaseDirectory(dirp);
 		BALL_docu->setWhatsThisEnabled(false);
-		BALL_docu->setProject("BALL");
+		BALL_docu->setProject(tr("BALL"));
 		BALL_docu->setDefaultPage("index.htm");
 		BALL_docu->show();
 
@@ -79,7 +84,7 @@ namespace BALL
 			py->show();
 		#endif
 
-		setStatusbarText("Ready.");
+		setStatusbarText((String)tr("Ready."));
 	}
 
 	Mainframe::~Mainframe()
