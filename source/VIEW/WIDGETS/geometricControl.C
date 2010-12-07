@@ -19,11 +19,11 @@
 #include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
 #include <BALL/VIEW/DIALOGS/clippingDialog.h>
 #include <BALL/VIEW/DIALOGS/setClippingPlane.h>
-#include <QtGui/QFileDialog>
 
-#include <QtGui/qmenubar.h>
-#include <QtGui/qtooltip.h> 
-#include <QtGui/qinputdialog.h> 
+#include <QtGui/QFileDialog>
+#include <QtGui/QMenuBar>
+#include <QtGui/QToolTip> 
+#include <QtGui/QInputDialog> 
 
 #include <BALL/MATHS/matrix44.h>
 #include <BALL/MATHS/analyticalGeometry.h>
