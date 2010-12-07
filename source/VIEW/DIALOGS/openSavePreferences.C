@@ -1,3 +1,8 @@
+/* TRANSLATOR BALL::VIEW::OpenSavePreferences
+
+		Necessary for lupdate.
+*/
+
 #include <BALL/VIEW/DIALOGS/openSavePreferences.h>
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
