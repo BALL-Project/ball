@@ -80,6 +80,8 @@ namespace BALL
 				///
 				void clear();
 
+				QSize sizeHint() const;
+
 			protected slots:
 				void exportImage_();
 
@@ -94,6 +96,9 @@ namespace BALL
 				System system_;
 
 				bool resize_to_parent_;
+
+				Vector3 upper_;
+				Vector3 lower_;
 		};
 
 	}

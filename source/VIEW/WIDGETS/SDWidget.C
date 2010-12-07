@@ -42,6 +42,8 @@ namespace BALL
 
 		void SDWidget::setup_()
 		{
+			upper_ = Vector3( 5.0f);
+			lower_ = Vector3(-5.0f);
 			setDefaultOptions();
 			setBackgroundRole(QPalette::Base);
 
@@ -102,15 +104,15 @@ namespace BALL
 
 			BoundingBoxProcessor bp;
 			system_.apply(bp);
-			Vector3 upper = bp.getUpper() + Vector3(5.,5.,5.);
-			Vector3 lower = bp.getLower() - Vector3(5.,5.,5.);
+			upper_ = bp.getUpper() + Vector3(5.0f);
+			lower_ = bp.getLower() - Vector3(5.0f);
 
 			GeometricCenterProcessor gcp;
 			system_.apply(gcp);
 			Vector3 center = gcp.getCenter();
 
-			float xscale = pd->width()  / (upper.x - lower.x);
-			float yscale = pd->height() / (upper.y - lower.y);
+			float xscale = pd->width()  / (upper_.x - lower_.x);
+			float yscale = pd->height() / (upper_.y - lower_.y);
 
 			xscale = yscale = std::min(xscale, yscale);
 
@@ -292,8 +294,16 @@ namespace BALL
 
 		void SDWidget::clear()
 		{
+			upper_ = Vector3( 5.0f);
+			lower_ = Vector3(-5.0f);
 			system_.clear();
 			update();
+		}
+
+		QSize SDWidget::sizeHint() const
+		{
+			Vector3 diff = upper_ - lower_;
+			return QSize(diff.x * 10, diff.y * 10);
 		}
 
 		void SDWidget::setDefaultOptions()
