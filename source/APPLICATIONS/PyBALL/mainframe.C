@@ -19,10 +19,10 @@
   #	include <BALL/VIEW/WIDGETS/pyWidget.h>
 #endif
 
-#include <QtGui/qmenubar.h>
-#include <QtGui/qlabel.h>
-#include <QtGui/qmessagebox.h>
-#include <QtGui/qcursor.h>
+#include <QtGui/QMenuBar>
+#include <QtGui/QLabel>
+#include <QtGui/QMessageBox>
+#include <QtGui/QCursor>
 #include <QtGui/QPixmap>
 
 #include <sstream>
