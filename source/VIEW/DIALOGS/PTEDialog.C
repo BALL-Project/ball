@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTEDialog.C,v 1.5.16.1 2007/03/25 22:00:40 oliver Exp $
-
 #include <BALL/VIEW/DIALOGS/PTEDialog.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/VIEW/WIDGETS/editableScene.h>

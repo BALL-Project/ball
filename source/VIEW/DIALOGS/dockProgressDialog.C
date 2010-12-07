@@ -1,4 +1,5 @@
-// $Id: dockProgressDialog.C,v 1.4.18.1 2007/03/25 22:01:54 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
 //
 
 #include <BALL/VIEW/DIALOGS/dockProgressDialog.h>

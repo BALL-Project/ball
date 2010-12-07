@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gridVisualizationDialog.C,v 1.1.6.2 2007/04/29 20:02:29 amoll Exp $
-//
 
 #include <BALL/VIEW/DIALOGS/gridVisualizationDialog.h>
 #include <BALL/VIEW/KERNEL/common.h>

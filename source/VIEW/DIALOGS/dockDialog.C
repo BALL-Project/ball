@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.5.18.1 2007/03/25 22:01:53 oliver Exp $
-//
 
 #include <QtGui/qpushbutton.h>
 #include <QtGui/qcombobox.h>
