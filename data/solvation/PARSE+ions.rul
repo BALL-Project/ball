@@ -1,6 +1,4 @@
 #
-# $Id: PARSE+ions.rul,v 1.2 2004/04/28 15:33:47 anker Exp $
-# 
 #  PARSE rule set -- charge and radius assignment rules based on the 
 #  parameters developed by 
 #   Sitkoff, Sharp, and Honig: Accurate Calculation of Hydration Free Energies 
