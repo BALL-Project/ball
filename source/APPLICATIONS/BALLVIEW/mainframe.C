@@ -65,7 +65,7 @@ namespace BALL
 		// ---------------------
 		// setup main window
 		// ---------------------
-		setWindowTitle("BALLView");
+		setWindowTitle(tr("BALLView"));
 		setWindowIcon(QPixmap(bucky_64x64_xpm));
 		// make sure submenus are the first 
 		initPopupMenu(FILE_OPEN);
