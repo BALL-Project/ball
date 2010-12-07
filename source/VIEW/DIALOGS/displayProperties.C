@@ -29,11 +29,11 @@
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 
-#include <QtGui/qmenubar.h>
-#include <QtGui/qlabel.h>
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qslider.h>
-#include <QtGui/qradiobutton.h>
+#include <QtGui/QMenuBar>
+#include <QtGui/QLabel>
+#include <QtGui/QPushButton>
+#include <QtGui/QSlider>
+#include <QtGui/QRadioButton>
 
 namespace BALL
 {
