@@ -476,7 +476,7 @@ void PyWidget::initializeWidget(MainControl& main_control)
 	if (!valid_)
 	{
 		getMainControl()->initPopupMenu(MainControl::TOOLS_PYTHON)->setEnabled(false);
-		appendText((String)tr("> No Python support available:"), true);
+		appendText("> "+ (String)tr("No Python support available:"), true);
 		runString("import BALL");
 		setEnabled(false);
 		setStatusbarText((String)tr("No Python support available! (See PyWidget)"), true);
@@ -621,7 +621,7 @@ void PyWidget::applyPreferences()
 	getMainControl()->insertPopupMenuSeparator(MainControl::USER);
 	insertMenuEntry(MainControl::USER, (String)tr("Modify"), this, SLOT(modifyHotkeys()));
 	setMenuHint((String)tr("Manage user defined Python commands"));
-	setMenuHelp((String)tr("pythonInterpreter.html#create_hotkeys"));
+	setMenuHelp("pythonInterpreter.html#create_hotkeys");
 
 	/////////////////////////////////////////
 	// startup script
@@ -652,7 +652,7 @@ void PyWidget::applyPreferences()
 
 	script_edit_->clear();
 	openFile(current_script_, false);
-	appendText((String)tr("> Ready"), false, true);
+	appendText("> " + (String)tr("Ready"), false, true);
 }
 
 void PyWidget::modifyHotkeys()
@@ -819,7 +819,7 @@ void PyWidget::exportHistory()
 	File file(filename, std::ios::out);
 	if (!file.isOpen()) 
 	{
-		appendText(((String)tr("> Could not export history to file ") + filename + "\n").c_str(), true);
+		appendText(("> " + (String)tr("Could not export history to file ") + filename + "\n").c_str(), true);
 		newPrompt_();
 		return;
 	}
@@ -845,7 +845,7 @@ void PyWidget::saveScript()
 	File file(filename, std::ios::out);
 	if (!file.isOpen()) 
 	{
-		appendText(((String)tr("> Could not script to ") + filename + "\n").c_str(), true);
+		appendText(((String)"> " + (String)tr("Could not save script to ") + filename + "\n").c_str(), true);
 		newPrompt_();
 		return;
 	}
@@ -923,8 +923,8 @@ bool PyWidget::openFile(const String& filename, bool run, bool is_current)
 	stop_script_ = false;
 	full_silent_ = filename.hasSuffix("startup.py");
 
-	if (run) appendText(((String)tr("> executing script from ") + filename + "\n").c_str(), false, true);
-	else     appendText(((String)tr("> loading script from ") + filename + "\n").c_str(), false, true);
+	if (run) appendText(((String)"> " + (String)tr("executing script from ") + filename + "\n").c_str(), false, true);
+	else     appendText(((String)"> " + (String)tr("loading script from ") + filename + "\n").c_str(), false, true);
 	LineBasedFile file;
 	try
 	{
@@ -932,7 +932,7 @@ bool PyWidget::openFile(const String& filename, bool run, bool is_current)
 	}
 	catch	(...)
 	{
-		appendText(((String)tr("> Could not find file ") + filename + "\n").c_str(), true);
+		appendText(("> " + (String)tr("Could not find file ") + filename + "\n").c_str(), true);
 		newPrompt_();
 		script_mode_ = false;
 		return false;
@@ -969,7 +969,7 @@ bool PyWidget::openFile(const String& filename, bool run, bool is_current)
 		current_line_ = i;
 		if (!parseLine_(lines[i]))
 		{
-			String result_string = (String)tr("> Error in line ") + String(i + 1) + (String)tr(" of file ") + filename + "\n";
+			String result_string = "> " + (String)tr("Error in line ") + String(i + 1) + (String)tr(" of file ") + filename + "\n";
 			appendText(result_string.c_str(), true);
 			aborted = true;
 		}
@@ -977,7 +977,7 @@ bool PyWidget::openFile(const String& filename, bool run, bool is_current)
 		if (stop_script_)
 		{
 			setStatusbarText((String)tr("Aborted script"), true);
-			appendText("> " + (String)tr( "aborted..."), true);
+			appendText("> " + (String)tr("aborted..."), true);
 			aborted = true;
 		}
 	}
@@ -986,7 +986,7 @@ bool PyWidget::openFile(const String& filename, bool run, bool is_current)
 	full_silent_ = false;
 	if (!aborted)
 	{
-		appendText((String)tr("> Finished."), false, true);
+		appendText("> " + (String)tr("Finished."), false, true);
 		setStatusbarText((String)tr("Finished script."));
 	}
 	newPrompt_();
@@ -1142,7 +1142,7 @@ bool PyWidget::parseLine_(String line)
 {
 	if (!Py_IsInitialized())
 	{
-		appendText((String)tr("> ERROR: no interpreter running!\n"), true);
+		appendText("> " + (String)tr("ERROR: no interpreter running!\n"), true);
 		return false;
 	}
 
@@ -1323,7 +1323,7 @@ void PyWidget::startInterpreter()
 	// print the BALL version and clear
 	// the widget's contents in case of a restart
 	text_edit_->clear();
-	appendText(((String)tr("> BALL ") + VersionInfo::getVersion()).c_str(), false, true);
+	appendText(("> "+(String)tr("BALL")+ " " + VersionInfo::getVersion()).c_str(), false, true);
 
 	// print the first prompt 
 	multi_line_mode_ = false;
