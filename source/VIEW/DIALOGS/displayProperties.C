@@ -6,8 +6,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.101.16.4 2007/04/24 22:56:56 amoll Exp $
-//
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
