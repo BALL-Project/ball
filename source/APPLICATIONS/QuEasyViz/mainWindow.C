@@ -1,3 +1,8 @@
+/* TRANSLATOR BALL::QSAR
+
+		Necessary for lupdate.
+*/
+
 /* mainWindow.C
  * 
  * Copyright (C) 2009 Marcel Schumann

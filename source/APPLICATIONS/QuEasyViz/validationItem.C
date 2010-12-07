@@ -1,3 +1,9 @@
+/* TRANSLATOR BALL::QSAR
+
+		Necessary for lupdate.
+*/
+
+
 /* validationItem.C
  * 
  * Copyright (C) 2009 Marcel Schumann

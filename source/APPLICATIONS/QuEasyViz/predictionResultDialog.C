@@ -1,3 +1,9 @@
+/* TRANSLATOR BALL::QSAR
+
+		Necessary for lupdate.
+*/
+
+
 /* predictionResultDialog.C
  * 
  * Copyright (C) 2009 Marcel Schumann

@@ -1,3 +1,8 @@
+/* TRANSLATOR BALL::QSAR
+
+		Necessary for lupdate.
+*/
+
 /* validationResultDialog.C
  * 
  * Copyright (C) 2009 Marcel Schumann
