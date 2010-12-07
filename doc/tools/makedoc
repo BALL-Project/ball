@@ -1,5 +1,4 @@
 #!/usr/local/bin/bash
-# $Id: makedoc,v 1.7 2002/12/18 18:43:57 amoll Exp $
 
 # This script is used to build the BALL-documentation.
 # It can receive "complete", "html", and "tex" as first parameter to
