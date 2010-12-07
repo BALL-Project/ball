@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: macros.h,v 1.9 2003/08/26 08:04:05 oliver Exp $
-//
 
 #ifndef BALL_COMMON_MACROS_H
 #define BALL_COMMON_MACROS_H

@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: create.h,v 1.11 2004/02/18 23:24:02 oliver Exp $
-//
 
 #ifndef BALL_COMMON_CREATE_H
 #define BALL_COMMON_CREATE_H
