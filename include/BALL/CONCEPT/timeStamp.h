@@ -48,23 +48,19 @@ namespace BALL
 		/**	Default constructor.
 				Initialize with zero.
 		*/
-		PreciseTime()
-			;
+		PreciseTime();
 			
 		/**	Copy constructor
 		*/
-		PreciseTime(const PreciseTime& time)
-			;
+		PreciseTime(const PreciseTime& time);
 
 		/**	Detailed constructor
 		*/
-		PreciseTime(long secs, long usecs)
-			;
+		PreciseTime(long secs, long usecs);
 			
 		/**	Destructor
 		*/
-		virtual ~PreciseTime()
-			;
+		virtual ~PreciseTime();
 
 		//@}
 		/**	@name Constants.
@@ -82,18 +78,15 @@ namespace BALL
 
 		/** Assignment method
 		*/
-		void set(long secs, long usecs) 
-			;
+		void set(long secs, long usecs);
 
 		/** Assignment method
 		*/
-		void set(const PreciseTime& time) 
-			;
+		void set(const PreciseTime& time);
 
 		/**	Assignment operator
 		*/
-		const PreciseTime& operator = (const PreciseTime& time) 
-			;
+		const PreciseTime& operator = (const PreciseTime& time);
 
 		/**	Clear method
 		*/
@@ -107,18 +100,15 @@ namespace BALL
 
 		/**	Greater than operator.
 		*/
-		bool operator < (const PreciseTime& time) const 
-			;
+		bool operator < (const PreciseTime& time) const;
 
 		/**	Lesser than operator.
 		*/
-		bool operator > (const PreciseTime& time) const 
-			;
+		bool operator > (const PreciseTime& time) const;
 
 		/**	Equality operator.
 		*/
-		bool operator == (const PreciseTime& time) const 
-			;
+		bool operator == (const PreciseTime& time) const;
 
 		//@}
 		/**	@name Accessors 
@@ -127,19 +117,16 @@ namespace BALL
 
 		/**	Return the seconds since Jan. 1, 1970.
 		*/
-		long getSeconds() const 
-			;
+		long getSeconds() const;
 
 		/**	Return the microseconds.
 		*/
-		long getMicroSeconds() const 
-			;
+		long getMicroSeconds() const;
 
 		/**	Return the current time.
 				@return PreciseTime the current time in seconds since Jan. 1, 1970
 		*/
-		static PreciseTime now() 
-			;
+		static PreciseTime now();
 
 		//@}
 
@@ -153,8 +140,7 @@ namespace BALL
         of the PersistenceManager.
         @param pm the persistence manager
     */
-    void write(PersistenceManager& pm) const
-			;
+    void write(PersistenceManager& pm) const;
 
     /** Persistent stream reading.
         This method reads the contents of a  \link PreciseTime PreciseTime \endlink  object from the
@@ -162,8 +148,7 @@ namespace BALL
         of the PersistenceManager.
         @param pm the persistence manager
     */
-    bool read(PersistenceManager& pm)
-			;
+    bool read(PersistenceManager& pm);
 
 		//@}
  
@@ -195,13 +180,11 @@ namespace BALL
 
 		/** Default constructor
 		*/
-		TimeStamp()
-			;
+		TimeStamp();
 
 		/** Destructor
 		*/
-		virtual ~TimeStamp()
-			;
+		virtual ~TimeStamp();
 
 		//@}
 		/**	@name	Predicates
@@ -210,28 +193,23 @@ namespace BALL
 
 		/**	Check the time stamp.
 		*/
-		bool isNewerThan(const PreciseTime& time) const 
-			;
+		bool isNewerThan(const PreciseTime& time) const;
 		
 		/**	Check the time stamp.
 		*/
-		bool isOlderThan(const PreciseTime& time) const 
-			;
+		bool isOlderThan(const PreciseTime& time) const;
 
 		/**	Check the time stamp.
 		*/
-		bool isNewerThan(const TimeStamp& stamp) const 
-			;
+		bool isNewerThan(const TimeStamp& stamp) const;
 		
 		/**	Check the time stamp.
 		*/
-		bool isOlderThan(const TimeStamp& stamp) const 
-			;
+		bool isOlderThan(const TimeStamp& stamp) const;
 
 		/** Equality operator
 		*/
-		bool operator == (const TimeStamp& stamp) const 
-			;
+		bool operator == (const TimeStamp& stamp) const;
 		
 		//@}
 		/**	@name Accessors
@@ -244,14 +222,12 @@ namespace BALL
 				 \link PreciseTime::now PreciseTime::now \endlink ).
 				@param time the new time stamp (default =  \link PreciseTime::now PreciseTime::now \endlink )														
 		*/
-		virtual void stamp(const PreciseTime& time = PreciseTime::ZERO) 
-			;
+		virtual void stamp(const PreciseTime& time = PreciseTime::ZERO);
 
 		/**	Return the time of last modification
 				@return the time stamp
 		*/
-		const PreciseTime& getTime() const 
-			;
+		const PreciseTime& getTime() const;
 
 		//@}
 		/**	@name	Assignment
@@ -260,13 +236,11 @@ namespace BALL
 
 		/**	Assignment operator
 		*/
-		const PreciseTime& operator = (const PreciseTime& time) 
-			;
+		const PreciseTime& operator = (const PreciseTime& time);
 
 		/**	Clear method
 		*/
-		virtual void clear() 
-			;
+		virtual void clear();
 
 		//@}
     /** @name Storable interface.
@@ -279,8 +253,7 @@ namespace BALL
         of the PersistenceManager.
         @param pm the persistence manager
     */
-    void write(PersistenceManager& pm) const
-			;
+    void write(PersistenceManager& pm) const;
 
     /** Persistent stream reading.
         This method reads the contents of a  \link TimeStamp TimeStamp \endlink  object from the
@@ -288,8 +261,7 @@ namespace BALL
         of the PersistenceManager.
         @param pm the persistence manager
     */
-    bool read(PersistenceManager& pm)
-			;
+    bool read(PersistenceManager& pm);
 
 		//@}
 
@@ -307,14 +279,12 @@ namespace BALL
 	/**	Print the contents of a PreciseTime object to a stream.
 	*/
 	BALL_EXPORT
-	std::ostream& operator << (std::ostream& os, const PreciseTime& time)
-		;
+	std::ostream& operator << (std::ostream& os, const PreciseTime& time);
 
 	/**	Print the contents of a TimeStamp object to a stream.
 	*/
 	BALL_EXPORT
-	std::ostream& operator << (std::ostream& os, const TimeStamp& stamp)
-		;
+	std::ostream& operator << (std::ostream& os, const TimeStamp& stamp);
 
 	//@}
 
