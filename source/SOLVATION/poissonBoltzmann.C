@@ -1915,6 +1915,7 @@ namespace BALL
 		tmp_phi	= new float[N];
 		if (tmp_phi == 0)
 		{
+			delete [] Q;
 			throw Exception::OutOfMemory(__FILE__, __LINE__, N * (Size)sizeof(float));
 		}
 
