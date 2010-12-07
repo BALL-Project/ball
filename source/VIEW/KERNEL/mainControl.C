@@ -199,7 +199,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 				if (BALLView_data_path!= 0) vdp = String(BALLView_data_path);
 				if (BALL_data_path!= 0) bdp = String(BALL_data_path);
 
-				QMessageBox::critical(0, "Critical error",
+				QMessageBox::critical(0, tr("Critical error"),
 						QString(tr("Could not read the FragmentDB data!\n")) + 
 						"Please check, that the BALL_DATA_PATH or BALLVIEW_DATA_PATH\n" + 
 						"environment variable is set to the directory containing the\n" + 
