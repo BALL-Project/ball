@@ -1086,7 +1086,8 @@ namespace BALL
 			std::list<Index> longest_path;
 			longest_path.push_back(max_i);
 			findFloydWarshallPath_(path, next, remaining_atoms, max_i, max_j, longest_path);
-			longest_path.push_back(max_j);
+			if (max_i != max_j)
+				longest_path.push_back(max_j);
 
 			// finally, remove all found atoms from the input
 			for (std::list<Index>::iterator l_it = longest_path.begin(); l_it != longest_path.end(); ++l_it)
@@ -1097,8 +1098,8 @@ namespace BALL
 
 			// and add one capping substituent to the beggining of the chain
 			Atom::BondIterator b_it;
-			Atom* first_atom  = *(  chains_.back().begin());
-			Atom* second_atom = *(++chains_.back().begin());
+			Atom* first_atom  = *(chains_.back().begin());
+			Atom* second_atom = (chains_.back().size() > 1) ? *(++chains_.back().begin()) : first_atom;
 
 			BALL_FOREACH_ATOM_BOND(*first_atom, b_it)
 			{
