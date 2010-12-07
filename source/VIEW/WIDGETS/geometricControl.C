@@ -1,7 +1,10 @@
+/* TRANSLATOR  BALL::QSAR
+
+		Necessary for lupdate.
+*/
+
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
-//
-// $Id: geometricControl.C,v 1.77.16.4 2007/05/30 18:56:27 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
