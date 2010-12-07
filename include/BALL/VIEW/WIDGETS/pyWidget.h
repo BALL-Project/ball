@@ -100,6 +100,7 @@ class BALL_VIEW_EXPORT RunPythonThread
 ///
 struct BALL_VIEW_EXPORT Hotkey
 {
+
 	public:
 
 	static Hotkey createHotkey(String modifier, String key, String command, 
