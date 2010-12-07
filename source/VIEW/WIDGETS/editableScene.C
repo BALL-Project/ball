@@ -48,7 +48,7 @@
 #include <BALL/MATHS/matrix44.h>
 #include <BALL/MATHS/angle.h>
 
-#include <QtGui/qmenubar.h>
+#include <QtGui/QMenuBar>
 #include <QtGui/QDesktopWidget>
 #include <QtGui/QPainter>
 #include <QtGui/QBitmap>
