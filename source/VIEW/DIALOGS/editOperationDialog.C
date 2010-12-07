@@ -5,10 +5,10 @@
 #include <BALL/VIEW/DIALOGS/editOperationDialog.h>
 #include <BALL/VIEW/WIDGETS/editableScene.h>
 
-#include <QtGui/qtooltip.h>
-#include <QtGui/q3buttongroup.h>
-#include <QtGui/q3button.h>
-#include <QtGui/q3listbox.h>
+#include <QtGui/QToolTip>
+#include <QtGui/QButtonGroup>
+#include <QtGui/QPushButton>
+#include <QtGui/QListBox>
 
 namespace BALL
 {

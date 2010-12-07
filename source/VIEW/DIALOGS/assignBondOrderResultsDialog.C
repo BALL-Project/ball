@@ -7,8 +7,8 @@
 #include <BALL/STRUCTURE/sdGenerator.h>
 #include <BALL/VIEW/KERNEL/message.h>
 
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qtreewidget.h>
+#include <QtGui/QPushButton>
+#include <QtGui/QTreeWidget>
 
 #include <sstream>
 

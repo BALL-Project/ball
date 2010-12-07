@@ -2,16 +2,16 @@
 // vi: set ts=2:
 //
 
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qcombobox.h>
-#include <QtCore/qstringlist.h>
-#include <QtGui/qmessagebox.h>
-#include <QtGui/qcheckbox.h>
-#include <QtGui/qlineedit.h>
-#include <QtGui/qradiobutton.h>
-#include <QtGui/qfiledialog.h>
-#include <QtGui/qtabwidget.h>
-#include <QtGui/qbuttongroup.h>
+#include <QtGui/QPushButton>
+#include <QtGui/QComboBox>
+#include <QtCore/QStringList>
+#include <QtGui/QMessageBox>
+#include <QtGui/QCheckBox>
+#include <QtGui/QLineEdit>
+#include <QtGui/QRadioButton>
+#include <QtGui/QFileDialog>
+#include <QtGui/QTabWidget>
+#include <QtGui/QButtonGroup>
 
 #include <BALL/VIEW/DIALOGS/dockDialog.h>
 #include <BALL/STRUCTURE/fragmentDB.h>

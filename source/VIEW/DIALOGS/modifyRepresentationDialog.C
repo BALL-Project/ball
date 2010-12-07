@@ -23,16 +23,16 @@
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/SYSTEM/sysinfo.h>
 
-#include <QtGui/qlineedit.h>
-#include <QtGui/qspinbox.h>
-#include <QtGui/qtabwidget.h>
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qlabel.h>
-#include <QtGui/qradiobutton.h>
-#include <QtGui/qcheckbox.h>
+#include <QtGui/QLineEdit>
+#include <QtGui/QSpinBox>
+#include <QtGui/QTabWidget>
+#include <QtGui/QPushButton>
+#include <QtGui/QLabel>
+#include <QtGui/QRadioButton>
+#include <QtGui/QCheckBox>
 #include <QtGui/QComboBox>
-#include <QtGui/qslider.h>
-#include <QtGui/qmessagebox.h>
+#include <QtGui/QSlider>
+#include <QtGui/QMessageBox>
 
 namespace BALL
 {

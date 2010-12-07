@@ -5,7 +5,7 @@
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/VIEW/WIDGETS/editableScene.h>
 
-#include <QtGui/qtooltip.h>
+#include <QtGui/QToolTip>
 #include <QtGui/QPushButton>
 
 namespace BALL

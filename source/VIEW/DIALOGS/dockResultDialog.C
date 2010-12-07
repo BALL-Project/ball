@@ -16,10 +16,10 @@
 
 #include <QtGui/QTableWidget>
 #include <QtGui/QHeaderView>
-#include <QtGui/qcombobox.h>
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qtextedit.h>
-#include <QtGui/qmessagebox.h>
+#include <QtGui/QComboBox>
+#include <QtGui/QPushButton>
+#include <QtGui/QTextEdit>
+#include <QtGui/QMessageBox>
 
 
 //#define BALL_VIEW_DEBUG

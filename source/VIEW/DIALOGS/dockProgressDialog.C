@@ -1,14 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-
 #include <BALL/VIEW/DIALOGS/dockProgressDialog.h>
 
-#include <QtGui/qprogressbar.h>
-#include <QtGui/qtextedit.h>
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qmessagebox.h>
-#include <QtGui/qlabel.h>
+#include <QtGui/QProgressBar>
+#include <QtGui/QTextEdit>
+#include <QtGui/QPushButton>
+#include <QtGui/QMessageBox>
+#include <QtGui/QLabel>
 
 //#define BALL_VIEW_DEBUG
 
