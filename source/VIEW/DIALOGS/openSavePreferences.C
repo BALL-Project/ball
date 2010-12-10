@@ -1,7 +1,6 @@
-/* TRANSLATOR BALL::VIEW::OpenSavePreferences
-
-		Necessary for lupdate.
-*/
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 
 #include <BALL/VIEW/DIALOGS/openSavePreferences.h>
 
@@ -15,10 +14,10 @@ namespace BALL
 		OpenSavePreferences::OpenSavePreferences(QWidget* parent, const char* name, Qt::WFlags fl)
 			: QWidget(parent, fl)
 		{
-			setINIFileSectionName((String)tr("OpenSave"));
+			setINIFileSectionName("OpenSave");
 			setupUi(this);
 			setObjectName(name);
-			setWidgetStackName((String)tr("Open/Save"));
+			setWidgetStackName("Open/Save");
 			registerWidgets_();
 		}
 
