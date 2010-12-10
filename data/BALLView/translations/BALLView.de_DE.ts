@@ -556,12 +556,12 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="205"/>
         <source>Invert Selection</source>
-        <translation>Selektion umkehren</translation>
+        <translation type="unfinished">Auswahl umkehren</translation>
     </message>
     <message>
         <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="209"/>
         <source>Clear Selection</source>
-        <translation>Selektion zurücksetzen</translation>
+        <translation type="unfinished">Auswahl zurücksetzen</translation>
     </message>
     <message>
         <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="215"/>
