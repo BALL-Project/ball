@@ -46,7 +46,6 @@ namespace BALL
 	}
 
 	Mainframe::~Mainframe()
-		throw()
 	{
 	}
 
