@@ -122,11 +122,11 @@ void DisplayProperties::initializeWidget(MainControl& main_control)
 	(main_control.initPopupMenu(MainControl::DISPLAY));
 
 	String description = "Shortcut|Display|Display_Properties";
-	id_ = insertMenuEntry(MainControl::DISPLAY, tr("D&isplay Properties"), this, 
+	id_ = insertMenuEntry(MainControl::DISPLAY, (String)tr("D&isplay Properties"), this, 
 																		 SLOT(show()), description,
 																		 QKeySequence("Ctrl+I"));
 
-	setMenuHint(tr("Create a new representation or modify an existing one"));
+	setMenuHint((String)tr("Create a new representation or modify an existing one"));
 	setMenuHelp("displayProperties.html");
 	setIcon("categories/preferences-display", true);
 
@@ -141,13 +141,13 @@ void DisplayProperties::initializePreferencesTab(Preferences &preferences)
 	preferences_ = &preferences;
 	if (model_settings_ == 0)
 	{
-		model_settings_ = new ModelSettingsDialog(this, tr("ModelSettings"));
+		model_settings_ = new ModelSettingsDialog(this, ((String)tr("ModelSettings")).c_str());
 	}
 	preferences.insertEntry(model_settings_);
 
 	if (coloring_settings_ == 0)
 	{
-		coloring_settings_ = new ColoringSettingsDialog(this, tr("ColoringSettings"));
+		coloring_settings_ = new ColoringSettingsDialog(this, ((String)tr("ColoringSettings")).c_str());
 	}
 	preferences.insertEntry(coloring_settings_);
 }
