@@ -252,7 +252,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="223"/>
         <source>Overwrite Selected Bonds</source>
-        <translation>Selektierte Bindungen überschreiben</translation>
+        <translation>Ausgewählte Bindungen überschreiben</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="48"/>
@@ -617,12 +617,12 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="../../../source/VIEW/WIDGETS/colorButton.C" line="74"/>
         <source>Select color</source>
-        <translation type="unfinished"></translation>
+        <translation>Wähle Farbe</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/WIDGETS/colorButton.C" line="76"/>
         <source>Choose color</source>
-        <translation type="unfinished"></translation>
+        <translation>Wähle Farbe</translation>
     </message>
 </context>
 <context>
@@ -2968,7 +2968,7 @@ so there was nothing to be done!</source>
     <message>
         <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="1113"/>
         <source> Bonds</source>
-        <translation> Atome</translation>
+        <translation type="unfinished"> Bindungen</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="1133"/>
@@ -3063,12 +3063,12 @@ so there was nothing to be done!</source>
     <message>
         <location filename="../../../source/APPLICATIONS/QuEasyViz/plotter.C" line="130"/>
         <source>Save Plot</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichere Bild</translation>
     </message>
     <message>
         <location filename="../../../source/APPLICATIONS/QuEasyViz/plotter.C" line="131"/>
         <source>PNG (*.png);;Encapsulated PostScript (*.eps);;Portable Document Format (*.pdf);;PostScript (*.ps);;JPG (*.jpg);;GIF (*.gif);;Windows Bitmap (*.bmp);;Tagged Image File Format (*.tif)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -3076,24 +3076,24 @@ so there was nothing to be done!</source>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/pluginDialog.C" line="144"/>
         <source>Load Plugin</source>
-        <translation type="unfinished">Plugin laden</translation>
+        <translation>Plugin laden</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/pluginDialog.C" line="219"/>
         <location filename="../../../source/VIEW/DIALOGS/pluginDialog.C" line="301"/>
         <source>Deactivate</source>
-        <translation type="unfinished">Deaktivieren</translation>
+        <translation>Deaktivieren</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/pluginDialog.C" line="223"/>
         <location filename="../../../source/VIEW/DIALOGS/pluginDialog.C" line="296"/>
         <source>Activate</source>
-        <translation type="unfinished">Aktivieren</translation>
+        <translation>Aktivieren</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/pluginDialog.C" line="250"/>
         <source>Select a plugin directory</source>
-        <translation type="unfinished">Wähle ein Plugin-Verzeichnis</translation>
+        <translation>Wähle ein Plugin-Verzeichnis</translation>
     </message>
 </context>
 <context>
@@ -3133,12 +3133,12 @@ so there was nothing to be done!</source>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.C" line="50"/>
         <source>Add</source>
-        <translation type="unfinished">Hinzufügen</translation>
+        <translation>Hinzufügen</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.C" line="51"/>
         <source>Clear Results</source>
-        <translation type="unfinished">Ergebnisse löschen</translation>
+        <translation>Ergebnisse löschen</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.C" line="59"/>
@@ -3158,7 +3158,7 @@ so there was nothing to be done!</source>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.C" line="196"/>
         <source>Secondary structure plotting failed</source>
-        <translation type="unfinished">D</translation>
+        <translation>Zeichnen der Strukture fehlgeschlagen</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.C" line="278"/>
