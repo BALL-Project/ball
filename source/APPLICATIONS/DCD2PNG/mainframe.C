@@ -1,3 +1,8 @@
+/* TRANSLATOR BALL::Mainframe
+
+		Necessary for lupdate.
+*/
+
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
@@ -28,14 +33,14 @@ namespace BALL
  		Log.remove(std::cout);
    	Log.remove(std::cerr);
 
-		control_ = new MolecularControl(this, "Structures");
- 		geometric_control_ = new GeometricControl(this, "Representations");
-		scene_ = new Scene(this, "3D View");
+		control_ = new MolecularControl(this, tr("Structures"));
+ 		geometric_control_ = new GeometricControl(this, tr("Representations"));
+		scene_ = new Scene(this, tr("3D View"));
 		scene_->setMinimumSize(10, 10);
 		setCentralWidget(scene_);
-		display_properties_ = new DisplayProperties(this, "DisplayProperties");
-		file_dialog_ = new MolecularFileDialog(this, "MolecularFileDialog");
- 		molecular_structure_ = new MolecularStructure(this, "MolecularStructure");
+		display_properties_ = new DisplayProperties(this, tr("DisplayProperties"));
+		file_dialog_ = new MolecularFileDialog(this, tr("MolecularFileDialog"));
+ 		molecular_structure_ = new MolecularStructure(this, tr("MolecularStructure"));
 
 		init_();
 	}
