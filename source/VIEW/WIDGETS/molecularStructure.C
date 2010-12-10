@@ -74,10 +74,10 @@ namespace BALL
 		{
 			// cant use ModularWidget::getMainControl() here, no idea why
 			String description = "Shortcut|Display|Viewpoint|Focus_Camera";
-			center_camera_id_ = insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "&Focus Camera", this, 
+			center_camera_id_ = insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, (String)tr("&Focus Camera"), this, 
 																												SLOT(centerCamera()), description,
 																												QKeySequence("Ctrl+F"));
-			setMenuHint("Focus the camera on one or multiple objects.");
+			setMenuHint((String)tr("Focus the camera on one or multiple objects."));
 			setIcon("actions/object-focus", true);
 
 			// Build Menu -------------------------------------------------------------------
@@ -86,84 +86,84 @@ namespace BALL
 	// 										CTRL+Key_G, -1 , hint);
 		
 			description = "Shortcut|Build|Build_Peptide";
-			build_peptide_id_ = insertMenuEntry(MainControl::BUILD, "B&uild Peptide", this, 
+			build_peptide_id_ = insertMenuEntry(MainControl::BUILD, (String)tr("B&uild Peptide"), this, 
 			                                    SLOT(buildPeptide()), description,
 			                                    QKeySequence("Ctrl+Alt+U"));
-			setMenuHint("Build a peptide from selected amino acids.");
+			setMenuHint((String)tr("Build a peptide from selected amino acids."));
 
 			description = "Shortcut|Build|Build_Bonds";
-			build_bonds_id_ = insertMenuEntry(MainControl::BUILD, "&Build Bonds", this, 
+			build_bonds_id_ = insertMenuEntry(MainControl::BUILD, (String)tr("&Build Bonds"), this, 
 																				SLOT(buildBonds()), description,
 																				QKeySequence("Ctrl+B"));
-			setMenuHint("Add missing bonds to a selected structure.");
+			setMenuHint((String)tr("Add missing bonds to a selected structure."));
 
 			description = "Shortcut|Build|Assign_Bond_Orders";
-			assign_bond_orders_id_ = insertMenuEntry(MainControl::BUILD, "&Assign Bond Orders", this, 
+			assign_bond_orders_id_ = insertMenuEntry(MainControl::BUILD, (String)tr("&Assign Bond Orders"), this, 
 																							 SLOT(runBondOrderAssignment()), description);
-			setMenuHint("Assign bond orders to a selected structure."); 
+			setMenuHint((String)tr("Assign bond orders to a selected structure.")); 
 			setIcon("actions/molecule-assign-bond-orders", false); //true);
 
 			description = "Shortcut|Build|Check_Structure";
-			check_structure_id_ = insertMenuEntry(MainControl::BUILD, "Chec&k Structure against FragmentDB", this, 
+			check_structure_id_ = insertMenuEntry(MainControl::BUILD, (String)tr("Chec&k Structure against FragmentDB"), this, 
 																						SLOT(checkResidue()), description,
 																						QKeySequence("Ctrl+K"));
-			setMenuHint("Check a structure against the fragment database.");
+			setMenuHint((String)tr("Check a structure against the fragment database."));
 		
 			description = "Shortcut|Build|Add_Hydrogens";
-			add_hydrogens_id_ = insertMenuEntry(MainControl::BUILD, "Add &Hydrogens", this, 
+			add_hydrogens_id_ = insertMenuEntry(MainControl::BUILD, (String)tr("Add &Hydrogens"), this, 
 																					SLOT(addHydrogens()), description,
 																					QKeySequence("Ctrl+H"));
-			setMenuHint("Add missing atoms to a selected structure by using the fragment database.");
+			setMenuHint((String)tr("Add missing atoms to a selected structure by using the fragment database."));
 			
 			// MOLECULARMECHANICS Menu -------------------------------------------------------------------
 
 			description = "Shortcut|MolecularMechanics|Single_Point_Calculation";
-			energy_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Single Point Calculation", this, 
+			energy_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, (String)tr("Single Point Calculation"), this, 
 																	 SLOT(calculateForceFieldEnergy()), description,
 																	 QKeySequence("Ctrl+A"));
-			setMenuHint("Calculate the energy of a System with the selected force field.");
+			setMenuHint((String)tr("Calculate the energy of a System with the selected force field."));
 			setMenuHelp("mm.html#single_point");
 				
 			description = "Shortcut|MolecularMechanics|Energy_Minimization";
-			minimization_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "&Energy Minimization", this, 
+			minimization_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, (String)tr("&Energy Minimization"), this, 
 																				 SLOT(runMinimization()), description);
-			setMenuHint("To perform an Energy Minimization, first select the molecular structures.");
+			setMenuHint((String)tr("To perform an Energy Minimization, first select the molecular structures."));
 			setMenuHelp("mm.html#mini");
 			
 			description = "Shortcut|MolecularMechanics|Molecular_Dynamics";
-			mdsimulation_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Molecular &Dynamics", this, 
+			mdsimulation_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, (String)tr("Molecular &Dynamics"), this, 
 																				 SLOT(MDSimulation()), description,
 																				 QKeySequence("Ctrl+M"));
-			setMenuHint("To perform a MD simulation , first select the molecular structures.");
+			setMenuHint((String)tr("To perform a MD simulation , first select the molecular structures."));
 			setMenuHelp("mm.html#md");
 
 			getMainControl()->insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
 
 			description = "Shortcut|MolecularMechanics|Choose_ForceField|Amber";
-			amber_ff_id_ = insertMenuEntry(MainControl::CHOOSE_FF, "Amber", this, 
+			amber_ff_id_ = insertMenuEntry(MainControl::CHOOSE_FF, (String)tr("Amber"), this, 
 																	   SLOT(chooseAmberFF()), description);
 			amber_ff_id_->setCheckable(true);
-			setMenuHint("Use Amber Force Field");
+			setMenuHint((String)tr("Use Amber Force Field"));
 			setMenuHelp("mm.html");
 			
 			description = "Shortcut|MolecularMechanics|Choose_ForceField|Charmm";
-			charmm_ff_id_ = insertMenuEntry(MainControl::CHOOSE_FF, "Charmm", this, 
+			charmm_ff_id_ = insertMenuEntry(MainControl::CHOOSE_FF, (String)tr("Charmm"), this, 
 																			SLOT(chooseCharmmFF()), description);
 			charmm_ff_id_->setCheckable(true);
-			setMenuHint("Use Charmm Force Field");
+			setMenuHint((String)tr("Use Charmm Force Field"));
 			setMenuHelp("mm.html");
 
 			description = "Shortcut|MolecularMechanics|Choose_ForceField|MMFF94";
-			mmff94_id_ = insertMenuEntry(MainControl::CHOOSE_FF, "MMFF94", this, 
+			mmff94_id_ = insertMenuEntry(MainControl::CHOOSE_FF, (String)tr("MMFF94"), this, 
 																	 SLOT(chooseMMFF94()), description);
 			mmff94_id_->setCheckable(true);
-			setMenuHint("Use MMFF94 Force Field");
+			setMenuHint((String)tr("Use MMFF94 Force Field"));
 			setMenuHelp("mm.html");
 
 			description = "Shortcut|MolecularMechanics|Options";
-			setup_ff_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Options", this, 
+			setup_ff_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, (String)tr("Options"), this, 
 																	SLOT(setupForceField()), description);
-			setMenuHint("Configure the force field");
+			setMenuHint((String)tr("Configure the force field"));
 			setMenuHelp("mm.html");
 
 			// Tools Menu -------------------------------------------------------------------
@@ -172,41 +172,41 @@ namespace BALL
 // 			map_proteins_id_ = insertMenuEntry(MainControl::TOOLS, "&Map two Proteins", this, SLOT(mapProteins()), 0, -1, hint);
 
 			description = "Shortcut|Tools|Calculate_RMSD";
-			calculate_RMSD_id_ = insertMenuEntry(MainControl::TOOLS, "&Calculate RMSD", this, 
+			calculate_RMSD_id_ = insertMenuEntry(MainControl::TOOLS, (String)tr("&Calculate RMSD"), this, 
 																					 SLOT(calculateRMSD()), description);
-			setMenuHint("Highlight two (partial) structures to calculate their RMSD value");
+			setMenuHint((String)tr("Highlight two (partial) structures to calculate their RMSD value"));
 			
 			description = "Shortcut|Tools|Calculate_SecondaryStructure";
-			calculate_ss_id_ = insertMenuEntry(MainControl::TOOLS, "Calculate Sec&ondary Structure", this,
+			calculate_ss_id_ = insertMenuEntry(MainControl::TOOLS, (String)tr("Calculate Sec&ondary Structure"), this,
 																				 SLOT(calculateSecondaryStructure()), description,
 																				 QKeySequence("Alt+O"));
-			setMenuHint("Recalculate the secondary structure for a structure");
+			setMenuHint((String)tr("Recalculate the secondary structure for a structure"));
 
 //   			calculate_ramachandran_ = insertMenuEntry(MainControl::TOOLS, "Ramachandran Plot", this,
 //   																				 SLOT(calculateRamachandranPlot()));
 //   			setMenuHint("Calculate a Ramachandran Plot for a Protein.");
 			
 			description = "Shortcut|Tools|Calculate_HBonds";
-			calculate_hbonds_id_ = insertMenuEntry(MainControl::TOOLS, "Calculate H-B&onds", this, 
+			calculate_hbonds_id_ = insertMenuEntry(MainControl::TOOLS, (String)tr("Calculate H-B&onds"), this, 
 																		SLOT(calculateHBonds()), description,
 																		QKeySequence("Alt+N"));
-			setMenuHint("To assign H-bonds, one System has to be selected.");
+			setMenuHint((String)tr("To assign H-bonds, one System has to be selected."));
 
 			description = "Shortcut|Tools|FDPB";
-			menu_FPDB_ = insertMenuEntry(MainControl::TOOLS, "FDPB Electrostatics", this, 
+			menu_FPDB_ = insertMenuEntry(MainControl::TOOLS, (String)tr("FDPB Electrostatics"), this, 
 																	 SLOT(calculateFDPB()), description);
-			setMenuHint("Calculate the Electrostatics with FDPB (for one highlighted System)");
+			setMenuHint((String)tr("Calculate the Electrostatics with FDPB (for one highlighted System)"));
 				
 			description = "Shortcut|Tools|Grid|Create_Distance_Grid";
-			create_distance_grid_id_ = insertMenuEntry(MainControl::TOOLS_GRID, "Create &Distance Grid", this, 
+			create_distance_grid_id_ = insertMenuEntry(MainControl::TOOLS_GRID, (String)tr("Create &Distance Grid"), this, 
 																								 SLOT(createGridFromDistance()), description);
-			setMenuHint("Create a grid with the distance to the geometric center of a structure");
+			setMenuHint((String)tr("Create a grid with the distance to the geometric center of a structure"));
 			setMenuHelp("tips.html#distance_grids");
 
 			description = "Shortcut|Tools|Grid|Create_Distance_From_Camera_Grid";
-			create_distance_grid_id2_ = insertMenuEntry(MainControl::TOOLS_GRID, "Create &Distance from Camera Grid", this, 
+			create_distance_grid_id2_ = insertMenuEntry(MainControl::TOOLS_GRID, (String)tr("Create &Distance from Camera Grid"), this, 
 																									SLOT(createGridFromCameraDistance()), description);
-			setMenuHint("Create a grid with the distance to the view point");
+			setMenuHint((String)tr("Create a grid with the distance to the view point"));
 			setMenuHelp("tips.html#distance_grids");
 
 			minimization_dialog_.setAmberDialog(&amber_dialog_);
@@ -284,7 +284,7 @@ namespace BALL
 						return;
 
 					default:
-						Log.error() << "Unknown type of MolecularTaskMessage in " 
+						Log.error() << (String)tr("Unknown type of MolecularTaskMessage in") << " " 
 												<< __FILE__ << "  " << __LINE__ << std::endl;
 				}
 			}
@@ -300,7 +300,7 @@ namespace BALL
 				return false;
 			}
 
-			setStatusbarText("checking " + String(selection.size()) + " objects...", true);
+			setStatusbarText((String)tr("checking") + " " + String(selection.size()) + " " +  (String)tr("objects") + "...", true);
 
 			ResidueChecker res_check(getFragmentDB());
 			res_check.disable(ResidueChecker::OVERLAPPING_ATOMS);
@@ -314,7 +314,8 @@ namespace BALL
 			{	
 				if (!RTTI::isKindOf<AtomContainer>(**it))
 				{
-					Log.error() << "ResidueChecker: cannot apply to a " << typeid(**it).name() << " object" << std::endl;
+					Log.error() << (String)tr("ResidueChecker: cannot apply to a") << " " << typeid(**it).name() 
+						          << " " << (String)tr("object") << std::endl;
 					continue;
 				}
 
@@ -346,11 +347,11 @@ namespace BALL
 
 			if (okay)
 			{
-				setStatusbarText("ResidueChecker: no errors found.", true);
+				setStatusbarText((String)tr("ResidueChecker: no errors found."), true);
 			} 
 			else 
 			{
-				setStatusbarText("Errors found in molecule, the problematic atoms are now selected and colored! See also logs", true);
+				setStatusbarText((String)tr("Errors found in molecule, the problematic atoms are now selected and colored! See also logs"), true);
 				HashSet<Composite*>::Iterator it = changed_roots.begin();
 				for (; it != changed_roots.end(); it++)
 				{
@@ -369,7 +370,7 @@ namespace BALL
 				return;
 			}
 
-			setStatusbarText("adding hydrogens ...", true);
+			setStatusbarText((String)tr("adding hydrogens ..."), true);
 
 			// copy the selection_, it can change after a changemessage event
 			list<Composite*> temp_selection_ = getMainControl()->getMolecularControlSelection();
@@ -394,16 +395,16 @@ namespace BALL
 				notify_(change_message);
 			}
 
-			String result =	String("added ") + String(number_of_hydrogens) + " hydrogen atoms.";
+			String result =	String(tr("added ")) + String(number_of_hydrogens) + " " + (String)tr("hydrogen atoms.");
 
 			if (!bond_ok) 
 			{
-				result += " An error occured, while adding the bonds. Too many bonds for one atom?";
+				result += " " + (String)tr("An error occured, while adding the bonds. Too many bonds for one atom?");
 			}
 
 			if (!hydrogen_ok) 
 			{
-				result += " An error occured, while adding the hydrogens. Too many bonds for one atom?";
+				result += " " + (String)tr("An error occured, while adding the hydrogens. Too many bonds for one atom?");
 			}
 
 			setStatusbarText(result, true);
@@ -417,7 +418,7 @@ namespace BALL
 				return;
 			}
 
-			setStatusbarText("building bonds ...", true);
+			setStatusbarText((String)tr("building bonds ..."), true);
 
 			// copy the selection_, it can change after a changemessage event
 			list<Composite*> temp_selection_ = getMainControl()->getMolecularControlSelection();
@@ -453,10 +454,10 @@ namespace BALL
 				new_number_of_bonds += ((**sit).countBonds());
 			}
 
-			String result = "added " + String(new_number_of_bonds - old_number_of_bonds) + 
-				" bonds (total " + String(new_number_of_bonds) + ").";
+			String result = (String)tr("added ") + String(new_number_of_bonds - old_number_of_bonds) + 
+				(String)tr(" bonds") + " (" + (String)tr("total") + " " + String(new_number_of_bonds) + ").";
 
-			if (!ok) result += " An error occured. Too many bonds for one atom?";
+			if (!ok) result +=  " " + (String)tr("An error occured. Too many bonds for one atom?");
 			setStatusbarText(result, true);
 		}
 
@@ -466,17 +467,17 @@ namespace BALL
 			// Make sure we run one instance of a assignment at a time only.
 			if (getMainControl()->isBusy())
 			{
-				Log.error() << "Assignment already running or still rendering!" << std::endl;
+				Log.error() << (String)tr("Assignment already running or still rendering!") << std::endl;
 				return;
 			}
 
 			if (getMainControl()->getMolecularControlSelection().size() == 0) 
 			{
-				setStatusbarText("Please highlight exactly one AtomContainer!", true);
+				setStatusbarText((String)tr("Please highlight exactly one AtomContainer!"), true);
 				return;
 			}
 			
-			setStatusbarText("  > assigning bond orders ...", true);
+			setStatusbarText("  > " + (String)tr("assigning bond orders") + " ...", true);
 
 			// Retrieve the selected atom container and abort if nothing is selected.
 			list<AtomContainer*> containers;
@@ -490,7 +491,7 @@ namespace BALL
 
 			if (containers.size() != 1) 
 			{
-				setStatusbarText("Please highlight exactly one AtomContainer!", true);
+				setStatusbarText((String)tr("Please highlight exactly one AtomContainer!"), true);
 				return;
 			}
 
@@ -570,14 +571,14 @@ namespace BALL
 			// give a message
 			if (abop.getNumberOfComputedSolutions() == 0)
 			{
-				setStatusbarText(String("Could not find a valid bond order assignment.", true));
+				setStatusbarText(String(tr("Could not find a valid bond order assignment.")), true);
 			}
 			else
 			{	
 				String nr = abop.getNumberOfComputedSolutions();
-				setStatusbarText(String("Found ") + nr + " bond order assignments.", true);
+				setStatusbarText(String(tr("Found")) + " " + nr + " " +  (String)tr("bond order assignments."), true);
 			
-				Log.info()<< "  > Result AssignBondOrderProcessor: " << endl;
+				Log.info()<< "  > " + (String)tr("Result AssignBondOrderProcessor: ") << endl;
 
 				for (Size i = 0; i < abop.getNumberOfComputedSolutions(); i++)
 				{
@@ -585,10 +586,10 @@ namespace BALL
 					stream_description.setf(std::ios_base::fixed);
 					stream_description.precision(2);
 
-					stream_description  << "      Solution " << i 
-								 						 << " has penalty " << abop.getTotalPenalty(i)
-								 						 << ", charge " << abop.getTotalCharge(i)
-														 << ", " <<  abop.getNumberOfAddedHydrogens(i) << " added hydrogens.";
+					stream_description << "      " + (String)tr("Solution") << " " << i 
+								 						 << " "  + (String)tr("has penalty") << " " << abop.getTotalPenalty(i)
+								 						 << ", " + (String)tr("charge") << " " << abop.getTotalCharge(i)
+														 << ", " <<  abop.getNumberOfAddedHydrogens(i) << " " << (String)tr("added hydrogens.");
  
 					String description = stream_description.str();
 
@@ -675,7 +676,7 @@ namespace BALL
 			// properties will be used only for atom containers
 			if (!RTTI::isKindOf<AtomContainer>(composite)) return;
 			
-			Log.info() << "> applying molecular properties ... " << endl;
+			Log.info() << "> " + (String)tr("applying molecular properties") + " ... " << endl;
 			
 			AtomContainer& atom_container = *RTTI::castTo<AtomContainer>(composite);
 			
@@ -685,17 +686,17 @@ namespace BALL
 			}
 			catch (Exception::GeneralException& e)
 			{
-				Log.error() << " > normalize names failed: " <<endl; 
+				Log.error() << " > " + (String)tr("normalize names failed: ") <<endl; 
 				Log.error() << e << endl;
 			}
 			catch (std::exception& e)
 			{
-				Log.error() << "  > normalized names failed." << endl;
+				Log.error() << "  > " + (String)tr("normalized names failed.") << endl;
 				Log.error() << e.what() << std::endl;
 				return;
 			}
 			
-			Log.info() << "  > normalized names" << endl;
+			Log.info() << "  > " + (String)tr("normalized names") << endl;
 			
 			try
 			{
@@ -703,16 +704,16 @@ namespace BALL
 			}
 			catch (Exception::GeneralException& e)
 			{
-				Log.error() << " > generate missing bonds - failed: " <<endl; 
+				Log.error() << " > " + (String)tr("generate missing bonds - failed: ") <<endl; 
 				Log.error() << e << endl;
 			}
 			catch (...)
 			{
-				Log.error() << "  > generate missing bonds - failed." << endl;
+				Log.error() << "  > " + (String)tr("generate missing bonds - failed.") << endl;
 				return;
 			}
 			
-			Log.info() << "  > generated missing bonds" << endl;
+			Log.info() << "  > " + (String)tr("generated missing bonds") << endl;
 			
 			if (atom_container.getName() == "")
 			{
@@ -764,7 +765,7 @@ namespace BALL
 			set->setComposite(&S);
 			notify_(new DatasetMessage(set, DatasetMessage::ADD));
 
-			setStatusbarText("Calculated grid", true);
+			setStatusbarText((String)tr("Calculated grid"), true);
 		}
 
 		void MolecularStructure::createGridFromCameraDistance()
@@ -800,7 +801,7 @@ namespace BALL
 			set->setComposite(&S);
 			notify_(new DatasetMessage(set, DatasetMessage::ADD));
 
-			setStatusbarText("Calculated grid", true);
+			setStatusbarText((String)tr("Calculated grid"), true);
 		}
 
 
@@ -819,7 +820,7 @@ namespace BALL
 
 			Size nr = s.countSecondaryStructures();
 
-			setStatusbarText(String("Calculated ") + String(nr) + " secondary structures.", true);
+			setStatusbarText(String(tr("Calculated ")) + String(nr) + " " + (String)tr("secondary structures."), true);
 		}
 
 
@@ -827,7 +828,7 @@ namespace BALL
 		{
 			if (getMainControl()->getMolecularControlSelection().size() != 2)
 			{
-				setStatusbarText("Not 2 atom containers highlighted", true);
+				setStatusbarText((String)tr("Please highlight exactly 2 AtomContainers."), true);
 				return;
 			}
 
@@ -839,20 +840,20 @@ namespace BALL
 		
 			if (!a1 || !a2)
 			{
-				setStatusbarText("Exact two AtomContainers have to be selected", true);
+				setStatusbarText((String)tr("Exact two AtomContainers have to be selected"), true);
 				return;
 			}
 
 			if (a1->isRelatedWith(*a2))
 			{
-				setStatusbarText("The two Proteins must not be descendet/ancestor of eachother.", true);
+				setStatusbarText((String)tr("The two Proteins must not be descendet/ancestor of eachother."), true);
 				return;
 			}
 
 			if (!a1->apply(getFragmentDB().normalize_names) ||
 					!a2->apply(getFragmentDB().normalize_names)		) 
 			{
-				setStatusbarText("Could not apply normalize names, so cant calulate RMSD", true);
+				setStatusbarText((String)tr("Could not apply normalize names, so cant calulate RMSD"), true);
 				return;
 			}
 
@@ -860,7 +861,7 @@ namespace BALL
 			ab.assignByName(*a1, *a2);
 			float rmsd = ab.calculateRMSD();
 
-			String rmsd_text("Calcuted RMSD: " + String(rmsd) + " A.");
+			String rmsd_text((String)tr("Calcuted RMSD") + ": " + String(rmsd) + " A.");
 
 			a1->deselect();
 			a2->deselect();
@@ -869,11 +870,12 @@ namespace BALL
 
 			if (ab.size() == max_atoms)
 			{
-				setStatusbarText(rmsd_text + ". All atoms could be matched.", true);
+				setStatusbarText(rmsd_text + ". " + (String)tr("All atoms could be matched."), true);
 				return;
 			}
 
-			rmsd_text += "  WARNING: " + String(max_atoms - ab.size()) + " atoms were not mapped and are now selected";
+			rmsd_text += "  " + (String)tr("WARNING") + ": " + String(max_atoms - ab.size()) + " " 
+				        + (String)tr("atoms were not mapped and are now selected");
 			setStatusbarText(rmsd_text, true);
 
 			HashSet<Atom*> atom_set;
@@ -923,7 +925,7 @@ namespace BALL
 			
 			if (!RTTI::isKindOf<Protein>(**it)) 
 			{
-				setStatusbarText("Exact two Proteins have to be selected", true);
+				setStatusbarText((String)tr("Exact two Proteins have to be selected"), true);
 				return;
 			}
 			
@@ -932,7 +934,7 @@ namespace BALL
 
 			if (!RTTI::isKindOf<Protein>(**it)) 
 			{
-				setStatusbarText("Exact two Proteins have to be selected", true);
+				setStatusbarText((String)tr("Exact two Proteins have to be selected"), true);
 				return;
 			}
 
@@ -940,14 +942,14 @@ namespace BALL
 
 			if (a1->isRelatedWith(*a2))
 			{
-				setStatusbarText("The two Proteins must not be descendet/ancestor of eachother.", true);
+				setStatusbarText((String)tr("The two Proteins must not be descendet/ancestor of eachother."), true);
 				return;
 			}
 
 			if (!a1->apply(getFragmentDB().normalize_names) ||
 					!a2->apply(getFragmentDB().normalize_names)		) 
 			{
-				setStatusbarText("Could not apply normalize names, so cant calulate RMSD", true);
+				setStatusbarText((String)tr("Could not apply normalize names, so cant calulate RMSD"), true);
 				return;
 			}
 
@@ -993,10 +995,10 @@ namespace BALL
 					new CompositeMessage(*a1, CompositeMessage::CHANGED_COMPOSITE);
 			notify_(cm);
 
-			Log.info() << "Calcuted RMSD: " << rmsd << std::endl;
-			Log.info() << "Calcuted Transformation: " << std::endl << m<< std::endl;
-			Log.info() << "Number of not matched CA atoms: " << not_matched_ca << std::endl << std::endl;
-			setStatusbarText("Calcuted RMSD: " + String(rmsd), true);
+			Log.info() << (String)tr("Calcuted RMSD") + ": " << rmsd << std::endl;
+			Log.info() << (String)tr("Calcuted Transformation") + ": " << std::endl << m<< std::endl;
+			Log.info() << (String)tr("Number of not matched CA atoms") + ": " << not_matched_ca << std::endl << std::endl;
+			setStatusbarText((String)tr("Calcuted RMSD") + ": " + String(rmsd), true);
 		}
 
 		AmberFF& MolecularStructure::getAmberFF()
@@ -1091,7 +1093,7 @@ namespace BALL
 
 			if (system == 0)
 			{
-				setStatusbarText("To calculate H-bonds, one system has to be selected", true);
+				setStatusbarText((String)tr("To calculate H-bonds, one system has to be selected"), true);
 				return;
 			}
 
@@ -1112,7 +1114,7 @@ namespace BALL
 
 			hbonds /= 2;
 			
-			setStatusbarText(String("Calculated ") + String(hbonds) + " H-bonds", true);
+			setStatusbarText(String(tr("Calculated")) + " " + String(hbonds) + (String)tr(" H-bonds"), true);
 		}
 
 		void MolecularStructure::applyForceFieldSettings_()
@@ -1127,7 +1129,7 @@ namespace BALL
 			System* system = getMainControl()->getSelectedSystem();
 			if (system == 0)
 			{
-				setStatusbarText("To calculate ForceField energies, one system has to be selected", true);
+				setStatusbarText((String)tr("To calculate ForceField energies, one system has to be selected"), true);
 				return;
 			}
 
@@ -1139,7 +1141,7 @@ namespace BALL
 			// workaround for MSVC: need to create an string, than log it!
 			String results = ff.getResults();
 			Log.info() << results << std::endl;
-			setStatusbarText("Total energy: " + String(ff.getEnergy()) + " kJ/mol.", true);
+			setStatusbarText((String)tr("Total energy") + ": " + String(ff.getEnergy()) + " " + (String)tr("kJ/mol."), true);
 			getMainControl()->update(*system);
 		}
 
@@ -1148,7 +1150,7 @@ namespace BALL
 			// Make sure we run one instance of a simulation at a time only.
 			if (getMainControl()->isBusy())
 			{
-				Log.error() << "Simulation already running or still rendering!" << std::endl;
+				Log.error() << (String)tr("Simulation already running or still rendering!") << std::endl;
 				return;
 			}
 
@@ -1173,14 +1175,14 @@ namespace BALL
 			
 			ForceField& ff = getForceField();
 			// Print some stats on the force field
-			Log.info() << "Set up the force field for " 
-								 << ff.getAtoms().size() << " atoms with parameters from " 
+			Log.info() << (String)tr("Set up the force field for ") 
+								 << ff.getAtoms().size() << " " << (String)tr("atoms with parameters from") << " "
 								 << ff.getParameters().getFilename() << "." << std::endl;
 
 			// Start the simulation. Make sure that potential selections
 			// are now honored.
 			ff.enableSelection();
-			setStatusbarText("Starting minimization...", false);
+			setStatusbarText((String)tr("Starting minimization..."), false);
 			ff.updateEnergy();
 
 			EnergyMinimizer* minimizer;
@@ -1214,14 +1216,14 @@ namespace BALL
 			// Setup the minimizer.
 			if (!minimizer->setup(ff))
 			{
-				setStatusbarText("Setup of minimizer failed. See log for details.", true);
+				setStatusbarText((String)tr("Setup of minimizer failed. See log for details."), true);
 				delete minimizer;
 				return;
 			}
 
 			// Print the number of moveable atoms.
-			Log.info() << "Minimizing " << ff.getNumberOfMovableAtoms() 
-								 << " of " << system->countAtoms() << " atoms." << std::endl;
+			Log.info() << (String)tr("Minimizing ") << ff.getNumberOfMovableAtoms() 
+								 << " " << (String)tr("of") << " " << system->countAtoms() <<  " " << (String)tr("atoms") << "." << std::endl;
 			
 			try
 			{
@@ -1250,31 +1252,33 @@ namespace BALL
 					converged = minimizer->minimize(minimization_dialog_.getRefresh(), true);
 					getMainControl()->update(*system);
 
-					setStatusbarText(String("Iteration ") + String(minimizer->getNumberOfIterations())
-													 + ": E = " + String(ff.getEnergy()) + " kJ/mol, RMS grad = "
-													 + String(ff.getRMSGradient()) + " kJ/(mol A)", true);
+					setStatusbarText(String(tr("Iteration"))  + " "   + String(minimizer->getNumberOfIterations())
+													 + ": " + (String)tr("E") + " = " + String(ff.getEnergy()) + " " 
+													 + (String)tr("kJ/mol")   + ", "  + (String)tr("RMS grad") + " = "
+													 + String(ff.getRMSGradient()) + " " + (String)tr("kJ/(mol A)"), true);
 					ok = !minimizer->wasAborted();
 				}
 
 				if (!ok)
 				{
-					setStatusbarText("Aborted EnergyMinimizer because of strange energy values.", true);
+					setStatusbarText((String)tr("Aborted EnergyMinimizer because of strange energy values."), true);
 				}
 				else
 				{
 					// Print the final results.
-					Log.info() << endl << "minimization terminated." << endl << endl;
+					Log.info() << endl << (String)tr("minimization terminated.") << endl << endl;
 					Log.info() << ff.getResults();
-					Log.info() << "final RMS gradient    : " << ff.getRMSGradient() << " kJ/(mol A)   after "
-										 << minimizer->getNumberOfIterations() << " iterations" << endl << endl;
-					setStatusbarText("Final energy: " + String(ff.getEnergy()) + " kJ/mol.", true);
+					Log.info() << (String)tr("final RMS gradient")   << "    : " << ff.getRMSGradient() 
+						         << " " << (String)tr("kJ/(mol A)")    << "   "    << (String)tr("after") << " " 
+										 << minimizer->getNumberOfIterations() << " "      << (String)tr("iterations") << endl << endl;
+					setStatusbarText((String)tr("Final energy") + ": " + String(ff.getEnergy()) + " " + (String)tr("kJ/mol."), true);
 				}
 		#endif
 			}
 			catch(Exception::GeneralException& e)
 			{
-				String txt = "Calculation aborted because of unexpected exception: ";
-				setStatusbarText(txt + ". See Log for details.", true);
+				String txt = (String)tr("Calculation aborted because of unexpected exception") + ": ";
+				setStatusbarText(txt + ". " + (String)tr("See Log for details."), true);
 				Log.error() << txt << ":" << std::endl;
 				Log.error() << e << std::endl;
 			}
@@ -1287,7 +1291,7 @@ namespace BALL
 			// Make sure we run just one instance at a time.
 			if (getMainControl()->isBusy())
 			{
-				Log.error() << "Simulation already running or still rendering!" << std::endl;
+				Log.error() << (String)tr("Simulation already running or still rendering!") << std::endl;
 				return;
 			}
 			
@@ -1300,7 +1304,7 @@ namespace BALL
 					|| md_dialog_.getSimulationTime() == 0.0
 					|| md_dialog_.getTemperature() == 0.0)
 			{
-				Log.error() << "No system or invalid settings for MD Simulation" << std::endl;
+				Log.error() << (String)tr("No system or invalid settings for MD Simulation") << std::endl;
 				return;
 			}
 
@@ -1333,7 +1337,7 @@ namespace BALL
 				// setup the simulation
 				if (!mds->setup(ff, 0, options))
 				{
-					Log.error() << "Setup for MD simulation failed!" << std::endl;
+					Log.error() << (String)tr("Setup for MD simulation failed!") << std::endl;
 					delete mds;
 					return;
 				}
@@ -1370,7 +1374,7 @@ namespace BALL
 					delete thread;
 					delete mds;
 					if (dcd != 0) delete dcd;
-					setStatusbarText("Could not lock Composites, is an other thread running?", true);
+					setStatusbarText((String)tr("Could not lock Composites, is an other thread running?"), true);
 					return;
 				}
 
@@ -1399,24 +1403,26 @@ namespace BALL
 					}
 
 
-					setStatusbarText(String("Iteration ") + String(mds->getNumberOfIterations())
-													 + ": E = " + String(ff.getEnergy()) + " kJ/mol, RMS grad = "
-													 + String(ff.getRMSGradient()) + " kJ/(mol A)", true);
+					setStatusbarText(String(tr("Iteration"))  + " "   + String(mds->getNumberOfIterations())
+													 + ": " + (String)tr("E") + " = " + String(ff.getEnergy()) + " " + (String)tr("kJ/mol") + ", " 
+													 + (String)tr("RMS grad") + " = "
+													 + String(ff.getRMSGradient())    + " "  + (String)tr("kJ/(mol A)"), true);
 				}
 
 				if (dcd) manager.flushToDisk();
 
 				if (!ok)
 				{
-					setStatusbarText("Aborted MDSimulation because of strange energy values.", true);
+					setStatusbarText((String)tr("Aborted MDSimulation because of strange energy values."), true);
 					return;
 				}
 
-				Log.info() << std::endl << "simulation terminated." << std::endl << endl;
+				Log.info() << std::endl << (String)tr("Simulation terminated.") << std::endl << endl;
 				Log.info() << ff.getResults();
-				Log.info() << "final RMS gradient    : " << ff.getRMSGradient() << " kJ/(mol A)   after " 
-									 << mds->getNumberOfIterations() << " iterations" << endl << endl;
-				setStatusbarText("Final energy: " + String(ff.getEnergy()) + " kJ/mol.", true);
+				Log.info() << (String)tr("final RMS gradient") << "    : " << ff.getRMSGradient() << " " 
+				           << (String)tr("kJ/(mol A)")         << "   "    << (String)tr("after") << " " 
+									 << mds->getNumberOfIterations()     << " "      << (String)tr("iterations") << endl << endl;
+				setStatusbarText((String)tr("Final energy") + ": " + String(ff.getEnergy()) + " " + (String)tr("kJ/mol."), true);
 
 				// clean up
 				delete mds;
@@ -1439,8 +1445,8 @@ namespace BALL
 			}
 			catch(Exception::GeneralException& e)
 			{
-				String txt = "Calculation aborted because of an unexpected exception";
-				setStatusbarText(txt + ". See Logs", true);
+				String txt = (String)tr("Calculation aborted because of an unexpected exception");
+				setStatusbarText(txt + ". " + (String)tr("See Logs"), true);
 				Log.error() << txt << ":" << std::endl;
 				Log.error() << e << std::endl;
 			}
@@ -1448,7 +1454,7 @@ namespace BALL
 
 		void MolecularStructure::buildPeptide()
 		{
-			PeptideDialog dialog(this, "PeptideDialog");
+			PeptideDialog dialog(this, ((String)tr("PeptideDialog")).c_str());
 			dialog.setFragmentDB(&getFragmentDB());
 			dialog.exec();
 
@@ -1507,7 +1513,7 @@ namespace BALL
 		{
 			if (nr > 2)
 			{
-				Log.error() << "Selected invalid force field!" << std::endl;
+				Log.error() << (String)tr("Selected invalid force field!") << std::endl;
 				return;
 			}
 
@@ -1583,7 +1589,7 @@ namespace BALL
 		{
 			if (fdpb_dialog_ == 0)
 			{
-				fdpb_dialog_ = new FDPBDialog(getMainControl(), "FDPBDialog");
+				fdpb_dialog_ = new FDPBDialog(getMainControl(), ((String)tr("FDPBDialog")).c_str());
 				fdpb_dialog_->fetchPreferences(getMainControl()->getINIFile());
 			}
 
@@ -1616,7 +1622,7 @@ namespace BALL
 
 			getMainControl()->update(*getForceField().getSystem(), true);
 
-			setStatusbarText("Setup of the force field failed for selected atoms.", true);
+			setStatusbarText((String)tr("Setup of the force field failed for selected atoms."), true);
 		}
 
 		bool MolecularStructure::setupForceField_(System* system,
@@ -1626,7 +1632,7 @@ namespace BALL
 			applyForceFieldSettings_();
 
 			// set up the force field
-			setStatusbarText("setting up force field...", false);
+			setStatusbarText((String)tr("setting up force field") + "...", false);
 		
 			// Setup the force field.
 			ForceField& ff = getForceField();
@@ -1643,9 +1649,9 @@ namespace BALL
 
 				if (ff.getUnassignedAtoms().size() > 0)
 				{
-					Log.error() << "Warning: some atoms could not be assigned/initialized!"
+					Log.error() << (String)tr("Warning: some atoms could not be assigned/initialized!")
 											<< std::endl
-											<< "<a href=mm.html#ff_problems>For more informations, click Here.</a>" << std::endl;
+											<< "<a href=mm.html#ff_problems>" << (String)tr("For more informations, click Here.") + "</a>" << std::endl;
 				}
 			}
 			catch(...)
@@ -1663,7 +1669,7 @@ namespace BALL
 
 			if (!ok)
 			{
-				setStatusbarText("Force field setup failed.", true);
+				setStatusbarText((String)tr("Force field setup failed."), true);
 				selectUnassignedForceFieldAtoms_();
 			}
 			else
