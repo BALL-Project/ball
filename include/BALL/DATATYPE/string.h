@@ -236,10 +236,10 @@ namespace BALL
 		String(unsigned int ui);
 
 		/// Construct a String from a long
-		String(long l);
+		String(LongIndex l);
 
 		/// Construct a String from an unsigned long
-		String(unsigned long);
+		String(LongSize);
 
 		/// Construct a String from a float value
 		String(float f);
@@ -313,10 +313,10 @@ namespace BALL
 		void set(unsigned int ui);
 
 		/// Assign a String from a long 
-		void set(long l);
+		void set(LongIndex l);
 
 		/// Assign a String from an unsigned long
-		void set(unsigned long ul);
+		void set(LongSize ul);
 
 		/// Assign a String from a float value
 		void set(float f);

@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.C,v 1.53 2005/02/15 19:18:41 oliver Exp $
-//
 
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/limits.h>
@@ -239,8 +237,8 @@ namespace BALL
 	BALL_STRING_DEFINE_CONSTRUCTOR_METHOD(unsigned short, "%hu")
 	BALL_STRING_DEFINE_CONSTRUCTOR_METHOD(int, "%d")
 	BALL_STRING_DEFINE_CONSTRUCTOR_METHOD(unsigned int, "%u")
-	BALL_STRING_DEFINE_CONSTRUCTOR_METHOD(long, "%ld")
-	BALL_STRING_DEFINE_CONSTRUCTOR_METHOD(unsigned long, "%lu")
+	BALL_STRING_DEFINE_CONSTRUCTOR_METHOD(LongIndex, "%lld")
+	BALL_STRING_DEFINE_CONSTRUCTOR_METHOD(LongSize, "%llu")
 	BALL_STRING_DEFINE_CONSTRUCTOR_METHOD(float, "%f")
 	BALL_STRING_DEFINE_CONSTRUCTOR_METHOD(double, "%f")
 
@@ -329,8 +327,8 @@ namespace BALL
 	BALL_STRING_DEFINE_SET_METHOD(unsigned short, "%hu")
 	BALL_STRING_DEFINE_SET_METHOD(int, "%d")
 	BALL_STRING_DEFINE_SET_METHOD(unsigned int, "%u")
-	BALL_STRING_DEFINE_SET_METHOD(long, "%ld")
-	BALL_STRING_DEFINE_SET_METHOD(unsigned long, "%lu")
+	BALL_STRING_DEFINE_SET_METHOD(LongIndex, "%lld")
+	BALL_STRING_DEFINE_SET_METHOD(LongSize, "%llu")
 	BALL_STRING_DEFINE_SET_METHOD(float, "%f")
 	BALL_STRING_DEFINE_SET_METHOD(double, "%f")
 
