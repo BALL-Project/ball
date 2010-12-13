@@ -363,10 +363,10 @@ namespace BALL
 		const String& operator = (unsigned int ui);
 
 		/// Assign a String from a long
-		const String& operator = (long l);
+		const String& operator = (LongIndex l);
 
 		/// Assign a String from an unsigned long
-		const String& operator = (unsigned long ul);
+		const String& operator = (LongSize ul);
 
 		/// Assign a String from a float
 		const String& operator = (float f);
