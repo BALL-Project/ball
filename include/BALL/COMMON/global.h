@@ -22,13 +22,6 @@
 #	include <stdint.h>
 #endif
 
-// Added to avoid warnings with MS Visual Studio .NET
-#ifdef BALL_COMPILER_MSVC
-#	pragma warning( disable : 4290 )
-#	pragma warning( disable : 4251 ) // Warnings about DLL interface 
-#	pragma warning( disable : 4275 ) // Warnings about DLL interface (we should do something about them, though)
-#endif
-
 #ifdef BALL_COMPILER_MSVC
 # define BALL_HIDE
 #	ifdef BALL_BUILD_DLL
