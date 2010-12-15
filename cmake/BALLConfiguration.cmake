@@ -157,9 +157,8 @@ CHECK_FUNCTION_EXISTS(kill BALL_HAS_KILL)
 CHECK_FUNCTION_EXISTS(sysconf BALL_HAS_SYSCONF)
 
 ## Can we overload long int with LongIndex?
-IF (BALL_HAS_SYS_TYPES_H)
-MESSAGE(STATUS "have types")
-	CHECK_CXX_SOURCE_COMPILES("#include <sys/types.h>
+IF (BALL_HAS_STDINT_H)
+	CHECK_CXX_SOURCE_COMPILES("#include <stdint.h>
 	void f(long int l) {l+=2;}
 	void f(${BALL_LONG64_TYPE} l) {l+=2;}
 	int main(int /*argc*/, char** /*argv*/)
@@ -167,7 +166,6 @@ MESSAGE(STATUS "have types")
 		return 0;
 	}" BALL_ALLOW_LONG64_TYPE_OVERLOADS) 
 ELSE()
-MESSAGE(STATUS "have no types")
 	CHECK_CXX_SOURCE_COMPILES("
 	void f(long int l) {l+=2;}
 	void f(${BALL_LONG64_TYPE} l) {l+=2;}
