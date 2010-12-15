@@ -236,9 +236,15 @@ namespace BALL
 		String(unsigned int ui);
 
 		/// Construct a String from a long
-		String(LongIndex l);
+		String(long l);
 
 		/// Construct a String from an unsigned long
+		String(unsigned long);
+
+		/// Construct a String from a signed 64 bit integer
+		String(LongIndex l);
+
+		/// Construct a String from an unsigned 64 bit integer
 		String(LongSize);
 
 		/// Construct a String from a float value
@@ -313,9 +319,15 @@ namespace BALL
 		void set(unsigned int ui);
 
 		/// Assign a String from a long 
-		void set(LongIndex l);
+		void set(long l);
 
 		/// Assign a String from an unsigned long
+		void set(unsigned long ul);
+
+		/// Assign a String from a 64 bit integer
+		void set(LongIndex l);
+
+		/// Assign a String from an unsigned 64 bit integer
 		void set(LongSize ul);
 
 		/// Assign a String from a float value
@@ -363,9 +375,15 @@ namespace BALL
 		const String& operator = (unsigned int ui);
 
 		/// Assign a String from a long
-		const String& operator = (LongIndex l);
+		const String& operator = (long l);
 
 		/// Assign a String from an unsigned long
+		const String& operator = (unsigned long ul);
+
+		/// Assign a String from a 64 bit integer
+		const String& operator = (LongIndex l);
+
+		/// Assign a String from an unsigned 64 bit integer
 		const String& operator = (LongSize ul);
 
 		/// Assign a String from a float
