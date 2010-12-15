@@ -15,7 +15,7 @@ namespace BALL
 		return BALL_RELEASE_STRING " ("__DATE__", " __TIME__ ")";
 	}
 
-	int VersionInfo::getMinorRevision() throw(Exception::InvalidFormat)
+	int VersionInfo::getMinorRevision()
 	{
 		static String release(BALL_RELEASE_STRING);
 		String minor = release.getField(1, ".");
@@ -30,7 +30,7 @@ namespace BALL
 		return minor.toInt();
 	}
 	
-	int VersionInfo::getMajorRevision() throw(Exception::InvalidFormat)
+	int VersionInfo::getMajorRevision()
 	{
 		static String release(BALL_RELEASE_STRING);
 		return release.getField(0, ". ").toInt();

@@ -35,43 +35,44 @@ namespace BALL
 	{
 		public:
 
-		/** Enumeration of all possible release types.
-		*/
-		enum Type
-		{
-			STABLE,
-			ALPHA,
-			BETA,
-			NONPUBLIC,
-			PRERELEASE,
-			PATCHLVL, // this can't be PATCHLEVEL due to a collision with historic Python versions (< 2.2).
-			UNKNOWN
-		};
+			/** Enumeration of all possible release types.
+			*/
+			enum Type
+			{
+				STABLE,
+				ALPHA,
+				BETA,
+				NONPUBLIC,
+				PRERELEASE,
+				PATCHLVL, // this can't be PATCHLEVEL due to a collision with historic Python versions (< 2.2).
+				UNKNOWN
+			};
 
-		/** Return the version number, which is defined in BALL_RELEASE_STRING
-		*/
-		static const char* getVersion() ;
+			/** Return the version number, which is defined in BALL_RELEASE_STRING
+			*/
+			static const char* getVersion();
 
-		/** Return the major revision number.
-				(The part of the release number before the point)
-		*/
-		static int getMajorRevision() throw(Exception::InvalidFormat);
+			/** Return the major revision number.
+					(The part of the release number before the point)
+					\throws Exception::InvalidFormat
+			*/
+			static int getMajorRevision();
 
-		/** Return the minor revision number.
-				(The part of the release number after the point)
-		*/
-		static int getMinorRevision() throw(Exception::InvalidFormat);
+			/** Return the minor revision number.
+					(The part of the release number after the point)
+					\throws Exception::InvalidFormat
+			*/
+			static int getMinorRevision();
 
-		/** Return the type of release:
-				ALPHA, BETA, NONPUPLIC, STABLE, PRERELEASE, PATCHLVL, UNKNOWN.
-		*/
-		static Type getType() ;
-		
+			/** Return the type of release:
+					ALPHA, BETA, NONPUPLIC, STABLE, PRERELEASE, PATCHLVL, UNKNOWN.
+			*/
+			static Type getType() ;
+			
 
 		protected:
-
-		static const char* RELEASE_DATE_AND_TIME;
-	    static const char* RELEASE_WHAT_STRING;
+			static const char* RELEASE_DATE_AND_TIME;
+			static const char* RELEASE_WHAT_STRING;
 	};
 	
 }
