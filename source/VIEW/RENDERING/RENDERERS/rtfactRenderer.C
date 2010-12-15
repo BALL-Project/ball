@@ -122,7 +122,10 @@ namespace BALL
 			if (camera == 0) camera = &(stage_->getCamera());
 
 			Vector3 const& position = camera->getViewPoint();
-			Vector3 const& view_vector = camera->getViewVector();
+			// RTfact relies on a normalized view vector, so we have to normalize it prior to handing it to RTfact 
+			// TODO: Store a normalized view vector in our Camera, mind project files 
+			Vector3  view_vector = camera->getViewVector();
+			view_vector.normalize();
 			Vector3 const& look_up = camera->getLookUpVector();
 
 			if (use_continuous_loop_)
