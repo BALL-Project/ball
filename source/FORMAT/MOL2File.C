@@ -970,7 +970,16 @@ namespace BALL
 
 	String MOL2File::getSybylType_(const Atom& atom) const
 	{
-		return atom.getProperty("atomtype").getString();
+		String type = atom.getProperty("atomtype").getString();
+		
+		// MOL2File needs something in the format of <element>.<number>
+		// in order to be able to read files correctly!
+		// Thus, use only element as atom 'type' if no Sybyl type was found for it.
+		if(type=="DU")
+		{
+			type = atom.getElement().getSymbol();
+		}
+		return type;
 	}
 
 	bool MOL2File::containsAtomChilds_(AtomContainerConstIterator& frag_it)
