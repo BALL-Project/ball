@@ -131,7 +131,6 @@ namespace BALL
 	}
 
 	PersistenceManager& PersistentObject::operator >> (PersistenceManager& pm) const
-		throw(Exception::GeneralException)
 	{ 
 		DEBUG("PersistenceManager: entering operator >>")
 		pm.startOutput();
@@ -141,12 +140,10 @@ namespace BALL
 	}
 
 	void PersistentObject::persistentWrite(PersistenceManager& /* pm */, const char* /* name */) const
-		throw(Exception::GeneralException)
 	{
 	}
 
 	void PersistentObject::persistentRead(PersistenceManager& /* pm */)
-		throw(Exception::GeneralException)
 	{
 	}
 
@@ -236,7 +233,6 @@ namespace BALL
 	}
 	
 	PersistentObject*	PersistenceManager::readObject()
-		throw(Exception::GeneralException)
 	{
 		DEBUG("PersistenceManager: entering readObject")
 		if (istr_ == 0)
@@ -359,7 +355,6 @@ namespace BALL
 	}
 
 	void PersistenceManager::addNeededObjects_() 
-		throw(Exception::GeneralException)
 	{
 		while (object_out_needed_.size() > 0)
 		{

@@ -13,7 +13,6 @@ using namespace std;
 namespace BALL 
 {
 
-
 	NamedProperty::NamedProperty()
 		: PersistentObject(),
 			type_(NONE),
@@ -37,7 +36,6 @@ namespace BALL
 	}
  
 	void NamedProperty::persistentWrite(PersistenceManager& pm, const char* name) const
-		throw(Exception::GeneralException)
 	{
 		pm.writeObjectHeader(this, name);
 			pm.writePrimitive((int)type_, "type_");
@@ -76,7 +74,6 @@ namespace BALL
 	}
 	
 	void NamedProperty::persistentRead(PersistenceManager& pm)
-		throw(Exception::GeneralException)
 	{
 		// Clear potentially allocated strings.
 		if (type_ == STRING)

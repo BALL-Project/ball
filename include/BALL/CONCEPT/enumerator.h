@@ -58,8 +58,7 @@ namespace BALL
 		{
 			public:
 
-			IncompatibleIndex(const char* file, int line)
-				;
+			IncompatibleIndex(const char* file, int line);
 		};
 
 		//@}
@@ -70,20 +69,17 @@ namespace BALL
 			
 		/** Default Constructor
 		 */
-		EnumeratorIndex()
-			;
+		EnumeratorIndex();
 
 		/** Detailed Constructor
 			  @param variant_list the list of variants to be applied
 		 */
 		template <typename Variant, typename VariantIterator>
-		EnumeratorIndex(const std::list<std::pair<VariantIterator, std::vector<Variant> > >& variant_list)
-			;
+		EnumeratorIndex(const std::list<std::pair<VariantIterator, std::vector<Variant> > >& variant_list);
 
 		/** Destructor
 		 */
-		~EnumeratorIndex()
-			;
+		~EnumeratorIndex();
 
 		//@}
 
@@ -92,19 +88,17 @@ namespace BALL
 		//@{
 		/** Assignment operator.
 		 */
-		const EnumeratorIndex& operator = (const EnumeratorIndex& rhs)
-			;
+		const EnumeratorIndex& operator = (const EnumeratorIndex& rhs);
 
 		/** Assignment operator for Position.
+		 *  \throws Exception::IndexOverflow
 		 */
-		const EnumeratorIndex& operator = (Position index)
-			throw(Exception::IndexOverflow);
+		const EnumeratorIndex& operator = (Position index);
 
 		/** Assignment operator for a variant list.
 		*/
 		template <typename Variant, typename VariantIterator>
-		const EnumeratorIndex& operator = (const std::list<std::pair<VariantIterator, std::vector<Variant> > >& variant_list)
-			;
+		const EnumeratorIndex& operator = (const std::list<std::pair<VariantIterator, std::vector<Variant> > >& variant_list);
 		//@}
 
 		/** @name Accessors
@@ -113,42 +107,37 @@ namespace BALL
 
 		/** Access the modulus part of the enumerator
 		 */
-		const std::vector<Size>& getModulus() const
-			;
+		const std::vector<Size>& getModulus() const;
 
 		/**	Access the modulus of a specific position
 		*/
-		Size getModulus(Position pos) const
-			;
+		Size getModulus(Position pos) const;
 			
 		/** Increment an instance of EnumeratorIndex. 
 				Increment the least significant component and apply any overflow to
 				more signficant components.
+				\throws Exception::IndexOverflow
 		 */
-		EnumeratorIndex& operator ++ ()
-			throw(Exception::IndexOverflow);
+		EnumeratorIndex& operator ++ ();
 
 		/** Decrement an instance of EnumeratorIndex. 
 				Decrement the least significant component and 
 				apply any underflow to more signficant components.
+				\throws Exception::IndexUnderflow
 		 */
-		EnumeratorIndex& operator -- ()
-			throw(Exception::IndexUnderflow);
+		EnumeratorIndex& operator -- ();
 
 		/**	Random access operator
 		*/
-		Position operator [] (Position pos) const
-			;
+		Position operator [] (Position pos) const;
 
 		/**	Random access operator
 		*/
-		Position& operator [] (Position pos)
-			;
+		Position& operator [] (Position pos);
 
 		/**	Return the size of the array.
 		*/
-		Size getSize() const
-			;
+		Size getSize() const;
 
 		/**	Add a new digit.	
 				Push the modulus to the ack of the modulus array and
@@ -161,8 +150,7 @@ namespace BALL
 				The counter will be initialized with all zeros.
 			@exception OutOfRange if the modulus is less than 2
 		*/
-		EnumeratorIndex& operator << (Size modulus)
-			throw(Exception::OutOfRange);
+		EnumeratorIndex& operator << (Size modulus);
 		//@}
 		
 		/** @name Predicates for EnumeratorIndex class
@@ -173,47 +161,41 @@ namespace BALL
 		 * @param rhs
 		 * @return true, if <tt>rhs</tt> is equal to <tt>this</tt> instance
 		 */
-		bool operator == (const EnumeratorIndex& rhs) const
-			;
+		bool operator == (const EnumeratorIndex& rhs) const;
 
 		/** Inequality operator.
 		 * @param rhs
 		 * @return true, if <tt>rhs</tt> is not equal to <tt>this</tt> instance
 		 */
-		bool operator != (const EnumeratorIndex& rhs) const
-			;
+		bool operator != (const EnumeratorIndex& rhs) const;
 
 		/** Greater than operator.
 		 * @param rhs
 		 * @return true, if <tt>rhs</tt> is greater than <tt>this</tt> instance
 			 @exception EnumeratorIndex::Incompatible index if the modulus vector differs, i.e. the two indices aren't comparable
 		 */
-		bool operator > (const EnumeratorIndex& rhs) const
-			throw(EnumeratorIndex::IncompatibleIndex);
+		bool operator > (const EnumeratorIndex& rhs) const;
 
 		/** Lesser than operator.
 		 * @param rhs
 		 * @return true, if <tt>rhs</tt> is lesser than <tt>this</tt> instance
 		 *  @exception EnumeratorIndex::Incompatible index if the modulus vector differs, i.e. the two indices aren't comparable
 		 */
-		bool operator < (const EnumeratorIndex& rhs) const
-			throw(EnumeratorIndex::IncompatibleIndex);
+		bool operator < (const EnumeratorIndex& rhs) const;
 				
 		/** Greater or equal operator.
 		 * @param rhs
 		 * @return true, if <tt>rhs</tt> is greater than or equal to <tt>this</tt> instance
 		 *  @exception EnumeratorIndex::Incompatible index if the modulus vector differs, i.e. the two indices aren't comparable
 		 */
-		bool operator >= (const EnumeratorIndex& rhs) const
-			throw(EnumeratorIndex::IncompatibleIndex);
+		bool operator >= (const EnumeratorIndex& rhs) const;
 
 		/** Lesser or equal operator.
 		 * @param rhs
 		 * @return true, if <tt>rhs</tt> is lesser than or equal to <tt>this</tt> instance
 		 *  @exception EnumeratorIndex::Incompatible index if the modulus vector differs, i.e. the two indices aren't comparable
 		 */
-		bool operator <= (const EnumeratorIndex& rhs) const
-			throw(EnumeratorIndex::IncompatibleIndex);
+		bool operator <= (const EnumeratorIndex& rhs) const;
 		//@}
 
 		private:
@@ -226,7 +208,6 @@ namespace BALL
 
 	template <typename Variant, typename VariantIterator>
 	EnumeratorIndex::EnumeratorIndex(const std::list<std::pair<VariantIterator, std::vector<Variant> > >& variant_list)
-		
 		: std::vector<Position>(variant_list.size()),
 			modulus_(variant_list.size()),
 			base_multipliers_(variant_list.size())
@@ -238,7 +219,6 @@ namespace BALL
 	template <typename Variant, typename VariantIterator>
 	const EnumeratorIndex& EnumeratorIndex::operator = 
 		(const std::list<std::pair<VariantIterator, std::vector<Variant> > >& variant_list)
-		
 	{ 
 		resize(variant_list.size());
 		modulus_.resize(variant_list.size());
@@ -313,18 +293,15 @@ namespace BALL
 
 		/**	A vector containing all possible variants for a specific site.
 		*/
-		typedef std::vector<Variant>							
-			VariantVector;
+		typedef std::vector<Variant> VariantVector;
 
 		/**	A combination of a site position and all its possible variants.
 		*/
-		typedef std::pair<SiteIterator, VariantVector>
-			Site;
+		typedef std::pair<SiteIterator, VariantVector> Site;
 
 		/** A list of sites.
 		*/
-		typedef std::list<Site>
-			SiteList;
+		typedef std::list<Site> SiteList;
 
 		/** Mutable forward iterator
 		*/
@@ -343,28 +320,24 @@ namespace BALL
 
 		/** Default Constructor
 		*/
-		Enumerator()
-			;
+		Enumerator();
 
 		/** Detailed Constructor.
 				The mutator function is set to a default mutator,
 				using the assignment operator for <tt>Variant</tt>.
 				@param container a Container class to be mutated
 		 */
-		Enumerator(Container& container)
-			;
+		Enumerator(Container& container);
 
 		/** Detailed Constructor
 				@param container a Container class to be mutated
 				@param mutator the function defining the mutations to be applied
 		 */
-		Enumerator(Container& container, MutatorFunction mutator)
-			;
+		Enumerator(Container& container, MutatorFunction mutator);
 
 		/** Default Destructor
 		 */
 		~Enumerator()
-			
 		{
 		}
 		//@}
@@ -376,7 +349,6 @@ namespace BALL
 		/** Add variants to the list of variants
 		 */
 		void addVariants(const SiteIterator& it, const VariantVector& variants)
-			
 		{
 			variant_sites_.push_back(Site(it, variants));
 			position_ = variant_sites_;
@@ -385,7 +357,6 @@ namespace BALL
 		/** Delete variants from the list of variants
 		 */
 		void deleteVariants(const SiteIterator& it, const VariantVector& variants)
-			
 		{
 			typename SiteList::iterator var_it;
 			var_it = std::find(variant_sites_.begin(), variant_sites_.end(), Site(it, variants));
@@ -400,7 +371,6 @@ namespace BALL
 				@return the number of all possible variants
 		 */
 		Size countVariants()
-			
 		{
 			Size total = 1;
 			typename SiteList::iterator it;
@@ -414,21 +384,20 @@ namespace BALL
 		/** Access the current content
        @return a reference to the container class of this enumerator
 		 */
-		Container& getCurrent()
-			;
+		Container& getCurrent();
 
 		/** Create a combination denoted by its number.
 		    @param index the number of the combination to be created
+				\throws Exception::IndexOverflow
 		 */
-		void createCombination(const Position index)
-			throw(Exception::IndexOverflow);
+		void createCombination(const Position index);
 
 		/** Create a combination denoted by an instance of EnumeratorIndex.
 				@param index the instance of EnumeratorIndex that describes the
 				combination to be created
+				\throws EnumeratorIndex::IncompatibleIndex
 		 */
-		void createCombination(const EnumeratorIndex& index)
-			throw(EnumeratorIndex::IncompatibleIndex);
+		void createCombination(const EnumeratorIndex& index);
 		//@}
 
 		/**	@name Iterators
@@ -436,20 +405,16 @@ namespace BALL
 		//@{
 		
 		///
-		Iterator begin()
-			;
+		Iterator begin();
 
 		///
-		Iterator end()
-			;
+		Iterator end();
 
 		///
-		ConstIterator begin() const
-			;
+		ConstIterator begin() const;
 
 		///
-		ConstIterator end() const
-			;
+		ConstIterator end() const;
 		//@}
 
 		protected:
@@ -480,7 +445,6 @@ namespace BALL
 				ValueType;
 
 			IteratorTraits_()
-				
 				:	bound_(0),	
 					position_(),
 					past_the_end_(false)
@@ -488,7 +452,6 @@ namespace BALL
 			}
 				
 			IteratorTraits_(const ContainerType& enumerator)
-				
 				:	bound_(const_cast<ContainerPointer>(&enumerator)),
 					position_(enumerator.variant_sites_),
 					past_the_end_(false)
@@ -496,55 +459,46 @@ namespace BALL
 			}
 			
 			ContainerConstPointer getContainer() const	
-				
 			{
 				return bound_;
 			}
 			
 			ContainerPointer getContainer()
-				
 			{
 				return bound_;
 			}
 
 			bool isSingular() const
-				
 			{
 				return (bound_ == 0);
 			}
  
       IteratorPosition& getPosition()
-				
       {
         return position_;
 			}
 
       const IteratorPosition& getPosition() const
-				
       {
         return position_;
 			}
 
       bool operator == (const IteratorTraits_& traits) const
-				
       {
         return ((bound_ == traits.bound_) && (position_ == traits.position_) && (past_the_end_ == traits.past_the_end_));
 			}
 
       bool operator != (const IteratorTraits_& traits) const
-				
       {
 				return ((bound_ != traits.bound_) || (position_ != traits.position_) || (past_the_end_ != traits.past_the_end_));
 			}
 
       bool isValid() const
-				
       {
         return (bound_ != 0);
 			}
 
       void invalidate()
-				
       {
         bound_ = 0;
         position_ = 0;
@@ -552,40 +506,34 @@ namespace BALL
 			}
 
 			void toBegin()
-				
 			{
 				position_ = 0;
 				past_the_end_ = false;
 			}
 
 			bool isBegin() const
-				
 			{
 				return (position_ == EnumeratorIndex()) && (past_the_end_ == false);
 			}
 			
 			void toEnd()
-				
 			{
 				position_ = 0;
 				past_the_end_ = true;
 			}
 			
 			bool isEnd() const
-				
 			{
 				return past_the_end_;
 			}
 			
 			ValueType& getData()
-				
 			{
 				validate();
 				return bound_->getCurrent();
 			}
 			
 			const ValueType& getData() const
-				
 			{
 				// This is logically const only!
 				const_cast<typename Enumerator<Container, SiteIterator, Variant>::IteratorTraits_*>(this)->validate();
@@ -593,7 +541,6 @@ namespace BALL
 			}
 			
 			void forward()
-				
 			{
 				try
 				{
@@ -607,7 +554,6 @@ namespace BALL
 			}
 			
 			void validate()
-				
 			{
 				if (!bound_->is_valid_position_
 						|| (position_ != bound_->position_))
@@ -629,7 +575,6 @@ namespace BALL
 		}
 
 		void mutate_(SiteIterator& it, const Variant& v)
-			
 		{
 			mutator_(*it, v);
 		}
@@ -643,7 +588,6 @@ namespace BALL
 
 	template <typename Container, typename SiteIterator, typename Variant>
 	Enumerator<Container, SiteIterator, Variant>::Enumerator()
-			
 		: container_(const_cast<Container&>(RTTI::getDefault<Container>())),
 			mutator_(0)
 	{
@@ -651,7 +595,6 @@ namespace BALL
 		
 	template <typename Container, typename SiteIterator, typename Variant>
 	Enumerator<Container, SiteIterator, Variant>::Enumerator(Container& container)
-			
 		: container_(container),
 			mutator_(defaultAssign_)
 	{
@@ -661,7 +604,6 @@ namespace BALL
 	BALL_INLINE
 	Enumerator<Container, SiteIterator, Variant>::Enumerator
 		(Container& container, typename Enumerator<Container, SiteIterator, Variant>::MutatorFunction mutator)
-		
 		: container_(container),
 			mutator_(mutator)
 	{
@@ -671,14 +613,12 @@ namespace BALL
 	template <typename Container, typename SiteIterator, typename Variant>
 	BALL_INLINE
 	Container& Enumerator<Container, SiteIterator, Variant>::getCurrent()
-		
 	{
 		return container_;
 	}
 	
 	template <typename Container, typename SiteIterator, typename Variant>
 	void Enumerator<Container, SiteIterator, Variant>::createCombination(const Position index)
-		throw(Exception::IndexOverflow)
 	{
 		try
 		{
@@ -693,7 +633,6 @@ namespace BALL
 
 	template <typename Container, typename SiteIterator, typename Variant>
 	void Enumerator<Container, SiteIterator, Variant>::createCombination(const EnumeratorIndex& index)
-		throw(EnumeratorIndex::IncompatibleIndex)
 	{
 		if (&index != &position_)
 		{
@@ -713,7 +652,6 @@ namespace BALL
 	template <typename Container, typename SiteIterator, typename Variant>
 	BALL_INLINE
 	typename Enumerator<Container, SiteIterator, Variant>::Iterator Enumerator<Container, SiteIterator, Variant>::begin()
-		
 	{
 		return Iterator::begin(*this);
 	}
@@ -721,7 +659,6 @@ namespace BALL
 	template <typename Container, typename SiteIterator, typename Variant>
 	BALL_INLINE
 	typename Enumerator<Container, SiteIterator, Variant>::Iterator Enumerator<Container, SiteIterator, Variant>::end()
-		
 	{
 		return Iterator::end(*this);
 	}
@@ -729,7 +666,6 @@ namespace BALL
 	template <typename Container, typename VariantConstIterator, typename Variant>
 	BALL_INLINE
 	typename Enumerator<Container, VariantConstIterator, Variant>::ConstIterator Enumerator<Container, VariantConstIterator, Variant>::begin() const
-		
 	{
 		return ConstIterator::begin(*this);
 	}
@@ -737,7 +673,6 @@ namespace BALL
 	template <typename Container, typename VariantConstIterator, typename Variant>
 	BALL_INLINE
 	typename Enumerator<Container, VariantConstIterator, Variant>::ConstIterator Enumerator<Container, VariantConstIterator, Variant>::end() const
-		
 	{
 		return ConstIterator::end(*this);
 	}

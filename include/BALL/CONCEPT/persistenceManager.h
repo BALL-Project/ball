@@ -215,9 +215,9 @@ namespace BALL
 				pointer is returned.
 				@return	0 if no object could be read, the object's <tt>this</tt>
 								pointer otherwise
+				\throws Exception::GeneralException
 		*/	
-		PersistentObject*	readObject()
-      throw(Exception::GeneralException);
+		PersistentObject*	readObject();
 
 		/**	Write a persistent object to the stream.
 				This method writes a persistent object to a stream.
@@ -726,9 +726,9 @@ namespace BALL
 		void addPointerPair_(LongSize old_ptr, void* new_ptr);
 				
 		/*_
+		 * \throws Exception::GeneralException
 		*/
-		void addNeededObjects_()
-			throw(Exception::GeneralException);
+		void addNeededObjects_();
 
 		/*_
 		*/

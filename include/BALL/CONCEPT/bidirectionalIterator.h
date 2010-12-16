@@ -56,53 +56,77 @@ namespace BALL
 		 */
 		//@{
 
-		/// Move the iterator to the beginning of the container
-		BALL_INLINE void toBegin() throw(Exception::Precondition);
+		/** Move the iterator to the beginning of the container
+		 *  \throws Exception::Precondition
+		 */
+		BALL_INLINE void toBegin();
 
 		/// Check whether the iterator points to the item at the beginning of the container
 		BALL_INLINE bool isBegin() const  { return Base::getTraits().isBegin(); }
 
-		/// Move the iterator to the position after the last item of the container
-		void toEnd() throw(Exception::Precondition);
+		/** Move the iterator to the position after the last item of the container
+		 *  \throws Exception::Precondition
+		 */
+		void toEnd();
 
 		/// Check whether the iterator points to the position after the last item of the container.
 		BALL_INLINE bool isEnd() const  { return Base::getTraits().isEnd(); }
 
-		/// Move the iterator to the "reverse" beginning of the container
-		void toRBegin() throw(Exception::Precondition);
+		/** Move the iterator to the "reverse" beginning of the container
+		 *  \throws Exception::Precondition
+		 */
+		void toRBegin();
 
 		/// Test whether the iterator points to the "reverse" first element	of the container
 		BALL_INLINE bool isRBegin() const  { return Base::getTraits().isRBegin(); }
 
-		/// Move the iterator to the position before the first element
-		void toREnd()	throw(Exception::Precondition);
+		/** Move the iterator to the position before the first element
+		 *  \throws Exception::Precondition
+		 */
+		void toREnd();
 
 		/// Test wheter the iterator points to the position before the first element
 		BALL_INLINE bool isREnd() const  { return Base::getTraits().isREnd(); }
 
-		/// Increment operator
-		BALL_INLINE ConstBidirectionalIterator& operator ++ () throw(Exception::Precondition);
+		/** Increment operator
+		 *  \throws Exception::Precondition
+		 */
+		BALL_INLINE ConstBidirectionalIterator& operator ++ ();
 
-		/// Postfix increment operator
-		BALL_INLINE ConstBidirectionalIterator operator ++ (int) throw(Exception::Precondition);
+		/** Postfix increment operator
+		 *  \throws Exception::Precondition
+		 */
+		BALL_INLINE ConstBidirectionalIterator operator ++ (int);
 
-		/// Decrement operator
-		BALL_INLINE ConstBidirectionalIterator& operator -- () throw(Exception::Precondition);
+		/** Decrement operator
+		 *  \throws Exception::Precondition
+		 */
+		BALL_INLINE ConstBidirectionalIterator& operator -- ();
 
-		/// Postfix decrement operator
-		BALL_INLINE ConstBidirectionalIterator operator -- (int) throw(Exception::Precondition);
+		/** Postfix decrement operator
+		 *  \throws Exception::Precondition
+		 */
+		BALL_INLINE ConstBidirectionalIterator operator -- (int);
 
-		/// Return an iterator pointingto the first item of the container
-		static ConstBidirectionalIterator begin(const Container& container) throw(Exception::Precondition);
+		/** Return an iterator pointing to the first item of the container
+		 *  \throws Exception::Precondition
+		 */
+		static ConstBidirectionalIterator begin(const Container& container);
 
-		/// Return an iterator pointing to the position after the last element.
-		static ConstBidirectionalIterator end(const Container& container) throw(Exception::Precondition);
+		/** Return an iterator pointing to the position after the last element.
+		 *  \throws Exception::Precondition
+		 */
+		static ConstBidirectionalIterator end(const Container& container);
 
-		/// Return an iterator pointing to the last element
-		static ConstBidirectionalIterator rbegin(const Container& container) throw(Exception::Precondition);
+		/** Return an iterator pointing to the last element
+		 *  \throws Exception::Precondition
+		 */
+		static ConstBidirectionalIterator rbegin(const Container& container);
 
-		/// Return an iterator pointing to the positon before the first element
-		static ConstBidirectionalIterator rend(const Container& container) throw(Exception::Precondition);
+		/** Return an iterator pointing to the positon before the first element
+		 *  \throws Exception::Precondition
+		 */
+		static ConstBidirectionalIterator rend(const Container& container);
 		//@}
 
 		protected:
@@ -118,7 +142,6 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	BALL_INLINE
 	void ConstBidirectionalIterator<Container, DataType, Position, Traits>::toBegin()
-		throw(Exception::Precondition)
 	{
 		BALL_PRECONDITION_EXCEPTION(!Base::getTraits().isSingular(), "cannot set unbound iterator to begin")
 		Base::getTraits().toBegin();
@@ -127,7 +150,6 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	BALL_INLINE
 	void ConstBidirectionalIterator<Container, DataType, Position, Traits>::toEnd()
-		throw(Exception::Precondition)
 	{
 		BALL_PRECONDITION_EXCEPTION(!Base::getTraits().isSingular(), "cannot set unbound iterator to end")
 		Base::getTraits().toEnd();
@@ -136,7 +158,6 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	BALL_INLINE
 	void ConstBidirectionalIterator<Container, DataType, Position, Traits>::toRBegin()
-		throw(Exception::Precondition)
 	{
 		BALL_PRECONDITION_EXCEPTION(!Base::getTraits().isSingular(), "cannot set unbound iterator to reverse begin")
 		Base::getTraits().toRBegin();
@@ -145,7 +166,6 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	BALL_INLINE
 	void ConstBidirectionalIterator<Container, DataType, Position, Traits>::toREnd()
-		throw(Exception::Precondition)
 	{	
 		BALL_PRECONDITION_EXCEPTION(!Base::getTraits().isSingular(), "cannot set unbound iterator to reverse end")
 		Base::getTraits().toREnd();
@@ -155,7 +175,6 @@ namespace BALL
 	BALL_INLINE
 	ConstBidirectionalIterator<Container, DataType, Position, Traits>& 
 		ConstBidirectionalIterator<Container, DataType, Position, Traits>::operator ++ ()
-		throw(Exception::Precondition)
 	{
 		BALL_PRECONDITION_EXCEPTION(Base::getTraits().isValid(), "cannot increment an invalid iterator")
 		Base::getTraits().forward();
@@ -166,7 +185,6 @@ namespace BALL
 	BALL_INLINE
 	ConstBidirectionalIterator<Container, DataType, Position, Traits> 
 		ConstBidirectionalIterator<Container, DataType, Position, Traits>::operator ++ (int)
-		throw(Exception::Precondition)
 	{
 		BALL_PRECONDITION_EXCEPTION(Base::getTraits().isValid(), "cannot increment an invalid iterator")
 		ConstBidirectionalIterator iterator(*this);
@@ -178,7 +196,6 @@ namespace BALL
 	BALL_INLINE
 	ConstBidirectionalIterator<Container, DataType, Position, Traits>& 
 		ConstBidirectionalIterator<Container, DataType, Position, Traits>::operator -- ()
-		throw(Exception::Precondition)
 	{
 		BALL_PRECONDITION_EXCEPTION(!Base::getTraits().isSingular(), "cannot decrement unbound iterator")
 		Base::getTraits().backward();
@@ -189,7 +206,6 @@ namespace BALL
 	BALL_INLINE
 	ConstBidirectionalIterator<Container, DataType, Position, Traits> 
 		ConstBidirectionalIterator<Container, DataType, Position, Traits>::operator -- (int)
-		throw(Exception::Precondition)
 	{
 		BALL_PRECONDITION_EXCEPTION(!Base::getTraits().isSingular(), "cannot decrement an unbound iterator")
 		ConstBidirectionalIterator iterator(*this);
@@ -201,7 +217,6 @@ namespace BALL
 	BALL_INLINE
 	ConstBidirectionalIterator<Container, DataType, Position, Traits> 
 		ConstBidirectionalIterator<Container, DataType, Position, Traits>::begin(const Container& container)
-		throw(Exception::Precondition)
 	{
 		ConstBidirectionalIterator iterator(container);
 		iterator.toBegin();
@@ -212,7 +227,6 @@ namespace BALL
 	BALL_INLINE
 	ConstBidirectionalIterator<Container, DataType, Position, Traits> 
 		ConstBidirectionalIterator<Container, DataType, Position, Traits>::end(const Container& container)
-		throw(Exception::Precondition)
 	{
 		ConstBidirectionalIterator iterator(container);
 		iterator.toEnd();
@@ -223,7 +237,6 @@ namespace BALL
 	BALL_INLINE
 	ConstBidirectionalIterator<Container, DataType, Position, Traits> 
 		ConstBidirectionalIterator<Container, DataType, Position, Traits>::rbegin(const Container& container)
-		throw(Exception::Precondition)
 	{
 		ConstBidirectionalIterator iterator(container);
 		iterator.toRBegin();
@@ -234,7 +247,6 @@ namespace BALL
 	BALL_INLINE
 	ConstBidirectionalIterator<Container, DataType, Position, Traits> 
 		ConstBidirectionalIterator<Container, DataType, Position, Traits>::rend(const Container& container)
-		throw(Exception::Precondition)
 	{
 		ConstBidirectionalIterator iterator(container);
 		iterator.toREnd();
@@ -289,33 +301,45 @@ namespace BALL
 		/// Pointer dereferentiation
 		BALL_INLINE pointer operator -> () const  { return (pointer)&Base::getTraits().getData(); }
 
-		/// Increment operator
-		BALL_INLINE BidirectionalIterator& operator ++ ()	throw(Exception::Precondition);
+		/** Increment operator
+		 *  \throws Exception::Precondition
+		 */
+		BALL_INLINE BidirectionalIterator& operator ++ ();
 
-		/// Postfix increment operator
-		BALL_INLINE BidirectionalIterator operator ++ (int) throw(Exception::Precondition);
+		/** Postfix increment operator
+		 *  \throws Exception::Precondition
+		 */
+		BALL_INLINE BidirectionalIterator operator ++ (int);
 
-		/// Decrement operator
-		BALL_INLINE BidirectionalIterator& operator -- ()	throw(Exception::Precondition);
+		/** Decrement operator
+		 *  \throws Exception::Precondition
+		 */
+		BALL_INLINE BidirectionalIterator& operator -- ();
 
-		/// Postfix decrement operator
-		BALL_INLINE BidirectionalIterator operator -- (int) throw(Exception::Precondition);
+		/** Postfix decrement operator
+		 *  \throws Exception::Precondition
+		 */
+		BALL_INLINE BidirectionalIterator operator -- (int);
 
-		/// Return an iterator pointing to the first item of the container
-		static BidirectionalIterator begin(const Container& container)
-			throw(Exception::Precondition);
+		/** Return an iterator pointing to the first item of the container
+		 *  \throws Exception::Precondition
+		 */
+		static BidirectionalIterator begin(const Container& container);
 
-		/// Return an iterator pointing to the position after the last element
-		static BidirectionalIterator end(const Container& container)
-			throw(Exception::Precondition);
+		/** Return an iterator pointing to the position after the last element
+		 *  \throws Exception::Precondition
+		 */
+		static BidirectionalIterator end(const Container& container);
 
-		/// Return an iterator pointing to the last element.
-		static BidirectionalIterator rbegin(const Container& container)
-			throw(Exception::Precondition);
+		/** Return an iterator pointing to the last element.
+		 *  \throws Exception::Precondition
+		 */
+		static BidirectionalIterator rbegin(const Container& container);
 
-		/// Return an iterator pointing to the positon before the first element
-		static BidirectionalIterator rend(const Container& container)
-			throw(Exception::Precondition);
+		/** Return an iterator pointing to the positon before the first element
+		 *  \throws Exception::Precondition
+		 */
+		static BidirectionalIterator rend(const Container& container);
 		//@}
 
 		protected:
@@ -329,7 +353,6 @@ namespace BALL
 	BALL_INLINE
 	BidirectionalIterator<Container, DataType, Position, Traits>& 
 		BidirectionalIterator<Container, DataType, Position, Traits>::operator ++ ()
-		throw(Exception::Precondition)
 	{
 		Base::operator ++ ();
 		return *this;
@@ -339,7 +362,6 @@ namespace BALL
 	BALL_INLINE
 	BidirectionalIterator<Container, DataType, Position, Traits> 
 		BidirectionalIterator<Container, DataType, Position, Traits>::operator ++ (int)
-		throw(Exception::Precondition)
 	{
 		BidirectionalIterator iterator(*this);
 		this->operator ++ ();
@@ -350,7 +372,6 @@ namespace BALL
 	BALL_INLINE
 	BidirectionalIterator<Container, DataType, Position, Traits>& 
 		BidirectionalIterator<Container, DataType, Position, Traits>::operator -- ()
-		throw(Exception::Precondition)
 	{
 		Base::operator -- ();
 		return *this;
@@ -360,7 +381,6 @@ namespace BALL
 	BALL_INLINE
 	BidirectionalIterator<Container, DataType, Position, Traits> 
 		BidirectionalIterator<Container, DataType, Position, Traits>::operator -- (int)
-		throw(Exception::Precondition)
 	{
 		BidirectionalIterator iterator(*this);
 		this->operator -- ();
@@ -371,7 +391,6 @@ namespace BALL
 	BALL_INLINE
 	BidirectionalIterator<Container, DataType, Position, Traits> 
 		BidirectionalIterator<Container, DataType, Position, Traits>::begin(const Container& container)
-		throw(Exception::Precondition)
 	{
 		BidirectionalIterator iterator(container);
 		iterator.toBegin();
@@ -382,7 +401,6 @@ namespace BALL
 	BALL_INLINE
 	BidirectionalIterator<Container, DataType, Position, Traits>
   	BidirectionalIterator<Container, DataType, Position, Traits>::end(const Container& container)
-		throw(Exception::Precondition)
 	{
 		BidirectionalIterator iterator(container);
 		iterator.toEnd();
@@ -393,7 +411,6 @@ namespace BALL
 	BALL_INLINE
 	BidirectionalIterator<Container, DataType, Position, Traits> 
 		BidirectionalIterator<Container, DataType, Position, Traits>::rbegin(const Container& container)
-		throw(Exception::Precondition)
 	{
 		BidirectionalIterator iterator(container);
 		iterator.toRBegin();
@@ -404,7 +421,6 @@ namespace BALL
 	BALL_INLINE
 	BidirectionalIterator<Container, DataType, Position, Traits> 
 		BidirectionalIterator<Container, DataType, Position, Traits>::rend(const Container& container)
-		throw(Exception::Precondition)
 	{
 		BidirectionalIterator iterator(container);
 		iterator.toREnd();

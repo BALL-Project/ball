@@ -17,7 +17,6 @@ namespace BALL
 
 	EnumeratorIndex::IncompatibleIndex::IncompatibleIndex
 		(const char* file, int line)
-		
 		: Exception::GeneralException(file, line, "IncompatibleIndex", "")
 	{
 		message_ = "different enumerator moduli occured.";
@@ -27,7 +26,6 @@ namespace BALL
 
 
 	EnumeratorIndex::EnumeratorIndex()
-		
 		: vector<Position>(),
 			modulus_(),
 			base_multipliers_()
@@ -35,13 +33,11 @@ namespace BALL
 	}
 
 	EnumeratorIndex::~EnumeratorIndex()
-		
 	{
 	}
 
 
 	EnumeratorIndex& EnumeratorIndex::operator ++ ()
-		throw(Exception::IndexOverflow)
 	{
 		Index i;
 		bool add_one = true;
@@ -66,7 +62,6 @@ namespace BALL
 
 
 	EnumeratorIndex& EnumeratorIndex::operator -- () 
-		throw(Exception::IndexUnderflow)
 	{
 		Index i;
 		bool sub_one = true;
@@ -92,7 +87,6 @@ namespace BALL
 	}
 
 	const EnumeratorIndex& EnumeratorIndex::operator = (const EnumeratorIndex& rhs)
-		
 	{
 		std::vector<Position>::operator = (rhs);
 		modulus_ = rhs.modulus_;
@@ -102,7 +96,6 @@ namespace BALL
 	}
 
 	const EnumeratorIndex& EnumeratorIndex::operator = (Position index)
-		throw(Exception::IndexOverflow)
 	{	
 		for (Position i = 0; i < std::vector<Position>::size(); ++i)
 		{
@@ -119,7 +112,6 @@ namespace BALL
 	}
 
 	EnumeratorIndex& EnumeratorIndex::operator << (Size modulus)
-		throw(Exception::OutOfRange)
 	{
 		// there's no point in counting in the unary system or below
 		if (modulus < 2)
@@ -145,19 +137,16 @@ namespace BALL
 	}
 
 	bool EnumeratorIndex::operator == (const EnumeratorIndex& rhs) const
-		
 	{
 		return (modulus_ == rhs.modulus_) && (static_cast<const vector<Position>&>(*this) == static_cast<const vector<Position>&>(rhs));
 	}
 
 	bool EnumeratorIndex::operator != (const EnumeratorIndex& rhs) const
-		
 	{
 		return (modulus_ != rhs.modulus_) || (static_cast<const vector<Position>&>(*this) != static_cast<const vector<Position>&>(rhs));
 	}
 
 	bool EnumeratorIndex::operator < (const EnumeratorIndex& rhs) const
-		throw(EnumeratorIndex::IncompatibleIndex)
 	{
 		if (modulus_ != rhs.modulus_)
 		{
@@ -168,7 +157,6 @@ namespace BALL
 	}
 
 	bool EnumeratorIndex::operator > (const EnumeratorIndex& rhs) const
-		throw(EnumeratorIndex::IncompatibleIndex)
 	{
 		if (modulus_ != rhs.modulus_)
 		{
@@ -179,7 +167,6 @@ namespace BALL
 	}
 
 	bool EnumeratorIndex::operator <= (const EnumeratorIndex& rhs) const
-		throw(EnumeratorIndex::IncompatibleIndex)
 	{
 		if (modulus_  != rhs.modulus_)
 		{
@@ -190,7 +177,6 @@ namespace BALL
 	}
 
 	bool EnumeratorIndex::operator >= (const EnumeratorIndex& rhs) const
-		throw(EnumeratorIndex::IncompatibleIndex)
 	{
 		if (modulus_ != rhs.modulus_)
 		{

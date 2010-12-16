@@ -36,7 +36,6 @@ void NamedProperty::clear()
 
 BALL_INLINE 
 NamedProperty::NamedProperty(const string& name)
-	
 	: PersistentObject(),
 		type_(NONE),
 		name_(name)
@@ -149,7 +148,6 @@ bool NamedProperty::operator == (const NamedProperty& np) const
 
 BALL_INLINE 
 bool NamedProperty::operator != (const NamedProperty& np) const
-	
 {
 	return !(*this == np);
 }
@@ -282,105 +280,90 @@ const PropertyManager& PropertyManager::operator = (const PropertyManager& prope
 
 BALL_INLINE 
 void PropertyManager::get(PropertyManager& property_manager) const
-	
 {
   property_manager.set(*this);
 }
 
 BALL_INLINE 
 BitVector& PropertyManager::getBitVector()
-	
 {
   return bitvector_;
 }
 
 BALL_INLINE 
 const BitVector& PropertyManager::getBitVector() const
-	
 {
   return bitvector_;
 }
 
 BALL_INLINE
 PropertyManager::operator BitVector & ()
-	
 {
   return bitvector_;
 }
 
 BALL_INLINE 
 void PropertyManager::setProperty(Property property)
-	
 {
   bitvector_.setBit(property);
 }
 
 BALL_INLINE 
 void PropertyManager::setProperty(const string& name, bool value)
-	
 {
 	setProperty(NamedProperty(name, value));
 }
 
 BALL_INLINE 
 void PropertyManager::setProperty(const string& name, float value)
-	
 {
 	setProperty(NamedProperty(name, value));
 }
 
 BALL_INLINE 
 void PropertyManager::setProperty(const string& name, double value)
-	
 {
 	setProperty(NamedProperty(name, value));
 }
 
 BALL_INLINE 
 void PropertyManager::setProperty(const string& name, unsigned int value)
-	
 {
 	setProperty(NamedProperty(name, value));
 }
 
 BALL_INLINE 
 void PropertyManager::setProperty(const string& name, int value)
-	
 {
 	setProperty(NamedProperty(name, value));
 }
 
 BALL_INLINE 
 void PropertyManager::setProperty(const string& name, const string& value)
-	
 {
 	setProperty(NamedProperty(name, const_cast<string&>(value)));
 }
 
 BALL_INLINE 
 void PropertyManager::setProperty(const string& name, const PersistentObject& value)
-	
 {
 	setProperty(NamedProperty(name, const_cast<PersistentObject&>(value)));
 }
 
 BALL_INLINE 
 void PropertyManager::clearProperty(Property property)
-	
 {
   bitvector_.setBit(property, false);
 }
 
 BALL_INLINE 
 void PropertyManager::toggleProperty(Property property)
-	
 {
   bitvector_.toggleBit(property);
 }
 
 BALL_INLINE 
 void PropertyManager::swap(PropertyManager& property_manager)
-	
 {
 	BitVector tmp = bitvector_;
 	bitvector_ = property_manager.bitvector_;
@@ -390,7 +373,6 @@ void PropertyManager::swap(PropertyManager& property_manager)
 
 BALL_INLINE 
 bool PropertyManager::hasProperty(Property property) const
-	
 {
 	if (bitvector_.getSize() <= (Size)property)
 	{
@@ -401,21 +383,18 @@ bool PropertyManager::hasProperty(Property property) const
 
 BALL_INLINE 
 bool PropertyManager::isValid() const
-	
 {
   return (bitvector_.isValid());
 }
 
 BALL_INLINE 
 Size PropertyManager::countProperties() const
-	
 {
   return ((Size)bitvector_.getSize() + (Size)named_properties_.size());
 }
 
 BALL_INLINE
 const NamedProperty& PropertyManager::getNamedProperty(Position index) const
-	throw(Exception::IndexOverflow)
 {
 	if (index >= named_properties_.size())
 	{
@@ -426,7 +405,6 @@ const NamedProperty& PropertyManager::getNamedProperty(Position index) const
 
 BALL_INLINE
 NamedProperty& PropertyManager::getNamedProperty(Position index)
-	throw(Exception::IndexOverflow)
 {
 	if (index >= named_properties_.size())
 	{
@@ -437,14 +415,12 @@ NamedProperty& PropertyManager::getNamedProperty(Position index)
 
 BALL_INLINE 
 Size PropertyManager::countNamedProperties() const
-	
 {
   return (Size)named_properties_.size();
 }
 
 BALL_INLINE 
 bool PropertyManager::operator == (const PropertyManager& pm) const
-	
 {
 	return (bitvector_				== pm.bitvector_ &&
 					named_properties_	== pm.named_properties_);
@@ -452,7 +428,6 @@ bool PropertyManager::operator == (const PropertyManager& pm) const
 
 BALL_INLINE 
 bool PropertyManager::operator != (const PropertyManager& pm) const
-	
 {
 	return (bitvector_				!= pm.bitvector_ ||
 					named_properties_	!= pm.named_properties_);
