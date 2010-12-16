@@ -75,12 +75,11 @@ namespace BALL
 				an open working connection.
 				\see         Exception::GeneralException			
 		*/
-		class BALL_EXPORT InvalidClient: public Exception::GeneralException
+		class BALL_EXPORT InvalidClient 
+			: public Exception::GeneralException
 		{
 			public:
-
-			InvalidClient(const char* file, int line)
-				;
+				InvalidClient(const char* file, int line);
 		};
 
 		/** NoPersistentObject exception class.
@@ -89,12 +88,11 @@ namespace BALL
 				Only PersistentObject's can be sent through this client.
 				\see         Exception::GeneralException			
 		*/
-		class BALL_EXPORT NoPersistentObject:	public Exception::GeneralException
+		class BALL_EXPORT NoPersistentObject
+		  :	public Exception::GeneralException
 		{
 			public:
-
-			NoPersistentObject(const char* file, int line)
-				;
+				NoPersistentObject(const char* file, int line);
 		};
 
 		//@}
@@ -108,8 +106,7 @@ namespace BALL
 				\return      Client new constructed client
 				\see         connect
 		*/
-		Client()
-			;
+		Client();
 
 		/** Detailed state initializing constructor.
 				Constructs new client.
@@ -122,8 +119,7 @@ namespace BALL
 				\return      Client new constructed client
 				\see         connect
 		*/
-		Client(const String& host, int port = 20000)
-			;
+		Client(const String& host, int port = 20000);
 
 		//@}
 		/** @name Destructors */
@@ -131,14 +127,12 @@ namespace BALL
 
 		/** Destructor.
 		*/
-		virtual ~Client()
-			;
+		virtual ~Client();
 
 		/** Explicit default initialization.
 				Empty for further purpose.
 		*/
-		virtual void clear()
-			;
+		virtual void clear();
 
 		//@}
 		/**	@name	Accessors: inspectors and mutators 
@@ -151,8 +145,7 @@ namespace BALL
 				\param   host the host (a string) to connect to
 				\param   port the port number of the host
 		*/
-		void connect(const String& host, int port = 20000)
-			;
+		void connect(const String& host, int port = 20000);
 
 		/** Adds a new composite.
 				Inserts a new Composite to this client. 
@@ -168,8 +161,7 @@ namespace BALL
 				\exception  InvalidClient if the client has no connection to a server
 				\exception  NoPersistentObject if the composite is not a PersistentObject
 		*/
-		void insert(Composite &composite)
-			throw(InvalidClient, NoPersistentObject);
+		void insert(Composite &composite);
 		//@}
 		/**	@name	debuggers and diagnostics
 		*/
@@ -183,8 +175,7 @@ namespace BALL
 										<tt> true</tt> if this client has a connection to a server,
 										<tt> false</tt> otherwise
 		*/
-		virtual bool isValid() const
-			;
+		virtual bool isValid() const;
 
 		/** Internal value dump.
 				Dumps the current host and port of this client to 
@@ -192,8 +183,7 @@ namespace BALL
 				\param   s output stream where to output the host and port of this client
 				\param   depth the dumping depth
 		*/
-		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-			;
+		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 		//@}
 		

@@ -156,6 +156,25 @@ CHECK_INCLUDE_FILE_CXX("values.h" BALL_HAS_VALUES_H)
 CHECK_FUNCTION_EXISTS(kill BALL_HAS_KILL)
 CHECK_FUNCTION_EXISTS(sysconf BALL_HAS_SYSCONF)
 
+## Can we overload long int with LongIndex?
+IF (BALL_HAS_STDINT_H)
+	CHECK_CXX_SOURCE_COMPILES("#include <stdint.h>
+	void f(long int l) {l+=2;}
+	void f(${BALL_LONG64_TYPE} l) {l+=2;}
+	int main(int /*argc*/, char** /*argv*/)
+	{
+		return 0;
+	}" BALL_ALLOW_LONG64_TYPE_OVERLOADS) 
+ELSE()
+	CHECK_CXX_SOURCE_COMPILES("
+	void f(long int l) {l+=2;}
+	void f(${BALL_LONG64_TYPE} l) {l+=2;}
+	int main(int /*argc*/, char** /*argv*/)
+	{
+		return 0;
+	}" BALL_ALLOW_LONG64_TYPE_OVERLOADS) 
+ENDIF()
+
 ## Do we have an ansi compatible iostream implementation?
 CHECK_CXX_SOURCE_COMPILES("#include <iostream>
 	class A : public std::iostream

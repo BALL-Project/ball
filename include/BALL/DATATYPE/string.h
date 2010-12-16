@@ -241,11 +241,13 @@ namespace BALL
 		/// Construct a String from an unsigned long
 		String(unsigned long);
 
+#ifdef BALL_ALLOW_LONG64_TYPE_OVERLOADS
 		/// Construct a String from a signed 64 bit integer
 		String(LongIndex l);
 
 		/// Construct a String from an unsigned 64 bit integer
 		String(LongSize);
+#endif
 
 		/// Construct a String from a float value
 		String(float f);
@@ -324,11 +326,13 @@ namespace BALL
 		/// Assign a String from an unsigned long
 		void set(unsigned long ul);
 
+#ifdef BALL_ALLOW_LONG64_TYPE_OVERLOADS
 		/// Assign a String from a 64 bit integer
 		void set(LongIndex l);
 
 		/// Assign a String from an unsigned 64 bit integer
 		void set(LongSize ul);
+#endif
 
 		/// Assign a String from a float value
 		void set(float f);
@@ -380,11 +384,13 @@ namespace BALL
 		/// Assign a String from an unsigned long
 		const String& operator = (unsigned long ul);
 
+#ifdef BALL_ALLOW_LONG64_TYPE_OVERLOADS
 		/// Assign a String from a 64 bit integer
 		const String& operator = (LongIndex l);
 
 		/// Assign a String from an unsigned 64 bit integer
 		const String& operator = (LongSize ul);
+#endif
 
 		/// Assign a String from a float
 		const String& operator = (float f);

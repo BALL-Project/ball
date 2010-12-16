@@ -37,7 +37,6 @@ namespace BALL
 				The default constructor has no functionality.
 		*/
 		PersistentObject() 
-			
 			:	Object()
 		{
 		}
@@ -46,7 +45,6 @@ namespace BALL
 				The destructor has no functionality.
 		*/
 		virtual ~PersistentObject() 
-			
 		{
 		}
 		//@}
@@ -62,11 +60,11 @@ namespace BALL
 				the object. Finally, a call to <tt>pm.stopOutput()</tt> writes all
 				dependend objects and the end marker to the persistent stream.
 				@param	pm	the persistence manager
+				\throws Exception::GeneralException
 				@return the persistence manager (for chaining multiple output 
 								operations)
 		*/
-		PersistenceManager& operator >> (PersistenceManager& pm) const
-			throw(Exception::GeneralException);
+		PersistenceManager& operator >> (PersistenceManager& pm) const;
 
 		/**	Serialize the object.
 				This method serializes the object by calls to Layer 1 methods of 
@@ -76,9 +74,9 @@ namespace BALL
 				this method should be <tt>pm.writeObjectTrailer(name)</tt>.
 				@param	pm the persistence manager
 				@param	name the name of the object (0 for writing base classes)
+				\throws Exception::GeneralException
 		*/
-		virtual void persistentWrite(PersistenceManager& pm, const char* name = "") const
-			throw(Exception::GeneralException);
+		virtual void persistentWrite(PersistenceManager& pm, const char* name = "") const;
 
 		/**	Deserialize the object.
 				This method reads the contents of an persistent object into an
@@ -90,9 +88,9 @@ namespace BALL
 				the header is read before this method is called (the object type
 				has to be known in advance to dynamically create the object).
 				@param pm the PersistenceManager
+				\throws Exception::GeneralException
 		*/
-		virtual void persistentRead(PersistenceManager& pm)
-			throw(Exception::GeneralException);
+		virtual void persistentRead(PersistenceManager& pm);
 
 		/**	Finalize the deserialization.
 				This method is called for all objects after their pointers have
@@ -100,9 +98,9 @@ namespace BALL
 				structures. For example, the bond class has to swap <tt>first_</tt>
 				and <tt>second_</tt> depending on the order of the atoms. It is
 				usually left unimplemented.
+				\throws Exception::GeneralException
 		*/
 		virtual void finalize()
-			throw(Exception::GeneralException)
 		{
 		}
 		//@}

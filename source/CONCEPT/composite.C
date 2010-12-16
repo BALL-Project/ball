@@ -19,7 +19,6 @@ namespace BALL
 
 	// default ctor
 	Composite::Composite()
-		
 		:	PersistentObject(),
 			Selectable(),
 			number_of_children_(0),
@@ -39,7 +38,6 @@ namespace BALL
 
 	// copy ctor
 	Composite::Composite(const Composite& composite, bool deep)
-			
 		:	PersistentObject(composite),
 			Selectable(composite),
 			number_of_children_(0),
@@ -63,13 +61,11 @@ namespace BALL
 
 	// destructor
 	Composite::~Composite()
-		
 	{
 		destroy();
 	}
 
 	void Composite::set(const Composite& composite, bool deep)
-		
 	{
 		if (deep == true)
 		{
@@ -92,7 +88,6 @@ namespace BALL
 	}
 
   void Composite::persistentWrite(PersistenceManager& pm, const char* name) const
-		throw(Exception::GeneralException)
   {
 		pm.writeObjectHeader(this, name);
 			pm.writeStorableObject(dynamic_cast<const Selectable&>(*this), "Selectable");
@@ -113,7 +108,6 @@ namespace BALL
 	}
 
   void Composite::persistentRead(PersistenceManager& pm)
-		throw(Exception::GeneralException)
   {
 		pm.readStorableObject(dynamic_cast<Selectable&>(*this), "Selectable");
 
@@ -132,7 +126,6 @@ namespace BALL
 	}
  
 	Size Composite::getPathLength(const Composite& composite) const
-		
 	{
 		// if composite equals *this - return 0
 		if (&composite == this)
@@ -168,7 +161,6 @@ namespace BALL
 	}
 
 	Size Composite::getDepth() const
-		
 	{
 		// walk up to the root (if possible)
 		Size size = 0;
@@ -182,7 +174,6 @@ namespace BALL
 	}
 
 	Composite& Composite::getRoot()
-		
 	{
 		// walk up to the root
 		Composite* composite_ptr = this;
@@ -192,7 +183,6 @@ namespace BALL
 	}
 
 	Composite* Composite::getChild(Index index)
-		
 	{
 		if (first_child_ != 0)
 		{
@@ -212,7 +202,6 @@ namespace BALL
 	} 
 
 	Composite* Composite::getLowestCommonAncestor(const Composite& composite)
-		
 	{
 		// determine depth of node A
 		const Size size_a = getDepth() + 1;
@@ -264,7 +253,6 @@ namespace BALL
 	} 
 
 	Composite* Composite::getSibling(Index index)
-		
 	{
 		Composite* composite_ptr = this;
 
@@ -291,7 +279,6 @@ namespace BALL
 	}
 
 	void* Composite::clone(Composite& root) const
-		
 	{
 		// avoid self-cloning
 		if (&root == this)	
@@ -329,7 +316,6 @@ namespace BALL
 	}
 
 	void Composite::stamp(Composite::StampType stamp_type)
-		
 	{
 		if ((stamp_type & MODIFICATION) != 0)
 		{
@@ -348,13 +334,11 @@ namespace BALL
 	}
 
 	void Composite::select()
-		
 	{
 		select_(true);
 	}
 
 	void Composite::select_(bool update_parent)
-		
 	{
 		if (!selected_)
 		{
@@ -402,13 +386,11 @@ namespace BALL
 	}
 	
 	void Composite::deselect()
-		
 	{
 		deselect_(true);
 	}
 
 	void Composite::deselect_(bool update_parent)
-		
 	{
 		// if anything is selected, deselect everything below
 		if (selected_ || (number_of_selected_children_ > 0)
@@ -455,7 +437,6 @@ namespace BALL
 	}
 	
 	void Composite::updateSelection_()
-		
 	{
 		// update the time stamp
 		selection_stamp_.stamp();
@@ -541,7 +522,6 @@ namespace BALL
 	}
 
 	void Composite::determineSelection_()
-		
 	{
 		number_of_selected_children_ = 0;
 		number_of_children_containing_selection_ = 0;
@@ -565,7 +545,6 @@ namespace BALL
 	}
 
 	void Composite::prependChild(Composite& composite)
-		
 	{
 		// avoid self-prepend and prepend of children
 		if (&composite == this || isDescendantOf(composite) == true)
@@ -621,7 +600,6 @@ namespace BALL
 	}
 
 	void Composite::appendChild(Composite& composite)
-		
 	{
 		// avoid self-appending and appending of parent nodes
 		if (&composite == this || isDescendantOf(composite) == true)
@@ -677,7 +655,6 @@ namespace BALL
 	}
 
 	bool Composite::insertParent(Composite& parent, Composite& first, Composite& last, bool destroy_parent)
-		
 	{
 		// return if first and last have different parents, 
 		// if either doesn't possess a parent, or if parent equals first or last
@@ -758,7 +735,6 @@ namespace BALL
 	}
 
 	void Composite::insertBefore(Composite& composite)
-		
 	{
 		// abort if a self-insertion is requested, there`s no parent at all,
 		// or this node is a descendant of composite
@@ -819,7 +795,6 @@ namespace BALL
 	}
 
 	void Composite::insertAfter(Composite& composite)
-		
 	{
 		// abort if there`s no parent, on self-insertion, or
 		// if this node is a descendant of composite
@@ -880,7 +855,6 @@ namespace BALL
 	}
 
 	void Composite::replace(Composite& composite)
-		
 	{
 		if (parent_ != 0 && &composite != this)
 		{
@@ -890,7 +864,6 @@ namespace BALL
 	} 
 
 	void Composite::spliceBefore(Composite& composite)
-		
 	{
 		// avoid self-splicing and the splicing of nodes that are
 		// descendants of composite
@@ -948,7 +921,6 @@ namespace BALL
 	}
 
 	void  Composite::spliceAfter(Composite& composite)
-		
 	{
 		// avoid self-splicing and the splicing of nodes that are
 		// descendants of composite
@@ -1006,7 +978,6 @@ namespace BALL
 	}
 
 	void Composite::splice(Composite& composite)
-		
 	{
 		// avoid self-splicing and splicing of descendants of composite
 		if (&composite == this|| isDescendantOf(composite) == true)
@@ -1097,7 +1068,6 @@ namespace BALL
 	}
 
 	bool Composite::removeChild(Composite& child)
-		
 	{
 		// avoid self-removal and removal of ancestors
 		if (&child == this || isDescendantOf(child) == true)
@@ -1233,7 +1203,6 @@ namespace BALL
 	}
 
 	void Composite::clear()
-		
 	{
 		for (Composite* composite_ptr = first_child_; composite_ptr != 0; )
 		{
@@ -1270,7 +1239,6 @@ namespace BALL
 	}
 
 	void Composite::destroy()
-		
 	{
 		if (parent_ != 0)
 		{
@@ -1281,7 +1249,6 @@ namespace BALL
 	}
 
 	void Composite::destroy(bool virtual_flag)
-		
 	{
 		if (parent_ != 0)
 		{
@@ -1300,7 +1267,6 @@ namespace BALL
 	}
 
 	void Composite::swap(Composite& composite)
-		
 	{
 		if (&composite == this || isAncestorOf(composite) == true
 				|| isDescendantOf(composite) == true)
@@ -1393,7 +1359,6 @@ namespace BALL
 	}
 
 	bool Composite::isDescendantOf(const Composite& composite) const
-		
 	{
 		for (Composite* composite_ptr = parent_;
 				 composite_ptr != 0; composite_ptr = composite_ptr->parent_)
@@ -1408,7 +1373,6 @@ namespace BALL
 	}
 
 	bool Composite::isHomomorph(const Composite& composite) const
-		
 	{
 		if (this == &composite)
 		{
@@ -1436,7 +1400,6 @@ namespace BALL
 	}
 
 	bool Composite::isValid() const
-		
 	{
 		Composite* composite_ptr = first_child_;
 		Size number_of_children = 0;
@@ -1542,7 +1505,6 @@ namespace BALL
 	}
 
 	void Composite::dump(std::ostream& s, Size depth) const
-		
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 
@@ -1617,7 +1579,6 @@ namespace BALL
 	}
 
 	Size Composite::getHeight() const
-		
 	{
 		Size size = 0;
 
@@ -1634,7 +1595,6 @@ namespace BALL
 	}
 
 	Size Composite::getHeight_(Size size, Size& max_height) const
-		
 	{
 		if (++size > max_height)
 		{
@@ -1654,7 +1614,6 @@ namespace BALL
 	}
 		
 	Size Composite::countDescendants_() const
-		
 	{
 			// walk over all children and recursively call countDescendants
 		Size number_of_descendants = 1;
@@ -1669,7 +1628,6 @@ namespace BALL
 	}
 
 	Size Composite::count(const KernelPredicateType& predicate) const
-		
 	{
 		// iterate over the node itself and all its descendants
 		// and count hits of the predicate
@@ -1687,7 +1645,6 @@ namespace BALL
 	}
 
 	void Composite::clone_(Composite& parent, Composite& stack) const
-		
 	{
 		Composite* cloned_ptr = 0;
 
@@ -1709,13 +1666,11 @@ namespace BALL
 	}
 				
 	bool Composite::operator == (const Composite& composite) const
-		
 	{
 		return(Object::operator == (composite));
 	}
 
 	bool Composite::operator != (const Composite& composite) const
-		
 	{
 		return !(*this == composite);
 	}

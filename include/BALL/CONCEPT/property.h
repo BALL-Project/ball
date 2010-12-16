@@ -201,14 +201,14 @@ namespace BALL
 		//@{
 			
 		/**	Write a persistent copy of the object.
+				\throws Exception::GeneralException
 		*/
-    virtual void persistentWrite(PersistenceManager& pm, const char* name = "") const
-			throw(Exception::GeneralException);
+    virtual void persistentWrite(PersistenceManager& pm, const char* name = "") const;
 
 		/**	Retrieve a persistent copy of the object
+			  \throws Exception::GeneralException
 		*/
-    virtual void persistentRead(PersistenceManager& pm)
-			throw(Exception::GeneralException);
+    virtual void persistentRead(PersistenceManager& pm);
 		
 		//@}
 		/**	@name	 Accessors 
@@ -471,14 +471,14 @@ namespace BALL
 		//@{
 
 		/**	Non-mutable access to a named property by its index.
+				\throws Exception::IndexOverflow
 		*/
-		const NamedProperty& getNamedProperty(Position index) const
-			throw(Exception::IndexOverflow);
+		const NamedProperty& getNamedProperty(Position index) const;
 
 		/**	Mutable access to a named property by its index.
+				\throws Exception::IndexOverflow
 		*/
-		NamedProperty& getNamedProperty(Position index)
-			throw(Exception::IndexOverflow);
+		NamedProperty& getNamedProperty(Position index);
 
 		/**	Set a named property.
 				This method adds a new named property to the property manager's 

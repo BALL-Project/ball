@@ -196,16 +196,15 @@ namespace BALL
 		/** Write a persistent copy of the object.
 				@param	pm the persistence manager
 				@param	name the object name
+				\throws Exception::GeneralException
 		*/
-		virtual void persistentWrite(PersistenceManager& pm,
-				const char* name = 0) const
-			throw(Exception::GeneralException);
+		virtual void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
 
 		/** Read a persistent object.
 				@param	pm the persistence manager
+				\throws Exception::GeneralException
 		*/
-		virtual void persistentRead(PersistenceManager& pm)
-			throw(Exception::GeneralException);
+		virtual void persistentRead(PersistenceManager& pm);
 
 		//@}
 
@@ -766,87 +765,87 @@ B		*/
 				Composites may be visited.
 				For an example look into Composite_test.C
 				@param	visitor	the visitor
+				\throws Exception::GeneralException
 		*/
-		void host(Visitor<Composite>& visitor)
-			throw(Exception::GeneralException);
+		void host(Visitor<Composite>& visitor);
 
 		/** Apply a processor to all ancestors of this node.
 				@return true if the processor could be applied.
+				\throws Exception::GeneralException
 		*/
 		template <typename T>
-		bool applyAncestor(UnaryProcessor<T>& processor)
-			throw(Exception::GeneralException);
+		bool applyAncestor(UnaryProcessor<T>& processor);
 
 		/** Apply a processor to all children of this node.
 				@return true if the processor could be applied.
+				\throws Exception::GeneralException
 		*/
 		template <typename T>
-		bool applyChild(UnaryProcessor<T>& processor)
-			throw(Exception::GeneralException);
+		bool applyChild(UnaryProcessor<T>& processor);
 		
 		/** Apply a processor to all descendents of this node.
 				The node itself is not processed.
 				The root of a subtree is accessed before the nodes in its left 
 				and right subtree.
 				@return true if the processor could be applied.
+				\throws Exception::GeneralException
 		*/
 		template <typename T>
-		bool applyDescendantPreorder(UnaryProcessor<T>& processor)
-			throw(Exception::GeneralException);
+		bool applyDescendantPreorder(UnaryProcessor<T>& processor);
 
 		/** Apply a processor to all descendents of this node.
 				The node itself is not processed.
 				The root of a subtree is accessed after the nodes in its left 
 				and right subtree.
 				@return true if the processor could be applied.
+				\throws Exception::GeneralException
 		*/
 		template <typename T>
-		bool applyDescendantPostorder(UnaryProcessor<T>& processor)
-			throw(Exception::GeneralException);
+		bool applyDescendantPostorder(UnaryProcessor<T>& processor);
 	
 		/** Apply a processor to all descendents of this node.
 				The node itself is not processed.
 				applyDescendantPreorder is used.
 				@see applyDescendantPreorder
 				@return true if the processor could be applied.
+				\throws Exception::GeneralException
 		*/
 		template <typename T>
-		bool applyDescendant(UnaryProcessor<T>& processor)
-			throw(Exception::GeneralException);
+		bool applyDescendant(UnaryProcessor<T>& processor);
 		
 		/** Apply a processor to the node and its subtree.
 				The root of a subtree is accessed before the nodes in its left 
 				and right subtree.
 				@return true if the processor could be applied.
+				\throws Exception::GeneralException
 		*/
 		template <typename T>
-		bool applyPreorder(UnaryProcessor<T>& processor)
-			throw(Exception::GeneralException);
+		bool applyPreorder(UnaryProcessor<T>& processor);
 		
 		/** Apply a processor to the node and its subtree.
 				The root of a subtree is accessed after the nodes in its left 
 				and right subtree.
 				@return true if the processor could be applied.
+				\throws Exception::GeneralException
 		*/
 		template <typename T>
-		bool applyPostorder(UnaryProcessor<T>& processor)
-			throw(Exception::GeneralException);
+		bool applyPostorder(UnaryProcessor<T>& processor);
 
 		/** Apply a processor to the node and its subtree.
 				applyPreorder is used.
 				@see applyPreorder
 				@return true if the processor could be applied.
+				\throws Exception::GeneralException
 		*/
 		template <typename T>
-		bool apply(UnaryProcessor<T>& processor)
-			throw(Exception::GeneralException);
+		bool apply(UnaryProcessor<T>& processor);
 		
 		/** Apply a processor to the node and its siblings.
 				@return true if the processor could be applied.
+				\throws Exception::GeneralException
 		*/
 		template <typename T>
-		bool applyLevel(UnaryProcessor<T>& processor, long level)
-			throw(Exception::GeneralException);
+		bool applyLevel(UnaryProcessor<T>& processor, long level);
 		//@}			
 
 
@@ -1408,31 +1407,31 @@ B		*/
 		///
 		void clone_(Composite& parent, Composite& stack) const ;
 
+		// \throws Exception::GeneralException
 		template <typename T>
-		bool applyLevelNostart_(UnaryProcessor<T>& processor, long level)
-			throw(Exception::GeneralException);
+		bool applyLevelNostart_(UnaryProcessor<T>& processor, long level);
 
+		// \throws Exception::GeneralException
 		template <typename T>
-		bool applyChildNostart_(UnaryProcessor<T>& processor)
-			throw(Exception::GeneralException);
+		bool applyChildNostart_(UnaryProcessor<T>& processor);
 
+		// \throws Exception::GeneralException
 		template <typename T>
-		bool applyPreorderNostart_(UnaryProcessor<T>& processor)
-			throw(Exception::GeneralException);
+		bool applyPreorderNostart_(UnaryProcessor<T>& processor);
 
+		// \throws Exception::GeneralException
 		template <typename T>
-		bool applyDescendantPreorderNostart_(UnaryProcessor<T>& processor)
-			throw(Exception::GeneralException);
+		bool applyDescendantPreorderNostart_(UnaryProcessor<T>& processor);
 
+		// \throws Exception::GeneralException
 		template <typename T>
-		bool applyDescendantPostorderNostart_(UnaryProcessor<T>& processor)
-			throw(Exception::GeneralException);
+		bool applyDescendantPostorderNostart_(UnaryProcessor<T>& processor);
 
 
-		void updateSelection_() ;
-		void determineSelection_() ;
-		void select_(bool update_parent = true) ;
-		void deselect_(bool update_parent = true) ;
+		void updateSelection_();
+		void determineSelection_();
+		void select_(bool update_parent = true);
+		void deselect_(bool update_parent = true);
 
 		// private attributes
 		
@@ -1452,7 +1451,6 @@ B		*/
 
 	template <typename T>
 	bool Composite::applyAncestor(UnaryProcessor<T>& processor)
-		throw(Exception::GeneralException)
 	{
 		if (processor.start() == false)
 		{
@@ -1479,14 +1477,12 @@ B		*/
 	
 	template <typename T>
 	bool Composite::applyChild(UnaryProcessor<T>& processor)
-		throw(Exception::GeneralException)
 	{
 		return processor.start() && applyChildNostart_(processor) && processor.finish();
 	}
 
 	template <typename T>
 	bool Composite::applyChildNostart_(UnaryProcessor<T>& processor)
-		throw(Exception::GeneralException)
 	{
 		Processor::Result result = Processor::CONTINUE;
 
@@ -1509,14 +1505,12 @@ B		*/
  
 	template <typename T>
 	bool Composite::applyDescendantPreorder(UnaryProcessor<T>& processor)
-		throw(Exception::GeneralException)
 	{
 		return processor.start() && applyDescendantPreorderNostart_(processor) && processor.finish();
 	}
 
 	template <typename T>
 	bool Composite::applyDescendantPreorderNostart_(UnaryProcessor<T>& processor)
-		throw(Exception::GeneralException)
 	{
 		Processor::Result result;
 
@@ -1545,14 +1539,12 @@ B		*/
 
 	template <typename T>
 	bool Composite::applyDescendantPostorder(UnaryProcessor<T>& processor)
-		throw(Exception::GeneralException)
 	{
 		return processor.start() && applyDescendantPostorderNostart_(processor) && processor.finish();
 	}
 
 	template <typename T>
 	bool Composite::applyDescendantPostorderNostart_(UnaryProcessor<T>& processor)
-		throw(Exception::GeneralException)
 	{
 		Processor::Result result;
 
@@ -1582,7 +1574,6 @@ B		*/
 
 	template <typename T>  
 	bool Composite::applyPostorder(UnaryProcessor<T>& processor)
-		throw(Exception::GeneralException)
 	{ 
 		if (!processor.start() || !applyDescendantPostorderNostart_(processor))
 		{
@@ -1598,14 +1589,12 @@ B		*/
 
 	template <typename T>
 	bool Composite::applyLevel(UnaryProcessor<T>& processor, long level)
-		throw(Exception::GeneralException)
 	{
 		return processor.start() && applyLevelNostart_(processor, level) && processor.finish();
 	}
 
 	template <typename T>
 	bool Composite::applyLevelNostart_(UnaryProcessor<T>& processor, long level)
-		throw(Exception::GeneralException)
 	{
 		if (level == 0)
 		{
@@ -1646,7 +1635,6 @@ B		*/
 
 	template <typename T>
 	bool Composite::applyPreorderNostart_(UnaryProcessor<T>& processor)
-		throw(Exception::GeneralException)
 	{
 		Processor::Result result;
 		bool return_value;
@@ -1674,14 +1662,12 @@ B		*/
 
 	template <typename T>
 	bool Composite::applyDescendant(UnaryProcessor<T>& processor)
-		throw(Exception::GeneralException)
 	{
 		return applyDescendantPreorder(processor);
 	}
 
 	template <typename T>
 	bool Composite::applyPreorder(UnaryProcessor<T>& processor)
-		throw(Exception::GeneralException)
 	{
 		return processor.start() && applyPreorderNostart_(processor) && processor.finish();
 	}
@@ -1689,7 +1675,6 @@ B		*/
 	template <typename T>
 	BALL_INLINE 
 	bool Composite::apply(UnaryProcessor<T>& processor)
-		throw(Exception::GeneralException)
 	{
 		return applyPreorder(processor);
 	}
