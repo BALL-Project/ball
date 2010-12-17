@@ -26,6 +26,7 @@
 #include  <plotter.h>
 #include  <modelItem.h>
 #include <qwt_raster_data.h>
+#include <BALL/QSAR/bayesModel.h>
 
 namespace BALL
 {

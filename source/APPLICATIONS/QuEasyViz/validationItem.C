@@ -35,6 +35,7 @@
 
 #include <BALL/MATHS/LINALG/matrix.h>
 #include <BALL/VIEW/KERNEL/iconLoader.h>
+#include <BALL/QSAR/classificationModel.h>
 
 using namespace BALL::QSAR;
 using namespace BALL::Exception;

@@ -27,6 +27,7 @@
 #include <qwt_plot_zoomer.h>
 
 #include <QColor>
+#include <BALL/QSAR/classificationModel.h>
 
 using namespace BALL::QSAR;
 

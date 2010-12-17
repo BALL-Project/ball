@@ -1104,7 +1104,7 @@ namespace BALL
 					String f1 = (*it)->savedAs().toStdString();
 					if(f1=="")
 					{
-						throw GeneralException(__FILE__,__LINE__, tr("SDF data saving error "), tr("SDF Input must be assigned a file to be saved to!"));
+						throw GeneralException(__FILE__,__LINE__, "SDF data saving error ", "SDF Input must be assigned a file to be saved to!");
 					}
 					String file = directory+f1;
 					if(use_tmp) file = settings.tmp_folder+settings.path_separator+f1;
@@ -1121,7 +1121,7 @@ namespace BALL
 					String f1 = (*it)->savedAs().toStdString();
 					if (f1=="")
 					{
-						throw GeneralException(__FILE__,__LINE__, tr("CSV saving error "), tr("CSV Item must be assigned a file to be saved to!"));
+						throw GeneralException(__FILE__,__LINE__, "CSV saving error ", "CSV Item must be assigned a file to be saved to!");
 					}
 					String file = directory+f1;
 					if (use_tmp) 
@@ -1139,7 +1139,7 @@ namespace BALL
 					String f1 = (*it)->savedAs().toStdString();
 					if (f1=="")
 					{
-						throw GeneralException(__FILE__,__LINE__, tr("Input-partition saving error "), tr("Item must be assigned a file to be saved to!"));
+						throw GeneralException(__FILE__,__LINE__, "Input-partition saving error ", "Item must be assigned a file to be saved to!");
 					}
 					String file = directory+f1;
 					if(use_tmp) file = settings.tmp_folder+settings.path_separator+f1;
@@ -1154,7 +1154,7 @@ namespace BALL
 					String f1 = (*it)->savedAs().toStdString();
 					if(f1=="")
 					{
-						throw GeneralException(__FILE__,__LINE__, tr("Model saving error "), tr("Model must be assigned a file to be saved to!"));
+						throw GeneralException(__FILE__,__LINE__, "Model saving error ", "Model must be assigned a file to be saved to!");
 					}
 					String file = directory+f1;
 					if(use_tmp) file = settings.tmp_folder+settings.path_separator+f1;
@@ -1169,7 +1169,7 @@ namespace BALL
 					String f1 = (*it)->savedAs().toStdString();
 					if(f1=="")
 					{
-						throw GeneralException(__FILE__,__LINE__, tr("Validation saving error "), tr("Validation must be assigned a file to be saved to!"));
+						throw GeneralException(__FILE__,__LINE__, "Validation saving error ", "Validation must be assigned a file to be saved to!");
 					}
 					String file = directory+f1;
 					if(use_tmp) file = settings.tmp_folder+settings.path_separator+f1;
@@ -1184,7 +1184,7 @@ namespace BALL
 					String f1 = (*it)->savedAs().toStdString();
 					if(f1=="")
 					{
-						throw GeneralException(__FILE__,__LINE__, tr("Prediction saving error "), tr("Prediction must be assigned a file to be saved to!"));
+						throw GeneralException(__FILE__,__LINE__, "Prediction saving error ", "Prediction must be assigned a file to be saved to!");
 					}
 					String file = directory+f1;
 					if(use_tmp) file = settings.tmp_folder+settings.path_separator+f1;
@@ -1194,7 +1194,7 @@ namespace BALL
 			}
 			catch(GeneralException e)
 			{	
-				QMessageBox::warning(this, tr("Error"),e.getMessage());
+				QMessageBox::warning(this, "Error",e.getMessage());
 			}
 			
 			if(archive!="")
@@ -1302,7 +1302,7 @@ namespace BALL
 			}
 			catch(GeneralException e)
 			{
-				QMessageBox::warning(this, tr("Error"),e.getMessage());
+				QMessageBox::warning(this, "Error",e.getMessage());
 			}
 		}
 
@@ -1323,7 +1323,7 @@ namespace BALL
 			
 			if (maximum == 0)
 			{
-				QMessageBox::about(this, tr("No pipeline"), tr("There is no pipeline to be excuted yet!"));
+				QMessageBox::about(this,"No pipeline", "There is no pipeline to be excuted yet!");
 				return;
 			}
 
@@ -1356,7 +1356,7 @@ namespace BALL
 			if (!done)
 			{
 				QMessageBox a;
-				a.about(this, tr("Warning:"), tr("Pipeline has not changed,\nso there was nothing to be done!"));
+				a.about(this, "Warning:", "Pipeline has not changed,\nso there was nothing to be done!");
 			}
 			
 			updatePipelineScene();
@@ -1431,11 +1431,11 @@ namespace BALL
 						}
 						if (no_conf_files==0)
 						{
-							throw BALL::Exception::GeneralException(__FILE__,__LINE__,tr("Pipeline-archive reading error"),tr("No conf-file found in archive!"));
+							throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Pipeline-archive reading error","No conf-file found in archive!");
 						}
 						else if (no_conf_files>1)
 						{
-							throw BALL::Exception::GeneralException(__FILE__,__LINE__,tr("Pipeline-archive reading error"),tr("More than one conf-file found in archive!"));
+							throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Pipeline-archive reading error","More than one conf-file found in archive!");
 						}
 					}
 				}	
@@ -1445,7 +1445,7 @@ namespace BALL
 				{
 					string txt =  "config-file '";
 					txt        += configfile+"' can not be found!";
-					throw BALL::Exception::GeneralException(__FILE__,__LINE__,tr("Pipeline reading error") ,txt.c_str());
+					throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Pipeline reading error" ,txt.c_str());
 				}
 			
 				bool input_section=0;
@@ -1790,7 +1790,7 @@ namespace BALL
 			int maximum = sdf_input_pipeline_.size() + csv_input_pipeline_.size() + model_pipeline_.size() + val_pipeline_.size() + prediction_pipeline_.size() + disconnected_items_.size(); //all items - fs-items (model items automatically created by feature selection are not exported)
 			if (maximum == 0)
 			{
-				QMessageBox::about(this,tr("No pipeline"),tr("There is no pipeline yet!"));
+				QMessageBox::about(this,"No pipeline","There is no pipeline yet!");
 				return 1;
 			}
 			return 0;

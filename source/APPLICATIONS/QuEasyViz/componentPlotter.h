@@ -24,6 +24,7 @@
 #include  <plotter.h>
 #include  <modelItem.h>
 #include <QtGui/QComboBox>
+#include <BALL/QSAR/latentVariableModel.h>
 
 
 namespace BALL
