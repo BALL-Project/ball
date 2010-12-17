@@ -92,10 +92,50 @@ namespace BALL
 
 	NucleotideMapping NucleotideMapping::assignFromAlignment(Chain& a, Chain& b, const Alignment& alignment)
 	{
+		//An iterator for the fist chain
+		ResidueIterator at = a.beginResidue();
+
+		//A pair of iterators for the second chain
+		ResidueIterator bt = b.beginResidue();
+		bt.toRBegin();
+		ResidueIterator bREnd = b.beginResidue();
+		bREnd.toREnd();
+
+		if(alignment.first.length() != alignment.second.length())
+		{
+			throw Exception::InvalidArgument(__FILE__, __LINE__, "Strings in the alignment have differing lengths");
+		}
+
 		NucleotideMap a_to_b;
 		NucleotideMap b_to_a;
 
-		throw Exception::NotImplemented(__FILE__, __LINE__);
+		for(size_t i = 0; (i < alignment.first.length()) && (at != a.endResidue()) && (bt != bREnd); ++i)
+		{
+			//This should not happen with a true alignment, but better to be safe...
+			if(alignment.first[i] == '-' && alignment.second[i] == '-')
+			{
+				continue;
+			}
+
+			//If the first residue is a gap, advance the iterator of the second chain
+			if(alignment.first[i] == '-')
+			{
+				--bt;
+				continue;
+			}
+
+			//If the second residue is a gap, advance the iterator of the first chain
+			if(alignment.second[i] == '-')
+			{
+				++at;
+				continue;
+			}
+
+			a_to_b.insert(NucleotideMap::value_type(&*at, &*bt));
+			b_to_a.insert(NucleotideMap::value_type(&*bt, &*at));
+
+			++at; --bt;
+		}
 
 		return NucleotideMapping(a, b, a_to_b, b_to_a);
 	}

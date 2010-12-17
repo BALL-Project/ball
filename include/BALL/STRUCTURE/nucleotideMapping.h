@@ -49,8 +49,15 @@ namespace BALL
 			static NucleotideMapping assignFromDistances(Chain& a, Chain& b);
 
 			/**
-			 * Construct a NucleotideMapping given a sequence alignment of the strands.
-			 *
+			 * Construct a NucleotideMapping given a sequence alignment of the strands. Note that residue names
+			 * are not actually checked, but rather any pair of characters different from '-' are considered
+			 * as an instruction to align the next bases. E.g: for the sequences ATGC and TCCG this would be a valid input:
+			 * <p>
+			 * *-***
+			 * **-**
+			 * </p>
+			 * Also the alignment does not need to cover the full length of the sequences. The assignment process simply
+			 * stops when the end of the alignment is reached.
 			 * @param a The first nucleic acid, it is assumed that it is available in 5' -> 3' order.
 			 * @param b The second nucleic acid, it is assumed that it is available in 5' -> 3' order.
 			 * @param alignment A pair of strings defining the mapping between the two strands.
