@@ -89,7 +89,10 @@ namespace BALL
 			BUTTON_PRESS_EVENT,
 
 			/// Event for button press events of custom input devices
-			BUTTON_RELEASE_EVENT
+			BUTTON_RELEASE_EVENT,
+
+			/// Event for passing BALL Messages accross threads
+			NOTIFICATION_EVENT
 		};
 
 		//@}

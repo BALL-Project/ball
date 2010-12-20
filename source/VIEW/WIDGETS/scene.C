@@ -43,6 +43,7 @@
 #include <BALL/VIEW/INPUT/transformationEvent6D.h>
 #include <BALL/VIEW/INPUT/headTrackingEvent.h>
 #include <BALL/VIEW/INPUT/motionTrackingEvent.h>
+#include <BALL/VIEW/INPUT/notificationEvent.h>
 #include <BALL/VIEW/INPUT/buttonEvent.h>
 
 #include <BALL/SYSTEM/timer.h>
@@ -1643,6 +1644,9 @@ namespace BALL
 					break;
 				case BUTTON_PRESS_EVENT:
 					buttonPressEvent(static_cast<ButtonEvent*>(evt));
+					break;
+				case NOTIFICATION_EVENT:
+					notify_(static_cast<NotificationEvent*>(evt)->getMessage());
 					break;
 				default:
 					break;
