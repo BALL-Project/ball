@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bitVector.C,v 1.34 2002/12/23 08:16:56 oliver Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 #include <BALL/MATHS/common.h>
@@ -51,7 +50,6 @@ namespace BALL
 	}
 
 	BitVector::BitVector(Size size)
-		throw(Exception::OutOfMemory)
 		:	size_(size)
 	{				
 		bitset_.resize(BALL_BLOCK_SIZE(size));
@@ -62,14 +60,12 @@ namespace BALL
 	}
 
 	BitVector::BitVector(const BitVector& bit_vector)
-		throw(Exception::OutOfMemory)
 		:	size_(bit_vector.size_),
 			bitset_(bit_vector.bitset_)
 	{
 	}
 
 	BitVector::BitVector(const char* bit_string)
-		throw(Exception::OutOfMemory)
 		: size_(0),
 			bitset_()
 	{
@@ -81,14 +77,12 @@ namespace BALL
 	}
 
 	void BitVector::set(const BitVector& bit_vector)
-  	throw(Exception::OutOfMemory)
 	{
 		bitset_= bit_vector.bitset_;
 		size_	= bit_vector.size_;
 	}
 
 	void BitVector::validateRange_(Index& first, Index& last) const
-	 throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
 		// indices may be given as negative arguments: start from the end
 		// -1 therefore means the last bit.
@@ -132,7 +126,6 @@ namespace BALL
 	}
 
 	void BitVector::validateIndex_(Index& index)
-	 throw(Exception::IndexUnderflow, Exception::OutOfMemory)
 	{
 		// indices may be given as negative arguments: start from the end
 		// -1 therefore means the last bit.
@@ -155,7 +148,6 @@ namespace BALL
 	}
 
 	void BitVector::validateIndex_(Index& index) const
-	 throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
 		// indices may be given as negative arguments: start from the end
 		// -1 therefore means the last bit.
@@ -178,7 +170,6 @@ namespace BALL
 	}
 
 	BitVector BitVector::operator () (Index first, Index last) const
-	 throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
 		validateRange_(first, last);
 
@@ -196,7 +187,6 @@ namespace BALL
 	}
 
 	BALL::Size BitVector::countValue(bool value) const
-
 	{
 		Size count = 0;
 
@@ -212,7 +202,6 @@ namespace BALL
 	}
 
 	void BitVector::set(const char* bit_string)
-	 throw(Exception::OutOfMemory)
 	{
 		if (bit_string == 0)
 		{
@@ -238,7 +227,6 @@ namespace BALL
 	}
 
 	void BitVector::fill(bool bit, Index first, Index last)
-	 throw(Exception::IndexUnderflow, Exception::OutOfMemory)
 	{
 		if (size_ == 0)
 		{
@@ -252,7 +240,6 @@ namespace BALL
 	}
 
 	void BitVector::toggle(Index first, Index last)
-	 throw(Exception::IndexUnderflow, Exception::OutOfMemory)
 	{
 		validateRange_(first, last);
 		for (Index i = first; i <= last; i++)
@@ -381,7 +368,6 @@ namespace BALL
 	}
 
 	void BitVector::bitwiseXor(const BitVector& bit_vector)
-		throw (Exception::OutOfMemory) // in setSize below
 	{
 		// adjust the bitvector size to that of the longest vector!
 		if (size_ < bit_vector.size_)
@@ -396,7 +382,6 @@ namespace BALL
 	}
 
 	void BitVector::bitwiseOr(const BitVector& bit_vector)
-		throw (Exception::OutOfMemory) // in setSize below
 	{
 		// adjust the bitvector size to that of the longest vector!
 		if (size_ < bit_vector.size_)
@@ -411,7 +396,6 @@ namespace BALL
 	}
 
 	void BitVector::bitwiseAnd(const BitVector& bit_vector)
-		throw (Exception::OutOfMemory) // in setSize below
 	{
 		for (Position i = 0; i < bitset_.size(); i++)
 		{
@@ -439,7 +423,6 @@ namespace BALL
 	}
 
 	bool BitVector::isAnyBit(bool bit, Index first, Index last) const
-		throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
 		validateRange_(first, last);
 
@@ -456,7 +439,6 @@ namespace BALL
 	}
 
 	bool BitVector::isEveryBit(bool bit, Index first, Index last) const
-	 throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
 		validateRange_(first, last);
 
@@ -473,7 +455,6 @@ namespace BALL
 	}
 
 	std::istream& operator >> (std::istream& s, BitVector& bit_vector)
-		throw(Exception::OutOfMemory)
 	{
 		bit_vector.read(s);
 		return s;
@@ -486,7 +467,6 @@ namespace BALL
 	}
 
 	void BitVector::read(std::istream& s)
-		throw(Exception::OutOfMemory)
 	{
 		Size size = 0;
 		s >> size;
@@ -519,7 +499,6 @@ namespace BALL
 	}
 
 	bool BitVector::read(PersistenceManager& pm)
-	  throw(Exception::OutOfMemory)
 	{
 		Size size = 0;
 		
@@ -552,7 +531,6 @@ namespace BALL
 	}
 
 	Index BitVector::block_(Index index)
-		throw(Exception::IndexUnderflow, Exception::OutOfMemory)
 	{
 		if (index < 0)
 		{
@@ -580,7 +558,6 @@ namespace BALL
 	}
 
 	Index BitVector::block_(Index index) const
-		throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
 		if (index < 0)
 		{
@@ -601,7 +578,6 @@ namespace BALL
 	}
 
 	void BitVector::setSize(Size size, bool keep) 
-		throw(Exception::OutOfMemory)
 	{
 		// calculate new block size
 		Size block_size = BALL_BLOCK_SIZE(size);
