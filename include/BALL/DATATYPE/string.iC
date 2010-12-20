@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.iC,v 1.44 2003/08/26 08:04:12 oliver Exp $
-//
 
 BALL_INLINE 
 String::String()
@@ -66,7 +64,6 @@ String::String(const string& s)
 
 BALL_INLINE 
 String::String(const String& s, Index from, Size len)
-	throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 	: string("")
 {
 	s.validateRange_(from, len);
@@ -82,42 +79,36 @@ void String::set(std::stringstream& s)
 #else
 void String::set(std::strstream& s)
 #endif
-	
 {
 	s >> (*this);
 }
 
 BALL_INLINE 
 void String::set(char c, Size len)
-	
 {
 	assign(len, c);
 }
 
 BALL_INLINE 
 void String::set(unsigned char c)
-	
 {
 	assign(1, (char)c);
 }
 
 BALL_INLINE 
 bool String::operator == (const char* char_ptr) const
-	throw(Exception::NullPointer)
 {
   return (compare(char_ptr) == 0);
 }
 
 BALL_INLINE 
 bool String::operator != (const char* char_ptr) const
-	throw(Exception::NullPointer)
 {
   return (compare(char_ptr) != 0);
 }
 
 BALL_INLINE 
 bool Substring::operator == (const String& s) const
-	throw(Substring::UnboundSubstring)
 {
 	if (bound_ == 0)
 	{
@@ -129,7 +120,6 @@ bool Substring::operator == (const String& s) const
 
 BALL_INLINE 
 bool Substring::operator != (const String& s) const
-	throw(Substring::UnboundSubstring)
 {
   if (bound_ == 0)
   {
@@ -141,7 +131,6 @@ bool Substring::operator != (const String& s) const
 
 BALL_INLINE
 Size Substring::size() const
-	
 {
 	if (bound_ == 0)
 	{
@@ -153,7 +142,6 @@ Size Substring::size() const
 
 BALL_INLINE 
 Substring::operator String() const
-	throw(Substring::UnboundSubstring)
 {
 	if (bound_ == 0)
 	{
@@ -165,7 +153,6 @@ Substring::operator String() const
 
 BALL_INLINE 
 void Substring::unbind()
-	
 {
   bound_ = 0;
   from_ = to_ = (Index)String::EndPos;
@@ -173,7 +160,6 @@ void Substring::unbind()
 
 BALL_INLINE 
 void Substring::destroy()
-	
 {
 	if (bound_ != 0)
 	{
@@ -185,14 +171,12 @@ void Substring::destroy()
 
 BALL_INLINE 
 void Substring::clear()
-	
 {
 	destroy();
 }
 
 BALL_INLINE 
 String Substring::toString() const
-	throw(Substring::UnboundSubstring)
 {
 	if (bound_ == 0)
 	{
@@ -204,7 +188,6 @@ String Substring::toString() const
 
 BALL_INLINE 
 Substring& Substring::bind(const String& s, Index from, Size len)
-	throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 {
 	s.validateRange_(from, len);
 
@@ -217,7 +200,6 @@ Substring& Substring::bind(const String& s, Index from, Size len)
 
 BALL_INLINE 
 void Substring::set(const String& s)
-	throw(Substring::UnboundSubstring)
 {
 	if (bound_ == 0)
 	{
@@ -229,7 +211,6 @@ void Substring::set(const String& s)
 
 BALL_INLINE 
 void Substring::set(const Substring& s)
-	throw(Substring::UnboundSubstring)
 {
 	if (bound_ == 0 || s.bound_ == 0)
 	{
@@ -241,7 +222,6 @@ void Substring::set(const Substring& s)
 
 BALL_INLINE 
 const Substring& Substring::operator = (const String& s)
-	throw(Substring::UnboundSubstring)
 {
   set(s);
   return *this;
@@ -249,7 +229,6 @@ const Substring& Substring::operator = (const String& s)
 
 BALL_INLINE 
 const Substring& Substring::operator = (const Substring& s)
-	throw(Substring::UnboundSubstring)
 {
   set(s);
   return *this;
@@ -257,7 +236,6 @@ const Substring& Substring::operator = (const Substring& s)
 
 BALL_INLINE 
 const Substring& Substring::operator = (const char* char_ptr)
-	throw(Substring::UnboundSubstring, Exception::NullPointer)
 {
   set(char_ptr);
   return *this;
@@ -265,21 +243,18 @@ const Substring& Substring::operator = (const char* char_ptr)
 
 BALL_INLINE 
 String* Substring::getBoundString()
-	
 {
   return bound_;
 }
 
 BALL_INLINE 
 const String* Substring::getBoundString() const
-	
 {
   return bound_;
 }
 
 BALL_INLINE 
 char* Substring::c_str()
-	throw(Substring::UnboundSubstring)
 {
   if (bound_ == 0)
   {
@@ -291,7 +266,6 @@ char* Substring::c_str()
 
 BALL_INLINE 
 const char* Substring::c_str() const
-	throw(Substring::UnboundSubstring)
 {
   if (bound_ == 0)
   {
@@ -303,7 +277,6 @@ const char* Substring::c_str() const
 
 BALL_INLINE 
 Index Substring::getFirstIndex() const
-	throw(Substring::UnboundSubstring)
 {
   if (bound_ == 0)
   {
@@ -315,7 +288,6 @@ Index Substring::getFirstIndex() const
 
 BALL_INLINE 
 Index Substring::getLastIndex() const
-	throw(Substring::UnboundSubstring)
 {
   if (bound_ == 0)
   {
@@ -327,7 +299,6 @@ Index Substring::getLastIndex() const
 
 BALL_INLINE 
 char& Substring::operator [] (Index index)
-	throw(Substring::UnboundSubstring, Exception::IndexUnderflow, Exception::IndexOverflow)
 {
   if (bound_ == 0)
   {
@@ -342,7 +313,6 @@ char& Substring::operator [] (Index index)
 
 BALL_INLINE 
 char Substring::operator [] (Index index) const
-	throw(Substring::UnboundSubstring, Exception::IndexUnderflow, Exception::IndexOverflow)
 {
   if (bound_ == 0)
   {
@@ -357,21 +327,18 @@ char Substring::operator [] (Index index) const
 
 BALL_INLINE 
 bool Substring::isBound() const
-	
 {
   return (bound_ != 0);
 }
 
 BALL_INLINE 
 bool Substring::isEmpty() const
-	
 {
   return (bound_ == 0);
 }
 
 BALL_INLINE 
 int String::compare(char c, Index from) const
-	throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 {
 	validateIndex_(from);
 	return (c_str()[from] - c);
@@ -380,7 +347,6 @@ int String::compare(char c, Index from) const
 
 BALL_INLINE 
 bool Substring::operator == (char c) const
-	throw(Substring::UnboundSubstring)
 {
   if (bound_ == 0)
   {
@@ -391,7 +357,6 @@ bool Substring::operator == (char c) const
 
 BALL_INLINE 
 bool Substring::operator != (char c) const
-	throw(Substring::UnboundSubstring)
 {
   if (bound_ == 0)
   {
@@ -403,14 +368,12 @@ bool Substring::operator != (char c) const
 
 BALL_INLINE 
 bool Substring::isValid() const
-	
 {
   return (bound_ != 0 && from_ >= 0 && from_ <= to_ && to_ < (Index)bound_->size()) ;
 }
 
 BALL_INLINE 
 Substring& Substring::toLower()
-	throw(Substring::UnboundSubstring)
 {
   if (bound_ == 0)
   {
@@ -422,7 +385,6 @@ Substring& Substring::toLower()
 
 BALL_INLINE 
 Substring& Substring::toUpper()
-	throw(Substring::UnboundSubstring)
 {
   if (bound_ == 0)
   {
@@ -434,7 +396,6 @@ Substring& Substring::toUpper()
 
 BALL_INLINE 
 const String& String::operator = (const String& s)
-	
 {
   set(s);
   return *this;
@@ -442,7 +403,6 @@ const String& String::operator = (const String& s)
 
 BALL_INLINE 
 const String& String::operator = (const char* char_ptr)
-	throw(Exception::NullPointer)
 {
   set(char_ptr, 0);
   return *this;
@@ -455,7 +415,6 @@ const String& String::operator = (std::stringstream& s)
 #else
 const String& String::operator = (std::strstream& s)
 #endif
-	
 {
   set(s);
   return *this;
@@ -484,40 +443,34 @@ BALL_STRING_DEFINE_ASSIGNMENT_METHOD(LongSize)
 #endif
 BALL_STRING_DEFINE_ASSIGNMENT_METHOD(float)
 BALL_STRING_DEFINE_ASSIGNMENT_METHOD(double)
-
 #undef BALL_STRING_DEFINE_ASSIGNMENT_METHOD
 
 BALL_INLINE 
 void String::setCompareMode(CompareMode mode)
-	
 {
   compare_mode_ = mode;
 }
 
 BALL_INLINE 
 String::CompareMode String::getCompareMode()
-	
 {
   return compare_mode_;
 }
 
 BALL_INLINE 
 char String::toChar() const
-	
 {
   return *c_str();
 }
 
 BALL_INLINE 
 unsigned char String::toUnsignedChar() const
-	
 {
   return (unsigned char)*c_str();
 }
 
 BALL_INLINE 
 Substring String::getSubstring(Index from, Size len) const
-	throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 {
 	validateRange_(from, len);
   return Substring(*this, from, len);
@@ -525,21 +478,18 @@ Substring String::getSubstring(Index from, Size len) const
 
 BALL_INLINE 
 Substring String::operator () (Index from, Size len) const
-	throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 {
   return getSubstring(from, len);
 }
 
 BALL_INLINE 
 String& String::trim(const char* trimmed)
-	
 {
   return trimRight(trimmed).trimLeft(trimmed);
 }
 
 BALL_INLINE 
 String String::trim(const char* trimmed) const
-	
 {
 	String tmp(*this);
 	tmp.trimRight(trimmed);
@@ -549,7 +499,6 @@ String String::trim(const char* trimmed) const
 
 BALL_INLINE 
 String& String::truncate(Size max_size)
-	
 {
   if (max_size < (Size) size())
 	{
@@ -561,7 +510,6 @@ String& String::truncate(Size max_size)
 
 BALL_INLINE 
 Substring String::left(Size len) const
-	
 {
 	if (len > (Size)size())
 	{
@@ -573,7 +521,6 @@ Substring String::left(Size len) const
 
 BALL_INLINE 
 Substring String::instr(const String& patterns, Index from) const
-	
 {
   string::size_type found = find(patterns, from); 
 
@@ -710,21 +657,18 @@ void String::destroy()
 
 BALL_INLINE 
 void String::clear()
-	
 {
   assign("");
 }
 
 BALL_INLINE 
 bool String::has(char c) const
-	
 {
   return ((c != (char)0) && (find(c, 0) != string::npos));
 }
 
 BALL_INLINE 
 bool String::hasSubstring(const String& s, Index from) const
-	
 {
 	if (s.size() == 0)
 	{
@@ -736,28 +680,24 @@ bool String::hasSubstring(const String& s, Index from) const
 
 BALL_INLINE 
 bool String::isEmpty() const
-	
 {
   return (size() == 0);
 }
 
 BALL_INLINE 
 bool String::isAlpha(char c)
-	
 {
 	return ((c != 0) && ((char*)strchr(CHARACTER_CLASS__ASCII_ALPHA, c) != 0));
 }
 
 BALL_INLINE 
 bool String::isAlnum(char c)
-	
 {
 	return ((c != 0) && ((char*)strchr(CHARACTER_CLASS__ASCII_ALPHANUMERIC, c) != 0));
 }
 
 BALL_INLINE 
 bool String::isDigit(char c)
-	
 {
   return ((c != 0) && ((char*)strchr(CHARACTER_CLASS__ASCII_NUMERIC, c) != 0));
 }
@@ -775,140 +715,120 @@ bool String::isFloat() const
 
 BALL_INLINE 
 bool String::isSpace(char c)
-	
 {
   return (c == ' ');
 }
 
 BALL_INLINE 
 bool String::isWhitespace(char c)
-	
 {
   return ((c != 0) && ((char*)strchr(CHARACTER_CLASS__WHITESPACE, c) != 0));
 }
 
 BALL_INLINE 
 bool String::operator != (const String& s) const
-	
 {
   return (compare(s) != 0);
 }
 
 BALL_INLINE 
 bool String::operator < (const String& s) const
-	
 {
   return (compare(s) < 0);
 }
 
 BALL_INLINE 
 bool String::operator <= (const String& s) const
-	
 {
   return (compare(s) <= 0);
 }
 
 BALL_INLINE 
 bool String::operator >= (const String& s) const
-	
 {
   return (compare(s) >= 0);
 }
 
 BALL_INLINE 
 bool String::operator > (const String& s) const
-	
 {
   return (compare(s) > 0);
 }
 
 BALL_INLINE
 bool String::operator == (const String& string) const
-	
 {
 	return (compare(string.c_str()) == 0);
 }
 
 BALL_INLINE 
 bool String::operator < (const char* char_ptr) const
-	throw(Exception::NullPointer)
 {
   return (compare(char_ptr) < 0);
 }
 
 BALL_INLINE
 bool String::operator <= (const char* char_ptr) const
-	throw(Exception::NullPointer)
 {
   return (compare(char_ptr) <= 0);
 }
 
 BALL_INLINE 
 bool String::operator >= (const char* char_ptr) const
-	throw(Exception::NullPointer)
 {
   return (compare(char_ptr) >= 0);
 }
 
 BALL_INLINE 
 bool String::operator > (const char* char_ptr) const
-	throw(Exception::NullPointer)
 {
   return (compare(char_ptr) > 0);
 }
 
 BALL_INLINE 
 bool String::operator == (char c) const
-	
 {
   return (compare(c) == 0);
 }
 
 BALL_INLINE 
 bool String::operator != (char c) const
-	
 {
   return (compare(c) != 0);
 }
 
 BALL_INLINE 
 bool String::operator < (char c) const
-	
 {
   return (compare(c) < 0);
 }
 
 BALL_INLINE 
 bool String::operator <= (char c) const
-	
 {
   return (compare(c) <= 0);
 }
 
 BALL_INLINE 
 bool String::operator >= (char c) const
-	
 {
   return (compare(c) >= 0);
 }
 
 BALL_INLINE 
 bool String::operator > (char c) const
-	
 {
   return (compare(c) > 0);
 }
 
 BALL_INLINE 
 bool String::isValid() const
-	
 {
   return (c_str() != 0 && size() <= capacity()); 
 }
 
 BALL_INLINE 
 std::istream& String::getline(std::istream& s,  char delimiter)
-	
 {
 	static vector<char> line_buffer(8192);
   s.getline(&(line_buffer[0]), 8191, delimiter);
@@ -919,105 +839,90 @@ std::istream& String::getline(std::istream& s,  char delimiter)
 
 BALL_INLINE 
 bool operator != (const String& s, const Substring& substring)
-	throw(Substring::UnboundSubstring)
 {
 	return (substring != s);
 }
 
 BALL_INLINE 
 bool operator == (const String& s, const Substring& substring)
-	throw(Substring::UnboundSubstring)
 {
 	return (substring == s);
 }
 
 BALL_INLINE 
 void String::swap(String& s)
-	
 {
 	string::swap(s);
 }
 
 BALL_INLINE 
 bool operator == (const char* char_ptr, const String &s)
-	throw(Exception::NullPointer)
 {
 	return (s.compare(char_ptr) == 0);
 }
 
 BALL_INLINE 
 bool operator != (const char* char_ptr, const String &s)
-	throw(Exception::NullPointer)
 {
 	return (s.compare(char_ptr) != 0);
 }
 
 BALL_INLINE 
 bool operator < (const char* char_ptr, const String& s)
-	throw(Exception::NullPointer)
 {
 	return (s.compare(char_ptr) > 0);
 }
 
 BALL_INLINE 
 bool operator <= (const char* char_ptr, const String &s)
-	throw(Exception::NullPointer)
 {
 	return (s.compare(char_ptr) >= 0);
 }
 
 BALL_INLINE 
 bool operator >= (const char* char_ptr, const String& s)
-	throw(Exception::NullPointer)
 {
 	return (s.compare(char_ptr) <= 0);
 }
 
 BALL_INLINE 
 bool operator > (const char* char_ptr, const String& s)
-	throw(Exception::NullPointer)
 {
 	return (s.compare(char_ptr) < 0);
 }
 
 BALL_INLINE 
 bool operator == (char c, const String& s)
-	
 {
 	return (s.compare(c) == 0);
 }
 
 BALL_INLINE 
 bool operator != (char c, const String &s)
-	
 {
 	return (s.compare(c) != 0);
 }
 
 BALL_INLINE 
 bool operator < (char c, const String& s)
-	
 {
 	return (s.compare(c) > 0);
 }
 
 BALL_INLINE 
 bool operator <= (char c, const String &s)
-	
 {
 	return (s.compare(c) >= 0);
 }
 
 BALL_INLINE 
 bool operator >= (char c, const String &s)
-	
 {
 	return (s.compare(c) <= 0);
 }
 
 BALL_INLINE 
 bool operator > (char c, const String &s)
-	
 {
 	return (s.compare(c) < 0);
 }
