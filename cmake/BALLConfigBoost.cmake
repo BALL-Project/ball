@@ -23,7 +23,12 @@ ELSE()
 	ENDFOREACH()
 	
 	## For asio, we have some more work to do...
-	IF (Boost_ASIO_FOUND)
+	MESSAGE(STATUS ${Boost_INCLUDE_DIRS})
+	FIND_PATH(BOOST_ASIO_DIR 
+		NAMES "boost/asio.hpp"
+		PATHS ${Boost_INCLUDE_DIRS})
+
+	IF (BOOST_ASIO_DIR)
 		SET(BALL_HAS_BOOST_ASIO TRUE)
 		SET(BALL_HAS_ASIO TRUE)
 		SET(BALL_ASIO_NAMESPACE "boost::asio")
