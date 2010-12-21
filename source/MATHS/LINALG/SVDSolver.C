@@ -201,8 +201,8 @@ namespace BALL
 					&(workspace_dummy), &worksize, &(integer_workspace[0]), &info);
 
 		// if _this_ does not work we should better not try anything at all
-		if (info)
-			return false;
+		//if (info)
+		//	return false;
 
 		// try to allocate the memory
 		double *workspace = (double*) malloc((int)workspace_dummy*sizeof(double));
@@ -249,8 +249,8 @@ namespace BALL
 			free(workspace);
 
 		// TODO: better error handling
-		if (info)
-			return false;
+		//if (info)
+		//	return false;
 
 		// done.
 		return true;

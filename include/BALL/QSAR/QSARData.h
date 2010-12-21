@@ -84,10 +84,10 @@ namespace BALL
 				/** @name Predicates */
 				
 				/** tells whether the features have been centered */
-				bool isDataCentered();
+				bool isDataCentered() const;
 				
 				/** tells whether the response variables have been centered */
-				bool isResponseCentered();
+				bool isResponseCentered() const;
 					
 				/** @name Accessors
 				 */
@@ -154,7 +154,7 @@ namespace BALL
 				vector<QSARData*> partitionInputData(int p);
 				
 				/** saves the current QSARData object to a text file */
-				void saveToFile(string filename);
+				void saveToFile(string filename) const;
 				
 				/** reconstructs a QSARData object from a text file */
 				void readFromFile(string filename);
@@ -162,6 +162,12 @@ namespace BALL
 				/** generates a training and an external validation set from the current QSARData object 
 				@param fraction the fraction of this current coumpounds that should be used as external validation set (by random drawing) */
 				vector<QSARData*> generateExternalSet(double fraction) const;
+
+				/** Split this data set into a training set and a test set.
+				In contrast to generateExternalSet(), compounds for the test set are *not* randomly selected. Instead, this data set is first sorted according to response values (in order to ensure equal response value ranges) and then split regularly into training and test set.
+				@param no_test_splits the total number of splits you want to create by successive calls of this function
+				@param current_test_split_id the split to be produced, with 0<=current_test_split_id<no_test_splits */
+				vector<QSARData*> evenSplit(int no_test_splits, int current_test_split_id, int response_id=0) const;
 				
 				/** returns a pointer to a new vector containing the UNcentered descriptor values for the s'th substance of the current data set */
 				vector<double>* getSubstance(int s) const;
@@ -192,7 +198,8 @@ namespace BALL
 				@param descriptor_ID the ID of the descriptor for which similar features should be searched
 				@param similarity the desired minimal correlation 
 				@param similar_descriptor_IDs list to which the IDs of the found descriptors will be saved as pairs of descriptor ID and descriptor name */
-				void getSimilarDescriptors(int descriptor_ID, double correlation, std::list<std::pair<uint,String> >& similar_descriptor_IDs);
+
+				void getSimilarDescriptors(int descriptor_ID, double correlation, std::list<std::pair<uint,String> >& similar_descriptor_IDs) const;
 				//@}
 				
 				
@@ -222,7 +229,7 @@ namespace BALL
 				void insertSubstance(const QSARData* source, int s, bool backtransformation=0);
 				
 				/** prints a vector-based matrix to a file */
-				void printMatrix(VMatrix& mat, std::ostream& out);
+				void printMatrix(const VMatrix& mat, std::ostream& out) const;
 				//@}
 				
 				/** @name Attributes
@@ -232,7 +239,7 @@ namespace BALL
 				VMatrix descriptor_matrix_;
 				
 				/** matrix containing the experimentally determined results (active/non-active) for each substance. Different activities are saved column-wise. */
-				VMatrix Y_;	
+				VMatrix Y_;
 				
 				/** 2xm dimensional matrix (m=no of descriptors) containing mean and stddev of each transformed descriptor */
 				VMatrix descriptor_transformations_;

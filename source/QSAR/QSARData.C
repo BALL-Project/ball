@@ -44,13 +44,13 @@ namespace BALL
 			
 		}
 
-		bool QSARData::isDataCentered()
+		bool QSARData::isDataCentered() const
 		{
 			if(descriptor_transformations_.size()>0) return 1;
 			return 0;
 		}
 
-		bool QSARData::isResponseCentered()
+		bool QSARData::isResponseCentered() const
 		{
 			if(y_transformations_.size()>0) return 1;
 			return 0;
@@ -1106,6 +1106,63 @@ namespace BALL
 			return v;	
 		}
 
+		vector<QSARData*> QSARData::evenSplit(int no_test_splits, int current_test_split_id, int response_id) const
+		{
+			if(current_test_split_id<0 || current_test_split_id>=no_test_splits)
+			{
+				throw BALL::Exception::GeneralException(__FILE__,__LINE__,"QSARData::evenSplit() error", "Make sure that 0<=current_test_split_id<no_test_splits !");
+			}
+
+			vector<QSARData*> v(2);
+			v[0] = new QSARData;  // training set
+			v[1] = new QSARData;  // external validation set
+
+			v[0]->descriptor_transformations_.clear();
+			v[0]->y_transformations_.clear();
+			v[0]->column_names_ = column_names_;
+			v[0]->descriptor_matrix_.resize(descriptor_matrix_.size());
+			v[0]->Y_.resize(Y_.size());
+			v[0]->class_names_ = class_names_;
+			v[1]->descriptor_transformations_.clear();
+			v[1]->y_transformations_.clear();
+			v[1]->column_names_ = column_names_;
+			v[1]->descriptor_matrix_.resize(descriptor_matrix_.size());
+			v[1]->Y_.resize(Y_.size());
+			v[1]->class_names_ = class_names_;
+
+			std::multiset<unsigned int> val;
+			//unsigned int no_val = static_cast<unsigned int>(descriptor_matrix_[0].size()*fraction);
+
+			/// Sort reponse values
+			multimap<double,Size> response_map;
+			for(Size i=0; i<Y_[0].size(); i++)
+			{
+				response_map.insert(make_pair(Y_[response_id][i],i));
+			}
+
+			/// Create the test partition
+			Size i=0;
+			for(multimap<double,Size>::iterator it=response_map.begin(); it!=response_map.end(); it++, i++)
+			{
+				if(i%no_test_splits==current_test_split_id)
+				{
+					v[1]->insertSubstance(this,it->second,1); // features are backtransformated to original space
+					val.insert(it->second);
+				}
+			}
+
+			/// All compounds not drawn before make up the training partition
+			for(unsigned int i=0;i<descriptor_matrix_[0].size();i++)
+			{
+				if(val.find(i)==val.end())
+				{
+					v[0]->insertSubstance(this,i,1);  // features are backtransformated to original space
+				}
+			}
+
+			return v;
+		}
+
 
 		vector<QSARData*> QSARData::generateExternalSet(double fraction) const
 		{
@@ -1203,7 +1260,7 @@ namespace BALL
 		}
 
 
-		void QSARData::printMatrix(VMatrix& mat, ostream& out)
+		void QSARData::printMatrix(const VMatrix& mat, std::ostream& out) const
 		{
 			if(mat.size()==0)
 			{
@@ -1216,14 +1273,14 @@ namespace BALL
 				{
 					out << mat[j][i] <<"\t";
 				}
-				out<<endl;
+				out<<std::endl;
 			}
-			out<<endl;
+			out<<std::endl;
 		}
 
-		void QSARData::saveToFile(string filename)
+		void QSARData::saveToFile(string filename) const
 		{
-			ofstream out(filename.c_str());
+			std::ofstream out(filename.c_str());
 			
 			bool center_data = 0;
 			bool center_y = 0;
@@ -1259,7 +1316,7 @@ namespace BALL
 			if(translated_class_labels) 
 			{
 				vector<String> ordered_names(class_names_.size(),"");
-				for(map<String,int>::iterator it=class_names_.begin();it!=class_names_.end();it++)
+				for(map<String,int>::const_iterator it=class_names_.begin();it!=class_names_.end();it++)
 				{
 					ordered_names[it->second]=it->first;
 				}
@@ -1568,7 +1625,7 @@ namespace BALL
 		}
 
 
-		void QSARData::getSimilarDescriptors(int descriptor_ID, double correlation, list<pair<uint,String> >& similar_descriptor_IDs)
+		void QSARData::getSimilarDescriptors(int descriptor_ID, double correlation, list<pair<uint,String> >& similar_descriptor_IDs) const
 		{
 			if(descriptor_ID<0 || descriptor_ID>=(int)descriptor_matrix_.size())
 			{
