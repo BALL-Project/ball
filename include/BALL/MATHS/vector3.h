@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector3.h,v 1.77 2006/01/09 20:14:59 oliver Exp $
-//
 
 #ifndef BALL_MATHS_VECTOR3_H
 #define BALL_MATHS_VECTOR3_H
@@ -89,8 +87,7 @@ namespace BALL
 				@param ptr the array to construct from
 				@exception NullPointer if <tt>ptr == 0</tt>
 		*/
-		explicit TVector3(const T* ptr)
-			throw(Exception::NullPointer);
+		explicit TVector3(const T* ptr);
 
 		/**	Scalar constructor.
 				Create a new vector with all components set
@@ -153,8 +150,7 @@ namespace BALL
 				@param ptr an array
 				@exception Nullpointer if <tt>ptr == 0</tt>
 		*/
-		void set(const T* ptr)
-			throw(Exception::NullPointer);
+		void set(const T* ptr);
 
 		/**	Assign from a scalar.
 				Assign <tt>value</tt> to the three vector components.
@@ -205,8 +201,7 @@ namespace BALL
 				@param	ptr the array
 				@exception	NullPointer if <tt>ptr == 0</tt>
 		*/
-		TVector3& operator = (const T* ptr)
-			throw(Exception::NullPointer);
+		TVector3& operator = (const T* ptr);
 
 		/**	Assign to an array.
 				Sets the first three array elements pointed to by <tt>ptr</tt> 
@@ -214,8 +209,7 @@ namespace BALL
 				@param ptr the array
 				@exception	NullPointer if <tt>ptr == 0</tt>
 		*/
-		void get(T* ptr) const
-			throw(Exception::NullPointer);
+		void get(T* ptr) const;
 
 		/**	Assign to three variables of type <tt>T</tt>.
 				@param	x the x component
@@ -264,8 +258,7 @@ namespace BALL
 				@return T, a reference to the normalized vector
 				@exception DivisionByZero if the length of the vector is 0
 		*/
-		TVector3& normalize()
-			throw(Exception::DivisionByZero);
+		TVector3& normalize();
 
 		/**	Negate the vector.
 				Negate the three components of the vector
@@ -285,14 +278,12 @@ namespace BALL
 		/**	Mutable array-like access to the components.
 				@exception Exception::IndexOverflow if <tt>index > 2</tt>
 		*/
-		T& operator [] (Position position)
-			throw(Exception::IndexOverflow);
+		T& operator [] (Position position);
 
 		/**	Constant array-like access to the components.
 				@exception Exception::IndexOverflow if <tt>index > 2</tt>
 		*/
-		const T& operator [] (Position position) const
-			throw(Exception::IndexOverflow);
+		const T& operator [] (Position position) const;
 		//@}
 		
 		/**	@name	Arithmetic operators
@@ -348,16 +339,14 @@ namespace BALL
 				@return TVector3& 
 				@exception Exception::DivisionByZero if <tt>lambda == (T)0</tt>
 		*/
-		TVector3 operator / (const T& lambda) const
-			throw(Exception::DivisionByZero);
+		TVector3 operator / (const T& lambda) const;
 
 		/**	Divide a vector by a scalar.
 				@param lambda the scalar value to divide by
 				@return TVector3&, {\em *this}
 				@exception Exception::DivisionByZero if <tt>lambda == (T)0</tt>
 		*/
-		TVector3& operator /= (const T& lambda)
-			throw(Exception::DivisionByZero);
+		TVector3& operator /= (const T& lambda);
 
 		/** Dot product.
 				Return the dot product of this vector and <tt>vector</tt>.
@@ -392,8 +381,7 @@ namespace BALL
 				@exception Exception::DivisionByZero if the product of the squared
 								lengths of the two vectors equals <tt>(T)0</tt>
 		*/
-		TAngle<T> getAngle(const TVector3& vector) const
-			throw(Exception::DivisionByZero);
+		TAngle<T> getAngle(const TVector3& vector) const;
 
 		/**	Return the orthogonal projection of this vector onto another.
 				@param direction the vector to project onto
@@ -553,7 +541,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	TVector3<T>::TVector3(const T* ptr)
-		throw(Exception::NullPointer)
 	{
 		if (ptr == 0) 
 		{
@@ -626,7 +613,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	void TVector3<T>::set(const T* ptr)
-		throw(Exception::NullPointer)
 	{
 		if (ptr == 0)	
 			throw Exception::NullPointer(__FILE__, __LINE__);
@@ -675,7 +661,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	TVector3<T>& TVector3<T>::operator = (const T* ptr)
-		throw(Exception::NullPointer)
 	{
 		if (ptr == 0)
 		{
@@ -712,7 +697,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	void TVector3<T>::get(T* ptr) const
-		throw(Exception::NullPointer)
 	{
 		if (ptr == 0)
 		{
@@ -784,7 +768,6 @@ namespace BALL
 
 	template <typename T>
 	TVector3<T>& TVector3<T>::normalize()
-		throw(Exception::DivisionByZero)
 	{
 		T len = sqrt(x * x + y * y + z * z);
 
@@ -829,7 +812,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	T& TVector3<T>::operator [] (Position position)
-		throw(Exception::IndexOverflow)
 	{
 		if (position > 2)
 		{
@@ -848,7 +830,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	const T& TVector3<T>::operator [] (Position position) const
-		throw(Exception::IndexOverflow)
 	{
 		if (position > 2)
 		{
@@ -920,7 +901,6 @@ namespace BALL
 
 	template <typename T>
 	TVector3<T> TVector3<T>::operator / (const T& lambda) const
-		throw(Exception::DivisionByZero)
 	{
 		if (lambda == (T)0)
 		{
@@ -931,7 +911,6 @@ namespace BALL
 
 	template <typename T>
 	TVector3<T>& TVector3<T>::operator /= (const T& lambda)
-		throw(Exception::DivisionByZero)
 	{
 		if (lambda == (T)0)
 		{
@@ -990,7 +969,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	TAngle<T> TVector3<T>::getAngle(const TVector3<T>& vector) const
-		throw(Exception::DivisionByZero)
 	{
 		T length_product = getSquareLength() * vector.getSquareLength();
 
