@@ -18,7 +18,7 @@
 #endif 
 
 
-#include <QtCore/qpoint.h>
+#include <QtCore/QPoint>
 #include <QtGui/QMenu>
 
 namespace BALL

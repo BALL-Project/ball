@@ -18,7 +18,7 @@
 # include <BALL/VIEW/WIDGETS/dockWidget.h>
 #endif
 
-#include <QtGui/qcolor.h>
+#include <QtGui/QColor>
 //Added by qt3to4:
 #include <QContextMenuEvent>
 #include <QResizeEvent>
