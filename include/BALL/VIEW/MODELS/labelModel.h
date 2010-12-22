@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: labelModel.h,v 1.3.18.2 2007/04/09 20:44:30 amoll Exp $
-//
 
 #ifndef BALL_VIEW_MODELS_LABELMODEL_H
 #define BALL_VIEW_MODELS_LABELMODEL_H
