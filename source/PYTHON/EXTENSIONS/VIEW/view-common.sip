@@ -3,7 +3,7 @@
 //
 
 %ModuleHeaderCode
-	#include <QtCore/qglobal.h>
+	#include <QtCore/QGlobal>
 	#include <BALL/VIEW/KERNEL/common.h>
 	using namespace BALL;
 	using namespace BALL::VIEW;
