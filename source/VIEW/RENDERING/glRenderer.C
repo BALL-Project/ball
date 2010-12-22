@@ -27,9 +27,9 @@
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/KERNEL/atom.h>
 
-#include <QtGui/qpixmap.h>
-#include <QtGui/qpainter.h>
-#include <QtGui/qimage.h>
+#include <QtGui/QPixMap>
+#include <QtGui/QPainter>
+#include <QtGui/QImage>
 
 #include <BALL/MATHS/vector2.h>
 #include <BALL/MATHS/plane3.h>
