@@ -3,14 +3,14 @@
 //
 
 // order of includes is important: first qapplication, than BALL includes
-#include <QtGui/qapplication.h>
+#include <QtGui/QApplication>
 #include <BALL/CONFIG/config.h>
 
 #include "mainframe.h"
 #include <BALL/SYSTEM/path.h>
 #include <BALL/SYSTEM/directory.h>
 
-#include <QtGui/qmessagebox.h>
+#include <QtGui/QMessageBox>
 #include <iostream>
 
 void myMessageOutput( QtMsgType type, const char *msg )
