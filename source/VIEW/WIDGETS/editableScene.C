@@ -253,7 +253,7 @@ namespace BALL
 			                                       this, SLOT(createNewMolecule()), "Shortcut|Build|Create_new_molecule");
 			setMenuHint((String)tr("Create a new molecule for editing"));
 
-			toolbar_edit_controls_->setObjectName(tr("Edit Control toolbar"));
+			toolbar_edit_controls_->setObjectName("Edit Control toolbar");
 			toolbar_edit_controls_->setIconSize(QSize(23,23));
 			toolbar_edit_controls_->layout()->setMargin(2);
 			toolbar_edit_controls_->layout()->setSpacing(2);

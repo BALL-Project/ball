@@ -93,7 +93,7 @@ namespace BALL
  			QGridLayout* lay = new QGridLayout();
  			glay->addLayout(lay, 2, 0);
 
-			listview->setObjectName(tr("MolecularControlList"));
+			listview->setObjectName("MolecularControlList");
 			listview->headerItem()->setText(0, tr("Name") + " ["+ tr("highlight") + "]");
 			listview->headerItem()->setText(1, tr("Type"));
 			listview->headerItem()->setText(2, tr("checked"));
@@ -369,8 +369,8 @@ namespace BALL
 			// ===============================================================
 			// create representation context menu:
 			// ===============================================================
-			context_menu_.setObjectName(tr("ContextMenu"));
-			model_menu_.setObjectName(tr("ModelMenu"));
+			context_menu_.setObjectName("ContextMenu");
+			model_menu_.setObjectName("ModelMenu");
 
 			model_menu_.addAction(tr("Custom"), this, SLOT(createRepresentation())); 
 
@@ -381,7 +381,7 @@ namespace BALL
 			{
 				if (!mi.modelMuteableByDisplayProperties((ModelType)pos)) break;
 				action = model_menu_.addMenu(&color_menu_[p]);
-				color_menu_[p].setObjectName((String(tr("ColorMenu")) + String(p)).c_str());
+				color_menu_[p].setObjectName((String("ColorMenu") + String(p)).c_str());
 				action->setText(mi.getModelName((ModelType)pos).c_str());
 				action->setObjectName(String(pos).c_str());
 				p++;

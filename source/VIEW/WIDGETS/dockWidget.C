@@ -42,7 +42,7 @@ namespace BALL
 			}
 			else 
 			{
-				Log.error() << "No valid name for DockWidget!" << std::endl;
+				Log.error() << (String)tr("No valid name for DockWidget!") << std::endl;
 				setObjectName("DockWidget");
 			}
 
