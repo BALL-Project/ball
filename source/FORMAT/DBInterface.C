@@ -17,7 +17,7 @@
 #include <sstream>
 #include <iostream>
 
-#include <QtSql/qsqlerror.h>
+#include <QSqlError>
 
 // #define BALL_DEBUG_DBINTERFACE 1
 
