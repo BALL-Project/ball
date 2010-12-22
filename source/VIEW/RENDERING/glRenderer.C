@@ -2109,7 +2109,7 @@ namespace BALL
 
 			if (Maths::isZero(camera->getViewVector().getSquareLength()))
 			{
-				Log.error() << "Unvalid camera settings: View point = LookAt point" << std::endl;
+				Log.error() << (String)tr("Invalid camera settings: View point = LookAt point") << std::endl;
 				return;
 			}
 
@@ -2222,8 +2222,8 @@ namespace BALL
 
 			if (state != use_vertex_buffer_)
 			{
-				if (state) Log.info() << "Enabling Vertex Buffer" << std::endl;
-				else       Log.info() << "Disabling Vertex Buffer" << std::endl;
+				if (state) Log.info() << (String)tr("Enabling Vertex Buffer") << std::endl;
+				else       Log.info() << (String)tr("Disabling Vertex Buffer") << std::endl;
 			}
 			use_vertex_buffer_ = state;
 
@@ -2542,7 +2542,7 @@ namespace BALL
 			Position texname = grid_to_texture_[vol.getGrid()];
 			if (texname == 0)
 			{
-				scene_->setStatusbarText("Graphics card does not support 3D textures", true);
+				scene_->setStatusbarText((String)tr("Graphics card does not support 3D textures. Abort"), true);
 				return;
 			}
 

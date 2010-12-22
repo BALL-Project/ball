@@ -1,3 +1,8 @@
+/* TRANSLATOR BALL::VIEW::Renderer
+
+		Necessary for lupdate.
+*/
+
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
@@ -60,8 +65,8 @@ namespace BALL
 
 			if (!representation.isValid())
 			{
-				Log.error() << "Representation " << &representation 
-										<< "not valid, so aborting." << std::endl;
+				Log.error() << (String)(qApp->translate("BALL::VIEW::Renderer", "Representation ")) << &representation 
+										<< (String)(qApp->translate("BALL::VIEW::Renderer", "not valid, so aborting.")) << std::endl;
 				return false;
 			}
 
@@ -98,7 +103,7 @@ namespace BALL
 			else
 			{
 				// unknown type of GeometricObject
-				Log.error() << "unknown type of GeometricObject in Renderer::render_: " 
+				Log.error() << (String)(qApp->translate("BALL::VIEW::Renderer", "unknown type of GeometricObject in" )) + " Renderer::render_: " 
 										<< typeid(object).name() << "  " << object << std::endl;
 				return;
 			}
@@ -137,39 +142,46 @@ namespace BALL
 
 		void Renderer::setLights(bool /*reset_all*/)
 		{
-			Log.error() << "Renderer::setLights() not implemented for this kind of renderer yet!" << std::endl;
+			Log.error() << (String)(qApp->translate("BALL::VIEW::Renderer", 
+						          "Renderer::setLights() not implemented for this kind of renderer yet!")) << std::endl;
 		}
 
 		void Renderer::updateCamera(const Camera* /*camera*/)
 		{
-			Log.error() << "Renderer::updateCamera() not implemented for this kind of renderer yet!" << std::endl;
+			Log.error() << (String)(qApp->translate("BALL::VIEW::Renderer", 
+						          "Renderer::updateCamera() not implemented for this kind of renderer yet!")) << std::endl;
 		}
 
 		void Renderer::updateBackgroundColor()
 		{
-			Log.error() << "Renderer::updateBackgroundColor() not implemented for this kind of renderer yet!" << std::endl;
+			Log.error() << (String)(qApp->translate("BALL::VIEW::Renderer", 
+						         "Renderer::updateBackgroundColor() not implemented for this kind of renderer yet!")) << std::endl;
 		}
 
 		void Renderer::setupStereo(float /*eye_separation*/, float /*focal_length*/)
 		{
-			Log.error() << "Renderer::setupStereo() not implemented for this kind of renderer yet!" << std::endl;
+			Log.error() << (String)(qApp->translate("BALL::VIEW::Renderer", 
+						         "Renderer::setupStereo() not implemented for this kind of renderer yet!")) << std::endl;
 		}
 
 		Vector3 Renderer::mapViewportTo3D(Position /*x*/, Position /*y*/)
 		{
-			Log.error() << "Renderer::mapViewportTo3D() not implemented for this kind of renderer yet!" << std::endl;
+			Log.error() << (String)(qApp->translate("BALL::VIEW::Renderer", 
+						         "Renderer::mapViewportTo3D() not implemented for this kind of renderer yet!")) << std::endl;
 			return Vector3();
 		}
 
 		Vector2 Renderer::map3DToViewport(const Vector3& /*vec*/)
 		{
-			Log.error() << "Renderer::map3DToViewport() not implemented for this kind of renderer yet!" << std::endl;
+			Log.error() << (String)(qApp->translate("BALL::VIEW::Renderer", 
+						         "Renderer::map3DToViewport() not implemented for this kind of renderer yet!")) << std::endl;
 			return Vector2();
 		}
 
 		void Renderer::renderRuler()
 		{
-			Log.error() << "Renderer::renderRuler() not implemented for this kind of renderer yet!" << std::endl;
+			Log.error() << (String)(qApp->translate("BALL::VIEW::Renderer", 
+						         "Renderer::renderRuler() not implemented for this kind of renderer yet!")) << std::endl;
 		}
 
 		bool Renderer::finish()
