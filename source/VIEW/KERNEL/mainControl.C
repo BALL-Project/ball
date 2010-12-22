@@ -231,7 +231,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 
 			connect(qApp,	SIGNAL(aboutToQuit()), this, SLOT(aboutToExit()));
 			connect(menuBar(), SIGNAL(hovered(QAction*)), this, SLOT(menuItemHighlighted(QAction*)));
-			menuBar()->setObjectName(tr("MainMenuBar"));
+			menuBar()->setObjectName("MainMenuBar");
 
 			font.setPointSize(14);
 			rep_label_ = new QLabel(statusBar());
