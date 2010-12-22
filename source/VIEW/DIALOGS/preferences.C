@@ -7,9 +7,10 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/WIDGETS/helpViewer.h>
 #include <BALL/FORMAT/INIFile.h>
+
 #include <QtGui/QStackedWidget>
 #include <QtGui/QTreeWidget>
-#include <QtGui/qpushbutton.h>
+#include <QtGui/QPushButton>
 
 namespace BALL
 {

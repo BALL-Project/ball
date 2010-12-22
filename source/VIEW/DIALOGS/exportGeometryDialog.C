@@ -15,8 +15,8 @@
 #include <BALL/VIEW/PRIMITIVES/simpleBox.h>
 
 #include <QtGui/QFileDialog>
-#include <QtGui/qmessagebox.h>
-#include <QtGui/qlineedit.h>
+#include <QtGui/QMessageBox>
+#include <QtGui/QLineEdit>
 
 
 namespace BALL

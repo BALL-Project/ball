@@ -8,12 +8,12 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
-#include <QtGui/qmenubar.h>
-#include <QtGui/qlabel.h>
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qlineedit.h>
-#include <QtGui/qfontdialog.h>
-#include <QtGui/qradiobutton.h>
+#include <QtGui/QMenuBar>
+#include <QtGui/QLabel>
+#include <QtGui/QPushButton>
+#include <QtGui/QLineEdit>
+#include <QtGui/QFontDialog>
+#include <QtGui/QRadioButton>
 
 namespace BALL
 {

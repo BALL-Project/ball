@@ -6,12 +6,12 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 
-#include <QtGui/qfiledialog.h>
-#include <QtGui/qcombobox.h>
-#include <QtGui/qcheckbox.h>
-#include <QtGui/qspinbox.h>
-#include <QtGui/qradiobutton.h>
-#include <QtGui/qlineedit.h>
+#include <QtGui/QFileDialog>
+#include <QtGui/QComboBox>
+#include <QtGui/QCheckBox>
+#include <QtGui/QSpinBox>
+#include <QtGui/QRadioButton>
+#include <QtGui/QLineEdit>
 
 namespace BALL
 {

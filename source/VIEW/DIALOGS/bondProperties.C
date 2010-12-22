@@ -5,8 +5,9 @@
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/residue.h>
-#include <QtGui/qlineedit.h>
-#include <QtGui/qpushbutton.h>
+
+#include <QtGui/QLineEdit>
+#include <QtGui/QPushButton>
 
 namespace BALL
 {

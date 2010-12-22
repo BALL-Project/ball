@@ -5,8 +5,8 @@
 #include <BALL/VIEW/DIALOGS/editSettings.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
-#include <QtGui/qcheckbox.h>
-#include <QtGui/qlineedit.h>
+#include <QtGui/QCheckBox>
+#include <QtGui/QLineEdit>
 
 namespace BALL
 {

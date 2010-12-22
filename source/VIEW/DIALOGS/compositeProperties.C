@@ -1,12 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+//
 #include <BALL/VIEW/DIALOGS/compositeProperties.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/residue.h>
-#include <QtGui/qlineedit.h>
-#include <QtGui/qpushbutton.h>
+
+#include <QtGui/QLineEdit>
+#include <QtGui/QPushButton>
 
 namespace BALL
 {

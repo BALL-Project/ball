@@ -17,7 +17,7 @@
 #include <BALL/MATHS/simpleBox3.h>
 #include <BALL/KERNEL/system.h>
 
-#include <QtGui/qmenubar.h>
+#include <QtGui/QMenuBar>
 #include <QtGui/QFileDialog>
 #include <QtGui/QToolBar>
 

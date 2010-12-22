@@ -6,8 +6,8 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/stage.h>
 
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qlineedit.h> 
+#include <QtGui/QPushButton>
+#include <QtGui/QLineEdit> 
 
 namespace BALL
 {

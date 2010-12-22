@@ -6,8 +6,8 @@
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/COMMON/logStream.h>
 
-#include <QtGui/qlineedit.h>
-#include <QtGui/qradiobutton.h>
+#include <QtGui/QLineEdit>
+#include <QtGui/QRadioButton>
 
 namespace BALL
 {

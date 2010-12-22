@@ -10,8 +10,8 @@
 #include <BALL/SYSTEM/path.h>
 
 #include <QtGui/QFileDialog>
-#include <QtGui/qlineedit.h>
-#include <QtGui/qmessagebox.h> 
+#include <QtGui/QLineEdit>
+#include <QtGui/QMessageBox> 
 
 namespace BALL
 {

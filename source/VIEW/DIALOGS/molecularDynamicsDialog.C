@@ -11,11 +11,11 @@
 #include <BALL/SYSTEM/path.h>
 
 #include <QtGui/QFileDialog>
-#include <QtGui/qlineedit.h>
-#include <QtGui/qradiobutton.h>
-#include <QtGui/qcheckbox.h>
-#include <QtGui/qlabel.h>
-#include <QtGui/qmessagebox.h> 
+#include <QtGui/QLineEdit>
+#include <QtGui/QRadioButton>
+#include <QtGui/QCheckBox>
+#include <QtGui/QLabel>
+#include <QtGui/QMessageBox> 
 
 namespace BALL
 {

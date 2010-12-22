@@ -18,9 +18,9 @@
 #include <BALL/DATATYPE/string.h>
 #include <BALL/FORMAT/INIFile.h>
 
-#include <QtGui/qslider.h>
-#include <QtGui/qlabel.h>
-#include <QtGui/qradiobutton.h>
+#include <QtGui/QSlider>
+#include <QtGui/QLabel>
+#include <QtGui/QRadioButton>
 
 namespace BALL
 {

@@ -8,7 +8,7 @@
 
 #include <BALL/FORMAT/bruker1DFile.h>
 
-#include <QtGui/q3filedialog.h>
+#include <QtGui/QFileDialog>
 
 namespace BALL
 {

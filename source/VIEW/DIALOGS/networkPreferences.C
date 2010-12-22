@@ -7,8 +7,8 @@
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
-#include <QtGui/qcheckbox.h>
-#include <QtGui/qlineedit.h>
+#include <QtGui/QCheckBox>
+#include <QtGui/QLineEdit>
 
 #include <QtNetwork/QNetworkProxy>
 

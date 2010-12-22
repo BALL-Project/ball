@@ -7,8 +7,8 @@
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
 
-#include <QtGui/qlabel.h>
-#include <QtGui/qslider.h>
+#include <QtGui/QLabel>
+#include <QtGui/QSlider>
 
 namespace BALL
 {

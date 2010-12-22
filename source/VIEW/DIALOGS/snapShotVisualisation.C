@@ -6,11 +6,11 @@
 #include <BALL/FORMAT/trajectoryFile.h>
 #include <BALL/SYSTEM/systemCalls.h>
 
-#include <QtGui/qlineedit.h>
-#include <QtGui/qcheckbox.h>
-#include <QtGui/qslider.h>
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qradiobutton.h>
+#include <QtGui/QLineEdit>
+#include <QtGui/QCheckBox>
+#include <QtGui/QSlider>
+#include <QtGui/QPushButton>
+#include <QtGui/QRadioButton>
 #include <QtGui/QProgressDialog>
 
 namespace BALL

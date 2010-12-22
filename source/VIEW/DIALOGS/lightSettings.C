@@ -5,11 +5,11 @@
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qlineedit.h> 
-#include <QtGui/qlabel.h>
-#include <QtGui/qradiobutton.h>
-#include <QtGui/qslider.h>
+#include <QtGui/QPushButton>
+#include <QtGui/QLineEdit> 
+#include <QtGui/QLabel>
+#include <QtGui/QRadioButton>
+#include <QtGui/QSlider>
 
 namespace BALL
 {

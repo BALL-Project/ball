@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+
 #include <BALL/VIEW/DIALOGS/pythonSettings.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
-#include <QtGui/qlineedit.h>
-#include <QtGui/qfiledialog.h>
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qstackedwidget.h>
+#include <QtGui/QLineEdit>
+#include <QtGui/QFileDialog>
+#include <QtGui/QPushButton>
+#include <QtGui/QStackedWidget>
 #include <QtGui/QTableWidgetItem>
 #include <QtGui/QHeaderView>
 #include <QtGui/QComboBox>

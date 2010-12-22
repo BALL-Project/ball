@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+//
 #include <BALL/VIEW/DIALOGS/setCamera.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/stage.h>
 
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qlineedit.h> 
+#include <QtGui/QPushButton>
+#include <QtGui/QLineEdit> 
 
 namespace BALL
 {
