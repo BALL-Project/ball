@@ -17,7 +17,7 @@
 #include <BALL/STRUCTURE/DOCKING/dockingAlgorithm.h>
 #include <BALL/FORMAT/DCDFile.h>
 
-#include <QtGui/qapplication.h>
+#include <QtGui/QApplication>
 
 namespace BALL
 {
