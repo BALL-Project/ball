@@ -23,8 +23,8 @@ using namespace BALL::VIEW;
 void showUsage()
 {
  	Log.insert(std::cerr);
-	Log.error() << "DCD2PNG DCDFILE.dcd  file.[bvp|pdb|hin]  [DCD2PNG.ini]" << std::endl;
-	Log.error() << "Read a BALLView project or a molecular file format and create PNG images from it by using POVRay." << std::endl;
+	Log.error() << (Sting)qApp->translate("BALL::VIEW::DCD2PNG", "DCD2PNG DCDFILE.dcd  file.[bvp|pdb|hin]  [DCD2PNG.ini]") << std::endl;
+	Log.error() << (Sting)qApp->translate("BALL::VIEW::DCD2PNG", "Read a BALLView project or a molecular file format and create PNG images from it by using POVRay.") << std::endl;
  	Log.remove(std::cerr);
 }
 
@@ -54,11 +54,11 @@ int main(int argc, char **argv)
 
 		if (home_dir == "")
 		{
-			Log.error() << 
-					"You dont have write access to the current working directory\n"<<
-					"and I can not find your home directory. This can cause\n" <<
-					"unexpected behaviour. Please start DCD2PNG from your homedir with\n" << 
-					"absolute path.\n";
+			Log.error() << (Sting)qApp->translate("BALL::VIEW::DCD2PNG", 
+					"You dont have write access to the current working directory")<< "\n" <<
+					(Sting)qApp->translate("BALL::VIEW::DCD2PNG", "and I can not find your home directory. This can cause") << "\n" <<
+					(Sting)qApp->translate("BALL::VIEW::DCD2PNG", "unexpected behaviour. Please start DCD2PNG from your homedir with") << "\n" << 
+					(Sting)qApp->translate("BALL::VIEW::DCD2PNG", "absolute path.") << "\n";
 			return -1;
 		}
 	}
@@ -112,7 +112,7 @@ int main(int argc, char **argv)
 			system = mfd->openMolecularFile(argument);
 			if (system == 0)
 			{
-				std::cerr << "Could not open file: " << argument << std::endl;
+				std::cerr << (Sting)qApp->translate("BALL::VIEW::DCD2PNG", "Could not open file") << ": " << argument << std::endl;
 				error = true;
 				break;
 			}
