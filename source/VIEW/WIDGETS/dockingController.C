@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.6.12.2 2007/03/25 23:30:47 amoll Exp $
-//
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
