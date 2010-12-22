@@ -21,7 +21,7 @@
 # include <asio.hpp>
 #endif
 
-#include <QtCore/qthread.h>
+#include <QtCore/QThread>
 
 namespace BALL
 {
