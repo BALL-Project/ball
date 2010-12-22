@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DBInterface.C,v 1.6.16.1 2007/03/25 22:00:15 oliver Exp $
-//
-// Author:
-//   Oliver Kohlbacher
-//
 
 #include <BALL/FORMAT/DBInterface.h>
 #include <BALL/KERNEL/PTE.h>
