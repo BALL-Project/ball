@@ -53,7 +53,7 @@ namespace BALL
 			{
 				Atom::BondConstIterator bond_it;
 				int delta = 0; // heavy degree
-				for (bond_it=atom_it->beginBond();bond_it!=atom_it->endBond();bond_it++)
+				for (bond_it = atom_it->beginBond(); bond_it != atom_it->endBond(); bond_it++)
 				{
 					if (bond_it->getBoundAtom(*atom_it)->getElement() != PTE[Element::H])
 					{
@@ -63,7 +63,7 @@ namespace BALL
 				sum += delta*delta;
 			}
 		}
-		//ac.setProperty("ZagrebIndex",sum);
+		//ac.setProperty("ZagrebIndex", sum);
 		return sum;
 	}
 

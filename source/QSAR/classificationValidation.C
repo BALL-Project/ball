@@ -36,93 +36,93 @@ namespace BALL
 
 		ClassificationValidation::ClassificationValidation(ClassificationModel* m) : Validation(m)
 		{
-			clas_model = m; quality_=-1; quality_cv_=-1; quality_input_test_=-1;
-			qualCalculation = &ClassificationValidation::calculateAverageSensitivity;
+			clas_model = m; quality_ = -1; quality_cv_ = -1; quality_input_test_ = -1;
+			qualCalculation = &ClassificationValidation::calculateAverageSensitivity; 
 		}
 
 		void ClassificationValidation::selectStat(int s)
 		{
-			if(s>=0 && s<=4)
+			if (s >= 0 && s <= 4)
 			{
 				validation_statistic_ = s;
 			}
-			if(s==0)
+			if (s == 0)
 			{
-				qualCalculation = &ClassificationValidation::calculateAverageSensitivity;
+				qualCalculation = &ClassificationValidation::calculateAverageSensitivity; 
 			}
-			else if(s==1)
+			else if (s == 1)
 			{
-				qualCalculation = &ClassificationValidation::calculateWeightedSensitivity;
+				qualCalculation = &ClassificationValidation::calculateWeightedSensitivity; 
 			}
-			else if(s==2)
+			else if (s == 2)
 			{
-				qualCalculation = &ClassificationValidation::calculateOverallAccuracy;
+				qualCalculation = &ClassificationValidation::calculateOverallAccuracy; 
 			}
-			else if(s==3)
+			else if (s == 3)
 			{
-				qualCalculation = &ClassificationValidation::calculateAverageMCC;
+				qualCalculation = &ClassificationValidation::calculateAverageMCC; 
 			}
-			else if(s==4)
+			else if (s == 4)
 			{
-				qualCalculation = &ClassificationValidation::calculateOverallMCC;
+				qualCalculation = &ClassificationValidation::calculateOverallMCC; 
 			}
-			else if(s==5)
+			else if (s == 5)
 			{
-				qualCalculation = &ClassificationValidation::calculateTDR;
+				qualCalculation = &ClassificationValidation::calculateTDR; 
 			}
 		}
 
 		void ClassificationValidation::crossValidation(int k, bool restore)
 		{
-			if(model_->data->descriptor_matrix_.size()==0 || model_->data->Y_.size()==0)
+			if (model_->data->descriptor_matrix_.size() == 0 || model_->data->Y_.size() == 0)
 			{
-				throw Exception::InconsistentUsage(__FILE__,__LINE__,"Data must be fetched from input-files by QSARData before cross-validation can be done!");
+				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Data must be fetched from input-files by QSARData before cross-validation can be done!"); 
 			}
 			
 			Matrix<double> desc_backup;
 			//Matrix<double> res_backup;
 			Matrix<double> y_backup;
-			if(restore)
+			if (restore)
 			{
-				desc_backup=model_->descriptor_matrix_; // save matrices in order in restore them after cross-validation
-				//res_backup=clas_model->training_result_;
-				y_backup=model_->Y_;
+				desc_backup = model_->descriptor_matrix_; // save matrices in order in restore them after cross-validation
+				//res_backup = clas_model->training_result_;
+				y_backup = model_->Y_;
 			}
 			
-			int lines=model_->data->descriptor_matrix_[0].size();
-			int col=model_->data->descriptor_matrix_.size();
-			if(!model_->descriptor_IDs_.empty())
+			int lines = model_->data->descriptor_matrix_[0].size();
+			int col = model_->data->descriptor_matrix_.size();
+			if (!model_->descriptor_IDs_.empty())
 			{
-				col=model_->descriptor_IDs_.size();
+				col = model_->descriptor_IDs_.size();
 			}
-			double average_accuracy=0;
+			double average_accuracy = 0;
 			class_results_.resize(clas_model->labels_.size());
 			class_results_ = 0;
 			
 			// test k times
-			for(int i=0; i<k; i++)
+			for (int i = 0; i < k; i++)
 			{	
-				int test_size= (lines+i)/k;
-				int training_size=lines-test_size;
-				model_->Y_.resize(training_size,model_->data->Y_.size());
-				model_->descriptor_matrix_.resize(training_size,col); 
+				int test_size = (lines+i)/k;
+				int training_size = lines-test_size;
+				model_->Y_.resize(training_size, model_->data->Y_.size());
+				model_->descriptor_matrix_.resize(training_size, col); 
 				test_substances_.resize(test_size);
-				test_Y_.resize(test_size,model_->data->Y_.size());
+				test_Y_.resize(test_size, model_->data->Y_.size());
 				
-				int train_line=0;  // no of line in descriptor_matrix_ of model_
-				int test_line=0;
+				int train_line = 0;  // no of line in descriptor_matrix_ of model_
+				int test_line = 0;
 				
 				//copy data to training and test data set
-				for(int line=0; line<lines; line++)
+				for (int line = 0; line < lines; line++)
 				{
-					if((line+1+i)%k==0)
+					if ((line+1+i)%k == 0)
 					{
-						setTestLine(test_line,line);
+						setTestLine(test_line, line);
 						test_line++;
 					}
 					else
 					{
-						setTrainingLine(train_line,line);
+						setTrainingLine(train_line, line);
 						train_line++;
 					}
 					
@@ -136,10 +136,10 @@ namespace BALL
 			quality_cv_ = average_accuracy/k;
 			class_results_ = class_results_/k;
 			
-			if(restore)
+			if (restore)
 			{
-				model_->descriptor_matrix_=desc_backup;   // prevent confusion of cross-validation coefficients with coefficients
-				model_->Y_=y_backup;
+				model_->descriptor_matrix_ = desc_backup;   // prevent confusion of cross-validation coefficients with coefficients
+				model_->Y_ = y_backup;
 				model_->readTrainingData();
 				model_->train();
 			}
@@ -148,42 +148,42 @@ namespace BALL
 
 		void ClassificationValidation::testAllSubstances(bool transform)
 		{	
-			confusion_matrix_.resize(4,clas_model->labels_.size());
-			confusion_matrix_=0;
+			confusion_matrix_.resize(4, clas_model->labels_.size());
+			confusion_matrix_ = 0;
 			class_results_.resize(clas_model->labels_.size());
 			class_results_ = 0;
 			
-			for(int i=0; i<(int)test_substances_.size();i++) // for all substances in test-data
+			for (int i = 0; i < (int)test_substances_.size(); i++) // for all substances in test-data
 			{
-				Vector<double> rv=model_->predict(test_substances_[i],transform);
+				Vector<double> rv = model_->predict(test_substances_[i], transform); 
 				
-				for(int c=1; c<=test_Y_.Ncols();c++) // for all modelled activities
+				for (int c = 1; c <= test_Y_.Ncols(); c++) // for all modelled activities
 				{			
-					int y_ic= static_cast<int>(test_Y_(i+1,c)); 
+					int y_ic = static_cast<int>(test_Y_(i+1, c)); 
 					int rv_ic = static_cast<int>(rv(c));
 					
-					for(int k=1;k<=confusion_matrix_.Ncols();k++)   // set TP,FP,TN,FN for all classes
+					for (int k = 1; k <= confusion_matrix_.Ncols(); k++)   // set TP, FP, TN, FN for all classes
 					{				
-						if((clas_model->labels_)[k-1]==y_ic)
+						if ((clas_model->labels_)[k-1] == y_ic)
 						{
-							if(y_ic==rv_ic)
+							if (y_ic == rv_ic)
 							{
-								confusion_matrix_(1,k)++;  // TP for class k
+								confusion_matrix_(1, k)++;  // TP for class k
 							}
 							else
 							{	
-								confusion_matrix_(4,k)++; // FN for class k
+								confusion_matrix_(4, k)++; // FN for class k
 							}
 						}
 						else
 						{
-							if(clas_model->labels_[k-1]!=rv_ic)
+							if (clas_model->labels_[k-1] != rv_ic)
 							{
-								confusion_matrix_(3,k)++;  // TN for class k
+								confusion_matrix_(3, k)++;  // TN for class k
 							}
 							else
 							{
-								confusion_matrix_(2,k)++; // FP for class k
+								confusion_matrix_(2, k)++; // FP for class k
 							}
 						}
 					}
@@ -198,133 +198,133 @@ namespace BALL
 
 		void ClassificationValidation::testInputData(bool transform)
 		{	
-			int lines=model_->data->descriptor_matrix_[0].size();
+			int lines = model_->data->descriptor_matrix_[0].size();
 			test_substances_.resize(lines);
-			test_Y_.resize(lines,model_->data->Y_.size());
+			test_Y_.resize(lines, model_->data->Y_.size());
 			
 			class_results_.resize(clas_model->labels_.size());
 			class_results_ = 0;
 			
-			bool back_transform=0;
-			if(transform && model_->data->descriptor_transformations_.size()>0)
+			bool back_transform = 0; 
+			if (transform && model_->data->descriptor_transformations_.size() > 0)
 			{
 				// if test data is to be transformed according to centering of training data, BUT has already been centered itself
-				back_transform=1;
+				back_transform = 1; 
 			}
 			
-			for(int i=0; i<lines; i++)
+			for (int i = 0; i < lines; i++)
 			{
-				setTestLine(i,i,back_transform);
+				setTestLine(i, i, back_transform); 
 			}
 			
-			testAllSubstances(transform);
+			testAllSubstances(transform); 
 			quality_input_test_ = quality_;
 		}
 
 
 		void ClassificationValidation::bootstrap(int k, bool restore)
 		{
-			if(model_->data->descriptor_matrix_.size()==0 || model_->data->Y_.size()==0)
+			if (model_->data->descriptor_matrix_.size() == 0 || model_->data->Y_.size() == 0)
 			{
-				throw Exception::InconsistentUsage(__FILE__,__LINE__,"Data must be fetched from input-files by QSARData before bootstrapping can be done!");
+				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Data must be fetched from input-files by QSARData before bootstrapping can be done!"); 
 			}
 			Matrix<double> desc_backup;
 			Matrix<double> res_backup;
 			Matrix<double> y_backup;
-			if(restore)
+			if (restore)
 			{
-				desc_backup=model_->descriptor_matrix_; // save matrices in order in restore them after cross-validation
-				//res_backup=clas_model->training_result_;
-				y_backup=model_->Y_;
+				desc_backup = model_->descriptor_matrix_; // save matrices in order in restore them after cross-validation
+				//res_backup = clas_model->training_result_;
+				y_backup = model_->Y_;
 			}
 
 			class_results_.resize(clas_model->labels_.size());
 			class_results_ = 0;
-			quality_cv_=0;
+			quality_cv_ = 0;
 			int N = model_->data->descriptor_matrix_[0].size();
-			int no_descriptors=model_->data->descriptor_matrix_.size();
-			if(!model_->descriptor_IDs_.empty())
+			int no_descriptors = model_->data->descriptor_matrix_.size();
+			if (!model_->descriptor_IDs_.empty())
 			{
-				no_descriptors=model_->descriptor_IDs_.size();
+				no_descriptors = model_->descriptor_IDs_.size();
 			}
 
 			gsl_rng * r = gsl_rng_alloc (gsl_rng_ranlxd2);
 			PreciseTime pt;
-			gsl_rng_set(r,pt.now().getSeconds());
+			gsl_rng_set(r, pt.now().getSeconds());
 			
-			double overall_fit=0;
-			double overall_pred=0;
+			double overall_fit = 0;
+			double overall_pred = 0;
 			Vector<double> class_results_pred; 
-			class_results_pred.resize(clas_model->labels_.size()); class_results_pred=0;
+			class_results_pred.resize(clas_model->labels_.size()); class_results_pred = 0;
 			Vector<double> class_results_fit; 
-			class_results_fit.resize(clas_model->labels_.size()); class_results_fit=0;
+			class_results_fit.resize(clas_model->labels_.size()); class_results_fit = 0;
 
-			for(int i=0; i<k; i++) // create and evaluate k bootstrap samples
+			for (int i = 0; i < k; i++) // create and evaluate k bootstrap samples
 			{
-				//gsl_rng_set(r,i);
-				vector<int> sample_substances(N,0); // numbers of occurences of substances within this sample
+				//gsl_rng_set(r, i);
+				vector<int> sample_substances(N, 0); // numbers of occurences of substances within this sample
 				
 				class_results_ = 0;
 			
 				/// create training matrix and train the model_
-				model_->descriptor_matrix_.resize(N,no_descriptors);
-				model_->Y_.resize(N,model_->data->Y_.size());
-				for(int j=0; j<N;j++)
+				model_->descriptor_matrix_.resize(N, no_descriptors);
+				model_->Y_.resize(N, model_->data->Y_.size());
+				for (int j = 0; j < N; j++)
 				{
 					//int pos = rand()%N;
-					int pos = gsl_rng_uniform_int(r,N);
-					setTrainingLine(j,pos);
+					int pos = gsl_rng_uniform_int(r, N); 
+					setTrainingLine(j, pos);
 					sample_substances[pos]++;
 				}
 				model_->train();
 			
 				
 				/// find size of test data set
-				int test_size=0;
-				for(int j=0; j<N;j++)
+				int test_size = 0;
+				for (int j = 0; j < N; j++)
 				{
-					if(sample_substances[j]>0) 
+					if (sample_substances[j] > 0) 
 					{
 						continue;
 					}
 					test_size++; 
 				}
 				test_substances_.resize(test_size);
-				test_Y_.resize(test_size,model_->data->Y_.size());
+				test_Y_.resize(test_size, model_->data->Y_.size());
 				
 			
 				/// create test data set and calculate quality_ of prediction
-				int test_line=0;
-				for(int j=0; j<N;j++) 
+				int test_line = 0;
+				for (int j = 0; j < N; j++) 
 				{
-					if(sample_substances[j]==0) 
+					if (sample_substances[j] == 0) 
 					{	
-						setTestLine(test_line,j);
+						setTestLine(test_line, j);
 						test_line++;
 					}
 				}
 				testAllSubstances(0);
-				overall_pred+=quality_;
-				class_results_pred+=class_results_;		
+				overall_pred += quality_;
+				class_results_pred += class_results_;		
 			
 				class_results_ = 0; // clear pred. result before adding training fit result!!
 				
 				/// create test data set and calculate quality_ of fit to training data	
 				test_substances_.resize(N);
-				test_Y_.resize(N,model_->data->Y_.size());
-				test_line=0;
-				for(int j=0; j<N;j++)
+				test_Y_.resize(N, model_->data->Y_.size());
+				test_line = 0;
+				for (int j = 0; j < N; j++)
 				{	
-					while(sample_substances[j]>0) // insert substance as often as it occurs in the training data set 
+					while (sample_substances[j] > 0) // insert substance as often as it occurs in the training data set 
 					{
-						setTestLine(test_line,j);
+						setTestLine(test_line, j);
 						test_line++;
 						sample_substances[j]--;
 					}
 				}
 				testAllSubstances(0);
-				overall_fit+=quality_;
-				class_results_fit+=class_results_;
+				overall_fit += quality_;
+				class_results_fit += class_results_;
 			}
 			
 			overall_pred = overall_pred/k;
@@ -336,46 +336,46 @@ namespace BALL
 			class_results_ = class_results_pred*0.632 + class_results_fit*0.368;
 			
 			gsl_rng_free(r);
-			if(restore)
+			if (restore)
 			{
-				model_->descriptor_matrix_=desc_backup;   // prevent confusion of cross-validation coefficients with coefficients
-				model_->Y_=y_backup;
+				model_->descriptor_matrix_ = desc_backup;   // prevent confusion of cross-validation coefficients with coefficients
+				model_->Y_ = y_backup;
 				model_->readTrainingData();
 				model_->train();
 			}
 		}
 
 
-		const BALL::Matrix<double>& ClassificationValidation::yRandomizationTest(int runs, int k)
+		const BALL::Matrix<double> & ClassificationValidation::yRandomizationTest(int runs, int k)
 		{
-			Matrix<double> y_backup=model_->Y_;
-			Matrix<double> desc_backup=model_->descriptor_matrix_;
-			//Matrix<double> res_backup=clas_model->training_result_;
-			vector<vector<double> > dataY_backup=model_->data->Y_;
+			Matrix<double> y_backup = model_->Y_;
+			Matrix<double> desc_backup = model_->descriptor_matrix_;
+			//Matrix<double> res_backup = clas_model->training_result_;
+			vector<vector<double> > dataY_backup = model_->data->Y_;
 						
-			//vector<double> c(2,-1);
-			//vector<vector<double> > results(runs,2);
-			yRand_results_.resize(runs,2);
-			yRand_results_=-1;
+			//vector<double> c(2, -1);
+			//vector<vector<double> > results(runs, 2);
+			yRand_results_.resize(runs, 2);
+			yRand_results_ = -1;
 			class_results_.resize(clas_model->labels_.size());
 			class_results_ = 0;
 
-			for(int i=0; i<runs;i++)
+			for (int i = 0; i < runs; i++)
 			{
 				yRand(); // randomize all columns of Y_
-				crossValidation(k,0);
+				crossValidation(k, 0);
 				testInputData(0);
-				yRand_results_(i+1,1)=quality_input_test_;
-				yRand_results_(i+1,2)=quality_cv_;
+				yRand_results_(i+1, 1) = quality_input_test_;
+				yRand_results_(i+1, 2) = quality_cv_;
 			}
 			
 			class_results_ = class_results_/runs;
 			
-			model_->Y_=y_backup;
-			model_->descriptor_matrix_=desc_backup;
-			//clas_model->training_result_=res_backup;
+			model_->Y_ = y_backup;
+			model_->descriptor_matrix_ = desc_backup;
+			//clas_model->training_result_ = res_backup;
 			QSARData* data = const_cast <QSARData*> (model_->data);
-			data->Y_=dataY_backup;
+			data->Y_ = dataY_backup;
 			model_->train();
 			
 			return yRand_results_;
@@ -387,14 +387,14 @@ namespace BALL
 		{		
 			// do NOT calculate accuracy seperately for each class!
 			int TP = 0;
-			for(int j=1;j<=confusion_matrix_.Ncols();j++)
+			for (int j = 1; j <= confusion_matrix_.Ncols(); j++)
 			{
-				TP += (int)confusion_matrix_(1,j);
+				TP += (int)confusion_matrix_(1, j);
 			}
 			int N = 0; // number of predictions
-			for(int j=1;j<=confusion_matrix_.Nrows();j++)
+			for (int j = 1; j <= confusion_matrix_.Nrows(); j++)
 			{
-				N += (int)confusion_matrix_(j,1);
+				N += (int)confusion_matrix_(j, 1);
 			}
 			quality_ = ((double)TP) / N;
 		}
@@ -403,14 +403,14 @@ namespace BALL
 
 		void ClassificationValidation::calculateAverageSensitivity()
 		{
-			quality_=0;
+			quality_ = 0;
 			
-			for(int j=1;j<=confusion_matrix_.Ncols();j++) // calculate quality_ of all classes
+			for (int j = 1; j <= confusion_matrix_.Ncols(); j++) // calculate quality_ of all classes
 			{	
-				int TP = (int)confusion_matrix_(1,j);
-				int FN = (int)confusion_matrix_(4,j);
+				int TP = (int)confusion_matrix_(1, j);
+				int FN = (int)confusion_matrix_(4, j);
 				double sens = 1;
-				if(TP!=0 || FN!=0)
+				if (TP != 0 || FN != 0)
 				{
 					sens = ((double)TP) / (TP+FN);
 				}
@@ -424,21 +424,21 @@ namespace BALL
 
 		void ClassificationValidation::calculateWeightedSensitivity()
 		{
-			quality_=0;
-			int no_all=0;
+			quality_ = 0;
+			int no_all = 0;
 			
 			// get number of substances that were used for training the model_
-			for(int i=0; i<(int)clas_model->no_substances_.size();i++)
+			for (int i = 0; i < (int)clas_model->no_substances_.size(); i++)
 			{
 				no_all += clas_model->no_substances_[i];
 			}
 
-			for(int j=1;j<=confusion_matrix_.Ncols();j++) 
+			for (int j = 1; j <= confusion_matrix_.Ncols(); j++) 
 			{	
-				int TP = (int)confusion_matrix_(1,j);
-				int FN = (int)confusion_matrix_(4,j);
+				int TP = (int)confusion_matrix_(1, j);
+				int FN = (int)confusion_matrix_(4, j);
 				double sens = 1;
-				if(TP!=0 || FN!=0)
+				if (TP != 0 || FN != 0)
 				{
 					sens = ((double)TP) / (TP+FN);
 				}		
@@ -452,19 +452,19 @@ namespace BALL
 
 		void ClassificationValidation::calculateAverageMCC()
 		{
-			quality_=0;
-			double MCC=0;
+			quality_ = 0;
+			double MCC = 0;
 			
-			for(int j=1;j<=confusion_matrix_.Ncols();j++)
+			for (int j = 1; j <= confusion_matrix_.Ncols(); j++)
 			{
-				int TP = (int)confusion_matrix_(1,j);
-				int FP = (int)confusion_matrix_(2,j);
-				int TN = (int)confusion_matrix_(3,j);
-				int FN = (int)confusion_matrix_(4,j);
+				int TP = (int)confusion_matrix_(1, j);
+				int FP = (int)confusion_matrix_(2, j);
+				int TN = (int)confusion_matrix_(3, j);
+				int FN = (int)confusion_matrix_(4, j);
 				
 				double nom = ((double)TP)*TN-FP*FN; // (often) too big for int...
 				double denom = ((double)(TP+FP))*(TP+FN)*(TN+FP)*(TN+FN);
-				if(denom!=0) denom = sqrt(denom);
+				if (denom != 0) denom = sqrt(denom); 
 				else denom = 1; 
 				
 				double d = nom/denom;
@@ -477,20 +477,20 @@ namespace BALL
 			
 		void ClassificationValidation::calculateOverallMCC()
 		{
-			quality_=0;
-			int TP = 0; int FP=0; int TN=0; int FN=0;
-			for(int j=1;j<=confusion_matrix_.Ncols();j++)
+			quality_ = 0;
+			int TP = 0; int FP = 0; int TN = 0; int FN = 0;
+			for (int j = 1; j <= confusion_matrix_.Ncols(); j++)
 			{
-				TP += (int)confusion_matrix_(1,j);
-				FP += (int)confusion_matrix_(2,j);
-				TN += (int)confusion_matrix_(3,j);
-				FN += (int)confusion_matrix_(4,j);
+				TP += (int)confusion_matrix_(1, j);
+				FP += (int)confusion_matrix_(2, j);
+				TN += (int)confusion_matrix_(3, j);
+				FN += (int)confusion_matrix_(4, j);
 			}
 			double nom = ((double)TP)*TN-FP*FN; // (often) too big for int...
 			double denom = ((double)(TP+FP))*(TP+FN)*(TN+FP)*(TN+FN);
-			if(denom!=0) denom = sqrt(denom);
+			if (denom != 0) denom = sqrt(denom); 
 			else denom = 1; 
-			quality_= nom/denom;
+			quality_ = nom/denom;
 		}
 
 
@@ -498,23 +498,23 @@ namespace BALL
 		void ClassificationValidation::calculateTDR()
 		{
 			quality_ = 0;
-			int TP = 0; int FP=0;
+			int TP = 0; int FP = 0;
 			
-			if(confusion_matrix_.getColumnCount()>2)
+			if (confusion_matrix_.getColumnCount() > 2)
 			{
-				throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Classification validation error","True Discovery Rate can only be calculated for binary classification data sets!");
+				throw BALL::Exception::GeneralException(__FILE__, __LINE__, "Classification validation error", "True Discovery Rate can only be calculated for binary classification data sets!"); 
 			}
 			
-			TP = (int)confusion_matrix_(1,2);
-			FP = (int)confusion_matrix_(2,2);
+			TP = (int)confusion_matrix_(1, 2);
+			FP = (int)confusion_matrix_(2, 2);
 			
-			if(TP==0) 
+			if (TP == 0) 
 			{
 				quality_ = 0;
 				return;
 			}
 				
-			quality_= ((double)TP)/(TP+FP);	
+			quality_ = ((double)TP)/(TP+FP);	
 		}
 
 
@@ -551,7 +551,7 @@ namespace BALL
 						
 		void ClassificationValidation::setCVRes(double d)
 		{
-			quality_cv_=d;
+			quality_cv_ = d;
 		}
 
 
@@ -562,7 +562,7 @@ namespace BALL
 
 		void ClassificationValidation::saveToFile(string filename) const
 		{
-			saveToFile(filename,quality_input_test_,quality_cv_);	
+			saveToFile(filename, quality_input_test_, quality_cv_);	
 		}
 
 		void ClassificationValidation::saveToFile(string filename, const double& quality_input_test, const double& predictive_quality) const
@@ -578,22 +578,22 @@ namespace BALL
 
 		void ClassificationValidation::readFromFile(string filename)
 		{
-			ifstream in(filename.c_str());
+			ifstream in(filename.c_str()); 
 			
-			while(in)
+			while (in)
 			{
 				String line;
-				getline(in,line);
+				getline(in, line);
 				line.trimLeft();
 				if(line=="" || line.hasPrefix("#") || line.hasPrefix("//") || line.hasPrefix("%"))
 				{
 					continue;
 				}
-				if(line.hasPrefix("Fit to training data"))
+				if (line.hasPrefix("Fit to training data"))
 				{
 					quality_input_test_ = ((String)line.after("=")).trimLeft().toDouble();
 				}
-				else if(line.hasPrefix("Predictive quality"))
+				else if (line.hasPrefix("Predictive quality"))
 				{
 					quality_cv_ = ((String)line.after("=")).trimLeft().toDouble();
 				}

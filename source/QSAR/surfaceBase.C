@@ -54,7 +54,7 @@ namespace BALL
   bool SurfaceBase::isValid_(AtomContainer& ac)
   {
 		static HashMap<Handle, PreciseTime> mod_times;
-		PreciseTime last_mod = ac.getModificationTime();
+		PreciseTime last_mod = ac.getModificationTime(); 
 		Handle mol_handle = ac.getHandle();
 		if (mod_times.has(mol_handle))
 		{
@@ -94,7 +94,7 @@ namespace BALL
 		
 
 		// assign van der Waals radii for the SAS calculator
-		for (AtomIterator it=ac.beginAtom();it!=ac.endAtom(); ++it)
+		for (AtomIterator it = ac.beginAtom(); it != ac.endAtom(); ++it)
 		{
 		  it->setRadius(it->getElement().getVanDerWaalsRadius());
 		}
@@ -112,14 +112,14 @@ namespace BALL
 		
 		// add the atom areas
 		HashMap<const Atom*, float>::ConstIterator a_it(atom_areas.begin()); 
-		for (;a_it!=atom_areas.end();++a_it)
+		for (; a_it != atom_areas.end(); ++a_it)
 		{
 			float area = a_it->second;
 			double charge = a_it->first->getProperty("PEOEPartialCharge").getDouble();
 			// total positive polar van der Waals surface area
 			if (charge > 0.2)	{	tot_pos_pol += area; } 
 			// total negative polar van der Waals surface area
-			if (charge < -0.2) { tot_neg_pol += area;	}
+			if (charge < -0.2) { tot_neg_pol += area; 	}
 			// total polar van der Waals surface area
 			if (fabs(charge) > 0.2)	{	tot_pol += area; }
 			// total hydrophobic van der Waals surface area

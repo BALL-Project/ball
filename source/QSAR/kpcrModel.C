@@ -33,29 +33,29 @@ namespace BALL
 			{
 
 
-		KPCRModel::KPCRModel(const QSARData& q, int k_type, double p1, double p2) : KernelModel(q,k_type,p1,p2) 
+		KPCRModel::KPCRModel(const QSARData& q, int k_type, double p1, double p2) : KernelModel(q, k_type, p1, p2) 
 		{
 			type_="KPCR";
-			frac_var_=0.99;
+			frac_var_ = 0.99;
 		}
 
 		KPCRModel::KPCRModel(const QSARData& q, Vector<double>& w) : KernelModel(q, w) 
 		{
 			type_="KPCR";
-			frac_var_=0.99;
+			frac_var_ = 0.99;
 		}
 
-		KPCRModel::KPCRModel(const QSARData& q, String s1, String s2) : KernelModel(q,s1,s2) 
+		KPCRModel::KPCRModel(const QSARData& q, String s1, String s2) : KernelModel(q, s1, s2) 
 		{
 			type_="KPCR";
-			frac_var_=0.99;
+			frac_var_ = 0.99;
 		}
 
 
-		KPCRModel::KPCRModel(const QSARData& q, const LinearModel& lm, int column) : KernelModel(q,lm,column) 
+		KPCRModel::KPCRModel(const QSARData& q, const LinearModel& lm, int column) : KernelModel(q, lm, column) 
 		{
 			type_="KPCR";
-			frac_var_=0.99;
+			frac_var_ = 0.99;
 		}
 
 
@@ -66,25 +66,25 @@ namespace BALL
 
 		void KPCRModel::setFracVar(double frac_var)
 		{
-			frac_var_=frac_var;
+			frac_var_ = frac_var;
 		}
 
 
 		void KPCRModel::train()
 		{
-			if(descriptor_matrix_.Ncols()==0)
+			if (descriptor_matrix_.Ncols() == 0)
 			{
-				throw Exception::InconsistentUsage(__FILE__,__LINE__,"Data must be read into the model before training!");
+				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Data must be read into the model before training!"); 
 			}
 			
 			kernel->calculateKernelMatrix(descriptor_matrix_, K_);
 			
-			PCRModel::calculateEigenvectors(K_,frac_var_,loadings_);
+			PCRModel::calculateEigenvectors(K_, frac_var_, loadings_);
 			
 			latent_variables_ = K_*loadings_;
 
 			//result of RR is a linear combination of latente variables 
-			// = column with length=no of latente variables => matrix for more than one modelled activity
+			// = column with length = no of latente variables = > matrix for more than one modelled activity
 			Matrix<double> m = latent_variables_.t()*latent_variables_;
 			MatrixInverter<double, StandardTraits> inverter(m);
 			inverter.computePseudoInverse();
@@ -98,11 +98,11 @@ namespace BALL
 
 		void KPCRModel::setParameters(vector<double>& v)
 		{
-			if(v.size()!=1)
+			if (v.size() != 1)
 			{
 				String c = "Wrong number of model parameters! Needed: 1;";
 				c = c+" given: "+String(v.size());
-				throw Exception::ModelParameterError(__FILE__,__LINE__,c.c_str());
+				throw Exception::ModelParameterError(__FILE__, __LINE__, c.c_str());
 			}
 			frac_var_ = v[0];
 		}

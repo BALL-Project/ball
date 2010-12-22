@@ -34,25 +34,25 @@ namespace BALL
 
 		KernelModel::KernelModel(const QSARData& q, int k_type, double p1, double p2) : NonLinearModel(q)
 		{
-			kernel=new Kernel(this, k_type, p1, p2);
+			kernel = new Kernel(this, k_type, p1, p2);
 		}
 				
 						
 		KernelModel::KernelModel(const QSARData& q, String f, String g) : NonLinearModel(q)
 		{
-			kernel=new Kernel(this,f,g);
+			kernel = new Kernel(this, f, g);
 		}
 				
 				
 		KernelModel::KernelModel(const QSARData& q, Vector<double>& w) : NonLinearModel(q)
 		{
-			kernel=new Kernel(this,w);
+			kernel = new Kernel(this, w);
 		}
 
 
 		KernelModel::KernelModel(const QSARData& q, const LinearModel& lm, int column) : NonLinearModel(q)
 		{
-			kernel=new Kernel(this,lm,column);
+			kernel = new Kernel(this, lm, column);
 		}
 
 
@@ -62,9 +62,9 @@ namespace BALL
 		}
 
 
-		void KernelModel::operator=(const Model& m)
+		void KernelModel::operator = (const Model& m)
 		{
-			Model::operator=(m);	
+			Model::operator = (m);	
 			const KernelModel* km = static_cast<const KernelModel*>(&m);
 			kernel->type = km->kernel->type;
 			kernel->par1 = km->kernel->par1;
@@ -77,33 +77,33 @@ namespace BALL
 		void KernelModel::calculateOffsets()
 		{
 			Matrix<double> residuals = (K_*training_result_)-Y_;	
-			int no_act=training_result_.Ncols();
+			int no_act = training_result_.Ncols();
 			offsets_.resize(no_act);
 			offsets_.setVectorType(0); // this is no Column vector
-			for(int i=1; i<=no_act; i++)
+			for (int i = 1; i <= no_act; i++)
 			{	
 				offsets_(i) = residuals.colSum(i) / training_result_.Nrows();
 			}
 		}
 
 
-		BALL::Vector<double> KernelModel::predict(const vector<double>& substance, bool transform)
+		BALL::Vector<double> KernelModel::predict(const vector<double> & substance, bool transform)
 		{	
-			if(training_result_.Ncols()==0)
+			if (training_result_.Ncols() == 0)
 			{
-				throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must be trained before it can predict the activitiy of substances!");
+				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Model must be trained before it can predict the activitiy of substances!"); 
 			}	
-			Vector<double> input=getSubstanceVector(substance,transform);
+			Vector<double> input = getSubstanceVector(substance, transform); 
 				
 			Vector<double> K_t;
-			kernel->calculateKernelVector(K_,input, descriptor_matrix_, K_t); // dim: 1xn
+			kernel->calculateKernelVector(K_, input, descriptor_matrix_, K_t); // dim: 1xn
 
 			Vector<double> res = K_t*training_result_;  // dim: 1xc
-			//if(offsets_.getSize()==res.getSize()) res -= offsets_;
+			//if (offsets_.getSize() == res.getSize()) res -= offsets_; 
 			
-			if(transform && y_transformations_.Ncols()!=0)
+			if (transform && y_transformations_.Ncols() != 0)
 			{
-				backTransformPrediction(res);
+				backTransformPrediction(res); 
 			}
 			return res;
 		}
@@ -112,7 +112,7 @@ namespace BALL
 		void KernelModel::saveToFile(string filename)
 		{
 			bool trained = 1;
-			if(training_result_.Nrows()==0)
+			if (training_result_.Nrows() == 0)
 			{
 				trained = 0;
 			}
@@ -121,40 +121,40 @@ namespace BALL
 			ofstream out(filename.c_str());
 			
 			const Matrix<double>* coeffErrors = validation->getCoefficientStdErrors();
-			bool sterr=0;
-			if(coeffErrors->Ncols()!=0)
+			bool sterr = 0;
+			if (coeffErrors->Ncols() != 0)
 			{
-				sterr=1;
+				sterr = 1;
 			}
 			bool centered_data = 0;
 			bool centered_y = 0;
-			if(descriptor_transformations_.Ncols()!=0)
+			if (descriptor_transformations_.Ncols() != 0)
 			{
-				centered_data=1;
-				if(y_transformations_.Ncols()!=0)
+				centered_data = 1;
+				if (y_transformations_.Ncols() != 0)
 				{
-					centered_y=1;
+					centered_y = 1;
 				}
 			}
 			
-			int sel_features=descriptor_IDs_.size();
-			if(sel_features==0)
+			int sel_features = descriptor_IDs_.size();
+			if (sel_features == 0)
 			{
 				sel_features = data->getNoDescriptors();
 			}
 			
 			int no_y = training_result_.Ncols();
-			if(no_y==0) no_y = y_transformations_.Ncols(); // correct no because transformation information will have to by read anyway when reading this model later ...
+			if (no_y == 0) no_y = y_transformations_.Ncols(); // correct no because transformation information will have to by read anyway when reading this model later ...
 			
 			out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tcentered response?\tno of substances\ttrained?"<<endl;
 			out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<no_y<<"\t"<<centered_data<<"\t"<<centered_y<<"\t"<<descriptor_matrix_.Nrows()<<"\t"<<trained<<"\n\n";
 			
 			saveKernelParametersToFile(out);
 			saveModelParametersToFile(out);
-			saveResponseTransformationToFile(out);
-			Model::saveDescriptorInformationToFile(out);
+			saveResponseTransformationToFile(out); 
+			Model::saveDescriptorInformationToFile(out); 
 			
-			if(!trained) return;
+			if (!trained) return; 
 			
 			saveTrainingResult(out);
 			out<<descriptor_matrix_<<endl; 
@@ -168,54 +168,54 @@ namespace BALL
 
 		void KernelModel::readFromFile(string filename)
 		{
-			ifstream input(filename.c_str());
-			if(!input)
+			ifstream input(filename.c_str()); 
+			if (!input)
 			{
-				throw BALL::Exception::FileNotFound(__FILE__,__LINE__,filename);
+				throw BALL::Exception::FileNotFound(__FILE__, __LINE__, filename);
 			}	
 			
 			String line0;
-			getline(input,line0);  // skip comment line 
-			getline(input,line0);  // read read line containing model specification
+			getline(input, line0);  // skip comment line 
+			getline(input, line0);  // read read line containing model specification
 			
-			if(line0.getField(0,"\t")!=type_)
+			if (line0.getField(0, "\t") != type_)
 			{
 				String e = "Wrong input data! Use training data file generated by a ";
 				e = e + type_ + " model !";
-				throw Exception::WrongDataType(__FILE__,__LINE__,e.c_str());
+				throw Exception::WrongDataType(__FILE__, __LINE__, e.c_str());
 			}
 			
-			int no_descriptors = line0.getField(2,"\t").toInt();
-			int no_y = line0.getField(3,"\t").toInt();
-			bool centered_data = line0.getField(4,"\t").toInt();
-			bool centered_y = line0.getField(5,"\t").toInt();
-			int no_substances = line0.getField(6,"\t").toInt();
-			bool trained = line0.getField(7,"\t").toInt();
+			int no_descriptors = line0.getField(2, "\t").toInt();
+			int no_y = line0.getField(3, "\t").toInt();
+			bool centered_data = line0.getField(4, "\t").toInt();
+			bool centered_y = line0.getField(5, "\t").toInt();
+			int no_substances = line0.getField(6, "\t").toInt();
+			bool trained = line0.getField(7, "\t").toInt();
 			
-			if(trained) training_result_.resize(no_substances,no_y);
-			else training_result_.resize(0,0);
+			if (trained) training_result_.resize(no_substances, no_y); 
+			else training_result_.resize(0, 0);
 			descriptor_names_.clear();
 			substance_names_.clear();
 			
-			getline(input,line0);  // skip empty line
+			getline(input, line0);  // skip empty line
 			readKernelParametersFromFile(input);
 			readModelParametersFromFile(input);
-			if(centered_y)
+			if (centered_y)
 			{
-				readResponseTransformationFromFile(input, no_y);
+				readResponseTransformationFromFile(input, no_y); 
 			}
-			Model::readDescriptorInformationFromFile(input, no_descriptors, centered_data);
+			Model::readDescriptorInformationFromFile(input, no_descriptors, centered_data); 
 			
-			if(!trained) return;
+			if (!trained) return; 
 			
 			readTrainingResult(input, no_substances, no_y);
-			readMatrix(descriptor_matrix_,input,no_substances,no_descriptors);  // read descriptor matrix
-			getline(input,line0);  // skip empty line 
-			readMatrix(K_,input,no_substances,no_substances); 	// read kernel matrix K_
-			getline(input,line0);  // skip empty line 
-			getline(input,line0);  // skip comment line 
-			if(input.eof()) offsets_.resize(0);
-			else readVector(offsets_,input,1,no_y);
+			readMatrix(descriptor_matrix_, input, no_substances, no_descriptors);  // read descriptor matrix
+			getline(input, line0);  // skip empty line 
+			readMatrix(K_, input, no_substances, no_substances); 	// read kernel matrix K_
+			getline(input, line0);  // skip empty line 
+			getline(input, line0);  // skip comment line 
+			if (input.eof()) offsets_.resize(0); 
+			else readVector(offsets_, input, 1, no_y);
 			
 			input.close();	
 		}
@@ -224,20 +224,20 @@ namespace BALL
 		void KernelModel::readKernelParametersFromFile(ifstream& input)
 		{
 			String line;
-			getline(input,line);  // skip comment line
-			getline(input,line);
-			kernel->type = line.getField(0,"\t").toInt();
-			if(kernel->type!=4)
+			getline(input, line);  // skip comment line
+			getline(input, line);
+			kernel->type = line.getField(0, "\t").toInt();
+			if (kernel->type != 4)
 			{
-				kernel->par1 = line.getField(1,"\t").toDouble();
-				kernel->par2 = line.getField(2,"\t").toDouble();
+				kernel->par1 = line.getField(1, "\t").toDouble();
+				kernel->par2 = line.getField(2, "\t").toDouble();
 			}
 			else
 			{
-				kernel->equation1 = line.getField(1,"\t");
-				kernel->equation1 = line.getField(1,"\t");
+				kernel->equation1 = line.getField(1, "\t");
+				kernel->equation1 = line.getField(1, "\t");
 			}
-			getline(input,line);  // skip empty line
+			getline(input, line);  // skip empty line
 		}
 
 
@@ -245,7 +245,7 @@ namespace BALL
 		{
 			out<<"# kernel-type_\tkernel-par1\tkernel-par2\n";
 			out<<kernel->type<<"\t";
-			if(kernel->type!=4)
+			if (kernel->type != 4)
 			{
 				out<<kernel->par1<<"\t"<<kernel->par2<<"\n";
 			}
@@ -260,31 +260,31 @@ namespace BALL
 		void KernelModel::readTrainingResult(ifstream& input, int no_substances, int no_y)
 		{
 			String line;
-			for(int i=1; i<=no_substances; i++) // read training result
+			for (int i = 1; i <= no_substances; i++) // read training result
 			{
-				getline(input,line);
-				substance_names_.push_back(line.getField(0,"\t"));
-				for(int j=1; j<=no_y; j++)
+				getline(input, line);
+				substance_names_.push_back(line.getField(0, "\t"));
+				for (int j = 1; j <= no_y; j++)
 				{
-					training_result_(i,j) = line.getField(j,"\t").toDouble();
+					training_result_(i, j) = line.getField(j, "\t").toDouble();
 				}
 			}
-			getline(input,line);  // skip empty line 
+			getline(input, line);  // skip empty line 
 		}
 
 		void KernelModel::saveTrainingResult(ofstream& out)
 		{
 			const Matrix<double>* coeffErrors = validation->getCoefficientStdErrors();
-			for(int i=1; i<=training_result_.Nrows();i++) // write training result
+			for (int i = 1; i <= training_result_.Nrows(); i++) // write training result
 			{
 				out<<substance_names_[i-1]<<"\t";
-				for(int j=1;j<=training_result_.Ncols();j++)
+				for (int j = 1; j <= training_result_.Ncols(); j++)
 				{
-					out<<training_result_(i,j)<<"\t";
+					out<<training_result_(i, j)<<"\t";
 				}
-				for(int j=1; j<=coeffErrors->Ncols();j++)
+				for (int j = 1; j <= coeffErrors->Ncols(); j++)
 				{
-					out<<(*coeffErrors)(i,j)<<"\t";
+					out<<(*coeffErrors)(i, j)<<"\t";
 				}
 				out<<endl;
 			}

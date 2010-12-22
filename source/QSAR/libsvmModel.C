@@ -29,15 +29,15 @@
 using namespace BALL::QSAR;
 
 
-LibsvmModel::LibsvmModel(const QSARData& q, int k_type, double p1, double p2) : SVRModel(q,k_type,p1,p2) 
+LibsvmModel::LibsvmModel(const QSARData& q, int k_type, double p1, double p2) : SVRModel(q, k_type, p1, p2) 
 { 
 	type_="SVR";
-	svm_train_result_=NULL;
+	svm_train_result_ = NULL;
 	use_nu_ = 1;
 	nu_ = 0.05;
 	p_ = 0.1;
 	eps_ = 1e-3;
-	C_= 1; 
+	C_ = 1; 
 	createParameters();
 	x_space_ = NULL;
 }
@@ -50,20 +50,20 @@ LibsvmModel::~LibsvmModel()
 
 void LibsvmModel::train()
 {
-	if(descriptor_matrix_.Ncols()==0)
+	if (descriptor_matrix_.Ncols() == 0)
 	{
-		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Data must be read into the model before training!");
+		throw Exception::InconsistentUsage(__FILE__, __LINE__, "Data must be read into the model before training!"); 
 	}
 
 	kernel->calculateKernelMatrix(descriptor_matrix_, K_);
 	struct svm_problem* prob = NULL;
-	training_result_.resize(K_.Nrows(),Y_.Ncols());
+	training_result_.resize(K_.Nrows(), Y_.Ncols());
 	offsets_.resize(Y_.Ncols());
 	
-	for(int act=1; act<=Y_.Ncols(); act++)
+	for (int act = 1; act <= Y_.Ncols(); act++)
 	{
 		prob = createProblem(act);
-		svm_train_result_ = (LibsvmModel::svm_model*)svm_train(prob,&parameters_);
+		svm_train_result_ = (LibsvmModel::svm_model*)svm_train(prob, &parameters_);
 		free(prob->y);free(prob->x);free(prob);
 		
 		const double* const *sv_coef = svm_train_result_->sv_coef;
@@ -71,9 +71,9 @@ void LibsvmModel::train()
 
 		for(int i=0;i<svm_train_result_->l;i++) // l=#support vectors == #compounds
 		{
-			for(int j=0;j<svm_train_result_->nr_class-1;j++)
+			for (int j = 0; j < svm_train_result_->nr_class-1; j++)
 			{
-				training_result_(i+1,j+1) = sv_coef[j][i];
+				training_result_(i+1, j+1) = sv_coef[j][i];
 			}
 		}
 		
@@ -88,31 +88,31 @@ void LibsvmModel::train()
 
 struct svm_problem* LibsvmModel::createProblem(int response_id)
 {
-	struct svm_problem* prob = Malloc(svm_problem,1);
+	struct svm_problem* prob = Malloc(svm_problem, 1);
 	prob->l = K_.Nrows();
-	prob->y = Malloc(double,prob->l);
-	prob->x = Malloc(struct svm_node*,prob->l);
-	int elements=(K_.Ncols()+2)*K_.Nrows();
+	prob->y = Malloc(double, prob->l);
+	prob->x = Malloc(struct svm_node*, prob->l);
+	int elements = (K_.Ncols()+2)*K_.Nrows();
 	free(x_space_);
-	x_space_ = Malloc(struct svm_node,elements);
+	x_space_ = Malloc(struct svm_node, elements);
 	
 	int cols = K_.Ncols();
-	int index=0;
+	int index = 0;
 	
-	for(int i=1; i<=K_.Nrows(); i++)
+	for (int i = 1; i <= K_.Nrows(); i++)
 	{
 		//prob->x[i-1] = Malloc(struct svm_node, cols+1);	
 		prob->x[i-1] = &x_space_[index];
-		prob->y[i-1] = Y_(i,response_id);
+		prob->y[i-1] = Y_(i, response_id);
 		x_space_[index].index = 0;
 		x_space_[index].value = i; // numer of current row
 		index++;
-		for(int j=1; j<=cols;j++)
+		for (int j = 1; j <= cols; j++)
 		{ 
 			//prob->x[i-1][j-1].index = j;
-			//prob->x[i-1][j-1].value = K_(i,j);
+			//prob->x[i-1][j-1].value = K_(i, j);
 			x_space_[index].index = j;
-			x_space_[index].value = K_(i,j);
+			x_space_[index].value = K_(i, j);
 			index++;
 		}
 		//prob->x[i-1][cols].index = -1;
@@ -127,9 +127,9 @@ struct svm_problem* LibsvmModel::createProblem(int response_id)
 
 void LibsvmModel::createParameters()
 {
-	parameters_.kernel_type=4; // use precomputed kernel !
+	parameters_.kernel_type = 4; // use precomputed kernel !
 	parameters_.cache_size = 100;
-	if(use_nu_)
+	if (use_nu_)
 	{
 		parameters_.svm_type = 4;
 	}
@@ -183,11 +183,11 @@ void LibsvmModel::createParameters()
 
 void LibsvmModel::setParameters(vector<double>& v)
 {
-	if(v.size()!=6)
+	if (v.size() != 6)
 	{
 		String c = "Wrong number of model parameters! Needed: 6;";
 		c = c+" given: "+String(v.size());
-		throw Exception::ModelParameterError(__FILE__,__LINE__,c.c_str());
+		throw Exception::ModelParameterError(__FILE__, __LINE__, c.c_str());
 	}
 	String d = v[0];
 	use_nu_ = d.toBool();

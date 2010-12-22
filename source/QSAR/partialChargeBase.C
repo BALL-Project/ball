@@ -59,7 +59,7 @@ namespace BALL
   bool PartialChargeBase::isValid_(AtomContainer& ac)
   {
 		static HashMap<Handle, PreciseTime> mod_times;
-		PreciseTime last_mod = ac.getModificationTime();
+		PreciseTime last_mod = ac.getModificationTime(); 
 		Handle mol_handle = ac.getHandle();
 		if (mod_times.has(mol_handle))
 		{
@@ -105,7 +105,7 @@ namespace BALL
 		AtomIterator it = ac.beginAtom();
 		// assign the calculated values to the descriptors
 		double tot_pos(0), tot_neg(0), rel_pos(0), rel_neg(0), max_charge(0), min_charge(0);	
-		for (it=ac.beginAtom();it!=ac.endAtom();++it)
+		for (it = ac.beginAtom(); it != ac.endAtom(); ++it)
 		{
 			double charge = it->getProperty("PEOEPartialCharge").getDouble();
 			if (charge > 0)

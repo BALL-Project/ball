@@ -28,9 +28,9 @@ void AutomaticModelCreator::optimizeParameters(Model* model)
 {
 	try
 	{
-		model->optimizeParameters(5,20);
+		model->optimizeParameters(5, 20);
 		KernelModel* km = dynamic_cast<KernelModel*>(model);
-		if(km) km->kernel->gridSearch(0.25,20,0,5);
+		if (km) km->kernel->gridSearch(0.25, 20, 0, 5); 
 	}
 	catch(Exception::SingularMatrixError e)
 	{
@@ -46,7 +46,7 @@ void AutomaticModelCreator::selectFeatures(Model* model)
 	optimizeParameters(model);
 	fs.twinScan(5);
 	optimizeParameters(model);
-	fs.forwardSelection(5);
+	fs.forwardSelection(5); 
 	optimizeParameters(model);
 }
 
@@ -54,10 +54,10 @@ void AutomaticModelCreator::selectFeatures(Model* model)
 Model* AutomaticModelCreator::generateModel()
 {
 	Registry registry;
-	bool use_regression = !data_->checkforDiscreteY();
+	bool use_regression = !data_->checkforDiscreteY(); 
 	bool use_random_testsets = 0;
 	Size no_folds = 3;
-	if(use_random_testsets) no_folds = 10;
+	if (use_random_testsets) no_folds = 10; 
 
 	Size best_model_id = 0;
 	Size best_kernel_id = 0;
@@ -70,7 +70,7 @@ Model* AutomaticModelCreator::generateModel()
 
 	Log.level(10)<<std::setiosflags(std::ios::fixed)<<std::left;
 
-	for(Size model_id=1; model_id<14; model_id++)
+	for (Size model_id = 1; model_id < 14; model_id++)
 	{
 		RegistryEntry* reg_entry;
 		try
@@ -83,30 +83,30 @@ Model* AutomaticModelCreator::generateModel()
 			continue;
 		}
 
-		if(use_regression!=reg_entry->regression) continue;
+		if (use_regression != reg_entry->regression) continue; 
 
 		Size no_kernel_types = 1;
-		if(reg_entry->kernel) no_kernel_types=3;
+		if (reg_entry->kernel) no_kernel_types = 3; 
 
-		for(Size kernel_id=1; kernel_id<=no_kernel_types; kernel_id++)
+		for (Size kernel_id = 1; kernel_id <= no_kernel_types; kernel_id++)
 		{
 			double nested_q2 = 0;
 			int no_features = 0;
 			vector<double> q2_values;
 
-			for(Size fold_id=0; fold_id<no_folds; fold_id++)
+			for (Size fold_id = 0; fold_id < no_folds; fold_id++)
 			{
 				vector<QSARData*> sets;
-				if(use_random_testsets)
+				if (use_random_testsets)
 				{
 					// randomly select 25% of compounds for external validation set
 					sets = data_->generateExternalSet(0.25);
 				}
 				else
 				{
-					sets = data_->evenSplit(no_folds,fold_id);
+					sets = data_->evenSplit(no_folds, fold_id);
 				}
-				if(data_->isDataCentered())
+				if (data_->isDataCentered())
 				{
 					bool center_y = data_->isResponseCentered();
 					sets[0]->centerData(center_y); // train-partition
@@ -114,8 +114,8 @@ Model* AutomaticModelCreator::generateModel()
 				}
 
 				Model* model;
-				if(!reg_entry->kernel) model=(*reg_entry->create)(*sets[0]);
-				else model=(*reg_entry->createKernel1)(*sets[0],kernel_id,1, -1);
+				if (!reg_entry->kernel) model = (*reg_entry->create)(*sets[0]); 
+				else model = (*reg_entry->createKernel1)(*sets[0], kernel_id, 1, -1);
 				model->setParameters(reg_entry->parameterDefaults);
 				optimizeParameters(model);
 
@@ -143,18 +143,18 @@ Model* AutomaticModelCreator::generateModel()
 			double stddev = Statistics::getStddev(q2_values);
 
 			Log.level(10)<<setw(10)<<reg_entry->name_abreviation<<"  ";
-			if(reg_entry->kernel)
+			if (reg_entry->kernel)
 			{
-				if(kernel_id==1) Log.level(10)<<setw(6)<<"polyn.";
-				else if(kernel_id==2) Log.level(10)<<setw(6)<<"rbf";
-				else if(kernel_id==3) Log.level(10)<<setw(6)<<"sigm.";
+				if (kernel_id == 1) Log.level(10)<<setw(6)<<"polyn."; 
+				else if (kernel_id == 2) Log.level(10)<<setw(6)<<"rbf"; 
+				else if (kernel_id == 3) Log.level(10)<<setw(6)<<"sigm."; 
 			}
 			else Log.level(10)<<setw(6)<<"none";
 			Log.level(10)<<"  ";
 			Log.level(10)<<setw(9)<<no_features<<"  "<<setw(10)<<nested_q2<<"  "<<setw(6)<<stddev<<endl<<flush;
 
 			double quality = nested_q2-stddev; // make sure to prefer models w/ low stddev
-			if(quality>best_nested_quality)
+			if (quality > best_nested_quality)
 			{
 				best_nested_quality = quality;
 				best_model_id = model_id;
@@ -163,7 +163,7 @@ Model* AutomaticModelCreator::generateModel()
 		}
 	}
 
-	if(best_nested_quality<min_quality_)
+	if (best_nested_quality < min_quality_)
 	{
 		Log.level(10)<<"Sorry, no model with satisfactory prediction quality found!"<<endl;
 		return 0;
@@ -172,8 +172,8 @@ Model* AutomaticModelCreator::generateModel()
 	/// Create best model using ENTIRE data set and return it
 	RegistryEntry* reg_entry = registry.getEntry(best_model_id);
 	Model* model;
-	if(!reg_entry->kernel) model=(*reg_entry->create)(*data_);
-	else model=(*reg_entry->createKernel1)(*data_,best_kernel_id,1, -1);
+	if (!reg_entry->kernel) model = (*reg_entry->create)(*data_); 
+	else model = (*reg_entry->createKernel1)(*data_, best_kernel_id, 1, -1);
 	model->setParameters(reg_entry->parameterDefaults);
 	optimizeParameters(model);
 	selectFeatures(model);
