@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: networkPreferences.C,v 1.4.18.1 2007/03/25 22:02:10 oliver Exp $
-//
 
 #include <BALL/VIEW/DIALOGS/networkPreferences.h>
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>

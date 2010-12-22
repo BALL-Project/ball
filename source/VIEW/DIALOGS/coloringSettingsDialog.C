@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.C,v 1.38.16.3 2007/05/30 21:23:14 amoll Exp $
-//
 
 #include <BALL/VIEW/DIALOGS/coloringSettingsDialog.h>
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>

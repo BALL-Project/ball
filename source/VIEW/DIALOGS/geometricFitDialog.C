@@ -1,3 +1,6 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 
 #include <BALL/VIEW/DIALOGS/geometricFitDialog.h>
 #include <BALL/STRUCTURE/DOCKING/geometricFit.h>

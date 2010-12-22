@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: minimizationDialog.C,v 1.4.16.2 2007/05/08 14:35:28 anhi Exp $
-//
 
 #include <BALL/VIEW/DIALOGS/minimizationDialog.h>
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>

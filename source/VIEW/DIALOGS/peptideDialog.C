@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peptideDialog.C,v 1.11.16.1 2007/03/25 22:02:12 oliver Exp $
 
 #include <BALL/VIEW/DIALOGS/peptideDialog.h>
 #include <BALL/VIEW/KERNEL/common.h>

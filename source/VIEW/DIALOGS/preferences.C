@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.C,v 1.19.16.1 2007/03/25 22:02:13 oliver Exp $
-//
 
 #include <BALL/VIEW/DIALOGS/preferences.h>
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>

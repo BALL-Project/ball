@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FDPBDialog.C,v 1.20.16.1 2007/03/25 22:00:37 oliver Exp $
-//
 
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>

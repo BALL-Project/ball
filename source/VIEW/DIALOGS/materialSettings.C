@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: materialSettings.C,v 1.11.16.2 2007/05/30 21:23:14 amoll Exp $
-// 
 
 #include <BALL/VIEW/DIALOGS/materialSettings.h>
 #include <BALL/VIEW/WIDGETS/scene.h>

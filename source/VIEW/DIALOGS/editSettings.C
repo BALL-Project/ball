@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editSettings.C,v 1.1.6.1 2007/03/25 22:01:57 oliver Exp $
-//
 
 #include <BALL/VIEW/DIALOGS/editSettings.h>
 #include <BALL/VIEW/KERNEL/common.h>

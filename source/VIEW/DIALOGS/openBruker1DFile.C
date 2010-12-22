@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: openBruker1DFile.C,v 1.6.16.1 2007/03/25 22:02:11 oliver Exp $
 
 #include <BALL/VIEW/DIALOGS/openBruker1DFile.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
