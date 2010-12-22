@@ -11,7 +11,7 @@
 #include <BALL/STRUCTURE/surfaceProcessor.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/FORMAT/HINFile.h>
-#include <BALL/DATATYPE/list.h>
+#include <list>
 
 ///////////////////////////
 
