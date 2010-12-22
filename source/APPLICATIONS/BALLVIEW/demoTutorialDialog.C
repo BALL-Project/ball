@@ -28,8 +28,8 @@
 #include <BALL/DATATYPE/contourSurface.h>
 #include <BALL/SYSTEM/path.h>
 
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qmessagebox.h>
+#include <QtGui/QPushButton>
+#include <QtGui/QMessageBox>
 #include <QtGui/QTextBrowser>
 
 namespace BALL
