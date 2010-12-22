@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DBInterface.h,v 1.7.10.2 2007/08/07 12:31:11 oliver Exp $
-//
-// Author:
-//   Oliver Kohlbacher
-//
 
 #ifndef BALL_FORMAT_DBINTERFACE_H
 #define BALL_FORMAT_DBINTERFACE_H
@@ -15,10 +10,10 @@
 #include <BALL/FORMAT/MOLFile.h>
 #include <BALL/COMMON/exception.h>
 
-#include <QtSql/qsqlrecord.h>
-#include <QtSql/qsqldatabase.h>
-#include <QtSql/qsqlquery.h>
-#include <QtCore/qvariant.h>
+#include <QSqlRecord>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QtCore/QVariant>
 
 namespace BALL
 {
