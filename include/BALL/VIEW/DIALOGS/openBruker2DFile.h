@@ -21,7 +21,7 @@
 # include <BALL/FORMAT/bruker2DFile.h>
 #endif
 
-#include <QtGui/qwidget.h>
+#include <QtGui/QWidget>
 
 namespace BALL
 {

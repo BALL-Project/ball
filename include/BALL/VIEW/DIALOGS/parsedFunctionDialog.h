@@ -11,7 +11,7 @@
 
 #include <BALL/VIEW/UIC/ui_parsedFunctionDialog.h>
 
-#include <QtGui/qdialog.h>
+#include <QtGui/QDialog>
 
 namespace BALL
 {

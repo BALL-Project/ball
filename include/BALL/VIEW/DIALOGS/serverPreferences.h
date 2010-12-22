@@ -9,9 +9,9 @@
 # include <BALL/COMMON/global.h>
 #endif
 
-#include <QtGui/qwidget.h>
-#include <QtGui/qcheckbox.h>
-#include <QtGui/qlineedit.h>
+#include <QtGui/QWidget>
+#include <QtGui/QCheckBox>
+#include <QtGui/QLineEdit>
 
 #ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
