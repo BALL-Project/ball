@@ -18,7 +18,7 @@
 #endif
 
 
-#include <QtGui/qfont.h>
+#include <QtGui/QFont>
 
 namespace BALL
 {
