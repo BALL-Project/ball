@@ -430,8 +430,21 @@ namespace BALL
 					return;
 
 				case SceneMessage::EXPORT_PNG:
-					exportPNG();
-					return;
+					{
+						// did we get a filename with the message?
+						String filename = "";
+						if (scene_message->data().type() == typeid(String))
+						{
+							filename = boost::any_cast<String>(scene_message->data());
+						}
+
+						if (filename != "")
+							exportPNG(filename);
+						else
+							exportPNG();
+
+						return;
+					}
 
 				case SceneMessage::EXPORT_POVRAY:
 					exportPOVRay();
