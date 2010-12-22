@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.16.16.1 2007/03/25 21:32:18 oliver Exp $
-//
 
 #ifndef BALL_APPLICATIONS_BALLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_BALLVIEW_MAINFRAME_H
