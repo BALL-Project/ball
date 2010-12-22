@@ -5,8 +5,8 @@
 #include <BALL/VIEW/WIDGETS/regularData1DWidget.h>
 #include <BALL/VIEW/KERNEL/message.h>
 
-#include <QtGui/q3popupmenu.h>
-#include <QtGui/qapplication.h>
+#include <QtGui/QPopupMenu>
+#include <QtGui/QApplication>
 //Added by qt3to4:
 #include <QContextMenuEvent>
 #include <QResizeEvent>

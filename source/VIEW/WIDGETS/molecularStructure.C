@@ -37,7 +37,7 @@
 
 #include <BALL/VIEW/KERNEL/threads.h>
 
-#include <QtGui/qmenubar.h>
+#include <QtGui/QMenuBar>
 
 #include <sstream>
 

@@ -12,9 +12,8 @@
 #include <QtCore/QFSFileEngine>
 #include <QtGui/QFileDialog>
 #include <QtGui/QApplication>
-#include <QtGui/QTreeView>
-#include <QtTest/qtestspontaneevent.h>
-#include <QtTest/qtestkeyboard.h>
+#include <QtGui/QTreeView> 
+#include <QTest>
 
 #ifdef BALL_PYTHON_SUPPORT
  #include <BALL/VIEW/WIDGETS/pyWidget.h>

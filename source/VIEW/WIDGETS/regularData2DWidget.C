@@ -6,11 +6,11 @@
 #include <BALL/VIEW/DATATYPE/colorMap.h>
 #include <BALL/VIEW/KERNEL/message.h>
 
-#include <QtGui/q3pointarray.h>
-#include <QtGui/qpainter.h>
-#include <QtGui/qlayout.h>
-#include <QtGui/q3popupmenu.h>
-#include <QtGui/qapplication.h>
+#include <QtGui/QPointArray>
+#include <QtGui/QPainter>
+#include <QtGui/QLayout>
+#include <QtGui/QPopupMenu>
+#include <QtGui/QApplication>
 //Added by qt3to4:
 #include <QContextMenuEvent>
 #include <QPixmap>
