@@ -77,10 +77,10 @@ namespace BALL
 
 			String GAMESSCommand = GAMESSPath->text().latin1();
 			GAMESSCommand += " " + filename;
-			Log.info() << "Executing GAMESS" << std::endl;
+			Log.info() << (String)tr("Executing GAMESS") << std::endl;
 
 			system(GAMESSCommand.c_str());
-			Log.info() << "Done! " << std::endl;
+			Log.info() << (String)tr("Done! ") << std::endl;
 
 			File::remove(filename+".inp");
 

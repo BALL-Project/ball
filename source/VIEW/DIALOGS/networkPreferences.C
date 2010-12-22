@@ -30,7 +30,7 @@ namespace BALL
 			// signals and slots connections
 			connect(proxy_type_box, SIGNAL(currentIndexChanged(int)), this, SLOT(proxyModeChanged(int)));
 
-			setWidgetStackName("Network");
+			setWidgetStackName((String)tr("Network"));
 			registerWidgets_();
 
 			if (!proxyEnabled())
@@ -73,7 +73,7 @@ namespace BALL
 
 			if (!valid_port && proxyEnabled())
 			{
-				Log.error() << "Proxy port invalid!" << std::endl;
+				Log.error() << (String)tr("Proxy port invalid!") << std::endl;
 				return;
 			}
 

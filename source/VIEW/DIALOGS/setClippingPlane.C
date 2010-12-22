@@ -59,7 +59,7 @@ void SetClippingPlane::okPressed()
 	}
 	catch(...)
 	{
-		getMainControl()->setStatusbarText("Invalid Values!");
+		getMainControl()->setStatusbarText((String)tr("Invalid Values!"));
 		return;
 	}
 
@@ -82,7 +82,7 @@ void SetClippingPlane::okPressed()
 	}
 	else
 	{
-		getMainControl()->setStatusbarText("No plane available");
+		getMainControl()->setStatusbarText((String)tr("No plane available"));
 	}
 
 	close();

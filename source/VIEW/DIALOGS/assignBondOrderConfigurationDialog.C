@@ -93,7 +93,7 @@ namespace BALL
 			}
 
 			QString tmp = filename.c_str();
-			QString result = QFileDialog::getOpenFileName(0, "Select the penalty parameter file", tmp, "*.xml");
+			QString result = QFileDialog::getOpenFileName(0, tr("Select the penalty parameter file"), tmp, "*.xml");
 			if (!result.isEmpty())
 			{
 				// store the new filename in the lineedit field

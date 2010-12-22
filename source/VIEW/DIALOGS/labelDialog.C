@@ -1,3 +1,8 @@
+/* TRANSLATOR BALL::VIEW::LabelDialog
+
+		Necessary for lupdate.
+*/
+
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
@@ -40,7 +45,7 @@ LabelDialog::LabelDialog(QWidget* parent, const char* name)
 	connect( all_items, SIGNAL( toggled(bool) ), this, SLOT( modeChanged() ) );
 	connect( text_box, SIGNAL( editTextChanged(const QString&) ), this, SLOT( textChanged() ) );
 
-	setWindowTitle("Add Label");
+	setWindowTitle(tr("Add Label"));
 	setObjectName(name);
 
 	// register the widget with the MainControl
@@ -118,10 +123,10 @@ void LabelDialog::onNotify(Message *message)
 void LabelDialog::initializeWidget(MainControl&)
 {
 	String description = "Shortcut|Display|Create|Label";
-	id_ = insertMenuEntry(MainControl::DISPLAY_CREATE, "&Label", this, 
+	id_ = insertMenuEntry(MainControl::DISPLAY_CREATE, (String)tr("&Label"), this, 
 												SLOT(show()), description,
 												QKeySequence("Ctrl+L"));
-	setMenuHint("Add a label for selected molecular objects");   
+	setMenuHint((String)tr("Add a label for selected molecular objects"));   
 }
 
 void LabelDialog::show()

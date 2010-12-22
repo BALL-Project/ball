@@ -143,7 +143,7 @@ void CompositeProperties::accept()
 			text.split(fields, "()|, ");
 			if (fields.size() != 3)
 			{
-				Log.error() << "Invalid values for position!" << std::endl;
+				Log.error() << (String)tr("Invalid values for position!") << std::endl;
 				return;
 			}
 
@@ -155,7 +155,7 @@ void CompositeProperties::accept()
 			text.split(fields, "(),| ");
 			if (fields.size() != 3)
 			{
-				Log.error() << "Invalid values for velocity!" << std::endl;
+				Log.error() << (String)tr("Invalid values for velocity!") << std::endl;
 				return;
 			}
 
@@ -167,7 +167,7 @@ void CompositeProperties::accept()
 			text.split(fields, "(),| ");
 			if (fields.size() != 3)
 			{
-				Log.error() << "Invalid values for force!" << std::endl;
+				Log.error() << (String)tr("Invalid values for force!") << std::endl;
 				return;
 			}
 
@@ -178,7 +178,7 @@ void CompositeProperties::accept()
 	}
 	catch(Exception::InvalidFormat&)
 	{
-		Log.error() << "Invalid value, try a floating point number!" << std::endl;
+		Log.error() << (String)tr("Invalid value, try a floating point number!") << std::endl;
 		return;
 	}
 

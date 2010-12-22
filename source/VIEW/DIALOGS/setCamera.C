@@ -61,7 +61,7 @@ void SetCamera::okPressed()
 	}
 	catch(...)
 	{
-		main_control->setStatusbarText("Invalid Values!");
+		main_control->setStatusbarText((String)tr("Invalid Values!"));
 		return;
 	}
 
@@ -70,7 +70,7 @@ void SetCamera::okPressed()
 
 	if (vp == lp) 
 	{
-		Log.error() << "Invalid values for setCamera: viewpoint = look at" << std::endl;
+		Log.error() << (String)tr("Invalid values for setCamera: viewpoint = look at") << std::endl;
 		return;
 	}
 

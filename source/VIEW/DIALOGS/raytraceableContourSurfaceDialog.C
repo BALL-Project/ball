@@ -57,7 +57,7 @@ RaytraceableContourSurfaceDialog::RaytraceableContourSurfaceDialog(RaytraceableG
 	}
 	else
 	{
-		Log.error() << "The grid is not valid" << std::endl;
+		Log.error() << (String)tr("The grid is not valid") << std::endl;
 	}
 }
 

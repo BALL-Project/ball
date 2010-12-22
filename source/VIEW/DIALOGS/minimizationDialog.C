@@ -49,7 +49,7 @@ namespace BALL
 			}
 			catch(...)
 			{
-				Log.error() << "Invalid max iterations!" << std::endl;
+				Log.error() << (String)tr("Invalid max iterations!") << std::endl;
 				return 0;
 			}
 		}
@@ -67,7 +67,7 @@ namespace BALL
 			}
 			catch(...)
 			{
-				Log.error() << "Invalid refresh iterations!" << std::endl;
+				Log.error() << (String)tr("Invalid refresh iterations!") << std::endl;
 				return 0;
 			}
 		}
@@ -85,7 +85,7 @@ namespace BALL
 			}
 			catch(...)
 			{
-				Log.error() << "Invalid max gradient!" << std::endl;
+				Log.error() << (String)tr("Invalid max gradient!") << std::endl;
 				return 0;
 			}
 		}
@@ -103,7 +103,7 @@ namespace BALL
 			}
 			catch(...)
 			{
-				Log.error() << "Invalid Energy Difference!" << std::endl;
+				Log.error() << (String)tr("Invalid Energy Difference!") << std::endl;
 				return 0;
 			}
 		}
@@ -199,12 +199,12 @@ namespace BALL
 			QString error;
 			if (getMaxGradient() == 0)
 			{
-				error = "maximum gradient.";
+				error = tr("maximum gradient.");
 			}
 
 			if(getEnergyDifference() == 0.0)
 			{
-				error = "energy difference.";
+				error = tr("energy difference.");
 			}
 
 			if (error == "")
@@ -213,7 +213,7 @@ namespace BALL
 				return;
 			}
 
-			QMessageBox::critical(this, "Invalid values", QString("Please apply correct settings (> 0) for the ") + error,
+			QMessageBox::critical(this, tr("Invalid values"), tr("Please apply correct settings") + " (> 0) " + tr("for the") + " " + error,
 					QMessageBox::Ok| QMessageBox::Default);
 		}
 

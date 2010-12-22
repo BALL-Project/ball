@@ -67,7 +67,7 @@ void StereoSettingsDialog::show()
 
 void StereoSettingsDialog::initializeWidget(MainControl&)
 {
-	insertMenuEntry(MainControl::DISPLAY_STEREO, "Stereo Settings", this, SLOT(show()), "Shortcut|Display|Stereo|Stereo_Settings");
+	insertMenuEntry(MainControl::DISPLAY_STEREO, tr("Stereo Settings"), this, SLOT(show()), "Shortcut|Display|Stereo|Stereo_Settings");
 }
 
 void StereoSettingsDialog::computeSettingsFromModelDistance()
@@ -131,7 +131,7 @@ void StereoSettingsDialog::okPressed()
 	}
 	catch(...)
 	{
-		main_control->setStatusbarText("Invalid Values!");
+		main_control->setStatusbarText((String)tr("Invalid Values!"));
 		return;
 	}
 
@@ -139,7 +139,7 @@ void StereoSettingsDialog::okPressed()
 			|| (v_viewer_distance_from_screen < 0)
 			|| (v_viewer_height < 0))
 	{
-		Log.error() << "Invalid values for StereoSettings: negative value(s)." << std::endl;
+		Log.error() << (String)tr("Invalid values for StereoSettings: negative value(s).") << std::endl;
 		return;
 	}
 	
@@ -149,9 +149,9 @@ void StereoSettingsDialog::okPressed()
 	//Camera& camera = Scene::getInstance(0)->getStage()->getCamera();
 	//camera.setViewPoint(vp);
 	//camera.setLookAtPosition(lp);
-	std::cout << " neue focal plane" << std::endl;
 	accept();
 }
 
 // NAMESPACE
-} }
+} 
+}

@@ -27,7 +27,7 @@ LightSettings::LightSettings(QWidget* parent, const char* name, Qt::WFlags fl)
 	setObjectName(name);
 	relative->setChecked(true);
 	defaultsPressed();
-	setWidgetStackName("Lighting");
+	setWidgetStackName((String)tr("Lighting"));
 	setINIFileSectionName("LIGHTING");
 	registerWidgetForHelpSystem_(this, "scene.html#lightsources");
 	registerWidgets_();
@@ -95,7 +95,7 @@ void LightSettings::update()
 	
 		for (Position light_nr = 0; light_nr < lights_.size(); light_nr++)
 		{
-			lights_list->addItem((String("Light ") + String(light_nr + 1)).c_str());
+			lights_list->addItem((String(tr("Light")) + " " + String(light_nr + 1)).c_str());
 		}
 	}
 

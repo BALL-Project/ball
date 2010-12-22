@@ -36,7 +36,7 @@ namespace BALL
 			setObjectName(name);
 			setINIFileSectionName("MODEL_OPTIONS");
 			setDefaultValues_();
-			setWidgetStackName("Models");
+			setWidgetStackName((String)tr("Models"));
 			setWidgetStack(widget_stack);
 
 			// signals and slots connections

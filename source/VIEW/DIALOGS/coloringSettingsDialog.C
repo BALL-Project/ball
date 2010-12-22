@@ -31,7 +31,7 @@ namespace BALL
 			setObjectName(name);
 			setINIFileSectionName("COLORING_OPTIONS");
 			setDefaultValues_();
-			setWidgetStackName("Model Colors");
+			setWidgetStackName((String)tr("Model Colors"));
 			setWidgetStack(widget_stack);
 
 			// signals and slots connections
@@ -65,7 +65,7 @@ namespace BALL
 
 				names.push_back(PTE[0].getSymbol());
 				colors.push_back(color_hash_map[0]);
-				element_table_->setNamesTitle("Element");
+				element_table_->setNamesTitle((String)tr("Element"));
 				element_table_->setContent(names, colors);
 				names.clear();
 				colors.clear();
@@ -85,7 +85,7 @@ namespace BALL
 					colors.push_back(it2->second);
 				}
 
-				residue_table_->setNamesTitle("Residue");
+				residue_table_->setNamesTitle((String)tr("Residue"));
 				residue_table_->setContent(names, colors);
 			}
 				
@@ -448,7 +448,7 @@ namespace BALL
 					names.push_back(p);
 				}
 
-				chain_table_->setNamesTitle("Chain");
+				chain_table_->setNamesTitle((String)tr("Chain"));
 				chain_table_->setContent(names, colors);
 			} else
 
@@ -464,7 +464,7 @@ namespace BALL
 					names.push_back(p);
 				}
 
-				molecule_table_->setNamesTitle("Molecule");
+				molecule_table_->setNamesTitle((String)tr("Molecule"));
 				molecule_table_->setContent(names, colors);
 			}
 

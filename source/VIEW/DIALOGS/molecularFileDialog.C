@@ -52,16 +52,16 @@ MolecularFileDialog::~MolecularFileDialog()
 void MolecularFileDialog::initializeWidget(MainControl&)
 {
 	String description = "Shortcut|File|Open_Structure";
-	open_id_ = insertMenuEntry(MainControl::FILE_OPEN, "&Structure", this, 
+	open_id_ = insertMenuEntry(MainControl::FILE_OPEN, (String)tr("&Structure"), this, 
 									SLOT(readFiles()), description, QKeySequence::Open);
 
-	setMenuHint("Open a molecular file (e.g. PDB,MOL2,SDF)");
+	setMenuHint((String)tr("Open a molecular file (e.g. PDB,MOL2,SDF)"));
 	setIcon("actions/document-open", true);
 
 	description = "Shortcut|File|Save_Structure";
-	save_id_ = insertMenuEntry(MainControl::FILE, "&Save Structure", this, 
+	save_id_ = insertMenuEntry(MainControl::FILE, (String)tr("&Save Structure"), this, 
 														 SLOT(writeFile()), description, QKeySequence::Save);
-	setMenuHint("Save the highlighted System (e.g. as PDB,MOL2,SDF file)");
+	setMenuHint((String)tr("Save the highlighted System (e.g. as PDB,MOL2,SDF file)"));
 	setIcon("actions/document-save", true);
 }
 
@@ -69,7 +69,7 @@ void MolecularFileDialog::readFiles()
 {
 	QStringList files = QFileDialog::getOpenFileNames(
 											0,
-											"Choose a molecular file to open",
+											tr("Choose a molecular file to open"),
 											getWorkingDir().c_str(),
 											getSupportedFileFormatsList().c_str());
 
@@ -87,16 +87,16 @@ String MolecularFileDialog::getSupportedFileFormats() const
 
 String MolecularFileDialog::getSupportedFileFormatsList() const
 {
-	String sl;
-	sl += "Molecular files (*.pdb *.brk *.ent *.hin *.mol *.mol2 *.sdf *.ac *.xyz);;";
-	sl += "PDB files (*.pdb *.brk *.ent);;";
-	sl += "HIN files (*.hin);;";
-	sl += "MOL files (*.mol);;";
-	sl += "MOL2 files (*.mol2);;";
-	sl += "SD files (*.sdf);;";
-	sl += "AC files (*.ac);;";
-	sl += "XYZ files (*.xyz)";
-	return sl;
+	QString sl;
+	sl += tr("Molecular files") + " (*.pdb *.brk *.ent *.hin *.mol *.mol2 *.sdf *.ac *.xyz);;";
+	sl += "PDB " + tr("files")  + " (*.pdb *.brk *.ent);;";
+	sl += "HIN " + tr("files")  + " (*.hin);;";
+	sl += "MOL " + tr("files")  + " (*.mol);;";
+	sl += "MOL2 "+ tr("files")  + " (*.mol2);;";
+	sl += "SD "  + tr("files")  + " (*.sdf);;";
+	sl += "AC "  + tr("files")  + " (*.ac);;";
+	sl += "XYZ " + tr("files")  + " (*.xyz)";
+	return (String)sl;
 }
 
 System* MolecularFileDialog::openMolecularFile(const String& file)
@@ -131,7 +131,7 @@ System* MolecularFileDialog::openMolecularFile(const String& filename,
 
 	if (!ok || filename == "/" || filename == "\\") 
 	{
-		setStatusbarText("Could not open file " + filename, true);
+		setStatusbarText((String)tr("Could not open file") + " " + filename, true);
 		return 0;
 	}
 
@@ -174,7 +174,7 @@ System* MolecularFileDialog::openMolecularFile(const String& filename,
 	}
 	else
 	{
-		setStatusbarText(String("Unknown filetype: ") + filetype, true);
+		setStatusbarText(String(tr("Unknown filetype")) + ": " + filetype, true);
 	}
 
 	return 0;
@@ -187,7 +187,7 @@ bool MolecularFileDialog::writeFile()
 
 	if (selection.size() != 1 || !RTTI::isKindOf<System> (**selection.begin()))
 	{
-		setStatusbarText("Not a single system selected! Aborting writing...", true);
+		setStatusbarText((String)tr("Not a single system selected! Aborting writing..."), true);
 		return false;
 	}
 
@@ -199,13 +199,13 @@ bool MolecularFileDialog::writeFile()
 
 	QString s = QFileDialog::getSaveFileName(
 								0,
-								"Choose a filename to save the selected system",
+								tr("Choose a filename to save the selected system"),
 								file_name.c_str(),
 								getSupportedFileFormats().c_str());
 
 	if (s == QString::null) return false;
 
-	setStatusbarText("writing file...");
+	setStatusbarText((String)tr("writing file..."));
 
 	String filename = ascii(s);
 	setWorkingDirFromFilename_(filename);
@@ -263,7 +263,7 @@ bool MolecularFileDialog::writeFile()
 		}
 		else
 		{
-			setStatusbarText("Unknown file format, please set the file extension accordingly to type, aborting...", true);
+			setStatusbarText((String)tr("Unknown file format, please set the file extension accordingly to type, aborting..."), true);
 			return false;
 		}
 	}
@@ -273,7 +273,7 @@ bool MolecularFileDialog::writeFile()
 		return false;
 	}
 
-	setStatusbarText(String(system.countAtoms()) + " atoms written to file \"" + filename + "\"", true);
+	setStatusbarText(String(system.countAtoms()) + " " + (String)tr("atoms written to file") + " \"" + filename + "\"", true);
 	return true;
 }
 
@@ -288,7 +288,7 @@ bool MolecularFileDialog::writePDBFile(String filename, const System& system)
 	catch(Exception::GeneralException& e)
 	{
 		Log.error() << e << std::endl;
-		setStatusbarText("Writing of PDB file failed, see logs!", true);
+		setStatusbarText((String)tr("Writing of PDB file failed, see logs!"), true);
 		return false;
 	}
 
@@ -307,7 +307,7 @@ bool MolecularFileDialog::writeHINFile(String filename, const System& system)
 	catch(Exception::GeneralException& e)
 	{
 		Log.error() << e << std::endl;
-		setStatusbarText("Writing of HIN file failed, see logs!", true);
+		setStatusbarText((String)tr("Writing of HIN file failed, see logs!"), true);
 		return false;
 	}
 
@@ -326,7 +326,7 @@ bool MolecularFileDialog::writeMOLFile(String filename, const System& system)
 	catch(Exception::GeneralException& e)
 	{
 		Log.error() << e << std::endl;
-		setStatusbarText("Writing of MOL file failed, see logs!", true);
+		setStatusbarText((String)tr("Writing of MOL file failed, see logs!"), true);
 		return false;
 	}
 
@@ -345,7 +345,7 @@ bool MolecularFileDialog::writeMOL2File(String filename, const System& system)
 	catch(Exception::GeneralException& e)
 	{
 		Log.error() << e << std::endl;
-		setStatusbarText("Writing of MOL2 file failed, see logs!", true);
+		setStatusbarText((String)tr("Writing of MOL2 file failed, see logs!"), true);
 		return false;
 	}
 
@@ -363,7 +363,7 @@ bool MolecularFileDialog::writeSDFile(String filename, const System& system)
 	catch(Exception::GeneralException& e)
 	{
 		Log.error() << e << std::endl;
-		setStatusbarText("Writing of SD file failed, see logs!", true);
+		setStatusbarText((String)tr("Writing of SD file failed, see logs!"), true);
 		return false;
 	}
 
@@ -381,7 +381,7 @@ bool MolecularFileDialog::writeACFile(String filename, const System& system)
 	catch(Exception::GeneralException& e)
 	{
 		Log.error() << e << std::endl;
-		setStatusbarText("Writing of AC file failed, see logs!", true);
+		setStatusbarText((String)tr("Writing of AC file failed, see logs!"), true);
 		return false;
 	}
 
@@ -399,7 +399,7 @@ bool MolecularFileDialog::writeXYZFile(String filename, const System& system)
 	catch(Exception::GeneralException& e)
 	{
 		Log.error() << e << std::endl;
-		setStatusbarText("Writing of XYZ file failed, see logs!", true);
+		setStatusbarText((String)tr("Writing of XYZ file failed, see logs!"), true);
 		return false;
 	}
 
@@ -409,7 +409,7 @@ bool MolecularFileDialog::writeXYZFile(String filename, const System& system)
 
 System* MolecularFileDialog::readPDBFile(String filename, String system_name)
 {
-	setStatusbarText("reading PDB file...", true);
+	setStatusbarText((String)tr("reading PDB file..."), true);
 
 	System* system = new System();
 
@@ -425,7 +425,7 @@ System* MolecularFileDialog::readPDBFile(String filename, String system_name)
 	catch(Exception::GeneralException& e)
 	{
 		Log.error() << e << std::endl;
-		setStatusbarText("Reading of PDB file failed, see logs!", true);
+		setStatusbarText((String)tr("Reading of PDB file failed, see logs!"), true);
 		delete system;
 		return 0;
 	}
@@ -440,7 +440,7 @@ System* MolecularFileDialog::readHINFile(String filename, String system_name)
 	bool has_periodic_boundary = false;
 	SimpleBox3 bounding_box;
 
-	setStatusbarText("reading HIN file...", true);
+	setStatusbarText((String)tr("reading HIN file..."), true);
 
 	System* system = new System();
 
@@ -458,7 +458,7 @@ System* MolecularFileDialog::readHINFile(String filename, String system_name)
 	catch(Exception::GeneralException& e)
 	{
 		Log.error() << e << std::endl;
-		setStatusbarText("Reading of HIN file failed, see logs!", true);
+		setStatusbarText((String)tr("Reading of HIN file failed, see logs!"), true);
 		delete system;
 		return 0;
 	}
@@ -489,7 +489,7 @@ System* MolecularFileDialog::readHINFile(String filename, String system_name)
 
 System* MolecularFileDialog::readMOLFile(String filename, String system_name)
 {
-	setStatusbarText("reading MOL file...", true);
+	setStatusbarText((String)tr("reading MOL file..."), true);
 
 	System* system = new System();
 
@@ -502,7 +502,7 @@ System* MolecularFileDialog::readMOLFile(String filename, String system_name)
 	catch(Exception::GeneralException& e)
 	{
 		Log.error() << e << std::endl;
-		setStatusbarText("Reading of MOL file failed, see logs!", true);
+		setStatusbarText((String)tr("Reading of MOL file failed, see logs!"), true);
 		delete system;
 		return 0;
 	}
@@ -514,7 +514,7 @@ System* MolecularFileDialog::readMOLFile(String filename, String system_name)
 
 System* MolecularFileDialog::readMOL2File(String filename, String system_name)
 {
-	setStatusbarText("reading MOL2 file...", true);
+	setStatusbarText((String)tr("reading MOL2 file..."), true);
 
 	System* system = new System();
 
@@ -526,7 +526,7 @@ System* MolecularFileDialog::readMOL2File(String filename, String system_name)
 	}
 	catch(Exception::GeneralException& e)
 	{
-		setStatusbarText("Reading of MOL2 file failed, see logs!", true);
+		setStatusbarText((String)tr("Reading of MOL2 file failed, see logs!"), true);
 		delete system;
 		return 0;
 	}
@@ -538,7 +538,7 @@ System* MolecularFileDialog::readMOL2File(String filename, String system_name)
 
 System* MolecularFileDialog::readSDFile(String filename, String system_name)
 {
-	setStatusbarText("reading SD file...", true);
+	setStatusbarText((String)tr("reading SD file..."), true);
 
 	System* system = new System();
 
@@ -550,7 +550,7 @@ System* MolecularFileDialog::readSDFile(String filename, String system_name)
 	}
 	catch(Exception::GeneralException& e)
 	{
-		setStatusbarText("Reading of SD file failed, see logs!", true);
+		setStatusbarText((String)tr("Reading of SD file failed, see logs!"), true);
 		delete system;
 		return 0;
 	}
@@ -562,7 +562,7 @@ System* MolecularFileDialog::readSDFile(String filename, String system_name)
 
 System* MolecularFileDialog::readACFile(String filename, String system_name)
 {
-	setStatusbarText("reading AC file...", true);
+	setStatusbarText((String)tr("reading AC file..."), true);
 
 	System* system = new System();
 
@@ -574,7 +574,7 @@ System* MolecularFileDialog::readACFile(String filename, String system_name)
 	}
 	catch(Exception::GeneralException& e)
 	{
-		setStatusbarText("Reading of AC file failed, see logs!", true);
+		setStatusbarText((String)tr("Reading of AC file failed, see logs!"), true);
 		delete system;
 		return 0;
 	}
@@ -585,7 +585,7 @@ System* MolecularFileDialog::readACFile(String filename, String system_name)
 
 System* MolecularFileDialog::readXYZFile(String filename, String system_name)
 {
-	setStatusbarText("reading XYZ file...", true);
+	setStatusbarText((String)tr("reading XYZ file..."), true);
 
 	System* system = new System();
 
@@ -597,7 +597,7 @@ System* MolecularFileDialog::readXYZFile(String filename, String system_name)
 	}
 	catch(Exception::GeneralException& e)
 	{
-		setStatusbarText("Reading of XYZ file failed, see logs!", true);
+		setStatusbarText((String)tr("Reading of XYZ file failed, see logs!"), true);
 		delete system;
 		return 0;
 	}
@@ -610,7 +610,8 @@ System* MolecularFileDialog::readXYZFile(String filename, String system_name)
 bool MolecularFileDialog::finish_(const String& filename, const String& system_name, System* system)
 {
 	// writing info to log
-	setStatusbarText(String("Read ") + String(system->countAtoms()) + " atoms from file \"" + filename + "\"", true);
+	setStatusbarText(String(tr("Read")) + " " + String(system->countAtoms()) + " " +
+			            (String)tr("atoms from file") + " \"" + filename + "\"", true);
 
 	if (system->getName() == "")
 	{
@@ -654,7 +655,7 @@ System* MolecularFileDialog::openFile_(String type)
 {
 	QStringList files = QFileDialog::getOpenFileNames(
 											0,
-											"Choose a molecular file to open",
+											tr("Choose a molecular file to open"),
 											getWorkingDir().c_str(),
 											"*.*");
 

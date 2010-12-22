@@ -24,7 +24,7 @@ namespace BALL
 			setupUi(this);
 			setObjectName(name);
 			setINIFileSectionName("MATERIAL_SETTINGS");
-			setWidgetStackName("Materials");
+			setWidgetStackName((String)tr("Materials"));
 			
 			setColor(ambient_color_label, ColorRGBA(1.0, 1.0, 1.0));
 			setColor(reflectiveness_color_label, ColorRGBA(1.0, 1.0, 1.0));

@@ -31,16 +31,16 @@ namespace BALL
 
     void OpenBruker1DFile::initializeWidget(MainControl&)
     {
-      insertMenuEntry(MainControl::FILE_IMPORT, "Bruker&1D File", this, SLOT(openFile()));
+      insertMenuEntry(MainControl::FILE_IMPORT, tr("Bruker&1D File"), this, SLOT(openFile()));
     }
 
 	  void OpenBruker1DFile::openFile()
     {
-      Q3FileDialog* fd = new Q3FileDialog(this,"Import Bruker1DFile", true);
+      QFileDialog* fd = new QFileDialog(this, tr("Import Bruker1DFile"), true);
 			fd->setMode(Q3FileDialog::ExistingFile);
       fd->setFilter("Bruker1DFile-files (*.1r)");
 			if (!fd->exec()) return;
-      setStatusbarText("reading Bruker1DFile file...");
+      setStatusbarText((String)tr("reading Bruker1DFile file..."));
 
       // reading the file
       Bruker1DFile myfile;
@@ -51,11 +51,11 @@ namespace BALL
       }
       catch(...)
       {
-				Log.info() << "> read Bruker1DFile file failed." << std::endl;
+				Log.info() << "> " << (String)tr("read Bruker1DFile file failed.") << std::endl;
 			  return;
       }
 
-      setStatusbarText(String("Read 1D NMR spectrum from ") + fd->selectedFile().ascii());
+      setStatusbarText(String(tr("Read 1D NMR spectrum from"))+ " " + fd->selectedFile().ascii());
 
 			RegularData1D* data = new RegularData1D(myfile.getData());
 

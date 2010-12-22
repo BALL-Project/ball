@@ -104,7 +104,7 @@ namespace BALL
 					}
 					catch(...)
 					{
-						QMessageBox::critical(this, "BALLView", "Please enter a correct numerical value for the split distance!", 
+						QMessageBox::critical(this, tr("BALLView"), tr("Please enter a correct numerical value for the split distance!"), 
 															 QMessageBox::Ok, Qt::NoButton);
 						return;
 					}
@@ -275,7 +275,7 @@ namespace BALL
 
 				if (error)
 				{
-					setStatusbarText("Warning the geometric object has points outside the grid!", true);
+					setStatusbarText((String)tr("Warning the geometric object has points outside the grid!"), true);
 				}
 
 				mid_value = (max_value - min_value) * 0.5 + min_value;
@@ -342,7 +342,7 @@ namespace BALL
 					rep_ == 0 ||
 					getMainControl()->isBusy())
 			{
-				setStatusbarText("Could not color surface, maybe because an other thread is still running?", true);
+				setStatusbarText((String)tr("Could not color surface, maybe because an other thread is still running?"), true);
 				return false;
 			}
 
@@ -474,7 +474,7 @@ namespace BALL
 			
 			if (error)
 			{
-				setStatusbarText("Error! There is a point contained in the surface that is not inside the grid!", true);
+				setStatusbarText((String)tr("Error! There is a point contained in the surface that is not inside the grid!"), true);
 			}
 
 			return true;

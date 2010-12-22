@@ -56,7 +56,7 @@ namespace BALL
 				filename = getFilename();
 			}
 			QString tmp = filename.c_str();
-			QString result = QFileDialog::getOpenFileName(0,"Select a Charmm parameter file", tmp, "*.ini", 0);
+			QString result = QFileDialog::getOpenFileName(0, tr("Select a Charmm parameter file"), tmp, "*.ini", 0);
 			if (!result.isEmpty())
 			{
 				// store the new filename in the lineedit field
@@ -133,7 +133,7 @@ namespace BALL
 				{
 					max_unassigned_atoms->setText("10");
 					charmm.setMaximumNumberOfErrors(10);
-					Log.error() << "Invalid value for max number of unassigned atoms, using default value of 10" << std::endl;
+					Log.error() << (String)tr("Invalid value for max number of unassigned atoms, using default value of 10") << std::endl;
 				}
 
 				/*

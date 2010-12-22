@@ -82,7 +82,7 @@ void SnapshotVisualisationDialog::firstSnapshotClicked()
 	}
   else
 	{
-		Log.error() << "Unable to apply first snapshot" <<std::endl;
+		Log.error() << (String)tr("Unable to apply first snapshot") <<std::endl;
 	}
 }
 
@@ -128,7 +128,7 @@ void SnapshotVisualisationDialog::lastSnapshotClicked()
 	}
   else
 	{
-		Log.error() << "Unable to apply first snapshot" <<std::endl;
+		Log.error() << (String)tr("Unable to apply first snapshot") << std::endl;
 	}
 }
 
@@ -149,7 +149,7 @@ void SnapshotVisualisationDialog::animateClicked()
 	for (Size i = getStartSnapshot(); 
 			 i < tempo && !error_ && !cancel_; )
 	{
-		setWindowTitle((String("CurrentSnapshot: ") + String(i)).c_str());
+		setWindowTitle(((String)tr("CurrentSnapshot") + (String)(": ") + String(i)).c_str());
 		snapShotSlider->setValue(i);
 		update_();
 
@@ -185,7 +185,7 @@ void SnapshotVisualisationDialog::animateClicked()
 			if (speed >= tempo - i)
 			{
 				i = tempo;
-				setWindowTitle((String("CurrentSnapshot: ") + String(i)).c_str());
+				setWindowTitle(((String)tr("CurrentSnapshot") + (String)(": ") + String(i)).c_str());
 				snapShotSlider->setValue(i);
 				update_();
 
@@ -228,7 +228,7 @@ void SnapshotVisualisationDialog::animateClicked()
 		}
 	}
 	
-	setWindowTitle("Snapshot Visualisation");
+	setWindowTitle(tr("Snapshot Visualisation"));
 	animateButton->setEnabled(true);
 	cancelButton->setText("Close");
 	animation_running_ = false;
@@ -250,7 +250,7 @@ void SnapshotVisualisationDialog::backward(Size nr)
 	{
 		if (!snap_shot_manager_->applySnapShot(tmpnr)) 
 		{
-			Log.error() << "Could not apply  snapshot" <<std::endl;
+			Log.error() << (String)tr("Could not apply snapshot") << std::endl;
 			error_ = true;
 		}
 	}
@@ -284,7 +284,7 @@ void SnapshotVisualisationDialog::forward(Size nr)
 
 		if (!ok)
 		{
-			Log.error() << "Could not apply  snapshot" << std::endl;
+			Log.error() << (String)tr("Could not apply snapshot") << std::endl;
 			error_ = true;
 		}
 	}
@@ -305,7 +305,7 @@ Size SnapshotVisualisationDialog::getStartSnapshot() const
 	}
 	catch(...)
 	{
-		Log.error() << "Invalid Start-Snapshot" << std::endl;
+		Log.error() << (String)tr("Invalid Start-Snapshot") << std::endl;
 		return 1;
 	}
 }
@@ -319,7 +319,7 @@ Size SnapshotVisualisationDialog::getEndSnapshot() const
 	}
 	catch(...)
 	{
-		Log.error() << "Invalid End-Snapshot" << std::endl;
+		Log.error() << (String)tr("Invalid End-Snapshot") << std::endl;
 		return 0;
 	}
 }
@@ -354,7 +354,7 @@ void SnapshotVisualisationDialog::sliderMovedToPos()
 	}
 	else
 	{
-		Log.error() << "Could not apply  snapshot" <<std::endl;
+		Log.error() << (String)tr("Could not apply snapshot") << std::endl;
 		error_ = true;
 	} 
 }
@@ -380,7 +380,7 @@ void SnapshotVisualisationDialog::setSnapShotManager(SnapShotManager* snapshot_m
 	main_control_ = getMainControl();
 	if (main_control_ == 0)
 	{
-		Log.error() << "No MainControl available for SnapshotVisualisationDialog!" << std::endl;
+		Log.error() << (String)tr("No MainControl available for SnapshotVisualisationDialog!") << std::endl;
 		return;
 	}
 
@@ -487,7 +487,7 @@ void SnapshotVisualisationDialog::show()
 	main_control_ = getMainControl();
 	if (main_control_ == 0)
 	{
-		Log.error() << "No MainControl available for SnapshotVisualisationDialog!" << std::endl;
+		Log.error() << (String)tr("No MainControl available for SnapshotVisualisationDialog!") << std::endl;
 		return;
 	}
 
