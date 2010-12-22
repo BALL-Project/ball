@@ -174,7 +174,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="807"/>
         <source>O&amp;K</source>
-        <translation type="unfinished">O&amp;K</translation>
+        <translation>O&amp;K</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="835"/>
@@ -184,7 +184,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="860"/>
         <source>Defaults</source>
-        <translation>Standardeinstellungen</translation>
+        <translation type="unfinished">Voreinstellungen</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="872"/>
@@ -415,7 +415,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="68"/>
         <source>BALLView</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="93"/>
@@ -425,7 +425,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="102"/>
         <source>MolecularFileDialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Moleküldatei Dialog</translation>
     </message>
     <message>
         <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="103"/>
@@ -440,12 +440,12 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="105"/>
         <source>PubChemDialog</source>
-        <translation type="unfinished">PubChem-Dialog</translation>
+        <translation>PubChem Dialog</translation>
     </message>
     <message>
         <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="106"/>
         <source>PluginDialog</source>
-        <translation type="unfinished">Plugin Dialog</translation>
+        <translation>Plugin Dialog</translation>
     </message>
     <message>
         <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="107"/>
@@ -481,12 +481,12 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="145"/>
         <source>LabelDialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Label Dialog</translation>
     </message>
     <message>
         <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="146"/>
         <source>MolecularStructure</source>
-        <translation type="unfinished">Molekülstruktur</translation>
+        <translation>Molekülstruktur</translation>
     </message>
     <message>
         <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="147"/>
@@ -1017,7 +1017,7 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1664"/>
         <source>The given parameter file does not exist! Using default!</source>
-        <translation>Die gewählte Parameterdatei existiert nicht! Stattdessen wird die Standard-Datei benutzt!</translation>
+        <translation>Die gewählte Parameterdatei existiert nicht! Stattdessen wird die Standarddatei benutzt!</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1705"/>
@@ -1620,7 +1620,7 @@ Oliver Kohlbacher</source>
         <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="860"/>
         <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="873"/>
         <source>Cant apply preferences while beeing busy!</source>
-        <translation type="unfinished">Einstellungen können gerade nicht angewendet werden!</translation>
+        <translation>Einstellungen können gerade nicht angewendet werden!</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="897"/>
@@ -1994,17 +1994,17 @@ Oliver Kohlbacher</source>
     <message>
         <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="650"/>
         <source>&amp;Windows</source>
-        <translation type="unfinished">Fenster</translation>
+        <translation>Fenster</translation>
     </message>
     <message>
         <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="654"/>
         <source>&amp;Help</source>
-        <translation type="unfinished">&amp;Hilfe</translation>
+        <translation>&amp;Hilfe</translation>
     </message>
     <message>
         <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="655"/>
         <source>&amp;Documentation</source>
-        <translation type="unfinished">&amp;Dokumentation</translation>
+        <translation>&amp;Dokumentation</translation>
     </message>
     <message>
         <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="672"/>
@@ -2993,85 +2993,6 @@ so there was nothing to be done!</source>
     </message>
 </context>
 <context>
-    <name>BALL::VIEW::MolecularStructure</name>
-    <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularStructure.C" line="1"/>
-        <source></source>
-        <comment>Necessary for lupdate.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularStructure.C" line="534"/>
-        <source>The given parameter file does not exist! Using default!</source>
-        <translation type="unfinished">Die gewählte Parameterdatei existiert nicht! Stattdessen wird die Standard-Datei benutzt!</translation>
-    </message>
-</context>
-<context>
-    <name>BALL::VIEW::OpenSavePreferences</name>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/openSavePreferences.C" line="1"/>
-        <source></source>
-        <comment>Necessary for lupdate.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/openSavePreferences.C" line="18"/>
-        <source>OpenSave</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/openSavePreferences.C" line="21"/>
-        <source>Open/Save</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>BALL::VIEW::OptimizePage</name>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialogPages.C" line="286"/>
-        <source>k</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialogPages.C" line="305"/>
-        <source>Model Parameters to be optimized:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialogPages.C" line="334"/>
-        <source>Optimize Kernel Parameters</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialogPages.C" line="338"/>
-        <source>number of steps for grid search:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialogPages.C" line="339"/>
-        <source>width of grid search:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialogPages.C" line="340"/>
-        <source>number of recursion steps:</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>BALL::VIEW::Plotter</name>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/plotter.C" line="130"/>
-        <source>Save Plot</source>
-        <translation>Speichere Bild</translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/plotter.C" line="131"/>
-        <source>PNG (*.png);;Encapsulated PostScript (*.eps);;Portable Document Format (*.pdf);;PostScript (*.ps);;JPG (*.jpg);;GIF (*.gif);;Windows Bitmap (*.bmp);;Tagged Image File Format (*.tif)</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
     <name>BALL::VIEW::PluginDialog</name>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/pluginDialog.C" line="144"/>
@@ -4053,12 +3974,12 @@ so there was nothing to be done!</source>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="93"/>
         <source>Reset settings to default values</source>
-        <translation>Auf Standardwerte zurücksetzten</translation>
+        <translation>Auf Voreinstellung zurücksetzten</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="96"/>
         <source>Defaults</source>
-        <translation>Standardwerte</translation>
+        <translation>Voreinstellungen</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="114"/>
@@ -4605,13 +4526,13 @@ so there was nothing to be done!</source>
         <location filename="../../../source/APPLICATIONS/BALLVIEW/demoTutorialDialog.ui" line="51"/>
         <location filename="../../../source/APPLICATIONS/BALLVIEW/demoTutorialDialogData.h" line="84"/>
         <source>Cancel</source>
-        <translation>&amp;Schließen</translation>
+        <translation>Schließen</translation>
     </message>
     <message>
         <location filename="../../../source/APPLICATIONS/BALLVIEW/demoTutorialDialog.ui" line="64"/>
         <location filename="../../../source/APPLICATIONS/BALLVIEW/demoTutorialDialogData.h" line="85"/>
         <source>Next</source>
-        <translation type="unfinished">Nächstes</translation>
+        <translation>Nächstes</translation>
     </message>
 </context>
 <context>
@@ -4619,7 +4540,7 @@ so there was nothing to be done!</source>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/displayProperties.ui" line="14"/>
         <source>Display Settings</source>
-        <translation>Darstellungseigenschaften</translation>
+        <translation type="unfinished">Repräsentationsseigenschaften</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/displayProperties.ui" line="339"/>
@@ -4731,7 +4652,7 @@ so there was nothing to be done!</source>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/displayProperties.ui" line="213"/>
         <source>Drawing Mode:</source>
-        <translation type="unfinished">Zeichen Modus</translation>
+        <translation>Zeichen Modus:</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/displayProperties.ui" line="281"/>
@@ -4756,7 +4677,7 @@ so there was nothing to be done!</source>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/displayProperties.ui" line="347"/>
         <source>Default / Custom:</source>
-        <translation>Standard / Individuell:</translation>
+        <translation type="unfinished">Voreinstellung / Individuell:</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/displayProperties.ui" line="364"/>
@@ -4776,7 +4697,7 @@ so there was nothing to be done!</source>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/displayProperties.ui" line="458"/>
         <source>Coloring Options</source>
-        <translation type="unfinished">Farb-Einstellungen</translation>
+        <translation>Farb-Einstellungen</translation>
     </message>
 </context>
 <context>
@@ -6424,12 +6345,12 @@ Farben</translation>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="117"/>
         <source>Reset all settings to default values</source>
-        <translation>Alle Einstellungen auf Standardeinstellungen zurücksetzen</translation>
+        <translation>Alle Einstellungen auf Voreinstellungen zurücksetzen</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="120"/>
         <source>Defaults</source>
-        <translation type="unfinished">Standardeinstellungen</translation>
+        <translation>Voreinstellungen</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="138"/>
