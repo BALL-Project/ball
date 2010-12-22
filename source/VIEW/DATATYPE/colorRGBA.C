@@ -4,7 +4,7 @@
 
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #include <BALL/VIEW/DATATYPE/colorHSV.h>
-#include <QtGui/qcolor.h>
+#include <QtGui/QColor>
 
 using namespace std;
 
