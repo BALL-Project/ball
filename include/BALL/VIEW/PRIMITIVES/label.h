@@ -13,7 +13,7 @@
 #	include <BALL/VIEW/DATATYPE/vertex1.h>
 #endif
 
-#include <QtGui/qfont.h>
+#include <QtGui/QFont>
 
 namespace BALL
 {
