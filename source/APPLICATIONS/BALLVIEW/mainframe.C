@@ -310,7 +310,7 @@ namespace BALL
 
 
 		QToolBar* tb = new QToolBar("Main Toolbar", this);
-		tb->setObjectName(tr("Main Toolbar"));
+		tb->setObjectName("Main Toolbar");
 		tb->setIconSize(QSize(22,22));
 		addToolBar(Qt::TopToolBarArea, tb);
 		
@@ -328,13 +328,13 @@ namespace BALL
 
 		IconLoader& loader = IconLoader::instance();
 		qload_action_ = new QAction(loader.getIcon("actions/quickopen-file"), tr("quickload"), this);
-		qload_action_->setObjectName(tr("quickload"));
+		qload_action_->setObjectName("quickload");
 		connect(qload_action_, SIGNAL(triggered()), this, SLOT(quickLoadConfirm()));
 		HelpViewer::getInstance("BALLView Docu")->registerForHelpSystem(qload_action_, "tips.html#quickload");
 		tb->addAction(qload_action_);
 
 		qsave_action_ = new QAction(loader.getIcon("actions/quicksave"), tr("quicksave"), this);
-		qsave_action_->setObjectName(tr("quicksave"));
+		qsave_action_->setObjectName("quicksave");
 		connect(qsave_action_, SIGNAL(triggered()), this, SLOT(quickSave()));
 		HelpViewer::getInstance("BALLView Docu")->registerForHelpSystem(qsave_action_, "tips.html#quickload");
 		tb->addAction(qsave_action_);
