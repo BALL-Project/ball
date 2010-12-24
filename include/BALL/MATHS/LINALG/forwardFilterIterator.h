@@ -52,10 +52,10 @@ namespace BALL
 		//@{
 
 		/// Default constructor
-		ConstForwardFilterIterator() throw() {}
+		ConstForwardFilterIterator() {}
 
 		///
-		ConstForwardFilterIterator(Predicate p, IteratorForward it) throw()
+		ConstForwardFilterIterator(Predicate p, IteratorForward it)
 		  :     BaseFilterIterator<Predicate, IteratorForward>(p,it)
 		{
 		  while (!isEnd() && !Base::predicate_(Base::getTraits().getData()))
@@ -63,13 +63,13 @@ namespace BALL
 		}
 	
 		/// Copy constructor
-		ConstForwardFilterIterator(const ConstForwardFilterIterator& iterator) throw()
+		ConstForwardFilterIterator(const ConstForwardFilterIterator& iterator)
 		  :	BaseFilterIterator<Predicate, IteratorForward>(iterator)
 		{
 		}
 			
 		///
-		~ConstForwardFilterIterator() throw() {}
+		~ConstForwardFilterIterator() {}
 
 		//@}
 
@@ -77,14 +77,14 @@ namespace BALL
 		*/
 		//@{
 		///
-		ConstForwardFilterIterator& operator = (const ConstForwardFilterIterator& iterator) throw()
+		ConstForwardFilterIterator& operator = (const ConstForwardFilterIterator& iterator)
 		{
 		        Base::operator = (iterator);
 			return *this;
 		}
 
 		///
-		void swap(ConstForwardFilterIterator& iterator) throw() 
+		void swap(ConstForwardFilterIterator& iterator) 
 		{ 
 		  std::swap(Base::predicate_, iterator.predicate_); 
 		  std::swap(Base::iterator_, iterator.iterator_);
@@ -92,7 +92,7 @@ namespace BALL
 		//@}
 
 		/// Set the internal iterator
-		void setIterator(const IteratorForward& iterator) throw() 
+		void setIterator(const IteratorForward& iterator) 
 		{ 
 		  Base::iterator_ = iterator; 
 
@@ -101,37 +101,45 @@ namespace BALL
 		}
 
 		/// Get a constant reference to the internal iterator.
-		const IteratorForward& getIterator() const throw() { return Base::iterator_; }
+		const IteratorForward& getIterator() const { return Base::iterator_; }
 
 		/// Get a constant reference to the internal iterator.
-		IteratorForward& getIterator() throw() { return Base::iterator_; }
+		IteratorForward& getIterator() { return Base::iterator_; }
 
 		/** @name Iterator methods
 		*/
 		//@{
 
-		/// Move the iterator to the item at the beginning of the container
-		void toBegin() throw(Exception::SingularIterator);
+		/** Move the iterator to the item at the beginning of the container
+		 *  @exception Exception::SingularIterator if the iterator is singular
+		 */
+		void toBegin();
 
 		/// Check whether the iterator points to the first item of the container
-		bool isBegin() const throw();
+		bool isBegin() const;
 
-		/// Move the iterator behind the last item of the container
-		void toEnd() throw(Exception::SingularIterator);
+		/** Move the iterator behind the last item of the container
+		 *  @exception Exception::SingularIterator if the iterator is singular
+		 */
+		void toEnd();
 
 		/// Check whether the iterator points behind the last item of the container
-		bool isEnd() const throw();
+		bool isEnd() const;
 
-		/// Return an iterator pointing to the beginning of the container
-		static ConstForwardFilterIterator begin(const Container& container)
-			throw(Exception::Precondition);
+		/** Return an iterator pointing to the beginning of the container
+		 *  @exception Exception::Precondition
+		 */
+		static ConstForwardFilterIterator begin(const Container& container);
 
-		/// Return an iterator pointing at the end of the container
-		static ConstForwardFilterIterator end(const Container& container) 
-			throw(Exception::Precondition);
+		/** Return an iterator pointing at the end of the container
+		 *  @exception Exception::Precondition
+		 */
+		static ConstForwardFilterIterator end(const Container& container);
 
-		/// Increment operator
-		ConstForwardFilterIterator& operator ++ () throw(Exception::InvalidIterator)
+		/** Increment operator
+		 *  @exception Exception::InvalidIterator if the iterator is invalid
+		 */
+		ConstForwardFilterIterator& operator ++ ()
 		{
 		  if (!Base::isValid())
 		  {
@@ -145,8 +153,10 @@ namespace BALL
 		  return *this;
 		}
 		
-		/// Postfix increment operator
-		ConstForwardFilterIterator operator ++ (int) throw(Exception::InvalidIterator)
+		/** Postfix increment operator
+		 *  @exception Exception::InvalidIterator if the iterator is invalid
+		 */
+		ConstForwardFilterIterator operator ++ (int)
 		{
 		  if (!IteratorForward::isValid())
 		  {
@@ -164,7 +174,7 @@ namespace BALL
 		
 		///
 		template <typename Container>
-		ConstForwardFilterIterator(const Container& container) throw()
+		ConstForwardFilterIterator(const Container& container)
 		  :	BaseFilterIterator<Predicate, IteratorForward>(container)
 		{
 		}
@@ -174,7 +184,6 @@ namespace BALL
 
         template <class Predicate, class IteratorForward>
 	void ConstForwardFilterIterator<Predicate, IteratorForward>::toBegin()
-		throw(Exception::SingularIterator)
 	{
 	  if (IteratorForward::isSingular())
 	  {
@@ -187,7 +196,6 @@ namespace BALL
 	template <class Predicate, class IteratorForward>
 	ConstForwardFilterIterator<Predicate, IteratorForward> 
 		ConstForwardFilterIterator<Predicate, IteratorForward>::begin(const Container& container)
-		throw(Exception::Precondition)
 	{
 		ConstForwardFilterIterator<Predicate, IteratorForward> iterator(container);
 		iterator.toBegin();
@@ -196,7 +204,6 @@ namespace BALL
 
 	template <class Predicate, class IteratorForward>
 	bool ConstForwardFilterIterator<Predicate, IteratorForward>::isBegin() const
-		throw()
 	{
 		if (Base::getTraits().isSingular())
 		{
@@ -207,7 +214,6 @@ namespace BALL
 
 	template <class Predicate, class IteratorForward>
 	void ConstForwardFilterIterator<Predicate, IteratorForward>::toEnd()
-		throw(Exception::SingularIterator)
 	{
 	  if (Base::isSingular())
 	  {
@@ -220,7 +226,6 @@ namespace BALL
 	template <class Predicate, class IteratorForward>
 	ConstForwardFilterIterator<Predicate, IteratorForward> 
 		ConstForwardFilterIterator<Predicate, IteratorForward>::end(const Container& container)
-		throw(Exception::Precondition)
 	{
 		ConstForwardFilterIterator<Predicate, IteratorForward> iterator(container);
 		iterator.toEnd();
@@ -229,7 +234,6 @@ namespace BALL
 
 	template <class Predicate, class IteratorForward>
 	bool ConstForwardFilterIterator<Predicate, IteratorForward>::isEnd() const
-		throw()
 	{
 		if (Base::isSingular())
 		{
@@ -276,29 +280,29 @@ namespace BALL
 		//@{
 
 		///
-		ForwardFilterIterator() throw() {}
+		ForwardFilterIterator() {}
 
 		///
-		ForwardFilterIterator(Predicate p, IteratorForward it) throw()
+		ForwardFilterIterator(Predicate p, IteratorForward it)
 		  :     ConstForwardFilterIterator<Predicate, IteratorForward>(p,it)
 		{
 		}
 	
 		///
-		ForwardFilterIterator(const ForwardFilterIterator& iterator) throw()
+		ForwardFilterIterator(const ForwardFilterIterator& iterator)
 			:	ConstForwardFilterIterator<Predicate, IteratorForward>(iterator)
 		{
 		}
 
 		///
-		~ForwardFilterIterator() throw() {}			
+		~ForwardFilterIterator() {}			
 		//@}
 
 		/** @name Assignemnt
 		*/
 		//@{
 		///
-		ForwardFilterIterator& operator = (const ForwardFilterIterator& iterator) throw()
+		ForwardFilterIterator& operator = (const ForwardFilterIterator& iterator)
 		{
 			Base::operator = (iterator);
 			return *this;
@@ -307,7 +311,7 @@ namespace BALL
 		///
 
 		///
-		void swap(ForwardFilterIterator& iterator) throw() 
+		void swap(ForwardFilterIterator& iterator) 
 		{ 
 		  std::swap(Base::predicate_, iterator.predicate_); 
 		  std::swap(Base::iterator_, iterator.iterator_);
@@ -318,26 +322,32 @@ namespace BALL
 		*/
 		//@{
 
-		/// Return an iterator pointing to the beginning of the container
-		static ForwardFilterIterator begin(const Container& container) throw(Exception::Precondition);
+		/** Return an iterator pointing to the beginning of the container
+		 *  @exception Exception::Precondition
+		 */
+		static ForwardFilterIterator begin(const Container& container);
 
-		/// Return an iterator pointing at the end of the container
-		static ForwardFilterIterator end(const Container& container) throw(Exception::Precondition);
+		/** Return an iterator pointing at the end of the container
+		 *  @exception Exception::Precondition
+		 */
+		static ForwardFilterIterator end(const Container& container);
 
 		///
-		reference operator * () const throw() 
+		reference operator * () const
 		{ 
 			return Base::getTraits().getData(); 
 		}
 
 		///
-		pointer operator -> () const throw() 
+		pointer operator -> () const
 		{ 
 			return &Base::getTraits().getData(); 
 		}
 
-		/// Increment operator
-		ForwardFilterIterator& operator ++ () throw(Exception::InvalidIterator)
+		/** Increment operator
+		 *  @exception Exception::InvalidIterator
+		 */
+		ForwardFilterIterator& operator ++ ()
 		{
 		  if (!Base::isValid())
 		  {
@@ -350,8 +360,10 @@ namespace BALL
 		  return *this;
 		}
 		
-		/// Postfix increment operator
-		ForwardFilterIterator operator ++ (int) throw(Exception::InvalidIterator)
+		/** Postfix increment operator
+		 *  @exception Exception::InvalidIterator
+		 */
+		ForwardFilterIterator operator ++ (int)
 		{
 		  if (!Base::isValid())
 		  {
@@ -368,7 +380,7 @@ namespace BALL
 		protected:
 
 		///
-		ForwardFilterIterator(const Container& container) throw()	
+		ForwardFilterIterator(const Container& container)
 		  :	ConstForwardFilterIterator<Predicate, IteratorForward>(container)
 		{
 		}
@@ -378,7 +390,6 @@ namespace BALL
 	template <class Predicate, class IteratorForward>
 	ForwardFilterIterator<Predicate, IteratorForward> 
 		ForwardFilterIterator<Predicate, IteratorForward>::begin(const Container& container)
-		throw(Exception::Precondition)
 	{
 		ForwardFilterIterator iterator(container);
 		iterator.toBegin();
@@ -388,7 +399,6 @@ namespace BALL
 	template <class Predicate, class IteratorForward>
 	ForwardFilterIterator<Predicate, IteratorForward> 
 		ForwardFilterIterator<Predicate, IteratorForward>::end(const Container& container)
-		throw(Exception::Precondition)
 	{
 		ForwardFilterIterator iterator(container);
 		iterator.toEnd();

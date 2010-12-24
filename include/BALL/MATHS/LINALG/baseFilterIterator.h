@@ -53,21 +53,21 @@ namespace BALL
 		*/
 		//@{
 		///	Default constructor
-		BaseFilterIterator() throw() {}
+		BaseFilterIterator() {}
 		///	Default constructor
-		BaseFilterIterator(Predicate p, IteratorBase it) throw()
+		BaseFilterIterator(Predicate p, IteratorBase it)
 		  :     predicate_(p), iterator_(it)
 		{
 		}
 	
 		///	Copy constructor
-		BaseFilterIterator(const BaseFilterIterator& iterator) throw()
+		BaseFilterIterator(const BaseFilterIterator& iterator)
 		  :	predicate_(iterator.predicate_), iterator_(iterator.iterator_)
 		{
 		}
 
 		///	Destructor.
-		~BaseFilterIterator() throw() {}
+		~BaseFilterIterator() {}
 		//@}
 
 		/**	@name	Assignment
@@ -78,7 +78,7 @@ namespace BALL
 				Assigns the contents of an iterator to another iterator.
 				@param	iterator the iterator to be copied
 		*/
-		BaseFilterIterator& operator = (const BaseFilterIterator& iterator) throw()
+		BaseFilterIterator& operator = (const BaseFilterIterator& iterator)
 		{
 			predicate_ = iterator.predicate_;
 			iterator_  = iterator.iterator_;
@@ -86,7 +86,7 @@ namespace BALL
 		}
 			
 		///	Swap two iterators
-		void swap(BaseFilterIterator& iterator) throw() 
+		void swap(BaseFilterIterator& iterator) 
 		{ 
 		  std::swap(predicate_, iterator.predicate_); 
 		  std::swap(iterator_, iterator.iterator_);
@@ -98,28 +98,28 @@ namespace BALL
 		//@{
 
 		/// Invalidate the iterator.
-		void invalidate() throw() { iterator_.invalidate(); }
+		void invalidate() { iterator_.invalidate(); }
 
 		/// Set the traits
-		void setTraits(const Traits& traits) throw() { iterator_.setTraits(traits); }
+		void setTraits(const Traits& traits) { iterator_.setTraits(traits); }
 
 		/// Get a constant reference to the traits of this iterator.
-		const Traits& getTraits() const throw() { return iterator_.getTraits(); }
+		const Traits& getTraits() const { return iterator_.getTraits(); }
 
 		/// Get a constant reference to the traits of this iterator.
-		Traits& getTraits() throw() { return iterator_.getTraits(); }
+		Traits& getTraits() { return iterator_.getTraits(); }
 
 		/// Set the predicates
-		void setPredicate(const Predicate& predicate) throw() { predicate_ = predicate; }
+		void setPredicate(const Predicate& predicate) { predicate_ = predicate; }
 
 		/// Get a constant reference to the traits of this iterator.
-		const Predicate& getPredicate() const throw() { return predicate_; }
+		const Predicate& getPredicate() const { return predicate_; }
 
 		/// Get a constant reference to the traits of this iterator.
-		Predicate& getPredicate() throw() { return predicate_; }
+		Predicate& getPredicate() { return predicate_; }
 
 		/// Get a constant pointer to the container of this iterator.
-		const Container* getContainer() const	throw() { return iterator_.getContainer(); }
+		const Container* getContainer() const { return iterator_.getContainer(); }
 		//@}
 
 		/** @name Converters
@@ -130,13 +130,13 @@ namespace BALL
 				This method returns the position of the iterator. 
 				Position is a template within this context.
 		*/
-		  operator const Position& () const throw() { return iterator_(); }
+		  operator const Position& () const { return iterator_(); }
 
 		/// Convert an iterator to its Datatype by returning a reference to the current data.
-		reference operator * () const throw() { return *iterator_; }
+		reference operator * () const { return *iterator_; }
 
 		/// Return a pointer to the current data.
-		pointer operator -> () const throw() { return iterator_.operator->(); }
+		pointer operator -> () const { return iterator_.operator->(); }
 		//@}
 
 		/**	@name	Predicates
@@ -144,33 +144,33 @@ namespace BALL
 		//@{
 
 		/// Equality operator
-		bool operator == (const BaseFilterIterator& iterator) const throw() { return (iterator_ == iterator.iterator_); }
+		bool operator == (const BaseFilterIterator& iterator) const { return (iterator_ == iterator.iterator_); }
 
 		/// Inequality operator
-		bool operator != (const BaseFilterIterator& iterator) const throw() { return !(iterator_ == iterator.iterator_); }
+		bool operator != (const BaseFilterIterator& iterator) const { return !(iterator_ == iterator.iterator_); }
 
 		/// Equality operator
-		bool operator == (const IteratorBase& iterator) const throw() { return (iterator_ == iterator); }
+		bool operator == (const IteratorBase& iterator) const { return (iterator_ == iterator); }
 
 		/// Inequality operator
-		bool operator != (const IteratorBase& iterator) const throw() { return !(iterator_ == iterator); }
+		bool operator != (const IteratorBase& iterator) const { return !(iterator_ == iterator); }
 
 		/** Singularity predicate.
 				This method returns <b>true</b> if the iterator is singular, i.e., 
 				not associated with a container.
 		*/
-		bool isSingular() const	throw() { return iterator_.isSingular(); }
+		bool isSingular() const { return iterator_.isSingular(); }
 
 		/** Validity predicate
 				@return true if the iterator is valid (pointing at an element in a container) 
 		*/
-		bool isValid() const throw() { return iterator_.isValid(); }
+		bool isValid() const { return iterator_.isValid(); }
 
 		/// Validity predicate
-		bool operator + () const throw() { return +(iterator_); }
+		bool operator + () const { return +(iterator_); }
 
 		/// Invalidity predicate
-		bool operator - () const throw() { return -(iterator_); }
+		bool operator - () const { return -(iterator_); }
 		//@}
 
 		protected:
@@ -178,7 +178,7 @@ namespace BALL
 		/** Constructor.
 				Protected to allow instantiation and use in derived classes only.
 		*/
-		BaseFilterIterator(const Container& container) throw()
+		BaseFilterIterator(const Container& container)
 			:       iterator_(container)
 		{
 		}

@@ -44,30 +44,28 @@ namespace BALL {
 	  public:
 
 			virtual ~ElementColumnIteratorTraits()
-				throw()
 			{
 			}
 
 			ElementColumnIteratorTraits()
-				throw()
 				:	bound_(0),
 					position_(0)
 			{
 			}
 			
-			ElementColumnIteratorTraits(const Matrix<valuetype, mtraits>& matrix)	throw()
+			ElementColumnIteratorTraits(const Matrix<valuetype, mtraits>& matrix)
 				:	bound_(const_cast<Matrix<valuetype, mtraits>*>(&matrix)),
 					position_(0)
 			{
 			}
 			
-			ElementColumnIteratorTraits(const ElementColumnIteratorTraits& traits)	throw()
+			ElementColumnIteratorTraits(const ElementColumnIteratorTraits& traits)
 				:	bound_(traits.bound_),
 					position_(traits.position_)
 			{
 			}
 			
-			ElementColumnIteratorTraits& operator = (const ElementColumnIteratorTraits& traits)	throw()
+			ElementColumnIteratorTraits& operator = (const ElementColumnIteratorTraits& traits)
 			{
 				bound_ = traits.bound_;
 				position_ = traits.position_;
@@ -75,93 +73,93 @@ namespace BALL {
 				return *this;
 			}
 
-			Matrix<valuetype, mtraits>* getContainer()	throw()
+			Matrix<valuetype, mtraits>* getContainer()
 			{
 				return bound_;
 			}
 			
-			const Matrix<valuetype, mtraits>* getContainer() const	throw()
+			const Matrix<valuetype, mtraits>* getContainer() const
 			{
 				return bound_;
 			}
 			
-			bool isSingular() const	throw()
+			bool isSingular() const
 			{
 				return (bound_ == 0);
 			}
 			
-			IteratorPosition& getPosition()	throw()
+			IteratorPosition& getPosition()
 			{
 				return position_;
 			}
 
-			const IteratorPosition& getPosition() const	throw()
+			const IteratorPosition& getPosition() const
 			{
 				return position_;
 			}
 
-			bool operator == (const ElementColumnIteratorTraits& traits) const	throw()
+			bool operator == (const ElementColumnIteratorTraits& traits) const
 			{
 			  return (position_ == traits.position_);
 			}
 
-			bool operator != (const ElementColumnIteratorTraits& traits) const	throw()
+			bool operator != (const ElementColumnIteratorTraits& traits) const
 			{
 				return (position_ != traits.position_);
 			}
 				
-			bool operator < (const ElementColumnIteratorTraits& traits) const throw()
+			bool operator < (const ElementColumnIteratorTraits& traits) const
 			{
 			  return (position_ < traits.position_);
 			}
 
-			Distance getDistance(const ElementColumnIteratorTraits& traits) const throw()
+			Distance getDistance(const ElementColumnIteratorTraits& traits) const
 			{
 			  return (Distance)(position_ - traits.position_);
 			}
 			
-			bool isValid() const	throw()
+			bool isValid() const
 			{
 			  return ((bound_ != 0) && (position_ >= 0) && (position_ < (int)bound_->data_.size()));
 			}
 
-			void invalidate()	throw()
+			void invalidate()
 			{
 				bound_ = 0;
 				position_ = -1;
 			}
 			
-			void toBegin()	throw()
+			void toBegin()
 			{
 			  position_ = 0;
 			}
 
-			bool isBegin() const	throw()
+			bool isBegin() const
 			{
 			  return ( position_ == 0 );
 			}
 
-			void toEnd()	throw()
+			void toEnd()
 			{
 			  position_ = bound_->data_.size();
 			}
 			
-			bool isEnd() const	throw()
+			bool isEnd() const
 			{
 			  return ( position_ == (int)bound_->data_.size());
 			}
 			
-			ValueType& getData()	throw()
+			ValueType& getData()
 			{
 				return (*bound_)[position_];
 			}
 
-			const ValueType& getData() const	throw()
+			const ValueType& getData() const
 			{
 				return (*bound_)[position_];
 			}
 
-			void forward()	throw()
+			void forward()
 			{
 			  if (bound_->row_major_)
 			  {
@@ -181,43 +179,36 @@ namespace BALL {
 			}
 
 			friend std::ostream& operator << (std::ostream& s, const ElementColumnIteratorTraits& traits)
-			  throw()
 			{
 			  return (s << traits.position_ << ' ');
 			}
 			
 			void dump(std::ostream& s) const
-			  throw()
 			{
 			  s << position_ << std::endl;
 			}
 			
 			void toRBegin()
-			  throw()
 			{
 			  position_ = bound_->data_.size() - 1;
 			}
 			
 			bool isRBegin() const
-			  throw()
 			{
 			  return (position_ == bound_->data_.size() - 1);
 			}
 			
 			void toREnd()
-			  throw()
 			{
 			  position_ = -1;
 			}
 
 			bool isREnd() const
-			  throw()
 			{
 			  return (position_ <= -1);
 			}
 			
 			void backward()
-			  throw()
 			{
 			  if (bound_->row_major_)
 			  {
@@ -237,7 +228,6 @@ namespace BALL {
 			}
 
 			void backward(Distance distance)
-			  throw()
 			{
 			  if (bound_->row_major_)
 			  {
@@ -260,7 +250,6 @@ namespace BALL {
 			}
 
 			void forward(Distance distance)
-			  throw()
 			{
 			  if (bound_->row_major_)
 			  {
@@ -282,12 +271,12 @@ namespace BALL {
 			  }
 			}
 			
-			ValueType& getData(Index index) throw()
+			ValueType& getData(Index index)
 			{
 			  return (*bound_)[index];
 			}
 			
-			const ValueType& getData(Index index) const throw()
+			const ValueType& getData(Index index) const
 			{
 			  return (*bound_)[index];
 			}
