@@ -364,7 +364,10 @@ class BALL_VIEW_EXPORT SceneMessage: public Message
 		ENTER_PICKING_MODE,
 
 		/// Move Composites or a Clipping Plane
-		ENTER_MOVE_MODE
+		ENTER_MOVE_MODE,
+
+		/// A previous export has finished
+		EXPORT_FINISHED
 	};
 
 	//@}

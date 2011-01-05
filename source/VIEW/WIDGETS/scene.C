@@ -442,7 +442,12 @@ namespace BALL
 						if (filename != "")
 							exportPNG(filename);
 						else
-							exportPNG();
+							filename = exportPNG();
+
+						SceneMessage *finished_message = new SceneMessage(SceneMessage::EXPORT_FINISHED);
+						finished_message->data() = filename;
+
+						notify_(finished_message);
 
 						return;
 					}
