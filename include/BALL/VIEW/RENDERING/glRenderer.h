@@ -158,16 +158,6 @@ namespace BALL
 			virtual void setSmoothLines(bool smooth_lines);
 			virtual bool getSmoothLines();
 
-			/** Compute the 3D position on the view plane corresponding
-			 *  to point (x,y) on the view port
-			 */
-			Vector3 mapViewportTo3D(Position x, Position y);
-
-			/** Compute the 2D position on the screen corresponding
-			 *  to the 3D point vec
-			 */
-			Vector2 map3DToViewport(const Vector3& vec);
-
 			/** Pick geometric objects
 			 		\param x1, y1, x2, y2 the rectangle of the selection
 			*/

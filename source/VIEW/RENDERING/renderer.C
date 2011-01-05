@@ -169,18 +169,81 @@ namespace BALL
 						         "Renderer::setupStereo() not implemented for this kind of renderer yet!")) << std::endl;
 		}
 
-		Vector3 Renderer::mapViewportTo3D(Position /*x*/, Position /*y*/)
+		// Convert 2D screen coordinate to 3D coordinate on the view plane
+		// TODO: allow orthographic projection as well
+		Vector3 Renderer::mapViewportTo3D(Position x, Position y)
 		{
-			Log.error() << (String)(qApp->translate("BALL::VIEW::Renderer", 
-						         "Renderer::mapViewportTo3D() not implemented for this kind of renderer yet!")) << std::endl;
-			return Vector3();
-		}
+			// the mapping works as follows:
+			//   - all points are mapped to the view plane, defined by the view 
+			//     vector and the right/up vectors of the camera
+			//   - the width of the view plane in world coordinates can be computed
+			//     using elementary geometry from the intercept theorem as
+			//     (right - left) * distance_camera_view_plane / distance_camera_near_plane
+			//   - the look_at_vector of the camera points at the center of the view plane
+			// 	   this center should be mapped to (width()/2, height()/2)
 
-		Vector2 Renderer::map3DToViewport(const Vector3& /*vec*/)
+			// get the frustum
+			// NOTE: please don't rename these to near, far, ..., since MSVC defines these variables... *sigh*
+			float near_f, far_f, left_f, right_f, top_f, bottom_f;
+			getFrustum(near_f, far_f, left_f, right_f, top_f, bottom_f);
+
+			const Camera&  camera  = stage_->getCamera();
+
+			const Vector3& view	 = camera.getViewVector();
+			const Vector3& right = camera.getRightVector();
+			const Vector3& up    = camera.getLookUpVector();
+
+			float distance_camera_view_plane = view.getLength();
+
+			float scale_right_vector = (distance_camera_view_plane / near_f) * (right_f - left_f  )/2.;
+			float scale_up_vector    = (distance_camera_view_plane / near_f) * (top_f   - bottom_f)/2.;
+
+			Vector3 result = 		camera.getLookAtPosition()
+												+ right   * (2.*(float)x/width_  - 1.) * scale_right_vector
+												- up      * (2.*(float)y/height_ - 1.) * scale_up_vector;
+
+			return result;
+		}	
+
+		// TODO: allow orthographic projection as well
+		Vector2 Renderer::map3DToViewport(const Vector3& vec)
 		{
-			Log.error() << (String)(qApp->translate("BALL::VIEW::Renderer", 
-						         "Renderer::map3DToViewport() not implemented for this kind of renderer yet!")) << std::endl;
-			return Vector2();
+			// get the frustum
+			// NOTE: please don't rename these to near, far, ..., since MSVC defines these variables... *sigh*
+			float near_f, far_f, left_f, right_f, top_f, bottom_f;
+			getFrustum(near_f, far_f, left_f, right_f, top_f, bottom_f);
+
+			const Camera&  camera  = stage_->getCamera();
+
+			const Vector3& right   = camera.getRightVector();
+			const Vector3& up      = camera.getLookUpVector();
+			
+			Vector3 point = vec - camera.getViewPoint();
+
+			Vector3 normalized_view = camera.getViewVector();
+			if (normalized_view.getLength() > 0)
+				normalized_view.normalize();
+			else
+				normalized_view = Vector3(0.,0.,-1.);
+
+			Vector2 result(FLT_MAX, FLT_MAX); 
+
+			float projection_on_view = normalized_view * point;
+			if (projection_on_view <= 0)
+				return result;
+
+			Vector3 point_on_near = near_f / projection_on_view * point;
+
+			// project point on plane
+			point_on_near -= near_f * normalized_view;
+
+			float near_width = right_f - left_f;
+			result.x = width_ / near_width * ((point_on_near * right) + near_width/2.);
+
+			float near_height = top_f - bottom_f;
+			result.y = height_ / near_height * ((point_on_near * (-up)) + near_height/2.);
+
+			return result;
 		}
 
 		void Renderer::getFrustum(float& near_f, float& far_f, float& left_f, float& right_f, float& top_f, float& bottom_f)
