@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.C,v 1.52 2005/12/23 17:03:06 amoll Exp $
-//
 
 #include <BALL/SYSTEM/file.h>
 #include <BALL/SYSTEM/simpleDownloader.h>
@@ -202,7 +200,6 @@ namespace BALL
 	}
 
 	File::File(const String& name, File::OpenMode open_mode)
-		throw(Exception::FileNotFound)
 		:	std::fstream(),
 			name_(),
 			open_mode_(open_mode),
@@ -224,7 +221,6 @@ namespace BALL
 	}
 
 	bool File::open(const String& name, File::OpenMode open_mode)
-		throw (Exception::FileNotFound)
 	{
 		close();	
 		original_name_ = name_ = name;
@@ -322,21 +318,18 @@ namespace BALL
 	}
 
 	bool File::reopen()
-		throw (Exception::FileNotFound)
 	{
 		close();
 		return open(name_, open_mode_);
 	}
 
 	bool File::reopen(File::OpenMode open_mode)
-		throw (Exception::FileNotFound)
 	{
 		close();
 		return open(name_, open_mode);
 	}
 
 	bool File::copy(String source_name, String destination_name, Size buffer_size)
-		throw (Exception::FileNotFound)
 	{
 		if (source_name == "" || destination_name == "" || source_name == destination_name)
 		{
@@ -401,7 +394,6 @@ namespace BALL
 	}
 
 	Size File::getSize()
-		throw(Exception::FileNotFound)
 	{
 		if (!is_open_)
 		{
@@ -429,7 +421,6 @@ namespace BALL
 	}
 
 	File::Type File::getType(String name, bool trace_link)
-		throw (Exception::FileNotFound)
 	{
 		// Canonize the path
 		FileSystem::canonizePath(name);

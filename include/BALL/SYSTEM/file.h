@@ -18,7 +18,7 @@
 #endif
 
 #include <stdlib.h>                   // 'getenv'
-#include <sys/stat.h>         // 'stat', 'lstat'
+#include <sys/stat.h>                 // 'stat', 'lstat'
 #include <stdio.h>                    // 'rename'
 #include <algorithm>                  // 'reverse'
 
@@ -250,12 +250,12 @@ namespace BALL
 		File();
 
 		/** Construct new File object from the file <b>  name </b> and open the file.
-				@param  name the name of the file to be opend
+				@param  name the name of the file to be opened
 				@param  open_mode the openmode to be used
 				@see    open
+				@exception Exception::FileNotFound if the file should be read but could not be found
 		*/
-		File(const String& name, OpenMode open_mode = std::ios::in)
-			throw(Exception::FileNotFound);
+		File(const String& name, OpenMode open_mode = std::ios::in);
 
 		/** Destructor.
 				The file is closed.
@@ -288,24 +288,24 @@ namespace BALL
 				@param name the name of the file
 				@param open_mode the open mode, default is IN
 				@return bool true if the file could be opened
+				@exception Exception::FileNotFound if the file should be read but could not be found
 		*/
-		bool open(const String& name, File::OpenMode open_mode = std::ios::in)
-			throw (Exception::FileNotFound);
+		bool open(const String& name, File::OpenMode open_mode = std::ios::in);
 
 		/**	Reopen the file.
 				The file is closed and reopend.
-				@return bool true if the file could be reopend
+				@return bool true if the file could be reopened
+				@exception Exception::FileNotFound if the file should be read but could not be found
 		*/
-		bool reopen()
-			throw (Exception::FileNotFound);
+		bool reopen();
 
 		/**	Reopen the file with a different mode.
 				The file is closed and reopend.
 				@param open_mode the new mode
 				@return bool true if the file could be reopend
+				@exception Exception::FileNotFound if the file should be read but could not be found
 		*/
-		bool reopen(File::OpenMode open_mode)
-			throw (Exception::FileNotFound);
+		bool reopen(File::OpenMode open_mode);
 
 		/**	Close the file.
 		*/
@@ -328,15 +328,15 @@ namespace BALL
 		/**	Return the size of the file.
 				If the file does not exist, 0 is returned.
 				@return Size the size of the file
+				@exception Exception::FileNotFound if the file could not be found
 		*/
-		Size getSize()
-			throw(Exception::FileNotFound);
+		Size getSize();
 
 		/**	Return the size of a given file.
 				@return Size the size of the file
+				@exception Exception::FileNotFound if the file could not be found
 		*/
-		static Size getSize(String name)
-			throw (Exception::FileNotFound);
+		static Size getSize(String name);
 
 		/** Return the open mode.
 				Default is IN.
@@ -348,16 +348,16 @@ namespace BALL
 				@param name the name of the file.
 				@param trace_link true to follow links
 				@return Type the filetype
+				@exception Exception::FileNotFound if the file could not be found
 		*/
-		static Type getType(String name, bool trace_link)
-			throw(Exception::FileNotFound);
+		static Type getType(String name, bool trace_link);
 
 		/**	Return the filetype.
 				@param trace_link true to follow links
 				@return Type the filetype
+				@exception Exception::FileNotFound if the file could not be found
 		*/
-		Type getType(bool trace_link)
-			const	throw(Exception::FileNotFound);
+		Type getType(bool trace_link) const;
 
 		/**	Copy a given file to a given destination.
 				If a file with the destination name exists already, nothing happens.
@@ -365,35 +365,35 @@ namespace BALL
 				@param destination_name the name of the destination file
 				@param buffer_size the buffer size to use while copying
 				@return true if copying was successfull
+				@exception Exception::FileNotFound if the file could not be found
 		*/
-		static bool copy(String source_name, String destination_name, Size buffer_size = 4096)
-			throw(Exception::FileNotFound);
+		static bool copy(String source_name, String destination_name, Size buffer_size = 4096);
 
 		/**	Copy the file to a given destination.
 				If a file with the destination name exists already, nothing happens.
 				@param destination_name the name of the destination file
 				@param buffer_size the buffer size to use while copying
 				@return true if copying was successfull
+				@exception Exception::FileNotFound if the file could not be found
 		*/
-		bool copyTo(const String& destination_name, Size buffer_size = 4096)
-			throw(Exception::FileNotFound);
+		bool copyTo(const String& destination_name, Size buffer_size = 4096);
 
 		/**	Move a given file to a given destination.
 				If a file with the destination name exists already, nothing happens.
 				@param source_name the name of the source file
 				@param destination_name the name of the destination file
 				@return true if copying was successfull
+				@exception Exception::FileNotFound if the file could not be found
 		*/
-		static bool move(const String& source_name, const String& destination_name)
-			throw(Exception::FileNotFound);
+		static bool move(const String& source_name, const String& destination_name);
 
 		/**	Move the file to a given destination.
 				If a file with the destination name exists already, nothing happens.
 				@param destination_name the name of the destination file
 				@return true if copying was successfull
+				@exception Exception::FileNotFound if the file could not be found
 		*/
-		bool moveTo(const String& destination_name)
-			throw(Exception::FileNotFound);
+		bool moveTo(const String& destination_name);
 
 		/**	Remove the given file.
 				@param name the name of the file to be removed
@@ -410,32 +410,32 @@ namespace BALL
 				@param old_path the path and name of the file to be renamed
 				@param new_path the new path and name of the file
 				@return bool true if the file could be renamed
+				@exception Exception::FileNotFound if the file could not be found
 		*/
-		static bool rename(String old_path, String new_path)
-			throw (Exception::FileNotFound);
+		static bool rename(String old_path, String new_path);
 
 		/**	Rename the file to a given name.
 				If a file with the destination name exists already, nothing happens.
 				@param new_path the new path and name of the file
 				@return bool true if the file could be renamed
+				@exception Exception::FileNotFound if the file could not be found
 		*/
-		bool renameTo(const String& new_path)
-			throw (Exception::FileNotFound);
+		bool renameTo(const String& new_path);
 
 		/**	Truncate a given file.
 				@param path the path to the file
 				@param size the new size of the file
 				@return bool true if the file could be truncated
+				@exception Exception::FileNotFound if the file could not be found
 		*/
-		static bool truncate(String path, Size size = 0)
-			throw (Exception::FileNotFound);
+		static bool truncate(String path, Size size = 0);
 
 		/**	Truncate the file.
 				@param size the new size of the file
 				@return bool true if the file could be truncated
+				@exception Exception::FileNotFound if the file could not be found
 		*/
-		bool truncate(Size size = 0)
-			throw (Exception::FileNotFound);
+		bool truncate(Size size = 0);
 			
 		/**	Create a temporary filename.
 				This method creates strings, starting at _AAAAAAA, adds the suffix
@@ -528,57 +528,57 @@ namespace BALL
 
 		/**	Test if the file can be accessed.
 				@return bool true if the file can be accessed
+				@exception Exception::FileNotfound if the file could not be found
 		*/
-		bool isAccessible()
-			const throw (Exception::FileNotFound);
+		bool isAccessible() const;
 
 		/**	Test if the path of the file is canonized.
 				The path is	compared before and after call of 
 				FileSystem::canonizePath(canonized_name).
 				@see FileSystem::canonizePath
 				@return bool true if the path is canonized.
+				@exception Exception::FileNotfound if the file could not be found
 		*/
-		bool isCanonized()
-			const throw (Exception::FileNotFound);
+		bool isCanonized() const;
 	
 		/**	Test if a given file is readable.
 				@param name the name of the file
 				@return true if the file can be read
+				@exception Exception::FileNotfound if the file could not be found
 		*/
-		static bool isReadable(String name)
-			throw (Exception::FileNotFound);
+		static bool isReadable(String name);
 
 		/**	Test if the file is readable.
 				@return true if the file can be read
+				@exception Exception::FileNotfound if the file could not be found
 		*/
-		bool isReadable()
-			const throw (Exception::FileNotFound);
+		bool isReadable() const;
 
 		/**	Test if a given file is writeable.
 				@param name the name of the file
 				@return true if the file is writeable
+				@exception Exception::FileNotfound if the file could not be found
 		*/
-		static bool isWritable(String name)
-			throw (Exception::FileNotFound);
+		static bool isWritable(String name);
 
 		/**	Test if the file is writeable.
 				@return true if the file is writeable
+				@exception Exception::FileNotfound if the file could not be found
 		*/
-		bool isWritable()
-			const throw (Exception::FileNotFound);
+		bool isWritable() const;
 
 		/**	Test if a given file is executable.
 				@param name the name of the file
 				@return true if the file is executable
+				@exception Exception::FileNotfound if the file could not be found
 		*/
-		static bool isExecutable(String name)
-			throw (Exception::FileNotFound);
+		static bool isExecutable(String name);
 
 		/**	Test if the file is executable.
 				@return true if the file is executable
+				@exception Exception::FileNotfound if the file could not be found
 		*/
-		bool isExecutable()
-			const throw (Exception::FileNotFound);
+		bool isExecutable() const;
  
 		//@}
 		/**	@name	Debugging and Diagnostics 
