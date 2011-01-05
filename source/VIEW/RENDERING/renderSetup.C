@@ -552,8 +552,6 @@ namespace BALL
 		Vector3 RenderSetup::mapViewportTo3D(Position x, Position y)
 		{
 			MutexLocker ml(&render_mutex_);
-			render_mutex_.lock();
-
 			makeCurrent();
 
 			return renderer->mapViewportTo3D(x, y);
