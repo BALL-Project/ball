@@ -1651,6 +1651,7 @@ namespace BALL
 					buttonPressEvent(static_cast<ButtonEvent*>(evt));
 					break;
 				case NOTIFICATION_EVENT:
+					onNotify(static_cast<NotificationEvent*>(evt)->getMessage());
 					notify_(static_cast<NotificationEvent*>(evt)->getMessage());
 					break;
 				default:
