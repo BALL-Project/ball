@@ -35,7 +35,7 @@ namespace BALL
 				  stride_(0)
 		 { }
 
-			virtual ~BufferedRenderer() throw() { }
+			virtual ~BufferedRenderer() { }
 
 			/** Tries to choose a format for buffered rendering.
 			 *  @return true if the format could be set,

@@ -62,7 +62,6 @@ namespace BALL
 
 				/// Destructor
 				virtual ~RTfactRenderer()
-					throw()
 				{
 				}
 
