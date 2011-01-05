@@ -701,11 +701,6 @@ namespace BALL
 		// TODO: make renderer / target configurable
 		void EditableScene::getClickedItems_(int x, int y)
 		{
-#ifdef BALL_HAS_RTFACT
-					Log.info() << "EditableScene::getClickedItems_(): sorry, raytracing does not yet support picking!" << std::endl;
-					return;
-#endif
-
 			current_bond_ = 0;
 			current_atom_ = 0;
 

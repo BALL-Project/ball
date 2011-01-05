@@ -158,6 +158,11 @@ namespace BALL
 			virtual void setSmoothLines(bool smooth_lines);
 			virtual bool getSmoothLines();
 
+			/** Pick all objects in the given screen rectangle.
+			 */
+			virtual void pickObjects(Position x1, Position y1, Position x2, Position y2, 
+			                         std::list<GeometricObject*>& objects);
+
 			/** Pick geometric objects
 			 		\param x1, y1, x2, y2 the rectangle of the selection
 			*/

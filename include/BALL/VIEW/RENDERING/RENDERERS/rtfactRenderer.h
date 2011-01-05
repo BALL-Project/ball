@@ -78,6 +78,9 @@ namespace BALL
 				{
 				}
 
+				virtual GeometricObject* pickObject(Position x, Position y);
+				virtual void pickObjects(Position x1, Position y1, Position x2, Position y2,
+				                         std::list<GeometricObject*>& objects);
 
 				virtual void getFrustum(float& near_f, float& far_f, float& left_f, float& right_f, float& top_f, float& bottom_f);
 
@@ -124,7 +127,10 @@ namespace BALL
 
 				RTfact::Remote::Renderer m_renderer;
 
+				boost::shared_ptr<RTfact::Remote::Picking>  m_picking;
+
 				HashMap<Representation const*, RTfactData> objects_;
+				HashMap<RTfact::Remote::GeoHandle, GeometricObject*> geometric_objects_;
 
 				Surface sphere_template_;
 				Surface tube_template_;

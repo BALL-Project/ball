@@ -246,6 +246,12 @@ namespace BALL
 			return result;
 		}
 
+		void Renderer::pickObjects(Position x1, Position y1, Position x2, Position y2, 
+			                         std::list<GeometricObject*>& objects)
+		{
+			Log.error() << "Renderer::pickObjects() not implemented for this kind of renderer yet!" << std::endl;
+		}
+
 		void Renderer::getFrustum(float& near_f, float& far_f, float& left_f, float& right_f, float& top_f, float& bottom_f)
 		{
 			Log.error() << "Renderer::getFrustum() not implemented for this kind of renderer yet!" << std::endl;

@@ -1902,6 +1902,14 @@ namespace BALL
 
 
 		// ############################ PICKING ###################################
+		void GLRenderer::pickObjects(Position x1, Position y1, Position x2, Position y2,
+		                             list<GeometricObject*>& objects)
+		{
+			pickObjects1(x1, y1, x2, y2);
+			renderToBuffer(NULL, GLRenderer::DIRECT_RENDERING);
+			pickObjects2(objects);
+		}
+
 		void GLRenderer::pickObjects1(Position x1, Position y1, Position x2, Position y2)
 		{
 			glFlush();

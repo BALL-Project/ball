@@ -562,7 +562,6 @@ namespace BALL
 		Vector2 RenderSetup::map3DToViewport(const Vector3& vec)
 		{
 			MutexLocker ml(&render_mutex_);
-
 			makeCurrent();
 
 			return renderer->map3DToViewport(vec);
@@ -572,20 +571,10 @@ namespace BALL
 		                              Position x2, Position y2,
 		                              list<GeometricObject*>& objects)
 		{
-			if (!RTTI::isKindOf<GLRenderer>(*renderer))
-			{
-				Log.error() << "RenderSetup::pickObjects not supported for this kind of renderer!" << std::endl;
-				return;
-			}
-	
 			MutexLocker ml(&render_mutex_);
-
 			makeCurrent();
 
-
-			((GLRenderer*)renderer)->pickObjects1(x1, y1, x2, y2);
-			((GLRenderer*)renderer)->renderToBuffer(target, GLRenderer::DIRECT_RENDERING);
-			((GLRenderer*)renderer)->pickObjects2(objects);
+			renderer->pickObjects(x1, y1, x2, y2, objects);
 		}
 
 		void RenderSetup::showRuler(bool show)

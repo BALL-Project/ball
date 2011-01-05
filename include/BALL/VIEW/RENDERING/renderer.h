@@ -133,6 +133,10 @@ namespace BALL
 			 */
 			virtual Vector2 map3DToViewport(const Vector3& vec);
 
+			/** Pick all objects in the given screen rectangle.
+			 */
+			virtual void pickObjects(Position x1, Position y1, Position x2, Position y2, 
+			                         std::list<GeometricObject*>& objects);
 
 			/** Return the frustum used by this renderer.
 			 */

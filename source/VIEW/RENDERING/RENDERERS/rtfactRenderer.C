@@ -16,6 +16,7 @@ static const float LINE_RADIUS = 0.02;
 using RTfact::Vec3f;
 using RTfact::Remote::GroupHandle;
 using RTfact::Remote::GeoHandle;
+using RTfact::Remote::Picking;
 using RTfact::Remote::Transform;
 using RTfact::Remote::float3;
 using RTfact::Remote::RTAppearanceHandle;
@@ -29,6 +30,7 @@ namespace BALL
 			Renderer::init(scene);
 
 			GroupHandle root = m_renderer.getRoot();
+			m_picking = boost::shared_ptr<Picking>(new Picking(&m_renderer));
 			
 			// prepare the sphere template
 			TriangulatedSphere sphere_template;
@@ -49,6 +51,42 @@ namespace BALL
 			return true;
 		}
 
+		GeometricObject* RTfactRenderer::pickObject(Position x, Position y)
+		{
+			RTfact::Remote::Picking::ScreenCoordinates coords((float)x, (float)y);
+			RTfact::Remote::Picking::Result result;
+
+			if (!m_picking->pick(coords, result))
+			{
+				return NULL;
+			}
+
+			if (geometric_objects_.find(result.mGeometry) != geometric_objects_.end())
+			{
+				return (geometric_objects_.find(result.mGeometry)->second);
+			}
+
+			return NULL;
+		}
+
+		// TODO: this should be done in parallel, or directly in the ray tracer
+		void RTfactRenderer::pickObjects(Position x1, Position y1, Position x2, Position y2,
+		                                 std::list<GeometricObject*>& objects)
+		{
+			if (x1 > x2) std::swap(x1, x2);
+			if (y1 > y2) std::swap(y1, y2);
+
+			for (Position x=x1; x<=x2; ++x)
+			{
+				for (Position y=y1; y<=y2; ++y)
+				{
+					GeometricObject* result = pickObject(x, y);
+
+					if (result)
+						objects.push_back(result);
+				}
+			}
+		}
 
 		void RTfactRenderer::getFrustum(float& near_f, float& far_f, float& left_f, float& right_f, float& top_f, float& bottom_f)
 		{
@@ -224,6 +262,9 @@ namespace BALL
 
 		void RTfactRenderer::bufferRepresentation(const Representation& rep)
 		{
+			if (rep.getGeometricObjects().empty())
+				return;
+
 			if (rep.isHidden())
 			{
 				if (rep.needsUpdate())
@@ -321,6 +362,8 @@ namespace BALL
 					rt_data.object_handles.push_back(handle);
 					rt_data.material_handles.push_back(material);
 
+					geometric_objects_[handle] = *it;
+
 					rtfact_needs_update_ = true;
 				} 
 
@@ -371,6 +414,8 @@ namespace BALL
 					rt_data.object_handles.push_back(handle);
 					rt_data.material_handles.push_back(material);
 
+					geometric_objects_[handle] = *it;
+
 					rtfact_needs_update_ = true;
 				}
 
@@ -405,6 +450,8 @@ namespace BALL
 						rt_data.top_group_handles.push_back(tubeGroup);
 						rt_data.object_handles.push_back(handle_1);
 						rt_data.material_handles.push_back(material_1);
+
+						geometric_objects_[handle_1] = *it;
 					} 
 					else 
 					{
@@ -447,6 +494,9 @@ namespace BALL
 						rt_data.object_handles.push_back(handle_2);
 						rt_data.material_handles.push_back(material_1);
 						rt_data.material_handles.push_back(material_2);
+
+						geometric_objects_[handle_1] = *it;
+						geometric_objects_[handle_2] = *it;
 					}
 
 					rtfact_needs_update_ = true;
@@ -483,6 +533,8 @@ namespace BALL
 						rt_data.top_group_handles.push_back(tubeGroup);
 						rt_data.object_handles.push_back(handle_1);
 						rt_data.material_handles.push_back(material_1);
+
+						geometric_objects_[handle_1] = *it;
 					} 
 					else 
 					{
@@ -525,6 +577,9 @@ namespace BALL
 						rt_data.object_handles.push_back(handle_2);
 						rt_data.material_handles.push_back(material_1);
 						rt_data.material_handles.push_back(material_2);
+
+						geometric_objects_[handle_1] = *it;
+						geometric_objects_[handle_2] = *it;
 					}
 
 					rtfact_needs_update_ = true;
@@ -548,6 +603,11 @@ namespace BALL
 				for (Position i=0; i<rt_data.top_group_handles.size(); ++i)
 				{
 					root->remove(rt_data.top_group_handles[i]);
+
+					for (Position current_geo_handle=0; current_geo_handle<rt_data.object_handles.size(); ++current_geo_handle)
+					{
+						geometric_objects_.erase(rt_data.object_handles[current_geo_handle]);
+					}
 				}
 
 				rtfact_needs_update_ = true;
