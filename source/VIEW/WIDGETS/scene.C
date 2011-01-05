@@ -1633,7 +1633,6 @@ namespace BALL
 			// into the toolbar_actions_view 
 			toolbar_actions_view_controls_.push_back(screenshot_action);
 
-#ifdef BALL_HAS_RTFACT
 			description = "Shortcut|Display|ContinuousLoop|Toggle";
 			toggle_continuous_loop_action_ = new QAction("Toggle continuous loop", this);
 			toggle_continuous_loop_action_->setObjectName(toggle_continuous_loop_action_->text());
@@ -1644,7 +1643,6 @@ namespace BALL
 			toolbar_actions_view_controls_.push_back(toggle_continuous_loop_action_);
 			toggle_continuous_loop_action_->setShortcut(QKeySequence(Qt::Key_Space));
 			shortcut_registry->registerShortcut(description, toggle_continuous_loop_action_);
-#endif
 			// end of the toolbar entries
 
 			description = "Shortcut|File|Print";
@@ -2926,8 +2924,6 @@ namespace BALL
 
 			boost::shared_ptr<RenderSetup> new_rs(new RenderSetup(new_renderer, new_widget, this, stage_));
 			new_rs->setReceiveBufferUpdates(false);
-
-
 #else
 			t_RaytracingRenderer* new_renderer = new t_RaytracingRenderer();
 			new_renderer->init(*this);
@@ -3145,7 +3141,6 @@ namespace BALL
 			stop_animation_ = true;
 		}
 
-#ifdef BALL_HAS_RTFACT		
 		void Scene::startContinuousLoop()
 		{	
 			continuous_loop_ = true;
@@ -3198,8 +3193,6 @@ namespace BALL
 				startContinuousLoop();
 			}
 		}
-#endif
-
 
 		void Scene::animate_()
 		{

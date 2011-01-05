@@ -618,7 +618,6 @@ namespace BALL
 			///
 			void restoreViewPoint();
 
-#ifdef BALL_HAS_RTFACT
 			///
 			void startContinuousLoop();
 			
@@ -628,6 +627,7 @@ namespace BALL
 			///
 			void toggleContinuousLoop();
 
+#ifdef BALL_HAS_RTFACT
 			RaytracingWindowPtr getWindow(WindowType aWindowType);
 #endif
 	
