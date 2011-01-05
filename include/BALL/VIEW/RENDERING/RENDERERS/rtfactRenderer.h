@@ -78,6 +78,9 @@ namespace BALL
 				{
 				}
 
+
+				virtual void getFrustum(float& near_f, float& far_f, float& left_f, float& right_f, float& top_f, float& bottom_f);
+
 				virtual void prepareBufferedRendering(const Stage& stage);
 				virtual void renderToBufferImpl(FrameBufferPtr buffer);
 

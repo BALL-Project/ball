@@ -183,6 +183,11 @@ namespace BALL
 			return Vector2();
 		}
 
+		void Renderer::getFrustum(float& near_f, float& far_f, float& left_f, float& right_f, float& top_f, float& bottom_f)
+		{
+			Log.error() << "Renderer::getFrustum() not implemented for this kind of renderer yet!" << std::endl;
+		}
+
 		void Renderer::renderRuler()
 		{
 			Log.error() << (String)(qApp->translate("BALL::VIEW::Renderer", 

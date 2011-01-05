@@ -134,6 +134,12 @@ namespace BALL
 			 */
 			virtual Vector2 map3DToViewport(const Vector3& vec);
 
+
+			/** Return the frustum used by this renderer.
+			 */
+			virtual void getFrustum(float& near_f, float& far_f, float& left_f, float& right_f, 
+			                        float& top_f,  float& bottom_f);
+
 			//@}
 			/**	@name	Accessors
 			*/

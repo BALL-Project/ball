@@ -49,6 +49,19 @@ namespace BALL
 			return true;
 		}
 
+
+		void RTfactRenderer::getFrustum(float& near_f, float& far_f, float& left_f, float& right_f, float& top_f, float& bottom_f)
+		{
+			RTfact::Remote::FrustumParameters rtfact_frustum = m_renderer.getFrustum();
+			
+			near_f   = rtfact_frustum.nearPlane;
+			far_f    = rtfact_frustum.farPlane;
+			left_f   = rtfact_frustum.left;
+			right_f  = rtfact_frustum.right;
+			top_f    = rtfact_frustum.top;
+			bottom_f = rtfact_frustum.bottom;
+		}
+
 		void RTfactRenderer::setLights(bool reset_all)
 		{
 			if (reset_all)

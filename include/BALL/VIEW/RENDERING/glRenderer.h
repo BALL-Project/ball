@@ -299,7 +299,7 @@ namespace BALL
 			Position createTextureFromGrid(const RegularData3D& grid, const ColorMap& map);
 			void removeTextureFor_(const RegularData3D& grid);
 
-			void getFrustum(float& near, float& far, float& left, float& right, float& top, float& bottom);
+			virtual void getFrustum(float& near_f, float& far_f, float& left_f, float& right_f, float& top_f, float& bottom_f);
 
 	protected:
 

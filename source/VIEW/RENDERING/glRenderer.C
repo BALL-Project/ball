@@ -2944,22 +2944,16 @@ namespace BALL
 			}
 		}
 
-#ifdef BALL_COMPILER_MSVC
-// don't ask... just *don't* ask... *sigh*
-#undef near
-#undef far
-#endif
-
-		void GLRenderer::getFrustum(float& near, float& far, float& left, float& right, float& top, float& bottom)
+		void GLRenderer::getFrustum(float& near_f, float& far_f, float& left_f, float& right_f, float& top_f, float& bottom_f)
 		{
-			near = near_;
-			far  = far_;
+			near_f = near_;
+			far_f  = far_;
 
-			left  = left_;
-			right = right_;
+			left_f  = left_;
+			right_f = right_;
 
-			top    = top_;
-			bottom = bottom_;
+			top_f    = top_;
+			bottom_f = bottom_;
 		}
 
 
