@@ -19,8 +19,7 @@
 
 //RTRemote proxy to RTfact
 #include <RTremote/Renderer.hpp>
-
-using RTfact::Remote::GroupHandle;
+#include <RTremote/Picking.hpp>
 
 namespace BALL
 {
@@ -97,8 +96,8 @@ namespace BALL
 
 				void updateMaterialForRepresentation(Representation const* rep);
 
-				GroupHandle transformTube(const TwoColoredTube& tube);
-				GroupHandle transformLine(const TwoColoredLine& line);
+				RTfact::Remote::GroupHandle transformTube(const TwoColoredTube& tube);
+				RTfact::Remote::GroupHandle transformLine(const TwoColoredLine& line);
 				void updateMaterialFromStage(RTfact::Remote::RTAppearanceHandle& material);
 				void convertMaterial(Stage::RaytracingMaterial const& rt_material, RTfact::Remote::RTAppearanceHandle& material);
 
