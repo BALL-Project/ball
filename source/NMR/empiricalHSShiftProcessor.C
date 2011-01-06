@@ -793,18 +793,22 @@ namespace BALL
 	char EmpiricalHSShiftProcessor::PropertiesForShift_::getSecondaryStructure_(Residue* residue) 
 	{
 		char ret = CHAR_VALUE_NA;
-		if (   (residue->getSecondaryStructure() == 0) 
-				&& (verbosity_ >= VERBOSITY_LEVEL_DEBUG))
+		if (!(residue->getSecondaryStructure())) 
 		{
-			Log.info() << "EmpiricalHSShiftProcessor: no secondary structure available. Consider precomputing!" << std::endl;
+			if (verbosity_ >= VERBOSITY_LEVEL_DEBUG)
+			{
+				Log.info() << "EmpiricalHSShiftProcessor: no secondary structure available. Consider precomputing!" << std::endl;
+			}
 		}
 		else if (residue->getSecondaryStructure()->getType() == SecondaryStructure::COIL)
 		{
 			ret = 'C';
-		}else if (residue->getSecondaryStructure()->getType() == SecondaryStructure::HELIX)
+		}
+		else if (residue->getSecondaryStructure()->getType() == SecondaryStructure::HELIX)
 		{
 			ret = 'H';
-		}else if (residue->getSecondaryStructure()->getType() == SecondaryStructure::STRAND)
+		}
+		else if (residue->getSecondaryStructure()->getType() == SecondaryStructure::STRAND)
 		{
 			ret = 'B';
 		}
@@ -1264,7 +1268,8 @@ namespace BALL
 							properties_real_[(*it)] -= 360;
 						else if (properties_real_[(*it)] < -180)
 							properties_real_[(*it)] += 360;
-					}else
+					}
+					else
 					{	
 						properties_real_[("PSI_N")]  = FLOAT_VALUE_NA;
 					}
@@ -1278,7 +1283,8 @@ namespace BALL
 							properties_real_[(*it)] -= 360;
 						else if (properties_real_[(*it)] < -180)
 							properties_real_[(*it)] += 360;	
-					}else
+					}
+					else
 					{
 						properties_real_[("PHI_N")]  = FLOAT_VALUE_NA;
 					}
@@ -1356,7 +1362,7 @@ namespace BALL
 					properties_string_[(*it)]= 	(hasDisulfidBond_(next_residue)? "Y": "N");		
 				}
 			}
-
+				
    		// Now compute the properties of the actual residue! 
 			if ((*it) == "FR" )
 			{
