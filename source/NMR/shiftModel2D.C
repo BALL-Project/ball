@@ -1,3 +1,7 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+
 #include <BALL/NMR/shiftModel2D.h>
 #include <BALL/NMR/shiftModel.h>
 #include <BALL/KERNEL/PTE.h>

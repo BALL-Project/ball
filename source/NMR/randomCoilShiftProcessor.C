@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: randomCoilShiftProcessor.C,v 1.6.20.2 2007-04-12 13:53:22 anne Exp $
 
 #include<BALL/NMR/randomCoilShiftProcessor.h>
 #include<BALL/FORMAT/parameterSection.h>
@@ -24,7 +23,6 @@ namespace BALL
 	}
 
 	RandomCoilShiftProcessor::~RandomCoilShiftProcessor()
-		
 	{
 	}
 
@@ -113,12 +111,15 @@ namespace BALL
 		return Processor::CONTINUE;
 	}
 	
-	void   RandomCoilShiftProcessor::postprocessing_()
+
+	void RandomCoilShiftProcessor::postprocessing_()
 	{
 		if (system_) 
 		{
 			// Add for all CA 0.2 times the values of HA ramdon coil shift contribution.
-			for (BALL::ResidueIterator r_it = system_->beginResidue(); r_it != system_->endResidue(); ++r_it)
+			for (BALL::ResidueIterator r_it = system_->beginResidue(); 
+					 r_it != system_->endResidue(); 
+					 ++r_it)
 			{
 				Atom* CA = 0;
 				Atom* HA = 0;
@@ -148,4 +149,5 @@ namespace BALL
 				 					<< __FILE__ << " " << __LINE__ << ")" <<  std::endl;
 		}
 	}
+
 }//namespace BALL

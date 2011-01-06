@@ -1,3 +1,7 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/NMR/empiricalHSShiftProcessor.h>
 #include <BALL/COMMON/limits.h>
