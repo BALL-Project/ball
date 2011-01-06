@@ -67,7 +67,7 @@ void StereoSettingsDialog::show()
 
 void StereoSettingsDialog::initializeWidget(MainControl&)
 {
-	insertMenuEntry(MainControl::DISPLAY_STEREO, tr("Stereo Settings"), this, SLOT(show()), "Shortcut|Display|Stereo|Stereo_Settings");
+	insertMenuEntry(MainControl::DISPLAY_STEREO, (String)tr("Stereo Settings"), this, SLOT(show()), "Shortcut|Display|Stereo|Stereo_Settings");
 }
 
 void StereoSettingsDialog::computeSettingsFromModelDistance()
