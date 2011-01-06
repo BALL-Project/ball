@@ -15,7 +15,7 @@
 #include <BALL/VIEW/WIDGETS/logView.h>
 #include <BALL/VIEW/WIDGETS/helpViewer.h>
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
-#include <BALL/VIEW/WIDGETS/editableScene.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/WIDGETS/fileObserver.h>
 #include <BALL/VIEW/DIALOGS/pubchemDialog.h>
 #include <BALL/VIEW/DIALOGS/undoManagerDialog.h>
@@ -152,7 +152,7 @@ namespace BALL
 		addDockWidget(Qt::BottomDockWidgetArea, new FileObserver( this, ((String)tr("FileObserver")).c_str()));
 
 		Scene::stereoBufferSupportTest();
-		scene_ = new EditableScene(this, ((String)tr("3D View")).c_str());
+		scene_ = new Scene(this, ((String)tr("3D View")).c_str());
 		setCentralWidget(scene_);
 		setAcceptDrops(true);
 

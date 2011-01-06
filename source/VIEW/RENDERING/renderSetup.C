@@ -128,8 +128,10 @@ namespace BALL
 				renderer_type_ = STL_RENDERER;
 			else if (RTTI::isKindOf<TilingRenderer>(*renderer))
 				renderer_type_ = TILING_RENDERER;
+#ifdef BALL_HAS_RTFACT
 			else if (RTTI::isKindOf<RTfactRenderer>(*renderer))
 				renderer_type_ = RTFACT_RENDERER;
+#endif
 			else
 				renderer_type_ = UNKNOWN_RENDERER;
 

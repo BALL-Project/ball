@@ -24,7 +24,7 @@ namespace BALL
 	{
 		/** EditFunctions class.
 		 		This DockWidget contains useful functions for the edit mode of the 
-				\link BALL::EditableScene EditableScene. \endlink
+				\link BALL::Scene Scene. \endlink
 		 		\ingroups ViewWidgets
 		 */
 		class BALL_VIEW_EXPORT EditFunctions

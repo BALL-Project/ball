@@ -5,7 +5,6 @@ SET(SOURCES_LIST
 	datasetControl.C
 	dockingController.C
 	dockWidget.C
-	editableScene.C
 	fileObserver.C
  	genericControl.C
 	geometricControl.C

@@ -3,7 +3,7 @@
 //
 
 #include <BALL/VIEW/DIALOGS/editOperationDialog.h>
-#include <BALL/VIEW/WIDGETS/editableScene.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
 
 #include <QtGui/QToolTip>
 #include <QtGui/QButtonGroup>
@@ -22,16 +22,16 @@ namespace BALL
 		{	
 			setupUi(this);
 
-			EditableScene* scene = EditableScene::getInstance(0);
+			Scene* scene = Scene::getInstance(0);
 
 			if (scene == 0)
 			{
-				Log.error() << "Expected an EditableScene, but found none!" << std::endl;
+				Log.error() << "Expected an Scene, but found none!" << std::endl;
 			}
 			else
 			{ 
-				connect(scene, SIGNAL(newEditOperation(EditableScene::EditOperation&)),
-								this,    SLOT(addEditOperation(EditableScene::EditOperation&)));
+				connect(scene, SIGNAL(newEditOperation(Scene::EditOperation&)),
+								this,    SLOT(addEditOperation(Scene::EditOperation&)));
 			}
 			undo_operation_list->setSelectionMode(Q3ListBox::Extended);	
 		}
@@ -60,7 +60,7 @@ namespace BALL
 			}
 		}
 
-		void EditOperationDialog::addEditOperation(EditableScene::EditOperation& eo)
+		void EditOperationDialog::addEditOperation(Scene::EditOperation& eo)
 		{
 			undo_operation_list->insertItem(eo.description.c_str());
 		}

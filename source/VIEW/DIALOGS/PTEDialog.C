@@ -3,7 +3,7 @@
 //
 #include <BALL/VIEW/DIALOGS/PTEDialog.h>
 #include <BALL/KERNEL/PTE.h>
-#include <BALL/VIEW/WIDGETS/editableScene.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
 
 #include <QtGui/QToolTip>
 #include <QtGui/QPushButton>
@@ -41,10 +41,10 @@ PTEDialog::PTEDialog(QWidget* parent)
 
 	connect(element_box, SIGNAL(activated(int)), this, SLOT(elementChoosen_()));
 
-	EditableScene* scene = EditableScene::getInstance(0);
+	Scene* scene = Scene::getInstance(0);
 	if (scene == 0)
 	{
-	  Log.error() << "Expected an EditableScene, but found none!" << std::endl;
+	  Log.error() << "Expected a Scene, but found none!" << std::endl;
 		return;
   }	
 
@@ -62,11 +62,11 @@ PTEDialog::~PTEDialog()
 
 void PTEDialog::newElementType(int elementNumber)
 {
- EditableScene* scene = EditableScene::getInstance(0);
+ Scene* scene = Scene::getInstance(0);
 
  if (scene == 0)
  {
-	 Log.error() << "Expected an EditableScene, but found none!" << std::endl;
+	 Log.error() << "Expected an Scene, but found none!" << std::endl;
  }
  else
  {

@@ -13,8 +13,8 @@
 # include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
-#ifndef BALL_VIEW_WIDGETS_EDITABLESCENE_H
-# include <BALL/VIEW/WIDGETS/editableScene.h>
+#ifndef BALL_VIEW_WIDGETS_SCENE_H
+# include <BALL/VIEW/WIDGETS/scene.h>
 #endif
 
 #include <BALL/VIEW/UIC/ui_editOperationDialog.h>
@@ -23,7 +23,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		/** Dialog for storing the undo Operations of EditableScene.
+		/** Dialog for storing the undo Operations of Scene.
 		 		\ingroups ViewDialogs
 		*/
 
@@ -49,7 +49,7 @@ namespace BALL
 				
 				void undo(int number_of_undo_steps);
 				void operationSelected(int operation);
-				void addEditOperation(EditableScene::EditOperation& eo);
+				void addEditOperation(Scene::EditOperation& eo);
 				
 			protected:
 

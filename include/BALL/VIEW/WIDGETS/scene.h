@@ -29,6 +29,14 @@
 # include <BALL/VIEW/RENDERING/renderSetup.h>
 #endif
 
+#ifndef BALL_VIEW_DIALOGS_EDITSETTINGS_H
+# include <BALL/VIEW/DIALOGS/editSettings.h>
+#endif
+
+#ifndef BALL_VIEW_STRUCTURE_FRAGMENTDB_H
+# include <BALL/STRUCTURE/fragmentDB.h>
+#endif
+
 #include <QtCore/QThread>
 #include <QtCore/QTimer>
 #include <QtGui/QDragEnterEvent>
@@ -54,8 +62,14 @@ class QRubberBand;
 class QMenu;
 class QImage;
 
+
+
 namespace BALL
 {
+	class Bond;
+	class PDBAtom;
+	class AtomContainer;
+
 	namespace VIEW
 	{
 		class Preferences;
@@ -118,87 +132,256 @@ namespace BALL
 			friend class RenderSetup;
 
 #ifdef BALL_HAS_RTFACT
-      typedef boost::shared_ptr<RaytracingRenderer> RaytracingRendererPtr;
-      typedef boost::shared_ptr<t_RenderWindow> RaytracingWindowPtr;
+			typedef boost::shared_ptr<RaytracingRenderer> RaytracingRendererPtr;
+			typedef boost::shared_ptr<t_RenderWindow> RaytracingWindowPtr;
 #endif
 
 			Q_OBJECT
+				// This class represents a single edit operation and stores its type and
+				// parameters. This can be used to implement undo functionality.
 
-		  public:
+			public:
+				BALL_EMBEDDABLE(Scene, ModularWidget)
 
-			BALL_EMBEDDABLE(Scene, ModularWidget)
+				class BALL_VIEW_EXPORT EditOperation
+				{
+					public:
 
-			/** @name Type definitions 
-			*/
-			//@{
+						/// Constructor
+						EditOperation();
 
+						///
+						EditOperation(Atom* atom, Bond* bond, String description= "Added Object", int operation=0);
 
-			//@} 
-			/** @name Enums 
-			*/ 
-			//@{
-			
-			/**	Predefined constants for the mode types
-			 		Add new enums members in derived classes, for new modi.
+						///
+						EditOperation(const EditOperation& eOperation);
+
+						/// Destructor.
+						virtual ~EditOperation();
+
+						///
+						enum OperationType
+						{
+							DEFAULT,
+							ADDED__ATOM,
+							ADDED__BOND,
+							CHANGED__TYPE
+								// DELETED__ATOM
+								// DELETED__BOND
+								//CHANGED__SYSTEM
+								//MOVED__ATOM
+						};
+
+						int	operationType;
+						Atom* atom;
+						Bond* bond;
+						String description;
+				};
+
+				/**	Predefined constants for the mode types
+					Add new enums members in derived classes, for new modi.
 					If you add new modi in this class, you have to add them in front of
 					the PICKING__MODE entry.
-			*/
-			enum ModeType
-			{
-				/// Default value.
-				ROTATE__MODE         = 0,
+					*/
+				enum ModeType
+				{
+					/// Default value.
+					ROTATE__MODE         = 0,
 
-				/// Move mode
-				MOVE__MODE,
+					/// Move mode
+					MOVE__MODE,
 
-				// add new modi here!!!
-				
-				/// Picking mode
-				PICKING__MODE
-			};
+					/// Picking mode
+					PICKING__MODE,
 
-			/// Different Mouse Mode actions
-			enum ModeAction
-			{
-				///
-				TRANSLATE_ACTION,
+					/// Edit mode,
+					EDIT__MODE,
+
+					/// The total number of modes in this enum
+					NUMBER_OF_MODES
+				};
 
 				///
-				ZOOM_ACTION,
+				void initializePreferencesTab(Preferences &preferences);
 
 				///
-				ROTATE_ACTION,
+				void finalizePreferencesTab(Preferences &preferences);
 
 				///
-				ROTATE_CLOCKWISE_ACTION
-			};
+				virtual void applyPreferences();
 
-			/**
-			 * Scene may hold several windows for different renering modes.
-			 * If you need to retrieve a particular window, use this enum together
-			 * with Scene::getWindow() to get a reference to it.
-			*/
-			enum WindowType
-			{
-				/// Main window that is always being displayed directly in the QT main interface
-				CONTROL_WINDOW = 0,
-				
-				/// Window into which left eye should be rendered. Indicates same window as CONTROL_WINDOW if no stereo is running.
-				LEFT_EYE_WINDOW,
+				///
+				void showContextMenu(QPoint pos);
 
-				/// Window into which right eye should be renderer.  Indicates same window as CONTROL_WINDOW if no stereo is running.
-				RIGHT_EYE_WINDOW
-			};
-				
+				///
+				virtual void setMode(ModeType mode);
 
-			//@} 
-			/**	@name	Constructors and Destructor
-			*/	
-			//@{
+				void addStructure(String name);
 
-			Scene();
+				using QWidget::setCursor;
 
-			/** Default Constructor.
+				///
+				void setCursor(String c);
+
+				///
+				void setElementCursor();
+
+				virtual void addToolBarEntries(QToolBar* tb);
+
+				/// Catch key events
+				virtual void keyPressEvent(QKeyEvent* e);
+				/////////////////////////////////////////
+				public slots:
+
+					void createNewMolecule();
+				void saturateWithHydrogens();
+				void optimizeStructure();
+				void computeBondOrders();
+
+				// slots for communication with PTEDialog
+				void setEditElementType(int element_number);
+				int getEditElementType();
+
+				////////////////////////////////////////
+				protected slots:
+
+					virtual void editMode_();
+				void deleteAtom_();
+				void changeElement_();
+				void changeAtomElement_();
+				void createBond_();
+				void deleteBond_();
+				void changeBondOrder_();
+				void activatedOrderItem_(QAction* action);
+				void moveAtom_();
+				void atomProperties_();
+				void createMolecule_();
+				void addStructure_();
+				void setFormalCharge_();
+
+				////////////////////////////////////////
+signals:
+
+				// signal for communication with EditOperationDialog
+				void newEditOperation(Scene::EditOperation &eo);
+
+				////////////////////////////////////////
+			protected:
+
+				void defaultKeyPressEvent(QKeyEvent* e);
+				virtual void mouseDoubleClickEvent(QMouseEvent* e);
+				virtual bool reactToKeyEvent_(QKeyEvent* e);
+
+				/**
+				 * Insert a given Atom in the Scene. Its position is specified by the 2-dim
+				 * Mouseclick coordinates of the Screen, which will be translated into the
+				 * 3-dim space of Viewing Volume.
+				 */
+				void insert_(int x_, int y_, PDBAtom &atom_);
+
+				void merge_(Composite* a1, Composite* a2);
+
+				/**
+				 *  Given a 3-dim. Coordinates (in Viewing Volume) getScreenPosition
+				 *  computes the 2-dim Coordinates on Screen.
+				 */
+				TVector2<float> getScreenPosition_(Vector3 vec);
+
+				void getClickedItems_(int x, int y);
+
+				void init_();
+
+				String getBondOrderString_(Index order);
+
+				std::list<AtomContainer*> getContainers_();
+
+				void changeBondOrder_(Index delta);
+				void deselect_(bool update=true);
+				void renderGrid_();
+
+				QAction* edit_id_, *new_molecule_action_, *optimize_action_, *add_hydrogens_action_, *element_action_;
+				QAction* bondorders_action_, *bond_action_;
+
+				Atom* current_atom_;
+				Bond* current_bond_;
+
+				Vector3 atom_pos_;
+
+				// pick atoms/bonds only in highlighted AtomContainer?
+				static bool only_highlighted_;
+				// element for new atoms
+				int atomic_number_;
+				// name for newly created atoms
+				Position atom_number_;
+				// order for new bonds
+				int bond_order_;
+				Position last_y_;
+				Qt::MouseButtons last_buttons_;
+
+				//undo stack
+				vector<EditOperation> undo_;
+				EditSettings* edit_settings_;
+				QPoint 	 menu_point_;
+				FragmentDB fragment_db_;
+				bool fragment_db_initialized_;
+				bool temp_move_;
+				QToolBar* toolbar_edit_controls_;
+				QList<QAction*> toolbar_actions_edit_controls_;
+
+			public:
+
+				/** @name Type definitions
+				*/
+				//@{
+
+
+				//@}
+				/** @name Enums
+				*/
+				//@{
+
+				/// Different Mouse Mode actions
+				enum ModeAction
+				{
+					///
+					TRANSLATE_ACTION,
+
+					///
+					ZOOM_ACTION,
+
+					///
+					ROTATE_ACTION,
+
+					///
+					ROTATE_CLOCKWISE_ACTION
+				};
+
+				/**
+				 * Scene may hold several windows for different renering modes.
+				 * If you need to retrieve a particular window, use this enum together
+				 * with Scene::getWindow() to get a reference to it.
+				 */
+				enum WindowType
+				{
+					/// Main window that is always being displayed directly in the QT main interface
+					CONTROL_WINDOW = 0,
+
+					/// Window into which left eye should be rendered. Indicates same window as CONTROL_WINDOW if no stereo is running.
+					LEFT_EYE_WINDOW,
+
+					/// Window into which right eye should be renderer.  Indicates same window as CONTROL_WINDOW if no stereo is running.
+					RIGHT_EYE_WINDOW
+				};
+
+
+				//@}
+				/**	@name	Constructors and Destructor
+				*/
+				//@{
+
+				Scene();
+
+				/** Default Constructor.
 					Initialize the width and height of this scene to <tt> 600</tt> and sets
 					the camera position.
 					\par
@@ -206,11 +389,11 @@ namespace BALL
 					\param      parent_widget the parent widget of this scene 
 					\param      name the name of this scene 
 					\param      w_flags the flags the scene widget should have 
-											(See documentation of QT-library for information concerning widget flags) 
-			*/
-			Scene(QWidget* parent_widget, const char* name = NULL, Qt::WFlags w_flags = 0);
+					(See documentation of QT-library for information concerning widget flags)
+					*/
+				Scene(QWidget* parent_widget, const char* name = NULL, Qt::WFlags w_flags = 0);
 
-			/** Copy constructor.
+				/** Copy constructor.
 					Initialize the width, height and camera position.
 					\par					
 					Calls registerWidget.
@@ -218,80 +401,81 @@ namespace BALL
 					\param  parent_widget the parent widget of this scene 
 					\param  name the name of this scene 
 					\param  wflags the flags the scene widget should have 
-									(See documentation of QT-library for information concerning widget flags) 
-			 */
-			Scene (const Scene& scene, QWidget* parent_widget = NULL, const char* name = NULL, Qt::WFlags wflags = 0);
+					(See documentation of QT-library for information concerning widget flags)
+					*/
+				Scene (const Scene& scene, QWidget* parent_widget = NULL, const char* name = NULL, Qt::WFlags wflags = 0);
 
-			/** Destructor.
-			*/
-			virtual ~Scene();
+				/** Destructor.
+				*/
+				virtual ~Scene();
 
-			/** Explicit default initialization.
+				/** Explicit default initialization.
 					Reset the default values of this scene to:
-					  -  width is set to <tt> 600</tt>
-					  -  height is set to <tt> 600</tt>
-					  - camera position set to <tt> Vector(1,0,0)</tt>
-					  - camera look at position set to <tt> Vector(0,0,0)</tt>
+					-  width is set to <tt> 600</tt>
+					-  height is set to <tt> 600</tt>
+					- camera position set to <tt> Vector(1,0,0)</tt>
+					- camera look at position set to <tt> Vector(0,0,0)</tt>
 					\par
-			*/
-			virtual void clear();
+					*/
+				virtual void clear();
 
-			//@} 
-			/**	@name	Assignment 
-			*/ 
-			//@{
+				//@}
+				/**	@name	Assignment
+				*/
+				//@{
 
-			/** Assignment.
+				/** Assignment.
 					Initialize the width, height and camera position.
 					\param  scene the scene to be copied
-			*/
-			void set(const Scene& scene);
+					*/
+				void set(const Scene& scene);
 
-			/** Assignment operator.
+				/** Assignment operator.
 					Calls set.
-			*/
-			const Scene& operator =	(const Scene& scene);
+					*/
+				const Scene& operator =	(const Scene& scene);
 
-			//@}
-			/**	@name	Accessors: inspectors and mutators 
-			*/
-			//@{
+				//@}
+				/**	@name	Accessors: inspectors and mutators
+				*/
+				//@{
 
-			/** Handles messages sent by other registered ConnectionObject objects.
+				/** Handles messages sent by other registered ConnectionObject objects.
 					Filters for SceneMessage and sets the Camera appropriate or updates the visualization. 
 					\param message the pointer to the message that should be processed
 					\see   ConnectionObject
 					\see   Message
-		  */
-			virtual void onNotify(Message *message);
+					*/
+				virtual void onNotify(Message *message);
+				virtual void defaultOnNotify(Message *message);
 
-			/** This method exports the content of the Scene to an external Renderer.
-			*/
-			virtual bool exportScene(Renderer &er) const;
+				/** This method exports the content of the Scene to an external Renderer.
+				*/
+				virtual bool exportScene(Renderer &er) const;
 
-			//@}	
-			/**	ModularWidget methods.
-			*/
-			//@{
-			
-			/**	Initialize the popup menu <b> Display</b> and the menus of this scene:
-					  - the <b> rotate mode</b> (all mouse actions are attached to rotating, 
-							translating and zooming the scene)
-					  - the <b> picking mode</b> (all mouse actions are attached to picking objects from the scene)
+				//@}
+				/**	ModularWidget methods.
+				*/
+				//@{
+
+				/**	Initialize the popup menu <b> Display</b> and the menus of this scene:
+					- the <b> rotate mode</b> (all mouse actions are attached to rotating,
+					translating and zooming the scene)
+					- the <b> picking mode</b> (all mouse actions are attached to picking objects from the scene)
 					\par
 					This method is called automatically	immediately before the main application is started 
 					by MainControl::show().
 					\param main_control the MainControl object to be initialized with this scene
-			*/
-			virtual void initializeWidget(MainControl& main_control);
-		
-			///
-			virtual void fetchPreferences(INIFile& inifile);
-			
-			///
-			virtual void writePreferences(INIFile& inifile);
+					*/
+				virtual void initializeWidget(MainControl& main_control);
 
-			/**	Menu checking method.
+				///
+				virtual void fetchPreferences(INIFile& inifile);
+
+				///
+				virtual void writePreferences(INIFile& inifile);
+
+				/**	Menu checking method.
 					This method is called by MainControl::checkMenus before a popup menu is shown.
 					The menus <b>rotate mode</b> and <b>picking mode</b> each will be checked
 					if this scene is in the corresponding mode.
@@ -300,402 +484,381 @@ namespace BALL
 					\see   finalizeWidget
 					\see   checkMenus
 					\see   show
-			*/
-			virtual void checkMenu(MainControl& main_control);
-			
-			//@}
-			/**	@name	Debugging and Diagnostics
-			*/
-			//@{
+					*/
+				virtual void checkMenu(MainControl& main_control);
 
-			/** Internal state and consistency self-validation.
+				//@}
+				/**	@name	Debugging and Diagnostics
+				*/
+				//@{
+
+				/** Internal state and consistency self-validation.
 					A Scene is valid if it has a parent.
-			*/
-			virtual bool isValid() const;
+					*/
+				virtual bool isValid() const;
 
-			/** Internal value dump.
+				/** Internal value dump.
 					Dump the current internal state of this scene to 
 					the output ostream <b> s</b> with dumping depth <b> depth</b>.
 					\param   s output stream where to output the internal state of this scene
 					\param   depth the dumping depth
-			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
-			
-			///
-			Stage* getStage()
-			{ return stage_;}
+					*/
+				virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
-			///
-			const Stage* getStage() const
-			{ return stage_;}
+				///
+				Stage* getStage()
+				{ return stage_;}
 
-			///
-			StageSettings* getStageSettings()
-			{ return stage_settings_; }
+				///
+				const Stage* getStage() const
+				{ return stage_;}
 
-			///
-			const StageSettings* getStageSettings() const
-			{ return stage_settings_; }
+				///
+				StageSettings* getStageSettings()
+				{ return stage_settings_; }
 
-			///
-			MaterialSettings* getMaterialSettings()
-			{ return material_settings_; }
+				///
+				const StageSettings* getStageSettings() const
+				{ return stage_settings_; }
 
-			///
-			const MaterialSettings* getMaterialSettings() const
-			{ return material_settings_; }
+				///
+				MaterialSettings* getMaterialSettings()
+				{ return material_settings_; }
 
-			///
-			void setCamera(const Camera& camera);
+				///
+				const MaterialSettings* getMaterialSettings() const
+				{ return material_settings_; }
 
-			///
-			std::list<Camera>& getAnimationPoints()
+				///
+				void setCamera(const Camera& camera);
+
+				///
+				std::list<Camera>& getAnimationPoints()
 				{ return animation_points_;}
 
-			///
-			static void setAnimationSmoothness(float value)
+				///
+				static void setAnimationSmoothness(float value)
 				{ animation_smoothness_ = value;}
 
-			///
-			static float getAnimationSmoothness()
+				///
+				static float getAnimationSmoothness()
 				{ return animation_smoothness_;}
 
-			/// 
-			float getDownsamplingFactor() const
+				///
+				float getDownsamplingFactor() const
 				{ return downsampling_factor_;}
-			
-			///
-			void setDownsamplingFactor(float ds_factor);
-	
-			///
-			void setDefaultLighting(bool update_GL = true);
 
-			///
-			void initializePreferencesTab(Preferences &preferences);
-			
-			///
-			void finalizePreferencesTab(Preferences &preferences);
+				///
+				void setDownsamplingFactor(float ds_factor);
 
-			///
-			virtual void applyPreferences();
-				
-			///
-			static void setMouseSensitivity(float sensitivity)
+				///
+				void setDefaultLighting(bool update_GL = true);
+
+				///
+				static void setMouseSensitivity(float sensitivity)
 				{ mouse_sensitivity_ = sensitivity; }
 
-			///
-			static float getMouseSensitivity()
+				///
+				static float getMouseSensitivity()
 				{ return mouse_sensitivity_;}
-			
-			///
-			static void setMouseWheelSensitivity(float sensitivity)
+
+				///
+				static void setMouseWheelSensitivity(float sensitivity)
 				{ mouse_wheel_sensitivity_ = sensitivity; }
 
-			///
-			static float getMouseWheelSensitivity()
+				///
+				static float getMouseWheelSensitivity()
 				{ return mouse_wheel_sensitivity_;}
 
-			///
-			static void setShowLightSources(bool state)
+				///
+				static void setShowLightSources(bool state)
 				{ show_light_sources_ = state;}
-			
-			///
-			static bool showLightSourcesEnabled() 
+
+				///
+				static bool showLightSourcesEnabled()
 				{ return show_light_sources_;}
 
-			/// 
-			GLRenderer& getGLRenderer()
+				///
+				GLRenderer& getGLRenderer()
 				{ return *gl_renderer_;}
 
 #ifdef BALL_HAS_RTFACT
-			///
-			RaytracingRenderer& getRaytracingRenderer()
+				///
+				RaytracingRenderer& getRaytracingRenderer()
 				{ return *rt_renderer_;}
 #endif
 
-			/** Set a new GLRenderer.
-			 		This method is intended for users, that what to
+				/** Set a new GLRenderer.
+					This method is intended for users, that what to
 					overload the behaviour of the GLRenderer.
-			*/
-			void setGLRenderer(GLRenderer& renderer);
+					*/
+				void setGLRenderer(GLRenderer& renderer);
 
-			///
-			static bool stereoBufferSupportTest();
-			
-			///
-			float getMousePositionX() { return x_window_pos_new_;}
+				///
+				static bool stereoBufferSupportTest();
 
-			///
-			float getMousePositionY() { return y_window_pos_new_;}
+				///
+				float getMousePositionX() { return x_window_pos_new_;}
 
-			///
-			bool exportPNG(const String& filename);
+				///
+				float getMousePositionY() { return y_window_pos_new_;}
 
-			///
-			virtual void setWidgetVisible(bool state);
+				///
+				bool exportPNG(const String& filename);
 
-			///
-			void setOffScreenRendering(bool enabled, Size factor);
+				///
+				virtual void setWidgetVisible(bool state);
 
-			///
-			virtual void paintEvent(QPaintEvent* e);
+				///
+				void setOffScreenRendering(bool enabled, Size factor);
 
-			/// Catch key events
-			virtual void keyPressEvent(QKeyEvent* e);
+				///
+				virtual void paintEvent(QPaintEvent* e);
 
-			///
-			virtual void mouseDoubleClickEvent(QMouseEvent* e);
+				///
+				virtual bool eventFilter(QObject* object, QEvent* event);
 
-			///
-			virtual bool eventFilter(QObject* object, QEvent* event);
-
-			///
-			ModeType getMode() const
+				///
+				ModeType getMode() const
 				{ return current_mode_;}
 
-			///
-			virtual void setMode(ModeType mode);
+				///
+				virtual void projectionModeChanged();
 
-			///
-			virtual void projectionModeChanged();
+				///
+				static void setScreenShotNumber(Position pos) { screenshot_nr_ = pos;}
 
-			///
-			static void setScreenShotNumber(Position pos) { screenshot_nr_ = pos;}
+				///
+				static void setPOVNumber(Position pos) { pov_nr_ = pos;}
 
-			///
-			static void setPOVNumber(Position pos) { pov_nr_ = pos;}
+				///
+				static void setVRMLNumber(Position pos) {vrml_nr_ = pos;}
 
-			///
-			static void setVRMLNumber(Position pos) {vrml_nr_ = pos;}
+				///
+				void rotate(float degree_right, float degree_up);
 
-			///
-			void rotate(float degree_right, float degree_up);
+				///
+				void rotateClockwise(float degree);
 
-			///
-			void rotateClockwise(float degree);
-
-			/** Move the view. \\
-			 		v.x = right  \\
+				/** Move the view. \\
+					v.x = right  \\
 					v.y = up     \\
 					v.z = view direction 
-			*/
-			void move(Vector3 v);
+					*/
+				void move(Vector3 v);
 
-			/** Move some Composites. \\
-			 		v.x = right  \\
+				/** Move some Composites. \\
+					v.x = right  \\
 					v.y = up     \\
 					v.z = view direction 
-			*/
-			void moveComposites(const std::list<Composite*>& composites, Vector3 v);
+					*/
+				void moveComposites(const std::list<Composite*>& composites, Vector3 v);
 
-			/** Rotate some Composites. \\
-			 		v.x = right  \\
+				/** Rotate some Composites. \\
+					v.x = right  \\
 					v.y = up     \\
 					v.z = view direction 
-			*/
-			void rotateComposites(const std::list<Composite*>& composites, float degree_right, float degree_up, float degree_clockwise = 0);
+					*/
+				void rotateComposites(const std::list<Composite*>& composites, float degree_right, float degree_up, float degree_clockwise = 0);
 
-			///
-			bool isAnimationRunning() const;
+				///
+				bool isAnimationRunning() const;
 
-			///
-			void setTurnPoint(const Vector3& v) { system_origin_ = v;}
+				///
+				void setTurnPoint(const Vector3& v) { system_origin_ = v;}
 
-			///
-			const Vector3& getTurnPoint() const { return system_origin_;}
+				///
+				const Vector3& getTurnPoint() const { return system_origin_;}
 
-			///
-			void setFullScreen(bool state);
+				///
+				void setFullScreen(bool state);
 
-			///
-			void setFPSEnabled(bool state) { show_fps_ = state; }
+				///
+				void setFPSEnabled(bool state) { show_fps_ = state; }
 
-			/** Show text in the lower right corner.
-			 		To clear the text, call this method again with an empty string.
-			*/
-			void showText(const String& text, Size font_size = 20);
+				/** Show text in the lower right corner.
+					To clear the text, call this method again with an empty string.
+					*/
+				void showText(const String& text, Size font_size = 20);
 
-			///
-			virtual void addToolBarEntries(QToolBar* tb);
+				///
+				bool isUpdateRunning() const { return update_running_;}
 
-			///
-			bool isUpdateRunning() const { return update_running_;}
+				void resetTracking() {tracking_initialized_ = false;}
 
-			void resetTracking() {tracking_initialized_ = false;}
-			
-			///
-			bool inMoveMode() const { return (mouse_button_is_pressed_ && (getMode() == MOVE__MODE)); }
+				///
+				bool inMoveMode() const { return (mouse_button_is_pressed_ && (getMode() == MOVE__MODE)); }
 
-// TODO: this pretty hacky!
+				// TODO: this pretty hacky!
 #ifdef BALL_HAS_RTFACT
-			void updateAllRTMaterials();
+				void updateAllRTMaterials();
 
-			void updateRTMaterialForRepresentation(Representation* rep, const Stage::RaytracingMaterial& new_material);
+				void updateRTMaterialForRepresentation(Representation* rep, const Stage::RaytracingMaterial& new_material);
 #endif
 
-			/// Try to setup an environment map for all renderers that support it
-			void setupEnvironmentMap(const QImage& image);
+				/// Try to setup an environment map for all renderers that support it
+				void setupEnvironmentMap(const QImage& image);
 
-			Position prepareGridTextures(const RegularData3D& grid, const ColorMap& map);
+				Position prepareGridTextures(const RegularData3D& grid, const ColorMap& map);
 
-			void updateGL();
+				void updateGL();
 
-		public slots:
+				public slots:
 
-			/// Create an coordinate system at current position
-			void createCoordinateSystem();
+					/// Create an coordinate system at current position
+					void createCoordinateSystem();
 
-			/// Create an coordinate system at origin
-			void createCoordinateSystemAtOrigin();
+				/// Create an coordinate system at origin
+				void createCoordinateSystemAtOrigin();
 
-			/// Export PNG image and return the filename
-			String exportPNG();
-			
-			///
-			void exportPOVRay();
+				/// Export PNG image and return the filename
+				String exportPNG();
 
-			/// Export to POVRay whithout showing file dialog
-			void exportNextPOVRay();
+				///
+				void exportPOVRay();
 
-			///
-			void printScene();
+				/// Export to POVRay whithout showing file dialog
+				void exportNextPOVRay();
 
-			/// show an dialog to save an PNG file to
-			void showExportPNGDialog();
+				///
+				void printScene();
 
-			/// opens the VIEW/DIALOGS/GeometryExportDialog for vrml and stl export
-			void showExportVRMLDialog();
+				/// show an dialog to save an PNG file to
+				void showExportPNGDialog();
 
-			/// Enable or disable model previews e.g. while rotating
-			void setPreview(bool state) { use_preview_ = state; }
+				/// opens the VIEW/DIALOGS/GeometryExportDialog for vrml and stl export
+				void showExportVRMLDialog();
 
-			/// Returns the state of the preview mode
-			bool usePreview() const { return use_preview_; }
-			
-			/** Show or hide widget (Called by menu entry in "WINDOWS")
+				/// Enable or disable model previews e.g. while rotating
+				void setPreview(bool state) { use_preview_ = state; }
+
+				/// Returns the state of the preview mode
+				bool usePreview() const { return use_preview_; }
+
+				/** Show or hide widget (Called by menu entry in "WINDOWS")
 					If the ModularWidget is not also a QWidget, this method does nothing
-			*/
-			virtual void switchShowWidget();
+					*/
+				virtual void switchShowWidget();
 
-			///
-			void switchRenderer(RenderSetup::RendererType new_type);
+				///
+				void switchRenderer(RenderSetup::RendererType new_type);
 
-			///
-			void addGlWindow();
-
-#ifdef BALL_HAS_RTFACT
-			///
-			void addRTfactWindow();
-#endif
-
-			///
-			void exitStereo();
-
-			///
-			void enterActiveStereo();
-
-			///
-			void enterDualStereo();
-
-			///
-			void enterDualStereoDifferentDisplays();
-
-			///
-			void clearRecordedAnimation();
-			
-			///
-			void startAnimation();
-
-			///
-			void stopAnimation();
-
-			///
-			void switchToLastMode();
-
-			///
-			void switchShowGrid();
-
-			/// Popup informations for object under mouse cursor
-			void showInfos();
-
-			///
-			void setupViewVolume();
-
-			///
-			void storeViewPoint();
-
-			///
-			void restoreViewPoint();
-
-			///
-			void startContinuousLoop();
-			
-			///
-			void stopContinuousLoop();
-			
-			///
-			void toggleContinuousLoop();
+				///
+				void addGlWindow();
 
 #ifdef BALL_HAS_RTFACT
-			RaytracingWindowPtr getWindow(WindowType aWindowType);
+				///
+				void addRTfactWindow();
 #endif
-	
-			protected slots:
 
-			//@}
-			/** @name Protected slots
-			*/
-			//@{
+				///
+				void exitStereo();
 
-			/** Switch to rotate mode.
-					If this method is called the mouse actions of this scene will
-					perform rotation, translation and zooming the visualization.
-					This method will be called from the corresponding menu entry.
-					\see initializeWidget
-					\see checkMenu
-			*/
-			virtual void rotateMode_();
+				///
+				void enterActiveStereo();
 
-			/** Switch to picking mode.
+				///
+				void enterDualStereo();
+
+				///
+				void enterDualStereoDifferentDisplays();
+
+				///
+				void clearRecordedAnimation();
+
+				///
+				void startAnimation();
+
+				///
+				void stopAnimation();
+
+				///
+				void switchToLastMode();
+
+				///
+				void switchShowGrid();
+
+				/// Popup informations for object under mouse cursor
+				void showInfos();
+
+				///
+				void setupViewVolume();
+
+				///
+				void storeViewPoint();
+
+				///
+				void restoreViewPoint();
+
+				///
+				void startContinuousLoop();
+
+				///
+				void stopContinuousLoop();
+
+				///
+				void toggleContinuousLoop();
+
+#ifdef BALL_HAS_RTFACT
+				RaytracingWindowPtr getWindow(WindowType aWindowType);
+#endif
+
+				protected slots:
+
+					//@}
+					/** @name Protected slots
+					*/
+					//@{
+
+					/** Switch to rotate mode.
+						If this method is called the mouse actions of this scene will
+						perform rotation, translation and zooming the visualization.
+						This method will be called from the corresponding menu entry.
+						\see initializeWidget
+						\see checkMenu
+						*/
+					virtual void rotateMode_();
+
+				/** Switch to picking mode.
 					If this method is called the mouse actions of this scene will
 					perform object picking.
 					This method will be called from the corresponding menu entry.
 					\see initializeWidget
 					\see checkMenu
-			*/
-			virtual void pickingMode_();
+					*/
+				virtual void pickingMode_();
 
-			/**
-			*/
-			virtual void moveMode_();
-			
-			/// Show the viewpoint and the look at point in the statusline of the mainwidget.
-			virtual void showViewPoint_();
+				/**
+				*/
+				virtual void moveMode_();
 
-			/// Set the viewpoint 
-			virtual void setViewPoint_();
+				/// Show the viewpoint and the look at point in the statusline of the mainwidget.
+				virtual void showViewPoint_();
 
-			/// Reset the camera to standard values
-			virtual void resetCamera_();
+				/// Set the viewpoint
+				virtual void setViewPoint_();
 
-			/** Rebuffer all representations for the current renderer_.
-			 *  Note: this function does not yet clear the old state of the renderer.
-			 */
-			virtual void resetRepresentationsForRenderer_(RenderSetup& rs);
+				/// Reset the camera to standard values
+				virtual void resetCamera_();
 
-			///
-			virtual void dropEvent(QDropEvent* e);
+				/** Rebuffer all representations for the current renderer_.
+				 *  Note: this function does not yet clear the old state of the renderer.
+				 */
+				virtual void resetRepresentationsForRenderer_(RenderSetup& rs);
 
-			///
-			virtual void dragEnterEvent(QDragEnterEvent* e);
+				///
+				virtual void dropEvent(QDropEvent* e);
 
-			// dummy slot for menu entries without immediate action (saves many lines code this way)
-			void dummySlot(){}
+				///
+				virtual void dragEnterEvent(QDragEnterEvent* e);
 
-			//@}
+				// dummy slot for menu entries without immediate action (saves many lines code this way)
+				void dummySlot(){}
+
+				//@}
 			protected:
 
-			//@}
+				//@}
 			/** @name Protected QT overridden virtual methods
 			*/
 			//@{
@@ -765,10 +928,15 @@ namespace BALL
 			*/
 			virtual void mouseReleaseEvent(QMouseEvent* qmouse_event);
 
+			virtual void defaultMouseReleaseEvent(QMouseEvent* qmouse_event);
+
 			/** Catch mouse wheel events and zoom the scene accordingly.
 					\param  e the QT-mouse event (See QT-library for mouse events)
 			*/
 			virtual void wheelEvent(QWheelEvent* qmouse_event);
+
+			//
+			void defaultWheelHandling_(QWheelEvent* qmouse_event);
 
 			//_
 			void animate_();

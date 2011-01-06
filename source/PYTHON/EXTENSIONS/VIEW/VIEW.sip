@@ -89,7 +89,6 @@
 %Include dockWidget.sip
 %Include pyWidget.sip
 %Include scene.sip
-%Include editableScene.sip
 %Include molecularStructure.sip
 %Include molecularControl.sip
 %Include geometricControl.sip
