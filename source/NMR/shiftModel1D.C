@@ -8,7 +8,6 @@ using namespace std;
 namespace BALL
 {
 	ShiftModel1D::ShiftModel1D() 
-		throw()
 		:	ShiftModule(),
 			peaks_(),
 			origin_(),
@@ -25,7 +24,6 @@ namespace BALL
 	}
 
 	ShiftModel1D::ShiftModel1D(const String& filename, SPECTRUM_TYPE st, bool compute_shifts) 
-		throw()
 		:	ShiftModule(),
 			peaks_(),
 			origin_(),
@@ -43,7 +41,6 @@ namespace BALL
 	}
 
 	ShiftModel1D::ShiftModel1D(const String& filename,SPECTRUM_TYPE st, double origin, double dimension, double spacing, bool compute_shifts) 
-		throw()
 		:	ShiftModule(),
 			peaks_(),
 			origin_(origin),
@@ -61,7 +58,6 @@ namespace BALL
 	}
 
 	ShiftModel1D::ShiftModel1D(const ShiftModel1D& model)
-		throw()
 		:	ShiftModule(),
 			peaks_(model.peaks_),
 			origin_(model.origin_),
@@ -77,14 +73,12 @@ namespace BALL
 	}
 	
 	ShiftModel1D::~ShiftModel1D()
-		throw()
 	{
 		clear();
 	}
 	
 			
 	void ShiftModel1D::clear()
-		throw()
 	{
 		// model is invalid
 		valid_ = false;
@@ -118,20 +112,17 @@ namespace BALL
 	}
 	
 	bool ShiftModel1D::isValid() const
-		throw()
 	{
 		return valid_;
 	}	
 	
 	bool ShiftModel1D::start()
-		throw()
 	{	
 		peaks_.clear();
 		return true;
 	}
 	
 	bool ShiftModel1D::finish()
-		throw()
 	{
 
 		if (!isValid())
@@ -222,7 +213,6 @@ namespace BALL
 	}
 
 	Processor::Result ShiftModel1D::operator () (Composite& composite)
-			throw()
 	{
 
 		Processor::Result result = Processor::CONTINUE;
@@ -240,7 +230,6 @@ namespace BALL
 
 
 	void ShiftModel1D::operator >> (Spectrum1D& spectrum)
-		throw()
   {
      // this overwrites the parameter
   	spectrum = Spectrum1D(peaks_, origin_, dimension_, spacing_);
@@ -249,7 +238,6 @@ namespace BALL
 
 	
 	bool ShiftModel1D::hasType_(Atom* a, SPECTRUM_TYPE type)
-		throw()
 	{
 		bool ret = false;
 		switch (type)
