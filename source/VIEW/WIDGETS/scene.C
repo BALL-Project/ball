@@ -1720,9 +1720,9 @@ namespace BALL
 
 					renderer->makeCurrent();
 					// NOTE: GLRenderers currently render in the GUI thread!
-					//if (RTTI::isKindOf<GLRenderer>(*(renderer->renderer)))
-					//	renderer->renderToBuffer();
-					//else
+					if (RTTI::isKindOf<GLRenderer>(*(renderer->renderer)))
+						renderer->renderToBuffer();
+					else
 						renderer->target->refresh();
 
 					renderer->setBufferReady(true);
