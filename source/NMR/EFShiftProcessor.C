@@ -403,7 +403,6 @@ namespace BALL
 
 
 	void EFShiftProcessor::printTargets_()
-		throw()
 	{
 		Log.info() << "********* \n EF: list of target bonds" << std::endl;
 		std::vector<std::pair<Atom*, Atom*> >::iterator tbond_it = bond_list_.begin();
@@ -415,7 +414,6 @@ namespace BALL
 	}
 
 	void EFShiftProcessor::printEffectors_()
-		throw()
 	{
 		Log.info() << "********* \n EF: list of effectors" << std::endl;
 		list<Atom*>::const_iterator effector_it = effector_list_.begin();
@@ -427,7 +425,6 @@ namespace BALL
 	}
 
 	void	EFShiftProcessor::printParameters_()
-		throw()
 	{
 		Log.info() << "********* \n EF: list of parameters" << std::endl;
 		Log.info() << "exclude_residue_field  " <<  exclude_residue_field_ << std::endl;
@@ -441,7 +438,6 @@ namespace BALL
 
 
 	void  EFShiftProcessor::postprocessing_()
-		throw()
 	{
 		System* system = NULL;
 	
