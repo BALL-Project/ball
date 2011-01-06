@@ -295,7 +295,7 @@ void DemoTutorialDialog::nextStepDemo_()
 				String msg((String)tr("Could not open bpti.pdb. Maybe the file was deleted?")+"\n");
 				msg += (String)tr("It should be found in") + " " + file_name;
 
-				QMessageBox::critical(0, (String)tr("Error while starting BALLView Demo"), msg.c_str(),
+				QMessageBox::critical(0, tr("Error while starting BALLView Demo"), msg.c_str(),
 						QMessageBox::Ok, Qt::NoButton, Qt::NoButton);
 				return;
 			}
@@ -585,11 +585,11 @@ void DemoTutorialDialog::initializeWidget(MainControl&)
 	getMainControl()->insertPopupMenuSeparator(MainControl::HELP);
 	
 	String description = "Shortcut|Help|Demo";
-	demo_action_ = insertMenuEntry(MainControl::HELP, tr("Demo"), this, SLOT(showDemo()), description);
+	demo_action_ = insertMenuEntry(MainControl::HELP, (String)tr("Demo"), this, SLOT(showDemo()), description);
 	setMenuHint((String)tr("Show a demonstration of BALLView's features"));
 
 	description = "Shortcut|Help|Tutorial";
-	tutorial_action_ = insertMenuEntry(MainControl::HELP, tr("Tutorial"), this, SLOT(showTutorial()), description);
+	tutorial_action_ = insertMenuEntry(MainControl::HELP, (String)tr("Tutorial"), this, SLOT(showTutorial()), description);
 	setMenuHint((String)tr("Perform a step-by-step tutorial"));
 	getMainControl()->insertPopupMenuSeparator(MainControl::HELP);
 }
