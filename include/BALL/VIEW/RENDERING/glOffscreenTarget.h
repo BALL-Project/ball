@@ -34,7 +34,7 @@ namespace BALL
 		 *  no support for PixelBufferObjects, we try to render into a window on screen instead.
 		 */
 		class BALL_VIEW_EXPORT GLOffscreenTarget
-			: public t_RenderWindow,
+			: public RenderWindow,
 				public QPaintDevice
 		{
 			public:

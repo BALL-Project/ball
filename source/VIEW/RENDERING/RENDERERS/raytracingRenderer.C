@@ -2,7 +2,7 @@
 // vi: set ts=2:
 //
 
-#include <BALL/VIEW/RENDERING/raytracingRenderer.h>
+#include <BALL/VIEW/RENDERING/RENDERERS/raytracingRenderer.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 
 namespace BALL

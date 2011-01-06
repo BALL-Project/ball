@@ -29,10 +29,10 @@
 
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
 
-#include <BALL/VIEW/RENDERING/POVRenderer.h>
-#include <BALL/VIEW/RENDERING/VRMLRenderer.h>
-#include <BALL/VIEW/RENDERING/STLRenderer.h>
-#include <BALL/VIEW/RENDERING/tilingRenderer.h>
+#include <BALL/VIEW/RENDERING/RENDERERS/POVRenderer.h>
+#include <BALL/VIEW/RENDERING/RENDERERS/VRMLRenderer.h>
+#include <BALL/VIEW/RENDERING/RENDERERS/STLRenderer.h>
+#include <BALL/VIEW/RENDERING/RENDERERS/tilingRenderer.h>
 #include <BALL/VIEW/RENDERING/glOffscreenTarget.h>
 
 #include <BALL/VIEW/PRIMITIVES/simpleBox.h>
@@ -65,7 +65,7 @@
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/DATATYPE/colorMap.h>
 
-#include <BALL/VIEW/RENDERING/bufferedRenderer.h>
+#include <BALL/VIEW/RENDERING/RENDERERS/bufferedRenderer.h>
 
 #ifdef BALL_HAS_RTFACT
     
@@ -3096,7 +3096,7 @@ namespace BALL
 				t_RaytracingRenderer* renderer = new t_RaytracingRenderer;
 
 				// build a new offscreen target for our renderer
-				RenderWindow<BALL_DEFAULT_PIXEL_TYPE>* target = new RenderWindow<BALL_DEFAULT_PIXEL_TYPE>;
+				TRenderWindow<BALL_DEFAULT_PIXEL_TYPE>* target = new TRenderWindow<BALL_DEFAULT_PIXEL_TYPE>;
 
 				// and combine it into a new render setup
 				boost::shared_ptr<RenderSetup> tr_rs(new RenderSetup(renderer, target, this, stage_));

@@ -1,6 +1,6 @@
 //STL Renderer: v 1.0 (2008.09.12) Annette Treichel
 
-#include <BALL/VIEW/RENDERING/STLRenderer.h>
+#include <BALL/VIEW/RENDERING/RENDERERS/STLRenderer.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/stage.h>
 

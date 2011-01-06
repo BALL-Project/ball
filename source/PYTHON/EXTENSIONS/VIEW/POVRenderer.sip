@@ -8,7 +8,7 @@ class POVRenderer
 : Renderer
 {
 %TypeHeaderCode
-	#include <BALL/VIEW/RENDERING/POVRenderer.h>
+	#include <BALL/VIEW/RENDERING/RENDERERS/POVRenderer.h>
 	using namespace BALL;
 	using namespace BALL::VIEW;
 	using namespace BALL::Exception;

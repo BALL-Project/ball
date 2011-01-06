@@ -7,7 +7,7 @@
 // vi: set ts=2:
 //
 
-#include <BALL/VIEW/RENDERING/renderer.h>
+#include <BALL/VIEW/RENDERING/RENDERERS/renderer.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/stage.h>
 

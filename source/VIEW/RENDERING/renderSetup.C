@@ -1,10 +1,10 @@
 #include <BALL/VIEW/RENDERING/renderSetup.h>
 
-#include <BALL/VIEW/RENDERING/bufferedRenderer.h>
-#include <BALL/VIEW/RENDERING/tilingRenderer.h>
-#include <BALL/VIEW/RENDERING/POVRenderer.h>
-#include <BALL/VIEW/RENDERING/VRMLRenderer.h>
-#include <BALL/VIEW/RENDERING/STLRenderer.h>
+#include <BALL/VIEW/RENDERING/RENDERERS/bufferedRenderer.h>
+#include <BALL/VIEW/RENDERING/RENDERERS/tilingRenderer.h>
+#include <BALL/VIEW/RENDERING/RENDERERS/POVRenderer.h>
+#include <BALL/VIEW/RENDERING/RENDERERS/VRMLRenderer.h>
+#include <BALL/VIEW/RENDERING/RENDERERS/STLRenderer.h>
 #include <BALL/VIEW/RENDERING/glRenderWindow.h>
 
 #include <BALL/VIEW/WIDGETS/scene.h>

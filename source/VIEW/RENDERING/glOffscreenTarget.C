@@ -16,7 +16,7 @@ namespace BALL
 	namespace VIEW
 	{
 		GLOffscreenTarget::GLOffscreenTarget(GLRenderWindow* share_from, const String& filename)
-			: t_RenderWindow(),
+			: RenderWindow(),
 				QPaintDevice(),
 				filename_(filename),
 				share_from_(share_from),
@@ -36,7 +36,7 @@ namespace BALL
 
 		bool GLOffscreenTarget::resize(const unsigned int width, const unsigned int height)
 		{
-			t_RenderWindow::resize(width, height);
+			RenderWindow::resize(width, height);
 
 			if (use_pixel_buffer_)
 			{

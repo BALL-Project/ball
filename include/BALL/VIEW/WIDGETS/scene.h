@@ -9,8 +9,8 @@
 #	include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
-#ifndef BALL_VIEW_RENDERING_GLRENDERER_H
-# include <BALL/VIEW/RENDERING/glRenderer.h>
+#ifndef BALL_VIEW_RENDERING_RENDERERSGLRENDERER_H
+# include <BALL/VIEW/RENDERING/RENDERERS/glRenderer.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -51,7 +51,7 @@
 #ifdef BALL_HAS_RTFACT 
 
 #ifndef BALL_VIEW_RENDERING_RAYTRACINGRENDERER_H
-# include <BALL/VIEW/RENDERING/raytracingRenderer.h>
+# include <BALL/VIEW/RENDERING/RENDERERS/raytracingRenderer.h>
 #endif
 
 # include <boost/shared_ptr.hpp>
@@ -132,8 +132,8 @@ namespace BALL
 			friend class RenderSetup;
 
 #ifdef BALL_HAS_RTFACT
-			typedef boost::shared_ptr<RaytracingRenderer> RaytracingRendererPtr;
-			typedef boost::shared_ptr<t_RenderWindow> RaytracingWindowPtr;
+      typedef boost::shared_ptr<RaytracingRenderer> RaytracingRendererPtr;
+      typedef boost::shared_ptr<RenderWindow> RaytracingWindowPtr;
 #endif
 
 			Q_OBJECT

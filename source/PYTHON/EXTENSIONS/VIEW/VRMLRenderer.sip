@@ -2,7 +2,7 @@ class VRMLRenderer
 	: Renderer
 {
 %TypeHeaderCode
-	#include <BALL/VIEW/RENDERING/VRMLRenderer.h>
+	#include <BALL/VIEW/RENDERING/RENDERERS/VRMLRenderer.h>
 	using namespace BALL;
 	using namespace BALL::VIEW;
 %End

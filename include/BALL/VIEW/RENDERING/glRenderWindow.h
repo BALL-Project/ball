@@ -35,7 +35,7 @@ namespace BALL
 		 * Model of the \link RenderWindow \endlink which uses OpenGL to render its buffer to the screen
 		 */
 		class BALL_VIEW_EXPORT GLRenderWindow 
-			: public t_RenderWindow,
+			: public RenderWindow,
 				public QGLWidget
 		{
 			

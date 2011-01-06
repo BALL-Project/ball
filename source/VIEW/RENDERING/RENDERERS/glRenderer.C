@@ -2,7 +2,7 @@
 // vi: set ts=2:
 //
 
-#include <BALL/VIEW/RENDERING/glRenderer.h>
+#include <BALL/VIEW/RENDERING/RENDERERS/glRenderer.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
 #include <BALL/VIEW/DATATYPE/colorMap.h>

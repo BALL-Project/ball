@@ -30,7 +30,7 @@ namespace BALL
 		 * \link RenderTarget \endlink interface can be displayed
 		 */
 		template<typename taPixelDatatype>
-			class BALL_VIEW_EXPORT RenderWindow : public RenderTarget
+			class BALL_VIEW_EXPORT TRenderWindow : public RenderTarget
 		{
 			// only int or floats are allowed as template parameters
 			BALLVIEW_STATIC_ASSERT_TYPE_IS_CHAR_OR_FLOAT(taPixelDatatype);
@@ -40,9 +40,9 @@ namespace BALL
 
 			public:
 
-			RenderWindow();
+			TRenderWindow();
 
-			virtual ~RenderWindow();            
+			virtual ~TRenderWindow();            
 
 			/* Initialize window internals. After that call, window is ready to receive \link resize \endlink call             
 			 * returns false if the initialization fails
@@ -99,11 +99,11 @@ namespace BALL
 			FrameBufferFormat m_fmt;				// description of the buffer format
 			const PixelFormat m_pfm;                // pixel format of the window
 			bool m_bufferLocked;					// pixel buffer is being accessed by another object?            
-			const unsigned int m_minimalWidth;      // minimum with the window can have
-			const unsigned int m_minimalHeight;     // minimum height the window can have
+			const Size m_minimalWidth;      // minimum with the window can have
+			const Size m_minimalHeight;     // minimum height the window can have
 		};
 
-		typedef RenderWindow<BALL_DEFAULT_PIXEL_TYPE> t_RenderWindow;
+		typedef TRenderWindow<BALL_DEFAULT_PIXEL_TYPE> RenderWindow;
 
 	} // namespace VIEW
 

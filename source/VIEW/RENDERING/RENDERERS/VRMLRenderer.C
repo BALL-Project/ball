@@ -5,7 +5,7 @@
 // modified by Annette Treichel (2008.09.12)
 //
 
-#include <BALL/VIEW/RENDERING/VRMLRenderer.h>
+#include <BALL/VIEW/RENDERING/RENDERERS/VRMLRenderer.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/stage.h>
 

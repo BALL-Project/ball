@@ -7,7 +7,7 @@
 class Renderer 
 {
 %TypeHeaderCode
-	#include <BALL/VIEW/RENDERING/renderer.h>
+	#include <BALL/VIEW/RENDERING/RENDERERS/renderer.h>
 	using namespace BALL;
 	using namespace BALL::VIEW;
 %End

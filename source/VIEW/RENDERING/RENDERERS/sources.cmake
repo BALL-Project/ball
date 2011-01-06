@@ -1,6 +1,13 @@
 ### list all filenames of the directory here ###
-SET(SOURCES_LIST "")
-
+SET(SOURCES_LIST
+	glRenderer.C
+	renderer.C
+	POVRenderer.C
+	STLRenderer.C
+	tilingRenderer.C
+	VRMLRenderer.C
+	raytracingRenderer.C
+)
 ### the list of all files requiring a moc run ###
 SET(MOC_SOURCES_LIST "")
 

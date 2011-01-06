@@ -4,19 +4,12 @@ INCLUDE(source/VIEW/RENDERING/RENDERERS/sources.cmake)
 SET(SOURCES_LIST
 	camera.C
 	glDisplayList.C
-	glRenderer.C
-	renderer.C
 	renderSetup.C
-	POVRenderer.C
-	STLRenderer.C
-	tilingRenderer.C
-	VRMLRenderer.C
 	vertexBuffer.C
 	glRenderWindow.C
 	glOffscreenTarget.C
 	renderWindow.C
 	pixelFormat.C
-	raytracingRenderer.C
 )
 
 ### the list of all files requiring a moc run ###

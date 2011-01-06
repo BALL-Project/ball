@@ -13,7 +13,7 @@ namespace BALL
 	namespace VIEW
 	{
 		template<typename taPixelDatatype>
-			RenderWindow<taPixelDatatype>::RenderWindow()
+			TRenderWindow<taPixelDatatype>::TRenderWindow()
 			:m_pfm((BALLVIEW_IS_SAME_TYPE(taPixelDatatype, char) ? PixelFormat::RGBA_32 : PixelFormat::RGBF_96)),
 			m_minimalWidth(2),
 			m_minimalHeight(2)
@@ -22,13 +22,13 @@ namespace BALL
 			}
 
 		template<typename taPixelDatatype>
-			RenderWindow<taPixelDatatype>::~RenderWindow()                
+			TRenderWindow<taPixelDatatype>::~TRenderWindow()                
 			{
 				//
 			}
 
 		template<typename taPixelDatatype>
-			FrameBufferPtr RenderWindow<taPixelDatatype>::getBuffer() throw(BALL::Exception::NoBufferAvailable)        
+			FrameBufferPtr TRenderWindow<taPixelDatatype>::getBuffer() throw(BALL::Exception::NoBufferAvailable)        
 			{
 				if((m_fmt.getWidth() < m_minimalWidth) || (m_fmt.getHeight() < m_minimalHeight))
 				{
@@ -50,19 +50,19 @@ namespace BALL
 			}
 
 		template<typename taPixelDatatype>
-			FrameBufferFormat RenderWindow<taPixelDatatype>::getFormat() const
+			FrameBufferFormat TRenderWindow<taPixelDatatype>::getFormat() const
 			{
 				return m_fmt;
 			}
 
 		template<typename taPixelDatatype>
-			void RenderWindow<taPixelDatatype>::releaseBuffer(FrameBufferPtr /*buffer*/)
+			void TRenderWindow<taPixelDatatype>::releaseBuffer(FrameBufferPtr /*buffer*/)
 			{
 				m_bufferLocked = false;
 			}		
 
 		template<typename taPixelDatatype>
-			bool RenderWindow<taPixelDatatype>::init()
+			bool TRenderWindow<taPixelDatatype>::init()
 			{				
 				m_fmt = FrameBufferFormat(0, 0, m_pfm);
 				m_bufferLocked = false;
@@ -70,7 +70,7 @@ namespace BALL
 			}
 
 		template<typename taPixelDatatype>
-			bool RenderWindow<taPixelDatatype>::resize(const unsigned int width, const unsigned int height)
+			bool TRenderWindow<taPixelDatatype>::resize(const unsigned int width, const unsigned int height)
 			{
 				if((width < m_minimalWidth) || (height < m_minimalHeight))
 				{
@@ -88,7 +88,7 @@ namespace BALL
 			}
 
 		template<typename taPixelDatatype>
-			void RenderWindow<taPixelDatatype>::refresh()
+			void TRenderWindow<taPixelDatatype>::refresh()
 			{
 				if(m_bufferLocked)
 				{
@@ -98,8 +98,8 @@ namespace BALL
 
 
 		// Explicit specializations to be able to have window defined in .cpp file
-		template class RenderWindow<char>;
-		template class RenderWindow<float>;
+		template class TRenderWindow<char>;
+		template class TRenderWindow<float>;
 
 	} // namespace VIEW
 

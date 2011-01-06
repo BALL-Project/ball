@@ -4,7 +4,7 @@
 // $Id: POVRenderer.C,v 1.22.16.3 2007/04/18 21:06:17 amoll Exp $
 //
 
-#include <BALL/VIEW/RENDERING/POVRenderer.h>
+#include <BALL/VIEW/RENDERING/RENDERERS/POVRenderer.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/stage.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>

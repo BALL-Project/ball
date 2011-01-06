@@ -2,11 +2,11 @@
 // vi: set ts=2:
 //
 
-#ifndef BALL_VIEW_RENDERING_RTFACTRENDERER_H
-#define BALL_VIEW_RENDERING_RTFACTRENDERER_H
+#ifndef BALL_VIEW_RENDERING_RENDERERS_RTFACTRENDERER_H
+#define BALL_VIEW_RENDERING_RENDERERS_RTFACTRENDERER_H
 
 #define BALLVIEW_RTFACTRENDERER_THROW(exceptionName, message) (throw BALL::Exception::##exceptionName##(__FILE__, __LINE__, message))
-#include <BALL/VIEW/RENDERING/raytracingRenderer.h>
+#include <BALL/VIEW/RENDERING/RENDERERS/raytracingRenderer.h>
 
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/stage.h>

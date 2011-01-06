@@ -7,8 +7,8 @@
 #include "demoTutorialDialog.h"
 
 #include <BALL/VIEW/KERNEL/iconLoader.h>
-#include <BALL/VIEW/RENDERING/POVRenderer.h>
-#include <BALL/VIEW/RENDERING/VRMLRenderer.h>
+#include <BALL/VIEW/RENDERING/RENDERERS/POVRenderer.h>
+#include <BALL/VIEW/RENDERING/RENDERERS/VRMLRenderer.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/geometricControl.h>

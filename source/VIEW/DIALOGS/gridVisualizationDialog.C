@@ -10,7 +10,7 @@
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
-#include <BALL/VIEW/RENDERING/glRenderer.h>
+#include <BALL/VIEW/RENDERING/RENDERERS/glRenderer.h>
 #include <BALL/VIEW/PRIMITIVES/gridVisualisation.h>
 
 #include <BALL/DATATYPE/regularData3D.h>

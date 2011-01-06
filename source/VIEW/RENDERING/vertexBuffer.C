@@ -8,7 +8,7 @@
 #ifdef BALL_HAS_GLEW
 #include <GL/glew.h>
 
-#include <BALL/VIEW/RENDERING/glRenderer.h>
+#include <BALL/VIEW/RENDERING/RENDERERS/glRenderer.h>
 #include <BALL/VIEW/RENDERING/vertexBuffer.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/KERNEL/common.h>
