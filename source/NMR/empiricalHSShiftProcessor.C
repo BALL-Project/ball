@@ -36,19 +36,16 @@ namespace BALL
 	const char* EmpiricalHSShiftProcessor::PROPERTY__EHS_SHIFT= "EmpiricalHSShift";
 
 	EmpiricalHSShiftProcessor::EmpiricalHSShiftProcessor()
-		throw()
 		:	ShiftModule()
 	{
 		setDefaultOptions();
 	}
 
 	EmpiricalHSShiftProcessor::~EmpiricalHSShiftProcessor()
-		throw()
 	{
 	}
 	
 	void EmpiricalHSShiftProcessor::init()
-		throw()
 	{	
 		verbosity_ = options.getInteger(Option::VERBOSITY);
 	
@@ -212,7 +209,6 @@ namespace BALL
 	}
 
 	bool EmpiricalHSShiftProcessor::start()
-		throw()
 	{	
 		// If the module is invalid, abort!
 		if (!isValid())
@@ -228,7 +224,6 @@ namespace BALL
 
 
 	bool EmpiricalHSShiftProcessor::finish()
-		throw()
 	{
 		// If the module is in an invalid state, abort!
 		if (!isValid())
@@ -306,7 +301,6 @@ namespace BALL
 	
 		
 	Processor::Result  EmpiricalHSShiftProcessor::operator () (Composite& composite)
-		throw()
 	{	
 		// Here, we collect all target atoms, specified in the section 
 		// "EmpiricalShiftHyperSurfaces" of the {\tt ShiftX.ini} - file,
@@ -342,7 +336,6 @@ namespace BALL
 	}
 	
 	void EmpiricalHSShiftProcessor::printParameters_()
-			throw()
 	{
 			Log.info() << "********* \n EHS: list of parameters" << std::endl;
 			Log.info() << "exclude prolins: " << exclude_prolins_ << std::endl;
@@ -369,7 +362,6 @@ namespace BALL
 	}
 	
 	void EmpiricalHSShiftProcessor::printTargets_()
-			throw()
 	{
 		Log.info() << "********* \n EHS: list of targets and their values" << std::endl;
 		Log.info() << "   atom\tFR\tAA\tSS\tPSI\tPHI\tCHI\tCHI2\tHAL\tHA\tHA2L\tHA2\tHNL\tHN\tOHL\tOH\tDisulfid" << std::endl;
@@ -394,13 +386,11 @@ namespace BALL
 // 
 	
 	EmpiricalHSShiftProcessor::PropertiesForShift_::PropertiesForShift_(int verbosity)
-		throw()
 		: verbosity_(verbosity)
 	{
 	}
 	
 	float EmpiricalHSShiftProcessor::PropertiesForShift_::getChiAngle_(Residue* residue) 
-		throw()
 	{
 		Atom* N = 0;
 		Atom* CA = 0;
@@ -587,7 +577,6 @@ namespace BALL
 
 	
 	float EmpiricalHSShiftProcessor::PropertiesForShift_::getChi2Angle_(Residue* residue) 
-		throw()
 	{
 		// NOTE: for compatibility with ShiftX, 
 		// in case of C, S, G and A we have to take the fourth column of the input table, which is symbolized by ALA
@@ -802,7 +791,6 @@ namespace BALL
 
 	
 	char EmpiricalHSShiftProcessor::PropertiesForShift_::getSecondaryStructure_(Residue* residue) 
-		throw()
 	{
 		char ret = CHAR_VALUE_NA;
 		if (   (residue->getSecondaryStructure() == 0) 
@@ -824,7 +812,6 @@ namespace BALL
 	}
 
 	char EmpiricalHSShiftProcessor::PropertiesForShift_::getAminoAcid_(Residue* residue)
-		throw()
 	{	
 		char ret = CHAR_VALUE_NA;
 		if (residue->isAminoAcid())
@@ -836,7 +823,6 @@ namespace BALL
 
 	
 	float EmpiricalHSShiftProcessor::PropertiesForShift_::getHA_HBondLen_(Residue* residue)
-		throw()
 	{
 		//float len = FLOAT_VALUE_NA;	
 		float len = FLOAT_VALUE_IGNORE;
@@ -869,7 +855,6 @@ namespace BALL
 
 	
 	float EmpiricalHSShiftProcessor::PropertiesForShift_::getHA2_HBondLen_(Residue* residue)
-		throw()
 	{
 		//float len = FLOAT_VALUE_NA ;
 		float len = FLOAT_VALUE_IGNORE;
@@ -901,7 +886,6 @@ namespace BALL
 	}	
 
 	float EmpiricalHSShiftProcessor::PropertiesForShift_::getHN_HBondLen_(Residue* residue)
-		throw()
 	{
 		//float len = FLOAT_VALUE_NA;	
 		float len = FLOAT_VALUE_IGNORE;
@@ -934,7 +918,6 @@ namespace BALL
 
 	
 	float 	EmpiricalHSShiftProcessor::PropertiesForShift_::getO_HBondLen_(Residue* residue) 
-		throw()
 	{
 //		float len = FLOAT_VALUE_NA;
 		float len = FLOAT_VALUE_IGNORE;
@@ -969,13 +952,11 @@ namespace BALL
 	}
 		
 	bool 		EmpiricalHSShiftProcessor::PropertiesForShift_::hasDisulfidBond_(Residue* residue)
-		throw()
 	{
 		return residue->hasProperty(Residue::PROPERTY__HAS_SSBOND);
 	}
 	
 	bool EmpiricalHSShiftProcessor::PropertiesForShift_::hasHA_HBond_(Residue* residue) 
-		throw()
 	{		
 		bool ret= false;
 		Atom* HA = 0;
@@ -1007,7 +988,6 @@ namespace BALL
 	
 
 	bool 		EmpiricalHSShiftProcessor::PropertiesForShift_::hasHA2_HBond_(Residue* residue) 
-		throw()
 	{
 		bool ret = false; 
 		Atom* HA2 = 0;
@@ -1038,7 +1018,6 @@ namespace BALL
 
 	
 	bool 	EmpiricalHSShiftProcessor::PropertiesForShift_::hasHN_HBond_(Residue* residue)
-		throw()
 	{
 		bool ret = false;
 		Atom* HN = 0;
@@ -1069,7 +1048,6 @@ namespace BALL
 	}
 
 	bool EmpiricalHSShiftProcessor::PropertiesForShift_::computeProperties_(Atom* a, std::set<String> properties) 
-		throw()
 	{				
 		// Set the atom pointer.
 		current_atom = a;
@@ -1272,10 +1250,10 @@ namespace BALL
 				else if ((*it) == 	"AA_N" )
 				{
 					properties_string_[(*it)]= getAminoAcid_(next_residue);
-				}else if ((*it) == 	"SS_N" )
+				} 
+				else if ((*it) == 	"SS_N" )
 				{
 					properties_string_[(*it)]= getSecondaryStructure_(next_residue);
-
 				}
 				else if ((*it) == 	"PSI_N")
 				{
@@ -1519,7 +1497,6 @@ namespace BALL
 
 	// Returns true, if the property type is alphanumeric/discrete.
 	bool EmpiricalHSShiftProcessor::PropertiesForShift_::isDiscrete(String property)
-		throw()
 	{
 		if( property.hasSubstring("PSI") || property.hasSubstring("PHI") || 
 				property.hasSubstring("HA2L") || property.hasSubstring("HA1L") || 
@@ -1530,7 +1507,6 @@ namespace BALL
 	}
 	
 	bool EmpiricalHSShiftProcessor::PropertiesForShift_::isMixed(String property)
-		throw()
 	{
 		if(property.hasSubstring("CHI") || property.hasSubstring("CHI2"))
 			return true;
@@ -1542,7 +1518,6 @@ namespace BALL
 
 	
 	std::pair<float, String>  EmpiricalHSShiftProcessor::PropertiesForShift_::operator [] (const String& property_name)
-		throw()
 	{
 		// Initialize the return value pair.
 		std::pair<float, String> p(FLOAT_VALUE_NA , STRING_VALUE_NA);
@@ -1571,7 +1546,6 @@ namespace BALL
 // 
 
 	EmpiricalHSShiftProcessor::ShiftHyperSurface_::ShiftHyperSurface_(int verbosity)
-		throw()
 		: type_(),
 			first_property_(),
 			second_property_(),
@@ -1830,12 +1804,10 @@ namespace BALL
 	}
 
 	EmpiricalHSShiftProcessor::ShiftHyperSurface_::~ShiftHyperSurface_() 
-		throw() 
 	{
 	}
 
 	void EmpiricalHSShiftProcessor::ShiftHyperSurface_::setType_(String firstproperty, String secondproperty)
-		throw()
 	{
 		// Is the first property of type "CHI"?
 		if(PropertiesForShift_::isMixed(firstproperty))
@@ -1895,7 +1867,6 @@ namespace BALL
 	}
 
 	void EmpiricalHSShiftProcessor::ShiftHyperSurface_::convertToReal_(const vector<String>& input, vector<float>& output)
-		throw()
 	{
 		// Clear the output vector.
 		output.clear();
@@ -1920,7 +1891,6 @@ namespace BALL
 	// x_axis_n1;...;x_axis_nm
 	// value_n1;...;value_nm
 	void EmpiricalHSShiftProcessor::ShiftHyperSurface_::parseDataFile_(BALL::File& file, String filename) 
-		throw()
 	{
 		String line;
 		std::vector<BALL::String> fields;
@@ -2040,7 +2010,6 @@ namespace BALL
 
 	
 	float EmpiricalHSShiftProcessor::ShiftHyperSurface_::operator() (EmpiricalHSShiftProcessor::PropertiesForShift_& properties)
-		throw()
 	{
 		// This method evaluates the empirical hypersurface given 
 		// the properties of an atom.
@@ -2297,7 +2266,6 @@ namespace BALL
 
 
 	float EmpiricalHSShiftProcessor::ShiftHyperSurface_::getTableAverage_()
-		throw()
 	{
 		float average = 0.;
 		int count = 0;
@@ -2323,7 +2291,6 @@ namespace BALL
 	}
 	
 	float EmpiricalHSShiftProcessor::ShiftHyperSurface_::getTableRowAverage_(const std::map<String, float>& row)
-		throw()
 	{
 		float average = 0.;
 		int   count = 0;
@@ -2344,7 +2311,6 @@ namespace BALL
 	}
 
 	float EmpiricalHSShiftProcessor::ShiftHyperSurface_::getTableColumnAverage_(const String& name)
-		throw()
 	{
 		float average = 0.;
 		int   count = 0;
@@ -2370,7 +2336,6 @@ namespace BALL
 	}
 
 	bool EmpiricalHSShiftProcessor::ShiftHyperSurface_::tableHasColumn_(const String& name)
-		throw()
 	{
 		// Method to check if the hypersurface's look--up table
 		// has a column named "name".
@@ -2383,7 +2348,6 @@ namespace BALL
 	}
 	
 	void  EmpiricalHSShiftProcessor::postprocessing_()
-		throw()
 	{
 		// Get the system.
 		System* system = NULL;
