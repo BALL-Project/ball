@@ -171,7 +171,7 @@ namespace BALL
 					waitForUpdateOfRepresentations_();
 
 					QString message;
-					message.sprintf((String)tr("Iteration") + " %d: " + tr("energy") + " = %f kJ/mol, " + tr("RMS gradient") + " = %f kJ/mol A", 
+					message.sprintf((tr("Iteration") + " %d: " + tr("energy") + " = %f kJ/mol, " + tr("RMS gradient") + " = %f kJ/mol A").toAscii().constData(), 
 													minimizer_->getNumberOfIterations(), 
 													ff.getEnergy(), ff.getRMSGradient());
 					output_(ascii(message));
@@ -265,9 +265,9 @@ namespace BALL
 					updateStructure_();
 
 					waitForUpdateOfRepresentations_();
-					
+	
 					QString message;
-					message.sprintf((String)tr("Iteration") + " %d: " + tr("energy") + " = %f kJ/mol, " + tr("RMS gradient") + " = %f kJ/mol A", 
+					message.sprintf((tr("Iteration") + " %d: " + tr("energy") + " = %f kJ/mol, " + tr("RMS gradient") + " = %f kJ/mol A").toAscii().constData(), 
 													md_->getNumberOfIterations(), 
 													ff.getEnergy(), ff.getRMSGradient());
 					output_(ascii(message));
