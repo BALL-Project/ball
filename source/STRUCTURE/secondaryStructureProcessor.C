@@ -841,18 +841,21 @@ namespace BALL
 		// - push all residues into residues
 		
 		SecondaryStructure* ss = 0;
-		char last_struct = 'X';
-		Position resnum=0;
+		char     last_struct   = 'X';
+		Position resnum        = 0;
  
 		vector<SecondaryStructure*> new_ss;
 		vector<SecondaryStructure*> new_parent;
 		vector<Residue*> 						residues;
 
-		for (;+ri;++ri)
+		if (summary_.size() == 0)
+			return Processor::CONTINUE;
+
+		for (; +ri; ++ri)
 		{
 			if (resnum >= summary_.size())
 			{
-				Log.error() << "Problem occured in " << __FILE__ << " " << __LINE__ << std::endl;
+				Log.error() << "A problem occured in " << __FILE__ << " " << __LINE__ << std::endl;
 				return Processor::CONTINUE;
 			}
 
