@@ -86,8 +86,8 @@ namespace BALL
 		*/
 		StringHashMap<float>	shift_map_;
 		private:
-		void			postprocessing_() throw();
-		System* system_;
+		void      postprocessing_();
+		System*   system_;
 
 	};
   
