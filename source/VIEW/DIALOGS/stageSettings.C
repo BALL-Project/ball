@@ -7,6 +7,7 @@
 #include <BALL/VIEW/KERNEL/stage.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
+#include <BALL/VIEW/RENDERING/renderSetup.h>
 
 #include <QtGui/QPushButton>
 #include <QtGui/QLabel>
@@ -44,6 +45,12 @@ namespace BALL
 			setWidgetStack(widget_stack);
 			registerWidgets_();
 
+#ifndef BALL_HAS_RTFACT
+			radioButton_rtfact->setEnabled(false);
+			radioButton_opengl->setChecked(true);
+#else
+			radioButton_rtfact->setChecked(true);
+#endif
 			// signals and slots connections
 			connect( color_button, SIGNAL( clicked() ), this, SLOT( colorPressed() ) );
 			connect( computeDefault_button, SIGNAL( clicked() ), this, SLOT( computeDefaultPressed() ) );
@@ -258,6 +265,11 @@ namespace BALL
 			renderer.setSmoothLines(smooth_lines_->isChecked());
 
 			scene_->setDownsamplingFactor(downsamplingfactor_label->text().toFloat());
+
+			if (radioButton_opengl->isChecked())
+				scene_->switchRenderer(RenderSetup::OPENGL_RENDERER);
+			else
+				scene_->switchRenderer(RenderSetup::RTFACT_RENDERER);
 		}
 
 		Vector3 StageSettings::getTextureUpDirection_()
@@ -387,7 +399,7 @@ namespace BALL
 			stage_->getCamera().setProjectionMode(projection_mode);
 			scene_->projectionModeChanged();
 		}
-		
+
 		void StageSettings::downsamplingSliderChanged()
 		{
 			if (downsampling_slider->value() == 0)

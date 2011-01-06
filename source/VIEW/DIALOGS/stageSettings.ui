@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>735</width>
-    <height>441</height>
+    <height>452</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item>
     <widget class="QStackedWidget" name="widget_stack">
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="Main">
       <layout class="QHBoxLayout" name="horizontalLayout_7">
@@ -114,14 +114,14 @@
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QLabel" name="min_label">
+             <widget class="QLabel" name="anim_min_label">
               <property name="text">
                <string>min</string>
               </property>
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QLabel" name="max_label">
+             <widget class="QLabel" name="anim_max_label">
               <property name="text">
                <string>max</string>
               </property>
@@ -607,17 +607,34 @@
           </widget>
          </item>
          <item>
-          <spacer name="verticalSpacer">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
+          <widget class="QGroupBox" name="RendererGroup">
+           <property name="title">
+            <string>Rendering Method</string>
            </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
+           <layout class="QGridLayout" name="gridLayout_7">
+            <item row="0" column="0">
+             <layout class="QHBoxLayout" name="horizontalLayout_8">
+              <item>
+               <widget class="QRadioButton" name="radioButton_opengl">
+                <property name="text">
+                 <string>OpenGl</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QRadioButton" name="radioButton_rtfact">
+                <property name="text">
+                 <string>Real time ray tracing (RTfact)</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
          </item>
         </layout>
        </item>

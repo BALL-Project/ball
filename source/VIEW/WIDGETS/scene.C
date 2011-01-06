@@ -2906,6 +2906,68 @@ namespace BALL
 			updateGL(); // TODO: update() or updateGL()???
 		}
 
+		void Scene::switchRenderer(RenderSetup::RendererType new_type)
+		{
+			if (new_type == renderers_[main_renderer_]->getRendererType())
+				return; // nothing to see here....
+
+			// let's see if we support the requested type at all...
+#ifdef BALL_HAS_RTFACT
+			if (new_type != RenderSetup::OPENGL_RENDERER && new_type != RenderSetup::RTFACT_RENDERER)
+#else
+			if (new_type != RenderSetup::OPENGL_RENDERER)
+#endif
+			{
+				Log.warn() << "Scene::switchRenderer(): Sorry, BALLView currently does not support renderers of this type!" << std::endl;
+				return;
+			}
+
+			// ok, we have some work to do...
+			boost::shared_ptr<RenderSetup> main_renderer_ptr = renderers_[main_renderer_];
+
+			main_renderer_ptr->useContinuousLoop(false);
+			main_renderer_ptr->stop();
+
+			main_renderer_ptr->loop_mutex.lock();
+			main_renderer_ptr->wait_for_render.wakeAll();
+			main_renderer_ptr->loop_mutex.unlock();
+
+			main_renderer_ptr->wait(100);
+
+			delete(main_renderer_ptr->renderer);
+
+			renderers_.erase(renderers_.begin() + main_renderer_);
+
+			// now, create a new renderer
+			if (new_type == RenderSetup::OPENGL_RENDERER)
+			{
+				GLRenderer*   new_renderer = new GLRenderer;
+				new_renderer->init(*this);
+				new_renderer->enableVertexBuffers(want_to_use_vertex_buffer_);
+
+				main_renderer_ptr = boost::shared_ptr<RenderSetup>(new RenderSetup(new_renderer, main_display_, this, stage_));
+			}
+			else if (new_type == RenderSetup::RTFACT_RENDERER)
+			{
+#ifdef BALL_HAS_RTFACT
+				t_RaytracingRenderer* new_renderer = new t_RaytracingRenderer();
+				new_renderer->init(*this);
+				new_renderer->setFrameBufferFormat(main_display_->getFormat());
+
+				main_renderer_ptr = boost::shared_ptr<RenderSetup>(new RenderSetup(new_renderer, main_display_, this, stage_));
+#endif
+			}
+
+			main_renderer_ptr->setReceiveBufferUpdates(true);
+			resetRepresentationsForRenderer_(*main_renderer_ptr);
+
+			renderers_.push_back(main_renderer_ptr);
+			main_renderer_ = renderers_.size()-1;
+			// NOTE: *don't* try to start new_rs, since this is an automatic variable
+			//       that will be destroyed soon afterwards
+			renderers_[main_renderer_]->start();
+		}
+
 		void Scene::addGlWindow()
 		{
 			GLRenderWindow* new_widget = new GLRenderWindow(0, ((String)tr("Scene")).c_str(), Qt::Window);
@@ -2931,6 +2993,7 @@ namespace BALL
 			renderers_[renderers_.size()-1]->start();
 		}
 
+#ifdef BALL_HAS_RTFACT
 		void Scene::addRTfactWindow()
 		{
 			GLRenderWindow* new_widget = new GLRenderWindow(0, ((String)tr("Scene")).c_str(), Qt::Window);
@@ -2955,6 +3018,7 @@ namespace BALL
 			//       that will be destroyed soon afterwards
 			renderers_[renderers_.size()-1]->start();
 		}
+#endif
 
 		void Scene::enterActiveStereo()
 		{

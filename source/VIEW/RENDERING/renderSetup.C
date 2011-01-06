@@ -2,6 +2,9 @@
 
 #include <BALL/VIEW/RENDERING/bufferedRenderer.h>
 #include <BALL/VIEW/RENDERING/tilingRenderer.h>
+#include <BALL/VIEW/RENDERING/POVRenderer.h>
+#include <BALL/VIEW/RENDERING/VRMLRenderer.h>
+#include <BALL/VIEW/RENDERING/STLRenderer.h>
 #include <BALL/VIEW/RENDERING/glRenderWindow.h>
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -66,7 +69,8 @@ namespace BALL
 				show_ruler_(rs.show_ruler_),
 				ttl_(rs.ttl_),
 				export_after_ttl_(rs.export_after_ttl_),
-				export_after_ttl_filename_(rs.export_after_ttl_filename_)
+				export_after_ttl_filename_(rs.export_after_ttl_filename_),
+				renderer_type_(rs.renderer_type_)
 		{
 			gl_target_   = dynamic_cast<GLRenderWindow*>(target);
 			gl_renderer_ = dynamic_cast<GLRenderer*>(renderer);
@@ -97,6 +101,8 @@ namespace BALL
 			gl_target_   = dynamic_cast<GLRenderWindow*>(target);
 			gl_renderer_ = dynamic_cast<GLRenderer*>(renderer);
 
+			renderer_type_ = rs.renderer_type_;
+
 			render_mutex_.unlock();
 
 			return *this;
@@ -110,6 +116,22 @@ namespace BALL
 
 			gl_target_   = dynamic_cast<GLRenderWindow*>(target);
 			gl_renderer_ = dynamic_cast<GLRenderer*>(renderer);
+
+			// set the type variable
+			if (RTTI::isKindOf<GLRenderer>(*renderer))
+				renderer_type_ = OPENGL_RENDERER;
+			else if (RTTI::isKindOf<POVRenderer>(*renderer))
+				renderer_type_ = POV_RENDERER;
+			else if (RTTI::isKindOf<VRMLRenderer>(*renderer))
+				renderer_type_ = VRML_RENDERER;
+			else if (RTTI::isKindOf<STLRenderer>(*renderer))
+				renderer_type_ = STL_RENDERER;
+			else if (RTTI::isKindOf<TilingRenderer>(*renderer))
+				renderer_type_ = TILING_RENDERER;
+			else if (RTTI::isKindOf<RTfactRenderer>(*renderer))
+				renderer_type_ = RTFACT_RENDERER;
+			else
+				renderer_type_ = UNKNOWN_RENDERER;
 
 			// initialize the rendering target
 			target->init();

@@ -52,6 +52,32 @@ namespace BALL {
 				Renderer* 			renderer;
 				RenderTarget*		target;
 
+				/** The type of the encapsulated renderer
+				 */
+				enum RendererType
+				{
+					/// A fallback
+					UNKNOWN_RENDERER = 0,
+
+					/// Standard OpenGL renderer
+					OPENGL_RENDERER,
+
+					/// Renders into a POVRay file
+					POV_RENDERER,
+
+					/// Renders into a VRML file
+					VRML_RENDERER,
+
+					/// Renders into an STL file
+					STL_RENDERER,
+
+					/// Used for offscreen rendering
+					TILING_RENDERER,
+
+					/// RTfact renderer (depends on the RTfact library)
+					RTFACT_RENDERER
+				};
+
 				enum STEREO_SETUP {
 					NONE,
 					LEFT_EYE,
@@ -84,6 +110,10 @@ namespace BALL {
 				/** This function returns the rendering state of our renderer.
 				 */
 				bool isPaused() const { return rendering_paused_; }
+
+				/** Returns the type of the encapsulated renderer.
+				 */
+				RendererType getRendererType() { return renderer_type_; }
 
 				/** Prevent updating of rendering buffers.
 				 *
@@ -314,6 +344,9 @@ namespace BALL {
 				std::deque<boost::shared_ptr<RenderSetup> > keep_in_sync_;
 
 				bool buffer_is_ready_;
+
+				// the type of the encapsulated renderer
+				RendererType renderer_type_;
 		};
 
 		/** This class is used for communication of render events over thread boundaries.

@@ -133,6 +133,11 @@ namespace BALL
 			//@{
 
 
+			//@} 
+			/** @name Enums 
+			*/ 
+			//@{
+			
 			/**	Predefined constants for the mode types
 			 		Add new enums members in derived classes, for new modi.
 					If you add new modi in this class, you have to add them in front of
@@ -168,11 +173,6 @@ namespace BALL
 				ROTATE_CLOCKWISE_ACTION
 			};
 
-			//@} 
-			/** @name Enums 
-			*/ 
-			//@{
-			
 			/**
 			 * Scene may hold several windows for different renering modes.
 			 * If you need to retrieve a particular window, use this enum together
@@ -190,6 +190,7 @@ namespace BALL
 				RIGHT_EYE_WINDOW
 			};
 				
+
 			//@} 
 			/**	@name	Constructors and Destructor
 			*/	
@@ -577,10 +578,15 @@ namespace BALL
 			virtual void switchShowWidget();
 
 			///
-			void addGlWindow();
+			void switchRenderer(RenderSetup::RendererType new_type);
 
 			///
+			void addGlWindow();
+
+#ifdef BALL_HAS_RTFACT
+			///
 			void addRTfactWindow();
+#endif
 
 			///
 			void exitStereo();
@@ -924,7 +930,7 @@ namespace BALL
 
 		protected:
 
-				Scene* scene_;
+			Scene* scene_;
 	};
 
 
