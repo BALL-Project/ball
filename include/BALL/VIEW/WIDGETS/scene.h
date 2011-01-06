@@ -580,6 +580,9 @@ namespace BALL
 			void addGlWindow();
 
 			///
+			void addRTfactWindow();
+
+			///
 			void exitStereo();
 
 			///

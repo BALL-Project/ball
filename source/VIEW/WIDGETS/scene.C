@@ -2915,26 +2915,40 @@ namespace BALL
 
 			new_widget->installEventFilter(this);
 
-#ifndef BALL_HAS_RTFACT
 			GLRenderer*   new_renderer = new GLRenderer;
 			new_renderer->init(*this);
 			new_renderer->enableVertexBuffers(want_to_use_vertex_buffer_);
 
+			boost::shared_ptr<RenderSetup> new_rs(new RenderSetup(new_renderer, new_widget, this, stage_));
+			new_rs->setReceiveBufferUpdates(true);
+
+			resetRepresentationsForRenderer_(*new_rs);
 			new_widget->show();
 
-			boost::shared_ptr<RenderSetup> new_rs(new RenderSetup(new_renderer, new_widget, this, stage_));
-			new_rs->setReceiveBufferUpdates(false);
-#else
+			renderers_.push_back(new_rs);
+			// NOTE: *don't* try to start new_rs, since this is an automatic variable
+			//       that will be destroyed soon afterwards
+			renderers_[renderers_.size()-1]->start();
+		}
+
+		void Scene::addRTfactWindow()
+		{
+			GLRenderWindow* new_widget = new GLRenderWindow(0, ((String)tr("Scene")).c_str(), Qt::Window);
+			new_widget->init();
+			new_widget->makeCurrent();
+			new_widget->resize(width(), height());
+
+			new_widget->installEventFilter(this);
+
 			t_RaytracingRenderer* new_renderer = new t_RaytracingRenderer();
 			new_renderer->init(*this);
 			new_renderer->setFrameBufferFormat(new_widget->getFormat());
 
 			boost::shared_ptr<RenderSetup> new_rs(new RenderSetup(new_renderer, new_widget, this, stage_));
 			new_rs->setReceiveBufferUpdates(true);
-#endif
+
 			resetRepresentationsForRenderer_(*new_rs);
 			new_widget->show();
-
 
 			renderers_.push_back(new_rs);
 			// NOTE: *don't* try to start new_rs, since this is an automatic variable
