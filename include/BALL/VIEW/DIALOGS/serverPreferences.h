@@ -50,7 +50,7 @@ namespace BALL
 						-  server status set to not accept clients
 					\par
 			*/
-			ServerPreferences(QWidget *parent = NULL, const char *name = tr("ServerPreferences"));
+			ServerPreferences(QWidget *parent = NULL, const char *name = ((String)tr("ServerPreferences")).c_str());
 
 			//@}
 			/** @name Destructors 
