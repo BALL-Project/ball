@@ -893,6 +893,8 @@ namespace BALL
 			String info_string_;
 
 			GLRenderWindow* main_display_;
+			/// The index of the renderer responsible for the main display
+			Position main_renderer_;
 
 			Index stereo_left_eye_;
 			Index stereo_right_eye_;

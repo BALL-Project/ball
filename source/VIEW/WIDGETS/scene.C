@@ -135,6 +135,7 @@ namespace BALL
 				toolbar_view_controls_(new QToolBar(tr("3D View Controls"), this)),
 				mode_group_(new QActionGroup(this)),
 				main_display_(new GLRenderWindow(this)),
+				main_renderer_(0),
 				stereo_left_eye_(-1),
 				stereo_right_eye_(-1)
 		{
@@ -143,8 +144,8 @@ namespace BALL
 			registerRenderers_();
 
 			init();
-			renderers_[0]->resize(width(), height());
-			renderers_[0]->start();
+			renderers_[main_renderer_]->resize(width(), height());
+			renderers_[main_renderer_]->start();
 
 			setAcceptDrops(true);
 #ifdef BALL_VIEW_DEBUG
@@ -179,9 +180,7 @@ namespace BALL
 				material_settings_(new MaterialSettings(this)),
 				animation_thread_(0),
 				stop_animation_(false),
-#ifdef BALL_HAS_RTFACT	
 			  continuous_loop_(false),
-#endif
 				want_to_use_vertex_buffer_(false),
 				mouse_button_is_pressed_(false),
 				preview_(false),
@@ -190,6 +189,7 @@ namespace BALL
 				toolbar_view_controls_(new QToolBar(tr("3D View Controls"), this)),
 				mode_group_(new QActionGroup(this)),
 				main_display_(new GLRenderWindow(this)),
+				main_renderer_(0),
 				stereo_left_eye_(-1),
 				stereo_right_eye_(-1)
 		{
@@ -207,8 +207,8 @@ namespace BALL
 			setAcceptDrops(true);
 
 			init();
-			renderers_[0]->resize(width(), height());
-			renderers_[0]->start();
+			renderers_[main_renderer_]->resize(width(), height());
+			renderers_[main_renderer_]->start();
 		}
 
 		Scene::Scene(const Scene& scene, QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
@@ -227,12 +227,11 @@ namespace BALL
 				material_settings_(new MaterialSettings(this)),
 				animation_thread_(0),
 				stop_animation_(false),
-#ifdef BALL_HAS_RTFACT	
 			  continuous_loop_(false),
-#endif
 				toolbar_view_controls_(new QToolBar(tr("3D View Controls"), this)),
 				mode_group_(new QActionGroup(this)),
 				main_display_(new GLRenderWindow(this)),
+				main_renderer_(0),
 				stereo_left_eye_(-1),
 				stereo_right_eye_(-1)
 		{
@@ -250,11 +249,11 @@ namespace BALL
 
 			init();
 
-			resize((Size) scene.renderers_[0]->renderer->getWidth(), 
-						 (Size) scene.renderers_[0]->renderer->getHeight());
+			resize((Size) scene.renderers_[main_renderer_]->renderer->getWidth(), 
+						 (Size) scene.renderers_[main_renderer_]->renderer->getHeight());
 
-			renderers_[0]->resize(width(), height());
-			renderers_[0]->start();
+			renderers_[main_renderer_]->resize(width(), height());
+			renderers_[main_renderer_]->start();
 		}
 
 		Scene::~Scene()
@@ -910,8 +909,8 @@ namespace BALL
 			list<GeometricObject*> objects;
 
 			// draw the representations
-			renderers_[0]->pickObjects((Position)p0.x(), (Position)p0.y(),
-															   (Position)p1.x(), (Position)p1.y(), objects);
+			renderers_[main_renderer_]->pickObjects((Position)p0.x(), (Position)p0.y(), 
+			                                        (Position)p1.x(), (Position)p1.y(), objects);
 
 			// sent collected objects
 			GeometricObjectSelectionMessage* message = new GeometricObjectSelectionMessage;
@@ -1466,6 +1465,9 @@ namespace BALL
 			shortcut_registry->registerShortcut("Shortcut|Display|Show_Coordinate_System|here", new_action);
 
 			insertMenuEntry(MainControl::DISPLAY, (String)tr("Add new GL Window"), this, SLOT(addGlWindow()), "Shortcut|Display|Add_new_GL_Window");
+#ifdef BALL_HAS_RTFACT
+			insertMenuEntry(MainControl::DISPLAY, (String)tr("Add new RTfact Window"), this, SLOT(addRTfactWindow()), "Shortcut|Display|Add_new_RTfact_Window");
+#endif
 			// ======================== Display->Animation ===============================================
 			String help_url = "tips.html#animations";
 
@@ -2210,7 +2212,7 @@ namespace BALL
 			// ok, do the picking, until we find something
 			for (Position p = 0; p < 8; p++)
 			{
-				renderers_[0]->pickObjects(pos_x - p, pos_y - p, pos_x + p, pos_y + p, objects);
+				renderers_[main_renderer_]->pickObjects(pos_x - p, pos_y - p, pos_x + p, pos_y + p, objects);
 				if (!objects.empty()) break;
 			}
 
@@ -2705,17 +2707,17 @@ namespace BALL
 		{
 			bool ok = false;
 
-			// TODO: currently, we always use the first renderer in the list for exporting;
+			// TODO: currently, we always use the renderer for the main display for exporting;
 			//       we should decide this in a sensible way instead
 
 			// first find out if we need to render offscreen or whether we can just use the current image
 			if (!offscreen_rendering_)
-				return renderers_[0]->exportPNG(filename);
+				return renderers_[main_renderer_]->exportPNG(filename);
 
 			// ok, we have to do this the hard way...	
 
 			// What kind of renderer do we have to encapsulate?
-			if (RTTI::isKindOf<GLRenderer>(*(renderers_[0]->renderer)))
+			if (RTTI::isKindOf<GLRenderer>(*(renderers_[main_renderer_]->renderer)))
 			{
 				// it's a GLRenderer => use tiling
 				GLOffscreenTarget* new_widget = new GLOffscreenTarget(main_display_, filename);
@@ -2744,14 +2746,12 @@ namespace BALL
 				delete(gr);
 				delete(new_widget);
 
-				// TODO: we should not rely on the first renderer being the one
-				// related to the main_display_!
-				renderers_[0]->resize(width(), height());
+				renderers_[main_renderer_]->resize(width(), height());
 				updateGL();
 
 			}
 #ifdef BALL_HAS_RTFACT
-			else if (RTTI::isKindOf<t_RaytracingRenderer>(*(renderers_[0]->renderer)))
+			else if (RTTI::isKindOf<t_RaytracingRenderer>(*(renderers_[main_renderer_]->renderer)))
 			{
 				// create a new renderer
 				t_RaytracingRenderer* renderer = new t_RaytracingRenderer;
@@ -3454,8 +3454,8 @@ namespace BALL
 		{
 			ignore_pick_ = true;
 			list<GeometricObject*> objects;
-			renderers_[0]->pickObjects((Position) p.x(), (Position) p.y(), 
-																 (Position) p.x(), (Position) p.y(), objects);
+			renderers_[main_renderer_]->pickObjects((Position) p.x(), (Position) p.y(), 
+																              (Position) p.x(), (Position) p.y(), objects);
 
 			if (objects.empty()) return;
 		
