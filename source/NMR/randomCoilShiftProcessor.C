@@ -114,7 +114,6 @@ namespace BALL
 	}
 	
 	void   RandomCoilShiftProcessor::postprocessing_()
-		throw()
 	{
 		if (system_) 
 		{
