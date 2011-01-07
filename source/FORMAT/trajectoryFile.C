@@ -17,7 +17,6 @@ namespace BALL
 	}
 
 	TrajectoryFile::TrajectoryFile(const String& filename, File::OpenMode open_mode)
-		throw(Exception::FileNotFound)
 		: File(filename, open_mode),
 			number_of_snapshots_(0),
 			number_of_atoms_(0)
@@ -85,7 +84,6 @@ namespace BALL
 	}
 
 	bool TrajectoryFile::flushToDisk(const std::vector<SnapShot>& /* buffer */)
-		throw(File::CannotWrite)
 	{
 		if (!isOpen() || getOpenMode() != File::MODE_OUT)
 		{
