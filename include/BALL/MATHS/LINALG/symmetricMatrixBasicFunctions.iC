@@ -546,82 +546,99 @@ namespace BALL {
 
 
 	template <> inline
+	#ifdef BALL_HAS_BLAS
 	void Matrix<float, SymmetricTraits>::multiply_blas(Matrix<float, SymmetricTraits>& result, const float& a) const
 	{
-	#ifdef BALL_HAS_BLAS
 		cblas_sscal(result.getSize(), a, &result[0], 1);
-	#else
-		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
-	#endif
 	}
+	#else
+	void Matrix<float, SymmetricTraits>::multiply_blas(Matrix<float, SymmetricTraits>& /*result*/, const float& /*a*/) const
+	{
+		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
+	}
+	#endif
 	
 	template <> inline
+	#ifdef BALL_HAS_BLAS
 	void Matrix<double, SymmetricTraits>::multiply_blas(Matrix<double, SymmetricTraits>& result, const double& a) const
 	{
-	#ifdef BALL_HAS_BLAS
 		cblas_dscal(result.getSize(), a, &result[0], 1);
 	#else	
+	void Matrix<double, SymmetricTraits>::multiply_blas(Matrix<double, SymmetricTraits>& /*result*/, const double& /*a*/) const
+	{
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
 	#endif
 	}
 
 	/** TODO: multiplication by float instead of ComplexFloat **/
 	template <> inline
+	#ifdef BALL_HAS_BLAS
 	void Matrix<ComplexFloat, SymmetricTraits>::multiply_blas(Matrix<ComplexFloat, SymmetricTraits>& result, const ComplexFloat& a) const
 	{
-	#ifdef BALL_HAS_BLAS
 		cblas_cscal(result.getSize(), reinterpret_cast<const void*>(&a), &result[0], 1);
 	#else
+	void Matrix<ComplexFloat, SymmetricTraits>::multiply_blas(Matrix<ComplexFloat, SymmetricTraits>& /*result*/, const ComplexFloat& /*a*/) const
+	{
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
 	#endif
 	}
 
 	template <> inline
+	#ifdef BALL_HAS_BLAS
 	void Matrix<ComplexDouble, SymmetricTraits>::multiply_blas(Matrix<ComplexDouble, SymmetricTraits>& result, const ComplexDouble& a) const
 	{
-	#ifdef BALL_HAS_BLAS
 		cblas_zscal(result.getSize(), reinterpret_cast<const void*>(&a), &result[0], 1);
 	#else
+	void Matrix<ComplexDouble, SymmetricTraits>::multiply_blas(Matrix<ComplexDouble, SymmetricTraits>& /*result*/, const ComplexDouble& /*a*/) const
+	{
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
 	#endif
 	}
 
 	template <> inline
+	#ifdef BALL_HAS_BLAS
 	void Matrix<float, SymmetricTraits>::multiply_inline_blas(const float& a)
 	{
-	#ifdef BALL_HAS_BLAS
 		cblas_sscal(data_.size(), a, &data_[0], 1);
 	#else
+	void Matrix<float, SymmetricTraits>::multiply_inline_blas(const float& /*a*/)
+	{
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
 	#endif
 	}
 
 	template <> inline
+	#ifdef BALL_HAS_BLAS
 	void Matrix<double, SymmetricTraits>::multiply_inline_blas(const double& a)
 	{
-	#ifdef BALL_HAS_BLAS
 		cblas_dscal(data_.size(), a, &data_[0], 1);
 	#else
+	void Matrix<double, SymmetricTraits>::multiply_inline_blas(const double& /*a*/)
+	{
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
 	#endif
 	}
 	
 	template <> inline
+	#ifdef BALL_HAS_BLAS
 	void Matrix<ComplexFloat, SymmetricTraits>::multiply_inline_blas(const ComplexFloat& a)
 	{
-	#ifdef BALL_HAS_BLAS
 		cblas_cscal(data_.size(), reinterpret_cast<const void*>(&a), &data_[0], 1);
 	#else
+	void Matrix<ComplexFloat, SymmetricTraits>::multiply_inline_blas(const ComplexFloat& /*a*/)
+	{
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
 	#endif
 	}
 
 	template <> inline
+	#ifdef BALL_HAS_BLAS
 	void Matrix<ComplexDouble, SymmetricTraits>::multiply_inline_blas(const ComplexDouble& a)
 	{
-	#ifdef BALL_HAS_BLAS
 		cblas_zscal(data_.size(), reinterpret_cast<const void*>(&a), &data_[0], 1);
 	#else
+	void Matrix<ComplexDouble, SymmetricTraits>::multiply_inline_blas(const ComplexDouble& /*a*/)
+	{
 		std::cerr << "BALL has been configured without BLAS support! Try the generic function instead!" << std::endl;
 	#endif
 	}
