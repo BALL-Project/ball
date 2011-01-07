@@ -38,7 +38,6 @@ namespace BALL
 
 	template<>
 	void TRegularData3D<float>::binaryWriteRaw(const String& filename) const
-		throw(Exception::FileNotFound)		
 	{	
 		String coreName = filename;
 		String::size_type dotIndex = filename.find_last_of(".");
