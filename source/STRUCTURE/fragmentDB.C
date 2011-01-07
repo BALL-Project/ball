@@ -36,7 +36,6 @@ namespace BALL
 {
 
 	FragmentDB::NoFragmentNode::NoFragmentNode(const char* file, int line, const string& filename)
-		
 		: Exception::GeneralException(file, line, "NoFragmentNode", 
 											 string("the resource database does not contain a valid Fragment entry: ") + filename),
 			filename_(filename)
@@ -63,7 +62,6 @@ namespace BALL
 	}
 
 	bool FragmentDB::expandFirst_(ResourceEntry& root_entry)
-		throw(Exception::FileNotFound)
 	{
 		String key = root_entry.getKey();
 		vector<String> key_fields;
@@ -130,7 +128,6 @@ namespace BALL
 
 
 	FragmentDB::FragmentDB(const String& filename)
-		throw(Exception::FileNotFound)
 		: tree(0),
 			valid_(false),
 			filename_("")
@@ -190,7 +187,6 @@ namespace BALL
 	}
 
 	void FragmentDB::setFilename(const String& filename)
-		throw(Exception::FileNotFound)
 	{
 		// search for the standard fragment DB file
 		Path path;
@@ -449,7 +445,6 @@ namespace BALL
 	}
 
 	FragmentDB& FragmentDB::operator = (const FragmentDB& db)
-		
 	{
 		destroy();
 		filename_ = db.filename_;
@@ -543,7 +538,6 @@ namespace BALL
 
 		
 	void FragmentDB::init()
-		throw(Exception::FileNotFound, NoFragmentNode)
 	{
 		// we are invalid until we're sure we're not...
 		valid_ = false;
@@ -1008,7 +1002,6 @@ namespace BALL
 	}
 
 	const StringHashMap<String>& FragmentDB::getNamingStandard(const String& std) const
-		throw(StringHashMap<String>::IllegalKey)
 	{
 		return standards_[std];
 	}
@@ -1389,7 +1382,6 @@ namespace BALL
 
 	bool FragmentDB::BuildBondsProcessor::buildConnection_(FragmentDB::BuildBondsProcessor::Connection& con1, 
 																												 FragmentDB::BuildBondsProcessor::Connection& con2)
-		throw(Exception::TooManyBonds)
 	{
 		if (con1.type_name != con2.connect_to || 
 				con1.connect_to != con2.type_name)
@@ -1448,7 +1440,6 @@ namespace BALL
 
 
 	Size FragmentDB::BuildBondsProcessor::buildFragmentBonds(Fragment& fragment, const Fragment& tplate) const
-		throw(Exception::TooManyBonds)
 	{
 		// abort immediately if no fragment DB is known
 		if (fragment_db_ == 0) return 0;
@@ -1614,7 +1605,6 @@ namespace BALL
 
 
 	Size FragmentDB::BuildBondsProcessor::buildInterFragmentBonds(Fragment& first, Fragment& second) const
-		throw(Exception::TooManyBonds)
 	{
 		if (fragment_db_ == 0) return 0;
 
