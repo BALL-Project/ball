@@ -23,12 +23,18 @@ namespace BALL
 		/** Stores a resolution consisting of width and height. */
 		struct Resolution
 		{
-			unsigned int width;
-			unsigned int height;
+			Size width;
+			Size height;
 
-			Resolution() : width(0), height(0) { }
+			Resolution() 
+				: width(0), 
+				  height(0) 
+			{ }
 		    
-			Resolution(const unsigned width, const unsigned int height) : width(width),height(height) { }
+			Resolution(Size width, Size height) 
+				: width(width),
+				  height(height) 
+			{ }
 		};
 
 
@@ -37,128 +43,121 @@ namespace BALL
 		 */
 		class FrameBufferFormat
 		{
-		public:
+			public:
 
-			/** Constructs empty invalid framebuffer format */
-			FrameBufferFormat() : 
-				width(0), height(0), pitch(0), pixelFormat(PixelFormat::RGB_32)
-			{ }
+				/** Constructs empty invalid framebuffer format */
+				FrameBufferFormat() 
+					: width(0), 
+					  height(0), 
+						pitch(0), 
+						pixelFormat(PixelFormat::RGB_32)
+				{ }
 
-			FrameBufferFormat(const unsigned int width,
-							  const unsigned int height, const PixelFormat &pixelFormat)
-				: width(width), height(height), 
-				  pitch(width * pixelFormat.computeByteSize()), 
-				  pixelFormat(pixelFormat)
-			{
-				assert(pitch >= width * pixelFormat.computeByteSize());
-			}
+				FrameBufferFormat(Size width, Size height, const PixelFormat &pixelFormat)
+					: width(width), 
+					  height(height), 
+					  pitch(width * pixelFormat.computeByteSize()), 
+						pixelFormat(pixelFormat)
+				{
+					assert(pitch >= width * pixelFormat.computeByteSize());
+				}
 
-			FrameBufferFormat(const unsigned int width, const unsigned int height,
-							  const unsigned int pitch, const PixelFormat &pixelFormat )
-				: width(width), height(height), pitch(pitch), pixelFormat(pixelFormat)
-			{
-				assert(pitch >= width * pixelFormat.computeByteSize());
-			}
+				FrameBufferFormat(Size width, Size height, Size pitch, const PixelFormat &pixelFormat)
+					: width(width), 
+					  height(height), 
+						pitch(pitch), 
+						pixelFormat(pixelFormat)
+				{
+					assert(pitch >= width * pixelFormat.computeByteSize());
+				}
 
-			FrameBufferFormat(const FrameBufferFormat &format)
-				: width(format.width), height(format.height), 
-				  pitch(format.pitch), pixelFormat(format.pixelFormat)
-			{
-			}
+				bool operator==(const FrameBufferFormat& format) const
+				{
+					return     width==format.width 
+					       && height==format.height 
+								 &&  pitch==format.pitch
+								 && pixelFormat==format.pixelFormat;
+				}                                                                                                                   
 
-			const FrameBufferFormat &operator=(const FrameBufferFormat &format)
-			{
-				width = format.width;
-				height = format.height;
-				pitch = format.pitch;
-				pixelFormat = format.pixelFormat;
-				return *this;
-			}
+				bool operator!=(const FrameBufferFormat& format) const
+				{
+					return !(*this == format);
+				}
 
-			bool operator==(const FrameBufferFormat& format) const
-			{
-				return width==format.width && height==format.height &&
-					   pitch==format.pitch && pixelFormat==format.pixelFormat;
-			}
+				bool isValid() const { return width > 0 && height > 0 && pitch > 0; }
 
-			bool operator!=(const FrameBufferFormat& format) const
-			{
-				return width!=format.width || height!=format.height ||
-					   pitch!=format.pitch || pixelFormat!=format.pixelFormat;
-			}
+				/** Returns width of writeable area of buffers in this format, 
+				 *  in pixels.
+				 */
+				unsigned int getWidth() const { return width; }
 
-			bool isValid() const { return width > 0 && height > 0 && pitch > 0; }
+				/** Sets width of writeable area of buffers in this format, 
+				 *  in pixels.
+				 */
+				void setWidth(unsigned int width) { this->width = width; }
 
-			/** Returns width of writeable area of buffers in this format, 
-			 *  in pixels.
-			 */
-			unsigned int getWidth() const { return width; }
+				/** Returns height of buffers in this format, in pixels. */
+				unsigned int getHeight() const { return height; }
 
-			/** Sets width of writeable area of buffers in this format, 
-			 *  in pixels.
-			 */
-			void setWidth(unsigned int width) { this->width = width; }
+				/** Sets height of buffers in this format, in pixels. */
+				void setHeight(unsigned int height) { this->height = height; }
 
-			/** Returns height of buffers in this format, in pixels. */
-			unsigned int getHeight() const { return height; }
+				/** Returns actual line width of buffers in this format, in bytes */
+				unsigned int getPitch() const { return pitch; }
 
-			/** Sets height of buffers in this format, in pixels. */
-			void setHeight(unsigned int height) { this->height = height; }
+				/** Sets actual line width of buffers in this format, in bytes */
+				void setPitch(unsigned int pitch) { this->pitch = pitch; }
 
-			/** Returns actual line width of buffers in this format, in bytes */
-			unsigned int getPitch() const { return pitch; }
+				/** Returns pixel format of buffers in this format */
+				const PixelFormat &getPixelFormat() const { return pixelFormat; }
 
-			/** Sets actual line width of buffers in this format, in bytes */
-			void setPitch(unsigned int pitch) { this->pitch = pitch; }
+				/** Sets pixel format of buffers in this format */
+				void setPixelFormat(const PixelFormat &pixelFormat)
+				{ 
+					this->pixelFormat = pixelFormat; 
+				}
 
-			/** Returns pixel format of buffers in this format */
-			const PixelFormat &getPixelFormat() const { return pixelFormat; }
-		    
-			/** Sets pixel format of buffers in this format */
-			void setPixelFormat(const PixelFormat &pixelFormat)
-			{ this->pixelFormat = pixelFormat; }
+				/** Computes size of the framebuffer with this format:
+				 *  size = pitch * height
+				 */
+				size_t computeSize() const
+				{
+					// pitch is in bytes
+					return isValid() ? (getPitch() * getHeight()) : 0;
+				}
 
-			/** Computes size of the framebuffer with this format:
-			 *  size = pitch * height
-			 */
-			size_t computeSize() const
-			{
-				// pitch is in bytes
-				return isValid() ? (getPitch() * getHeight()) : 0;
-			}
+				/** Modify width and height of this format */
+				void resize(Size newWidth, Size newHeight)
+				{
+					this->width = newWidth;
+					this->height = newHeight;
+				}
 
-			/** Modify width and height of this format */
-			void resize(const unsigned int newWidth, const unsigned int newHeight)
-			{
-				this->width = newWidth;
-				this->height = newHeight;
-			}
+				/** Returns new FrameBufferFormat where width and height are
+				 *  replaced by specified values.
+				 */
+				const FrameBufferFormat resized(Size newWidth, Size newHeight) const
+				{
+					return FrameBufferFormat(newWidth, newHeight, pitch, pixelFormat);
+				}
 
-			/** Returns new FrameBufferFormat where width and height are
-			 *  replaced by specified values.
-			 */
-			const FrameBufferFormat resized(const unsigned int newWidth, 
-											const unsigned int newHeight) const
-			{
-				return FrameBufferFormat(newWidth, newHeight, pitch, pixelFormat);
-			}
+			private:
 
-		private:
-			/** Width of writeable area of this buffer, in pixels. */
-			unsigned int width;
+				/** Width of writeable area of this buffer, in pixels. */
+				unsigned int width;
 
-			/** Height of buffers in this format, in pixels. */
-			unsigned int height;
+				/** Height of buffers in this format, in pixels. */
+				unsigned int height;
 
-			/** Actual line width of this buffer. You can compute the beginning of a
-			 *  line as firstPixel + pitch * lineNr.
-			 *  Unlike width and height, the pitch is measured in bytes. This may be
-			 *  needed in cases where the pitch is not a multiple of the byte size of
-			 *  a single pixel.
-			 */
-			unsigned int pitch;
+				/** Actual line width of this buffer. You can compute the beginning of a
+				 *  line as firstPixel + pitch * lineNr.
+				 *  Unlike width and height, the pitch is measured in bytes. This may be
+				 *  needed in cases where the pitch is not a multiple of the byte size of
+				 *  a single pixel.
+				 */
+				unsigned int pitch;
 
-			PixelFormat pixelFormat;
+				PixelFormat pixelFormat;
 		};
 
 		inline std::ostream &operator<<(std::ostream &o, const FrameBufferFormat &f)
@@ -174,49 +173,50 @@ namespace BALL
 
 		class FrameBuffer
 		{
-		public:
+			public:
 
-			/** Constructs new FrameBuffer instance with the specified 
-			 *  data and format.
-			 */
-			FrameBuffer( void* data, const FrameBufferFormat &format ) :
-				data(data), format(format)
-			{
-			}
+				/** Constructs new FrameBuffer instance with the specified 
+				 *  data and format.
+				 */
+				FrameBuffer(void* data, const FrameBufferFormat &format) 
+				  : data(data),
+					  format(format)
+				{
+			  }
 
-			/** You can override this if you want the data array to be deleted with the
-			 *  FrameBuffer.
-			 */
-			virtual ~FrameBuffer() {}
+				/** You can override this if you want the data array to be deleted with the
+				 *  FrameBuffer.
+				 */
+				virtual ~FrameBuffer() {}
 
-			/** Returns pointer to the data of this buffer */
-			void *getData() { return data; }
+				/** Returns pointer to the data of this buffer */
+				void *getData() { return data; }
 
-			/** Returns const pointer to the data of this buffer */
-			const void *getData() const { return data; }
+				/** Returns const pointer to the data of this buffer */
+				const void *getData() const { return data; }
 
-			/** Returns the format of this buffer */
-			const FrameBufferFormat &getFormat() const { return format; }
+				/** Returns the format of this buffer */
+				const FrameBufferFormat &getFormat() const { return format; }
 
-		protected:
+			protected:
 
-			/** Sets pointer to the data of this buffer */
-			void setData(void *data) { this->data = data; }
+				/** Sets pointer to the data of this buffer */
+				void setData(void *data) { this->data = data; }
 
-			/** Sets the format of this buffer */
-			void setFormat(const FrameBufferFormat &format) { this->format = format; }
+				/** Sets the format of this buffer */
+				void setFormat(const FrameBufferFormat &format) { this->format = format; }
 
-		private:
-			/**
-			 *  This points to the memory area where the rendering results should
-			 *  be written to (the first pixel of the result).
-			 */
-			void *data;
+			private:
+				/**
+				 *  This points to the memory area where the rendering results should
+				 *  be written to (the first pixel of the result).
+				 */
+				void *data;
 
-			/**
-			 *  The format of this buffer.
-			 */
-			FrameBufferFormat format;
+				/**
+				 *  The format of this buffer.
+				 */
+				FrameBufferFormat format;
 		};
 
 		typedef boost::shared_ptr<FrameBuffer> FrameBufferPtr;
@@ -233,9 +233,8 @@ namespace BALL
 			 *  specified in the constructor.
 			 *  The buffer will remain valid until update() is called with that buffer.
 			 *  Each call to getBuffer() creates a new FrameBuffer.
-			 *  If no new FrameBuffer can be created for this RenderTarget (e.g. if
-			 *  the RenderTarget supports only a single buffer at a time), a
-			 *  NoBufferAvailable exception is thrown.
+			 *  @throw Exception::NoBufferAvailable if no new FrameBuffer can be created for this 
+			 *         RenderTarget (e.g. if the RenderTarget supports only a single buffer at a time)
 			 */
 			virtual FrameBufferPtr getBuffer() throw(BALL::Exception::NoBufferAvailable) = 0;
 

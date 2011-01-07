@@ -132,27 +132,29 @@ namespace BALL
 
 		Scene::Scene()
 			:	QWidget(),
-			ModularWidget("<Scene>"),
-			update_running_(false),
-			rb_(new QRubberBand(QRubberBand::Rectangle, this)),
-			stage_(new Stage()),
-			renderers_(),
-			gl_renderer_(new GLRenderer()),
+				ModularWidget("<Scene>"),
+				update_running_(false),
+				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
+				stage_(new Stage()),
+				renderers_(),
+				gl_renderer_(new GLRenderer()),
 #ifdef BALL_HAS_RTFACT
-			rt_renderer_(new t_RaytracingRenderer()),
+				rt_renderer_(new t_RaytracingRenderer()),
 #endif
-			light_settings_(new LightSettings(this)),
-			material_settings_(new MaterialSettings(this)),
-			animation_thread_(0),
-			toolbar_view_controls_(new QToolBar(tr("3D View Controls"), this)),
-			mode_group_(new QActionGroup(this)),
-			main_display_(new GLRenderWindow(this)),
-			main_renderer_(0),
-			stereo_left_eye_(-1),
-			stereo_right_eye_(-1),
-			toolbar_edit_controls_(new QToolBar(tr("Edit Controls"), this))
+				light_settings_(new LightSettings(this)),
+				material_settings_(new MaterialSettings(this)),
+				animation_thread_(0),
+				toolbar_view_controls_(new QToolBar(tr("3D View Controls"), this)),
+				mode_group_(new QActionGroup(this)),
+				main_display_(new GLRenderWindow(this)),
+				main_renderer_(0),
+				stereo_left_eye_(-1),
+				stereo_right_eye_(-1),
+				toolbar_edit_controls_(new QToolBar(tr("Edit Controls"), this))
 			{
-				stage_settings_=new StageSettings(this);
+				initializeMembers_();
+
+				stage_settings_ = new StageSettings(this);
 
 				registerRenderers_();
 
@@ -164,55 +166,55 @@ namespace BALL
 #ifdef BALL_VIEW_DEBUG
 				Log.error() << "new Scene (1) " << this << std::endl;
 #endif
-
-				init_();
 			}
 
 		Scene::Scene(QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
 			:	QWidget(parent_widget, w_flags),
-			ModularWidget(name),
-			current_mode_(ROTATE__MODE),
-			last_mode_(PICKING__MODE),
-			rotate_action_(0),
-			picking_action_(0),
-			system_origin_(0.0, 0.0, 0.0),
-			need_update_(false),
-			update_running_(false),
-			x_window_pos_old_(0),
-			y_window_pos_old_(0),
-			x_window_pos_new_(0),
-			y_window_pos_new_(0),
-			x_window_pick_pos_first_(0),
-			y_window_pick_pos_first_(0),
-			rb_(new QRubberBand(QRubberBand::Rectangle, this)),
-			stage_(new Stage),
-			renderers_(),
-			gl_renderer_(new GLRenderer),
+				ModularWidget(name),
+				current_mode_(ROTATE__MODE),
+				last_mode_(PICKING__MODE),
+				rotate_action_(0),
+				picking_action_(0),
+				system_origin_(0.0, 0.0, 0.0),
+				need_update_(false),
+				update_running_(false),
+				x_window_pos_old_(0),
+				y_window_pos_old_(0),
+				x_window_pos_new_(0),
+				y_window_pos_new_(0),
+				x_window_pick_pos_first_(0),
+				y_window_pick_pos_first_(0),
+				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
+				stage_(new Stage),
+				renderers_(),
+				gl_renderer_(new GLRenderer),
 #ifdef BALL_HAS_RTFACT
-			rt_renderer_(new t_RaytracingRenderer()),
+				rt_renderer_(new t_RaytracingRenderer()),
 #endif
-			light_settings_(new LightSettings(this)),
-			material_settings_(new MaterialSettings(this)),
-			animation_thread_(0),
-			stop_animation_(false),
+				light_settings_(new LightSettings(this)),
+				material_settings_(new MaterialSettings(this)),
+				animation_thread_(0),
+				stop_animation_(false),
 #ifdef BALL_HAS_RTFACT
-			continuous_loop_(false),
+				continuous_loop_(false),
 #endif
-			want_to_use_vertex_buffer_(false),
-			mouse_button_is_pressed_(false),
-			preview_(false),
-			use_preview_(true),
-			show_fps_(false),
-			toolbar_view_controls_(new QToolBar(tr("3D View Controls"), this)),
-			mode_group_(new QActionGroup(this)),
-			main_display_(new GLRenderWindow(this)),
-			main_renderer_(0),
-			stereo_left_eye_(-1),
-			stereo_right_eye_(-1),
-			fragment_db_(),
-			fragment_db_initialized_(false),
-			toolbar_edit_controls_(new QToolBar(tr("Edit Controls"), this))
+				want_to_use_vertex_buffer_(false),
+				mouse_button_is_pressed_(false),
+				preview_(false),
+				use_preview_(true),
+				show_fps_(false),
+				toolbar_view_controls_(new QToolBar(tr("3D View Controls"), this)),
+				mode_group_(new QActionGroup(this)),
+				main_display_(new GLRenderWindow(this)),
+				main_renderer_(0),
+				stereo_left_eye_(-1),
+				stereo_right_eye_(-1),
+				fragment_db_(),
+				fragment_db_initialized_(false),
+				toolbar_edit_controls_(new QToolBar(tr("Edit Controls"), this))
 			{
+				initializeMembers_();
+
 				stage_settings_=new StageSettings(this);
 #ifdef BALL_VIEW_DEBUG
 				Log.error() << "new Scene (2) " << this << std::endl;
@@ -230,36 +232,37 @@ namespace BALL
 				renderers_[main_renderer_]->resize(width(), height());
 				renderers_[main_renderer_]->start();
 
-				init_();
 				registerWidget(this);
 			}
 
 		Scene::Scene(const Scene& scene, QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
 			:	QWidget(parent_widget, w_flags),
-			ModularWidget(scene),
-			system_origin_(scene.system_origin_),
-			update_running_(false),
-			rb_(new QRubberBand(QRubberBand::Rectangle, this)),
-			stage_(new Stage(*scene.stage_)),
-			renderers_(),
-			gl_renderer_(new GLRenderer()),
+				ModularWidget(scene),
+				system_origin_(scene.system_origin_),
+				update_running_(false),
+				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
+				stage_(new Stage(*scene.stage_)),
+				renderers_(),
+				gl_renderer_(new GLRenderer()),
 #ifdef BALL_HAS_RTFACT
-			rt_renderer_(new t_RaytracingRenderer()),
+				rt_renderer_(new t_RaytracingRenderer()),
 #endif
-			light_settings_(new LightSettings(this)),
-			material_settings_(new MaterialSettings(this)),
-			animation_thread_(0),
-			stop_animation_(false),
+				light_settings_(new LightSettings(this)),
+				material_settings_(new MaterialSettings(this)),
+				animation_thread_(0),
+				stop_animation_(false),
 #ifdef BALL_HAS_RTFACT
-			continuous_loop_(false),
+				continuous_loop_(false),
 #endif
-			toolbar_view_controls_(new QToolBar(tr("3D View Controls"), this)),
-			mode_group_(new QActionGroup(this)),
-			main_display_(new GLRenderWindow(this)),
-			main_renderer_(0),
-			stereo_left_eye_(-1),
-			stereo_right_eye_(-1)
+				toolbar_view_controls_(new QToolBar(tr("3D View Controls"), this)),
+				mode_group_(new QActionGroup(this)),
+				main_display_(new GLRenderWindow(this)),
+				main_renderer_(0),
+				stereo_left_eye_(-1),
+				stereo_right_eye_(-1)
 			{
+				initializeMembers_();
+
 				stage_settings_=new StageSettings(this);
 #ifdef BALL_VIEW_DEBUG
 				Log.error() << "new Scene (3) " << this << std::endl;
@@ -279,8 +282,6 @@ namespace BALL
 
 				renderers_[main_renderer_]->resize(width(), height());
 				renderers_[main_renderer_]->start();
-
-				init_();
 			}
 
 		Scene::~Scene()
@@ -305,8 +306,6 @@ namespace BALL
 				delete(renderers_[i]->target);
 			}
 
-			//rt_renderer_ & rt_render_window are smart pointers
-
 			if (animation_thread_ != 0) delete animation_thread_;
 		}
 
@@ -325,7 +324,6 @@ namespace BALL
 
 			stage_->clear();
 			animation_points_.clear();
-
 
 			// TODO: clear the render setups
 		}
@@ -363,94 +361,81 @@ namespace BALL
 
 		// ####################GL, CAMERA############################################
 
-		void Scene::defaultOnNotify(Message *message)
+		// #################### Messaging ############################################
+		void Scene::handleRepresentationMessage_(RepresentationMessage* rm)
 		{
-#ifdef BALL_VIEW_DEBUG
-			Log.error() << "Scene " << this  << "onNotify " << message << std::endl;
-#endif
-			//   			qApp->processEvents(); ??????? AM
+			bool needs_updategl = true;
 
-			if (RTTI::isKindOf<RepresentationMessage>(*message)) 
+			Representation* rep = rm->getRepresentation();
+			switch (rm->getType())
 			{
-				bool needs_updategl = true;
-
-				RepresentationMessage* rm = RTTI::castTo<RepresentationMessage>(*message);
-				Representation* rep = rm->getRepresentation();
-				switch (rm->getType())
-				{
-					case RepresentationMessage::UPDATE:
+				case RepresentationMessage::UPDATE:
+					{
+						RepresentationManager& pm = getMainControl()->getRepresentationManager();
+						if (pm.startRendering(rep))
 						{
-							RepresentationManager& pm = getMainControl()->getRepresentationManager();
-							if (pm.startRendering(rep))
-							{
-								for (Position i=0; i<renderers_.size(); ++i)
-									renderers_[i]->bufferRepresentation(*rep);
+							for (Position i=0; i<renderers_.size(); ++i)
+								renderers_[i]->bufferRepresentation(*rep);
 
-								pm.finishedRendering(rep);
-							}
-							break;
+							pm.finishedRendering(rep);
 						}
-
-					case RepresentationMessage::REMOVE:
-						for (Position i=0; i<renderers_.size(); ++i)
-							renderers_[i]->removeRepresentation(*rep);
 						break;
+					}
 
-					case RepresentationMessage::FINISHED_UPDATE:
-						needs_updategl = false;
-						break;
-
-					default:
-						break;
-				}
-
-				if (needs_updategl)
-				{
-					// TODO: for some reason, we need to reset the
-					//       lights here; otherwise, the lighting
-					//       will be wrong until the first call to
-					//       updateCamera()
-					//       this is probably due to some wrong order
-					//       of initializations and should be fixed
-					//       somewhere else instead of this band-aid
+				case RepresentationMessage::REMOVE:
 					for (Position i=0; i<renderers_.size(); ++i)
-						renderers_[i]->setLights(true);
-					updateGL();
-				}
+						renderers_[i]->removeRepresentation(*rep);
+					break;
 
-				return;
+				case RepresentationMessage::FINISHED_UPDATE:
+					needs_updategl = false;
+					break;
+
+				default:
+					break;
 			}
 
-			if (RTTI::isKindOf<DatasetMessage>(*message))
+			if (needs_updategl)
 			{
-				DatasetMessage* rm = RTTI::castTo<DatasetMessage>(*message);
-				if (!rm->isValid()) return;
-				RegularData3DDataset* set = dynamic_cast<RegularData3DDataset*>(rm->getDataset());
-				if (set == 0) return;
-
-				switch (rm->getType())
-				{
-					case DatasetMessage::UPDATE:
-					case DatasetMessage::REMOVE:
-						// TODO: change to a correct render setup call!
-						for (Position i=0; i<renderers_.size(); ++i)
-							renderers_[i]->removeGridTextures(*set->getData());
-						break;
-
-					default:
-						return;
-				}
-
+				// TODO: for some reason, we need to reset the
+				//       lights here; otherwise, the lighting
+				//       will be wrong until the first call to
+				//       updateCamera()
+				//       this is probably due to some wrong order
+				//       of initializations and should be fixed
+				//       somewhere else instead of this band-aid
+				for (Position i=0; i<renderers_.size(); ++i)
+					renderers_[i]->setLights(true);
 				updateGL();
-				return;
+			}
+		}
+
+		void Scene::handleDatasetMessage_(DatasetMessage* dm)
+		{
+			if (!dm->isValid()) return;
+
+			RegularData3DDataset* set = dynamic_cast<RegularData3DDataset*>(dm->getDataset());
+			if (set == 0) return;
+
+			switch (dm->getType())
+			{
+				case DatasetMessage::UPDATE:
+				case DatasetMessage::REMOVE:
+					// TODO: change to a correct render setup call!
+					for (Position i=0; i<renderers_.size(); ++i)
+						renderers_[i]->removeGridTextures(*set->getData());
+					break;
+
+				default:
+					return;
 			}
 
-			// react now only to SceneMessage
-			if (!RTTI::isKindOf<SceneMessage>(*message)) return;
+			updateGL();
+		}
 
-			SceneMessage *scene_message = RTTI::castTo<SceneMessage>(*message);
-
-			switch (scene_message->getType())
+		void Scene::handleSceneMessage_(SceneMessage *sm)
+		{
+			switch (sm->getType())
 			{
 				case SceneMessage::REDRAW:
 					updateGL();
@@ -462,8 +447,8 @@ namespace BALL
 					return;
 
 				case SceneMessage::UPDATE_CAMERA:
-					stage_->getCamera() = scene_message->getStage().getCamera();
-					system_origin_ = scene_message->getStage().getCamera().getLookAtPosition();
+					stage_->getCamera() = sm->getStage().getCamera();
+					system_origin_ = sm->getStage().getCamera().getLookAtPosition();
 					light_settings_->updateFromStage();
 					updateGL();
 					return;
@@ -477,9 +462,9 @@ namespace BALL
 					{
 						// did we get a filename with the message?
 						String filename = "";
-						if (scene_message->data().type() == typeid(String))
+						if (sm->data().type() == typeid(String))
 						{
-							filename = boost::any_cast<String>(scene_message->data());
+							filename = boost::any_cast<String>(sm->data());
 						}
 
 						if (filename != "")
@@ -499,7 +484,6 @@ namespace BALL
 					exportPOVRay();
 					return;
 
-
 				case SceneMessage::ENTER_ROTATE_MODE:
 					rotateMode_();
 					return;
@@ -514,7 +498,63 @@ namespace BALL
 
 				case SceneMessage::UNDEFINED:
 					Log.error() << (String)tr("Unknown type of SceneMessage in ") << __FILE__ << __LINE__ << std::endl;
+				default:
+					break;
 			}
+		}
+
+		void Scene::handleCompositeMessage_(CompositeMessage* cm)
+		{
+			switch (cm->getType())
+			{
+				case CompositeMessage::REMOVED_COMPOSITE:
+				case CompositeMessage::CHANGED_COMPOSITE_HIERARCHY:
+					current_atom_ = 0;
+					current_bond_ = 0;
+					break;
+				default:
+					break;
+			}
+		}
+
+		void Scene::handleControlSelectionMessage_(ControlSelectionMessage* /*csm*/)
+		{
+			checkMenu(*getMainControl());
+		}	
+
+		void Scene::onNotify(Message *message)
+		{
+#ifdef BALL_VIEW_DEBUG
+			Log.error() << "Scene " << this  << "onNotify " << message << std::endl;
+#endif
+
+			if (RTTI::isKindOf<CompositeMessage>(*message))
+			{
+				CompositeMessage* cm = RTTI::castTo<CompositeMessage>(*message);
+				handleCompositeMessage_(cm);
+			}
+			else if (RTTI::isKindOf<ControlSelectionMessage>(*message))
+			{
+				ControlSelectionMessage* csm = RTTI::castTo<ControlSelectionMessage>(*message);
+				handleControlSelectionMessage_(csm);
+			}
+			else if (RTTI::isKindOf<RepresentationMessage>(*message)) 
+			{
+				RepresentationMessage* rm = RTTI::castTo<RepresentationMessage>(*message);
+				handleRepresentationMessage_(rm);
+			} 
+			else if (RTTI::isKindOf<DatasetMessage>(*message))
+			{
+				DatasetMessage* dm = RTTI::castTo<DatasetMessage>(*message);
+				handleDatasetMessage_(dm);
+			}
+			else if (RTTI::isKindOf<SceneMessage>(*message))
+			{
+				SceneMessage *sm = RTTI::castTo<SceneMessage>(*message);
+				handleSceneMessage_(sm);
+			}
+
+			// all other messages are ignored
 		}
 
 		void Scene::init()
@@ -581,6 +621,24 @@ namespace BALL
 			return fps_string;
 		}
 
+		void Scene::renderText_(QPointF const& point, String const& text, QPaintDevice* current_dev)
+		{
+			ColorRGBA text_color = stage_->getBackgroundColor().getInverseColor();
+
+			QPainter p(current_dev);
+
+			QPen pen(QColor((int)text_color.getRed(),  (int)text_color.getGreen(), 
+						          (int)text_color.getBlue(), (int)text_color.getAlpha()));
+
+			p.setPen(pen);
+			p.setRenderHint(QPainter::Antialiasing, true);
+			p.setRenderHint(QPainter::TextAntialiasing, true);
+
+			p.drawText(point, text.c_str());
+
+			p.end();
+		}
+
 		void Scene::paintGL()
 		{
 			update_running_ = true;
@@ -588,9 +646,6 @@ namespace BALL
 			// This function tries to sync renderers by letting (a) all renderers
 			// perform their updates and then (b) swap in the newly created buffers
 			// of all render targets
-
-			// this widget does not really paint anything
-			//doneCurrent();
 
 			// needed for all fps estimates
 			time_ = PreciseTime::now();
@@ -610,8 +665,6 @@ namespace BALL
 			}
 
 			// then, estimate fps if necessary and add to the render target
-			ColorRGBA text_color = stage_->getBackgroundColor().getInverseColor();
-
 			String fps_string;
 			QPoint fps_point;
 
@@ -629,47 +682,20 @@ namespace BALL
 				QPaintDevice* current_dev = dynamic_cast<QPaintDevice*>(renderers_[i]->target);
 				if (show_fps_ && current_dev)
 				{
-					QPainter p(current_dev);
-
-					QPen pen(QColor((int)text_color.getRed(),  (int)text_color.getGreen(), 
-								(int)text_color.getBlue(), (int)text_color.getAlpha()));
-					p.setPen(pen);
-
-					QFont font("Arial", 16., QFont::Bold);
-					font.setPointSizeF(16.);
-					font.setBold(true);
-					QFontMetrics fm(font);
-
+					QFontMetrics fm(default_font_);
 					QRect r = fm.boundingRect(fps_string.c_str());
 					QPointF fps_point((float)current_dev->width() - 20 - r.width(), 20);
 
-					p.setRenderHint(QPainter::Antialiasing, true);
-					p.setRenderHint(QPainter::TextAntialiasing, true);
-					p.setFont(font);
-					p.drawText(QPointF(fps_point), fps_string.c_str());
-
-					p.end();
+					renderText_(fps_point, fps_string.c_str(), current_dev);
 				}
 
 				if (info_string_ != "")
 				{
-					QPainter p(current_dev);
-
-					QPen pen(QColor((int)text_color.getRed(),  (int)text_color.getGreen(), 
-								(int)text_color.getBlue(), (int)text_color.getAlpha()));
-
-					p.setPen(pen);
-					p.setRenderHint(QPainter::Antialiasing, true);
-					p.setRenderHint(QPainter::TextAntialiasing, true);
-					p.setFont(QFont("Arial", 16., QFont::Bold));
-
 					// account for differently sized windows
 					float xscale = current_dev->width()  / width();
 					float yscale = current_dev->height() / height();
 
-					p.drawText(QPointF(info_point_.x()*xscale, info_point_.y()*yscale), info_string_.c_str());
-
-					p.end();
+					renderText_(QPointF(info_point_.x()*xscale, info_point_.y()*yscale), info_string_.c_str(), current_dev);
 				}
 			}
 
@@ -727,27 +753,9 @@ namespace BALL
 
 		/////////////////////////////////////////////////////////
 
-		Vector3 Scene::getTranslationVector_(const Vector3& v)
-		{
-			const Camera& camera = stage_->getCamera();
-
-			Vector3 vv = camera.getViewVector();
-			float length = vv.getLength();
-			if (!Maths::isZero(length)) vv /= length;
-
-			return v.x * camera.getRightVector() +
-				v.y * camera.getLookUpVector() -
-				v.z * vv;
-		}
-
 		void Scene::rotateClockwise(float degree)
 		{
-			Camera camera(stage_->getCamera());
-			Matrix4x4 m;
-			m.setRotation(Angle(-degree, false), camera.getViewVector());
-
-			camera.setLookUpVector(m * camera.getLookUpVector());
-			stage_->getCamera() = camera;
+			stage_->getCamera().rotateAboutView(degree);
 			updateGL();
 		}
 
@@ -755,13 +763,13 @@ namespace BALL
 		{
 			Camera& camera = stage_->getCamera();
 
-			camera.translate(-getTranslationVector_(v));
+			camera.translate(-camera.convertCameraToSceneCoordinates(v));
 			updateGL();
 		}
 
 		void Scene::rotate(float degree_right, float degree_up)
 		{
-			const Camera& camera = stage_->getCamera();
+			Camera& camera = stage_->getCamera();
 
 			Quaternion q1;
 			q1.fromAxisAngle(camera.getLookUpVector(), Angle(degree_right, false).toRadian());
@@ -771,7 +779,7 @@ namespace BALL
 
 			q1 += q2;
 
-			stage_->getCamera().rotate(q1, system_origin_);
+			camera.rotate(q1, system_origin_);
 			updateGL();
 		}
 
@@ -779,7 +787,7 @@ namespace BALL
 		{
 			HashSet<Composite*> roots;
 
-			Vector3 x = getTranslationVector_(v);
+			Vector3 x = stage_->getCamera().convertCameraToSceneCoordinates(v);
 
 			Matrix4x4 m;
 			m.setTranslation(x);
@@ -937,7 +945,7 @@ namespace BALL
 
 			// draw the representations
 			renderers_[main_renderer_]->pickObjects((Position)p0.x(), (Position)p0.y(), 
-					(Position)p1.x(), (Position)p1.y(), objects);
+					                                    (Position)p1.x(), (Position)p1.y(), objects);
 
 			// sent collected objects
 			GeometricObjectSelectionMessage* message = new GeometricObjectSelectionMessage;
@@ -1683,7 +1691,7 @@ namespace BALL
 			window_menu_entry_->setCheckable(true);
 			setMenuHelp("scene.html");
 
-			setCursor(QCursor(Qt::ArrowCursor));
+			QWidget::setCursor(QCursor(Qt::ArrowCursor));
 
 			setFocusPolicy(Qt::StrongFocus);
 			registerForHelpSystem(this, "scene.html");
@@ -2776,7 +2784,7 @@ namespace BALL
 			gl_renderer_->exitPickingMode();
 			last_mode_ = current_mode_;
 			current_mode_ = ROTATE__MODE;		
-			setCursor(QCursor(Qt::ArrowCursor));
+			QWidget::setCursor(QCursor(Qt::ArrowCursor));
 			rotate_action_->setChecked(true);
 			checkMenu(*getMainControl());
 		}
@@ -2788,7 +2796,7 @@ namespace BALL
 			gl_renderer_->enterPickingMode();
 			last_mode_ = current_mode_;
 			current_mode_ = PICKING__MODE;
-			setCursor(QCursor(Qt::CrossCursor));
+			QWidget::setCursor(QCursor(Qt::CrossCursor));
 			picking_action_->setChecked(true);
 			checkMenu(*getMainControl());
 		}
@@ -2800,7 +2808,7 @@ namespace BALL
 			gl_renderer_->exitPickingMode();
 			last_mode_ = current_mode_;
 			current_mode_ = MOVE__MODE;
-			setCursor(QCursor(Qt::SizeAllCursor));
+			QWidget::setCursor(QCursor(Qt::SizeAllCursor));
 			move_action_->setChecked(true);
 			checkMenu(*getMainControl());
 		}
@@ -3960,43 +3968,12 @@ namespace BALL
 			}
 		}
 
-		Scene::EditOperation::EditOperation()
-			: operationType(),
-			atom(),
-			bond(),
-			description()
-		{
-		}
-
-		Scene::EditOperation::EditOperation(Atom* new_atom, Bond* new_bond, String new_description, int new_operation)
-			: operationType((Scene::EditOperation::OperationType)new_operation),
-			atom(new_atom),
-			bond(new_bond),
-			description(new_description)
-		{
-		}
-
-		Scene::EditOperation::EditOperation(const EditOperation& eOperation)
-			: operationType(eOperation.operationType),
-			atom(eOperation.atom),
-			bond(eOperation.bond),
-			description(eOperation.description)
-		{
-		}
-
-		Scene::EditOperation::~EditOperation()
-		{
-#ifdef BALL_VIEW_DEBUG
-			Log.info() << "Destructing object EditOperation " << this << " of class EditOperation>" << std::endl;
-#endif
-		}
-
 		//
 		//-------------------- Scene -----------------------
 
 		bool Scene::only_highlighted_ = true;
 
-		void Scene::init_()
+		void Scene::initializeMembers_()
 		{
 			edit_id_ = 0;
 			current_atom_ = 0;
@@ -4006,6 +3983,7 @@ namespace BALL
 			atomic_number_ = 6;
 			atom_number_ = 0;
 			temp_move_ = false;
+			default_font_ = QFont("Arial", 16., QFont::Bold);
 		}
 
 		void Scene::setCursor(String c)
@@ -4037,7 +4015,7 @@ namespace BALL
 
 			pm.createAlphaMask();
 			QCursor cursor(QPixmap::fromImage(pm), 0, 0);
-			Scene::setCursor(cursor);
+			QWidget::setCursor(cursor);
 		}
 
 		void Scene::wheelEvent(QWheelEvent* e)
@@ -4836,34 +4814,6 @@ namespace BALL
 
 			current_bond_->setOrder((Bond::BondOrder)bond_order_);
 			getMainControl()->update(*(Atom*)current_bond_->getFirstAtom(), true);
-		}
-
-		void Scene::onNotify(Message *message)
-		{
-			if ((current_atom_ != 0 || current_bond_ != 0) &&
-					RTTI::isKindOf<CompositeMessage>(*message))
-			{
-				CompositeMessage* composite_message = RTTI::castTo<CompositeMessage>(*message);
-				if (composite_message->getType() == CompositeMessage::REMOVED_COMPOSITE)
-				{
-					current_atom_ = 0;
-					current_bond_ = 0;
-				}
-
-				if (composite_message->getType() == CompositeMessage::CHANGED_COMPOSITE_HIERARCHY)
-				{
-					current_atom_ = 0;
-					current_bond_ = 0;
-				}
-			}
-
-			if (RTTI::isKindOf<ControlSelectionMessage>(*message))
-			{
-				checkMenu(*getMainControl());
-				return;
-			}
-
-			defaultOnNotify(message);
 		}
 
 		void Scene::activatedOrderItem_(QAction* action)

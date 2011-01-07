@@ -90,9 +90,12 @@ namespace BALL
 				const Vector3& getLookUpVector() const
 					{ return look_up_vector_;}
 
-				/// Set the look up vector
+				/// Set the look up vector and compute the new right vector
 				void setLookUpVector(const Vector3& look_up_vector)
 					{ look_up_vector_ = look_up_vector; calculateVectors_();}
+
+				/// Rotate up and right around the view vector
+				void rotateAboutView(float degree);
 
 				/// Get the distance between the view point and the look at point
 				float getDistance() const
@@ -107,8 +110,10 @@ namespace BALL
 					{ return right_vector_;}
 
 				/// Translate the view point and the point the camera is looking to by a given vector
-				void translate(const Vector3& v)
-					{ view_point_ += v; look_at_ += v; calculateVectors_();}
+				void translate(const Vector3& v);
+
+				/// Convert the given vector from camera system to cartesian coordinates
+				Vector3 convertCameraToSceneCoordinates(const Vector3& v);
 
 				/// Rotate the camera
 				void rotate(const Quaternion& q, const Vector3& origin);

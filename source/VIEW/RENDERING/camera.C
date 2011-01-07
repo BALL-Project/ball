@@ -163,5 +163,32 @@ namespace BALL
 			translate(origin);
 		}
 
+		void Camera::rotateAboutView(float degree)
+		{
+			Matrix4x4 m;
+			m.setRotation(Angle(-degree, false), view_vector_);
+
+			// setLookUp takes care of normalization and the right vector for us...
+			setLookUpVector(m * look_up_vector_);
+		}
+
+		void Camera::translate(const Vector3& v)
+		{ 
+			view_point_ += v; 
+			look_at_ += v; 
+			calculateVectors_();
+		}
+
+		Vector3 Camera::convertCameraToSceneCoordinates(const Vector3& v)
+		{
+			Vector3 vv = view_vector_;
+			float length = vv.getLength();
+			if (!Maths::isZero(length)) vv /= length;
+
+			return v.x * right_vector_ +
+				     v.y * look_up_vector_ -
+						 v.z * vv;
+		}
+
 	} // namespace VIEW
 } // namespace BALL
