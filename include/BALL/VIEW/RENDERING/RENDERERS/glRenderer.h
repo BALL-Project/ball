@@ -174,6 +174,10 @@ namespace BALL
 			*/
 			void pickObjects2(std::list<GeometricObject*>& objects);
 
+			/** Set the GL_FOG intensity
+			 */
+			void setFogIntensity(float intensity);
+
 			///
 			void enterPickingMode();
 

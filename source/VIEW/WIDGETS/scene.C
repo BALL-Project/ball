@@ -1339,29 +1339,12 @@ namespace BALL
 			for (Position i=0; i<renderers_.size(); ++i)
 				renderers_[i]->updateBackgroundColor();
 
-			if (stage_->getFogIntensity() == 0)
+			// currently, only the GLRenderer knows how to handle fog...
+			// TODO: Fog in other renderers!
+			for (Position i=0; i<renderers_.size(); ++i)
 			{
-				glDisable(GL_FOG);
-			}
-			else
-			{
-				/// TODO: Fog in POVRAY!
-				glEnable(GL_FOG);
-
-				ColorRGBA co = stage_->getBackgroundColor();
-				GLfloat color[4] = {(float) co.getRed(), (float) co.getGreen(), (float) co.getBlue(), 1.0};
-				glFogfv(GL_FOG_COLOR, color);
-
-				glFogf(GL_FOG_START, 10.0);
-				float end = ((float) stage_->getFogIntensity());
-				end = 400 - end;
-				end += 20;
-				glFogf(GL_FOG_END, end);
-				glFogi(GL_FOG_MODE, GL_LINEAR);
-
-				// doesnt work as expected:
-				// glFogf(GL_FOG_END, 400);
-				// glFogf(GL_FOG_DENSITY, ((float) stage_->getFogIntensity()) / 40.0);
+				if (renderers_[i]->getRendererType() == RenderSetup::OPENGL_RENDERER)
+					dynamic_cast<GLRenderer*>(renderers_[i]->renderer)->setFogIntensity((float)stage_->getFogIntensity());
 			}
 
 			updateGL();
