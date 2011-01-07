@@ -1739,7 +1739,7 @@ namespace BALL
 	BALL_INLINE 
 	Index HashGrid3<Item>::getIndex_(const HashGridBox3<Item>& box) const
 	{
-		if (&box < &box_[0] ||& box >= &box_[getSize()])
+		if ((&box < &box_[0]) || (&box - &box_[0]  >= getSize()))
 		{
 			return INVALID_INDEX;
 		} 
