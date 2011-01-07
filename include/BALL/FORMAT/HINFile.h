@@ -40,9 +40,9 @@ namespace BALL
 		HINFile();
 
 		/** Detailed constructor
-		*/
-		HINFile(const String& filename, File::OpenMode open_mode = std::ios::in)
-			throw(Exception::FileNotFound);
+		 *  @throw Exception::FileNotFound if the file could not be opened
+		 */
+		HINFile(const String& filename, File::OpenMode open_mode = std::ios::in);
 
 		/**	Destructor
 		*/
@@ -54,9 +54,9 @@ namespace BALL
 		//@{
 		
 		/** Assignment operator.
-		*/
-		const HINFile& operator = (const HINFile& rhs)
-			throw(Exception::FileNotFound);
+		 *  @throw Exception::FileNotFound if the file could not be opened
+		 */
+		const HINFile& operator = (const HINFile& rhs);
 
 		//@}
 		/**	@name Reading and Writing of Kernel Datastructures
@@ -64,26 +64,25 @@ namespace BALL
 		//@{
 		
 		/**	Write a molecule to a HIN file.
-				Note that this changes the properties of atoms in the system.
-		*/
-		virtual bool write(const Molecule& molecule)
-			throw(File::CannotWrite);
+		 *	Note that this changes the properties of atoms in the system.
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		virtual bool write(const Molecule& molecule);
 
 		/**	Write a system to a HIN file.
-				Note that this changes the properties of atoms in the system.
-		*/
-		virtual bool write(const System& system)
-			throw(File::CannotWrite);
+		 *	Note that this changes the properties of atoms in the system.
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		virtual bool write(const System& system);
 		
 		/**	Read a system from the HIN file
-		*/
-		virtual Molecule* read()
-			throw(Exception::ParseError);
+		 *  @throw Exception::ParseError if a syntax error was encountered
+		 */
+		virtual Molecule* read();
 
-		/**
-		*/
-		virtual bool read(System& system)
-			throw(Exception::ParseError);
+		/** @copydoc GenericMolFile(System& system)
+		 */
+		virtual bool read(System& system);
 
 		//@}
 		/**	@name	Accessors
