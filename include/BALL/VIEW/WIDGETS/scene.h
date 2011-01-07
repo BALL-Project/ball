@@ -33,6 +33,10 @@
 # include <BALL/VIEW/DIALOGS/editSettings.h>
 #endif
 
+#ifndef BALL_VIEW_KERNEL_EDITOPERATION_H
+# include <BALL/VIEW/KERNEL/editOperation.h>
+#endif
+
 #ifndef BALL_VIEW_STRUCTURE_FRAGMENTDB_H
 # include <BALL/STRUCTURE/fragmentDB.h>
 #endif
@@ -137,205 +141,10 @@ namespace BALL
 #endif
 
 			Q_OBJECT
-				// This class represents a single edit operation and stores its type and
-				// parameters. This can be used to implement undo functionality.
 
 			public:
 				BALL_EMBEDDABLE(Scene, ModularWidget)
 
-				class BALL_VIEW_EXPORT EditOperation
-				{
-					public:
-
-						/// Constructor
-						EditOperation();
-
-						///
-						EditOperation(Atom* atom, Bond* bond, String description= "Added Object", int operation=0);
-
-						///
-						EditOperation(const EditOperation& eOperation);
-
-						/// Destructor.
-						virtual ~EditOperation();
-
-						///
-						enum OperationType
-						{
-							DEFAULT,
-							ADDED__ATOM,
-							ADDED__BOND,
-							CHANGED__TYPE
-								// DELETED__ATOM
-								// DELETED__BOND
-								//CHANGED__SYSTEM
-								//MOVED__ATOM
-						};
-
-						int	operationType;
-						Atom* atom;
-						Bond* bond;
-						String description;
-				};
-
-				/**	Predefined constants for the mode types
-					Add new enums members in derived classes, for new modi.
-					If you add new modi in this class, you have to add them in front of
-					the PICKING__MODE entry.
-					*/
-				enum ModeType
-				{
-					/// Default value.
-					ROTATE__MODE         = 0,
-
-					/// Move mode
-					MOVE__MODE,
-
-					/// Picking mode
-					PICKING__MODE,
-
-					/// Edit mode,
-					EDIT__MODE,
-
-					/// The total number of modes in this enum
-					NUMBER_OF_MODES
-				};
-
-				///
-				void initializePreferencesTab(Preferences &preferences);
-
-				///
-				void finalizePreferencesTab(Preferences &preferences);
-
-				///
-				virtual void applyPreferences();
-
-				///
-				void showContextMenu(QPoint pos);
-
-				///
-				virtual void setMode(ModeType mode);
-
-				void addStructure(String name);
-
-				using QWidget::setCursor;
-
-				///
-				void setCursor(String c);
-
-				///
-				void setElementCursor();
-
-				virtual void addToolBarEntries(QToolBar* tb);
-
-				/// Catch key events
-				virtual void keyPressEvent(QKeyEvent* e);
-				/////////////////////////////////////////
-				public slots:
-
-					void createNewMolecule();
-				void saturateWithHydrogens();
-				void optimizeStructure();
-				void computeBondOrders();
-
-				// slots for communication with PTEDialog
-				void setEditElementType(int element_number);
-				int getEditElementType();
-
-				////////////////////////////////////////
-				protected slots:
-
-					virtual void editMode_();
-				void deleteAtom_();
-				void changeElement_();
-				void changeAtomElement_();
-				void createBond_();
-				void deleteBond_();
-				void changeBondOrder_();
-				void activatedOrderItem_(QAction* action);
-				void moveAtom_();
-				void atomProperties_();
-				void createMolecule_();
-				void addStructure_();
-				void setFormalCharge_();
-
-				////////////////////////////////////////
-signals:
-
-				// signal for communication with EditOperationDialog
-				void newEditOperation(Scene::EditOperation &eo);
-
-				////////////////////////////////////////
-			protected:
-
-				void defaultKeyPressEvent(QKeyEvent* e);
-				virtual void mouseDoubleClickEvent(QMouseEvent* e);
-				virtual bool reactToKeyEvent_(QKeyEvent* e);
-
-				/**
-				 * Insert a given Atom in the Scene. Its position is specified by the 2-dim
-				 * Mouseclick coordinates of the Screen, which will be translated into the
-				 * 3-dim space of Viewing Volume.
-				 */
-				void insert_(int x_, int y_, PDBAtom &atom_);
-
-				void merge_(Composite* a1, Composite* a2);
-
-				/**
-				 *  Given a 3-dim. Coordinates (in Viewing Volume) getScreenPosition
-				 *  computes the 2-dim Coordinates on Screen.
-				 */
-				TVector2<float> getScreenPosition_(Vector3 vec);
-
-				void getClickedItems_(int x, int y);
-
-				void init_();
-
-				String getBondOrderString_(Index order);
-
-				std::list<AtomContainer*> getContainers_();
-
-				void changeBondOrder_(Index delta);
-				void deselect_(bool update=true);
-				void renderGrid_();
-
-				QAction* edit_id_, *new_molecule_action_, *optimize_action_, *add_hydrogens_action_, *element_action_;
-				QAction* bondorders_action_, *bond_action_;
-
-				Atom* current_atom_;
-				Bond* current_bond_;
-
-				Vector3 atom_pos_;
-
-				// pick atoms/bonds only in highlighted AtomContainer?
-				static bool only_highlighted_;
-				// element for new atoms
-				int atomic_number_;
-				// name for newly created atoms
-				Position atom_number_;
-				// order for new bonds
-				int bond_order_;
-				Position last_y_;
-				Qt::MouseButtons last_buttons_;
-
-				//undo stack
-				vector<EditOperation> undo_;
-				EditSettings* edit_settings_;
-				QPoint 	 menu_point_;
-				FragmentDB fragment_db_;
-				bool fragment_db_initialized_;
-				bool temp_move_;
-				QToolBar* toolbar_edit_controls_;
-				QList<QAction*> toolbar_actions_edit_controls_;
-
-			public:
-
-				/** @name Type definitions
-				*/
-				//@{
-
-
-				//@}
 				/** @name Enums
 				*/
 				//@{
