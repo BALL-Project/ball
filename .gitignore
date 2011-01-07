@@ -6,7 +6,8 @@ contrib/*
 *~
 moc_*.C
 *.dh
-*.swp
+*.sw?
+*.orig
 .Dependencies
 lib/*
 build/*
