@@ -51,7 +51,6 @@ namespace BALL
 
 
 	bool DSN6File::open(const String& name, File::OpenMode open_mode)
-		throw(Exception::FileNotFound)
 	{
 		if (!(open_mode |= std::ios::binary))
 		{
