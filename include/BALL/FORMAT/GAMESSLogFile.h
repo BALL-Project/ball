@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: GAMESSLogFile.h,v 1.2 2005/10/05 09:59:46 anhi Exp $
-//
 
 #ifndef BALL_FORMAT_GAMESSLOGFILE_H
 #define BALL_FORMAT_GAMESSLOGFILE_H
@@ -46,23 +44,21 @@ namespace BALL
 			
 			/** Default constructor
 			 */
-			GAMESSLogFile()
-				;
+			GAMESSLogFile();
 
 			/** Copy constructor
+		   *  @throw Exception::FileNotFound if the file could not be opened
 			 */
-			GAMESSLogFile(const GAMESSLogFile& file)
-				throw(Exception::FileNotFound);
+			GAMESSLogFile(const GAMESSLogFile& file);
 
 			/** Detailed constructor
+		   *  @throw Exception::FileNotFound if the file could not be opened
 			 */
-			GAMESSLogFile(const String& filename, File::OpenMode open_mode = std::ios::in)
-				throw(Exception::FileNotFound);
+			GAMESSLogFile(const String& filename, File::OpenMode open_mode = std::ios::in);
 
 			/** Destructor
 			 */
-			virtual ~GAMESSLogFile()
-				;
+			virtual ~GAMESSLogFile();
 			
 			//@}
 			/** @name Assignment.
@@ -70,9 +66,9 @@ namespace BALL
 			//@{
 			
 			/** Assignment operator.
+		   *  @throw Exception::FileNotFound if the file could not be opened
 			 */
-			const GAMESSLogFile& operator = (const GAMESSLogFile& rhs)
-				throw(Exception::FileNotFound);
+			const GAMESSLogFile& operator = (const GAMESSLogFile& rhs);
 
 			//@}
 
@@ -83,74 +79,61 @@ namespace BALL
 			/** Write a molecule to a GAMESSLogFile.
 			 *  If additional GAMESS - keywords are stored in this class, they
 			 *  will be written as well.
+		 	 *  @throw File::CannotWrite if writing to the file failed
 			 */
-			virtual bool write(const Molecule& molecule)
-				throw(File::CannotWrite);
+			virtual bool write(const Molecule& molecule);
 
 			/** Write a system to a GAMESSLogFile.
 			 *  If additional GAMESS - keywords are stored in this class, they
 			 *  will be written as well.
+		 	 *  @throw File::CannotWrite if writing to the file failed
 			 */
-			virtual bool write(const System& molecule)
-				throw(File::CannotWrite);
+			virtual bool write(const System& molecule);
 
 			/** Read a Molecule from the GAMESSLogFile.
 			 *  If the GAMESS .log - file contains additional lines apart from the
 			 *  molecule itself, they are stored in this class.
+		   *  @throw Exception::ParseError if a syntax error was encountered
 			 */
-			virtual Molecule* read()
-				throw(Exception::ParseError);
+			virtual Molecule* read();
 
 			/** Read a System from the GAMESSLogFile.
 			 *  If the GAMESS .log - file contains additional lines apart from the
 			 *  molecule itself, they are stored in this class.
+		   *  @throw Exception::ParseError if a syntax error was encountered
 			 */
-			virtual bool read(System& system)
-				throw(Exception::ParseError);
+			virtual bool read(System& system);
 
 			//@}
 
 			/** @name Accessors
 			 */
 			//@{
-			void newMolecule()
-				;
+			void newMolecule();
 
-			void setMoleculeName(char* name)
-				;			
+			void setMoleculeName(char* name);			
 			
-			void insertAtom(const String& element, float charge, float x, float y, float z)
-				;
+			void insertAtom(const String& element, float charge, float x, float y, float z);
 
-			void insertBond(Index a1, Index a2)
-				;
+			void insertBond(Index a1, Index a2);
 
-			void clearBonds()
-				;
+			void clearBonds();
 
-			void setCurrentCharge(float charge)
-				;
+			void setCurrentCharge(float charge);
 
-			void setUnitConversionFactor(float factor)
-				;
+			void setUnitConversionFactor(float factor);
 
-			void addCoefficient(float coefficient)
-				;
+			void addCoefficient(float coefficient);
 
-			void initializeBasisSet()
-				;
+			void initializeBasisSet();
 
-			QMBasisSet& getBasisSet()
-				;
+			QMBasisSet& getBasisSet();
 
-			const QMBasisSet& getBasisSet() const
-				;
+			const QMBasisSet& getBasisSet() const;
 
-			void addBasisOption(const String& key, const String& value)
-				;
+			void addBasisOption(const String& key, const String& value);
 
-			String getBasisOption(const String& key)
-				;
+			String getBasisOption(const String& key);
 			//@}
 			
 			static State state;
@@ -165,6 +148,7 @@ namespace BALL
 			 *  all the stuff here.
 			 */
 			System *system; // needed for the datasetControl stuff
+
 		protected:
 			virtual void initRead_();
 
