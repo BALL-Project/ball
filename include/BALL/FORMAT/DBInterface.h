@@ -214,13 +214,17 @@ namespace BALL
 		*/
 		bool connect();
 		
-		/// Execute a query
-		QSqlQuery& executeQuery(const String& query_string) 
-			throw(InvalidQuery, NotConnected);
+		/** Execute a query
+		 *  @ŧhrow InvalidQuery if the query was invalid
+		 *  @throw NotConnected if the database connection is down
+		 */
+		QSqlQuery& executeQuery(const String& query_string);
 		
-		/// Execute a prepared query
-		QSqlQuery& executeQuery() 
-			throw(InvalidQuery, NotConnected);
+		/** Execute a prepared query
+		 *  @ŧhrow InvalidQuery if the query was invalid
+		 *  @throw NotConnected if the database connection is down
+		 */
+		QSqlQuery& executeQuery();
 
 		/// Return the internal query.
 		QSqlQuery& query() { return *query_; }

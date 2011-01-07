@@ -129,7 +129,6 @@ namespace BALL
 	}
 
 	QSqlQuery& DBInterface::executeQuery(const String& query_string) 
-		throw(DBInterface::InvalidQuery, DBInterface::NotConnected)
 	{
 		prepare(query_string);
 		return executeQuery();
@@ -138,7 +137,6 @@ namespace BALL
 
 
 	QSqlQuery& DBInterface::executeQuery() 
-		throw(DBInterface::InvalidQuery, DBInterface::NotConnected)
 	{
 		//check if there is a connection active
 		if (!db_.isOpen())
