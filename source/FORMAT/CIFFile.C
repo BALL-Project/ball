@@ -29,7 +29,6 @@ namespace BALL
 	}
 
 	CIFFile::CIFFile(const String& name, File::OpenMode open_mode)
-		throw(Exception::FileNotFound)
 		: File(),
 			molecule_(0),
 			current_datablock_(),
@@ -49,7 +48,6 @@ namespace BALL
 	}
 
 	bool CIFFile::write()
-		throw(File::CannotWrite)
 	{
 		if (!isOpen() || getOpenMode() != std::ios::out)
 		{
@@ -66,7 +64,6 @@ namespace BALL
 	}
 	
 	bool CIFFile::read()
-		throw(Exception::ParseError)
 	{
 		if (!isValid())
 		{
