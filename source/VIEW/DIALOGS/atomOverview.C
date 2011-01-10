@@ -79,7 +79,7 @@ void AtomOverview::accept()
 	parent_->apply(apply_processor_);
 	VIEW::getMainControl()->update(*parent_);
 	VIEW::getMainControl()->sendMessage(*new NewSelectionMessage());
-	VIEW::getMainControl()->setStatusbarText("Applied values", true);
+	VIEW::getMainControl()->setStatusbarText(tr("Applied values"), true);
 }
 
 

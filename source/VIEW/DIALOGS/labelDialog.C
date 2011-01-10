@@ -175,7 +175,7 @@ void LabelDialog::accept()
 	
 	text_box->addItem(text_box->currentText());
 
-	setStatusbarText("Label added.");
+	setStatusbarText(tr("Label added."));
 }
 
 void LabelDialog::editColor()

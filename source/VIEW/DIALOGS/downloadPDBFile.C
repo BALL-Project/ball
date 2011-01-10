@@ -154,7 +154,7 @@ namespace BALL
 					{
 						delete system;
 						show();
-						setStatusbarText("Could not fetch the given PDBFile", true);
+						setStatusbarText(tr("Could not fetch the given PDBFile"), true);
 						return;
 					}
 					else
@@ -179,7 +179,7 @@ namespace BALL
 				}
 				catch(...)
 				{
-					setStatusbarText("download PDB file failed", true);
+					setStatusbarText(tr("download PDB file failed"), true);
 					delete system;
 				}
 			}
@@ -221,7 +221,7 @@ namespace BALL
 		{
 			aborted_ = false;
 			error_   = false;
-			setStatusbarText("Started download, please wait...", true);
+			setStatusbarText(tr("Started download, please wait..."), true);
 			button_abort->setEnabled(true);
 			download->setEnabled(false);
 			pdbId->setEnabled(false);
@@ -232,7 +232,7 @@ namespace BALL
 		{
 			if (!aborted_ && !error_)
 			{
-				setStatusbarText("Finished downloading, please wait...", true);
+				setStatusbarText(tr("Finished downloading, please wait..."), true);
 			}
 			button_abort->setEnabled(false);
 			download->setEnabled(true);

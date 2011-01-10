@@ -149,7 +149,13 @@ namespace BALL
 			entry->writePreferenceEntries(inifile);
 		}
 
-		void ModularWidget::setStatusbarText(String text, bool important)
+		void ModularWidget::setStatusbarText(const String& text, bool important)
+		{
+			if (getMainControl() == 0) return;
+			getMainControl()->setStatusbarText(text, important);
+		}
+
+		void ModularWidget::setStatusbarText(const QString& text, bool important)
 		{
 			if (getMainControl() == 0) return;
 			getMainControl()->setStatusbarText(text, important);

@@ -261,7 +261,10 @@ namespace BALL
 			 		<b>Note:</b> The ModularWidget must be registered to a MainControl.
 					Implemented for convenience.
 			 */
-			virtual void setStatusbarText(String text, bool important = false);
+			virtual void setStatusbarText(const String& text, bool important = false);
+
+			/// @copydoc ModularWidget::setStatusbarText
+			virtual void setStatusbarText(const QString& text, bool important = false);
 
 			///	Implemented for convenience.
 			String getWorkingDir();

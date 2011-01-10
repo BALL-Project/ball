@@ -118,12 +118,12 @@ namespace BALL
 					}
 				}
 				
-				setStatusbarText("Starting scoring...", true);
+				setStatusbarText(tr("Starting scoring..."), true);
 				if(!runScoring_((ConformationSet*)(dfm->getConformationSet())))
 				{
 				 delete dfm->getConformationSet();
 				}
-				setStatusbarText("Scoring finished.", true);
+				setStatusbarText(tr("Scoring finished."), true);
 				return;
 			}
 
@@ -237,7 +237,7 @@ namespace BALL
 			}
 			
 			// Set up the docking algorithm
-			setStatusbarText("Setting up docking algorithm...", true);
+			setStatusbarText(tr("Setting up docking algorithm..."), true);
 			// keep the larger protein in System A and the smaller one in System B
 			// and setup the algorithm
 			System& s1 = *dock_dialog_.getSystem1();

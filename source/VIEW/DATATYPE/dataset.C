@@ -390,6 +390,13 @@ namespace BALL
 			getDatasetControl()->setStatusbarText(text, important);
 		}
 
+		void DatasetController::setStatusbarText(const QString& text, bool important)
+		{
+			if (getDatasetControl() == 0) return;
+
+			getDatasetControl()->setStatusbarText(text, important);
+		}
+
 		void DatasetController::checkMenu(MainControl& mc)
 		{
 			Size selected = getSelectedDatasets().size();

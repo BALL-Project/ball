@@ -1130,12 +1130,12 @@ namespace BALL
 			}
 			catch(Exception::ParseError& e)
 			{
-				setStatusbarText((String)tr("Invalid expression ") + e.getMessage(), true);
+				setStatusbarText(tr("Invalid expression ") + e.getMessage(), true);
 				return 0;
 			}
 			catch(Exception::GeneralException& e)
 			{
-				setStatusbarText(e.getMessage(), true);
+				setStatusbarText(QString(e.getMessage()), true);
 				return 0;
 			}
 
@@ -1151,7 +1151,7 @@ namespace BALL
 				}
 				catch(Exception::GeneralException& e)
 				{
-					setStatusbarText((String)tr("Invalid expression ") + e.getMessage(), true);
+					setStatusbarText(tr("Invalid expression ") + e.getMessage(), true);
 					return 0;
 				}
 

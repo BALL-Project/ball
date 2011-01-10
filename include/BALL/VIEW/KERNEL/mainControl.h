@@ -612,6 +612,9 @@ namespace BALL
 			*/
 			void setStatusbarText(const String& text, bool important = false, bool beep = false);
 
+			/// @copydoc MainControl::setStatusbarText
+			void setStatusbarText(const QString& text, bool important = false, bool beep = false);
+
 			///
 			String getStatusbarText() const;
 	

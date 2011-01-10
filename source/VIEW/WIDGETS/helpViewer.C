@@ -476,7 +476,7 @@ namespace BALL
 
 			if (object2 == 0) 
 			{
-				setStatusbarText("No documentation for this widget available!", true);
+				setStatusbarText(tr("No documentation for this widget available!"), true);
 				return false;
 			}
 

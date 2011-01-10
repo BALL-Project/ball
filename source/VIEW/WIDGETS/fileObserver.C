@@ -53,7 +53,7 @@ void FileObserver::updateFile()
 	MolecularFileDialog* mf = MolecularFileDialog::getInstance(0);
 	if (mf == 0)
 	{
-		setStatusbarText("No MolecularFileDialog available, aborting...", true);
+		setStatusbarText(tr("No MolecularFileDialog available, aborting..."), true);
 		unlockComposites();
 		return;
 	}

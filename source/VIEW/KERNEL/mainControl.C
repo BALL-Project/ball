@@ -1119,7 +1119,7 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			{
 				case 0:
 				{
-					setStatusbarText("", true);
+					setStatusbarText(QString(), true);
 					return;
 				}
 				case 1:
@@ -1330,13 +1330,17 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			}
 		}
 
-
 		void MainControl::setStatusbarText(const String& text, bool important, bool beep)
+		{
+			setStatusbarText(QString(text.c_str()), important, beep);
+		}
+
+		void MainControl::setStatusbarText(const QString& text, bool important, bool beep)
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << text << std::endl;
 #endif
-			if (ascii(message_label_->text()) == text) return;
+			if (message_label_->text() == text) return;
 
 			if (beep) QApplication::beep();
 
@@ -1350,17 +1354,14 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			if (important)
 			{
 				setTextColor(message_label_, ColorRGBA(255,0,0));
- 				Log.info() << text << std::endl;
+ 				Log.info() << ascii(text) << std::endl;
 			}
 			else
 			{
 				setTextColor(message_label_, ColorRGBA(0,0,0));
 			}
 
-			String t(text);
-			if (t.size() && t[t.size() - 1] == '\n') t.truncate(t.size() - 1);
-
-			message_label_->setText(t.c_str());
+			message_label_->setText(text);
 			timer_.start(6000);
 		}
 
