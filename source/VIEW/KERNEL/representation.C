@@ -372,12 +372,19 @@ namespace BALL
 
 					if (color_processor_->start())
 					{
+						bool no_error = true;
 						for (std::list<GeometricObject*>::iterator it = getGeometricObjects().begin(); it != getGeometricObjects().end(); ++it)
 						{
 							if ((*color_processor_)(*it) <= Processor::BREAK)
 							{
+								no_error = false;
 								break;
 							}
+						}
+
+						if(no_error)
+						{
+							color_processor_->finish();
 						}
 					}
 
