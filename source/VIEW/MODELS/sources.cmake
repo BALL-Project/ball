@@ -4,6 +4,7 @@ SET(SOURCES_LIST
 	backboneModel.C
 	ballAndStickModel.C
 	cartoonModel.C
+	colorByGridProcessor.C
 	colorProcessor.C
 	fieldLineCreator.C
 	forceModel.C
