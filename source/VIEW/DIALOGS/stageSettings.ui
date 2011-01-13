@@ -13,11 +13,11 @@
   <property name="windowTitle">
    <string>StageSettings</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_9">
+  <layout class="QHBoxLayout" name="horizontalLayout_13">
    <item>
     <widget class="QStackedWidget" name="widget_stack">
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="Main">
       <layout class="QHBoxLayout" name="horizontalLayout_7">
@@ -896,9 +896,23 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="Stereo">
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
+     <widget class="QTabWidget" name="Stereo">
+      <property name="currentIndex">
+       <number>1</number>
+      </property>
+      <widget class="QWidget" name="VRSettings">
+       <attribute name="title">
+        <string>VR Settings</string>
+       </attribute>
+       <widget class="QWidget" name="layoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>174</width>
+          <height>259</height>
+         </rect>
+        </property>
         <layout class="QVBoxLayout" name="verticalLayout_5">
          <item>
           <widget class="QGroupBox" name="groupBox1_2_2">
@@ -906,7 +920,7 @@
             <string/>
            </property>
            <property name="title">
-            <string>Stereo: Eye points distance</string>
+            <string>Eye points distance</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignHCenter</set>
@@ -979,7 +993,7 @@
             <string/>
            </property>
            <property name="title">
-            <string>Stereo: focal distance</string>
+            <string>Focal distance</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignHCenter</set>
@@ -1047,19 +1061,6 @@
           </widget>
          </item>
          <item>
-          <spacer name="verticalSpacer_4">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
           <widget class="QCheckBox" name="swap_sss_button">
            <property name="text">
             <string>Swap side by side stereo</string>
@@ -1067,87 +1068,104 @@
           </widget>
          </item>
         </layout>
-       </item>
-       <item>
+       </widget>
+       <widget class="QWidget" name="layoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>170</x>
+          <y>0</y>
+          <width>276</width>
+          <height>261</height>
+         </rect>
+        </property>
         <layout class="QVBoxLayout" name="verticalLayout_4">
          <item>
-          <layout class="QGridLayout" name="gridLayout_4">
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_4">
-             <property name="text">
-              <string>eye level: </string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLineEdit" name="eye_level_lineEdit">
-             <property name="text">
-              <string>180</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight</set>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QLabel" name="label_5">
-             <property name="text">
-              <string>cm</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_3">
-             <property name="text">
-              <string>eye distance: </string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QLineEdit" name="eye_distance_lineEdit">
-             <property name="text">
-              <string>6</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight</set>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2">
-            <widget class="QLabel" name="label_6">
-             <property name="text">
-              <string>cm</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_2">
-             <property name="text">
-              <string>distance to screen: </string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QLineEdit" name="screen_distance_lineEdit">
-             <property name="text">
-              <string>150</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight</set>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="2">
-            <widget class="QLabel" name="label_7">
-             <property name="text">
-              <string>cm</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
+          <widget class="QGroupBox" name="groupBox_2">
+           <property name="title">
+            <string>Viewer Position</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_9">
+            <item row="0" column="0">
+             <layout class="QGridLayout" name="gridLayout_4">
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_4">
+                <property name="text">
+                 <string>eye level: </string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLineEdit" name="eye_level_lineEdit">
+                <property name="text">
+                 <string>180</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight</set>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QLabel" name="label_5">
+                <property name="text">
+                 <string>cm</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_3">
+                <property name="text">
+                 <string>eye distance: </string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLineEdit" name="eye_distance_lineEdit">
+                <property name="text">
+                 <string>6</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight</set>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QLabel" name="label_6">
+                <property name="text">
+                 <string>cm</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="label_2">
+                <property name="text">
+                 <string>distance to screen: </string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QLineEdit" name="screen_distance_lineEdit">
+                <property name="text">
+                 <string>150</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight</set>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="2">
+               <widget class="QLabel" name="label_7">
+                <property name="text">
+                 <string>cm</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
          </item>
          <item>
-          <spacer name="verticalSpacer_3">
+          <spacer name="verticalSpacer_4">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
            </property>
@@ -1190,8 +1208,415 @@
           </layout>
          </item>
         </layout>
-       </item>
-      </layout>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="DisplaySettings">
+       <attribute name="title">
+        <string>Display Settings</string>
+       </attribute>
+       <widget class="QWidget" name="layoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>422</width>
+          <height>116</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_10">
+         <item>
+          <widget class="QGroupBox" name="controlScreen_groupBox">
+           <property name="toolTip">
+            <string>Specify the control display</string>
+           </property>
+           <property name="title">
+            <string>Control Screen</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_10">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_10">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QComboBox" name="controlScreen_comboBox">
+              <item>
+               <property name="text">
+                <string>Select a Screen</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QComboBox" name="controlRenderer_comboBox">
+              <item>
+               <property name="text">
+                <string>Select a Renderer</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="stereoScreens_groupBox">
+           <property name="toolTip">
+            <string>Specify the stereo displays</string>
+           </property>
+           <property name="title">
+            <string>Stereo Screens</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_11">
+            <item row="0" column="0">
+             <layout class="QVBoxLayout" name="verticalLayout_12">
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout">
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_9">
+                  <item>
+                   <widget class="QLabel" name="label_8">
+                    <property name="text">
+                     <string>Left Eye</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QComboBox" name="leftEyeScreen_comboBox">
+                    <item>
+                     <property name="text">
+                      <string>Select a Screen</string>
+                     </property>
+                    </item>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_11">
+                  <item>
+                   <widget class="QLabel" name="label_9">
+                    <property name="text">
+                     <string>Right Eye</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QComboBox" name="rightEyeScreen_comboBox">
+                    <item>
+                     <property name="text">
+                      <string>Select a Screen</string>
+                     </property>
+                    </item>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="QComboBox" name="stereoScreenRenderer_comboBox">
+                <item>
+                 <property name="text">
+                  <string>Select a Renderer</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>370</y>
+          <width>171</width>
+          <height>24</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_9">
+         <item>
+          <widget class="QPushButton" name="identifyDisplays_button">
+           <property name="text">
+            <string>Identify Displays</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_6">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_3">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>140</y>
+          <width>571</width>
+          <height>208</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string>Select a Stereo mode</string>
+        </property>
+        <property name="title">
+         <string>Stereo Modes</string>
+        </property>
+        <widget class="QGroupBox" name="interlaced_groupBox">
+         <property name="geometry">
+          <rect>
+           <x>9</x>
+           <y>30</y>
+           <width>553</width>
+           <height>42</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>The parameters for interlaced stereo</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignBottom|Qt::AlignRight|Qt::AlignTrailing</set>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_12">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="interlaced_checkBox">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="text">
+             <string>Interlaced</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <spacer name="horizontalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>51</width>
+              <height>21</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="interlaced_label">
+            <property name="text">
+             <string>stride</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLineEdit" name="interlaced_stride"/>
+          </item>
+          <item row="0" column="4">
+           <widget class="QLabel" name="interlaced_label_4">
+            <property name="text">
+             <string>px</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="5">
+           <spacer name="horizontalSpacer_7">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="6">
+           <widget class="QLabel" name="interlaced_label_2">
+            <property name="text">
+             <string>offset</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="7">
+           <widget class="QLineEdit" name="interlaced_offset"/>
+          </item>
+          <item row="0" column="8">
+           <widget class="QLabel" name="interlaced_label_5">
+            <property name="text">
+             <string>px</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QGroupBox" name="sideBySide_groupBox">
+         <property name="geometry">
+          <rect>
+           <x>9</x>
+           <y>76</y>
+           <width>551</width>
+           <height>42</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>The parameters for side by side stereo</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignBottom|Qt::AlignRight|Qt::AlignTrailing</set>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_13">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="interlaced_checkBox_2">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="text">
+             <string>Side by Side</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <spacer name="horizontalSpacer_5">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="sideBySide_label_6">
+            <property name="text">
+             <string>stride</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLineEdit" name="sideBySide_stride"/>
+          </item>
+          <item row="0" column="4">
+           <widget class="QLabel" name="interlaced_label_7">
+            <property name="text">
+             <string>px</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="5">
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="6">
+           <widget class="QLabel" name="sideBySide_label_3">
+            <property name="text">
+             <string>offset</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="7">
+           <widget class="QLineEdit" name="sideBySide_offset"/>
+          </item>
+          <item row="0" column="8">
+           <widget class="QLabel" name="sideBySide_label_4">
+            <property name="text">
+             <string>px</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QCheckBox" name="topBottom_checkBox">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>9</x>
+           <y>122</y>
+           <width>91</width>
+           <height>23</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Top Bottom</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="active_checkBox">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>9</x>
+           <y>149</y>
+           <width>102</width>
+           <height>23</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Active Stereo</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="anaglyph_checkBox">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>9</x>
+           <y>176</y>
+           <width>78</width>
+           <height>23</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Anaglyph</string>
+         </property>
+        </widget>
+       </widget>
+      </widget>
      </widget>
      <widget class="QWidget" name="OpenGL">
       <layout class="QVBoxLayout" name="verticalLayout_8">
