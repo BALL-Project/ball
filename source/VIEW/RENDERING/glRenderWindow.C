@@ -171,12 +171,6 @@ namespace BALL
 			float newWidth = (origWidth + fabs(stereo_delta_));
 			float newRatio = origWidth / newWidth;
 			float deltaRatio = 1. - newRatio;
-			if (newRatio != 1.)
-			{
-				std::cout << newRatio << std::endl;
-			}
-			
-
 				
 			glBegin(GL_QUADS);
 			
@@ -331,7 +325,6 @@ namespace BALL
 		{
 			switch(static_cast<EventsIDs>(evt->type())) {
 				case RENDER_TO_BUFFER_FINISHED_EVENT:
-					printf("refreshing\n");
 					refresh();
 					swapBuffers();
 					break;
