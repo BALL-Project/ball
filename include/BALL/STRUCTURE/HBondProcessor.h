@@ -49,7 +49,7 @@ namespace BALL
                          HBondProcessor::PredictionMethod::KABSCH_SANDER);
    		   protein->apply(hbp);  
         
-   		   std::vector<std::vector<Position> > h_bond_indices = hbp.getBackboneHBondPairs();
+   		   std::vector<std::vector<Position> > h_bond_indices = hbp.getBackboneHBondPattern();
 				 std::vector<HBondProcessor::HBond>  h_bonds        = hbp.getHBonds(); 
 				 for (Size i=0; i<h_bonds.size(); ++i)
    			 {
@@ -59,7 +59,7 @@ namespace BALL
          }
       \endcode
 
-	 * 	The artifical indices of method getBackboneHBondPairs() are 
+	 * 	The artifical indices of method getBackboneHBondPattern() are 
 	 * 	created by iterating with the ResidueIterator and
 	 * 	assigning ascending numbers starting with zero.
 	 * 	NOTE: After finishing the processor, the ResidueIterator may 
@@ -243,8 +243,11 @@ namespace BALL
 			///
 			std::vector< HBond> getHBonds() {return h_bonds_;}
 
-			///
-			const std::vector< std::vector<Position> >& getBackboneHBondPairs() const;
+			///	
+			BALL_DEPRECATED const std::vector< std::vector<Position> >& getBackboneHBondPairs() const;
+			
+			/// computes the HBond pattern as needed, e.g. by the SecondaryStructureProcessor
+			const std::vector< std::vector<Position> >& getBackboneHBondPattern() const;
 
 			/// 
 			const std::vector<ResidueData>& getResidueData() const;

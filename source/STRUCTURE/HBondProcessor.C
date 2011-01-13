@@ -220,7 +220,17 @@ namespace BALL
 		// we find the first complete residue and use it instead 
 		for ( ; +resit ; ++resit)
 		{	
-			if (!resit->isAminoAcid()) continue;
+			if (!resit->isAminoAcid()) 
+			{
+				ResidueData pos;
+				pos.is_complete = false;
+
+				pos.number = j++;
+				pos.res = &(*resit);
+
+				residue_data_.push_back(pos);
+				continue;
+			}
 
 			bool haveO = false;
 			bool haveN = false;
@@ -277,10 +287,9 @@ namespace BALL
 					pos.is_complete = false;
 				}
 			}
-
 			residue_data_.push_back(pos);  
 			j++;
-		}	
+		}
 	}
 
  	bool HBondProcessor::finish()
@@ -638,6 +647,11 @@ namespace BALL
 	}
 
 	const std::vector< std::vector<Position> >& HBondProcessor::getBackboneHBondPairs() const
+	{
+		return backbone_h_bond_pairs_;
+	}
+		
+	const std::vector< std::vector<Position> >& HBondProcessor::getBackboneHBondPattern() const
 	{
 		return backbone_h_bond_pairs_;
 	}
