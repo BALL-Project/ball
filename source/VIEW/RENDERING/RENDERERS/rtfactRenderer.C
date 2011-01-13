@@ -88,16 +88,52 @@ namespace BALL
 			}
 		}
 
+		void RTfactRenderer::setSize(float width, float height)
+		{
+			width_ = width;
+			height_ = height;
+
+			if (width > height)
+			{
+				x_scale_ = width / (height * 2);
+				y_scale_ = 0.5;
+			}
+			else
+			{
+				x_scale_ = 0.5;
+				y_scale_ = height / (width * 2);
+			}
+
+			setFrustum(1.5f, RTfact::Packet<1,float>::C_INFINITY, -2.f * x_scale_, 2.f * x_scale_, 2.f * y_scale_, -2.f * y_scale_);
+		}
+
+
 		void RTfactRenderer::getFrustum(float& near_f, float& far_f, float& left_f, float& right_f, float& top_f, float& bottom_f)
 		{
 			RTfact::Remote::FrustumParameters rtfact_frustum = m_renderer.getFrustum();
 			
 			near_f   = rtfact_frustum.nearPlane;
 			far_f    = rtfact_frustum.farPlane;
-			left_f   = rtfact_frustum.left;
-			right_f  = rtfact_frustum.right;
-			top_f    = rtfact_frustum.top;
-			bottom_f = rtfact_frustum.bottom;
+			left_f   = rtfact_frustum.left   * 2.f*x_scale_;
+			right_f  = rtfact_frustum.right  * 2.f*x_scale_;
+			top_f    = rtfact_frustum.top    * 2.f*y_scale_;
+			bottom_f = rtfact_frustum.bottom * 2.f*y_scale_;
+		}
+
+		void RTfactRenderer::setFrustum(float near_f, float far_f, float left_f, float right_f, float top_f, float bottom_f)
+		{
+			RTfact::Remote::FrustumParameters rtfact_frustum;
+			
+			rtfact_frustum.nearPlane = near_f;
+			rtfact_frustum.farPlane  = far_f;
+
+			rtfact_frustum.left  = left_f  / (2.f*x_scale_);
+			rtfact_frustum.right = right_f / (2.f*x_scale_);
+
+			rtfact_frustum.top    = top_f     / (2.f*y_scale_);
+			rtfact_frustum.bottom = bottom_f  / (2.f*y_scale_);
+
+			m_renderer.setFrustum(rtfact_frustum);
 		}
 
 		void RTfactRenderer::setLights(bool reset_all)

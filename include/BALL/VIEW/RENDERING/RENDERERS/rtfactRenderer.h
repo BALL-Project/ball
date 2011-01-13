@@ -82,7 +82,10 @@ namespace BALL
 				virtual void pickObjects(Position x1, Position y1, Position x2, Position y2,
 				                         std::list<GeometricObject*>& objects);
 
+				virtual void setSize(float width, float height);
+
 				virtual void getFrustum(float& near_f, float& far_f, float& left_f, float& right_f, float& top_f, float& bottom_f);
+				virtual void setFrustum(float near_f, float far_f, float left_f, float right_f, float top_f, float bottom_f);
 
 				virtual void prepareBufferedRendering(const Stage& stage);
 				virtual void renderToBufferImpl(FrameBufferPtr buffer);
@@ -147,6 +150,9 @@ namespace BALL
 				Vector3 last_camera_position;
 				Vector3 last_camera_view_vec;
 				Vector3 last_camera_lookup;
+
+				float x_scale_;
+				float y_scale_;
 		};
 
 
