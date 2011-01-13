@@ -196,7 +196,7 @@ namespace BALL
 						std::cerr << "Light source type not supported!" << std::endl;
 						break;
 				}
-				float intensity = it->getIntensity()*100;
+				float intensity = it->getIntensity();
 				ColorRGBA const& color = it->getColor();
 
 				lights_[current_light]->setParam("intensity", float3((float)color.getRed()*intensity,(float)color.getGreen()*intensity,(float)color.getBlue()*intensity));
