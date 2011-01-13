@@ -50,6 +50,7 @@
 #include <QtGui/QToolBar>
 #include <QtGui/QActionGroup>
 #include <QtGui/QFont>
+#include <QtGui/QPicture>
 
 #include <boost/shared_ptr.hpp>
 
@@ -89,6 +90,7 @@ namespace BALL
 		class TransformationEvent6D;
 		class MotionTrackingEvent;
 		class ButtonEvent;
+		class RenderToBufferFinishedEvent;
 
 		/**	Scene is the main visualization widget that shows the graphical Representation 's.
 				To do this, the class Scene must be a child of the MainControl.
@@ -779,6 +781,10 @@ namespace BALL
 				 */
 				void handleControlSelectionMessage_(ControlSelectionMessage* csm);
 
+				/** React to RenderToBufferFinishedEvents
+				 */
+				virtual void handleRenderToBufferFinishedEvent_(RenderToBufferFinishedEvent* evt);
+
 				/** Render a text at the given position.
 				 *  Currently, this always uses a 16pt Arial bold font.
 				 *  TODO: this should be configurable in the GUI.
@@ -1056,6 +1062,9 @@ namespace BALL
 				Index stereo_right_eye_;
 
 				QFont default_font_;
+
+				QPicture overlay_;
+				bool has_overlay_;
 		};
 
 

@@ -664,41 +664,6 @@ namespace BALL
 				}
 			}
 
-			// then, estimate fps if necessary and add to the render target
-			String fps_string;
-			QPoint fps_point;
-
-			if (show_fps_)
-				fps_string = createFPSInfo_();
-
-			// draw all renderable texts and swap the new buffers in
-			for (Position i=0; i<renderers_.size(); ++i)
-			{
-				if (renderers_[i]->isPaused())
-					continue;
-
-				renderers_[i]->makeCurrent();
-
-				QPaintDevice* current_dev = dynamic_cast<QPaintDevice*>(renderers_[i]->target);
-				if (show_fps_ && current_dev)
-				{
-					QFontMetrics fm(default_font_);
-					QRect r = fm.boundingRect(fps_string.c_str());
-					QPointF fps_point((float)current_dev->width() - 20 - r.width(), 20);
-
-					renderText_(fps_point, fps_string.c_str(), current_dev);
-				}
-
-				if (info_string_ != "")
-				{
-					// account for differently sized windows
-					float xscale = current_dev->width()  / width();
-					float yscale = current_dev->height() / height();
-
-					renderText_(QPointF(info_point_.x()*xscale, info_point_.y()*yscale), info_string_.c_str(), current_dev);
-				}
-			}
-
 			update_running_ = false;
 		}
 
@@ -1831,6 +1796,127 @@ namespace BALL
 
 		//##########################EVENTS#################################
 
+		void Scene::handleRenderToBufferFinishedEvent_(RenderToBufferFinishedEvent* evt)
+		{
+			RenderSetup* renderer = evt->getRenderer();
+
+			renderer->makeCurrent();
+			// NOTE: GLRenderers currently render in the GUI thread!
+			if (RTTI::isKindOf<GLRenderer>(*(renderer->renderer)))
+				renderer->renderToBuffer();
+			else
+				renderer->target->refresh();
+
+			renderer->setBufferReady(true);
+
+			// then, estimate fps if necessary and add to the render target
+			String fps_string;
+			QPoint fps_point;
+
+			if (show_fps_)
+				fps_string = createFPSInfo_();
+
+			// draw all renderable texts 
+			// TODO: does this work for dependent renderers?
+			QPaintDevice* current_dev = dynamic_cast<QPaintDevice*>(renderer->target);
+
+			if (show_fps_ && current_dev)
+			{
+				QFontMetrics fm(default_font_);
+				QRect r = fm.boundingRect(fps_string.c_str());
+				QPointF fps_point((float)current_dev->width() - 20 - r.width(), 20);
+
+				renderText_(fps_point, fps_string.c_str(), current_dev);
+			}
+
+			if (info_string_ != "")
+			{
+				// account for differently sized windows
+				float xscale = current_dev->width()  / width();
+				float yscale = current_dev->height() / height();
+
+				renderText_(QPointF(info_point_.x()*xscale, info_point_.y()*yscale), info_string_.c_str(), current_dev);
+			}
+
+			// and paint our overlay, if we have one
+			if (has_overlay_)
+			{
+				QPainter painter(current_dev);
+				painter.drawPicture(0, 0, overlay_);
+				painter.end();
+			}
+			// implements a trivial synchronization mechanism: if
+			// two renderers depend on one another, their images will
+			// be swapped in at the same time
+			std::deque<boost::shared_ptr<RenderSetup> >& dependent_renderers = renderer->getDependentRenderers();
+
+			// find out if all renderers are ready
+			bool ready_to_swap = true;
+			for (std::deque<boost::shared_ptr<RenderSetup> >::iterator render_it  = dependent_renderers.begin();
+					render_it != dependent_renderers.end(); ++render_it)
+			{
+				ready_to_swap &= (*render_it)->bufferIsReady();
+			}
+
+			if (ready_to_swap)
+			{
+				// paint all buffers
+				if (RTTI::isKindOf<GLRenderWindow>(*(renderer->target)))
+					static_cast<GLRenderWindow*>(renderer->target)->swapBuffers();
+
+				if (renderer->isContinuous() && (renderer->getTimeToLive() != 0))
+				{
+					renderer->loop_mutex.lock();
+					renderer->wait_for_render.wakeAll();
+					renderer->loop_mutex.unlock();
+				}
+
+				for (std::deque<boost::shared_ptr<RenderSetup> >::iterator render_it  = dependent_renderers.begin();
+						render_it != dependent_renderers.end(); ++render_it)
+				{
+					(*render_it)->makeCurrent();
+
+					if (RTTI::isKindOf<GLRenderWindow>(*((*render_it)->target)))
+						static_cast<GLRenderWindow*>((*render_it)->target)->swapBuffers();
+
+					if ((*render_it)->isContinuous() && ((*render_it)->getTimeToLive() != 0))
+					{
+						(*render_it)->loop_mutex.lock();
+						(*render_it)->wait_for_render.wakeAll();
+						(*render_it)->loop_mutex.unlock();
+					}
+				}
+			}
+
+			// has the renderer reached the end of its live span?
+			if (renderer->getTimeToLive() == 0)
+			{
+				renderer->useContinuousLoop(false);
+				renderer->stop();
+
+				renderer->loop_mutex.lock();
+				renderer->wait_for_render.wakeAll();
+				renderer->loop_mutex.unlock();
+
+				renderer->wait(100);
+
+				std::vector<boost::shared_ptr<RenderSetup> >::iterator it;
+
+				for (it = renderers_.begin(); it != renderers_.end(); ++it)
+				{
+					if (it->get() == renderer)
+					{
+						delete((*it)->renderer);
+						delete((*it)->target);
+
+						renderers_.erase(it);
+
+						break;
+					}
+				}
+			}
+		}
+
 		void Scene::customEvent(QEvent* evt)
 		{
 			switch(static_cast<EventsIDs>(evt->type())) {
@@ -1850,90 +1936,9 @@ namespace BALL
 					onNotify(static_cast<NotificationEvent*>(evt)->getMessage());
 					notify_(static_cast<NotificationEvent*>(evt)->getMessage());
 					break;
-				case RENDER_TO_BUFFER_FINISHED_EVENT: {
-					RenderSetup* renderer = static_cast<RenderToBufferFinishedEvent*>(evt)->getRenderer();
-
-					renderer->makeCurrent();
-					// NOTE: GLRenderers currently render in the GUI thread!
-					if (RTTI::isKindOf<GLRenderer>(*(renderer->renderer)))
-						renderer->renderToBuffer();
-					else
-						renderer->target->refresh();
-
-					renderer->setBufferReady(true);
-
-					// implements a trivial synchronization mechanism: if
-					// two renderers depend on one another, their images will
-					// be swapped in at the same time
-					std::deque<boost::shared_ptr<RenderSetup> >& dependent_renderers = renderer->getDependentRenderers();
-
-					// find out if all renderers are ready
-					bool ready_to_swap = true;
-					for (std::deque<boost::shared_ptr<RenderSetup> >::iterator render_it  = dependent_renderers.begin();
-							render_it != dependent_renderers.end(); ++render_it)
-					{
-						ready_to_swap &= (*render_it)->bufferIsReady();
-					}
-
-					if (ready_to_swap)
-					{
-						// paint all buffers
-						if (RTTI::isKindOf<GLRenderWindow>(*(renderer->target)))
-							static_cast<GLRenderWindow*>(renderer->target)->swapBuffers();
-
-						if (renderer->isContinuous() && (renderer->getTimeToLive() != 0))
-						{
-							renderer->loop_mutex.lock();
-							renderer->wait_for_render.wakeAll();
-							renderer->loop_mutex.unlock();
-						}
-
-						for (std::deque<boost::shared_ptr<RenderSetup> >::iterator render_it  = dependent_renderers.begin();
-								render_it != dependent_renderers.end(); ++render_it)
-						{
-							(*render_it)->makeCurrent();
-
-							if (RTTI::isKindOf<GLRenderWindow>(*((*render_it)->target)))
-								static_cast<GLRenderWindow*>((*render_it)->target)->swapBuffers();
-
-							if ((*render_it)->isContinuous() && ((*render_it)->getTimeToLive() != 0))
-							{
-								(*render_it)->loop_mutex.lock();
-								(*render_it)->wait_for_render.wakeAll();
-								(*render_it)->loop_mutex.unlock();
-							}
-						}
-					}
-
-					// has the renderer reached the end of its live span?
-					if (renderer->getTimeToLive() == 0)
-					{
-						renderer->useContinuousLoop(false);
-						renderer->stop();
-
-						renderer->loop_mutex.lock();
-						renderer->wait_for_render.wakeAll();
-						renderer->loop_mutex.unlock();
-
-						renderer->wait(100);
-
-						std::vector<boost::shared_ptr<RenderSetup> >::iterator it;
-
-						for (it = renderers_.begin(); it != renderers_.end(); ++it)
-						{
-							if (it->get() == renderer)
-							{
-								delete((*it)->renderer);
-								delete((*it)->target);
-
-								renderers_.erase(it);
-
-								break;
-							}
-						}
-					}
+				case RENDER_TO_BUFFER_FINISHED_EVENT: 
+					handleRenderToBufferFinishedEvent_(static_cast<RenderToBufferFinishedEvent*>(evt));
 					break;
-				}
 				default:
 					break;
 			}
@@ -2123,8 +2128,9 @@ namespace BALL
 
 			Vector2 draw_from = renderers_[main_renderer_]->map3DToViewport(current_atom_->getPosition());
 
-			// paint the line representing the offered bond
-			QPainter p(main_display_);
+			// paint the line representing the offered bond into a suitable QPicture which will
+			// later be painted on top of our display
+			QPainter p(&overlay_);
 
 			QColor color;
 			stage_->getBackgroundColor().getInverseColor().get(color);
@@ -2138,14 +2144,12 @@ namespace BALL
 			p.drawLine(QPointF(draw_from.x, draw_from.y), QPointF(draw_to.x, draw_to.y));
 			p.end();
 
-			GLRenderWindow* gt = dynamic_cast<GLRenderWindow*>(renderers_[main_renderer_]->target);
-			if (gt) gt->swapBuffers();
+			has_overlay_ = true;
 
 			x_window_pos_old_ = x_window_pos_new_;
 			y_window_pos_old_ = y_window_pos_new_;
 			x_window_pos_new_ = e->x();
 			y_window_pos_new_ = e->y();
-
 
 			///////////////////////////////////////////////////
 		}
@@ -3984,6 +3988,7 @@ namespace BALL
 			atom_number_ = 0;
 			temp_move_ = false;
 			default_font_ = QFont("Arial", 16., QFont::Bold);
+			has_overlay_ = false;
 		}
 
 		void Scene::setCursor(String c)
@@ -4067,6 +4072,8 @@ namespace BALL
 		// TODO: make renderer dependent on current target
 		void Scene::mouseReleaseEvent(QMouseEvent* e)
 		{
+			has_overlay_ = false;
+
 			if (temp_move_)
 			{
 				deselect_();
