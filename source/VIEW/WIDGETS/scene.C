@@ -3388,13 +3388,14 @@ namespace BALL
 			// first clean up
 			exitStereo();
 
-			QWidget* screen = QApplication::desktop()->screen(1);
+			QDesktopWidget* desktop = QApplication::desktop();
+			QRect screen_geom = QApplication::desktop()->screenGeometry(0);
 
-			GLRenderWindow* left_widget = new GLRenderWindow(screen, "left eye", Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
+			GLRenderWindow* left_widget = new GLRenderWindow(0, "left eye", Qt::FramelessWindowHint);
 			left_widget->makeCurrent();
 			left_widget->init();
-			left_widget->resize(screen->width() / 2, screen->height());
-			left_widget->move(0, 0);
+			left_widget->resize(screen_geom.width() / 2, screen_geom.height());
+			left_widget->move(screen_geom.x(), screen_geom.y());
 
 			GLRenderer*   left_renderer = new GLRenderer;
 			left_renderer->init(*this);
@@ -3412,11 +3413,11 @@ namespace BALL
 			stereo_left_eye_ = renderers_.size()-1;
 			left_rs->start();
 
-			GLRenderWindow* right_widget = new GLRenderWindow(screen, "right eye", Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
+			GLRenderWindow* right_widget = new GLRenderWindow(0, "right eye", Qt::FramelessWindowHint);
 			right_widget->makeCurrent();
 			right_widget->init();
-			right_widget->resize(screen->width() / 2, screen->height());
-			right_widget->move(screen->width() / 2, 0);
+			right_widget->resize(screen_geom.width() / 2, screen_geom.height());
+			right_widget->move(screen_geom.x() + screen_geom.width() / 2, screen_geom.y());
 
 			GLRenderer*   right_renderer = new GLRenderer;
 			right_renderer->init(*this);

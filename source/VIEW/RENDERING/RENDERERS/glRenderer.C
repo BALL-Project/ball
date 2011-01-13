@@ -2100,8 +2100,8 @@ namespace BALL
 
 			float ndfl    = near_ / focal_length;
 
-			float new_left   = left_  - eye_separation * ndfl;
-			float new_right  = right_ - eye_separation * ndfl;
+			float new_left   = 2*left_  - eye_separation * ndfl;
+			float new_right  = 2*right_ - eye_separation * ndfl;
 
 			glMatrixMode(GL_PROJECTION);
 
