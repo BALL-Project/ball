@@ -3397,9 +3397,15 @@ namespace BALL
 			left_widget->resize(screen_geom.width() / 2, screen_geom.height());
 			left_widget->move(screen_geom.x(), screen_geom.y());
 
+#ifndef BALL_HAS_RTFACT
 			GLRenderer*   left_renderer = new GLRenderer;
 			left_renderer->init(*this);
 			left_renderer->enableVertexBuffers(want_to_use_vertex_buffer_);
+#else
+			t_RaytracingRenderer*  left_renderer = new t_RaytracingRenderer();
+			left_renderer->init(*this);
+			left_renderer->setFrameBufferFormat(left_widget->getFormat());
+#endif
 
 			left_widget->show();
 			left_renderer->setSize(left_widget->width(), left_widget->height());
@@ -3419,10 +3425,15 @@ namespace BALL
 			right_widget->resize(screen_geom.width() / 2, screen_geom.height());
 			right_widget->move(screen_geom.x() + screen_geom.width() / 2, screen_geom.y());
 
+#ifndef BALL_HAS_RTFACT
 			GLRenderer*   right_renderer = new GLRenderer;
 			right_renderer->init(*this);
 			right_renderer->enableVertexBuffers(want_to_use_vertex_buffer_);
-
+#else
+			t_RaytracingRenderer*  right_renderer = new t_RaytracingRenderer();
+			right_renderer->init(*this);
+			right_renderer->setFrameBufferFormat(right_widget->getFormat());
+#endif
 			right_widget->show();
 			right_renderer->setSize(right_widget->width(), right_widget->height());
 
@@ -3438,6 +3449,7 @@ namespace BALL
 			gl_renderer_->setStereoMode(GLRenderer::DUAL_VIEW_STEREO);
 
 			setFullScreen(false);
+			applyPreferences();
 			updateGL();
 
 			no_stereo_action_->setChecked(false);
