@@ -920,7 +920,6 @@ namespace BALL
 	}
 
 	bool NMRStarFile::read() 
-		throw(Exception::ParseError)
 	{
 
 #ifdef NMRSTAR_DEBUG
@@ -1365,8 +1364,8 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 			if (datablocks_[db].hasSaveframeCategory("entry_information"))
 			{
 				vector<CIFFile::SaveFrame> saveframes = datablocks_[db].getSaveframesByCategory("entry_information");
-				if (saveframes.size() > 1)
-					Log.warn() << "NMRStarFile::readEntryInformation_(): Warning: NMRFile has more than one entry information saveframe! " << std::endl; 
+//				if (saveframes.size() > 1)
+//					Log.warn() << "NMRStarFile::readEntryInformation_(): Warning: NMRFile has more than one entry information saveframe! " << std::endl; 
 				for (Size sf=0; sf<saveframes.size(); sf++)
 				{
 					if (saveframes[sf].hasItem("_Entry_type"))
@@ -1397,8 +1396,8 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 			if (datablocks_[db].hasSaveframeCategory("molecular_system"))
 			{
 				vector<CIFFile::SaveFrame> saveframes = datablocks_[db].getSaveframesByCategory("molecular_system");
-				if (saveframes.size() > 1)
-					Log.warn() << "NMRStarFile::readMolSystem_(): Warning: NMRFile has more than one molecular system saveframe! " << std::endl; 
+//				if (saveframes.size() > 1)
+//					Log.warn() << "NMRStarFile::readMolSystem_(): Warning: NMRFile has more than one molecular system saveframe! " << std::endl; 
 				for (Size sf = 0; sf < saveframes.size(); sf++)
 				{
 					// read the paired entries
@@ -1429,11 +1428,9 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 
 					// in dalton
 					if (saveframes[sf].hasItem("_System_molecular_weight"))
-						molecular_system_.system_molecular_weight = 
-							( isValidSingleValue_(saveframes[sf].getItemValue("_System_molecular_weight")) 
-								? saveframes[sf].getItemValue("_System_molecular_weight").toFloat()
-								:  FLOAT_VALUE_NA  );
-					else  molecular_system_.system_molecular_weight = FLOAT_VALUE_NA;
+						molecular_system_.system_molecular_weight = valueToFloat_(saveframes[sf].getItemValue("_System_molecular_weight"));
+					else  
+						molecular_system_.system_molecular_weight = FLOAT_VALUE_NA;
 
 					//
 					// read the loop entries
@@ -1501,8 +1498,8 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 			if (datablocks_[db].hasSaveframeCategory("monomeric_polymer"))
 			{
 				vector<CIFFile::SaveFrame> saveframes = datablocks_[db].getSaveframesByCategory("monomeric_polymer");
-				if (saveframes.size() > 1)
-					Log.warn() << "NMRStarFile::readMonomericPolymers_(): Warning: NMRFile has more than one monomeric polymer saveframe!" << std::endl; 
+//				if (saveframes.size() > 1)
+//					Log.warn() << "NMRStarFile::readMonomericPolymers_(): Warning: NMRFile has more than one monomeric polymer saveframe!" << std::endl; 
 				for (Size sf = 0; sf < saveframes.size(); sf++)
 				{
 					NMRStarFile::MonomericPolymer mp;
@@ -1526,20 +1523,18 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 					else   mp.name_variant = "";
 					
 					if (saveframes[sf].hasItem("_Molecular_mass"))
-						mp.molecular_mass = 
-							( isValidSingleValue_(saveframes[sf].getItemValue("_Molecular_mass")) 
-								? saveframes[sf].getItemValue("_Molecular_mass").toFloat() :  FLOAT_VALUE_NA );
-					else  mp.molecular_mass = 0.f;
+						mp.molecular_mass = valueToFloat_(saveframes[sf].getItemValue("_Molecular_mass"));
+					else  
+						mp.molecular_mass = 0.f;
 					
 					if (saveframes[sf].hasItem("_Details"))
 						mp.details = saveframes[sf].getItemValue("_Details").trim(";\n");
 					else   mp.details = "";
 
 					if (saveframes[sf].hasItem("_Residue_count"))
-						mp.number_of_residues = 
-							( isValidSingleValue_(saveframes[sf].getItemValue("_Residue_count")) 
-								? saveframes[sf].getItemValue("_Residue_count").toInt() : INT_VALUE_NA );
-					else  mp.number_of_residues  = 0;
+						mp.number_of_residues = valueToInt_(saveframes[sf].getItemValue("_Residue_count"));
+					else  
+						mp.number_of_residues  = 0;
 
 					if (saveframes[sf].hasItem("_Mol_residue_sequence"))
 					{
@@ -1585,24 +1580,24 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 									if ( pos > -1) hdb.entry_mol_name = current_loop->values[line][pos];
 
 									pos = current_loop->getKeyIndex("_Sequence_query_to_submitted_percentage");
-									hdb.seq_to_submitted_percentage  = (((pos>-1 ) && isValidSingleValue_(current_loop->values[line][pos])) 
-																				? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
+									hdb.seq_to_submitted_percentage  = ((pos>-1 ) ? valueToFloat_(current_loop->values[line][pos]) 
+																											          : FLOAT_VALUE_NA);
 
 									pos = current_loop->getKeyIndex("_Sequence_subject_length");
-									hdb.subject_length  = (((pos>-1 ) && isValidSingleValue_(current_loop->values[line][pos])) 
-																				? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
+									hdb.subject_length  = ((pos>-1 ) ? valueToFloat_(current_loop->values[line][pos])
+																				           : FLOAT_VALUE_NA);
 			
 									pos = current_loop->getKeyIndex("_Sequence_identity");
-									hdb.seq_identity  = (((pos>-1 ) && isValidSingleValue_(current_loop->values[line][pos])) 
-																				? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
+									hdb.seq_identity  = ((pos>-1 ) ? valueToFloat_(current_loop->values[line][pos])
+																				         : FLOAT_VALUE_NA);
 
 									pos = current_loop->getKeyIndex("_Sequence_positive");
-									hdb.seq_positive  = (((pos>-1 ) && isValidSingleValue_(current_loop->values[line][pos])) 
-																				? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
+									hdb.seq_positive  = ((pos>-1 ) ? valueToFloat_(current_loop->values[line][pos])
+																				         : FLOAT_VALUE_NA);
 
 									pos = current_loop->getKeyIndex("_Sequence_homology_expectation_value");
-									hdb.homology_expectation_value  = (((pos>-1 ) && isValidSingleValue_(current_loop->values[line][pos])) 	
-																				? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
+									hdb.homology_expectation_value  = ((pos>-1 ) ? valueToFloat_(current_loop->values[line][pos])
+																															 : FLOAT_VALUE_NA);
 									mp.homolog_database_entries.push_back(hdb);
 								}
 							}
@@ -1659,16 +1654,12 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 									Index pos = current_loop->getKeyIndex("_Variable_value");
 									if ( pos > -1) 
 									{
-										tmp.values[insert_pos] = 
-												( isValidSingleValue_(current_loop->values[line][pos])
-												 ? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA );
+										tmp.values[insert_pos] = valueToFloat_(current_loop->values[line][pos]);
 									}
 									pos = current_loop->getKeyIndex("_Variable_value_error");
 									if ( pos > -1) 
 									{
-										tmp.errors[insert_pos] = 
-												( isValidSingleValue_(current_loop->values[line][pos])
-												 ? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA );
+										tmp.errors[insert_pos] = valueToFloat_(current_loop->values[line][pos]);
 									}
 									pos = current_loop->getKeyIndex("_Variable_value_units");
 									if ( pos > -1) 
@@ -1696,8 +1687,8 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 			if  (datablocks_[db].hasSaveframeCategory("chemical_shift_reference"))
 			{
 				vector<CIFFile::SaveFrame> saveframes = datablocks_[db].getSaveframesByCategory("chemical_shift_reference");
-				if (saveframes.size() > 1)
-					Log.warn() << "NMRStarFile::readShiftReferences_(): Warning: NMRFile has more than one chemical_shift_reference saveframe! " << std::endl; 
+//				if (saveframes.size() > 1)
+//					Log.warn() << "NMRStarFile::readShiftReferences_(): Warning: NMRFile has more than one chemical_shift_reference saveframe! " << std::endl; 
 
 				for (Size sf = 0; sf < saveframes.size(); sf++)
 				{
@@ -1734,8 +1725,7 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 									pos = current_loop->getKeyIndex("_Atom_isotope_number");
 									if (pos > 1)
 									{
-											ref_element.isotope_number = ( isValidSingleValue_(current_loop->values[line][pos]) 
-													                          ? (Position)current_loop->values[line][pos].toInt() : INT_VALUE_NA );
+											ref_element.isotope_number = (Position)valueToInt_(current_loop->values[line][pos]);
 									}
 									
 									pos = current_loop->getKeyIndex("_Atom_group");
@@ -1753,8 +1743,7 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 									pos = current_loop->getKeyIndex("_Chem_shift_value");
 									if (pos > -1)
 									{
-											ref_element.shift_value  = ( isValidSingleValue_(current_loop->values[line][pos]) 
-												 												 ?  current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);	
+											ref_element.shift_value  = valueToFloat_(current_loop->values[line][pos]);
 									}
 									
 									pos = current_loop->getKeyIndex("_Reference_method");
@@ -1772,9 +1761,7 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 									pos = current_loop->getKeyIndex("_Indirect_shift_ratio");
 									if (pos > -1)
 									{
-										ref_element.indirect_shift_ratio  = 
-											(isValidSingleValue_(current_loop->values[line][pos]) 
-											 ? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA); 
+										ref_element.indirect_shift_ratio = valueToFloat_(current_loop->values[line][pos]);
 									}
 									
 									reference_set.elements.push_back(ref_element);
@@ -1798,8 +1785,8 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 			if  (datablocks_[db].hasSaveframeCategory("assigned_chemical_shifts"))
 			{
 				vector<CIFFile::SaveFrame> saveframes = datablocks_[db].getSaveframesByCategory("assigned_chemical_shifts");
-				if (saveframes.size() > 1)
-					Log.warn() << "NMRStarfile::readShifts(): Warning: File has more than one assigned_chemical_shifts saveframe! " << std::endl; 
+//				if (saveframes.size() > 1)
+//					Log.warn() << "NMRStarfile::readShifts(): Warning: File has more than one assigned_chemical_shifts saveframe! " << std::endl; 
 				number_of_shift_sets_ =  saveframes.size();
 				for (Size sf = 0; sf < saveframes.size(); sf++)
 				{
@@ -1823,17 +1810,18 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 
 									// empty values are denoted by '.' what shall we do?
 									Index pos = current_loop->getKeyIndex("_Atom_shift_assign_ID");
-									atom_data.atom_ID = (((pos > -1) && isValidSingleValue_(current_loop->values[line][0]) )
-																			?  current_loop->values[line][0].toUnsignedInt() : POSITION_VALUE_NA);
+									atom_data.atom_ID = ((pos > -1) ? (Position)valueToInt_(current_loop->values[line][pos]) 
+																			            : POSITION_VALUE_NA);
+									
 									pos = current_loop->getKeyIndex("_Residue_seq_code");
-									atom_data.residue_seq_code = (((pos > -1) && isValidSingleValue_(current_loop->values[line][pos]))
-																								? current_loop->values[line][1].toUnsignedInt() : POSITION_VALUE_NA);
+									atom_data.residue_seq_code = ((pos > -1) ? (Position)valueToInt_(current_loop->values[line][pos])
+																								           : POSITION_VALUE_NA);
+									
 									pos = current_loop->getKeyIndex("_Residue_label");
 									if (pos > -1) atom_data.residue_label = current_loop->values[line][pos];
 
 									pos = current_loop->getKeyIndex("_Atom_name");
-									if (pos > -1) 
-										atom_data.atom_name = current_loop->values[line][pos];
+									if (pos > -1) atom_data.atom_name = current_loop->values[line][pos];
 
 									pos = current_loop->getKeyIndex("_Atom_type");
 									if (pos > -1) 
@@ -1854,16 +1842,16 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 									}
 
 									pos = current_loop->getKeyIndex("_Chem_shift_value");
-									atom_data.shift_value = ( (pos > -1) && isValidSingleValue_(current_loop->values[line][pos]) 
-										 												? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
+									atom_data.shift_value = ( (pos > -1) ? valueToFloat_(current_loop->values[line][pos]) 
+										 												           : FLOAT_VALUE_NA);
 								
 									pos = current_loop->getKeyIndex("_Chem_shift_value_error");
-									atom_data.error_value = ( (pos > -1) && isValidSingleValue_(current_loop->values[line][pos])
-																						?  current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
+									atom_data.error_value = ( (pos > -1) ? valueToFloat_(current_loop->values[line][pos])
+									                                     : FLOAT_VALUE_NA);
 
 									pos = current_loop->getKeyIndex("_Chem_shift_ambiguity_code");
-									atom_data.ambiguity_code = ( (pos > -1) && isValidSingleValue_(current_loop->values[line][pos])
-																							?  current_loop->values[line][pos].toUnsignedInt() : INT_VALUE_NA);
+									atom_data.ambiguity_code = ( (pos > -1) ? valueToInt_(current_loop->values[line][pos])
+																							            : INT_VALUE_NA);
 									// store in the NMRDataSet
 									atom_data_set.atom_data.push_back(atom_data);
 								}
@@ -1954,8 +1942,7 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 									Index pos = current_loop->getKeyIndex("_Concentration_value");
 									if ( pos > -1) 
 									{ 
-										component.concentration_value =  (isValidSingleValue_(current_loop->values[line][pos]) 
-																										? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
+										component.concentration_value = valueToFloat_(current_loop->values[line][pos]); 
 									}	
 
 									pos = current_loop->getKeyIndex("_Concentration_value_units");
@@ -1964,15 +1951,13 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 									pos = current_loop->getKeyIndex("_Concentration_min_value");
 									if ( pos > -1)
 									{
-										component.concentration_min =  (isValidSingleValue_(current_loop->values[line][pos]) 
-																									? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
+										component.concentration_min = valueToFloat_(current_loop->values[line][pos]);
 									}
 									
 									pos = current_loop->getKeyIndex("_Concentration_max_value");
 									if ( pos > -1) 
 									{
-										component.concentration_max  =  (isValidSingleValue_(current_loop->values[line][pos]) 
-																									? current_loop->values[line][pos].toFloat() : FLOAT_VALUE_NA);
+										component.concentration_max = valueToFloat_(current_loop->values[line][pos]);
 									}
 
 									pos = current_loop->getKeyIndex("_Isotopic_labeling");
@@ -2010,8 +1995,8 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 					if (saveframes[sf].hasItem("_Model"))
 						spectrometer.model = saveframes[sf].getDataItemValue("_Model");
 					if (saveframes[sf].hasItem("_Field_strength"))
-						spectrometer.field_strength = (isValidSingleValue_(saveframes[sf].getDataItemValue("_Field_strength")) 
-											?  saveframes[sf].getDataItemValue("_Field_strength").toFloat() : FLOAT_VALUE_NA);
+						spectrometer.field_strength = valueToFloat_(saveframes[sf].getDataItemValue("_Field_strength")); 
+					
 					// store
 					nmr_spectrometers_.push_back(spectrometer);
 				}
@@ -2071,6 +2056,30 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 			}
 		}
 		return true;
+	}
+
+	float NMRStarFile::valueToFloat_(String value)
+	{
+		if (isValidSingleValue_(value) && value.isFloat())
+			return value.toFloat();	
+		else
+			return FLOAT_VALUE_NA;
+	}
+
+	int NMRStarFile::valueToInt_(String value)
+	{
+		int result = INT_VALUE_NA;
+		
+		if (isValidSingleValue_(value))
+		{
+			try {
+				result = value.toInt();
+			} catch (Exception::InvalidFormat) {
+				// invalid format => INT_VALUE_NA
+			}
+		}
+		
+		return result;
 	}
 
 	bool NMRStarFile::operator == (const NMRStarFile& f)  

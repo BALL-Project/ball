@@ -550,8 +550,7 @@ namespace BALL
 
 			/** Read an NMRStarFile.
 			 */
-			bool read()
-				throw(Exception::ParseError);
+			bool read();
 
 			/*  Read an NMRStarFile and assign the shifts to the
 			    given AtomContainer using a trivial standard mapping.
@@ -804,6 +803,11 @@ namespace BALL
 			/// check whether the given String denotes a non-available value
 			bool isValidSingleValue_(String value);
 			
+			/// returns the value as float, if it is a valid one, or FLOAT_VALUE_NA
+			float valueToFloat_(String value);
+			
+			/// returns the value as int, if it is a valid one, or INT_VALUE_NA
+			int valueToInt_(String value);
 			/** Apply the shifts read into the AtomContainer as denoted in the mapping.
 			 * 	We assume, that the file was already read!
 			 * 	The shifts are stored as a property under the key 
