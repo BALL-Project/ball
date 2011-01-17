@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFileDetails.C,v 1.14.12.1 2007/03/25 22:00:20 oliver Exp $
-//
-// Author:
-//  Oliver Kohlbacher
-//
 
 // This file contains the more or less implementation specific portion of PDBFile.
 // It covers the methods doing the specific parsing of all parsed records.
@@ -1108,7 +1103,6 @@ namespace BALL
 
 
 	bool PDBFile::read(Protein& protein)
-		throw(Exception::ParseError)
 	{
 		clear();
 		protein.destroy();
@@ -1124,7 +1118,6 @@ namespace BALL
 	}
 
 	bool PDBFile::read(Molecule& molecule)
-		throw(Exception::ParseError)
 	{
 		Protein* protein = new Protein;
 		bool result = read(*protein);
@@ -1138,7 +1131,6 @@ namespace BALL
 	}
 
 	bool PDBFile::read(System& system)
-		throw(Exception::ParseError)
 	{
 		Protein* protein = new Protein;
 		bool result = read(*protein);
@@ -1155,7 +1147,6 @@ namespace BALL
 	}
 
 	Molecule* PDBFile::read()
-		throw(Exception::ParseError)
 	{
 		Molecule* result = new Molecule;
 		read(*result);
@@ -1164,13 +1155,11 @@ namespace BALL
 	}
 
 	bool PDBFile::write(const System& system)
-		throw(File::CannotWrite)
 	{
 		return write(system, PDBInfo());
 	}
 
 	bool PDBFile::write(const System& system, const PDBInfo& info)
-		throw(File::CannotWrite)
 	{
 		if (!isOpen() || getOpenMode() != std::ios::out)
 		{

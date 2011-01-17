@@ -31,10 +31,10 @@ namespace BALL
 		Bruker2DFile();
 
 		/**	Constructor.
-				@param name important: name of the Bruker-*directory*
-		*/
-		Bruker2DFile(const String& name, OpenMode open_mode = std::ios::in | std::ios::binary)
-			throw(Exception::FileNotFound);
+		 *	@param name important: name of the Bruker-*directory*
+		 *  @throw Exception::FileNotFound if the file could not be opened
+		 */
+		Bruker2DFile(const String& name, OpenMode open_mode = std::ios::in | std::ios::binary);
 
 		/**	Destructor.
 		*/

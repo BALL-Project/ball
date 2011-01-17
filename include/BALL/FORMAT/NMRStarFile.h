@@ -534,10 +534,10 @@ namespace BALL
 			NMRStarFile();
 			
 			/** Detailed constuctor.
-					Opens the given file and extracts all usefull data (Calls  \link read read \endlink). 
-			*/
-			NMRStarFile(const String& file_name, File::OpenMode open_mode = std::ios::in)
-				throw(Exception::FileNotFound);
+			 *	Opens the given file and extracts all usefull data (Calls  \link read read \endlink). 
+		   *  @throw Exception::FileNotFound if the file could not be opened
+			 */
+			NMRStarFile(const String& file_name, File::OpenMode open_mode = std::ios::in);
 			
 			/// Destructor.
 			~NMRStarFile();
@@ -549,6 +549,7 @@ namespace BALL
 			//@{
 
 			/** Read an NMRStarFile.
+		   *  @throw Exception::ParseError if a syntax error was encountered
 			 */
 			bool read();
 
@@ -692,11 +693,15 @@ namespace BALL
 			float getNMRSpectrometerFieldStrength(Position i) const;
 		
 
+			/** Get a mutable reference to the MonomericPolymer-information by name
+			 *	@throw Exception::OutOfRange if a polymer with this name could not be found
+			 */
+			NMRStarFile::MonomericPolymer& getMonomericPolymer(const String& name);
+
 			/** Get the MonomericPolymer-information by name
-			 		Throws exception OutOfRange
-			*/
-			NMRStarFile::MonomericPolymer& getMonomericPolymer(const String& name) throw(Exception::OutOfRange);
-			const NMRStarFile::MonomericPolymer& getMonomericPolymer(const String& name) const throw(Exception::OutOfRange);
+			 *	@throw Exception::OutOfRange if a polymer with this name could not be found
+			 */
+			const NMRStarFile::MonomericPolymer& getMonomericPolymer(const String& name) const;
 			
 			/// Get the number of monomeric polymers in the file
 			Size getNumberOfMonomericPolymers() const {return monomeric_polymers_.size();};

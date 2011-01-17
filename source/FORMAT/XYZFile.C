@@ -23,7 +23,6 @@ namespace BALL
 	}
 
 	XYZFile::XYZFile(const String& name, File::OpenMode open_mode)
-		throw(Exception::FileNotFound)
 		: GenericMolFile()
 	{
 		GenericMolFile::open(name, open_mode);
@@ -34,7 +33,6 @@ namespace BALL
 	}
 	
 	bool XYZFile::write(const AtomContainer& ac)
-		throw(File::CannotWrite)
 	{
 		if (!isOpen() || getOpenMode() != std::ios::out)
 		{
@@ -61,19 +59,16 @@ namespace BALL
 		return true;
 	}
 	bool XYZFile::write(const System& system)
-		throw(File::CannotWrite)
 	{
 		return write((const AtomContainer&)system);
 	}
 
 	bool XYZFile::write(const Molecule& mol)
-		throw(File::CannotWrite)
 	{
 		return write((const AtomContainer&)mol);
 	}
 	
 	bool XYZFile::read(System& system)
-		throw(Exception::ParseError)
 	{
 		// remove old rubbish from the system
 		system.destroy();
@@ -90,7 +85,6 @@ namespace BALL
 	}
 
 	Molecule* XYZFile::read()
-		throw(Exception::ParseError)
 	{
 		// remember the line number for error messages
 		Size number_of_lines = 0;

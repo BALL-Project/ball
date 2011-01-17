@@ -28,7 +28,6 @@ namespace BALL
 	}
 
 	MOL2File::MOL2File(const String& name, File::OpenMode open_mode)
-		throw(Exception::FileNotFound)
 		: GenericMolFile(name, open_mode),
 		  number_of_lines_(0),
 		  found_next_header_(0)
@@ -44,7 +43,6 @@ namespace BALL
 	const Size MOL2File::MAX_LENGTH_ = 4096;
 
 	bool MOL2File::write(const Molecule& molecule)
-		throw(File::CannotWrite)
 	{
 		if (!isOpen() || getOpenMode() != std::ios::out)
 		{
@@ -309,7 +307,6 @@ namespace BALL
 
 
 	bool MOL2File::read(System& system)
-		throw(Exception::ParseError)
 	{
 		// remove old rubbish from the system
 		system.destroy();
@@ -344,7 +341,6 @@ namespace BALL
 	}
 
 	Molecule* MOL2File::read()
-		throw(Exception::ParseError)
 	{
 		//reset the contents of the members
 		clear_();
@@ -430,7 +426,6 @@ namespace BALL
 
 
 	bool MOL2File::write(const System& system)
-		throw(File::CannotWrite)
 	{
 		for (MoleculeConstIterator mol_it=system.beginMolecule(); +mol_it; mol_it++)
 		{

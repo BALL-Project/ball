@@ -120,7 +120,6 @@ namespace BALL
 	}
 
 	PDBFile::PDBFile(const String& filename, File::OpenMode open_mode)
-		throw(Exception::FileNotFound)
 		:	GenericMolFile(),
 			residue_name_(""),
 			residue_sequence_number_(-1),

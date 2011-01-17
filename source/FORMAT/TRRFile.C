@@ -633,7 +633,6 @@ namespace BALL
 	}
 
 	bool TRRFile::flushToDisk(const std::vector<SnapShot>& buffer)
-		throw(File::CannotWrite)
 	{
 		if (!reopen(File::MODE_APP | File::MODE_BINARY) && good())
 		{

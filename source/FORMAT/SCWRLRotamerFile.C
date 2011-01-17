@@ -61,7 +61,7 @@ namespace BALL
 			return;
 		}
 
-		void SCWRLRotamerFile::readSCWRLBackboneDependentLibraryFile_(RotamerLibrary& rotamer_library) throw(Exception::ParseError)
+		void SCWRLRotamerFile::readSCWRLBackboneDependentLibraryFile_(RotamerLibrary& rotamer_library)
 		{
 			rotamer_library.setBackboneDependent(true);
 
@@ -107,7 +107,7 @@ namespace BALL
 			return;
 		}
 
-		void SCWRLRotamerFile::readSCWRLBackboneIndependentLibraryFile_(RotamerLibrary& rotamer_library) throw(Exception::ParseError)
+		void SCWRLRotamerFile::readSCWRLBackboneIndependentLibraryFile_(RotamerLibrary& rotamer_library)
 		{
 			rotamer_library.setBackboneDependent(false);
 

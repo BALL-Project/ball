@@ -629,7 +629,6 @@ namespace BALL
 	}
 
 	ResourceFile::ResourceFile(const String& name)
-		throw(Exception::FileNotFound)
 		:	File(),
 			root_()
 	{

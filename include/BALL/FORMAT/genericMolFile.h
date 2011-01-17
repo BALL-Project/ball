@@ -68,7 +68,7 @@ namespace BALL
 
 		/** Detailed constructor
 		 *  @throw Exception::FileNotFound if the file could not be opened
-		*/
+		 */
 		GenericMolFile(const String& filename, File::OpenMode open_mode = std::ios::in);
 
 		/** Destructor
@@ -82,7 +82,7 @@ namespace BALL
 	
 		/**	Assignment operator.
 		 *	Create a new object pointing to the same filename.
-		 *   @throw Exception::FileNotFound if the file could not be opened
+		 *  @throw Exception::FileNotFound if the file could not be opened
 		 */
 		const GenericMolFile& operator = (const GenericMolFile& rhs);
 

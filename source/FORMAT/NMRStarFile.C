@@ -433,7 +433,6 @@ namespace BALL
 	}
 
 	NMRStarFile::MonomericPolymer& NMRStarFile::getMonomericPolymer(const String& name)
-		throw(Exception::OutOfRange)
 	{	
 		for (Size i=0; i<monomeric_polymers_.size(); i++)
 		{
@@ -445,7 +444,6 @@ namespace BALL
 	}
 	
 	const NMRStarFile::MonomericPolymer& NMRStarFile::getMonomericPolymer(const String& name) const
-		throw(Exception::OutOfRange)
 	{	
 		for (Size i=0; i<monomeric_polymers_.size(); i++)
 		{
@@ -888,7 +886,6 @@ namespace BALL
 	}
 
 	NMRStarFile::NMRStarFile(const String& file_name, File::OpenMode open_mode)
-		throw (Exception::FileNotFound)
 		:	CIFFile(file_name, open_mode),
 			valid_(false),
 			number_of_shift_sets_(0),

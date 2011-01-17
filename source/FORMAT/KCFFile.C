@@ -30,7 +30,6 @@ namespace BALL
 	}
 
 	KCFFile::KCFFile(const String& name, File::OpenMode open_mode)
-		throw(Exception::FileNotFound)
 		: GenericMolFile()
 	{
 		GenericMolFile::open(name, open_mode);
@@ -41,7 +40,6 @@ namespace BALL
 	}
 
 	bool KCFFile::write(const Molecule& molecule)
-		throw(File::CannotWrite)
 	{
 		if (!isOpen() || getOpenMode() != std::ios::out)
 		{
@@ -116,7 +114,6 @@ namespace BALL
 	}
 
 	bool KCFFile::write(const System& system)
-		throw(File::CannotWrite)
 	{
 		// Walk over all molecules, write them one by one and abort 
 		// if one of them could not be written.
@@ -132,7 +129,7 @@ namespace BALL
 	}
 
 
-	bool KCFFile::read(System& system) throw(Exception::ParseError)
+	bool KCFFile::read(System& system)
 	{
 		Molecule* molecule = 0;
 		bool read_anything = false;
@@ -163,7 +160,7 @@ namespace BALL
 		return read_anything;
 	}
 
-	Molecule* KCFFile::read()	throw(Exception::ParseError)
+	Molecule* KCFFile::read()
 	{
 		// Read the first line, this ought to be an ENTRY tag.
 		bool ok = readLine();

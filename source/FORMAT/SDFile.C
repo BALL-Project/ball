@@ -17,7 +17,6 @@ namespace BALL
 	}
 
 	SDFile::SDFile(const String& name, File::OpenMode open_mode)
-		throw(Exception::FileNotFound)
 		: MOLFile(name, open_mode),
 			read_atoms_(true)
 	{
@@ -38,7 +37,6 @@ namespace BALL
 	}
 
 	bool SDFile::write(const System& system)
-		throw(File::CannotWrite)
 	{
 		MoleculeConstIterator molecule = system.beginMolecule();
 		for (; +molecule; ++molecule)
@@ -53,7 +51,6 @@ namespace BALL
 	}
 	
 	bool SDFile::write(const Molecule& molecule)
-		throw(File::CannotWrite)
 	{
 		if (!MOLFile::write(molecule)) 
 		{
@@ -65,7 +62,6 @@ namespace BALL
 	}
 
 	Molecule* SDFile::read()
-		throw(Exception::ParseError)
 	{
 		Molecule* molecule = 0;
 		// Catch any parse errors. This allows to recover 
@@ -108,7 +104,6 @@ namespace BALL
 	}
 	
 	bool SDFile::read(System& system)
-		throw(Exception::ParseError)
 	{
 		Molecule* molecule = 0;
 		bool read_anything = false;

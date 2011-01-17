@@ -48,17 +48,17 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/** Default constructor
+		*/
 		KCFFile();
 
-		////
-		KCFFile(const String& filename, File::OpenMode open_mode = std::ios::in)
-			throw(Exception::FileNotFound);
+		/** Detailed constructor
+		 *  @throw Exception::FileNotFound if the file could not be opened
+		 */
+		KCFFile(const String& filename, File::OpenMode open_mode = std::ios::in);
 
-		////
-		KCFFile(const KCFFile& file) throw(Exception::FileNotFound);
-
-		///
+		/**	Destructor
+		*/
 		virtual ~KCFFile();
 		//@}
 
@@ -66,24 +66,29 @@ namespace BALL
 		*/
 		//@{
 		
-		///	Write a molecule to the file
-		virtual bool write(const Molecule& molecule) throw(File::CannotWrite);
+		/**	Write a molecule to a KCF file.
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		virtual bool write(const Molecule& molecule);
 
 		/**	Write a system to the KCF file.
-			Each Molecule in the system is written as distinct molecule in the KCF file.
-		*/
-		virtual bool write(const System& system) throw(File::CannotWrite);
+		 *  Each Molecule in the system is written as distinct molecule in the KCF file.
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		virtual bool write(const System& system);
 		
 		/**	Read a system from a KCF File.
-			  Each molecule in the file is stored as an individual instance of Molecule
-		  	within the system. Previous contents of the system are erased.
-		*/
-		virtual bool read(System& system) throw(Exception::ParseError);
+		 *  Each molecule in the file is stored as an individual instance of Molecule
+		 * 	within the system. Previous contents of the system are erased.
+		 *  @throw Exception::ParseError if a syntax error was encountered
+		 */
+		virtual bool read(System& system);
 
 		/**	Read a single molecule from the file
-   			If unscuccesful, a NULL pointer is returned.
-		*/
-		virtual Molecule* read() throw(Exception::ParseError);
+   	 *	If unscuccesful, a NULL pointer is returned.
+		 *  @throw Exception::ParseError if a syntax error was encountered
+		 */
+		virtual Molecule* read();
 
 		///
 		const KCFFile& operator = (const KCFFile& file);

@@ -45,14 +45,15 @@ namespace BALL
 		XYZFile();
 
 		/** Detailed constructor.
-				Create a XYZ file and open it with mode <tt>open_mode</tt> (reading is default)
-				@param filename the filename
-				@param open_mode the openmode - default is  \link File::IN File::IN \endlink 
-		*/
-		XYZFile(const String& filename, File::OpenMode open_mode = std::ios::in)
-			throw(Exception::FileNotFound);
+		 *	Create a XYZ file and open it with mode <tt>open_mode</tt> (reading is default)
+		 *	@param filename the filename
+		 *	@param open_mode the openmode - default is  \link File::IN File::IN \endlink 
+		 *  @throw Exception::FileNotFound if the file could not be opened
+		 */
+		XYZFile(const String& filename, File::OpenMode open_mode = std::ios::in);
 
-		/// Destructor
+		/** Destructor
+		 */
 		virtual ~XYZFile();
 		
 		//@}
@@ -61,29 +62,29 @@ namespace BALL
 		//@{
 		
 		/** Write an AtomContainer to the XYZ file
+		 *  @throw File::CannotWrite if writing to the file failed
 		 */
-		virtual bool write(const AtomContainer& ac)
-			throw(File::CannotWrite);
+		virtual bool write(const AtomContainer& ac);
 
 		/**	Write a system to the XYZ file
-		*/
-		virtual bool write(const System& system)
-			throw(File::CannotWrite);
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		virtual bool write(const System& system);
 		
 		/**	Write a molecule to the XYZ file
-		*/
-		virtual bool write(const Molecule& mol)
-			throw(File::CannotWrite);
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		virtual bool write(const Molecule& mol);
 
 		/**	Read a system from the XYZ file
-		*/
-		virtual bool read(System&	system)
-			throw(Exception::ParseError);
+		 *  @throw Exception::ParseError if a syntax error was encountered
+		 */
+		virtual bool read(System&	system);
 
 		/** Read a molecule from the XYZ file
+		 *  @throw Exception::ParseError if a syntax error was encountered
 		 */
-		virtual Molecule* read()
-			throw(Exception::ParseError);
+		virtual Molecule* read();
 
 		///@deprecated Instead of this method use XYZFile::getComment()
 		BALL_DEPRECATED const String& getComent() const { return comment_; }

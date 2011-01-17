@@ -36,7 +36,7 @@ namespace BALL
 		//@{
 		
 		/** Default constructor
-		*/
+		 */
 		HINFile();
 
 		/** Detailed constructor
@@ -45,7 +45,7 @@ namespace BALL
 		HINFile(const String& filename, File::OpenMode open_mode = std::ios::in);
 
 		/**	Destructor
-		*/
+		 */
 		virtual ~HINFile();
 
 		//@}
@@ -75,7 +75,7 @@ namespace BALL
 		 */
 		virtual bool write(const System& system);
 		
-		/**	Read a system from the HIN file
+		/**	Read a molecule from the HIN file
 		 *  @throw Exception::ParseError if a syntax error was encountered
 		 */
 		virtual Molecule* read();

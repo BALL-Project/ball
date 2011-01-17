@@ -618,9 +618,9 @@ namespace BALL
 		ResourceFile();
 
 		/**	Detailed constructor.
-		*/
-		ResourceFile(const String& name)
-			throw(Exception::FileNotFound);
+		 *  @throw Exception::FileNotFound if the file could not be opened
+		 */
+		ResourceFile(const String& name);
 
 		/**	Destructor
 		*/

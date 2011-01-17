@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBInfo.h,v 1.3 2005/12/23 17:01:45 amoll Exp $
-//
 
 #ifndef BALL_FORMAT_PDBINFO_H
 #define BALL_FORMAT_PDBINFO_H

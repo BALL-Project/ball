@@ -128,9 +128,9 @@ namespace BALL
 		MOLFile();
 
 		/** Detailed constructor.
-		*/
-		MOLFile(const String& filename, File::OpenMode open_mode = std::ios::in)
-			throw(Exception::FileNotFound);
+		 *  @throw Exception::FileNotFound if the file could not be opened
+		 */
+		MOLFile(const String& filename, File::OpenMode open_mode = std::ios::in);
 
 		/// Destructor
 		virtual ~MOLFile();
@@ -141,26 +141,25 @@ namespace BALL
 		*/
 		//@{
 		
-		/**	Write a molecule to the file
-		*/
-		virtual bool write(const Molecule& molecule)
-			throw(File::CannotWrite);
+		/**	Write a molecule to the MOL file
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		virtual bool write(const Molecule& molecule);
 
 		/**	Write a system to the MOL file.
-				Note that this changes the properties of atoms in the system.
-		*/
-		virtual bool write(const System& system)
-			throw(File::CannotWrite);
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		virtual bool write(const System& system);
 		
 		/**	Read a system from the MOL file
-		*/
-		virtual bool read(System&	system)
-			throw(Exception::ParseError);
+		 *  @throw Exception::ParseError if a syntax error was encountered
+		 */
+		virtual bool read(System&	system);
 
 		/**	Read a single molecule from the file
-		*/
-		virtual Molecule* read()
-			throw(Exception::ParseError);
+		 *  @throw Exception::ParseError if a syntax error was encountered
+		 */
+		virtual Molecule* read();
 			
 		///
 		const MOLFile& operator = (const MOLFile& file);
@@ -181,9 +180,10 @@ namespace BALL
 		static const String bond_format_;
 		//@}
 
-		/// Read the CTAB of a MOL file and construct a Molecule from its data
-		Molecule* readCTAB_(std::vector<Atom*>& atom_map)
-			throw(Exception::ParseError);
+		/** Read the CTAB of a MOL file and construct a Molecule from its data
+		 *  @throw Exception::ParseError if a syntax error was encountered
+		 */
+		Molecule* readCTAB_(std::vector<Atom*>& atom_map);
 
 		/// Read the Counts line of a MOL file
 		bool readCountsLine_(CountsStruct& counts);

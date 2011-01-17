@@ -19,7 +19,6 @@ namespace BALL
 	}
 
 	LineBasedFile::LineBasedFile(const String& filename, File::OpenMode open_mode, bool trim_whitespaces)
-		throw(Exception::FileNotFound)
 		: File(),
 			line_number_(0),
 			trim_whitespaces_(trim_whitespaces)
@@ -32,7 +31,6 @@ namespace BALL
 	}
 
 	const LineBasedFile& LineBasedFile::operator = (const LineBasedFile& f)
-		throw(Exception::FileNotFound)
 	{
 		open(f.getName(), f.getOpenMode());
 		line_number_ = 0;
@@ -53,7 +51,6 @@ namespace BALL
 
 
 	bool LineBasedFile::search(const String& text, bool return_to_start)
-		throw(Exception::ParseError)
 	{
 		if (!isOpen() || getOpenMode() != MODE_IN)
 		{
@@ -78,7 +75,6 @@ namespace BALL
 	}
 
 	bool LineBasedFile::search(const String& text, const String& stop, bool return_to_start)
-		throw(Exception::ParseError)
 	{
 		if (!isOpen() || getOpenMode() != MODE_IN)
 		{
@@ -115,7 +111,6 @@ namespace BALL
 	}
 
 	bool LineBasedFile::readLine()
-		throw(Exception::ParseError)
 	{
 		if (!isOpen() || getOpenMode() != MODE_IN)
 		{
@@ -133,7 +128,6 @@ namespace BALL
 	}
 
 	bool LineBasedFile::skipLines(Size number)
-		throw(Exception::ParseError)
 	{
 		for (Position i = 0; i < number +1; i++)
 		{
@@ -147,7 +141,6 @@ namespace BALL
 	}
 
 	void LineBasedFile::rewind()
-		 throw(Exception::ParseError)
 	{
 		if (!isOpen())
 		{
@@ -160,7 +153,6 @@ namespace BALL
 	}
 
 	bool LineBasedFile::gotoLine(Position line_number)
-		 throw(Exception::ParseError)
 	{
 		if (!isOpen())
 		{
@@ -195,8 +187,7 @@ namespace BALL
 		trim_whitespaces_ = false;
 	}
 
-	void LineBasedFile::test(const char* file, int line, bool condition, const String& msg)
-		const throw(Exception::ParseError)
+	void LineBasedFile::test(const char* file, int line, bool condition, const String& msg) const
 	{
 		if (!condition)
 		{
@@ -204,8 +195,7 @@ namespace BALL
 		}
 	}
 
-	String LineBasedFile::getField(Index pos, const String& quotes, const String& delimiters)
-		const	throw(Exception::IndexUnderflow)
+	String LineBasedFile::getField(Index pos, const String& quotes, const String& delimiters) const
 	{
 		if (quotes == "")
 		{
