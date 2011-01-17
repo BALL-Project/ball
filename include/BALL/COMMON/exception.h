@@ -227,8 +227,7 @@ namespace BALL
 			public:
 			InvalidFormat(const char* file, int line, const String& s);
 			
-			~InvalidFormat()
-				throw();
+			~InvalidFormat() throw();
 
 			protected:
 
