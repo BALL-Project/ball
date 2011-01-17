@@ -155,70 +155,65 @@ namespace BALL {
 			bool operator != (const Matrix& B) const;
 			
 			/** Adds the matrix B on this matrix.
-			 * 	If the dimensions of both matrices do not match, an
-			 * 	Exception::MatrixHasWrongDimension is thrown.
+			 *  @throw Exception::MatrixHasWrongDimension If the dimensions 
+			 *         of both matrices do not match			 
 			 */
-			inline Matrix& operator+= (const Matrix& B)
-				throw(Exception::MatrixHasWrongDimension);
+			inline Matrix& operator+= (const Matrix& B);
 			
 			/** Subtracts the matrix B from this matrix.
-			 * 	If the dimensions of both matrices do not match, an
-			 * 	Exception::MatrixHasWrongDimension is thrown.
+			 *  @throw Exception::MatrixHasWrongDimension If the dimensions 
+			 *         of both matrices do not match			 
 			 */
-			inline Matrix& operator-= (const Matrix& B)
-				throw(Exception::MatrixHasWrongDimension);
+			inline Matrix& operator-= (const Matrix& B);
 			
 			/** Returns the sum of this matrix and the matrix B.
-			 * 	If the dimensions of both matrices do not match, an
-			 * 	Exception::MatrixHasWrongDimension is thrown.
 			 *  The storage order of the result depends on the storage orders of the input matrices.
 			 *  If both inputs have the same storage order, the output will have the same as well.
 			 *  If the inputs differ in their storage, the output will have the default storage order
 			 *  (row major).
+			 *  @throw Exception::MatrixHasWrongDimension If the dimensions 
+			 *         of both matrices do not match			 
 			 */
-			inline Matrix operator+ (const Matrix& B) const
-				throw(Exception::MatrixHasWrongDimension);
+			inline Matrix operator+ (const Matrix& B) const;
 
 			/** Returns the difference of this matrix and the matrix B.
-			 * 	If the dimensions of both matrices do not match, an
-			 * 	Exception::MatrixHasWrongDimension is thrown.
 			 *  The storage order of the result depends on the storage orders of the input matrices.
 			 *  If both inputs have the same storage order, the output will have the same as well.
 			 *  If the inputs differ in their storage, the output will have the default storage order
 			 *  (row major).
+			 *  @throw Exception::MatrixHasWrongDimension If the dimensions 
+			 *         of both matrices do not match			 
 			 */
-			inline Matrix operator- (const Matrix& B) const
-				throw(Exception::MatrixHasWrongDimension);
+			inline Matrix operator- (const Matrix& B) const;
 
-			/** Returns a matrix with containing the entries of this matrix
+			/** Scalar multiplication
+			 *  Returns a matrix with containing the entries of this matrix
 			 *  multiplied with the factor a. The storage order of the new
 			 *  matrix is the same as that of this matrix.
 			 */
-			inline Matrix operator* (const valuetype& a) const
-				throw();
+			inline Matrix operator* (const valuetype& a) const;
 
 			/** Multiplies the entries of this matrix by the factor a.
 			 */
-			inline Matrix& operator*= (const valuetype& a)
-				throw();
+			inline Matrix& operator*= (const valuetype& a);
 
 			/** Returns the product of this matrix and the matrix B.
-			 * 	If the dimensions of both matrices are incompatible, an
-			 * 	Exception::MatrixHasWrongDimension is thrown.
 			 *  The storage order of the result depends on the storage orders of the input matrices.
 			 *  If both inputs have the same storage order, the output will have the same as well.
 			 *  If the inputs differ in their storage, the output will have the default storage order
 			 *  (row major).
+			 *  @throw Exception::MatrixHasWrongDimension If the dimensions 
+			 *         of both matrices do not match			 
 			 */
-			inline Matrix operator* (const Matrix& B) const
-				throw(Exception::MatrixHasWrongDimension);
+			inline Matrix operator* (const Matrix& B) const;
 
 
 			/** Returns a vector containing the entries of this matrix
-			 *  rightmultiplied with the Vector X.
+			 *  right multiplied with the Vector X.
+			 *  @throw Exception::VectorHasWrongDimension if the length of X
+			 *         does not equal numColumns
 			 */
-			inline Vector<valuetype> operator* (const Vector<valuetype>& X) const
-				throw(Exception::VectorHasWrongDimension);
+			inline Vector<valuetype> operator* (const Vector<valuetype>& X) const;
 
 			/** "fast" and unchecked version of matrix addition, native version.
 			 *  The storage order of the result depends on the storage orders of the input matrices.
@@ -552,15 +547,13 @@ namespace BALL {
 
 			/** Return a copy of our raw data vector.
        */
-			std::vector<valuetype> getData() const
-				throw();
+			std::vector<valuetype> getData() const;
 
 			/** Set the raw data vector of this class to a copy of the input vector.
-			 *  If the new vector is incompatible with the size of this matrix,
-			 *  an exception MatrixHasWrongDimension is thrown.
+			 *  @throw Exception::MatrixHasWrongDimension if the size of new_vector
+			 *         does not equal rowCount*columnCount
 			 */
-			void setData(const std::vector<valuetype>& new_data)
-				throw(Exception::MatrixHasWrongDimension);
+			void setData(const std::vector<valuetype>& new_data);
 
 			inline size_t getRowCount() const;
 			inline size_t getColumnCount() const;

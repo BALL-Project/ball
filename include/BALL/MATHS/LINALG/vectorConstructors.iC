@@ -46,20 +46,19 @@ namespace BALL {
 
 	////////////////////////////////////////////////////////////
   template <> 
-  Vector<float>::Vector(const Vector<float>& v) throw(Exception::OutOfMemory);
+  Vector<float>::Vector(const Vector<float>& v);
   
 	template <> 
-	Vector<double>::Vector(const Vector<double>& v) throw(Exception::OutOfMemory);
+	Vector<double>::Vector(const Vector<double>& v);
 	
 	template <> 
-	Vector<ComplexFloat>::Vector(const Vector<ComplexFloat>& v) throw(Exception::OutOfMemory);
+	Vector<ComplexFloat>::Vector(const Vector<ComplexFloat>& v);
 	
 	template <> 
-	Vector<ComplexDouble>::Vector(const Vector<ComplexDouble>& v) throw(Exception::OutOfMemory);
+	Vector<ComplexDouble>::Vector(const Vector<ComplexDouble>& v);
 	
 	template <typename valuetype>
 	Vector<valuetype>::Vector(const Vector<valuetype>& v)
-		throw(Exception::OutOfMemory)
 		: data_(),
 			is_column_vector_(v.is_column_vector_),
 			n_(v.n_)
@@ -81,24 +80,19 @@ namespace BALL {
 	}
 
 	template <>
-	Vector<float>& Vector<float>::operator = (const Vector<float>& v)
-		throw(Exception::OutOfMemory);
+	Vector<float>& Vector<float>::operator = (const Vector<float>& v);
 
 	template <>
-	Vector<double>& Vector<double>::operator = (const Vector<double>& v)
-		throw(Exception::OutOfMemory);
+	Vector<double>& Vector<double>::operator = (const Vector<double>& v);
 
 	template <>
-	Vector<ComplexFloat>& Vector<ComplexFloat>::operator = (const Vector<ComplexFloat>& v)
-		throw(Exception::OutOfMemory);
+	Vector<ComplexFloat>& Vector<ComplexFloat>::operator = (const Vector<ComplexFloat>& v);
 	
 	template <>
-	Vector<ComplexDouble>& Vector<ComplexDouble>::operator = (const Vector<ComplexDouble>& v)
-		throw(Exception::OutOfMemory);
+	Vector<ComplexDouble>& Vector<ComplexDouble>::operator = (const Vector<ComplexDouble>& v);
 	
 	template <typename valuetype>
 	Vector<valuetype>& Vector<valuetype>::operator = (const Vector<valuetype>& v)
-		throw(Exception::OutOfMemory)
 	{
 		is_column_vector_ = v.is_column_vector_;
 		n_ = v.n_;

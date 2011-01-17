@@ -14,132 +14,60 @@ namespace BALL
 		class BALL_EXPORT MatrixHasWrongDimension : public BALL::Exception::GeneralException
 		{
 			public:
-				MatrixHasWrongDimension() 
-					throw();
+				MatrixHasWrongDimension();
 				
-				MatrixHasWrongDimension(const char* file, unsigned long line)
-					throw();
+				MatrixHasWrongDimension(const char* file, unsigned long line);
 				
-				virtual ~MatrixHasWrongDimension()
-					throw();
+				virtual ~MatrixHasWrongDimension() throw();
 		};
 
 		class BALL_EXPORT VectorHasWrongDimension : public BALL::Exception::GeneralException
 		{
 			public:
-				VectorHasWrongDimension()
-					throw();
+				VectorHasWrongDimension();
 				
-				VectorHasWrongDimension(const char* file, unsigned long line)
-					throw();
+				VectorHasWrongDimension(const char* file, unsigned long line);
 
-				virtual ~VectorHasWrongDimension()
-					throw();
+				virtual ~VectorHasWrongDimension() throw();
 		};
 
 		class BALL_EXPORT MatrixNotRegular : public BALL::Exception::GeneralException
 		{
 			public:
-				MatrixNotRegular() 
-					throw();
+				MatrixNotRegular();
 
-				~MatrixNotRegular()
-					throw();
+				~MatrixNotRegular() throw();
 		};
 
 		class BALL_EXPORT MatrixNotQuadratic : public BALL::Exception::GeneralException
 		{
 			public:
-				MatrixNotQuadratic() 
-					throw();
+				MatrixNotQuadratic();
 
-				~MatrixNotQuadratic()
-					throw();
+				~MatrixNotQuadratic() throw();
 		};
 		
 		class BALL_EXPORT MatrixIsSingular : public BALL::Exception::GeneralException
 		{
 			public:
-				MatrixIsSingular(const char* file, unsigned long line) 
-						throw();
+				MatrixIsSingular(const char* file, unsigned long line);
 
-				~MatrixIsSingular()
-						throw();
+				~MatrixIsSingular() throw();
 		};		
-
-// 		class BALL_EXPORT OutOfMemory : public std::bad_alloc
-// 		{
-// 			public:
-// 				OutOfMemory(const char* file, int line, size_t n = 0)
-// 					throw();
-// 
-// 				virtual ~OutOfMemory()
-// 					throw();
-// 
-// 				protected:
-// 					size_t size_;
-// 		};
-
-// 		class BALL_EXPORT OutOfRange 
-// 		{
-// 			public:
-// 
-// 			 OutOfRange(const char* file, int line, size_t size, size_t value)
-// 				throw();
-// 
-// 			~OutOfRange()
-// 				throw();
-// 	
-// 			protected:
-// 				size_t size_;
-// 				size_t index_;
-// 		};
 
 		class BALL_EXPORT SingularIterator : public BALL::Exception::GeneralException
 		{
 			public:
-				SingularIterator() 
-					throw();
+				SingularIterator();
 
-				~SingularIterator()
-					throw();
+				~SingularIterator() throw();
 		};
-
-// 		class BALL_EXPORT InvalidIterator
-// 		{
-// 			public:
-// 				InvalidIterator() 
-// 					throw();
-// 
-// 				~InvalidIterator()
-// 					throw();
-// 		};
-
-// 		class BALL_EXPORT Precondition
-// 		{
-// 			public:
-// 				Precondition() 
-// 					throw();
-// 
-// 				~Precondition()
-// 					throw();
-// 		};
-
-// 		class BALL_EXPORT IncompatibleIterators
-// 		{
-// 			public:
-// 				IncompatibleIterators() 
-// 					throw();
-// 
-// 				~IncompatibleIterators()
-// 					throw();
-// 		};
 
 		class BALL_EXPORT Uninitialized : public BALL::Exception::GeneralException
 		{
 			public:
-				Uninitialized() throw();
-				~Uninitialized()throw();
+				Uninitialized();
+				~Uninitialized() throw();
 		};
 	}
 

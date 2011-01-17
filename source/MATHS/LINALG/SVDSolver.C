@@ -4,7 +4,6 @@ namespace BALL
 {
 	template <>
 	bool SVDSolver<float, StandardTraits>::computeSVD_lapack()
-		throw(Exception::OutOfMemory)
 	{
 #if defined(BALL_HAS_BLAS) && defined(BALL_HAS_LAPACK)
 		// we need a copy of the bound matrix since lapack overwrites the memory.
@@ -129,7 +128,6 @@ namespace BALL
 					
 	template <>
 	bool SVDSolver<double, StandardTraits>::computeSVD_lapack()
-		throw(Exception::OutOfMemory)
 	{
 #if defined(BALL_HAS_BLAS) && defined(BALL_HAS_LAPACK)
 		// we need a copy of our matrix since lapack overwrites the memory.
@@ -263,7 +261,6 @@ namespace BALL
 
 	template <>
 	bool SVDSolver<ComplexFloat, StandardTraits>::computeSVD_lapack()
-		throw(Exception::OutOfMemory)
 	{
 #if defined(BALL_HAS_BLAS) && defined(BALL_HAS_LAPACK)
 		// we need a copy of our matrix since lapack overwrites the memory.
@@ -390,7 +387,6 @@ namespace BALL
 
 	template <>
 	bool SVDSolver<ComplexDouble, StandardTraits>::computeSVD_lapack()
-		throw(Exception::OutOfMemory)
 	{
 #if defined(BALL_HAS_BLAS) && defined(BALL_HAS_LAPACK)
 		// we need a copy of our matrix since lapack overwrites the memory.
