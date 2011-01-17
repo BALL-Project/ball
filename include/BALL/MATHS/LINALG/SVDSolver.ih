@@ -106,9 +106,10 @@ class SVDSolver
 		 *  singular vector matrix is always stored in column major format!
 		 *  @return true if the computation terminated successfully
 		 *  @return false otherwise
+		 *  @throw Exception::OutOfMemory if the memory could not be allocated
+		 *  @throw Exception::Uninitialized if the solver has not been initialized correctly
 		 */
-		inline bool computeSVD()
-				throw(Exception::OutOfMemory, Exception::Uninitialized);
+		inline bool computeSVD();
 
 		/** Compute the singular value decomposition of the matrix we are bound to,
 		 *  native implementation.
@@ -116,9 +117,9 @@ class SVDSolver
 		 *  singular vector matrix is always stored in column major format!
 		 *  @return true if the computation terminated successfully
 		 *  @return false otherwise
+		 *  @throw Exception::OutOfMemory if the memory could not be allocated
 		 */
-		inline bool computeSVD_native()
-				throw(Exception::OutOfMemory);
+		inline bool computeSVD_native();
 
 		/** Compute the singular value decomposition of the matrix we are bound to
 		 *  using LAPACK.
@@ -126,9 +127,9 @@ class SVDSolver
 		 *  singular vector matrix is always stored in column major format!
 		 *  @return true if the computation terminated successfully
 		 *  @return false otherwise
+		 *  @throw Exception::OutOfMemory if the memory could not be allocated
 		 */
-		inline bool computeSVD_lapack()
-				throw(Exception::OutOfMemory);
+		inline bool computeSVD_lapack();
 
 		/**
 		 *  Returns the matrix of left singular vectors. (U in U*S*V^t)
