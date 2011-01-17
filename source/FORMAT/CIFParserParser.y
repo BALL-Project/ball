@@ -60,6 +60,7 @@ string textfield_helper;
 %type  <text>		 				tag
 %type  <text>		 				value
 %type  <text>		 				value_helper
+%type  <text>		 				value_helper_start
 %type  <text>		 				textfield_line
 %%
 /*        grammar rules           */
@@ -175,7 +176,7 @@ tag: TK_UNDERSCORE value {
 		}
 	 ;
 
-value: value_helper { 
+value: value_helper_start { 
 				  if (is_textfield) 
 					{
 						value_helper = textfield_helper;
@@ -189,13 +190,19 @@ value: value_helper {
 				}
 	;
 
-value_helper: TK_VALUE                                  { is_textfield = false; strcpy($$, $1); }
-						| TK_VALUE single_quote_helper value        { is_textfield = false; sprintf($$, "%s%s%s", $1, $2, $3); }
+value_helper_start: TK_VALUE                            { is_textfield = false; strcpy($$, $1); }
+						| TK_VALUE single_quote_helper value_helper { is_textfield = false; sprintf($$, "%s%s%s", $1, $2, $3); }
 						| TK_VALUE single_quote_helper              { is_textfield = false; sprintf($$, "%s%s", $1, $2); }
-						| TK_VALUE TK_UNDERSCORE value				      { is_textfield = false; sprintf($$, "%s_%s", $1, $3); }
+						| TK_VALUE TK_UNDERSCORE value_helper				{ is_textfield = false; sprintf($$, "%s_%s", $1, $3); }
 						| TK_OPEN_SINGLE_QUOTE single_quoted_string { is_textfield = false; sprintf($$, "\'%s", $2); }
 						| TK_OPEN_DOUBLE_QUOTE double_quoted_string { is_textfield = false; sprintf($$, "\"%s", $2); }
 						| TK_TEXTFIELD textfield_line TK_TEXTFIELD  { is_textfield = true; }
+	;
+
+value_helper: TK_VALUE                                  { is_textfield = false; strcpy($$, $1); }
+						| TK_VALUE single_quote_helper value_helper { is_textfield = false; sprintf($$, "%s%s%s", $1, $2, $3); }
+						| TK_VALUE single_quote_helper              { is_textfield = false; sprintf($$, "%s%s", $1, $2); }
+						| TK_VALUE TK_UNDERSCORE value_helper				{ is_textfield = false; sprintf($$, "%s_%s", $1, $3); }
 	;
 
 single_quote_helper: TK_SINGLE_QUOTE { strcpy($$, "\'"); }
@@ -208,7 +215,7 @@ single_quoted_string: TK_CLOSE_SINGLE_QUOTE { strcpy($$, "\'"); }
 			|	 TK_VALUE TK_UNDERSCORE single_quoted_string { 
 										CIF_DEBUG("single_quoted_string: %s_%s" << $1 << $3)
 										sprintf($$, "%s_%s", $1, $3); }
-      |  TK_SINGLE_QUOTE TK_VALUE single_quoted_string { sprintf($$, "\'%s%s", $2, $3); }
+      |  TK_SINGLE_QUOTE single_quoted_string { sprintf($$, "\'%s", $2); }
 			|  TK_DOUBLE_QUOTE single_quoted_string { sprintf($$, "\"%s", $2); }
 	;
 
@@ -224,9 +231,9 @@ double_quoted_string: TK_CLOSE_DOUBLE_QUOTE {
 			|	 TK_WHITESPACE   double_quoted_string { 
 										CIF_DEBUG("double_quoted_string: whitespace" << $1)
 										sprintf($$, "%s%s", $1, $2); }
-      |  TK_DOUBLE_QUOTE TK_VALUE double_quoted_string { 
+      |  TK_DOUBLE_QUOTE double_quoted_string { 
 										CIF_DEBUG("double_quoted_string: double quote and value" << $2)
-										sprintf($$, "\"%s%s", $2, $3); }
+										sprintf($$, "\"%s", $2); }
 			|  TK_SINGLE_QUOTE double_quoted_string { 
 										CIF_DEBUG("double_quoted_string: single quote")
 										sprintf($$, "\'%s", $2); }
@@ -234,7 +241,7 @@ double_quoted_string: TK_CLOSE_DOUBLE_QUOTE {
 
 textfield_line: /* empty */ {}
 							| TK_TEXTFIELD_LINE textfield_line { 
-								textfield_helper += string($1);
+								textfield_helper = string($1) + textfield_helper;
 								CIF_DEBUG("TextField line: " << $1 << " " << $2) } ;
 
 %%
