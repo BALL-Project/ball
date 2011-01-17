@@ -31,32 +31,25 @@ namespace BALL {
 	}
 
 	template <> 
-	bool EigenSolver<float, StandardTraits>::solveRightEigenProblem_lapack()
-		throw(Exception::OutOfMemory);
+	bool EigenSolver<float, StandardTraits>::solveRightEigenProblem_lapack();
 
 	template <> 
-	bool EigenSolver<double, StandardTraits>::solveRightEigenProblem_lapack()
-		throw(Exception::OutOfMemory);
+	bool EigenSolver<double, StandardTraits>::solveRightEigenProblem_lapack(); 
 
 	template <>
-	bool EigenSolver<ComplexFloat, StandardTraits>::solveRightEigenProblem_lapack()
-		throw(Exception::OutOfMemory);
+	bool EigenSolver<ComplexFloat, StandardTraits>::solveRightEigenProblem_lapack();
 
 	template <>
-	bool EigenSolver<ComplexDouble, StandardTraits>::solveRightEigenProblem_lapack()
-		throw(Exception::OutOfMemory);
+	bool EigenSolver<ComplexDouble, StandardTraits>::solveRightEigenProblem_lapack();
 
 	template <> 
-	bool EigenSolver<float, SymmetricTraits>::solveRightEigenProblem_lapack()
-		throw(Exception::OutOfMemory);
+	bool EigenSolver<float, SymmetricTraits>::solveRightEigenProblem_lapack();
 
 	template <> 
-	bool EigenSolver<double, SymmetricTraits>::solveRightEigenProblem_lapack()
-		throw(Exception::OutOfMemory);
+	bool EigenSolver<double, SymmetricTraits>::solveRightEigenProblem_lapack();
 
 	template <class valuetype, class mtraits> 
 	bool EigenSolver<valuetype, mtraits>::solveRightEigenProblem_lapack()
-		throw(Exception::OutOfMemory)
 	{
 		std::cerr << "Sorry, no LAPACK-based eigenvalue computation for this valuetype/storage type combination!" << std::endl;
 		std::cerr << "Aborting!" << std::endl;
@@ -66,7 +59,6 @@ namespace BALL {
 
 	template <class valuetype, class mtraits>
 	bool EigenSolver<valuetype, mtraits>::solveRightEigenProblem()
-		throw(Exception::OutOfMemory, Exception::MatrixNotQuadratic, Exception::Uninitialized)
 	{
 		if (!matrix_)
 		{
