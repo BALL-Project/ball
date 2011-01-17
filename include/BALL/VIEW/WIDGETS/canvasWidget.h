@@ -58,28 +58,22 @@ namespace BALL
       virtual ~CanvasWidget();  
       
       ///
-      void showObjects()	 
-				throw();
+      void showObjects();
       
     public slots:
 
-      virtual void zoomIn()
-        throw();
+      virtual void zoomIn();
 
-      virtual void zoomOut()
-				throw();
+      virtual void zoomOut();
 
-      virtual void zoom(float xfactor,float yfactor)
-				throw();
+      virtual void zoom(float xfactor,float yfactor);
 
-      virtual void zoomToFit()
-				throw();
+      virtual void zoomToFit();
 
     protected:  
 
       //Copyconstructor doesn't work because of the QT private copy constructors
 			CanvasWidget(const CanvasWidget& /*cw*/)
-				throw()
 				: QCanvasView() {};
 
       QCanvas canvas_;
