@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorHSV.C,v 1.7.32.1 2007/03/25 21:56:34 oliver Exp $
 
 #include <BALL/VIEW/DATATYPE/colorHSV.h>
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
@@ -34,13 +33,11 @@ namespace BALL
 		}
 
 		ColorHSV::ColorHSV(const char* char_ptr)
-			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			stringToHSV_(String(char_ptr));
 		}
 
 		ColorHSV::ColorHSV(const String& s)
-			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			stringToHSV_(s);
 		}
@@ -114,13 +111,11 @@ namespace BALL
 		}
 
 		void ColorHSV::set(const char* char_ptr)
-			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			stringToHSV_(String(char_ptr));
 		}
 
 		const ColorHSV& ColorHSV::operator = (const char* char_ptr)
-			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			set(char_ptr);
 
@@ -135,13 +130,11 @@ namespace BALL
 		}
 
 		void ColorHSV::set(const String& s)
-			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			stringToHSV_(s);
 		}
 
 		const ColorHSV& ColorHSV::operator = (const String& s)
-			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			set(s);
 
@@ -354,7 +347,6 @@ namespace BALL
 		}
 
 		void ColorHSV::stringToHSV_(const String& s)
-			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			int length = (int)s.size();
 

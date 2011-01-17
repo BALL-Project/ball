@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnitHue.iC,v 1.6 2003/04/17 14:48:01 oliver Exp $
 
 BALL_INLINE
 ColorUnitHue::operator String () const

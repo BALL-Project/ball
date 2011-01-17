@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnit.h,v 1.28 2005/12/23 17:02:08 amoll Exp $
-//
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNIT_H
 #define BALL_VIEW_DATATYPE_COLORUNIT_H
@@ -78,16 +76,14 @@ namespace BALL
 					\exception   InvalidRange if <tt> string length != 2</tt>
 					\exception   NotInHexFormat if string contains characters g-z or G-Z
 			*/
-			ColorUnit(const char* value)
-				throw(Exception::InvalidRange, NotInHexFormat);
+			ColorUnit(const char* value);
 
 			/** Constructor with Parameter String.
 					\param       value a string (00 - FF, or 00 - ff)
 					\exception   InvalidRange if <tt> string length != 2</tt>
 					\exception   NotInHexFormat if string contains characters g-z or G-Z
 			*/
-			ColorUnit(const String& value)
-				throw(Exception::InvalidRange, NotInHexFormat);
+			ColorUnit(const String& value);
 
 			/** Constructor with Parameter unsigned char.
 					\param       value a char (0 - 255)
@@ -98,57 +94,49 @@ namespace BALL
 					\param       value a short (0 - 255)
 					\exception   InvalidRange if <tt> value < 0 || value > 255</tt>
 			*/
-			ColorUnit(const short value)
-				throw(Exception::InvalidRange);
+			ColorUnit(const short value);
 
 			/** Constructor with Parameter unsigned short.
 					\param       value a unsigned short (0 - 255)
 					\exception   InvalidRange if <tt> value > 255</tt>
 			*/
-			ColorUnit(const unsigned short value)
-				throw(Exception::InvalidRange);
+			ColorUnit(const unsigned short value);
 
 			/** Constructor with Parameter int.
 					\param       value an int (0 - 255)
 					\exception   InvalidRange if <tt> value < 0 || value > 255</tt>
 			*/
-			ColorUnit(const int value)
-				throw(Exception::InvalidRange);
+			ColorUnit(const int value);
 		
 			/** Constructor with Parameter unsigned int.
 					\param       value an unsigned int (0 - 255)
 					\exception   InvalidRange if <tt> value > 255</tt>
 			*/
-			ColorUnit(const unsigned int value)
-				throw(Exception::InvalidRange);
+			ColorUnit(const unsigned int value);
 
 			/** Constructor with Parameter long.
 					\param       value an long (0 - 255)
 					\exception   InvalidRange if <tt> value < 0 || value > 255</tt>
 			*/
-			ColorUnit(const long value)
-				throw(Exception::InvalidRange);
+			ColorUnit(const long value);
 
 			/** Constructor with Parameter unsigned long.
 					\param       value an unsigned long (0 - 255)
 					\exception   InvalidRange if <tt> value > 255</tt>
 			*/
-			ColorUnit(const unsigned long value)
-				throw(Exception::InvalidRange);
+			ColorUnit(const unsigned long value);
 		
 			/** Constructor with Parameter float.
 					\param       value a float (0 - 1.0)
 					\exception   InvalidRange if <tt> value < 0.0 || value > 1.0</tt>
 			*/
-			ColorUnit(const float value)
-				throw(Exception::InvalidRange);
+			ColorUnit(const float value);
 		
 			/** Constructor with Parameter double.
 					\param       value a double (0 - 1.0)
 					\exception   InvalidRange if <tt> value < 0.0 || value > 1.0</tt>
 			*/
-			ColorUnit(const double value)
-				throw(Exception::InvalidRange);
+			ColorUnit(const double value);
 
 			//@}
 			/** @name Destructors */
@@ -254,8 +242,7 @@ namespace BALL
 					\exception   InvalidRange if <tt> string length != 2</tt>
 					\exception   NotInHexFormat if string contains characters g-z or G-Z
 			*/
-			void set(const char* value)
-				throw(Exception::InvalidRange, NotInHexFormat);
+			void set(const char* value);
 
 			/** Assignment operator with char*.
 					Calls set.
@@ -263,8 +250,7 @@ namespace BALL
 					\exception   InvalidRange if <tt> string length != 2</tt>
 					\exception   NotInHexFormat if string contains characters g-z or G-Z
 			*/
-			const ColorUnit& operator = (const char* value)
-				throw(Exception::InvalidRange, NotInHexFormat);
+			const ColorUnit& operator = (const char* value);
 		
 			/** Inspection of the colorUnit's value.
 					Memory must be allocated for this parameter. The memory must be at least
@@ -280,8 +266,7 @@ namespace BALL
 					\exception   InvalidRange if <tt> string length != 2</tt>
 					\exception   NotInHexFormat if string contains characters g-z or G-Z
 			*/
-			void set(const String& value)
-				throw(Exception::InvalidRange, NotInHexFormat);
+			void set(const String& value);
 
 			/** Assignment operator with string.
 					Calls set.
@@ -289,8 +274,7 @@ namespace BALL
 					\exception   InvalidRange if <tt> string length != 2</tt>
 					\exception   NotInHexFormat if string contains characters g-z or G-Z
 			*/
-			const ColorUnit& operator = (const String& value)
-				throw(Exception::InvalidRange, NotInHexFormat);
+			const ColorUnit& operator = (const String& value);
 		
 			/** Inspection of the colorUnit's value.
 					\param   value a string receiving the value of this colorUnit in hex format (<tt> "00"-"FF"</tt> or <tt> "00"-"ff"</tt>)
@@ -317,16 +301,14 @@ namespace BALL
 					\param       value a short of range <tt> 0-255</tt>
 					\exception   InvalidRange if <tt> value < 0 || value > 255</tt>
 			*/
-			void set(const short value)
-				throw(Exception::InvalidRange);
+			void set(const short value);
 
 			/** Assignment operator with short.
 					Calls set.
 					\param       value a short containing a value of range <tt> 0-255</tt>
 					\exception   InvalidRange if <tt> value < 0 || value > 255</tt>
 			*/
-			const ColorUnit& operator = (const short value)
-				throw(Exception::InvalidRange);
+			const ColorUnit& operator = (const short value);
 
 			/** Inspection of the colorUnit's value.
 					\param   value a short receiving the value of this colorUnit (range: <tt> 0-255</tt>)
@@ -337,16 +319,14 @@ namespace BALL
 					\param       value an unsigned short of range <tt> 0-255</tt>
 					\exception   InvalidRange if <tt> value > 255</tt>
 			*/
-			void set(const unsigned short value)
-				throw(Exception::InvalidRange);
+			void set(const unsigned short value);
 
 			/** Assignment operator with unsigned short.
 					Calls set.
 					\param       value an unsigned short containing a value of range <tt> 0-255</tt>
 					\exception   InvalidRange if <tt> value > 255</tt>
 			*/
-			const ColorUnit& operator = (const unsigned short value)
-				throw(Exception::InvalidRange);
+			const ColorUnit& operator = (const unsigned short value);
 
 			/** Inspection of the colorUnit's value.
 					\param   value an unsigned short receiving the value of this colorUnit (range: <tt> 0-255</tt>)
@@ -357,16 +337,14 @@ namespace BALL
 					\param       value an int of range <tt> 0-255</tt>
 					\exception   InvalidRange if <tt> value < 0 || value > 255</tt>
 			*/
-			void set(const int value)
-				throw(Exception::InvalidRange);
+			void set(const int value);
 
 			/** Assignment operator with int.
 					Calls set.
 					\param       value an int containing a value of range <tt> 0-255</tt>
 					\exception   InvalidRange if <tt> value < 0 || value > 255</tt>
 			*/
-			const ColorUnit& operator = (const int value)
-				throw(Exception::InvalidRange);
+			const ColorUnit& operator = (const int value);
 
 			/** Inspection of the colorUnit's value.
 					\param   value an int receiving the value of this colorUnit (range: <tt> 0-255</tt>)
@@ -377,16 +355,14 @@ namespace BALL
 					\param       value an unsigned int of range <tt> 0-255</tt>
 					\exception   InvalidRange if <tt> value > 255</tt>
 			*/
-			void set(const unsigned int value)
-				throw(Exception::InvalidRange);
+			void set(const unsigned int value);
 
 			/** Assignment operator with unsigned int.
 					Calls set.
 					\param       value an unsigned int containing a value of range <tt> 0-255</tt>
 					\exception   InvalidRange if <tt> value > 255</tt>
 			*/
-			const ColorUnit& operator = (const unsigned int value)
-				throw(Exception::InvalidRange);
+			const ColorUnit& operator = (const unsigned int value);
 
 			/** Inspection of the colorUnit's value.
 					\param   value an unsigned int receiving the value of this colorUnit (range: <tt> 0-255</tt>)
@@ -397,16 +373,14 @@ namespace BALL
 					\param       value a long of range <tt> 0-255</tt>
 					\exception   InvalidRange if <tt> value < 0 || value > 255</tt>
 			*/
-			void set(const long value)
-				throw(Exception::InvalidRange);
+			void set(const long value);
 
 			/** Assignment operator with long.
 					Calls set.
 					\param       value a long containing a value of range <tt> 0-255</tt>
 					\exception   InvalidRange if <tt> value < 0 || value > 255</tt>
 			*/
-			const ColorUnit& operator = (const long value)
-				throw(Exception::InvalidRange);
+			const ColorUnit& operator = (const long value);
 
 			/** Inspection of the colorUnit's value.
 					\param   value a long receiving the value of this colorUnit (range: <tt> 0-255</tt>)
@@ -417,16 +391,14 @@ namespace BALL
 					\param       value an unsigned long of range <tt> 0-255</tt>
 					\exception   InvalidRange if <tt> value > 255</tt>
 			*/
-			void set(const unsigned long value)
-				throw(Exception::InvalidRange);
+			void set(const unsigned long value);
 
 			/** Assignment operator with unsigned long.
 					Calls set.
 					\param       value an unsigned long containing a value of range <tt> 0-255</tt>
 					\exception   InvalidRange if <tt> value > 255</tt>
 			*/
-			const ColorUnit& operator = (const unsigned long value)
-				throw(Exception::InvalidRange);
+			const ColorUnit& operator = (const unsigned long value);
 
 			/** Inspection of the colorUnit's value.
 					\param   value an unsigned long receiving the value of this colorUnit (range: <tt> 0-255</tt>)
@@ -437,16 +409,14 @@ namespace BALL
 					\param       value a float of range 0-1.0
 					\exception   InvalidRange if <tt> value < 0.0 || value > 1.0</tt>
 			*/
-			void set(const float value)
-				throw(Exception::InvalidRange);
+			void set(const float value);
 
 			/** Assignment operator with float.
 					Calls set.
 					\param       value a float containing a value of range 0-1.0
 					\exception   InvalidRange if <tt> value < 0.0 || value > 1.0</tt>
 			*/
-			const ColorUnit& operator = (const float value)
-				throw(Exception::InvalidRange);
+			const ColorUnit& operator = (const float value);
 
 			/** Inspection of the colorUnit's value.
 					\param   value a float receiving the value of this colorUnit (range: 0-1.0)
@@ -457,16 +427,14 @@ namespace BALL
 					\param       value a double of range 0-1.0
 					\exception   InvalidRange if <tt> value < 0.0 || value > 1.0</tt>
 			*/
-			void set(const double value)
-				throw(Exception::InvalidRange);
+			void set(const double value);
 
 			/** Assignment operator with double.
 					Calls set.
 					\param       value a double containing a value of range 0-1.0
 					\exception   InvalidRange if <tt> value < 0.0 || value > 1.0</tt>
 			*/
-			const ColorUnit& operator = (const double value)
-				throw(Exception::InvalidRange);
+			const ColorUnit& operator = (const double value);
 
 			/** Inspection of the colorUnit's value.
 					\param   value a double receiving the value of this colorUnit (range: 0-1.0)
@@ -553,8 +521,9 @@ namespace BALL
 
 			private:
 		
-			float hexToFloat_(const char* value)
-				throw(Exception::InvalidRange, NotInHexFormat);
+			// @throws Exception::InvalidRange
+			// @throws Exception::NotInHexFormat
+			float hexToFloat_(const char* value);
 			
 			float value_;
 		

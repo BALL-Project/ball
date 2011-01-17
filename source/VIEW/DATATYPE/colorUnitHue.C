@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnitHue.C,v 1.13.20.1 2007/03/25 21:56:35 oliver Exp $
-//
 
 #include <BALL/VIEW/DATATYPE/colorUnitHue.h>
 #include <BALL/COMMON/rtti.h>
@@ -27,19 +25,16 @@ namespace BALL
 		}
 
 		ColorUnitHue::ColorUnitHue(const char* char_ptr)
-			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			value_ = hexToFloat_(char_ptr);
 		}
 
 		ColorUnitHue::ColorUnitHue(const String& is)
-			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			value_ = hexToFloat_(is.c_str());
 		}
 
 		ColorUnitHue::ColorUnitHue(const short s)
-			throw(Exception::InvalidRange)
 		{
 			if ((s < 0) || (s > 360))
 			{
@@ -50,7 +45,6 @@ namespace BALL
 		}
 
 		ColorUnitHue::ColorUnitHue(const unsigned short s)
-			throw(Exception::InvalidRange)
 		{
       if (s > 360)
       {
@@ -61,7 +55,6 @@ namespace BALL
 		}
 
 		ColorUnitHue::ColorUnitHue(const int i)
-			throw(Exception::InvalidRange)
 		{
       if ((i < 0) || (i > 360))
       {
@@ -72,7 +65,6 @@ namespace BALL
 		}
 
 		ColorUnitHue::ColorUnitHue(const unsigned int i)
-			throw(Exception::InvalidRange)
 		{
       if (i > 360)
       {
@@ -83,7 +75,6 @@ namespace BALL
 		}
 
 		ColorUnitHue::ColorUnitHue(const long l)
-			throw(Exception::InvalidRange)
 		{
       if ((l < 0) || (l > 360))
       {
@@ -94,7 +85,6 @@ namespace BALL
 		}
 
 		ColorUnitHue::ColorUnitHue(const unsigned long l)
-			throw(Exception::InvalidRange)
 		{
       if (l > 360)
       {
@@ -105,7 +95,6 @@ namespace BALL
 		}
 
 		ColorUnitHue::ColorUnitHue(const float f)
-			throw(Exception::InvalidRange)
 		{
       if ((f < 0.0) || (f > 1.0))
       {
@@ -116,7 +105,6 @@ namespace BALL
 		}
 
 		ColorUnitHue::ColorUnitHue(const double d)
-			throw(Exception::InvalidRange)
 		{
       if ((d < 0.0) || (d > 1.0))
       {
@@ -150,13 +138,11 @@ namespace BALL
 		}
 
 		void ColorUnitHue::set(const char* char_ptr)
-			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			value_ = hexToFloat_(char_ptr);
 		}
 
 		const ColorUnitHue& ColorUnitHue::operator = (const char* char_ptr)
-			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			set(char_ptr);
 			return *this;
@@ -168,13 +154,11 @@ namespace BALL
 		}
 
 		void ColorUnitHue::set(const String& s)
-			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			value_ = hexToFloat_(s.c_str());
 		}
 
 		const ColorUnitHue& ColorUnitHue::operator = (const String& s)
-			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			set(s);
 			return *this;
@@ -188,7 +172,6 @@ namespace BALL
 		}
 
 		void ColorUnitHue::set(const short s)
-			throw(Exception::InvalidRange)
 		{
       if ((s < 0) || (s > 360))
       {
@@ -200,7 +183,6 @@ namespace BALL
 
 		const ColorUnitHue& ColorUnitHue::operator =
 			(const short s)
-			throw(Exception::InvalidRange)
 		{
 			set(s);
 			return *this;
@@ -212,7 +194,6 @@ namespace BALL
 		}
 
 		void ColorUnitHue::set(const unsigned short s)
-			throw(Exception::InvalidRange)
 		{
       if (s > 360)
       {
@@ -223,7 +204,6 @@ namespace BALL
 		}
 
 		const ColorUnitHue& ColorUnitHue::operator = (const unsigned short s)
-			throw(Exception::InvalidRange)
 		{
 			set(s);
 			return *this;
@@ -235,7 +215,6 @@ namespace BALL
 		}
 
 		void ColorUnitHue::set(const int i)
-			throw(Exception::InvalidRange)
 		{
       if ((i < 0) || (i > 360))
       {
@@ -246,7 +225,6 @@ namespace BALL
 		}
 
 		const ColorUnitHue& ColorUnitHue::operator = (const int i)
-			throw(Exception::InvalidRange)
 		{
 			set(i);
 
@@ -259,7 +237,6 @@ namespace BALL
 		}
 
 		void ColorUnitHue::set(const unsigned int i)
-			throw(Exception::InvalidRange)
 		{
       if (i > 360)
       {
@@ -270,7 +247,6 @@ namespace BALL
 		}
 
 		const ColorUnitHue& ColorUnitHue::operator = (const unsigned int i)
-			throw(Exception::InvalidRange)
 		{
 			set(i);
 
@@ -283,7 +259,6 @@ namespace BALL
 		}
 
 		void ColorUnitHue::set(const long l)
-			throw(Exception::InvalidRange)
 		{
       if ((l < 0) || (l > 360))
       {
@@ -294,7 +269,6 @@ namespace BALL
 		}
 
 		const ColorUnitHue& ColorUnitHue::operator = (const long l)
-			throw(Exception::InvalidRange)
 		{
 			set(l);
 
@@ -307,7 +281,6 @@ namespace BALL
 		}
 
 		void ColorUnitHue::set(const unsigned long l)
-			throw(Exception::InvalidRange)
 		{
       if (l > 360)
       {
@@ -318,7 +291,6 @@ namespace BALL
 		}
 
 		const ColorUnitHue& ColorUnitHue::operator = (const unsigned long l)
-			throw(Exception::InvalidRange)
 		{
 			set(l);
 
@@ -331,7 +303,6 @@ namespace BALL
 		}
 
 		void ColorUnitHue::set(const float f)
-			throw(Exception::InvalidRange)
 		{
       if ((f < 0.0) || (f > 1.0))
       {
@@ -342,7 +313,6 @@ namespace BALL
 		}
 
 		const ColorUnitHue& ColorUnitHue::operator = (const float f)
-			throw(Exception::InvalidRange)
 		{
 			set(f);
 
@@ -355,7 +325,6 @@ namespace BALL
 		}
 
 		void ColorUnitHue::set(const double d)
-			throw(Exception::InvalidRange)
 		{
       if ((d < 0.0) || (d > 1.0))
       {
@@ -366,7 +335,6 @@ namespace BALL
 		}
 
 		const ColorUnitHue& ColorUnitHue::operator = (const double d)
-			throw(Exception::InvalidRange)
 		{
 			set(d);
 
@@ -414,7 +382,6 @@ namespace BALL
 		}
 
 		float ColorUnitHue::hexToFloat_(const char* char_ptr)
-			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)		
 		{
 			int number = 0;
 
