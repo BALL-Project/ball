@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: parsedFunction.h,v 1.9 2003/12/19 14:54:08 anne Exp $
-//
 
 #ifndef BALL_MATHS_PARSEDFUNCTION_H
 #define BALL_MATHS_PARSEDFUNCTION_H
@@ -62,15 +60,15 @@ namespace BALL
 			*/
 			//@{
 			/** Evaluate the function at point \f$p\f$.
-			*/
-			double operator () (arg p) throw(Exception::ParseError);
+			 *  @throw Exception::ParseError if a syntax error was encountered
+			 */
+			double operator () (arg p);
 		
 			//@}
 			/** @name Parsing
 			*/
 			//@{
-			/** This function initializes the function table and the constant table
-				of our parser.
+			/** This function initializes the function table and the constant table of our parser.
 				*/
 			void initTable();
 			//@}
@@ -121,7 +119,6 @@ namespace BALL
 
 	template <typename arg>
 	double ParsedFunction<arg>::operator () (arg argument)
-		throw(Exception::ParseError)
 	{
 		constants_["X"] = (double*)&argument;
 		ParsedFunctionConstants = &constants_;
@@ -134,12 +131,10 @@ namespace BALL
 	}
 
 	template <>
-	BALL_EXPORT double ParsedFunction<float>::operator () (float argument)
-		throw(Exception::ParseError);
+	BALL_EXPORT double ParsedFunction<float>::operator () (float argument);
 
 	template <>
-	BALL_EXPORT double ParsedFunction<double>::operator () (double argument)
-		throw(Exception::ParseError);
+	BALL_EXPORT double ParsedFunction<double>::operator () (double argument);
  
 	template <typename arg>
 	void ParsedFunction<arg>::initTable()

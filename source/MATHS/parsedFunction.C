@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: parsedFunction.C,v 1.8 2003/12/19 14:53:55 anne Exp $
 
 #include <BALL/MATHS/parsedFunction.h>
 
@@ -12,7 +11,6 @@ namespace BALL
 
 	template <>
 	double ParsedFunction<float>::operator () (float argument)
-		throw(Exception::ParseError)
 	{
 		double arg = argument;
 		constants_["X"] = &arg;
@@ -26,7 +24,6 @@ namespace BALL
 
 	template <>
 	double ParsedFunction<double>::operator () (double argument)
-		throw(Exception::ParseError)
 	{
 		double arg = argument;
 		constants_["X"] = &arg;

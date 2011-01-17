@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: angle.h,v 1.48.18.1 2007/03/25 21:23:44 oliver Exp $
-//
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -263,23 +261,23 @@ namespace BALL
 		/**	Division operator.
 				@param angle the angle to divide by
 				@return TAngle, {\em *this}
+				@throw  Exception::DivisionByZero if angle is zero
 		*/
-		TAngle& operator /= (const TAngle& angle)
-			throw(Exception::DivisionByZero);
+		TAngle& operator /= (const TAngle& angle);
 
 		/**	Divide this angle by a value.
 				@param val the angle to divide by
 				@return TAngle, {\em *this}
+				@throw  Exception::DivisionByZero if val is zero
 		*/
-		TAngle& operator /= (const T& val)
-			throw(Exception::DivisionByZero);
+		TAngle& operator /= (const T& val);
 
 		/**	Divide this angle by a value.
 				@param val the angle to divide by
 				@return TAngle, the new angle
+				@throw  Exception::DivisionByZero if val is zero
 		*/
-		TAngle operator / (const TAngle& val)
-			throw(Exception::DivisionByZero);
+		TAngle operator / (const TAngle& val);
 
 		//@}
 		/**	@name	Predicates
@@ -593,7 +591,6 @@ namespace BALL
 
 	template <typename T>
 	TAngle<T>& TAngle<T>::operator /= (const TAngle& angle)
-		throw(Exception::DivisionByZero)
 	{
 		if (angle.value == 0)
 		{
@@ -606,7 +603,6 @@ namespace BALL
 
 	template <typename T>
 	TAngle<T>& TAngle<T>::operator /= (const T& val) 
-		throw(Exception::DivisionByZero)
 	{
 		if (val == 0)
 		{
@@ -620,7 +616,6 @@ namespace BALL
 
 	template <typename T>
 	TAngle<T> TAngle<T>::operator / (const TAngle<T>& val) 
-		throw(Exception::DivisionByZero)
 	{
 		if (val.value == 0)
 		{

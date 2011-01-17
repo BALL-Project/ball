@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: piecewiseFunction.C,v 1.12 2004/11/07 14:44:15 oliver Exp $
 
 #include <BALL/MATHS/piecewiseFunction.h>
 
@@ -20,7 +19,6 @@ namespace BALL
 
 
 	PiecewiseFunction::PiecewiseFunction(const PiecewiseFunction& function)
-		 
 		:	intervals_(function.intervals_),
 			coefficients_(function.coefficients_),
 			valid_(function.valid_),
@@ -37,7 +35,6 @@ namespace BALL
 		calculateRange();
 		valid_ = isValid();
 	}
-
 
 	PiecewiseFunction::~PiecewiseFunction() 
 	{
@@ -88,14 +85,12 @@ namespace BALL
 
 
 	const std::vector<Interval>& PiecewiseFunction::getIntervals() const
-		
 	{
 		return intervals_;
 	}
 
 
 	const Interval& PiecewiseFunction::getInterval(double x) const 
-		throw(Exception::OutOfRange)
 	{
 		Position index = getIntervalIndex(x);
 		// No error checking here, is handled by getIntervalIndex()
@@ -104,7 +99,6 @@ namespace BALL
 
 
 	const Interval& PiecewiseFunction::getInterval(Position index) const
-		throw(Exception::IndexOverflow)
 	{
 		if (index < intervals_.size())
 		{
@@ -118,7 +112,6 @@ namespace BALL
 
 
 	Position PiecewiseFunction::getIntervalIndex(double x) const
-		throw(Exception::OutOfRange)
 	{
 		if (!isInRange(x))
 		{
@@ -154,8 +147,7 @@ namespace BALL
 	}
 
 
-	const std::vector<Coefficients>& PiecewiseFunction::getCoefficients()
-		const  
+	const std::vector<Coefficients>& PiecewiseFunction::getCoefficients() const  
 	{
 		if (coefficients_.empty())
 		{
@@ -167,7 +159,6 @@ namespace BALL
 
 
 	const Coefficients& PiecewiseFunction::getCoefficients(double x) const
-		throw(Exception::OutOfRange)
 	{
 		Position index = getIntervalIndex(x);
 		// No error checking here, is handled by getIntervalIndex()
@@ -175,8 +166,7 @@ namespace BALL
 	}
 
 
-	const Coefficients& PiecewiseFunction::getCoefficients(Position index)
-		const throw(Exception::IndexOverflow)
+	const Coefficients& PiecewiseFunction::getCoefficients(Position index) const
 	{
 		if (index < coefficients_.size())
 		{
