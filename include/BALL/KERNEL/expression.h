@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expression.h,v 1.33 2005/10/23 12:02:18 oliver Exp $
-//
 
 #ifndef BALL_KERNEL_EXPRESSION_H
 #define BALL_KERNEL_EXPRESSION_H
@@ -63,12 +61,12 @@ namespace BALL
 		Expression(const Expression& expression);
 
 		/** Construct an Expression with a string
-		*/
-		Expression(const String& expression_string)
-			throw(Exception::ParseError);
+		 *  @throw Exception::ParseError if a syntax error was encountered
+		 */
+		Expression(const String& expression_string);
 
 		/** Destructor.
-		*/
+		 */
 		virtual ~Expression();
 
 		//@}
@@ -107,8 +105,9 @@ namespace BALL
 		void registerPredicate(const String& name, CreationMethod creation_method);
 
 		/** Set the expression and build a tree for it.
-		*/
-		void setExpression(const String& expression) throw(Exception::ParseError);
+		 *  @throw Exception::ParseError if a syntax error was encountered
+		 */
+		void setExpression(const String& expression);
 
 		/** Get the expression string.
 		*/
@@ -144,9 +143,9 @@ namespace BALL
 		//@{
 
 		/*_ Construct the expression tree from the SyntaxTree
-		*/
-		ExpressionTree*	constructExpressionTree_(const ExpressionParser::SyntaxTree& tree)
-			throw(Exception::ParseError);
+		 *  @throw Exception::ParseError if a syntax error was encountered
+		 */
+		ExpressionTree*	constructExpressionTree_(const ExpressionParser::SyntaxTree& tree);
 
 		/*_ Register the predicates defined by default.
 				See also: BALL/KERNEL/standardPredicates.h

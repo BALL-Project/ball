@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragment.h,v 1.29 2005/10/23 12:02:18 oliver Exp $
-//
 
 #ifndef BALL_KERNEL_FRAGMENT_H
 #define BALL_KERNEL_FRAGMENT_H
@@ -64,16 +62,14 @@ namespace BALL
 		//@{
 
 		/**	Writes a Fragment object to a persistent stream.
-				@param pm the persistence manager
-		*/
-		void persistentWrite(PersistenceManager& pm, const char* name = 0) const
-			throw(Exception::GeneralException);
+		 *	@param pm the persistence manager
+		 */
+		void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
 
 		/**	Reads a Fragment object from a persistent stream.
-				@param pm the persistence manager
-		*/
-		void persistentRead(PersistenceManager& pm)
-			throw(Exception::GeneralException);
+		 *	@param pm the persistence manager
+		 */
+		void persistentRead(PersistenceManager& pm);
 
 		//@}
 		/**	@name	Assignment 

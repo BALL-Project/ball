@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomContainer.C,v 1.20 2005/12/23 17:02:41 amoll Exp $
-//
 
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/KERNEL/forEach.h>
@@ -56,7 +54,6 @@ namespace BALL
 	}
 
 	void AtomContainer::persistentWrite(PersistenceManager& pm, const char* name) const
-		throw(Exception::GeneralException)
 	{
 		pm.writeObjectHeader(this, name);
 			Composite::persistentWrite(pm);
@@ -68,7 +65,6 @@ namespace BALL
 	}
 
 	void AtomContainer::persistentRead(PersistenceManager& pm)
-		throw(Exception::GeneralException)
 	{
 		pm.checkObjectHeader(RTTI::getStreamName<Composite>());
 			Composite::persistentRead(pm);

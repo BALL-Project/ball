@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomContainer.h,v 1.32 2005/10/23 12:02:17 oliver Exp $
-//
 
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
 #define BALL_KERNEL_ATOMCONTAINER_H
@@ -90,16 +88,14 @@ namespace BALL
 		//@{
 
 		/**	Write an AtomContainer object to a persistent stream.
-				@param pm the persistence manager
-		*/
-		virtual void persistentWrite(PersistenceManager& pm, const char* name = 0) const
-			throw(Exception::GeneralException);
+		 *	@param pm the persistence manager
+		 */
+		virtual void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
 
 		/**	Read an AtomContainer object from a persistent stream.
-				@param pm the persistence manager
-		*/
-		virtual void persistentRead(PersistenceManager& pm)
-			throw(Exception::GeneralException);
+		 *	@param pm the persistence manager
+		 */
+		virtual void persistentRead(PersistenceManager& pm);
 
 		//@}			
 		/**	@name	Assignment 

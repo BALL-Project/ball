@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBAtom.C,v 1.18 2003/08/26 09:17:48 oliver Exp $
-//
 
 #include <BALL/KERNEL/PDBAtom.h>
 #include <BALL/KERNEL/chain.h>
@@ -87,7 +85,6 @@ namespace BALL
 	}
 
 	void PDBAtom::persistentWrite(PersistenceManager& pm, const char* name) const	
-		throw(Exception::GeneralException)
 	{
 		pm.writeObjectHeader(this, name);
 			Atom::persistentWrite(pm);
@@ -100,7 +97,6 @@ namespace BALL
 	}
 
 	void PDBAtom::persistentRead(PersistenceManager& pm)
-		throw(Exception::GeneralException)
 	{
 		pm.checkObjectHeader(RTTI::getStreamName<Atom>());
 			Atom::persistentRead(pm);

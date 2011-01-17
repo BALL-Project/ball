@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleicAcid.C,v 1.18 2003/08/26 09:17:49 oliver Exp $
-//
 
 #include <BALL/KERNEL/nucleicAcid.h>
 
@@ -47,7 +45,6 @@ namespace BALL
 	}
 		
 	void NucleicAcid::persistentWrite(PersistenceManager& pm, const char* name) const
-		throw(Exception::GeneralException)
 	{
 		pm.writeObjectHeader(this, name);
 			Molecule::persistentWrite(pm);
@@ -56,7 +53,6 @@ namespace BALL
 	}
 
 	void NucleicAcid::persistentRead(PersistenceManager& pm)
-		throw(Exception::GeneralException)
 	{
 		pm.checkObjectHeader(RTTI::getStreamName<Molecule>());
 			Molecule::persistentRead(pm);

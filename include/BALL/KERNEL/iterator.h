@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: iterator.h,v 1.28 2005/10/23 12:02:19 oliver Exp $
-//
 
 #ifndef BALL_KERNEL_ITERATOR_H
 #define BALL_KERNEL_ITERATOR_H
@@ -185,16 +183,16 @@ namespace BALL
 		inline void invalidate();
 
 		/**	Reposition the iterator to the first element of the container.
-				@exception InvalidIterator if the iterator is <b>  singular </b>.
-				@see isSingular
-		*/
-		inline void toBegin() throw(Exception::Precondition);
+		 *	@throw Exception::Precondition if the iterator is unbound
+		 *	@see isSingular
+		 */
+		inline void toBegin();
 
 		/**	Reposition the iterator after the last element of the container.
-				@exception InvalidIterator if the iterator is <b>  singular </b>.
-				@see isSingular
-		*/
-		inline void toEnd() throw(Exception::Precondition);
+		 *	@throw Exception::Precondition if the iterator is unbound
+		 *	@see isSingular
+		 */
+		inline void toEnd();
 
 		/// Return a reference to the current element
 		inline Composite& getData();
@@ -208,11 +206,15 @@ namespace BALL
 		/// Decrement the iterator one element
 		inline void backward();
 			
-		/// Reposition the (backward) iterator to the last element of the container
-		inline void toRBegin() throw(Exception::Precondition);
+		/** Reposition the (backward) iterator to the last element of the container
+		 *  @throw Exception::Precondition if the iterator is unbound
+		 */
+		inline void toRBegin();
 
-		/// Reposition the (backward) iterator beyond the first element of the container
-		inline void toREnd() throw(Exception::Precondition);
+		/** Reposition the (backward) iterator beyond the first element of the container
+		 *  @throw Exception::Precondition if the iterator is unbound
+		 */
+		inline void toREnd();
 
 		/// Assign the current predicate associated with the iterator
 		inline void setPredicate(const UnaryPredicate<Composite>& predicate) { predicate_ = &predicate; }
@@ -278,7 +280,7 @@ namespace BALL
 		composite_iterator_.invalidate();
 	}
 
-	inline void CompositeIteratorTraits::toBegin() throw(Exception::Precondition)
+	inline void CompositeIteratorTraits::toBegin()
 	{
 		BALL_PRECONDITION_EXCEPTION((bound_ != 0), "cannot move unbound iterator to begin")
 		composite_iterator_ = bound_->beginComposite();
@@ -311,7 +313,7 @@ namespace BALL
 		return false;
 	}
 
-	inline void CompositeIteratorTraits::toEnd() throw(Exception::Precondition)
+	inline void CompositeIteratorTraits::toEnd()
 	{
 		composite_iterator_.toEnd();
 	}
@@ -335,7 +337,7 @@ namespace BALL
 		}
 	}
 
-	inline void CompositeIteratorTraits::toRBegin() throw(Exception::Precondition)
+	inline void CompositeIteratorTraits::toRBegin()
 	{
 		BALL_PRECONDITION_EXCEPTION(!isSingular(), "cannot move singular iterator to reverse begin")
 		composite_iterator_ = --bound_->endComposite();
@@ -360,7 +362,7 @@ namespace BALL
 		return (composite_iterator_ == sub_iterator);
 	}
 
-	inline void CompositeIteratorTraits::toREnd() throw(Exception::Precondition)
+	inline void CompositeIteratorTraits::toREnd()
 	{
 		composite_iterator_.toREnd();
 	}

@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.75.14.1 2007/03/25 21:23:43 oliver Exp $
-//
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -253,16 +251,14 @@ namespace BALL
 			//@{
 
 			/**	Write an Atom to a persistent stream.
-					@param pm the persistence manager
-			*/
-			virtual void persistentWrite(PersistenceManager& pm, const char* name = 0) const
-				throw(Exception::GeneralException);
+			 *	@param pm the persistence manager
+			 */
+			virtual void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
 
 			/**	Read an Atom from a persistent stream.
-					@param pm the persistence manager
-			*/
-			virtual void persistentRead(PersistenceManager& pm)
-				throw(Exception::GeneralException);
+			 *	@param pm the persistence manager
+			 */
+			virtual void persistentRead(PersistenceManager& pm);
 
 			//@}
 			/** @name Assignment methods 
@@ -497,42 +493,40 @@ namespace BALL
 			Size countBonds() const;
 
 			/** Return a bond by its index (mutable).
-					The reference is 0 if this instance does not have a bond with index <b>  index </b>. \par
-					<b>Note:</b> No corresponding mutator Atom::setBond exists to
-					consider design of contract - an atom may not insert a bond in its bond table at a given index.
-					The atom's bond table is an implementation detail that is not relevant to and should not be relied
-					on by the client programmer. A bond must always be created via  \link Bond::Bond Bond::Bond \endlink  or
-					 \link Atom::createBond Atom::createBond \endlink .
-					@param   index the index of the bond to be accessed to
-					@return  Bond* - mutable pointer to the bond that is indexed in this instance's bond table,
-									 0 if this instance does not have a bond with index <b>  index </b>
-					@exception   IndexOverflow if <tt>index >= MAX_NUMBER_OF_BONDS</tt>
-			*/
-			Bond* getBond(Position index)
-				throw(Exception::IndexOverflow);
+			 *	The reference is 0 if this instance does not have a bond with index <b>  index </b>. \par
+			 *	<b>Note:</b> No corresponding mutator Atom::setBond exists to
+			 *	consider design of contract - an atom may not insert a bond in its bond table at a given index.
+			 *	The atom's bond table is an implementation detail that is not relevant to and should not be relied
+			 *	on by the client programmer. A bond must always be created via  \link Bond::Bond Bond::Bond \endlink  or
+			 *	 \link Atom::createBond Atom::createBond \endlink .
+			 *	@param   index the index of the bond to be accessed to
+			 *	@return  Bond* - mutable pointer to the bond that is indexed in this instance's bond table,
+			 *					 0 if this instance does not have a bond with index <b>  index </b>
+			 *	@throw   IndexOverflow if <tt>index >= MAX_NUMBER_OF_BONDS</tt>
+			 */
+			Bond* getBond(Position index);
 
 			/** Return a bond by its index (const).
-					@exception   IndexOverflow if <tt>index >= MAX_NUMBER_OF_BONDS</tt>
-			*/
-			const Bond* getBond(Position index) const
-				throw(Exception::IndexOverflow);
+			 *	@exception   IndexOverflow if <tt>index >= MAX_NUMBER_OF_BONDS</tt>
+			 */
+			const Bond* getBond(Position index) const;
 
 			/** Return a bond by its partner atom (const).
-					The reference is 0 if this instance does not have a bond with <b>  atom </b>.
-					@param   atom the atom that is considered to have a bond with this instance
-					@return  Bond* - mutable pointer to the bond that connects <tt>atom</tt>  with this instance,
-									 0 if this instance does not have a bond with <b>  atom </b>
-					@see     Atom::createBond	     
-			*/
+			 *	The reference is 0 if this instance does not have a bond with <b>  atom </b>.
+			 *	@param   atom the atom that is considered to have a bond with this instance
+			 *	@return  Bond* - mutable pointer to the bond that connects <tt>atom</tt>  with this instance,
+			 *					 0 if this instance does not have a bond with <b>  atom </b>
+			 *	@see     Atom::createBond	     
+			 */
 			Bond* getBond(const Atom& atom);
 
 			/** Return a bond by its partner atom (mutable)
-					The reference is 0 if this instance does not have a bond with <b>  atom </b>.
-					@param   atom the atom that is considered to have a bond with this instance
-					@return  Bond* - constant pointer to the bond that connects <b>  atom </b> with 
-									 this instance, 0 if this instance does not have a bond with <b>  atom </b>
-					@see     Atom::createBond	     
-			*/
+			 *	The reference is 0 if this instance does not have a bond with <b>  atom </b>.
+			 *	@param   atom the atom that is considered to have a bond with this instance
+			 *	@return  Bond* - constant pointer to the bond that connects <b>  atom </b> with 
+			 *					 this instance, 0 if this instance does not have a bond with <b>  atom </b>
+			 *	@see     Atom::createBond	     
+			 */
 			const Bond* getBond(const Atom& atom) const;
 			//@}
 
@@ -542,26 +536,28 @@ namespace BALL
 			//@{ 
 
 			/** Create a new bond to an atom.
-					Create a new instance of  \link Bond Bond \endlink  connecting this instance to <b>  atom </b>.
-					Calls  \link Bond::createBond Bond::createBond \endlink .
-					The state of the bond is initialized to the default values.
-					@return  Bond* - default initialized Bond instance that connects this instance to <b>  atom </b>
-					@see     Bond::createBond
-			*/
-			Bond* createBond(Atom& atom)
-				throw(Exception::TooManyBonds);
+			 *	Create a new instance of  \link Bond Bond \endlink  connecting this instance to <b>  atom </b>.
+			 *	Calls  \link Bond::createBond Bond::createBond \endlink .
+			 *	The state of the bond is initialized to the default values.
+			 *	@return  Bond* - default initialized Bond instance that connects this instance to <b>  atom </b>
+			 *  @throw   Exception::TooManyBonds if one of the atom already possesses 
+			 *           \link Atom::MAX_NUMBER_OF_BONDS Atom::MAX_NUMBER_OF_BONDS \endlink  bonds.
+			 *	@see     Bond::createBond
+			 */
+			Bond* createBond(Atom& atom);
 
 			/** Create a new bond from an already existing instance of Bond.
-					Initialize the bond <b>  bond </b> to connect this instance to <b>  atom </b>.
-					Calls  \link Bond::createBond Bond::createBond \endlink .
-					The state of the bond is initialzed to the default values. \par
-					<b>Note:</b> This method is recommended for use if a subclass of the  \link Bond Bond \endlink 
-									 is to be used as the new bond. This permits extensibility of bonds to the framework client.
-					@return  Bond* - default initialized bond <b>  bond </b> that connects this instance to <b>  atom </b>
-					@see     Bond::createBond
-			*/
-			Bond* createBond(Bond& bond, Atom& atom)
-				throw(Exception::TooManyBonds);
+			 *	Initialize the bond <b>  bond </b> to connect this instance to <b>  atom </b>.
+			 *	Calls  \link Bond::createBond Bond::createBond \endlink .
+			 *	The state of the bond is initialzed to the default values. \par
+			 *	<b>Note:</b> This method is recommended for use if a subclass of the  \link Bond Bond \endlink 
+			 *					 is to be used as the new bond. This permits extensibility of bonds to the framework client.
+			 *	@return  Bond* - default initialized bond <b>  bond </b> that connects this instance to <b>  atom </b>
+			 *  @throw   Exception::TooManyBonds if one of the atom already possesses 
+			 *           \link Atom::MAX_NUMBER_OF_BONDS Atom::MAX_NUMBER_OF_BONDS \endlink  bonds.
+			 *	@see     Bond::createBond
+			 */
+			Bond* createBond(Bond& bond, Atom& atom);
 
 			/**	Create a copy of a bond.
 					This is mostly for internal use and should not be required by most
@@ -603,15 +599,17 @@ namespace BALL
 			 * @throw Exception::IndexOverflow is thrown if i >= countBonds(). This 
 			 *        exception originates from getBond(i)
 			 */
-			Atom* getPartnerAtom(Position i) throw(Exception::IndexOverflow);
+			Atom* getPartnerAtom(Position i);
 
 			/**
 			 * Returns the Atom bound at the i-th bond. This is a convenience function for:
 			 * getBond(i)->getBoundAtom(*this)
 			 *
 			 * @param i The index of the partner atom
+			 * @throw Exception::IndexOverflow is thrown if i >= countBonds(). This 
+			 *        exception originates from getBond(i)
 			 */
-			const Atom* getPartnerAtom(Position i) const throw(Exception::IndexOverflow);
+			const Atom* getPartnerAtom(Position i) const;
 
 			/**
 			 * A convenience function for computing the distance between two atoms.
