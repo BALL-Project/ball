@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularExpression.h,v 1.3 2005/12/23 17:01:42 amoll Exp $
-//
 
 #ifndef BALL_DATATYPE_REGULAREXPRESSION_H
 #define BALL_DATATYPE_REGULAREXPRESSION_H
@@ -167,57 +165,61 @@ namespace BALL
 		Size countSubexpressions() const;
 
 		/**	Match a text with a given pattern.
-				@param text to process
-				@param pattern to compare with
-				@param compile_flags ?????
-				@param execute_flags ?????
-				@exception NullPointer if <tt>text</tt> or <tt>pattern</tt> are NULL
-		*/
+		 *	@param text to process
+		 *	@param pattern to compare with
+		 *	@param compile_flags ?????
+		 *	@param execute_flags ?????
+		 *	@exception NullPointer if <tt>text</tt> or <tt>pattern</tt> are NULL
+		 */
 		static bool match(const char* text, const char* pattern,
-											int compile_flags = 0 | REG_EXTENDED | REG_NOSUB, int execute_flags = 0)
-			throw(Exception::NullPointer);
+											int compile_flags = 0 | REG_EXTENDED | REG_NOSUB, int execute_flags = 0);
 		
 		/**	Match a text with this regular expression.
-				@param text to process
-				@param from index in the string to start the matching
-				@param execute_flags ?????
-		*/
-		bool match(const String& text, Index from = 0, int execute_flags = 0) const
-			throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow);
+		 *	@param text to process
+		 *	@param from index in the string to start the matching
+		 *	@param execute_flags ?????
+		 *  @throw Exception::IndexUnderflow if from < 0
+		 *  @throw Exception::IndexOverflow if from > text.size()
+		 */
+		bool match(const String& text, Index from = 0, int execute_flags = 0) const;
 	
 		/**	Match a substring with this regular expression.
-				@param text to process
-				@param from index in the substring to start the matching
-				@param execute_flags ?????
-		*/
-		bool match(const Substring& text, Index from = 0, int execute_flags = 0) const
-			throw(Substring::InvalidSubstring, Exception::IndexUnderflow, Exception::IndexOverflow);
+		 *	@param text to process
+		 *	@param from index in the substring to start the matching
+		 *	@param execute_flags ?????
+		 *  @throw Exception::InvalidSubstring if text is invalid
+		 *  @throw Exception::IndexUnderflow if from < 0
+		 *  @throw Exception::IndexOverflow if from > text.size()
+		 */
+		bool match(const Substring& text, Index from = 0, int execute_flags = 0) const;
 	
 		/**	Match a C-String with this regular expression.
-				@param text to process
-				@param execute_flags ?????
-		*/
-		bool match(const char* text, int execute_flags = 0) const
-			throw(Exception::NullPointer);
+		 *	@param text to process
+		 *	@param execute_flags ?????
+		 *	@exception NullPointer if <tt>text</tt> is NULL
+		 */
+		bool match(const char* text, int execute_flags = 0) const;
 	
 		/**	Find this expression in a string
-				@param from index in the string to start the matching
-				@param found the result is stored as a substring here
-				@param execute_flags ?????
-		*/
+		 *	@param from index in the string to start the matching
+		 *	@param found the result is stored as a substring here
+		 *	@param execute_flags ?????
+		 *  @throw Exception::IndexUnderflow if from < 0
+		 *  @throw Exception::IndexOverflow if from >= text.size()
+		 */
 		bool find(const String& text, Substring& found,
-							Index from = 0, int execute_flags = 0) const
-							throw(Exception::IndexUnderflow, Exception::IndexOverflow);
+							Index from = 0, int execute_flags = 0) const;
 			
 		/**	Find this expression in a string
-				@param text to process
-				@param subexpressions the results are stored here
-				@param from index in the string to start the matching		
-				@param execute_flags ?????
-		*/
+		 *	@param text to process
+		 *	@param subexpressions the results are stored here
+		 *	@param from index in the string to start the matching		
+		 *	@param execute_flags ?????
+		 *  @throw Exception::IndexUnderflow if from < 0
+		 *  @throw Exception::IndexOverflow if from >= text.size()
+		 */
 		bool find(const String& text, vector<Substring>& subexpressions,
-							Index from = 0, int execute_flags = 0) const
-							throw(Exception::IndexUnderflow, Exception::IndexOverflow);
+							Index from = 0, int execute_flags = 0) const;
 						
 		//@}
 		/**	@name	Predicates

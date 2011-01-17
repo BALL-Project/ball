@@ -64,7 +64,6 @@ namespace BALL
 
 	bool RegularExpression::match(const char* text, const char* pattern,
 															  int compile_flags, int execute_flags)
-		 throw(Exception::NullPointer)
 	{
 		if ((text == 0) || (pattern == 0))
 		{
@@ -85,7 +84,6 @@ namespace BALL
 	}
 
 	bool RegularExpression::match(const String& text, Index from, int execute_flags) const
-		 throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
 		if (valid_pattern_ == false)
 		{
@@ -106,7 +104,6 @@ namespace BALL
 	}
 
 	bool RegularExpression::match(const Substring& text, Index from, int execute_flags) const 
-		throw(Substring::InvalidSubstring, Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
 		if (valid_pattern_ == false)
 		{
@@ -138,7 +135,6 @@ namespace BALL
 	}
 
 	bool RegularExpression::match(const char* text, int execute_flags) const
-		throw(Exception::NullPointer)
 	{
 		if (valid_pattern_ == false)
 		{
@@ -154,8 +150,7 @@ namespace BALL
 	}
 
 	bool RegularExpression::find(const String& text, Substring& found,
-															 Index from, int execute_flags) 
-			const throw(Exception::IndexUnderflow, Exception::IndexOverflow)
+															 Index from, int execute_flags) const
 	{
 		if ((valid_pattern_ == false) || (text.size() == 0))
 		{
@@ -186,7 +181,6 @@ namespace BALL
 
 	bool RegularExpression::find(const String& text, vector<Substring>& subexpressions,
 															 Index from, int execute_flags) const
-				throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
 		if (valid_pattern_ == false)
 		{

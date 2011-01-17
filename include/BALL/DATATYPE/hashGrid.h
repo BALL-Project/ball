@@ -188,7 +188,7 @@ namespace BALL
 
 			BALL_CREATE_DEEP(BoxIteratorTraits)
 
-			virtual ~BoxIteratorTraits() throw () {}
+			virtual ~BoxIteratorTraits() {}
 
 			BoxIteratorTraits()
 				: bound_(0),
