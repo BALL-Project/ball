@@ -100,7 +100,8 @@ namespace BALL
 					StringHashMap<float>  values;
 					StringHashMap<float>  errors;
 					StringHashMap<String> units;
-				
+					
+					bool hasType(String type) {return values.has(type);}	
 					std::ostream& operator >> (std::ostream& s);
 			};
 	
@@ -250,7 +251,9 @@ namespace BALL
 					String   entry_type;
 					String   BMRB_accession_code;
 					String   NMR_STAR_version;
-					String   experimental_method;
+					String   experimental_method;	
+					String   submission_date;
+
 			};
 			
 			/** Monomeric Polymer

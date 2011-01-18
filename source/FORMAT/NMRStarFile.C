@@ -1379,6 +1379,10 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 					if (saveframes[sf].hasItem("_Experimental_method"))
 						entry_information_.experimental_method = saveframes[sf].getItemValue("_Experimental_method");	
 					else  entry_information_.experimental_method = "";
+
+					if (saveframes[sf].hasItem("_Submission_date"))
+						entry_information_.submission_date = saveframes[sf].getItemValue("_Submission_date");
+					else entry_information_.submission_date = "";	
 				}
 			}
 		}
