@@ -836,7 +836,17 @@ namespace BALL
 				return 0;
 			}
 
-			QAction* action = popup->addAction(name.c_str(), receiver, slot, accel);
+			QAction* action;
+			if(slot && receiver)
+			{
+				action = popup->addAction(name.c_str(), receiver, slot, accel);
+			}
+			else
+			{
+				action = popup->addAction(name.c_str());
+				action->setShortcut(accel);
+			}
+
 			action->setObjectName(name.c_str());
 
 			if (description != "")

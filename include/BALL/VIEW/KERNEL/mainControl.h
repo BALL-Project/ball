@@ -495,6 +495,8 @@ namespace BALL
 			QAction* insertMenuEntry(Position parent_id, const String& name, const QObject* receiver = 0, 
 													 const char* slot = 0, const String& description = "", QKeySequence accel = QKeySequence());
 
+			QAction* insertMenuEntry(Position parent_id, const QString& name, const QObject* receiver = 0,
+													 const char* slot = 0, const QString& description = "", QKeySequence accel = QKeySequence());
 			/// 
 			void removeMenuEntry (Index parent_id, QAction* action);
 			

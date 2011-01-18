@@ -567,10 +567,8 @@ namespace BALL
 
 			if (selected_.size() == 1 && RTTI::isKindOf<System>(**selected_.begin()))
 			{
-				bool is_in_move_mode = 
-					(Scene::getInstance(0) != 0) &&
-					(Scene::getInstance(0)->getMode() == Scene::MOVE__MODE);
-			
+				bool is_in_move_mode = Scene::getInstance(0) && Scene::getInstance(0)->inMoveMode();
+
 				if (!is_in_move_mode) showFilename();
 			}
 

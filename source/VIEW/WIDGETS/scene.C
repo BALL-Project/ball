@@ -24,8 +24,6 @@
 #include <BALL/VIEW/DIALOGS/stageSettings.h>
 #include <BALL/VIEW/DIALOGS/materialSettings.h>
 #include <BALL/VIEW/DIALOGS/exportGeometryDialog.h>
-#include <BALL/VIEW/DIALOGS/PTEDialog.h>
-#include <BALL/VIEW/DIALOGS/compositeProperties.h>
 
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
 
@@ -125,65 +123,11 @@ namespace BALL
 		float Scene::animation_smoothness_ = 2;
 		float Scene::downsampling_factor_ = 1;
 
-#define  ROTATE_FACTOR    50.
-#define  ROTATE_FACTOR2   50.
-#define  TRANSLATE_FACTOR 4.
-#define  ZOOM_FACTOR      7.
-
-		Scene::Scene()
-			:	QWidget(),
-				ModularWidget("<Scene>"),
-				update_running_(false),
-				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
-				stage_(new Stage()),
-				renderers_(),
-				gl_renderer_(new GLRenderer()),
-#ifdef BALL_HAS_RTFACT
-				rt_renderer_(new t_RaytracingRenderer()),
-#endif
-				light_settings_(new LightSettings(this)),
-				material_settings_(new MaterialSettings(this)),
-				animation_thread_(0),
-				toolbar_view_controls_(new QToolBar(tr("3D View Controls"), this)),
-				mode_group_(new QActionGroup(this)),
-				main_display_(new GLRenderWindow(this)),
-				main_renderer_(0),
-				stereo_left_eye_(-1),
-				stereo_right_eye_(-1),
-				toolbar_edit_controls_(new QToolBar(tr("Edit Controls"), this))
-			{
-				initializeMembers_();
-
-				stage_settings_ = new StageSettings(this);
-
-				registerRenderers_();
-
-				init();
-				renderers_[main_renderer_]->resize(width(), height());
-				renderers_[main_renderer_]->start();
-
-				setAcceptDrops(true);
-#ifdef BALL_VIEW_DEBUG
-				Log.error() << "new Scene (1) " << this << std::endl;
-#endif
-			}
-
 		Scene::Scene(QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
 			:	QWidget(parent_widget, w_flags),
 				ModularWidget(name),
-				current_mode_(ROTATE__MODE),
-				last_mode_(PICKING__MODE),
-				rotate_action_(0),
-				picking_action_(0),
 				system_origin_(0.0, 0.0, 0.0),
-				need_update_(false),
 				update_running_(false),
-				x_window_pos_old_(0),
-				y_window_pos_old_(0),
-				x_window_pos_new_(0),
-				y_window_pos_new_(0),
-				x_window_pick_pos_first_(0),
-				y_window_pick_pos_first_(0),
 				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
 				stage_(new Stage),
 				renderers_(),
@@ -199,19 +143,15 @@ namespace BALL
 				continuous_loop_(false),
 #endif
 				want_to_use_vertex_buffer_(false),
-				mouse_button_is_pressed_(false),
-				preview_(false),
 				use_preview_(true),
 				show_fps_(false),
 				toolbar_view_controls_(new QToolBar(tr("3D View Controls"), this)),
-				mode_group_(new QActionGroup(this)),
+				toolbar_edit_controls_(new QToolBar(tr("Edit Controls"), this)),
 				main_display_(new GLRenderWindow(this)),
 				main_renderer_(0),
 				stereo_left_eye_(-1),
 				stereo_right_eye_(-1),
-				fragment_db_(),
-				fragment_db_initialized_(false),
-				toolbar_edit_controls_(new QToolBar(tr("Edit Controls"), this))
+				mode_manager_(this)
 			{
 				initializeMembers_();
 
@@ -255,11 +195,12 @@ namespace BALL
 				continuous_loop_(false),
 #endif
 				toolbar_view_controls_(new QToolBar(tr("3D View Controls"), this)),
-				mode_group_(new QActionGroup(this)),
+				toolbar_edit_controls_(new QToolBar(tr("Edit Controls"), this)),
 				main_display_(new GLRenderWindow(this)),
 				main_renderer_(0),
 				stereo_left_eye_(-1),
-				stereo_right_eye_(-1)
+				stereo_right_eye_(-1),
+				mode_manager_(this)
 			{
 				initializeMembers_();
 
@@ -483,15 +424,12 @@ namespace BALL
 					return;
 
 				case SceneMessage::ENTER_ROTATE_MODE:
-					rotateMode_();
 					return;
 
 				case SceneMessage::ENTER_PICKING_MODE:
-					pickingMode_();
 					return;
 
 				case SceneMessage::ENTER_MOVE_MODE:
-					moveMode_();
 					return;
 
 				case SceneMessage::UNDEFINED:
@@ -619,7 +557,7 @@ namespace BALL
 			return fps_string;
 		}
 
-		void Scene::renderText_(QPointF const& point, String const& text, QPaintDevice* current_dev)
+		void Scene::renderText_(QPointF const& point, QString const& text, QPaintDevice* current_dev)
 		{
 			ColorRGBA text_color = stage_->getBackgroundColor().getInverseColor();
 
@@ -632,7 +570,7 @@ namespace BALL
 			p.setRenderHint(QPainter::Antialiasing, true);
 			p.setRenderHint(QPainter::TextAntialiasing, true);
 
-			p.drawText(point, text.c_str());
+			p.drawText(point, text);
 
 			p.end();
 		}
@@ -829,94 +767,8 @@ namespace BALL
 
 		/////////////////////////////////////////////////////////
 
-		float Scene::getXDiff_()
-		{
-			float delta_x = (float)x_window_pos_new_ - (float)x_window_pos_old_;
-			delta_x /= qApp->desktop()->width();
-			delta_x *= mouse_sensitivity_;
-			return delta_x;
-		}
-
-		float Scene::getYDiff_()
-		{
-			float delta_y = (float)y_window_pos_new_ - (float)y_window_pos_old_;
-			delta_y /= qApp->desktop()->width();
-			delta_y *= mouse_sensitivity_;
-			return delta_y;
-		}
-
-		void Scene::rotateSystemClockwise_()
-		{
-			float x = getXDiff_();
-
-			if (x == 0) return;
-
-			x *= ROTATE_FACTOR2;
-
-			rotateClockwise(x);
-		}
-
-
-		void Scene::rotateSystem_()
-		{
-			float x = getXDiff_() * ROTATE_FACTOR;
-			float y = getYDiff_() * ROTATE_FACTOR;
-
-			rotate(-x, -y);
-		}
-
-
-		void Scene::translateSystem_()
-		{
-			float x = getXDiff_() * TRANSLATE_FACTOR; 
-			float y = getYDiff_() * TRANSLATE_FACTOR;
-
-			move(Vector3(x, -y, 0));
-		}
-
-
-		void Scene::zoomSystem_()
-		{
-			float y = getYDiff_() * ZOOM_FACTOR;
-
-			if (stage_->getCamera().getProjectionMode() == Camera::PERSPECTIVE)
-			{
-				move(Vector3(0, 0, y));
-			}
-			else
-			{
-				float scale = std::max(0.05, 1.-y);
-
-				gl_renderer_->setOrthographicZoom(gl_renderer_->getOrthographicZoom() * scale);
-				gl_renderer_->initPerspective();
-
-				updateGL();
-			}
-		}
-
-
 		// picking routine ------
 		// TODO: make renderer configurable
-		void Scene::selectObjects_()
-		{
-			rb_->hide();
-
-			QPoint p0 = mapFromGlobal(QPoint(x_window_pick_pos_first_, y_window_pick_pos_first_));
-			QPoint p1 = mapFromGlobal(QPoint(x_window_pos_new_, y_window_pos_new_));
-
-			list<GeometricObject*> objects;
-
-			// draw the representations
-			renderers_[main_renderer_]->pickObjects((Position)p0.x(), (Position)p0.y(), 
-					                                    (Position)p1.x(), (Position)p1.y(), objects);
-
-			// sent collected objects
-			GeometricObjectSelectionMessage* message = new GeometricObjectSelectionMessage;
-			message->setSelection(objects);
-			message->setSelected(pick_select_);
-			notify_(message);
-		}
-
 
 		void Scene::setViewPoint_()
 		{
@@ -1317,11 +1169,6 @@ namespace BALL
 
 			if (edit_settings_ == 0) return;
 			only_highlighted_ = edit_settings_->only_highlighted->isChecked();
-
-			if ((int)current_mode_ == (int)EDIT__MODE)
-			{
-				setElementCursor();
-			}
 		}
 
 		void Scene::writeLights_(INIFile& inifile) const
@@ -1438,11 +1285,7 @@ namespace BALL
 			IconLoader& loader = IconLoader::instance();
 			setMinimumSize(10, 10);
 
-			ignore_pick_ = false;
-
 			main_control.initPopupMenu(MainControl::DISPLAY);
-
-			mode_group_->setExclusive(true);
 
 			ShortcutRegistry* shortcut_registry = ShortcutRegistry::getInstance(0);
 			QAction* new_action;
@@ -1580,40 +1423,7 @@ namespace BALL
 			setMenuHint((String)tr("Export a VRML or stl file from the scene"));
 
 			// ====================================== MODES =====================================
-			description = "Shortcut|Display|Rotate_Mode";
-			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
-			rotate_action_ = insertMenuEntry(MainControl::DISPLAY, (String)tr("&Rotate Mode"), this, 
-					SLOT(rotateMode_()), description, QKeySequence("Ctrl+R"));
-
-			setMenuHint((String)tr("Switch to rotate/zoom mode"));
-			setMenuHelp("scene.html#rotate_mode");
-			rotate_action_->setCheckable(true);
-			setIcon("actions/transform-rotate", false);
-			toolbar_actions_view_controls_.push_back(rotate_action_);
-			mode_group_->addAction(rotate_action_);
-
-			description = "Shortcut|Display|Picking_Mode";
-			picking_action_ = insertMenuEntry(MainControl::DISPLAY, (String)tr("&Picking Mode"), this, 
-					SLOT(pickingMode_()), description, QKeySequence("Ctrl+P"));
-
-			setMenuHint((String)tr("Switch to picking mode, e.g. to identify single atoms or groups"));
-			setMenuHelp("scene.html#identify_atoms");
-			setIcon("actions/select-rectangular", false);
-			picking_action_->setCheckable(true);
-			toolbar_actions_view_controls_.push_back(picking_action_);
-			mode_group_->addAction(picking_action_);
-
-			description = "Shortcut|Display|Move_Mode";
-			move_action_ = insertMenuEntry(MainControl::DISPLAY, (String)tr("Move Mode"), this, 
-					SLOT(moveMode_()), description);
-
-			setMenuHint((String)tr("Switch to move mode, e.g. move selected items"));
-			setMenuHelp("molecularControl.html#move_molecule");
-			setIcon("actions/transform-move", false);
-			move_action_->setCheckable(true);
-			toolbar_actions_view_controls_.push_back(move_action_);
-			mode_group_->addAction(move_action_);
-
+			
 			description = "Shortcut|ShowRuler";
 			switch_grid_ = new QAction(tr("Show ruler"), this);
 			switch_grid_->setObjectName(switch_grid_->text());
@@ -1660,19 +1470,6 @@ namespace BALL
 			toolbar_view_controls_->layout()->setSpacing(2);
 
 			/// EDITABLE SCENE STUFF
-			help_url = "scene.html#editing";
-
-			description = "Shortcut|Display|Edit_Mode";
-			edit_id_ = insertMenuEntry(MainControl::DISPLAY, (String)tr("Edit Mode"), this,
-					SLOT(editMode_()), description, QKeySequence("Ctrl+E"));
-			setMenuHint((String)tr("Create and modify molecular structures"));
-			edit_id_->setToolTip(tr("Switch to edit mode, e.g. draw your own molecule"));
-
-			edit_id_->setCheckable(true);
-			setIcon("actions/mode-edit", false);
-			setMenuHelp(help_url);
-			mode_group_->addAction(edit_id_);
-
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
 			description = "Shortcut|QuicklyAssignBondOrders";
@@ -1702,27 +1499,6 @@ namespace BALL
 
 			getMainControl()->initPopupMenu(MainControl::BUILD)->addAction(add_hydrogens_action_);
 
-			description = "Shortcut|EditMode|SetElement";
-			element_action_ = new QAction(loader.getIcon("actions/molecule-set-element"), tr("Set element"), this);
-			element_action_->setToolTip(tr("Edit mode: Choose element for next atom, to modify atom under cursor: Double left click"));
-			element_action_->setObjectName(element_action_->text());
-			registerForHelpSystem(element_action_, "scene.html#choose_element");
-			connect(element_action_, SIGNAL(triggered()), this, SLOT(changeElement_()));
-			getMainControl()->getShortcutRegistry().registerShortcut(description, element_action_);
-			QMenu* qmenu = getMainControl()->initPopupMenu(MainControl::BUILD);
-			qmenu->addAction(element_action_);
-
-			description = "Shortcut|EditMode|CreateBond";
-			bond_action_ = new QAction(loader.getIcon("actions/create-bond"), tr("Create Bond"), this);
-			bond_action_->setToolTip(tr("Edit mode: If two atoms are selected, create a single bond between them"));
-			bond_action_->setObjectName(bond_action_->text());
-			registerForHelpSystem(bond_action_, "scene.html#create_bond");
-			//TODO registerForHelpSystem not done yet
-			connect(bond_action_, SIGNAL(triggered()), this, SLOT(createBond_()));
-			getMainControl()->getShortcutRegistry().registerShortcut(description, bond_action_);
-			// 			qmenu = getMainControl()->initPopupMenu(MainControl::BUILD);
-			qmenu->addAction(bond_action_);
-
 
 			//TODO create an icon
 			new_molecule_action_ = insertMenuEntry(MainControl::BUILD, (String)tr("Create new molecule"),
@@ -1738,13 +1514,6 @@ namespace BALL
 		void Scene::checkMenu(MainControl& main_control)
 		{
 			bool busy = main_control.compositesAreLocked();
-			edit_id_->setChecked(current_mode_ == (Scene::ModeType)EDIT__MODE);
-			edit_id_->setEnabled(!busy);
-			rotate_action_->setChecked(current_mode_ == ROTATE__MODE);
-			picking_action_->setChecked(current_mode_ == PICKING__MODE);
-			picking_action_->setEnabled(!busy);
-			move_action_->setChecked(current_mode_ == MOVE__MODE);
-			move_action_->setEnabled(!busy);
 
 			create_coordinate_system_->setEnabled(!busy);
 
@@ -1756,7 +1525,6 @@ namespace BALL
 			clear_animation_action_->setEnabled(animation_points_.size() > 0 && !animation_running);
 
 			window_menu_entry_->setChecked(isVisible());
-			bool edit_mode = (current_mode_ == (Scene::ModeType)EDIT__MODE);
 			bool selected_system = !busy && main_control.getSelectedSystem();
 
 			optimize_action_->setEnabled(selected_system);
@@ -1771,10 +1539,7 @@ namespace BALL
 			optimize_action_->setEnabled(selected_system_or_molecule && !busy);
 			add_hydrogens_action_->setEnabled(selected_system_or_molecule && !busy);
 
-			element_action_->setEnabled(!busy && edit_mode);
-
 			new_molecule_action_->setEnabled(!busy);
-
 		}
 
 		bool Scene::isAnimationRunning() const
@@ -1834,7 +1599,7 @@ namespace BALL
 				float xscale = current_dev->width()  / width();
 				float yscale = current_dev->height() / height();
 
-				renderText_(QPointF(info_point_.x()*xscale, info_point_.y()*yscale), info_string_.c_str(), current_dev);
+				renderText_(QPointF(info_point_.x()*xscale, info_point_.y()*yscale), info_string_, current_dev);
 			}
 
 			// and paint our overlay, if we have one
@@ -1982,12 +1747,13 @@ namespace BALL
 			Quaternion new_trackrotation = evt->getTransform();
 			Quaternion track_rotation = new_trackrotation - old_trackrotation_;
 
-			if (!mouse_button_is_pressed_)
-			{
-				old_trackorigin_ = new_trackorigin;
-				old_trackrotation_ = new_trackrotation;
-				return;
-			}
+			//Fix this!
+		//	if (!mouse_button_is_pressed_)
+		//	{
+		//		old_trackorigin_ = new_trackorigin;
+		//		old_trackrotation_ = new_trackrotation;
+		//		return;
+		//	}
 
 			Camera& camera = stage_->getCamera();
 
@@ -2045,471 +1811,31 @@ namespace BALL
 		// TODO: make the renderer dependent on the target
 		void Scene::mouseMoveEvent(QMouseEvent* e)
 		{
-			if (current_mode_ != (Scene::ModeType) EDIT__MODE)
-			{
-				if (isAnimationRunning()) return;
-
-				need_update_ = true;
-
-				x_window_pos_new_ = e->globalX();
-				y_window_pos_new_ = e->globalY();
-
-				// ============ picking mode ================
-				if (current_mode_ == PICKING__MODE)
-				{
-					if (e->buttons() == Qt::LeftButton  ||
-							e->buttons() == Qt::RightButton)
-					{
-						selectionPressedMoved_();
-					}
-				}
-				else if (current_mode_ == MOVE__MODE)
-				{
-					processMoveModeMouseEvents_(e);
-				}
-				else
-				{
-					processRotateModeMouseEvents_(e);
-				}
-
-				x_window_pos_old_ = x_window_pos_new_;
-				y_window_pos_old_ = y_window_pos_new_;
-
-				return;
-			}
-
-			if (isAnimationRunning() || getMainControl()->isBusy()) return;
-
-			if (temp_move_)
-			{
-				x_window_pos_new_ = e->globalX();
-				y_window_pos_new_ = e->globalY();
-
-				processMoveModeMouseEvents_(e);
-
-				x_window_pos_old_ = x_window_pos_new_;
-				y_window_pos_old_ = y_window_pos_new_;
-				return;
-			}
-
-			// create a new bond
-			//
-			// is there an atom nearby the actual mouse position?
-			Atom* last_atom = current_atom_;
-			getClickedItems_(e->x(), e->y());
-
-			Vector2 draw_to;
-
-			// have we found such an atom? if so, is it different from the one we started with?
-			// (self bonds make no sense)
-			if (last_atom &&  current_atom_ &&
-					last_atom != current_atom_ &&
-					// workaround against crashes:
-					&last_atom->getRoot() == &current_atom_->getRoot())
-			{
-				// if we are really close to an atom, the endpoints of the line we draw will be set to
-				// its center, so that the user has a drop in effect for the bonds
-				atom_pos_ = current_atom_->getPosition();
-				draw_to   = renderers_[main_renderer_]->map3DToViewport(atom_pos_);
-			}
-			else
-			{
-				draw_to.x = e->x();
-				draw_to.y = e->y();
-			}
-
-			current_atom_ = last_atom;
-
-			updateGL();
-
-			if (current_atom_ == 0)
-				return;
-
-			Vector2 draw_from = renderers_[main_renderer_]->map3DToViewport(current_atom_->getPosition());
-
-			// paint the line representing the offered bond into a suitable QPicture which will
-			// later be painted on top of our display
-			QPainter p(&overlay_);
-
-			QColor color;
-			stage_->getBackgroundColor().getInverseColor().get(color);
-
-			QPen pen(color);
-			pen.setWidth(3);
-			pen.setStyle(Qt::DashLine);
-
-			p.setPen(pen);
-			p.setRenderHint(QPainter::Antialiasing, true);
-			p.drawLine(QPointF(draw_from.x, draw_from.y), QPointF(draw_to.x, draw_to.y));
-			p.end();
-
 			has_overlay_ = true;
 
-			x_window_pos_old_ = x_window_pos_new_;
-			y_window_pos_old_ = y_window_pos_new_;
-			x_window_pos_new_ = e->x();
-			y_window_pos_new_ = e->y();
-
-			///////////////////////////////////////////////////
+			mode_manager_.mouseMoveEvent(e);
 		}
 
 		void Scene::mousePressEvent(QMouseEvent* e)
 		{
-			if (current_mode_ != (Scene::ModeType) EDIT__MODE)
-			{
-				info_string_ = "";
-
-				if (isAnimationRunning()) return;
-
-				mouse_button_is_pressed_ = true;
-				ignore_pick_ = false;
-
-				x_window_pos_old_ = e->globalX();
-				y_window_pos_old_ = e->globalY();
-
-				if (current_mode_ == ROTATE__MODE)
-				{
-					preview_ = true;
-					return;
-				}
-
-				if (current_mode_ == PICKING__MODE)
-				{
-					if (e->modifiers() == Qt::NoModifier &&(
-								e->buttons() == Qt::LeftButton ||
-								e->buttons() == Qt::RightButton))
-					{
-						pick_select_ = (e->buttons() == Qt::LeftButton);
-						selectionPressed_();
-					}
-					else
-					{
-						QPoint p = mapFromGlobal(QCursor::pos());
-						pickParent_(p);
-					}
-				}
-				else if (current_mode_ == MOVE__MODE)
-				{
-					preview_ = true;
-				}
-
-				return;
-			}
-
-			if (isAnimationRunning() || getMainControl()->isBusy()) return;
-
-			deselect_();
-
-			x_window_pos_old_ = x_window_pos_new_;
-			y_window_pos_old_ = y_window_pos_new_;
-			x_window_pos_new_ = e->x();
-			y_window_pos_new_ = e->y();
-			mouse_button_is_pressed_ = true;
-			last_buttons_ = e->buttons();
-
-			if (e->button() != Qt::RightButton)
-			{
-				if (only_highlighted_ &&
-						getMainControl()->getMolecularControlSelection().size() == 0)
-				{
-					setStatusbarText((String)tr("Warning: no AtomContainer highlighted"), true);
-					return;
-				}
-			}
-
-			getClickedItems_(e->x(), e->y());
-
-			/////////////////////////////////////////
-			// right button -> context menu
-			if (e->button() == Qt::RightButton)
-			{
-				if (current_atom_)
-				{
-					current_atom_->select();
-					notify_(new CompositeMessage(*current_atom_, CompositeMessage::SELECTED_COMPOSITE));
-				}
-
-				if (current_bond_)
-				{
-					current_bond_->select();
-					Atom* a1 = (Atom*)current_bond_->getFirstAtom();
-					Atom* a2 = (Atom*)current_bond_->getSecondAtom();
-					a1->select();
-					a2->select();
-					notify_(new CompositeMessage(*a1, CompositeMessage::SELECTED_COMPOSITE));
-					notify_(new CompositeMessage(*a2, CompositeMessage::SELECTED_COMPOSITE));
-				}
-
-				// we open a context menu at this point
-				showContextMenu(QPoint(e->x(), e->y()));
-				return;
-			}
-
-			////////////////////////////////////////////////
-			// left button -> add atom or move existing atom
-			if (e->button() == Qt::LeftButton && e->modifiers() != Qt::ControlModifier)
-			{
-				if (current_bond_ != 0) return;
-
-				if (current_atom_ != 0)
-				{
-					getMainControl()->selectCompositeRecursive(current_atom_, true);
-					x_window_pos_new_ = x_window_pos_old_ = e->globalX();
-					y_window_pos_new_ = y_window_pos_old_ = e->globalY();
-					temp_move_ = true;
-					return;
-				}
-
-				/////////////////////////////////////////
-				// insert a new atom:
-				String name = PTE[atomic_number_].getSymbol();
-				name += String(atom_number_);
-				atom_number_ ++;
-				PDBAtom* a = new PDBAtom(PTE[atomic_number_], name);
-				insert_(e->x(), e->y(), *a);
-				current_atom_ = a;
-
-				//store the Operation in undo_
-				Vector3 atom_position = a->getPosition();
-
-				EditOperation eo(a, NULL, (String)tr("Added atom of type ") + PTE[atomic_number_].getName() + (String)tr(" at position (")
-						+ String(atom_position.x) + ", "
-						+ String(atom_position.y) + ", "
-						+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
-				undo_.push_back(eo);
-
-				// tell about the new undo operation
-				emit newEditOperation(eo);
-				return;
-			}
-
-			//////////////////////////////////////////////
-			// middle button -> add bond
-			if (e->button() == Qt::MidButton ||
-					(e->button() == Qt::LeftButton && e->modifiers() == Qt::ControlModifier))
-			{
-				if (current_atom_)
-				{
-					current_atom_->select();
-					notify_(new CompositeMessage(*current_atom_, CompositeMessage::SELECTED_COMPOSITE));
-					atom_pos_ = current_atom_->getPosition();
-				}
-
-				return;
-			}
-
-			///////////////////////////////////////
-			///////////////////////////////////////
+			mode_manager_.mousePressEvent(e);
 		}
 
-		Index Scene::getMoveModeAction_(const QMouseEvent& e)
+		void Scene::mouseReleaseEvent(QMouseEvent* e)
 		{
-			// TODO make keys configurable in shortcutRegistry 
-			if (e.modifiers() == Qt::NoModifier)
-			{
-				if (e.buttons() == Qt::LeftButton)  return TRANSLATE_ACTION;
-				if (e.buttons() == Qt::MidButton)   return ZOOM_ACTION;
-				if (e.buttons() == Qt::RightButton) return ROTATE_ACTION;
-			}
-			else if (e.buttons() == Qt::LeftButton)
-			{
-				if (e.modifiers() == Qt::ShiftModifier) return ZOOM_ACTION;
-				if (e.modifiers() == Qt::ControlModifier) return ROTATE_ACTION;
-				if (e.modifiers() == (Qt::ShiftModifier | Qt::ControlModifier)) return ROTATE_CLOCKWISE_ACTION;
-			}
-			else if (e.buttons() == (Qt::LeftButton | Qt::RightButton))
-			{
-				return ROTATE_CLOCKWISE_ACTION;
-			}
+			has_overlay_ = false;
 
-			return ROTATE_ACTION;
+			mode_manager_.mouseReleaseEvent(e);
 		}
 
-		void Scene::processRotateModeMouseEvents_(QMouseEvent* e)
+		void Scene::mouseDoubleClickEvent(QMouseEvent* e)
 		{
-			if (x_window_pos_old_ == e->globalX() &&
-					y_window_pos_old_ == e->globalY())
-			{
-				return;
-			}
-
-			switch ((Index)(e->buttons() | e->modifiers()))
-			{
-				case (Qt::SHIFT | Qt::LeftButton): 
-				case  Qt::MidButton:
-					zoomSystem_();
-					break;
-
-				case (Qt::CTRL | Qt::LeftButton):
-				case  Qt::RightButton:
-					translateSystem_();
-					break;
-
-				case ((Index)Qt::LeftButton | Qt::RightButton):
-				case (Qt::SHIFT | Qt::CTRL | Qt::LeftButton):
-					rotateSystemClockwise_();
-					break;
-
-				case Qt::LeftButton:
-					rotateSystem_();
-					break;
-
-				default:
-					break;
-			}
-
-			if (record_animation_action_->isChecked())
-			{
-				animation_points_.push_back(stage_->getCamera());
-			}
+			mode_manager_.mouseDoubleClickEvent(e);
 		}
 
-		void Scene::processMoveModeMouseEvents_(QMouseEvent* e)
+		void Scene::keyPressEvent(QKeyEvent* evt)
 		{
-			Camera& camera = stage_->getCamera();
-
-			x_window_pos_new_ = e->globalX();
-			y_window_pos_new_ = e->globalY();
-
-			// Difference between the old and new position in the window 
-			float delta_x = getXDiff_() / 4.0;
-			float delta_y = getYDiff_() / 4.0;
-
-			// stop if no movement
-			if (delta_x == 0 && delta_y == 0) return;
-
-			Index action = getMoveModeAction_(*e);
-
-			// if we have a selection of Composites, we perform the moving here:
-			const HashSet<Composite*>& selection = getMainControl()->getSelection();
-			if (selection.size() != 0)
-			{
-				list<Composite*> composites;
-				std::copy(selection.begin(), selection.end(), std::front_inserter(composites));
-
-				switch (action)
-				{
-					case ZOOM_ACTION:
-						{
-							moveComposites(composites, Vector3(0,0, delta_y * ZOOM_FACTOR));
-							return;
-						}
-
-					case TRANSLATE_ACTION:
-						{
-							moveComposites(composites, Vector3(delta_x * TRANSLATE_FACTOR ,-delta_y * TRANSLATE_FACTOR, 0));
-							return;
-						}
-
-					case ROTATE_ACTION:
-						{
-							rotateComposites(composites, delta_x * ROTATE_FACTOR * 4., delta_y * ROTATE_FACTOR * 4., 0);
-							return;
-						}
-
-					case ROTATE_CLOCKWISE_ACTION:
-						{
-							rotateComposites(composites, 0, 0, delta_x * ROTATE_FACTOR * 4.);
-							return;
-						}
-				}
-
-				return;
-			}
-
-			// moving for Clipping Planes is done in DatasetControl:
-			// we create the Matrix for this here and send it per Message
-			Matrix4x4 m;
-
-			switch (action)
-			{
-				case ZOOM_ACTION:
-					{
-						Vector3 v = -stage_->getCamera().getViewVector();
-						if (Maths::isZero(v.getSquareLength())) v = Vector3(1,0,0);
-						v.normalize();
-
-						v *= delta_y * ZOOM_FACTOR * 1.5;
-
-						m.setTranslation(v);
-						break;
-					}
-
-				case TRANSLATE_ACTION:
-					{
-						// calculate translation in x-axis direction
-						Vector3 right_translate = camera.getRightVector() * delta_x * TRANSLATE_FACTOR * 3.0;
-
-						// calculate translation in y-axis direction
-						Vector3 up_translate = camera.getLookUpVector() * delta_y * TRANSLATE_FACTOR * 3.0;
-
-						m.setTranslation(right_translate - up_translate);
-						break;
-					}
-
-				case ROTATE_ACTION:
-					{
-						delta_x *= ROTATE_FACTOR * 4.;
-						delta_y *= ROTATE_FACTOR * 4.;
-						float angle_total = fabs(delta_x) + fabs(delta_y);
-
-						Vector3 rotation_axis = (camera.getLookUpVector() * delta_x / angle_total) +
-							(camera.getRightVector()  * delta_y / angle_total);
-
-						m.rotate(Angle(angle_total, false), rotation_axis);
-						break;
-					}
-
-				case ROTATE_CLOCKWISE_ACTION:
-				default:
-					delta_x *= ROTATE_FACTOR2;
-					Vector3 rotation_axis = camera.getViewVector();
-					m.rotate(Angle(delta_x, false), rotation_axis);
-			}
-
-			TransformationMessage* msg = new TransformationMessage;
-			msg->setMatrix(m);
-			notify_(msg);
-		}
-
-
-		void Scene::defaultMouseReleaseEvent(QMouseEvent* e)
-		{
-			if (isAnimationRunning()) return;
-
-			mouse_button_is_pressed_ = false;
-			preview_ = false;
-
-			// ============ picking mode ================
-			if (current_mode_ == PICKING__MODE)
-			{
-				if (ignore_pick_)
-				{
-					ignore_pick_ = false;
-
-					return;
-				}
-				x_window_pos_new_ = e->globalX();
-				y_window_pos_new_ = e->globalY();
-				selectObjects_();
-				// update will be done from MolecularControl!
-				need_update_ = false; 			
-			}
-			else if (current_mode_ == ROTATE__MODE)
-			{
-				processRotateModeMouseEvents_(e);
-				light_settings_->updateFromStage();
-			}
-			else if (current_mode_ == MOVE__MODE)
-			{
-				processMoveModeMouseEvents_(e);
-			}
-
-			if (need_update_)
-			{
-				updateGL();
-				need_update_ = false;
-			}
+			mode_manager_.keyPressEvent(evt);
 		}
 
 		// TODO: make renderer configurable
@@ -2538,7 +1864,7 @@ namespace BALL
 			// ok, do the picking, until we find something
 			for (Position p = 0; p < 8; p++)
 			{
-				renderers_[main_renderer_]->pickObjects(pos_x - p, pos_y - p, pos_x + p, pos_y + p, objects);
+				pickObjects(QPoint(pos_x - p, pos_y - p), QPoint(pos_x + p, pos_y + p), objects);
 				if (!objects.empty()) break;
 			}
 
@@ -2549,7 +1875,7 @@ namespace BALL
 			}
 
 			// get the description
-			String string;
+			QString string;
 			MolecularInformation info;
 
 			GeometricObject* object = 0;
@@ -2563,12 +1889,12 @@ namespace BALL
 				object = *git;
 
 				info.visit(*composite);
-				String this_string(info.getName());
+				QString this_string(info.getName().c_str());
 				if (composite->getParent() != 0 &&
 						RTTI::isKindOf<Residue>(*composite->getParent()))
 				{
 					info.visit(*composite->getParent());
-					this_string = info.getName() + " : " + this_string;
+					this_string = QString(info.getName().c_str()) + " : " + this_string;
 				}
 
 				if (this_string == "UNKNOWN") continue;
@@ -2576,9 +1902,9 @@ namespace BALL
 				if (RTTI::isKindOf<Atom>(*composite))
 				{
 					this_string += "[T:";
-					this_string += ((Atom*)composite)->getTypeName();
+					this_string += ((Atom*)composite)->getTypeName().c_str();
 					this_string += ",FC:";
-					this_string += String(((Atom*)composite)->getFormalCharge());
+					this_string += QString::number(((Atom*)composite)->getFormalCharge());
 					this_string += "]";
 				}
 
@@ -2594,9 +1920,9 @@ namespace BALL
 
 			info_string_ = string;
 
-			String string2 = String(tr("Object at cursor is ")) + string;
+			QString string2 = tr("Object at cursor is ") + string;
 
-			if (getMainControl()->getStatusbarText() != string2) 
+			if (string2 != getMainControl()->getStatusbarText().c_str())
 			{
 				setStatusbarText(string2, false);
 
@@ -2609,167 +1935,6 @@ namespace BALL
 			unlockComposites();
 		}
 
-		void Scene::defaultWheelHandling_(QWheelEvent* qmouse_event)
-		{
-			info_string_ = "";
-
-			qmouse_event->accept();
-
-			y_window_pos_new_ = (Position)(y_window_pos_old_ + (qmouse_event->delta() / 120. * mouse_wheel_sensitivity_));
-			zoomSystem_();
-			y_window_pos_old_ = y_window_pos_new_;
-		}
-
-		void Scene::defaultKeyPressEvent(QKeyEvent* e)
-		{
-			// TODO make keys configurable in shortcutRegistry 
-			if ((gl_renderer_->getStereoMode() == GLRenderer::NO_STEREO) &&
-					(e->key() == Qt::Key_Escape))
-			{
-				switchToLastMode();
-				return;
-			}
-
-			// TODO make keys configurable in shortcutRegistry 
-			if (e->key() == Qt::Key_R)
-			{
-				setMode(ROTATE__MODE);
-				return;
-			}
-
-			// TODO make keys configurable in shortcutRegistry 
-			if (e->key() == Qt::Key_W)
-			{
-				setMode(MOVE__MODE);
-				return;
-			}
-
-			// TODO make keys configurable in shortcutRegistry 
-			if (e->key() == Qt::Key_Q)
-			{
-				setMode(PICKING__MODE);
-				return;
-			}
-
-			if (gl_renderer_->getStereoMode() == GLRenderer::NO_STEREO) 
-			{
-				e->ignore();
-				return;
-			}
-
-			// TODO make keys configurable in shortcutRegistry 
-			if ((e->key() == Qt::Key_Y && e->modifiers() == Qt::AltModifier) ||
-					e->key() == Qt::Key_Escape)
-			{
-				exitStereo();
-				return;
-			}
-
-			// TODO make keys configurable in shortcutRegistry 
-			// setting of eye and focal distance
-			if (e->key() != Qt::Key_Left  &&
-					e->key() != Qt::Key_Right &&
-					e->key() != Qt::Key_Up    &&
-					e->key() != Qt::Key_Down)
-			{
-				e->ignore();
-				return;
-			}
-
-			// TODO make keys configurable in shortcutRegistry 
-			// setting of eye distance
-			if (e->key() == Qt::Key_Left ||
-					e->key() == Qt::Key_Right)
-			{
-				float new_distance = stage_->getEyeDistance();
-
-				// TODO make keys configurable in shortcutRegistry 
-				float modifier = 1;
-				if (e->key() == Qt::Key_Left)
-				{
-					modifier = -0.1;
-				}
-				else
-				{
-					modifier = +0.1;
-				}
-
-				// TODO make keys configurable in shortcutRegistry 
-				if (e->modifiers() == Qt::ShiftModifier)
-				{
-					modifier *= 10;
-				}
-
-				new_distance += modifier;
-
-				// prevent strange values
-				if (new_distance < 0)
-				{
-					new_distance = 0;
-				}
-
-				if (new_distance > 4)
-				{
-					new_distance = 4;
-				}
-
-				stage_->setEyeDistance(new_distance);
-			}
-			// setting of focal distance
-			else
-			{
-				float new_focal_distance = stage_->getFocalDistance();
-
-				// TODO make keys configurable in shortcutRegistry 
-				float modifier = 1;
-				if (e->key() == Qt::Key_Down)
-				{
-					modifier = -1;
-				}
-				else
-				{
-					modifier = +1;
-				}
-
-				// TODO make keys configurable in shortcutRegistry 
-				if (e->modifiers() == Qt::ShiftModifier)
-				{
-					modifier *= 10;
-				}
-
-				new_focal_distance += modifier;
-
-				// prevent strange values
-				if (new_focal_distance < 7)
-				{
-					new_focal_distance = 7;
-				}
-
-				if (new_focal_distance > 1000) 
-				{
-					new_focal_distance = 1000;
-				}
-
-				stage_->setFocalDistance(new_focal_distance);
-			}
-
-			stage_settings_->updateFromStage();
-			updateGL();
-		}
-
-		void Scene::setMode(ModeType mode)
-		{
-			switch(mode)
-			{
-				case ROTATE__MODE:  rotateMode_();  break;
-				case PICKING__MODE: pickingMode_(); break;
-				case MOVE__MODE:    moveMode_();    break;
-				case EDIT__MODE:    editMode_();    break;
-			}
-
-			update();
-		}
-
 		void Scene::projectionModeChanged()
 		{
 			for (Position i=0; i<renderers_.size(); ++i)
@@ -2778,65 +1943,6 @@ namespace BALL
 			}
 
 			updateGL();
-		}
-
-		void Scene::rotateMode_()
-		{
-			if (current_mode_ == ROTATE__MODE) return;
-
-			gl_renderer_->exitPickingMode();
-			last_mode_ = current_mode_;
-			current_mode_ = ROTATE__MODE;		
-			QWidget::setCursor(QCursor(Qt::ArrowCursor));
-			rotate_action_->setChecked(true);
-			checkMenu(*getMainControl());
-		}
-
-		void Scene::pickingMode_()
-		{
-			if (current_mode_ == PICKING__MODE) return;
-
-			gl_renderer_->enterPickingMode();
-			last_mode_ = current_mode_;
-			current_mode_ = PICKING__MODE;
-			QWidget::setCursor(QCursor(Qt::CrossCursor));
-			picking_action_->setChecked(true);
-			checkMenu(*getMainControl());
-		}
-
-		void Scene::moveMode_()
-		{
-			if (current_mode_ == MOVE__MODE) return;
-
-			gl_renderer_->exitPickingMode();
-			last_mode_ = current_mode_;
-			current_mode_ = MOVE__MODE;
-			QWidget::setCursor(QCursor(Qt::SizeAllCursor));
-			move_action_->setChecked(true);
-			checkMenu(*getMainControl());
-		}
-
-		void Scene::selectionPressed_()
-		{
-			x_window_pick_pos_first_ = x_window_pos_old_;
-			y_window_pick_pos_first_ = y_window_pos_old_;
-		}
-
-
-		void Scene::selectionPressedMoved_()
-		{
-			Position x0, x1, y0, y1;
-
-			x0 = BALL_MIN(x_window_pos_new_, x_window_pick_pos_first_);
-			x1 = BALL_MAX(x_window_pos_new_, x_window_pick_pos_first_);
-			y0 = BALL_MIN(y_window_pos_new_, y_window_pick_pos_first_);
-			y1 = BALL_MAX(y_window_pos_new_, y_window_pick_pos_first_);
-
-			QPoint p0 = mapFromGlobal(QPoint(x0, y0));
-			QPoint p1 = mapFromGlobal(QPoint(x1, y1));
-
-			rb_->setGeometry(QRect(p0, p1));
-			rb_->show();
 		}
 
 		//Opens a dialog in which parts of the scene can be exported as VRML or stl files
@@ -3750,7 +2856,7 @@ namespace BALL
 
 		void Scene::switchToLastMode()
 		{
-			setMode(last_mode_);
+			mode_manager_.switchToLastMode();
 		}
 
 		void Scene::dropEvent(QDropEvent* e)
@@ -3788,6 +2894,11 @@ namespace BALL
 				 return supports;
 				 */
 			return false;
+		}
+
+		bool Scene::inMoveMode() const
+		{
+			return mode_manager_.getCurrentModeName() == "MoveMode";
 		}
 
 		void Scene::setWidgetVisible(bool state)
@@ -3898,51 +3009,6 @@ namespace BALL
 		}
 
 		// TODO: make renderer configurable
-		void Scene::pickParent_(QPoint p)
-		{
-			ignore_pick_ = true;
-			list<GeometricObject*> objects;
-			renderers_[main_renderer_]->pickObjects((Position) p.x(), (Position) p.y(), 
-					(Position) p.x(), (Position) p.y(), objects);
-
-			if (objects.empty()) return;
-
-			Composite* composite = 	(Composite*)(**objects.begin()).getComposite();
-			if (composite == 0) return;
-
-			Composite* to_select = 0;
-			Atom* atom = dynamic_cast<Atom*>(composite);
-			if (atom != 0)
-			{
-				to_select = atom->getParent();
-			}
-			else
-			{
-				Bond* bond = dynamic_cast<Bond*>(composite);
-				if (bond!= 0) 
-				{
-					to_select = (Composite*)bond->getFirstAtom()->getParent();
-				}
-				else
-				{
-					to_select = composite;
-				}
-			}
-
-			if (to_select != 0)
-			{
-				if (to_select->isSelected())
-				{
-					getMainControl()->deselectCompositeRecursive(to_select, true);
-				}
-				else
-				{
-					getMainControl()->selectCompositeRecursive(to_select, true);
-				}
-				getMainControl()->update(*to_select, true);
-			}
-		}
-
 		void Scene::setupViewVolume()
 		{
 			bool ok;
@@ -4050,14 +3116,10 @@ namespace BALL
 
 		void Scene::initializeMembers_()
 		{
-			edit_id_ = 0;
 			current_atom_ = 0;
 			current_bond_ = 0;
 			edit_settings_ = 0;
-			bond_order_ = Bond::ORDER__SINGLE;
 			atomic_number_ = 6;
-			atom_number_ = 0;
-			temp_move_ = false;
 			default_font_ = QFont("Arial", 16., QFont::Bold);
 			has_overlay_ = false;
 		}
@@ -4096,34 +3158,10 @@ namespace BALL
 
 		void Scene::wheelEvent(QWheelEvent* e)
 		{
-			Index delta = e->delta();
-			if (delta == 0) return;
-
-			if (current_mode_ != (Scene::ModeType) EDIT__MODE)
-			{
-				Scene::defaultWheelHandling_(e);
-				return;
-			}
-
-			e->accept();
-
-			if (isAnimationRunning() || getMainControl()->isBusy()) return;
-
-			if (delta > 1) delta = 1;
-			if (delta < -1) delta = -1;
-
-			if (e->modifiers() == Qt::ShiftModifier)
-			{
-				getClickedItems_(e->x(), e->y());
-				changeBondOrder_(delta);
-			}
-			else
-			{
-				Scene::defaultWheelHandling_(e);
-			}
+			mode_manager_.wheelEvent(e);
 		}
 
-		void Scene::changeBondOrder_(Index delta)
+		void Scene::changeBondOrder(Index delta)
 		{
 			if (current_bond_ == 0) return;
 
@@ -4141,122 +3179,6 @@ namespace BALL
 		}
 
 		// TODO: make renderer dependent on current target
-		void Scene::mouseReleaseEvent(QMouseEvent* e)
-		{
-			has_overlay_ = false;
-
-			if (temp_move_)
-			{
-				deselect_();
-				temp_move_ = false;
-				return;
-			}
-
-			if ((int)current_mode_ < (int) EDIT__MODE)
-			{
-				Scene::defaultMouseReleaseEvent(e);
-				return;
-			}
-
-			if (last_buttons_ == Qt::RightButton)
-			{
-				deselect_();
-				return;
-			}
-
-			if (isAnimationRunning() || getMainControl()->isBusy()) return;
-
-			mouse_button_is_pressed_ = false;
-
-			// if we didnt find first atom: abort
-			if (!current_atom_)
-			{
-				deselect_();
-				return;
-			}
-
-			current_atom_->deselect();
-			notify_(new CompositeMessage(*current_atom_, CompositeMessage::DESELECTED_COMPOSITE));
-
-			Atom* atom = current_atom_;
-			getClickedItems_(e->x(), e->y());
-
-			// decide what to do... did we find an atom at all?
-			if (current_atom_)
-			{
-				// is it the atom we started with?
-				if (atom == current_atom_ || // workaround against crashes:
-						&atom->getRoot() != &current_atom_->getRoot())
-				{
-					// in this case, we assume that the user does not want to set a bond
-					deselect_();
-					return;
-				}
-
-				// we found _another_ atom: set the bond
-				Bond* c = new Bond("Bond", *current_atom_, *atom, Bond::ORDER__SINGLE);
-
-				EditOperation eo(0, c, "Added bond of type single" , EditOperation::ADDED__BOND);
-				undo_.push_back(eo);
-
-				// tell about the new undo operation
-				emit newEditOperation(eo);
-
-				merge_(current_atom_, atom);
-
-				//update representation
-				getMainControl()->update(*atom, true);
-				setStatusbarText((String)tr("Added a bond"));
-			}
-			else // no atom found -> create one
-			{
-				// project the new atom on the plane of the old atom
-				current_atom_ = atom;
-				Vector3 new_pos = renderers_[main_renderer_]->mapViewportTo3D(e->x(), e->y());
-
-				// test if the two atoms would have the same position
-				if (fabs((current_atom_->getPosition() - new_pos).getLength()) < 0.02)
-				{
-					setStatusbarText((String)tr("Aborting, since both atoms would have the same location!"), true);
-					return;
-				}
-
-				// build a new atom...
-				String name(PTE[atomic_number_].getSymbol());
-				name += String(atom_number_);
-				atom_number_++;
-				PDBAtom* a = new PDBAtom(PTE[atomic_number_], name);
-				a->setPosition(new_pos);
-				current_atom_->getParent()->appendChild(*a);
-
-				//store the Operation in undo_
-				Vector3 atom_position = a->getPosition();
-
-				EditOperation eo(a, NULL, (String)tr("Added atom of type ") + PTE[atomic_number_].getName() + (String)tr(" at position (")
-						+ String(atom_position.x) + ", "
-						+ String(atom_position.y) + ", "
-						+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
-				undo_.push_back(eo);
-
-				// tell about the new undo operation
-				emit newEditOperation(eo);
-
-				//set the bond
-				Bond* c = new Bond("Bond", *current_atom_, *a, Bond::ORDER__SINGLE);
-
-				// tell about the new undo operation
-				String bond_string = getBondOrderString_(bond_order_);
-				EditOperation eo2(0, c, (String)tr("Added bond of type ") + bond_string, EditOperation::ADDED__BOND);
-				undo_.push_back(eo2);
-				emit newEditOperation(eo2);
-
-				getMainControl()->update(*a->getParent(), true);
-				setStatusbarText((String)tr("Added a bond and an atom"));
-			}
-
-			deselect_();
-		}
-
 		String Scene::getBondOrderString_(Index order)
 		{
 			String bond_string;
@@ -4286,7 +3208,7 @@ namespace BALL
 		}
 
 		/// ******************** Helper Functions *************************
-		list<AtomContainer*> Scene::getContainers_()
+		list<AtomContainer*> Scene::getContainers()
 		{
 			list<AtomContainer*> containers;
 			if (only_highlighted_)
@@ -4313,16 +3235,23 @@ namespace BALL
 			return containers;
 		}
 
-		// TODO: make renderer / target configurable
-		void Scene::getClickedItems_(int x, int y)
+		void Scene::enterPickingMode()
+		{
+			gl_renderer_->enterPickingMode();
+		}
+
+		void Scene::exitPickingMode()
+		{
+			gl_renderer_->exitPickingMode();
+		}
+
+		void Scene::getClickedItems(const QPoint& p)
 		{
 			current_bond_ = 0;
 			current_atom_ = 0;
 
-			QPoint p(x,y);
 			list<GeometricObject*> objects;
-			renderers_[main_renderer_]->pickObjects((Position)p.x(), (Position)p.y(),
-					(Position)p.x(), (Position)p.y(), objects);
+			pickObjects(p, p, objects);
 
 			if (objects.size() > 0)
 			{
@@ -4332,53 +3261,14 @@ namespace BALL
 				current_bond_ = dynamic_cast<Bond*>(c);
 				current_atom_ = dynamic_cast<Atom*>(c);
 			}
+
 		}
 
-		void Scene::setElementCursor()
+		// TODO: make renderer / target configurable
+		void Scene::setElementCursor(int number)
 		{
-			String s = PTE[atomic_number_].getSymbol();
+			String s = PTE[number].getSymbol();
 			setCursor(s.c_str());
-		}
-
-		// Slot to change to EDIT__MODE
-		// TODO: popup a message box if the currently highlighted atom container does not have a
-		//			 suitable representation
-		void Scene::editMode_()
-		{
-			if (!fragment_db_initialized_)
-			{
-				fragment_db_.setFilename("fragments/Editing-Fragments.db");
-				fragment_db_.init();
-				fragment_db_initialized_ = true;
-			}
-
-			list<AtomContainer*> acs = getContainers_();
-
-			list<Composite*> sel;
-			list<AtomContainer*>::iterator lit = acs.begin();
-			for (; lit != acs.end(); lit++)
-			{
-				sel.push_back(*lit);
-			}
-			ControlSelectionMessage* msg = new ControlSelectionMessage();
-			msg->setSelection(sel);
-			notify_(msg);
-
-			last_mode_ = current_mode_;
-			current_mode_ = (Scene::ModeType)EDIT__MODE;
-			edit_id_->setChecked(true);
-			setElementCursor();
-			checkMenu(*getMainControl());
-
-			HashSet<Composite*> selection = getMainControl()->getSelection();
-			HashSet<Composite*>::Iterator it = selection.begin();
-			for (; +it; ++it)
-			{
-				if (!(**it).containsSelection()) continue;
-				getMainControl()->deselectCompositeRecursive(*it, true);
-				getMainControl()->update(**it, false);
-			}
-			notify_(new NewSelectionMessage);
 		}
 
 		// insert an atom at screen positions (x,y) on the view plane
@@ -4476,7 +3366,7 @@ namespace BALL
 		void Scene::setEditElementType(int element_number)
 		{
 			atomic_number_ = element_number;
-			setElementCursor();
+			setElementCursor(atomic_number_);
 		}
 
 		// Get the element for the next insert operations
@@ -4487,164 +3377,23 @@ namespace BALL
 
 		void Scene::showContextMenu(QPoint pos)
 		{
-			menu_point_ = pos;
 			QMenu menu;
-			IconLoader& loader = IconLoader::instance();
-
-			QAction* rotate_mode = menu.addAction(tr("Rotate Mode"), this, SLOT(rotateMode_()));
-			rotate_mode->setCheckable(true);
-			rotate_mode->setChecked(current_mode_ == (Scene::ModeType) MOVE__MODE);
-
-			QAction* picking_mode = menu.addAction(tr("Picking Mode"), this, SLOT(pickingMode_()));
-			picking_mode->setCheckable(true);
-			picking_mode->setChecked(current_mode_ == (Scene::ModeType) PICKING__MODE);
-
-			QAction* move_mode = menu.addAction(tr("Move Mode"), this, SLOT(moveMode_()));
-			move_mode->setCheckable(true);
-			move_mode->setChecked(current_mode_ == (Scene::ModeType) MOVE__MODE);
-
-			QAction* edit_mode = menu.addAction(tr("Edit Mode"), this, SLOT(editMode_()));
-			edit_mode->setCheckable(true);
-			edit_mode->setChecked(current_mode_ == (Scene::ModeType) EDIT__MODE);
+			mode_manager_.populateContextMenu(&menu);
 
 			menu.addSeparator();
-
-			if (current_mode_ == (Scene::ModeType) EDIT__MODE)
-			{
-				menu.addAction(tr("Atom Properties"), this, SLOT(atomProperties_()))->setEnabled(current_atom_ != 0);
-				menu.addAction(tr("Move Atom"), this, SLOT(moveAtom_()))->setEnabled(current_atom_ != 0);
-				menu.addAction(tr("Delete Atom"), this, SLOT(deleteAtom_()))->setEnabled(current_atom_ != 0);
-				menu.addAction(loader.getIcon("actions/molecule-set-element"), tr("Change Atom Element"), this, SLOT(changeAtomElement_()))->setEnabled(current_atom_ != 0);
-
-				QMenu* charge = new QMenu();
-				QAction* change_charge = menu.addMenu(charge);
-				change_charge->setText(tr("Set formal charge"));
-				Index charge_value = 0;
-				if (current_atom_ != 0) charge_value = current_atom_->getFormalCharge();
-				for (Index p = +6; p > -7; p--)
-				{
-					String s(p);
-					if (p > 0) s = String("+") + s;
-
-					QAction* action = charge->addAction(s.c_str(), this, SLOT(setFormalCharge_()));
-					action->setCheckable(true);
-					action->setChecked(p == charge_value);
-				}
-				change_charge->setEnabled(current_atom_ != 0);
-
-				menu.addSeparator();
-
-				menu.addAction(tr("Delete Bond"), this, SLOT(deleteBond_()))->setEnabled(current_bond_ != 0);
-
-				QMenu* order = new QMenu();
-				QAction* change_order = menu.addMenu(order);
-				connect(order, SIGNAL(hovered(QAction*)), this, SLOT(activatedOrderItem_(QAction*)));
-				change_order->setText(tr("Change bond order"));
-				vector<QAction*> oas;
-				oas.push_back(order->addAction(tr("Single"),    this, SLOT(changeBondOrder_())));
-				oas.push_back(order->addAction(tr("Double"),    this, SLOT(changeBondOrder_())));
-				oas.push_back(order->addAction(tr("Triple"),    this, SLOT(changeBondOrder_())));
-				oas.push_back(order->addAction(tr("Quadruple"), this, SLOT(changeBondOrder_())));
-				oas.push_back(order->addAction(tr("Aromatic"),  this, SLOT(changeBondOrder_())));
-				oas.push_back(order->addAction(tr("Unknown"),   this, SLOT(changeBondOrder_())));
-
-				Index bo = 0;
-				if (current_bond_) bo = ((Index)current_bond_->getOrder());
-				for (Index p = 0; p < (Index) oas.size(); p++)
-				{
-					oas[p]->setCheckable(true);
-				}
-
-				switch (bo)
-				{
-					case Bond::ORDER__SINGLE:
-						oas[0]->setChecked(true);
-						break;
-					case Bond::ORDER__DOUBLE:
-						oas[1]->setChecked(true);
-						break;
-					case Bond::ORDER__TRIPLE:
-						oas[2]->setChecked(true);
-						break;
-					case Bond::ORDER__QUADRUPLE:
-						oas[3]->setChecked(true);
-						break;
-					case Bond::ORDER__AROMATIC:
-						oas[4]->setChecked(true);
-						break;
-					default:
-						oas[5]->setChecked(true);
-						break;
-				}
-
-				change_order->setEnabled(current_bond_ != 0);
-
-				menu.addSeparator();
-
-				QMenu* add_menu = new QMenu();
-				QAction* add_action = menu.addMenu(add_menu);
-				add_action->setText(tr("Add"));
-				if (getContainers_().size() == 0)
-				{
-					add_action->setEnabled(false);
-				}
-
-				QMenu* rings = new QMenu();
-				QAction* ring_action = add_menu->addMenu(rings);
-				ring_action->setText(tr("Aromatic rings"));
-				rings->addAction(tr("Pyrrole"), this, SLOT(addStructure_()));
-				rings->addAction(tr("Benzene"), this, SLOT(addStructure_()));
-				rings->addAction(tr("Indole"), this, SLOT(addStructure_()));
-
-				QMenu* aas = new QMenu();
-				QAction* aas_action = add_menu->addMenu(aas);
-				aas_action->setText(tr("Amino acids"));
-
-				QMenu* nas = new QMenu();
-				QAction* nas_action = add_menu->addMenu(nas);
-				nas_action->setText(tr("Nucleic acids"));
-
-				HashSet<String> names;
-				const std::vector<Residue*>& residues = fragment_db_.getFragments();
-				vector<Residue*>::const_iterator rit = residues.begin();
-				vector<Residue*> nucleotides;
-				for (;rit != residues.end();++rit)
-				{
-					String name = (**rit).getName();
-					if ((**rit).isAminoAcid())
-					{
-						if (names.has(name)) continue;
-						names.insert(name);
-						aas->addAction(name.c_str(), this, SLOT(addStructure_()));
-						continue;
-					}
-				}
-
-				nas->addAction(tr("Alanine"), this, SLOT(addStructure_()));
-				nas->addAction(tr("Cytosine"), this, SLOT(addStructure_()));
-				nas->addAction(tr("Guanine"), this, SLOT(addStructure_()));
-				nas->addAction(tr("Thymine"), this, SLOT(addStructure_()));
-				nas->addAction(tr("Uracil"), this, SLOT(addStructure_()));
-
-				menu.addSeparator();
-
-				menu.addAction(optimize_action_);
-				menu.addAction(add_hydrogens_action_);
-				menu.addAction(bondorders_action_);
-			}
 
 			menu.exec(mapToGlobal(pos));
 
 			// if we switched to move mode, let the user move the atom:
-			if (current_mode_ == MOVE__MODE) return;
+			if (inMoveMode()) return;
 
 			// otherwise deselect all selected items
-			deselect_();
+			deselect();
 		}
 
 		void Scene::setFormalCharge_()
 		{
-			deselect_();
+			deselect();
 
 			QObject* os = sender();
 			if (os == 0) return;
@@ -4663,7 +3412,7 @@ namespace BALL
 			}
 		}
 
-		void Scene::deselect_(bool update)
+		void Scene::deselect(bool update)
 		{
 			bool was_mt = getMainControl()->useMultithreading();
 			getMainControl()->setMultithreading(false);
@@ -4695,237 +3444,88 @@ namespace BALL
 			getMainControl()->setMultithreading(was_mt);
 		}
 
-		void Scene::deleteAtom_()
+		void Scene::setInfo(const QString& str)
 		{
-			if (current_atom_ == 0) return;
-			getMainControl()->remove(*current_atom_);
-			current_atom_ = 0;
+			info_string_ = str;
 		}
 
-		void Scene::changeElement_()
+		Vector3 Scene::mapViewportTo3D(const Vector2& coords)
 		{
-			if (current_atom_ != 0)
-			{
-				atomic_number_ = current_atom_->getElement().getAtomicNumber();
-			}
-
-			PTEDialog pte;
-			pte.exec();
+			return renderers_[main_renderer_]->mapViewportTo3D(coords.x, coords.y);
 		}
 
-		void Scene::changeAtomElement_()
+		Vector3 Scene::mapViewportTo3D(int x, int y)
 		{
-			if (current_atom_ != 0)
-			{
-				atomic_number_ = current_atom_->getElement().getAtomicNumber();
-			}
-
-			PTEDialog pte;
-			pte.exec();
-
-			if ((current_atom_ != 0))
-			{
-				current_atom_->setElement(PTE[atomic_number_]);
-				String new_name = PTE[atomic_number_].getSymbol();
-				//get the old atom number
-				String old_name = current_atom_->getName();
-				old_name.toUpper();
-				new_name += old_name.trimLeft("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-				current_atom_->setName(new_name);
-				deselect_();
-				getMainControl()->update(*current_atom_);
-			}
+			return renderers_[main_renderer_]->mapViewportTo3D(x, y);
 		}
 
-		void Scene::createBond_()
+		Vector2 Scene::map3DToViewport(const Vector3& coords)
 		{
-			// this functionaltiy shall be independent from the edit mode
-			// check if two atoms are selected
-			HashSet<Composite*> selection = getMainControl()->getSelection();
+			return renderers_[main_renderer_]->map3DToViewport(coords);
+		}
 
-			// by switching into the edit mode recursive selection
-			// has already cleaned up
-			Atom*  first_atom = 0;
-			Atom* second_atom = 0;
+		void Scene::pickObjects(const QPoint& pos, list<GeometricObject*>& objects)
+		{
+			pickObjects(pos, pos, objects);
+		}
 
-			// case 1: one system with exactly two atoms
-			if (selection.size() == 1)
+		void Scene::pickObjects(const QPoint& pos1, const QPoint& pos2, list<GeometricObject*>& objects)
+		{
+			renderers_[main_renderer_]->pickObjects((Position) pos1.x(), (Position) pos1.y(),
+			                                        (Position) pos2.x(), (Position) pos2.y(), objects);
+		}
+
+		void Scene::setRubberBandGeometry(const QRect& rect)
+		{
+			rb_->setGeometry(rect);
+		}
+
+		void Scene::setRubberBandVisible(bool show)
+		{
+			rb_->setVisible(show);
+		}
+
+		bool Scene::isRecording() const
+		{
+			return record_animation_action_->isChecked();
+		}
+
+		void Scene::captureCamera()
+		{
+			animation_points_.push_back(getStage()->getCamera());
+		}
+
+		void Scene::drawLine(const QPointF& a, const QPointF& b, QPainter* painter)
+		{
+			QPainter* p = painter;
+
+			if(!p)
 			{
-				if (RTTI::isKindOf<AtomContainer>(**selection.begin()))
-				{
-					AtomContainer* ac = reinterpret_cast<AtomContainer*>(*selection.begin());
-					if (ac->countAtoms() == 2)
-					{
-						AtomIterator atom_it = ac->beginAtom();
-						for(; +atom_it; ++atom_it)
-						{
-							if (!first_atom)
-							{
-								first_atom = &*atom_it;
-							}
-							else if (!second_atom)
-							{
-								second_atom = &*atom_it;
-							}
-							else
-							{
-								Log.error() << (String)tr("Internal error! Too many atoms selected.") << endl;
-							}
-						}
-					}
-					else
-					{
-						setStatusbarText((String)tr("Please select exactly two atoms."), true);
-					}
-				}
-				else
-				{
-					setStatusbarText((String)tr("Please select exactly two atoms."), true);
-				}
-			}
-			// case 2: two selected atoms with unselected in
-			//         either distinct atom containers
-			//         or with unselected in the same container
-			else if (selection.size() == 2)
-			{
-				HashSet<Composite*>::Iterator it = selection.begin();
-				for (; +it; ++it)
-				{
-					if (RTTI::isKindOf<Atom>(**it))
-					{
-						if (!first_atom)
-						{
-							first_atom = reinterpret_cast<Atom*>(*it);
-						}
-						else if (!second_atom)
-						{
-							second_atom = reinterpret_cast<Atom*>(*it);
-						}
-					}
-					// case 3: a single atom in selected atomcontainer
-					else if (RTTI::isKindOf<AtomContainer>(**it))
-					{
-						AtomContainer* ac = reinterpret_cast<AtomContainer*>(*it);
-						if (ac->countAtoms() == 1)
-						{
-							if (!first_atom)
-							{
-								first_atom = &*ac->beginAtom();
-							}
-							else if (!second_atom)
-							{
-								second_atom = &*ac->beginAtom();
-							}
-						}
-						else
-						{
-							Log.error() << (String)tr("Scene: Internal error! ") << __LINE__ << endl;
-						}
-					}
-				}
+				p = new QPainter(&overlay_);
 			}
 
-			// we found two atoms
-			if (first_atom && second_atom)
+			QColor color;
+			getStage()->getBackgroundColor().getInverseColor().get(color);
+
+			QPen pen(color);
+			pen.setWidth(3);
+			pen.setStyle(Qt::DashLine);
+
+			p->setPen(pen);
+			p->setRenderHint(QPainter::Antialiasing, true);
+			p->drawLine(a, b);
+
+			has_overlay_ = true;
+
+			if(!painter)
 			{
-				// create a bond
-				Bond* bond = first_atom->createBond(*second_atom);
-				bond->setOrder(Bond::ORDER__SINGLE); //TODO single bond or current edit mode default bond order?
-
-				// 		TODO:for undo -operation
-				// 		EditOperation eo(0, bond, "Added bond of type single" , EditOperation::ADDED__BOND);
-				// 		undo_.push_back(eo);
-				//
-				// 		// tell about the new undo operation
-				// 		emit newEditOperation(eo);
-
-				// if the bond is between two molecules, merge them
-				merge_(first_atom, second_atom);
-
-				// update representation
-				getMainControl()->update(*first_atom, true);
-				getMainControl()->update(*second_atom, true);
-				setStatusbarText((String)tr("Added a bond"));
-
-				// deselect and delete recursively from the selection set
-				HashSet<Composite*>::Iterator it = selection.begin();
-				for (; +it; ++it)
-				{
-					if (!(**it).containsSelection()) continue;
-					getMainControl()->deselectCompositeRecursive(*it, true);
-					getMainControl()->update(**it, false);
-				}
-				first_atom->deselect();
-				second_atom->deselect();
-
-				// update representation
-				getMainControl()->update(*first_atom, true);
-				getMainControl()->update(*second_atom, true);
-			}
-			else
-			{
-				setStatusbarText((String)tr("Please select exactly two atoms."), true);
+				delete p;
 			}
 		}
 
-		void Scene::deleteBond_()
+		void Scene::drawLine(const Vector2& a, const Vector2& b, QPainter* painter)
 		{
-			if (current_bond_ == 0) return;
-
-			Atom* a1 = (Atom*)current_bond_->getFirstAtom();
-			Atom* a2 = (Atom*)current_bond_->getSecondAtom();
-			a1->destroyBond(*a2);
-			a1->deselect();
-			a2->deselect();
-			notify_(new CompositeMessage(*a1, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY));
-			notify_(new CompositeMessage(*a2, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY));
-			notify_(new CompositeMessage(*a1, CompositeMessage::DESELECTED_COMPOSITE));
-			notify_(new CompositeMessage(*a2, CompositeMessage::DESELECTED_COMPOSITE));
-			current_bond_ = 0;
-		}
-
-		void Scene::changeBondOrder_()
-		{
-			if (current_bond_ == 0) return;
-			deselect_();
-			if (current_bond_->getOrder() == bond_order_) return;
-
-			current_bond_->setOrder((Bond::BondOrder)bond_order_);
-			getMainControl()->update(*(Atom*)current_bond_->getFirstAtom(), true);
-		}
-
-		void Scene::activatedOrderItem_(QAction* action)
-		{
-			if (action == 0) return;
-			String text = ascii(action->text());
-
-			if (text == (String)tr("Single")) bond_order_ = Bond::ORDER__SINGLE;
-			else if (text == (String)tr("Double")) bond_order_ = Bond::ORDER__DOUBLE;
-			else if (text == (String)tr("Triple")) bond_order_ = Bond::ORDER__TRIPLE;
-			else if (text == (String)tr("Quadruple")) bond_order_ = Bond::ORDER__QUADRUPLE;
-			else if (text == (String)tr("Aromatic")) bond_order_ = Bond::ORDER__AROMATIC;
-			else if (text == (String)tr("Unknown")) bond_order_ = Bond::ORDER__UNKNOWN;
-
-		}
-
-		void Scene::moveAtom_()
-		{
-			if (current_atom_ == 0) return;
-
-			current_atom_->setSelected(true);
-			notify_(new CompositeMessage(*current_atom_, CompositeMessage::SELECTED_COMPOSITE));
-			setMode(MOVE__MODE);
-		}
-
-		void Scene::atomProperties_()
-		{
-			if (current_atom_ == 0) return;
-
-			CompositeProperties as(current_atom_, this);
-			bool apply = as.exec();
-			deselect_();
-
-			if (apply) getMainControl()->update(*current_atom_, true);
+			drawLine(QPointF(a.x, a.y), QPointF(b.x, b.y), painter);
 		}
 
 		void Scene::createMolecule_()
@@ -4942,172 +3542,7 @@ namespace BALL
 			notify_(nsm);
 		}
 
-		void Scene::keyPressEvent(QKeyEvent* e)
-		{
-			if (!reactToKeyEvent_(e))
-			{
-				defaultKeyPressEvent(e);
-
-				// TODO QShortcut* shortcut
-				if (e->key() == Qt::Key_E)
-				{
-					setMode((Scene::ModeType)EDIT__MODE);
-					return;
-				}
-
-			}
-		}
-
-		bool Scene::reactToKeyEvent_(QKeyEvent* e)
-		{
-			int key = e->key();
-
-			// TODO QShortcut* shortcut
-			if (key == Qt::Key_E)
-			{
-				setMode((ModeType)EDIT__MODE);
-				return true;
-			}
-
-			if (current_mode_ != (ModeType)EDIT__MODE) return false;
-
-			if (!getMainControl()->isBusy())
-			{
-				QPoint point = mapFromGlobal(QCursor::pos());
-
-				// TODO QShortcut* shortcut
-				if (key == Qt::Key_D)
-				{
-					getClickedItems_(point.x(), point.y());
-					deleteAtom_();
-					return true;
-				}
-
-				// TODO QShortcut* shortcut
-				if (key == Qt::Key_Backspace)
-				{
-					getClickedItems_(point.x(), point.y());
-					deleteBond_();
-					return true;
-				}
-			}
-
-			// TODO QShortcut* shortcut
-			if (key < Qt::Key_A || key > Qt::Key_Z)
-			{
-				return false;
-			}
-
-			// TODO QShortcut* shortcut
-			if      (key == Qt::Key_H) atomic_number_ = 1;
-			else if (key == Qt::Key_C) atomic_number_ = 6;
-			else if (key == Qt::Key_N) atomic_number_ = 7;
-			else if (key == Qt::Key_O) atomic_number_ = 8;
-			else if (key == Qt::Key_P) atomic_number_ = 15;
-			else if (key == Qt::Key_S) atomic_number_ = 16;
-			else
-			{
-				return false;
-			}
-
-			setElementCursor();
-
-			String text(tr("Setting element to "));
-			text += PTE[atomic_number_].getName();
-			setStatusbarText(text);
-
-			return true;
-		}
-
 		// TODO: make the renderer dependent on the current target!
-		void Scene::addStructure(String name)
-		{
-			deselect_();
-
-			if (!fragment_db_initialized_)
-			{
-				fragment_db_.setFilename("fragments/Editing-Fragments.db");
-				fragment_db_.init();
-				fragment_db_initialized_ = true;
-			}
-
-			list<AtomContainer*> containers = getContainers_();
-			if (containers.size() == 0) return;
-
-			Residue* residue = fragment_db_.getResidueCopy(name);
-			if (residue == 0)
-			{
-				residue = fragment_db_.getResidueCopy(name + "-Skeleton");
-				if (residue == 0) return;
-			}
-
-			Vector3 p;
-			Size nr = 0;
-			AtomIterator ait = residue->beginAtom();
-			for (;+ait; ++ait)
-			{
-				p += ait->getPosition();
-				nr++;
-			}
-
-			if (nr == 0)
-			{
-				BALLVIEW_DEBUG
-					delete residue;
-				return;
-			}
-
-			p /= (float) nr;
-
-			Matrix4x4 m;
-			Vector3 x = renderers_[main_renderer_]->mapViewportTo3D(menu_point_.x(), menu_point_.y());
-			TransformationProcessor tf;
-
-			Vector3 vv = getStage()->getCamera().getViewVector();
-			float l = vv.getLength();
-			if (!Maths::isZero(l)) vv /= l;
-			Vector3 axis = Vector3(1,0,0) % vv;
-			if (axis.getSquareLength() != 0)
-			{
-				Angle a = vv.getAngle(Vector3(1,0,0));
-				m.setRotation(a, axis);
-				tf.setTransformation(m);
-				residue->apply(tf);
-			}
-
-			m.setTranslation(x - p);
-			tf.setTransformation(m);
-			residue->apply(tf);
-
-			AtomContainer* s = *containers.begin();
-			if (RTTI::isKindOf<System>(*s))
-			{
-				System* system = (System*) s;
-				Molecule* mol = system->getMolecule(0);
-				if (mol == 0)
-				{
-					mol = new Molecule();
-					system->insert(*mol);
-				}
-				s = mol;
-			}
-
-			s->insert(*residue);
-			getMainControl()->deselectCompositeRecursive(s, true);
-			getMainControl()->selectCompositeRecursive(residue, true);
-			getMainControl()->update(*s);
-			notify_(new NewSelectionMessage);
-			setMode(MOVE__MODE);
-		}
-
-		void Scene::addStructure_()
-		{
-			QObject* os = sender();
-			if (os == 0) return;
-			QAction* action = dynamic_cast<QAction*>(os);
-			if (action == 0) return;
-			addStructure(ascii(action->text()));
-		}
 
 		void Scene::createNewMolecule()
 		{
@@ -5123,16 +3558,14 @@ namespace BALL
 			sel.push_back(m);
 			msg->setSelection(sel);
 			notify_(msg);
-
-			editMode_();
 		}
 
 		void Scene::saturateWithHydrogens()
 		{
 			if (getMainControl()->isBusy()) return;
 
-			deselect_(false);
-			list<AtomContainer*> containers = getContainers_();
+			deselect(false);
+			list<AtomContainer*> containers = getContainers();
 			if (containers.size() < 1) return;
 			AtomContainer* ac = *containers.begin();
 			RingPerceptionProcessor rpp;
@@ -5156,7 +3589,7 @@ namespace BALL
 			System* system = getMainControl()->getSelectedSystem();
 			if (system == 0) { return;};
 
-			deselect_(false);
+			deselect(false);
 
 			// do we have a Molecular Structure?
 			MolecularStructure* ms = MolecularStructure::getInstance(0);
@@ -5296,8 +3729,8 @@ namespace BALL
 		{
 			if (getMainControl()->isBusy()) return;
 
-			deselect_();
-			list<AtomContainer*> containers = getContainers_();
+			deselect();
+			list<AtomContainer*> containers = getContainers();
 			if (containers.size() < 1) return;
 
 			MolecularStructure* ms = MolecularStructure::getInstance(0);
@@ -5364,15 +3797,16 @@ namespace BALL
 
 		void Scene::addToolBarEntries(QToolBar* tb)
 		{
+			mode_manager_.init();
+
 			toolbar_view_controls_->addActions(toolbar_actions_view_controls_);
 			toolbar_view_controls_->insertSeparator(switch_grid_);
 			getMainControl()->addToolBar(Qt::TopToolBarArea, toolbar_view_controls_);
 			ModularWidget::addToolBarEntries(tb);
 			getMainControl()->initPopupMenu(MainControl::WINDOWS)->addAction(toolbar_view_controls_->toggleViewAction());
 
-			toolbar_actions_edit_controls_.push_back(edit_id_);
-			toolbar_actions_edit_controls_.push_back(element_action_);
-			toolbar_actions_edit_controls_.push_back(bond_action_);
+			mode_manager_.addToolBarEntries(toolbar_edit_controls_);
+
 			toolbar_actions_edit_controls_.push_back(add_hydrogens_action_);
 			toolbar_actions_edit_controls_.push_back(optimize_action_);
 			toolbar_actions_edit_controls_.push_back(bondorders_action_);
@@ -5391,106 +3825,7 @@ namespace BALL
 			toolbar_edit_controls_->show();
 		}
 
-		void Scene::mouseDoubleClickEvent(QMouseEvent* e)
-		{
-			if (current_mode_ != (ModeType) EDIT__MODE)
-			{
-				if (getMainControl()->isBusy()) return;
-
-				if (current_mode_ == PICKING__MODE)
-				{
-					QPoint p = mapFromGlobal(QCursor::pos());
-					pickParent_(p);
-				}
-				else
-				{
-					if (current_mode_ == ROTATE__MODE)
-					{
-						showInfos();
-					}
-				}
-
-				return;
-			}
-
-			getClickedItems_(e->x(), e->y());
-			if (current_atom_ != 0)
-			{
-				current_atom_->setElement(PTE[atomic_number_]);
-				String new_name = PTE[atomic_number_].getSymbol();
-				//get the old atom number
-				String old_name = current_atom_->getName();
-				old_name.toUpper();
-				new_name += old_name.trimLeft("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-				current_atom_->setName(new_name);
-				deselect_();
-				getMainControl()->update(*current_atom_);
-				return;
-			}
-
-			if (current_bond_ != 0)
-			{
-				Atom* a1 = (Atom*)current_bond_->getFirstAtom();
-				Atom* a2 = (Atom*)current_bond_->getSecondAtom();
-
-				if (!a1->getParent() || (a1->getParent() != a2->getParent()))
-					return;
-
-				RingPerceptionProcessor rpp;
-				vector<vector<Atom*> > rings;
-				Composite* comp = a1->getParent();
-				AtomContainer* ac = static_cast<AtomContainer*>(comp);
-				if (!ac) return;
-				rpp.calculateSSSR(rings, *ac);
-				rings = rpp.getAllSmallRings();
-				vector<Position> rings_to_modify;
-				for (Position r = 0; r < rings.size(); r++)
-				{
-					Size found = 0;
-					for (Position a = 0; a < rings[r].size(); a++)
-					{
-						if (   (rings[r][a] == a1)
-								|| (rings[r][a] == a2))
-						{
-							found++;
-						}
-					}
-
-					if (found == 2) rings_to_modify.push_back(r);
-				}
-
-				for (Position r = 0; r < rings_to_modify.size(); r++)
-				{
-					HashSet<Atom*> ratoms;
-					vector<Atom*>& ring = rings[rings_to_modify[r]];
-					for (Position a = 0; a < ring.size(); a++)
-					{
-						ratoms.insert(ring[a]);
-					}
-
-					for (Position a = 0; a < ring.size(); a++)
-					{
-						AtomBondIterator abit = ring[a]->beginBond();
-						for (;+abit; ++abit)
-						{
-							if (ratoms.has(abit->getPartner(*ring[a])))
-							{
-								abit->setOrder(Bond::ORDER__AROMATIC);
-							}
-						}
-					}
-				}
-
-				if (rings_to_modify.size() == 0)
-				{
-					changeBondOrder_(1);
-				}
-
-				getMainControl()->update(*a1->getParent(), true);
-			}
-		}
-
-		void Scene::merge_(Composite* a1, Composite* a2)
+		void Scene::merge(Composite* a1, Composite* a2)
 		{
 			if ( !a1 || !a2 || !a1->getParent() || !a2->getParent() )
 			{
@@ -5545,5 +3880,6 @@ namespace BALL
 				Log.error() << (String)tr("Internal error! ") << __FILE__ << " " << __LINE__ << endl;
 			}
 		}
+
 	} // namespace VIEW
 } // namespace BALL

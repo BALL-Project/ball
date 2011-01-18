@@ -1,3 +1,5 @@
+INCLUDE(source/VIEW/KERNEL/MODES/sources.cmake)
+
 ### list all filenames of the directory here ###
 SET(SOURCES_LIST
 	clippingPlane.C

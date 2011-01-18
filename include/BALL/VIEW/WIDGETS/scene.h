@@ -37,18 +37,15 @@
 # include <BALL/VIEW/KERNEL/editOperation.h>
 #endif
 
-#ifndef BALL_VIEW_STRUCTURE_FRAGMENTDB_H
-# include <BALL/STRUCTURE/fragmentDB.h>
+#ifndef BALL_VIEW_KERNEL_MODES_INTERACTIONMODEMANAGER_H
+# include <BALL/VIEW/KERNEL/MODES/interactionModeManager.h>
 #endif
 
 #include <QtCore/QThread>
 #include <QtCore/QTimer>
 #include <QtGui/QDragEnterEvent>
-#include <QtGui/QWheelEvent>
-#include <QtGui/QKeyEvent>
 #include <QtGui/QDropEvent>
 #include <QtGui/QToolBar>
-#include <QtGui/QActionGroup>
 #include <QtGui/QFont>
 #include <QtGui/QPicture>
 
@@ -66,6 +63,9 @@ class QMouseEvent;
 class QRubberBand;
 class QMenu;
 class QImage;
+class QAction;
+class QWheelEvent;
+class QKeyEvent;
 
 namespace BALL
 {
@@ -76,6 +76,7 @@ namespace BALL
 	namespace VIEW
 	{
 		class ColorMap;
+		class InteractionMode;
 		class Preferences;
 		class LightSettings;
 		class StageSettings;
@@ -155,22 +156,6 @@ namespace BALL
 				*/
 				//@{
 
-				/// Different Mouse Mode actions
-				enum ModeAction
-				{
-					///
-					TRANSLATE_ACTION,
-
-					///
-					ZOOM_ACTION,
-
-					///
-					ROTATE_ACTION,
-
-					///
-					ROTATE_CLOCKWISE_ACTION
-				};
-
 				/**
 				 * Scene may hold several windows for different renering modes.
 				 * If you need to retrieve a particular window, use this enum together
@@ -188,35 +173,9 @@ namespace BALL
 					RIGHT_EYE_WINDOW
 				};
 
-				/**	Predefined constants for the mode types
-					Add new enums members in derived classes, for new modi.
-					If you add new modi in this class, you have to add them in front of
-					the PICKING__MODE entry.
-					*/
-				enum ModeType
-				{
-					/// Default value.
-					ROTATE__MODE = 0,
-
-					/// Move mode
-					MOVE__MODE,
-
-					/// Picking mode
-					PICKING__MODE,
-
-					/// Edit mode,
-					EDIT__MODE,
-
-					/// The total number of modes in this enum
-					NUMBER_OF_MODES
-				};
-				//@}
-
 				/**	@name	Constructors and Destructor
 				*/
 				//@{
-
-				Scene();
 
 				/** Default Constructor.
 					Initialize the width and height of this scene to <tt> 600</tt> and sets
@@ -228,7 +187,7 @@ namespace BALL
 					\param      w_flags the flags the scene widget should have 
 					(See documentation of QT-library for information concerning widget flags)
 					*/
-				Scene(QWidget* parent_widget, const char* name = NULL, Qt::WFlags w_flags = 0);
+				Scene(QWidget* parent_widget = 0, const char* name = NULL, Qt::WFlags w_flags = 0);
 
 				/** Copy constructor.
 					Initialize the width, height and camera position.
@@ -342,6 +301,39 @@ namespace BALL
 					*/
 				virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
+				void setInfo(const QString& info_string);
+				bool isRecording() const;
+				void captureCamera();
+				Atom* getCurrentAtom() { return current_atom_; }
+				void setCurrentAtom(Atom* atom) { current_atom_ = atom; }
+				void notify(Message* msg) { notify_(msg); }
+				Vector2 map3DToViewport(const Vector3& coords);
+				Vector3 mapViewportTo3D(const Vector2& coords);
+				Vector3 mapViewportTo3D(int x, int y);
+				void setRubberBandGeometry(const QRect& rect);
+				void setRubberBandVisible(bool show);
+				void pickObjects(const QPoint& pos, list<GeometricObject*>& objects);
+				void pickObjects(const QPoint& pos1, const QPoint& pos2, list<GeometricObject*>& objects);
+				void merge(Composite* a1, Composite* a2);
+				std::list<AtomContainer*> getContainers();
+				void enterPickingMode();
+				void exitPickingMode();
+
+				void drawLine(const QPointF& a, const QPointF& b, QPainter* painter = 0);
+				void drawLine(const Vector2& a, const Vector2& b, QPainter* painter = 0);
+
+				Bond* getCurrentBond() { return current_bond_; }
+				void setCurrentBond(Bond* b) { current_bond_ = b; }
+
+				void changeBondOrder();
+				void changeBondOrder(Index delta);
+				void activatedOrderItem_(QAction* action);
+				void createMolecule_();
+				void setFormalCharge_();
+
+				void deselect(bool update=true);
+				void getClickedItems(const QPoint& p);
+
 				///
 				Stage* getStage()
 				{ return stage_;}
@@ -435,10 +427,7 @@ namespace BALL
 				static bool stereoBufferSupportTest();
 
 				///
-				float getMousePositionX() { return x_window_pos_new_;}
-
-				///
-				float getMousePositionY() { return y_window_pos_new_;}
+				bool inMoveMode() const;
 
 				///
 				bool exportPNG(const String& filename);
@@ -454,10 +443,6 @@ namespace BALL
 
 				///
 				virtual bool eventFilter(QObject* object, QEvent* event);
-
-				///
-				ModeType getMode() const
-				{ return current_mode_;}
 
 				///
 				virtual void projectionModeChanged();
@@ -524,9 +509,6 @@ namespace BALL
 
 				void resetTracking() {tracking_initialized_ = false;}
 
-				///
-				bool inMoveMode() const { return (mouse_button_is_pressed_ && (getMode() == MOVE__MODE)); }
-
 				// TODO: this pretty hacky!
 #ifdef BALL_HAS_RTFACT
 				void updateAllRTMaterials();
@@ -554,12 +536,6 @@ namespace BALL
 				///
 				void showContextMenu(QPoint pos);
 
-				///
-				virtual void setMode(ModeType mode);
-
-				///
-				void addStructure(String name);
-
 				// Allow to use the base class setCursor, too
 				using QWidget::setCursor;
 
@@ -567,7 +543,7 @@ namespace BALL
 				void setCursor(String c);
 
 				///
-				void setElementCursor();
+				void setElementCursor(int number);
 
 				///
 				virtual void addToolBarEntries(QToolBar* tb);
@@ -577,7 +553,6 @@ namespace BALL
 
 			/////////////////////////////////////////
 			public slots:
-
 				/// Create an coordinate system at current position
 				void createCoordinateSystem();
 
@@ -692,28 +667,8 @@ namespace BALL
 				*/
 				//@{
 
-				/** Switch to rotate mode.
-					If this method is called the mouse actions of this scene will
-					perform rotation, translation and zooming the visualization.
-					This method will be called from the corresponding menu entry.
-					\see initializeWidget
-					\see checkMenu
-					*/
-				virtual void rotateMode_();
-
-				/** Switch to picking mode.
-					If this method is called the mouse actions of this scene will
-					perform object picking.
-					This method will be called from the corresponding menu entry.
-					\see initializeWidget
-					\see checkMenu
-					*/
-				virtual void pickingMode_();
-
 				/**
 				*/
-				virtual void moveMode_();
-
 				/// Show the viewpoint and the look at point in the statusline of the mainwidget.
 				virtual void showViewPoint_();
 
@@ -737,19 +692,6 @@ namespace BALL
 				// dummy slot for menu entries without immediate action (saves many lines code this way)
 				void dummySlot(){}
 
-				virtual void editMode_();
-				void deleteAtom_();
-				void changeElement_();
-				void changeAtomElement_();
-				void createBond_();
-				void deleteBond_();
-				void changeBondOrder_();
-				void activatedOrderItem_(QAction* action);
-				void moveAtom_();
-				void atomProperties_();
-				void createMolecule_();
-				void addStructure_();
-				void setFormalCharge_();
 				//@}
 
 			////////////////////////////////////////
@@ -760,10 +702,6 @@ namespace BALL
 
 			////////////////////////////////////////
 			protected:
-
-				void defaultKeyPressEvent(QKeyEvent* e);
-				virtual void mouseDoubleClickEvent(QMouseEvent* e);
-				virtual bool reactToKeyEvent_(QKeyEvent* e);
 
 				/** React to RepresentationMessages.
 				 */
@@ -793,7 +731,7 @@ namespace BALL
 				 *  Currently, this always uses a 16pt Arial bold font.
 				 *  TODO: this should be configurable in the GUI.
 				 */
-				void renderText_(QPointF const& point, String const& text, QPaintDevice* current_dev);
+				void renderText_(QPointF const& point, QString const& text, QPaintDevice* current_dev);
 
 				/**
 				 * Insert a given Atom in the Scene. Its position is specified by the 2-dim
@@ -802,54 +740,33 @@ namespace BALL
 				 */
 				void insert_(int x_, int y_, PDBAtom &atom_);
 
-				void merge_(Composite* a1, Composite* a2);
-
 				/**
 				 *  Given a 3-dim. Coordinates (in Viewing Volume) getScreenPosition
 				 *  computes the 2-dim Coordinates on Screen.
 				 */
 				TVector2<float> getScreenPosition_(Vector3 vec);
 
-				void getClickedItems_(int x, int y);
-
 				void initializeMembers_();
 
 				String getBondOrderString_(Index order);
 
-				std::list<AtomContainer*> getContainers_();
-
-				void changeBondOrder_(Index delta);
-				void deselect_(bool update=true);
 				void renderGrid_();
 
-				QAction *edit_id_, *new_molecule_action_, *optimize_action_; 
-				QAction *add_hydrogens_action_, *element_action_;
-				QAction *bondorders_action_, *bond_action_;
+				QAction *new_molecule_action_, *optimize_action_; 
+				QAction *add_hydrogens_action_;
+				QAction *bondorders_action_;
 
 				Atom* current_atom_;
 				Bond* current_bond_;
-
-				Vector3 atom_pos_;
 
 				// pick atoms/bonds only in highlighted AtomContainer?
 				static bool only_highlighted_;
 				// element for new atoms
 				int atomic_number_;
-				// name for newly created atoms
-				Position atom_number_;
-				// order for new bonds
-				int bond_order_;
-				Position last_y_;
-				Qt::MouseButtons last_buttons_;
 
 				//undo stack
 				vector<EditOperation> undo_;
 				EditSettings* edit_settings_;
-				QPoint 	 menu_point_;
-				FragmentDB fragment_db_;
-				bool fragment_db_initialized_;
-				bool temp_move_;
-				QToolBar* toolbar_edit_controls_;
 				QList<QAction*> toolbar_actions_edit_controls_;
 
 				/** @name Protected QT overridden virtual methods
@@ -921,27 +838,18 @@ namespace BALL
 				*/
 				virtual void mouseReleaseEvent(QMouseEvent* qmouse_event);
 
-				virtual void defaultMouseReleaseEvent(QMouseEvent* qmouse_event);
-
 				/** Catch mouse wheel events and zoom the scene accordingly.
 						\param  e the QT-mouse event (See QT-library for mouse events)
 				*/
 				virtual void wheelEvent(QWheelEvent* qmouse_event);
 
-				//
-				void defaultWheelHandling_(QWheelEvent* qmouse_event);
+				virtual void mouseDoubleClickEvent(QMouseEvent* e);
 
 				//_
 				void animate_();
 
-				void processRotateModeMouseEvents_(QMouseEvent* e);
-				void processMoveModeMouseEvents_(QMouseEvent* e);
-
-				void rotateSystem_();
 				void rotateSystemClockwise_();
-				void translateSystem_();
 				void zoomSystem_();
-				Index getMoveModeAction_(const QMouseEvent& e);
 
 				void selectionPressed_();
 				void selectionPressedMoved_();
@@ -953,9 +861,6 @@ namespace BALL
 				
 				void readLights_(const INIFile& inifile);
 
-				inline float getXDiff_();
-				inline float getYDiff_();
-				
 				void createCoordinateSystem_(bool at_origin);
 
 				void registerRenderers_();
@@ -963,14 +868,7 @@ namespace BALL
 				/// Estimate current fps and convert into a string
 				String createFPSInfo_();
 
-				//_ state of the scene: picking or rotate mode?
-				ModeType current_mode_;
-
-				//_ last state of the scene: picking or rotate mode?
-				ModeType last_mode_;
-		
 				// Menu entry IDs
-				QAction *rotate_action_, *picking_action_, *move_action_;
 				QAction *no_stereo_action_, *active_stereo_action_, *dual_stereo_action_, *dual_stereo_different_display_action_;
 				QAction *record_animation_action_, *start_animation_action_, *clear_animation_action_, *cancel_animation_action_;
 				QAction *animation_export_POV_action_, *animation_export_VRML_action_, 	*animation_export_PNG_action_, *animation_repeat_action_;
@@ -986,19 +884,8 @@ namespace BALL
 				bool tracking_initialized_;
 				Quaternion old_trackrotation_;
 
-				bool need_update_;
 				bool update_running_;
 
-				Index x_window_pos_old_;
-				Index y_window_pos_old_;
-				Index x_window_pos_new_;
-				Index y_window_pos_new_;
-
-				Index x_window_pick_pos_first_;
-				Index y_window_pick_pos_first_;
-				Index x_window_pick_pos_second_;
-				Index y_window_pick_pos_second_;
-				bool pick_select_;
 				QRubberBand* rb_;
 
 				Stage* stage_;
@@ -1033,30 +920,26 @@ namespace BALL
 				std::list<Camera> animation_points_;
 				AnimationThread* animation_thread_;
 				bool stop_animation_;
-#ifdef BALL_HAS_RTFACT				
+#ifdef BALL_HAS_RTFACT
 				bool continuous_loop_;
 #endif
 				bool want_to_use_vertex_buffer_;
-				bool mouse_button_is_pressed_;
 				bool preview_;
 				bool use_preview_;
 
 				PreciseTime time_;
-				float zoom_factor_;
 				QPoint info_point_;
 				QByteArray last_state_;
 				list<float> fps_;
 				bool show_fps_;
 				static bool offscreen_rendering_;
 				Size offscreen_factor_;
-				String text_;
 				Size   font_size_;
 				QToolBar* toolbar_view_controls_;
+				QToolBar* toolbar_edit_controls_;
 				QList<QAction*> toolbar_actions_view_controls_;
-				bool ignore_pick_;
-				QActionGroup* mode_group_;
 
-				String info_string_;
+				QString info_string_;
 
 				GLRenderWindow* main_display_;
 				/// The index of the renderer responsible for the main display
@@ -1069,6 +952,7 @@ namespace BALL
 
 				QPicture overlay_;
 				bool has_overlay_;
+				InteractionModeManager mode_manager_;
 		};
 
 
