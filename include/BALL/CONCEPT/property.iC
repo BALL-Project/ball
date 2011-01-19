@@ -176,13 +176,13 @@ double NamedProperty::getDouble() const
 }
 
 BALL_INLINE 
-string NamedProperty::getString() const
+String NamedProperty::getString() const
 {
 	return (((type_ == STRING) && (boost::any_cast<string*>(data_) != 0)) ? (*boost::any_cast<string*>(data_)) : string(""));
 }
 
 BALL_INLINE 
-string NamedProperty::toString() const
+String NamedProperty::toString() const
 {
 	String res;
 	if(type_ == INT)
@@ -229,7 +229,7 @@ unsigned int NamedProperty::getUnsignedInt() const
 }
 
 BALL_INLINE 
-string NamedProperty::getName() const
+String NamedProperty::getName() const
 {
 	return name_;
 }

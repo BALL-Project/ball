@@ -199,7 +199,7 @@ namespace BALL
 		vector<NamedProperty>::iterator it = named_properties_.begin();
 		for (; it != named_properties_.end(); ++it)
 		{
-			if (it->getName() == name)
+			if (it->getName() == name.c_str())
 			{
 				// yes, it exists. Erase the old content
 				named_properties_.erase(it);
@@ -215,7 +215,7 @@ namespace BALL
 	{
 		for (Size i = 0; i < named_properties_.size(); ++i)
 		{
-			if (named_properties_[i].getName() == name)
+			if (named_properties_[i].getName() == name.c_str())
 			{
 				return named_properties_[i];
 			}
@@ -229,7 +229,7 @@ namespace BALL
     vector<NamedProperty>::iterator it = named_properties_.begin();
 		for (; it != named_properties_.end(); ++it)
  		{
-			if (it->getName() == name)
+			if (it->getName() == name.c_str())
 			{
 				named_properties_.erase(it);
 				break;
@@ -241,7 +241,7 @@ namespace BALL
 	{
 		for (Size i = 0; i < named_properties_.size(); i++)
 		{
-			if (named_properties_[i].getName() == name)
+			if (named_properties_[i].getName() == name.c_str())
 			{
 				return true;
 			}
