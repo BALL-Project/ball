@@ -34,7 +34,7 @@ namespace BALL
 		OPLSModel::OPLSModel(const QSARData& q) : PLSModel(q) 
 		{ 
 			type_="OPLS";
-			no_ortho_components_=5;
+			no_ortho_components_ = 5;
 		}
 
 		OPLSModel::~OPLSModel()
@@ -43,15 +43,15 @@ namespace BALL
 
 		void OPLSModel::train()
 		{
-			Matrix<double> X=descriptor_matrix_;
+			Matrix<double> X = descriptor_matrix_;
 			
 			
-		// 	double d[]={-1,-1,1,-1,-1,1,1,1};
-		// 	//double d[]={-2.18,-2.18,1.84,-0.16,-0.48,1.52,0.83,0.83};
-		// 	Matrix X(4,2);
+		// 	double d[] = {-1, -1, 1, -1, -1, 1, 1, 1};
+		// 	//double d[] = {-2.18, -2.18, 1.84, -0.16, -0.48, 1.52, 0.83, 0.83};
+		// 	Matrix X(4, 2);
 		// 	X << d;
-		// 	Y_.ReSize(4,1);
-		// 	double e[]={2,2,0,-4};
+		// 	Y_.ReSize(4, 1);
+		// 	double e[] = {2, 2, 0, -4};
 		// 	Y_ << e;
 			int cols = descriptor_matrix_.Ncols();
 			
@@ -60,9 +60,9 @@ namespace BALL
 			Vector<double> c; c.setVectorType(1); // column-vector
 			Vector<double> u(X.Nrows());  u.setVectorType(1); // column-vector
 			
-			for (uint i=1; i<=u.getSize(); i++)
+			for (uint i = 1; i <= u.getSize(); i++)
 			{
-				u(i)=Y_(i,1);
+				u(i) = Y_(i, 1);
 			}
 			Vector<double> u_old; u_old.setVectorType(1); // column-vector
 			//w = X.t()*u / Statistics::scalarProduct(u);
@@ -73,24 +73,24 @@ namespace BALL
 			// but obviously the number of orthogonal components must be <= #features-1
 			// since we will need at least one non-orthogonal component as well
 			uint orthogonal_components_to_create = no_ortho_components_;
-			if(cols-1<no_ortho_components_) orthogonal_components_to_create=cols-1;
+			if (cols-1 < no_ortho_components_) orthogonal_components_to_create = cols-1; 
 			
-			W_ortho_.resize(cols,orthogonal_components_to_create);
-			T_ortho_.resize(descriptor_matrix_.Nrows(),orthogonal_components_to_create);
+			W_ortho_.resize(cols, orthogonal_components_to_create);
+			T_ortho_.resize(descriptor_matrix_.Nrows(), orthogonal_components_to_create);
 
-			for(uint j=0; j<orthogonal_components_to_create; j++)
+			for (uint j = 0; j < orthogonal_components_to_create; j++)
 			{	
-				for(int i=0; ;i++)
+				for (int i = 0; ; i++)
 				{
 					w = X.t()*u / Statistics::scalarProduct(u);
 					w = w / Statistics::euclNorm(w);	
 					
 					t = X*w ;
 					c = Y_.t()*t / Statistics::scalarProduct(t);
-					u_old=u;
+					u_old = u;
 					u = Y_*c / Statistics::scalarProduct(c);
 					
-					if (Statistics::euclDistance(u,u_old)/Statistics::euclNorm(u)>0.0000001) 
+					if (Statistics::euclDistance(u, u_old)/Statistics::euclNorm(u) > 0.0000001) 
 					{ 
 						continue;				
 					}
@@ -108,11 +108,11 @@ namespace BALL
 				Vector<double> p_ortho = X.t()*t_ortho / Statistics::scalarProduct(t_ortho);
 				
 				Matrix<double> TP; 
-				t_ortho.dotProduct(p_ortho,TP); // t.p.t() -> dim. nxm
+				t_ortho.dotProduct(p_ortho, TP); // t.p.t() -> dim. nxm
 				X -= TP; 
 				
-				W_ortho_.copyVectorToColumn(w_ortho,j+1);
-				T_ortho_.copyVectorToColumn(t_ortho,j+1);
+				W_ortho_.copyVectorToColumn(w_ortho, j+1);
+				T_ortho_.copyVectorToColumn(t_ortho, j+1);
 			}
 				
 			descriptor_matrix_ = X;
@@ -134,72 +134,72 @@ namespace BALL
 
 		bool OPLSModel::optimizeParameters(int k, int no_steps)
 		{
-			double best_q2=0;
-			int best_no=1;
-			int best_o_no=1;
+			double best_q2 = 0;
+			int best_no = 1;
+			int best_o_no = 1;
 			int cols = data->getNoDescriptors();
-			if(!descriptor_IDs_.empty())
+			if (!descriptor_IDs_.empty())
 			{
 				cols = descriptor_IDs_.size();
 			}
-			no_ortho_components_=0;
+			no_ortho_components_ = 0;
 			
 			// first find best number of components, for PLS analysis 
-			for(int i=1; i<=no_steps && i<=cols;i++)
+			for (int i = 1; i <= no_steps && i <= cols; i++)
 			{	
-				no_components_=i;
+				no_components_ = i;
 					
 				validation->crossValidation(k);
 			
-				if(validation->getQ2()>best_q2)
+				if (validation->getQ2() > best_q2)
 				{
-					best_q2=validation->getQ2();
-					best_no=i;
+					best_q2 = validation->getQ2();
+					best_no = i;
 				}
-				else if(validation->getQ2()<0.75*best_q2)
+				else if (validation->getQ2() < 0.75*best_q2)
 				{
 					break; // for speed-up
 				}
 			}
-			no_components_=best_no;
+			no_components_ = best_no;
 			
 			//then try to remove orthogonal variance by use of OPLS components
-			for(int i=0; i<=no_steps && i<=cols && i<no_components_;i++)
+			for (int i = 0; i <= no_steps && i <= cols && i < no_components_; i++)
 			{	
-				no_ortho_components_=i;
+				no_ortho_components_ = i;
 					
 				validation->crossValidation(k);
 			
-				if(validation->getQ2()>best_q2)
+				if (validation->getQ2() > best_q2)
 				{
-					best_q2=validation->getQ2();
-					best_o_no=i;
+					best_q2 = validation->getQ2();
+					best_o_no = i;
 				}
-				else if(validation->getQ2()<0.75*best_q2)
+				else if (validation->getQ2() < 0.75*best_q2)
 				{
 					break; // for speed-up
 				}
 			}
-			no_ortho_components_=best_o_no;
+			no_ortho_components_ = best_o_no;
 
 			//finally, try to reduce the number of PLS components (since orthogonal variance has been removed, less PLS components should be neccessary)
-			for(int i=no_components_; i>=1 ;i--)
+			for (int i = no_components_; i >= 1 ; i--)
 			{	
-				no_components_=i;
+				no_components_ = i;
 					
 				validation->crossValidation(k);
 			
-				if(validation->getQ2()>best_q2)
+				if (validation->getQ2() > best_q2)
 				{
-					best_q2=validation->getQ2();
-					best_no=i;
+					best_q2 = validation->getQ2();
+					best_no = i;
 				}
-				else if(validation->getQ2()<0.75*best_q2)
+				else if (validation->getQ2() < 0.75*best_q2)
 				{
 					break; // for speed-up
 				}
 			}
-			no_components_=best_no;
+			no_components_ = best_no;
 			
 			validation->setQ2(best_q2);
 			
@@ -215,17 +215,17 @@ namespace BALL
 						
 		void OPLSModel::setNoOrthoComponents(int d)
 		{
-			no_ortho_components_=d;
+			no_ortho_components_ = d;
 		}
 
 
 		void OPLSModel::setParameters(vector<double>& v)
 		{
-			if(v.size()!=2)
+			if (v.size() != 2)
 			{
 				String c = "Wrong number of model parameters! Needed: 2;";
 				c = c+" given: "+String(v.size());
-				throw Exception::ModelParameterError(__FILE__,__LINE__,c.c_str());
+				throw Exception::ModelParameterError(__FILE__, __LINE__, c.c_str());
 			}
 			no_ortho_components_ = (int)v[0];
 			no_components_ = (int)v[1];
@@ -240,23 +240,23 @@ namespace BALL
 			return d;
 		}
 
-		// RowVector OPLSModel::predict(const vector<double>& substance, bool transform)
+		// RowVector OPLSModel::predict(const vector<double> & substance, bool transform)
 		// {
-		// 	if(training_result_.Ncols()==0)
+		// 	if (training_result_.Ncols() == 0)
 		// 	{
-		// 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must be trained before it can predict the activitiy of substances!");
+		// 		throw Exception::InconsistentUsage(__FILE__, __LINE__, "Model must be trained before it can predict the activitiy of substances!"); 
 		// 	}
 		// 
-		// 	RowVector v=getSubstanceVector(substance, transform);
+		// 	RowVector v = getSubstanceVector(substance, transform); 
 		// 	
 		// // 	ColumnVector t_new_ortho = v*W_ortho_.Column(1) / (W_ortho_.Column(1).t()*W_ortho_.Column(1)).AsScalar();
 		// // 	v = v - t_new_ortho*P_ortho.Column(1).t();
 		// 	
-		// 	RowVector res=v*training_result_;
+		// 	RowVector res = v*training_result_;
 		// 
-		// 	if(transform && y_transformations_.Ncols()!=0)
+		// 	if (transform && y_transformations_.Ncols() != 0)
 		// 	{
-		// 		backTransformPrediction(res);
+		// 		backTransformPrediction(res); 
 		// 	}
 		// 
 		// 	return res;

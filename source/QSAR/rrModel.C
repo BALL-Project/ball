@@ -35,7 +35,7 @@ namespace BALL
 		RRModel::RRModel(const QSARData& q, double lambda) : MLRModel(q) 
 		{
 			type_="RR";
-			lambda_=lambda;
+			lambda_ = lambda;
 		}
 
 		RRModel::~RRModel()
@@ -45,28 +45,28 @@ namespace BALL
 
 		void RRModel::train()
 		{	
-			if(descriptor_matrix_.Ncols()==0)
+			if (descriptor_matrix_.Ncols() == 0)
 			{
-				throw Exception::InconsistentUsage(__FILE__,__LINE__,"Data must be read into the model before training!");
+				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Data must be read into the model before training!"); 
 			}
-			if(Y_.Ncols()==0)
+			if (Y_.Ncols() == 0)
 			{
-				throw Exception::InconsistentUsage(__FILE__,__LINE__,"No response values have been read! Model can not be trained!");
+				throw Exception::InconsistentUsage(__FILE__, __LINE__, "No response values have been read! Model can not be trained!");
 			}
-			if (lambda_==0 && descriptor_matrix_.Ncols()>=descriptor_matrix_.Nrows())
+			if (lambda_ == 0 && descriptor_matrix_.Ncols() >= descriptor_matrix_.Nrows())
 			{	
-				throw Exception::SingularMatrixError(__FILE__,__LINE__,"For MLR model, matrix must have more rows than columns in order to be invertible!!");
-				//training_result_.ReSize(0,0);
+				throw Exception::SingularMatrixError(__FILE__, __LINE__, "For MLR model, matrix must have more rows than columns in order to be invertible!!");
+				//training_result_.ReSize(0, 0);
 				//return;
 			}
 
   			Matrix<double> m = descriptor_matrix_.t()*descriptor_matrix_;
 
-			if(lambda_ != 0)
+			if (lambda_ != 0)
 			{
 				Matrix<double> I; I.setToIdentity(m.Nrows());
-				I*=lambda_;
-				m+=I;
+				I *= lambda_;
+				m += I;
 			}
 				
 			try
@@ -90,8 +90,8 @@ namespace BALL
 			}
 			catch(BALL::Exception::GeneralException e)
 			{
-				training_result_.resize(0,0);
-				throw Exception::SingularMatrixError(__FILE__,__LINE__,"Matrix for RR training is singular!! Check that descriptor_matrix_ does not contain empty columns and that lambda is not too small!");
+				training_result_.resize(0, 0);
+				throw Exception::SingularMatrixError(__FILE__, __LINE__, "Matrix for RR training is singular!! Check that descriptor_matrix_ does not contain empty columns and that lambda is not too small!"); 
 				return;
 			}
 			
@@ -100,13 +100,13 @@ namespace BALL
 
 		void RRModel::setParameters(vector<double>& v)
 		{	
-			if(v.size()!=1)
+			if (v.size() != 1)
 			{
 				String c = "Wrong number of model parameters! Needed: 1;";
 				c = c+" given: "+String(v.size());
-				throw Exception::ModelParameterError(__FILE__,__LINE__,c.c_str());
+				throw Exception::ModelParameterError(__FILE__, __LINE__, c.c_str());
 			}
-			lambda_=v[0];
+			lambda_ = v[0];
 		}
 
 		vector<double> RRModel::getParameters() const

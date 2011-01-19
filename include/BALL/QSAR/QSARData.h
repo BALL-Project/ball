@@ -229,7 +229,7 @@ namespace BALL
 				void insertSubstance(const QSARData* source, int s, bool backtransformation=0);
 				
 				/** prints a vector-based matrix to a file */
-				void printMatrix(VMatrix& mat, std::ostream& out) const;
+				void printMatrix(const VMatrix& mat, std::ostream& out) const;
 				//@}
 				
 				/** @name Attributes

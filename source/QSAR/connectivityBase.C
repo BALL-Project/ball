@@ -54,7 +54,7 @@ namespace BALL
 	bool ConnectivityBase::isValid_(AtomContainer& ac)
 	{
 		static HashMap<Handle, PreciseTime> mod_times;
-		PreciseTime last_mod = ac.getModificationTime();
+		PreciseTime last_mod = ac.getModificationTime(); 
 		Handle mol_handle = ac.getHandle();
 		if (mod_times.has(mol_handle))
 		{
@@ -69,7 +69,7 @@ namespace BALL
 			{
 				mod_times[mol_handle] = last_mod;
 				#ifdef BALL_QSAR_CONNECTIVITYBASE_DEBUG
-				cerr << ">> ConnectivityBase::isValid: atom container not valid, modified!" << endl;
+				cerr << ">> ConnectivityBase::isValid: atom container not valid, modified!" << endl; 
 				#endif
 				return false;
 			}
@@ -111,7 +111,7 @@ namespace BALL
 		{
 			if (atom_it->getElement() != PTE[Element::H])
 			{
-				index_map.insert(std::make_pair(&(*atom_it),num_heavy_atoms++));
+				index_map.insert(std::make_pair(&(*atom_it), num_heavy_atoms++));
 			}
 		}
 
@@ -119,7 +119,7 @@ namespace BALL
 		vector<double> row_sums(num_heavy_atoms, 0.0);
 		// do for every atom the min dists to all other atoms 
 		// (single source shortest path for every single atom)
-		for (atom_it = ac.beginAtom(); atom_it != ac.endAtom();++atom_it)
+		for (atom_it = ac.beginAtom(); atom_it != ac.endAtom(); ++atom_it)
 		{
 			if (atom_it->getElement() != PTE[Element::H])
 			{
@@ -172,7 +172,7 @@ namespace BALL
 		dists[source_idx] = 0.0;
 		
 		// set the distances from the atoms next to the source atom
-		for (Atom::BondConstIterator it=source->beginBond();it!=source->endBond();it++)
+		for (Atom::BondConstIterator it = source->beginBond(); it != source->endBond(); it++)
 		{
 			if (it->getBoundAtom(*source)->getElement() != PTE[Element::H])
 			{
@@ -193,7 +193,7 @@ namespace BALL
 			
 			// relax O(1)
 			Atom::BondConstIterator bond_it;
-			for(bond_it=min_atom->beginBond();bond_it!=min_atom->endBond();++bond_it)
+			for (bond_it = min_atom->beginBond(); bond_it != min_atom->endBond(); ++bond_it)
 			{
 				// if the bound atom is a hydrogen we don't process it
 				if (bond_it->getBoundAtom(*min_atom)->getElement() != PTE[Element::H])

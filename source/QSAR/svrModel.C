@@ -29,7 +29,7 @@ namespace BALL
 {
 	namespace QSAR
 	{
-		SVRModel::SVRModel(const QSARData& q, int k_type, double p1, double p2) : KernelModel(q,k_type,p1,p2) { }
+		SVRModel::SVRModel(const QSARData& q, int k_type, double p1, double p2) : KernelModel(q, k_type, p1, p2) { }
 
 		SVRModel::~SVRModel()
 		{

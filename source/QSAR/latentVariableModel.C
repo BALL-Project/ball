@@ -28,9 +28,9 @@ namespace BALL
 
 		LatentVariableModel::LatentVariableModel()
 		{
-			latent_variables_.resize(0,0);
-			loadings_.resize(0,0);
-			weights_.resize(0,0);
+			latent_variables_.resize(0, 0);
+			loadings_.resize(0, 0);
+			weights_.resize(0, 0);
 		}
 
 
