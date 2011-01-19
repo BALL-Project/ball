@@ -67,9 +67,9 @@ namespace BALL {
 
 			/**
 			 *  Copy constructor.
+			 *  @throw Exception::OutOfMemory if the memory could not be allocated
 			 */
-			Vector(const Vector& v)
-				throw(Exception::OutOfMemory);
+			Vector(const Vector& v);
 
 			/**
 			 * 	Destructor.
@@ -121,9 +121,9 @@ namespace BALL {
 
 			/**
 			 *  Assignment operator
+			 *  @throw Exception::OutOfMemory if the memory could not be allocated
 			 */
-			Vector<valuetype>& operator = (const Vector<valuetype>& B)
-				throw(Exception::OutOfMemory);
+			Vector<valuetype>& operator = (const Vector<valuetype>& B);
 
 			/**
 			 *  Checks for equality.
@@ -141,43 +141,43 @@ namespace BALL {
 
 			/**
 			 *  Adds the vector B to this vector.
-			 *  If the sizes of the vectors don't match, an Exception::VectorHasWrongDimension
-			 *  is thrown. Note that no distinction is made between row and column vectors.
+			 *  @throw Exception::VectorHasWrongDimension if the sizes of the 
+			 *         vectors do not match (no distinction is made between row 
+			 *         and column vectors)
 			 */
-			inline Vector<valuetype>& operator += (const Vector<valuetype>& B)
-				throw(Exception::VectorHasWrongDimension);
+			inline Vector<valuetype>& operator += (const Vector<valuetype>& B);
 
 			/**
 			 *  Returns the sum of this vector and the vector B.
-			 *  If the sizes of the vectors do not match, an
-			 *  Exception::MatrixHasWrongDimension is thrown.
 			 *  The type of the vector (i.e. row or column) depends on the type of the
 			 *  input vectors. If both inputs have the same type, the output will have
 			 *  the same type as well. If the inputs differ in type, the output will have
 			 *  the default type (column vector).
+			 *  @throw Exception::VectorHasWrongDimension if the sizes of the 
+			 *         vectors do not match (no distinction is made between row
+			 *         and column vectors)
 			 */
-			inline Vector<valuetype> operator+ (const Vector<valuetype>& B) const
-				throw(Exception::VectorHasWrongDimension);
+			inline Vector<valuetype> operator+ (const Vector<valuetype>& B) const;
 			
 			/**
 			 *  Subtracts the vector B from this vector.
-			 *  If the sizes of the vectors don't match, an Exception::VectorHasWrongDimension
-			 *  is thrown. Note that no distinction is made between row and column vectors.
+			 *  @throw Exception::VectorHasWrongDimension if the sizes of the 
+			 *         vectors do not match (no distinction is made between row 
+			 *         and column vectors)
 			 */
-			inline Vector<valuetype>& operator -= (const Vector<valuetype>& B)
-				throw(Exception::VectorHasWrongDimension);
+			inline Vector<valuetype>& operator -= (const Vector<valuetype>& B);
 
 			/**
 			 *  Returns the difference of this vector and the vector B.
-			 *  If the sizes of the vectors do not match, an
-			 *  Exception::MatrixHasWrongDimension is thrown.
 			 *  The type of the vector (i.e. row or column) depends on the type of the
 			 *  input vectors. If both inputs have the same type, the output will have
 			 *  the same type as well. If the inputs differ in type, the output will have
 			 *  the default type (column vector).
+			 *  @throw Exception::VectorHasWrongDimension if the sizes of the 
+			 *         vectors do not match (no distinction is made between row 
+			 *         and column vectors)
 			 */
-			inline Vector<valuetype> operator- (const Vector<valuetype>& B) const
-				throw(Exception::VectorHasWrongDimension);
+			inline Vector<valuetype> operator- (const Vector<valuetype>& B) const;
 
 			/** Returns a vector containing the entries of this vector
 			 *  multiplied with the factor a. The type of the vector (row or
@@ -204,15 +204,19 @@ namespace BALL {
 			 *        a^' * b
 			 *        where ^' denotes Hermite transposal (i.e. transposition
 			 *        and complex conjugation)
+			 *  @throw Exception::VectorHasWrongDimension if the sizes of the 
+			 *         vectors do not match (no distinction is made between row 
+			 *         and column vectors)
 			 */
-			inline valuetype operator* (const Vector<valuetype>& a) const
-				throw(Exception::VectorHasWrongDimension);
+			inline valuetype operator* (const Vector<valuetype>& a) const;
 
 			/** Build the cross product of this vector and the vector a.
 			 *  Note: this is currently only implemented for the 3D case.
+			 *  @throw Exception::VectorHasWrongDimension if the sizes of the 
+			 *         vectors do not match (no distinction is made between row 
+			 *         and column vectors)
 			 */
-			inline Vector<valuetype> operator % (const Vector<valuetype>& a) const
-				throw(Exception::VectorHasWrongDimension);
+			inline Vector<valuetype> operator % (const Vector<valuetype>& a) const;
 
 			/** "fast" and unchecked inline version of vector addition, native version.
 			 *  The type of the vector, i.e. row or column, will not be changed, independent
@@ -306,10 +310,11 @@ namespace BALL {
 
 			/** Returns a vector containing the entries of this vector
 			 *  right multiplied with the Matrix A.
+			 *  @throw Exception::VectorHasWrongDimension if the length of this
+			 *         vector does not equal A.getRowCount()
 			 */
 			template <class mvaluetype, class mtraits>
-			inline Vector<valuetype> operator* (const Matrix<mvaluetype, mtraits>& A) const
-				throw(Exception::VectorHasWrongDimension);
+			inline Vector<valuetype> operator* (const Matrix<mvaluetype, mtraits>& A) const;
 
 			/** "fast" and unchecked version of multiplication with a Matrix, native implementation.
 			 *  The type of the resulting vector equals the type of this one.

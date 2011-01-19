@@ -1,10 +1,13 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 
 #include <BALL/VIEW/DIALOGS/geometricFitDialog.h>
 #include <BALL/STRUCTURE/DOCKING/geometricFit.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
-#include <QtGui/qlineedit.h>
-#include <QtGui/qcombobox.h>
+#include <QtGui/QLineEdit>
+#include <QtGui/QComboBox>
 
 //#define BALL_VIEW_DEBUG
 

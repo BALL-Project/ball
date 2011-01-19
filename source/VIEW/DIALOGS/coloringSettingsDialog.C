@@ -1,18 +1,16 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.C,v 1.38.16.3 2007/05/30 21:23:14 amoll Exp $
-//
 
 #include <BALL/VIEW/DIALOGS/coloringSettingsDialog.h>
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/KERNEL/PTE.h>
 
-#include <QtGui/qcolordialog.h>
-#include <QtGui/qslider.h>
-#include <QtGui/qlabel.h>
+#include <QtGui/QColorDialog>
+#include <QtGui/QSlider>
+#include <QtGui/QLabel>
 #include <QtGui/QStackedWidget>
-#include <QtGui/qcheckbox.h>
+#include <QtGui/QCheckBox>
 
 namespace BALL
 {
@@ -33,7 +31,7 @@ namespace BALL
 			setObjectName(name);
 			setINIFileSectionName("COLORING_OPTIONS");
 			setDefaultValues_();
-			setWidgetStackName("Model Colors");
+			setWidgetStackName((String)tr("Model Colors"));
 			setWidgetStack(widget_stack);
 
 			// signals and slots connections
@@ -67,7 +65,7 @@ namespace BALL
 
 				names.push_back(PTE[0].getSymbol());
 				colors.push_back(color_hash_map[0]);
-				element_table_->setNamesTitle("Element");
+				element_table_->setNamesTitle((String)tr("Element"));
 				element_table_->setContent(names, colors);
 				names.clear();
 				colors.clear();
@@ -87,7 +85,7 @@ namespace BALL
 					colors.push_back(it2->second);
 				}
 
-				residue_table_->setNamesTitle("Residue");
+				residue_table_->setNamesTitle((String)tr("Residue"));
 				residue_table_->setContent(names, colors);
 			}
 				
@@ -450,7 +448,7 @@ namespace BALL
 					names.push_back(p);
 				}
 
-				chain_table_->setNamesTitle("Chain");
+				chain_table_->setNamesTitle((String)tr("Chain"));
 				chain_table_->setContent(names, colors);
 			} else
 
@@ -466,7 +464,7 @@ namespace BALL
 					names.push_back(p);
 				}
 
-				molecule_table_->setNamesTitle("Molecule");
+				molecule_table_->setNamesTitle((String)tr("Molecule"));
 				molecule_table_->setContent(names, colors);
 			}
 

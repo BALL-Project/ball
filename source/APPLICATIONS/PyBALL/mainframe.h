@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.1.4.1 2007/03/25 21:32:27 oliver Exp $
-//
 
 #ifndef BALL_APPLICATIONS_BALLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_BALLVIEW_MAINFRAME_H
@@ -11,7 +9,7 @@
 # include <BALL/VIEW/KERNEL/mainControl.h>
 #endif
 
-#include <QtGui/qwidget.h>
+#include <QtGui/QWidget>
 
 namespace BALL
 {

@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.46.16.2 2007/05/17 21:10:06 amoll Exp $
-//
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/DATATYPE/dataset.h>
@@ -20,9 +18,9 @@ DatasetControl::DatasetControl(QWidget* parent, const char* name)
 	Log.error() << "new DatasetControl " << this << std::endl;
 #endif
 	listview->setColumnCount(3);
-	listview->headerItem()->setText(0, "Name");
-	listview->headerItem()->setText(1, "from");
-	listview->headerItem()->setText(2, "Type");
+	listview->headerItem()->setText(0, qApp->translate("BALL::VIEW::DatasetControl", "Name"));
+	listview->headerItem()->setText(1, qApp->translate("BALL::VIEW::DatasetControl", "from"));
+	listview->headerItem()->setText(2, qApp->translate("BALL::VIEW::DatasetControl", "Type"));
 	listview->setSortingEnabled(true);
 	default_visible_ = false;
 	resize(50,50);
@@ -93,7 +91,7 @@ void DatasetControl::onNotify(Message *message)
 	}
 
 	BALLVIEW_DEBUG
-	Log.error() << "Unknown dataset type:"<< type << std::endl;
+	Log.error() << (String)qApp->translate("BALL::VIEW::DatasetControl", "Unknown dataset type:") << type << std::endl;
    
 }
 
@@ -182,7 +180,7 @@ bool DatasetControl::openFile(const String& filename)
 		}
 	}
 
-	setStatusbarText(String("Can not open unknown file type: ") + suffix, true);
+	setStatusbarText(String(qApp->translate("BALL::VIEW::DatasetControl", "Can not open unknown file type: ")) + suffix, true);
 
 	return false;
 }
@@ -243,14 +241,14 @@ bool DatasetControl::registerController(DatasetController* con)
 	String type = con->getType();
 	if (type == "" || type == "none")
 	{
-		Log.error() << "Can not register Controller with type " << type << std::endl;
+		Log.error() <<  (String)qApp->translate("BALL::VIEW::DatasetControl", "Can not register Controller with type ") << type << std::endl;
 		return false;
 	}
 
 	if (getController(type) != 0)
 	{
-		Log.error() << "Can not register Controller with type " << type << ": "
-								<< "Such a controller was already registered!" << std::endl;
+		Log.error() << (String)qApp->translate("BALL::VIEW::DatasetControl", "Can not register Controller with type ") << type << ": "
+								<< (String)qApp->translate("BALL::VIEW::DatasetControl", "Such a controller was already registered!") << std::endl;
 		return false;
 	}
 

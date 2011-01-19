@@ -4,87 +4,93 @@
 using namespace BALL::Exception;
 
 
-MatrixHasWrongDimension::MatrixHasWrongDimension() throw()
+MatrixHasWrongDimension::MatrixHasWrongDimension()
 {
 	name_= "MatrixHasWrongDimension";
 	BALL::Exception::globalHandler.setName(String(name_));
 }
 
-MatrixHasWrongDimension::MatrixHasWrongDimension(const char* file, unsigned long line) throw()
+MatrixHasWrongDimension::MatrixHasWrongDimension(const char* file, unsigned long line)
 	: GeneralException(file,line)
 {
 	name_= "MatrixHasWrongDimension";
 	BALL::Exception::globalHandler.setName(String(name_));
 }
 
-MatrixHasWrongDimension::~MatrixHasWrongDimension() throw()
-{
-}
+MatrixHasWrongDimension::~MatrixHasWrongDimension() 
+	throw()
+{ }
 
-VectorHasWrongDimension::VectorHasWrongDimension() throw()
+VectorHasWrongDimension::VectorHasWrongDimension()
 {
 	name_= "VectorHasWrongDimension";
 	BALL::Exception::globalHandler.setName(String(name_));
 }
 
-VectorHasWrongDimension::VectorHasWrongDimension(const char* file, unsigned long line) throw()
+VectorHasWrongDimension::VectorHasWrongDimension(const char* file, unsigned long line)
 	: GeneralException(file,line)
 {
 	name_= "VectorHasWrongDimension";
 	BALL::Exception::globalHandler.setName(String(name_));
 }
 
-VectorHasWrongDimension::~VectorHasWrongDimension() throw()
+VectorHasWrongDimension::~VectorHasWrongDimension() 
+	throw()
 {
 }
 
-MatrixNotRegular::MatrixNotRegular() throw()
+MatrixNotRegular::MatrixNotRegular()
 {
 	name_= "MatrixNotRegular";
 	BALL::Exception::globalHandler.setName(String(name_));
 }
 
-MatrixNotRegular::~MatrixNotRegular() throw()
+MatrixNotRegular::~MatrixNotRegular() 
+	throw()
 {
 }
 
 MatrixIsSingular::MatrixIsSingular(const char* file, unsigned long line) 
-	throw() : GeneralException(file,line)
+	: GeneralException(file,line)
 {
 	name_= "MatrixIsSingular";
 	BALL::Exception::globalHandler.setName(String(name_));
 }
 
-MatrixIsSingular::~MatrixIsSingular() throw()
+MatrixIsSingular::~MatrixIsSingular()
+	throw()
 {
 }
 
-MatrixNotQuadratic::MatrixNotQuadratic() throw()
+MatrixNotQuadratic::MatrixNotQuadratic()
 {
 	name_= "MatrixNotQuadratic";
 	BALL::Exception::globalHandler.setName(String(name_));
 }
 
-MatrixNotQuadratic::~MatrixNotQuadratic() throw()
+MatrixNotQuadratic::~MatrixNotQuadratic()
+	throw()
 {
 }
 
-SingularIterator::SingularIterator() throw()
+SingularIterator::SingularIterator()
 {
 	name_= "SingularIterator";
 	BALL::Exception::globalHandler.setName(String(name_));
 }
 
-SingularIterator::~SingularIterator() throw()
+SingularIterator::~SingularIterator() 
+	throw()
 {
 }
 
-Uninitialized::Uninitialized() throw()
+Uninitialized::Uninitialized()
 {
 	name_= "Uninitialized";
 	BALL::Exception::globalHandler.setName(String(name_));
 }
 
-Uninitialized::~Uninitialized() throw()
+Uninitialized::~Uninitialized()
+	throw()
 {
 }

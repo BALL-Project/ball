@@ -1260,7 +1260,7 @@ namespace BALL
 		}
 
 
-		void QSARData::printMatrix(const VMatrix& mat, ostream& out) const
+		void QSARData::printMatrix(const VMatrix& mat, std::ostream& out) const
 		{
 			if (mat.size() == 0)
 			{
@@ -1273,14 +1273,14 @@ namespace BALL
 				{
 					out << mat[j][i] <<"\t";
 				}
-				out<<endl;
+				out<<std::endl;
 			}
-			out<<endl;
+			out<<std::endl;
 		}
 
 		void QSARData::saveToFile(string filename) const
 		{
-			ofstream out(filename.c_str());
+			std::ofstream out(filename.c_str());
 			
 			bool center_data = 0;
 			bool center_y = 0;

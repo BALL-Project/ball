@@ -1,19 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: runGAMESSDialog.C,v 1.2.18.1 2007/03/25 22:02:16 oliver Exp $
-//
 
 #include <BALL/VIEW/DIALOGS/runGAMESSDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 
-#include <QtGui/qfiledialog.h>
-#include <QtGui/qcombobox.h>
-#include <QtGui/qcheckbox.h>
-#include <QtGui/qspinbox.h>
-#include <QtGui/qradiobutton.h>
-#include <QtGui/qlineedit.h>
+#include <QtGui/QFileDialog>
+#include <QtGui/QComboBox>
+#include <QtGui/QCheckBox>
+#include <QtGui/QSpinBox>
+#include <QtGui/QRadioButton>
+#include <QtGui/QLineEdit>
 
 namespace BALL
 {
@@ -79,10 +77,10 @@ namespace BALL
 
 			String GAMESSCommand = GAMESSPath->text().latin1();
 			GAMESSCommand += " " + filename;
-			Log.info() << "Executing GAMESS" << std::endl;
+			Log.info() << (String)tr("Executing GAMESS") << std::endl;
 
 			system(GAMESSCommand.c_str());
-			Log.info() << "Done! " << std::endl;
+			Log.info() << (String)tr("Done! ") << std::endl;
 
 			File::remove(filename+".inp");
 

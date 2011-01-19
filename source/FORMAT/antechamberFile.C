@@ -18,7 +18,6 @@ namespace BALL
 	}
 
 	AntechamberFile::AntechamberFile(const String& name, File::OpenMode open_mode)
-		throw(Exception::FileNotFound)
 		: GenericMolFile()
 	{
 		GenericMolFile::open(name, open_mode);
@@ -29,7 +28,6 @@ namespace BALL
 	}
 
 	bool AntechamberFile::write(const AtomContainer& ac)
-		throw(File::CannotWrite)
 	{
 		if (!isOpen() || getOpenMode() != std::ios::out)
 		{
@@ -149,19 +147,16 @@ namespace BALL
 	}
 
 	bool AntechamberFile::write(const System& system)
-		throw(File::CannotWrite)
 	{
 		return write((const AtomContainer&)system);
 	}
 
 	bool AntechamberFile::write(const Molecule& mol)
-		throw(File::CannotWrite)
 	{
 		return write((const AtomContainer&)mol);
 	}
 
 	bool AntechamberFile::read(System& system)
-		throw(Exception::ParseError)
 	{
 		// remove old rubbish from the system
 		system.destroy();
@@ -178,7 +173,6 @@ namespace BALL
 	}
 
 	Molecule* AntechamberFile::read()
-		throw(Exception::ParseError)
 	{
 		// ...create a molecule to hold the atoms, and start reading...
 		Molecule* mol = new Molecule;

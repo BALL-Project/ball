@@ -30,8 +30,7 @@ namespace BALL
 
 			/**	Default constructor.
 			*/
-			CubicSpline2D()
-				throw();
+			CubicSpline2D();
 			
 
 			/** Detailed constructor
@@ -59,8 +58,7 @@ namespace BALL
 										const std::vector<float>& x_upper_derivatives = std::vector<float>(),
 										float y_lower_derivative = 0., 
 										float y_upper_derivative = 0.,
-										int verbosity = VERBOSITY_LEVEL_DEBUG)
-				throw();
+										int verbosity = VERBOSITY_LEVEL_DEBUG);
 		
 		
 
@@ -94,8 +92,7 @@ namespace BALL
 										const std::vector<float>& x_upper_derivatives = std::vector<float>(),
 										float y_lower_derivative = 0.0,
 										float y_upper_derivative = 0.0,
-										int verbosity = VERBOSITY_LEVEL_DEBUG)
-				throw();
+										int verbosity = VERBOSITY_LEVEL_DEBUG);
 			
 //-------------------------- Constructors with equal x sample positions for all y ------------------------
      //Assumes that all rows have the same x-positions.
@@ -126,8 +123,7 @@ namespace BALL
 										const std::vector<float>& x_upper_derivatives = std::vector<float>(),
 										float y_lower_derivative = 0., 
 										float y_upper_derivative = 0.,
-										int verbosity = VERBOSITY_LEVEL_DEBUG)
-				throw();
+										int verbosity = VERBOSITY_LEVEL_DEBUG);
 		
 		/** Detailed constructor
 				Given the increasingly sorted sample positions {\tt sample_positions_y_} in y direction, 
@@ -159,19 +155,16 @@ namespace BALL
 										const std::vector<float>& x_upper_derivatives = std::vector<float>(),
 										float y_lower_derivative = 0.0,
 										float y_upper_derivative = 0.0,
-										int verbosity = VERBOSITY_LEVEL_DEBUG)
-				throw();
+										int verbosity = VERBOSITY_LEVEL_DEBUG);
 
 			
 			/**	Copy constructor.
 			*/
-			CubicSpline2D(const CubicSpline2D& cs2D)
-				throw();
+			CubicSpline2D(const CubicSpline2D& cs2D);
 			
 			/**	Destructor.
 			*/
-			virtual ~CubicSpline2D()
-				throw();
+			virtual ~CubicSpline2D();
 	
 			/// Set the verbosity of the spline computation and evaluation.
 			void setVerbosity(int verbosity);
@@ -186,82 +179,114 @@ namespace BALL
 			 *  If the spacing is zero, <tt> std::numeric_limits<float>::min() </tt>
 			 *  is returned.
 			 */
-			float operator () (float x, float y)
-				throw(); 
+			float operator () (float x, float y); 
 					
-			// Returns the x-th default value in x direction.
-			// If x is out of bound,  <tt> std::numeric_limits<float>::min() </tt> is returned.
-			float getXDefaultValue(Index x) const throw(Exception::OutOfRange);
-			// Returns the y-th default value in x direction.
-			// If y is out of bound,  <tt> std::numeric_limits<float>::min() </tt> is returned.
-			float getYDefaultValue() const throw () {return  y_default_value_;}
+			/** Returns the x-th default value in x direction.
+			 *  @throw Exception::OutOfRange if x >= number_of_default_values
+			 */
+			float getXDefaultValue(Index x) const;
+
+			/** Returns the y-th default value in x direction.
+			 */
+			float getYDefaultValue() const {return y_default_value_;}
+
 			// Set the default values in x direction.
-			void setXDefaultValues(vector<float> x_default_values)  throw() {x_default_values_ = x_default_values;}
+			void setXDefaultValues(vector<float> x_default_values) {x_default_values_ = x_default_values;}
+
 			// Set the default values in y direction.
-			void setYDefaultValue(float y_default_value)  throw() {y_default_value_ = y_default_value;} 
+			void setYDefaultValue(float y_default_value) {y_default_value_ = y_default_value;} 
 				
 			
 			// Set the lower/upper bound in y direction
-			void  setYLowerBound(float lb) throw() {y_lower_bound_ = lb;}
-			void  setYUpperBound(float ub) throw() {y_upper_bound_ = ub;}
+			void  setYLowerBound(float lb) {y_lower_bound_ = lb;}
+			void  setYUpperBound(float ub) {y_upper_bound_ = ub;}
 			// Get the lower/upper bound in y direction
-			float getYLowerBound() throw() {return y_lower_bound_;}
-			float getYUpperBound() throw() {return y_upper_bound_;}
+			float getYLowerBound() {return y_lower_bound_;}
+			float getYUpperBound() {return y_upper_bound_;}
 			// Set the lower/upper bounds in x direction
-			void  setXLowerBounds(vector<float> lb) throw() {x_lower_bounds_ = lb;}
-			void  setXUpperBounds(vector<float> ub) throw() {x_upper_bounds_ = ub;}
-			/** Returns all lower/upper bounds in x direction.*/
-			const vector<float>&  getXLowerBounds() const throw(Exception::OutOfRange) {return x_lower_bounds_ ;}  
-			const vector<float>&  getXUpperBounds() const throw(Exception::OutOfRange) {return x_upper_bounds_;}  
-			/** Get the lower/upper bounds in x direction  
-			 		If x is out of bound,  <tt> std::numeric_limits<float>::min() </tt> is returned.*/
-			float getXLowerBounds(Index x) const throw(Exception::OutOfRange);  
-			float getXUpperBounds(Index x) const throw(Exception::OutOfRange);  
+			void  setXLowerBounds(vector<float> lb) {x_lower_bounds_ = lb;}
+			void  setXUpperBounds(vector<float> ub) {x_upper_bounds_ = ub;}
 
+			/** Returns all lower bounds in x direction.
+			 */
+			const vector<float>&  getXLowerBounds() const {return x_lower_bounds_ ;}  
+
+			/** Returns all upper bounds in x direction.
+			 */
+			const vector<float>&  getXUpperBounds() const {return x_upper_bounds_;}  
+
+			/** Get the lower bounds in x direction  
+			 *	@throw Exception::OutOfRange if x  >= x_lower_bounds_.size()
+			 */
+			float getXLowerBounds(Index x) const;  
+
+			/** Get the upper bounds in x direction  
+			 *	@throw Exception::OutOfRange if x  >= x_upper_bounds_.size()
+			 */
+			float getXUpperBounds(Index x) const;  
 
 			/** Returns true if the x-th spline in x direction is natural.
 			 *  If x is out of bound,  <tt> std::numeric_limits<float>::min() </tt> is returned.*/ 
-			bool isXNatural(Index x) throw();
-			vector<bool> isXNatural() const throw() {return x_is_natural_;}
+			bool isXNatural(Index x);
+			vector<bool> isXNatural() const {return x_is_natural_;}
+
 			/** Sets the flag {\tt is_natural_} for the x-th spline to true. 
 			 *  By default the method recomputes the spline. 
 			 *  If the argument is false, no recomputation is done.*/
-			void makeXNatural(Index x, bool recompute = true) throw();
+			void makeXNatural(Index x, bool recompute = true);
+
 			/** Sets the flag {\tt is_natural_} for all x-th splines to true. 
 			 *  By default the method recomputes all splines. 
 			 *  If the argument is false, no recomputation is done.*/
-			void makeAllXNatural(bool recompute = true) throw();
+			void makeAllXNatural(bool recompute = true);
+
 			/** Sets the flag {\tt y_is_natural_} to true.
 			 * 	Since the spline in y direction is created 
 			 * 	for each call of {\tt operator ()} new, 
 			 * 	recomputation is not necessary.*/
-			void makeYNatural(bool y_is_natural, bool recompute = true) throw();
-			// Returns true if the spline in y direction
-			// for each call in {\tt operator ()}  is natural.
-			bool isYNatural() throw() {return y_is_natural_;}
+			void makeYNatural(bool y_is_natural, bool recompute = true);
+
+			/** Returns true if the spline in y direction for each call in {\tt operator ()} is natural.
+			 */
+			bool isYNatural() {return y_is_natural_;}
 			
 			// Set the lower/upper derivatives in x direction
-			void  setXLowerDerivatives(vector<float> ld, bool recompute = true) throw(); 
-			void  setXUpperDerivatives(vector<float> ud, bool recompute = true) throw(); 
-			/** Get the lower/upper derivatives in x direction  
-			 		If x is out of bound, 
-					<tt> std::numeric_limits<float>::min() </tt> is returned.*/
-			float getXLowerDerivatives(Index x) throw(Exception::OutOfRange);
-			float getXUpperDerivatives(Index x) throw(Exception::OutOfRange); 
-			vector<float>& getXLowerDerivatives() throw() {return x_lower_derivatives_;}
-			vector<float>& getXUpperDerivatives() throw() {return x_upper_derivatives_;}
+			void  setXLowerDerivatives(vector<float> ld, bool recompute = true); 
+			void  setXUpperDerivatives(vector<float> ud, bool recompute = true); 
+
+			/** Get the lower derivatives in x direction  
+			 *  @throw Exception::OutOfRange if x >= x_lower_derivatives_.size()
+			 */
+			float getXLowerDerivatives(Index x);
+
+			/** Get the upper derivatives in x direction  
+			 *  @throw Exception::OutOfRange if x >= x_upper_derivatives_.size()
+			 */
+			float getXUpperDerivatives(Index x); 
+
+			vector<float>& getXLowerDerivatives() {return x_lower_derivatives_;}
+			vector<float>& getXUpperDerivatives() {return x_upper_derivatives_;}
+
 			// Set the lower/upper derivative in y direction
-			void setYLowerDerivative (float ld, bool recompute = true) throw(); 
-			void setYUpperDerivative (float ud, bool recompute = true) throw();
+			void setYLowerDerivative (float ld, bool recompute = true); 
+			void setYUpperDerivative (float ud, bool recompute = true);
+
 			// Get the lower/upper derivative in y direction
-			float getYLowerDerivative() throw() {return y_lower_derivative_;}
-			float getYUpperDerivative() throw() {return y_upper_derivative_;}
+			float getYLowerDerivative() {return y_lower_derivative_;}
+			float getYUpperDerivative() {return y_upper_derivative_;}
 
 			
-			CubicSpline1D& getSpline(Position i) throw(Exception::OutOfRange); 
-			// {if (i < ..) return splines_[i]; else throw{Exception::OutOfBounds}} 
-			const CubicSpline1D& getSpline(Position i) const throw(Exception::OutOfRange);
-			Size getNumberOfSplines() const throw() {return splines_.size();}	
+			/** Return the i-th spline
+			 *  @throw Exception::OutOfRange if i >= getNumberOfSplines()
+			 */
+			CubicSpline1D& getSpline(Position i); 
+
+			/** Return the i-th spline
+			 *  @throw Exception::OutOfRange if i >= getNumberOfSplines()
+			 */
+			const CubicSpline1D& getSpline(Position i) const;
+
+			Size getNumberOfSplines() const {return splines_.size();}	
 	
 		private :
 			
@@ -273,8 +298,7 @@ namespace BALL
 			 * By default the boundaries in y direction are set to the lower and the upper y sample position. 
 			 * The {\tt operator ()} returns the 2D interpolation for given x and y values. 
 			 */
-			void createBiCubicSpline()
-				throw(); 
+			void createBiCubicSpline(); 
 				
 			// Sample x positions of the spline.
 			// Note: we allow for each y value different x positions.

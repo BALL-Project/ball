@@ -39,16 +39,16 @@ namespace BALL
 		//@{
 
 		///
-		ConstReverseIterator() throw() {}
+		ConstReverseIterator() {}
 	
 		///
-		ConstReverseIterator(const ConstReverseIterator& iterator) throw()
+		ConstReverseIterator(const ConstReverseIterator& iterator)
 			:	Base(iterator)
 		{
 		}
 
 		///
-		~ConstReverseIterator() throw() {}
+		~ConstReverseIterator() {}
 		//@}
 
 
@@ -58,70 +58,79 @@ namespace BALL
 		//@{
 		
 		/** Advance iterator a given distance.
+		 *  @exception Exception::InvalidIterator if the iterator is invalid
 		 */
-		ConstReverseIterator& operator += (Distance distance)
-			throw(Exception::InvalidIterator);
+		ConstReverseIterator& operator += (Distance distance);
 
 		/** Advance iterator a given distance in reverse direction.
+		 *  @exception Exception::InvalidIterator if the iterator is invalid
 		 */
-		ConstReverseIterator& operator -= (Distance distance)
-			throw(Exception::InvalidIterator);
+		ConstReverseIterator& operator -= (Distance distance);
 
 		/** Return an iterator.
 		 *  It points to the element with the given distance from the element of this iterator.
+		 *  @exception Exception::InvalidIterator if the iterator is invalid
 		 */
-		ConstReverseIterator operator + (Distance distance) const
-			throw(Exception::InvalidIterator);
+		ConstReverseIterator operator + (Distance distance) const;
 
 		/** Return an iterator.
 		 *  It points to the element with the given distance in reverse direction
 		 *  from the element of this iterator.
+		 *  @exception Exception::InvalidIterator if the iterator is invalid
 		 */
-		ConstReverseIterator operator - (Distance distance) const
-			throw(Exception::InvalidIterator);
+		ConstReverseIterator operator - (Distance distance) const;
 
 		/** Return an iterator.
 		 *  It points to the element with the given distance in reverse direction
 		 *  from the element of this iterator.
+		 *  @exception Exception::InvalidIterator if the iterator is invalid
+		 *  @exception Exception::IncompatibleIterators if this iterator and the argument are incompatible
 		 */
-		Distance operator - (const ConstReverseIterator& iterator) const
-			throw(Exception::InvalidIterator, Exception::IncompatibleIterators);
+		Distance operator - (const ConstReverseIterator& iterator) const;
 
 		/** Return a ConstReverseIterator for a given container. 
 		 *  It points to the first element.
+		 *  @exception Exception::Precondition
 		 */
-		static ConstReverseIterator begin(const Container& container) 
-			throw(Exception::Precondition);
+		static ConstReverseIterator begin(const Container& container);
 
 		/** Return a Const ReverseIterator for a given container.
 		 *  It points behind the last element of the container.
+		 *  @exception Exception::Precondition
 		 */
-		static ConstReverseIterator end(const Container& container)
-			throw(Exception::Precondition);
+		static ConstReverseIterator end(const Container& container);
 
 		/** Return a Const ReverseIterator for a given container.
 		 *  It points at the last element of the container.
+		 *  @exception Exception::Precondition
 		 */
-		static ConstReverseIterator rbegin(const Container& container)
-			throw(Exception::Precondition);
+		static ConstReverseIterator rbegin(const Container& container);
 
 		/** Return a Const ReverseIterator for a given container.
 		 *  It points before the first element.
+		 *  @exception Exception::Precondition
 		 */
-		static ConstReverseIterator rend(const Container& container) 
-			throw(Exception::Precondition);
+		static ConstReverseIterator rend(const Container& container);
 
-		/// Increment operator
-		ConstReverseIterator& operator ++ () throw(Exception::InvalidIterator);
+		/** Increment operator
+		 *  @exception Exception::InvalidIterator if the iterator is invalid
+		 */
+		ConstReverseIterator& operator ++ ();
 
-		/// Postfix increment operator
-		ConstReverseIterator operator ++ (int) throw(Exception::InvalidIterator);
+		/** Postfix increment operator
+		 *  @exception Exception::InvalidIterator if the iterator is invalid
+		 */
+		ConstReverseIterator operator ++ (int);
 
-		/// Decrement operator
-		ConstReverseIterator& operator -- () throw(Exception::SingularIterator);
+		/** Decrement operator
+		 *  @exception Exception::SingularIterator if the iterator is singular
+		 */
+		ConstReverseIterator& operator -- ();
 
-		/// Postfix decrement operator
-		ConstReverseIterator operator -- (int) throw(Exception::SingularIterator);
+		/** Postfix decrement operator
+		 *  @exception Exception::SingularIterator if the iterator is singular
+		 */
+		ConstReverseIterator operator -- (int);
 
 
 		//@}
@@ -131,10 +140,10 @@ namespace BALL
 		//@{
 
 		///
-		bool operator + () const throw() { return Base::getTraits().isValid(); }
+		bool operator + () const { return Base::getTraits().isValid(); }
 
 		///
-		bool operator - () const throw() { return !Base::getTraits().isValid(); }
+		bool operator - () const { return !Base::getTraits().isValid(); }
 
     /** Lesser operator.
 		 *	Returns true if both iterators have the same container
@@ -142,8 +151,7 @@ namespace BALL
 		 *  @exception InvalidIterator if one of the iterators is not valid
 		 *  @exception IncompatibleIterators if the iterators show to different containers.
 		 */
-		bool operator < (const ConstReverseIterator& iterator) const
-			throw(Exception::InvalidIterator, Exception::IncompatibleIterators);
+		bool operator < (const ConstReverseIterator& iterator) const;
 
     /** Lesser or equal operator.
 		 *  Returns true if both iterators have the same container
@@ -152,8 +160,7 @@ namespace BALL
 		 *  @exception InvalidIterator if one of the iterators is not valid
 		 *  @exception IncompatibleIterators if the iterators show to different containers.
 		 */
-		bool operator <= (const ConstReverseIterator& iterator) const
-			throw(Exception::InvalidIterator, Exception::IncompatibleIterators);
+		bool operator <= (const ConstReverseIterator& iterator) const;
 
     /** Greater or equal operator.
 		 *  Returns true if both iterators have the same container
@@ -162,8 +169,7 @@ namespace BALL
 		 *  @exception InvalidIterator if one of the iterators is not valid
 		 *  @exception IncompatibleIterators if the iterators show to different containers.
 		 */
-		bool operator >= (const ConstReverseIterator& iterator) const
-			throw(Exception::InvalidIterator, Exception::IncompatibleIterators);
+		bool operator >= (const ConstReverseIterator& iterator) const;
 
     /** Greater operator.
 		 *  Returns true if both iterators have the same container
@@ -171,8 +177,7 @@ namespace BALL
 		 *  @exception InvalidIterator if one of the iterators is not valid
 		 *  @exception IncompatibleIterators if the iterators show to different containers.
 		 */
-		bool operator > (const ConstReverseIterator& iterator) const
-			throw(Exception::InvalidIterator, Exception::IncompatibleIterators);
+		bool operator > (const ConstReverseIterator& iterator) const;
 
 		//@}
 
@@ -182,13 +187,14 @@ namespace BALL
 		*/
 		//@{
 		/** Random access operator.
+		 *  @exception Exception::InvalidIterator if the iterator is invalid
 		 */
-		const DataType& operator [] (Index index) const	throw(Exception::InvalidIterator);
+		const DataType& operator [] (Index index) const;
 		//@}
 
 		protected:
 
-		ConstReverseIterator(const Container& container) throw()
+		ConstReverseIterator(const Container& container)
 			:	Base(container)
 		{
 		}
@@ -198,7 +204,6 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ConstReverseIterator<Container, DataType, Position, Traits>& 
 		ConstReverseIterator<Container, DataType, Position, Traits>::operator ++ ()
-		throw(Exception::InvalidIterator)
 	{
 		  if (!Base::getTraits().isValid())
 		  {
@@ -212,7 +217,6 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ConstReverseIterator<Container, DataType, Position, Traits> 
 		ConstReverseIterator<Container, DataType, Position, Traits>::operator ++ (int)
-		throw(Exception::InvalidIterator)
 	{
 		  if (!Base::getTraits().isValid())
 		  {
@@ -227,7 +231,6 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ConstReverseIterator<Container, DataType, Position, Traits>& 
 		ConstReverseIterator<Container, DataType, Position, Traits>::operator -- ()
-		throw(Exception::SingularIterator)
 	{	
 		  if (Base::getTraits().isSingular())
 		  {
@@ -241,7 +244,6 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ConstReverseIterator<Container, DataType, Position, Traits> 
 		ConstReverseIterator<Container, DataType, Position, Traits>::operator -- (int)
-		throw(Exception::SingularIterator)
 	{	
 		  if (Base::getTraits().isSingular())
 		  {
@@ -256,11 +258,11 @@ namespace BALL
 	/** Return an incremented iterator.
 	 *  It points to the element with the given distance from the element 
 	 *  of the given iterator.
+	 *  @exception Exception::InvalidIterator if the iterator is invalid
 	 */
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ConstReverseIterator<Container, DataType, Position, Traits> operator + 
 		(Distance distance, const ConstReverseIterator<Container, DataType, Position, Traits>& iterator) 
-		throw(Exception::InvalidIterator)
 	{
 		ConstReverseIterator<Container, DataType, Position, Traits> tmp_iterator(iterator);
 		return (tmp_iterator += distance);
@@ -269,11 +271,12 @@ namespace BALL
 	/** Return the distance between two iterators.
 	 *  It points to the element with the given distance in reverse direction
 	 *  of the given iterator.
+	 *  @exception Exception::InvalidIterator if the iterator is invalid
+	 *  @exception Exception::IncompatibleIterators if this iterator and the argument are incompatible
 	 */
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	Distance ConstReverseIterator<Container, DataType, Position, Traits>::operator -
 		(const ConstReverseIterator<Container, DataType, Position, Traits>& b) const
-		throw(Exception::InvalidIterator, Exception::IncompatibleIterators)
 	{
 		if (!Base::getTraits().isValid())
 		{
@@ -296,7 +299,6 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ConstReverseIterator<Container, DataType, Position, Traits>&
 		ConstReverseIterator<Container, DataType, Position, Traits>::operator += (Distance distance)
-		throw(Exception::InvalidIterator)
 	{
 		if (!Base::getTraits().isValid())
 		{
@@ -314,7 +316,6 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ConstReverseIterator<Container, DataType, Position, Traits>&
 		ConstReverseIterator<Container, DataType, Position, Traits>::operator -= (Distance distance)
-		throw(Exception::InvalidIterator)
 	{
 		if (Base::getTraits().isSingular())
 		{
@@ -340,7 +341,6 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ConstReverseIterator<Container, DataType, Position, Traits>
 		ConstReverseIterator<Container, DataType, Position, Traits>::operator + (Distance distance) const
-		throw(Exception::InvalidIterator)
 	{
 		ConstReverseIterator iterator(*this);
 		return (iterator += distance);
@@ -349,7 +349,6 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ConstReverseIterator<Container, DataType, Position, Traits> 
 		ConstReverseIterator<Container, DataType, Position, Traits>::operator - (Distance distance) const
-		throw(Exception::InvalidIterator)
 	{
 		ConstReverseIterator iterator(*this);
 		return (iterator -= distance);
@@ -358,7 +357,6 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool ConstReverseIterator<Container, DataType, Position, Traits>::operator < 
 		(const ConstReverseIterator& iterator) const
-		throw(Exception::InvalidIterator, Exception::IncompatibleIterators)
 	{
 		if (!Base::getTraits().isValid())
 		{
@@ -382,7 +380,6 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool ConstReverseIterator<Container, DataType, Position, Traits>::operator <= 
 		(const ConstReverseIterator& iterator) const
-		throw(Exception::InvalidIterator, Exception::IncompatibleIterators)
 	{
 		if (!Base::getTraits().isValid())
 		{
@@ -405,7 +402,6 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool ConstReverseIterator<Container, DataType, Position, Traits>::operator >= 
 		(const ConstReverseIterator& iterator) const
-		throw(Exception::InvalidIterator, Exception::IncompatibleIterators)
 	{
 		if (!Base::getTraits().isValid())
 		{
@@ -429,7 +425,6 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool ConstReverseIterator<Container, DataType, Position, Traits>::operator > 
 		(const ConstReverseIterator& iterator) const
-		throw(Exception::InvalidIterator, Exception::IncompatibleIterators)
 	{
 		if (!Base::getTraits().isValid())
 		{
@@ -453,7 +448,6 @@ namespace BALL
 	
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	const DataType& ConstReverseIterator<Container, DataType, Position, Traits>::operator [] (Index index) const
-		throw(Exception::InvalidIterator)
 	{
 		if (!Base::getTraits().isValid())
 		{
@@ -467,7 +461,6 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ConstReverseIterator<Container, DataType, Position, Traits> 
 		ConstReverseIterator<Container, DataType, Position, Traits>::begin(const Container& container)
-		throw(Exception::Precondition)
 	{
 		ConstReverseIterator iterator(container);
 		iterator.toRBegin();
@@ -477,7 +470,6 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ConstReverseIterator<Container, DataType, Position, Traits> 
 		ConstReverseIterator<Container, DataType, Position, Traits>::end(const Container& container)
-		throw(Exception::Precondition)
 	{
 		ConstReverseIterator iterator(container);
 		iterator.toREnd();
@@ -487,7 +479,6 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ConstReverseIterator<Container, DataType, Position, Traits> 
 		ConstReverseIterator<Container, DataType, Position, Traits>::rbegin(const Container& container)
-		throw(Exception::Precondition)
 	{
 		ConstReverseIterator iterator(container);
 		iterator.toBegin();
@@ -497,7 +488,6 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ConstReverseIterator<Container, DataType, Position, Traits> 
 		ConstReverseIterator<Container, DataType, Position, Traits>::rend(const Container& container)
-		throw(Exception::Precondition)
 	{
 		ConstReverseIterator iterator(container);
 		iterator.toEnd();
@@ -533,27 +523,29 @@ namespace BALL
 		//@{
 
 		///
-		ReverseIterator() throw() {}
+		ReverseIterator() {}
 	
 		///
-		ReverseIterator(const ReverseIterator& iterator) throw()
+		ReverseIterator(const ReverseIterator& iterator)
 			:	Base(iterator)
 		{
 		}
 
 		///
-		~ReverseIterator() throw() {}
+		~ReverseIterator() {}
 		//@}
 
 		/**	@name Dereferenciation
 		*/
 		//@{
+		/** Random access operator.
+		 *  @exception Exception::InvalidIterator if the iterator is invalid
+		 */
+		reference operator [] (Index index) const { return const_cast<reference>(Base::getTraits().getData(index)); }
 		///
-		reference operator [] (Index index) const throw(Exception::InvalidIterator) { return const_cast<reference>(Base::getTraits().getData(index)); }
+		reference operator * () const { return const_cast<reference>(Base::getTraits().getData()); }
 		///
-		reference operator * () const throw() { return const_cast<reference>(Base::getTraits().getData()); }
-		///
-		pointer operator -> () const throw() { return const_cast<pointer>(&Base::getTraits().getData()); }
+		pointer operator -> () const { return const_cast<pointer>(&Base::getTraits().getData()); }
 		//@}
 
 		/**	@name Assignment
@@ -561,32 +553,32 @@ namespace BALL
 		//@{
 		/** Return a ReverseIterator for a given container.
 		 *  It points at the first element.
+		 *  @exception Exception::InvalidIterator if the iterator is invalid
 		 */
-		static ReverseIterator begin(const Container& container)
-			throw(Exception::InvalidIterator);
+		static ReverseIterator begin(const Container& container);
 
 		/** Return a ReverseIterator for a given container.
 		 *  It points behind the last element of the container.
+		 *  @exception Exception::InvalidIterator if the iterator is invalid
 		 */
-		static ReverseIterator end(const Container& container)
-			throw(Exception::InvalidIterator);
+		static ReverseIterator end(const Container& container);
 
 		/** Return a ReverseIterator for a given container.
 		 *  It points at the last element of the container.
+		 *  @exception Exception::InvalidIterator if the iterator is invalid
 		 */
-		static ReverseIterator rbegin(const Container& container)
-			throw(Exception::InvalidIterator);
+		static ReverseIterator rbegin(const Container& container);
 
 		/** Return a ReverseIterator for a given container.
 		 *  It points before the first element.
+		 *  @exception Exception::InvalidIterator if the iterator is invalid
 		 */
-		static ReverseIterator rend(const Container& container)
-			throw(Exception::InvalidIterator);
+		static ReverseIterator rend(const Container& container);
 		//@}
 
 		protected:
 
-		ReverseIterator(const Container& container) throw()
+		ReverseIterator(const Container& container)
 			:	Base(container)
 		{
 		}
@@ -597,7 +589,6 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ReverseIterator<Container, DataType, Position, Traits> 
 		ReverseIterator<Container, DataType, Position, Traits>::begin(const Container& container)
-		throw(Exception::InvalidIterator)
 	{
 		ReverseIterator iterator(container);
 		iterator.toRBegin();
@@ -607,7 +598,6 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ReverseIterator<Container, DataType, Position, Traits> 
 		ReverseIterator<Container, DataType, Position, Traits>::end(const Container& container)
-		throw(Exception::InvalidIterator)
 	{
 		ReverseIterator iterator(container);
 		iterator.toREnd();
@@ -617,7 +607,6 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ReverseIterator<Container, DataType, Position, Traits> 
 		ReverseIterator<Container, DataType, Position, Traits>::rbegin(const Container& container)
-		throw(Exception::InvalidIterator)
 	{
 		ReverseIterator iterator(container);
 		iterator.toBegin();
@@ -627,7 +616,6 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ReverseIterator<Container, DataType, Position, Traits> 
 		ReverseIterator<Container, DataType, Position, Traits>::rend(const Container& container)
-		throw(Exception::InvalidIterator)
 	{
 		ReverseIterator iterator(container);
 		iterator.toEnd();

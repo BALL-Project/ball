@@ -42,9 +42,10 @@ namespace BALL
 		/// Default constructor
 		DCDFile();
 
-		/// Detailed constructor
-		DCDFile(const String& name, File::OpenMode open_mode = std::ios::in)
-			throw(Exception::FileNotFound);
+		/** Detailed constructor
+		 *  @throw Exception::FileNotFound if the file could not be openend
+		 */
+		DCDFile(const String& name, File::OpenMode open_mode = std::ios::in);
 
 		/// Destructor
 		virtual ~DCDFile();
@@ -76,9 +77,9 @@ namespace BALL
 		//@{
 
 		/** open a DCDFile
-		*/
-		virtual bool open(const String& name, File::OpenMode open_mode = std::ios::in)
-			throw(Exception::FileNotFound);
+		 *  @throw Exception::FileNotFound if the file could not be openend
+		 */
+		virtual bool open(const String& name, File::OpenMode open_mode = std::ios::in);
 
 		/** Initialize this instance, i. e. read the header and update members
 		*/
@@ -113,10 +114,9 @@ namespace BALL
 		*/
 		virtual bool read(SnapShot& snapshot);
 
-		/**
-		*/
-		virtual bool flushToDisk(const std::vector<SnapShot>& buffer)
-			throw(File::CannotWrite);
+		/** @copydoc TrajectoryFile::flushToDisk(const std::vector<SnapShot>&)
+		 */
+		virtual bool flushToDisk(const std::vector<SnapShot>& buffer);
 
 		//@}
 		/** @name Accessors 

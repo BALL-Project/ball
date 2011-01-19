@@ -80,7 +80,6 @@ Vector<valuetype> Vector<valuetype>::t()
 
 template <typename valuetype>
 Vector<valuetype>& Vector<valuetype>::operator+= (const Vector<valuetype>& B)
-	throw(Exception::VectorHasWrongDimension)
 {
 	if (n_ != B.getSize())
 	{
@@ -140,7 +139,6 @@ void Vector<valuetype>::add_inline_native(const Vector<valuetype>& B)
 
 template <typename valuetype>
 Vector<valuetype> Vector<valuetype>::operator + (const Vector<valuetype>& B) const
-	throw(Exception::VectorHasWrongDimension)
 {
 	if (n_ != B.getSize())
 	{
@@ -174,7 +172,6 @@ void Vector<valuetype>::add_native(Vector<valuetype>& result, const Vector<value
 
 template <typename valuetype>
 Vector<valuetype>& Vector<valuetype>::operator-= (const Vector<valuetype>& B)
-	throw(Exception::VectorHasWrongDimension)
 {
 	if (n_ != B.getSize())
 	{
@@ -207,7 +204,6 @@ void Vector<valuetype>::subtract_inline_native(const Vector<valuetype>& B)
 
 template <typename valuetype>
 Vector<valuetype> Vector<valuetype>::operator - (const Vector<valuetype>& B) const
-	throw(Exception::VectorHasWrongDimension)
 {
 	if (n_ != B.getSize())
 	{
@@ -313,7 +309,6 @@ void Vector<valuetype>::multiply_inline_native(const valuetype& a)
 
 template <typename valuetype>
 Vector<valuetype> Vector<valuetype>::operator % (const Vector<valuetype>& a) const
-	throw(Exception::VectorHasWrongDimension)
 {
 	// quick and dirty implementation... no blas stuff yet, handles only case D=3
 	if (n_ != 3)
@@ -574,7 +569,6 @@ void Vector<ComplexDouble>::multiply_inline_blas(const ComplexDouble& a);
 
 template <typename valuetype>
 valuetype Vector<valuetype>::operator* (const Vector<valuetype>& a) const
-	throw(Exception::VectorHasWrongDimension)
 {
 	if (n_ != a.getSize())
 	{
@@ -644,7 +638,6 @@ void Vector<valuetype>::dotProduct(const Vector<valuetype>& a, Matrix<mvaluetype
 
 template <class valuetype> template <class mvaluetype, class mtraits>
 Vector<valuetype> Vector<valuetype>::operator* (const Matrix<mvaluetype, mtraits>& A) const
-	throw(Exception::VectorHasWrongDimension)
 {
 	if ((uint)A.getRowCount() != getSize())
 	{

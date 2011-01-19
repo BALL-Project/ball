@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: plane3.h,v 1.38 2004/05/27 19:49:42 oliver Exp $
-//
 
 #ifndef BALL_MATHS_PLANE3_H
 #define BALL_MATHS_PLANE3_H
@@ -108,12 +106,12 @@ namespace BALL
 		}
 
 		/**	Constructor.
-				Create a new TPlane3 object from four <tt>T</tt> values.
-				Form: COORDINATE (ax + by + cz + d = 0)
-				@param	a, b, c are used to calculate the normal <tt>n</tt> and the point <tt>p</tt>
-		*/
+		 *	Create a new TPlane3 object from four <tt>T</tt> values.
+		 *	Form: COORDINATE (ax + by + cz + d = 0)
+		 *	@param	a, b, c are used to calculate the normal <tt>n</tt> and the point <tt>p</tt>
+		 *  @throw Exception::DivisionByZero if a == b == c == 0
+		 */
 		TPlane3(const T& a, const T& b, const T& c, const T& d)
-			throw(Exception::DivisionByZero)
 		{
 			n = TVector3<T>(a, b, c);
 			if (a == 0 && b == 0 && c == 0)
@@ -246,12 +244,11 @@ namespace BALL
 		//@{
 
 		/**	Normalize the the normal of the plane.
-				The normal is scaled with its length:
-				\f$\{x|y|z\} *= \sqrt{x^2 + y^2 + z^2}\f$.
-				@exception DivisionByZero if the length of the normal is 0
-		*/
+		 *	The normal is scaled with its length:
+		 *	\f$\{x|y|z\} *= \sqrt{x^2 + y^2 + z^2}\f$.
+		 *	@throw Exception::DivisionByZero if the length of the normal is 0
+		 */
 		void normalize()
-			throw(Exception::DivisionByZero)
 		{
 			T length = n.getLength();
 			// throw an exception on zero length normal

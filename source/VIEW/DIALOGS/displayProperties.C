@@ -122,11 +122,11 @@ void DisplayProperties::initializeWidget(MainControl& main_control)
 	(main_control.initPopupMenu(MainControl::DISPLAY));
 
 	String description = "Shortcut|Display|Display_Properties";
-	id_ = insertMenuEntry(MainControl::DISPLAY, "D&isplay Properties", this, 
+	id_ = insertMenuEntry(MainControl::DISPLAY, (String)tr("D&isplay Properties"), this, 
 																		 SLOT(show()), description,
 																		 QKeySequence("Ctrl+I"));
 
-	setMenuHint("Create a new representation or modify an existing one");
+	setMenuHint((String)tr("Create a new representation or modify an existing one"));
 	setMenuHelp("displayProperties.html");
 	setIcon("categories/preferences-display", true);
 
@@ -141,13 +141,13 @@ void DisplayProperties::initializePreferencesTab(Preferences &preferences)
 	preferences_ = &preferences;
 	if (model_settings_ == 0)
 	{
-		model_settings_ = new ModelSettingsDialog(this, "ModelSettings");
+		model_settings_ = new ModelSettingsDialog(this, ((String)tr("ModelSettings")).c_str());
 	}
 	preferences.insertEntry(model_settings_);
 
 	if (coloring_settings_ == 0)
 	{
-		coloring_settings_ = new ColoringSettingsDialog(this, "ColoringSettings");
+		coloring_settings_ = new ColoringSettingsDialog(this, ((String)tr("ColoringSettings")).c_str());
 	}
 	preferences.insertEntry(coloring_settings_);
 }
@@ -213,7 +213,7 @@ void DisplayProperties::show()
 void DisplayProperties::createRepresentationMode()
 {
 	rep_ = 0;
- 	setWindowTitle("Create a Representation");
+ 	setWindowTitle(tr("Create a Representation"));
 	if (id_ != 0) checkMenu(*getMainControl());
 
 	model_updates_enabled->setChecked(true);
@@ -223,7 +223,7 @@ void DisplayProperties::createRepresentationMode()
 void DisplayProperties::modifyRepresentationMode(Representation* rep)
 {
 	rep_ = rep;
- 	setWindowTitle("Modify a Representation");
+ 	setWindowTitle(tr("Modify a Representation"));
 	if (id_ != 0) checkMenu(*getMainControl());
 
 	if (rep_ == 0 || 
@@ -408,7 +408,7 @@ void DisplayProperties::apply()
 		return;
 	}
 
-	setStatusbarText("building model...");
+	setStatusbarText((String)tr("building model..."));
 
 	if (changed_selection_color_)
 	{
@@ -837,7 +837,7 @@ void DisplayProperties::createRepresentation(String data_string, const vector<co
 
 		if (system_pos >= new_systems.size())
 		{
-			Log.error() << "Error while reading project file, invalid structure for Representation! Aborting..." << std::endl;
+			Log.error() << (String)tr("Error while reading project file, invalid structure for Representation! Aborting...") << std::endl;
 			return;
 		}
 

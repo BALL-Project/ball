@@ -357,7 +357,9 @@ namespace BALL
 			Dataset* set = open(fields[fields.size() - 1], ascii(file));
 			if (set == 0) return false;
 
-			return insertDataset(set);
+			getMainControl()->sendMessage(*(new DatasetMessage(set, DatasetMessage::ADD)));
+
+			return true;
 		}
 
 		QAction* DatasetController::insertMenuEntry_(Position pid, const String& name, 
@@ -384,6 +386,13 @@ namespace BALL
 		}
 
 		void DatasetController::setStatusbarText(const String& text, bool important)
+		{
+			if (getDatasetControl() == 0) return;
+
+			getDatasetControl()->setStatusbarText(text, important);
+		}
+
+		void DatasetController::setStatusbarText(const QString& text, bool important)
 		{
 			if (getDatasetControl() == 0) return;
 

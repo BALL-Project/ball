@@ -100,7 +100,8 @@ namespace BALL
 					StringHashMap<float>  values;
 					StringHashMap<float>  errors;
 					StringHashMap<String> units;
-				
+					
+					bool hasType(String type) {return values.has(type);}	
 					std::ostream& operator >> (std::ostream& s);
 			};
 	
@@ -250,7 +251,9 @@ namespace BALL
 					String   entry_type;
 					String   BMRB_accession_code;
 					String   NMR_STAR_version;
-					String   experimental_method;
+					String   experimental_method;	
+					String   submission_date;
+
 			};
 			
 			/** Monomeric Polymer
@@ -534,10 +537,10 @@ namespace BALL
 			NMRStarFile();
 			
 			/** Detailed constuctor.
-					Opens the given file and extracts all usefull data (Calls  \link read read \endlink). 
-			*/
-			NMRStarFile(const String& file_name, File::OpenMode open_mode = std::ios::in)
-				throw(Exception::FileNotFound);
+			 *	Opens the given file and extracts all usefull data (Calls  \link read read \endlink). 
+		   *  @throw Exception::FileNotFound if the file could not be opened
+			 */
+			NMRStarFile(const String& file_name, File::OpenMode open_mode = std::ios::in);
 			
 			/// Destructor.
 			~NMRStarFile();
@@ -549,9 +552,9 @@ namespace BALL
 			//@{
 
 			/** Read an NMRStarFile.
+		   *  @throw Exception::ParseError if a syntax error was encountered
 			 */
-			bool read()
-				throw(Exception::ParseError);
+			bool read();
 
 			/*  Read an NMRStarFile and assign the shifts to the
 			    given AtomContainer using a trivial standard mapping.
@@ -693,11 +696,15 @@ namespace BALL
 			float getNMRSpectrometerFieldStrength(Position i) const;
 		
 
+			/** Get a mutable reference to the MonomericPolymer-information by name
+			 *	@throw Exception::OutOfRange if a polymer with this name could not be found
+			 */
+			NMRStarFile::MonomericPolymer& getMonomericPolymer(const String& name);
+
 			/** Get the MonomericPolymer-information by name
-			 		Throws exception OutOfRange
-			*/
-			NMRStarFile::MonomericPolymer& getMonomericPolymer(const String& name) throw(Exception::OutOfRange);
-			const NMRStarFile::MonomericPolymer& getMonomericPolymer(const String& name) const throw(Exception::OutOfRange);
+			 *	@throw Exception::OutOfRange if a polymer with this name could not be found
+			 */
+			const NMRStarFile::MonomericPolymer& getMonomericPolymer(const String& name) const;
 			
 			/// Get the number of monomeric polymers in the file
 			Size getNumberOfMonomericPolymers() const {return monomeric_polymers_.size();};
@@ -804,6 +811,11 @@ namespace BALL
 			/// check whether the given String denotes a non-available value
 			bool isValidSingleValue_(String value);
 			
+			/// returns the value as float, if it is a valid one, or FLOAT_VALUE_NA
+			float valueToFloat_(String value);
+			
+			/// returns the value as int, if it is a valid one, or INT_VALUE_NA
+			int valueToInt_(String value);
 			/** Apply the shifts read into the AtomContainer as denoted in the mapping.
 			 * 	We assume, that the file was already read!
 			 * 	The shifts are stored as a property under the key 

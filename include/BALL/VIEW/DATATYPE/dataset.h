@@ -301,6 +301,7 @@ namespace BALL
 			
 			///
 			void setStatusbarText(const String& text, bool important = false);
+			void setStatusbarText(const QString& text, bool important = false);
 
 			virtual bool write(Dataset* /*set*/, String /*filetype*/, String /*filename*/);
 			virtual Dataset* open(String /*filetype*/, String /*filename*/);

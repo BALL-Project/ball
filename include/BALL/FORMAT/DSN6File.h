@@ -63,9 +63,9 @@ namespace BALL
 		//@{
 
 		/** open a DSN6File
-		*/
-		virtual bool open(const String& name, File::OpenMode open_mode = std::ios::in)
-			throw(Exception::FileNotFound);
+		 *  @throw Exception::FileNotFound if the file could not be opened
+		 */
+		virtual bool open(const String& name, File::OpenMode open_mode = std::ios::in);
 
 		/** Read the header of an existing file.
 				Return true if the header could be read successfully, false ow.

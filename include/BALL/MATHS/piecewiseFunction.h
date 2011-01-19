@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: piecewiseFunction.h,v 1.23 2005/12/23 17:01:48 amoll Exp $
-//
 
 #ifndef BALL_MATHS_PIECEWISEFUNCTION_H
 #define BALL_MATHS_PIECEWISEFUNCTION_H
@@ -95,23 +93,23 @@ namespace BALL
 		const std::vector<Interval>& getIntervals() const ;
 
 		/** Get the interval a given x belongs to 
-		*/
-		const Interval& getInterval(double x) const
-			throw(Exception::OutOfRange);
+		 *  @throw Exception::OutOfRange if x is out of range
+		 */
+		const Interval& getInterval(double x) const;
 
 		/** Get interval limits by index 
-		*/
-		const Interval& getInterval(Position index) const 
-			throw(Exception::IndexOverflow);
+		 *  @throw Exception::IndexOverflow if index >= intervals_.size()
+		 */
+		const Interval& getInterval(Position index) const;
 
 		/** Get the interval index for a given x 
-		*/
-		Position getIntervalIndex(double x) const 
-			throw(Exception::OutOfRange);
+		 *  @throw Exception::OutOfRange if x is out of range
+		 */
+		Position getIntervalIndex(double x) const;
 
 		/** Return the range of the definition 
 		*/
-		const Interval& getRange() const ;
+		const Interval& getRange() const;
 
 		/** Set the coefficients.
 				Note that this method does <b>not</b> check the vector of coefficients
@@ -123,22 +121,22 @@ namespace BALL
 		const std::vector<Coefficients>& getCoefficients() const ;
 
 		/** Get the coefficients for a given x 
-		*/
-		const Coefficients& getCoefficients(double x) const 
-			throw(Exception::OutOfRange);
+		 *  @throw Exception::OutOfRange if x is out of range
+		 */
+		const Coefficients& getCoefficients(double x) const;
 
-		/** get coefficients from index 
-		*/
-		const Coefficients& getCoefficients(Position index) const 
-			throw(Exception::IndexOverflow);
+		/** Get the coefficients from index 
+		 *  @throw Exception::IndexOverflow if index >= intervals_.size()
+		 */
+		const Coefficients& getCoefficients(Position index) const;
 		
 		/** compute the value of the piecewise function data for a given x 
 		*/
-		virtual double operator () (double x) const ;
+		virtual double operator () (double x) const;
 
 		/** */
 		void set(const std::vector<Interval>& intervals,
-				const std::vector<Coefficients>& coeffs) ;
+				const std::vector<Coefficients>& coeffs);
 
 		//@}
 		/** @name Predicates 
@@ -147,15 +145,15 @@ namespace BALL
 
 		/** Check whether a given x is in the range of definition 
 		*/
-		bool isInRange(double x) const ;
+		bool isInRange(double x) const;
 
 		/** check validity of the definition 
 		*/
-		virtual bool isValid() const ;
+		virtual bool isValid() const;
 
 		/** Equality operator 
 		*/
-		bool operator == (const PiecewiseFunction& function) const ;
+		bool operator == (const PiecewiseFunction& function) const;
 
 		//@}
 		/** @name Debugging and Diagnostics 
@@ -164,7 +162,7 @@ namespace BALL
 
 		/** 	Dumps the whole content of the object 
 		*/
-		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const ;
+		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const;
 
 		//@}
 
@@ -189,7 +187,7 @@ namespace BALL
 
 		/*_ Set the internal range fields 
 		*/
-		void calculateRange() ;
+		void calculateRange();
 
 	};
 }

@@ -25,14 +25,12 @@ namespace BALL {
 
 	template <class valuetype>
 	std::vector<valuetype> Matrix<valuetype, LowerTriangularTraits>::getData() const
-		throw()
 	{
 		return data_;
 	}
 
 	template <class valuetype>
 	void Matrix<valuetype, LowerTriangularTraits>::setData(const std::vector<valuetype>& new_data)
-		throw(Exception::MatrixHasWrongDimension)
 	{
 		if (new_data.size() != n_*(n_+1)/2)
 		{
@@ -190,7 +188,6 @@ namespace BALL {
 
 	template <class valuetype>
 	Matrix<valuetype, LowerTriangularTraits> Matrix<valuetype, LowerTriangularTraits>::operator + (const Matrix<valuetype, LowerTriangularTraits>& B) const
-		throw(Exception::MatrixHasWrongDimension)
 	{
 		if ( (getRowCount() != B.getRowCount()) || (getColumnCount() != B.getColumnCount()) )
 		{
@@ -276,7 +273,6 @@ namespace BALL {
 
 	template <class valuetype>
 	Matrix<valuetype, LowerTriangularTraits>& Matrix<valuetype, LowerTriangularTraits>::operator += (const Matrix<valuetype, LowerTriangularTraits>& B)
-		throw(Exception::MatrixHasWrongDimension)
 	{
 		if ( (getRowCount() != B.getRowCount()) || (getColumnCount() != B.getColumnCount()) )
 		{
@@ -359,7 +355,6 @@ namespace BALL {
 
 	template <class valuetype>
 	Matrix<valuetype, LowerTriangularTraits> Matrix<valuetype, LowerTriangularTraits>::operator - (const Matrix<valuetype, LowerTriangularTraits>& B) const
-		throw(Exception::MatrixHasWrongDimension)
 	{
 		if ( (getRowCount() != B.getRowCount()) || (getColumnCount() != B.getColumnCount()) )
 		{
@@ -445,7 +440,6 @@ namespace BALL {
 
 	template <class valuetype>
 	Matrix<valuetype, LowerTriangularTraits>& Matrix<valuetype, LowerTriangularTraits>::operator -= (const Matrix<valuetype, LowerTriangularTraits>& B)
-		throw(Exception::MatrixHasWrongDimension)
 	{
 		if ( (getRowCount() != B.getRowCount()) || (getColumnCount() != B.getColumnCount()) )
 		{
@@ -527,7 +521,6 @@ namespace BALL {
 
 	template <class valuetype>
 	Matrix<valuetype, LowerTriangularTraits> Matrix<valuetype, LowerTriangularTraits>::operator* (const valuetype& a) const
-		throw()
 	{
 		Matrix<valuetype, LowerTriangularTraits> result(*this);
 
@@ -557,7 +550,6 @@ namespace BALL {
 
 	template <class valuetype>
 	Matrix<valuetype, LowerTriangularTraits>& Matrix<valuetype, LowerTriangularTraits>::operator*= (const valuetype& a)
-		throw()
 	{
 	#ifdef BALL_BALL_HAS_BLAS
 	#ifdef DEBUG

@@ -61,7 +61,7 @@ namespace BALL
 		// note that HBonds_.size() is not the number of HBonds but
 		// rather the number of residues in the system.
 	  Size size = HBonds_.size();
-	
+
 		sheet_.resize(size);
 		for (Size i=0; i<size; i++)
 		{
@@ -806,11 +806,11 @@ namespace BALL
 
 		return result;
 	}
-
-/**********************************************
- *   determine the new Secondary Structure and
- *   replace the old one with the new one
- ************************************************/
+	
+	/**********************************************
+	 *   determine the new Secondary Structure and
+	 *   replace the old one with the new one
+	 **********************************************/
 	Processor::Result SecondaryStructureProcessor::operator() (Composite &composite)
 	{
 		if (!RTTI::isKindOf<Chain>(composite))
@@ -821,10 +821,9 @@ namespace BALL
 		Chain* p = RTTI::castTo<Chain>(composite);
 		HBondProcessor hbp;
 
-
 		p->apply(hbp);       // find all posible HBonds
 		
-		HBonds_ = hbp.getBackboneHBondPairs();
+		HBonds_ = hbp.getBackboneHBondPattern();
 		ResidueIterator ri = p->beginResidue();
 		 
 		if (!(+ri))
@@ -841,18 +840,21 @@ namespace BALL
 		// - push all residues into residues
 		
 		SecondaryStructure* ss = 0;
-		char last_struct = 'X';
-		Position resnum=0;
+		char     last_struct   = 'X';
+		Position resnum        = 0;
  
 		vector<SecondaryStructure*> new_ss;
 		vector<SecondaryStructure*> new_parent;
 		vector<Residue*> 						residues;
 
-		for (;+ri;++ri)
+		if (summary_.size() == 0)
+			return Processor::CONTINUE;
+		
+		for (; +ri; ++ri)
 		{
 			if (resnum >= summary_.size())
 			{
-				Log.error() << "Problem occured in " << __FILE__ << " " << __LINE__ << std::endl;
+				Log.error() << "A problem occured in " << __FILE__ << " " << __LINE__ << std::endl;
 				return Processor::CONTINUE;
 			}
 

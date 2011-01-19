@@ -12,7 +12,6 @@ namespace BALL
 
 	//	Default constructor.
 	CubicSpline2D::CubicSpline2D()
-		throw()
 		: verbosity_(VERBOSITY_LEVEL_DEBUG)
 	{}	
 	
@@ -26,7 +25,6 @@ namespace BALL
 										float y_lower_derivative, 
 										float y_upper_derivative,
 										int verbosity)
-		throw()
 		:	sample_positions_x_(sample_positions_x),
 			sample_positions_y_(sample_positions_y),
 			splines_(),
@@ -89,7 +87,6 @@ namespace BALL
 										float y_lower_derivative,
 										float y_upper_derivative,
 										int   verbosity)
-		throw()
 		: sample_positions_x_(sample_positions_x),
 			sample_positions_y_(sample_positions_y),
 			splines_(),
@@ -135,7 +132,6 @@ namespace BALL
 										float y_lower_derivative, 
 										float y_upper_derivative,
 										int 	verbosity)
-		throw()
 		:	sample_positions_x_(),
 			sample_positions_y_(sample_positions_y),
 			splines_(),
@@ -208,7 +204,6 @@ namespace BALL
 										float y_lower_derivative,
 										float y_upper_derivative,
 										int		verbosity)
-		throw()
 		: sample_positions_x_(),
 			sample_positions_y_(sample_positions_y),
 			splines_(),
@@ -252,7 +247,6 @@ namespace BALL
 	
 	// Copy  constructor
 	CubicSpline2D::CubicSpline2D(const CubicSpline2D& cs2D)
-		throw() 
 		: sample_positions_x_(cs2D.sample_positions_x_),
 			sample_positions_y_(cs2D.sample_positions_y_),
 			splines_(cs2D.splines_),
@@ -277,12 +271,10 @@ namespace BALL
 			
  	// Destructor
 	CubicSpline2D::~CubicSpline2D()
-		throw() 
 	{}
 
 	// A complex version to create a 2D Cubic spline. 
 	void CubicSpline2D::createBiCubicSpline()
-		throw()
 	{
 		// For each y sample position
 		// a 1D spline upon the corresponding x sample positions 
@@ -318,7 +310,6 @@ namespace BALL
 	}
 
 	float CubicSpline2D::operator () (float x, float y)
-		throw()
 	{ 
 		// We are looking for the interpolation of the 2D spline
 		// at (x,y). 
@@ -358,9 +349,8 @@ namespace BALL
 	
 	
 	float CubicSpline2D::getXDefaultValue(Index x) const
-		throw(Exception::OutOfRange)
 	{
-		if (x > (Index)x_default_values_.size())
+		if (x >= (Index)x_default_values_.size())
 		{	
 			throw Exception::OutOfRange(__FILE__, __LINE__);
 		}
@@ -371,9 +361,8 @@ namespace BALL
 	}
 	
 	float CubicSpline2D::getXLowerBounds(Index x) const
-		throw(Exception::OutOfRange)
 	{
-		if (x > (Index)x_lower_bounds_.size())
+		if (x >= (Index)x_lower_bounds_.size())
 		{	
 			throw Exception::OutOfRange(__FILE__, __LINE__);
 		}
@@ -384,9 +373,8 @@ namespace BALL
 	}
 	
 	float CubicSpline2D::getXUpperBounds(Index x) const
-		throw(Exception::OutOfRange)
 	{
-		if (x > (Index)x_upper_bounds_.size())
+		if (x >= (Index)x_upper_bounds_.size())
 		{	
 			throw Exception::OutOfRange(__FILE__, __LINE__);
 		}
@@ -397,7 +385,6 @@ namespace BALL
 	}
 	
 	bool CubicSpline2D::isXNatural(Index x)
-		throw()
 	{
 		if (x > (Index)x_is_natural_.size())
 		{	
@@ -413,7 +400,6 @@ namespace BALL
 	 *  By default the method recomputes the spline. 
 	 *  If the argument is false, no recomputation is done.*/
 	void CubicSpline2D::makeXNatural(Index x, bool recompute)
-		throw()
 	{
 		if (x > (Index)x_is_natural_.size())
 		{	
@@ -432,7 +418,6 @@ namespace BALL
 	
 	
 	void CubicSpline2D::makeAllXNatural(bool recompute)
-		throw()
 	{
 		for (Size i = 0; i < x_is_natural_.size(); i++)
 		{
@@ -445,7 +430,6 @@ namespace BALL
 	}
 		
 	void CubicSpline2D::makeYNatural(bool y_is_natural, bool recompute)
-		throw()
 	{ 
 		y_is_natural_ = y_is_natural;	
 		
@@ -456,7 +440,6 @@ namespace BALL
 	}
 	
 	void CubicSpline2D::setXLowerDerivatives(vector<float> ld, bool recompute)
-		throw()
 	{
 		x_lower_derivatives_ = ld;
 		if (recompute)
@@ -467,7 +450,6 @@ namespace BALL
 	}
 	
 	void CubicSpline2D::setXUpperDerivatives(vector<float> ud, bool recompute) 
-		throw()
 	{
 		x_upper_derivatives_ = ud;	
 		if (recompute)
@@ -478,7 +460,6 @@ namespace BALL
 	
 	
 	void CubicSpline2D::setYLowerDerivative (float ld, bool recompute)
-		throw()
 	{
 		y_lower_derivative_ = ld;
 		if (recompute)
@@ -488,7 +469,6 @@ namespace BALL
 	}
 	
 	void CubicSpline2D::setYUpperDerivative (float ud, bool recompute)
-		throw()
 	{
 		y_upper_derivative_ = ud;
 		if (recompute)
@@ -499,9 +479,8 @@ namespace BALL
 
 	
 	float CubicSpline2D::getXLowerDerivatives(Index x)
-		throw(Exception::OutOfRange)
 	{
-		if (x > (Index)x_lower_derivatives_.size())
+		if (x >= (Index)x_lower_derivatives_.size())
 		{	
 			throw Exception::OutOfRange(__FILE__, __LINE__);
 		}
@@ -512,9 +491,8 @@ namespace BALL
 	}
 	
 	float CubicSpline2D::getXUpperDerivatives(Index x)
-		throw(Exception::OutOfRange)
 	{
-		if (x > (Index)x_upper_derivatives_.size())
+		if (x >= (Index)x_upper_derivatives_.size())
 		{	
 			throw Exception::OutOfRange(__FILE__, __LINE__);
 		}
@@ -525,7 +503,6 @@ namespace BALL
 	}
 	
 	CubicSpline1D& CubicSpline2D::getSpline(Position i) 
-		throw(Exception::OutOfRange)
 	{
 		if (i < (Position)splines_.size()) 
 			return splines_[i]; 
@@ -534,7 +511,6 @@ namespace BALL
 	} 
 	
 	const CubicSpline1D& CubicSpline2D::getSpline(Position i) const 
-		throw(Exception::OutOfRange) 
 	{
 		if (i < (Position)splines_.size()) 
 			return splines_[i]; 

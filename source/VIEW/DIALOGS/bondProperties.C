@@ -5,8 +5,9 @@
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/residue.h>
-#include <QtGui/qlineedit.h>
-#include <QtGui/qpushbutton.h>
+
+#include <QtGui/QLineEdit>
+#include <QtGui/QPushButton>
 
 namespace BALL
 {
@@ -24,7 +25,7 @@ BondProperties::BondProperties( Atom* atom, QWidget* parent,  const char* name, 
 
 	if (atom->countBonds() == 0)
 	{
-		((ModularWidget*)parent)->setStatusbarText("Atom has no bonds");
+		((ModularWidget*)parent)->setStatusbarText((String)tr("Atom has no bonds"));
 		return;
 	}
 	parent_ = parent;
@@ -80,25 +81,25 @@ void BondProperties::bondSelected()
 	switch(bond->getOrder())
 	{
 		case Bond::ORDER__UNKNOWN:
-			text = "Unknown";
+			text = (String)tr("Unknown");
 			break;
 		case Bond::ORDER__SINGLE:
-			text = "Single";
+			text = (String)tr("Single");
 			break;
 		case Bond::ORDER__DOUBLE:
-			text = "Double";
+			text = (String)tr("Double");
 			break;
 		case Bond::ORDER__TRIPLE:
-			text = "Triple";
+			text = (String)tr("Triple");
 			break;
 		case Bond::ORDER__QUADRUPLE: 
-			text = "Quadruple";
+			text = (String)tr("Quadruple");
 			break;
 		case Bond::ORDER__AROMATIC: 
-			text = "Aromatic";
+			text = (String)tr("Aromatic");
 			break;
 		case Bond::ORDER__ANY:
-			text = "Any";
+			text = (String)tr("Any");
 			break;
 	}
 	order_edit->setText(text.c_str());
@@ -106,22 +107,22 @@ void BondProperties::bondSelected()
 	switch (bond->getType())
 	{
 		case Bond::TYPE__UNKNOWN:
-			text = "Unknown";
+			text = (String)tr("Unknown");
 			break;
 		case Bond::TYPE__COVALENT:
-			text = "Covalent";
+			text = (String)tr("Covalent");
 			break;
 		case Bond::TYPE__HYDROGEN:
-			text = "Hydrogen";
+			text = (String)tr("Hydrogen");
 			break;
 		case Bond::TYPE__DISULPHIDE_BRIDGE: 
-			text = "Disulphide Bridge";
+			text = (String)tr("Disulphide Bridge");
 			break;
 		case Bond::TYPE__SALT_BRIDGE:
-			text = "Salt Bridge";
+			text = (String)tr("Salt Bridge");
 			break;
 		case Bond::TYPE__PEPTIDE:
-			text = "Peptide";
+			text = (String)tr("Peptide");
 			break;
 	}
 	type_edit->setText(text.c_str());

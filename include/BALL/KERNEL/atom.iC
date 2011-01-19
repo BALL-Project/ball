@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.iC,v 1.19 2005/12/23 17:01:47 amoll Exp $
-//
 
 BALL_INLINE
 void Atom::setElement(const Element& element)

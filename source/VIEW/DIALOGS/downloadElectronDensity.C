@@ -171,7 +171,7 @@ namespace BALL
 			if (current_reply_->error() != QNetworkReply::NoError)
 			{
 				Log.error() << "Could not download Electron Density map! Reason given was \"" + (String)(current_reply_->errorString()) + "\""<< std::endl;
-				setStatusbarText("Could not download electron Density map! Reason given was \"" + (String)(current_reply_->errorString()) + "\"");
+				setStatusbarText(tr("Could not download electron Density map! Reason given was") + " \"" + current_reply_->errorString() + "\"");
 
 				error_ = true;
 			}
@@ -231,7 +231,7 @@ namespace BALL
 					notify_(new DatasetMessage(set, DatasetMessage::ADD));
 					removeFile_(temp_filename);
 
-					setStatusbarText(String("read ") + id + " electron density map", true);
+					setStatusbarText(tr("read ") + id.c_str() + tr(" electron density map"), true);
 
 					DatasetController* dc = DatasetControl::getInstance(0)->getController(RegularData3DController::type);
 					RegularData3DController& rcon = *(RegularData3DController*) dc;
@@ -255,7 +255,7 @@ namespace BALL
 				}
 				catch(...)
 				{
-					setStatusbarText("download Electron Density map failed", true);
+					setStatusbarText(tr("download Electron Density map failed"), true);
 					delete d3;
 					delete set;
 				}
@@ -300,7 +300,7 @@ namespace BALL
 			progress_bar_->setRange(0, total);
 			progress_bar_->setValue(received);
 
-			setStatusbarText("received " + String((unsigned int)received) + " / " + String((unsigned int)total) + " bytes", true);
+			setStatusbarText(tr("received") + " " + QString::number(received) + " / " + QString::number(total) + " " + tr("bytes"), true);
 		}
 
 		void DownloadElectronDensity::abort()
@@ -315,7 +315,7 @@ namespace BALL
 		{
 			aborted_ = false;
 			error_   = false;
-			setStatusbarText("Started download, please wait...", true);
+			setStatusbarText(tr("Started download, please wait..."), true);
 			button_abort->setEnabled(true);
 			download->setEnabled(false);
 			entryId->setEnabled(false);
@@ -326,7 +326,7 @@ namespace BALL
 		{
 			if (!aborted_ && !error_)
 			{
-				setStatusbarText("Finished downloading, please wait...", true);
+				setStatusbarText(tr("Finished downloading, please wait..."), true);
 			}
 			button_abort->setEnabled(false);
 			download->setEnabled(true);

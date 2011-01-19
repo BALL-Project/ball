@@ -38,14 +38,14 @@ namespace BALL
 		TrajectoryFile();
 
 		/** Detailed constructor requiring a filename and the mode in which
-				this file should be opened.
-				@see File
-				@param filename the name of the file
-				@param open_mode the mode in which this file should be opened
-		*/
+		 *	this file should be opened.
+		 *	@param filename the name of the file
+		 *	@param open_mode the mode in which this file should be opened
+		 *  @throw Exception::FileNotFound if the file could not be openend
+		 *	@see File
+		 */
 		TrajectoryFile(const String& filename,
-			File::OpenMode open_mode = std::ios::in)
-			throw(Exception::FileNotFound);
+			File::OpenMode open_mode = std::ios::in);
 
 		/// Destructor
 		virtual ~TrajectoryFile();
@@ -106,11 +106,11 @@ namespace BALL
 		virtual bool read(SnapShot& snapshot);
 
 		/** Write several SnapShots to disk.
-				@param buffer a vector of snapshots
-				@return true, if flushing was successful, false ow.
-		*/
-		virtual bool flushToDisk(const std::vector<SnapShot>& buffer)
-			throw(File::CannotWrite);
+		 *	@param buffer a vector of snapshots
+		 *	@return true, if flushing was successful, false ow.
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		virtual bool flushToDisk(const std::vector<SnapShot>& buffer);
 		//@}
 
 		private:

@@ -408,14 +408,17 @@ namespace BALL
 		Size erase(const KeyType& key);
 
 		/**	Erase element at a given position.
-				@param pos an iterator pointing to the element to delete
-		*/
-		void erase(Iterator pos) throw(Exception::IncompatibleIterators, Exception::InvalidIterator);
+		 *	@param pos an iterator pointing to the element to delete
+		 *  @throw Exception::IncompatibleIterators does not point into this HashSet
+		 *  @throw Exception::InvalidIterator if pos is invalid
+		 */
+		void erase(Iterator pos);
 
 		/**	Erase a range of elements.
-				Erase all elements in the range <tt>f - l</tt>.
-		*/
-		void erase(Iterator f, Iterator l) throw(Exception::IncompatibleIterators);
+		 *	Erase all elements in the range <tt>f - l</tt>.
+		 *  @throw Exception::IncompatibleIterators if one of the arguments does not point into this HashSet
+		 */
+		void erase(Iterator f, Iterator l);
 
 		//@}
 
@@ -955,7 +958,6 @@ namespace BALL
 
 	template <class Key>
 	void HashSet<Key>::erase(Iterator pos)
-		throw(Exception::IncompatibleIterators, Exception::InvalidIterator)
 	{
 		if (pos.getTraits().bound_ != this)
 		{
@@ -995,7 +997,6 @@ namespace BALL
 
 	template <class Key>
 	void HashSet<Key>::erase(Iterator f, Iterator l)
-		throw(Exception::IncompatibleIterators)
 	{
 		if (f.getTraits().bound_ != this || l.getTraits().bound_ != this)
 		{

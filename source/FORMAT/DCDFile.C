@@ -29,7 +29,6 @@ namespace BALL
 	}
 
 	DCDFile::DCDFile(const String& name, File::OpenMode open_mode)
-		throw(Exception::FileNotFound)
 		: TrajectoryFile(name, open_mode),
 			verbosity_(0),
 			swap_bytes_(false),
@@ -95,7 +94,6 @@ namespace BALL
 
 
 	bool DCDFile::open(const String& name, File::OpenMode open_mode)
-		throw(Exception::FileNotFound)
 	{
 		if (!(open_mode |= std::ios::binary))
 		{
@@ -642,7 +640,6 @@ namespace BALL
 
 
 	bool DCDFile::flushToDisk(const ::std::vector<SnapShot>& buffer)
-		throw(File::CannotWrite)
 	{
 		if (!isOpen() || !(getOpenMode() & File::MODE_OUT))
 		{

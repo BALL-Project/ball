@@ -1,3 +1,7 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+
 #ifndef BALL_VIEW_WIDGETS_CANVASWIDGET_H
 #define BALL_VIEW_WIDGETS_CANVASWIDGET_H
 
@@ -6,8 +10,8 @@
 #endif
 
 #include <QCanvasWidget>
-#include <QtGui/qpixmap.h>
-#include <QtGui/qpainter.h>
+#include <QtGui/QPixmap>
+#include <QtGui/QPainter>
 #include <vector>
 
 namespace BALL
@@ -54,28 +58,22 @@ namespace BALL
       virtual ~CanvasWidget();  
       
       ///
-      void showObjects()	 
-				throw();
+      void showObjects();
       
     public slots:
 
-      virtual void zoomIn()
-        throw();
+      virtual void zoomIn();
 
-      virtual void zoomOut()
-				throw();
+      virtual void zoomOut();
 
-      virtual void zoom(float xfactor,float yfactor)
-				throw();
+      virtual void zoom(float xfactor,float yfactor);
 
-      virtual void zoomToFit()
-				throw();
+      virtual void zoomToFit();
 
     protected:  
 
       //Copyconstructor doesn't work because of the QT private copy constructors
 			CanvasWidget(const CanvasWidget& /*cw*/)
-				throw()
 				: QCanvasView() {};
 
       QCanvas canvas_;

@@ -1,14 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+
 #include <BALL/VIEW/DIALOGS/contourSurfaceDialog.h>
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
-#include <QtGui/qlineedit.h>
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qlayout.h>
+#include <QtGui/QLineEdit>
+#include <QtGui/QPushButton>
+#include <QtGui/QLayout>
 
 namespace BALL
 {

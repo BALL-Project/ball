@@ -6,10 +6,10 @@
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
-#include <BALL/VIEW/DATATYPE/colorMap.h>
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
+#include <BALL/VIEW/MODELS/colorByGridProcessor.h>
 #include <BALL/VIEW/PRIMITIVES/multiLine.h>
 #include <BALL/VIEW/PRIMITIVES/quadMesh.h>
 
@@ -104,7 +104,7 @@ namespace BALL
 					}
 					catch(...)
 					{
-						QMessageBox::critical(this, "BALLView", "Please enter a correct numerical value for the split distance!", 
+						QMessageBox::critical(this, tr("BALLView"), tr("Please enter a correct numerical value for the split distance!"), 
 															 QMessageBox::Ok, Qt::NoButton);
 						return;
 					}
@@ -275,7 +275,7 @@ namespace BALL
 
 				if (error)
 				{
-					setStatusbarText("Warning the geometric object has points outside the grid!", true);
+					setStatusbarText((String)tr("Warning the geometric object has points outside the grid!"), true);
 				}
 
 				mid_value = (max_value - min_value) * 0.5 + min_value;
@@ -338,144 +338,14 @@ namespace BALL
 
 		bool ModifyRepresentationDialog::colorByGrid_()
 		{
-			if (grid_ == 0 ||
-					rep_ == 0 ||
-					getMainControl()->isBusy())
+			if (grid_ == 0 || rep_ == 0 || getMainControl()->isBusy())
 			{
-				setStatusbarText("Could not color surface, maybe because an other thread is still running?", true);
+				setStatusbarText((String)tr("Could not color surface, maybe because an other thread is still running?"), true);
 				return false;
 			}
 
-			min_min_color = gridColorWidget->getMinMinColor();
-			min_color = gridColorWidget->getMinColor();
-			mid_color = gridColorWidget->getMidColor();
-			max_color = gridColorWidget->getMaxColor();
-			max_max_color = gridColorWidget->getMaxMaxColor();
-
-			// now do the colorizing stuff...
-			float min_value = gridColorWidget->getMinValue();
-			float mid_value = gridColorWidget->getMidValue();
-			float max_value = gridColorWidget->getMaxValue();
-
-			rep_->setTransparency(0);
-
-			if ((Size)min_min_color.getAlpha() 	!= 255 ||
-					(Size)min_color.getAlpha() 			!= 255 ||
-					(Size)mid_color.getAlpha() 			!= 255 ||
-					(Size)max_color.getAlpha() 			!= 255 ||
-					(Size)max_max_color.getAlpha() 	!= 255)
-			{
-					// if we use Transparency, just tell the Representation
-					rep_->setTransparency(80);
-			}
-
-
-			ColorRGBA list[3];
-			list[0] = min_color;
-			list[1] = mid_color;
-			list[2] = max_color;
-	
-			ColorMap cm(list, 3);
-			cm.setMinMaxColors(min_min_color, max_max_color);
-			cm.setAlphaBlending(true);
-			cm.setNumberOfColors(gridColorWidget->getNumLevels());
-			cm.setRange(min_value, max_value);
-
-			std::vector<Vector4> interpolation_points(3);
-			interpolation_points[0] = Vector4(0.);
-			interpolation_points[1] = Vector4( (mid_value - min_value) / (max_value - min_value));
-			interpolation_points[2] = Vector4(1.);
-			
-			cm.setInterpolationBoundaries(interpolation_points);
-			cm.createMap();
-
-			vector<float> values;
-			GeometricObjectList::iterator git = rep_->getGeometricObjects().begin();
-			bool error = false;
-			try 
-			{
-				vector<Vector3>* vertices;
-				for (; git != rep_->getGeometricObjects().end(); ++git)
-				{
-					vertices = 0;
-
-					Mesh* mesh = dynamic_cast<Mesh*>(*git);
-					if (mesh != 0) vertices = &mesh->vertex;
-
-					QuadMesh* qmesh = dynamic_cast<QuadMesh*>(*git);
-					if (qmesh != 0) vertices = &qmesh->vertex;
-
-					MultiLine* line = dynamic_cast<MultiLine*>(*git);
-					if (line != 0) vertices = &line->vertices;
-
-					if (vertices == 0) continue;
-
-					values.reserve(values.size() + vertices->size());
-					for (Position i = 0; i < vertices->size(); i++)
-					{
-						values.push_back(grid_->getInterpolatedValue((*vertices)[i]));
-					}
-				}	 // all geometric objects
-			}
-			catch (Exception::OutOfGrid&)
-			{
-				error = true;
-			}
-
-			if (gridColorWidget->isNormalizationEnabled())
-			{
-				calculateHistogramEqualization(values, values);
-			}
-			
-			git = rep_->getGeometricObjects().begin();
-			Position p = 0;
-			vector<ColorRGBA>* colors;
-			vector<Vector3>*   vertices;
-			for (; git != rep_->getGeometricObjects().end(); ++git)
-			{
-				colors = 0;
-				vertices = 0;
-
-				Mesh* mesh = dynamic_cast<Mesh*>(*git);
-				if (mesh != 0)
-				{
-					colors = &mesh->colors;
-					vertices = &mesh->vertex;
-				}
-
-				QuadMesh* qmesh = dynamic_cast<QuadMesh*>(*git);
-				if (qmesh != 0)
-				{
-					colors = &qmesh->colors;
-					vertices = &qmesh->vertex;
-				}
-
-				MultiLine* line = dynamic_cast<MultiLine*>(*git);
-				if (line != 0)
-				{
-					colors = &line->colors;
-					vertices = &line->vertices;
-				}
-
-				if (colors == 0) continue;
-
-				colors->resize(vertices->size());
-				for (Position i = 0; i < colors->size(); i++)
-				{
-					(*colors)[i].set(cm.map(values[p]));
-					p++;
-
-					if (p == values.size()) 
-					{
-						break;
-					}
-				}
-			}	 // all geometric objects
-			
-			if (error)
-			{
-				setStatusbarText("Error! There is a point contained in the surface that is not inside the grid!", true);
-			}
+			ColorByGridProcessor* grid_processor = new ColorByGridProcessor(grid_, gridColorWidget);
+			rep_->setColorProcessor(grid_processor);
 
 			return true;
 		}

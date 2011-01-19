@@ -15,7 +15,6 @@ namespace BALL
 	}
 
 	Bruker2DFile::Bruker2DFile(const String& name, OpenMode open_mode) 
-		throw(Exception::FileNotFound)
 		: File(name + FileSystem::PATH_SEPARATOR + "2rr", open_mode),
 			parsf1_(name + FileSystem::PATH_SEPARATOR + "proc2s"),
 			parsf2_(name + FileSystem::PATH_SEPARATOR + "procs")

@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: analyticalGeometry.h,v 1.63 2004/02/23 17:26:02 anhi Exp $
-//
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -362,11 +360,11 @@ namespace BALL
 			@param  r the ratio factor of the first vector
 			@param  s the ratio factor of the second vector
 			@return TVector3 the partition
+			@throw  Exception::DivisionByZero if r+s == 0
 	*/
 	template <typename T>
 	BALL_INLINE 
 	TVector3<T> GetPartition(const TVector3<T>& a, const TVector3<T>& b, const T& r, const T& s)
-		throw(Exception::DivisionByZero)
 	{
 		T sum = r + s;
 		if (sum == (T)0)
@@ -399,11 +397,11 @@ namespace BALL
 			@param	line the line
 			@param	point the point
 			@return T the distance
+			@throw  Exception::DivisionByZero if the line has length 0
 	*/
 	template <typename T>
 	BALL_INLINE 
 	T GetDistance(const TLine3<T>& line, const TVector3<T>& point)
-		throw(Exception::DivisionByZero)
 	{
 		if (line.d.getLength() == (T)0)
 		{
@@ -416,11 +414,11 @@ namespace BALL
 			@param	point the point
 			@param	line the line
 			@return T the distance
+			@throw  Exception::DivisionByZero if the line has length 0
 	*/
 	template <typename T>
 	BALL_INLINE 
 	T GetDistance(const TVector3<T>& point, const TLine3<T>& line)
-		throw(Exception::DivisionByZero)
 	{
 		return GetDistance(line, point);
 	}
@@ -429,10 +427,10 @@ namespace BALL
 			@param	a the first line
 			@param	b the second line
 			@return T the distance
+			@throw  Exception::DivisionByZero if the lines are parallel and a has length 0
 	*/
 	template <typename T>
 	T GetDistance(const TLine3<T>& a, const TLine3<T>& b)
-		throw(Exception::DivisionByZero)
 	{
 		T cross_product_length = (a.d % b.d).getLength();
 		
@@ -465,11 +463,11 @@ namespace BALL
 			@param	point the point
 			@param	plane the plane
 			@return T the distance
+			@throw  Exception::DivisionByZero if the normal vector of plane has zero length
 	*/
 	template <typename T>
 	BALL_INLINE 
 	T GetDistance(const TVector3<T>& point, const TPlane3<T>& plane)
-		throw(Exception::DivisionByZero)
 	{
 		T length = plane.n.getLength();
 
@@ -484,11 +482,11 @@ namespace BALL
 			@param	plane the plane
 			@param	point the point
 			@return T the distance
+			@throw  Exception::DivisionByZero if the normal vector of plane has zero length
 	*/
 	template <typename T>
 	BALL_INLINE 
 	T GetDistance(const TPlane3<T>& plane, const TVector3<T>& point)
-		throw(Exception::DivisionByZero)
 	{
 		return GetDistance(point, plane);
 	}
@@ -497,11 +495,11 @@ namespace BALL
 			@param	line the line
 			@param	plane the plane
 			@return T the distance
+			@throw  Exception::DivisionByZero if the normal vector of plane has zero length
 	*/
 	template <typename T>
 	BALL_INLINE 
 	T GetDistance(const TLine3<T>& line, const TPlane3<T>& plane)
-		throw(Exception::DivisionByZero)
 	{
 		T length = plane.n.getLength();
 		if (length == (T)0)
@@ -515,11 +513,11 @@ namespace BALL
 			@param	plane the plane
 			@param	line the line
 			@return T the distance
+			@throw  Exception::DivisionByZero if the normal vector of plane has zero length
 	*/
 	template <typename T>
 	BALL_INLINE 
 	T GetDistance(const TPlane3<T>& plane, const TLine3<T>& line)
-		throw(Exception::DivisionByZero)
 	{
 		return GetDistance(line, plane);
 	}
@@ -528,11 +526,11 @@ namespace BALL
 			@param	a the first plane
 			@param	b the second plane
 			@return T the distance
+			@throw  Exception::DivisionByZero if the normal vector of a has zero length
 	*/
 	template <typename T>
 	BALL_INLINE 
 	T GetDistance(const TPlane3<T>& a, const TPlane3<T>& b)
-		throw(Exception::DivisionByZero)
 	{
 		T length = a.n.getLength();
 		if (length == (T)0)
@@ -1254,13 +1252,13 @@ namespace BALL
 	}
 
 	/**	Return the oriented angle of two vectors with a normal vector.
+	 *  @throw Exception::DivisionByZero if at least one vector is zero
 	*/
 	template <typename T>
 	TAngle<T> getOrientedAngle
 		(const T& ax, const T& ay, const T& az,
 		 const T& bx, const T& by, const T& bz,
 		 const T& nx, const T& ny, const T& nz)
-		throw(Exception::DivisionByZero)
 	{
     // Calculate the length of the two normals
     T bl = (T) sqrt((double)ax * ax + ay * ay + az * az);
@@ -1295,11 +1293,11 @@ namespace BALL
 	}
 
 	/**	Return the oriented angle of two vectors with a normal vector.
+	 *  @throw Exception::DivisionByZero if at least one vector is zero
 	*/
   template <typename T>
 	BALL_INLINE 
   TAngle<T>getOrientedAngle(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& normal)
-		throw(Exception::DivisionByZero)
   {
     return getOrientedAngle(a.x, a.y, a.z, b.x, b.y, b.z, normal.x, normal.y, normal.z);
 	}
@@ -1318,6 +1316,7 @@ namespace BALL
 			@param  dy 4. vector y component
 			@param  dz 4. vector z component
 			@return TAngle the torsion angle
+			@throw  Exception::DivisionByZero if one of the outer vectors is collinear with the middle one
 	*/
 	template <typename T>
 	TAngle<T> getTorsionAngle
@@ -1325,7 +1324,6 @@ namespace BALL
 		 const T& bx, const T& by, const T& bz,
 		 const T& cx, const T& cy, const T& cz, 
 		 const T& dx, const T& dy, const T& dz)
-		throw(Exception::DivisionByZero)
 	{
 		T abx = ax - bx;
 		T aby = ay - by;

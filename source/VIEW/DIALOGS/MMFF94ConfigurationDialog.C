@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94ConfigurationDialog.C,v 1.1.6.3 2007/05/10 09:05:11 amoll Exp $
-//
 
 #include <BALL/VIEW/DIALOGS/MMFF94ConfigurationDialog.h>
 #include <BALL/VIEW/KERNEL/common.h>
@@ -14,10 +12,10 @@
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
 #include <BALL/SYSTEM/path.h>
 
-#include <QtGui/qlineedit.h>
-#include <QtGui/qradiobutton.h>
-#include <QtGui/qcheckbox.h>
-#include <QtGui/qpushbutton.h>
+#include <QtGui/QLineEdit>
+#include <QtGui/QRadioButton>
+#include <QtGui/QCheckBox>
+#include <QtGui/QPushButton>
 #include <QtGui/QFileDialog>
 
 namespace BALL

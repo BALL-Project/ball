@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: system.C,v 1.26 2003/08/26 09:17:50 oliver Exp $
-//
 
 #include <BALL/KERNEL/system.h>
 
@@ -26,7 +24,6 @@ namespace BALL
 	}
 
   void System::persistentWrite(PersistenceManager& pm, const char* name) const
-		throw(Exception::GeneralException)
   {
     pm.writeObjectHeader(this, name);
 		AtomContainer::persistentWrite(pm);
@@ -34,7 +31,6 @@ namespace BALL
 	}
 
   void System::persistentRead(PersistenceManager& pm)
-		throw(Exception::GeneralException)
   {
     pm.checkObjectHeader(RTTI::getStreamName<AtomContainer>());
 		AtomContainer::persistentRead(pm);

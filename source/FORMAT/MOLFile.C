@@ -62,7 +62,6 @@ namespace BALL
 	}
 
 	MOLFile::MOLFile(const String& name, File::OpenMode open_mode)
-		throw(Exception::FileNotFound)
 		: GenericMolFile()
 	{
 		GenericMolFile::open(name, open_mode);
@@ -73,7 +72,6 @@ namespace BALL
 	}
 
 	bool MOLFile::write(const Molecule& molecule)
-		throw(File::CannotWrite)
 	{
 		if (!isOpen() || getOpenMode() != std::ios::out)
 		{
@@ -212,7 +210,6 @@ namespace BALL
 	}
 
 	bool MOLFile::write(const System& system)
-		throw(File::CannotWrite)
 	{
 		MoleculeConstIterator mol = system.beginMolecule();
 		if (!write(*mol)) return false;
@@ -225,7 +222,6 @@ namespace BALL
 	}
 
 	Molecule* MOLFile::readCTAB_(vector<Atom*>& atom_map)
-		throw(Exception::ParseError)
 	{
 
 		#ifdef DEBUG
@@ -497,7 +493,6 @@ namespace BALL
 	}
 
 	bool MOLFile::read(System& system)
-		throw(Exception::ParseError)
 	{
 		// read the molecule
 		Molecule* molecule = 0;
@@ -528,7 +523,6 @@ namespace BALL
 	}
 
 	Molecule* MOLFile::read()
-		throw(Exception::ParseError)
 	{
 		// read the header block: first line == name, third line = comment, second line ignored
 		bool ok = readLine();

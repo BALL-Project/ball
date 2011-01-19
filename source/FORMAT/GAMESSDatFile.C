@@ -23,7 +23,6 @@ namespace BALL
 	}
 
 	GAMESSDatFile::GAMESSDatFile(const String& name, File::OpenMode open_mode)
-		throw(Exception::FileNotFound)
 		: GenericMolFile(),
 			molecule_(0),
 			symmetry_group_("C1")
@@ -36,7 +35,6 @@ namespace BALL
 	}
 
 	const GAMESSDatFile& GAMESSDatFile::operator = (const GAMESSDatFile& rhs)
-		throw(Exception::FileNotFound)
 	{
 		GenericMolFile::operator = (rhs);
 
@@ -49,7 +47,6 @@ namespace BALL
 	}
 
 	bool GAMESSDatFile::write(const Molecule& molecule)
-		throw(File::CannotWrite)
 	{
 		System S;
 		S.insert(*(Molecule*)molecule.create(true));
@@ -58,7 +55,6 @@ namespace BALL
 
 	/** ToDo: Implement! :-) **/
 	bool GAMESSDatFile::write(const System& system)
-		throw(File::CannotWrite)
 	{
 		if (!isOpen() || getOpenMode() != std::ios::out)
 		{
@@ -107,13 +103,11 @@ namespace BALL
 	}
 
 	bool GAMESSDatFile::read(System& system)
-		throw(Exception::ParseError)
 	{
 		return GenericMolFile::read(system);
 	}
 
 	Molecule* GAMESSDatFile::read()
-		throw(Exception::ParseError)
 	{
 		if (!isValid())
 		{

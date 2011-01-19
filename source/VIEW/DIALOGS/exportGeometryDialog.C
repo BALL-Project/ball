@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id:
 
 #include <BALL/VIEW/DIALOGS/exportGeometryDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -16,8 +15,8 @@
 #include <BALL/VIEW/PRIMITIVES/simpleBox.h>
 
 #include <QtGui/QFileDialog>
-#include <QtGui/qmessagebox.h>
-#include <QtGui/qlineedit.h>
+#include <QtGui/QMessageBox>
+#include <QtGui/QLineEdit>
 
 
 namespace BALL
@@ -65,9 +64,9 @@ void ExportGeometryDialog::exec()
 	listview->setHorizontalHeaderItem(0, new QTableWidgetItem());
 	listview->setHorizontalHeaderItem(1, new QTableWidgetItem());
 	listview->setHorizontalHeaderItem(2, new QTableWidgetItem());
-	listview->horizontalHeaderItem(0)->setText("Model");
-	listview->horizontalHeaderItem(1)->setText("Coloring");
-	listview->horizontalHeaderItem(2)->setText("Properties");
+	listview->horizontalHeaderItem(0)->setText(tr("Model"));
+	listview->horizontalHeaderItem(1)->setText(tr("Coloring"));
+	listview->horizontalHeaderItem(2)->setText(tr("Properties"));
 	listview->setColumnWidth(0, 140);
 	listview->setColumnWidth(1, 140);
 	listview->setColumnWidth(2, 140);
@@ -186,7 +185,7 @@ void ExportGeometryDialog::accept()
 
 	void ExportGeometryDialog::browseFiles()
 	{
-		QString fname = QFileDialog::getSaveFileName(0, "Export as 3D file", getMainControl()->getWorkingDir().c_str(), "*.*");
+		QString fname = QFileDialog::getSaveFileName(0, tr("Export as 3D file"), getMainControl()->getWorkingDir().c_str(), "*.*");
 		if (fname == QString::null)
 		{
 			return;

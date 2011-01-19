@@ -42,37 +42,31 @@ namespace BALL
 		
 		/** Default Constructor
 		*/
-		ShiftModel1D() 
-			throw() ;
+		ShiftModel1D(); 
 
 		/** Detailed Constructor.
 		 *  If compute_shifts is set to false, we assume that the shifts have been previously assigned, and will use the
 		 *  properties as we find them in the system.
 		*/
-		ShiftModel1D(const String& filename,SPECTRUM_TYPE st, bool compute_shifts=true) 
-			throw();
+		ShiftModel1D(const String& filename,SPECTRUM_TYPE st, bool compute_shifts=true);
 				
 		/** Detailed Constructor.
 		 *  If compute_shifts is set to false, we assume that the shifts have been previously assigned, and will use the
 		 *  properties as we find them in the system.
 		*/
-		ShiftModel1D(const String& filename,SPECTRUM_TYPE st, double origin, double dimension, double spacing, bool compute_shifts=true) 
-			throw();
+		ShiftModel1D(const String& filename,SPECTRUM_TYPE st, double origin, double dimension, double spacing, bool compute_shifts=true);
 	
 		/**	Copy constructor
 		*/
-		ShiftModel1D(const ShiftModel1D& model)
-			throw();
+		ShiftModel1D(const ShiftModel1D& model);
 
 		/**	Destructor
 		*/
-		virtual ~ShiftModel1D()
-			throw();
+		virtual ~ShiftModel1D();
 		
 		/**	Clear method.	
 		*/
-		void clear()
-			throw();
+		void clear();
 
 		//@}
 		/**	@name Accessors
@@ -87,62 +81,83 @@ namespace BALL
 		/**	Return the parameter filename.
 		*/
 		const String& getFilename() const
-			throw()	{return parameters_.getFilename();};
+		{
+			return parameters_.getFilename();
+		};
 		
 		/**
 		*/
 		const Parameters& getParameters() const
-			throw() {return parameters_;};
+		{
+			return parameters_;
+		};
 
 		/**	Get the peaks
 		*/
 		const std::vector<Peak1D>& getPeaks() const
-			throw() {return peaks_;};
+		{
+			return peaks_;
+		};
 		
 		/**	Set the peaks
 		*/
 		void setPeaks(std::vector<Peak1D> peaks)	
-			throw() {peaks_ = peaks;};
+		{
+			peaks_ = peaks;
+		};
 			
 		
 		/**	Get the origin
 		*/
 		const double& getOrigin() const
-			throw() {return origin_;};
+		{
+			return origin_;
+		};
  		
 		/**	Set the origin
 		*/
 		void setOrigin(const double& origin) 
-			throw() {origin_ = origin;};
+		{
+			origin_ = origin;
+		};
  
 		/**	Get the dimension
 		*/
 		const double& getDimension() const
-			throw(){ return dimension_;};
+		{ 
+			return dimension_;
+		};
 
 		/**	Set the dimension 
 		*/
 		void setDimension(	const double& dimension) 
-			throw() { dimension_ = dimension; }
+		{ 
+			dimension_ = dimension; 
+		}
 
 		/**	Get the spacing
 		*/
 		const double getSpacing() const
-			throw() {return spacing_;};
+		{
+			return spacing_;
+		};
 
 		/**	Set the system
 		*/
 		void setSystem( System* system)
-			throw() {system_ = system;};
+		{
+			system_ = system;
+		};
 	
 		/**	Return the system
 		*/
 		const System* getSystem() const
-			throw() {return system_;};
+		{
+			return system_;
+		};
 		
 
-		void operator >> (Spectrum1D& spectrum)
-			throw();
+		void operator >> (Spectrum1D& spectrum);
 
 		//@}
 		/**	@name	Predicates
@@ -151,29 +166,24 @@ namespace BALL
 			
 		/**	Validity flag
 		*/
-		bool isValid() const
-			throw();
+		bool isValid() const;
 
-		
-			//@}
+		//@}
 		/**	@name	Processor related methods
 		*/
 		//@{
 
 		/**	Start method
 		*/
-		bool start()
-			throw();
+		bool start();
 
 		/**	Finish method
 		*/
-		bool finish()
-			throw();
+		bool finish();
 
 		/**	Application method
 		*/
-		Processor::Result operator () (Composite& composite)
-			throw();
+		Processor::Result operator () (Composite& composite);
 		//@}
 
 	protected:	
@@ -223,7 +233,7 @@ namespace BALL
 		/// Flag for shift computation
 		bool compute_shifts_;
 
-		bool hasType_(Atom* a, SPECTRUM_TYPE type) throw();
+		bool hasType_(Atom* a, SPECTRUM_TYPE type);
 
 	}; // end of class
 

@@ -28,7 +28,8 @@ class NMRStarFile
 					StringHashMap<float>  values;
 					StringHashMap<float>  errors;
 					StringHashMap<String> units;
-				
+					
+					bool hasType(String );	
 //					void clear(); 
 //					ostream& operator >> (ostream& s);
 			};
@@ -140,6 +141,7 @@ class NMRStarFile
 					String BMRB_accession_code;
 					String NMR_STAR_version;
 					String experimental_method;
+					String submission_date;
 			};
 
 			class MonomericPolymer

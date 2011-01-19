@@ -9,9 +9,9 @@
 # include <BALL/COMMON/global.h>
 #endif
 
-#include <QtGui/qwidget.h>
-#include <QtGui/qcheckbox.h>
-#include <QtGui/qlineedit.h>
+#include <QtGui/QWidget>
+#include <QtGui/QCheckBox>
+#include <QtGui/QLineEdit>
 
 #ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
@@ -50,7 +50,7 @@ namespace BALL
 						-  server status set to not accept clients
 					\par
 			*/
-			ServerPreferences(QWidget *parent = NULL, const char *name = "ServerPreferences");
+			ServerPreferences(QWidget *parent = NULL, const char *name = ((String)tr("ServerPreferences")).c_str());
 
 			//@}
 			/** @name Destructors 

@@ -1,11 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBA.C,v 1.10.16.1 2007/03/25 21:56:34 oliver Exp $
 
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #include <BALL/VIEW/DATATYPE/colorHSV.h>
-#include <QtGui/qcolor.h>
+#include <QtGui/QColor>
 
 using namespace std;
 
@@ -39,13 +38,11 @@ namespace BALL
 		}
 		 
 		ColorRGBA::ColorRGBA(const char *char_ptr)
-			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			stringToRGBA_(String(char_ptr));
 		}
 		 
 		ColorRGBA::ColorRGBA(const String &s)
-			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			stringToRGBA_(s);
 		}
@@ -126,13 +123,11 @@ namespace BALL
 		}
 
 		void ColorRGBA::set(const char* char_ptr)
-			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			stringToRGBA_(String(char_ptr));
 		}
 
 		const ColorRGBA& ColorRGBA::operator = (const char* char_ptr)
-			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			set(char_ptr);
 			return *this;
@@ -153,13 +148,11 @@ namespace BALL
 		}
 
 		void ColorRGBA::set(const String& s)
-			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			stringToRGBA_(s);
 		}
 
 		const ColorRGBA& ColorRGBA::operator = (const String& s)
-			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			set(s);
 			return *this;
@@ -253,7 +246,6 @@ namespace BALL
 		}
 
 		void ColorRGBA::stringToRGBA_(const String& s)
-			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			int length = (int)s.size();
 

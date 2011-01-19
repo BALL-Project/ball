@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chain.C,v 1.21 2003/08/26 09:17:48 oliver Exp $
-//
 
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/protein.h>
@@ -32,7 +30,6 @@ namespace BALL
 	}
 
   void Chain::persistentWrite(PersistenceManager& pm, const char* name) const
-		throw(Exception::GeneralException)
   {
     pm.writeObjectHeader(this, name);
       AtomContainer::persistentWrite(pm);
@@ -40,7 +37,6 @@ namespace BALL
 	}
 
   void Chain::persistentRead(PersistenceManager& pm)
-		throw(Exception::GeneralException)
   {
     pm.checkObjectHeader(RTTI::getStreamName<AtomContainer>());
 			AtomContainer::persistentRead(pm);

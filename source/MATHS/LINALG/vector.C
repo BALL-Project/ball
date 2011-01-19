@@ -6,7 +6,7 @@ namespace BALL {
 
 	// ----- Constructors -----
   template <>
-  Vector<float>::Vector(const Vector<float>& v) throw(Exception::OutOfMemory)
+  Vector<float>::Vector(const Vector<float>& v)
 	:	data_(),
 		is_column_vector_(v.is_column_vector_),
 		n_(v.n_) {
@@ -34,7 +34,7 @@ namespace BALL {
   }
 
   template <>
-  Vector<double>::Vector(const Vector<double>& v) throw(Exception::OutOfMemory)
+  Vector<double>::Vector(const Vector<double>& v)
 	:	data_(),
 		is_column_vector_(v.is_column_vector_),
 		n_(v.n_) {
@@ -61,7 +61,6 @@ namespace BALL {
   
   template <>
   Vector<ComplexFloat>::Vector(const Vector<ComplexFloat>& v)	
-    throw(Exception::OutOfMemory)
 	:	data_(),
 		is_column_vector_(v.is_column_vector_),n_(v.n_) {
 	#ifdef BALL_HAS_BLAS
@@ -87,7 +86,6 @@ namespace BALL {
   
   template <>
   Vector<ComplexDouble>::Vector(const Vector<ComplexDouble>& v)
-		throw(Exception::OutOfMemory)
 	:	data_(),
 		is_column_vector_(v.is_column_vector_),n_(v.n_) {
 	#ifdef BALL_HAS_BLAS
@@ -114,14 +112,14 @@ namespace BALL {
 
   template <>
   Vector<float>& Vector<float>::operator = (const Vector<float>& v)
-		throw(Exception::OutOfMemory) {
-	is_column_vector_ = v.is_column_vector_;
-	n_ = v.n_;
+	{
+		is_column_vector_ = v.is_column_vector_;
+		n_ = v.n_;
 
-	#ifdef BALL_HAS_BLAS
-	#ifdef DEBUG
+#ifdef BALL_HAS_BLAS
+#ifdef DEBUG
 		std::cout << "Info: using blas for assignment" << std::endl;
-	#endif // DEBUG
+#endif // DEBUG
 		try {
 			data_.resize(n_);
 		}
@@ -129,28 +127,28 @@ namespace BALL {
 			throw Exception::OutOfMemory(__FILE__, __LINE__, data_.size() * sizeof(float));
 		}
 		cblas_scopy(data_.size(), &v[0], 1, (&data_[0]), 1);
-	#else // no blas support
+#else // no blas support
 		try {
 			data_ = v.data_;
 		}
 		catch (std::bad_alloc&) {
 			throw Exception::OutOfMemory(__FILE__, __LINE__, data_.size() * sizeof(float));
 		}
-	#endif
+#endif
 
-	return *this;
-  }
+		return *this;
+	}
 
   template <>
   Vector<double>& Vector<double>::operator = (const Vector<double>& v)
-		throw(Exception::OutOfMemory) {
-	is_column_vector_ = v.is_column_vector_;
-	n_ = v.n_;
+	{
+		is_column_vector_ = v.is_column_vector_;
+		n_ = v.n_;
 
-	#ifdef BALL_HAS_BLAS
-	#ifdef DEBUG
+#ifdef BALL_HAS_BLAS
+#ifdef DEBUG
 		std::cout << "Info: using blas for assignment" << std::endl;
-	#endif // DEBUG
+#endif // DEBUG
 		try {
 			data_.resize(n_);
 		}
@@ -158,28 +156,28 @@ namespace BALL {
 			throw Exception::OutOfMemory(__FILE__, __LINE__, data_.size() * sizeof(double));
 		}
 		cblas_dcopy(data_.size(), &v[0], 1, (&data_[0]), 1);
-	#else // no blas support
+#else // no blas support
 		try  {
 			data_ = v.data_;
 		}
 		catch (std::bad_alloc&) {
 			throw Exception::OutOfMemory(__FILE__, __LINE__, data_.size() * sizeof(double));
 		}
-	#endif
+#endif
 
-	return *this;
-  }   
+		return *this;
+	}   
   
   template <>
   Vector<ComplexFloat>& Vector<ComplexFloat>::operator = (const Vector<ComplexFloat>& v)
-    throw(Exception::OutOfMemory) {
-        is_column_vector_ = v.is_column_vector_;
-	n_ = v.n_;
+	{
+		is_column_vector_ = v.is_column_vector_;
+		n_ = v.n_;
 
-	#ifdef BALL_HAS_BLAS
-	#ifdef DEBUG
+#ifdef BALL_HAS_BLAS
+#ifdef DEBUG
 		std::cout << "Info: using blas for assignment" << std::endl;
-	#endif // DEBUG
+#endif // DEBUG
 		try {
 			data_.resize(n_);
 		}
@@ -187,21 +185,20 @@ namespace BALL {
 			throw Exception::OutOfMemory(__FILE__, __LINE__, data_.size() * sizeof(ComplexFloat));
 		}
 		cblas_ccopy(data_.size(), &v[0], 1, (&data_[0]), 1);
-	#else // no blas support
+#else // no blas support
 		try {
 			data_ = v.data_;
 		}
 		catch (std::bad_alloc&) {
 			throw Exception::OutOfMemory(__FILE__, __LINE__, data_.size() * sizeof(ComplexFloat));
 		}
-	#endif
+#endif
 
-	return *this;
-    }
+		return *this;
+	}
 
   template <>
   Vector<ComplexDouble>& Vector<ComplexDouble>::operator = (const Vector<ComplexDouble>& v)
-    throw(Exception::OutOfMemory) 
 	{
 		is_column_vector_ = v.is_column_vector_;
 		n_ = v.n_;

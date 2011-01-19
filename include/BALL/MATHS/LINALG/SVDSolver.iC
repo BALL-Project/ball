@@ -32,24 +32,19 @@ namespace BALL {
 	}
 
 	template <>
-	bool SVDSolver<float, StandardTraits>::computeSVD_lapack()
-		throw(Exception::OutOfMemory);
+	bool SVDSolver<float, StandardTraits>::computeSVD_lapack();
 
 	template <>
-	bool SVDSolver<double, StandardTraits>::computeSVD_lapack()
-		throw(Exception::OutOfMemory);
+	bool SVDSolver<double, StandardTraits>::computeSVD_lapack();
 
 	template <>
-	bool SVDSolver<ComplexFloat, StandardTraits>::computeSVD_lapack()
-		throw(Exception::OutOfMemory);
+	bool SVDSolver<ComplexFloat, StandardTraits>::computeSVD_lapack();
 
 	template <>
-	bool SVDSolver<ComplexDouble, StandardTraits>::computeSVD_lapack()
-		throw(Exception::OutOfMemory);
+	bool SVDSolver<ComplexDouble, StandardTraits>::computeSVD_lapack();
 
 	template <class valuetype, class mtraits> 
 	bool SVDSolver<valuetype, mtraits>::computeSVD_lapack()
-		throw(Exception::OutOfMemory)
 	{
 		std::cerr << "Sorry, no LAPACK-based SVD computation for this valuetype/storage type combination!" << std::endl;
 		std::cerr << "Aborting!" << std::endl;
@@ -59,7 +54,6 @@ namespace BALL {
 
 	template <class valuetype, class mtraits> 
 	bool SVDSolver<valuetype, mtraits>::computeSVD()
-		throw(Exception::OutOfMemory, Exception::Uninitialized)
 	{
 		if (!matrix_)
 		{
@@ -82,7 +76,6 @@ namespace BALL {
 
 	template <class valuetype, class mtraits>
 	bool SVDSolver<valuetype, mtraits>::computeSVD_native()
-		throw(Exception::OutOfMemory)
 	{
 		std::cout << "Error: computeSVD_native not implemented yet! Sorry!" << std::endl;
 		

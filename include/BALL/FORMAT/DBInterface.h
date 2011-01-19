@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DBInterface.h,v 1.7.10.2 2007/08/07 12:31:11 oliver Exp $
-//
-// Author:
-//   Oliver Kohlbacher
-//
 
 #ifndef BALL_FORMAT_DBINTERFACE_H
 #define BALL_FORMAT_DBINTERFACE_H
@@ -15,10 +10,10 @@
 #include <BALL/FORMAT/MOLFile.h>
 #include <BALL/COMMON/exception.h>
 
-#include <QtSql/qsqlrecord.h>
-#include <QtSql/qsqldatabase.h>
-#include <QtSql/qsqlquery.h>
-#include <QtCore/qvariant.h>
+#include <QSqlRecord>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QtCore/QVariant>
 
 namespace BALL
 {
@@ -219,13 +214,17 @@ namespace BALL
 		*/
 		bool connect();
 		
-		/// Execute a query
-		QSqlQuery& executeQuery(const String& query_string) 
-			throw(InvalidQuery, NotConnected);
+		/** Execute a query
+		 *  @ŧhrow InvalidQuery if the query was invalid
+		 *  @throw NotConnected if the database connection is down
+		 */
+		QSqlQuery& executeQuery(const String& query_string);
 		
-		/// Execute a prepared query
-		QSqlQuery& executeQuery() 
-			throw(InvalidQuery, NotConnected);
+		/** Execute a prepared query
+		 *  @ŧhrow InvalidQuery if the query was invalid
+		 *  @throw NotConnected if the database connection is down
+		 */
+		QSqlQuery& executeQuery();
 
 		/// Return the internal query.
 		QSqlQuery& query() { return *query_; }

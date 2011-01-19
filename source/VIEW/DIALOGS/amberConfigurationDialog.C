@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberConfigurationDialog.C,v 1.16.16.1 2007/03/25 22:00:40 oliver Exp $
-//
 
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
 #include <BALL/VIEW/KERNEL/common.h>
@@ -13,10 +11,10 @@
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/SYSTEM/path.h>
 
-#include <QtGui/qlineedit.h>
-#include <QtGui/qradiobutton.h>
-#include <QtGui/qcheckbox.h>
-#include <QtGui/qpushbutton.h>
+#include <QtGui/QLineEdit>
+#include <QtGui/QRadioButton>
+#include <QtGui/QCheckBox>
+#include <QtGui/QPushButton>
 #include <QtGui/QFileDialog>
 
 namespace BALL

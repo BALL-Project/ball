@@ -1,13 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id:
 
 #include <BALL/VIEW/DIALOGS/fieldLinesDialog.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
-#include <QtGui/qlabel.h>
+#include <QtGui/QLabel>
 
 namespace BALL
 {
@@ -74,14 +73,14 @@ void FieldLinesDialog::accept()
 	}
 	catch(...)
 	{
-		getMainControl()->setStatusbarText("No valid floating point numbers", true);
+		getMainControl()->setStatusbarText((String)tr("No valid floating point numbers"), true);
 		return;
 	}
 
 	if (Maths::isZero(getTolerance()))
 	{
-		getMainControl()->setStatusbarText("Tolerance too low!", true);
-		Log.error() << String("Tolerance: ") + String(getTolerance()) + " !" << std::endl;
+		getMainControl()->setStatusbarText((String)tr("Tolerance too low!"), true);
+		Log.error() << String(tr("Tolerance")) + ": " + String(getTolerance()) + " !" << std::endl;
 		return;
 	}
 

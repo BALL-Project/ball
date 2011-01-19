@@ -5,7 +5,7 @@
 #include <BALL/VIEW/DIALOGS/raytraceableContourSurfaceDialog.h>
 
 #include <QtGui/QPushButton>
-#include <QtGui/qlineedit.h>
+#include <QtGui/QLineEdit>
 //#include <QtGui/qpushbutton.h>
 #include <QtGui/QSlider>
 #include <iostream>
@@ -57,7 +57,7 @@ RaytraceableContourSurfaceDialog::RaytraceableContourSurfaceDialog(RaytraceableG
 	}
 	else
 	{
-		Log.error() << "The grid is not valid" << std::endl;
+		Log.error() << (String)tr("The grid is not valid") << std::endl;
 	}
 }
 

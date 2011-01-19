@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id:$
-//
 
 #include <limits>
 #include <BALL/VIEW/DATATYPE/raytraceableGrid.h>
@@ -11,7 +9,6 @@ namespace BALL
 	namespace VIEW
 	{
 		void RaytraceableGrid::binaryWrite(const String& filename) const 
-			throw(Exception::FileNotFound)
 		{	
 			grid_->binaryWriteRaw(filename);						
 		}

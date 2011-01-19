@@ -1,15 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: serverPreferences.C,v 1.11.16.1 2007/03/25 22:02:17 oliver Exp $
-//
 
 #include <BALL/VIEW/DIALOGS/serverPreferences.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/COMMON/rtti.h>
 
-#include <QtGui/qlabel.h>
-#include <QtGui/qpushbutton.h>
+#include <QtGui/QLabel>
+#include <QtGui/QPushButton>
 
 namespace BALL
 {
@@ -27,7 +25,7 @@ namespace BALL
 			port_label->setFrameStyle(0);
 			port_label->setLineWidth(1);
 			port_label->setMidLineWidth(0);
-			port_label->setText("server port");
+			port_label->setText(tr("server port"));
 			port_label->setMargin(0);
 			
 			port_ = new QLineEdit(this);
@@ -43,7 +41,7 @@ namespace BALL
 			server_status_->setObjectName("server_status");
 			server_status_->setGeometry(40, 80, 180, 21);
 			server_status_->setFocusPolicy(Qt::TabFocus);
-			server_status_->setText("accept clients");
+			server_status_->setText(tr("accept clients"));
 			server_status_->setAutoRepeat(false);
 			
 			resize(380,210);
@@ -54,7 +52,7 @@ namespace BALL
 			server_status_->setChecked(false);
 			
 			setINIFileSectionName("NETWORK");
-			setWidgetStackName("Client/Server");
+			setWidgetStackName((String)tr("Client/Server"));
 			registerWidgets_();
 		}
 

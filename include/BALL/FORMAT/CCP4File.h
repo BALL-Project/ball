@@ -36,9 +36,10 @@ namespace BALL
 		/// Default constructor
 		CCP4File();
 
-		/// Detailed constructor
-		CCP4File(const String& name, File::OpenMode open_mode = std::ios::in)
-			throw(Exception::FileNotFound);
+		/** Detailed constructor
+		 *  @throw Exception::FileNotFound if the file could not be opened
+		 */
+		CCP4File(const String& name, File::OpenMode open_mode = std::ios::in);
 
 		/// Destructor
 		virtual ~CCP4File();
@@ -64,9 +65,9 @@ namespace BALL
 		//@{
 
 		/** open a CCP4File
-		*/
-		virtual bool open(const String& name, File::OpenMode open_mode = std::ios::in)
-			throw(Exception::FileNotFound);
+		 *  @throw Exception::FileNotFound if the file could not be opened
+		 */
+		virtual bool open(const String& name, File::OpenMode open_mode = std::ios::in);
 
 		/** Read the header of an existing file.
 				Return true if the header could be read successfully, false ow.

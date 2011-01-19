@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: openBruker2DFile.C,v 1.6.16.1 2007/03/25 22:02:11 oliver Exp $
 
 #include <BALL/VIEW/DIALOGS/openBruker2DFile.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -9,7 +8,7 @@
 
 #include <BALL/FORMAT/bruker2DFile.h>
 
-#include <QtGui/q3filedialog.h>
+#include <QtGui/QFileDialog>
 
 namespace BALL
 {
@@ -32,16 +31,16 @@ namespace BALL
 
     void OpenBruker2DFile::initializeWidget(MainControl&)
     {
-      insertMenuEntry(MainControl::FILE_IMPORT, "Bruker&2D File", this, SLOT(openFile()));
+      insertMenuEntry(MainControl::FILE_IMPORT, tr("Bruker&2D File"), this, SLOT(openFile()));
     }
 
 	  void OpenBruker2DFile::openFile()
     {
-      Q3FileDialog* fd = new Q3FileDialog(this,"Import Bruker2DFile", true);
+      Q3FileDialog* fd = new Q3FileDialog(this, tr("Import Bruker2DFile"), true);
 			fd->setMode(Q3FileDialog::ExistingFile);
       fd->setFilter("Bruker2DFile-files (*.2r)");
 			if (!fd->exec()) return;
-      setStatusbarText("reading Bruker2DFile file...");
+      setStatusbarText((String)tr("reading Bruker2DFile file..."));
 
       // reading the file
       Bruker2DFile myfile;
@@ -52,11 +51,11 @@ namespace BALL
       }
       catch(...)
       {
-				Log.info() << "> read Bruker2DFile file failed." << std::endl;
+				Log.info() << "> " << (String)tr("read Bruker2DFile file failed.") << std::endl;
 			  return;
       }
 
-      setStatusbarText(String("Read 2D NMR spectrum from ") + fd->selectedFile().ascii());
+      setStatusbarText(String(tr("Read 2D NMR spectrum from")) + " " + fd->selectedFile().ascii());
 
 			RegularData2D* data = new RegularData2D(myfile.getData());
 

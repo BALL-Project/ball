@@ -33,9 +33,9 @@ namespace BALL
 		SDFile();
 
 		/** Detailed constructor.
-		*/
-		SDFile(const String& filename, File::OpenMode open_mode = std::ios::in)
-			throw(Exception::FileNotFound);
+		 *  @throw Exception::FileNotFound if the file could not be opened
+		 */
+		SDFile(const String& filename, File::OpenMode open_mode = std::ios::in);
 
 		/// Destructor
 		virtual ~SDFile();
@@ -47,43 +47,43 @@ namespace BALL
 		//@{
 		
 		/**	Write a system to the SD file.
-				Write all molecules contained in the system to the
-				SD file. All named properties are included in the
-				property section.
-		*/
-		virtual bool write(const System& system)
-			throw(File::CannotWrite);
+		 *	Write all molecules contained in the system to the
+		 *	SD file. All named properties are included in the
+		 *	property section.
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		virtual bool write(const System& system);
 
 		/**	Append a single molecule to the SD file.
-		*/
-		virtual bool write(const Molecule& molecule)
-			throw(File::CannotWrite);
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		virtual bool write(const Molecule& molecule);
 
 		/**	Read a system from the SD file
-		*/
-		virtual bool read(System& system)
-			throw(Exception::ParseError);
+		 *  @throw Exception::ParseError if a syntax error was encountered
+		 */
+		virtual bool read(System& system);
 
 		/**	Read a single molecule from an SD file.
-		*/
-		virtual Molecule* read()
-			throw(Exception::ParseError);
+		 *  @throw Exception::ParseError if a syntax error was encountered
+		 */
+		virtual Molecule* read();
 
 		/** Do not read atoms and bonds.
-				This (seemingly strange) option allows the user to read
-				the properties of the molecules only. Since SD files can contain
-				all kinds of information besides the molecular structure
-				and reading the structure can be rather time and space consuming,
-				you can disable it with this option. The  \link read read \endlink  and  \link write write \endlink 
-				methods will still create molecules, but they will be empty. 
-				However, the  \link NamedProperties NamedProperties \endlink  of the molecules contain
-				the optional information contained in the SD file.
-		*/
+		 *	This (seemingly strange) option allows the user to read
+		 *	the properties of the molecules only. Since SD files can contain
+		 *	all kinds of information besides the molecular structure
+		 *	and reading the structure can be rather time and space consuming,
+		 *	you can disable it with this option. The  \link read read \endlink  and  \link write write \endlink 
+		 *	methods will still create molecules, but they will be empty. 
+		 *	However, the  \link NamedProperties NamedProperties \endlink  of the molecules contain
+		 *	the optional information contained in the SD file.
+		 */
 		void disableAtoms();
 
 		/** Read atoms and bonds.
-				@see disableAtoms
-		*/
+		 *	@see disableAtoms
+		 */
 		void enableAtoms();
 
 		///

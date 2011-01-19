@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.C,v 1.37 2005/12/23 17:02:41 amoll Exp $
-//
 
 #include <BALL/KERNEL/bond.h>
 
@@ -40,7 +38,6 @@ namespace BALL
 	}
 
 	Bond::Bond(const String& name, Atom& first, Atom& second, Bond::Order order, Type type)
-		throw(TooManyBonds)
 		: Composite(),
 			PropertyManager(),
 			first_(BALL_BOND_DEFAULT_FIRST_ATOM),
@@ -62,7 +59,6 @@ namespace BALL
 	}
 
 	Bond* Bond::createBond(Bond& bond, Atom& first, Atom& second)
-		throw(TooManyBonds)
 	{
 		// first check the cases where no new bond will be created.
 		if (&first == &second)
@@ -123,7 +119,6 @@ namespace BALL
 	}
 
  void Bond::persistentWrite(PersistenceManager& pm, const char* name) const
-		throw(Exception::GeneralException)
 	{
 		pm.writeObjectHeader(this, name);
 
@@ -140,7 +135,6 @@ namespace BALL
 	}
 
   void Bond::persistentRead(PersistenceManager& pm)
-		throw(Exception::GeneralException)
 	{
 		pm.checkObjectHeader(RTTI::getStreamName<Composite>());
 			Composite::persistentRead(pm);

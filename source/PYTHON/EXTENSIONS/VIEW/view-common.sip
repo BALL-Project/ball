@@ -1,11 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id$
-//
 
 %ModuleHeaderCode
-	#include <QtCore/qglobal.h>
+	#include <QtCore/QtGlobal>
 	#include <BALL/VIEW/KERNEL/common.h>
 	using namespace BALL;
 	using namespace BALL::VIEW;

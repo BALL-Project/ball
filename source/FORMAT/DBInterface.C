@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DBInterface.C,v 1.6.16.1 2007/03/25 22:00:15 oliver Exp $
-//
-// Author:
-//   Oliver Kohlbacher
-//
 
 #include <BALL/FORMAT/DBInterface.h>
 #include <BALL/KERNEL/PTE.h>
@@ -22,7 +17,7 @@
 #include <sstream>
 #include <iostream>
 
-#include <QtSql/qsqlerror.h>
+#include <QSqlError>
 
 // #define BALL_DEBUG_DBINTERFACE 1
 
@@ -134,7 +129,6 @@ namespace BALL
 	}
 
 	QSqlQuery& DBInterface::executeQuery(const String& query_string) 
-		throw(DBInterface::InvalidQuery, DBInterface::NotConnected)
 	{
 		prepare(query_string);
 		return executeQuery();
@@ -143,7 +137,6 @@ namespace BALL
 
 
 	QSqlQuery& DBInterface::executeQuery() 
-		throw(DBInterface::InvalidQuery, DBInterface::NotConnected)
 	{
 		//check if there is a connection active
 		if (!db_.isOpen())

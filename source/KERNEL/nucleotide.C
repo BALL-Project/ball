@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleotide.C,v 1.16 2003/08/26 09:17:49 oliver Exp $
-//
 
 #include <BALL/KERNEL/nucleotide.h>
 
@@ -54,7 +52,6 @@ namespace BALL
 	}
 
 	void Nucleotide::persistentWrite(PersistenceManager& pm, const char* name) const
-		throw(Exception::GeneralException)
 	{
 		pm.writeObjectHeader(this, name);
 			Fragment::persistentWrite(pm);
@@ -64,7 +61,6 @@ namespace BALL
 	}
 
 	void Nucleotide::persistentRead(PersistenceManager& pm)
-		throw(Exception::GeneralException)
 	{
 		pm.checkObjectHeader(RTTI::getStreamName<Fragment>());
 			Fragment::persistentRead(pm);

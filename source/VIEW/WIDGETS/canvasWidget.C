@@ -1,11 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: canvasWidget.C
-//
 
 #include <BALL/VIEW/WIDGETS/canvasWidget.h>
-//Added by qt3to4:
 #include <QPixmap>
 
 namespace BALL
@@ -62,7 +59,6 @@ namespace BALL
     }
 		
     void CanvasWidget::showObjects()
-      throw() 
     {
       for(int i=0; i<(int)objects_.size(); i++)
       {
@@ -71,7 +67,6 @@ namespace BALL
     }
     
     void CanvasWidget::zoomIn()
-      throw()
     {
       QMatrix m = this->worldMatrix();
       m.scale(2.0,2.0);
@@ -79,7 +74,6 @@ namespace BALL
     }
   
     void CanvasWidget::zoomOut()
-      throw()
     {
       QMatrix m = this->worldMatrix();
       m.scale(0.5, 0.5);
@@ -88,7 +82,6 @@ namespace BALL
 
 
     void CanvasWidget::zoom(float xfactor, float yfactor)
-      throw()
     {
       QMatrix m = this->worldMatrix();
       m.scale(xfactor, yfactor);
@@ -96,7 +89,6 @@ namespace BALL
     }
 
     void CanvasWidget::zoomToFit()
-      throw()
     {      
       float xfactor = 1.;
       float yfactor = 1.;

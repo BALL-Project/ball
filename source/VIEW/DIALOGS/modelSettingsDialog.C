@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.37.16.2 2007/05/30 21:06:34 amoll Exp $
-//
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
 
@@ -20,9 +18,9 @@
 #include <BALL/DATATYPE/string.h>
 #include <BALL/FORMAT/INIFile.h>
 
-#include <QtGui/qslider.h>
-#include <QtGui/qlabel.h>
-#include <QtGui/qradiobutton.h>
+#include <QtGui/QSlider>
+#include <QtGui/QLabel>
+#include <QtGui/QRadioButton>
 
 namespace BALL
 {
@@ -38,7 +36,7 @@ namespace BALL
 			setObjectName(name);
 			setINIFileSectionName("MODEL_OPTIONS");
 			setDefaultValues_();
-			setWidgetStackName("Models");
+			setWidgetStackName((String)tr("Models"));
 			setWidgetStack(widget_stack);
 
 			// signals and slots connections

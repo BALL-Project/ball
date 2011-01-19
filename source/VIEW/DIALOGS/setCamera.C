@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+//
 #include <BALL/VIEW/DIALOGS/setCamera.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/stage.h>
 
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qlineedit.h> 
+#include <QtGui/QPushButton>
+#include <QtGui/QLineEdit> 
 
 namespace BALL
 {
@@ -60,7 +61,7 @@ void SetCamera::okPressed()
 	}
 	catch(...)
 	{
-		main_control->setStatusbarText("Invalid Values!");
+		main_control->setStatusbarText((String)tr("Invalid Values!"));
 		return;
 	}
 
@@ -69,7 +70,7 @@ void SetCamera::okPressed()
 
 	if (vp == lp) 
 	{
-		Log.error() << "Invalid values for setCamera: viewpoint = look at" << std::endl;
+		Log.error() << (String)tr("Invalid values for setCamera: viewpoint = look at") << std::endl;
 		return;
 	}
 

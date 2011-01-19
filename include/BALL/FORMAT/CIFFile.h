@@ -217,9 +217,9 @@ namespace BALL
 			CIFFile();
 
 			/** Detailed constructor
+			 *  @throw Exception::FileNotFound if the file could not be opened
 			 */
-			CIFFile(const String& filename, File::OpenMode open_mode = std::ios::in)
-				throw(Exception::FileNotFound);
+			CIFFile(const String& filename, File::OpenMode open_mode = std::ios::in);
 
 			/** Destructor
 			 */
@@ -232,14 +232,14 @@ namespace BALL
 			//@{
 			
 			/** Write a CIFFile.
-			*/
-			virtual bool write()
-				throw(File::CannotWrite);
+			 *  @throw File::CannotWrite if writing to the file failed
+			 */
+			virtual bool write();
 
 			/** Read a CIFFile.
+			 *  @throw Exception::ParseError if a syntax error was encountered
 			 */
-			virtual bool read()
-				throw(Exception::ParseError);
+			virtual bool read();
 			
 			//@}
 			/** @name Accessors

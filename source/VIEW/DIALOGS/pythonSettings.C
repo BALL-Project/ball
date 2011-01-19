@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+
 #include <BALL/VIEW/DIALOGS/pythonSettings.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
-#include <QtGui/qlineedit.h>
-#include <QtGui/qfiledialog.h>
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qstackedwidget.h>
+#include <QtGui/QLineEdit>
+#include <QtGui/QFileDialog>
+#include <QtGui/QPushButton>
+#include <QtGui/QStackedWidget>
 #include <QtGui/QTableWidgetItem>
 #include <QtGui/QHeaderView>
 #include <QtGui/QComboBox>
@@ -25,7 +26,7 @@ ComboBoxDelegate::ComboBoxDelegate(QObject* parent)
 	
 	for (Position p = 2; p < 13; p++)
 	{
-		sl_keys_ << (String("F") + String(p)).c_str();
+		sl_keys_ << (String(tr("F")) + String(p)).c_str();
 	}
 }
 
@@ -131,9 +132,9 @@ void PythonSettings::fileSelected()
 {
 	QString s = QFileDialog::getOpenFileName(
 								0,
-								"Choose a Startup Python Script",
+								tr("Choose a Startup Python Script"),
 								getMainControl()->getWorkingDir().c_str(),
-								"Python scripts (*.py)");
+								tr("Python scripts") + " (*.py)");
 
 	if (s == QString::null) return;
 	script_edit->setText(s);

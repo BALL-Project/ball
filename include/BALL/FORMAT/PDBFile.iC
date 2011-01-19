@@ -1,11 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.iC,v 1.10 2005/02/12 23:08:26 oliver Exp $
-//
 
 BALL_INLINE 
-PDBFile& PDBFile::operator >> (Protein& protein) throw(Exception::ParseError)
+PDBFile& PDBFile::operator >> (Protein& protein)
 {
   read(protein);
   
@@ -13,7 +11,7 @@ PDBFile& PDBFile::operator >> (Protein& protein) throw(Exception::ParseError)
 }
 
 BALL_INLINE 
-PDBFile& PDBFile::operator >> (Molecule& molecule) throw(Exception::ParseError)
+PDBFile& PDBFile::operator >> (Molecule& molecule)
 {
   read(molecule);
   
@@ -21,7 +19,7 @@ PDBFile& PDBFile::operator >> (Molecule& molecule) throw(Exception::ParseError)
 }
 
 BALL_INLINE 
-PDBFile& PDBFile::operator >> (System& system) throw(Exception::ParseError)
+PDBFile& PDBFile::operator >> (System& system)
 {
   read(system);
   
@@ -29,7 +27,7 @@ PDBFile& PDBFile::operator >> (System& system) throw(Exception::ParseError)
 }
 
 BALL_INLINE 
-bool PDBFile::write(const Molecule& molecule) throw(File::CannotWrite)
+bool PDBFile::write(const Molecule& molecule)
 {
 	if (!isOpen() || getOpenMode() != std::ios::out)
 	{
@@ -41,7 +39,7 @@ bool PDBFile::write(const Molecule& molecule) throw(File::CannotWrite)
 }
 
 BALL_INLINE 
-bool PDBFile::write(const Protein& protein) throw(File::CannotWrite)
+bool PDBFile::write(const Protein& protein)
 {
 	if (!isOpen() || getOpenMode() != std::ios::out)
 	{
@@ -53,7 +51,7 @@ bool PDBFile::write(const Protein& protein) throw(File::CannotWrite)
 }
 
 BALL_INLINE 
-PDBFile& PDBFile::operator << (const Molecule& molecule) throw(File::CannotWrite)
+PDBFile& PDBFile::operator << (const Molecule& molecule)
 {
   write(molecule);
   
@@ -61,7 +59,7 @@ PDBFile& PDBFile::operator << (const Molecule& molecule) throw(File::CannotWrite
 }
 
 BALL_INLINE 
-PDBFile& PDBFile::operator << (const Protein& protein) throw(File::CannotWrite)
+PDBFile& PDBFile::operator << (const Protein& protein)
 {
   write(protein);
   
@@ -69,7 +67,7 @@ PDBFile& PDBFile::operator << (const Protein& protein) throw(File::CannotWrite)
 }
 
 BALL_INLINE 
-PDBFile& PDBFile::operator << (const System& system) throw(File::CannotWrite)
+PDBFile& PDBFile::operator << (const System& system)
 {
   write(system);
   

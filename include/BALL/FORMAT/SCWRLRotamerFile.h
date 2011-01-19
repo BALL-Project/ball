@@ -53,11 +53,15 @@ namespace BALL
 
 		protected:
 
-			// backbone dependent read method
-			void readSCWRLBackboneDependentLibraryFile_(RotamerLibrary& library) throw(Exception::ParseError);
+			/** Backbone dependent read method
+			 *  @throw Exception::ParseError if a syntax error was encountered
+			 */
+			void readSCWRLBackboneDependentLibraryFile_(RotamerLibrary& library);
 
-			// backbone independent read method
-			void readSCWRLBackboneIndependentLibraryFile_(RotamerLibrary& library) throw(Exception::ParseError);
+			/** Backbone independent read method
+			 *  @throw Exception::ParseError if a syntax error was encountered
+			 */
+			void readSCWRLBackboneIndependentLibraryFile_(RotamerLibrary& library);
 
 	};
 } // namespace BALL

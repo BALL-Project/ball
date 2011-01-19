@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: threads.C,v 1.41.16.3 2007/05/28 13:35:28 amoll Exp $
-//
 
 #include <BALL/VIEW/KERNEL/threads.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -19,7 +17,7 @@
 #include <BALL/STRUCTURE/DOCKING/dockingAlgorithm.h>
 #include <BALL/FORMAT/DCDFile.h>
 
-#include <QtGui/qapplication.h>
+#include <QtGui/QApplication>
 
 namespace BALL
 {
@@ -173,7 +171,7 @@ namespace BALL
 					waitForUpdateOfRepresentations_();
 
 					QString message;
-					message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
+					message.sprintf((tr("Iteration") + " %d: " + tr("energy") + " = %f kJ/mol, " + tr("RMS gradient") + " = %f kJ/mol A").toAscii().constData(), 
 													minimizer_->getNumberOfIterations(), 
 													ff.getEnergy(), ff.getRMSGradient());
 					output_(ascii(message));
@@ -182,19 +180,22 @@ namespace BALL
 				updateStructure_();
 
 				output_(ff.getResults());
-				output_("final RMS gradient    : " + String(ff.getRMSGradient()) + " kJ/(mol A)   after " 
-								+ String(minimizer_->getNumberOfIterations()) + " iterations\n",
+				output_((String)tr("final RMS gradient") + "    : " + String(ff.getRMSGradient()) + " kJ/(mol A)   " + (String)tr("after") 
+				        + " " + String(minimizer_->getNumberOfIterations()) + " " + (String)tr("iterations") + "\n",
 								true);
 
-				if (converged) output_("converged!");
-				if (!ok) output_("aborted!");
-				if (minimizer_->getNumberOfIterations() == minimizer_->getMaxNumberOfIterations()) output_("max number of iterations reached!");
+				if (converged) output_((String)tr("converged!"));
+				if (!ok) output_((String)tr("aborted!"));
+				if (minimizer_->getNumberOfIterations() == minimizer_->getMaxNumberOfIterations())
+				{
+					output_((String)tr("max number of iterations reached!"));
+				}
 
 				finish_();
 
 				if (!ok)
 				{
-					output_("Aborted minimization because convergence could not be reached. Try to restart the minimization.", true);
+					output_((String)tr("Aborted minimization because convergence could not be reached. Try to restart the minimization."), true);
 					return;
 				}
 			}
@@ -203,7 +204,7 @@ namespace BALL
 				delete dcd_file_;
 				dcd_file_ = 0;
 
-				String txt = String("Exception was thrown during minimization: ") + __FILE__ + ": " + String(__LINE__) + " :\n" 
+				String txt = String(tr("Exception was thrown during minimization")) + ": " + __FILE__ + ": " + String(__LINE__) + " :\n" 
 											+ e.getMessage();
 				output_(txt, true);
 
@@ -264,13 +265,13 @@ namespace BALL
 					updateStructure_();
 
 					waitForUpdateOfRepresentations_();
-					
+	
 					QString message;
-					message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
-													md_->getNumberOfIterations(), ff.getEnergy(),
-													ff.getRMSGradient());
+					message.sprintf((tr("Iteration") + " %d: " + tr("energy") + " = %f kJ/mol, " + tr("RMS gradient") + " = %f kJ/mol A").toAscii().constData(), 
+													md_->getNumberOfIterations(), 
+													ff.getEnergy(), ff.getRMSGradient());
 					output_(ascii(message));
-					
+
 
 					if (save_images_) exportSceneToPNG_();
 					if (dcd_file_) 		manager.takeSnapShot();
@@ -279,20 +280,20 @@ namespace BALL
 				if (dcd_file_) manager.flushToDisk();
 
  				output_(ff.getResults());
-				output_("final RMS gradient    : " + String(ff.getRMSGradient()) + " kJ/(mol A)   after " 
-								+ String(md_->getNumberOfIterations()) + " iterations\n", 
+				output_((String)tr("final RMS gradient") + "    : " + String(ff.getRMSGradient()) + " kJ/(mol A)   " + (String)tr("after") 
+				        + " " + String(md_->getNumberOfIterations()) + " " + (String)tr("iterations") + "\n",
 								true);
-
+ 
 				if (!ok)
 				{
-					output_("Simulation aborted to to strange energy values.", true);
+					output_((String)tr("Simulation aborted to to strange energy values."), true);
 				}
 
 				finish_();
 			}
 			catch(Exception::GeneralException& e)
 			{
-				String txt = String("Exception was thrown during MD simulation: ")
+				String txt = String(tr("Exception was thrown during MD simulation")) + ": "
 											+ __FILE__ + ": " + String(__LINE__) + " \n" + e.getMessage();
 				output_(txt, true);
 
@@ -353,7 +354,7 @@ namespace BALL
 		///
 		DockingThread::~DockingThread()
 		{
-			output_("delete thread", true);
+			output_((String)tr("delete thread"), true);
 
 			// docking algorithm is deleted in DockingController
 		}
@@ -384,7 +385,7 @@ namespace BALL
 					throw Exception::NullPointer(__FILE__, __LINE__);
 				}
 				
-				output_("starting docking...", true);
+				output_((String)tr("starting docking..."), true);
 
 				dock_alg_->start();
 				
@@ -393,7 +394,7 @@ namespace BALL
 				msg->setConformationSet(new ConformationSet(dock_alg_->getConformationSet()));
 				sendMessage_(msg);
 				
-				output_("Docking finished.", true);
+				output_((String)tr("Docking finished."), true);
 		}
 		
 		// =================================================0

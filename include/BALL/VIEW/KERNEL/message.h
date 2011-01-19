@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.69.16.1 2007/03/25 21:26:00 oliver Exp $
-//
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
 #define BALL_VIEW_KERNEL_MESSAGE_H
@@ -14,6 +12,8 @@
 #ifndef BALL_VIEW_KERNEL_COMMON_H
 # include <BALL/VIEW/KERNEL/common.h>
 #endif
+
+#include <boost/any.hpp>
 
 class QWidget;
 
@@ -107,6 +107,12 @@ class BALL_VIEW_EXPORT Message
 	/** Test if this message is deletable.
 	*/
 	bool isDeletable() const;
+
+	/** Access the optional data stored in this message.
+	 *  The data is stored as a boost::any to allow any kind of data sets.
+	 *  @returns a mutable reference to the data
+	 */
+	boost::any& data() { return data_; }
 	//@}
 
 	private:
@@ -114,6 +120,8 @@ class BALL_VIEW_EXPORT Message
 	const ConnectionObject* connection_object_;
 
 	bool deletable_;
+
+	boost::any data_;
 };
 
 
@@ -356,7 +364,10 @@ class BALL_VIEW_EXPORT SceneMessage: public Message
 		ENTER_PICKING_MODE,
 
 		/// Move Composites or a Clipping Plane
-		ENTER_MOVE_MODE
+		ENTER_MOVE_MODE,
+
+		/// A previous export has finished
+		EXPORT_FINISHED
 	};
 
 	//@}

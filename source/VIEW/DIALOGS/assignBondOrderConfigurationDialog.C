@@ -8,10 +8,10 @@
 #include <BALL/SYSTEM/path.h>
 
 #include <BALL/STRUCTURE/assignBondOrderProcessor.h>
-#include <QtGui/qlineedit.h>
-#include <QtGui/qradiobutton.h>
-#include <QtGui/qcheckbox.h>
-#include <QtGui/qpushbutton.h>
+#include <QtGui/QLineEdit>
+#include <QtGui/QRadioButton>
+#include <QtGui/QCheckBox>
+#include <QtGui/QPushButton>
 #include <QtGui/QFileDialog>
 
 namespace BALL
@@ -93,7 +93,7 @@ namespace BALL
 			}
 
 			QString tmp = filename.c_str();
-			QString result = QFileDialog::getOpenFileName(0, "Select the penalty parameter file", tmp, "*.xml");
+			QString result = QFileDialog::getOpenFileName(0, tr("Select the penalty parameter file"), tmp, "*.xml");
 			if (!result.isEmpty())
 			{
 				// store the new filename in the lineedit field

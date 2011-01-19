@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id:
 
 #include "demoTutorialDialog.h"
 #include "mainframe.h"
@@ -29,8 +28,8 @@
 #include <BALL/DATATYPE/contourSurface.h>
 #include <BALL/SYSTEM/path.h>
 
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qmessagebox.h>
+#include <QtGui/QPushButton>
+#include <QtGui/QMessageBox>
 #include <QtGui/QTextBrowser>
 
 namespace BALL
@@ -83,7 +82,7 @@ DemoTutorialDialog::~DemoTutorialDialog()
 
 void DemoTutorialDialog::initDemo_()
 {
-	setWindowTitle("BALLView Demo");
+	setWindowTitle(tr("BALLView Demo"));
 
 	prefix_ = getBaseDir_() + "demo";
 
@@ -115,7 +114,7 @@ String DemoTutorialDialog::getBaseDir_()
 
 void DemoTutorialDialog::initTutorial_()
 {
-	setWindowTitle("BALLView Tutorial");
+	setWindowTitle(tr("BALLView Tutorial"));
 	
 	prefix_ = getBaseDir_() + "tutorial";
 
@@ -147,8 +146,8 @@ void DemoTutorialDialog::show()
 	}
 	else
 	{
-		int result = QMessageBox::question(this, "Warning",
-				"To start the tutorial, all loaded structures and molecules must be deleted. Is this ok?",
+		int result = QMessageBox::question(this, tr("Warning"),
+				tr("To start the tutorial, all loaded structures and molecules will be deleted."),
 				QMessageBox::Ok| QMessageBox::Cancel, QMessageBox::Ok);
 		if (result != QMessageBox::Ok) return;
 
@@ -293,10 +292,10 @@ void DemoTutorialDialog::nextStepDemo_()
 
 			if (system_ == 0)
 			{
-				String msg("Could not open bpti.pdb. Maybe the file was deleted?\n");
-				msg += "It should be found in " + file_name;
+				String msg((String)tr("Could not open bpti.pdb. Maybe the file was deleted?")+"\n");
+				msg += (String)tr("It should be found in") + " " + file_name;
 
-				QMessageBox::critical(0, "Error while starting BALLView Demo", msg.c_str(),
+				QMessageBox::critical(0, tr("Error while starting BALLView Demo"), msg.c_str(),
 						QMessageBox::Ok, Qt::NoButton, Qt::NoButton);
 				return;
 			}
@@ -307,7 +306,7 @@ void DemoTutorialDialog::nextStepDemo_()
 		}
 		catch(Exception::FileNotFound e)
 		{
-			Log.error() << "Could not open " << e.getFilename() << std::endl;
+			Log.error() << (String)tr("Could not open") << " " << e.getFilename() << std::endl;
 			return;
 		}
 
@@ -574,7 +573,7 @@ void DemoTutorialDialog::onNotifyTutorial_(Message *message)
 
 		default:
 			BALLVIEW_DEBUG;
-			Log.error() << "Current step: " << current_step_ << std::endl;
+			Log.error() << (String)tr("Current step") << ": " << current_step_ << std::endl;
 			return;
 	}
 
@@ -586,12 +585,12 @@ void DemoTutorialDialog::initializeWidget(MainControl&)
 	getMainControl()->insertPopupMenuSeparator(MainControl::HELP);
 	
 	String description = "Shortcut|Help|Demo";
-	demo_action_ = insertMenuEntry(MainControl::HELP, "Demo", this, SLOT(showDemo()), description);
-	setMenuHint("Show a demonstration of BALLView's features");
+	demo_action_ = insertMenuEntry(MainControl::HELP, (String)tr("Demo"), this, SLOT(showDemo()), description);
+	setMenuHint((String)tr("Show a demonstration of BALLView's features"));
 
 	description = "Shortcut|Help|Tutorial";
-	tutorial_action_ = insertMenuEntry(MainControl::HELP, "Tutorial", this, SLOT(showTutorial()), description);
-	setMenuHint("Perform a step-by-step tutorial");
+	tutorial_action_ = insertMenuEntry(MainControl::HELP, (String)tr("Tutorial"), this, SLOT(showTutorial()), description);
+	setMenuHint((String)tr("Perform a step-by-step tutorial"));
 	getMainControl()->insertPopupMenuSeparator(MainControl::HELP);
 }
 

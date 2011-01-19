@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+
 #include <BALL/VIEW/DIALOGS/setClippingPlane.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qlineedit.h> 
+#include <QtGui/QPushButton>
+#include <QtGui/QLineEdit> 
 
 namespace BALL
 {
@@ -58,7 +59,7 @@ void SetClippingPlane::okPressed()
 	}
 	catch(...)
 	{
-		getMainControl()->setStatusbarText("Invalid Values!");
+		getMainControl()->setStatusbarText((String)tr("Invalid Values!"));
 		return;
 	}
 
@@ -81,7 +82,7 @@ void SetClippingPlane::okPressed()
 	}
 	else
 	{
-		getMainControl()->setStatusbarText("No plane available");
+		getMainControl()->setStatusbarText((String)tr("No plane available"));
 	}
 
 	close();

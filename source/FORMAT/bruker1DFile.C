@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker1DFile.C,v 1.22 2005/12/23 17:02:40 amoll Exp $
-//
 
 #include <BALL/FORMAT/bruker1DFile.h>
 
@@ -18,7 +16,6 @@ namespace BALL
   }
 
 	Bruker1DFile::Bruker1DFile(const String& name, OpenMode open_mode) 
-		throw(Exception::FileNotFound)
 		: File(name + FileSystem::PATH_SEPARATOR + "1r", open_mode),
 			min_(0),
 			max_(1),

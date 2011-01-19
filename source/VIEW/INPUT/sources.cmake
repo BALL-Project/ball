@@ -4,6 +4,7 @@ SET(SOURCES_LIST
 	transformationEvent6D.C
 	headTrackingEvent.C
 	motionTrackingEvent.C
+	notificationEvent.C
 	buttonEvent.C
 	inputDeviceDriver.C
 )

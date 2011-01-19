@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockingController.C,v 1.6.12.2 2007/03/25 23:30:47 amoll Exp $
-//
 
 #include <BALL/VIEW/WIDGETS/dockingController.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -29,8 +27,8 @@
 
 #include <BALL/VIEW/KERNEL/threads.h>
 
-#include <QtGui/qmessagebox.h>
-#include <QtGui/qcombobox.h>
+#include <QtGui/QMessageBox>
+#include <QtGui/QComboBox>
 
 //#define BALL_VIEW_DEBUG
 //#undef BALL_QT_HAS_THREADS
@@ -120,12 +118,12 @@ namespace BALL
 					}
 				}
 				
-				setStatusbarText("Starting scoring...", true);
+				setStatusbarText(tr("Starting scoring..."), true);
 				if(!runScoring_((ConformationSet*)(dfm->getConformationSet())))
 				{
 				 delete dfm->getConformationSet();
 				}
-				setStatusbarText("Scoring finished.", true);
+				setStatusbarText(tr("Scoring finished."), true);
 				return;
 			}
 
@@ -239,7 +237,7 @@ namespace BALL
 			}
 			
 			// Set up the docking algorithm
-			setStatusbarText("Setting up docking algorithm...", true);
+			setStatusbarText(tr("Setting up docking algorithm..."), true);
 			// keep the larger protein in System A and the smaller one in System B
 			// and setup the algorithm
 			System& s1 = *dock_dialog_.getSystem1();

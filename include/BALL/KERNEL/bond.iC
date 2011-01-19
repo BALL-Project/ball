@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.iC,v 1.5 2005/12/23 17:01:47 amoll Exp $
 
 BALL_INLINE
 void Bond::clear_()
@@ -32,7 +31,6 @@ void Bond::destroy()
 
 BALL_INLINE
 void Bond::finalize()
-	throw(Exception::GeneralException)
 {
 	if (*first_ > *second_)
 	{
@@ -140,7 +138,6 @@ Bond::Type Bond::getType() const
 
 BALL_INLINE
 Real Bond::getLength() const
-	throw(Bond::NotBound)
 {
 	if (first_ == 0 || second_ == 0)
 	{

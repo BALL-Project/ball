@@ -88,7 +88,7 @@ namespace BALL
 			:	public Exception::GeneralException
 		{
 			public:
-			NoFragmentNode(const char* file, int line, const string& filename) ;
+			NoFragmentNode(const char* file, int line, const string& filename);
 			~NoFragmentNode() throw() {}
 
 			protected:
@@ -108,16 +108,14 @@ namespace BALL
 		 		If filename is an empty string, the default value "fragments/Fragments.db" is used.
 				@exception Exception::FileNotFound if the file is not found in the BALL_DATA_PATH
 		*/
-		FragmentDB(const String& filename)
-			throw(Exception::FileNotFound);
+		FragmentDB(const String& filename);
 
 		/**	Copy constructor.
 		*/
 		FragmentDB(const FragmentDB& db, bool deep = true);	
 
 		/// Assignment  operator 
-		FragmentDB& operator = (const FragmentDB& db)
-			;
+		FragmentDB& operator = (const FragmentDB& db);
 
 		/**	Destructor.
 		*/
@@ -133,9 +131,10 @@ namespace BALL
 		//@{
 
 		/**	Initialization of the database. 
+				@exception Exception::FileNotFound if the file is not found in the BALL_DATA_PATH
+		 *  @exception Exception::NoFragmentNode if the FragmentDB file did not contain any node entries
 		*/
-		void init()
-			throw(Exception::FileNotFound, NoFragmentNode);
+		void init();
 		
 		//@}
 		/**@name	Inspectors and mutators
@@ -143,9 +142,9 @@ namespace BALL
 		//@{
 
 		/**	Assigns a filename.
+				@exception Exception::FileNotFound if the file is not found in the BALL_DATA_PATH
 		*/	
-		void setFilename(const String& filename)
-			throw(Exception::FileNotFound);
+		void setFilename(const String& filename);
 		
 		/**	Get the filename.
 		*/	
@@ -226,8 +225,7 @@ namespace BALL
 		 * @return A StringHashMap that maps atom names to atom names
 		 * @throw StringHashMap<String>::IllegalKey if std is not a valid naming standard
 		 */
-		const StringHashMap<String>& getNamingStandard(const String& std) const
-			throw(StringHashMap<String>::IllegalKey);
+		const StringHashMap<String>& getNamingStandard(const String& std) const;
 
 		/**
 		 * Return a vector of available naming standards
@@ -418,17 +416,17 @@ namespace BALL
 					This method builds all bonds that are contained
 					in manually provided template.
 					@return the number of bonds built
+					@exception Exception::TooManyBonds if an atom would be assigned too many bonds
 			*/
-			Size buildFragmentBonds(Fragment& fragment, const Fragment& tplate) const
-				throw(Exception::TooManyBonds);
+			Size buildFragmentBonds(Fragment& fragment, const Fragment& tplate) const;
 
 			/**	Build all possible bonds between two fragments.
 					This method builds all bonds that are allowed by
 					the <b>Connections</b> entries in a resource database.
 					@return the number of bonds built
+					@exception Exception::TooManyBonds if an atom would be assigned too many bonds
 			*/
-			Size buildInterFragmentBonds(Fragment& first, Fragment& second) const
-				throw(Exception::TooManyBonds);
+			Size buildInterFragmentBonds(Fragment& first, Fragment& second) const;
 
 			//@}
 
@@ -442,9 +440,9 @@ namespace BALL
 			void storeConnections_(Fragment& fragment);
 
 			/**	Build a connection between two atoms, if possible
+					@exception Exception::TooManyBonds if an atom would be assigned too many bonds
 			*/
-			bool buildConnection_(Connection& con1, Connection& con2)
-				throw(Exception::TooManyBonds);
+			bool buildConnection_(Connection& con1, Connection& con2);
 		
 			/**	A pointer to the fragment database 
 			*/
@@ -538,9 +536,9 @@ namespace BALL
 	 
 		/*_	Expands the first occuring include directive.
 				If no include directive is found, <b>  false </b> is returned, otherwise <b>  true </b>.
+				@exception Exception::FileNotFound if the file is not found in the BALL_DATA_PATH
 		*/
-		bool expandFirst_(ResourceEntry& root_entry)
-			throw(Exception::FileNotFound);
+		bool expandFirst_(ResourceEntry& root_entry);
 
 		// The status of the FragmentDB
 		bool						valid_;

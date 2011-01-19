@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.h,v 1.46 2005/12/23 17:01:47 amoll Exp $
-//
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -69,13 +67,13 @@ namespace BALL
 		//@{
 
 		/**	Not bound to two atoms.
-				This exception may be thrown by  \link getLength getLength \endlink  if this instance is not bound.
-		*/
+		 *	This exception may be thrown by  \link getLength getLength \endlink  if this instance is not bound.
+		 */
 		class BALL_EXPORT NotBound
 			:	public Exception::GeneralException
 		{
 			public:
-			NotBound(const char* file, int line);
+				NotBound(const char* file, int line);
 		};
 		//@}
 
@@ -154,79 +152,74 @@ namespace BALL
 		//@{
 
 		/** Default constructor.
-				The state of this bond is:
-
-					- bond has no first atom (=0)
-					- bond has no second atom (=0)
-					- bond name is the empty string (="")
-					- bond order is unknown (= \link Bond::ORDER__UNKNOWN Bond::ORDER__UNKNOWN \endlink )
-					- bond type is unknown (= \link Bond::TYPE__UNKNOWN Bond::TYPE__UNKNOWN \endlink )
-				
-		*/
+		 *	The state of this bond is:
+		 *		- bond has no first atom (=0)
+		 *		- bond has no second atom (=0)
+		 *		- bond name is the empty string (="")
+		 *		- bond order is unknown (= \link Bond::ORDER__UNKNOWN Bond::ORDER__UNKNOWN \endlink )
+		 *		- bond type is unknown (= \link Bond::TYPE__UNKNOWN Bond::TYPE__UNKNOWN \endlink )
+		 */
 		Bond();
 
 		/** Copy constructor.
-				Calls  \link Bond::createBond Bond::createBond \endlink .
-				The state of this bond is initialized to the state of bond.
-				 \par
-				<b>Note:</b> Deep copying of bonds makes no sense, the parameter <tt>deep</tt> is therefore
-				ignored. The use of this method is not recommended because it may result in inconcistencies
-				of the whole the kernel data structure. This if for internal use only!
-				@param			 bond the bond to be copied
-				@param       deep ignored
-				@see         createBond
-		*/
+		 *	Calls  \link Bond::createBond Bond::createBond \endlink .
+		 *	The state of this bond is initialized to the state of bond.
+		 *	 \par
+		 *	<b>Note:</b> Deep copying of bonds makes no sense, the parameter <tt>deep</tt> is therefore
+		 *	ignored. The use of this method is not recommended because it may result in inconcistencies
+		 *	of the whole the kernel data structure. This if for internal use only!
+		 *	@param			 bond the bond to be copied
+		 *	@param       deep ignored
+		 *	@see         createBond
+		 */
 		Bond(const Bond& bond, bool deep = true);
 
 		/** Detailed constructor.
-				Calls  \link createBond createBond \endlink  to create a new bond between the two atoms
-				@param       name name of the constructed bond
-				@param       first first atom of the constructed bond
-				@param       second second atom of the constructed bond
-				@param       order order of the constructed bond
-				@param       type type of the constructed bond
-				@exception TooManyBonds if one of the atom already possesses  \link Atom::MAX_NUMBER_OF_BONDS Atom::MAX_NUMBER_OF_BONDS \endlink  bonds.
-		*/
+		 *	Calls  \link createBond createBond \endlink  to create a new bond between the two atoms
+		 *	@param       name name of the constructed bond
+		 *	@param       first first atom of the constructed bond
+		 *	@param       second second atom of the constructed bond
+		 *	@param       order order of the constructed bond
+		 *	@param       type type of the constructed bond
+		 *	@exception TooManyBonds if one of the atom already possesses  \link Atom::MAX_NUMBER_OF_BONDS Atom::MAX_NUMBER_OF_BONDS \endlink  bonds.
+		 */
 		Bond(const String& name, Atom& first, Atom& second, Order order = BALL_BOND_DEFAULT_ORDER,
-				 Type type = BALL_BOND_DEFAULT_TYPE)
-			throw(Exception::TooManyBonds);
+				 Type type = BALL_BOND_DEFAULT_TYPE);
 
 		/** Create a bond.
-				Connect the two atoms <tt>first</tt> and <tt>second</tt> via a bond.
-				@param 	bond the instantiated bond that connects the first atom <tt>first</tt> 
-								to the second atom <tt>second</tt>
-				@param 	first the first atom of the bond
-				@param 	second the second atom of the bond
-				@return Bond* <tt>this</tt>
-				@exception TooManyBonds if one of the atom already possesses  \link Atom::MAX_NUMBER_OF_BONDS Atom::MAX_NUMBER_OF_BONDS \endlink  bonds.
-		*/
-		static Bond* createBond(Bond& bond, Atom& first, Atom& second)
-			throw(Exception::TooManyBonds);
+		 *	Connect the two atoms <tt>first</tt> and <tt>second</tt> via a bond.
+		 *	@param 	bond the instantiated bond that connects the first atom <tt>first</tt> 
+		 *					to the second atom <tt>second</tt>
+		 *	@param 	first the first atom of the bond
+		 *	@param 	second the second atom of the bond
+		 *	@return Bond* <tt>this</tt>
+		 *	@exception TooManyBonds if one of the atom already possesses  \link Atom::MAX_NUMBER_OF_BONDS Atom::MAX_NUMBER_OF_BONDS \endlink  bonds.
+		 */
+		static Bond* createBond(Bond& bond, Atom& first, Atom& second);
 
 		/** Destructor.
-				If the bond is connecting two atoms, they are disconnected.
-		*/
+		 *	If the bond is connecting two atoms, they are disconnected.
+		 */
 		virtual ~Bond();
 
 		/** Disconnect and reset to default state.
-				Reset the bond attributes to their default values.
-				The state of this bond is:
-					- bond has no connectivity with first atom (=0)
-					- bond has no connectivity with second atom (=0)
-					- bond name is the empty string (="")
-					- bond order is unknown (= \link Bond::ORDER__UNKNOWN Bond::ORDER__UNKNOWN \endlink )
-					- bond type is unknown (= \link Bond::TYPE__UNKNOWN Bond::TYPE__UNKNOWN \endlink )
-				
-		*/
+		 *	Reset the bond attributes to their default values.
+		 *	The state of this bond is:
+		 *		- bond has no connectivity with first atom (=0)
+		 *		- bond has no connectivity with second atom (=0)
+		 *		- bond name is the empty string (="")
+		 *		- bond order is unknown (= \link Bond::ORDER__UNKNOWN Bond::ORDER__UNKNOWN \endlink )
+		 *		- bond type is unknown (= \link Bond::TYPE__UNKNOWN Bond::TYPE__UNKNOWN \endlink )
+		 */
 		virtual void clear();
 
 		/** Explicit destructor.
-				Destroy this bond explicitly without releasing its heap memory thus
-				this bond may exist further.	Calls  \link Bond::clear Bond::clear \endlink .
-				Set the state of this bond to the default values. 
-				<b>Note:</b> Destroy is equivalent to  \link Bond::clear Bond::clear \endlink .
-				@see Bond::clear
-		*/
+		 *	Destroy this bond explicitly without releasing its heap memory thus
+		 *	this bond may exist further.	Calls  \link Bond::clear Bond::clear \endlink .
+		 *	Set the state of this bond to the default values. 
+		 *	<b>Note:</b> Destroy is equivalent to  \link Bond::clear Bond::clear \endlink .
+		 *	@see Bond::clear
+		 */
 		virtual void destroy();
 		//@}
 
@@ -235,23 +228,20 @@ namespace BALL
 		//@{
 
 		/**	Write a bond to a persistent stream.
-				@param pm the persistence manager
-		*/
-		void persistentWrite(PersistenceManager& pm, const char* name = 0) const
-			throw(Exception::GeneralException);
+		 *	@param pm the persistence manager
+		 */
+		void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
 
 		/**	Read a bond from a persistent stream.
-				@param pm the persistence manager
-		*/
-		void persistentRead(PersistenceManager& pm)
-			throw(Exception::GeneralException);
+		 *	@param pm the persistence manager
+		 */
+		void persistentRead(PersistenceManager& pm);
 
 		/**	Finalize the deserialization.
-				Bond might have to swap <tt>first_</tt> and <tt>second_</tt> to ensure
-				the correct order (see  \link Bond Bond \endlink ).
-		*/
-		void finalize()
-			throw(Exception::GeneralException);
+		 *	Bond might have to swap <tt>first_</tt> and <tt>second_</tt> to ensure
+		 *	the correct order (see  \link Bond Bond \endlink ).
+		 */
+		void finalize();
 		//@}
 
 		/**	@name Predicates
@@ -346,10 +336,10 @@ namespace BALL
 		Type getType() const;
 
 		/** Return the bond length
-				@exception NotBound if the bond has not two atoms
-				@return      float - the distance between the two atoms
-		*/
-		float getLength() const throw(NotBound);
+		 *	@return    float - the distance between the two atoms
+		 *	@exception NotBound if the bond is not bound to two atoms
+		 */
+		float getLength() const;
 
 		/** Return the partner of the atom in this bond.
 				@param			 atom an atom

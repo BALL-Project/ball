@@ -1,12 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+//
 #include <BALL/VIEW/DIALOGS/compositeProperties.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/residue.h>
-#include <QtGui/qlineedit.h>
-#include <QtGui/qpushbutton.h>
+
+#include <QtGui/QLineEdit>
+#include <QtGui/QPushButton>
 
 namespace BALL
 {
@@ -141,7 +143,7 @@ void CompositeProperties::accept()
 			text.split(fields, "()|, ");
 			if (fields.size() != 3)
 			{
-				Log.error() << "Invalid values for position!" << std::endl;
+				Log.error() << (String)tr("Invalid values for position!") << std::endl;
 				return;
 			}
 
@@ -153,7 +155,7 @@ void CompositeProperties::accept()
 			text.split(fields, "(),| ");
 			if (fields.size() != 3)
 			{
-				Log.error() << "Invalid values for velocity!" << std::endl;
+				Log.error() << (String)tr("Invalid values for velocity!") << std::endl;
 				return;
 			}
 
@@ -165,7 +167,7 @@ void CompositeProperties::accept()
 			text.split(fields, "(),| ");
 			if (fields.size() != 3)
 			{
-				Log.error() << "Invalid values for force!" << std::endl;
+				Log.error() << (String)tr("Invalid values for force!") << std::endl;
 				return;
 			}
 
@@ -176,7 +178,7 @@ void CompositeProperties::accept()
 	}
 	catch(Exception::InvalidFormat&)
 	{
-		Log.error() << "Invalid value, try a floating point number!" << std::endl;
+		Log.error() << (String)tr("Invalid value, try a floating point number!") << std::endl;
 		return;
 	}
 

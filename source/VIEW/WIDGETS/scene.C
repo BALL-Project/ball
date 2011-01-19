@@ -43,6 +43,7 @@
 #include <BALL/VIEW/INPUT/transformationEvent6D.h>
 #include <BALL/VIEW/INPUT/headTrackingEvent.h>
 #include <BALL/VIEW/INPUT/motionTrackingEvent.h>
+#include <BALL/VIEW/INPUT/notificationEvent.h>
 #include <BALL/VIEW/INPUT/buttonEvent.h>
 
 #include <BALL/SYSTEM/timer.h>
@@ -430,8 +431,26 @@ namespace BALL
 					return;
 
 				case SceneMessage::EXPORT_PNG:
-					exportPNG();
-					return;
+					{
+						// did we get a filename with the message?
+						String filename = "";
+						if (scene_message->data().type() == typeid(String))
+						{
+							filename = boost::any_cast<String>(scene_message->data());
+						}
+
+						if (filename != "")
+							exportPNG(filename);
+						else
+							filename = exportPNG();
+
+						SceneMessage *finished_message = new SceneMessage(SceneMessage::EXPORT_FINISHED);
+						finished_message->data() = filename;
+
+						notify_(finished_message);
+
+						return;
+					}
 
 				case SceneMessage::EXPORT_POVRAY:
 					exportPOVRay();
@@ -1577,7 +1596,7 @@ namespace BALL
 			setFocusPolicy(Qt::StrongFocus);
 			registerForHelpSystem(this, "scene.html");
 
-			toolbar_view_controls_->setObjectName(tr("3D View Control toolbar"));
+			toolbar_view_controls_->setObjectName("3D View Control toolbar");
 			toolbar_view_controls_->setIconSize(QSize(22,22));
 			toolbar_view_controls_->layout()->setMargin(2);
 			toolbar_view_controls_->layout()->setSpacing(2);
@@ -1630,6 +1649,10 @@ namespace BALL
 					break;
 				case BUTTON_PRESS_EVENT:
 					buttonPressEvent(static_cast<ButtonEvent*>(evt));
+					break;
+				case NOTIFICATION_EVENT:
+					onNotify(static_cast<NotificationEvent*>(evt)->getMessage());
+					notify_(static_cast<NotificationEvent*>(evt)->getMessage());
 					break;
 				default:
 					break;

@@ -123,9 +123,11 @@ class EigenSolver
 		 *  eigenvector matrix is always stored in column major format!
 		 *  @return true if the computation terminated successfully
 		 *  @return false otherwise
+		 *  @throw Exception::OutOfMemory if the memory could not be allocated
+		 *  @throw Exception::MatrixNotQuadratic if the matrix is not square
+		 *  @throw Exception::Uninitialized if the solver has not been initialized correctly
 		 */
-		inline bool solveRightEigenProblem()
-			throw(Exception::OutOfMemory, Exception::MatrixNotQuadratic, Exception::Uninitialized);
+		inline bool solveRightEigenProblem();
  
 		/** Compute the eigenvalues and the right eigenvectors of the matrix we are bound to,
 		 *	native implementation.
@@ -144,8 +146,9 @@ class EigenSolver
 		 *	real values suffices.
 		 *	@return true if the computation terminated successfully
 		 *	@return false otherwise
+		 *  @throw Exception::OutOfMemory if the memory could not be allocated
 		 */
-		bool solveRightEigenProblem_lapack() throw (Exception::OutOfMemory);
+		bool solveRightEigenProblem_lapack();
 
 		/** Sort the eigenvalues and their corresponding eigenvectors.
 		 */

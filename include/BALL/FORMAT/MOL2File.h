@@ -65,9 +65,9 @@ namespace BALL
 		MOL2File();
 
 		/** Detailed constructor
-		*/
-		MOL2File(const String& filename, File::OpenMode open_mode = std::ios::in)
-			throw(Exception::FileNotFound);
+		 *  @throw Exception::FileNotFound if the file could not be opened
+		 */
+		MOL2File(const String& filename, File::OpenMode open_mode = std::ios::in);
 
 		/// Destructor
 		virtual ~MOL2File();
@@ -79,24 +79,24 @@ namespace BALL
 		//@{
 
 		/**	Write a system to the MOL2 file
-		*/
-		virtual bool write(const System& system)
-			throw(File::CannotWrite);
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		virtual bool write(const System& system);
 
 		/**	Read a system from the MOL2 file
-		*/
-		virtual bool read(System&	system)
-			throw(Exception::ParseError);
+		 *  @throw Exception::ParseError if a syntax error was encountered
+		 */
+		virtual bool read(System&	system);
 
-		/**
-		*/
-		virtual Molecule* read()
-			throw(Exception::ParseError);
+		/**	Read a molecule from the MOL2 file
+		 *  @throw Exception::ParseError if a syntax error was encountered
+		 */
+		virtual Molecule* read();
 
-		/**
-		*/
-		virtual bool write(const Molecule& molecule)
-			throw(File::CannotWrite);
+		/**	Write a molecule to a HIN file.
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		virtual bool write(const Molecule& molecule);
 
 		///
 		const MOL2File& operator = (const MOL2File& file);

@@ -1,16 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: materialSettings.C,v 1.11.16.2 2007/05/30 21:23:14 amoll Exp $
-// 
 
 #include <BALL/VIEW/DIALOGS/materialSettings.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
 
-#include <QtGui/qlabel.h>
-#include <QtGui/qslider.h>
+#include <QtGui/QLabel>
+#include <QtGui/QSlider>
 
 namespace BALL
 {
@@ -26,7 +24,7 @@ namespace BALL
 			setupUi(this);
 			setObjectName(name);
 			setINIFileSectionName("MATERIAL_SETTINGS");
-			setWidgetStackName("Materials");
+			setWidgetStackName((String)tr("Materials"));
 			
 			setColor(ambient_color_label, ColorRGBA(1.0, 1.0, 1.0));
 			setColor(reflectiveness_color_label, ColorRGBA(1.0, 1.0, 1.0));

@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.h,v 1.36.12.1 2007/03/25 21:23:40 oliver Exp $ 
-//
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
 #define BALL_DATATYPE_REGULARDATA3D_H
@@ -92,33 +90,33 @@ namespace BALL
 		//@{
 
 		/**	Default constructor.
-				Creates a TRegularData3D object without allocating a grid.
-			*/
+		 *	Creates a TRegularData3D object without allocating a grid.
+		 */
 		TRegularData3D();	
 	
 		/**	Copy constructor.
-		*/
-		TRegularData3D(const TRegularData3D<ValueType>& grid)
-			throw(Exception::OutOfMemory);
+		 *  @throw Exception::OutOfMemory if the memory for the copy could not be allocated
+		 */
+		TRegularData3D(const TRegularData3D<ValueType>& grid);
 
 		/**	Constructor for an orthogonal TRegularData3D.
-		*/
-		TRegularData3D(const CoordinateType& origin, const CoordinateType& dimension, const CoordinateType& spacing)
-			 throw(Exception::OutOfMemory);
+		 *  @throw Exception::OutOfMemory if the memory for the grid could not be allocated
+		 */
+		TRegularData3D(const CoordinateType& origin, const CoordinateType& dimension, const CoordinateType& spacing);
 
 		/**	Constructor for a non-orthogonal TRegularData3D.
-		*/
+		 *  @throw Exception::OutOfMemory if the memory for the grid could not be allocated
+		 */
 		TRegularData3D(const CoordinateType& origin, const CoordinateType& x_axis, 
-									 const CoordinateType& y_axis, const CoordinateType& z_axis, const IndexType& size)
-			 throw(Exception::OutOfMemory);
+									 const CoordinateType& y_axis, const CoordinateType& z_axis, const IndexType& size);
 
 		/**	Constructor for a standard orthogonal TRegularData3D.
-		*/
+		 *  @throw Exception::OutOfMemory if the memory for the grid could not be allocated
+		 */
 		TRegularData3D
 			(const IndexType& size, 
 			 const CoordinateType& origin = CoordinateType(0.0),
-			 const CoordinateType& dimension = CoordinateType(1.0))
-			 throw(Exception::OutOfMemory);
+			 const CoordinateType& dimension = CoordinateType(1.0));
 
 		/**	Destructor. 
 		*/
@@ -135,10 +133,10 @@ namespace BALL
     //@{
 
     /** Assignment operator.
-        Copy the data, the origin, and the dimension (spacing is copied implicitly as well).
-    */
-		TRegularData3D& operator = (const TRegularData3D<ValueType>& data)
-      throw(Exception::OutOfMemory);
+     *  Copy the data, the origin, and the dimension (spacing is copied implicitly as well).
+		 *  @throw Exception::OutOfMemory if the memory for the copy could not be allocated
+     */
+		TRegularData3D& operator = (const TRegularData3D<ValueType>& data);
     //@}
 
 
@@ -194,28 +192,28 @@ namespace BALL
 		const vector<ValueType>& getData() const;
 
     /** Return a nonmutable reference to a specific data element.
-        This is the range checking version of <tt>operator []</tt>.
+     *  This is the range checking version of <tt>operator []</tt>.
+		 *  @throw Exception::OutOfGrid if index is outside the grid boundaries
      */
-    const ValueType& getData(const IndexType& index) const
-      throw(Exception::OutOfGrid);
+    const ValueType& getData(const IndexType& index) const;
 
     /** Return a mutable reference to a specific data element.
-        This is the range checking version of <tt>operator []</tt>.
+     *  This is the range checking version of <tt>operator []</tt>.
+		 *  @throw Exception::OutOfGrid if index is outside the grid boundaries
      */
-    ValueType& getData(const IndexType& index)
-      throw(Exception::OutOfGrid);
+    ValueType& getData(const IndexType& index);
 
     /** Return a nonmutable reference to a specific data element.
-        This is the range checking version of <tt>operator []</tt>.
+     *  This is the range checking version of <tt>operator []</tt>.
+		 *  @throw Exception::OutOfGrid if index is outside the grid boundaries
      */
-    const ValueType& getData(Position index) const
-      throw(Exception::OutOfGrid);
+    const ValueType& getData(Position index) const;
 
     /** Return a mutable reference to a specific data element.
-        This is the range checking version of <tt>operator []</tt>.
+     *  This is the range checking version of <tt>operator []</tt>.
+		 *  @throw Exception::OutOfGrid if index is outside the grid boundaries
      */
-    ValueType& getData(Position index)
-      throw(Exception::OutOfGrid);
+    ValueType& getData(Position index);
 
     /** Nonmutable random access operator.
         @note No range checking is done. For a more robust version, please
@@ -260,43 +258,41 @@ namespace BALL
     ValueType operator () (const CoordinateType& x) const;
 		
     /** Return the linearly interpolated value of the surrounding two grid points.
-        This method first performs a range check for the argument <tt>x</tt>
-        and then calls <tt>operator () (x)</tt> to determine an interpolated
-        value at that position.
-    */
-    ValueType getInterpolatedValue(const CoordinateType& x) const
-      throw(Exception::OutOfGrid);
+     *  This method first performs a range check for the argument <tt>x</tt>
+     *  and then calls <tt>operator () (x)</tt> to determine an interpolated
+     *  value at that position.
+		 *  @throw Exception::OutOfGrid if x is outside the grid boundaries
+     */
+    ValueType getInterpolatedValue(const CoordinateType& x) const;
 
     /** Return a nonmutable reference to the closest non-interpolated value.
-        This method first performs a range check for the argument <tt>x</tt>
-        and then returns the value of the closest data point to the left or
-        right of <tt>x</tt>.
-    */
-    const ValueType& getClosestValue(const CoordinateType& x) const
-      throw(Exception::OutOfGrid);
+     *  This method first performs a range check for the argument <tt>x</tt>
+     *  and then returns the value of the closest data point to the left or
+     *  right of <tt>x</tt>.
+		 *  @throw Exception::OutOfGrid if x is outside the grid boundaries
+     */
+    const ValueType& getClosestValue(const CoordinateType& x) const;
 
     /** Return a mutable reference to the closest non-interpolated value.
-        This method first performs a range check for the argument <tt>x</tt>
-        and then returns the value of the closest data point to the left or
-        right of <tt>x</tt>.
-    */
-    ValueType& getClosestValue(const CoordinateType& x)
-      throw(Exception::OutOfGrid);
+     *  This method first performs a range check for the argument <tt>x</tt>
+     *  and then returns the value of the closest data point to the left or
+     *  right of <tt>x</tt>.
+		 *  @throw Exception::OutOfGrid if x is outside the grid boundaries
+     */
+    ValueType& getClosestValue(const CoordinateType& x);
 
     /** Return the position of the grid point closest to the given vector.
-        If there are multiple grid points with equal distance, the
-        grid point with the lowest indices in x, y direction is returned.
-        @exception OutOfGrid if the point is outside the grid
-    */
-    IndexType getClosestIndex(const CoordinateType& v) const
-      throw(Exception::OutOfGrid);
+     *  If there are multiple grid points with equal distance, the
+     *  grid point with the lowest indices in x, y direction is returned.
+     *  @throw Exception::OutOfGrid if the point is outside the grid
+     */
+    IndexType getClosestIndex(const CoordinateType& v) const;
 
     /** Return the position of the next grid point with coordinates smaller than the given vector.
-				This yields the front lower left corner of the cube enclosing the specified position.
-        @exception OutOfGrid if the point is outside the grid
-    */
-    IndexType getLowerIndex(const CoordinateType& v) const
-      throw(Exception::OutOfGrid);
+		 *	This yields the front lower left corner of the cube enclosing the specified position.
+     *  @throw Exception::OutOfGrid if the point is outside the grid
+     */
+    IndexType getLowerIndex(const CoordinateType& v) const;
 
     /** Return the size of the grid.
         This method yields the number of grid points in x- and y-direction.
@@ -347,79 +343,76 @@ namespace BALL
 		}
 
     /** Resize the data.
-        If <tt>new_size</tt> is larger than the current size, the data
-        <tt>vector</tt> is extended to the new size and filled with default
-        constructed items of type <tt>ValueType</tt>. Resizing to a value lesser than
-        the current size truncates the vector.
-        \par
-        The boundaries are adapted and the positions of the retained items
-        fixed, i.e.  the dimension is increased or decreased proportionally
-        while the origin remains unchanged.
-				\par
-				Note: this function currently only works on orthogonal grids! For non-orthogonal
-				      data calls to resize are ignored.
-        @param size the new size
-    */
-    void resize(const IndexType& size)
-      throw(Exception::OutOfMemory);
+     *  If <tt>new_size</tt> is larger than the current size, the data
+     *  <tt>vector</tt> is extended to the new size and filled with default
+     *  constructed items of type <tt>ValueType</tt>. Resizing to a value lesser than
+     *  the current size truncates the vector.
+     *  \par
+     *  The boundaries are adapted and the positions of the retained items
+     *  fixed, i.e.  the dimension is increased or decreased proportionally
+     *  while the origin remains unchanged.
+		 *	\par
+		 *	Note: this function currently only works on orthogonal grids! For non-orthogonal
+		 *	      data calls to resize are ignored.
+     *  @param size the new size
+		 *	@throw Exception::OutOfMemory if the memory for the resized grid could not be allocated
+     */
+    void resize(const IndexType& size);
 
     /** Rescale the data.
-        Keep the current boundaries of the data and reinterpolate
-        the data to reflect the new size. To create a data set of <tt>new_size</tt>
-        data points, the data is interpolated linearly at the new data points from
-        the closest points in the old data set.
-				\par
-				Note: this function currently only works on orthogonal grids! For non-orthogonal
-				      data calls to rescale are ignored.
-
-        @param new_size the new data set size
-    */
-    void rescale(const IndexType& new_size)
-      throw(Exception::OutOfMemory);
-
-    /** Returns the exact coordinates of a grid point.
-        @return     CoordinateType
-        @exception  OutOfGrid if the point is outside the grid
-    */
-    CoordinateType getCoordinates(const IndexType& index) const
-      throw(Exception::OutOfGrid);
+     *  Keep the current boundaries of the data and reinterpolate
+     *  the data to reflect the new size. To create a data set of <tt>new_size</tt>
+     *  data points, the data is interpolated linearly at the new data points from
+     *  the closest points in the old data set.
+		 *	\par
+		 *	Note: this function currently only works on orthogonal grids! For non-orthogonal
+		 *	      data calls to rescale are ignored.
+		 * 
+     *  @param new_size the new data set size
+		 *	@throw Exception::OutOfMemory if the memory for the resized grid could not be allocated
+		 */
+    void rescale(const IndexType& new_size);
 
     /** Returns the exact coordinates of a grid point.
-        @return     CoordinateType
-        @exception  OutOfGrid if the point is outside the grid
-    */
-    CoordinateType getCoordinates(Position index) const
-      throw(Exception::OutOfGrid);
+     *  @return     CoordinateType
+     *  @exception  Exception::OutOfGrid if the point is outside the grid boundaries
+     */
+    CoordinateType getCoordinates(const IndexType& index) const;
+
+    /** Returns the exact coordinates of a grid point.
+     *  @return     CoordinateType
+     *  @exception  Exception::OutOfGrid if the point is outside the grid boundaries
+     */
+    CoordinateType getCoordinates(Position index) const;
 
     /** Return the indices of the grid points of the enclosing box.
-        This method calculates the grid box that contains the given vector
-        and returns the indices of the grid points forming this box.
-        The given point lies either in the box or is the lower left front edge of the box.
-        @exception OutOfGrid if the point is outside the grid
-        @param vector a point inside the grid
-        @param llf  left lower front corner of the box
-        @param rlf  right lower front corner of the box
-        @param luf  left upper front corner of the box
-        @param ruf  right upper front corner of the box
-        @param llb  left lower back corner of the box
-        @param rlb  right lower back corner of the box
-        @param lub  left upper back corner of the box
-        @param rub  right upper back corner of the box
-    */
+     *  This method calculates the grid box that contains the given vector
+     *  and returns the indices of the grid points forming this box.
+     *  The given point lies either in the box or is the lower left front edge of the box.
+     *  @param vector a point inside the grid
+     *  @param llf  left lower front corner of the box
+     *  @param rlf  right lower front corner of the box
+     *  @param luf  left upper front corner of the box
+     *  @param ruf  right upper front corner of the box
+     *  @param llb  left lower back corner of the box
+     *  @param rlb  right lower back corner of the box
+     *  @param lub  left upper back corner of the box
+     *  @param rub  right upper back corner of the box
+     *  @exception  Exception::OutOfGrid if the point is outside the grid boundaries
+     */
     void getEnclosingIndices
       (const CoordinateType& r,
       Position& llf, Position& rlf, Position& luf, Position& ruf,
-      Position& llb, Position& rlb, Position& lub, Position& rub) const
-      throw(Exception::OutOfGrid);
+      Position& llb, Position& rlb, Position& lub, Position& rub) const;
 
     /** Return the data at the grid points of the enclosing box.
-				@sse getEnclosingIndices
-    */
+     *  @exception  Exception::OutOfGrid if the point is outside the grid boundaries
+		 *	@see getEnclosingIndices
+     */
     void getEnclosingValues
       (const CoordinateType& r,
 			 ValueType& llf, ValueType& rlf, ValueType& luf, ValueType& ruf,
-			 ValueType& llb, ValueType& rlb, ValueType& lub, ValueType& rub) const
-      throw(Exception::OutOfGrid);
+			 ValueType& llb, ValueType& rlb, ValueType& lub, ValueType& rub) const;
 		
 		/** Calculate the mean of the dataset
 		 		@return ValueType
@@ -433,26 +426,24 @@ namespace BALL
 		
 		/** Write the grid contents in a (non-portable) binary format.
 		 * 	\par Note: this currently only works correctly for orthogonal grids.
-		 		@exception FileNotFound thrown if file could not be written
-		*/
-		void binaryWrite(const String& filename) const
-			throw(Exception::FileNotFound);		
+		 *	@throw Exception::FileNotFound thrown if the file could not be written
+		 */
+		void binaryWrite(const String& filename) const;		
 
 		/**
-		* Writes out raw binary plus text header file.
-		* !!!WARNING!!! This method is defined only for float template parameters.
-		* If you try it to call it from any other specialization, it will give out
-		* compile error that the function has no body.
-		*/ 
-		void binaryWriteRaw(const String& filename) const
-			throw(Exception::FileNotFound);
+		 * Writes out raw binary plus text header file.
+		 * !!!WARNING!!! This method is defined only for float template parameters.
+		 * If you try it to call it from any other specialization, it will give out
+		 * compile error that the function has no body.
+		 * @throw Exception::FileNotFound thrown if the file could not be written
+		 */ 
+		void binaryWriteRaw(const String& filename) const;
 
 		/** Read the grid contents from a file written with binaryWrite
 		 * 	\par Note: this currently only works correctly for orthogonal grids.
-		 		@exception FileNotFound thrown if file doesnt exists or could not be read
-		*/
-		void binaryRead(const String& filename)
-			throw(Exception::FileNotFound);
+		 *	@throw Exception::FileNotFound thrown if file does not exist or could not be read
+		 */
+		void binaryRead(const String& filename);
 		//@}
 		
 		protected:
@@ -535,7 +526,6 @@ namespace BALL
 	template <class ValueType>
 	TRegularData3D<ValueType>::TRegularData3D
 		(const TRegularData3D<ValueType>& data)
-		throw(Exception::OutOfMemory)
 		: data_(),
 			origin_(data.origin_),
 			dimension_(data.dimension_),
@@ -561,7 +551,6 @@ namespace BALL
     (const typename TRegularData3D<ValueType>::IndexType& size,
      const typename TRegularData3D<ValueType>::CoordinateType& origin,
      const typename TRegularData3D<ValueType>::CoordinateType& dimension)
-    throw(Exception::OutOfMemory)
     : data_(),
       origin_(origin),
       dimension_(dimension),
@@ -593,7 +582,6 @@ namespace BALL
     (const typename TRegularData3D<ValueType>::CoordinateType& origin,
      const typename TRegularData3D<ValueType>::CoordinateType& dimension,
      const typename TRegularData3D<ValueType>::CoordinateType& spacing)
-    throw(Exception::OutOfMemory)
     : data_(),
       origin_(origin),
       dimension_(dimension),
@@ -631,7 +619,6 @@ namespace BALL
 	 	 const typename TRegularData3D<ValueType>::CoordinateType& y_axis, 
 		 const typename TRegularData3D<ValueType>::CoordinateType& z_axis, 
 		 const typename TRegularData3D<ValueType>::IndexType& new_size)
- 		throw(Exception::OutOfMemory)
 		: data_(),
 		  origin_(origin),
 			dimension_(x_axis+y_axis+z_axis),
@@ -695,7 +682,6 @@ namespace BALL
   BALL_INLINE
   TRegularData3D<ValueType>& TRegularData3D<ValueType>::operator =
     (const TRegularData3D<ValueType>& rhs)
-    throw(Exception::OutOfMemory)
   {
 		// Avoid self-assignment.
 		if (&rhs != this)
@@ -727,7 +713,6 @@ namespace BALL
 
   template <typename ValueType>
   void TRegularData3D<ValueType>::resize(const typename TRegularData3D<ValueType>::IndexType& size)
-    throw(Exception::OutOfMemory)
   {
 		if (is_orthogonal_)
 		{
@@ -791,7 +776,6 @@ namespace BALL
 
   template <typename ValueType>
   void TRegularData3D<ValueType>::rescale(const typename TRegularData3D<ValueType>::IndexType& size)
-    throw(Exception::OutOfMemory)
   {
 		if (is_orthogonal_)
 		{
@@ -875,7 +859,6 @@ namespace BALL
   BALL_INLINE
   const ValueType& TRegularData3D<ValueType>::getData
     (const typename TRegularData3D<ValueType>::IndexType& index) const
-    throw(Exception::OutOfGrid)
   {
     size_type pos = index.x + index.y * size_.x + index.z * size_.x * size_.y;
     if (pos >= data_.size())
@@ -896,7 +879,6 @@ namespace BALL
   BALL_INLINE
   ValueType& TRegularData3D<ValueType>::getData
     (const typename TRegularData3D<ValueType>::IndexType& index)
-    throw(Exception::OutOfGrid)
   {
     size_type pos = index.x + index.y * size_.x + index.z * size_.x * size_.y;
     if (pos >= data_.size())
@@ -909,7 +891,6 @@ namespace BALL
   template <class ValueType>
   BALL_INLINE
   const ValueType& TRegularData3D<ValueType>::getData(Position index) const
-    throw(Exception::OutOfGrid)
   {
     if (index >= data_.size())
     {
@@ -921,7 +902,6 @@ namespace BALL
   template <class ValueType>
   BALL_INLINE
   ValueType& TRegularData3D<ValueType>::getData(Position index)
-    throw(Exception::OutOfGrid)
   {
     if (index >= data_.size())
     {
@@ -934,7 +914,6 @@ namespace BALL
   BALL_INLINE
   typename TRegularData3D<ValueType>::CoordinateType TRegularData3D<ValueType>::getCoordinates
     (const typename TRegularData3D<ValueType>::IndexType& index) const
-    throw(Exception::OutOfGrid)
   {
     if ((index.x >= size_.x) || (index.y >= size_.y) || (index.z >= size_.z))
     {
@@ -961,7 +940,6 @@ namespace BALL
   BALL_INLINE
   typename TRegularData3D<ValueType>::CoordinateType
   TRegularData3D<ValueType>::getCoordinates(Position position) const
-    throw(Exception::OutOfGrid)
   {
     if (position >= data_.size())
     {
@@ -993,7 +971,6 @@ namespace BALL
 		(const typename TRegularData3D<ValueType>::CoordinateType& r,
 		Position& llf, Position& rlf, Position& luf, Position& ruf,
 		Position& llb, Position& rlb, Position& lub, Position& rub) const
-		throw(Exception::OutOfGrid)
 	{
 		if (!isInside(r))
 		{
@@ -1036,7 +1013,6 @@ namespace BALL
 		(const typename TRegularData3D<ValueType>::CoordinateType& r,
 		ValueType& llf, ValueType& rlf, ValueType& luf, ValueType& ruf,
 		ValueType& llb, ValueType& rlb, ValueType& lub, ValueType& rub) const
-		throw(Exception::OutOfGrid)
 	{
 		if (!isInside(r))
 		{
@@ -1062,7 +1038,6 @@ namespace BALL
 	BALL_INLINE
 	ValueType TRegularData3D<ValueType>::getInterpolatedValue
 		(const typename TRegularData3D<ValueType>::CoordinateType& r) const
-		throw(Exception::OutOfGrid)
 	{
 		if (!isInside(r))
 		{
@@ -1138,7 +1113,6 @@ namespace BALL
   BALL_INLINE
   typename TRegularData3D<ValueType>::IndexType TRegularData3D<ValueType>::getClosestIndex
     (const typename TRegularData3D<ValueType>::CoordinateType& r) const
-    throw(Exception::OutOfGrid)
   {
     if (!isInside(r))
     {
@@ -1168,7 +1142,6 @@ namespace BALL
   BALL_INLINE
   typename TRegularData3D<ValueType>::IndexType  TRegularData3D<ValueType>::getLowerIndex
     (const typename TRegularData3D<ValueType>::CoordinateType& r) const
-    throw(Exception::OutOfGrid)
   {
     if (!isInside(r))
     {
@@ -1197,7 +1170,6 @@ namespace BALL
   BALL_INLINE
   const ValueType& TRegularData3D<ValueType>::getClosestValue
     (const typename TRegularData3D<ValueType>::CoordinateType& r) const
-    throw(Exception::OutOfGrid)
   {
     if (!isInside(r))
     {
@@ -1227,7 +1199,6 @@ namespace BALL
   BALL_INLINE
   ValueType& TRegularData3D<ValueType>::getClosestValue
     (const typename TRegularData3D<ValueType>::CoordinateType& r)
-    throw(Exception::OutOfGrid)
   {
     if (!isInside(r))
     {
@@ -1313,7 +1284,6 @@ namespace BALL
 
 	template <typename ValueType>
 	void TRegularData3D<ValueType>::binaryWrite(const String& filename) const
-		throw(Exception::FileNotFound)
 	{
 		File outfile(filename, std::ios::out|std::ios::binary);
 		if (!outfile.isValid()) throw Exception::FileNotFound(__FILE__, __LINE__, filename);
@@ -1366,7 +1336,6 @@ namespace BALL
 
 	template <typename ValueType>
 	void TRegularData3D<ValueType>::binaryRead(const String& filename)
-		throw(Exception::FileNotFound)
 	{
 		File infile(filename, std::ios::in|std::ios::binary);
 		if (!infile.isValid()) throw Exception::FileNotFound(__FILE__, __LINE__, filename);

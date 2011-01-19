@@ -10,7 +10,6 @@ namespace BALL
 	const int CubicSpline1D::VERBOSITY_LEVEL_DEBUG = 10;
 
 	CubicSpline1D::CubicSpline1D()
-		throw() 
 		: sample_positions_(),
 			sample_values_(),
 			curvature_(),
@@ -29,7 +28,6 @@ namespace BALL
 															 const std::vector<float>& sample_values, bool return_average, 
 															 bool is_natural, float lower_derivative, float upper_derivative,
 															 int verbosity)
-		throw()
 		: sample_positions_(sample_positions),
 			sample_values_(sample_values),
 			curvature_(),
@@ -50,7 +48,6 @@ namespace BALL
 															 const std::vector<float>& sample_values, float default_value, 
 															 bool is_natural, float lower_derivative, float upper_derivative,
 															 int verbosity)
-		throw()
 		: sample_positions_(sample_positions),
 			sample_values_(sample_values),
 			curvature_(),
@@ -73,7 +70,6 @@ namespace BALL
 															 float lower_bound, float upper_bound, 
 															 bool is_natural, float lower_derivative, float upper_derivative,
 															 int verbosity)
-		throw()
 		: sample_positions_(sample_positions),
 			sample_values_(sample_values),
 			curvature_(),
@@ -97,7 +93,6 @@ namespace BALL
 															 bool return_average, float default_value,
 															 bool is_natural, float lower_derivative, float upper_derivative,
 															 int verbosity)
-		throw() 
 		: sample_positions_(sample_positions),
 			sample_values_(sample_values),
 			curvature_(),
@@ -116,7 +111,6 @@ namespace BALL
 	}
 	
 	CubicSpline1D::CubicSpline1D(const CubicSpline1D& cs1D)
-		throw() 
 		: sample_positions_(cs1D.sample_positions_),
 			sample_values_(cs1D.sample_values_),
 			curvature_(cs1D.curvature_),
@@ -132,11 +126,9 @@ namespace BALL
 	}
 			
 	CubicSpline1D::~CubicSpline1D()
-		throw() 
 	{}
 			
 	void CubicSpline1D::createSpline()
-		throw()
 	{
 		// Do we have reasonable data?
 		if (	 (sample_values_.size() != sample_positions_.size()) 
@@ -223,7 +215,6 @@ namespace BALL
 	}
 
 	void CubicSpline1D::setCurvature(std::vector<float> curvature)
-		throw()
 	{
 		// Do we have enough curvature values?
 		if (   (curvature.size() != sample_positions_.size()) 
@@ -243,7 +234,6 @@ namespace BALL
 	}
 	
 	void CubicSpline1D::setValues(std::vector<float> values, bool recompute)
-		throw()
 	{
 		sample_values_ = values;
 		if (recompute)
@@ -253,7 +243,6 @@ namespace BALL
 	}
 	
 	void CubicSpline1D::setPositions(std::vector<float> positions, bool recompute)
-		throw()
 	{
 		sample_positions_= positions; 
 		if (recompute)
@@ -263,7 +252,6 @@ namespace BALL
 	}
 
 	void CubicSpline1D::setLowerDerivative(float derivative, bool recompute)
-		throw()
 	{
 		lower_derivative_ = derivative;
 		is_natural_ = false;
@@ -274,7 +262,6 @@ namespace BALL
 	}
 	
 	void CubicSpline1D::setUpperDerivative(float derivative, bool recompute)
-		throw()
 	{
 		upper_derivative_ = derivative;
 		is_natural_ = false;
@@ -285,7 +272,6 @@ namespace BALL
 	}
 
 	void CubicSpline1D::makeNatural(bool recompute)
-		throw()
 	{
 		is_natural_ = true;
 		if (recompute)
@@ -295,7 +281,6 @@ namespace BALL
 	}
 
 	void CubicSpline1D::setBoudaryDerivatives(float lower_derivative, float upper_derivative, bool recompute)
-		throw()
 	{
 		is_natural_ = false;
 		lower_derivative_ = lower_derivative;
@@ -306,9 +291,7 @@ namespace BALL
 		}
 	}
 
-	
 	float CubicSpline1D::operator() (float x)
-		throw()
 	{
 		unsigned int n = sample_positions_.size();
 		// Is this access-value inside the boundaries?

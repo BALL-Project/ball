@@ -65,9 +65,8 @@ namespace BALL
 		retrieveSymOps_(space_group_);
 	}
 	
-	CrystalInfo::~CrystalInfo() throw()
+	CrystalInfo::~CrystalInfo()
 	{
-		
 	}
 	
 	
@@ -202,7 +201,6 @@ namespace BALL
 	}
 
 	const Matrix4x4& CrystalInfo::getNCS(Position p) const
-		throw(Exception::IndexOverflow)
 	{
 		if (p >= (ncs_symops_.size()))
 		{
@@ -212,7 +210,6 @@ namespace BALL
 	}
 	
 	Matrix4x4& CrystalInfo::getNCS(Position p)
-		throw(Exception::IndexOverflow)
 	{
 		if (p >= (ncs_symops_.size()))
 		{
@@ -222,17 +219,6 @@ namespace BALL
 	}
 	
 	bool CrystalInfo::isgivenNCS(Position p) const
-		throw(Exception::IndexOverflow)
-	{
-		if (p >= (ncs_symops_.size()))
-		{
-			throw Exception::IndexOverflow(__FILE__, __LINE__, p, ncs_symops_.size());
-		}
-		return ncs_isgiven_[p];				
-	}
-	
-	bool CrystalInfo::isgivenNCS(Position p)
-		throw(Exception::IndexOverflow)
 	{
 		if (p >= (ncs_symops_.size()))
 		{
@@ -242,7 +228,6 @@ namespace BALL
 	}
 	
 	bool CrystalInfo::insertNCS(Position p, Matrix4x4 ncsm, bool is_given)
-		throw(Exception::IndexOverflow)
 	{
 		vector<Matrix4x4>::iterator ita = ncs_symops_.begin();
 		vector<bool>::iterator itb = ncs_isgiven_.begin();
@@ -263,7 +248,6 @@ namespace BALL
 	}
 	
 	bool CrystalInfo::eraseNCS(Position p)
-		throw(Exception::IndexOverflow)
 	{
 		vector<Matrix4x4>::iterator ita = ncs_symops_.begin();
 		vector<bool>::iterator itb = ncs_isgiven_.begin();
@@ -413,7 +397,6 @@ namespace BALL
 	}
 
   void CrystalInfo::persistentWrite(PersistenceManager& pm, const char* name) const
-		throw (Exception::GeneralException)
   {
 		pm.writeObjectHeader(this, name);
 
@@ -488,7 +471,6 @@ namespace BALL
 	}
   
   void CrystalInfo::persistentRead(PersistenceManager& pm)
-		throw (Exception::GeneralException)
   {
 		String space_group = "";
 		pm.readPrimitive(space_group, "space_group_");

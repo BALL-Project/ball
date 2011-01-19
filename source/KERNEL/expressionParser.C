@@ -1,11 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expressionParser.C,v 1.7 2003/08/26 09:17:49 oliver Exp $
-//
 
 #include <BALL/KERNEL/expressionParser.h>
-//#include <algorithm>
 
 // defined in the lexer (expressionParserLexer.l)
 extern void ExpressionParser_initBuffer(const char* buf);
@@ -128,14 +125,12 @@ namespace BALL
 	}
 
 	const ExpressionParser::SyntaxTree& ExpressionParser::getSyntaxTree() const
-		throw(Exception::NullPointer)
 	{
 		if (syntax_tree_ == 0) throw(Exception::NullPointer(__FILE__, __LINE__));
 		return *syntax_tree_;
 	}
 
 	void ExpressionParser::parse(const String& s)
-		throw(Exception::ParseError)
 	{
 		// clear former contents
 		if (syntax_tree_ != 0)

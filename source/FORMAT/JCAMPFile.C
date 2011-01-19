@@ -23,7 +23,6 @@ namespace BALL
 	}
 
 	JCAMPFile::JCAMPFile(const String& name, OpenMode open_mode) 
-		throw(Exception::FileNotFound)
 		: LineBasedFile(), 
 			header_(),
 			entries_()
@@ -33,7 +32,6 @@ namespace BALL
 	}
 
 	void JCAMPFile::read()
-		throw(Exception::ParseError)
 	{
 		// Clear the old contents of the header/entry maps.
 		header_.clear();
@@ -189,7 +187,6 @@ namespace BALL
 	}
 
 	bool JCAMPFile::write()
-		throw(File::CannotWrite)
 	{
 		if (!isOpen() || getOpenMode() != File::MODE_OUT)
 		{
@@ -245,7 +242,6 @@ namespace BALL
 	}
 
 	double JCAMPFile::getDoubleValue(const String& name) const 
-		throw(Exception::InvalidFormat)
 	{
 		if (!entries_.has(name)) return 0.0;
 
@@ -267,7 +263,6 @@ namespace BALL
 	}
 
 	Index JCAMPFile::getIntValue(const String& name) const 
-		throw(Exception::InvalidFormat)
 	{
 		if (!entries_.has(name)) return 0;
 

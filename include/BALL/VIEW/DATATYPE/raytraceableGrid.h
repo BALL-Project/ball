@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id:$
-//
 
 #ifndef BALL_VIEW_DATATYPE_RAYTRACEABLEGRID_H
 #define BALL_VIEW_DATATYPE_RAYTRACEABLEGRID_H
@@ -37,7 +35,10 @@ namespace BALL
 				
 				float getGridMaxValue();
 
-				void binaryWrite(const String& filename) const throw(Exception::FileNotFound);
+				/** Write the grid in binary format
+				 *  @throw Exception::FileNotFound if the write failed
+				 */
+				void binaryWrite(const String& filename) const;
 
 			protected:
 				RegularData3D* grid_;

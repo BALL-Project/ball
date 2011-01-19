@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.72.12.2 2007/03/25 23:30:45 amoll Exp $
-//
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
 #include <BALL/VIEW/KERNEL/common.h>
@@ -29,9 +27,9 @@
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/KERNEL/atom.h>
 
-#include <QtGui/qpixmap.h>
-#include <QtGui/qpainter.h>
-#include <QtGui/qimage.h>
+#include <QtGui/QPixmap>
+#include <QtGui/QPainter>
+#include <QtGui/QImage>
 
 #include <BALL/MATHS/vector2.h>
 #include <BALL/MATHS/plane3.h>
@@ -2111,7 +2109,7 @@ namespace BALL
 
 			if (Maths::isZero(camera->getViewVector().getSquareLength()))
 			{
-				Log.error() << "Unvalid camera settings: View point = LookAt point" << std::endl;
+				Log.error() << (String)(qApp->translate("BALL::VIEW::GLRenderer", "Invalid camera settings: View point = LookAt point")) << std::endl;
 				return;
 			}
 
@@ -2224,8 +2222,8 @@ namespace BALL
 
 			if (state != use_vertex_buffer_)
 			{
-				if (state) Log.info() << "Enabling Vertex Buffer" << std::endl;
-				else       Log.info() << "Disabling Vertex Buffer" << std::endl;
+				if (state) Log.info() << (String)qApp->translate("BALL::VIEW::GLRenderer", "Enabling Vertex Buffer") << std::endl;
+				else       Log.info() << (String)qApp->translate("BALL::VIEW::GLRenderer", "Disabling Vertex Buffer") << std::endl;
 			}
 			use_vertex_buffer_ = state;
 
@@ -2544,7 +2542,7 @@ namespace BALL
 			Position texname = grid_to_texture_[vol.getGrid()];
 			if (texname == 0)
 			{
-				scene_->setStatusbarText("Graphics card does not support 3D textures", true);
+				scene_->setStatusbarText((String)qApp->translate("BALL::VIEW::GLRenderer", "Graphics card does not support 3D textures. Abort"), true);
 				return;
 			}
 

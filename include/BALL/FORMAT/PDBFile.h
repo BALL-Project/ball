@@ -181,16 +181,22 @@ namespace BALL
 		/** @name Constructurs and destructor.
 		*/
 		//@{
-		/// Default constructor.
+
+		/** Default constructor
+		*/
 		PDBFile();
 			
-		/// File-like constructor
-		PDBFile(const String& filename, File::OpenMode open_mode = std::ios::in) throw(Exception::FileNotFound);
+		/** File-like constructor
+		 *  @throw Exception::FileNotFound if the file could not be opened
+		 */
+		PDBFile(const String& filename, File::OpenMode open_mode = std::ios::in);
 
-		/// Construct with options.
+		/** Construct with options.
+		 */
 		PDBFile(const Options& new_options);
 
-		/// Destructor
+		/** Destructor
+		 */
 		virtual ~PDBFile();
 		//@}
 
@@ -638,40 +644,97 @@ namespace BALL
 
 		/**	@name Reading and writing */
 		//@{
-		/// Read a protein from the file
-		PDBFile& operator >> (Protein& protein) throw(Exception::ParseError);
-		/// Read a molecule from the file
-		PDBFile& operator >> (Molecule& molecule) throw(Exception::ParseError);
-		// Read system from the file
-		PDBFile& operator >> (System& system) throw(Exception::ParseError);
-		/// Write a protein to the file
-		PDBFile& operator << (const Protein& protein) throw(File::CannotWrite);
-		// Write system to the file
-		PDBFile& operator << (const System& system) throw(File::CannotWrite);
-		// Write molecule to the file
-		PDBFile& operator << (const Molecule& molecule) throw(File::CannotWrite);
-		///
-		bool read(Protein& protein) throw(Exception::ParseError);
-		///
-		bool read(Molecule& protein) throw(Exception::ParseError);
-		///
-		bool read(System& system) throw(Exception::ParseError);
-		///
-		Molecule* read() throw(Exception::ParseError);
-		///
-		bool write(const Protein& protein) throw(File::CannotWrite);
-		///
-		bool write(const Molecule& molecule) throw(File::CannotWrite);
-		///
-		bool write(const System& system) throw(File::CannotWrite);
-		///
-		bool write(const System& system, const PDBInfo& info) throw(File::CannotWrite);
+
+		/** Read a protein from the file
+		 *  @throw Exception::ParseError if a syntax error was encountered
+		 */
+		PDBFile& operator >> (Protein& protein);
+
+		/** Read a molecule from the file
+		 *  @throw Exception::ParseError if a syntax error was encountered
+		 */
+		PDBFile& operator >> (Molecule& molecule);
+
+		/** Read system from the file
+		 *  @throw Exception::ParseError if a syntax error was encountered
+		 */
+		PDBFile& operator >> (System& system);
+
+		/** Write a protein to the file
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		PDBFile& operator << (const Protein& protein);
+
+		/** Write a system to the file
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		PDBFile& operator << (const System& system);
+
+		/** Write molecule to the file
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		PDBFile& operator << (const Molecule& molecule);
+
+		/** Read a Protein from the file
+		 *  return true if the Protein was read successfully
+		 *  return false otherwise
+		 *  @throw Exception::ParseError if a syntax error was encountered
+		 */
+		bool read(Protein& protein);
+
+		/** Read a Molecule from the file
+		 *  return true if the Molecule was read successfully
+		 *  return false otherwise
+		 *  @throw Exception::ParseError if a syntax error was encountered
+		 */
+		bool read(Molecule& protein);
+
+		/** Read a System from the file
+		 *  return true if the System was read successfully
+		 *  return false otherwise
+		 *  @throw Exception::ParseError if a syntax error was encountered
+		 */
+		bool read(System& system);
+
+		/** Read a Molecule from the file
+		 *  return Molecule* pointer to the newly created Molecule
+		 *  @throw Exception::ParseError if a syntax error was encountered
+		 */
+		Molecule* read();
+
+		/** Write a Protein to the file
+		 *  return true if the writing finished successfully
+		 *  return false otherwise
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		bool write(const Protein& protein);
+
+		/** Write a Molecule to the file
+		 *  return true if the writing finished successfully
+		 *  return false otherwise
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		bool write(const Molecule& molecule);
+
+		/** Write a System to the file
+		 *  return true if the writing finished successfully
+		 *  return false otherwise
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		bool write(const System& system);
+
+		/** Write a System to the file
+		 *  return true if the writing finished successfully
+		 *  return false otherwise
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		bool write(const System& system, const PDBInfo& info);
 		//@}
 
 		protected:
 
 		//_
-		PDBFile(const File& pdbf) throw(Exception::FileNotFound);
+		PDBFile(const File& pdbf);
 
 		//_
 		PDBFile& operator = (const PDBFile& pdbf);

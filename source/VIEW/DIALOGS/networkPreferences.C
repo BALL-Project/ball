@@ -1,16 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: networkPreferences.C,v 1.4.18.1 2007/03/25 22:02:10 oliver Exp $
-//
 
 #include <BALL/VIEW/DIALOGS/networkPreferences.h>
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
-#include <QtGui/qcheckbox.h>
-#include <QtGui/qlineedit.h>
+#include <QtGui/QCheckBox>
+#include <QtGui/QLineEdit>
 
 #include <QtNetwork/QNetworkProxy>
 
@@ -32,7 +30,7 @@ namespace BALL
 			// signals and slots connections
 			connect(proxy_type_box, SIGNAL(currentIndexChanged(int)), this, SLOT(proxyModeChanged(int)));
 
-			setWidgetStackName("Network");
+			setWidgetStackName((String)tr("Network"));
 			registerWidgets_();
 
 			if (!proxyEnabled())
@@ -75,7 +73,7 @@ namespace BALL
 
 			if (!valid_port && proxyEnabled())
 			{
-				Log.error() << "Proxy port invalid!" << std::endl;
+				Log.error() << (String)tr("Proxy port invalid!") << std::endl;
 				return;
 			}
 

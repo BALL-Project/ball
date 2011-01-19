@@ -1,7 +1,11 @@
+/* TRANSLATOR BALL::VIEW::LabelDialog
+
+		Necessary for lupdate.
+*/
+
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id:
 
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/VIEW/DIALOGS/labelDialog.h>
@@ -9,12 +13,12 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
-#include <QtGui/qmenubar.h>
-#include <QtGui/qlabel.h>
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qlineedit.h>
-#include <QtGui/qfontdialog.h>
-#include <QtGui/qradiobutton.h>
+#include <QtGui/QMenuBar>
+#include <QtGui/QLabel>
+#include <QtGui/QPushButton>
+#include <QtGui/QLineEdit>
+#include <QtGui/QFontDialog>
+#include <QtGui/QRadioButton>
 
 namespace BALL
 {
@@ -41,7 +45,7 @@ LabelDialog::LabelDialog(QWidget* parent, const char* name)
 	connect( all_items, SIGNAL( toggled(bool) ), this, SLOT( modeChanged() ) );
 	connect( text_box, SIGNAL( editTextChanged(const QString&) ), this, SLOT( textChanged() ) );
 
-	setWindowTitle("Add Label");
+	setWindowTitle(tr("Add Label"));
 	setObjectName(name);
 
 	// register the widget with the MainControl
@@ -119,10 +123,10 @@ void LabelDialog::onNotify(Message *message)
 void LabelDialog::initializeWidget(MainControl&)
 {
 	String description = "Shortcut|Display|Create|Label";
-	id_ = insertMenuEntry(MainControl::DISPLAY_CREATE, "&Label", this, 
+	id_ = insertMenuEntry(MainControl::DISPLAY_CREATE, (String)tr("&Label"), this, 
 												SLOT(show()), description,
 												QKeySequence("Ctrl+L"));
-	setMenuHint("Add a label for selected molecular objects");   
+	setMenuHint((String)tr("Add a label for selected molecular objects"));   
 }
 
 void LabelDialog::show()
@@ -171,7 +175,7 @@ void LabelDialog::accept()
 	
 	text_box->addItem(text_box->currentText());
 
-	setStatusbarText("Label added.");
+	setStatusbarText(tr("Label added."));
 }
 
 void LabelDialog::editColor()

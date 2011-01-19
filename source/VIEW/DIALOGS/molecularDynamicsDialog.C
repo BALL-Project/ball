@@ -11,11 +11,11 @@
 #include <BALL/SYSTEM/path.h>
 
 #include <QtGui/QFileDialog>
-#include <QtGui/qlineedit.h>
-#include <QtGui/qradiobutton.h>
-#include <QtGui/qcheckbox.h>
-#include <QtGui/qlabel.h>
-#include <QtGui/qmessagebox.h> 
+#include <QtGui/QLineEdit>
+#include <QtGui/QRadioButton>
+#include <QtGui/QCheckBox>
+#include <QtGui/QLabel>
+#include <QtGui/QMessageBox> 
 
 namespace BALL
 {
@@ -184,7 +184,7 @@ void MolecularDynamicsDialog::setMMFF94Dialog(MMFF94ConfigurationDialog* dialog)
 
 void MolecularDynamicsDialog::chooseDCDFile()
 {
-	QString result = QFileDialog::getSaveFileName(0, "Choose a DCDFile",
+	QString result = QFileDialog::getSaveFileName(0, tr("Choose a DCDFile"),
 																	getMainControl()->getWorkingDir().c_str(), "*.dcd");
 	if (result != "") dcd_file_edit->setText(result);
 }
@@ -214,17 +214,17 @@ void MolecularDynamicsDialog::accept()
 	QString error;
 	if (getNumberOfSteps() == 0)
 	{
-		error = "number of steps.";
+		error = tr("number of steps.");
 	}
 
 	if (getTemperature() == 0)
 	{
-		error = "temperature.";
+		error = tr("temperature.");
 	}
 
-	if(getTimeStep() == 0.0)
+	if (getTimeStep() == 0.0)
 	{
-		error = "time step.";
+		error = tr("time step.");
 	}
 
 	if (error == "")
@@ -233,7 +233,7 @@ void MolecularDynamicsDialog::accept()
 		return;
 	}
 
-	QMessageBox::critical(this, "Invalid values", QString("Please apply correct settings (> 0) for the ") + error,
+	QMessageBox::critical(this, tr("Invalid values"), tr("Please apply correct settings") + " (> 0) " + tr("for the") + " " + error,
 			QMessageBox::Ok| QMessageBox::Default);
 }
 

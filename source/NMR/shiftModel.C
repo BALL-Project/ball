@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: shiftModel.C,v 1.18.10.1 2006-07-18 18:42:46 anne Exp $
 
 #include <BALL/NMR/shiftModel.h>
 #include <BALL/CONCEPT/factory.h>

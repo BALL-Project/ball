@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SurfaceProcessor_test.C,v 1.7.28.1 2007/03/25 21:49:06 oliver Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -13,7 +11,7 @@
 #include <BALL/STRUCTURE/surfaceProcessor.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/FORMAT/HINFile.h>
-#include <BALL/DATATYPE/list.h>
+#include <list>
 
 ///////////////////////////
 

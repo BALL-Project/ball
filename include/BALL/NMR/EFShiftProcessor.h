@@ -231,14 +231,14 @@ namespace BALL
 		/*_ Some debugging functions printing parameter/effector/target information
 		 *  to the Log-stream.
 		 */
-		void 			printParameters_() throw();
-		void  		printEffectors_() throw();
-		void 			printTargets_() throw();
+		void 			printParameters_();
+		void  		printEffectors_();
+		void 			printTargets_();
 		
 		/*_ A function to perform some ShiftX-y postprocessing: 
 		    add for all CA-atoms 0.2 times the EF-shift-value of the bound HA-atoms 
 	  */
-		void 			postprocessing_() throw();
+		void 			postprocessing_();
 
  	};
   

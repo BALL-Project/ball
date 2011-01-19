@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FDPBDialog.C,v 1.20.16.1 2007/03/25 22:00:37 oliver Exp $
-//
 
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -12,10 +10,10 @@
 #include <BALL/VIEW/KERNEL/threads.h>
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
 
-#include <QtGui/qlineedit.h>
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qradiobutton.h>
-#include <QtGui/qcheckbox.h>
+#include <QtGui/QLineEdit>
+#include <QtGui/QPushButton>
+#include <QtGui/QRadioButton>
+#include <QtGui/QCheckBox>
 #include <QtGui/QFileDialog>
 
 namespace BALL
@@ -132,7 +130,7 @@ namespace BALL
 
 			if (!lockComposites()) 
 			{
-				setStatusbarText("Can not calculate FDPB, since I can not lock the molecular data. Is a simulation running?", true);
+				setStatusbarText(tr("Can not calculate FDPB, since I can not lock the molecular data. Is a simulation running?"), true);
 				return false;
 			}
 
@@ -160,11 +158,11 @@ namespace BALL
 				thread_->start();
 
 				Position pos = 3;
-				String dots;
+				QString dots;
 				Position i = 0;
 				while (thread_->isRunning())
 				{
-					setStatusbarText("Calculating FDPB grid " + dots, false);
+					setStatusbarText(tr("Calculating FDPB grid ") + dots, false);
 					qApp->processEvents();
 					if (i > 10)
 					{
@@ -189,7 +187,7 @@ namespace BALL
 			#endif
 			if (!use_mt) calculate_();
 			
-			setStatusbarText("Finished FDPB grid", true);
+			setStatusbarText(tr("Finished FDPB grid"), true);
 			RegularData3DDataset* set = new RegularData3DDataset();
 			set->setData(fdpb_.phi_grid);
 			set->setComposite(system_);

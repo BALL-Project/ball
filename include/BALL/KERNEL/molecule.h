@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecule.h,v 1.35 2005/10/23 12:02:19 oliver Exp $
-//
 
 #ifndef BALL_KERNEL_MOLECULE_H
 #define BALL_KERNEL_MOLECULE_H
@@ -74,16 +72,14 @@ namespace BALL
 		//@{
 
 		/**	Writes a Molecule object to a persistent stream.
-				@param pm the persistence manager
-		*/
-		void persistentWrite(PersistenceManager& pm, const char* name = 0) const
-			throw(Exception::GeneralException);
+		 *	@param pm the persistence manager
+		 */
+		void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
 
 		/**	Reads a Molecule object from a persistent stream.
-				@param pm the persistence manager
-		*/
-		void persistentRead(PersistenceManager& pm)
-			throw(Exception::GeneralException);
+		 *	@param pm the persistence manager
+		 */
+		void persistentRead(PersistenceManager& pm);
 
 		//@}
 		/**	@name	Assignment 

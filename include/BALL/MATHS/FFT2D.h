@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT2D.h,v 1.16.16.1 2007/03/25 21:23:44 oliver Exp $
-//
 
 #ifndef BALL_MATHS_TFFT2D_H
 #define BALL_MATHS_TFFT2D_H
@@ -70,7 +68,7 @@ namespace BALL
 					@param inFourierSpace Flag to decide whether the data is assumed to be in physical or fourier
 																space
 			 */
-			 // AR: ldn is not any longer the binary logarithm but the absolute number of grid points
+			 // ldn is not any longer the binary logarithm but the absolute number of grid points
 			TFFT2D(Size nX, Size nY, double stepPhysX=1., double stepPhysY=1., Vector2 origin=Vector2(0.,0.), bool inFourierSpace=false);
 
 			/// Destructor
@@ -176,69 +174,73 @@ namespace BALL
 			 */
 			double getFourierSpaceMaxY() const;
 				
-			/** AR: Return the largest grid position for the x direction. 
+			/** Return the largest grid position for the x direction. 
 			 		This method returns the maximum position allowed in the grid. As the point 
 					in the origin has the indices (0, 0), this method returns the number of 
 					points in X direction minus one.
 			  */
 			Size getMaxXIndex() const;
 
-			/** AR: Return the largest grid position for the y direction. 
+			/** Return the largest grid position for the y direction. 
 			 		This method returns the maximum position allowed in the grid. As the point 
 					in the origin has the indices (0, 0), this method returns the number of 
 					points in Y direction minus one.
 			  */
 			Size getMaxYIndex() const;
 				
-			/** AR: Return the number of inverse transforms that have been carried out using this class.
+			/** Return the number of inverse transforms that have been carried out using this class.
 			 		This is an important factor for the normalization of the data.
 			 */
 			Size getNumberOfInverseTransforms() const;
 
-			/** AR: Returns the grid coordinate corresponding to the position.
+			/** Returns the grid coordinate corresponding to the position.
 			 */
 			Vector2 getGridCoordinates(Position position) const;
 
 			/** Returns the data at the grid position closest to <b>  pos </b>,
-				and automatically includes
-				the correct phase factor and (symmetric) normalization.
+			 *	and automatically includes
+			 * 	the correct phase factor and (symmetric) normalization.
+			 *
+			 *  @throw Exception::OutOfGrid if pos is outside the grid boundaries
 			 */
-			Complex getData(const Vector2& pos) const
-				throw(Exception::OutOfGrid);
+			Complex getData(const Vector2& pos) const;
 
 			/** Returns the data at point <b>pos</b>. If <b>pos</b> is not a 
-			 		point on the grid, the data is linearly interpolated.
-					This method automatically includes the correct phase factor
-					and (symmetric) normalization.
-				*/
-			Complex getInterpolatedValue(const Vector2& pos) const
-				throw(Exception::OutOfGrid);
+			 *	point on the grid, the data is linearly interpolated.
+			 *	This method automatically includes the correct phase factor
+			 *	and (symmetric) normalization.
+			 *
+			 *  @throw Exception::OutOfGrid if pos is outside the grid boundaries
+			 */
+			Complex getInterpolatedValue(const Vector2& pos) const;
 
 			/** Sets the data point at the grid position closest to <b>  pos </b>
-				to the value <b>  val </b>, and -- if called in fourier space --
-				automatically includes the correct phase factor and 
-				(symmetric) normalization.
+			 *  to the value <b>  val </b>, and -- if called in fourier space --
+			 *  automatically includes the correct phase factor and 
+			 *  (symmetric) normalization.
+			 *
+			 *  @throw Exception::OutOfGrid if pos is outside the grid boundaries
 			 */
-			void setData(const Vector2& pos, Complex val)
-				throw(Exception::OutOfGrid);
+			void setData(const Vector2& pos, Complex val);
 
 			/** Access the data at the grid position closest to <b>  pos </b>.
-				This function returns the "raw" data at that position.
+			 *  This function returns the "raw" data at that position.
+			 *
+			 *  @throw Exception::OutOfGrid if pos is outside the grid boundaries
 			 */
-			Complex& operator[](const Vector2& pos)
-				throw(Exception::OutOfGrid);
+			Complex& operator[](const Vector2& pos);
 
 			/** Access the data at the grid position closest to <b>  pos </b>.
-			 		This function returns the "raw" data at that position.
-				*/
-			const Complex& operator[](const Vector2& pos) const
-				throw(Exception::OutOfGrid);
-				
+			 *	This function returns the "raw" data at that position.
+			 *
+			 *  @throw Exception::OutOfGrid if pos is outside the grid boundaries
+			 */
+			const Complex& operator[](const Vector2& pos) const;
 
 			/** Nonmutable random access operator.
-					@note No range checking is done. For a more robust version, please
-					use getData.
-				*/
+			 *	@note No range checking is done. For a more robust version, please
+			 *	use getData.
+			 */
 			const Complex& operator [] (const IndexType& index) const { return TRegularData2D<Complex>::operator [](index); }
 
 			/** Mutable random access operator.
@@ -247,29 +249,31 @@ namespace BALL
 			*/
 			Complex& operator [] (const IndexType& index) {  return TRegularData2D<Complex>::operator [](index); }
 			
-			/** AR: Access the (raw) data at Position pos.
+			/** Access the (raw) data at Position pos.
+			 *
+			 *  @throw Exception::OutOfGrid if pos is outside the grid boundaries
 			 */
 			Complex& operator[](const Position& pos)
-				throw(Exception::OutOfGrid)
 			{
 				return TRegularData2D<Complex>::operator [] (pos);
 			}
 
-			/** AR: Access the (raw) data at Position pos. Const method.
-				*/
+			/** Access the (raw) data at Position pos. Const method.
+			 *
+			 *  @throw Exception::OutOfGrid if pos is outside the grid boundaries
+			 */
 			const Complex& operator[](const Position& pos) const
-				throw(Exception::OutOfGrid)
 			{
 				return TRegularData2D<Complex>::operator [] (pos);
 			}
 			
-			// AR:
+			// 
 			void setNumberOfFFTTransforms(Size num)
 			{
 				numPhysToFourier_ = num;
 			}
 			
-			// AR:
+			// 
 			void setNumberOfiFFTTransforms(Size num)
 			{
 				numFourierToPhys_ = num;
@@ -281,7 +285,7 @@ namespace BALL
 			 */
 			Complex phase(const Vector2& pos) const;
 				
-			/** AR: Returns <b>true</b> if the data is considered to be in Fourier space,
+			/** Returns <b>true</b> if the data is considered to be in Fourier space,
 			 		<b>false</b> otherwise.
 			 */
 			bool isInFourierSpace() const;
@@ -297,12 +301,12 @@ namespace BALL
       Vector2 minPhys_, maxPhys_;
       Vector2 minFourier_, maxFourier_;
       
-      // AR: new version for FFTW3
+      // new version for FFTW3
 			typename ComplexTraits::FftwPlan planForward_;
 			typename ComplexTraits::FftwPlan planBackward_;
 
 			
-			// AR: to control plan calculation with new fftw3
+			// to control plan calculation with new fftw3
 			Size dataLength_;
 			Complex *dataAdress_;
 			bool planCalculated_;
@@ -313,7 +317,6 @@ namespace BALL
 	*/
 	typedef TFFT2D<BALL_FFTW_DEFAULT_TRAITS> FFT2D;
 	
-	// AR:
 	/** Global assignment operator from TFFT2D to TRegularData2D<Complex>
 	 */
 	template <typename ComplexTraits>
@@ -339,8 +342,8 @@ namespace BALL
 	template <typename ComplexTraits>
 	bool TFFT2D<ComplexTraits>::operator == (const TFFT2D<ComplexTraits>& fft2D) const
 	{
-		// AR: test whether data_.size() == fft2D.data_.size()
-		//     instead of testing 2 lengths. Better for vector handling.
+		// test whether data_.size() == fft2D.data_.size()
+		// instead of testing 2 lengths. Better for vector handling.
 		
 		if (lengthX_ == fft2D.lengthX_ &&
 				lengthY_ == fft2D.lengthY_ &&
@@ -515,7 +518,7 @@ namespace BALL
 		return numFourierToPhys_;
 	}
 	
-	// AR: new for compatibility with FFT3D
+	// new for compatibility with FFT3D
 	template <typename ComplexTraits>
 	Vector2 TFFT2D<ComplexTraits>::getGridCoordinates(Position position) const
 	{
@@ -574,7 +577,6 @@ namespace BALL
 	
 	template <typename ComplexTraits>
 	typename TFFT2D<ComplexTraits>::Complex TFFT2D<ComplexTraits>::getData(const Vector2& pos) const
-		throw(Exception::OutOfGrid)
 	{
 		Complex result;
 		double normalization=1.;
@@ -597,7 +599,6 @@ namespace BALL
 
 	template <typename ComplexTraits>
 	typename TFFT2D<ComplexTraits>::Complex TFFT2D<ComplexTraits>::getInterpolatedValue(const Vector2& pos) const
-		throw(Exception::OutOfGrid)
 	{
 		Complex result;
 		
@@ -639,7 +640,6 @@ namespace BALL
 
 	template <typename ComplexTraits>
 	void TFFT2D<ComplexTraits>::setData(const Vector2& pos, Complex val)
-		throw(Exception::OutOfGrid)
 	{
 		Complex dummy;
 	
@@ -663,7 +663,6 @@ namespace BALL
 
 	template <typename ComplexTraits>
 	typename TFFT2D<ComplexTraits>::Complex& TFFT2D<ComplexTraits>::operator[](const Vector2& pos)
-		throw(Exception::OutOfGrid)
 	{
 		Index internalPos;
 
@@ -706,7 +705,6 @@ namespace BALL
 
 	template <typename ComplexTraits>
 	const typename TFFT2D<ComplexTraits>::Complex& TFFT2D<ComplexTraits>::operator[](const Vector2& pos) const
-		throw(Exception::OutOfGrid)
 	{
 		Index internalPos;
 

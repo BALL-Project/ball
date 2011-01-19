@@ -81,7 +81,7 @@ namespace BALL
 			BALL_CREATE(CrystalInfo)
 			/** Default Constructor
 			 */
-			~CrystalInfo() throw ();
+			~CrystalInfo();
 			//@}
 	
 			bool setSpaceGroup(const String& sg);
@@ -117,25 +117,32 @@ namespace BALL
 
 			Size getNumberOfNCSSymOps() const;
 
-			const Matrix4x4& getNCS(Position p) const
-				throw(Exception::IndexOverflow);
+			/** Returns the p-th NCS
+			 *  @throw Exception::IndexOverflow if p >= getNumberOfNCSSymOps()
+			 */
+			const Matrix4x4& getNCS(Position p) const;
 			
-			Matrix4x4& getNCS(Position p)
-				throw(Exception::IndexOverflow);
+			/** Returns a mutable reference to the p-th NCS
+			 *  @throw Exception::IndexOverflow if p >= getNumberOfNCSSymOps()
+			 */
+			Matrix4x4& getNCS(Position p);
 			
-			bool isgivenNCS(Position p) const
-				throw(Exception::IndexOverflow);
+			/** Returns true is the p-th NCS is given
+			 *  @throw Exception::IndexOverflow if p >= getNumberOfNCSSymOps()
+			 */
+			bool isgivenNCS(Position p) const;
 			
-			bool isgivenNCS(Position p)
-				throw(Exception::IndexOverflow);
-			
-			bool insertNCS(Position p, Matrix4x4 ncsm, bool is_given = 0)
-				throw(Exception::IndexOverflow);
+			/** Insert an NCS
+			 *  @throw Exception::IndexOverflow if p >= getNumberOfNCSSymOps()
+			 */
+			bool insertNCS(Position p, Matrix4x4 ncsm, bool is_given = 0);
 			
 			void pushbackNCS(Matrix4x4 ncsm, bool is_given = 0);
 			
-			bool eraseNCS(Position p)
-				throw(Exception::IndexOverflow);
+			/** Erase an NCS
+			 *  @throw Exception::IndexOverflow if p >= getNumberOfNCSSymOps()
+			 */
+			bool eraseNCS(Position p);
 
 			const Matrix4x4& getCart2Frac() const;	
 			const Matrix4x4& getFrac2Cart() const;	
@@ -147,14 +154,12 @@ namespace BALL
 			/** Persistent stream writing.
 			*/
 			//void write(PersistenceManager& pm) const;
-			void persistentWrite(PersistenceManager& pm, const char* name) const
-				throw (Exception::GeneralException);
+			void persistentWrite(PersistenceManager& pm, const char* name) const;
 
 			/** Persistent stream reading.
 			*/
 			//bool read(PersistenceManager& pm);
-			void persistentRead(PersistenceManager& pm)
-				throw (Exception::GeneralException);
+			void persistentRead(PersistenceManager& pm);
 
 			//@}
 

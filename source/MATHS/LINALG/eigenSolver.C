@@ -9,7 +9,6 @@ namespace BALL {
 	// ----- EigenSolver::solveRightEigenProblem_lapack ----- //
 	template <> 
 	bool EigenSolver<float, StandardTraits>::solveRightEigenProblem_lapack()
-		throw(Exception::OutOfMemory)
 	{
 #if defined(BALL_HAS_BLAS) && defined(BALL_HAS_LAPACK)
 		// we need a copy of the bound matrix since lapack overwrites the memory.
@@ -99,7 +98,6 @@ namespace BALL {
 
 	template <> 
 	bool EigenSolver<double, StandardTraits>::solveRightEigenProblem_lapack()
-		throw(Exception::OutOfMemory)
 	{
 #if defined(BALL_HAS_BLAS) && defined(BALL_HAS_LAPACK)
 		// we need a copy of our matrix since lapack overwrites the memory.
@@ -189,7 +187,6 @@ namespace BALL {
 
 	template <>
 	bool EigenSolver<ComplexFloat, StandardTraits>::solveRightEigenProblem_lapack()
-		throw(Exception::OutOfMemory)
 	{
 #if defined(BALL_HAS_BLAS) && defined(BALL_HAS_LAPACK)
 		// we need a copy of our matrix since lapack overwrites the memory.
@@ -277,7 +274,6 @@ namespace BALL {
 
 	template <>
 	bool EigenSolver<ComplexDouble, StandardTraits>::solveRightEigenProblem_lapack()
-		throw(Exception::OutOfMemory)
 	{
 #if defined(BALL_HAS_BLAS) && defined(BALL_HAS_LAPACK)
 		// we need a copy of our matrix since lapack overwrites the memory.
@@ -365,7 +361,6 @@ namespace BALL {
 
 	template <> 
 	bool EigenSolver<float, SymmetricTraits>::solveRightEigenProblem_lapack()
-		throw(Exception::OutOfMemory)
 	{
 #if defined(BALL_HAS_BLAS) && defined(BALL_HAS_LAPACK)
 		// we need a copy of the bound matrix since lapack overwrites the memory.
@@ -456,7 +451,6 @@ namespace BALL {
 
 	template <> 
 	bool EigenSolver<double, SymmetricTraits>::solveRightEigenProblem_lapack()
-		throw(Exception::OutOfMemory)
 	{
 #if defined(BALL_HAS_BLAS) && defined(BALL_HAS_LAPACK)
 		// we need a copy of the bound matrix since lapack overwrites the memory.

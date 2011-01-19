@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT3D.h,v 1.17.16.1 2007/03/25 21:23:44 oliver Exp $
-//
 
 #ifndef BALL_MATHS_TFFT3D_H
 #define BALL_MATHS_TFFT3D_H
@@ -234,52 +232,59 @@ namespace BALL
 			Vector3 getGridCoordinates(Position position) const;
 			
 			/** Returns the data at the grid position closest to <b>  pos </b>,
-				and automatically includes
-				the correct phase factor and (symmetric) normalization.
+			 *	and automatically includes
+			 *	the correct phase factor and (symmetric) normalization.
+			 *
+			 *  @throw Exception::OutOfGrid if pos is outside the grid boundaries
 			 */
-			Complex getData(const Vector3& pos) const
-				throw(Exception::OutOfGrid);
+			Complex getData(const Vector3& pos) const;
 
 			/** Returns the data at point <b>pos</b>. If <b>pos</b> is not a 
-			 		point on the grid, the data is linearly interpolated.
-					This method automatically includes the correct phase factor
-					and (symmetric) normalization.
-				*/
-			Complex getInterpolatedValue(const Vector3& pos) const
-				throw(Exception::OutOfGrid);
+			 *	point on the grid, the data is linearly interpolated.
+			 *	This method automatically includes the correct phase factor
+			 *	and (symmetric) normalization.
+			 *
+			 *  @throw Exception::OutOfGrid if pos is outside the grid boundaries
+			 */
+			Complex getInterpolatedValue(const Vector3& pos) const;
 
 			/** Sets the data point at the grid position closest to <b>  pos </b>
-				to the value <b>  val </b>, and -- if called in Fourier space --
-				automatically includes the correct phase factor and 
-				(symmetric) normalization.
+			 *  to the value <b>  val </b>, and -- if called in Fourier space --
+			 *  automatically includes the correct phase factor and 
+			 *  (symmetric) normalization.
+			 *
+			 *  @throw Exception::OutOfGrid if pos is outside the grid boundaries
 			 */
-			void setData(const Vector3& pos, Complex val)
-				throw(Exception::OutOfGrid);
+			void setData(const Vector3& pos, Complex val);
 
 			/** Access the data at the grid position closest to <b>  pos </b>.
-				This function returns the "raw" data at that position.
+			 *  This function returns the "raw" data at that position.
+			 *
+			 *  @throw Exception::OutOfGrid if pos is outside the grid boundaries
 			 */
-			Complex& operator[](const Vector3& pos)
-				throw(Exception::OutOfGrid);
+			Complex& operator[](const Vector3& pos);
 
 			/** Access the data at the grid position closest to <b>  pos </b>.
-			 		This function returns the "raw" data at that position.
-				*/
-			const Complex& operator[](const Vector3& pos) const
-				throw(Exception::OutOfGrid);
+			 *	This function returns the "raw" data at that position.
+			 *
+			 *  @throw Exception::OutOfGrid if pos is outside the grid boundaries
+			 */
+			const Complex& operator[](const Vector3& pos) const;
 
 			/** Access the (raw) data at Position pos.
+			 *
+			 *  @throw Exception::OutOfGrid if pos is outside the grid boundaries
 			 */
 			Complex& operator[](const Position& pos)
-				throw(Exception::OutOfGrid)
 			{
 				return TRegularData3D<Complex>::operator [] (pos);
 			}
 
 			/** Access the (raw) data at Position pos. Const method.
-				*/
+			 *
+			 *  @throw Exception::OutOfGrid if pos is outside the grid boundaries
+			 */
 			const Complex& operator[](const Position& pos) const
-				throw(Exception::OutOfGrid)
 			{
 				return TRegularData3D<Complex>::operator [] (pos);
 			}
@@ -661,7 +666,6 @@ namespace BALL
 	
 	template <typename ComplexTraits>
 	typename TFFT3D<ComplexTraits>::Complex TFFT3D<ComplexTraits>::getData(const Vector3& pos) const
-		throw(Exception::OutOfGrid)
 	{
 		Complex result;
 		double normalization=1.;
@@ -690,7 +694,6 @@ namespace BALL
 
 	template <typename ComplexTraits>
 	typename TFFT3D<ComplexTraits>::Complex TFFT3D<ComplexTraits>::getInterpolatedValue(const Vector3& pos) const
-		throw(Exception::OutOfGrid)
 	{
 		Complex result;
 		
@@ -741,7 +744,6 @@ namespace BALL
 
 	template <typename ComplexTraits>
 	void TFFT3D<ComplexTraits>::setData(const Vector3& pos, Complex val)
-		throw(Exception::OutOfGrid)
 	{
 		Complex dummy;
 	
@@ -767,7 +769,6 @@ namespace BALL
 
 	template <typename ComplexTraits>
 	typename TFFT3D<ComplexTraits>::Complex& TFFT3D<ComplexTraits>::operator[](const Vector3& pos)
-		throw(Exception::OutOfGrid)
 	{
 		Index internalPos;
 
@@ -823,7 +824,6 @@ namespace BALL
 
 	template <typename ComplexTraits>
 	const typename TFFT3D<ComplexTraits>::Complex& TFFT3D<ComplexTraits>::operator[](const Vector3& pos) const
-		throw(Exception::OutOfGrid)
 	{
 		Index internalPos;
 
@@ -878,13 +878,11 @@ namespace BALL
 	}
 
 	/*Complex& TFFT3D<ComplexTraits>::operator[](const Position& pos)
-		throw(Exception::OutOfGrid)
 	{
 		return operator [] (pos);
 	}
 
 	const Complex& TFFT3D<ComplexTraits>::operator[](const Position& pos) const
-		throw(Exception::OutOfGrid)
 	{
 		return operator [] (pos);
 	}

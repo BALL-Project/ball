@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: anisotropyShiftProcessor.C,v 1.15 2003/08/26 09:18:09 oliver Exp $
-//
 
 #include <BALL/NMR/anisotropyShiftProcessor.h>
 

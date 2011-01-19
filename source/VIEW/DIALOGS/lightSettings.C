@@ -1,17 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.C,v 1.23.16.1 2007/03/25 22:02:02 oliver Exp $
-//
 
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qlineedit.h> 
-#include <QtGui/qlabel.h>
-#include <QtGui/qradiobutton.h>
-#include <QtGui/qslider.h>
+#include <QtGui/QPushButton>
+#include <QtGui/QLineEdit> 
+#include <QtGui/QLabel>
+#include <QtGui/QRadioButton>
+#include <QtGui/QSlider>
 
 namespace BALL
 {
@@ -29,7 +27,7 @@ LightSettings::LightSettings(QWidget* parent, const char* name, Qt::WFlags fl)
 	setObjectName(name);
 	relative->setChecked(true);
 	defaultsPressed();
-	setWidgetStackName("Lighting");
+	setWidgetStackName((String)tr("Lighting"));
 	setINIFileSectionName("LIGHTING");
 	registerWidgetForHelpSystem_(this, "scene.html#lightsources");
 	registerWidgets_();
@@ -97,7 +95,7 @@ void LightSettings::update()
 	
 		for (Position light_nr = 0; light_nr < lights_.size(); light_nr++)
 		{
-			lights_list->addItem((String("Light ") + String(light_nr + 1)).c_str());
+			lights_list->addItem((String(tr("Light")) + " " + String(light_nr + 1)).c_str());
 		}
 	}
 

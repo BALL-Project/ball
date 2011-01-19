@@ -38,7 +38,6 @@ namespace BALL
 
 	template<>
 	void TRegularData3D<float>::binaryWriteRaw(const String& filename) const
-		throw(Exception::FileNotFound)		
 	{	
 		String coreName = filename;
 		String::size_type dotIndex = filename.find_last_of(".");
@@ -394,7 +393,7 @@ namespace BALL
 				set->setType(type);
 				float dens_mean = d3->calculateMean();
 				float dens_stddev = d3->calculateSD();
-				setStatusbarText("Successfully read " + type + " from " + maptype + " file: " + filename, true);
+				setStatusbarText(tr("Successfully read ") + type.c_str() + tr(" from ") + maptype.c_str() + tr(" file: ") + filename.c_str(), true);
 				Log.info() << mapname << " Map Density Mean: " << dens_mean << endl;
 				Log.info() << mapname << " Map Density Sigma: " << dens_stddev << endl;
 			}
@@ -588,7 +587,7 @@ namespace BALL
 
 			if (cs.vertex.size() == 0)
 			{
-				setStatusbarText("Could not calculate ContourSurface, no grid points found for threshold!", true);
+				setStatusbarText(tr("Could not calculate ContourSurface, no grid points found for threshold!"), true);
 				return false;
 			}
 
@@ -664,7 +663,7 @@ namespace BALL
 					new_size.y == size.y &&
 					new_size.z == size.z)
 			{
-				setStatusbarText("Grid does not need to be resized!", true);
+				setStatusbarText(tr("Grid does not need to be resized!"), true);
 				return 0;
 			}
 
@@ -689,7 +688,7 @@ namespace BALL
 
 			if (grid_ptr == 0)
 			{
-				setStatusbarText("Not enough memory to resize grid!", true);
+				setStatusbarText(tr("Not enough memory to resize grid!"), true);
 				return 0;
 			}
 
@@ -711,7 +710,7 @@ namespace BALL
 			}
 			
 			// should not happen:
-			if (problem) setStatusbarText("Grid may be inaccurate!", true);
+			if (problem) setStatusbarText(tr("Grid may be inaccurate!"), true);
 
 			return grid_ptr;
 		}
@@ -817,7 +816,7 @@ namespace BALL
 
 			if (dcd->getNumberOfAtoms() != system->countAtoms())
 			{
-				setStatusbarText("Number of atoms do not match. Aborting...");
+				setStatusbarText(tr("Number of atoms do not match. Aborting..."));
 				delete dcd;
 				return 0;
 			}
@@ -899,7 +898,7 @@ namespace BALL
 				if (!ssm->readFromFile())
 				{
 					ssm->clearBuffer();
-					setStatusbarText("Could not read trajectories into buffer! Out of memory?");
+					setStatusbarText(tr("Could not read trajectories into buffer! Out of memory?"));
 				}
 			}
 			return true;
@@ -956,7 +955,7 @@ namespace BALL
 			DockResult* dr = new DockResult();
 			if (!dr->readDockResult(filename))
 			{
-				setStatusbarText("Could not read DockResult file!", true);
+				setStatusbarText(tr("Could not read DockResult file!"), true);
 				return 0;
 			}
 		
@@ -1016,11 +1015,11 @@ namespace BALL
 			DockResult* res = getData(data);
 			if (!res->getConformationSet()->writeDCDFile(filename))
 			{
-				setStatusbarText("Could not write DCDFile.", true);
+				setStatusbarText(tr("Could not write DCDFile."), true);
 				return false;
 			}
 
-			setStatusbarText("Written DCDFile.", true);
+			setStatusbarText(tr("Written DCDFile."), true);
 			return true;
 		}
 
@@ -1152,7 +1151,7 @@ namespace BALL
 			Representation* rep = dialog.createLines();
 			if (rep == 0) 
 			{
-				setStatusbarText("Creation of field line failed, see logs for further details...", true);
+				setStatusbarText(tr("Creation of field line failed, see logs for further details..."), true);
 				return false;
 			}
 

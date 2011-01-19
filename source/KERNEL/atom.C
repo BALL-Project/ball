@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.C,v 1.57 2005/12/23 17:02:41 amoll Exp $
-//
 
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
@@ -96,7 +94,6 @@ namespace BALL
 	}
 
 	void Atom::persistentWrite(PersistenceManager& pm, const char* name) const
-		throw(Exception::GeneralException)
 	{
 		pm.writeObjectHeader(this, name);
 
@@ -123,7 +120,6 @@ namespace BALL
 	}
 
 	void Atom::persistentRead(PersistenceManager& pm)
-		throw(Exception::GeneralException)
 	{
 		pm.checkObjectHeader(RTTI::getStreamName<Composite>());
 			Composite::persistentRead(pm);
@@ -296,7 +292,6 @@ namespace BALL
 	}
 
 	Bond* Atom::getBond(Position index)
-		throw(Exception::IndexOverflow)
 	{
 		if (index >= (Index)MAX_NUMBER_OF_BONDS)
 		{
@@ -307,7 +302,6 @@ namespace BALL
 	}
 
 	const Bond* Atom::getBond(Position index) const
-		throw(Exception::IndexOverflow)
 	{
 		return (const Bond *)((Atom *)this)->getBond(index);
 	}
@@ -334,7 +328,6 @@ namespace BALL
 	}
 
 	Bond* Atom::createBond(Atom& atom)
-		throw(Exception::TooManyBonds)
 	{
 		// Check whether this bond exists already
 		Bond* bond = getBond(atom);
@@ -350,7 +343,6 @@ namespace BALL
 	}
 
 	Bond* Atom::createBond(Bond& bond, Atom& atom)
-		throw(Exception::TooManyBonds)
 	{
 		return Bond::createBond(bond, *this, atom);
 	}
@@ -417,12 +409,12 @@ namespace BALL
 		number_of_bonds_ = 0;
 	}
 
-	Atom* Atom::getPartnerAtom(Position i) throw(Exception::IndexOverflow)
+	Atom* Atom::getPartnerAtom(Position i)
 	{
 		return getBond(i)->getBoundAtom(*this);
 	}
 
-	const Atom* Atom::getPartnerAtom(Position i) const throw(Exception::IndexOverflow)
+	const Atom* Atom::getPartnerAtom(Position i) const
 	{
 		return getBond(i)->getBoundAtom(*this);
 	}

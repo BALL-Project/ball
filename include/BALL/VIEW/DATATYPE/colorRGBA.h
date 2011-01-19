@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBA.h,v 1.21.16.1 2007/03/25 21:25:40 oliver Exp $
-//
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 #define BALL_VIEW_DATATYPE_COLORRGBA_H
@@ -70,8 +68,7 @@ namespace BALL
 					\exception   NotInHexFormat if the string is not a valid hex format string
 					\return      ColorRGBA new constructed colorRGBA
 			*/
-			ColorRGBA(const char* value)
-				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);
+			ColorRGBA(const char* value);
 
 			/** Constructor with Parameter string.
 					Same as constructor with parameter char*.
@@ -80,8 +77,7 @@ namespace BALL
 					\exception   NotInHexFormat if the string is not a valid hex format string
 					\return      ColorRGBA new constructed colorRGBA
 			*/
-			ColorRGBA(const String& value)
-				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);
+			ColorRGBA(const String& value);
 
 			/** Detailed component initializing constructor.
 					\param       red_value the red component. 
@@ -167,8 +163,7 @@ namespace BALL
 					\exception   InvalidRange if <tt> string length != 6 && string length != 8</tt>
 					\exception   NotInHexFormat if the string is not a valid hex format string
 			*/
-			void set(const char* value)
-				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);
+			void set(const char* value);
 
 			/** Assignment operator with char*.
 					Calls set.
@@ -178,8 +173,7 @@ namespace BALL
 					\exception   NotInHexFormat if the string is not a valid hex format string
 					\return      ColorRGBA& this colorRGBA
 			*/
-			const ColorRGBA& operator = (const char* value)
-				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);
+			const ColorRGBA& operator = (const char* value);
 
 			/** Copying to char*.
 					Copies the color to the string represented by a pointer.
@@ -197,8 +191,7 @@ namespace BALL
 					\exception   InvalidRange if <tt> string length != 6 && string length != 8</tt>
 					\exception   NotInHexFormat if the string is not a valid hex format string
 			*/
-			void set(const String& value)
-				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);
+			void set(const String& value);
 
 			/** Assign the color represented by the string <b> value</b> to this colorRGBA.
 					Calls set.
@@ -210,8 +203,7 @@ namespace BALL
 					\return      ColorRGBA& this colorRGBA
 					\see         set
 			*/
-			const ColorRGBA& operator = (const String& value)
-				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);
+			const ColorRGBA& operator = (const String& value);
 
 			/** Copying to string.
 					Calls set.
@@ -436,8 +428,9 @@ namespace BALL
 			ColorUnit blue_;
 			ColorUnit alpha_;
 
-			void stringToRGBA_(const String& s)
-				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);
+			// @throw Exception::InvalidRange 
+			// @throw Exception::NotInHexFormat
+			void stringToRGBA_(const String& s);
 		};
 
 		/** Static instance for the color of selected geometric objects */

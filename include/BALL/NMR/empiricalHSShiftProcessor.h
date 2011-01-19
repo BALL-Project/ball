@@ -84,13 +84,11 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		EmpiricalHSShiftProcessor()
-			throw();
+		EmpiricalHSShiftProcessor();
 
 		/**	Destructor.
 		*/
-		virtual ~EmpiricalHSShiftProcessor()
-			throw();	
+		virtual ~EmpiricalHSShiftProcessor();
 
 		//@}
 		/**	@name	Accessors.
@@ -129,8 +127,7 @@ namespace BALL
 				is read from this section too. 
 				@see finish ()
 		*/
-		virtual void init()
-			throw();
+		virtual void init();
 
 		//@}
 		/**	@name	Processor specific functions.
@@ -142,8 +139,7 @@ namespace BALL
 				It fails if no parameters were assigned.
 				@return bool, <b>false</b> if <tt>parameters_ == 0</tt>
 		*/
-		virtual bool start()
-			throw();
+		virtual bool start();
 
 
 		/**	operator (). 
@@ -158,8 +154,7 @@ namespace BALL
 				@return Processor::CONTINUE
 				@param composite an arbitrary composite. All non-atom objects are ignored.
 		*/
-		virtual Processor::Result operator () (Composite& composite)
-			throw();
+		virtual Processor::Result operator () (Composite& composite);
 
 		/**	Finish method. 
 				This method performs the chemical shift calculation for all
@@ -178,9 +173,8 @@ namespace BALL
 				added to the named property  \link ShiftModule::PROPERTY__SHIFT ShiftModule::PROPERTY__SHIFT \endlink .
 				@return bool, <b>false</b> if <tt>invalid_ </tt>
 		*/
-		virtual bool finish()
-			throw();
-			
+		virtual bool finish();
+
 		//@}
 		/** @name Public Attributes
 			*/
@@ -204,8 +198,7 @@ namespace BALL
 							
 				/** Default constructor.
 				 */
-				PropertiesForShift_(int verbosity_ = EmpiricalHSShiftProcessor::VERBOSITY_LEVEL_CRITICAL) 
-					throw();
+				PropertiesForShift_(int verbosity_ = EmpiricalHSShiftProcessor::VERBOSITY_LEVEL_CRITICAL);
 
 				/** A pointer to the atom, whose properties are computed and stored. 
 				 */
@@ -227,7 +220,7 @@ namespace BALL
 				 *   The method fails if the atom does not belong to a residue.
 				 *	 @return bool, <b>false</b> if <tt> !a->getResidue()</tt>
 				 **/
-				bool computeProperties_(Atom* atom, std::set<String> properties) 	throw();  
+				bool computeProperties_(Atom* atom, std::set<String> properties);  
 
 				/**   Method to obtain a property's value. 
 				 *    A std::pair<float, String> is returned, such that 
@@ -240,18 +233,18 @@ namespace BALL
 				 *     	otherwise the operator is not able to return the correct value!
 				 *    @return pair<float, String> 
 				 */
-				std::pair<float, String> operator [] (const String& property_name) throw();
+				std::pair<float, String> operator [] (const String& property_name);
 
 				/**  Method to check the type of a property.
 				 *   @return bool, <b>false</b> if <tt> property is of type
 				 *   	"PSI"  || "PHI" || "HA2L" || "HA1L" || "HNL" || "OHL"|| "CHI" </tt>
 				 */
-				static bool isDiscrete(String property) throw();
+				static bool isDiscrete(String property);
 				
 				/**  Method to check the type of a property.
 				 *   @return bool, <b>false</b> if <tt> property != "CHI" || "CHI2" </tt>
 				 */
-				static bool isMixed(String property) throw();
+				static bool isMixed(String property);
 
 			protected:
 
@@ -263,19 +256,19 @@ namespace BALL
 
 			protected:
 				
-				float			getChiAngle_(Residue* residue) throw();
-				float			getChi2Angle_(Residue* residue) throw();
-				char 			getAminoAcid_(Residue* residue) throw();
-				char 			getSecondaryStructure_(Residue* residue) throw();
-				float 		getHA_HBondLen_(Residue* residue) throw();
-				float 		getHA2_HBondLen_(Residue* residue) throw();
-				float 		getHN_HBondLen_(Residue* residue) throw();
-				float 		getO_HBondLen_(Residue* residue) throw();
-				bool 			hasDisulfidBond_(Residue* residue) throw();
-				bool 			hasHA_HBond_(Residue* residue) throw();
-				bool 			hasHA2_HBond_(Residue* residue) throw();
-				bool 			hasHN_HBond_(Residue* residue) throw();
-				bool 			hasO_HBond_(Residue* residue) throw();
+				float			getChiAngle_(Residue* residue);
+				float			getChi2Angle_(Residue* residue);
+				char 			getAminoAcid_(Residue* residue);
+				char 			getSecondaryStructure_(Residue* residue);
+				float 		getHA_HBondLen_(Residue* residue);
+				float 		getHA2_HBondLen_(Residue* residue);
+				float 		getHN_HBondLen_(Residue* residue);
+				float 		getO_HBondLen_(Residue* residue);
+				bool 			hasDisulfidBond_(Residue* residue);
+				bool 			hasHA_HBond_(Residue* residue);
+				bool 			hasHA2_HBond_(Residue* residue);
+				bool 			hasHN_HBond_(Residue* residue);
+				bool 			hasO_HBond_(Residue* residue);
 				
 			private:
 				// verbosity of the classes methods
@@ -312,7 +305,7 @@ namespace BALL
 
 				/*_  Constructors and Destructors.
 				*/
-				ShiftHyperSurface_(int verbosity = EmpiricalHSShiftProcessor::VERBOSITY_LEVEL_CRITICAL) throw();
+				ShiftHyperSurface_(int verbosity = EmpiricalHSShiftProcessor::VERBOSITY_LEVEL_CRITICAL);
 
 				/*_ Detailed constructor. 
 				 *  Creates a ShiftHyperSurface given the <b>filename<\b> of the data file, 
@@ -345,7 +338,7 @@ namespace BALL
 
 				/**	Destructor.
 				*/
-				virtual ~ShiftHyperSurface_() throw();
+				virtual ~ShiftHyperSurface_();
 
 				/** Method to evaluate the empirical hypersurface given the properties of an atom.
 				 *  In case of a SINGLE__?? property type, the property type string works as 
@@ -356,32 +349,32 @@ namespace BALL
 				 *  If one of the property values is set to { /tt FLOAT_VALUE_IGNORE}, 
 				 *  zero is returned.
 				 */
-				float operator () (PropertiesForShift_& properties) throw();	
+				float operator () (PropertiesForShift_& properties);	
 
 				/** Method to check if the hypersurface is valid.
 				 *   @return bool, <b>false</b> if <tt> hypersurface is invalid.
 				 */
-				bool isvalid() throw(){return !invalid_;}
+				bool isvalid(){return !invalid_;}
 
 				// Returns the total average given in the input file.
-				float getTotalAverage() throw() {return average_;}
+				float getTotalAverage() {return average_;}
 
 			private:
 
 				// Computes the average of the look-up table values.
-				float getTableAverage_() throw();
+				float getTableAverage_();
 
 				// Computes the row average of the look-up table given a row name.
-				float getTableRowAverage_(const std::map<String, float>& row) throw();
+				float getTableRowAverage_(const std::map<String, float>& row);
 
 				// Computes the column average of the look-up table given a column name.
-				float getTableColumnAverage_(const String& name) throw();
+				float getTableColumnAverage_(const String& name);
 
 				/** Method to check if the hypersurface's look--up table
 				 *  has a column named "name".
 				 *  @return bool, <b>false</b> if <tt> the look-up table has no column "name".
 				 */
-				bool tableHasColumn_(const String& name) throw();
+				bool tableHasColumn_(const String& name) ;
 
 				/** Method to read the datafile of a shift hypersurface. 
 				 *  
@@ -402,15 +395,15 @@ namespace BALL
 
 				 where  ( | ) denotes alternatives and "N/A" an empty entry. 
 				 */ 
-				void parseDataFile_(BALL::File& file, String filename) throw();
+				void parseDataFile_(BALL::File& file, String filename) ;
 
 				// Method to convert a vector of strings into a vector of floats {/tt output}.
-				void convertToReal_(const vector<String>& input, vector<float>& output) throw();
+				void convertToReal_(const vector<String>& input, vector<float>& output);
 
 				/** Method to set the type of the hypersurface according to two input property types 
 				 * (see {\tt HYPERSURFACE__TYPE()} )
 				 */
-				void setType_(String firstproperty, String secondproperty) throw();
+				void setType_(String firstproperty, String secondproperty);
 
 				// The type of the hypersurface.
 				int type_;
@@ -503,15 +496,15 @@ namespace BALL
 		/*_ Some debugging functions printing parameter/effector/target information
 		 *   to the Log stream.
 		 */
-		void 			printParameters_() throw();
-		void 			printTargets_() throw();	
+		void 			printParameters_();
+		void 			printTargets_();	
 
 		/*_ A function to perform some ShiftX-y postprocessing: 
 			add for all CA-atoms 0.2 times the EF-shift-value of the bound HA-atoms.
 			Due to some reason ShiftX does not perform this postprocessing 
 			for the empirical Hypersurface contributions.
 			*/
-		void			postprocessing_() throw();
+		void			postprocessing_();
 
 		/// The verbosity of this class as taken from the options
 		int 			verbosity_;

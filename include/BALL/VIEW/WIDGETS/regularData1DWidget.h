@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.h,v 1.14.16.1 2007/03/25 21:26:24 oliver Exp $
-//
 
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
 # include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -20,7 +18,7 @@
 # include <BALL/VIEW/WIDGETS/dockWidget.h>
 #endif
 
-#include <QtGui/qcolor.h>
+#include <QtGui/QColor>
 //Added by qt3to4:
 #include <QContextMenuEvent>
 #include <QResizeEvent>

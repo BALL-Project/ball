@@ -26,7 +26,7 @@
 # include <BALL/STRUCTURE/fragmentDB.h>
 #endif
 
-#include <QtGui/qcursor.h>
+#include <QtGui/QCursor>
 
 namespace BALL
 {

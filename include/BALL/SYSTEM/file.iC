@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.iC,v 1.20 2003/08/26 08:04:55 oliver Exp $
-//
 
 BALL_INLINE 
 void File::clear()
@@ -33,15 +31,13 @@ File::OpenMode File::getOpenMode() const
 }
   
 BALL_INLINE 
-File::Type File::getType(bool trace_link) 
-	const throw (Exception::FileNotFound)
+File::Type File::getType(bool trace_link) const
 {
   return File::getType(name_, trace_link);
 }
 
 BALL_INLINE 
 bool File::copyTo(const String& destination_name, Size buffer_size)
-	throw (Exception::FileNotFound)
 {
   return File::copy(name_, destination_name, buffer_size);
 }
@@ -68,7 +64,6 @@ bool File::remove()
 
 BALL_INLINE 
 bool File::move(const String& source_name, const String& destination_name)
-	throw (Exception::FileNotFound)
 {
   if (File::copy(source_name, destination_name))
   {
@@ -79,7 +74,6 @@ bool File::move(const String& source_name, const String& destination_name)
 
 BALL_INLINE 
 bool File::moveTo(const String& destination_name)
-	throw (Exception::FileNotFound)
 {
 #ifdef BALL_COMPILER_MSVC
   File::close();
@@ -105,8 +99,7 @@ bool File::isAccessible(String name)
 }
 
 BALL_INLINE 
-bool File::isAccessible()
-	const throw (Exception::FileNotFound)
+bool File::isAccessible() const
 {
   return File::isAccessible(name_);
 }
@@ -114,7 +107,6 @@ bool File::isAccessible()
 
 BALL_INLINE 
 bool File::rename(String old_path, String new_path)
-	throw (Exception::FileNotFound)
 {
   FileSystem::canonizePath(old_path);
   FileSystem::canonizePath(new_path);
@@ -134,7 +126,6 @@ bool File::rename(String old_path, String new_path)
 
 BALL_INLINE 
 bool File::renameTo(const String& new_path)
-	throw (Exception::FileNotFound)
 {
 #ifdef BALL_COMPILER_MSVC
   File::close();
@@ -156,7 +147,6 @@ bool File::renameTo(const String& new_path)
 
 BALL_INLINE 
 bool File::truncate(String path, Size size)
-	throw (Exception::FileNotFound)
 {
 	if (!isAccessible(path))
 	{
@@ -176,7 +166,6 @@ bool File::truncate(String path, Size size)
 
 BALL_INLINE 
 bool File::truncate(Size size)
-	throw (Exception::FileNotFound)
 {
   return File::truncate(name_, size);
 }
@@ -195,7 +184,6 @@ bool File::operator != (const File &file) const
 
 BALL_INLINE
 bool File::isValid() const	
-	
 {
   return (getName() != "" && ((File*)this)->std::fstream::good() );
 }
@@ -214,7 +202,6 @@ bool File::isClosed() const
 
 BALL_INLINE 
 bool File::isCanonized() const 
-	throw (Exception::FileNotFound)
 {
 	if (!isAccessible()) throw(Exception::FileNotFound(__FILE__, __LINE__, name_));
 
@@ -227,7 +214,6 @@ bool File::isCanonized() const
 
 BALL_INLINE 
 bool File::isReadable(String name)
-	throw (Exception::FileNotFound)
 {
 	if (!File::isAccessible(name)) throw(Exception::FileNotFound(__FILE__, __LINE__, name));
 
@@ -238,14 +224,12 @@ bool File::isReadable(String name)
 
 BALL_INLINE 
 bool File::isReadable() const 
-	throw (Exception::FileNotFound)
 {
   return File::isReadable(name_);
 }
 
 BALL_INLINE 
 bool File::isWritable(String name)
-	throw (Exception::FileNotFound)
 {
 	if (!File::isAccessible(name)) throw(Exception::FileNotFound(__FILE__, __LINE__, name));
 
@@ -256,14 +240,12 @@ bool File::isWritable(String name)
 
 BALL_INLINE 
 bool File::isWritable() const 
-	throw (Exception::FileNotFound)
 {
   return File::isWritable(name_);
 }
 
 BALL_INLINE 
 bool File::isExecutable(String name)
-	throw (Exception::FileNotFound)
 {
 	if (!isAccessible(name)) throw(Exception::FileNotFound(__FILE__, __LINE__, name));
 
@@ -277,14 +259,12 @@ bool File::isExecutable(String name)
 
 BALL_INLINE 
 bool File::isExecutable() const 
-	throw (Exception::FileNotFound)
 {
   return File::isExecutable(name_);
 }
 
 BALL_INLINE 
 Size File::getSize(String name)
-	throw (Exception::FileNotFound)
 {
   File tmp(name);
   return tmp.getSize();

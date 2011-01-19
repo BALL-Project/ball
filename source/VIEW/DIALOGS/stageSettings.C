@@ -230,7 +230,7 @@ namespace BALL
 			if (use_buffer != renderer.vertexBuffersEnabled() &&
 					getMainControl()->getRepresentationManager().getNumberOfRepresentations() > 0)
 			{
-				getMainControl()->setStatusbarText("Because of change in usage of vertex buffer, all Representations have to be deleted!", true);
+				getMainControl()->setStatusbarText(tr("Because of change in usage of vertex buffer, all Representations have to be deleted!"), true);
 				// remove representations
 				RepresentationManager& pm = getMainControl()->getRepresentationManager();
 				Size nr = pm.getNumberOfRepresentations();

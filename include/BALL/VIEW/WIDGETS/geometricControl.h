@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.27.16.1 2007/03/25 21:26:20 oliver Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -19,7 +18,7 @@
 #endif 
 
 
-#include <QtCore/qpoint.h>
+#include <QtCore/QPoint>
 #include <QtGui/QMenu>
 
 namespace BALL

@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnit.C,v 1.14.18.1 2007/03/25 21:56:35 oliver Exp $
-//
 
 #include <BALL/VIEW/DATATYPE/colorUnit.h>
 #include <stdio.h>
@@ -32,13 +30,11 @@ namespace BALL
 		}
 
 		ColorUnit::ColorUnit(const char *char_ptr)
-			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			value_ = hexToFloat_(char_ptr);
 		}
 
 		ColorUnit::ColorUnit(const String& s)
-			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			value_ = hexToFloat_(s.c_str());
 		}
@@ -49,7 +45,6 @@ namespace BALL
 		}
 
 		ColorUnit::ColorUnit(const short s)
-			throw(Exception::InvalidRange)
 		{
 			if ((s < 0) || (s > 255))
 			{
@@ -60,7 +55,6 @@ namespace BALL
 		}
 
 		ColorUnit::ColorUnit(const unsigned short us)
-			throw(Exception::InvalidRange)
 		{
 			if (us > 255)
       {
@@ -71,7 +65,6 @@ namespace BALL
 		}
 
 		ColorUnit::ColorUnit(const int i)
-			throw(Exception::InvalidRange)
 		{
 			/*
 			if ((i < 0) || (i > 255))
@@ -84,7 +77,6 @@ namespace BALL
 		}
 
 		ColorUnit::ColorUnit(const unsigned int ui)
-			throw(Exception::InvalidRange)
 		{
 			/*
 			if (ui > 255)
@@ -97,7 +89,6 @@ namespace BALL
 		}
 
 		ColorUnit::ColorUnit(const long l)
-			throw(Exception::InvalidRange)
 		{
 			/*
 			if ((l < 0) || (l > 255))
@@ -110,7 +101,6 @@ namespace BALL
 		}
 
 		ColorUnit::ColorUnit(const unsigned long ul)
-			throw(Exception::InvalidRange)
 		{
 			/*
 			if (ul > 255)
@@ -123,7 +113,6 @@ namespace BALL
 		}
 
 		ColorUnit::ColorUnit(const float f)
-			throw(Exception::InvalidRange)
 		{
 			/*
 			if ((f < 0.0) || (f > 1.0))
@@ -136,7 +125,6 @@ namespace BALL
 		}
 
 		ColorUnit::ColorUnit(const double d)
-			throw(Exception::InvalidRange)
 		{
 			/*
 			if ((d < 0.0) || (d > 1.0))
@@ -174,13 +162,11 @@ namespace BALL
 		}
 
 		void ColorUnit::set(const char* char_ptr)
-			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			value_ = hexToFloat_(char_ptr);
 		}
 
 		const ColorUnit& ColorUnit::operator = (const char* char_ptr)
-			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			set(char_ptr);
 
@@ -193,13 +179,11 @@ namespace BALL
 		}
 
 		void ColorUnit::set(const String& s)
-			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			value_ = hexToFloat_(s.c_str());
 		}
 
 		const ColorUnit& ColorUnit::operator = (const String& s)
-			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			set(s);
 
@@ -233,7 +217,6 @@ namespace BALL
 		}
 
 		void ColorUnit::set(const short s)
-			throw(Exception::InvalidRange)
 		{
 			/*
 			if ((s < 0) || (s > 255))
@@ -246,7 +229,6 @@ namespace BALL
 		}
 
 		const ColorUnit& ColorUnit::operator = (const short s)
-			throw(Exception::InvalidRange)
 		{
 			set(s);
 
@@ -259,7 +241,6 @@ namespace BALL
 		}
 
 		void ColorUnit::set(const unsigned short us)
-			throw(Exception::InvalidRange)
 		{
 			/*
 			if (us > 255)
@@ -272,7 +253,6 @@ namespace BALL
 		}
 
 		const ColorUnit& ColorUnit::operator = (const unsigned short us)
-			throw(Exception::InvalidRange)
 		{
 			set(us);
 
@@ -285,7 +265,6 @@ namespace BALL
 		}
 
 		void ColorUnit::set(const int i)
-			throw(Exception::InvalidRange)
 		{
 			/*
 			if ((i < 0) || (i > 255))
@@ -298,7 +277,6 @@ namespace BALL
 		}
 
 		const ColorUnit& ColorUnit::operator = (const int i)
-			throw(Exception::InvalidRange)
 		{
 			set(i);
 
@@ -311,7 +289,6 @@ namespace BALL
 		}
 
 		void ColorUnit::set(const unsigned int ui)
-			throw(Exception::InvalidRange)
 		{
 			/*
 			if (ui > 255)
@@ -324,7 +301,6 @@ namespace BALL
 		}
 
 		const ColorUnit& ColorUnit::operator = (const unsigned int ui)
-			throw(Exception::InvalidRange)
 		{
 			set(ui);
 
@@ -337,7 +313,6 @@ namespace BALL
 		}
 
 		void ColorUnit::set(const long l)
-			throw(Exception::InvalidRange)
 		{
 			/*
 			if ((l < 0) || (l > 255))
@@ -350,7 +325,6 @@ namespace BALL
 		}
 
 		const ColorUnit& ColorUnit::operator = (const long l)
-			throw(Exception::InvalidRange)
 		{
 			set(l);
 
@@ -363,7 +337,6 @@ namespace BALL
 		}
 
 		void ColorUnit::set(const unsigned long ul)
-			throw(Exception::InvalidRange)
 		{
 			/*
 			if (ul > 255)
@@ -376,7 +349,6 @@ namespace BALL
 		}
 
 		const ColorUnit& ColorUnit::operator = (const unsigned long ul)
-			throw(Exception::InvalidRange)
 		{
 			set(ul);
 
@@ -389,7 +361,6 @@ namespace BALL
 		}
 
 		void ColorUnit::set(const float f)
-			throw(Exception::InvalidRange)
 		{
 			/*
 			if ((f < 0.0) || (f > 1.0))
@@ -402,7 +373,6 @@ namespace BALL
 		}
 
 		const ColorUnit& ColorUnit::operator = (const float f)
-			throw(Exception::InvalidRange)
 		{
 			set(f);
 
@@ -415,7 +385,6 @@ namespace BALL
 		}
 
 		void ColorUnit::set(const double d)
-			throw(Exception::InvalidRange)
 		{
 			/*
 			if ((d < 0.0) || (d > 1.0))
@@ -428,7 +397,6 @@ namespace BALL
 		}
 
 		const ColorUnit& ColorUnit::operator = (const double d)
-			throw(Exception::InvalidRange)
 		{
 			set(d);
 
@@ -475,7 +443,6 @@ namespace BALL
 		}
 
 		float ColorUnit::hexToFloat_(const char *char_ptr)
-			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			int number = 0;
 

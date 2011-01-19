@@ -67,9 +67,9 @@ namespace BALL
 		GenericMolFile();
 
 		/** Detailed constructor
-		*/
-		GenericMolFile(const String& filename, File::OpenMode open_mode = std::ios::in)
-			throw(Exception::FileNotFound);
+		 *  @throw Exception::FileNotFound if the file could not be opened
+		 */
+		GenericMolFile(const String& filename, File::OpenMode open_mode = std::ios::in);
 
 		/** Destructor
 		*/
@@ -81,10 +81,10 @@ namespace BALL
 		//@{
 	
 		/**	Assignment operator.
-				Create a new object pointing to the same filename.
-		*/
-		const GenericMolFile& operator = (const GenericMolFile& rhs)
-			throw(Exception::FileNotFound);
+		 *	Create a new object pointing to the same filename.
+		 *  @throw Exception::FileNotFound if the file could not be opened
+		 */
+		const GenericMolFile& operator = (const GenericMolFile& rhs);
 
 		//@}
 		/**	@name Reading and Writing of Kernel Datastructures
@@ -92,48 +92,46 @@ namespace BALL
 		//@{
 
 		/**	Write the molecules of a system.
-				If the file format does not support multiple 
-				molecules in a single file, a warning should be printed
-				and only the first molecule should be stored. \par
-				The default implementation iterates over
-				the system and calls  \link write(const Molecule& molecule) write(const Molecule& molecule) \endlink  
-				for each molecule. 
-		*/
-		virtual bool write(const System& system)
-			throw(File::CannotWrite);
+		 *	If the file format does not support multiple 
+		 *	molecules in a single file, a warning should be printed
+		 *	and only the first molecule should be stored. \par
+		 *	The default implementation iterates over
+		 *	the system and calls  \link write(const Molecule& molecule) write(const Molecule& molecule) \endlink  
+		 *	for each molecule. 
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		virtual bool write(const System& system);
 		
 		/**	Write a molecule.
-				Repeated invocations of this method append
-				molecules to the same file. \par
-				The default implementation does nothing.
-		*/
-		virtual bool write(const Molecule& molecule)
-			throw(File::CannotWrite);
+		 *	Repeated invocations of this method append
+		 *	molecules to the same file. \par
+		 *	The default implementation does nothing.
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		virtual bool write(const Molecule& molecule);
 		
 		/**	Read a system.
-				This method will read all molecules contained in the file
-				and add them to the system. \par
-				The default implementation calls  \link read() read() \endlink 
-				until <b>false</b> is returned and adds the molecules read to 
-				the system.
-				@return true if anything could be read
-				@exception Exception::ParseError if the file could not be parsed while reading a molecule
-		*/
-		virtual bool read(System&	system)
-			throw(Exception::ParseError);
+		 *	This method will read all molecules contained in the file
+		 *	and add them to the system. \par
+		 *	The default implementation calls  \link read() read() \endlink 
+		 *	until <b>false</b> is returned and adds the molecules read to 
+		 *	the system.
+		 *	@return true if anything could be read
+		 *	@throw Exception::ParseError if the file could not be parsed while reading a molecule
+		 */
+		virtual bool read(System&	system);
 
 		/**	Read a molecule.
-				This method will load the 
-				first (or the next, on subsequent invocation) molecule
-				from the file. If the file format does not support 
-				multiple molecules, only the first call to  \link read read \endlink 
-				will be successful. This method will create an instance of molecule
-				and its the user's responsibility to destroy that molecule.
-				@return a pointer to a molecule, <b>0</b> if the file was not open, empty, or at its end
-				@exception Exception::ParseError if the contents of the file could not be parsed
-		*/
-		virtual Molecule* read()
-			throw(Exception::ParseError);
+		 *	This method will load the 
+		 *	first (or the next, on subsequent invocation) molecule
+		 *	from the file. If the file format does not support 
+		 *	multiple molecules, only the first call to  \link read read \endlink 
+		 *	will be successful. This method will create an instance of molecule
+		 *	and its the user's responsibility to destroy that molecule.
+		 *	@return a pointer to a molecule, <b>0</b> if the file was not open, empty, or at its end
+		 *	@throw Exception::ParseError if the contents of the file could not be parsed
+		 */
+		virtual Molecule* read();
 
 		//@}
 		/**	@name Operators
@@ -141,28 +139,28 @@ namespace BALL
 		//@{
 	
 		/** Stream operator for reading a system.
-				Calls  \link read(System&) read(System&) \endlink .
-		*/
-		virtual GenericMolFile& operator >> (System& system)
-			throw(Exception::ParseError);
+		 *	Calls  \link read(System&) read(System&) \endlink .
+		 *  @throw Exception::ParseError if a syntax error was encountered
+		 */
+		virtual GenericMolFile& operator >> (System& system);
 		
 		/**	Stream operator for writing a system of molecules.
-				Calls  \link write(const System& system) const write(const System& system) const \endlink .
-		*/
-		virtual GenericMolFile& operator << (const System& system)
-			throw(File::CannotWrite);
+		 *	Calls  \link write(const System& system) const write(const System& system) const \endlink .
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		virtual GenericMolFile& operator << (const System& system);
 
 		/** Stream operator for reading a molecule.
-				Calls  \link read() read() \endlink 
-		*/
-		virtual GenericMolFile& operator >> (Molecule& molecule)
-			throw(Exception::ParseError);
+		 *	Calls  \link read() read() \endlink 
+		 *  @throw Exception::ParseError if a syntax error was encountered
+		 */
+		virtual GenericMolFile& operator >> (Molecule& molecule);
 		
 		/**	Stream operator for writing a system of molecules.
-				Calls  \link write() write() \endlink 
-		*/
-		virtual GenericMolFile& operator << (const Molecule& molecule)
-			throw(File::CannotWrite);
+		 *	Calls  \link write() write() \endlink 
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		virtual GenericMolFile& operator << (const Molecule& molecule);
 		//@}
 		
 		protected:

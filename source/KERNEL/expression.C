@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expression.C,v 1.47.24.1 2007/03/25 22:00:23 oliver Exp $
-//
 
 #include <BALL/KERNEL/expression.h>
 #include <BALL/KERNEL/standardPredicates.h>
@@ -31,7 +29,6 @@ namespace BALL
 
 
 	Expression::Expression(const String& expression_string)
-		throw(Exception::ParseError)
 		:	create_methods_(),
 			expression_tree_(0),
 			expression_string_("")
@@ -137,7 +134,6 @@ namespace BALL
 
 
 	void Expression::setExpression(const String& expression_string)
-		throw(Exception::ParseError)
 	{
 		// don't use clear() here, because it also would delete create_methods_
 		if (expression_tree_ != 0)
@@ -177,7 +173,6 @@ namespace BALL
 
 
   ExpressionTree* Expression::constructExpressionTree_(const ExpressionParser::SyntaxTree& t)
-		throw(Exception::ParseError)
   {
     ExpressionTree* root = new ExpressionTree;
     root->setType(t.type);

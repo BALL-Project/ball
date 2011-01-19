@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residue.C,v 1.30 2004/02/23 21:29:10 oliver Exp $
-//
 
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/chain.h>
@@ -56,7 +54,6 @@ namespace BALL
 	}
 
 	void Residue::persistentWrite(PersistenceManager& pm, const char* name) const
-		throw(Exception::GeneralException)
 	{
 		pm.writeObjectHeader(this, name);
 			Fragment::persistentWrite(pm);
@@ -66,7 +63,6 @@ namespace BALL
 	}
 
 	void Residue::persistentRead(PersistenceManager& pm)
-		throw(Exception::GeneralException)
 	{
 		pm.checkObjectHeader(RTTI::getStreamName<Fragment>());
 			Fragment::persistentRead(pm);

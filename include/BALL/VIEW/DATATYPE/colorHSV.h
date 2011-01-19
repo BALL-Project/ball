@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorHSV.h,v 1.21 2005/12/23 17:02:07 amoll Exp $
-//
 
 #ifndef BALL_VIEW_DATATYPE_COLORHSV_H
 #define BALL_VIEW_DATATYPE_COLORHSV_H
@@ -84,8 +82,7 @@ namespace BALL
 					\see         ColorUnit
 					\see         ColorUnitHue
 			*/
-			ColorHSV(const char* value)
-				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);
+			ColorHSV(const char* value);
 
 			/** Constructor with Parameter string.
 					Constructs new ColorHSV by initialising its value with  
@@ -97,8 +94,7 @@ namespace BALL
 					\exception   InvalidRange if <tt> string length != 6 && string length != 7</tt>
 					\exception   NotInHexFormat if the string is not a valid hex format string
 			*/
-			ColorHSV(const String& value)
-				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);
+			ColorHSV(const String& value);
 
 			/** Detailed component initializing constructor.
 					\param   hue the hue component. See ColorUnitHue
@@ -182,8 +178,7 @@ namespace BALL
 					\exception   InvalidRange if <tt> string length != 6 && string length != 7</tt>
 					\exception   NotInHexFormat if the string is not a valid hex format string
 			*/
-			void set(const char* value)
-				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);
+			void set(const char* value);
 
 			/** Assignment operator with char*.
 					Calls set.
@@ -193,8 +188,7 @@ namespace BALL
 					\exception   InvalidRange if <tt> string length != 6 && string length != 7</tt>
 					\exception   NotInHexFormat if the string is not a valid hex format string
 			*/
-			const ColorHSV& operator = (const char* value)
-				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);
+			const ColorHSV& operator = (const char* value);
 
 			/** Copying to char*.
 					Calls set.
@@ -214,8 +208,7 @@ namespace BALL
 					\exception   InvalidRange if <tt> string length != 6 && string length != 7</tt>
 					\exception   NotInHexFormat if the string is not a valid hex format string
 			*/
-			void set(const String& value)
-				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);
+			void set(const String& value);
 
 			/** Assignment operator with string.
 					Assigns the color represented by the string <b> value</b> to this colorHSV.
@@ -225,8 +218,7 @@ namespace BALL
 					\exception   InvalidRange if <tt> string length != 6 && string length != 7</tt>
 					\exception   NotInHexFormat if the string is not a valid hex format string
 			*/
-			const ColorHSV& operator = (const String& value)
-				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);
+			const ColorHSV& operator = (const String& value);
 
 			/** Copying to string.
 					Calls set.
@@ -387,8 +379,9 @@ namespace BALL
 
 			void calculateRGB_ (ColorUnit& red, ColorUnit& green, ColorUnit& blue) const;
 
-			void stringToHSV_ (const String& value)
-				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);
+			// @throw Exception::InvalidRange 
+			// @throw Exception::NotInHexFormat
+			void stringToHSV_ (const String& value);
 
 			ColorUnitHue 	hue_;
 			ColorUnit 		saturation_;

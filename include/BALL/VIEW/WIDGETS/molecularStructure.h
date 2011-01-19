@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.28.16.2 2007/05/13 21:18:57 amoll Exp $
-//
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
 #define BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -56,7 +54,7 @@
 #endif
 
 
-#include <QtGui/qwidget.h>
+#include <QtGui/QWidget>
 
 namespace BALL
 {

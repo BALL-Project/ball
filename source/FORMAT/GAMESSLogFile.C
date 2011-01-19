@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: GAMESSLogFile.C,v 1.2 2005/10/05 10:08:20 anhi Exp $
-//
 
 #include <BALL/FORMAT/GAMESSLogFile.h>
 #include <BALL/KERNEL/system.h>
@@ -24,7 +22,6 @@ namespace BALL
 
 	/** Todo: What to do with the molecule_ **/
 	GAMESSLogFile::GAMESSLogFile(const GAMESSLogFile& file)
-		throw(Exception::FileNotFound)
 		:	GenericMolFile(),
 			factor_(file.factor_),
 			qmbs_(file.qmbs_)
@@ -42,7 +39,6 @@ namespace BALL
 	}
 
 	GAMESSLogFile::GAMESSLogFile(const String& name, File::OpenMode open_mode)
-		throw(Exception::FileNotFound)
 		: GenericMolFile(),
 			molecule_(0),
 			factor_(1.)
@@ -55,7 +51,6 @@ namespace BALL
 	}
 
 	const GAMESSLogFile& GAMESSLogFile::operator = (const GAMESSLogFile& rhs)
-		throw(Exception::FileNotFound)
 	{
 		GenericMolFile::operator = (rhs);
 
@@ -63,7 +58,6 @@ namespace BALL
 	}
 
 	bool GAMESSLogFile::write(const Molecule& molecule)
-		throw(File::CannotWrite)
 	{
 		System S;
 		S.insert(*(Molecule*)molecule.create(true));
@@ -72,7 +66,6 @@ namespace BALL
 
 	/** ToDo: Implement! :-) **/
 	bool GAMESSLogFile::write(const System& system)
-		throw(File::CannotWrite)
 	{
 		if (!isOpen() || getOpenMode() != std::ios::out)
 		{
@@ -85,13 +78,11 @@ namespace BALL
 	}
 
 	bool GAMESSLogFile::read(System& system)
-		throw(Exception::ParseError)
 	{
 		return GenericMolFile::read(system);
 	}
 
 	Molecule* GAMESSLogFile::read()
-		throw(Exception::ParseError)
 	{
 		if (!isValid())
 		{

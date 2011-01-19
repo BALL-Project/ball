@@ -214,10 +214,10 @@ namespace BALL
 		/// Read the whole file into a SnapShotManager
 		virtual TRRFile& operator >> (SnapShotManager& ssm);
 		
-		/**
-		*/
-		virtual bool flushToDisk(const std::vector<SnapShot>& buffer)
-			throw(File::CannotWrite);
+		/** Flush the SnapShot buffer to disk.
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		virtual bool flushToDisk(const std::vector<SnapShot>& buffer);
 		//@}
 
 

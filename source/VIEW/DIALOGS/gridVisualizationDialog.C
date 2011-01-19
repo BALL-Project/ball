@@ -211,14 +211,14 @@ namespace BALL
 			if (texname == 0)
 			{
 				reject();
-				getMainControl()->setStatusbarText("Setting up of 3D textures failed!");
+				getMainControl()->setStatusbarText(tr("Setting up of 3D textures failed!"));
 				return;
 			}
 
 			if (texname == 0)
 			{
 				reject();
-				getMainControl()->setStatusbarText("Your computer does not support 3D textures, aborting...", true);
+				getMainControl()->setStatusbarText(tr("Your computer does not support 3D textures, aborting..."), true);
 				return;
 			}
 				

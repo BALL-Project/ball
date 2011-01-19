@@ -140,7 +140,7 @@ namespace BALL
 			else
 			{
 				Log.info() << "There are no further solutions!" << std::endl;		
-				setStatusbarText( "There are no further solutions!", true);
+				setStatusbarText(tr("There are no further solutions!"), true);
 
 			}
 		}

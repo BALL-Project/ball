@@ -650,12 +650,7 @@ namespace BALL
 	// AR: ldn is not any longer the binary logarithm but the absolute number of grid points
 	template <>
 	TFFT3D<LongDoubleTraits>::TFFT3D(Size ldnX, Size ldnY, Size ldnZ, double stepPhysX, double stepPhysY, double stepPhysZ, Vector3 origin, bool inFourierSpace)
-<<<<<<< HEAD:source/MATHS/FFT3D.C
-		: TRegularData3D<Complex>(TRegularData3D<Complex>::IndexType((ldnX), (ldnY), (ldnZ)), -origin, Vector3((((ldnX)-1)*stepPhysX_),(((ldnY)-1)*stepPhysY_),(((ldnZ)-1)*stepPhysZ_))),
-=======
-		throw()
 		: TRegularData3D<Complex>(TRegularData3D<Complex>::IndexType((ldnX), (ldnY), (ldnZ)), -origin, Vector3((((ldnX)-1)*stepPhysX),(((ldnY)-1)*stepPhysY),(((ldnZ)-1)*stepPhysZ))),
->>>>>>> c59e19b... Fixed unassigned value:source/MATHS/FFT3D.C
 		  lengthX_(ldnX),
 			lengthY_(ldnY),
 			lengthZ_(ldnZ),

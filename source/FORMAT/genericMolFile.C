@@ -14,7 +14,6 @@ namespace BALL
 	}
 
 	GenericMolFile::GenericMolFile(const String& filename, File::OpenMode open_mode)
-		throw(Exception::FileNotFound)
 		:	LineBasedFile(filename, open_mode)
 	{
 	}
@@ -24,14 +23,12 @@ namespace BALL
 	}
 
 	const GenericMolFile& GenericMolFile::operator = (const GenericMolFile& rhs)
-		throw(Exception::FileNotFound)
 	{
 		LineBasedFile::operator = (rhs);
 		return *this;
 	}
 
 	bool GenericMolFile::read(System& system)
-		throw(Exception::ParseError)
 	{
 		if (!isOpen())
 		{
@@ -52,13 +49,11 @@ namespace BALL
 	}
 
 	Molecule* GenericMolFile::read()
-		throw(Exception::ParseError)
 	{
 		return 0;
 	}
 
 	bool GenericMolFile::write(const Molecule& /* molecule */)
-		throw(File::CannotWrite)
 	{
 		if (!isOpen() || getOpenMode() != std::ios::out)
 		{
@@ -68,7 +63,6 @@ namespace BALL
 	}
 
 	bool GenericMolFile::write(const System& system)
-		throw(File::CannotWrite)
 	{
 		if (!isOpen() || getOpenMode() != std::ios::out)
 		{
@@ -85,21 +79,18 @@ namespace BALL
 	}
 
 	GenericMolFile& GenericMolFile::operator >> (System& system)
-		throw(Exception::ParseError)
 	{
 		read(system);
 		return *this;
 	}
  
 	GenericMolFile& GenericMolFile::operator << (const System& system)
-		throw(File::CannotWrite)
 	{
 		write(system);
 		return *this;
 	}
 
 	GenericMolFile& GenericMolFile::operator >> (Molecule& molecule)
-		throw(Exception::ParseError)
 	{
 		molecule.clear();
 		Molecule* new_mol = read();
@@ -113,7 +104,6 @@ namespace BALL
 	}
  
 	GenericMolFile& GenericMolFile::operator << (const Molecule& molecule)
-		throw(File::CannotWrite)
 	{
 		write(molecule);
 		return *this;

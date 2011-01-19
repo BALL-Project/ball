@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expressionParser.h,v 1.13 2005/10/23 12:02:18 oliver Exp $
-//
 
 #ifndef BALL_KERNEL_EXPRESSIONPARSER_H
 #define BALL_KERNEL_EXPRESSIONPARSER_H
@@ -158,15 +156,17 @@ namespace BALL
 		/**	@name	Parsing
 		*/
 		//@{
+
 		/**	Parse an expression.
-		*/
-		void parse(const String& s)
-			throw(Exception::ParseError);
+		 *  @throw Exception::ParseError if a syntax error was encountered
+		 */
+		void parse(const String& s);
 
 		/**	Return the parsed system
-		*/
-		const SyntaxTree& getSyntaxTree() const
-			throw(Exception::NullPointer);
+		 *  @throw Exception::NullPointer if the syntax tree is NULL
+		 */
+		const SyntaxTree& getSyntaxTree() const;
+
 		//@}
 		
 		struct State

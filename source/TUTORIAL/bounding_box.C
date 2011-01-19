@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bounding_box.C,v 1.12.18.1 2007/03/25 22:00:36 oliver Exp $
 //
 // BALLView tutorial example
 // ------------------------
@@ -18,7 +17,7 @@
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 
-#include <QtGui/qapplication.h>
+#include <QtGui/QApplication>
 
 // include our new processor
 #include "glBoundingBoxModel.h"

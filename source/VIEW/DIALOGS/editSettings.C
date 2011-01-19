@@ -1,14 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editSettings.C,v 1.1.6.1 2007/03/25 22:01:57 oliver Exp $
-//
 
 #include <BALL/VIEW/DIALOGS/editSettings.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
-#include <QtGui/qcheckbox.h>
-#include <QtGui/qlineedit.h>
+#include <QtGui/QCheckBox>
+#include <QtGui/QLineEdit>
 
 namespace BALL
 {
@@ -23,7 +21,7 @@ EditSettings::EditSettings(QWidget* parent, const char* name, Qt::WFlags fl)
 	setupUi(this);
 	setObjectName(name);
 	setINIFileSectionName("EDITING");
-	setWidgetStackName("Editing");
+	setWidgetStackName((String)tr("Editing"));
 	registerWidgetForHelpSystem_(this, "scene.html#editing");
 	registerWidgets_();
 }

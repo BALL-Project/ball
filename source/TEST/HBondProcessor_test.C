@@ -61,16 +61,16 @@ CHECK( PredictionMethod::KABSCH_SANDER)
 	mol >> sys;
 
   sys.apply(hbond_pro);
-	std::vector<std::vector<Position> > backbone_HBonds = hbond_pro.getBackboneHBondPairs();
+	std::vector<std::vector<Position> > backbone_HBonds = hbond_pro.getBackboneHBondPattern();
 	std::vector<HBondProcessor::HBond>  HBonds = hbond_pro.getHBonds();
   TEST_EQUAL(HBonds.size(), 181)
-  TEST_EQUAL(backbone_HBonds.size(), 281)
+  TEST_EQUAL(backbone_HBonds.size(), 439)
 	
 	// test reapply	
 	sys.apply(hbond_pro);
 	HBonds = hbond_pro.getHBonds();
   TEST_EQUAL(HBonds.size(), 181)	
-  TEST_EQUAL(backbone_HBonds.size(), 281)
+  TEST_EQUAL(backbone_HBonds.size(), 439)
 	
 RESULT
 
@@ -86,18 +86,18 @@ CHECK(Option::ADD_HBONDS)
 	mol >> sys;
 
   sys.apply(hbond_pro);
-	std::vector<std::vector<Position> > backbone_HBonds = hbond_pro.getBackboneHBondPairs();	
+	std::vector<std::vector<Position> > backbone_HBonds = hbond_pro.getBackboneHBondPattern();	
 	std::vector<HBondProcessor::HBond>  HBonds          = hbond_pro.getHBonds();
 
-  TEST_EQUAL(backbone_HBonds.size(), 281)
+  TEST_EQUAL(backbone_HBonds.size(), 439)
   TEST_EQUAL(HBonds.size(), 181)
 
 	hbond_pro.options.set(HBondProcessor::Option::ADD_HBONDS, false);
 	sys.apply(hbond_pro);
-	backbone_HBonds = hbond_pro.getBackboneHBondPairs(); 
+	backbone_HBonds = hbond_pro.getBackboneHBondPattern(); 
 	HBonds = hbond_pro.getHBonds(); 
 
-	TEST_EQUAL(backbone_HBonds.size(), 281)
+	TEST_EQUAL(backbone_HBonds.size(), 439)
   TEST_EQUAL(HBonds.size(), 181)	
 	bool found_h_bond = false;
 	
@@ -166,10 +166,10 @@ CHECK( apply to protein)
 	mol >> sys;
   sys.getProtein(0)->apply(hbond_pro);
 
-	std::vector<std::vector<Position> > backbone_HBonds = hbond_pro.getBackboneHBondPairs();
+	std::vector<std::vector<Position> > backbone_HBonds = hbond_pro.getBackboneHBondPattern();
 	std::vector<HBondProcessor::HBond>  HBonds = hbond_pro.getHBonds();
   TEST_EQUAL(HBonds.size(), 181)
-  TEST_EQUAL(backbone_HBonds.size(), 281)
+  TEST_EQUAL(backbone_HBonds.size(), 439)
 
 RESULT
 
@@ -186,7 +186,7 @@ CHECK( apply to chain)
 	ChainIterator cit = sys.beginChain();
   cit->apply(hbond_pro);
 
-	std::vector<std::vector<Position> > backbone_HBonds = hbond_pro.getBackboneHBondPairs();
+	std::vector<std::vector<Position> > backbone_HBonds = hbond_pro.getBackboneHBondPattern();
 	std::vector<HBondProcessor::HBond>  HBonds = hbond_pro.getHBonds();
   TEST_EQUAL(HBonds.size(), 144)
   TEST_EQUAL(backbone_HBonds.size(), 223)
@@ -195,7 +195,7 @@ CHECK( apply to chain)
 			                  HBondProcessor::PredictionMethod::WISHART_ET_AL);
  	cit->apply(hbond_pro);
 
-	backbone_HBonds = hbond_pro.getBackboneHBondPairs();
+	backbone_HBonds = hbond_pro.getBackboneHBondPattern();
 	HBonds = hbond_pro.getHBonds();
   TEST_EQUAL(HBonds.size(), 72)
   TEST_EQUAL(backbone_HBonds.size(), 223)
@@ -205,7 +205,7 @@ CHECK( apply to chain)
 			                  HBondProcessor::PredictionMethod::KABSCH_SANDER);
 
  	cit->apply(hbond_pro);
-	backbone_HBonds = hbond_pro.getBackboneHBondPairs();
+	backbone_HBonds = hbond_pro.getBackboneHBondPattern();
 	HBonds = hbond_pro.getHBonds();
   TEST_EQUAL(HBonds.size(), 31)
   TEST_EQUAL(backbone_HBonds.size(), 58)
@@ -214,7 +214,7 @@ CHECK( apply to chain)
 			                  HBondProcessor::PredictionMethod::WISHART_ET_AL);
  	cit->apply(hbond_pro);
 
-	backbone_HBonds = hbond_pro.getBackboneHBondPairs();
+	backbone_HBonds = hbond_pro.getBackboneHBondPattern();
 	HBonds = hbond_pro.getHBonds();
   TEST_EQUAL(HBonds.size(), 13)
   TEST_EQUAL(backbone_HBonds.size(), 58)

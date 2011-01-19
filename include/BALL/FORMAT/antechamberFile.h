@@ -36,9 +36,9 @@ namespace BALL
 			AntechamberFile();
 
 			/** Detailed constructor
+			 *  @throw Exception::FileNotFound if the file could not be opened
 			*/
-			AntechamberFile(const String& filename, File::OpenMode open_mode = std::ios::in)
-				throw(Exception::FileNotFound);
+			AntechamberFile(const String& filename, File::OpenMode open_mode = std::ios::in);
 
 			/// Destructor
 			virtual ~AntechamberFile();
@@ -49,29 +49,29 @@ namespace BALL
 			//@{
 
 			/** Write an AtomContainer to the ac file
+			 *  @throw File::CannotWrite if writing to the file failed
 			 */
-			virtual bool write(const AtomContainer& ac)
-				throw(File::CannotWrite);
+			virtual bool write(const AtomContainer& ac);
 
 			/**	Write a system to the ac file
-			*/
-			virtual bool write(const System& system)
-				throw(File::CannotWrite);
+			 *  @throw File::CannotWrite if writing to the file failed
+			 */
+			virtual bool write(const System& system);
 
 			/**	Read a system from the ac file
+			 *  @throw Exception::ParseError if a syntax error was encountered
 			*/
-			virtual bool read(System&	system)
-				throw(Exception::ParseError);
+			virtual bool read(System&	system);
 
-			/**
-			*/
-			virtual Molecule* read()
-				throw(Exception::ParseError);
+			/** Read a Molecule from the ac file
+			 *  @throw Exception::ParseError if a syntax error was encountered
+			 */
+			virtual Molecule* read();
 
-			/**
-			*/
-			virtual bool write(const Molecule& molecule)
-				throw(File::CannotWrite);
+			/** Write a Molecule to the ac file
+			 *  @throw File::CannotWrite if writing to the file failed
+			 */
+			virtual bool write(const Molecule& molecule);
 	
 			//@}
 		

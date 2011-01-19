@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBRecords.h,v 1.2 2005/12/23 17:01:45 amoll Exp $
-//
 
 #ifndef BALL_FORMAT_PDBRECORDS_H
 #define BALL_FORMAT_PDBRECORDS_H
@@ -138,10 +136,14 @@ namespace BALL
 		ConstReference operator [] (SizeType n) const { return records_[n]; }
 		///
 		Reference operator [] (SizeType n) { return records_[n]; }
-		///
-		ConstReference at(SizeType n) const throw(std::out_of_range) { return records_.at(n); }
-		///
-		Reference at(SizeType n) throw(std::out_of_range) { return records_.at(n); }
+		/** Random access operator
+		 *  @throw std::out_of_range if n < 0 || n >= size()
+		 */
+		ConstReference at(SizeType n) const { return records_.at(n); }
+		/** Random access operator
+		 *  @throw std::out_of_range if n < 0 || n >= size()
+		 */
+		Reference at(SizeType n) { return records_.at(n); }
 		//@}
 
 		protected:

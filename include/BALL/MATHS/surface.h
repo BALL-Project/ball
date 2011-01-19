@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surface.h,v 1.29 2004/10/22 20:11:54 amoll Exp $
-//
 
 #ifndef BALL_MATHS_SURFACE_H
 #define BALL_MATHS_SURFACE_H
@@ -69,16 +67,13 @@ namespace BALL
 		//@{
 
 		///
-		TSurface()
-			;
+		TSurface();
 
 		///
-		TSurface(const TSurface& surface)
-			;
+		TSurface(const TSurface& surface);
 
 		///
-		virtual ~TSurface()
-			;
+		virtual ~TSurface();
 		//@}
 
 		/**	@name	Assignment
@@ -86,27 +81,23 @@ namespace BALL
 		//@{
 
 		///
-		void set(const TSurface& surface)
-			;
+		void set(const TSurface& surface);
 
 		///
-		TSurface& operator = (const TSurface& surface)
-			;
+		TSurface& operator = (const TSurface& surface);
 
 		///
-		void get(TSurface& surface) const
-			;
+		void get(TSurface& surface) const;
 
 		///
-		void clear()
-			;
+		void clear();
 
 		/**	Read from MSMS file.
-				Read the contents of the vertex and faces file created by Michael
-				Sanners software MSMS.
-		*/
-		void readMSMSFile(const String& vert_filename, const String& face_filename)
-			throw(Exception::FileNotFound);
+		 * 	Read the contents of the vertex and faces file created by Michael
+		 *	Sanners software MSMS.
+		 *  @throw Exception::FileNotFound if the file could not be opened
+		 */
+		void readMSMSFile(const String& vert_filename, const String& face_filename);
 		//@}
 
 		/**	@name	Accessors
@@ -117,28 +108,22 @@ namespace BALL
 				The area is computed as the sum of the areas of all 
 				triangles.
 		*/
-		float getArea() const
-			;
+		float getArea() const;
 
 		/// Return the number of triangles
-		Size getNumberOfTriangles() const
-			;
+		Size getNumberOfTriangles() const;
 		
 		/// Return the number of vertices
-		Size getNumberOfVertices() const
-			;
+		Size getNumberOfVertices() const;
 
 		/// Return the number of normals
-		Size getNumberOfNormals() const
-			;
+		Size getNumberOfNormals() const;
 
 		/// Return a triangle with a given index
-		Triangle& getTriangle(Position index)
-			;
+		Triangle& getTriangle(Position index);
 
 		/// Return a triangle with a given index
-		const Triangle& getTriangle(Position index) const
-			;
+		const Triangle& getTriangle(Position index) const;
 			
 		/// Clear all triangles
 		void clearTriangles();
@@ -147,16 +132,13 @@ namespace BALL
 		void resizeTriangles(Size size);
 
 		/// Add a triangle
-		void pushBackTriangle(const Triangle& triangle)
-			;
+		void pushBackTriangle(const Triangle& triangle);
 
 		/// Return the position of a vertex
-		Vertex& getVertex(Position index)
-			;
+		Vertex& getVertex(Position index);
 
 		/// Return the position of a vertex
-		const Vertex& getVertex(Position index) const
-			;
+		const Vertex& getVertex(Position index) const;
 
 		/// Clear all vertices
 		void clearVertices();
@@ -165,16 +147,13 @@ namespace BALL
 		void resizeVertices(Size size);
 
 		/// Add a vertex
-		void pushBackVertex(const Vertex& vertex)
-			;
+		void pushBackVertex(const Vertex& vertex);
 
 		/// Return the position of a normal
-		Normal& getNormal(Position index)
-			;
+		Normal& getNormal(Position index);
 
 		/// Return the position of a normal
-		const Normal& getNormal(Position index) const
-			;
+		const Normal& getNormal(Position index) const;
 
 		/// Clear all normals
 		void clearNormals();
@@ -183,8 +162,7 @@ namespace BALL
 		void resizeNormals(Size size);
 
 		/// Add a normal
-		void pushBackNormal(const Normal& n)
-			;
+		void pushBackNormal(const Normal& n);
 
 		//@}
 
@@ -193,12 +171,10 @@ namespace BALL
 		//@{
 
 		///
-		bool operator == (const TSurface& surface) const
-			;
+		bool operator == (const TSurface& surface) const;
 
 		///
-		bool operator != (const TSurface& surface) const
-			;
+		bool operator != (const TSurface& surface) const;
 		//@}
 
 		/**	@name	Attributes
@@ -224,13 +200,11 @@ namespace BALL
 
 	template <typename T>
 	TSurface<T>::TSurface()
-		
 	{
 	}
 
 	template <typename T>
 	TSurface<T>::TSurface(const TSurface<T>& surface)
-		
 		:	vertex(surface.vertex),
 			normal(surface.normal),
 			triangle(surface.triangle)
@@ -239,13 +213,11 @@ namespace BALL
 
 	template <typename T>
 	TSurface<T>::~TSurface()
-		
 	{
 	}
 
 	template <typename T>
 	void TSurface<T>::clear()
-		
 	{
 		vertex.clear();
 		normal.clear();
@@ -254,7 +226,6 @@ namespace BALL
 	
 	template <typename T>
 	void TSurface<T>::set(const TSurface<T>& surface)
-		
 	{
 		vertex = surface.vertex;
 		normal = surface.normal;
@@ -263,7 +234,6 @@ namespace BALL
 
 	template <typename T>
 	TSurface<T>& TSurface<T>::operator = (const TSurface<T>& surface)
-		
 	{
 		vertex = surface.vertex;
 		normal = surface.normal;
@@ -273,7 +243,6 @@ namespace BALL
 	
 	template <typename T>
 	void TSurface<T>::get(TSurface<T>& surface) const
-		
 	{
 		surface.vertex = vertex;
 		surface.normal = normal;
@@ -282,7 +251,6 @@ namespace BALL
 	
 	template <typename T>
 	void TSurface<T>::readMSMSFile(const String& vert_filename, const String& face_filename)
-		throw(Exception::FileNotFound)
 	{
 		// delete old contents
 		normal.clear();
@@ -358,7 +326,6 @@ namespace BALL
 
 	template <typename T>
 	float TSurface<T>::getArea() const
-		
 	{
 		// add the areas of all triangles
 		double area = 0;
@@ -375,7 +342,6 @@ namespace BALL
 
 	template <typename T>
 	bool TSurface<T>::operator == (const TSurface<T>& surface) const
-		
 	{
 		return ((surface.vertex == vertex) 
 						&& (surface.normal == normal) 
@@ -385,7 +351,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	Size TSurface<T>::getNumberOfTriangles() const
-			
 	{
 		return (Size)triangle.size();
 	}
@@ -393,7 +358,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	Size TSurface<T>::getNumberOfVertices() const
-			
 	{
 		return (Size)vertex.size();
 	}
@@ -401,16 +365,13 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	Size TSurface<T>::getNumberOfNormals() const
-			
 	{
 		return (Size)normal.size();
 	}
-
 	
 	template <typename T>
 	BALL_INLINE
 	typename TSurface<T>::Triangle& TSurface<T>::getTriangle(Position index)
-		
 	{
 		return triangle[index];
 	}
@@ -418,12 +379,10 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	const typename TSurface<T>::Triangle& TSurface<T>::getTriangle(Position index) const
-		
 	{
 		return triangle[index];
 	}
 
-	
 	template <typename T>
 	BALL_INLINE
 	void TSurface<T>::clearTriangles()
@@ -441,7 +400,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	void TSurface<T>::pushBackTriangle(const Triangle& t)
-		
 	{
 		triangle.push_back(t);
 	}
@@ -450,7 +408,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	typename TSurface<T>::Vertex& TSurface<T>::getVertex(Position index)
-		
 	{
 		return vertex[index];
 	}
@@ -458,7 +415,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	const typename TSurface<T>::Vertex& TSurface<T>::getVertex(Position index) const
-		
 	{
 		return vertex[index];
 	}
@@ -481,7 +437,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	void TSurface<T>::pushBackVertex(const typename TSurface<T>::Vertex& position)
-		
 	{
 		vertex.push_back(position);
 	}
@@ -489,7 +444,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	typename TSurface<T>::Normal& TSurface<T>::getNormal(Position index)
-		
 	{
 		return normal[index];
 	}
@@ -497,7 +451,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	const typename TSurface<T>::Normal& TSurface<T>::getNormal(Position index) const
-		
 	{
 		return normal[index];
 	}
@@ -519,18 +472,15 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	void TSurface<T>::pushBackNormal(const typename TSurface<T>::Normal& n)
-		
 	{
 		normal.push_back(n);
 	}
 
 	template <typename T>
 	bool TSurface<T>::operator != (const TSurface<T>& surface) const
-		
 	{
 		return !(*this == surface);
 	}
-
 
 	/**	Default surface type.
 	 		\ingroup GeometricSurface

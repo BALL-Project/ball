@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmConfigurationDialog.C,v 1.10.16.1 2007/03/25 22:00:43 oliver Exp $
-//
 
 #include <BALL/VIEW/DIALOGS/charmmConfigurationDialog.h>
 #include <BALL/VIEW/KERNEL/common.h>
@@ -15,10 +13,10 @@
 #include <BALL/SYSTEM/path.h>
 
 #include <QtGui/QFileDialog>
-#include <QtGui/qlineedit.h>
-#include <QtGui/qradiobutton.h>
-#include <QtGui/qcheckbox.h>
-#include <QtGui/qpushbutton.h>
+#include <QtGui/QLineEdit>
+#include <QtGui/QRadioButton>
+#include <QtGui/QCheckBox>
+#include <QtGui/QPushButton>
 
 namespace BALL
 {
@@ -58,7 +56,7 @@ namespace BALL
 				filename = getFilename();
 			}
 			QString tmp = filename.c_str();
-			QString result = QFileDialog::getOpenFileName(0,"Select a Charmm parameter file", tmp, "*.ini", 0);
+			QString result = QFileDialog::getOpenFileName(0, tr("Select a Charmm parameter file"), tmp, "*.ini", 0);
 			if (!result.isEmpty())
 			{
 				// store the new filename in the lineedit field
@@ -135,7 +133,7 @@ namespace BALL
 				{
 					max_unassigned_atoms->setText("10");
 					charmm.setMaximumNumberOfErrors(10);
-					Log.error() << "Invalid value for max number of unassigned atoms, using default value of 10" << std::endl;
+					Log.error() << (String)tr("Invalid value for max number of unassigned atoms, using default value of 10") << std::endl;
 				}
 
 				/*

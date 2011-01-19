@@ -53,9 +53,9 @@ namespace BALL
 			GAMESSDatFile();
 
 			/** Detailed constructor
+		   *  @throw Exception::FileNotFound if the file could not be opened
 			 */
-			GAMESSDatFile(const String& filename, File::OpenMode open_mode = std::ios::in)
-				throw(Exception::FileNotFound);
+			GAMESSDatFile(const String& filename, File::OpenMode open_mode = std::ios::in);
 
 			/** Destructor
 			 */
@@ -67,9 +67,10 @@ namespace BALL
 			//@{
 			
 			/** Assignment operator.
+		   *	Create a new object pointing to the same filename.
+		   *  @throw Exception::FileNotFound if the file could not be opened
 			 */
-			const GAMESSDatFile& operator = (const GAMESSDatFile& rhs)
-				throw(Exception::FileNotFound);
+			const GAMESSDatFile& operator = (const GAMESSDatFile& rhs);
 
 			//@}
 
@@ -80,30 +81,30 @@ namespace BALL
 			/** Write a molecule to a GAMESSDatFile.
 			 *  If additional GAMESS - keywords are stored in this class, they
 			 *  will be written as well.
+		   *  @throw File::CannotWrite if writing to the file failed
 			 */
-			virtual bool write(const Molecule& molecule)
-				throw(File::CannotWrite);
+			virtual bool write(const Molecule& molecule);
 
 			/** Write a system to a GAMESSDatFile.
 			 *  If additional GAMESS - keywords are stored in this class, they
 			 *  will be written as well.
+		   *  @throw File::CannotWrite if writing to the file failed
 			 */
-			virtual bool write(const System& molecule)
-				throw(File::CannotWrite);
+			virtual bool write(const System& molecule);
 
 			/** Read a Molecule from the GAMESSDatFile.
 			 *  If the GAMESS .dat - file contains additional lines apart from the
 			 *  molecule itself, they are stored in this class.
+		   *  @throw Exception::ParseError if a syntax error was encountered
 			 */
-			virtual Molecule* read()
-				throw(Exception::ParseError);
+			virtual Molecule* read();
 
 			/** Read a System from the GAMESSDatFile.
 			 *  If the GAMESS .dat - file contains additional lines apart from the
 			 *  molecule itself, they are stored in this class.
+		   *  @throw Exception::ParseError if a syntax error was encountered
 			 */
-			virtual bool read(System& system)
-				throw(Exception::ParseError);
+			virtual bool read(System& system);
 
 			//@}
 

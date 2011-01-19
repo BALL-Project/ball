@@ -23,7 +23,7 @@
 
 #include <BALL/VIEW/UIC/ui_labelDialog.h>
 
-#include <QtGui/qfont.h>
+#include <QtGui/QFont>
 
 namespace BALL
 {

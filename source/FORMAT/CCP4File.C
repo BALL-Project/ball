@@ -22,7 +22,6 @@ namespace BALL
 	}
 
 	CCP4File::CCP4File(const String& name, File::OpenMode open_mode)
-		throw(Exception::FileNotFound)
 		: File(name, open_mode),
 			swap_bytes_(false),
 			offset_symops_(0),
@@ -68,7 +67,6 @@ namespace BALL
 
 
 	bool CCP4File::open(const String& name, File::OpenMode open_mode)
-		throw(Exception::FileNotFound)
 	{
 		if (!(open_mode |= std::ios::binary))
 		{

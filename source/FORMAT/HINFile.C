@@ -32,7 +32,6 @@ namespace BALL
 	}
 
 	HINFile::HINFile(const String& name, File::OpenMode open_mode)
-		throw(Exception::FileNotFound)
 		: GenericMolFile(),
 			box_(0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
 			temperature_(0.0)
@@ -46,7 +45,6 @@ namespace BALL
 	}
 	
 	const HINFile& HINFile::operator = (const HINFile& rhs)
-		throw(Exception::FileNotFound)
 	{
 		box_ = SimpleBox3(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		temperature_ = 0.0;
@@ -133,7 +131,6 @@ namespace BALL
 	}
 
 	bool HINFile::write(const Molecule& molecule)
-		throw(File::CannotWrite)
 	{
 		System S;
 		S.insert(*(Molecule*)molecule.create(true));
@@ -141,7 +138,6 @@ namespace BALL
 	}
 	
 	bool HINFile::write(const System& system)
-		throw(File::CannotWrite)
 	{
 		if (!isOpen() || getOpenMode() != std::ios::out)
 		{
@@ -388,13 +384,11 @@ namespace BALL
 	}
 
 	bool HINFile::read(System& system)
-		throw(Exception::ParseError)
 	{
 		return GenericMolFile::read(system);
 	}
 	
 	Molecule* HINFile::read()
-		throw(Exception::ParseError)
 	{
 		if (!isValid())
 		{

@@ -76,14 +76,17 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/**	Default constructor
+		*/
 		JCAMPFile()  {}
 
-		///
-		JCAMPFile(const String& name, OpenMode open_mode = std::ios::in)
-			throw(Exception::FileNotFound);
+		/** Detailed constructor
+		 *  @throw Exception::FileNotFound if the file could not be opened
+		 */
+		JCAMPFile(const String& name, OpenMode open_mode = std::ios::in);
 
-		///	Destructor.
+		/** Destructor
+		*/
 		virtual ~JCAMPFile()  {}
 
 		//@}
@@ -91,13 +94,15 @@ namespace BALL
 		 */
 		//@{
 
-		/// Read the file.
-		void read() 
-			throw(Exception::ParseError);
+		/** Read the file.
+		 *  @throw Exception::ParseError if a syntax error was encountered
+		 */
+		void read();
 
-		/// Write the file.
-		bool write()
-			throw(File::CannotWrite);
+		/** Write the file.
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		bool write();
 
 		///
 		HeaderMap& getHeader()  { return header_; }
@@ -114,13 +119,15 @@ namespace BALL
 		///
 		const JCAMPValue& operator [] (const String& name) const { return entries_[name]; }
 
-		///
-		double getDoubleValue(const String& name) const 
-			throw(Exception::InvalidFormat);
+		/** Return a double value for key name
+		 *  @throw Exception::InvalidFormat if the value is not a floating point number
+		 */
+		double getDoubleValue(const String& name) const;
 		
-		///
-		Index getIntValue(const String& name) const 
-			throw(Exception::InvalidFormat);
+		/** Return an int value for key name
+		 *  @throw Exception::InvalidFormat if the value is not convertible to an int
+		 */
+		Index getIntValue(const String& name) const;
 
 		/// 
 		bool hasEntry(const String& name) const  { return entries_.has(name); }
