@@ -301,11 +301,17 @@ IF (BALL_HAS_VIEW)
 
 	## Cg
 	IF (BALL_ENABLE_CG)
-		MESSAGE(STATUS "Looking for Cg library...")
+		IF (BALL_REQUIRE_CG)
+			SET(CG_MESSAGE "Looking for Cg library (required)...")
+		ELSE()
+			SET(CG_MESSAGE "Looking for Cg library...")
+		ENDIF()
+
+		MESSAGE(STATUS ${CG_MESSAGE})
 		FIND_PACKAGE(Cg)
 
 		IF (CG_FOUND)
-			MESSAGE(STATUS "Looking for Cg library... - found  ${CG_LIBRARY}  ${CG_GL_LIBRARY}")
+			MESSAGE(STATUS "${CG_MESSAGE} - found  ${CG_LIBRARY}  ${CG_GL_LIBRARY}")
 			SET(BALL_HAS_CG TRUE)
 			SET(CG_LIBRARIES ${CG_LIBRARY} ${CG_GL_LIBRARY})
 			INCLUDE_DIRECTORIES(${RTFACT_INCLUDE_PATH})
