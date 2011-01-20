@@ -1637,7 +1637,7 @@ namespace BALL
 
 #ifdef BALL_HAS_RTFACT
 			description = "Shortcut|Display|ContinuousLoop|Toggle";
-			toggle_continuous_loop_action_ = new QAction("Toggle continuous loop", this);
+			toggle_continuous_loop_action_ = new QAction(tr("Toggle continuous loop"), this);
 			toggle_continuous_loop_action_->setObjectName(toggle_continuous_loop_action_->text());
 			connect(toggle_continuous_loop_action_, SIGNAL(triggered()), this, SLOT(toggleContinuousLoop()));
 			toggle_continuous_loop_action_->setCheckable(true);
@@ -3590,7 +3590,7 @@ namespace BALL
 					//toggle_continuous_loop_action_->setChecked(true);
 				}
 			}
-			setStatusbarText("Switched continuous loop on", true);
+			setStatusbarText(tr("Switched continuous loop on"), true);
 #endif
 		}
 
@@ -3611,7 +3611,7 @@ namespace BALL
 					//toggle_continuous_loop_action_->setChecked(false);
 				}
 			}
-			setStatusbarText("Switched continuous loop off", true);
+			setStatusbarText(tr("Switched continuous loop off"), true);
 #endif
 		}
 
