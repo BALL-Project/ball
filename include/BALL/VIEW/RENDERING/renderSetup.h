@@ -308,6 +308,8 @@ namespace BALL {
 				// does the hard work and can be called from a continuous loop as well as from event-based rendering
 				void renderToBuffer_();
 
+				void initType_();
+
 				bool rendering_paused_;
 				bool receive_updates_;
 				bool use_offset_;

@@ -47,6 +47,8 @@ namespace BALL
 				export_after_ttl_(false),
 				export_after_ttl_filename_()
 		{
+			initType_();
+
 			gl_target_   = dynamic_cast<GLRenderWindow*>(target);
 			gl_renderer_ = dynamic_cast<GLRenderer*>(renderer);
 		}
@@ -112,28 +114,12 @@ namespace BALL
 		{
 			render_mutex_.lock();
 
+			initType_();
+
 			makeCurrent();
 
 			gl_target_   = dynamic_cast<GLRenderWindow*>(target);
 			gl_renderer_ = dynamic_cast<GLRenderer*>(renderer);
-
-			// set the type variable
-			if (RTTI::isKindOf<GLRenderer>(*renderer))
-				renderer_type_ = OPENGL_RENDERER;
-			else if (RTTI::isKindOf<POVRenderer>(*renderer))
-				renderer_type_ = POV_RENDERER;
-			else if (RTTI::isKindOf<VRMLRenderer>(*renderer))
-				renderer_type_ = VRML_RENDERER;
-			else if (RTTI::isKindOf<STLRenderer>(*renderer))
-				renderer_type_ = STL_RENDERER;
-			else if (RTTI::isKindOf<TilingRenderer>(*renderer))
-				renderer_type_ = TILING_RENDERER;
-#ifdef BALL_HAS_RTFACT
-			else if (RTTI::isKindOf<RTfactRenderer>(*renderer))
-				renderer_type_ = RTFACT_RENDERER;
-#endif
-			else
-				renderer_type_ = UNKNOWN_RENDERER;
 
 			// initialize the rendering target
 			target->init();
@@ -611,6 +597,27 @@ namespace BALL
 			{
 				static_cast<GLRenderer*>(renderer)->initPerspective();
 			}
+		}
+
+		void RenderSetup::initType_()
+		{
+			// set the type variable
+			if (RTTI::isKindOf<GLRenderer>(*renderer))
+				renderer_type_ = OPENGL_RENDERER;
+			else if (RTTI::isKindOf<POVRenderer>(*renderer))
+				renderer_type_ = POV_RENDERER;
+			else if (RTTI::isKindOf<VRMLRenderer>(*renderer))
+				renderer_type_ = VRML_RENDERER;
+			else if (RTTI::isKindOf<STLRenderer>(*renderer))
+				renderer_type_ = STL_RENDERER;
+			else if (RTTI::isKindOf<TilingRenderer>(*renderer))
+				renderer_type_ = TILING_RENDERER;
+#ifdef BALL_HAS_RTFACT
+			else if (RTTI::isKindOf<RTfactRenderer>(*renderer))
+				renderer_type_ = RTFACT_RENDERER;
+#endif
+			else
+				renderer_type_ = UNKNOWN_RENDERER;
 		}
 	}
 }
