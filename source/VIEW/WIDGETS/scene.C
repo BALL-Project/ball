@@ -1270,6 +1270,8 @@ namespace BALL
 
 		void Scene::applyPreferences()
 		{
+			stage_settings_->apply();
+
 			if (light_settings_ == 0) return;
 
 			light_settings_->apply();
@@ -1278,7 +1280,6 @@ namespace BALL
 				renderers_[i]->setLights(true);
 
 			bool showed_coordinate = stage_->coordinateSystemEnabled();
-			stage_settings_->apply();
 			RepresentationManager& pm = getMainControl()->getRepresentationManager();
 
 			if (showed_coordinate && !stage_->coordinateSystemEnabled())
@@ -3251,6 +3252,7 @@ namespace BALL
 			if (main_renderer_ >= renderers_.size())
 			{
 				Log.warn() << "SwitchRenderer: invalid renderer requested";
+				return;
 			}
 
 			if (new_type == renderers_[main_renderer_]->getRendererType())
@@ -3813,7 +3815,10 @@ namespace BALL
 
 			rep->setProperty(rt_mat_property);
 
-			rt_renderer_->updateMaterialForRepresentation(rep);
+			for (Position i=0; i<renderers_.size(); ++i)
+			{
+				renderers_[i]->updateMaterialForRepresentation(rep);
+			}
 
 			updateGL();
 		}
