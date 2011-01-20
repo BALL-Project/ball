@@ -404,9 +404,7 @@ namespace BALL
 				//       this is probably due to some wrong order
 				//       of initializations and should be fixed
 				//       somewhere else instead of this band-aid
-				for (Position i=0; i<renderers_.size(); ++i)
-					renderers_[i]->setLights(true);
-				updateGL();
+				lightsUpdated(true);
 			}
 		}
 
@@ -999,13 +997,9 @@ namespace BALL
 			stage_->clearLightSources();
 			stage_->addLightSource(light);
 
-			for (Position i=0; i<renderers_.size(); ++i)
-				renderers_[i]->setLights(true);
-
 			light_settings_->updateFromStage();
 
-			if (update_GL)
-				updateGL();
+			lightsUpdated(update_GL);
 		}
 
 		void Scene::createCoordinateSystem()
@@ -1275,9 +1269,7 @@ namespace BALL
 			if (light_settings_ == 0) return;
 
 			light_settings_->apply();
-
-			for (Position i=0; i<renderers_.size(); ++i)
-				renderers_[i]->setLights(true);
+			lightsUpdated(false);
 
 			bool showed_coordinate = stage_->coordinateSystemEnabled();
 			RepresentationManager& pm = getMainControl()->getRepresentationManager();
@@ -3272,7 +3264,7 @@ namespace BALL
 			// ok, we have some work to do...
 			boost::shared_ptr<RenderSetup> main_renderer_ptr = renderers_[main_renderer_];
 
-			main_renderer_ptr->useContinuousLoop(false);
+			stopContinuousLoop();
 			main_renderer_ptr->stop();
 
 			main_renderer_ptr->loop_mutex.lock();
@@ -3590,7 +3582,8 @@ namespace BALL
 
 			for (Position i=0; i<renderers_.size(); ++i)
 			{
-				if (!renderers_[i]->isContinuous())
+				// TODO: OpenGL does *not* like the continuous loop
+				if (!renderers_[i]->isContinuous() && (renderers_[i]->getRendererType() != RenderSetup::OPENGL_RENDERER))
 				{
 					renderers_[i]->useContinuousLoop(true);
 					renderers_[i]->loop_mutex.lock();
@@ -3823,6 +3816,15 @@ namespace BALL
 			updateGL();
 		}
 #endif
+
+		void Scene::lightsUpdated(bool redraw)
+		{
+			for (Position i=0; i<renderers_.size(); ++i)
+				renderers_[i]->setLights();
+
+			if (redraw)
+				updateGL();
+		}
 
 		void Scene::setupEnvironmentMap(const QImage& image)
 		{

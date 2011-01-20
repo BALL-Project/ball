@@ -133,6 +133,8 @@ namespace BALL
 			
 			bool ignore_;
 			Index current_light_;
+
+			Scene* scene_;
 		};
 
 	}

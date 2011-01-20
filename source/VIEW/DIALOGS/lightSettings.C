@@ -55,7 +55,8 @@ LightSettings::LightSettings(QWidget* parent, const char* name, Qt::WFlags fl)
 		return;
 	}
 
-	stage_ = (dynamic_cast<Scene*>(parent))->getStage();
+	scene_ = (dynamic_cast<Scene*>(parent));
+	stage_ = scene_->getStage();
 	if (stage_ == 0) 
 	{
 		Log.error() << "LightSettings dialog was created with a Scene as parent, which has no Stage!" << std::endl;
@@ -142,7 +143,10 @@ void LightSettings::addLightPressed()
 	lights_list->setCurrentRow(lights_.size()-1, QItemSelectionModel::Select);
 	
 	if (update_directly_checkBox->isChecked())
+	{
 		apply();
+		scene_->lightsUpdated(true);
+	}
 }
 
 
@@ -151,7 +155,10 @@ void LightSettings::colorPressed()
 	chooseColor(color_sample);
 	
 	if (update_directly_checkBox->isChecked())
+	{
 		apply();
+		scene_->lightsUpdated(true);
+	}
 }
 
 
@@ -248,7 +255,10 @@ void LightSettings::removeLightPressed()
 	update();
 	
 	if (update_directly_checkBox->isChecked())
+	{
 		apply();
+		scene_->lightsUpdated(true);
+	}
 }
 
 
@@ -261,7 +271,11 @@ void LightSettings::typeSelected()
 	typeSelected_(pos);
 
 	if (update_directly_checkBox->isChecked())
+	{
 		apply();
+		scene_->lightsUpdated(true);
+	}
+		
 }
 
 void LightSettings::typeSelected_(Position type)
@@ -293,7 +307,6 @@ void LightSettings::getValues_(Index current)
 	setControlsEnabled_(true);
 
 	LightSource& light = lights_[current];
-
 	setColor(color_sample, light.getColor());
 
 	Vector3 pos = light.getPosition();
@@ -349,7 +362,6 @@ void LightSettings::setControlsEnabled_(bool state)
 	direction_y->setEnabled(state);
 	direction_z->setEnabled(state);
 	intensity->setEnabled(state);
-	intensity->setValue(0);
 	remove_lights_button->setEnabled(state);
 	relative->setEnabled(state);
 	not_relative->setEnabled(state);
@@ -380,7 +392,10 @@ void LightSettings::intensityChanged()
 	intensity_label->setText(String(intensity->value()).c_str());
 	
 	if (update_directly_checkBox->isChecked())
-				apply();
+	{
+		apply();
+		scene_->lightsUpdated(true);
+	}
 
 }
 
@@ -390,7 +405,10 @@ void LightSettings::intensityMaxChanged(const QString& text)
 		intensity->setMaximum(text.toFloat());
 	
 	if (update_directly_checkBox->isChecked())
+	{
 		apply();
+		scene_->lightsUpdated(true);
+	}
 }
 
 void LightSettings::restoreDefaultValues(bool /*all*/)
@@ -437,7 +455,10 @@ void LightSettings::positionTypeChanged()
 	}
 	
 	if (update_directly_checkBox->isChecked())
+	{
 		apply();
+		scene_->lightsUpdated(true);
+	}
 }	
 
 void LightSettings::updateDirectlyBoxChanged()
@@ -445,6 +466,7 @@ void LightSettings::updateDirectlyBoxChanged()
 	if (update_directly_checkBox->isChecked())
 	{
 		apply();
+		scene_->lightsUpdated(true);
 	}
 }
 
