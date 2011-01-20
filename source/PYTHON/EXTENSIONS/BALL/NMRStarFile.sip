@@ -315,6 +315,8 @@ class NMRStarFile
 			const EntryInformation& getEntryInformation() const;
 
 			const MolecularSystem& getMolecularInformation() const;
+			
+			bool hasSampleCondition(String );
 
 			SampleCondition& getSampleConditionByName(String );
 //			const SampleCondition& getSampleConditionByName(String ) const;
@@ -351,7 +353,8 @@ class NMRStarFile
 		
 			Size getNumberOfMonomericPolymers() const;
 
-			MonomericPolymer getMonomericPolymer(String name) throw();
+			MonomericPolymer getMonomericPolymer(Position);
+			MonomericPolymer getMonomericPolymer(String name);
 		
 //			vector<NMRStarFile::MonomericPolymer> getMonomericPolymers() const;
 			

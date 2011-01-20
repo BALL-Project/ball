@@ -607,6 +607,18 @@ namespace BALL
 			 */
 			const MolecularSystem& getMolecularInformation() const {return molecular_system_;};
 
+			/** Get the molecular information
+			 */
+			MolecularSystem& getMolecularInformation() {return molecular_system_;};
+	
+			/**  Return true if the file contains a SampleCondition named name, false otherwise
+			 */
+			bool hasSampleCondition(String name);
+
+			/**  Return true if the file contains a SampleCondition named name, false otherwise
+			 */
+			bool hasSampleCondition(String name) const;
+
 			/** Get a SampleCondition by its SaveFrame name
 			 */
 			SampleCondition& getSampleConditionByName(String name);
@@ -696,6 +708,16 @@ namespace BALL
 			float getNMRSpectrometerFieldStrength(Position i) const;
 		
 
+			/** Get a mutable reference to the MonomericPolymer-information by index
+			 *	@throw Exception::OutOfRange if a polymer with this index could not be found
+			 */
+			NMRStarFile::MonomericPolymer& getMonomericPolymer(Position i);
+
+			/** Get the MonomericPolymer-information by index
+			 *	@throw Exception::OutOfRange if a polymer with this index could not be found
+			 */
+			const NMRStarFile::MonomericPolymer& getMonomericPolymer(Position i) const;
+			
 			/** Get a mutable reference to the MonomericPolymer-information by name
 			 *	@throw Exception::OutOfRange if a polymer with this name could not be found
 			 */

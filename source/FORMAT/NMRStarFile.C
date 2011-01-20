@@ -432,6 +432,22 @@ namespace BALL
 	{
 	}
 
+	NMRStarFile::MonomericPolymer& NMRStarFile::getMonomericPolymer(Position i)
+	{	
+		if (i >= monomeric_polymers_.size())
+				throw(Exception::OutOfRange(__FILE__, __LINE__));
+
+		return monomeric_polymers_[i];
+	}
+
+	const NMRStarFile::MonomericPolymer& NMRStarFile::getMonomericPolymer(Position i) const
+	{	
+		if (i >= monomeric_polymers_.size())
+				throw(Exception::OutOfRange(__FILE__, __LINE__));
+
+		return monomeric_polymers_[i];
+	}
+
 	NMRStarFile::MonomericPolymer& NMRStarFile::getMonomericPolymer(const String& name)
 	{	
 		for (Size i=0; i<monomeric_polymers_.size(); i++)
@@ -1153,21 +1169,24 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 	String NMRStarFile::getResidueSequence(Position i) const
 	{	
 		if (monomeric_polymers_.size() > 0)
-		{				
+		{			
 			if (atom_data_sets_.size() > i)
 			{	
 				bool identical_sequences = true;
-
 				std::vector<NMRAtomData> atom_data = atom_data_sets_[0].atom_data;
 				String residue_sequence = monomeric_polymers_[i].residue_sequence;
-
+				
 				for (Position j=0; identical_sequences && (j<atom_data.size()); j++)
 				{
-					if (   residue_sequence[atom_data[j].residue_seq_code - 1] 
-							!= Peptides::OneLetterCode(atom_data[j].residue_label))
+					if (   (  atom_data[j].residue_seq_code != POSITION_VALUE_NA ) 
+							&& (   residue_sequence[atom_data[j].residue_seq_code - 1] 
+							    != Peptides::OneLetterCode(atom_data[j].residue_label))
+						 )
 					{
 						identical_sequences = false;
-						Log.warn() << "NMRStarFile::getResidueSequence(): Warning: Inconsistent residue sequence information." << endl;
+						Log.warn() << "NMRStarFile::getResidueSequence(): Warning: Inconsistent residue sequence information." 
+						           << residue_sequence[atom_data[j].residue_seq_code - 1] 
+											 << " != "  << Peptides::OneLetterCode(atom_data[j].residue_label) << endl;
 					}
 				}
 		
@@ -1185,6 +1204,30 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 	const std::vector<NMRStarFile::NMRAtomDataSet>& NMRStarFile::getNMRData() const
 	{
 		return atom_data_sets_;
+	}
+
+	bool NMRStarFile::hasSampleCondition(String name)
+	{
+		for (Size i=0; i < sample_conditions_.size(); i++)
+		{
+			if (sample_conditions_[i].name == name)
+			{
+				return true; 
+			}
+		}
+		return false;
+	}
+
+	bool NMRStarFile::hasSampleCondition(String name) const
+	{
+		for (Size i=0; i < sample_conditions_.size(); i++)
+		{
+			if (sample_conditions_[i].name == name)
+			{
+				return true; 
+			}
+		}
+		return false;
 	}
 
 	NMRStarFile::SampleCondition&	NMRStarFile::getSampleConditionByName(String condition) 
