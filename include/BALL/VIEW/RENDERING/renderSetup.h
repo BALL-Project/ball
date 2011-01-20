@@ -249,6 +249,10 @@ namespace BALL {
 				 */
 				void stop() { MutexLocker ml(&render_mutex_); about_to_quit_ = true; }
 
+				/** Indicates whether the renderer has already been stopped.
+				 */
+				bool isAboutToQuit() { return about_to_quit_; }
+
 				/** Returns the mode of the render loop.
 				 */
 				bool isContinuous() { return use_continuous_loop_; }

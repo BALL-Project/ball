@@ -1800,6 +1800,12 @@ namespace BALL
 		{
 			RenderSetup* renderer = evt->getRenderer();
 
+			if (renderer->isAboutToQuit())
+			{
+				// stopped renderers need to be ignored
+				return;
+			}
+
 			renderer->makeCurrent();
 			// NOTE: GLRenderers currently render in the GUI thread!
 			if (RTTI::isKindOf<GLRenderer>(*(renderer->renderer)))
@@ -3242,6 +3248,11 @@ namespace BALL
 
 		void Scene::switchRenderer(RenderSetup::RendererType new_type)
 		{
+			if (main_renderer_ >= renderers_.size())
+			{
+				Log.warn() << "SwitchRenderer: invalid renderer requested";
+			}
+
 			if (new_type == renderers_[main_renderer_]->getRendererType())
 				return; // nothing to see here....
 
