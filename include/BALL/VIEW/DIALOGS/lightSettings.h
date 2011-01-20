@@ -91,9 +91,15 @@ namespace BALL
 
 			/// Slot for changes of the intensity slider
 			virtual void intensityChanged();
+			
+			/// Slot for changes of the intensity max factor 
+			virtual void intensityMaxChanged(const QString& text);
 
 			///
 			virtual void positionTypeChanged();
+			
+			///	
+			virtual void updateDirectlyBoxChanged();
 
 			protected:
 

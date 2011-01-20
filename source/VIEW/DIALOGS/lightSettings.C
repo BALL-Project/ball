@@ -41,11 +41,13 @@ LightSettings::LightSettings(QWidget* parent, const char* name, Qt::WFlags fl)
 	connect( point, SIGNAL( clicked() ), this, SLOT( typeSelected() ) );
 	connect( directional, SIGNAL( clicked() ), this, SLOT( typeSelected() ) );
 	connect( intensity, SIGNAL( valueChanged(int) ), this, SLOT( intensityChanged() ) );
+	connect( max_intensity_factor, SIGNAL(textChanged( const QString& ) ), this, SLOT( intensityMaxChanged(const QString& ) ) );
 	connect( color_button, SIGNAL( clicked() ), this, SLOT( colorPressed() ) );
 	connect( add_lights_button, SIGNAL( clicked() ), this, SLOT( addLightPressed() ) );
 	connect( remove_lights_button, SIGNAL( clicked() ), this, SLOT( removeLightPressed() ) );
 	connect( not_relative, SIGNAL( clicked() ), this, SLOT( positionTypeChanged() ) );
 	connect( relative, SIGNAL( clicked() ), this, SLOT( positionTypeChanged() ) );
+	connect (update_directly_checkBox, SIGNAL(stateChanged(int)), this, SLOT( updateDirectlyBoxChanged()));
 
 	if (parent == 0 || !RTTI::isKindOf<Scene>(*parent)) 
 	{
@@ -129,22 +131,27 @@ void LightSettings::addLightPressed()
 	// position light 20 space units behind camera position
 
 	light.setRelativeToCamera(true);
-	light.setPosition(Vector3(0, 4, -20));
-	light.setDirection(Vector3(0, 0, 1));
+	light.setPosition(Vector3(0., 4., -20.));
+	light.setDirection(Vector3(0., 0., 1.));
 	light.setAttenuation(Vector3(1., 0., 0.));
-
 
 	lights_.push_back(light);
 
 	update();
 
 	lights_list->setCurrentRow(lights_.size()-1, QItemSelectionModel::Select);
+	
+	if (update_directly_checkBox->isChecked())
+		apply();
 }
 
 
 void LightSettings::colorPressed()
 {
 	chooseColor(color_sample);
+	
+	if (update_directly_checkBox->isChecked())
+		apply();
 }
 
 
@@ -239,6 +246,9 @@ void LightSettings::removeLightPressed()
 	lights_list->setCurrentRow(current);
 
 	update();
+	
+	if (update_directly_checkBox->isChecked())
+		apply();
 }
 
 
@@ -249,6 +259,9 @@ void LightSettings::typeSelected()
 	if (directional->isChecked()) pos = LightSource::DIRECTIONAL;
 
 	typeSelected_(pos);
+
+	if (update_directly_checkBox->isChecked())
+		apply();
 }
 
 void LightSettings::typeSelected_(Position type)
@@ -365,8 +378,20 @@ void LightSettings::apply()
 void LightSettings::intensityChanged()
 {
 	intensity_label->setText(String(intensity->value()).c_str());
+	
+	if (update_directly_checkBox->isChecked())
+				apply();
+
 }
 
+void LightSettings::intensityMaxChanged(const QString& text)
+{
+	if (text.toFloat()>0)
+		intensity->setMaximum(text.toFloat());
+	
+	if (update_directly_checkBox->isChecked())
+		apply();
+}
 
 void LightSettings::restoreDefaultValues(bool /*all*/)
 {
@@ -410,27 +435,39 @@ void LightSettings::positionTypeChanged()
 	{
 		BALLVIEW_DEBUG
 	}
+	
+	if (update_directly_checkBox->isChecked())
+		apply();
+}	
+
+void LightSettings::updateDirectlyBoxChanged()
+{
+	if (update_directly_checkBox->isChecked())
+	{
+		apply();
+	}
 }
+
 
 void LightSettings::setPosition_(const Vector3& v)
 {
-	position_x->setText(createFloatString(v.x, 2).c_str());
-	position_y->setText(createFloatString(v.y, 2).c_str());
-	position_z->setText(createFloatString(v.z, 2).c_str());
+	position_x->setText(createFloatString(v.x, 4).c_str());
+	position_y->setText(createFloatString(v.y, 4).c_str());
+	position_z->setText(createFloatString(v.z, 4).c_str());
 }
 
 void LightSettings::setDirection_(const Vector3& v)
 {
-	direction_x->setText(createFloatString(v.x, 2).c_str());
-	direction_y->setText(createFloatString(v.y, 2).c_str());
-	direction_z->setText(createFloatString(v.z, 2).c_str());
+	direction_x->setText(createFloatString(v.x, 4).c_str());
+	direction_y->setText(createFloatString(v.y, 4).c_str());
+	direction_z->setText(createFloatString(v.z, 4).c_str());
 }
 
 void LightSettings::setAttenuation_(const Vector3& a)
 {
-	 attenuation_p_1->setText(createFloatString(a.x, 2).c_str());
-	 attenuation_p_2->setText(createFloatString(a.y, 2).c_str());
-	 attenuation_p_3->setText(createFloatString(a.z, 2).c_str());
+	 attenuation_p_1->setText(createFloatString(a.x, 4).c_str());
+	 attenuation_p_2->setText(createFloatString(a.y, 4).c_str());
+	 attenuation_p_3->setText(createFloatString(a.z, 4).c_str());
 }
 
 Vector3 LightSettings::getPosition_() 
