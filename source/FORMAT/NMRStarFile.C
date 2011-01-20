@@ -24,7 +24,7 @@ using namespace std;
 namespace BALL
 {
 	const float    NMRStarFile::FLOAT_VALUE_NA    = Limits<float>::max();
-	const int      NMRStarFile::INT_VALUE_NA    	= Limits<int>::max();
+	const int      NMRStarFile::INT_VALUE_NA    	= Limits<Position>::max();
 	const Position NMRStarFile::POSITION_VALUE_NA = Limits<Position>::max();
 
 	NMRStarFile::NMRAtomData::NMRAtomData()
