@@ -17,6 +17,13 @@
 #include <QtGui/QListWidget>
 #include <QtGui/QFileDialog>
 #include <QtGui/QImage>
+#include <QtGui/QPainter>
+#include <QtGui/QPainterPath>
+#include <QtGui/QPixmap>
+#include <QtGui/QApplication>
+#include <QtGui/QDesktopWidget>
+#include <QtGui/QSplashScreen>
+#include <QtGui/QLinearGradient>
 
 namespace BALL
 {
@@ -45,6 +52,13 @@ namespace BALL
 			setWidgetStack(widget_stack);
 			registerWidgets_();
 
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
+			screenCountChanged(QApplication::desktop()->screenCount());
+#else
+			screenCountChanged(QApplication::desktop()->numScreens());
+#endif
+
+
 #ifndef BALL_HAS_RTFACT
 			radioButton_rtfact->setEnabled(false);
 			radioButton_opengl->setChecked(true);
@@ -63,6 +77,9 @@ namespace BALL
 			connect( environment_map, SIGNAL( toggled(bool)), this, SLOT( environmentMapChanged(bool) ) );
 			connect( fog_box, SIGNAL( toggled(bool)), this, SLOT( fogBoxChanged(bool) ) );	
 			connect( downsampling_slider, SIGNAL( valueChanged(int) ), this, SLOT( downsamplingSliderChanged() ) );
+			connect( identifyDisplays_button, SIGNAL( clicked() ), this, SLOT( identifyDisplays() ) );
+
+			connect( QApplication::desktop(), SIGNAL( screenCountChanged(int) ), this, SLOT( screenCountChanged(int) ) );
 		} 
 
 
@@ -348,6 +365,116 @@ namespace BALL
 				use_vertex_buffers->setChecked(true);
 			}
 			downsampling_slider->setValue(4);
+		}
+
+		void StageSettings::identifyDisplays()
+		{
+			// loop over all displays
+			// (we iterate until size() - 1 because there's also
+			// 'disabled' in the combo box)
+			for (int i=0; i<std::max(0, controlScreen_comboBox->count() - 1); ++i)
+			{
+				QPainter p;
+
+				// create a transparent background image
+				QImage pm(250, 250, QImage::Format_ARGB32);
+				pm.fill(qRgba(0, 0, 0, 0));
+
+				p.begin(&pm);
+
+				QFont text_font("Arial", 200, QFont::Bold);
+
+				QPainterPath text_path;
+				text_path.addText(QPointF(10.f, 220.f), text_font, QString::number(i));
+
+				QLinearGradient gradient(0, 0, 0, 100);
+				gradient.setColorAt(0.0, qRgba(0, 0, 128, 0));
+				gradient.setColorAt(1.0, qRgba(0, 128, 128, 0));
+
+				p.setBrush(gradient);
+				p.setPen(QPen(QColor(0, 0, 0), 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+
+				p.drawPath(text_path);
+				p.end();
+
+				pm.createAlphaMask();
+
+				QSplashScreen* splash = new QSplashScreen(QApplication::desktop()->screen(i), QPixmap::fromImage(pm));
+				splash->show();
+
+				identification_labels_.push_back(splash);
+			}
+
+			QTimer::singleShot(2000, this, SLOT(killIdentificationLabels_()));
+		}
+
+		void StageSettings::killIdentificationLabels_()
+		{
+			for (Position i=0; i<identification_labels_.size(); ++i)
+			{
+				delete(identification_labels_[i]);
+			}
+
+			identification_labels_.clear();
+		}
+
+		int StageSettings::getControlScreenNumber()
+		{
+			bool valid;
+			int result = controlScreen_comboBox->currentText().toInt(&valid);
+
+			if (!valid)
+				result = -1;
+
+			return result;
+		}
+
+		int StageSettings::getLeftEyeScreenNumber()
+		{
+			bool valid;
+			int result = leftEyeScreen_comboBox->currentText().toInt(&valid);
+
+			if (!valid)
+				result = -1;
+
+			return result;
+		}
+
+		int StageSettings::getRightEyeScreenNumber()
+		{
+			bool valid;
+			int result = rightEyeScreen_comboBox->currentText().toInt(&valid);
+
+			if (!valid)
+				result = -1;
+
+			return result;
+		}
+
+		void StageSettings::screenCountChanged(int number)
+		{
+			// first, get the old mappings
+			int old_control = controlScreen_comboBox->currentIndex();
+			int old_left    = leftEyeScreen_comboBox->currentIndex();
+			int old_right   = rightEyeScreen_comboBox->currentIndex();
+
+			// TODO: we need a heuristic to map the old values to sensible new ones...
+
+			controlScreen_comboBox->clear();
+			controlScreen_comboBox->addItem(tr("disabled"));
+			for (int i=0; i<number; ++i)
+				controlScreen_comboBox->addItem(QString::number(number));
+			controlScreen_comboBox->setCurrentIndex(1);
+
+			leftEyeScreen_comboBox->clear();
+			leftEyeScreen_comboBox->addItem(tr("disabled"));
+			for (int i=0; i<number; ++i)
+				leftEyeScreen_comboBox->addItem(QString::number(number));
+
+			rightEyeScreen_comboBox->clear();
+			rightEyeScreen_comboBox->addItem(tr("disabled"));
+			for (int i=0; i<number; ++i)
+				rightEyeScreen_comboBox->addItem(QString::number(number));
 		}
 
 		void StageSettings::eyeDistanceChanged()

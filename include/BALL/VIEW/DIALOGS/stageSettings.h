@@ -21,12 +21,15 @@
 
 #include <QtGui/QWidget>
 
+class QSplashScreen;
+
 namespace BALL
 {
 	namespace VIEW
 	{
 		class Stage;
 		class Scene;
+
 
 		/** Dialog for the Stage setup.
 		 		Following options can be set:
@@ -60,6 +63,18 @@ namespace BALL
 			///
 			void getGLSettings();
 
+			/** Return the screen number of the control screen in our stereo setup.
+			 */
+			int getControlScreenNumber();
+
+			/** Return the screen number of the right eye in our stereo setup.
+			 */
+			int getLeftEyeScreenNumber();
+
+			/** Return the screen number of the right eye in our stereo setup.
+			 */
+			int getRightEyeScreenNumber();
+
 			public slots:
 
 			/// Show a QColorDialog to select a new background color for the Scene
@@ -80,6 +95,11 @@ namespace BALL
 			///
 			void cappingColorPressed();
 
+			///
+			void screenCountChanged(int number);
+
+			///
+			void identifyDisplays();
 
 			private slots:
 				
@@ -94,6 +114,9 @@ namespace BALL
 			
 			///
 			void downsamplingSliderChanged();
+
+			///
+			void killIdentificationLabels_();
 
 			private:
 			
@@ -110,7 +133,7 @@ namespace BALL
 			
 			///
 			void setUser2ScreenDistance_(const float& s2u);
-			
+
 			///
 			float getUserEyeLevel_()
 				throw(Exception::InvalidFormat);
@@ -133,6 +156,8 @@ namespace BALL
 			Scene* scene_;
 
 			VIEW::Stage* stage_;
+
+			std::vector<QSplashScreen*> identification_labels_;
 		};
 
 } }
