@@ -3486,10 +3486,27 @@ namespace BALL
 			// first clean up
 			exitStereo();
 
-			GLRenderWindow* left_widget = new GLRenderWindow(QApplication::desktop()->screen(0), String(tr("left eye")).c_str());
+			// get the correct screens for control, left, and right eye
+			// TODO: handle the control screen! currently, we just leave it alone
+			int control_screen_index = stage_settings_->getControlScreenNumber();
+			int left_screen_index = stage_settings_->getLeftEyeScreenNumber();
+			int right_screen_index = stage_settings_->getRightEyeScreenNumber();
+
+			if (left_screen_index == -1 || right_screen_index == -1)
+			{
+				QMessageBox *box = new QMessageBox;
+				box->setText("Stereo setup invalid");
+				box->setInformativeText("Please assign the displays to valid screens in Preferences->Main->Stereo->Display Settings");
+				box->show();
+
+				return;
+			}
+
+			QWidget* left_screen = QApplication::desktop()->screen(left_screen_index);
+			GLRenderWindow* left_widget = new GLRenderWindow(left_screen, String(tr("left eye")).c_str());
 			left_widget->makeCurrent();
 			left_widget->init();
-			left_widget->resize(QApplication::desktop()->screen(0)->width(), QApplication::desktop()->screen(0)->height());
+			left_widget->resize(left_screen->width(), left_screen->height());
 
 #ifndef BALL_HAS_RTFACT
 			GLRenderer*   left_renderer = new GLRenderer;
@@ -3513,10 +3530,11 @@ namespace BALL
 			stereo_left_eye_ = renderers_.size()-1;
 			left_rs->start();
 
-			GLRenderWindow* right_widget = new GLRenderWindow(QApplication::desktop()->screen(1), String(tr("right eye")).c_str());
+			QWidget* right_screen = QApplication::desktop()->screen(right_screen_index);
+			GLRenderWindow* right_widget = new GLRenderWindow(right_screen, String(tr("right eye")).c_str());
 			right_widget->makeCurrent();
 			right_widget->init();
-			right_widget->resize(QApplication::desktop()->screen(1)->width(), QApplication::desktop()->screen(1)->height());
+			right_widget->resize(right_screen->width(), right_screen->height());
 
 #ifndef BALL_HAS_RTFACT
 			GLRenderer*   right_renderer = new GLRenderer;
