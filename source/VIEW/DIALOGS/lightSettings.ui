@@ -292,6 +292,9 @@
       <property name="toolTip">
        <string>maximal Intensity factor</string>
       </property>
+			<property name="text">
+			 <string>500</string>
+			</property>
      </widget>
     </item>
     <item row="1" column="3">

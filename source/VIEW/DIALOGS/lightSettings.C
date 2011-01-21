@@ -166,6 +166,7 @@ void LightSettings::defaultsPressed()
 {
 	lights_list->clear();
 	lights_.clear();
+	max_intensity_factor->setText("500");	
 	addLightPressed();
 }
 
