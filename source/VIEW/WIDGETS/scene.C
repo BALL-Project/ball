@@ -3198,6 +3198,24 @@ namespace BALL
 			RenderTarget* left_window  = (stereo_left_eye_  != -1) ? renderers_[stereo_left_eye_ ]->target : 0;
 			RenderTarget* right_window = (stereo_right_eye_ != -1) ? renderers_[stereo_right_eye_]->target : 0;
 
+			// stop rendering
+			stopContinuousLoop();
+			renderers_[stereo_left_eye_]->stop();
+			renderers_[stereo_left_eye_]->loop_mutex.lock();
+			renderers_[stereo_left_eye_]->wait_for_render.wakeAll();
+			renderers_[stereo_left_eye_]->loop_mutex.unlock();
+
+			renderers_[stereo_right_eye_]->stop();
+			renderers_[stereo_right_eye_]->loop_mutex.lock();
+			renderers_[stereo_right_eye_]->wait_for_render.wakeAll();
+			renderers_[stereo_right_eye_]->loop_mutex.unlock();
+
+			renderers_[stereo_left_eye_]->wait(100);
+			renderers_[stereo_right_eye_]->wait(100);
+
+			delete(renderers_[stereo_left_eye_]->renderer);
+			delete(renderers_[stereo_right_eye_]->renderer);
+
 			// note: it is important to erase the right eye first, because then the index of the
 			// left eye will still be valid (being smaller than the erased right one)
 			if (stereo_right_eye_ != -1)
