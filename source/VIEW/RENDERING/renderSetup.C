@@ -200,7 +200,8 @@ namespace BALL
 #ifndef BALL_HAS_RTFACT
 				renderer->setupStereo(eye_separation, stage.getFocalDistance());
 #else
-				target->setupStereo(eye_separation, stage.getFocalDistance());
+				//target->setupStereo(eye_separation, stage.getFocalDistance());
+				renderer->setupStereo(eye_separation, stage.getFocalDistance());
 #endif
 
 				//delta *= stage.swapSideBySideStereo() ? -1. : 1.;

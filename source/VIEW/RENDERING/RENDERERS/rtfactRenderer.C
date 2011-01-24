@@ -110,10 +110,34 @@ namespace BALL
 				x_scale_ = 0.5;
 				y_scale_ = height / (width * 2);
 			}
-
+			
 			setFrustum(1.5f, RTfact::Packet<1,float>::C_INFINITY, -2.f * x_scale_, 2.f * x_scale_, 2.f * y_scale_, -2.f * y_scale_);
+
 		}
 
+		void RTfactRenderer::setupStereo(float eye_separation, float focal_length)
+		{
+			// TODO: - make near and far clip configurable!!!
+			//       - keep the same frustrum until either the size or the stereo settings change
+
+			float near    = 1.5f;
+			float ndfl    = near / focal_length;
+			float left    = -2.0 * x_scale_;
+			float right   = 2.0 * x_scale_;
+			float bottom 	= -2.0 * y_scale_;
+			float top    	=  2.0 * y_scale_;
+
+			float new_left   = 2*left  - eye_separation * ndfl;
+			float new_right  = 2*right - eye_separation * ndfl;
+			
+			if (stage_->getCamera().getProjectionMode() == Camera::PERSPECTIVE)
+				setFrustum(near, RTfact::Packet<1,float>::C_INFINITY, left, right, bottom, top);
+			else
+			{
+				//glOrtho(new_left * orthographic_zoom_, new_right * orthographic_zoom_, 
+				//         bottom_ * orthographic_zoom_,      top_ * orthographic_zoom_, near_, far_);
+			}
+		}
 
 		void RTfactRenderer::getFrustum(float& near_f, float& far_f, float& left_f, float& right_f, float& top_f, float& bottom_f)
 		{

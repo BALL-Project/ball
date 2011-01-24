@@ -83,6 +83,8 @@ namespace BALL
 				                         std::list<GeometricObject*>& objects);
 
 				virtual void setSize(float width, float height);
+				
+				virtual void setupStereo(float eye_separation, float focal_length);
 
 				virtual void getFrustum(float& near_f, float& far_f, float& left_f, float& right_f, float& top_f, float& bottom_f);
 				virtual void setFrustum(float near_f, float far_f, float left_f, float right_f, float top_f, float bottom_f);
@@ -98,7 +100,7 @@ namespace BALL
 				void setLights(bool reset_all = false);
 
 				void updateCamera(const Camera* camera = 0);
-
+				
 				void updateBackgroundColor();
 
 				void setupEnvironmentMap(const QImage& image);
