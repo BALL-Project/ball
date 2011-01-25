@@ -2457,11 +2457,11 @@ namespace BALL
 
 			if (!ok)
 			{
-				setStatusbarText("Could not export XML3D/XHTML to string", true);
+				setStatusbarText((String)tr("Could not export XML3D/XHTML to string"), true);
 			}
 			else
 			{
-				setStatusbarText("Dumped XML3D/XHTML to string");
+				setStatusbarText((String)tr("Dumped XML3D/XHTML to string"));
 			}
 		}
 
