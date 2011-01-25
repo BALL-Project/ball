@@ -261,7 +261,7 @@ class NMRStarFile
 				
 					BALLToBMRBMapper();	
 
-					BALLToBMRBMapper(const Chain& , const NMRStarFile& );	
+					BALLToBMRBMapper(const Chain& , const NMRStarFile&, const String&);	
 					virtual ~BALLToBMRBMapper();
 
 					const Chain* getChain() const;
@@ -303,7 +303,7 @@ class NMRStarFile
 		//	bool read(AtomContainer&);
 
 			bool assignShifts(BALLToBMRBMapper&);
-			bool assignShifts(AtomContainer&, const String&, const String&);
+			bool assignShifts(AtomContainer&, const String&,  const String&, const String&);
 
 			
 			Size getNumberOfAtoms() const;
@@ -336,7 +336,9 @@ class NMRStarFile
 //			vector<NMRStarFile::ShiftReferenceSet>& getShiftReferenceSets(); 
 //			const vector<ShiftReferenceSet>& getShiftReferenceSets() const;
 
-			const Size getNumberOfShiftReferenceSets() const;
+			Size getNumberOfShiftReferenceSets() const;
+			bool hasShiftReferenceSet(String name);	
+
 //			const ShiftReferenceSet& getShiftReferenceSet(Position ) const;
 			ShiftReferenceSet& getShiftReferenceSet(Position ); 
 //			const ShiftReferenceSet& getShiftReferenceSetByName(String ) const;

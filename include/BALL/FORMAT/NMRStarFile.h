@@ -31,7 +31,7 @@ namespace BALL
 		 
 			This class provides methods for reading and assigning experimental 
 			chemical shifts from NMRStar files to peptides. 
-			The nested class BALLToBMRPMapper creates a mapping between NMRStar file atoms and
+			The nested class BALLToBMRBMapper creates a mapping between NMRStar file atoms and
 		 	atoms of a chain either based on a trivial mapping @see createTrivialMapping()
 			or based on a given alignment @see createMapping().
 			Access to information other than the shifts is provided as well.
@@ -49,8 +49,31 @@ namespace BALL
 					
 				std::cout << Peptides::GetSequence(chain)  << std::endl;
 				std::cout << nmr_file.getResidueSequence() << std::endl;
+			
+				// get the data
+				std::vector<NMRAtomDataSet>& nmr_data = nmr_file.getNMRData();
 
-				NMRStarFile::BALLToBMRBMapper mapper(chain, nmr_file);
+				// see what we have got
+				for (Size k=0; k < nmr_data.size(); k++)
+				{
+					std::cout << 	nmr_data[k].name << std::endl;
+				}
+				
+				// select a chemical unit of interest
+				String chemical_unit_name;
+
+				// NOTE: nmr_file.atom_data_sets_ equals  nmr_data !
+
+				for (Size k=0; k < nmr_file.atom_data_sets_.size() && nmr_file.getMolecularInformation().chemical_units.size(); k++)
+				{	
+					std::cout << nmr_file.getMolecularInformation().chemical_units[k].component_name << std::endl;
+					std::cout << nmr_file.atom_data_sets_[k].name << " " << nmr_file.atom_data_sets_[k].condition << std::endl;
+					
+					// decide for one
+					chemical_unit_name = nmr_file.getMolecularInformation().chemical_units[k].component_name;
+				}
+
+				NMRStarFile::BALLToBMRBMapper mapper(chain, nmr_file, chemical_unit_name);
 				
 				mapper.createMapping("MKSTGIVRKVDELGRVVIPIELRRTLGIAEKDALEIYVDDEKIIL-KKYKPNMT", 
 														 "AKSTGIVRKVDELGRVVIPIELRRTLGIAEKDALEIYVDDEKIILKK-YKPNMT");		
@@ -61,6 +84,25 @@ namespace BALL
 				...
 				   std::cout << atom->getProperty(ShiftModule::PROPERTY__EXPERIMENTAL__SHIFT).getFloat() << std::endl;
 			  ...
+
+				// use the chemical_unit_name to find the corresponding SampleCondition
+				NMRStarFile::MolecularSystem::ChemicalUnit chemical_unit = getChemicalUnitByLabel(chemical_unit_name); 
+				
+				if (chemical_unit.shifts && nmr_file.hasSampleCondition(chemical_unit.shifts->condition))
+				{
+					NMRStarFile::SampleCondition& condition = nmr_file.getSampleConditionByName(chemical_unit.shifts->condition);			
+					if (condition.hasType("pH"))
+						pH = condition.values["pH"];  
+					if (condition.hasType("pH*"))
+						pH = condition.values["pH*"]; 
+					if (condition.hasType("temperature"))
+						temperature  = condition.values["temperature"];
+					if (condition.hasType("pressure"))
+						pressure  = condition.values["pressure"];
+				
+					std::cout << "NMR conditions: " << pH << ", " << temperature << ", " << pressure << std::endl; 
+				}
+
 	    \endcode
 	*/
 	class BALL_EXPORT NMRStarFile
@@ -211,13 +253,14 @@ namespace BALL
 			/** NMRAtomDataSet
 				  This class includes all NMR information concerning a 
 				  dataset of atoms delivered by a NMRStar file.
-				  The corresponding condition, reference set and samples can be looked 
+					The corresponding condition, reference set, and samples can be looked 
 				  up with getSampleConditionByName(), 
 				          getShiftReferenceSetByName(), and 
 						  		getSample(). 
 				  All members are public for easy access.
 			*/
-			class BALL_EXPORT NMRAtomDataSet
+			class BALL_EXPORT NMRAtomDataSet 	// _Saveframe_category  assigned_chemical_shifts
+
 			{
 				public:
 					NMRAtomDataSet(NMRStarFile* parent);
@@ -411,8 +454,13 @@ namespace BALL
 					//@{
 					BALLToBMRBMapper();
 									
-					/// Detailed constructor
-					BALLToBMRBMapper(Chain const& chain, const NMRStarFile& nmr_data);	
+					/** Detailed constructor
+					
+					@param  chain            the chain to be mapped to a shift reference set 
+					@param  nmr_data         the NMRStarFile provinding the chemical shifts for chain
+					@param  chemical_unit    the name of the molecular system (chemical unit) storing the atom shifts 
+					*/
+					BALLToBMRBMapper(Chain const& chain, const NMRStarFile& nmr_data, const String& chemical_unit);	
 					
 					/// Destructor
 					virtual ~BALLToBMRBMapper() {}
@@ -437,6 +485,15 @@ namespace BALL
 
 					/// Get the NMRStar file
 					const NMRStarFile* getNMRStarFile() const {return nmr_data_;} 
+		
+					/// Set the NMRAtomDataSet
+					void setNMRAtomDataSet(NMRAtomDataSet const& nmr_atom_data_set){nmr_atom_data_set_= &nmr_atom_data_set;} //TODO
+					
+					/// Set the NMRAtomDataSet by chemical unit name
+					bool setNMRAtomDataSetByName(String const& chemical_unit_name);
+
+					// Get the NMRAtomDataSet 
+					const NMRAtomDataSet* getNMRAtomDataSet() const{return nmr_atom_data_set_;}
 
 					/// Return the mapping	
 					BALLToBMRBMapping& getBALLToBMRBMapping() {return ball_to_bmrb_map_;}
@@ -483,12 +540,14 @@ namespace BALL
 					*/
 					bool createTrivialMapping();
 					
-					/** Create a mapping between the given chain and the NMRStar file 
+					/** Create a mapping between the given chain and the molecular system named chemical_unit 
+					    of the given NMRStar file 
 					    atoms based on the given alignment.
 							The alignmed sequences should be given in OneLetterCode, where '-' denotes a gap.
 
 						  @param  aligned_ball_sequence    the aligned protein or chain aminoacid sequence 
-						  @param  aligned_nmrstar_sequence the aligned aminoacid sequence of the NMRStar atoms 
+						  @param  aligned_nmrstar_sequence the aligned aminoacid sequence of the NMRStar atoms  
+						
 						  @return bool - <tt>true</tt> if creating the mapping was possible 
 					*/
 					bool createMapping(const String& aligned_ball_sequence,
@@ -517,9 +576,11 @@ namespace BALL
 					// NOTE: do *not* attempt to delete these pointers!
 					const Chain*            chain_;
 					const NMRStarFile*      nmr_data_;
+					const NMRAtomDataSet*   nmr_atom_data_set_;
+					Position								nmr_atom_data_set_index_;
 					int                     num_mismatches_; 
 					int                     num_gabs_; 
-
+					bool 										valid_;
 					//@}
 
 				private:
@@ -579,13 +640,16 @@ namespace BALL
 			    The alignmed sequences should be given in 
 			    OneLetterCode, where '-' denotes a gap. 		
 					
-					@param  ac AtomContainer to which the NMRStarfile's shift should be assigned.	
+					@param  ac              AtomContainer to which the NMRStarfile's shift should be assigned.		
+					@param  chemical_unit   the name of the molecular system (chemical unit) storing the atom shifts 
 					@param  aligned_ball_sequence    the aligned AtomContainers aminoacid sequence 
 					@param  aligned_nmrstar_sequence the aligned aminoacid sequence of the NMRStar file atoms 
           @return bool - <tt>true</tt> if reading the file was successful 
 			 */
-			bool assignShifts(AtomContainer& ac, const String& aligned_ball_sequence,
-												const String& aligned_nmrstar_sequence);  
+			bool assignShifts(AtomContainer& ac,  
+			                  const String& chemical_unit,
+			                  const String& aligned_ball_sequence,
+			                  const String& aligned_nmrstar_sequence);  
 
 			/** Return the maximum number of atoms in all shift sets
 			*/
@@ -610,7 +674,17 @@ namespace BALL
 			/** Get the molecular information
 			 */
 			MolecularSystem& getMolecularInformation() {return molecular_system_;};
-	
+
+			
+			/** Get a chemical unit by name
+			 */
+			const MolecularSystem::ChemicalUnit& getChemicalUnitByLabel(String const& label) const;	
+			
+			/** Get a chemical unit by name
+			 */
+			MolecularSystem::ChemicalUnit& getChemicalUnitByLabel(String const& label);
+
+
 			/**  Return true if the file contains a SampleCondition named name, false otherwise
 			 */
 			bool hasSampleCondition(String name);
@@ -671,7 +745,10 @@ namespace BALL
 
 			/// Get the number of shift reference sets
 			Size getNumberOfShiftReferenceSets() const {return shift_references_.size();};
-	
+			
+			/// Check if there is a ShiftReferenceSet named name
+			bool hasShiftReferenceSet(String name);	
+
 			/// Get the i-th shift reference set
 			ShiftReferenceSet& getShiftReferenceSet(Position i) {return shift_references_[i];}; 	
 			/// Get the i-th shift reference set

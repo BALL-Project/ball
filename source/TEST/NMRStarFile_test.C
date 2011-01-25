@@ -340,20 +340,27 @@ CHECK(BALLToBMRBMapper)
 
 	NMRStarFile nmr_file(BALL_TEST_DATA_PATH(NMRStarFile_test_1z0r.bmr));
 	
-	NMRStarFile::BALLToBMRBMapper mapper(chain, nmr_file);
+	NMRStarFile::BALLToBMRBMapper mapper(chain, nmr_file, "'AbrBN subunit 1'");
 	TEST_EQUAL(*mapper.getChain() == chain, true)
 	TEST_EQUAL(*mapper.getNMRStarFile() == nmr_file, true)
-	
+	TEST_EQUAL(mapper.getNMRAtomDataSet() != NULL, true)
+	const NMRStarFile::NMRAtomDataSet* nmr_atom_data_set = mapper.getNMRAtomDataSet();
+
 	NMRStarFile nmr_file2(BALL_TEST_DATA_PATH(NMRStarFile_test.bmr));
+
 	Chain& chain2 = *(S.beginChain()++);
-	NMRStarFile::BALLToBMRBMapper mapper2(chain, nmr_file2);
+	NMRStarFile::BALLToBMRBMapper mapper2(chain2, nmr_file2, "dockerin");
 	
 	TEST_EQUAL(*mapper2.getChain() == chain2, true)	
 	TEST_EQUAL(*mapper.getNMRStarFile() == nmr_file2, true)
+	TEST_EQUAL(mapper2.getNMRAtomDataSet() != NULL, true)
+
 	mapper2.setChain(chain);
 	mapper2.setNMRStarFile(nmr_file);
-	TEST_EQUAL(*mapper.getChain() == *mapper2.getChain(), true)
-	TEST_EQUAL(*mapper.getNMRStarFile() == *mapper2.getNMRStarFile(), true)
+	mapper2.setNMRAtomDataSet(*nmr_atom_data_set);
+	TEST_EQUAL(*(mapper2.getChain()) == *(mapper.getChain()), true)
+	TEST_EQUAL(mapper2.getNMRAtomDataSet() == nmr_atom_data_set, true)
+	TEST_EQUAL(*(mapper2.getNMRStarFile()) == nmr_file, true)
 
 	/*
 	String ball_seq = Peptides::GetSequence(chain);
@@ -427,7 +434,7 @@ CHECK(bool assignShifts(BALLToBMRBMapper& ball_to_bmrb_mapping))
 	
 	Chain& chain = *(S.beginChain());
 	NMRStarFile nmr_file(BALL_TEST_DATA_PATH(NMRStarFile_test_1z0r.bmr));
-	NMRStarFile::BALLToBMRBMapper mapper(chain, nmr_file);
+	NMRStarFile::BALLToBMRBMapper mapper(chain, nmr_file, "'AbrBN subunit 1'");
 
 	// NOTE: for testing, we artificially create a gap. this leads to a lower number of assigned shifts later on
 	//       (606 instead of 617)
@@ -482,8 +489,9 @@ CHECK(assignShifts(AtomContainer& ac, const String& aligned_ball_sequence,
 	
 	NMRStarFile nmr_file(BALL_TEST_DATA_PATH(NMRStarFile_test_1z0r.bmr));
 	
-	bool worked = nmr_file.assignShifts(S,"MKSTGIVRKVDELGR-VVIPIELRRTLGIAEKDALEIYVDDEKIILKKYKPNMT", 
-																		    "MKSTGIVRKVDELGRVV-IPIELRRTLGIAEKDALEIYVDDEKIILKKYKPNMT" );
+	bool worked = nmr_file.assignShifts(S, "'AbrBN subunit 1'",
+			"MKSTGIVRKVDELGR-VVIPIELRRTLGIAEKDALEIYVDDEKIILKKYKPNMT", 
+			"MKSTGIVRKVDELGRVV-IPIELRRTLGIAEKDALEIYVDDEKIILKKYKPNMT"  );
 	TEST_EQUAL (worked, true)
 	if (worked)
 	{

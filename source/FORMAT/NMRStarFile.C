@@ -574,16 +574,44 @@ namespace BALL
  	}
 
 
-	NMRStarFile::BALLToBMRBMapper::BALLToBMRBMapper(Chain const& chain, const NMRStarFile& nmr_data)
+	NMRStarFile::BALLToBMRBMapper::BALLToBMRBMapper(Chain const& chain, 
+		                                              const NMRStarFile& nmr_data, 
+	                                                const String& chemical_unit)
 		: name_converter_(), 
 			ball_to_bmrb_map_(),
 			bmrb_to_ball_map_(), 
 			chain_(&chain),
 			nmr_data_(&nmr_data),
+			nmr_atom_data_set_(NULL),
+			nmr_atom_data_set_index_(0),
 			num_mismatches_(0),
-			num_gabs_(0)
+			num_gabs_(0),
+			valid_(true)
 	{
+		valid_ = setNMRAtomDataSetByName(chemical_unit);
  	}
+	
+	bool NMRStarFile::BALLToBMRBMapper::setNMRAtomDataSetByName(String const& chemical_unit_name)
+	{
+		bool found_chemical_unit = false;
+		
+		for (Size k=0; k < nmr_data_->atom_data_sets_.size(); k++)
+		{
+			if (nmr_data_->atom_data_sets_[k].name == chemical_unit_name)
+			{
+				found_chemical_unit = true;		
+				nmr_atom_data_set_  = &nmr_data_->atom_data_sets_[k];
+				nmr_atom_data_set_index_ = k;
+			}
+		}
+
+		if (!found_chemical_unit)
+		{
+			Log.warn() << "BALLToBMRBMapper: " << chemical_unit_name << " not found!" << std::endl;
+				valid_ = false;
+		}
+		return valid_;
+	}
 
 	bool NMRStarFile::BALLToBMRBMapper::isMapped(Atom const* atom) const
 	{
@@ -658,8 +686,15 @@ namespace BALL
 	}
 
 
+	// TODO: this currently works only with one NMRAtomDataSet
 	bool  NMRStarFile::BALLToBMRBMapper::createTrivialMapping()
 	{ 
+		if (!valid_)
+		{
+std::cout << "create Trivial ist invalid!"<< std::endl;
+			return false;
+		}
+
 		num_mismatches_  = -1;	
 		num_gabs_        = -1;
 
@@ -683,20 +718,29 @@ namespace BALL
 
 		num_mismatches_  = 0;	
 		num_gabs_        = 0;
+		
+		const NMRAtomDataSet* nmr_atom_data_set = nmr_atom_data_set_;
+		if (!nmr_atom_data_set_)
+		{
+			Log.warn() << "NMRStarFile::BALLToBMRBMapper::createTrivialMapping(): no chemical unit specified, try the first!" << std::endl;
+			
+			// if nothing was specified, try the first atom data set	
+			nmr_atom_data_set = &nmr_data_sets[0];
+		}
 
 		// TODO: insert the data from the NMRAtomDataSet (like conditions) as properties!
 		for (Position current_nmr_atom = 0; 
-				current_nmr_atom < nmr_data_sets[0].atom_data.size(); 
+				current_nmr_atom < nmr_atom_data_set->atom_data.size(); 
 				++current_nmr_atom)
 		{
-			const Atom* ball_atom = findNMRAtom_(nmr_data_sets[0].atom_data[current_nmr_atom]);
+			const Atom* ball_atom = findNMRAtom_(nmr_atom_data_set->atom_data[current_nmr_atom]);
 
 			BMRBIndex b_index(0, current_nmr_atom);
 
 			if (ball_atom)
 			{
 				ball_to_bmrb_map_[ball_atom] = b_index;
-				bmrb_to_ball_map_[&(nmr_data_sets[0].atom_data[current_nmr_atom])] = ball_atom;
+				bmrb_to_ball_map_[&(nmr_atom_data_set->atom_data[current_nmr_atom])] = ball_atom;
 			}
 		}
 		return true;
@@ -705,8 +749,11 @@ namespace BALL
 
 	bool NMRStarFile::BALLToBMRBMapper::createMapping(const String& aligned_ball_sequence,
 																										const String& aligned_nmrstar_sequence)
-	{	
-		int  matches     = 0;
+	{
+		if (!valid_)
+			return false;
+
+		int  matches     =  0;
 		num_mismatches_  = -1;	
 		num_gabs_        = -1;
 	
@@ -746,7 +793,7 @@ namespace BALL
 		num_mismatches_  = 0;	
 		num_gabs_        = 0;
 
-		std::vector<NMRAtomData> const& nmr_data = nmr_data_->atom_data_sets_[0].atom_data;
+		std::vector<NMRAtomData> const& nmr_data = nmr_atom_data_set_->atom_data;
 
 		// get the actual length of the nmr sequence
 		// NOTE: unfortunately this information is not provided by getResidueSequence().size !!!
@@ -760,7 +807,6 @@ namespace BALL
 		}
 
 		std::vector<std::list<Position> > atoms_per_nmr_residue(len_sequence);
-
 		for (Position i=0; i<nmr_data.size(); i++)
 		{	
 			atoms_per_nmr_residue[nmr_data[i].residue_seq_code-1].push_back(i);
@@ -840,7 +886,7 @@ namespace BALL
 								                           "NMRSTAR", full_name, "PDB"))
 								{
 									// and store in the mappings
-									BALLToBMRBMapper::BMRBIndex b_index(0, *nmr_atom);
+									BALLToBMRBMapper::BMRBIndex b_index(nmr_atom_data_set_index_, *nmr_atom);
 									ball_to_bmrb_map_[&*at_it] = b_index;
 									bmrb_to_ball_map_[&(nmr_data[*nmr_atom])] = &*at_it;	
 									mapped_me = true;
@@ -866,10 +912,13 @@ namespace BALL
 	{
 		ball_to_bmrb_map_.clear();
 		bmrb_to_ball_map_.clear();
-		chain_ = NULL;
+		chain_    = NULL;
 		nmr_data_ = NULL;
-		num_mismatches_ = -1;
+		nmr_atom_data_set_ = NULL;
+		nmr_atom_data_set_index_ = 0;
+		num_mismatches_    = -1;
 		num_gabs_ = -1; 
+		valid_    = false;
 	}
 
 
@@ -1026,21 +1075,31 @@ namespace BALL
 			Log.error() << "NMRStarfile::read(): Cannot assign shifts to a non-chain." << endl;
 			return false;
 		}
+	
+		String chemical_unit = "";
+		// get always the first chemical_unit
+		if (atom_data_sets_.size()>0)
+		{
+			Log.error() << "NMRStarfile::read(): chemical unit ambiguous." << endl;
+//			return false;
+		}
+		chemical_unit = atom_data_sets_[0].name;
 
 		// Since no explicit mapping AtomContainer-->BMRB
 		// is given, we try to find a trivial mapping 
 		// by exactly matching residues and atom names
-		BALLToBMRBMapper pdb_to_bmrb_mapping(*chain, *this);
+		BALLToBMRBMapper pdb_to_bmrb_mapping(*chain, *this, chemical_unit);
 		pdb_to_bmrb_mapping.createTrivialMapping();
 
 		// now assign the shifts via the mapping
 		result = assignShifts_(pdb_to_bmrb_mapping);
 		return result;
-	}
+	} 
 	
-	bool NMRStarFile::assignShifts(AtomContainer& ac,
-													const String& aligned_ball_sequence,
-													const String& aligned_nmrstar_sequence)
+	bool NMRStarFile::assignShifts(AtomContainer& ac, 
+	                        const String& chemical_unit,
+	                        const String& aligned_ball_sequence,
+	                        const String& aligned_nmrstar_sequence)
 	{
 		// read the NMRStarFile's information
 		bool result = valid_;
@@ -1080,7 +1139,7 @@ namespace BALL
 		if (result && chain)
 		{
 			// create a mapping
-			BALLToBMRBMapper pdb_to_bmrb_mapping(*chain, *this);
+			BALLToBMRBMapper pdb_to_bmrb_mapping(*chain, *this, chemical_unit);
 			pdb_to_bmrb_mapping.createMapping(aligned_ball_sequence, aligned_nmrstar_sequence);
 
 #if defined NMRSTAR_DEBUG_MAPPING
@@ -1089,19 +1148,6 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 #endif
 			// now assign the shifts via the mapping
 			result = assignShifts_(pdb_to_bmrb_mapping);
-		}
-		else if (result && chain)
-		{
-			// create a mapping
-			BALLToBMRBMapper chain_to_bmrb_mapping(*chain, *this);
-			chain_to_bmrb_mapping.createMapping(aligned_ball_sequence, aligned_nmrstar_sequence);
-
-#if defined NMRSTAR_DEBUG_MAPPING
-Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: " 
-						<< chain_to_bmrb_mapping.getNumberOfMismatches()<< endl;
-#endif
-			// now assign the shifts via the mapping
-			result = assignShifts_(chain_to_bmrb_mapping);
 		}
 		return result;
 	}
@@ -1205,6 +1251,32 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 	{
 		return atom_data_sets_;
 	}
+		
+	const NMRStarFile::MolecularSystem::ChemicalUnit& NMRStarFile::getChemicalUnitByLabel(String const& label) const
+	{
+		NMRStarFile::MolecularSystem mol_sys = getMolecularInformation();
+
+		for (Position i=0; i<mol_sys.chemical_units.size(); ++i)
+		{
+			if (mol_sys.chemical_units[i].label == label)
+				return mol_sys.chemical_units[i];
+		}
+
+		throw (Exception::OutOfRange(__FILE__, __LINE__));
+	}
+
+	NMRStarFile::MolecularSystem::ChemicalUnit& NMRStarFile::getChemicalUnitByLabel(String const& label)
+	{
+		NMRStarFile::MolecularSystem& mol_sys = getMolecularInformation();
+
+		for (Position i=0; i<mol_sys.chemical_units.size(); ++i)
+		{
+			if (mol_sys.chemical_units[i].label == label)
+				return mol_sys.chemical_units[i];
+		}
+
+		throw (Exception::OutOfRange(__FILE__, __LINE__));
+	}
 
 	bool NMRStarFile::hasSampleCondition(String name)
 	{
@@ -1294,6 +1366,18 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 		return  dummy_sample_;
 	}
 
+  
+	bool  NMRStarFile::hasShiftReferenceSet(String name)
+	{
+		for (Size i=0; i < shift_references_.size(); i++)
+		{
+			if (shift_references_[i].name == name)
+			{
+				return true; 
+			}
+		}
+		return false;
+	}	
 
 	const  NMRStarFile::ShiftReferenceSet& NMRStarFile::getShiftReferenceSetByName(String name) const 
 	{
@@ -2071,9 +2155,11 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 		{
 			for (Size i=0; i < atom_data_sets_.size(); i++)
 			{
-				if (atom_data_sets_[i].name == molecular_system_.chemical_units[j].label)//component_name)
+				if (  atom_data_sets_[i].name == molecular_system_.chemical_units[j].component_name
+						||atom_data_sets_[i].name == molecular_system_.chemical_units[j].label)
 				{
 					molecular_system_.chemical_units[j].shifts = &atom_data_sets_[i];
+					break;
 				}
 			}
 		}
