@@ -119,14 +119,14 @@ namespace BALL
 		String XML3DRenderer::XML3DColorRGBA(const ColorRGBA& color, const String& name)
 		{
 			// NOTE: XML3D currently does not use the alpha value => use float3
-			String output = "<bind semantic=\"" + name + "\">\n";
+			String output = "<float3 name=\"" + name + "\">\n";
 
-			output += String("   <float3>") + String((float)color.getRed())   + " "
+			output += String("   ") + String((float)color.getRed())   + " "
 																	    + String((float)color.getGreen()) + " "
 																		  + String((float)color.getBlue())
-																		  + "</float3>\n";
+																		  + "\n";
 
-			output += "</bind>\n";
+			output += "</float3>\n";
 
 			return output;
 		}
@@ -169,27 +169,27 @@ namespace BALL
 
       result += XML3DColorRGBA(reflect, "reflective");
 
-      result += "<bind semantic=\"transparency\">\n";
-      result += "   <float>"+String(rt_material_.transparency)+"</float>\n";
-      result += "</bind>\n";
+      result += "<float name=\"transparency\">\n";
+      result += "   "+String(rt_material_.transparency)+"\n";
+      result += "</float>\n";
 
-      result += "<bind semantic=\"transparent\">\n";
-      result += "   <float>" + String(rt_material_.transparency) + " "
+      result += "<float name=\"transparent\">\n";
+      result += "   " + String(rt_material_.transparency) + " "
 			                       + String(rt_material_.transparency) + " "
-														 + String(rt_material_.transparency) + "</float>\n";
-      result += "</bind>\n";
+														 + String(rt_material_.transparency) + "\n";
+      result += "</float>\n";
 
-      result += "<bind semantic=\"shininess\">\n";
-      result += "   <float>"+String(rt_material_.shininess)+"</float>\n";
-      result += "</bind>\n";
+      result += "<float name=\"shininess\">\n";
+      result += "   "+String(rt_material_.shininess)+"\n";
+      result += "</float>\n";
 
-      result += "<bind semantic=\"ambientIntensity\">\n";
-      result += "   <float>"+String(rt_material_.ambient_intensity)+"</float>\n";
-      result += "</bind>\n";
+      result += "<float name=\"ambientIntensity\">\n";
+      result += "   "+String(rt_material_.ambient_intensity)+"\n";
+      result += "</float>\n";
 
-      result += "<bind semantic=\"Intensity\">\n";
-      result += "   <float>"+String(rt_material_.ambient_intensity)+"</float>\n";
-      result += "</bind>\n";
+      result += "<float name=\"Intensity\">\n";
+      result += "   "+String(rt_material_.ambient_intensity)+"\n";
+      result += "</float>\n";
 
 			return result;
 		}
@@ -396,11 +396,11 @@ namespace BALL
 						pos = stage_->calculateAbsoluteCoordinates(pos) + stage_->getCamera().getViewPoint();
 					}
 					out << "<lightshader id=\"point" << i << "\" script=\"#pointlight\" >" << endl; 
-					out << "<bind semantic=\"position\"><float3>" << pos.x << " " << pos.y << " " << pos.z << "</float3></bind>" << endl;
-					out << "<bind semantic=\"intensity\"><float3>" << (float) color.getRed() * intensity << " " 
+					out << "<float3 name=\"position\">" << pos.x << " " << pos.y << " " << pos.z << "</float3>" << endl;
+					out << "<float3 name=\"intensity\">" << (float) color.getRed() * intensity << " " 
 																												<< (float) color.getGreen() * intensity << " "
-																												<< (float) color.getBlue() * intensity <<   "</float3></bind>" << endl;
-					out << "<bind semantic=\"attenuation\"><float3>" << attenuation.x << " " << attenuation.y << " " << attenuation.z << "</float3></bind>" << endl;
+																												<< (float) color.getBlue() * intensity <<   "</float3>" << endl;
+					out << "<float3 name=\"attenuation\">" << attenuation.x << " " << attenuation.y << " " << attenuation.z << "</float3>" << endl;
 					out << "</lightshader>" << endl;
 					out << "<light shader=\"#point" << i << "\" id=\"mypoint" << i << "\" />" << endl;
 				}
@@ -565,8 +565,7 @@ namespace BALL
 			out << ">" << endl; 
 
 			// First the indices
-			out << "<bind semantic=\"index\">" << endl;
-			out << "<int>" << endl;
+			out << "<int name=\"index\">" << endl;
  			vector<Surface::Triangle>::const_iterator itt = sphere_template_.triangle.begin();
  			
 			for (; itt != sphere_template_.triangle.end(); itt++)
@@ -575,11 +574,9 @@ namespace BALL
 			}	
 			
 			out << "</int>" << endl;
-			out << "</bind>" << endl;
 
 			// then then position vectors
-			out << "<bind semantic=\"position\">" << endl;
-			out << "<float3>" << endl;
+			out << "<float3 name=\"position\">" << endl;
  			
 			vector<Surface::Vertex>::const_iterator itv = sphere_template_.vertex.begin();
  			for (; itv != sphere_template_.vertex.end(); itv++)
@@ -588,11 +585,9 @@ namespace BALL
 			}	
 			
 			out << "</float3>" << endl;;
-			out << "</bind>" << endl;
 			
 			// then then position normals
-			out << "<bind semantic=\"normal\">" << endl;
-			out << "<float3>" << endl;
+			out << "<float3 name=\"normal\">" << endl;
  			
 			vector<Surface::Normal>::const_iterator itn = sphere_template_.normal.begin();
  			for (; itn != sphere_template_.normal.end(); itn++)
@@ -601,7 +596,6 @@ namespace BALL
 			}	
 			
 			out << "</float3>" << endl;
-			out << "</bind>" << endl;
 			
 			out << "</mesh>" << endl;
 			out << "</group>" << endl; 
@@ -721,6 +715,7 @@ namespace BALL
 		}
 
 
+
 		void XML3DRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
 		{
 			std::ostream& out = *outfile_;
@@ -746,8 +741,7 @@ namespace BALL
 				out << ">" << endl; 
 
 				// First the indices
-				out << "<bind semantic=\"index\">" << endl;
-				out << "<int>" << endl;
+				out << "<int name=\"index\">" << endl;
  				vector<Surface::Triangle>::const_iterator itt = tube_template_.triangle.begin();
  				
 				for (; itt != tube_template_.triangle.end(); itt++)
@@ -756,11 +750,9 @@ namespace BALL
 				}	
 				
 				out << "</int>" << endl;
-				out << "</bind>" << endl;
 
 				// then then position vectors
-				out << "<bind semantic=\"position\">" << endl;
-				out << "<float3>" << endl;
+				out << "<float3 name=\"position\">" << endl;
  				
 				vector<Surface::Vertex>::const_iterator itv = tube_template_.vertex.begin();
  				for (; itv != tube_template_.vertex.end(); itv++)
@@ -769,11 +761,9 @@ namespace BALL
 				}	
 				
 				out << "</float3>" << endl;;
-				out << "</bind>" << endl;
 				
 				// then then position normals
-				out << "<bind semantic=\"normal\">" << endl;
-				out << "<float3>" << endl;
+				out << "<float3 name=\"normal\">" << endl;
  				
 				vector<Surface::Normal>::const_iterator itn = tube_template_.normal.begin();
  				for (; itn != tube_template_.normal.end(); itn++)
@@ -782,7 +772,6 @@ namespace BALL
 				}	
 				
 				out << "</float3>" << endl;
-				out << "</bind>" << endl;
 				
 				out << "</mesh>" << endl;
 				out << "</group>" << endl; 
@@ -821,8 +810,7 @@ namespace BALL
 				out << ">" << endl; 
 
 				// First the indices
-				out << "<bind semantic=\"index\">" << endl;
-				out << "<int>" << endl;
+				out << "<int name=\"index\">" << endl;
  				vector<Surface::Triangle>::const_iterator itt = tube_template_.triangle.begin();
  				
 				for (; itt != tube_template_.triangle.end(); itt++)
@@ -831,11 +819,9 @@ namespace BALL
 				}	
 				
 				out << "</int>" << endl;
-				out << "</bind>" << endl;
 
 				// then then position vectors
-				out << "<bind semantic=\"position\">" << endl;
-				out << "<float3>" << endl;
+				out << "<float3 name=\"position\">" << endl;
  				
 				vector<Surface::Vertex>::const_iterator itv = tube_template_.vertex.begin();
  				for (; itv != tube_template_.vertex.end(); itv++)
@@ -844,11 +830,9 @@ namespace BALL
 				}	
 				
 				out << "</float3>" << endl;;
-				out << "</bind>" << endl;
 				
 				// then then position normals
-				out << "<bind semantic=\"normal\">" << endl;
-				out << "<float3>" << endl;
+				out << "<float3 name=\"normal\">" << endl;
  				
 				vector<Surface::Normal>::const_iterator itn = tube_template_.normal.begin();
  				for (; itn != tube_template_.normal.end(); itn++)
@@ -857,7 +841,6 @@ namespace BALL
 				}	
 				
 				out << "</float3>" << endl;
-				out << "</bind>" << endl;
 				
 				out << "</mesh>" << endl;
 				out << "</group>" << endl; 
@@ -873,8 +856,7 @@ namespace BALL
 				out << ">" << endl; 
 
 				// First the indices
-				out << "<bind semantic=\"index\">" << endl;
-				out << "<int>" << endl;
+				out << "<int name=\"index\">" << endl;
  				vector<Surface::Triangle>::const_iterator itt2 = tube_template_.triangle.begin();
  				
 				for (; itt2 != tube_template_.triangle.end(); itt2++)
@@ -883,11 +865,9 @@ namespace BALL
 				}	
 				
 				out << "</int>" << endl;
-				out << "</bind>" << endl;
 
 				// then then position vectors
-				out << "<bind semantic=\"position\">" << endl;
-				out << "<float3>" << endl;
+				out << "<float3 name=\"position\">" << endl;
  				
 				vector<Surface::Vertex>::const_iterator itv2 = tube_template_.vertex.begin();
  				for (; itv2 != tube_template_.vertex.end(); itv2++)
@@ -896,11 +876,9 @@ namespace BALL
 				}	
 				
 				out << "</float3>" << endl;;
-				out << "</bind>" << endl;
 				
 				// then then position normals
-				out << "<bind semantic=\"normal\">" << endl;
-				out << "<float3>" << endl;
+				out << "<float3 name=\"normal\">" << endl;
  				
 				vector<Surface::Normal>::const_iterator itn2 = tube_template_.normal.begin();
  				for (; itn2 != tube_template_.normal.end(); itn2++)
@@ -909,7 +887,6 @@ namespace BALL
 				}	
 				
 				out << "</float3>" << endl;
-				out << "</bind>" << endl;
 				
 				out << "</mesh>" << endl;
 				out << "</group>" << endl; 
@@ -945,7 +922,7 @@ namespace BALL
 			}
 			else
 			{
-				out << "<bind semantic=\"useVertexColor\">\n<bool>true</bool>\n</bind>\n";
+				out << "<bool name=\"useVertexColor\">true</bool>\n";
 			}
 
 			out << XML3DRaytracingMaterial(rt_material_);
@@ -962,8 +939,7 @@ namespace BALL
 			out << ">" << endl; 
 
 			// First the indices
-			out << "<bind semantic=\"index\">" << endl;
-			out << "<int>" << endl;
+			out << "<int name=\"index\">" << endl;
  			vector<Surface::Triangle>::const_iterator itt = mesh.triangle.begin();
  			
 			for (; itt != mesh.triangle.end(); itt++)
@@ -972,11 +948,9 @@ namespace BALL
 			}	
 			
 			out << "</int>" << endl;
-			out << "</bind>" << endl;
 
 			// then then position vectors
-			out << "<bind semantic=\"position\">" << endl;
-			out << "<float3>" << endl;
+			out << "<float3 name=\"position\">" << endl;
  			
 			vector<Surface::Vertex>::const_iterator itv = mesh.vertex.begin();
  			for (; itv != mesh.vertex.end(); itv++)
@@ -985,11 +959,9 @@ namespace BALL
 			}	
 			
 			out << "</float3>" << endl;;
-			out << "</bind>" << endl;
 			
 			// then then position normals
-			out << "<bind semantic=\"normal\">" << endl;
-			out << "<float3>" << endl;
+			out << "<float3 name=\"normal\">" << endl;
  			
 			vector<Surface::Normal>::const_iterator itn = mesh.normal.begin();
  			for (; itn != mesh.normal.end(); itn++)
@@ -998,13 +970,11 @@ namespace BALL
 			}	
 			
 			out << "</float3>" << endl;
-			out << "</bind>" << endl;
 			
 			// export Vertex Colors if necessary	
 			if (mesh.colors.size() > 1)
 			{
-				out << "<bind semantic=\"color\">" << endl;
-				out << "<float3>" << endl;
+				out << "<float3 name=\"color\">" << endl;
 
 				vector<ColorRGBA>::const_iterator itc = mesh.colors.begin();
 				for (; itc != mesh.colors.end(); itc++)
@@ -1013,7 +983,6 @@ namespace BALL
 				}	
 
 				out << "</float3>" << endl;
-				out << "</bind>" << endl;
 			}
  			
 			
