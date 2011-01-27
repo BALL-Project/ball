@@ -580,48 +580,51 @@ namespace BALL
 			hotkeys_ = (python_settings_->getContent());
 
 			QMenu* menu = getMainControl()->initPopupMenu(MainControl::USER);
-			menu->clear();
+	if (menu)
+	{
+		menu->clear();
 
-			list<Hotkey>::iterator it = hotkeys_.begin();
-			for (; it != hotkeys_.end(); it++)
-			{
-				String entry = (*it).action;
-				if (entry.size() > 35)
-				{ 
-					entry.truncate(32);
-					entry += "...";
-				}
-
-				QKeySequence seq((*it).key);
-				if ((*it).button_state != Qt::NoModifier)
-				{
-					String prefix;
-					if      ((*it).button_state == Qt::SHIFT) prefix = "Shift";
-					else if ((*it).button_state == Qt::CTRL)  prefix = "Ctrl";
-					else BALLVIEW_DEBUG
-
-						seq = QKeySequence(((prefix + "+F") + String((*it).key - Qt::Key_F1 + 1)).c_str());
-				}
-
-				QAction* action = insertMenuEntry(MainControl::USER, entry.c_str(), this, 
-				                                  SLOT(hotkeyItem()), "", seq);
-				action->setData((*it).action.c_str());
-				String comment = (*it).comment;
-				if (comment != "")
-				{
-					setMenuHint(comment);
-				}
-				else
-				{
-					setMenuHint((String)tr("Run a Python script"));
-				}
-				setMenuHelp("pythonInterpreter.html#create_hotkeys");
+		list<Hotkey>::iterator it = hotkeys_.begin();
+		for (; it != hotkeys_.end(); it++)
+		{
+			String entry = (*it).action;
+			if (entry.size() > 35)
+			{ 
+				entry.truncate(32);
+				entry += "...";
 			}
 
-			getMainControl()->insertPopupMenuSeparator(MainControl::USER);
-			insertMenuEntry(MainControl::USER, (String)tr("Modify"), this, SLOT(modifyHotkeys()));
-			setMenuHint((String)tr("Manage user defined Python commands"));
+			QKeySequence seq((*it).key);
+			if ((*it).button_state != Qt::NoModifier)
+			{
+				String prefix;
+				if      ((*it).button_state == Qt::SHIFT) prefix = "Shift";
+				else if ((*it).button_state == Qt::CTRL)  prefix = "Ctrl";
+				else BALLVIEW_DEBUG
+
+					seq = QKeySequence(((prefix + "+F") + String((*it).key - Qt::Key_F1 + 1)).c_str());
+			}
+
+			QAction* action = insertMenuEntry(MainControl::USER, entry.c_str(), this, 
+					SLOT(hotkeyItem()), "", seq);
+			action->setData((*it).action.c_str());
+			String comment = (*it).comment;
+			if (comment != "")
+			{
+				setMenuHint(comment);
+			}
+			else
+			{
+				setMenuHint((String)tr("Run a Python script"));
+			}
 			setMenuHelp("pythonInterpreter.html#create_hotkeys");
+		}
+
+		getMainControl()->insertPopupMenuSeparator(MainControl::USER);
+		insertMenuEntry(MainControl::USER, (String)tr("Modify"), this, SLOT(modifyHotkeys()));
+		setMenuHint((String)tr("Manage user defined Python commands"));
+		setMenuHelp("pythonInterpreter.html#create_hotkeys");
+	}
 
 			/////////////////////////////////////////
 			// startup script

@@ -14,6 +14,7 @@
 #include <BALL/VIEW/KERNEL/modularWidget.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
+#include <BALL/VIEW/KERNEL/UIOperationMode.h>
 #include <BALL/VIEW/DIALOGS/mainControlPreferences.h>
 #include <BALL/VIEW/DIALOGS/networkPreferences.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
@@ -327,8 +328,10 @@ namespace BALL
 			clear();
 		}
 
-		QMenu* MainControl::initPopupMenu(int ID)
+		QMenu* MainControl::initPopupMenu(int ID, UIOperationMode::OperationMode mode)
 		{
+			if (UIOperationMode::instance().getMode() > mode) return 0;
+			
 			if (id_to_menu_.has(ID)) return id_to_menu_[ID];
 
 			QMenu* menu = 0;
@@ -401,7 +404,7 @@ namespace BALL
 					menu = menuBar()->addMenu(tr("&Windows"));
 					break;
 				case USER:
-					menu = menuBar()->addMenu(tr("&User"));
+					menu = addMenu(tr("&User"), UIOperationMode::MODE_ADVANCED);
 					break;
 				case MACRO:
 					menu = menuBar()->addMenu(tr("Macros"));
@@ -413,13 +416,17 @@ namespace BALL
 					return 0;
 			}
 
-			if (!RTTI::isKindOf<QMenu>(*menu->parent()))
+			if (menu)
 			{
-				connect(menu, SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
+				if (!RTTI::isKindOf<QMenu>(*menu->parent()))
+				{
+					connect(menu, SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
+				}
+
+				id_to_menu_[ID] = menu;
+				menu->setObjectName(menu->title());
 			}
 
-			id_to_menu_[ID] = menu;
-			menu->setObjectName(menu->title());
 
 			return menu;
 		}
@@ -853,6 +860,17 @@ namespace BALL
 				shortcut_registry_.registerShortcut(description, action);
 
 			return action;
+		}
+
+		QMenu* MainControl::addMenu(const QString& title, UIOperationMode::OperationMode mode)
+		{
+			QMenu* menu = 0;
+			if (UIOperationMode::instance().getMode() <= mode)
+			{
+				menu = menuBar()->addMenu(title);
+			}
+
+			return menu;
 		}
 
 		void MainControl::removeMenuEntry(Index parent_id, QAction* action)

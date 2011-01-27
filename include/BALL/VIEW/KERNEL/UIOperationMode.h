@@ -30,7 +30,8 @@ namespace BALL
 				{
 					MODE_FULL = 0,
 					MODE_ADVANCED,
-					MODE_KIOSK
+					MODE_KIOSK,
+					MODE_ALL
 				};
 
 				virtual ~UIOperationMode();

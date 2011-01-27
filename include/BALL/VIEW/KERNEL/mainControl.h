@@ -29,6 +29,14 @@
 #include <BALL/VIEW/KERNEL/shortcutRegistry.h>
 #endif
 
+#ifndef BALL_VIEW_KERNEL_UIOPERATIONMODE_H
+#include <BALL/VIEW/KERNEL/UIOperationMode.h>
+#endif
+
+#ifndef BALL_VIEW_KERNEL_UIOPERATIONMODE_H
+#include <BALL/VIEW/KERNEL/shortcutRegistry.h>
+#endif
+
 #ifndef BALL_FORMAT_INIFILE_H
 # include <BALL/FORMAT/INIFile.h>
 #endif
@@ -497,6 +505,10 @@ namespace BALL
 
 			QAction* insertMenuEntry(Position parent_id, const QString& name, const QObject* receiver = 0,
 													 const char* slot = 0, const QString& description = "", QKeySequence accel = QKeySequence());
+			
+			///
+			virtual QMenu* addMenu(const QString& title, UIOperationMode::OperationMode mode);
+
 			/// 
 			void removeMenuEntry (Index parent_id, QAction* action);
 			
@@ -507,7 +519,7 @@ namespace BALL
 					\return   QPopupMenu* a pointer to the created QPopupMenu
 					\see      PopUpID
 			*/	
-			virtual QMenu* initPopupMenu(int ID);
+			virtual QMenu* initPopupMenu(int ID, UIOperationMode::OperationMode mode = UIOperationMode::MODE_ALL);
 
 			/** Insert a separator into the popup menu <b> ID</b>. 
 					If the menu <b>ID</b> is not existent, it will be created first.

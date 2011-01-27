@@ -82,7 +82,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 	bool kiosk_mode = false;
 	for (arg_it = arguments.constBegin(); arg_it != arguments.constEnd(); ++arg_it)
 	{
-		if (arg_it->toLocal8Bit().constData() == "-kiosk")
+		if (arg_it->toLocal8Bit() == "-kiosk")
 		{
 			kiosk_mode = true;
 		}
@@ -92,6 +92,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 	{
 		BALL::VIEW::UIOperationMode::instance().setMode(BALL::VIEW::UIOperationMode::MODE_KIOSK);
 	}
+
+	std::cout << BALL::VIEW::UIOperationMode::instance().getMode() << std::endl;
 
   QPixmap splash_pm(":BALLView-1.4-Splashscreen.png");
   QSplashScreen* splash = new QSplashScreen(splash_pm);
