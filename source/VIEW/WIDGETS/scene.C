@@ -1292,7 +1292,7 @@ namespace BALL
 
 			create_coordinate_system_ = getMainControl()->initPopupMenu(MainControl::DISPLAY)->
 				addMenu(tr("Show Coordinate System"));
-			setMenuHint((String)tr("Show a coordinate system"));
+			create_coordinate_system_->setToolTip(tr("Show a coordinate system"));
 
 			new_action = create_coordinate_system_->addAction(tr("at origin"), this, SLOT(createCoordinateSystemAtOrigin()));
 			shortcut_registry->registerShortcut("Shortcut|Display|Show_Coordinate_System|at_origin", new_action);
@@ -1300,127 +1300,187 @@ namespace BALL
 			new_action = create_coordinate_system_->addAction(tr("here"), this, SLOT(createCoordinateSystem()));
 			shortcut_registry->registerShortcut("Shortcut|Display|Show_Coordinate_System|here", new_action);
 
-			insertMenuEntry(MainControl::DISPLAY, (String)tr("Add new GL Window"), this, SLOT(addGlWindow()), "Shortcut|Display|Add_new_GL_Window");
+			insertMenuEntry(MainControl::DISPLAY, tr("Add new GL Window"), this, SLOT(addGlWindow()), 
+			                "Shortcut|Display|Add_new_GL_Window", QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 #ifdef BALL_HAS_RTFACT
-			insertMenuEntry(MainControl::DISPLAY, (String)tr("Add new RTfact Window"), this, SLOT(addRTfactWindow()), "Shortcut|Display|Add_new_RTfact_Window");
+			insertMenuEntry(MainControl::DISPLAY, tr("Add new RTfact Window"), this, SLOT(addRTfactWindow()), 
+			                "Shortcut|Display|Add_new_RTfact_Window", QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 #endif
 			// ======================== Display->Animation ===============================================
 			String help_url = "tips.html#animations";
 
-			record_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, (String)tr("Record"), this, 
-					SLOT(dummySlot()), "Shortcut|Display|Animation|Record");
-			setMenuHint((String)tr("Record an animation for later processing"));
-			setMenuHelp(help_url);
-			record_animation_action_->setCheckable(true);
+			record_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Record"), this, 
+			                                           SLOT(dummySlot()), "Shortcut|Display|Animation|Record", QKeySequence(),
+																								 tr("Record an animation for later processing"),
+																								 UIOperationMode::MODE_ADVANCED);
+			if (record_animation_action_)
+			{
+				setMenuHelp(record_animation_action_, help_url);
+				record_animation_action_->setCheckable(true);
+			}
 
-			clear_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, (String)tr("Clear"), this, 
-					SLOT(clearRecordedAnimation()), "Shortcut|Display|Animation|Clear");
-			setMenuHelp(help_url);
-
-			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
-
-			start_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, (String)tr("Start"), this, 
-					SLOT(startAnimation()), "Shortcut|Display|Animation|Start");
-			setMenuHelp(help_url);
-
-			cancel_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, (String)tr("Stop"), this, 
-					SLOT(stopAnimation()), "Shortcut|Display|Animation|Stop");
-			cancel_animation_action_->setEnabled(false);
-			setMenuHelp(help_url);
+			clear_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Clear"), this, 
+			                                          SLOT(clearRecordedAnimation()), "Shortcut|Display|Animation|Clear", 
+																								QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
+			if (clear_animation_action_)
+			{
+				setMenuHelp(clear_animation_action_, help_url);
+			}
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
 
-			animation_export_PNG_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, (String)tr("Export PNG"), this, 
-					SLOT(dummySlot()), "Shortcut|Display|Animation|Export_PNG");
-			setMenuHelp(help_url);
-			animation_export_PNG_action_->setCheckable(true);
+			start_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Start"), this, 
+			                                          SLOT(startAnimation()), "Shortcut|Display|Animation|Start",
+																								QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
+			if (start_animation_action_)
+			{
+				setMenuHelp(start_animation_action_, help_url);
+			}
 
-			animation_export_POV_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, (String)tr("Export POV"), this, 
-					SLOT(dummySlot()), "Shortcut|Display|Animation|Export_POV");
-			setMenuHelp(help_url);
-			animation_export_POV_action_->setCheckable(true);
+			cancel_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Stop"), this, 
+			                                           SLOT(stopAnimation()), "Shortcut|Display|Animation|Stop",
+																								 QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 
-			animation_repeat_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, (String)tr("Repeat"), this, 
-					SLOT(dummySlot()), "Shortcut|Display|Animation|Repeat");
-			setMenuHelp(help_url);
-			animation_repeat_action_->setCheckable(true);
+			if (cancel_animation_action_)
+			{
+				cancel_animation_action_->setEnabled(false);
+				setMenuHelp(cancel_animation_action_, help_url);
+			}
+
+			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
+
+			animation_export_PNG_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Export PNG"), this, 
+			                                               SLOT(dummySlot()), "Shortcut|Display|Animation|Export_PNG",
+																										 QKeySequence(), tr(""), UIOperationMode::MODE_KIOSK);
+
+			if (animation_export_PNG_action_)
+			{
+				setMenuHelp(animation_export_PNG_action_, help_url);
+				animation_export_PNG_action_->setCheckable(true);
+			}
+
+			animation_export_POV_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Export POV"), this, 
+			                                               SLOT(dummySlot()), "Shortcut|Display|Animation|Export_POV",
+																										 QKeySequence(), tr(""), UIOperationMode::MODE_KIOSK);
+
+			if (animation_export_POV_action_)
+			{
+				setMenuHelp(animation_export_POV_action_, help_url);
+				animation_export_POV_action_->setCheckable(true);
+			}
+
+			animation_repeat_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Repeat"), this, 
+			                                           SLOT(dummySlot()), "Shortcut|Display|Animation|Repeat",
+																								 QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
+
+			if (animation_repeat_action_)
+			{
+				setMenuHelp(animation_repeat_action_, help_url);
+				animation_repeat_action_->setCheckable(true);
+			}
 
 			// ======================== Display->Stereo ===============================================
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
-			no_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, (String)tr("No Stereo"), this, 
-					SLOT(exitStereo()), "Shortcut|Display|Stereo|No_Stereo");
-			no_stereo_action_->setCheckable(true);
-			no_stereo_action_->setChecked(true);
-			setMenuHelp("tips.html#3D");
+			no_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, tr("No Stereo"), this, 
+			                                    SLOT(exitStereo()), "Shortcut|Display|Stereo|No_Stereo",
+																					QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 
-			active_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, (String)tr("Shutter Glasses"), this, 
-					SLOT(enterActiveStereo()), "Shortcut|Display|Stereo|Shutter_Glasses");
-			setMenuHelp("tips.html#3D");
-			active_stereo_action_->setCheckable(true);
+			if (no_stereo_action_)
+			{
+				no_stereo_action_->setCheckable(true);
+				no_stereo_action_->setChecked(true);
+				setMenuHelp(no_stereo_action_, "tips.html#3D");
+			}
 
-			dual_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, (String)tr("Side by Side"), this,
-					SLOT(enterDualStereo()), "Shortcut|Display|Stereo|Side_by_Side");
-			setMenuHelp("tips.html#3D");
-			dual_stereo_action_->setCheckable(true);
+			active_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, tr("Shutter Glasses"), this, 
+			                                        SLOT(enterActiveStereo()), "Shortcut|Display|Stereo|Shutter_Glasses",
+																							QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
+
+			if (active_stereo_action_)
+			{
+				setMenuHelp(active_stereo_action_, "tips.html#3D");
+				active_stereo_action_->setCheckable(true);
+			}
+
+			dual_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, tr("Side by Side"), this,
+			                                      SLOT(enterDualStereo()), "Shortcut|Display|Stereo|Side_by_Side",
+																						QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
+
+			if (dual_stereo_action_)
+			{
+				setMenuHelp(dual_stereo_action_, "tips.html#3D");
+				dual_stereo_action_->setCheckable(true);
+			}
 
 			dual_stereo_different_display_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, 
-					(String)tr("Side by Side on Different Displays"), this, 
-					SLOT(enterDualStereoDifferentDisplays()),
-					"Shortcut|Display|Stereo|Side_by_Side_on_Different_Displays");
-			setMenuHelp("tips.html#3D");
-			dual_stereo_different_display_action_->setCheckable(true);
+			                                                        tr("Side by Side on Different Displays"), this, 
+																															SLOT(enterDualStereoDifferentDisplays()),
+																															"Shortcut|Display|Stereo|Side_by_Side_on_Different_Displays",
+																															QKeySequence(), tr(""),
+																														  UIOperationMode::MODE_ADVANCED);
+			if (dual_stereo_different_display_action_)
+			{
+				setMenuHelp(dual_stereo_different_display_action_, "tips.html#3D");
+				dual_stereo_different_display_action_->setCheckable(true);
+			}
 
 			// ======================== Display->Viewpoint ===============================================
 			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT);
 
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, (String)tr("&Store Viewpoint"), this, 
-					SLOT(storeViewPoint()), "Shortcut|Display|Viewpoint|Store");
-			setMenuHint((String)tr("Store the current viewpoint"));
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("&Store Viewpoint"), this, 
+			                SLOT(storeViewPoint()), "Shortcut|Display|Viewpoint|Store",
+											QKeySequence(), tr("Store the current viewpoint"), UIOperationMode::MODE_KIOSK);
 
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, (String)tr("&Restore Viewpoint"), this, 
-					SLOT(restoreViewPoint()), "Shortcut|Display|Viewpoint|Restore");
-			setMenuHint((String)tr("Restore the viewpoint"));
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("&Restore Viewpoint"), this, 
+			                SLOT(restoreViewPoint()), "Shortcut|Display|Viewpoint|Restore", QKeySequence(),
+											tr("Restore the viewpoint"), UIOperationMode::MODE_KIOSK);
 
 			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT);
 
 			String description("Shortcut|Display|Viewpoint|Show_Vie&wpoint");
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, (String)tr("Show Viewpoint"), this, 
-					SLOT(showViewPoint_()), description, QKeySequence("Ctrl+W"));
-			setMenuHint((String)tr("Print the coordinates of the current viewpoint"));
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("Show Viewpoint"), this, 
+			                SLOT(showViewPoint_()), description, QKeySequence("Ctrl+W"),
+											tr("Print the coordinates of the current viewpoint"), UIOperationMode::MODE_KIOSK);
 
 
 			description = "Shortcut|Display|Viewpoint|Set_Viewpoint";
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, (String)tr("Set Viewpoi&nt"), this, 
-					SLOT(setViewPoint_()), description, QKeySequence("Ctrl+N"));
-			setMenuHint((String)tr("Move the viewpoint to the given coordinates"));
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("Set Viewpoi&nt"), this, 
+			                SLOT(setViewPoint_()), description, QKeySequence("Ctrl+N"),
+											tr("Move the viewpoint to the given coordinates"), UIOperationMode::MODE_KIOSK);
 
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, (String)tr("Rese&t Camera"), this, 
-					SLOT(resetCamera_()), "Shortcut|Display|Viewpoint|Reset_Camera");
-			setMenuHint((String)tr("Reset the camera to the orgin (0,0,0)"));
+			description = "Shortcut|Display|Viewpoint|Reset_Camera";
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("Rese&t Camera"), this, 
+			                SLOT(resetCamera_()), description, QKeySequence(), 
+											tr("Reset the camera to the orgin (0,0,0)"), UIOperationMode::MODE_KIOSK);
 
 			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT);
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, (String)tr("Limit View Volume"), this, 
-					SLOT(setupViewVolume()), "Shortcut|Display|Viewpoint|Limit_View_Volume");
+
+			description = "Shortcut|Display|Viewpoint|Limit_View_Volume";
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("Limit View Volume"), this, 
+			                SLOT(setupViewVolume()), description, QKeySequence(),
+											tr(""), UIOperationMode::MODE_ADVANCED);
 
 			description = "Shortcut|File|Export|PNG";
-			QAction* screenshot_action = insertMenuEntry(MainControl::FILE_EXPORT, (String)tr("PNG..."), this, 
-					SLOT(showExportPNGDialog()), description, QKeySequence("Alt+P"));
-			setMenuHint((String)tr("Export a PNG image file from the Scene"));
-			setIcon("actions/screenshot", false);
+			QAction* screenshot_action = insertMenuEntry(MainControl::FILE_EXPORT, tr("PNG..."), this, 
+			                                             SLOT(showExportPNGDialog()), description, QKeySequence("Alt+P"),
+																									 tr("Export a PNG image file from the Scene"),
+																									 UIOperationMode::MODE_KIOSK);
+			setIcon(screenshot_action, "actions/screenshot", false);
 
 			description = "Shortcut|File|Export|POVRay";
-			insertMenuEntry(MainControl::FILE_EXPORT, (String)tr("POVRa&y scene"), this, 
-					SLOT(exportPOVRay()), description, QKeySequence("Ctrl+Y"));
-			setIcon("mimetype/text-x-povray", false);
-
-			setMenuHint((String)tr("Export a POVRay file from the Scene"));
-			setMenuHelp("tips.html#povray");
+			QAction* pov_action = insertMenuEntry(MainControl::FILE_EXPORT, tr("POVRa&y scene"), this, 
+ 			                                      SLOT(exportPOVRay()), description, QKeySequence("Ctrl+Y"),
+																						tr("Export a POVRay file from the Scene"), 
+																						UIOperationMode::MODE_KIOSK);
+			setIcon(pov_action, "mimetype/text-x-povray", false);
+			setMenuHelp(pov_action, "tips.html#povray");
 
 			description = "Shortcut|File|Export|VRML";
-			insertMenuEntry(MainControl::FILE_EXPORT, (String)tr("3D Prototyping Export"), this, 
-					SLOT(showExportVRMLDialog()), description);
-			setMenuHint((String)tr("Export a VRML or stl file from the scene"));
+			insertMenuEntry(MainControl::FILE_EXPORT, tr("3D Prototyping Export"), this, 
+			                SLOT(showExportVRMLDialog()), description, QKeySequence(),
+											tr("Export a VRML or stl file from the scene"),
+											UIOperationMode::MODE_ADVANCED);
 
 			// ====================================== MODES =====================================
 			
@@ -1453,11 +1513,11 @@ namespace BALL
 #endif
 
 			description = "Shortcut|File|Print";
-			insertMenuEntry(MainControl::FILE, (String)tr("Print"), this, SLOT(printScene()), description);
+			insertMenuEntry(MainControl::FILE, tr("Print"), this, SLOT(printScene()), description);
 
-			window_menu_entry_ = insertMenuEntry(MainControl::WINDOWS, (String)tr("Scene"), this, SLOT(switchShowWidget()));
+			window_menu_entry_ = insertMenuEntry(MainControl::WINDOWS, tr("Scene"), this, SLOT(switchShowWidget()));
 			window_menu_entry_->setCheckable(true);
-			setMenuHelp("scene.html");
+			setMenuHelp(window_menu_entry_, "scene.html");
 
 			QWidget::setCursor(QCursor(Qt::ArrowCursor));
 
@@ -1501,9 +1561,9 @@ namespace BALL
 
 
 			//TODO create an icon
-			new_molecule_action_ = insertMenuEntry(MainControl::BUILD, (String)tr("Create new molecule"),
-					this, SLOT(createNewMolecule()), "Shortcut|Build|Create_new_molecule");
-			setMenuHint((String)tr("Create a new molecule for editing"));
+			new_molecule_action_ = insertMenuEntry(MainControl::BUILD, tr("Create new molecule"),
+			                                       this, SLOT(createNewMolecule()), "Shortcut|Build|Create_new_molecule",
+																						 QKeySequence(), tr("Create a new molecule for editing"), UIOperationMode::MODE_ADVANCED);
 
 			toolbar_edit_controls_->setObjectName(tr("Edit Control toolbar"));
 			toolbar_edit_controls_->setIconSize(QSize(23,23));
