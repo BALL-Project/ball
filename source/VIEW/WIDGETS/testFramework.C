@@ -75,37 +75,55 @@ TestFramework::~TestFramework()
 
 void TestFramework::initializeWidget(MainControl& mc)
 {
-	save_file = 
-		insertMenuEntry(MainControl::MACRO, "Start a new macro", this, SLOT(saveFile()));
-	setMenuHint("Select a file to start a new macro");
+	String description = "Shortcut|MainControl|Macro|Start";
+	save_file = insertMenuEntry(MainControl::MACRO, tr("Start a new macro"), this,
+				    SLOT(saveFile()), description, QKeySequence(),
+				    tr("Select a file to start a new macro"),
+				    UIOperationMode::MODE_ADVANCED);
 
-	start_recording = 
-		insertMenuEntry(MainControl::MACRO, "Record macro", this, SLOT(startTest()));
-	setMenuHint("Record a macro");
+	description = "Shortcut|MainControl|Macro|Record";
+	start_recording = insertMenuEntry(MainControl::MACRO, tr("Record macro"), this,
+					  SLOT(startTest()), description, QKeySequence(),
+					  tr("Record a macro"),
+					  UIOperationMode::MODE_ADVANCED);
 
-	stop_recording = 
-		insertMenuEntry(MainControl::MACRO, "Stop recording", this, SLOT(stopTest()));
-	setMenuHint("Stop the recording");
-
-	switch_move = 
-		insertMenuEntry(MainControl::MACRO, "Record mouse moves", this, SLOT(switchRecordMove()));
-	setMenuHint("Enable or disable storing of events where the mouse only moved");
-	switch_move->setCheckable(true);
-	switch_move->setChecked(true);
+	description = "Shortcut|MainControl|Macro|Stop";
+	stop_recording = insertMenuEntry(MainControl::MACRO, tr("Stop recording"), this, 
+					 SLOT(stopTest()), description, QKeySequence(),
+					 tr("Stop the recording"), 
+					 UIOperationMode::MODE_ADVANCED);
+	
+	description = "Shortcut|MainControl|Macro|Move";
+	switch_move = insertMenuEntry(MainControl::MACRO, tr("Record mouse moves"), this, 
+		      SLOT(switchRecordMove()), description, QKeySequence(),
+		      tr("Enable or disable storing of events where the mouse only moved"), 
+		      UIOperationMode::MODE_ADVANCED);
+	
+	if(switch_move)
+	{
+	  switch_move->setCheckable(true);
+	  switch_move->setChecked(true);
+	}
 
 	mc.insertPopupMenuSeparator(MainControl::MACRO);
 
-	load_file = 
-		insertMenuEntry(MainControl::MACRO, "Load macro", this, SLOT(loadFile()));
-	setMenuHint("Load a macro");
+	description = "Shortcut|MainControl|Macro|Load";
+	load_file = insertMenuEntry(MainControl::MACRO, tr("Load macro"), this, 
+				    SLOT(loadFile()), description, QKeySequence(),
+				    tr("Load a macro"), 
+				    UIOperationMode::MODE_ADVANCED);
 
-	run_test = 
-		insertMenuEntry(MainControl::MACRO, "Run macro", this, SLOT(runTest()));
-	setMenuHint("Run a loaded macro");
+	description = "Shortcut|MainControl|Macro|Run";
+	run_test = insertMenuEntry(MainControl::MACRO, tr("Run macro"), this, 
+				   SLOT(runTest()), description, QKeySequence(),
+				   tr("Run a loaded macro"), 
+				   UIOperationMode::MODE_ADVANCED);
 
-	abort_test = 
-		insertMenuEntry(MainControl::MACRO, "Abort macro", this, SLOT(abortTest()));
-	setMenuHint("Abort the current macro");
+	description = "Shortcut|MainControl|Macro|Abort";
+	abort_test = insertMenuEntry(MainControl::MACRO, tr("Abort macro"), this, 
+				     SLOT(abortTest()), description, QKeySequence(),
+				     tr("Abort the current macro"),
+				     UIOperationMode::MODE_ADVANCED);
 }
 
 void TestFramework::switchRecordMove()
