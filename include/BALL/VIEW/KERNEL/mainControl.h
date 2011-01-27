@@ -490,24 +490,39 @@ namespace BALL
 			//@{
 		
 			/** Insert a new menu entry into menu <b>ID</b> 
-					(creates a new menu if <b>ID</b> not existent).
-					See the documentation of the qt library for more information concerning menu creation.
-					\param ID the menu ID to which the new menu entry should be inserted
-					\param name the name of the new menu entry
-					\param receiver the object to which the menu action will be connected
-					\param slot the function that will be called by activation of the menu entry
-					\param description a unique descriptive string for the action
-					\param accel the acceleration key
-					\return int the new entry_ID
-			*/
-			QAction* insertMenuEntry(Position parent_id, const String& name, const QObject* receiver = 0, 
-													 const char* slot = 0, const String& description = "", QKeySequence accel = QKeySequence());
+			 *	(creates a new menu if <b>ID</b> not existent).
+			 *	See the documentation of the qt library for more information concerning menu creation.
+			 *	@param ID the menu ID to which the new menu entry should be inserted
+			 *	@param name the name of the new menu entry
+			 *	@param receiver the object to which the menu action will be connected
+			 *	@param slot the function that will be called by activation of the menu entry
+			 *	@param description a unique descriptive string for the action
+			 *	@param accel the acceleration key
+			 *  @param minimal_mode the least restrictive mode for which this entry should be added
+			 *	@return int the new entry_ID
+			 */
+			QAction* insertMenuEntry(Position parent_id,   const String& name,             const QObject* receiver = 0, 
+													     const char* slot = 0, const String& description = "", QKeySequence accel = QKeySequence(),
+															 UIOperationMode::OperationMode minimal_mode = MODE_ALL);
 
-			QAction* insertMenuEntry(Position parent_id, const QString& name, const QObject* receiver = 0,
-													 const char* slot = 0, const QString& description = "", QKeySequence accel = QKeySequence());
+			/** Insert a new menu entry into menu <b>ID</b> 
+			 *	(creates a new menu if <b>ID</b> not existent).
+			 *	See the documentation of the qt library for more information concerning menu creation.
+			 *	@param ID the menu ID to which the new menu entry should be inserted
+			 *	@param name the name of the new menu entry
+			 *	@param receiver the object to which the menu action will be connected
+			 *	@param slot the function that will be called by activation of the menu entry
+			 *	@param description a unique descriptive string for the action
+			 *	@param accel the acceleration key
+			 *  @param minimal_mode the least restrictive mode for which this entry should be added
+			 *	@return int the new entry_ID
+			 */
+			QAction* insertMenuEntry(Position parent_id,   const QString& name,             const QObject* receiver = 0,
+													     const char* slot = 0, const QString& description = "", QKeySequence accel = QKeySequence(),
+															 UIOperationMode::OperationMode minimal_mode = UIOperationMode::MODE_ALL);
 			
 			///
-			virtual QMenu* addMenu(const QString& title, UIOperationMode::OperationMode mode);
+			virtual QMenu* addMenu(const QString& title, UIOperationMode::OperationMode mode = UIOperationMode::MODE_ALL);
 
 			/// 
 			void removeMenuEntry (Index parent_id, QAction* action);

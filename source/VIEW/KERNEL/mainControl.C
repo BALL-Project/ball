@@ -833,9 +833,15 @@ namespace BALL
 			return mc;
 		}
 
-		QAction* MainControl::insertMenuEntry(Position parent_id, const String& name, const QObject* receiver, 
-																		 const char* slot, const String& description, QKeySequence accel)
+		QAction* MainControl::insertMenuEntry(Position parent_id, const String& name,        const QObject* receiver, 
+																		      const char* slot,   const String& description, QKeySequence accel,
+																					UIOperationMode::OperationMode minimal_mode)
 		{
+			if (UIOperationMode::instance().getMode() > minimal_mode)
+			{
+				return 0;
+			}
+
 			QMenu* popup = initPopupMenu(parent_id);
 			if (popup == 0)
 			{
