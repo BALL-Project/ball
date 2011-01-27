@@ -461,13 +461,33 @@ namespace BALL
 			DockWidget::initializeWidget(main_control);
 			registerForHelpSystem(this, "pythonInterpreter.html");
 
-			insertMenuEntry(MainControl::TOOLS_PYTHON, (String)tr("Load Python Script"), this, SLOT(loadScript()), "Shortcut|Tools|Python|Load_script");
-			insertMenuEntry(MainControl::TOOLS_PYTHON, (String)tr("Save Python Script"), this, SLOT(saveScript()), "Shortcut|Tools|Python|Save_script");
-			insertMenuEntry(MainControl::TOOLS_PYTHON, (String)tr("Exec Python Script"), this , SLOT(execScript()), "Shortcut|Tools|Python|Exec_script");
-			insertMenuEntry(MainControl::TOOLS_PYTHON, (String)tr("Run Current Script"), this , SLOT(runCurrentScript()), "Shortcut|Tools|Python|Run_current_script");
-			insertMenuEntry(MainControl::TOOLS_PYTHON, (String)tr("Abort Python Script"), this, SLOT(abortScript()), "Shortcut|Tools|Python|Abort_script");
-			insertMenuEntry(MainControl::TOOLS_PYTHON, (String)tr("Export History"), this, SLOT(exportHistory()), "Shortcut|Tools|Python|Export_history");
-			insertMenuEntry(MainControl::TOOLS_PYTHON, (String)tr("Clear Editor"), this, SLOT(clearScript()), "Shortcut|Tools|Python|Clear_editor");
+	insertMenuEntry(MainControl::TOOLS_PYTHON, tr("Load Python Script"), this,
+									SLOT(loadScript()), tr("Shortcut|Tools|Python|Load_script"),
+									UIOperationMode::MODE_ADVANCED);
+
+	insertMenuEntry(MainControl::TOOLS_PYTHON, tr("Save Python Script"), this,
+									SLOT(saveScript()), tr("Shortcut|Tools|Python|Save_script"),
+									UIOperationMode::MODE_ADVANCED);
+
+	insertMenuEntry(MainControl::TOOLS_PYTHON, tr("Exec Python Script"), this,
+									SLOT(execScript()), tr("Shortcut|Tools|Python|Exec_script"),
+									UIOperationMode::MODE_ADVANCED);
+
+	insertMenuEntry(MainControl::TOOLS_PYTHON, tr("Run Current Script"), this,
+									SLOT(runCurrentScript()), tr("Shortcut|Tools|Python|Run_current_script"),
+									UIOperationMode::MODE_ADVANCED);
+
+	insertMenuEntry(MainControl::TOOLS_PYTHON, tr("Abort Python Script"), this,
+									SLOT(abortScript()), tr("Shortcut|Tools|Python|Abort_script"),
+									UIOperationMode::MODE_ADVANCED);
+
+	insertMenuEntry(MainControl::TOOLS_PYTHON, tr("Export History"), this,
+									SLOT(exportHistory()), tr("Shortcut|Tools|Python|Export_history"),
+									UIOperationMode::MODE_ADVANCED);
+
+	insertMenuEntry(MainControl::TOOLS_PYTHON, tr("Clear Editor"), this,
+									SLOT(clearScript()), tr("Shortcut|Tools|Python|Clear_editor"),
+									UIOperationMode::MODE_ADVANCED);
 
 			startInterpreter();
 
@@ -606,8 +626,8 @@ namespace BALL
 			}
 
 			QAction* action = insertMenuEntry(MainControl::USER, entry.c_str(), this, 
-					SLOT(hotkeyItem()), "", seq);
-			action->setData((*it).action.c_str());
+					SLOT(hotkeyItem()), "", seq, UIOperationMode::MODE_ADVANCED);
+			if (action) action->setData((*it).action.c_str());
 			String comment = (*it).comment;
 			if (comment != "")
 			{
