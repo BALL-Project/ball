@@ -286,7 +286,8 @@ namespace BALL
 
 		void DownloadPDBFile::checkMenu(MainControl& mc)
 		{
-			menu_id_->setEnabled(!mc.compositesAreLocked());
+			if (menu_id_)
+				menu_id_->setEnabled(!mc.compositesAreLocked());
 		}
 
 	} // namespace VIEW

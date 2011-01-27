@@ -54,7 +54,8 @@ namespace BALL
 		void UndoManagerDialog::checkMenu(MainControl& main_control)
 		{
 			bool busy = main_control.compositesAreLocked();
-			action_->setEnabled(!busy);
+			if (action_)
+				action_->setEnabled(!busy);
 		}
 
 		void UndoManagerDialog::onNotify(Message* message)

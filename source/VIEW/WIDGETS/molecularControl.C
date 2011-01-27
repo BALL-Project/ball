@@ -188,24 +188,30 @@ namespace BALL
 				else if (main_control.isBusy())         hint = (String)tr("Simulation running, cant paste meanwhile");
 				else                                    hint = (String)tr("Update of Representation running, cant paste meanwhile");
 			}
-
-			paste_id_->setEnabled(allow_paste);	
+			
+			if (paste_id_)
+			{
+				paste_id_->setEnabled(allow_paste);	
+			}
 			getMainControl()->setMenuHint(paste_id_, hint);
 
 			// ------------------------------------------------------------------
 			// clearClipboard
 			// enable only if copy_list_ not empty
 			bool copy_list_filled = (copy_list_.size() > 0);
-			clipboard_id_->setEnabled(copy_list_filled && !main_control.isBusy());
-			if (clipboard_id_->isEnabled())
+			if (clipboard_id_)
 			{
-				hint = (String)tr("No item copied/cuted or simulation running");
-			} 
-			else
-			{
-				hint = (String)tr("Clear the items in the clipboard");
+				clipboard_id_->setEnabled(copy_list_filled && !main_control.isBusy());
+				if (clipboard_id_->isEnabled())
+				{
+					hint = (String)tr("No item copied/cuted or simulation running");
+				} 
+				else
+				{
+					hint = (String)tr("Clear the items in the clipboard");
+				}
+				getMainControl()->setMenuHint(clipboard_id_, hint);
 			}
-			getMainControl()->setMenuHint(clipboard_id_, hint);
 
 			// ------------------------------------------------------------------
 			// cut / delete  +  select / deselect
@@ -214,18 +220,25 @@ namespace BALL
 			if (list_filled) hint = "";
 			else hint = (String)tr("No item selected or simulation running");
 			
-			cut_id_->setEnabled(list_filled);
+			if (cut_id_)
+				cut_id_->setEnabled(list_filled);
 			getMainControl()->setMenuHint(cut_id_, hint);
-			copy_id_->setEnabled(list_filled);	
+			if (copy_id_)
+				copy_id_->setEnabled(list_filled);	
 			getMainControl()->setMenuHint(copy_id_, hint);
 
-			select_id_->setEnabled(list_filled);
+			if (select_id_)
+				select_id_->setEnabled(list_filled);
 			getMainControl()->setMenuHint(select_id_, hint);
-			deselect_id_->setEnabled(list_filled);	
+
+			if (deselect_id_)
+				deselect_id_->setEnabled(list_filled);	
 			getMainControl()->setMenuHint(deselect_id_, hint);
 
-			angle_action_->setEnabled(list_filled && selected_.size() == 3);	
-			distance_action_->setEnabled(list_filled && selected_.size() == 2);	
+			if (angle_action_)
+				angle_action_->setEnabled(list_filled && selected_.size() == 3);	
+			if (distance_action_)
+				distance_action_->setEnabled(list_filled && selected_.size() == 2);	
 
 			// enable global delete entry for all GenericControls, if this Control has the selection
 			if (selected_.size() > 0)
