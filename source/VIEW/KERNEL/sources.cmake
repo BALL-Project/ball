@@ -21,6 +21,7 @@ SET(SOURCES_LIST
 	stage.C
 	stringStub.C
 	threads.C
+	UIOperationMode.C
 )
 
 ### the list of all files requiring a moc run ###
