@@ -462,31 +462,31 @@ namespace BALL
 			registerForHelpSystem(this, "pythonInterpreter.html");
 
 	insertMenuEntry(MainControl::TOOLS_PYTHON, tr("Load Python Script"), this,
-									SLOT(loadScript()), tr("Shortcut|Tools|Python|Load_script"),
+									SLOT(loadScript()), "Shortcut|Tools|Python|Load_script",
 									UIOperationMode::MODE_ADVANCED);
 
 	insertMenuEntry(MainControl::TOOLS_PYTHON, tr("Save Python Script"), this,
-									SLOT(saveScript()), tr("Shortcut|Tools|Python|Save_script"),
+									SLOT(saveScript()), "Shortcut|Tools|Python|Save_script",
 									UIOperationMode::MODE_ADVANCED);
 
 	insertMenuEntry(MainControl::TOOLS_PYTHON, tr("Exec Python Script"), this,
-									SLOT(execScript()), tr("Shortcut|Tools|Python|Exec_script"),
+									SLOT(execScript()), "Shortcut|Tools|Python|Exec_script",
 									UIOperationMode::MODE_ADVANCED);
 
 	insertMenuEntry(MainControl::TOOLS_PYTHON, tr("Run Current Script"), this,
-									SLOT(runCurrentScript()), tr("Shortcut|Tools|Python|Run_current_script"),
+									SLOT(runCurrentScript()), "Shortcut|Tools|Python|Run_current_script",
 									UIOperationMode::MODE_ADVANCED);
 
 	insertMenuEntry(MainControl::TOOLS_PYTHON, tr("Abort Python Script"), this,
-									SLOT(abortScript()), tr("Shortcut|Tools|Python|Abort_script"),
+									SLOT(abortScript()), "Shortcut|Tools|Python|Abort_script",
 									UIOperationMode::MODE_ADVANCED);
 
 	insertMenuEntry(MainControl::TOOLS_PYTHON, tr("Export History"), this,
-									SLOT(exportHistory()), tr("Shortcut|Tools|Python|Export_history"),
+									SLOT(exportHistory()), "Shortcut|Tools|Python|Export_history",
 									UIOperationMode::MODE_ADVANCED);
 
 	insertMenuEntry(MainControl::TOOLS_PYTHON, tr("Clear Editor"), this,
-									SLOT(clearScript()), tr("Shortcut|Tools|Python|Clear_editor"),
+									SLOT(clearScript()), "Shortcut|Tools|Python|Clear_editor",
 									UIOperationMode::MODE_ADVANCED);
 
 			startInterpreter();
@@ -625,25 +625,22 @@ namespace BALL
 					seq = QKeySequence(((prefix + "+F") + String((*it).key - Qt::Key_F1 + 1)).c_str());
 			}
 
+			QString comment = QString((*it).comment.c_str());
+			if (comment == "")
+			{
+				comment = tr("Run a Python script");
+			}
+
 			QAction* action = insertMenuEntry(MainControl::USER, entry.c_str(), this, 
-					SLOT(hotkeyItem()), "", seq, UIOperationMode::MODE_ADVANCED);
+			                                  SLOT(hotkeyItem()), "", seq, comment, UIOperationMode::MODE_ADVANCED);
 			if (action) action->setData((*it).action.c_str());
-			String comment = (*it).comment;
-			if (comment != "")
-			{
-				setMenuHint(comment);
-			}
-			else
-			{
-				setMenuHint((String)tr("Run a Python script"));
-			}
-			setMenuHelp("pythonInterpreter.html#create_hotkeys");
+			setMenuHelp(action, "pythonInterpreter.html#create_hotkeys");
 		}
 
 		getMainControl()->insertPopupMenuSeparator(MainControl::USER);
-		insertMenuEntry(MainControl::USER, (String)tr("Modify"), this, SLOT(modifyHotkeys()));
-		setMenuHint((String)tr("Manage user defined Python commands"));
-		setMenuHelp("pythonInterpreter.html#create_hotkeys");
+		QAction* action = insertMenuEntry(MainControl::USER, tr("Modify"), this, SLOT(modifyHotkeys()), "", QKeySequence(),
+		                                  tr("Manage user defined Python commands"), UIOperationMode::MODE_ADVANCED);
+		setMenuHelp(action, "pythonInterpreter.html#create_hotkeys");
 	}
 
 			/////////////////////////////////////////
