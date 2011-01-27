@@ -367,8 +367,10 @@ namespace BALL
 		void PubChemDialog::checkMenu(MainControl& main_control)
 		{
 			bool busy = main_control.compositesAreLocked();
-			action1_->setEnabled(!busy);
-			action2_->setEnabled(!busy);
+			if (action1_)
+				action1_->setEnabled(!busy);
+			if (action2_)
+				action2_->setEnabled(!busy);
 		}
 
 		void PubChemDialog::updateDownloadProgress(qint64 done, qint64 total)
