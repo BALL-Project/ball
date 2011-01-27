@@ -186,6 +186,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 			mainframe.enableLoggingToFile();
 			continue;
 		}
+		else if (argument == "-kiosk")
+		{
+			// the kiosk mode has already been handled
+			continue;
+		}
 
 		mainframe.openFile(argument);
 	}
