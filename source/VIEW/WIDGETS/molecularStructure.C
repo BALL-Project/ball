@@ -154,24 +154,33 @@ namespace BALL
 																	   SLOT(chooseAmberFF()), description, QKeySequence(),
 																		 tr("Use Amber Force Field"),
 																		 UIOperationMode::MODE_ADVANCED);
-			amber_ff_id_->setCheckable(true);
-			setMenuHelp(amber_ff_id_, "mm.html");
+			if (amber_ff_id_)
+			{
+				amber_ff_id_->setCheckable(true);
+				setMenuHelp(amber_ff_id_, "mm.html");
+			}
 			
 			description = "Shortcut|MolecularMechanics|Choose_ForceField|Charmm";
 			charmm_ff_id_ = insertMenuEntry(MainControl::CHOOSE_FF, tr("Charmm"), this, 
 																			SLOT(chooseCharmmFF()), description, QKeySequence(),
 			                                tr("Use Charmm Force Field"),
 																			UIOperationMode::MODE_ADVANCED);
-			charmm_ff_id_->setCheckable(true);
-			setMenuHelp(charmm_ff_id_, "mm.html");
+			if (charmm_ff_id_)
+			{
+				charmm_ff_id_->setCheckable(true);
+				setMenuHelp(charmm_ff_id_, "mm.html");
+			}
 
 			description = "Shortcut|MolecularMechanics|Choose_ForceField|MMFF94";
 			mmff94_id_ = insertMenuEntry(MainControl::CHOOSE_FF, tr("MMFF94"), this, 
 																	 SLOT(chooseMMFF94()), description, QKeySequence(),
 																	 tr("Use MMFF94 Force Field"),
 																	 UIOperationMode::MODE_ADVANCED);
-			mmff94_id_->setCheckable(true);
-			setMenuHelp(mmff94_id_, "mm.html");
+			if (mmff94_id_)
+			{
+				mmff94_id_->setCheckable(true);
+				setMenuHelp(mmff94_id_, "mm.html");
+			}
 
 			description = "Shortcut|MolecularMechanics|Options";
 			setup_ff_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, tr("Options"), this, 
@@ -1581,13 +1590,16 @@ namespace BALL
 
 			force_field_id_ = nr;
 			
-			amber_ff_id_->setChecked(false);
-			charmm_ff_id_->setChecked(false);
-			mmff94_id_->setChecked(false);
+			if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
+			{
+				amber_ff_id_->setChecked(false);
+				charmm_ff_id_->setChecked(false);
+				mmff94_id_->setChecked(false);
 
-			if (nr == 0) amber_ff_id_->setChecked(true);
-			else if (nr == 1) charmm_ff_id_->setChecked(true);
-			else if (nr == 2) mmff94_id_->setChecked(true);
+				if (nr == 0) amber_ff_id_->setChecked(true);
+				else if (nr == 1) charmm_ff_id_->setChecked(true);
+				else if (nr == 2) mmff94_id_->setChecked(true);
+			}
 
 			md_dialog_.selectForceField(force_field_id_);
 			minimization_dialog_.selectForceField(force_field_id_);

@@ -643,8 +643,10 @@ bool MolecularFileDialog::finish_(const String& filename, const String& system_n
 void MolecularFileDialog::checkMenu(MainControl& mc)
 {
 	bool busy = mc.compositesAreLocked();
-	save_id_->setEnabled(!busy && mc.getSelectedSystem());
-	open_id_->setEnabled(!busy);
+	if (save_id_)
+		save_id_->setEnabled(!busy && mc.getSelectedSystem());
+	if (open_id_)
+		open_id_->setEnabled(!busy);
 }
 
 
