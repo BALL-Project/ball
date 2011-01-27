@@ -24,6 +24,8 @@
 #include <BALL/SYSTEM/fileSystem.h>
 #include <BALL/COMMON/logStream.h>
 
+#include <BALL/VIEW/KERNEL/UIOperationMode.h>
+
 #include <iostream>
 
 #ifdef Q_WS_X11
@@ -73,10 +75,27 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 
 	putenv("BALL_RETURN_VALUE=");
 	QApplication application(argc, argv);
-	
-	QPixmap splash_pm(":BALLView-1.4-Splashscreen.png");
-	QSplashScreen* splash = new QSplashScreen(splash_pm);
-	splash->show();
+
+	QStringList arguments = application.arguments();
+	QStringList::const_iterator arg_it;
+
+	bool kiosk_mode = false;
+	for (arg_it = arguments.constBegin(); arg_it != arguments.constEnd(); ++arg_it)
+	{
+		if (arg_it->toLocal8Bit().constData() == "-kiosk")
+		{
+			kiosk_mode = true;
+		}
+	}
+
+	if (kiosk_mode)
+	{
+		BALL::VIEW::UIOperationMode::instance().setMode(BALL::VIEW::UIOperationMode::MODE_KIOSK);
+	}
+
+  QPixmap splash_pm(":BALLView-1.4-Splashscreen.png");
+  QSplashScreen* splash = new QSplashScreen(splash_pm);
+  splash->show();
 
 	// =============== testing for opengl support ======================================
 	if (!QGLFormat::hasOpenGL())
