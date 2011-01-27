@@ -103,13 +103,12 @@ namespace BALL
 		void DownloadElectronDensity::initializeWidget(MainControl&)
 		{
 			String description = "Shortcut|File|Open|Download_Electron_Density";
-			menu_id_ = insertMenuEntry(MainControl::FILE_OPEN, "Download Electron Density", this,
-																	 SLOT(show()), description,
-																	 QKeySequence("Ctrl+D"));
-			
-			setMenuHint("Download an electron density map from EDS or EMDB");
-			setMenuHelp("tips.html#download_edmap");
-			setIcon("actions/download-electrondensity", true);
+			menu_id_ = insertMenuEntry(MainControl::FILE_OPEN, tr("Download Electron Density"), this,
+																	 SLOT(show()), description, QKeySequence("Ctrl+D"), 
+																	 tr("Download an electron density map from EDS or EMDB"),
+																	 UIOperationMode::MODE_ADVANCED);
+			setMenuHelp(menu_id_, "tips.html#download_edmap");
+			setIcon(menu_id_, "actions/download-electrondensity", true);
 		}
 
 		void DownloadElectronDensity::slotDownload()

@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id:
-//
 
 #include <BALL/VIEW/WIDGETS/helpViewer.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -98,15 +96,21 @@ namespace BALL
 		void HelpViewer::initializeWidget(MainControl& main_control)
 		{
 			DockWidget::initializeWidget(main_control);
-			insertMenuEntry(MainControl::HELP, project_ + " Documentation", this, SLOT(showHelp()));
-			setIcon("actions/help-hint", true);
-			registerForHelpSystem(last_action_, "tips.html#help");
+			QAction* action = insertMenuEntry(MainControl::HELP, tr((project_ + " Documentation").c_str()), this, SLOT(showHelp()),
+			                                  "Shortcut|MainControl|Documentation|Help", QKeySequence(), 
+																				tr(""), UIOperationMode::MODE_KIOSK);
+			setIcon(action, "actions/help-hint", true);
+
+			if (action)
+				registerForHelpSystem(action, "tips.html#help");
 
 			if (whats_this_)
 			{
-				whats_action_ = insertMenuEntry(MainControl::HELP, "Whats this?", this, SLOT(enterWhatsThisMode()));	
+				whats_action_ = insertMenuEntry(MainControl::HELP, tr("Whats this?"), this, SLOT(enterWhatsThisMode()),
+				                                "Shortcut|MainControl|Documentation|WhatsThis", QKeySequence(),
+																				tr("Show help for clicked widget, exit this mode with right mouse button."),
+																				UIOperationMode::MODE_KIOSK);
 				registerForHelpSystem(whats_action_, "tips.html#help");
-				setMenuHint("Show help for clicked widget, exit this mode with right mouse button.");
 			}
 
  			qApp->installEventFilter(this);

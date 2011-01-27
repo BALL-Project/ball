@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardDatasets.C,v 1.1.4.4 2007-05-01 21:59:49 amoll Exp $
-//
 
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -451,33 +449,37 @@ namespace BALL
 			if (!DatasetController::createMenuEntries()) return false;
 			
 			String description = "Shortcut|Tools|Grid|Calculate_normalized_grid";
-			insertMenuEntry_(MainControl::TOOLS_GRID, "Calculate normalized Grid", SLOT(createHistogramGrid()), description);
-			getDatasetControl()->setMenuHint("Create a new grid with a histogram equalization");
+			insertMenuEntry_(MainControl::TOOLS_GRID, tr("Calculate normalized Grid"), SLOT(createHistogramGrid()), 
+			                 description, QKeySequence(), tr("Create a new grid with a histogram equalization"),
+											 UIOperationMode::MODE_ADVANCED);
 
 			description = "Shortcut|Tools|Grid|Resize_for_Rendering";
-			insertMenuEntry_(MainControl::TOOLS_GRID, "Resize for Rendering", SLOT(resizeGrid()), description);
-			getDatasetControl()->setMenuHint("Resize a grid for rendering");
-			getDatasetControl()->setMenuHelp("datasetControl.html#volume");
+			QAction* action = insertMenuEntry_(MainControl::TOOLS_GRID, tr("Resize for Rendering"), SLOT(resizeGrid()), 
+			                                   description, QKeySequence(), tr("Resize a grid for rendering"), 
+																				 UIOperationMode::MODE_ADVANCED);
+			getDatasetControl()->setMenuHelp(action, "datasetControl.html#volume");
 
 			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS_GRID);
 
 			// visualizations:
 			description = "Shortcut|Tools|Grid|Visualize_3D_Grid";
-			insertMenuEntry_(MainControl::TOOLS_GRID, "Visualize 3D Grid", SLOT(visualizeGrid()), description);
-			getDatasetControl()->setMenuHint("Visualize a grid");
-			getDatasetControl()->setMenuHelp("datasetControl.html#volume");
+			action = insertMenuEntry_(MainControl::TOOLS_GRID, tr("Visualize 3D Grid"), SLOT(visualizeGrid()), 
+			                          description, QKeySequence(), tr("Visualize a grid"),
+																UIOperationMode::MODE_ADVANCED);
+			getDatasetControl()->setMenuHelp(action, "datasetControl.html#volume");
 
 			description = "Shortcut|Tools|Grid|Render_Contour_Surface";
-			insertMenuEntry_(MainControl::TOOLS_GRID, "Render Contour S&urface", 
-											 SLOT(computeIsoContourSurface()), description,
-											 QKeySequence("Ctrl+U"));
-			getDatasetControl()->setMenuHint("Calculate an isocontour surface from a 3D grid. The grid has to be loaded in the DatasetControl.");
-			getDatasetControl()->setMenuHelp("datasetControl.html#isocontour_surfaces");
+			action = insertMenuEntry_(MainControl::TOOLS_GRID, "Render Contour S&urface", SLOT(computeIsoContourSurface()), 
+					                      description, QKeySequence("Ctrl+U"), 
+																tr("Calculate an isocontour surface from a 3D grid. The grid has to be loaded in the DatasetControl."),
+																UIOperationMode::MODE_ADVANCED);
+			getDatasetControl()->setMenuHelp(action, "datasetControl.html#isocontour_surfaces");
 
 			// TODO: add to Documentation (via setMenuHelp())
 			description = "Shortcut|Tools|Grid|Create_a_Sphere";
-			insertMenuEntry_(MainControl::TOOLS_GRID, "Create a sphere", SLOT(createSphere()), description);
-			getDatasetControl()->setMenuHint("Create a sphere for the grid, e.g. for colorizing");
+			insertMenuEntry_(MainControl::TOOLS_GRID, "Create a sphere", SLOT(createSphere()), 
+			                 description, QKeySequence(), tr("Create a sphere for the grid, e.g. for colorizing"),
+											 UIOperationMode::MODE_ADVANCED);
 
 			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS_GRID);
 
@@ -855,11 +857,13 @@ namespace BALL
 			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
 
 			String description = "Shortcut|TrajectoryController|Buffer_Trajectory";
-			insertMenuEntry_(MainControl::TOOLS, "Buffer Trajectory", SLOT(bufferTrajectory()), description);
-			getDatasetControl()->setMenuHint("Buffer Trajectory in RAM for faster access");
+			QAction* action = insertMenuEntry_(MainControl::TOOLS, "Buffer Trajectory", SLOT(bufferTrajectory()), 
+			                                   description, QKeySequence(), tr("Buffer Trajectory in RAM for faster access"),
+																				 UIOperationMode::MODE_ADVANCED);
 
 			description = "Shortcut|TrajectoryController|Visualize_Trajectory";
-			insertMenuEntry_(MainControl::TOOLS, "Visualize Trajectory", SLOT(visualizeTrajectory()));
+			insertMenuEntry_(MainControl::TOOLS, "Visualize Trajectory", SLOT(visualizeTrajectory()),
+			                 description, QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 
 			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
 
@@ -1113,9 +1117,9 @@ namespace BALL
 		{
 			if (!DatasetController::createMenuEntries()) return false;
 
-			insertMenuEntry_(MainControl::TOOLS_GRID, "Visualize Field Lines", 
-											 SLOT(visualizeFieldLines()), "Shortcut|Tools|Grid|Visualize_Field_Lines");
-			getDatasetControl()->setMenuHint("Visualise a gradient grid per field lines");
+			insertMenuEntry_(MainControl::TOOLS_GRID, "Visualize Field Lines", SLOT(visualizeFieldLines()), 
+			                 "Shortcut|Tools|Grid|Visualize_Field_Lines", QKeySequence(),
+											 tr("Visualise a gradient grid per field lines"), UIOperationMode::MODE_ADVANCED);
 
 			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS_GRID);
 

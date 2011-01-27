@@ -356,12 +356,16 @@ namespace BALL
 
 		void PubChemDialog::initializeWidget(MainControl&)
 		{
-			action1_ = insertMenuEntry(MainControl::FILE_OPEN, (String)tr("PubChem"), this, SLOT(show()), "Shortcut|File|Open|PubChem");
-			setMenuHint((String)tr("Download a file from pubchem"));
-			setIcon("actions/download-pubchem", true);
+			action1_ = insertMenuEntry(MainControl::FILE_OPEN, tr("PubChem"), this, 
+			                           SLOT(show()), "Shortcut|File|Open|PubChem", QKeySequence(),
+																 tr("Download a file from pubchem"),
+																 UIOperationMode::MODE_ADVANCED);
+			setIcon(action1_, "actions/download-pubchem", true);
 			
-			action2_ = insertMenuEntry(MainControl::BUILD, (String)tr("Build from SMILES"), this, SLOT(show()), "Shortcut|Build|Build_from_SMILES");
-			setMenuHint((String)tr("Create a structure from a SMILES expression"));
+			action2_ = insertMenuEntry(MainControl::BUILD, tr("Build from SMILES"), this, 
+			                           SLOT(show()), "Shortcut|Build|Build_from_SMILES", QKeySequence(),
+																 tr("Create a structure from a SMILES expression"),
+																 UIOperationMode::MODE_ADVANCED);
 		}
 
 		void PubChemDialog::checkMenu(MainControl& main_control)

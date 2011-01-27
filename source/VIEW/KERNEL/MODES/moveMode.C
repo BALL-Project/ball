@@ -41,14 +41,18 @@ namespace BALL
 			  move_atom_(0)
 		{
 			String description = "Shortcut|Display|Move_Mode";
-			main_action_ = scene_->insertMenuEntry(MainControl::DISPLAY, (String)tr("Move Mode"), 0,
-			                                       0, description, QKeySequence("Ctrl+W"));
+			main_action_ = scene_->insertMenuEntry(MainControl::DISPLAY, tr("Move Mode"), 0,
+			                                       0, description, QKeySequence("Ctrl+W"), 
+			                                       tr("Switch to move mode, e.g. move selected items"),
+																						 UIOperationMode::MODE_ADVANCED);
 
-			scene_->setMenuHint((String)tr("Switch to move mode, e.g. move selected items"));
-			scene_->setMenuHelp("molecularControl.html#move_molecule");
-			scene_->setIcon("actions/transform-move", false);
-			main_action_->setCheckable(true);
-			connect(main_action_, SIGNAL(triggered()), SLOT(modeChangeSlot_()));
+			if (main_action_)
+			{
+				scene_->setMenuHelp(main_action_, "molecularControl.html#move_molecule");
+				scene_->setIcon(main_action_, "actions/transform-move", false);
+				main_action_->setCheckable(true);
+				connect(main_action_, SIGNAL(triggered()), SLOT(modeChangeSlot_()));
+			}
 		}
 
 		void MoveMode::mouseMoveEventImpl_(QMouseEvent* evt)

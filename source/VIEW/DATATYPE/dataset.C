@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dataset.C,v 1.1.4.2 2007/05/10 21:40:37 amoll Exp $
-//
 
 #include <BALL/VIEW/DATATYPE/dataset.h>
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
@@ -290,8 +288,9 @@ namespace BALL
 			temp_type.substitute(" ", "_");
 			String description = "Shortcut|File|Open|Dataset|" + temp_type;
 			
-			QAction* action = getDatasetControl()->insertMenuEntry(MainControl::FILE_OPEN, type_, this, 
-												SLOT(open()), description);
+			QAction* action = getDatasetControl()->insertMenuEntry(MainControl::FILE_OPEN, tr(type_.c_str()), this, 
+												                                     SLOT(open()), description, QKeySequence(),
+																														 tr(""), UIOperationMode::MODE_ADVANCED);
 			actions_for_one_set_.insert(action);
 
 			return true;
@@ -362,12 +361,15 @@ namespace BALL
 			return true;
 		}
 
-		QAction* DatasetController::insertMenuEntry_(Position pid, const String& name, 
-																													const char* slot, const String& description,
-																													QKeySequence accel)
+		QAction* DatasetController::insertMenuEntry_(Position pid, const QString& name, const char* slot, 
+		                                             const String& description, QKeySequence accel, 
+																								 const QString& menu_hint, UIOperationMode::OperationMode minimal_mode)
 		{
 			if (getDatasetControl() == 0) return 0;
-			QAction* action = getDatasetControl()->insertMenuEntry(pid, name, this, slot, description, accel);
+			QAction* action = getDatasetControl()->insertMenuEntry(pid, name, this, 
+			                                                       slot, description, accel,
+																														 menu_hint, minimal_mode);
+
 			actions_.push_back(action);
 			actions_for_one_set_.insert(action);
 			return action;

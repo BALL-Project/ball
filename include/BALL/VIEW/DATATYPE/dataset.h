@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dataset.h,v 1.1.4.1 2007/03/25 21:25:41 oliver Exp $
-//
 
 #ifndef BALL_VIEW_DATATYPE_DATASET_H
 #define BALL_VIEW_DATATYPE_DATASET_H
@@ -21,6 +19,10 @@
 
 #ifndef BALL_CONCEPT_EMBEDDABLE_H
 #	include <BALL/CONCEPT/embeddable.h>
+#endif
+
+#ifndef BALL_VIEW_KERNEL_UIOPERATIONMODE_H
+# include <BALL/VIEW/KERNEL/UIOperationMode.h>
 #endif
 
 #include <QtGui/QMenu>
@@ -308,8 +310,10 @@ namespace BALL
 
 			String getFileTypes_();
 			String getNameFromFileName_(String filename);
-			QAction* insertMenuEntry_(Position pid, const String& name, const char* slot,
-																const String& description = "", QKeySequence accel = QKeySequence());
+			QAction* insertMenuEntry_(Position pid, const QString& name, const char* slot,
+																const String& description = "", QKeySequence accel = QKeySequence(),
+																const QString& menu_hint = "", 
+																UIOperationMode::OperationMode initial_mode = UIOperationMode::MODE_ALL);
 			
 			/** In the derived class: cast to concrete type and delete the data!
 			*/

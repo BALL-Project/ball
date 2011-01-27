@@ -503,7 +503,7 @@ namespace BALL
 			 */
 			QAction* insertMenuEntry(Position parent_id,   const String& name,             const QObject* receiver = 0, 
 													     const char* slot = 0, const String& description = "", QKeySequence accel = QKeySequence(),
-															 UIOperationMode::OperationMode minimal_mode = MODE_ALL);
+															 UIOperationMode::OperationMode minimal_mode = UIOperationMode::MODE_ALL);
 
 			/** Insert a new menu entry into menu <b>ID</b> 
 			 *	(creates a new menu if <b>ID</b> not existent).

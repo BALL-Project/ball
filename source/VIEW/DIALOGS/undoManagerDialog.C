@@ -43,8 +43,9 @@ namespace BALL
 		void UndoManagerDialog::initializeWidget(MainControl&)
 		{
 			String description = "Shortcut|Edit|Undo_Manager";
-			action_ = insertMenuEntry(MainControl::EDIT, "Open Undo Manager", this, SLOT(show()), description);
-			setMenuHint("Start the undo manager dialog.");
+			action_ = insertMenuEntry(MainControl::EDIT, tr("Open Undo Manager"), this, 
+			                          SLOT(show()), description, QKeySequence(),
+																tr("Start the undo manager dialog."), UIOperationMode::MODE_ADVANCED);
 
 			// TODO icon
 			// setIcon("actions/undo-manager", true);

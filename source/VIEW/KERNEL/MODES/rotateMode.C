@@ -20,14 +20,17 @@ namespace BALL
 		{
 			String description = "Shortcut|Display|Rotate_Mode";
 			scene_->getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY);
-			main_action_ = scene_->insertMenuEntry(MainControl::DISPLAY, (String)tr("&Rotate Mode"),
-			                                       this, 0, description, QKeySequence("Ctrl+R"));
+			main_action_ = scene_->insertMenuEntry(MainControl::DISPLAY, tr("&Rotate Mode"), this, 
+			                                       0, description, QKeySequence("Ctrl+R"),
+																						 tr("Switch to rotate/zoom mode"), UIOperationMode::MODE_ADVANCED);
 
-			scene_->setMenuHint((String)tr("Switch to rotate/zoom mode"));
-			scene_->setMenuHelp("scene.html#rotate_mode");
-			main_action_->setCheckable(true);
-			scene_->setIcon("actions/transform-rotate", false);
-			connect(main_action_, SIGNAL(triggered()), SLOT(modeChangeSlot_()));
+			if (main_action_)
+			{
+				scene_->setMenuHelp(main_action_, "scene.html#rotate_mode");
+				main_action_->setCheckable(true);
+				scene_->setIcon(main_action_, "actions/transform-rotate", false);
+				connect(main_action_, SIGNAL(triggered()), SLOT(modeChangeSlot_()));
+			}
 		}
 
 		void RotateMode::mouseDoubleClickEvent(QMouseEvent* /*evt*/)

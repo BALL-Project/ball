@@ -147,19 +147,19 @@ namespace BALL
 		// Initializes the popup menu Molecular Mechanics with its checkable submenu Docking.
 		void DockingController::initializeWidget(MainControl& main_control)
 		{			
-			action_ = main_control.insertMenuEntry(MainControl::MOLECULARMECHANICS, "&Docking", this,
-																				 SLOT(startDocking()), Qt::CTRL + Qt:: Key_D);
-			setMenuHint("Dock two systems.");
+			action_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, tr("&Docking"), this,
+													      SLOT(startDocking()), "Shortcut|MolecularMechanics|Dock", QKeySequence("Ctrl + D"), 
+																tr("Dock two systems."), UIOperationMode::MODE_ADVANCED);
 			dock_dialog_.initializeWidget();
 		}
 		
-		//Fetches the preferences from the INIFile
+		// Fetches the preferences from the INIFile
 		void DockingController::fetchPreferences(INIFile& file)
 		{
 			dock_dialog_.fetchPreferences(file);
 		}
 
-		//Writes the preferences to the INIFile.
+		// Writes the preferences to the INIFile.
 		void DockingController::writePreferences(INIFile& file)
 		{
 			dock_dialog_.writePreferences(file);

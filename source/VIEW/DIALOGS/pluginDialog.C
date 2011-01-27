@@ -141,7 +141,9 @@ namespace BALL
 
 		void PluginDialog::initializeWidget(MainControl&)
 		{	
-			insertMenuEntry(MainControl::TOOLS, (String)tr("Load Plugin"), this, SLOT(show()), "Shortcut|Tools|Load_Plugin");	
+			insertMenuEntry(MainControl::TOOLS, tr("Load Plugin"), this, 
+			                SLOT(show()), "Shortcut|Tools|Load_Plugin", QKeySequence(),
+											tr(""), UIOperationMode::MODE_ADVANCED);	
 			PreferencesEntry::restoreValues();
 		}
 

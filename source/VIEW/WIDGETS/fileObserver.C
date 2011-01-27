@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id:
-//
 
 #include <BALL/VIEW/WIDGETS/fileObserver.h>
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
@@ -110,12 +108,14 @@ void FileObserver::setUpdateInterval(Size msec)
 void FileObserver::initializeWidget(MainControl&)
 {
 	start_action_ = 
-		insertMenuEntry(MainControl::FILE_MONITOR, "Monitor Molecular File", this, SLOT(chooseFile()));
-	setMenuHint("Monitor a molecular file for changes");
+		insertMenuEntry(MainControl::FILE_MONITOR, tr("Monitor Molecular File"), this, SLOT(chooseFile()),
+		                "Shortcut|File|Monitor|Start", QKeySequence(), tr("Monitor a molecular file for changes"),
+										UIOperationMode::MODE_ADVANCED);
 
 	stop_action_ = 
-		insertMenuEntry(MainControl::FILE_MONITOR, "Stop monitoring", this, SLOT(stop()));
-	setMenuHint("Stop monitoring a molecular file");
+		insertMenuEntry(MainControl::FILE_MONITOR, tr("Stop monitoring"), this, SLOT(stop()),
+		                "Shortcut|File|Monitor|Stop", QKeySequence(), tr("Stop monitoring a molecular file"),
+										UIOperationMode::MODE_ADVANCED);
 }
 
 // select a molecular file to monitor

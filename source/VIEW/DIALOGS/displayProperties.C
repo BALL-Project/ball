@@ -124,13 +124,12 @@ void DisplayProperties::initializeWidget(MainControl& main_control)
 	(main_control.initPopupMenu(MainControl::DISPLAY));
 
 	String description = "Shortcut|Display|Display_Properties";
-	id_ = insertMenuEntry(MainControl::DISPLAY, (String)tr("D&isplay Properties"), this, 
-																		 SLOT(show()), description,
-																		 QKeySequence("Ctrl+I"));
-
-	setMenuHint((String)tr("Create a new representation or modify an existing one"));
-	setMenuHelp("displayProperties.html");
-	setIcon("categories/preferences-display", true);
+	id_ = insertMenuEntry(MainControl::DISPLAY, tr("D&isplay Properties"), this, 
+												SLOT(show()), description, QKeySequence("Ctrl+I"),
+												tr("Create a new representation or modify an existing one"),
+	                      UIOperationMode::MODE_ADVANCED);
+	setMenuHelp(id_, "displayProperties.html");
+	setIcon(id_, "categories/preferences-display", true);
 
 	registerForHelpSystem(this, "displayProperties.html");
 

@@ -52,17 +52,18 @@ MolecularFileDialog::~MolecularFileDialog()
 void MolecularFileDialog::initializeWidget(MainControl&)
 {
 	String description = "Shortcut|File|Open_Structure";
-	open_id_ = insertMenuEntry(MainControl::FILE_OPEN, (String)tr("&Structure"), this, 
-									SLOT(readFiles()), description, QKeySequence::Open);
-
-	setMenuHint((String)tr("Open a molecular file (e.g. PDB,MOL2,SDF)"));
-	setIcon("actions/document-open", true);
+	open_id_ = insertMenuEntry(MainControl::FILE_OPEN, tr("&Structure"), this, 
+	                           SLOT(readFiles()), description, QKeySequence::Open,
+														 tr("Open a molecular file (e.g. PDB,MOL2,SDF)"),
+														 UIOperationMode::MODE_ADVANCED);
+	setIcon(open_id_, "actions/document-open", true);
 
 	description = "Shortcut|File|Save_Structure";
-	save_id_ = insertMenuEntry(MainControl::FILE, (String)tr("&Save Structure"), this, 
-														 SLOT(writeFile()), description, QKeySequence::Save);
-	setMenuHint((String)tr("Save the highlighted System (e.g. as PDB,MOL2,SDF file)"));
-	setIcon("actions/document-save", true);
+	save_id_ = insertMenuEntry(MainControl::FILE, tr("&Save Structure"), this, 
+														 SLOT(writeFile()), description, QKeySequence::Save,
+														 tr("Save the highlighted System (e.g. as PDB,MOL2,SDF file)"),
+														 UIOperationMode::MODE_ADVANCED);
+	setIcon(save_id_, "actions/document-save", true);
 }
 
 void MolecularFileDialog::readFiles()

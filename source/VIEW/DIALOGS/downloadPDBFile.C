@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.C,v 1.34.16.1 2007/03/25 22:01:56 oliver Exp $
-//
 
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
 
@@ -87,13 +85,12 @@ namespace BALL
 		void DownloadPDBFile::initializeWidget(MainControl&)
 		{
 			String description = "Shortcut|File|Open|Download_PDB";
-			menu_id_ = insertMenuEntry(MainControl::FILE_OPEN, "Download PDB", this,
-																	 SLOT(show()), description,
-																	 QKeySequence("Ctrl+T"));
-
-			setMenuHint("Download a PDB file from www.rcsb.org");
-			setMenuHelp("tips.html#download_pdb");
-			setIcon("actions/download-pdb", true);
+			menu_id_ = insertMenuEntry(MainControl::FILE_OPEN, tr("Download PDB"), this,
+																 SLOT(show()), description, QKeySequence("Ctrl+T"),
+																 tr("Download a PDB file from www.rcsb.org"),
+																 UIOperationMode::MODE_ADVANCED);
+			setMenuHelp(menu_id_, "tips.html#download_pdb");
+			setIcon(menu_id_, "actions/download-pdb", true);
 		}
 
 		void DownloadPDBFile::slotDownload()

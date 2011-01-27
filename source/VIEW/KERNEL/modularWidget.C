@@ -22,16 +22,14 @@ namespace BALL
 				ConnectionObject(),
 				window_menu_entry_(0),
 				show_window_enty_(false),
-				default_visible_(true),
-				last_action_(0)
+				default_visible_(true)
 		{
 			if (name) setIdentifier(name);
 		}
 
 		ModularWidget::ModularWidget(const ModularWidget& widget)
 			: Embeddable(widget),
-				ConnectionObject(widget),
-				last_action_(0)
+				ConnectionObject(widget)
 		{
 		}
 
@@ -220,39 +218,31 @@ namespace BALL
 			return getMainControl()->unlockCompositesFor(this);
 		}
 
-		QAction* ModularWidget::insertMenuEntry(Position menu_id, const String& name, 
-												const QObject* receiver, const char* slot, const String& description,
-												QKeySequence shortcut)
+		QAction* ModularWidget::insertMenuEntry(Position menu_id, const QString& name,       const QObject* receiver, 
+		                                        const char* slot, const String& description, QKeySequence shortcut,
+																						const QString& menu_hint, UIOperationMode::OperationMode minimal_mode)
 		{
 			if (getMainControl() == 0) return 0;
 
-			last_action_ = getMainControl()->insertMenuEntry(menu_id, name, receiver, slot, description, shortcut);
+			QAction* result = getMainControl()->insertMenuEntry(menu_id, (String)name, receiver, slot, description, shortcut, minimal_mode);
 
-			return last_action_;
+			if (result && (menu_hint != ""))
+			{
+				result->setToolTip(menu_hint);
+				getMainControl()->setMenuHint(result, (String)menu_hint);
+			}
+
+			return result;
 		}
 
-		void ModularWidget::setMenuHint(const String& hint)
+		void ModularWidget::setMenuHelp(QAction* action, const String& url)
 		{
-			if (last_action_ 		 == 0 ||
-					getMainControl() == 0)
+			if (!action || !getMainControl())
 			{
 				return;
 			}
 
-			last_action_->setToolTip(hint.c_str());
-
- 			getMainControl()->setMenuHint(last_action_, hint);
-		}
-
-		void ModularWidget::setMenuHelp(const String& url)
-		{
-			if (last_action_ 			== 0 ||
-					getMainControl() == 0)
-			{
-				return;
-			}
-
-			registerForHelpSystem(last_action_, url);
+			registerForHelpSystem(action, url);
 		}
 
 		void ModularWidget::showHelp(const String& url)
@@ -268,13 +258,15 @@ namespace BALL
 			notify_(msg);
 		}
 
-		void ModularWidget::setIcon(const String& filename, bool add_to_main_toolbar)
+		void ModularWidget::setIcon(QAction* action, const String& filename, bool add_to_main_toolbar)
 		{
-			last_action_->setIcon(IconLoader::instance().getIcon(filename.c_str()));
+			if (!action) return;
+
+			action->setIcon(IconLoader::instance().getIcon(filename.c_str()));
 
 			if (add_to_main_toolbar)
 			{
-				main_toolbar_actions_.push_back(last_action_);
+				main_toolbar_actions_.push_back(action);
 			}
 		}
 

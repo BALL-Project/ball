@@ -515,15 +515,20 @@ namespace BALL
 		{
 			GenericControl::initializeWidget(main_control);
 
-			menu_clipping_plane_ = insertMenuEntry(MainControl::DISPLAY_CREATE, 
-																		(String)tr("Clipping Plane"), this, SLOT(createNewClippingPlane()));   
-			setMenuHint((String)tr("Add an OpenGL Clipping Plane to the Scene"));
-			setMenuHelp("geometricControl.html#clipping_planes");
+			menu_clipping_plane_ = insertMenuEntry(MainControl::DISPLAY_CREATE, tr("Clipping Plane"), 
+			                                       this, SLOT(createNewClippingPlane()), "Shortcut|Display|Create|ClippingPlane",
+																						 QKeySequence(), tr("Add an OpenGL Clipping Plane to the Scene"),
+																						 UIOperationMode::MODE_ADVANCED);
+			setMenuHelp(menu_clipping_plane_, "geometricControl.html#clipping_planes");
 
-			menu_load_surface_ = insertMenuEntry(MainControl::FILE_OPEN, (String)tr("Surface"), this,
-																						SLOT(loadSurface()));
-			modify_surface_ = insertMenuEntry(MainControl::DISPLAY, (String)tr("Modify Representation"), 
-																						modify_rep_dialog_, SLOT(show()));	
+			menu_load_surface_ = insertMenuEntry(MainControl::FILE_OPEN, tr("Surface"), this,
+																					 SLOT(loadSurface()), "Shortcut|Display|Create|Surface",
+																					 QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
+
+			modify_surface_ = insertMenuEntry(MainControl::DISPLAY, tr("Modify Representation"), modify_rep_dialog_, 
+			                                  SLOT(show()), "Shortcut|Display|Modify Representation", QKeySequence(),
+																				tr(""), UIOperationMode::MODE_ADVANCED);
+
 			registerForHelpSystem(this, "geometricControl.html");
 		}
 

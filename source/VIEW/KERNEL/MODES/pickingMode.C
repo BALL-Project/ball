@@ -18,14 +18,18 @@ namespace BALL
 			  ignore_pick_(false)
 		{
 			String description = "Shortcut|Display|Picking_Mode";
-			main_action_ = scene_->insertMenuEntry(MainControl::DISPLAY, (String)tr("&Picking Mode"), this,
-			                                       0, description, QKeySequence("Ctrl+P"));
+			main_action_ = scene_->insertMenuEntry(MainControl::DISPLAY, tr("&Picking Mode"), this,
+			                                       0, description, QKeySequence("Ctrl+P"),
+                                             tr("Switch to picking mode, e.g. to identify single atoms or groups"),
+																						 UIOperationMode::MODE_ADVANCED);
 
-			scene_->setMenuHint((String)tr("Switch to picking mode, e.g. to identify single atoms or groups"));
-			scene_->setMenuHelp("scene.html#identify_atoms");
-			scene_->setIcon("actions/select-rectangular", false);
-			main_action_->setCheckable(true);
-			connect(main_action_, SIGNAL(triggered()), SLOT(modeChangeSlot_()));
+			if (main_action_)
+			{
+				scene_->setMenuHelp(main_action_, "scene.html#identify_atoms");
+				scene_->setIcon(main_action_, "actions/select-rectangular", false);
+				main_action_->setCheckable(true);
+				connect(main_action_, SIGNAL(triggered()), SLOT(modeChangeSlot_()));
+			}
 		}
 
 		void PickingMode::mouseDoubleClickEvent(QMouseEvent* evt)

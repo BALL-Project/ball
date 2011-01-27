@@ -48,43 +48,57 @@ namespace BALL
 			String help_url = "scene.html#editing";
 
 			String description = "Shortcut|Display|Edit_Mode";
-			main_action_ = scene_->insertMenuEntry(MainControl::DISPLAY, (String)tr("Edit Mode"), 0, 0, description, QKeySequence("Ctrl+E"));
-			scene_->setMenuHint((String)tr("Create and modify molecular structures"));
-			main_action_->setToolTip(tr("Switch to edit mode, e.g. draw your own molecule"));
+			main_action_ = scene_->insertMenuEntry(MainControl::DISPLAY, tr("Edit Mode"), 0, 
+			                                       0, description, QKeySequence("Ctrl+E"),
+																						 tr("Create and modify molecular structures"),
+																						 UIOperationMode::MODE_ADVANCED);
 
-			main_action_->setCheckable(true);
-			main_action_->setIcon(loader.getIcon("actions/mode-edit"));
-			connect(main_action_, SIGNAL(triggered()), SLOT(modeChangeSlot_()));
+			if (main_action_)
+			{
+				main_action_->setToolTip(tr("Switch to edit mode, e.g. draw your own molecule"));
+
+				main_action_->setCheckable(true);
+				main_action_->setIcon(loader.getIcon("actions/mode-edit"));
+				connect(main_action_, SIGNAL(triggered()), SLOT(modeChangeSlot_()));
+			}
 
 //			setMenuHelp(help_url);
 
-			description = "Shortcut|EditMode|SetElement";
-			element_action_ = new QAction(loader.getIcon("actions/molecule-set-element"), tr("Set element"), this);
-			element_action_->setToolTip(tr("Edit mode: Choose element for next atom, to modify atom under cursor: Double left click"));
-			element_action_->setObjectName(element_action_->text());
-//			registerForHelpSystem(element_action_, "scene.html#choose_element");
-			connect(element_action_, SIGNAL(triggered()), this, SLOT(changeAtomElementTriggered_()));
-			getMainControl()->getShortcutRegistry().registerShortcut(description, element_action_);
-			QMenu* qmenu = scene_->getMainControl()->initPopupMenu(MainControl::BUILD);
-			qmenu->addAction(element_action_);
+			QMenu* qmenu;
 
-			description = "Shortcut|EditMode|CreateBond";
-			bond_action_ = new QAction(loader.getIcon("actions/create-bond"), tr("Create Bond"), this);
-			bond_action_->setToolTip(tr("Edit mode: If two atoms are selected, create a single bond between them"));
-			bond_action_->setObjectName(bond_action_->text());
-//			registerForHelpSystem(bond_action_, "scene.html#create_bond");
-			//TODO registerForHelpSystem not done yet
-			connect(bond_action_, SIGNAL(triggered()), this, SLOT(createBond_()));
-			scene_->getMainControl()->getShortcutRegistry().registerShortcut(description, bond_action_);
-			// 			qmenu = getMainControl()->initPopupMenu(MainControl::BUILD);
-			qmenu->addAction(bond_action_);
+			if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
+			{
+				description = "Shortcut|EditMode|SetElement";
+				element_action_ = new QAction(loader.getIcon("actions/molecule-set-element"), tr("Set element"), this);
+				element_action_->setToolTip(tr("Edit mode: Choose element for next atom, to modify atom under cursor: Double left click"));
+				element_action_->setObjectName(element_action_->text());
+				//			registerForHelpSystem(element_action_, "scene.html#choose_element");
+				connect(element_action_, SIGNAL(triggered()), this, SLOT(changeAtomElementTriggered_()));
+				getMainControl()->getShortcutRegistry().registerShortcut(description, element_action_);
+				qmenu = scene_->getMainControl()->initPopupMenu(MainControl::BUILD);
+				qmenu->addAction(element_action_);
+
+				description = "Shortcut|EditMode|CreateBond";
+				bond_action_ = new QAction(loader.getIcon("actions/create-bond"), tr("Create Bond"), this);
+				bond_action_->setToolTip(tr("Edit mode: If two atoms are selected, create a single bond between them"));
+				bond_action_->setObjectName(bond_action_->text());
+	//			registerForHelpSystem(bond_action_, "scene.html#create_bond");
+				//TODO registerForHelpSystem not done yet
+				connect(bond_action_, SIGNAL(triggered()), this, SLOT(createBond_()));
+				scene_->getMainControl()->getShortcutRegistry().registerShortcut(description, bond_action_);
+				// 			qmenu = getMainControl()->initPopupMenu(MainControl::BUILD);
+				qmenu->addAction(bond_action_);
+			}
 		}
 
 		void EditMode::addToolBarEntries(QToolBar* tb)
 		{
-			tb->addAction(main_action_);
-			tb->addAction(element_action_);
-			tb->addAction(bond_action_);
+			if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
+			{
+				tb->addAction(main_action_);
+				tb->addAction(element_action_);
+				tb->addAction(bond_action_);
+			}
 		}
 
 		void EditMode::keyPressEvent(QKeyEvent* evt)

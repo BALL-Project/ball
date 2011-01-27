@@ -140,7 +140,9 @@ namespace BALL
 			text_edit_->setReadOnly(true);
 
 			DockWidget::initializeWidget(main_control);
-			insertMenuEntry(MainControl::EDIT, (String)tr("Clear Logs"), text_edit_, SLOT(clear()));
+			insertMenuEntry(MainControl::EDIT, tr("Clear Logs"), text_edit_, SLOT(clear()),
+			                "Shortcut|MainControl|Edit|ClearLogs", QKeySequence(), tr(""),
+											UIOperationMode::MODE_ADVANCED);
 
 			registerForHelpSystem(this, "logView.html");
 		}

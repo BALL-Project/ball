@@ -13,6 +13,10 @@
 # include <BALL/VIEW/KERNEL/connectionObject.h>
 #endif
 
+#ifndef BALL_VIEW_KERNEL_UIOPERATIONMODE_H
+# include <BALL/VIEW/KERNEL/UIOperationMode.h>
+#endif
+
 #include <QtGui/QKeySequence>
 #include <QtGui/QToolBar>
 
@@ -148,26 +152,25 @@ namespace BALL
 			//@{
 	
 			/**	Menu checking method.
-					This method is called MainControl::checkMenus before a popup menu is shown.
-					It should be used to update the state of menu entries (e.g. disable or enable entries).
-					\param main_control the MainControl object whose menus should be checked
+			 *	This method is called MainControl::checkMenus before a popup menu is shown.
+			 *	It should be used to update the state of menu entries (e.g. disable or enable entries).
+			 *	@param main_control the MainControl object whose menus should be checked
 			*/
 			virtual void checkMenu(MainControl& main_control);
 
 			///
-			QAction* insertMenuEntry (Position parent_id, const String& name, const QObject* receiver = 0, 
-													 const char* slot = 0, const String& description = "", QKeySequence accel = QKeySequence());
+			QAction* insertMenuEntry(Position parent_id,   const QString& name,            const QObject* receiver = 0, 
+													     const char* slot = 0, const String& description = "", QKeySequence accel = QKeySequence(),
+															 const QString& menu_hint = QString(""), 
+															 UIOperationMode::OperationMode minimal_mode = UIOperationMode::MODE_ALL);
 
-			/** Set the hint for the last added menu entry
-			 		@see insertMenuEntry
-			*/
-			void setMenuHint(const String& hint);
-
-			/** Set the help URL for the last added menu entry
-			 		@see insertMenuEntry
-					@see HelpViewer
-			*/
-			void setMenuHelp(const String& url);
+			/** Set the help URL for the given action
+			 *	@see insertMenuEntry
+			 *	@see HelpViewer
+			 *  @param action the action to process (it is safe to pass a null pointer)
+			 *  @param url the url to add
+			 */
+			void setMenuHelp(QAction* action, const String& url);
 
 			/** Register an QObject for the help system.
 			 		@see HelpViewer
@@ -180,10 +183,13 @@ namespace BALL
 			*/
 			virtual void addToolBarEntries(QToolBar* main_tb);
 
-			/** Set the icon for the last added QAction.
-			 		The file is searched in BALL/data/graphics.
-			*/
-			void setIcon(const String& filename, bool add_to_main_toolbar = true);
+			/** Set the icon for the given QAction.
+			 *	The file is searched in BALL/data/graphics.
+			 *  @param action the action to process (it is safe to pass a null pointer)
+			 *  @param filename the name of the icon file
+			 *  @param add_to_main_toolbar add the icon to the main toolbar
+			 */
+			void setIcon(QAction* action, const String& filename, bool add_to_main_toolbar = true);
 
 
 			//@}	
@@ -309,7 +315,6 @@ namespace BALL
 			//_ should the widget be visible, if no config file entry exists?
 			bool default_visible_;
 
-			QAction* last_action_;
 			QList<QAction*> main_toolbar_actions_;
 		}; 
   
