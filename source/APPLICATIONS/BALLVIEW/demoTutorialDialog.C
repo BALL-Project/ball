@@ -1025,9 +1025,12 @@ void DemoTutorialDialog::initializeWidget(MainControl&)
 void DemoTutorialDialog::checkMenu(MainControl& main_control)
 {
 	bool busy = main_control.isBusy();
-	demo_action_->setEnabled(!busy);
-	tutorial_action_->setEnabled(!busy);
-	raytracing_tutorial_action_->setEnabled(!busy);
+	if (demo_action_)
+		demo_action_->setEnabled(!busy);
+	if (tutorial_action_)
+		tutorial_action_->setEnabled(!busy);
+	if (raytracing_tutorial_action_)
+		raytracing_tutorial_action_->setEnabled(!busy);
 }
 						
 } } // namespaces

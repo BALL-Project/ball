@@ -1575,31 +1575,42 @@ namespace BALL
 		{
 			bool busy = main_control.compositesAreLocked();
 
-			create_coordinate_system_->setEnabled(!busy);
+			if (create_coordinate_system_)
+				create_coordinate_system_->setEnabled(!busy);
 
 			bool animation_running = (animation_thread_ != 0 && animation_thread_->isRunning());
 
-			start_animation_action_->setEnabled(animation_points_.size() > 0 && 
-					!busy && !animation_running);
+			if (start_animation_action_)
+			{
+				start_animation_action_->setEnabled(animation_points_.size() > 0 && !busy && !animation_running);
+			}
 
-			clear_animation_action_->setEnabled(animation_points_.size() > 0 && !animation_running);
+			if (clear_animation_action_)
+				clear_animation_action_->setEnabled(animation_points_.size() > 0 && !animation_running);
 
-			window_menu_entry_->setChecked(isVisible());
+			if (window_menu_entry_)
+				window_menu_entry_->setChecked(isVisible());
 			bool selected_system = !busy && main_control.getSelectedSystem();
 
-			optimize_action_->setEnabled(selected_system);
-			add_hydrogens_action_->setEnabled(selected_system);
+			if (optimize_action_)
+				optimize_action_->setEnabled(selected_system);
+			if (add_hydrogens_action_)
+				add_hydrogens_action_->setEnabled(selected_system);
 
 			list<Composite*> highl = getMainControl()->getMolecularControlSelection();
 			list<Composite*>::iterator lit = highl.begin();
 			bool selected_system_or_molecule =   (highl.size() == 1)
 				&& (RTTI::isKindOf<System>(**lit) || RTTI::isKindOf<Molecule>(**lit) ) ;
 
-			bondorders_action_->setEnabled(selected_system_or_molecule && !busy);
-			optimize_action_->setEnabled(selected_system_or_molecule && !busy);
-			add_hydrogens_action_->setEnabled(selected_system_or_molecule && !busy);
+			if (bondorders_action_)
+				bondorders_action_->setEnabled(selected_system_or_molecule && !busy);
+			if (optimize_action_)
+				optimize_action_->setEnabled(selected_system_or_molecule && !busy);
+			if (add_hydrogens_action_)
+				add_hydrogens_action_->setEnabled(selected_system_or_molecule && !busy);
 
-			new_molecule_action_->setEnabled(!busy);
+			if (new_molecule_action_)
+				new_molecule_action_->setEnabled(!busy);
 		}
 
 		bool Scene::isAnimationRunning() const

@@ -172,7 +172,8 @@ void DisplayProperties::checkMenu(MainControl& main_control)
 {
 	bool busy = main_control.isBusy();
 
-	id_->setEnabled(!main_control.compositesAreLocked());	
+	if (id_)
+		id_->setEnabled(!main_control.compositesAreLocked());	
 
 	if (busy)
 	{

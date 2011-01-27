@@ -705,33 +705,48 @@ namespace BALL
 
 			// AMBER methods are available only for single systems
 			// disable calculation entries, if a simulation is running
-			energy_id_->setEnabled( one_system && composites_muteable);
-			minimization_id_->setEnabled( one_system && composites_muteable);
-			mdsimulation_id_->setEnabled( one_system && composites_muteable);
+			if (energy_id_)
+				energy_id_->setEnabled( one_system && composites_muteable);
+			if (minimization_id_)
+				minimization_id_->setEnabled( one_system && composites_muteable);
+			if (mdsimulation_id_)
+				mdsimulation_id_->setEnabled( one_system && composites_muteable);
 
-			assign_bond_orders_id_->setEnabled( one_system && composites_muteable);
-			build_endcaps_id_->setEnabled( one_system && composites_muteable && one_system);
-			calculate_hbonds_id_->setEnabled( one_system && composites_muteable);
+			if (assign_bond_orders_id_)
+				assign_bond_orders_id_->setEnabled( one_system && composites_muteable);
+			if (calculate_hbonds_id_)
+				calculate_hbonds_id_->setEnabled( one_system && composites_muteable);
 
 			// prevent changes to forcefields, if simulation is running
 			getMainControl()->initPopupMenu(MainControl::CHOOSE_FF)->setEnabled(composites_muteable);
 			
-			build_peptide_id_->setEnabled(composites_muteable);
+			if (build_peptide_id_)
+				build_peptide_id_->setEnabled(composites_muteable);
 
 			bool allow = composites_muteable && one_system;
-			add_hydrogens_id_->setEnabled( allow);
-			build_bonds_id_->setEnabled( allow);
-			check_structure_id_->setEnabled( allow);
-			calculate_ss_id_->setEnabled( allow);
-			center_camera_id_->setEnabled(allow);
-			create_distance_grid_id_->setEnabled(allow);
-			menu_FPDB_->setEnabled(allow);
-			setup_ff_->setEnabled(composites_muteable);
+			if (add_hydrogens_id_)
+				add_hydrogens_id_->setEnabled( allow);
+			if (build_bonds_id_)
+				build_bonds_id_->setEnabled( allow);
+			if (check_structure_id_)
+				check_structure_id_->setEnabled( allow);
+			if (calculate_ss_id_)
+				calculate_ss_id_->setEnabled( allow);
+			if (center_camera_id_)
+				center_camera_id_->setEnabled(allow);
+			if (create_distance_grid_id_)
+				create_distance_grid_id_->setEnabled(allow);
+			if (menu_FPDB_)
+				menu_FPDB_->setEnabled(allow);
+			if (setup_ff_)
+				setup_ff_->setEnabled(composites_muteable);
 
 //			menuBar()->setItemEnabled( map_proteins_id_, (number_of_selected_objects == 2) && 
 // 																									 composites_muteable);
 			
-			calculate_RMSD_id_->setEnabled( (number_of_selected_objects == 2) && composites_muteable); 
+			if (calculate_RMSD_id_)
+				calculate_RMSD_id_->setEnabled( (number_of_selected_objects == 2) && composites_muteable); 
+
 			getMainControl()->initPopupMenu(MainControl::TOOLS_GRID)->setEnabled(composites_muteable);
 			
 //   			calculate_ramachandran_->setEnabled((number_of_selected_objects == 1) &&

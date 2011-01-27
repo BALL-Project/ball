@@ -192,8 +192,8 @@ namespace BALL
 			if (paste_id_)
 			{
 				paste_id_->setEnabled(allow_paste);	
+				getMainControl()->setMenuHint(paste_id_, hint);
 			}
-			getMainControl()->setMenuHint(paste_id_, hint);
 
 			// ------------------------------------------------------------------
 			// clearClipboard
@@ -221,19 +221,28 @@ namespace BALL
 			else hint = (String)tr("No item selected or simulation running");
 			
 			if (cut_id_)
+			{
 				cut_id_->setEnabled(list_filled);
-			getMainControl()->setMenuHint(cut_id_, hint);
+				getMainControl()->setMenuHint(cut_id_, hint);
+			}
+
 			if (copy_id_)
+			{
 				copy_id_->setEnabled(list_filled);	
-			getMainControl()->setMenuHint(copy_id_, hint);
+				getMainControl()->setMenuHint(copy_id_, hint);
+			}
 
 			if (select_id_)
+			{
 				select_id_->setEnabled(list_filled);
-			getMainControl()->setMenuHint(select_id_, hint);
+				getMainControl()->setMenuHint(select_id_, hint);
+			}
 
 			if (deselect_id_)
+			{
 				deselect_id_->setEnabled(list_filled);	
-			getMainControl()->setMenuHint(deselect_id_, hint);
+				getMainControl()->setMenuHint(deselect_id_, hint);
+			}
 
 			if (angle_action_)
 				angle_action_->setEnabled(list_filled && selected_.size() == 3);	

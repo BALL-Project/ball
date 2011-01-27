@@ -484,9 +484,12 @@ namespace BALL
 				main_control.setDeleteEntryEnabled(true);
 			}
 
-			menu_clipping_plane_->setEnabled(!busy);
-			menu_load_surface_->setEnabled(!busy);
-			modify_surface_->setEnabled(!busy && getSelectedItems().size());
+			if (menu_clipping_plane_)
+				menu_clipping_plane_->setEnabled(!busy);
+			if (menu_load_surface_)
+				menu_load_surface_->setEnabled(!busy);
+			if (modify_surface_)
+				modify_surface_->setEnabled(!busy && getSelectedItems().size());
 		}
 
 		void GeometricControl::focus()

@@ -902,14 +902,29 @@ void TestFramework::processEvent_()
 void TestFramework::checkMenu(MainControl& main_control)
 {
 	bool busy = main_control.isBusy();
-	start_recording->setEnabled(!recording_ && !busy && filename_ != "");
-	start_recording->setChecked(recording_);
-	stop_recording->setEnabled(recording_);
-	run_test->setEnabled(filename_ != "" && !recording_ && !test_running_ && !busy);
-	run_test->setChecked(test_running_);
-	abort_test->setEnabled(test_running_);
-	save_file->setEnabled(!recording_ && !test_running_ && !busy);
-	load_file->setEnabled(!recording_ && !test_running_ && !busy);
+	if (start_recording)
+	{
+		start_recording->setEnabled(!recording_ && !busy && filename_ != "");
+		start_recording->setChecked(recording_);
+	}
+	
+	if (stop_recording)
+		stop_recording->setEnabled(recording_);
+	
+	if (run_test)
+	{
+		run_test->setEnabled(filename_ != "" && !recording_ && !test_running_ && !busy);
+		run_test->setChecked(test_running_);
+	}
+	
+	if (abort_test)
+		abort_test->setEnabled(test_running_);
+
+	if (save_file)
+		save_file->setEnabled(!recording_ && !test_running_ && !busy);
+	
+	if (load_file)
+		load_file->setEnabled(!recording_ && !test_running_ && !busy);
 }
 
 

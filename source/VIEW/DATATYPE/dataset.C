@@ -410,21 +410,24 @@ namespace BALL
 
 			for (Position p = 0; p < actions_.size(); p++)
 			{
-				QAction& action = *actions_[p];
-
-				if (other_selection || mc.isBusy() || selected == 0)
+				if (actions_[p])
 				{
-					action.setEnabled(false);
-					continue;
-				}
+					QAction& action = *actions_[p];
 
-				if (selected > 1 && actions_for_one_set_.has(&action))
-				{
-					action.setEnabled(false);
-					continue;
+					if (other_selection || mc.isBusy() || selected == 0)
+					{
+						action.setEnabled(false);
+						continue;
+					}
+
+					if (selected > 1 && actions_for_one_set_.has(&action))
+					{
+						action.setEnabled(false);
+						continue;
+					}
+
+					action.setEnabled(true);
 				}
-		
-				action.setEnabled(true);
 			}
 		}
 

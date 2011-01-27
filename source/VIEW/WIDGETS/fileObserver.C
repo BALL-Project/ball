@@ -139,8 +139,10 @@ void FileObserver::chooseFile()
 
 void FileObserver::checkMenu(MainControl& main_control)
 {
-	stop_action_->setEnabled(timer_.isActive());
-	start_action_->setEnabled(!main_control.isBusy());
+	if (stop_action_)
+		stop_action_->setEnabled(timer_.isActive());
+	if (start_action_)
+		start_action_->setEnabled(!main_control.isBusy());
 }
 
 	} // VIEW
