@@ -91,10 +91,11 @@ namespace BALL
 		// Display Menu
 		String description = "Shortcut|Display|Toggle_Fullscreen";
 		fullscreen_action_ = insertMenuEntry(MainControl::DISPLAY, (String)tr("Toggle Fullscreen"), this,
-		                      SLOT(toggleFullScreen()), description,
-		                      QKeySequence("Alt+X"));
+		                                     SLOT(toggleFullScreen()), description, QKeySequence("Alt+X"),
+																				 UIOperationMode::MODE_ADVANCED);
 
-		fullscreen_action_->setIcon(IconLoader::instance().getIcon("actions/view-fullscreen"));
+		if (fullscreen_action_)
+			fullscreen_action_->setIcon(IconLoader::instance().getIcon("actions/view-fullscreen"));
 
 		insertPopupMenuSeparator(DISPLAY);
 		initPopupMenu(DISPLAY_VIEWPOINT);

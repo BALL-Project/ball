@@ -1002,16 +1002,21 @@ void DemoTutorialDialog::initializeWidget(MainControl&)
 	getMainControl()->insertPopupMenuSeparator(MainControl::HELP);
 	
 	String description = "Shortcut|Help|Demo";
-	demo_action_ = insertMenuEntry(MainControl::HELP, (String)tr("Demo"), this, SLOT(showDemo()), description);
-	setMenuHint((String)tr("Show a demonstration of BALLView's features"));
+	demo_action_ = insertMenuEntry(MainControl::HELP, tr("Demo"), this, SLOT(showDemo()), 
+	                               description, QKeySequence(),
+																 tr("Show a demonstration of BALLView's features"), UIOperationMode::MODE_ADVANCED);
 
 	description = "Shortcut|Help|Tutorial";
-	tutorial_action_ = insertMenuEntry(MainControl::HELP, (String)tr("Tutorial"), this, SLOT(showTutorial()), description);
-	setMenuHint((String)tr("Perform a step-by-step tutorial"));
+	tutorial_action_ = insertMenuEntry(MainControl::HELP, tr("Tutorial"), this, SLOT(showTutorial()), 
+	                                   description, QKeySequence(), tr("Perform a step-by-step tutorial"),
+																		 UIOperationMode::MODE_ADVANCED);
 
+#ifdef BALL_HAS_RTFACT
 	description = "Shortcut|Help|RaytracingTutorial";
-	raytracing_tutorial_action_ = insertMenuEntry(MainControl::HELP, (String)tr("Ray tracing Tutorial"), this, SLOT(showRaytracingTutorial()), description);
-	setMenuHint((String)tr("Learn how to use RTFact"));
+	raytracing_tutorial_action_ = insertMenuEntry(MainControl::HELP, tr("Ray tracing Tutorial"), this, 
+	                                              SLOT(showRaytracingTutorial()), description, QKeySequence(),
+																								tr("Learn how to use RTFact"), UIOperationMode::MODE_ADVANCED);
+#endif
 
 	getMainControl()->insertPopupMenuSeparator(MainControl::HELP);
 
