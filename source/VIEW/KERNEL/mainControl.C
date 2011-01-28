@@ -360,7 +360,7 @@ namespace BALL
 					menu = initPopupMenu(FILE)->addMenu(tr("&Monitor File"));
 					break;
 				case EDIT:
-					menu = menuBar()->addMenu(tr("&Edit"));
+					menu = addMenu(tr("&Edit"), UIOperationMode::MODE_ADVANCED);
 					break;
 				case BUILD:
 					menu = menuBar()->addMenu(tr("&Build"));
@@ -535,9 +535,9 @@ namespace BALL
 				String description = "Shortcut|Edit|Preferences";
 				preferences_action_ = insertMenuEntry(MainControl::EDIT, (String)tr("Preferences"), preferences_dialog_, 
 																							SLOT(show()), description,
-																							QKeySequence("Ctrl+Z"));
-
-				preferences_action_->setIcon(IconLoader::instance().getIcon("categories/preferences"));
+																							QKeySequence("Ctrl+Z"), UIOperationMode::OperationMode::MODE_ADVANCED);
+				
+				if (preferences_action_) preferences_action_->setIcon(IconLoader::instance().getIcon("categories/preferences"));
 			}
 
 			fetchPreferences(preferences_file_);
