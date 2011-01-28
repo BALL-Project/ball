@@ -21,6 +21,10 @@
 
 #include <vector>
 
+#include <QtCore/QList>
+#include <QtCore/QPair>
+#include <QtCore/QString>
+
 namespace BALL 
 {
 	/** Embedded Python interpreter.
@@ -105,10 +109,13 @@ namespace BALL
 		*/
 		static bool importModule(const String& module_name);
 		//@}
+
+		static bool execute(const QString& module, const QString& func, const QList<QPair<QString, QString> >& params);
+
 		protected:
-		static PathStrings sys_path_;
-		static bool   valid_;
-		static String start_log_;
+			static PathStrings sys_path_;
+			static bool   valid_;
+			static String start_log_;
 	};
    
 } // namespace BALL

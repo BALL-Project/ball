@@ -4,9 +4,9 @@
 // $Id: pyInterpreter.C,v 1.13.18.1 2007/03/25 21:42:50 oliver Exp $
 //
 
+#include <BALL/PYTHON/pyInterpreter.h>
 #include <Python.h>
 
-#include <BALL/PYTHON/pyInterpreter.h>
 #include <BALL/PYTHON/BALLPythonConfig.h>
 
 #include <BALL/FORMAT/lineBasedFile.h>
@@ -34,7 +34,6 @@ namespace BALL
 		PyObject* result = PyRun_String(const_cast<char*>(str.c_str()), mode, context_, context_);
 		if (PyErr_Occurred())
 		{
-			PyErr_Print();
 			PyObject* type;
 			PyObject* value;
 			PyObject* range;
@@ -50,7 +49,9 @@ namespace BALL
 			{	
 				error_message_ += " (error message could not be parsed)";
 			}
-			
+
+			PyErr_Print();
+
 			error_message_ += "\n";
 
 			return 0;
@@ -221,6 +222,105 @@ namespace BALL
 		}
 	}
 
+	PyObject* loadModule_(const QString& name)
+	{
+		PyObject* module_dict = PyImport_GetModuleDict();
+
+		if(!module_dict)
+		{
+			Log.error() << "Could not obtain module dictionary" << std::endl;
+			return 0;
+		}
+
+		PyObject* mod_name = PyString_FromString(name.toAscii().data());
+
+		PyObject* module = 0;
+
+		if(PyDict_Contains(module_dict, mod_name))
+		{
+			module = PyDict_GetItem(module_dict, mod_name);
+		}
+		else
+		{
+			//This could leak the imported module. Need to check...
+			module = PyImport_ImportModule(name.toAscii().data());
+		}
+
+		Py_XDECREF(mod_name);
+
+
+		if(!module || PyErr_Occurred())
+		{
+			PyErr_Print();
+			return 0;
+		}
+
+		return module;
+	}
+
+	bool PyInterpreter::execute(const QString& module, const QString& func_name, const QList<QPair<QString, QString> >& params)
+	{
+		PyObject* mod = loadModule_(module);
+
+		if(mod == 0)
+		{
+			Log.error() << "Could not load module " << module.toAscii().data() << std::endl;
+			return false;
+		}
+
+		PyObject* func = PyObject_GetAttrString(mod, func_name.toAscii().data());
+
+		if(!func || !PyCallable_Check(func))
+		{
+			PyErr_Print();
+
+			return false;
+		}
+
+		PyObject* dict = PyDict_New();
+
+		if(!dict)
+		{
+			Log.error() << "Error: Could not create named arguments dictionary" << std::endl;
+			return false;
+		}
+
+		for(QList<QPair<QString, QString> >::const_iterator it = params.begin(); it != params.end(); ++it)
+		{
+			if(it->first == "action" || it->first == "module" || it->first == "method")
+			{
+				continue;
+			}
+
+			PyObject* val = PyString_FromString(it->second.toAscii().data());
+
+			if(!val)
+			{
+				Log.error() << "Could not create parameter" << it->first.toAscii().data() << "=" << it->second.toAscii().data() << " Skipping." << std::endl;
+				continue;
+			}
+
+			PyDict_SetItemString(dict, it->first.toAscii().data(), val);
+		}
+
+		Py_DECREF(dict);
+
+
+		PyObject* dummy = PyTuple_New(0);
+
+		if(!dummy)
+		{
+			Log.error() << "Could not allocate dummy tuple" << std::endl;
+			return false;
+		}
+
+		PyObject* res = PyObject_Call(func, dummy, dict);
+
+		Py_XDECREF(res);
+		Py_DECREF(dummy);
+
+		return true;
+	}
 
 	String PyInterpreter::run(const String& s, bool& state)
 	{
@@ -228,6 +328,8 @@ namespace BALL
 
 		state = false;
 		if (runSingleString_("CIO = cStringIO.StringIO()", Py_single_input) == 0 ||
+		    runSingleString_("stdout=sys.stdout", Py_single_input) == 0 ||
+		    runSingleString_("stderr=sys.stderr", Py_single_input) == 0 ||
 		    runSingleString_("sys.stdout=CIO", Py_single_input) == 0 ||
 		    runSingleString_("sys.stderr=CIO", Py_single_input) == 0) 
 		{
@@ -243,8 +345,11 @@ namespace BALL
 		{
 			PyArg_Parse(result, "s", &buf);
 		}
-		
-		return buf;
+
+		runSingleString_("sys.stdout=stdout", Py_single_input);
+		runSingleString_("sys.stderr=stderr", Py_single_input);
+
+		return String(buf);
 	}
 
 	String PyInterpreter::runFile(const String& filename)
@@ -252,34 +357,23 @@ namespace BALL
 	{
 		if (!valid_) return "";
 
-		if (runSingleString_("CIO = cStringIO.StringIO()", Py_single_input) == 0 ||
-		    runSingleString_("sys.stdout = CIO", Py_single_input) == 0 || 
-		    runSingleString_("sys.stderr = CIO", Py_single_input) == 0) 
-		{
-			return error_message_;
-		}
-		
-		String result_string;
-		LineBasedFile file(filename);
-		while (file.readLine())
-		{
-			if (runSingleString_(file.getLine(), Py_single_input) == 0) 
-			{
-				result_string += "Error in Line " + String(file.getLineNumber()) + " in file " + filename;
-				return result_string;
-			}
+		FILE* file = fopen(filename.c_str(), "r");
 
-			// retrieve output
-			PyObject* result = runSingleString_("str(CIO.getvalue())", Py_eval_input);
-			if (result != 0)
-			{
-				char* buf;
-				PyArg_Parse(result, "s", &buf);
-				result_string += String(buf);
-			}
+		if(!file)
+		{
+			throw Exception::FileNotFound(__FILE__, __LINE__, filename);
 		}
 
-		return result_string;
+		PyErr_Clear();
+		PyRun_SimpleFileEx(file, filename.c_str(), true);
+
+		if (PyErr_Occurred())
+		{
+			std::cout << "Error occured while executing " << filename << "\nPrinting Traceback:" << std::endl;
+			PyErr_Print();
+		}
+
+		return "";
 	}
 
 	void PyInterpreter::setSysPath(const PathStrings& path_strings)
