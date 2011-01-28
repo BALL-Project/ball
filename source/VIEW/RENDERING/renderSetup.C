@@ -304,13 +304,17 @@ namespace BALL
 				t.stop();
 
 				fps += t.getClockTime();
-				
-				if (current_frame % 10 == 0)
-				{
-					fps = 10./fps;
-					printf("########## Average rendering FPS = %.2lf  #########\n", fps);
 
-					fps = 0.;
+				//For GLRenderers this message is not useful and plain annoying
+				if (!gl_renderer_)
+				{
+					if (current_frame % 10 == 0)
+					{
+						fps = 10./fps;
+						printf("########## Average rendering FPS = %.2lf  #########\n", fps);
+
+						fps = 0.;
+					}
 				}
 				loop_mutex.lock();
 				QApplication::instance()->postEvent(scene_, new RenderToBufferFinishedEvent(this));
