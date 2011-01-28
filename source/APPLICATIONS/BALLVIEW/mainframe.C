@@ -390,9 +390,17 @@ namespace BALL
 		if(evt->type() == QEvent::WindowStateChange) {
 			if (isFullScreen())
 			{
-				fullscreen_action_->setIcon(IconLoader::instance().getIcon("actions/view-restore"));
-			} else {
-				fullscreen_action_->setIcon(IconLoader::instance().getIcon("actions/view-fullscreen"));
+				if (fullscreen_action_ != 0)
+				{
+					fullscreen_action_->setIcon(IconLoader::instance().getIcon("actions/view-restore"));
+				}
+			}
+			else
+			{
+				if (fullscreen_action_ != 0)
+				{
+					fullscreen_action_->setIcon(IconLoader::instance().getIcon("actions/view-fullscreen"));
+				}
 			}
 		}
 	}
