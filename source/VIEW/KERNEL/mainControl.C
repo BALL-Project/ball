@@ -535,7 +535,7 @@ namespace BALL
 				String description = "Shortcut|Edit|Preferences";
 				preferences_action_ = insertMenuEntry(MainControl::EDIT, (String)tr("Preferences"), preferences_dialog_, 
 																							SLOT(show()), description,
-																							QKeySequence("Ctrl+Z"), UIOperationMode::OperationMode::MODE_ADVANCED);
+																							QKeySequence("Ctrl+Z"), UIOperationMode::MODE_ADVANCED);
 				
 				if (preferences_action_) preferences_action_->setIcon(IconLoader::instance().getIcon("categories/preferences"));
 			}
