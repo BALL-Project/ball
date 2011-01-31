@@ -45,7 +45,10 @@
 #include "ui_aboutDialog.h"
 
 #include <BALL/VIEW/DIALOGS/pluginDialog.h>
-#include <BALL/VIEW/WIDGETS/HTMLBasedInterface.h>
+
+#ifdef BALL_HAS_QTWEBKIT
+# include <BALL/VIEW/WIDGETS/HTMLBasedInterface.h>
+#endif
 
 using namespace std;
 //#define BALL_VIEW_DEBUG
@@ -219,10 +222,12 @@ namespace BALL
 
  		qApp->installEventFilter(this);
 
+#ifdef BALL_HAS_QTWEBKIT
 		HTMLBasedInterface* html_interface = new HTMLBasedInterface;
 		HTMLViewDock* html_view_dock = new HTMLViewDock(html_interface, 0, "Navigation");
 		addDockWidget(Qt::LeftDockWidgetArea, html_view_dock);
 		html_view_dock->show();
+#endif
 
 		setStatusbarText((String)tr("Ready."));
 	}

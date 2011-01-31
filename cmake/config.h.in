@@ -319,6 +319,8 @@
 #define BALL_QT_HAS_THREADS // Qt now always has thread support
 #define QT_THREAD_SUPPORT
 
+#cmakedefine BALL_HAS_QTWEBKIT
+
 // Glew
 #cmakedefine BALL_HAS_GSL
 
