@@ -60,12 +60,18 @@ namespace BALL
 			{
 				return NULL;
 			}
-
-			if (geometric_objects_.find(result.mGeometry) != geometric_objects_.end())
+			else
 			{
-				return (geometric_objects_.find(result.mGeometry)->second);
+				HashMap<RTfact::Remote::GeoHandle, GeometricObject*>::iterator geo = geometric_objects_.begin();
+				
+				for (; geo != geometric_objects_.end(); ++geo)
+				{
+					if (RTfact::Remote::Geometry::equal(result.mGeometry, geo->first))
+					{
+						return geo->second;
+					}
+				}
 			}
-
 			return NULL;
 		}
 
@@ -81,9 +87,10 @@ namespace BALL
 				for (Position y=y1; y<=y2; ++y)
 				{
 					GeometricObject* result = pickObject(x, y);
-
 					if (result)
+					{
 						objects.push_back(result);
+					}
 				}
 			}
 		}
