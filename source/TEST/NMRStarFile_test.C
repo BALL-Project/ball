@@ -340,7 +340,8 @@ CHECK(BALLToBMRBMapper)
 
 	NMRStarFile nmr_file(BALL_TEST_DATA_PATH(NMRStarFile_test_1z0r.bmr));
 	
-	NMRStarFile::BALLToBMRBMapper mapper(chain, nmr_file, "'AbrBN subunit 1'");
+	NMRStarFile::BALLToBMRBMapper mapper(chain, nmr_file, "AbrBN");
+//	NMRStarFile::BALLToBMRBMapper mapper(chain, nmr_file, "'AbrBN subunit 1'");
 	TEST_EQUAL(*mapper.getChain() == chain, true)
 	TEST_EQUAL(*mapper.getNMRStarFile() == nmr_file, true)
 	TEST_EQUAL(mapper.getNMRAtomDataSet() != NULL, true)
@@ -434,7 +435,7 @@ CHECK(bool assignShifts(BALLToBMRBMapper& ball_to_bmrb_mapping))
 	
 	Chain& chain = *(S.beginChain());
 	NMRStarFile nmr_file(BALL_TEST_DATA_PATH(NMRStarFile_test_1z0r.bmr));
-	NMRStarFile::BALLToBMRBMapper mapper(chain, nmr_file, "'AbrBN subunit 1'");
+	NMRStarFile::BALLToBMRBMapper mapper(chain, nmr_file, "AbrBN");
 
 	// NOTE: for testing, we artificially create a gap. this leads to a lower number of assigned shifts later on
 	//       (606 instead of 617)
@@ -489,7 +490,7 @@ CHECK(assignShifts(AtomContainer& ac, const String& aligned_ball_sequence,
 	
 	NMRStarFile nmr_file(BALL_TEST_DATA_PATH(NMRStarFile_test_1z0r.bmr));
 	
-	bool worked = nmr_file.assignShifts(S, "'AbrBN subunit 1'",
+	bool worked = nmr_file.assignShifts(S, "AbrBN",
 			"MKSTGIVRKVDELGR-VVIPIELRRTLGIAEKDALEIYVDDEKIILKKYKPNMT", 
 			"MKSTGIVRKVDELGRVV-IPIELRRTLGIAEKDALEIYVDDEKIILKKYKPNMT"  );
 	TEST_EQUAL (worked, true)
