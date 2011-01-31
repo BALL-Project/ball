@@ -112,7 +112,7 @@ namespace BALL
 
 			// constant variables to denote unknown values
 			static const float    FLOAT_VALUE_NA;
-			static const int   	  INT_VALUE_NA;
+			static const int      INT_VALUE_NA;
 
 			static const Position POSITION_VALUE_NA;
 			
@@ -200,10 +200,10 @@ namespace BALL
 					Position	isotope_number;
 					String		atom_group;
 					String		shift_units;
-					float			shift_value;
+					float           shift_value;
 					String		reference_method;
 					String		reference_type;
-					float			indirect_shift_ratio;
+					float           indirect_shift_ratio;
 
 					std::ostream& operator >> (std::ostream& s);
 			};
@@ -240,9 +240,9 @@ namespace BALL
 					Position	residue_seq_code;
 					String		residue_label;
 					String		atom_name;
-					char			atom_type;
-					float			shift_value;
-					float			error_value;
+					char            atom_type;
+					float           shift_value;
+					float           error_value;
 					Position	ambiguity_code;
 					
 					bool operator == (const NMRAtomData& atom) const;
@@ -265,17 +265,17 @@ namespace BALL
 				public:
 					NMRAtomDataSet(NMRStarFile* parent);
 
-					String										name; 
-					String										label;
+					String                          name; 
+					String                          label;	
 					std::vector<NMRAtomData> 	atom_data;
-					String 										condition;  
-					String										reference;  
-					std::vector<String>				samples;   
+					String                          condition;  
+					String                          reference;  
+					std::vector<String>             samples;   
 
 					std::ostream& operator >> (std::ostream& s);
 	
 				protected: 
-					NMRStarFile* 							parent_;
+					NMRStarFile*                    parent_;
 			};
 
 			/** EntryInformation
@@ -390,6 +390,11 @@ namespace BALL
 
 					MolecularSystem(); 
 					~MolecularSystem(); 
+					
+					ChemicalUnit const&  getChemicalUnit(Position i) const { return chemical_units[i]; }
+					ChemicalUnit&  getChemicalUnit(Position i) { return chemical_units[i]; }
+					
+					Size getNumberOfChemicalUnits(){return chemical_units.size(); }					
 
 					// Name of the molecular system
 					String                system_name;
@@ -476,19 +481,19 @@ namespace BALL
 					
 					/// Set the chain
 					void setChain(Chain const& chain) { chain_ = &chain; 
-				                                      num_mismatches_ = -1; 
+				                                            num_mismatches_ = -1; 
 					                                    num_gabs_ = -1;}
 					
 					/// Set the NMRStar file
 					void setNMRStarFile(NMRStarFile const& nmrfile) {nmr_data_ = &nmrfile;
-						                                               num_mismatches_ = -1; 
+					                                                 num_mismatches_ = -1; 
 					                                                 num_gabs_ = -1;}
 
 					/// Get the NMRStar file
 					const NMRStarFile* getNMRStarFile() const {return nmr_data_;} 
 		
 					/// Set the NMRAtomDataSet
-					void setNMRAtomDataSet(NMRAtomDataSet const& nmr_atom_data_set){nmr_atom_data_set_= &nmr_atom_data_set;} //TODO
+					void setNMRAtomDataSet(NMRAtomDataSet const& nmr_atom_data_set){nmr_atom_data_set_= &nmr_atom_data_set;} 
 					
 					/// Set the NMRAtomDataSet by chemical unit name
 					bool setNMRAtomDataSetByName(String const& chemical_unit_name);
@@ -519,8 +524,8 @@ namespace BALL
 					
 					/** Return the atom mapped to the given NMRAtom.
 
-							@param  atom the NMRAtom 
-              @return the mapped BALL atom. If no atom can be matched a NULL pointer is returned.
+						@param  atom the NMRAtom 
+						@return the mapped BALL atom. If no atom can be matched a NULL pointer is returned.
 					*/
 					const Atom* getBALLAtom(const NMRAtomData& nmr_atom) const;
 
@@ -535,16 +540,15 @@ namespace BALL
 					
 					/** Create a trivial mapping between the given chain and the NMRStar file atoms.
 					 		
-							NOTE: this mapping only works for very simple cases as we assume no gabs.
+						NOTE: this mapping only works for very simple cases as we assume no gabs.
 
-							@return bool - <tt>true</tt> if creating the mapping was possible 
+						@return bool - <tt>true</tt> if creating the mapping was possible 
 					*/
 					bool createTrivialMapping();
 					
 					/** Create a mapping between the given chain and the molecular system named chemical_unit 
-					    of the given NMRStar file 
-					    atoms based on the given alignment.
-							The alignmed sequences should be given in OneLetterCode, where '-' denotes a gap.
+					    of the given NMRStar file atoms based on the given alignment.
+					    The alignmed sequences should be given in OneLetterCode, where '-' denotes a gap.
 
 						  @param  aligned_ball_sequence    the aligned protein or chain aminoacid sequence 
 						  @param  aligned_nmrstar_sequence the aligned aminoacid sequence of the NMRStar atoms  
@@ -552,7 +556,7 @@ namespace BALL
 						  @return bool - <tt>true</tt> if creating the mapping was possible 
 					*/
 					bool createMapping(const String& aligned_ball_sequence,
-														 const String& aligned_nmrstar_sequence);
+					                   const String& aligned_nmrstar_sequence);
 
 					/** Clear the object.
 					*/
@@ -565,8 +569,8 @@ namespace BALL
 					Peptides::NameConverter name_converter_;
 
 					/**     @name Atributes
-          */
-          //@{
+					*/
+					//@{
 					
 					/// map BALL atoms to NMR atom data
 					BALLToBMRBMapping       ball_to_bmrb_map_;
@@ -578,10 +582,10 @@ namespace BALL
 					const Chain*            chain_;
 					const NMRStarFile*      nmr_data_;
 					const NMRAtomDataSet*   nmr_atom_data_set_;
-					Position								nmr_atom_data_set_index_;
+					Position                nmr_atom_data_set_index_;
 					int                     num_mismatches_; 
 					int                     num_gabs_; 
-					bool 										valid_;
+					bool                    valid_;
 					//@}
 
 				private:
@@ -600,7 +604,7 @@ namespace BALL
 			
 			/** Detailed constuctor.
 			 *	Opens the given file and extracts all usefull data (Calls  \link read read \endlink). 
-		   *  @throw Exception::FileNotFound if the file could not be opened
+			 *  	@throw Exception::FileNotFound if the file could not be opened
 			 */
 			NMRStarFile(const String& file_name, File::OpenMode open_mode = std::ios::in);
 			
@@ -614,16 +618,16 @@ namespace BALL
 			//@{
 
 			/** Read an NMRStarFile.
-		   *  @throw Exception::ParseError if a syntax error was encountered
+			 *  @throw Exception::ParseError if a syntax error was encountered
 			 */
 			bool read();
 
 			/*  Read an NMRStarFile and assign the shifts to the
 			    given AtomContainer using a trivial standard mapping.
-			   	If the AtomContainer is a system, the first chain in chosen.  
+			    If the AtomContainer is a system, the first chain in chosen.  
 			 
-			 		@param  ac AtomContainer to which the NMRStarfile's shift should be assigned.
-          @return bool - <tt>true</tt> if reading the file was successful 
+			 	@param  ac AtomContainer to which the NMRStarfile's shift should be assigned.
+				@return bool - <tt>true</tt> if reading the file was successful 
 			 */
 			//TODO to be able to use this function, further functions getMapping() and assign() are needed.
 			bool read(AtomContainer& ac);
@@ -631,8 +635,8 @@ namespace BALL
 			/** Assign the shifts to the given AtomContainer as 
 			    denoted in the given {\b BALLToBMRBMapper}.
 					
-					@return bool - <tt>true</tt> if reading the file was successful 
-					@see   NMRStarFile::BALLToBMRBMapper
+				@return bool - <tt>true</tt> if reading the file was successful 
+				@see   NMRStarFile::BALLToBMRBMapper
 			 */
 			bool assignShifts(BALLToBMRBMapper& ball_to_bmrb_mapping); 
 
@@ -641,11 +645,11 @@ namespace BALL
 			    The alignmed sequences should be given in 
 			    OneLetterCode, where '-' denotes a gap. 		
 					
-					@param  ac              AtomContainer to which the NMRStarfile's shift should be assigned.		
-					@param  chemical_unit   the name of the molecular system (chemical unit) storing the atom shifts 
-					@param  aligned_ball_sequence    the aligned AtomContainers aminoacid sequence 
-					@param  aligned_nmrstar_sequence the aligned aminoacid sequence of the NMRStar file atoms 
-          @return bool - <tt>true</tt> if reading the file was successful 
+				@param  ac              AtomContainer to which the NMRStarfile's shift should be assigned.		
+				@param  chemical_unit   the name of the molecular system (chemical unit) storing the atom shifts 
+				@param  aligned_ball_sequence    the aligned AtomContainers aminoacid sequence 
+				@param  aligned_nmrstar_sequence the aligned aminoacid sequence of the NMRStar file atoms 
+				@return bool - <tt>true</tt> if reading the file was successful 
 			 */
 			bool assignShifts(AtomContainer& ac,  
 			                  const String& chemical_unit,
@@ -823,7 +827,7 @@ namespace BALL
 			bool isMonomericPolymer(String chemical_unit_label); 
 
 			/** Add a Monomeric Polymer
-				 	NOTE: if a poymer with the same name already exists, it will be overwritten! 
+			    NOTE: if a poymer with the same name already exists, it will be overwritten! 
 			*/
 			//TODO: Store changes/additions as Saveframes also in CIFFile
 			void addMonomericPolymer(MonomericPolymer mp);
@@ -831,11 +835,11 @@ namespace BALL
 
 			/** Get the sequence of residues of the i-th monomeric polymer in the file.
 					
-			 		This method automatically compares the i-th monomeric_polymers' residue sequence 
-			 		with the actual stored NMR shift data. If there is a mismatch, a warning is given!
-					If there is a mismatch or there is no monomeric_polymers residue sequence an empty. 
+			    This method automatically compares the i-th monomeric_polymers' residue sequence 
+			    with the actual stored NMR shift data. If there is a mismatch, a warning is given!
+			    If there is a mismatch or there is no monomeric_polymers residue sequence an empty. 
 					
-					@return String amino acid sequence
+				@return String amino acid sequence
 			*/
 			String getResidueSequence(Position i=0) const;
 			
@@ -856,12 +860,12 @@ namespace BALL
 			//@{
 
 			/** Equality operator.
-				  Test if both instances point to the same file.
+			    Test if both instances point to the same file.
 			 */
 			bool operator == (const NMRStarFile& f);
 
 			/** Inequality operator
-				  Test if both instances point to different files.
+			    Test if both instances point to different files.
 			 */
 			bool operator != (const NMRStarFile& f);
 	

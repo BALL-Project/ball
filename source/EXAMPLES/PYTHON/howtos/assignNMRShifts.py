@@ -16,31 +16,43 @@ import BALL
 #  exit()
 
 # read the NMRStar file
-f = BALL.NMRStarFile("../source/TEST/data/NMRStarFile_test_1z0r.bmr", BALL.File.MODE_IN)
+nmr_file = BALL.NMRStarFile("../../../TEST/data/NMRStarFile_test_1z0r.bmr", BALL.File.MODE_IN)
 #f = BALL.NMRStarFile(sys.argv[1], BALL.File.MODE_IN)
-f.read()
+if not nmr_file:
+  print "Could not open given file, aborting"
+  exit(-1)
 
-print f.getNumberOfAtoms()
+#nmr_file.read()
+
+print nmr_file.getNumberOfAtoms()
 
 # read the corresponding PDB file
-p = BALL.PDBFile("../source/TEST/data/NMRStarFile_test_1z0r.pdb", BALL.File.MODE_IN)
+p = BALL.PDBFile("../../../TEST/data/NMRStarFile_test_1z0r.pdb", BALL.File.MODE_IN)
 #p = BALL.PDBFile(sys.argv[2], BALL.File.MODE_IN)
+if not p:
+  print "Could not open given file, aborting"
+  exit(-1)
+
 S = BALL.System()
 p.read(S)
 
 # get the sequences to compute an alignment
 print BALL.Peptides.GetSequence(chains(S)[0])
-print f.getResidueSequence(0)
+print nmr_file.getResidueSequence(0)
+
+# get a chemical unit of this file
+chem_unit = nmr_file.getMolecularInformation().getChemicalUnit(0).label 
+print nmr_file.getMolecularInformation().system_name
 
 # create a mapping based on an alignment
-mapper = BALL.NMRStarFile.BALLToBMRBMapper(chains(S)[0], f)
+mapper = BALL.NMRStarFile.BALLToBMRBMapper(chains(S)[0], nmr_file, chem_unit)
 mapper.createMapping("MKSTGIVRKVDELGR-VVIPIELRRTLGIAEKDALEIYVDDEKIILKKYKPNMT", "MKSTGIVRKVDELGRVV-IPIELRRTLGIAEKDALEIYVDDEKIILKKYKPNMT")
 #mapper.createTrivialMapping()
 print mapper.getNumberOfMismatches()
 print mapper.getNumberOfGabs()
 
 # assign the shifts
-f.assignShifts(mapper)
+nmr_file.assignShifts(mapper)
 
 # get some print outs
 for a in BALL.atoms(S):

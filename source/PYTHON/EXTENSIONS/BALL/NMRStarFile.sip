@@ -218,10 +218,13 @@ class NMRStarFile
 
 					MolecularSystem(); 
 					~MolecularSystem(); 
+	
+					ChemicalUnit&  getChemicalUnit(Position i);
+					Size getNumberOfChemicalUnits();					
 
 					String system_name;
 					String abbreviation_common;
-//					vector<NMRStarFile::MolecularSystem::ChemicalUnit> chemical_units;  
+					//vector<NMRStarFile::MolecularSystem::ChemicalUnit> chemical_units;  
 					String system_physical_state;
 					String system_oligomer_state;
 					String system_paramagnetic;
@@ -269,6 +272,10 @@ class NMRStarFile
 					
 					void setNMRStarFile(const NMRStarFile&);
 					const NMRStarFile* getNMRStarFile() const;
+					
+					// void setNMRAtomDataSet(const NMRAtomDataSet& ); 
+					bool setNMRAtomDataSetByName(const String& );
+					//const NMRAtomDataSet* getNMRAtomDataSet();
 
 					// TODO!
 //					map<const Atom*, BMRBIndex>& getBALLToBMRBMapping();
@@ -289,6 +296,7 @@ class NMRStarFile
 					bool createTrivialMapping();
 					bool createMapping(const String&, const String&);	
 					void clear();
+
 			};
 
 			NMRStarFile();
@@ -315,7 +323,8 @@ class NMRStarFile
 			const EntryInformation& getEntryInformation() const;
 
 			const MolecularSystem& getMolecularInformation() const;
-			
+			MolecularSystem::ChemicalUnit& getChemicalUnitByLabel(const String& );
+	
 			bool hasSampleCondition(String );
 
 			SampleCondition& getSampleConditionByName(String );
@@ -337,7 +346,7 @@ class NMRStarFile
 //			const vector<ShiftReferenceSet>& getShiftReferenceSets() const;
 
 			Size getNumberOfShiftReferenceSets() const;
-			bool hasShiftReferenceSet(String name);	
+			bool hasShiftReferenceSet(String );	
 
 //			const ShiftReferenceSet& getShiftReferenceSet(Position ) const;
 			ShiftReferenceSet& getShiftReferenceSet(Position ); 
