@@ -266,6 +266,7 @@ namespace BALL
 					NMRAtomDataSet(NMRStarFile* parent);
 
 					String										name; 
+					String										label;
 					std::vector<NMRAtomData> 	atom_data;
 					String 										condition;  
 					String										reference;  

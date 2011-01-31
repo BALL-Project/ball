@@ -591,18 +591,29 @@ namespace BALL
 		valid_ = setNMRAtomDataSetByName(chemical_unit);
  	}
 	
-	bool NMRStarFile::BALLToBMRBMapper::setNMRAtomDataSetByName(String const& chemical_unit_name)
+	bool NMRStarFile::BALLToBMRBMapper::setNMRAtomDataSetByName(String const& chemical_unit_label)
 	{
 		bool found_chemical_unit = false;
-		
-		for (Size k=0; k < nmr_data_->atom_data_sets_.size(); k++)
-		{
-			if (nmr_data_->atom_data_sets_[k].name == chemical_unit_name)
+		String chemical_unit_name;
+
+		try {
+			MolecularSystem::ChemicalUnit const& cu = nmr_data_->getChemicalUnitByLabel(chemical_unit_label);
+			chemical_unit_name = cu.component_name;
+
+
+			// first, try to identify a data set with the same *name*
+			for (Size k=0; k < nmr_data_->atom_data_sets_.size(); k++)
 			{
-				found_chemical_unit = true;		
-				nmr_atom_data_set_  = &nmr_data_->atom_data_sets_[k];
-				nmr_atom_data_set_index_ = k;
+				if (nmr_data_->atom_data_sets_[k].name == chemical_unit_name)
+				{
+					found_chemical_unit = true;		
+					nmr_atom_data_set_  = &nmr_data_->atom_data_sets_[k];
+					nmr_atom_data_set_index_ = k;
+				}
 			}
+		} catch (...)
+		{
+			found_chemical_unit = false;
 		}
 
 		if (!found_chemical_unit)
@@ -691,7 +702,6 @@ namespace BALL
 	{ 
 		if (!valid_)
 		{
-std::cout << "create Trivial ist invalid!"<< std::endl;
 			return false;
 		}
 
@@ -1171,7 +1181,7 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 	bool NMRStarFile::assignShifts_(BALLToBMRBMapper& ball_to_bmrb_mapping)
 	{
 		number_of_assigned_shifts_ = 0;
-
+		std::cout << "trying assing" << std::endl;
 		ResidueIterator r_it;
 		if (ball_to_bmrb_mapping.getChain())
 			r_it = const_cast<Chain*>(ball_to_bmrb_mapping.getChain())->beginResidue();
@@ -1254,12 +1264,14 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 		
 	const NMRStarFile::MolecularSystem::ChemicalUnit& NMRStarFile::getChemicalUnitByLabel(String const& label) const
 	{
-		NMRStarFile::MolecularSystem mol_sys = getMolecularInformation();
+		NMRStarFile::MolecularSystem const& mol_sys = getMolecularInformation();
 
 		for (Position i=0; i<mol_sys.chemical_units.size(); ++i)
 		{
 			if (mol_sys.chemical_units[i].label == label)
+			{
 				return mol_sys.chemical_units[i];
+			}
 		}
 
 		throw (Exception::OutOfRange(__FILE__, __LINE__));
@@ -2005,6 +2017,7 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 								{		
 									//store the name
 									atom_data_set.name = (saveframes[sf].getItemValue("_Mol_system_component_name")).trim("$");
+									atom_data_set.label = saveframes[sf].framename;
 								}
 
 								// look for the samples
