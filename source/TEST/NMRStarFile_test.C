@@ -55,10 +55,13 @@ CHECK(MolecularSystem)
 	TEST_EQUAL(mol_sys.system_name, "\"endoglucanase Cel45A\"") //TODO 
 	TEST_EQUAL(mol_sys.abbreviation_common, "dockerin")
 	TEST_EQUAL(mol_sys.chemical_units.size(), 1)
+	TEST_EQUAL(mol_sys.getNumberOfChemicalUnits(), 1)	
 	if (mol_sys.chemical_units.size() > 0)
 	{	
 		TEST_EQUAL(mol_sys.chemical_units[0].component_name, "dockerin")
+		TEST_EQUAL(mol_sys.getChemicalUnit(0).component_name, "dockerin")
 		TEST_EQUAL(mol_sys.chemical_units[0].label, "dockerin")
+		TEST_EQUAL(mol_sys.getChemicalUnit(0).label, "dockerin")
 		TEST_EQUAL(mol_sys.chemical_units[0].monomeric_polymer != NULL, true)  //!= NULL
 
 		TEST_EQUAL(mol_sys.chemical_units[0].monomeric_polymer->label_name, "dockerin")
@@ -371,14 +374,14 @@ CHECK(BALLToBMRBMapper)
 
 	TEST_EQUAL(mapper.createTrivialMapping(), true)
 	TEST_EQUAL(mapper.getNumberOfMismatches(), 0)
-	TEST_EQUAL(mapper.getNumberOfGabs(), 0)
+	TEST_EQUAL(mapper.getNumberOfGaps(), 0)
 	
 	NMRStarFile:: BALLToBMRBMapper::BALLToBMRBMapping& all_mappings = mapper.getBALLToBMRBMapping();
 	TEST_EQUAL(all_mappings.size(), 617)
 	
 	TEST_EQUAL(mapper.createMapping("MKSTGIVRKVDELGRVVIPIELRRTLGIAEKDALEIYVDDEKIIL-KKYKPNMT", "AKSTGIVRKVDELGRVVIPIELRRTLGIAEKDALEIYVDDEKIILKK-YKPNMT"), true)		
 	TEST_EQUAL(mapper.getNumberOfMismatches(), 1)
-	TEST_EQUAL(mapper.getNumberOfGabs(),2)
+	TEST_EQUAL(mapper.getNumberOfGaps(),2)
 
 	NMRStarFile:: BALLToBMRBMapper::BMRBToBALLMapping& all_mappings2 = mapper.getBMRBToBALLMapping();
 	TEST_EQUAL(all_mappings2.size(), 617)

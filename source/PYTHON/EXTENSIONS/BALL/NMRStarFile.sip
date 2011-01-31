@@ -286,7 +286,7 @@ class NMRStarFile
 //					const BMRBToBALLMapping& getBMRBToBALLMapping() const;
 
 					int getNumberOfMismatches();
-					int getNumberOfGabs();
+					int getNumberOfGaps();
 					bool isMapped(const NMRStarFile::NMRAtomData&) const; // TODO!
 					const Atom* getBALLAtom(const NMRStarFile::NMRAtomData&) const;
 
@@ -322,7 +322,7 @@ class NMRStarFile
 
 			const EntryInformation& getEntryInformation() const;
 
-			const MolecularSystem& getMolecularInformation() const;
+			MolecularSystem& getMolecularInformation();
 			MolecularSystem::ChemicalUnit& getChemicalUnitByLabel(const String& );
 	
 			bool hasSampleCondition(String );

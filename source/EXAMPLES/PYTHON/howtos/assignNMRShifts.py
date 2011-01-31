@@ -4,7 +4,6 @@
 #
 import sys
 from BALL import *
-import BALL
 
 #### for use in BALLView
 #system = getSystems()[0]
@@ -16,50 +15,49 @@ import BALL
 #  exit()
 
 # read the NMRStar file
-nmr_file = BALL.NMRStarFile("../../../TEST/data/NMRStarFile_test_1z0r.bmr", BALL.File.MODE_IN)
-#f = BALL.NMRStarFile(sys.argv[1], BALL.File.MODE_IN)
+nmr_file = NMRStarFile("../../../TEST/data/NMRStarFile_test_1z0r.bmr", File.MODE_IN)
+#nmr_file = NMRStarFile(sys.argv[1], File.MODE_IN)
 if not nmr_file:
   print "Could not open given file, aborting"
   exit(-1)
 
-#nmr_file.read()
-
-print nmr_file.getNumberOfAtoms()
+print "File contains ", nmr_file.getNumberOfAtoms(), " chemcial shifts"
 
 # read the corresponding PDB file
-p = BALL.PDBFile("../../../TEST/data/NMRStarFile_test_1z0r.pdb", BALL.File.MODE_IN)
-#p = BALL.PDBFile(sys.argv[2], BALL.File.MODE_IN)
+p = PDBFile("../../../TEST/data/NMRStarFile_test_1z0r.pdb", File.MODE_IN)
+#p = PDBFile(sys.argv[2], File.MODE_IN)
 if not p:
   print "Could not open given file, aborting"
   exit(-1)
 
-S = BALL.System()
+S = System()
 p.read(S)
 
 # get the sequences to compute an alignment
-print BALL.Peptides.GetSequence(chains(S)[0])
+print Peptides.GetSequence(chains(S)[0])
 print nmr_file.getResidueSequence(0)
 
 # get a chemical unit of this file
 chem_unit = nmr_file.getMolecularInformation().getChemicalUnit(0).label 
-print nmr_file.getMolecularInformation().system_name
+print "Label of chemical unit: ", chem_unit
+print "Molecular systems name: ", nmr_file.getMolecularInformation().system_name
 
 # create a mapping based on an alignment
-mapper = BALL.NMRStarFile.BALLToBMRBMapper(chains(S)[0], nmr_file, chem_unit)
+mapper = NMRStarFile.BALLToBMRBMapper(chains(S)[0], nmr_file, chem_unit)
 mapper.createMapping("MKSTGIVRKVDELGR-VVIPIELRRTLGIAEKDALEIYVDDEKIILKKYKPNMT", "MKSTGIVRKVDELGRVV-IPIELRRTLGIAEKDALEIYVDDEKIILKKYKPNMT")
-#mapper.createTrivialMapping()
-print mapper.getNumberOfMismatches()
-print mapper.getNumberOfGabs()
+
+print "Number of mismatches: ", mapper.getNumberOfMismatches()
+print "Number of gaps: ", mapper.getNumberOfGaps()
 
 # assign the shifts
 nmr_file.assignShifts(mapper)
 
 # get some print outs
-for a in BALL.atoms(S):
+for a in atoms(S):
   if a.hasProperty("ExperimentalChemicalShift"):
 #    print a.getProperty("ExperimentalChemicalShift").getFloat()
     print a.getProperty(ShiftModule.PROPERTY__EXPERIMENTAL__SHIFT).getFloat()
 
-
 p.close()
-# done
+
+# we are done

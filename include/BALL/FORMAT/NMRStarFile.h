@@ -394,7 +394,7 @@ namespace BALL
 					ChemicalUnit const&  getChemicalUnit(Position i) const { return chemical_units[i]; }
 					ChemicalUnit&  getChemicalUnit(Position i) { return chemical_units[i]; }
 					
-					Size getNumberOfChemicalUnits(){return chemical_units.size(); }					
+					Size getNumberOfChemicalUnits() const {return chemical_units.size(); }					
 
 					// Name of the molecular system
 					String                system_name;
@@ -462,9 +462,9 @@ namespace BALL
 									
 					/** Detailed constructor
 					
-					@param  chain            the chain to be mapped to a shift reference set 
-					@param  nmr_data         the NMRStarFile provinding the chemical shifts for chain
-					@param  chemical_unit    the name of the molecular system (chemical unit) storing the atom shifts 
+					    @param  chain            the chain to be mapped to a shift reference set 
+					    @param  nmr_data         the NMRStarFile provinding the chemical shifts for chain
+				 	    @param  chemical_unit    the name of the molecular system (chemical unit) storing the atom shifts 
 					*/
 					BALLToBMRBMapper(Chain const& chain, const NMRStarFile& nmr_data, const String& chemical_unit);	
 					
@@ -481,13 +481,13 @@ namespace BALL
 					
 					/// Set the chain
 					void setChain(Chain const& chain) { chain_ = &chain; 
-				                                            num_mismatches_ = -1; 
-					                                    num_gabs_ = -1;}
+					                                    num_mismatches_ = -1; 
+					                                    num_gaps_ = -1;}
 					
 					/// Set the NMRStar file
 					void setNMRStarFile(NMRStarFile const& nmrfile) {nmr_data_ = &nmrfile;
 					                                                 num_mismatches_ = -1; 
-					                                                 num_gabs_ = -1;}
+					                                                 num_gaps_ = -1;}
 
 					/// Get the NMRStar file
 					const NMRStarFile* getNMRStarFile() const {return nmr_data_;} 
@@ -517,15 +517,15 @@ namespace BALL
 					int getNumberOfMismatches(){return num_mismatches_;}
 					
 					/// Return the number of mismatches in the current mapping
-					int getNumberOfGabs(){return num_gabs_;}
+					int getNumberOfGaps(){return num_gaps_;}
 
 					/// Test whether the given nmr atom data is mapped to a structure atom 
 					bool isMapped(const NMRAtomData& nmr_atom) const;
 					
 					/** Return the atom mapped to the given NMRAtom.
 
-						@param  atom the NMRAtom 
-						@return the mapped BALL atom. If no atom can be matched a NULL pointer is returned.
+						  @param  atom the NMRAtom 
+						  @return the mapped BALL atom. If no atom can be matched a NULL pointer is returned.
 					*/
 					const Atom* getBALLAtom(const NMRAtomData& nmr_atom) const;
 
@@ -540,7 +540,7 @@ namespace BALL
 					
 					/** Create a trivial mapping between the given chain and the NMRStar file atoms.
 					 		
-						NOTE: this mapping only works for very simple cases as we assume no gabs.
+						NOTE: this mapping only works for very simple cases as we assume no gaps.
 
 						@return bool - <tt>true</tt> if creating the mapping was possible 
 					*/
@@ -584,7 +584,7 @@ namespace BALL
 					const NMRAtomDataSet*   nmr_atom_data_set_;
 					Position                nmr_atom_data_set_index_;
 					int                     num_mismatches_; 
-					int                     num_gabs_; 
+					int                     num_gaps_; 
 					bool                    valid_;
 					//@}
 
@@ -626,8 +626,8 @@ namespace BALL
 			    given AtomContainer using a trivial standard mapping.
 			    If the AtomContainer is a system, the first chain in chosen.  
 			 
-			 	@param  ac AtomContainer to which the NMRStarfile's shift should be assigned.
-				@return bool - <tt>true</tt> if reading the file was successful 
+			 	  @param  ac AtomContainer to which the NMRStarfile's shift should be assigned.
+				  @return bool - <tt>true</tt> if reading the file was successful 
 			 */
 			//TODO to be able to use this function, further functions getMapping() and assign() are needed.
 			bool read(AtomContainer& ac);
@@ -635,8 +635,8 @@ namespace BALL
 			/** Assign the shifts to the given AtomContainer as 
 			    denoted in the given {\b BALLToBMRBMapper}.
 					
-				@return bool - <tt>true</tt> if reading the file was successful 
-				@see   NMRStarFile::BALLToBMRBMapper
+				  @return bool - <tt>true</tt> if reading the file was successful 
+				  @see   NMRStarFile::BALLToBMRBMapper
 			 */
 			bool assignShifts(BALLToBMRBMapper& ball_to_bmrb_mapping); 
 
@@ -645,11 +645,11 @@ namespace BALL
 			    The alignmed sequences should be given in 
 			    OneLetterCode, where '-' denotes a gap. 		
 					
-				@param  ac              AtomContainer to which the NMRStarfile's shift should be assigned.		
-				@param  chemical_unit   the name of the molecular system (chemical unit) storing the atom shifts 
-				@param  aligned_ball_sequence    the aligned AtomContainers aminoacid sequence 
-				@param  aligned_nmrstar_sequence the aligned aminoacid sequence of the NMRStar file atoms 
-				@return bool - <tt>true</tt> if reading the file was successful 
+				  @param  ac              AtomContainer to which the NMRStarfile's shift should be assigned.		
+				  @param  chemical_unit   the name of the molecular system (chemical unit) storing the atom shifts 
+				  @param  aligned_ball_sequence    the aligned AtomContainers aminoacid sequence 
+				  @param  aligned_nmrstar_sequence the aligned aminoacid sequence of the NMRStar file atoms 
+				  @return bool - <tt>true</tt> if reading the file was successful 
 			 */
 			bool assignShifts(AtomContainer& ac,  
 			                  const String& chemical_unit,

@@ -569,7 +569,7 @@ namespace BALL
 			chain_(NULL),
 			nmr_data_(NULL),
 			num_mismatches_(0),
-			num_gabs_(0)
+			num_gaps_(0)
 	{
  	}
 
@@ -585,7 +585,7 @@ namespace BALL
 			nmr_atom_data_set_(NULL),
 			nmr_atom_data_set_index_(0),
 			num_mismatches_(0),
-			num_gabs_(0),
+			num_gaps_(0),
 			valid_(true)
 	{
 		valid_ = setNMRAtomDataSetByName(chemical_unit);
@@ -706,7 +706,7 @@ namespace BALL
 		}
 
 		num_mismatches_  = -1;	
-		num_gabs_        = -1;
+		num_gaps_        = -1;
 
 		// walk over the NMRAtomData sets of the nmr data file
 		// NOTE: currently, we walk only over the first of those data sets
@@ -727,7 +727,7 @@ namespace BALL
 		}
 
 		num_mismatches_  = 0;	
-		num_gabs_        = 0;
+		num_gaps_        = 0;
 		
 		const NMRAtomDataSet* nmr_atom_data_set = nmr_atom_data_set_;
 		if (!nmr_atom_data_set_)
@@ -765,7 +765,7 @@ namespace BALL
 
 		int  matches     =  0;
 		num_mismatches_  = -1;	
-		num_gabs_        = -1;
+		num_gaps_        = -1;
 	
 		String chain_seq = Peptides::GetSequence(*chain_);
 
@@ -801,7 +801,7 @@ namespace BALL
 		}
 		
 		num_mismatches_  = 0;	
-		num_gabs_        = 0;
+		num_gaps_        = 0;
 
 		std::vector<NMRAtomData> const& nmr_data = nmr_atom_data_set_->atom_data;
 
@@ -832,7 +832,7 @@ namespace BALL
 					&& (aligned_nmrstar_sequence[i] == '-'))
 			{
 				Log.warn() << "BALLToBMRBMapper::createMapping(): Warning: Gaps in both aligned sequences!" << endl;	
-				num_gabs_++;
+				num_gaps_++;
 			}
 			else
 			{
@@ -845,7 +845,7 @@ namespace BALL
 					Log.warn() << "BALLToBMRBMapper::createMapping(): Warning: NMR residue no" << i << " " 
 						         << aligned_nmrstar_sequence[i] << " has no assigned structure residue!" << endl; 
 #endif
-					num_gabs_++;
+					num_gaps_++;
 				}
 				else if (aligned_nmrstar_sequence[i] == '-')
 				{	
@@ -853,7 +853,7 @@ namespace BALL
 					// the current residue cannot be assigned any shifts!
 					res_it++;
 					num_nmr_alig_gaps++;
-					num_gabs_++;
+					num_gaps_++;
 
 #if defined NMRSTAR_DEBUG || defined NMRSTAR_DEBUG_MAPPING					
 					Log.warn() << "BALLToBMRBMapper::createMapping(): Warning: Structure residue no " << i << " " 
@@ -927,7 +927,7 @@ namespace BALL
 		nmr_atom_data_set_ = NULL;
 		nmr_atom_data_set_index_ = 0;
 		num_mismatches_    = -1;
-		num_gabs_ = -1; 
+		num_gaps_ = -1; 
 		valid_    = false;
 	}
 
@@ -1176,12 +1176,11 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 	}
 
 
-  //  Apply the shifts read into to the AtomContainer as denoted in the mapping.
+	//  Apply the shifts read into to the AtomContainer as denoted in the mapping.
 	//  We assume, that the file was already read!
 	bool NMRStarFile::assignShifts_(BALLToBMRBMapper& ball_to_bmrb_mapping)
 	{
 		number_of_assigned_shifts_ = 0;
-		std::cout << "trying assing" << std::endl;
 		ResidueIterator r_it;
 		if (ball_to_bmrb_mapping.getChain())
 			r_it = const_cast<Chain*>(ball_to_bmrb_mapping.getChain())->beginResidue();
@@ -2168,8 +2167,8 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 		{
 			for (Size i=0; i < atom_data_sets_.size(); i++)
 			{
-				if (  atom_data_sets_[i].name == molecular_system_.chemical_units[j].component_name
-						||atom_data_sets_[i].name == molecular_system_.chemical_units[j].label)
+				if (   atom_data_sets_[i].name == molecular_system_.chemical_units[j].component_name
+				    || atom_data_sets_[i].name == molecular_system_.chemical_units[j].label)
 				{
 					molecular_system_.chemical_units[j].shifts = &atom_data_sets_[i];
 					break;
