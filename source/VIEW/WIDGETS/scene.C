@@ -3558,7 +3558,10 @@ namespace BALL
 
 		bool Scene::isRecording() const
 		{
-			return record_animation_action_->isChecked();
+			if (!record_animation_action_)
+				return false;
+			else
+				return record_animation_action_->isChecked();
 		}
 
 		void Scene::captureCamera()
