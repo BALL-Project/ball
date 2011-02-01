@@ -651,7 +651,7 @@ namespace BALL
 																		 UIOperationMode::MODE_ADVANCED);
 			setMenuHelp(deselect_id_, "molecularControl.html#selection_highlight");
 
-			main_control.insertPopupMenuSeparator(MainControl::EDIT);
+			main_control.insertPopupMenuSeparator(MainControl::EDIT, UIOperationMode::MODE_ADVANCED);
 
 			String description = "Shortcut|Edit|Cut";
 			cut_id_ = insertMenuEntry(MainControl::EDIT, tr("Cu&t"), this, 
@@ -669,7 +669,7 @@ namespace BALL
 																  tr(""), UIOperationMode::MODE_ADVANCED);
 
 			main_control.insertDeleteEntry();
-			main_control.insertPopupMenuSeparator(MainControl::EDIT);
+			main_control.insertPopupMenuSeparator(MainControl::EDIT, UIOperationMode::MODE_ADVANCED);
 
 			description = "Shortcut|Edit|Clear_Clipboard";
 			clipboard_id_ = insertMenuEntry(MainControl::EDIT, tr("Clear Clipboard"), this, 

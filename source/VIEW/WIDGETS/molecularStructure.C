@@ -147,7 +147,7 @@ namespace BALL
 																				 UIOperationMode::MODE_ADVANCED);
 			setMenuHelp(mdsimulation_id_, "mm.html#md");
 
-			getMainControl()->insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
+			getMainControl()->insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS, UIOperationMode::MODE_ADVANCED);
 
 			description = "Shortcut|MolecularMechanics|Choose_ForceField|Amber";
 			amber_ff_id_ = insertMenuEntry(MainControl::CHOOSE_FF, tr("Amber"), this, 
@@ -190,7 +190,7 @@ namespace BALL
 			setMenuHelp(setup_ff_, "mm.html");
 
 			// Tools Menu -------------------------------------------------------------------
-			getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
+			getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS, UIOperationMode::MODE_ADVANCED);
 //			hint = " Map two proteins.";
 // 			map_proteins_id_ = insertMenuEntry(MainControl::TOOLS, "&Map two Proteins", this, SLOT(mapProteins()), 0, -1, hint);
 
@@ -718,7 +718,9 @@ namespace BALL
 				calculate_hbonds_id_->setEnabled( one_system && composites_muteable);
 
 			// prevent changes to forcefields, if simulation is running
-			getMainControl()->initPopupMenu(MainControl::CHOOSE_FF)->setEnabled(composites_muteable);
+			QMenu* menu = getMainControl()->initPopupMenu(MainControl::CHOOSE_FF, UIOperationMode::MODE_ADVANCED);
+			if (menu)
+				menu->setEnabled(composites_muteable);
 			
 			if (build_peptide_id_)
 				build_peptide_id_->setEnabled(composites_muteable);
