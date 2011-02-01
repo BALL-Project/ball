@@ -459,7 +459,7 @@ namespace BALL
 																				 UIOperationMode::MODE_ADVANCED);
 			getDatasetControl()->setMenuHelp(action, "datasetControl.html#volume");
 
-			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS_GRID);
+			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS_GRID, UIOperationMode::MODE_ADVANCED);
 
 			// visualizations:
 			description = "Shortcut|Tools|Grid|Visualize_3D_Grid";
@@ -481,7 +481,7 @@ namespace BALL
 			                 description, QKeySequence(), tr("Create a sphere for the grid, e.g. for colorizing"),
 											 UIOperationMode::MODE_ADVANCED);
 
-			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS_GRID);
+			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS_GRID, UIOperationMode::MODE_ADVANCED);
 
 			return true;
 		}
@@ -854,7 +854,7 @@ namespace BALL
 		{
 			if (!DatasetController::createMenuEntries()) return false;
 
-			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
+			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS, UIOperationMode::MODE_ADVANCED);
 
 			String description = "Shortcut|TrajectoryController|Buffer_Trajectory";
 			QAction* action = insertMenuEntry_(MainControl::TOOLS, "Buffer Trajectory", SLOT(bufferTrajectory()), 
@@ -865,7 +865,7 @@ namespace BALL
 			insertMenuEntry_(MainControl::TOOLS, "Visualize Trajectory", SLOT(visualizeTrajectory()),
 			                 description, QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 
-			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
+			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS, UIOperationMode::MODE_ADVANCED);
 
 			return true;
 		}
@@ -999,7 +999,7 @@ namespace BALL
 
 			insertMenuEntry_(MainControl::TOOLS, "Visualize DockResult", SLOT(showDockResult()), "Shortcut|Tools|Visualize_DockResult");
 
-			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
+			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS, UIOperationMode::MODE_ADVANCED);
 
 			return true;
 		}
@@ -1121,7 +1121,7 @@ namespace BALL
 			                 "Shortcut|Tools|Grid|Visualize_Field_Lines", QKeySequence(),
 											 tr("Visualise a gradient grid per field lines"), UIOperationMode::MODE_ADVANCED);
 
-			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS_GRID);
+			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS_GRID, UIOperationMode::MODE_ADVANCED);
 
 			return true;
 		}
@@ -1239,7 +1239,7 @@ namespace BALL
 		{
 			if (!DatasetController::createMenuEntries()) return false;
 
-			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS_GRID);
+			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS_GRID, UIOperationMode::MODE_ADVANCED);
 
 			return true;
 		}
