@@ -201,23 +201,28 @@ namespace BALL
 
 		// TODO: why is this done here and not, e.g., in mainControl()???
 		description = "Shortcut|MolecularMechanics|Abort_Calculation";
-		stop_simulation_action_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, (String)tr("Abort Calculation"), this,
-		                                          SLOT(stopSimulation()), description,
-		                                          QKeySequence("Alt+C"));
+		stop_simulation_action_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, (String)tr("Abort Calculation"), this, 
+																							SLOT(stopSimulation()), description, QKeySequence("Alt+C"), 
+																							UIOperationMode::MODE_ADVANCED);
+		if (stop_simulation_action_)
+		{
+			stop_simulation_action_->setEnabled(false);
+			setMenuHint(stop_simulation_action_, (String)tr("Abort a running simulation"));
+			insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
+
+			stop_simulation_action_->setIcon(IconLoader::instance().getIcon("actions/process-stop"));
+		}
 		
-		stop_simulation_action_->setEnabled(false);
-		insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
-		setMenuHint(stop_simulation_action_, (String)tr("Abort a running simulation"));
-		
-		stop_simulation_action_->setIcon(IconLoader::instance().getIcon("actions/process-stop"));
 		
 		description = "Shortcut|Edit|Invert_Selection";
-		complement_selection_action_ = insertMenuEntry(MainControl::EDIT, (String)tr("Invert Selection"), this,
-		                                               SLOT(complementSelection()), description);
+		complement_selection_action_ = insertMenuEntry(MainControl::EDIT, (String)tr("Invert Selection"), this, 
+																									 SLOT(complementSelection()), description, QKeySequence(), 
+																									 UIOperationMode::MODE_ADVANCED);
 
 		description = "Shortcut|Edit|Clear_Selection";
-		clear_selection_action_ = insertMenuEntry(MainControl::EDIT, (String)tr("Clear Selection"), this,
-		                                          SLOT(clearSelection()), description);
+		clear_selection_action_ = insertMenuEntry(MainControl::EDIT, (String)tr("Clear Selection"), this, 
+																							SLOT(clearSelection()), description, QKeySequence(),
+																							UIOperationMode::MODE_ADVANCED);
 
 
  		qApp->installEventFilter(this);
@@ -325,16 +330,20 @@ namespace BALL
 			return;
 		}
 
-
 		QToolBar* tb = new QToolBar("Main Toolbar", this);
 		tb->setObjectName("Main Toolbar");
 		tb->setIconSize(QSize(22,22));
 		addToolBar(Qt::TopToolBarArea, tb);
-		
 		MainControl::show();
 
-		initPopupMenu(MainControl::WINDOWS)->addSeparator();
-		initPopupMenu(MainControl::WINDOWS)->addAction(tb->toggleViewAction());
+		QMenu *menu = initPopupMenu(MainControl::WINDOWS, UIOperationMode::MODE_ADVANCED);
+
+		if (menu)
+		{
+			menu->addSeparator();
+		  menu->addAction(tb->toggleViewAction());
+		}
+
 		MolecularFileDialog::getInstance(0)->addToolBarEntries(tb);
 		DownloadPDBFile::getInstance(0)->addToolBarEntries(tb);
 		DownloadElectronDensity::getInstance(0)->addToolBarEntries(tb);
