@@ -112,6 +112,11 @@ namespace BALL
 				else // we have this action
 				{
 					QAction* action = shortcuts_[fields[0]];
+
+					// in kiosk mode, the action might be 0
+					if (!action)
+						continue;
+
 					if (!action->parent())
 					{
 						Log.error() << "ShortcutRegistry: action associated with description " << fields[0] << " has no parent! Ignoring!" << std::endl;
@@ -231,7 +236,10 @@ namespace BALL
 
 			QByteArray out;
 
-			for (; it->second->shortcut().isEmpty(); ++it) ;
+			for (; it!=shortcuts_.end() && (!it->second || it->second->shortcut().isEmpty()); ++it) ;
+
+			if (it == shortcuts_.end())
+				return true;
 
 			value += ascii(QByteArray(it->first.c_str()).toPercentEncoding());
 			value += IN_SC_SEPERATOR;
@@ -239,7 +247,7 @@ namespace BALL
 
 			for (++it; it != shortcuts_.end(); ++it)
 			{
-				if (it->second->shortcut().isEmpty())
+				if (!it->second || it->second->shortcut().isEmpty())
 				{
 					continue;
 				}
