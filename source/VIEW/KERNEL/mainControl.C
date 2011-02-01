@@ -386,10 +386,12 @@ namespace BALL
 					break;
 #endif
 				case MOLECULARMECHANICS:
-					menu = menuBar()->addMenu(tr("&Molecular Mechanics"));
+					menu = addMenu(tr("&Molecular Mechanics"), UIOperationMode::MODE_ADVANCED);
 					break;
 				case CHOOSE_FF:
-					menu = initPopupMenu(MOLECULARMECHANICS)->addMenu(tr("Force Field"));
+					menu = initPopupMenu(MOLECULARMECHANICS, UIOperationMode::MODE_ADVANCED);
+					if (menu)
+						menu = menu->addMenu(tr("Force Field"));
 					break;
 				case TOOLS:
 					menu = menuBar()->addMenu(tr("&Tools"));
@@ -520,7 +522,7 @@ namespace BALL
 			preferences_dialog_->showEntry(main_control_preferences_);
 
 			// own menu entries
-			insertPopupMenuSeparator(MainControl::FILE);
+			insertPopupMenuSeparator(MainControl::FILE, UIOperationMode::MODE_KIOSK);
 
 			String description = "Shortcut|File|Quit";
 			insertMenuEntry(MainControl::FILE, (String)tr("&Quit"), qApp, 
@@ -530,7 +532,7 @@ namespace BALL
 			// if the preferences dialog has any tabs then show it
 			if (preferences_dialog_->hasPages())
 			{
-				insertPopupMenuSeparator(MainControl::EDIT);
+				insertPopupMenuSeparator(MainControl::EDIT, UIOperationMode::MODE_ADVANCED);
 
 				String description = "Shortcut|Edit|Preferences";
 				preferences_action_ = insertMenuEntry(MainControl::EDIT, (String)tr("Preferences"), preferences_dialog_, 
@@ -846,6 +848,7 @@ namespace BALL
 			if (popup == 0)
 			{
 				Log.error() << "MainControl::insertMenuEntry: cannot find popup menu for ID " << parent_id << endl;
+				Log.error() << "Requested menu name/description was: " << name << " / " << description << std::endl;
 				return 0;
 			}
 
@@ -886,8 +889,11 @@ namespace BALL
 			popup->removeAction(action);
 		}
 
-		void MainControl::insertPopupMenuSeparator(int ID)
+		void MainControl::insertPopupMenuSeparator(int ID, UIOperationMode::OperationMode mode)
 		{
+			if (UIOperationMode::instance().getMode() > mode)
+				return;
+
 			QMenu* popup = initPopupMenu(ID);
 			if (popup == 0)
 			{
@@ -1618,7 +1624,8 @@ namespace BALL
 			if (delete_action_ == 0) 
 			{
 				delete_action_ = insertMenuEntry(MainControl::EDIT, (String)tr("Delete"), this, 
-												 SLOT(deleteClicked()), "Shortcut|Edit|Delete", QKeySequence::Delete);	
+												 SLOT(deleteClicked()), "Shortcut|Edit|Delete", QKeySequence::Delete,
+												 UIOperationMode::MODE_ADVANCED);	
 			}
 		}
 
