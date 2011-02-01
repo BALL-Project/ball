@@ -541,7 +541,7 @@ namespace BALL
 					\param ID the id of the menu to which a separator will be inserted
 					\see   PopUpID
 			*/
-			void insertPopupMenuSeparator(int ID);
+			void insertPopupMenuSeparator(int ID, UIOperationMode::OperationMode mode = UIOperationMode::MODE_ALL);
 
 			/// Set a hint for a menu entry
 			void setMenuHint(QAction* id, const String& hint);

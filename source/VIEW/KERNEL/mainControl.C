@@ -520,7 +520,7 @@ namespace BALL
 			preferences_dialog_->showEntry(main_control_preferences_);
 
 			// own menu entries
-			insertPopupMenuSeparator(MainControl::FILE);
+			insertPopupMenuSeparator(MainControl::FILE, UIOperationMode::MODE_KIOSK);
 
 			String description = "Shortcut|File|Quit";
 			insertMenuEntry(MainControl::FILE, (String)tr("&Quit"), qApp, 
@@ -530,7 +530,7 @@ namespace BALL
 			// if the preferences dialog has any tabs then show it
 			if (preferences_dialog_->hasPages())
 			{
-				insertPopupMenuSeparator(MainControl::EDIT);
+				insertPopupMenuSeparator(MainControl::EDIT, UIOperationMode::MODE_ADVANCED);
 
 				String description = "Shortcut|Edit|Preferences";
 				preferences_action_ = insertMenuEntry(MainControl::EDIT, (String)tr("Preferences"), preferences_dialog_, 
@@ -886,8 +886,11 @@ namespace BALL
 			popup->removeAction(action);
 		}
 
-		void MainControl::insertPopupMenuSeparator(int ID)
+		void MainControl::insertPopupMenuSeparator(int ID, UIOperationMode::OperationMode mode)
 		{
+			if (UIOperationMode::instance().getMode() > mode)
+				return;
+
 			QMenu* popup = initPopupMenu(ID);
 			if (popup == 0)
 			{
