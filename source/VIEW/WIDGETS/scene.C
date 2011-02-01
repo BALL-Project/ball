@@ -1327,7 +1327,7 @@ namespace BALL
 				setMenuHelp(clear_animation_action_, help_url);
 			}
 
-			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
+			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION, UIOperationMode::MODE_ADVANCED);
 
 			start_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Start"), this, 
 			                                          SLOT(startAnimation()), "Shortcut|Display|Animation|Start",
@@ -1347,7 +1347,7 @@ namespace BALL
 				setMenuHelp(cancel_animation_action_, help_url);
 			}
 
-			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
+			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION, UIOperationMode::MODE_ADVANCED);
 
 			animation_export_PNG_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Export PNG"), this, 
 			                                               SLOT(dummySlot()), "Shortcut|Display|Animation|Export_PNG",
@@ -1380,7 +1380,7 @@ namespace BALL
 			}
 
 			// ======================== Display->Stereo ===============================================
-			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
+			main_control.insertPopupMenuSeparator(MainControl::DISPLAY, UIOperationMode::MODE_ADVANCED);
 
 			no_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, tr("No Stereo"), this, 
 			                                    SLOT(exitStereo()), "Shortcut|Display|Stereo|No_Stereo",
@@ -1426,7 +1426,7 @@ namespace BALL
 			}
 
 			// ======================== Display->Viewpoint ===============================================
-			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT);
+			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT, UIOperationMode::MODE_KIOSK);
 
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("&Store Viewpoint"), this, 
 			                SLOT(storeViewPoint()), "Shortcut|Display|Viewpoint|Store",
@@ -1436,7 +1436,7 @@ namespace BALL
 			                SLOT(restoreViewPoint()), "Shortcut|Display|Viewpoint|Restore", QKeySequence(),
 											tr("Restore the viewpoint"), UIOperationMode::MODE_KIOSK);
 
-			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT);
+			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT, UIOperationMode::MODE_KIOSK);
 
 			String description("Shortcut|Display|Viewpoint|Show_Vie&wpoint");
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("Show Viewpoint"), this, 
@@ -1454,7 +1454,7 @@ namespace BALL
 			                SLOT(resetCamera_()), description, QKeySequence(), 
 											tr("Reset the camera to the orgin (0,0,0)"), UIOperationMode::MODE_KIOSK);
 
-			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT);
+			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT, UIOperationMode::MODE_KIOSK);
 
 			description = "Shortcut|Display|Viewpoint|Limit_View_Volume";
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("Limit View Volume"), this, 
@@ -1557,7 +1557,9 @@ namespace BALL
 			connect(add_hydrogens_action_, SIGNAL(triggered()), this, SLOT(saturateWithHydrogens()));
 			getMainControl()->getShortcutRegistry().registerShortcut(description, add_hydrogens_action_);
 
-			getMainControl()->initPopupMenu(MainControl::BUILD)->addAction(add_hydrogens_action_);
+			QMenu* menu = getMainControl()->initPopupMenu(MainControl::BUILD);
+			if (menu)
+				menu->addAction(add_hydrogens_action_);
 
 
 			//TODO create an icon
