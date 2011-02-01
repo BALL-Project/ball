@@ -488,14 +488,15 @@ namespace BALL
 	insertMenuEntry(MainControl::TOOLS_PYTHON, tr("Clear Editor"), this,
 									SLOT(clearScript()), "Shortcut|Tools|Python|Clear_editor",
 									UIOperationMode::MODE_ADVANCED);
-
 			startInterpreter();
 
 			valid_ = PyInterpreter::isValid();
 
 			if (!valid_)
 			{
-				getMainControl()->initPopupMenu(MainControl::TOOLS_PYTHON)->setEnabled(false);
+		QMenu* menu = getMainControl()->initPopupMenu(MainControl::TOOLS_PYTHON, UIOperationMode::MODE_ADVANCED);
+		if (menu)
+			menu->setEnabled(false);
 				appendText("> "+ (String)tr("No Python support available:"), true);
 				runString("import BALL");
 				setEnabled(false);
@@ -599,7 +600,7 @@ namespace BALL
 			////////////////////////////////////////////////
 			hotkeys_ = (python_settings_->getContent());
 
-			QMenu* menu = getMainControl()->initPopupMenu(MainControl::USER);
+	QMenu* menu = getMainControl()->initPopupMenu(MainControl::USER, UIOperationMode::MODE_ADVANCED);
 	if (menu)
 	{
 		menu->clear();
@@ -637,7 +638,7 @@ namespace BALL
 			setMenuHelp(action, "pythonInterpreter.html#create_hotkeys");
 		}
 
-		getMainControl()->insertPopupMenuSeparator(MainControl::USER);
+		getMainControl()->insertPopupMenuSeparator(MainControl::USER, UIOperationMode::MODE_ADVANCED);
 		QAction* action = insertMenuEntry(MainControl::USER, tr("Modify"), this, SLOT(modifyHotkeys()), "", QKeySequence(),
 		                                  tr("Manage user defined Python commands"), UIOperationMode::MODE_ADVANCED);
 		setMenuHelp(action, "pythonInterpreter.html#create_hotkeys");
@@ -1867,7 +1868,9 @@ namespace BALL
 
 		void PyWidget::checkMenu(MainControl& main_control)
 		{
-			main_control.initPopupMenu(MainControl::TOOLS_PYTHON)->setEnabled(!main_control.isBusy());
+	QMenu* menu = main_control.initPopupMenu(MainControl::TOOLS_PYTHON, UIOperationMode::MODE_ADVANCED);
+	if (menu)
+		menu->setEnabled(!main_control.isBusy());
 		}
 
 		bool PyWidget::isInDirectMode() const
