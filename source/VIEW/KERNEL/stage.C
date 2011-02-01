@@ -107,6 +107,7 @@ namespace BALL
 				specular_color(ColorRGBA(255, 255, 255, 255)),
 				specular_intensity(1.),
 				reflective_color(ColorRGBA(255, 255, 255, 255)),
+				reflective_intensity(0.),
 				shininess(60.),
 				transparency(0.)
 		{
