@@ -4,7 +4,7 @@
 
 #include <BALL/FORMAT/NMRStarFile.h>
 #include <BALL/FORMAT/lineBasedFile.h>
-#include <iostream> 
+#include <iostream>
 #include <fstream>
 
 #include <BALL/KERNEL/system.h>
@@ -24,7 +24,7 @@ using namespace std;
 namespace BALL
 {
 	const float    NMRStarFile::FLOAT_VALUE_NA    = Limits<float>::max();
-	const int      NMRStarFile::INT_VALUE_NA    	= Limits<Position>::max();
+	const int      NMRStarFile::INT_VALUE_NA      = Limits<Position>::max();
 	const Position NMRStarFile::POSITION_VALUE_NA = Limits<Position>::max();
 
 	NMRStarFile::NMRAtomData::NMRAtomData()
@@ -61,7 +61,7 @@ namespace BALL
 	{
 	}
 
-	ostream& NMRStarFile::NMRAtomData::operator >> (ostream &s)	
+	ostream& NMRStarFile::NMRAtomData::operator >> (ostream &s)
 	{
 		// TODO: if POSITION_VALUE_NA, FLOAT_VALUE_NA ... -> NA ausgeben
 		s << "atom_ID: "					  << atom_ID ;
@@ -74,7 +74,7 @@ namespace BALL
 		return s;
 	}
 
-	ostream& NMRStarFile::SampleCondition::operator >> (std::ostream& s)		
+	ostream& NMRStarFile::SampleCondition::operator >> (std::ostream& s)
 	{
 		// TODO: if POSITION_VALUE_NA, FLOAT_VALUE_NA ... -> NA ausgeben
 		if (values.size() != errors.size() && errors.size() != units.size())
@@ -86,13 +86,13 @@ namespace BALL
 		s << "set " << name  << std::endl;
 		for (Size i=0; i < types.size(); i++)
 		{
-					s << types[i] << " = " << values[types[i]] << " " << units[types[i]] << " with error " << errors[types[i]] << std::endl;  
+					s << types[i] << " = " << values[types[i]] << " " << units[types[i]] << " with error " << errors[types[i]] << std::endl;
 		}
 
 		s << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " << endl << endl;
 		return s;
 	}
-	
+
 	NMRStarFile::Sample::Component::Component()
 		: label(""),
 		concentration_value(0.),
@@ -114,9 +114,9 @@ namespace BALL
 	}
 
 	ostream& NMRStarFile::Sample::Component::operator >> (std::ostream& s)
-	{	
-		s << "   " << label << " :\t value: " << concentration_value 
-			<< " unit: " << value_unit 
+	{
+		s << "   " << label << " :\t value: " << concentration_value
+			<< " unit: " << value_unit
 			<< " concentration_min: " << concentration_min
 			<< " concentration_max: " << concentration_max
 			<< " isotopic labeling: " << isotopic_labeling << std::endl;
@@ -141,12 +141,12 @@ namespace BALL
 
 
 	ostream& NMRStarFile::Sample::operator >> (std::ostream& s)
-	{	
+	{
 		s << endl<< "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << endl;
 		s << "label: " << label
 			<< " type: " << type
 			<< " details : " << details << endl;
-		s	<< " components: " << endl;
+		s << " components: " << endl;
 		for (Size i=0; i< components.size(); i++)
 		{
 			if (i!=0)
@@ -159,23 +159,23 @@ namespace BALL
 
 
 
-	ostream& NMRStarFile::ShiftReferenceElement::operator >> (std::ostream& s)		
+	ostream& NMRStarFile::ShiftReferenceElement::operator >> (std::ostream& s)
 	{
 		// TODO: if POSITION_VALUE_NA, FLOAT_VALUE_NA ... -> NA ausgeben
 		s << endl;
 		s << "mol_common_name: "		<< mol_common_name << endl;
 		s << "atom_type: "					<< atom_type << endl;
-		s << "isotope_number: "		<< isotope_number << endl;
-		s << "atom_group: "				<< atom_group << endl;
+		s << "isotope_number: "		  << isotope_number << endl;
+		s << "atom_group: "				  << atom_group << endl;
 		s << "shift_units: "				<< shift_units << endl;
 		s << "shift_value: "				<< shift_value << endl;
-		s << "reference_method: "  << reference_method << endl;
-		s << "reference_type: " 		<< reference_type << endl;
+		s << "reference_method: "   << reference_method << endl;
+		s << "reference_type: "     << reference_type << endl;
 		s << "indirect_shift_ratio: " <<  indirect_shift_ratio << endl << endl;
 		return s;
 	}
-	
-	ostream& NMRStarFile::ShiftReferenceSet::operator >> (std::ostream& s)	
+
+	ostream& NMRStarFile::ShiftReferenceSet::operator >> (std::ostream& s)
 	{
 		// TODO: if POSITION_VALUE_NA, FLOAT_VALUE_NA ... -> NA ausgeben
 		s << endl<< "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << endl;
@@ -197,7 +197,7 @@ namespace BALL
 	{
 	}
 
-	ostream& NMRStarFile::NMRAtomDataSet::operator >> (std::ostream& s)		
+	ostream& NMRStarFile::NMRAtomDataSet::operator >> (std::ostream& s)
 	{
 		// TODO: if POSITION_VALUE_NA, FLOAT_VALUE_NA ... -> NA ausgeben
 		s << endl << "name " << name << endl << endl;
@@ -219,19 +219,19 @@ namespace BALL
 		return s;
 	}
 
-	NMRStarFile::ShiftReferenceElement::ShiftReferenceElement()	
+	NMRStarFile::ShiftReferenceElement::ShiftReferenceElement()
 		: atom_type(),
 			isotope_number(0),
 			atom_group(),
 			shift_units(),
 			shift_value(),
 			reference_method(),
-		  reference_type	(),
+		  reference_type(),
 			indirect_shift_ratio()
 	{
 	}
 
-	NMRStarFile::SampleCondition::SampleCondition()	
+	NMRStarFile::SampleCondition::SampleCondition()
 		: types(),
 			values(),
 			errors(),
@@ -239,8 +239,8 @@ namespace BALL
 	{
 	}
 
-	
-	NMRStarFile::EntryInformation::EntryInformation() 
+
+	NMRStarFile::EntryInformation::EntryInformation()
 		: entry_type(),
 		  BMRB_accession_code(),
 		  NMR_STAR_version(),
@@ -248,30 +248,30 @@ namespace BALL
 	{
 	}
 
-	NMRStarFile::EntryInformation::~EntryInformation() 
+	NMRStarFile::EntryInformation::~EntryInformation()
 	{
 	}
 
 	ostream& NMRStarFile::EntryInformation::operator >> (std::ostream& s)
-	{	
+	{
 		// TODO: if POSITION_VALUE_NA, FLOAT_VALUE_NA ... -> NA ausgeben
 		s << endl<< "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"  << endl;
 		s << "BMRB_accession_code:" << BMRB_accession_code  << endl;
- 		s << "entry_type: "  			<< entry_type						<< endl;
-		s << "NMR_STAR_version: "	<< NMR_STAR_version			<< endl;
+    s << "entry_type: "         << entry_type           << endl;
+		s << "NMR_STAR_version: "	  << NMR_STAR_version     << endl;
 		s << "experimental_method: "<< experimental_method << std::endl;
 		s << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " << endl << endl;
 		return s;
 	}
-	
+
 	void NMRStarFile::EntryInformation::clear()
-	{	
+	{
 		entry_type.clear();
 		BMRB_accession_code.clear();
 		NMR_STAR_version.clear();
 		experimental_method.clear();
 	}
-		
+
 
 	NMRStarFile::MolecularSystem::ChemicalUnit::ChemicalUnit()
 		: component_name(),
@@ -283,7 +283,7 @@ namespace BALL
 	{
 		s << endl<< "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"  << endl;
 		s << "component_name:" << component_name  << endl;
- 		s << "label: "  			<< label						<< endl;
+    s << "label: "         << label << endl;
 		if (monomeric_polymer)
 			*monomeric_polymer >> s;
 		if (shifts)
@@ -392,21 +392,21 @@ namespace BALL
 	}
 
 
-	ostream& NMRStarFile::MonomericPolymer::operator >> (std::ostream& s)
+	ostream& NMRStarFile::MonomericPolymer::operator >> (ostream& s)
 	{	
 		s << endl<< "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"  << endl;
 		s << "Monomeric Polymer:" << label_name << endl;
- 		s << "type: "  						<< type						<< endl;
-		s << "polymer_class: "		<< polymer_class			<< endl;
-		s << "common_name: " 			<< common_name << std::endl;
-		s << "name_variant: " 		<< name_variant << std::endl;
-		s << "molecular_mass: " 	<< molecular_mass << std::endl;
-		s << "details " 					<< details << std::endl;
-		s << "number_of_residues: " << number_of_residues << std::endl;
-		s << "residue_sequence " << residue_sequence << std::endl;
+ 		s << "type: "             << type << endl;
+		s << "polymer_class: "		<< polymer_class << endl;
+		s << "common_name: "			<< common_name << endl;
+		s << "name_variant: "     << name_variant << endl;
+		s << "molecular_mass: "   << molecular_mass << endl;
+		s << "details "           << details << endl;
+		s << "number_of_residues: " << number_of_residues << endl;
+		s << "residue_sequence " << residue_sequence << endl;
 		//s << "residues per index :" << endl;	
 		// TODO residue per index
-		s << "other databases with homologs :" << endl;	
+		s << "other databases with homologs :" << endl;
 		for (Size i=0; i < homolog_database_entries.size(); i++)
 		{
 			homolog_database_entries[i] >> s;
@@ -415,7 +415,7 @@ namespace BALL
 		return s;
 	}
 
-	NMRStarFile::MolecularSystem::MolecularSystem() 
+	NMRStarFile::MolecularSystem::MolecularSystem()
 		: system_name(),
 			abbreviation_common(),
 			chemical_units(),
@@ -428,7 +428,7 @@ namespace BALL
 	{
 	}
 
-	NMRStarFile::MolecularSystem::~MolecularSystem() 
+	NMRStarFile::MolecularSystem::~MolecularSystem()
 	{
 	}
 
@@ -521,31 +521,31 @@ namespace BALL
 	{	
 		// TODO: if POSITION_VALUE_NA, FLOAT_VALUE_NA ... -> NA ausgeben
 		s << endl<< "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << endl;
-		s << "system_name:" << system_name												<< endl;
- 		s << "abbreviation_common: "  	<< abbreviation_common 		<< endl;
-		s << "system_physical_state: "	<< system_physical_state	<< endl;
-		s << "system_oligomer_state: "	<< system_oligomer_state	<< endl;
-		s << "system_paramagnetic: "		<< system_paramagnetic		<< endl;
-		s << "system_thiol_state: " 		<< system_thiol_state			<< endl;
-		s << "system_molecular_weight: "<< system_molecular_weight << std::endl;
+		s << "system_name:" << system_name << endl;
+ 		s << "abbreviation_common: "	  << abbreviation_common << endl;
+		s << "system_physical_state: "	<< system_physical_state << endl;
+		s << "system_oligomer_state: "	<< system_oligomer_state << endl;
+		s << "system_paramagnetic: "		<< system_paramagnetic << endl;
+		s << "system_thiol_state: "     << system_thiol_state << endl;
+		s << "system_molecular_weight: "<< system_molecular_weight << endl;
 
-		s << "chemical units:" << std::endl; 
+		s << "chemical units:" << endl;
 		for (Size i=0; i < chemical_units.size(); i++)
 		{
-			s << "  " << chemical_units[i].component_name << " : " << chemical_units[i].label << std::endl;
+			s << "  " << chemical_units[i].component_name << " : " << chemical_units[i].label << endl;
 			*(chemical_units[i].monomeric_polymer) >> s;
 		}
-		s << "related database entries:" << std::endl;
+		s << "related database entries:" << endl;
 		for (Size i=0; i < related_database_entries.size(); i++)
 		{
 			if (i!=0)
 				s << "   -------------------------------------------" << endl;
 
-			s << "   DB name: "				<< related_database_entries[i].name 						<< endl;
-			s << "   accesion code: " 	<< related_database_entries[i].accession_code 	<< std::endl; 
-			s << "   molecule name: " 	<< related_database_entries[i].entry_mol_name 	<< std::endl; 
-			s << "   relation type: " 	<< related_database_entries[i].relation_type 	<< std::endl; 
-			s << "   details : " 			<< related_database_entries[i].details 				<< std::endl; 	
+			s << "   DB name: "				<< related_database_entries[i].name << endl;
+			s << "   accesion code: "	<< related_database_entries[i].accession_code << endl;
+			s << "   molecule name: "	<< related_database_entries[i].entry_mol_name << endl;
+			s << "   relation type: "	<< related_database_entries[i].relation_type << endl;
+			s << "   details : "			<< related_database_entries[i].details << endl;
 		}
 		s << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " << endl << endl;
 		return s;
@@ -554,10 +554,10 @@ namespace BALL
 	ostream& NMRStarFile::NMRSpectrometer::operator >> (std::ostream& s)
 	{	
 		s << endl<< "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << endl;
-		s << "name:	"						<< name 					<< endl;
-		s << "manufacturer: " 	<< manufacturer 	<< endl;
-		s << "model: " 					<< model 					<< endl;
-		s << "field strength: " << field_strength << endl; 
+		s << "name:	"						<< name << endl;
+		s << "manufacturer: "   << manufacturer << endl;
+		s << "model: "          << model << endl;
+		s << "field strength: " << field_strength << endl;
 		s << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " << endl << endl;
 		return s;
 	}
@@ -571,15 +571,15 @@ namespace BALL
 			num_mismatches_(0),
 			num_gaps_(0)
 	{
- 	}
+	}
 
 
-	NMRStarFile::BALLToBMRBMapper::BALLToBMRBMapper(Chain const& chain, 
-		                                              const NMRStarFile& nmr_data, 
+	NMRStarFile::BALLToBMRBMapper::BALLToBMRBMapper(Chain const& chain,
+		                                              const NMRStarFile& nmr_data,
 	                                                const String& chemical_unit)
-		: name_converter_(), 
+		: name_converter_(),
 			ball_to_bmrb_map_(),
-			bmrb_to_ball_map_(), 
+			bmrb_to_ball_map_(),
 			chain_(&chain),
 			nmr_data_(&nmr_data),
 			nmr_atom_data_set_(NULL),
@@ -589,8 +589,8 @@ namespace BALL
 			valid_(true)
 	{
 		valid_ = setNMRAtomDataSetByName(chemical_unit);
- 	}
-	
+	}
+
 	bool NMRStarFile::BALLToBMRBMapper::setNMRAtomDataSetByName(String const& chemical_unit_label)
 	{
 		bool found_chemical_unit = false;
@@ -606,7 +606,7 @@ namespace BALL
 			{
 				if (nmr_data_->atom_data_sets_[k].name == chemical_unit_name)
 				{
-					found_chemical_unit = true;		
+					found_chemical_unit = true;
 					nmr_atom_data_set_  = &nmr_data_->atom_data_sets_[k];
 					nmr_atom_data_set_index_ = k;
 				}
@@ -616,7 +616,12 @@ namespace BALL
 			found_chemical_unit = false;
 		}
 
-		if (!found_chemical_unit)
+		if (chemical_unit_name=="")
+		{
+			Log.warn() << "BALLToBMRBMapper: No chemical unit given!" << std::endl;
+				valid_ = false;
+		}
+		else if (!found_chemical_unit)
 		{
 			Log.warn() << "BALLToBMRBMapper: " << chemical_unit_name << " not found!" << std::endl;
 				valid_ = false;
@@ -643,8 +648,8 @@ namespace BALL
 			atom = bmrb_to_ball_map_.find(&nmr_atom)->second;
 		}
 		return atom;
-	}	
-		
+	}
+
 	NMRStarFile::BALLToBMRBMapper::BMRBIndex NMRStarFile::BALLToBMRBMapper::operator() (const Atom* atom)
 	{
 		NMRStarFile::BALLToBMRBMapper::BMRBIndex mapping(0,0);
@@ -690,7 +695,7 @@ namespace BALL
 		}	
 		else
 		{		
-			Log.warn() << "NMRStarFile::findNMRAtom_(): Warning: Given atom belongs to residue " << atom.residue_seq_code   
+			Log.warn() << "NMRStarFile::findNMRAtom_(): Warning: Given atom belongs to residue " << atom.residue_seq_code 
 								 << " but the corresponding chain has only " << chain_->countResidues()  << " residues." << std::endl;
 		}
 		return NULL;
@@ -699,13 +704,13 @@ namespace BALL
 
 	// TODO: this currently works only with one NMRAtomDataSet
 	bool  NMRStarFile::BALLToBMRBMapper::createTrivialMapping()
-	{ 
+	{
 		if (!valid_)
 		{
 			return false;
 		}
 
-		num_mismatches_  = -1;	
+		num_mismatches_  = -1;
 		num_gaps_        = -1;
 
 		// walk over the NMRAtomData sets of the nmr data file
@@ -726,21 +731,21 @@ namespace BALL
 			return false;
 		}
 
-		num_mismatches_  = 0;	
+		num_mismatches_  = 0;
 		num_gaps_        = 0;
-		
+
 		const NMRAtomDataSet* nmr_atom_data_set = nmr_atom_data_set_;
 		if (!nmr_atom_data_set_)
 		{
 			Log.warn() << "NMRStarFile::BALLToBMRBMapper::createTrivialMapping(): no chemical unit specified, try the first!" << std::endl;
-			
+
 			// if nothing was specified, try the first atom data set	
 			nmr_atom_data_set = &nmr_data_sets[0];
 		}
 
 		// TODO: insert the data from the NMRAtomDataSet (like conditions) as properties!
-		for (Position current_nmr_atom = 0; 
-				current_nmr_atom < nmr_atom_data_set->atom_data.size(); 
+		for (Position current_nmr_atom = 0;
+				current_nmr_atom < nmr_atom_data_set->atom_data.size();
 				++current_nmr_atom)
 		{
 			const Atom* ball_atom = findNMRAtom_(nmr_atom_data_set->atom_data[current_nmr_atom]);
@@ -764,9 +769,9 @@ namespace BALL
 			return false;
 
 		int  matches     =  0;
-		num_mismatches_  = -1;	
+		num_mismatches_  = -1;
 		num_gaps_        = -1;
-	
+
 		String chain_seq = Peptides::GetSequence(*chain_);
 
 		String squeezed_align_seq(aligned_ball_sequence);
@@ -783,10 +788,10 @@ namespace BALL
 
 		// check whether the alignment is valid
 		if ((aligned_ball_sequence.size()==0) || (aligned_nmrstar_sequence.size()==0) )
-		{	
+		{
 			Log.warn() << "BALLToBMRBMapper::createMapping(): Warning: One of the aligned strings has length zero!" << endl;
 			return false;
-		}	
+		}
 
 		if (aligned_ball_sequence.size() != aligned_nmrstar_sequence.size())
 		{
@@ -799,8 +804,8 @@ namespace BALL
 		{
 			return false;
 		}
-		
-		num_mismatches_  = 0;	
+
+		num_mismatches_  = 0;
 		num_gaps_        = 0;
 
 		std::vector<NMRAtomData> const& nmr_data = nmr_atom_data_set_->atom_data;
@@ -818,7 +823,7 @@ namespace BALL
 
 		std::vector<std::list<Position> > atoms_per_nmr_residue(len_sequence);
 		for (Position i=0; i<nmr_data.size(); i++)
-		{	
+		{
 			atoms_per_nmr_residue[nmr_data[i].residue_seq_code-1].push_back(i);
 		}
 
@@ -826,12 +831,12 @@ namespace BALL
 		Position num_nmr_alig_gaps  = 0;
 
 		// now create BALLToBMRBMappers for the given alignment
-		for (Position i=0; (i < aligned_nmrstar_sequence.size()) && (res_it != chain_->endResidue()); i++)	
+		for (Position i=0; (i < aligned_nmrstar_sequence.size()) && (res_it != chain_->endResidue()); i++)
 		{
-			if (   (aligned_ball_sequence[i]    == '-') 
+			if (   (aligned_ball_sequence[i]    == '-')
 					&& (aligned_nmrstar_sequence[i] == '-'))
 			{
-				Log.warn() << "BALLToBMRBMapper::createMapping(): Warning: Gaps in both aligned sequences!" << endl;	
+				Log.warn() << "BALLToBMRBMapper::createMapping(): Warning: Gaps in both aligned sequences!" << endl;
 				num_gaps_++;
 			}
 			else
@@ -842,13 +847,13 @@ namespace BALL
 					// nothing to do!
 
 #if defined NMRSTAR_DEBUG || defined NMRSTAR_DEBUG_MAPPING
-					Log.warn() << "BALLToBMRBMapper::createMapping(): Warning: NMR residue no" << i << " " 
-						         << aligned_nmrstar_sequence[i] << " has no assigned structure residue!" << endl; 
+					Log.warn() << "BALLToBMRBMapper::createMapping(): Warning: NMR residue no" << i << " "
+						         << aligned_nmrstar_sequence[i] << " has no assigned structure residue!" << endl;
 #endif
 					num_gaps_++;
 				}
 				else if (aligned_nmrstar_sequence[i] == '-')
-				{	
+				{
 					// this BALL residue has no assigned NMR residue
 					// the current residue cannot be assigned any shifts!
 					res_it++;
@@ -856,25 +861,25 @@ namespace BALL
 					num_gaps_++;
 
 #if defined NMRSTAR_DEBUG || defined NMRSTAR_DEBUG_MAPPING					
-					Log.warn() << "BALLToBMRBMapper::createMapping(): Warning: Structure residue no " << i << " " 
-						<< aligned_ball_sequence[i] << " has no assigned NMR residue!" << endl; 
+					Log.warn() << "BALLToBMRBMapper::createMapping(): Warning: Structure residue no " << i << " "
+						<< aligned_ball_sequence[i] << " has no assigned NMR residue!" << endl;
 #endif
 				}
 				else //if (aligned_ball_sequence[i] == aligned_nmrstar_sequence[i])
-				{   
+				{
 					// there is a correspondence found between nmr and ball 
 					if (Peptides::OneLetterCode(res_it->getName()) != aligned_nmrstar_sequence[i])
 					{
-						Log.warn() << "NMRStarFile::BALLToBMRBMapper::createMapping(): Warning: Incorrect mapping "   
+						Log.warn() << "NMRStarFile::BALLToBMRBMapper::createMapping(): Warning: Incorrect mapping "
 											 << Peptides::OneLetterCode(res_it->getName()) << " to " << aligned_nmrstar_sequence[i]  << "." << std::endl;
 
-						num_mismatches_++; 
+						num_mismatches_++;
 					}
 					else if (aligned_ball_sequence[i] != aligned_nmrstar_sequence[i])
 					{
-						num_mismatches_++; 
+						num_mismatches_++;
 #if defined NMRSTAR_DEBUG || defined NMRSTAR_DEBUG_MAPPING
-						Log.warn() << "BALLToBMRBMapper::createMapping(): Warning: Assigned structure residue " 
+						Log.warn() << "BALLToBMRBMapper::createMapping(): Warning: Assigned structure residue "
 							<< aligned_ball_sequence[i] << " to NMR residue " << aligned_nmrstar_sequence[i] << "." << endl;
 #endif
 					}
@@ -892,19 +897,18 @@ namespace BALL
 							{
 								String full_name = at_it->getName();
 
-								if (name_converter_.matches(nmr_data[*nmr_atom].residue_label, nmr_data[*nmr_atom].atom_name, 
+								if (name_converter_.matches(nmr_data[*nmr_atom].residue_label, nmr_data[*nmr_atom].atom_name,
 								                           "NMRSTAR", full_name, "PDB"))
 								{
 									// and store in the mappings
 									BALLToBMRBMapper::BMRBIndex b_index(nmr_atom_data_set_index_, *nmr_atom);
 									ball_to_bmrb_map_[&*at_it] = b_index;
-									bmrb_to_ball_map_[&(nmr_data[*nmr_atom])] = &*at_it;	
+									bmrb_to_ball_map_[&(nmr_data[*nmr_atom])] = &*at_it;
 									mapped_me = true;
 								}
-							}	
+							}
 						}
 					}
-					
 					// get the next residue 
 					res_it++;
 
@@ -917,7 +921,7 @@ namespace BALL
 #endif
 		return true;
 	}
-	
+
 	void NMRStarFile::BALLToBMRBMapper::clear()
 	{
 		ball_to_bmrb_map_.clear();
@@ -927,7 +931,7 @@ namespace BALL
 		nmr_atom_data_set_ = NULL;
 		nmr_atom_data_set_index_ = 0;
 		num_mismatches_    = -1;
-		num_gaps_ = -1; 
+		num_gaps_ = -1;
 		valid_    = false;
 	}
 
@@ -935,7 +939,7 @@ namespace BALL
 ////////////////////////////////////////////////////////////////
 
 	NMRStarFile::NMRStarFile()
-		:	CIFFile(),
+		: CIFFile(),
 			valid_(false),
 			number_of_shift_sets_(0),
 			number_of_assigned_shifts_(0),
@@ -944,7 +948,7 @@ namespace BALL
 			atom_data_sets_(),
 			sample_conditions_(),
 			samples_(),
-			shift_references_(), 
+			shift_references_(),
 			nmr_spectrometers_(),
 			monomeric_polymers_(),
 			has_H_shifts_(false),
@@ -961,7 +965,7 @@ namespace BALL
 	}
 
 	NMRStarFile::NMRStarFile(const String& file_name, File::OpenMode open_mode)
-		:	CIFFile(file_name, open_mode),
+		: CIFFile(file_name, open_mode),
 			valid_(false),
 			number_of_shift_sets_(0),
 			number_of_assigned_shifts_(0),
@@ -971,7 +975,7 @@ namespace BALL
 			sample_conditions_(),
 			samples_(),
 			shift_references_(),
-			nmr_spectrometers_(),	
+			nmr_spectrometers_(),
 			monomeric_polymers_(),
 			has_H_shifts_(false),
 			has_C_shifts_(false),
@@ -987,11 +991,11 @@ namespace BALL
 		read();
 	}
 
-	NMRStarFile::~NMRStarFile()		
+	NMRStarFile::~NMRStarFile()
 	{
 	}
 
-	bool NMRStarFile::read() 
+	bool NMRStarFile::read()
 	{
 
 #ifdef NMRSTAR_DEBUG
@@ -1033,10 +1037,10 @@ namespace BALL
 #endif
 			readShifts_();
 #ifdef NMRSTAR_DEBUG
-	std::cout << "NMRStarFile::findDependiencies_()" << std::endl;	
+	std::cout << "NMRStarFile::findDependiencies_()" << std::endl;
 #endif
 			findDependiencies_();
-			
+
 			valid_ = true;
 
 		//}
@@ -1068,7 +1072,7 @@ namespace BALL
 		{
 			System* system =  RTTI::castTo<System>(ac);
 			if (system->countChains() > 0)
-			{	 
+			{
 				ChainIterator cit = system->beginChain();
 
 				// NOTE: we take the first chain of the system
@@ -1079,19 +1083,19 @@ namespace BALL
 				Log.error() << "NMRStarfile::read(): No chain found in the given AtomContainer." << endl;
 				return false;
 			}
-		} 
+		}
 		else
 		{
 			Log.error() << "NMRStarfile::read(): Cannot assign shifts to a non-chain." << endl;
 			return false;
 		}
-	
+
 		String chemical_unit = "";
 		// get always the first chemical_unit
 		if (atom_data_sets_.size()>0)
 		{
-			Log.error() << "NMRStarfile::read(): chemical unit ambiguous." << endl;
-//			return false;
+			Log.warn() << "NMRStarfile::read(): Warning: chemical unit ambiguous!" << endl;
+			// return false;
 		}
 		chemical_unit = atom_data_sets_[0].name;
 
@@ -1568,7 +1572,7 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 					// in dalton
 					if (saveframes[sf].hasItem("_System_molecular_weight"))
 						molecular_system_.system_molecular_weight = valueToFloat_(saveframes[sf].getItemValue("_System_molecular_weight"));
-					else  
+					else
 						molecular_system_.system_molecular_weight = FLOAT_VALUE_NA;
 
 					//
@@ -1591,19 +1595,19 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 								// store the data
 								MolecularSystem::ChemicalUnit cu;
 								for (Size line = 0; line < current_loop->values.size(); line++)
-								{	
+								{
 									cu.component_name  = current_loop->values[line][0];
 									cu.label = current_loop->values[line][1];
 									molecular_system_.chemical_units.push_back(cu);
 								}
 							}
-							
+
 							// read the related DB entries
 							if (saveframes[sf].items[loop].keys[0] == "_Database_name")
 							{
 								NMRStarFile::MolecularSystem::RelatedDB db;
 								for (Size line = 0; line < current_loop->values.size(); line++ )
-								{	
+								{
 									db.name = current_loop->values[line][0];
 									Index pos = current_loop->getKeyIndex("_Database_accession_code");
 									if ( pos > -1) db.accession_code = current_loop->values[line][pos];
