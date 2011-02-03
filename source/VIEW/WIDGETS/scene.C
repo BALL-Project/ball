@@ -3098,7 +3098,7 @@ namespace BALL
 		void Scene::lightsUpdated(bool redraw)
 		{
 			for (Position i=0; i<renderers_.size(); ++i)
-				renderers_[i]->setLights();
+				renderers_[i]->setLights(true);
 
 			if (redraw)
 				updateGL();
