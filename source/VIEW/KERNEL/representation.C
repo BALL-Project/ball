@@ -594,7 +594,7 @@ namespace BALL
 				result += "\\";
 				for (Position i=0; i<countProperties(); ++i) 
 				{
-					ostringstream serialized_properties;
+					std::ostringstream serialized_properties;
 					TextPersistenceManager tpm(serialized_properties);
 
 					NamedProperty prop = getNamedProperty(i);
