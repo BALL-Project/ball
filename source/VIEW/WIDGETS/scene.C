@@ -2613,15 +2613,45 @@ namespace BALL
 			dual_stereo_different_display_action_->setChecked(false);
 		}
 
+		// TODO: merge with enterDualStereoDifferentDisplays, decide through the stage_settings
 		void Scene::enterDualStereo()
 		{
 			// first clean up
 			exitStereo();
 
-			QDesktopWidget* desktop = QApplication::desktop();
-			QRect screen_geom = QApplication::desktop()->screenGeometry(0);
+			// get the correct screens for control, left, and right eye
+			// TODO: handle the control screen! currently, we just leave it alone
+			int control_screen_index = stage_settings_->getControlScreenNumber();
+			int left_screen_index = stage_settings_->getLeftEyeScreenNumber();
+			int right_screen_index = stage_settings_->getRightEyeScreenNumber();
 
-			GLRenderWindow* left_widget = new GLRenderWindow(0, "left eye", Qt::FramelessWindowHint);
+			if (left_screen_index == -1 || right_screen_index == -1)
+			{
+				QMessageBox *box = new QMessageBox;
+				box->setText("Stereo setup invalid");
+				box->setInformativeText("Please assign the displays to valid screens in Preferences->Main->Stereo->Display Settings");
+				box->show();
+
+				return;
+			}
+
+			if (left_screen_index != right_screen_index)
+			{
+				QMessageBox *box = new QMessageBox;
+				box->setText("Stereo setup invalid");
+				box->setInformativeText("Currently, this stereo mode requires both eyes to be located on the same screen!");
+				box->show();
+
+				return;
+			}
+
+			QDesktopWidget* desktop = QApplication::desktop();
+			QRect screen_geom = QApplication::desktop()->screenGeometry(left_screen_index);
+
+			QWidget* left_screen = QApplication::desktop()->screen(left_screen_index);
+			QWidget* right_screen = left_screen;
+
+			GLRenderWindow* left_widget = new GLRenderWindow(left_screen, "left eye", Qt::FramelessWindowHint);
 			left_widget->makeCurrent();
 			left_widget->init();
 			left_widget->resize(screen_geom.width() / 2, screen_geom.height());
@@ -2649,7 +2679,7 @@ namespace BALL
 			stereo_left_eye_ = renderers_.size()-1;
 			left_rs->start();
 
-			GLRenderWindow* right_widget = new GLRenderWindow(0, "right eye", Qt::FramelessWindowHint);
+			GLRenderWindow* right_widget = new GLRenderWindow(right_screen, "right eye", Qt::FramelessWindowHint);
 			right_widget->makeCurrent();
 			right_widget->init();
 			right_widget->resize(screen_geom.width() / 2, screen_geom.height());
