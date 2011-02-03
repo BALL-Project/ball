@@ -2399,7 +2399,8 @@ namespace BALL
 			dual_stereo_action_->setChecked(false);
 			dual_stereo_different_display_action_->setChecked(false);
 
-			if (gl_renderer_->getStereoMode() == GLRenderer::NO_STEREO) return;
+			if (stereo_left_eye_ == -1 || stereo_right_eye_ == -1) return;
+//			if (gl_renderer_->getStereoMode() == Renderer::NO_STEREO) return;
 
 			// remember pointers to the left and right windows
 			RenderTarget* left_window  = (stereo_left_eye_  != -1) ? renderers_[stereo_left_eye_ ]->target : 0;
@@ -2436,7 +2437,7 @@ namespace BALL
 			delete(left_window);
 			delete(right_window);
 
-			gl_renderer_->setStereoMode(GLRenderer::NO_STEREO);
+			gl_renderer_->setStereoMode(Renderer::NO_STEREO);
 			gl_renderer_->setSize(width(), height());
 
 			gl_renderer_->initPerspective();
@@ -2604,7 +2605,9 @@ namespace BALL
 			//			renderers_.push_back(rs);
 			return;
 
-			gl_renderer_->setStereoMode(GLRenderer::ACTIVE_STEREO);
+//			left_renderer->setStereoMode(Renderer::ACTIVE_STEREO);
+//			right_renderer->setStereoMode(Renderer::ACTIVE_STEREO);
+
 			setFullScreen(true);
 
 			no_stereo_action_->setChecked(false);
@@ -2706,7 +2709,8 @@ namespace BALL
 			stereo_right_eye_ = renderers_.size()-1;
 			right_rs->start();
 
-			gl_renderer_->setStereoMode(GLRenderer::DUAL_VIEW_STEREO);
+			left_renderer->setStereoMode(Renderer::DUAL_VIEW_STEREO);
+			right_renderer->setStereoMode(Renderer::DUAL_VIEW_STEREO);
 
 			setFullScreen(false);
 			applyPreferences();
@@ -2795,7 +2799,8 @@ namespace BALL
 			stereo_right_eye_ = renderers_.size()-1;
 			right_rs->start();
 
-			gl_renderer_->setStereoMode(GLRenderer::DUAL_VIEW_DIFFERENT_DISPLAY_STEREO);
+			left_renderer->setStereoMode(Renderer::DUAL_VIEW_DIFFERENT_DISPLAY_STEREO);
+			right_renderer->setStereoMode(Renderer::DUAL_VIEW_DIFFERENT_DISPLAY_STEREO);
 
 			right_rs->makeDependentOn(left_rs);
 			left_rs->makeDependentOn(right_rs);

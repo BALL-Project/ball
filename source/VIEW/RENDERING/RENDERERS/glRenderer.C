@@ -97,7 +97,6 @@ namespace BALL
 				name_to_object_(),
 				object_to_name_(),
 				all_names_(1),
-				stereo_(NO_STEREO),
 				render_mode_(RENDER_MODE_UNDEFINED),
 				use_vertex_buffer_(false),
 				smooth_lines_(false),

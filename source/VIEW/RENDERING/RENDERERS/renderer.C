@@ -41,7 +41,8 @@ namespace BALL
 				show_preview_(false),
 				volume_width_(0.),
 				show_light_sources_(false),
-				use_continuous_loop_(false)
+				use_continuous_loop_(false),
+				stereo_(NO_STEREO)
 		{
 			stage_ = &RTTI::getDefault<Stage>();
 		}
@@ -55,7 +56,8 @@ namespace BALL
 			show_preview_(renderer.show_preview_),
 			volume_width_(renderer.volume_width_),
 			show_light_sources_(renderer.show_light_sources_),
-			use_continuous_loop_(renderer.use_continuous_loop_)
+			use_continuous_loop_(renderer.use_continuous_loop_),
+			stereo_(renderer.stereo_)
 		{}
 
 
@@ -266,6 +268,16 @@ namespace BALL
 		bool Renderer::finish()
 		{
 			return true;
+		}
+
+		Renderer::StereoMode Renderer::getStereoMode() const
+		{
+			return stereo_;
+		}
+
+		void Renderer::setStereoMode(Renderer::StereoMode state)
+		{
+			stereo_ = state;
 		}
 
 

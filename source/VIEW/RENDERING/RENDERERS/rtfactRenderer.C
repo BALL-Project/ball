@@ -112,7 +112,6 @@ namespace BALL
 			}
 			
 			setFrustum(1.5f, RTfact::Packet<1,float>::C_INFINITY, -2.f * x_scale_, 2.f * x_scale_, 2.f * y_scale_, -2.f * y_scale_);
-
 		}
 
 		void RTfactRenderer::setupStereo(float eye_separation, float focal_length)
@@ -123,9 +122,15 @@ namespace BALL
 			float near    = 1.5f;
 			float ndfl    = near / focal_length;
 			float left    = -2.0 * x_scale_;
-			float right   = 2.0 * x_scale_;
+			float right   =  2.0 * x_scale_;
 			float bottom 	= -2.0 * y_scale_;
 			float top    	=  2.0 * y_scale_;
+
+			if (getStereoMode() == Renderer::DUAL_VIEW_STEREO)
+			{
+				left  *= 2;
+				right *= 2;
+			}
 
 			float new_left   = 2*left  - eye_separation * ndfl;
 			float new_right  = 2*right - eye_separation * ndfl;

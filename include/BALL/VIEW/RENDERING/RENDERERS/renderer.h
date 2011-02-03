@@ -56,6 +56,21 @@ namespace BALL
 		{
 			public:
 
+			///
+ 			enum StereoMode
+			{
+				NO_STEREO = 0,
+
+				/// Stereo mode for shutter glasses
+				ACTIVE_STEREO,
+
+				/// Stereo mode for output on two projectors
+				DUAL_VIEW_STEREO,
+
+				/// Stereo mode for output on two projectors with one display per head
+				DUAL_VIEW_DIFFERENT_DISPLAY_STEREO
+			};
+
 			BALL_CREATE(Renderer)
 
 			/**	@name	Constructors and Destructors
@@ -204,6 +219,12 @@ namespace BALL
 			 */
 			virtual void renderRuler();
 
+			///
+			virtual void setStereoMode(StereoMode state);
+
+			///
+			virtual StereoMode getStereoMode() const;
+
 			//@}
 			/**	@name Predicates
 			*/
@@ -306,6 +327,8 @@ namespace BALL
 			Vector3					camera_offset_;
 
 			bool						use_continuous_loop_;
+
+			StereoMode 			stereo_;
 		};
 
 	} // namespace VIEW

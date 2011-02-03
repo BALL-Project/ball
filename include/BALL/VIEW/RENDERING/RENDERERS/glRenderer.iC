@@ -67,13 +67,6 @@ void GLRenderer::clearNames_()
 //////////////////////////////////////////////////////////
 
 
-BALL_INLINE
-void GLRenderer::setStereoMode(StereoMode state)
-{
-	if (state == stereo_) return;
-	stereo_ = state;
-}
-
 
 BALL_INLINE
 float GLRenderer::getXScale() const
@@ -82,10 +75,6 @@ float GLRenderer::getXScale() const
 BALL_INLINE
 float GLRenderer::getYScale() const
 	{ return y_scale_;}
-
-BALL_INLINE
-GLRenderer::StereoMode GLRenderer::getStereoMode() const
-	{ return stereo_;}
 
 BALL_INLINE
 GLRenderer::RenderMode GLRenderer::getRenderMode() const

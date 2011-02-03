@@ -67,21 +67,6 @@ namespace BALL
 			public:
 
 			///
- 			enum StereoMode
-			{
-				NO_STEREO = 0,
-
-				/// Stereo mode for shutter glasses
-				ACTIVE_STEREO,
-
-				/// Stereo mode for output on two projectors
-				DUAL_VIEW_STEREO,
-
-				/// Stereo mode for output on two projectors with one display per head
-				DUAL_VIEW_DIFFERENT_DISPLAY_STEREO
-			};
-
-			///
 			enum RenderMode
 			{
 				///
@@ -219,12 +204,6 @@ namespace BALL
 
 			/// Test if a Representation has a DisplayList.
 			bool hasDisplayListFor(const Representation& rep) const;
-
-			///
-			void setStereoMode(StereoMode state);
-
-			///
-			StereoMode getStereoMode() const;
 
 			///
 			RenderMode getRenderMode() const;
@@ -482,7 +461,6 @@ namespace BALL
 			GLuint 									object_buffer_[BALL_GLRENDERER_PICKING_NUMBER_OF_MAX_OBJECTS];
 			Vector3 								normal_vector_;
 
-			StereoMode 							stereo_;
 			RenderMode 							render_mode_;
 
 			bool 										use_vertex_buffer_;

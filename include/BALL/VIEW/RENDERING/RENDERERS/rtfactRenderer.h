@@ -124,6 +124,7 @@ namespace BALL
 				 */
 				virtual std::vector<float> intersectRaysWithGeometry(const std::vector<Vector3>& origins, 
 																														 const std::vector<Vector3>& directions);
+
 				//@}
 
 			private:

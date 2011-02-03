@@ -205,15 +205,6 @@ namespace BALL
 #endif
 
 				//delta *= stage.swapSideBySideStereo() ? -1. : 1.;
-				if (stereo_setup_ == LEFT_EYE)
-				{
-					std::cout << "<<<Left Eye:" << gl_target_->stereo_delta_ << std::endl;
-				}
-				else if (stereo_setup_ == RIGHT_EYE)
-				{
-					std::cout << ">>>Right Eye:" << gl_target_->stereo_delta_ << std::endl;
-				}
-				else std::cout << "---No Eye:" << gl_target_->stereo_delta_ << std::endl;
 
 				camera_offset_  = Vector3(eye_separation, 0., 0.);
 
