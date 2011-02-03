@@ -2926,7 +2926,7 @@ namespace BALL
 
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
-#		include <BALL/VIEW/RENDERING/glRenderer.iC>
+#		include <BALL/VIEW/RENDERING/RENDERERS/glRenderer.iC>
 #	endif
 
 	} // namespace VIEW
