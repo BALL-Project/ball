@@ -913,7 +913,7 @@ namespace BALL
 							}
 							else
 							{
-								Log.error() << (String)tr("Internal error! Too many atoms selected.") << endl;
+								Log.error() << (String)tr("Internal error! Too many atoms selected.") << std::endl;
 							}
 						}
 					}
@@ -963,7 +963,7 @@ namespace BALL
 						}
 						else
 						{
-							Log.error() << (String)tr("Scene: Internal error! ") << __LINE__ << endl;
+							Log.error() << (String)tr("Scene: Internal error! ") << __LINE__ << std::endl;
 						}
 					}
 				}
