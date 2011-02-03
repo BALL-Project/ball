@@ -394,13 +394,25 @@ namespace BALL
 						menu = menu->addMenu(tr("Force Field"));
 					break;
 				case TOOLS:
-					menu = menuBar()->addMenu(tr("&Tools"));
+					menu = addMenu(tr("&Tools"), UIOperationMode::MODE_ADVANCED);
 					break;
 				case TOOLS_PYTHON:
-					menu = initPopupMenu(TOOLS)->addMenu(tr("&Python"));
+					menu = NULL;
+					if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
+					{
+						menu = initPopupMenu(TOOLS, UIOperationMode::MODE_ADVANCED);
+						if (menu)
+							menu = menu->addMenu(tr("&Python"));
+					}
 					break;
 				case TOOLS_GRID:
-					menu = initPopupMenu(TOOLS)->addMenu(tr("&Grids"));
+					menu = NULL;
+					if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
+					{
+						menu = initPopupMenu(TOOLS, UIOperationMode::MODE_ADVANCED);
+						if (menu)
+							menu = menu->addMenu(tr("&Grids"));
+					}
 					break;
 				case WINDOWS:
 					menu = menuBar()->addMenu(tr("&Windows"));
@@ -409,10 +421,10 @@ namespace BALL
 					menu = addMenu(tr("&User"), UIOperationMode::MODE_ADVANCED);
 					break;
 				case MACRO:
-					menu = menuBar()->addMenu(tr("Macros"));
+					menu = addMenu(tr("Macros"), UIOperationMode::MODE_ADVANCED);
 					break;
 				case HELP:
-					menu = menuBar()->addMenu(tr("&Help"));
+					menu = addMenu(tr("&Help"), UIOperationMode::MODE_KIOSK);
 					break;
 				default:
 					return 0;

@@ -997,7 +997,8 @@ namespace BALL
 		{
 			if (!DatasetController::createMenuEntries()) return false;
 
-			insertMenuEntry_(MainControl::TOOLS, "Visualize DockResult", SLOT(showDockResult()), "Shortcut|Tools|Visualize_DockResult");
+			insertMenuEntry_(MainControl::TOOLS, "Visualize DockResult", SLOT(showDockResult()), 
+			                 "Shortcut|Tools|Visualize_DockResult", QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 
 			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS, UIOperationMode::MODE_ADVANCED);
 

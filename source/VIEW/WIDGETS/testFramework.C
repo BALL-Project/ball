@@ -105,7 +105,7 @@ void TestFramework::initializeWidget(MainControl& mc)
 	  switch_move->setChecked(true);
 	}
 
-	mc.insertPopupMenuSeparator(MainControl::MACRO);
+	mc.insertPopupMenuSeparator(MainControl::MACRO, UIOperationMode::MODE_ADVANCED);
 
 	description = "Shortcut|MainControl|Macro|Load";
 	load_file = insertMenuEntry(MainControl::MACRO, tr("Load macro"), this, 

@@ -1290,15 +1290,21 @@ namespace BALL
 			ShortcutRegistry* shortcut_registry = ShortcutRegistry::getInstance(0);
 			QAction* new_action;
 
-			create_coordinate_system_ = getMainControl()->initPopupMenu(MainControl::DISPLAY)->
-				addMenu(tr("Show Coordinate System"));
-			create_coordinate_system_->setToolTip(tr("Show a coordinate system"));
+			create_coordinate_system_ = NULL;
+			QMenu* menu = getMainControl()->initPopupMenu(MainControl::DISPLAY, UIOperationMode::MODE_ADVANCED);
+			if (menu)
+				create_coordinate_system_ = menu->addMenu(tr("Show Coordinate System"));
 
-			new_action = create_coordinate_system_->addAction(tr("at origin"), this, SLOT(createCoordinateSystemAtOrigin()));
-			shortcut_registry->registerShortcut("Shortcut|Display|Show_Coordinate_System|at_origin", new_action);
+			if (create_coordinate_system_)
+			{
+				create_coordinate_system_->setToolTip(tr("Show a coordinate system"));
 
-			new_action = create_coordinate_system_->addAction(tr("here"), this, SLOT(createCoordinateSystem()));
-			shortcut_registry->registerShortcut("Shortcut|Display|Show_Coordinate_System|here", new_action);
+				new_action = create_coordinate_system_->addAction(tr("at origin"), this, SLOT(createCoordinateSystemAtOrigin()));
+				shortcut_registry->registerShortcut("Shortcut|Display|Show_Coordinate_System|at_origin", new_action);
+
+				new_action = create_coordinate_system_->addAction(tr("here"), this, SLOT(createCoordinateSystem()));
+				shortcut_registry->registerShortcut("Shortcut|Display|Show_Coordinate_System|here", new_action);
+			}
 
 			insertMenuEntry(MainControl::DISPLAY, tr("Add new GL Window"), this, SLOT(addGlWindow()), 
 			                "Shortcut|Display|Add_new_GL_Window", QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
@@ -1483,32 +1489,39 @@ namespace BALL
 											UIOperationMode::MODE_ADVANCED);
 
 			// ====================================== MODES =====================================
-			
-			description = "Shortcut|ShowRuler";
-			switch_grid_ = new QAction(tr("Show ruler"), this);
-			switch_grid_->setObjectName(switch_grid_->text());
-			connect(switch_grid_, SIGNAL(triggered()), this, SLOT(switchShowGrid()));
-			switch_grid_->setCheckable(true);
-			switch_grid_->setChecked(false);
-			switch_grid_->setIcon(loader.getIcon("actions/measure"));
-			toolbar_actions_view_controls_.push_back(switch_grid_);
-			shortcut_registry->registerShortcut(description, switch_grid_);
+			switch_grid_ = NULL;	
+			if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
+			{
+				description = "Shortcut|ShowRuler";
+				switch_grid_ = new QAction(tr("Show ruler"), this);
+				switch_grid_->setObjectName(switch_grid_->text());
+				connect(switch_grid_, SIGNAL(triggered()), this, SLOT(switchShowGrid()));
+				switch_grid_->setCheckable(true);
+				switch_grid_->setChecked(false);
+				switch_grid_->setIcon(loader.getIcon("actions/measure"));
+				toolbar_actions_view_controls_.push_back(switch_grid_);
+				shortcut_registry->registerShortcut(description, switch_grid_);
 
-			// and push the icons whose actions are defined somewhere else
-			// into the toolbar_actions_view 
-			toolbar_actions_view_controls_.push_back(screenshot_action);
+				// and push the icons whose actions are defined somewhere else
+				// into the toolbar_actions_view 
+				toolbar_actions_view_controls_.push_back(screenshot_action);
+			}
 
 #ifdef BALL_HAS_RTFACT
-			description = "Shortcut|Display|ContinuousLoop|Toggle";
-			toggle_continuous_loop_action_ = new QAction(tr("Toggle continuous loop"), this);
-			toggle_continuous_loop_action_->setObjectName(toggle_continuous_loop_action_->text());
-			connect(toggle_continuous_loop_action_, SIGNAL(triggered()), this, SLOT(toggleContinuousLoop()));
-			toggle_continuous_loop_action_->setCheckable(true);
-			toggle_continuous_loop_action_->setChecked(false);
-			toggle_continuous_loop_action_->setIcon(loader.getIcon("actions/continuous-loop"));
-			toolbar_actions_view_controls_.push_back(toggle_continuous_loop_action_);
-			toggle_continuous_loop_action_->setShortcut(QKeySequence(Qt::Key_Space));
-			shortcut_registry->registerShortcut(description, toggle_continuous_loop_action_);
+			toggle_continuous_loop_action_ = NULL;
+			if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
+			{
+				description = "Shortcut|Display|ContinuousLoop|Toggle";
+				toggle_continuous_loop_action_ = new QAction(tr("Toggle continuous loop"), this);
+				toggle_continuous_loop_action_->setObjectName(toggle_continuous_loop_action_->text());
+				connect(toggle_continuous_loop_action_, SIGNAL(triggered()), this, SLOT(toggleContinuousLoop()));
+				toggle_continuous_loop_action_->setCheckable(true);
+				toggle_continuous_loop_action_->setChecked(false);
+				toggle_continuous_loop_action_->setIcon(loader.getIcon("actions/continuous-loop"));
+				toolbar_actions_view_controls_.push_back(toggle_continuous_loop_action_);
+				toggle_continuous_loop_action_->setShortcut(QKeySequence(Qt::Key_Space));
+				shortcut_registry->registerShortcut(description, toggle_continuous_loop_action_);
+			}
 			// end of the toolbar entries
 #endif
 
@@ -1530,34 +1543,46 @@ namespace BALL
 			toolbar_view_controls_->layout()->setSpacing(2);
 
 			/// EDITABLE SCENE STUFF
-			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
+			main_control.insertPopupMenuSeparator(MainControl::DISPLAY, UIOperationMode::MODE_KIOSK);
 
-			description = "Shortcut|QuicklyAssignBondOrders";
-			bondorders_action_ = new QAction(loader.getIcon("actions/molecule-assign-bond-orders"), tr("Quickly optimize bond orders"), this);
-			bondorders_action_->setObjectName(bondorders_action_->text());
-			bondorders_action_->setToolTip(tr("Compute the bond orders of the highlighted structures"));
-			//TODO
-			//registerForHelpSystem(bondorders_action_, "scene.html#bondorders");
-			connect(bondorders_action_, SIGNAL(triggered()), this, SLOT(computeBondOrders()));
-			getMainControl()->getShortcutRegistry().registerShortcut(description, bondorders_action_);
+			bondorders_action_ = NULL;
+			if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
+			{
+				description = "Shortcut|QuicklyAssignBondOrders";
+				bondorders_action_ = new QAction(loader.getIcon("actions/molecule-assign-bond-orders"), tr("Quickly optimize bond orders"), this);
+				bondorders_action_->setObjectName(bondorders_action_->text());
+				bondorders_action_->setToolTip(tr("Compute the bond orders of the highlighted structures"));
+				//TODO
+				//registerForHelpSystem(bondorders_action_, "scene.html#bondorders");
+				connect(bondorders_action_, SIGNAL(triggered()), this, SLOT(computeBondOrders()));
+				getMainControl()->getShortcutRegistry().registerShortcut(description, bondorders_action_);
+			}
 
-			description = "Shortcut|QuicklyOptimizeStructure";
-			optimize_action_ = new QAction(loader.getIcon("actions/molecule-minimize"), tr("Quickly optimize structure"), this);
-			optimize_action_->setObjectName(optimize_action_->text());
-			optimize_action_->setToolTip(tr("Quickly optimize the highlighted structure"));
-			registerForHelpSystem(optimize_action_, "scene.html#optimize");
-			connect(optimize_action_, SIGNAL(triggered()), this, SLOT(optimizeStructure()));
-			getMainControl()->getShortcutRegistry().registerShortcut(description, optimize_action_);
+			optimize_action_ = NULL;
+			if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
+			{
+				description = "Shortcut|QuicklyOptimizeStructure";
+				optimize_action_ = new QAction(loader.getIcon("actions/molecule-minimize"), tr("Quickly optimize structure"), this);
+				optimize_action_->setObjectName(optimize_action_->text());
+				optimize_action_->setToolTip(tr("Quickly optimize the highlighted structure"));
+				registerForHelpSystem(optimize_action_, "scene.html#optimize");
+				connect(optimize_action_, SIGNAL(triggered()), this, SLOT(optimizeStructure()));
+				getMainControl()->getShortcutRegistry().registerShortcut(description, optimize_action_);
+			}
 
-			description = "Shortcut|SaturateWithHydrogens";
-			add_hydrogens_action_ = new QAction(loader.getIcon("actions/molecule-add-hydrogens"), tr("Saturate with Hydrogens"), this);
-			add_hydrogens_action_->setToolTip(tr("Saturate the highlighted structure with hydrogens (with regards to formal charges)"));
-			add_hydrogens_action_->setObjectName(add_hydrogens_action_->text());
-			registerForHelpSystem(add_hydrogens_action_, "scene.html#saturate");
-			connect(add_hydrogens_action_, SIGNAL(triggered()), this, SLOT(saturateWithHydrogens()));
-			getMainControl()->getShortcutRegistry().registerShortcut(description, add_hydrogens_action_);
+			add_hydrogens_action_ = NULL;
+			if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
+			{
+				description = "Shortcut|SaturateWithHydrogens";
+				add_hydrogens_action_ = new QAction(loader.getIcon("actions/molecule-add-hydrogens"), tr("Saturate with Hydrogens"), this);
+				add_hydrogens_action_->setToolTip(tr("Saturate the highlighted structure with hydrogens (with regards to formal charges)"));
+				add_hydrogens_action_->setObjectName(add_hydrogens_action_->text());
+				registerForHelpSystem(add_hydrogens_action_, "scene.html#saturate");
+				connect(add_hydrogens_action_, SIGNAL(triggered()), this, SLOT(saturateWithHydrogens()));
+				getMainControl()->getShortcutRegistry().registerShortcut(description, add_hydrogens_action_);
+			}
 
-			QMenu* menu = getMainControl()->initPopupMenu(MainControl::BUILD);
+			menu = getMainControl()->initPopupMenu(MainControl::BUILD);
 			if (menu)
 				menu->addAction(add_hydrogens_action_);
 
@@ -1567,10 +1592,13 @@ namespace BALL
 			                                       this, SLOT(createNewMolecule()), "Shortcut|Build|Create_new_molecule",
 																						 QKeySequence(), tr("Create a new molecule for editing"), UIOperationMode::MODE_ADVANCED);
 
-			toolbar_edit_controls_->setObjectName(tr("Edit Control toolbar"));
-			toolbar_edit_controls_->setIconSize(QSize(23,23));
-			toolbar_edit_controls_->layout()->setMargin(2);
-			toolbar_edit_controls_->layout()->setSpacing(2);
+			if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
+			{
+				toolbar_edit_controls_->setObjectName(tr("Edit Control toolbar"));
+				toolbar_edit_controls_->setIconSize(QSize(23,23));
+				toolbar_edit_controls_->layout()->setMargin(2);
+				toolbar_edit_controls_->layout()->setSpacing(2);
+			}
 		}
 
 		void Scene::checkMenu(MainControl& main_control)
@@ -3875,30 +3903,33 @@ namespace BALL
 		{
 			mode_manager_.init();
 
-			toolbar_view_controls_->addActions(toolbar_actions_view_controls_);
-			toolbar_view_controls_->insertSeparator(switch_grid_);
-			getMainControl()->addToolBar(Qt::TopToolBarArea, toolbar_view_controls_);
-			ModularWidget::addToolBarEntries(tb);
-			getMainControl()->initPopupMenu(MainControl::WINDOWS)->addAction(toolbar_view_controls_->toggleViewAction());
+			if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
+			{
+				toolbar_view_controls_->addActions(toolbar_actions_view_controls_);
+				toolbar_view_controls_->insertSeparator(switch_grid_);
+				getMainControl()->addToolBar(Qt::TopToolBarArea, toolbar_view_controls_);
+				ModularWidget::addToolBarEntries(tb);
+				getMainControl()->initPopupMenu(MainControl::WINDOWS)->addAction(toolbar_view_controls_->toggleViewAction());
 
-			mode_manager_.addToolBarEntries(toolbar_edit_controls_);
+				mode_manager_.addToolBarEntries(toolbar_edit_controls_);
 
-			toolbar_actions_edit_controls_.push_back(add_hydrogens_action_);
-			toolbar_actions_edit_controls_.push_back(optimize_action_);
-			toolbar_actions_edit_controls_.push_back(bondorders_action_);
-			//TODO make icon
-			//toolbar_actions_edit_controls_.push_back(new_molecule_action_);
+				toolbar_actions_edit_controls_.push_back(add_hydrogens_action_);
+				toolbar_actions_edit_controls_.push_back(optimize_action_);
+				toolbar_actions_edit_controls_.push_back(bondorders_action_);
+				//TODO make icon
+				//toolbar_actions_edit_controls_.push_back(new_molecule_action_);
 
-			toolbar_edit_controls_->addActions(toolbar_actions_edit_controls_);
-			getMainControl()->addToolBar(Qt::TopToolBarArea, toolbar_edit_controls_);
-			ModularWidget::addToolBarEntries(tb);
-			getMainControl()->initPopupMenu(MainControl::WINDOWS)->addAction(toolbar_edit_controls_->toggleViewAction());
+				toolbar_edit_controls_->addActions(toolbar_actions_edit_controls_);
+				getMainControl()->addToolBar(Qt::TopToolBarArea, toolbar_edit_controls_);
+				ModularWidget::addToolBarEntries(tb);
+				getMainControl()->initPopupMenu(MainControl::WINDOWS)->addAction(toolbar_edit_controls_->toggleViewAction());
 
-			// workaround for Qt, when it only would show the first item:
-			//	toolbar_view_controls_->hide();
-			//	toolbar_view_controls_->show();
-			toolbar_edit_controls_->hide();
-			toolbar_edit_controls_->show();
+				// workaround for Qt, when it only would show the first item:
+				//	toolbar_view_controls_->hide();
+				//	toolbar_view_controls_->show();
+				toolbar_edit_controls_->hide();
+				toolbar_edit_controls_->show();
+			}
 		}
 
 		void Scene::merge(Composite* a1, Composite* a2)

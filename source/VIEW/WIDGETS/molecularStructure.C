@@ -749,7 +749,9 @@ namespace BALL
 			if (calculate_RMSD_id_)
 				calculate_RMSD_id_->setEnabled( (number_of_selected_objects == 2) && composites_muteable); 
 
-			getMainControl()->initPopupMenu(MainControl::TOOLS_GRID)->setEnabled(composites_muteable);
+			menu = getMainControl()->initPopupMenu(MainControl::TOOLS_GRID, UIOperationMode::MODE_ADVANCED);
+			if (menu)
+				menu->setEnabled(composites_muteable);
 			
 //   			calculate_ramachandran_->setEnabled((number_of_selected_objects == 1) &&
 //   							RTTI::isKindOf<Protein>(**getMainControl()->getMolecularControlSelection().begin()));

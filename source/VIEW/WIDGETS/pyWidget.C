@@ -463,31 +463,31 @@ namespace BALL
 
 	insertMenuEntry(MainControl::TOOLS_PYTHON, tr("Load Python Script"), this,
 									SLOT(loadScript()), "Shortcut|Tools|Python|Load_script",
-									UIOperationMode::MODE_ADVANCED);
+									QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 
 	insertMenuEntry(MainControl::TOOLS_PYTHON, tr("Save Python Script"), this,
 									SLOT(saveScript()), "Shortcut|Tools|Python|Save_script",
-									UIOperationMode::MODE_ADVANCED);
+									QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 
 	insertMenuEntry(MainControl::TOOLS_PYTHON, tr("Exec Python Script"), this,
 									SLOT(execScript()), "Shortcut|Tools|Python|Exec_script",
-									UIOperationMode::MODE_ADVANCED);
+									QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 
 	insertMenuEntry(MainControl::TOOLS_PYTHON, tr("Run Current Script"), this,
 									SLOT(runCurrentScript()), "Shortcut|Tools|Python|Run_current_script",
-									UIOperationMode::MODE_ADVANCED);
+									QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 
 	insertMenuEntry(MainControl::TOOLS_PYTHON, tr("Abort Python Script"), this,
 									SLOT(abortScript()), "Shortcut|Tools|Python|Abort_script",
-									UIOperationMode::MODE_ADVANCED);
+									QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 
 	insertMenuEntry(MainControl::TOOLS_PYTHON, tr("Export History"), this,
 									SLOT(exportHistory()), "Shortcut|Tools|Python|Export_history",
-									UIOperationMode::MODE_ADVANCED);
+									QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 
 	insertMenuEntry(MainControl::TOOLS_PYTHON, tr("Clear Editor"), this,
 									SLOT(clearScript()), "Shortcut|Tools|Python|Clear_editor",
-									UIOperationMode::MODE_ADVANCED);
+									QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 			startInterpreter();
 
 			valid_ = PyInterpreter::isValid();

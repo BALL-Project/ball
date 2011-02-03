@@ -224,7 +224,8 @@ namespace BALL
 		{
 			if (getMainControl() == 0) return 0;
 
-			QAction* result = getMainControl()->insertMenuEntry(menu_id, (String)name, receiver, slot, description, shortcut, minimal_mode);
+			QAction* result = getMainControl()->insertMenuEntry(menu_id, (String)name, receiver, slot, 
+			                                                    description, shortcut, minimal_mode);
 
 			if (result && (menu_hint != ""))
 			{
