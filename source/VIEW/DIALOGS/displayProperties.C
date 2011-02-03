@@ -886,7 +886,7 @@ void DisplayProperties::createRepresentation(String data_string, const vector<co
 
 			for (Position i=0; i<string_vector_properties.size(); ++i)
 			{
-				istringstream is(string_vector_properties[i].decodeBase64());
+				std::istringstream is(string_vector_properties[i].decodeBase64());
 
 				TextPersistenceManager tmp(is);
 				tmp.registerClass(RTTI::getStreamName<Stage::RaytracingMaterial>(), Stage::RaytracingMaterial::createDefault);
