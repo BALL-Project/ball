@@ -131,7 +131,7 @@ namespace BALL
 			float new_right  = 2*right - eye_separation * ndfl;
 			
 			if (stage_->getCamera().getProjectionMode() == Camera::PERSPECTIVE)
-				setFrustum(near, RTfact::Packet<1,float>::C_INFINITY, left, right, bottom, top);
+				setFrustum(near, RTfact::Packet<1,float>::C_INFINITY, left, right, top, bottom);
 			else
 			{
 				//glOrtho(new_left * orthographic_zoom_, new_right * orthographic_zoom_, 
