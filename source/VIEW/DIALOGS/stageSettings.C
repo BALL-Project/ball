@@ -463,18 +463,18 @@ namespace BALL
 			controlScreen_comboBox->clear();
 			controlScreen_comboBox->addItem(tr("disabled"));
 			for (int i=0; i<number; ++i)
-				controlScreen_comboBox->addItem(QString::number(number));
+				controlScreen_comboBox->addItem(QString::number(i));
 			controlScreen_comboBox->setCurrentIndex(1);
 
 			leftEyeScreen_comboBox->clear();
 			leftEyeScreen_comboBox->addItem(tr("disabled"));
 			for (int i=0; i<number; ++i)
-				leftEyeScreen_comboBox->addItem(QString::number(number));
+				leftEyeScreen_comboBox->addItem(QString::number(i));
 
 			rightEyeScreen_comboBox->clear();
 			rightEyeScreen_comboBox->addItem(tr("disabled"));
 			for (int i=0; i<number; ++i)
-				rightEyeScreen_comboBox->addItem(QString::number(number));
+				rightEyeScreen_comboBox->addItem(QString::number(i));
 		}
 
 		void StageSettings::eyeDistanceChanged()
