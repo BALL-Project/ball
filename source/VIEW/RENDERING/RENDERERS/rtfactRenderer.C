@@ -119,8 +119,8 @@ namespace BALL
 			// TODO: - make near and far clip configurable!!!
 			//       - keep the same frustrum until either the size or the stereo settings change
 
-			float near    = 1.5f;
-			float ndfl    = near / focal_length;
+			float nearf    = 1.5f;
+			float ndfl    = nearf / focal_length;
 			float left    = -2.0 * x_scale_;
 			float right   =  2.0 * x_scale_;
 			float bottom 	= -2.0 * y_scale_;
@@ -136,7 +136,7 @@ namespace BALL
 			float new_right  = 2*right - eye_separation * ndfl;
 			
 			if (stage_->getCamera().getProjectionMode() == Camera::PERSPECTIVE)
-				setFrustum(near, RTfact::Packet<1,float>::C_INFINITY, left, right, top, bottom);
+				setFrustum(nearf, RTfact::Packet<1,float>::C_INFINITY, left, right, top, bottom);
 			else
 			{
 				//glOrtho(new_left * orthographic_zoom_, new_right * orthographic_zoom_, 
