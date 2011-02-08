@@ -129,6 +129,12 @@ ELSEIF(MSVC)
 
 	## minimal code rebuild
 	#add_definitions(/Gm /Zi)
+
+	## if requested, produce a parallel solution
+	OPTION(BALL_BUILD_SOLUTION_PARALLEL OFF)
+	IF (BALL_BUILD_SOLUTION_PARALLEL)
+		ADD_DEFINITIONS(/MP)
+	ENDIF()
 ELSEIF(CMAKE_CXX_COMPILER MATCHES "icpc")
 	
 	SET(CXX_COMPILER_ID "Intel")
