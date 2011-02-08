@@ -21,7 +21,7 @@ namespace BALL
 		class Scene;
 		class MainControl;
 
-		class BALL_EXPORT InteractionMode : public QObject
+		class BALL_VIEW_EXPORT InteractionMode : public QObject
 		{
 			Q_OBJECT
 

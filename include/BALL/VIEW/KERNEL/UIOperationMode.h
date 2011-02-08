@@ -22,7 +22,7 @@ namespace BALL
 		/**
 		 * A singleton that manages the operation mode of our user interface.
 		 */
-		class UIOperationMode
+		class BALL_VIEW_EXPORT UIOperationMode
 		{
 			public:
 				
