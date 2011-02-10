@@ -57,12 +57,12 @@ namespace BALL
 				/// switch cleanup of GAFF types (cc=>cd, ...) on or off
 				static const String GAFF_ATOMTYPE_POSTPROCESSING;
 			};
-			
+
 			struct BALL_EXPORT Default
 			{
 				/// path to the file containing the atom type definitions
 				static const String ATOMTYPE_FILENAME;
-				
+
 				/// switch cleanup of GAFF types (cc=>cd, ...) on or off
 				static const bool GAFF_ATOMTYPE_POSTPROCESSING;
 			};
@@ -83,6 +83,8 @@ namespace BALL
 			virtual ~GAFFTypeProcessor();
 			virtual Processor::Result operator() (Composite &composite);
 
+      std::set<String> getTypeNames() const;
+
 			Options options;
 
 		protected:
@@ -92,7 +94,7 @@ namespace BALL
 			std::vector<TypeDefinition> getNitrogenTypes_() { return atom_types_[7];  }
 			std::vector<TypeDefinition> getOxygenTypes_()   { return atom_types_[8];  }
 			std::vector<TypeDefinition> getSulfurTypes_()   { return atom_types_[16]; }
-			
+
 			/** Read file with table of atomtypes and push atomtypes 
 			 *  and their TypeDefinition in corresponding vector
 			 *  and store a GAFFCESParser for every CESstring.
@@ -101,7 +103,7 @@ namespace BALL
 			 */
 			void parseAtomtypeTableFile_()
 				throw(Exception::FileNotFound);
-	
+
 			/// compute aromaticity, ring memberships, GAFF bond typization, ...
 			void precomputeBondProperties_(Molecule* molecule);
 

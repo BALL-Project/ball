@@ -43,8 +43,8 @@ namespace BALL
 		StringHashMap<GAFFCESParser*>::Iterator parser_it = ces_parsers_.begin();
 		for (; parser_it != ces_parsers_.end(); ++parser_it)
 			delete(parser_it->second);
-	}	
-	
+  }
+
 	Processor::Result GAFFTypeProcessor::operator() (Composite &composite)
 	{
 		// TODO: think whether application to other things than molecules would make sense...
@@ -72,6 +72,23 @@ namespace BALL
 
 		return Processor::CONTINUE;
 	}
+
+  std::set<String> GAFFTypeProcessor::getTypeNames() const
+  {
+    std::set<String> result;
+    for (std::map<Position, std::vector<TypeDefinition> >::const_iterator type_it = atom_types_.begin();
+         type_it != atom_types_.end();
+         ++type_it)
+    {
+      std::vector<TypeDefinition> const& types = type_it->second;
+      for (Position i=0; i<types.size(); ++i)
+      {
+        result.insert(types[i].atom_type);
+      }
+    }
+
+    return result;
+  }
 
 	//read File with table of atomtypes and push atomtypes 
 	//and their TypeDefinition in corresponding vector
