@@ -36,6 +36,10 @@ namespace BALL
 			return;
 
 #ifdef BALL_COMPILER_MSVC
+		// TODO: we need much, much better unc handling
+		if (path.hasPrefix("//"))
+			return;
+
 		// replace "\" by "/"
 		for (index = 0; index != INVALID_INDEX; index = path.substitute("\\", "/")) { }
 #endif
