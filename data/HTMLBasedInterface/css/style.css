@@ -1,0 +1,49 @@
+#breadcrumb {
+	background-image:url(../images/breadcrumb_bg.png);
+	background-repeat:x-repeat;
+	vertical-align:middle;
+	color:black;
+	padding-top:10px;
+	padding-bottom:10px;
+	padding-left:10px
+}
+
+#text-content {
+	height:800px;
+	margin:0px 10px 0px 10px;
+}
+
+#content {
+//	background-image:url(../images/buckball_blured.png);
+	background-repeat:no-repeat;
+	background-position:center;
+	background-color:black;
+	height:700px;
+	text-align:justify;
+}
+
+.actions {
+	margin:5px 5px 5px 50px;
+	padding:5px 20px 5px 10px;
+	background-color:#666666;
+	display:table;
+}
+
+div.actions h3 {
+	color:#FFFFFF;
+}
+
+div.decoration_image {
+ float:right;
+ margin:5px 10px 5px 10px;
+}
+
+div.actions a {
+	margin-bottom:2pt;
+	color:#FF0000;
+	display:block;
+}
+
+div.actions a:hover {
+	color:#00FFFF;
+}

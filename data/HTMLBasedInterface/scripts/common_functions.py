@@ -1,7 +1,10 @@
 from BALL import *
 
 def loadStructure(filename):
-	p = PDBFile(String("/home/HPL/dstoeckel/source/BALL/data/" + filename))
+	path = Path()
+	loc = path.find(String(filename))
+	p = MolFileFactory.open(loc)
+
 	s = System()
 	p >> s
 

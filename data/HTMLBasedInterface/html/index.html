@@ -1,14 +1,73 @@
 <html>
 	<head>
 		<title>Startseite</title>
+		<link rel="stylesheet" href="../css/style.css">
 	</head>
-	<body>
-		<h1>Willkommen</h1>
-		<div class="greeter">
-			Dies ist die Startseite zur interaktiven Molek&uuml;lsimulation BALLView.
+	<body style="background-color:#000000;color:#FFFFFF;margin:0px 0px 0px 0px">
+		<script>
+			firsttime=true
+			mini_index=0
+			mini_pics=['../images/cool_scaled.png', '../images/3eml_scaled.png', '../images/1glu2_scaled.png']
+
+			fade_step=0
+
+			function animateOpacity(id, from, to, duration, time) {
+				var elem = document.getElementById(id)
+				var opa = (to - from) * time / duration
+
+				elem.style.opacity = opa
+
+				if(time < duration) {
+					time += 20
+					window.setTimeout("animateOpacity(\"" + id + "\"," + from + "," + to + "," + duration + "," + time + ")", 20)
+				}
+			}
+
+			function doFade(image, duration) {
+				var image_element = document.getElementById("mini_picture")
+				var image_bg_element = document.getElementById("mini_picture_bg")
+
+				image_bg_element.style.backgroundImage = 'url(' + image_element.src + ')'
+				image_bg_element.style.backgroundRepeat = 'no-repeat'
+
+				image_element.src = image
+
+				animateOpacity("mini_picture", 0, 1, duration, 0)
+			}
+
+			function changeMiniPicture() {
+				doFade(mini_pics[mini_index], 1500)
+
+				mini_index = (mini_index == 2) ? 0 : mini_index + 1
+				window.setTimeout("changeMiniPicture()", 5000);
+			}
+		</script>
+		<div id="breadcrumb">
+		Startseite
 		</div>
-		<div class="actions">
-			<a href="bpti.html?action=loadStructure&module=common_functions&filename=structures/bpti.pdb">BPsdddTI</a>
+
+		<div id="text-content">
+			<h1>Willkommen</h1>
+			<div id="content">
+				<div id="mini_picture_bg" class="decoration_image"><img id="mini_picture" src="../images/1glu2_scaled.png"></div>
+				<div class="greeter">
+					Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+					invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
+					et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
+					Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+					diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+					At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
+					takimata sanctus est Lorem ipsum dolor sit amet.
+				</div>
+				<div class="actions">
+					<h3>Projekte</h3>
+					<a href="bpti.html?action=loadStructure&module=common_functions&filename=structures/bpti.pdb">BPTI</a>
+					<a href="aspirin.html?action=loadStructure&module=common_functions&filename=structures/aspirin.hin">Aspirin</a>
+				</div>
+			<div>
 		</div>
+		<script>
+			window.setTimeout("changeMiniPicture()", 5000);
+		</script>
 	</body>
 </html>
