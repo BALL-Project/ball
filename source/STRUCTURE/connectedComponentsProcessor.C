@@ -36,11 +36,11 @@ namespace BALL
 
 		// for each atom, the component_index contains the index of its 
 		// connected component
-		vector<Index>	component_index(atom_vector.size(), -1);
+		vector<Index> component_index(atom_vector.size(), -1);
 
 		// now calculate all connected components in the graph
 		// formed by atoms and bonds of the system
-			
+
 		// index of the current connected component
 		current_index = 0;
 
@@ -72,12 +72,11 @@ namespace BALL
 				while (atom_stack.size() > 0)
 				{
 					// check all bonds of this atom and remove it from the stack
-
 					Atom* current_atom = atom_stack.top();
 					atom_stack.pop();
 
-					Atom::BondIterator	bond_it = current_atom->beginBond();
-					for (; +bond_it; ++bond_it) 
+					Atom::BondIterator bond_it = current_atom->beginBond();
+					for (; +bond_it; ++bond_it)
 					{
 						// add the atom if it is not marked yet
 						// NOTE: if the bond points outside the current atom container,
@@ -159,7 +158,7 @@ namespace BALL
 			to_split.insert(*current_mol);
 
 			current_mol->setName(to_split.getName()+"_comp_"+String(current_component_index));
-			
+
 			for (Size current_atom_index = 0;
 								current_atom_index < current_component.size();
 								++current_atom_index)
