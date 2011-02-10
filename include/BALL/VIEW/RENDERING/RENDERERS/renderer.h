@@ -231,6 +231,9 @@ namespace BALL
 			///
 			virtual StereoMode getStereoMode() const;
 
+			///
+			virtual void setStereoFrustumConversion(int width_factor, int height_factor);
+
 			//@}
 			/**	@name Predicates
 			*/
@@ -333,6 +336,9 @@ namespace BALL
 			Vector3					camera_offset_;
 
 			bool						use_continuous_loop_;
+
+			Size            stereo_frustum_conversion_width_;
+			Size            stereo_frustum_conversion_height_;
 
 			StereoMode 			stereo_;
 		};

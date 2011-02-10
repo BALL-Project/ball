@@ -2405,6 +2405,7 @@ namespace BALL
 		void Scene::exitStereo()
 		{
 			no_stereo_action_->setChecked(true);
+			enter_stereo_action_->setChecked(false);
 			active_stereo_action_->setChecked(false);
 			dual_stereo_action_->setChecked(false);
 			dual_stereo_different_display_action_->setChecked(false);
@@ -2513,6 +2514,8 @@ namespace BALL
 
 			renderers_.erase(renderers_.begin() + main_renderer_);
 
+			main_display_->makeCurrent();
+
 			// now, create a new renderer
 			if (new_type == RenderSetup::OPENGL_RENDERER)
 			{
@@ -2535,6 +2538,9 @@ namespace BALL
 
 			main_renderer_ptr->setReceiveBufferUpdates(true);
 			resetRepresentationsForRenderer_(*main_renderer_ptr);
+
+			if (stereo_left_eye_  > main_renderer_) stereo_left_eye_--;
+			if (stereo_right_eye_ > main_renderer_) stereo_right_eye_--;
 
 			renderers_.push_back(main_renderer_ptr);
 			main_renderer_ = renderers_.size()-1;
@@ -2616,22 +2622,128 @@ namespace BALL
 				return;
 			}
 
+			QDesktopWidget* desktop = QApplication::desktop();
+
+			QWidget* left_screen  = desktop->screen(left_screen_index);
+			QWidget* right_screen = desktop->screen(right_screen_index);
+
+			QRect left_geometry  = stage_settings_->getLeftEyeGeometry();
+			QRect right_geometry = stage_settings_->getRightEyeGeometry();
+
 			RenderSetup::RendererType control_renderer_type = stage_settings_->getControlScreenRendererType();
 			RenderSetup::RendererType stereo_renderer_type = stage_settings_->getStereoScreensRendererType();
 
+#ifndef BALL_HAS_RTFACT
+			if (control_renderer_type == Renderer::RTFACT_RENDERER || stereo_renderer_type == Renderer::RTFACT_RENDERER)
+			{
+				QMessageBox *box = new QMessageBox;
+				box->setText("Stereo setup invalid");
+				box->setInformativeText("BALLView was compiled without RTfact support! Please run stereo setup again!");
+				box->show();
+
+				return;
+			}
+#endif
 			Renderer::StereoMode mode = stage_settings_->getStereoMode();
 
-			switch (mode)
+			if (mode == Renderer::DUAL_VIEW_STEREO || mode == Renderer::TOP_BOTTOM_STEREO) 
 			{
-				case Renderer::DUAL_VIEW_STEREO: // side by side
-					
-				case Renderer::INTERLACED_STEREO: // TODO
-				case Renderer::ACTIVE_STEREO: // TODO
-				default:	
-					Log.error() << "The chosen stereo mode is currently not implemented! Sorry!" << std::endl;
-					break;
+				// in both cases (side by side and top bottom), we can 
+				// use the same code
+				GLRenderWindow* left_widget = new GLRenderWindow(left_screen, "left eye", Qt::FramelessWindowHint);
+				left_widget->makeCurrent();
+				left_widget->init();
+				left_widget->resize(left_geometry.width(), left_geometry.height());
+				left_widget->move(left_geometry.x(), left_geometry.y());
+
+				GLRenderWindow* right_widget = new GLRenderWindow(right_screen, "right eye", Qt::FramelessWindowHint);
+				right_widget->makeCurrent();
+				right_widget->init();
+				right_widget->resize(right_geometry.width(), right_geometry.height());
+				right_widget->move(right_geometry.x(), right_geometry.y());
+
+				Renderer* left_renderer;
+				Renderer* right_renderer;
+
+				if (stereo_renderer_type == RenderSetup::OPENGL_RENDERER)
+				{
+					left_widget->makeCurrent();
+					left_renderer = new GLRenderer;
+					left_renderer->init(*this);
+					left_renderer->setStereoMode(Renderer::DUAL_VIEW_STEREO);
+					static_cast<GLRenderer*>(left_renderer)->enableVertexBuffers(want_to_use_vertex_buffer_);
+
+					right_widget->makeCurrent();
+					right_renderer = new GLRenderer;
+					right_renderer->init(*this);
+					right_renderer->setStereoMode(Renderer::DUAL_VIEW_STEREO);
+					static_cast<GLRenderer*>(right_renderer)->enableVertexBuffers(want_to_use_vertex_buffer_);
+				}
+				else if (stereo_renderer_type == RenderSetup::RTFACT_RENDERER)
+				{
+#ifdef BALL_HAS_RTFACT
+					left_renderer = new t_RaytracingRenderer();
+					left_renderer->init(*this);
+					static_cast<t_RaytracingRenderer*>(left_renderer)->setFrameBufferFormat(left_widget->getFormat());
+
+					right_renderer = new t_RaytracingRenderer();
+					right_renderer->init(*this);
+					static_cast<t_RaytracingRenderer*>(right_renderer)->setFrameBufferFormat(right_widget->getFormat());
+#endif
+				}
+
+				left_widget->show();
+				right_widget->show();
+
+				left_renderer->setSize(left_widget->width(),   left_widget->height());
+				right_renderer->setSize(right_widget->width(), right_widget->height());
+
+				// we may need to account for differences in the frusta
+				QRect left_screen_size = QApplication::desktop()->screenGeometry(left_screen_index);
+				left_renderer->setStereoFrustumConversion(left_screen_size.width()  / left_geometry.width(),
+                                                  left_screen_size.height() / left_geometry.height());
+
+				QRect right_screen_size = QApplication::desktop()->screenGeometry(right_screen_index);
+				right_renderer->setStereoFrustumConversion(right_screen_size.width()  / right_geometry.width(),
+                                                   right_screen_size.height() / right_geometry.height());
+
+				boost::shared_ptr<RenderSetup> left_rs(new RenderSetup(left_renderer, left_widget, this, stage_));
+
+				resetRepresentationsForRenderer_(*left_rs);
+				left_rs->setStereoMode(RenderSetup::LEFT_EYE);
+
+				renderers_.push_back(left_rs);
+				stereo_left_eye_ = renderers_.size()-1;
+				left_rs->start();
+
+				boost::shared_ptr<RenderSetup> right_rs(new RenderSetup(right_renderer, right_widget, this, stage_));
+
+				resetRepresentationsForRenderer_(*right_rs);
+				right_rs->setStereoMode(RenderSetup::RIGHT_EYE);
+
+				renderers_.push_back(right_rs);
+				stereo_right_eye_ = renderers_.size()-1;
+				right_rs->start();
+
+				left_rs->makeDependentOn(right_rs);
+				right_rs->makeDependentOn(left_rs);
+			}
+			else
+			{
+				Log.error() << "The chosen stereo mode is currently not implemented! Sorry!" << std::endl;
 			}
 
+			switchRenderer(control_renderer_type);
+
+			// why do we need *this*?
+			applyPreferences();
+			updateGL();
+
+			no_stereo_action_->setChecked(false);
+			active_stereo_action_->setChecked(false);
+			enter_stereo_action_->setChecked(true);
+			dual_stereo_action_->setChecked(false);
+			dual_stereo_different_display_action_->setChecked(false);
 		}
 
 		void Scene::enterActiveStereo()

@@ -121,16 +121,10 @@ namespace BALL
 
 			float nearf    = 1.5f;
 			float ndfl    = nearf / focal_length;
-			float left    = -2.0 * x_scale_;
-			float right   =  2.0 * x_scale_;
-			float bottom 	= -2.0 * y_scale_;
-			float top    	=  2.0 * y_scale_;
-
-			if (getStereoMode() == Renderer::DUAL_VIEW_STEREO)
-			{
-				left  *= 2;
-				right *= 2;
-			}
+			float left    = -2.0 * stereo_frustum_conversion_width_  * x_scale_;
+			float right   =  2.0 * stereo_frustum_conversion_width_  * x_scale_;
+			float bottom 	= -2.0 * stereo_frustum_conversion_height_ * y_scale_;
+			float top    	=  2.0 * stereo_frustum_conversion_height_ * y_scale_;
 
 			float new_left   = 2*left  - eye_separation * ndfl;
 			float new_right  = 2*right - eye_separation * ndfl;

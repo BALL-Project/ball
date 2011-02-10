@@ -2099,18 +2099,22 @@ namespace BALL
 
 			float ndfl    = near_ / focal_length;
 
-			float new_left   = 2*left_  - eye_separation * ndfl;
-			float new_right  = 2*right_ - eye_separation * ndfl;
+			// TODO: is this correct?
+			float new_left   = 2*stereo_frustum_conversion_width_*left_  - eye_separation * ndfl;
+			float new_right  = 2*stereo_frustum_conversion_width_*right_ - eye_separation * ndfl;
+
+			float new_top    = top_    * stereo_frustum_conversion_height_;
+			float new_bottom = bottom_ * stereo_frustum_conversion_height_;
 
 			glMatrixMode(GL_PROJECTION);
 
 			glLoadIdentity();
 
 			if (stage_->getCamera().getProjectionMode() == Camera::PERSPECTIVE)
-				glFrustum(new_left, new_right, bottom_, top_, near_, far_);
+				glFrustum(new_left, new_right, new_bottom, new_top, near_, far_);
 			else
-				glOrtho(new_left * orthographic_zoom_, new_right * orthographic_zoom_, 
-				         bottom_ * orthographic_zoom_,      top_ * orthographic_zoom_, near_, far_);
+				glOrtho(new_left   * orthographic_zoom_, new_right * orthographic_zoom_, 
+				        new_bottom * orthographic_zoom_, new_top   * orthographic_zoom_, near_, far_);
 
 			glViewport(0, 0, width_, height_);
 

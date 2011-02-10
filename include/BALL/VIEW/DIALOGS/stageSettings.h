@@ -95,6 +95,14 @@ namespace BALL
 			 */
 			RenderSetup::RendererType getStereoScreensRendererType() const;
 
+			/** Return the screen geometry for the left eye
+       */
+			QRect getLeftEyeGeometry() const;
+
+			/** Return the screen geometry for the right eye
+       */
+			QRect getRightEyeGeometry() const;
+
 			public slots:
 
 			/// Show a QColorDialog to select a new background color for the Scene
@@ -119,7 +127,13 @@ namespace BALL
 			void screenCountChanged(int number);
 
 			///
+			void stereoScreenChanged(int new_screen);
+
+			///
 			void identifyDisplays();
+
+			///
+			void stereoModeChanged();
 
 			private slots:
 				

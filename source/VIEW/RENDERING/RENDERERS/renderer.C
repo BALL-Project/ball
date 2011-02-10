@@ -42,6 +42,8 @@ namespace BALL
 				volume_width_(0.),
 				show_light_sources_(false),
 				use_continuous_loop_(false),
+				stereo_frustum_conversion_width_(1),
+				stereo_frustum_conversion_height_(1),
 				stereo_(NO_STEREO)
 		{
 			stage_ = &RTTI::getDefault<Stage>();
@@ -57,6 +59,8 @@ namespace BALL
 			volume_width_(renderer.volume_width_),
 			show_light_sources_(renderer.show_light_sources_),
 			use_continuous_loop_(renderer.use_continuous_loop_),
+			stereo_frustum_conversion_width_(renderer.stereo_frustum_conversion_width_),
+			stereo_frustum_conversion_height_(renderer.stereo_frustum_conversion_height_),
 			stereo_(renderer.stereo_)
 		{}
 
@@ -278,6 +282,12 @@ namespace BALL
 		void Renderer::setStereoMode(Renderer::StereoMode state)
 		{
 			stereo_ = state;
+		}
+
+		void Renderer::setStereoFrustumConversion(int width_factor, int height_factor)
+		{
+			stereo_frustum_conversion_width_  = width_factor;
+			stereo_frustum_conversion_height_ = height_factor;
 		}
 
 

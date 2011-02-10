@@ -1513,7 +1513,14 @@
                     </widget>
                    </item>
                    <item row="0" column="1">
-                    <widget class="QLineEdit" name="left_xmin_edit_2"/>
+                    <widget class="QLineEdit" name="left_xmin_edit">
+                     <property name="minimumSize">
+                      <size>
+                       <width>60</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                    </widget>
                    </item>
                    <item row="0" column="2">
                     <widget class="QLabel" name="interlaced_label_26">
@@ -1529,13 +1536,6 @@
                      </property>
                     </widget>
                    </item>
-                   <item row="0" column="6">
-                    <widget class="QLabel" name="interlaced_label_28">
-                     <property name="text">
-                      <string>px</string>
-                     </property>
-                    </widget>
-                   </item>
                    <item row="1" column="0">
                     <widget class="QLabel" name="interlaced_label_29">
                      <property name="text">
@@ -1544,7 +1544,14 @@
                     </widget>
                    </item>
                    <item row="1" column="1">
-                    <widget class="QLineEdit" name="left_width_edit_2"/>
+                    <widget class="QLineEdit" name="left_width_edit">
+                     <property name="minimumSize">
+                      <size>
+                       <width>60</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                    </widget>
                    </item>
                    <item row="1" column="2">
                     <widget class="QLabel" name="interlaced_label_30">
@@ -1561,12 +1568,12 @@
                     </widget>
                    </item>
                    <item row="1" column="5">
-                    <widget class="QLineEdit" name="left_height_edit_2"/>
-                   </item>
-                   <item row="1" column="6">
-                    <widget class="QLabel" name="interlaced_label_32">
-                     <property name="text">
-                      <string>px</string>
+                    <widget class="QLineEdit" name="left_height_edit">
+                     <property name="minimumSize">
+                      <size>
+                       <width>60</width>
+                       <height>0</height>
+                      </size>
                      </property>
                     </widget>
                    </item>
@@ -1597,9 +1604,29 @@
                     </spacer>
                    </item>
                    <item row="0" column="5">
-                    <widget class="QLineEdit" name="left_ymin_edit_2">
+                    <widget class="QLineEdit" name="left_ymin_edit">
+                     <property name="minimumSize">
+                      <size>
+                       <width>60</width>
+                       <height>0</height>
+                      </size>
+                     </property>
                      <property name="text">
                       <string/>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="7">
+                    <widget class="QLabel" name="interlaced_label_32">
+                     <property name="text">
+                      <string>px</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="7">
+                    <widget class="QLabel" name="interlaced_label_28">
+                     <property name="text">
+                      <string>px</string>
                      </property>
                     </widget>
                    </item>
@@ -1632,7 +1659,14 @@
                     </widget>
                    </item>
                    <item row="0" column="1">
-                    <widget class="QLineEdit" name="right_xmin_edit_2"/>
+                    <widget class="QLineEdit" name="right_xmin_edit">
+                     <property name="minimumSize">
+                      <size>
+                       <width>60</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                    </widget>
                    </item>
                    <item row="0" column="2">
                     <widget class="QLabel" name="interlaced_label_34">
@@ -1649,7 +1683,14 @@
                     </widget>
                    </item>
                    <item row="0" column="5">
-                    <widget class="QLineEdit" name="right_ymin_edit_2"/>
+                    <widget class="QLineEdit" name="right_ymin_edit">
+                     <property name="minimumSize">
+                      <size>
+                       <width>60</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                    </widget>
                    </item>
                    <item row="0" column="6">
                     <widget class="QLabel" name="interlaced_label_36">
@@ -1666,7 +1707,14 @@
                     </widget>
                    </item>
                    <item row="1" column="1">
-                    <widget class="QLineEdit" name="right_width_edit_2"/>
+                    <widget class="QLineEdit" name="right_width_edit">
+                     <property name="minimumSize">
+                      <size>
+                       <width>60</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                    </widget>
                    </item>
                    <item row="1" column="2">
                     <widget class="QLabel" name="interlaced_label_38">
@@ -1683,7 +1731,14 @@
                     </widget>
                    </item>
                    <item row="1" column="5">
-                    <widget class="QLineEdit" name="right_height_edit_2"/>
+                    <widget class="QLineEdit" name="right_height_edit">
+                     <property name="minimumSize">
+                      <size>
+                       <width>60</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                    </widget>
                    </item>
                    <item row="1" column="6">
                     <widget class="QLabel" name="interlaced_label_40">

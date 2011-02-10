@@ -58,6 +58,8 @@ namespace BALL
 			screenCountChanged(QApplication::desktop()->numScreens());
 #endif
 
+			stereoModeChanged();
+
 			controlRenderer_comboBox->addItem(tr("OpenGL"));
 			controlRenderer_comboBox->setCurrentIndex(1);
 			stereoScreensRenderer_comboBox->addItem(tr("OpenGL"));
@@ -66,10 +68,11 @@ namespace BALL
 #ifndef BALL_HAS_RTFACT
 			radioButton_rtfact->setEnabled(false);
 			radioButton_opengl->setChecked(true);
-			controlRenderer_comboBox->addItem(tr("RTfact"));
-			stereoRenderer_comboBox->addItem(tr("RTfact"));
 #else
 			radioButton_rtfact->setChecked(true);
+			controlRenderer_comboBox->addItem(tr("RTfact"));
+			stereoScreensRenderer_comboBox->addItem(tr("RTfact"));
+			stereoScreensRenderer_comboBox->setCurrentIndex(2);
 #endif
 			// signals and slots connections
 			connect( color_button, SIGNAL( clicked() ), this, SLOT( colorPressed() ) );
@@ -78,6 +81,7 @@ namespace BALL
 			connect( eye_distance_slider, SIGNAL( valueChanged(int) ), this, SLOT( eyeDistanceChanged() ) );
 			connect( focal_distance_slider, SIGNAL( valueChanged(int) ), this, SLOT( focalDistanceChanged() ) );
 			connect( radioButton_perspectiveProjection, SIGNAL( clicked() ), this, SLOT( projectionTransformationChanged() ) );
+
 			connect( radioButton_orthographicProjection, SIGNAL( clicked() ), this, SLOT( projectionTransformationChanged() ) );
 			connect( texture_browse_button, SIGNAL( clicked() ), this, SLOT( loadEnvironmentMapPressed() ) );
 			connect( environment_map, SIGNAL( toggled(bool)), this, SLOT( environmentMapChanged(bool) ) );
@@ -86,6 +90,16 @@ namespace BALL
 			connect( identifyDisplays_button, SIGNAL( clicked() ), this, SLOT( identifyDisplays() ) );
 
 			connect( QApplication::desktop(), SIGNAL( screenCountChanged(int) ), this, SLOT( screenCountChanged(int) ) );
+			
+			connect( interlaced_radioButton,    SIGNAL( clicked() ), this, SLOT( stereoModeChanged() ) );
+			connect( sideBySide_radioButton,    SIGNAL( clicked() ), this, SLOT( stereoModeChanged() ) );
+			connect( topBottom_radioButton,     SIGNAL( clicked() ), this, SLOT( stereoModeChanged() ) );
+			connect( activeStereo_radioButton,  SIGNAL( clicked() ), this, SLOT( stereoModeChanged() ) );
+			connect( anaglyph_radioButton,      SIGNAL( clicked() ), this, SLOT( stereoModeChanged() ) );
+			connect( custom_radioButton,        SIGNAL( clicked() ), this, SLOT( stereoModeChanged() ) );
+
+			connect( leftEyeScreen_comboBox,    SIGNAL( currentIndexChanged(int) ), this, SLOT( stereoScreenChanged(int) ) );
+			connect( rightEyeScreen_comboBox,   SIGNAL( currentIndexChanged(int) ), this, SLOT( stereoScreenChanged(int) ) );
 		} 
 
 
@@ -368,6 +382,11 @@ namespace BALL
 			downsampling_slider->setValue(4);
 		}
 
+		void StageSettings::stereoScreenChanged(int new_screen)
+		{
+			stereoModeChanged();
+		}
+
 		void StageSettings::identifyDisplays()
 		{
 			// loop over all displays
@@ -407,6 +426,52 @@ namespace BALL
 			}
 
 			QTimer::singleShot(2000, this, SLOT(killIdentificationLabels_()));
+		}
+
+		void StageSettings::stereoModeChanged()
+		{
+			int control_screen_index = getControlScreenNumber();
+			int left_screen_index    = getLeftEyeScreenNumber();
+			int right_screen_index   = getRightEyeScreenNumber();
+
+			if (control_screen_index == -1 || left_screen_index == -1 || right_screen_index == -1)
+				return;
+
+			QDesktopWidget* desktop = QApplication::desktop();
+
+			QRect left_screen_geom  = QApplication::desktop()->screenGeometry(left_screen_index);
+			QRect	right_screen_geom = QApplication::desktop()->screenGeometry(right_screen_index);
+
+			if (left_screen_index == right_screen_index)
+			{
+				if (sideBySide_radioButton->isChecked())
+				{
+					left_screen_geom.setWidth(left_screen_geom.width()/2);
+
+					right_screen_geom.setX(left_screen_geom.x() + left_screen_geom.width());
+					right_screen_geom.setWidth(left_screen_geom.width());
+				}
+				else if (topBottom_radioButton->isChecked())
+				{
+					left_screen_geom.setHeight(left_screen_geom.height()/2);
+
+					right_screen_geom.setY(left_screen_geom.y() + left_screen_geom.height());
+					right_screen_geom.setHeight(left_screen_geom.height());
+				}
+			}
+
+			if (sideBySide_radioButton->isChecked() || topBottom_radioButton->isChecked())
+			{
+				left_xmin_edit->setText(QString::number(left_screen_geom.x()));
+				left_ymin_edit->setText(QString::number(left_screen_geom.y()));
+				left_width_edit->setText(QString::number(left_screen_geom.width()));
+				left_height_edit->setText(QString::number(left_screen_geom.height()));
+
+				right_xmin_edit->setText(QString::number(right_screen_geom.x()));
+				right_ymin_edit->setText(QString::number(right_screen_geom.y()));
+				right_width_edit->setText(QString::number(right_screen_geom.width()));
+				right_height_edit->setText(QString::number(right_screen_geom.height()));
+			}
 		}
 
 		void StageSettings::killIdentificationLabels_()
@@ -492,6 +557,46 @@ namespace BALL
 				result = RenderSetup::OPENGL_RENDERER;
 			else if (selected_renderer == "RTfact")
 				result = RenderSetup::RTFACT_RENDERER;
+
+			return result;
+		}
+
+		QRect StageSettings::getLeftEyeGeometry() const
+		{
+			bool valid;
+			int left_xmin_result = left_xmin_edit->text().toInt(&valid);
+			if (!valid) left_xmin_result = 0;
+
+			int left_ymin_result = left_ymin_edit->text().toInt(&valid);
+			if (!valid) left_ymin_result = 0;
+
+			int left_width_result = left_width_edit->text().toInt(&valid);
+			if (!valid) left_width_result = 0;
+
+			int left_height_result = left_height_edit->text().toInt(&valid);
+			if (!valid) left_height_result = 0;
+
+			QRect result(left_xmin_result, left_ymin_result, left_width_result, left_height_result);
+
+			return result;
+		}
+
+		QRect StageSettings::getRightEyeGeometry() const
+		{
+			bool valid;
+			int right_xmin_result = right_xmin_edit->text().toInt(&valid);
+			if (!valid) right_xmin_result = 0;
+
+			int right_ymin_result = right_ymin_edit->text().toInt(&valid);
+			if (!valid) right_ymin_result = 0;
+
+			int right_width_result = right_width_edit->text().toInt(&valid);
+			if (!valid) right_width_result = 0;
+
+			int right_height_result = right_height_edit->text().toInt(&valid);
+			if (!valid) right_height_result = 0;
+
+			QRect result(right_xmin_result, right_ymin_result, right_width_result, right_height_result);
 
 			return result;
 		}
