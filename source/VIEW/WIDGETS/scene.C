@@ -1399,6 +1399,16 @@ namespace BALL
 				setMenuHelp(no_stereo_action_, "tips.html#3D");
 			}
 
+			enter_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, tr("Enter Stereo"), this,
+			                                       SLOT(enterStereo()), "Shortcut|Display|Stereo|Enter_Stereo",
+																						 QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
+
+			if (enter_stereo_action_)
+			{
+				enter_stereo_action_->setCheckable(true);
+				setMenuHelp(enter_stereo_action_, "tips.html#3D");
+			}
+
 			active_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, tr("Shutter Glasses"), this, 
 			                                        SLOT(enterActiveStereo()), "Shortcut|Display|Stereo|Shutter_Glasses",
 																							QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
@@ -2584,6 +2594,45 @@ namespace BALL
 			renderers_[renderers_.size()-1]->start();
 		}
 #endif
+
+		void Scene::enterStereo()
+		{
+			// first clean up
+			exitStereo();
+
+			// get the correct screens for control, left, and right eye
+			// TODO: handle the control screen! currently, we just leave it alone
+			int control_screen_index = stage_settings_->getControlScreenNumber();
+			int left_screen_index = stage_settings_->getLeftEyeScreenNumber();
+			int right_screen_index = stage_settings_->getRightEyeScreenNumber();
+
+			if (left_screen_index == -1 || right_screen_index == -1)
+			{
+				QMessageBox *box = new QMessageBox;
+				box->setText("Stereo setup invalid");
+				box->setInformativeText("Please assign the displays to valid screens in Preferences->Main->Stereo->Display Settings");
+				box->show();
+
+				return;
+			}
+
+			RenderSetup::RendererType control_renderer_type = stage_settings_->getControlScreenRendererType();
+			RenderSetup::RendererType stereo_renderer_type = stage_settings_->getStereoScreensRendererType();
+
+			Renderer::StereoMode mode = stage_settings_->getStereoMode();
+
+			switch (mode)
+			{
+				case Renderer::DUAL_VIEW_STEREO: // side by side
+					
+				case Renderer::INTERLACED_STEREO: // TODO
+				case Renderer::ACTIVE_STEREO: // TODO
+				default:	
+					Log.error() << "The chosen stereo mode is currently not implemented! Sorry!" << std::endl;
+					break;
+			}
+
+		}
 
 		void Scene::enterActiveStereo()
 		{

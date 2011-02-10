@@ -58,10 +58,16 @@ namespace BALL
 			screenCountChanged(QApplication::desktop()->numScreens());
 #endif
 
+			controlRenderer_comboBox->addItem(tr("OpenGL"));
+			controlRenderer_comboBox->setCurrentIndex(1);
+			stereoScreensRenderer_comboBox->addItem(tr("OpenGL"));
+			stereoScreensRenderer_comboBox->setCurrentIndex(1);
 
 #ifndef BALL_HAS_RTFACT
 			radioButton_rtfact->setEnabled(false);
 			radioButton_opengl->setChecked(true);
+			controlRenderer_comboBox->addItem(tr("RTfact"));
+			stereoRenderer_comboBox->addItem(tr("RTfact"));
 #else
 			radioButton_rtfact->setChecked(true);
 #endif
@@ -120,14 +126,9 @@ namespace BALL
 					positions.clear();
 				}
 			}
-			Log.info() << "min_sep " << min_separation << std::endl;
-			Log.info() << "max_sep " << max_separation << std::endl;
 
 			float focal_distance = (max_separation - min_separation)/3 + min_separation;
-			Log.info() << "focal distance  " << focal_distance << std::endl;
-
 			float real2intern = focal_distance / getUser2ScreenDistance_();
-			Log.info() << "screen2intern  " << real2intern << std::endl;
 
 			float eye_separation = real2intern * getUserEyeDistance_();
 			
@@ -418,7 +419,7 @@ namespace BALL
 			identification_labels_.clear();
 		}
 
-		int StageSettings::getControlScreenNumber()
+		int StageSettings::getControlScreenNumber() const
 		{
 			bool valid;
 			int result = controlScreen_comboBox->currentText().toInt(&valid);
@@ -429,7 +430,7 @@ namespace BALL
 			return result;
 		}
 
-		int StageSettings::getLeftEyeScreenNumber()
+		int StageSettings::getLeftEyeScreenNumber() const
 		{
 			bool valid;
 			int result = leftEyeScreen_comboBox->currentText().toInt(&valid);
@@ -440,13 +441,57 @@ namespace BALL
 			return result;
 		}
 
-		int StageSettings::getRightEyeScreenNumber()
+		int StageSettings::getRightEyeScreenNumber() const
 		{
 			bool valid;
 			int result = rightEyeScreen_comboBox->currentText().toInt(&valid);
 
 			if (!valid)
 				result = -1;
+
+			return result;
+		}
+
+		Renderer::StereoMode StageSettings::getStereoMode() const
+		{
+			Renderer::StereoMode result = Renderer::NO_STEREO;
+
+			if (interlaced_radioButton->isChecked())
+				result = Renderer::INTERLACED_STEREO;
+			else if (sideBySide_radioButton->isChecked())
+				result = Renderer::DUAL_VIEW_STEREO;
+			else if (topBottom_radioButton->isChecked())
+				result = Renderer::TOP_BOTTOM_STEREO;
+			else if (activeStereo_radioButton->isChecked())
+				result = Renderer::ACTIVE_STEREO;
+
+			return result;
+		}
+
+		RenderSetup::RendererType StageSettings::getControlScreenRendererType() const
+		{
+			RenderSetup::RendererType result = RenderSetup::OPENGL_RENDERER;
+
+			QString selected_renderer = controlRenderer_comboBox->currentText();
+
+			if (selected_renderer == "OpenGL")
+				result = RenderSetup::OPENGL_RENDERER;
+			else if (selected_renderer == "RTfact")
+				result = RenderSetup::RTFACT_RENDERER;
+
+			return result;
+		}
+
+		RenderSetup::RendererType StageSettings::getStereoScreensRendererType() const
+		{
+			RenderSetup::RendererType result = RenderSetup::OPENGL_RENDERER;
+
+			QString selected_renderer = stereoScreensRenderer_comboBox->currentText();
+
+			if (selected_renderer == "OpenGL")
+				result = RenderSetup::OPENGL_RENDERER;
+			else if (selected_renderer == "RTfact")
+				result = RenderSetup::RTFACT_RENDERER;
 
 			return result;
 		}

@@ -68,7 +68,13 @@ namespace BALL
 				DUAL_VIEW_STEREO,
 
 				/// Stereo mode for output on two projectors with one display per head
-				DUAL_VIEW_DIFFERENT_DISPLAY_STEREO
+				DUAL_VIEW_DIFFERENT_DISPLAY_STEREO,
+
+				/// Stereo mode for top bottom views
+				TOP_BOTTOM_STEREO,
+
+				/// Line interlaced stereo
+				INTERLACED_STEREO
 			};
 
 			BALL_CREATE(Renderer)

@@ -603,6 +603,9 @@ namespace BALL
 				void exitStereo();
 
 				///
+				void enterStereo();
+
+				///
 				void enterActiveStereo();
 
 				///
@@ -869,7 +872,7 @@ namespace BALL
 				String createFPSInfo_();
 
 				// Menu entry IDs
-				QAction *no_stereo_action_, *active_stereo_action_, *dual_stereo_action_, *dual_stereo_different_display_action_;
+				QAction *no_stereo_action_, *enter_stereo_action_, *active_stereo_action_, *dual_stereo_action_, *dual_stereo_different_display_action_;
 				QAction *record_animation_action_, *start_animation_action_, *clear_animation_action_, *cancel_animation_action_;
 				QAction *animation_export_POV_action_, *animation_export_VRML_action_, 	*animation_export_PNG_action_, *animation_repeat_action_;
 

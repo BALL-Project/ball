@@ -17,6 +17,14 @@
 # include <BALL/MATHS/vector3.h>
 #endif
 
+#ifndef BALL_VIEW_RENDERING_RENDERSETUP_H
+# include <BALL/VIEW/RENDERING/renderSetup.h>
+#endif
+
+#ifndef BALL_VIEW_RENDERING_RENDERERS_RENDERER_H
+# include <BALL/VIEW/RENDERING/RENDERERS/renderer.h>
+#endif
+
 #include <BALL/VIEW/UIC/ui_stageSettings.h>
 
 #include <QtGui/QWidget>
@@ -65,15 +73,27 @@ namespace BALL
 
 			/** Return the screen number of the control screen in our stereo setup.
 			 */
-			int getControlScreenNumber();
+			int getControlScreenNumber() const;
 
 			/** Return the screen number of the right eye in our stereo setup.
 			 */
-			int getLeftEyeScreenNumber();
+			int getLeftEyeScreenNumber() const;
 
 			/** Return the screen number of the right eye in our stereo setup.
 			 */
-			int getRightEyeScreenNumber();
+			int getRightEyeScreenNumber() const;
+
+			/** Return the chosen stereo mode
+			 */
+			Renderer::StereoMode getStereoMode() const;
+
+			/** Return the selected renderer for the control screen
+			 */
+			RenderSetup::RendererType getControlScreenRendererType() const;
+
+			/** Return the selected renderer for the stereo screens
+			 */
+			RenderSetup::RendererType getStereoScreensRendererType() const;
 
 			public slots:
 
