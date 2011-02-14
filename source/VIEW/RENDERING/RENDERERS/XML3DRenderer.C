@@ -154,13 +154,19 @@ namespace BALL
 		{
 			String result;
       	
+			ColorRGBA old_ambience = rt_material_.ambient_color;
+			ColorRGBA ambience((float)old_ambience.getRed()  * rt_material_.ambient_intensity,
+			                  (float)old_ambience.getBlue()  * rt_material_.ambient_intensity,
+											  (float)old_ambience.getGreen() * rt_material_.ambient_intensity, 1.);
+
+      result += XML3DColorRGBA(ambience, "ambientIntensity");
+			
 			ColorRGBA old_specular = rt_material_.specular_color;
 			ColorRGBA specular((float)old_specular.getRed()   * rt_material_.specular_intensity,
 			                   (float)old_specular.getBlue()  * rt_material_.specular_intensity,
 											   (float)old_specular.getGreen() * rt_material_.specular_intensity, 1.);
 
       result += XML3DColorRGBA(specular, "specularColor");
-//      result += XML3DColorRGBA(rt_material_.emissive_color,  "emissiveColor");
 
 			ColorRGBA old_reflect = rt_material_.reflective_color;
 			ColorRGBA reflect((float)old_reflect.getRed()   * rt_material_.reflective_intensity,
@@ -168,8 +174,12 @@ namespace BALL
 											  (float)old_reflect.getGreen() * rt_material_.reflective_intensity, 1.);
 
       result += XML3DColorRGBA(reflect, "reflective");
+      
+      result += "<float name=\"shininess\">\n";
+      result += "   "+String(rt_material_.shininess/128.)+"\n";
+      result += "</float>\n";
 
-      result += "<float name=\"transparency\">\n";
+			result += "<float name=\"transparency\">\n";
       result += "   "+String(rt_material_.transparency)+"\n";
       result += "</float>\n";
 
@@ -177,18 +187,6 @@ namespace BALL
       result += "   " + String(rt_material_.transparency) + " "
 			                       + String(rt_material_.transparency) + " "
 														 + String(rt_material_.transparency) + "\n";
-      result += "</float>\n";
-
-      result += "<float name=\"shininess\">\n";
-      result += "   "+String(rt_material_.shininess)+"\n";
-      result += "</float>\n";
-
-      result += "<float name=\"ambientIntensity\">\n";
-      result += "   "+String(rt_material_.ambient_intensity)+"\n";
-      result += "</float>\n";
-
-      result += "<float name=\"Intensity\">\n";
-      result += "   "+String(rt_material_.ambient_intensity)+"\n";
       result += "</float>\n";
 
 			return result;
@@ -264,28 +262,26 @@ namespace BALL
 			if (create_XHTML_) {createXHTMLHeader();};
 
 			// initialize xml3d environment	
-			out << "<xml3d id=\"MyXml3d\"" << endl;
+			out << "<xml3d id=\"MyXml3d\" " << endl;
 
 			//set height and width of the scene
-			out << "		style=\"width:" << int(width) << "px; ";
-			out << "height: " << int(height) << "px;\"" << endl;
-
-			
-			
-			out << "		xmlns=\"http://www.w3.org/2009/xml3d\"" << endl;
+			out << "style=\"width:" << int(width) << "px; ";
+			out << "height: " << int(height) << "px;\" ";
+			out << "xmlns=\"http://www.xml3d.org/2009/xml3d\" ";
 			
 			//Enable Debug
 			//out << "webgl:showLog=\"true\"" << endl;
 			
 			// set Active View, standard name ist ballview_camera
-			out << "activeView=\"ballview_camera\"" << endl;
+			out << "activeView=\"ballview_camera\" ";
 
-			out << "		>" << endl;
+			// Close xml3d opening tag
+			out << ">" << endl;
 			
 
 			// Define BALLView Camera view
-			out << "<view id=\"ballview_camera\" ";
-			out << "position=\"" << stage.getCamera().getViewPoint().x << " "
+			out << "	<view id=\"ballview_camera\" ";
+			out << "	position=\"" << stage.getCamera().getViewPoint().x << " "
 													<< stage.getCamera().getViewPoint().y << " "
 													<< stage.getCamera().getViewPoint().z << "\"";
 			
@@ -366,14 +362,11 @@ namespace BALL
 			
 			out << " fieldOfView=\"" << 1.2 << "\"";
 			out << " >";
-			out << "</view>" << endl;
+			out << "</view>\n" << endl;
 			
-			// Add support for phong shaders
-			//out << "<script id=\"X3DPhong\">ORTPhong</script>" << endl;
+			//// Start the Defs Section
+			//out << "<defs id=\"MainDef\">\n";
 			
-			//Add support for point light sources in general
-			//out << "<script id=\"pointlight\">PointLight</script>" << endl;
-				
 			list<LightSource>::const_iterator it = stage_->getLightSources().begin();
 			for (int i=0; it!=stage_->getLightSources().end(); ++it, ++i)
 			{
@@ -381,28 +374,28 @@ namespace BALL
 				{
 					Vector3 pos = it->getPosition();
 					float intensity = it->getIntensity() ;
-					intensity = intensity * 100;
 					ColorRGBA color = it->getColor();
 					Vector3 attenuation = it->getAttenuation();
-					attenuation = attenuation*2.;
 					if (it->isRelativeToCamera())
 					{
 						pos = stage_->calculateAbsoluteCoordinates(pos) + stage_->getCamera().getViewPoint();
 					}
-					out << "<lightshader id=\"point" << i << "\" script=\"urn:xml3d:lightshader:point\" >" << endl; 
-					out << "<float3 name=\"position\">" << pos.x << " " << pos.y << " " << pos.z << "</float3>" << endl;
+					out << "<transform id=\"lighttransform" << i << "\" translation=\"";
+					out << pos.x << " " << pos.y << " " << pos.z << "\" /> " << endl;
+					out << "<lightshader id=\"point" << i << "\" script=\"urn:xml3d:lightshader:point\" > "; 
 					out << "<float3 name=\"intensity\">" << (float) color.getRed() * intensity << " " 
 																												<< (float) color.getGreen() * intensity << " "
-																												<< (float) color.getBlue() * intensity <<   "</float3>" << endl;
-					out << "<float3 name=\"attenuation\">" << attenuation.x << " " << attenuation.y << " " << attenuation.z << "</float3>" << endl;
+																												<< (float) color.getBlue() * intensity <<   "</float3> ";
+					out << "<float3 name=\"attenuation\">" << attenuation.x << " " << attenuation.y << " " << attenuation.z << "</float3> ";
 					out << "</lightshader>" << endl;
+					out << "<group transform=\"lighttransform" << i << "\" >" << endl;
 					out << "<light shader=\"#point" << i << "\" id=\"mypoint" << i << "\" />" << endl;
+					out << "</group>" << endl;
 				}
+				
 			}
+			//out << "</defs>\n";
 			
-			// Only matters for WebGL
-			//out << "<script id=\"ORTPhong-fs\" src=\"scripts/phong.fs\" type=\"x-shader/x-vertex\" ></script>" << endl;
-			//out << "<script id=\"ORTPhong-vs\" src=\"scripts/phong.vs\" type=\"x-shader/x-vertex\" ></script>" << endl;
 			return true;
 		}
 
@@ -470,6 +463,12 @@ namespace BALL
 			out << "  <head>" << endl;
 			out << "  <title>Our BALLView Export</title>" << endl;
 			out << "    <link rel=\"stylesheet\" type=\"text/css\" href=\"http://xml3d.org/xml3d/script/xml3d.css\" />" << endl;
+			out << "<style type=\"text/css\">" << endl;
+			out << "	xml3d {" << endl;
+			out << "		border: 1px solid white;" << endl;
+			out << "		background-color: #000000;" << endl;
+			out << "	}" << endl;
+			out << "  </style>" << endl;
 			out << "  </head>" << endl;
 			
 			// Start XHTML Body
@@ -503,25 +502,10 @@ namespace BALL
 			//define a shader for each Tube elment
 
       ColorRGBA const& color = sphere.getColor();
-			out << "<shader id=\"" << &sphere << "shader\" script=\"urn:xml3d:lightshader:phong\" >" << endl;
+			out << "<shader id=\"" << &sphere << "shader\" script=\"urn:xml3d:shader:phong\" >" << endl;
      	out << XML3DColorRGBA(color, "diffuseColor");
 			out << XML3DRaytracingMaterial(rt_material_);
       
-			//out << "<bind semantic=\"specularColor\">" << endl;
-      //out << "   <float3>0 0 0</float3>" << endl;
-      //out << "</bind>" << endl;
-      //out << "<bind semantic=\"emissiveColor\">" << endl;
-      //out << "   <float3>0 0 0</float3>" << endl;
-      //out << "</bind>" << endl;
-      //out << "<bind semantic=\"transparency\">" << endl; 
-      //out << "   <float>0</float>" << endl;
-      //out << "</bind>" << endl;
-      //out << "<bind semantic=\"shininess\">" << endl;
-      //out << "   <float>0.2</float>" << endl;
-      //out << "</bind>" << endl;
-      //out << "<bind semantic=\"ambientIntensity\">" << endl; 
-      //out << "   <float>0.2</float>" << endl;
-      //out << "</bind>" << endl;
       out << "</shader>" << endl;
 			
 			//define a transform for each Tube element
@@ -714,7 +698,7 @@ namespace BALL
 
 			if (color1 == color2)
 			{
-				out << "<shader id=\"" << &tube << "shader\" script=\"urn:xml3d:lightshader:phong\" >" << endl;
+				out << "<shader id=\"" << &tube << "shader\" script=\"urn:xml3d:shader:phong\" >" << endl;
      		out << XML3DColorRGBA(color1, "diffuseColor");
 				out << XML3DRaytracingMaterial(rt_material_);
 				out << "</shader>" << endl;
@@ -768,12 +752,12 @@ namespace BALL
 			else
 			{
 				TwoColoredTube new_tube_1, new_tube_2;
-				out << "<shader id=\"" << &new_tube_1 << "shader\" script=\"urn:xml3d:lightshader:phong\" >" << endl;
+				out << "<shader id=\"" << &new_tube_1 << "shader\" script=\"urn:xml3d:shader:phong\" >" << endl;
      		out << XML3DColorRGBA(color1, "diffuseColor");
 				out << XML3DRaytracingMaterial(rt_material_);
 				out << "</shader>" << endl;
 
-				out << "<shader id=\"" << &new_tube_2 << "shader\" script=\"urn:xml3d:lightshader:phong\" >" << endl;
+				out << "<shader id=\"" << &new_tube_2 << "shader\" script=\"urn:xml3d:shader:phong\" >" << endl;
      		out << XML3DColorRGBA(color2, "diffuseColor");
 				out << XML3DRaytracingMaterial(rt_material_);
 				out << "</shader>" << endl;
@@ -903,7 +887,7 @@ namespace BALL
 			
 			ColorRGBA const &c = (mesh.colors.size() == 1) ? mesh.colors[0] : ColorRGBA(1., 1., 1., 1.);
     		
-			out << "<shader id=\"" << &mesh << "shader\" script=\"urn:xml3d:lightshader:phong\" >" << endl;
+			out << "<shader id=\"" << &mesh << "shader\" script=\"urn:xml3d:shader:phong\" >" << endl;
 
 			if (mesh.colors.size() == 1)
 			{

@@ -180,6 +180,7 @@ namespace BALL
 				void storeColor_(const GeometricObject& object);
 				String getColorIndex_(const ColorRGBA& color);
 				void createTubeTransform_(const TwoColoredTube& tube);
+				void createSphereTemplate_();
 
 
 				Vector3   origin_;
