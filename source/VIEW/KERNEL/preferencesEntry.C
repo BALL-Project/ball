@@ -326,7 +326,7 @@ namespace BALL
 					String v = value;
 					if (gb->isCheckable())
 					{
-						gb->setChecked(v[0] == '#');
+						gb->setChecked(v.hasPrefix("#"));
 					}
 
 					v.trimLeft("#");
