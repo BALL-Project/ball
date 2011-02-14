@@ -169,6 +169,8 @@ namespace BALL
 		{
 			#ifdef BALL_COMPILER_MSVC
 				return (_isnan(t) != 0);
+			#elif  defined(BALL_OS_DARWIN)
+				return ( __inline_isnand(t) != 0);
 			#else
 				return (isnan(t) != 0);
 			#endif
