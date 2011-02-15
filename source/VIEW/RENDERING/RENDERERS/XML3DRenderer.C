@@ -351,10 +351,6 @@ namespace BALL
 			Matrix4x4 final_rotation_matrix;
 			final_rotation.getRotationMatrix(final_rotation_matrix);
 
-			//out << " orientation=\""<< screw_axis.x << " "
-			//												<< screw_axis.y << " "
-			//												<< screw_axis.z << " "
-			//												<< (-angle) << "\"" ;
 			out << " orientation=\""<< final_rotation_axis.x << " "
 															<< final_rotation_axis.y << " "
 															<< final_rotation_axis.z << " "
@@ -577,114 +573,28 @@ namespace BALL
 
 		void XML3DRenderer::renderDisc_(const Disc& disc)
 		{
-			//std::ostream& out = *outfile_;
-
-			//const ColorRGBA& color = getColor_(disc);
-
-			//// then, find out its radius, its normal, and its position
-			//float radius;
-			//Vector3 normal;
-			//Vector3 position;
-			//disc.getCircle().get(position, normal, radius);
-			//normal -= origin_;
-
-			//// now write the information into the out
-			//out << "disc { ";
-			//out << XML3DVector3(position) << ", ";
-			//out << XML3DVector3(normal) << ", ";
-			//out << radius;
-			//out << " pigment { " << getColorIndex_(color) << " } ";
-			//out << XML3DFinish("Tube", color); // We use the same finish as for tubes -> helices
-			//out << "} " << endl;
+			// *Not Implemented yet*
 		}
 
 		void XML3DRenderer::renderLine_(const Line& line)
 		{
-			//std::ostream& out = *outfile_;
-
-			//const ColorRGBA& color = getColor_(line);
-
-			//String p1 = XML3DVector3(line.getVertex1());
-			//String p2 = XML3DVector3(line.getVertex2());
-
-			//if (p1 == p2) return;
-
-			//if ((Size) color.getAlpha() == 255) out << "Tube(";
-			//else 																out << "TubeT(";
-
-		  //out << p1 << ", " << p2 << ", "
-			//		<< BALLVIEW_XML3DRAY_LINE_RADIUS << ", "
-			//		<< getColorIndex_(color) << ")" << endl;
+			// *Not implemented yet*
 		}
 
 		void XML3DRenderer::renderTwoColoredLine_(const TwoColoredLine& tube)
 		{
-			//std::ostream& out = *outfile_;
-
-			//// we have found a two colored tube
-			//const ColorRGBA& color1 = tube.getColor();
-			//const ColorRGBA& color2 = tube.getColor2();
-
-			//String p1 = XML3DVector3(tube.getVertex1());
-			//String p2 = XML3DVector3(tube.getMiddleVertex());
-
-			//if (p1 != p2)
-			//{
-			//	if ((Size) color1.getAlpha() == 255) out << "Tube(";
-			//	else 																 out << "TubeT(";
-			//	
-			//	out << p1 << ", "
-			//			<< p2 << ", "
-			//			<< BALLVIEW_XML3DRAY_LINE_RADIUS << ", "
-			//			<< getColorIndex_(color1) << ")" << endl;
-			//}
-
-			//p1 = XML3DVector3(tube.getMiddleVertex());
-			//p2 = XML3DVector3(tube.getVertex2());
-
-			//if (p1 == p2) return;
-
-  		//if ((Size) color1.getAlpha() == 255) out << "Tube(";
-			//else 																 out << "TubeT(";
-			//
-		  //out << p1 << ", "
-		  //    << p2 << ", "
-			//		<< BALLVIEW_XML3DRAY_LINE_RADIUS << ", "
-			//		<< getColorIndex_(color2) << ")" << endl;
+			// *Not implmented yet*
 		}
 
 
 		void XML3DRenderer::renderTube_(const Tube& tube)
 		{
-			//std::ostream& out = *outfile_;
-
-			//String p1 = XML3DVector3(tube.getVertex1());
-			//String p2 = XML3DVector3(tube.getVertex2());
-
-			//if (p1 == p2) return;
-
-			//const ColorRGBA& color = getColor_(tube);
-
-			//if ((Size) color.getAlpha() == 255) out << "Tube(";
-			//else 																out << "TubeT(";
-
-		  //out << p1 << ", " << p2 << ", "
-			//		<< tube.getRadius() << ", "
-			//		<< getColorIndex_(color) << ")" << endl;
+			// *Not implmented yet*
 		}	
 
 		void XML3DRenderer::renderPoint_(const Point& point)
 		{
-			//std::ostream& out = *outfile_;
-
-			//const ColorRGBA& color = getColor_(point);
-
-			//if ((Size) color.getAlpha() == 255) out << "Sphere(";
-			//else 																out << "SphereT(";
-
-		  //out << XML3DVector3(point.getVertex()) << ", "
-			//		<< BALLVIEW_XML3DRAY_LINE_RADIUS << ", "
-			//		<< getColorIndex_(color) << ")" << endl;
+			// *Not implmented yet*
 		}
 
 
@@ -962,10 +872,6 @@ namespace BALL
 			out << "</mesh>" << endl;
 			
 			out << "</group>" << endl; 
-
-			// then then position texcoord
-			//out << "<bind semantic=\"texcoord\">" << endl;
-			//out << "<\bind>" << endl;
 
 		}
 				
