@@ -107,15 +107,13 @@ namespace BALL
   			@param	by assigned to <TT>  b.y </TT>
 				@param	bz assigned to <TT>  b.z </TT>
 		*/
-		void set(const T& ax, const T& ay, const T& az, const T& bx, const T& by, const T& bz)
-			;
+		void set(const T& ax, const T& ay, const T& az, const T& bx, const T& by, const T& bz);
 
 		/**	Assignment operator.
 				Assign the box components from another instance of TSimpleBox3.
 				@param box the TSimpleBox3 to assign from
 		**/
-		const TSimpleBox3& operator = (const TSimpleBox3& box)
-			;
+		const TSimpleBox3& operator = (const TSimpleBox3& box);
 
 		/**	Assign to another instance of TSimpleBox3.
 				Assigns the box components to another box.
@@ -127,8 +125,7 @@ namespace BALL
 				@param lower the lower corner of the box
 				@param upper the upper corner of the box
 		*/
-		void get(TVector3<T>& lower, TVector3<T>& upper) const
-			;
+		void get(TVector3<T>& lower, TVector3<T>& upper) const;
 
 		/**	Assign to six variables of type <TT>  T </TT>.
 				@param	ax is assigned <TT>  a.x </TT>
@@ -154,40 +151,34 @@ namespace BALL
 		/**	Calculate the surface area.
 				@return T the surface
 		*/
-		T getSurface() const
-			;
+		T getSurface() const;
 
 		/**	Calculate the volume.
 				@return T the volume
 		*/
-		T getVolume() const
-			;
+		T getVolume() const;
 
 		/**	Return the width of the box.
 				@return T the width
 		*/
-		T getWidth() const
-			;
+		T getWidth() const;
 	
 		/**	Return the height of the box.
 				@return T the height
 		*/
-		T getHeight() const
-			;
+		T getHeight() const;
 	
 		/**	Return the depth of the box.
 				@return T the depth
 		*/
-		T getDepth() const
-			;
+		T getDepth() const;
 	
 		/**	Join the box with an other.
 				Instance is set to the box containing
 				both, this box and a given box.
 				@param	box the box to join with
 		*/
-		void join(const TSimpleBox3& box)
-			;
+		void join(const TSimpleBox3& box);
 
 		//@}
 		/**	@name	Predicates
@@ -197,14 +188,12 @@ namespace BALL
 		/**	Equality operator.
 				@return bool, <b>  true </b> if all box components are equal, <b>  false </b> otherwise
 		*/
-		bool operator == (const TSimpleBox3& box) const
-			;
+		bool operator == (const TSimpleBox3& box) const;
 
 		/**	Inequality operator.
 				@return bool, <b>  true </b> if the two boxes differ in at least one component, <b>  false </b> otherwise
 		*/
-		bool operator != (const TSimpleBox3& box) const
-			;
+		bool operator != (const TSimpleBox3& box) const;
 
 		/**	Test if a given point is a member of the box.
 				Optional it can be testet, if the point lies on the surface.
@@ -212,15 +201,13 @@ namespace BALL
 				@param on_surface true to test the surface (default = false)
 				@return bool, <b>  true </b> or <b>  false </b>
 		*/
-		bool has(const TVector3<T>& point, bool on_surface = false) const
-			;
+		bool has(const TVector3<T>& point, bool on_surface = false) const;
 
 		/**	Test if two boxes intersect.
 				@param box the box to be tested
 				@return bool, <b>  true </b> if the two boxes are intersecting, <b>  false </b> otherwise
 		*/
-		bool isIntersecting(const TSimpleBox3& box) const
-			;
+		bool isIntersecting(const TSimpleBox3& box) const;
 		//@}
 
 		/**	@name	Debugging and Diagnostics
@@ -231,8 +218,7 @@ namespace BALL
 				Always returns true.
 				@return bool <b>  true </b>
 		*/
-		bool isValid() const
-			;
+		bool isValid() const;
 
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} to 
@@ -240,8 +226,7 @@ namespace BALL
 				@param   s - output stream where to output the internal state of {\em *this}
 				@param   depth - the dumping depth
 		*/
-		void dump(std::ostream& s = std::cout, Size depth = 0) const
-			;
+		void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		//@}
 
 
@@ -262,7 +247,6 @@ namespace BALL
 
 	template <typename T>
 	TSimpleBox3<T>::TSimpleBox3()
-		
 		:	a(),
 			b()
 	{
@@ -270,7 +254,6 @@ namespace BALL
 
 	template <typename T>
 	TSimpleBox3<T>::TSimpleBox3(const TSimpleBox3<T>& box)
-		
 		:	a(box.a),
 			b(box.b)
 	{
