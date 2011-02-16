@@ -178,7 +178,7 @@ namespace BALL
 
 		/**	Retrieve the box dimensions.
 		*/
-		SimpleBox3 getBox() const;
+		SimpleBox3 getBox() const; 
 
 		/**	Set the box dimensions.
 				The box dimensions are additionally stored in options
@@ -193,12 +193,16 @@ namespace BALL
 				or a default is assumed. \par
 				This method replicates the solvent box starting at the box origin in
 				all three dimensions and removes all solvent molecules that are within 
-				 \link solvent_distance solvent_distance \endlink  of a solute molecule or outside the periodic box. \par
+				 \link solvent_distance solvent_distance \endlink  of a solute molecule 
+				or outside the periodic box. \par
+				To ensure periodicity, our SimpleBox instance might be resized to an integral
+				multiple of the spacing of the periodic solvent box.
 				The method returns the number of inserted solvent molecules. All solvent 
-				molecules are marked as such by setting their property  \link Molecule::PROPERTY__PERIODIC_BOX_SOLVENT Molecule::PROPERTY__PERIODIC_BOX_SOLVENT \endlink . \par
+				molecules are marked as such by setting their property  
+				\link Molecule::PROPERTY__PERIODIC_BOX_SOLVENT Molecule::PROPERTY__PERIODIC_BOX_SOLVENT \endlink . \par
 				@see	removeSolvent
 		*/
-		Size addSolvent(const String& filename) const;
+		Size addSolvent(const String& filename);
 		
 		/**	Removes all solvent molecules
 				This method removes all molecules that have the property  \link Molecule::PROPERTY__PERIODIC_BOX_SOLVENT Molecule::PROPERTY__PERIODIC_BOX_SOLVENT \endlink 
@@ -206,7 +210,7 @@ namespace BALL
 				The number of removed solvent molecules is returned.
 				@see	addSolvent
 		*/
-		Size removeSolvent() const;
+		Size removeSolvent();
 
 		//@}
 		/**	@name	Predicates	

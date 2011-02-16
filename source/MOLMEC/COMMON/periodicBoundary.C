@@ -376,7 +376,7 @@ namespace BALL
 
 	// Fill the part of the box that contains no system atoms with solvent
 	// molecules
-	Size PeriodicBoundary::addSolvent(const String& filename) const
+	Size PeriodicBoundary::addSolvent(const String& filename)
 	{
 		// try to find and read the file
 		Path p;
@@ -403,6 +403,26 @@ namespace BALL
 		
 		SimpleBox3 solvent_box = hin.getPeriodicBoundary();
 
+		// calculate the number of solvent boxes needed for each dimension
+		float width = solvent_box.getWidth();
+		float height = solvent_box.getHeight();
+		float depth = solvent_box.getDepth();
+		
+		Size N_x = (Size)ceil(box_.getWidth() / width);
+		Size N_y = (Size)ceil(box_.getHeight() / height);
+		Size N_z = (Size)ceil(box_.getDepth() / depth);
+		
+		Vector3 box_lower;
+		Vector3 box_upper;
+		box_.get(box_lower,box_upper);
+		
+		box_upper /= box_lower.getDistance(box_upper);
+		box_upper.x *= N_x * width;
+		box_upper.y *= N_y * height;
+		box_upper.z *= N_z * depth;
+
+		box_.set(box_lower, box_upper);
+		
 		// adapt foreign water boxes to our definition
 		MolmecSupport::adaptWaterBox(solvent, solvent_box);
 
@@ -453,14 +473,6 @@ namespace BALL
 		// box to the lower vector of the periodic box
 		Vector3 basis = box_.a - solvent_box.a;
 		
-		// calculate the number of solvent boxes needed for each dimension
-		float width = solvent_box.getWidth();
-		float height = solvent_box.getHeight();
-		float depth = solvent_box.getDepth();
-		Size N_x = (Size)(box_.getWidth() / width);
-		Size N_y = (Size)(box_.getHeight() / height);
-		Size N_z = (Size)(box_.getDepth() / depth);
-		
 		for (Size i = 0; i <= N_x; ++i)
 		{
 			for (Size j = 0; j <= N_y; ++j)
@@ -494,7 +506,7 @@ namespace BALL
 
 
 	// Remove the solvent molecules that have been added by periodic boundary
-	Size PeriodicBoundary::removeSolvent() const
+	Size PeriodicBoundary::removeSolvent()
 	{
 		// check whether the force field and the system therein
 		// are set
