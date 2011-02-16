@@ -268,6 +268,17 @@ CHECK([EXTRA]writing of Systems containing Atoms instead of PDBAtoms)
 	delete system;
 RESULT
 
+CHECK(PDBFile sets HETATM property)
+	PDBFile pdb_file(BALL_TEST_DATA_PATH(PDBFile_test_write_methane.txt));
+
+	System sys;
+	pdb_file >> sys;
+	for(AtomIterator it = sys.beginAtom(); +it; ++it)
+	{
+		TEST_EQUAL(it->hasProperty(PDBAtom::PROPERTY__HETATM), true)
+	}
+RESULT
+
 CHECK(PDBFile& operator << (const Molecule& molecule))
 RESULT
 

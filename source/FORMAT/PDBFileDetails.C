@@ -689,6 +689,7 @@ namespace BALL
 		
 		current_residue_->clearProperty(Residue::PROPERTY__AMINO_ACID);
 		current_residue_->setProperty(Residue::PROPERTY__NON_STANDARD);
+		current_PDB_atom_->setProperty(PDBAtom::PROPERTY__HETATM);
 		
 		static RegularExpression regular_expression("^OHH|HOH|HHO|H2O|2HO|OH2|SOL|TIP|TIP2|TIP3|TIP4|WAT|D2O$");
 		if (regular_expression.match(current_residue_->getName()) == true)

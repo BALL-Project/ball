@@ -75,7 +75,11 @@ namespace BALL
 		*/
 		enum Property
 		{
-			NUMBER_OF_PROPERTIES = Atom::NUMBER_OF_PROPERTIES
+			///Property which indicates whether the current atom is a HETATM
+			PROPERTY__HETATM = Atom::NUMBER_OF_PROPERTIES + 1,
+
+			///The number of properties in PDBAtom
+			NUMBER_OF_PROPERTIES
 		};
 		//@}
 
