@@ -175,7 +175,8 @@ namespace BALL
 			char*	BALLView_data_path = getenv("BALLVIEW_DATA_PATH");
 			if (BALLView_data_path != 0)
 			{
-				putenv(const_cast<char*>((String("BALL_DATA_PATH=") + String(BALLView_data_path)).c_str()));
+				char* key = const_cast<char*>("BALL_DATA_PATH=");
+				setenv(key,BALLView_data_path,true);
 			}
 
 			try
