@@ -1161,7 +1161,9 @@ namespace BALL
 	}
 
 	bool PDBFile::write(const System& system, const PDBInfo& info)
-	{
+	{	
+		write_pdbformat_1996_ = options.getBool(Option::WRITE_PDBFORMAT_1996);
+			
 		if (!isOpen() || getOpenMode() != std::ios::out)
 		{
 			throw (File::CannotWrite(__FILE__, __LINE__, name_));
@@ -2084,7 +2086,7 @@ namespace BALL
 					cl.saltbridges.pop_front();
 				}
 			
-			writeRecord_(cr);
+				writeRecord_(cr);
 			}
 		}
 		else 
@@ -2109,7 +2111,7 @@ namespace BALL
 	void PDBFile::writeRecord_(const PDB::RecordCONECT& cr)
 	{
 		// ???? We should not write undefined atom numbers as 0 but as "" instead! // OK
-		if(write_pdbformat_1996_)
+		if (write_pdbformat_1996_)
 		{
 			writeRecord_(PDB::RECORD_TYPE__CONECT,
 			             cr.atom_serial_number,

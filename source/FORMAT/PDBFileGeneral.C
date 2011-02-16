@@ -277,13 +277,13 @@ namespace BALL
 	bool PDBFile::readRecords()
 	{
 		// Extract all relevant options
-		verbosity_ = options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
-		strict_line_checking_ = options.setDefaultBool(Option::STRICT_LINE_CHECKING, Default::STRICT_LINE_CHECKING);
-		selected_model_ = options.setDefaultInteger(Option::CHOOSE_MODEL, Default::CHOOSE_MODEL);
+		verbosity_             = options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
+		strict_line_checking_  = options.setDefaultBool(Option::STRICT_LINE_CHECKING, Default::STRICT_LINE_CHECKING);
+		selected_model_        = options.setDefaultInteger(Option::CHOOSE_MODEL, Default::CHOOSE_MODEL);
 		ignore_xplor_pseudo_atoms_ = options.setDefaultBool(Option::IGNORE_XPLOR_PSEUDO_ATOMS, Default::IGNORE_XPLOR_PSEUDO_ATOMS);
 		store_skipped_records_ = options.setDefaultBool(Option::STORE_SKIPPED_RECORDS, Default::STORE_SKIPPED_RECORDS);
 		parse_partial_charges_ = options.setDefaultBool(Option::PARSE_PARTIAL_CHARGES, Default::PARSE_PARTIAL_CHARGES);
-		write_pdbformat_1996_ = options.setDefaultBool(Option::WRITE_PDBFORMAT_1996, Default::WRITE_PDBFORMAT_1996);
+		write_pdbformat_1996_  = options.getBool(Option::WRITE_PDBFORMAT_1996);
 													 
 		// Clear the information in info and prepare it for the new stuff.
 		info.clear();
@@ -544,9 +544,11 @@ namespace BALL
 				return parseRecordCOMPND(line, size);
 
 			case PDB::RECORD_TYPE__CONECT:
-				return parseRecordCONECT(line, size);
-
 			case PDB::RECORD_TYPE__CON06:
+			case PDB::RECORD_TYPE__CON061:
+			case PDB::RECORD_TYPE__CON062:
+			case PDB::RECORD_TYPE__CON063:
+			case PDB::RECORD_TYPE__CON064:
 				return parseRecordCONECT(line, size);
 
 			case PDB::RECORD_TYPE__CRYST1:
@@ -1559,9 +1561,11 @@ namespace BALL
 				book_keeping_.ter_records++; break;
 
 			case PDB::RECORD_TYPE__CONECT:
-				book_keeping_.conect_records++; break;
-
 			case PDB::RECORD_TYPE__CON06:
+			case PDB::RECORD_TYPE__CON061:
+			case PDB::RECORD_TYPE__CON062:
+			case PDB::RECORD_TYPE__CON063:
+			case PDB::RECORD_TYPE__CON064:
 				book_keeping_.conect_records++; break;
 
 			case PDB::RECORD_TYPE__SEQRES:

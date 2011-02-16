@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile_test.C,v 1.33.8.1 2007/03/25 21:47:26 oliver Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -34,7 +32,7 @@ namespace BALL
 
 }
 
-START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.33.8.1 2007/03/25 21:47:26 oliver Exp $")
+START_TEST(PDBFile, "$Id: PDBFile_test.C $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -215,6 +213,35 @@ CHECK(bool write(const System& system) throw(File::CannotWrite))
 	f.write(S);
 	f.close();
 
+	TEST_FILE_REGEXP(tmp_filename.c_str(), BALL_TEST_DATA_PATH(PDBFile_test2_2006.txt))
+
+	f.open(tmp_filename, std::ios::out);
+	f.write(S);
+	f.close();
+
+	TEST_FILE_REGEXP(tmp_filename.c_str(), BALL_TEST_DATA_PATH(PDBFile_test2_2006.txt))
+
+	PDBFile out(tmp_filename);
+	TEST_EXCEPTION(File::CannotWrite, out.write(S))
+RESULT
+
+
+CHECK(bool write(const System& system) throw(File::CannotWrite) - PDBFormat 1996)
+	PDBFile f;
+	f.options[PDBFile::Option::WRITE_PDBFORMAT_1996] = true;
+	
+	f.open(BALL_TEST_DATA_PATH(PDBFile_test2.pdb));
+	String tmp_filename;
+	NEW_TMP_FILE(tmp_filename)
+	System S;
+	f.read(S);
+	TEST_EQUAL(S.countAtoms(), 892);
+	f.close();
+
+	f.open(tmp_filename, std::ios::out);
+	f.write(S);
+	f.close();
+
 	TEST_FILE_REGEXP(tmp_filename.c_str(), BALL_TEST_DATA_PATH(PDBFile_test2.txt))
 
 	f.open(tmp_filename, std::ios::out);
@@ -225,6 +252,28 @@ CHECK(bool write(const System& system) throw(File::CannotWrite))
 
 	PDBFile out(tmp_filename);
 	TEST_EXCEPTION(File::CannotWrite, out.write(S))
+RESULT
+
+
+CHECK([EXTRA]writing of Systems containing Atoms instead of PDBAtoms - PDBFormat 2006)
+	FragmentDB db("fragments/Fragments.db");
+	System* system = new System;
+	String filename;
+	NEW_TMP_FILE(filename)
+	PDBFile outfile(filename, std::ios::out);
+	outfile.options[PDBFile::Option::WRITE_PDBFORMAT_1996] = true;
+	
+	HINFile methane(BALL_TEST_DATA_PATH(methane.hin));
+	system->clear();
+	methane.read(*system);
+	TEST_EQUAL(system->countAtoms(), 5)
+	NEW_TMP_FILE(filename)
+	outfile.open(filename, std::ios::out);
+	outfile << *system;
+	outfile.close();
+	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(PDBFile_test_write_methane.txt))
+	
+	delete system;
 RESULT
 
 
@@ -240,7 +289,7 @@ CHECK([EXTRA]writing of Systems containing Atoms instead of PDBAtoms)
 	outfile << *system;
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(PDBFile_test_write_empty.txt))
-
+	
 	system->insert(*protein);
 	protein->insert(*chain);
 	Residue* res = db.getResidueCopy("ALA");
@@ -248,6 +297,7 @@ CHECK([EXTRA]writing of Systems containing Atoms instead of PDBAtoms)
 	STATUS("Residue ID: " << res->getID())
 	chain->insert(*res);
 	TEST_EQUAL(system->countAtoms(), 10)
+	
 	NEW_TMP_FILE(filename)
 	STATUS(system->countBonds())
 	outfile.open(filename, std::ios::out);
@@ -263,8 +313,8 @@ CHECK([EXTRA]writing of Systems containing Atoms instead of PDBAtoms)
 	outfile.open(filename, std::ios::out);
 	outfile << *system;
 	outfile.close();
-	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(PDBFile_test_write_methane.txt))
-
+	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(PDBFile_test_write_methane_2006.txt))
+	
 	delete system;
 RESULT
 
@@ -406,6 +456,7 @@ CHECK(bool readNextRecord(bool read_values = true))
 	TEST_EQUAL(empty.readNextRecord(false), true)
 RESULT
 
+// this is just a test if the types compile
 PDB::Integer my_int;
 PDB::Atom my_atom;
 PDB::Character my_character;
