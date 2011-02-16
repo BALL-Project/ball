@@ -366,7 +366,8 @@ namespace BALL
 				CCP4File* ccp4file = new CCP4File(filename);
 				read_success = ccp4file->read(*d3);
 				ccp4file->close();
-				type = "Electron Density";
+				//type = "Electron Density";
+				type = RegularData3DController::type;
 				maptype = "CCP4";
 			}
 			else if(filetype == "omap" || filetype == "dsn6")
@@ -374,7 +375,8 @@ namespace BALL
 				DSN6File* dsn6file = new DSN6File(filename);
 				read_success = dsn6file->read(*d3);
 				dsn6file->close();
-				type = "Electron Density";
+				//type = "Electron Density";
+				type = RegularData3DController::type;
 				maptype = "DSN6";
 			}
 			else
