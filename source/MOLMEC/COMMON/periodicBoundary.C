@@ -366,7 +366,6 @@ namespace BALL
 			}
 		}
 
-
 		// store the box dimensions in the options
 		options->setVector(Option::PERIODIC_BOX_LOWER, box_.a);
 		options->setVector(Option::PERIODIC_BOX_UPPER, box_.b);
@@ -411,15 +410,14 @@ namespace BALL
 		Size N_x = (Size)ceil(box_.getWidth() / width);
 		Size N_y = (Size)ceil(box_.getHeight() / height);
 		Size N_z = (Size)ceil(box_.getDepth() / depth);
-		
+
 		Vector3 box_lower;
 		Vector3 box_upper;
 		box_.get(box_lower,box_upper);
 		
-		box_upper /= box_lower.getDistance(box_upper);
-		box_upper.x *= N_x * width;
-		box_upper.y *= N_y * height;
-		box_upper.z *= N_z * depth;
+		box_upper.x = box_lower.x + N_x * width;
+		box_upper.y = box_lower.y + N_y * height;
+		box_upper.z = box_lower.z + N_z * depth;
 
 		box_.set(box_lower, box_upper);
 		
