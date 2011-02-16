@@ -94,7 +94,7 @@ namespace BALL
 		bool hasPeriodicBoundary() const;
 
 		/**	Return the periodic boundary of the file.
-				An emptry box is returned if no periodic boundary is defined.
+				An empty box is returned if no periodic boundary is defined.
 				@return	the boundary box
 		*/
 		SimpleBox3 getPeriodicBoundary() const;
