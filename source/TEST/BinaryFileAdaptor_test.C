@@ -86,7 +86,7 @@ CHECK(Byte Swapping (unsigned short))
 RESULT
 
 CHECK(Byte Swapping (uint32_t))
-	uint32_t x = 0xAABBCCDD;
+	BALL_UINT32 x = 0xAABBCCDD;
 	swapBytes(x);
 	TEST_EQUAL(x, 0xDDCCBBAA);
 	swapBytes(x);
@@ -94,7 +94,7 @@ CHECK(Byte Swapping (uint32_t))
 RESULT
 
 CHECK(Byte Swapping (int32_t))
-	int32_t x = 0x11223344;
+	BALL_INT32 x = 0x11223344;
 	swapBytes(x);
 	TEST_EQUAL(x, 0x44332211);
 	swapBytes(x);
@@ -102,7 +102,7 @@ CHECK(Byte Swapping (int32_t))
 RESULT
 
 CHECK(Byte Swapping (uint64_t))
-	uint64_t x = 0xAAABACADBABBBCBD;
+	BALL_UINT64 x = 0xAAABACADBABBBCBD;
 	swapBytes(x);
 	TEST_EQUAL(x, 0xBDBCBBBAADACABAA);
 	swapBytes(x);
@@ -110,7 +110,7 @@ CHECK(Byte Swapping (uint64_t))
 RESULT
 
 CHECK(Byte Swapping (int64_t))
-	int64_t x = 0x0011223344556677;
+	BALL_INT64 x = 0x0011223344556677;
 	swapBytes(x);
 	TEST_EQUAL(x, 0x7766554433221100);
 	swapBytes(x);
@@ -162,7 +162,7 @@ CHECK(Byte Swapping (arbitrary))
 RESULT
 
 CHECK(swapEndianess)
-	BinaryFileAdaptor<uint32_t> a;
+	BinaryFileAdaptor<BALL_UINT32> a;
 	a.setSwapEndian(false);
 
 	String outfile_name;

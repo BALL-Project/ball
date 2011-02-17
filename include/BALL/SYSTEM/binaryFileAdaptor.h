@@ -270,11 +270,11 @@ namespace BALL
 			UFloat(float f_) : f(f_) { }
 
 #if   BALL_FLOAT_SIZE == 2
-			uint16_t u;
+			BALL_UINT16 u;
 #elif BALL_FLOAT_SIZE == 4
-			uint32_t u;
+			BALL_UINT32 u;
 #elif BALL_FLOAT_SIZE == 8
-			uint64_t u;
+			BALL_UINT64 u;
 #else
 	#error "Unknown double size, refusing to compile."
 #endif
@@ -286,11 +286,11 @@ namespace BALL
 			UDouble(double f_) : f(f_) { }
 
 #if   BALL_DOUBLE_SIZE == 2
-			uint16_t u;
+			BALL_UINT16 u;
 #elif BALL_DOUBLE_SIZE == 4
-			uint32_t u;
+			BALL_UINT32 u;
 #elif BALL_DOUBLE_SIZE == 8
-			uint64_t u;
+			BALL_UINT64 u;
 #else
 	#error "Unknown double size, refusing to compile."
 #endif
