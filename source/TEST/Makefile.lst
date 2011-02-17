@@ -210,6 +210,7 @@ $(TEST_PREFIX)AnalyticalSES_test$(EXEEXT)\
 $(TEST_PREFIX)MolecularGraph_test$(EXEEXT)\
 $(TEST_PREFIX)NumericalSAS_test$(EXEEXT)\
 $(TEST_PREFIX)PeptideBuilder_test$(EXEEXT)\
+$(TEST_PREFIX)PeptideCapProcessor_test$(EXEEXT)\
 $(TEST_PREFIX)Peptides_test$(EXEEXT)\
 $(TEST_PREFIX)RadialDistributionFunction_test$(EXEEXT)\
 $(TEST_PREFIX)RDFIntegrator_test$(EXEEXT)\

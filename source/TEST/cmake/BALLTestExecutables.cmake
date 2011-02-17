@@ -212,6 +212,7 @@ SET(BALL_STRUCTURE_TESTS
 	MolecularGraph_test
 	NumericalSAS_test
 	PeptideBuilder_test
+	PeptideCapProcessor_test
 	Peptides_test
 	RadialDistributionFunction_test
 	RDFIntegrator_test

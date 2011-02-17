@@ -26,6 +26,7 @@ SET(SOURCES_LIST
 	numericalSAS.C
 	peptides.C
 	peptideBuilder.C
+	peptideCapProcessor.C
 	radialDistributionFunction.C
 	reconstructFragmentProcessor.C
 	RDFIntegrator.C
