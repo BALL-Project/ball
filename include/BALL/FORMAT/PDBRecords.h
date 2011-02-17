@@ -12,6 +12,10 @@
 #	include <BALL/DATATYPE/hashMap.h>
 #endif
 
+#ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
+#	include <BALL/CONCEPT/persistenceManager.h>
+#endif
+
 namespace BALL 
 {
 	
@@ -25,6 +29,7 @@ namespace BALL
 			behaves mostly like the vector of Strings it actually is.
 	*/
 	class BALL_EXPORT PDBRecords
+			  : public PersistentObject
 	{
 		public:
 		
@@ -144,6 +149,22 @@ namespace BALL
 		 *  @throw std::out_of_range if n < 0 || n >= size()
 		 */
 		Reference at(SizeType n) { return records_.at(n); }
+		//@}
+
+		/** @name Storable Interface
+		*/
+		//@{
+
+		/** Persistent stream writing.
+		*/
+		//void write(PersistenceManager& pm) const;
+		void persistentWrite(PersistenceManager& pm, const char* name) const;
+
+		/** Persistent stream reading.
+		*/
+		//bool read(PersistenceManager& pm);
+		void persistentRead(PersistenceManager& pm);
+
 		//@}
 
 		protected:

@@ -33,4 +33,33 @@ namespace BALL
 		return *this;
 	}
 
+	void PDBRecords::persistentWrite(PersistenceManager& pm, const char* name) const
+	{
+		pm.writeObjectHeader(this, name);
+		pm.writePrimitive((Size)records_.size(), "records_.size");
+		for (Position record = 0; record < records_.size(); record++)
+		{
+			String record_identifier = "records_["+String(record)+"]";
+			pm.writePrimitive(records_[record], record_identifier.c_str());
+		}
+		pm.writeObjectTrailer(name);
+	}
+
+	void PDBRecords::persistentRead(PersistenceManager& pm)
+	{
+		Position record_size;
+		pm.readPrimitive(record_size,"records_.size");
+		records_.resize(record_size);
+
+		for(Position record = 0; record < record_size; record++)
+		{
+			String record_identifier = "records_["+String(record)+"]";
+			String record_content;
+			pm.readPrimitive(record_content, record_identifier.c_str());
+			records_[record] = record_content;
+		}
+	}
+
+
+
 } // namespace BALL

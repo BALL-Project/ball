@@ -10,6 +10,7 @@
 #include <BALL/KERNEL/nucleicAcid.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/XRAY/crystalInfo.h>
+#include <BALL/FORMAT/PDBRecords.h>
 
 // #define BALL_DEBUG_PERSISTENCE
 
@@ -120,6 +121,7 @@ namespace BALL
 		REGISTER_CLASS(System)
 		REGISTER_CLASS(Molecule)
 		REGISTER_CLASS(PDBAtom)
+		REGISTER_CLASS(PDBRecords)
 		REGISTER_CLASS(Residue)
 		REGISTER_CLASS(Chain)
 		REGISTER_CLASS(Protein)
