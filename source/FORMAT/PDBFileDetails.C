@@ -1165,6 +1165,16 @@ namespace BALL
 			system.insert(*protein);
 		}
 
+		if (!system.hasProperty("PDBINFO")) {
+			// create a new storage PDBInfo
+			boost::shared_ptr<PersistentObject> pdbi_ptr(new PDBInfo());
+			system.setProperty(NamedProperty("PDBINFO",pdbi_ptr));
+		}
+
+		boost::shared_ptr<PDBInfo> pdbi;
+		pdbi = boost::dynamic_pointer_cast<PDBInfo>(system.getProperty("PDBINFO").getSmartObject());
+		*pdbi = info;
+
 		return result;
 	}
 
@@ -1178,7 +1188,15 @@ namespace BALL
 
 	bool PDBFile::write(const System& system)
 	{
-		return write(system, PDBInfo());
+		PDBInfo pdbi;
+
+		if (system.hasProperty("PDBINFO")) {
+			// retrieve the stored PDBInfo record from the system.
+			boost::shared_ptr<PDBInfo> pdbi_ptr = boost::dynamic_pointer_cast<PDBInfo>(system.getProperty("PDBINFO").getSmartObject());
+			pdbi = *pdbi_ptr;
+		}
+
+		return write(system, pdbi);
 	}
 
 	bool PDBFile::write(const System& system, const PDBInfo& info)
