@@ -79,6 +79,14 @@
 #cmakedefine BALL_SIZE_T_SIZE @BALL_SIZE_T_SIZE@
 #cmakedefine BALL_POINTER_SIZE @BALL_POINTER_SIZE@
 
+// define platform independant types for unsigned 16|32|64 bit numbers
+#cmakedefine BALL_UINT16 @BALL_UINT16@
+#cmakedefine BALL_UINT32 @BALL_UINT32@
+#cmakedefine BALL_UINT64 @BALL_UINT64@
+#cmakedefine BALL_INT16 @BALL_INT16@
+#cmakedefine BALL_INT32 @BALL_INT32@
+#cmakedefine BALL_INT64 @BALL_INT64@
+
 // Define a signed/unsigned numeric type of 64 bit length (used for
 // platform independent persistence: stores pointers)
 // this usually defaults to unsigned long on 64 bit architectures
