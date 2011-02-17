@@ -8,12 +8,10 @@
 
 namespace BALL
 {
+	extern int connolly_ (int number_of_atoms, double *coordinates, double *radius,
+	                      double *volume, double *area, double probe, double exclude, double* atom_areas);
 
-  extern int connolly_ (int number_of_atoms, double *coordinates, double *radius,
-												double *volume, double *area, double probe, double exclude, double* atom_areas);
-
-	float calculateSESArea	
-		(const AtomContainer& fragment, float probe_radius)
+	float calculateSESArea(const AtomContainer& fragment, float probe_radius)
 	{
 		// extract all atoms: iterate over all composites and
 		// check whether they are Atoms
@@ -53,7 +51,7 @@ namespace BALL
 
 
 		// int connolly_ (int number_of_atoms, double *coordinates, double *radius,
-		//								double *volume, double *area, double probe, double exclude, double* atom_areas);
+		//                double *volume, double *area, double probe, double exclude, double* atom_areas);
 		// call connolly_
 		connolly_(number_of_atoms, coordinates, radii, 
 							&volume, &area, probe_radius, 0.0, atom_areas);
@@ -65,8 +63,8 @@ namespace BALL
 
 		return area;
 	}
-
-  float calculateSESAtomAreas
+	
+	float calculateSESAtomAreas
 		(const AtomContainer& fragment, HashMap<const Atom*,float>& atom_areas, float probe_radius)
 	{
 		// extract all atoms: iterate over all composites and
