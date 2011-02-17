@@ -16,6 +16,10 @@
 #	include <BALL/FORMAT/PDBdefs.h>
 #endif
 
+#ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
+#	include <BALL/CONCEPT/persistenceManager.h>
+#endif
+
 namespace BALL 
 {
 	
@@ -25,6 +29,7 @@ namespace BALL
 			\link PDBFile \endlink as well as unparse records.
 	*/
 	class BALL_EXPORT PDBInfo
+			  : public PersistentObject
 	{
 		public:
 		
@@ -113,6 +118,23 @@ namespace BALL
 		*/
 		std::list<Position> getRecordIndices(PDB::RecordType record) const;
 		//@}
+
+		/** @name Storable Interface
+		*/
+		//@{
+
+		/** Persistent stream writing.
+		*/
+		//void write(PersistenceManager& pm) const;
+		void persistentWrite(PersistenceManager& pm, const char* name) const;
+
+		/** Persistent stream reading.
+		*/
+		//bool read(PersistenceManager& pm);
+		void persistentRead(PersistenceManager& pm);
+
+		//@}
+
 
 		protected:
 		/// Skipped PDB records (not parsed)

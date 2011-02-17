@@ -107,4 +107,44 @@ namespace BALL
 		return indices;
 	}
 
+	void PDBInfo::persistentWrite(PersistenceManager& pm, const char* name) const
+	{
+		pm.writeObjectHeader(this,name);
+
+		skipped_records_.persistentWrite(pm,"skipped_records_");
+		invalid_records_.persistentWrite(pm, "invalid_records_");
+
+		BALL_WRITE_PRIMITIVE_MEMBER(pm,filename_);
+		BALL_WRITE_PRIMITIVE_MEMBER(pm,id_);
+		BALL_WRITE_PRIMITIVE_MEMBER(pm,name_);
+		BALL_WRITE_PRIMITIVE_MEMBER(pm,number_of_records_);
+		BALL_WRITE_PRIMITIVE_MEMBER(pm,number_of_models_);
+		BALL_WRITE_PRIMITIVE_MEMBER(pm,model_read_);
+		BALL_WRITE_PRIMITIVE_MEMBER(pm,number_of_atom_records_);
+		BALL_WRITE_PRIMITIVE_MEMBER(pm,number_of_hetatm_records_);
+
+		pm.writeObjectTrailer(name);
+	}
+
+	void PDBInfo::persistentRead(PersistenceManager& pm)
+	{
+		pm.checkObjectHeader(skipped_records_,"skipped_records_");
+		skipped_records_.persistentRead(pm);
+		pm.checkObjectTrailer("skipped_records_");
+
+		pm.checkObjectHeader(invalid_records_,"invalid_records_");
+		invalid_records_.persistentRead(pm);
+		pm.checkObjectTrailer("invalid_records_");
+
+		BALL_READ_PRIMITIVE_MEMBER(pm,filename_);
+		BALL_READ_PRIMITIVE_MEMBER(pm,id_);
+		BALL_READ_PRIMITIVE_MEMBER(pm,name_);
+		BALL_READ_PRIMITIVE_MEMBER(pm,number_of_records_);
+		BALL_READ_PRIMITIVE_MEMBER(pm,number_of_models_);
+		BALL_READ_PRIMITIVE_MEMBER(pm,model_read_);
+		BALL_READ_PRIMITIVE_MEMBER(pm,number_of_atom_records_);
+		BALL_READ_PRIMITIVE_MEMBER(pm,number_of_hetatm_records_);
+	}
+
+
 } // namespace BALL
