@@ -34,6 +34,9 @@
 
 #include <boost/shared_ptr.hpp>
 
+#define BALL_WRITE_PRIMITIVE_MEMBER(pm,x) pm.writePrimitive(x,#x)
+#define BALL_READ_PRIMITIVE_MEMBER(pm,x) pm.readPrimitive(x,#x)
+
 namespace BALL 
 {
 
