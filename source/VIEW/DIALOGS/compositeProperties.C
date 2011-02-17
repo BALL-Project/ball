@@ -6,6 +6,7 @@
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/residue.h>
+#include <BALL/VIEW/WIDGETS/propertyEditor.h>
 
 #include <QtGui/QLineEdit>
 #include <QtGui/QPushButton>
@@ -22,10 +23,13 @@ CompositeProperties::CompositeProperties(Composite* composite, QWidget* parent,
 			composite_(composite)
 {
 	setupUi(this);
-	
-  // signals and slots connections
-  connect( ok_button, SIGNAL( clicked() ), this, SLOT( accept() ) );
-  connect( cancel_button, SIGNAL( clicked() ), this, SLOT( reject() ) );
+
+	connect(buttonBox, SIGNAL(accepted()), named, SLOT(apply()));
+	connect(buttonBox, SIGNAL(rejected()), named, SLOT(reset()));
+
+	tabWidget->setTabText(0, tr("Standard"));	
+	tabWidget->setTabText(1, tr("Named"));	
+	named->setPropertyManager(dynamic_cast<PropertyManager*>(composite));
 
 	setObjectName(name);
 	if (RTTI::isKindOf<AtomContainer>(*composite))
@@ -92,6 +96,7 @@ CompositeProperties::CompositeProperties(Composite* composite, QWidget* parent,
 
 	String symb = atom->getElement().getSymbol();
 	element_box->setCurrentIndex(element_box->findText(symb.c_str()));
+
 }
 
 String CompositeProperties::getString_(float data) const

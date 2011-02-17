@@ -229,7 +229,7 @@ namespace BALL
 				 * @param parent the parent widget of this widget.
 				 * @param editable should the properties be editable?
 				 */
-				explicit PropertyEditor(QWidget* parent, bool editable = true);
+				explicit PropertyEditor(QWidget* parent = 0, bool editable = true);
 
 				/**
 				 * Construct a PropertyEditor
