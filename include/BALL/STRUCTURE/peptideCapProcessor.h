@@ -32,7 +32,7 @@ namespace BALL
 		\ingroup StructureMiscellaneous
    */
 
-  /** \brief This processor adds ACE/NME caps to proteins.
+  /** \brief This processor adds ACE-N and NME-C caps to proteins.
   */ 
 
 	class BALL_EXPORT PeptideCapProcessor 
