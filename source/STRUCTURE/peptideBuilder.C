@@ -191,8 +191,17 @@ namespace BALL
 
 		Protein* PeptideBuilder::construct()
 		{
-			if (fragment_db_ == 0) return 0;
+			if (fragment_db_ == 0) 
+			{	
+				Log.warn() << "PeptideBuilder::construct(): no FragmengDB given!" << std::endl;
+				return 0;
+			}
+			if (sequence_.size() == 0)
+			{
 
+				Log.warn() << "PeptideBuilder::construct(): no amino acid sequence specified." << std::endl;
+ 				return 0;
+			}
 			int id = 1;
 			Protein *protein = new Protein(proteinname_);
 			Chain *chain = new Chain(chainname_);
