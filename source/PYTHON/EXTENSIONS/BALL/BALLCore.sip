@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id$
-//
-// Author:
-//   Oliver Kohlbacher
-//
 
 /////////////////////////
 // BALL PYTHON SUPPORT
@@ -296,6 +291,7 @@
 %Include structureMapper.sip
 //%Include smilesParser.sip
 %Include peptideBuilder.sip
+%Include peptideCapProcessor.sip
 %Include secondaryStructureProcessor.sip
 %Include surfaceProcessor.sip
 
