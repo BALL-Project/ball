@@ -13,6 +13,8 @@
 #include <BALL/KERNEL/nucleicAcid.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/secondaryStructure.h>
+#include <BALL/FORMAT/PDBRecords.h>
+#include <BALL/FORMAT/PDBInfo.h>
 ///////////////////////////
 
 template <typename T>
@@ -253,6 +255,8 @@ CHECK(getStreamName<>())
 	TEST_EQUAL(getStreamName<Molecule>(), String("BALL::Molecule"))
 	TEST_EQUAL(getStreamName<AtomContainer>(), String("BALL::AtomContainer"))
 	TEST_EQUAL(getStreamName<Fragment>(), String("BALL::Fragment"))
+	TEST_EQUAL(getStreamName<PDBInfo>(), String("BALL::PDBInfo"))
+	TEST_EQUAL(getStreamName<PDBRecords>(), String("BALL::PDBRecords"))
 RESULT
 
 CHECK(castTo<>())
