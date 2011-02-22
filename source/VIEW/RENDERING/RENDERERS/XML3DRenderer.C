@@ -266,7 +266,13 @@ namespace BALL
 
 			//set height and width of the scene
 			out << "style=\"width:" << int(width) << "px; ";
-			out << "height: " << int(height) << "px;\" ";
+			out << "height: " << int(height) << "px; ";
+			String bg_color;
+			stage_->getBackgroundColor().get(bg_color);
+			bg_color.truncate(6);
+			bg_color.toLower();
+			out << "background-color: #" << bg_color << ";\" ";
+
 			out << "xmlns=\"http://www.xml3d.org/2009/xml3d\" ";
 			
 			//Enable Debug
@@ -459,12 +465,6 @@ namespace BALL
 			out << "  <head>" << endl;
 			out << "  <title>Our BALLView Export</title>" << endl;
 			out << "    <link rel=\"stylesheet\" type=\"text/css\" href=\"http://xml3d.org/xml3d/script/xml3d.css\" />" << endl;
-			out << "<style type=\"text/css\">" << endl;
-			out << "	xml3d {" << endl;
-			out << "		border: 1px solid white;" << endl;
-			out << "		background-color: #000000;" << endl;
-			out << "	}" << endl;
-			out << "  </style>" << endl;
 			out << "  </head>" << endl;
 			
 			// Start XHTML Body
