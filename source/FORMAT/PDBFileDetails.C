@@ -1673,8 +1673,9 @@ namespace BALL
 					// Line full.
 					sr.serial_number = ++ser_num;
 				}
-				else
-				{	
+
+				if((res_counter != 13) || (chain_id != current_chain))
+				{
 					// New chain.
 					chain_counter++;
 					sr.serial_number = 1;
