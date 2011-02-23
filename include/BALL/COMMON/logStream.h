@@ -167,6 +167,7 @@ namespace BALL
 			int									min_level;
 			int									max_level;
 			LogStreamNotifier*	target;
+			bool disabled;
 		
 			StreamStruct()
 				:	stream(0),

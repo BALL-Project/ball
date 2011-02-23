@@ -62,7 +62,7 @@ namespace BALL
 		}
 	}
  
-	int LogStreamBuf::sync() 
+	int LogStreamBuf::sync()
 	{
 		static char buf[BUFFER_LENGTH];
 
@@ -112,7 +112,7 @@ namespace BALL
 					for (; list_it != stream_list_.end(); ++list_it)
 					{
 						// if the stream is open for that level, write to it...
-						if ((list_it->min_level <= tmp_level_) && (list_it->max_level >= tmp_level_))
+						if ((list_it->min_level <= tmp_level_) && (list_it->max_level >= tmp_level_) && !list_it->disabled)
 						{
 							*(list_it->stream) << expandPrefix_(list_it->prefix, tmp_level_, time(0)).c_str()
 																 << outstring.c_str() << std::endl;
@@ -331,6 +331,7 @@ namespace BALL
 		LogStreamBuf::StreamStruct s_struct;
 		s_struct.min_level = min_level;
 		s_struct.max_level = max_level;
+		s_struct.disabled = false;
 		s_struct.stream = &stream;
 		rdbuf()->stream_list_.push_back(s_struct);
 	}
@@ -508,12 +509,20 @@ namespace BALL
 		
 	{
 		disable_output_ = true;
+		for(list<LogStreamBuf::StreamStruct>::iterator it=rdbuf()->stream_list_.begin(); it!=rdbuf()->stream_list_.end(); it++)
+		{
+			it->disabled = true;
+		}
 	}
 
 	void LogStream::enableOutput()
 		
 	{
 		disable_output_ = false;
+		for(list<LogStreamBuf::StreamStruct>::iterator it=rdbuf()->stream_list_.begin(); it!=rdbuf()->stream_list_.end(); it++)
+		{
+			it->disabled = false;
+		}
 		std::ostream::flush();
 	}
 
