@@ -234,11 +234,14 @@ namespace BALL
 																	 float3(view_vector.x, view_vector.y, view_vector.z),
 																	 float3(look_up.x, look_up.y, look_up.z));
 
+			if (lights_.size() != stage_->getLightSources().size()) return;
+			
 			// lights that are relative to the camera need to have their position updated
 			if (lights_.size() == 0) return; // TEST
 			std::list<LightSource>::const_iterator it = stage_->getLightSources().begin();
 			Size current_light=0;
 			Vector3 light_position, direction;
+			
 			for (; it != stage_->getLightSources().end(); ++it, ++current_light)
 			{
 				switch (it->getType())
