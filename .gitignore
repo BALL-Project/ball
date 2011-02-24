@@ -1,3 +1,4 @@
+include/BALL/BALL.doc
 contrib/*
 *.o
 *.lo
