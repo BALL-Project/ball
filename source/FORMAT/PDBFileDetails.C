@@ -81,7 +81,28 @@ namespace BALL
 			{
 				first->second->setProperty(Residue::PROPERTY__HAS_SSBOND);
 				second->second->setProperty(Residue::PROPERTY__HAS_SSBOND);
-			} 
+
+				AtomIterator a_it = first->second->beginAtom();
+				for(; +a_it; ++a_it)
+				{
+					if(a_it->getElement().getAtomicNumber() == 16) {
+						break;
+					}
+				}
+
+				AtomIterator b_it = second->second->beginAtom();
+				for(; +b_it; ++b_it)
+				{
+					if(b_it->getElement().getAtomicNumber() == 16) {
+						break;
+					}
+				}
+
+				if(+a_it && +b_it) {
+					Bond* bond = a_it->getBond(*b_it);
+					if(bond) bond->setType(Bond::TYPE__DISULPHIDE_BRIDGE);
+				}
+			}
 		}
 	}
 
