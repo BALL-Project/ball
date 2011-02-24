@@ -455,39 +455,63 @@ namespace BALL
 		}
 		else
 		{
-			const Atom& atom1 = *(Atom*)bond.getFirstAtom();
-			const Atom& atom2 = *(Atom*)bond.getSecondAtom();
-
-			// ok, this bond can be a sbmb or a standard bond
-			// it is sbmb if :
-
-			// is the bond order == 1 ?
-			// are both atoms sp or sp2 hypridised?
-			// both atoms are not in one aromatic ring
-			const bool in_one_ring = isInOneAromaticRing(bond);
-
-			is_sbmb = bond.getOrder() == Bond::ORDER__SINGLE  &&
-								!in_one_ring;
-
-			// check if both atoms are in different aromatic rings
-			if (!is_sbmb && !in_one_ring)
+			if (bond.getOrder() == Bond::ORDER__SINGLE)
 			{
-				bool a1 = false;
-				bool a2 = false;
+				const Atom& atom1 = *(Atom*)bond.getFirstAtom();
+				const Atom& atom2 = *(Atom*)bond.getSecondAtom();
 
+				// are both atoms aromatic?
+				bool atom1_is_aromatic = false;
 				for (Position pos = 0; pos < aromatic_rings_.size(); pos++)
 				{
-					if (aromatic_rings_[pos].has((Atom*)&atom1)) a1 = true;
-					if (aromatic_rings_[pos].has((Atom*)&atom2)) a2 = true;
+					if (aromatic_rings_[pos].has((Atom*)&atom1)) 
+					{
+						atom1_is_aromatic = true;
+						break;
+					}
 				}
-			
-			  if (a1 && a2) is_sbmb = true;
-			}
+
+				bool atom2_is_aromatic = false;
+				for (Position pos = 0; pos < aromatic_rings_.size(); pos++)
+				{
+					if (aromatic_rings_[pos].has((Atom*)&atom2)) 
+					{
+						atom2_is_aromatic = true;
+						break;
+					}
+				}
+
+				// ok, this bond can be a sbmb or a standard bond
+				
+				// it is set to a non-standard bond type, iff
+				//   (a)  it is a single bond (we checked that already)
+				//     (b1) between non-aromatic atoms
+				//     (c1) both of which have sbmb in their type definition
+				// or  
+				//     (b2) between aromatic atoms
+				//     (c2) in different aromatic rings
+				
+				if (!(atom1_is_aromatic || atom2_is_aromatic))
+				{
+					if (    atom_types_.getAtomTypes()[atom1.getType()].sbmb 
+							 && atom_types_.getAtomTypes()[atom2.getType()].sbmb)
+					{
+						is_sbmb = true;
+					}
+				}
+				else if (atom1_is_aromatic && atom2_is_aromatic)
+				{
+					if (!isInOneAromaticRing(bond))
+					{
+						is_sbmb = true;
+					}
+				}
 #ifdef BALL_DEBUG_MMFF
-Log.info() << atom1.getName() << " " << atom2.getName() << "  order single: "
-					 << (bond.getOrder() == Bond::ORDER__SINGLE) << "  sp: " 
-					 << !isInOneAromaticRing(bond) << std::endl;
+				Log.info() << atom1.getName() << " " << atom2.getName() << "  order single: "
+					<< (bond.getOrder() == Bond::ORDER__SINGLE) << "  sp: " 
+					<< !isInOneAromaticRing(bond) << std::endl;
 #endif
+			}
 		}
 
 		if (is_sbmb)
