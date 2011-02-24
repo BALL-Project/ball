@@ -1410,37 +1410,37 @@ namespace BALL
 				setMenuHelp(enter_stereo_action_, "tips.html#3D");
 			}
 
-			active_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, tr("Shutter Glasses"), this, 
-			                                        SLOT(enterActiveStereo()), "Shortcut|Display|Stereo|Shutter_Glasses",
-																							QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
+			//active_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, tr("Shutter Glasses"), this, 
+			//                                        SLOT(enterActiveStereo()), "Shortcut|Display|Stereo|Shutter_Glasses",
+			//																				QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 
-			if (active_stereo_action_)
-			{
-				setMenuHelp(active_stereo_action_, "tips.html#3D");
-				active_stereo_action_->setCheckable(true);
-			}
+			//if (active_stereo_action_)
+			//{
+			//	setMenuHelp(active_stereo_action_, "tips.html#3D");
+			//	active_stereo_action_->setCheckable(true);
+			//}
 
-			dual_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, tr("Side by Side"), this,
-			                                      SLOT(enterDualStereo()), "Shortcut|Display|Stereo|Side_by_Side",
-																						QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
+			//dual_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, tr("Side by Side"), this,
+			//                                      SLOT(enterDualStereo()), "Shortcut|Display|Stereo|Side_by_Side",
+			//																			QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 
-			if (dual_stereo_action_)
-			{
-				setMenuHelp(dual_stereo_action_, "tips.html#3D");
-				dual_stereo_action_->setCheckable(true);
-			}
+			//if (dual_stereo_action_)
+			//{
+			//	setMenuHelp(dual_stereo_action_, "tips.html#3D");
+			//	dual_stereo_action_->setCheckable(true);
+			//}
 
-			dual_stereo_different_display_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, 
-			                                                        tr("Side by Side on Different Displays"), this, 
-																															SLOT(enterDualStereoDifferentDisplays()),
-																															"Shortcut|Display|Stereo|Side_by_Side_on_Different_Displays",
-																															QKeySequence(), tr(""),
-																														  UIOperationMode::MODE_ADVANCED);
-			if (dual_stereo_different_display_action_)
-			{
-				setMenuHelp(dual_stereo_different_display_action_, "tips.html#3D");
-				dual_stereo_different_display_action_->setCheckable(true);
-			}
+			//dual_stereo_different_display_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, 
+			//                                                        tr("Side by Side on Different Displays"), this, 
+			//																												SLOT(enterDualStereoDifferentDisplays()),
+			//																												"Shortcut|Display|Stereo|Side_by_Side_on_Different_Displays",
+			//																												QKeySequence(), tr(""),
+			//																											  UIOperationMode::MODE_ADVANCED);
+			//if (dual_stereo_different_display_action_)
+			//{
+			//	setMenuHelp(dual_stereo_different_display_action_, "tips.html#3D");
+			//	dual_stereo_different_display_action_->setCheckable(true);
+			//}
 
 			// ======================== Display->Viewpoint ===============================================
 			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT, UIOperationMode::MODE_KIOSK);
@@ -2477,11 +2477,11 @@ namespace BALL
 		// TODO: make renderer configurable
 		void Scene::exitStereo()
 		{
-			no_stereo_action_->setChecked(true);
-			enter_stereo_action_->setChecked(false);
-			active_stereo_action_->setChecked(false);
-			dual_stereo_action_->setChecked(false);
-			dual_stereo_different_display_action_->setChecked(false);
+			if (no_stereo_action_) no_stereo_action_->setChecked(true);
+			if (enter_stereo_action_) enter_stereo_action_->setChecked(false);
+			//if (active_stereo_action_) active_stereo_action_->setChecked(false);
+			//if (dual_stereo_action_) dual_stereo_action_->setChecked(false);
+			//if (dual_stereo_different_display_action_) dual_stereo_different_display_action_->setChecked(false);
 
 			if (stereo_left_eye_ == -1 || stereo_right_eye_ == -1) return;
 //			if (gl_renderer_->getStereoMode() == Renderer::NO_STEREO) return;
@@ -2812,11 +2812,11 @@ namespace BALL
 			applyPreferences();
 			updateGL();
 
-			no_stereo_action_->setChecked(false);
-			active_stereo_action_->setChecked(false);
-			enter_stereo_action_->setChecked(true);
-			dual_stereo_action_->setChecked(false);
-			dual_stereo_different_display_action_->setChecked(false);
+			if (no_stereo_action_) no_stereo_action_->setChecked(false);
+			//if (active_stereo_action_)  active_stereo_action_->setChecked(false);
+			if (enter_stereo_action_) enter_stereo_action_->setChecked(true);
+			//if (dual_stereo_action_) dual_stereo_action_->setChecked(false);
+			//if (dual_stereo_different_display_action_) dual_stereo_different_display_action_->setChecked(false);
 		}
 
 		void Scene::enterActiveStereo()
