@@ -16,7 +16,7 @@
 //
 //  master data for all revisions is stored in this define!
 //
-#define BALL_RELEASE_STRING             "1.4.0"
+#define BALL_RELEASE_STRING             "@BALL_PACKAGE_VERSION_MAJOR@.@BALL_PACKAGE_VERSION_MINOR@.@BALL_PACKAGE_VERSION_PATCH@"
 
 namespace BALL
 {

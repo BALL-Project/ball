@@ -324,6 +324,9 @@ ENDIF ()
 ## replace any variables in config.h.in with current values
 SET(CONFIGURED_CONFIG_H ${PROJECT_BINARY_DIR}/include/BALL/CONFIG/config.h)
 CONFIGURE_FILE(cmake/config.h.in ${CONFIGURED_CONFIG_H})
+	
+## automatically create the version numbers
+CONFIGURE_FILE(cmake/templates/version.h.in ${PROJECT_BINARY_DIR}/include/BALL/COMMON/version.h)
 
 ## build a config.h file for the python support to not disturb the
 ## rest of BALL
