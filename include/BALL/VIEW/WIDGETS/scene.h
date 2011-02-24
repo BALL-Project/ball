@@ -6,7 +6,7 @@
 #define BALL_VIEW_WIDGETS_SCENE_H
 
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
-#	include <BALL/VIEW/KERNEL/modularWidget.h>
+# include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
 #ifndef BALL_VIEW_RENDERING_RENDERERSGLRENDERER_H
@@ -15,7 +15,7 @@
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
 # include <BALL/VIEW/KERNEL/common.h>
-#endif 
+#endif
 
 #ifndef BALL_VIEW_RENDERING_RENDERWINDOW_H
 # include <BALL/VIEW/RENDERING/renderWindow.h>
