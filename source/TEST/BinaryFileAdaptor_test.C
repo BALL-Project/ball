@@ -70,19 +70,35 @@ CHECK(streams)
 RESULT
 
 CHECK(Byte Swapping (short))
+#if BALL_SHORT_SIZE == 2
 	short x = 0x1122;
 	swapBytes(x);
 	TEST_EQUAL(x, 0x2211);
 	swapBytes(x);
 	TEST_EQUAL(x, 0x1122);
+#elif BALL_SHORT_SIZE == 4
+	short x = 0x11223344;
+	swapBytes(x);
+	TEST_EQUAL(x, 0x44332211);
+	swapBytes(x);
+	TEST_EQUAL(x, 0x44331122);
+#endif
 RESULT
 
 CHECK(Byte Swapping (unsigned short))
+#if BALL_USHORT_SIZE == 2
 	unsigned short x = 0xAABB;
 	swapBytes(x);
 	TEST_EQUAL(x, 0xBBAA);
 	swapBytes(x);
 	TEST_EQUAL(x, 0xAABB);
+#elif BALL_USHORT_SIZE == 4
+	unsigned short x = 0xAABBCCDD;
+	swapBytes(x);
+	TEST_EQUAL(x, 0xDDCCBBAA);
+	swapBytes(x);
+	TEST_EQUAL(x, 0xAABBCCDD);
+#endif
 RESULT
 
 CHECK(Byte Swapping (uint32_t))
