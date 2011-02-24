@@ -149,8 +149,7 @@ namespace BALL
 
 		/**	Clear method
 		*/
-		virtual void clear() 
-			;
+		virtual void clear();
 
 		//@}
 		/**	@name	Setup Methods 
