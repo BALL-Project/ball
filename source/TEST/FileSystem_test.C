@@ -33,7 +33,10 @@ RESULT
 CHECK(canonizePath(String& path) -- removal of duplicate path separators)
 	String path("//");
 	FileSystem::canonizePath(path);
-	TEST_EQUAL(path, "/")
+	TEST_EQUAL(path, "//");
+	path = "/usr//local";
+	FileSystem::canonizePath(path);
+	TEST_EQUAL(path, "/usr/local");
 	path = PS + "usr" + PS + "local" + PS + PS;
 	FileSystem::canonizePath(path);
 	TEST_EQUAL(path, "/usr/local/")
