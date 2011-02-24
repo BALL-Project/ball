@@ -73,9 +73,13 @@
 #cmakedefine BALL_64BIT_ARCHITECTURE
 
 // define some symbols for the (bit)size of some builtin types
-#cmakedefine BALL_INT_SIZE @BALL_INT_SIZE@
 #cmakedefine BALL_CHAR_SIZE @BALL_CHAR_SIZE@
+#cmakedefine BALL_SHORT_SIZE @BALL_INT_SIZE@
+#cmakedefine BALL_INT_SIZE @BALL_INT_SIZE@
 #cmakedefine BALL_LONG_SIZE @BALL_LONG_SIZE@
+#cmakedefine BALL_USHORT_SIZE @BALL_INT_SIZE@
+#cmakedefine BALL_UINT_SIZE @BALL_INT_SIZE@
+#cmakedefine BALL_ULONG_SIZE @BALL_ULONG_SIZE@
 #cmakedefine BALL_SIZE_T_SIZE @BALL_SIZE_T_SIZE@
 #cmakedefine BALL_POINTER_SIZE @BALL_POINTER_SIZE@
 
