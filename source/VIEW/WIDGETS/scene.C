@@ -2634,7 +2634,7 @@ namespace BALL
 			RenderSetup::RendererType stereo_renderer_type = stage_settings_->getStereoScreensRendererType();
 
 #ifndef BALL_HAS_RTFACT
-			if (control_renderer_type == Renderer::RTFACT_RENDERER || stereo_renderer_type == Renderer::RTFACT_RENDERER)
+			if (control_renderer_type == RenderSetup::RTFACT_RENDERER || stereo_renderer_type == RenderSetup::RTFACT_RENDERER)
 			{
 				QMessageBox *box = new QMessageBox;
 				box->setText("Stereo setup invalid");
