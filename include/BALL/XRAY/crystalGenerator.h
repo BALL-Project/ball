@@ -32,9 +32,7 @@
 # include <BALL/MATHS/box3.h>
 #endif
 
-#ifndef BALL_DATATYPE_LIST_H
-# include <BALL/DATATYPE/list.h>
-#endif
+#include <list>
 
 namespace BALL
 {
@@ -91,12 +89,12 @@ namespace BALL
 			void setCrystalInfo(boost::shared_ptr<CrystalInfo> ci_ptr);
 			void setSystem(System* system_ptr);	
 
-			List<System*> generatePacking(Index a_loweridx, Index a_upperidx, Index b_loweridx, Index b_upperid, Index c_loweridx, Index c_upperid);	
+			std::list<System*> generatePacking(Index a_loweridx, Index a_upperidx, Index b_loweridx, Index b_upperid, Index c_loweridx, Index c_upperid);
 
 			System* generateUnitCell(Index a, Index b, Index c);	
 			System* generateUnitCell();	
 			System* generateAsymmetricUnit();	
-			List<System*> generateSymMoleculesWithinDistance(float angstrom);	
+			std::list<System*> generateSymMoleculesWithinDistance(float angstrom);
 			
 			Box3 getUnitCellBox(Index a, Index b, Index c);
 
