@@ -1,5 +1,5 @@
 @INCLUDE = Doxyfile_inc
 
-HTML_OUTPUT            = @CF_BALL_BIN_PATH@/doc_dot/html
+HTML_OUTPUT            = @CF_BALL_BIN_PATH@/doc/html-dot
 
 HAVE_DOT = YES
