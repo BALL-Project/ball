@@ -506,16 +506,16 @@ RESULT
 
 CHECK(static bool isWhitespace(char c) throw())
 	String char_class = String::CHARACTER_CLASS__WHITESPACE;
-	for (char c = '\0'; c != (char)255; c++)
+	for (unsigned char c = '\0'; c != (unsigned char)255; c++)
 	{
-		TEST_EQUAL(String::isWhitespace(c), char_class.has(c))
+		TEST_EQUAL(String::isWhitespace((char)c), char_class.has((char)c))
 	}
 RESULT
 
 CHECK(static bool isSpace(char c) throw())
-	for (char c = '\0'; c != (char)255; c++)
+	for (unsigned char c = '\0'; c != (unsigned char)255; c++)
 	{
-		TEST_EQUAL(String::isSpace(c), (c == ' '))
+		TEST_EQUAL(String::isSpace((char)c), ((char)c == ' '))
 	}
 RESULT
 
