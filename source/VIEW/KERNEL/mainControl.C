@@ -59,6 +59,7 @@
 #include <QtCore/QEvent>
 
 #include <algorithm> // sort
+#include <cstdlib>
 
 //       #define BALL_BENCHMARKING
 
