@@ -19,6 +19,7 @@ SET(SOURCES_LIST
 	shortcutTableView.C
 	SDWidget.C
 	testFramework.C
+	textEditorWidget.C
 #	canvasWidget.C
 #	regularData2DWidget.C
 #	regularData1DWidget.C
