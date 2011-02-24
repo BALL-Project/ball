@@ -72,12 +72,15 @@ def setSceneSize(width, height):
 	showOnlyScene()
 	getScene().update(false)
 
+def clearProject():
+	getMainControl().clearData()
 
 def loadProject(filename):
 	path = Path()
 	loc = path.find(String(filename))
-	return MainControl.getInstance(0).loadBALLViewProjectFile(loc)
-	
+	clearProject()
+	return getMainControl().loadBALLViewProjectFile(loc)
+		
 ###################### SHORTCUTS: #######################
 
 # map a key to a python command:
