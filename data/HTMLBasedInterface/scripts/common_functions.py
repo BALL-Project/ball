@@ -74,11 +74,15 @@ def setSceneSize(width, height):
 
 def clearProject():
 	getMainControl().clearData()
+	
+def enterStereo():
+	getScene().enterStereo()
 
 def loadProject(filename):
 	path = Path()
 	loc = path.find(String(filename))
 	clearProject()
+	enterStereo()
 	return getMainControl().loadBALLViewProjectFile(loc)
 		
 ###################### SHORTCUTS: #######################
