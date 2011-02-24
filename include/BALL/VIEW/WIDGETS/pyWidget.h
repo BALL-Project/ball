@@ -17,7 +17,10 @@
 #	include <BALL/VIEW/WIDGETS/dockWidget.h>
 #endif
 
-#include <QtGui/QTextEdit>
+#ifndef BALL_VIEW_WIDGETS_TEXTEDITORWIDGET_H
+#	include <BALL/VIEW/WIDGETS/textEditorWidget.h>
+#endif
+
 #include <QtGui/QDragEnterEvent>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QDropEvent>
@@ -156,11 +159,11 @@ class BALL_VIEW_EXPORT PyWidget
 	};
 
 	class MyTextEdit
-		: public QTextEdit
+		: public TextEditorWidget
 	{
 		public:
 			MyTextEdit(QWidget* parent)
-				: QTextEdit(parent) {};
+				: TextEditorWidget(parent) {};
 
 			void setPyWidget(PyWidget* pw) { pw_ = pw;}
 
@@ -389,7 +392,7 @@ class BALL_VIEW_EXPORT PyWidget
 	//_ Wrapper for multi and single threading call
 	String runCommand_(const String& command, bool& state);
 
-	void appendText_(QTextEdit* te, String text);
+	void appendText_(TextEditorWidget* te, String text);
 
 	/**	Replace the line the cursor is in with a line from the history.
 			Used to display text from the history (cursor down/up).
@@ -405,7 +408,7 @@ class BALL_VIEW_EXPORT PyWidget
 
 	bool keyPressed(QKeyEvent* e);
 
-	void createMenuHelpEntry_(QMenu* menu, QTextEdit* text_edit, const QPoint& point);
+	void createMenuHelpEntry_(QMenu* menu, TextEditorWidget* text_edit, const QPoint& point);
 
 	void findError_(String result);
 
@@ -415,7 +418,7 @@ class BALL_VIEW_EXPORT PyWidget
 
 	std::list<Hotkey>::iterator findKey_(Hotkey& hotkey);
 
-	QTextEdit* 				text_edit_, *script_output_;
+	TextEditorWidget* 				text_edit_, *script_output_;
 	MyTextEdit* 			script_edit_;
 	QTabWidget* 			tab_widget_;
 	PythonHighlighter highlighter_1_, highlighter_2_;
