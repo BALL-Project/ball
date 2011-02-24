@@ -70,8 +70,12 @@ askContrib()
 				exit 11
 			fi
 			else if [ "$INST" = "No" ]; then
-				export VERSION=`cat "include/BALL/BALL.doc" | grep version | sed "s/.version//" | tr -d ' ' | tr -d '\t'`
-				echo Assuming version is:$VERSION ....
+				MAJOR_VERSION=`grep ^SET\(BALL_PACKAGE_VERSION_MAJOR "CMakeLists.txt" | sed 's/.*\"\([0-9]*\)\".*/\1/'`
+				MINOR_VERSION=`grep ^SET\(BALL_PACKAGE_VERSION_MINOR "CMakeLists.txt" | sed 's/.*\"\([0-9]*\)\".*/\1/'`
+				PATCH_VERSION=`grep ^SET\(BALL_PACKAGE_VERSION_PATCH "CMakeLists.txt" | sed 's/.*\"\([0-9]*\)\".*/\1/'`
+				export VERSION="${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}"
+
+				echo Assuming version is: $VERSION ....
 				if [ "$OS" != Darwin ]
 				then
 					PACKAGE=${PREFIX}"-"${VERSION}".tar.gz"
