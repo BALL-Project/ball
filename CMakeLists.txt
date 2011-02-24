@@ -18,7 +18,6 @@ PROJECT("BALL")
 ### - do NOT hardcode them here!										 ###
 ### - edit them within CMakeCache.txt using ccmake	 ###
 ########################################################
-# BALL_BUILD_TYPE
 # CONTRIB_CUSTOM_DIR
 # STL_DEBUG
 # QT_DB_PLUGIN
@@ -61,16 +60,9 @@ SET(CF_BALL_PACKAGE_VERSION "${BALL_PACKAGE_VERSION_MAJOR}.${BALL_PACKAGE_VERSIO
 
 ## default build type (for Makefile generators): Release
 ## TODO: 64 Bit builds etc for Windows
-SET(BALL_BUILD_TYPE "Release" CACHE STRING "Build type: 'Debug' or 'Release'")
-
-IF ("${BALL_BUILD_TYPE}" STREQUAL "Debug")
-	MESSAGE(STATUS "BALL build type: ${BALL_BUILD_TYPE} (compiler debug info and BALL debug mode enabled)")
-	SET(CMAKE_BUILD_TYPE "Debug" CACHE INTERNAL "This must be equal to BALL_BUILD_TYPE!" FORCE)
-ELSEIF ("${BALL_BUILD_TYPE}" STREQUAL "Release")
-	MESSAGE(STATUS "BALL build type: ${BALL_BUILD_TYPE} (optimization enabled)")
-	SET(CMAKE_BUILD_TYPE "Release" CACHE INTERNAL "This must be equal to BALL_BUILD_TYPE!" FORCE)
-ELSE()
-	MESSAGE(FATAL_ERROR "BALL_BUILD_TYPE must be 'Debug' or 'Release'!")
+IF(BALL_BUILD_TYPE)
+	MESSAGE(WARNING "The BALL_BUILD_TYPE should no longer be used. Use CMAKE_BUILD_TYPE instead")
+	SET(CMAKE_BUILD_TYPE ${BALL_BUILD_TYPE})
 ENDIF()
 
 SET(BALL_CONTRIB_PATH "" CACHE PATH "Path to the contrib directory, if installed (optional)")
