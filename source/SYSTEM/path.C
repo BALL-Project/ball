@@ -163,6 +163,7 @@ namespace BALL
 
 		// remember we don't have to do this again - computation on demand!
 		path_array_valid_ = true;
+		initialized_ = true;
 	}
 
 
