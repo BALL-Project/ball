@@ -331,8 +331,23 @@ namespace BALL
 			if ((buffer[0] != '#') && (buffer[0] != '!') && (buffer[0] != ';')) 
 			{
 				s = buffer;
-				key = s.getField(0, " ");
-				s = s.after(" ");
+				size_t i = 0;
+				for(; i < s.length(); ++i) {
+					if(s[i] == ' ' || s[i] == '\t') {
+						break;
+					}
+				}
+
+				key = s.left(i);
+
+				while(i < s.length() && (s[i] == ' ' || s[i] == '\t')) ++i;
+
+				if(i < s.length()) {
+					s = s.getSubstring(i);
+				} else {
+					s = "";
+				}
+
 				set(key, s);
 			}
 		}

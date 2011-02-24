@@ -189,6 +189,15 @@ CHECK(bool readOptionFile(const String& filename) throw())
 	Vector3 v(0.0, 1.0, 2.0);
 	TEST_EQUAL(o2.getVector("SVECTOR"), v)
 	TEST_EQUAL(o2.getVector("VECTOR"), vector)
+
+	//Test an options file with arbitrary deleimiters
+	Options o3;
+	TEST_EQUAL(o3.readOptionFile(BALL_TEST_DATA_PATH(OptionsFile4.txt)), true)
+	TEST_EQUAL(o3.getBool("BOOL"), true)
+	TEST_EQUAL(o3.getBool("BOOL2"), false)
+	TEST_REAL_EQUAL(o3.getReal("REAL"), 1.23456)
+	TEST_EQUAL(o3.getVector("VECTOR"), vector)
+	TEST_EQUAL(o3.getInteger("INT"), 1234567890)
 RESULT
 
 String filename;
