@@ -34,6 +34,7 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/MATHS/analyticalGeometry.h>
 #include <BALL/MATHS/common.h>
+#include <BALL/SYSTEM/path.h>
 
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
@@ -179,44 +180,54 @@ namespace BALL
 				setenv(key,BALLView_data_path,true);
 			}
 
-			try
-			{
-#ifdef BALL_BENCHMARKING
-Timer t;
-t.start();
-#endif
-				fragment_db_.setFilename("fragments/Fragments.db");
-				fragment_db_.init();
-#ifdef BALL_BENCHMARKING
-t.stop();
-Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
-#endif
-			}
-			catch(Exception::GeneralException& e)
-			{
-				char*	BALLView_data_path = getenv("BALLVIEW_DATA_PATH");
-				char*	BALL_data_path = getenv("BALL_DATA_PATH");
-				String vdp, bdp;
-				if (BALLView_data_path!= 0) vdp = String(BALLView_data_path);
-				if (BALL_data_path!= 0) bdp = String(BALL_data_path);
+			bool ball_data_path_works = false;
 
-				QMessageBox::critical(0, tr("Critical error"),
-						QString(tr("Could not read the FragmentDB data!\n")) + 
-						"Please check, that the BALL_DATA_PATH or BALLVIEW_DATA_PATH\n" + 
-						"environment variable is set to the directory containing the\n" + 
-						"BALL or BALLView data directory (e.g. to C:\\BALL\\data).\n"+
-						"Currently:\n" + 
-						"BALLVIEW_DATA_PATH = " + vdp.c_str() + "\n"+ 
-						"BALL_DATA_PATH = "     + bdp.c_str() + "\n"+ 
-						"If the problem persists, start the application with the\n"+
-						"-l flag to enable logging and read the file "+
-						logging_file_name_.c_str() + "." +
-						"This file is created in either your home directory or\n"+ 
-						"in the directory with this executeable.",
-						QMessageBox::Abort,  Qt::NoButton);
-				Log.error() << e << std::endl;
+			while (!ball_data_path_works)
+			{
+				try
+				{
+#ifdef BALL_BENCHMARKING
+					Timer t;
+					t.start();
+#endif
+					fragment_db_.setFilename("fragments/Fragments.db");
+					fragment_db_.init();
+#ifdef BALL_BENCHMARKING
+					t.stop();
+					Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
+#endif
+					ball_data_path_works = true;
+				}
+				catch(Exception::GeneralException& e)
+				{
+					char*	BALLView_data_path = getenv("BALLVIEW_DATA_PATH");
+					char*	BALL_data_path = getenv("BALL_DATA_PATH");
+					String vdp, bdp;
+					if (BALLView_data_path!= 0) vdp = String(BALLView_data_path);
+					if (BALL_data_path!= 0) bdp = String(BALL_data_path);
 
-				throw Exception::GeneralException(__FILE__, __LINE__, ((String)tr("Datapath Error")).c_str(), ((String)tr("Could not read the FragmentDB")).c_str());
+					QMessageBox::critical(0, tr("Critical error"),
+							QString(tr("Could not read the FragmentDB data!\n")) + 
+							"Please check that the BALL_DATA_PATH or BALLVIEW_DATA_PATH\n" + 
+							"environment variable is set to the directory containing the\n" + 
+							"BALL or BALLView data directory (e.g. to C:\\BALL\\data).\n"+
+							"Currently:\n" + 
+							"BALLVIEW_DATA_PATH = " + vdp.c_str() + "\n"+ 
+							"BALL_DATA_PATH = "     + bdp.c_str() + "\n"+ 
+							"If the problem persists, start the application with the\n"+
+							"-l flag to enable logging and read the file "+
+							logging_file_name_.c_str() + "." +
+							"This file is created in either your home directory or\n"+ 
+							"in the directory with this executeable.",
+							QMessageBox::Ok,  Qt::NoButton);
+					Log.error() << e << std::endl;
+					
+					QString new_dir = QFileDialog::getExistingDirectory(0, tr("Choose the BALL data directory"), "");
+					Path p;
+					p.addDataPath(ascii(new_dir));
+					
+//					throw Exception::GeneralException(__FILE__, __LINE__, ((String)tr("Datapath Error")).c_str(), ((String)tr("Could not read the FragmentDB")).c_str());
+				}
 			}
 
 			preferences_file_.read();
