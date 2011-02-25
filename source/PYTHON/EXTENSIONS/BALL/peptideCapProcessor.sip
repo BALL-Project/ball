@@ -7,6 +7,7 @@ class PeptideCapProcessor
 {
 %TypeHeaderCode
 	#include <BALL/STRUCTURE/peptideCapProcessor.h>
+	#include <BALL/STRUCTURE/peptides.h>
 	using namespace BALL;
 	using namespace BALL::Peptides;
 	typedef UnaryProcessor<Composite> CompositeProcessor;
