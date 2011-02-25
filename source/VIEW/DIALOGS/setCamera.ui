@@ -1,205 +1,112 @@
-<ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>SetCameraData</class>
- <widget class="QDialog" name="SetCameraData" >
-  <property name="geometry" >
+ <widget class="QDialog" name="SetCameraData">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>350</width>
-    <height>112</height>
+    <height>153</height>
    </rect>
   </property>
-  <property name="minimumSize" >
+  <property name="minimumSize">
    <size>
     <width>350</width>
     <height>0</height>
    </size>
   </property>
-  <property name="maximumSize" >
+  <property name="maximumSize">
    <size>
     <width>350</width>
     <height>32767</height>
    </size>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Set Camera</string>
   </property>
-  <widget class="QLineEdit" name="look_z" >
-   <property name="geometry" >
-    <rect>
-     <x>272</x>
-     <y>36</y>
-     <width>68</width>
-     <height>23</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="look_y" >
-   <property name="geometry" >
-    <rect>
-     <x>193</x>
-     <y>36</y>
-     <width>68</width>
-     <height>23</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="ok_button" >
-   <property name="geometry" >
-    <rect>
-     <x>12</x>
-     <y>76</y>
-     <width>162</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="sizePolicy" >
-    <sizepolicy>
-     <hsizetype>7</hsizetype>
-     <vsizetype>0</vsizetype>
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="minimumSize" >
-    <size>
-     <width>0</width>
-     <height>30</height>
-    </size>
-   </property>
-   <property name="maximumSize" >
-    <size>
-     <width>32767</width>
-     <height>30</height>
-    </size>
-   </property>
-   <property name="toolTip" >
-    <string>Set camera to new coordinates</string>
-   </property>
-   <property name="text" >
-    <string>O&amp;K</string>
-   </property>
-   <property name="shortcut" >
-    <string>Alt+K</string>
-   </property>
-   <property name="default" >
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="cancel_button" >
-   <property name="geometry" >
-    <rect>
-     <x>180</x>
-     <y>76</y>
-     <width>161</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="sizePolicy" >
-    <sizepolicy>
-     <hsizetype>7</hsizetype>
-     <vsizetype>0</vsizetype>
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="minimumSize" >
-    <size>
-     <width>0</width>
-     <height>30</height>
-    </size>
-   </property>
-   <property name="maximumSize" >
-    <size>
-     <width>32767</width>
-     <height>30</height>
-    </size>
-   </property>
-   <property name="toolTip" >
-    <string>Close window without reseting camera</string>
-   </property>
-   <property name="text" >
-    <string>C&amp;ancel</string>
-   </property>
-   <property name="shortcut" >
-    <string>Alt+A</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="view_x" >
-   <property name="geometry" >
-    <rect>
-     <x>113</x>
-     <y>8</y>
-     <width>68</width>
-     <height>23</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="view_y" >
-   <property name="geometry" >
-    <rect>
-     <x>193</x>
-     <y>7</y>
-     <width>68</width>
-     <height>23</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="view_z" >
-   <property name="geometry" >
-    <rect>
-     <x>272</x>
-     <y>7</y>
-     <width>68</width>
-     <height>23</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="view_label" >
-   <property name="geometry" >
-    <rect>
-     <x>6</x>
-     <y>10</y>
-     <width>101</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>View point</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="look_label" >
-   <property name="geometry" >
-    <rect>
-     <x>8</x>
-     <y>40</y>
-     <width>96</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>Look at</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="look_x" >
-   <property name="geometry" >
-    <rect>
-     <x>113</x>
-     <y>37</y>
-     <width>68</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="inputMask" >
-    <string/>
-   </property>
-  </widget>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="view_label">
+       <property name="text">
+        <string>View point</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="view_x"/>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLineEdit" name="view_y"/>
+     </item>
+     <item row="0" column="3">
+      <widget class="QLineEdit" name="view_z"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="look_label">
+       <property name="text">
+        <string>Look at</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="look_x">
+       <property name="inputMask">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLineEdit" name="look_y"/>
+     </item>
+     <item row="1" column="3">
+      <widget class="QLineEdit" name="look_z"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="look_up_label">
+       <property name="text">
+        <string>Look up</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="look_up_x">
+       <property name="inputMask">
+        <string/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLineEdit" name="look_up_y">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3">
+      <widget class="QLineEdit" name="look_up_z">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
+ <layoutdefault spacing="6" margin="11"/>
  <tabstops>
   <tabstop>view_x</tabstop>
   <tabstop>view_y</tabstop>
@@ -207,11 +114,9 @@
   <tabstop>look_x</tabstop>
   <tabstop>look_y</tabstop>
   <tabstop>look_z</tabstop>
-  <tabstop>ok_button</tabstop>
-  <tabstop>cancel_button</tabstop>
  </tabstops>
  <includes>
-  <include location="global" >BALL/COMMON/global.h</include>
+  <include location="global">BALL/COMMON/global.h</include>
  </includes>
  <resources/>
  <connections/>
