@@ -307,6 +307,7 @@ class NMRStarFile
 			~NMRStarFile();
 
 			bool read();
+			void close();
 
 		//	bool read(AtomContainer&);
 
