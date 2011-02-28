@@ -23,6 +23,12 @@ using namespace BALL;
 
 int state_buffer = 0;
 int textfield_state_buffer = 0;
+
+void CIFParserLexer_reset()
+{
+	BEGIN(0);
+	YY_FLUSH_BUFFER;
+}
 %}
 
 %s			in_data_heading

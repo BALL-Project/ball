@@ -12,6 +12,7 @@
 extern void CIFParser_initBuffer(const char* buf);
 extern void CIFParser_delBuffer();
 extern int  CIFParserparse();
+extern void CIFParserLexer_reset();
 
 //extern int CIFParserdebug;
 
@@ -72,6 +73,7 @@ namespace BALL
 		}
 	
 		try {
+			CIFParserLexer_reset();
 			state.current_parser = this;
 			//CIFParserdebug = 1;
 			CIFParserparse();
