@@ -783,6 +783,8 @@ namespace BALL
 		if (chain_seq != squeezed_align_seq)
 		{
 			Log.warn() << "BALLToBMRBMapper::createMapping(): Warning: Alignment sequence cannnot be matched to chosen chain!" << endl;
+			Log.warn() << chain_seq << std::endl;
+			Log.warn() << squeezed_align_seq << std::endl;
 			return false;
 		}
 
@@ -1189,7 +1191,10 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 		if (ball_to_bmrb_mapping.getChain())
 			r_it = const_cast<Chain*>(ball_to_bmrb_mapping.getChain())->beginResidue();
 		else
+		{
+			Log.warn() << "NMRStarFile: could not find chain" << std::endl;
 			return false;
+		}
 
 		// map the shifts via the pdb_bmrb_mapping into the given AtomContainer
 		for ( ; +r_it; r_it++)
