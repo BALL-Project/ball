@@ -224,7 +224,7 @@ namespace BALL
 		Type getType() const;
 		
 		/// Return the name of the property
-		String getName() const;
+		const string& getName() const;
 
 		/** Return the data of the property object as bool.
 				If the property object is not of BOOL type, <b>false</b>

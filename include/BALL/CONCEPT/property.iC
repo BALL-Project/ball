@@ -229,7 +229,7 @@ unsigned int NamedProperty::getUnsignedInt() const
 }
 
 BALL_INLINE 
-String NamedProperty::getName() const
+const string& NamedProperty::getName() const
 {
 	return name_;
 }
