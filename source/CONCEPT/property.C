@@ -254,14 +254,14 @@ namespace BALL
 
 	bool PropertyManager::hasProperty(const string& name) const
 	{
-		for (Size i = 0; i < named_properties_.size(); i++)
+		for (std::vector<NamedProperty>::const_iterator it = named_properties_.begin(); it != named_properties_.end(); ++it)
 		{
-			if (named_properties_[i].getName() == name.c_str())
+			if (it->getName() == name)
 			{
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 
