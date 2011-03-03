@@ -108,7 +108,6 @@ CompositeMessage::~CompositeMessage()
 }
 
 SceneMessage::SceneMessage(SceneMessageType type)
-	
 	: Message(),
 		type_(type),
 		stage_()
@@ -119,7 +118,6 @@ SceneMessage::SceneMessage(SceneMessageType type)
 }
 
 SceneMessage::SceneMessage(const SceneMessage& message)
-	
 	: Message(message),
 		type_(message.type_),
 		stage_(message.stage_)
@@ -130,7 +128,6 @@ SceneMessage::SceneMessage(const SceneMessage& message)
 }
 
 SceneMessage::~SceneMessage()
-	
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "Destructing " << this << " SceneMessage" << endl;
@@ -138,7 +135,6 @@ SceneMessage::~SceneMessage()
 }
 
 void SceneMessage::setType(SceneMessageType type)
-	 
 { 
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "SceneMessage::setType " << type << std::endl;
@@ -149,7 +145,6 @@ void SceneMessage::setType(SceneMessageType type)
 
 
 GenericSelectionMessage::GenericSelectionMessage()
-	
 	: Message(),
 		selection_()
 {

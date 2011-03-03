@@ -124,7 +124,6 @@ namespace BALL
 				look_at_(look_at),
 				look_up_vector_(look_up_vector),
 				projection_mode_(mode)
-
 		{
 			calculateVectors_();
 		}
