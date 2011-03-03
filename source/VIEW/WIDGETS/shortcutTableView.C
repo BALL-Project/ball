@@ -47,12 +47,12 @@ namespace BALL
 			if(index.column() == 0) {
 				switch(role) {
 					case Qt::DisplayRole: {
-						String desc = (*registry_)[index.row()].first;
-						desc.substitute("Shortcut|","");
-						while (desc.substitute("|","->") != String::EndPos) ;
-						while (desc.substitute("_"," ") != String::EndPos) ;
+						QString desc = (*registry_)[index.row()].first.c_str();
+						desc.replace("Shortcut|", "");
+						desc.replace("|","->");
+						desc.replace("_"," ");
 
-						return QVariant::fromValue(QString(desc.c_str()));
+						return QVariant::fromValue(desc);
 					}
 					case Qt::DecorationRole:
 						return QVariant::fromValue((*registry_)[index.row()].second->icon());
