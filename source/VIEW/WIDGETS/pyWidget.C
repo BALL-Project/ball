@@ -452,7 +452,9 @@ namespace BALL
 		}
 
 		PyWidget::~PyWidget()
-		{}
+		{
+			delete editor_combo_box_;
+		}
 
 		void PyWidget::initializeWidget(MainControl& main_control)
 		{
