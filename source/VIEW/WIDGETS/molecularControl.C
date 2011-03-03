@@ -1197,6 +1197,10 @@ namespace BALL
 
 		void MolecularControl::deleteCurrentItems()
 		{
+			if(getMainControl()->isBusy()) {
+				setStatusbarText(tr("No changes allowed, while simulation is running or creating new representations!"), true);
+				return;
+			}
 			was_delete_ = true;
 			cut();
 			was_delete_ = false;
