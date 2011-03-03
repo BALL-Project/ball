@@ -71,10 +71,15 @@ MainControlPreferences::~MainControlPreferences()
 	#endif 
 }
 
-QStyle* MainControlPreferences::getStyle()
+QStyle* MainControlPreferences::setStyle()
 {
-	QStyle* new_style = QStyleFactory::create(style_box_->currentText());			
-	return new_style;
+	if(!QApplication::style() || (QApplication::style()->objectName().compare(style_box_->currentText(), Qt::CaseInsensitive) != 0))
+	{
+		QStyle* new_style = QStyleFactory::create(style_box_->currentText());
+		QApplication::setStyle(new_style);
+	}
+
+	return QApplication::style();
 }
 
 QFont MainControlPreferences::getFont()

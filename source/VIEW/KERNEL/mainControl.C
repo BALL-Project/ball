@@ -902,7 +902,7 @@ namespace BALL
 			
 			if (main_control_preferences_ != 0)
 			{
-				QApplication::setStyle(main_control_preferences_->getStyle());
+				main_control_preferences_->setStyle();
 				QApplication::setFont(main_control_preferences_->getFont());
 
 				if(main_control_preferences_->getLanguageChanged()) {

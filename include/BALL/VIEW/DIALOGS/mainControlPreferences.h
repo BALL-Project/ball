@@ -55,7 +55,7 @@ class BALL_VIEW_EXPORT MainControlPreferences
 			\return  QStyle* a pointer to the selected style.
 			(See documentation of QT-library for information concerning styles)
 	 */
-	QStyle* getStyle();
+	QStyle* setStyle();
 
 	/// Enable logging to file
 	void enableLoggingToFile(bool state);
