@@ -2981,6 +2981,7 @@ namespace BALL
 						camera.setViewPoint(camera.getViewPoint() - diff_viewpoint);
 						camera.setLookUpVector(camera.getLookUpVector() - diff_up);
 						camera.setLookAtPosition(camera.getLookAtPosition() - diff_look_at);
+						camera.setProjectionMode(stage_->getCamera().getProjectionMode());
 
 						SceneMessage* msg = new SceneMessage(SceneMessage::UPDATE_CAMERA);
 						Stage stage(*getStage());
