@@ -87,26 +87,26 @@ RESULT
 
 CHECK(Byte Swapping (unsigned short))
 #if BALL_USHORT_SIZE == 2
-	unsigned short x = 0xAABB;
+	unsigned short x = 0xAABBu;
 	swapBytes(x);
-	TEST_EQUAL(x, 0xBBAA);
+	TEST_EQUAL(x, 0xBBAAu);
 	swapBytes(x);
-	TEST_EQUAL(x, 0xAABB);
+	TEST_EQUAL(x, 0xAABBu);
 #elif BALL_USHORT_SIZE == 4
-	unsigned short x = 0xAABBCCDD;
+	unsigned short x = 0xAABBCCDDu;
 	swapBytes(x);
-	TEST_EQUAL(x, 0xDDCCBBAA);
+	TEST_EQUAL(x, 0xDDCCBBAAu);
 	swapBytes(x);
-	TEST_EQUAL(x, 0xAABBCCDD);
+	TEST_EQUAL(x, 0xAABBCCDDu);
 #endif
 RESULT
 
 CHECK(Byte Swapping (uint32_t))
-	BALL_UINT32 x = 0xAABBCCDD;
+	BALL_UINT32 x = 0xAABBCCDDu;
 	swapBytes(x);
-	TEST_EQUAL(x, 0xDDCCBBAA);
+	TEST_EQUAL(x, 0xDDCCBBAAu);
 	swapBytes(x);
-	TEST_EQUAL(x, 0xAABBCCDD);
+	TEST_EQUAL(x, 0xAABBCCDDu);
 RESULT
 
 CHECK(Byte Swapping (int32_t))
@@ -118,19 +118,19 @@ CHECK(Byte Swapping (int32_t))
 RESULT
 
 CHECK(Byte Swapping (uint64_t))
-	BALL_UINT64 x = 0xAAABACADBABBBCBD;
+	BALL_UINT64 x = 0xAAABACADBABBBCBDull;
 	swapBytes(x);
-	TEST_EQUAL(x, 0xBDBCBBBAADACABAA);
+	TEST_EQUAL(x, 0xBDBCBBBAADACABAAull);
 	swapBytes(x);
-	TEST_EQUAL(x, 0xAAABACADBABBBCBD);
+	TEST_EQUAL(x, 0xAAABACADBABBBCBDull);
 RESULT
 
 CHECK(Byte Swapping (int64_t))
-	BALL_INT64 x = 0x0011223344556677;
+	BALL_INT64 x = 0x0011223344556677ll;
 	swapBytes(x);
-	TEST_EQUAL(x, 0x7766554433221100);
+	TEST_EQUAL(x, 0x7766554433221100ll);
 	swapBytes(x);
-	TEST_EQUAL(x, 0x0011223344556677);
+	TEST_EQUAL(x, 0x0011223344556677ll);
 RESULT
 
 CHECK(Byte Swapping (float))
@@ -144,11 +144,11 @@ RESULT
 
 CHECK(Byte Swapping (double))
 	__private::UDouble tmp(0.0);
-	tmp.u = 0xAAABACADBABBBCBD;
+	tmp.u = 0xAAABACADBABBBCBDull;
 	swapBytes(tmp.f);
-	TEST_EQUAL(tmp.u, 0xBDBCBBBAADACABAA);
+	TEST_EQUAL(tmp.u, 0xBDBCBBBAADACABAAull);
 	swapBytes(tmp.f);
-	TEST_EQUAL(tmp.u, 0xAAABACADBABBBCBD);
+	TEST_EQUAL(tmp.u, 0xAAABACADBABBBCBDull);
 RESULT
 
 CHECK(Byte Swapping (arbitrary))
