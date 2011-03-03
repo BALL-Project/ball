@@ -177,8 +177,12 @@ namespace BALL
 			char*	BALLView_data_path = getenv("BALLVIEW_DATA_PATH");
 			if (BALLView_data_path != 0)
 			{
+#ifdef BALL_OS_WINDOWS
+				SetEnvironmentVariable("BALL_DATA_PATH", BALLView_data_path); 
+#else
 				char* key = const_cast<char*>("BALL_DATA_PATH=");
 				setenv(key,BALLView_data_path,true);
+#endif
 			}
 
 			bool ball_data_path_works = false;
