@@ -63,6 +63,7 @@
 #include <QtGui/QDesktopWidget>
 #include <QtGui/QFileDialog>
 #include <QtGui/QInputDialog>
+#include <QtGui/QProgressBar>
 #include <QtOpenGL/QGLPixelBuffer>
 #include <QtGui/QMessageBox>
 
@@ -1103,18 +1104,36 @@ namespace BALL
 		{
 			if (er.init(*stage_, (float) width(), (float) height()))
 			{
-				RepresentationList::const_iterator it;
 				MainControl *main_control = MainControl::getMainControl(this);
+				RepresentationManager& rman = main_control->getRepresentationManager();
 
-				it = main_control->getRepresentationManager().getRepresentations().begin();
-				for (; it != main_control->getRepresentationManager().getRepresentations().end(); it++)
+				QProgressBar* progress_bar_ = new QProgressBar();
+				progress_bar_->setWindowFlags(Qt::FramelessWindowHint);
+
+				progress_bar_->setMaximum(rman.getRepresentations().size());
+				progress_bar_->setValue(0);
+				progress_bar_->move(
+					main_control->width()  / 2 - 100,
+					main_control->height() / 2 - 20
+				);
+				progress_bar_->setFixedWidth(200);
+				progress_bar_->setFixedHeight(40);
+				progress_bar_->show();
+
+				RepresentationList::const_iterator it = rman.getRepresentations().begin();
+				for (; it != rman.getRepresentations().end(); it++)
 				{
 					if (!er.renderOneRepresentation(**it))
 					{
 						getMainControl()->setStatusbarText((String)tr("Error rendering representation..."));
 						return false;
 					}
+
+					progress_bar_->setValue(progress_bar_->value() + 1);
+					QApplication::processEvents();
 				}
+
+				delete progress_bar_;
 
 				if (er.finish())
 				{
