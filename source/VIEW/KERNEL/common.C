@@ -5,6 +5,7 @@
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
 
 #include <BALL/SYSTEM/directory.h>
 #include <BALL/SYSTEM/file.h>
@@ -260,6 +261,8 @@ namespace BALL
 			if (mc)
 			{
 				SceneMessage *scene_message = new SceneMessage(SceneMessage::UPDATE_CAMERA);
+				scene_message->setStage(*(Scene::getInstance(0)->getStage()));
+				camera.setProjectionMode(scene_message->getStage().getCamera().getProjectionMode());
 				scene_message->getStage().setCamera(camera);
 				mc->sendMessage(*scene_message);
 			}
