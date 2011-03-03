@@ -25,6 +25,7 @@ namespace BALL
 
 			public:
 				ShortcutTableView(QWidget* parent);
+				virtual ~ShortcutTableView();
 
 				void setFilter(const QString& filter);
 

@@ -148,6 +148,11 @@ namespace BALL
 			resizeColumnsToContents();
 		}
 
+		ShortcutTableView::~ShortcutTableView()
+		{
+			delete proxy_model_->sourceModel();
+		}
+
 		void ShortcutTableView::onClick(const QModelIndex& index)
 		{
 			if(!index.isValid() || editor_->isVisible()) {
