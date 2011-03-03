@@ -33,7 +33,7 @@ namespace BALL
 		int TextEditorWidget::lineNumbersWidth()
 		{
 			int max    = std::max(1, blockCount());
-			int digits = (int)log10(max)+1;
+			int digits = ((int)log10((float)max))+1;
 
 			int space = 3 + fontMetrics().width(QLatin1Char('9')) * digits;
 
