@@ -32,7 +32,7 @@ namespace BALL
 		Index index = 0;
 
 		// If the path starts with a '\\' or '//', assume it's in UNC and return.
-		if (path.hasPrefix("\\") || path.hasPrefix("//"))
+		if (path.hasPrefix("\\\\") || path.hasPrefix("//"))
 			return;
 
 #ifdef BALL_COMPILER_MSVC
