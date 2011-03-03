@@ -166,16 +166,16 @@ namespace BALL
 	//In the following some specialisations of swapBytes are provided for efficiency reasons
 	//These should also cover BALL types like Size, Position and Index
 #define BALL_SWAP_BYTES_16(x)\
-	x = ((x >> 8)  & 0x00FF) | ((x << 8)  & 0xFF00)
+	x = ((x >> 8)  & 0x00FFu) | ((x << 8)  & 0xFF00u)
 
 #define BALL_SWAP_BYTES_32(x)\
-	x = ((x >> 8)  & 0x00FF00FF) | ((x << 8)  & 0xFF00FF00);\
-	x = ((x >> 16) & 0x0000FFFF) | ((x << 16) & 0xFFFF0000)
+	x = ((x >> 8)  & 0x00FF00FFu) | ((x << 8)  & 0xFF00FF00u);\
+	x = ((x >> 16) & 0x0000FFFFu) | ((x << 16) & 0xFFFF0000u)
 
 #define BALL_SWAP_BYTES_64(x)\
-	x = ((x >> 8)  & 0x00FF00FF00FF00FF) | ((x << 8)  & 0xFF00FF00FF00FF00);\
-	x = ((x >> 16) & 0x0000FFFF0000FFFF) | ((x << 16) & 0xFFFF0000FFFF0000);\
-	x = ((x >> 32) & 0x00000000FFFFFFFF) | ((x << 32) & 0xFFFFFFFF00000000)
+	x = ((x >> 8)  & 0x00FF00FF00FF00FFull) | ((x << 8)  & 0xFF00FF00FF00FF00ull);\
+	x = ((x >> 16) & 0x0000FFFF0000FFFFull) | ((x << 16) & 0xFFFF0000FFFF0000ull);\
+	x = ((x >> 32) & 0x00000000FFFFFFFFull) | ((x << 32) & 0xFFFFFFFF00000000ull)
 
 	template <>
 	BALL_INLINE void swapBytes(unsigned short& t)
