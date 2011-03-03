@@ -350,9 +350,6 @@ namespace BALL
 		// we have changed the child widgets stored in the maincontrol (e.g. toolbars), so we have
 		// to restore the window state again!
 		restoreWindows();
-
-		// finally, apply all values our modular widgets have fetched from their preferences
-		applyPreferences();
 	}
 
 	void Mainframe::about()
