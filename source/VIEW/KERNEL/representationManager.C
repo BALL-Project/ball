@@ -36,6 +36,7 @@ RepresentationManager::RepresentationManager(MainControl* mc)
 RepresentationManager::~RepresentationManager()
 {
 	clear();
+	delete thread_;
 }
 
 RepresentationManager::RepresentationManager(const RepresentationManager& pm)
