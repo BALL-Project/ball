@@ -103,4 +103,6 @@ class Representation
 	String toString() const throw();
 	//bool operator == (const Representation&) const throw();
 	//bool operator < (const Representation& object) const throw();
+  String getName() const;
+  void setName(const String&);
 };
