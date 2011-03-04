@@ -82,7 +82,7 @@ def loadProject(filename):
 	path = Path()
 	loc = path.find(String(filename))
 	clearProject()
-	enterStereo()
+	#enterStereo()
 	return getMainControl().loadBALLViewProjectFile(loc)
 		
 ###################### SHORTCUTS: #######################
@@ -377,4 +377,46 @@ def addPlane(plane_specifier, height, boundary, bottom = True):
   #
   getMainControl().insert(r)
   getMainControl().update(r)
+
+def selectByExpression(expression):
+  getMainControl().clearSelection()
+  getMolecularControl().applySelector(String(expression)) 
+
+def getVectorFromURLString(string):
+  sp = string.split("|")
+  if (len(sp) != 3):
+   return Vector3()
+  result = Vector3(float(sp[0]), float(sp[1]), float(sp[2]))
+  return result
+
+def setViewPoint(view_point, look_at, look_up): 
+  getMainControl().clearSelection()
+  camera = getScene().getStage().getCamera()
+  camera.setViewPoint(getVectorFromURLString(view_point))
+  camera.setLookAtPosition(getVectorFromURLString(look_at))
+  camera.setLookUpVector(getVectorFromURLString(look_up))
+  setCamera(camera)
+
+
+def selectByExpressionAndSetViewPoint(expression, view_point, look_at, look_up):
+  setViewPoint(view_point, look_at, look_up)
+  selectByExpression(expression)
+
+def toggleRepresentationByName(name):
+  reps = getRepresentations()
+  
+  for rep in reps:
+    if rep.getName() == name:
+      rep.setHidden(not rep.isHidden())
+      getMainControl().update(rep)
+
+
+def toggleSelectionByExpression(expression):
+  if (len(getSelection()) == 0):
+    getMolecularControl().applySelector(String(expression))
+  else:
+    getMainControl().clearSelection()
+    
+
+
 

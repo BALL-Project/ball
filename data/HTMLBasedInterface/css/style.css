@@ -29,6 +29,22 @@
 	display:table;
 }
 
+a:link {
+	text-decoration: non;
+	color: yellow;
+}
+A:visited {
+	text-decoration: non;
+	color: yellow;
+}
+A:active {
+	text-decoration: non;
+}
+A:hover {
+	text-decoration: underline; 
+	color: red;
+}
+
 div.actions h3 {
 	color:#FFFFFF;
 }
@@ -47,3 +63,8 @@ div.actions a {
 div.actions a:hover {
 	color:#00FFFF;
 }
+
+div.task {
+	font-style:italic
+}
+
