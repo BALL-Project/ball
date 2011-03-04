@@ -95,7 +95,11 @@ namespace BALL
 	//and store a GAFFCESParser for every CESstring
 	void GAFFTypeProcessor::parseAtomtypeTableFile_()
 		throw(Exception::FileNotFound)
-	{	
+	{
+		StringHashMap<GAFFCESParser*>::Iterator parser_it = ces_parsers_.begin();
+		for (; parser_it != ces_parsers_.end(); ++parser_it)
+			delete(parser_it->second);
+
 		ces_parsers_.clear();
 
 		std::ifstream atomfile;
@@ -131,7 +135,10 @@ namespace BALL
 				to_parse = "[*]";
 			to_parse += typeDefinition.chemical_environment;
 
-			ces_parsers_.insert(to_parse, new GAFFCESParser(to_parse));
+			parser_it = ces_parsers_.find(to_parse);
+			if(parser_it == ces_parsers_.end()) {
+				ces_parsers_.insert(to_parse, new GAFFCESParser(to_parse));
+			}
 
 			// insert the type definition at the corresponding position
 			if (atom_types_.find(typeDefinition.atomic_number) == atom_types_.end())
