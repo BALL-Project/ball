@@ -39,6 +39,10 @@ namespace BALL
 		void ModelProcessor::clear()
 		{
 			PropertyManager::clear();
+			for(std::list<GeometricObject*>::iterator it = geometric_objects_.begin(); it != geometric_objects_.end(); ++it)
+			{
+				delete *it;
+			}
 			geometric_objects_.clear();
 			
 			drawing_precision_ = DRAWING_PRECISION_HIGH;
