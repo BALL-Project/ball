@@ -2,6 +2,8 @@
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/PYTHON/pyInterpreter.h>
+#include <BALL/VIEW/KERNEL/common.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 
 namespace BALL
 {
@@ -18,6 +20,9 @@ namespace BALL
 		HTMLBasedInterface::HTMLBasedInterface(QWidget* parent)
 			: HTMLView(parent)
 		{
+			page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+
+			connect(this, SIGNAL(linkClicked(const QUrl&)), this, SLOT(handleLinkClicked(const QUrl&)));
 			connect(this, SIGNAL(urlChanged(const QUrl&)), this, SLOT(executeLink(const QUrl&)));
 
 			Path p;
@@ -51,6 +56,14 @@ namespace BALL
 			}
 
 			action_registry_.insert(action->getName(), action);
+		}
+
+		void HTMLBasedInterface::handleLinkClicked(const QUrl& url)
+		{
+			if(!getMainControl()->isBusy())
+			{
+				setUrl(url);
+			}
 		}
 
 		void HTMLBasedInterface::executeLink(const QUrl& url)

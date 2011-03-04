@@ -43,6 +43,7 @@ namespace BALL
 				typedef QList<QPair<QString, QString> > ParameterList;
 			protected slots:
 
+				void handleLinkClicked(const QUrl& url);
 				void executeLink(const QUrl& url);
 				void executePython_(const QString& action, const ParameterList& parameters);
 
