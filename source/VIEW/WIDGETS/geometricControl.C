@@ -54,7 +54,8 @@ namespace BALL
 			listview->headerItem()->setText(1, tr("Model"));
 			listview->headerItem()->setText(2, tr("Built from"));
 			listview->headerItem()->setText(3, tr("Color"));
-			listview->headerItem()->setText(4, tr("Properties"));
+      listview->headerItem()->setText(4, tr("Name"));
+			listview->headerItem()->setText(5, tr("Properties"));
 			listview->setSortingEnabled(false);
 
 			String txt = String(tr("List of the representations")) + ": \n" +
@@ -62,7 +63,8 @@ namespace BALL
 									"2." + (String)tr("column") + ": " + (String)tr("model type") + "\n" +
 									"3." + (String)tr("column") + ": " + (String)tr("name of the molecular entity the model was created from") + "\n" +
 									"4." + (String)tr("column") + ": " + (String)tr("used coloring method") + "\n" +
-									"5." + (String)tr("column") + ": " + (String)tr("number of used molecular entities, number of geometric objects") + ". ";
+									"5." + (String)tr("column") + ": " + (String)tr("name of the representation") + "\n" +
+									"6." + (String)tr("column") + ": " + (String)tr("number of used molecular entities, number of geometric objects") + ". ";
 
 			listview->setToolTip(txt.c_str());
 			
@@ -130,8 +132,11 @@ namespace BALL
 			String new_text3 = mi.getColoringName(rep.getColoringMethod());
 			changed_content |= ascii(item->text(3)) != new_text3;
 
-			String new_text4 = rep.getProperties();
-			changed_content |= ascii(item->text(3)) != new_text4;
+      String new_text4 = rep.getName();
+			changed_content |= ascii(item->text(4)) != new_text4;
+
+			String new_text5 = rep.getProperties();
+			changed_content |= ascii(item->text(5)) != new_text5;
 
 			if (changed_content)
 			{
@@ -140,6 +145,7 @@ namespace BALL
 				item->setText(2, new_text2.c_str());
 				item->setText(3, new_text3.c_str());
 				item->setText(4, new_text4.c_str());
+				item->setText(5, new_text5.c_str());
 			}
 
 			if (rep.isHidden() == (item->checkState(0) == Qt::Checked))
@@ -301,6 +307,7 @@ namespace BALL
 				 << mi.getModelName(rep.getModelType()).c_str()
 				 << rep.getCompositeName().c_str()
 				 << mi.getColoringName(rep.getColoringMethod()).c_str()
+         << rep.getName().c_str()
 				 << rep.getProperties().c_str();
 			// create a new list item
 			QTreeWidgetItem* new_item = new QTreeWidgetItem(listview, sl);
