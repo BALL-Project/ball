@@ -103,6 +103,14 @@ def getOneSystem():
 def getRepresentations():
 	return getMainControl().getRepresentationManager().getRepresentations()
 
+def getRepresentationByName(name):
+  """Return the first representation with the given name"""
+  reps = getRepresentations()
+  for rep in reps:
+    if rep.getName() == name:
+      return rep
+  return None
+
 def getForceField():
 	return getMolecularStructure().getForceField()
 
