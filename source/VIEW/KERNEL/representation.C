@@ -640,11 +640,12 @@ namespace BALL
 		void Representation::setName(const String& name)
 		{
 			name_ = name;
+      setProperty("REPRESENTATION_NAME", name);
 		}
 
 		String Representation::getName() const
 		{
-			if (name_ != "") return name_;
+			if (hasProperty("REPRESENTATION_NAME")) return getProperty("REPRESENTATION_NAME").getString();
 
 			if (hasProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM))
 			{
