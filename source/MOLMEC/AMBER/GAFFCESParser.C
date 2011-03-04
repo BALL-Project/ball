@@ -551,6 +551,7 @@ namespace BALL
 			for(; child_it != children.end(); ++child_it)
 			{
 				(*child_it)->clear();
+				delete *child_it;
 			}
 			children.clear();	
 		}
