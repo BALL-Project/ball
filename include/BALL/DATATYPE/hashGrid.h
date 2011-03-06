@@ -598,6 +598,11 @@ namespace BALL
 	bool HashGridBox3<Item>::remove(const Item& item)
 	{
 #ifdef BALL_HAS_GNU_SLIST
+		if(data.empty())
+		{
+			return false;
+		}
+
 		if(*data.begin() == item)
 		{
 			data.pop_front();
