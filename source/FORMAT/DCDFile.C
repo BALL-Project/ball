@@ -12,6 +12,39 @@ using namespace std;
 namespace BALL
 {
 
+	/*
+	* general structure of a DCD-file:
+	* 
+	* <header>
+	* first snapshot: (<extra_block_A>) (<extra_block_B>) <snapshot_data>
+	* [...]
+	* last snapshot: (<extra_block_A>) (<extra_block_B>) <snapshot_data>
+	* 
+	* for a more detailed definition of <header> see: readHeader() or writeHeader()
+	* 
+	* all other blocks (<extra_block_A>, <extra_block_B> and <snapshot_data>)
+	* are build-up in the same scheme:
+	* <block_size in bytes>
+	* <block_content>
+	* <block_size in bytes>
+	*	
+	* detailed definition of <snapshot_data>:
+	* <block_size in bytes> = # of atoms * 4
+	* <x_coords>
+	* <block_size in bytes> = # of atoms * 4
+	* <block_size in bytes> = # of atoms * 4
+	* <y_coords>
+	* <block_size in bytes> = # of atoms * 4
+	* <block_size in bytes> = # of atoms * 4
+	* <z_coords>
+	* <block_size in bytes> = # of atoms * 4
+	* only if velocities are set:
+	* <block_size in bytes> = # of atoms * 4
+	* <velocities>
+	* <block_size in bytes> = # of atoms * 4
+	*
+	*/
+
 	DCDFile::DCDFile()
 		: TrajectoryFile(),
 			verbosity_(0),
@@ -125,6 +158,45 @@ namespace BALL
 	bool DCDFile::readHeader()
 		
 	{
+		/*
+		* general structure of a DCD-file header:
+		* 
+		* it consists of 3 blocks
+		*
+		* each block is enclosed by its size given as a 4 byte int:
+		* <size> <block_content> <size>
+		* 
+		* where:
+		* -> size is given in bytes
+		* -> block_content is given in subblocks of 4 bytes each
+		*
+		* 1. block (general information):
+		* <size> = 54 in HEX = 84 in dezimal
+		* <block_content (in subblocks) =
+		*   CORD
+		*   number of snapshots
+		*   number of the first snapshot
+		*   number of steps between saves
+		*   DCD or DC2 (has velocities?)
+		*   5 uninteresting subblocks (to be skipped)
+		*   time between steps (as double = 2 subblocks)
+		*   8 uninteresting subblocks (to be skipped)
+		*   CHARMm version info>
+		* <size> = 54 in HEX = 84 in dezimal
+		*
+		* 2. block (eventually comments):
+		* each comment consists of 80 bytes
+		* <size> = number of comments * 80 + 4
+		* <block_content> = comments
+		* <size> = number of comments * 80 + 4
+		* 
+		* 3. block (number of atoms):
+		* <size> = 4
+		* <block_content> = number of atoms
+		* <size> = 4
+		*
+		*/
+		
 		current_snapshot_ = 0;
 
 		// read the "header" of the 84 byte block. This must contain the number
@@ -347,7 +419,6 @@ namespace BALL
 			return false;
 		}
 
-
 		if (count_snapshots)
 		{
 			SnapShot dummy;
@@ -379,6 +450,45 @@ namespace BALL
 	bool DCDFile::writeHeader()
 		
 	{
+		/*
+		* general structure of a DCD-file header:
+		* 
+		* it consists of 3 blocks
+		*
+		* each block is enclosed by its size given as a 4 byte int:
+		* <size> <block_content> <size>
+		* 
+		* where:
+		* -> size is given in bytes
+		* -> block_content is given in subblocks of 4 bytes each
+		*
+		* 1. block (general information):
+		* <size> = 54 in HEX = 84 in dezimal
+		* <block_content (in subblocks) =
+		*   CORD
+		*   number of snapshots
+		*   number of the first snapshot
+		*   number of steps between saves
+		*   DCD or DC2 (has velocities?)
+		*   5 uninteresting subblocks (to be skipped)
+		*   time between steps (as double = 2 subblocks)
+		*   8 uninteresting subblocks (to be skipped)
+		*   CHARMm version info>
+		* <size> = 54 in HEX = 84 in dezimal
+		*
+		* 2. block (eventually comments):
+		* each comment consists of 80 bytes
+		* <size> = number of comments * 80 + 4
+		* <block_content> = comments
+		* <size> = number of comments * 80 + 4
+		* 
+		* 3. block (number of atoms):
+		* <size> = 4
+		* <block_content> = number of atoms
+		* <size> = 4
+		*
+		*/
+
 		Size i;
 		if (!isAccessible() || !isOpen()) return false;
 
@@ -484,14 +594,25 @@ namespace BALL
 
 	
 	bool DCDFile::read(SnapShot& snapshot)
-		
 	{
 		#ifdef BALL_DEBUG
 			Log.info() << "file position at beginning of read(): " << tellg() << endl;
  		#endif
 
-		if (!good() || current_snapshot_ >= number_of_snapshots_) return false;
+		Size current = 0;
+		if (((int(current_snapshot_) - int(number_of_snapshots_)) > 0) && (int(current_snapshot_) != int(number_of_snapshots_)))
+		{
+			current = current_snapshot_ - number_of_snapshots_;
+			number_of_snapshots_ = int(current_snapshot_) - int(number_of_snapshots_) - 1;
+			current_snapshot_ = current - 1;
+		}
+		else
+		{
+			current = current_snapshot_;
+		}
 
+		if (!good() || ((current > number_of_snapshots_) && (current == current_snapshot_)) || ((current_snapshot_ == number_of_snapshots_) && (number_of_snapshots_ != 0))) return false;
+	 
 		// the number of atoms has to be read from the file header before ever
 		// thinking of reading correct information
 		Size expected_noa = getNumberOfAtoms();
@@ -501,7 +622,6 @@ namespace BALL
 			return false;
 		}
 		snapshot.setNumberOfAtoms(expected_noa);
-
 
 		// ignore the CHARMM extra block A if present
 		if (charmm_extra_block_A_)
