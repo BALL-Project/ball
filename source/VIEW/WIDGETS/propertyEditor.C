@@ -99,8 +99,7 @@ namespace BALL
 		void PropertyEditor::setPropertyManager(PropertyManager* man)
 		{
 			manager_ = man;
-			size_t num_properties = man->countProperties();
-			std::cout << num_properties << std::endl;
+			size_t num_properties = man->countNamedProperties();
 
 			new_properties_.clear();
 			deleted_properties_.clear();
