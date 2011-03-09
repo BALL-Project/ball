@@ -23,6 +23,7 @@ START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.27.28.1 2007/03/25 21:47:01 oliver 
 using namespace BALL;
 
 String dcd_test_file(BALL_TEST_DATA_PATH(DCD_test.dcd));
+String dcd_test_file1(BALL_TEST_DATA_PATH(DCD_test3.dcd));
 
 DCDFile* p = 0;
 CHECK(DCDFile() throw())
@@ -101,7 +102,38 @@ CHECK([EXTRA] full test writing)
 RESULT
 
 
+String filename3;
+System system3;
+Size nr_of_atoms3;
+
+CHECK([EXTRA] full test writing)
+	PDBFile pfile3(BALL_TEST_DATA_PATH(DCDFile_test3.pdb));
+	pfile3.read(system3);
+	nr_of_atoms3 = system3.countAtoms();
+	TEST_EQUAL(nr_of_atoms3, 2381)
+	TEST_EQUAL(system3.getAtom(0)->getPosition(), Vector3(23.560, 26.351, 42.169))
+	AmberFF amberFF;
+	NEW_TMP_FILE(filename3);
+	DCDFile dcd3(filename3, std::ios::out);
+	dcd3.enableVelocityStorage();
+	TEST_EQUAL(dcd3.isAccessible(), true)
+	Options options3;
+	SnapShotManager ssm3(&system3, &amberFF, options3, &dcd3);
+	ssm3.takeSnapShot();
+	system3.getAtom(0)->setPosition(Vector3(1,2,1111));
+	system3.getAtom(0)->setForce(Vector3(3,4,5));
+	system3.getAtom(0)->setVelocity(Vector3(6,7,8));
+	ssm3.takeSnapShot();
+	ssm3.flushToDisk();
+	dcd3.close();
+	TEST_EQUAL(dcd3.getNumberOfSnapShots(), 2)
+	TEST_NOT_EQUAL(dcd3.getSize(), 0) 
+	system3.getAtom(0)->setVelocity(Vector3(1,2,3));
+RESULT
+
+
 SnapShot ss;
+
 CHECK(bool read(SnapShot& snapshot) throw())
 	DCDFile dcd(filename);
 	TEST_EQUAL(dcd.getNumberOfSnapShots(), 2)
@@ -123,6 +155,29 @@ CHECK(bool read(SnapShot& snapshot) throw())
 	TEST_EQUAL(result, false)
 RESULT
 
+SnapShot ss3;
+
+CHECK(bool read(SnapShot& snapshot) throw())
+	DCDFile dcd3(filename3);
+	TEST_EQUAL(dcd3.getNumberOfSnapShots(), 2)
+	bool result = dcd3.read(ss3);
+	TEST_EQUAL(result, true)
+	ss3.applySnapShot(system3);
+	TEST_EQUAL(ss3.getNumberOfAtoms(), nr_of_atoms3)
+	TEST_EQUAL(ss3.getAtomPositions()[0], Vector3(23.560, 26.351, 42.169))
+	TEST_EQUAL(system3.getAtom(0)->getPosition(), Vector3(23.560, 26.351, 42.169))
+	TEST_EQUAL(system3.getAtom(0)->getVelocity(), Vector3(0,0,0))
+	result = dcd3.read(ss3);
+	TEST_EQUAL(result, true)
+	TEST_EQUAL(ss3.getNumberOfAtoms(), nr_of_atoms3)
+	ss3.applySnapShot(system3);
+	TEST_EQUAL(system3.getAtom(0)->getPosition(), Vector3(1,2,1111))
+	TEST_EQUAL(system3.getAtom(0)->getForce(), Vector3(3,4,5))
+	TEST_EQUAL(system3.getAtom(0)->getVelocity(), Vector3(6,7,8))
+	result = dcd3.read(ss3);
+	TEST_EQUAL(result, false)
+RESULT
+
 
 CHECK(bool readHeader() throw())
   DCDFile one(dcd_test_file, std::ios::in);
@@ -132,11 +187,26 @@ CHECK(bool readHeader() throw())
 	DCDFile two(BALL_TEST_DATA_PATH(INIFile_test.ini), std::ios::in);
 	test = two.readHeader();
 	TEST_EQUAL(test, false)
-
 	DCDFile three(filename);
 	test = three.readHeader();
 	TEST_EQUAL(test, false)
 RESULT
+
+CHECK(bool readHeader() throw())
+  DCDFile one(dcd_test_file1, std::ios::in);
+	bool test = one.readHeader();
+	TEST_EQUAL(test, false)
+	one.close();
+	DCDFile two(BALL_TEST_DATA_PATH(INIFile_test.ini), std::ios::in);
+	test = two.readHeader();
+	TEST_EQUAL(test, false)
+	DCDFile three(filename3);
+	test = three.readHeader();
+	TEST_EQUAL(test, false)
+RESULT
+
+
+
 
 
 CHECK(bool writeHeader() throw())
