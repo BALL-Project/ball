@@ -238,6 +238,12 @@ namespace BALL
 			*/
 			void buildBonds();
 			
+			/** Adds neutral end caps to a protein chain.
+			 *  This function runs our PeptideCapProcessor to replace the terminals by neutral
+			 *  end caps.
+			 */
+			void buildEndcaps();
+
 			/** Assigns bond orders.
 					If a single selected molecular object is available Bond Orders will be set
 					for each bond object of the selected AtomContainer using the assign_bond_order processor.
@@ -346,6 +352,7 @@ namespace BALL
 
 			QAction* center_camera_id_;
 			QAction* build_bonds_id_;
+			QAction* build_endcaps_id_;
 			QAction* assign_bond_orders_id_;
 			QAction* add_hydrogens_id_;
 			QAction* check_structure_id_;

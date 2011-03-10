@@ -18,6 +18,7 @@
 
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
+#include <BALL/STRUCTURE/peptideCapProcessor.h>
 #include <BALL/STRUCTURE/secondaryStructureProcessor.h>
 #include <BALL/STRUCTURE/structureMapper.h>
 #include <BALL/STRUCTURE/HBondProcessor.h>
@@ -96,6 +97,12 @@ namespace BALL
 																				SLOT(buildBonds()), description,
 																				QKeySequence("Ctrl+B"));
 			setMenuHint((String)tr("Add missing bonds to a selected structure."));
+
+			description = "Shortcut|Build|Add_End_Caps";
+			build_endcaps_id_ = insertMenuEntry(MainControl::BUILD, (String)tr("Add Peptide Endcaps"), this,
+			                                    SLOT(buildEndcaps()), description,
+																					QKeySequence());
+			setMenuHint((String)tr("Add neutral end caps to an amino acid chain"));
 
 			description = "Shortcut|Build|Assign_Bond_Orders";
 			assign_bond_orders_id_ = insertMenuEntry(MainControl::BUILD, (String)tr("&Assign Bond Orders"), this, 
@@ -458,6 +465,39 @@ namespace BALL
 				(String)tr(" bonds") + " (" + (String)tr("total") + " " + String(new_number_of_bonds) + ").";
 
 			if (!ok) result +=  " " + (String)tr("An error occured. Too many bonds for one atom?");
+			setStatusbarText(result, true);
+		}
+
+
+		void MolecularStructure::buildEndcaps()
+		{
+			if (getMainControl()->getMolecularControlSelection().size() == 0) 
+			{
+				return;
+			}
+
+			setStatusbarText((String)tr("adding neutral end caps..."), true);
+
+			// copy the selection_, it can change after a changemessage event
+			list<Composite*> temp_selection_ = getMainControl()->getMolecularControlSelection();
+			list<Composite*>::const_iterator it = temp_selection_.begin();
+
+			bool ok = true;
+			PeptideCapProcessor pcp;
+
+			for (; it != temp_selection_.end(); ++it)
+			{	
+				ok &= (*it)->apply(pcp);
+
+				CompositeMessage *change_message = 
+					new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
+				notify_(change_message);
+			}
+
+			String result = (String)tr("added end caps");
+
+			if (!ok) result +=  " " + (String)tr("An error occured.");
+
 			setStatusbarText(result, true);
 		}
 
