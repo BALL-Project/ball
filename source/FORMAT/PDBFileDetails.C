@@ -461,7 +461,7 @@ namespace BALL
 	bool PDBFile::parseRecordATOM(const char* line, Size size)
 	{
 		// Parse only those records belonging to the correct model!
-		if ((selected_model_ != 0) && (selected_model_ != current_model_))
+		if ((selected_model_ != -1) && (selected_model_ != current_model_))
 		{
 			return true;
 		}
@@ -702,7 +702,7 @@ namespace BALL
 
 	bool PDBFile::parseRecordHETATM(const char* line, Size size)
 	{
-		if ((selected_model_ != 0) && (selected_model_ != current_model_))
+		if ((selected_model_ != -1) && (selected_model_ != current_model_))
 		{
 			return true;
 		}
@@ -1055,7 +1055,7 @@ namespace BALL
 
 	bool PDBFile::parseRecordTER(const char* line, Size size)
 	{
-		if ((selected_model_ != 0) && (selected_model_ != current_model_))
+		if ((selected_model_ != -1) && (selected_model_ != current_model_))
 		{
 			return true;
 		}

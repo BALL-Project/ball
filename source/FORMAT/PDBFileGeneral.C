@@ -1349,7 +1349,7 @@ namespace BALL
 	
 	bool PDBFile::interpretRecord(const PDB::RecordSIGATM& /* record */)
 	{
-		if ((selected_model_ != 0) && (selected_model_ != current_model_))
+		if ((selected_model_ != -1) && (selected_model_ != current_model_))
 		{
 			return true;
 		}
@@ -1385,7 +1385,7 @@ namespace BALL
 	
 	bool PDBFile::interpretRecord(const PDB::RecordSIGUIJ& /* record */)
 	{
-		if ((selected_model_ != 0) && (selected_model_ != current_model_))
+		if ((selected_model_ != -1) && (selected_model_ != current_model_))
 		{
 			return true;
 		}

@@ -118,12 +118,12 @@ CHECK([EXTRA]PDBFile::selectModel())
 	TEST_EQUAL(s.countAtoms(), 0)
 	TEST_EQUAL(f.options.getInteger(PDBFile::Option::CHOOSE_MODEL), 4)
 	s.clear();
-	f.selectModel(0);
+	f.selectModel(-1);
 	f.read(s);
 	TEST_EQUAL(s.countAtoms(), 6)
-	TEST_EQUAL(f.options.getInteger(PDBFile::Option::CHOOSE_MODEL), 0)
+	TEST_EQUAL(f.options.getInteger(PDBFile::Option::CHOOSE_MODEL), -1)
 	s.clear();
-	f.options.setInteger(PDBFile::Option::CHOOSE_MODEL, 0);
+	f.options.setInteger(PDBFile::Option::CHOOSE_MODEL, -1);
 	f.read(s);
 	TEST_EQUAL(s.countAtoms(), 6)
 	s.clear();
@@ -152,7 +152,7 @@ CHECK([EXTRA]PDBFile::selectModel())
 	g.read(s);
 	TEST_EQUAL(s.countAtoms(), 3)
 	s.clear();
-	g.selectModel(0);
+	g.selectModel(-1);
 	g.read(s);
 	TEST_EQUAL(s.countAtoms(), 3)
 	s.clear();

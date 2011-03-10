@@ -107,8 +107,8 @@ void PDBFile::selectAltLocationIndicator(char c)
 BALL_INLINE 
 void PDBFile::selectAllModels()
 {
-	options.setInteger(Option::CHOOSE_MODEL, 0);
-  selected_model_ = 0;
+	options.setInteger(Option::CHOOSE_MODEL, -1);
+  selected_model_ = -1;
 }
 
 BALL_INLINE 
