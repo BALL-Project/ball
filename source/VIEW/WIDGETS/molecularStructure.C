@@ -439,7 +439,7 @@ namespace BALL
 
 			bool ok = true;
 
-			for (; it != temp_selection_.end(); ++it)
+			for (it = temp_selection_.begin(); it != temp_selection_.end(); ++it)
 			{	
 				ok &= (*it)->apply(getFragmentDB().build_bonds);
 

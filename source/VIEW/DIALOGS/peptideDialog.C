@@ -5,6 +5,7 @@
 #include <BALL/VIEW/DIALOGS/peptideDialog.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/COMMON/logStream.h>
+#include <BALL/STRUCTURE/peptideCapProcessor.h>
 
 #include <QtGui/QLineEdit>
 #include <QtGui/QRadioButton>
@@ -107,6 +108,12 @@ namespace BALL
 			if (sequence->text() != "" && fragment_db_ != 0)
 			{
 				protein_ = construct();
+			}
+
+			if (build_endcaps->isChecked())
+			{
+				PeptideCapProcessor pcp;
+				protein_->apply(pcp);
 			}
 			hide();
 		}
