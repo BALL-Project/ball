@@ -1179,7 +1179,6 @@ bool MMFF94ESParameters::setup_(const vector<vector<String> >& lines)
 
 Position MMFF94ESParameters::getIndex_(Position at1, Position at2, Position bt) const
 {
-	if (bt > 1) bt = 1;
 	return at1 * MMFF94_number_atom_types + at2 + bt * MMFF94_number_atom_types * MMFF94_number_atom_types;
 }
 
