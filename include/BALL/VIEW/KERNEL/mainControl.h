@@ -323,7 +323,7 @@ namespace BALL
 					CompositeManager::insert called.
 					\return false if the CompositeManager contains the Composite
 			*/
-			bool insert(Composite& composite, String name = "");
+			bool insert(Composite& composite, String name = "", bool normalize = true);
 
 			/** Remove a Composite and notify all ModularWidget.
 			 		A CompositeMessage with type REMOVED_COMPOSITE is send and

@@ -283,7 +283,7 @@ namespace BALL
 				switch (cmessage->getType())
 				{
 					case CompositeMessage::NEW_COMPOSITE:
-						addComposite_(*cmessage->getComposite(), cmessage->getCompositeName());
+						addComposite_(*cmessage->getComposite(), cmessage->getCompositeName(), boost::any_cast<bool>(cmessage->data()));
 						return;
 					case CompositeMessage::CENTER_CAMERA:
 						centerCamera(cmessage->getComposite());
@@ -759,7 +759,7 @@ namespace BALL
 
 
 
-		void MolecularStructure::addComposite_(Composite& composite, const String& name)
+		void MolecularStructure::addComposite_(Composite& composite, const String& name, bool normalize)
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "starting applying molecular properties" << std::endl;
@@ -772,41 +772,43 @@ namespace BALL
 			
 			AtomContainer& atom_container = *RTTI::castTo<AtomContainer>(composite);
 			
-			try
-			{
-				atom_container.apply(getFragmentDB().normalize_names);
+			if(normalize) {
+				try
+				{
+					atom_container.apply(getFragmentDB().normalize_names);
+				}
+				catch (Exception::GeneralException& e)
+				{
+					Log.error() << " > " + (String)tr("normalize names failed: ") <<endl; 
+					Log.error() << e << endl;
+				}
+				catch (std::exception& e)
+				{
+					Log.error() << "  > " + (String)tr("normalized names failed.") << endl;
+					Log.error() << e.what() << std::endl;
+					return;
+				}
+				
+				Log.info() << "  > " + (String)tr("normalized names") << endl;
+				
+				try
+				{
+					atom_container.apply(getFragmentDB().build_bonds);
+				}
+				catch (Exception::GeneralException& e)
+				{
+					Log.error() << " > " + (String)tr("generate missing bonds - failed: ") <<endl; 
+					Log.error() << e << endl;
+				}
+				catch (...)
+				{
+					Log.error() << "  > " + (String)tr("generate missing bonds - failed.") << endl;
+					return;
+				}
+				
+				Log.info() << "  > " + (String)tr("generated missing bonds") << endl;
 			}
-			catch (Exception::GeneralException& e)
-			{
-				Log.error() << " > " + (String)tr("normalize names failed: ") <<endl; 
-				Log.error() << e << endl;
-			}
-			catch (std::exception& e)
-			{
-				Log.error() << "  > " + (String)tr("normalized names failed.") << endl;
-				Log.error() << e.what() << std::endl;
-				return;
-			}
-			
-			Log.info() << "  > " + (String)tr("normalized names") << endl;
-			
-			try
-			{
-				atom_container.apply(getFragmentDB().build_bonds);
-			}
-			catch (Exception::GeneralException& e)
-			{
-				Log.error() << " > " + (String)tr("generate missing bonds - failed: ") <<endl; 
-				Log.error() << e << endl;
-			}
-			catch (...)
-			{
-				Log.error() << "  > " + (String)tr("generate missing bonds - failed.") << endl;
-				return;
-			}
-			
-			Log.info() << "  > " + (String)tr("generated missing bonds") << endl;
-			
+	
 			if (atom_container.getName() == "")
 			{
 				atom_container.setName(name);

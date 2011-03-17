@@ -1531,7 +1531,7 @@ namespace BALL
 			updateRepresentationsOf(composite.getRoot(), true, changed_hierarchy);
 		}
 
-		bool MainControl::insert(Composite& composite, String name)
+		bool MainControl::insert(Composite& composite, String name, bool normalize)
 		{
 			if (!composite_manager_.insert(composite)) return false;
 			CompositeMessage* cm; 
@@ -1539,10 +1539,12 @@ namespace BALL
 			if (MolecularStructure::getInstance(0) != 0)
 			{
 				cm = new CompositeMessage(composite, CompositeMessage::NEW_COMPOSITE);
+				cm->data() = boost::any(normalize);
 			}
 			else
 			{
 				cm = new CompositeMessage(composite, CompositeMessage::NEW_MOLECULE);
+				cm->data() = boost::any(normalize);
 			}
 
 			cm->setCompositeName(name);
@@ -1986,7 +1988,7 @@ namespace BALL
 			System* system = dynamic_cast<System*>(po);
 			if (system == 0) continue;
 
-			insert(*system);
+			insert(*system, "", false);
 			new_systems.push_back(system);
 			current_composite++;
 		}

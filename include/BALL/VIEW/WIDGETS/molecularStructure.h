@@ -342,7 +342,7 @@ namespace BALL
 			
 			private:
 
-			virtual void addComposite_(Composite& composite, const String& name);
+			virtual void addComposite_(Composite& composite, const String& name, bool normalize = true);
 
 			void applyForceFieldSettings_();
 
