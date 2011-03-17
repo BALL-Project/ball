@@ -6,7 +6,7 @@ def loadStructure(filename):
 	p = MolFileFactory.open(loc)
 
 	s = System()
-	p >> s
+	p.read(s)
 
 	mc = getMainControl()
 	mc.insert(s)
