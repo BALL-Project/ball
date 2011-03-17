@@ -100,10 +100,10 @@ namespace BALL
 																				UIOperationMode::MODE_ADVANCED);
 
 			description = "Shortcut|Build|Add_End_Caps";
-			build_endcaps_id_ = insertMenuEntry(MainControl::BUILD, (String)tr("Add Peptide Endcaps"), this,
-			                                    SLOT(buildEndcaps()), description,
-			                                    QKeySequence());
-			setMenuHint((String)tr("Add neutral end caps to an amino acid chain"));
+			build_endcaps_id_ = insertMenuEntry(MainControl::BUILD, tr("Add Peptide Endcaps"), this,
+			                                    SLOT(buildEndcaps()), description, QKeySequence(), 
+                                          tr("Add neutral end caps to an amino acid chain"),
+                                          UIOperationMode::MODE_ADVANCED);
 
 			description = "Shortcut|Build|Assign_Bond_Orders";
 			assign_bond_orders_id_ = insertMenuEntry(MainControl::BUILD, tr("&Assign Bond Orders"), this, 
@@ -312,7 +312,7 @@ namespace BALL
 
 					default:
 						Log.error() << (String)tr("Unknown type of MolecularTaskMessage in") << " " 
-												<< __FILE__ << "  " << __LINE__ << std::endl;
+							          << __FILE__ << "  " << __LINE__ << std::endl;
 				}
 			}
 		}	
