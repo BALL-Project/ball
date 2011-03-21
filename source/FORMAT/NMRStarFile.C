@@ -1691,6 +1691,11 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 						{
 							mp.residue_sequence.substitute("\n", "");
 						}
+						// some nmr files seem to have carriage return
+						while ( mp.residue_sequence.hasSubstring("\r"))
+						{
+							mp.residue_sequence.substitute("\r", "");
+						}
 					}
 					else { mp.residue_sequence = "";}
 
