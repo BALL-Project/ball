@@ -16,9 +16,8 @@
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
 
-// We need the GNU scientific Library (GSL) to solve the eigenvalue problem.
-#include <gsl/gsl_math.h>
-#include <gsl/gsl_eigen.h>
+#include <Eigen/Core>
+#include <Eigen/Eigenvalues>
 
 using namespace std;
 
@@ -107,31 +106,24 @@ namespace BALL
 	
 		// Compute the residual matrix F (see original paper for details, names should
 		// be identical).
-		TMatrix4x4<double> F(R(0,0) + R(1,1) + R(2,2), R(1,2) - R(2,1),       R(2,0) - R(0,2),      R(0,1) - R(1,0),
-												 R(1,2) - R(2,1),  R(0,0) - R(1,1) - R(2,2), R(0,1) + R(1,0),      R(0,2) + R(2,0),
-												 R(2,0) - R(0,2),          R(0,1) + R(1,0),  -R(0,0) + R(1,1) - R(2,2), R(1,2) + R(2,1),
-												 R(0,1) - R(1,0),          R(0,2) + R(2,0),       R(1,2) + R(2,1),  -R(0,0) - R(1,1) + R(2,2));
+		Eigen::Matrix4d F;
+		F << R(0,0) + R(1,1) + R(2,2), R(1,2) - R(2,1),          R(2,0) - R(0,2),          R(0,1) - R(1,0),
+		     R(1,2) - R(2,1),          R(0,0) - R(1,1) - R(2,2), R(0,1) + R(1,0),          R(0,2) + R(2,0),
+		     R(2,0) - R(0,2),          R(0,1) + R(1,0),         -R(0,0) + R(1,1) - R(2,2), R(1,2) + R(2,1),
+		     R(0,1) - R(1,0),          R(0,2) + R(2,0),          R(1,2) + R(2,1),         -R(0,0) - R(1,1) + R(2,2);
 
-		// Prepare the matrix for the eigenvalue problem.
-		gsl_matrix_view m = gsl_matrix_view_array(&F[0], 4, 4);
-		gsl_vector* eval = gsl_vector_alloc(4);
-		gsl_matrix* evec = gsl_matrix_alloc(4, 4);
+		Eigen::SelfAdjointEigenSolver<Eigen::Matrix4d> es(F);
 
-		// Solve the eigenvalue problem and sort the matrix
-		// w.r.t the eigenvalues
-		gsl_eigen_symmv_workspace* w = gsl_eigen_symmv_alloc(4);
-		gsl_eigen_symmv(&m.matrix, eval, evec, w);
-		gsl_eigen_symmv_free(w);
-		gsl_eigen_symmv_sort(eval, evec, GSL_EIGEN_SORT_VAL_DESC);	
+		// Extract the largest eigenvalue, and its corresponding eigenvector.
+		double eval_max = es.eigenvalues()[3];
 
-		// Extract the eigenvector matrix, the largest eigenvalue,
-		// and its corresponding eigenvector.
-		TMatrix4x4<double> EV(evec->data);
-		double eval_max = eval->data[0];
-		TVector4<double> evec_max = EV.getColumn(0);
-
-		Quaternion q_max; 
-		q_max.set(evec_max[0], evec_max[1], evec_max[2], evec_max[3]);
+		Quaternion q_max;
+		q_max.set(
+			es.eigenvectors()(0,3),
+			es.eigenvectors()(1,3),
+			es.eigenvectors()(2,3),
+			es.eigenvectors()(3,3)
+		);
 
 		// Compute the complete transformation: move barycenter of A to the origin, 
 		// apply quaternion,  move to the barycenter of B. This will (optimally) 
@@ -151,10 +143,6 @@ namespace BALL
 			sum_of_squares += X[i].getSquareLength() + Y[i].getSquareLength();
 		}
 		double rmsd = sqrt(fabs((sum_of_squares - 2.0 * eval_max)) / double(X.size()));
-
-		// free space used by gsl
-		gsl_vector_free(eval);
-		gsl_matrix_free(evec);
 
 		return make_pair(T, rmsd);
 	}
