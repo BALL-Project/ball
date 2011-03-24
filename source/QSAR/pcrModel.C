@@ -24,10 +24,7 @@
 // 
 
 #include <BALL/QSAR/pcrModel.h>
-
-#ifndef BALL_LINALG_SVDSOLVER_H
-#include <BALL/MATHS/LINALG/SVDSolver.h>
-#endif
+#include <Eigen/Dense>
 
 namespace BALL
 {
@@ -49,42 +46,37 @@ namespace BALL
 			frac_var_ = frac_var;
 		}
 
-		void PCRModel::calculateEigenvectors(const Matrix<double>& data, double frac_var, Matrix<double>& output)
+		void PCRModel::calculateEigenvectors(const Eigen::MatrixXd& data, double frac_var, Eigen::MatrixXd& output)
 		{
-			SVDSolver<double> solver(data);
-			solver.computeSVD();
-			Vector<double> singular_values = solver.getSingularValues();
-			
+			Eigen::JacobiSVD<Eigen::MatrixXd> svd;
+			svd.compute(data, Eigen::ComputeThinV);
+
 			// find the smallest singular vector that should be taken into account
 			// complete variance == sum of all eigen-values == sum of squared singular values
-			double complete_var = singular_values.sum();
-			
+			double complete_var = svd.singularValues().sum();
+
 			double explained_var = 0;
-			uint cols = 0; 
+			uint cols = 0;
 			if (complete_var < 5*std::numeric_limits < double > ::epsilon())
 			{
 				throw Exception::NoPCAVariance(__FILE__, __LINE__, "No variance present to be explained by PCA!");
 			}
-			
-			uint last_vector = 1;
-			for (; last_vector <= singular_values.getSize() && cols < data.getRowCount() && explained_var/complete_var < frac_var ; last_vector++) 
+
+			uint last_vector = 0;
+			for (; last_vector < svd.singularValues().rows() && cols < data.rows() && explained_var/complete_var < frac_var ; last_vector++)
 			{
 				// (singular-value)^2 == eigen-value
-				explained_var += singular_values(last_vector);
+				explained_var += svd.singularValues()[last_vector];
 				cols++;
 			}
-			last_vector--;
 
-			output.resize(data.Nrows(), cols);
-			
-			// getRightSingularVectors() returns V.t() NOT V, so we have to transform back to V here !!
-			Matrix<double> V = solver.getRightSingularVectors().t();
-			
-			for (uint i = 1; i <= data.getRowCount(); i++)
+			output.resize(data.rows(), cols);
+
+			for (uint i = 0; i < data.rows(); i++)
 			{
-				for (uint j = 1; j <= last_vector ; j++)
+				for (uint j = 0; j < last_vector ; j++)
 				{
-					output(i, j) = V(i, j);
+					output(i, j) = svd.matrixV()(i, j);
 				}
 			}
 		}
@@ -92,11 +84,11 @@ namespace BALL
 
 		void PCRModel::train()
 		{
-			if (descriptor_matrix_.Ncols() == 0)
+			if (descriptor_matrix_.cols() == 0)
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Data must be read into the model before training!"); 
 			}
-			Matrix<double> XX = descriptor_matrix_.t()*descriptor_matrix_;
+			Eigen::MatrixXd XX = descriptor_matrix_.transpose()*descriptor_matrix_;
 			
 			calculateEigenvectors(XX, frac_var_, loadings_);
 

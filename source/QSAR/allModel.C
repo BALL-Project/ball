@@ -24,7 +24,8 @@
 //
 
 #include <BALL/QSAR/allModel.h>
-#include <BALL/MATHS/LINALG/matrixInverter.h>
+
+#include <Eigen/Dense>
 
 namespace BALL
 {
@@ -55,14 +56,14 @@ namespace BALL
 			return kw_;
 		}
 
-		void ALLModel::calculateEuclDistanceMatrix(Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output)
+		void ALLModel::calculateEuclDistanceMatrix(Eigen::MatrixXd& m1, Eigen::MatrixXd& m2, Eigen::MatrixXd& output)
 		{
-			output.resize(m1.Nrows(), m2.Nrows());
-			output = 0;
+			output.resize(m1.rows(), m2.rows());
+			output.setZero();
 			Statistics n;
-			for (int i = 1; i <= m1.Nrows(); i++)
+			for (int i = 0; i < m1.rows(); i++)
 			{
-				for (int j = 1; j <= m2.Nrows(); j++)
+				for (int j = 0; j < m2.rows(); j++)
 				{
 					//get euclidean distances of the two current rows
 					output(i, j) = n.euclDistance(m1, m2, i, j);
@@ -71,49 +72,45 @@ namespace BALL
 		}
 
 
-		BALL::Vector<double> ALLModel::predict(const vector<double> & substance, bool transform)
+		Eigen::VectorXd ALLModel::predict(const vector<double> & substance, bool transform)
 		{
-			if (descriptor_matrix_.Ncols() == 0)
+			if (descriptor_matrix_.cols() == 0)
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Training data must be read into the ALL-model before the activity of a substance can be predicted!"); 
 			}
- 			Vector<double> v0 = getSubstanceVector(substance, transform); 
+ 			Eigen::VectorXd v0 = getSubstanceVector(substance, transform); 
 		 	
-			Matrix<double> v(1, v0.getSize()); v.copyVectorToRow(v0, 1);
-			Matrix<double> dist;
+			Eigen::MatrixXd v(1, v0.rows());
+			v.row(0) = v0;
+			Eigen::MatrixXd dist;
 			
 			// calculate distances between the given substance and the substances of X
 			// dimension of dist: 1xn 
  			calculateEuclDistanceMatrix(v, descriptor_matrix_, dist);
-			Vector<double> w;
+			Eigen::VectorXd w;
 			calculateWeights(dist, w);
 
-			Matrix<double> XX;
+			Eigen::MatrixXd XX;
 			
 			// calculate X.t()*X as cross-products weighted by the similarity of the given substance to the respective row of X
 			calculateXX(w, XX);
 			
- 			Matrix<double> XY;
+ 			Eigen::MatrixXd XY;
 			
 			// calculate X.t()*Y_ as cross-products weighted by the similarity of the given substance to the respective row of X
  			calculateXY(w, XY);
 			
 			// rigde regression in order to be able to cope with linearly dependent columns, i.e. singular matrices
-			Matrix<double> im; im.setToIdentity(XX.Nrows());
+			Eigen::MatrixXd im(XX.rows(), XX.rows()); im.setIdentity();
 			im *= lambda_;
 			XX += im;
 
-			MatrixInverter<double, StandardTraits> inverter(XX);
-			inverter.computeInverse();
+			Eigen::MatrixXd train = XX.colPivHouseholderQr().solve(XY);
 
-			Matrix<double> train = inverter.getInverse();
+			Eigen::VectorXd res(Y_.cols());
+			res = v0.transpose()*train;
 			
-			train *= XY;
-			
-			Vector<double> res(Y_.getColumnCount());
-			res = v0*train;
-			
-			if (transform && y_transformations_.Ncols() != 0)
+			if (transform && y_transformations_.cols() != 0)
 			{
 				backTransformPrediction(res); 
 			}
@@ -121,26 +118,26 @@ namespace BALL
 			return res;	
 		}
 
-		void ALLModel::calculateWeights(Matrix<double>& dist, Vector<double>& w)
+		void ALLModel::calculateWeights(Eigen::MatrixXd& dist, Eigen::VectorXd& w)
 		{
-			w.resize(dist.Ncols());
-			for (int i = 1; i <= dist.Ncols(); i++)
+			w.resize(dist.cols());
+			for (int i = 0; i < dist.cols(); i++)
 			{
-				w(i) = exp(-pow(dist(1, i), 2)/(2*pow(kw_, 2)));
+				w(i) = exp(-pow(dist(0, i), 2)/(2*pow(kw_, 2)));
 			}
 		}
 
 
-		void ALLModel::calculateXX(Vector<double>& w, Matrix<double>& res)
+		void ALLModel::calculateXX(Eigen::VectorXd& w, Eigen::MatrixXd& res)
 		{
-			res.resize(descriptor_matrix_.Ncols(), descriptor_matrix_.Ncols());
-			res = 0;
+			res.resize(descriptor_matrix_.cols(), descriptor_matrix_.cols());
+			res.setZero();
 			// for all descriptors, calculate their weighted cross-product
-			for (int i = 1; i <= descriptor_matrix_.Ncols(); i++)
+			for (int i = 0; i < descriptor_matrix_.cols(); i++)
 			{
-				for (int j = i; j <= descriptor_matrix_.Ncols(); j++)
+				for (int j = i; j < descriptor_matrix_.cols(); j++)
 				{
-					for (int s = 1; s <= descriptor_matrix_.Nrows(); s++) 
+					for (int s = 0; s < descriptor_matrix_.rows(); s++) 
 					{
 						res(i, j) += w(s)*descriptor_matrix_(s, i)*descriptor_matrix_(s, j);
 					}
@@ -151,16 +148,16 @@ namespace BALL
 		}
 
 
-		void ALLModel::calculateXY(Vector<double>& w, Matrix<double>& res)
+		void ALLModel::calculateXY(Eigen::VectorXd& w, Eigen::MatrixXd& res)
 		{
-			res.resize(descriptor_matrix_.Ncols(), Y_.Ncols());
-			res = 0;
+			res.resize(descriptor_matrix_.cols(), Y_.cols());
+			res.setZero();
 			
-			for (int i = 1; i <= descriptor_matrix_.Ncols(); i++)
+			for (int i = 0; i < descriptor_matrix_.cols(); i++)
 			{
-				for (int j = 1; j <= Y_.Ncols(); j++)
+				for (int j = 0; j < Y_.cols(); j++)
 				{
-					for (int s = 1; s <= descriptor_matrix_.Nrows(); s++)
+					for (int s = 0; s < descriptor_matrix_.rows(); s++)
 					{
 						res(i, j) += w(s)*descriptor_matrix_(s, i)*Y_(s, j);
 					}
@@ -221,18 +218,18 @@ namespace BALL
 		{
 			std::ofstream out(filename.c_str());
 			
-			const Matrix<double>* coeffErrors = validation->getCoefficientStdErrors();
+			const Eigen::MatrixXd* coeffErrors = validation->getCoefficientStdErrors();
 			bool sterr = 0;
-			if (coeffErrors->Ncols() != 0)
+			if (coeffErrors->cols() != 0)
 			{
 				sterr = 1;
 			}
 			bool centered_data = 0;
 			bool centered_y = 0;
-			if (descriptor_transformations_.Ncols() != 0)
+			if (descriptor_transformations_.cols() != 0)
 			{
 				centered_data = 1;
-				if (y_transformations_.Ncols() != 0)
+				if (y_transformations_.cols() != 0)
 				{
 					centered_y = 1;
 				}
@@ -244,11 +241,11 @@ namespace BALL
 				sel_features = data->getNoDescriptors();
 			}
 			
-			int no_y = training_result_.Ncols();
-			if (no_y == 0) no_y = y_transformations_.Ncols(); // correct no because transformation information will have to by read anyway when reading this model later ...
+			int no_y = training_result_.cols();
+			if (no_y == 0) no_y = y_transformations_.cols(); // correct no because transformation information will have to by read anyway when reading this model later ...
 			
 			out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tcentered response?\tno of substances"<<std::endl;
-			out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<no_y<<"\t"<<centered_data<<"\t"<<centered_y<<"\t"<<descriptor_matrix_.Nrows()<<"\n\n";
+			out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<no_y<<"\t"<<centered_data<<"\t"<<centered_y<<"\t"<<descriptor_matrix_.rows()<<"\n\n";
 				
 			saveModelParametersToFile(out);
 			saveResponseTransformationToFile(out); 

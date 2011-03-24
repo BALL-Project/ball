@@ -25,7 +25,8 @@
 
 #include <BALL/QSAR/kpcrModel.h>
 #include <BALL/QSAR/pcrModel.h>
-#include <BALL/MATHS/LINALG/matrixInverter.h>
+
+#include <Eigen/Dense>
 
 namespace BALL
 {
@@ -39,7 +40,7 @@ namespace BALL
 			frac_var_ = 0.99;
 		}
 
-		KPCRModel::KPCRModel(const QSARData& q, Vector<double>& w) : KernelModel(q, w) 
+		KPCRModel::KPCRModel(const QSARData& q, Eigen::VectorXd& w) : KernelModel(q, w) 
 		{
 			type_="KPCR";
 			frac_var_ = 0.99;
@@ -72,7 +73,7 @@ namespace BALL
 
 		void KPCRModel::train()
 		{
-			if (descriptor_matrix_.Ncols() == 0)
+			if (descriptor_matrix_.cols() == 0)
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Data must be read into the model before training!"); 
 			}
@@ -85,11 +86,9 @@ namespace BALL
 
 			//result of RR is a linear combination of latente variables 
 			// = column with length = no of latente variables = > matrix for more than one modelled activity
-			Matrix<double> m = latent_variables_.t()*latent_variables_;
-			MatrixInverter<double, StandardTraits> inverter(m);
-			inverter.computePseudoInverse();
+			Eigen::MatrixXd m = latent_variables_.transpose()*latent_variables_;
 
-			weights_ = inverter.getPseudoInverse()*latent_variables_.t()*Y_;
+			weights_ = m.colPivHouseholderQr().solve(latent_variables_.transpose()*Y_);
 			training_result_ = loadings_*weights_;
 			
 			calculateOffsets();

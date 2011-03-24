@@ -68,7 +68,7 @@ namespace BALL
 				ModelItem* modelItem();
 
 				/** returns the results of the prediction*/
-				const list<Vector<double> >* results();
+				const list<Eigen::VectorXd >* results();
 
 				enum { Type = UserType + 6};
 				int type() const { return Type; }
@@ -114,7 +114,7 @@ namespace BALL
 				/** @name Private Attributes */
 
 				/** results of the prediction */
-				list<Vector<double> > results_;
+				list<Eigen::VectorXd > results_;
 				//ModelItem* model_item_;
 				
 				/** The InputDataItem which contains the data-source for the predictions (NOT the training data) */

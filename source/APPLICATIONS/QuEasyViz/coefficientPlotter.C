@@ -64,7 +64,7 @@ namespace BALL
 			qwt_plot_->clear();
 			
 			RegressionModel* model = (RegressionModel*)model_item_->model();
-			const Matrix<double>* coefficient_matrix = model->getTrainingResult();
+			const Eigen::MatrixXd* coefficient_matrix = model->getTrainingResult();
 			
 			if(coefficient_matrix->Ncols()==0)
 			{
@@ -83,7 +83,7 @@ namespace BALL
 			}
 			
 			bool show_stddev=0;
-			const Matrix<double>* coeff_stddev = model->validation->getCoefficientStdErrors();
+			const Eigen::MatrixXd* coeff_stddev = model->validation->getCoefficientStdErrors();
 			if(coeff_stddev!=NULL && coeff_stddev->Nrows()==coefficient_matrix->Nrows() && coeff_stddev->Ncols()==coefficient_matrix->Ncols())
 			{
 				show_stddev=1;

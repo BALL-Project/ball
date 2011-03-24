@@ -28,7 +28,7 @@
 #include <vector>
 #include <set>
 
-#include <BALL/MATHS/LINALG/matrix.h>
+#include <Eigen/Core>
 
 #ifndef VALIDATION
 #include <BALL/QSAR/validation.h>
@@ -64,6 +64,8 @@ namespace BALL
 				/** copy constructur; creates a model with the same specifications as the given one (same model and kernel parameters). If the given model has been trained, the training result is copied as well. \n
 				Note, that the input data that has been read by m to m.descriptor_matrix_ and m.Y_ is NOT copied to new model, since the input data is not part of the specification of a model. If nevertheless, copying of the input data is desired, use function copyData() (afterwards).  */
 				virtual void operator=(const Model& m);
+
+				EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 				//@}
 				
 				
@@ -89,7 +91,7 @@ namespace BALL
 				If (transform==1): each descriptor value is transformed according to the centering of the respective column of QSARData.descriptor_matrix used to train this model. \n
 				If the substance to be predicted is part of the same input data (e.g. same SD-file) as the training data (as is the case during cross validation), transform should therefore be set to 0. 
 				@return a RowVector containing one value for each predicted activity*/
-				virtual Vector<double> predict(const vector<double>& substance, bool transform) =0; 
+				virtual Eigen::VectorXd predict(const vector<double>& substance, bool transform) =0; 
 				
 				/** removes all entries from descriptor_IDs */
 				void deleteDescriptorIDs();
@@ -126,7 +128,7 @@ namespace BALL
 				virtual void readFromFile(string filename) = 0;
 				
 				/** returns a const pointer to the descriptor matrix of this model */
-				const Matrix<double>* getDescriptorMatrix();
+				const Eigen::MatrixXd* getDescriptorMatrix();
 				
 				/** returns a const pointer to the names of the substances of this model */
 				const vector<string>* getSubstanceNames();
@@ -135,7 +137,7 @@ namespace BALL
 				const vector<string>* getDescriptorNames();
 				
 				/** returns a const pointer to the activity values of this model */
-				const Matrix<double>* getY();
+				const Eigen::MatrixXd* getY();
 				
 				/** manually specify a set of descriptors */
 				void setDescriptorIDs(const std::multiset<unsigned int>& sl);
@@ -174,15 +176,15 @@ namespace BALL
 				//@{
 				/** returns a Row-Vector containing only the values for these descriptors, that have been selected for this model \n
 				@param substance a vector of *all* descriptor values for the substance to be predicted */
-				Vector<double> getSubstanceVector(const vector<double>& substance, bool transform);
+				Eigen::VectorXd getSubstanceVector(const vector<double>& substance, bool transform);
 				
-				Vector<double> getSubstanceVector(const Vector<double>& substance, bool transform);
+				Eigen::VectorXd getSubstanceVector(const Eigen::VectorXd& substance, bool transform);
 				
 				/** transforms a prediction (obtained by Model.train()) according to the inverse of the transformation(s) of the activity values of the training data */
-				void backTransformPrediction(Vector<double>& pred);
+				void backTransformPrediction(Eigen::VectorXd& pred);
 				
 				/** adds offset lambda to the diagonal of the given matrix */
-				void addLambda(Matrix<double>& matrix, double& lambda);
+				void addLambda(Eigen::MatrixXd& matrix, double& lambda);
 				
 				/** reads selected descriptors, their names and the information about their transformations (mean and stddev of each descriptor). This function is used after feature selection to read information about the selected features */
 				void readDescriptorInformation();
@@ -192,10 +194,10 @@ namespace BALL
 				/** @name Input and Output. The following methods can be used to implement the functions saveToFile() and readFromFile() in final classes derived from this base-class 
 				 */
 				//@{
-				/** reconstructs a Matrix<double> from a given input stream after resizing the given Matrix<double> as specified */
-				void readMatrix(Matrix<double>& mat, std::ifstream& in, uint lines, uint col);
+				/** reconstructs a Eigen::MatrixXd from a given input stream after resizing the given Eigen::MatrixXd as specified */
+				void readMatrix(Eigen::MatrixXd& mat, std::ifstream& in, uint lines, uint col);
 				
-				void readVector(Vector<double>& vec, std::ifstream& in, uint no_cells, bool column_vector);
+				void readVector(Eigen::RowVectorXd& vec, std::ifstream& in, uint no_cells, bool column_vector);
 				
 				void readModelParametersFromFile(std::ifstream& in);
 				void saveModelParametersToFile(std::ofstream& out);
@@ -214,7 +216,7 @@ namespace BALL
 				 */
 				//@{
 				/** matrix containing the values of each descriptor for each substance */ 
-				Matrix<double> descriptor_matrix_;
+				Eigen::MatrixXd descriptor_matrix_;
 					
 				/** names of all substances */
 				vector<string> substance_names_;
@@ -224,15 +226,15 @@ namespace BALL
 				
 				/** 2xm dimensional matrix (m=no of descriptors) containing mean and stddev of each selected descriptor. \n
 				The content of this matrix is updated only by Model.readTrainingData() */
-				Matrix<double> descriptor_transformations_;
+				Eigen::MatrixXd descriptor_transformations_;
 				
 				/** 2xc dimensional matrix (c=no of activities) containing mean and stddev of each activity.\n
 				The content of this matrix is updated only by Model.readTrainingData() */
-				Matrix<double> y_transformations_;
+				Eigen::MatrixXd y_transformations_;
 				
 				/** Matrix containing the experimentally determined results (active/non-active) for each substance. \n
 				Each column contains the values for one activity. */
-				Matrix<double> Y_;
+				Eigen::MatrixXd Y_;
 
 				/** The type of model, e.g. "MLR", "GP", ... */
 				String type_;

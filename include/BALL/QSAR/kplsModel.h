@@ -49,13 +49,15 @@ namespace BALL
 				//@{
 				KPLSModel(const QSARData& q, int k_type, double p1, double p2=-1);
 				
-				KPLSModel(const QSARData& q, Vector<double>& w);
+				KPLSModel(const QSARData& q, Eigen::VectorXd& w);
 				
 				KPLSModel(const QSARData& q, String s1, String s2);
 				
 				KPLSModel(const QSARData& q, const LinearModel& lm, int column);
 
 				~KPLSModel();
+
+				EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 				//@}
 				
 				
@@ -74,7 +76,7 @@ namespace BALL
 				void setNoComponents(int d);
 				
 				/** returns a pointer to the  PLS Y-scores matrix U */
-				const Matrix<double>* getU();
+				const Eigen::MatrixXd* getU();
 				
 				void setParameters(vector<double>& v);
 				
@@ -85,7 +87,7 @@ namespace BALL
 			protected:
 				/** @name Attributes
 				 */
-				Matrix<double> U_;
+				Eigen::MatrixXd U_;
 				
 				int no_components_;
 				//@}

@@ -24,7 +24,10 @@
 //
 
 #include <BALL/QSAR/ldaModel.h>
-#include <BALL/MATHS/LINALG/matrixInverter.h>
+
+#include <Eigen/Dense>
+
+#include <limits>
 
 using namespace std;
 
@@ -45,7 +48,7 @@ namespace BALL
 
 		void LDAModel::train()
 		{
-			if (descriptor_matrix_.Ncols() == 0)
+			if (descriptor_matrix_.cols() == 0)
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Data must be read into the model before training!"); 
 			}
@@ -59,55 +62,52 @@ namespace BALL
 			}
 
 			// calculate sigma_ = covariance matrix of descriptors
-			sigma_.resize(descriptor_matrix_.Ncols(), descriptor_matrix_.Ncols());
-			for (int i = 1; i <= descriptor_matrix_.Ncols(); i++)
+			sigma_.resize(descriptor_matrix_.cols(), descriptor_matrix_.cols());
+			for (int i = 0; i < descriptor_matrix_.cols(); i++)
 			{
 				double mi = Statistics::getMean(descriptor_matrix_, i);
-				for (int j = 1; j <= descriptor_matrix_.Ncols(); j++)
+				for (int j = 0; j < descriptor_matrix_.cols(); j++)
 				{
 					sigma_(i, j) = Statistics::getCovariance(descriptor_matrix_, i, j, mi);
 				}
 			}
-			Matrix<double> I; I.setToIdentity(sigma_.Ncols());
+			Eigen::MatrixXd I(sigma_.cols(), sigma_.cols()); I.setIdentity();
 			I *= lambda_;
 			sigma_ += I;
 
-			MatrixInverter<double, StandardTraits> inverter(sigma_);
-			inverter.computeInverse();
+			sigma_ = sigma_.inverse();
 
-			sigma_ = inverter.getInverse();
-
-			mean_vectors_.resize(Y_.Ncols());
+			mean_vectors_.resize(Y_.cols());
 			no_substances_.clear();
 			no_substances_.resize(labels_.size(), 0);
-			for (int c = 0; c < Y_.Ncols(); c++)
+			for (int c = 0; c < Y_.cols(); c++)
 			{
 				vector < int > no_substances_c(labels_.size(), 0);  // no of substances in each class for activitiy c
-				mean_vectors_[c].resize(labels_.size(), descriptor_matrix_.Ncols());
-				mean_vectors_[c] = 0;
+				mean_vectors_[c].resize(labels_.size(), descriptor_matrix_.cols());
+				mean_vectors_[c].setZero();
 				
-				for (int i = 1; i <= descriptor_matrix_.Nrows(); i++) // calculate sum vector of each class
+				for (int i = 0; i < descriptor_matrix_.rows(); i++) // calculate sum vector of each class
 				{
-					int yi = static_cast < int > (Y_(i, c+1)); // Y_ will contains only ints for classifications
+					int yi = static_cast < int > (Y_(i, c)); // Y_ will contains only ints for classifications
 					int pos = label_to_pos.find(yi)->second; 
 					
-					for (int j = 1; j < descriptor_matrix_.Ncols(); j++)
+					for (int j = 0; j < descriptor_matrix_.cols(); j++)
 					{
-						mean_vectors_[c](pos+1, j) += descriptor_matrix_(i, j);
+						mean_vectors_[c](pos, j) += descriptor_matrix_(i, j);
 					}
 					
 					if (c == 0) no_substances_c[pos]++; 
 					
 				}
 				
-				for (int i = 1; i <= mean_vectors_[c].Nrows(); i++) // calculate mean vector of each class
+				for (int i = 0; i < mean_vectors_[c].rows(); i++) // calculate mean vector of each class
 				{
 					if (no_substances_c[i-1] == 0)
 					{
-						mean_vectors_[c].setRow(i, exp(100.));  // set mean of classes NOT occurring for activitiy c to inf
+						mean_vectors_[c].row(i).setConstant(std::numeric_limits<double>::infinity());  // set mean of classes NOT occurring for activitiy c to inf
 					}
 					
-					for (int j = 1; j < descriptor_matrix_.Ncols(); j++)
+					for (int j = 0; j < descriptor_matrix_.cols(); j++)
 					{
 						mean_vectors_[c](i, j) = mean_vectors_[c](i, j)/no_substances_c[i-1];
 					}
@@ -122,36 +122,36 @@ namespace BALL
 		}
 
 
-		BALL::Vector<double> LDAModel::predict(const vector<double> & substance, bool transform)
+		Eigen::VectorXd LDAModel::predict(const vector<double> & substance, bool transform)
 		{
-			if (sigma_.Ncols() == 0)
+			if (sigma_.cols() == 0)
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Model must be trained before it can predict the activitiy of substances!"); 
 			}
 			// search class to which the given substance has the smallest distance
-			Vector<double> s = getSubstanceVector(substance, transform); // dim: 1xm
+			Eigen::VectorXd s = getSubstanceVector(substance, transform); // dim: 1xm
 			
 			int min_k = 0;
 			double min_dist = 99999999;
-			Vector<double> result(mean_vectors_.size());
+			Eigen::VectorXd result(mean_vectors_.size());
 			
 			for (unsigned int c = 0; c < mean_vectors_.size(); c++)
 			{
-				for (int k = 1; k <= mean_vectors_[c].Nrows(); k++)
+				for (int k = 0; k < mean_vectors_[c].rows(); k++)
 				{
-					Vector<double> diff(s.getSize()); 
-					for (uint i = 1; i <= s.getSize(); i++)
+					Eigen::VectorXd diff(s.rows()); 
+					for (uint i = 0; i < s.rows(); i++)
 					{
 						diff(i) = s(i)-mean_vectors_[c](k, i); 
 					}
-					double dist = diff*sigma_*diff.t(); 
+					double dist = diff.transpose()*sigma_*diff;
 					if (dist < min_dist)
 					{
 						min_dist = dist;
 						min_k = k;
 					}
 				}
-				result(c+1) = labels_[min_k-1];
+				result(c) = labels_[min_k];
 			}
 			
 			return result;
@@ -181,16 +181,16 @@ namespace BALL
 		void LDAModel::saveToFile(string filename)
 		{
 			bool trained = 1;
-			if (sigma_.Nrows() == 0) trained = 0; 
+			if (sigma_.rows() == 0) trained = 0; 
 			
 			ofstream out(filename.c_str());
 			
 			bool centered_data = 0;
 			bool centered_y = 0;
-			if (descriptor_transformations_.Ncols() != 0)
+			if (descriptor_transformations_.cols() != 0)
 			{
 				centered_data = 1;
-				if (y_transformations_.Ncols() != 0)
+				if (y_transformations_.cols() != 0)
 				{
 					centered_y = 1;
 				}
@@ -203,8 +203,8 @@ namespace BALL
 			}
 			
 			
-			int no_y = sigma_.Ncols();
-			if (no_y == 0) no_y = y_transformations_.Ncols(); // correct no because transformation information will have to by read anyway when reading this model later ...
+			int no_y = sigma_.cols();
+			if (no_y == 0) no_y = y_transformations_.cols(); // correct no because transformation information will have to by read anyway when reading this model later ...
 			
 			out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tno of classes\ttrained?"<<endl;
 			out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<no_y<<"\t"<<centered_data<<"\t"<<no_substances_.size()<<"\t"<<trained<<"\n\n";

@@ -46,7 +46,7 @@ namespace BALL
 				//@{
 				GPModel(const QSARData& q, int k_type, double p1, double p2=-1);
 				
-				GPModel(const QSARData& q, Vector<double>& w);
+				GPModel(const QSARData& q, Eigen::VectorXd& w);
 				
 				/** constructor that sets KernelModel.f to s1 and KernelModel.g to s2 */
 				GPModel(const QSARData& q, String s1, String s2);
@@ -54,6 +54,8 @@ namespace BALL
 				GPModel(const QSARData& q, const LinearModel& lm, int column);
 
 				~GPModel();
+
+				EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 				//@}
 				
 				/** @name Accessors
@@ -61,7 +63,7 @@ namespace BALL
 				//@{
 				void train();
 				
-				Vector<double> predict(const vector<double>& substance, bool transform=1);
+				Eigen::VectorXd predict(const vector<double>& substance, bool transform=1);
 				
 				/** calculates standart error for the last prediction as \f$ \sqrt{k(x_*,x_*)-\sum_{i=1}^n \sum_{j=1}^n k(x_*,x_i)*k(x_*,x_j)-L_{ij} } \f$*/
 				double calculateStdErr();
@@ -75,12 +77,12 @@ namespace BALL
 				/** @name Attributes
 				 */
 				//@{
-				Matrix<double> L_;
+				Eigen::MatrixXd L_;
 				
 				/** the last predicted substance */
-				Vector<double> input_;
+				Eigen::VectorXd input_;
 				
-				Vector<double> K_t_;
+				Eigen::RowVectorXd K_t_;
 				
 				double lambda_;
 				//@}

@@ -45,7 +45,7 @@ namespace BALL
 				KNNModel(const QSARData& q, int k=3);
 				//@}
 				
-				void calculateWeights(Matrix<double>& dist, Vector<double>& w);
+				void calculateWeights(Eigen::MatrixXd& dist, Eigen::VectorXd& w);
 				
 				void setParameters(vector<double>& v);
 				

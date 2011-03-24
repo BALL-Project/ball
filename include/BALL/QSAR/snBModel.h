@@ -26,6 +26,10 @@
 #ifndef SNBMODEL
 #define SNBMODEL
 
+#ifndef BALL_QSAR_COMMON_H
+	#include <BALL/QSAR/common.h>
+#endif
+
 #ifndef STATISTICS
 #include <BALL/QSAR/statistics.h>
 #endif
@@ -56,7 +60,7 @@ namespace BALL{
 				//@{
 				void train();
 				
-				Vector<double> predict(const vector<double>& substance, bool transform=1);
+				Eigen::VectorXd predict(const vector<double>& substance, bool transform=1);
 				
 				vector<double> getParameters() const;
 				
@@ -81,10 +85,10 @@ namespace BALL{
 				 */
 				//@{
 				/** vector containing one matrix for each modelled activity which holds the mean of each feature for each class */
-				vector<Matrix<double> > mean_;
+				MatrixVector mean_;
 				
 				/** vector containing one matrix for each modelled activity which holds the standard deviation of each feature for each class */
-				vector<Matrix<double> > stddev_;
+				MatrixVector stddev_;
 				
 				static const double sqrt2Pi_;
 							

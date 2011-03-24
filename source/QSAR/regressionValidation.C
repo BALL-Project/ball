@@ -103,7 +103,7 @@ namespace BALL
 		}
 
 
-		void RegressionValidation::crossValidation(int k, vector<Matrix<double> >* results, bool restore)
+		void RegressionValidation::crossValidation(int k, MatrixVector* results, bool restore)
 		{
 			if (model_->data->descriptor_matrix_.size() == 0 || model_->data->Y_.size() == 0)
 			{
@@ -167,13 +167,13 @@ namespace BALL
 		{	
 			quality_ = 0; ssE_ = 0; ssR_ = 0; std_err_ = 0; ssY_ = 0;
 			
-			Vector<double> mean_Y(test_Y_.Ncols()); // mean of each activity
-			//RowVector sum_of_squares(test_Y_.Ncols());
+			Eigen::VectorXd mean_Y(test_Y_.cols()); // mean of each activity
+			//RowVector sum_of_squares(test_Y_.cols());
 			
 			/// In case of external test data (for which 'transform' == 1), data in test_Y_ has been backtransformed to original space and model_->predict(.., 1) will return the activity value in original space.
 			/// In case of internal testing ('transform' == 0), data in test_Y_ is in transformed space and model->predict(.., 0) will return the activity value in the same space.
 			
-			for (int i = 1; i <= test_Y_.Ncols(); i++)
+			for (int i = 0; i < test_Y_.cols(); i++)
 			{
 				mean_Y(i) = Statistics::getMean(test_Y_, i);	
 			}
@@ -181,13 +181,13 @@ namespace BALL
 			
 			for (unsigned int i = 0; i < test_substances_.size(); i++)
 			{       
-				Vector<double> rv = model_->predict(test_substances_[i], transform); 
+				Eigen::VectorXd rv = model_->predict(test_substances_[i], transform); 
 				double error = 0;
-				for (int k = 1; k <= test_Y_.Ncols(); k++)
+				for (int k = 0; k < test_Y_.cols(); k++)
 				{
-					error += pow(test_Y_(i+1, k)-rv(k), 2);
+					error += pow(test_Y_(i, k)-rv(k), 2);
 					ssR_ += pow(mean_Y(k)-rv(k), 2);
-					ssY_ += pow(mean_Y(k)-test_Y_(i+1, k), 2);
+					ssY_ += pow(mean_Y(k)-test_Y_(i, k), 2);
 				}
 				if (error > max_error_)
 				{
@@ -221,15 +221,15 @@ namespace BALL
 			{
 				//unsigned int des = model_->descriptor_IDs_.size();
 				//unsigned int data_cols = model_->data->descriptor_matrix_.size();
-				uint res_rows = regr_model_->training_result_.Nrows();
-				//unsigned int desmat_cols = model_->descriptor_matrix_.Ncols();
+				uint res_rows = regr_model_->training_result_.rows();
+				//unsigned int desmat_cols = model_->descriptor_matrix_.cols();
 				
 				if (res_rows == 0)
 				{
 					throw Exception::InconsistentUsage(__FILE__, __LINE__, "Model must be trained before its fit to the input data can be evaluated!"); 
 				}
 				uint test_col = model_->descriptor_IDs_.size(); // no of columns of X^T X (linear model)
-				uint kernel_test_col = model_->descriptor_matrix_.Nrows();  // no of columns of X X^T (nonlinear model)
+				uint kernel_test_col = model_->descriptor_matrix_.rows();  // no of columns of X X^T (nonlinear model)
 				if (test_col == 0)
 				{
 					test_col = model_->data->getNoDescriptors();
@@ -293,7 +293,7 @@ namespace BALL
 			backupTrainingResults();
 			
 			int no_activities = model_->data->Y_.size();
-			vector<Matrix<double> >* results = new vector<Matrix<double> >;
+			MatrixVector* results = new MatrixVector;
 			int no_descriptors = model_->data->descriptor_matrix_.size();
 			if (!model_->descriptor_IDs_.empty())
 			{
@@ -303,16 +303,16 @@ namespace BALL
 			
 			if (b == 1)
 			{
-				bootstrap(k, results, 0);
+				bootstrap(k, results, false);
 			}
 			else
 			{
-				crossValidation(k, results, 0);
+				crossValidation(k, results, false);
 			}
 			
-			for (int c = 1; c <= no_activities; c++) // for all modelled activities
+			for (int c = 0; c < no_activities; c++) // for all modelled activities
 			{
-				for (int m = 1; m <= no_descriptors; m++) // for all descriptors
+				for (int m = 0; m < no_descriptors; m++) // for all descriptors
 				{			
 					double mean_mc = 0;
 					double sumsquares_mc = 0;
@@ -345,7 +345,7 @@ namespace BALL
 		}
 
 
-		void RegressionValidation::bootstrap(int k, vector<Matrix<double> >* results, bool restore)
+		void RegressionValidation::bootstrap(int k, MatrixVector* results, bool restore)
 		{
 			if (model_->data->descriptor_matrix_.size() == 0 || model_->data->Y_.size() == 0)
 			{
@@ -438,7 +438,7 @@ namespace BALL
 		}
 
 
-		const BALL::Matrix<double>& RegressionValidation::yRandomizationTest(int runs, int k)
+		const Eigen::MatrixXd& RegressionValidation::yRandomizationTest(int runs, int k)
 		{
 			if (model_->data->descriptor_matrix_.size() == 0 || model_->data->Y_.size() == 0)
 			{
@@ -449,7 +449,7 @@ namespace BALL
 			vector<vector<double> > dataY_backup = model_->data->Y_;
 						
 			yRand_results_.resize(runs, 2);
-			yRand_results_ = -1;
+			yRand_results_.setConstant(-1);
 
 			for (int i = 0; i < runs; i++)
 			{
@@ -458,8 +458,8 @@ namespace BALL
 				model_->readTrainingData();
 				model_->train();
 				testInputData(0);	
-				yRand_results_(i+1, 1) = R2_;
-				yRand_results_(i+1, 2) = Q2_;
+				yRand_results_(i, 0) = R2_;
+				yRand_results_(i, 1) = Q2_;
 			}	
 			
 			restoreTrainingResults();
@@ -541,13 +541,13 @@ namespace BALL
 		}
 
 
-		const BALL::Matrix<double>* RegressionValidation::getCoefficientStdErrors()
+		const Eigen::MatrixXd* RegressionValidation::getCoefficientStdErrors()
 		{
 			return &coefficient_stderr_;
 		}
 
 
-		void RegressionValidation::setCoefficientStdErrors(const Matrix<double>* sterr)
+		void RegressionValidation::setCoefficientStdErrors(const Eigen::MatrixXd* sterr)
 		{
 			coefficient_stderr_ = *sterr;	
 		}
@@ -558,7 +558,7 @@ namespace BALL
 			saveToFile(filename, R2_, Q2_, coefficient_stderr_, yRand_results_);	
 		}
 
-		void RegressionValidation::saveToFile(string filename, const double& r2, const double& q2, const Matrix<double>& coefficient_stddev, const Matrix<double>& yRand_results) const
+		void RegressionValidation::saveToFile(string filename, const double& r2, const double& q2, const Eigen::MatrixXd& coefficient_stddev, const Eigen::MatrixXd& yRand_results) const
 		{
 			ofstream out(filename.c_str());
 			
@@ -567,18 +567,18 @@ namespace BALL
 			out << "Fit to training data = "<<r2<<endl;
 			out << "Predictive quality = "<<q2<<endl;
 			
-			if (coefficient_stddev.getColumnCount() > 0)
+			if (coefficient_stddev.cols() > 0)
 			{
 				out<<endl;
 				out<<"[Coefficient stddev]"<<endl;
-				out<<"dimensions = "<<coefficient_stddev.getRowCount()<<" "<<coefficient_stddev.getColumnCount()<<endl;
+				out<<"dimensions = "<<coefficient_stddev.rows()<<" "<<coefficient_stddev.cols()<<endl;
 				out<<coefficient_stddev<<endl;
 			}
-			if (yRand_results.getColumnCount() > 0)
+			if (yRand_results.cols() > 0)
 			{
 				out<<endl;
 				out<<"[Response Permutation]"<<endl;
-				out<<"dimensions = "<<yRand_results.getRowCount()<<" "<<yRand_results.getColumnCount()<<endl;
+				out<<"dimensions = "<<yRand_results.rows()<<" "<<yRand_results.cols()<<endl;
 				out<<yRand_results<<endl;
 			}
 		}

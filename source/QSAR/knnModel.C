@@ -36,19 +36,19 @@ namespace BALL
 			default_no_opt_steps_ = 20;
 		}
 
-		void KNNModel::calculateWeights(Matrix<double>& dist, Vector<double>& w)
+		void KNNModel::calculateWeights(Eigen::MatrixXd& dist, Eigen::VectorXd& w)
 		{
 			// set first k entries of similarity vector w to 1
 			//   and all other entries to 0
 			//   == > KNN instead of ALL	
 			
-			w.resize(dist.getColumnCount());
-			w = 1;
+			w.resize(dist.cols());
+			w.setConstant(1.0);
 			
 			std::multiset<pair<double, int> > ranking;
-			for (int i = 1; i <= dist.Ncols(); i++)
+			for (int i = 0; i < dist.cols(); i++)
 			{
-				ranking.insert(make_pair(dist(1, i), i));
+				ranking.insert(make_pair(dist(0, i), i));
 			}
 			
 			std::multiset<pair<double, int> >::iterator r_it = ranking.begin();

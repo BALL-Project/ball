@@ -50,17 +50,17 @@ LibsvmModel::~LibsvmModel()
 
 void LibsvmModel::train()
 {
-	if (descriptor_matrix_.Ncols() == 0)
+	if (descriptor_matrix_.cols() == 0)
 	{
 		throw Exception::InconsistentUsage(__FILE__, __LINE__, "Data must be read into the model before training!"); 
 	}
 
 	kernel->calculateKernelMatrix(descriptor_matrix_, K_);
 	struct svm_problem* prob = NULL;
-	training_result_.resize(K_.Nrows(), Y_.Ncols());
-	offsets_.resize(Y_.Ncols());
+	training_result_.resize(K_.rows(), Y_.cols());
+	offsets_.resize(Y_.cols());
 	
-	for (int act = 1; act <= Y_.Ncols(); act++)
+	for (int act = 0; act <= Y_.cols(); act++)
 	{
 		prob = createProblem(act);
 		svm_train_result_ = (LibsvmModel::svm_model*)svm_train(prob, &parameters_);
@@ -73,7 +73,7 @@ void LibsvmModel::train()
 		{
 			for (int j = 0; j < svm_train_result_->nr_class-1; j++)
 			{
-				training_result_(i+1, j+1) = sv_coef[j][i];
+				training_result_(i, j) = sv_coef[j][i];
 			}
 		}
 		
@@ -89,25 +89,25 @@ void LibsvmModel::train()
 struct svm_problem* LibsvmModel::createProblem(int response_id)
 {
 	struct svm_problem* prob = Malloc(svm_problem, 1);
-	prob->l = K_.Nrows();
+	prob->l = K_.rows();
 	prob->y = Malloc(double, prob->l);
 	prob->x = Malloc(struct svm_node*, prob->l);
-	int elements = (K_.Ncols()+2)*K_.Nrows();
+	int elements = (K_.cols()+2)*K_.rows();
 	free(x_space_);
 	x_space_ = Malloc(struct svm_node, elements);
 	
-	int cols = K_.Ncols();
+	int cols = K_.cols();
 	int index = 0;
 	
-	for (int i = 1; i <= K_.Nrows(); i++)
+	for (int i = 0; i < K_.rows(); i++)
 	{
 		//prob->x[i-1] = Malloc(struct svm_node, cols+1);	
-		prob->x[i-1] = &x_space_[index];
-		prob->y[i-1] = Y_(i, response_id);
+		prob->x[i] = &x_space_[index];
+		prob->y[i] = Y_(i, response_id);
 		x_space_[index].index = 0;
 		x_space_[index].value = i; // numer of current row
 		index++;
-		for (int j = 1; j <= cols; j++)
+		for (int j = 0; j < cols; j++)
 		{ 
 			//prob->x[i-1][j-1].index = j;
 			//prob->x[i-1][j-1].value = K_(i, j);
@@ -146,32 +146,32 @@ void LibsvmModel::createParameters()
 }
 
 
-// RowVector LibsvmModel::predict(const vector<double>& substance, bool transform)
+// RowVector LibsvmModel::predict(const Eigen::VectorXd& substance, bool transform)
 // {	
 // 	if(svm_train_result_==NULL)
 // 	{
 // 		throw Exception::InconsistentUsage(__FILE__,__LINE__,"Model must be trained before it can predict the activitiy of substances!");
 // 	}
 // 	RowVector input=getSubstanceVector(substance, transform);
-// 	Matrix K_t(input.Nrows(), descriptor_matrix_.Nrows());
+// 	Matrix K_t(input.rows(), descriptor_matrix_.rows());
 // 	kernel->calculateKernelMatrix(K_,input, descriptor_matrix_, K_t);
 // 		
-// 	svm_node* node = Malloc(struct svm_node, K_t.Ncols()+1);
+// 	svm_node* node = Malloc(struct svm_node, K_t.cols()+1);
 // 	
-// 	for(int i=1; i<=K_t.Ncols(); i++)
+// 	for(int i=1; i<=K_t.cols(); i++)
 // 	{
 // 		node[i-1].index = i-1;
 // 		node[i-1].value = K_t(1,i);
 // 	}
-// 	node[K_t.Ncols()].index = -1;
-// 	node[K_t.Ncols()].value = '?';
+// 	node[K_t.cols()].index = -1;
+// 	node[K_t.cols()].value = '?';
 // 		
 // 	double res = svm_predict(svm_train_result_, node);
 // 	
 // 	RowVector rv(1);
 // 	rv << res;
 // 	
-// 	if(transform && y_transformations_.Ncols()!=0)
+// 	if(transform && y_transformations_.cols()!=0)
 // 	{
 // 		backTransformPrediction(rv);
 // 	}
@@ -181,7 +181,7 @@ void LibsvmModel::createParameters()
 // }
 
 
-void LibsvmModel::setParameters(vector<double>& v)
+void LibsvmModel::setParameters(Eigen::VectorXd& v)
 {
 	if (v.size() != 6)
 	{
@@ -201,14 +201,8 @@ void LibsvmModel::setParameters(vector<double>& v)
 }
 
 
-vector<double> LibsvmModel::getParameters() const
+Eigen::VectorXd LibsvmModel::getParameters() const
 {
-	vector<double> d;
-	d.push_back(use_nu_);
-	d.push_back(use_shrinking_);
-	d.push_back(nu_);
-	d.push_back(p_);
-	d.push_back(eps_);
-	d.push_back(C_);
+	Eigen::VectorXd d(6) << use_nu_, use_shrinking_, nu_, p_, eps_, C_;
 	return d;
 }

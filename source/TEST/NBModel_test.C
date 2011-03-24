@@ -21,7 +21,7 @@ CHECK(NB-model)
 	model.train();
 	model.validation->testInputData();
 	double quality=model.validation->getFitRes();
-	TEST_REAL_EQUAL(quality,1)
+	TEST_REAL_EQUAL(quality,1.0)
 RESULT
 
 

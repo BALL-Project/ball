@@ -49,7 +49,7 @@ namespace BALL
 
 		void SNBModel::train()
 		{
-			if (descriptor_matrix_.Ncols() == 0)
+			if (descriptor_matrix_.cols() == 0)
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Data must be read into the model before training!"); 
 			}
@@ -63,57 +63,57 @@ namespace BALL
 			}	
 
 			
-			mean_.resize(Y_.Ncols());
-			stddev_.resize(Y_.Ncols());
+			mean_.resize(Y_.cols());
+			stddev_.resize(Y_.cols());
 			no_substances_.clear();
 			no_substances_.resize(labels_.size(), 0);
-			for (int act = 0; act < Y_.Ncols(); act++)
+			for (int act = 0; act < Y_.cols(); act++)
 			{
 				// calculate mean and stddev of each feature for _each_ class
-				mean_[act].resize(labels_.size(), descriptor_matrix_.Ncols());
-				stddev_[act].resize(labels_.size(), descriptor_matrix_.Ncols());
-				mean_[act] = 0; stddev_[act] = 0;
+				mean_[act].resize(labels_.size(), descriptor_matrix_.cols());
+				stddev_[act].resize(labels_.size(), descriptor_matrix_.cols());
+				mean_[act].setZero(); stddev_[act].setZero();
 			
-				for (int i = 1; i <= descriptor_matrix_.Ncols(); i++)
+				for (int i = 0; i < descriptor_matrix_.cols(); i++)
 				{
 					vector<double> v0(0, 0);
-					v0.reserve(descriptor_matrix_.Nrows());
+					v0.reserve(descriptor_matrix_.rows());
 					vector<vector<double> > class_values(labels_.size(), v0); 
 					
 					// sort values of current feature into the respective vector (one for each class)
-					for (int j = 1; j <= descriptor_matrix_.Nrows(); j++)
+					for (int j = 0; j < descriptor_matrix_.rows(); j++)
 					{
-						uint index = label_to_pos.find((int)Y_(j, act+1))->second;
+						uint index = label_to_pos.find((int)Y_(j, act))->second;
 						class_values[index].push_back(descriptor_matrix_(j, i));
 						if (act == 0 && i == 1) no_substances_[index]++; 
 					}
 					
 					// calculate mean and stddev for current feature for all classes
-					for (uint j = 1; j <= labels_.size(); j++)
+					for (uint j = 0; j < labels_.size(); j++)
 					{
-						mean_[act](j, i) = Statistics::getMean(class_values[j-1]);
-						stddev_[act](j, i) = Statistics::getStddev(class_values[j-1], mean_[act](j, i));
+						mean_[act](j, i) = Statistics::getMean(class_values[j]);
+						stddev_[act](j, i) = Statistics::getStddev(class_values[j], mean_[act](j, i));
 					}
 				}
 			}
 		}
 
 
-		BALL::Vector<double> SNBModel::predict(const vector<double> & substance, bool transform)
+		Eigen::VectorXd SNBModel::predict(const vector<double> & substance, bool transform)
 		{
 			if (mean_.size() == 0)
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Model must be trained before it can predict the activitiy of substances!"); 
 			}
 			
-			Vector<double> s = getSubstanceVector(substance, transform); 
+			Eigen::VectorXd s = getSubstanceVector(substance, transform); 
 			
 			uint no_activities = mean_.size();
-			uint no_classes = mean_[0].Nrows();
-			uint no_features = mean_[0].Ncols();
+			uint no_classes = mean_[0].rows();
+			uint no_features = mean_[0].cols();
 			
-			Vector<double> result(no_activities);
-			result = 0;
+			Eigen::VectorXd result(no_activities);
+			result.setZero();
 			
 			for (uint act = 0; act < no_activities; act++)
 			{
@@ -124,12 +124,12 @@ namespace BALL
 				// calculate probability-density-function value for each given feature value
 				for (uint i = 0; i < no_features; i++)
 				{
-					double x = s(i+1);
+					double x = s[i];
 					for (uint j = 0; j < no_classes; j++)
 					{
-						double stddev = stddev_[act](j+1, i+1);
+						double stddev = stddev_[act](j, i);
 						if (stddev == 0) stddev = 0.000001; // zero is not allowed by the below equation
-						probabilities[i][j] = (1/(stddev*sqrt2Pi_)) * exp(-pow((x-mean_[act](j+1, i+1)), 2)/(2*stddev*stddev));
+						probabilities[i][j] = (1/(stddev*sqrt2Pi_)) * exp(-pow((x-mean_[act](j, i)), 2)/(2*stddev*stddev));
 						pdf_sums[i] += probabilities[i][j];
 					}
 				}
@@ -158,11 +158,11 @@ namespace BALL
 				
 				if (max >= second_best+min_prob_diff_)
 				{
-					result(act+1) = best_label;
+					result(act) = best_label;
 				}
 				else
 				{
-					result(act+1) = undef_act_class_id_;
+					result(act) = undef_act_class_id_;
 				}
 			}
 			
@@ -176,8 +176,8 @@ namespace BALL
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Model must be trained before a probability for a given feature value can be calculated!"); 
 			}
-			int no_features = mean_[0].Ncols();
-			int no_classes = mean_[0].Nrows();
+			int no_features = mean_[0].cols();
+			int no_classes = mean_[0].rows();
 			if (activitiy_index >= (int)stddev_.size() || feature_index >= no_features || activitiy_index < 0 || feature_index < 0)
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Index of bound for parameters given to SNBModel::calculateProbability() !"); 
@@ -208,7 +208,7 @@ namespace BALL
 			{
 				sel_features = data->getNoDescriptors();
 			}
-			if (mean_.size() > 0 && (uint)mean_[0].Ncols() == sel_features) return true; 
+			if (mean_.size() > 0 && (uint)mean_[0].cols() == sel_features) return true; 
 			return false;
 		}
 
@@ -254,10 +254,10 @@ namespace BALL
 			
 			bool centered_data = 0;
 			bool centered_y = 0;
-			if (descriptor_transformations_.Ncols() != 0)
+			if (descriptor_transformations_.cols() != 0)
 			{
 				centered_data = 1;
-				if (y_transformations_.Ncols() != 0)
+				if (y_transformations_.cols() != 0)
 				{
 					centered_y = 1;
 				}
@@ -270,7 +270,7 @@ namespace BALL
 			}
 			
 			int no_y = mean_.size();
-			if (no_y == 0) no_y = y_transformations_.Ncols(); // correct no because transformation information will have to by read anyway when reading this model later ...
+			if (no_y == 0) no_y = y_transformations_.cols(); // correct no because transformation information will have to by read anyway when reading this model later ...
 			
 			out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tno of classes\ttrained?"<<endl;
 			out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<no_y<<"\t"<<centered_data<<"\t"<<no_substances_.size()<<"\t"<<trained<<"\n\n";

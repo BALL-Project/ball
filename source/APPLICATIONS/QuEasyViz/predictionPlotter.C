@@ -130,7 +130,7 @@ namespace BALL
 				const QSARData* p_data;
 				if(pred_item_) p_data = data_;
 				else p_data = (*p_it)->getTestData();
-				const list<Vector<double> >* results = (*p_it)->results();
+				const list<Eigen::VectorXd >* results = (*p_it)->results();
 				if(results==0)
 				{
 					cout<<"Results must be read before plotting can be done!"<<endl;
@@ -152,7 +152,7 @@ namespace BALL
 				int i = 0;
 				const vector<string>* comp_names = p_data->getSubstanceNames();
 				
-				for (list<Vector<double> >::const_iterator it = results->begin(); it != results->end(); it++,i++)
+				for (list<Eigen::VectorXd >::const_iterator it = results->begin(); it != results->end(); it++,i++)
 				{
 					QwtPlotMarker* marker= new QwtPlotMarker;
 					marker->setSymbol(symbol);
@@ -211,7 +211,7 @@ namespace BALL
 		{
 			if(pred_item_==NULL) return;
 			
-			const list<Vector<double> >* results = pred_item_->results();
+			const list<Eigen::VectorXd >* results = pred_item_->results();
 			
 			if(results==0)
 			{
@@ -226,7 +226,7 @@ namespace BALL
 			
 			int i = 0;
 			const vector<string>* comp_names = data_->getSubstanceNames();
-			for (list<Vector<double> >::const_iterator it = results->begin(); it != results->end(); it++,i++)
+			for (list<Eigen::VectorXd >::const_iterator it = results->begin(); it != results->end(); it++,i++)
 			{
 				QwtPlotMarker* marker= new QwtPlotMarker;
 				marker->setSymbol(data_symbol);
@@ -309,7 +309,7 @@ namespace BALL
 				const QSARData* p_data;
 				if(pred_item_) p_data = data_;
 				else p_data = (*p_it)->getTestData();
-				const list<Vector<double> >* results = (*p_it)->results();
+				const list<Eigen::VectorXd >* results = (*p_it)->results();
 				if(results==0)
 				{
 					cout<<"Results must be read before plotting can be done!"<<endl;
@@ -322,7 +322,7 @@ namespace BALL
 				}
 				
 				int compound = 0;
-				for(list<Vector<double> >::const_iterator it = results->begin(); it != results->end(); it++,compound++)
+				for(list<Eigen::VectorXd >::const_iterator it = results->begin(); it != results->end(); it++,compound++)
 				{
 					int observed = (int)((*it)(selected_activity_+1));
 					vector<double>* e = p_data->getActivity(compound);

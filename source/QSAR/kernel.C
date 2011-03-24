@@ -84,7 +84,7 @@ namespace BALL
 		}
 
 
-		Kernel::Kernel(Model* m, Vector<double>& w)
+		Kernel::Kernel(Model* m, Eigen::VectorXd& w)
 		{
 			type = 5;
 			model_ = m;
@@ -99,13 +99,13 @@ namespace BALL
 			par1 = 2;
 			type = 5;
 			
-			const Matrix<double>* w = lm.getTrainingResult();
-			if (w->Nrows() == 0)
+			const Eigen::MatrixXd* w = lm.getTrainingResult();
+			if (w->rows() == 0)
 			{
 				throw Exception::KernelParameterError(__FILE__, __LINE__, "linear model_ must be trained before its weights_ can be used for a weighted kernel function!"); 
 			}
-			Vector<double> v(w->getSize());
-			for (int i = 1; i <= w->Nrows(); i++)
+			Eigen::VectorXd v(w->rows());
+			for (int i = 0; i < w->rows(); i++)
 			{
 				v(i) = (*w)(i, column);
 			}
@@ -118,20 +118,18 @@ namespace BALL
 		{
 		}
 
-		void Kernel::calculateKernelVector(Matrix<double>& K, Vector<double>& input, Matrix<double>& descriptor_matrix, Vector<double>& output)
+		void Kernel::calculateKernelVector(Eigen::MatrixXd& K, Eigen::VectorXd& input, Eigen::MatrixXd& descriptor_matrix, Eigen::RowVectorXd& output)
 		{
-			Matrix<double> M1(1, input.getSize());
-			M1.copyVectorToRow(input, 1);
-			Matrix<double> out;
+			Eigen::MatrixXd M1(1, input.rows());
+			M1.row(1) = input;
+			Eigen::MatrixXd out;
 			calculateKernelMatrix(K, M1, descriptor_matrix, out);
-			output.resize(out.getColumnCount());
-			output.setVectorType(0); // row-vector
-			out.copyRowToVector(output, 1);	
+			output = out.row(1);
 		}
 
-		void Kernel::calculateKernelMatrix(Matrix<double>& input, Matrix<double>& output)
+		void Kernel::calculateKernelMatrix(Eigen::MatrixXd& input, Eigen::MatrixXd& output)
 		{
-			output.resize(input.getColumnCount(), input.getColumnCount());
+			output.resize(input.cols(), input.cols());
 			
 			if (type == 1)
 			{
@@ -149,26 +147,26 @@ namespace BALL
 			{
 				calculateKernelMatrix4(input, output);
 			}
-			else if (type == 5 && weights_.getSize() != 0)
+			else if (type == 5 && weights_.rows() != 0)
 			{
 				calculateWeightedKernelMatrix(input, output); 
 				if (*model_->getType() == "GP"){return; }
 			}
 			
-			// center Matrix<double> output
-		//  	Matrix<double> I; I.setToIdentity(output.Ncols());
-		//  	Vector<double> iv(output.Ncols());
+			// center Eigen::MatrixXd output
+		//  	Eigen::MatrixXd I; I.setToIdentity(output.cols());
+		//  	Eigen::VectorXd iv(output.cols());
 		//  	iv = 1;
-		//  	double d = 1./output.Ncols();
+		//  	double d = 1./output.cols();
 		// 	
 		// 	I -= iv*d*iv.t();
 		//  	output = I*output*I;
 		}
 
 
-		void Kernel::calculateKernelMatrix(Matrix<double>& K, Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output)
+		void Kernel::calculateKernelMatrix(Eigen::MatrixXd& K, Eigen::MatrixXd& m1, Eigen::MatrixXd& m2, Eigen::MatrixXd& output)
 		{
-			output.resize(m1.getRowCount(), K.getColumnCount());
+			output.resize(m1.cols(), K.cols());
 				
 			if (type == 1)
 			{
@@ -186,18 +184,18 @@ namespace BALL
 			{
 				calculateKernelMatrix4(m1, m2, output);
 			}
-			else if (type == 5 && weights_.getSize() != 0)
+			else if (type == 5 && weights_.rows() != 0)
 			{
 				calculateWeightedKernelMatrix(m1, m2, output); 
 				if (*model_->getType() == "GP"){return; }
 			}
 			
-			// center Matrix<double> output
-		// 	Matrix<double> I; I.setToIdentity(output.Ncols());
-		//  	Vector<double> iv(m2.Nrows()); //dim: nx1 
+			// center Eigen::MatrixXd output
+		// 	Eigen::MatrixXd I; I.setToIdentity(output.cols());
+		//  	Eigen::VectorXd iv(m2.rows()); //dim: nx1 
 		// 	iv = 1;
 		// 			
-		//  	double d = 1./output.Ncols();
+		//  	double d = 1./output.cols();
 		// 	
 		// 	I -= iv*d*iv.t(); 
 		// 	output -= iv.t()*d*(iv.t()*K); 
@@ -376,13 +374,13 @@ namespace BALL
 
 
 
-		void Kernel::calculateKernelMatrix1(Matrix<double>& input, Matrix<double>& output) // polynomial kernel
+		void Kernel::calculateKernelMatrix1(Eigen::MatrixXd& input, Eigen::MatrixXd& output) // polynomial kernel
 		{
-			output.resize(input.Nrows(), input.Nrows());
+			output.resize(input.rows(), input.rows());
 			//output = 0;
-			for (int i = 1; i <= input.Nrows(); i++)
+			for (int i = 0; i < input.rows(); i++)
 			{
-				for (int j = i; j <= input.Nrows(); j++)
+				for (int j = i; j < input.rows(); j++)
 				{	
 					// get distance of the two current rows
 					double d = Statistics::distance(input, i, j, par1);
@@ -393,13 +391,13 @@ namespace BALL
 		}
 
 
-		void Kernel::calculateKernelMatrix1(Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output) // polynomial kernel
+		void Kernel::calculateKernelMatrix1(Eigen::MatrixXd& m1, Eigen::MatrixXd& m2, Eigen::MatrixXd& output) // polynomial kernel
 		{
-			output.resize(m1.Nrows(), m2.Nrows());
+			output.resize(m1.rows(), m2.rows());
 			//output = 0;
-			for (int i = 1; i <= m1.Nrows(); i++)
+			for (int i = 0; i < m1.rows(); i++)
 			{
-				for (int j = 1; j <= m2.Nrows(); j++)
+				for (int j = 0; j < m2.rows(); j++)
 				{	
 					output(i, j) = Statistics::distance(m1, m2, i, j, par1);
 				}	
@@ -407,12 +405,12 @@ namespace BALL
 		}
 
 
-		void Kernel::calculateKernelMatrix2(Matrix<double>& input, Matrix<double>& output) // radial basis function kernel
+		void Kernel::calculateKernelMatrix2(Eigen::MatrixXd& input, Eigen::MatrixXd& output) // radial basis function kernel
 		{
-			output.resize(input.Nrows(), input.Nrows());
-			for (int i = 1; i <= input.Nrows(); i++)
+			output.resize(input.rows(), input.rows());
+			for (int i = 0; i < input.rows(); i++)
 			{
-				for (int j = i; j <= input.Nrows(); j++)
+				for (int j = i; j < input.rows(); j++)
 				{	
 					// get distance of the two current rows
 					double d = exp(-par1*Statistics::euclDistance(input, input, i, j));
@@ -423,12 +421,12 @@ namespace BALL
 		}		
 				
 				
-		void Kernel::calculateKernelMatrix2(Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output) // radial basis function kernel
+		void Kernel::calculateKernelMatrix2(Eigen::MatrixXd& m1, Eigen::MatrixXd& m2, Eigen::MatrixXd& output) // radial basis function kernel
 		{
-			output.resize(m1.Nrows(), m2.Nrows());
-			for (int i = 1; i <= m1.Nrows(); i++)
+			output.resize(m1.rows(), m2.rows());
+			for (int i = 0; i < m1.rows(); i++)
 			{
-				for (int j = 1; j <= m2.Nrows(); j++)
+				for (int j = 0; j < m2.rows(); j++)
 				{	
 					output(i, j) = exp(-par1*Statistics::euclDistance(m1, m2, i, j));
 				}	
@@ -436,12 +434,12 @@ namespace BALL
 		}		
 				
 				
-		void Kernel::calculateKernelMatrix3(Matrix<double>& input, Matrix<double>& output) // sigmoid kernel
+		void Kernel::calculateKernelMatrix3(Eigen::MatrixXd& input, Eigen::MatrixXd& output) // sigmoid kernel
 		{
-			output.resize(input.Nrows(), input.Nrows());
-			for (int i = 1; i <= input.Nrows(); i++)
+			output.resize(input.rows(), input.rows());
+			for (int i = 0; i < input.rows(); i++)
 			{
-				for (int j = i; j <= input.Nrows(); j++)
+				for (int j = i; j < input.rows(); j++)
 				{	
 					double p = 1;
 					double d = tanh(par1*Statistics::distance(input, input, i, j, p)+par2);
@@ -452,12 +450,12 @@ namespace BALL
 		}		
 				
 				
-		void Kernel::calculateKernelMatrix3(Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output) // sigmoid kernel
+		void Kernel::calculateKernelMatrix3(Eigen::MatrixXd& m1, Eigen::MatrixXd& m2, Eigen::MatrixXd& output) // sigmoid kernel
 		{
-			output.resize(m1.Nrows(), m2.Nrows());
-			for (int i = 1; i <= m1.Nrows(); i++)
+			output.resize(m1.rows(), m2.rows());
+			for (int i = 0; i < m1.rows(); i++)
 			{
-				for (int j = 1; j <= m2.Nrows(); j++)
+				for (int j = 0; j < m2.rows(); j++)
 				{	
 					double p = 1;
 					output(i, j) = tanh(par1*Statistics::distance(m1, m2, i, j, p)+par2);
@@ -466,12 +464,12 @@ namespace BALL
 		}		
 				
 				
-		void Kernel::calculateKernelMatrix4(Matrix<double>& input, Matrix<double>& output) // individual kernel
+		void Kernel::calculateKernelMatrix4(Eigen::MatrixXd& input, Eigen::MatrixXd& output) // individual kernel
 		{
-			output.resize(input.Nrows(), input.Nrows());
-			for (int i = 1; i <= input.Nrows(); i++)
+			output.resize(input.rows(), input.rows());
+			for (int i = 0; i < input.rows(); i++)
 			{
-				for (int j = i; j <= input.Nrows(); j++)
+				for (int j = i; j < input.rows(); j++)
 				{	
 					double d = Statistics::distance(input, input, i, j, equation1, equation2);
 					output(i, j) = d;
@@ -481,12 +479,12 @@ namespace BALL
 		}		
 				
 				
-		void Kernel::calculateKernelMatrix4(Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output) // individual kernel
+		void Kernel::calculateKernelMatrix4(Eigen::MatrixXd& m1, Eigen::MatrixXd& m2, Eigen::MatrixXd& output) // individual kernel
 		{
-			output.resize(m1.Nrows(), m2.Nrows());
-			for (int i = 1; i <= m1.Nrows(); i++)
+			output.resize(m1.rows(), m2.rows());
+			for (int i = 0; i < m1.rows(); i++)
 			{
-				for (int j = 1; j <= m2.Nrows(); j++)
+				for (int j = 0; j < m2.rows(); j++)
 				{	
 					output(i, j) = Statistics::distance(m1, m2, i, j, equation1, equation2);
 				}	
@@ -494,22 +492,22 @@ namespace BALL
 		}		
 
 
-		void Kernel::calculateWeightedKernelMatrix(Matrix<double>& input, Matrix<double>& output)
+		void Kernel::calculateWeightedKernelMatrix(Eigen::MatrixXd& input, Eigen::MatrixXd& output)
 		{
-			if (input.getColumnCount() != weights_.getSize())
+			if (input.cols() != weights_.rows())
 			{
 				throw Exception::KernelParameterError(__FILE__, __LINE__, "Kernel.weights_ has wrong size! One weight for each column of the given matrix is needed in order to be able to calculate a weighted distance matrix!"); 
 			}
 			
-			output.resize(input.Nrows(), input.Nrows());
-			output = 0;
+			output.resize(input.rows(), input.rows());
+			output.setZero();
 			// for all substances, calculate their weighted cross-product
-			for (int i = 1; i <= input.Nrows(); i++)
+			for (int i = 0; i < input.rows(); i++)
 			{
-				for (int j = i; j <= input.Nrows(); j++)
+				for (int j = i; j < input.rows(); j++)
 				{
 					// get distance of the two current rows
-					for (int c = 1; c <= input.Ncols(); c++) 
+					for (int c = 0; c < input.cols(); c++) 
 					{
 						output(i, j) += weights_(c)*pow(input(i, c)-input(j, c), par1);
 					}
@@ -519,17 +517,17 @@ namespace BALL
 		}
 
 
-		void Kernel::calculateWeightedKernelMatrix(Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output)
+		void Kernel::calculateWeightedKernelMatrix(Eigen::MatrixXd& m1, Eigen::MatrixXd& m2, Eigen::MatrixXd& output)
 		{
-			output.resize(m1.Nrows(), m2.Nrows());
-			output = 0;
+			output.resize(m1.rows(), m2.rows());
+			output.setZero();
 			// for all substances, calculate their weighted cross-product
-			for (int i = 1; i <= m1.Nrows(); i++)
+			for (int i = 0; i < m1.rows(); i++)
 			{
-				for (int j = 1; j <= m2.Nrows(); j++)
+				for (int j = 0; j < m2.rows(); j++)
 				{
 					// get distance of the two current rows
-					for (int c = 1; c <= m1.Ncols(); c++) 
+					for (int c = 0; c < m1.cols(); c++) 
 					{
 						output(i, j) += weights_(c)*pow(m1(i, c)-m2(j, c), par1);
 					}

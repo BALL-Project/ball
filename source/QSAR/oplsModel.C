@@ -43,7 +43,7 @@ namespace BALL
 
 		void OPLSModel::train()
 		{
-			Matrix<double> X = descriptor_matrix_;
+			Eigen::MatrixXd X = descriptor_matrix_;
 			
 			
 		// 	double d[] = {-1, -1, 1, -1, -1, 1, 1, 1};
@@ -53,18 +53,18 @@ namespace BALL
 		// 	Y_.ReSize(4, 1);
 		// 	double e[] = {2, 2, 0, -4};
 		// 	Y_ << e;
-			int cols = descriptor_matrix_.Ncols();
+			int cols = descriptor_matrix_.cols();
 			
-			Vector<double> w; w.setVectorType(1); // column-vector
-			Vector<double> t; t.setVectorType(1); // column-vector
-			Vector<double> c; c.setVectorType(1); // column-vector
-			Vector<double> u(X.Nrows());  u.setVectorType(1); // column-vector
+			Eigen::VectorXd w;
+			Eigen::VectorXd t;
+			Eigen::VectorXd c;
+			Eigen::VectorXd u(X.rows());
 			
-			for (uint i = 1; i <= u.getSize(); i++)
+			for (uint i = 1; i <= u.rows(); i++)
 			{
 				u(i) = Y_(i, 1);
 			}
-			Vector<double> u_old; u_old.setVectorType(1); // column-vector
+			Eigen::VectorXd u_old;
 			//w = X.t()*u / Statistics::scalarProduct(u);
 			//w = w / Statistics::euclNorm(w);	
 			
@@ -76,17 +76,17 @@ namespace BALL
 			if (cols-1 < no_ortho_components_) orthogonal_components_to_create = cols-1; 
 			
 			W_ortho_.resize(cols, orthogonal_components_to_create);
-			T_ortho_.resize(descriptor_matrix_.Nrows(), orthogonal_components_to_create);
+			T_ortho_.resize(descriptor_matrix_.rows(), orthogonal_components_to_create);
 
 			for (uint j = 0; j < orthogonal_components_to_create; j++)
 			{	
 				for (int i = 0; ; i++)
 				{
-					w = X.t()*u / Statistics::scalarProduct(u);
+					w = X.transpose()*u / Statistics::scalarProduct(u);
 					w = w / Statistics::euclNorm(w);	
 					
 					t = X*w ;
-					c = Y_.t()*t / Statistics::scalarProduct(t);
+					c = Y_.transpose()*t / Statistics::scalarProduct(t);
 					u_old = u;
 					u = Y_*c / Statistics::scalarProduct(c);
 					
@@ -100,19 +100,17 @@ namespace BALL
 					}
 				}
 			
-				Vector<double> p = X.t()*t / Statistics::scalarProduct(t);
-				Vector<double> w_ortho = w*((w.t()*p) / (w.t()*w));
+				Eigen::VectorXd p = X.transpose()*t / Statistics::scalarProduct(t);
+				Eigen::VectorXd w_ortho = w*((w.transpose()*p) / (w.transpose()*w));
 				w_ortho = p-w_ortho;
 				w_ortho = w_ortho / Statistics::euclNorm(w_ortho);
-				Vector<double> t_ortho = X*w_ortho / Statistics::scalarProduct(w_ortho); 
-				Vector<double> p_ortho = X.t()*t_ortho / Statistics::scalarProduct(t_ortho);
-				
-				Matrix<double> TP; 
-				t_ortho.dotProduct(p_ortho, TP); // t.p.t() -> dim. nxm
-				X -= TP; 
-				
-				W_ortho_.copyVectorToColumn(w_ortho, j+1);
-				T_ortho_.copyVectorToColumn(t_ortho, j+1);
+				Eigen::VectorXd t_ortho = X*w_ortho / Statistics::scalarProduct(w_ortho); 
+				Eigen::VectorXd p_ortho = X.transpose()*t_ortho / Statistics::scalarProduct(t_ortho);
+
+				X -= t_ortho * p_ortho.transpose();
+	
+				W_ortho_.col(j+1) = w_ortho;
+				T_ortho_.col(j+1) = t_ortho;
 			}
 				
 			descriptor_matrix_ = X;
@@ -120,13 +118,13 @@ namespace BALL
 		}
 
 
-		const BALL::Matrix<double>* OPLSModel::getTOrtho()
+		const Eigen::MatrixXd* OPLSModel::getTOrtho()
 		{ 
 			return &T_ortho_;
 		}
 
 
-		const BALL::Matrix<double>* OPLSModel::getWOrtho()
+		const Eigen::MatrixXd* OPLSModel::getWOrtho()
 		{
 			return &W_ortho_;
 		}
@@ -242,7 +240,7 @@ namespace BALL
 
 		// RowVector OPLSModel::predict(const vector<double> & substance, bool transform)
 		// {
-		// 	if (training_result_.Ncols() == 0)
+		// 	if (training_result_.cols() == 0)
 		// 	{
 		// 		throw Exception::InconsistentUsage(__FILE__, __LINE__, "Model must be trained before it can predict the activitiy of substances!"); 
 		// 	}
@@ -254,7 +252,7 @@ namespace BALL
 		// 	
 		// 	RowVector res = v*training_result_;
 		// 
-		// 	if (transform && y_transformations_.Ncols() != 0)
+		// 	if (transform && y_transformations_.cols() != 0)
 		// 	{
 		// 		backTransformPrediction(res); 
 		// 	}

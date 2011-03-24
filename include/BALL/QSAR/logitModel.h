@@ -45,6 +45,8 @@ namespace BALL{
 				LogitModel(const QSARData& q);
 
 				~LogitModel();
+
+				EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 				//@}
 				
 				
@@ -53,7 +55,7 @@ namespace BALL{
 				//@{
 				void train();
 				
-				Vector<double> predict(const vector<double>& substance, bool transform);
+				Eigen::VectorXd predict(const vector<double>& substance, bool transform);
 				
 				void saveToFile(string filename);
 				
@@ -65,7 +67,7 @@ namespace BALL{
 				/** @name Attributes
 				 */
 				//@{
-				Matrix<double> training_result_;
+				Eigen::MatrixXd training_result_;
 				//@}
 				
 		};

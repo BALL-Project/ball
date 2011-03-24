@@ -52,6 +52,8 @@ namespace BALL
 				
 				~RegressionModel();
 
+				EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
 				virtual void operator=(const RegressionModel& m);
 				//@}
 				
@@ -63,7 +65,7 @@ namespace BALL
 				RegressionValidation* validation;
 				
 				/** returns a const pointer to the matrix containing the coefficients obtained by Model.train() */
-				const BALL::Matrix<double>* getTrainingResult() const; 
+				const Eigen::MatrixXd* getTrainingResult() const; 
 				
 				virtual void saveToFile(string filename);
 				
@@ -77,7 +79,7 @@ namespace BALL
 				/** @name Attributes
 				 */
 				//@{
-				/** BALL::Matrix<double> containing the coefficients obtained by Model.train().\n
+				/** Eigen::MatrixXd containing the coefficients obtained by Model.train().\n
 				raining_result will have the following dimensions for the different types of models, with m=no of descriptors and c=no of modelled activities (=no of columns of Model.Y) : \n
 				LinearModel : mxc \n
 				KernelModel : nxc \n
@@ -85,10 +87,10 @@ namespace BALL
 				FitModel : mxc \n
 				SVMModel : m x (c*no of classes) \n
 				SVRModel : m x (c*no of classes)    */
-				BALL::Matrix<double> training_result_;
+				Eigen::MatrixXd training_result_;
 				
 				// RowVector holding the regression constants (one value for each feature)
-				Vector<double> offsets_;
+				Eigen::RowVectorXd offsets_;
 				//@}
 				
 				

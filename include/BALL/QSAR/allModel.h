@@ -53,7 +53,7 @@ namespace BALL
 				//@{
 				void setKw(double kw);
 				
-				virtual Vector<double> predict(const vector<double>& substance, bool transform=1);
+				virtual Eigen::VectorXd predict(const vector<double>& substance, bool transform=1);
 				
 				/** automated lazy learning does not have a seperate training step */
 				void train(){};
@@ -79,16 +79,16 @@ namespace BALL
 				/** @name Accessors
 				 */
 				//@{
-				virtual void calculateWeights(BALL::Matrix<double>& dist, BALL::Vector<double>& w);
+				virtual void calculateWeights(Eigen::MatrixXd& dist, Eigen::VectorXd& w);
 				
-				/** calculates weighted BALL::Matrix<double> X^T*X  */
-				void calculateXX(BALL::Vector<double>& w, BALL::Matrix<double>& res);
+				/** calculates weighted Eigen::MatrixXd X^T*X  */
+				void calculateXX(Eigen::VectorXd& w, Eigen::MatrixXd& res);
 			
-				/** calculates weighted BALL::Matrix<double> X^T*Y  */
-				void calculateXY(BALL::Vector<double>& w, BALL::Matrix<double>& res);
+				/** calculates weighted Eigen::MatrixXd X^T*Y  */
+				void calculateXY(Eigen::VectorXd& w, Eigen::MatrixXd& res);
 				
-				/** calculates pairwise euclidean distance between all substances of m1 and m2 and saves them to BALL::Matrix<double> output */
-				void calculateEuclDistanceMatrix(BALL::Matrix<double>& m1, BALL::Matrix<double>& m2, BALL::Matrix<double>& output);
+				/** calculates pairwise euclidean distance between all substances of m1 and m2 and saves them to Eigen::MatrixXd output */
+				void calculateEuclDistanceMatrix(Eigen::MatrixXd& m1, Eigen::MatrixXd& m2, Eigen::MatrixXd& output);
 				//@}
 				
 				

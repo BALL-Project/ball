@@ -26,6 +26,10 @@
 #ifndef REGVALIDATION
 #define REGVALIDATION
 
+#ifndef BALL_QSAR_COMMON_H
+	#include <BALL/QSAR/common.h>
+#endif
+
 #ifndef QSARDATA
 #include <BALL/QSAR/QSARData.h>
 #endif
@@ -37,12 +41,6 @@
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_cdf.h>
 #include <iterator>
-
-
-#include <BALL/MATHS/LINALG/matrix.h>
-#include <BALL/MATHS/LINALG/vector.h>
-
-
 
 namespace BALL
 {	
@@ -61,6 +59,8 @@ namespace BALL
 				RegressionValidation(RegressionModel* m);
 
 				~RegressionValidation();
+
+				EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 				//@}
 				
 				
@@ -70,13 +70,13 @@ namespace BALL
 				/** starts k-fold cross validation \n
 				@param k no of cross validation folds
 				@param restore if restore==1, Model.descriptor_matrix and RegressionModel.training_result is restored after cross validation */
-				void crossValidation(int k, bool restore=1);
+				void crossValidation(int k, bool restore=true);
 				
 				/** starts k-fold cross validation \n
 				@param k no of cross validation folds
 				@param restore if restore==1, Model.descriptor_matrix and RegressionModel.training_result is restored after cross validation 
 				@param results pointer to vector that should take all matrices RegressionModel.training_result produced during this cross validation run */
-				void crossValidation(int k, vector<BALL::Matrix<double> >* results, bool restore=1);
+				void crossValidation(int k, MatrixVector* results, bool restore=true);
 				
 				
 				/** starts bootstrapping with k samples \n
@@ -88,14 +88,14 @@ namespace BALL
 				@param k no of bootstrap samples
 				@param restore if restore==1, Model.descriptor_matrix and RegressionModel.training_result is restored after bootstrapping
 				@param results pointer to vector that should take all matrices RegressionModel.training_result produced during this bootstrapping */
-				void bootstrap(int k, vector<BALL::Matrix<double> >* results, bool restore=1);
+				void bootstrap(int k, MatrixVector* results, bool restore=true);
 				
-				void bootstrap1(int k, vector<BALL::Matrix<double> >* results, bool restore=1);
+				void bootstrap1(int k, MatrixVector* results, bool restore=true);
 				
 				/** Y randomization test \n
 				Randomizes all columns of model.Y, trains the model, runs crossValidation and testInputData and saves the resulting R2 and Q2 value to a matrix with 2 columns; the R2 values makeing up the first colum, the Q2 value the second.
 				@param runs this is repeated as often as specified by 'runs' */
-				const BALL::Matrix<double>& yRandomizationTest(int runs, int k);
+				const Eigen::MatrixXd& yRandomizationTest(int runs, int k);
 				
 				/** get the Q^2 value.\n
 				If no cross-validation has been done yet, -1 is returned */
@@ -138,13 +138,13 @@ namespace BALL
 				void calculateCoefficientStdErrors(int k, bool b=1);
 			
 				/** returns a const pointer to the matrix containing the standart deviations of all predicted coefficients */
-				const BALL::Matrix<double>* getCoefficientStdErrors();
+				const Eigen::MatrixXd* getCoefficientStdErrors();
 				
-				void setCoefficientStdErrors(const BALL::Matrix<double>* stddev);
+				void setCoefficientStdErrors(const Eigen::MatrixXd* stddev);
 				
 				void saveToFile(string filename) const;
 				
-				void saveToFile(string filename, const double& r2, const double& q2, const Matrix<double>& coefficient_stddev, const Matrix<double>& yRand_results) const;
+				void saveToFile(string filename, const double& r2, const double& q2, const Eigen::MatrixXd& coefficient_stddev, const Eigen::MatrixXd& yRand_results) const;
 				
 				void readFromFile(string filename);
 				//@}
@@ -154,13 +154,15 @@ namespace BALL
 				
 				struct BackupData
 				{
-					Matrix<double> descriptor_matrix;
-					Matrix<double> training_result;
-					Matrix<double> Y;
-					Matrix<double> K;
-					Matrix<double> latent_variables;
-					Matrix<double> loadings;
-					Matrix<double> weights;
+					EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
+					Eigen::MatrixXd descriptor_matrix;
+					Eigen::MatrixXd training_result;
+					Eigen::MatrixXd Y;
+					Eigen::MatrixXd K;
+					Eigen::MatrixXd latent_variables;
+					Eigen::MatrixXd loadings;
+					Eigen::MatrixXd weights;
 				};
 				
 				
@@ -213,7 +215,7 @@ namespace BALL
 				void calculateQOF();
 				
 				/** contains the standart deviations of all predicted coefficients in one column for each modelled activity */
-				BALL::Matrix<double> coefficient_stderr_;
+				Eigen::MatrixXd coefficient_stderr_;
 				
 				/** pointer to the regression model, which the object of this class should test */
 				RegressionModel* regr_model_;

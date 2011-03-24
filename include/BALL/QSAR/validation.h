@@ -51,6 +51,8 @@ namespace BALL
 				Validation(Model* m);
 
 				virtual ~Validation();
+
+				EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 				//@}
 				
 				
@@ -73,7 +75,7 @@ namespace BALL
 				
 				/** return the result of the previous response permutation test .\n
 				The return matrix is empty if no such test has been run yet */	
-				const Matrix<double>& getYRandResults() const;
+				const Eigen::MatrixXd& getYRandResults() const;
 				
 				/** Fetches input data from QSARData and tests the current (unchanged) model with all these new substances (without cross-validation!). \n
 				@param transform if transform==1, the test data is transformed in the same way that the training data was transformed before predicting activities. \n
@@ -82,7 +84,7 @@ namespace BALL
 				
 				virtual void bootstrap(int k,  bool restore=1) = 0;
 				
-				virtual const Matrix<double>& yRandomizationTest(int runs, int k) = 0;
+				virtual const Eigen::MatrixXd& yRandomizationTest(int runs, int k) = 0;
 				
 				/** select the desired statistic to be used for validating the models
 				@param s if (s==1) R^2 and Q^2 are used \n
@@ -124,7 +126,7 @@ namespace BALL
 				vector<vector<double> > test_substances_;
 				
 				/** contains the experimentally determined results (activities) for all current test-substances in one column for each activity */
-				Matrix<double> test_Y_;
+				Eigen::MatrixXd test_Y_;
 				
 				/** contains the names of all current test-substances */
 				vector<string> substances_names_;
@@ -136,7 +138,7 @@ namespace BALL
 				/** the selected validation statistic */
 				int validation_statistic_;
 				
-				Matrix<double> yRand_results_;
+				Eigen::MatrixXd yRand_results_;
 				//@}
 			
 		};

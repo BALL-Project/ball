@@ -56,6 +56,8 @@ namespace BALL
 				PLSModel(const QSARData& q);
 
 				~PLSModel();
+
+				EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 				//@}
 				
 				
@@ -76,7 +78,7 @@ namespace BALL
 				int getNoComponents();
 				
 				/** returns a pointer to the  PLS Y-scores matrix U */
-				const Matrix<double>* getU();
+				const Eigen::MatrixXd* getU();
 				
 				void setParameters(vector<double>& v);
 				
@@ -89,7 +91,7 @@ namespace BALL
 				 */
 				//@{
 				
-				Matrix<double> U_;
+				Eigen::MatrixXd U_;
 	
 				int no_components_;
 				//@}

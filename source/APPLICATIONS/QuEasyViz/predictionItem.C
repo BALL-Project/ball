@@ -145,7 +145,7 @@ namespace BALL
 			for(unsigned int i=0; i<test_data_item_->data()->getNoSubstances();i++)
 			{
 				vector<double>* substance = test_data_item_->data()->getSubstance(i);
-				Vector<double> res = model_item_->model()->predict(*substance,1);
+				Eigen::VectorXd res = model_item_->model()->predict(*substance,1);
 				results_.push_back(res);
 				delete substance;
 			}
@@ -173,7 +173,7 @@ namespace BALL
 			return model_item_;
 		}
 
-		const list<BALL::Vector<double> >* PredictionItem::results()
+		const list<Eigen::VectorXd >* PredictionItem::results()
 		{
 			return &results_;
 		}
@@ -280,7 +280,7 @@ namespace BALL
 					
 			out<<"expected_values = "<<print_expected<<endl;
 			out<<"dimensions = "<<results_.size()<<" "<<no_cols<<endl;
-			list<Vector<double> >::const_iterator it=results_.begin();
+			list<Eigen::VectorXd >::const_iterator it=results_.begin();
 			for(uint i=0; it!=results_.end(); i++, it++)
 			{	
 				vector<double>* e = 0;
@@ -345,7 +345,7 @@ namespace BALL
 			if(expected_values) no_act /= 2;
 			for(uint i=1;i<=no_rows;i++)
 			{
-				Vector<double> v(no_act);
+				Eigen::VectorXd v(no_act);
 				int act=1;
 				for(uint j=1; j<=no_cols;j++)
 				{

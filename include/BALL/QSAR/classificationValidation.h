@@ -54,6 +54,8 @@ namespace BALL
 				/** constructor
 				@param m pointer to the regression model, which the object of this class should test */
 				ClassificationValidation(ClassificationModel* m);
+
+				EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 				//@}
 				
 				
@@ -71,19 +73,19 @@ namespace BALL
 				void testInputData(bool transform=0);
 				
 				/** return pointer to the matrix containing the number of TP, FP, TN, FN in one column for each class  */
-				const BALL::Matrix<double>* getConfusionMatrix();
+				const Eigen::MatrixXd* getConfusionMatrix();
 				
 				/** returns a RowVector holding the one value contituting the validation result for each class if "average accuracy" or "average MCC" is chosen (see selectStat()). */
-				const BALL::Vector<double>* getClassResults();
+				const Eigen::VectorXd* getClassResults();
 				
 				/** starts bootstrapping with k samples \n
 				@param k no of bootstrap samples */
 				void bootstrap(int k, bool restore=1);
 				
 				/** Y randomization test \n
-				Randomizes all columns of model.Y, trains the model, runs crossValidation and testInputData and saves the resulting accuracy_input_test and accuracy_cv value to a vector, where BALL::Matrix<double>(i,0)=accuracy_input_test, BALL::Matrix<double>(i,1)=accuracy_cv \n
+				Randomizes all columns of model.Y, trains the model, runs crossValidation and testInputData and saves the resulting accuracy_input_test and accuracy_cv value to a vector, where Eigen::MatrixXd(i,0)=accuracy_input_test, Eigen::MatrixXd(i,1)=accuracy_cv \n
 				@param runs this is repeated as often as specified by 'runs' */
-				const BALL::Matrix<double>& yRandomizationTest(int runs, int k);
+				const Eigen::MatrixXd& yRandomizationTest(int runs, int k);
 				
 				/** get average accuracy value as determined after cross validation */
 				double getAccuracyCV();
@@ -133,10 +135,10 @@ namespace BALL
 				 */
 				//@{
 				/** matrix containing the number of TP, FP, FN, TN in one column for each class  */
-				BALL::Matrix<double> confusion_matrix_;
+				Eigen::MatrixXd confusion_matrix_;
 				
 				/** RowVector holding the one value contituting the validation result for each class if "average sensitivity" or "average MCC" is chosen (see selectStat()). */
-				Vector<double> class_results_;
+				Eigen::VectorXd class_results_;
 			
 				double quality_;
 				

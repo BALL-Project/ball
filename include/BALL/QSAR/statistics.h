@@ -28,11 +28,11 @@
 
 #include <vector>
 #include <iostream>
-#include <BALL/MATHS/LINALG/matrix.h>
 #include <cmath>
 #include <BALL/MATHS/parsedFunction.h>
 
 #include <set>
+#include <Eigen/Core>
 
 namespace BALL 
 {
@@ -109,52 +109,52 @@ namespace BALL
 				
 				
 				/** scales each column of the given newmat-matrix to a variance of 1 */
-				static void centering(BALL::Matrix<double>& m);
+				static void centering(Eigen::MatrixXd& m);
 	
 				/** scales column col of the given newmat-matrix m to a variance of 1 */
-				static void centering(BALL::Matrix<double>& m, int col);
+				static void centering(Eigen::MatrixXd& m, int col);
 	
 				/** calculates mean of column col of newmat-matrix m */
-				static double getMean(const BALL::Matrix<double>& m, int col);
+				static double getMean(const Eigen::MatrixXd& m, int col);
 	
 				/** calculates variance of column col of newmat-matrix m */
-				static double getVariance(const BALL::Matrix<double>& m, int col, double mean=-1);
+				static double getVariance(const Eigen::MatrixXd& m, int col, double mean=-1);
 				
 				/** calculated standard deviation of column col of matrix m */
-				static double getStddev(const BALL::Matrix<double>& m, int col, double mean=-1);
+				static double getStddev(const Eigen::MatrixXd& m, int col, double mean=-1);
 				
 				/** calculates covariance between columns col1 and col2 of matrix m*/
-				static double getCovariance(const BALL::Matrix<double>& m, int col1, int col2, double mean1=-1, double mean2=-1);
+				static double getCovariance(const Eigen::MatrixXd& m, int col1, int col2, double mean1=-1, double mean2=-1);
 				
 				/** calculates the sum-of-square of column col of newmat-matrix m */
-				static double sq(const BALL::Matrix<double>& m, int col, double mean=-1);
+				static double sq(const Eigen::MatrixXd& m, int col, double mean=-1);
 				
 				/** calculates polynomial distance between two rows of newmat-matrix m */
-				static double distance(const BALL::Matrix<double>& m, int& row1, int& row2, double& p);
-				
-				/** calculates polynomial distance between row1 of BALL::Matrix<double> m1 and row2 of BALL::Matrix<double> m2.\n
+				static double distance(const Eigen::MatrixXd& m, int& row1, int& row2, double& p);
+			
+				/** calculates polynomial distance between row1 of Eigen::MatrixXd m1 and row2 of Eigen::MatrixXd m2.\n
 				m1 and m2 must therefore have the same number of columns.*/
-				static double distance(const BALL::Matrix<double>& m1, const BALL::Matrix<double>& m2, int& row1, int& row2, double& p);
+				static double distance(const Eigen::MatrixXd& m1, const Eigen::MatrixXd& m2, int& row1, int& row2, double& p);
 
 				
-				/** calculates the distance between row1 of BALL::Matrix<double> m1 and row2 of BALL::Matrix<double> m2 according to the given equations 
+				/** calculates the distance between row1 of Eigen::MatrixXd m1 and row2 of Eigen::MatrixXd m2 according to the given equations 
 				@param f equation f, determines how elements "x1" of row1 are charged against elements "x2" of row2. Use "x1" and "x2" in the String, e.g. "x1*x2"
 				@param g equation g, determines what is to be done with the calculated "sum" over all elements (use "sum" in String); e.g. "sum^0.5" => euclidean distance if f=="x1*x2" */
-				static double distance(const BALL::Matrix<double>& m1, const BALL::Matrix<double>& m2, int& row1, int& row2, String& f, String& g);
+				static double distance(const Eigen::MatrixXd& m1, const Eigen::MatrixXd& m2, int& row1, int& row2, String& f, String& g);
 				
 				
-				/** calculates euclidean distance between row1 of BALL::Matrix<double> m1 and row2 of BALL::Matrix<double> m2 as \f$ sqrt(\sum_i (row1_i-row2_i)^2) \f$\n
+				/** calculates euclidean distance between row1 of Eigen::MatrixXd m1 and row2 of Eigen::MatrixXd m2 as \f$ sqrt(\sum_i (row1_i-row2_i)^2) \f$\n
 				m1 and m2 must therefore have the same number of columns.*/
-				static double euclDistance(const BALL::Matrix<double>& m1, const BALL::Matrix<double>& m2, int row1, int row2);
+				static double euclDistance(const Eigen::MatrixXd& m1, const Eigen::MatrixXd& m2, int row1, int row2);
 				
 				/** Returns the euclidic norm of a ColumnVector as \f$ sqrt(\sum_i cv_i^2) \f$*/
-				static double euclNorm(const Vector<double>& cv);
+				static double euclNorm(const Eigen::VectorXd& cv);
 		
 				/** Returns the euclidician difference between two ColumnVectors as \f$ sqrt(\sum_i (cv1_i-cv2_i)^2) \f$ */
-				static double euclDistance(const Vector<double>& c1, const Vector<double>& c2);
+				static double euclDistance(const Eigen::VectorXd& c1, const Eigen::VectorXd& c2);
 				
 				/** returns the scalar product \f$ cv^T*cv = \sum_i cv_i^2 \f$ */
-				static double scalarProduct(const Vector<double>& cv);
+				static double scalarProduct(const Eigen::VectorXd& cv);
 				//@}
 		
 		};

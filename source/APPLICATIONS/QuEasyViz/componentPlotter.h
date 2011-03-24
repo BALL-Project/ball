@@ -42,7 +42,7 @@ namespace BALL
 			private:
 				void plot(bool zoom);
 				
-				const Matrix<double>* component_matrix_;
+				const Eigen::MatrixXd* component_matrix_;
 				
 				ModelItem* model_item_;
 				

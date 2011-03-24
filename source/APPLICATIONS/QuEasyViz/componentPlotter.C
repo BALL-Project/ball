@@ -251,7 +251,7 @@ namespace BALL
 			QString s1 = component_one_combobox_->itemText(component_one_combobox_->currentIndex());
 			QString s2 = component_two_combobox_->itemText(component_two_combobox_->currentIndex());
 			LatentVariableModel* lv_model = dynamic_cast<LatentVariableModel*>(model_item_->model());
-			const Matrix<double>* weights = lv_model->getWeights();
+			const Eigen::MatrixXd* weights = lv_model->getWeights();
 			
 			if(!plot_loadings_)
 			{

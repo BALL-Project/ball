@@ -19,13 +19,13 @@ CHECK(KPCR-model)
 	KPCRModel model(data,2,0.005);
 	model.readTrainingData();
 	model.train();
-	const Matrix<double>* res = model.getTrainingResult();
-	TEST_EQUAL(res->getRowCount(),5)
-	TEST_REAL_EQUAL((*res)[0],-23.62431)
-	TEST_REAL_EQUAL((*res)[1],14.25058)
-	TEST_REAL_EQUAL((*res)[2],1.784667)
-	TEST_REAL_EQUAL((*res)[3],37.10245)
-	TEST_REAL_EQUAL((*res)[4],-23.62431)
+	const Eigen::MatrixXd* res = model.getTrainingResult();
+	TEST_EQUAL(res->rows(),5)
+	TEST_REAL_EQUAL((*res)(0,0),-23.62431)
+	TEST_REAL_EQUAL((*res)(1,0),14.25058)
+	TEST_REAL_EQUAL((*res)(2,0),1.784667)
+	TEST_REAL_EQUAL((*res)(3,0),37.10245)
+	TEST_REAL_EQUAL((*res)(4,0),-23.62431)
 RESULT
 
 

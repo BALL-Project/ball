@@ -79,9 +79,9 @@ namespace BALL
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Data must be fetched from input-files by QSARData before cross-validation can be done!"); 
 			}
 			
-			Matrix<double> desc_backup;
-			//Matrix<double> res_backup;
-			Matrix<double> y_backup;
+			Eigen::MatrixXd desc_backup;
+			//Eigen::MatrixXd res_backup;
+			Eigen::MatrixXd y_backup;
 			if (restore)
 			{
 				desc_backup = model_->descriptor_matrix_; // save matrices in order in restore them after cross-validation
@@ -97,7 +97,7 @@ namespace BALL
 			}
 			double average_accuracy = 0;
 			class_results_.resize(clas_model->labels_.size());
-			class_results_ = 0;
+			class_results_.setZero();
 			
 			// test k times
 			for (int i = 0; i < k; i++)
@@ -149,49 +149,50 @@ namespace BALL
 		void ClassificationValidation::testAllSubstances(bool transform)
 		{	
 			confusion_matrix_.resize(4, clas_model->labels_.size());
-			confusion_matrix_ = 0;
+			confusion_matrix_.setZero();
 			class_results_.resize(clas_model->labels_.size());
-			class_results_ = 0;
+			class_results_.setZero();
 			
 			for (int i = 0; i < (int)test_substances_.size(); i++) // for all substances in test-data
 			{
-				Vector<double> rv = model_->predict(test_substances_[i], transform); 
-				
-				for (int c = 1; c <= test_Y_.Ncols(); c++) // for all modelled activities
+				Eigen::VectorXd rv = model_->predict(test_substances_[i], transform); 
+
+				for (int c = 0; c < test_Y_.cols(); c++) // for all modelled activities
 				{			
-					int y_ic = static_cast<int>(test_Y_(i+1, c)); 
+					int y_ic = static_cast<int>(test_Y_(i, c)); 
 					int rv_ic = static_cast<int>(rv(c));
 					
-					for (int k = 1; k <= confusion_matrix_.Ncols(); k++)   // set TP, FP, TN, FN for all classes
+					for (int k = 0; k < confusion_matrix_.cols(); k++)   // set TP, FP, TN, FN for all classes
 					{				
-						if ((clas_model->labels_)[k-1] == y_ic)
+						if ((clas_model->labels_)[k] == y_ic)
 						{
 							if (y_ic == rv_ic)
 							{
-								confusion_matrix_(1, k)++;  // TP for class k
+								confusion_matrix_(0, k)++;  // TP for class k
 							}
 							else
 							{	
-								confusion_matrix_(4, k)++; // FN for class k
+								confusion_matrix_(3, k)++; // FN for class k
 							}
 						}
 						else
 						{
-							if (clas_model->labels_[k-1] != rv_ic)
+							if (clas_model->labels_[k] != rv_ic)
 							{
-								confusion_matrix_(3, k)++;  // TN for class k
+								confusion_matrix_(2, k)++;  // TN for class k
 							}
 							else
 							{
-								confusion_matrix_(2, k)++; // FP for class k
+								confusion_matrix_(1, k)++; // FP for class k
 							}
 						}
 					}
+
 				}
 				
 				
 			}
-			
+
 			(this->*qualCalculation)();
 		}
 
@@ -203,7 +204,7 @@ namespace BALL
 			test_Y_.resize(lines, model_->data->Y_.size());
 			
 			class_results_.resize(clas_model->labels_.size());
-			class_results_ = 0;
+			class_results_.setZero();
 			
 			bool back_transform = 0; 
 			if (transform && model_->data->descriptor_transformations_.size() > 0)
@@ -228,9 +229,9 @@ namespace BALL
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Data must be fetched from input-files by QSARData before bootstrapping can be done!"); 
 			}
-			Matrix<double> desc_backup;
-			Matrix<double> res_backup;
-			Matrix<double> y_backup;
+			Eigen::MatrixXd desc_backup;
+			Eigen::MatrixXd res_backup;
+			Eigen::MatrixXd y_backup;
 			if (restore)
 			{
 				desc_backup = model_->descriptor_matrix_; // save matrices in order in restore them after cross-validation
@@ -239,7 +240,7 @@ namespace BALL
 			}
 
 			class_results_.resize(clas_model->labels_.size());
-			class_results_ = 0;
+			class_results_.setZero();
 			quality_cv_ = 0;
 			int N = model_->data->descriptor_matrix_[0].size();
 			int no_descriptors = model_->data->descriptor_matrix_.size();
@@ -254,17 +255,17 @@ namespace BALL
 			
 			double overall_fit = 0;
 			double overall_pred = 0;
-			Vector<double> class_results_pred; 
-			class_results_pred.resize(clas_model->labels_.size()); class_results_pred = 0;
-			Vector<double> class_results_fit; 
-			class_results_fit.resize(clas_model->labels_.size()); class_results_fit = 0;
+			Eigen::VectorXd class_results_pred; 
+			class_results_pred.resize(clas_model->labels_.size()); class_results_pred.setZero();
+			Eigen::VectorXd class_results_fit; 
+			class_results_fit.resize(clas_model->labels_.size()); class_results_fit.setZero();
 
 			for (int i = 0; i < k; i++) // create and evaluate k bootstrap samples
 			{
 				//gsl_rng_set(r, i);
 				vector<int> sample_substances(N, 0); // numbers of occurences of substances within this sample
 				
-				class_results_ = 0;
+				class_results_.setZero();
 			
 				/// create training matrix and train the model_
 				model_->descriptor_matrix_.resize(N, no_descriptors);
@@ -307,7 +308,7 @@ namespace BALL
 				overall_pred += quality_;
 				class_results_pred += class_results_;		
 			
-				class_results_ = 0; // clear pred. result before adding training fit result!!
+				class_results_.setZero(); // clear pred. result before adding training fit result!!
 				
 				/// create test data set and calculate quality_ of fit to training data	
 				test_substances_.resize(N);
@@ -346,27 +347,27 @@ namespace BALL
 		}
 
 
-		const BALL::Matrix<double> & ClassificationValidation::yRandomizationTest(int runs, int k)
+		const Eigen::MatrixXd & ClassificationValidation::yRandomizationTest(int runs, int k)
 		{
-			Matrix<double> y_backup = model_->Y_;
-			Matrix<double> desc_backup = model_->descriptor_matrix_;
-			//Matrix<double> res_backup = clas_model->training_result_;
-			vector<vector<double> > dataY_backup = model_->data->Y_;
+			Eigen::MatrixXd y_backup = model_->Y_;
+			Eigen::MatrixXd desc_backup = model_->descriptor_matrix_;
+			//Eigen::MatrixXd res_backup = clas_model->training_result_;
+			VMatrix dataY_backup = model_->data->Y_;
 						
-			//vector<double> c(2, -1);
-			//vector<vector<double> > results(runs, 2);
+			//Eigen::VectorXd c(2, -1);
+			//vector<Eigen::VectorXd > results(runs, 2);
 			yRand_results_.resize(runs, 2);
-			yRand_results_ = -1;
+			yRand_results_.fill(-1);
 			class_results_.resize(clas_model->labels_.size());
-			class_results_ = 0;
+			class_results_.setZero();
 
 			for (int i = 0; i < runs; i++)
 			{
 				yRand(); // randomize all columns of Y_
 				crossValidation(k, 0);
 				testInputData(0);
-				yRand_results_(i+1, 1) = quality_input_test_;
-				yRand_results_(i+1, 2) = quality_cv_;
+				yRand_results_(i, 0) = quality_input_test_;
+				yRand_results_(i, 1) = quality_cv_;
 			}
 			
 			class_results_ = class_results_/runs;
@@ -387,14 +388,14 @@ namespace BALL
 		{		
 			// do NOT calculate accuracy seperately for each class!
 			int TP = 0;
-			for (int j = 1; j <= confusion_matrix_.Ncols(); j++)
+			for (int j = 0; j < confusion_matrix_.cols(); j++)
 			{
-				TP += (int)confusion_matrix_(1, j);
+				TP += (int)confusion_matrix_(0, j);
 			}
 			int N = 0; // number of predictions
-			for (int j = 1; j <= confusion_matrix_.Nrows(); j++)
+			for (int j = 0; j < confusion_matrix_.rows(); j++)
 			{
-				N += (int)confusion_matrix_(j, 1);
+				N += (int)confusion_matrix_(j, 0);
 			}
 			quality_ = ((double)TP) / N;
 		}
@@ -405,10 +406,10 @@ namespace BALL
 		{
 			quality_ = 0;
 			
-			for (int j = 1; j <= confusion_matrix_.Ncols(); j++) // calculate quality_ of all classes
+			for (int j = 0; j < confusion_matrix_.cols(); j++) // calculate quality_ of all classes
 			{	
-				int TP = (int)confusion_matrix_(1, j);
-				int FN = (int)confusion_matrix_(4, j);
+				int TP = (int)confusion_matrix_(0, j);
+				int FN = (int)confusion_matrix_(3, j);
 				double sens = 1;
 				if (TP != 0 || FN != 0)
 				{
@@ -418,7 +419,7 @@ namespace BALL
 				quality_ += sens;
 			}
 			
-			quality_ /= confusion_matrix_.Ncols(); // mean quality_ of all classes
+			quality_ /= confusion_matrix_.cols(); // mean quality_ of all classes
 		}
 
 
@@ -433,16 +434,16 @@ namespace BALL
 				no_all += clas_model->no_substances_[i];
 			}
 
-			for (int j = 1; j <= confusion_matrix_.Ncols(); j++) 
+			for (int j = 0; j < confusion_matrix_.cols(); j++) 
 			{	
-				int TP = (int)confusion_matrix_(1, j);
-				int FN = (int)confusion_matrix_(4, j);
+				int TP = (int)confusion_matrix_(0, j);
+				int FN = (int)confusion_matrix_(3, j);
 				double sens = 1;
 				if (TP != 0 || FN != 0)
 				{
 					sens = ((double)TP) / (TP+FN);
 				}		
-				double sens_weighted = sens*(((double)clas_model->no_substances_[j-1])/no_all);
+				double sens_weighted = sens*(((double)clas_model->no_substances_[j])/no_all);
 				class_results_(j) += sens_weighted;
 				quality_ += sens_weighted;
 			}
@@ -455,12 +456,12 @@ namespace BALL
 			quality_ = 0;
 			double MCC = 0;
 			
-			for (int j = 1; j <= confusion_matrix_.Ncols(); j++)
+			for (int j = 0; j < confusion_matrix_.cols(); j++)
 			{
-				int TP = (int)confusion_matrix_(1, j);
-				int FP = (int)confusion_matrix_(2, j);
-				int TN = (int)confusion_matrix_(3, j);
-				int FN = (int)confusion_matrix_(4, j);
+				int TP = (int)confusion_matrix_(0, j);
+				int FP = (int)confusion_matrix_(1, j);
+				int TN = (int)confusion_matrix_(2, j);
+				int FN = (int)confusion_matrix_(3, j);
 				
 				double nom = ((double)TP)*TN-FP*FN; // (often) too big for int...
 				double denom = ((double)(TP+FP))*(TP+FN)*(TN+FP)*(TN+FN);
@@ -471,7 +472,7 @@ namespace BALL
 				class_results_(j) += d;
 				MCC += d;
 			}
-			quality_ = MCC/confusion_matrix_.Ncols();
+			quality_ = MCC/confusion_matrix_.cols();
 		}
 			
 			
@@ -479,12 +480,12 @@ namespace BALL
 		{
 			quality_ = 0;
 			int TP = 0; int FP = 0; int TN = 0; int FN = 0;
-			for (int j = 1; j <= confusion_matrix_.Ncols(); j++)
+			for (int j = 0; j < confusion_matrix_.cols(); j++)
 			{
-				TP += (int)confusion_matrix_(1, j);
-				FP += (int)confusion_matrix_(2, j);
-				TN += (int)confusion_matrix_(3, j);
-				FN += (int)confusion_matrix_(4, j);
+				TP += (int)confusion_matrix_(0, j);
+				FP += (int)confusion_matrix_(1, j);
+				TN += (int)confusion_matrix_(2, j);
+				FN += (int)confusion_matrix_(3, j);
 			}
 			double nom = ((double)TP)*TN-FP*FN; // (often) too big for int...
 			double denom = ((double)(TP+FP))*(TP+FN)*(TN+FP)*(TN+FN);
@@ -500,13 +501,13 @@ namespace BALL
 			quality_ = 0;
 			int TP = 0; int FP = 0;
 			
-			if (confusion_matrix_.getColumnCount() > 2)
+			if (confusion_matrix_.cols() > 2)
 			{
 				throw BALL::Exception::GeneralException(__FILE__, __LINE__, "Classification validation error", "True Discovery Rate can only be calculated for binary classification data sets!"); 
 			}
 			
-			TP = (int)confusion_matrix_(1, 2);
-			FP = (int)confusion_matrix_(2, 2);
+			TP = (int)confusion_matrix_(0, 1);
+			FP = (int)confusion_matrix_(1, 1);
 			
 			if (TP == 0) 
 			{
@@ -518,13 +519,13 @@ namespace BALL
 		}
 
 
-		const BALL::Matrix<double>* ClassificationValidation::getConfusionMatrix()
+		const Eigen::MatrixXd* ClassificationValidation::getConfusionMatrix()
 		{
 			return &confusion_matrix_;
 		}
 
 
-		const BALL::Vector<double>* ClassificationValidation::getClassResults()
+		const Eigen::VectorXd* ClassificationValidation::getClassResults()
 		{
 			return &class_results_;
 		}

@@ -58,7 +58,7 @@ namespace BALL
 				/** @name Private Attributes */
 			
 				/** the results of the validation */
-				const list<Vector<double> >* results_;
+				const list<Eigen::VectorXd >* results_;
 			
 				QString file_name_;
 

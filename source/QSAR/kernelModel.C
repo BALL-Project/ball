@@ -44,7 +44,7 @@ namespace BALL
 		}
 				
 				
-		KernelModel::KernelModel(const QSARData& q, Vector<double>& w) : NonLinearModel(q)
+		KernelModel::KernelModel(const QSARData& q, Eigen::VectorXd& w) : NonLinearModel(q)
 		{
 			kernel = new Kernel(this, w);
 		}
@@ -76,32 +76,27 @@ namespace BALL
 
 		void KernelModel::calculateOffsets()
 		{
-			Matrix<double> residuals = (K_*training_result_)-Y_;	
-			int no_act = training_result_.Ncols();
-			offsets_.resize(no_act);
-			offsets_.setVectorType(0); // this is no Column vector
-			for (int i = 1; i <= no_act; i++)
-			{	
-				offsets_(i) = residuals.colSum(i) / training_result_.Nrows();
-			}
+			Eigen::MatrixXd residuals = (K_*training_result_)-Y_;	
+			int no_act = training_result_.cols();
+			offsets_ = residuals.colwise().sum() / training_result_.rows();
 		}
 
 
-		BALL::Vector<double> KernelModel::predict(const vector<double> & substance, bool transform)
+		Eigen::VectorXd KernelModel::predict(const vector<double> & substance, bool transform)
 		{	
-			if (training_result_.Ncols() == 0)
+			if (training_result_.cols() == 0)
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Model must be trained before it can predict the activitiy of substances!"); 
 			}	
-			Vector<double> input = getSubstanceVector(substance, transform); 
+			Eigen::VectorXd input = getSubstanceVector(substance, transform); 
 				
-			Vector<double> K_t;
+			Eigen::RowVectorXd K_t;
 			kernel->calculateKernelVector(K_, input, descriptor_matrix_, K_t); // dim: 1xn
 
-			Vector<double> res = K_t*training_result_;  // dim: 1xc
+			Eigen::VectorXd res = K_t*training_result_;  // dim: 1xc
 			//if (offsets_.getSize() == res.getSize()) res -= offsets_; 
 			
-			if (transform && y_transformations_.Ncols() != 0)
+			if (transform && y_transformations_.cols() != 0)
 			{
 				backTransformPrediction(res); 
 			}
@@ -112,7 +107,7 @@ namespace BALL
 		void KernelModel::saveToFile(string filename)
 		{
 			bool trained = 1;
-			if (training_result_.Nrows() == 0)
+			if (training_result_.rows() == 0)
 			{
 				trained = 0;
 			}
@@ -120,18 +115,18 @@ namespace BALL
 			
 			ofstream out(filename.c_str());
 			
-			const Matrix<double>* coeffErrors = validation->getCoefficientStdErrors();
+			const Eigen::MatrixXd* coeffErrors = validation->getCoefficientStdErrors();
 			bool sterr = 0;
-			if (coeffErrors->Ncols() != 0)
+			if (coeffErrors->cols() != 0)
 			{
 				sterr = 1;
 			}
 			bool centered_data = 0;
 			bool centered_y = 0;
-			if (descriptor_transformations_.Ncols() != 0)
+			if (descriptor_transformations_.cols() != 0)
 			{
 				centered_data = 1;
-				if (y_transformations_.Ncols() != 0)
+				if (y_transformations_.cols() != 0)
 				{
 					centered_y = 1;
 				}
@@ -143,11 +138,11 @@ namespace BALL
 				sel_features = data->getNoDescriptors();
 			}
 			
-			int no_y = training_result_.Ncols();
-			if (no_y == 0) no_y = y_transformations_.Ncols(); // correct no because transformation information will have to by read anyway when reading this model later ...
+			int no_y = training_result_.cols();
+			if (no_y == 0) no_y = y_transformations_.cols(); // correct no because transformation information will have to by read anyway when reading this model later ...
 			
 			out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tcentered response?\tno of substances\ttrained?"<<endl;
-			out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<no_y<<"\t"<<centered_data<<"\t"<<centered_y<<"\t"<<descriptor_matrix_.Nrows()<<"\t"<<trained<<"\n\n";
+			out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<no_y<<"\t"<<centered_data<<"\t"<<centered_y<<"\t"<<descriptor_matrix_.rows()<<"\t"<<trained<<"\n\n";
 			
 			saveKernelParametersToFile(out);
 			saveModelParametersToFile(out);
@@ -274,15 +269,15 @@ namespace BALL
 
 		void KernelModel::saveTrainingResult(ofstream& out)
 		{
-			const Matrix<double>* coeffErrors = validation->getCoefficientStdErrors();
-			for (int i = 1; i <= training_result_.Nrows(); i++) // write training result
+			const Eigen::MatrixXd* coeffErrors = validation->getCoefficientStdErrors();
+			for (int i = 1; i <= training_result_.rows(); i++) // write training result
 			{
 				out<<substance_names_[i-1]<<"\t";
-				for (int j = 1; j <= training_result_.Ncols(); j++)
+				for (int j = 1; j <= training_result_.cols(); j++)
 				{
 					out<<training_result_(i, j)<<"\t";
 				}
-				for (int j = 1; j <= coeffErrors->Ncols(); j++)
+				for (int j = 1; j <= coeffErrors->cols(); j++)
 				{
 					out<<(*coeffErrors)(i, j)<<"\t";
 				}

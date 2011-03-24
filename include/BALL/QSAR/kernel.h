@@ -45,7 +45,6 @@
 #include <cmath>
 #include <sstream>
 
-
 namespace BALL
 {
 	namespace QSAR
@@ -62,34 +61,36 @@ namespace BALL
 				
 				Kernel(Model* m, String f, String g);
 						
-				Kernel(Model* m, Vector<double>& w);
+				Kernel(Model* m, Eigen::VectorXd& w);
 				
 				/** constructor for weighted distance kernel.
 				@param column no of column of LinearModel.training_result that is to be used as weights vector */
 				Kernel(Model* m, const LinearModel& lm, int column);
 
 				~Kernel();
+
+				EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 				//@}
 				
 				
 				/** @name Accessors
 				 */
 				//@{
-				/** calculates pairwise distances between all substances in Matrix<double> input and saves them to Matrix<double> output.\n
+				/** calculates pairwise distances between all substances in Eigen::MatrixXd input and saves them to Eigen::MatrixXd output.\n
 				If Kernel.weights is not empty, function Kernel.calculateWeightedDistanceMatrix() is used \n 
 				Else if: Kernel.f=="" and Kernel.g="", the distance between two substances a and b is calculated as \f$ \sum_{i=1}^m (input_{ai} * input_{bi})^p \f$, with m=\#descriptors  \n
 				Else: distance is calculated as \f$ g(\sum_{i=1}^m f(input_{ai}, input_{bi})) \f$*/
-				void calculateKernelMatrix(Matrix<double>& input, Matrix<double>& output);
+				void calculateKernelMatrix(Eigen::MatrixXd& input, Eigen::MatrixXd& output);
 				
-				/** calculates pairwise distance between all substances of m1 and m2 and saves them to Matrix<double> output. \n
+				/** calculates pairwise distance between all substances of m1 and m2 and saves them to Eigen::MatrixXd output. \n
 				If Kernel.weights is not empty, function Kernel.calculateWeightedDistanceMatrix() is used \n 
 				Esle if: Kernel.f=="" and Kernel.g="", the distance between two substances a and b is calculated as \f$ \sum_{i=1}^m (m1_{ai} * m2_{bi})^p \f$, with m=\#descriptors \n
 				Else: distance is calculated as \f$ g(\sum_{i=1}^m f(m1_{ai}, m2_{bi})) \f$*/
-				void calculateKernelMatrix(Matrix<double>& K, Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output);
+				void calculateKernelMatrix(Eigen::MatrixXd& K, Eigen::MatrixXd& m1, Eigen::MatrixXd& m2, Eigen::MatrixXd& output);
 				
 				
 				/** transforms test data 'input' into the kernel-saves and saves it to matrix 'output' */
-				void calculateKernelVector(Matrix<double>& K,Vector<double>& m1, Matrix<double>& m2, Vector<double>& output);
+				void calculateKernelVector(Eigen::MatrixXd& K,Eigen::VectorXd& m1, Eigen::MatrixXd& m2, Eigen::RowVectorXd& output);
 				
 				/** grid search for the best kernel parameters.\n
 				Grid search is done locally around the current kernel parameter value(s).
@@ -134,32 +135,32 @@ namespace BALL
 
 				void gridSearch(double step_width, int steps, bool first_rec, int k, double par1_start, double par2_start, bool opt);
 
-				/** calculates pairwise distances between all substances in Matrix<double> input, weighted by the contribution of every descriptor (as encoded in Kernel.weights), and saves them to Matrix<double> output.\n
+				/** calculates pairwise distances between all substances in Eigen::MatrixXd input, weighted by the contribution of every descriptor (as encoded in Kernel.weights), and saves them to Eigen::MatrixXd output.\n
 				Distance between two substances a and b is calculated as \f$ \sum_{i=1}^m w_i * (input_{ai}- input_{bi})^2 \f$, with m=\#descriptors */
-				void calculateWeightedKernelMatrix(Matrix<double>& input, Matrix<double>& output);
+				void calculateWeightedKernelMatrix(Eigen::MatrixXd& input, Eigen::MatrixXd& output);
 				
 				
-				/** calculates pairwise distances between all substances of m1 and m2, weighted by the contribution of every descriptor (as encoded in Kernel.weights), and saves them to Matrix<double> output.\n
+				/** calculates pairwise distances between all substances of m1 and m2, weighted by the contribution of every descriptor (as encoded in Kernel.weights), and saves them to Eigen::MatrixXd output.\n
 				Distance between two substances a and b is calculated as \f$ \sum_{i=1}^m w_i * (m1_{ai}- m2_{bi})^2 \f$, with m=\#descriptors */
-				void calculateWeightedKernelMatrix(Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output);
+				void calculateWeightedKernelMatrix(Eigen::MatrixXd& m1, Eigen::MatrixXd& m2, Eigen::MatrixXd& output);
 				
 				
-				void calculateKernelMatrix1(Matrix<double>& input, Matrix<double>& output);
+				void calculateKernelMatrix1(Eigen::MatrixXd& input, Eigen::MatrixXd& output);
 				
-				void calculateKernelMatrix2(Matrix<double>& input, Matrix<double>& output);
+				void calculateKernelMatrix2(Eigen::MatrixXd& input, Eigen::MatrixXd& output);
 				
-				void calculateKernelMatrix3(Matrix<double>& input, Matrix<double>& output);
+				void calculateKernelMatrix3(Eigen::MatrixXd& input, Eigen::MatrixXd& output);
 				
-				void calculateKernelMatrix4(Matrix<double>& input, Matrix<double>& output);
+				void calculateKernelMatrix4(Eigen::MatrixXd& input, Eigen::MatrixXd& output);
 				
 				
-				void calculateKernelMatrix1(Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output);
+				void calculateKernelMatrix1(Eigen::MatrixXd& m1, Eigen::MatrixXd& m2, Eigen::MatrixXd& output);
 				
-				void calculateKernelMatrix2(Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output);
+				void calculateKernelMatrix2(Eigen::MatrixXd& m1, Eigen::MatrixXd& m2, Eigen::MatrixXd& output);
 				
-				void calculateKernelMatrix3(Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output);
+				void calculateKernelMatrix3(Eigen::MatrixXd& m1, Eigen::MatrixXd& m2, Eigen::MatrixXd& output);
 				
-				void calculateKernelMatrix4(Matrix<double>& m1, Matrix<double>& m2, Matrix<double>& output);
+				void calculateKernelMatrix4(Eigen::MatrixXd& m1, Eigen::MatrixXd& m2, Eigen::MatrixXd& output);
 				//@}
 				
 				
@@ -169,7 +170,7 @@ namespace BALL
 				/** pointer to the model which uses this kernel */
 				Model* model_;
 				
-				Vector<double> weights_;
+				Eigen::VectorXd weights_;
 				//@}
 				
 				

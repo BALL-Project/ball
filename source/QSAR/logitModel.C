@@ -24,7 +24,7 @@
 //
 
 #include <BALL/QSAR/logitModel.h>
-#include <BALL/MATHS/LINALG/matrixInverter.h>
+#include <Eigen/Dense>
 
 using namespace std;
 
@@ -44,51 +44,42 @@ namespace BALL
 
 		void LogitModel::train()
 		{
-			if (descriptor_matrix_.Ncols() == 0)
+			if (descriptor_matrix_.cols() == 0)
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Data must be read into the model before training!"); 
 			}
 			readLabels();
 			
-			int lines = descriptor_matrix_.Nrows();
-			int col = descriptor_matrix_.Ncols();
-			training_result_.resize(col, Y_.Ncols());
-				
-			for (int c = 1; c <= Y_.Ncols(); c++)	
+			int lines = descriptor_matrix_.rows();
+			int col = descriptor_matrix_.cols();
+			training_result_.resize(col, Y_.cols());
+
+			Eigen::MatrixXd I(col, col);
+			I.setIdentity();
+			I *= 0.0001;
+
+			for (int c = 0; c < Y_.cols(); c++)	
 			{
-				Vector<double> beta(col);
-				beta = 0;
+				Eigen::VectorXd beta(col);
+				beta.setZero();
 				for ( int b = 0; b < 100; b++)
 				{
 					// calculate matrix W and vector p
-					Vector<double> p(lines);
-					Matrix<double> W(lines, lines); W = 0; // diagonal matrix
-					for (int i = 1; i <= lines; i++)
+					Eigen::VectorXd p(lines);
+					Eigen::MatrixXd W(lines, lines); W.setZero(); // diagonal matrix
+					for (int i = 0; i < lines; i++)
 					{
-						Vector<double> v; v.setVectorType(0);
-						descriptor_matrix_.copyRowToVector(v, i);
-						double nom = exp(v*beta);
+						double nom = exp(descriptor_matrix_.row(i).dot(beta));
 						p(i) = nom/(1+nom);
 						W(i, i) = p(i)*(1/(1+nom));
 					}
-					Vector<double> beta_old = beta;
+					Eigen::VectorXd beta_old = beta;
 					
-					Matrix<double> I; I.setToIdentity(col); 
-					I *= 0.0001;
-					Matrix<double> xwx;
-					xwx = descriptor_matrix_.t();
-					xwx *= W;
-					xwx *= descriptor_matrix_;
-					xwx += I;
-					
-					for (uint i = 1; i < Y_.getRowCount(); i++)
-					{
-						p(i) = Y_(c, i)-p(i);
-					}
-					MatrixInverter<double, StandardTraits> inverter(xwx);
-					inverter.computeInverse();
+					Eigen::MatrixXd xwx = descriptor_matrix_.transpose() * W * descriptor_matrix_ + I;
 
-					beta += inverter.getInverse()*descriptor_matrix_.t()*p;
+					p = Y_.row(c) - p;
+
+					beta += xwx.colPivHouseholderQr().solve(descriptor_matrix_.transpose()*p);
 					//beta = xwx.i()*descriptor_matrix_.t()*W*(descriptor_matrix_*beta+W.i()*(Y_.Column(c)-p));
 					
 					if (Statistics::euclDistance(beta, beta_old)/Statistics::euclNorm(beta) < 0.01) 
@@ -96,27 +87,27 @@ namespace BALL
 						break;
 					}
 				}
-				training_result_.copyVectorToColumn(beta, c);
+				training_result_.col(c) = beta;
 			}
 		}
 
 
-		BALL::Vector<double> LogitModel::predict(const vector<double> & substance, bool transform)
+		Eigen::VectorXd LogitModel::predict(const vector<double> & substance, bool transform)
 		{
-			if (training_result_.Ncols() == 0)
+			if (training_result_.cols() == 0)
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Model must be trained before it can predict the activitiy of substances!"); 
 			}
 
-			Vector<double> v = getSubstanceVector(substance, transform); 
-			Vector<double> res = v*training_result_;
+			Eigen::VectorXd v = getSubstanceVector(substance, transform); 
+			Eigen::VectorXd res = v*training_result_;
 
 			if (transform)
 			{
 				backTransformPrediction(res); 
 			}
 
-			for (uint i = 1; i <= res.getSize(); i++)
+			for (uint i = 0; i < res.rows(); i++)
 			{
 				if (res(i) >= 0)
 				{
@@ -134,14 +125,14 @@ namespace BALL
 
 		void LogitModel::saveToFile(string filename)
 		{
-			if (training_result_.Nrows() == 0)
+			if (training_result_.rows() == 0)
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Model must have been trained before the results can be saved to a file!"); 
 			}
 			ofstream out(filename.c_str());
 			
 			bool centered_data = 0;
-			if (descriptor_transformations_.Ncols() != 0)
+			if (descriptor_transformations_.cols() != 0)
 			{
 				centered_data = 1;
 			}
@@ -151,8 +142,8 @@ namespace BALL
 				sel_features = data->getNoDescriptors();
 			}
 			
-			int no_y = training_result_.Ncols();
-			if (no_y == 0) no_y = y_transformations_.Ncols(); // correct no because transformation information will have to by read anyway when reading this model later ...
+			int no_y = training_result_.cols();
+			if (no_y == 0) no_y = y_transformations_.cols(); // correct no because transformation information will have to by read anyway when reading this model later ...
 			
 			out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tno of classes"<<endl;
 			out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<no_y<<"\t"<<centered_data<<"\t"<<no_substances_.size()<<"\n\n";
@@ -179,34 +170,34 @@ namespace BALL
 			if (!descriptor_IDs_.empty())  /// write descriptors and information about their transformation
 			{
 				std::multiset<unsigned int>::iterator d_it = descriptor_IDs_.begin();
-				for (int i = 0; i < training_result_.Nrows(); i++, ++d_it)
+				for (int i = 0; i < training_result_.rows(); i++, ++d_it)
 				{
 					out<<String(*d_it)<<"\t"<<descriptor_names_[i]<<"\t";
 				
-					for (int j = 1; j <= training_result_.Ncols(); j++) 
+					for (int j = 0; j < training_result_.cols(); j++) 
 					{
-						out<<training_result_(i+1, j)<<"\t";
+						out<<training_result_(i, j)<<"\t";
 					}
 					if (centered_data)
 					{
-						out<<descriptor_transformations_(1, i+1)<<"\t"<<descriptor_transformations_(2, i+1)<<"\t"; 
+						out<<descriptor_transformations_(0, i)<<"\t"<<descriptor_transformations_(1, i)<<"\t"; 
 					}
 					out <<"\n";
 				}
 			}
 			else
 			{
-				for (int i = 0; i < training_result_.Nrows(); i++)
+				for (int i = 0; i < training_result_.rows(); i++)
 				{
 					out<<String(i)<<"\t"<<descriptor_names_[i]<<"\t";
 
-					for (int j = 1; j <= training_result_.Ncols(); j++) 
+					for (int j = 0; j < training_result_.cols(); j++) 
 					{
-						out<<training_result_(i+1, j)<<"\t";
+						out<<training_result_(i, j)<<"\t";
 					}
 					if (centered_data)
 					{
-						out<<descriptor_transformations_(1, i+1)<<"\t"<<descriptor_transformations_(2, i+1)<<"\t"; 
+						out<<descriptor_transformations_(0, i)<<"\t"<<descriptor_transformations_(1, i)<<"\t"; 
 					}
 					out <<"\n";
 				}
@@ -277,17 +268,17 @@ namespace BALL
 			if (centered_y)
 			{
 				y_transformations_.resize(2, no_y); 
-				for (int i = 1; i <= no_y; i++)
+				for (int i = 0; i < no_y; i++)
 				{
 					getline(input, line0);
-					y_transformations_(1, i) = line0.getField(0, "\t").toDouble(); 	
-					y_transformations_(2, i) = line0.getField(1, "\t").toDouble(); 
+					y_transformations_(0, i) = line0.getField(0, "\t").toDouble(); 	
+					y_transformations_(1, i) = line0.getField(1, "\t").toDouble(); 
 				}
 				getline(input, line0);  // skip empty line 
 			}
 			getline(input, line0);  // skip comment line 
 			
-			for (int i = 1; !input.eof(); i++)
+			for (int i = 0; !input.eof(); i++)
 			{
 				String line;
 				getline(input, line);
@@ -302,8 +293,8 @@ namespace BALL
 				}
 				if (centered_data)
 				{
-					descriptor_transformations_(1, i) = line.getField(j, "\t").toDouble(); 
-					descriptor_transformations_(2, i) = line.getField(j+1, "\t").toDouble(); 
+					descriptor_transformations_(0, i) = line.getField(j, "\t").toDouble(); 
+					descriptor_transformations_(1, i) = line.getField(j+1, "\t").toDouble(); 
 				}
 					
 			}

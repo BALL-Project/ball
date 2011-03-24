@@ -53,36 +53,36 @@ namespace BALL
 		}
 
 
-		Vector<double> FitModel::predict(const vector<double> & substance, bool transform)
+		Eigen::VectorXd FitModel::predict(const vector<double> & substance, bool transform)
 		{
-			if (training_result_.Ncols() == 0)
+			if (training_result_.cols() == 0)
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Model must be trained before it can predict the activitiy of substances!"); 
 			}
-			Vector<double> v = getSubstanceVector(substance, transform); 
-			Vector<double> res(Y_.Ncols()); res.setVectorType(0);
+			Eigen::VectorXd v = getSubstanceVector(substance, transform); 
+			Eigen::VectorXd res(Y_.cols());
 			
 			String var="";
 			// replace all x-values for the current substance
-			for (uint j = 0; j < v.getSize(); j++)
+			for (uint j = 0; j < v.rows(); j++)
 			{
-				var = var+"x"+String(j)+"="+String(v(j+1))+";";
+				var = var+"x"+String(j)+"="+String(v(j))+";";
 			}
 			
 			//calculated all activities for given substance
-			for (int c = 0; c < Y_.Ncols(); c++)
+			for (int c = 0; c < Y_.cols(); c++)
 			{
 				String coeff="";
 				// get optimized coefficients
-				for (int m = 0; m < training_result_.Nrows(); m++)
+				for (int m = 0; m < training_result_.rows(); m++)
 				{
-					coeff = coeff+"b"+String(m)+"="+String(training_result_(m+1, c+1))+";";
+					coeff = coeff+"b"+String(m)+"="+String(training_result_(m, c))+";";
 				}
 				ParsedFunction<float> f = coeff+var+allEquations_[c];
-				res(c+1) = f(0);
+				res(c) = f(0);
 			}
 			
-			if (transform && y_transformations_.Ncols() != 0)
+			if (transform && y_transformations_.cols() != 0)
 			{
 				backTransformPrediction(res); 
 			}
@@ -96,7 +96,7 @@ namespace BALL
 		// 	{
 		// 		cout << "Derivatives for all equations are needed!"<<endl; return; 
 		// 	}
-		// 	if (eq.size() != Y_.Ncols())
+		// 	if (eq.size() != Y_.cols())
 		// 	{
 		// 		cout << "An equation (and their each derivatives) is needed for each column of Y_. \nPlease either specify all equations or change matrix Y_."<<endl; return; 
 		// 	}
@@ -111,7 +111,7 @@ namespace BALL
 
 		void FitModel::setEquations(vector<String>& eq)
 		{
-		// 	if (eq.size() != Y_.Ncols())
+		// 	if (eq.size() != Y_.cols())
 		// 	{
 		// 		cout << "An equation is needed for each column of Y_. \nPlease either specify all equations or change matrix Y_."<<endl; return; 
 		// 	}
@@ -128,7 +128,7 @@ namespace BALL
 
 		void FitModel::train()
 		{	
-			if (descriptor_matrix_.Ncols() == 0)
+			if (descriptor_matrix_.cols() == 0)
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Data must be read into the model before training!"); 
 			}
@@ -138,14 +138,14 @@ namespace BALL
 				return;
 			}
 				
-			training_result_.resize(descriptor_matrix_.Ncols(), Y_.Ncols());
+			training_result_.resize(descriptor_matrix_.cols(), Y_.cols());
 			
-			for (c = 0; c < (unsigned int)Y_.Ncols(); c++)
+			for (c = 0; c < (unsigned int)Y_.cols(); c++)
 			{	
- 				fitY = new Matrix<double>(Y_.Nrows(), 1);
-				for (int n = 1; n <= Y_.Nrows(); n++)
+ 				fitY = new Eigen::MatrixXd(Y_.rows(), 1);
+				for (int n = 0; n < Y_.rows(); n++)
 				{
-					(*fitY)(n, 1) = Y_(n, c+1);
+					(*fitY)(n, 0) = Y_(n, c);
 				}
 				
 				fitX = &descriptor_matrix_;
@@ -161,10 +161,10 @@ namespace BALL
 				}
 					
 				const gsl_multifit_fdfsolver_type* T = gsl_multifit_fdfsolver_lmsder; 
-				gsl_multifit_fdfsolver* s = gsl_multifit_fdfsolver_alloc(T, fitX->Nrows(), fitX->Ncols()); 
+				gsl_multifit_fdfsolver* s = gsl_multifit_fdfsolver_alloc(T, fitX->rows(), fitX->cols()); 
 				
-				const size_t n = descriptor_matrix_.Nrows();
-				const size_t p = descriptor_matrix_.Ncols();
+				const size_t n = descriptor_matrix_.rows();
+				const size_t p = descriptor_matrix_.cols();
 				gsl_multifit_function_fdf fdf; 
 						
 				fdf = make_fdf(&setF, &setDf, &setFdf, n, p, 0);
@@ -189,7 +189,7 @@ namespace BALL
 				// save the predicted coefficients
 				for (unsigned int m = 0; m < s->x->size; m++)
 				{
-					training_result_(m+1, c+1) = gsl_vector_get(s->x, m);
+					training_result_(m, c) = gsl_vector_get(s->x, m);
 				}
 				
 				delete fitY;
@@ -218,19 +218,19 @@ namespace BALL
 				constants = constants+"b"+String(m)+"="+String(gsl_vector_get(x, m))+";";
 			}
 			
- 			for (int n = 0; n < fitX->Nrows(); n++)
+ 			for (int n = 0; n < fitX->rows(); n++)
 			{
 				String var="";
 				// replace all x-values for the current substance
-				for (int m = 0; m < fitX->Ncols(); m++)
+				for (int m = 0; m < fitX->cols(); m++)
 				{
-					var = var+"x"+String(m)+"="+String((*fitX)(n+1, m+1))+";";
+					var = var+"x"+String(m)+"="+String((*fitX)(n, m))+";";
 				}
 				
 				// evaluate function for current substance
 				ParsedFunction<double> f1 = constants+var+(*equation);
 				double fn = f1(0);
-				gsl_vector_set(f, n, pow((*fitY)(n+1, 1)-fn, 2));
+				gsl_vector_set(f, n, pow((*fitY)(n, 0)-fn, 2));
 			}
 			
 			return GSL_SUCCESS;
@@ -252,24 +252,24 @@ namespace BALL
 					constants = constants+"b"+String(i)+"="+String(gsl_vector_get(x, i))+";";
 				}
 				
-				for (int i = 0; i < fitX->Nrows(); i++) // for each substance...
+				for (int i = 0; i < fitX->rows(); i++) // for each substance...
 				{
 					String var="";
 					// replace all x-variables for the current substance
-					for (int j = 0; j < fitX->Ncols(); j++)
+					for (int j = 0; j < fitX->cols(); j++)
 					{
-						var = var+"x"+String(j)+"="+String((*fitX)(i+1, j+1))+";";
+						var = var+"x"+String(j)+"="+String((*fitX)(i, j))+";";
 					}
 				
 					String y="";
 					// replacements for y_i
-					for (int j = 0; j < fitY->Ncols(); j++)
+					for (int j = 0; j < fitY->cols(); j++)
 					{
-						y = y+"y"+String(j)+"="+String((*fitY)(i+1, j+1))+";";
+						y = y+"y"+String(j)+"="+String((*fitY)(i, j))+";";
 					}
 				
 					// evaluate all differential derivatives for current substance
-					for (int j = 0; j < fitX->Ncols(); j++)
+					for (int j = 0; j < fitX->cols(); j++)
 					{
 						ParsedFunction < double > f1 = constants+var+y+(*diffEquations)[j]; 
 						double dfi = f1(0);
@@ -286,26 +286,26 @@ namespace BALL
 				F.function = &getFunctionValue;
 				F.params = 0;
 				
-				for (int i = 0; i < fitX->Nrows(); i++) // for all substances...
+				for (int i = 0; i < fitX->rows(); i++) // for all substances...
 				{
 					String y="";
 					// replacements for y_i
-					for (int j = 0; j < fitY->Ncols(); j++)
+					for (int j = 0; j < fitY->cols(); j++)
 					{
-						y = y+"y"+String(j)+"="+String((*fitY)(i+1, j+1))+";";
+						y = y+"y"+String(j)+"="+String((*fitY)(i, j))+";";
 					}
 					
 					String var="";	
-					for (int j = 0; j < fitX->Ncols(); j++)
+					for (int j = 0; j < fitX->cols(); j++)
 					{
-						var = var+"x"+String(j)+"="+String((*fitX)(i+1, j+1))+";";
+						var = var+"x"+String(j)+"="+String((*fitX)(i, j))+";";
 					}
 				
 					// evaluate all differential equations for current substance
-					for (int j = 0; j < fitX->Ncols(); j++)
+					for (int j = 0; j < fitX->cols(); j++)
 					{
 						String coeff="";
-						for (int k = 0; k < fitX->Ncols(); k++)
+						for (int k = 0; k < fitX->cols(); k++)
 						{
 							if (k != j)
 							{
@@ -323,8 +323,8 @@ namespace BALL
 									
 						f = new ParsedFunction<double>(es);
 						double dfi; double abserr;
-						gsl_deriv_central (&F, (*fitX)(i+1, j+1), 1e-8, &dfi, &abserr); // finds value of \delta f / \delta x_j
-						
+						gsl_deriv_central (&F, (*fitX)(i, j), 1e-8, &dfi, &abserr); // finds value of \delta f / \delta x_j
+
 						if (i == 5) {cout<<"f(0) = "<<(*f)(0)<<endl; 
 							cout<<es<<"  "<<dfi<<endl;}
 						gsl_matrix_set (df, i, j, dfi);

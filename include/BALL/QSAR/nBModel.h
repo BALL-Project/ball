@@ -26,6 +26,10 @@
 #ifndef NBMODEL
 #define NBMODEL
 
+#ifndef BALL_QSAR_COMMON_H
+#include <BALL/QSAR/common.h>
+#endif
+
 #ifndef BAYESMODEL
 #include <BALL/QSAR/bayesModel.h>
 #endif
@@ -49,6 +53,8 @@ namespace BALL
 				NBModel(const QSARData& q);
 
 				~NBModel();
+
+				EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 				//@}
 				
 				
@@ -57,7 +63,7 @@ namespace BALL
 				//@{
 				void train();
 				
-				Vector<double> predict(const vector<double>& substance, bool transform=1);
+				Eigen::VectorXd predict(const vector<double>& substance, bool transform=1);
 				
 				void saveToFile(string filename);
 				
@@ -84,11 +90,11 @@ namespace BALL
 				
 				
 				/** the minmum (row1) and maximum (row2) of each feature. */
-				Matrix<double> min_max_;
+				Eigen::MatrixXd min_max_;
 				
 				/** One probability Matrix for each modelled activity and each class. \n
 				Each Matrix stores in each cell the probability for a feature lying within a specific range to be in a specific class  */
-				vector<vector<Matrix<double> > > probabilities_;
+				vector<MatrixVector> probabilities_;
 							
 
 				

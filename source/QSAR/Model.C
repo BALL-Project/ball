@@ -143,12 +143,12 @@ namespace BALL
 			{
 				for (unsigned int j = 0; j < data->Y_[0].size(); j++)
 				{
-					Y_(j+1, i+1) = data->Y_[i][j];
+					Y_(j, i) = data->Y_[i][j];
 				}
 				if (y_transform)
 				{
-					y_transformations_(1, i+1) = data->y_transformations_[i][0]; 
-					y_transformations_(2, i+1) = data->y_transformations_[i][1]; 
+					y_transformations_(0, i) = data->y_transformations_[i][0]; 
+					y_transformations_(1, i) = data->y_transformations_[i][1]; 
 				}
 			}
 			int t = 0; // index in line of training data
@@ -167,14 +167,14 @@ namespace BALL
 					}
 					if (transform)
 					{
-						descriptor_transformations_(1, t+1) = data->descriptor_transformations_[j][0]; 
-						descriptor_transformations_(2, t+1) = data->descriptor_transformations_[j][1]; 
+						descriptor_transformations_(0, t) = data->descriptor_transformations_[j][0]; 
+						descriptor_transformations_(1, t) = data->descriptor_transformations_[j][1]; 
 					}		
 					 // set each cell of the current column j
 					for (int i = 0; i < lines; i++)
 					{
 						//cout<<"trying to write to cell "<<i+1<<", "<<t+1<<" from cell "<<j<<", "<<i<<endl;
-						descriptor_matrix_(i+1, t+1) = data->descriptor_matrix_[j][i];
+						descriptor_matrix_(i, t) = data->descriptor_matrix_[j][i];
 					}
 					t++;
 					if (fs)
@@ -230,8 +230,8 @@ namespace BALL
 					}
 					if (transform)
 					{
-						descriptor_transformations_(1, t+1) = data->descriptor_transformations_[j][0]; 
-						descriptor_transformations_(2, t+1) = data->descriptor_transformations_[j][1]; 
+						descriptor_transformations_(0, t) = data->descriptor_transformations_[j][0]; 
+						descriptor_transformations_(1, t) = data->descriptor_transformations_[j][1]; 
 					}
 					t++;
 					if (fs)
@@ -243,9 +243,9 @@ namespace BALL
 		}
 
 
-		BALL::Vector<double> Model::getSubstanceVector(const vector<double> & substance, bool transform)
+		Eigen::VectorXd Model::getSubstanceVector(const vector<double> & substance, bool transform)
 		{
-			if (transform == 1 && descriptor_transformations_.Ncols() == 0)
+			if (transform == 1 && descriptor_transformations_.cols() == 0)
 			{
 				transform = 0; 
 				//throw Exception::InconsistentUsage(__FILE__, __LINE__, "Transformation of test data requested although no scaling of training data was done!!"); 
@@ -270,15 +270,14 @@ namespace BALL
 			std::multiset<unsigned int>::iterator it = descriptor_IDs_.begin();
 
 			int t = 0; // index in line of test data
-			int length = descriptor_matrix_.Ncols();
+			int length = descriptor_matrix_.cols();
 			if (fs)
 			{	
 				length = descriptor_IDs_.size();
 			}
 			
-			Vector<double> v(length);
-			v.setVectorType(0); // this is a row, not a column-vector
-			
+			Eigen::RowVectorXd v(length);
+
 			// if no feature selection was done, i.e. if descriptor_IDs_ is empty
 			if (!fs)
 			{
@@ -286,16 +285,16 @@ namespace BALL
 				{
 					for (int i = 0; i < length; i++)
 					{
-						double stddev = descriptor_transformations_(2, i+1); 
+						double stddev = descriptor_transformations_(1, i); 
 						if (stddev == 0) {stddev = 0.001; }
-						v(i+1) = (substance[i]-descriptor_transformations_(1, i+1))/stddev; 
+						v(i) = (substance[i]-descriptor_transformations_(0, i))/stddev; 
 					}
 				}
 				else
 				{
 					for (int i = 0; i < length; i++)
 					{
-						v(i+1) = substance[i];
+						v(i) = substance[i];
 					}
 				}
 			}
@@ -308,9 +307,9 @@ namespace BALL
 					for (int i = 0; i < length; i++)
 					{
 						t = *it;
-						double stddev = descriptor_transformations_(2, i+1); 
+						double stddev = descriptor_transformations_(1, i); 
 						if (stddev == 0) {stddev = 0.001; }
-						v(i+1) = (substance[t]-descriptor_transformations_(1, i+1))/stddev; 
+						v(i) = (substance[t]-descriptor_transformations_(0, i))/stddev; 
 						it++;
 					}
 				}
@@ -319,7 +318,7 @@ namespace BALL
 					for (int i = 0; i < length; i++)
 					{
 						t = *it;
-						v(i+1) = substance[t];
+						v(i) = substance[t];
 						it++;
 					}
 				}
@@ -328,17 +327,17 @@ namespace BALL
 		}
 
 
-		BALL::Vector<double> Model::getSubstanceVector(const Vector < double > & substance, bool transform)
+		Eigen::VectorXd Model::getSubstanceVector(const Eigen::VectorXd & substance, bool transform)
 		{
-			if (transform == 1 && descriptor_transformations_.Ncols() == 0)
+			if (transform == 1 && descriptor_transformations_.cols() == 0)
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Transformation of test data requested although no scaling of training data was done!!"); 
 			}
-			if ( (data != NULL && data->getNoDescriptors() != substance.getSize()) || (data == NULL && substance.getSize() <= *(descriptor_IDs_.end()--)) )
+			if ( (data != NULL && data->getNoDescriptors() != substance.rows()) || (data == NULL && substance.rows() <= *(descriptor_IDs_.end()--)) )
 			{
 				String message="For compounds whose activity is to be predicted, the same number of features must be present than within the training data!\n";
 				message += "No of features of given compound: ";
-				message += String(substance.getSize())+"\n";
+				message += String(substance.rows())+"\n";
 				message += "No of required features: ";
 				if (data) message += String(data->getNoDescriptors()); 
 				else message += String(*(descriptor_IDs_.end()--));
@@ -353,25 +352,24 @@ namespace BALL
 			std::multiset<unsigned int>::iterator it = descriptor_IDs_.begin();
 
 			int t = 0; // index in line of test data
-			int length = descriptor_matrix_.Ncols();
+			int length = descriptor_matrix_.cols();
 			if (fs)
 			{	
 				length = descriptor_IDs_.size();
 			}
 			
-			Vector<double> v(length);
-			v.setVectorType(0); // this is a row, not a column-vector
-			
+			Eigen::RowVectorXd v(length);
+
 			// if no feature selection was done, i.e. if descriptor_IDs_ is empty
 			if (!fs)
 			{
 				if (transform)
 				{
-					for (int i = 1; i <= length; i++)
+					for (int i = 0; i < length; i++)
 					{
-						double stddev = descriptor_transformations_(2, i); 
+						double stddev = descriptor_transformations_(1, i); 
 						if (stddev == 0) {stddev = 0.001; }
-						v(i) = (substance(i)-descriptor_transformations_(1, i))/stddev; 
+						v(i) = (substance(i)-descriptor_transformations_(0, i))/stddev; 
 					}
 				}
 				else
@@ -385,21 +383,21 @@ namespace BALL
 			{
 				if (transform)
 				{
-					for (int i = 1; i <= length; i++)
+					for (int i = 0; i < length; i++)
 					{
 						t = *it; // descr. IDs start at 0 !
-						double stddev = descriptor_transformations_(2, i); 
+						double stddev = descriptor_transformations_(1, i); 
 						if (stddev == 0) {stddev = 0.001; }
-						v(i) = (substance(t+1)-descriptor_transformations_(1, i))/stddev; 
+						v(i) = (substance(t+1)-descriptor_transformations_(0, i))/stddev; 
 						it++;
 					}
 				}
 				else
 				{
-					for (int i = 1; i <= length; i++)
+					for (int i = 0; i < length; i++)
 					{
 						t = *it;
-						v(i) = substance(t+1);
+						v(i) = substance(t);
 						it++;
 					}
 				}
@@ -408,17 +406,17 @@ namespace BALL
 		}
 
 
-		void Model::backTransformPrediction(Vector<double> & pred)
+		void Model::backTransformPrediction(Eigen::VectorXd & pred)
 		{
-			for (int i = 1; i <= y_transformations_.Ncols(); i++)
+			for (int i = 0; i < y_transformations_.cols(); i++)
 			{
-				double stddev = y_transformations_(2, i); 
-				pred(i) = pred(i)*stddev+y_transformations_(1, i); 
+				double stddev = y_transformations_(1, i); 
+				pred(i) = pred(i)*stddev+y_transformations_(0, i); 
 			}	
 		}
 
 
-		const BALL::Matrix<double>* Model::getDescriptorMatrix()
+		const Eigen::MatrixXd* Model::getDescriptorMatrix()
 		{
 			return &descriptor_matrix_;
 		}
@@ -436,7 +434,7 @@ namespace BALL
 		}
 
 			
-		const BALL::Matrix<double>* Model::getY()
+		const Eigen::MatrixXd* Model::getY()
 		{
 			return &Y_;
 		}
@@ -464,28 +462,28 @@ namespace BALL
 			data = q;
 		}
 
-		void Model::addLambda(Matrix<double>& matrix, double& lambda)
+		void Model::addLambda(Eigen::MatrixXd& matrix, double& lambda)
 		{
-			if (matrix.Nrows() != matrix.Ncols())
+			if (matrix.rows() != matrix.cols())
 			{
 				throw BALL::Exception::GeneralException(__FILE__, __LINE__, "Model::addLambda error: ", "Lambda can only be added to a square matrix!");
 			}
 						
-			for (int i = 1; i < matrix.Nrows(); i++)
+			for (int i = 1; i < matrix.rows(); i++)
 			{
 				matrix(i, i) += lambda;
 			}
 		}
 			
-		void Model::readMatrix(Matrix<double> & mat, ifstream& in, uint lines, uint col)
+		void Model::readMatrix(Eigen::MatrixXd & mat, ifstream& in, uint lines, uint col)
 		{
 			mat.resize(lines, col);
 			String line;
 			
-			for (uint i = 1; i <= lines; i++)
+			for (uint i = 0; i < lines; i++)
 			{
 				//getline(in, line);
-				for (uint j = 1; j <= col; j++)
+				for (uint j = 0; j < col; j++)
 				{
 					String s;
 					in>>s;
@@ -495,13 +493,12 @@ namespace BALL
 			getline(in, line); // read the rest of the last matrix-line
 		}
 
-		void Model::readVector(Vector<double> & vec, ifstream& in, uint no_cells, bool column_vector)
+		void Model::readVector(Eigen::RowVectorXd & vec, ifstream& in, uint no_cells, bool column_vector)
 		{
 			vec.resize(no_cells);
-			vec.setVectorType(column_vector);
 			String line;
 			
-			for (uint i = 1; i <= no_cells; i++)
+			for (uint i = 0; i < no_cells; i++)
 			{
 				String s;
 				in>>s;
@@ -544,7 +541,7 @@ namespace BALL
 			else descriptor_transformations_.resize(0, 0); 
 			String line;
 			getline(input, line);  // skip comment line
-			for (int i = 1; i <= no_descriptors; i++)
+			for (int i = 0; i < no_descriptors; i++)
 			{
 				getline(input, line);
 				unsigned int id = (unsigned int) line.getField(0, "\t").toInt();
@@ -552,8 +549,8 @@ namespace BALL
 				descriptor_names_.push_back(line.getField(1, "\t"));
 				if (transformation)
 				{
-					descriptor_transformations_(1, i) = line.getField(2, "\t").toDouble(); 
-					descriptor_transformations_(2, i) = line.getField(3, "\t").toDouble(); 
+					descriptor_transformations_(0, i) = line.getField(2, "\t").toDouble(); 
+					descriptor_transformations_(1, i) = line.getField(3, "\t").toDouble(); 
 				}
 			}
 			getline(input, line);  // skip empty line	
@@ -564,7 +561,7 @@ namespace BALL
 		{
 			out<<"# ID\tdescriptor-name\tcoefficient(s)\t";
 			
-			bool centered_data = (descriptor_transformations_.Ncols() > 0); 
+			bool centered_data = (descriptor_transformations_.cols() > 0); 
 			
 			if (centered_data)
 			{
@@ -584,7 +581,7 @@ namespace BALL
 					out<<String(*d_it)<<"\t"<<descriptor_names_[i]<<"\t";
 					if (centered_data)
 					{
-						out<<descriptor_transformations_(1, i+1)<<"\t"<<descriptor_transformations_(2, i+1)<<"\t"; 
+						out<<descriptor_transformations_(0, i)<<"\t"<<descriptor_transformations_(1, i)<<"\t"; 
 					}
 					out <<"\n";
 				}
@@ -596,7 +593,7 @@ namespace BALL
 					out<<String(i)<<"\t"<<descriptor_names_[i]<<"\t";
 					if (centered_data)
 					{
-						out<<descriptor_transformations_(1, i+1)<<"\t"<<descriptor_transformations_(2, i+1)<<"\t"; 
+						out<<descriptor_transformations_(0, i)<<"\t"<<descriptor_transformations_(1, i)<<"\t"; 
 					}
 					out <<"\n";
 				}
@@ -609,11 +606,11 @@ namespace BALL
 		{
 			y_transformations_.resize(2, no_y); 
 			String line;
-			for (int i = 1; i <= no_y; i++)
+			for (int i = 0; i < no_y; i++)
 			{
 				getline(input, line);
-				y_transformations_(1, i) = line.getField(0, "\t").toDouble(); 	
-				y_transformations_(2, i) = line.getField(1, "\t").toDouble(); 
+				y_transformations_(0, i) = line.getField(0, "\t").toDouble(); 	
+				y_transformations_(1, i) = line.getField(1, "\t").toDouble(); 
 			}
 			getline(input, line);  // skip empty line
 		}
@@ -621,11 +618,11 @@ namespace BALL
 
 		void Model::saveResponseTransformationToFile(ofstream& out)
 		{
-			if (y_transformations_.Ncols() != 0)
+			if (y_transformations_.cols() != 0)
 			{
-				for (int i = 1; i <= y_transformations_.Ncols(); i++)
+				for (int i = 0; i < y_transformations_.cols(); i++)
 				{
-					out<<y_transformations_(1, i)<<"\t"<<y_transformations_(2, i)<<endl; 
+					out<<y_transformations_(0, i)<<"\t"<<y_transformations_(1, i)<<endl; 
 				}
 				out<<endl;
 			}	
@@ -640,7 +637,7 @@ namespace BALL
 
 		void Model::getUnnormalizedFeatureValue(int compound, int feature, double& return_value)
 		{
-			if (compound < 1 || feature < 1 || compound > (int)descriptor_matrix_.getRowCount() || feature > (int)descriptor_matrix_.getColumnCount())
+			if (compound < 1 || feature < 1 || compound > (int)descriptor_matrix_.rows() || feature > (int)descriptor_matrix_.cols())
 			{
 				cout<<"Model::getUnnormalizedFeatureValue(): Specified compound or feature ID is out of range!"<<endl; 
 				BALL::Exception::OutOfRange e(__FILE__, __LINE__);
@@ -649,16 +646,16 @@ namespace BALL
 			}
 
 			return_value = descriptor_matrix_(compound, feature);
-			if (descriptor_transformations_.getColumnCount() > 0)
+			if (descriptor_transformations_.cols() > 0)
 			{
-				return_value *= descriptor_transformations_(2, feature); // stddev
-				return_value += descriptor_transformations_(1, feature); // mean
+				return_value *= descriptor_transformations_(1, feature); // stddev
+				return_value += descriptor_transformations_(0, feature); // mean
 			}
 		}
 
 		void Model::getUnnormalizedResponseValue(int compound, int response, double& return_value)
 		{
-			if (compound < 1 || response < 1 || compound > (int)Y_.getRowCount() || response > (int)Y_.getColumnCount())
+			if (compound < 1 || response < 1 || compound > (int)Y_.rows() || response > (int)Y_.cols())
 			{
 				cout<<"Model::getUnnormalizedFeatureValue(): Specified compound or response ID is out of range!"<<endl; 
 				BALL::Exception::OutOfRange e(__FILE__, __LINE__);
@@ -667,10 +664,10 @@ namespace BALL
 			}
 
 			return_value = Y_(compound, response);
-			if (y_transformations_.getColumnCount() > 0)
+			if (y_transformations_.cols() > 0)
 			{
-				return_value *= y_transformations_(2, response); // stddev
-				return_value += y_transformations_(1, response); // mean
+				return_value *= y_transformations_(1, response); // stddev
+				return_value += y_transformations_(0, response); // mean
 			}
 		}
 

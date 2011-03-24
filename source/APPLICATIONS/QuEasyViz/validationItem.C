@@ -330,7 +330,7 @@ namespace BALL
 			else if(type_==6)
 			{
 				coeff_stddev_ = *((RegressionModel*)model_item_->model())->validation->getCoefficientStdErrors();
-				const Matrix<double>* training_result = ((RegressionModel*)model_item_->model())->getTrainingResult();
+				const Eigen::MatrixXd* training_result = ((RegressionModel*)model_item_->model())->getTrainingResult();
 				
 				// calculate&display average stddev
 				double mean_stddev=0;
@@ -456,7 +456,7 @@ namespace BALL
 			return k_;
 		}
 
-		BALL::Matrix<double>* ValidationItem::resultOfRandTest()
+		Eigen::MatrixXd* ValidationItem::resultOfRandTest()
 		{
 			return &result_of_rand_test_;
 		}

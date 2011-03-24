@@ -103,7 +103,7 @@ namespace BALL
 				void setValFraction(double frac);
 				double getValFraction();
 
-				Matrix<double>* resultOfRandTest();
+				Eigen::MatrixXd* resultOfRandTest();
 				
 				void addExternalFoldValidation(ValidationItem* item);
 				
@@ -166,9 +166,9 @@ namespace BALL
 				*/
 				ModelItem* model_item_;
 
-				Matrix<double> result_of_rand_test_;
+				Eigen::MatrixXd result_of_rand_test_;
 				
-				Matrix<double> coeff_stddev_;
+				Eigen::MatrixXd coeff_stddev_;
 
 				double q2_;
 				

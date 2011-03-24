@@ -274,10 +274,6 @@ SET(BALL_QSAR_TESTS
 )
 
 IF(BALL_HAS_LAPACK)
-	LIST(APPEND BALL_MATHS_TESTS
-		SVDSolver_test
-	)
-
 	LIST(APPEND BALL_QSAR_TESTS
 		ALLModel_test
 		FeatureSelection_test

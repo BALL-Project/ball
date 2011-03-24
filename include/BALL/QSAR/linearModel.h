@@ -55,7 +55,7 @@ namespace BALL
 				/** @name Accessors
 				 */
 				//@{
-				virtual Vector<double> predict(const vector<double>& substance, bool transform=1);
+				virtual Eigen::VectorXd predict(const vector<double>& substance, bool transform=1);
 	
 			protected:
 				void calculateOffsets();

@@ -74,7 +74,7 @@ namespace BALL
 				
 				/** calculates the first eigenvectors of the given matrix 'data' and saves them as columns of matrix 'output' 
 				@param frac_var the fraction of the variance that is to the covered the selected eigenvectors */
-				static void calculateEigenvectors(const Matrix<double>& data, double frac_var, Matrix<double>& output);
+				static void calculateEigenvectors(const Eigen::MatrixXd& data, double frac_var, Eigen::MatrixXd& output);
 				//@}
 
 				

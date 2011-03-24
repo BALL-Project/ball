@@ -113,7 +113,7 @@ namespace BALL
 			if(results_->size()==compound_names_->size())
 			{
 				int i = 0;
-				for (list<Vector<double> >::const_iterator it = results_->begin(); it != results_->end(); it++)
+				for (list<Eigen::VectorXd >::const_iterator it = results_->begin(); it != results_->end(); it++)
 				{
 					QTableWidgetItem* name = new QTableWidgetItem(QString(compound_names_->at(i).c_str()));
 					table_->setItem(i, 0, name);

@@ -19,11 +19,11 @@ CHECK(PLS-model)
 	PLSModel pls(data);
 	pls.readTrainingData();
 	pls.train();
-	const Matrix<double>* res = pls.getTrainingResult();
-	TEST_EQUAL(res->getRowCount(),3)
-	TEST_REAL_EQUAL((*res)[0],0.1407737)
-	TEST_REAL_EQUAL((*res)[1],0.5902179)
-	TEST_REAL_EQUAL((*res)[2],0.4159182)
+	const Eigen::MatrixXd* res = pls.getTrainingResult();
+	TEST_EQUAL(res->rows(),3)
+	TEST_REAL_EQUAL((*res)(0,0),0.1407737)
+	TEST_REAL_EQUAL((*res)(1,0),0.5902179)
+	TEST_REAL_EQUAL((*res)(2,0),0.4159182)
 RESULT
 
 

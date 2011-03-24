@@ -95,7 +95,7 @@ namespace BALL
 			// ------ Q2 value for regression using all descriptors  --- //
 			double q2_allDes = 0;
 			std::multiset<unsigned int> old_descr = model_->descriptor_IDs_;
-			int col = model_->descriptor_matrix_.Ncols();
+			int col = model_->descriptor_matrix_.cols();
 			if (model_->descriptor_IDs_.size() != 0)
 			{
 				col = model_->descriptor_IDs_.size();
@@ -111,7 +111,7 @@ namespace BALL
 			}
 			// --------------------------------------------------------- //
 			
-			Vector<double> oldWeights;
+			Eigen::VectorXd oldWeights;
 			if (weights_ != NULL)
 			{	
 				oldWeights = *weights_;
@@ -139,7 +139,7 @@ namespace BALL
 					
 					std::multiset<unsigned int>::iterator last_insert = model_->descriptor_IDs_.insert(i);
 					
-					if (weights_ != NULL && weights_->getSize() > 0)
+					if (weights_ != NULL && weights_->rows() > 0)
 					{
 						updateWeights(old_descr, model_->descriptor_IDs_, oldWeights);
 					}
@@ -192,7 +192,7 @@ namespace BALL
 			{	
 				model_->model_val->setCVRes(q2_allDes);
 				model_->descriptor_IDs_ = old_descr;
-				if (weights_ != NULL && weights_->getSize() > 0)
+				if (weights_ != NULL && weights_->rows() > 0)
 				{
 					*weights_ = oldWeights;
 				}
@@ -200,7 +200,7 @@ namespace BALL
 			else 
 			{	
 				model_->model_val->setCVRes(old_q2);
-				if (weights_ != NULL && weights_->getSize() > 0) 
+				if (weights_ != NULL && weights_->rows() > 0) 
 				{
 					updateWeights(old_descr, model_->descriptor_IDs_, oldWeights);
 				}
@@ -229,13 +229,13 @@ namespace BALL
 
 			// ------ Q2 value for regression using all descriptors  --- //
 			double q2_allDes = 0;
-			int col = model_->descriptor_matrix_.Ncols();
+			int col = model_->descriptor_matrix_.cols();
 			if (model_->descriptor_IDs_.size() != 0)
 			{
 				col = model_->descriptor_IDs_.size();
 			}
 			
-			if (col < model_->descriptor_matrix_.Nrows()*(((double)k-1)/k) || model_->type_ != "MLR")
+			if (col < model_->descriptor_matrix_.rows()*(((double)k-1)/k) || model_->type_ != "MLR")
 			{
 				if (!optPar || !model_->optimizeParameters(k))
 				{
@@ -245,7 +245,7 @@ namespace BALL
 			}
 			// --------------------------------------------------------- //
 			
-			Vector<double> oldWeights;
+			Eigen::VectorXd oldWeights;
 			if (weights_ != NULL)
 			{	
 				oldWeights = *weights_;
@@ -293,7 +293,7 @@ namespace BALL
 					des_it = tmp;
 					
 					
-					if (weights_ != NULL && weights_->getSize() > 0)
+					if (weights_ != NULL && weights_->rows() > 0)
 					{
 						updateWeights(old_descr, model_->descriptor_IDs_, oldWeights);
 					}
@@ -341,7 +341,7 @@ namespace BALL
 			{	
 				model_->model_val->setCVRes(q2_allDes);
 				model_->descriptor_IDs_ = old_descr;
-				if (weights_ != NULL && weights_->getSize() > 0)
+				if (weights_ != NULL && weights_->rows() > 0)
 				{
 					*weights_ = oldWeights;
 				}
@@ -349,7 +349,7 @@ namespace BALL
 			else
 			{	
 				model_->model_val->setCVRes(old_q2);
-				if (weights_ != NULL && weights_->getSize() > 0) 
+				if (weights_ != NULL && weights_->rows() > 0) 
 				{
 					updateWeights(old_descr, model_->descriptor_IDs_, oldWeights);
 				}
@@ -411,7 +411,7 @@ namespace BALL
 			// ------ Q2 value for regression using all descriptors  --- //
 			double q2_allDes = 0;
 			std::multiset<unsigned int> old_descr = model_->descriptor_IDs_;
-			int col = model_->descriptor_matrix_.Ncols();
+			int col = model_->descriptor_matrix_.cols();
 			if (model_->descriptor_IDs_.size() != 0)
 			{
 				col = model_->descriptor_IDs_.size();
@@ -427,7 +427,7 @@ namespace BALL
 			}
 			// --------------------------------------------------------- //
 			
-			Vector<double> oldWeights;
+			Eigen::VectorXd oldWeights;
 			if (weights_ != NULL)
 			{	
 				oldWeights = *weights_;
@@ -454,7 +454,7 @@ namespace BALL
 				
 				last_insertion = model_->descriptor_IDs_.insert(i);
 				
-				if (weights_ != NULL && weights_->getSize() > 0)
+				if (weights_ != NULL && weights_->rows() > 0)
 				{
 					updateWeights(old_descr, model_->descriptor_IDs_, oldWeights);
 				}
@@ -527,7 +527,7 @@ namespace BALL
 			{	
 				model_->model_val->setCVRes(q2_allDes);
 				model_->descriptor_IDs_ = old_descr;
-				if (weights_ != NULL && weights_->getSize() > 0)
+				if (weights_ != NULL && weights_->rows() > 0)
 				{
 					*weights_ = oldWeights;
 				}
@@ -535,7 +535,7 @@ namespace BALL
 			else 
 			{	
 				model_->model_val->setCVRes(old_q2);
-				if (weights_ != NULL && weights_->getSize() > 0) 
+				if (weights_ != NULL && weights_->rows() > 0) 
 				{
 					updateWeights(old_descr, model_->descriptor_IDs_, oldWeights);
 				}
@@ -564,7 +564,7 @@ namespace BALL
 			double q2_allDes = 0;
 			SortedList<int> old_descr = model_->descriptor_IDs_;
 			
-			if (model_->descriptor_matrix_.Ncols() < model_->descriptor_matrix_.Nrows()*3/4 || model_->type_ != "MLR")
+			if (model_->descriptor_matrix_.cols() < model_->descriptor_matrix_.rows()*3/4 || model_->type_ != "MLR")
 			{
 				if (!optPar || !model_->optimizeParameters())
 				{
@@ -602,7 +602,7 @@ namespace BALL
 					
 					model_->descriptor_IDs_.insert(i);
 					
-					if (weights_ != NULL && weights_->Ncols() > 0)
+					if (weights_ != NULL && weights_->cols() > 0)
 					{
 						updateWeights(old_descr, model_->descriptor_IDs_, oldWeights);
 					}
@@ -641,7 +641,7 @@ namespace BALL
 			{	
 				model_->model_val->setCVRes(q2_allDes);
 				model_->descriptor_IDs_ = old_descr;
-				if (weights_ != NULL && weights_->Ncols() > 0)
+				if (weights_ != NULL && weights_->cols() > 0)
 				{
 					*weights_ = oldWeights;
 				}
@@ -649,7 +649,7 @@ namespace BALL
 			else
 			{
 				model_->model_val->setCVRes(old_q2);
-				if (weights_ != NULL && weights_->Ncols() > 0) 
+				if (weights_ != NULL && weights_->cols() > 0) 
 				{
 					updateWeights(old_descr, model_->descriptor_IDs_, oldWeights);
 				}
@@ -854,10 +854,10 @@ namespace BALL
 		void FeatureSelection::implicitSelection(LinearModel& lm, int act, double d)
 		{
 			std::multiset<unsigned int> newIDs;
-			const Matrix<double>* training_result = lm.getTrainingResult();
-			const Matrix<double>* coeff_errors = lm.validation->getCoefficientStdErrors();
+			const Eigen::MatrixXd* training_result = lm.getTrainingResult();
+			const Eigen::MatrixXd* coeff_errors = lm.validation->getCoefficientStdErrors();
 			
-			if (coeff_errors->Nrows() == 0)
+			if (coeff_errors->rows() == 0)
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "The standard deviations of the coefficients of the given LinearModel must be calculated before implicit feature selection can be done!"); 
 			}
@@ -866,7 +866,7 @@ namespace BALL
 			if (!lm.descriptor_IDs_.empty())
 			{
 				std::multiset<unsigned int>::iterator d_it = lm.descriptor_IDs_.begin(); 
-				for (int i = 1; i <= training_result->Nrows() && (d_it != lm.descriptor_IDs_.end()); i++, d_it++)
+				for (int i = 0; i < training_result->rows() && (d_it != lm.descriptor_IDs_.end()); i++, d_it++)
 				{	
 					int id = *d_it;
 					// consider only those descriptors that are already part of BOTH models AND that have a coefficient outside of 0 +/- stddev
@@ -880,11 +880,11 @@ namespace BALL
 			}
 			else
 			{
-				for (int i = 0; i < training_result->Nrows(); i++)
+				for (int i = 0; i < training_result->rows(); i++)
 				{		
 					// consider only those descriptors that are already part of BOTH models AND that have a coefficient outside of 0 +/- stddev
 					if (  (model_->descriptor_IDs_.empty() || (model_->descriptor_IDs_.find(i) != model_->descriptor_IDs_.end()))
-										&&  ((*training_result)(i+1, act)>(*coeff_errors)(i+1, act)*d || (*training_result)(i+1, act)< -(*coeff_errors)(i+1, act)*d) )
+										&&  ((*training_result)(i, act)>(*coeff_errors)(i, act)*d || (*training_result)(i, act)< -(*coeff_errors)(i, act)*d) )
 					{
 						newIDs.insert(i); //cout<<"  added "<<i-1<<endl;
 					}
@@ -892,9 +892,9 @@ namespace BALL
 				}	
 			}
 					
-			if (weights_ != NULL && weights_->getSize() > 0)
+			if (weights_ != NULL && weights_->rows() > 0)
 			{
-				Vector<double> oldWeights = *weights_;
+				Eigen::VectorXd oldWeights = *weights_;
 				updateWeights(model_->descriptor_IDs_, newIDs, oldWeights);
 			}
 			model_->descriptor_IDs_ = newIDs;
@@ -904,7 +904,7 @@ namespace BALL
 		}
 
 
-		void FeatureSelection::updateWeights(std::multiset<unsigned int>& oldDescIDs, std::multiset<unsigned int>& newDescIDs, Vector<double>& oldWeights)
+		void FeatureSelection::updateWeights(std::multiset<unsigned int>& oldDescIDs, std::multiset<unsigned int>& newDescIDs, Eigen::VectorXd& oldWeights)
 		{
 			weights_->resize(newDescIDs.size());
 			
@@ -927,7 +927,7 @@ namespace BALL
 					}
 					if (*it1 == value)
 					{
-						(*weights_)(posNew) = oldWeights(posOld);
+						(*weights_)(posNew) = oldWeights[posOld];
 						posNew++;
 					}
 					it++;
@@ -939,7 +939,7 @@ namespace BALL
 			{
 				while (it != newDescIDs.end())
 				{	
-					(*weights_)(posNew) = oldWeights(*it+1);
+					(*weights_)(posNew) = oldWeights[*it];
 					posNew++;
 					it++;
 				}

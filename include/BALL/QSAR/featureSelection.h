@@ -56,6 +56,8 @@ namespace BALL
 				FeatureSelection(KernelModel& m);
 
 				~FeatureSelection();
+
+				EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 				//@}
 				
 				
@@ -118,7 +120,7 @@ namespace BALL
 				/** @name Accessors
 				 */
 				//@{
-				void updateWeights(std::multiset<unsigned int>& oldDescIDs, std::multiset<unsigned int>& newDescIDs, Vector<double>& oldWeights);
+				void updateWeights(std::multiset<unsigned int>& oldDescIDs, std::multiset<unsigned int>& newDescIDs, Eigen::VectorXd& oldWeights);
 				//@}
 				
 				
@@ -133,7 +135,7 @@ namespace BALL
 				Model* model_;
 				
 				/** pointer to KernelModel.weights (if the model to be optimized is a KernelModel) */
-				Vector<double>* weights_;
+				Eigen::VectorXd* weights_;
 				
 				/** implements forward selection; if stepwise==1, backwardSelection() is called after each forward step, i.e. after adding a feature. */
 				void forward(bool stepwise, int k, bool optPar);

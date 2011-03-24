@@ -34,19 +34,19 @@ namespace BALL
 		}
 
 
-		const BALL::Matrix<double>* LatentVariableModel::getLoadings()
+		const Eigen::MatrixXd* LatentVariableModel::getLoadings()
 		{
 			return &loadings_;
 		}
 
 
-		const BALL::Matrix<double>* LatentVariableModel::getLatentVariables()
+		const Eigen::MatrixXd* LatentVariableModel::getLatentVariables()
 		{
 			return &latent_variables_;
 		}
 
 
-		const BALL::Matrix<double>* LatentVariableModel::getWeights()
+		const Eigen::MatrixXd* LatentVariableModel::getWeights()
 		{
 			return &weights_;
 		}

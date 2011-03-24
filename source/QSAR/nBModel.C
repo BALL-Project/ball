@@ -24,6 +24,7 @@
 //
 
 #include <BALL/QSAR/nBModel.h>
+#include <limits>
 
 using namespace std;
 
@@ -47,16 +48,16 @@ namespace BALL
 
 		void NBModel::train()
 		{
-			if (descriptor_matrix_.Ncols() == 0)
+			if (descriptor_matrix_.cols() == 0)
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Data must be read into the model before training!"); 
 			}
 			readLabels();
 			
-			uint no_features = descriptor_matrix_.Ncols();
+			uint no_features = descriptor_matrix_.cols();
 			uint no_classes = labels_.size();
-			uint no_compounds = descriptor_matrix_.Nrows();
-			uint no_activities = Y_.Ncols();
+			uint no_compounds = descriptor_matrix_.rows();
+			uint no_activities = Y_.cols();
 				
 			// map values of Y to their index
 			map<int, uint> label_to_pos; 
@@ -66,8 +67,8 @@ namespace BALL
 			}	
 
 			min_max_.resize(2, no_features);
-			min_max_.setRow(1, 1e10);
-			min_max_.setRow(2, -1e10);
+			min_max_.row(0).setConstant( std::numeric_limits<double>::infinity());
+			min_max_.row(1).setConstant(-std::numeric_limits<double>::infinity());
 			
 			probabilities_.clear();
 			probabilities_.resize(no_activities);
@@ -77,27 +78,27 @@ namespace BALL
 			/// discretize the training data features
 			(this->*discretizeFeatures)(discretization_steps_, min_max_);
 			
-			Matrix<double> prob_matrix(discretization_steps_, no_features); prob_matrix = 0;
+			Eigen::MatrixXd prob_matrix(discretization_steps_, no_features); prob_matrix.setZero();
 			probabilities_.resize(no_activities);
 			for (uint act = 0; act < no_activities; act++)
 			{
 				probabilities_[act].resize(no_classes, prob_matrix);
 			
-				for (uint j = 1; j <= no_compounds; j++)
+				for (uint j = 0; j < no_compounds; j++)
 				{
-					uint class_id = label_to_pos.find((int)Y_(j, act+1))->second;
+					uint class_id = label_to_pos.find((int)Y_(j, act))->second;
 					no_substances_[class_id]++;
-					for (uint i = 1; i <= no_features; i++)
+					for (uint i = 0; i < no_features; i++)
 					{
 						// features have been discretized, so that descriptor_matrix_ contains only uint's
 						uint feat_bucket = (uint)descriptor_matrix_(j, i);
-						probabilities_[act][class_id](feat_bucket+1, i)++;
+						probabilities_[act][class_id](feat_bucket, i)++;
 					}	
 				}
 				
-				for (uint i = 1; i <= no_features; i++)
+				for (uint i = 0; i < no_features; i++)
 				{
-					for (uint j = 1; j <= discretization_steps_; j++)
+					for (uint j = 0; j < discretization_steps_; j++)
 					{
 						for (uint k = 0; k < no_classes; k++)
 						{
@@ -110,21 +111,21 @@ namespace BALL
 		}
 
 
-		BALL::Vector<double> NBModel::predict(const vector<double> & substance, bool transform)
+		Eigen::VectorXd NBModel::predict(const vector<double> & substance, bool transform)
 		{
 			if (probabilities_.size() == 0)
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Model must be trained before it can predict the activitiy of substances!"); 
 			}
 			
-			Vector<double> s = getSubstanceVector(substance, transform); 
+			Eigen::VectorXd s = getSubstanceVector(substance, transform); 
 			
 			uint no_activities = probabilities_.size();
 			uint no_classes = probabilities_[0].size();
-			uint no_features = probabilities_[0][0].Ncols();
+			uint no_features = probabilities_[0][0].cols();
 			
-			Vector<double> result(no_activities);
-			result = 0; result.setVectorType(0);
+			Eigen::RowVectorXd result(no_activities);
+			result.setZero();
 			
 			/// discretize the test data features according to the discretization of training data
 			(this->*discretizeTestDataFeatures)(s, discretization_steps_, min_max_);
@@ -136,16 +137,16 @@ namespace BALL
 				int best_label = labels_[0];
 				double second_best = 0;
 				
-				for (uint i = 1; i <= no_features; i++)
+				for (uint i = 0; i < no_features; i++)
 				{
 					// features were discretized, so they contain only uint's
 					uint feature_bucket = (uint) s(i);
 					
 					for (uint j = 0; j < no_classes; j++)
 					{
-						substance_prob[j] *= probabilities_[act][j](feature_bucket+1, i);
+						substance_prob[j] *= probabilities_[act][j](feature_bucket, i);
 						
-						if (i == no_features && substance_prob[j] > max)
+						if (i == no_features-1 && substance_prob[j] > max)
 						{
 							second_best = max;
 							max = substance_prob[j];
@@ -156,15 +157,15 @@ namespace BALL
 				
 				if (max >= second_best+min_prob_diff_)
 				{
-					result(act+1) = best_label;
+					result(act) = best_label;
 				}
 				else
 				{
-					result(act+1) = undef_act_class_id_;
+					result(act) = undef_act_class_id_;
 				}
 			}	
 			
-		// 	cout<<"no features = "<<s.Ncols()<<endl;
+		// 	cout<<"no features = "<<s.cols()<<endl;
 		// 	cout<<"descriptor_IDs_="<<descriptor_IDs_.toStr()<<endl;
 		//  	cout<<"discretized s="<<s;
 		//  	cout<<"predicted class="<<result;
@@ -209,7 +210,7 @@ namespace BALL
 				sel_features = data->getNoDescriptors();
 			}
 			
-			if (probabilities_.size() > 0 && (uint)min_max_.Ncols() == sel_features) return true; 
+			if (probabilities_.size() > 0 && (uint)min_max_.cols() == sel_features) return true; 
 			return false;
 		}
 
@@ -227,24 +228,24 @@ namespace BALL
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Model must be trained before a probability for a given feature value can be calculated!"); 
 			}
-			uint no_features = probabilities_[0][0].Ncols();
+			uint no_features = probabilities_[0][0].cols();
 			uint no_classes = probabilities_[0].size();
 			if (activitiy_index >= (int)probabilities_.size() || feature_index >= (int)no_features || activitiy_index < 0 || feature_index < 0)
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Index out of bounds for parameters given to SNBModel::calculateProbability() !"); 
 			}
 			
-			uint no_discretizations = probabilities_[0][0].Nrows();
-			double step = (min_max_(2, feature_index+1)-min_max_(1, feature_index+1))/no_discretizations;
-			int disc_index = (int)((feature_value-min_max_(1, feature_index+1))/step)+1;
+			uint no_discretizations = probabilities_[0][0].rows();
+			double step = (min_max_(1, feature_index)-min_max_(0, feature_index))/no_discretizations;
+			int disc_index = (int)((feature_value-min_max_(0, feature_index))/step);
 			
-			if (disc_index < 1) disc_index = 1; 
-			else if (disc_index > (int)no_discretizations) disc_index = no_discretizations; 
+			if (disc_index < 0) disc_index = 0; 
+			else if (disc_index >= (int)no_discretizations) disc_index = no_discretizations - 1; 
 			
 			vector<double> prob(no_classes);
 			for (uint i = 0; i < no_classes; i++)
 			{
-				prob[i] = probabilities_[activitiy_index][i](disc_index, feature_index+1);
+				prob[i] = probabilities_[activitiy_index][i](disc_index, feature_index);
 			}
 			return prob;
 		}
@@ -258,10 +259,10 @@ namespace BALL
 			
 			bool centered_data = 0;
 			bool centered_y = 0;
-			if (descriptor_transformations_.Ncols() != 0)
+			if (descriptor_transformations_.cols() != 0)
 			{
 				centered_data = 1;
-				if (y_transformations_.Ncols() != 0)
+				if (y_transformations_.cols() != 0)
 				{
 					centered_y = 1;
 				}
@@ -275,7 +276,7 @@ namespace BALL
 			
 				
 			int no_y = probabilities_.size();
-			if (no_y == 0) no_y = y_transformations_.Ncols(); // correct no because transformation information will have to by read anyway when reading this model later ...
+			if (no_y == 0) no_y = y_transformations_.cols(); // correct no because transformation information will have to by read anyway when reading this model later ...
 			
 			out<<"# model-type_\tno of featues in input data\tselected featues\tno of response variables\tcentered descriptors?\tno of classes\ttrained?"<<endl;
 			out<<type_<<"\t"<<data->getNoDescriptors()<<"\t"<<sel_features<<"\t"<<no_y<<"\t"<<centered_data<<"\t"<<no_substances_.size()<<"\t"<<trained<<"\n\n";

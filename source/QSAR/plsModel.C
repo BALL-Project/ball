@@ -24,7 +24,8 @@
 //
 
 #include <BALL/QSAR/plsModel.h>
-#include <BALL/MATHS/LINALG/matrixInverter.h>
+
+#include <Eigen/Dense>
 
 namespace BALL
 {
@@ -54,14 +55,14 @@ namespace BALL
 
 		void PLSModel::train()
 		{	
-			if (descriptor_matrix_.Ncols() == 0)
+			if (descriptor_matrix_.cols() == 0)
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Data must be read into the model before training!"); 
 			}
-			int cols = descriptor_matrix_.Ncols();
+			int cols = descriptor_matrix_.cols();
 			
-			Matrix<double> X = descriptor_matrix_;
-			Matrix<double> P;  // Matrix P saves all vectors p
+			Eigen::MatrixXd X = descriptor_matrix_;
+			Eigen::MatrixXd P;  // Matrix P saves all vectors p
 			
 			// determine the number of components that are to be created.
 			// no_components_ contains the number of components desired by the user, 
@@ -69,30 +70,26 @@ namespace BALL
 			uint components_to_create = no_components_;
 			if (cols < no_components_) components_to_create = cols; 
 			
-			U_.resize(X.Nrows(), components_to_create);
+			U_.resize(X.rows(), components_to_create);
 			loadings_.resize(cols, components_to_create);
-			weights_.resize(Y_.getColumnCount(), components_to_create);
-			latent_variables_.resize(descriptor_matrix_.Nrows(), components_to_create);
+			weights_.resize(Y_.cols(), components_to_create);
+			latent_variables_.resize(descriptor_matrix_.rows(), components_to_create);
 			P.resize(cols, components_to_create);
 
-			Vector<double> w; w.setVectorType(1); // column-vector
-			Vector<double> t; t.setVectorType(1); // column-vector
-			Vector<double> c; c.setVectorType(1); // column-vector
-			Vector<double> u(X.Nrows()); u.setVectorType(1); // column-vector
-			for (uint i = 1; i <= u.getSize(); i++)
-			{
-				u(i) = Y_(i, 1);	
-			}
-			Vector<double> u_old; u_old.setVectorType(1); // column-vector
+			Eigen::VectorXd w;
+			Eigen::VectorXd t;
+			Eigen::VectorXd c;
+			Eigen::VectorXd u = Y_.col(0);
+			Eigen::VectorXd u_old;
 			
 			for (uint j = 0; j < components_to_create; j++)
 			{
 				for (int i = 0; i < 10000; i++)
 				{	
-					w = X.t()*u / Statistics::scalarProduct(u);
+					w = X.transpose()*u / Statistics::scalarProduct(u);
 					w = w / Statistics::euclNorm(w);
 					t = X*w;
-					c = Y_.t()*t / Statistics::scalarProduct(t);
+					c = Y_.transpose()*t / Statistics::scalarProduct(t);
 					u_old = u;
 					u = Y_*c / Statistics::scalarProduct(c); 
 			
@@ -105,17 +102,15 @@ namespace BALL
 						break;
 					}
 				}
-				Vector<double> p = X.t()*t / Statistics::scalarProduct(t);
+				Eigen::VectorXd p = X.transpose()*t / Statistics::scalarProduct(t);
 				
-				Matrix<double> TP;
-				t.dotProduct(p, TP); // t.p.t() -> dim. nxm
-				X -= TP;
+				X -= t * p.transpose();
 			
-				U_.copyVectorToColumn(u, j+1);
-				loadings_.copyVectorToColumn(w, j+1);
-				weights_.copyVectorToColumn(c, j+1);
-				P.copyVectorToColumn(p, j+1);
-				latent_variables_.copyVectorToColumn(t, j+1);
+				U_.col(j) = u;
+				loadings_.col(j) = w;
+				weights_.col(j) = c;
+				P.col(j) = p;
+				latent_variables_.col(j) = t;
 			}
 
 		// 	try  // p's are not orthogonal to each other, so that in rare cases P.t()*loadings_ is not invertible
@@ -124,20 +119,13 @@ namespace BALL
 		// 	}
 		// 	catch(BALL::Exception::MatrixIsSingular e)
 		// 	{
-		// 		Matrix<double> I; I.setToIdentity(P.Ncols());
+		// 		Eigen::MatrixXd I; I.setToIdentity(P.cols());
 		// 		I *= 0.0001;
 		// 		loadings_ = loadings_*(P.t()*loadings_+I).i();
 		// 	}
 
-			Matrix<double> m = P.t()*loadings_;
-			MatrixInverter<double, StandardTraits> inverter(m);
-			inverter.computePseudoInverse();
+			training_result_ = loadings_*(P.transpose()*loadings_).jacobiSvd(Eigen::ComputeThinU | Eigen::ComputeThinV).solve(weights_.transpose());
 
-			loadings_ = loadings_*inverter.getPseudoInverse();
-			
-			weights_ = weights_.t(); // transform, so that one column contains the importances of all latent variables for modelling the response (-> weights_ will have more than one column in case of more than one modelled response variable)
-			training_result_ = loadings_*weights_;
-			
 			calculateOffsets();
 		}
 
@@ -168,7 +156,7 @@ namespace BALL
 		}
 
 
-		const BALL::Matrix<double>* PLSModel::getU()
+		const Eigen::MatrixXd* PLSModel::getU()
 		{ 
 			return &U_;
 		}

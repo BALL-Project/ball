@@ -69,7 +69,7 @@ namespace BALL
 		// 				model_->transformations(1, t+1) = model_->data->transformations[i][0]; 
 		// 				model_->transformations(2, t+1) = model_->data->transformations[i][1]; 
 		// 			}
-					model_->descriptor_matrix_(train_line+1, t+1) = model_->data->descriptor_matrix_[i][current_line];
+					model_->descriptor_matrix_(train_line, t) = model_->data->descriptor_matrix_[i][current_line];
 					t++;
 					if (fs)
 					{
@@ -81,7 +81,7 @@ namespace BALL
 		//	int a = model_->data->transformations.size() - model_->data->Y_.size(); 
 			for (unsigned int i = 0; i < model_->data->Y_.size(); i++)
 			{
-				model_->Y_(train_line+1, i+1) = model_->data->Y_[i][current_line];
+				model_->Y_(train_line, i) = model_->data->Y_[i][current_line];
 		// 		if (train_line == 0)
 		// 		{
 		// 			transformations(1, col+i+1) = model_->data->transformations[a+i][0]; 
@@ -116,11 +116,11 @@ namespace BALL
 			// set all y-values for current substance
 			for (unsigned int i = 0; i < model_->data->Y_.size(); i++)
 			{	
-				test_Y_(test_line+1, i+1) = model_->data->Y_[i][current_line];
+				test_Y_(test_line, i) = model_->data->Y_[i][current_line];
 				if (back_transform)
 				{
 					double stddev = model_->data->y_transformations_[i][1]; 
-					test_Y_(test_line+1, i+1) = test_Y_(test_line+1, i+1)*stddev+model_->data->y_transformations_[i][0]; 
+					test_Y_(test_line, i) = test_Y_(test_line, i)*stddev+model_->data->y_transformations_[i][0]; 
 				}
 			}
 		}
@@ -147,7 +147,7 @@ namespace BALL
 		}
 
 
-		const BALL::Matrix<double>& Validation::getYRandResults() const
+		const Eigen::MatrixXd& Validation::getYRandResults() const
 		{
 			return yRand_results_;
 		}

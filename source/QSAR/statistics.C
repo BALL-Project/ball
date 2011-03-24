@@ -215,16 +215,16 @@ namespace BALL
 		// -----------------------------------------------------------------
 
 
-		void Statistics::centering(Matrix<double>& m)
+		void Statistics::centering(Eigen::MatrixXd& m)
 		{
-			for (int i = 1; i <= m.Ncols(); i++)
+			for (int i = 0; i < m.cols(); i++)
 			{
 				centering(m, i);
 			}
 		}
 
 
-		void Statistics::centering(Matrix<double>& m, int col)
+		void Statistics::centering(Eigen::MatrixXd& m, int col)
 		{
 			double mean = getMean(m, col);
 			double std = sqrt(getVariance(m, col, mean));
@@ -232,104 +232,87 @@ namespace BALL
 			// standard deviation = 0, i.e. all values of this column are identical, so do nothing!
 			if (std < 5*std::numeric_limits < double > ::epsilon()) return; 
 	
-			for (int i = 1; i <= m.Nrows(); i++)
+			for (int i = 0; i < m.rows(); i++)
 			{
 				m(i, col) = (m(i, col)-mean)/std;
 			}
 		}
 
-		double Statistics::getMean(const Matrix<double>& m, int col)
+		double Statistics::getMean(const Eigen::MatrixXd& m, int col)
 		{
 			double sum = 0;
-			for (int i = 1; i <= m.Nrows(); i++)
+			for (int i = 0; i < m.rows(); i++)
 			{
 				sum += m(i, col);
 			}
-			return sum/m.Nrows();
+			return sum/m.rows();
 		}
 
-		double Statistics::getVariance(const Matrix<double>& m, int col, double mean)
+		double Statistics::getVariance(const Eigen::MatrixXd& m, int col, double mean)
 		{
 			if (mean == -1) {	mean = getMean(m, col); }
 			double sum_of_squares = 0;
-			for (int i = 1; i <= m.Nrows(); i++)
+			for (int i = 0; i < m.rows(); i++)
 			{
 				sum_of_squares += pow(m(i, col)-mean, 2);
 			}
-			return sum_of_squares/(m.Nrows()-1);
+			return sum_of_squares/(m.rows()-1);
 		}
 
-		double Statistics::getStddev(const Matrix<double>& m, int col, double mean)
+		double Statistics::getStddev(const Eigen::MatrixXd& m, int col, double mean)
 		{
 			double d = getVariance(m, col, mean);
 			return sqrt(d);
 		}
 
-		double Statistics::getCovariance(const Matrix<double>& m, int col1, int col2, double mean1, double mean2)
+		double Statistics::getCovariance(const Eigen::MatrixXd& m, int col1, int col2, double mean1, double mean2)
 		{
 			if (mean1 == -1) {mean1 = getMean(m, col1); }
 			if (mean2 == -1) {mean2 = getMean(m, col2); }
 			double sum_of_squares = 0;
-			for (int i = 1; i <= m.Nrows(); i++)
+			for (int i = 0; i < m.rows(); i++)
 			{
 				sum_of_squares += (m(i, col1)-mean1)*(m(i, col2)-mean2);
 			}
-			return sum_of_squares/(m.Nrows()-1);
+			return sum_of_squares/(m.rows()-1);
 		}
 
 
-		double Statistics::sq(const Matrix<double>& m, int col, double mean)
+		double Statistics::sq(const Eigen::MatrixXd& m, int col, double mean)
 		{
 			if (mean == -1) {	mean = getMean(m, col); }
 			double sum_of_squares = 0;
-			for (int i = 1; i <= m.Nrows(); i++)
+			for (int i = 0; i < m.rows(); i++)
 			{
 				sum_of_squares += pow(m(i, col)-mean, 2);
 			}
 			return sum_of_squares;
 		}
 
-		double Statistics::euclNorm(const Vector<double>& cv)
+		double Statistics::euclNorm(const Eigen::VectorXd& cv)
 		{
 			return sqrt(scalarProduct(cv));
 		}
 
 
-		double Statistics::scalarProduct(const Vector<double>& cv)
+		double Statistics::scalarProduct(const Eigen::VectorXd& cv)
 		{
-			double n = 0;
-			for (uint i = 1; i <= cv.getSize(); i++)
-			{
-				n += cv(i)*cv(i);
-			}
-			return n;
+			return cv.dot(cv);
 		}
 
 
-		double Statistics::euclDistance(const Vector<double>& c1, const Vector<double>& c2)
+		double Statistics::euclDistance(const Eigen::VectorXd& c1, const Eigen::VectorXd& c2)
 		{
-			if (c1.getSize() != c2.getSize()) 
-			{
-				BALL::Exception::VectorHasWrongDimension e;
-				e.setMessage("Vectors must have the same number of cells in order to be able to calculate the euclidian distance between them!!");
-				throw e;
-			}
-			
-			double n = 0;
-			for (uint i = 1; i <= c1.getSize(); i++)
-			{
-				n += pow((c1(i)-c2(i)), 2);
-			}
-			return sqrt(n);
+			return sqrt(scalarProduct(c1 - c2));
 		}
 
 		//---------------------------
 
 
-		double Statistics::distance(const Matrix<double>& m, int& row1, int& row2, double& p)
+		double Statistics::distance(const Eigen::MatrixXd& m, int& row1, int& row2, double& p)
 		{
 			double dist = 0;
-			for (int j = 1; j <= m.Ncols(); j++)
+			for (int j = 1; j <= m.cols(); j++)
 			{
 				dist += m(row1, j)*m(row2, j);
 				
@@ -344,21 +327,10 @@ namespace BALL
 		}
 
 
-		double Statistics::distance(const Matrix<double>& m1, const Matrix<double>& m2, int& row1, int& row2, double& p)
+		double Statistics::distance(const Eigen::MatrixXd& m1, const Eigen::MatrixXd& m2, int& row1, int& row2, double& p)
 		{
-			if (m1.Ncols() != m2.Ncols()) 
-			{
-				BALL::Exception::MatrixHasWrongDimension e;
-				e.setMessage("Matrices must have the same number of columns in order to be able to calculate a distance between two of their rows!!");
-				throw e;
-			}
-			
-			double dist = 0;
-			for (int j = 1; j <= m1.Ncols(); j++)
-			{
-				dist += m1(row1, j)*m2(row2, j);
-			}
-				
+			double dist = m1.row(row1).dot(m2.row(row2));
+
 			int i_p = static_cast <int> (p);
 			if (i_p != p) // if a root of dist should be taken, then dist may not be negative
 			{
@@ -368,17 +340,10 @@ namespace BALL
 		}
 
 
-		double Statistics::distance(const Matrix<double>& m1, const Matrix<double>& m2, int& row1, int& row2, String& f, String& g)
+		double Statistics::distance(const Eigen::MatrixXd& m1, const Eigen::MatrixXd& m2, int& row1, int& row2, String& f, String& g)
 		{
-			if (m1.Ncols() != m2.Ncols()) 
-			{
-				BALL::Exception::MatrixHasWrongDimension e;
-				e.setMessage("Matrices must have the same number of columns in order to be able to calculate a distance between two of their rows!!");
-				throw e;
-			}
-			
 			double dist = 0;
-			for (int j = 1; j <= m1.Ncols(); j++)
+			for (int j = 0; j < m1.cols(); j++)
 			{
 				String var="";
 				var = var+"x1="+String(m1(row1, j))+";x2="+String(m2(row2, j))+";";
@@ -394,21 +359,9 @@ namespace BALL
 		}
 
 
-		double Statistics::euclDistance(const Matrix<double>& m1, const Matrix<double>& m2, int row1, int row2)
+		double Statistics::euclDistance(const Eigen::MatrixXd& m1, const Eigen::MatrixXd& m2, int row1, int row2)
 		{
-			if (m1.Ncols() != m2.Ncols()) 
-			{
-				BALL::Exception::MatrixHasWrongDimension e;
-				e.setMessage("Matrices must have the same number of columns in order to be able to calculate the euclidian distance between two of their rows!!");
-				throw e;
-			}
-			
-			double dist = 0;
-			for (int j = 1; j <= m1.Ncols(); j++)
-			{
-				dist += pow(m1(row1, j)-m2(row2, j), 2);
-			}	
-			return sqrt(dist);
+			return euclDistance(m1.row(row1), m2.row(row2));
 		}
 	}
 }

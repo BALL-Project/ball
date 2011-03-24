@@ -25,7 +25,8 @@
 
 #include <BALL/QSAR/kplsModel.h>
 #include <BALL/QSAR/mlrModel.h>
-#include <BALL/MATHS/LINALG/matrixInverter.h>
+
+#include <Eigen/Dense>
 
 namespace BALL
 {
@@ -40,7 +41,7 @@ namespace BALL
 		}
 
 
-		KPLSModel::KPLSModel(const QSARData& q, Vector<double>& w) : KernelModel(q, w) 
+		KPLSModel::KPLSModel(const QSARData& q, Eigen::VectorXd& w) : KernelModel(q, w) 
 		{
 			no_components_ = 1;
 			type_="KPLS";
@@ -98,52 +99,49 @@ namespace BALL
 
 		void KPLSModel::train()
 		{	
-			if (descriptor_matrix_.Ncols() == 0)
+			if (descriptor_matrix_.cols() == 0)
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Data must be read into the model before training!"); 
 			}
-		// 	if (descriptor_matrix_.Ncols() < no_components_)
+		// 	if (descriptor_matrix_.cols() < no_components_)
 		// 	{
-		// 		throw Exception::TooManyPLSComponents(__FILE__, __LINE__, no_components_, descriptor_matrix_.Ncols());
+		// 		throw Exception::TooManyPLSComponents(__FILE__, __LINE__, no_components_, descriptor_matrix_.cols());
 		// 	}
 			
 			kernel->calculateKernelMatrix(descriptor_matrix_, K_);
 
-			Matrix<double> P;  // Matrix P saves all vectors p
+			Eigen::MatrixXd P;  // Matrix P saves all vectors p
 
-			int cols = K_.Ncols();
+			int cols = K_.cols();
 			
 			// determine the number of components that are to be created.
 			// no_components_ contains the number of components desired by the user, 
 			// but obviously we cannot calculate more PLS components than features
-			int features = descriptor_matrix_.Ncols();
+			int features = descriptor_matrix_.cols();
 			uint components_to_create = no_components_;
 			if (features < no_components_) components_to_create = features; 
 
-			U_.resize(K_.Nrows(), components_to_create);
+			U_.resize(K_.rows(), components_to_create);
 			loadings_.resize(cols, components_to_create);
-			weights_.resize(Y_.getColumnCount(), components_to_create);
-			latent_variables_.resize(K_.Nrows(), components_to_create);
+			weights_.resize(Y_.cols(), components_to_create);
+			latent_variables_.resize(K_.rows(), components_to_create);
 			P.resize(cols, components_to_create);
 			
-			Vector<double> w; w.setVectorType(1);
-			Vector<double> t; t.setVectorType(1);
-			Vector<double> c; c.setVectorType(1);
-			Vector<double> u(K_.Nrows()); c.setVectorType(1);
-			for (uint i = 1; i <= u.getSize(); i++)
-			{
-				u(i) = Y_(i, 1);	
-			}
-			Vector<double> u_old; u_old.setVectorType(1);
+			Eigen::VectorXd w;
+			Eigen::VectorXd t;
+			Eigen::VectorXd c;
+			Eigen::VectorXd u = Y_.col(0);
+
+			Eigen::VectorXd u_old;
 			
 			for (uint j = 0; j < components_to_create; j++)
 			{
 				for (int i = 0; i < 10000 ; i++)
 				{	
-					w = K_.t()*u / Statistics::scalarProduct(u);
+					w = K_.transpose()*u / Statistics::scalarProduct(u);
 					w = w / Statistics::euclNorm(w);
 					t = K_*w;
-					c = Y_.t()*t / Statistics::scalarProduct(t);
+					c = Y_.transpose()*t / Statistics::scalarProduct(t);
 					u_old = u;
 					u = Y_*c / Statistics::scalarProduct(c); 
 				
@@ -156,18 +154,15 @@ namespace BALL
 						break;
 					}
 				}
-				Vector<double> p = K_.t()*t / Statistics::scalarProduct(t);
-				
-				Matrix<double> TP; 
-				t.dotProduct(p, TP); // t.p.t() -> dim. nxn
-				K_ -= TP;
-				//Y_ = Y_ - t*c.t();
-				
-				U_.copyVectorToColumn(u, j+1);
-				loadings_.copyVectorToColumn(w, j+1);
-				weights_.copyVectorToColumn(c, j+1);
-				P.copyVectorToColumn(p, j+1);
-				latent_variables_.copyVectorToColumn(t, j+1);
+
+				Eigen::VectorXd p = K_.transpose() * t / Statistics::scalarProduct(t);
+				K_ -= t * p.transpose();
+
+				U_.col(j) = u;
+				loadings_.col(j) = w;
+				weights_.col(j) = c;
+				P.col(j) = p;
+				latent_variables_.col(j) = t;
 			}
 
 		// 	try // p's are not orthogonal to each other, so that in rare cases P.t()*loadings_ is not invertible
@@ -176,19 +171,14 @@ namespace BALL
 		// 	}
 		// 	catch(BALL::Exception::MatrixIsSingular e)
 		// 	{
-		// 		Matrix<double> I; I.setToIdentity(P.Ncols());
+		// 		Eigen::MatrixXd I; I.setToIdentity(P.cols());
 		// 		I *= 0.001;
 		// 		loadings_ = loadings_*(P.t()*loadings_+I).i();
 		// 	}
 
-			Matrix<double> m = P.t()*loadings_;
-			MatrixInverter<double, StandardTraits> inverter(m);
-			inverter.computePseudoInverse();
+			Eigen::MatrixXd m = P.transpose()*loadings_;
+			training_result_ = loadings_*m.colPivHouseholderQr().solve(weights_.transpose());
 
-			loadings_ = loadings_*inverter.getPseudoInverse();
-			
-			training_result_ = loadings_*weights_.t();
-			
 			calculateOffsets();
 		}
 
@@ -217,7 +207,7 @@ namespace BALL
 			return 1;
 		}
 
-		const BALL::Matrix<double>* KPLSModel::getU()
+		const Eigen::MatrixXd* KPLSModel::getU()
 		{ 
 			return &U_;
 		}

@@ -54,7 +54,7 @@ namespace BALL
 				
 				KernelModel(const QSARData& q, String f, String g);
 						
-				KernelModel(const QSARData& q, Vector<double>& w);
+				KernelModel(const QSARData& q, Eigen::VectorXd& w);
 				
 				KernelModel(const QSARData& q, const LinearModel& lm, int column);
 				
@@ -64,9 +64,11 @@ namespace BALL
 				
 				virtual void readFromFile(string filename);
 				
-				virtual Vector<double> predict(const vector<double>& substance, bool transform);
+				virtual Eigen::VectorXd predict(const vector<double>& substance, bool transform);
 				
 				void operator=(const Model& m);
+
+				EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 				//@}
 				
 				/** @name Attributes
@@ -82,7 +84,7 @@ namespace BALL
 				 */
 				//@{
 				/** Matrix containing the pairwise distances between all substances */
-				Matrix<double> K_;
+				Eigen::MatrixXd K_;
 				
 				/** resulting matrix with one column for each modeled activity and with one coefficient for each substance (i.e. one column for each column for Model.Y) */
 				//Matrix B;

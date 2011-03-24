@@ -19,13 +19,13 @@ CHECK(KPLS-model)
 	KPLSModel model(data,2,0.005);
 	model.readTrainingData();
 	model.train();
-	const Matrix<double>* res = model.getTrainingResult();
-	TEST_EQUAL(res->getRowCount(),5)
-	TEST_REAL_EQUAL((*res)[0],1.097792)
-	TEST_REAL_EQUAL((*res)[1],1.098163)
-	TEST_REAL_EQUAL((*res)[2],1.099770)
-	TEST_REAL_EQUAL((*res)[3],1.091865)
-	TEST_REAL_EQUAL((*res)[4],1.097792)
+	const Eigen::MatrixXd* res = model.getTrainingResult();
+	TEST_EQUAL(res->rows(),5)
+	TEST_REAL_EQUAL((*res)(0,0),1.097792)
+	TEST_REAL_EQUAL((*res)(1,0),1.098163)
+	TEST_REAL_EQUAL((*res)(2,0),1.099770)
+	TEST_REAL_EQUAL((*res)(3,0),1.091865)
+	TEST_REAL_EQUAL((*res)(4,0),1.097792)
 RESULT
 
 

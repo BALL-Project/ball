@@ -21,8 +21,8 @@ CHECK(PLS-model)
 	model.setParameters(p);
 	model.readTrainingData();
 	model.train();
-	const Matrix<double>* res = model.getTrainingResult();
-	TEST_REAL_EQUAL(res->getRowCount(),3)
+	const Eigen::MatrixXd* res = model.getTrainingResult();
+	TEST_REAL_EQUAL(res->rows(),3)
 	TEST_REAL_EQUAL((*res)[0],0.141237)
 	TEST_REAL_EQUAL((*res)[1],0.3923251)
 	TEST_REAL_EQUAL((*res)[2],0.5555323)

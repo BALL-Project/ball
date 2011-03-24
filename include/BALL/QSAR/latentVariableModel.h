@@ -26,10 +26,9 @@
 #ifndef LVMODEL
 #define LVMODEL
 
-#ifndef BALL_LINALG_MATRIX_H
-#include <BALL/MATHS/LINALG/matrix.h>
-#endif
+#include <Eigen/Core>
 
+#include <BALL/COMMON/global.h>
 
 namespace BALL
 {
@@ -44,26 +43,26 @@ namespace BALL
 				
 				/** Return the latent variable matrix as computed by the last training.\n
 				It contains one loading vector in each column. Each loading vector contains the importance of each feature for a latente variable. */
-				const Matrix<double>* getLatentVariables();
+				const Eigen::MatrixXd* getLatentVariables();
 				
 				/** Return the weights matrix as computed by the last training.\n
 				It contains one weight vector in each column. Each weight vector contains the importance of each latente variable for modelling the result. */
-				const Matrix<double>* getWeights();
+				const Eigen::MatrixXd* getWeights();
 				
 				/** Return the loading matrix as computed by the last training.\n
 				It contains one loading vector in each column. Each loading vector contains the importance of each feature for a latente variable. */
-				const Matrix<double>* getLoadings();
+				const Eigen::MatrixXd* getLoadings();
 			
 			protected:
 				
 				/** The loading-matrix which contains one loading vector in each column. Each loading vector contains the importance of each feature for a latente variable. */
-				Matrix<double> latent_variables_;
+				Eigen::MatrixXd latent_variables_;
 				
 				/** The loading-matrix which contains one loading vector in each column. Each loading vector contains the importance of each feature for a latente variable. */
-				Matrix<double> loadings_;
+				Eigen::MatrixXd loadings_;
 				
 				/** The weights-matrix which contains one weight vector in each column. Each weight vector contains the importance of each latente variable for modelling the result. */
-				Matrix<double> weights_;
+				Eigen::MatrixXd weights_;
 				
 				friend class RegressionValidation;	
 		};

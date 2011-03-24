@@ -24,7 +24,8 @@
 // 
 
 #include <BALL/QSAR/gpModel.h>
-#include <BALL/MATHS/LINALG/matrixInverter.h>
+
+#include <Eigen/Dense>
 
 namespace BALL
 {
@@ -37,7 +38,7 @@ namespace BALL
 			lambda_ = 0.001;
 		}
 
-		GPModel::GPModel(const QSARData& q, Vector<double>& w) : KernelModel(q, w) 
+		GPModel::GPModel(const QSARData& q, Eigen::VectorXd& w) : KernelModel(q, w) 
 		{
 			type_="GP";
 			lambda_ = 0.001;
@@ -63,33 +64,21 @@ namespace BALL
 
 		void GPModel::train()
 		{
-			if (descriptor_matrix_.Ncols() == 0)
+			if (descriptor_matrix_.cols() == 0)
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Data must be read into the model before training!"); 
 			}
 			kernel->calculateKernelMatrix(descriptor_matrix_, K_);
 			
-			Matrix<double> I(K_.Nrows(), K_.Nrows());
-			I = 0;
-			for (int i = 1; i < I.Nrows(); i++)
-			{
-				I(i, i) = 1;
-			}
-			
-			MatrixInverter<double, StandardTraits> inverter(K_);
-			inverter.computePseudoInverse();
-
-			L_ = inverter.getPseudoInverse();  // dim: nxn
-
-			training_result_ = L_*Y_; // B: one coefficient for each substance; dim: nxc
+			training_result_ = K_.colPivHouseholderQr().solve(Y_); // B: one coefficient for each substance; dim: nxc
 			
 			calculateOffsets();
 		}
 
 
-		BALL::Vector<double> GPModel::predict(const vector<double> & substance, bool transform)
+		Eigen::VectorXd GPModel::predict(const vector<double> & substance, bool transform)
 		{
-			if (training_result_.Ncols() == 0)
+			if (training_result_.cols() == 0)
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Model must be trained before it can predict the activitiy of substances!"); 
 			}
@@ -97,10 +86,10 @@ namespace BALL
 			
 			kernel->calculateKernelVector(K_, input_, descriptor_matrix_, K_t_); // dim: 1xn
 			
-			Vector<double> res = K_t_*training_result_;
+			Eigen::VectorXd res = K_t_*training_result_;
 			//if (offsets_.getSize() == res.getSize()) res -= offsets_; 
 			
-			if (transform && y_transformations_.Ncols() != 0)
+			if (transform && y_transformations_.cols() != 0)
 			{
 				backTransformPrediction(res); 
 			}
@@ -110,15 +99,15 @@ namespace BALL
 
 		double GPModel::calculateStdErr()
 		{
-			Matrix<double> mx;
-			Matrix<double> m1(1, input_.getSize());
-			m1.copyVectorToRow(input_, 1);
+			Eigen::MatrixXd mx;
+			Eigen::MatrixXd m1(1, input_.rows());
+			m1.row(1) = input_;
 			kernel->calculateKernelMatrix(m1, mx); // k(x*, x*), dim: 1x1
 			
 			double sum = 0;
-			for (uint i = 1; i <= K_t_.getSize(); i++)
+			for (uint i = 1; i <= K_t_.cols(); i++)
 			{
-				for (uint j = 1; j <= K_t_.getSize(); j++)
+				for (uint j = 1; j <= K_t_.cols(); j++)
 				{
 					sum += K_t_(i)*K_t_(j)*L_(i, j); // k(x*, _i)*k(x*, x_j)*L_ij
 				}

@@ -94,7 +94,7 @@ void startPrediction(ifstream& in, QSARData* q, String* data_filename)
 	{
 		vector<double>* v = q->getSubstance(i); // get UNcentered descriptor-vector of test compound 
 			
-		Vector<double> res = m->predict(*v,1); // transform val. data according to centering of training data
+		Eigen::VectorXd res = m->predict(*v,1); // transform val. data according to centering of training data
 		delete v;
 		
 		vector<double>* exp = q->getActivity(i); // get UNcentered response value vector

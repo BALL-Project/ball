@@ -45,6 +45,7 @@ namespace BALL
 				OPLSModel(const QSARData& q);
 
 				~OPLSModel();
+				EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 				//@}
 				
 				
@@ -55,9 +56,9 @@ namespace BALL
 				In order to find the optimal number of latente variables for the current data of this model, run findNoLatenteVariables() first. */
 				void train();
 				
-				const Matrix<double>* getWOrtho();
+				const Eigen::MatrixXd* getWOrtho();
 				
-				const Matrix<double>* getTOrtho();
+				const Eigen::MatrixXd* getTOrtho();
 				
 				int getNoOrthoComponents();
 				
@@ -76,8 +77,8 @@ namespace BALL
 				/** @name Attributes
 				 */
 				//@{
-				Matrix<double> T_ortho_;
-				Matrix<double> W_ortho_;
+				Eigen::MatrixXd T_ortho_;
+				Eigen::MatrixXd W_ortho_;
 				
 				int no_ortho_components_;
 				//@}
