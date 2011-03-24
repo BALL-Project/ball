@@ -1,4 +1,4 @@
-INCLUDE(include/BALL/MATHS/LINALG/sources.cmake)
+#INCLUDE(include/BALL/MATHS/LINALG/sources.cmake)
 
 ### list all filenames of the directory here ###
 SET(GROUP MATHS)
