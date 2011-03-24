@@ -56,9 +56,6 @@
 #include <BALL/QSAR/exception.h>
 #endif
 
-#include <gsl/gsl_randist.h>
-#include <gsl/gsl_cdf.h>
-
 #include <BALL/CONCEPT/timeStamp.h>
 
 // #ifndef MODEL

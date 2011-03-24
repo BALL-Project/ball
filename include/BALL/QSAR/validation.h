@@ -30,8 +30,6 @@
 #include <BALL/QSAR/QSARData.h>
 #endif
 
-#include <gsl/gsl_randist.h>
-#include <gsl/gsl_cdf.h>
 #include <iterator>
 
 

@@ -27,6 +27,8 @@
 #include <set>
 #include <algorithm>
 
+#include <boost/random/mersenne_twister.hpp>
+
 using namespace std;
 
 namespace BALL
@@ -1183,19 +1185,18 @@ namespace BALL
 			v[1]->Y_.resize(Y_.size());
 			v[1]->class_names_ = class_names_;
 			
-			gsl_rng * r = gsl_rng_alloc (gsl_rng_ranlxd2);
-			
 			std::multiset<unsigned int> val;
 			set<uint> map_val;
 			unsigned int no_val = static_cast<unsigned int>(descriptor_matrix_[0].size()*fraction);
 			
 			PreciseTime pt;
-			gsl_rng_set(r, pt.now().getMicroSeconds());
+			boost::mt19937 rng(pt.now().getMicroSeconds());
+			
 			
 			/// randomly draw without replacement the desired number of external validation compounds
 			for (unsigned int i = 0; i < no_val; i++)
 			{
-				int pos = gsl_rng_uniform_int(r, descriptor_matrix_[0].size()-1); 
+				int pos = rng() % (descriptor_matrix_[0].size()-1);
 				if (map_val.find(pos) != map_val.end())
 				{
 					i--; // no increase, since no new validation compound was selected

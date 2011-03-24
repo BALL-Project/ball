@@ -28,7 +28,8 @@
 #include <BALL/QSAR/kernelModel.h>
 #include <BALL/QSAR/latentVariableModel.h>
 #include <BALL/QSAR/registry.h>
-#include <gsl/gsl_rng.h>
+
+#include <boost/random/mersenne_twister.hpp>
 
 using namespace std;
 
@@ -362,9 +363,7 @@ namespace BALL
 				no_descriptors = model_->descriptor_IDs_.size();
 			}
 			
-			gsl_rng * r = gsl_rng_alloc (gsl_rng_ranlxd2);
-			PreciseTime pt;
-			gsl_rng_set(r, pt.now().getSeconds());
+			boost::mt19937 rng(PreciseTime::now().getMicroSeconds());
 			
 			for (int i = 0; i < k; i++) // create and evaluate k bootstrap samples
 			{
@@ -375,7 +374,7 @@ namespace BALL
 				model_->Y_.resize(N, model_->data->Y_.size());
 				for (int j = 0; j < N; j++)
 				{
-					int pos = gsl_rng_uniform_int(r, N); 
+					int pos = rng() % N;
 					setTrainingLine(j, pos);
 					sample_substances[pos]++;
 				}
@@ -433,7 +432,6 @@ namespace BALL
 			
 			Q2_ = 0.632*Q2_ + 0.368*r2;
 				
-			gsl_rng_free(r);
 			if (restore) restoreTrainingResults(); 
 		}
 

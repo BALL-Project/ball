@@ -27,6 +27,8 @@
 #include <BALL/QSAR/classificationModel.h>
 #include <BALL/QSAR/registry.h>
 
+#include <boost/random/mersenne_twister.hpp>
+
 using namespace std;
 
 namespace BALL
@@ -249,9 +251,7 @@ namespace BALL
 				no_descriptors = model_->descriptor_IDs_.size();
 			}
 
-			gsl_rng * r = gsl_rng_alloc (gsl_rng_ranlxd2);
-			PreciseTime pt;
-			gsl_rng_set(r, pt.now().getSeconds());
+			boost::mt19937 rng(PreciseTime::now().getMicroSeconds());
 			
 			double overall_fit = 0;
 			double overall_pred = 0;
@@ -262,7 +262,6 @@ namespace BALL
 
 			for (int i = 0; i < k; i++) // create and evaluate k bootstrap samples
 			{
-				//gsl_rng_set(r, i);
 				vector<int> sample_substances(N, 0); // numbers of occurences of substances within this sample
 				
 				class_results_.setZero();
@@ -273,7 +272,7 @@ namespace BALL
 				for (int j = 0; j < N; j++)
 				{
 					//int pos = rand()%N;
-					int pos = gsl_rng_uniform_int(r, N); 
+					int pos = rng() % N;
 					setTrainingLine(j, pos);
 					sample_substances[pos]++;
 				}
@@ -336,7 +335,6 @@ namespace BALL
 			quality_cv_ = 0.632*overall_pred + 0.368*overall_fit;
 			class_results_ = class_results_pred*0.632 + class_results_fit*0.368;
 			
-			gsl_rng_free(r);
 			if (restore)
 			{
 				model_->descriptor_matrix_ = desc_backup;   // prevent confusion of cross-validation coefficients with coefficients

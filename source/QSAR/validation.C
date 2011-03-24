@@ -26,6 +26,8 @@
 #include <BALL/QSAR/statistics.h>
 #include <BALL/QSAR/Model.h>
 
+#include <boost/random/mersenne_twister.hpp>
+
 namespace BALL
 {
 	namespace QSAR
@@ -128,9 +130,7 @@ namespace BALL
 
 		void Validation::yRand()
 		{
-			gsl_rng * r = gsl_rng_alloc (gsl_rng_ranlxd2);
-			PreciseTime pt;
-			gsl_rng_set(r, pt.now().getSeconds());
+			boost::mt19937 rng(PreciseTime::now().getMicroSeconds());
 			
 			QSARData* data = const_cast <QSARData*> (model_->data);
 			
@@ -138,7 +138,7 @@ namespace BALL
 			{
 				for (unsigned int j = 0; j < data->Y_[0].size(); j++)
 				{	
-					int pos = gsl_rng_uniform_int(r, data->Y_[0].size()-1);  // exchange elements at pos and j
+					int pos = rng() % (data->Y_[0].size()-1);  // exchange elements at pos and j
 					double tmp = data->Y_[i][pos];
 					data->Y_[i][pos] = data->Y_[i][j];
 					data->Y_[i][j] = tmp;
