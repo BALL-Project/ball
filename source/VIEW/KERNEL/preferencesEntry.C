@@ -274,6 +274,8 @@ namespace BALL
 
 		bool PreferencesEntry::setValue_(QObject* widget, const String& value)
 		{
+			if (!setValueAllowed(widget)) return true;
+
 			try
 			{
 				ExtendedPreferencesObject* epo = dynamic_cast<ExtendedPreferencesObject*>(widget);
