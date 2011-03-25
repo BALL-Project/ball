@@ -74,6 +74,13 @@ namespace BALL
 			stereoScreensRenderer_comboBox->addItem(tr("RTfact"));
 			stereoScreensRenderer_comboBox->setCurrentIndex(2);
 #endif
+// TODO: this is the bad ms wischa hack!! Remove after the children are gone!
+			controlRenderer_comboBox->setCurrentIndex(2);
+			leftEyeScreen_comboBox->setCurrentIndex(1);
+			rightEyeScreen_comboBox->setCurrentIndex(1);
+			sideBySide_radioButton->setChecked(true);
+			stereoModeChanged();
+// END TODO
 			// signals and slots connections
 			connect( color_button, SIGNAL( clicked() ), this, SLOT( colorPressed() ) );
 			connect( computeDefault_button, SIGNAL( clicked() ), this, SLOT( computeDefaultPressed() ) );
@@ -102,6 +109,18 @@ namespace BALL
 			connect( rightEyeScreen_comboBox,   SIGNAL( currentIndexChanged(int) ), this, SLOT( stereoScreenChanged(int) ) );
 		} 
 
+
+		bool StageSettings::setValueAllowed(QObject* widget)
+		{
+			// TODO: ms_wischa hack
+
+			while (widget->parent())
+			{
+				if (widget->parent()->objectName() == "DisplaySettings") return false;
+				widget = widget->parent();
+			}
+			return true;
+		}
 
 		void StageSettings::colorPressed()
 		{

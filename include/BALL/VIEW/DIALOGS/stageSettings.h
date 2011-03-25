@@ -103,6 +103,8 @@ namespace BALL
        */
 			QRect getRightEyeGeometry() const;
 
+			virtual bool setValueAllowed(QObject* widget);
+
 			public slots:
 
 			/// Show a QColorDialog to select a new background color for the Scene
