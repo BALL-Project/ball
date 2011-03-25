@@ -191,8 +191,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 			// the kiosk mode has already been handled
 			continue;
 		}
-
-		mainframe.openFile(argument);
+		else
+			mainframe.openFile(argument);
 	}
 
 	// enable ending of program from python script
