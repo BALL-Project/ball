@@ -3142,6 +3142,11 @@ namespace BALL
 #endif
 		}
 
+		void Scene::applyStereoDefaults()
+		{
+			stage_settings_->computeDefaultPressed();
+		}
+
 		void Scene::animate_()
 		{
 			bool export_PNG = animation_export_PNG_action_->isChecked();

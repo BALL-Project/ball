@@ -656,6 +656,9 @@ namespace BALL
 				///
 				void toggleContinuousLoop();
 
+				///
+				void applyStereoDefaults();
+
 #ifdef BALL_HAS_RTFACT
 				RaytracingWindowPtr getWindow(WindowType aWindowType);
 #endif
