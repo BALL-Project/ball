@@ -45,7 +45,8 @@ namespace BALL
 				show_ruler_(false),
 				ttl_(-1),
 				export_after_ttl_(false),
-				export_after_ttl_filename_()
+				export_after_ttl_filename_(),
+				buffer_is_ready_(true)
 		{
 			initType_();
 
@@ -72,6 +73,7 @@ namespace BALL
 				ttl_(rs.ttl_),
 				export_after_ttl_(rs.export_after_ttl_),
 				export_after_ttl_filename_(rs.export_after_ttl_filename_),
+				buffer_is_ready_(rs.buffer_is_ready_),
 				renderer_type_(rs.renderer_type_)
 		{
 			gl_target_   = dynamic_cast<GLRenderWindow*>(target);
@@ -80,6 +82,8 @@ namespace BALL
 
 		const RenderSetup& RenderSetup::operator = (const RenderSetup& rs)
 		{
+			if (&rs == this) return;
+
 			render_mutex_.lock();
 
 			renderer = rs.renderer;
@@ -103,7 +107,8 @@ namespace BALL
 			gl_target_   = dynamic_cast<GLRenderWindow*>(target);
 			gl_renderer_ = dynamic_cast<GLRenderer*>(renderer);
 
-			renderer_type_ = rs.renderer_type_;
+			buffer_is_ready_ = rs.buffer_is_ready_;
+			renderer_type_   = rs.renderer_type_;
 
 			render_mutex_.unlock();
 
@@ -115,6 +120,10 @@ namespace BALL
 			render_mutex_.lock();
 
 			initType_();
+
+			// Yes, this seems inconsistent... but we need to start with a ready (albeit empty)
+			// buffer to boot the system
+			buffer_is_ready_ = true;
 
 			makeCurrent();
 
@@ -314,6 +323,19 @@ namespace BALL
 				t.reset();
 				current_frame++;
 			}
+		}
+
+		bool RenderSetup::isReadyToSwap()
+		{
+			bool result = buffer_is_ready_;
+
+			for (std::deque<boost::shared_ptr<RenderSetup> >::iterator render_it  = keep_in_sync_.begin();
+					result && (render_it != keep_in_sync_.end()); ++render_it)
+			{
+				result &= (*render_it)->bufferIsReady();
+			}
+		
+			return result;	
 		}
 
 		void RenderSetup::renderToBuffer()

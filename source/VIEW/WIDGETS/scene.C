@@ -1734,14 +1734,7 @@ namespace BALL
 			std::deque<boost::shared_ptr<RenderSetup> >& dependent_renderers = renderer->getDependentRenderers();
 
 			// find out if all renderers are ready
-			bool ready_to_swap = true;
-			for (std::deque<boost::shared_ptr<RenderSetup> >::iterator render_it  = dependent_renderers.begin();
-					render_it != dependent_renderers.end(); ++render_it)
-			{
-				ready_to_swap &= (*render_it)->bufferIsReady();
-			}
-
-			if (ready_to_swap)
+			if (renderer->isReadyToSwap())
 			{
 				// paint all buffers
 				if (RTTI::isKindOf<GLRenderWindow>(*(renderer->target)))

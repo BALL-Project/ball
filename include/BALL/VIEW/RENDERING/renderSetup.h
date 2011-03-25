@@ -295,6 +295,9 @@ namespace BALL {
 				/// Returns true if the buffer has been filled and just waits for painting
 				bool bufferIsReady() { return buffer_is_ready_; }
 
+				/// Returns true iff bufferIsReady() holds for this renderer and all dependent ones
+				bool isReadyToSwap();
+
 				///
 				void setBufferReady(bool is_ready) { buffer_is_ready_ = is_ready; }
 
