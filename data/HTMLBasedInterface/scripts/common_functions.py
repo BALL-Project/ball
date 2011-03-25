@@ -83,7 +83,10 @@ def loadProject(filename):
 	loc = path.find(String(filename))
 	clearProject()
 	#enterStereo()
-	return getMainControl().loadBALLViewProjectFile(loc)
+	result = getMainControl().loadBALLViewProjectFile(loc)
+#	Scene.getInstance(0).applyStereoDefaults()
+	Scene.getInstance(0).startContinuousLoop()
+	return result
 		
 ###################### SHORTCUTS: #######################
 
