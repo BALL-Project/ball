@@ -128,5 +128,8 @@ static Scene* getInstance(Position /index/);
 	void optimizeStructure();
 	void setEditElementType(int element_number);
 	int getEditElementType();
+	void toggleContinuousLoop();
+	void startContinuousLoop();
+	void stopContinuousLoop();
 	void applyStereoDefaults();
 };
