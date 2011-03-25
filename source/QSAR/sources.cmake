@@ -12,7 +12,6 @@ SET(SOURCES_LIST
 	connectivityDescriptors.C
 	descriptor.C
 	exception.C
-	fitModel.C
 	kernel.C
 	kernelModel.C
 	latentVariableModel.C
@@ -40,6 +39,12 @@ SET(SOURCES_LIST
 	svrModel.C
 	validation.C
 )	
+
+IF(BALL_HAS_GSL)
+	LIST(APPEND SOURCES_LIST
+		fitModel.C
+	)
+ENDIF()
 
 IF(BALL_HAS_LAPACK)
 	LIST(APPEND SOURCES_LIST

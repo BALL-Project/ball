@@ -26,6 +26,10 @@
 #ifndef FMODEL
 #define FMODEL
 
+#include <BALL/CONFIG/config.h>
+
+#ifdef BALL_HAS_GSL
+
 #ifndef NLMODEL
 #include <BALL/QSAR/nonlinearModel.h>
 #endif
@@ -120,5 +124,7 @@ namespace BALL
 		
 	}
 }
+
+#endif //BALL_HAS_GSL
 
 #endif // FMODEL

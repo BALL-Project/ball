@@ -317,6 +317,9 @@
 #define QT_THREAD_SUPPORT
 
 // Glew
+#cmakedefine BALL_HAS_GSL
+
+// Glew
 #cmakedefine BALL_HAS_GLEW
 
 // MPI
