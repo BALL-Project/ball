@@ -81,7 +81,7 @@ namespace BALL
 
 		const RenderSetup& RenderSetup::operator = (const RenderSetup& rs)
 		{
-			if (&rs == this) return;
+			if (&rs == this) return *this;
 
 			render_mutex_.lock();
 
