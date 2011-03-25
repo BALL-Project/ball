@@ -354,3 +354,5 @@ def addPlane(plane_specifier, height, boundary, bottom = True):
   getMainControl().insert(r)
   getMainControl().update(r)
 
+
+Scene.getInstance(0).enterStereo()
