@@ -1025,7 +1025,7 @@ namespace BALL
 				}
 			}
 
-			restoreWindows(inifile);
+			//restoreWindows(inifile);
 			
 			preferences_dialog_->fetchPreferences(inifile);
 
