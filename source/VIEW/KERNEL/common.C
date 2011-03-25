@@ -13,12 +13,14 @@
 #include <BALL/SYSTEM/path.h>
 
 #include <BALL/STRUCTURE/geometricProperties.h>
-#include <BALL/MATHS/randomNumberGenerator.h>
 
 #include <QtGui/QApplication>
 #include <QtCore/QUrl>
 
 #include <BALL/COMMON/init.h>
+
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/uniform_real.hpp>
 
 namespace BALL
 {
@@ -477,8 +479,8 @@ namespace BALL
 		void calculateRandomPoints(const RegularData3D& grid, Size nr_points, 
 															 vector<Vector3>& resulting_points)
 		{
-			RandomNumberGenerator ran_gen;
-			ran_gen.setup();
+			PreciseTime pt;
+			boost::mt19937 ran_gen(pt.now().getMicroSeconds());
 
 			Vector3 point;
 
@@ -506,9 +508,14 @@ namespace BALL
 			Index hh = (int) (grid.getData().size() / 2.0);
 			Index h, hmin, hmax;
 
+			boost::uniform_real<double> rng(0, current);
+			boost::uniform_real<double> rng_xd(xdm, xd);
+			boost::uniform_real<double> rng_yd(ydm, yd);
+			boost::uniform_real<double> rng_zd(zdm, zd);
+
 			for (Position i = 0; i < nr_points; i++)
 			{
-				x = ran_gen.randomDouble(0, current);
+				x = rng(ran_gen);
 
 				try
 				{
@@ -541,9 +548,7 @@ namespace BALL
 					}
 
 					Vector3 point = grid.getCoordinates(h) + off +
-													Vector3(ran_gen.randomDouble(xdm, xd),
-													        ran_gen.randomDouble(ydm, yd),
-																  ran_gen.randomDouble(zdm, zd));
+													Vector3(rng_xd(ran_gen), rng_yd(ran_gen), rng_zd(ran_gen));
 
 					grid.getClosestIndex(point);
 

@@ -10,7 +10,6 @@
 #include <BALL/VIEW/PRIMITIVES/multiLine.h>
 #include <BALL/VIEW/PRIMITIVES/point.h>
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
-#include <BALL/MATHS/randomNumberGenerator.h>
 
 using namespace std;
 

@@ -42,7 +42,6 @@
 
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 
-#include <BALL/MATHS/randomNumberGenerator.h>
 #include <BALL/MATHS/analyticalGeometry.h>
 #include <BALL/MATHS/vector3.h>
 #include <BALL/MATHS/matrix44.h>
@@ -54,6 +53,9 @@
 #include <QtGui/QBitmap>
 
 #include <sstream>
+
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/uniform_real.hpp>
 
 using std::endl;
 
@@ -1769,14 +1771,14 @@ void EditableScene::optimizeStructure()
 	notify_(nsm);
 
 	float range = 0.05;
-	RandomNumberGenerator rng;
-	rng.setup();
+	PreciseTime pt;
+	boost::mt19937 rng(pt.now().getMicroSeconds());
+	boost::uniform_real<double> random(-range, range);
+
 	AtomIterator ait = ac->beginAtom();
 	for (; +ait; ++ait)
 	{
-		ait->getPosition() += Vector3(rng.randomDouble(-range, range),
-          	                              rng.randomDouble(-range, range),
-		                              rng.randomDouble(-range, range));
+		ait->getPosition() += Vector3(random(rng), random(rng), random(rng));
 	}
 	ms->chooseMMFF94();
 
