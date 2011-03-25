@@ -1150,9 +1150,9 @@ const MMFF94ESParameters& MMFF94ESParameters::operator = (const MMFF94ESParamete
 bool MMFF94ESParameters::setup_(const vector<vector<String> >& lines)
 {
 	parameters_.clear();
-	parameters_.resize(MMFF94_number_atom_types * MMFF94_number_atom_types * 2);
+	parameters_.resize(MMFF94_number_atom_types * MMFF94_number_atom_types * 5);
 
-	for (Position p = 0; p < MMFF94_number_atom_types * MMFF94_number_atom_types * 2; p++)
+	for (Position p = 0; p < MMFF94_number_atom_types * MMFF94_number_atom_types * 5; p++)
 	{
 		parameters_[p] = MMFF94_INVALID_VALUE;
 	}
