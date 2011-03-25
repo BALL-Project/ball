@@ -11,7 +11,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		class HTMLInterfaceAction : public QObject
+		class BALL_VIEW_EXPORT HTMLInterfaceAction : public QObject
 		{
 			Q_OBJECT
 
@@ -29,7 +29,7 @@ namespace BALL
 				void finishedExecution();
 		};
 
-		class HTMLBasedInterface : public HTMLView
+		class BALL_VIEW_EXPORT HTMLBasedInterface : public HTMLView
 		{
 			Q_OBJECT
 

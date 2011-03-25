@@ -13,7 +13,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-		class HTMLView : public QWebView
+		class BALL_VIEW_EXPORT HTMLView : public QWebView
 		{
 			Q_OBJECT
 
@@ -21,7 +21,7 @@ namespace BALL
 				HTMLView(QWidget* parent = 0);
 		};
 
-		class HTMLViewDock : public DockWidget
+		class BALL_VIEW_EXPORT HTMLViewDock : public DockWidget
 		{
 			public:
 				HTMLViewDock(QWidget* parent, const char* title = 0);
