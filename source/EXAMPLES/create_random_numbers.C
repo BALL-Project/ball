@@ -4,8 +4,11 @@
 
 // A small example application for creating random numbers.
 
-#include <BALL/MATHS/randomNumberGenerator.h>
 #include <BALL/DATATYPE/string.h>
+#include <BALL/CONCEPT/timeStamp.h>
+
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/uniform_01.hpp>
 
 using namespace BALL;
 
@@ -29,12 +32,12 @@ int main(int argc, char** argv)
 
 	double r, rmin=1e32, rmax=-1e32;
 
-	RandomNumberGenerator rng;
-	rng.setup(1802, 9373);
+	boost::mt19937 rng(PreciseTime::now().getMicroSeconds());
+	boost::uniform_01<double> unif;
 
 	for (Size i=0; i < numbers; i++)
 	{
-		r = rng.randomUniform();
+		r = unif(rng);
 		if (r < rmin) rmin = r;
 		if (r > rmax) rmax = r;
 		std::cout << r << std::endl;
