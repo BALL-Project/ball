@@ -10,8 +10,7 @@
 #include <BALL/VIEW/WIDGETS/scene.h>
 
 
-#include <BALL/SYSTEM/timer.h>
-
+#include <BALL/SYSTEM/timer.h> 
 #ifdef BALL_HAS_RTFACT
 #include <BALL/VIEW/RENDERING/RENDERERS/rtfactRenderer.h>
 
@@ -150,8 +149,13 @@ namespace BALL
 		{
 			// prevent resizing of full screen Windows because they are
 			// most probably stereo half images
+			// TODO: Move this to the doNotResize call (reimplement in GLRenderWindow)
 			if (gl_target_ && gl_target_->isFullScreen())
 				return;
+
+			if(target->doNotResize()) {
+				return;
+			}
 
 			render_mutex_.lock();
 

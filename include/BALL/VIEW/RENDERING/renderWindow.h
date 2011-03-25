@@ -93,6 +93,13 @@ namespace BALL
 			 */
 			virtual void prepareRendering() {};
 
+			/** @copydoc RenderTarget::doNotResize 
+			 */
+			virtual bool doNotResize() const { return do_not_resize_; }
+
+			virtual void setDoNotResize(bool do_not_resize) { do_not_resize_ = do_not_resize; }
+			 
+
 			protected:
 			t_PixelPtr m_pixels;					// raw pixel buffer
 			FrameBufferPtr m_framebuffer;           // frame buffer given out to the wild by getBuffer method
@@ -101,6 +108,7 @@ namespace BALL
 			bool m_bufferLocked;					// pixel buffer is being accessed by another object?            
 			const Size m_minimalWidth;      // minimum with the window can have
 			const Size m_minimalHeight;     // minimum height the window can have
+			bool do_not_resize_;
 		};
 
 		typedef TRenderWindow<BALL_DEFAULT_PIXEL_TYPE> RenderWindow;

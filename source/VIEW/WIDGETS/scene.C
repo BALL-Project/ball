@@ -2717,12 +2717,14 @@ namespace BALL
 				// in both cases (side by side and top bottom), we can 
 				// use the same code
 				GLRenderWindow* left_widget = new GLRenderWindow(left_screen, "left eye", Qt::FramelessWindowHint);
+				left_widget->setDoNotResize(true);
 				left_widget->makeCurrent();
 				left_widget->init();
 				left_widget->resize(left_geometry.width(), left_geometry.height());
 				left_widget->move(left_geometry.x(), left_geometry.y());
 
 				GLRenderWindow* right_widget = new GLRenderWindow(right_screen, "right eye", Qt::FramelessWindowHint);
+				right_widget->setDoNotResize(true);
 				right_widget->makeCurrent();
 				right_widget->init();
 				right_widget->resize(right_geometry.width(), right_geometry.height());
