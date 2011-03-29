@@ -10,7 +10,7 @@
 
 #text-content {
 	height:800px;
-	margin:0px 10px 0px 10px;
+	padding:0px 20px 0px 20px;
 }
 
 #content {
@@ -33,16 +33,16 @@ a:link {
 	text-decoration: non;
 	color: yellow;
 }
-A:visited {
+a:visited {
 	text-decoration: non;
 	color: yellow;
 }
-A:active {
+a:active {
 	text-decoration: non;
 }
-A:hover {
+a:hover {
 	text-decoration: underline; 
-	color: red;
+	color: yellow;
 }
 
 div.actions h3 {
@@ -56,7 +56,7 @@ div.decoration_image {
 
 div.actions a {
 	margin-bottom:2pt;
-	color:#FF0000;
+	color:#FFFF00;
 	display:block;
 }
 
