@@ -708,8 +708,7 @@ bool String::isFloat() const
 	char* test;
 	char* str = const_cast<char*>(c_str());
   errno = 0;
-	double d = 0;
-	d = strtod(str, &test);
+	strtod(str, &test);
 	return (errno == 0 && *test == '\0');
 }
 
