@@ -283,7 +283,7 @@ namespace BALL
 				switch (cmessage->getType())
 				{
 					case CompositeMessage::NEW_COMPOSITE:
-						addComposite_(*cmessage->getComposite(), cmessage->getCompositeName(), boost::any_cast<bool>(cmessage->data()));
+						addComposite_(*cmessage->getComposite(), cmessage->getCompositeName(), cmessage->data().empty() ? true : boost::any_cast<bool>(cmessage->data()));
 						return;
 					case CompositeMessage::CENTER_CAMERA:
 						centerCamera(cmessage->getComposite());
