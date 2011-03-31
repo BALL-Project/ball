@@ -48,6 +48,8 @@
 #include <QtGui/QLabel>
 #include <QtCore/QTimer>
 
+class QCloseEvent;
+
 namespace BALL
 {
 	namespace VIEW
@@ -842,6 +844,8 @@ namespace BALL
 			void setPreferencesEnabled_(bool state);
 
 			void init_();
+
+			virtual void closeEvent(QCloseEvent* evt);
 
 			bool 								about_to_quit_;
 			bool								multi_threading_mode_;	
