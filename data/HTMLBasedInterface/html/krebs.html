@@ -4,6 +4,16 @@
 		<link rel="stylesheet" href="../css/style.css">
 	</head>
 	<body style="background-color:#000000;color:#FFFFFF;margin:0px 0px 0px 0px" >
+		<script language="javascript">
+			<!--
+			function showAnswer(answer_id) {
+				document.getElementById(answer_id).style.visibility="visible";
+			}
+			function hideAnswer(answer_id) {
+				document.getElementById(answer_id).style.visibility="hidden";
+			}
+			-->
+		</script>
 	  <div class="navigation" id="breadcrumb">
 	    <a href="index.html?action=clearAll&module=common_functions">Startseite</a> > Krebs
 	  </div>
@@ -28,10 +38,24 @@
 		Bei Krebs ist diese Selbstkontrolle kaputt.
 		</p>
 		<p class="step">
-		Der genetische Code besteht aus nur 4 Molek&uuml;len: A (gelb), C (rot), G (gr&uuml;) und T (blau). <br>
-		Wir haben Sie farblich markiert.<br>
-		<div class="task">Wieviele A sind in der DNA nebenan enthalten? <br> 
-		Mit Hilfe der Maus, kannst du die DNA drehen.</div>
+		Der genetische Code besteht aus nur 4 Molek&uuml;len: <b><font color="yellow">A (gelb)</font>, <font color="red">C (rot)</font>, 
+		<font color="green">G (gr&uuml;n)</font></b> und <b><font color="blue">T (blau)</font></b>. <br>
+		<div class="task">Wieviele A sind in der DNA nebenan enthalten? (Klicke <a href="javascript:showAnswer('numberofas')">hier</a>, um die richtige Antwort zu sehen)<br> 
+
+		<p class="answer" style="visibility:hidden" id="numberofas">
+			Der Doppelstrang, den Du hier siehst, sieht so aus... <br>	
+			<b>
+			<tt>
+				<font color="red">C</font><font color="yellow">A</font><font color="green">G</font><font color="yellow">A</font><font color="yellow">A</font><font color="red">C</font><font color="yellow">A</font><font color="blue">T</font><font color="red">C</font><font color="green">G</font><font color="yellow">A</font><font color="blue">T</font><font color="green">G</font><font color="blue">T</font><font color="blue">T</font><font color="red">C</font><font color="blue">T</font><font color="green">G</font> <br>
+				<font color="green">G</font><font color="blue">T</font><font color="red">C</font><font color="blue">T</font><font color="blue">T</font><font color="green">G</font><font color="blue">T</font><font color="yellow">A</font><font color="green">G</font><font color="red">C</font><font color="blue">T</font><font color="yellow">A</font><font color="red">C</font><font color="yellow">A</font><font color="yellow">A</font><font color="green">G</font><font color="yellow">A</font><font color="red">C</font>
+			</tt>
+			</b>
+			<br>
+			Im gesamten Doppelstrang sind also 10 '<font color="yellow">A</font>' enthalten.<br>
+			Antwort <a href="javascript:hideAnswer('numberofas')">verstecken</a>
+		</p>
+
+		Mit Hilfe der Maus kannst du die DNA drehen.</div>
 		<br>
 		Zur Sicherheit wird der genetische Code als Doppelstrang gespeichert, und jedes Molek&uuml;l hat einen festgelegten Partner, d.h. 
 		falls die eine H&auml;lfte der DNA verloren geht, kann man die Information &uuml;ber den anderen Strang wieder ablesen.<br>
@@ -42,23 +66,16 @@
 		Mit Hilfe der Maus kannst Du Dir den DNA Doppelstrang genauer ansehen.</div> 
 		</p>
 		<p class="step">
-		Wissenschaftler haben herausgefunden, dass Krebszellen genau wie Haarwurzelzellen viel schneller wachsen als normale Zellen. Au&szlig;erdem sind
-		sie nicht gut darin, genetische Abschreibefehler zu reparieren.<br>
+		Wissenschaftler haben herausgefunden, dass Krebszellen genau wie Haarwurzelzellen viel schneller wachsen als normale Zellen. 
+		Au&szlig;erdem sind sie nicht gut darin, genetische Abschreibefehler zu reparieren.<br>
 		Die Idee f&uuml;r einen Wirkstoff gegen Krebs ist daher die Zellteilung zu behindern. 
 		Das trifft den Krebs mehr als gesunde Zellen, da  er sich ja viel h&auml;ufiger teilt.
 		<br>
-		Ein Mittel gegen Krebs ist Docetaxel, das urspr&uuml;nglich aus der Eibenrinde gewonnen wurde.<br>
-		<div id="Docetaxel_bg"><img id="Docetaxel" src="../images/Docetaxel3.png"> </div>
-		Docetaxel (Quelle: Wikipedia)<br>
-		</p>
-		<p class="step">
-		Docetaxel ist nat&uuml;rlich nicht platt, sondern hat eine r&auml;umliche Struktur.
-		<div class="task">Klicke <a href="krebs.html?action=loadProject&module=common_functions&filename=projects/Docetaxel_solo.bvp">hier</a>, um Dir die r&auml;umliche Struktur von Docetaxel anzusehen.</div>
-		<br>
-		<div class="task">Klicke auf weiter, um die Funktionsweise von Docetaxel n&auml;her anzusehen.</div>
-		</p >	
-		<a href="krebs2.html?action=loadProject&module=common_functions&filename=projects/Docetaxel.bvp">weiter</a> 
+		Ein Mittel gegen Krebs ist Docetaxel.<br>
+		Klicke auf weiter, um mehr &uuml;ber den Wirkstoff zu erfahren.<b>
+                </p>
+		<a href="krebs3.html?action=loadProject&module=common_functions&filename=projects/Docetaxel_solo.bvp">weiter</a> 
 		</div> 
-		</div>
-		</body>
+	</div>
+	</body>
 </html>

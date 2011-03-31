@@ -1,0 +1,471 @@
+349
+3
+[BALLVIEW_PROJECT]
+PersistenceFormat=XDR
+Representation0=2;2 2 2 3.500000 0 0 [2]|0000ffff|H\U1RBUlQKT0JKRUNUIEJBTEw6Ok5hbWVkUHJvcGVydHkgQCAxNDA3MzUzMjE1ODY2ODggLQogIEJBTEw6OkluZGV4IHR5cGVfID0gNSAKICBCQUxMOjpTdHJpbmcgbmFtZV8gPSAxOSBSRVBSRVNFTlRBVElPTl9OQU1FIAogIEJBTEw6OlN0cmluZyBkYXRhXy5zID0gMTMgU2FsaWN5bHNhZXVyZSAKRU5EX09CSkVDVApFTkQKRU5ECg==
+Representation1=0;2 2 2 3.500000 0 0 [0]|0000ffff|\U1RBUlQKT0JKRUNUIEJBTEw6Ok5hbWVkUHJvcGVydHkgQCAxNDA3MzUzMjE1ODY2ODggLQogIEJBTEw6OkluZGV4IHR5cGVfID0gNSAKICBCQUxMOjpTdHJpbmcgbmFtZV8gPSAxOSBSRVBSRVNFTlRBVElPTl9OQU1FIAogIEJBTEw6OlN0cmluZyBkYXRhXy5zID0gNyBTYWxpY2luIApFTkRfT0JKRUNUCkVORApFTkQK
+Representation2=1;2 2 2 3.500000 0 0 [0]|0000ffff|H\U1RBUlQKT0JKRUNUIEJBTEw6Ok5hbWVkUHJvcGVydHkgQCAxNDA3MzUzMjE1ODY2ODggLQogIEJBTEw6OkluZGV4IHR5cGVfID0gNSAKICBCQUxMOjpTdHJpbmcgbmFtZV8gPSAxOSBSRVBSRVNFTlRBVElPTl9OQU1FIAogIEJBTEw6OlN0cmluZyBkYXRhXy5zID0gNyBBc3BpcmluIApFTkRfT0JKRUNUCkVORApFTkQK
+TurnPoint=(29.492493,34.428288,213.070236) 
+Camera=(25.816586,37.619022,219.295227)  (30.277649,33.571262,211.713318)  (0.170020,0.907381,-0.384387) 
+[MAIN]
+Version=1.4
+Font=Sans Serif,9,-1,5,50,0,0,0,0,0
+[WINDOWS]
+Main::x=-1
+Main::y=0
+Main::width=1920
+Main::height=1005
+File::working_dir=/home/demouser
+Main::dockwidgets=AAAA/wAAAAD9AAAAAwAAAAAAAAMgAAADlfwCAAAAA/sAAAAUAFMAdAByAHUAYwB0AHUAcgBlAHMAAAAAPwAAALQAAAC0AAA6mPsAAAAeAFIAZQBwAHIAZQBzAGUAbgB0AGEAdABpAG8AbgBzAAAAAD8AAAHBAAAAcgAAOpj7AAAAFABOAGEAdgBpAGcAYQB0AGkAbwBuAQAAAD8AAAOVAAAAFAD///8AAAACAAAAAAAAAAD8AQAAAAH7AAAAEABEAGEAdABhAHMAZQB0AHMAAAAAAP////8AAABeAAA6mAAAAAMAAAeAAAABF/wBAAAABfsAAAASAEIAQQBMAEwAIABEAG8AYwB1AAAAAAD/////AAAAXgAAOpj7AAAAGgBCAEEATABMAFYAaQBlAHcAIABEAG8AYwB1AAAAAAD/////AAAAXgAAOpj7AAAACABMAG8AZwBzAAAAAAAAAAM9AAAAXgAAOpj7AAAAGABGAGkAbABlAE8AYgBzAGUAcgB2AGUAcgAAAAAA/////wAAAEYA////+wAAACQAUAB5AHQAaABvAG4AIABJAG4AdABlAHIAcAByAGUAdABlAHIAAAAAAAAAB4AAAACDAAA6mAAABFoAAAOVAAAABAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAMAAAAYAE0AYQBpAG4AIABUAG8AbwBsAGIAYQByAQAAAAD/////AAAAAAAAAAAAAAAuADMARAAgAFYAaQBlAHcAIABDAG8AbgB0AHIAbwBsACAAdABvAG8AbABiAGEAcgEAAAG+/////wAAAAAAAAAAAAAAKABFAGQAaQB0ACAAQwBvAG4AdAByAG8AbAAgAHQAbwBvAGwAYgBhAHIBAAACMv////8AAAAAAAAAAA==
+MolecularFileDialog::x=0
+MolecularFileDialog::y=0
+MolecularFileDialog::width=100
+MolecularFileDialog::height=30
+PubChemDialog::x=132
+PubChemDialog::y=174
+PubChemDialog::width=648
+PubChemDialog::height=721
+PluginDialog::x=0
+PluginDialog::y=0
+PluginDialog::width=681
+PluginDialog::height=332
+UndoManagerDialog::x=0
+UndoManagerDialog::y=0
+UndoManagerDialog::width=378
+UndoManagerDialog::height=478
+ModifyRepresentationDialog::x=1
+ModifyRepresentationDialog::y=27
+ModifyRepresentationDialog::width=620
+ModifyRepresentationDialog::height=440
+BALLViewDemo::x=176
+BALLViewDemo::y=232
+BALLViewDemo::width=311
+BALLViewDemo::height=375
+LabelDialog::x=22
+LabelDialog::y=29
+LabelDialog::width=321
+LabelDialog::height=423
+Label::customcolor=000000ff
+Label::font=Helvetica,12,-1,5,50,0,0,0,0,0
+Label::manylabels=0
+AssignBondOrderConfigurationDialog::x=132
+AssignBondOrderConfigurationDialog::y=174
+AssignBondOrderConfigurationDialog::width=617
+AssignBondOrderConfigurationDialog::height=426
+AssignBondOrderResultsDialog::x=154
+AssignBondOrderResultsDialog::y=203
+AssignBondOrderResultsDialog::width=650
+AssignBondOrderResultsDialog::height=694
+3D View::on=1
+3D View::x=806
+3D View::y=63
+3D View::width=1114
+3D View::height=917
+DisplayProperties::x=1
+DisplayProperties::y=27
+DisplayProperties::width=570
+DisplayProperties::height=310
+Test Framework::x=0
+Test Framework::y=0
+Test Framework::width=100
+Test Framework::height=30
+Python Interpreter::on=0
+Python Interpreter::x=0
+Python Interpreter::y=0
+Python Interpreter::width=479
+Python Interpreter::height=371
+Preferences::x=0
+Preferences::y=0
+[PDBFiles]
+History=3eml#2ovc#1mah#1pth#2ptc#2pti#1MBN#1q9b#1a01#104m#1tau#2ge4#1qjp#1qj8#1q9f#1py5#1aar#2hde#1ots#1a6d#1bz5#100d#1hv4#1p5y#1wpl#1a51#1pma#1lae#1aw4#1glu#6exn#2ovc+#1djh#1lee#1opd#1yjp#1hh3#2ol9#1byz#1a0m#1qu9#1jtv#2nmw#1m05#1lwc#1bna#2hu4#329d#1adb#1hho#2rh1#1hfr#1ane#2p3d#1tf6#1pq9#1qpq9#1prc#1iep#1aoi#1MAH#1MH#2e7a#2fv5#1buv#1HMI#1FKo#1FK9#2HMI#1IA0#1CLL#1CFD#3os1#
+[ElectronDensityFiles]
+History=
+[BALLVIEW_PLUGIN_DIRECTORIES]
+PluginManager=%2Fhome%2FAH%2Fsabmue%2FBALLdevel%2Fbuild%2Flib?%2Fhome%2FHPL%2Fanne%2FBALL%2FBALL-RAY%2Fplugins?%2Fhome%2Fandreas%2FBALL_contrib%2Fbuild%2Fcontrib%2F%2Fplugins?%2Flocal%2Fanne%2FBALL%2Fcontrib%2Fplugins?%2Fspace%2FBALL-RAY-GCB%2FBALL_devel%2Fcontrib%2Fplugins?%2Ftmp%2Fdaniel%2Fcontrib%2Fplugins?%2Fusr%2Flib%2Fqt4%2Fplugins?C%3A%5CQt%5C4.6.3%5Cplugins?C%3A%5CQt%5Cqt-win-opensource-src-4.5.1%5Cplugins
+activate_all_plugins_check_box=0
+[MOLECULARCONTROL]
+ShowSS=0
+RegularExpressions=SMARTS([$([#6D3](~[#8D1]))])   |SMARTS([#6r5]=[#6r5]-[$([#7D3](-[*])~[#6r5])])|SMARTS([#6r5]=[#7r5]-[#6r5]=[#6r5]-[$([#7D3](-[#1,*])(-[#6r5])(-[#6r5]))])  |numberOfBonds(3) |SMARTS([$([C])]) AND numberOfBonds(3)|SMARTS([$[#7D3]-H])|SMARTS([$([#6D3])])|SMARTS([$(N)-H])|SMARTS([$([#7D3](-[#1])~[#6])])|SMARTS(COOH)|SMARTS([$([#15D4](~[#8D1,#16D1])(~[!#8&!#16,!D1])(~[!#8&!#16,!D1])(~[#8D1-,#16D1-]))])SMARTS([$([#15D4](~[#8D1,#16D1])(~[!#8&!#16,!D1])(~[!#8&!#16,!D1,#8D1-,#16D1-])(~[#8D1-,#16D1-]))])|SMARTS([$([#15D4](~[#8D1,#16D1])(~[!#8&!#16,!D1])(~[!#8&!#16,!D1])(~[#8D1-,#16D1-]))])SMARTS([$([#15D4](~[#8D1,#16D1])(~[!#8&!#16,!D1])(~[!#8&!#16,!D1])(~[#8D1-,#16D1-]))]))|SMARTS([$([#7D3](-[#1])~[#6r5])])|element(H)|SMARTS([#6r5]-[$([#7D3](-[#1]))])|SMARTS([#6r5]=[#6r5]-[$([#7D3](-[#1,#6])~[#6r5])])|SMARTS([#6r5]=[#7r5]-[#6r5]=[#6r5]-[$([#7D3](-[#1,*])(-[#6r5]))])  |SMARTS([$([#7D3](~[#1])(~[#6]))])|SMARTS([#6r5]-[$([#7D3](-[#1])(~[#6r5]))]-[#6r5])|SMARTS([$([#15D4](~[#8D1,#16D1])])|backbone()|SMARTS([$([#15D4](~[#8D1,#16D1]))])|residueID(150) OR residueID(151) OR residueID(152) OR residueID(178) OR residueID(179) OR residueID(222) OR residueID(223) OR residueID(224) OR residueID(225) OR residueID(226) OR residueID(227) OR residueID(242) OR residueID(243) OR residueID(244) OR residueID(245) OR residueID(246) OR residueID(276) OR residueID(277) OR residueID(292) OR residueID(293) OR residueID(294) OR residueID(347) OR residueID(348) OR residueID(349) OR residueID(350) OR residueID(405) OR residueID(406) OR residueID(407)|SMARTS([$([#7D3](~[#8D1-,#16D1-])~[#8D1,#16D1])])|chain(E) OR chain(F)|SMARTS([#7D+])|SMARTS([#6r5]=[#7r5]-[#6r5]=[#6r5]-[$([#7D3](-[#1,*])(-[#6])(-[#6]))])  |SMARTS([#6r5]=[#6r5]-[$([#7D3](-[#1])~[#6r5])])|residue(ALA)|select(H)|backbone() AND element(C)|SMARTS([#6r5]=[#6r5]-[$([#7D3](-[R0])~[#6r5])])|SMARTS([#6r5]-[$([#7D3](-[#1])(~[#6r5]))])|SMARTS([#8D-])|delete(element(H))|backbone()  AND name(C)|chain(E) or chain(F)|residueID(ARG)|SMARTS([$([#15D4](~[#8D1,#16D1])(~[!#8&!#16,!D1])(~[!#8&!#16,!D1,#8D1-,#16D1-])(~[#8D1-,#16D1-]))])|SMARTS(#15D4)|backbone()  AND type(CA)|SMARTS([#6r5]=[#6r5]-[$([#7D3](-[#1,#6r0])~[#6r5])])|SMARTS([$([C])]) and numberOfBonds(3)|SMARTS([$([#15D4](~[#8D1,#16D1])(~[!#8&!#16,!D1])(~[!#8&!#16,!D1,#8D1-,#16D1-])(~[#8D1-,#16D1-]))]))|SMARTS([#6r5]-[$([#7D3](-[#1]))]-[#6r5])|SMARTS([#7D3])|residue(A)|residueID(151)|SMARTS([$([#6])]) and numberOfBonds(3) |SMARTS([#6r5]=[#7r5]-[#6r5]=[#6r5]-[$([#7D3](-[H])(~[#6r5]))])|name(G39)|SMARTS([#6r5]-[$([#7D3](-[#1])~[#6r5])])|SMARTS([#6r5]=[#6r5]-[$([#7D3](-[*])(~[#6r5])(~[#6r5]) )])|SMARTS([a])| numberOfBonds(3)|residue("G39")|aromaticBonds()|SMARTS([$([#15D4](~[#8D1,#16D1])(~[!#8&!#16,!D1])(~[!#8&!#16,!D1])(~[#8D1-,#16D1-]))]))|SMARTS([$([#6D3](~[#8D1-,#16D1-]))])|SMARTS([#6r5]-[$([#7D3](-[H])(~[#6r5]))])|SMARTS([$([#15D4](~[#8D1,#16D1])(~[!#8;!#16,!D1])(~[!#8;!#16,!D1])(~[#8D1,#16D1]))])|SMARTS([#6])|SMARTS([OD1,SD1]~[#6D3]~[OD1,SD1])|SMARTS([#7D])|SMARTS([$([#7D3](~[#6])(~[#6]))])|residue(RG)|SMARTS([$([#6D3](~[#8D1,#16D1,#8#1,#16#1])(~[#8D1,#16D1]))])|SMARTS([#6r5]=[#6r5]-[$([#7D3](-[*r0])~[#6r5])])|backbone|SMARTS([#6r5]=[#7r5]-[#6r5]=[#6r5]-[$([#7D3](-[#1,*]))])  |SMARTS([$([C])])|SMARTS([#6r5]=[#6r5]-[$([#7D3](-[r0])~[#6r5])])|SMARTS([$([#15D4](~[#8D1,#16D1])(~[!#8&!#16,!D1])(~[!#8&!#16,!D1])(~[#8D1-,#16D1-]))])|SMARTS([#6r5]-[$([#7D3](-[#1]))]-[*])|SMARTS([$([#6D3](~[#8D1]))]) |backbone()  AND element(C)|SMARTS([O-])|SMARTS([#6r5]=[#6r5]-[$([#7D3](-[*])(~[#6r5]))]-[#6r5])|SMARTS($([O-]))|SMARTS([$([#15D4](~[#8D1,#16D1])(~[!#8;!#16,!D1])(~[!#8;!#16,!D1,#8D1-,#16D1-])(~[#8D1-,#16D1-]))])|SMARTS([$([#6D3](~[#8D2,#16D2])(~[#8D1,#16D1]))])|SMARTS([#6r5]=[#6r5]-[$([#7D3](-[*])(~[#6r5])(~[#6r5]))]-)|SMARTS([#6r5]=[#7r5]-[#6r5]=[#6r5]-[$([#7D3&v3](-[#6r5])(-[#1,*]))])  |SMARTS([OD1-])|SMARTS([#6r5]=[#6r5]-[$([#7D3](-[*])(~[#6r5]))])|SMARTS([$([#15D4](~[#8D1,#16D1])(~[#8D1,#16D1])(~[#8D1,#16D1])(~[!#8;!#16,!D1]))])|SMARTS([#7D3](~[#8D1,#16D1])(~[!#8&!#16,!D1])(~[!#8&!#16,!D1])) AND element(O)|SMARTS([$([#7D3](~[#1])~[#6])])|SMARTS([$([#6D1](~[#7D2]))])|SMARTS([$([#6D3](~[#8D1-,#16D1-])~[#8D2,#16D2])])|SMARTS($([#8-]))|SMARTS([$([#6D3](~[#8D1-,#16D1-])~[#8D1,#16D1])])|SMARTS([$([#6D3](~[#8D1,#16D1])(~[#8D1,#16D1]))])|!element(H)|SMARTS($([#8]))|SMARTS([OD-])|residue(HOH)|SMARTS([#6r5]=[#7r5]-[#6r5]=[#6r5]-[$([#7D3](-[#6r5])(-[#1,*]))])  |residueID(103)|SMARTS([#7r5]-[#6r5]=[#6r5]-[$([#7D3](-[*])(~[#6r5]))])|SMARTS([#6r5]-[$([#7D3](-[#1]))]-)|SMARTS([#6D-])|SMARTS([O.])|delete(H)|residue(ARG)|residueID("G39")|SMARTS([#7D3R](~[#8D1,#16D1])) AND element(O)|SMARTS(OD1~C~OH)|SMARTS([#6r5]=[#7r5]-[#6r5]=[#6r5]-[$([#7D3](-[#1,*])(~[#6r5]))])  |residueID(103) |SMARTS([#6r5]=[#6r5]-[$([#7D3](-[*])(~[#6r5])(~[#6r5]))-[#6r5]])|SMARTS([$([#16D2](~[#8,#16])(~[#8,#16])]))|SMARTS([#6r5]=[#7r5]-[#6r5]=[#6r5]-[$([#7D3](-[H])(~[#6r5]))])  |SMARTS($[#7D3])|residueID(Arg)|SMARTS([#6r5]=[#6r5]-[$([#7D3](-[*])(~[#6r5])(~[#6r5]))]-[#6])|SMARTS([#6r5]=[#7r5]-[#6r5]=[#6r5]-[$([#7D3&v4](-[#6r5])(-[#1,*]))])  |SMARTS([#6r5]=[#7r5]-[#6r5]=[#6r5]-[$([#7D3](-[#1])(~[#6r5]))])  |SMARTS([$([#15D4](~[#8D1,#16D1])(~[!#8&amp;!#16,!D1])(~[!#8&amp;!#16,!D1])(~[#8D1,#16D1]))])|chain(A) OR chain(B)|residueID(134)|SMARTS([$[#7D3]])|name(H)|SMARTS([$([#6D3](~[#8D1,#16])(~[#8D1,#16]))])|SMARTS([$([#6D3])]) |SMARTS([$([#15D4](~[#8D1,#16D1])(~[!#8&!#16,!D1])(~[!#8&!#16,!D1])(~[#8D1-,#16D1-]))])SMARTS([$([#15D4](~[#8D1,#16D1])(~[!#8&!#16,!D1])(~[!#8&!#16,!D1])(~[#8D1-,#16D1-]))])|SMARTS(H)|residueID(116) OR residueID(349) OR residueID(352) OR residueID(355) OR residueID(358) OR residueID(359) OR residueID(523) OR residueID(527) OR residueID(530) OR residueID(531)|SMARTS([#7D3+])|SMARTS([$([#6D3](~[#8D1,#16D1,#8H,#16H])(~[#8D1,#16D1]))])|SMARTS([$([#6D3](~[#8D1.#16])(~[#8D1,#16]))])|SMARTS([$([#16D2](~[#8,#16])~[#8,#16])])|SMARTS([$([#6D3](~[#8D1])(~[#8D1]))])|SMARTS([$([#8D3](~[#8D1-,#16D1-])~[#8D1,#16D1])])|SMARTS([#6r5]=[#7r5]-[#6r5]=[#6r5]-[$([#7D3](-[*])(~[#6r5]))])|SMARTS([#6r5]=[#6r5]-[$([#7D3](-[*])(~[#6r5])(~[#6r5]))])|
+[BONDORDERASSIGNER]
+overwrite_doubleBO_box=1
+max_n_opt_solutions=25
+penalty_balance_slider=0
+overwrite_selected_bonds_box=0
+add_hydrogens_checkBox=0
+groupBox_2=kekulizeBonds_button
+parameter_file_edit=bond_lengths/BondOrder.xml
+overwrite_tripleBO_box=1
+overwrite_singleBO_box=1
+groupBox_5=single_solution_button
+max_n_all_solutions=25
+groupBox_4=ASTAR_button
+[MINIMIZATION]
+energy_difference_lineedit=0.0001
+minimization_group=conjugate_button
+groupBox_2=useMMFF94RadioButton
+max_iterations_lineedit=500
+refresh_iterations_lineedit=100
+max_grad_lineedit=4.5
+[MDSIMULATION]
+dielectric_group_2=canonical_button
+timestep_linedit=0.0001
+textLabel2=ece9d8ff
+groupBox5=useMMFF94RadioButton
+steps_lineedit=1000
+dcd_file_edit=trajectory.dcd
+refresh_lineedit=1
+temperature_lineedit=300
+enable_dcd=0
+textLabel1=ece9d8ff
+[AMBER]
+nonbonded_cutoff_line_edit=20.0
+torsions_box=1
+scaling_electrostatic_1_4_line_edit=2.0
+assign_typenames_checkBox=1
+assign_types_checkBox=1
+electrostatic_cuton_line_edit=13.0
+scaling_vdw_1_4_line_edit=2.0
+bends_box=1
+assign_charges_checkBox=1
+NB_box=1
+dielectric_group=constant_button
+vdw_cutoff_line_edit=15.0
+max_unassigned_atoms=10
+parameter_file_edit=Amber/amber96.ini
+vdw_cuton_line_edit=13.0
+overwrite_typenames_checkBox=1
+overwrite_charges_checkBox=1
+stretches_box=1
+electrostatic_cutoff_line_edit=15.0
+[CHARMM]
+NB_box=1
+solvation_cuton_line_edit=7.0
+electrostatic_cutoff_line_edit=9.0
+nonbonded_cutoff_line_edit=20.0
+assign_types_checkBox=1
+vdw_cuton_line_edit=7.0
+assign_charges_checkBox=1
+itorsions_box=1
+torsions_box=1
+overwrite_charges_checkBox=1
+use_eef1_checkBox=1
+assign_typenames_checkBox=1
+scaling_electrostatic_1_4_line_edit=1.0
+solvation_cutoff_line_edit=9.0
+dielectric_group=distance_button
+parameter_file_edit=CHARMM/EEF1/param19_eef1.ini
+stretches_box=1
+max_unassigned_atoms=10
+vdw_cutoff_line_edit=9.0
+overwrite_typenames_checkBox=1
+bends_box=1
+scaling_vdw_1_4_line_edit=2.0
+electrostatic_cuton_line_edit=7.0
+[MMFF94]
+vdw_box=1
+nonbonded_cutoff=16.0
+overwrite_typenames_checkBox=1
+assign_types_checkBox=1
+electrostatic_cutoff=15.0
+es_box=1
+overwrite_charges_checkBox=1
+stretch_box=1
+vdw_cutoff=15.0
+assign_charges_checkBox=1
+max_unassigned_atoms=10
+parameter_file_edit=MMFF94
+stretch_bends_box=1
+electrostatic_cuton=13.0
+assign_typenames_checkBox=1
+dielectric_group=constant_button
+bends_box=1
+plane_box=1
+torsions_box=1
+vdw_cuton=13.0
+[FORCEFIELD]
+selected=2
+[EXPORT]
+POVNR=100000
+VRMLNR=100001
+PNGNR=100011
+[LIGHTING]
+Light_0_Position=(0.000000,4.000000,-20.000000) 
+Light_0_Direction=(0.000000,0.000000,1.000000) 
+Light_0_Attenuation=(1.000000,0.000000,0.000000) 
+Light_0_Angle=10.000000
+Light_0_Intensity=1.000000
+Light_0_Color=(255,255,255,255)
+Light_0_Type=1
+Light_0_Relative=1
+position_y=4
+position_x=0
+direction_z=1
+attenuation_p_3=0
+color_sample=ffffffff
+type_group=point
+orientation_group=relative
+position_z=-20
+direction_y=0
+attenuation_p_2=0
+attenuation_p_1=1
+direction_x=0
+max_intensity_factor=500000
+update_directly_checkBox=1
+intensity=100
+[REPRESENTATION]
+model_group=presets_precision_button
+model_type_combobox=2
+coloring_method_combobox=0
+mode_combobox=2
+coloring_updates_enabled=1
+precision_slider=35
+precision_combobox=2
+resolution_group=presets_precision_button
+transparency_slider=0
+model_updates_enabled=1
+[PYTHON]
+current_script=C:\\Dokumente und Einstellungen\Kohring\last_BALL_script.py
+script_edit=
+table=NoneΒ°F2Β°runCurrentScript()Β°Run current Python scriptΒ°@NoneΒ°F3Β°hideAllRepresentations()Β°Hide all loaded representationsΒ°@NoneΒ°F4Β°removeWater()Β°Delete all water moleculesΒ°@ShiftΒ°F4Β°randomizeAtoms(0.2)Β°Randomize all atom positions by max 0.2 AΒ°@NoneΒ°F5Β°printAtomTypesForHighlighted()Β°Print the atom types for the currently highlighted molecular itemsΒ°@ShiftΒ°F5Β°printAtomTypesForLigands()Β°Print the atom types for all ligandsΒ°@NoneΒ°F6Β°highlightLigand()Β°Highlight the ligand in the molecular controlΒ°@ShiftΒ°F6Β°showCartoonAndLigand()Β°Create VDW for all ligands and a cartoon model for the receptorΒ°@NoneΒ°F7Β°addOptimizedHydrogens()Β°Add hydrogens through FragmentDB and optimize themΒ°@ShiftΒ°F7Β°relaxStructure()Β°Quickly optimize a ligandΒ°@NoneΒ°F8Β°quickSave()Β°Quickly store a project fileΒ°@ShiftΒ°F8Β°quickLoad()Β°Quickly load a project fileΒ°@NoneΒ°F12Β°clearRepresentations()Β°Delete all loaded representationsΒ°@ShiftΒ°F12Β°clearAll()Β°Delete all molecules and representationsΒ°@
+font=Helvetica,12,-1,5,50,0,0,0,0,0
+[BALLVIEWSHORTCUTS]
+ShortcutRegistry=Shortcut%7CBuild%7CAdd_Hydrogens$Ctrl%2BAlt%2BH?Shortcut%7CBuild%7CAssign_Bond_Orders$Ctrl%2BAlt%2BO?Shortcut%7CBuild%7CBuild_Bonds$Ctrl%2BB?Shortcut%7CBuild%7CBuild_Peptide$Alt%2BU?Shortcut%7CBuild%7CCheck_Structure$Ctrl%2BK?Shortcut%7CDisplay%7CContinuousLoop%7CToggle$Space?Shortcut%7CDisplay%7CCreate%7CLabel$Ctrl%2BL?Shortcut%7CDisplay%7CDisplay_Properties$Ctrl%2BI?Shortcut%7CDisplay%7CEdit_Mode$Ctrl%2BE?Shortcut%7CDisplay%7CPicking_Mode$Ctrl%2BH?Shortcut%7CDisplay%7CRotate_Mode$Ctrl%2BR?Shortcut%7CDisplay%7CToggle_Fullscreen$Alt%2BX?Shortcut%7CDisplay%7CViewpoint%7CFocus_Camera$Ctrl%2BF?Shortcut%7CDisplay%7CViewpoint%7CSet_Viewpoint$Ctrl%2BN?Shortcut%7CDisplay%7CViewpoint%7CShow_Vie%26wpoint$Ctrl%2BW?Shortcut%7CEdit%7CCopy$Ctrl%2BC?Shortcut%7CEdit%7CCut$Ctrl%2BX?Shortcut%7CEdit%7CDelete$Del?Shortcut%7CEdit%7CPaste$Ctrl%2BV?Shortcut%7CEdit%7CPreferences$Ctrl%2BZ?Shortcut%7CFile%7CExport%7CPNG$Alt%2BP?Shortcut%7CFile%7CExport%7CPOVRay$Ctrl%2BY?Shortcut%7CFile%7COpen_Structure$Ctrl%2BO?Shortcut%7CFile%7COpen%7CDownload_Electron_Density$Ctrl%2BD?Shortcut%7CFile%7COpen%7CDownload_PDB$Ctrl%2BT?Shortcut%7CFile%7CPrint$Ctrl%2BP?Shortcut%7CFile%7CQuit$Ctrl%2BQ?Shortcut%7CFile%7CSave_Structure$Ctrl%2BS?Shortcut%7CMolecularMechanics%7CAbort_Calculation$Alt%2BC?Shortcut%7CMolecularMechanics%7CMolecular_Dynamics$Ctrl%2BM?Shortcut%7CMolecularMechanics%7CSingle_Point_Calculation$Ctrl%2BA?Shortcut%7CTools%7CCalculate_HBonds$Alt%2BN?Shortcut%7CTools%7CCalculate_SecondaryStructure$Alt%2BO?Shortcut%7CTools%7CGrid%7CRender_Contour_Surface$Ctrl%2BU?Shortcut%7CTools%7CPython%7CRun_current_script$Alt%2BY
+predefined_combo_box=0
+error_label=ece9d8ff
+settings_group=customize_button
+[MODEL_OPTIONS]
+cartoon_dna_ladder_radius_slider=5
+cartoon_dna_base_radius_slider=1
+cartoon_helix_radius_slider=20
+ball_stick_dashed_bonds=1
+force_offset_slider=2
+cartoon_dna_ladder=
+strand_arrow_width_slider=10
+vdw_radius_factor_slider=10
+ball_stick_cylinder_radius_slider=2
+stick_radius_slider=2
+force_scaling_slider=11
+force_base_slider=2
+strand_width_slider=22
+tube_radius_slider=4
+ball_stick_sphere_radius_slider=4
+force_max_length_slider=100
+cartoon_dna_wac=#
+cartoon_tube_radius_slider=2
+cartoon_dna_helix_radius_slider=2
+strand_height_slider=4
+surface_probe_radius_slider=15
+hbonds_radius_slider=3
+ribbons_enabled=1
+[NETWORK]
+host_edit=
+port_edit=
+proxy_type_box=0
+pdb_suffix=.pdb
+password_edit=
+login_edit=
+pdb_prefix=http://www.rcsb.org/pdb/files/
+server_status=0
+port=20000
+[OpenSave]
+project_groupbox=binary_project_radiobutton
+pdb_model_box_=0
+[COLORING_OPTIONS]
+Elements=ffffffff;d8ffffff;cd7effff;c4ff00ff;ffb6b6ff;909090ff;8e8effff;f00000ff;b3ffffff;afe2f4ff;aa5df2ff;89ff00ff;d1a5a5ff;809a9aff;ff8000ff;ffc828ff;1af01aff;80d1e4ff;8e41d3ff;3dff00ff;e6e6e4ff;bfc3c6ff;a7a5acff;8999c6ff;9c7bc6ff;807bc6ff;5d6dffff;5d7bc3ff;ff7b62ff;7c80afff;c39090ff;669090ff;bc80e2ff;ffa100ff;a52121ff;5dbad1ff;702db1ff;00ff00ff;95fdffff;95e1e1ff;74c3cbff;54b5b6ff;3b9ea8ff;238e97ff;0a7c8cff;006985ff;99c6ffff;ffd890ff;a77572ff;668080ff;9e64b5ff;d47b00ff;930093ff;429eafff;56188eff;00cb00ff;70ddffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;4dc1ffff;4da7ffff;2693d6ff;267eacff;266797ff;185487ff;185b90ff;ffd123ff;b5b5c3ff;a7544dff;505960ff;9e4fb5ff;ac5d00ff;754f44ff;428397ff;420066ff;007c00ff;70aafbff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;ffffffff;
+max_tf_slider=500
+force_max_value_slider=100
+Chains=ff0000ff;00ff00ff;0000ffff;ffff00ff;00ffffff;ff00ffff;7f7f7fff;ff7f7fff;ffffffff;7f7f00ff;ff3333ff;e519e5ff;00e500ff;e50033ff;ffff7fff;7fffffff;ff7fffff;b233b2ff;33b2b2ff;b2b233ff;
+Molecules=ff0000ff;00ff00ff;0000ffff;ffff00ff;00ffffff;ff00ffff;7f7f7fff;ff7f7fff;ffffffff;7f7f00ff;ff3333ff;e519e5ff;00e500ff;e50033ff;ffff7fff;7fffffff;ff7fffff;b233b2ff;33b2b2ff;b2b233ff;
+force_min_value_slider=1
+max_distance_slider=100
+Residues=ff0000ff;aa5df2ff;1af01aff;afe2f4ff;cd7effff;00ff00ff;d1a5a5ff;909090ff;809a9aff;ffc828ff;0000ffff;6464ffff;f00000ff;b3ffffff;d8ffffff;ffffffff;80d1e4ff;c4ff00ff;8e41d3ff;ffffffff;8e8effff;ffb6b6ff;3dff00ff;ffff00ff;ff8000ff;89ff00ff;
+distance_show_selected=0
+[EDITING]
+only_highlighted=1
+[MATERIAL_SETTINGS]
+reflectiveness_factor_slider=0
+update_directly_checkBox=0
+specularity_color_label=ffffffff
+specularity_factor_slider=100
+shininess_factor_slider=77
+ambient_color_label=ffffffff
+transparency_factor_slider=0
+groupBox_11=radioButton_POVRay
+reflectiveness_color_label=ffffffff
+ambient_factor_slider=50
+[STAGE]
+left_xmin_edit=1920
+groupBox_4=sideBySide_radioButton
+right_height_edit=1080
+controlScreen_comboBox=1
+up_direction_z=0
+protect_override=0
+color_sample=000000ff
+offscreen_group=#
+eye_distance_slider=2
+interlaced_offset_2=
+capping_color=0000ffff
+leftEyeScreen_comboBox=2
+up_direction_y=-1
+up_direction_x=0
+focal_distance_slider=65
+RendererGroup=radioButton_rtfact
+color_sample_=f0f0f0ff
+right_width_edit=960
+rightEyeScreen_comboBox=2
+smooth_lines_=0
+swap_sss_button=0
+use_vertex_buffers=0
+show_lights_=0
+fog_box=
+use_preview=0
+capping_transparency=2
+groupBox=radioButton_perspectiveProjection
+stereoScreensRenderer_comboBox=2
+eye_distance_lineEdit=6
+label_10=f0ebe2ff
+eye_level_lineEdit=180
+left_height_edit=1080
+environment_map=
+controlRenderer_comboBox=2
+right_ymin_edit=0
+tube_points_slider=20
+sphere_points_slider=2
+left_ymin_edit=0
+fog_slider=200
+qt_spinbox_lineedit=2
+resolution_factor=2
+show_fps=0
+downsampling_slider=4
+animation_smoothness=25
+wheel_slider_=10
+texture_file_edit=texture
+left_width_edit=960
+interlaced_stride_2=
+slider_=10
+right_xmin_edit=2880
+screen_distance_lineEdit=150
+[GENERAL]
+logging_to_file=0
+style=Plastique
+language=Default
+€  Μή­Ύο   BALL::System    ΨΟ     ΨΟ     ΨΟ                                    υΐ    υΐ                M”΄† ϊύM‹¤x 	χuή­μ          BALL::NamedProperty     Gα       ή­μ   Salicin ή­μή­μΎοή­€  Πή­Ύο   BALL::Molecule      υΐ    υΐ    υΐ           ΨΟ                     )Ε    )Ε                M”΄† ϊόM‹¤x 	χuή­μ          BALL::NamedProperty     Hzΐ       ή­μ   Salicin ή­μή­μΎοή­€  Θή­Ύο   BALL::Chain     )Ε    )Ε    )Ε           υΐ                    S…`    S…`                M”΄† ϊόM‹¤x 	χuή­μ          BALL::NamedProperty     φΰP       ή­μ   A   ή­μή­μΎοή­€  πή­Ύο   BALL::Residue       S…`    S…`    S…`    S…`       '    )Ε                    Ύ0P    Ξά                M”΄† ϊόM‹¤x 	χuή­μ                    BALL::NamedProperty     R        ή­μ   SAL ή­μή­μ   710     ή­μΎοή­€ $ή­Ύο   
+BALL::Atom      Ξά    Ξά            S…`                                             M”΄† ϊόM‹£e ή­μ          BALL::NamedProperty     κ       InitialCharge       ή­μ   H       >ΜΜΝ       HO10   HOR    Aσ”B ΣaCV»ΰ            ®Εϋl,½G.ϊ          Ηίΐή­μΎοή­€  δή­Ύο   
+BALL::Bond      Ηίΐ    Ηίΐ                                                                M”΄† ϋ        ή­μ          BALL::NamedProperty     ‚s°      	MMFF94RBL   ?οΎvΘ΄ή­μ    Ξά    Ωp           ή­μΎοή­€ Pή­Ύο   BALL::PDBAtom       Ωp    Ωp    Ωp            S…`    _ΰ     ‚P                                M”΄† ϊϋM‹£Q ή­μ          BALL::NamedProperty     m5       InitialCharge       ή­μ   O       Ώ.{       O10    OR     AμfBJJCW!σ            .ψΒ/8 -­]`          άΏ0    Ηίΐή­μ            ?€      ή­μΎοή­€  θή­Ύο   
+BALL::Bond      άΏ0    άΏ0                                                                M”΄† ϋ        ή­μ          BALL::NamedProperty     Gσ`      	MMFF94RBL   ?φ° Δ›¥γή­μ    Ωp    κ†   Bond       ή­μΎοή­€ Xή­Ύο   BALL::PDBAtom       κ†    κ†    κ†            S…`    €»0    nγ                                 M”΄† ϊϊM‹£# χxή­μ          BALL::NamedProperty     -fπ       InRing     ή­μ   C       >\)       C4     CR     Aν0BϊCVί7            ®Η	Ι.Γ―y«?           ) °    όά`    άΏ0    β“0ή­μ            ?€      ή­μΎοή­€  άή­Ύο   
+BALL::Bond      β“0    β“0                                                                M”΄† ϋ        ή­μ          BALL::NamedProperty     €       InRing     ή­μ    κ†    νn`           ή­μΎοή­€ <ή­Ύο   
+BALL::Atom      νn`    νn`            S…`    ίƒ     }Π                                M”΄† ϊωM‹Ά™ 	΅aή­μ          BALL::NamedProperty     έπ       InRing     ή­μ   C                  C2     Any     AρΎ.B	ΣVCU&            ­d.†Ο)­«y$          €    Ò€    γΕp    )ΤP    β“0ή­μΎοή­€  δή­Ύο   
+BALL::Bond      )ΤP    )ΤP                                                                M”΄† ϋ        ή­μ          BALL::NamedProperty     Yy       	MMFF94RBL   ?ρs¤nΝνεή­μ    νn`    @5ΰ           ή­μΎοή­€ $ή­Ύο   
+BALL::Atom      @5ΰ    @5ΰ            S…`    εψ     ΠώΠ                                M”΄† ϊϋM‹£e Νή­μ          BALL::NamedProperty     .v      InitialCharge       ή­μ   H                  H2C2   Any     AϊaGB	03CTΣ(            -–Β
+®γWm-ªΉ%          )ΤPή­μΎοή­€ $ή­Ύο   
+BALL::Atom      ΠώΠ    ΠώΠ            S…`    @5ΰ    n                                M”΄† ϊϋM‹£e Φή­μ          BALL::NamedProperty     ~ΰ      InitialCharge       ή­μ   H                  HC1    HC     AϊΝB„CVÒY            ®A»-iμ	®?          τΪ€ή­μΎοή­€  δή­Ύο   
+BALL::Bond      τΪ€    τΪ€                                                                M”΄† ϋ        ή­μ          BALL::NamedProperty     =Q`      	MMFF94RBL   ?ρ|ν‘hr°ή­μ    ΠώΠ    ΘΫ0           ή­μΎοή­€ Xή­Ύο   BALL::PDBAtom       ΘΫ0    ΘΫ0    ΘΫ0            S…`    }Π    gV                                 M”΄† ϊϊM‹£
+ ΡZή­μ          BALL::NamedProperty     ήy        InRing     ή­μ   C       >\)       C1     CR     Aύ'oB”&CV8γ            ®°ί.―w®ρIζ              'ψΐ    ψΎp    τΪ€ή­μ            ?€      ή­μΎοή­€  θή­Ύο   
+BALL::Bond      ψΎp    ψΎp                                                                M”΄† ϋ        ή­μ          BALL::NamedProperty     ue0      	MMFF94RBL   ?ψ Δ›¥γTή­μ    ΘΫ0    nγ    Bond       ή­μΎοή­€ `ή­Ύο   BALL::PDBAtom       nγ     nγ     nγ             S…`    κ†    °                                M”΄† ϊϊM‹£9 υή­μ          BALL::NamedProperty     M`      InitialCharge       ή­μ   C       >\)       C6     CR     B\eBCCCU[­            -•Ζ»-qώ.qξ          ψΎp    a€    (ep    ›Κ ή­μ            ?€      ή­μΎοή­€  δή­Ύο   
+BALL::Bond      ›Κ     ›Κ                                                                 M”΄† ϋ        ή­μ          BALL::NamedProperty     Òd      	MMFF94RBL   ?ρ|ν‘hr°ή­μ    nγ     Ν1ΰ           ή­μΎοή­€ $ή­Ύο   
+BALL::Atom      Ν1ΰ    Ν1ΰ            S…`    Ν@    βπ                                M”΄† ϊόM‹£e ή­μ          BALL::NamedProperty     ·Χ`      InitialCharge       ή­μ   H                  H2C6   HC     BZXBkΖCT‘            ®@®®yN          ›Κ ή­μΎοή­€ $ή­Ύο   
+BALL::Atom      βπ    βπ            S…`    Ν1ΰ    ο:p                                M”΄† ϊόM‹£e 	ή­μ          BALL::NamedProperty     “¶@      InitialCharge       ή­μ   H       >ΜΜΝ       HO7    HOR    Aώ"ΝB±CT+υ            /XW-»Ά/-–          {ύπή­μΎοή­€  δή­Ύο   
+BALL::Bond      {ύπ    {ύπ                                                                M”΄† ϋ        ή­μ          BALL::NamedProperty     [›       	MMFF94RBL   ?οΎvΘ΄ή­μ    βπ    °           ή­μΎοή­€ Pή­Ύο   BALL::PDBAtom       °    °    °            S…`    nγ     Ψw                                M”΄† ϊϊM‹£? pή­μ          BALL::NamedProperty     KpP      InitialCharge       ή­μ   O       Ώ.{       O7     OR     B?FBDcCTΉ9            ―Η¨,―.J          a€    {ύπή­μ            ?€      ή­μΎοή­€  θή­Ύο   
+BALL::Bond      a€    a€                                                                M”΄† ϋ        ή­μ          BALL::NamedProperty     -l°      	MMFF94RBL   ?φ° Δ›¥γή­μ    nγ     °   Bond       ή­μΎοή­€ Pή­Ύο   BALL::PDBAtom       Ψw    Ψw    Ψw            S…`    °    _ΰ                                 M”΄† ϊϊM‹£I 	‰ςή­μ          BALL::NamedProperty     ε®P      InitialCharge       ή­μ   O       Ώ.{       O8     OR     BΚΛBΚACV‘Χ            ®ΉΛ//c›―µB          &g0    mVpή­μ            ?€      ή­μΎοή­€  δή­Ύο   
+BALL::Bond      mVp    mVp                                                                M”΄† ϋ        ή­μ          BALL::NamedProperty     (Κ       	MMFF94RBL   ?οΎvΘ΄ή­μ    Ψw    ο:p           ή­μΎοή­€ $ή­Ύο   
+BALL::Atom      ο:p    ο:p            S…`    βπ                                     M”΄† ϊόM‹£e ή­μ          BALL::NamedProperty     f}       InitialCharge       ή­μ   H       >ΜΜΝ       HO8    HOR    B‰B	ΤCWA§            ­ώ€®Φεt/‘µ]          mVpή­μΎοή­€ $ή­Ύο   
+BALL::Atom                        S…`    ο:p    Ξά                                M”΄† ϊόM‹£e ή­μ          BALL::NamedProperty     <+°      InitialCharge       ή­μ   H       >ΜΜΝ       HO9    HOR    AσV!B&•CXΌp            ®ν0Μ.…Ο€.«π          |± ή­μΎοή­€  δή­Ύο   
+BALL::Bond      |±     |±                                                                 M”΄† ϋ        ή­μ          BALL::NamedProperty     -`°      	MMFF94RBL   ?οΎvΘ΄ή­μ         _ΰ            ή­μΎοή­€ Pή­Ύο   BALL::PDBAtom       _ΰ     _ΰ     _ΰ             S…`    Ψw    Ωp                                M”΄† ϊϊM‹£M ΐή­μ          BALL::NamedProperty     Ò       InitialCharge       ή­μ   O       Ώ.{       O9     OR     Aω9DB½ΛCXΏ“            ­½.QΠ….kU`          )3Π    |± ή­μ            ?€      ή­μΎοή­€  θή­Ύο   
+BALL::Bond      )3Π    )3Π                                                                M”΄† ϋ        ή­μ          BALL::NamedProperty     vσP      	MMFF94RBL   ?φ° Δ›¥γή­μ    _ΰ     €»0   Bond       ή­μΎοή­€ Xή­Ύο   BALL::PDBAtom       €»0    €»0    €»0            S…`    gV     κ†                                M”΄† ϊϊM‹£ ›+ή­μ          BALL::NamedProperty     ΉJ@       InRing     ή­μ   C       >\)       C3     CR     AυΓΌB
+-CWίώ            ®€Zv/Ϊ2.7z          :"    ) °    )3Π    (1ΰή­μ            ?€      ή­μΎοή­€  δή­Ύο   
+BALL::Bond      (1ΰ    (1ΰ                                                                M”΄† ϋ        ή­μ          BALL::NamedProperty     ΏA@      	MMFF94RBL   ?ρ|ν‘hr°ή­μ    €»0    •„0           ή­μΎοή­€ $ή­Ύο   
+BALL::Atom      •„0    •„0            S…`    n    ~π                                M”΄† ϊόM‹£e βή­μ          BALL::NamedProperty     ΰq      InitialCharge       ή­μ   H                  HC3    HC     AςIΖBCXƒ;            ®τοe/J®l“          (1ΰή­μΎοή­€ $ή­Ύο   
+BALL::Atom      ~π    ~π            S…`    •„0    Ν@                                M”΄† ϊόM‹£e μή­μ          BALL::NamedProperty     X°Π      InitialCharge       ή­μ   H                  HC4    HC     Aεa*B	δΆCVϋΛ            ®¬)B.gΫx­ώ>ό          όά`ή­μΎοή­€  δή­Ύο   
+BALL::Bond      όά`    όά`                                                                M”΄† ϋ        ή­μ          BALL::NamedProperty     ΐ0      	MMFF94RBL   ?ρ|ν‘hr°ή­μ    κ†    ~π           ή­μΎοή­€ $ή­Ύο   
+BALL::Atom      Ν@    Ν@            S…`    ~π    Ν1ΰ                                M”΄† ϊόM‹£e  ή­μ          BALL::NamedProperty     GTΐ      InitialCharge       ή­μ   H                  HC6    HC     Bπ BΞZCUϊ6            ®¦%ύ.Έ-ρ® γ          (epή­μΎοή­€  δή­Ύο   
+BALL::Bond      (ep    (ep                                                                M”΄† ϋ        ή­μ          BALL::NamedProperty     *«       	MMFF94RBL   ?ρ|ν‘hr°ή­μ    nγ     Ν@           ή­μΎοή­€ $ή­Ύο   
+BALL::Atom      n    n            S…`    ΠώΠ    •„0                                M”΄† ϊϋM‹£e άή­μ          BALL::NamedProperty     uπ      InitialCharge       ή­μ   H                  HC2    HC     Bµ©B›½CWτ†            ®:Ca/ r.ªα          ρπή­μΎοή­€  δή­Ύο   
+BALL::Bond      ρπ    ρπ                                                                M”΄† ϋ        ή­μ          BALL::NamedProperty     Π\      	MMFF94RBL   ?ρ|ν‘hr°ή­μ    n    gV            ή­μΎοή­€ Xή­Ύο   BALL::PDBAtom       gV     gV     gV             S…`    ΘΫ0    €»0                                M”΄† ϊϊM‹£ p3ή­μ          BALL::NamedProperty     •9        InRing     ή­μ   C       >\)       C2     CR     AÿΫBCW2Q            ­q¬p+ύ@­ξsR          'ψΐ    :"    &g0    ρπή­μ            ?€      ή­μΎοή­€  θή­Ύο   
+BALL::Bond      &g0    &g0                                                                M”΄† ϋ        ή­μ          BALL::NamedProperty     .e0      	MMFF94RBL   ?φ° Δ›¥γή­μ    Ψw    gV    Bond       ή­μΎοή­€  ΰή­Ύο   
+BALL::Bond      :"    :"                                                                M”΄† ϋ        ή­μ          BALL::NamedProperty     †!€       InRing     ή­μ    €»0    gV    Bond       ή­μΎοή­€  ΰή­Ύο   
+BALL::Bond      'ψΐ    'ψΐ                                                                M”΄† ϋ        ή­μ          BALL::NamedProperty     pτ0       InRing     ή­μ    ΘΫ0    gV    Bond       ή­μΎοή­€  ΰή­Ύο   
+BALL::Bond      ) °    ) °                                                                M”΄† ϋ        ή­μ          BALL::NamedProperty     ½·       InRing     ή­μ    κ†    €»0   Bond       ή­μΎοή­€  ΰή­Ύο   
+BALL::Bond                                                                          M”΄† ϋ        ή­μ          BALL::NamedProperty     ϊδp       InRing     ή­μ    ΘΫ0    }Π   Bond       ή­μΎοή­€ Hή­Ύο   BALL::PDBAtom       }Π    }Π    }Π            S…`    νn`    ΘΫ0                                M”΄† ϊϊM‹£  ή­μ          BALL::NamedProperty     ¬t€       InRing     ή­μ   O       Ύ\)       O0     OR     AσευB\CUd:            ®¤.ήe.ΊB:          Ò€    ή­μ            ?€      ή­μΎοή­€  ΰή­Ύο   
+BALL::Bond      Ò€    Ò€                                                                M”΄† ϋ        ή­μ          BALL::NamedProperty     θΙ°       InRing     ή­μ    νn`    }Π   Bond       ή­μΎοή­€ $ή­Ύο   
+BALL::Atom      εψ     εψ             S…`    Ν°    @5ΰ                                M”΄† ϊϋM‹£e Δή­μ          BALL::NamedProperty     ^`      InitialCharge       ή­μ   H                  HC2    Any     Aυ ÒB¬1CUDό            -ΎΝ³.ο΅<®ϋ‰          γΕpή­μΎοή­€  δή­Ύο   
+BALL::Bond      γΕp    γΕp                                                                M”΄† ϋ        ή­μ          BALL::NamedProperty     Ψ)       	MMFF94RBL   ?ρs¤nΝνεή­μ    νn`    εψ            ή­μΎοή­€ $ή­Ύο   
+BALL::Atom      Ν°    Ν°            S…`    –1°    εψ                                 M”΄† ϊϋM‹£e Ίή­μ          BALL::NamedProperty     °°      InitialCharge       ή­μ   H       >ΜΜΝ       HO2'   HOR    Aε‰)AώƒCUÿU            -›Π.Ξµ®23          ΞΗ€ή­μΎοή­€  δή­Ύο   
+BALL::Bond      ΞΗ€    ΞΗ€                                                                M”΄† ϋ         ή­μ          BALL::NamedProperty     ηX€      	MMFF94RBL   ?οΎvΘ΄ή­μ    Ν°    ½R0           ή­μΎοή­€ Xή­Ύο   BALL::PDBAtom       ½R0    ½R0    ½R0            S…`    Ύ0P    N―                                M”΄† ϊψM‹Ά™ 	΅0ή­μ                BALL::NamedProperty     †
+`      InitialCharge       ή­μ   O       Ώ.{       O2'    OR     Aζ‹DB ZCUε                                  «!     ΞΗ€ή­μ   '   2    ?€  B   ή­μΎοή­€  δή­Ύο   
+BALL::Bond      «!     «!                                                                 M”΄† ϊÿ        ή­μ          BALL::NamedProperty     v@      	MMFF94RBL   ?φ° Δ›¥γή­μ    ½R0    Ύ0P          ή­μΎοή­€ hή­Ύο   BALL::PDBAtom       Ύ0P    Ύ0P    Ύ0P            S…`            ½R0                                M”΄† ϊψM‹Ά™ 	΅)ή­μ                BALL::NamedProperty     Ώπ      InitialCharge       ή­μ   C       >ΨΤώ       C1'    CR     Aέ°!B “CT…γ                                  †s    «!     Λÿΰ    ΄ΰή­μ   '   1    ?€  B   ή­μΎοή­€  δή­Ύο   
+BALL::Bond      ΄ΰ    ΄ΰ                                                                M”΄† ϊÿ        ή­μ          BALL::NamedProperty     ο Π      	MMFF94RBL   ?ρ|ν‘hr°ή­μ    Ύ0P    –1°           ή­μΎοή­€ (ή­Ύο   
+BALL::Atom      –1°    –1°            S…`    ‚P    Ν°                                M”΄† ϊϋM‹£e °ή­μ          BALL::NamedProperty     Ϋ°      InitialCharge       ή­μ   H                  H2C1'      HC     Aά€6AωβCSξS            +
+)™ «¦D0          ΄ΰή­μΎοή­€ $ή­Ύο   
+BALL::Atom      ‚P    ‚P            S…`    Ωp    –1°                                M”΄† ϊϋM‹£e ή­μ          BALL::NamedProperty     τλP      InitialCharge       ή­μ   H                  HC1'   HC     AΧTΧB `CUH®            ¬ΛÒ!ªΡΪ ¬ε£          Λÿΰή­μΎοή­€  δή­Ύο   
+BALL::Bond      Λÿΰ    Λÿΰ                                                                M”΄† ϊÿ        ή­μ          BALL::NamedProperty     ύ*ΰ      	MMFF94RBL   ?ρ|ν‘hr°ή­μ    Ύ0P    ‚P           ή­μΎοή­€  δή­Ύο   
+BALL::Bond      †s    †s                                                                M”΄† ϊÿ        ή­μ          BALL::NamedProperty     ‹Ϋ      	MMFF94RBL   ?χΖ§ο²-ή­μ    Ύ0P    N―          ή­μΎοή­€ Xή­Ύο   BALL::PDBAtom       N―    N―    N―            S…`    ½R0    4ΨΠ                                M”΄† ϊψM‹Ά™ 	΅4ή­μ                BALL::NamedProperty     Τ?        InRing     ή­μ   C       Ύρª       C1     CB     %AΪ‰7BCS§+                                  †s    ›π    χ ή­μ       1    ?€  B   ή­μΎοή­€  άή­Ύο   
+BALL::Bond      χ     χ                                                                 M”΄† ϋ         ή­μ          BALL::NamedProperty     Ωφΰ       InRing     ή­μ    N―    δΗ`          ή­μΎοή­€ Xή­Ύο   BALL::PDBAtom       δΗ`    δΗ`    δΗ`            S…`    c     ΎΙΐ                                M”΄† ϊωM‹Ά™ 	΅Gή­μ                BALL::NamedProperty     Eηΰ       InRing     ή­μ   C       Ύ™       C6     CB     %AΠ^5B.CSu                                  χ     I­     ‡*πή­μ       6    ?€  B   ή­μΎοή­€  δή­Ύο   
+BALL::Bond      ‡*π    ‡*π                                                                M”΄† ϋ        ή­μ          BALL::NamedProperty     Uo       	MMFF94RBL   ?ρXbMÒςή­μ    δΗ`    ίƒ            ή­μΎοή­€ $ή­Ύο   
+BALL::Atom      ίƒ     ίƒ             S…`    ΈΑΠ    νn`                                M”΄† ϊωM‹Ά™ 	΅^ή­μ          BALL::NamedProperty     ‰Η       InitialCharge       ή­μ   H       >™       HC6    HC     AΚ΅ρBοΈCS-k                                  ‡*πή­μΎοή­€ $ή­Ύο   
+BALL::Atom      ΈΑΠ    ΈΑΠ            S…`    ¬     ίƒ                                 M”΄† ϊωM‹Ά™ 	΅Zή­μ          BALL::NamedProperty     ΅0      InitialCharge       ή­μ   H       >™       HC5    HC     AΕ{B	UρCQΛ?                                  ΒΦ`ή­μΎοή­€  δή­Ύο   
+BALL::Bond      ΒΦ`    ΒΦ`                                                                M”΄† ϋ        ή­μ          BALL::NamedProperty     Η_ΰ      	MMFF94RBL   ?ρXbMÒςή­μ    ΈΑΠ    c            ή­μΎοή­€ Xή­Ύο   BALL::PDBAtom       c     c     c             S…`    ωθ    δΗ`                                M”΄† ϊωM‹Ά™ 	΅Cή­μ                BALL::NamedProperty     J^        InRing     ή­μ   C       Ύ™       C5     CB     %AΝXB	OίCRC–                                  ƒ<`    I­     ΒΦ`ή­μ       5    ?€  B   ή­μΎοή­€  άή­Ύο   
+BALL::Bond      I­     I­                                                                 M”΄† ϋ        ή­μ          BALL::NamedProperty     Όΰ       InRing     ή­μ    δΗ`    c           ή­μΎοή­€  άή­Ύο   
+BALL::Bond      ƒ<`    ƒ<`                                                                M”΄† ϋ        ή­μ          BALL::NamedProperty     ζP       InRing     ή­μ    c     ωθ          ή­μΎοή­€ Xή­Ύο   BALL::PDBAtom       ωθ    ωθ    ωθ            S…`    ‘FP    c                                 M”΄† ϊψM‹Ά™ 	΅?ή­μ                BALL::NamedProperty     9©        InRing     ή­μ   C       Ύ™       C4     CB     %AΤ|ξBiyCRH                                  ψw    ƒ<`    -`ή­μ       4    ?€  B   ή­μΎοή­€  δή­Ύο   
+BALL::Bond      -`    -`                                                                M”΄† ϋ        ή­μ          BALL::NamedProperty     1d      	MMFF94RBL   ?ρXbMÒςή­μ    ωθ    ¬            ή­μΎοή­€ $ή­Ύο   
+BALL::Atom      ¬     ¬             S…`    >     ΈΑΠ                                M”΄† ϊωM‹Ά™ 	΅Vή­μ          BALL::NamedProperty     θ€       InitialCharge       ή­μ   H       >™       HC4    HC     AÒ,©B°YCQXζ                                  -`ή­μΎοή­€ $ή­Ύο   
+BALL::Atom      >     >             S…`    ΎΙΐ    ¬                                 M”΄† ϊωM‹Ά™ 	΅Rή­μ          BALL::NamedProperty     @¨`      InitialCharge       ή­μ   H       >™       HC3    HC     Aδ4FB»CRW                                  40ή­μΎοή­€  δή­Ύο   
+BALL::Bond      40    40                                                                M”΄† ϋ        ή­μ          BALL::NamedProperty     ήr       	MMFF94RBL   ?ρXbMÒςή­μ    >     ‘FP           ή­μΎοή­€ Xή­Ύο   BALL::PDBAtom       ‘FP    ‘FP    ‘FP            S…`    4ΨΠ    ωθ                                M”΄† ϊψM‹Ά™ 	΅;ή­μ                BALL::NamedProperty     γκ`       InRing     ή­μ   C       Ύ™       C3     CB     %Aή“uBZCR\                                  -Υ     ψw    40ή­μ       3    ?€  B   ή­μΎοή­€  άή­Ύο   
+BALL::Bond      ψw    ψw                                                                M”΄† ϋ        ή­μ          BALL::NamedProperty     κΦ       InRing     ή­μ    ωθ    ‘FP          ή­μΎοή­€  άή­Ύο   
+BALL::Bond      -Υ     -Υ                                                                 M”΄† ϋ        ή­μ          BALL::NamedProperty     Π°       InRing     ή­μ    ‘FP    4ΨΠ          ή­μΎοή­€ Xή­Ύο   BALL::PDBAtom       4ΨΠ    4ΨΠ    4ΨΠ            S…`    N―    ‘FP                                M”΄† ϊψM‹Ά™ 	΅8ή­μ                BALL::NamedProperty     ΩΒ        InRing     ή­μ   C       =¨υΓ       C2     CB     %AαΈRB	/CSa‰                                  ›π    -Υ     ¤―ή­μ       2    ?€  B   ή­μΎοή­€  δή­Ύο   
+BALL::Bond      ¤―    ¤―                                                                M”΄† ϋ        ή­μ          BALL::NamedProperty     ¨@      	MMFF94RBL   ?φ“tΌjή­μ    4ΨΠ    ΎΙΐ          ή­μΎοή­€ Xή­Ύο   BALL::PDBAtom       ΎΙΐ    ΎΙΐ    ΎΙΐ            S…`    δΗ`    >                                 M”΄† ϊωM‹Ά™ 	΅Kή­μ                BALL::NamedProperty             InitialCharge       ή­μ   O       ½¨υΓ       O2     OC=C   AλΐƒB	^5CSεγ                                  ¤―    €ή­μ       2    ?€  B   ή­μΎοή­€  δή­Ύο   
+BALL::Bond      €    €                                                                M”΄† ϋ        ή­μ          BALL::NamedProperty     x       	MMFF94RBL   ?φn—Oί;ή­μ    νn`    ΎΙΐ           ή­μΎοή­€  άή­Ύο   
+BALL::Bond      ›π    ›π                                                                M”΄† ϋ         ή­μ          BALL::NamedProperty     w        InRing     ή­μ    N―    4ΨΠ          ή­μΎοή­€  Ύοή­€  Μή­Ύο   BALL::System    Θ0    Θ0    Θ0                                   έ½     έ½                 M”· 	πM”¶ζ τΪή­μ          BALL::NamedProperty     ΛΪπ       ή­μ   Aspirin ή­μή­μΎοή­€  Πή­Ύο   BALL::Molecule      έ½     έ½     έ½            Θ0                    BK     BK                 M”· 	πM”¶ζ τΪή­μ          BALL::NamedProperty     ΌLπ       ή­μ   Aspirin ή­μή­μΎοή­€  Θή­Ύο   BALL::Chain     BK     BK     BK            έ½                     8€    8€                M”· 	πM”¶ζ τΩή­μ          BALL::NamedProperty      §       ή­μ   A   ή­μή­μΎοή­€  πή­Ύο   BALL::Residue       8€    8€    8€    8€           BK                     BÒ°    €€P                M”· 	πM”¶ζ τΩή­μ                    BALL::NamedProperty     ϊΠ       ή­μ   SAL ή­μή­μ   710     ή­μΎοή­€ $ή­Ύο   
+BALL::Atom      €€P    €€P            8€     ΨτΠ                                        M”· 	πM”¶ζ τΩή­μ          BALL::NamedProperty     iΝπ      InitialCharge       ή­μ   H                  H2C2   HC     Aϋ›BvbCUκD            .άA.ζ/.»Χ¥          π,`ή­μΎοή­€  δή­Ύο   
+BALL::Bond      π,`    π,`                                                                M”· 	π¦        ή­μ          BALL::NamedProperty     ψµ`      	MMFF94RBL   ?ρ|ν‘hr°ή­μ    €€P    NΡ           ή­μΎοή­€ <ή­Ύο   
+BALL::Atom      NΡ    NΡ            8€    C6Π    WΉ                                M”· 	π™M”΄1 rή­μ          BALL::NamedProperty     „p      InitialCharge       ή­μ   C       =yΫ#       C2     CR     Aψ?ωB
+›μCU            ―;Ο/| Ò.κ'Ο          €Φπ    ΡΎΐ    ύ`    π,`ή­μΎοή­€  δή­Ύο   
+BALL::Bond      ύ`    ύ`                                                                M”· 	π¥        ή­μ          BALL::NamedProperty     α2p      	MMFF94RBL   ?ρ|ν‘hr°ή­μ    NΡ     ΨτΠ           ή­μΎοή­€ $ή­Ύο   
+BALL::Atom       ΨτΠ     ΨτΠ            8€    WΉ    €€P                                M”· 	πM”¶ζ τΟή­μ          BALL::NamedProperty     δA`      InitialCharge       ή­μ   H                  HC2    HC     Aύ#ΡBÿGCTΟ©            .o<ή­–n®ΌZM          ύ`ή­μΎοή­€ Lή­Ύο   BALL::PDBAtom       WΉ    WΉ    WΉ            8€    NΡ     ΨτΠ                                M”· 	πM”¶® ή­μ          BALL::NamedProperty     Δ#P      InitialCharge       ή­μ   H                  H2051      HC     AψhBΙ(CVt            ®9„‘«πRƒ.U(          ΡΎΐή­μ            ?€      ή­μΎοή­€  δή­Ύο   
+BALL::Bond      ΡΎΐ    ΡΎΐ                                                                M”· 	π¥        ή­μ          BALL::NamedProperty     V       	MMFF94RBL   ?ρ|ν‘hr°ή­μ    NΡ    WΉ           ή­μΎοή­€  δή­Ύο   
+BALL::Bond      €Φπ    €Φπ                                                                M”· 	π¥        ή­μ          BALL::NamedProperty     Τθ       	MMFF94RBL   ?χί;dZ¬ή­μ    NΡ    εΎ°           ή­μΎοή­€ 4ή­Ύο   
+BALL::Atom      εΎ°    εΎ°            8€    Vΰ    I¤ΰ                                M”· 	π™M”΄1 r|ή­μ          BALL::NamedProperty     ;ί°      InitialCharge       ή­μ   C       ?(΄9       C2     COO    Aμδ‚By;CU,Φ            .ε°­ΪΔ®©Ò”          D@    @°    €Φπή­μΎοή­€  θή­Ύο   
+BALL::Bond      @°    @°                                                                M”· 	π¥        ή­μ          BALL::NamedProperty     ›       	MMFF94RBL   ?σOί;dZή­μ    εΎ°    I¤ΰ   Bond       ή­μΎοή­€ Hή­Ύο   BALL::PDBAtom       I¤ΰ    I¤ΰ    I¤ΰ            8€    εΎ°    ψ’                                M”· 	π™M”΄1 r~ή­μ          BALL::NamedProperty     ªc`      InitialCharge       ή­μ   O       Ώλ…       O0     O=CO   AεύωB«CUΨ2            ―8I²­ς-XΊ)          @°ή­μ            ?€      ή­μΎοή­€ (ή­Ύο   
+BALL::Atom      ψ’    ψ’            8€    I¤ΰ    C6Π                                M”· 	π™M”΄1 rή­μ          BALL::NamedProperty     V\Π      InitialCharge       ή­μ   O       Ώλ…       O2C1'      O=CO   AΧJAωοCT»a            .β.Ρ[D­ΡD’          k0πή­μΎοή­€  δή­Ύο   
+BALL::Bond      k0π    k0π                                                                M”· 	π         ή­μ          BALL::NamedProperty     ƒeΠ      	MMFF94RBL   ?σOί;dZή­μ    ψ’    BÒ°           ή­μΎοή­€ `ή­Ύο   BALL::PDBAtom       BÒ°    BÒ°    BÒ°            8€            KDπ                                M”· 	π—M”΄1 rgή­μ                BALL::NamedProperty     “l      InitialCharge       ή­μ   C       ?"@Έ       C1'    COO    Aέ°!B “CT…γ                                  Ο9ΐ    *ΰ    k0πή­μ   '   1    ?€  B   ή­μΎοή­€  δή­Ύο   
+BALL::Bond      *ΰ    *ΰ                                                                M”· 	π         ή­μ          BALL::NamedProperty     W       	MMFF94RBL   ?υ®zαG®ή­μ    BÒ°    KDπ          ή­μΎοή­€ Xή­Ύο   BALL::PDBAtom       KDπ    KDπ    KDπ            8€    BÒ°    Cό@                                M”· 	π—M”΄1 riή­μ                BALL::NamedProperty     /Σ       InitialCharge       ή­μ   O       Ώ&ff       O2'    OC=O   Aζ‹DB ZCUε                                  *ΰ    ge°ή­μ   '   2    ?€  B   ή­μΎοή­€  δή­Ύο   
+BALL::Bond      ge°    ge°                                                                M”· 	π΅        ή­μ          BALL::NamedProperty     ΝΓ      	MMFF94RBL   ?οdZ¬1ή­μ    KDπ    C6Π           ή­μΎοή­€ $ή­Ύο   
+BALL::Atom      C6Π    C6Π            8€    ψ’    NΡ                                M”· 	π™M”΄1 rή­μ          BALL::NamedProperty     QζΠ      InitialCharge       ή­μ   H       ?          HO2'   HOCO   Aζ@Aϊ7³CUό            ­MΛ$―Η+cφ           ge°ή­μΎοή­€ Xή­Ύο   BALL::PDBAtom       Cό@    Cό@    Cό@            8€    KDπ     Ϊ`                                M”· 	π—M”΄1 rkή­μ                BALL::NamedProperty      ΧΠ       InRing     ή­μ   C       =°‰        C1     CB     %AΪ‰7BCS§+                                  Ο9ΐ    β     •ζή­μ       1    ?€  B   ή­μΎοή­€  άή­Ύο   
+BALL::Bond      •ζ    •ζ                                                                M”· 	π΅        ή­μ          BALL::NamedProperty     Ε+       InRing     ή­μ    Cό@    >CP          ή­μΎοή­€ Xή­Ύο   BALL::PDBAtom       >CP    >CP    >CP            8€    ‹σΐ    v0                                M”· 	πM”΄1 rsή­μ                BALL::NamedProperty     ν`       InRing     ή­μ   C       Ύ™       C6     CB     %AΠ^5B.CSu                                  •ζ    ύΜ     λD ή­μ       6    ?€  B   ή­μΎοή­€  δή­Ύο   
+BALL::Bond      λD     λD                                                                 M”· 	π£        ή­μ          BALL::NamedProperty     Hψ      	MMFF94RBL   ?ρXbMÒςή­μ    >CP    Vΰ           ή­μΎοή­€ $ή­Ύο   
+BALL::Atom      Vΰ    Vΰ            8€    7%     εΎ°                                M”· 	π™M”΄1 r{ή­μ          BALL::NamedProperty     2&0      InitialCharge       ή­μ   H       >™       HC6    HC     AΚ΅ρBοΈCS-k                                  λD ή­μΎοή­€ $ή­Ύο   
+BALL::Atom      7%     7%             8€    µΰ    Vΰ                                M”· 	π™M”΄1 ryή­μ          BALL::NamedProperty     'έ       InitialCharge       ή­μ   H       >™       HC5    HC     AΕ{B	UρCQΛ?                                  σg€ή­μΎοή­€  δή­Ύο   
+BALL::Bond      σg€    σg€                                                                M”· 	π£        ή­μ          BALL::NamedProperty     ΪΧ€      	MMFF94RBL   ?ρXbMÒςή­μ    7%     ‹σΐ           ή­μΎοή­€ Xή­Ύο   BALL::PDBAtom       ‹σΐ    ‹σΐ    ‹σΐ            8€    ‡    >CP                                M”· 	πM”΄1 rqή­μ                BALL::NamedProperty     5%        InRing     ή­μ   C       Ύ™       C5     CB     %AΝXB	OίCRC–                                  θ³ΰ    ύΜ     σg€ή­μ       5    ?€  B   ή­μΎοή­€  άή­Ύο   
+BALL::Bond      ύΜ     ύΜ                                                                 M”· 	π£        ή­μ          BALL::NamedProperty     ,?P       InRing     ή­μ    >CP    ‹σΐ          ή­μΎοή­€  άή­Ύο   
+BALL::Bond      θ³ΰ    θ³ΰ                                                                M”· 	π£        ή­μ          BALL::NamedProperty     Ε`       InRing     ή­μ    ‹σΐ    ‡          ή­μΎοή­€ Xή­Ύο   BALL::PDBAtom       ‡    ‡    ‡            8€    ’ P    ‹σΐ                                M”· 	πM”΄1 rpή­μ                BALL::NamedProperty     NE0       InRing     ή­μ   C       Ύ™       C4     CB     %AΤ|ξBiyCRH                                  P    ΰE@    θ³ΰή­μ       4    ?€  B   ή­μΎοή­€  δή­Ύο   
+BALL::Bond      ΰE@    ΰE@                                                                M”· 	πΆ        ή­μ          BALL::NamedProperty     ’P      	MMFF94RBL   ?ρXbMÒςή­μ    ‡    µΰ           ή­μΎοή­€ $ή­Ύο   
+BALL::Atom      µΰ    µΰ            8€    βα0    7%                                 M”· 	π™M”΄1 rxή­μ          BALL::NamedProperty     F       InitialCharge       ή­μ   H       >™       HC4    HC     AÒ,©B°YCQXζ                                  ΰE@ή­μΎοή­€ $ή­Ύο   
+BALL::Atom      βα0    βα0            8€    v0    µΰ                                M”· 	πM”΄1 rvή­μ          BALL::NamedProperty     °      InitialCharge       ή­μ   H       >™       HC3    HC     Aδ4FB»CRW                                  Kή­μΎοή­€  δή­Ύο   
+BALL::Bond      K    K                                                                M”· 	πΆ        ή­μ          BALL::NamedProperty     ΫQΰ      	MMFF94RBL   ?ρXbMÒςή­μ    βα0    ’ P           ή­μΎοή­€ Xή­Ύο   BALL::PDBAtom       ’ P    ’ P    ’ P            8€     Ϊ`    ‡                                M”· 	πM”΄1 rnή­μ                BALL::NamedProperty     0       InRing     ή­μ   C       Ύ™       C3     CB     %Aή“uBZCR\                                  οw€    P    Kή­μ       3    ?€  B   ή­μΎοή­€  άή­Ύο   
+BALL::Bond      P    P                                                                M”· 	πΆ        ή­μ          BALL::NamedProperty     #ΧΠ       InRing     ή­μ    ‡    ’ P          ή­μΎοή­€  άή­Ύο   
+BALL::Bond      οw€    οw€                                                                M”· 	π΅        ή­μ          BALL::NamedProperty     ζp       InRing     ή­μ    ’ P     Ϊ`          ή­μΎοή­€ Xή­Ύο   BALL::PDBAtom        Ϊ`     Ϊ`     Ϊ`            8€    Cό@    ’ P                                M”· 	πM”΄1 rlή­μ                BALL::NamedProperty     ª'        InRing     ή­μ   C       =¨υΓ       C2     CB     %AαΈRB	/CSa‰                                  β     `(@    οw€ή­μ       2    ?€  B   ή­μΎοή­€  δή­Ύο   
+BALL::Bond      `(@    `(@                                                                M”· 	π΅        ή­μ          BALL::NamedProperty     UG°      	MMFF94RBL   ?φ“tΌjή­μ     Ϊ`    v0          ή­μΎοή­€ Xή­Ύο   BALL::PDBAtom       v0    v0    v0            8€    >CP    βα0                                M”· 	πM”΄1 ruή­μ                BALL::NamedProperty     γΨ€      InitialCharge       ή­μ   O       Ύn{       O2     OC=O   AλΐƒB	^5CSεγ                                  `(@    D@ή­μ       2    ?€  B   ή­μΎοή­€  δή­Ύο   
+BALL::Bond      D@    D@                                                                M”· 	π¤        ή­μ          BALL::NamedProperty     ΥϋP      	MMFF94RBL   ?υ®zαG®ή­μ    εΎ°    v0           ή­μΎοή­€  άή­Ύο   
+BALL::Bond      β     β                                                                 M”· 	π΅        ή­μ          BALL::NamedProperty     φµ€       InRing     ή­μ    Cό@     Ϊ`          ή­μΎοή­€  δή­Ύο   
+BALL::Bond      Ο9ΐ    Ο9ΐ                                                                M”· 	π         ή­μ          BALL::NamedProperty     Β`      	MMFF94RBL   ?χOί;dZή­μ    BÒ°    Cό@          ή­μΎοή­€  Ύοή­€  Τή­Ύο   BALL::System    Q€    Q€    Q€                                   π€    π€                M”΄‹ “CM‹M °μή­μ          BALL::NamedProperty     ΡΡΠ       ή­μ   Salicylsaeure   ή­μή­μΎοή­€  Ψή­Ύο   BALL::Molecule      π€    π€    π€           Q€                    -ρ    -ρ                M”΄‹ “CM‹M °μή­μ          BALL::NamedProperty     Mi`       ή­μ   Salicylsaeure   ή­μή­μΎοή­€  Θή­Ύο   BALL::Chain     -ρ    -ρ    -ρ           π€                    μ8ΰ    μ8ΰ                M”΄‹ “CM‹M °μή­μ          BALL::NamedProperty     /Α        ή­μ   A   ή­μή­μΎοή­€  πή­Ύο   BALL::Residue       μ8ΰ    μ8ΰ    μ8ΰ    μ8ΰ           -ρ                    Εκ@    Iωΐ                M”΄‹ “CM‹M °μή­μ                    BALL::NamedProperty     Θ0        ή­μ   SAL ή­μή­μ   710     ή­μΎοή­€ $ή­Ύο   
+BALL::Atom      Iωΐ    Iωΐ            μ8ΰ    ³$`                                        M”΄‹ “CM‹M °μή­μ          BALL::NamedProperty     cQ       InitialCharge       ή­μ   H       >ζff       HO2    HOCC   Aμ±—BfϊCT‰π            ,(ρ .„0―«Q          Π¨`ή­μΎοή­€  δή­Ύο   
+BALL::Bond      Π¨`    Π¨`                                                                M”΄‹ “K        ή­μ          BALL::NamedProperty     |τΰ      	MMFF94RBL   ?ο"Πε`A‰ή­μ    Iωΐ    ΒoΠ           ή­μΎοή­€ Xή­Ύο   BALL::PDBAtom       ΒoΠ    ΒoΠ    ΒoΠ            μ8ΰ    $W@    e]p                                M”΄‹ “BM‹] ,ή­μ                BALL::NamedProperty     Ξ‡ΐ      InitialCharge       ή­μ   O       ΏQμ       O2     OC=C   AλΐƒB	^5CSεγ                                  h›p    Π¨`ή­μ       2    ?€  B   ή­μΎοή­€  δή­Ύο   
+BALL::Bond      h›p    h›p                                                                M”΄‹ “H        ή­μ          BALL::NamedProperty     ζ‘       	MMFF94RBL   ?φ“tΌjή­μ    ΒoΠ    0-`          ή­μΎοή­€ Xή­Ύο   BALL::PDBAtom       0-`    0-`    0-`            μ8ΰ    34Π    SΗ                                M”΄‹ “AM‹] #ή­μ                BALL::NamedProperty     Kk@       InRing     ή­μ   C       =¨υΓ       C2     CB     %AαΈRB	/CSa‰                                  ι¬π    Y    h›pή­μ       2    ?€  B   ή­μΎοή­€  άή­Ύο   
+BALL::Bond      Y    Y                                                                M”΄‹ “H        ή­μ          BALL::NamedProperty     R       InRing     ή­μ    0-`    SΗ          ή­μΎοή­€ Xή­Ύο   BALL::PDBAtom       SΗ    SΗ    SΗ            μ8ΰ    0-`    6πP                                M”΄‹ “AM‹] %ή­μ                BALL::NamedProperty     Κπ       InRing     ή­μ   C       Ύ™       C3     CB     %Aή“uBZCR\                                  Y    )6ΰ    _φ ή­μ       3    ?€  B   ή­μΎοή­€  δή­Ύο   
+BALL::Bond      _φ     _φ                                                                 M”΄‹ “I        ή­μ          BALL::NamedProperty     &ω      	MMFF94RBL   ?ρXbMÒςή­μ    SΗ     @           ή­μΎοή­€ $ή­Ύο   
+BALL::Atom       @     @            μ8ΰ    e]p    -P                                M”΄‹ “BM‹M °Μή­μ          BALL::NamedProperty     ‹Dΰ      InitialCharge       ή­μ   H       >™       HC3    HC     Aδ4FB»CRW            ®¤”Α­3c.8Ζ          _φ ή­μΎοή­€ $ή­Ύο   
+BALL::Atom      -P    -P            μ8ΰ     @    μp                                M”΄‹ “BM‹M °Φή­μ          BALL::NamedProperty     Κzp      InitialCharge       ή­μ   H       >™       HC4    HC     AÒ,©B°YCQXζ            -/‰®r_.…\1          όΉή­μΎοή­€  δή­Ύο   
+BALL::Bond      όΉ    όΉ                                                                M”΄‹ “I        ή­μ          BALL::NamedProperty     ~ΗP      	MMFF94RBL   ?ρXbMÒςή­μ    -P    6πP           ή­μΎοή­€ Xή­Ύο   BALL::PDBAtom       6πP    6πP    6πP            μ8ΰ    SΗ    ,jΰ                                M”΄‹ “AM‹] 'ή­μ                BALL::NamedProperty     κΩπ       InRing     ή­μ   C       Ύ™       C4     CB     %AΤ|ξBiyCRH                                  )6ΰ    dΞ°    όΉή­μ       4    ?€  B   ή­μΎοή­€  άή­Ύο   
+BALL::Bond      dΞ°    dΞ°                                                                M”΄‹ “I        ή­μ          BALL::NamedProperty     pώπ       InRing     ή­μ    6πP    ,jΰ          ή­μΎοή­€ Xή­Ύο   BALL::PDBAtom       ,jΰ    ,jΰ    ,jΰ            μ8ΰ    6πP    $W@                                M”΄‹ “AM‹] (ή­μ                BALL::NamedProperty     ½γP       InRing     ή­μ   C       Ύ™       C5     CB     %AΝXB	OίCRC–                                  dΞ°    )jp    =© ή­μ       5    ?€  B   ή­μΎοή­€  δή­Ύο   
+BALL::Bond      =©     =©                                                                 M”΄‹ “J        ή­μ          BALL::NamedProperty     h±Π      	MMFF94RBL   ?ρXbMÒςή­μ    ,jΰ    μp           ή­μΎοή­€ $ή­Ύο   
+BALL::Atom      μp    μp            μ8ΰ    -P    ³$`                                M”΄‹ “BM‹M °έή­μ          BALL::NamedProperty     =a       InitialCharge       ή­μ   H       >™       HC5    HC     AΕ{B	UρCQΛ?            .¦\5.^Z.΅F          =© ή­μΎοή­€ $ή­Ύο   
+BALL::Atom      ³$`    ³$`            μ8ΰ    μp    Iωΐ                                M”΄‹ “BM‹M °δή­μ          BALL::NamedProperty     ΡP      InitialCharge       ή­μ   H       >™       HC6    HC     AΚ΅ρBοΈCS-k            .IΓ.ή³Ε.ε          σ°ΰή­μΎοή­€  δή­Ύο   
+BALL::Bond      σ°ΰ    σ°ΰ                                                                M”΄‹ “J        ή­μ          BALL::NamedProperty     9%ΐ      	MMFF94RBL   ?ρXbMÒςή­μ    ³$`    $W@           ή­μΎοή­€ Xή­Ύο   BALL::PDBAtom       $W@    $W@    $W@            μ8ΰ    ,jΰ    ΒoΠ                                M”΄‹ “AM‹] +ή­μ                BALL::NamedProperty     ­p0       InRing     ή­μ   C       Ύ™       C6     CB     %AΠ^5B.CSu                                  π½p    )jp    σ°ΰή­μ       6    ?€  B   ή­μΎοή­€  άή­Ύο   
+BALL::Bond      )jp    )jp                                                                M”΄‹ “J        ή­μ          BALL::NamedProperty     h‘€       InRing     ή­μ    ,jΰ    $W@          ή­μΎοή­€  άή­Ύο   
+BALL::Bond      π½p    π½p                                                                M”΄‹ “H        ή­μ          BALL::NamedProperty     s       InRing     ή­μ    $W@    34Π          ή­μΎοή­€ Xή­Ύο   BALL::PDBAtom       34Π    34Π    34Π            μ8ΰ    ψΖp    0-`                                M”΄‹ “AM‹]  ή­μ                BALL::NamedProperty     ~”0       InRing     ή­μ   C       =°‰        C1     CB     %AΪ‰7BCS§+                                  σP    ι¬π    π½pή­μ       1    ?€  B   ή­μΎοή­€  άή­Ύο   
+BALL::Bond      ι¬π    ι¬π                                                                M”΄‹ “G        ή­μ          BALL::NamedProperty     9–`       InRing     ή­μ    0-`    34Π          ή­μΎοή­€  δή­Ύο   
+BALL::Bond      σP    σP                                                                M”΄‹ “F        ή­μ          BALL::NamedProperty     NΑ       	MMFF94RBL   ?χOί;dZή­μ    34Π    Εκ@          ή­μΎοή­€ `ή­Ύο   BALL::PDBAtom       Εκ@    Εκ@    Εκ@            μ8ΰ            T³p                                M”΄‹ “@M‹] ή­μ                BALL::NamedProperty     z`      InitialCharge       ή­μ   C       ?"@Έ       C1'    COO    Aέ°!B “CT…γ                                  *%°    )Μ    σPή­μ   '   1    ?€  B   ή­μΎοή­€  δή­Ύο   
+BALL::Bond      )Μ    )Μ                                                                M”΄‹ “F        ή­μ          BALL::NamedProperty     χΛ      	MMFF94RBL   ?σOί;dZή­μ    Εκ@    ψΖp          ή­μΎοή­€ Pή­Ύο   BALL::PDBAtom       ψΖp    ψΖp    ψΖp            μ8ΰ    T³p    34Π                                M”΄‹ “@M‹] ή­μ                BALL::NamedProperty     ?8      InitialCharge       ή­μ   O       Ώλ…       O2'    O=CO   Aζ‹DB ZCUε                                  )Μή­μ   '   2    ?€  B   ή­μΎοή­€ Xή­Ύο   BALL::PDBAtom       T³p    T³p    T³p            μ8ΰ    Εκ@    ψΖp                                M”΄‹ “@M‹] ή­μ                BALL::NamedProperty     K8ΐ      InitialCharge       ή­μ   O       Ώ&ff       O1'    OC=O   AΦ|ξAωΌjCT¶                                  *%°     ή­μ   '   1    ?€  B   ή­μΎοή­€  δή­Ύο   
+BALL::Bond                                                                            M”΄‹ “G        ή­μ          BALL::NamedProperty     »      	MMFF94RBL   ?οdZ¬1ή­μ    T³p    e]p           ή­μΎοή­€ $ή­Ύο   
+BALL::Atom      e]p    e]p            μ8ΰ    ΒoΠ     @                                M”΄‹ “BM‹M °µή­μ          BALL::NamedProperty     y	       InitialCharge       ή­μ   H       ?          HO1'   HOCO   AΟ†Aϋπ|CTΌΌ            .ά„-Nµ ®ΟqΜ           ή­μΎοή­€  δή­Ύο   
+BALL::Bond      *%°    *%°                                                                M”΄‹ “F        ή­μ          BALL::NamedProperty     ·a      	MMFF94RBL   ?υ®zαG®ή­μ    Εκ@    T³p          ή­μΎοή­€  άή­Ύο   
+BALL::Bond      )6ΰ    )6ΰ                                                                M”΄‹ “I        ή­μ          BALL::NamedProperty     !Q°       InRing     ή­μ    SΗ    6πP          ή­μΎοή­€  Ύοή­

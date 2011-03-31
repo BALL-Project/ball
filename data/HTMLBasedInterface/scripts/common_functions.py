@@ -420,6 +420,16 @@ def toggleSelectionByExpression(expression):
   else:
     getMainControl().clearSelection()
     
-
-
+def showOnlyRepresentationByName(name):
+  reps = getRepresentations()
+  
+  for rep in reps:
+    print rep.getName()," ",name, rep.getName() == name
+    if rep.getName() == name:
+      print "gnaggel"
+      rep.setHidden(False)
+    else:
+      print "gnoggel"
+      rep.setHidden(True)
+  getMainControl().update(rep)
 
