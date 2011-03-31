@@ -79,7 +79,9 @@ namespace BALL
 		void DockWidget::initializeWidget(MainControl&)
 		{
 			window_menu_entry_ = toggleViewAction();
-			getMainControl()->initPopupMenu(MainControl::WINDOWS)->addAction(window_menu_entry_);
+			QMenu* menu = getMainControl()->initPopupMenu(MainControl::WINDOWS, UIOperationMode::MODE_ADVANCED);
+			if (menu)
+				menu->addAction(window_menu_entry_);
 		}
 
 		void DockWidget::writePreferences(INIFile& /*inifile*/)

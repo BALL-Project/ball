@@ -331,10 +331,15 @@ namespace BALL
 			return;
 		}
 
-		QToolBar* tb = new QToolBar("Main Toolbar", this);
-		tb->setObjectName("Main Toolbar");
-		tb->setIconSize(QSize(22,22));
-		addToolBar(Qt::TopToolBarArea, tb);
+		QToolBar* tb = NULL;
+		if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
+		{
+			tb = new QToolBar("Main Toolbar", this);
+			tb->setObjectName("Main Toolbar");
+			tb->setIconSize(QSize(22,22));
+			addToolBar(Qt::TopToolBarArea, tb);
+		}
+
 		MainControl::show();
 
 		QMenu *menu = initPopupMenu(MainControl::WINDOWS, UIOperationMode::MODE_ADVANCED);
@@ -345,35 +350,39 @@ namespace BALL
 		  menu->addAction(tb->toggleViewAction());
 		}
 
-		MolecularFileDialog::getInstance(0)->addToolBarEntries(tb);
-		DownloadPDBFile::getInstance(0)->addToolBarEntries(tb);
-		DownloadElectronDensity::getInstance(0)->addToolBarEntries(tb);
-		PubChemDialog::getInstance(0)->addToolBarEntries(tb);
-		UndoManagerDialog::getInstance(0)->addToolBarEntries(tb);
-		tb->addAction(fullscreen_action_);
-		Path path;
+		if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
+		{
+			MolecularFileDialog::getInstance(0)->addToolBarEntries(tb);
+			DownloadPDBFile::getInstance(0)->addToolBarEntries(tb);
+			DownloadElectronDensity::getInstance(0)->addToolBarEntries(tb);
+			PubChemDialog::getInstance(0)->addToolBarEntries(tb);
+			UndoManagerDialog::getInstance(0)->addToolBarEntries(tb);
+			tb->addAction(fullscreen_action_);
 
-		IconLoader& loader = IconLoader::instance();
-		qload_action_ = new QAction(loader.getIcon("actions/quickopen-file"), tr("quickload"), this);
-		qload_action_->setObjectName("quickload");
-		connect(qload_action_, SIGNAL(triggered()), this, SLOT(quickLoadConfirm()));
-		HelpViewer::getInstance("BALLView Docu")->registerForHelpSystem(qload_action_, "tips.html#quickload");
-		tb->addAction(qload_action_);
+			Path path;
 
-		qsave_action_ = new QAction(loader.getIcon("actions/quicksave"), tr("quicksave"), this);
-		qsave_action_->setObjectName("quicksave");
-		connect(qsave_action_, SIGNAL(triggered()), this, SLOT(quickSave()));
-		HelpViewer::getInstance("BALLView Docu")->registerForHelpSystem(qsave_action_, "tips.html#quickload");
-		tb->addAction(qsave_action_);
+			IconLoader& loader = IconLoader::instance();
+			qload_action_ = new QAction(loader.getIcon("actions/quickopen-file"), tr("quickload"), this);
+			qload_action_->setObjectName("quickload");
+			connect(qload_action_, SIGNAL(triggered()), this, SLOT(quickLoadConfirm()));
+			HelpViewer::getInstance("BALLView Docu")->registerForHelpSystem(qload_action_, "tips.html#quickload");
+			tb->addAction(qload_action_);
 
-		tb->addSeparator();
-		DisplayProperties::getInstance(0)->addToolBarEntries(tb);
-		MolecularStructure::getInstance(0)->addToolBarEntries(tb);
-		scene_->addToolBarEntries(tb);
-		tb->addAction(stop_simulation_action_);
-		tb->addAction(preferences_action_);
-		HelpViewer::getInstance("BALLView Docu")->addToolBarEntries(tb);
+			qsave_action_ = new QAction(loader.getIcon("actions/quicksave"), tr("quicksave"), this);
+			qsave_action_->setObjectName("quicksave");
+			connect(qsave_action_, SIGNAL(triggered()), this, SLOT(quickSave()));
+			HelpViewer::getInstance("BALLView Docu")->registerForHelpSystem(qsave_action_, "tips.html#quickload");
+			tb->addAction(qsave_action_);
 
+			tb->addSeparator();
+			DisplayProperties::getInstance(0)->addToolBarEntries(tb);
+			MolecularStructure::getInstance(0)->addToolBarEntries(tb);
+			scene_->addToolBarEntries(tb);
+			tb->addAction(stop_simulation_action_);
+			tb->addAction(preferences_action_);
+			HelpViewer::getInstance("BALLView Docu")->addToolBarEntries(tb);
+
+		}
 		// we have changed the child widgets stored in the maincontrol (e.g. toolbars), so we have
 		// to restore the window state again!
 		restoreWindows();

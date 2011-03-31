@@ -363,7 +363,7 @@ namespace BALL
 					menu = addMenu(tr("&Edit"), UIOperationMode::MODE_ADVANCED);
 					break;
 				case BUILD:
-					menu = menuBar()->addMenu(tr("&Build"));
+					menu = addMenu(tr("&Build"), UIOperationMode::MODE_ADVANCED);
 					break;
 				case DISPLAY:
 					menu = menuBar()->addMenu(tr("&Display"));
@@ -415,7 +415,7 @@ namespace BALL
 					}
 					break;
 				case WINDOWS:
-					menu = menuBar()->addMenu(tr("&Windows"));
+					menu = addMenu(tr("&Windows"), UIOperationMode::MODE_ADVANCED);
 					break;
 				case USER:
 					menu = addMenu(tr("&User"), UIOperationMode::MODE_ADVANCED);
@@ -2260,6 +2260,16 @@ namespace BALL
 
 		Log.error() << (String)tr("Dont know how to open ")
 								<< file << (String)tr(". This extension is not supported.") << std::endl;
+	}
+
+	QMenu* MainControl::createPopupMenu()
+	{
+		if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
+		{
+			return QMainWindow::createPopupMenu();
+		}
+
+		return NULL;
 	}
 
 	void MainControl::setModelInformation(ModelInformation* mi)

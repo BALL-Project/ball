@@ -716,6 +716,10 @@ namespace BALL
 			virtual void openFile(const String& file) ;
 
 
+			/** Create the standard popup menu.
+			 */
+			virtual QMenu* createPopupMenu();
+
 			//@}
 			/** @name Public slots
 			*/

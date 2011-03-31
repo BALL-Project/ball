@@ -1027,7 +1027,8 @@ namespace BALL
 		void Scene::writePreferences(INIFile& inifile)
 		{
 			// workaround: otherwise the variable might not get set
-			window_menu_entry_->setChecked(!isHidden());
+			if (window_menu_entry_)
+				window_menu_entry_->setChecked(!isHidden());
 
 			ModularWidget::writePreferences(inifile);
 
@@ -1358,7 +1359,7 @@ namespace BALL
 
 			animation_export_PNG_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Export PNG"), this, 
 			                                               SLOT(dummySlot()), "Shortcut|Display|Animation|Export_PNG",
-																										 QKeySequence(), tr(""), UIOperationMode::MODE_KIOSK);
+																										 QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 
 			if (animation_export_PNG_action_)
 			{
@@ -1368,7 +1369,7 @@ namespace BALL
 
 			animation_export_POV_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Export POV"), this, 
 			                                               SLOT(dummySlot()), "Shortcut|Display|Animation|Export_POV",
-																										 QKeySequence(), tr(""), UIOperationMode::MODE_KIOSK);
+																										 QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 
 			if (animation_export_POV_action_)
 			{
@@ -1546,9 +1547,13 @@ namespace BALL
 			description = "Shortcut|File|Print";
 			insertMenuEntry(MainControl::FILE, tr("Print"), this, SLOT(printScene()), description);
 
-			window_menu_entry_ = insertMenuEntry(MainControl::WINDOWS, tr("Scene"), this, SLOT(switchShowWidget()));
-			window_menu_entry_->setCheckable(true);
-			setMenuHelp(window_menu_entry_, "scene.html");
+			window_menu_entry_ = insertMenuEntry(MainControl::WINDOWS, tr("Scene"), this, SLOT(switchShowWidget()), "", 
+			                                     QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
+			if (window_menu_entry_)
+			{
+				window_menu_entry_->setCheckable(true);
+				setMenuHelp(window_menu_entry_, "scene.html");
+			}
 
 			QWidget::setCursor(QCursor(Qt::ArrowCursor));
 

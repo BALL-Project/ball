@@ -125,7 +125,7 @@ namespace BALL
 			id_ = insertMenuEntry(MainControl::DISPLAY_CREATE, tr("&Label"), this, 
 					                  SLOT(show()), description, QKeySequence("Ctrl+L"),
 														tr("Add a label for selected molecular objects"),
-														UIOperationMode::MODE_KIOSK);
+														UIOperationMode::MODE_ADVANCED);
 		}
 
 		void LabelDialog::show()
@@ -219,7 +219,8 @@ namespace BALL
 
 		void LabelDialog::checkMenu(MainControl& main_control)
 		{
-			id_->setEnabled(main_control.getMolecularControlSelection().size() > 0 && !main_control.isBusy());
+			if (id_)
+				id_->setEnabled(main_control.getMolecularControlSelection().size() > 0 && !main_control.isBusy());
 		}
 
 
