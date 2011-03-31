@@ -558,6 +558,11 @@ namespace BALL
 			applyPreferences();
 		}
 
+		void MainControl::closeEvent(QCloseEvent* /*evt*/)
+		{
+			quit();
+		}
+
 		void MainControl::checkMenus()
 		{
 			if (preferences_action_ == 0) return;
