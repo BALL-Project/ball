@@ -1,52 +1,67 @@
+body {
+	font-family:bitstream vera sans;
+	background-color:black;
+	margin:0px;
+}
+
+h1, h3 {
+	color:#CFE3CB;
+}
+
+div.structure {
+	text-align:center;
+	font-size:small;
+	margin-top:1.0em;
+	margin-bottom:1.0em;
+}
+
+div.structure.img {
+	clear:both;
+}
+
 #breadcrumb {
-	background-image:url(../images/breadcrumb_bg.png);
-	background-repeat:x-repeat;
+	background-color:#333333;
 	vertical-align:middle;
-	color:black;
+	color:#BBB;
 	padding-top:10px;
 	padding-bottom:10px;
-	padding-left:10px
+	padding-left:10px;
+	position:fixed;
+	top:0px;
+	width:100%;
+	float:left;
 }
 
 #text-content {
-	height:800px;
-	padding:0px 20px 0px 20px;
+	padding:30px 20px 1em 20px;
+	clear:both;
+	text-align:justify;
+	color: #A0B09D;
 }
 
 #content {
-//	background-image:url(../images/buckball_blured.png);
-	background-repeat:no-repeat;
-	background-position:center;
 	background-color:black;
-	height:700px;
-	text-align:justify;
 }
 
 .actions {
-	margin:5px 5px 5px 50px;
 	padding:5px 20px 5px 10px;
-	background-color:#666666;
+	background-color:#333333;
 	display:table;
 }
 
-a:link {
-	text-decoration: non;
-	color: yellow;
-}
-a:visited {
-	text-decoration: non;
-	color: yellow;
-}
-a:active {
-	text-decoration: non;
-}
-a:hover {
-	text-decoration: underline; 
-	color: yellow;
+div.actions a {
+	margin-bottom:2pt;
+	display:block;
 }
 
-div.actions h3 {
-	color:#FFFFFF;
+a {
+	color: #99E88A;
+	text-decoration:none;
+}
+
+a:hover {
+	text-decoration: underline; 
+	color: #99E88A;
 }
 
 div.decoration_image {
@@ -54,17 +69,11 @@ div.decoration_image {
  margin:5px 10px 5px 10px;
 }
 
-div.actions a {
-	margin-bottom:2pt;
-	color:#FFFF00;
-	display:block;
-}
-
-div.actions a:hover {
-	color:#00FFFF;
-}
-
 div.task {
-	font-style:italic
+	font-style:italic;
+	background-color:#333;
+	margin:0.5em;
+	padding:0.5em 0.7em;
+	text-align:left;
 }
 
