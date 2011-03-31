@@ -350,38 +350,43 @@ namespace BALL
 		  menu->addAction(tb->toggleViewAction());
 		}
 
+		// NOTE: this *has* to be run... a null pointer is unproblematic
 		if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
 		{
-			MolecularFileDialog::getInstance(0)->addToolBarEntries(tb);
-			DownloadPDBFile::getInstance(0)->addToolBarEntries(tb);
-			DownloadElectronDensity::getInstance(0)->addToolBarEntries(tb);
-			PubChemDialog::getInstance(0)->addToolBarEntries(tb);
-			UndoManagerDialog::getInstance(0)->addToolBarEntries(tb);
-			tb->addAction(fullscreen_action_);
+						MolecularFileDialog::getInstance(0)->addToolBarEntries(tb);
+						DownloadPDBFile::getInstance(0)->addToolBarEntries(tb);
+						DownloadElectronDensity::getInstance(0)->addToolBarEntries(tb);
+						PubChemDialog::getInstance(0)->addToolBarEntries(tb);
+						UndoManagerDialog::getInstance(0)->addToolBarEntries(tb);
+						tb->addAction(fullscreen_action_);
 
-			Path path;
+						Path path;
 
-			IconLoader& loader = IconLoader::instance();
-			qload_action_ = new QAction(loader.getIcon("actions/quickopen-file"), tr("quickload"), this);
-			qload_action_->setObjectName("quickload");
-			connect(qload_action_, SIGNAL(triggered()), this, SLOT(quickLoadConfirm()));
-			HelpViewer::getInstance("BALLView Docu")->registerForHelpSystem(qload_action_, "tips.html#quickload");
-			tb->addAction(qload_action_);
+						IconLoader& loader = IconLoader::instance();
+						qload_action_ = new QAction(loader.getIcon("actions/quickopen-file"), tr("quickload"), this);
+						qload_action_->setObjectName("quickload");
+						connect(qload_action_, SIGNAL(triggered()), this, SLOT(quickLoadConfirm()));
+						HelpViewer::getInstance("BALLView Docu")->registerForHelpSystem(qload_action_, "tips.html#quickload");
+						tb->addAction(qload_action_);
 
-			qsave_action_ = new QAction(loader.getIcon("actions/quicksave"), tr("quicksave"), this);
-			qsave_action_->setObjectName("quicksave");
-			connect(qsave_action_, SIGNAL(triggered()), this, SLOT(quickSave()));
-			HelpViewer::getInstance("BALLView Docu")->registerForHelpSystem(qsave_action_, "tips.html#quickload");
-			tb->addAction(qsave_action_);
+						qsave_action_ = new QAction(loader.getIcon("actions/quicksave"), tr("quicksave"), this);
+						qsave_action_->setObjectName("quicksave");
+						connect(qsave_action_, SIGNAL(triggered()), this, SLOT(quickSave()));
+						HelpViewer::getInstance("BALLView Docu")->registerForHelpSystem(qsave_action_, "tips.html#quickload");
+						tb->addAction(qsave_action_);
 
-			tb->addSeparator();
-			DisplayProperties::getInstance(0)->addToolBarEntries(tb);
-			MolecularStructure::getInstance(0)->addToolBarEntries(tb);
-			scene_->addToolBarEntries(tb);
-			tb->addAction(stop_simulation_action_);
-			tb->addAction(preferences_action_);
-			HelpViewer::getInstance("BALLView Docu")->addToolBarEntries(tb);
+						tb->addSeparator();
+						DisplayProperties::getInstance(0)->addToolBarEntries(tb);
+						MolecularStructure::getInstance(0)->addToolBarEntries(tb);
+		}
 
+		scene_->addToolBarEntries(tb);
+		if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
+		{
+		
+						tb->addAction(stop_simulation_action_);
+						tb->addAction(preferences_action_);
+						HelpViewer::getInstance("BALLView Docu")->addToolBarEntries(tb);
 		}
 		// we have changed the child widgets stored in the maincontrol (e.g. toolbars), so we have
 		// to restore the window state again!
