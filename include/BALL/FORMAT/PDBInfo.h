@@ -32,6 +32,8 @@ namespace BALL
 			  : public PersistentObject
 	{
 		public:
+			
+		BALL_CREATE(PDBInfo)
 		
 		/**	@name Constructors and Destructor */
 		//@{

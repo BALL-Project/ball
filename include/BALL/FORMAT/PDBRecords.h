@@ -53,6 +53,8 @@ namespace BALL
 		typedef std::vector<String>::size_type size_type;
 		typedef std::vector<String>::size_type SizeType;
 		
+		BALL_CREATE(PDBRecords)
+
 		/**	@name Constructors and Destructor */
 		//@{
 		///
