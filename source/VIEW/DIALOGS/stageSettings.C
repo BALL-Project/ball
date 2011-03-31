@@ -76,8 +76,8 @@ namespace BALL
 #endif
 // TODO: this is the bad ms wischa hack!! Remove after the children are gone!
 			controlRenderer_comboBox->setCurrentIndex(2);
-			leftEyeScreen_comboBox->setCurrentIndex(1);
-			rightEyeScreen_comboBox->setCurrentIndex(1);
+			leftEyeScreen_comboBox->setCurrentIndex(2);
+			rightEyeScreen_comboBox->setCurrentIndex(2);
 			sideBySide_radioButton->setChecked(true);
 			stereoModeChanged();
 // END TODO
