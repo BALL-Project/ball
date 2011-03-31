@@ -399,6 +399,8 @@ def setViewPoint(view_point, look_at, look_up):
   camera.setLookAtPosition(getVectorFromURLString(look_at))
   camera.setLookUpVector(getVectorFromURLString(look_up))
   setCamera(camera)
+  Scene.getInstance(0).applyStereoDefaults()
+  getMainControl().update()
 
 
 def selectByExpressionAndSetViewPoint(expression, view_point, look_at, look_up):
@@ -426,10 +428,8 @@ def showOnlyRepresentationByName(name):
   for rep in reps:
     print rep.getName()," ",name, rep.getName() == name
     if rep.getName() == name:
-      print "gnaggel"
       rep.setHidden(False)
     else:
-      print "gnoggel"
       rep.setHidden(True)
   getMainControl().update(rep)
 
