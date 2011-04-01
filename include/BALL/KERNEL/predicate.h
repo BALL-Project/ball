@@ -21,6 +21,13 @@
 
 namespace BALL 
 {
+	class Atom;
+	class Molecule;
+	class Protein;
+	class Fragment;
+	class Residue;
+	class Chain;
+
 	/**	@name	KernelPredicates Kernel predicates
 			This chapter describes a set of unary predicates acting on  \link Composite \endlink instances, that
 			can be used to identify the class type of a composite at runtime. \par
@@ -63,6 +70,102 @@ namespace BALL
 		virtual bool operator () (const Composite& composite) const;
 		virtual ~KernelPredicate() {}
 	};
+
+	template <>
+	class KernelPredicate<Atom>
+		: public UnaryPredicate<Composite>
+	{
+		public:
+
+		/// Constant virtual RTTI evaluation operator
+		virtual bool operator () (const Composite& composite) const;
+		virtual ~KernelPredicate() {}
+	};
+
+	template <>
+	class KernelPredicate<Molecule>
+		: public UnaryPredicate<Composite>
+	{
+		public:
+
+		/// Constant virtual RTTI evaluation operator
+		virtual bool operator () (const Composite& composite) const;
+		virtual ~KernelPredicate() {}
+	};
+
+	template <>
+	class KernelPredicate<Protein>
+		: public UnaryPredicate<Composite>
+	{
+		public:
+
+		/// Constant virtual RTTI evaluation operator
+		virtual bool operator () (const Composite& composite) const;
+		virtual ~KernelPredicate() {}
+	};
+
+	template <>
+	class KernelPredicate<Fragment>
+		: public UnaryPredicate<Composite>
+	{
+		public:
+
+		/// Constant virtual RTTI evaluation operator
+		virtual bool operator () (const Composite& composite) const;
+		virtual ~KernelPredicate() {}
+	};
+
+	template <>
+	class KernelPredicate<Residue>
+		: public UnaryPredicate<Composite>
+	{
+		public:
+
+		/// Constant virtual RTTI evaluation operator
+		virtual bool operator () (const Composite& composite) const;
+		virtual ~KernelPredicate() {}
+	};
+
+	template <>
+	class KernelPredicate<Chain>
+		: public UnaryPredicate<Composite>
+	{
+		public:
+
+		/// Constant virtual RTTI evaluation operator
+		virtual bool operator () (const Composite& composite) const;
+		virtual ~KernelPredicate() {}
+	};
+
+	inline bool KernelPredicate<Atom>::operator () (const Composite& composite) const
+	{
+		return composite.isAtom();
+	}
+
+	inline bool KernelPredicate<Molecule>::operator () (const Composite& composite) const
+	{
+		return composite.isMolecule();
+	}
+
+	inline bool KernelPredicate<Protein>::operator () (const Composite& composite) const
+	{
+		return composite.isProtein();
+	}
+
+	inline bool KernelPredicate<Fragment>::operator () (const Composite& composite) const
+	{
+		return composite.isFragment();
+	}
+
+	inline bool KernelPredicate<Residue>::operator () (const Composite& composite) const
+	{
+		return composite.isResidue();
+	}
+
+	inline bool KernelPredicate<Chain>::operator () (const Composite& composite) const
+	{
+		return composite.isChain();
+	}
 
 	template <class T>
 	bool KernelPredicate<T>::operator () (const Composite& composite) const

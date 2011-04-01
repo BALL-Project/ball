@@ -743,6 +743,43 @@ B		*/
 		bool containsSelection() const ;
 		//@}
 
+		/** @name Type predicates
+		 *
+		 * These predicates should be used for type checking instead of dynamic_casts
+		 * as a virtual function call is orders of magnitudes faster.
+		 */
+		//@{
+		/**
+		 * Test if the Composite is an Atom
+		 */
+		virtual bool isAtom() const { return false; }
+
+		/**
+		 * Test if the Composite is a Molecule
+		 */
+		virtual bool isMolecule() const { return false; }
+
+		/**
+		 * Test if the Composite is a Protein
+		 */
+		virtual bool isProtein() const { return false; }
+
+		/**
+		 * Test if the Composite is a Fragment
+		 */
+		virtual bool isFragment() const { return false; }
+
+		/**
+		 * Test if the Composite is a Residue
+		 */
+		virtual bool isResidue() const { return false; }
+
+		/**
+		 * Test if the Composite is a Chain
+		 */
+		virtual bool isChain() const { return false; }
+		//@}
+
 		/**	@name	Debugging and Diagnostics */
 		//@{
 		/** Test if the subtree with this node as root is valid.

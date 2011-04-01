@@ -268,6 +268,12 @@ namespace BALL
 		using Molecule::spliceBefore;
 		using Molecule::spliceAfter;
 
+		/** @name Type predicates */
+		//@{
+		/// @copydoc Composite::isProtein
+		virtual bool isProtein() const { return true; }
+		//@}
+
 		/**	@name	Debugging and Diagnostics
 		*/
 		//@{

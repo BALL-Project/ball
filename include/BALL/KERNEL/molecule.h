@@ -205,6 +205,13 @@ namespace BALL
 		bool remove(AtomContainer& atom_container);
 
 		//@}
+
+		/** @name Type predicates */
+		//@{
+		/// @copydoc Composite::isMolecule
+		virtual bool isMolecule() const { return true; }
+		//@}
+
 		/**	@name Debugging and Diagnostics 
 		*/
 		//@{

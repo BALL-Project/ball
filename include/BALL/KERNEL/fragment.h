@@ -95,6 +95,12 @@ namespace BALL
 		*/
 		bool operator != (const Fragment& fragment) const;
 
+		/** @name Type predicates */
+		//@{
+		/// @copydoc Composite::isFragment
+		virtual bool isFragment() const { return true; }
+		//@}
+
 		/**	@name	Debugging and Diagnostics 
 		*/
 		//@{

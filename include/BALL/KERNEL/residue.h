@@ -359,6 +359,13 @@ namespace BALL
 		bool isCTerminal() const;
 
 		//@}
+
+		/** @name Type predicates */
+		//@{
+		/// @copydoc Composite::isResidue
+		virtual bool isResidue() const { return true; }
+		//@}
+
 		/**	@name	Debugging and Diagnostics 
 		*/
 		//@{

@@ -306,6 +306,13 @@ namespace BALL
 		void splice(Chain &chain);
 
 		//@}
+
+		/** @name Type predicates */
+		//@{
+		/// @copydoc Composite::isChain
+		virtual bool isChain() const { return true; }
+		//@}
+
 		/**	@name	Debugging and Diagnostics 
 		*/
 		//@{

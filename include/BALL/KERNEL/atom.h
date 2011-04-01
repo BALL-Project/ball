@@ -668,6 +668,12 @@ namespace BALL
 			bool isVicinal(const Atom& atom) const;
 			//@}
 
+			/** @name Type predicates */
+			//@{
+			/// @copydoc Composite::isAtom
+			virtual bool isAtom() const { return true; }
+			//@}
+
 			/** @name Debuggers and diagnostics 
 			*/
 			//@{ 
