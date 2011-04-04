@@ -738,7 +738,7 @@ namespace BALL
 				double distance = sqrt(distance_2);
 
 				// contribution of atom1
-				float factor_exp = (distance - a1.r_min) / a1.sig_w; 
+				double factor_exp = (distance - a1.r_min) / a1.sig_w; 
 				factor_exp *= factor_exp;
 
 				double tmp_energy =  - 0.5 * a2.V * a1.dG_free * exp(-factor_exp) / (a1.sig_w * factor);
@@ -934,8 +934,8 @@ namespace BALL
 				CharmmEEF1::Values a2 = solvation[atom2->getType()];
 
 				// contribution of atom1
-				float factor_exp = (distance - a1.r_min) / a1.sig_w; 
-				float factor_exp_2 = SQR(factor_exp);
+				double factor_exp = (distance - a1.r_min) / a1.sig_w; 
+				double factor_exp_2 = SQR(factor_exp);
 
 				double tmp =  - a2.V * a1.dG_free * exp(-factor_exp_2) * ((factor_exp/a1.sig_w) + inverse_distance) / a1.sig_w;
 
@@ -979,7 +979,7 @@ namespace BALL
 					double tmp2 = PI * sqrt(PI) * distance_2;
 					
 					// contribution of atom1
-					float factor_exp = (distance - a1.r_min) / a1.sig_w; 
+					double factor_exp = (distance - a1.r_min) / a1.sig_w; 
 					factor_exp *= factor_exp;
 					double solvation_energy = - 0.5 * a2.V * a1.dG_free * exp(-factor_exp) / (a1.sig_w * tmp2);
 
