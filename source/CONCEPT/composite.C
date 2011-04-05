@@ -62,7 +62,12 @@ namespace BALL
 	// destructor
 	Composite::~Composite()
 	{
-		destroy();
+		if (parent_ != 0)
+		{
+			parent_->removeChild(*this);
+		}
+
+		destroyChildren_();
 	}
 
 	void Composite::set(const Composite& composite, bool deep)
@@ -435,7 +440,28 @@ namespace BALL
 			}
 		}
 	}
-	
+
+	void Composite::destroyChildren_()
+	{
+		for (Composite* composite_ptr = first_child_; composite_ptr != 0; )
+		{
+			Composite* next_ptr = composite_ptr->next_;
+
+			if (composite_ptr->isAutoDeletable())
+			{
+				delete composite_ptr;
+			}
+			else
+			{
+				composite_ptr->previous_ = composite_ptr->next_ = composite_ptr->parent_ = 0;
+				composite_ptr->clear();
+			}
+
+			composite_ptr = next_ptr;
+		}
+
+	}
+
 	void Composite::updateSelection_()
 	{
 		// update the time stamp

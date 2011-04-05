@@ -1433,6 +1433,8 @@ B		*/
 		void select_(bool update_parent = true);
 		void deselect_(bool update_parent = true);
 
+		void destroyChildren_();
+
 		// private attributes
 		
 		Size 						number_of_children_;
