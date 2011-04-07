@@ -232,6 +232,8 @@ namespace BALL
 		HTMLViewDock* html_view_dock = new HTMLViewDock(html_interface, 0, "Navigation");
 		html_view_dock->setFeatures(0);
 		addDockWidget(Qt::LeftDockWidgetArea, html_view_dock);
+		html_view_dock->setMaximumWidth(730);
+		html_view_dock->setMinimumWidth(730);
 		html_view_dock->show();
 #endif
 
