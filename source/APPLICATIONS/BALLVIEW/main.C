@@ -93,8 +93,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 		BALL::VIEW::UIOperationMode::instance().setMode(BALL::VIEW::UIOperationMode::MODE_KIOSK);
 	}
 
-	std::cout << BALL::VIEW::UIOperationMode::instance().getMode() << std::endl;
-
   QPixmap splash_pm(":BALLView-1.4-Splashscreen.png");
   QSplashScreen* splash = new QSplashScreen(splash_pm);
   splash->show();
