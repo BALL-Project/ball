@@ -400,7 +400,6 @@ def setViewPoint(view_point, look_at, look_up):
   camera.setLookUpVector(getVectorFromURLString(look_up))
   setCamera(camera)
   Scene.getInstance(0).applyStereoDefaults()
-  getMainControl().update()
 
 
 def selectByExpressionAndSetViewPoint(expression, view_point, look_at, look_up):
