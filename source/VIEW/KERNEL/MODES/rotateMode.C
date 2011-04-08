@@ -19,7 +19,7 @@ namespace BALL
 			: InteractionMode(scene)
 		{
 			String description = "Shortcut|Display|Rotate_Mode";
-			scene_->getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY);
+			scene_->getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY, UIOperationMode::MODE_ADVANCED);
 			main_action_ = scene_->insertMenuEntry(MainControl::DISPLAY, tr("&Rotate Mode"), this, 
 			                                       0, description, QKeySequence("Ctrl+R"),
 																						 tr("Switch to rotate/zoom mode"), UIOperationMode::MODE_ADVANCED);

@@ -98,7 +98,7 @@ namespace BALL
 			DockWidget::initializeWidget(main_control);
 			QAction* action = insertMenuEntry(MainControl::HELP, tr((project_ + " Documentation").c_str()), this, SLOT(showHelp()),
 			                                  "Shortcut|MainControl|Documentation|Help", QKeySequence(), 
-																				tr(""), UIOperationMode::MODE_KIOSK);
+																				tr(""), UIOperationMode::MODE_ADVANCED);
 			setIcon(action, "actions/help-hint", true);
 
 			if (action)
@@ -109,7 +109,7 @@ namespace BALL
 				whats_action_ = insertMenuEntry(MainControl::HELP, tr("Whats this?"), this, SLOT(enterWhatsThisMode()),
 				                                "Shortcut|MainControl|Documentation|WhatsThis", QKeySequence(),
 																				tr("Show help for clicked widget, exit this mode with right mouse button."),
-																				UIOperationMode::MODE_KIOSK);
+																				UIOperationMode::MODE_ADVANCED);
 				registerForHelpSystem(whats_action_, "tips.html#help");
 			}
 

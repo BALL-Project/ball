@@ -342,22 +342,32 @@ namespace BALL
 			switch (ID)
 			{
 				case FILE:
-					menu = menuBar()->addMenu(tr("&File"));
+					menu = addMenu(tr("&File"), UIOperationMode::MODE_ADVANCED);
 					break;
 				case FILE_OPEN:
-					menu = initPopupMenu(FILE)->addMenu(tr("&Open"));
+					menu = initPopupMenu(FILE, UIOperationMode::MODE_ADVANCED);
+					if (menu)
+						menu->addMenu(tr("&Open"));
 					break;
 				case FILE_OPEN_GRID:
-					menu = initPopupMenu(FILE_OPEN)->addMenu(tr("&Grids"));
+					menu = initPopupMenu(FILE_OPEN, UIOperationMode::MODE_ADVANCED);
+					if (menu)
+						menu->addMenu(tr("&Grids"));
 					break;
 				case FILE_IMPORT:
-					menu = initPopupMenu(FILE)->addMenu(tr("&Import"));
+					menu = initPopupMenu(FILE, UIOperationMode::MODE_ADVANCED);
+					if (menu)
+						menu->addMenu(tr("&Import"));
 					break;
 				case FILE_EXPORT:
-					menu = initPopupMenu(FILE)->addMenu(tr("&Export"));
+					menu = initPopupMenu(FILE, UIOperationMode::MODE_ADVANCED);
+					if (menu)
+						menu->addMenu(tr("&Export"));
 					break;
 				case FILE_MONITOR:
-					menu = initPopupMenu(FILE)->addMenu(tr("&Monitor File"));
+					menu = initPopupMenu(FILE, UIOperationMode::MODE_ADVANCED);
+					if (menu)
+						menu->addMenu(tr("&Monitor File"));
 					break;
 				case EDIT:
 					menu = addMenu(tr("&Edit"), UIOperationMode::MODE_ADVANCED);
@@ -366,23 +376,33 @@ namespace BALL
 					menu = addMenu(tr("&Build"), UIOperationMode::MODE_ADVANCED);
 					break;
 				case DISPLAY:
-					menu = menuBar()->addMenu(tr("&Display"));
+					menu = addMenu(tr("&Display"), UIOperationMode::MODE_ADVANCED);
 					break;
 				case DISPLAY_VIEWPOINT:
-					menu = initPopupMenu(DISPLAY)->addMenu(tr("&Viewpoint"));
+					menu = initPopupMenu(DISPLAY, UIOperationMode::MODE_ADVANCED);
+					if (menu)
+						menu->addMenu(tr("&Viewpoint"));
 					break;
 				case DISPLAY_CREATE:
-					menu = initPopupMenu(DISPLAY)->addMenu(tr("&Create"));
+					menu = initPopupMenu(DISPLAY, UIOperationMode::MODE_ADVANCED);
+					if (menu)
+						addMenu(tr("&Create"), UIOperationMode::MODE_ADVANCED);
 					break;
 				case DISPLAY_STEREO:
-					menu = initPopupMenu(DISPLAY)->addMenu(tr("&Stereo"));
+					menu = initPopupMenu(DISPLAY, UIOperationMode::MODE_ADVANCED);
+					if (menu)
+						addMenu(tr("&Stereo"), UIOperationMode::MODE_ADVANCED);
 					break;
 				case DISPLAY_ANIMATION:
-					menu = initPopupMenu(DISPLAY)->addMenu(tr("&Animation"));
+					menu = initPopupMenu(DISPLAY, UIOperationMode::MODE_ADVANCED);
+					if (menu)
+						addMenu(tr("&Animation"), UIOperationMode::MODE_ADVANCED);
 					break;
 #ifdef BALL_HAS_RTFACT	
 				case DISPLAY_CONTINUOUSLOOP:
-					menu = initPopupMenu(DISPLAY)->addMenu("&Continuous Loop");
+					menu = initPopupMenu(DISPLAY, UIOperationMode::MODE_ADVANCED);
+					if (menu)
+						addMenu("&Continuous Loop", UIOperationMode::MODE_ADVANCED);
 					break;
 #endif
 				case MOLECULARMECHANICS:
@@ -534,12 +554,12 @@ namespace BALL
 			preferences_dialog_->showEntry(main_control_preferences_);
 
 			// own menu entries
-			insertPopupMenuSeparator(MainControl::FILE, UIOperationMode::MODE_KIOSK);
+			insertPopupMenuSeparator(MainControl::FILE, UIOperationMode::MODE_ADVANCED);
 
 			String description = "Shortcut|File|Quit";
 			insertMenuEntry(MainControl::FILE, (String)tr("&Quit"), qApp, 
 											SLOT(quit()), description,
-											QKeySequence("Ctrl+Q"));
+											QKeySequence("Ctrl+Q"), UIOperationMode::MODE_ADVANCED);
 
 			// if the preferences dialog has any tabs then show it
 			if (preferences_dialog_->hasPages())

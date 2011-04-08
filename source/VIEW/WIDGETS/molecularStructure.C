@@ -79,7 +79,7 @@ namespace BALL
 			center_camera_id_  = insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("&Focus Camera"), this, 
 																					 SLOT(centerCamera()), description, QKeySequence("Ctrl+F"),
 			                                     tr("Focus the camera on one or multiple objects."), 
-																					 UIOperationMode::MODE_KIOSK);
+																					 UIOperationMode::MODE_ADVANCED);
 			setIcon(center_camera_id_, "actions/object-focus", true);
 
 			// Build Menu -------------------------------------------------------------------

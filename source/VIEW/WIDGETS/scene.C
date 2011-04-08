@@ -1444,35 +1444,35 @@ namespace BALL
 			//}
 
 			// ======================== Display->Viewpoint ===============================================
-			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT, UIOperationMode::MODE_KIOSK);
+			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT, UIOperationMode::MODE_ADVANCED);
 
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("&Store Viewpoint"), this, 
 			                SLOT(storeViewPoint()), "Shortcut|Display|Viewpoint|Store",
-											QKeySequence(), tr("Store the current viewpoint"), UIOperationMode::MODE_KIOSK);
+											QKeySequence(), tr("Store the current viewpoint"), UIOperationMode::MODE_ADVANCED);
 
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("&Restore Viewpoint"), this, 
 			                SLOT(restoreViewPoint()), "Shortcut|Display|Viewpoint|Restore", QKeySequence(),
-											tr("Restore the viewpoint"), UIOperationMode::MODE_KIOSK);
+											tr("Restore the viewpoint"), UIOperationMode::MODE_ADVANCED);
 
-			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT, UIOperationMode::MODE_KIOSK);
+			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT, UIOperationMode::MODE_ADVANCED);
 
 			String description("Shortcut|Display|Viewpoint|Show_Vie&wpoint");
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("Show Viewpoint"), this, 
 			                SLOT(showViewPoint_()), description, QKeySequence("Ctrl+W"),
-											tr("Print the coordinates of the current viewpoint"), UIOperationMode::MODE_KIOSK);
+											tr("Print the coordinates of the current viewpoint"), UIOperationMode::MODE_ADVANCED);
 
 
 			description = "Shortcut|Display|Viewpoint|Set_Viewpoint";
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("Set Viewpoi&nt"), this, 
 			                SLOT(setViewPoint_()), description, QKeySequence("Ctrl+N"),
-											tr("Move the viewpoint to the given coordinates"), UIOperationMode::MODE_KIOSK);
+											tr("Move the viewpoint to the given coordinates"), UIOperationMode::MODE_ADVANCED);
 
 			description = "Shortcut|Display|Viewpoint|Reset_Camera";
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("Rese&t Camera"), this, 
 			                SLOT(resetCamera_()), description, QKeySequence(), 
-											tr("Reset the camera to the orgin (0,0,0)"), UIOperationMode::MODE_KIOSK);
+											tr("Reset the camera to the orgin (0,0,0)"), UIOperationMode::MODE_ADVANCED);
 
-			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT, UIOperationMode::MODE_KIOSK);
+			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT, UIOperationMode::MODE_ADVANCED);
 
 			description = "Shortcut|Display|Viewpoint|Limit_View_Volume";
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("Limit View Volume"), this, 
@@ -1483,14 +1483,14 @@ namespace BALL
 			QAction* screenshot_action = insertMenuEntry(MainControl::FILE_EXPORT, tr("PNG..."), this, 
 			                                             SLOT(showExportPNGDialog()), description, QKeySequence("Alt+P"),
 																									 tr("Export a PNG image file from the Scene"),
-																									 UIOperationMode::MODE_KIOSK);
+																									 UIOperationMode::MODE_ADVANCED);
 			setIcon(screenshot_action, "actions/screenshot", false);
 
 			description = "Shortcut|File|Export|POVRay";
 			QAction* pov_action = insertMenuEntry(MainControl::FILE_EXPORT, tr("POVRa&y scene"), this, 
  			                                      SLOT(exportPOVRay()), description, QKeySequence("Ctrl+Y"),
 																						tr("Export a POVRay file from the Scene"), 
-																						UIOperationMode::MODE_KIOSK);
+																						UIOperationMode::MODE_ADVANCED);
 			setIcon(pov_action, "mimetype/text-x-povray", false);
 			setMenuHelp(pov_action, "tips.html#povray");
 
@@ -1498,7 +1498,7 @@ namespace BALL
 			QAction* xml3d_action = insertMenuEntry(MainControl::FILE_EXPORT, tr("XML3D as XHTML"), this, 
 																						SLOT(exportXML3D()), description, QKeySequence(""),
 																						tr("Export a XML3D/XHTML file from the Scene"), 
-																						UIOperationMode::MODE_KIOSK);
+																						UIOperationMode::MODE_ADVANCED);
 			setMenuHelp(pov_action, "tips.html#XML3D");
 			
 			description = "Shortcut|File|Export|VRML";
@@ -1545,7 +1545,8 @@ namespace BALL
 #endif
 
 			description = "Shortcut|File|Print";
-			insertMenuEntry(MainControl::FILE, tr("Print"), this, SLOT(printScene()), description);
+			insertMenuEntry(MainControl::FILE, tr("Print"), this, SLOT(printScene()), description, QKeySequence(), 
+			                tr("Print the scene"), UIOperationMode::MODE_ADVANCED);
 
 			window_menu_entry_ = insertMenuEntry(MainControl::WINDOWS, tr("Scene"), this, SLOT(switchShowWidget()), "", 
 			                                     QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
@@ -1566,7 +1567,7 @@ namespace BALL
 			toolbar_view_controls_->layout()->setSpacing(2);
 
 			/// EDITABLE SCENE STUFF
-			main_control.insertPopupMenuSeparator(MainControl::DISPLAY, UIOperationMode::MODE_KIOSK);
+			main_control.insertPopupMenuSeparator(MainControl::DISPLAY, UIOperationMode::MODE_ADVANCED);
 
 			bondorders_action_ = NULL;
 			if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)

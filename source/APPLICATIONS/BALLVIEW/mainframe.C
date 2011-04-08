@@ -101,7 +101,7 @@ namespace BALL
 		if (fullscreen_action_)
 			fullscreen_action_->setIcon(IconLoader::instance().getIcon("actions/view-fullscreen"));
 
-		insertPopupMenuSeparator(DISPLAY);
+		insertPopupMenuSeparator(DISPLAY, UIOperationMode::MODE_ADVANCED);
 		initPopupMenu(DISPLAY_VIEWPOINT);
 
 		new MolecularFileDialog(this, ((String)tr("MolecularFileDialog")).c_str());
@@ -182,22 +182,27 @@ namespace BALL
 
 		description = "Shortcut|File|Open|Project";
 		insertMenuEntry(MainControl::FILE_OPEN, ((String)tr("Project")).c_str(), this, 
-		                SLOT(loadBALLViewProjectFile()), description);
+										SLOT(loadBALLViewProjectFile()), description, QKeySequence(),
+										UIOperationMode::MODE_ADVANCED);
 		
 		description = "Shortcut|File|Save_Project";
-		save_project_action_ = insertMenuEntry(MainControl::FILE, ((String)tr("Save Project")).c_str(), this,
-		                                       SLOT(saveBALLViewProjectFile()), description);
+		save_project_action_ = insertMenuEntry(MainControl::FILE, ((String)tr("Save Project")).c_str(), this, 
+											 										 SLOT(saveBALLViewProjectFile()), description, QKeySequence(),
+																					 UIOperationMode::MODE_ADVANCED);
 
 		// Help-Menu -------------------------------------------------------------------
 		QAction* action = 0;
 
 		description = "Shortcut|Help|About";
 		action = insertMenuEntry(MainControl::HELP, (String)tr("About"), this, SLOT(about()), description);
-		setMenuHint(action, (String)tr("Show informations on this version of BALLView"));
+		if (action)
+			setMenuHint(action, (String)tr("Show informations on this version of BALLView"));
 
 		description = "Shortcut|Help|How_to_cite";
-		action = insertMenuEntry(MainControl::HELP, (String)tr("How to cite"), this, SLOT(howToCite()), description);
-		setMenuHint(action, (String)tr("Show infos on how to cite BALL and BALLView"));
+		action = insertMenuEntry(MainControl::HELP, (String)tr("How to cite"), this, SLOT(howToCite()), description,
+		                         QKeySequence(), UIOperationMode::MODE_ADVANCED);
+		if (action)
+			setMenuHint(action, (String)tr("Show infos on how to cite BALL and BALLView"));
 
 		// TODO: why is this done here and not, e.g., in mainControl()???
 		description = "Shortcut|MolecularMechanics|Abort_Calculation";
