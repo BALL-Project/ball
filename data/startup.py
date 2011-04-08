@@ -354,5 +354,8 @@ def addPlane(plane_specifier, height, boundary, bottom = True):
   getMainControl().insert(r)
   getMainControl().update(r)
 
+import os
 
-Scene.getInstance(0).enterStereo()
+if os.environ.has_key('BALLVIEW_ENTER_STEREO') and (os.environ['BALLVIEW_ENTER_STEREO'].upper() == "TRUE"):
+  Scene.getInstance(0).enterStereo()
+
