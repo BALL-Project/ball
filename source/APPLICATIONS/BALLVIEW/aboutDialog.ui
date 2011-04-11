@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>271</width>
-    <height>479</height>
+    <height>534</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -506,11 +506,11 @@
      <property name="focusPolicy">
       <enum>Qt::StrongFocus</enum>
      </property>
-     <property name="pixmap">
-      <pixmap>logo.png</pixmap>
-     </property>
      <property name="toolTip">
       <string notr="true"/>
+     </property>
+     <property name="pixmap">
+      <pixmap>logo.png</pixmap>
      </property>
      <property name="scaledContents">
       <bool>false</bool>
@@ -522,9 +522,6 @@
    </item>
    <item>
     <widget class="QLabel" name="BALLView_version_label">
-     <property name="toolTip">
-      <string notr="true"/>
-     </property>
      <property name="toolTip">
       <string notr="true"/>
      </property>
@@ -572,12 +569,22 @@
     </widget>
    </item>
    <item>
+    <widget class="QLineEdit" name="lineEdit">
+     <property name="styleSheet">
+      <string notr="true">font: 11pt &quot;Sans Serif&quot;;</string>
+     </property>
+     <property name="text">
+      <string>    MS Wissenschaft 2011</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <spacer name="verticalSpacer">
+     <property name="toolTip">
+      <string notr="true">Vertical Spacer 'verticalSpacer', 20 x 40</string>
+     </property>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
-     </property>
-     <property name="toolTip">
-      <string notr="true"/>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -590,12 +597,14 @@
    <item>
     <widget class="QLabel" name="TextLabel1">
      <property name="text">
-      <string notr="true">Andreas Hildebrandt
-Anna Katharina Dehof
-Stefan Nickels
+      <string notr="true">Stefan Nickels
+Sabine C. Mueller
 Daniel Stöckel
-Andreas Moll
-Oliver Kohlbacher</string>
+Wolfgang Herget
+Anna Katharina Dehof
+Oliver Kohlbacher
+Hans-Peter Lenhof
+Andreas Hildebrandt</string>
      </property>
      <property name="textFormat">
       <enum>Qt::AutoText</enum>
