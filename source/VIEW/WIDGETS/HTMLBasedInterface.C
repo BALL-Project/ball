@@ -66,6 +66,10 @@ namespace BALL
 			}
 		}
 
+		void HTMLBasedInterface::contextMenuEvent(QContextMenuEvent*)
+		{
+		}
+
 		void HTMLBasedInterface::executeLink(const QUrl& url)
 		{
 			QString action_name = url.queryItemValue("action");

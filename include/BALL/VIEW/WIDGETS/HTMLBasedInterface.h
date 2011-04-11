@@ -41,6 +41,7 @@ namespace BALL
 
 			protected:
 				typedef QList<QPair<QString, QString> > ParameterList;
+				void contextMenuEvent(QContextMenuEvent* evt);
 			protected slots:
 
 				void handleLinkClicked(const QUrl& url);
