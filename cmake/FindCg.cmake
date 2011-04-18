@@ -39,17 +39,20 @@ IF (APPLE)
 ELSE (APPLE)
   IF (WIN32)
 		IF (CMAKE_SIZEOF_VOID_P EQUAL 8)
-			SET(CG_BIN_SEARCH_PATH "$ENV{PROGRAMFILES}/NVIDIA\ Corporation/Cg/bin.x64")
+						FIND_PROGRAM( CG_COMPILER cgc
+							$ENV{CG_BIN64_PATH}
+							$ENV{PROGRAMFILES}/Cg
+							${PROJECT_SOURCE_DIR}/../Cg
+							DOC "The Cg Compiler"
+							)
 		ELSE()
-			SET(CG_BIN_SEARCH_PATH "$ENV{PROGRAMFILES}/NVIDIA\ Corporation/Cg/bin")
+						FIND_PROGRAM( CG_COMPILER cgc
+							$ENV{CG_BIN_PATH}
+							$ENV{PROGRAMFILES}/Cg
+							${PROJECT_SOURCE_DIR}/../Cg
+							DOC "The Cg Compiler"
+							)
 		ENDIF()
-    FIND_PROGRAM( CG_COMPILER cgc
-      $ENV{CG_BIN_PATH}
-			${CG_BIN_SEARCH_PATH}
-      $ENV{PROGRAMFILES}/Cg
-      ${PROJECT_SOURCE_DIR}/../Cg
-      DOC "The Cg Compiler"
-      )
     IF (CG_COMPILER)
       GET_FILENAME_COMPONENT(CG_COMPILER_DIR ${CG_COMPILER} PATH)
       GET_FILENAME_COMPONENT(CG_COMPILER_SUPER_DIR ${CG_COMPILER_DIR} PATH)
@@ -67,31 +70,49 @@ ELSE (APPLE)
       DOC "The directory where Cg/cg.h resides"
       )
 		IF (CMAKE_SIZEOF_VOID_P EQUAL 8)
-			SET(CG_LIB_SEARCH_PATH "$ENV{PROGRAMFILES}/NVIDIA\ Corporation/Cg/lib.x64")
+						FIND_LIBRARY( CG_LIBRARY
+							NAMES Cg
+							PATHS
+							$ENV{CG_LIB64_PATH}
+							$ENV{PROGRAMFILES}/Cg
+							${PROJECT_SOURCE_DIR}/../Cg
+							${CG_COMPILER_SUPER_DIR}/lib
+							${CG_COMPILER_DIR}
+							DOC "The Cg runtime library"
+							)
+						FIND_LIBRARY( CG_GL_LIBRARY
+							NAMES CgGL
+							PATHS
+							$ENV{CG_LIB64_PATH}
+							$ENV{PROGRAMFILES}/Cg
+							${PROJECT_SOURCE_DIR}/../Cg
+							${CG_COMPILER_SUPER_DIR}/lib
+							${CG_COMPILER_DIR}
+							DOC "The Cg runtime library"
+							)
 		ELSE()
-			SET(CG_LIB_SEARCH_PATH "$ENV{PROGRAMFILES}/NVIDIA\ Corporation/Cg/lib")
+						FIND_LIBRARY( CG_LIBRARY
+							NAMES Cg
+							${CG_LIB_SEARCH_PATH}
+							PATHS
+							$ENV{CG_LIB_PATH}
+							$ENV{PROGRAMFILES}/Cg
+							${PROJECT_SOURCE_DIR}/../Cg
+							${CG_COMPILER_SUPER_DIR}/lib
+							${CG_COMPILER_DIR}
+							DOC "The Cg runtime library"
+							)
+						FIND_LIBRARY( CG_GL_LIBRARY
+							NAMES CgGL
+							${CG_LIB_SEARCH_PATH}
+							PATHS
+							$ENV{PROGRAMFILES}/Cg
+							${PROJECT_SOURCE_DIR}/../Cg
+							${CG_COMPILER_SUPER_DIR}/lib
+							${CG_COMPILER_DIR}
+							DOC "The Cg runtime library"
+							)
 		ENDIF()
-    FIND_LIBRARY( CG_LIBRARY
-      NAMES Cg
-      PATHS
-			${CG_LIB_SEARCH_PATH}
-      $ENV{CG_LIB_PATH}
-      $ENV{PROGRAMFILES}/Cg
-      ${PROJECT_SOURCE_DIR}/../Cg
-      ${CG_COMPILER_SUPER_DIR}/lib
-      ${CG_COMPILER_DIR}
-      DOC "The Cg runtime library"
-      )
-    FIND_LIBRARY( CG_GL_LIBRARY
-      NAMES CgGL
-      PATHS
-			${CG_LIB_SEARCH_PATH}
-      $ENV{PROGRAMFILES}/Cg
-      ${PROJECT_SOURCE_DIR}/../Cg
-      ${CG_COMPILER_SUPER_DIR}/lib
-      ${CG_COMPILER_DIR}
-      DOC "The Cg runtime library"
-      )
   ELSE (WIN32)
     FIND_PROGRAM( CG_COMPILER cgc
       /usr/bin
