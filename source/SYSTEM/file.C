@@ -28,6 +28,7 @@ namespace BALL
 	const File::OpenMode File::MODE_BINARY = std::ios::binary;
 	const File::OpenMode File::MODE_ATE = std::ios::ate;
 	const File::OpenMode File::MODE_TRUNC = std::ios::trunc;
+	HashSet<String> File::created_temp_filenames_ = HashSet<String>();
  
 	File::CannotWrite::CannotWrite(const char* file, int line, const String& filename)
 		:	Exception::GeneralException(file, line, "File::CannotWrite", ""),
@@ -522,8 +523,9 @@ namespace BALL
 									temporary[6] = f;
 									temporary[7] = g;
 			
-									if (::access(temporary.c_str(), F_OK) < 0)
-									{ 
+									if (created_temp_filenames_.find(temporary) == created_temp_filenames_.end() && ::access(temporary.c_str(), F_OK) < 0)
+									{
+										created_temp_filenames_.insert(temporary);
 										return true;
 									}					
 								}

@@ -17,6 +17,8 @@
 #	include <BALL/SYSTEM/fileSystem.h>
 #endif
 
+#include <BALL/DATATYPE/hashSet.h>
+
 #include <stdlib.h>                   // 'getenv'
 #include <sys/stat.h>                 // 'stat', 'lstat'
 #include <stdio.h>                    // 'rename'
@@ -604,6 +606,7 @@ namespace BALL
 		OpenMode	open_mode_;
 		bool			is_open_;
 		bool			is_temporary_;
+		static HashSet<String> created_temp_filenames_;
 
 		static TransformationManager	transformation_manager_;
 		static Size										transformation_methods_;
