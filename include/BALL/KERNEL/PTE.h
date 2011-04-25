@@ -675,11 +675,9 @@ namespace BALL
 			*/
 			//@{
 
-			/** Return the element at a given position in the PTE.
-					The position is equal to the atomic number.
-					@return Element the static Element at the position <b>  position </b>
+			/** Return the element that has the specified atomic number.
 			*/
-			static Element& getElement(Position position);
+			static Element& getElement(Position atomic_number);
 		
 			/** Return the element with a given symbol.
 					@return Element the static Element with the symbol <b>  symbol </b>

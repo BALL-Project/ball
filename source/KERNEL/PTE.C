@@ -478,11 +478,19 @@ namespace BALL
 	{
 	}
 
-	Element& PTE_::getElement(Position position)
+	Element& PTE_::getElement(Position atomic_number)
 	{
-		return ((position < Element::NUMBER_OF_ELEMENTS)
-						 ? element_[position]
-						 : Element::UNKNOWN);
+		// atomic number 1 should point us to array-index 0 ..
+		atomic_number--;
+
+		if (atomic_number < Element::NUMBER_OF_ELEMENTS)
+		{
+			return *atomic_number_to_element_[atomic_number];
+		}
+		else
+		{
+			return Element::UNKNOWN;
+		}
 	}
  
 	Element& PTE_::getElement(const String& symbol)
