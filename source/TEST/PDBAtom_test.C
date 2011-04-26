@@ -74,7 +74,7 @@ CHECK(PDBAtom(Element& element, const String& name, const String& type_name = BA
 	delete pa;
 RESULT
 
-PDBAtom pdba(PTE.getElement(1), "name", "type_name" , 0, position, velocity, force, 9.1, 10.1, 'a', 'b', 'c', 11.1, 12.1);
+PDBAtom pdba(PTE.getElement(13), "name", "type_name" , 0, position, velocity, force, 9.1, 10.1, 'a', 'b', 'c', 11.1, 12.1);
 
 CHECK(PDBAtom(const PDBAtom& pdb_atom, bool deep = true) throw())
 	PDBAtom* p2 = new PDBAtom(pdba);

@@ -273,16 +273,16 @@ RESULT
 // test for PTE_:
 
 CHECK(static Element& getElement(Position position) throw())
-	TEST_EQUAL(PTE.getElement(1).getName(), "Aluminum")
-	TEST_EQUAL(PTE.getElement(1).getSymbol(), "Al")
-	TEST_EQUAL(PTE.getElement(1).getGroup(), 13)
-	TEST_EQUAL(PTE.getElement(1).getPeriod(), 3)
-	TEST_EQUAL(PTE.getElement(1).getAtomicNumber(), 13)
-	TEST_REAL_EQUAL(PTE.getElement(1).getAtomicWeight(), 26.9815390)
-	TEST_REAL_EQUAL(PTE.getElement(1).getAtomicRadius(), 1.43)
-	TEST_REAL_EQUAL(PTE.getElement(1).getCovalentRadius(), 1.25)
-	TEST_REAL_EQUAL(PTE.getElement(1).getVanDerWaalsRadius(), 2.05)
-	TEST_REAL_EQUAL(PTE.getElement(1).getElectronegativity(), 1.61)
+	TEST_EQUAL(PTE.getElement(13).getName(), "Aluminum")
+	TEST_EQUAL(PTE.getElement(13).getSymbol(), "Al")
+	TEST_EQUAL(PTE.getElement(13).getGroup(), 13)
+	TEST_EQUAL(PTE.getElement(13).getPeriod(), 3)
+	TEST_EQUAL(PTE.getElement(13).getAtomicNumber(), 13)
+	TEST_REAL_EQUAL(PTE.getElement(13).getAtomicWeight(), 26.9815390)
+	TEST_REAL_EQUAL(PTE.getElement(13).getAtomicRadius(), 1.43)
+	TEST_REAL_EQUAL(PTE.getElement(13).getCovalentRadius(), 1.25)
+	TEST_REAL_EQUAL(PTE.getElement(13).getVanDerWaalsRadius(), 2.05)
+	TEST_REAL_EQUAL(PTE.getElement(13).getElectronegativity(), 1.61)
 RESULT
 
 CHECK(static Element& getElement(const String& symbol) throw())
