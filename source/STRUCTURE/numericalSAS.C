@@ -82,7 +82,7 @@ namespace BALL
 		sphere_template_t.exportSurface(sphere_template);
 
 		// a safety threshold
-		float epsilon = 0.2;
+		float epsilon = 0.5;
 
 		// determine the maximum SAS radius
 		float max_radius = 0;
@@ -115,13 +115,20 @@ namespace BALL
 
 		for (AtomConstIterator at_it = fragment.beginAtom(); +at_it; ++at_it)
 		{
-			if (at_it->getRadius() > 0.)
+			if (at_it->getRadius() > 0.001)
+			{
 				atom_grid.insert(at_it->getPosition(), &(*at_it));
+			}
 		}
 
 		// now iterate over all atoms and determine their possibly occluding neighbours
 		for (AtomConstIterator at_it = fragment.beginAtom(); +at_it; ++at_it)
 		{
+			if (at_it->getRadius() <= 0.001)
+			{
+				continue;
+			}
+
 			Vector3 current_center = at_it->getPosition();
 			float   current_radius = at_it->getRadius()+probe_radius;
 
@@ -135,6 +142,10 @@ namespace BALL
 
 			// find the atom's box
 			HashGridBox3<Atom const*>* box = atom_grid.getBox(at_it->getPosition());
+			if(!box)
+			{
+				throw BALL::Exception::GeneralException(__FILE__, __LINE__, "NumericalSAS error", "Cannot find atom in hashgrid!");
+			}
 
 			// and iterate over all boxes in the neighbourhood, including the box itself
 			HashGridBox3<Atom const*>::BoxIterator neighbour_box = box->beginBox();
