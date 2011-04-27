@@ -153,6 +153,8 @@ namespace BALL
 		*/
 		virtual int sync();
 
+		int sync(bool force_flush);
+
 		/**	Overflow method.
 				This method calls sync and <tt>streambuf::overflow(c)</tt> to 
 				prevent a buffer overflow.
@@ -467,9 +469,10 @@ namespace BALL
 		bool outputEnabled() const
 			;
 
-		///
-		void flush()
-			;
+		/** Flush the LogStream.\n
+		This function overloads std::ostream::flush(). */
+		std::ostream& flush();
+
 		//@}		
 		
 		/**	@name	Message Buffer Management */

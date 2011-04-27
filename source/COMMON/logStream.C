@@ -61,8 +61,13 @@ namespace BALL
 						 << "]:" << loglines_[line - 1].text.c_str() << std::endl;
 		}
 	}
- 
+
 	int LogStreamBuf::sync()
+	{
+		return sync(false);
+	}
+ 
+	int LogStreamBuf::sync(bool force_flush)
 	{
 		static char buf[BUFFER_LENGTH];
 
@@ -78,7 +83,7 @@ namespace BALL
 				// search for the first end of line
 				for (; line_end < pptr() && *line_end != '\n'; line_end++) {};
 
-				if (line_end >= pptr()) 
+				if (!force_flush && line_end >= pptr())
 				{
 					// Copy the incomplete line to the incomplete_line_ buffer
 					size_t length = line_end - line_start + 1;
@@ -532,12 +537,13 @@ namespace BALL
 		return disable_output_;
 	}
 
-	void LogStream::flush()
-		
+	std::ostream& LogStream::flush()
 	{
-		if (disable_output_) return;
+		if (disable_output_) return *this;
 
+		rdbuf()->sync(true);
 		std::ostream::flush();
+		return *this;
 	}
 
 	bool LogStream::bound_() const
