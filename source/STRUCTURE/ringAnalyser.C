@@ -68,6 +68,8 @@ namespace BALL
 	{
 		rings_.clear();
 		ring_systems_.clear();
+		peeling_order_.clear();
+		rings_per_bond_.clear();
 	}
 
 	bool RingAnalyser::start()
