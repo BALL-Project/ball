@@ -89,7 +89,9 @@ INCLUDE(cmake/BALLComponents.cmake)
 ## additional include directories
 INCLUDE_DIRECTORIES(${PROJECT_BINARY_DIR}/include/) ## for configured files, i.e. config.h
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include/)
-INCLUDE_DIRECTORIES(${BALL_CONTRIB_PATH}/include/)
+IF (BALL_CONTRIB_PATH)
+	INCLUDE_DIRECTORIES(${BALL_CONTRIB_PATH}/include/)
+ENDIF()
 
 ## Extra libraries we want to link into BALL
 SET(BALL_DEP_LIBRARIES)
@@ -741,15 +743,35 @@ ENDFOREACH()
 SET(CF_BALL_ADD_DEFINITIONS)
 
 ## the filename for library settings (this file will be included in BALLConfig.cmake)
+SET(BALL_CMAKE_EXPORT_PATH "lib/cmake/BALL" CACHE PATH "Path to the cmake config and export files")
 SET(CF_BALLExport ${PROJECT_BINARY_DIR}/cmake/BALLExport.cmake)
 
 ## create code that allows to call find_package()
 ## (must come after the above code that sets the variables!)
 GET_DIRECTORY_PROPERTY(BALL_INCLUDE_DIRS  INCLUDE_DIRECTORIES)
+
+## Configure the BALLConfig for compilation against the version in PROJECT_BINARY_DIR
 CONFIGURE_FILE(
 	"${PROJECT_SOURCE_DIR}/cmake/BALLConfig.cmake.in"
 	"${PROJECT_BINARY_DIR}/cmake/BALLConfig.cmake"
 	@ONLY
+)
+SET(CF_BALLExport ${PROJECT_BINARY_DIR}/cmake/BALLExport.cmake)
+
+## Configure the BALLConfig for compilation against the installed version
+## If we want to install the package, we need to rewrite the include directories
+LIST(REMOVE_ITEM BALL_INCLUDE_DIRS "${PROJECT_BINARY_DIR}/include" "${PROJECT_SOURCE_DIR}/include")
+SET(BALL_INCLUDE_DIRS ${BALL_PATH}/include/ ${BALL_INCLUDE_DIRS})
+SET(CF_BALLExport "${BALL_PATH}/${BALL_CMAKE_EXPORT_PATH}/BALLExport.cmake")
+CONFIGURE_FILE(
+	"${PROJECT_SOURCE_DIR}/cmake/BALLConfig.cmake.in"
+	"${PROJECT_BINARY_DIR}/exports/BALLConfig.cmake"
+	@ONLY
+)
+INSTALL(FILES 
+	"${PROJECT_BINARY_DIR}/exports/BALLConfig.cmake"
+	DESTINATION "${CMAKE_INSTALL_PREFIX}/${BALL_CMAKE_EXPORT_PATH}/"
+	COMPONENT   ${COMPONENT_LIBBALL_DEV}
 )
 
 ## Create BALLExport.cmake
@@ -761,8 +783,8 @@ ELSE()
 	EXPORT(PACKAGE BALL)
 ENDIF()
 ## export our libs
-EXPORT(TARGETS BALL VIEW FILE ${CF_BALLExport})
 
-INSTALL(EXPORT BALLExportGroup DESTINATION cmake/ FILE BALLExport.cmake)
+EXPORT(TARGETS BALL VIEW FILE ${PROJECT_BINARY_DIR}/cmake/BALLExport.cmake)
+INSTALL(EXPORT BALLExportGroup DESTINATION ${BALL_CMAKE_EXPORT_PATH} FILE BALLExport.cmake)
 
 INCLUDE(cmake/BALLCTags.cmake)
