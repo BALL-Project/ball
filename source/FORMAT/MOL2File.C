@@ -560,16 +560,25 @@ namespace BALL
 						Size number_of_fields = getLine().countFields();
 						set.number_of_members = getLine().getField(0).toInt();
 
-						if (set.number_of_members != number_of_fields-1)
+						Size read_members = 0;
+						for (Size i = 1; (read_members < set.number_of_members) && (i < number_of_fields); i++)
+						{
+							//If we read a '\' then we need to continue reading in the next line
+							if(getLine().getField(i) == "\\")
+							{
+								readLine();
+								i = 0;
+								number_of_fields = getLine().countFields();
+							}
+
+							set.static_members.push_back(getLine().getField(i).toInt());
+							++read_members;
+						}
+
+						if (set.number_of_members != read_members)
 						{
 							Log.warn() << "Warning: inconsistent set definition in MOL2File! Ignoring the set!" << std::endl;
-						}
-						else
-						{
-							for (Size i = 1; (i <= (Size)getLine().getField(0).toInt()) && (i < number_of_fields); i++)
-							{
-								set.static_members.push_back(getLine().getField(i).toInt());
-							}
+							set.static_members.clear();
 						}
 					}
 					else
