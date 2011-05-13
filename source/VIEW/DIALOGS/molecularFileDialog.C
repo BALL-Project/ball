@@ -526,7 +526,8 @@ System* MolecularFileDialog::readMOL2File(String filename, String system_name)
 	}
 	catch(Exception::GeneralException& e)
 	{
-		setStatusbarText((String)tr("Reading of MOL2 file failed, see logs!"), true);
+		setStatusbarText(tr("Reading of MOL2 file failed, see logs!"), true);
+		Log.error() << e << std::endl;
 		delete system;
 		return 0;
 	}
