@@ -202,6 +202,16 @@ CHECK([Extra]Handling of static sets)
 		TEST_EQUAL((Position)set.static_members[i], i+1)
 RESULT
 
+CHECK([Extra]Handling of linebreaks in static sets)
+	MOL2File f(BALL_TEST_DATA_PATH(MOL2File_test_set_linebreak.mol2));
+	System S;
+	f >> S;
+	TEST_EQUAL(f.getNumberOfSets(), 1)
+	MOL2File::SetStruct& set = f.getSet(0);
+	TEST_EQUAL(set.number_of_members, 20)
+	for (Position i=0; i<set.number_of_members; i++)
+		TEST_EQUAL((Position)set.static_members[i], i+1)
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
