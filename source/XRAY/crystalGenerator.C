@@ -6,12 +6,17 @@ using namespace std;
 
 namespace BALL
 {
+
+	const string CrystalGenerator::Option::SPACE_GROUP_FILE= "filename";
+	const string CrystalGenerator::Default::SPACE_GROUP_FILE= "XRAY/spacegroups-details.ini";
+	
 	CrystalGenerator::CrystalGenerator()
 		: center_processor_(),
 			transformer_(),
 			system_(0),
 			asu_(0),
-			unitcell_(0)
+			unitcell_(0),
+			filename_(Default::SPACE_GROUP_FILE)
 	{
 	}
 	
@@ -20,7 +25,8 @@ namespace BALL
 			transformer_(cg.transformer_),
 			system_(cg.system_),
 			asu_(cg.asu_),
-			unitcell_(cg.unitcell_)
+			unitcell_(cg.unitcell_),
+			filename_(cg.filename_)
 	{
 	}
 
@@ -29,7 +35,8 @@ namespace BALL
 			transformer_(),
 			system_(system),
 			asu_(0),
-			unitcell_(0)
+			unitcell_(0),
+			filename_(Default::SPACE_GROUP_FILE)
 	{
 		setSystem(system);
 	}

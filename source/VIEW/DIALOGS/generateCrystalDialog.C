@@ -12,8 +12,11 @@ namespace BALL
 			: QDialog(parent, fl),
 			Ui_GenerateCrystalDialogData(),
 			ModularWidget(name),
-			cryst_gen_(0),
+			generator_(0),
+			//sg_list(0),
+			//sg_entry(0),
 			selectedSystem_(0)
+
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new GenerateCrystalDialog" << this << std::endl;
@@ -48,6 +51,10 @@ namespace BALL
 
 		bool GenerateCrystalDialog::initSpaceGroupList()
 		{
+			if (generator_)
+			{
+
+			}
 			return false;
 		}
 		

@@ -12,7 +12,7 @@ using namespace std;
 namespace BALL
 {
 	const string CrystalInfo::Option::SPACE_GROUP_FILE = "filename";
-	const string CrystalInfo::Default::SPACE_GROUP_FILE = "XRAY/spacegroups.dat";
+	const string CrystalInfo::Default::SPACE_GROUP_FILE = "XRAY/spacegroups-details.dat";
 
 	CrystalInfo::CrystalInfo()
 		:	options(),

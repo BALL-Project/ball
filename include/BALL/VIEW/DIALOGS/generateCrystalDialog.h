@@ -22,6 +22,14 @@
 # include <BALL/XRAY/crystalGenerator.h>
 #endif
 
+#ifndef BALL_XRAY_CRYSTALGENERATOR_H
+# include <BALL/XRAY/crystalGenerator.h>
+#endif
+
+#ifndef BALL_FORMAT_PARAAMETERSECTION_H
+# include <BALL/FORMAT/parameterSection.h>
+#endif
+
 namespace BALL
 {
 
@@ -69,15 +77,17 @@ namespace BALL
 
 			protected:
 
-
 				HashMap<String, QImage> image_cache_;
 
 				// e.g. gif images if not supported
 				HashSet<String> 				unsupported_images_;
 
 				//QAction* menu_id_;
-				CrystalGenerator* cryst_gen_;
+				CrystalGenerator* generator_;
+				ParameterSection sg_list;
+				ParameterSection sg_entry;
 				System* selectedSystem_;
+				String filename_;
 		};
 
 	} 

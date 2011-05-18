@@ -55,6 +55,23 @@ namespace BALL
 				UNITCELL	= 2
 			};
 
+			/** Option Names
+			 */
+			struct BALL_EXPORT Option
+			{
+				/** The file name for the space group to symmetry operations mappings file
+				 */
+				static const string SPACE_GROUP_FILE;
+			};
+			
+			/** Default Names
+			 */
+			struct BALL_EXPORT Default
+			{
+				/** The default filename for the space group mappings file
+				 */
+				static const string SPACE_GROUP_FILE;
+			};
 
 			/** @name constructors and Destructors
 			*/
@@ -82,8 +99,12 @@ namespace BALL
 			*/
 			~CrystalGenerator();
 			//@}
-	
+
+			///
+			void setSpaceGroupFilename(String& filename){filename_ = filename;};	
 			
+			///
+			const String& getSpaceGroupFilename() const {return filename_;};	
 			void setCrystalInfo(boost::shared_ptr<CrystalInfo> ci_ptr);
 			void setSystem(System* system_ptr);	
 
@@ -110,6 +131,7 @@ namespace BALL
 			System* asu_;
 			System* unitcell_;
 			boost::shared_ptr<CrystalInfo> ci_ptr_;
+			String filename_;
 	};
 }	// namespace BALL
 
