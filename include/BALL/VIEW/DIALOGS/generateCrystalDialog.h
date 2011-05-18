@@ -61,7 +61,7 @@ namespace BALL
 				//void checkMenu(MainControl& mc);
 				
 				///
-				bool initSpaceGroupList();
+				bool initSpaceGroupList() throw(Exception::FileNotFound);
 				
 				///
 				//virtual void initializeWidget(MainControl& main_control);
@@ -84,8 +84,8 @@ namespace BALL
 
 				//QAction* menu_id_;
 				CrystalGenerator* generator_;
-				ParameterSection sg_list;
-				ParameterSection sg_entry;
+				ParameterSection sg_list_;
+				ParameterSection sg_entry_;
 				System* selectedSystem_;
 				String filename_;
 		};

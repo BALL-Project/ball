@@ -3,6 +3,10 @@
 
 #include <BALL/VIEW/DIALOGS/generateCrystalDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/FORMAT/parameters.h>
+#include <BALL/SYSTEM/path.h>
+
+#include <QComboBox>
 
 namespace BALL
 {
@@ -12,7 +16,8 @@ namespace BALL
 			: QDialog(parent, fl),
 			Ui_GenerateCrystalDialogData(),
 			ModularWidget(name),
-			generator_(0),
+			//generator_(0),
+			generator_(new CrystalGenerator()),
 			//sg_list(0),
 			//sg_entry(0),
 			selectedSystem_(0)
@@ -24,6 +29,7 @@ namespace BALL
 			setupUi(this);
 			setObjectName(name);
 			
+			initSpaceGroupList();
 			// register the widget with the MainControl
 			ModularWidget::registerWidget(this);
 			hide();
@@ -50,11 +56,40 @@ namespace BALL
 // 		}
 
 		bool GenerateCrystalDialog::initSpaceGroupList()
+		throw(Exception::FileNotFound)
 		{
 			if (generator_)
 			{
+				Path path;
+				String filename = generator_->getSpaceGroupFilename();
+				String filepath = path.find(filename);
+				if (filepath == "")
+				{
+						throw Exception::FileNotFound(__FILE__, __LINE__, filename);
+				}
 
+				Parameters* param = new Parameters(filepath);
+				if (!param->isValid()) return false;
+
+				sg_list_.extractSection(*param, "SpacegroupList");	
+				if (!sg_list_.isValid()) return false;
+				
+				delete param;
+						
+				space_group_combobox->clear();
+				for (Position i = 0; i < sg_list_.getNumberOfKeys(); i++)
+				{
+					space_group_combobox->addItem(QString(sg_list_.getValue(i,0).c_str()));
+				}
+					
+				if (space_group_combobox->count() != sg_list_.getNumberOfKeys())
+				{
+					space_group_combobox->clear();
+				};
+					
+				return true;		
 			}
+			
 			return false;
 		}
 		
