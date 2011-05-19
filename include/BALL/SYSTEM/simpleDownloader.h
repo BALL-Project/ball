@@ -16,7 +16,7 @@ namespace BALL
 {
 	namespace SimpleDownloaderHelper
 	{
-		class DLThread;
+		class HelperThread;
 	}
 
 	/**
@@ -25,6 +25,9 @@ namespace BALL
 	 * a QCoreApplication object. If no global instance is existing a local application
 	 * object is created. For this reason you must not use this class in any thread but
 	 * the main thread if you did not create a QCoreApplication object yourself.
+	 *
+	 * REMARK: this class is considered experimental and its interface
+	 * can be a subject to redesign.
 	 */
 	class BALL_EXPORT SimpleDownloader
 	{
@@ -56,6 +59,46 @@ namespace BALL
 			int downloadToFile(const String& path);
 
 			/**
+			 * Upload the passed string to the specified URL and save the response
+			 * to the specified buffer
+			 *
+			 * @param data the string which is uploaded
+			 * @param response the response of the server
+			 * @return Non-zero if an error occured while uploading
+			 */
+			int uploadStringToBuffer(const String& data, std::vector<char>& response);
+
+			/**
+			 * Upload the passed string to the specified URL and save the response
+			 * to the specified file
+			 *
+			 * @param data the string which is uploaded
+			 * @param response the file the response is saved to
+			 * @return Non-zero if an error occured while uploading
+			 */
+			int uploadStringToFile(const String& data, const String& response);
+
+			/**
+			 * Upload the passed string to the specified URL and save the response
+			 * to the specified file
+			 *
+			 * @param path the path of the file to upload
+			 * @param response the response of the server
+			 * @return Non-zero if an error occured while uploading
+			 */
+			int uploadFileToBuffer(const String& path, std::vector<char>& response);
+
+			/**
+			 * Upload the passed string to the specified URL and save the response
+			 * to the specified file
+			 *
+			 * @param path the path of the file to upload
+			 * @param response the file the response is saved to
+			 * @return Non-zero if an error occured while uploading
+			 */
+			int uploadFileToFile(const String& path, const String& response);
+
+			/**
 			 * Sets the maximum amount of time a download my take. The time is specified in
 			 * milliseconds.
 			 *
@@ -78,7 +121,7 @@ namespace BALL
 			const String& getURL() const;
 
 		private:
-			int download_(SimpleDownloaderHelper::DLThread& thread);
+			int download_(SimpleDownloaderHelper::HelperThread& thread);
 
 			String url_;
 			unsigned int timeout_;
@@ -86,21 +129,49 @@ namespace BALL
 
 	namespace SimpleDownloaderHelper
 	{
-		class DLThread : public QThread
+		class HelperThread : public QThread
 		{
 			public:
-				DLThread(const String& url, QByteArray* result);
-				DLThread(const String& url, const String& path);
+				HelperThread(const String& url, QByteArray* result);
+				HelperThread(const String& url, const String& path);
 
 				int getStatus();
 
 			protected:
+				virtual QNetworkReply* getReply_(QNetworkAccessManager* man) = 0;
+
 				void run();
 
 				int err_;
 				String url_;
 				QByteArray* result_;
 				String path_;
+
+		};
+
+		class DLThread : public HelperThread
+		{
+			public:
+				DLThread(const String& url, QByteArray* result);
+				DLThread(const String& url, const String& path);
+
+			protected:
+				virtual QNetworkReply* getReply_(QNetworkAccessManager* man);
+		};
+
+		class UPThread : public HelperThread
+		{
+			public:
+				UPThread(const String& url, const QByteArray* data, QByteArray* result);
+				UPThread(const String& url, const QByteArray* data, const String& path);
+				UPThread(const String& url, QIODevice* file, QByteArray* result);
+				UPThread(const String& url, QIODevice* file, const String& path);
+
+			protected:
+				virtual QNetworkReply* getReply_(QNetworkAccessManager* man);
+
+				const QByteArray* data_;
+				QIODevice* file_;
 		};
 
 		class BasicHelper : public QObject
@@ -108,7 +179,7 @@ namespace BALL
 			Q_OBJECT
 
 			public:
-				BasicHelper(DLThread* caller, QNetworkReply* reply);
+				BasicHelper(HelperThread* caller, QNetworkReply* reply);
 				virtual ~BasicHelper(){}
 
 			public slots:
@@ -119,7 +190,7 @@ namespace BALL
 				virtual void finished() = 0;
 
 			protected:
-				DLThread* caller_;
+				HelperThread* caller_;
 				QNetworkReply* reply_;
 		};
 
@@ -128,7 +199,7 @@ namespace BALL
 			Q_OBJECT
 
 			public:
-				DLArrayHelper(DLThread* caller, QNetworkReply* reply, QByteArray* result);
+				DLArrayHelper(HelperThread* caller, QNetworkReply* reply, QByteArray* result);
 
 			public slots:
 				void finished();
@@ -142,7 +213,7 @@ namespace BALL
 			Q_OBJECT
 
 			public:
-				DLHelper(DLThread* caller, QNetworkReply* reply, const String& path);
+				DLHelper(HelperThread* caller, QNetworkReply* reply, const String& path);
 
 			public slots:
 				void finished();

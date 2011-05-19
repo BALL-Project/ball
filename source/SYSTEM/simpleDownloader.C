@@ -7,25 +7,25 @@ namespace BALL
 {
 	namespace SimpleDownloaderHelper
 	{
-		DLThread::DLThread(const String& url, QByteArray* result)
+		HelperThread::HelperThread(const String& url, QByteArray* result)
 			: err_(0), url_(url), result_(result)
 		{
 		}
 
-		DLThread::DLThread(const String& url, const String& path)
+		HelperThread::HelperThread(const String& url, const String& path)
 			: err_(0), url_(url), result_(0), path_(path)
 		{
 		}
 
-		int DLThread::getStatus()
+		int HelperThread::getStatus()
 		{
 			return err_;
 		}
 
-		void DLThread::run()
+		void HelperThread::run()
 		{
 			QNetworkAccessManager* man = new QNetworkAccessManager();
-			QNetworkReply* reply = man->get(QNetworkRequest(QUrl(url_.c_str())));
+			QNetworkReply* reply = getReply_(man);
 
 			BasicHelper* dl;
 			if(path_ != "") {
@@ -41,7 +41,54 @@ namespace BALL
 			delete man;
 		}
 
-		BasicHelper::BasicHelper(DLThread* caller, QNetworkReply* reply)
+		DLThread::DLThread(const String& url, QByteArray* result)
+			: HelperThread(url, result)
+		{
+		}
+
+		DLThread::DLThread(const String& url, const String& path)
+			: HelperThread(url, path)
+		{
+		}
+
+		QNetworkReply* DLThread::getReply_(QNetworkAccessManager* man)
+		{
+			return man->get(QNetworkRequest(QUrl(url_.c_str())));
+		}
+
+		UPThread::UPThread(const String& url, const QByteArray* data, QByteArray* result)
+			: HelperThread(url, result), data_(data), file_(0)
+		{
+		}
+
+		UPThread::UPThread(const String& url, const QByteArray* data, const String& path)
+			: HelperThread(url, path), data_(data), file_(0)
+		{
+		}
+
+		UPThread::UPThread(const String& url, QIODevice* file, QByteArray* result)
+			: HelperThread(url, result), data_(0), file_(file)
+		{
+		}
+
+		UPThread::UPThread(const String& url, QIODevice* file, const String& path)
+			: HelperThread(url, path), data_(0), file_(file)
+		{
+		}
+
+		QNetworkReply* UPThread::getReply_(QNetworkAccessManager* man)
+		{
+			if(data_)
+			{
+				return man->post(QNetworkRequest(QUrl(url_.c_str())), *data_);
+			}
+			else
+			{
+				return man->post(QNetworkRequest(QUrl(url_.c_str())), file_);
+			}
+		}
+
+		BasicHelper::BasicHelper(HelperThread* caller, QNetworkReply* reply)
 			: caller_(caller), reply_(reply)
 		{
 			QObject::connect(reply, SIGNAL(finished()),
@@ -74,7 +121,7 @@ namespace BALL
 		}
 #endif
 
-		DLHelper::DLHelper(DLThread* caller, QNetworkReply* reply, const String& path)
+		DLHelper::DLHelper(HelperThread* caller, QNetworkReply* reply, const String& path)
 			: BasicHelper(caller, reply), file_(path.c_str())
 		{
 			file_.open(QIODevice::WriteOnly);
@@ -94,7 +141,7 @@ namespace BALL
 			file_.write(reply_->readAll());
 		}
 
-		DLArrayHelper::DLArrayHelper(DLThread* caller, QNetworkReply* reply, QByteArray* result)
+		DLArrayHelper::DLArrayHelper(HelperThread* caller, QNetworkReply* reply, QByteArray* result)
 			: BasicHelper(caller, reply), result_(result)
 		{
 		}
@@ -129,7 +176,58 @@ namespace BALL
 		return download_(th);
 	}
 
-	int SimpleDownloader::download_(SimpleDownloaderHelper::DLThread& th)
+	int SimpleDownloader::uploadStringToBuffer(const String& data, std::vector<char>& response)
+	{
+		QByteArray tmp_array;
+		QByteArray data_array(data.c_str());
+		SimpleDownloaderHelper::UPThread th(url_, &data_array, &tmp_array);
+
+		int result = download_(th);
+		response.resize(tmp_array.count());
+		std::copy(tmp_array.data(), tmp_array.data() + tmp_array.count(), &response[0]);
+
+		return result;
+	}
+
+	int SimpleDownloader::uploadStringToFile(const String& data, const String& path)
+	{
+		QByteArray data_array(data.c_str());
+		SimpleDownloaderHelper::UPThread th(url_, &data_array, path);
+		return download_(th);
+	}
+
+	int SimpleDownloader::uploadFileToBuffer(const String& path, std::vector<char>& response)
+	{
+		QByteArray tmp_array;
+		QFile file(path.c_str());
+
+		if(!file.open(QIODevice::ReadOnly)) {
+			return -1;
+		}
+
+		SimpleDownloaderHelper::UPThread th(url_, &file, &tmp_array);
+
+		int result = download_(th);
+		response.resize(tmp_array.count());
+		std::copy(tmp_array.data(), tmp_array.data() + tmp_array.count(), &response[0]);
+
+		return result;
+	}
+
+	int SimpleDownloader::uploadFileToFile(const String& in_path, const String& out_path)
+	{
+		QFile file(in_path.c_str());
+
+		if(!file.open(QIODevice::ReadOnly)) {
+			return -1;
+		}
+
+		SimpleDownloaderHelper::UPThread th(url_, &file, out_path);
+
+		return download_(th);
+	}
+
+	int SimpleDownloader::download_(SimpleDownloaderHelper::HelperThread& th)
 	{
 		QCoreApplication* app = 0;
 		if(!QCoreApplication::instance()) {
