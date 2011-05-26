@@ -26,6 +26,7 @@ SET(SOURCES_LIST
 	PDBFileDetails.C
 	PDBInfo.C
 	PDBRecords.C
+	pubchemDownloader.C
 	resourceFile.C
 	trajectoryFile.C
 	TRRFile.C
