@@ -38,6 +38,7 @@
 
 #include <BALL/VIEW/KERNEL/threads.h>
 
+#include <QtCore/QDir>
 #include <QtGui/QMenuBar>
 
 #include <sstream>
@@ -1390,16 +1391,14 @@ namespace BALL
 				Size steps = md_dialog_.getStepsBetweenRefreshs();
 
 				DCDFile* dcd = 0;
-				if (md_dialog_.getDCDFile().size() != 0) 
+				if (md_dialog_.getDCDFile().size() != 0)
 				{
-					Directory d;
 					// use an absolute filename
-					String name = md_dialog_.getDCDFile();
-
-					if (!md_dialog_.getDCDFile().has(FileSystem::PATH_SEPARATOR))
-					{
-						name = d.getPath() + FileSystem::PATH_SEPARATOR + 
-									 md_dialog_.getDCDFile();
+					String name;
+					if(QDir::isRelativePath(md_dialog_.getDCDFile())) {
+						name = String(QDir::current().absoluteFilePath(md_dialog_.getDCDFile()));
+					} else {
+						name = String(md_dialog_.getDCDFile());
 					}
 
 					dcd = new DCDFile;

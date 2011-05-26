@@ -69,7 +69,7 @@ class BALL_VIEW_EXPORT MolecularDynamicsDialog
 		float getTemperature() const;
 
 		/// 
-		String getDCDFile() const;
+		QString getDCDFile() const;
 
 		///
 		void setDCDFile(const String& name);

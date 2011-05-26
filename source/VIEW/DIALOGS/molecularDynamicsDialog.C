@@ -140,10 +140,10 @@ void MolecularDynamicsDialog::enableDCDFileSelected()
 	dcd_file_edit->setEnabled(enable_dcd->isChecked());
 }
 
-String MolecularDynamicsDialog::getDCDFile() const
+QString MolecularDynamicsDialog::getDCDFile() const
 {
 	if (!dcd_file_edit->isEnabled()) return "";
-	return ascii(dcd_file_edit->text());
+	return dcd_file_edit->text();
 }
 
 Size MolecularDynamicsDialog::getStepsBetweenRefreshs() const
