@@ -41,6 +41,15 @@ namespace BALL
 			 */
 			SimpleDownloader(const String& url, unsigned int timeout = UINT_MAX);
 
+			/*
+			 * Default Constructor.
+			 *
+			 * @param url The URL to download.
+			 * @param timeout The maximum number of milliseconds the download is allowed to take.
+			 *                default: infinite
+			 */
+			SimpleDownloader(const QUrl& url, unsigned int timeout = UINT_MAX);
+
 			/**
 			 * If the content of the download should be kept in memory you can use this function
 			 * that stores the received bytes in the provides vector. Any previous content is overwritten.
@@ -114,16 +123,23 @@ namespace BALL
 			void setURL(const String& url);
 
 			/**
+			 * Sets the url of the download.
+			 *
+			 * @param url The URL to download
+			 */
+			void setURL(const QUrl& url);
+
+			/**
 			 * Returns the current URL.
 			 *
 			 * @return The currently set URL
 			 */
-			const String& getURL() const;
+			const QUrl& getURL() const;
 
 		private:
 			int download_(SimpleDownloaderHelper::HelperThread& thread);
 
-			String url_;
+			QUrl url_;
 			unsigned int timeout_;
 	};
 
@@ -132,8 +148,8 @@ namespace BALL
 		class HelperThread : public QThread
 		{
 			public:
-				HelperThread(const String& url, QByteArray* result);
-				HelperThread(const String& url, const String& path);
+				HelperThread(const QUrl& url, QByteArray* result);
+				HelperThread(const QUrl& url, const String& path);
 
 				int getStatus();
 
@@ -143,7 +159,7 @@ namespace BALL
 				void run();
 
 				int err_;
-				String url_;
+				QUrl url_;
 				QByteArray* result_;
 				String path_;
 
@@ -152,8 +168,8 @@ namespace BALL
 		class DLThread : public HelperThread
 		{
 			public:
-				DLThread(const String& url, QByteArray* result);
-				DLThread(const String& url, const String& path);
+				DLThread(const QUrl& url, QByteArray* result);
+				DLThread(const QUrl& url, const String& path);
 
 			protected:
 				virtual QNetworkReply* getReply_(QNetworkAccessManager* man);
@@ -162,10 +178,10 @@ namespace BALL
 		class UPThread : public HelperThread
 		{
 			public:
-				UPThread(const String& url, const QByteArray* data, QByteArray* result);
-				UPThread(const String& url, const QByteArray* data, const String& path);
-				UPThread(const String& url, QIODevice* file, QByteArray* result);
-				UPThread(const String& url, QIODevice* file, const String& path);
+				UPThread(const QUrl& url, const QByteArray* data, QByteArray* result);
+				UPThread(const QUrl& url, const QByteArray* data, const String& path);
+				UPThread(const QUrl& url, QIODevice* file, QByteArray* result);
+				UPThread(const QUrl& url, QIODevice* file, const String& path);
 
 			protected:
 				virtual QNetworkReply* getReply_(QNetworkAccessManager* man);

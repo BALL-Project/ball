@@ -7,12 +7,12 @@ namespace BALL
 {
 	namespace SimpleDownloaderHelper
 	{
-		HelperThread::HelperThread(const String& url, QByteArray* result)
+		HelperThread::HelperThread(const QUrl& url, QByteArray* result)
 			: err_(0), url_(url), result_(result)
 		{
 		}
 
-		HelperThread::HelperThread(const String& url, const String& path)
+		HelperThread::HelperThread(const QUrl& url, const String& path)
 			: err_(0), url_(url), result_(0), path_(path)
 		{
 		}
@@ -41,37 +41,37 @@ namespace BALL
 			delete man;
 		}
 
-		DLThread::DLThread(const String& url, QByteArray* result)
+		DLThread::DLThread(const QUrl& url, QByteArray* result)
 			: HelperThread(url, result)
 		{
 		}
 
-		DLThread::DLThread(const String& url, const String& path)
+		DLThread::DLThread(const QUrl& url, const String& path)
 			: HelperThread(url, path)
 		{
 		}
 
 		QNetworkReply* DLThread::getReply_(QNetworkAccessManager* man)
 		{
-			return man->get(QNetworkRequest(QUrl(url_.c_str())));
+			return man->get(QNetworkRequest(url_));
 		}
 
-		UPThread::UPThread(const String& url, const QByteArray* data, QByteArray* result)
+		UPThread::UPThread(const QUrl& url, const QByteArray* data, QByteArray* result)
 			: HelperThread(url, result), data_(data), file_(0)
 		{
 		}
 
-		UPThread::UPThread(const String& url, const QByteArray* data, const String& path)
+		UPThread::UPThread(const QUrl& url, const QByteArray* data, const String& path)
 			: HelperThread(url, path), data_(data), file_(0)
 		{
 		}
 
-		UPThread::UPThread(const String& url, QIODevice* file, QByteArray* result)
+		UPThread::UPThread(const QUrl& url, QIODevice* file, QByteArray* result)
 			: HelperThread(url, result), data_(0), file_(file)
 		{
 		}
 
-		UPThread::UPThread(const String& url, QIODevice* file, const String& path)
+		UPThread::UPThread(const QUrl& url, QIODevice* file, const String& path)
 			: HelperThread(url, path), data_(0), file_(file)
 		{
 		}
@@ -80,11 +80,11 @@ namespace BALL
 		{
 			if(data_)
 			{
-				return man->post(QNetworkRequest(QUrl(url_.c_str())), *data_);
+				return man->post(QNetworkRequest(url_), *data_);
 			}
 			else
 			{
-				return man->post(QNetworkRequest(QUrl(url_.c_str())), file_);
+				return man->post(QNetworkRequest(url_), file_);
 			}
 		}
 
@@ -154,6 +154,11 @@ namespace BALL
 	}
 
 	SimpleDownloader::SimpleDownloader(const String& url, unsigned int timeout)
+		: url_(url.c_str()), timeout_(timeout)
+	{
+	}
+
+	SimpleDownloader::SimpleDownloader(const QUrl& url, unsigned int timeout)
 		: url_(url), timeout_(timeout)
 	{
 	}
@@ -238,7 +243,7 @@ namespace BALL
 		th.start();
 		if (!th.wait(timeout_))
 		{
-			Log.error() << "SimpleDownloader::download_: Download request \"" << url_ << "\" timed out.\n";
+			Log.error() << "SimpleDownloader::download_: Download request \"" << (String)(url_.toString()) << "\" timed out.\n";
 			return -1;
 		}
 
@@ -254,10 +259,15 @@ namespace BALL
 
 	void SimpleDownloader::setURL(const String& url)
 	{
+		url_ = QUrl(url.c_str());
+	}
+
+	void SimpleDownloader::setURL(const QUrl& url)
+	{
 		url_ = url;
 	}
 
-	const String& SimpleDownloader::getURL() const
+	const QUrl& SimpleDownloader::getURL() const
 	{
 		return url_;
 	}

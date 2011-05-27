@@ -110,10 +110,14 @@ namespace BALL
 
 			if (!download_url_list.isEmpty())
 			{
-				entrez_dl.setURL((String)download_url_list.at(0).firstChild().nodeValue());
-				std::cout << entrez_dl.getURL() << std::endl;
+				QUrl download_url(download_url_list.at(0).firstChild().nodeValue());
+				download_url.setUserName("anonymous");
+				download_url.setPassword("anonymous@\r\nTYPE I");
+				std::cout << download_url.password().toAscii().data() << std::endl;
+				std::cout << download_url.path().toAscii().data() << std::endl;
+				entrez_dl.setURL(download_url);
 
-				entrez_dl.downloadToFile("test.sdf");
+				std::cout << entrez_dl.downloadToFile("test.sdf") << std::endl;
 			}
 		} 
 		else 
