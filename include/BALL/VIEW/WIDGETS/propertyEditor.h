@@ -11,6 +11,11 @@
 
 #include <BALL/VIEW/UIC/ui_propertyEditor.h>
 #include <BALL/VIEW/UIC/ui_propEditorWidget.h>
+#include <BALL/VIEW/UIC/ui_editorPDBInfoDialog.h>
+
+#ifndef BALL_FORMAT_PDBINFO_H
+# include <BALL/FORMAT/PDBInfo.h>
+#endif
 
 #include <QtGui/QWidget>
 
@@ -210,6 +215,61 @@ namespace BALL
 
 			private:
 				QLineEdit* edit_;
+		};
+
+		/**
+		 * A simple Widget for arbitrary properties that just allows deleting them.
+		 */
+		class PropDeleteWidget : public PropEditorWidget
+		{
+			public:
+				PropDeleteWidget(const NamedProperty& prop, QWidget* parent)
+					: PropEditorWidget(prop.getName(), parent)
+				{
+					addWidget_(1,new QLabel(tr("(not editable)"),this));
+					ui_.duplicate_button->setEnabled(false);
+				}
+				virtual PropEditorWidget* clone(const std::string&, QWidget*)
+				{
+					return NULL;
+				}
+			protected:
+				virtual void apply_(PropertyManager *) {}
+				virtual void reset_(const NamedProperty &) {}
+		};
+
+		class PDBInfoEditorWidget : public PropEditorWidget
+		{
+			Q_OBJECT
+
+			public:
+				PDBInfoEditorWidget(const PDBInfo& info, QWidget* parent);
+				virtual PDBInfoEditorWidget* clone(const std::string& name, QWidget* parent);
+
+			protected slots:
+				void startEditorDialog();
+
+			protected:
+				virtual void apply_(PropertyManager* man);
+				virtual void reset_(const NamedProperty& prop);
+
+			private:
+				// TODO: This should maybe become a generic TextEditor and not be as hackish.
+				class EditorPDBInfoDialog : public QDialog {
+				public:
+					EditorPDBInfoDialog(QWidget* parent) : QDialog(parent)
+					{
+						ui_.setupUi(this);
+						QFont mono("Monaco"); mono.setStyleHint(QFont::TypeWriter);
+						ui_.textEditor->setFont(mono);
+					}
+				protected:
+					friend class PDBInfoEditorWidget;
+					Ui::editorPDBInfoDialog ui_;
+				};
+
+				PDBInfo localCopy_;
+				EditorPDBInfoDialog* editorDialog_;
 		};
 
 		/**

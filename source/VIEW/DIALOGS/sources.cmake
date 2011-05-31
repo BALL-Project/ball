@@ -17,6 +17,7 @@ SET(UI_LIST
 	downloadElectronDensity.ui
 	editSettings.ui
 	editSingleShortcut.ui
+	editorPDBInfoDialog.ui
 	displayProperties.ui
 	fieldLinesDialog.ui
 	FDPBDialog.ui

@@ -16,6 +16,8 @@
 #include <QtGui/QMessageBox>
 #include <QtGui/QInputDialog>
 #include <QtGui/QDoubleValidator>
+#include <QtGui/QPushButton>
+#include <QtGui/QScrollBar>
 
 #include <limits>
 
@@ -306,6 +308,15 @@ namespace BALL
 					return new FloatEditorWidget (prop, ui_.editors);
 				case NamedProperty::STRING:
 					return new StringEditorWidget(prop, ui_.editors);
+				case NamedProperty::SMART_OBJECT:
+					if (dynamic_cast<PDBInfo*>(prop.getSmartObject().get()) != NULL)
+					{
+						return new PDBInfoEditorWidget(* (PDBInfo*)prop.getSmartObject().get(), ui_.editors);
+					}
+					else
+					{
+						return new PropDeleteWidget(prop, ui_.editors);
+					}
 				default:
 					return NULL;
 			}
@@ -659,6 +670,65 @@ namespace BALL
 		void StringEditorWidget::reset_(const NamedProperty& prop)
 		{
 			edit_->setText(prop.getString().c_str());
+		}
+
+		// SMART_OBJECTs
+
+		PDBInfoEditorWidget::PDBInfoEditorWidget(const PDBInfo &prop, QWidget *parent)
+			: PropEditorWidget("PDBINFO", parent)
+		{
+			editorDialog_ = new EditorPDBInfoDialog(this);
+			localCopy_ = prop;
+			ui_.duplicate_button->setEnabled(false);
+			QPushButton* launchEditor = new QPushButton(tr("Edit..."),this);
+			connect(launchEditor,SIGNAL(clicked()),this,SLOT(startEditorDialog()));
+			addWidget_(1,launchEditor);
+		}
+
+		PDBInfoEditorWidget* PDBInfoEditorWidget::clone(const std::string &, QWidget *parent)
+		{
+			return new PDBInfoEditorWidget(localCopy_, parent);
+		}
+
+		void PDBInfoEditorWidget::startEditorDialog()
+		{
+			PDBRecords& skipped = localCopy_.getSkippedRecords();
+			// copy the text over to the editor component
+			editorDialog_->ui_.textEditor->clear();
+			for (PDBRecords::iterator it = skipped.begin();
+				 it != skipped.end();
+				 ++it)
+			{
+				editorDialog_->ui_.textEditor->appendPlainText((*it).c_str());
+			}
+			// then fire up the editor
+			if (editorDialog_->exec() == QDialog::Accepted) {
+				QStringList lines = editorDialog_->ui_.textEditor->toPlainText().split("\n");
+
+				int n = 0;
+				skipped.clear();
+				foreach(QString line, lines) {
+					skipped.push_back(String(line));
+					n++;
+				}
+				// don't forget to emit this -- else changes won't be written back!
+				emit valueChanged();
+			}
+		}
+
+		void PDBInfoEditorWidget::apply_(PropertyManager *man)
+		{
+			boost::shared_ptr<PersistentObject> ptr(new PDBInfo(localCopy_));
+			NamedProperty prop(String(getName()), ptr);
+			man->setProperty(prop);
+		}
+
+		void PDBInfoEditorWidget::reset_(const NamedProperty &prop)
+		{
+			if (dynamic_cast<PDBInfo*>(prop.getSmartObject().get()) != NULL)
+			{
+				localCopy_ = * (PDBInfo*) (prop.getSmartObject().get());
+			}
 		}
 
 	}
