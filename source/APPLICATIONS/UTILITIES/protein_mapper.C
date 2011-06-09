@@ -3,14 +3,11 @@
 //
 // $Id: proteinMapper.C,v 1.10.14.2 2007/08/06 16:22:07 oliver Exp $
 //
+// Compute an optimal mapping of two proteins.
+//
 // Author:
 //   Oliver Kohlbacher
 //
-
-//========================================================================
-// protein mapper example
-//========================================================================
-
 
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/KERNEL/protein.h>
