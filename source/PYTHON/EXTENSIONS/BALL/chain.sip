@@ -72,4 +72,21 @@ class Chain
 						+ " { " + String(sipCpp->countResidues()) + " residues }").c_str());
 %End
 
+	PDBAtomIterator iterpdbatoms();
+%MethodCode
+	return BALL_CONVERT_FROM_INSTANCE(new PDBAtomIterator(sipCpp->beginPDBAtom()), PDBAtomIterator, Py_None);
+%End
+
+	SecondaryStructureIterator itersecondarystructure();
+%MethodCode
+	return BALL_CONVERT_FROM_INSTANCE(new SecondaryStructureIterator(sipCpp->beginSecondaryStructure()),
+	                          SecondaryStructureIterator,
+	                          Py_None);
+%End
+
+	ResidueIterator iterresidues();
+%MethodCode
+	return BALL_CONVERT_FROM_INSTANCE(new ResidueIterator(sipCpp->beginResidue()), ResidueIterator, Py_None);
+%End
+
 };
