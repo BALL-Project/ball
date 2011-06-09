@@ -1,0 +1,54 @@
+<html>
+	<head>
+		<title>DEIN PROJECT TITLE</title>
+		<link rel="stylesheet" href="../css/style.css">
+	</head>
+<!--Ein paar HTML-Infos vorweg (fuer Neulinge): <br> erzeugt einen Zeilenumbruch...ein Tag (z.B. <p>) muss immer auch wieder geschlossen werden z.B. mit </p>...bitte achte darauf dass du die Tags auch immer schoen einrueckst! Damit machst du die Datei fuer dich und andre besser lesbar!...falls du mehr wissen willst bzw. mehr Handwerkszeug brauchst findest du unter http://de.selfhtml.org/ jede Menge Bsp. -->
+	<body>
+<!-- 	  div bedeutet sowas wie eine Section oder ein Block -->
+	  <div class="navigation" id="breadcrumb">
+	    <a href="index.html?action=clearAll&module=common_functions">Startseite</a> > DEIN PROJECT TITLE
+	  </div>
+	  <div id="text-content">
+	    <h1>DEINE UEBERSCHRIFT</h1>
+		 <h6> (EVTL. QUELLE ANGEBEN) </h6>
+	      <div class="greeter">
+		<!-- p bedeutet nichts anderes als "paragraph" den du einfach mit Text fuellen kannst  -->
+		 <p class="general">
+			TEXT: GENERELLES ZUM THEMA
+		 </p>
+		 <p class="functionality">	
+			TEXT: WIE FUNKTIONIERT DAS PROTEIN/DIE KRANKHEIT/ ETC...
+
+			<h3> EVTL EINE ZWISCHENUEBERSCHRIFT </h3>
+			TEXT...
+		 </p>
+<!-- 		  Wenn du ein Bild einfuegen willst: -->
+<!-- 		  Das Bild solltest du vorher in deinem BALLordner unter data/HTMLBasedInterface/images ablegen (und spaeter auch nicht 				  vergessen im git zu committen!) -->
+		 <div id="DEINE_BELIEBIGE_ID" class="structure"><div class="img"><img id="DEIN_BELIEBIGER_NAME" src="../images/DEIN_DATEINAME" </div> BILDUNTERSCHRIFT (kurz und mit QUELLE, z.B. Wikipedia) 
+		</div>
+
+		 <p class="step">
+			TEXT: EVTL. EINE KLEINE AUFGABE STELLEN...(einfach!) <br>
+			 BSP: gegeben ein DNA-Doppelstrang, Frage: welche Basenpaare sind immer komplementär zueinander?
+		 </p>
+	      </div>
+<!-- 		Im folgenden kannst du Links zu BALLprojekten, die du erstellt hast angeben (die Projekte solltest du vorher in deinem 					BALLordner unter data/projects abgelegt haben (und nicht vergessen spaeter im git zu committen!) -->
+		 <div class="actions">
+		  <!-- BSP: -->
+			<a href="imatinib.html?action=loadProject&module=common_functions&filename=projects/imatinib_ligand.bvp">Imatinib</a>
+			<a href="imatinib.html?action=loadProject&module=common_functions&filename=projects/ABLkinase.bvp">ABL-Tyrosinkinase kinase </a>
+		<!-- ...und so kannst du deinen eigenen Link erstellen: -->
+			<a href="YOUR_PROJECT.html?action=loadProject&module=common_fucntions&filename=projects/YOUR_PROJECT_FILENAME"> DEIN LINKTEXT </a>
+	    </div>
+		 <div class="greeter">
+		 <p class="step">
+			TEXT: EVTL. EINE KLEINE AUFGABE/FRAGE STELLEN...(einfach!) <br>
+			BSP: 2 Molekuele als Strukturen gegeben, die sehr aehnlich sind (z.B. Aspirin u Salicin): Vergleiche die beiden Strukturen!
+		 </p>
+	    </div>
+<!-- 		Beim zurueck-link sollte nochmal dein BALL-Projektfile geladen werden: -->
+		<a href="index.html?action=loadProject&module=common_functions&filename=projects/DEIN_BALL_PROJECT_FILENAME.bvp">zur&uuml;ck</a> 
+	    </div>
+	</body>
+</html>
