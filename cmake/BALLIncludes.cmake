@@ -42,6 +42,9 @@ INCLUDE(include/BALL/QSAR/sources.cmake)
 INCLUDE(source/SCORING/sources.cmake)
 INCLUDE(include/BALL/SCORING/sources.cmake)
 
+INCLUDE(source/SEQUENCE/sources.cmake)
+INCLUDE(include/BALL/SEQUENCE/sources.cmake)
+
 INCLUDE(source/SOLVATION/sources.cmake)
 INCLUDE(include/BALL/SOLVATION/sources.cmake)
 

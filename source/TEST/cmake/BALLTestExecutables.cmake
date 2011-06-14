@@ -288,6 +288,13 @@ SET(BALL_ENERGY_TESTS
 	OoiEnergy_test
 )
 
+SET(BALL_SEQUENCE_TESTS
+	Sequence_test
+	SequenceCharacter_test
+	FASTAFile_test
+	ClustalFile_test
+)
+
 SET(BALL_STRUCTURE_TESTS
 	AddHydrogenProcessor_test
 	AnalyticalSES_test
@@ -366,6 +373,12 @@ SET(BALL_QSAR_TESTS
 	SurfaceBase_test
 	SurfaceDescriptors_test
 	NBModel_test
+
+SET(BALL_SEQUENCE_TESTS
+	SequenceCharacter_test
+
+)
+
 	ALLModel_test
 	FeatureSelection_test
 	GPModel_test
@@ -407,6 +420,7 @@ SET(BALL_TESTS
 	BALL_NMR_TESTS
 	BALL_FORMATS_TESTS
 	BALL_ENERGY_TESTS
+	BALL_SEQUENCE_TESTS
 	BALL_STRUCTURE_TESTS
 	BALL_SOLVATION_TESTS
 	BALL_QSAR_TESTS
