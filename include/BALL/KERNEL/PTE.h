@@ -367,9 +367,11 @@ namespace BALL
 			*/
 			void setName(const String& name);
 
-			/** Get the name.
-					@return String - the name
-			*/
+			/**
+			 * Get the name.
+			 * @return The name of the element. For example if the Element is a hydrogen
+			 *         the string "Hydrogen" is returned.
+			 */
 			const String& getName() const;
 
 			/** Set the atomic symbol.
