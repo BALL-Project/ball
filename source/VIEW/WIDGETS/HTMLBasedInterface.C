@@ -1,6 +1,9 @@
 #include <BALL/VIEW/WIDGETS/HTMLBasedInterface.h>
 
 #include <BALL/SYSTEM/path.h>
+#include <BALL/SYSTEM/directory.h>
+#include <BALL/FORMAT/INIFile.h>
+#include <BALL/SYSTEM/fileSystem.h>
 #include <BALL/PYTHON/pyInterpreter.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -26,9 +29,36 @@ namespace BALL
 			connect(this, SIGNAL(urlChanged(const QUrl&)), this, SLOT(executeLink(const QUrl&)));
 
 			Path p;
-			String s = p.find("HTMLBasedInterface/html");
+			String s;
+			
+			//set the webpage language according to the language set in preferences
+			String home_dir = Directory::getUserHomeDir();
+			INIFile f(home_dir + FileSystem::PATH_SEPARATOR + ".BALLView");
+			f.read();
 
-			setUrl(QUrl::fromLocalFile(QString(s.c_str()) + "/index.html"));
+			if (f.hasEntry("GENERAL", "language")) 
+			{
+			  QString str = f.getValue("GENERAL", "language").c_str();
+
+			  if (!(str == "Default") && str == "de_DE") 
+			  {
+			    s = p.find("HTMLBasedInterface/html_de");
+			  }
+			  else
+			  {
+			    //default = english
+			    s = p.find("HTMLBasedInterface/html_eng");
+			  }
+			 }
+
+			if (!s.isEmpty())
+			{
+			  setUrl(QUrl::fromLocalFile(QString(s.c_str()) + "/index.html"));
+			}
+			else
+			{
+			  Log.error() << "No html directory set!" << std::endl;
+			}
 
 			script_base_ = p.find("HTMLBasedInterface/scripts") + "/";
 		}
