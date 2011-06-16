@@ -133,16 +133,19 @@ namespace BALL
 			HelpViewer* BALL_docu = new HelpViewer(this, ((String)tr("BALL Docu")).c_str());
 			addDockWidget(Qt::BottomDockWidgetArea, BALL_docu);
 
-
 			BALL_docu->setBaseDirectory(dirp);
 			BALL_docu->setWhatsThisEnabled(false);
 			BALL_docu->setProject("BALL");
 			BALL_docu->setDefaultPage("index.html");
 
 		}
+		else
+		{
+			Log.error() << "Please build the BALL documentation!" << std::endl;
+		}
 
 		addDockWidget(Qt::BottomDockWidgetArea, new HelpViewer(this, "BALLView Docu"));
-		new LabelDialog(				this, ((String)tr("LabelDialog")).c_str());
+		new LabelDialog(        this, ((String)tr("LabelDialog")).c_str());
 		new MolecularStructure(	this, ((String)tr("MolecularStructure")).c_str());
  		addDockWidget(Qt::BottomDockWidgetArea, new LogView(      this, ((String)tr("Logs")).c_str()));
 		addDockWidget(Qt::BottomDockWidgetArea, new FileObserver( this, ((String)tr("FileObserver")).c_str()));
@@ -157,9 +160,9 @@ namespace BALL
 		// setup the VIEW server
 		#ifdef BALL_HAS_ASIO
 			ServerWidget* server = new ServerWidget(this);
-		// registering object generator
-		MoleculeObjectCreator* object_creator = new MoleculeObjectCreator;
-		server->registerObjectCreator(*object_creator);
+			// registering object generator
+			MoleculeObjectCreator* object_creator = new MoleculeObjectCreator;
+			server->registerObjectCreator(*object_creator);
 		#endif
 
 		#ifdef BALL_PYTHON_SUPPORT
@@ -173,11 +176,11 @@ namespace BALL
 
 		description = "Shortcut|File|Open|Project";
 		insertMenuEntry(MainControl::FILE_OPEN, ((String)tr("Project")).c_str(), this, 
-										SLOT(loadBALLViewProjectFile()), description);
+		                SLOT(loadBALLViewProjectFile()), description);
 		
 		description = "Shortcut|File|Save_Project";
-		save_project_action_ = insertMenuEntry(MainControl::FILE, ((String)tr("Save Project")).c_str(), this, 
-											 										 SLOT(saveBALLViewProjectFile()), description);
+		save_project_action_ = insertMenuEntry(MainControl::FILE, ((String)tr("Save Project")).c_str(), this,
+		                                       SLOT(saveBALLViewProjectFile()), description);
 
 		// Help-Menu -------------------------------------------------------------------
 		QAction* action = 0;
@@ -192,9 +195,10 @@ namespace BALL
 
 		// TODO: why is this done here and not, e.g., in mainControl()???
 		description = "Shortcut|MolecularMechanics|Abort_Calculation";
-		stop_simulation_action_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, (String)tr("Abort Calculation"), this, 
-																							SLOT(stopSimulation()), description,
-																							QKeySequence("Alt+C"));
+		stop_simulation_action_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, (String)tr("Abort Calculation"), this,
+		                                          SLOT(stopSimulation()), description,
+		                                          QKeySequence("Alt+C"));
+		
 		stop_simulation_action_->setEnabled(false);
 		insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
 		setMenuHint(stop_simulation_action_, (String)tr("Abort a running simulation"));
@@ -202,12 +206,12 @@ namespace BALL
 		stop_simulation_action_->setIcon(IconLoader::instance().getIcon("actions/process-stop"));
 		
 		description = "Shortcut|Edit|Invert_Selection";
-		complement_selection_action_ = insertMenuEntry(MainControl::EDIT, (String)tr("Invert Selection"), this, 
-																									 SLOT(complementSelection()), description);
+		complement_selection_action_ = insertMenuEntry(MainControl::EDIT, (String)tr("Invert Selection"), this,
+		                                               SLOT(complementSelection()), description);
 
 		description = "Shortcut|Edit|Clear_Selection";
-		clear_selection_action_ = insertMenuEntry(MainControl::EDIT, (String)tr("Clear Selection"), this, 
-																							SLOT(clearSelection()), description);
+		clear_selection_action_ = insertMenuEntry(MainControl::EDIT, (String)tr("Clear Selection"), this,
+		                                          SLOT(clearSelection()), description);
 
 
  		qApp->installEventFilter(this);
