@@ -94,33 +94,33 @@ namespace BALL
 			setMenuHint((String)tr("Build a peptide from selected amino acids."));
 
 			description = "Shortcut|Build|Build_Bonds";
-			build_bonds_id_ = insertMenuEntry(MainControl::BUILD, (String)tr("&Build Bonds"), this, 
-																				SLOT(buildBonds()), description,
-																				QKeySequence("Ctrl+B"));
+			build_bonds_id_ = insertMenuEntry(MainControl::BUILD, (String)tr("&Build Bonds"), this,
+			                                  SLOT(buildBonds()), description,
+			                                  QKeySequence("Ctrl+B"));
 			setMenuHint((String)tr("Add missing bonds to a selected structure."));
 
 			description = "Shortcut|Build|Add_End_Caps";
 			build_endcaps_id_ = insertMenuEntry(MainControl::BUILD, (String)tr("Add Peptide Endcaps"), this,
 			                                    SLOT(buildEndcaps()), description,
-																					QKeySequence());
+			                                    QKeySequence());
 			setMenuHint((String)tr("Add neutral end caps to an amino acid chain"));
 
 			description = "Shortcut|Build|Assign_Bond_Orders";
 			assign_bond_orders_id_ = insertMenuEntry(MainControl::BUILD, (String)tr("&Assign Bond Orders"), this, 
-																							 SLOT(runBondOrderAssignment()), description);
+			                                         SLOT(runBondOrderAssignment()), description);
 			setMenuHint((String)tr("Assign bond orders to a selected structure.")); 
 			setIcon("actions/molecule-assign-bond-orders", false); //true);
 
 			description = "Shortcut|Build|Check_Structure";
-			check_structure_id_ = insertMenuEntry(MainControl::BUILD, (String)tr("Chec&k Structure against FragmentDB"), this, 
-																						SLOT(checkResidue()), description,
-																						QKeySequence("Ctrl+K"));
+			check_structure_id_ = insertMenuEntry(MainControl::BUILD, (String)tr("Chec&k Structure against FragmentDB"), this,
+			                                      SLOT(checkResidue()), description,
+			                                      QKeySequence("Ctrl+K"));
 			setMenuHint((String)tr("Check a structure against the fragment database."));
 		
 			description = "Shortcut|Build|Add_Hydrogens";
 			add_hydrogens_id_ = insertMenuEntry(MainControl::BUILD, (String)tr("Add &Hydrogens"), this, 
-																					SLOT(addHydrogens()), description,
-																					QKeySequence("Ctrl+H"));
+			                                    SLOT(addHydrogens()), description,
+			                                    QKeySequence("Ctrl+H"));
 			setMenuHint((String)tr("Add missing atoms to a selected structure by using the fragment database."));
 			
 			// MOLECULARMECHANICS Menu -------------------------------------------------------------------
@@ -679,6 +679,7 @@ namespace BALL
 			mdsimulation_id_->setEnabled( one_system && composites_muteable);
 
 			assign_bond_orders_id_->setEnabled( one_system && composites_muteable);
+			build_endcaps_id_->setEnabled( one_system && composites_muteable && one_system);
 			calculate_hbonds_id_->setEnabled( one_system && composites_muteable);
 
 			// prevent changes to forcefields, if simulation is running
