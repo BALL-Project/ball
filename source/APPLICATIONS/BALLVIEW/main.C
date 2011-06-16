@@ -73,10 +73,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 
 	putenv("BALL_RETURN_VALUE=");
 	QApplication application(argc, argv);
-
-  QPixmap splash_pm(":BALLView-1.4-Splashscreen.png");
-  QSplashScreen* splash = new QSplashScreen(splash_pm);
-  splash->show();
+	
+	QPixmap splash_pm(":BALLView-1.4-Splashscreen.png");
+	QSplashScreen* splash = new QSplashScreen(splash_pm);
+	splash->show();
 
 	// =============== testing for opengl support ======================================
 	if (!QGLFormat::hasOpenGL())
