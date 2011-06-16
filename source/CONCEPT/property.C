@@ -170,12 +170,12 @@ namespace BALL
 			return false;
 		}
 		
-		named_properties_.resize(1);
-		NamedProperty& property = named_properties_[0];
 		Size size = 0;
 		pm.readPrimitive(size, "size");
+		named_properties_.resize(size);
 		for (Size i = 0; i < size; i++)
 		{
+			NamedProperty& property = named_properties_[i];
 			pm.checkObjectHeader(property, "");
 				property.persistentRead(pm);
 			pm.checkObjectTrailer("");
