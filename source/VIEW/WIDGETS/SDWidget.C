@@ -97,15 +97,15 @@ namespace BALL
 
 		void SDWidget::renderSD_(QPaintDevice* pd)
 		{
-			if(!pd)
+			if (!pd)
 			{
 				return;
 			}
 
 			BoundingBoxProcessor bp;
 			system_.apply(bp);
-			upper_ = bp.getUpper() + Vector3(5.0f);
-			lower_ = bp.getLower() - Vector3(5.0f);
+			upper_ = bp.getUpper()*1.1;
+			lower_ = bp.getLower()*1.1;
 
 			GeometricCenterProcessor gcp;
 			system_.apply(gcp);

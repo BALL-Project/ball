@@ -19,10 +19,15 @@ namespace BALL
 			PubChemDownloader();
 			virtual ~PubChemDownloader() {};
 
+			bool downloadSDF(const String& query, const String& filename);
+
 		protected:
 			QDomDocument pollPubChem_(const QString& request_id);
 			void buildSimpleTree_(const String& names);
 			void addTextNode_(const String& value);
+
+			String esearch_base_url_;
+			String pug_base_url_;
 
 			SimpleDownloader dl_;
 			QDomDocument request_;

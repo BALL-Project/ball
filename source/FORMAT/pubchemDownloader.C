@@ -7,41 +7,25 @@
 namespace BALL
 {
 	PubChemDownloader::PubChemDownloader()
-		: dl_("http://pubchem.ncbi.nlm.nih.gov/pug/pug.cgi"),
+		: esearch_base_url_("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pccompound&usehistory=y&retmax=2&term="),
+			pug_base_url_("http://pubchem.ncbi.nlm.nih.gov/pug/pug.cgi"),
+		 	dl_(pug_base_url_),
 		  request_("Request")
 	{
-	/*	QDomElement root = request_.createElement("PCT-Data");
-		request_.appendChild(root);
+	}
 
-		current_node_ = root;
-
-		buildSimpleTree_("PCT-Data_input|PCT-InputData|PCT-InputData_query|PCT-Query|PCT-Query_type");
-		buildSimpleTree_("PCT-QueryType|PCT-QueryType_css|PCT-QueryCompoundCS");
-
-		QDomElement query_compound_cs = current_node_;
-
-		buildSimpleTree_("PCT-QueryCompoundCS_query|PCT-QueryCompoundCS_query_data");
-		addTextNode_("C1=CC(=CC=C1C[C@@H](C(=O)O)N)O");
-//		addTextNode_("caffeine");
-
-		current_node_ = query_compound_cs;
-
-		buildSimpleTree_("PCT-QueryCompoundCS_type|PCT-QueryCompoundCS_type_identical|PCT-CSIdentity");
-		current_node_.setAttribute("value", "same-stereo-isotope");
-		addTextNode_("5");
-		current_node_ = query_compound_cs;
-
-		buildSimpleTree_("PCT-QueryCompoundCS_results");
-		addTextNode_("2000000");
-
-		std::cout << request_.toString().toAscii().data() << std::endl;
-		dl_.uploadStringToBuffer(request_.toString().toAscii().data(), response);
-		*/
-
+	bool PubChemDownloader::downloadSDF(const String& query, const String& filename)
+	{
 		std::vector<char> response;
 
-		SimpleDownloader entrez_dl("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pccompound&usehistory=y&retmax=0&term=caffeine");
+		SimpleDownloader entrez_dl(esearch_base_url_+query);
 		entrez_dl.downloadToBuffer(response);
+
+		if (response.size() == 0)
+		{
+			return false;
+		}
+		response.push_back('\0');
 
 		QDomDocument response_dom("Response");
 		response_dom.setContent(QString::fromLatin1(&response[0]));
@@ -49,19 +33,7 @@ namespace BALL
 		QString query_key = response_dom.elementsByTagName("QueryKey").at(0).firstChild().nodeValue();
 		QString web_env = response_dom.elementsByTagName("WebEnv").at(0).firstChild().nodeValue();
 
-/*		QDomNodeList waiting_list = response_dom.elementsByTagName("PCT-Waiting_reqid");
-
-		if (!waiting_list.isEmpty())
-		{
-			response_dom = pollPubChem_(waiting_list.at(0).firstChild().nodeValue());
-		}
-
-		// ok, apparently, the search has finished... let's see if it was successful
-		QString status = response_dom.elementsByTagName("PCT-Status-Message_status").at(0).firstChild().attributes().namedItem("value").nodeValue();
-
-		if (status == "success")
-		{
-*/
+		// the search has finished. now let's try to download the data.
 		if ( (query_key != "") && (web_env != ""))
 		{
 			current_node_ = request_.createElement("PCT-Data");
@@ -92,10 +64,8 @@ namespace BALL
 			buildSimpleTree_("PCT-Download_compression");
 			current_node_.setAttribute("value", "none");
 
-			std::cout << "bla: " << std::endl;
-			std::cout << request_.toString().toAscii().data() << std::endl;
-
 			dl_.uploadStringToBuffer(request_.toString().toAscii().data(), response);
+			response.push_back('\0');
 			response_dom.setContent(QString::fromLatin1(&response[0]));
 
 			QDomNodeList waiting_list = response_dom.elementsByTagName("PCT-Waiting_reqid");
@@ -104,27 +74,22 @@ namespace BALL
 			{
 				response_dom = pollPubChem_(waiting_list.at(0).firstChild().nodeValue());
 			}
-			std::cout << response_dom.toString().toAscii().data() << std::endl;
 
 			QDomNodeList download_url_list = response_dom.elementsByTagName("PCT-Download-URL_url");
 
 			if (!download_url_list.isEmpty())
 			{
 				QUrl download_url(download_url_list.at(0).firstChild().nodeValue());
-				download_url.setUserName("anonymous");
-				download_url.setPassword("anonymous@\r\nTYPE I");
-				std::cout << download_url.password().toAscii().data() << std::endl;
-				std::cout << download_url.path().toAscii().data() << std::endl;
 				entrez_dl.setURL(download_url);
-
-				std::cout << entrez_dl.downloadToFile("test.sdf") << std::endl;
+				entrez_dl.downloadToFile(filename);
 			}
 		} 
 		else 
 		{
-			std::cout << "Query failed!" << std::endl;
+			return false;
 		}
 
+		return true;
 	}
 
 	QDomDocument PubChemDownloader::pollPubChem_(const QString& request_id)
@@ -149,11 +114,11 @@ namespace BALL
 		do 
 		{
 			dl_.uploadStringToBuffer(request_.toString().toAscii().data(), response);
+			response.push_back('\0');
 			response_dom.setContent(QString::fromLatin1(&response[0]));
 
 			waiting_list = response_dom.elementsByTagName("PCT-Waiting_reqid");
 
-			std::cout << "Waiting..." << std::endl;
 		} while (!waiting_list.isEmpty());
 
 		return response_dom;
