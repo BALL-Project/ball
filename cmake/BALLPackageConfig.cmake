@@ -31,6 +31,10 @@ IF (WIN32 AND NOT UNIX)
 	SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "NOT-FOUND")
 	FILE(READ "${PROJECT_SOURCE_DIR}/cmake/NSISExtraInstallCommands.cmake" CPACK_NSIS_EXTRA_INSTALL_COMMANDS)
 	FILE(READ "${PROJECT_SOURCE_DIR}/cmake/NSISExtraUninstallCommands.cmake" CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS)
+	IF (PYTHON_INSTALLER)
+		CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/cmake/NSISEmbeddedInstallers.cmake.in ${PROJECT_BINARY_DIR}/cmake/NSISEmbeddedInstallers.cmake")
+		FILE(READ "${PROJECT_BINARY_DIR}/cmake/NSISEmbeddedInstallers.cmake" CPACK_NSIS_EMBEDDED_INSTALLERS)
+	ENDIF()
 	# NOTE: CPack overwrites this option, so it is currently ignored *sigh*. Thus, we use
 	#       our own NSIS template
 	SET(CPACK_NSIS_DEFINES "  RequestExecutionLevel highest")
