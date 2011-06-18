@@ -730,6 +730,8 @@ Section "-Add to path"
   doNotAddToPath:
 SectionEnd
 
+@CPACK_NSIS_EMBEDDED_INSTALLERS@
+
 ;--------------------------------
 ; Create custom pages
 Function InstallOptionsPage
