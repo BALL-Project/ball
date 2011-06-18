@@ -1,7 +1,7 @@
 Section 'Install Python'
 	SetOutPath $INSTDIR\3dParty
 	MessageBox MB_YESNO 'Scripting BALLView in Python requires a current Python installation. Do you want to install Python now?'
-	File "$INSTDIR\Runtime\3dParty\@PYTHON_INSTALLER@"
+	;	File "Runtime\3dParty\@PYTHON_INSTALLER@"
 	ExecWait '"msiexec" /i "$INSTDIR\3dParty\@PYTHON_INSTALLER@"'
 	Goto endPython
 	endPython:
