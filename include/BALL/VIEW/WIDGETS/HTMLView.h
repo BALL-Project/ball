@@ -18,13 +18,18 @@ namespace BALL
 			Q_OBJECT
 
 			public:
+				
 				HTMLView(QWidget* parent = 0);
 		};
 
 		class BALL_VIEW_EXPORT HTMLViewDock : public DockWidget
 		{
 			public:
+				
+				BALL_EMBEDDABLE(HTMLViewDock, DockWidget)
+
 				HTMLViewDock(QWidget* parent, const char* title = 0);
+				
 				HTMLViewDock(HTMLView* view,  QWidget* parent, const char* title = 0);
 
 				void setHTMLView(HTMLView* view);

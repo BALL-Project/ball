@@ -234,11 +234,19 @@ namespace BALL
 
 #ifdef BALL_HAS_QTWEBKIT
 		HTMLBasedInterface* html_interface = new HTMLBasedInterface;
-		HTMLViewDock* html_view_dock = new HTMLViewDock(html_interface, 0, "Navigation");
-		html_view_dock->setFeatures(0);
+		HTMLViewDock* html_view_dock = new HTMLViewDock(html_interface, this, ((String(tr("HTMLNavigation")).c_str())));
+
+		if (UIOperationMode::instance().getMode() > UIOperationMode::MODE_ADVANCED)
+		{
+			html_view_dock->setFeatures(0);
+			html_view_dock->setMaximumWidth(730);
+			html_view_dock->setMinimumWidth(730);
+		}
+		else
+		{
+			html_view_dock->registerWidget(html_view_dock);
+		}
 		addDockWidget(Qt::LeftDockWidgetArea, html_view_dock);
-		html_view_dock->setMaximumWidth(730);
-		html_view_dock->setMinimumWidth(730);
 		html_view_dock->show();
 #endif
 
