@@ -2,6 +2,10 @@
 #define BALL_SEQUENCE_FASTAFILE_H
 
 /////////////////////////////////////////
+#ifndef BALL_KERNEL_SYSTEM_H
+	#include<BALL/KERNEL/system.h>
+#endif
+
 #ifndef BALL_DATATYPE_STRING_H
 	#include <BALL/DATATYPE/string.h>
 #endif
@@ -10,22 +14,37 @@
 	#include <BALL/FORMAT/lineBasedFile.h>
 #endif
 
-#ifndef
+#ifndef BALL_STRUCTURE_PEPTIDES_H
+	#include<BALL/STRUCTURE/peptides.h>
+#endif
+
+#ifndef BALL_KERNEL_MOLECULE_H
+	#include<BALL/KERNEL/molecule.h>
+#endif
+
+#ifndef BALL_KERNEL_PROTEIN_H
+	#include<BALL/KERNEL/protein.h>
+#endif
+
+#ifndef BALL_KERNEL_RESIDUE_H
+	#include<BALL/KERNEL/residue.h>
+#endif
+
+#ifndef BALL_SEQUENCE_SEQUENCE_H
 	#include<BALL/SEQUENCE/sequence.h>
 #endif
 
 /////////////////////////////////////////////////////////
 
 
-
+#include<string>
 //////////////////////////////////////////////////
 
 namespace BALL{
 
-	class BALL_EXPORT FASTAFile : public BALL::LineBasedFile
-	{
-		public:
-			//////////////////////////////////////////////////// Constructor und Deconstructor //////////////////////////////////////////////////////////////
+	class FASTAFile : public LineBasedFile { 
+
+			public: 
 			/**
 			 *Default Constructor
 			 */
@@ -38,31 +57,23 @@ namespace BALL{
 			FASTAFile(const BALL::String& filename,BALL::File::OpenMode open_mode=std::ios::in, bool trim_whitespaces=false);
 
 			/**
-			 *Copy Constructor
-			 */ 
-			FASTAFile(FASTAFile& file)
-
-			/**
 			 *Destructor
 			 */
 			~FASTAFile();
+			
 
+			///////////////////////////////////////// Operators ///////////////////////////////////////
+			bool operator == (const FASTAFile& f);  
+			
+			bool operator != (const FASTAFile& f);
+						
+			
+		//	const FASTAFile& operator = (const FASTAFile& f);
+
+			
+			
+			
 			///////////////////////////////////////////////////////////// Reading and Writing /////////////////////////////////////////
-
-			/**
-			*reads a FastaFile into a protein
-			*/
-			Protein& operator>>(FASTAFile file,Protein& protein);
-		
-			/**
-			* reads a Fastafile into a Molecule
-			*/
-			Molecule& operator>>(FASTAFile file, Molecule& molecule);
-
-			/**
-			*reads a FastaFile into a System
-			*/
-			System& operator>> (FASTAFile file, System& system);
 
 			 /**
                         *reads a FastaFile into a protein
@@ -100,15 +111,27 @@ namespace BALL{
 			 *clear method
 			 */
 			virtual void clear();
-			
+
+			};
+
+	/////////////////////////////////////////////////////////////////// operators that have to be outside the class ///////////////////////////////////////////////////
+
 			/**
-			*@return the Sequence stored in the file
+			*reads a FastaFile into a protein
 			*/
-			Sequence& getSequence();
+			Protein& operator>>(FASTAFile file,Protein& protein);
+		
+			/**
+			* reads a Fastafile into a Molecule
+			*/
+			Molecule& operator>>(FASTAFile file, Molecule& molecule);
 
-		private: Sequence sequence;
+			/**
+			*reads a FastaFile into a System
+			*/
+			System& operator>> (FASTAFile file, System& system);
 
-	};
+
 
 
 
