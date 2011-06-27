@@ -289,10 +289,7 @@ SET(BALL_ENERGY_TESTS
 )
 
 SET(BALL_SEQUENCE_TESTS
-	Sequence_test
-	SequenceCharacter_test
 	FASTAFile_test
-	ClustalFile_test
 )
 
 SET(BALL_STRUCTURE_TESTS
@@ -373,11 +370,6 @@ SET(BALL_QSAR_TESTS
 	SurfaceBase_test
 	SurfaceDescriptors_test
 	NBModel_test
-
-SET(BALL_SEQUENCE_TESTS
-	SequenceCharacter_test
-
-)
 
 	ALLModel_test
 	FeatureSelection_test
