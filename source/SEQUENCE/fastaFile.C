@@ -49,6 +49,11 @@ namespace BALL{
 
 			///////////////////////////////////////////////////////////// Reading and Writing /////////////////////////////////////////
 
+
+
+
+
+			
 			/**
 			*reads a FastaFile into a protein
 			*/
@@ -79,23 +84,30 @@ namespace BALL{
                         */
 			void FASTAFile::read(Protein& protein){
 				//counter
+
 				int i=0;
-				
-				String& current_str_l = (*this).getLine();
-				
-		
-				while((*this).gotoLine(i)) {
+				//read the first line
+				if (! this->readLine()) throw Exception::InvalidArgument(__FILE__,__LINE__, "could not read the current Line");
+
+
+				//extract the current line
+				String& current_str_l = this->getLine();
+
+				cout<<"the first line as BALL::String is: "<< current_str_l <<endl;
+
+				//iterate over all lines of the file
+
+				while(this->gotoLine(i) && this->readLine()) {
+
 
 					//extract current line of the Sequence
-					char* currentl;
-							
-					current_str_l = (*this).getLine();
-	
-					Residue* r;
+					current_str_l = this->getLine();
 
-					//check whether it is a headline or a comment
+					//extract the first character of the current line to check whether it is a comment or a headline
+
 					char c= current_str_l.toChar();
 
+					cout<<"the first char of the line "<< i << " is " << c << endl;
 
 					if ((c =='>') || (c == ';'))
 					{
@@ -104,96 +116,87 @@ namespace BALL{
 						if(i==0){
 							//Substring& ID = current_str_l.getSubstring(2);
 							//protein.setID 
-							}else{
+						}else{
 							throw BALL::Exception::InvalidArgument(__FILE__,__LINE__, "The file holds more than one sequence for a protein. Either split the file or load it into a System");
 						}
 					}
 
-					else{			
+					else{
 
-						//convert current_str_l to a C style String	
-						current_str_l.set(currentl);
 
 						//iterate through the string to get the single characters
-						//TODO check whether set gives a terminating null character!!!!!!!!!!!!
-						while(*currentl)
+						for (int i=1; i<=current_str_l.length(); i++)						
 						{	
-							String* name = new String(*currentl);
-							
+
 							//for every Amino Acid create a new Residue named with the name of the Amino Acid
-							r= new Residue(*name);
+							Residue* r= new Residue(current_str_l[i]);
 
 							//set the Property to Amino Acid
 							r->setProperty(Residue::Property::PROPERTY__AMINO_ACID);
 
-							//append Residue to the Protein		
+
+							//append Residue to the Protein	
+
 							protein.append(*r); 	
 
-							//got to the next character				
-							currentl++;	
 
 						}
 
 					}
-					
+
 					//increment the counter
 					++i;
 
 				}
-		
+
 			}
 
 			/**
                         * reads a Fastafile into a Molecule
                         */
 			void FASTAFile::read(Molecule& molecule){
-					//counter
 
+				//counter
 				int i=0;
 
-				String& current_str_l =(*this).getLine();
-				
-				while((*this).gotoLine(i)) {
+				//read the first line
+				if (! this->readLine()) throw Exception::InvalidArgument(__FILE__,__LINE__, "could not read the current Line");
+
+				//extract the first line
+				String& current_str_l =this->getLine();
+
+				//iterate over all Lines of the file
+				while(this->gotoLine(i) && this->readLine()) {
 
 					//extract current line of the Sequence
-					current_str_l = (*this).getLine();
+					current_str_l = this->getLine();
 
-					char* currentl;
-
-					Residue* r;
-					
+					//extract first character of current line to check whether the line conatins a comment							
 					char c= current_str_l.toChar();
 
 					//check whether it is a headline or a comment
 
 					if (( c =='>') || (c == ';'))
 					{ 
-					//Check whether there is more than one protein in the file
-					if(i!=0) throw BALL::Exception::InvalidArgument(__FILE__,__LINE__, "The file holds more than one sequence for a melcule. Either split the file or load it into a system.");
+						//Check whether there is more than one protein in the file
+						if(i!=0) throw BALL::Exception::InvalidArgument(__FILE__,__LINE__, "The file holds more than one sequence for a molecule. Either split the file or load it into a system.");
 
 					}else{			
 
-						//convert current_str_l to a C style String	
-						current_str_l.set(currentl);
-
 						//iterate through the string to get the single characters
-						//TODO check whether set gives a terminating null character!!!!!!!!!!!!
-						while(*currentl)
+						for (int i=1; i<=current_str_l.length(); i++)
 						{	
-							String* name= new String(*currentl);
+
 							//for every Amino Acid create a new Residue named with the name of the Amino Acid
-							r= new Residue(*name);
+							Residue* r= new Residue(current_str_l[i]);
 
 							//append Residue to the molecule		
 							molecule.append(*r); 	
 
-							//got to the next character				
-							currentl++;	
-
 						}
 
 					}
-					
+
 					//increment the counter
 					++i;
 
@@ -206,48 +209,45 @@ namespace BALL{
                         *reads a FastaFile into a System
                         */
 			void FASTAFile::read(System& system){
+
+
 				//counter
 				int i=0;
-				
-				String& current_str_l=(*this).getLine();
 
-				while((*this).gotoLine(i)) {
+				//read the first line
+				if (! this->readLine()) throw Exception::InvalidArgument(__FILE__,__LINE__, "could not read the current Line");
+
+				//extract the first line
+				String& current_str_l=this->getLine();
+
+				//iterate over all Lines of the File
+				while(this->gotoLine(i) && this->readLine()) {
+
 
 					//extract current line of the Sequence
-					current_str_l = (*this).getLine();
+					current_str_l = this->getLine();
 
-					char* currentl;
-
-					Residue* r;
+					//check whether the current line is a > then start a new Protein
+					char c = current_str_l.toChar();
 
 					Protein* pp;
 
-					char c = current_str_l.toChar();
-
 					//check whether it is a headline or a comment
-
 					if (( c =='>') || (c == ';'))
 					{ 
-						pp= new Protein();
+						pp= new Protein;	
 						system.append(*pp);
 
 					}else{			
-
-						//convert current_str_l to a C style String	
-						current_str_l.set(currentl);
-
 						//iterate through the string to get the single characters
-						//TODO check whether set gives a terminating null character!!!!!!!!!!!!
-						while(*currentl)
+						for (int i=1; i<=current_str_l.length(); i++)
 						{	
 							//for every Amino Acid create a new Residue named with the name of the Amino Acid
-							r= new Residue(*(new String(*currentl)));
+							Residue* r= new Residue(current_str_l[i]);
 
 							//append Residue to the Protein		
 							(*pp).append(*r); 	
 
-							//got to the next character				
-							currentl++;	
 
 						}
 
@@ -282,10 +282,10 @@ namespace BALL{
 			/**
 			*writes a Molecule into a Fastafile
 			*/
-			void FASTAFile::write(Molecule& molecule)
-			{
+			//void FASTAFile::write(Molecule& molecule)
+			//{
 			
-			}
+			//}
 			
 			/**
 			*writes a System into a Fastafile
