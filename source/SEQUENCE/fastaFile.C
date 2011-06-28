@@ -58,18 +58,20 @@ namespace BALL{
 			*reads a FastaFile into a protein
 			*/
 			Protein& operator>>(FASTAFile file,Protein& protein){
+				
 				file.read(protein);
+				
 				return protein;
 			}
 	
 			/**
 			* reads a Fastafile into a Molecule
 			*/
-			Molecule& operator>>(FASTAFile file, Molecule& molecule){
+			/**Molecule& operator>>(FASTAFile file, Molecule& molecule){
 				file.read(molecule);
 				return molecule;	
 				}
-
+*/
 			/**
 			*reads a FastaFile into a System
 			*/
@@ -93,8 +95,6 @@ namespace BALL{
 				//extract the current line
 				String& current_str_l = this->getLine();
 
-				cout<<"the first line as BALL::String is: "<< current_str_l <<endl;
-
 				//iterate over all lines of the file
 
 				while(this->gotoLine(i) && this->readLine()) {
@@ -107,12 +107,10 @@ namespace BALL{
 
 					char c= current_str_l.toChar();
 
-					cout<<"the first char of the line "<< i << " is " << c << endl;
-
 					if ((c =='>') || (c == ';'))
 					{
 						//check whether currentline is the first line, else there is more than one Sequence in the FastaFile and we can not read it into a protein
-						//TODO extraction if the ID
+						//TODO extraction of the ID
 						if(i==0){
 							//Substring& ID = current_str_l.getSubstring(2);
 							//protein.setID 
@@ -125,11 +123,22 @@ namespace BALL{
 
 
 						//iterate through the string to get the single characters
-						for (int i=1; i<=current_str_l.length(); i++)						
+						for (unsigned int j=0; j<current_str_l.length(); j++)						
 						{	
+							String tmp;
+
+							char check = current_str_l[j];
+
+							//check whether the next character is a valid AS and if it is change it to three letter code						
+							if(Peptides::IsOneLetterCode(check)) {
+								tmp= Peptides::ThreeLetterCode(check);
+
+							}else{ 
+								throw Exception::InvalidArgument(__FILE__,__LINE__, "There is no OneLetterCode in the FASTAFile");
+							}  
 
 							//for every Amino Acid create a new Residue named with the name of the Amino Acid
-							Residue* r= new Residue(current_str_l[i]);
+							Residue* r= new Residue(tmp);
 
 							//set the Property to Amino Acid
 							r->setProperty(Residue::Property::PROPERTY__AMINO_ACID);
@@ -140,6 +149,7 @@ namespace BALL{
 							protein.append(*r); 	
 
 
+
 						}
 
 					}
@@ -148,13 +158,13 @@ namespace BALL{
 					++i;
 
 				}
-
 			}
+			
 
 			/**
                         * reads a Fastafile into a Molecule
                         */
-			void FASTAFile::read(Molecule& molecule){
+			/**void FASTAFile::read(Molecule& molecule){
 
 				//counter
 				int i=0;
@@ -184,11 +194,11 @@ namespace BALL{
 					}else{			
 
 						//iterate through the string to get the single characters
-						for (int i=1; i<=current_str_l.length(); i++)
+						for (unsigned int j=1; j<=current_str_l.length(); j++)
 						{	
 
 							//for every Amino Acid create a new Residue named with the name of the Amino Acid
-							Residue* r= new Residue(current_str_l[i]);
+							Residue* r= new Residue(current_str_l[j]);
 
 							//append Residue to the molecule		
 							molecule.append(*r); 	
@@ -204,10 +214,12 @@ namespace BALL{
 
 
 			}
+*/
 
 			/**
                         *reads a FastaFile into a System
                         */
+			//TODO check whether it is a protein or a nucleic acid
 			void FASTAFile::read(System& system){
 
 
@@ -240,14 +252,30 @@ namespace BALL{
 
 					}else{			
 						//iterate through the string to get the single characters
-						for (int i=1; i<=current_str_l.length(); i++)
+						for (unsigned int j=0; j<current_str_l.length(); j++)
 						{	
+
+							String tmp;
+
+							char check = current_str_l[j];
+
+							//check whether the next character is a valid AS and if it is change it to three letter code						
+							if(Peptides::IsOneLetterCode(check)) {
+								tmp= Peptides::ThreeLetterCode(check);
+
+							}else{ 
+								throw Exception::InvalidArgument(__FILE__,__LINE__, "There is no OneLetterCode in the FASTAFile");
+							}  
+
 							//for every Amino Acid create a new Residue named with the name of the Amino Acid
-							Residue* r= new Residue(current_str_l[i]);
+							Residue* r= new Residue(tmp);
 
-							//append Residue to the Protein		
-							(*pp).append(*r); 	
+							//set the Property to Amino Acid
+							r->setProperty(Residue::Property::PROPERTY__AMINO_ACID);
 
+
+							//append Residue to the Protein	
+							pp->append(*r); 	
 
 						}
 
@@ -260,6 +288,28 @@ namespace BALL{
 
 
 			}
+
+
+		
+
+
+		void FASTAFile::read(Alignment& align){
+					
+				//read the file into a System
+				System* s= new System();
+				
+				read(*s);
+		//TODO fix why align-read gives undefined reference while building	
+				//align.read(*s);
+
+				}
+
+
+
+
+
+
+
 
 
 

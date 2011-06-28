@@ -34,6 +34,9 @@
 	#include<BALL/SEQUENCE/sequence.h>
 #endif
 
+#ifndef BALL_SEQUENCE_ALIGNMENT_H
+	#include<BALL/SEQUENCE/alignment.h>
+#endif
 /////////////////////////////////////////////////////////
 
 
@@ -52,7 +55,7 @@ namespace BALL{
 
 			/**			
 			 *Detailed Constructor
-			 *@param trim_whitespaces sets whether leading and trailing whitespaces shall be removed while reading the file
+			 *@param trim_whitespaces sets whether leading and trailing whitespaces shall be removed while reading the file default is
 			 */
 			FASTAFile(const BALL::String& filename,BALL::File::OpenMode open_mode=std::ios::in, bool trim_whitespaces=false);
 
@@ -83,13 +86,18 @@ namespace BALL{
 			/**
                         * reads a Fastafile into a Molecule
                         */
-			void read(Molecule& molecule);
+			//void read(Molecule& molecule);
 
 			/**
                         *reads a FastaFile into a System
                         */
 			void read(System& system);
 
+			/**
+			* read a FastaFile into an Alignment
+			*/
+			void read(Alignment& align);
+			
 			/**
 			* writes a Protein into a Fastafile
 			*/
@@ -105,6 +113,7 @@ namespace BALL{
 			*/
 			void write(System& system);
 
+			
 			////////////////////////////////////////////////// Misc ////////////////////////////////////////////////////
 
 			/**
@@ -124,7 +133,7 @@ namespace BALL{
 			/**
 			* reads a Fastafile into a Molecule
 			*/
-			Molecule& operator>>(FASTAFile file, Molecule& molecule);
+			//Molecule& operator>>(FASTAFile file, Molecule& molecule);
 
 			/**
 			*reads a FastaFile into a System
