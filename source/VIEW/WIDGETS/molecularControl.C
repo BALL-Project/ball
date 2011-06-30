@@ -173,30 +173,22 @@ namespace BALL
 			// 																			copy_list_ not empty && 
 			// 																			no simulation running &&
 			// 																			it makes sense
-			bool allow_paste = getSelection().size() <= 1 &&
-												 copy_list_.size() > 0 && 
-												 !busy;
+			bool allow_paste = getSelection().size() <= 1 && copy_list_.size() > 0 && !busy;
+
 			if (allow_paste)
 			{
 				hint = (String)tr("Paste a copied or cuted object into current selected object.");
-				list<Composite*>::iterator it = copy_list_.begin();
-				for (; it != copy_list_.end(); it++)
-				{
-					if (!pasteAllowedFor_(**it)) 
-					{
-						allow_paste = false;
-						hint = (String)tr("Invalid Combination, cant paste into this entity.");
-						break;
-					}
-				}
+				allow_paste = allowPaste_();
+				hint = (String)tr("Invalid Combination, cant paste into this entity.");
 			}
 			else
 			{
-				if (getSelection().size() != 1) 	hint = (String)tr("One item must be selected to paste into.");
-				else if (copy_list_.size() == 0) 	hint = (String)tr("No copied/cuted object.");
-				else if (main_control.isBusy()) 	hint = (String)tr("Simulation running, cant paste meanwhile");
-				else 															hint = (String)tr("Update of Representation running, cant paste meanwhile");
+				if (getSelection().size() != 1)         hint = (String)tr("One item must be selected to paste into.");
+				else if (copy_list_.size() == 0)        hint = (String)tr("No copied/cuted object.");
+				else if (main_control.isBusy())         hint = (String)tr("Simulation running, cant paste meanwhile");
+				else                                    hint = (String)tr("Update of Representation running, cant paste meanwhile");
 			}
+
 			paste_id_->setEnabled(allow_paste);	
 			getMainControl()->setMenuHint(paste_id_, hint);
 
@@ -450,7 +442,7 @@ namespace BALL
 
 			edit_menu_.addAction(tr("Cut"), this, SLOT(cut()));
 			edit_menu_.addAction(tr("Copy"), this, SLOT(copy()));
-			edit_menu_.addAction(tr("Paste"), this, SLOT(paste()));
+			paste_action_ = edit_menu_.addAction(tr("Paste"), this, SLOT(paste()));
 			edit_menu_.addAction(tr("Delete"), this, SLOT(deleteCurrentItems()));
 			edit_menu_.addSeparator();
 			edit_menu_.addAction(tr("Move"), this, SLOT(moveItems()));
@@ -464,6 +456,9 @@ namespace BALL
 
 			select_action_->setEnabled(!composite.isSelected() && composites_muteable);
 			deselect_action_->setEnabled(composite.isSelected() && composites_muteable);
+
+			bool allow_paste = allowPaste_();
+			paste_action_->setEnabled(allow_paste && composites_muteable);
 
 			// -----------------------------------> AtomContainer
 			bool ac = RTTI::isKindOf<AtomContainer>(composite);
@@ -938,6 +933,8 @@ namespace BALL
 			{
 				getMainControl()->update(**it, true);
 			}
+			
+			// TODO: for convenience, move back to rotate mode if we were in edit mode before
 		}
 
 
@@ -1219,7 +1216,7 @@ namespace BALL
 			const Composite& parent = **getSelection().begin();
 
 			if (RTTI::isKindOf<Atom>(parent)) return false;
-
+			
 			if (RTTI::isKindOf<Residue>(parent)) return (RTTI::isKindOf<Atom>(child));
 
 			if (RTTI::isKindOf<SecondaryStructure>(parent)) return (RTTI::isKindOf<Residue>(child));
@@ -1233,6 +1230,7 @@ namespace BALL
 
 			if (RTTI::isKindOf<NucleicAcid>(parent)) return (RTTI::isKindOf<Nucleotide>(child));
 
+			if (RTTI::isKindOf<Molecule>(parent)) return (!RTTI::isKindOf<Molecule>(child));
 			if (RTTI::isKindOf<System>(parent)) return (RTTI::isKindOf<Molecule>(child));
 
 			return true;
@@ -1608,6 +1606,22 @@ namespace BALL
 			rep->setProperty(Representation::PROPERTY__ALWAYS_FRONT);
 			getMainControl()->insert(*rep);
 			getMainControl()->update(*rep);
+		}
+
+		bool MolecularControl::allowPaste_()
+		{
+			bool allow_paste = true;
+			list<Composite*>::iterator it = copy_list_.begin();
+			for (; it != copy_list_.end(); it++)
+			{
+				if (!pasteAllowedFor_(**it)) 
+				{
+					allow_paste = false;
+					break;
+				}
+			}
+
+			return allow_paste;
 		}
 
 	} // namespace VIEW

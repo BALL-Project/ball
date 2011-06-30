@@ -117,7 +117,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 		}
 	}
 
-	// =============== testing if we can write in current directoy =====================
+	// =============== testing if we can write in current directory =====================
 	if (home_dir == "")
 	{
 		try
@@ -179,9 +179,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 	// Remove the splashscreen
 	splash->finish(&mainframe);
 	delete splash;
-
-  // Hand over control to the application.
-  int value = application.exec();
+	
+	// Hand over control to the application.
+	int value = application.exec();
 	char*	return_value = getenv("BALL_RETURN_VALUE");
 	if (return_value != 0)
 	{
