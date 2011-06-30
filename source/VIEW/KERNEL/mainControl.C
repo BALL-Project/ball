@@ -347,27 +347,27 @@ namespace BALL
 				case FILE_OPEN:
 					menu = initPopupMenu(FILE, UIOperationMode::MODE_ADVANCED);
 					if (menu)
-						menu->addMenu(tr("&Open"));
+						menu = menu->addMenu(tr("&Open"));
 					break;
 				case FILE_OPEN_GRID:
 					menu = initPopupMenu(FILE_OPEN, UIOperationMode::MODE_ADVANCED);
 					if (menu)
-						menu->addMenu(tr("&Grids"));
+						menu = menu->addMenu(tr("&Grids"));
 					break;
 				case FILE_IMPORT:
 					menu = initPopupMenu(FILE, UIOperationMode::MODE_ADVANCED);
 					if (menu)
-						menu->addMenu(tr("&Import"));
+						menu = menu->addMenu(tr("&Import"));
 					break;
 				case FILE_EXPORT:
 					menu = initPopupMenu(FILE, UIOperationMode::MODE_ADVANCED);
 					if (menu)
-						menu->addMenu(tr("&Export"));
+						menu = menu->addMenu(tr("&Export"));
 					break;
 				case FILE_MONITOR:
 					menu = initPopupMenu(FILE, UIOperationMode::MODE_ADVANCED);
 					if (menu)
-						menu->addMenu(tr("&Monitor File"));
+						menu = menu->addMenu(tr("&Monitor File"));
 					break;
 				case EDIT:
 					menu = addMenu(tr("&Edit"), UIOperationMode::MODE_ADVANCED);
@@ -381,28 +381,28 @@ namespace BALL
 				case DISPLAY_VIEWPOINT:
 					menu = initPopupMenu(DISPLAY, UIOperationMode::MODE_ADVANCED);
 					if (menu)
-						menu->addMenu(tr("&Viewpoint"));
+						menu = menu->addMenu(tr("&Viewpoint"));
 					break;
 				case DISPLAY_CREATE:
 					menu = initPopupMenu(DISPLAY, UIOperationMode::MODE_ADVANCED);
 					if (menu)
-						addMenu(tr("&Create"), UIOperationMode::MODE_ADVANCED);
+						menu = menu->addMenu(tr("&Create"));
 					break;
 				case DISPLAY_STEREO:
 					menu = initPopupMenu(DISPLAY, UIOperationMode::MODE_ADVANCED);
 					if (menu)
-						addMenu(tr("&Stereo"), UIOperationMode::MODE_ADVANCED);
+						menu = menu->addMenu(tr("&Stereo"));
 					break;
 				case DISPLAY_ANIMATION:
 					menu = initPopupMenu(DISPLAY, UIOperationMode::MODE_ADVANCED);
 					if (menu)
-						addMenu(tr("&Animation"), UIOperationMode::MODE_ADVANCED);
+						menu = menu->addMenu(tr("&Animation"));
 					break;
 #ifdef BALL_HAS_RTFACT	
 				case DISPLAY_CONTINUOUSLOOP:
 					menu = initPopupMenu(DISPLAY, UIOperationMode::MODE_ADVANCED);
 					if (menu)
-						addMenu("&Continuous Loop", UIOperationMode::MODE_ADVANCED);
+						menu = menu->addMenu("&Continuous Loop");
 					break;
 #endif
 				case MOLECULARMECHANICS:
@@ -460,7 +460,6 @@ namespace BALL
 				id_to_menu_[ID] = menu;
 				menu->setObjectName(menu->title());
 			}
-
 
 			return menu;
 		}
