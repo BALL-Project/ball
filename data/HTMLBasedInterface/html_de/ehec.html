@@ -3,11 +3,23 @@
     <title>EHEC</title>
     <link rel="stylesheet" href="../css/style.css">
    </head>
-  <body>
-    <div class="navigation" id="breadcrumb"><a href="UrlBlockedError.aspx" target="_blank">Startseite</a> &gt; EHEC
-    </div>
+  <body style="background-color:#000000;color:#FFFFFF;margin:0px 0px 0px 0px" >
+	 <script language="javascript">
+			<!--
+			function showAnswer(answer_id) {
+				document.getElementById(answer_id).style.visibility="visible";
+			}
+			function hideAnswer(answer_id) {
+				document.getElementById(answer_id).style.visibility="hidden";
+			}
+			-->
+	 </script>
+    <div class="navigation" id="breadcrumb">
+	    <a href="index.html?action=clearAll&module=common_functions">Startseite</a> > 
+			<a href="krebs.html?action=loadProject&module=common_functions&filename=projects/EHEC_intimin1.bvp">EHEC</a> 
+	  </div>
     <div id="text-content">
-    <h1>EHEC - Enteroh&auml;morrhagische Escherichia coli</h1>
+    <h1>EHEC-Enteroh&auml;morrhagische Escherichia coli</h1>
     <h6>(Text teilweise von Wikipedia &uuml;bernommen) </h6>
     <div class="greeter">
       <p class="general">
@@ -28,17 +40,19 @@
       <a href="ehec.html?action=loadProject&module=common_functions&filename=projects/EHEC_intimin2.bvp">Intimin in Kugel-Stab Repr&auml;sentation</a> 
     </div>
     <div class="greeter">
-    <p class="step">
+    <p class="task">
       Erkennst du den Unterschied in den beiden Repr&auml;sentationsarten? Welche Repr&auml;sentation findest du besser geeignet um einen &Uuml;berblick &uuml;ber die Struktur zu kriegen? <br>
       (Klicke <a href="javascript:showAnswer('numberone')">hier</a>, um die richtige Antwort zu sehen)
     </p>
     <p class="answer" style="visibility:hidden" id="numberone">
-      Die Kugel-Stab Repr&auml;sentation ist bei gr&ouml;sseren Proteinen sehr un&uuml;bersichtlich, daher eignet sich die Cartoon Darstellung eher, um einen Eindruck vom Aufbau des Proteins zu erhalten. 
+      Die Kugel-Stab Repr&auml;sentation ist bei gr&ouml;sseren Proteinen sehr un&uuml;bersichtlich, daher eignet sich die Cartoon Darstellung eher, um einen Eindruck vom Aufbau des Proteins zu erhalten. <br>
+		Antwort <a href="javascript:hideAnswer('numberone')">verstecken</a>
     </p>
-    <p class="step">Kannst Du dir vorstellen wie die Bindung an das Oberfl&auml;chenprotein der Darmschleimhaut verhindert werden kann?(Klicke <a href="javascript:showAnswer('numbertwo')">hier</a>, um die richtige Antwort zu sehen)
+    <p class="task">Kannst Du dir vorstellen wie die Bindung an das Oberfl&auml;chenprotein der Darmschleimhaut verhindert werden kann?(Klicke <a href="javascript:showAnswer('numbertwo')">hier</a>, um die richtige Antwort zu sehen) 
     </p>
     <p class="answer" style="visibility:hidden" id="numbertwo">
-    Die Bindung kann verhindert werden indem das Oberfl&auml;chenprotein, das Schloss, mit einem anderen passenden Protein, einem alternativen Schl&uuml;ssel, blockiert wird, so dass Intimin keine Bindestelle mehr zur Verf&uuml;gung hat.
+    Die Bindung kann verhindert werden indem das Oberfl&auml;chenprotein, das Schloss, mit einem anderen passenden Protein, einem alternativen Schl&uuml;ssel, blockiert wird, so dass Intimin keine Bindestelle mehr zur Verf&uuml;gung hat. <br>
+	 Antwort <a href="javascript:hideAnswer('numbertwo')">verstecken</a>
     </p>
     </div>
     <a href="index.html?action=loadProject&module=common_functions&filename=projects/EHEC_intimin1.bvp">zur&uuml;ck</a> 
