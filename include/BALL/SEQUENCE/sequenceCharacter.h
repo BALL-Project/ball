@@ -26,7 +26,12 @@ namespace BALL
 
 	class BALL_EXPORT SequenceCharacter
 	{
+
 		public:
+
+			enum type { GAP , CHAR};
+
+
 
 			/////////////////////////////////////////// Constructors and Destructor ////////////////////////////////////////////////////
 
@@ -40,7 +45,7 @@ namespace BALL
 			 *@param sequenceCharacter the SequenceCharacter to construct from
 			 *@param origin the Sequence from which the character origins
 			 */
-			SequenceCharacter(const SequenceCharacter& sequenceCharacter, Sequence& origin); 
+			SequenceCharacter(SequenceCharacter& seq_char); 
 
 			/**
 			 *Detailed Constructor
@@ -48,7 +53,7 @@ namespace BALL
 			 *@param origin the sequence from which the character originates
 			 *@param type tells whether the character is a GAP a nucleic acid or an amino acid
 			 */
-			SequenceCharacter(char character, Sequence& origin, String& type);
+			SequenceCharacter(char c, Sequence* ori, type ty);
 
 			/**
 			 *Destructor
@@ -62,50 +67,52 @@ namespace BALL
 			 *@param type the new type to be set
 			 *@throws BALL::InvalidArgument if type is no SequenceCharacterType
 			 */
-			void setType(String& type);
+			void setType(type ty);
 
 			/**
 			 *returns the type of the Character
 			 *@return the type of the SequenceCharacter
 			 */
-			String& getType();
+			type getType() const;
 
 			/**
 			 *@param character the character to be set
 			 */
-			void setChar(char character);
+			void setChar(char c);
 
 			/**
 			 *@return the stored character
 			 */
-			char getChar();
+			char getChar() const;
 
 			/**
 			 *sets the Origin of the Character
 			 *@param origin the origin to be set
 			 */
-			void setOrigin(Sequence& origin);
+			void setOrigin(Sequence* ori);
 
 			/**
 			 *@return the origin of the character
 			 */
-			Sequence& getOrigin();
-			
+			Sequence* getOrigin();
+
+
+						
 			//////////////////////////////////////////////////////////////////////////////// Operators ///////////////////////////////////////////////////
 			/**
-			*operator ==
-			*/
+			 *operator ==
+			 */
 			bool operator== (SequenceCharacter& c);
-			
+
 			/**
-			*operator !=
-			**/
-			
+			 *operator !=
+			 **/
+
 			bool operator!= (SequenceCharacter& c);
 
-			
-			
-			
+
+
+
 			//////////////////////////////////////////////////////////////////// Misc //////////////////////////////////////////////////////////
 
 			/**
@@ -115,8 +122,8 @@ namespace BALL
 			bool isGap();
 
 		private:
-			String type;
-			Sequence origin;
+			type t;
+			Sequence* origin;
 			char character;
 	};
 

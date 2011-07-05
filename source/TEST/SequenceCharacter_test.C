@@ -18,90 +18,84 @@ START_TEST(SequenceCharacter, "SequenceCharacter Test 2011/05/31 Author: nikoch"
 PRECISION(1e-5)
 
 
-SequenceCharacter* seqcharp;
+SequenceCharacter* seqcharp = new SequenceCharacter();
 
 //test the constructor
 CHECK(SequenceCharacter())
 	TEST_NOT_EQUAL(seqcharp,0);
-
 RESULT
+
+Sequence* s = new Sequence();
+	
+seqcharp->setOrigin(s);
+
+
 //test the Deconstructor
 CHECK(~SequenceCharacter());
 	delete seqcharp;
+	TEST_NOT_EQUAL(s,0);
 RESULT
+
+
 
 ////////////////////////// Test Getter and Setter //////////////////////////////////
  
-SequenceCharacter seqchar;
+SequenceCharacter* seqchar= new SequenceCharacter();
 
 
 CHECK(setChar(char character))
-        seqchar.setChar('D');
-	TEST_EQUAL(seqchar.getChar(), 'D');
+        seqchar->setChar('D');
+	TEST_EQUAL(seqchar->getChar(), 'D');
 RESULT
 
-String* s =new String("AA");
+SequenceCharacter::type t = SequenceCharacter::type::CHAR ;
 
-CHECK(setType(String& type))
-	seqchar.setType(*s);
+CHECK(setType(SequenceCharacter::type ty))
 	
-	TEST_EQUAL(seqchar.getType, *s);
+	seqchar->setType(t);
+	 
+	TEST_EQUAL(seqchar->getType(), t);
 RESULT
 
-//
-CHECK(setSequence(Sequence& origin))
-	Sequence* s = new Sequence();
-	seqchar.setOrigin(*s);
-	TEST_EQUAL(seqchar.getOrigin(),*s);
-RESULT
+//template für GAP
+SequenceCharacter::type gap = SequenceCharacter::type::GAP;
 
+//templat für CHAR
+SequenceCharacter::type ch = SequenceCharacter::type::CHAR;
 
 ////////////////////////////////////////////// Test Exceptions /////////////////////////////////////////////////////7
 
 //checks whether an exception is thrown if character is invalid
 CHECK(setChar(char character))
-	TEST_EXCEPTION(Exception::InvalidArgument,seqchar.setChar('B'));
+	TEST_EXCEPTION(Exception::InvalidArgument,seqchar->setChar('B'));
 RESULT
-
-//checks whether an exception is thrown if type is invalid
-	*s="foo";
-CHECK(setType(String type))
-	TEST_EXCEPTION(Exception::InvalidArgument, seqchar.setType(*s));
-RESULT
-
-/**checks whether an exception is thrown if origin is invalid
-CHECK(setOrigin(Sequence& seq))
-	TEST_EXCEPTION(Exception::InvaldiArgument,seqchar.setOrigin("somethingstupid"));
-RESULT
-*/
 
 //checks whether isGap returns false if type is no GAP
 CHECK(isGAP())
-	TEST_EQUAL(seqchar.isGAP(), false);
+	TEST_EQUAL(seqchar->isGap(), false);
 RESULT
 
-//checks whether isGap returns true if type is GAP
-CHECK(isGap())
-	seqchar.setChar('-');
-	*s="GAP";
-	seqchar.setType(*s);
-
-	TEST_EQUAL(seqchar.isGap, true);
+//CHECKS whether setting the char to '-'sets also the type to GAP
+CHECK(setChar(char character))
+	seqchar->setChar('-');
+	TEST_EQUAL(seqchar->getType(),gap);
+RESULT
+	
+//CHECKS whether setting it back to a character also changes the type again
+CHECK(setChar(char character))
+	seqchar->setChar('C');
+	TEST_EQUAL(seqchar->getType(), ch);
+RESULT
+	
+//CHECKS whether changing the type to GAP does also change the character
+CHECK(setType(SequenceCharacter::type ty))
+	seqchar->setType(gap);
+	TEST_EQUAL(seqchar->getChar(), '-');
 RESULT
 
-//checks whether an Exception is thrown if type is GAP but character is no GAP
-
-CHECK(isGap())
-	seqchar.setChar('A');
-	TEST_EXCEPTION(Exception::GeneralException,seqchar.isGap());
-RESULT
-
-//checks whether an Exception is thrown if type is not GAP but hte character is a GAP
-CHECK(isGap())
-	seq.setChar('-');
-	*s= "AA";
-	seq.setType(*s);
-	TEST_EXCEPTION(Exception::GeneralException, seqchar.isGap());
+//CHECKS wether setting the type back to CHAR throws an Exception
+CHECK(setType(SequenceCharacter::type ty))
+	TEST_EXCEPTION(Exception::InvalidArgument,seqchar->setType(ch));
 RESULT
 
 
