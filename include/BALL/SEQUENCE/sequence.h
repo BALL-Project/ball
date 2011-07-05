@@ -35,7 +35,7 @@ namespace BALL
 			 *@param name the name of the Sequence
 			 *@param origin the composite from which the sequence originates
 			 */
-			Sequence(BALL::String& name, BALL::Composite& origin);
+			Sequence(String& seq_name, Composite* seq_origin);
 
 			/**
 			 *Copy Constructor
@@ -53,36 +53,41 @@ namespace BALL
 			 * @param name the new name to be set
 			 * @throws Exception::GeneralException if an invalid name was specified
 			 */
-			void setName(BALL::String& name);
+			void setName(String& seq_name);
 
 			/**
 			 *@return the name of the sequence
 			 */
-			BALL::String& getname();
+			String& getName();
 
 
 			/**
 			 *@param origin the origin which is to be setted
 			 */
-			void setOrigin(BALL::Composite& origin);
+			void setOrigin(Composite* seq_origin);
 
 			/**
 			 *@return the origin of the Sequence
 			 */
-			Composite& getOrign();	
+			Composite* getOrigin();	
 			
 			///////////////////////////////////////////////////////////// Operators //////////////////////////////////////////////////////////////////////
 			
 			/**
 			*operator==
 			*/
-			bool operator== (Sequence& seq2);
+			bool operator== (Sequence& seq);
 
 			/**
 			*operator!=
 			*/
-			bool operator!= (Sequence& seq2);
-
+			bool operator!= (Sequence& seq);
+			
+			/**
+			*assignment operator
+			*/
+			Sequence& operator= (Sequence& seq);
+			
 			
 			/////////////////////////////////////////////////Misc///////////////////////////////////////////
 
@@ -105,7 +110,7 @@ namespace BALL
 
 			String name;
 
-			Composite origin;
+			Composite* origin;
 
 	};
 
