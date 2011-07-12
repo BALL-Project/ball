@@ -1,0 +1,238 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+
+#ifndef BALL_FORMAT_CLUSTALFILE_H
+#define BALL_FORMAT_CLUSTALFILE_H
+
+///////////////////////////////////////
+#ifndef BALL_DATATYPE_STRING_H
+	#include <BALL/DATATYPE/string.h>
+#endif
+
+#ifndef BALL_FORMAT_LINEBASEDFILE_H
+	#include <BALL/FORMAT/lineBasedFile.h>
+#endif
+
+#ifndef BALL_SEQUENCE_ALIGNMENT_H
+	#include <BALL/SEQUENCE/alignment.h>
+#endif
+
+#ifndef BALL_COMMON_EXCEPTION_H
+	#include <BALL/COMMON/exception.h>
+#endif
+
+#define CLUSTALPARSER_LINE_LENGTH 2550
+
+
+/////////////////////////////////////////////////////////
+
+//#include <vector.h>
+
+//#include <iostream>
+
+//////////////////////////////////////////////////
+
+
+namespace BALL
+{
+
+	class BALL_EXPORT ClustalFile 
+		: public LineBasedFile
+	{
+		public:
+
+			///////////////////////////////////////////////////Constructors and Destructors ///////////////////////////////////////////////////
+
+			class SequenceLine {
+				
+			public:	/*
+				*Constructor
+				*/
+				SequenceLine();
+
+				/*
+				*Copy Constructor
+				*/
+				SequenceLine(const SequenceLine& line);
+				
+				/**
+				*Detailed Constructor
+				*/
+				SequenceLine(String& id, String& seq, int len);
+
+				/*
+				*resets the Block
+				*/
+				void reset();
+				
+				/**
+				*operator >>
+				* writes a SequenceLine into the stream buffer
+				*/
+				std::ostream& operator >> (std::ostream& os);
+
+			//////////////////////////////////////////////
+
+				String ident;
+				String  sequence;
+				int length;
+							
+			};
+
+			
+
+			/**
+			*Nested Class for Block
+			*/
+			class Block {
+
+				public: 
+					/*
+					 *Constructor
+					 */
+					Block();
+
+					/**
+					 *Copy constructor
+					 */
+					Block(const Block& bl);
+
+					/**
+					 *resets the Block
+					 */
+					void reset();
+
+					/**
+					 *adds a SequenceLine to the Block
+					 */
+					bool addSequenceLine(SequenceLine& line);
+
+					/**
+					 *returns the Sequence at Position i, starting to count at zero
+					 */
+					SequenceLine& getSequenceLine(unsigned int i);
+
+					/**
+					* operator >> ostream
+					* writes a block into the stream
+					*/
+					std::ostream& operator >> (std::ostream& os);
+
+					
+
+				////////////////////////////////////////////////////////////////////////
+
+					/**
+					 *contains all the sequence lines of the Block as sequences
+					 */
+					std::vector<SequenceLine> seqs;
+
+					/**
+					 *String that contains the last line of a Block that denotes the degree of conservation of the column
+					 */
+					String conserv_line;
+
+			};
+			
+
+					
+			/** State of the parser **/
+			struct State
+			{
+				ClustalFile* current_parser;
+			};
+
+///////////////////////////////////////////////////////// Clustal File ///////////////////////////////////////////
+
+			/**
+			 *Default Constructor
+			 */
+			ClustalFile();
+
+			/**			
+			 *Detailed Constructor
+			 *@param trim_whitespaces sets whether leading and trailing whitespaces shall be removed while reading the file
+			 */
+			ClustalFile(const String& filename, File::OpenMode open_mode=std::ios::in, bool trim_whitespaces=false);
+
+			/**
+			 *Copy Constructor
+			 */ 
+			ClustalFile(ClustalFile& file);
+
+			/**
+			 *Destructor
+			 */
+			~ClustalFile();
+
+			///////////////////////////////////////////////////////////// Reading and Writing /////////////////////////////////////////
+
+		
+			/*
+			*checks whether all Blocks have the same idents, and the same number of lines
+			*/
+			bool hasValidBlocks();
+			
+			/**
+			*reads a ClustalFile
+			*/
+			bool read();
+
+			/**
+			* writes a ClustalFile
+			*/
+			bool write();
+		
+			/**
+			 *reads a ClustalFile into a System
+			 */
+			ClustalFile& operator >> (System& system);
+
+			/**
+			*
+			*/
+			ClustalFile& operator >>(Alignment& alignment);
+			
+
+			/**
+			*writes a System into a ClustalFile
+			*/
+			ClustalFile& operator << (System& system);
+
+
+			/**
+			*writes an ALignment into a ClustalFile
+			*/
+			ClustalFile& operator << (Alignment& alignment);
+			
+			
+	
+			//@}
+			/** @name Accessors
+			 */
+			//@{
+
+			/**
+			*adds a Block at the top of the vector blocks
+			*/
+			void addBlock(const Block& block);
+
+			std::vector<Block> getBlocks();
+
+			////////////////////////////////////////////////// Misc ////////////////////////////////////////////////////
+
+			/**
+			 *clear method
+			 */
+			virtual void clear();
+
+			static State state;
+
+			private:
+				std::vector<Block> blocks;
+			
+};
+
+}
+#endif // BALL_FORMAT_CLUSTALFILE_H

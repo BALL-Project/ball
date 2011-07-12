@@ -17,6 +17,7 @@
 #ifndef BALL_COMMON_EXCEPTION_H
 #include <BALL/COMMON/exception.h>
 #endif
+
 ////////////////////////////////////////////////////////////
 
 

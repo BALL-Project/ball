@@ -8,8 +8,10 @@ SET(SOURCES_LIST
 	dockResultFile.C
 	CCP4File.C
 	CIFFile.C
+	ClustalFile.C
 	DCDFile.C
 	DSN6File.C
+	fastaFile.C
 	GAMESSDatFile.C
 #	GAMESSLogFile.C
 	genericMolFile.C
@@ -52,4 +54,5 @@ ADD_BALL_SOURCES("FORMAT" "${SOURCES_LIST}")
 
 ADD_BALL_PARSER_LEXER("FORMAT" "CIFParser" "CIFParser")
 ADD_BALL_PARSER_LEXER("FORMAT" "GAMESSDatParser" "GAMESSDatParser")
+ADD_BALL_PARSER_LEXER("FORMAT" "ClustalParser" "ClustalParser")
 #ADD_BALL_PARSER_LEXER("FORMAT" "GAMESSLogParser" "GAMESSLogParser")

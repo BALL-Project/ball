@@ -17,7 +17,7 @@ namespace BALL{
 			 *@param name the name of the Sequence
 			 *@param origin the composite from which the sequence originates
 			 */
-			Sequence::Sequence(String& seq_name, Composite* seq_origin):name(seq_name),origin(seq_origin){
+			Sequence::Sequence(String& seq_name, AtomContainer* seq_origin):name(seq_name),origin(seq_origin){
 				}
 
 			/**
@@ -56,14 +56,14 @@ namespace BALL{
 			/**
 			 *@param origin the origin which is to be setted
 			 */
-			void Sequence::setOrigin(Composite* seq_origin){
+			void Sequence::setOrigin(AtomContainer* seq_origin){
 				origin=seq_origin;
 			}
 
 			/**
 			 *@return the origin of the Sequence
 			 */
-			Composite* Sequence::getOrigin(){
+			AtomContainer* Sequence::getOrigin(){
 				return origin;
 			}	
 
@@ -93,26 +93,50 @@ namespace BALL{
 
 
 
-//TODO implement
-
-
 			/**
 			 *@return a SequenceIterator which points to the first character of the Sequence
 			 */
-//			SequenceIterator& begin();				
+			SequenceIterator& Sequence::begin(){
+
+				//Initialize the new Iterator
+				SequenceIterator* it = new SequenceIterator(*this);
+				
+				return *it;				
+			
+			}				
 
 			/**
-			 *@return a SequenceIterator which points to exactly one position after the last character of the Sequence
+			 *@return a SequenceIterator which points to the last character of the Sequence
 			 */
-//			SequenceIterator& end();
+			SequenceIterator& Sequence::end(){
+				
+				//initialize the new Iterator
+				SequenceIterator* it= new SequenceIterator();
+				
+				//set the the sequence
+				it->setSequence(*this);
+				
+				//go to to the last chracter and return the iterator
+
+				return it->last();
+				
+			}
 
 			/**
 			 *@return String which contains the Sequence
 			 **/
-			/**String& Sequence::getSequence(){
-			//TODO implement!!!
-				
+			String Sequence::getSequence(){
+
+			String seq = "";
+
+			for(SequenceIterator it = begin(); it != end(); it.next()){
 			
-			}*/
+				String* tmp = new String(it.getCharacter().getChar());
+
+				seq += *tmp;
+			}
+
+				return seq;
+			}
 
 }//namespace BALL

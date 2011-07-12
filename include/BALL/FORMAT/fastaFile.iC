@@ -1,0 +1,55 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+
+BALL_INLINE 
+FASTAFile& FASTAFile::operator >> (Protein& protein)
+{
+  read(protein);
+  
+  return *this;
+}
+
+
+
+BALL_INLINE 
+FASTAFile& FASTAFile::operator >> (Molecule& molecule)
+{
+  read(molecule);
+  
+  return *this;
+}
+
+BALL_INLINE 
+FASTAFile& FASTAFile::operator >> (System& system)
+{
+  read(system);
+  
+  return *this;
+}
+
+
+BALL_INLINE 
+FASTAFile& FASTAFile::operator << (const Molecule& molecule)
+{
+  write(molecule);
+  
+  return *this;
+}
+
+BALL_INLINE 
+FASTAFile& FASTAFile::operator << (const Protein& protein)
+{
+  write(protein);
+  
+  return *this;
+}
+
+BALL_INLINE 
+FASTAFile& FASTAFile::operator << (const System& system)
+{
+  write(system);
+  
+  return *this;
+}
+

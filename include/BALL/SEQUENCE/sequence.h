@@ -5,17 +5,17 @@
 	#include <BALL/DATATYPE/string.h>
 #endif
 
-#ifndef BALL_CONCEPT_COMPOSITE_H
-	#include <BALL/CONCEPT/composite.h>
+#ifndef BALL_KERNEL_ATOMCONTAINER_H
+	#include <BALL/KERNEL/atomContainer.h>
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class SequenceIterator;
 
 namespace BALL
 {
-
+	class SequenceIterator;
+	     
 	class BALL_EXPORT Sequence
 	{
 
@@ -35,7 +35,7 @@ namespace BALL
 			 *@param name the name of the Sequence
 			 *@param origin the composite from which the sequence originates
 			 */
-			Sequence(String& seq_name, Composite* seq_origin);
+			Sequence(String& seq_name, AtomContainer* seq_origin);
 
 			/**
 			 *Copy Constructor
@@ -64,31 +64,31 @@ namespace BALL
 			/**
 			 *@param origin the origin which is to be setted
 			 */
-			void setOrigin(Composite* seq_origin);
+			void setOrigin(AtomContainer* seq_origin);
 
 			/**
 			 *@return the origin of the Sequence
 			 */
-			Composite* getOrigin();	
-			
+			AtomContainer* getOrigin();	
+
 			///////////////////////////////////////////////////////////// Operators //////////////////////////////////////////////////////////////////////
-			
+
 			/**
-			*operator==
-			*/
+			 *operator==
+			 */
 			bool operator== (Sequence& seq);
 
 			/**
-			*operator!=
-			*/
+			 *operator!=
+			 */
 			bool operator!= (Sequence& seq);
-			
+
 			/**
-			*assignment operator
-			*/
+			 *assignment operator
+			 */
 			Sequence& operator= (Sequence& seq);
-			
-			
+
+
 			/////////////////////////////////////////////////Misc///////////////////////////////////////////
 
 			/**
@@ -104,13 +104,13 @@ namespace BALL
 			/**
 			 *@return String which contains the Sequence
 			 **/
-			String& getSequence();
+			String getSequence();
 
 		private:
 
 			String name;
 
-			Composite* origin;
+			AtomContainer* origin;
 
 	};
 

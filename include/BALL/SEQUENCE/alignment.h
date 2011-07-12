@@ -3,15 +3,27 @@
 
 ///////////////////////////////////////////////
 #ifndef BALL_SEQUENCE_SEQUENCECHARACTER_H
-	#include <Ball/SEQUENCE/sequenceCharacter.h>
+	#include <BALL/SEQUENCE/sequenceCharacter.h>
+#endif
+/*
+#ifndef BALL_SEQUENCE_CLUSTALFILE_H
+	#include<BALL/SEQUENCE/clustalFile.h>
+#endif
+*/
+#ifndef BALL_FORMAT_PDBFILE_H
+	#include<BALL/FORMAT/PDBFile.h>
 #endif
 
 #ifndef BALL_DATATYPE_STRING_H
 	#include <BALL/DATATYPE/string.h>
 #endif
 
-#ifndef BALL_MATHS_MATRIX44_H
-	#include <BALL/MATHS/MATRIX44.h>
+#ifndef BALL_KERNEL_PROTEIN_H
+	#include <BALL/KERNEL/protein.h>
+#endif
+
+#ifndef BALL_KERNEL_SYSTEM_H
+	#include<BALL/KERNEL/system.h>
 #endif
 
 #ifndef BALL_SYSTEM_FILE
@@ -26,10 +38,11 @@
 ///////////////////////////////////////////////
 
 
-typedef Eigen::Array<SequenceCharacter, Eigen::Dynamic, Eigen::Dynmaic> AlignmentMatrix;
 
 namespace BALL
 {
+	typedef Eigen::Array<SequenceCharacter, Eigen::Dynamic, Eigen::Dynamic> AlignmentMatrix;
+
 
 	class BALL_EXPORT Alignment
 {
@@ -132,7 +145,7 @@ namespace BALL
 		 *@param c the SequenceCharacter to be added
 		 *@param pos the int where the SequenceCharacter is to be added
 		 */
-		void insertSeqChar(Sequence& seq, SequenceCharacter& c; int pos=0);
+		void insertSeqChar(Sequence& seq, SequenceCharacter& c, int pos=0);
 		
 		/**
 		*inserts a given SequenceCharacter into the alignment at a given row and column
@@ -149,40 +162,45 @@ namespace BALL
 		 *reads a Clustalfile into an alignment
 		 *@param file the file to be read
 		 */
-		void read(ClustalFile & file);
+//		void read(ClustalFile & file);
 		
 		
-		/**
-		*reads a FastaFile into the alignment
-		*@param file the file to be read
-		*/
-		void read(FastaFile & file);
-
+	
 		/**
 		*reads a PDBFile into the alignment
 		*@param file the file to be read
 		*/
 		void read(PDBFile& file);
 
+		/**
+		*reads a System into the Alignment
+		*/
+		void read(System& system);
+
+		/**
+		* reads a Protein into the Alignment
+		*/
+		void read(Protein& protein);
+
 		
 		/**
 		 *reads a Clustalfile into an alignment
 		 *@param file the file to be read
 		 */
-		Alignment& operator<<(ClustalFile & file);
+//		Alignment& operator<<(ClustalFile & file);
 		
 		
 		/**
 		*reads a FastaFile into the alignment
 		*@param file the file to be read
 		*/
-		Alignment& operator<<(FastaFile & file);
+//		Alignment& operator<<(FastaFile & file);
 
 		/**
 		*reads a PDBFile into the alignment
 		*@param file the file to be read
 		*/
-		Alignment& operator<<(PDBFile& file);
+//		Alignment& operator<<(PDBFile& file);
 
 
 		
@@ -190,39 +208,39 @@ namespace BALL
 		 *writes an alignment into a FastaFile
 		 *@param file the file to be read
 		 */
-		Alignment& operator>>(ClustalFile & file);
+//		Alignment& operator>>(ClustalFile & file);
 		
 		
 		/**
 		*writes an Alignment into a FastaFile 
 		*@param file the file to be read
 		*/
-		Alignment& operator>>(FastaFile & file);
+//		Alignment& operator>>(FastaFile & file);
 
 		/**
 		*writes an alignment into a PDBFile
 		*@param file the file to be read
 		*/
-		Alignment& operator>>(PDBFile& file);
+//		Alignment& operator>>(PDBFile& file);
 
 		/**
 		 *writes the alignment into a given Clustalfile
 		 *@param file the file to be written to
 		 */
-		void write(ClustalFile & file)
+//		void write(ClustalFile & file);
 		
 
 		/**
 		*writes the alignment into a given FastaFile
 		*@param file the file to be written to
 		*/
-		void write(FastaFile & file);
+//		void write(FastaFile & file);
 
 		/**
 		*writes the alignment into a given PDBFile
 		*@param file the file to be read
 		*/
-		void write(PDBFile& file);		
+//		void write(PDBFile& file);		
 		
 
 	private:

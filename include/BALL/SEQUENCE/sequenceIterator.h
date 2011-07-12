@@ -7,15 +7,26 @@
 	#include <BALL/SEQUENCE/sequenceCharacter.h>
 #endif
 
+#ifndef BALL_KERNEL_PROTEIN_H
+#include <BALL/KERNEL/protein.h>
+#endif
+
+#ifndef BALL_STRUCTURE_PEPTIDES_H
+#include <BALL/STRUCTURE/peptides.h>
+#endif
+
+
 //////////////////////////////////////////////////////////////////////////
 
 
 ////////////////////////////////////////////////////////////////////////
 
-	class Sequence;
 
 namespace BALL 
 {
+	class Sequence;
+
+
 	class BALL_EXPORT SequenceIterator
 	{
 		public:
@@ -49,7 +60,7 @@ namespace BALL
 			/**
 			 * @param seq the Sequence to be set
 			 */
-			void setSequence(const Sequence& seq);
+			void setSequence(Sequence& seq);
 
 			/**
 			 *@return the Sequence over which the Iterator iterates
@@ -71,11 +82,27 @@ namespace BALL
 			/**
 			 *@return a sequenceIterator pointing to the next Character of the Sequence
 			 */
-			void next();
+			SequenceIterator& next();
+
+			/**
+			 *@return the current Iterator setted to the last character
+			 */
+			SequenceIterator& last();
+
+			/**
+			 *operator==
+			 */
+			bool operator == (SequenceIterator& it);
+
+			/**
+			 *operator !=
+			 **/
+			bool operator != (SequenceIterator& it);
+
 
 
 		private:
-			Sequence sequence;
+			Sequence* sequence;
 
 			int counter;
 

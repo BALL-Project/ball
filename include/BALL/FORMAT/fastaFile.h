@@ -86,7 +86,7 @@ namespace BALL{
 			/**
                         * reads a Fastafile into a Molecule
                         */
-			//void read(Molecule& molecule);
+			void read(Molecule& molecule);
 
 			/**
                         *reads a FastaFile into a System
@@ -101,17 +101,17 @@ namespace BALL{
 			/**
 			* writes a Protein into a Fastafile
 			*/
-			void write(Protein& protein);
+			void write(const Protein& protein);
 
 			/**
 			*writes a Molecule into a Fastafile
 			*/
-			void write(Molecule& molecule);
+			void write(const Molecule& molecule);
 			
 			/**
 			*writes a System into a Fastafile
 			*/
-			void write(System& system);
+			void write(const System& system);
 
 			
 			////////////////////////////////////////////////// Misc ////////////////////////////////////////////////////
@@ -121,27 +121,46 @@ namespace BALL{
 			 */
 			virtual void clear();
 
+		/** Read a protein from the file
+		 *  @throw Exception::ParseError if a syntax error was encountered
+	 	*/
+		FASTAFile& operator >> (Protein& protein);
+
+		/** Read a molecule from the file
+		 *  @throw Exception::ParseError if a syntax error was encountered
+		 */
+		FASTAFile& operator >> (Molecule& molecule);
+
+		/** Read system from the file
+		 *  @throw Exception::ParseError if a syntax error was encountered
+		 */
+		FASTAFile& operator >> (System& system);
+
+		/** Write a protein to the file
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		FASTAFile& operator << (const Protein& protein);
+
+		/** Write a system to the file
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		FASTAFile& operator << (const System& system);
+
+		/** Write molecule to the file
+		 *  @throw File::CannotWrite if writing to the file failed
+		 */
+		FASTAFile& operator << (const Molecule& molecule);
+
 			};
 
 	/////////////////////////////////////////////////////////////////// operators that have to be outside the class ///////////////////////////////////////////////////
 
-			/**
-			*reads a FastaFile into a protein
-			*/
-			Protein& operator>>(FASTAFile file,Protein& protein);
+#	ifndef BALL_NO_INLINE_FUNCTIONS
+#		include <BALL/FORMAT/fastaFile.iC>
+#	endif
 		
-			/**
-			* reads a Fastafile into a Molecule
-			*/
-			//Molecule& operator>>(FASTAFile file, Molecule& molecule);
 
-			/**
-			*reads a FastaFile into a System
-			*/
-			System& operator>> (FASTAFile file, System& system);
-
-
-
+			
 
 
 }//namespace BALL

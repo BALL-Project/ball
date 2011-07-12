@@ -1,6 +1,6 @@
 /////////////////////////////////////////////
 
-#include<BALL/SEQUENCE/fastaFile.h>
+#include<BALL/FORMAT/fastaFile.h>
 
 namespace BALL{
 
@@ -50,36 +50,7 @@ namespace BALL{
 			///////////////////////////////////////////////////////////// Reading and Writing /////////////////////////////////////////
 
 
-
-
-
-			
-			/**
-			*reads a FastaFile into a protein
-			*/
-			Protein& operator>>(FASTAFile file,Protein& protein){
-				
-				file.read(protein);
-				
-				return protein;
-			}
-	
-			/**
-			* reads a Fastafile into a Molecule
-			*/
-			/**Molecule& operator>>(FASTAFile file, Molecule& molecule){
-				file.read(molecule);
-				return molecule;	
-				}
-*/
-			/**
-			*reads a FastaFile into a System
-			*/
-			System& operator>> (FASTAFile file, System& system){
-			file.read(system);
-				return system;
-				}
-
+		
 			 /**
                         *reads a FastaFile into a protein
 			@throws InvalidArgument if a file holding more than one sequence is to be read
@@ -164,7 +135,7 @@ namespace BALL{
 			/**
                         * reads a Fastafile into a Molecule
                         */
-			/**void FASTAFile::read(Molecule& molecule){
+			void FASTAFile::read(Molecule& molecule){
 
 				//counter
 				int i=0;
@@ -214,7 +185,7 @@ namespace BALL{
 
 
 			}
-*/
+
 
 			/**
                         *reads a FastaFile into a System
@@ -319,7 +290,7 @@ namespace BALL{
 			/**
 			* writes a Protein into a Fastafile
 			*/
-			void FASTAFile::write(Protein& protein){
+			void FASTAFile::write(const Protein& protein){
 
 			//retrieve the Sequence of the Protein
 			String seq = Peptides::GetSequence(protein);
@@ -340,14 +311,14 @@ namespace BALL{
 			/**
 			*writes a System into a Fastafile
 			*/
-			void FASTAFile::write(System& system){
+			void FASTAFile::write(const System& system){
 
 			//	for (Molecule::MoleculeIterator m_it = S.beginMolecule(); +m_it; ++m_it)
 			//	{
 			//		if (RTTI::isKindOf<Protein>(*(m_it)))
 			//		{
 
-				for(ProteinIterator it = system.beginProtein(); +it; ++it)
+				for(ProteinConstIterator it = system.beginProtein(); +it; ++it)
 					{
 						// get the protein's sequence
 						
@@ -369,5 +340,9 @@ namespace BALL{
 			
 
 			
+#	ifdef BALL_NO_INLINE_FUNCTIONS
+#		include <BALL/FORMAT/fastaFile.iC>
+#	endif
+
 
 }//namespace BALL
