@@ -543,26 +543,14 @@ namespace BALL
 	{
 		validateRange_(from, len);
 
-		Index index = from;
-		char* char_ptr = const_cast<char*>(c_str()) + from;
-
-		for (; index < (Index)(from + len); index++, char_ptr++)
-		{
-			*char_ptr = tolower(*char_ptr);
-		}
+		std::transform(begin()+from, begin()+from+len, begin()+from, ::tolower); 
 	}
 
 	void String::toUpper(Index from, Size len)
 	{
 		validateRange_(from, len);
 
-		Index index = from;
-		char *char_ptr = const_cast<char*>(c_str()) + from;
-
-		for(; index < (Index)(from + len); index++, char_ptr++)
-		{
-			*char_ptr = toupper(*char_ptr);
-		}
+		std::transform(begin()+from, begin()+from+len, begin()+from, ::toupper); 
 	}
 
 	Size String::countFields(const char* delimiters) const
@@ -1097,20 +1085,7 @@ namespace BALL
 	{
 		validateRange_(from, len);
 
-		if (len > 1)
-		{
-			char* forward_ptr = const_cast<char*>(c_str()) + from;
-			char* backward_ptr = const_cast<char*>(c_str()) + from + len - 1;
-			char temp = 0;
-
-			for (; forward_ptr < backward_ptr; ++forward_ptr, --backward_ptr)
-			{
-				temp = *forward_ptr;
-				*forward_ptr = *backward_ptr;
-				*backward_ptr = temp;
-			}
-		}
-
+		std::reverse(begin()+from, begin()+from+len);
 		return *this;
 	}
 
