@@ -96,10 +96,10 @@ namespace std
 		};
 
 		template <class A, class B, class C, class D>
-		struct hash< const ::BALL::Quadruple<A, B, C, D> > : public std::unary_function< const ::BALL::Quadruple<A, B, C, D>, size_t> 
+		struct hash< ::BALL::Quadruple<A, B, C, D> > : public std::unary_function< const ::BALL::Quadruple<A, B, C, D>, size_t> 
 		{
 			inline size_t
-			operator()(const ::BALL::Quadruple<A, B, C, D> q) const
+			operator()( ::BALL::Quadruple<A, B, C, D> q) const
 			{
 				size_t seed = 0;
 				hash_combine_ala_boost(seed, q.first);
