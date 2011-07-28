@@ -2,6 +2,11 @@
 #define BALL_SYSTEM_BINARYFILEADAPTOR_H
 
 #include <iostream>
+#include <algorithm>
+
+#ifndef BALL_COMMON_LOGSTREAM_H
+# include <BALL/COMMON/logStream.h>
+#endif
 
 namespace BALL
 {
@@ -67,45 +72,45 @@ namespace BALL
 	};
 
 	template <typename T>
-	BALL_INLINE BinaryFileAdaptor<T>::BinaryFileAdaptor()
+	BinaryFileAdaptor<T>::BinaryFileAdaptor()
 		: data_(),
 		  swap_endian_(false)
 	{
 	}
 
 	template <typename T>
-	BALL_INLINE BinaryFileAdaptor<T>::BinaryFileAdaptor(const T& data, bool swap_endian)
+	BinaryFileAdaptor<T>::BinaryFileAdaptor(const T& data, bool swap_endian)
 		: data_(data),
 		  swap_endian_(swap_endian)
 	{
 	}
 
 	template <typename T>
-	BALL_INLINE void BinaryFileAdaptor<T>::setSwapEndian(bool swap_endian)
+	void BinaryFileAdaptor<T>::setSwapEndian(bool swap_endian)
 	{
 		swap_endian_ = swap_endian;
 	}
 
 	template <typename T>
-	BALL_INLINE bool BinaryFileAdaptor<T>::getSwapEndian() const
+	bool BinaryFileAdaptor<T>::getSwapEndian() const
 	{
 		return swap_endian_;
 	}
 
 	template <typename T>
-	BALL_INLINE void BinaryFileAdaptor<T>::setData(const T& data)
+	void BinaryFileAdaptor<T>::setData(const T& data)
 	{
 		data_ = data;
 	}
 
 	template <typename T>
-	BALL_INLINE const T& BinaryFileAdaptor<T>::getData() const
+	const T& BinaryFileAdaptor<T>::getData() const
 	{
 		return data_;
 	}
 
 	template <typename T>
-	BALL_INLINE T& BinaryFileAdaptor<T>::getData()
+	T& BinaryFileAdaptor<T>::getData()
 	{
 		return data_;
 	}
@@ -151,7 +156,7 @@ namespace BALL
 			of type T if this type is of size 2n.
 	*/
 	template <typename T>
-	BALL_INLINE void swapBytes(T& t)
+	void swapBytes(T& t)
 	{
 		if (sizeof(T) % 2 != 0)
 		{
@@ -165,171 +170,18 @@ namespace BALL
 
 	//In the following some specialisations of swapBytes are provided for efficiency reasons
 	//These should also cover BALL types like Size, Position and Index
-#define BALL_SWAP_BYTES_16(x)\
-	x = ((x >> 8)  & 0x00FFu) | ((x << 8)  & 0xFF00u)
-
-#define BALL_SWAP_BYTES_32(x)\
-	x = ((x >> 8)  & 0x00FF00FFu) | ((x << 8)  & 0xFF00FF00u);\
-	x = ((x >> 16) & 0x0000FFFFu) | ((x << 16) & 0xFFFF0000u)
-
-#define BALL_SWAP_BYTES_64(x)\
-	x = ((x >> 8)  & 0x00FF00FF00FF00FFull) | ((x << 8)  & 0xFF00FF00FF00FF00ull);\
-	x = ((x >> 16) & 0x0000FFFF0000FFFFull) | ((x << 16) & 0xFFFF0000FFFF0000ull);\
-	x = ((x >> 32) & 0x00000000FFFFFFFFull) | ((x << 32) & 0xFFFFFFFF00000000ull)
-
-	template <>
-	BALL_INLINE void swapBytes(unsigned short& t)
-	{
-#if   BALL_USHORT_SIZE == 2
-			BALL_SWAP_BYTES_16(t);
-#elif BALL_USHORT_SIZE == 4
-			BALL_SWAP_BYTES_32(t);
-#elif BALL_USHORT_SIZE == 8
-			BALL_SWAP_BYTES_64(t);
-#else
-	#error "Unknown unsigned short size, refusing to compile."
-#endif
-	}
-
-	template <>
-	BALL_INLINE void swapBytes(short& t)
-	{
-#if   BALL_SHORT_SIZE == 2
-			BALL_SWAP_BYTES_16(t);
-#elif BALL_SHORT_SIZE == 4
-			BALL_SWAP_BYTES_32(t);
-#elif BALL_SHORT_SIZE == 8
-			BALL_SWAP_BYTES_64(t);
-#else
-	#error "Unknown short size, refusing to compile."
-#endif
-	}
-
-	template <>
-	BALL_INLINE void swapBytes(unsigned int& t)
-	{
-#if   BALL_UINT_SIZE == 2
-			BALL_SWAP_BYTES_16(t);
-#elif BALL_UINT_SIZE == 4
-			BALL_SWAP_BYTES_32(t);
-#elif BALL_UINT_SIZE == 8
-			BALL_SWAP_BYTES_64(t);
-#else
-	#error "Unknown unsigned int size, refusing to compile."
-#endif
-	}
-
-	template <>
-	BALL_INLINE void swapBytes(int& t)
-	{
-#if   BALL_INT_SIZE == 2
-			BALL_SWAP_BYTES_16(t);
-#elif BALL_INT_SIZE == 4
-			BALL_SWAP_BYTES_32(t);
-#elif BALL_INT_SIZE == 8
-			BALL_SWAP_BYTES_64(t);
-#else
-	#error "Unknown int size, refusing to compile."
-#endif
-	}
-
-	template <>
-	BALL_INLINE void swapBytes(long& t)
-	{
-#if   BALL_LONG_SIZE == 2
-			BALL_SWAP_BYTES_16(t);
-#elif BALL_LONG_SIZE == 4
-			BALL_SWAP_BYTES_32(t);
-#elif BALL_LONG_SIZE == 8
-			BALL_SWAP_BYTES_64(t);
-#else
-	#error "Unknown long size, refusing to compile."
-#endif
-	}
-
-	template <>
-	BALL_INLINE void swapBytes(unsigned long& t)
-	{
-#if   BALL_ULONG_SIZE == 2
-			BALL_SWAP_BYTES_16(t);
-#elif BALL_ULONG_SIZE == 4
-			BALL_SWAP_BYTES_32(t);
-#elif BALL_ULONG_SIZE == 8
-			BALL_SWAP_BYTES_64(t);
-#else
-	#error "Unknown unsigned long size, refusing to compile."
-#endif
-	}
-
-	namespace __private
-	{
-		//We need these unions to provide a safe cast (without violating strict aliasing)
-		//from float/double to a bitfield
-		union UFloat
-		{
-			UFloat(float f_) : f(f_) { }
-
-#if   BALL_FLOAT_SIZE == 2
-			BALL_UINT16 u;
-#elif BALL_FLOAT_SIZE == 4
-			BALL_UINT32 u;
-#elif BALL_FLOAT_SIZE == 8
-			BALL_UINT64 u;
-#else
-	#error "Unknown double size, refusing to compile."
-#endif
-			float f;
-		};
-
-		union UDouble
-		{
-			UDouble(double f_) : f(f_) { }
-
-#if   BALL_DOUBLE_SIZE == 2
-			BALL_UINT16 u;
-#elif BALL_DOUBLE_SIZE == 4
-			BALL_UINT32 u;
-#elif BALL_DOUBLE_SIZE == 8
-			BALL_UINT64 u;
-#else
-	#error "Unknown double size, refusing to compile."
-#endif
-			double f;
-		};
-	}
-
-	template <>
-	BALL_INLINE void swapBytes(float& f)
-	{
-		__private::UFloat u(f);
-#if   BALL_FLOAT_SIZE == 2
-		BALL_SWAP_BYTES_16(u.u);
-#elif BALL_FLOAT_SIZE == 4
-		BALL_SWAP_BYTES_32(u.u);
-#elif BALL_FLOAT_SIZE == 8
-		BALL_SWAP_BYTES_64(u.u);
-#else
-	#error "Unknown float size, refusing to compile."
-#endif
-		f = u.f;
-	}
-
-	template <>
-	BALL_INLINE void swapBytes(double& f)
-	{
-		__private::UDouble u(f);
-#if   BALL_DOUBLE_SIZE == 2
-		BALL_SWAP_BYTES_16(u.u);
-#elif BALL_DOUBLE_SIZE == 4
-		BALL_SWAP_BYTES_32(u.u);
-#elif BALL_DOUBLE_SIZE == 8
-		BALL_SWAP_BYTES_64(u.u);
-#else
-	#error "Unknown double size, refusing to compile."
-#endif
-		f = u.f;
-	}
-
+	template<> void swapBytes(unsigned short&);
+	template<> void swapBytes(short&);
+	template<> void swapBytes(unsigned int&);
+	template<> void swapBytes(int&);
+	template<> void swapBytes(unsigned long&);
+	template<> void swapBytes(long&);
+	template<> void swapBytes(float&);
+	template<> void swapBytes(double&);
 } //namespace BALL
+
+#ifndef BALL_NO_INLINE_FUNCTIONS
+	#include <BALL/SYSTEM/binaryFileAdaptor.iC>
+#endif
 
 #endif //BALL_SYSTEM_BINARYFILEADAPTOR_H
