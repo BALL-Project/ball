@@ -1,43 +1,76 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 
+// A small program for using the GAFF atomtyper
+
 #include <BALL/KERNEL/system.h>
 // #include <BALL/FORMAT/HINFile.h>
-#include <BALL/FORMAT/MOL2File.h>
 #include <BALL/MOLMEC/AMBER/GAFFTypeProcessor.h>
 #include <BALL/STRUCTURE/assignBondOrderProcessor.h>
+#include <BALL/FORMAT/molFileFactory.h>
+#include <BALL/FORMAT/genericMolFile.h>
 
 using namespace BALL;
 using namespace std;
 
-int main(int argc, char** argv){
-	
-//  	String fname = "benzene.hin";
-	String fname = "benzene.mol2";
- 	if (argc > 1)
- 		fname = argv[1];
-		
-//  	HINFile mol(fname, std::ios::in);
-	MOL2File mol(fname, std::ios::in);
+int main(int argc, char** argv)
+{
+	if ((argc < 3 || argc > 4))
+	{
+		Log << "Usage:" << argv[0] << " <infile> <outfile> [GAFFTypes.dat]" << endl;
+		return 1;
+	}
+	GenericMolFile* infile = MolFileFactory::open(argv[1]);
 
-	System S;
-	mol >> S;
+	if (!infile)
+	{
+		Log.error() << "Could not determine filetype, aborting" << std::endl;
+		return 2;
+
+	}
+
+	if (!*infile)
+	{
+		std::cerr << "Invalid file, aborting" << std::endl;
+		return 2;
+	}
+
+
+	System system;
+	*infile >> system;
 
 	AssignBondOrderProcessor abp;
-	S.apply(abp);
+	system.apply(abp);
 
 	Options options;
-	options[GAFFTypeProcessor::Option::ATOMTYPE_FILENAME] = "Amber/GAFFTypes.dat";
-	if (argc > 2)
-		options[GAFFTypeProcessor::Option::ATOMTYPE_FILENAME] = String("Amber/")+argv[2];
+	options[GAFFTypeProcessor::Option::ATOMTYPE_FILENAME] = "atomtyping/GAFFTypes.dat";
+
+	if (argc > 3)
+		options[GAFFTypeProcessor::Option::ATOMTYPE_FILENAME] = String("Amber/")+argv[3];
 
 	GAFFTypeProcessor gt(options);
-	S.apply(gt);
+	system.apply(gt);
 
-	for (AtomIterator at_it = S.beginAtom(); +at_it; ++at_it)
+	for (AtomIterator at_it = system.beginAtom(); +at_it; ++at_it)
 		std::cout << "atom name: " << at_it->getName() << " atomtype  " << at_it->getProperty("atomtype").getString() << std::endl;
 
-	MOL2File m("rockaz.mol2", std::ios::out);
-	m << S;
-	m.close();
+	GenericMolFile* outfile = MolFileFactory::open(argv[2], std::ios::out);
+
+	if (!outfile) 
+	{
+		std::cerr << "Could not determine filetype, aborting" << std::endl;
+		exit(-1);
+	}
+
+	if (!*outfile) 
+	{
+		std::cerr << "Invalid file, aborting" << std::endl;
+		exit(-1);
+	}
+
+	*outfile << system;
+
+	// Important: Cleanup
+	outfile->close();
+	delete outfile;
 }
