@@ -15,6 +15,7 @@
 #include <QtGui/QPushButton>
 #include <QtGui/QTreeWidget>
 #include <QtGui/QProgressBar>
+#include <QtGui/QMessageBox>
 
 #include <QtCore/QUrl>
 
@@ -169,8 +170,14 @@ namespace BALL
 			PubChemDownloader pcd;
 			pcd.downloadSDF(qt, filename);
 
+			SDFile sdf;
 			// now, try to read the SD File
-			SDFile sdf(filename, std::ios::in);
+			try {
+				sdf.open(filename, std::ios::in);
+			} catch(Exception::FileNotFound& e) {
+				QMessageBox::critical(this, tr("Download failed"), tr("Could not download pubchem entries for") + " \"" + pubchem_label->displayText() + "\"");
+				return;
+			}
 
 			// iterate over the molecules in the SD File and build a system for each
 			Size count = 0;
