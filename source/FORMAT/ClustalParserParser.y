@@ -32,17 +32,17 @@ ClustalFile::SequenceLine current_seq_line;
 
 /*         bison declarations      */
 %union {
-	char  	text[CLUSTALPARSER_LINE_LENGTH];
-	int	  	integer;
+	char text[CLUSTALPARSER_LINE_LENGTH];
+	int  integer;
 	}
 
 
-%token <text>		  	TK_WHITESPACE
-%token <text>	  		TK_CONSERV_LINE
-%token <text>			TK_IDENT
-%token <text>			TK_SEQUENCE
-%token <integer> 		TK_NUM
-%token <text>			TK_CLUSTAL
+%token <text>     TK_WHITESPACE
+%token <text>     TK_CONSERV_LINE
+%token <text>     TK_IDENT
+%token <text>     TK_SEQUENCE
+%token <integer>  TK_NUM
+%token <text>     TK_CLUSTAL
 
 
 

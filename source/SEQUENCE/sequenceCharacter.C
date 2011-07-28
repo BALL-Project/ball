@@ -1,4 +1,6 @@
+
 #include <BALL/SEQUENCE/sequenceCharacter.h>
+#include <BALL/SEQUENCE/sequence.h>
 
 namespace BALL
 {

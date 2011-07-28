@@ -6,9 +6,6 @@
 #include <BALL/DATATYPE/string.h>
 #endif
 
-#ifndef BALL_SEQUENCE_SEQUENCE_H
-#include <BALL/SEQUENCE/sequence.h>
-#endif
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #include <BALL/CONCEPT/composite.h>
@@ -24,6 +21,7 @@
 
 namespace BALL
 {
+	class Sequence;
 
 	class BALL_EXPORT SequenceCharacter
 	{

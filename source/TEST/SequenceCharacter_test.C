@@ -10,7 +10,7 @@
 
 #include <BALL/SEQUENCE/sequenceCharacter.h>
 #include <BALL/COMMON/exception.h>
-
+#include <BALL/SEQUENCE/sequence.h>
 ////////////////////////////////////////////////////////////////////////////
 using namespace BALL;
 

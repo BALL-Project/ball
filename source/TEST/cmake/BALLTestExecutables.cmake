@@ -290,6 +290,8 @@ SET(BALL_ENERGY_TESTS
 
 SET(BALL_SEQUENCE_TESTS
 	FASTAFile_test
+	SequenceCharacter_test
+	Sequence_test
 )
 
 SET(BALL_STRUCTURE_TESTS

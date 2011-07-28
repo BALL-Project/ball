@@ -18,7 +18,7 @@
 #include <BALL/KERNEL/system.h>
 #include <BALL/STRUCTURE/peptides.h>
 #include <BALL/SEQUENCE/sequence.h>
-#include <BALL/SEQUENCE/fastaFile.h>
+#include <BALL/FORMAT/fastaFile.h>
 #include <iostream>
 ///////////////////////////
 
@@ -34,16 +34,11 @@ using namespace BALL;
 //////////////////////////////////////// Constructor and Deconstructor Test ///////////////////////////////////////////////////
 
 CHECK(FASTAFile())
-
-	cout << "TEST 1" <<endl;
-
 	TEST_NOT_EQUAL(fp,0);
 RESULT
 
 
 CHECK(~FASTAFile())
-
-	cout<< "TEST 2" <<endl;
 	delete fp;
 RESULT
 
@@ -63,10 +58,6 @@ RESULT
 
 	////////////////////open the File ///////////////////////////
 
-	cout<<"open file"<<endl;
-
-	fp->open(BALL_TEST_DATA_PATH(FASTAFile_test1.fasta));
-
 	String* seq=new String();
 	
 //////////////////////////////////////////////////////////////////// Reading Tests //////////////////////////////////////////////////77
@@ -77,10 +68,11 @@ RESULT
 	String *rs= new String("AGTACGTAGTAGCTGCTGCTACGTGCGCTAGCTAGTACGTCACGACGTAGATGCTAGCTGACTCGATGC");
 	
 CHECK(read (Protein& protein))
-	cout<<"TEST read Protein"<<endl;
-	
+
+	fp->open(BALL_TEST_DATA_PATH(FASTAFile_test1.fasta));
+
+
 	fp->read(*pp);
-	cout<<"successfully read Protein"<<endl;
 
 	 *seq = Peptides::GetSequence(*pp);
 	
@@ -88,9 +80,7 @@ CHECK(read (Protein& protein))
 
 RESULT
 
-cout<< "the sequence is: "<<(*seq) << endl;
-
-	////////TODO CHECK(operator>>(FASTAFile file, Molecule& molecue))
+////////TODO CHECK(operator>>(FASTAFile file, Molecule& molecue))
 
 	
 	/**	fp>>mp;
@@ -99,46 +89,44 @@ cout<< "the sequence is: "<<(*seq) << endl;
 	*/
 	
 
-
-
 CHECK(read(System& system))
-	cout<<"TEST read System"<<endl;
 
 	seq->destroy();
-	cout<< "successfully destroyed seq"<< endl;
+	
+	fp->open(BALL_TEST_DATA_PATH(FASTAFile_test1.fasta));
 
 	fp->read(*sp);
-	cout<<"successfully read sequence into system"<<endl;
 
 	//Get the Sequence out of the System	
 	for(ProteinIterator it = sp->beginProtein(); +it; ++it) {
     	*seq = Peptides::GetSequence(*it);
 	}
-	cout<<seq<<endl;
+
 	
         TEST_EQUAL(*seq, *rs);
 RESULT
 
-	cout<<"delete pointers"<<endl;
-
-	//delete no more needed pointer
+//delete no more needed pointer
 	
 	delete pp;
-	cout<< "deleted pp"<<endl;
 //	delete mp;
 	
 	
 	delete sp;
-	cout <<"deleted sp"<<endl;
-	
+
+
+
+
 	//instantiate new ones
 	 Protein *np=new Protein();
          System *ns=new System();
 
 
 CHECK(operator>>(Protein& protein))
-	cout<<"TEST operator>> protein"<<endl;
+
 	seq->destroy();
+	fp->open(BALL_TEST_DATA_PATH(FASTAFile_test1.fasta));
+
 
         fp->read(*np);
         *seq=Peptides::GetSequence(*pp);
@@ -147,11 +135,11 @@ RESULT
 
 
         
-
 CHECK(operator>>(System& system))
-	
-	cout<<"TEST operator>> system"<<endl;
+
 	seq->destroy();
+	fp->open(BALL_TEST_DATA_PATH(FASTAFile_test1.fasta));
+
 	fp->read(*ns);
          for(ProteinIterator it = ns->beginProtein(); +it; ++it) {
          *seq = Peptides::GetSequence(*it);

@@ -1,5 +1,6 @@
 %{
 #include <BALL/FORMAT/ClustalFile.h>
+#include <BALL/COMMON/parserDefinitions.h>
 
 using namespace BALL;
 
@@ -34,8 +35,8 @@ void ClustalParserLexer_reset()
 %}
 
 
+%option nounput
 %option noyywrap
-%option array
 
 EOL					[\n\r]
 WHITESPACE				[[:blank:]\n\r]+

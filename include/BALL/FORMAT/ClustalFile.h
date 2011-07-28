@@ -22,6 +22,18 @@
 	#include <BALL/COMMON/exception.h>
 #endif
 
+#ifndef BALL_STRUCTURE_PEPTIDES_H
+	#include<BALL/STRUCTURE/peptides.h>
+#endif
+
+#ifndef BALL_KERNEL_PROTEIN_H
+	#include<BALL/KERNEL/protein.h>
+#endif
+
+#ifndef BALL_KERNEL_SYSTEM_H
+	#include<BALL/KERNEL/system.h>
+#endif
+
 #define CLUSTALPARSER_LINE_LENGTH 2550
 
 
@@ -76,7 +88,7 @@ namespace BALL
 
 				String ident;
 				String  sequence;
-				int length;
+				unsigned int length;
 							
 			};
 
@@ -231,6 +243,10 @@ namespace BALL
 
 			private:
 				std::vector<Block> blocks;
+				
+					//methods to faciliate the writing process
+					
+					
 			
 };
 
