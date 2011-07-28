@@ -563,13 +563,14 @@ namespace BALL
 	}
 
 	NMRStarFile::BALLToBMRBMapper::BALLToBMRBMapper()
-		: name_converter_(), 
+		: name_converter_(),
 			ball_to_bmrb_map_(),
-			bmrb_to_ball_map_(), 
+			bmrb_to_ball_map_(),
 			chain_(NULL),
 			nmr_data_(NULL),
 			num_mismatches_(0),
-			num_gaps_(0)
+			num_gaps_(0),
+			valid_(true)
 	{
 	}
 
@@ -766,7 +767,10 @@ namespace BALL
 																										const String& aligned_nmrstar_sequence)
 	{
 		if (!valid_)
+		{
+			Log.error() << "BALLToBMRBMapper::createMapping(): Warning: invalid state!" << std::endl;
 			return false;
+		}
 
 		int  matches     =  0;
 		num_mismatches_  = -1;
@@ -785,7 +789,8 @@ namespace BALL
 			Log.warn() << "BALLToBMRBMapper::createMapping(): Warning: Alignment sequence cannnot be matched to chosen chain!" << endl;
 			Log.warn() << chain_seq << std::endl;
 			Log.warn() << squeezed_align_seq << std::endl;
-			return false;
+//			TODO: what should we do here?
+//			return false;
 		}
 
 		// check whether the alignment is valid
@@ -804,6 +809,7 @@ namespace BALL
 		// NOTE: we take the zero's dataset!
 		if (nmr_data_->atom_data_sets_.size() == 0)
 		{
+			Log.error() << "BALLToBMRBMapper::createMapping(): Warning: no atom data present!" << std::endl;
 			return false;
 		}
 
@@ -822,7 +828,6 @@ namespace BALL
 				++len_sequence;
 			}
 		}
-
 		std::vector<std::list<Position> > atoms_per_nmr_residue(len_sequence);
 		for (Position i=0; i<nmr_data.size(); i++)
 		{

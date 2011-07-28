@@ -9,20 +9,18 @@
 
 using namespace std;
 
-namespace BALL 
+namespace BALL
 {
-	
+
 	const char* EFShiftProcessor::PROPERTY__EF_SHIFT = "ElectricFieldShift";
 
 	EFShiftProcessor::EFShiftProcessor()
-		
-		:	ShiftModule()
-	{	
+		:ShiftModule()
+	{
 	}
 
 	EFShiftProcessor::EFShiftProcessor(const EFShiftProcessor& processor)
-		
-		:	ShiftModule(processor),
+		: ShiftModule(processor),
 			bond_list_(processor.bond_list_),
 			effector_list_(processor.effector_list_),
 			first_atom_expressions_(processor.first_atom_expressions_),
@@ -31,21 +29,19 @@ namespace BALL
 			epsilon2_(processor.epsilon2_),
 			charge_map_(processor.charge_map_),
 			exclude_residue_field_(processor.exclude_residue_field_),
-			exclude_adjacent_residue_field_(processor.	exclude_adjacent_residue_field_),
+			exclude_adjacent_residue_field_(processor.exclude_adjacent_residue_field_),
 			carbonyl_influences_amide_field_(processor.carbonyl_influences_amide_field_),
 			exclude_solvent_field_(processor.exclude_solvent_field_),
 			cut_off2_(processor.cut_off2_),
 			charge_factor_(processor.charge_factor_)
 	{
 	}
-	
+
 	EFShiftProcessor::~EFShiftProcessor()
-		
 	{
 	}
 
 	void EFShiftProcessor::init()
-		
 	{
 		// By default, we assume the worst...
 		valid_ = false;
@@ -73,21 +69,21 @@ namespace BALL
 		{
 			exclude_residue_field_ = parameter_section.options.getBool("exclude_residue_field");
 		}
-		
+
 		// Check for the option "exclude_adjacent_field".
 		exclude_adjacent_residue_field_ = false;
 		if (parameter_section.options.has("exclude_adjacent_residue_field"))
 		{
 			exclude_adjacent_residue_field_ = parameter_section.options.getBool("exclude_adjacent_residue_field");
 		}
-		
+
 		// Check for the option "carbonyl_influences_amide_field".
 		carbonyl_influences_amide_field_ = false;
 		if (parameter_section.options.has("carbonyl_influences_amide_field"))
 		{
 			carbonyl_influences_amide_field_ = parameter_section.options.getBool("carbonyl_influences_amide_field");
 		}
-		
+
 		// Check for the option "exclude_solvent_field".
 		exclude_solvent_field_ = false;
 		if (parameter_section.options.has("exclude_solvent_field"))
@@ -127,7 +123,7 @@ namespace BALL
 			cut_off2_ = parameter_section.options.getReal("cut_off");
 			cut_off2_ *= cut_off2_;
 		}
-		
+
 		// For numeric aspects, here, the esu unit is divided by 
 		// the charge_factor_, such that the molecules charges (which are given 
 		// by PDB.org in elementary units) can easily be multiplied with. 
@@ -148,8 +144,8 @@ namespace BALL
 			}
 			else
 			{
-				Log.warn() << "EFShiftProcessor::init: unknown unit for charges in file " 
-									 << parameters_->getFilename() << ", section [Charges]: " 
+				Log.warn() << "EFShiftProcessor::init: unknown unit for charges in file "
+									 << parameters_->getFilename() << ", section [Charges]: "
 									 << unit << " - using default unit elemtary charges (e0)." << endl;
 			}
 		}
@@ -169,9 +165,8 @@ namespace BALL
 		// Mark the module as initialized.
 		valid_ = true;
 	}
-		
+
 	bool EFShiftProcessor::start()
-		
 	{
 		// If the module is invalid, abort.
 		if (!isValid())
@@ -187,7 +182,6 @@ namespace BALL
 	}
 
 	bool EFShiftProcessor::finish()
-		
 	{
 		// If the module is in an invalid state, abort.
 		if (!isValid())
@@ -205,18 +199,18 @@ namespace BALL
 		if (exclude_solvent_field_)
 		{
 			// We build a new effector list.
-			list<Atom*>				tmp_effector_list;
-			
+			list<Atom*> tmp_effector_list;
+
 			list<Atom*>::const_iterator effector_it = effector_list_.begin();
 			for (; effector_it != effector_list_.end(); ++effector_it)
-			{			
-				if ((*effector_it)->getResidue()->getName() != "HOH")
+			{
+				if ((*effector_it)->getResidue() && (*effector_it)->getResidue()->getName() != "HOH")
 				{
 					tmp_effector_list.push_back(*effector_it);
 				}
 			}
 			// Replace the effector list.
-			effector_list_  = 	tmp_effector_list;
+			effector_list_ = tmp_effector_list;
 		}
 
 		// Iterate over all target bonds.
@@ -247,8 +241,8 @@ namespace BALL
 				// Exclude this effector--target combination from consideration if
 				// effector is a cabonyl oxygen (O) and the target is an amid hydrogen (HN)
 				// and carbonyl_influences_amide_field is set (read from options in init()).
-				if (	 !carbonyl_influences_amide_field_ && ((*effector_it)->getName() == "O") 
-						&& ( (first_atom->getName() == "H") || second_atom->getName() == "H" ) 
+				if (   !carbonyl_influences_amide_field_ && ((*effector_it)->getName() == "O")
+						&& ( (first_atom->getName() == "H") || second_atom->getName() == "H" )
 					 )
 				{
 					continue;
@@ -269,7 +263,7 @@ namespace BALL
 															||(*effector_it)->getFragment()->isPreviousSiblingOf(*(first_atom->getFragment()))
 															||(abs((*effector_it)->getResidue()->getID().toInt() - first_atom->getResidue()->getID().toInt()) <= 1));
 				// Exclude effectors if flags are set and exclude criterion holds. 
-				if (   (!exclude_residue_field_					  ||  !same_residue) 
+				if (   (!exclude_residue_field_           ||  !same_residue)
 						&& (!exclude_adjacent_residue_field_  ||  !adjacent_residues) )
 				{
 					Vector3 distance(first_atom_pos - (*effector_it)->getPosition());
@@ -282,7 +276,7 @@ namespace BALL
 						//       was divided by the charge factor, such that the molecules charges
 						//       (given by PDB.org in elementary units) could easily be multiplied
 						//       with. Here, we multiply again with the charge_factor_.
-						float charge = (*effector_it)->getCharge() * 1./charge_factor_; 
+						float charge = (*effector_it)->getCharge() * 1./charge_factor_;
 
 						// Add to the current contribution to the field.
 						E += distance * charge / (square_distance * distance.getLength());
@@ -294,7 +288,7 @@ namespace BALL
 			float Ez = (bond_vector * E) / bond_vector.getLength();
 
 			// Calculate the secondary shift induced by this field.
-			float delta_EF = 		epsilon1_[expression_number_[current_bond]] * Ez 
+			float delta_EF =    epsilon1_[expression_number_[current_bond]] * Ez
 												+ epsilon2_[expression_number_[current_bond]] * E.getSquareLength();
 
 			// Store the shift in the corresponding properties.
@@ -311,21 +305,20 @@ namespace BALL
 		postprocessing_();
 		return true;
 	}
-		
+
 	Processor::Result EFShiftProcessor::operator () (Composite& object)
-		
 	{
 		// Here, we collect all target bonds and
 		// all charged atoms (as effectors of the electric field).
 		if (RTTI::isKindOf<Atom>(object))
 		{
 			Atom* atom_ptr = RTTI::castTo<Atom>(object);
-			
+
 			// Assign the charge (if it is defined for this atom).
 			String full_name = atom_ptr->getFullName();
 			full_name.substitute(":", " ");
 			atom_ptr->setCharge(0.0);
-			
+
 			if (charge_map_.has(full_name))
 			{
 				atom_ptr->setCharge(charge_map_[full_name]);
@@ -349,7 +342,7 @@ namespace BALL
 			Atom::BondIterator bond_it = atom_ptr->beginBond();
 			for (; +bond_it; ++bond_it)
 			{
-				Atom*	first_atom  = 0;
+				Atom* first_atom  = 0;
 				Atom* second_atom = 0;
 
 				bool match_found  = false;
@@ -393,7 +386,7 @@ namespace BALL
 						expression_number_.push_back(j);
 					}
 				}
-			}	
+			}
 		}
 
 		return Processor::CONTINUE;
@@ -406,7 +399,7 @@ namespace BALL
 		Log.info() << "********* \n EF: list of target bonds" << std::endl;
 		std::vector<std::pair<Atom*, Atom*> >::iterator tbond_it = bond_list_.begin();
 		for (; tbond_it != bond_list_.end(); ++tbond_it)
-		{			
+		{
 			Log.info() << tbond_it->first->getFullName() << "  " << tbond_it->second->getFullName() << std::endl; 
 		}
 		Log.info() << "------------------------------\n" << std::endl;
@@ -417,7 +410,7 @@ namespace BALL
 		Log.info() << "********* \n EF: list of effectors" << std::endl;
 		list<Atom*>::const_iterator effector_it = effector_list_.begin();
 		for (; effector_it != effector_list_.end(); ++effector_it)
-		{			
+		{
 			Log.info() << (*effector_it)->getFullName() <<"  " << (*effector_it)->getName()  << "  "  << std::endl; 
 		}
 		Log.info() << "------------------------------\n" << std::endl;
@@ -430,8 +423,8 @@ namespace BALL
 		Log.info() << "exclude_adjacent_residue_field  "	<< exclude_adjacent_residue_field_ << std::endl;
 		Log.info() << "carbonyl_influences_amide_field  "	<< carbonyl_influences_amide_field_ << std::endl;
 		Log.info() << "exclude_solvent_field  " << exclude_solvent_field_ << std::endl;
-	  Log.info() << 	"cut_off" << cut_off2_ << std::endl;
-		Log.info() << 	"unit" << (charge_factor_ > 0.9 ? "e0" :"ESU")<< std::endl;
+	  Log.info() << "cut_off" << cut_off2_ << std::endl;
+		Log.info() << "unit" << (charge_factor_ > 0.9 ? "e0" :"ESU")<< std::endl;
 		Log.info() << "------------------------------\n" << std::endl;
 	}
 
@@ -439,19 +432,19 @@ namespace BALL
 	void  EFShiftProcessor::postprocessing_()
 	{
 		System* system = NULL;
-	
+
 		// Try to get the system.
 		std::vector<std::pair<Atom*, Atom*> >::iterator tbond_it = bond_list_.begin();
 		for (; tbond_it != bond_list_.end(); ++tbond_it)
 		{
 			if  (RTTI::isKindOf<System>(tbond_it->first->getRoot()))
-			{	
+			{
 				system = dynamic_cast<System*>(&(tbond_it->first->getRoot()));
 				break;
 			}
 		}
 
-		if (system) 
+		if (system)
 		{
 			// Add for all CA-atoms 0.2 times the EF-shift-values of the bound HA-atom.
 			for (BALL::ResidueIterator r_it = system->beginResidue(); r_it != system->endResidue(); ++r_it)
@@ -468,11 +461,11 @@ namespace BALL
 				}
 
 				if (CA && HA)
-				{	
+				{
 					float total = CA->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
 					float ca_shift = CA->getProperty(BALL::EFShiftProcessor::PROPERTY__EF_SHIFT).getFloat();
 					float ha_shift = HA->getProperty(BALL::EFShiftProcessor::PROPERTY__EF_SHIFT).getFloat();
-					
+
 					CA->setProperty(BALL::EFShiftProcessor::PROPERTY__EF_SHIFT, ca_shift + 0.2*ha_shift);
 					CA->setProperty(ShiftModule::PROPERTY__SHIFT, total+ 0.2*ha_shift );
 				}
@@ -480,8 +473,8 @@ namespace BALL
 		}
 		else
 		{
-			Log.error() << "Error in EFShiftProcessor: no system found for postprocessing. (" 
-				 					<< __FILE__ << " " << __LINE__ << ")" <<  std::endl;
+			Log.error() << "Error in EFShiftProcessor: no system found for postprocessing. ("
+			            << __FILE__ << " " << __LINE__ << ")" <<  std::endl;
 		}
 	}
 
