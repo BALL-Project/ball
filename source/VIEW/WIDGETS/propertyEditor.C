@@ -592,7 +592,7 @@ namespace BALL
 			edit_  = new QLineEdit(this);
 
 			edit_->setText(QString::number(prop.getFloat()));
-			edit_->setValidator(new QDoubleValidator(numeric_limits<float>::min(), numeric_limits<float>::max(), 20, this));
+			edit_->setValidator(new QDoubleValidator(std::numeric_limits<float>::min(), std::numeric_limits<float>::max(), 20, this));
 
 			connect(edit_, SIGNAL(textEdited(const QString&)), this, SIGNAL(valueChanged()));
 
