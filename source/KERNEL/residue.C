@@ -154,7 +154,7 @@ namespace BALL
 				} 
 				else
 				{
-					Log.error() << "Atoms not found:" << N << "/" << CA << "/" << C << "/" << next_N << endl;
+					Log.error() << "Atoms not found:" << N << "/" << CA << "/" << C << "/" << next_N << " in residue " << getFullName() << " " << getID() << endl;
 				}
 			}
 			else
@@ -218,7 +218,7 @@ namespace BALL
 				} 
 				else
 				{
-					Log.error() << "Atoms not found:" << last_C << "/" << N << "/" << CA << "/" << C << endl;
+					Log.error() << "Atoms not found:" << last_C << "/" << N << "/" << CA << "/" << C << " in residue " << getFullName() << " " << getID() << endl;
 				}
 			}
 			else
