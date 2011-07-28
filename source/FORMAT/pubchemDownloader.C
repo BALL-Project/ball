@@ -12,13 +12,24 @@ namespace BALL
 		 	dl_(pug_base_url_),
 		  request_("Request")
 	{
+		connect(&ftp_, SIGNAL(dataTransferProgress(qint64, qint64)),
+						this,  SLOT(dataTransferProgress(qint64, qint64)));
+
+		connect(&ftp_, SIGNAL(done(bool)), 
+		        this, SLOT(downloadFinished(bool)));
 	}
 
-	bool PubChemDownloader::downloadSDF(const String& query, const String& filename)
+	void PubChemDownloader::dataTransferProgress(qint64 a, qint64 b)
 	{
-		std::vector<char> response;
+		// for some reason, connecting the signals directly did not work as expected... 
+		emit(downloadProgress(a, b)); 
+	} 
+	
+	bool PubChemDownloader::downloadSDF(const String& query, const String& filename, bool blocking) 
+	{ 
+		std::vector<char> response; 
 
-		SimpleDownloader entrez_dl(esearch_base_url_+query);
+		SimpleDownloader entrez_dl(esearch_base_url_+query); 
 		entrez_dl.downloadToBuffer(response);
 
 		if (response.size() == 0)
@@ -80,8 +91,26 @@ namespace BALL
 			if (!download_url_list.isEmpty())
 			{
 				QUrl download_url(download_url_list.at(0).firstChild().nodeValue());
-				entrez_dl.setURL(download_url);
-				entrez_dl.downloadToFile(filename);
+				
+				// blocking downloads can be handled by the simple downloader
+				// non-blocking ones are more complicated... at the moment, this
+				// will only work for ftp downloads
+				if (blocking || download_url.scheme() != "ftp")
+				{
+					entrez_dl.setURL(download_url);
+					entrez_dl.downloadToFile(filename);
+				}
+				else
+				{
+					// ok, we have to do it the hard way
+					outfile_.setFileName(filename.c_str());
+					outfile_.open(QIODevice::WriteOnly);
+
+					ftp_.connectToHost(download_url.host(), download_url.port(21));
+					ftp_.login();
+					ftp_.get(download_url.path(), &outfile_);
+					ftp_.close();
+				}
 			}
 		} 
 		else 
@@ -141,5 +170,11 @@ namespace BALL
 	{
 		QDomText text = request_.createTextNode(value.c_str());
 		current_node_.appendChild(text);
+	}
+
+	void PubChemDownloader::downloadFinished(bool error)
+	{
+		emit downloadFinished(outfile_.fileName());
+		outfile_.close();
 	}
 }

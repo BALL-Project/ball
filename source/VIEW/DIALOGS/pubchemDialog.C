@@ -35,7 +35,8 @@ namespace BALL
 				ModularWidget(name),
 				action1_(0),
 				action2_(0),
-				progress_(0)
+				progress_(0),
+				downloader_(this)
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "new PubChemDialog " << this << std::endl;
@@ -43,6 +44,9 @@ namespace BALL
 
 			setupUi(this);
 			setObjectName(name);
+
+			progress_ = new QProgressBar(queries);
+			progress_->hide();
 
 			// register the widget with the MainControl
 			ModularWidget::registerWidget(this);
@@ -163,17 +167,33 @@ namespace BALL
 			String qt = ascii(pubchem_label->displayText());
 			if (qt == "") return;
 
-			String filename;
-			File::createTemporaryFilename(filename, ".sdf");
+			File::createTemporaryFilename(downloader_.filename, ".sdf");
 
 			getMainControl()->setStatusbarText(String(tr("Performing query...")));
-			PubChemDownloader pcd;
-			pcd.downloadSDF(qt, filename);
 
+			progress_->show();
+			progress_->setMaximum(0);
+
+			connect(&pcd_, SIGNAL(downloadProgress(qint64, qint64)), 
+			        this, SLOT(updateDownloadProgress(qint64, qint64)));
+		
+			connect(&pcd_, SIGNAL(downloadFinished(const QString&)),
+			        this, SLOT(downloadFinished(const QString&)));
+
+			
+			downloader_.query = qt;
+
+			downloader_.start();
+
+			search_button->setEnabled(false);
+		}
+
+		void PubChemDialog::downloadFinished(const QString& filename)
+		{
 			SDFile sdf;
 			// now, try to read the SD File
 			try {
-				sdf.open(filename, std::ios::in);
+				sdf.open(ascii(filename), std::ios::in);
 			} catch(Exception::FileNotFound& e) {
 				QMessageBox::critical(this, tr("Download failed"), tr("Could not download pubchem entries for") + " \"" + pubchem_label->displayText() + "\"");
 				return;
@@ -182,6 +202,8 @@ namespace BALL
 			// iterate over the molecules in the SD File and build a system for each
 			Size count = 0;
 
+			sdf.enableAtoms();
+
 			Molecule *current_molecule;
 			std::deque<System*> sd_systems;
 			do {
@@ -189,7 +211,9 @@ namespace BALL
 
 				if (current_molecule)
 				{
+					String qt = ascii(pubchem_label->displayText());
 					System* new_system = new System(qt);
+
 					new_system->insert(*current_molecule);
 
 					if (current_molecule->hasProperty("PUBCHEM_IUPAC_NAME"))
@@ -202,7 +226,7 @@ namespace BALL
 				++count;
 			} while(current_molecule && (count < 20)); // TODO: find a way to limit the *search* directly
 			sdf.close();
-			File::remove(filename);
+			File::remove(ascii(filename));
 
 			QTreeWidgetItem* new_query_result = new QTreeWidgetItem((QTreeWidget*)0, 
 																														 QStringList(pubchem_label->displayText()
@@ -254,6 +278,9 @@ namespace BALL
 				first_item->setSelected(true);
 				switchView(first_item, 0);
 			}
+
+			search_button->setEnabled(true);
+			progress_->hide();
 		}
 
 		void PubChemDialog::insert_(ParsedResult_ pr, QTreeWidgetItem* parent, bool plot)
@@ -312,6 +339,26 @@ namespace BALL
 			bool busy = main_control.compositesAreLocked();
 			action1_->setEnabled(!busy);
 			action2_->setEnabled(!busy);
+		}
+
+		void PubChemDialog::updateDownloadProgress(qint64 done, qint64 total)
+		{
+			progress_->setMaximum(std::max(total, (qint64)0));
+			progress_->setValue(done);
+		}
+
+		namespace PubChemDialogPrivate
+		{
+			DownloadHelper::DownloadHelper(PubChemDialog* parent)
+				: QThread(),
+					parent_(parent)
+			{
+			}
+
+			void DownloadHelper::run()
+			{
+				parent_->pcd_.downloadSDF(query, filename, false);
+			}
 		}
 	}
 }

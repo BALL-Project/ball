@@ -31,7 +31,10 @@ namespace BALL
 	 * can be a subject to redesign.
 	 */
 	class BALL_EXPORT SimpleDownloader
+		: public QObject
 	{
+		Q_OBJECT
+
 		public:
 			/*
 			 * Default Constructor.
@@ -150,8 +153,8 @@ namespace BALL
 		class HelperThread : public QThread
 		{
 			public:
-				HelperThread(const QUrl& url, QByteArray* result);
-				HelperThread(const QUrl& url, const String& path);
+				HelperThread(const QUrl& url, QByteArray* result, SimpleDownloader* parent);
+				HelperThread(const QUrl& url, const String& path, SimpleDownloader* parent);
 
 				int getStatus();
 
@@ -164,14 +167,14 @@ namespace BALL
 				QUrl url_;
 				QByteArray* result_;
 				String path_;
-
+				SimpleDownloader* parent_;
 		};
 
 		class DLThread : public HelperThread
 		{
 			public:
-				DLThread(const QUrl& url, QByteArray* result);
-				DLThread(const QUrl& url, const String& path);
+				DLThread(const QUrl& url, QByteArray* result, SimpleDownloader* parent);
+				DLThread(const QUrl& url, const String& path, SimpleDownloader* parent);
 
 			protected:
 				virtual QNetworkReply* getReply_(QNetworkAccessManager* man);
@@ -180,10 +183,10 @@ namespace BALL
 		class UPThread : public HelperThread
 		{
 			public:
-				UPThread(const QUrl& url, const QByteArray* data, QByteArray* result);
-				UPThread(const QUrl& url, const QByteArray* data, const String& path);
-				UPThread(const QUrl& url, QIODevice* file, QByteArray* result);
-				UPThread(const QUrl& url, QIODevice* file, const String& path);
+				UPThread(const QUrl& url, const QByteArray* data, QByteArray* result, SimpleDownloader* parent);
+				UPThread(const QUrl& url, const QByteArray* data, const String& path, SimpleDownloader* parent);
+				UPThread(const QUrl& url, QIODevice* file, QByteArray* result, SimpleDownloader* parent);
+				UPThread(const QUrl& url, QIODevice* file, const String& path, SimpleDownloader* parent);
 
 			protected:
 				virtual QNetworkReply* getReply_(QNetworkAccessManager* man);
@@ -253,7 +256,7 @@ namespace BALL
 			Q_OBJECT
 
 			public:
-				QFtpHackThread(const QUrl& url, QIODevice* iodev);
+				QFtpHackThread(const QUrl& url, QIODevice* iodev, SimpleDownloader* parent);
 				~QFtpHackThread();
 
 			protected:
@@ -264,6 +267,7 @@ namespace BALL
 				QFtpHackHelper* helper_;
 				QUrl url_;
 				QIODevice* iodev_;
+				SimpleDownloader* parent_;
 		};
 
 		class QFtpHackHelper : public QObject

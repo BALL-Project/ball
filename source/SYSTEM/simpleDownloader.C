@@ -8,13 +8,13 @@ namespace BALL
 {
 	namespace SimpleDownloaderHelper
 	{
-		HelperThread::HelperThread(const QUrl& url, QByteArray* result)
-			: err_(0), url_(url), result_(result)
+		HelperThread::HelperThread(const QUrl& url, QByteArray* result, SimpleDownloader* parent)
+			: err_(0), url_(url), result_(result), parent_(parent)
 		{
 		}
 
-		HelperThread::HelperThread(const QUrl& url, const String& path)
-			: err_(0), url_(url), result_(0), path_(path)
+		HelperThread::HelperThread(const QUrl& url, const String& path, SimpleDownloader* parent)
+			: err_(0), url_(url), result_(0), path_(path), parent_(parent)
 		{
 		}
 
@@ -42,13 +42,13 @@ namespace BALL
 			delete man;
 		}
 
-		DLThread::DLThread(const QUrl& url, QByteArray* result)
-			: HelperThread(url, result)
+		DLThread::DLThread(const QUrl& url, QByteArray* result, SimpleDownloader* parent)
+			: HelperThread(url, result, parent)
 		{
 		}
 
-		DLThread::DLThread(const QUrl& url, const String& path)
-			: HelperThread(url, path)
+		DLThread::DLThread(const QUrl& url, const String& path, SimpleDownloader* parent)
+			: HelperThread(url, path, parent)
 		{
 		}
 
@@ -57,23 +57,23 @@ namespace BALL
 			return man->get(QNetworkRequest(url_));
 		}
 
-		UPThread::UPThread(const QUrl& url, const QByteArray* data, QByteArray* result)
-			: HelperThread(url, result), data_(data), file_(0)
+		UPThread::UPThread(const QUrl& url, const QByteArray* data, QByteArray* result, SimpleDownloader* parent)
+			: HelperThread(url, result, parent), data_(data), file_(0)
 		{
 		}
 
-		UPThread::UPThread(const QUrl& url, const QByteArray* data, const String& path)
-			: HelperThread(url, path), data_(data), file_(0)
+		UPThread::UPThread(const QUrl& url, const QByteArray* data, const String& path, SimpleDownloader* parent)
+			: HelperThread(url, path, parent), data_(data), file_(0)
 		{
 		}
 
-		UPThread::UPThread(const QUrl& url, QIODevice* file, QByteArray* result)
-			: HelperThread(url, result), data_(0), file_(file)
+		UPThread::UPThread(const QUrl& url, QIODevice* file, QByteArray* result, SimpleDownloader* parent)
+			: HelperThread(url, result, parent), data_(0), file_(file)
 		{
 		}
 
-		UPThread::UPThread(const QUrl& url, QIODevice* file, const String& path)
-			: HelperThread(url, path), data_(0), file_(file)
+		UPThread::UPThread(const QUrl& url, QIODevice* file, const String& path, SimpleDownloader* parent)
+			: HelperThread(url, path, parent), data_(0), file_(file)
 		{
 		}
 
@@ -154,11 +154,12 @@ namespace BALL
 		}
 
 		//Hack Thread
-		QFtpHackThread::QFtpHackThread(const QUrl& url, QIODevice* iodev)
+		QFtpHackThread::QFtpHackThread(const QUrl& url, QIODevice* iodev, SimpleDownloader* parent)
 			: ftp_(0),
 			  helper_(0),
 			  url_(url),
-			  iodev_(iodev)
+			  iodev_(iodev),
+				parent_(parent)
 		{
 		}
 
@@ -172,8 +173,8 @@ namespace BALL
 		{
 			ftp_ = new QFtp;
 			helper_ = new QFtpHackHelper(this);
-			connect(ftp_, SIGNAL(done(bool)), helper_, SLOT(done(bool)));
-
+			connect(ftp_,    SIGNAL(done(bool)), helper_, SLOT(done(bool)));
+			
 			ftp_->connectToHost(url_.host(), url_.port(21));
 			ftp_->login();
 			ftp_->get(url_.path(), iodev_);
@@ -214,7 +215,7 @@ namespace BALL
 			app = new QCoreApplication(tmp, 0);
 		}
 
-		SimpleDownloaderHelper::QFtpHackThread th_(url_, iodev);
+		SimpleDownloaderHelper::QFtpHackThread th_(url_, iodev, this);
 		th_.start();
 
 		if(!th_.wait(timeout_)) {
@@ -238,7 +239,7 @@ namespace BALL
 			QBuffer buf(&tmp_array);
 			result = qftpDownloadHack_(&buf);
 		} else {
-			SimpleDownloaderHelper::DLThread th(url_, &tmp_array);
+			SimpleDownloaderHelper::DLThread th(url_, &tmp_array, this);
 
 			result = download_(th);
 		}
@@ -259,7 +260,7 @@ namespace BALL
 		}
 		else
 		{
-			SimpleDownloaderHelper::DLThread th(url_, path);
+			SimpleDownloaderHelper::DLThread th(url_, path, this);
 			return download_(th);
 		}
 	}
@@ -268,7 +269,7 @@ namespace BALL
 	{
 		QByteArray tmp_array;
 		QByteArray data_array(data.c_str());
-		SimpleDownloaderHelper::UPThread th(url_, &data_array, &tmp_array);
+		SimpleDownloaderHelper::UPThread th(url_, &data_array, &tmp_array, this);
 
 		int result = download_(th);
 		response.resize(tmp_array.count());
@@ -280,7 +281,7 @@ namespace BALL
 	int SimpleDownloader::uploadStringToFile(const String& data, const String& path)
 	{
 		QByteArray data_array(data.c_str());
-		SimpleDownloaderHelper::UPThread th(url_, &data_array, path);
+		SimpleDownloaderHelper::UPThread th(url_, &data_array, path, this);
 		return download_(th);
 	}
 
@@ -293,7 +294,7 @@ namespace BALL
 			return -1;
 		}
 
-		SimpleDownloaderHelper::UPThread th(url_, &file, &tmp_array);
+		SimpleDownloaderHelper::UPThread th(url_, &file, &tmp_array, this);
 
 		int result = download_(th);
 		response.resize(tmp_array.count());
@@ -310,7 +311,7 @@ namespace BALL
 			return -1;
 		}
 
-		SimpleDownloaderHelper::UPThread th(url_, &file, out_path);
+		SimpleDownloaderHelper::UPThread th(url_, &file, out_path, this);
 
 		return download_(th);
 	}
@@ -324,6 +325,7 @@ namespace BALL
 		}
 
 		th.start();
+
 		if (!th.wait(timeout_))
 		{
 			Log.error() << "SimpleDownloader::download_: Download request \"" << (String)(url_.toString()) << "\" timed out.\n";

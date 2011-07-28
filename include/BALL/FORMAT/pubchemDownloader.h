@@ -14,12 +14,23 @@
 namespace BALL
 {
 	class PubChemDownloader
+		: public QObject
 	{
+		Q_OBJECT
+
 		public:
 			PubChemDownloader();
 			virtual ~PubChemDownloader() {};
 
-			bool downloadSDF(const String& query, const String& filename);
+			bool downloadSDF(const String& query, const String& filename, bool blocking = true);
+
+		public slots:
+			void downloadFinished(bool error);
+			void dataTransferProgress(qint64 done, qint64 total);
+
+		signals:
+			void downloadProgress(qint64 done, qint64 total);
+			void downloadFinished(const QString& filename);
 
 		protected:
 			QDomDocument pollPubChem_(const QString& request_id);
@@ -33,6 +44,9 @@ namespace BALL
 			QDomDocument request_;
 			QDomElement last_node_;
 			QDomElement current_node_;
+
+			QFile outfile_;
+			QFtp   ftp_;
 	};
 }
 

@@ -37,81 +37,116 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		/** Dialog for querying PubChem and generating structures from a SMILES string
-			 */
-			class BALL_VIEW_EXPORT PubChemDialog :
-				public QDialog,
-				public Ui_PubChemDialogData,
-				public ModularWidget
+		class PubChemDialog;
+
+		namespace PubChemDialogPrivate
+		{
+			class DownloadHelper
+				: public QThread
 			{
 				Q_OBJECT
 
 				public:
+					DownloadHelper(PubChemDialog* parent);
 
-					BALL_EMBEDDABLE(PubChemDialog,ModularWidget)
+					void run();
 
-					/// Default Constructor.
-					PubChemDialog(QWidget *parent = NULL, const char *name = "PubChemDialog");
-
-					/// Destructor.
-					virtual ~PubChemDialog();
-
-					///
-					virtual void initializeWidget(MainControl& main_control);
-
-					///
-					virtual void checkMenu(MainControl& main_control);
-
-					///
-					void generateFromSMILES(const String& SMILES);
-				public slots:
-					
-					/// Show and raise dialog
-					void show();
-
-					/// Generate a structure from SMILES
-					void generateButtonClicked();
-
-					/// Query PubChem
-					void queryPubChem();
-
-					///
-					void switchView(QTreeWidgetItem* item, int column);
-
-					///
-					void clearEntries();
-
-					///
-					void finished();
+					String query;
+					String filename;
 
 				protected:
-
-					SmilesParser      smiles_parser_;
-
-					struct ParsedResult_
-					{
-						String name;
-						String description;
-						String smiles;
-					};
-
-					void parseItemRecursive_(const QDomNode& current_node, Position level, ParsedResult_& result);
-					 
-					void insert_(ParsedResult_ d, QTreeWidgetItem* parent, bool plot);
-					
-					std::map<QTreeWidgetItem*, System*> 				sd_systems_;
-					std::map<QTreeWidgetItem*, System*> 				original_systems_;
-					std::map<QTreeWidgetItem*, ParsedResult_>  	descriptions_;
-
-					QAction* action1_, *action2_;
-
-					int current_request_id_;
-
-					HashMap<int, QTreeWidgetItem*> esummary_request_ids_;
-					QProgressBar *progress_;
-
-					QPushButton* add_button_;
+					PubChemDialog *parent_;
 			};
+		}
+
+		/** Dialog for querying PubChem and generating structures from a SMILES string
+		 */
+		class BALL_VIEW_EXPORT PubChemDialog 
+			: public QDialog,
+				public Ui_PubChemDialogData,
+				public ModularWidget
+		{
+			Q_OBJECT
+
+			friend class PubChemDialogPrivate::DownloadHelper;
+
+			public:
+
+				BALL_EMBEDDABLE(PubChemDialog,ModularWidget)
+
+				/// Default Constructor.
+				PubChemDialog(QWidget *parent = NULL, const char *name = "PubChemDialog");
+
+				/// Destructor.
+				virtual ~PubChemDialog();
+
+				///
+				virtual void initializeWidget(MainControl& main_control);
+
+				///
+				virtual void checkMenu(MainControl& main_control);
+
+				///
+				void generateFromSMILES(const String& SMILES);
+			public slots:
+				
+				/// Show and raise dialog
+				void show();
+
+				/// Generate a structure from SMILES
+				void generateButtonClicked();
+
+				/// Query PubChem
+				void queryPubChem();
+
+				///
+				void switchView(QTreeWidgetItem* item, int column);
+
+				///
+				void clearEntries();
+
+				///
+				void finished();
+
+				///
+				void updateDownloadProgress(qint64 done, qint64 total);
+
+				///
+				void downloadFinished(const QString& filename);
+				
+			protected:
+
+				SmilesParser      smiles_parser_;
+
+				struct ParsedResult_
+				{
+					String name;
+					String description;
+					String smiles;
+				};
+
+				void parseItemRecursive_(const QDomNode& current_node, Position level, ParsedResult_& result);
+				 
+				void insert_(ParsedResult_ d, QTreeWidgetItem* parent, bool plot);
+				
+				PubChemDownloader pcd_;
+
+				std::map<QTreeWidgetItem*, System*> 				sd_systems_;
+				std::map<QTreeWidgetItem*, System*> 				original_systems_;
+				std::map<QTreeWidgetItem*, ParsedResult_>  	descriptions_;
+
+				QAction* action1_, *action2_;
+
+				int current_request_id_;
+
+				HashMap<int, QTreeWidgetItem*> esummary_request_ids_;
+				QProgressBar *progress_;
+
+				QPushButton* add_button_;
+
+				PubChemDialogPrivate::DownloadHelper downloader_;
+		};
+
 	}
 }
 #endif
