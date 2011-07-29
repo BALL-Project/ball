@@ -209,6 +209,9 @@ CHECK_CXX_SOURCE_COMPILES("template <int i>
 INCLUDE(cmake/BALLConfigSList.cmake)
 
 ## Check for rvalue reference
+INCLUDE(cmake/BALLConfigExternTemplates.cmake)
+
+## Check for rvalue reference
 INCLUDE(cmake/BALLConfigRValueReferences.cmake)
 
 ## Test whether vsnprintf is available

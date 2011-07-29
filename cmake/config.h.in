@@ -219,6 +219,11 @@
 // This is useful for e.g. an efficient HashGrid implementation
 #cmakedefine BALL_HAS_GNU_SLIST
 
+// Defines whether the extern keyword for templates is supported by the compiler.
+// We can use this to speed up compilation and to reduce some warnings in under
+// MSVC.
+#cmakedefine BALL_HAS_EXTERN_TEMPLATES
+
 // Defines whether the compiler supports c++0x-style rvalue references
 // (int&&, ...)
 #cmakedefine BALL_HAS_RVALUE_REFERENCES
