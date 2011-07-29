@@ -1,3 +1,8 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+
+
 #ifndef BALL__SEQUENCE_SEQUENCEITERATOR_H
 #define BALL__SEQUENCE_SEQUENCEITERATOR_H
 
@@ -50,6 +55,7 @@ namespace BALL
 			 */
 			SequenceIterator(SequenceIterator& it);
 
+
 			/**
 			 *Destructor
 			 */
@@ -70,42 +76,50 @@ namespace BALL
 			/**
 			 *@return the current counter
 			 */
-			int getCounter();
+			unsigned int getCounter();
 
 			/**
 			 *@return the SequenceCharacter to which the Iterator points
 			 */
 			SequenceCharacter& getCharacter();
 
+			/**
+			*sets the Character 
+			*@param c the character to be set
+			*/
+			void setChar(SequenceCharacter& c);
+
 			//////////////////////////////////////////////Misc//////////////////////////////////////////////////////////
 
 			/**
 			 *@return a sequenceIterator pointing to the next Character of the Sequence
 			 */
-			SequenceIterator& next();
+			SequenceIterator next();
 
 			/**
-			 *@return the current Iterator setted to the last character
+			 *@return a SequenceIterator indicating the end of the sequence
 			 */
-			SequenceIterator& last();
+			SequenceIterator end();
 
 			/**
 			 *operator==
 			 */
 			bool operator == (SequenceIterator& it);
 
+
+
+
 			/**
 			 *operator !=
 			 **/
 			bool operator != (SequenceIterator& it);
 
-
-
+	
 		private:
 			Sequence* sequence;
 
-			int counter;
-
+			unsigned int counter;
+			
 			SequenceCharacter character;
 	};
 
