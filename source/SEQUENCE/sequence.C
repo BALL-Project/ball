@@ -1,8 +1,13 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+
+
 #include<BALL/SEQUENCE/sequence.h>
 
 #include<BALL/SEQUENCE/sequenceIterator.h>
 
-
+#include <BALL/SEQUENCE/sequenceCharacter.h>
 
 namespace BALL{
 
@@ -10,15 +15,16 @@ namespace BALL{
 			/**
 			 *Default Constructor
 			 */
-			Sequence::Sequence(){
-						}
+			Sequence::Sequence()
+				:name(),origin()
+			{  }
 			/**
 			 *Detailed Constructor
 			 *@param name the name of the Sequence
 			 *@param origin the composite from which the sequence originates
 			 */
-			Sequence::Sequence(String& seq_name, AtomContainer* seq_origin):name(seq_name),origin(seq_origin){
-				}
+			Sequence::Sequence(String& seq_name, AtomContainer* seq_origin):name(seq_name),origin(seq_origin)
+			{  }
 
 			/**
 			 *Copy Constructor
@@ -26,7 +32,7 @@ namespace BALL{
 			Sequence::Sequence(Sequence& seq){
 				name = seq.getName();
 				origin =  seq.getOrigin();
-			}
+				}
 
 			/**
 			 *Deconstrcutor
@@ -41,7 +47,7 @@ namespace BALL{
 			/**
 			 * @param name the new name to be set
 			  */
-			void Sequence::setName(BALL::String& seq_name){
+			void Sequence::setName(const BALL::String& seq_name){
 				name= seq_name;
 			}
 
@@ -56,8 +62,9 @@ namespace BALL{
 			/**
 			 *@param origin the origin which is to be setted
 			 */
-			void Sequence::setOrigin(AtomContainer* seq_origin){
-				origin=seq_origin;
+			void Sequence::setOrigin(AtomContainer* seq_origin)
+			{
+			origin=seq_origin;
 			}
 
 			/**
@@ -78,7 +85,7 @@ namespace BALL{
 			*operator!=
 			*/
 			bool Sequence::operator!= (Sequence& seq){
-				return !operator==(seq);
+				return ! (operator==(seq));
 			}
 			
 			/**
@@ -96,47 +103,112 @@ namespace BALL{
 			/**
 			 *@return a SequenceIterator which points to the first character of the Sequence
 			 */
-			SequenceIterator& Sequence::begin(){
+			SequenceIterator Sequence::begin(){
 
 				//Initialize the new Iterator
-				SequenceIterator* it = new SequenceIterator(*this);
+					SequenceIterator *it = new SequenceIterator();
+					it->setSequence(*this);
+
+				if (RTTI::isKindOf<Protein>(*origin)) 
+				{
+
+					//create new Sequencecharacter
+					SequenceCharacter c;
+					c.setOrigin(this);
+
+					Protein* p= RTTI::castTo<Protein>(*origin);
+
+					c.setChar(Peptides::OneLetterCode(p->getResidue(0)->getName()));
+
+
+					it->setChar(c);
+
+					return *it;
+				}
 				
-				return *it;				
-			
+				throw BALL::Exception::InvalidArgument(__FILE__,__LINE__,"origin is no Protein");
+					
 			}				
 
 			/**
-			 *@return a SequenceIterator which points to the last character of the Sequence
+			 *@return a SequenceIterator which points to the end character of the Sequence
 			 */
-			SequenceIterator& Sequence::end(){
+			SequenceIterator Sequence::end(){
 				
+				cout<<"inside Sequence-end() now"<<endl;
 				//initialize the new Iterator
 				SequenceIterator* it= new SequenceIterator();
 				
 				//set the the sequence
 				it->setSequence(*this);
 				
-				//go to to the last chracter and return the iterator
-
-				return it->last();
+				cout<<"returning now"<<endl;
+				//go to to the end chracter and return the iterator
+			
+				*it = it->end();
+	
+				return *it;
 				
 			}
 
 			/**
 			 *@return String which contains the Sequence
 			 **/
-			String Sequence::getSequence(){
-
-			String seq = "";
-
-			for(SequenceIterator it = begin(); it != end(); it.next()){
+			String Sequence::getStringSequence(){
 			
+			cout<< "inside get StringSequence now..."<<endl;
+
+			String* nseq = new String();
+			cout<< "created a new String ->entering loop now"<<endl;
+
+			SequenceIterator it;
+				 it = begin();
+
+			cout<<"created Sequenceiterator.."<<endl;		
+
+			SequenceIterator e;
+				e = end();
+				cout<<"created end-it now.."<<endl;
+
+			while(it != e){
+			//for(SequenceIterator it = begin(); it != end(); it.next()){
+
+			cout<< "inside the loop now " <<endl;	
+
 				String* tmp = new String(it.getCharacter().getChar());
 
-				seq += *tmp;
+				cout<< "append now the sequence "<< endl;
+				*nseq += *tmp;
+				
+				cout <<"the current seq is: "<< *nseq <<endl;
+				cout<< "increasing the iterator "<<endl; 
+				it=it.next();
 			}
 
-				return seq;
+				cout<< "this is the sequence returned: "<< *nseq << endl;
+				return *nseq;
 			}
+
+	Eigen::Array<SequenceCharacter,Eigen::Dynamic,1> Sequence::getArraySequence(){
+
+		//initialize the array
+		Eigen::Array<SequenceCharacter, Eigen::Dynamic, 1> seq;
+			
+		SequenceIterator it,e;
+		e = end(); 
+
+		for(it = begin(); it != e; it.next())
+			{
+			//make room for the new Character
+			seq.conservativeResize(seq.rows());
+
+			//retrieve the current Sequencecharacter for each Step
+			SequenceCharacter c = it.getCharacter();
+
+			//store it in the Array
+			seq(seq.rows()-1) = c;
+			}
+		return seq;
+	}
 
 }//namespace BALL

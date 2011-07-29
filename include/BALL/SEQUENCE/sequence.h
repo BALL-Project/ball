@@ -1,3 +1,8 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+
+
 #ifndef BALL_SEQUENCE_SEQUENCE_H
 #define BALL_SEQUENCE_SEQUENCE_H
 ////////////////////////////////////////////////////////////////////////////////
@@ -9,12 +14,18 @@
 	#include <BALL/KERNEL/atomContainer.h>
 #endif
 
+
+/////////////////////////////////////////////////////////////////////7
+#include <Eigen/Dense>
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 namespace BALL
 {
 	class SequenceIterator;
+
+	class SequenceCharacter;
 	     
 	class BALL_EXPORT Sequence
 	{
@@ -53,7 +64,7 @@ namespace BALL
 			 * @param name the new name to be set
 			 * @throws Exception::GeneralException if an invalid name was specified
 			 */
-			void setName(String& seq_name);
+			void setName(const String& seq_name);
 
 			/**
 			 *@return the name of the sequence
@@ -94,24 +105,29 @@ namespace BALL
 			/**
 			 *@return a SequenceIterator which points to the first character of the Sequence
 			 */
-			SequenceIterator& begin();				
+			SequenceIterator begin();				
 
 			/**
 			 *@return a SequenceIterator which points to exactly one position after the last character of the Sequence
 			 */
-			SequenceIterator& end();
+			SequenceIterator end();
 
 			/**
 			 *@return String which contains the Sequence
 			 **/
-			String getSequence();
+			String getStringSequence();
+
+			/**
+			*@return an Eigen Array of SequenceCharacters containing the Sequence
+			*/
+			Eigen::Array< SequenceCharacter ,Eigen::Dynamic,1> getArraySequence();
+			
 
 		private:
 
 			String name;
-
 			AtomContainer* origin;
-
+			
 	};
 
 }//namespace BALL
