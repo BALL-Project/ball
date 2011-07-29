@@ -170,14 +170,14 @@ namespace BALL
 
 	//In the following some specialisations of swapBytes are provided for efficiency reasons
 	//These should also cover BALL types like Size, Position and Index
-	template<> void swapBytes(unsigned short&);
-	template<> void swapBytes(short&);
-	template<> void swapBytes(unsigned int&);
-	template<> void swapBytes(int&);
-	template<> void swapBytes(unsigned long&);
-	template<> void swapBytes(long&);
-	template<> void swapBytes(float&);
-	template<> void swapBytes(double&);
+	template<> BALL_EXPORT void swapBytes(unsigned short&);
+	template<> BALL_EXPORT void swapBytes(short&);
+	template<> BALL_EXPORT void swapBytes(unsigned int&);
+	template<> BALL_EXPORT void swapBytes(int&);
+	template<> BALL_EXPORT void swapBytes(unsigned long&);
+	template<> BALL_EXPORT void swapBytes(long&);
+	template<> BALL_EXPORT void swapBytes(float&);
+	template<> BALL_EXPORT void swapBytes(double&);
 } //namespace BALL
 
 #ifndef BALL_NO_INLINE_FUNCTIONS
