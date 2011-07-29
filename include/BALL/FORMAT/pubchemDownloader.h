@@ -13,7 +13,7 @@
 
 namespace BALL
 {
-	class PubChemDownloader
+	class BALL_EXPORT PubChemDownloader
 		: public QObject
 	{
 		Q_OBJECT
