@@ -13,6 +13,11 @@
 #	include <BALL/COMMON/global.h>
 #endif
 
+#ifdef BALL_COMPILER_MSVC
+	#pragma warning(push)
+	#pragma warning( disable : 4251 ) //disable needs to have dll-interface to be used by clients of class 'std::string'
+#endif
+
 #include <new>
 #include <string>
 
@@ -563,5 +568,9 @@ namespace BALL
 		std::ostream& operator << (std::ostream& os, const Exception::GeneralException& e);
 	
 } // namespace BALL
+
+#ifdef BALL_COMPILER_MSVC
+	#pragma warning(pop)
+#endif
 
 #endif // BALL_COMMON_EXCEPTION_H
