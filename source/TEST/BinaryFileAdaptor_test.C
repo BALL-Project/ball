@@ -9,6 +9,11 @@
 #include <BALL/SYSTEM/file.h>
 #include <BALL/SYSTEM/binaryFileAdaptor.h>
 
+//We need this to get some of the defines used in the implementation part
+#ifdef BALL_NO_INLINE_FUNCTIONS
+	#include <BALL/SYSTEM/binaryFileAdaptor.iC>
+#endif
+
 ///////////////////////////
 
 START_TEST(BinaryFileAdaptor, "$Id: BinaryFileAdaptor_test.C,v 1.9.20.1 2007/03/25 21:46:50 oliver Exp $")
