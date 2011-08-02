@@ -16,8 +16,11 @@ namespace BALL{
 			 *Default Constructor
 			 */
 			Sequence::Sequence()
-				:name(),origin()
-			{  }
+			//	:name(""),origin(0)
+			{ 
+				name= "";
+				origin = 0;
+			 }
 			/**
 			 *Detailed Constructor
 			 *@param name the name of the Sequence
@@ -29,17 +32,17 @@ namespace BALL{
 			/**
 			 *Copy Constructor
 			 */
-			Sequence::Sequence(Sequence& seq){
+			Sequence::Sequence(Sequence& seq)
+			{
 				name = seq.getName();
 				origin =  seq.getOrigin();
-				}
+			}
 
 			/**
 			 *Deconstrcutor
 			 **/
-			Sequence::~Sequence(){
-
-			}
+			Sequence::~Sequence()
+			{		}
 
 			
 
@@ -47,14 +50,16 @@ namespace BALL{
 			/**
 			 * @param name the new name to be set
 			  */
-			void Sequence::setName(const BALL::String& seq_name){
+			void Sequence::setName(const BALL::String& seq_name)
+			{
 				name= seq_name;
 			}
 
 			/**
 			 *@return the name of the sequence
 			 */
-			String& Sequence::getName(){
+			String& Sequence::getName()
+			{
 				return name;
 			}
 
@@ -70,64 +75,91 @@ namespace BALL{
 			/**
 			 *@return the origin of the Sequence
 			 */
-			AtomContainer* Sequence::getOrigin(){
+			AtomContainer* Sequence::getOrigin()
+			{
 				return origin;
 			}	
 
 			/**
 			*operator==
 			*/
-			bool Sequence::operator== (Sequence& seq){
+			bool Sequence::operator== (Sequence& seq)
+			{
 				return ((name==seq.getName()) && (origin==seq.getOrigin()));
 			}
 
 			/**
 			*operator!=
 			*/
-			bool Sequence::operator!= (Sequence& seq){
+			bool Sequence::operator!= (Sequence& seq)
+			{
 				return ! (operator==(seq));
 			}
 			
 			/**
 			*assignment operator
 			*/
-			Sequence& Sequence::operator= (Sequence& seq){
-				name = seq.getName();
-				origin = seq.getOrigin();
+			Sequence& Sequence::operator= (Sequence& seq)
+			{
+		if (!origin) 
+		{
+cout<<"origin unintialised"<<endl;
+}
+else {
+cout << "Doch nicht null" <<endl;
+}
 
+if(name == "") {
+	cout<<"name empty"<<endl;
+}
+cout << "this.name=" <<  name << endl;
+
+if(seq.name =="") cout <<"seq.name empty"<<endl;
+cout<<"the name of the right sequence is: << "<< name<<endl;
+				name = seq.getName();
+				cout<<"setted the name"<<endl;
+				origin = seq.getOrigin();
+cout<<"setted origin"<<endl;
 				return *this;
-			}
+		}
 
 
 
 			/**
 			 *@return a SequenceIterator which points to the first character of the Sequence
 			 */
-			SequenceIterator Sequence::begin(){
-
+			SequenceIterator Sequence::begin()
+			{
+//	cout<<"inside SequenceBegin() now"<< endl;
 				//Initialize the new Iterator
-					SequenceIterator *it = new SequenceIterator();
-					it->setSequence(*this);
+					SequenceIterator it;
+					it.setSequence(*this);
 
 				if (RTTI::isKindOf<Protein>(*origin)) 
 				{
-
 					//create new Sequencecharacter
 					SequenceCharacter c;
 					c.setOrigin(this);
-
 					Protein* p= RTTI::castTo<Protein>(*origin);
+				
+					if (p)
+					{	
+						c.setChar(Peptides::OneLetterCode(p->getResidue(0)->getName()));
+				
+					it.setChar(c);
 
-					c.setChar(Peptides::OneLetterCode(p->getResidue(0)->getName()));
+					it.setCounter(1);
 
+//	cout<<"leaving SequenceBegin() now"<< endl;
 
-					it->setChar(c);
-
-					return *it;
+					
+					return it;
+					}
 				}
 				
 				throw BALL::Exception::InvalidArgument(__FILE__,__LINE__,"origin is no Protein");
-					
+//			cout<<"leaving SequenceBegin() now"<< endl;
+
 			}				
 
 			/**
@@ -135,57 +167,63 @@ namespace BALL{
 			 */
 			SequenceIterator Sequence::end(){
 				
-				cout<<"inside Sequence-end() now"<<endl;
-				//initialize the new Iterator
-				SequenceIterator* it= new SequenceIterator();
+//cout<<"inside Sequence-end() now"<<endl;
+
+						//initialize the new Iterator
+						SequenceIterator it;
 				
-				//set the the sequence
-				it->setSequence(*this);
+						//set the the sequence
+						it.setSequence(*this);
 				
-				cout<<"returning now"<<endl;
-				//go to to the end chracter and return the iterator
 			
-				*it = it->end();
-	
-				return *it;
+						if (RTTI::isKindOf<Protein>(*origin)) {
+
+							//cast origin to a protein
+							Protein* protein = RTTI::castTo<Protein>(*origin);
+
+							int num_of_res = protein->countResidues();
+
+							//set the counter to the number of residues in the protein
+							it.setCounter(num_of_res+1);
+
+							SequenceCharacter c;
+							c.setOrigin(this);
+							c.setChar(Peptides::OneLetterCode(protein->getResidue(num_of_res-1)->getName()));
 				
+							it.setChar(c);
+
+						}
+//cout<<"returning now"<<endl;
+
+						return it;
 			}
+
+
+
+
 
 			/**
 			 *@return String which contains the Sequence
 			 **/
 			String Sequence::getStringSequence(){
 			
-			cout<< "inside get StringSequence now..."<<endl;
-
 			String* nseq = new String();
-			cout<< "created a new String ->entering loop now"<<endl;
-
-			SequenceIterator it;
-				 it = begin();
-
-			cout<<"created Sequenceiterator.."<<endl;		
+			
+			SequenceIterator it;  
+			 it = begin();
 
 			SequenceIterator e;
 				e = end();
-				cout<<"created end-it now.."<<endl;
-
+	
 			while(it != e){
 			//for(SequenceIterator it = begin(); it != end(); it.next()){
+	
+			String* tmp = new String(it.getCharacter().getChar());
 
-			cout<< "inside the loop now " <<endl;	
-
-				String* tmp = new String(it.getCharacter().getChar());
-
-				cout<< "append now the sequence "<< endl;
 				*nseq += *tmp;
-				
-				cout <<"the current seq is: "<< *nseq <<endl;
-				cout<< "increasing the iterator "<<endl; 
+
 				it=it.next();
 			}
-
-				cout<< "this is the sequence returned: "<< *nseq << endl;
 				return *nseq;
 			}
 

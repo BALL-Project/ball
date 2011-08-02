@@ -78,6 +78,8 @@ namespace BALL
 			 */
 			unsigned int getCounter();
 
+			void setCounter( unsigned int i);
+
 			/**
 			 *@return the SequenceCharacter to which the Iterator points
 			 */
@@ -96,11 +98,7 @@ namespace BALL
 			 */
 			SequenceIterator next();
 
-			/**
-			 *@return a SequenceIterator indicating the end of the sequence
-			 */
-			SequenceIterator end();
-
+			
 			/**
 			 *operator==
 			 */

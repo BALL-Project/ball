@@ -49,6 +49,7 @@
 namespace BALL
 {
 
+	
 	class BALL_EXPORT ClustalFile 
 		: public LineBasedFile
 	{

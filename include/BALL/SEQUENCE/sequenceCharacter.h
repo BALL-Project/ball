@@ -93,7 +93,7 @@ namespace BALL
 			/**
 			 *@return the origin of the character
 			 */
-			Sequence* getOrigin();
+			Sequence* getOrigin() const;
 
 
 						
@@ -110,7 +110,7 @@ namespace BALL
 			bool operator!= (SequenceCharacter& c);
 
 
-
+			SequenceCharacter& operator = (const SequenceCharacter& c);
 
 			//////////////////////////////////////////////////////////////////// Misc //////////////////////////////////////////////////////////
 
