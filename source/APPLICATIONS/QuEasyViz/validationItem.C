@@ -33,7 +33,6 @@
 #include <QtGui/QDrag>
 #include <QtCore/QMimeData>
 
-#include <BALL/MATHS/LINALG/matrix.h>
 #include <BALL/VIEW/KERNEL/iconLoader.h>
 #include <BALL/QSAR/classificationModel.h>
 
