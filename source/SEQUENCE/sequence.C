@@ -16,26 +16,28 @@ namespace BALL{
 			 *Default Constructor
 			 */
 			Sequence::Sequence()
-			//	:name(""),origin(0)
+			//	:name_(""),origin_(0)
 			{ 
-				name= "";
-				origin = 0;
+				name_= "";
+				origin_ = 0;
 			 }
 			/**
 			 *Detailed Constructor
-			 *@param name the name of the Sequence
-			 *@param origin the composite from which the sequence originates
+			 *@param name_ the name_ of the Sequence
+			 *@param origin_ the composite from which the sequence originates
 			 */
-			Sequence::Sequence(String& seq_name, AtomContainer* seq_origin):name(seq_name),origin(seq_origin)
-			{  }
+			Sequence::Sequence(String& name, AtomContainer* origin)
+				:name_(name),
+				 origin_(origin)
+				 {  }
 
 			/**
 			 *Copy Constructor
 			 */
 			Sequence::Sequence(Sequence& seq)
 			{
-				name = seq.getName();
-				origin =  seq.getOrigin();
+				name_ = seq.getName();
+				origin_ =  seq.getOrigin();
 			}
 
 			/**
@@ -48,36 +50,36 @@ namespace BALL{
 
 
 			/**
-			 * @param name the new name to be set
+			 * @param name_ the new name_ to be set
 			  */
-			void Sequence::setName(const BALL::String& seq_name)
+			void Sequence::setName(const BALL::String& name)
 			{
-				name= seq_name;
+				name_= name;
 			}
 
 			/**
-			 *@return the name of the sequence
+			 *@return the name_ of the sequence
 			 */
 			String& Sequence::getName()
 			{
-				return name;
+				return name_;
 			}
 
 
 			/**
-			 *@param origin the origin which is to be setted
+			 *@param origin_ the origin which is to be setted
 			 */
-			void Sequence::setOrigin(AtomContainer* seq_origin)
+			void Sequence::setOrigin(AtomContainer* origin)
 			{
-			origin=seq_origin;
+				origin_=origin;
 			}
 
 			/**
-			 *@return the origin of the Sequence
+			 *@return the origin_ of the Sequence
 			 */
 			AtomContainer* Sequence::getOrigin()
 			{
-				return origin;
+				return origin_;
 			}	
 
 			/**
@@ -85,7 +87,7 @@ namespace BALL{
 			*/
 			bool Sequence::operator== (Sequence& seq)
 			{
-				return ((name==seq.getName()) && (origin==seq.getOrigin()));
+				return ((name_==seq.getName()) && (origin_==seq.getOrigin()));
 			}
 
 			/**
@@ -101,27 +103,11 @@ namespace BALL{
 			*/
 			Sequence& Sequence::operator= (Sequence& seq)
 			{
-		if (!origin) 
-		{
-cout<<"origin unintialised"<<endl;
-}
-else {
-cout << "Doch nicht null" <<endl;
-}
+				name_ = seq.getName();
+				origin_ = seq.getOrigin();
 
-if(name == "") {
-	cout<<"name empty"<<endl;
-}
-cout << "this.name=" <<  name << endl;
-
-if(seq.name =="") cout <<"seq.name empty"<<endl;
-cout<<"the name of the right sequence is: << "<< name<<endl;
-				name = seq.getName();
-				cout<<"setted the name"<<endl;
-				origin = seq.getOrigin();
-cout<<"setted origin"<<endl;
 				return *this;
-		}
+			}
 
 
 
@@ -135,12 +121,12 @@ cout<<"setted origin"<<endl;
 					SequenceIterator it;
 					it.setSequence(*this);
 
-				if (RTTI::isKindOf<Protein>(*origin)) 
+				if (RTTI::isKindOf<Protein>(*origin_)) 
 				{
 					//create new Sequencecharacter
 					SequenceCharacter c;
 					c.setOrigin(this);
-					Protein* p= RTTI::castTo<Protein>(*origin);
+					Protein* p= RTTI::castTo<Protein>(*origin_);
 				
 					if (p)
 					{	
@@ -157,7 +143,7 @@ cout<<"setted origin"<<endl;
 					}
 				}
 				
-				throw BALL::Exception::InvalidArgument(__FILE__,__LINE__,"origin is no Protein");
+				throw BALL::Exception::InvalidArgument(__FILE__,__LINE__,"origin_ is no Protein");
 //			cout<<"leaving SequenceBegin() now"<< endl;
 
 			}				
@@ -176,10 +162,10 @@ cout<<"setted origin"<<endl;
 						it.setSequence(*this);
 				
 			
-						if (RTTI::isKindOf<Protein>(*origin)) {
+						if (RTTI::isKindOf<Protein>(*origin_)) {
 
-							//cast origin to a protein
-							Protein* protein = RTTI::castTo<Protein>(*origin);
+							//cast origin_ to a protein
+							Protein* protein = RTTI::castTo<Protein>(*origin_);
 
 							int num_of_res = protein->countResidues();
 
@@ -209,21 +195,17 @@ cout<<"setted origin"<<endl;
 			
 			String* nseq = new String();
 			
-			SequenceIterator it;  
-			 it = begin();
+		SequenceIterator it,e;
+	e = end(); 
 
-			SequenceIterator e;
-				e = end();
-	
-			while(it != e){
-			//for(SequenceIterator it = begin(); it != end(); it.next()){
-	
-			String* tmp = new String(it.getCharacter().getChar());
+		for(it = begin(); it != e; it.next())
+			{
+
+				String* tmp = new String(it.getCharacter().getChar());
 
 				*nseq += *tmp;
 
-				it=it.next();
-			}
+					}
 				return *nseq;
 			}
 
@@ -231,22 +213,23 @@ cout<<"setted origin"<<endl;
 
 		//initialize the array
 		Eigen::Array<SequenceCharacter, Eigen::Dynamic, 1> seq;
-			
-		SequenceIterator it,e;
-		e = end(); 
+		
+	SequenceIterator it,e;
+	e = end(); 
 
 		for(it = begin(); it != e; it.next())
 			{
 			//make room for the new Character
-			seq.conservativeResize(seq.rows());
-
+			seq.conservativeResize(seq.rows()+1);
 			//retrieve the current Sequencecharacter for each Step
 			SequenceCharacter c = it.getCharacter();
-
 			//store it in the Array
-			seq(seq.rows()-1) = c;
+			seq(seq.rows()-1,0) = c;
+
+
 			}
+
 		return seq;
 	}
 
-}//namespace BALL
+}//name_space BALL

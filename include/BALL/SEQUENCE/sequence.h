@@ -43,10 +43,10 @@ namespace BALL
 
 			/**
 			 *Detailed Constructor
-			 *@param name the name of the Sequence
-			 *@param origin the composite from which the sequence originates
+			 *@param name_ the name_ of the Sequence
+			 *@param origin_ the composite from which the sequence origin_ates
 			 */
-			Sequence(String& seq_name, AtomContainer* seq_origin);
+			Sequence(String& name, AtomContainer* origin);
 
 			/**
 			 *Copy Constructor
@@ -61,24 +61,24 @@ namespace BALL
 			/////////////////////////////////////Getter and Setter/////////////////////////////////////////////////////////////
 
 			/**
-			 * @param name the new name to be set
-			 * @throws Exception::GeneralException if an invalid name was specified
+			 * @param name_ the new name_ to be set
+			 * @throws Exception::GeneralException if an invalid name_ was specified
 			 */
-			void setName(const String& seq_name);
+			void setName(const String& name);
 
 			/**
-			 *@return the name of the sequence
+			 *@return the name_ of the sequence
 			 */
 			String& getName();
 
 
 			/**
-			 *@param origin the origin which is to be setted
+			 *@param origin_ the origin_ which is to be setted
 			 */
-			void setOrigin(AtomContainer* seq_origin);
+			void setOrigin(AtomContainer* origin);
 
 			/**
-			 *@return the origin of the Sequence
+			 *@return the origin_ of the Sequence
 			 */
 			AtomContainer* getOrigin();	
 
@@ -125,10 +125,10 @@ namespace BALL
 
 		private:
 
-			String name;
-			AtomContainer* origin;
+			String name_;
+			AtomContainer* origin_;
 			
 	};
 
-}//namespace BALL
+}//name_space BALL
 #endif // BALL_SEQUENCE_SEQUENCE_H
