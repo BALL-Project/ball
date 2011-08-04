@@ -14,7 +14,7 @@
 
 using namespace BALL;
 
-START_TEST(ConnectedComponentsProcessor, "$Id:$")
+START_TEST(ConnectedComponentsProcessor)
 
 PRECISION(1e-5)
 

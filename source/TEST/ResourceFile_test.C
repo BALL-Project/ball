@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ResourceFile_test.C,v 1.18.32.1 2007/03/25 21:48:53 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
 
@@ -9,7 +9,7 @@
 #include <BALL/FORMAT/resourceFile.h>
 ///////////////////////////
 
-START_TEST(ResourceFile, "$Id: ResourceFile_test.C,v 1.18.32.1 2007/03/25 21:48:53 oliver Exp $")
+START_TEST(ResourceFile)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

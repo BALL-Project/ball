@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Pair6_12RDFIntegrator_test.C,v 1.8.32.1 2007/03/25 21:47:27 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(Pair6_12RDFIntegrator, "$Id: Pair6_12RDFIntegrator_test.C,v 1.8.32.1 2007/03/25 21:47:27 oliver Exp $")
+START_TEST(Pair6_12RDFIntegrator)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

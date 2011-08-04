@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: LineModel_test.C,v 1.1.2.1 2007/04/09 20:17:11 amoll Exp $
-//
-// Author:
-//   Andreas Moll
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -23,7 +18,7 @@
 using namespace BALL;
 using namespace BALL::VIEW;
 
-START_TEST(AddLineModel, "$Id: LineModel_test.C,v 1.1.2.1 2007/04/09 20:17:11 amoll Exp $")
+START_TEST(AddLineModel)
 
 CHECK(CSTR)
 	AddLineModel();

@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ConstForwardIterator_test.C,v 1.3.32.1 2007/03/25 21:46:59 oliver Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -356,7 +354,7 @@ class VectorIteratorTraits_
 
 typedef ConstForwardIterator<vector<float>, float, VectorIteratorPosition_, VectorIteratorTraits_<float> > MyIterator;
 
-START_TEST(ConstForwardIterator, "$Id: ConstForwardIterator_test.C,v 1.3.32.1 2007/03/25 21:46:59 oliver Exp $")
+START_TEST(ConstForwardIterator)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

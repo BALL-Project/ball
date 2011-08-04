@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-//
+
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
 
@@ -13,7 +13,7 @@
 #include <BALL/KERNEL/molecule.h>
 
 ///////////////////////////
-START_TEST(PartialChargeBase, "")
+START_TEST(PartialChargeBase)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

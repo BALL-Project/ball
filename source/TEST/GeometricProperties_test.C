@@ -5,7 +5,7 @@
 
 #include <BALL/CONCEPT/classTest.h>
 
-START_TEST(GeometricProperties, "")
+START_TEST(GeometricProperties)
 
 using namespace BALL;
 

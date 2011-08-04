@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: LabelModel_test.C,v 1.1.2.1 2007/04/09 21:05:15 amoll Exp $
-//
-// Author:
-//   Andreas Moll
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -22,7 +17,7 @@
 using namespace BALL;
 using namespace BALL::VIEW;
 
-START_TEST(LabelModel, "$Id: LabelModel_test.C,v 1.1.2.1 2007/04/09 21:05:15 amoll Exp $")
+START_TEST(LabelModel)
 
 CHECK(CSTR)
 	LabelModel();

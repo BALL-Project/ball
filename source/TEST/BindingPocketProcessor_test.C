@@ -1,4 +1,3 @@
-
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
 #include <BALL/FORMAT/PDBFile.h>
@@ -9,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(BindingPocketProcessor, "$Id: BindingPocketProcessor_test.C")
+START_TEST(BindingPocketProcessor)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

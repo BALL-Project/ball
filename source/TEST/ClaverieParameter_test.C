@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ClaverieParameter_test.C,v 1.8.30.1 2007/03/25 21:46:54 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
 
@@ -12,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(ClaverieParameter, "$Id: ClaverieParameter_test.C,v 1.8.30.1 2007/03/25 21:46:54 oliver Exp $")
+START_TEST(ClaverieParameter)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

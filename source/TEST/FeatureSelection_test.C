@@ -9,7 +9,7 @@ using namespace BALL;
 using namespace BALL::QSAR;
 
 
-START_TEST(Regression, "$Id: QSAR_test.C$")
+START_TEST(Regression)
 
 PRECISION(1E-5)
 

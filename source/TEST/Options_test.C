@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Options_test.C,v 1.10.14.2 2007/03/26 16:34:19 bertsch Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -12,7 +10,7 @@
 #include <BALL/DATATYPE/options.h>
 #include <BALL/CONCEPT/textPersistenceManager.h>
 
-START_TEST(Options, "$Id: Options_test.C,v 1.10.14.2 2007/03/26 16:34:19 bertsch Exp $")
+START_TEST(Options)
 
 using BALL::Options;
 using BALL::Vector3;

@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BuildBondsProcessor_test.C,v 1.8.20.2 2007/03/29 10:34:57 bertsch Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -14,7 +12,7 @@
 #include <BALL/KERNEL/forEach.h>
 ///////////////////////////
 
-START_TEST(Fragment, "$Id: BuildBondsProcessor_test.C,v 1.8.20.2 2007/03/29 10:34:57 bertsch Exp $")
+START_TEST(Fragment)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

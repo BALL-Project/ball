@@ -8,7 +8,7 @@ using namespace BALL;
 using namespace BALL::QSAR;
 
 
-START_TEST(PLS-model, "$Id: PLS_test.C$")
+START_TEST(PLS-model)
 
 PRECISION(1E-7)
 

@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HashGrid3DataIteratorTraits_test.C,v 1.1.32.1 2007/03/25 21:47:11 oliver Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(HashGrid3::DataIteratorTraits, "$Id: HashGrid3DataIteratorTraits_test.C,v 1.1.32.1 2007/03/25 21:47:11 oliver Exp $")
+START_TEST(HashGrid3::DataIteratorTraits)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

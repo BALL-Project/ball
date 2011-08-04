@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Extractors_test.C,v 1.1.18.1 2007/03/25 21:47:06 oliver Exp $
-//
-// Author:
-//   Oliver Kohlbacher
-//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -15,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(Extractors, "$Id: Extractors_test.C,v 1.1.18.1 2007/03/25 21:47:06 oliver Exp $")
+START_TEST(Extractors)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

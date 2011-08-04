@@ -14,7 +14,7 @@
 #include <BALL/KERNEL/chainIterator.h>
 ///////////////////////////
 
-START_TEST(HBondProcessor, "$Id: HBondProcessor_test.C,v 1.3.3 2010/09/21 15:48:56 anne Exp $")
+START_TEST(HBondProcessor)
 
 PRECISION(1e-5)
 

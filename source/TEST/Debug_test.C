@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Debug_test.C,v 1.1.30.1 2007/03/25 21:47:01 oliver Exp $
-//
 
 #include <BALL/CONFIG/config.h>
 // Make sure the debug flag is set, independent of what 
@@ -14,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(COMMON_debug, "$Id: Debug_test.C,v 1.1.30.1 2007/03/25 21:47:01 oliver Exp $")
+START_TEST(COMMON_debug)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

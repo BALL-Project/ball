@@ -112,7 +112,7 @@ bool compareHBonds(System& sys)
 
 
 
-START_TEST(AssignBondOrderProcessor, "$Id:$")
+START_TEST(AssignBondOrderProcessor)
 
 PRECISION(1e-5)
 

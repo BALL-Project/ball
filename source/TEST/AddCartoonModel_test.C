@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AddCartoonModel_test.C,v 1.1.2.1 2007/05/12 10:08:57 amoll Exp $
-//
-// Author:
-//   Andreas Moll
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -20,7 +15,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: AddCartoonModel_test.C,v 1.1.2.1 2007/05/12 10:08:57 amoll Exp $")
+START_TEST(class_name)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RMSDMinimizer_test.C,v 1.1.18.2 2007/05/18 12:06:00 oliver Exp $
-//
-// Author:
-//   Oliver Kohlbacher
-//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -15,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(RMSDMinimizer, "$Id: RMSDMinimizer_test.C,v 1.1.18.2 2007/05/18 12:06:00 oliver Exp $")
+START_TEST(RMSDMinimizer)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

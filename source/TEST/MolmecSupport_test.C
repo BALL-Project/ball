@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MolmecSupport_test.C,v 1.6.28.1 2007/03/25 21:47:22 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -23,7 +23,7 @@ namespace BALL
 	}
 }
 
-START_TEST(class_name, "$Id: MolmecSupport_test.C,v 1.6.28.1 2007/03/25 21:47:22 oliver Exp $")
+START_TEST(class_name)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

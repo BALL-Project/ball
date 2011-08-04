@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BallAndStickModel_test.C,v 1.1.4.1 2007/03/25 21:46:49 oliver Exp $
-//
-// Author:
-//   Andreas Moll
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -20,14 +15,14 @@
 using namespace BALL;
 using namespace BALL::VIEW;
 
-START_TEST(AddBallAndStickModel, "$Id: BallAndStickModel_test.C,v 1.1.4.1 2007/03/25 21:46:49 oliver Exp $")
+START_TEST(AddBallAndStickModel)
 
 CHECK(CSTR)
 	AddBallAndStickModel();
 RESULT
 
 CHECK(AddBallAndStickModel::BALL_CREATE(AddBallAndStickModel))
-  //BAUSTELLE
+  //TODO
 RESULT
 
 
@@ -85,7 +80,7 @@ CHECK(AddBallAndStickModel::isStickModel() const  throw())
 RESULT
 
 CHECK(AddBallAndStickModel::Processor::Result operator() (Composite& composite))
-  //BAUSTELLE
+  //TODO
 RESULT
 
 

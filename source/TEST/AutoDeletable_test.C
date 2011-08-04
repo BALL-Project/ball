@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AutoDeletable_test.C,v 1.8.28.1 2007/03/25 21:46:49 oliver Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -19,7 +17,7 @@ class A
 {
 };
 
-START_TEST(AutoDeletable, "$Id: AutoDeletable_test.C,v 1.8.28.1 2007/03/25 21:46:49 oliver Exp $")
+START_TEST(AutoDeletable)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

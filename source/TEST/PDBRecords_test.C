@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBRecords_test.C,v 1.1.28.1 2007/03/25 21:47:27 oliver Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PDBRecords_test.C,v 1.1.28.1 2007/03/25 21:47:27 oliver Exp $")
+START_TEST(class_name)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

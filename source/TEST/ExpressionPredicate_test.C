@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ExpressionPredicate_test.C,v 1.1.32.1 2007/03/25 21:47:05 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +12,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(ExpressionPredicate, "$Id: ExpressionPredicate_test.C,v 1.1.32.1 2007/03/25 21:47:05 oliver Exp $")
+START_TEST(ExpressionPredicate)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

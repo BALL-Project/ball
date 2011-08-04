@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile_test.C,v 1.27.28.1 2007/03/25 21:47:01 oliver Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -15,7 +13,7 @@
 #include <BALL/MOLMEC/AMBER/amber.h>
 ///////////////////////////
 
-START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.27.28.1 2007/03/25 21:47:01 oliver Exp $")
+START_TEST(DCDFile)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

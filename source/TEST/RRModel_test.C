@@ -9,7 +9,7 @@ using namespace BALL;
 using namespace BALL::QSAR;
 
 
-START_TEST(RR-model, "$Id: RR_test.C$")
+START_TEST(RR-model)
 
 PRECISION(1E-7)
 

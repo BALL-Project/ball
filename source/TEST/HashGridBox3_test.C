@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HashGridBox3_test.C,v 1.1.32.1 2007/03/25 21:47:13 oliver Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -14,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(HashGridBox3, "$Id: HashGridBox3_test.C,v 1.1.32.1 2007/03/25 21:47:13 oliver Exp $")
+START_TEST(HashGridBox3)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

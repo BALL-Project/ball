@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTE_test.C,v 1.13.30.1 2007/03/25 21:47:27 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -11,7 +10,7 @@
 #include "ItemCollector.h"
 ///////////////////////////
 
-START_TEST(Element, "$Id: PTE_test.C,v 1.13.30.1 2007/03/25 21:47:27 oliver Exp $")
+START_TEST(Element)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

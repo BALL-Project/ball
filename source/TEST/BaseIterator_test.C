@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BaseIterator_test.C,v 1.2.32.1 2007/03/25 21:46:49 oliver Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -356,7 +354,7 @@ class VectorIteratorTraits_
 
 typedef BaseIterator<vector<float>, float, VectorIteratorPosition_, VectorIteratorTraits_<float> > MyIterator;
 
-START_TEST(BaseIterator, "$Id: BaseIterator_test.C,v 1.2.32.1 2007/03/25 21:46:49 oliver Exp $")
+START_TEST(BaseIterator)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

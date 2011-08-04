@@ -8,7 +8,7 @@ using namespace BALL;
 using namespace BALL::QSAR;
 
 
-START_TEST(KPCR-model, "$Id: KPCR_test.C$")
+START_TEST(KPCR-model)
 
 PRECISION(1E-5)
 

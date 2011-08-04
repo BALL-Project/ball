@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: EnergyMinimizer_test.C,v 1.7.30.2 2007/05/07 11:50:08 aleru Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -16,7 +15,7 @@
 
 ///////////////////////////
 
-START_TEST(EnergyMinimizer, "$Id: EnergyMinimizer_test.C,v 1.7.30.2 2007/05/07 11:50:08 aleru Exp $")
+START_TEST(EnergyMinimizer)
 
 using namespace BALL;
 

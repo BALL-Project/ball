@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: LogStream_test.C,v 1.25.20.1 2007/03/25 21:47:17 oliver Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -17,7 +15,7 @@
 
 ///////////////////////////
 
-START_TEST(LogStream, "$Id: LogStream_test.C,v 1.25.20.1 2007/03/25 21:47:17 oliver Exp $")
+START_TEST(LogStream)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

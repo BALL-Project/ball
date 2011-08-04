@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RadialDistributionFunction_test.C,v 1.5.32.1 2007/03/25 21:48:49 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(RadialDistributionFunction, "$Id: RadialDistributionFunction_test.C,v 1.5.32.1 2007/03/25 21:48:49 oliver Exp $")
+START_TEST(RadialDistributionFunction)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

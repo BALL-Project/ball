@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Angle_test.C,v 1.22.30.1 2007/03/25 21:46:44 oliver Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -11,7 +9,7 @@
 #	include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(Angle, "$Id: Angle_test.C,v 1.22.30.1 2007/03/25 21:46:44 oliver Exp $")
+START_TEST(Angle)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

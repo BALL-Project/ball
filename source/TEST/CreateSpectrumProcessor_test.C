@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: CreateSpectrumProcessor_test.C,v 1.9.30.1 2007/03/25 21:47:00 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
 
@@ -16,7 +16,7 @@
 
 ///////////////////////////
 
-START_TEST(CreateSpectrumProcessor, "$Id: CreateSpectrumProcessor_test.C,v 1.9.30.1 2007/03/25 21:47:00 oliver Exp $")
+START_TEST(CreateSpectrumProcessor)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

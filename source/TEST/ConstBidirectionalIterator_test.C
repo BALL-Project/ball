@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ConstBidirectionalIterator_test.C,v 1.2.32.1 2007/03/25 21:46:58 oliver Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -349,7 +347,7 @@ class VectorIteratorTraits
 typedef ConstBidirectionalIterator<vector<float>, float, VectorIteratorPosition, VectorIteratorTraits<float> > MyIterator;
 typedef reverse_iterator<ConstBidirectionalIterator<vector<float>, float, VectorIteratorPosition, VectorIteratorTraits<float> > > MyReverseIterator;
 
-START_TEST(ConstBidirectionalIterator, "$Id: ConstBidirectionalIterator_test.C,v 1.2.32.1 2007/03/25 21:46:58 oliver Exp $")
+START_TEST(ConstBidirectionalIterator)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

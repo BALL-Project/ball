@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PierottiCavFreeEnergyProcessor_test.C,v 1.4.30.1 2007/03/25 21:47:33 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
 
@@ -13,7 +13,7 @@
 #include <BALL/STRUCTURE/fragmentDB.h>
 ///////////////////////////
 
-START_TEST(PierottiCavFreeEnergyProcessor, "$Id: PierottiCavFreeEnergyProcessor_test.C,v 1.4.30.1 2007/03/25 21:47:33 oliver Exp $")
+START_TEST(PierottiCavFreeEnergyProcessor)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

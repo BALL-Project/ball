@@ -15,7 +15,7 @@
 
 using namespace BALL;
 
-START_TEST(SideChainPlacementProcessor, "$Id:$")
+START_TEST(SideChainPlacementProcessor, BALL_RELEASE_STRING)
 
 PRECISION(1e-5)
 

@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MoleculeAssembler_test.C,v 1.5.8.2 2007/04/03 13:29:30 bertsch Exp $
-//
-// Author:
-//   Holger Franken
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -24,7 +19,7 @@
 
 ///////////////////////////
 
-START_TEST(MoleculeAssembler, "$Id: MoleculeAssembler_test.C,v 1.5.8.2 2007/04/03 13:29:30 bertsch Exp $")
+START_TEST(MoleculeAssembler)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

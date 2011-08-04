@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HashGrid3NeighborBoxItem_test.C,v 1.1.32.1 2007/03/25 21:47:12 oliver Exp $
-//
 
 #include <set>
 
@@ -14,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(HashGrid3::NeighborBoxItem, "$Id: HashGrid3NeighborBoxItem_test.C,v 1.1.32.1 2007/03/25 21:47:12 oliver Exp $")
+START_TEST(HashGrid3::NeighborBoxItem)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

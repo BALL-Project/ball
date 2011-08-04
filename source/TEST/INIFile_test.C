@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile_test.C,v 1.27.28.2 2007/08/09 17:17:09 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -30,7 +29,7 @@ class MyItemCollector
 };
 
 
-START_TEST(INIFile, "$Id: INIFile_test.C,v 1.27.28.2 2007/08/09 17:17:09 amoll Exp $")
+START_TEST(INIFile)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

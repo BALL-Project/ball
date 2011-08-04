@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ConjugateGradientMinimizer_test.C,v 1.23.8.4 2007/05/16 15:56:33 aleru Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -18,7 +16,7 @@
 #include <BALL/STRUCTURE/residueChecker.h>
 ///////////////////////////
 
-START_TEST(ConjugateGradientMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.23.8.4 2007/05/16 15:56:33 aleru Exp $")
+START_TEST(ConjugateGradientMinimizer)
 
 using namespace BALL;
 

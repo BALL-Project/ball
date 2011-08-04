@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Matrix44_test.C,v 1.23.20.1 2007/03/25 21:47:20 oliver Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -16,7 +14,7 @@
 #include <math.h>
 ///////////////////////////
 
-START_TEST(Matrix44, "$Id: Matrix44_test.C,v 1.23.20.1 2007/03/25 21:47:20 oliver Exp $")
+START_TEST(Matrix44)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AtomBijection_test.C,v 1.1.18.2 2007/08/07 15:39:05 oliver Exp $
-//
-// Author:
-//   Oliver Kohlbacher
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -33,7 +28,7 @@ String dumpBijection(AtomBijection& ab)
 }
 
 
-START_TEST(AtomBijection, "$Id: AtomBijection_test.C,v 1.1.18.2 2007/08/07 15:39:05 oliver Exp $")
+START_TEST(AtomBijection)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

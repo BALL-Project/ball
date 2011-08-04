@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ChainBuilder_test.C,v 1.3.8.2 2007/04/03 13:29:31 bertsch Exp $
-//
-// Author:
-//   Holger Franken
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -20,7 +15,7 @@
 
 ///////////////////////////
 
-START_TEST(ChainBuilder, "$Id: ChainBuilder_test.C,v 1.3.8.2 2007/04/03 13:29:31 bertsch Exp $")
+START_TEST(ChainBuilder)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

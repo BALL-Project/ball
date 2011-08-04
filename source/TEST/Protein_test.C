@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Protein_test.C,v 1.13.30.1 2007/03/25 21:47:35 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -14,7 +13,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Protein, "$Id: Protein_test.C,v 1.13.30.1 2007/03/25 21:47:35 oliver Exp $")
+START_TEST(Protein)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

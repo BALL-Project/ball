@@ -15,7 +15,7 @@
 #include <algorithm>
 #include "ItemCollector.h"
 
-START_TEST(AtomContainer, "$Id: AtomContainer_test.C,v 1.11.30.1 2007/03/25 21:46:46 oliver Exp $")
+START_TEST(AtomContainer)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

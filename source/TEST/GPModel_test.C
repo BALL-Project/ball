@@ -8,7 +8,7 @@ using namespace BALL;
 using namespace BALL::QSAR;
 
 
-START_TEST(GP-model, "$Id: GP_test.C$")
+START_TEST(GP-model)
 
 PRECISION(1E-2)
 

@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HashSet_test.C,v 1.19.30.1 2007/03/25 21:47:13 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -47,7 +46,7 @@ class MyVisitor
 	}
 };
 
-START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.19.30.1 2007/03/25 21:47:13 oliver Exp $")
+START_TEST(HashSet<T>)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

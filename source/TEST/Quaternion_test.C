@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Quaternion_test.C,v 1.16.30.1 2007/03/25 21:47:35 oliver Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -13,7 +11,7 @@
 #include <BALL/MATHS/quaternion.h>
 ///////////////////////////
 
-START_TEST(Quaternion, "$Id: Quaternion_test.C,v 1.16.30.1 2007/03/25 21:47:35 oliver Exp $")
+START_TEST(Quaternion)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

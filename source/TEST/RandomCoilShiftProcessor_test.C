@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RandomCoilShiftProcessor_test.C,v 1.5.32.1 2007/03/25 21:48:49 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
 
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(RandomCoilShiftProcessor, "$Id: RandomCoilShiftProcessor_test.C,v 1.5.32.1 2007/03/25 21:48:49 oliver Exp $")
+START_TEST(RandomCoilShiftProcessor)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

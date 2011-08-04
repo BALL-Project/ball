@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Box3_test.C,v 1.23.30.1 2007/03/25 21:46:51 oliver Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +9,7 @@
 #	include <BALL/MATHS/vector3.h>
 ///////////////////////////
 
-START_TEST(SimpleBox3, "$Id: Box3_test.C,v 1.23.30.1 2007/03/25 21:46:51 oliver Exp $")
+START_TEST(SimpleBox3)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

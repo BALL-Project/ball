@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ContourLine_test.C,v 1.2.32.1 2007/03/25 21:46:59 oliver Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -10,7 +8,7 @@
 #include <BALL/DATATYPE/contourLine.h>
 ///////////////////////////
 
-START_TEST(TContourLine, "$Id: ContourLine_test.C,v 1.2.32.1 2007/03/25 21:46:59 oliver Exp $")
+START_TEST(TContourLine)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

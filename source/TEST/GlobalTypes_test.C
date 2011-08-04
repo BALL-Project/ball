@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: GlobalTypes_test.C,v 1.5.28.1 2007/03/25 21:47:10 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -17,7 +16,7 @@
 // COMMON/global.h) have the correct size on all platforms.
 // This is required for portable persistence.
 
-START_TEST(sizes of the global data types, "$Id: GlobalTypes_test.C,v 1.5.28.1 2007/03/25 21:47:10 oliver Exp $")
+START_TEST(sizes of the global data types)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94_test.C,v 1.1.6.7 2007/05/17 00:35:20 amoll Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -48,7 +46,7 @@ float diff(double original, double our)
 	return x / fabs(original);
 }
 
-START_TEST(MMFF94, "$Id: MMFF94_test.C,v 1.1.6.7 2007/05/17 00:35:20 amoll Exp $")
+START_TEST(MMFF94)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

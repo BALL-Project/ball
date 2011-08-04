@@ -8,7 +8,7 @@ using namespace BALL;
 using namespace BALL::QSAR;
 
 
-START_TEST(KNN-model, "$Id: KNN_test.C$")
+START_TEST(KNN-model)
 
 PRECISION(1E-7)
 

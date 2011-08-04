@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-//
+
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
 
@@ -19,7 +19,7 @@ using std::cerr; using std::endl;
 
 
 ///////////////////////////
-START_TEST(ConnectivityDescriptors, "")
+START_TEST(ConnectivityDescriptors)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

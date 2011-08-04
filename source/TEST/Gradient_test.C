@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Gradient_test.C,v 1.5.30.1 2007/03/25 21:47:10 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +10,7 @@
 #include <BALL/MOLMEC/COMMON/atomVector.h>
 ///////////////////////////
 
-START_TEST(Gradient, "$Id: Gradient_test.C,v 1.5.30.1 2007/03/25 21:47:10 oliver Exp $")
+START_TEST(Gradient)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

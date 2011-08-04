@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File_test.C,v 1.12.26.2 2007/05/14 19:30:14 oliver Exp $
-//
-// Author:
-//   Oliver Kohlbacher
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -23,7 +18,7 @@
 
 ///////////////////////////
 
-START_TEST(MOL2File, "$Id: MOL2File_test.C,v 1.12.26.2 2007/05/14 19:30:14 oliver Exp $")
+START_TEST(MOL2File)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

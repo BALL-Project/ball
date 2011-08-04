@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RDFParameter_test.C,v 1.4.32.1 2007/03/25 21:47:36 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(RDFParameter, "$Id: RDFParameter_test.C,v 1.4.32.1 2007/03/25 21:47:36 oliver Exp $")
+START_TEST(RDFParameter)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

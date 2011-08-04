@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: LineSearch_test.C,v 1.2.34.2 2007/05/07 11:49:40 aleru Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(LineSearch, "$Id: LineSearch_test.C,v 1.2.34.2 2007/05/07 11:49:40 aleru Exp $")
+START_TEST(LineSearch)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -8,7 +8,7 @@ using namespace BALL;
 using namespace BALL::QSAR;
 
 
-START_TEST(LDA-model, "$Id: LDA_test.C$")
+START_TEST(LDA-model)
 
 PRECISION(1E-7)
 

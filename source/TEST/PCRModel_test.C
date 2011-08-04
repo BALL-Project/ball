@@ -8,7 +8,7 @@ using namespace BALL;
 using namespace BALL::QSAR;
 
 
-START_TEST(PCR-model, "$Id: PCR_test.C$")
+START_TEST(PCR-model)
 
 PRECISION(1E-7)
 

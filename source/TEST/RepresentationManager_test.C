@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RepresentationManager_test.C,v 1.1.4.3 2007/05/28 13:42:15 amoll Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -16,7 +14,7 @@
 ///////////////////////////
 
 /////////////////////////////////////////////////////////////
-START_TEST(RepresentationManager, "$Id: RepresentationManager_test.v")
+START_TEST(RepresentationManager)
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;

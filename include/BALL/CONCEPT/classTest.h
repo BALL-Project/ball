@@ -47,7 +47,7 @@
 		caught by the <tt>try</tt> block created by  \link #CHECK CHECK \endlink  and  \link #RESULT RESULT \endlink .
 		\ingroup ClassTest
 */
-#define START_TEST(class_name, version)\
+#define START_TEST(class_name)\
 /* define a special namespace for all internal variables */\
 /* to avoid potential collisions                         */\
 namespace TEST {\
@@ -57,7 +57,7 @@ namespace TEST {\
 	bool					this_test;\
 	int 					exception = 0;\
 	string 				exception_name = "";\
-	const char*		version_string = version;\
+	const char*		version_string = BALL_RELEASE_STRING;\
 	bool					newline = false;\
 	list<string>	tmp_file_list;\
 	std::ifstream	infile;\

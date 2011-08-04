@@ -1,14 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RegularData2D_test.C,v 1.21.28.1 2007/03/25 21:48:51 oliver Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
 #include <BALL/DATATYPE/regularData2D.h>
 
-START_TEST(RegularData2D, "$Id: RegularData2D_test.C,v 1.21.28.1 2007/03/25 21:48:51 oliver Exp $")
+START_TEST(RegularData2D)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

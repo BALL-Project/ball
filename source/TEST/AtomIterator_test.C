@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AtomIterator_test.C,v 1.6.32.1 2007/03/25 21:46:47 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(AtomIterator, "$Id: AtomIterator_test.C,v 1.6.32.1 2007/03/25 21:46:47 oliver Exp $")
+START_TEST(AtomIterator)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

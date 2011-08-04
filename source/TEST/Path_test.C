@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Path_test.C,v 1.12.30.3 2007/06/21 19:44:53 oliver Exp $
+
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -13,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(Path, "$Id: Path_test.C,v 1.12.30.3 2007/06/21 19:44:53 oliver Exp $")
+START_TEST(Path)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

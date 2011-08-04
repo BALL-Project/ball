@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PersistenceManager_test.C,v 1.11.28.1 2007/03/25 21:47:31 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -247,7 +246,7 @@ namespace BALL
 
 ///////////////////////////
 
-START_TEST(PersistanceManager, "$Id: PersistenceManager_test.C,v 1.11.28.1 2007/03/25 21:47:31 oliver Exp $")
+START_TEST(PersistanceManager)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

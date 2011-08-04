@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Embeddable_test.C,v 1.8.30.1 2007/03/25 21:47:03 oliver Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -35,7 +33,7 @@ class C
 	BALL_EMBEDDABLE(C, A)
 };
 
-START_TEST(Embeddable, "$Id: Embeddable_test.C,v 1.8.30.1 2007/03/25 21:47:03 oliver Exp $")
+START_TEST(Embeddable)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
