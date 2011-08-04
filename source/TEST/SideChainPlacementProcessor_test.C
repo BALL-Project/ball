@@ -78,9 +78,12 @@ RESULT
 CHECK( operator() apply to a system )
 	SideChainPlacementProcessor scpp;
 	//TODO shouldn't we test the input file as well?
-	//scpp.options.set(SideChainPlacementProcessor::Option::SCWRL_INPUT_FILE, BALL_TEST_DATA_PATH(SideChainPlacementProcessor_test_input_1.pdb));
-	//	scpp.options.set(SideChainPlacementProcessor::Option::SCWRL_SEQUENCE_FILE, BALL_TEST_DATA_PATH(SideChainPlacementProcessor_test_sequence_1.dat));
-	scpp.options.set(SideChainPlacementProcessor::Option::SCWRL_OUTPUT_FILE, BALL_TEST_DATA_PATH(SideChainPlacementProcessor_test_output_1.pdb));
+	//scpp.options.set(SideChainPlacementProcessor::Option::SCWRL_INPUT_FILE, 
+  //                 BALL_TEST_DATA_PATH(SideChainPlacementProcessor_test_input_1.pdb));
+	//scpp.options.set(SideChainPlacementProcessor::Option::SCWRL_SEQUENCE_FILE,
+	//                 BALL_TEST_DATA_PATH(SideChainPlacementProcessor_test_sequence_1.dat));
+	scpp.options.set(SideChainPlacementProcessor::Option::SCWRL_OUTPUT_FILE, 
+	                 BALL_TEST_DATA_PATH(SideChainPlacementProcessor_test_output_1.pdb));
 
 	System sys;	
 	PDBFile mol(BALL_TEST_DATA_PATH(SideChainPlacementProcessor_test.pdb), std::ios::in); 
@@ -99,7 +102,7 @@ CHECK( operator() apply to a system )
 	PDBFile PDB_pre( BALL_TEST_DATA_PATH(SideChainPlacementProcessor_test_output_pre_1.pdb), std::ios::out);	
 
 	// compare
-	//////// geht leider nicht! TEST_EQUAL(PDB_temp==PDB_pre, true) //TODO	
+	//////// does not work like this: TEST_EQUAL(PDB_temp==PDB_pre, true) //TODO	
 
 	// remove the temp file
 	File::remove(temp); 
@@ -144,58 +147,44 @@ CHECK(mutate)
  	scpp.options.set(SideChainPlacementProcessor::Option::MUTATE_SELECTED_SIDE_CHAINS, true);
 	//TODO   scpp.options.set(SideChainPlacementProcessor::Option::SCWRL_OUTPUT_FILE, BALL_TEST_DATA_PATH(SideChainPlacementProcessor_test_output_mut1.pdb));
 
-
 	System sys;	
 	PDBFile mol(BALL_TEST_DATA_PATH(SideChainPlacementProcessor_test.pdb), std::ios::in); 
 	mol >> sys;
-	String mutated_seq = "arCdcCeg";
-	scpp.setMutations(mutated_seq);
 	
 	//check if SCWRL path is set and the required file exists
-	try
-	{	
-	  File file(scpp.options.get(SideChainPlacementProcessor::Option::SCWRL_BINARY_PATH));
-	  if(file.isExecutable())
-	  {
-		sys.apply(scpp); //TODO werden beide cysteine gesetzt?
-		TEST_EQUAL(sys.getProtein(0)->getChain(0)->getResidue(2)->getName(), "CYS")
-		TEST_EQUAL(sys.getProtein(0)->getChain(1)->getResidue(1)->getName(), "CYS")
-		scpp.clear();
-	  }
-	}
-	//TODO in classTest.h catch handler throws "caught exception" error/message
-	catch(...)
+	try {
+		File file(scpp.options.get(SideChainPlacementProcessor::Option::SCWRL_BINARY_PATH));
+		if(file.isExecutable())
+		{
+			String mutated_seq = "arCdcCeg";
+			scpp.setMutations(mutated_seq);
+
+			printf("blubblubb\n");
+			sys.apply(scpp); //TODO Are both Cysteins set correctly?
+			TEST_EQUAL(sys.getProtein(0)->getChain(0)->getResidue(2)->getName(), "CYS")
+			TEST_EQUAL(sys.getProtein(0)->getChain(1)->getResidue(1)->getName(), "CYS")
+			scpp.clear();
+
+			scpp.options.set(SideChainPlacementProcessor::Option::MUTATE_SELECTED_SIDE_CHAINS, true);
+			scpp.options.set(SideChainPlacementProcessor::Option::SCWRL_OUTPUT_FILE, 
+											 BALL_TEST_DATA_PATH(SideChainPlacementProcessor_test_output_mut2.pdb));
+
+			System sys2;	
+			PDBFile mol2(BALL_TEST_DATA_PATH(SideChainPlacementProcessor_test.pdb), std::ios::in); 
+			mol2 >> sys2;
+			mutated_seq = "arCd";
+			scpp.setMutations(mutated_seq);
+			Chain* chain1 = (sys.getProtein(0)->getChain(0));
+			chain1->apply(scpp);
+			
+			sys2.apply(scpp);
+			TEST_EQUAL(sys.getProtein(0)->getChain(0)->getResidue(2)->getName(), "CYS")
+			TEST_EQUAL(sys.getProtein(0)->getChain(1)->getResidue(1)->getName(), "GLN")
+		}
+	} 
+	catch (...) 
 	{
-	  std::cout << "catch FileNotFound" << std::endl;
-	}
-
-	scpp.options.set(SideChainPlacementProcessor::Option::MUTATE_SELECTED_SIDE_CHAINS, true);
-	scpp.options.set(SideChainPlacementProcessor::Option::SCWRL_OUTPUT_FILE, BALL_TEST_DATA_PATH(SideChainPlacementProcessor_test_output_mut2.pdb));
-
-	System sys2;	
-	PDBFile mol2(BALL_TEST_DATA_PATH(SideChainPlacementProcessor_test.pdb), std::ios::in); 
-	mol2 >> sys2;
-	mutated_seq = "arCd";
-	scpp.setMutations(mutated_seq);
-	Chain* chain1 = (sys.getProtein(0)->getChain(0));
-	chain1->apply(scpp);
-
-	
-	//check if SCWRL path is set and the required file exists
-	try
-	{	
-	  File file2(scpp.options.get(SideChainPlacementProcessor::Option::SCWRL_BINARY_PATH));
-	  if(file2.isExecutable())
-	  {
-		sys2.apply(scpp);
-		TEST_EQUAL(sys.getProtein(0)->getChain(0)->getResidue(2)->getName(), "CYS")
-		TEST_EQUAL(sys.getProtein(0)->getChain(1)->getResidue(1)->getName(), "GLN")
-	  }
-	}
-	//TODO in classTest.h catch handler throws "caught exception" error/message
-	catch(...)
-	{
-	  std::cout << "catch FileNotFound" << std::endl;
+		std::cout << "Could not find Scwrl binary" << std::endl;
 	}
 
 RESULT

@@ -166,7 +166,7 @@ cout << endl;
 
 				// if we are not given a Scwrl results file, we have to
 				// actually call Scwrl.
-				int error_code = 0;
+				int error_code = -1;
 				if (!has_output)
 				{
 					// do we need a temporary input?
