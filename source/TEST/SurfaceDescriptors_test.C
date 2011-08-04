@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-//
+
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
 
@@ -16,7 +16,7 @@
 
 ///////////////////////////
 
-START_TEST(SimpleDescriptors, "")
+START_TEST(SimpleDescriptors)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

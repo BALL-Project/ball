@@ -1,20 +1,20 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SolventDescriptor_test.C,v 1.11.28.1 2007/03/25 21:49:00 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
- 
+
 ///////////////////////////
 #include <BALL/SOLVATION/solventDescriptor.h>
 ///////////////////////////
-	  
-START_TEST(SolventDescriptor, "$Id: SolventDescriptor_test.C,v 1.11.28.1 2007/03/25 21:49:00 oliver Exp $")
-		 
+
+START_TEST(SolventDescriptor)
+
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
-		  
+
 using namespace BALL;
-			 
+
 SolventDescriptor* s_ptr;
 CHECK(Cstr)
 	s_ptr = new SolventDescriptor;

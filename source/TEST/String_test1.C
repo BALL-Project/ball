@@ -10,7 +10,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test1.C,v 1.9.30.1 2007/03/25 21:49:03 oliver Exp $")
+START_TEST(String)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -18,7 +18,7 @@ START_TEST(String,"$Id: String_test1.C,v 1.9.30.1 2007/03/25 21:49:03 oliver Exp
 using namespace BALL;
 using std::string;
 
-String* s;	
+String* s;
 CHECK(String() throw())
 	s = new String;
 	TEST_NOT_EQUAL(0, s)

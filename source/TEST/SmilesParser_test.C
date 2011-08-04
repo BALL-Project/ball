@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SmilesParser_test.C,v 1.6.30.1 2007/03/25 21:48:59 oliver Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -67,7 +65,7 @@ Line readSmilesLine(std::istream& is)
 	return s;
 }
 
-START_TEST(SmilesParser, "$Id: SmilesParser_test.C,v 1.6.30.1 2007/03/25 21:48:59 oliver Exp $")
+START_TEST(SmilesParser)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

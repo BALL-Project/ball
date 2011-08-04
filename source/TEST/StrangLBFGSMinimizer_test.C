@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: StrangLBFGSMinimizer_test.C,v 1.1.4.3 2007/08/17 09:22:05 anhi Exp $
-//
 
 // NOTE: we are still missing a test that triggers a restart in the minimization after
 //			 the line search fails
@@ -21,7 +19,7 @@
 #include <BALL/STRUCTURE/residueChecker.h>
 ///////////////////////////
 
-START_TEST(StrangLBFGSMinimizer, "$Id: StrangLBFGSMinimizer_test.C,v 1.1.4.3 2007/08/17 09:22:05 anhi Exp $")
+START_TEST(StrangLBFGSMinimizer)
 
 using namespace BALL;
 

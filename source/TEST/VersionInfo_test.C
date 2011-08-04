@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: VersionInfo_test.C,v 1.4.14.2 2007/03/26 16:34:21 bertsch Exp $
-//
-// Author:
-//   Oliver Kohlbacher
-//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -16,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(VersionInfo, "$Id: VersionInfo_test.C,v 1.4.14.2 2007/03/26 16:34:21 bertsch Exp $")
+START_TEST(VersionInfo)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

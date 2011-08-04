@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XYZFile_test.C,v 1.7.28.2 2007/03/28 08:23:45 bertsch Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -15,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(XYZFile, "$Id: XYZFile_test.C,v 1.7.28.2 2007/03/28 08:23:45 bertsch Exp $")
+START_TEST(XYZFile)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

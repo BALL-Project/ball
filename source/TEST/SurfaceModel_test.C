@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SurfaceModel_test.C,v 1.1.2.4 2007/05/14 08:18:07 amoll Exp $
-//
-// Author:
-//   Andreas Moll
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -21,7 +16,7 @@
 using namespace BALL;
 using namespace BALL::VIEW;
 
-START_TEST(AddSurfaceModel, "$Id: SurfaceModel_test.C,v 1.1.2.4 2007/05/14 08:18:07 amoll Exp $")
+START_TEST(AddSurfaceModel)
 
 CHECK(CSTR)
 	AddSurfaceModel();

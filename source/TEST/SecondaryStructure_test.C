@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SecondaryStructure_test.C,v 1.14.30.1 2007/03/25 21:48:56 oliver Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -14,7 +12,7 @@
 #include <BALL/KERNEL/protein.h>
 ///////////////////////////
 
-START_TEST(SecondaryStructure, "$Id: SecondaryStructure_test.C,v 1.14.30.1 2007/03/25 21:48:56 oliver Exp $")
+START_TEST(SecondaryStructure)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -29,7 +27,7 @@ SecondaryStructure* s1;
 CHECK(SecondaryStructure() throw())
 	s1 = new SecondaryStructure;
 	TEST_NOT_EQUAL(s1, 0)
-RESULT											
+RESULT
 
 CHECK(~SecondaryStructure() throw())
 	delete s1;

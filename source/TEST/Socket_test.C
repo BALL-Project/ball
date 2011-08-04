@@ -42,7 +42,7 @@ class SimpleTCPServerTestThread
 		String sent_sync;
 };
 
-START_TEST(Socket, "")
+START_TEST(Socket)
 using namespace BALL;
 
 /////////////////////////////////////////////////////////////

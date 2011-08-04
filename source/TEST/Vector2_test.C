@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Vector2_test.C,v 1.11.28.1 2007/03/25 21:49:10 oliver Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -14,7 +12,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(TVector2, "$Id: Vector2_test.C,v 1.11.28.1 2007/03/25 21:49:10 oliver Exp $")
+START_TEST(TVector2)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

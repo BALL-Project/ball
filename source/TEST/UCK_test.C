@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: UCK_test.C,v 1.6.20.1 2007/03/25 21:49:10 oliver Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -28,7 +26,7 @@ UCK *u1;
 UCK *u2;
 UCK *u3;
 
-START_TEST(UCK, "$Id: UCK_test.C,v 1.6.20.1 2007/03/25 21:49:10 oliver Exp $")
+START_TEST(UCK)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

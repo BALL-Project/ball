@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SteepestDescentMinimizer_test.C,v 1.5.30.3 2007/05/16 15:56:36 aleru Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -17,7 +15,7 @@
 
 ///////////////////////////
 
-START_TEST(SteepestDescentMinimizer, "$Id: SteepestDescentMinimizer_test.C,v 1.5.30.3 2007/05/16 15:56:36 aleru Exp $")
+START_TEST(SteepestDescentMinimizer)
 
 using namespace BALL;
 

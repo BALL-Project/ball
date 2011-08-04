@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TranslationProcessor_test.C,v 1.2.28.1 2007/03/25 21:49:09 oliver Exp $
-//
 
 
 #include <BALL/CONCEPT/classTest.h>
@@ -10,7 +8,7 @@
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/KERNEL/fragment.h>
 
-START_TEST(TranslationApplictor, "$Id: TranslationProcessor_test.C,v 1.2.28.1 2007/03/25 21:49:09 oliver Exp $")
+START_TEST(TranslationApplictor)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

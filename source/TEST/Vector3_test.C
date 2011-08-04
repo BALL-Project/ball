@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Vector3_test.C,v 1.38.30.1 2007/03/25 21:49:11 oliver Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -15,7 +13,7 @@
 #include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.38.30.1 2007/03/25 21:49:11 oliver Exp $")
+START_TEST(TVector3)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

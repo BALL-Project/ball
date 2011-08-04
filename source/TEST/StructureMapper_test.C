@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: StructureMapper_test.C,v 1.13.14.2 2007/03/26 16:34:21 bertsch Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -15,7 +13,7 @@
 #include <BALL/FORMAT/PDBFile.h>
 #include <vector>
 
-START_TEST(StructureMapper, "$Id: StructureMapper_test.C,v 1.13.14.2 2007/03/26 16:34:21 bertsch Exp $")
+START_TEST(StructureMapper)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

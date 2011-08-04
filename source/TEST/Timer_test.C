@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Timer_test.C,v 1.23.20.1 2007/03/25 21:49:08 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -16,7 +15,7 @@
 #endif
 ///////////////////////////
 
-START_TEST(Timer, "$Id: Timer_test.C,v 1.23.20.1 2007/03/25 21:49:08 oliver Exp $")
+START_TEST(Timer)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

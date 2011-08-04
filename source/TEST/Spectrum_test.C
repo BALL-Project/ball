@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Spectrum_test.C,v 1.4.32.1 2007/03/25 21:49:01 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -14,7 +14,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Spectrum1D, "$Id: Spectrum_test.C,v 1.4.32.1 2007/03/25 21:49:01 oliver Exp $")
+START_TEST(Spectrum1D)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

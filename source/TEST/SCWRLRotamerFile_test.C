@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SCWRLRotamerFile_test.C,v 1.1.2.3 2007/08/07 09:51:19 toussaint Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -14,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(SCWRLRotamerFile, "$Id: SCWRLRotamerFile_test.C,v 1.1.2.3 2007/08/07 09:51:19 toussaint Exp $")
+START_TEST(SCWRLRotamerFile)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

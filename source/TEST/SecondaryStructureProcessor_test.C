@@ -13,14 +13,13 @@
 
 ///////////////////////////
 
-START_TEST(SecondaryStructureProcessor, "$Id: SecondaryStructureProcessor_test.C,v 1.2.30.1 2007/03/25 21:48:56 oliver Exp $")
+START_TEST(SecondaryStructureProcessor)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-											
 CHECK(Processor::Result operator() (Composite& composite))
   // ???
 RESULT

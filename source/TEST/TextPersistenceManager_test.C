@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TextPersistenceManager_test.C,v 1.18.28.1 2007/03/25 21:49:07 oliver Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -17,7 +15,7 @@
 
 ///////////////////////////
 
-START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.18.28.1 2007/03/25 21:49:07 oliver Exp $")
+START_TEST(TextPersistenceManager)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

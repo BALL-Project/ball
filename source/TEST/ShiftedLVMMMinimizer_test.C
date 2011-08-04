@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ShiftedLVMMMinimizer_test.C,v 1.1.4.2 2007/05/07 11:51:31 aleru Exp $
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -18,7 +16,7 @@
 #include <BALL/STRUCTURE/residueChecker.h>
 ///////////////////////////
 
-START_TEST(ShiftedLVMMMinimizer, "$Id: ShiftedLVMMMinimizer_test.C,v 1.1.4.2 2007/05/07 11:51:31 aleru Exp $")
+START_TEST(ShiftedLVMMMinimizer)
 
 using namespace BALL;
 

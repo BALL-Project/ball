@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TransformationManager_test.C,v 1.8.30.1 2007/03/25 21:49:08 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(TransformationManager, "$Id: TransformationManager_test.C,v 1.8.30.1 2007/03/25 21:49:08 oliver Exp $")
+START_TEST(TransformationManager)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -22,11 +21,11 @@ TransformationManager* ptr = 0;
 CHECK(TransformationManger::TransformationManager())
 	ptr = new TransformationManager;
 	TEST_NOT_EQUAL(ptr, 0)
-RESULT											
+RESULT
 
 CHECK(TransformationManger::~TransformationManager())
 	delete ptr;
-RESULT											
+RESULT
 
 TransformationManager tm;
 CHECK(TransformationManager::registerTransformation(const String& pattern, const String& command))
