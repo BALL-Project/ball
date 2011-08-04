@@ -29,6 +29,7 @@ namespace BALL
 				forward_(false),
 				backward_(false)
 		{
+			setOpenExternalLinks(true);
 //   			connect(this, SIGNAL(backwardAvailable(bool)), this, SLOT(setBackwardAvailable(bool)));
 //   			connect(this, SIGNAL(forwardAvailable(bool)), this, SLOT(setForwardAvailable(bool)));
 		}
