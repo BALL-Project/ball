@@ -8,6 +8,9 @@
 ///////////////////////////
 
 #include <BALL/STRUCTURE/assignBondOrderProcessor.h>
+#include <BALL/STRUCTURE/BONDORDERS/AStarBondOrderStrategy.h>
+#include <BALL/STRUCTURE/BONDORDERS/KGreedyBondOrderStrategy.h>
+#include <BALL/STRUCTURE/BONDORDERS/branchAndBoundBondOrderStrategy.h>
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/KERNEL/system.h>
@@ -171,8 +174,8 @@ CHECK(setDefaultOptions())
 	TEST_EQUAL(testbop.options.get(AssignBondOrderProcessor::Option::ALGORITHM),
 													 AssignBondOrderProcessor::Default::ALGORITHM)
 	
-	TEST_EQUAL(testbop.options.get(AssignBondOrderProcessor::Option::HEURISTIC),
-													 AssignBondOrderProcessor::Default::HEURISTIC)
+	TEST_EQUAL(testbop.options.get(AStarBondOrderStrategy::Option::HEURISTIC),
+													 AStarBondOrderStrategy::Default::HEURISTIC)
 
 	TEST_REAL_EQUAL(testbop.options.getReal(AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING),
 													 AssignBondOrderProcessor::Default::BOND_LENGTH_WEIGHTING)
@@ -180,11 +183,11 @@ CHECK(setDefaultOptions())
 	TEST_EQUAL(testbop.options.getBool(AssignBondOrderProcessor::Option::APPLY_FIRST_SOLUTION),
 													 AssignBondOrderProcessor::Default::APPLY_FIRST_SOLUTION)	
 
-	TEST_EQUAL(testbop.options.getInteger(AssignBondOrderProcessor::Option::GREEDY_K_SIZE),
-													 AssignBondOrderProcessor::Default::GREEDY_K_SIZE)
+	TEST_EQUAL(testbop.options.getInteger(KGreedyBondOrderStrategy::Option::GREEDY_K_SIZE),
+													 KGreedyBondOrderStrategy::Default::GREEDY_K_SIZE)
 	
-	TEST_REAL_EQUAL(testbop.options.getReal(AssignBondOrderProcessor::Option::BRANCH_AND_BOUND_CUTOFF),
-													 AssignBondOrderProcessor::Default::BRANCH_AND_BOUND_CUTOFF)
+	TEST_REAL_EQUAL(testbop.options.getReal(BranchAndBoundBondOrderStrategy::Option::BRANCH_AND_BOUND_CUTOFF),
+													 BranchAndBoundBondOrderStrategy::Default::BRANCH_AND_BOUND_CUTOFF)
 
 	TEST_EQUAL(testbop.options.getBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_CONNECTIVITY),
 													 AssignBondOrderProcessor::Default::COMPUTE_ALSO_CONNECTIVITY)
@@ -246,8 +249,8 @@ CHECK(Option::ALGORITHM: BRANCH_AND_BOUND)
 	// to have a chance of catching bugs with valgrind if they sneak in
 	AssignBondOrderProcessor abop;
 	abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM, AssignBondOrderProcessor::Algorithm::BRANCH_AND_BOUND);
-	//abop.options.setReal(AssignBondOrderProcessor::Option::BRANCH_AND_BOUND_CUTOFF, 5);
-	//abop.options.setReal(AssignBondOrderProcessor::Option::GREEDY_K_SIZE, 100);
+	//abop.options.setReal(BranchAndBoundBondOrderStrategy::Option::BRANCH_AND_BOUND_CUTOFF, 5);
+	//abop.options.setReal(KGreedyBondOrderStrategy::Option::GREEDY_K_SIZE, 100);
 	
 	System sys;
 	MOL2File mol(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AAA.mol2), std::ios::in);
@@ -263,7 +266,7 @@ CHECK(Option::HEURISTIC: SIMPLE)
   // There is really not much we can test here, so we just execute the processor
 	// to have a chance of catching bugs with valgrind if they sneak in
 	AssignBondOrderProcessor abop;
-	abop.options.set(AssignBondOrderProcessor::Option::HEURISTIC,AssignBondOrderProcessor::Heuristic::SIMPLE);
+	abop.options.set(AStarBondOrderStrategy::Option::HEURISTIC,AStarBondOrderStrategy::Heuristic::SIMPLE);
 
 	System sys;
 	MOL2File mol_in(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMHTAR01.mol2), std::ios::in);
@@ -274,7 +277,7 @@ CHECK(Option::HEURISTIC: MEDIUM)
   // There is really not much we can test here, so we just execute the processor
 	// to have a chance of catching bugs with valgrind if they sneak in
 	AssignBondOrderProcessor abop;
-	abop.options.set(AssignBondOrderProcessor::Option::HEURISTIC,AssignBondOrderProcessor::Heuristic::MEDIUM);
+	abop.options.set(AStarBondOrderStrategy::Option::HEURISTIC,AStarBondOrderStrategy::Heuristic::MEDIUM);
 
 	System sys;
 	MOL2File mol_in(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMHTAR01.mol2), std::ios::in);
@@ -285,7 +288,7 @@ CHECK(Option::HEURISTIC: TIGHT)
   // There is really not much we can test here, so we just execute the processor
 	// to have a chance of catching bugs with valgrind if they sneak in
 	AssignBondOrderProcessor abop;
-	abop.options.set(AssignBondOrderProcessor::Option::HEURISTIC,AssignBondOrderProcessor::Heuristic::TIGHT);
+	abop.options.set(AStarBondOrderStrategy::Option::HEURISTIC,AStarBondOrderStrategy::Heuristic::TIGHT);
 
 	System sys;
 	MOL2File mol_in(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMHTAR01.mol2), std::ios::in);
@@ -1642,7 +1645,7 @@ RESULT
 CHECK(Option::GREEDY_K_SIZE) 
 	AssignBondOrderProcessor abop;
 	abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM,AssignBondOrderProcessor::Algorithm::K_GREEDY);
-	abop.options.setReal(AssignBondOrderProcessor::Option::GREEDY_K_SIZE, 1);
+	abop.options.setReal(KGreedyBondOrderStrategy::Option::GREEDY_K_SIZE, 1);
 	
 	System sys;
 	MOL2File mol(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CUDJAM_sol_5.mol2), std::ios::in);
@@ -1650,16 +1653,16 @@ CHECK(Option::GREEDY_K_SIZE)
 	sys.apply(abop);
 	TEST_EQUAL(abop.getNumberOfComputedSolutions(), 1)
 
-	abop.options.setReal(AssignBondOrderProcessor::Option::GREEDY_K_SIZE, 2);
+	abop.options.setReal(KGreedyBondOrderStrategy::Option::GREEDY_K_SIZE, 2);
 	sys.apply(abop);
 	TEST_EQUAL(abop.getNumberOfComputedSolutions(), 2)
 
-	abop.options.setReal(AssignBondOrderProcessor::Option::GREEDY_K_SIZE, 5);
+	abop.options.setReal(KGreedyBondOrderStrategy::Option::GREEDY_K_SIZE, 5);
 	sys.apply(abop);
 	TEST_EQUAL(abop.getNumberOfComputedSolutions(), 5)
 	
 	CAPTURE_OUTPUT_LEVEL(1000)
-		abop.options.setReal(AssignBondOrderProcessor::Option::GREEDY_K_SIZE, -1);
+		abop.options.setReal(KGreedyBondOrderStrategy::Option::GREEDY_K_SIZE, -1);
 		sys.apply(abop);
 		TEST_EQUAL(abop.getNumberOfComputedSolutions(), 0)
 	COMPARE_OUTPUT("")
@@ -1670,8 +1673,8 @@ CHECK(Option::BRANCH_AND_BOUND_CUTOFF)
 	// to have a chance of catching bugs with valgrind if they sneak in
 	AssignBondOrderProcessor abop;
 	abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM, AssignBondOrderProcessor::Algorithm::BRANCH_AND_BOUND);
-	abop.options.setReal(AssignBondOrderProcessor::Option::BRANCH_AND_BOUND_CUTOFF, 1);
-	abop.options.setReal(AssignBondOrderProcessor::Option::GREEDY_K_SIZE, 1);
+	abop.options.setReal(BranchAndBoundBondOrderStrategy::Option::BRANCH_AND_BOUND_CUTOFF, 1);
+	abop.options.setReal(KGreedyBondOrderStrategy::Option::GREEDY_K_SIZE, 1);
 	System sys;		
 	MOL2File mol(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_COHKOZ_sol_5.mol2), std::ios::in);
 	mol >> sys;

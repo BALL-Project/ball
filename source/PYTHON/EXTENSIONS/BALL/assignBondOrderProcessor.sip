@@ -35,15 +35,15 @@ class AssignBondOrderProcessor
 			static const char* USE_FINE_PENALTY;
 			static const char* KEKULIZE_RINGS;
 			static const char* ALGORITHM; 
-			static const char* HEURISTIC;
+//			static const char* HEURISTIC;
 			static const char* INIFile;	
 			static const char* MAX_BOND_ORDER;
 			static const char* MAX_NUMBER_OF_SOLUTIONS;
 			static const char* COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS;
 			static const char* BOND_LENGTH_WEIGHTING;	
 			static const char* APPLY_FIRST_SOLUTION;
-			static const char* GREEDY_K_SIZE;
-			static const char* BRANCH_AND_BOUND_CUTOFF;
+//			static const char* GREEDY_K_SIZE;
+//			static const char* BRANCH_AND_BOUND_CUTOFF;
 		};
 
 		struct Default
@@ -60,15 +60,15 @@ class AssignBondOrderProcessor
 			static const bool USE_FINE_PENALTY;
 			static const bool KEKULIZE_RINGS;
 			static const String ALGORITHM;	
-			static const String HEURISTIC;
+//			static const String HEURISTIC;
 			static const String INIFile;
 			static const int MAX_BOND_ORDER;	
 			static const int MAX_NUMBER_OF_SOLUTIONS;
 			static const bool COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS;
 			static const float BOND_LENGTH_WEIGHTING;	
 			static const bool APPLY_FIRST_SOLUTION;
-			static const int GREEDY_K_SIZE;
-			static const float BRANCH_AND_BOUND_CUTOFF;
+//			static const int GREEDY_K_SIZE;
+//			static const float BRANCH_AND_BOUND_CUTOFF;
 
 		};
 
@@ -84,6 +84,7 @@ class AssignBondOrderProcessor
 			static const String BRANCH_AND_BOUND;
 		};
 		
+		/*
 		struct Heuristic
 		{
 %TypeHeaderCode
@@ -95,6 +96,7 @@ class AssignBondOrderProcessor
 			static const String MEDIUM; 
 			static const String TIGHT;
 		};
+		*/
 
 	//	BALL_CREATE(AssignBondOrderProcessor);
 		

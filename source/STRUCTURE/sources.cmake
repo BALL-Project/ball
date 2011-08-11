@@ -1,3 +1,4 @@
+INCLUDE(source/STRUCTURE/BONDORDERS/sources.cmake)
 INCLUDE(source/STRUCTURE/DOCKING/sources.cmake)
 
 ### list all filenames of the directory here ###

@@ -17,7 +17,6 @@
 	#include <BALL/DATATYPE/hashSet.h>
 #endif
 
-
 #ifndef BALL_KERNEL_BOND_H
 	#include <BALL/KERNEL/bond.h>
 #endif
@@ -35,17 +34,23 @@
 #endif
 
 #ifndef BALL_SYSTEM_TIMER_H
-#include <BALL/SYSTEM/timer.h>
+# include <BALL/SYSTEM/timer.h>
+#endif
+
+#ifndef BALL_STRUCTURE_BONDORDERS_BONDORDERASSIGNMENTSTRATEGY_H
+# include <BALL/STRUCTURE/BONDORDERS/bondOrderAssignmentStrategy.h>
+#endif
+
+#ifndef BALL_STRUCTURE_BONDORDERS_BONDORDERASSIGNMENT_H
+# include <BALL/STRUCTURE/BONDORDERS/bondOrderAssignment.h>
+#endif
+
+#ifndef BALL_STRUCTURE_BONDORDERS_PARTIALBONDORDERASSIGNMENT_H
+# include <BALL/STRUCTURE/BONDORDERS/partialBondOrderAssignment.h>
 #endif
 
 #include <map>
 #include <vector>
-#include <queue>
-
-#ifdef BALL_HAS_LPSOLVE
-		struct _lprec;
-		typedef struct _lprec lprec;
-#endif
 
 namespace BALL
 {
@@ -86,10 +91,18 @@ namespace BALL
 		: public UnaryProcessor<AtomContainer>
 	{
 		protected:
-			class Solution_;
-			friend class Solution;
+			friend class PartialBondOrderAssignment;
+			friend class BondOrderAssignment;
+
 			class PQ_Entry_;
 			friend class PQ_Entry_;
+
+			friend class BondOrderAssignmentStrategy;
+
+			friend class AStarBondOrderStrategy;
+			friend class BranchAndBoundBondOrderStrategy;
+			friend class ILPBondOrderStrategy;
+			friend class KGreedyBondOrderStrategy;
 
 		public:
 
@@ -153,13 +166,6 @@ namespace BALL
 				*/
 				static const char* ALGORITHM;
 
-				/**	heuristic defining the tightness of the search critria 
-				 * @see Option::Heuristic::SIMPLE
-				 * @see Option::Heuristic::MEDIUM
-				 * @see Option::Heuristic::TIGHT
-				*/
-				static const char* HEURISTIC;
-
 				/** the penalty parameter file
 				 */
 				static const char* INIFile;
@@ -192,23 +198,6 @@ namespace BALL
 				 */
 				static const char* APPLY_FIRST_SOLUTION;
 
-				/** the size of priority queue for the greedy algorithm.
-				 * Default is 1. 
-				 * @see Option::Algorithm::K_GREEDY;
-				 * \par
-				 *   <b>NOTE:</b> This option is still experimental.
-				 */
-				static const char* GREEDY_K_SIZE;
-
-				/** the percentage cutoff for keeping PQ-Entries in the branch and bound algorithm.
-				 * Default is 1.2.
-				 * @see Option::AlgorithmBRANCH_AND_BOUND;
-				 * \par
-				 *   <b>NOTE:</b> This option is still experimental.
-				 */
-				static const char* BRANCH_AND_BOUND_CUTOFF;
-
-
 			};
 
 			/// Default values for options
@@ -224,15 +213,12 @@ namespace BALL
 				static const bool USE_FINE_PENALTY;
 				static const bool KEKULIZE_RINGS;
 				static const String ALGORITHM;
-				static const String HEURISTIC;
 				static const String INIFile;
 				static const int MAX_BOND_ORDER;
 				static const int MAX_NUMBER_OF_SOLUTIONS;
 				static const bool COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS;
 				static const float BOND_LENGTH_WEIGHTING;
 				static const bool APPLY_FIRST_SOLUTION;
-				static const int GREEDY_K_SIZE;
-				static const float BRANCH_AND_BOUND_CUTOFF;
 			};
 
 			struct BALL_EXPORT Algorithm
@@ -241,13 +227,6 @@ namespace BALL
 				static const String ILP;
 				static const String K_GREEDY;
 				static const String BRANCH_AND_BOUND;
-			};
-
-			struct BALL_EXPORT Heuristic
-			{
-				static const String SIMPLE;
-				static const String MEDIUM;
-				static const String TIGHT;
 			};
 
 			//@}
@@ -475,123 +454,6 @@ namespace BALL
 
 		protected:
 
-			// Nested class storing the parameters of a solution to our ILP
-			class Solution_
-			{
-				friend class AssignBondOrderProcessor;
-
-				public:
-					// Default constructor
-					Solution_();
-
-					// Detailed constructor 
-					Solution_(PQ_Entry_& entry ,AssignBondOrderProcessor* abop,
-										int number_of_node_expansions, int search_queue_size);
-
-					// Destructor
-					virtual ~Solution_();
-
-					// 
-					void clear();
-
-					// 
-					int getNumberOfNodeExpansions() const {return node_expansions;}
-
-					//
-					int getQueueSize() const {return queue_size;}
-
-					// denotes whether the problem could be solved or not  
-					bool valid;
-
-					// the result : the set of bond orders for _ALL_ original bonds
-					HashMap<Bond*, int> bond_orders;
-
-					// the result part2: the atoms with n additional hydrogens
-					HashMap<Atom*, int> number_of_virtual_hydrogens;
-
-					// the virtual atoms and bonds that should be deleted when the next 
-					// solution is applied
-					vector<Atom*> atoms_to_delete;
-					//vector<Bond*> bonds_to_delete;
-
-					// the values of the objective function
-					float atom_type_penalty;
-					float bond_length_penalty;
-					float total_charge;
-					int node_expansions;
-					int queue_size;
-					AssignBondOrderProcessor* parent;
-					AtomContainer* ac;
-			};
-
-			// Nested class storing a priority queue entry for the A-STAR-Option
-			class PQ_Entry_
-			{
-				friend class AssignBondOrderProcessor;
-
-				public:
-
-					// Default constructor
-					PQ_Entry_();
-
-					// Destructor
-					~PQ_Entry_();
-
-					// 
-					void clear();
-
-					// the less operator.
-					// NOTE: we want a reverse sort, hence we actually return a "greater" 
-					bool operator < (const PQ_Entry_& b) const;
-						// the penalty
-
-					float coarsePenalty(float atom_type_penalty, float bond_length_penalty) const
-					{
-						return ( ( (    (atom_type_normalization_factor < 0.0001)
-										     || (bond_length_normalization_factor < 0.0001)
-												 || (alpha < 0.0001)) ?
-											 atom_type_penalty :
-											 ((1.-alpha) * (atom_type_penalty / atom_type_normalization_factor)
-								        + (alpha* bond_length_penalty / bond_length_normalization_factor))));
-					}
-
-					// the penalty
-					float coarsePenalty() const
-					{
-						return coarsePenalty(estimated_atom_type_penalty, estimated_bond_length_penalty);
-					}
-
-					// the bond length penalty 
-					float finePenalty() const {return estimated_bond_length_penalty;}
-
-					// the estimated atom type penalty
-					float estimated_atom_type_penalty;
-					// the estimated bond length penalty
-					float estimated_bond_length_penalty;
-
-					// the bond orders 
-					// the i-th entry denotes the bondorder of the i-th bond
-					// unset bonds get the order 0
-					vector<short> bond_orders;
-
-					// the index of the bond last considered 
-					Position last_bond;
-
-					// NOTE: these variables are here to speed up
-					//       a number of decisions, but we do not
-					//       want to store them in each PQ_Entry_
-					//       object since they are the same in the
-					//       whole queue
-					//
-					//       But this approach is not thread-safe!
-					//       Two simultaneously running bond order threads
-					//       might overwrite their alpha, ... values!
-					static float alpha;
-					static float atom_type_normalization_factor;
-					static float bond_length_normalization_factor;
-					static bool  use_fine_penalty;
-				};
-
 			/** Reads, checks and stores the options. 	
 			 *
 			 * @return bool - false if one of the options got an invalid value.
@@ -656,8 +518,9 @@ namespace BALL
 			float computeVirtualHydrogens_(Atom* atom);
 
 			/** Applies the given solution.
+			 *  TODO: move to the solution!
 			 */
-			bool apply_(Solution_& solution);
+			bool apply_(BondOrderAssignment& solution);
 
 			/** Stores the original configuration of the atom container.
 			 */
@@ -668,7 +531,7 @@ namespace BALL
 			 * param   sol  solution, whose queue size should be returned. 
 			 * return  int -  queue size when the given solution was found.  
 			 */
-			int getQueueSize_(const Solution_& sol){return sol.getQueueSize();}
+			int getQueueSize_(const BondOrderAssignment& sol){return sol.getQueueSize();}
 
 			/** Returns the total charge of a solution.
 			 * 
@@ -676,7 +539,7 @@ namespace BALL
 			 * @return float -  total charge of the given solution.  
 			*/
 
-			float getTotalCharge_(const Solution_& sol)
+			float getTotalCharge_(const BondOrderAssignment& sol)
 			{
 				if (sol.valid) 
 				{
@@ -694,19 +557,9 @@ namespace BALL
 			 * @return  float -  total penalty of solution i.  
 			 * @see  Option::BOND_LENGTH_WEIGHTING;
 			 */
-			float getTotalPenalty_(const Solution_& sol)
+			float getTotalPenalty_(const BondOrderAssignment& sol)
 			{
-				if (   (atom_type_normalization_factor_   < 0.00001)
-				    || (bond_length_normalization_factor_ < 0.00001)
-						|| (alpha_ < 0.0001))
-				{
-					return sol.atom_type_penalty;
-				}
-				else
-				{
-					return (  (1.-alpha_) * (sol.atom_type_penalty/atom_type_normalization_factor_)
-									+ (alpha_*sol.bond_length_penalty/bond_length_normalization_factor_));
-				}
+				return sol.coarsePenalty();
 			}
 
 			/* Returns the number of node expansions before the given solution was found.
@@ -714,18 +567,7 @@ namespace BALL
 			 * param   sol  solution, whose number of node expansions should be returned. 
 			 * return  int -  number of node expansions before solution i was found.  
 			 */
-			int getNumberOfNodeExpansions_(const Solution_& sol){return sol.getNumberOfNodeExpansions();}
-
-
-#ifdef BALL_HAS_LPSOLVE
-			/** Setup the integer linear program.
-			 */
-			bool createILP_();
-
-			/** Solve the current integer linear program and convert it into a Solution_
-			 */
-			bool solveILP_();
-#endif
+			int getNumberOfNodeExpansions_(const BondOrderAssignment& sol){return sol.getNumberOfNodeExpansions();}
 
 			/// Processor is in a useable valid state. 
 			bool valid_;
@@ -769,20 +611,6 @@ namespace BALL
 			//
 			// a virtual dummy bond
 			Bond* virtual_bond_;
-			//
-			//
-
-			// ********************* ILP stuff ***********************
-			//
-			// Vector for mapping from variable indices onto free bonds in the
-			// order used by the ILP
-			std::vector<Bond*> ilp_index_to_free_bond_;
-
-			// number of bond variables in the ILP
-			Position ilp_number_of_free_bonds_;
-
-			// Constant penalty (fixed bonds)
-			float ilp_const_penalty_;
 
 			// ******************* general datastructures *********************
 
@@ -796,11 +624,11 @@ namespace BALL
 			std::vector<Position> fixed_val_;
 
 			// storing the solutions
-			vector<Solution_> solutions_;
+			vector<BondOrderAssignment> solutions_;
 
 			// the original conformation before we computed anything
 			// this is a vector because we can have multiple molecules...
-			vector<Solution_> starting_configuration_;
+			vector<BondOrderAssignment> starting_configuration_;
 
 			// the inverse of the atom type penalty normalization factor
 			float atom_type_normalization_factor_;
@@ -836,58 +664,8 @@ namespace BALL
 			// flag for using fine penalties derived from 3d information
 			bool use_fine_penalty_;
 
-			// this enum allows faster access to the type of the chosen heuristic than a string compare
-			enum HEURISTIC_INDEX
-			{
-				SIMPLE,
-				MEDIUM,
-				TIGHT
-			};
-
-			HEURISTIC_INDEX heuristic_index_;
-
-			// //////// ************ for Algorithm::BRANCH_AND_BOUND ************ /////////
-			bool performBranchAndBound_();
-			float greedy_atom_type_penalty_;
-			float greedy_bond_length_penalty_;
-
-			// //////// ************ for Algorithm::K_GREEDY ************ /////////
-			vector<PQ_Entry_> performGreedy_(PQ_Entry_& entry, Size greedy_k  = 10);
-			int greedy_node_expansions_;
-
-			// //////// ************ for Algorithm::A_STAR ************ /////////
-			/// Computes a next solution in the ASTAR - algorithm.
-			bool	performAStarStep_();
-
-
 			// ////////              general stuff                      /////////
 
-			/// The priority queue. 
-			std::priority_queue<PQ_Entry_> queue_;
-
-			/** Estimates the objective function f = g* + h* of the ASTAR - algorithm, if
-			 *  include_heuristic_term == true, otherwise compute only f = g*. The
-			 *  result is stored in the PQ_Entry_ entry's member estimated_atom_type_penalty.
-			 *
-			 *  @retval bool - true, if the entry is still valid.
-			 *  @retval bool - false otherwise.
-			 */
-			bool estimatePenalty_(PQ_Entry_& entry, bool include_heuristic_term = true);
-
-			/// Estimates the atom type penalty for a given unclosed atom.
-			float estimateAtomTypePenalty_(Atom* atom,
-																		 Index atom_index,    // the atom index
-																		 int fixed_valence,   // its so far fixed valence (incl. virtual H's)
-																		 int fixed_virtual_order, // its so far fixed virtual H's
-																		 int num_free_bonds,  // its number of unfixed original bonds
-																		 PQ_Entry_& entry);
-			/// Estimates the bond length penalty for a given unclosed atom.
-			//  NOTE: virtual bonds are excluded!
-			float estimateBondLengthPenalty_(Index atom_index, // the atom index
-																			 const vector<Bond*>& free_bonds,
-																			 int fixed_virtual_order,
-																			 int fixed_valence,
-																			 int num_free_bonds);
 
 			// The penalty administration datastructures.
 			//  filled by readAtomPenalties_
@@ -912,16 +690,13 @@ namespace BALL
 			// Stores the possible bond lengths penalties per order.
 			HashMap<Bond*, vector<float> > bond_lengths_penalties_;
 
-			// The current number of node expansions. 
-			// step_ + queue_.size() gives the number of touched nodes.
-			int step_;
-
 			Timer timer_;
-#ifdef BALL_HAS_LPSOLVE
-			lprec* ilp_;
-#endif
+
 			AssignBondOrderProcessor(const AssignBondOrderProcessor& abop);
 			AssignBondOrderProcessor& operator = (const AssignBondOrderProcessor& abop);
+
+			// The strategies this class can use
+			StringHashMap<boost::shared_ptr<BondOrderAssignmentStrategy> > strategies_;
 		};
 
 } // namespace BALL 
