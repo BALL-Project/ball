@@ -250,6 +250,11 @@ namespace BALL
 		html_view_dock->show();
 #endif
 
+		if (UIOperationMode::instance().getMode() > UIOperationMode::MODE_ADVANCED)
+		{
+			toggleFullScreen();	
+		}
+
 		setStatusbarText((String)tr("Ready."));
 	}
 
