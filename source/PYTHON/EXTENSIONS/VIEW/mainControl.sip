@@ -85,6 +85,8 @@ class MainControl
 	virtual bool isAboutToQuit();
 	virtual void resize(int, int);
 	void setContentSize(int, int);
+
+	void toggleFullScreen();
 	
 	// static MainControl* getMainControl(const QObject* object) throw();
 	// int insertMenuEntry(int /ID/, const String& /name/, const QObject* /receiver/ = 0, const char* /slot/ = 0, int /accel/ = 0, int /entry_ID/ = -1, String /hint/ = "") throw();

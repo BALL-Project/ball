@@ -359,3 +359,6 @@ import os
 if os.environ.has_key('BALLVIEW_ENTER_STEREO') and (os.environ['BALLVIEW_ENTER_STEREO'].upper() == "TRUE"):
   Scene.getInstance(0).enterStereo()
 
+if os.environ.has_key('BALLVIEW_FULLSCREEN') and (os.environ['BALLVIEW_FULLSCREEN'].upper() == "TRUE"):
+  getMainControl().toggleFullScreen()
+
