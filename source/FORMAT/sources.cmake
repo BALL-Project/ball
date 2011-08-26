@@ -20,6 +20,8 @@ SET(SOURCES_LIST
 	lineBasedFile.C
 	molDB.C
 	MOLFile.C
+	MOPACInputFile.C
+	MOPACOutputFile.C
 	SDFile.C
 	MOL2File.C
 	NMRStarFile.C
