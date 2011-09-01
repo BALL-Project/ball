@@ -6,7 +6,11 @@
 #include <boost/graph/adjacency_list.hpp>
 
 #ifndef BALL_COMMON_GLOBAL_H
-	#include <BALL/COMMON/global.h>
+#	include <BALL/COMMON/global.h>
+#endif
+
+#ifndef BALL_DATATYPE_GRAPH_GRAPHALGORITHMS_H
+# include <BALL/DATATYPE/GRAPH/graphAlgorithms.h>
 #endif
 
 namespace boost
@@ -27,8 +31,8 @@ namespace BALL
 
 	//Define a properly adjusted boost graph type
 	typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS,
-		boost::property<boost::vertex_atom_ptr_t, const Atom*>,
-		boost::property<boost::edge_bond_ptr_t, const Bond*>
+	                              boost::property<boost::vertex_atom_ptr_t, const Atom*>,
+	                              boost::property<boost::edge_bond_ptr_t, const Bond*>
 	> MolecularGraphBase;
 
 	/**
@@ -45,7 +49,8 @@ namespace BALL
 	 *   const Atom* atom = boost::get(atom_ptrs, vertex_handle);
 	 * @endcode
 	 */
-	class BALL_EXPORT MolecularGraph : public MolecularGraphBase
+	class BALL_EXPORT MolecularGraph 
+		: public MolecularGraphBase
 	{
 		public:
 			///@TODO do something useful with this
@@ -71,6 +76,7 @@ namespace BALL
 			std::map<const Atom*, Vertex> atom_to_vertex_;
 	};
 
+	typedef GRAPH::GraphTraits<MolecularGraph> MolecularGraphTraits;
 }
 
 #endif //BALL_DATATYPE_MOLECULARGRAPH_H

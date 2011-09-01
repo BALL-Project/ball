@@ -28,15 +28,19 @@ namespace BALL
 		greedy_node_expansions_ = 0;
 	}
 
-	void KGreedyBondOrderStrategy::readOptions(const Options& options)
+	bool KGreedyBondOrderStrategy::readOptions(const Options& options)
 	{
-		AStarBondOrderStrategy::readOptions(options);
+		bool result = AStarBondOrderStrategy::readOptions(options);
 
-		if (options.getInteger(Option::GREEDY_K_SIZE) < 0)
+		if (options.getReal(Option::GREEDY_K_SIZE) < 0)
 		{
 			Log.error() << __FILE__ << " " << __LINE__ 
 				          << " : Error in options! Please check the option Option::GREEDY_K_SIZE."  << std::endl;
+
+			return false;
 		}
+
+		return result;
 	}
 
 	void KGreedyBondOrderStrategy::setDefaultOptions()
@@ -49,6 +53,8 @@ namespace BALL
 
 	void KGreedyBondOrderStrategy::init()
 	{
+		clear();
+
 		// in the k-greedy case, init() alredy computes the k solutions
 		// computeNextSolution() then only returns them from the results vector
 		current_solution_ = 0;

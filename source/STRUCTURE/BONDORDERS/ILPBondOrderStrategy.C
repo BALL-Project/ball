@@ -38,8 +38,9 @@ namespace BALL
 		ilp_ = 0;
 	}
 
-	void ILPBondOrderStrategy::readOptions(const Options& /*options*/)
+	bool ILPBondOrderStrategy::readOptions(const Options& /*options*/)
 	{
+		return true;
 	}
 
 	void ILPBondOrderStrategy::setDefaultOptions()

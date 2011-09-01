@@ -384,7 +384,6 @@ namespace BALL
 	
 	template <typename T>
 	TVector2<T>::TVector2()
-		
 		:	PersistentObject(),
 			x(0),
 			y(0)
@@ -393,7 +392,6 @@ namespace BALL
 
 	template <typename T>
 	TVector2<T>::TVector2(const T& value)
-		
 		:	PersistentObject(),	
 			x(value),
 			y(value)
@@ -402,7 +400,6 @@ namespace BALL
 
 	template <typename T>
 	TVector2<T>::TVector2(const T& vx, const T& vy)
-		
 		:	PersistentObject(),
 			x(vx),
 			y(vy)
@@ -411,7 +408,6 @@ namespace BALL
 
 	template <typename T>
 	TVector2<T>::TVector2(const TVector2& vector)
-		
 		:	PersistentObject(),
 			x(vector.x),
 			y(vector.y)
@@ -420,7 +416,6 @@ namespace BALL
 
 	template <typename T>
 	TVector2<T>::~TVector2()
-		
 	{
 	}
 
@@ -439,7 +434,6 @@ namespace BALL
 
 	template <typename T>
 	void TVector2<T>::clear()
-		
 	{
 		x = y = (T)0;
 	}
@@ -463,7 +457,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	void TVector2<T>::set(const T& value)
-		
 	{
 		x = value;
 		y = value;
@@ -472,7 +465,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	void TVector2<T>::set(const T& vx, const T& vy)
-		
 	{
 		x = vx;
 		y = vy;
@@ -481,7 +473,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	void TVector2<T>::set(const TVector2<T>& vector)
-		
 	{
 		x = vector.x;
 		y = vector.y;
@@ -490,7 +481,6 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE 
 	TVector2<T>& TVector2<T>::operator = (const TVector2<T>& vector)
-		
 	{
 		x = vector.x;
 		y = vector.y;

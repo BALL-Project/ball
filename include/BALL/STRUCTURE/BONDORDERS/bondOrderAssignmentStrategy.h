@@ -29,7 +29,7 @@ namespace BALL
 			BondOrderAssignmentStrategy(AssignBondOrderProcessor* parent);
 
 			virtual boost::shared_ptr<BondOrderAssignment> computeNextSolution() = 0;
-			virtual void readOptions(const Options& options);
+			virtual bool readOptions(const Options& options);
 			virtual void setDefaultOptions();
 			virtual void clear();
 			virtual void init() = 0;

@@ -30,7 +30,7 @@ namespace BALL
 			virtual void clear();
 			virtual void init();
 
-			virtual void readOptions(const Options& options);
+			virtual bool readOptions(const Options& options);
 			virtual void setDefaultOptions();
 
 			virtual boost::shared_ptr<BondOrderAssignment> computeNextSolution();

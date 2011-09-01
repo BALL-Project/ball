@@ -7,8 +7,9 @@ namespace BALL
 	{
 	}
 
-	void BondOrderAssignmentStrategy::readOptions(const Options& /*options*/)
+	bool BondOrderAssignmentStrategy::readOptions(const Options& /*options*/)
 	{
+		return true;
 	}
 
 	void BondOrderAssignmentStrategy::setDefaultOptions()

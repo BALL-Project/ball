@@ -52,13 +52,13 @@ namespace BALL
 			KGreedyBondOrderStrategy(AssignBondOrderProcessor* parent);
 			virtual ~KGreedyBondOrderStrategy();
 
-			void clear();
-			void init();
+			virtual void clear();
+			virtual void init();
 
-			void readOptions(const Options& options);
-			void setDefaultOptions();
+			virtual bool readOptions(const Options& options);
+			virtual void setDefaultOptions();
 
-			boost::shared_ptr<BondOrderAssignment> computeNextSolution();
+			virtual boost::shared_ptr<BondOrderAssignment> computeNextSolution();
 
 		protected:
 

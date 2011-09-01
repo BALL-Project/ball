@@ -31,7 +31,7 @@ namespace BALL
 		step_ = 0;
 	}
 
-	void AStarBondOrderStrategy::readOptions(const Options& options)
+	bool AStarBondOrderStrategy::readOptions(const Options& options)
 	{
 		String heuristic = options.get(Option::HEURISTIC);
 		if (heuristic == Heuristic::TIGHT)
@@ -40,6 +40,8 @@ namespace BALL
 			heuristic_index_ = PartialBondOrderAssignment::MEDIUM;
 		else if (heuristic == Heuristic::SIMPLE)
 			heuristic_index_ = PartialBondOrderAssignment::SIMPLE;
+
+		return true;
 	}
 
 	void AStarBondOrderStrategy::setDefaultOptions()
@@ -50,6 +52,7 @@ namespace BALL
 
 	void AStarBondOrderStrategy::init()
 	{
+		clear();
 		// Initialize a priority queue and try to find a first solution
 
 		// Initialize the priority queue

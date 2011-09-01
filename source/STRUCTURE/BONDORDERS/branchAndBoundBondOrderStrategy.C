@@ -4,7 +4,7 @@
 namespace BALL
 {
 	const char*  BranchAndBoundBondOrderStrategy::Option::BRANCH_AND_BOUND_CUTOFF = "branch_and_bound_cutoff";
-	const float  BranchAndBoundBondOrderStrategy::Default::BRANCH_AND_BOUND_CUTOFF = 1.2;
+	const float  BranchAndBoundBondOrderStrategy::Default::BRANCH_AND_BOUND_CUTOFF = 1;
 
 	BranchAndBoundBondOrderStrategy::BranchAndBoundBondOrderStrategy(AssignBondOrderProcessor* parent)
 		: KGreedyBondOrderStrategy(parent)
@@ -20,13 +20,17 @@ namespace BALL
 		KGreedyBondOrderStrategy::clear();
 	}
 
-	void BranchAndBoundBondOrderStrategy::readOptions(const Options& options)
+	bool BranchAndBoundBondOrderStrategy::readOptions(const Options& options)
 	{
 		if (options.getReal(Option::BRANCH_AND_BOUND_CUTOFF) < 0)
 		{
 			Log.error() << __FILE__ << " " << __LINE__ 
 				          << " : Error in options! Please check the option Option::BRANCH_AND_BOUND_CUTOFF."  << std::endl;
+
+			return false;
 		}
+
+		return true;
 	}
 
 	void BranchAndBoundBondOrderStrategy::setDefaultOptions()
@@ -37,6 +41,8 @@ namespace BALL
 
 	void BranchAndBoundBondOrderStrategy::init()
 	{
+		clear();
+
 		// first, perform a greedy search to create a bound
 		KGreedyBondOrderStrategy::init();
 
@@ -128,7 +134,7 @@ namespace BALL
 			float branch_and_bound_cutoff = 
 								entry.coarsePenalty(greedy_atom_type_penalty_, greedy_bond_length_penalty_) 
 							* abop->options.getReal(Option::BRANCH_AND_BOUND_CUTOFF); 
-					
+
 			// try to find a solution
 			while(!queue_.empty())
 			{	
@@ -204,8 +210,6 @@ namespace BALL
 							for (int i = 1; i <= abop->max_bond_order_; i++)
 							{
 								entry.bond_orders[entry.last_bond] = i;
-
-								entry.estimatePenalty_();
 
 								// Penalty estimation went well  
 								if (entry.estimatePenalty_() && (entry.coarsePenalty() <= branch_and_bound_cutoff ))

@@ -221,14 +221,15 @@ namespace BALL
 		
 	bool AssignBondOrderProcessor::readOptions_()
 	{
+		bool ret = true;
+
 		for (StringHashMap<boost::shared_ptr<BondOrderAssignmentStrategy> >::Iterator s_it = strategies_.begin();
 		     s_it != strategies_.end();
 				 ++s_it)
 		{
-			s_it->second->readOptions(options);
+			ret &= s_it->second->readOptions(options);
 		}
 
-		bool ret = true;
 
 		max_bond_order_ = options.getInteger(Option::MAX_BOND_ORDER);
 		alpha_ = options.getReal(Option::BOND_LENGTH_WEIGHTING);

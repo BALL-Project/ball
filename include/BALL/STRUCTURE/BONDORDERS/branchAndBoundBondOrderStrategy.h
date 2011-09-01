@@ -17,9 +17,10 @@ namespace BALL
 {
 	/** Branch-and-bound algorithm for bond order assignment.
 	 *  
-	 *  This class implements a branch and bound approach for the bond order assignment
-	 *  problem that can be used by the \link AssignBondOrderProcessor
-	 *  AssignBondOrderProcessor \endlink. The implementation of this strategy
+	 *  This class implements a (possibly sub-optimal) branch and bound approach
+	 *  for the bond order assignment problem that can be used by the 
+	 *  \link AssignBondOrderProcessor AssignBondOrderProcessor \endlink. 
+	 *  The implementation of this strategy
 	 *  is very similar to the KGreedy approach and much of its functionality
 	 *  can be reused. We thus derive from \link KGreedyBondOrderStrategy
 	 *  KGreedyBondOrderStrategy \endlink.
@@ -52,13 +53,13 @@ namespace BALL
 			BranchAndBoundBondOrderStrategy(AssignBondOrderProcessor* parent);
 			virtual ~BranchAndBoundBondOrderStrategy();
 
-			void clear();
-			void init();
+			virtual void clear();
+			virtual void init();
 
-			void readOptions(const Options& options);
-			void setDefaultOptions();
+			virtual bool readOptions(const Options& options);
+			virtual void setDefaultOptions();
 
-			boost::shared_ptr<BondOrderAssignment> computeNextSolution();
+			virtual boost::shared_ptr<BondOrderAssignment> computeNextSolution();
 
 		protected:
 	};
