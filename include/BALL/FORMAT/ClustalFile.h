@@ -85,6 +85,9 @@ namespace BALL
 				*/
 				std::ostream& operator >> (std::ostream& os);
 
+				/*prints the values contained in this SequenceLine*/
+				virtual void dump(std::ostream& s = std::cout) const;
+
 			//////////////////////////////////////////////
 
 				String ident;
@@ -117,9 +120,9 @@ namespace BALL
 					void reset();
 
 					/**
-					 *adds a SequenceLine to the Block
+					 *adds a SequenceLine on top of the Block
 					 */
-					bool addSequenceLine(SequenceLine& line);
+					void addSequenceLine(SequenceLine& line);
 
 					/**
 					 *returns the Sequence at Position i, starting to count at zero
@@ -133,6 +136,8 @@ namespace BALL
 					std::ostream& operator >> (std::ostream& os);
 
 					
+				/*prints the values contained in this SequenceLine*/
+				virtual void dump(std::ostream& s = std::cout) const;
 
 				////////////////////////////////////////////////////////////////////////
 
@@ -145,6 +150,7 @@ namespace BALL
 					 *String that contains the last line of a Block that denotes the degree of conservation of the column
 					 */
 					String conserv_line;
+
 
 			};
 			
@@ -181,7 +187,12 @@ namespace BALL
 
 			///////////////////////////////////////////////////////////// Reading and Writing /////////////////////////////////////////
 
-		
+	
+/*prints the values contained in this SequenceLine*/
+				void dump();
+
+
+	
 			/*
 			*checks whether all Blocks have the same idents, and the same number of lines
 			*/

@@ -39,46 +39,60 @@ void ClustalParserLexer_reset()
 %option noyywrap
 
 EOL					[\n\r]
-WHITESPACE				[[:blank:]\n\r]+
-CLUSTAL             			[cC][lL][uU][sS][tT][aA][lL]({WHITESPACE}*|{OrdinaryChar}*|{MiscChars}*)*\n
+WHITESPACE				[[:blank:]]+
+CLUSTAL             			[cC][lL][uU][sS][tT][aA][lL]([[:blank:]\r]*|{OrdinaryChar}*|{MiscChars}*)*{EOL}
 MiscChars  				[%&$()*+,/:<=>?\\^`{|}\[\]~\"\'#_;]
-SEQUENCE				[GPAVLIMCFVWHKRQNEDST]+
+SEQUENCE				[GPAVLIMCFWHKRQNEDSTYgpavlimcfwhkrqnedsty\-]+
 NUMBER					[0-9]+
 EVAL 					[*:. ]+
-
-OrdinaryChar        [0-9a-zA-Z!\-.@_]
+EmptyLine                               ^[[:blank:]]*{EOL}
+OrdinaryChar        [0-9!a-zA-Z\-.@_]
 
 
 %%
-
 {WHITESPACE} {
 	CLUSTAL_DEBUG("WHITESPACE")
 	return TK_WHITESPACE;
 }
 
+
 {CLUSTAL} {
+
+	//copy what is read to lval.text to enable bison to access the values
+	strncpy(ClustalParserlval.text, yytext, CLUSTALPARSER_LINE_LENGTH);
 	CLUSTAL_DEBUG("CLUSTAL")
 	return TK_CLUSTAL;
 }
 
 {NUMBER} {
+ClustalParserlval.integer = atoi( yytext);
 	CLUSTAL_DEBUG("NUMBER")
 	return TK_NUM;
 }
 
 {SEQUENCE} {
+strncpy(ClustalParserlval.text, yytext, CLUSTALPARSER_LINE_LENGTH);
 	CLUSTAL_DEBUG ("SEQUENCE")
 	return TK_SEQUENCE;
 }
 
 {EVAL} {
+strncpy(ClustalParserlval.text, yytext, CLUSTALPARSER_LINE_LENGTH);
 	CLUSTAL_DEBUG("CONSERV_LINE")
 	return TK_CONSERV_LINE;
 }
 
 {OrdinaryChar}+ {
+
+		strncpy(ClustalParserlval.text, yytext, CLUSTALPARSER_LINE_LENGTH);
 		CLUSTAL_DEBUG("IDENT")
 		return TK_IDENT;
 }
-%%
 
+
+{EmptyLine} {
+	 		CLUSTAL_DEBUG("EMPTY_LINE")
+			return TK_EMPTYLINE;
+}
+
+%%

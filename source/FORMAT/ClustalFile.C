@@ -39,41 +39,64 @@ namespace BALL
 
 	///////////////////////////////////////////////////////////// Reading and Writing /////////////////////////////////////////
 
-	bool ClustalFile::hasValidBlocks(){
+	
+	bool ClustalFile::hasValidBlocks()
+	{
+					// number of lines in the first block and therefore in every block
+					unsigned int num = blocks.at(0).seqs.size();
 
-		// number of lines in the first block and therefore in every block
-		unsigned int num = blocks.at(0).seqs.size();
+					//if there are more than 60 AAs in the block the block isn't valid
+					if (num > 60) 
+					{
+									return false;
+					}
+					//Vector of Idents of the first block, must be equal to that of all other blocks
+					std::vector<String> idents;
 
-		//if there are more than 60 AAs in the block the block isn't valid
-		if (num > 60) return false;
+					// fill the idents vector
+					for(std::vector<SequenceLine>::iterator it = blocks.at(0).seqs.begin(); it != blocks.at(0).seqs.end(); it++)
+					{ 
+									idents.push_back(it->ident);
+					}
 
-		//Vector of Idents of the first block, must be equal to that of all other blocks
-		std::vector<String> idents;
+					//iterate over all blocks of the file
+					for(vector<Block>::iterator it = blocks.begin(); it != blocks.end(); it++)
+					{ 
+									//check if the current Block has equal amount of sequences than the others
+									if(it->seqs.size() != num) 
+									{
+													return false;
+									}
 
-		// fill the idents vector
-		for(std::vector<SequenceLine>::iterator it = blocks.at(0).seqs.begin(); it != blocks.at(0).seqs.end(); it++)
-		{ idents.push_back(it->ident);}
+									//iterate over all sequences of the Block
+									for(unsigned int i = 0; i < it->seqs.size(); i++)
+									{
+													SequenceLine line= it->getSequenceLine(i);
 
-		//iterate over all blocks of the file
-		for(vector<Block>::iterator it = blocks.begin(); it != blocks.end(); it++)
-		{ 
-			//check if the current Block has equal amount of sequences than the others
-			if(it->seqs.size() != num) {return false;}
+													//check whether idents match
+													if (line.ident != idents.at(i))  
+													{
+																	return false;
+													}
 
-			//iterate over all sequences of the Block
-			for(unsigned int i = 0; i < it->seqs.size(); i++)
-			{
-				if (it->getSequenceLine(i).ident != idents.at(i)) return false;
-			}
-		}
+													//check whether given number at end of each line matches the length of the sequence
+													if(line.length != line.sequence.length())
+													{
+																	return false;
+													}
 
-		return true;
+									}
+
+					}
+
+
+					return true;
 
 	}
 
 	bool ClustalFile::read() 
 	{
-
+//cout<<"reading now---------------------------------"<<endl;
 		if (!isValid())
 		{
 			Log.error() << "Trying to read from invalid ClustalFile '" << getName() << "'" << std::endl;
@@ -83,21 +106,23 @@ namespace BALL
 		try {
 			ClustalParserLexer_reset();
 			state.current_parser = this;
-			//CIFParserdebug = 1;
+
+			//ClustalParserdebug = 1;
 			ClustalParserparse();
+
 		}
 		catch (Exception::ParseError& e)
 		{
 			Log.error() << "ClustalFile: Cannot read " << getName() << std::endl;
-		}
 
+		}
 		if(!hasValidBlocks()) 
 		{ 
 		Log.error() << "Trying to read from invalid ClustalFile '" <<getName() << "'" << std::endl;
 		return false;
 		}
+//cout<<"parsing done file contains: ---------"<<endl;
 
-		
 		return true;
 	}
 
@@ -132,7 +157,7 @@ namespace BALL
 
 
 	void ClustalFile::addBlock(const ClustalFile::Block& block){
-		blocks.insert(blocks.begin(), block);
+			blocks.push_back(block);
 	}
 
 
@@ -168,20 +193,9 @@ namespace BALL
 		conserv_line.clear();
 	}
 
-	bool ClustalFile::Block::addSequenceLine(SequenceLine& line)
+	void ClustalFile::Block::addSequenceLine(SequenceLine& line)
 	{
-
-		//check whether the number at the end of the line equals the number of AminoAcids in the line
-		if(line.length != line.sequence.length()) 
-		{ 
-			return false;
-		}
-
-		//insert the line at the beginning of the block
-		seqs.insert(seqs.begin(),line);
-
-		return true;
-
+		seqs.push_back(line);
 	}
 
 	ClustalFile::SequenceLine& ClustalFile::Block::getSequenceLine(unsigned int i)
@@ -209,6 +223,24 @@ namespace BALL
 
 	}
 
+	void ClustalFile::Block::dump(std::ostream& s) const 
+	{
+		s<<"The block contains "<< seqs.size() <<"SequenceLines."<< endl <<"These are: "<< endl;
+
+			for(unsigned int i=0; i < seqs.size(); i++) 
+			{
+				seqs.at(i).dump(s);
+			}
+
+		if(conserv_line.isEmpty())
+		{
+			s<<"The Conserv_Line is empty."<<endl;
+		}
+		else
+		{
+			s<<"Conserv_Line: "<< conserv_line<<endl;
+		}
+	}
 
 	///////////////////////////////////////////// Nested class SequenceLine /////////////////////////////////////////////////////
 
@@ -239,6 +271,11 @@ namespace BALL
 
 	}
 
+	void ClustalFile::SequenceLine::dump(std::ostream& s) const
+	{
+		s <<"The ident is: "<< ident <<endl << "The sequence is: " << sequence<<endl << "The length is: "<<length<<endl;
+	}
+
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	ClustalFile& ClustalFile::ClustalFile::operator >> (System& system)
@@ -263,8 +300,8 @@ namespace BALL
 													//fetch the current protein an increment the counter
 													Protein* p_ptr = system.getProtein(p_counter++);
 
-													//check the protein's ID and the current SequenceLines ID are equal
-													if(p_ptr->getID() != s_it->ident) 
+													//check the protein's Name and the current SequenceLines Ident are equal
+													if(p_ptr->getName() != s_it->ident) 
 													{ 
 																	throw Exception::InvalidArgument(__FILE__,__LINE__, "ClustalFile Error: IDs don't match");
 													}
@@ -345,6 +382,7 @@ namespace BALL
 													throw Exception::ParseError(__FILE__,__LINE__, "No Protein in this System");
 											}
 
+											//TAKE CARE OF "?"
 											//get the protein's sequence
 											String tmp = Peptides::GetSequence(*protein);
 
@@ -354,7 +392,7 @@ namespace BALL
 
 											//initialize a SequenceLine
 											ClustalFile::SequenceLine* seqline__ptr = new SequenceLine();
-											seqline_ptr->ident= protein->getID();
+											seqline_ptr->ident= protein->getName();
 
 											//insert the sequenceLine at the desired Position 
 											bl_it->seqs.insert(bl_it->seqs.begin() + pr_ctr, *seqline_ptr);
@@ -370,7 +408,7 @@ namespace BALL
 
 																			//make new SequenceLine
 																			seq_line_ptr = new SequenceLine();
-																			seqline_ptr->ident = protein -> getID();
+																			seqline_ptr->ident = protein -> getName();
 
 																			//go to the next block and insert the SequenceLine at the desired position
 																			if(++bl_it != blocks.end())
