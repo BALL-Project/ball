@@ -1,39 +1,39 @@
 /////////////////////////////////////////////
 
 #include<BALL/FORMAT/fastaFile.h>
-
+#include <BALL/KERNEL/residueIterator.h>
 namespace BALL{
 
 	///////////////////////////////////////////// Constructor und Deconstructor //////////////////////////////////////////////////////////////
 			
-			FASTAFile::FASTAFile()
+			FastaFile::FastaFile()
 
 			{
 			}
 
 			
-			FASTAFile::FASTAFile(const BALL::String& filename,BALL::File::OpenMode open_mode, bool trim_whitespaces):LineBasedFile::LineBasedFile( filename, open_mode, trim_whitespaces){
+			FastaFile::FastaFile(const BALL::String& filename,BALL::File::OpenMode open_mode, bool trim_whitespaces):LineBasedFile::LineBasedFile( filename, open_mode, trim_whitespaces){
 			}
 
 		
 			/**
 			 *Destructor
 			 */
-			FASTAFile::~FASTAFile(){}
+			FastaFile::~FastaFile(){}
 
 
 			/////////////////////////////////////////////////// Operators ///////////////////////////////////////////7
-			bool FASTAFile::operator == (const FASTAFile& f){
+			bool FastaFile::operator == (const FastaFile& f){
 			return LineBasedFile::operator==(f);
 			}  
 			
-			bool FASTAFile::operator != (const FASTAFile& f){
+			bool FastaFile::operator != (const FastaFile& f){
 			return LineBasedFile::operator != (f);
 			}
 			
 			
 			/**
-			const FASTAFile& FASTAFile::operator = (const FASTAFile& f){
+			const FastaFile& FastaFile::operator = (const FastaFile& f){
 				return LineBasedFile::operator=(f);
 			}
 			*/
@@ -55,7 +55,7 @@ namespace BALL{
                         *reads a FastaFile into a protein
 			@throws InvalidArgument if a file holding more than one sequence is to be read
                         */
-			void FASTAFile::read(Protein& protein){
+			void FastaFile::read(Protein& protein){
 				//counter
 
 				int i=0;
@@ -105,7 +105,7 @@ namespace BALL{
 								tmp= Peptides::ThreeLetterCode(check);
 
 							}else{ 
-								throw Exception::InvalidArgument(__FILE__,__LINE__, "There is no OneLetterCode in the FASTAFile");
+								throw Exception::InvalidArgument(__FILE__,__LINE__, "There is no OneLetterCode in the FastaFile");
 							}  
 
 							//for every Amino Acid create a new Residue named with the name of the Amino Acid
@@ -135,7 +135,7 @@ namespace BALL{
 			/**
                         * reads a Fastafile into a Molecule
                         */
-			void FASTAFile::read(Molecule& molecule){
+			void FastaFile::read(Molecule& molecule){
 
 				//counter
 				int i=0;
@@ -191,7 +191,7 @@ namespace BALL{
                         *reads a FastaFile into a System
                         */
 			//TODO check whether it is a protein or a nucleic acid
-			void FASTAFile::read(System& system){
+			void FastaFile::read(System& system){
 
 
 				//counter
@@ -235,7 +235,7 @@ namespace BALL{
 								tmp= Peptides::ThreeLetterCode(check);
 
 							}else{ 
-								throw Exception::InvalidArgument(__FILE__,__LINE__, "There is no OneLetterCode in the FASTAFile");
+								throw Exception::InvalidArgument(__FILE__,__LINE__, "There is no OneLetterCode in the FastaFile");
 							}  
 
 							//for every Amino Acid create a new Residue named with the name of the Amino Acid
@@ -264,14 +264,13 @@ namespace BALL{
 		
 
 
-		void FASTAFile::read(Alignment& align){
+		void FastaFile::read(Alignment& align){
 					
 				//read the file into a System
 				System* s= new System();
 				
 				read(*s);
-		//TODO fix why align-read gives undefined reference while building	
-				//align.read(*s);
+		//TODO 				//align.read(*s);
 
 				}
 
@@ -290,20 +289,27 @@ namespace BALL{
 			/**
 			* writes a Protein into a Fastafile
 			*/
-			void FASTAFile::write(const Protein& protein){
+		void FastaFile::write(const Protein& protein){
 
-			//retrieve the Sequence of the Protein
-			String seq = Peptides::GetSequence(protein);
-			
-			getFileStream() << "> " << protein.getID() << endl << seq << endl;
-			
-			}
+						ResidueConstIterator resit = protein.beginResidue();
+										String seq;
+						for (; +resit ; ++resit)
+						{
+										if (resit->isAminoAcid())
+										{
+														seq += Peptides::OneLetterCode(resit->getName());
+										} 
+						}
+
+						getFileStream() << "> " << protein.getName() << endl << seq << endl;
+
+		}
 			
 
 			/**
 			*writes a Molecule into a Fastafile
 			*/
-			//void FASTAFile::write(Molecule& molecule)
+			//void FastaFile::write(Molecule& molecule)
 			//{
 			
 			//}
@@ -311,7 +317,7 @@ namespace BALL{
 			/**
 			*writes a System into a Fastafile
 			*/
-			void FASTAFile::write(const System& system){
+			void FastaFile::write(const System& system){
 
 			//	for (Molecule::MoleculeIterator m_it = S.beginMolecule(); +m_it; ++m_it)
 			//	{
@@ -324,7 +330,7 @@ namespace BALL{
 						
 						String seq= Peptides::GetSequence(*it);
 						
-						getFileStream()<< "> " << it->getID() <<endl << seq << endl;
+						getFileStream()<< "> " << it->getName() <<endl << seq << endl;
 					}
 				}
 			
@@ -334,7 +340,7 @@ namespace BALL{
 			/**
 			 *clear method
 			 */
-			void FASTAFile::clear(){
+			void FastaFile::clear(){
 			LineBasedFile::clear();
 			}
 			

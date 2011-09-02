@@ -3,7 +3,7 @@
 //
 
 BALL_INLINE 
-FASTAFile& FASTAFile::operator >> (Protein& protein)
+FastaFile& FastaFile::operator >> (Protein& protein)
 {
   read(protein);
   
@@ -13,7 +13,7 @@ FASTAFile& FASTAFile::operator >> (Protein& protein)
 
 
 BALL_INLINE 
-FASTAFile& FASTAFile::operator >> (Molecule& molecule)
+FastaFile& FastaFile::operator >> (Molecule& molecule)
 {
   read(molecule);
   
@@ -21,7 +21,7 @@ FASTAFile& FASTAFile::operator >> (Molecule& molecule)
 }
 
 BALL_INLINE 
-FASTAFile& FASTAFile::operator >> (System& system)
+FastaFile& FastaFile::operator >> (System& system)
 {
   read(system);
   
@@ -30,7 +30,7 @@ FASTAFile& FASTAFile::operator >> (System& system)
 
 
 BALL_INLINE 
-FASTAFile& FASTAFile::operator << (const Molecule& molecule)
+FastaFile& FastaFile::operator << (const Molecule& molecule)
 {
   write(molecule);
   
@@ -38,7 +38,7 @@ FASTAFile& FASTAFile::operator << (const Molecule& molecule)
 }
 
 BALL_INLINE 
-FASTAFile& FASTAFile::operator << (const Protein& protein)
+FastaFile& FastaFile::operator << (const Protein& protein)
 {
   write(protein);
   
@@ -46,7 +46,7 @@ FASTAFile& FASTAFile::operator << (const Protein& protein)
 }
 
 BALL_INLINE 
-FASTAFile& FASTAFile::operator << (const System& system)
+FastaFile& FastaFile::operator << (const System& system)
 {
   write(system);
   

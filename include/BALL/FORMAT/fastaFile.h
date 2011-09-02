@@ -1,5 +1,5 @@
-#ifndef BALL_SEQUENCE_FASTAFILE_H
-#define BALL_SEQUENCE_FASTAFILE_H
+#ifndef BALL_FORMAT_FASTAFILE_H
+#define BALL_FORMAT_FASTAFILE_H
 
 /////////////////////////////////////////
 #ifndef BALL_KERNEL_SYSTEM_H
@@ -45,33 +45,33 @@
 
 namespace BALL{
 
-	class FASTAFile : public LineBasedFile { 
+	class FastaFile : public LineBasedFile { 
 
 			public: 
 			/**
 			 *Default Constructor
 			 */
-			FASTAFile();
+			FastaFile();
 
 			/**			
 			 *Detailed Constructor
 			 *@param trim_whitespaces sets whether leading and trailing whitespaces shall be removed while reading the file default is
 			 */
-			FASTAFile(const BALL::String& filename,BALL::File::OpenMode open_mode=std::ios::in, bool trim_whitespaces=false);
+			FastaFile(const BALL::String& filename,BALL::File::OpenMode open_mode=std::ios::in, bool trim_whitespaces=false);
 
 			/**
 			 *Destructor
 			 */
-			~FASTAFile();
+			~FastaFile();
 			
 
 			///////////////////////////////////////// Operators ///////////////////////////////////////
-			bool operator == (const FASTAFile& f);  
+			bool operator == (const FastaFile& f);  
 			
-			bool operator != (const FASTAFile& f);
+			bool operator != (const FastaFile& f);
 						
 			
-		//	const FASTAFile& operator = (const FASTAFile& f);
+		//	const FastaFile& operator = (const FastaFile& f);
 
 			
 			
@@ -124,32 +124,32 @@ namespace BALL{
 		/** Read a protein from the file
 		 *  @throw Exception::ParseError if a syntax error was encountered
 	 	*/
-		FASTAFile& operator >> (Protein& protein);
+		FastaFile& operator >> (Protein& protein);
 
 		/** Read a molecule from the file
 		 *  @throw Exception::ParseError if a syntax error was encountered
 		 */
-		FASTAFile& operator >> (Molecule& molecule);
+		FastaFile& operator >> (Molecule& molecule);
 
 		/** Read system from the file
 		 *  @throw Exception::ParseError if a syntax error was encountered
 		 */
-		FASTAFile& operator >> (System& system);
+		FastaFile& operator >> (System& system);
 
 		/** Write a protein to the file
 		 *  @throw File::CannotWrite if writing to the file failed
 		 */
-		FASTAFile& operator << (const Protein& protein);
+		FastaFile& operator << (const Protein& protein);
 
 		/** Write a system to the file
 		 *  @throw File::CannotWrite if writing to the file failed
 		 */
-		FASTAFile& operator << (const System& system);
+		FastaFile& operator << (const System& system);
 
 		/** Write molecule to the file
 		 *  @throw File::CannotWrite if writing to the file failed
 		 */
-		FASTAFile& operator << (const Molecule& molecule);
+		FastaFile& operator << (const Molecule& molecule);
 
 			};
 
