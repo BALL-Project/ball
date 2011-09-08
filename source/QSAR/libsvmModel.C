@@ -81,7 +81,7 @@ void LibsvmModel::train()
 		
 		//free(prob);
 		//free(prob->y); free(prob->x);
-		svm_destroy_model((::svm_model*)svm_train_result_);
+		destroyModel((::svm_model*)svm_train_result_);
 	}
 }
 
@@ -212,3 +212,24 @@ vector<double> LibsvmModel::getParameters() const
 	d.push_back(C_);
 	return d;
 }
+
+void LibsvmModel::destroyModel(::svm_model* model)
+{
+	if(model->free_sv && model->l > 0)
+	{
+		free((void *)(model->SV[0]));
+	}
+	for(int i=0;i<model->nr_class-1;i++)
+	{
+		free(model->sv_coef[i]);
+	}
+	free(model->SV);
+	free(model->sv_coef);
+	free(model->rho);
+	free(model->label);
+	free(model->probA);
+	free(model->probB);
+	free(model->nSV);
+	free(model);
+}
+
