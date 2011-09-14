@@ -57,7 +57,7 @@ namespace BALL
 		}
 
 		// clear the queue
-		queue_ = priority_queue<PartialBondOrderAssignment>();
+		queue_ = std::priority_queue<PartialBondOrderAssignment>();
 
 		// initialize the step counter with the number steps needed by k_greedy
 		step_ = greedy_node_expansions_; 
@@ -125,7 +125,7 @@ namespace BALL
 		if (current_solution_ != 0)
 		{
 			// branch and bound does not support computing next solutions!
-			Log.warn() << " Branch&Bound does not support computing next solutions!" << endl;
+			Log.warn() << " Branch&Bound does not support computing next solutions!" << std::endl;
 		}
 		else
 		{

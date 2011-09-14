@@ -1,8 +1,10 @@
 #include <BALL/STRUCTURE/BONDORDERS/DPBondAssignment.h>
+#include <BALL/DATATYPE/GRAPH/treeTraits.h>
 
 #include <boost/graph/connected_components.hpp>
 #include <boost/graph/subgraph.hpp>
 #include <boost/graph/copy.hpp>
+#include <boost/graph/iteration_macros.hpp>
 
 namespace BALL 
 {
@@ -215,7 +217,7 @@ namespace BALL
 			return (*this)->isValid(*computingData->moleculeGraph, getPenaltyMap());
 		}
 
-		bool DPBondAssignmentAlgorithm::isValidAssignment(Assignment const& ref)
+		bool DPBondAssignmentAlgorithm::isValidAssignment(Assignment& ref)
 		{
 			shouldBeStarted();
 
@@ -271,14 +273,14 @@ namespace BALL
 			return hasSolution;
 		}
 
-		Assignment const& DPBondAssignmentAlgorithm::operator * () const
+		Assignment& DPBondAssignmentAlgorithm::operator * ()
 		{
 			shouldHaveSolution();
 
 			return combiner->getSolution();
 		}
 
-		Assignment const * DPBondAssignmentAlgorithm::operator -> () const
+		Assignment * DPBondAssignmentAlgorithm::operator -> ()
 		{
 			shouldHaveSolution();
 
@@ -367,7 +369,7 @@ namespace BALL
 
 		void DPBondAssignmentAlgorithm::computeBondAssignment()
 		{
-			MolecularGraph const& mol_graph = *computingData->moleculeGraph;
+			MolecularGraph& mol_graph = *computingData->moleculeGraph;
 
 			std::vector<NiceTreeDecomposition*> & ntds = computingData->niceTreeDecompositions;
 			std::vector<DPBondAssignment*> & bondAssignments = computingData->bondAssignments;
@@ -752,12 +754,16 @@ namespace BALL
 		/**
 		 * DPBondAssignment
 		 */
-		DPBondAssignment::DPBondAssignment(MolecularGraph const& molecule,
-				PenaltyMap const& penalties, NiceTreeDecomposition const& ntd, Penalty upperbound) :
-			molecule(&molecule), penalties(&penalties), ntd(&ntd), properties(ntd.size()), upperbound(upperbound),
-			maxBondOrder(penalties.maxBondOrder()), maxValence(penalties.maxValence())
+		DPBondAssignment::DPBondAssignment(MolecularGraph& molecule, PenaltyMap& penalties, 
+		                                   NiceTreeDecomposition& ntd, Penalty upperbound) 
+			: molecule(&molecule), 
+			  penalties(&penalties), 
+				ntd(&ntd), 
+				properties(ntd.size()), 
+				upperbound(upperbound),
+				maxBondOrder(penalties.maxBondOrder()), 
+				maxValence(penalties.maxValence())
 		{
-
 		}
 
 		DPBondAssignment::~DPBondAssignment()
@@ -766,7 +772,8 @@ namespace BALL
 
 		Penalty DPBondAssignment::compute()
 		{
-			DPTable* table(postOrderFolding<NiceTreeDecompositionBag<MolecularGraph>, DPTable*, DPBondAssignment> (*ntd->getRoot(), *this));
+			DPTable* table(postOrderFolding<NiceTreeDecompositionBag<MolecularGraph>, DPTable*, 
+			                                DPBondAssignment> (*ntd->getRoot(), *this));
 			return table->bestPenalty();
 		}
 
@@ -854,10 +861,11 @@ namespace BALL
 				{
 					if (boost::edge(*iter, *iter2, *molecule).second)
 					{
-						bonds.push_back(Edge(*iter, *iter2));
+						bonds.push_back(boost::edge(*iter, *iter2, *molecule).first);
 					}
 				}
 			}
+
 			return bonds;
 		}
 
@@ -896,7 +904,10 @@ namespace BALL
 						!= bonds.end(); ++it, ++vindex)
 				{
 					Edge e(*it);
-					if (e.incidence(iv))
+					MolecularGraphTraits::VertexType source = boost::source(*it, *molecule);
+					MolecularGraphTraits::VertexType target = boost::target(*it, *molecule);
+
+					if (iv == source || iv == target)
 					{
 						// remember the indizes of the new introduced bonds
 						indizes.push_back(vindex);
@@ -936,30 +947,37 @@ namespace BALL
 		Penalty DPBondAssignment::forgetInnerVertexIn(NiceTreeDecompositionBag<MolecularGraph> & bag,
 				DPConstRow childRow, DPConfig& entry, vector<Edge>& childBonds, Size forgottenIndex)
 		{
-			DPConfig& childEntry (childRow.first);
+			DPConfig const& childEntry (childRow.first);
 			MolecularGraphTraits::VertexType forgottenVertex (bag.getForgottenVertex());
 			std::set<MolecularGraphTraits::VertexType>& vertices (bag.getInnerVertices());
 			Size bondIndex (0);
 			Size childBondIndex(0);
 			Size forgottenValence (childEntry.consumedValences[forgottenIndex]);
 			Size maxForgottenValence (min(static_cast<BondOrder>(maxValence-1),
-					static_cast<BondOrder>(molecule->degree(forgottenVertex)) * maxBondOrder));
+					static_cast<BondOrder>(boost::out_degree(forgottenVertex, *molecule) * maxBondOrder)));
+
 			// copy valence values in child entry into new entry
 			for (Size i (0); i < forgottenIndex; ++i)
 			{
 				entry.consumedValences[i] = childEntry.consumedValences[i];
 			}
+
 			for (Size i (forgottenIndex+1); i < childEntry.consumedValences.size(); ++i)
 			{
 				entry.consumedValences[i-1] = childEntry.consumedValences[i];
 			}
+
 			// forget each bond which is incident to forgotten vertex
 			for (; childBondIndex < childBonds.size(); ++childBondIndex)
 			{
-				if (childBonds[childBondIndex].incidence(forgottenVertex))
+				MolecularGraphTraits::VertexType source = boost::source(childBonds[childBondIndex], *molecule);
+				MolecularGraphTraits::VertexType target = boost::target(childBonds[childBondIndex], *molecule);
+
+				if (source == forgottenVertex || target == forgottenVertex)
 				{
 					// forget this bond, add its bondvalue to the consumed valence of the kept (not forgotten) atom and to the forgotten atom
-					MolecularGraphTraits::VertexType keptAtom = childBonds[childBondIndex].partnerOf(forgottenVertex);
+					MolecularGraphTraits::VertexType keptAtom = (source == forgottenVertex) ? target : source;
+
 					BondOrder bondValue (childEntry.bondAssignments[childBondIndex] + 1);
 					Size atomIndex (distance(vertices.begin(), find(vertices.begin(), vertices.end(), keptAtom)));;
 					Size newValence (entry.consumedValences[atomIndex] + bondValue);
@@ -967,8 +985,8 @@ namespace BALL
 					// if valence is greater than maximal possible valence (< 8, < number of neighbours * max bond value per neighbour)
 					// then don't add this entry
 					if ((forgottenValence <= maxForgottenValence) &&
-							(newValence <= min(molecule->degree(keptAtom) * static_cast<Size>(maxBondOrder),
-									static_cast<Size>(maxValence))))
+							(newValence <= std::min((Size)boost::out_degree(keptAtom, *molecule) * static_cast<Size>(maxBondOrder),
+																			static_cast<Size>(maxValence))))
 					{
 						entry.consumedValences[atomIndex] = newValence;
 					} else
@@ -992,10 +1010,10 @@ namespace BALL
 		}
 
 		void DPBondAssignment::computeForgetBag(
-				NiceTreeDecompositionBag<MolecularGraph> const& bag, DPTable const& child, AdditionalBagProperties& property)
+				NiceTreeDecompositionBag<MolecularGraph>& bag, DPTable& child, AdditionalBagProperties& property)
 		{
 			AdditionalBagProperties& childProperty (properties[bag.firstChild().getIndex()]);
-			vertexSet const& vset (bag.firstChild().getInnerVertices());
+			std::set<MolecularGraphTraits::VertexType>& vset (bag.firstChild().getInnerVertices());
 			DPConfig newEntry (vset.size()-1, property.bonds.size());
 			Size forgottenIndex (distance(vset.begin(), find(vset.begin(), vset.end(), bag.getForgottenVertex())));
 			for (DPTable::const_iterator entryIterator (child.begin()); entryIterator != child.end(); ++entryIterator)
@@ -1008,7 +1026,7 @@ namespace BALL
 			}
 		}
 
-		void DPBondAssignment::computeRootBag(NiceTreeDecompositionBag<MolecularGraph> const& bag, DPTable const& child, AdditionalBagProperties& bagProperties)
+		void DPBondAssignment::computeRootBag(NiceTreeDecompositionBag<MolecularGraph>& bag, DPTable& child, AdditionalBagProperties& bagProperties)
 		{
 			DPConfig empty (0, 0);
 			vector<Edge> emptyList (0);
@@ -1024,12 +1042,12 @@ namespace BALL
 			bagProperties.table->insert(empty, minPenalty);
 		}
 
-		void DPBondAssignment::computeJoinBag(NiceTreeDecompositionBag<MolecularGraph> const& bag,
-				DPTable const& leftChild, DPTable const& rightChild, AdditionalBagProperties& property)
+		void DPBondAssignment::computeJoinBag(NiceTreeDecompositionBag<MolecularGraph>& bag,
+				DPTable& leftChild, DPTable& rightChild, AdditionalBagProperties& property)
 		{
-			Size const numOfValences(bag.getInnerVertices().size());
-			vertexSet const& innerVertices(bag.getInnerVertices());
-			idList vertices(innerVertices.begin(), innerVertices.end());
+			Size numOfValences(bag.getInnerVertices().size());
+			std::set<MolecularGraphTraits::VertexType>& innerVertices(bag.getInnerVertices());
+			std::vector<MolecularGraphTraits::VertexType> vertices(innerVertices.begin(), innerVertices.end());
 			DPTable& table(*property.table);
 			DPJoinMap map;
 			// insert each entry of the left child into a DPJoinMap
@@ -1060,9 +1078,9 @@ namespace BALL
 						config.consumedValences[index]
 								+= rightEntry.first.consumedValences[index];
 						{
-							vertexId vertex(vertices[index]);
+							MolecularGraphTraits::VertexType vertex(vertices[index]);
 							if (config.consumedValences[index] > (int) (min(static_cast<BondOrder>(maxValence-1),
-									maxBondOrder * static_cast<BondOrder>(molecule->degree(vertex)))))
+									maxBondOrder * static_cast<BondOrder>(boost::out_degree(vertex, *molecule)))))
 							{
 								doInsert = false;
 								break;
@@ -1086,18 +1104,22 @@ namespace BALL
 			bonds(), penalty(INFINITE_PENALTY)
 		{
 		}
+
 		Assignment::Assignment(Size numOfBonds) :
 			bonds(numOfBonds, 0), penalty(INFINITE_PENALTY)
 		{
 		}
+
 		Assignment::Assignment(Assignment const& copy) :
 			bonds(copy.bonds), penalty(copy.penalty)
 		{
 		}
+
 		Assignment::Assignment(vector<BondOrder> bonds, Penalty penalty) :
 			bonds(bonds), penalty(penalty)
 		{
 		}
+
 		Assignment& Assignment::operator=(Assignment const& copy)
 		{
 			if (this != &copy)
@@ -1253,7 +1275,7 @@ namespace BALL
 		/*
 		 * DPBackTracking
 		 */
-		DPBackTracking::DPBackTracking(DPBondAssignment const& bondAssignment, Size maxNumberOfSolutions, Penalty upperbound) :
+		DPBackTracking::DPBackTracking(DPBondAssignment& bondAssignment, Size maxNumberOfSolutions, Penalty upperbound) :
 				bondAssignment(&bondAssignment), currentState(NULL), queue(), maxNumberOfSolutions(maxNumberOfSolutions), bonds(),
 				bags(), maxHeapSize(maxNumberOfSolutions), upperbound(upperbound)
 		{
@@ -1262,16 +1284,16 @@ namespace BALL
 			{
 				throw Exception::NullPointer(__FILE__, __LINE__);
 			}
-			UndirectedGraph const& graph (*bondAssignment.molecule);
-			bonds.reserve(graph.numberOfEdges());
-			for (EdgeIterator iter (graph.firstEdge()); iter != graph.endEdge(); ++iter)
+
+			MolecularGraph& graph (*bondAssignment.molecule);
+			bonds.reserve(boost::num_edges(graph));
+
+			BGL_FORALL_EDGES(edge_it, graph, MolecularGraph)
 			{
-				Edge e (*iter);
-				if (e.left < e.right)
-				{
-					bonds.push_back(e);
-				}
+				if (boost::source(edge_it, graph) < boost::target(edge_it, graph))
+					bonds.push_back(edge_it);
 			}
+
 			// sort bonds - the second vertex could be in false order
 			sort(bonds.begin(), bonds.end());
 			// order bags in preorder
@@ -1281,8 +1303,8 @@ namespace BALL
 			}
 			{
 				bags.reserve(bondAssignment.ntd->size());
-				PreOrderTraversal<NiceTreeDecompositionBag<MolecularGraph> const> begin (*bondAssignment.ntd->getRoot());
-				PreOrderTraversal<NiceTreeDecompositionBag<MolecularGraph> const> const end;
+				PreOrderTraversal<NiceTreeDecompositionBag<MolecularGraph> > begin (*bondAssignment.ntd->getRoot());
+				PreOrderTraversal<NiceTreeDecompositionBag<MolecularGraph> > end;
 				for (; begin != end; ++begin)
 				{
 					bags.push_back(&(*begin));
@@ -1356,8 +1378,7 @@ namespace BALL
 			return *left < *right;
 		}
 
-
-		DPTable const& DPBackTracking::getTable(Size order) const
+		DPTable& DPBackTracking::getTable(Size order)
 		{
 			DPTable * table (getProperties(order).table);
 			if (table == NULL)
@@ -1367,9 +1388,10 @@ namespace BALL
 			return *table;
 		}
 
-		AdditionalBagProperties const& DPBackTracking::getProperties(Size order) const
+		AdditionalBagProperties& DPBackTracking::getProperties(Size order)
 		{
-			vector<AdditionalBagProperties> const& properties (bondAssignment->properties);
+			vector<AdditionalBagProperties>& properties = bondAssignment->properties;
+
 			if (order < properties.size())
 			{
 				return properties[order];
@@ -1377,6 +1399,15 @@ namespace BALL
 			{
 				throw Exception::IndexOverflow(__FILE__, __LINE__, static_cast<Index>(order), properties.size());
 			}
+		}
+
+		Assignment& DPBackTracking::getSolution()
+		{
+			if (currentState == NULL)
+			{
+				throw Exception::NullPointer(__FILE__, __LINE__);
+			}
+			return currentState->assignment;
 		}
 
 		Assignment const& DPBackTracking::getSolution() const
@@ -1404,34 +1435,34 @@ namespace BALL
 			{
 				delete currentState;
 			}
-			multiset<BackTrackingState*>::iterator first (queue.begin());
+			multiset<BackTrackingState*>::iterator first = queue.begin();
 			currentState = *first;
 			queue.erase(first);
 			--maxHeapSize;
 			for (Size index(currentState->index); index < bags.size(); ++index)
 			{
-				NiceTreeDecompositionBag<MolecularGraph> const& bag(*bags[index]);
+				NiceTreeDecompositionBag<MolecularGraph>& bag(*bags[index]);
 				switch (bag.getBagType())
 				{
-				case ROOT_BAG:
+				case TreeDecompositionBag<MolecularGraph>::ROOT_BAG:
 					visitForget(*currentState, bag, getTable(bag.firstChild().getIndex()));
 					break;
-				case INTRODUCE_BAG:
+				case TreeDecompositionBag<MolecularGraph>::INTRODUCE_BAG:
 					visitIntroduce(*currentState, bag, getTable(bag.firstChild().getIndex()));
 					break;
-				case LEAF_BAG:
+				case TreeDecompositionBag<MolecularGraph>::LEAF_BAG:
 					visitLeaf(*currentState);
 					break;
-				case JOIN_BAG:
+				case TreeDecompositionBag<MolecularGraph>::JOIN_BAG:
 				{
 					visitJoin(*currentState, bag, getTable(bag.firstChild().getIndex()), getTable(bag.secondChild().getIndex()));
 					break;
 				}
-				case FORGET_BAG:
+				case TreeDecompositionBag<MolecularGraph>::FORGET_BAG:
 					visitForget(*currentState, bag, getTable(bag.firstChild().getIndex()));
 					break;
-				case END_BAG:
-					if (bondAssignment->molecule->numberOfVertices() == 0)
+				case TreeDecompositionBag<MolecularGraph>::END_BAG:
+					if (boost::num_vertices(*(bondAssignment->molecule)) == 0)
 					{
 						// empty molecule -> you are finished
 						return;
@@ -1454,12 +1485,12 @@ namespace BALL
 		 * -> Löschen der neuen Spalten wieder den Eintrag der Kindtabelle bekommen
 		 */
 		void DPBackTracking::visitIntroduce(BackTrackingState& state,
-				NiceTreeDecompositionBag<MolecularGraph> const& bag, DPTable const& table)
+				NiceTreeDecompositionBag<MolecularGraph>& bag, DPTable& table)
 		{
 
-			vertexSet const& bagVertices(bag.getInnerVertices());
-			vector<Edge> const& bagBonds(getProperties(bag.getIndex()).bonds);
-			vertexId const iv(bag.getIntroducedVertex());
+			std::set<MolecularGraphTraits::VertexType>& bagVertices(bag.getInnerVertices());
+			std::vector<MolecularGraphTraits::EdgeType>& bagBonds(getProperties(bag.getIndex()).bonds);
+			MolecularGraphTraits::VertexType& iv = bag.getIntroducedVertex();
 
 			// entry of the given table
 			DPConfig& successor(state.config);
@@ -1467,10 +1498,13 @@ namespace BALL
 			DPConfig antecessor((*table.begin()).first);
 
 			// copy each bond value of bonds which were not introduced in this vertex
-			Size j(0);
-			for (Size i(0); i < bagBonds.size(); ++i)
+			Size j = 0;
+			for (Size i = 0; i < bagBonds.size(); ++i)
 			{
-				if (!bagBonds[i].incidence(iv))
+				MolecularGraphTraits::VertexType source = boost::source(bagBonds[i], *(bondAssignment->molecule));
+				MolecularGraphTraits::VertexType target = boost::target(bagBonds[i], *(bondAssignment->molecule));
+
+				if (!(source == iv || target == iv))
 				{
 					antecessor.bondAssignments[j++] = successor.bondAssignments[i];
 				}
@@ -1478,7 +1512,7 @@ namespace BALL
 			// copy each consumed valences of vertices which were not introduced in this vertex
 			j = 0;
 			Size k(0);
-			for (set<vertexId>::const_iterator iter(bagVertices.begin()); iter
+			for (set<MolecularGraphTraits::VertexType>::const_iterator iter(bagVertices.begin()); iter
 					!= bagVertices.end(); ++iter, ++k)
 			{
 				if ((*iter) != iv)
@@ -1521,8 +1555,7 @@ namespace BALL
 		 * gesucht: Alle Paare von Kindknoten, die diesen Eintrag erzeugt haben können
 		 */
 		void DPBackTracking::visitJoin(BackTrackingState& state,
-				NiceTreeDecompositionBag<MolecularGraph> const& bag, DPTable const& leftTable,
-				DPTable const& rightTable)
+				NiceTreeDecompositionBag<MolecularGraph>& bag, DPTable& leftTable, DPTable& rightTable)
 		{
 
 			vector<DPPairIt> possibleAntecessors;
@@ -1622,35 +1655,35 @@ namespace BALL
 		 * -> löschen und prüfen, ob sie dann den gesuchten Eintrag ergeben.
 		 */
 		void DPBackTracking::visitForget(BackTrackingState& state,
-				NiceTreeDecompositionBag<MolecularGraph> const& bag, DPTable const& table)
+				NiceTreeDecompositionBag<MolecularGraph>& bag, DPTable& table)
 		{
 			vector<DPPointerRow> possibleAntecessors;
-			NiceTreeDecompositionBag<MolecularGraph> const& child(bag.firstChild());
-			vertexSet const& childVertices(child.getInnerVertices());
-			vector<Edge> const& childBonds(getProperties(child.getIndex()).bonds);
-			vertexId const fv(bag.getForgottenVertex());
-			Size const forgottenIndex(distance(childVertices.begin(), find(
+			NiceTreeDecompositionBag<MolecularGraph>& child(bag.firstChild());
+			std::set<MolecularGraphTraits::VertexType>& childVertices(child.getInnerVertices());
+			std::vector<MolecularGraphTraits::EdgeType>& childBonds(getProperties(child.getIndex()).bonds);
+			MolecularGraphTraits::VertexType fv(bag.getForgottenVertex());
+			Size forgottenIndex(distance(childVertices.begin(), find(
 					childVertices.begin(), childVertices.end(), fv)));
-			DPConfig const& successor(state.config);
+			DPConfig & successor(state.config);
 			DPConfig testEntry (successor);
 			// check for each row entry: is it a possible anteccessor?
-			for (DPTable::const_iterator iter(table.begin()); iter != table.end(); ++iter)
+			for (DPTable::iterator iter = table.begin(); iter != table.end(); ++iter)
 			{
 				Penalty pen (bondAssignment->forgetInnerVertexIn(bag, *iter, testEntry, childBonds, forgottenIndex));
 				if (pen < INFINITE_PENALTY && testEntry == successor)
 				{
-					possibleAntecessors.push_back(DPPointerRow(&(iter->first), pen));
+					possibleAntecessors.push_back(DPPointerRow(const_cast<DPConfig*>(&(iter->first)), pen));
 				}
 			}
 			// remember each found antecessors
 			sort(possibleAntecessors.begin(), possibleAntecessors.end(),
 					compareTablePointerEntries);
-			vector<DPPointerRow>::const_iterator iter(possibleAntecessors.begin());
+			vector<DPPointerRow>::iterator iter(possibleAntecessors.begin());
 			// follow this antecessor;
 
 			Penalty bestPenalty((*iter).second);
 			{
-				DPConfig const& antecessor(*(*iter).first);
+				DPConfig& antecessor(*(*iter).first);
 				extendState(state, antecessor, 0);
 				++state.index;
 				setStateAssignment(state, child, antecessor, fv);
@@ -1659,8 +1692,8 @@ namespace BALL
 			// add each other antecessors into the queue
 			for (++iter; iter != possibleAntecessors.end(); ++iter)
 			{
-				DPConfig const& antecessor(*(*iter).first);
-				Penalty const addPenalty((*iter).second - bestPenalty);
+				DPConfig& antecessor(*(*iter).first);
+				Penalty addPenalty((*iter).second - bestPenalty);
 				if (isSolutionNeeded(state.assignment.penalty + addPenalty))
 				{
 					BackTrackingState newState(state);
@@ -1674,7 +1707,7 @@ namespace BALL
 			}
 		}
 
-		Size DPBackTracking::bondIndexFor(Edge bond) const
+		Size DPBackTracking::bondIndexFor(MolecularGraphTraits::EdgeType bond) const
 		{
 			Size d (distance(bonds.begin(), lower_bound(bonds.begin(), bonds.end(), bond)));
 			if (d < bonds.size())
@@ -1710,17 +1743,20 @@ namespace BALL
 			if (queue.size() >= maxHeapSize) {return Maths::isLess(penalty, upperbound);}
 			return Maths::isLessOrEqual(penalty, upperbound);
 		}
+
 		void DPBackTracking::setStateAssignment(BackTrackingState& state,
-				NiceTreeDecompositionBag<MolecularGraph> const& bag, DPConfig const& antecessor, vertexId forgottenVertex)
+				NiceTreeDecompositionBag<MolecularGraph>& bag, DPConfig& antecessor, MolecularGraphTraits::VertexType forgottenVertex)
 		{
-			vector<Edge> bonds(getProperties(bag.getIndex()).bonds);
-			vector<Edge>::const_iterator begin (bonds.begin());
+			std::vector<MolecularGraphTraits::EdgeType> bonds(getProperties(bag.getIndex()).bonds);
+			std::vector<MolecularGraphTraits::EdgeType>::iterator begin (bonds.begin());
 			{
-				for (vector<Edge>::const_iterator iter(begin); iter
-						!= bonds.end(); ++iter)
+				for (std::vector<MolecularGraphTraits::EdgeType>::iterator iter(begin); iter != bonds.end(); ++iter)
 				{
-					Edge bond(*iter);
-					if (bond.incidence(forgottenVertex))
+					MolecularGraphTraits::EdgeType bond(*iter);
+					MolecularGraphTraits::VertexType source = boost::source(*iter, *(bondAssignment->molecule));
+					MolecularGraphTraits::VertexType target = boost::target(*iter, *(bondAssignment->molecule));
+
+					if (source == forgottenVertex || target == forgottenVertex)
 					{
 						Size bondIndex(bondIndexFor(bond));
 						state.assignment[bondIndex] = antecessor.bondAssignments[std::distance(begin, iter)];
@@ -1757,17 +1793,26 @@ namespace BALL
 			}
 		}
 
-		DPBackTrackingCombiner::DPBackTrackingCombiner(
-				DPBackTrackingCombiner const& copy) :
-		backtrackers(copy.deepCopyOfBacktrackers()), priorityQueue(copy.priorityQueue),
-		componentSolutions(copy.componentSolutions), assignment(copy.assignment),
-		solutionNumber(copy.solutionNumber), optimum(copy.optimum), upperbound(copy.upperbound)
+		DPBackTrackingCombiner::DPBackTrackingCombiner(DPBackTrackingCombiner const& copy) 
+			: backtrackers(copy.deepCopyOfBacktrackers()), 
+			  priorityQueue(copy.priorityQueue),
+				componentSolutions(copy.componentSolutions), 
+				assignment(copy.assignment),
+				solutionNumber(copy.solutionNumber), 
+				optimum(copy.optimum), 
+				upperbound(copy.upperbound)
 		{
-
 		}
-		DPBackTrackingCombiner::DPBackTrackingCombiner(vector<DPBondAssignment*> const& bondAssignments, Size solutionNumber, Penalty upperbound) :
-		backtrackers(), priorityQueue(), componentSolutions(bondAssignments.size()),
-		assignment(), solutionNumber(solutionNumber), optimum(INFINITE_PENALTY), upperbound(upperbound)
+
+		DPBackTrackingCombiner::DPBackTrackingCombiner(vector<DPBondAssignment*>& bondAssignments, 
+		                                               Size solutionNumber, Penalty upperbound) 
+			: backtrackers(), 
+				priorityQueue(), 
+				componentSolutions(bondAssignments.size()),
+				assignment(), 
+				solutionNumber(solutionNumber), 
+				optimum(INFINITE_PENALTY), 
+				upperbound(upperbound)
 		{
 			if (bondAssignments.empty())
 			{
@@ -1781,19 +1826,26 @@ namespace BALL
 			}
 			initialize();
 		}
-		DPBackTrackingCombiner::DPBackTrackingCombiner(
-				vector<DPBondAssignment> const& bondAssignments, Size solutionNumber, Penalty upperbound) :
-		backtrackers(), priorityQueue(), componentSolutions(bondAssignments.size()),
-		assignment(), solutionNumber(solutionNumber), optimum(INFINITE_PENALTY), upperbound(upperbound)
+
+		DPBackTrackingCombiner::DPBackTrackingCombiner(vector<DPBondAssignment>& bondAssignments, 
+		                                               Size solutionNumber, Penalty upperbound) 
+			: backtrackers(), 
+			  priorityQueue(), 
+				componentSolutions(bondAssignments.size()),
+				assignment(), 
+				solutionNumber(solutionNumber), 
+				optimum(INFINITE_PENALTY), 
+				upperbound(upperbound)
 		{
 			backtrackers.reserve(bondAssignments.size());
-			for (vector<DPBondAssignment>::const_iterator iter(bondAssignments.begin()); iter
+			for (vector<DPBondAssignment>::iterator iter(bondAssignments.begin()); iter
 					!= bondAssignments.end(); ++iter)
 			{
 				backtrackers.push_back(new DPBackTracking(*iter, solutionNumber, upperbound));
 			}
 			initialize();
 		}
+
 		DPBackTrackingCombiner::~DPBackTrackingCombiner()
 		{
 			for(vector<DPBackTracking*>::iterator iter(backtrackers.begin()); iter != backtrackers.end(); ++iter)
@@ -1956,6 +2008,11 @@ namespace BALL
 			return (priorityQueue.empty() ? nextPen : Maths::min(nextPen, priorityQueue.top().penalty));
 		}
 
+		Assignment& DPBackTrackingCombiner::getSolution()
+		{
+			return assignment;
+		}
+
 		Assignment const& DPBackTrackingCombiner::getSolution() const
 		{
 			return assignment;
@@ -1973,25 +2030,28 @@ namespace BALL
 			return ts;
 		}
 
-		bool Assignment::isValid(UndirectedGraph const& graph, PenaltyMap const& penalties) const
+		bool Assignment::isValid(MolecularGraph& graph, PenaltyMap& penalties)
 		{
-			float cpen (0);
-			Valence const maxValence (penalties.maxValence());
-			BondOrder const maxBondOrder (penalties.maxBondOrder());
-			vector<Valence> valences (graph.maxVertexId()+1, 0);
-			vector<vertexId> sortedNeighbours;
+			float cpen = 0;
+
+			Valence maxValence (penalties.maxValence());
+			BondOrder maxBondOrder (penalties.maxBondOrder());
+			vector<Valence> valences (boost::num_vertices(graph)+1, 0);
+			vector<MolecularGraphTraits::VertexType> sortedNeighbours;
 			sortedNeighbours.reserve(10);
-			vector<vertexId> const& vertices (graph.getVertices());
+
+			vector<MolecularGraphTraits::VertexType>& vertices = boost::vertices(graph);
 			vector<BondOrder>::const_iterator bondIterator (bonds.begin());
-			for (vector<vertexId>::const_iterator iter(vertices.begin()); iter != vertices.end(); ++iter)
+			for (vector<MolecularGraphTraits::VertexType>::const_iterator iter(vertices.begin()); iter != vertices.end(); ++iter)
 			{
-				vertexId left (*iter);
-				vector<vertexId> const& neighbours (graph.getNeighbourhood(left));
+				MolecularGraphTraits::VertexType left (*iter);
+				vector<MolecularGraphTraits::VertexType> const& neighbours (graph.getNeighbourhood(left));
 				sortedNeighbours = neighbours; //.assign(neighbours.begin(), neighbours.end());
 				sort(sortedNeighbours.begin(), sortedNeighbours.end());
-				for (vector<vertexId>::const_iterator iter2(sortedNeighbours.begin()); iter2 != sortedNeighbours.end(); ++iter2)
+				for (vector<MolecularGraphTraits::VertexType>::const_iterator iter2(sortedNeighbours.begin()); 
+				     iter2 != sortedNeighbours.end(); ++iter2)
 				{
-					vertexId right (*iter2);
+					MolecularGraphTraits::VertexType right (*iter2);
 					if (left < right)
 					{
 						if (bondIterator == bonds.end())
@@ -2009,6 +2069,7 @@ namespace BALL
 					}
 				}
 			}
+
 			Size vertexId (0);
 			for (vector<Valence>::const_iterator iter (valences.begin()); iter != valences.end(); ++iter, ++vertexId)
 			{

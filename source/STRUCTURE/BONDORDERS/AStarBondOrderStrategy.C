@@ -27,7 +27,7 @@ namespace BALL
 
 	void AStarBondOrderStrategy::clear()
 	{
-		queue_ = priority_queue<PartialBondOrderAssignment>();
+		queue_ = std::priority_queue<PartialBondOrderAssignment>();
 		step_ = 0;
 	}
 

@@ -4,6 +4,9 @@
 #include <boost/graph/properties.hpp>
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/copy.hpp>
+
+#include <list>
 
 #ifndef BALL_COMMON_GLOBAL_H
 #	include <BALL/COMMON/global.h>
@@ -12,15 +15,6 @@
 #ifndef BALL_DATATYPE_GRAPH_GRAPHALGORITHMS_H
 # include <BALL/DATATYPE/GRAPH/graphAlgorithms.h>
 #endif
-
-namespace boost
-{
-	enum vertex_atom_ptr_t { vertex_atom_ptr };
-	enum edge_bond_ptr_t { edge_bond_ptr };
-
-	BOOST_INSTALL_PROPERTY(vertex, atom_ptr);
-	BOOST_INSTALL_PROPERTY(edge, bond_ptr);
-}
 
 namespace BALL
 {
@@ -66,10 +60,14 @@ namespace BALL
 			typedef boost::property_map<MolecularGraphBase, boost::vertex_atom_ptr_t>::const_type ConstAtomPtrMap;
 			typedef boost::property_map<MolecularGraphBase, boost::edge_bond_ptr_t>::const_type   ConstBondPtrMap;
 
+			typedef GRAPH::GraphTraits<MolecularGraph>::EditableGraph EditableGraph;
+
 			MolecularGraph(AtomContainer& ac, ExportOptions opt = INCLUDE_ALL);
 
 			const Edge&   getEdge  (const Bond* bond) const;
 			const Vertex& getVertex(const Atom* atom) const;
+
+			void editableCopy(EditableGraph& eg);
 
 		private:
 			std::map<const Bond*, Edge>   bond_to_edge_;
@@ -77,6 +75,7 @@ namespace BALL
 	};
 
 	typedef GRAPH::GraphTraits<MolecularGraph> MolecularGraphTraits;
+	typedef MolecularGraph::EditableGraph EditableMolecularGraph;
 }
 
 #endif //BALL_DATATYPE_MOLECULARGRAPH_H

@@ -81,5 +81,10 @@ namespace BALL
 		return it->second;
 	}
 
+	void MolecularGraph::editableCopy(EditableGraph& eg)
+	{
+		boost::copy_graph(*dynamic_cast<MolecularGraphBase*>(this), eg, 
+				vertex_copy(GRAPH::makeEditableVertexCopier(*this, eg)).edge_copy(GRAPH::makeEditableEdgeCopier(*this, eg)));
+	}
 }
 

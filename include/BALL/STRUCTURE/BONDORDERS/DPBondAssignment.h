@@ -416,7 +416,7 @@ namespace BALL
 		 * Is used to save a reference to a const DPConfig in an object (which isn't possible with references, because they are constant and would prevent it's
 		 * adding into collections)
 		 */
-		typedef pair<DPConfig const*, Penalty> DPPointerRow;
+		typedef pair<DPConfig*, Penalty> DPPointerRow;
 
 		/**
 		 * A map which gives fast access to the penalty of a given DPConfig. Is used to compare the penalty of two DPConfigs or to
@@ -594,9 +594,9 @@ namespace BALL
 			 * @param upperbound the algorithm will only compute solutions which are better than the upperbound. By default
 			 * 										the upperbound is infinity.
 			 */
-			DPBondAssignment(MolecularGraph const& molecule,
-					PenaltyMap const& penalties,
-					NiceTreeDecomposition const& ntd, Penalty upperbound = INFINITE_PENALTY);
+			DPBondAssignment(MolecularGraph& molecule,
+					PenaltyMap& penalties,
+					NiceTreeDecomposition& ntd, Penalty upperbound = INFINITE_PENALTY);
 			/**
 			 * Destructor. Just delete the AdditionalBagProperties, which were computed during this algorithm. So don't
 			 * delete this instance before backtracking. Furthermore this destructor doesn't delete the nice tree decomposition
@@ -616,17 +616,17 @@ namespace BALL
 			/**
 			 * the graph with the bonds, which were assigned to a bond value during this algorithm
 			 */
-			MolecularGraph const * molecule;
+			MolecularGraph * molecule;
 
 			/**
 			 * A PenaltyMap implementation which maps the valence of a specific atom to the penalty for this configuration
 			 */
-			PenaltyMap const * penalties;
+			PenaltyMap * penalties;
 
 			/**
 			 * The nice tree decomposition which is built from the graph
 			 */
-			NiceTreeDecomposition const * ntd;
+			NiceTreeDecomposition * ntd;
 
 			/**
 			 * A vector of AdditionalBagProperties. Contains the bonds and the dynamic programming tables for each vertex
@@ -727,25 +727,25 @@ namespace BALL
 			 * quadratic in worst case, too. But usually the number of entries in the table is not so huge, because the forget bags
 			 * remove many entries which can not have better solutions than the kept one.
 			 */
-			void computeJoinBag(NiceTreeDecompositionBag<MolecularGraph> const& bag,
-					DPTable const& leftChild, DPTable const& rightChild, AdditionalBagProperties& bagProperties);
+			void computeJoinBag(NiceTreeDecompositionBag<MolecularGraph>& bag,
+					DPTable& leftChild, DPTable& rightChild, AdditionalBagProperties& bagProperties);
 
 			/**
 			 * computes the dynamic programming table for a given root node.
 			 * A root bag is nothing more than a forget bag, so this operations does the same as the #computeForgetBag
 			 * function.
 			 */
-			void computeRootBag(NiceTreeDecompositionBag<MolecularGraph> const& bag,
-					DPTable const& child, AdditionalBagProperties& bagProperties);
+			void computeRootBag(NiceTreeDecompositionBag<MolecularGraph>& bag,
+					DPTable& child, AdditionalBagProperties& bagProperties);
 
 			/**
 			 * delete the column of the forgotten vertex and it's incident bonds in a given table entry. Sum the bond values of
 			 * the forgotten bonds to the valence values of their incident non-forgotten vertices.
 			 * This function is reused in DPBackTracking and is called in the #computeForgetBag function.
 			 */
-			Penalty forgetInnerVertexIn(NiceTreeDecompositionBag<MolecularGraph> const& bag, DPConstRow childRow, 
-			                            DPConfig& entry, std::vector<MolecularGraphTraits::EdgeType> const& childBonds, 
-																	Size const forgottenIndex) const;
+			Penalty forgetInnerVertexIn(NiceTreeDecompositionBag<MolecularGraph>& bag, DPConstRow childRow, 
+			                            DPConfig& entry, std::vector<MolecularGraphTraits::EdgeType>& childBonds, 
+																	Size forgottenIndex);
 
 		};
 
@@ -871,7 +871,7 @@ namespace BALL
 				 * @param PenaltyMap should be the same penalty map which was used to compute this assignment
 				 * @return true if the assignment is valid, false otherwise
 				 */
-				bool isValid(MolecularGraph const& molecule, PenaltyMap const& penalties) const;
+				bool isValid(MolecularGraph& molecule, PenaltyMap& penalties);
 		};
 
 		/**
@@ -1015,7 +1015,7 @@ namespace BALL
 				 * the nice tree decomposition. This class doesn't make a copy of the bondAssignment, so take care
 				 * that the bondAssignment isn't deleted before the instance of this class.
 				 */
-				DPBondAssignment const * bondAssignment;
+				DPBondAssignment * bondAssignment;
 
 				/**
 				 * The current state of the backtracking. Each other state is in the priority queue
@@ -1042,7 +1042,7 @@ namespace BALL
 				/**
 				 * The nice tree decomposition bags in pre-order
 				 */
-				std::vector<NiceTreeDecompositionBag<MolecularGraph> const *> bags;
+				std::vector<NiceTreeDecompositionBag<MolecularGraph>*> bags;
 
 				/**
 				 * maxHeapSize is the maxNumberOfSolutions - the number of backtracked solutions. So this attribute
@@ -1060,12 +1060,12 @@ namespace BALL
 				/**
 				 * returns the dynamic programming table of the bag with the given pre-order index
 				 */
-				DPTable const& getTable(Size order) const;
+				DPTable& getTable(Size order);
 
 				/**
 				 * returns the bag properties of the bag with the given pre-order index
 				 */
-				AdditionalBagProperties const& getProperties(Size order) const;
+				AdditionalBagProperties& getProperties(Size order);
 
 				/**
 				 * Leaf-Nodes have no antecessors. So either the computing is finished,
@@ -1086,8 +1086,8 @@ namespace BALL
 				 * @param leftTable the table of the first child
 				 * @param rightTable the table of the second child
 				 */
-				void visitJoin(BackTrackingState& state, NiceTreeDecompositionBag<MolecularGraph> const& bag, 
-				               DPTable const& leftTable, DPTable const& rightTable);
+				void visitJoin(BackTrackingState& state, NiceTreeDecompositionBag<MolecularGraph>& bag, 
+				               DPTable& leftTable, DPTable& rightTable);
 
 				/**
 				 * search the antecessor of this forget node. This is the entry which is equal to
@@ -1097,7 +1097,7 @@ namespace BALL
 				 * @param table the child's table with the antecessor entry
 				 */
 				void visitForget(BackTrackingState& state,
-						NiceTreeDecompositionBag<MolecularGraph> const& bag, DPTable const& table);
+						NiceTreeDecompositionBag<MolecularGraph>& bag, DPTable& table);
 
 				/**
 				 * search antecessor of this introduce node. This is the same entry
@@ -1107,7 +1107,7 @@ namespace BALL
 				 * @param table the child's table with the antecessor entry
 				 */
 				void visitIntroduce(BackTrackingState& state,
-						NiceTreeDecompositionBag<MolecularGraph> const& bag, DPTable const& table);
+						NiceTreeDecompositionBag<MolecularGraph>& bag, DPTable& table);
 
 				/**
 				 * searchs the index of this bond in the assignment array.
@@ -1139,8 +1139,8 @@ namespace BALL
 				 * @param antecessor the choosed entry in the bag's child bag
 				 * @param forgottenVertex the vertex which is forgotten in the forget bag
 				 */
-				void setStateAssignment(BackTrackingState& state, NiceTreeDecompositionBag<MolecularGraph> const& bag, 
-				                        DPConfig const& antecessor, MolecularGraphTraits::VertexType forgottenVertex);
+				void setStateAssignment(BackTrackingState& state, NiceTreeDecompositionBag<MolecularGraph>& bag, 
+				                        DPConfig& antecessor, MolecularGraphTraits::VertexType forgottenVertex);
 
 				/**
 				 * Make the antecessor entry to the new successor entry of the given state and
@@ -1172,7 +1172,7 @@ namespace BALL
 				 * @param maxNumberOfSolutions the number of solutions you want to backtrack. Is by default 1. The size of the
 				 * 															priority queue can never be greater than maxNumberOfSolutions
 				 */
-				DPBackTracking(DPBondAssignment const& bondAssignment, Size maxNumberOfSolutions = MAX_SOLUTION_NUMBER, Penalty upperbound = INFINITE_PENALTY);
+				DPBackTracking(DPBondAssignment& bondAssignment, Size maxNumberOfSolutions = MAX_SOLUTION_NUMBER, Penalty upperbound = INFINITE_PENALTY);
 
 				/**
 				 * Copy constructor
@@ -1191,6 +1191,13 @@ namespace BALL
 
 				/**
 				 * returns the current solution. Remark that after constructing the backtracking, there is no solution computed. So
+				 * you have to call #nextSolution first.
+				 * @throw BALL::Exception::NullPointer if you forgot to call #nextSolution
+				 */
+				Assignment& getSolution();
+
+				/**
+				 * returns the current solution, const version. Remark that after constructing the backtracking, there is no solution computed. So
 				 * you have to call #nextSolution first.
 				 * @throw BALL::Exception::NullPointer if you forgot to call #nextSolution
 				 */
@@ -1303,7 +1310,7 @@ namespace BALL
 				 * @param bondAssignments vector with pointers to the bond assignments. Call #compute before constructing
 				 * @param solutionNumber the maximum number of solutions you want to backtrack
 				 */
-				DPBackTrackingCombiner(vector<DPBondAssignment*> const& bondAssignments,
+				DPBackTrackingCombiner(vector<DPBondAssignment*>& bondAssignments,
 						Size solutionNumber, Penalty upperbound = INFINITE_PENALTY);
 
 				/**
@@ -1311,7 +1318,7 @@ namespace BALL
 				 * @param bondAssignments vector with the bond assignments. Call #compute before constructing
 				 * @param solutionNumber the maximum number of solutions you want to backtrack
 				 */
-				DPBackTrackingCombiner(vector<DPBondAssignment> const& bondAssignments,
+				DPBackTrackingCombiner(vector<DPBondAssignment>& bondAssignments,
 						Size solutionNumber, Penalty upperbound = INFINITE_PENALTY);
 
 				/**
@@ -1342,6 +1349,11 @@ namespace BALL
 
 				/**
 				 * returns the last computed solution
+				 */
+				Assignment& getSolution();
+
+				/**
+				 * returns the last computed solution, const version
 				 */
 				Assignment const& getSolution() const;
 
@@ -1562,14 +1574,14 @@ namespace BALL
 				 * access the penalty of the solution and the bond order.
 				 * @throw BALL::Exception::InvalidIterator if #start is not called
 				 */
-				Assignment const& operator * () const;
+				Assignment& operator * ();
 
 				/**
 				 * Give access to the last computed solution. This solution is returned as Assignment instance. So you can
 				 * access the penalty of the solution and the bond order.
 				 * @throw BALL::Exception::InvalidIterator if #start is not called
 				 */
-				Assignment const * operator -> () const;
+				Assignment * operator -> ();
 
 				/**
 				 * Validates the assignment
@@ -1579,7 +1591,7 @@ namespace BALL
 				 */
 				bool isValidAssignment();
 
-				bool isValidAssignment(Assignment const& ref);
+				bool isValidAssignment(Assignment& ref);
 
 				/**
 				 * Give access to the last computed solution. This function returns a HashMap which maps each bond in the
@@ -1686,7 +1698,7 @@ namespace BALL
 				/**
 				 * The backtracker
 				 */
-				DPBackTrackingCombiner * combiner;
+				DPBackTrackingCombiner *combiner;
 
 				/**
 				 * A shared pointer to the computing data, so that you can copy this instance without copying

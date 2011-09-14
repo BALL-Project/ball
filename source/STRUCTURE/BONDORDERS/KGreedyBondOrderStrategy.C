@@ -95,7 +95,7 @@ namespace BALL
 			}
 			else // Bond is free -> try all bond orders for all nodes in our greedy set
 			{	
-				queue_ = priority_queue<PartialBondOrderAssignment>();
+				queue_ = std::priority_queue<PartialBondOrderAssignment>();
 				Size min_size =  std::min(greedy_set_size, greedy_k_);
 				for (Size j=0; j < min_size; j++)
 				{

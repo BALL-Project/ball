@@ -61,7 +61,7 @@ namespace BALL
 		Position no_atoms = abop->ac_->countAtoms();
 
 		// Mapping from (free) bonds onto bond variable indices
-		map<Bond*, Position> bond_map;
+		std::map<Bond*, Position> bond_map;
 
 		// Vector for mapping from variable indices onto bonds
 		index_to_free_bond_.resize(total_no_bonds, (Bond*)0);
@@ -143,7 +143,7 @@ namespace BALL
 		ilp_ = make_lp(0, no_vars);
 		if (!ilp_)
 		{
-			Log.error() << "ILPBondOrderStrategy::init(): Creation of ILP failed" << endl;
+			Log.error() << "ILPBondOrderStrategy::init(): Creation of ILP failed" << std::endl;
 
 			return;
 		}
@@ -189,7 +189,7 @@ namespace BALL
 			}
 			if (!add_constraintex(ilp_, abop->max_bond_order_, &choices[0], &cons_indices[0], EQ, 1))
 			{
-				Log.error() << "ILPBondOrderStrategy::init(): Setting bond choice constraint for ILP failed" << endl;
+				Log.error() << "ILPBondOrderStrategy::init(): Setting bond choice constraint for ILP failed" << std::endl;
 
 				return;
 			}
@@ -209,7 +209,7 @@ namespace BALL
 			Position count_b = 0;
 			for(Atom::BondIterator bit = at1->beginBond(); +bit; ++bit)
 			{
-				map<Bond*, unsigned int>::iterator it = bond_map.find(&(*bit));
+				std::map<Bond*, unsigned int>::iterator it = bond_map.find(&(*bit));
 				if (it != bond_map.end())
 				{
 					for(int k = 1; k <= abop->max_bond_order_; ++k, ++count_b)
@@ -253,14 +253,14 @@ namespace BALL
 					if (!add_constraintex(ilp_, count_vars, &cons_prefactors[0], &cons_indices[0], EQ,
 							 abop->fixed_val_[i]))
 					{
-						Log.error() << "ILPBondOrderStrategy::init(): Setting valence constraint for ILP failed" << endl;
+						Log.error() << "ILPBondOrderStrategy::init(): Setting valence constraint for ILP failed" << std::endl;
 
 						return;
 					}
 					// Add choice constraint 
 					if (!add_constraintex(ilp_, total_length, &choices[0], &cons_indices[count_b], EQ, 1))
 					{
-						Log.error() << "ILPBondOrderStrategy::init(): Setting valence choice constraint for ILP failed" << endl;
+						Log.error() << "ILPBondOrderStrategy::init(): Setting valence choice constraint for ILP failed" << std::endl;
 
 						return;
 					}
@@ -297,14 +297,14 @@ namespace BALL
 					if (!add_constraintex(ilp_, count_vars, &cons_prefactors[0], &cons_indices[0], EQ,
 								abop->fixed_val_[i]))
 					{
-						Log.error() << "ILPBondOrderStrategy::init(): Setting valence constraint for ILP failed" << endl;
+						Log.error() << "ILPBondOrderStrategy::init(): Setting valence constraint for ILP failed" << std::endl;
 
 						return;
 					}
 					// Add choice constraint 
 					if (!add_constraintex(ilp_, abop->block_to_length_[abop->atom_to_block_[i][0]], &choices[0], &cons_indices[count_b], EQ, 1))
 					{
-						Log.error() << "ILPBondOrderStrategy::init(): Setting choice constraint for ILP failed" << endl;
+						Log.error() << "ILPBondOrderStrategy::init(): Setting choice constraint for ILP failed" << std::endl;
 
 						return;
 					}
@@ -318,7 +318,7 @@ namespace BALL
 		// Set objective function
 		if (!set_obj_fnex(ilp_, obj_prefactors.size(), &obj_prefactors[0], &obj_indices[0]))
 		{
-			Log.error() << "ILPBondOrderStrategy::init(): Setting objective function for ILP failed" << endl;
+			Log.error() << "ILPBondOrderStrategy::init(): Setting objective function for ILP failed" << std::endl;
 		}
 
 		// Tell lp_solve that this problem is a minimization problem
@@ -366,7 +366,7 @@ namespace BALL
 			
 			if (!add_constraintex(ilp_, j, &cons_prefactors[0], &cons_indices[0], LE, (REAL)j-1))
 			{
-				Log.error() << "AssignBondOrderProcessor: Adding constraint for next solution failed" << endl;
+				Log.error() << "AssignBondOrderProcessor: Adding constraint for next solution failed" << std::endl;
 
 				return solution;
 			}
@@ -466,7 +466,7 @@ namespace BALL
 		}
 		else
 		{
-			Log.error() << "ILPBondOrderStrategy::computeNextSolution(): ILP could not be solved successfully, reason: " << ret << endl;
+			Log.error() << "ILPBondOrderStrategy::computeNextSolution(): ILP could not be solved successfully, reason: " << ret << std::endl;
 		}
 
 		return solution;

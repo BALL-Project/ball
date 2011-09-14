@@ -484,6 +484,8 @@ namespace BALL
 			 * @throw BALL::Exception::OutOfRange if iterator is on the begin of a tree
 			 */
 			AbstractTraversal<T> operator--(int);
+
+			Cursor& getCursor() { return cursor; }
 	};
 
 	/**
@@ -534,7 +536,7 @@ namespace BALL
 	 *	@return the return value for the root vertex
 	 */
 	template<class From, class To, class Functor>
-																	To postOrderFolding(From& tree, Functor& f);
+	To postOrderFolding(From& tree, Functor& f);
 
 	//@}
 
@@ -828,7 +830,7 @@ namespace BALL
 				throw Exception::IllegalTreeOperation(__FILE__, __LINE__);
 			} else
 			{
-				return parents.top();
+				return *(parents.top());
 			}
 		}
 
