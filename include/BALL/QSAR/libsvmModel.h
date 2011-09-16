@@ -89,8 +89,6 @@ namespace BALL
 				struct svm_problem* createProblem(int response_id);
 				
 				void createParameters();
-
-				void destroyModel(::svm_model* model);
 				
 				struct svm_model* svm_train_result_;
 				
