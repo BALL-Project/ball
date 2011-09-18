@@ -4,7 +4,6 @@ SET(DIRECTORY source/DATATYPE/GRAPH)
 SET(SOURCES_LIST
 	graphAlgorithms.C
 	molecularGraph.C
-	treeTraits.C
 	treeWidth.C
 )
 

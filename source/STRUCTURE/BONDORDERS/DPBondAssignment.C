@@ -187,7 +187,7 @@ namespace BALL
 			buildGraph();
 
 			// build NiceTreeDecomposition
-			buildNiceTreeDecomposition();
+			computingData.tw_ = boost::shared_ptr<TreeWidth<MolecularGraph> >(new TreeWidth<MolecularGraph>(*(computingData->moleculeGraph)));
 
 			// compute BondAssignments
 			computeBondAssignment();
@@ -311,67 +311,11 @@ namespace BALL
 			// TODO: do we need to sort the bonds in a particular way?
 		}
 
-		void DPBondAssignmentAlgorithm::buildNiceTreeDecomposition()
-		{
-			MolecularGraph & mol_graph = *computingData->moleculeGraph;
-
-			std::vector<int> components(num_vertices(mol_graph));
-			int num_components = boost::connected_components(mol_graph, &components[0]);
-
-			std::vector<NiceTreeDecomposition*> & ntds = computingData->niceTreeDecompositions;
-			ntds.reserve(num_components);
-
-
-			// build individual graphs out of the components
-			std::vector<MolecularGraph> subgraphs;
-			subgraphs.reserve(num_components);
-
-			for (int i=0; i<num_components; ++i)
-			{
-				subgraphs[i] = MolecularGraph(mol_graph);
-
-				std::list<VertexType> to_remove;
-				boost::property_map<MolecularGraph, boost::vertex_index_t>::type vertex_index = boost::get(boost::vertex_index, subgraphs[i]);
-
-				BGL_FORALL_VERTICES(current_vertex, subgraphs[i], MolecularGraph)
-				{
-					if (components[vertex_index[current_vertex]] != i)
-						to_remove.push_back(current_vertex);
-				}
-
-				for (std::list<VertexType>::iterator li = to_remove.begin(); li != to_remove.end(); ++li)
-				{
-					boost::clear_vertex(*li, subgraphs[i]);
-					boost::remove_vertex(*li, subgraphs[i]);
-				}
-			}
-
-			for (int i=0; i<num_components; ++i)
-			{
-				MolecularGraph& component = subgraphs[i];
-
-				TreeDecomposition treeDecomposition;
-
-				// Quick-Bound-And-Branch algorithm to compute a perfect elimination order
-				QuickBB<MolecularGraph> quickBB (component);
-
-				TreeWidthTraits<MolecularGraph>::EliminationOrder permutation(quickBB.compute());
-				// use this elimination order to build an optimal tree decomposition
-				eliminationOrderToTreeDecomposition(mol_graph, permutation, treeDecomposition);
-				// transform this tree decomposition into a nice tree decomposition
-				ntds.push_back(new NiceTreeDecomposition());
-
-				NiceTreeDecompositionBuilder<MolecularGraph> builder (*ntds[i]);
-				builder.buildNiceTreeDecomposition(*treeDecomposition.getRoot());
-			}
-			// for each connection component in the molecule graph
-		}
-
 		void DPBondAssignmentAlgorithm::computeBondAssignment()
 		{
 			MolecularGraph& mol_graph = *computingData->moleculeGraph;
 
-			std::vector<NiceTreeDecomposition*> & ntds = computingData->niceTreeDecompositions;
+			std::vector<NiceTreeDecomposition*> & ntds = computingData->tw_->getDecompositions();
 			std::vector<DPBondAssignment*> & bondAssignments = computingData->bondAssignments;
 
 			Size connectionComponents = computingData->connectionComponents.size();
@@ -772,12 +716,12 @@ namespace BALL
 
 		Penalty DPBondAssignment::compute()
 		{
-			DPTable* table(postOrderFolding<NiceTreeDecompositionBag<MolecularGraph>, DPTable*, 
+			DPTable* table(postOrderFolding<NiceTreeDecompositionBag, DPTable*, 
 			                                DPBondAssignment> (*ntd->getRoot(), *this));
 			return table->bestPenalty();
 		}
 
-		DPTable* DPBondAssignment::operator()(NiceTreeDecompositionBag<MolecularGraph>& bag,
+		DPTable* DPBondAssignment::operator()(NiceTreeDecompositionBag& bag,
 				NodeType, vector<DPTable*>::const_iterator begin, vector<DPTable*>::const_iterator end)
 		{
 			AdditionalBagProperties& bagProperties (properties[bag.getIndex()]);
@@ -787,20 +731,20 @@ namespace BALL
 			// check the pointers
 			switch (bag.getBagType())
 			{
-			case TreeDecompositionBag<MolecularGraph>::JOIN_BAG:
+			case TreeDecompositionBag::JOIN_BAG:
 				if (first == end || second == end || *second == NULL)
 				{
 					throw Exception::NullPointer(__FILE__, __LINE__);
 				}
-			case TreeDecompositionBag<MolecularGraph>::INTRODUCE_BAG:
-			case TreeDecompositionBag<MolecularGraph>::FORGET_BAG:
-			case TreeDecompositionBag<MolecularGraph>::ROOT_BAG:
+			case TreeDecompositionBag::INTRODUCE_BAG:
+			case TreeDecompositionBag::FORGET_BAG:
+			case TreeDecompositionBag::ROOT_BAG:
 				if (first == end || *first == NULL)
 				{
 					throw Exception::NullPointer(__FILE__, __LINE__);
 				}
-			case TreeDecompositionBag<MolecularGraph>::LEAF_BAG: break;
-			case TreeDecompositionBag<MolecularGraph>::END_BAG:
+			case TreeDecompositionBag::LEAF_BAG: break;
+			case TreeDecompositionBag::END_BAG:
 				if (boost::num_vertices(*molecule) == 0 && (&bag == ntd->getRoot()))
 				{
 					// empty molecule -> empty table
@@ -817,22 +761,22 @@ namespace BALL
 			// compute the table
 			switch (bag.getBagType())
 			{
-				case TreeDecompositionBag<MolecularGraph>::INTRODUCE_BAG:
+				case TreeDecompositionBag::INTRODUCE_BAG:
 					computeIntroduceBag(bag, **first, bagProperties);
 					break;
-				case TreeDecompositionBag<MolecularGraph>::FORGET_BAG:
+				case TreeDecompositionBag::FORGET_BAG:
 					computeForgetBag(bag, **first, bagProperties);
 					break;
-				case TreeDecompositionBag<MolecularGraph>::JOIN_BAG:
+				case TreeDecompositionBag::JOIN_BAG:
 					computeJoinBag(bag, **first, **second, bagProperties);
 					break;
-				case TreeDecompositionBag<MolecularGraph>::LEAF_BAG:
+				case TreeDecompositionBag::LEAF_BAG:
 					computeLeafIntroduceBag(bagProperties);
 					break;
-				case TreeDecompositionBag<MolecularGraph>::ROOT_BAG:
+				case TreeDecompositionBag::ROOT_BAG:
 					computeRootBag(bag, **first, bagProperties);
 					break;
-				case TreeDecompositionBag<MolecularGraph>::END_BAG: ;
+				case TreeDecompositionBag::END_BAG: ;
 					// can't happen
 			}
 			//PRINT_TABLE(bagProperties, bag);
@@ -848,7 +792,7 @@ namespace BALL
 		}
 
 		std::vector<MolecularGraphTraits::EdgeType> DPBondAssignment::getBondsInBag(
-				NiceTreeDecompositionBag<MolecularGraph>& bag)
+				NiceTreeDecompositionBag& bag)
 		{
 			std::set<MolecularGraphTraits::VertexType>& vertices = bag.getInnerVertices();
 			std::vector<MolecularGraphTraits::EdgeType> bonds;
@@ -870,7 +814,7 @@ namespace BALL
 		}
 
 		void DPBondAssignment::computeIntroduceBag(
-				NiceTreeDecompositionBag<MolecularGraph>& bag, DPTable& child, AdditionalBagProperties& property)
+				NiceTreeDecompositionBag& bag, DPTable& child, AdditionalBagProperties& property)
 		{
 			DPTable& table(*property.table);
 			MolecularGraphTraits::VertexType iv(bag.getIntroducedVertex());
@@ -944,7 +888,7 @@ namespace BALL
 			}
 		}
 
-		Penalty DPBondAssignment::forgetInnerVertexIn(NiceTreeDecompositionBag<MolecularGraph> & bag,
+		Penalty DPBondAssignment::forgetInnerVertexIn(NiceTreeDecompositionBag & bag,
 				DPConstRow childRow, DPConfig& entry, vector<Edge>& childBonds, Size forgottenIndex)
 		{
 			DPConfig const& childEntry (childRow.first);
@@ -1010,7 +954,7 @@ namespace BALL
 		}
 
 		void DPBondAssignment::computeForgetBag(
-				NiceTreeDecompositionBag<MolecularGraph>& bag, DPTable& child, AdditionalBagProperties& property)
+				NiceTreeDecompositionBag& bag, DPTable& child, AdditionalBagProperties& property)
 		{
 			AdditionalBagProperties& childProperty (properties[bag.firstChild().getIndex()]);
 			std::set<MolecularGraphTraits::VertexType>& vset (bag.firstChild().getInnerVertices());
@@ -1026,7 +970,7 @@ namespace BALL
 			}
 		}
 
-		void DPBondAssignment::computeRootBag(NiceTreeDecompositionBag<MolecularGraph>& bag, DPTable& child, AdditionalBagProperties& bagProperties)
+		void DPBondAssignment::computeRootBag(NiceTreeDecompositionBag& bag, DPTable& child, AdditionalBagProperties& bagProperties)
 		{
 			DPConfig empty (0, 0);
 			vector<Edge> emptyList (0);
@@ -1042,7 +986,7 @@ namespace BALL
 			bagProperties.table->insert(empty, minPenalty);
 		}
 
-		void DPBondAssignment::computeJoinBag(NiceTreeDecompositionBag<MolecularGraph>& bag,
+		void DPBondAssignment::computeJoinBag(NiceTreeDecompositionBag& bag,
 				DPTable& leftChild, DPTable& rightChild, AdditionalBagProperties& property)
 		{
 			Size numOfValences(bag.getInnerVertices().size());
@@ -1303,8 +1247,8 @@ namespace BALL
 			}
 			{
 				bags.reserve(bondAssignment.ntd->size());
-				PreOrderTraversal<NiceTreeDecompositionBag<MolecularGraph> > begin (*bondAssignment.ntd->getRoot());
-				PreOrderTraversal<NiceTreeDecompositionBag<MolecularGraph> > end;
+				PreOrderTraversal<NiceTreeDecompositionBag > begin (*bondAssignment.ntd->getRoot());
+				PreOrderTraversal<NiceTreeDecompositionBag > end;
 				for (; begin != end; ++begin)
 				{
 					bags.push_back(&(*begin));
@@ -1426,7 +1370,6 @@ namespace BALL
 
 		void DPBackTracking::nextSolution()
 		{
-
 			if (queue.empty() || maxHeapSize == 0)
 			{
 				throw Exception::OutOfRange(__FILE__, __LINE__);
@@ -1441,36 +1384,36 @@ namespace BALL
 			--maxHeapSize;
 			for (Size index(currentState->index); index < bags.size(); ++index)
 			{
-				NiceTreeDecompositionBag<MolecularGraph>& bag(*bags[index]);
+				NiceTreeDecompositionBag& bag(*bags[index]);
 				switch (bag.getBagType())
 				{
-				case TreeDecompositionBag<MolecularGraph>::ROOT_BAG:
-					visitForget(*currentState, bag, getTable(bag.firstChild().getIndex()));
-					break;
-				case TreeDecompositionBag<MolecularGraph>::INTRODUCE_BAG:
-					visitIntroduce(*currentState, bag, getTable(bag.firstChild().getIndex()));
-					break;
-				case TreeDecompositionBag<MolecularGraph>::LEAF_BAG:
-					visitLeaf(*currentState);
-					break;
-				case TreeDecompositionBag<MolecularGraph>::JOIN_BAG:
-				{
-					visitJoin(*currentState, bag, getTable(bag.firstChild().getIndex()), getTable(bag.secondChild().getIndex()));
-					break;
-				}
-				case TreeDecompositionBag<MolecularGraph>::FORGET_BAG:
-					visitForget(*currentState, bag, getTable(bag.firstChild().getIndex()));
-					break;
-				case TreeDecompositionBag<MolecularGraph>::END_BAG:
-					if (boost::num_vertices(*(bondAssignment->molecule)) == 0)
+					case TreeDecompositionBag::ROOT_BAG:
+						visitForget(*currentState, bag, getTable(bag.firstChild().getIndex()));
+						break;
+					case TreeDecompositionBag::INTRODUCE_BAG:
+						visitIntroduce(*currentState, bag, getTable(bag.firstChild().getIndex()));
+						break;
+					case TreeDecompositionBag::LEAF_BAG:
+						visitLeaf(*currentState);
+						break;
+					case TreeDecompositionBag::JOIN_BAG:
 					{
-						// empty molecule -> you are finished
-						return;
-					} else
-					{
-						// nice tree decomposition is damaged
-						throw Exception::IllegalTreeOperation(__FILE__, __LINE__);
+						visitJoin(*currentState, bag, getTable(bag.firstChild().getIndex()), getTable(bag.secondChild().getIndex()));
+						break;
 					}
+					case TreeDecompositionBag::FORGET_BAG:
+						visitForget(*currentState, bag, getTable(bag.firstChild().getIndex()));
+						break;
+					case TreeDecompositionBag::END_BAG:
+						if (boost::num_vertices(*(bondAssignment->molecule)) == 0)
+						{
+							// empty molecule -> you are finished
+							return;
+						} else
+						{
+							// nice tree decomposition is damaged
+							throw Exception::IllegalTreeOperation(__FILE__, __LINE__);
+						}
 				}
 			}
 		}
@@ -1485,7 +1428,7 @@ namespace BALL
 		 * -> Löschen der neuen Spalten wieder den Eintrag der Kindtabelle bekommen
 		 */
 		void DPBackTracking::visitIntroduce(BackTrackingState& state,
-				NiceTreeDecompositionBag<MolecularGraph>& bag, DPTable& table)
+				NiceTreeDecompositionBag& bag, DPTable& table)
 		{
 
 			std::set<MolecularGraphTraits::VertexType>& bagVertices(bag.getInnerVertices());
@@ -1555,7 +1498,7 @@ namespace BALL
 		 * gesucht: Alle Paare von Kindknoten, die diesen Eintrag erzeugt haben können
 		 */
 		void DPBackTracking::visitJoin(BackTrackingState& state,
-				NiceTreeDecompositionBag<MolecularGraph>& bag, DPTable& leftTable, DPTable& rightTable)
+				NiceTreeDecompositionBag& bag, DPTable& leftTable, DPTable& rightTable)
 		{
 
 			vector<DPPairIt> possibleAntecessors;
@@ -1563,7 +1506,7 @@ namespace BALL
 			vector<DPTable::const_iterator> rightEntries;
 			DPJoinMapComparator comp;
 			DPConfig const& successor(state.config);
-			NiceTreeDecompositionBag<MolecularGraph> const& rightChild(bag.secondChild());
+			NiceTreeDecompositionBag const& rightChild(bag.secondChild());
 			// insert possible antecessors in vectors
 			for (DPTable::const_iterator iter(leftTable.begin()); iter != leftTable.end(); ++iter)
 			{
@@ -1655,10 +1598,10 @@ namespace BALL
 		 * -> löschen und prüfen, ob sie dann den gesuchten Eintrag ergeben.
 		 */
 		void DPBackTracking::visitForget(BackTrackingState& state,
-				NiceTreeDecompositionBag<MolecularGraph>& bag, DPTable& table)
+				NiceTreeDecompositionBag& bag, DPTable& table)
 		{
 			vector<DPPointerRow> possibleAntecessors;
-			NiceTreeDecompositionBag<MolecularGraph>& child(bag.firstChild());
+			NiceTreeDecompositionBag& child(bag.firstChild());
 			std::set<MolecularGraphTraits::VertexType>& childVertices(child.getInnerVertices());
 			std::vector<MolecularGraphTraits::EdgeType>& childBonds(getProperties(child.getIndex()).bonds);
 			MolecularGraphTraits::VertexType fv(bag.getForgottenVertex());
@@ -1745,7 +1688,7 @@ namespace BALL
 		}
 
 		void DPBackTracking::setStateAssignment(BackTrackingState& state,
-				NiceTreeDecompositionBag<MolecularGraph>& bag, DPConfig& antecessor, MolecularGraphTraits::VertexType forgottenVertex)
+				NiceTreeDecompositionBag& bag, DPConfig& antecessor, MolecularGraphTraits::VertexType forgottenVertex)
 		{
 			std::vector<MolecularGraphTraits::EdgeType> bonds(getProperties(bag.getIndex()).bonds);
 			std::vector<MolecularGraphTraits::EdgeType>::iterator begin (bonds.begin());
@@ -1773,7 +1716,7 @@ namespace BALL
 		}
 
 		void DPBackTracking::branchState(BackTrackingState& state,
-				NiceTreeDecompositionBag<MolecularGraph> const& child, DPConfig const& antecessor)
+				NiceTreeDecompositionBag const& child, DPConfig const& antecessor)
 		{
 			pair<DPConfig, Size> rightState;
 			rightState.first = antecessor;

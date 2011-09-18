@@ -21,14 +21,12 @@
 namespace boost
 {
 	enum vertex_atom_ptr_t { vertex_atom_ptr };
-	enum vertex_atom_ptr_list_t { vertex_atom_ptr_list };
 	enum vertex_orig_ptr_t { vertex_orig_ptr };
 
 	enum edge_bond_ptr_t { edge_bond_ptr };
 	enum edge_orig_ptr_t   { edge_orig_ptr   };
 
 	BOOST_INSTALL_PROPERTY(vertex, atom_ptr);
-	BOOST_INSTALL_PROPERTY(vertex, atom_ptr_list);
 	BOOST_INSTALL_PROPERTY(vertex, orig_ptr);
 
 	BOOST_INSTALL_PROPERTY(edge, bond_ptr);
@@ -189,7 +187,7 @@ namespace BALL
 					if (!boost::edge(*ai, *bi, graph).second)
 					{
 						boost::add_edge(*ai, *bi, graph);
-						result.getEdges().push_back(std::make_pair<int, int>(boost::get(boost::vertex_index, graph, *ai),
+						result.getEdges().push_back(std::make_pair(boost::get(boost::vertex_index, graph, *ai),
 						                                                     boost::get(boost::vertex_index, graph, *bi)));
 					}
 				}
@@ -258,8 +256,8 @@ namespace BALL
 		UndoEliminateOperation<UndirectedGraph>::UndoEliminateOperation(UndirectedGraph& ugraph, VertexType const& a)
 			: graph(&ugraph), 
 				vertex(a),
-				neighbours_(),
 				edges_(), 
+				neighbours_(),
 				applied(true)
 		{
 			vertex_properties_ = boost::get(boost::vertex_all_t(), ugraph, a);
@@ -320,6 +318,70 @@ namespace BALL
 
 			boost::copy_graph(src, target, vertex_index_map(vertex_property_map));
 		}
+
+		template <class Tree, class From, class To, class Functor>
+		class PostOrderFolding
+		{
+			public:
+				typedef typename Tree::children_iterator ChildrenIterator;
+
+				typedef typename std::vector<To>::iterator        ArgumentIterator;
+
+				PostOrderFolding(Tree& tree, Functor& f)
+					: tree_(&tree),
+					  f_(&f),
+						return_stack_(boost::shared_ptr<std::vector<To> >(new std::vector<To>()))
+				{
+					boost::traverse_tree(root(*tree_), *tree_, *this);
+				}
+
+				template <class Node>
+				void preorder(Node, Tree&)
+				{
+				}
+
+				template <class Node>
+				void inorder(Node, Tree&)
+				{
+				}
+
+				template <class Node>
+				void postorder(Node n, Tree& t)
+				{
+					ChildrenIterator c_i, c_end;
+					boost::tie(c_i, c_end) = children(n, t);
+
+					bool is_leaf = (c_i == c_end);
+					bool is_root = (n   == root(t));
+
+					ArgumentIterator begin_arg = return_stack_->end();
+					ArgumentIterator end_arg   = return_stack_->end();
+
+					if (!is_leaf)
+					{
+						for (; c_i != c_end; ++c_i)
+						{
+							--begin_arg;
+						}
+					}
+
+					To value = (*f_)(n, begin_arg, end_arg);
+
+					if (begin_arg != end_arg)
+					{
+						return_stack_->erase(begin_arg, end_arg);
+					}
+
+					return_stack_->push_back(value);
+				}
+
+			protected:
+				boost::shared_ptr<std::vector<To> > return_stack_;
+
+				Tree*    tree_;
+				Functor* f_;
+		};
+		
 	}
 }
 

@@ -577,14 +577,15 @@ namespace BALL
 		 */
 		class DPBondAssignment
 		{
-			friend class DPBackTracking;
-			friend DPTable* postOrderFolding<NiceTreeDecompositionBag<MolecularGraph>, DPTable*, DPBondAssignment>(
-					NiceTreeDecompositionBag<MolecularGraph>&, 	DPBondAssignment &
-					);
-
 			public:
 				typedef GRAPH::GraphTraits<MolecularGraph>::EdgeType Edge;
-				typedef TreeNodeList<NiceTreeDecompositionBag<MolecularGraph> > NiceTreeDecomposition;
+				typedef TreeWidthImplementation<MolecularGraph>::NiceTreeDecomposition    NiceTreeDecomposition;
+				typedef TreeWidthImplementation<MolecularGraph>::TreeDecompositionBag     TreeDecompositionBag;
+				typedef TreeWidthImplementation<MolecularGraph>::NiceTreeDecompositionBag NiceTreeDecompositionBag;
+
+				friend class DPBackTracking;
+				friend DPTable* postOrderFolding<NiceTreeDecompositionBag, DPTable*, DPBondAssignment>(NiceTreeDecompositionBag&, 	
+				                                                                                       DPBondAssignment &);
 
 			/**
 			 * Construct a new DPBondAssignment with the given molecule, a PenaltyMap and a built nice tree decomposition
@@ -665,7 +666,7 @@ namespace BALL
 			 * @throws BALL::Exception::IllegalTreeOperation if the nice tree decomposition is damaged
 			 * @return the dynamic programming table for this bag
 			 */
-			DPTable* operator() (NiceTreeDecompositionBag<MolecularGraph>& bag, NodeType type,
+			DPTable* operator() (NiceTreeDecompositionBag& bag, NodeType type,
 					std::vector<DPTable*>::const_iterator begin, std::vector<DPTable*>::const_iterator end);
 
 			/**
@@ -674,7 +675,7 @@ namespace BALL
 			 * @param bag the bag of the nice tree decomposition
 			 * @return a vector of edges which are only incident to vertices in this bag
 			 */
-			std::vector<MolecularGraphTraits::EdgeType> getBondsInBag(NiceTreeDecompositionBag<MolecularGraph>& bag);
+			std::vector<MolecularGraphTraits::EdgeType> getBondsInBag(NiceTreeDecompositionBag& bag);
 
 			/**
 			 * computes the dynamic programming table for a given leaf node.
@@ -694,7 +695,7 @@ namespace BALL
 			 * operation is O([number of bond values]^[number of introduced bonds] * [number of table entries] * insertion-costs),
 			 * where insertion-costs are logarithmic, because the table is implemented as search tree.
 			 */
-			void computeIntroduceBag(NiceTreeDecompositionBag<MolecularGraph>& bag, 
+			void computeIntroduceBag(NiceTreeDecompositionBag& bag, 
 			                         DPTable& child, AdditionalBagProperties& bagProperties);
 
 			/**
@@ -711,7 +712,7 @@ namespace BALL
 			 * which is done in O(log(number of entries) * (number of bonds + number of atoms)),
 			 * because the table is implemented as search tree.
 			 */
-			void computeForgetBag(NiceTreeDecompositionBag<MolecularGraph>& bag,
+			void computeForgetBag(NiceTreeDecompositionBag& bag,
 														DPTable& child, AdditionalBagProperties& property);
 
 			/**
@@ -727,7 +728,7 @@ namespace BALL
 			 * quadratic in worst case, too. But usually the number of entries in the table is not so huge, because the forget bags
 			 * remove many entries which can not have better solutions than the kept one.
 			 */
-			void computeJoinBag(NiceTreeDecompositionBag<MolecularGraph>& bag,
+			void computeJoinBag(NiceTreeDecompositionBag& bag,
 					DPTable& leftChild, DPTable& rightChild, AdditionalBagProperties& bagProperties);
 
 			/**
@@ -735,7 +736,7 @@ namespace BALL
 			 * A root bag is nothing more than a forget bag, so this operations does the same as the #computeForgetBag
 			 * function.
 			 */
-			void computeRootBag(NiceTreeDecompositionBag<MolecularGraph>& bag,
+			void computeRootBag(NiceTreeDecompositionBag& bag,
 					DPTable& child, AdditionalBagProperties& bagProperties);
 
 			/**
@@ -743,7 +744,7 @@ namespace BALL
 			 * the forgotten bonds to the valence values of their incident non-forgotten vertices.
 			 * This function is reused in DPBackTracking and is called in the #computeForgetBag function.
 			 */
-			Penalty forgetInnerVertexIn(NiceTreeDecompositionBag<MolecularGraph>& bag, DPConstRow childRow, 
+			Penalty forgetInnerVertexIn(NiceTreeDecompositionBag& bag, DPConstRow childRow, 
 			                            DPConfig& entry, std::vector<MolecularGraphTraits::EdgeType>& childBonds, 
 																	Size forgottenIndex);
 
@@ -997,171 +998,11 @@ namespace BALL
 		 */
 		class DPBackTracking
 		{
-			protected:
-
-				/**
-				 * Defines the Min-order for BackTrackingState-pointer instances in the queue
-				 */
-				struct StateComparator
-				{
-					/**
-					 * Comparison is done by dereferencing the pointer
-					 */
-					bool operator () (BackTrackingState const * left, BackTrackingState const * right) const;
-				};
-
-				/**
-				 * The instance of the DPBondAssignment algorithm, which gives access to the computed tables and
-				 * the nice tree decomposition. This class doesn't make a copy of the bondAssignment, so take care
-				 * that the bondAssignment isn't deleted before the instance of this class.
-				 */
-				DPBondAssignment * bondAssignment;
-
-				/**
-				 * The current state of the backtracking. Each other state is in the priority queue
-				 */
-				BackTrackingState * currentState;
-
-				/**
-				 * priority queue for backtracking states. It is implemented as search tree, because we need also
-				 * access to the worst element (to limit the queues size).
-				 */
-				multiset<BackTrackingState*, StateComparator> queue;
-
-				/**
-				 * the maximum number of solutions we want do backtrack.
-				 */
-				Size maxNumberOfSolutions;
-
-				/**
-				 * A sorted vector of the edges of the graph. The bond values in the assignments are in the same order
-				 * as the edges in this vector.
-				 */
-				std::vector<MolecularGraphTraits::EdgeType> bonds;
-
-				/**
-				 * The nice tree decomposition bags in pre-order
-				 */
-				std::vector<NiceTreeDecompositionBag<MolecularGraph>*> bags;
-
-				/**
-				 * maxHeapSize is the maxNumberOfSolutions - the number of backtracked solutions. So this attribute
-				 * contains the current number of solutions we want to backtrack.
-				 */
-				Size maxHeapSize;
-
-				/**
-				 * current upperbound. This algorithm will just iterate solutions which are better than this upperbound;
-				 */
-				Penalty upperbound;
-
-				typedef vector<NiceTreeDecompositionBag<MolecularGraph> const *> BagVector;
-
-				/**
-				 * returns the dynamic programming table of the bag with the given pre-order index
-				 */
-				DPTable& getTable(Size order);
-
-				/**
-				 * returns the bag properties of the bag with the given pre-order index
-				 */
-				AdditionalBagProperties& getProperties(Size order);
-
-				/**
-				 * Leaf-Nodes have no antecessors. So either the computing is finished,
-				 * or there is an unfinished join node in join branch stack which has to
-				 * be computed next.
-				 */
-				void visitLeaf(BackTrackingState& state);
-
-				/**
-				 * search the both antecessors of this join node. This is the pair of entries,
-				 * which bond values are the same as the successor's bond values and which
-				 * sum of consumed valences are the same as the successor's consumed valences.
-				 * The best left entry becomes the new current state. The right entry is pushed
-				 * on top of the state's join branch stack. Other possible pairs of antecessors
-				 * are inserted into the priority queue
-				 * @param state the current backtracking state
-				 * @param bag the join bag with the successor entry
-				 * @param leftTable the table of the first child
-				 * @param rightTable the table of the second child
-				 */
-				void visitJoin(BackTrackingState& state, NiceTreeDecompositionBag<MolecularGraph>& bag, 
-				               DPTable& leftTable, DPTable& rightTable);
-
-				/**
-				 * search the antecessor of this forget node. This is the entry which is equal to
-				 * the successor after forgetting the forget-vertex and it's incident bonds.
-				 * @param state the current backtracking state
-				 * @param bag the forget bag with the successor entry
-				 * @param table the child's table with the antecessor entry
-				 */
-				void visitForget(BackTrackingState& state,
-						NiceTreeDecompositionBag<MolecularGraph>& bag, DPTable& table);
-
-				/**
-				 * search antecessor of this introduce node. This is the same entry
-				 * as the successor, but without the introduced columns
-				 * @param state the current backtracking state
-				 * @param bag the introduce bag with the successor entry
-				 * @param table the child's table with the antecessor entry
-				 */
-				void visitIntroduce(BackTrackingState& state,
-						NiceTreeDecompositionBag<MolecularGraph>& bag, DPTable& table);
-
-				/**
-				 * searchs the index of this bond in the assignment array.
-				 * Because there is a strict ordering of bonds, this search
-				 * is computed as binary search in logarithmic time.
-				 */
-				Size bondIndexFor(MolecularGraphTraits::EdgeType bond) const;
-
-				/**
-				 * remembers the given state as another possible solution with higher penalty.
-				 * The state is inserted in the queue.
-				 * If the algorithm found enough solutions, it updates the upperbound to the worst solution in the
-				 * queue. So just solutions with better penalty are inserted into the queue.
-				 * @param state an alternative antecessor which has a greater or equal penalty than the choosed one
-				 */
-				void remember(BackTrackingState& state);
-
-				/**
-				 * Checks if the penalty of this solution is good enough for backtracking.
-				 * This happens if the penalty is better than the upperbound
-				 */
-				bool isSolutionNeeded(Penalty penalty);
-
-				/**
-				 * Is called by visitForget. It writes the values of all forgotten bonds into
-				 * the state's assignment.
-				 * @param state the current state
-				 * @param bag the forget bag
-				 * @param antecessor the choosed entry in the bag's child bag
-				 * @param forgottenVertex the vertex which is forgotten in the forget bag
-				 */
-				void setStateAssignment(BackTrackingState& state, NiceTreeDecompositionBag<MolecularGraph>& bag, 
-				                        DPConfig& antecessor, MolecularGraphTraits::VertexType forgottenVertex);
-
-				/**
-				 * Make the antecessor entry to the new successor entry of the given state and
-				 * adding the penalty
-				 * @param state the backtracking state
-				 * @param antecessor the choosed entry which becomes the new successor
-				 * @param additionalPenalty the penalty which is added to the best previous solution for choosing this antecessor
-				 */
-				void extendState(BackTrackingState& state, DPConfig const& antecessor,
-						Penalty additionalPenalty);
-
-				/**
-				 * Remember the choosed entry of the right child's table by adding it into the joinBranch stack.
-				 * @param state the backtracking state
-				 * @param child the right child of the join bag
-				 * @param antecessor the choosed entry in the right child's table
-				 */
-				void branchState(BackTrackingState& state,
-						NiceTreeDecompositionBag<MolecularGraph> const& child, DPConfig const& antecessor);
-
 			public:
+				typedef TreeWidthImplementation<MolecularGraph>::NiceTreeDecomposition    NiceTreeDecomposition;
+				typedef TreeWidthImplementation<MolecularGraph>::TreeDecompositionBag     TreeDecompositionBag;
+				typedef TreeWidthImplementation<MolecularGraph>::NiceTreeDecompositionBag NiceTreeDecompositionBag;
+
 				/**
 				 * Construct a new DPBackTracking for a given DPBondAssignment algorithm, which backtracks not more than
 				 * maxNumberOfSolutions. By default, the backtracking backtracks only the optimal solution.
@@ -1220,6 +1061,170 @@ namespace BALL
 				 * this function returns INFINITE_PENALTY.
 				 */
 				Penalty penaltyOfNextSolution() const;
+
+			protected:
+
+				/**
+				 * Defines the Min-order for BackTrackingState-pointer instances in the queue
+				 */
+				struct StateComparator
+				{
+					/**
+					 * Comparison is done by dereferencing the pointer
+					 */
+					bool operator () (BackTrackingState const * left, BackTrackingState const * right) const;
+				};
+
+				/**
+				 * The instance of the DPBondAssignment algorithm, which gives access to the computed tables and
+				 * the nice tree decomposition. This class doesn't make a copy of the bondAssignment, so take care
+				 * that the bondAssignment isn't deleted before the instance of this class.
+				 */
+				DPBondAssignment * bondAssignment;
+
+				/**
+				 * The current state of the backtracking. Each other state is in the priority queue
+				 */
+				BackTrackingState * currentState;
+
+				/**
+				 * priority queue for backtracking states. It is implemented as search tree, because we need also
+				 * access to the worst element (to limit the queues size).
+				 */
+				multiset<BackTrackingState*, StateComparator> queue;
+
+				/**
+				 * the maximum number of solutions we want do backtrack.
+				 */
+				Size maxNumberOfSolutions;
+
+				/**
+				 * A sorted vector of the edges of the graph. The bond values in the assignments are in the same order
+				 * as the edges in this vector.
+				 */
+				std::vector<MolecularGraphTraits::EdgeType> bonds;
+
+				/**
+				 * The nice tree decomposition bags in pre-order
+				 */
+				std::vector<NiceTreeDecompositionBag*> bags;
+
+				/**
+				 * maxHeapSize is the maxNumberOfSolutions - the number of backtracked solutions. So this attribute
+				 * contains the current number of solutions we want to backtrack.
+				 */
+				Size maxHeapSize;
+
+				/**
+				 * current upperbound. This algorithm will just iterate solutions which are better than this upperbound;
+				 */
+				Penalty upperbound;
+
+				typedef vector<NiceTreeDecompositionBag const *> BagVector;
+
+				/**
+				 * returns the dynamic programming table of the bag with the given pre-order index
+				 */
+				DPTable& getTable(Size order);
+
+				/**
+				 * returns the bag properties of the bag with the given pre-order index
+				 */
+				AdditionalBagProperties& getProperties(Size order);
+
+				/**
+				 * Leaf-Nodes have no antecessors. So either the computing is finished,
+				 * or there is an unfinished join node in join branch stack which has to
+				 * be computed next.
+				 */
+				void visitLeaf(BackTrackingState& state);
+
+				/**
+				 * search the both antecessors of this join node. This is the pair of entries,
+				 * which bond values are the same as the successor's bond values and which
+				 * sum of consumed valences are the same as the successor's consumed valences.
+				 * The best left entry becomes the new current state. The right entry is pushed
+				 * on top of the state's join branch stack. Other possible pairs of antecessors
+				 * are inserted into the priority queue
+				 * @param state the current backtracking state
+				 * @param bag the join bag with the successor entry
+				 * @param leftTable the table of the first child
+				 * @param rightTable the table of the second child
+				 */
+				void visitJoin(BackTrackingState& state, NiceTreeDecompositionBag& bag, 
+				               DPTable& leftTable, DPTable& rightTable);
+
+				/**
+				 * search the antecessor of this forget node. This is the entry which is equal to
+				 * the successor after forgetting the forget-vertex and it's incident bonds.
+				 * @param state the current backtracking state
+				 * @param bag the forget bag with the successor entry
+				 * @param table the child's table with the antecessor entry
+				 */
+				void visitForget(BackTrackingState& state,
+						NiceTreeDecompositionBag& bag, DPTable& table);
+
+				/**
+				 * search antecessor of this introduce node. This is the same entry
+				 * as the successor, but without the introduced columns
+				 * @param state the current backtracking state
+				 * @param bag the introduce bag with the successor entry
+				 * @param table the child's table with the antecessor entry
+				 */
+				void visitIntroduce(BackTrackingState& state,
+						NiceTreeDecompositionBag& bag, DPTable& table);
+
+				/**
+				 * searchs the index of this bond in the assignment array.
+				 * Because there is a strict ordering of bonds, this search
+				 * is computed as binary search in logarithmic time.
+				 */
+				Size bondIndexFor(MolecularGraphTraits::EdgeType bond) const;
+
+				/**
+				 * remembers the given state as another possible solution with higher penalty.
+				 * The state is inserted in the queue.
+				 * If the algorithm found enough solutions, it updates the upperbound to the worst solution in the
+				 * queue. So just solutions with better penalty are inserted into the queue.
+				 * @param state an alternative antecessor which has a greater or equal penalty than the choosed one
+				 */
+				void remember(BackTrackingState& state);
+
+				/**
+				 * Checks if the penalty of this solution is good enough for backtracking.
+				 * This happens if the penalty is better than the upperbound
+				 */
+				bool isSolutionNeeded(Penalty penalty);
+
+				/**
+				 * Is called by visitForget. It writes the values of all forgotten bonds into
+				 * the state's assignment.
+				 * @param state the current state
+				 * @param bag the forget bag
+				 * @param antecessor the choosed entry in the bag's child bag
+				 * @param forgottenVertex the vertex which is forgotten in the forget bag
+				 */
+				void setStateAssignment(BackTrackingState& state, NiceTreeDecompositionBag& bag, 
+				                        DPConfig& antecessor, MolecularGraphTraits::VertexType forgottenVertex);
+
+				/**
+				 * Make the antecessor entry to the new successor entry of the given state and
+				 * adding the penalty
+				 * @param state the backtracking state
+				 * @param antecessor the choosed entry which becomes the new successor
+				 * @param additionalPenalty the penalty which is added to the best previous solution for choosing this antecessor
+				 */
+				void extendState(BackTrackingState& state, DPConfig const& antecessor,
+						Penalty additionalPenalty);
+
+				/**
+				 * Remember the choosed entry of the right child's table by adding it into the joinBranch stack.
+				 * @param state the backtracking state
+				 * @param child the right child of the join bag
+				 * @param antecessor the choosed entry in the right child's table
+				 */
+				void branchState(BackTrackingState& state,
+						NiceTreeDecompositionBag const& child, DPConfig const& antecessor);
 
 		};
 
@@ -1430,8 +1435,8 @@ namespace BALL
 			public:
 				typedef GRAPH::GraphTraits<MolecularGraph>::EdgeType Edge;
 				typedef GRAPH::GraphTraits<MolecularGraph>::VertexType VertexType;
-				typedef TreeNodeList<NiceTreeDecompositionBag<MolecularGraph> > NiceTreeDecomposition;
-				typedef TreeNodeList<TreeDecompositionBag<MolecularGraph> > TreeDecomposition;
+				typedef TreeWidthImplementation<MolecularGraph>::NiceTreeDecomposition NiceTreeDecomposition;
+				typedef TreeWidthImplementation<MolecularGraph>::TreeDecomposition TreeDecomposition;
 
 				BALL_CREATE(DPBondAssignmentAlgorithm)
 
@@ -1646,7 +1651,7 @@ namespace BALL
 						/**
 						 * The nice tree decompositions for each connection component
 						 */
-						std::vector<DPBondAssignment::NiceTreeDecomposition*> niceTreeDecompositions;
+						boost::shared_ptr<TreeWidth<MolecularGraph> > tw_;
 
 						/**
 						 * a vector with pointers to the bonds of the atom container. The order of this bonds in the vector
@@ -1739,12 +1744,13 @@ namespace BALL
 		/**
 		 * returns the name of a bag. Just for debugging
 		 */
-		string getBagName(NiceTreeDecompositionBag<MolecularGraph> const& bag);
+		string getBagName(TreeWidthImplementation<MolecularGraph>::NiceTreeDecompositionBag const& bag);
 
 		/**
 		 * prints a table on standard output. Just for debugging
 		 */
-		void PRINT_TABLE(AdditionalBagProperties properties, NiceTreeDecompositionBag<MolecularGraph> const& bag, MolecularGraph const& graph);
+		void PRINT_TABLE(AdditionalBagProperties properties, 
+		                 TreeWidthImplementation<MolecularGraph>::NiceTreeDecompositionBag const& bag, MolecularGraph const& graph);
 		/**
 		 * prints a table entry on standard output. Just for debugging
 		 */
@@ -1754,33 +1760,37 @@ namespace BALL
 		 */
 		void PRINT_ASSIGNMENT(Assignment assignment);
 
-		inline string getBagName(NiceTreeDecompositionBag<MolecularGraph> const& bag)
+		inline string getBagName(TreeWidthImplementation<MolecularGraph>::NiceTreeDecompositionBag const& bag)
 		{
+			typedef TreeWidthImplementation<MolecularGraph>::TreeDecompositionBag TreeDecompositionBag;
 			string tab;
 			switch (bag.getBagType())
 			{
-				case TreeDecompositionBag<MolecularGraph>::INTRODUCE_BAG: tab = "introduce"; break;
-				case TreeDecompositionBag<MolecularGraph>::FORGET_BAG: tab = "forget"; break;
-				case TreeDecompositionBag<MolecularGraph>::LEAF_BAG: tab = "leaf"; break;
-				case TreeDecompositionBag<MolecularGraph>::ROOT_BAG: tab = "root"; break;
-				case TreeDecompositionBag<MolecularGraph>::JOIN_BAG: tab = "join"; break;
+				case TreeDecompositionBag::INTRODUCE_BAG: tab = "introduce"; break;
+				case TreeDecompositionBag::FORGET_BAG: tab = "forget"; break;
+				case TreeDecompositionBag::LEAF_BAG: tab = "leaf"; break;
+				case TreeDecompositionBag::ROOT_BAG: tab = "root"; break;
+				case TreeDecompositionBag::JOIN_BAG: tab = "join"; break;
 				default: tab = "UNDEFINED"; break;
 			}
 			return tab;
 		}
 
 #include <iostream>
-		inline void PRINT_TABLE(AdditionalBagProperties properties, NiceTreeDecompositionBag<MolecularGraph>& bag, MolecularGraph const& graph)
+		inline void PRINT_TABLE(AdditionalBagProperties properties, 
+		                        TreeWidthImplementation<MolecularGraph>::NiceTreeDecompositionBag& bag, MolecularGraph const& graph)
 		{
+			typedef TreeWidthImplementation<MolecularGraph>::TreeDecompositionBag TreeDecompositionBag;
+
 			DPTable const& table (*properties.table);
 			cout << "<table " << getBagName(bag);
-			if (bag.getBagType() != TreeDecompositionBag<MolecularGraph>::JOIN_BAG)
+			if (bag.getBagType() != TreeDecompositionBag::JOIN_BAG)
 			{
 				cout << "  <-  " << bag.getForgottenVertex();
 			}
 			cout << "\n\t";
 
-			for (TreeDecompositionBag<MolecularGraph>::VertexSet::const_iterator iter = bag.getInnerVertices().begin(); 
+			for (TreeDecompositionBag::VertexSet::const_iterator iter = bag.getInnerVertices().begin(); 
 			     iter != bag.getInnerVertices().end(); ++iter)
 			{
 				cout << *iter << "\t\t";

@@ -21,11 +21,6 @@
 # include <BALL/DATATYPE/GRAPH/graphAlgorithms.h>
 #endif
 
-// TODO: replace by boost::graph_as_tree
-#ifndef BALL_DATATYPE_GRAPH_TREETRAITS_H
-# include <BALL/DATATYPE/GRAPH/treeTraits.h>
-#endif
-
 #ifndef BALL_DATATYPE_GRAPH_MOLECULARGRAPH_H
 # include <BALL/DATATYPE/GRAPH/molecularGraph.h>
 #endif
@@ -38,7 +33,19 @@
 
 #include <boost/graph/connected_components.hpp>
 #include <boost/graph/filtered_graph.hpp>
+#include <boost/graph/graph_as_tree.hpp>
 #include <boost/graph/copy.hpp>
+
+namespace boost
+{
+	enum vertex_bag_content_t { vertex_bag_content };
+	enum vertex_bag_special_t { vertex_bag_special };
+	enum vertex_bag_type_t    { vertex_bag_type    };
+
+	BOOST_INSTALL_PROPERTY(vertex, bag_content);
+	BOOST_INSTALL_PROPERTY(vertex, bag_special);
+	BOOST_INSTALL_PROPERTY(vertex, bag_type);
+}
 
 namespace BALL
 {
@@ -50,21 +57,63 @@ namespace BALL
 	class TreeWidth
 	{
 		public:
-			typedef typename GRAPH::GraphTraits<UndirectedGraph>::EditableGraph EditableGraph;
-		  typedef typename TreeWidthImplementation<EditableGraph>::NiceTreeDecomposition NiceTreeDecomposition;
+			/**
+			 * The type of this bag
+			 */
+			enum BagType {
+				/**
+				 * Introduce bags differs from their childs in exactly one new vertex
+				 */
+				INTRODUCE_BAG,
+				/**
+				 * Leaf bags contains just one vertex and have no childs
+				 */
+				LEAF_BAG,
+				/**
+				 * Forget bags contain one vertex less than their children
+				 */
+				FORGET_BAG,
+				/**
+				 * Root bags have an empty vertex set
+				 */
+				ROOT_BAG,
+				/**
+				 * Join bags have two children, which have both the same inner vertices as their parent
+				 */
+				JOIN_BAG,
+				/**
+				 * Inner bags are any kind of inner node in the tree, i.e., JOIN, INTRODUCE, or FORGET nodes
+				 */
+				INNER_BAG,
+				/**
+				 * End bags aren't defined, so you can use them as null-value or as placeholder
+				 */
+				END_BAG
+			};
 
-			typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS,
-			                              boost::property<boost::vertex_atom_ptr_list_t, std::list<const Atom*> >,
+			typedef typename GRAPH::GraphTraits<UndirectedGraph>::EditableGraph EditableGraph;
+			typedef typename boost::graph_traits<UndirectedGraph>::vertex_descriptor OriginalVertexType;
+
+			typedef std::list<OriginalVertexType> TreeDecompositionContent;
+
+			typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS,
+																		  boost::property<boost::vertex_bag_content_t, std::list<OriginalVertexType>,
+																			boost::property<boost::vertex_bag_special_t, OriginalVertexType, 
+																			boost::property<boost::vertex_bag_type_t, int> > >, 
 																	  boost::no_property> TreeDecompositionGraph;
+
+			typedef typename boost::graph_traits<TreeDecompositionGraph>::vertex_descriptor TreeDecompositionBag_b;
+
+			typedef boost::iterator_property_map<typename std::vector<TreeDecompositionBag_b>::iterator,
+							                             typename boost::property_map<TreeDecompositionGraph, boost::vertex_index_t>::type> 
+																					 TreeDecompositionParentMap;
+			typedef boost::graph_as_tree<TreeDecompositionGraph, TreeDecompositionParentMap> TreeDecomposition_b;
 
 			TreeWidth(UndirectedGraph const& input);
 
 			std::vector<boost::shared_ptr<EditableGraph> >& getComponents() { return components_; }
-			std::vector<NiceTreeDecomposition>& getDecompositions() { return decompositions_; }
+			std::vector<boost::shared_ptr<TreeDecomposition_b> >& getNiceTreeDecompositions()   { return nice_tree_decompositions_; }
 
-			/// Converts the tree decomposition into a boost::graph
-			TreeDecompositionGraph convertToGraph();
-				
 		protected:
 			template <typename ComponentMap>
 			class ComponentFilter_
@@ -88,7 +137,9 @@ namespace BALL
 
 			MolecularGraph const* input_;
 			std::vector<boost::shared_ptr<EditableGraph> > components_; 
-		  std::vector<typename TreeWidthImplementation<EditableGraph>::NiceTreeDecomposition> decompositions_;
+
+			std::vector<boost::shared_ptr<TreeDecomposition_b> >    nice_tree_decompositions_;
+			std::vector<boost::shared_ptr<TreeDecompositionGraph> > nice_tree_decomposition_graphs_;
 	};
 
 	template <class UndirectedGraph>
@@ -349,265 +400,6 @@ namespace BALL
 		};
 
 		/**
-		 * The TreeNodeList handles allocating and deleting of tree nodes. Tree nodes
-		 * will survive until the TreeNodeList is freed. So you don't have to worry about
-		 * freeing/allocating single vertices until you keep the TreeNodeList.
-		 * The TreeNodeList expect that their vertices implements an empty constructor,
-		 * a copy constructor and an assignment operator.
-		 */
-		template<class Decomposition>
-		class TreeNodeList
-		{
-			public:
-				/**
-				 * Default-Constructor
-				 */
-				TreeNodeList();
-
-				/**
-				 * Save Copy-Constructor
-				 */
-				TreeNodeList(TreeNodeList<Decomposition> const& other);
-
-				/// Destructor;
-				virtual ~TreeNodeList();
-
-				/**
-				 * Save Assignment
-				 */
-				TreeNodeList<Decomposition>& operator=(TreeNodeList<Decomposition> const& other);
-
-				/**
-				 * Frees each vertex in the list.
-				 */
-				void clear();
-
-				/**
-				 * Adds a copy of the given vertex into the vertex-list
-				 */
-				Decomposition* newVertex(Decomposition const& vertex);
-
-				/**
-				 * Adds a new vertex into the vertex list by default constructor
-				 */
-				Decomposition* newVertex();
-
-				/**
-				 * returns the root of the tree
-				 */
-				Decomposition* getRoot()
-				{
-					return root;
-				}
-
-				/**
-				 * const-getter for the root of the tree
-				 */
-				Decomposition const* getRoot() const
-				{
-					return root;
-				}
-
-				/**
-				 * returns the number of vertices in the vertex list. This don't have to be
-				 * the number of vertices in the tree!
-				 */
-				Size size() const
-				{
-					return vertices.size();
-				}
-
-			protected:
-				/**
-				 * vector with pointers of the vertices of the tree
-				 */
-				std::vector<Decomposition*> vertices;
-
-				/**
-				 * pointer to the root element of the tree
-				 */
-				Decomposition* root;
-		};
-
-		/**
-		 * A TreeDecompositionBag is a vertex in a tree-decomposition. It consists of a set of vertices and
-		 * pointers to child elements.
-		 * TreeDecompositionBag implements the tree_traits, so you can use it in generic tree algorithms.
-		 */
-		class TreeDecompositionBag
-		{
-			public:
-				/**
-				 * Set of vertices which is used as label for tree-decomposition vertices
-				 */
-				typedef std::set<VertexType> VertexSet;
-
-				/**
-				 * The type of this bag
-				 */
-				enum BagType {
-					/**
-					 * Introduce bags differs from their childs in exactly one new vertex
-					 */
-					INTRODUCE_BAG,
-					/**
-					 * Leaf bags contains just one vertex and have no childs
-					 */
-					LEAF_BAG,
-					/**
-					 * Forget bags contain one vertex less than their children
-					 */
-					FORGET_BAG,
-					/**
-					 * Root bags have an empty vertex set
-					 */
-					ROOT_BAG,
-					/**
-					 * Join bags have two children, which have both the same inner vertices as their parent
-					 */
-					JOIN_BAG,
-					/**
-					 * End bags aren't defined, so you can use them as null-value or as placeholder
-					 */
-					END_BAG
-				};
-
-			public:
-
-				/**
-				 * iterator type which is used by tree_traits
-				 */
-				typedef typename std::vector<TreeDecompositionBag*>::iterator child_iterator;
-				/**
-				 * const iterator type which is used by tree_traits
-				 */
-				typedef typename std::vector<TreeDecompositionBag*>::const_iterator const_child_iterator;
-
-				/**
-				 * Default-Constructor which builds a new
-				 * TreeDecompositionBag with empty inner vertices and
-				 * no children
-				 */
-				TreeDecompositionBag();
-
-				/**
-				 * Copy-Constructor
-				 */
-				TreeDecompositionBag(TreeDecompositionBag const& other);
-
-				/**
-				 * Builds a new TreeDecompositionBag with the given
-				 * inner vertices
-				 */
-				TreeDecompositionBag(VertexSet);
-
-				/**
-				 * Frees the bag, but doesn't free the children!
-				 */
-				~TreeDecompositionBag();
-
-				/**
-				 * returns a reference to inner vertices.
-				 */
-				VertexSet& getInnerVertices();
-
-				/**
-				 * returns a reference to inner vertices, const version
-				 * Use setInnerVertices to change this set
-				 */
-				VertexSet const& getInnerVertices() const;
-
-				/**
-				 * Assignment
-				 */
-				TreeDecompositionBag& operator=(TreeDecompositionBag const& other);
-
-				/**
-				 * Add new child. Don't allocate this child yourself, use
-				 * the TreeNodeList instead, because this class will not free
-				 * the child itself.
-				 */
-				void addChild(TreeDecompositionBag*);
-
-				/**
-				 * Adds a new vertex into the innerVertices
-				 */
-				void addInnerVertex(VertexType const&);
-
-				/**
-				 * Adds new vertices into the inner vertices by the given input-iterators
-				 */
-				template<class Iterator>
-				void addInnerVertices(Iterator first, Iterator last) 
-				{
-					vertices.insert(first, last);
-				}
-
-				/**
-				 * Replace the inner vertices by the given input-iterators
-				 */
-				template<class Iterator>
-				void setInnerVertices(Iterator first, Iterator last) 
-				{
-					vertices.clear();
-					vertices.insert(first, last);
-				}
-
-				/**
-				 * returns the number of inner vertices
-				 */
-				Size size() const;
-
-				/**
-				 * returns the number of children
-				 */
-				Size numberOfChildren() const;
-
-				/**
-				 * returns the first child of this bag
-				 */
-				TreeDecompositionBag& firstChild();
-
-				/**
-				 * returns the first child of this bag
-				 */
-				TreeDecompositionBag const& firstChild() const;
-
-				/**
-				 * returns an iterator to the first child of this bag
-				 */
-				typename std::vector<TreeDecompositionBag*>::iterator beginChild();
-
-				/**
-				 * returns an iterator to the end of the childs of this bag
-				 */
-				typename std::vector<TreeDecompositionBag*>::iterator endChild();
-
-				/**
-				 * returns an iterator to the first child of this bag
-				 */
-				typename std::vector<TreeDecompositionBag*>::const_iterator beginChild() const;
-
-				/**
-				 * returns an iterator to the end of childs of this bag
-				 */
-				typename std::vector<TreeDecompositionBag*>::const_iterator endChild() const;
-
-			protected:
-				/**
-				 * vertices of the source graph in this tree-decomposition bag
-				 */
-				VertexSet vertices;
-
-				/**
-				 * pointers to child elements
-				 */
-				std::vector<TreeDecompositionBag*> children;
-		};
-
-		typedef TreeNodeList<TreeDecompositionBag> TreeDecomposition;
-
-		/**
 		 * An upperbound heuristic which computes an EliminationOrder,
 		 * which can build a tree decomposition, and a treewidth of a given
 		 * graph. The basic idea is to add as few as possible edges into the
@@ -618,260 +410,63 @@ namespace BALL
 		 */
 		typedef GreedyX<FillInHeuristic> GreedyFillIn;
 
-		/**
-		 * TreeNodeList which handles allocating/deallocating of a tree-decomposition
-		 */
-		class TreeNodeListTraits
-		{
-		};
-
-		/**
-		 * Builds a tree decomposition by the given elimination order
-		 * @param graph The source graph for which the tree decomposition is built
-		 * @param permutation the elimination order which is used to build the tree
-		 * @param treeDecomposition an empty TreeNodeList which is filled with instances of TreeDecompositionBag
-		 */
-		template <class TreeDecompositionType>
-		static void eliminationOrderToTreeDecomposition(UndirectedGraph const& graph, 
-					                                          EliminationOrder const& permutation,
-																										TreeDecompositionType& treeDecomposition);
-
-		/**
-		 * A nice tree decomposition bag is a bag of a nice tree decomposition. Such a nice tree decomposition
-		 * is a binary tree with five vertex types:
-		 * - Introduce-nodes, which have one child and one more inner vertex than their child
-		 * - Forget-nodes, which have one child and one inner vertex less than their child
-		 * - Join-nodes, which have two childs and the same inner vertices as their childs
-		 * - Leaf-nodes, which have no childs and exactly one inner vertex
-		 * - Root-nodes, which have one child and no inner vertices
-		 */
-		class NiceTreeDecompositionBag
-		{
+		template <class OriginalGraphType>
+		class TreeDecompositionBuilder
+	  {
 			public:
-				typedef typename TreeDecompositionBag::BagType BagType;
-				typedef typename TreeDecompositionBag::VertexSet VertexSet;
+				typedef typename TreeWidth<OriginalGraphType>::TreeDecomposition_b    TreeDecomposition_b;
+				typedef typename TreeWidth<OriginalGraphType>::TreeDecompositionBag_b TreeDecompositionBag_b;
+				typedef typename TreeWidth<OriginalGraphType>::TreeDecompositionGraph TreeDecompositionGraph;
 
-				typedef NiceTreeDecompositionBag * const * child_iterator;
-				typedef NiceTreeDecompositionBag const * const * const_child_iterator;
+				typedef typename TreeWidth<OriginalGraphType>::OriginalVertexType OriginalVertexType;
 
-				/**
-				 * Default constructor
-				 */
-				NiceTreeDecompositionBag();
+				typedef std::list<OriginalVertexType> TreeDecompositionContent;
 
 				/**
-				 * Set the index
+				 * Builds a tree decomposition by the given elimination order
+				 * @param graph The source graph for which the tree decomposition is built
+				 * @param permutation the elimination order which is used to build the tree
+				 * @return tree_decomposition an empty TreeNodeList which is filled with instances of TreeDecompositionBag
 				 */
-				NiceTreeDecompositionBag(Size index);
+				boost::shared_ptr<TreeDecomposition_b> operator() (UndirectedGraph const& graph, EliminationOrder const& permutation);
 
 				/**
-				 * Shallow copy constructor.
+				 *  Converts the TreeDecomposition into a NiceTreeDecomposition
+				 *   A nice tree decomposition is a binary tree with five vertex types:
+				 *    - Introduce-nodes, which have one child and one more inner vertex than their child
+				 *    - Forget-nodes, which have one child and one inner vertex less than their child
+				 *    - Join-nodes, which have two childs and the same inner vertices as their childs
+				 *    - Leaf-nodes, which have no childs and exactly one inner vertex
+				 *    - Root-nodes, which have one child and no inner vertices
 				 */
-				NiceTreeDecompositionBag(NiceTreeDecompositionBag const& copy);
+				boost::shared_ptr<TreeDecomposition_b> makeNice(boost::shared_ptr<TreeDecompositionGraph>& nice_tree);
 
-				/**
-				 * shallow assignment operator
-				 */
-				NiceTreeDecompositionBag& operator=(NiceTreeDecompositionBag const& copy);
-
-				/**
-				 * returns the first child of this bag
-				 * @throw IllegalTreeOperation if bagType is END_BAG or LEAF_BAG
-				 */
-				NiceTreeDecompositionBag& firstChild();
-				NiceTreeDecompositionBag const& firstChild() const;
-
-				/**
-				 * returns the second child of this bag
-				 * @throw IllegalTreeOperation if bagType isn't JOIN_BAG
-				 */
-				NiceTreeDecompositionBag& secondChild();
-				NiceTreeDecompositionBag const& secondChild() const;
-
-				/**
-				 * returns an iterator to the first child
-				 */
-				NiceTreeDecompositionBag * const * beginChild();
-				/**
-				 * returns an iterator to the end of the children
-				 */
-				NiceTreeDecompositionBag * const * endChild();
-				NiceTreeDecompositionBag const * const * beginChild() const;
-				NiceTreeDecompositionBag const * const * endChild() const;
-
-				BagType getBagType() const;
-
-				Size getIndex() const;
-
-				/**
-				 * returns a reference to the inner vertices
-				 */
-				VertexSet& getInnerVertices();
-
-				/**
-				 * returns a reference to the inner vertices, const version
-				 */
-				VertexSet const& getInnerVertices() const;
-
-				/**
-				 * returns the introduced vertex. This function should be called only when bag is
-				 * an introduce node. Nevertheless, this condition isn't checked.
-				 */
-				VertexType& getIntroducedVertex();
-
-				/**
-				 * returns the forgotten vertex. This function should be called only when bag is
-				 * a forget node. Nevertheless, this condition isn't checked.
-				 */
-				VertexType& getForgottenVertex();
-
-				/**
-				 * The bag becomes a leaf-bag, introducing the given vertex
-				 */
-				void setAsLeaf(VertexType& vertex);
-
-				/**
-				 * The bag becomes an introduce-bag, introducing the given vertex and being a parent of the given child-node
-				 */
-				void setAsIntroduce(NiceTreeDecompositionBag& child, VertexType& introducedVertex);
-
-				/**
-				 * The bag becomes a forget-bag, forgetting the given vertex and being a parent of the given child-node
-				 */
-				void setAsForget(NiceTreeDecompositionBag& child, VertexType& forgotten);
-
-				/**
-				 * The bag becomes a join-bag, branching the tree by the given two childs
-				 */
-				void setAsJoin(NiceTreeDecompositionBag& left, NiceTreeDecompositionBag& right);
-
-				/**
-				 * The bag becomes a root-bag, forgetting the given vertex and being a parent of the given child-node
-				 */
-				void setAsRoot(NiceTreeDecompositionBag& child, VertexType& forgotten);
+				TreeDecompositionBag_b operator() (TreeDecompositionBag_b n,
+					typename std::vector<TreeDecompositionBag_b>::iterator c_i, typename std::vector<TreeDecompositionBag_b>::iterator c_end);
 
 			protected:
-				/**
-				 * pointer to the children. Only join-nodes have to children, leafs have
-				 * no childs and each other vertex has one child
-				 */
-				NiceTreeDecompositionBag* children[2];
+				TreeDecompositionBag_b buildRoot_(TreeDecompositionBag_b child);
+				TreeDecompositionBag_b buildLeaf_(TreeDecompositionBag_b child);
+				TreeDecompositionBag_b buildJoin_(TreeDecompositionBag_b node, TreeDecompositionBag_b left,
+				                                  TreeDecompositionBag_b right, bool do_forget);
 
-				/**
-				 * set of inner vertices
-				 */
-				VertexSet vertices;
+				TreeDecompositionBag_b buildSingle_(TreeDecompositionBag_b node, int node_type, 
+				                                    TreeDecompositionBag_b child);
 
-				/**
-				 * the special inner vertex is either an introduced vertex in an introduce/leaf-node,
-				 * a forget vertex in a forget/root-node or undefined in a join-node
-				 */
-				VertexType specialVertex;
+				TreeDecompositionBag_b buildLinkage_(TreeDecompositionBag_b node, TreeDecompositionBag_b child);
 
-				/**
-				 * the type of the bag. Either introduce, forget, join, root, leaf or undefined
-				 */
-				BagType bagType;
+				TreeDecompositionBag_b linkWithIntroduceNodes_(TreeDecompositionContent parent_set, TreeDecompositionBag_b child);
+				TreeDecompositionBag_b linkWithForgetNodes_   (TreeDecompositionContent parent_set, TreeDecompositionBag_b child);
 
-				/**
-				 * index of the bag
-				 */
-				Size index;
-		};
+				TreeDecompositionBag_b branch_(TreeDecompositionBag_b node, int node_type, 
+				                               typename std::vector<TreeDecompositionBag_b>::iterator begin, 
+																			 typename std::vector<TreeDecompositionBag_b>::iterator end);
 
-		/**
-		 * The difference between a nice tree-decomposition and a tree-decomposition
-		 * is that each node in a nice-treedecomposition either differs from its parent and it's single child
-		 * in just one inner vertex, or has exact two childs, which have the same set of inner vertices as their
-		 * parent. So a nice tree-decomposition is a binary tree.
-		 */
-		typedef TreeNodeList<NiceTreeDecompositionBag> NiceTreeDecomposition;
+				boost::shared_ptr<TreeDecomposition_b> tree_;
+				boost::shared_ptr<TreeDecompositionGraph> tree_graph_;
+				boost::shared_ptr<TreeDecompositionGraph> nice_tree_;
 
-		/**
-		 * Builds a NiceTreeDecomposition from a TreeDecomposition
-		 */
-		class NiceTreeDecompositionBuilder
-		{
-			public:
-				typedef std::set<VertexType> VertexSet;
-
-				typedef typename std::vector<NiceTreeDecompositionBag*>::const_iterator ConstBagIterator; 
-
-				/**
-				 * Constructs a new builder which inserts it's vertices into the given NiceTreeDecomposition
-				 */
-				NiceTreeDecompositionBuilder(NiceTreeDecomposition& ntd);
-
-				/**
-				 * Builds a NiceTreeDecomposition from the TreeDecomposition rooted in the given vertex
-				 */
-				void buildNiceTreeDecomposition(TreeDecompositionBag const& root);
-
-				NiceTreeDecompositionBag* operator () (TreeDecompositionBag const& node, 
-				                                       NodeType nodeType, ConstBagIterator begin, ConstBagIterator end);
-
-			protected:
-				/**
-				 * Manages the allocation of new nice tree decomposition vertices
-				 */
-				TreeNodeList<NiceTreeDecompositionBag>* ntd;
-
-				/**
-				 * First this function builds a leaf node which introduce one vertex from the given tree decomposition bag.
-				 * After this, the function builds introduce nodes for each further inner vertex in the bag.
-				 */
-				NiceTreeDecompositionBag* buildLeaf(TreeDecompositionBag const&);
-
-				/**
-				 * This function builds forget nodes until all inner vertices of the child node are forgotten. This last
-				 * forget node which has no inner vertices is called "root".
-				 */
-				NiceTreeDecompositionBag* buildRoot(NiceTreeDecompositionBag* child);
-
-				/**
-				 * First this function forgets all vertices which are in the child nodes but not in the parent bag.
-				 * After this, the function introduce vertices so that the children are equal. Then it builds a join node
-				 * which branches the tree into the both children.
-				 * After calling this function the join node isn't finished, because there are missing introduce nodes for vertices
-				 * which are contained in the tree decomposition bag but not in the join node. This makes sense because if the
-				 * tree decomposition bag has more than two children, the algorithm have to build also more than two join nodes.
-				 * So it's the best to introduce the missing vertices in the last join node. This happens in the #branch method
-				 * by calling #buildSingle.
-				 */
-				NiceTreeDecompositionBag* buildJoin(TreeDecompositionBag const& node, NiceTreeDecompositionBag* left, 
-				                                    NiceTreeDecompositionBag* right, bool doForget);
-
-				/**
-				 * This function is called for inner vertices. If the inner vertices have more than one child, this function
-				 * builds join nodes to keep the binary property of the nice tree decomposition.
-				 */
-				NiceTreeDecompositionBag* branch(TreeDecompositionBag const&, NodeType nodeType,
-				                                 ConstBagIterator begin, ConstBagIterator end);
-
-				/**
-				 * Is called for inner vertices with just one child. Builds forget and introduce nodes by calling #buildLinkage
-				 * (or #buildRoot for the root node).
-				 */
-				NiceTreeDecompositionBag* buildSingle(TreeDecompositionBag const& node, NodeType nodeType, 
-				                                      NiceTreeDecompositionBag* child);
-
-				/**
-				 * Builds introduce and forget nodes to introduce all vertices, which are contained in
-				 * the given bag but not in the child bag, and to forget all vertices which are contained in the child bag but not
-				 * in the tree decomposition bag.
-				 */
-				NiceTreeDecompositionBag* buildLinkage(TreeDecompositionBag const& node, NiceTreeDecompositionBag* child);
-
-				/**
-				 * Builds introduce nodes to insert vertices which are contained in the parent set but not in the child bag
-				 */
-				NiceTreeDecompositionBag* linkWithIntroduceNodes(VertexSet const& parentSet, NiceTreeDecompositionBag* child);
-
-				/**
-				 * Builds forget nodes to remove vertices which are contained in the child bag but not in the parent set
-				 */
-				NiceTreeDecompositionBag* linkWithForgetNodes(VertexSet const& parentSet, NiceTreeDecompositionBag* child);
-
+				TreeDecompositionBag_b root_;
 		};
 
 	};
