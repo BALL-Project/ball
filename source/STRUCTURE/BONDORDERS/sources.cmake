@@ -4,7 +4,7 @@ SET(SOURCES_LIST
 	bondOrderAssignment.C
 	bondOrderAssignmentStrategy.C
 	branchAndBoundBondOrderStrategy.C
-#	DPBondAssignment.C
+	FPTBondOrderStrategy.C
 	KGreedyBondOrderStrategy.C
 	partialBondOrderAssignment.C
 )

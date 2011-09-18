@@ -1,0 +1,896 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+
+namespace BALL
+{
+	template <class UndirectedGraph>
+	TreeWidth<UndirectedGraph>::TreeWidth(UndirectedGraph const& input)
+		: input_(&input)
+	{
+		// first, compute the connected components of the graph
+
+		// since we do not know what kind of graph we are working with, we first
+		// create a suitable index map
+		typedef typename GRAPH::GraphTraits<UndirectedGraph>::VertexType OriginalVertexType;
+		typedef std::map<OriginalVertexType, int> OriginalVertexIndexMap;
+		typedef boost::associative_property_map<OriginalVertexIndexMap> OriginalVertexPropertyIndexMap;
+
+		OriginalVertexIndexMap vi, vc;
+		OriginalVertexPropertyIndexMap vertex_indices(vi), connected_components(vc);
+
+		int num_vertex = 0;
+		BGL_FORALL_VERTICES_T(vertex, input, UndirectedGraph)
+		{
+			vi[vertex] = num_vertex++;
+		}
+
+		int num_components = boost::connected_components(input, connected_components, vertex_index_map(vertex_indices));
+
+		// now, copy each copmonent into an editable graph
+		components_.resize(num_components);
+
+		// and copy them into individual graphs
+		for (int i=0; i<num_components; ++i)
+		{
+			components_[i] = boost::shared_ptr<EditableGraph>(new EditableGraph());
+
+			ComponentFilter_<OriginalVertexPropertyIndexMap> filter(connected_components, i); 
+			boost::filtered_graph<UndirectedGraph, boost::keep_all, 
+			                      ComponentFilter_<OriginalVertexPropertyIndexMap> > fg(input, boost::keep_all(), filter);
+			 
+			boost::copy_graph(input, *(components_[i]),
+				vertex_copy(GRAPH::makeEditableVertexCopier(input, *(components_[i]))).
+				edge_copy(GRAPH::makeEditableEdgeCopier(input, *(components_[i]))));
+		}
+
+		// now, generate the nice tree decompositions
+		typedef typename TreeWidthImplementation<EditableGraph>::MinorMinWidth   MinorMinWidth;
+		typedef typename TreeWidthImplementation<EditableGraph>::FillInHeuristic FillInHeuristic;
+		typedef typename TreeWidthImplementation<EditableGraph>::GreedyFillIn   GreedyFillIn;
+
+		nice_tree_decompositions_.resize(num_components);
+
+		for (int i=0; i<num_components; ++i)
+		{
+			// Quick-Bound-And-Branch algorithm to compute a perfect elimination order
+			typename TreeWidthImplementation<EditableGraph>::template QuickBB<MinorMinWidth, GreedyFillIn> decomposer(*components_[i]);
+
+			// use the computed elimination order to build an optimal tree decomposition
+			typename TreeWidthImplementation<EditableGraph>::EliminationOrder permutation = decomposer.compute();
+
+			typename TreeWidthImplementation<EditableGraph>::template TreeDecompositionBuilder<UndirectedGraph> dbuilder;
+			boost::shared_ptr<TreeDecomposition> tree_decomposition_b = dbuilder(*components_[i], permutation);
+
+			// transform this tree decomposition into a nice tree decomposition
+			nice_tree_decomposition_graphs_.push_back(boost::shared_ptr<TreeDecompositionGraph>(new TreeDecompositionGraph()));
+			nice_tree_decompositions_[i] = dbuilder.makeNice(nice_tree_decomposition_graphs_[i]);
+		}
+	}
+
+	// *****************************************************************************************
+	// * TreeWidthImplementation                                                               *
+	// *****************************************************************************************
+
+	// *****************************************************************************************
+	// * GeneralLowerBoundAlgorithm                                                            *
+	// *****************************************************************************************
+	template <class UndirectedGraph>
+	template <class Criterion, class Reducer>
+	Size TreeWidthImplementation<UndirectedGraph>::GeneralLowerBoundAlgorithm<Criterion, Reducer>::operator() (
+	                                                                              UndirectedGraph const& original_graph)
+	{
+		UndirectedGraph graph_copy;
+		GRAPH::deepCopy(original_graph, graph_copy);
+
+		Size maximum = boost::num_vertices(graph_copy);
+		Size lower_bound = 0;
+
+		while (boost::num_vertices(graph_copy) > 1)
+		{
+			Size minimum = maximum;
+
+			Criterion criterion(graph_copy);
+			Reducer   reducer(graph_copy);
+
+			VertexType best_vertex = *(boost::vertices(graph_copy).first);
+			BGL_FORALL_VERTICES_T(current_vertex, graph_copy, UndirectedGraph)
+			{
+				// find vertex which fits the criterium
+				Size criterion_value = criterion(current_vertex);
+
+				if (criterion_value < minimum)
+				{
+					best_vertex = current_vertex;
+					minimum     = criterion_value;
+				}
+			}
+
+			lower_bound = std::max(lower_bound, minimum);
+
+			// now reduce graph by the found vertex
+			reducer(best_vertex);
+		}
+
+		return lower_bound;
+	}
+
+	// *****************************************************************************************
+	// * MinorMinWidthReducer                                                                  *
+	// *****************************************************************************************
+
+	template <class UndirectedGraph>
+	TreeWidthImplementation<UndirectedGraph>::MinorMinWidthReducer::MinorMinWidthReducer(UndirectedGraph& graph) 
+		: graph_(graph) 
+	{
+	}
+
+	template <class UndirectedGraph>
+	void TreeWidthImplementation<UndirectedGraph>::MinorMinWidthReducer::operator () (VertexType& vertex)
+	{
+		if (boost::out_degree(vertex, graph_) == 0)
+		{
+			throw GRAPH::UnconnectedGraphException(__FILE__, __LINE__, String("MinorMinWidth"));
+		}
+
+		// iterate over the neighbourhood of the given vertex
+		VertexType min_vertex = *(boost::adjacent_vertices(vertex, graph_).first);
+
+		Size min_degree = boost::out_degree(min_vertex, graph_);
+
+		BGL_FORALL_ADJ_T(vertex, neighbour, graph_, UndirectedGraph)
+		{
+			Size current_degree = boost::out_degree(neighbour, graph_);
+
+			if (current_degree < min_degree)
+			{
+				min_vertex = neighbour;
+				min_degree = current_degree;
+			}
+		}
+
+		if (min_degree < boost::out_degree(vertex, graph_))
+		{
+			contractEdge(vertex, min_vertex);
+		} 
+		else
+		{
+			contractEdge(min_vertex, vertex);
+		}
+	}
+
+	template <class UndirectedGraph>
+	void TreeWidthImplementation<UndirectedGraph>::MinorMinWidthReducer::contractEdge(VertexType& u, VertexType& v)
+	{
+		std::vector<std::pair<VertexType, VertexType> > new_edges;
+		BGL_FORALL_ADJ_T(v, neighbour, graph_, UndirectedGraph)
+		{
+			// connect the neighbour to u
+			if (neighbour != u && !boost::edge(u, neighbour, graph_).second)
+			{
+				new_edges.push_back(std::make_pair(u, neighbour));
+			}
+		}
+
+		for (Position i=0; i<new_edges.size(); ++i)
+			boost::add_edge(new_edges[i].first, new_edges[i].second, graph_);
+
+		// remove v from the graph
+		boost::clear_vertex(v, graph_);
+		boost::remove_vertex(v, graph_);
+	}
+
+	// *****************************************************************************************
+	// * MinorMinWidthCriterion                                                                *
+	// *****************************************************************************************
+
+	template <class UndirectedGraph>
+	TreeWidthImplementation<UndirectedGraph>::MinorMinWidthCriterion::MinorMinWidthCriterion(UndirectedGraph const& graph) 
+		: graph_(graph)
+	{
+	}
+
+	template <class UndirectedGraph>
+	Size TreeWidthImplementation<UndirectedGraph>::MinorMinWidthCriterion::operator () (VertexType& a) const
+	{
+		return boost::out_degree(a, graph_);
+	}
+
+	// *****************************************************************************************
+	// * GreedyX                                                                               *
+	// *****************************************************************************************
+
+	template <class UndirectedGraph> template <class Criterion>
+	typename TreeWidthImplementation<UndirectedGraph>::EliminationOrder 
+	TreeWidthImplementation<UndirectedGraph>::GreedyX<Criterion>::operator() (UndirectedGraph& original_graph)
+	{
+		UndirectedGraph graph;
+		GRAPH::deepCopy(original_graph, graph);
+
+		Criterion criterion;
+
+		Size length = boost::num_vertices(graph);
+		std::vector<Size> permutation(length); // UNDEFINED_VERTEX_ID);
+
+		if (length == 0)
+			return EliminationOrder(permutation, length);
+
+		Size upper_bound = 0;
+		for (Size index = 0; index < length; ++index)
+		{
+			VertexType& vertex = criterion(graph);
+
+			Size degree = boost::out_degree(vertex, graph);
+			if (degree == 0 && index < length-1)
+			{
+				throw GRAPH::UnconnectedGraphException(__FILE__, __LINE__, "GreedyX");
+			}
+
+			permutation[index] = boost::get(boost::vertex_index, graph, vertex);
+
+			upper_bound = std::max(upper_bound, degree);
+
+			GRAPH::eliminateVertex(vertex, graph);
+		}
+
+		return EliminationOrder(permutation, upper_bound);
+	}
+
+	// *****************************************************************************************
+	// * FillInHeuristic                                                                       *
+	// *****************************************************************************************
+
+	template <class UndirectedGraph>
+	typename TreeWidthImplementation<UndirectedGraph>::VertexType& 
+	TreeWidthImplementation<UndirectedGraph>::FillInHeuristic::operator() (UndirectedGraph& graph)
+	{
+		VertexIterator v_i, v_j, v_end;
+		boost::tie(v_i, v_end) = boost::vertices(graph);
+
+		VertexIterator v_min = v_i;
+		Size min_value = edgeIncreaseByEliminating(v_min, graph);
+
+		if (min_value > 0)
+		{
+			for (; v_i != v_end; ++v_i)
+			{
+				Size value = edgeIncreaseByEliminating(v_i, graph);
+
+				if (value < min_value)
+				{
+					v_min = v_i;
+					min_value = value;
+
+					if (min_value == 0)
+					{
+						return *v_min;
+					}
+				}
+			}
+		}
+
+		return *v_min;
+	}
+
+	template <class UndirectedGraph>
+	Size TreeWidthImplementation<UndirectedGraph>::FillInHeuristic::edgeIncreaseByEliminating(VertexIterator vertex, 
+	                                                                                          UndirectedGraph& graph)
+	{
+		Size result = 0;
+
+		typename boost::graph_traits<UndirectedGraph>::adjacency_iterator a_i, a_j, ai_end;
+
+		for (boost::tie(a_i, ai_end) = boost::adjacent_vertices(*vertex, graph); a_i != ai_end; ++a_i)
+		{
+			a_j = a_i; ++a_j;
+			for (; a_j != ai_end; ++a_j)
+			{
+				VertexType i = *a_i;
+				VertexType j = *a_j;
+
+				if (!boost::edge(i, j, graph).second)
+				{
+					++result;
+				}
+			}
+		}
+
+		return result;
+	}
+
+	// *****************************************************************************************
+	// * QuickBB                                                                       *
+	// *****************************************************************************************
+
+	template <class UndirectedGraph>
+	template <class L, class U>
+	TreeWidthImplementation<UndirectedGraph>::QuickBB<L, U>::QuickBB(UndirectedGraph const& graph) 
+		: graph_(graph),
+			state(), 
+			greedy_solution(), 
+			own_solution(),
+			visitedSubgraphs(), 
+			upper_bound(0)
+	{
+	}
+
+	template <class UndirectedGraph>
+	template <class L, class U>
+	typename TreeWidthImplementation<UndirectedGraph>::template QuickBB<L, U>::SIMPLICIAL_TYPE 
+	TreeWidthImplementation<UndirectedGraph>::QuickBB<L, U>::isSimplicial(VertexType& vertex) const
+	{
+		if (boost::out_degree(vertex, graph_) <= 1)
+			return IS_SIMPLICIAL;
+
+		VertexType* n1 = NULL;
+		VertexType* n2 = NULL;
+
+		typename boost::graph_traits<UndirectedGraph>::adjacency_iterator a_i, a_j, ai_end;
+
+		for (boost::tie(a_i, ai_end) = boost::adjacent_vertices(vertex, graph_); a_i != ai_end; ++a_i)
+		{
+			a_j = a_i; ++a_j;
+			for (; a_j != ai_end; ++a_j)
+			{
+				VertexType i = *a_i;
+				VertexType j = *a_j;
+
+				if (!boost::edge(i, j, graph_).second)
+				{
+					if (!n1)
+					{
+						n1 = &i;
+						n2 = &j;
+					} 
+					else if (i == *n1 || i == *n2)
+					{
+						n1 = &i;
+						n2 = &i;
+					} 
+					else if (j == *n1 || j == *n2)
+					{
+						n1 = &j;
+						n2 = &j;
+					} 
+					else
+					{
+						return NOT_SIMPLICIAL;
+					}
+				}
+			}
+		}
+
+		if (!n1)
+		{
+			return IS_SIMPLICIAL;
+		} 
+		else 
+		{
+			return ALMOST_SIMPLICIAL;
+		}
+	}
+
+	template <class UndirectedGraph>
+	template <class L, class U>
+	void TreeWidthImplementation<UndirectedGraph>::QuickBB<L, U>::prune(QuickBB::QuickBBState& cstate)
+	{
+		Size nxt = cstate.permutation.size();
+
+		std::map<int, VertexType> index_to_vertex;
+		BGL_FORALL_VERTICES_T(current_vertex, graph_, UndirectedGraph)
+		{
+			Size index = boost::get(boost::vertex_index, graph_, current_vertex);
+			index_to_vertex[index] = current_vertex;
+			SIMPLICIAL_TYPE simplicial(isSimplicial(current_vertex));
+			if (simplicial == IS_SIMPLICIAL || simplicial == ALMOST_SIMPLICIAL)
+			{
+				cstate.permutation.push_back(index);
+			}
+		}
+
+	
+		for (typename std::vector<Size>::const_iterator st_iter = cstate.permutation.begin() + nxt; 
+				st_iter != cstate.permutation.end(); ++st_iter)
+		{
+			VertexType vertex = index_to_vertex[*st_iter];
+			cstate.g = std::max(cstate.g, (Size)boost::out_degree(vertex, graph_));
+			cstate.f = std::max(cstate.f, cstate.g);
+
+			GRAPH::eliminateVertex(vertex, graph_);
+		}
+	}
+
+	template <class UndirectedGraph>
+	template <class L, class U>
+	typename TreeWidthImplementation<UndirectedGraph>::template QuickBB<L, U>::BitSet 
+	TreeWidthImplementation<UndirectedGraph>::QuickBB<L, U>::buildBitset() const
+	{
+		BitSet set;
+
+		BGL_FORALL_VERTICES_T(v, graph_, UndirectedGraph)
+		{
+			set[v] = true;
+		}
+
+		return set;
+	}
+
+	template <class UndirectedGraph>
+	template <class L, class U>
+	typename TreeWidthImplementation<UndirectedGraph>::EliminationOrder 
+	TreeWidthImplementation<UndirectedGraph>::QuickBB<L, U>::compute()
+	{
+		Size lower_bound = L()(graph_);
+		greedy_solution = U()(graph_);
+
+		state.f = lower_bound;
+		state.h = lower_bound;
+		state.g = 0;
+
+		upper_bound = greedy_solution.second;
+		if (lower_bound < upper_bound)
+		{
+			prune(state);
+			branchAndBound(state);
+
+			own_solution = EliminationOrder(state.permutation, upper_bound);
+		} 
+		else
+		{
+			own_solution = greedy_solution;
+		}
+
+		return own_solution;
+	}
+
+	template <class UndirectedGraph>
+	template <class L, class U>
+	void TreeWidthImplementation<UndirectedGraph>::QuickBB<L, U>::branchAndBound(QuickBB::QuickBBState& nstate)
+	{
+		Size length = boost::num_vertices(graph_);
+
+		if (length == 0)
+		{
+			upper_bound = nstate.f;
+		} 
+		else if (length == 1)
+		{
+			if (upper_bound >= nstate.f)
+			{
+				upper_bound = nstate.f;
+				state.permutation = nstate.permutation;
+				state.permutation.push_back(0);
+			}
+		} 
+		else
+		{
+			std::map<int, VertexType> index_to_vertex;
+			BGL_FORALL_VERTICES_T(v, graph_, UndirectedGraph)
+			{
+				index_to_vertex[boost::get(boost::vertex_index, graph_, v)] = v;
+			}
+
+			for (typename std::vector<Size>::iterator viter = greedy_solution.first.begin(); 
+					viter != greedy_solution.first.end(); ++viter)
+			{
+				VertexType& vertex = index_to_vertex[*viter];
+				Size degree = boost::out_degree(vertex, graph_);
+
+				GRAPH::UndoEliminateOperation<UndirectedGraph> elimination(graph_, vertex);
+
+				QuickBBState xstate(nstate);
+				xstate.g = std::max(nstate.g, degree);
+				xstate.permutation.push_back(boost::get(boost::vertex_index, graph_, vertex));
+
+				BitSet bitset(buildBitset());
+
+				Size lower_bound = L()(graph_);
+				xstate.h = lower_bound;
+				xstate.f = max(xstate.g, lower_bound);
+
+				if (xstate.f >= upper_bound)
+				{
+					elimination.undo();
+
+					continue;
+				}
+
+				MapPos entry(visitedSubgraphs.insert(MapEntry(bitset, xstate.f)));
+
+				if (entry.second)
+				{
+					branchAndBound(xstate);
+				} 
+				else if ((entry.first)->second > xstate.f)
+				{
+					entry.first->second = xstate.f;
+					branchAndBound(xstate);
+				}
+
+				elimination.undo();
+			}
+		}
+	}
+
+	// *****************************************************************************************
+	// * TreeDecompositionBuilder                                                              *
+	// *****************************************************************************************
+
+	template <class UndirectedGraph>
+	template <class OriginalGraphType>
+	boost::shared_ptr<typename TreeWidthImplementation<UndirectedGraph>:: 
+	                  template TreeDecompositionBuilder<OriginalGraphType>::TreeDecomposition>
+	TreeWidthImplementation<UndirectedGraph>::TreeDecompositionBuilder<OriginalGraphType>::operator() (
+	                                                                              UndirectedGraph const& original_graph, 
+                                                                                EliminationOrder const& permutation)
+	{
+		if (num_vertices(original_graph) == 0)
+		{
+			return boost::shared_ptr<TreeDecomposition>();
+		}
+
+		UndirectedGraph graph;
+		GRAPH::deepCopy(original_graph, graph);
+
+		std::map<int, VertexType> original_vertices;
+		std::map<int, VertexType> new_vertices;
+
+		VertexIterator v_i, v_end;
+		for (boost::tie(v_i, v_end) = boost::vertices(original_graph); v_i != v_end; ++v_i)
+		{
+			original_vertices[boost::get(boost::vertex_index, original_graph, *v_i)] = *v_i;
+		}
+
+		for (boost::tie(v_i, v_end) = boost::vertices(graph); v_i != v_end; ++v_i)
+		{
+			new_vertices[boost::get(boost::vertex_index, graph, *v_i)] = *v_i;
+		}
+
+		std::vector<int> permutation_order(boost::num_vertices(original_graph));
+
+		Size last_vertex_id = permutation.first.size() - 1;
+
+		tree_graph_ = boost::shared_ptr<TreeDecompositionGraph>(new TreeDecompositionGraph());
+
+		std::vector<TreeDecompositionBag> bags(last_vertex_id+1);
+		std::vector<TreeDecompositionBag> parent_map(last_vertex_id+1);
+
+		std::vector<GRAPH::UndoEliminateOperation<UndirectedGraph> > eliminations;
+		eliminations.reserve(last_vertex_id);
+
+		// first: eliminate each vertex and remember its permutation order
+		for (Size i = 0; i <= last_vertex_id; ++i)
+		{
+			size_t index = permutation.first[i];
+			VertexType new_vertex = new_vertices[index];
+
+			permutation_order[index] = i;
+
+			if (i < last_vertex_id)
+			{
+				eliminations.push_back(GRAPH::eliminateVertexUndoable(new_vertex, graph));
+			}
+		}
+
+		std::list<typename TreeWidth<OriginalGraphType>::OriginalVertexType> current_content;
+
+		// last vertex is root of tree decomposition
+		size_t first_index = permutation.first[last_vertex_id];
+		current_content.push_back(boost::get(boost::vertex_orig_ptr, graph, new_vertices[first_index]));
+
+		for (Position i=0; i<=last_vertex_id; ++i)
+		{
+			bags[i] = boost::add_vertex(*tree_graph_);
+		}
+		
+		TreeDecompositionBag& root = bags[last_vertex_id];
+		boost::put(boost::vertex_bag_content,  *tree_graph_, root, current_content);
+
+		// next: de-eliminate each vertex and add it and its neighbours to the tree decomposition
+		for (Index i = last_vertex_id - 1; i >= 0; --i)
+		{
+			current_content.clear();
+
+			VertexType ro_replace = eliminations[i].undo();
+			new_vertices[boost::get(boost::vertex_index, graph, ro_replace)] = ro_replace;	
+
+			size_t index = permutation.first[i];
+			VertexType new_vertex = new_vertices[index];
+
+			TreeDecompositionBag bag = bags[i];
+
+			// add it to bag
+			current_content.push_back(boost::get(boost::vertex_orig_ptr, original_graph, original_vertices[index]));
+
+			// add its neighbours to bag and search the neighbour with minimal permutation order
+			NeighbourIterator neighbour;
+			Size min_permutation_order = last_vertex_id;
+			BGL_FORALL_ADJ_T(new_vertex, neighbour, graph, UndirectedGraph)
+			{
+				// TODO: zurueck aufloesen
+				size_t n_index = boost::get(boost::vertex_index, original_graph, neighbour);
+				current_content.push_back(boost::get(boost::vertex_orig_ptr, original_graph, original_vertices[n_index]));
+
+				min_permutation_order = std::min(min_permutation_order, (Size)permutation_order[n_index]);
+
+				// the bag with the neighour with minimal permutation order becomes parent of the
+				// new created bag
+			}
+
+			boost::put(boost::vertex_bag_content, *tree_graph_, bag, current_content);
+			boost::add_edge(bags[min_permutation_order], bag, *tree_graph_);
+		}
+
+		tree_ = boost::shared_ptr<TreeDecomposition>(new TreeDecomposition(*tree_graph_, root, 
+		                                                                       boost::make_iterator_property_map(parent_map.begin(), 
+		                                                                       boost::get(boost::vertex_index, *tree_graph_))));
+
+		return tree_;
+	}
+
+	template <class UndirectedGraph>
+	template <class OriginalGraphType>
+	typename TreeWidth<OriginalGraphType>::TreeDecompositionBag
+	TreeWidthImplementation<UndirectedGraph>::TreeDecompositionBuilder<OriginalGraphType>::operator() (TreeDecompositionBag n, 
+                                                        typename std::vector<TreeDecompositionBag>::iterator c_i, 
+																												typename std::vector<TreeDecompositionBag>::iterator c_end)
+	{
+		bool is_leaf = (c_i == c_end);
+		bool is_root = (n   == root(*tree_));
+
+		if (is_root)
+		{
+			int node_type = TreeWidth<OriginalGraphType>::ROOT_BAG;
+
+			if (is_leaf) // we only have one bag in the original decomposition
+			{
+				return buildRoot_(buildLeaf_(n));
+			}
+			else
+			{
+				return buildSingle_(n, node_type, branch_(n, node_type, c_i, c_end));
+			}
+		}
+		else if (is_leaf)
+		{
+			return buildLeaf_(n);
+		}
+		else
+		{
+			int node_type = TreeWidth<OriginalGraphType>::INNER_BAG;
+
+			return buildSingle_(n, node_type, branch_(n, node_type, c_i, c_end));
+		}
+	}
+
+	template <class UndirectedGraph>
+	template <class OriginalGraphType>
+	boost::shared_ptr<typename TreeWidthImplementation<UndirectedGraph>:: 
+	                  template TreeDecompositionBuilder<OriginalGraphType>::TreeDecomposition>
+	TreeWidthImplementation<UndirectedGraph>::TreeDecompositionBuilder<OriginalGraphType>::makeNice(
+                                           	                       boost::shared_ptr<TreeDecompositionGraph>& nice_tree)
+	{
+		nice_tree_ = nice_tree;
+
+		GRAPH::PostOrderFolding<TreeDecomposition, TreeDecompositionBag, TreeDecompositionBag, 
+														TreeDecompositionBuilder<OriginalGraphType> > pof(*tree_, *this);
+
+		std::vector<TreeDecompositionBag> parent_map(boost::num_vertices(*nice_tree_));
+
+		return boost::shared_ptr<TreeDecomposition>(new TreeDecomposition(*nice_tree_, root_, 
+		                                                                       boost::make_iterator_property_map(parent_map.begin(), 
+		                                                                       boost::get(boost::vertex_index, *nice_tree_))));
+	}
+
+	template <class UndirectedGraph>
+	template <class OriginalGraphType>
+	typename TreeWidth<OriginalGraphType>::TreeDecompositionBag
+	TreeWidthImplementation<UndirectedGraph>::TreeDecompositionBuilder<OriginalGraphType>::buildRoot_(TreeDecompositionBag child)
+	{
+		TreeDecompositionBag last_vertex;
+
+    TreeDecompositionContent content = boost::get(boost::vertex_bag_content, *nice_tree_, child);
+
+		if (content.size() > 1)
+		{
+			last_vertex = *content.begin();
+			content.erase(content.begin());
+
+			child = linkWithForgetNodes_(content, child);
+		}
+		else if (content.size() == 1)
+		{
+			last_vertex = *content.begin();
+		}
+
+		root_ = boost::add_vertex(*nice_tree_);
+
+		boost::put(boost::vertex_bag_type,    *nice_tree_, TreeWidth<OriginalGraphType>::ROOT_BAG, root_);
+		if (content.size() > 0)
+			boost::put(boost::vertex_bag_special, *nice_tree_, last_vertex,                            root_); 
+
+		boost::add_edge(root_, child, *nice_tree_);
+
+		return root_;
+	}
+
+	template <class UndirectedGraph>
+	template <class OriginalGraphType>
+	typename TreeWidth<OriginalGraphType>::TreeDecompositionBag
+	TreeWidthImplementation<UndirectedGraph>::TreeDecompositionBuilder<OriginalGraphType>::buildLeaf_(TreeDecompositionBag node)
+	{
+    TreeDecompositionContent content = boost::get(boost::vertex_bag_content, *tree_, node);
+		OriginalVertexType leaf_inner_vertex = *content.begin();
+		content.erase(content.begin());
+
+		TreeDecompositionBag new_vertex = boost::add_vertex(*nice_tree_);
+
+		TreeDecompositionContent new_content;
+		new_content.push_back(leaf_inner_vertex);
+
+		boost::put(boost::vertex_bag_content, *nice_tree_, new_vertex, new_content                           );
+		boost::put(boost::vertex_bag_special, *nice_tree_, new_vertex, leaf_inner_vertex                     );
+		boost::put(boost::vertex_bag_type,    *nice_tree_, new_vertex, TreeWidth<OriginalGraphType>::LEAF_BAG);
+
+		return linkWithIntroduceNodes_(content, new_vertex);
+	}
+
+	template <class UndirectedGraph>
+	template <class OriginalGraphType>
+	typename TreeWidth<OriginalGraphType>::TreeDecompositionBag
+	TreeWidthImplementation<UndirectedGraph>::TreeDecompositionBuilder<OriginalGraphType>::buildJoin_(
+		TreeDecompositionBag node, TreeDecompositionBag left, TreeDecompositionBag right, bool do_forget)
+	{
+		// first: both children should have identical inner vertex sets
+		TreeDecompositionContent parent_set = boost::get(boost::vertex_bag_content, *tree_, node);
+
+		if (do_forget)
+		{
+			left  = linkWithForgetNodes_(parent_set, left);
+			right = linkWithForgetNodes_(parent_set, right);
+		}
+		left  = linkWithIntroduceNodes_(boost::get(boost::vertex_bag_content, *nice_tree_, right), left);
+		right = linkWithIntroduceNodes_(boost::get(boost::vertex_bag_content, *nice_tree_, left),  right);
+
+		// now both children should be equal
+		TreeDecompositionBag join = boost::add_vertex(*nice_tree_);
+
+		boost::put(boost::vertex_bag_content, *nice_tree_, join, boost::get(boost::vertex_bag_content, *nice_tree_, left));
+		boost::put(boost::vertex_bag_type,    *nice_tree_, join, TreeWidth<OriginalGraphType>::JOIN_BAG                  );
+		
+		boost::add_edge(join, left,  *nice_tree_);
+		boost::add_edge(join, right, *nice_tree_);
+
+		return join;
+	}
+
+	template <class UndirectedGraph>
+	template <class OriginalGraphType>
+	typename TreeWidth<OriginalGraphType>::TreeDecompositionBag
+	TreeWidthImplementation<UndirectedGraph>::TreeDecompositionBuilder<OriginalGraphType>::buildSingle_(
+		                                     TreeDecompositionBag node, int node_type, TreeDecompositionBag child)
+	{
+		if (node_type == TreeWidth<OriginalGraphType>::ROOT_BAG)
+		{
+			return buildRoot_(buildLinkage_(node, child));
+		}
+		else if (node_type == TreeWidth<OriginalGraphType>::INNER_BAG)
+		{
+			return buildLinkage_(node, child);
+		}
+		else
+			// this should not happen...
+			return TreeDecompositionBag();
+	}
+
+	template <class UndirectedGraph>
+	template <class OriginalGraphType>
+	typename TreeWidth<OriginalGraphType>::TreeDecompositionBag
+	TreeWidthImplementation<UndirectedGraph>::TreeDecompositionBuilder<OriginalGraphType>::buildLinkage_(
+			                                                     TreeDecompositionBag node, TreeDecompositionBag child)
+	{
+		return linkWithIntroduceNodes_(boost::get(boost::vertex_bag_content, *tree_, node),
+		                               linkWithForgetNodes_(boost::get(boost::vertex_bag_content, *tree_, node), child));
+	}
+
+	template <class UndirectedGraph>
+	template <class OriginalGraphType>
+	typename TreeWidth<OriginalGraphType>::TreeDecompositionBag
+	TreeWidthImplementation<UndirectedGraph>::TreeDecompositionBuilder<OriginalGraphType>::linkWithIntroduceNodes_(
+                                                  			TreeDecompositionContent parent_set, TreeDecompositionBag child)
+	{
+		TreeDecompositionContent child_set = boost::get(boost::vertex_bag_content, *nice_tree_, child);
+		TreeDecompositionBag current_parent = child;
+
+		// for each vertex, which exists in parent and doesn't exist in child
+		for (typename TreeDecompositionContent::iterator iter = parent_set.begin(); iter != parent_set.end(); ++iter)
+		{
+			OriginalVertexType vertex = *iter;
+
+			if (std::find(child_set.begin(), child_set.end(), vertex) == child_set.end())
+			{
+				// insert introduce node
+				TreeDecompositionBag new_parent = boost::add_vertex(*nice_tree_);
+
+				TreeDecompositionContent current_parent_set = boost::get(boost::vertex_bag_content, *nice_tree_, current_parent);
+				current_parent_set.push_back(vertex);
+
+				boost::put(boost::vertex_bag_content, *nice_tree_, new_parent, current_parent_set                         );
+				boost::put(boost::vertex_bag_type,    *nice_tree_, new_parent, TreeWidth<OriginalGraphType>::INTRODUCE_BAG);
+				boost::put(boost::vertex_bag_special, *nice_tree_, new_parent, vertex                                     );
+
+				boost::add_edge(new_parent, current_parent, *nice_tree_);
+
+				current_parent = new_parent;
+			}
+		}
+
+		return current_parent;
+	}
+
+	template <class UndirectedGraph>
+	template <class OriginalGraphType>
+	typename TreeWidth<OriginalGraphType>::TreeDecompositionBag
+	TreeWidthImplementation<UndirectedGraph>::TreeDecompositionBuilder<OriginalGraphType>::linkWithForgetNodes_(
+                                                  			TreeDecompositionContent parent_set, TreeDecompositionBag child)
+	{
+		TreeDecompositionContent child_set = boost::get(boost::vertex_bag_content, *nice_tree_, child);
+
+		TreeDecompositionBag current_parent = child;
+
+		// for each vertex, which exists in child and doesn't exist in parent
+		for (typename TreeDecompositionContent::iterator iter = child_set.begin(); iter != child_set.end(); ++iter)
+		{
+			OriginalVertexType vertex = *iter;
+			if (std::find(parent_set.begin(), parent_set.end(), vertex) == parent_set.end())
+			{
+				// insert forget node
+				TreeDecompositionBag new_parent = boost::add_vertex(*nice_tree_);
+
+				TreeDecompositionContent new_content = boost::get(boost::vertex_bag_content, *nice_tree_, current_parent);
+				new_content.remove(vertex);
+
+				boost::put(boost::vertex_bag_content, *nice_tree_, new_parent, new_content                             );
+				boost::put(boost::vertex_bag_type,    *nice_tree_, new_parent, TreeWidth<OriginalGraphType>::FORGET_BAG);
+				boost::put(boost::vertex_bag_special, *nice_tree_, new_parent, vertex                                  );
+
+				boost::add_edge(new_parent, current_parent, *nice_tree_);
+
+				current_parent = new_parent;
+			}
+		}
+	
+		return current_parent;	
+	}
+
+	template <class UndirectedGraph>
+	template <class OriginalGraphType>
+	typename TreeWidth<OriginalGraphType>::TreeDecompositionBag
+	TreeWidthImplementation<UndirectedGraph>::TreeDecompositionBuilder<OriginalGraphType>::branch_(TreeDecompositionBag node,
+		                                                   int node_type, 
+																											 typename std::vector<TreeDecompositionBag>::iterator begin, 
+																											 typename std::vector<TreeDecompositionBag>::iterator end) 
+	{
+		size_t length = distance(begin, end);
+
+		if (length == 1)
+		{
+			return *begin;
+		}
+		else if (length == 2)
+		{
+			typename std::vector<TreeDecompositionBag>::iterator now = begin;
+			++begin;
+			return buildJoin_(node, *now, *begin, true);
+		}
+		else
+		{
+			typename std::vector<TreeDecompositionBag>::iterator middle = begin + length/2;
+			return buildJoin_(node, branch_(node, node_type, begin,  middle),
+			                        branch_(node, node_type, middle, end), length < 4);
+		}
+
+		return TreeDecompositionBag();
+	}
+	
+}

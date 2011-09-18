@@ -102,17 +102,17 @@ namespace BALL
 																			boost::property<boost::vertex_bag_type_t, int> > >, 
 																	  boost::no_property> TreeDecompositionGraph;
 
-			typedef typename boost::graph_traits<TreeDecompositionGraph>::vertex_descriptor TreeDecompositionBag_b;
+			typedef typename boost::graph_traits<TreeDecompositionGraph>::vertex_descriptor TreeDecompositionBag;
 
-			typedef boost::iterator_property_map<typename std::vector<TreeDecompositionBag_b>::iterator,
+			typedef boost::iterator_property_map<typename std::vector<TreeDecompositionBag>::iterator,
 							                             typename boost::property_map<TreeDecompositionGraph, boost::vertex_index_t>::type> 
 																					 TreeDecompositionParentMap;
-			typedef boost::graph_as_tree<TreeDecompositionGraph, TreeDecompositionParentMap> TreeDecomposition_b;
+			typedef boost::graph_as_tree<TreeDecompositionGraph, TreeDecompositionParentMap> TreeDecomposition;
 
 			TreeWidth(UndirectedGraph const& input);
 
 			std::vector<boost::shared_ptr<EditableGraph> >& getComponents() { return components_; }
-			std::vector<boost::shared_ptr<TreeDecomposition_b> >& getNiceTreeDecompositions()   { return nice_tree_decompositions_; }
+			std::vector<boost::shared_ptr<TreeDecomposition> >& getNiceTreeDecompositions()   { return nice_tree_decompositions_; }
 
 		protected:
 			template <typename ComponentMap>
@@ -138,7 +138,7 @@ namespace BALL
 			MolecularGraph const* input_;
 			std::vector<boost::shared_ptr<EditableGraph> > components_; 
 
-			std::vector<boost::shared_ptr<TreeDecomposition_b> >    nice_tree_decompositions_;
+			std::vector<boost::shared_ptr<TreeDecomposition> >    nice_tree_decompositions_;
 			std::vector<boost::shared_ptr<TreeDecompositionGraph> > nice_tree_decomposition_graphs_;
 	};
 
@@ -414,8 +414,8 @@ namespace BALL
 		class TreeDecompositionBuilder
 	  {
 			public:
-				typedef typename TreeWidth<OriginalGraphType>::TreeDecomposition_b    TreeDecomposition_b;
-				typedef typename TreeWidth<OriginalGraphType>::TreeDecompositionBag_b TreeDecompositionBag_b;
+				typedef typename TreeWidth<OriginalGraphType>::TreeDecomposition    TreeDecomposition;
+				typedef typename TreeWidth<OriginalGraphType>::TreeDecompositionBag TreeDecompositionBag;
 				typedef typename TreeWidth<OriginalGraphType>::TreeDecompositionGraph TreeDecompositionGraph;
 
 				typedef typename TreeWidth<OriginalGraphType>::OriginalVertexType OriginalVertexType;
@@ -428,7 +428,7 @@ namespace BALL
 				 * @param permutation the elimination order which is used to build the tree
 				 * @return tree_decomposition an empty TreeNodeList which is filled with instances of TreeDecompositionBag
 				 */
-				boost::shared_ptr<TreeDecomposition_b> operator() (UndirectedGraph const& graph, EliminationOrder const& permutation);
+				boost::shared_ptr<TreeDecomposition> operator() (UndirectedGraph const& graph, EliminationOrder const& permutation);
 
 				/**
 				 *  Converts the TreeDecomposition into a NiceTreeDecomposition
@@ -439,34 +439,34 @@ namespace BALL
 				 *    - Leaf-nodes, which have no childs and exactly one inner vertex
 				 *    - Root-nodes, which have one child and no inner vertices
 				 */
-				boost::shared_ptr<TreeDecomposition_b> makeNice(boost::shared_ptr<TreeDecompositionGraph>& nice_tree);
+				boost::shared_ptr<TreeDecomposition> makeNice(boost::shared_ptr<TreeDecompositionGraph>& nice_tree);
 
-				TreeDecompositionBag_b operator() (TreeDecompositionBag_b n,
-					typename std::vector<TreeDecompositionBag_b>::iterator c_i, typename std::vector<TreeDecompositionBag_b>::iterator c_end);
+				TreeDecompositionBag operator() (TreeDecompositionBag n,
+					typename std::vector<TreeDecompositionBag>::iterator c_i, typename std::vector<TreeDecompositionBag>::iterator c_end);
 
 			protected:
-				TreeDecompositionBag_b buildRoot_(TreeDecompositionBag_b child);
-				TreeDecompositionBag_b buildLeaf_(TreeDecompositionBag_b child);
-				TreeDecompositionBag_b buildJoin_(TreeDecompositionBag_b node, TreeDecompositionBag_b left,
-				                                  TreeDecompositionBag_b right, bool do_forget);
+				TreeDecompositionBag buildRoot_(TreeDecompositionBag child);
+				TreeDecompositionBag buildLeaf_(TreeDecompositionBag child);
+				TreeDecompositionBag buildJoin_(TreeDecompositionBag node, TreeDecompositionBag left,
+				                                  TreeDecompositionBag right, bool do_forget);
 
-				TreeDecompositionBag_b buildSingle_(TreeDecompositionBag_b node, int node_type, 
-				                                    TreeDecompositionBag_b child);
+				TreeDecompositionBag buildSingle_(TreeDecompositionBag node, int node_type, 
+				                                    TreeDecompositionBag child);
 
-				TreeDecompositionBag_b buildLinkage_(TreeDecompositionBag_b node, TreeDecompositionBag_b child);
+				TreeDecompositionBag buildLinkage_(TreeDecompositionBag node, TreeDecompositionBag child);
 
-				TreeDecompositionBag_b linkWithIntroduceNodes_(TreeDecompositionContent parent_set, TreeDecompositionBag_b child);
-				TreeDecompositionBag_b linkWithForgetNodes_   (TreeDecompositionContent parent_set, TreeDecompositionBag_b child);
+				TreeDecompositionBag linkWithIntroduceNodes_(TreeDecompositionContent parent_set, TreeDecompositionBag child);
+				TreeDecompositionBag linkWithForgetNodes_   (TreeDecompositionContent parent_set, TreeDecompositionBag child);
 
-				TreeDecompositionBag_b branch_(TreeDecompositionBag_b node, int node_type, 
-				                               typename std::vector<TreeDecompositionBag_b>::iterator begin, 
-																			 typename std::vector<TreeDecompositionBag_b>::iterator end);
+				TreeDecompositionBag branch_(TreeDecompositionBag node, int node_type, 
+				                               typename std::vector<TreeDecompositionBag>::iterator begin, 
+																			 typename std::vector<TreeDecompositionBag>::iterator end);
 
-				boost::shared_ptr<TreeDecomposition_b> tree_;
+				boost::shared_ptr<TreeDecomposition> tree_;
 				boost::shared_ptr<TreeDecompositionGraph> tree_graph_;
 				boost::shared_ptr<TreeDecompositionGraph> nice_tree_;
 
-				TreeDecompositionBag_b root_;
+				TreeDecompositionBag root_;
 		};
 
 	};

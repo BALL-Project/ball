@@ -101,6 +101,7 @@ namespace BALL
 
 			friend class AStarBondOrderStrategy;
 			friend class BranchAndBoundBondOrderStrategy;
+			friend class FPTBondOrderStrategy;
 			friend class ILPBondOrderStrategy;
 			friend class KGreedyBondOrderStrategy;
 

@@ -328,11 +328,16 @@ namespace BALL
 				typedef typename std::vector<To>::iterator        ArgumentIterator;
 
 				PostOrderFolding(Tree& tree, Functor& f)
-					: tree_(&tree),
-					  f_(&f),
-						return_stack_(boost::shared_ptr<std::vector<To> >(new std::vector<To>()))
+				  :	return_stack_(boost::shared_ptr<std::vector<To> >(new std::vector<To>())),
+					  tree_(&tree),
+					  f_(&f)
 				{
 					boost::traverse_tree(root(*tree_), *tree_, *this);
+				}
+
+				To getResult()
+				{ 
+					return *return_stack_->begin(); 
 				}
 
 				template <class Node>
@@ -352,7 +357,6 @@ namespace BALL
 					boost::tie(c_i, c_end) = children(n, t);
 
 					bool is_leaf = (c_i == c_end);
-					bool is_root = (n   == root(t));
 
 					ArgumentIterator begin_arg = return_stack_->end();
 					ArgumentIterator end_arg   = return_stack_->end();
