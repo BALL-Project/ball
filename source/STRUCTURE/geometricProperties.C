@@ -188,19 +188,19 @@ namespace BALL
 	bool FragmentDistanceCollector::finish()
 		
 	{
-		bool                                	collect_it = false;
-		AtomIterator                        	atom_iterator2;
-		Fragment*															mol_fragment;
-		Composite::CompositeConstIterator  		composite_it;
-		vector<Atom*>													reference_atoms;
-		Atom*                               	atom_ptr;
-		GeometricCenterProcessor            	center_processor;
-		Vector3                             	center;
-		float                               	fragment_radius;
-		float                               	difference;
+		bool                              collect_it = false;
+		AtomConstIterator                 atom_iterator2;
+		const Fragment*                   mol_fragment;
+		Composite::CompositeConstIterator composite_it;
+		vector<const Atom*>               reference_atoms;
+		const Atom*                       atom_ptr;
+		GeometricCenterProcessor          center_processor;
+		Vector3                           center;
+		float                             fragment_radius;
+		float                             difference;
 
-		Size                                	i, j;
-		Size																	size;
+		Size                              i, j;
+		Size                              size;
 
 
 		for (composite_it = reference_composite_->beginComposite(); 
@@ -259,13 +259,12 @@ namespace BALL
 	 return true;
 	}
 
-	Processor::Result FragmentDistanceCollector::operator()(Composite& composite)
+	Processor::Result FragmentDistanceCollector::operator()(const Composite& composite)
 		
 	{
-		
-		if (RTTI::isKindOf<Fragment>(composite))
+		const Fragment* mol_fragment = dynamic_cast<const Fragment*>(&composite);
+		if (mol_fragment)
 		{
-			Fragment*	mol_fragment = RTTI::castTo<Fragment>(composite);
 			all_fragments_.push_back(mol_fragment);
 		}
 

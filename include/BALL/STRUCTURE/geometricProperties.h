@@ -54,7 +54,7 @@ namespace BALL
 			\ingroup StructureGeometric
 	*/
 	class BALL_EXPORT BoundingBoxProcessor
-		:	public UnaryProcessor<Atom>
+		: public ConstUnaryProcessor<Atom>
 	{
 		public:
 
@@ -74,7 +74,7 @@ namespace BALL
 
 		/**
 		*/
-		virtual Processor::Result operator () (Atom& atom)
+		virtual Processor::Result operator () (const Atom& atom)
 			 { return operator() (atom.getPosition());}
 
 		/**
@@ -122,7 +122,7 @@ namespace BALL
 			\ingroup StructureGeometric
 	*/
 	class BALL_EXPORT GeometricCenterProcessor
-		:	public UnaryProcessor<Atom> 
+		:	public ConstUnaryProcessor<Atom> 
 	{
 		public:
 
@@ -142,7 +142,7 @@ namespace BALL
 
 		/**
 		*/
-		virtual Processor::Result operator()(Atom& atom)
+		virtual Processor::Result operator()(const Atom& atom)
 			 { return operator()(atom.getPosition());}
 
 		/**
@@ -187,8 +187,8 @@ namespace BALL
 	\ingroup StructureGeometric
 	*/
 	class BALL_EXPORT FragmentDistanceCollector
-		: public UnaryProcessor<Composite> 
-	{		
+		: public ConstUnaryProcessor<Composite>
+	{
 		public:
 
 		/** @name Constructors and Destructors 
@@ -236,8 +236,7 @@ namespace BALL
 
 		/**
 		*/
-		virtual Processor::Result operator()(Composite& composite)
-			;
+		virtual Processor::Result operator()(const Composite& composite);
 
 		//@}
 		/**	@name Accessors
@@ -278,12 +277,12 @@ namespace BALL
 		
 		/**	The array containing all molecular fragments collected
 		*/
-		std::vector<Fragment*>	fragments;
+		std::vector<const Fragment*> fragments;
 
 
 		protected:
 
-		std::vector<Fragment*>	all_fragments_;
+		std::vector<const Fragment*>	all_fragments_;
 		const Composite*	reference_composite_;
 		float							squared_distance_;
 	};
