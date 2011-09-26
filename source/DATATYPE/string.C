@@ -245,7 +245,6 @@ namespace BALL
 
 	String::~String()
 	{
-		erase();
 	}
 
 	void String::set(const String& s)
