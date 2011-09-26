@@ -776,13 +776,28 @@ B		*/
 		template <typename T>
 		bool applyAncestor(UnaryProcessor<T>& processor);
 
+		/** Apply a const processor to all ancestors of this node.
+				@return true if the processor could be applied.
+				\throws Exception::GeneralException
+		*/
+		template <typename T>
+		bool applyAncestor(ConstUnaryProcessor<T>& processor) const;
+
+
 		/** Apply a processor to all children of this node.
 				@return true if the processor could be applied.
 				\throws Exception::GeneralException
 		*/
 		template <typename T>
 		bool applyChild(UnaryProcessor<T>& processor);
-		
+
+		/** Apply a const processor to all children of this node.
+				@return true if the processor could be applied.
+				\throws Exception::GeneralException
+		*/
+		template <typename T>
+		bool applyChild(ConstUnaryProcessor<T>& processor) const;
+
 		/** Apply a processor to all descendents of this node.
 				The node itself is not processed.
 				The root of a subtree is accessed before the nodes in its left 
@@ -793,6 +808,16 @@ B		*/
 		template <typename T>
 		bool applyDescendantPreorder(UnaryProcessor<T>& processor);
 
+		/** Apply a const processor to all descendents of this node.
+				The node itself is not processed.
+				The root of a subtree is accessed before the nodes in its left 
+				and right subtree.
+				@return true if the processor could be applied.
+				\throws Exception::GeneralException
+		*/
+		template <typename T>
+		bool applyDescendantPreorder(ConstUnaryProcessor<T>& processor) const;
+
 		/** Apply a processor to all descendents of this node.
 				The node itself is not processed.
 				The root of a subtree is accessed after the nodes in its left 
@@ -802,7 +827,17 @@ B		*/
 		*/
 		template <typename T>
 		bool applyDescendantPostorder(UnaryProcessor<T>& processor);
-	
+
+		/** Apply a const processor to all descendents of this node.
+				The node itself is not processed.
+				The root of a subtree is accessed after the nodes in its left 
+				and right subtree.
+				@return true if the processor could be applied.
+				\throws Exception::GeneralException
+		*/
+		template <typename T>
+		bool applyDescendantPostorder(ConstUnaryProcessor<T>& processor) const;
+
 		/** Apply a processor to all descendents of this node.
 				The node itself is not processed.
 				applyDescendantPreorder is used.
@@ -812,7 +847,17 @@ B		*/
 		*/
 		template <typename T>
 		bool applyDescendant(UnaryProcessor<T>& processor);
-		
+
+		/** Apply a const processor to all descendents of this node.
+				The node itself is not processed.
+				applyDescendantPreorder is used.
+				@see applyDescendantPreorder
+				@return true if the processor could be applied.
+				\throws Exception::GeneralException
+		*/
+		template <typename T>
+		bool applyDescendant(ConstUnaryProcessor<T>& processor) const;
+
 		/** Apply a processor to the node and its subtree.
 				The root of a subtree is accessed before the nodes in its left 
 				and right subtree.
@@ -821,7 +866,16 @@ B		*/
 		*/
 		template <typename T>
 		bool applyPreorder(UnaryProcessor<T>& processor);
-		
+
+		/** Apply a const processor to the node and its subtree.
+				The root of a subtree is accessed before the nodes in its left 
+				and right subtree.
+				@return true if the processor could be applied.
+				\throws Exception::GeneralException
+		*/
+		template <typename T>
+		bool applyPreorder(ConstUnaryProcessor<T>& processor) const;
+
 		/** Apply a processor to the node and its subtree.
 				The root of a subtree is accessed after the nodes in its left 
 				and right subtree.
@@ -831,6 +885,15 @@ B		*/
 		template <typename T>
 		bool applyPostorder(UnaryProcessor<T>& processor);
 
+		/** Apply a const processor to the node and its subtree.
+				The root of a subtree is accessed after the nodes in its left 
+				and right subtree.
+				@return true if the processor could be applied.
+				\throws Exception::GeneralException
+		*/
+		template <typename T>
+		bool applyPostorder(ConstUnaryProcessor<T>& processor) const;
+
 		/** Apply a processor to the node and its subtree.
 				applyPreorder is used.
 				@see applyPreorder
@@ -839,7 +902,16 @@ B		*/
 		*/
 		template <typename T>
 		bool apply(UnaryProcessor<T>& processor);
-		
+
+		/** Apply a const processor to the node and its subtree.
+				applyPreorder is used.
+				@see applyPreorder
+				@return true if the processor could be applied.
+				\throws Exception::GeneralException
+		*/
+		template <typename T>
+		bool apply(ConstUnaryProcessor<T>& processor) const;
+
 		/** Apply a processor to the node and its siblings.
 				@return true if the processor could be applied.
 				\throws Exception::GeneralException
@@ -847,6 +919,15 @@ B		*/
 		template <typename T>
 		bool applyLevel(UnaryProcessor<T>& processor, long level);
 		//@}			
+
+		/** Apply a const processor to the node and its siblings.
+				@return true if the processor could be applied.
+				\throws Exception::GeneralException
+		*/
+		template <typename T>
+		bool applyLevel(ConstUnaryProcessor<T>& processor, long level) const;
+		//@}			
+
 
 
 	
@@ -1413,7 +1494,15 @@ B		*/
 
 		// \throws Exception::GeneralException
 		template <typename T>
+		bool applyLevelNostart_(ConstUnaryProcessor<T>& processor, long level) const;
+
+		// \throws Exception::GeneralException
+		template <typename T>
 		bool applyChildNostart_(UnaryProcessor<T>& processor);
+
+		// \throws Exception::GeneralException
+		template <typename T>
+		bool applyChildNostart_(ConstUnaryProcessor<T>& processor) const;
 
 		// \throws Exception::GeneralException
 		template <typename T>
@@ -1421,12 +1510,23 @@ B		*/
 
 		// \throws Exception::GeneralException
 		template <typename T>
+		bool applyPreorderNostart_(ConstUnaryProcessor<T>& processor) const;
+
+		// \throws Exception::GeneralException
+		template <typename T>
 		bool applyDescendantPreorderNostart_(UnaryProcessor<T>& processor);
+
+		// \throws Exception::GeneralException
+		template <typename T>
+		bool applyDescendantPreorderNostart_(ConstUnaryProcessor<T>& processor) const;
 
 		// \throws Exception::GeneralException
 		template <typename T>
 		bool applyDescendantPostorderNostart_(UnaryProcessor<T>& processor);
 
+		// \throws Exception::GeneralException
+		template <typename T>
+		bool applyDescendantPostorderNostart_(ConstUnaryProcessor<T>& processor) const;
 
 		void updateSelection_();
 		void determineSelection_();
@@ -1474,9 +1574,41 @@ B		*/
 
 		return processor.finish();
 	}
-	
+
+	template <typename T>
+	bool Composite::applyAncestor(ConstUnaryProcessor<T>& processor) const
+	{
+		if (processor.start() == false)
+		{
+			return false;
+		}
+
+		Processor::Result result;
+
+		for (const Composite* composite = parent_; composite != 0; composite = composite->parent_)
+		{
+			const T* t_ptr;
+			if ((t_ptr = dynamic_cast<const T*>(composite)) != 0)
+			{
+				result = processor(*t_ptr);
+				if (result <= Processor::BREAK)
+				{
+					return (result == Processor::BREAK);
+				}
+			}
+		}
+
+		return processor.finish();
+	}
+
 	template <typename T>
 	bool Composite::applyChild(UnaryProcessor<T>& processor)
+	{
+		return processor.start() && applyChildNostart_(processor) && processor.finish();
+	}
+
+	template <typename T>
+	bool Composite::applyChild(ConstUnaryProcessor<T>& processor) const
 	{
 		return processor.start() && applyChildNostart_(processor) && processor.finish();
 	}
@@ -1502,9 +1634,37 @@ B		*/
 
 		return (result >= Processor::BREAK);
 	}
- 
+
+	template <typename T>
+	bool Composite::applyChildNostart_(ConstUnaryProcessor<T>& processor) const
+	{
+		Processor::Result result = Processor::CONTINUE;
+
+		for (const Composite* composite = first_child_;
+				 composite != 0; composite = composite->next_)
+		{
+			const T* t_ptr;
+			if ((t_ptr = dynamic_cast<const T*>(composite)) != 0)
+			{
+				result = processor(*t_ptr);
+				if (result <= Processor::BREAK)
+				{
+					break;
+				}
+			}
+		}
+
+		return (result >= Processor::BREAK);
+	}
+
 	template <typename T>
 	bool Composite::applyDescendantPreorder(UnaryProcessor<T>& processor)
+	{
+		return processor.start() && applyDescendantPreorderNostart_(processor) && processor.finish();
+	}
+
+	template <typename T>
+	bool Composite::applyDescendantPreorder(ConstUnaryProcessor<T>& processor) const
 	{
 		return processor.start() && applyDescendantPreorderNostart_(processor) && processor.finish();
 	}
@@ -1538,7 +1698,41 @@ B		*/
 	}
 
 	template <typename T>
+	bool Composite::applyDescendantPreorderNostart_(ConstUnaryProcessor<T>& processor) const
+	{
+		Processor::Result result;
+
+		for (const Composite* composite = first_child_;
+				 composite != 0; composite = composite->next_)
+		{
+			const T* t_ptr;
+			if ((t_ptr = dynamic_cast<const T*>(composite)) != 0)
+			{	
+				result = processor(*t_ptr);
+
+				if (result <= Processor::BREAK)
+				{
+					return (result == Processor::BREAK);
+				}
+			}
+
+			if (composite->first_child_ != 0  && composite->applyDescendantPreorderNostart_(processor) == false)
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	template <typename T>
 	bool Composite::applyDescendantPostorder(UnaryProcessor<T>& processor)
+	{
+		return processor.start() && applyDescendantPostorderNostart_(processor) && processor.finish();
+	}
+
+	template <typename T>
+	bool Composite::applyDescendantPostorder(ConstUnaryProcessor<T>& processor) const
 	{
 		return processor.start() && applyDescendantPostorderNostart_(processor) && processor.finish();
 	}
@@ -1572,9 +1766,38 @@ B		*/
 		return true;
 	}
 
-	template <typename T>  
+	template <typename T>
+	bool Composite::applyDescendantPostorderNostart_(ConstUnaryProcessor<T>& processor) const
+	{
+		Processor::Result result;
+
+		for (const Composite* composite = first_child_;
+				 composite != 0; composite = composite->next_)
+		{
+			if (composite->first_child_ != 0 &&
+					composite->applyDescendantPostorderNostart_(processor) == false)
+			{
+				return false;
+			}
+
+			const T* t_ptr = dynamic_cast<const T*>(composite);
+			if (t_ptr != 0)
+			{
+				result = processor(*t_ptr);
+
+				if (result <= Processor::BREAK)
+				{
+					return (result == Processor::BREAK);
+				}
+			}
+		}
+
+		return true;
+	}
+
+	template <typename T>
 	bool Composite::applyPostorder(UnaryProcessor<T>& processor)
-	{ 
+	{
 		if (!processor.start() || !applyDescendantPostorderNostart_(processor))
 		{
 			return false;
@@ -1582,13 +1805,35 @@ B		*/
 
 		T* t_ptr = dynamic_cast<T*>(this);
 
-		return (t_ptr != 0													  && 
-						processor(*t_ptr) >= Processor::BREAK && 
-						processor.finish()											);
+		return (t_ptr != 0                            &&
+						processor(*t_ptr) >= Processor::BREAK &&
+						processor.finish()                      );
 	}
 
 	template <typename T>
+	bool Composite::applyPostorder(ConstUnaryProcessor<T>& processor) const
+	{
+		if (!processor.start() || !applyDescendantPostorderNostart_(processor))
+		{
+			return false;
+		}
+
+		const T* t_ptr = dynamic_cast<const T*>(this);
+
+		return (t_ptr != 0                            &&
+						processor(*t_ptr) >= Processor::BREAK &&
+						processor.finish()                      );
+	}
+
+
+	template <typename T>
 	bool Composite::applyLevel(UnaryProcessor<T>& processor, long level)
+	{
+		return processor.start() && applyLevelNostart_(processor, level) && processor.finish();
+	}
+
+	template <typename T>
+	bool Composite::applyLevel(ConstUnaryProcessor<T>& processor, long level) const
 	{
 		return processor.start() && applyLevelNostart_(processor, level) && processor.finish();
 	}
@@ -1634,6 +1879,47 @@ B		*/
 	}
 
 	template <typename T>
+	bool Composite::applyLevelNostart_(ConstUnaryProcessor<T>& processor, long level) const
+	{
+		if (level == 0)
+		{
+			const T* t_ptr = dynamic_cast<const T*>(this);
+			if (t_ptr != 0)
+			{
+			 Processor::Result result = processor(*t_ptr);
+
+				if (result <= Processor::BREAK)
+				{
+					return (result == Processor::BREAK);
+				}
+			}
+		}
+		else
+		{
+			if (--level == 0)
+			{
+				return applyChildNostart_(processor);
+			}
+			else
+			{
+				if (level > 0)
+				{
+					for (const Composite* composite = first_child_;
+							 composite != 0; composite = composite->next_)
+					{
+						if (composite->first_child_ != 0 && composite->applyLevelNostart_(processor, level) == false)
+						{
+							return false;
+						}
+					}
+				}
+			}
+		}
+		return true;
+	}
+
+
+	template <typename T>
 	bool Composite::applyPreorderNostart_(UnaryProcessor<T>& processor)
 	{
 		Processor::Result result;
@@ -1661,7 +1947,40 @@ B		*/
 	}
 
 	template <typename T>
+	bool Composite::applyPreorderNostart_(ConstUnaryProcessor<T>& processor) const
+	{
+		Processor::Result result;
+		bool return_value;
+		const T* t_ptr = dynamic_cast<const T*>(this);
+		if (t_ptr != 0)
+		{
+			result = processor(*t_ptr);
+
+			if (result <= Processor::BREAK)
+			{
+				return_value = (result == Processor::BREAK);
+			}
+			else
+			{
+				return_value =  applyDescendantPreorderNostart_(processor);
+			}
+		}
+		else
+		{
+			return_value =  applyDescendantPreorderNostart_(processor);
+		}
+
+		return return_value;
+	}
+
+	template <typename T>
 	bool Composite::applyDescendant(UnaryProcessor<T>& processor)
+	{
+		return applyDescendantPreorder(processor);
+	}
+
+	template <typename T>
+	bool Composite::applyDescendant(ConstUnaryProcessor<T>& processor) const
 	{
 		return applyDescendantPreorder(processor);
 	}
@@ -1673,8 +1992,21 @@ B		*/
 	}
 
 	template <typename T>
-	BALL_INLINE 
+	bool Composite::applyPreorder(ConstUnaryProcessor<T>& processor) const
+	{
+		return processor.start() && applyPreorderNostart_(processor) && processor.finish();
+	}
+
+	template <typename T>
+	BALL_INLINE
 	bool Composite::apply(UnaryProcessor<T>& processor)
+	{
+		return applyPreorder(processor);
+	}
+
+	template <typename T>
+	BALL_INLINE
+	bool Composite::apply(ConstUnaryProcessor<T>& processor) const
 	{
 		return applyPreorder(processor);
 	}
