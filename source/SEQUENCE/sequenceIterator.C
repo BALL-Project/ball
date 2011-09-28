@@ -105,63 +105,357 @@ namespace BALL{
 			}
 
 
-			//////////////////////////////////////////////Misc//////////////////////////////////////////////////////////
+			////////////////////////////////////////////// Operators //////////////////////////////////////////////////////////
 
 			/**
 			 *@return a sequenceIterator pointing to the next Character of the Sequence
 			 */
-			SequenceIterator SequenceIterator::next()
+			SequenceIterator& SequenceIterator::next()
 			{
-					//get the residue at position counter
+					
 					AtomContainer* ori = sequence->getOrigin();
 
 					if (RTTI::isKindOf<Protein>(*ori)) 
 					{
 							//cast origin to a protein
-
 							Protein* protein = RTTI::castTo<Protein>(*ori);
-							
-							if(counter >= protein->countResidues())
-							{
-								counter= protein->countResidues()+1;
-								
-								return *this;
+
+							//increase counter
+							counter++;
+
+							//check whether we are already at the end	
+							if(counter > protein->countResidues())
+							{			
+									throw BALL::Exception::IndexOverflow(__FILE__,__LINE__,counter, protein->countResidues());
 							}
 
-							//retrieve the residue and increase counter
-							Residue* res = protein->getResidue(counter++);
+							//check whether we are at the last character
+							if(counter == protein->countResidues()) 
+							{		
+									//create new empty SequenceCharacter
+									SequenceCharacter c;
+
+									//set its origin to the current sequence
+									c.setOrigin(sequence);
+
+									//add it to the current Iterator
+									character=c;
+				
+									return *this;
+							}
+
+							//retrieve the residue
+							Residue* res = protein->getResidue(counter);
 							
 							//retrieve the residue's name and cast it to OneLetterCode
 							char name = Peptides::OneLetterCode(res->getName());
 
-							//set the sequence character char
+							//set the SequenceCharacter
 							character.setChar(name);
-							}
-						return *this;
+					}
+
+					return *this;
 			}
 
-		
-			
+	SequenceIterator& SequenceIterator::previous()
+	{
+
+		AtomContainer* ori = sequence->getOrigin();
+
+					if (RTTI::isKindOf<Protein>(*ori)) 
+					{
+							//cast origin to a protein
+							Protein* protein = RTTI::castTo<Protein>(*ori);
+
+							if(counter==0)
+							{
+								throw BALL::Exception::IndexUnderflow(__FILE__,__LINE__,counter,0);
+							}
+
+							//decrease counter
+							counter--;
+
+							//retrieve the residue
+							Residue* res = protein->getResidue(counter);
+							
+							//retrieve the residue's name and cast it to OneLetterCode
+							char name = Peptides::OneLetterCode(res->getName());
+
+							//set the SequenceCharacter
+							character.setChar(name);
+					}
+
+					return *this;
+			}
+
 	
-			
-			/**
-			*operator==
-			*/
-			bool SequenceIterator::operator == (SequenceIterator& it)
+
+				bool SequenceIterator::operator == (SequenceIterator& it)
 			{
 				return ((sequence == it.sequence) && (counter == it.getCounter()) && ( it.getCharacter() == character));
 			}
 
-
-	
-
-			/**
-			*operator !=
-			**/
 			bool SequenceIterator::operator != (SequenceIterator& it)
 			{
 				return !(operator== (it));
 			}
+
+	SequenceIterator& SequenceIterator::operator = (const SequenceIterator& it){
+
+		sequence = it.sequence;
+		counter = it.counter;
+		character=it.character;
+	return *this;
+
+	}
+
+			SequenceCharacter& SequenceIterator::operator * (){
+				return character;
+		}
+
+//		SequenceIterator* operator -> ();
+	
+	SequenceIterator& SequenceIterator::operator ++ ()
+	{
+//TODO check index!
+		return next();
+	}
+
+		/**
+		* postfix - operator ++
+		* increments iterator after returning it
+		*@return unchanged Iterator
+		*/
+SequenceIterator SequenceIterator::operator++ (int)
+{ 
+//TODO check index!
+	//Postfix increment
+		SequenceIterator tmp = *this;
+		next();
+		return tmp;
+}
+
+
+	/**
+	* operator-- decrements the SequenceIterator
+	*prefix
+	*@return incremented Iterator
+	*/
+SequenceIterator& SequenceIterator::operator -- (){
+
+						return previous();
+
+}
+
+	/**
+	* postfix operator --
+	*decrements SequenceIterator after returning
+	*@ return unchanged Iterator
+	*/
+SequenceIterator SequenceIterator::operator --(int)
+{
+//Postfix decrementation
+	SequenceIterator tmp = *this;
+	previous();
+	return tmp;
+}
+
+
+
+
+	/**
+	* assignment operator
+			*/
+//SequenceIterator& operator - (SequenceIterator& it); TODO Das macht doch keine Sinn!
+
+	/**
+	* comparison operator
+	*/
+
+bool SequenceIterator::operator < (const SequenceIterator& it)
+{
+	if (sequence != it.sequence)
+	{
+		throw BALL::Exception::IncompatibleIterators(__FILE__,__LINE__);
+	}
+
+	if(counter < it.counter) 
+	{
+		return true;
+	}
+
+	return false;
+}
+
+	/**
+	* comparison operator
+	*/
+bool SequenceIterator::operator > (const SequenceIterator& it)
+{	
+	if (sequence != it.sequence)
+	{
+		throw BALL::Exception::IncompatibleIterators(__FILE__,__LINE__);
+	}
+
+	if(counter > it.counter) 
+	{
+	return true;
+	}
+
+	return false;
+}
+
+
+	/**
+	* comparison operator
+	*/
+bool SequenceIterator::operator <= (const SequenceIterator& it)
+{	
+	if (sequence != it.sequence)
+	{
+		throw BALL::Exception::IncompatibleIterators(__FILE__,__LINE__);
+	}
+
+if(counter <= it.counter) 
+{
+return true;
+}
+return false;
+}
+
+
+	/**
+	* comparison operator
+	*/
+bool SequenceIterator::operator >= (const SequenceIterator& it)
+{
+	if (sequence != it.sequence)
+	{
+		throw BALL::Exception::IncompatibleIterators(__FILE__,__LINE__);
+	}
+if(counter >= it.counter)
+{
+return true;
+}
+return false;}
+
+	/**
+	*operator +
+	* increments the SequenceIterator by n
+	*@return incremented SequenceIterator
+	*/
+SequenceIterator SequenceIterator::operator + (int  n)
+{
+	return SequenceIterator( *this ) += n;
+}
+
+
+//n + a
+
+	/**
+	*operator -
+	* decrements the SequenceIterator by n
+	*@return decremented SequenceIterator
+ 	*/
+SequenceIterator SequenceIterator::operator - (int n)
+{
+	return SequenceIterator(*this) -= n;
+	}
+
+	/**
+	* assignment and increment operator
+	*/
+SequenceIterator& SequenceIterator::operator += (int n){
+
+AtomContainer* ori = sequence->getOrigin();
+
+					if (RTTI::isKindOf<Protein>(*ori)) 
+					{
+							//cast origin to a protein
+							Protein* protein = RTTI::castTo<Protein>(*ori);
+
+							//increase counter
+							counter+= n;
+
+							//check whether we are already at the end	
+							if(counter > protein->countResidues())
+							{			
+									throw BALL::Exception::IndexOverflow(__FILE__,__LINE__,counter, protein->countResidues());
+							}
+
+							//check whether we are at the last character
+							if(counter == protein->countResidues()) 
+							{		
+									//create new empty SequenceCharacter
+									SequenceCharacter c;
+
+									//set its origin to the current sequence
+									c.setOrigin(sequence);
+
+									//add it to the current Iterator
+									character=c;
+				
+									return *this;
+							}
+
+							//retrieve the residue
+							Residue* res = protein->getResidue(counter);
+							
+							//retrieve the residue's name and cast it to OneLetterCode
+							char name = Peptides::OneLetterCode(res->getName());
+
+							//set the SequenceCharacter
+							character.setChar(name);
+					}
+
+ 
+	return *this;}
+
+
+	/**
+	* assignment and decrement operator
+	*/
+SequenceIterator& SequenceIterator::operator -= (int n)
+{
+	AtomContainer* ori = sequence->getOrigin();
+
+					if (RTTI::isKindOf<Protein>(*ori)) 
+					{
+							//cast origin to a protein
+							Protein* protein = RTTI::castTo<Protein>(*ori);
+
+							if( (counter==0) || (counter < n))
+							{
+								throw BALL::Exception::IndexUnderflow(__FILE__,__LINE__,counter,0);
+							}
+
+							//decrease counter
+							counter-=n;
+
+							//retrieve the residue
+							Residue* res = protein->getResidue(counter);
+							
+							//retrieve the residue's name and cast it to OneLetterCode
+							char name = Peptides::OneLetterCode(res->getName());
+
+							//set the SequenceCharacter
+							character.setChar(name);
+					}
+
+					return *this;
+}
+
+
+	/**
+	* access whats inside the ith SequenceIterator
+	*/
+//SequenceCharacter& SequenceIterator::operator[] (int n)
+//{
+	//return new SequenceCharacter();
+//}
+
+
+
 
 //
 
