@@ -10,6 +10,33 @@
 
 namespace BALL
 {
+	/** Coping with endianness. This function swaps the bytes of a variable
+			of type T if this type is of size 2n.
+	*/
+	template <typename T>
+	void swapBytes(T& t)
+	{
+		if (sizeof(T) % 2 != 0)
+		{
+			Log.error() << "Cannot swap types of uneven size." << std::endl;
+			return;
+		}
+
+		char* tmp = reinterpret_cast<char*>(&t);
+		std::reverse(tmp, tmp + sizeof(T));
+	}
+
+	//In the following some specialisations of swapBytes are provided for efficiency reasons
+	//These should also cover BALL types like Size, Position and Index
+	template<> BALL_EXPORT void swapBytes(unsigned short&);
+	template<> BALL_EXPORT void swapBytes(short&);
+	template<> BALL_EXPORT void swapBytes(unsigned int&);
+	template<> BALL_EXPORT void swapBytes(int&);
+	template<> BALL_EXPORT void swapBytes(unsigned long&);
+	template<> BALL_EXPORT void swapBytes(long&);
+	template<> BALL_EXPORT void swapBytes(float&);
+	template<> BALL_EXPORT void swapBytes(double&);
+
 	/**
 	 * Helper class for data conversion.
 	 * BinaryFileAdaptors are used to read and write binary data from and to
@@ -152,32 +179,6 @@ namespace BALL
 		return is;
 	}
 
-	/** Coping with endianness. This function swaps the bytes of a variable
-			of type T if this type is of size 2n.
-	*/
-	template <typename T>
-	void swapBytes(T& t)
-	{
-		if (sizeof(T) % 2 != 0)
-		{
-			Log.error() << "Cannot swap types of uneven size." << std::endl;
-			return;
-		}
-
-		char* tmp = reinterpret_cast<char*>(&t);
-		std::reverse(tmp, tmp + sizeof(T));
-	}
-
-	//In the following some specialisations of swapBytes are provided for efficiency reasons
-	//These should also cover BALL types like Size, Position and Index
-	template<> BALL_EXPORT void swapBytes(unsigned short&);
-	template<> BALL_EXPORT void swapBytes(short&);
-	template<> BALL_EXPORT void swapBytes(unsigned int&);
-	template<> BALL_EXPORT void swapBytes(int&);
-	template<> BALL_EXPORT void swapBytes(unsigned long&);
-	template<> BALL_EXPORT void swapBytes(long&);
-	template<> BALL_EXPORT void swapBytes(float&);
-	template<> BALL_EXPORT void swapBytes(double&);
 } //namespace BALL
 
 #ifndef BALL_NO_INLINE_FUNCTIONS

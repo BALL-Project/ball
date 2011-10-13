@@ -236,7 +236,7 @@ namespace BALL
 	template <class Key, class T>
 	const T& HashMap<Key, T>::operator [] (const Key& key) const
 	{
-		ConstIterator it = find(key);
+		ConstIterator it = this->find(key);
 		if (it == Base::end())
 		{
 			throw IllegalKey(__FILE__, __LINE__);
@@ -272,10 +272,10 @@ namespace BALL
 	T& HashMap<Key, T>::operator [] (const Key& key)
 		
 	{
-		Iterator it = find(key);
+		Iterator it = this->find(key);
 		if (it == Base::end())
 		{
-			it = insert(ValueType(key, T())).first;
+			it = this->insert(ValueType(key, T())).first;
 		}
 		return it->second;
 	}
