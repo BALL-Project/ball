@@ -94,7 +94,7 @@ namespace BALL
 				
 				/** One probability Matrix for each modelled activity and each class. \n
 				Each Matrix stores in each cell the probability for a feature lying within a specific range to be in a specific class  */
-				vector<MatrixVector> probabilities_;
+				vector<MatrixVector, Eigen::aligned_allocator<MatrixVector> > probabilities_;
 							
 
 				
