@@ -308,7 +308,7 @@ namespace BALL
 			BondStruct bond_struct;
 			for (Position i = 0; i < counts.number_of_bonds; i++)
 			{
-				if (!readBondLine_(bond_struct)) return false;
+				if (!readBondLine_(bond_struct)) return 0;
 
 				// ensure the atoms referenced do exist
 				if ((bond_struct.first_atom < 1) || (bond_struct.first_atom > counts.number_of_atoms))
