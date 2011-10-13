@@ -3,6 +3,7 @@ contrib/*
 *.o
 *.lo
 *_moc.C
+*~
 moc_*.C
 *.dh
 *.swp
