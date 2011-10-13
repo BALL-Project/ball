@@ -890,7 +890,7 @@ namespace BALL
 				{
 					Log.error() << "ConnectedToPredicate:parse_(): " << std::endl
 						<< "\tparse error: bond char before bracket." << std::endl;
-					return(false);
+					return 0;
 				}
 				bracket_stack.push_back(current);
 				current = createNewNode_(current);
@@ -911,7 +911,7 @@ namespace BALL
 					{
 						Log.error() << "ConnectedToPredicate::parse_():\n"
 							<< "\ttried to access a NULL pointer. Aborting." << std::endl;
-						return(false);
+						return 0;
 					}
 					current->setFinished();
 					depth--;
@@ -940,7 +940,7 @@ namespace BALL
 						delete root;
 						root = 0;
 
-						return(false);
+						return 0;
 					}
 				}
 				else
@@ -1070,7 +1070,7 @@ namespace BALL
 										Log.error() << "ConnectedToPredicate::parse_():\n"
 											<< "\tparse error: unknown input char: " 
 											<< input[position] << std::endl;
-										return(false);
+										return 0;
 									}
 								}
 							}

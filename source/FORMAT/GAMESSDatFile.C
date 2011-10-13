@@ -112,7 +112,7 @@ namespace BALL
 		if (!isValid())
 		{
 //			Log.error() << "Trying to read from invalid GAMESSDatFile '" << getName() << "'" << std::endl;
-			return false;
+			return 0;
 		}
 
 		/** Let the parser do the hard work **/

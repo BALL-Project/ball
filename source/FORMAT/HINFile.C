@@ -393,7 +393,7 @@ namespace BALL
 		if (!isValid())
 		{
 			Log.error() << "trying to read form invalid HINFile '" << getName() << "'" << std::endl;
-			return false;
+			return 0;
 		}
 		
 		// we define some states for our simple parser machine
