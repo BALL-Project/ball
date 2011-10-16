@@ -11,8 +11,8 @@
 	#include <BALL/KERNEL/atomContainer.h>
 #endif
 
-#ifndef BALL_STRUCTURE_MOLECULARGRAPH_H
-	#include <BALL/STRUCTURE/molecularGraph.h>
+#ifndef BALL_STRUCTURE_SIMPLEMOLECULARGRAPH_H
+	#include <BALL/STRUCTURE/simpleMolecularGraph.h>
 #endif
 
 #ifndef BALL_DATATYPE_OPTIONS_H
@@ -119,7 +119,7 @@ namespace BALL
 					adapted from a standard bcc (binary connected components) algorithm. 
 					Returns the number of bccs found.
 			*/
-			Size findAllBCC(std::vector<MolecularGraph*>& bcc, MolecularGraph& graph);
+			Size findAllBCC(std::vector<SimpleMolecularGraph*>& bcc, SimpleMolecularGraph& graph);
 
 			/*_ Options for the ring perception
 			*/
@@ -156,11 +156,11 @@ namespace BALL
 			/*_ Method that finds all biconnected components, the algorithm is freely 
 					adapted from a standard bcc algorithm.
 			*/
-			Size findAllBCC_(std::vector<MolecularGraph*>& bcc, MolecularGraph& graph);
+			Size findAllBCC_(std::vector<SimpleMolecularGraph*>& bcc, SimpleMolecularGraph& graph);
 	
 			/*_ recursive function that finds bccs
 			*/
-			void DFSBCC_( std::vector<MolecularGraph*>& bccs, Size dfbi, 
+			void DFSBCC_( std::vector<SimpleMolecularGraph*>& bccs, Size dfbi, 
 										HashMap<NodeItem<Index, Index>*, Size> DFBIndex, 
 										NodeItem<Index, Index>* v);
 																		
@@ -243,7 +243,7 @@ namespace BALL
 	
 			/*_ Implementation of the Balducci/Pearlman algorithm 
 			*/
-			Size BalducciPearlmanAlgorithm_(std::vector<std::vector<Atom*> >& sssr, MolecularGraph& graph);
+			Size BalducciPearlmanAlgorithm_(std::vector<std::vector<Atom*> >& sssr, SimpleMolecularGraph& graph);
 	};
 } // namespace BALL
 

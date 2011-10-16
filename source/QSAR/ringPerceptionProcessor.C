@@ -87,10 +87,10 @@ namespace BALL
 		{
 			// build molecular graph
 			Molecule* mol = static_cast<Molecule*>(&ac);
-			MolecularGraph mol_graph(*mol);
+			SimpleMolecularGraph mol_graph(*mol);
 		
 			vector<Bond*> to_delete;
-      for (MolecularGraph::EdgeIterator eit = mol_graph.beginEdge(); eit != mol_graph.endEdge(); ++eit)
+      for (SimpleMolecularGraph::EdgeIterator eit = mol_graph.beginEdge(); eit != mol_graph.endEdge(); ++eit)
       {
         Bond::Type bond_type = eit->getBond()->getType();
         if (bond_type == Bond::TYPE__HYDROGEN || bond_type == Bond::TYPE__DISULPHIDE_BRIDGE)
@@ -105,13 +105,13 @@ namespace BALL
       }
 
 			// detect the bccs
-			vector<MolecularGraph*> bccs;
+			vector<SimpleMolecularGraph*> bccs;
 			findAllBCC(bccs, mol_graph);
 
 			Size num_rings(0);
 
 			// for each bcc that potentially contains rings do the Balducci/Pearlman ring perception
-			for (vector<MolecularGraph*>::iterator it = bccs.begin(); it != bccs.end(); ++it)
+			for (vector<SimpleMolecularGraph*>::iterator it = bccs.begin(); it != bccs.end(); ++it)
 			{
 				if ((*it)->getNumberOfNodes() > 2 && (*it)->getNumberOfEdges() > 2)
 				{
@@ -120,7 +120,7 @@ namespace BALL
 			}
 
 			// now delete the bccs
-			for (vector<MolecularGraph*>::iterator it = bccs.begin(); it != bccs.end(); ++it)
+			for (vector<SimpleMolecularGraph*>::iterator it = bccs.begin(); it != bccs.end(); ++it)
 			{
 				delete *it;
 			}
@@ -462,7 +462,7 @@ namespace BALL
 
 	// bcc code
 
-	Size RingPerceptionProcessor::findAllBCC(vector<MolecularGraph*>& bccs, MolecularGraph& graph)
+	Size RingPerceptionProcessor::findAllBCC(vector<SimpleMolecularGraph*>& bccs, SimpleMolecularGraph& graph)
 	{
 		// delete all content from the strcutures
 		visited_.clear();
@@ -474,7 +474,7 @@ namespace BALL
 		visited_bonds_.clear();
 
 		// for each node in the graph apply the recursive function
-		for (MolecularGraph::NodeIterator ait = graph.beginNode(); ait != graph.endNode(); ++ait)
+		for (SimpleMolecularGraph::NodeIterator ait = graph.beginNode(); ait != graph.endNode(); ++ait)
 		{
 			NodeItem<Index, Index>* v = &*ait;
 			if (!visited_.has(v))
@@ -486,7 +486,7 @@ namespace BALL
 		return bccs.size();
 	}
 
-	void RingPerceptionProcessor::DFSBCC_(vector<MolecularGraph*>& bccs, Size dfbi, 
+	void RingPerceptionProcessor::DFSBCC_(vector<SimpleMolecularGraph*>& bccs, Size dfbi, 
 																				HashMap<NodeItem<Index, Index>*, Size> DFBIndex, 
 																				NodeItem<Index, Index>* v)
 	{
@@ -556,7 +556,7 @@ namespace BALL
 						
 						// now all items are collected, lets build the new graph						
 						// first adding the nodes!!!
-						MolecularGraph* new_graph = new MolecularGraph;
+						SimpleMolecularGraph* new_graph = new SimpleMolecularGraph;
 						for (HashSet<Atom*>::Iterator it = ac.begin(); it != ac.end(); ++it)
 						{
 							new_graph->newNode(**it);
@@ -865,7 +865,7 @@ namespace BALL
 		rings_.push_back(beer);
 	}
 
-	Size RingPerceptionProcessor::BalducciPearlmanAlgorithm_(vector<vector<Atom*> >& sssr, MolecularGraph& graph)
+	Size RingPerceptionProcessor::BalducciPearlmanAlgorithm_(vector<vector<Atom*> >& sssr, SimpleMolecularGraph& graph)
 	{
 		Size num_atoms = graph.getNumberOfNodes();
 		Size num_bonds = graph.getNumberOfEdges();
@@ -884,7 +884,7 @@ namespace BALL
 		// 1. init the flow-network
 
 		// do the node to tnode mapping
-		for (MolecularGraph::NodeIterator ait = graph.beginNode(); ait != graph.endNode(); ++ait)
+		for (SimpleMolecularGraph::NodeIterator ait = graph.beginNode(); ait != graph.endNode(); ++ait)
 		{
 			TNode_* node = new TNode_();
 			atom_to_tnode_[&*ait] = node;
@@ -893,14 +893,14 @@ namespace BALL
 
 		// do the bond to index mapping for the bitvector
 		Size bond_num(0);
-		for (MolecularGraph::EdgeIterator bit = graph.beginEdge(); bit != graph.endEdge(); ++bit)
+		for (SimpleMolecularGraph::EdgeIterator bit = graph.beginEdge(); bit != graph.endEdge(); ++bit)
 		{
 			bond_to_index_[&*bit] = bond_num;
 			index_to_bond_[bond_num++] = &*bit;
 		}
 
 		// fill in the messages
-		for (MolecularGraph::NodeIterator ait = graph.beginNode(); ait != graph.endNode(); ++ait)
+		for (SimpleMolecularGraph::NodeIterator ait = graph.beginNode(); ait != graph.endNode(); ++ait)
 		{
 			for (NodeItem<Index, Index>::Iterator bit = ait->begin(); bit != ait->end(); ++bit)
 			{
@@ -942,12 +942,12 @@ namespace BALL
 #endif
 			
 			// calling all sends 
-			for (MolecularGraph::NodeIterator ait = graph.beginNode(); ait != graph.endNode(); ++ait)
+			for (SimpleMolecularGraph::NodeIterator ait = graph.beginNode(); ait != graph.endNode(); ++ait)
 			{
 				atom_to_tnode_[&*ait]->send();
 			}
 			// calling all recieves
-			for (MolecularGraph::NodeIterator ait = graph.beginNode(); ait != graph.endNode(); ++ait)
+			for (SimpleMolecularGraph::NodeIterator ait = graph.beginNode(); ait != graph.endNode(); ++ait)
 			{
 				atom_to_tnode_[&*ait]->recieve();
 			}

@@ -2,8 +2,8 @@
 // vi: set ts=2:
 //
 
-#ifndef BALL_STRUCTURE_MOLECULARGRAPH_H
-#define BALL_STRUCTURE_MOLECULARGRAPH_H
+#ifndef BALL_STRUCTURE_SIMPLEMOLECULARGRAPH_H
+#define BALL_STRUCTURE_SIMPLEMOLECULARGRAPH_H
 
 #ifndef BALL_KERNEL_ATOM_H
 #	include <BALL/KERNEL/atom.h>
@@ -32,7 +32,7 @@ namespace BALL
 	class EdgeItem;
 
 	template <typename Node, typename Edge> 
-	class TMolecularGraph;
+	class TSimpleMolecularGraph;
 
 	/**	The node type in a molecular graph
 		\ingroup StructureMiscellaneous
@@ -56,7 +56,7 @@ namespace BALL
 		typedef typename std::list<EdgeItem<Node, Edge>*>::const_iterator ConstIterator;
 		//@}
 
-		friend class TMolecularGraph<Node, Edge>;
+		friend class TSimpleMolecularGraph<Node, Edge>;
 
 		NodeItem() ;
 		NodeItem(const Atom& atom) ;
@@ -142,7 +142,7 @@ namespace BALL
 	}
 
 	template <typename Node, typename Edge>
-	class TMolecularGraph
+	class TSimpleMolecularGraph
 	{
 		public:
 		typedef NodeItem<Node, Edge> NodeItemType;
@@ -152,8 +152,8 @@ namespace BALL
 		typedef typename std::list<EdgeItemType>::iterator EdgeIterator;
 		typedef typename std::list<EdgeItemType>::const_iterator EdgeConstIterator;
 
-		TMolecularGraph() ;
-		TMolecularGraph(const Molecule& molecule) ;
+		TSimpleMolecularGraph() ;
+		TSimpleMolecularGraph(const Molecule& molecule) ;
 
 		bool newNode(const Atom& atom) ;
 		bool newEdge(const Bond& bond) ;
@@ -199,10 +199,10 @@ namespace BALL
 	/**	Default molecular graph type.
 			Each edge and node has a label of type  \link Index Index \endlink .
 	*/
-	typedef TMolecularGraph<Index, Index> MolecularGraph;
+	typedef TSimpleMolecularGraph<Index, Index> SimpleMolecularGraph;
 
 	template <typename Node, typename Edge>
-	TMolecularGraph<Node, Edge>::TMolecularGraph()
+	TSimpleMolecularGraph<Node, Edge>::TSimpleMolecularGraph()
 			
 		:	nodes_(),
 			edges_(),
@@ -212,7 +212,7 @@ namespace BALL
 	}
 
 	template <typename Node, typename Edge>
-	TMolecularGraph<Node, Edge>::TMolecularGraph(const Molecule& molecule)
+	TSimpleMolecularGraph<Node, Edge>::TSimpleMolecularGraph(const Molecule& molecule)
 			
 		:	nodes_(),
 			edges_(),
@@ -238,7 +238,7 @@ namespace BALL
 	}
 
 	template <typename Node, typename Edge>
-	bool TMolecularGraph<Node, Edge>::newNode(const Atom& atom)
+	bool TSimpleMolecularGraph<Node, Edge>::newNode(const Atom& atom)
 		
 	{
 		Atom* atom_ptr = const_cast<Atom*>(&atom);
@@ -255,7 +255,7 @@ namespace BALL
 	}
 
 	template <typename Node, typename Edge>
-	bool TMolecularGraph<Node, Edge>::newEdge(const Bond& bond)
+	bool TSimpleMolecularGraph<Node, Edge>::newEdge(const Bond& bond)
 		
 	{
 		// Create convenience aliases for atoms.
@@ -287,11 +287,11 @@ namespace BALL
 	}
 
 	template <typename Node, typename Edge>
-	std::ostream& operator << (std::ostream& os, const TMolecularGraph<Node, Edge>& G)
+	std::ostream& operator << (std::ostream& os, const TSimpleMolecularGraph<Node, Edge>& G)
 	{		
 		os << "Nodes:" << std::endl;
 
-		typename TMolecularGraph<Node, Edge>::NodeConstIterator node = G.beginNode();
+		typename TSimpleMolecularGraph<Node, Edge>::NodeConstIterator node = G.beginNode();
 		Size count = 0;
 		for (; node != G.endNode(); ++node)
 		{
@@ -300,7 +300,7 @@ namespace BALL
 
 		os << "Edges:" << std::endl;	
 
-		typename TMolecularGraph<Node, Edge>::EdgeConstIterator edge = G.beginEdge();
+		typename TSimpleMolecularGraph<Node, Edge>::EdgeConstIterator edge = G.beginEdge();
 		count = 0;
 		for (; edge != G.endEdge(); ++edge)
 		{
@@ -311,7 +311,7 @@ namespace BALL
 	}
 
 	template <typename Node, typename Edge>
-	bool TMolecularGraph<Node, Edge>::deleteNode(const Atom& atom)
+	bool TSimpleMolecularGraph<Node, Edge>::deleteNode(const Atom& atom)
 	{
 		if (!atom_to_node_.has(const_cast<Atom*>(&atom)))
 		{
@@ -322,7 +322,7 @@ namespace BALL
 	}
 
 	template <typename Node, typename Edge>
-	bool TMolecularGraph<Node, Edge>::deleteEdge(const Bond& bond)
+	bool TSimpleMolecularGraph<Node, Edge>::deleteEdge(const Bond& bond)
 	{
 		if (!bond_to_edge_.has(const_cast<Bond*>(&bond)))
 		{
@@ -333,7 +333,7 @@ namespace BALL
 	}
 
 	template <typename Node, typename Edge>
-	bool TMolecularGraph<Node, Edge>::deleteNode(typename TMolecularGraph<Node, Edge>::NodeItemType& node)
+	bool TSimpleMolecularGraph<Node, Edge>::deleteNode(typename TSimpleMolecularGraph<Node, Edge>::NodeItemType& node)
 	{
 		NodeIterator node_it = std::find(nodes_.begin(), nodes_.end(), node);
 		if (node_it == nodes_.end())
@@ -360,7 +360,7 @@ namespace BALL
 	}
 
 	template <typename Node, typename Edge>
-	bool TMolecularGraph<Node, Edge>::deleteEdge(typename TMolecularGraph<Node, Edge>::EdgeItemType& edge)
+	bool TSimpleMolecularGraph<Node, Edge>::deleteEdge(typename TSimpleMolecularGraph<Node, Edge>::EdgeItemType& edge)
 	{
 		typename std::list<EdgeItemType>::iterator edge_it = std::find(edges_.begin(), edges_.end(), edge);
 		if (edge_it == edges_.end())
@@ -489,7 +489,7 @@ namespace BALL
 
 	template <typename Node, typename Edge>
 	BALL_INLINE
-	Size TMolecularGraph<Node, Edge>::getNumberOfNodes() const
+	Size TSimpleMolecularGraph<Node, Edge>::getNumberOfNodes() const
 		
 	{
 		return nodes_.size();
@@ -497,7 +497,7 @@ namespace BALL
 
 	template <typename Node, typename Edge>
 	BALL_INLINE
-	Size TMolecularGraph<Node, Edge>::getNumberOfEdges() const
+	Size TSimpleMolecularGraph<Node, Edge>::getNumberOfEdges() const
 		
 	{
 		return edges_.size();

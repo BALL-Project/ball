@@ -209,7 +209,7 @@ SET(BALL_STRUCTURE_TESTS
 	Enumerator_test
 	EnumeratorIndex_test
 	GeometricProperties_test
-	MolecularGraph_test
+	SimpleMolecularGraph_test
 	NumericalSAS_test
 	PeptideBuilder_test
 	PeptideCapProcessor_test
