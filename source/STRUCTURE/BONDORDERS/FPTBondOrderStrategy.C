@@ -1151,7 +1151,7 @@ namespace BALL
 	bool FPTBondOrderStrategy::EdgeComparator_::operator() (typename FPTBondOrderStrategy::EdgeComparator_::Edge const& e1,
 			                                                    typename FPTBondOrderStrategy::EdgeComparator_::Edge const& e2)
 	{
-		typedef typename FPTBondOrderStrategy::VertexType VertexType;
+		typedef FPTBondOrderStrategy::VertexType VertexType;
 
 		VertexType left        = boost::source(e1, *graph_);
 		VertexType right       = boost::target(e1, *graph_);
