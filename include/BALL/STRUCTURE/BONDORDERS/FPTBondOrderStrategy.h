@@ -57,6 +57,7 @@
 
 namespace BALL
 {
+	//TODO: documentation is obsolete!
 	/** FPT algorithm for bond order assignment.
 	 *  
 	 *  This class implements a fixed parameter tractability approach
@@ -467,8 +468,12 @@ namespace BALL
 					DPTable_ * table;
 			};
 
+			class DPBackTracking_;
+			class DPBackTrackingCombiner_;
+
 			/**
-			 * bond assignment algorithm. Traverse in post-order the nice tree decomposition and computes the dynamic programming table for each vertex
+			 * bond assignment algorithm. 
+			 * Traverse in post-order the nice tree decomposition and computes the dynamic programming table for each vertex
 			 * This class uses a pointer to a graph, to a penalty map and to a nice tree decomposition. So you should take care that
 			 * all three objects aren't deleted during this algorithm, because this class neither uses shared pointers, nor make
 			 * copies of the objects.
@@ -476,7 +481,8 @@ namespace BALL
 			class FPTBondOrderAssignment_
 			{
 				public:
-					friend class FPTBackTracking_;
+					friend class DPBackTracking_;
+					friend class DPBackTrackingCombiner_;
 					friend class GRAPH::PostOrderFolding<TreeDecomposition, TreeDecompositionBag, DPTable_*, FPTBondOrderAssignment_>;
 
 					/**
@@ -663,11 +669,6 @@ namespace BALL
 					vector<FPTBondOrderAssignment_*> bond_assignments;
 
 					/**
-					 * the connection components of this molecule
-					 */
-					std::vector<std::vector<MolecularGraphTraits::VertexType> > connection_components;
-
-					/**
 					 * the molecule graph
 					 */
 					MolecularGraph *molecule_graph;
@@ -701,11 +702,6 @@ namespace BALL
 			{
 				public:
 					/**
-					 * The penalty of this assignment
-					 */
-					Penalty penalty;
-
-					/**
 					 * build a new, empty assignment
 					 */
 					Assignment_();
@@ -725,7 +721,7 @@ namespace BALL
 					 * Build an assignment from a given bond value vector and penalty. Such a bond assignment don't have to
 					 * be valid!
 					 */
-					Assignment_(std::vector<BondOrder> bonds, Penalty penalty);
+					Assignment_(std::vector<BondOrder> const& bonds, Penalty penalty);
 
 					/**
 					 * Assignment operator
@@ -803,6 +799,11 @@ namespace BALL
 					 */
 					bool isValid(MolecularGraph& molecule, FPTBondOrderStrategy& parent);
 
+					/**
+					 * The penalty of this assignment
+					 */
+					Penalty penalty;
+
 				protected:
 					/**
 					 * A vector with bond values. 0 is single bond, 1 is double bond, 2 is tripple bond
@@ -822,7 +823,7 @@ namespace BALL
 				 * Less-operator. Returns true if leftp is smaller than rightp.
 				 * @throws BALL::Exception::InvalidArgument if the both DPConfig entries can not be compared
 				 */
-				bool operator()(DPConfig_ const* leftp, DPConfig_ const* rightp) const;
+				bool operator() (DPConfig_ const* leftp, DPConfig_ const* rightp) const;
 
 				/**
 				 * returns 1, if leftp is greather than rightp, 0 if both are equal and -1 otherwise.
@@ -830,6 +831,23 @@ namespace BALL
 				 * @throws BALL::Exception::InvalidArgument if the both DPConfig entries can not be compared
 				 */
 				int compare(DPConfig_ const* leftp, DPConfig_ const* rightp) const;
+			};
+
+			/** A comparator for edges in the molecular graph.
+			 */
+			class EdgeComparator_
+			{
+				public:
+					typedef GRAPH::GraphTraits<MolecularGraph>::EdgeType Edge;
+
+					EdgeComparator_(MolecularGraph* graph)
+						: graph_(graph)
+					{ }
+
+					bool operator() (Edge const& e1, Edge const& e2);
+
+				protected:
+					MolecularGraph* graph_;
 			};
 
 			/**
@@ -841,31 +859,6 @@ namespace BALL
 			class BackTrackingState_
 			{
 				public:
-					/**
-					 * Assignment which contains all bond values of the bonds which were forgotten during the backtracking.
-					 * Such an assignment is valid, if the BackTrackingState is pointing to the end of the backtracking
-					 */
-					Assignment_ assignment;
-
-					/**
-					 * the table entry, which this backtracking state follows. This is the entry of the bag, this BackTrackingState is
-					 * pointing to.
-					 */
-					DPConfig_ config;
-
-					/**
-					 * If the BackTrackingState reachs a join node, it can just follow one of it's both children. So it have to remember
-					 * which entry of the table of the second child it choosed. This is done in this stack. It contains the table entry
-					 * of the right child and the index of this child in pre-order.
-					 */
-					stack<pair<DPConfig_, Size> > join_branches;
-
-					/**
-					 * pre-order index of this bag. If you traverse the tree in pre-order and give each vertex a number from 0 to n-1,
-					 * this number is the pre-order index.
-					 */
-					Size index;
-
 					/**
 					 * Default constructor
 					 */
@@ -917,8 +910,49 @@ namespace BALL
 					 */
 					bool operator == (BackTrackingState_ const&) const;
 
+					/**
+					 * Assignment which contains all bond values of the bonds which were forgotten during the backtracking.
+					 * Such an assignment is valid, if the BackTrackingState is pointing to the end of the backtracking
+					 */
+					Assignment_ assignment;
+
+					/**
+					 * the table entry, which this backtracking state follows. This is the entry of the bag, this BackTrackingState is
+					 * pointing to.
+					 */
+					DPConfig_ config;
+
+					/**
+					 * If the BackTrackingState reachs a join node, it can just follow one of it's both children. So it have to remember
+					 * which entry of the table of the second child it choosed. This is done in this stack. It contains the table entry
+					 * of the right child and the index of this child in pre-order.
+					 */
+					stack<pair<DPConfig_, Size> > join_branches;
+
+					/**
+					 * pre-order index of this bag. If you traverse the tree in pre-order and give each vertex a number from 0 to n-1,
+					 * this number is the pre-order index.
+					 */
+					Size index;
+
+
 			};
 
+			/**
+			 * is used to remember the pair of table entries of the children of a join node without
+			 * copying their configuration
+			 */
+			typedef std::pair<DPTable_::const_iterator, DPTable_::const_iterator> DPPairIt_;
+
+			/**
+			 * compare two join-table antecessor pairs by comparing their penalties
+			 */
+			static bool compareJoinTablePairs_(DPPairIt_ const& left, DPPairIt_ const& right);
+
+			/**
+			 * Compare pointers of entries of introduce or forget table antecessors by comparing their penalties
+			 */
+			static bool compareTablePointerEntries_(DPPointerRow_ const& left, DPPointerRow_ const& right);
 
 			/**
 			 * A map which remember pointers to DPConfigs of a child of a join-node. It uses a DPJoinMapComparator to find
@@ -945,7 +979,7 @@ namespace BALL
 			 * Furthermore if we don't specify an upperbound, this backtracking algorithm can iterate about EACH possible solution
 			 * of this bond order problem.
 			 */
-			class FPTBackTracking_
+			class DPBackTracking_
 			{
 				public:
 					typedef TreeWidth<MolecularGraph>::TreeDecomposition        TreeDecomposition;
@@ -953,32 +987,32 @@ namespace BALL
 					typedef TreeWidth<MolecularGraph>::TreeDecompositionContent TreeDecompositionContent;
 
 					/**
-					 * Construct a new FPTBackTracking_ for a given FPTBondOrder algorithm, which backtracks not more than
+					 * Construct a new DPBackTracking_ for a given FPTBondOrder algorithm, which backtracks not more than
 					 * maxNumberOfSolutions. By default, the backtracking backtracks only the optimal solution.
-					 * You have to call the FPTBondOrder#compute method before constructing the FPTBackTracking_.
-					 * Furthermore you should take care to delete the FPTBackTracking_ before the FPTBondOrder, because this
+					 * You have to call the FPTBondOrder#compute method before constructing the DPBackTracking_.
+					 * Furthermore you should take care to delete the DPBackTracking_ before the FPTBondOrder, because this
 					 * class operates on a pointer to the bond assignment algorithm, not on a copy.
 					 * @param bondAssignment a reference to a FPTBondOrder which is already computed
 					 * @param maxNumberOfSolutions the number of solutions you want to backtrack. Is by default 1. The size of the
 					 * 															priority queue can never be greater than maxNumberOfSolutions
 					 */
-					FPTBackTracking_(FPTBondOrderAssignment_& bond_assignment, Size max_number_of_solutions,
-					                 Penalty upperbound = infinite_penalty);
+					DPBackTracking_(FPTBondOrderAssignment_& bond_assignment, Size max_number_of_solutions,
+					                std::vector<MolecularGraphTraits::EdgeType> const& bonds, Penalty upperbound = infinite_penalty);
 
 					/**
 					 * Copy constructor
 					 */
-					FPTBackTracking_(FPTBackTracking_ const& copy);
+					DPBackTracking_(DPBackTracking_ const& copy);
 
 					/**
 					 * Destructor. Removes just the BackTrackingStates, not the bond assignment algorithm instance.
 					 */
-					~FPTBackTracking_();
+					~DPBackTracking_();
 
 					/**
 					 * Assignment operator
 					 */
-					FPTBackTracking_& operator= (FPTBackTracking_ const& copy);
+					DPBackTracking_& operator= (DPBackTracking_ const& copy);
 
 					/**
 					 * returns the current solution. Remark that after constructing the backtracking, there is no solution computed. So
@@ -988,7 +1022,8 @@ namespace BALL
 					Assignment_& getSolution();
 
 					/**
-					 * returns the current solution, const version. Remark that after constructing the backtracking, there is no solution computed. So
+					 * returns the current solution, const version. 
+					 * Remark that after constructing the backtracking, there is no solution computed. So
 					 * you have to call #nextSolution first.
 					 * @throw BALL::Exception::NullPointer if you forgot to call #nextSolution
 					 */
@@ -1016,7 +1051,7 @@ namespace BALL
 
 					void preorder(TreeDecompositionBag node, TreeDecomposition&)
 					{
-						bags_.push_back(node);
+						bags_->push_back(node);
 					}
 
 					void inorder(TreeDecompositionBag, TreeDecomposition&)
@@ -1067,12 +1102,12 @@ namespace BALL
 					 * A sorted vector of the edges of the graph. The bond values in the assignments are in the same order
 					 * as the edges in this vector.
 					 */
-					std::vector<MolecularGraphTraits::EdgeType> bonds_;
+					std::vector<MolecularGraphTraits::EdgeType> const* bonds_;
 
 					/**
 					 * The nice tree decomposition bags in pre-order
 					 */
-					std::vector<TreeDecompositionBag> bags_;
+					boost::shared_ptr<std::vector<TreeDecompositionBag> > bags_;
 
 					/**
 					 * maxHeapSize is the maxNumberOfSolutions - the number of backtracked solutions. So this attribute
@@ -1189,6 +1224,157 @@ namespace BALL
 
 			};
 
+			/**
+			 * Combines backtracked solutions from other DPBackTrackers.
+			 * Is used to combine the solutions of computed connection components
+			 * of a graph to a solution for the whole graph. Because the bond orders of the
+			 * connection components are disjoint, the solutions of the backtrackers can be combined
+			 * independently.
+			 * This class provides the same public functions as DPBackTracking.
+			 * Remarks that this class will start the backtracking of the best solution after constructing,
+			 * while DPBackTracking will start only after calling DPBackTracking#nextSolution. Nevertheless
+			 * you have to call #nextSolution before you can access the optimal solution.
+			 */
+			class DPBackTrackingCombiner_
+			{
+				public:
+					/**
+					 * Construct a DPBackTrackingCombiner with the given FPTBondOrder and the number of solutions
+					 * @param bondAssignments vector with pointers to the bond assignments. Call #compute before constructing
+					 * @param solutionNumber the maximum number of solutions you want to backtrack
+					 */
+					DPBackTrackingCombiner_(std::vector<FPTBondOrderAssignment_*>& bond_assignments,
+							                    Size solution_number, Penalty upper_bound = infinite_penalty);
+
+					/**
+					 * Construct a DPBackTrackingCombiner with the given FPTBondOrder and the number of solutions
+					 * @param bondAssignments vector with the bond assignments. Call #compute before constructing
+					 * @param solutionNumber the maximum number of solutions you want to backtrack
+					 */
+					DPBackTrackingCombiner_(std::vector<FPTBondOrderAssignment_>& bond_assignments, 
+					                        Size solution_number, Penalty upper_bound = infinite_penalty);
+
+					/**
+					 * Copy constructor
+					 */
+					DPBackTrackingCombiner_(DPBackTrackingCombiner_ const& copy);
+
+					/**
+					 * Destructor. Deletes all backtrackers but not the bond assignment algorithms
+					 */
+					~DPBackTrackingCombiner_();
+
+					void clear();
+
+					/**
+					 * Assignment operator
+					 */
+					DPBackTrackingCombiner_& operator = (DPBackTrackingCombiner_ const& copy);
+
+					/**
+					 * return true if there are more solutions to backtrack
+					 */
+					bool hasMoreSolutions() const;
+
+					/**
+					 * computes the next solution. Call #hasMoreSolutions before to avoid an OutOfRange exception.
+					 * @throw BALL::Exception::OutOfRange if there is no more solution to backtrack
+					 */
+					void nextSolution();
+
+					/**
+					 * returns the last computed solution
+					 */
+					Assignment_& getSolution();
+
+					/**
+					 * returns the last computed solution, const version
+					 */
+					Assignment_ const& getSolution() const;
+
+					/**
+					 * returns the penalty of the solution which can be backtracked next or INFINITE_PENALTY, if there
+					 * is no more solution.
+					 */
+					Penalty penaltyOfNextSolution() const;
+
+					/**
+					 * A sorted vector of the edges of the graph. The bond values in the assignments are in the same order
+					 * as the edges in this vector.
+					 */
+					std::vector<MolecularGraphTraits::EdgeType> sorted_edges;
+
+				protected:
+					/**
+					 * The backtrackers. They are managed by this class, so you don't have to care about deleting them.
+					 */
+					std::vector<DPBackTracking_*> backtrackers_;
+
+					/**
+					 * The priority queue for the assignments. Because each new backtracked assignment of a connection
+					 * component can be combined with each other found assignment of the other connection components,
+					 * you get many new solutions in each backtracking step. They are combined inserted into this queue.
+					 */
+					std::priority_queue<Assignment_, std::vector<Assignment_>, greater<Assignment_> > priority_queue_;
+
+					/**
+					 * The backtracked solutions of the connection components. They can be combined to build the
+					 * solution of the whole graph.
+					 */
+					std::vector<std::vector<Assignment_> > component_solutions_;
+
+					/**
+					 * the last backtracked and combined solution
+					 */
+					Assignment_ assignment_;
+
+					/**
+					 * maximum number of solutions you want to backtrack
+					 */
+					Size solution_number_;
+
+					/**
+					 * The penalty of the best solution
+					 */
+					Penalty optimum_;
+
+					/**
+					 * This backtracker returns only solutions which have a better penalty than the given upperbound
+					 */
+					Penalty upper_bound_;
+
+					/**
+					 * Searches for the backtracker which would compute the best next solution (after combining).
+					 * Returns it index and the penalty of it's solution.
+					 */
+					std::pair<Size, Penalty> getNextMinimumBackTracker_() const;
+
+					/**
+					 * Combines the component assignment with the whole graph assignment
+					 * @param backtracker_index index of the backtracker
+					 * @param solutionIndex the number of the assignment of this backtracker, which will be combined
+					 */
+					void applyAssignment_(Size backtracker_index, Size solution_index);
+
+					/**
+					 * Lets each backtracker backtrack a solution and initialize the combiner.
+					 */
+					void initialize_();
+
+					/**
+					 * Combines the given new assignment with each previous found assignments
+					 * @param mindex index of the backtracker which found the next best assignment
+					 */
+					void combineEachSolution_(Size mindex);
+
+					/**
+					 * copy each DPBackTracking
+					 */
+					std::vector<DPBackTracking_*> deepCopyOfBacktrackers_() const;
+
+			};
+
+
 			/// Initialize pointers to penalty data
 			void initPenaltyData_();
 
@@ -1228,6 +1414,11 @@ namespace BALL
 			 * all the computing data
 			 */
 			boost::shared_ptr<ComputingData_> computing_data_;
+
+			/**
+			 * The backtracking combiner_
+			 */
+			boost::shared_ptr<DPBackTrackingCombiner_> combiner_;
 	};
 }
 #endif // BALL_STRUCTURE_BONDORDERS_FPTBONDORDERSTRATEGY_H

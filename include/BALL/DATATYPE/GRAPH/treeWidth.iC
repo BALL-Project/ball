@@ -572,11 +572,11 @@ namespace BALL
 			}
 		}
 
-		std::list<typename TreeWidth<OriginalGraphType>::OriginalVertexType> current_content;
+		std::set<typename TreeWidth<OriginalGraphType>::OriginalVertexType> current_content;
 
 		// last vertex is root of tree decomposition
 		size_t first_index = permutation.first[last_vertex_id];
-		current_content.push_back(boost::get(boost::vertex_orig_ptr, graph, new_vertices[first_index]));
+		current_content.insert(boost::get(boost::vertex_orig_ptr, graph, new_vertices[first_index]));
 
 		for (Position i=0; i<=last_vertex_id; ++i)
 		{
@@ -584,7 +584,8 @@ namespace BALL
 		}
 		
 		TreeDecompositionBag& root = bags[last_vertex_id];
-		boost::put(boost::vertex_bag_content,  *tree_graph_, root, current_content);
+		boost::put(boost::vertex_bag_content,  *tree_graph_, root, current_content                       );
+		boost::put(boost::vertex_bag_type,     *tree_graph_, root, TreeWidth<OriginalGraphType>::ROOT_BAG);
 
 		// next: de-eliminate each vertex and add it and its neighbours to the tree decomposition
 		for (Index i = last_vertex_id - 1; i >= 0; --i)
@@ -600,16 +601,15 @@ namespace BALL
 			TreeDecompositionBag bag = bags[i];
 
 			// add it to bag
-			current_content.push_back(boost::get(boost::vertex_orig_ptr, original_graph, original_vertices[index]));
+			current_content.insert(boost::get(boost::vertex_orig_ptr, original_graph, original_vertices[index]));
 
 			// add its neighbours to bag and search the neighbour with minimal permutation order
 			NeighbourIterator neighbour;
 			Size min_permutation_order = last_vertex_id;
 			BGL_FORALL_ADJ_T(new_vertex, neighbour, graph, UndirectedGraph)
 			{
-				// TODO: zurueck aufloesen
 				size_t n_index = boost::get(boost::vertex_index, original_graph, neighbour);
-				current_content.push_back(boost::get(boost::vertex_orig_ptr, original_graph, original_vertices[n_index]));
+				current_content.insert(boost::get(boost::vertex_orig_ptr, original_graph, original_vertices[n_index]));
 
 				min_permutation_order = std::min(min_permutation_order, (Size)permutation_order[n_index]);
 
@@ -705,9 +705,10 @@ namespace BALL
 
 		root_ = boost::add_vertex(*nice_tree_);
 
-		boost::put(boost::vertex_bag_type,    *nice_tree_, TreeWidth<OriginalGraphType>::ROOT_BAG, root_);
+		boost::put(boost::vertex_bag_type,    *nice_tree_, root_, TreeWidth<OriginalGraphType>::ROOT_BAG);
+
 		if (content.size() > 0)
-			boost::put(boost::vertex_bag_special, *nice_tree_, last_vertex,                            root_); 
+			boost::put(boost::vertex_bag_special, *nice_tree_, root_, last_vertex); 
 
 		boost::add_edge(root_, child, *nice_tree_);
 
@@ -726,7 +727,7 @@ namespace BALL
 		TreeDecompositionBag new_vertex = boost::add_vertex(*nice_tree_);
 
 		TreeDecompositionContent new_content;
-		new_content.push_back(leaf_inner_vertex);
+		new_content.insert(leaf_inner_vertex);
 
 		boost::put(boost::vertex_bag_content, *nice_tree_, new_vertex, new_content                           );
 		boost::put(boost::vertex_bag_special, *nice_tree_, new_vertex, leaf_inner_vertex                     );
@@ -813,7 +814,7 @@ namespace BALL
 				TreeDecompositionBag new_parent = boost::add_vertex(*nice_tree_);
 
 				TreeDecompositionContent current_parent_set = boost::get(boost::vertex_bag_content, *nice_tree_, current_parent);
-				current_parent_set.push_back(vertex);
+				current_parent_set.insert(vertex);
 
 				boost::put(boost::vertex_bag_content, *nice_tree_, new_parent, current_parent_set                         );
 				boost::put(boost::vertex_bag_type,    *nice_tree_, new_parent, TreeWidth<OriginalGraphType>::INTRODUCE_BAG);
@@ -848,7 +849,8 @@ namespace BALL
 				TreeDecompositionBag new_parent = boost::add_vertex(*nice_tree_);
 
 				TreeDecompositionContent new_content = boost::get(boost::vertex_bag_content, *nice_tree_, current_parent);
-				new_content.remove(vertex);
+				typename TreeDecompositionContent::iterator vertex_it = std::find(new_content.begin(), new_content.end(), vertex);
+				new_content.erase(vertex_it);
 
 				boost::put(boost::vertex_bag_content, *nice_tree_, new_parent, new_content                             );
 				boost::put(boost::vertex_bag_type,    *nice_tree_, new_parent, TreeWidth<OriginalGraphType>::FORGET_BAG);

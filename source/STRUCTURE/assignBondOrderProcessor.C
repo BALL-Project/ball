@@ -22,8 +22,9 @@
 #include <QtXml/qdom.h>
 
 #include <BALL/STRUCTURE/BONDORDERS/AStarBondOrderStrategy.h>
-#include <BALL/STRUCTURE/BONDORDERS/KGreedyBondOrderStrategy.h>
 #include <BALL/STRUCTURE/BONDORDERS/branchAndBoundBondOrderStrategy.h>
+#include <BALL/STRUCTURE/BONDORDERS/FPTBondOrderStrategy.h>
+#include <BALL/STRUCTURE/BONDORDERS/KGreedyBondOrderStrategy.h>
 #ifdef BALL_HAS_LPSOLVE
 # include <BALL/STRUCTURE/BONDORDERS/ILPBondOrderStrategy.h>
 #endif
@@ -65,6 +66,7 @@ namespace BALL
 	const String AssignBondOrderProcessor::Algorithm::ILP = "ilp";
 	const String AssignBondOrderProcessor::Algorithm::K_GREEDY = "k_greedy";
 	const String AssignBondOrderProcessor::Algorithm::BRANCH_AND_BOUND = "branch_and_bound";
+	const String AssignBondOrderProcessor::Algorithm::FPT = "fpt";
 
 	const char* AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS = "overwrite_single_bond_orders";
 	const bool  AssignBondOrderProcessor::Default::OVERWRITE_SINGLE_BOND_ORDERS = true;
@@ -158,6 +160,7 @@ namespace BALL
 		strategies_["AStar"] = boost::shared_ptr<BondOrderAssignmentStrategy>(new AStarBondOrderStrategy(this));
 		strategies_["KGreedy"] = boost::shared_ptr<BondOrderAssignmentStrategy>(new KGreedyBondOrderStrategy(this));
 		strategies_["BranchAndBound"] = boost::shared_ptr<BondOrderAssignmentStrategy>(new BranchAndBoundBondOrderStrategy(this));
+		strategies_["FPT"] = boost::shared_ptr<BondOrderAssignmentStrategy>(new FPTBondOrderStrategy(this));
 #ifdef BALL_HAS_LPSOLVE
 		strategies_["ILP"] = boost::shared_ptr<BondOrderAssignmentStrategy>(new ILPBondOrderStrategy(this));
 #endif
@@ -472,7 +475,7 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 #endif					
 
 					BondOrderAssignmentStrategy* strategy = NULL;
-
+std::cout << options.get(Option::ALGORITHM) << std::endl;
 					if (options.get(Option::ALGORITHM) == Algorithm::A_STAR) 	
 					{
 						strategy = strategies_["AStar"].get();
@@ -484,6 +487,10 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 					else if (options.get(Option::ALGORITHM) == Algorithm::BRANCH_AND_BOUND)
 					{
 						strategy = strategies_["BranchAndBound"].get();
+					}
+					else if (options.get(Option::ALGORITHM) == Algorithm::FPT)
+					{
+						strategy = strategies_["FPT"].get();
 					}
 					else if (options.get(Option::ALGORITHM) == Algorithm::ILP)
 					{
@@ -525,12 +532,11 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 						solutions_.push_back(*solution);
 
 						// Do we have to find more solutions?
-						Size max_n = options.getInteger(Option::MAX_NUMBER_OF_SOLUTIONS);
 						bool found_another = true;
 						bool last_sol_is_optimal = true;
 
 						while (    found_another  
-						        && ((getNumberOfComputedSolutions() < max_n) || (!max_n))
+						        && ((getNumberOfComputedSolutions() < max_number_of_solutions_) || (!max_number_of_solutions_))
 						        && (last_sol_is_optimal || (compute_also_non_optimal_solutions_))
 						      )
 						{	
@@ -1245,7 +1251,7 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 		{	
 			// apply the i-th solution
 			apply(i);
-
+std::cout << "solution " << i << " " << solutions_[i].ac << std::endl;
 			// What kind of composite do we have?
 			if (RTTI::isKindOf<System>(*solutions_[i].ac))
 			{
@@ -1296,6 +1302,10 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 		else if (options.get(Option::ALGORITHM) == Algorithm::BRANCH_AND_BOUND)
 		{
 			strategy = strategies_["BranchAndBound"].get();
+		}
+		else if (options.get(Option::ALGORITHM) == Algorithm::FPT)
+		{
+			strategy = strategies_["FPT"].get();
 		}
 		else if (options.get(Option::ALGORITHM) == Algorithm::ILP)
 		{

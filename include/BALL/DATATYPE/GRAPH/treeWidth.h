@@ -94,10 +94,10 @@ namespace BALL
 			typedef typename GRAPH::GraphTraits<UndirectedGraph>::EditableGraph EditableGraph;
 			typedef typename boost::graph_traits<UndirectedGraph>::vertex_descriptor OriginalVertexType;
 
-			typedef std::list<OriginalVertexType> TreeDecompositionContent;
+			typedef std::set<OriginalVertexType> TreeDecompositionContent;
 
 			typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS,
-																		  boost::property<boost::vertex_bag_content_t, std::list<OriginalVertexType>,
+																		  boost::property<boost::vertex_bag_content_t, std::set<OriginalVertexType>,
 																			boost::property<boost::vertex_bag_special_t, OriginalVertexType, 
 																			boost::property<boost::vertex_bag_type_t, int> > >, 
 																	  boost::no_property> TreeDecompositionGraph;
@@ -420,7 +420,7 @@ namespace BALL
 
 				typedef typename TreeWidth<OriginalGraphType>::OriginalVertexType OriginalVertexType;
 
-				typedef std::list<OriginalVertexType> TreeDecompositionContent;
+				typedef std::set<OriginalVertexType> TreeDecompositionContent;
 
 				/**
 				 * Builds a tree decomposition by the given elimination order

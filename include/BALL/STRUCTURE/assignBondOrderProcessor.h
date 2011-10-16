@@ -226,6 +226,7 @@ namespace BALL
 			{
 				static const String A_STAR;
 				static const String ILP;
+				static const String FPT;
 				static const String K_GREEDY;
 				static const String BRANCH_AND_BOUND;
 			};

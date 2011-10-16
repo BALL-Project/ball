@@ -114,7 +114,7 @@ namespace BALL
 	boost::shared_ptr<BondOrderAssignment> AStarBondOrderStrategy::computeNextSolution()
 	{
 		// try to find a solution
-		while(!queue_.empty())
+		while (!queue_.empty())
 		{
 
 #ifdef DEBUG

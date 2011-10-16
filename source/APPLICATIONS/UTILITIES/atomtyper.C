@@ -39,7 +39,11 @@ int main(int argc, char** argv)
 	System system;
 	*infile >> system;
 
+
+// TEST
+
 	AssignBondOrderProcessor abp;
+
 	system.apply(abp);
 
 	Options options;
