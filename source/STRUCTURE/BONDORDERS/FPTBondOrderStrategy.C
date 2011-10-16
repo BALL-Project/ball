@@ -1148,8 +1148,8 @@ namespace BALL
 	//*           EdgeComparator_                                                                         *
 	//*****************************************************************************************************
 
-	bool FPTBondOrderStrategy::EdgeComparator_::operator() (typename FPTBondOrderStrategy::EdgeComparator_::Edge const& e1,
-			                                                    typename FPTBondOrderStrategy::EdgeComparator_::Edge const& e2)
+	bool FPTBondOrderStrategy::EdgeComparator_::operator() (FPTBondOrderStrategy::EdgeComparator_::Edge const& e1,
+			                                                    FPTBondOrderStrategy::EdgeComparator_::Edge const& e2)
 	{
 		typedef FPTBondOrderStrategy::VertexType VertexType;
 
