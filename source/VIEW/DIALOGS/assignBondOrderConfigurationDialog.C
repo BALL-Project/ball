@@ -44,7 +44,13 @@ namespace BALL
 			connect(overwrite_tripleBO_box, SIGNAL(stateChanged(int)), this, SLOT(validateBOBoxes_()));
 			connect(overwrite_selected_bonds_box, SIGNAL(stateChanged(int)), this, SLOT(validateBOBoxes_()));
 
+			connect(ASTAR_button, SIGNAL(clicked()), this, SLOT(validateStrategies_()));
+			connect(ILP_button,   SIGNAL(clicked()), this, SLOT(validateStrategies_()));
+			connect(FPT_button,   SIGNAL(clicked()), this, SLOT(validateStrategies_()));
+			connect(all_optimal_solutions_button, SIGNAL(clicked()), this, SLOT(validateStrategies_()));
+
 			validateBOBoxes_();
+			validateStrategies_();
 
 #ifndef BALL_HAS_LPSOLVE
 			ILP_button->setEnabled(false);
@@ -68,7 +74,7 @@ namespace BALL
 			// if one of the bond orders is checked, the "selected" box must be
 			// de-activated and vice versa
 			bool    selected_checked = overwrite_selected_bonds_box->isChecked();
-		
+
 			if (selected_checked)
 			{
 				overwrite_singleBO_box->setChecked(!selected_checked);
@@ -78,7 +84,26 @@ namespace BALL
 			overwrite_singleBO_box->setDisabled(selected_checked);
 			overwrite_doubleBO_box->setDisabled(selected_checked);
 			overwrite_tripleBO_box->setDisabled(selected_checked);
-		
+		}
+
+		void AssignBondOrderConfigurationDialog::validateStrategies_()
+		{
+			// if the FPT strategy is selected we have to disable some functionality
+			bool FPT_touched = FPT_button->isChecked();
+			bool ILP_touched = ILP_button->isChecked();
+			bool touched = FPT_touched || ILP_touched;
+			if (touched)
+			{
+				add_hydrogens_checkBox->setChecked(!touched);
+			}
+			hydrogen_check_options->setDisabled(touched);
+			bond_length_groupBox->setDisabled(touched);
+
+			if (FPT_touched)
+			{
+				all_optimal_solutions_button->setChecked(!FPT_touched);
+				n_opt_solutions_button->setChecked(FPT_touched);
+			}
 		}
 
 		void AssignBondOrderConfigurationDialog::browseParameterFiles_()
@@ -117,8 +142,10 @@ namespace BALL
 
 		String AssignBondOrderConfigurationDialog::getValue_(const QCheckBox* box) const
 		{
-			if (box->isChecked()) return "true";
-			else 									return "false";
+			if (box->isChecked())
+				return "true";
+			else
+				return "false";
 		}
 
 		float AssignBondOrderConfigurationDialog::getValue_(const QLineEdit* edit) const

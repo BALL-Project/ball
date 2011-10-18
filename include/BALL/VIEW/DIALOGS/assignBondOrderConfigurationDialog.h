@@ -41,7 +41,7 @@ namespace BALL
 			friend class MolecularStructure;
 
 			Q_OBJECT
-			
+
 			public:
 
 			BALL_EMBEDDABLE(AssignBondOrderConfigurationDialog,ModularWidget)
@@ -51,7 +51,7 @@ namespace BALL
 
 			/// Destructor
 			virtual ~AssignBondOrderConfigurationDialog();
-				
+
 			///
 			virtual void initializeWidget(MainControl& main_control);
 
@@ -59,7 +59,7 @@ namespace BALL
 
 			///
 			virtual void resetOptions();
-			
+
 			///
 			void accept();
 
@@ -72,15 +72,16 @@ namespace BALL
 				virtual void balanceParameterChanged_();
 
 				virtual void validateBOBoxes_();
+				virtual void validateStrategies_();
 
 				virtual void dialogButtonClicked_(QAbstractButton* button);
 
 			protected:
 
 			private:
-				
+
 				String getValue_(const QCheckBox* box) const;
-				
+
 				float getValue_(const QLineEdit* edit) const
 					throw(Exception::InvalidFormat);
 		};
