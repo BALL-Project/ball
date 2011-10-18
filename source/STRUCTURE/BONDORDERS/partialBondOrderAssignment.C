@@ -8,7 +8,7 @@ namespace BALL
 
 	// Default constructor
 	PartialBondOrderAssignment::PartialBondOrderAssignment(AssignBondOrderProcessor* parent)
-		: estimated_atom_type_penalty(0.), 
+		: estimated_atom_type_penalty(0.),
 			estimated_bond_length_penalty(0.),
 			bond_orders(),
 			last_bond(),
@@ -20,7 +20,7 @@ namespace BALL
 	PartialBondOrderAssignment::~PartialBondOrderAssignment()
 	{
 	}
-	
+
 	// clear-method
 	void PartialBondOrderAssignment::clear()
 	{
@@ -33,7 +33,7 @@ namespace BALL
 
 	// the less operator
 	// note: we want a reverse sort, hence we actually return a "greater"
-	bool PartialBondOrderAssignment::operator < (const PartialBondOrderAssignment& b) const 
+	bool PartialBondOrderAssignment::operator < (const PartialBondOrderAssignment& b) const
 	{
 		bool value = false;
 		if (coarsePenalty() > b.coarsePenalty())
@@ -41,7 +41,7 @@ namespace BALL
 			value = true;
 		}
 		else
-		{ 
+		{
 			if (coarsePenalty() == b.coarsePenalty())
 			{
 				if (abop->use_fine_penalty_ && (finePenalty() > b.finePenalty()))
@@ -56,11 +56,11 @@ cout << "PartialBondOrderAssignment::operator <: " <<  coarsePenalty() << " > " 
 	" yields" << value <<  std::endl;
 #endif
 
-		return value; 
+		return value;
 	}
-	
+
 	boost::shared_ptr<BondOrderAssignment> PartialBondOrderAssignment::convertToFullAssignment()
-	{	
+	{
 		boost::shared_ptr<BondOrderAssignment> result(new BondOrderAssignment(abop));
 
 		result->valid = true;
@@ -71,25 +71,25 @@ cout << "PartialBondOrderAssignment::operator <: " <<  coarsePenalty() << " > " 
 		Size num_of_virtual_bonds = abop->num_of_virtual_bonds_;
 
 		result->ac = abop->ac_;
-		
+
 		if (bond_orders.size() != (total_num_of_bonds + num_of_virtual_bonds))
-	 	{
+		{
 			Log.error() << "Error: " << __FILE__ << " " << __LINE__  << std::endl;
 			result->valid = false;
 		}
-		
+
 		result->estimated_atom_type_penalty   = estimated_atom_type_penalty;
 		result->estimated_bond_length_penalty = estimated_bond_length_penalty;
 
-	 	// convert the entry's bond order vector into a HashMap
-	 	//    first the original bonds
+		// convert the entry's bond order vector into a HashMap
+		//    first the original bonds
 		for (Size i=0; i < total_num_of_bonds; i++)
-		{	
+		{
 			result->bond_order_map[abop->index_to_bond_[i]] =  bond_orders[i];
-		} 
+		}
 		//   then the virtual bonds
 		for (Size i = 0; i < num_of_virtual_bonds; i++)
-		{	
+		{
 			int num_H = bond_orders[total_num_of_bonds + i];
 			if (num_H > 0)
 			{
@@ -101,7 +101,7 @@ cout << "PartialBondOrderAssignment::operator <: " <<  coarsePenalty() << " > " 
 		// Nothing has to be done, since this datastructure is handled by the
 		// methods apply_() and computeNextSolution()	
 		//atoms_to_delete;
-		
+
 		// compute the total charge
 		// TODO: the favoured Nobel gas configuration should be stored in class PTE
 		// NOTE: this is just a workaround as long no core-developer decision has been made!
@@ -109,19 +109,19 @@ cout << "PartialBondOrderAssignment::operator <: " <<  coarsePenalty() << " > " 
 		for (AtomIterator a_it = abop->ac_->beginAtom(); a_it != abop->ac_->endAtom(); a_it++)
 		{
 			int valence = 0;
-			int atom_charge = 0;				
+			int atom_charge = 0;
 			for (Atom::BondIterator b_it = a_it->beginBond(); b_it != a_it->endBond(); b_it++)
 			{
-				valence += result->bond_order_map[&*b_it];	
+				valence += result->bond_order_map[&*b_it];
 			}
-			
+
 			if (result->number_of_virtual_hydrogens.find(&*a_it) != result->number_of_virtual_hydrogens.end())
 				valence += result->number_of_virtual_hydrogens[&*a_it];
 
 			// NOTE: This is just an heuristic! 
 			if (  a_it->getElement() == PTE[Element::H])
 					//|(a_it->getElement() == PTE[Element::He]))
-			{	
+			{
 				atom_charge -= a_it->getElement().getGroup() - valence;
 			}
 			else if (  (a_it->getElement().getGroup() == 1)
@@ -190,9 +190,9 @@ cout << "PartialBondOrderAssignment::operator <: " <<  coarsePenalty() << " > " 
 #if defined DEBUG || defined DEBUG_ESTIMATE
 cout << "PartialBondOrderAssignment::called estimatePenalty_()"<< std::endl;
 #endif
-	
-		AtomIterator a_it = abop->ac_->beginAtom();	
-		Atom::BondIterator b_it; 
+
+		AtomIterator a_it = abop->ac_->beginAtom();
+		Atom::BondIterator b_it;
 		int valence = 0;       // the so far fixed valence of the considered atom
 		bool closed = true;    // are all bonds of this atom fixed? 
 		float estimated_atom_penalty = 0.;
@@ -204,7 +204,7 @@ cout << "PartialBondOrderAssignment::called estimatePenalty_()"<< std::endl;
 		// NOTE: this variable indexes the currently addressed atom. We cannot rely on
 		// 			 getIndex for this task since this is relative to the static atom array,
 		// 			 not to the current atom container!
-		Index current_atom_index = 0; 
+		Index current_atom_index = 0;
 
 		// Evaluate all atom type and bond length penalties
 		for (; a_it != abop->ac_->endAtom() && valid ; a_it++, current_atom_index++)
@@ -223,8 +223,8 @@ cout << "PartialBondOrderAssignment::called estimatePenalty_()"<< std::endl;
 
 			// Iterate over all bonds of this atom
 			//   first its original bonds
-			for (b_it = a_it->beginBond(); +b_it; b_it++) 
-			{			
+			for (b_it = a_it->beginBond(); +b_it; b_it++)
+			{
 				Bond* current_bond = &*b_it;
 				// Do we have a valid bond? 
 				if (abop->bond_to_index_.find(current_bond) != abop->bond_to_index_.end())
@@ -240,7 +240,7 @@ cout << "PartialBondOrderAssignment::called estimatePenalty_()"<< std::endl;
 						// We just consider non-virtual bonds here!
 						if (abop->bond_lengths_penalties_.find(current_bond) != abop->bond_lengths_penalties_.end())
 						{
-							current_bond_length_penalty += abop->bond_lengths_penalties_[&*b_it][order]; 
+							current_bond_length_penalty += abop->bond_lengths_penalties_[&*b_it][order];
 						}
 						else
 						{
@@ -249,8 +249,8 @@ cout << "PartialBondOrderAssignment::called estimatePenalty_()"<< std::endl;
 
 #if defined DEBUG || defined DEBUG_ESTIMATE
 						cout << "   bond " << abop->bond_to_index_[&*b_it] << " (" << b_it->getFirstAtom()->getFullName() << "-" << b_it->getSecondAtom()->getFullName() << ") fixed"
-							<< " by order " << bond_orders[abop->bond_to_index_[&*b_it]]  
-							<< " : bond len penalty: " << abop->bond_lengths_penalties_[&*b_it][order] 
+							<< " by order " << bond_orders[abop->bond_to_index_[&*b_it]]
+							<< " : bond len penalty: " << abop->bond_lengths_penalties_[&*b_it][order]
 							<< " -+-> cur bond len pen:"<< current_bond_length_penalty << std::endl;
 #endif
 
@@ -259,9 +259,9 @@ cout << "PartialBondOrderAssignment::called estimatePenalty_()"<< std::endl;
 					{
 						closed = false;
 						num_free_bonds++;
-						free_bonds.push_back(&*b_it); 	// store the bond length penalty
+						free_bonds.push_back(&*b_it); // store the bond length penalty
 					}
-				} 
+				}
 				else  // no valid bond
 				{
 					Log.error() << "Error: invalid bond!" << __FILE__ << " " << __LINE__ << std::endl;
@@ -278,7 +278,7 @@ cout << "PartialBondOrderAssignment::called estimatePenalty_()"<< std::endl;
 			}
 
 			// Decide, whether there is a free virtual bond left => atom not closed yet!
-			if (   abop->add_missing_hydrogens_ 
+			if (   abop->add_missing_hydrogens_
 					&& (last_bond != (abop->total_num_of_bonds_ + abop->num_of_virtual_bonds_ - 1)))
 			{
 				closed = false;
@@ -315,20 +315,20 @@ cout << "PartialBondOrderAssignment::called estimatePenalty_()"<< std::endl;
 			// Remember, we start atom counting with 0
 			if (current_atom_index >= (int)abop->atom_to_block_.size())
 			{
-				Log.error() << "Error: Atom  " << a_it->getFullName() << " out of index ! " 
+				Log.error() << "Error: Atom  " << a_it->getFullName() << " out of index ! "
 				            <<  __FILE__ << " "  << __LINE__ << std::endl;
 
 				estimated_atom_type_penalty = INFINITE_PENALTY;
-				return false; 
+				return false;
 			}
-			
+
 			// This should not happen either: Far to many virtual hydrogens choosen 
 			if (virtual_order > (int)abop->atom_to_block_[current_atom_index].size())
 			{
-				Log.error() << "Error: Too many virtual bonds  " 
+				Log.error() << "Error: Too many virtual bonds  "
 				            <<  __FILE__ << " " << __LINE__ << std::endl;
 				estimated_atom_type_penalty = INFINITE_PENALTY;
-				return false; 
+				return false;
 			}
 
 			// Are all bonds of this atom already fixed?
@@ -339,18 +339,18 @@ cout << "PartialBondOrderAssignment::called estimatePenalty_()"<< std::endl;
 
 				if (block < 0)
 				{
-					Log.error() << "Error: No penalty vector for atom " << current_atom_index << " " 
+					Log.error() << "Error: No penalty vector for atom " << current_atom_index << " "
 					            << virtual_order << "! " << __FILE__ << " " << __LINE__ << std::endl;
-										
+
 					estimated_atom_type_penalty = INFINITE_PENALTY;
-					return false; 
+					return false;
 				}
 
 				int current_start_valence = abop->block_to_start_valence_[block];
 				int current_block_length  = abop->block_to_length_[block];
 				int current_end_valence   = current_start_valence + current_block_length-1;
 				int current_start_index   = abop->block_to_start_idx_[block];
-				
+
 				// Is the valence found already greater than the largest for this atom type?
 				if (valence > current_end_valence)
 				{
@@ -360,9 +360,9 @@ cout << "  Error: valence explosion for atom " << a_it->getFullName() << std::en
 #endif
 					if (abop->evaluation_mode_)
 					{
-						Log.info() << "  AssignBondOrderProcessor: Valence explosion for atom " 
-						           <<   a_it->getFullName()  << " :  val " << valence 
-					                   << ", free bonds "<<  num_free_bonds <<  ", Ruleid " <<  block +1 
+						Log.info() << "  AssignBondOrderProcessor: Valence explosion for atom "
+						           <<   a_it->getFullName()  << " :  val " << valence
+					                   << ", free bonds "<<  num_free_bonds <<  ", Ruleid " <<  block +1
 						           << " with length " <<  abop->block_to_length_[block] << std::endl;
 					}
 
@@ -381,14 +381,14 @@ cout << "  CLOSED atom " <<   a_it->getFullName() << " with valence " << valence
 
 					// add the actual penalty
 					estimated_atom_penalty   +=  abop->penalties_[current_start_index + valence  - current_start_valence];
-					estimated_bond_penalty   +=  current_bond_length_penalty; 
+					estimated_bond_penalty   +=  current_bond_length_penalty;
 
 #if defined DEBUG || defined DEBUG_ESTIMATE
 cout << " ESTIMATE RESULT:  atom type penalty   +" << penalties_[current_start_index + valence - current_start_valence] << " = " << estimated_atom_penalty << std::endl
 	   << "                   bond length penalty +" << current_bond_length_penalty << " = " << estimated_bond_penalty << std::endl;
 #endif
-	
-		
+
+
 				}
 				else // valence too small
 				{
@@ -397,9 +397,9 @@ cout << " ERROR: "<< a_it->getFullName() << " valence too small : " << valence <
 #endif
 					if (abop->evaluation_mode_)
 					{
-						Log.info() << "AssignBondOrderProcessor: Valence of " << a_it->getFullName() 
-						           << " too small : " << valence   
-						           <<   " < " <<  current_start_valence 
+						Log.info() << "AssignBondOrderProcessor: Valence of " << a_it->getFullName()
+						           << " too small : " << valence
+						           <<   " < " <<  current_start_valence
 						           << ". Consider adding hydrogen atoms!" << std::endl;
 					}
 					estimated_atom_type_penalty = INFINITE_PENALTY;
@@ -414,13 +414,13 @@ cout << " ERROR: "<< a_it->getFullName() << " valence too small : " << valence <
 				//       (which was precomputed in a preprocessing step and stored in the 0-th entry)
 				// 			 in the check-if-atom-is-closed-loop, such that we do not have to do this 
 				// 			 in the heuristic! 
-				
+
 				float current_atom_type_penalty = 0.;
-				current_atom_type_penalty = estimateAtomTypePenalty_(&*a_it, current_atom_index, 
+				current_atom_type_penalty = estimateAtomTypePenalty_(&*a_it, current_atom_index,
 			                         valence, virtual_order, num_free_bonds, heuristic_index);
 
 				if (current_atom_type_penalty >= 0)
-					estimated_atom_penalty += current_atom_type_penalty;			
+					estimated_atom_penalty += current_atom_type_penalty;
 				else
 					return false;
 
@@ -436,7 +436,7 @@ cout << " ERROR: "<< a_it->getFullName() << " valence too small : " << valence <
 
 		// store the computed atom type penalty
 		estimated_atom_type_penalty = estimated_atom_penalty;
-		
+
 		//store the computed bond length penalty
 		estimated_bond_length_penalty = estimated_bond_penalty;
 
@@ -454,10 +454,10 @@ cout << " ) : atom type pen = " << estimated_atom_type_penalty << ", bond len pe
 
 	// Computes the atom type penalty for a given atom
 	// returns -1 if no valid atom type penalty for this atom could be computed!
-	float PartialBondOrderAssignment::estimateAtomTypePenalty_(Atom* atom, Index atom_index, int fixed_valence, 
-																														 int fixed_virtual_order, int num_free_bonds, 
-																														 HEURISTIC_INDEX heuristic_index) 
-	{	
+	float PartialBondOrderAssignment::estimateAtomTypePenalty_(Atom* atom, Index atom_index, int fixed_valence,
+																														 int fixed_virtual_order, int num_free_bonds,
+																														 HEURISTIC_INDEX heuristic_index)
+	{
 		bool found_a_value = false;
 		// We have to estimate the penalty heuristically 
 		// by finding the minimum in all further possible penalty vector entries.
@@ -479,15 +479,15 @@ cout << " ) : atom type pen = " << estimated_atom_type_penalty << ", bond len pe
 				int current_block_length  = abop->block_to_length_[block];
 				int current_end_valence   = current_start_valence + current_block_length-1;
 				int current_start_index   = abop->block_to_start_idx_[block];
-				
+
 				if (fixed_valence <= current_end_valence)
-				{ 
+				{
 					// at which position in the current penalty vector are we at the moment?
 					int i = current_start_valence;
 					if (heuristic_index == SIMPLE)
 					{
-				 		// this is the default case
-				 		// Position i = current_start_valence;
+						// this is the default case
+						// Position i = current_start_valence;
 					}
 					else if (heuristic_index == MEDIUM)
 					{
@@ -548,7 +548,7 @@ cout << " ) : atom type pen = " << estimated_atom_type_penalty << ", bond len pe
 								if (    abop->add_missing_hydrogens_
 										&& (abop->atom_to_virtual_bond_index_.find(neighbor) != abop->atom_to_virtual_bond_index_.end()))
 								{
-									neighbors_virtual_bonds = std::max((short)0,bond_orders[abop->atom_to_virtual_bond_index_[neighbor] 
+									neighbors_virtual_bonds = std::max((short)0,bond_orders[abop->atom_to_virtual_bond_index_[neighbor]
 									                                   + abop->total_num_of_bonds_]);
 								}
 							}
@@ -560,20 +560,20 @@ cout << " ) : atom type pen = " << estimated_atom_type_penalty << ", bond len pe
 							int n_current_end_valence   = n_current_start_valence + n_current_block_length-1;
 
 							// add the maximal possible bond order
-							max_valence += (n_current_end_valence - (neighbors_num_free_bonds-1) 
-									-  neighbors_virtual_bonds 
+							max_valence += (n_current_end_valence - (neighbors_num_free_bonds-1)
+									-  neighbors_virtual_bonds
 									-  neighbors_bond_order);
 
 						}// end of all neighbors
 
 						current_end_valence = std::min(current_end_valence, max_valence);
 					}
-					else 
+					else
 					{
 						Log.error() << __FILE__ << " " << __LINE__ << " : No heuristic defined! Please check the option Option::HEURISTIC."  << std::endl;
-						return min_atom_type_penalty; 
+						return min_atom_type_penalty;
 					}
-				
+
 					// for every remaining valence of the atom under consideration
 					// (we know there is at least one)
 					for (; i <= current_end_valence; i++)
@@ -591,22 +591,22 @@ cout << " ) : atom type pen = " << estimated_atom_type_penalty << ", bond len pe
 				{
 					if (abop->evaluation_mode_)
 					{
-						Log.info() << "  AssignBondOrderProcessor: Valence explosion for atom " 
-						           <<   atom->getFullName()  << " :  val " << fixed_valence 
-						           << ", free bonds "<<  num_free_bonds <<  ", Ruleid " <<  block +1 
+						Log.info() << "  AssignBondOrderProcessor: Valence explosion for atom "
+						           <<   atom->getFullName()  << " :  val " << fixed_valence
+						           << ", free bonds "<<  num_free_bonds <<  ", Ruleid " <<  block +1
 						           << " with length " <<  abop->block_to_length_[block] << std::endl;
 					}
 				}
 			} // end of valid block
 		} // end of all virtual orders
-		
+
 		if (!found_a_value)
 		{
 			min_atom_type_penalty = -1;
 		}
-		return min_atom_type_penalty; 
+		return min_atom_type_penalty;
 	}
-	
+
 
 	// Computes the min possible bond length penalty for all free bonds of this atom
 	// returns -1 if no bond length penalty could be found!
@@ -614,11 +614,11 @@ cout << " ) : atom type pen = " << estimated_atom_type_penalty << ", bond len pe
 	// over all free bonds of this atom seems to be far to expensive.
 	// In addition take care of the fact, that all bonds between two unclosed atoms 
 	// are counted twice -> all bonds should be counted twice!
-	float PartialBondOrderAssignment::estimateBondLengthPenalty_(Index atom_index, const vector<Bond*>& free_bonds, 
+	float PartialBondOrderAssignment::estimateBondLengthPenalty_(Index atom_index, const vector<Bond*>& free_bonds,
 	                                                         int fixed_virtual_order,  int fixed_valence, int num_free_bonds)
-	{	
+	{
 		// NOTE: virtual bond are excluded!
-		
+
 		// we have to estimate the bond length penalty heuristically 
 		// by trying to distribute the remaining free valences over all remaining free bonds
 		// such that the summed bond length penalty is minimal
@@ -627,10 +627,10 @@ cout << " ) : atom type pen = " << estimated_atom_type_penalty << ", bond len pe
 		float min_bond_length_penalty = Limits<float>::max();
 
 		bool found_a_value = false;
-	
+
 		// all possible free valences
 		// NOTE: virtual hydrogens may use or don't use one free valence
-		
+
 		// just look into the penalty vectors starting from the already fixed virtual order
 		for (Size vi = fixed_virtual_order; vi < abop->atom_to_block_[atom_index].size(); vi++)
 		{
@@ -644,38 +644,38 @@ cout << " ) : atom type pen = " << estimated_atom_type_penalty << ", bond len pe
 				int current_start_valence = abop->block_to_start_valence_[block];
 				int current_block_length  = abop->block_to_length_[block];
 				int current_end_valence   = current_start_valence + current_block_length-1;
-				
+
 				// do we have an explosion ?
 				if (fixed_valence <= current_end_valence)
 				{
 					float bond_length_penalty_current_set_up = 0;
-					
+
 					// iterating over all free bonds 
 					// (we know there is at least one free bond)
-					for (Size fb=0; fb < free_bonds.size(); fb++) 
+					for (Size fb=0; fb < free_bonds.size(); fb++)
 					{
-						float current_bond_min = Limits<float>::max();	
+						float current_bond_min = Limits<float>::max();
 						// Note: for simplification we do not share the free bond 
 						//       orders correctly! We just find the min!
 						// the number of the remaining bond orders to be assigned 
 						// to the free bonds are :
 						std::vector<float>& current_bond_length_penalties = abop->bond_lengths_penalties_[free_bonds[fb]];
-						int up_to = std::min( (int)current_bond_length_penalties.size()-1, 
-						                      current_end_valence -(num_free_bonds-1)-fixed_valence); 
-						
+						int up_to = std::min( (int)current_bond_length_penalties.size()-1,
+						                      current_end_valence -(num_free_bonds-1)-fixed_valence);
+
 						// for all possible valences for this bond
 						for (int j = 1; j <= up_to; j++)
 						{
-							float deviation = current_bond_length_penalties[j]; 
+							float deviation = current_bond_length_penalties[j];
 
 							if (deviation < current_bond_min)
 							{
 								current_bond_min = deviation;
 							}
 						} // end of for all possible valences for this bond
-						bond_length_penalty_current_set_up	+= current_bond_min;
+						bond_length_penalty_current_set_up += current_bond_min;
 					} // end of for all free bonds
-					
+
 					if (bond_length_penalty_current_set_up < min_bond_length_penalty)
 					{
 						found_a_value = true;

@@ -92,7 +92,7 @@ namespace BALL
 			Assignment_ const& solution = combiner_->getSolution();
 
 			result->estimated_atom_type_penalty = solution.penalty;
-			
+
 			//TODO: virtual hydrogens? charges?
 			for (Position current_bond_index=0; current_bond_index < combiner_->sorted_edges.size(); ++current_bond_index)
 			{
@@ -107,14 +107,20 @@ namespace BALL
 			{
 				result->bond_orders.push_back(result->bond_order_map[&*bond_it]);
 			}
-		} 
+		}
+		else
+		{
+		/*	Log.info() << "AssignBondOrderProcessor: strategy FPT does not support computeNextSolution(). " << endl
+								 << "Please use the options Option::MAX_NUMBER_OF_SOLUTIONS or Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS " << endl
+								 << "to compute additional solutions." << endl; */
+		}
 
 		return result;
 	}
 
 	void FPTBondOrderStrategy::initPenaltyData_()
 	{
-		penalties_              = &abop->penalties_;	
+		penalties_              = &abop->penalties_;
 		block_to_start_idx_     = &abop->block_to_start_idx_;
 		block_to_length_        = &abop->block_to_length_;
 		block_to_start_valence_ = &abop->block_to_start_valence_;
@@ -392,11 +398,11 @@ namespace BALL
 	//*****************************************************************************************************
 
 	FPTBondOrderStrategy::FPTBondOrderAssignment_::FPTBondOrderAssignment_(FPTBondOrderStrategy& parent,
-								             										 boost::shared_ptr<TreeDecomposition>& ntd, Penalty upper_bound) 
-		: parent_(&parent), 
+			                          boost::shared_ptr<TreeDecomposition>& ntd, Penalty upper_bound)
+		: parent_(&parent),
 		  molecule_(parent.computing_data_->molecule_graph),
-			ntd_(ntd), 
-			properties_(boost::num_vertices(ntd->_g)), 
+			ntd_(ntd),
+			properties_(boost::num_vertices(ntd->_g)),
 			upper_bound_(upper_bound),
 			max_bond_order_(parent.abop->max_bond_order_),
 			max_valence_(parent.max_valence)
@@ -416,8 +422,8 @@ namespace BALL
 		return table->bestPenalty();
 	}
 
-	FPTBondOrderStrategy::DPTable_* FPTBondOrderStrategy::FPTBondOrderAssignment_::operator() (TreeDecompositionBag& bag, 
-	                                                                                           std::vector<DPTable_*>::const_iterator begin, 
+	FPTBondOrderStrategy::DPTable_* FPTBondOrderStrategy::FPTBondOrderAssignment_::operator() (TreeDecompositionBag& bag,
+	                                                                                           std::vector<DPTable_*>::const_iterator begin,
 																																														 std::vector<DPTable_*>::const_iterator end)
 	{
 		AdditionalBagProperties_& bag_properties = properties_[boost::get(boost::vertex_index, *ntd_, bag)];

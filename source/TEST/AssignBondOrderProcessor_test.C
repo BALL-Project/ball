@@ -140,51 +140,51 @@ CHECK(setDefaultOptions())
 	TEST_EQUAL(testbop.options.getBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS),
 												AssignBondOrderProcessor::Default::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS)
 
-	TEST_EQUAL(testbop.options.getBool(AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS), 
-	 											AssignBondOrderProcessor::Default::OVERWRITE_SINGLE_BOND_ORDERS)
-	
+	TEST_EQUAL(testbop.options.getBool(AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS),
+										AssignBondOrderProcessor::Default::OVERWRITE_SINGLE_BOND_ORDERS)
+
 	TEST_EQUAL(testbop.options.getBool(AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS),
 												AssignBondOrderProcessor::Default::OVERWRITE_DOUBLE_BOND_ORDERS)
-	
+
 	TEST_EQUAL(testbop.options.getBool(AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS),
 												AssignBondOrderProcessor::Default::OVERWRITE_TRIPLE_BOND_ORDERS)
-	
-	TEST_EQUAL(testbop.options.getBool(AssignBondOrderProcessor::Option::OVERWRITE_SELECTED_BONDS),  
+
+	TEST_EQUAL(testbop.options.getBool(AssignBondOrderProcessor::Option::OVERWRITE_SELECTED_BONDS),
 												AssignBondOrderProcessor::Default::OVERWRITE_SELECTED_BONDS)
-		
+
 	TEST_EQUAL(testbop.options.getBool(AssignBondOrderProcessor::Option::ADD_HYDROGENS),
 												   AssignBondOrderProcessor::Default::ADD_HYDROGENS)
 
 	TEST_EQUAL(testbop.options.getBool(AssignBondOrderProcessor::Option::KEKULIZE_RINGS),
-													 AssignBondOrderProcessor::Default::KEKULIZE_RINGS)	
-		
+													 AssignBondOrderProcessor::Default::KEKULIZE_RINGS)
+
 	TEST_EQUAL(testbop.options.get(AssignBondOrderProcessor::Option::INIFile),
-													 AssignBondOrderProcessor::Default::INIFile)		
-		
+													 AssignBondOrderProcessor::Default::INIFile)
+
 	TEST_EQUAL(testbop.options.getInteger(AssignBondOrderProcessor::Option::MAX_BOND_ORDER),
 													 AssignBondOrderProcessor::Default::MAX_BOND_ORDER)
 
 	TEST_EQUAL(testbop.options.getInteger(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS),
-				 							     AssignBondOrderProcessor::Default::MAX_NUMBER_OF_SOLUTIONS)
+											     AssignBondOrderProcessor::Default::MAX_NUMBER_OF_SOLUTIONS)
 
 	TEST_EQUAL(testbop.options.getBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS),
 													 AssignBondOrderProcessor::Default::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS)
 
 	TEST_EQUAL(testbop.options.get(AssignBondOrderProcessor::Option::ALGORITHM),
 													 AssignBondOrderProcessor::Default::ALGORITHM)
-	
+
 	TEST_EQUAL(testbop.options.get(AStarBondOrderStrategy::Option::HEURISTIC),
 													 AStarBondOrderStrategy::Default::HEURISTIC)
 
 	TEST_REAL_EQUAL(testbop.options.getReal(AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING),
 													 AssignBondOrderProcessor::Default::BOND_LENGTH_WEIGHTING)
-	
+
 	TEST_EQUAL(testbop.options.getBool(AssignBondOrderProcessor::Option::APPLY_FIRST_SOLUTION),
-													 AssignBondOrderProcessor::Default::APPLY_FIRST_SOLUTION)	
+													 AssignBondOrderProcessor::Default::APPLY_FIRST_SOLUTION)
 
 	TEST_EQUAL(testbop.options.getInteger(KGreedyBondOrderStrategy::Option::GREEDY_K_SIZE),
 													 KGreedyBondOrderStrategy::Default::GREEDY_K_SIZE)
-	
+
 	TEST_REAL_EQUAL(testbop.options.getReal(BranchAndBoundBondOrderStrategy::Option::BRANCH_AND_BOUND_CUTOFF),
 													 BranchAndBoundBondOrderStrategy::Default::BRANCH_AND_BOUND_CUTOFF)
 
@@ -195,11 +195,45 @@ CHECK(setDefaultOptions())
 													 AssignBondOrderProcessor::Default::CONNECTIVITY_CUTOFF)
 
 	TEST_EQUAL(testbop.options.getBool(AssignBondOrderProcessor::Option::USE_FINE_PENALTY),
-													 AssignBondOrderProcessor::Default::USE_FINE_PENALTY)	
+													 AssignBondOrderProcessor::Default::USE_FINE_PENALTY)
 
 RESULT
 
 
+CHECK(check Options for consistency)
+	AssignBondOrderProcessor testbop;
+	testbop.setDefaultOptions();
+	TEST_EQUAL(testbop.hasValidOptions(), true)
+
+	testbop.setDefaultOptions();
+	testbop.options.set(AssignBondOrderProcessor::Option::ALGORITHM, AssignBondOrderProcessor::Algorithm::FPT);
+	testbop.options.set(AssignBondOrderProcessor::Option::ADD_HYDROGENS, true);
+
+	TEST_EQUAL(testbop.hasValidOptions(), false)
+
+	testbop.setDefaultOptions();
+	testbop.options.set(AssignBondOrderProcessor::Option::ALGORITHM, AssignBondOrderProcessor::Algorithm::FPT);
+	testbop.options.set(AssignBondOrderProcessor::Option::OVERWRITE_SELECTED_BONDS, true);
+
+	TEST_EQUAL(testbop.hasValidOptions(), false)
+
+	testbop.setDefaultOptions();
+	testbop.options.set(AssignBondOrderProcessor::Option::ALGORITHM, AssignBondOrderProcessor::Algorithm::FPT);
+	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 0);
+
+	TEST_EQUAL(testbop.hasValidOptions(), false)
+
+
+	testbop.setDefaultOptions();
+	testbop.options.set(AssignBondOrderProcessor::Option::ALGORITHM, AssignBondOrderProcessor::Algorithm::FPT);
+	testbop.options.set(AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING, 0);
+	testbop.options.set(AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS, true);
+	testbop.options.set(AssignBondOrderProcessor::Option::COMPUTE_ALSO_CONNECTIVITY, true);
+	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 0);
+
+	TEST_EQUAL(testbop.hasValidOptions(), false)
+
+RESULT
 
 ///////////////////////  ALGORITHMS     //////////////////////
 CHECK(Option::ALGORITHM: A_STAR)
@@ -207,13 +241,31 @@ CHECK(Option::ALGORITHM: A_STAR)
 	// to have a chance of catching bugs with valgrind if they sneak in
 	AssignBondOrderProcessor abop;
 	abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM, AssignBondOrderProcessor::Algorithm::A_STAR);
-	
+
 	System sys6;
 	MOL2File mol6(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_COHKOZ_sol_5.mol2), std::ios::in);
 	mol6 >> sys6;
 	sys6.apply(abop);
 	TEST_REAL_EQUAL(abop.getTotalPenalty(1), 6.f)
 RESULT
+
+
+CHECK(Option::ALGORITHM: FPT)
+  // There is really not much we can test here, so we just execute the processor
+	// to have a chance of catching bugs with valgrind if they sneak in
+	AssignBondOrderProcessor abop;
+	abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM, AssignBondOrderProcessor::Algorithm::FPT);
+
+	System sys60;
+	MOL2File mol60(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_COHKOZ_sol_5.mol2), std::ios::in);
+	mol60 >> sys60;
+	sys60.apply(abop);
+	TEST_EQUAL(abop.hasValidOptions(), true)
+
+	TEST_REAL_EQUAL(abop.getNumberOfComputedSolutions(), 2)
+	TEST_REAL_EQUAL(abop.getTotalPenalty(1), 6.f)
+RESULT
+
 
 #ifdef BALL_HAS_LPSOLVE
 CHECK(Option::ALGORITHM: ILP - single solution)
@@ -236,13 +288,14 @@ CHECK(ALGORITHM: K_GREEDY)
 	// to have a chance of catching bugs with valgrind if they sneak in
 	AssignBondOrderProcessor abop;
 	abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM,AssignBondOrderProcessor::Algorithm::K_GREEDY);
-	
+
 	System sys6;
 	MOL2File mol6(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_COHKOZ_sol_5.mol2), std::ios::in);
 	mol6 >> sys6;
 	sys6.apply(abop);
 	TEST_REAL_EQUAL(abop.getTotalPenalty(1), 34.f)
 RESULT
+
 CHECK(Option::ALGORITHM: BRANCH_AND_BOUND)
   // There is really not much we can test here, so we just execute the processor
 	// to have a chance of catching bugs with valgrind if they sneak in
@@ -250,7 +303,7 @@ CHECK(Option::ALGORITHM: BRANCH_AND_BOUND)
 	abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM, AssignBondOrderProcessor::Algorithm::BRANCH_AND_BOUND);
 	//abop.options.setReal(BranchAndBoundBondOrderStrategy::Option::BRANCH_AND_BOUND_CUTOFF, 5);
 	//abop.options.setReal(KGreedyBondOrderStrategy::Option::GREEDY_K_SIZE, 100);
-	
+
 	System sys;
 	MOL2File mol(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AAA.mol2), std::ios::in);
 	mol >> sys;
@@ -300,13 +353,21 @@ CHECK(getNumberOfComputedSolutions())
   AssignBondOrderProcessor testbop;
 	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 0)
 	// There are further test in e.g. computeNextSolution()
+
+	// FPT
+	System sys4;
+	MOL2File mol4(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CITSED10_sol_6.mol2), std::ios::in);
+	mol4 >> sys4;
+	sys4.apply(testbop);
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 3)
+
 RESULT
 
 
 CHECK(getAtomContainer())
   AssignBondOrderProcessor testbop;
 	TEST_EQUAL(testbop.getAtomContainer()==NULL, true)
-	
+
 	System sys;
 	MOL2File mol_in(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMHTAR01.mol2), std::ios::in);
 	mol_in >> sys;
@@ -321,7 +382,7 @@ CHECK(evaluatePenalty(AtomContainer* ac))
 	MOL2File mol_in(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMHTAR01.mol2), std::ios::in);
 	mol_in >> sys;
 	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys), 0.f)
-	
+
 	System sys2;
 	MOL2File mol_in2(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AN06.mol2), std::ios::in);
 	mol_in2 >> sys2;
@@ -335,20 +396,20 @@ RESULT
 
 
 CHECK( operator() and apply(Position i) A* single solution )
-	AssignBondOrderProcessor testbop;	
+	AssignBondOrderProcessor testbop;
 	testbop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, true);
-	
+
 	System sys;
 	MOL2File mol(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AGLYSL01_out.mol2), std::ios::in);
 	mol >> sys;
-	storeBondOrders(sys);	
+	storeBondOrders(sys);
 	sys.apply(testbop);
 	TEST_EQUAL(compareBondOrder(sys), true)
-	
+
 	System sys2;
 	MOL2File mol2(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CITSED10_sol_2.mol2), std::ios::in);
 	mol2 >> sys2;
-	storeBondOrders(sys2);	
+	storeBondOrders(sys2);
 	sys2.apply(testbop);
 	testbop.apply(2);
 	TEST_EQUAL(compareBondOrder(sys2), true)
@@ -389,7 +450,7 @@ CHECK( operator() and apply(Position i) A* single solution )
 	System sys7;
 	MOL2File mol7(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CONFAM_sol_1.mol2), std::ios::in);
 	mol7 >> sys7;
-	storeBondOrders(sys7);	
+	storeBondOrders(sys7);
 	sys7.apply(testbop);
 	testbop.apply(1);
 	TEST_EQUAL(compareBondOrder(sys7), true)
@@ -397,7 +458,7 @@ CHECK( operator() and apply(Position i) A* single solution )
 	System sys8;
 	MOL2File mol8(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CONFAM_sol_2.mol2), std::ios::in);
 	mol8 >> sys8;
-	storeBondOrders(sys8);	
+	storeBondOrders(sys8);
 	sys8.apply(testbop);
 	testbop.apply(2);
 	TEST_EQUAL(compareBondOrder(sys8), true)
@@ -429,7 +490,7 @@ CHECK( operator() and apply(Position i) A* single solution )
 	System sys12;
 	MOL2File mol12(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CUDJAM_sol_2.mol2), std::ios::in);
 	mol12 >> sys12;
-	storeBondOrders(sys12);	
+	storeBondOrders(sys12);
 	sys12.apply(testbop);
 	testbop.apply(2);
 	TEST_EQUAL(compareBondOrder(sys12), true)
@@ -437,7 +498,7 @@ CHECK( operator() and apply(Position i) A* single solution )
 	System sys13;
 	MOL2File mol13(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CUDJAM_sol_3.mol2), std::ios::in);
 	mol13 >> sys13;
-	storeBondOrders(sys13);	
+	storeBondOrders(sys13);
 	sys13.apply(testbop);
 	testbop.apply(3);
 	TEST_EQUAL(compareBondOrder(sys13), true)
@@ -470,21 +531,21 @@ RESULT
 
 #ifdef BALL_HAS_LPSOLVE
 CHECK(testing bond order assignment using ILP - operator() and apply(Position i))
-	AssignBondOrderProcessor testbop;	
+	AssignBondOrderProcessor testbop;
 	testbop.options.set(AssignBondOrderProcessor::Option::ALGORITHM,AssignBondOrderProcessor::Algorithm::ILP);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, true);
-	
+
 	System sys;
 	MOL2File mol(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AGLYSL01_out.mol2), std::ios::in);
 	mol >> sys;
-	storeBondOrders(sys);	
+	storeBondOrders(sys);
 	sys.apply(testbop);
 	TEST_EQUAL(compareBondOrder(sys), true)
-	
+
 	System sys2;
 	MOL2File mol2(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CITSED10_sol_2.mol2), std::ios::in);
 	mol2 >> sys2;
-	storeBondOrders(sys2);	
+	storeBondOrders(sys2);
 	sys2.apply(testbop);
 	testbop.apply(2);
 	TEST_EQUAL(compareBondOrder(sys2), true)
@@ -525,7 +586,7 @@ CHECK(testing bond order assignment using ILP - operator() and apply(Position i)
 	System sys7;
 	MOL2File mol7(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CONFAM_sol_1.mol2), std::ios::in);
 	mol7 >> sys7;
-	storeBondOrders(sys7);	
+	storeBondOrders(sys7);
 	sys7.apply(testbop);
 	testbop.apply(1);
 	TEST_EQUAL(compareBondOrder(sys7), true)
@@ -533,7 +594,7 @@ CHECK(testing bond order assignment using ILP - operator() and apply(Position i)
 	System sys8;
 	MOL2File mol8(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CONFAM_sol_2.mol2), std::ios::in);
 	mol8 >> sys8;
-	storeBondOrders(sys8);	
+	storeBondOrders(sys8);
 	sys8.apply(testbop);
 	testbop.apply(2);
 	TEST_EQUAL(compareBondOrder(sys8), true)
@@ -565,7 +626,7 @@ CHECK(testing bond order assignment using ILP - operator() and apply(Position i)
 	System sys12;
 	MOL2File mol12(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CUDJAM_sol_2.mol2), std::ios::in);
 	mol12 >> sys12;
-	storeBondOrders(sys12);	
+	storeBondOrders(sys12);
 	sys12.apply(testbop);
 	testbop.apply(2);
 	TEST_EQUAL(compareBondOrder(sys12), true)
@@ -573,7 +634,7 @@ CHECK(testing bond order assignment using ILP - operator() and apply(Position i)
 	System sys13;
 	MOL2File mol13(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CUDJAM_sol_3.mol2), std::ios::in);
 	mol13 >> sys13;
-	storeBondOrders(sys13);	
+	storeBondOrders(sys13);
 	sys13.apply(testbop);
 	testbop.apply(3);
 	TEST_EQUAL(compareBondOrder(sys13), true)
@@ -606,7 +667,7 @@ RESULT
 #endif
 
 CHECK(getTotalPenalty(Position i) and operator() A* single solution)
-  AssignBondOrderProcessor testbop;		
+  AssignBondOrderProcessor testbop;
 	testbop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, true);
 
 	System sys;
@@ -626,11 +687,11 @@ CHECK(getTotalPenalty(Position i) and operator() A* single solution)
 
 	System sys3;
 	MOL2File mol_in3(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_BEWCUB.mol2), std::ios::in);
-	mol_in3 >> sys3;	
+	mol_in3 >> sys3;
 	sys3.apply(testbop);
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.f)
 
-	
+
 	System sys15;
 	MOL2File mol15(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CUDJAM_sol_5.mol2), std::ios::in);
 	mol15 >> sys15;
@@ -655,7 +716,7 @@ CHECK(getTotalPenalty(Position i) and operator() A* single solution)
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(7), 96.f)
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(8), 96.f)
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(9), 96.f)
-	
+
 	System sys6;
 	MOL2File mol6(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_COHKOZ_sol_5.mol2), std::ios::in);
 	mol6 >> sys6;
@@ -685,7 +746,7 @@ RESULT
 
 #ifdef BALL_HAS_LPSOLVE
 CHECK(getTotalPenalty(Position i) and operator() ILP single solution)
-  AssignBondOrderProcessor testbop;	
+  AssignBondOrderProcessor testbop;
 	testbop.options.set(AssignBondOrderProcessor::Option::ALGORITHM,AssignBondOrderProcessor::Algorithm::ILP);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, true);
 
@@ -706,11 +767,11 @@ CHECK(getTotalPenalty(Position i) and operator() ILP single solution)
 
 	System sys3;
 	MOL2File mol_in3(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_BEWCUB.mol2), std::ios::in);
-	mol_in3 >> sys3;	
+	mol_in3 >> sys3;
 	sys3.apply(testbop);
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.f)
 
-	
+
 	System sys15;
 	MOL2File mol15(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CUDJAM_sol_5.mol2), std::ios::in);
 	mol15 >> sys15;
@@ -735,7 +796,7 @@ CHECK(getTotalPenalty(Position i) and operator() ILP single solution)
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(7), 96.f)
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(8), 96.f)
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(9), 96.f)
-	
+
 	System sys6;
 	MOL2File mol6(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_COHKOZ_sol_5.mol2), std::ios::in);
 	mol6 >> sys6;
@@ -764,13 +825,92 @@ CHECK(getTotalPenalty(Position i) and operator() ILP single solution)
 RESULT
 #endif
 
+CHECK(getTotalPenalty(Position i) and operator() FPT single solution)
+  AssignBondOrderProcessor testbop;
+	testbop.options.set(AssignBondOrderProcessor::Option::ALGORITHM,AssignBondOrderProcessor::Algorithm::FPT);
+	testbop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, true);
+
+	System sys;
+	MOL2File mol_in(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMHTAR01.mol2), std::ios::in);
+	mol_in >> sys;
+	sys.apply(testbop);
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.f)
+
+	//testbop.options.dump();
+
+	System sys2;
+	MOL2File mol_in2(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AN06.mol2), std::ios::in);
+	mol_in2 >> sys2;
+	sys2.apply(testbop);
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 2.f)//0.00625) 
+
+
+	System sys3;
+	MOL2File mol_in3(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_BEWCUB.mol2), std::ios::in);
+	mol_in3 >> sys3;
+	sys3.apply(testbop);
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.f)
+
+
+	System sys15;
+	MOL2File mol15(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CUDJAM_sol_5.mol2), std::ios::in);
+	mol15 >> sys15;
+	sys15.apply(testbop);
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 2.f ) //0.0015528 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 5.f ) //0.00388199)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 7.f ) //0.00543478)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 8.f ) //0.00621118)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 10.f) //0.00776398)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 33.f) //0.0256211 )
+
+	System sys10;
+	MOL2File mol10(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CONFAM_sol_4.mol2), std::ios::in);
+	mol10 >> sys10;
+	sys10.apply(testbop);
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 3.f )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 33.f)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 34.f)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 36.f)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 66.f)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 66.f)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(7), 96.f)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(8), 96.f)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(9), 96.f)
+
+	System sys6;
+	MOL2File mol6(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_COHKOZ_sol_5.mol2), std::ios::in);
+	mol6 >> sys6;
+	sys6.apply(testbop);
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 6.f )// 0.00802139)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 7.f )// 0.00935829)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 8.f )// 0.0106952 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 8.f )// 0.0106952 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 15.f)// 0.0200535 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 34.f)// 0.0454545 )
+
+	System sys4;
+	MOL2File mol4(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CITSED10_sol_6.mol2), std::ios::in);
+	mol4 >> sys4;
+	sys4.apply(testbop);
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 1.f )// 0.00195312)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 1.f )// 0.00195312)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 32.f)// 0.0625    )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(3), 34.f)// 0.0664062 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(4), 34.f)// 0.0664062 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(5), 34.f)// 0.0664062 )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(6), 66.f)// 0.125     )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(7), 66.f)// 0.128906  )
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(8), 67.f)
+
+RESULT
+
+
 CHECK(getTotalCharge(Position i))
 	// This feature is experimental!! 
-  AssignBondOrderProcessor testbop;		
+  AssignBondOrderProcessor testbop;
 	testbop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, true);
 
 	//testbop.options.dump();
-	
 	System sys;
 	MOL2File mol_in(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMHTAR01.mol2), std::ios::in);
 	mol_in >> sys;
@@ -783,19 +923,19 @@ CHECK(getTotalCharge(Position i))
 	MOL2File mol_in2(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AN06.mol2), std::ios::in);
 	mol_in2 >> sys2;
 	sys2.apply(testbop);
-	TEST_REAL_EQUAL(testbop.getTotalCharge(0), -1.f)	
-	TEST_REAL_EQUAL(testbop.getTotalCharge(1),  1.f)	
+	TEST_REAL_EQUAL(testbop.getTotalCharge(0), -1.f)
+	TEST_REAL_EQUAL(testbop.getTotalCharge(1),  1.f)
 
 	System sys3;
 	MOL2File mol_in3(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_BEWCUB.mol2), std::ios::in);
-	mol_in3 >> sys3;	
+	mol_in3 >> sys3;
 	sys3.apply(testbop);
 	TEST_REAL_EQUAL(testbop.getTotalCharge(0), 4.f)
 	TEST_REAL_EQUAL(testbop.getTotalCharge(2), 2.f)
-	
+
 	System sys40;
 	MOL2File mol40(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_C3_input.mol2), std::ios::in);
-	mol40 >> sys40;	
+	mol40 >> sys40;
 	sys40.apply(testbop);
 	TEST_REAL_EQUAL(testbop.getTotalCharge(0), 0.f)
 	TEST_REAL_EQUAL(testbop.getTotalCharge(1), 2.f)
@@ -810,11 +950,15 @@ CHECK(computeNextSolution() using A*)
 	MOL2File mol_in(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AN06.mol2), std::ios::in);
 	mol_in >> sys;
 	sys.apply(testbop);
-	TEST_EQUAL(testbop.getNumberOfComputedSolutions(),1)	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(),1)
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 2.f)//0.00625)// 2.)
-	TEST_EQUAL(testbop.computeNextSolution(), true)
+	bool testbop_result = testbop.computeNextSolution();
+	TEST_EQUAL(testbop_result, true)
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 2)
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 32.f)//0.1)//32.)
 	TEST_EQUAL(testbop.computeNextSolution(), true)
+
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(),3)
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(2), 128.f)
 	TEST_EQUAL(testbop.computeNextSolution(), false)
 	TEST_EQUAL(testbop.getNumberOfComputedSolutions(),3)
@@ -825,7 +969,7 @@ CHECK(computeNextSolution() using A*)
 	sys4.apply(testbop);
 	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 1)
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 1.f)
-	TEST_EQUAL(testbop.computeNextSolution(), true)	
+	TEST_EQUAL(testbop.computeNextSolution(), true)
 
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 1.f)
 	TEST_EQUAL(testbop.computeNextSolution(), true)
@@ -862,7 +1006,7 @@ CHECK(computeNextSolution() using A*)
 
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(12), 99.f)
 	TEST_EQUAL(testbop.computeNextSolution(), true)
-	
+
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(13), 132.f)
 	TEST_EQUAL(testbop.computeNextSolution(), false)
 
@@ -879,7 +1023,7 @@ CHECK(computeNextSolution() using ILP)
 	MOL2File mol_in(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AN06.mol2), std::ios::in);
 	mol_in >> sys;
 	sys.apply(testbop);
-	TEST_EQUAL(testbop.getNumberOfComputedSolutions(),1)	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(),1)
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 2.f)//0.00625)// 2.)
 	TEST_EQUAL(testbop.computeNextSolution(), true)
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 32.f)//0.1)//32.)
@@ -894,7 +1038,7 @@ CHECK(computeNextSolution() using ILP)
 	sys4.apply(testbop);
 	TEST_EQUAL(testbop.getNumberOfComputedSolutions(),1)
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 1.f)
-	TEST_EQUAL(testbop.computeNextSolution(), true)	
+	TEST_EQUAL(testbop.computeNextSolution(), true)
 
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(1), 1.f)
 	TEST_EQUAL(testbop.computeNextSolution(), true)
@@ -931,21 +1075,38 @@ CHECK(computeNextSolution() using ILP)
 
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(12), 99.f)
 	TEST_EQUAL(testbop.computeNextSolution(), true)
-	
+
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(13), 132.f)
 	TEST_EQUAL(testbop.computeNextSolution(), false)
 
 RESULT
 #endif
 
+CHECK(computeNextSolution() using FPT)
+  AssignBondOrderProcessor testbop;
+	testbop.options.set(AssignBondOrderProcessor::Option::ALGORITHM,AssignBondOrderProcessor::Algorithm::FPT);
+	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 1);
+
+	System sys;
+	MOL2File mol_in(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AN06.mol2), std::ios::in);
+	mol_in >> sys;
+	sys.apply(testbop);
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(),1)
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 2.f)//0.00625)// 2.)
+	TEST_EQUAL(testbop.computeNextSolution(), false)
+
+RESULT
+
+
 CHECK(resetBondOrders())
-	AssignBondOrderProcessor testbop;	
+	AssignBondOrderProcessor testbop;
 	testbop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, true);
-	
+	//testbop.options.set(AssignBondOrderProcessor::Option::ALGORITHM,AssignBondOrderProcessor::Algorithm::FPT);
+
 	System sys2;
 	MOL2File mol2(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CITSED10_sol_2.mol2), std::ios::in);
 	mol2 >> sys2;
-	storeBondOrders(sys2);	
+	storeBondOrders(sys2);
 	sys2.apply(testbop);
 	testbop.apply(0);
 	TEST_EQUAL(compareBondOrder(sys2), false)
@@ -955,7 +1116,7 @@ CHECK(resetBondOrders())
 	System sys4;
 	MOL2File mol4(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_COHKOZ_sol_1.mol2), std::ios::in);
 	mol4 >> sys4;
-	storeBondOrders(sys4);	
+	storeBondOrders(sys4);
 	sys4.apply(testbop);
 	testbop.apply(0);
 	TEST_EQUAL(compareBondOrder(sys4), false)
@@ -965,7 +1126,7 @@ CHECK(resetBondOrders())
 	System sys7;
 	MOL2File mol7(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CONFAM_sol_1.mol2), std::ios::in);
 	mol7 >> sys7;
-	storeBondOrders(sys7);	
+	storeBondOrders(sys7);
 	sys7.apply(testbop);
 	testbop.apply(0);
 	TEST_EQUAL(compareBondOrder(sys7), false)
@@ -975,7 +1136,7 @@ CHECK(resetBondOrders())
 	System sys11;
 	MOL2File mol11(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CUDJAM_sol_1.mol2), std::ios::in);
 	mol11 >> sys11;
-	storeBondOrders(sys11);	
+	storeBondOrders(sys11);
 	sys11.apply(testbop);
 	testbop.apply(0);
 	TEST_EQUAL(compareBondOrder(sys11), false)
@@ -987,58 +1148,109 @@ RESULT
 ///////////////////           options                 ///////////////////////////
 
 CHECK(Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS and Option:: MAX_NUMBER_OF_SOLUTIONS=0 using A*)
-  AssignBondOrderProcessor testbop;	
+  AssignBondOrderProcessor testbop;
 	testbop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, false);
 
 	System sys2;
 	MOL2File mol_in2(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AN06.mol2), std::ios::in);
 	mol_in2 >> sys2;
 	sys2.apply(testbop);
-	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 2)	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 2)
 
 	System sys15;
 	MOL2File mol15(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CUDJAM_sol_5.mol2), std::ios::in);
 	mol15 >> sys15;
 	sys15.apply(testbop);
-	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 2)	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 2)
 
 	System sys10;
 	MOL2File mol10(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CONFAM_sol_4.mol2), std::ios::in);
 	mol10 >> sys10;
 	sys10.apply(testbop);
-	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 2)	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 2)
 
 	System sys6;
 	MOL2File mol6(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_COHKOZ_sol_5.mol2), std::ios::in);
 	mol6 >> sys6;
 	sys6.apply(testbop);
-	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 2)	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 2)
 
 	System sys4;
 	MOL2File mol4(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CITSED10_sol_6.mol2), std::ios::in);
 	mol4 >> sys4;
 	sys4.apply(testbop);
-	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 3)	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 3)
 
 
 	testbop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, true);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 0);
 
 	sys2.apply(testbop);
-	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 3)	
-	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 3)
+
 	sys10.apply(testbop);
-	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 22)	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 22)
 
 	sys4.apply(testbop);
-	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 14)	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 14)
 
 RESULT
+
+CHECK(Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS and Option:: MAX_NUMBER_OF_SOLUTIONS=0 using FPT)
+  AssignBondOrderProcessor testbop;
+	testbop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, false);
+	testbop.options.set(AssignBondOrderProcessor::Option::ALGORITHM,AssignBondOrderProcessor::Algorithm::FPT);
+
+	System sys2;
+	MOL2File mol_in2(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AN06.mol2), std::ios::in);
+	mol_in2 >> sys2;
+	sys2.apply(testbop);
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 2)
+
+	System sys15;
+	MOL2File mol15(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CUDJAM_sol_5.mol2), std::ios::in);
+	mol15 >> sys15;
+	sys15.apply(testbop);
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 2)
+
+	System sys10;
+	MOL2File mol10(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CONFAM_sol_4.mol2), std::ios::in);
+	mol10 >> sys10;
+	sys10.apply(testbop);
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 2)
+
+	System sys6;
+	MOL2File mol6(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_COHKOZ_sol_5.mol2), std::ios::in);
+	mol6 >> sys6;
+	sys6.apply(testbop);
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 2)
+
+	System sys4;
+	MOL2File mol4(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CITSED10_sol_6.mol2), std::ios::in);
+	mol4 >> sys4;
+	sys4.apply(testbop);
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 3)
+
+	// Option::MAX_NUMBER_OF_SOLUTIONS==0 is used to automatically enumerate all optimal solutions
+	// this currently does not work for the FPT
+//	testbop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, true);
+//	testbop.options.setBool(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 0);
+
+//	sys2.apply(testbop);
+//	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 3)
+
+//	sys10.apply(testbop);
+//	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 22)
+
+//	sys4.apply(testbop);
+//	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 14)
+RESULT
+
 
 
 CHECK(Option::BOND_LENGTH_WEIGHTING and getTotalPenalty())
   AssignBondOrderProcessor testbop;
-	
+
 	/// 1.0
 	testbop.options.setReal(AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING,1);
 
@@ -1046,20 +1258,20 @@ CHECK(Option::BOND_LENGTH_WEIGHTING and getTotalPenalty())
 	MOL2File mol_in(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMHTAR01.mol2), std::ios::in);
 	mol_in >> sys;
 	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys), 0.187165f) //0.112424)
-	
+
 	System sys2;
 	MOL2File mol_in2(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AN06.mol2), std::ios::in);
 	mol_in2 >> sys2;
 	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys2),0.00879483f)// 0.416132)
-	
+
 	System sys3;
 	MOL2File mol_in3(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_BEWCUB.mol2), std::ios::in);
 	mol_in3 >> sys3;
 	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys3),0.224469f) // 0.084565)
-	
+
 	/// 0.5
 	testbop.options.setReal(AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING,0.5);
-	
+
 	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys),0.0935824f)//  0.0562121)
 	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys2),0.0122099f )//	0.215878)
 	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys3),0.11981f)// 0.0498582)
@@ -1134,7 +1346,7 @@ RESULT
 
 
 CHECK(Option::MAX_NUMBER_OF_SOLUTIONS  - Default and value  using A*)
-  AssignBondOrderProcessor testbop;	
+  AssignBondOrderProcessor testbop;
 	testbop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, true);
 
 	System sys2;
@@ -1142,11 +1354,11 @@ CHECK(Option::MAX_NUMBER_OF_SOLUTIONS  - Default and value  using A*)
 	mol_in2 >> sys2;
 	sys2.apply(testbop);
 	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), (Size)AssignBondOrderProcessor::Default::MAX_NUMBER_OF_SOLUTIONS)
-	
+
 	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 5);
 	sys2.apply(testbop);
-	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 5)	
-	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 5)
+
 	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 15);
 	sys2.apply(testbop);
 	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 15)
@@ -1157,39 +1369,40 @@ CHECK(Option::MAX_NUMBER_OF_SOLUTIONS  - Default and value  using A*)
 
 	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 5);
 	sys6.apply(testbop);
-	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), (Size)5)	
-	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), (Size)5)
+
 	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 15);
 	sys6.apply(testbop);
-	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 15)	
-	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 15)
+
 	testbop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, false);
 	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 15);
 	sys6.apply(testbop);
 	// NOTE: the operator() has to compute all optimal +1 solutions 
 	// to get aware that all following solutions are not optimal any longer! 
-	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 2)	
-	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 2)
+
 	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 1);
 	sys6.apply(testbop);
 	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 1)
 
 RESULT
 
-CHECK(Option::MAX_NUMBER_OF_SOLUTIONS  - Default and value  using A*)
-  AssignBondOrderProcessor testbop;	
+CHECK(Option::MAX_NUMBER_OF_SOLUTIONS  - Default and value  using FPT)
+  AssignBondOrderProcessor testbop;
 	testbop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, true);
+	testbop.options.set(AssignBondOrderProcessor::Option::ALGORITHM,AssignBondOrderProcessor::Algorithm::FPT);
 
 	System sys2;
 	MOL2File mol_in2(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMHTAR01.mol2), std::ios::in);
 	mol_in2 >> sys2;
 	sys2.apply(testbop);
 	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), (Size)AssignBondOrderProcessor::Default::MAX_NUMBER_OF_SOLUTIONS)
-	
+
 	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 5);
 	sys2.apply(testbop);
-	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 5)	
-	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 5)
+
 	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 15);
 	sys2.apply(testbop);
 	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 15)
@@ -1200,19 +1413,19 @@ CHECK(Option::MAX_NUMBER_OF_SOLUTIONS  - Default and value  using A*)
 
 	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 5);
 	sys6.apply(testbop);
-	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 5)	
-	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 5)
+
 	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 15);
 	sys6.apply(testbop);
-	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 15)	
-	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 15)
+
 	testbop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, false);
 	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 15);
 	sys6.apply(testbop);
 	// NOTE: the operator() has to compute all optimal +1 solutions 
 	// to get aware that all following solutions are not optimal any longer! 
-	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 2)	
-	
+	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 2)
+
 	testbop.options.set(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 1);
 	sys6.apply(testbop);
 	TEST_EQUAL(testbop.getNumberOfComputedSolutions(), 1)
@@ -1221,7 +1434,7 @@ RESULT
 
 #ifdef BALL_HAS_LPSOLVE
 CHECK(Option::ADD_HYDROGENS using ILP )
-  AssignBondOrderProcessor testbop;	
+  AssignBondOrderProcessor testbop;
 	testbop.options.set(AssignBondOrderProcessor::Option::ALGORITHM,AssignBondOrderProcessor::Algorithm::ILP);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::ADD_HYDROGENS, true);
 
@@ -1239,7 +1452,7 @@ CHECK(Option::ADD_HYDROGENS using ILP )
 	mol2 >> sys2;
 	storeHBonds(sys2);
 	deleteHBonds(sys2);
-	sys2.apply(testbop);	
+	sys2.apply(testbop);
 	testbop.apply(2);
 	TEST_EQUAL(compareHBonds(sys2), true)
 
@@ -1251,20 +1464,20 @@ CHECK(Option::ADD_HYDROGENS using ILP )
 	sys3.apply(testbop);
 	testbop.apply(1);
 	TEST_EQUAL(compareHBonds(sys3), true)
-	
+
 RESULT
 #endif
 
 
 CHECK(getNumberOfAddedHydrogens() using A*)
-	AssignBondOrderProcessor testbop;	
+	AssignBondOrderProcessor testbop;
 	//false
 	System sys;
 	MOL2File mol(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CITSED10_sol_6.mol2), std::ios::in);
 	mol >> sys;
 	sys.apply(testbop);
 	for (Size i = 0; i < testbop.getNumberOfComputedSolutions(); i++)
-	{	
+	{
 		TEST_EQUAL(testbop.getNumberOfAddedHydrogens(i), 0)
 	}
 
@@ -1273,13 +1486,13 @@ CHECK(getNumberOfAddedHydrogens() using A*)
 	mol6 >> sys6;
 	sys6.apply(testbop);
 	for (Size i = 0; i < testbop.getNumberOfComputedSolutions(); i++)
-	{	
+	{
 		TEST_EQUAL(testbop.getNumberOfAddedHydrogens(i), 0)
 	}
 
 	//true
 	testbop.options.setBool(AssignBondOrderProcessor::Option::ADD_HYDROGENS, true);
-	
+
 	System sys20;
 	MOL2File mol20(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_C2.mol2), std::ios::in);
 	mol20 >> sys20;
@@ -1290,18 +1503,18 @@ CHECK(getNumberOfAddedHydrogens() using A*)
 
 	testbop.apply(0);
 	TEST_EQUAL(testbop.getNumberOfAddedHydrogens(0), 6)
-	
+
 	testbop.apply(1);
 	TEST_EQUAL(testbop.getNumberOfAddedHydrogens(1), 4)
-	
+
 	testbop.apply(2);
 	TEST_EQUAL(testbop.getNumberOfAddedHydrogens(2), 2)
-	
+
 RESULT
 
 #ifdef BALL_HAS_LPSOLVE
 CHECK(getNumberOfAddedHydrogens() using ILP)
-	AssignBondOrderProcessor testbop_ilp;		
+	AssignBondOrderProcessor testbop_ilp;
 	testbop_ilp.options.set(AssignBondOrderProcessor::Option::ALGORITHM,AssignBondOrderProcessor::Algorithm::ILP);
 	//false
 	System sys;
@@ -1309,7 +1522,7 @@ CHECK(getNumberOfAddedHydrogens() using ILP)
 	mol >> sys;
 	sys.apply(testbop_ilp);
 	for (Size i = 0; i < testbop_ilp.getNumberOfComputedSolutions(); i++)
-	{	
+	{
 		TEST_EQUAL(testbop_ilp.getNumberOfAddedHydrogens(i), 0)
 	}
 
@@ -1318,13 +1531,13 @@ CHECK(getNumberOfAddedHydrogens() using ILP)
 	mol6 >> sys6;
 	sys6.apply(testbop_ilp);
 	for (Size i = 0; i < testbop_ilp.getNumberOfComputedSolutions(); i++)
-	{	
+	{
 		TEST_EQUAL(testbop_ilp.getNumberOfAddedHydrogens(i), 0)
 	}
 
 	//true
 	testbop_ilp.options.setBool(AssignBondOrderProcessor::Option::ADD_HYDROGENS, true);
-	
+
 	System sys20;
 	MOL2File mol20(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_C2.mol2), std::ios::in);
 	mol20 >> sys20;
@@ -1336,10 +1549,10 @@ CHECK(getNumberOfAddedHydrogens() using ILP)
 
 	testbop_ilp.apply(0);
 	TEST_EQUAL(testbop_ilp.getNumberOfAddedHydrogens(0), 6)
-	
+
 	testbop_ilp.apply(1);
 	TEST_EQUAL(testbop_ilp.getNumberOfAddedHydrogens(1), 2)
-	
+
 	testbop_ilp.apply(2);
 	TEST_EQUAL(testbop_ilp.getNumberOfAddedHydrogens(2), 4)
 RESULT
@@ -1351,19 +1564,21 @@ CHECK(Option:::KEKULIZE_RINGS using A* )
 	//       so there is really not much we can test here, so we 
 	//       just execute the processor to have a chance of 
 	//       catching bugs with valgrind if they sneak in
-	AssignBondOrderProcessor testbop;	
-	
+	AssignBondOrderProcessor testbop;
+	TEST_EQUAL(testbop.options.getBool(AssignBondOrderProcessor::Option::KEKULIZE_RINGS), true)
+	TEST_EQUAL(testbop.options.getBool(AssignBondOrderProcessor::Option::APPLY_FIRST_SOLUTION), true)
+
 	// true
 	System sys30;
 	MOL2File mol30(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMPTRB10_kek_sol0.mol2), std::ios::in);
 	mol30 >> sys30;
-	storeBondOrders(sys30);	
+	storeBondOrders(sys30);
 	sys30.apply(testbop);
 	TEST_EQUAL(compareBondOrder(sys30), true)
-	
+
 	// false
 	testbop.options.setBool(AssignBondOrderProcessor::Option::KEKULIZE_RINGS, false);
-	
+
 	System sys31;
 	MOL2File mol31(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMPTRB10_arom_sol0.mol2), std::ios::in);
 	mol31 >> sys31;
@@ -1375,85 +1590,111 @@ CHECK(Option:::KEKULIZE_RINGS using A* )
 RESULT
 
 
-CHECK(Option::OVERWRITE_SINGLE_BOND_ORDERS  using A* )	
+CHECK(Option:::KEKULIZE_RINGS using FPT )
+	// NOTE :this option only depends on the AROMATICITY processor
+	//       so there is really not much we can test here, so we 
+	//       just execute the processor to have a chance of 
+	//       catching bugs with valgrind if they sneak in
+	AssignBondOrderProcessor testbop;
+	testbop.options.set(AssignBondOrderProcessor::Option::ALGORITHM,AssignBondOrderProcessor::Algorithm::FPT);
+	TEST_EQUAL(testbop.options.getBool(AssignBondOrderProcessor::Option::APPLY_FIRST_SOLUTION), true)
+
+	// there exist 7 optimal solutions for AssignBondOrderProcessor_test_AMPTRB10_kek_sol0.mol2 
+	// and FPT returns a different solution than A* ... we tested kekulized solutions implicitely
+
+	testbop.options.setBool(AssignBondOrderProcessor::Option::KEKULIZE_RINGS, false);
+
+	System sys31;
+	MOL2File mol31(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMPTRB10_arom_sol0.mol2), std::ios::in);
+	mol31 >> sys31;
+	storeBondOrders(sys31);
+	//deleteBondOrders(sys31);
+	sys31.apply(testbop);
+	TEST_EQUAL(compareBondOrder(sys31), true)
+
+RESULT
+
+
+CHECK(Option::OVERWRITE_SINGLE_BOND_ORDERS  using A* )
 	// This test is very hand made 
 	// By construction the optimal solution can be reached if _all_ 
 	// bonds were considered, but with the current option 
 	// only a better solution is found!
-	AssignBondOrderProcessor testbop;	
+	AssignBondOrderProcessor testbop;
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS, true);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS, false);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS, false);
-	
+
 	System sys40;
 	MOL2File mol40(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_C4_input.mol2), std::ios::in);
-	mol40 >> sys40;	
+	mol40 >> sys40;
 	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys40), 128.f)
-	
+
 	sys40.apply(testbop);
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 64.f)
 
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS, true);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS, true);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS, true);
-	
+
 	sys40.apply(testbop);
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.f)
 
 RESULT
 
 #ifdef BALL_HAS_LPSOLVE
-CHECK(Option::OVERWRITE_SINGLE_BOND_ORDERS  using ILP )	
+CHECK(Option::OVERWRITE_SINGLE_BOND_ORDERS  using ILP )
 	// This test is very hand made 
 	// By construction the optimal solution can be reached if _all_ 
 	// bonds were considered, but with the current option 
 	// only a better solution is found!
-	AssignBondOrderProcessor testbop;	
+	AssignBondOrderProcessor testbop;
 	testbop.options.set(AssignBondOrderProcessor::Option::ALGORITHM,AssignBondOrderProcessor::Algorithm::ILP);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS, true);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS, false);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS, false);
-	
+
 	System sys40;
 	MOL2File mol40(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_C4_input.mol2), std::ios::in);
-	mol40 >> sys40;	
+	mol40 >> sys40;
 	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys40), 128.f)
-	
+
 	sys40.apply(testbop);
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 64.f)
 
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS, true);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS, true);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS, true);
-	
+
 	sys40.apply(testbop);
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.f)
 
 RESULT
 #endif
 
+
 CHECK(Option::OVERWRITE_DOUBLE_BOND_ORDERS using A* )
 	// This test is very hand made 
 	// By construction the optimal solution can be reached if _all_ 
 	// bonds were considered, but with the current option 
 	// only a better solution is found!
-	AssignBondOrderProcessor testbop;		
+	AssignBondOrderProcessor testbop;
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS, false);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS, true);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS, false);
-	
+
 	System sys40;
 	MOL2File mol40(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_C3_input.mol2), std::ios::in);
-	mol40 >> sys40;	
+	mol40 >> sys40;
 	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys40), 128.f)
-	
+
 	sys40.apply(testbop);
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 64.f)
 
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS, true);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS, true);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS, true);
-	
+
 	sys40.apply(testbop);
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.f)
 
@@ -1465,68 +1706,66 @@ CHECK(Option::OVERWRITE_DOUBLE_BOND_ORDERS using ILP )
 	// By construction the optimal solution can be reached if _all_ 
 	// bonds were considered, but with the current option 
 	// only a better solution is found!
-	AssignBondOrderProcessor testbop;		
+	AssignBondOrderProcessor testbop;
 	testbop.options.set(AssignBondOrderProcessor::Option::ALGORITHM,AssignBondOrderProcessor::Algorithm::ILP);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS, false);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS, true);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS, false);
-	
+
 	System sys40;
 	MOL2File mol40(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_C3_input.mol2), std::ios::in);
-	mol40 >> sys40;	
+	mol40 >> sys40;
 	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys40), 128.f)
-	
+
 	sys40.apply(testbop);
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 64.f)
 
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS, true);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS, true);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS, true);
-	
+
 	sys40.apply(testbop);
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.f)
 
 RESULT
 #endif
 
-CHECK(Option::OVERWRITE_TRIPLE_BOND_ORDERS using A* )	
+CHECK(Option::OVERWRITE_TRIPLE_BOND_ORDERS using A* )
 	// This test is very hand made 
 	// By construction the optimal solution can be reached if _all_ 
 	// bonds were considered, but with the current option 
 	// only a better solution is found!
-	AssignBondOrderProcessor testbop;	
+	AssignBondOrderProcessor testbop;
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS, false);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS, false);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS, true);
-	
+
 	System sys40;
 	MOL2File mol40(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_C4_input.mol2), std::ios::in);
-	mol40 >> sys40;	
+	mol40 >> sys40;
 	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys40), 128.f)
-	
+
 	sys40.apply(testbop);
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 64.f)
 
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS, true);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS, true);
 	testbop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS, true);
-	
+
 	sys40.apply(testbop);
 	TEST_REAL_EQUAL(testbop.getTotalPenalty(0), 0.f)
 RESULT
 
-
-
 CHECK(Option::OVERWRITE_SELECTED_BONDS using A* )
 	// There is really not much we can test here, so we just execute the processor
 	// to have a chance of catching bugs with valgrind if they sneak in
-  AssignBondOrderProcessor testbop;	
-	
+  AssignBondOrderProcessor testbop;
+
 	System sys40;
 	MOL2File mol40(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_C4_input.mol2), std::ios::in);
-	mol40 >> sys40;	
+	mol40 >> sys40;
 	TEST_REAL_EQUAL(testbop.evaluatePenalty(&sys40), 128.f)
-	
+
 	// now select 3 bonds
 	AtomIterator a_it;
 	Atom::BondIterator b_it;
@@ -1546,14 +1785,15 @@ CHECK(Option::OVERWRITE_SELECTED_BONDS using A* )
 
 RESULT
 
-CHECK(Option::COMPUTE_ALSO_CONNCETIVITY and Option::CONNECTIVITY_CUTOFF)  
+
+CHECK(Option::COMPUTE_ALSO_CONNCETIVITY and Option::CONNECTIVITY_CUTOFF)
   // There is really not much we can test here, so we just execute the processor
 	// to have a chance of catching bugs with valgrind if they sneak in
 	// NOTE: this functionality is still experimental! //TODO
 	AssignBondOrderProcessor abop;
 	abop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_CONNECTIVITY, true);
 	abop.options.setReal(AssignBondOrderProcessor::Option::CONNECTIVITY_CUTOFF, 3);
-	
+
 	System sys;
 	MOL2File mol(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AAA.mol2), std::ios::in);
 	mol >> sys;
@@ -1565,14 +1805,14 @@ CHECK(Option::COMPUTE_ALSO_CONNCETIVITY and Option::CONNECTIVITY_CUTOFF)
 	sys.apply(abop);
 RESULT
 
-CHECK(Option::USE_FINE_PENALTY)  
- 	AssignBondOrderProcessor abop;
+CHECK(Option::USE_FINE_PENALTY)
+	AssignBondOrderProcessor abop;
 	abop.options.setBool(AssignBondOrderProcessor::Option::USE_FINE_PENALTY, true);
-	
+
 	System sys;
 	MOL2File mol(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMPTRB10_kek_sol0.mol2), std::ios::in);
-	mol >> sys;	
-	storeBondOrders(sys);	
+	mol >> sys;
+	storeBondOrders(sys);
 	sys.apply(abop);
 	//abop.apply(3);
 	TEST_EQUAL(compareBondOrder(sys), true)
@@ -1580,73 +1820,101 @@ CHECK(Option::USE_FINE_PENALTY)
 	TEST_EQUAL(compareBondOrder(sys), false)
 
 	abop.clear();
-	abop.options.setBool(AssignBondOrderProcessor::Option::USE_FINE_PENALTY, false);	
-	storeBondOrders(sys);	
-	sys.apply(abop);	
+	abop.options.setBool(AssignBondOrderProcessor::Option::USE_FINE_PENALTY, false);
+	storeBondOrders(sys);
+	sys.apply(abop);
 	TEST_EQUAL(compareBondOrder(sys), false)
-	abop.apply(3);	
+	abop.apply(5); //3);
 	TEST_EQUAL(compareBondOrder(sys), true)
 
 RESULT
 
-CHECK(Option::INIFile)  
- 	// There is really not much we can test here, so we just execute the processor
+
+CHECK(Option::INIFile)
+	// There is really not much we can test here, so we just execute the processor
 	// to have a chance of catching bugs with valgrind if they sneak in
-	AssignBondOrderProcessor abop;	
-	abop.options.set(AssignBondOrderProcessor::Option::INIFile, "/bond_lengths/BondOrderGAFF.xml");	
+	AssignBondOrderProcessor abop;
+	abop.options.set(AssignBondOrderProcessor::Option::INIFile, "/bond_lengths/BondOrderGAFF.xml");
 
 	System sys40;
 	MOL2File mol40(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_C4_input.mol2), std::ios::in);
-	mol40 >> sys40;		
+	mol40 >> sys40;
 	sys40.apply(abop);
 RESULT
 
-CHECK(Option::MAX_BOND_ORDER)  
- 	AssignBondOrderProcessor abop;	
-	abop.options.setInteger(AssignBondOrderProcessor::Option::MAX_BOND_ORDER,1);	
+CHECK(Option::MAX_BOND_ORDER)
+	AssignBondOrderProcessor abop;
+	abop.options.setInteger(AssignBondOrderProcessor::Option::MAX_BOND_ORDER, 1);
 
 	System sys40;
 	MOL2File mol40(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_C4_input.mol2), std::ios::in);
-	mol40 >> sys40;		
+	mol40 >> sys40;
 	sys40.apply(abop);
 	TEST_REAL_EQUAL(abop.evaluatePenalty(&sys40), 192.f)
-	
-	abop.options.setInteger(AssignBondOrderProcessor::Option::MAX_BOND_ORDER,2);	
+
+	abop.options.setInteger(AssignBondOrderProcessor::Option::MAX_BOND_ORDER, 2);
 	sys40.apply(abop);
 	TEST_REAL_EQUAL(abop.evaluatePenalty(&sys40), 0.f)
+
+	// FPT		
+	abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM,AssignBondOrderProcessor::Algorithm::FPT);
+	abop.options.setInteger(AssignBondOrderProcessor::Option::MAX_BOND_ORDER, 1);
+
+	sys40.apply(abop);
+	TEST_REAL_EQUAL(abop.evaluatePenalty(&sys40), 192.f)
+
+	abop.options.setInteger(AssignBondOrderProcessor::Option::MAX_BOND_ORDER, 2);
+	sys40.apply(abop);
+	TEST_REAL_EQUAL(abop.evaluatePenalty(&sys40), 0.f)
+
 RESULT
 
-CHECK(Option::APPLY_FIRST_SOLUTION) 
+CHECK(Option::APPLY_FIRST_SOLUTION)
 	AssignBondOrderProcessor abop;
 	abop.options.setBool(AssignBondOrderProcessor::Option::APPLY_FIRST_SOLUTION, true);
-	
+
 	System sys;
 	MOL2File mol(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CUDJAM_sol_2.mol2), std::ios::in);
-	mol >> sys;	
-	storeBondOrders(sys);	
+	mol >> sys;
+	storeBondOrders(sys);
 	sys.apply(abop);
 	TEST_EQUAL(compareBondOrder(sys), false)
 
 	// reset the BondOrders
 	abop.resetBondOrders();
 	TEST_EQUAL(compareBondOrder(sys), true)
-	
+
 	abop.clear();
 	abop.options.setBool(AssignBondOrderProcessor::Option::APPLY_FIRST_SOLUTION, false);
-	storeBondOrders(sys);	
+	storeBondOrders(sys);
 	sys.apply(abop);
 	TEST_EQUAL(compareBondOrder(sys), true)
-	abop.apply(0); 
+	abop.apply(0);
+	TEST_EQUAL(compareBondOrder(sys), false)
+
+	// now the FPT
+	abop.resetBondOrders();
+	TEST_EQUAL(compareBondOrder(sys), true)
+
+	abop.clear();
+	abop.options.setBool(AssignBondOrderProcessor::Option::APPLY_FIRST_SOLUTION, false);
+	abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM,AssignBondOrderProcessor::Algorithm::FPT);
+
+	storeBondOrders(sys);
+	sys.apply(abop);
+	TEST_EQUAL(compareBondOrder(sys), true)
+	abop.apply(0);
 	TEST_EQUAL(compareBondOrder(sys), false)
 
 RESULT
 
-CHECK(Option::GREEDY_K_SIZE) 
+
+CHECK(Option::GREEDY_K_SIZE)
 	AssignBondOrderProcessor abop;
 	abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM,AssignBondOrderProcessor::Algorithm::K_GREEDY);
 	abop.options.setInteger(KGreedyBondOrderStrategy::Option::GREEDY_K_SIZE, 1);
 	abop.options.set(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, true);
-	
+
 	System sys;
 	MOL2File mol(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CUDJAM_sol_5.mol2), std::ios::in);
 	mol >> sys;
@@ -1660,7 +1928,7 @@ CHECK(Option::GREEDY_K_SIZE)
 	abop.options.setInteger(KGreedyBondOrderStrategy::Option::GREEDY_K_SIZE, 5);
 	sys.apply(abop);
 	TEST_EQUAL(abop.getNumberOfComputedSolutions(), 5)
-	
+
 	CAPTURE_OUTPUT_LEVEL(1000)
 		abop.options.setInteger(KGreedyBondOrderStrategy::Option::GREEDY_K_SIZE, -1);
 		sys.apply(abop);
@@ -1668,14 +1936,14 @@ CHECK(Option::GREEDY_K_SIZE)
 	COMPARE_OUTPUT("")
 RESULT
 
-CHECK(Option::BRANCH_AND_BOUND_CUTOFF) 
+CHECK(Option::BRANCH_AND_BOUND_CUTOFF)
   // There is really not much we can test here, so we just execute the processor
 	// to have a chance of catching bugs with valgrind if they sneak in
 	AssignBondOrderProcessor abop;
 	abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM, AssignBondOrderProcessor::Algorithm::BRANCH_AND_BOUND);
 	abop.options.setReal(BranchAndBoundBondOrderStrategy::Option::BRANCH_AND_BOUND_CUTOFF, 1);
 	abop.options.setReal(KGreedyBondOrderStrategy::Option::GREEDY_K_SIZE, 5);
-	System sys;		
+	System sys;
 	MOL2File mol(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_COHKOZ_sol_5.mol2), std::ios::in);
 	mol >> sys;
 	sys.apply(abop);
@@ -1687,7 +1955,7 @@ RESULT
 CHECK(getSolution(Position i))
 	// There is really not much we can test here, so we just execute the method
 	// to have a chance of catching bugs with valgrind if they sneak in
-	AssignBondOrderProcessor testbop;	
+	AssignBondOrderProcessor testbop;
 	testbop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, true);
 	System sys4;
 	MOL2File mol4(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CITSED10_sol_6.mol2), std::ios::in);
@@ -1702,23 +1970,23 @@ CHECK(getSolution(Position i))
 		bool no_exception = true;
 		try {
 			sys = testbop.getSolution(i);
-			const System& ref_sys = testbop.getSolution(i);	
+			const System& ref_sys = testbop.getSolution(i);
 			TEST_EQUAL(ref_sys.countBonds(), 8);
-		} catch (...)	{
+		} catch (...) {
 			no_exception = false;
 		}
-		TEST_EQUAL(no_exception, true)	
+		TEST_EQUAL(no_exception, true)
 	}
 
 	TEST_EXCEPTION(Exception::IndexOverflow, testbop.getSolution(limit))
-	
+
 RESULT
 
 
-CHECK(clear()) 
+CHECK(clear())
 	// There is really not much we can test here, so we just execute the method
 	// to have a chance of catching bugs with valgrind if they sneak in
-	AssignBondOrderProcessor testbop;	
+	AssignBondOrderProcessor testbop;
 	testbop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, true);
 	System sys;
 	MOL2File mol4(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_CITSED10_sol_6.mol2), std::ios::in);
@@ -1743,7 +2011,6 @@ CHECK(clear())
 	TEST_EQUAL(testbop.computeNextSolution(), false)
 
 RESULT
-
 
 
 

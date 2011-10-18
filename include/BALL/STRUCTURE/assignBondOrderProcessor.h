@@ -68,7 +68,7 @@ namespace BALL
 	 *  All further optimal solutions can be applied by calling
 	 *  the method \link apply()  apply() \endlink. 
 	 *  Additional solutions can be computed by calling the method 
-	 *  \link computeNextSolution()  computeNextSolution()\endlink.
+	 *  \link computeNextSolution()  computeNextSolution()\endlink (except when using the FPT algorithm).
 	 *  \par
 	 *  <br>
 	 *  Example code: <br> 
@@ -224,9 +224,48 @@ namespace BALL
 
 			struct BALL_EXPORT Algorithm
 			{
+				/** Solves the problem using an A* formulation.
+				 * 
+				 */
 				static const String A_STAR;
+
+				/** Solves the problem using an ILP.
+				 *  \par
+				 *   <b>NOTE:</b> This option requires an ILP solver and currently 
+				 *   cannot be combined with the options 
+				 *   	Option::USE_FINE_PENALTY, 
+				 *   	Option::BOND_LENGTH_WEIGHTING, 
+				 *   	Option::ADD_HYDROGENS, 
+				 *   	or Option::COMPUTE_ALSO_CONNECTIVITY.
+				 */
 				static const String ILP;
+
+				/** Solves the problem using an FPT algorithm.
+				 *  \par 
+				 *  <b>NOTE:</b> 
+				 *   This algorithm does not support the method computeNextSolution() by design.
+				 *	 Instead, you can use the options 
+				 *	  \link Option:MAX_NUMBER_OF_SOLUTIONS Option:MAX_NUMBER_OF_SOLUTIONS \endlink and
+				 *	 	\link Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS \endlink 
+				 *	 to create an ensemble of solutions.
+				 *
+				 *   Furthermore, this option currently cannot be combined with the options 
+				 *   	\link Option::USE_FINE_PENALTY Option::USE_FINE_PENALTY  \endlink,
+				 *   	\link Option::BOND_LENGTH_WEIGHTING Option::BOND_LENGTH_WEIGHTING \endlink, 
+				 *   	\link Option::ADD_HYDROGENS Option::ADD_HYDROGENS  \endlink, 
+				 *   	\link Option::COMPUTE_ALSO_CONNECTIVITY Option::COMPUTE_ALSO_CONNECTIVITY\endlink,  
+				 *   	\link Option::OVERWRITE_SELECTED_BONDS Option::OVERWRITE_SELECTED_BONDS\endlink,  and
+				 *   	the special hack Option::MAX_NUMBER_OF_SOLUTIONS==0 to enumerate all optimal solutions. 
+				 *
+				 *   	@see Option::USE_FINE_PENALTY, 
+				 *   	@see Option::BOND_LENGTH_WEIGHTING, 
+				 *   	@see Option::ADD_HYDROGENS, 
+				 *   	@see Option::COMPUTE_ALSO_CONNECTIVITY, 
+				 *   	@see Option::OVERWRITE_SELECTED_BONDS
+				 *   	@see Option::MAX_NUMBER_OF_SOLUTIONS
+				 */
 				static const String FPT;
+
 				static const String K_GREEDY;
 				static const String BRANCH_AND_BOUND;
 			};
@@ -334,8 +373,10 @@ namespace BALL
 			 */
 			const System& getSolution(Position i) throw(Exception::IndexOverflow);
 
-			/** Returns the total charge of solution i.
-			
+			/** Returns the total charge of solution i. 
+			 
+			 		<b>NOTE:</b> This method is still experimental.
+
 			 	 	@param   i index of the solution, whose charge should be computed. 
 				 	@return  float - total charge of solution i.  
 			 */
@@ -348,15 +389,15 @@ namespace BALL
 					return Limits<float>::max();
 				}
 				else
+				{
 					return getTotalCharge_(solutions_[i]);
-
+				}
 			}
 
 			/** Returns the total penalty of solution i.
 			 *
 			 * 	@param   i  	 index of the solution, whose penalty should be returned. 
 			 * 	@return  float -  total penalty of solution i.  
-			 * 	@see Option:: BOND_LENGTH_WEIGHTING;
 			 */
 			float getTotalPenalty(Position i=0)
 			{
@@ -436,6 +477,10 @@ namespace BALL
 			/** Resets the options to default values.
 			*/
 			void setDefaultOptions();
+
+			/** Checks the options.
+			*/
+			bool hasValidOptions(){return readOptions_();}
 
 			/** Evaluates the AtomContainer ac's bond orders as specified in 
 			 *  the Options and returns the computed penalty.

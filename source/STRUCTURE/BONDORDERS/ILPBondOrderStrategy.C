@@ -342,18 +342,18 @@ namespace BALL
 		{
 			// NOTE: lpsolve5.5 despite claiming does not support this!
 			// Thus, we include this feature by incorporating constraints which forbid old solutions
-			
+
 			// Get old variables
 			REAL *vars;
 			get_ptr_variables(ilp_, &vars);
-			
+
 			set_add_rowmode(ilp_, TRUE);
-			
+
 			// Indices of the variables (constraints)
 			std::vector<int> cons_indices(number_of_free_bonds_+1); // colno
 			// Prefactors (constraints)
 			std::vector<REAL> cons_prefactors(number_of_free_bonds_+1,1.); // row
-			
+
 			Position j = 0;
 			for(Position i = 0; i < number_of_free_bonds_; ++i)
 			{
@@ -363,16 +363,16 @@ namespace BALL
 					++j;
 				}
 			}
-			
+
 			if (!add_constraintex(ilp_, j, &cons_prefactors[0], &cons_indices[0], LE, (REAL)j-1))
 			{
 				Log.error() << "AssignBondOrderProcessor: Adding constraint for next solution failed" << std::endl;
 
 				return solution;
 			}
-			
+
 			set_add_rowmode(ilp_, FALSE);
-			
+
 			// Reset the basis to reinitialize the solve process
 			reset_basis(ilp_);
 		}
@@ -381,7 +381,7 @@ namespace BALL
 
 		// Let lp_solve solve our problem
 		int ret = solve(ilp_);
-		
+
 		// Check whether lp_solve could do its job successfully
 		if (ret == OPTIMAL)
 		{
@@ -402,7 +402,7 @@ namespace BALL
 			// Get variables
 			REAL *vars;
 			get_ptr_variables(ilp_, &vars);
-			
+
 			solution->estimated_atom_type_penalty = get_objective(ilp_) + const_penalty_;
 
 			// Do the assignment of the bond orders
@@ -437,22 +437,21 @@ namespace BALL
 					}
 				}
 			}
-			
+
 			if (abop->add_missing_hydrogens_)
 			{
 				// Store the atoms which need additional hydrogens
-				
 				Position no_atoms = abop->ac_->countAtoms();
 				Position current_var = number_of_free_bonds_;
 				for (Position current_atom = 0; current_atom < no_atoms; ++current_atom)
 				{
 					current_var += abop->block_to_length_[abop->atom_to_block_[current_atom][0]];
-					
+
 					// Note: If there are no hydrogens to be added there is no need to check the variables
 					for(Position j = 1; j < abop->atom_to_block_[current_atom].size(); ++j)
 					{
 						Size current_length = abop->block_to_length_[abop->atom_to_block_[current_atom][j]];
-						
+
 						for(Position k = 0; k < current_length; ++k, ++current_var)
 						{
 							if (fabs(vars[current_var] - 1.) < 1.e-10)

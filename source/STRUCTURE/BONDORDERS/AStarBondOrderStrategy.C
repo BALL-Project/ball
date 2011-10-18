@@ -146,14 +146,14 @@ cout << ")" << endl;
 				return (entry.convertToFullAssignment());
 			}
 			else // no leaf
-			{	
+			{
 				entry.last_bond++;
 				Bond* current_bond = abop->index_to_bond_[entry.last_bond];
 
 				// Take the next bond and ...
 				//   ... set to the prefixed value ... 
 				if (abop->bond_fixed_[current_bond])
-				{	
+				{
 					// Set this fixed bond order
 					entry.bond_orders[entry.last_bond] = abop->bond_fixed_[current_bond];
 
@@ -162,17 +162,17 @@ cout << ")" << endl;
 					{
 						queue_.push(entry);
 					}
-				}	
+				}
 				//   ... or try all bond orders
-				else 
+				else
 				{
 					// case 1: VIRTUAL__BOND
 					if (entry.last_bond >= abop->total_num_of_bonds_)
-					{	
+					{
 						int virtual_bond_index = entry.last_bond - abop->total_num_of_bonds_;
-						int max_virtual_hydrogens = 
-						 		abop->virtual_bond_index_to_number_of_virtual_hydrogens_[virtual_bond_index];
-								
+						int max_virtual_hydrogens =
+							  abop->virtual_bond_index_to_number_of_virtual_hydrogens_[virtual_bond_index];
+
 						for (int i = 0; i <= max_virtual_hydrogens; i++)
 						{
 							// Set the bond order
@@ -186,7 +186,7 @@ cout << ")" << endl;
 						}
 					}
 					else // case 2: original bond
-					{	
+					{
 						for (int i = 1; i <= abop->max_bond_order_; i++)
 						{
 							entry.bond_orders[entry.last_bond] = i;
@@ -199,7 +199,7 @@ cout << ")" << endl;
 							}
 						} // end of all bond orders
 					} // end of case 2
-				}	// end of free bond	
+				} // end of free bond	
 			} // no valid bond order try -> do nothing
 		}
 
