@@ -9,13 +9,17 @@ source code of each example.
 
 Further examples can be found in the folder "BALL/source/APPLICATIONS/UTILITIES/". 
 
-ramachandran:
+addHydrogens:
 =============
- 
-  This example reads a PDB-file and calculates all backbone torsion angles.
-  From the output of the program, a Ramachandran plot can be created that
-  shows the torsion angle distribution.
+	This example reads a PDB-file, normalizes the atoms names, builds bonds, 
+	adds missing hydrogens and minimizes the all hydrogens employing a 
+	conjugate gradient minimizer.
 
+amberEnergy:
+============
+	This example reads a PDB-file and optionally an AMBER-option-file, normalizes
+	the atoms names, builds bonds, computes and prints nicely all AMBER energy 
+	contributions.
 
 BALLVIEWClient:
 ==============
@@ -26,6 +30,27 @@ BALLVIEWClient:
   the molecule is then inserted and drawn in the current representation
   (please make sure, the VIEW server is activated - check the settings in
   Display/Preferences/Network).
+
+bindingEnergy:
+==============
+	This example reads two PDB-files, normalizes the atoms names, adds missing
+	bonds, and computes the binding energy according to the following equation:
+			(ACE_AB - ACE_A - ACE_B) + (ES_AB - ES_A - ES_B)
+	where ACE denotes the _A_tom _C_ontact _E_nergy of the molecules and 
+	the complex (Zhang et al. "Determination of atomic desolvation energies from 
+	the structures of crystallized proteins". J. Mol. Biol., 267:707-726, 1997) 
+	as well as the electrostatic energy analogs.
+
+
+energy:
+=======
+  This example shows an examplary energy function as used in Althaus 
+  et al. "A branch and cut algorithm for the optimal solution of the 
+  side-chain placement problem", 2000.
+  
+  It reads a PDB-file and calculates "the" bonded energy using a force
+  field and "the" non-bonded energy (electrostatics only) by solving 
+	the Poisson-Boltzmann equation.
 
 
 PDB2Discover:
@@ -44,39 +69,6 @@ PDBChecker:
 	missing or superfluous atoms in a residue.
 
 
-energy:
-=======
-  This example shows an examplary energy function as used in Althaus 
-  et al. "A branch and cut algorithm for the optimal solution of the 
-  side-chain placement problem", 2000.
-  
-  It reads a PDB-file and calculates "the" bonded energy using a force
-  field and "the" non-bonded energy (electrostatics only) by solving 
-	the Poisson-Boltzmann equation.
-
-
-addHydrogens:
-=============
-	This example reads a PDB-file, normalizes the atoms names, builds bonds, 
-	adds missing hydrogens and minimizes the all hydrogens employing a 
-	conjugate gradient minimizer.
-
-amberEnergy:
-============
-	This example reads a PDB-file and optionally an AMBER-option-file, normalizes
-	the atoms names, builds bonds, computes and prints nicely all AMBER energy 
-	contributions.
-
-
-bindingEnergy:
-==============
-	This example reads two PDB-files, normalizes the atoms names, adds missing
-	bonds, and computes the binding energy according to the following equation:
-			(ACE_AB - ACE_A - ACE_B) + (ES_AB - ES_A - ES_B)
-	where ACE denotes the _A_tom _C_ontact _E_nergy of the molecules and 
-	the complex (Zhang et al. "Determination of atomic desolvation energies from 
-	the structures of crystallized proteins". J. Mol. Biol., 267:707-726, 1997) 
-	as well as the electrostatic energy analogs.
 
 proteinMapper:
 ==============
@@ -96,4 +88,12 @@ proteinMapper:
     upper     = 8
     lower     = 4
     tolerance = 0.6
+
+ramachandran:
+=============
+ 
+  This example reads a PDB-file and calculates all backbone torsion angles.
+  From the output of the program, a Ramachandran plot can be created that
+  shows the torsion angle distribution.
+
 

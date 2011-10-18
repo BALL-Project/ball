@@ -1,8 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: create_random_numbers.C,v 1.1.22.1 2007/08/07 18:26:18 oliver Exp $
-//
+
 // A small example application for creating random numbers.
 
 #include <BALL/MATHS/randomNumberGenerator.h>
