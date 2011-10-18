@@ -43,6 +43,7 @@ int main(int argc, char** argv)
 
 	Log << "Compute bond orders..." << endl;
 	AssignBondOrderProcessor abop;
+	Log << "Current penalty: " << abop.evaluatePenalty(&system) << endl;
 
 	//
 	//    set the options:
