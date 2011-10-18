@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: assign_radii_from_rules.C,v 1.1.12.2 2007/08/07 18:26:16 oliver Exp $
-//
 
 #include <BALL/common.h>
 #include <BALL/KERNEL/system.h>

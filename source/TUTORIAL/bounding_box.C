@@ -66,7 +66,7 @@ bool GLBoundingBoxModel::finish()
 	// use a MolecularInformation visitor to gain information about the
 	// molecular structure wa are processing at the moment
 	MolecularInformation molecular_information;
-	start_composite_->host(molecular_information);                        
+	start_composite_->host(molecular_information);
 
 	// create a SimpleBox with the boundaries of the calculated box and set
 	// its properties with help from MolecularInformation

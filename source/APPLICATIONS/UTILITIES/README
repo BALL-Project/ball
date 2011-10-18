@@ -1,4 +1,3 @@
-# $Id: README,v 1.6.14.1 2007/03/25 21:32:28 oliver Exp $
 
 BALL Utilities
 ==============
@@ -6,14 +5,38 @@ BALL Utilities
 This directory contains some little utilities which are handy for everyday
 use in molecular modeling:
 
+assign_bond_orders:
+	Compute bond orders for ligand molecules based on atomic valence
+	penalty scores.
+
 add_hydrogens:
 
 	Add missing hydrogens to PDB files and minimizes them while fixing all
 	other atoms.
 
+assign_charges_from_rules:
+
+	Assign charges to a PDB file given a charge rule file.
+
+assign_radii_from_rules:
+
+	Assign radii to a PDB file given a radii rule file.
+
 assign_typenames_from_rules:
 
 	Assign typenames from rule files.
+
+atomtyper:
+
+	Create a GAFF typization for a given ligand molecule.
+
+calculate_RMSD:
+
+	Calculate the RMSD between two given PDB files.
+
+compute_connected_components:
+	
+	Split a given ligand file into its connected components.
 
 dcd2dcd:
 
@@ -27,6 +50,16 @@ export_fragment:
 	file with at least atom entries depending on the content of the input
 	files.
 
+fdb_load:
+
+	Parse the content of a FragmentDB-xml file.
+
+file_converter:
+	
+	Convert ligand file between different file formats.
+
+hin2mol2: (obsolete, deprecated by file_converter)
+
 pdb2amber_naming:
 
 	Converts standard PDB files to PDB files which are conform to the AMBER
@@ -35,14 +68,14 @@ pdb2amber_naming:
 	which will not be resolved by this program. Instead a standard case will
 	be assumed (like CYX for CYS residues which built a sulphur bridge).
 
-pdb2dcd:
+pdb2dcd: (obsolete, deprecated by file_converter)
 
 	Converts a bunch of PDB files to a dcd file containing the spatial
 	information of these PDBs as trajectory information.
 	
 reconstruct_fragment:
 
-  Reconstrucst degraded residues from fragment database information. If tou
+  Reconstruct degraded residues from fragment database information. If you
 	happen to have a PDB file which lacks some atoms, use this program to fix
 	it.
 
@@ -50,3 +83,11 @@ rigid_docking:
 
 	Run a rigid docking for two systems using the algorithm GeometricFit.
 	There are two possible ways to store the docking results.
+
+solvent_accessibility:
+	
+	Compute for a given PDB file which residues are solvent exposed by 
+	summing up atom-based solvent-accessible surface areas. 
+	Further print all residues along with their solvent-accessible
+	surface area and mark all residues with an area below 10 A^2 as buried.
+

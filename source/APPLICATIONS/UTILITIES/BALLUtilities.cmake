@@ -4,6 +4,7 @@ SET(DIRECTORY source/APPLICATIONS/UTILITIES)
 ### list all filenames of the directory here ###
 SET(EXECUTABLES_LIST
 	add_hydrogens
+	assign_bond_orders
 	assign_charges_from_rules
 	assign_radii_from_rules
 	assign_typenames_from_rules
@@ -12,7 +13,6 @@ SET(EXECUTABLES_LIST
 	clip_protein_around_ligand
 	compute_connected_components
 	compute_docking_RMSD
-	create_random_numbers
 	dcd2dcd
 	export_fragment
 	file_converter
@@ -22,7 +22,7 @@ SET(EXECUTABLES_LIST
 	pdb2hin
 	reconstruct_fragment
 	solvent_accessibility
-)	
+)
 
 IF (BALL_HAS_FFTW)
 	LIST(APPEND EXECUTABLES_LIST rigid_docking)

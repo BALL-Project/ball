@@ -1,5 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
+//
 
 // A small program for using the GAFF atomtyper
 
@@ -20,13 +21,14 @@ int main(int argc, char** argv)
 		Log << "Usage:" << argv[0] << " <infile> <outfile> [GAFFTypes.dat]" << endl;
 		return 1;
 	}
+
+	Log << "Loading " << argv[1] << "..." << endl;
 	GenericMolFile* infile = MolFileFactory::open(argv[1]);
 
 	if (!infile)
 	{
 		Log.error() << "Could not determine filetype, aborting" << std::endl;
 		return 2;
-
 	}
 
 	if (!*infile)
@@ -35,15 +37,11 @@ int main(int argc, char** argv)
 		return 2;
 	}
 
-
 	System system;
 	*infile >> system;
-
-
-// TEST
+	Log << "done." << endl;
 
 	AssignBondOrderProcessor abp;
-
 	system.apply(abp);
 
 	Options options;
@@ -58,21 +56,23 @@ int main(int argc, char** argv)
 	for (AtomIterator at_it = system.beginAtom(); +at_it; ++at_it)
 		std::cout << "atom name: " << at_it->getName() << " atomtype  " << at_it->getProperty("atomtype").getString() << std::endl;
 
+	Log << "Writing " << argv[2] << "..." << endl;
 	GenericMolFile* outfile = MolFileFactory::open(argv[2], std::ios::out);
 
-	if (!outfile) 
+	if (!outfile)
 	{
 		std::cerr << "Could not determine filetype, aborting" << std::endl;
 		exit(-1);
 	}
 
-	if (!*outfile) 
+	if (!*outfile)
 	{
 		std::cerr << "Invalid file, aborting" << std::endl;
 		exit(-1);
 	}
 
 	*outfile << system;
+	Log << "done." << endl;
 
 	// Important: Cleanup
 	outfile->close();

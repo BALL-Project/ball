@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-//
+
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
 // StrangLBFGS minimizer.
@@ -29,7 +29,7 @@ int main(int argc, char** argv)
 		Log << "Usage:" << argv[0] << " <PDB infile> <PDB outfile> [<amber parameter file>]" << endl;
 		return 1;
 	}
-    
+
 	Log << "Loading " << argv[1] << "..." << endl;
 	PDBFile infile(argv[1]);
 	if (!infile)
@@ -46,7 +46,7 @@ int main(int argc, char** argv)
 	Log << "Initializing FragmentDB..." << endl;
 	FragmentDB db("");
 	Log << "done." << endl;
-		
+
 	Log << "Normalizing names..." << endl;
 	system.apply(db.normalize_names);
 	Log << "done." << endl;
