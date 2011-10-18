@@ -9,6 +9,7 @@
 #include <BALL/KERNEL/system.h>
 #include <BALL/FORMAT/molFileFactory.h>
 #include <BALL/FORMAT/genericMolFile.h>
+#include <BALL/STRUCTURE/assignBondOrderProcessor.h>
 
 using namespace std;
 using namespace BALL;
@@ -22,7 +23,7 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-	Log << "Loading " << argv[1] << "..." << endl;
+	Log << "Loading..." << argv[1] << "..." << endl;
 	GenericMolFile* infile = MolFileFactory::open(argv[1]);
 
 	if (!infile)
@@ -39,7 +40,6 @@ int main(int argc, char** argv)
 
 	System system;
 	*infile >> system;
-	Log << "done." << endl;
 
 	Log << "Compute bond orders..." << endl;
 	AssignBondOrderProcessor abop;
@@ -57,42 +57,47 @@ int main(int argc, char** argv)
 	abop.options.setReal(AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING, 0);
 	abop.options.setReal(AssignBondOrderProcessor::Option::USE_FINE_PENALTY, true);
 
-	// the combination of the following two options cause the computation of all optimal solutions
+	// the combination of the following two options causes the computation of all optimal solutions
 	abop.options.setInteger(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 0);
-	abop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, false); //TODO
+	abop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, false);
 
 	if (argc == 4)
 	{
-		abop.options.setInteger(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, argv[3]);
+		Log << "  with compute fixed number (" << argv[3] << ") solutions" << endl;
+		abop.options.setInteger(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, String(argv[3]).toInt());
 		abop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, true);
 	}
 
 	// define input and output properties
 	abop.options.setBool(AssignBondOrderProcessor::Option::KEKULIZE_RINGS, true);
-	abop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_SELECTED_BONDS, true);
+	abop.options.setBool(AssignBondOrderProcessor::Option::OVERWRITE_SELECTED_BONDS, false);
 
+/*	cout << endl;
 	abop.options.dump();
-
+	cout << endl;
+*/
 	// compute
-	system.apply(abp);
-	int num_of_sols = abop.getNumberOfComputedSolutions();
+	system.apply(abop);
+	Size num_of_sols = abop.getNumberOfComputedSolutions();
+
 	if (num_of_sols == 0)
 	{
-		cout << "No valid bond order assignment found!" << endl;
+		Log << "No valid bond order assignment found!" << endl;
 		return 1;
 	}
 	else
 	{
-		int optimal_score = abop.getTotalPenalty(0);
-		for (Size i=0; (i<num_of_sols) && (abop.getTotalPenalty(0)==optimal_score); i++)
+		Log << "Found " << num_of_sols << " solutions:" << endl;
+
+		for (Size i=0; (i<num_of_sols) /*&& (abop.getTotalPenalty(0)==optimal_score)*/; i++)
 		{
-			cout << "Solution " << i << " has penalty " << abop.getTotalPenalty(i) << endl;
+			Log << "   Solution " << i << " has penalty " << abop.getTotalPenalty(i) << endl;
 
 			// apply the solution
 			if (abop.apply(i))
 			{
-				String outfile_name = String(argv[2]) + "_" + String(i);
-				Log << "Writing " << outfile_name << "..." << endl;
+				String outfile_name = String(argv[2]) + "_" + String(i) + ".mol2";
+				Log << "   Writing solution " << String(i) << " as " << outfile_name << endl;
 				GenericMolFile* outfile = MolFileFactory::open(outfile_name, ios::out);
 
 				if (!outfile)
