@@ -54,10 +54,6 @@
 
 namespace BALL
 {
-	/**	Bond Order Assignment Processor
-			\ingroup StructureMiscellaneous
-	*/
-
 	/** \brief Assignment of bond orders from topology information.
 	 *  
 	 *  Called with default options the processor computes up to 
@@ -68,7 +64,7 @@ namespace BALL
 	 *  All further optimal solutions can be applied by calling
 	 *  the method \link apply()  apply() \endlink. 
 	 *  Additional solutions can be computed by calling the method 
-	 *  \link computeNextSolution()  computeNextSolution()\endlink (except when using the FPT algorithm).
+	 *  \link computeNextSolution()  computeNextSolution()\endlink (except when using the FPT strategy).
 	 *  \par
 	 *  <br>
 	 *  Example code: <br> 
@@ -119,43 +115,47 @@ namespace BALL
 			  static const char* OVERWRITE_SINGLE_BOND_ORDERS;
 
 				/**	compute bond orders for all bonds of type double bond order.
+				 *
 				 *  @see OVERWRITE_SELECTED_BONDS 
 				*/
 				static const char* OVERWRITE_DOUBLE_BOND_ORDERS;
 
 				/**	compute bond orders for all bonds of type triple bond order.
+				 *
 				 *  @see OVERWRITE_SELECTED_BONDS 
 				*/
 				static const char* OVERWRITE_TRIPLE_BOND_ORDERS;
 
 				/**	compute bond orders for all selected bonds
-				 * \par
-				 *  <b>NOTE:</b> This option has higher priority than 
-				 *  the OVERWRITE_BOND_ORDER-Options.
-				 *  @see Option::OVERWRITE_SINGLE_BOND_ORDERS
-				 *  @see Option::OVERWRITE_DOUBLE_BOND_ORDERS
-				 *  @see Option::OVERWRITE_TRIPLE_BOND_ORDERS
+				 
+				   <b>NOTE:</b> This option has higher priority than 
+				   the OVERWRITE_BOND_ORDER-Options.
+
+				   @see Option::OVERWRITE_SINGLE_BOND_ORDERS
+				   @see Option::OVERWRITE_DOUBLE_BOND_ORDERS
+				   @see Option::OVERWRITE_TRIPLE_BOND_ORDERS
 				*/
 				static const char* OVERWRITE_SELECTED_BONDS;
 
 				/**	add hydrogens based on free valences
-				 *  <b>NOTE:</b> This option is still experimental.
+
+				   <b>NOTE:</b> This option is still experimental!
 				*/
 				static const char* ADD_HYDROGENS;             //TODO
 
 				/**  compute also the connectivity of the molecule 
-				 * \par
-				 *   <b>NOTE:</b> This option is still experimental.
+				 
+				    <b>NOTE:</b> This option is still experimental!
 				 */
 				static const char* COMPUTE_ALSO_CONNECTIVITY; //TODO
 
 				/**  the connectivity cut off
-				 *  \par
-				 *   <b>NOTE:</b> This option is still experimental
+				 *
+				 *   <b>NOTE:</b> This option is still experimental!
 				 */
 				static const char* CONNECTIVITY_CUTOFF;       //TODO 
 
-				/**	resolve penalty ties based on structural information
+				/**	additionally use structural information
 				*/
 				static const char* USE_FINE_PENALTY;
 
@@ -163,7 +163,7 @@ namespace BALL
 				*/
 				static const char* KEKULIZE_RINGS;
 
-				/**	technique to compute all solutions
+				/**	the strategy used
 				*/
 				static const char* ALGORITHM;
 
@@ -176,26 +176,30 @@ namespace BALL
 				static const char* MAX_BOND_ORDER;
 
 				/** the maximal number of solutions to compute
+				 *
 				 *  If set to zero all optimal solutions will be computed.
+				 *
 				 *  @see Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS
 				 */
 				static const char* MAX_NUMBER_OF_SOLUTIONS;
 
 				/** compute also non-optimal solutions but not more than 
 				 *  \link MAX_NUMBER_OF_SOLUTIONS MAX_NUMBER_OF_SOLUTIONS \endlink solutions.
+				 *
 				 *  @see Option::MAX_NUMBER_OF_SOLUTIONS
 				 */
 				static const char* COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS;
 
 				/** weighting of bond length penalties wrt valence penalties.
 				 *  If set to zero, the valence penalty will not be normalized. 
-				 *  \par
+				 *  
 				 *   <b>NOTE:</b> This option is still experimental.
 				 */
 				static const char* BOND_LENGTH_WEIGHTING;
 
 				/** apply the first solution directly.
-				 * Default is false.
+				 *
+				 *  Default is false.
 				 */
 				static const char* APPLY_FIRST_SOLUTION;
 
@@ -230,6 +234,7 @@ namespace BALL
 				static const String A_STAR;
 
 				/** Solves the problem using an ILP.
+				 *
 				 *  \par
 				 *   <b>NOTE:</b> This option requires an ILP solver and currently 
 				 *   cannot be combined with the options 
@@ -241,6 +246,7 @@ namespace BALL
 				static const String ILP;
 
 				/** Solves the problem using an FPT algorithm.
+				 *
 				 *  \par 
 				 *  <b>NOTE:</b> 
 				 *   This algorithm does not support the method computeNextSolution() by design.
@@ -249,7 +255,7 @@ namespace BALL
 				 *	 	\link Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS \endlink 
 				 *	 to create an ensemble of solutions.
 				 *
-				 *   Furthermore, this option currently cannot be combined with the options 
+				 *   Furthermore, this option currently cannot be combined with the options:
 				 *   	\link Option::USE_FINE_PENALTY Option::USE_FINE_PENALTY  \endlink,
 				 *   	\link Option::BOND_LENGTH_WEIGHTING Option::BOND_LENGTH_WEIGHTING \endlink, 
 				 *   	\link Option::ADD_HYDROGENS Option::ADD_HYDROGENS  \endlink, 
@@ -294,9 +300,10 @@ namespace BALL
 			virtual bool start();
 
 			/** Clears the datastructures.
-			* 	<b>NOTE:</b> The options remain!
-			* 	Use setDefaultOptions() to clear the options.
-			*/
+			 *
+			 * 	<b>NOTE:</b> The options remain!
+			 * 	Use setDefaultOptions() to clear the options.
+			 */
 			void clear();
 
 			/** Operator () for the processor 
@@ -324,9 +331,11 @@ namespace BALL
 
 			/** Returns the number of added hydrogens in Solution i.
 			 *
-			 *  @return Size - number of hydrogens added in Solution i.
-			 *  @see Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS
-			 *  @see Option::MAX_NUMBER_OF_SOLUTIONS
+			 *	<b>NOTE:</b> Hydrogens can only be added using the
+			 *	\link  Option::ADD_HYDROGENS  Option::ADD_HYDROGENS\endlink-option.
+			 *
+			 *  @return Size - number of hydrogens added in assignment solution i.
+			 *  @see Option::ADD_HYDROGENS
 			 */
 			Size getNumberOfAddedHydrogens(Position i)
 			{
@@ -556,7 +565,7 @@ namespace BALL
 			 *  returns the maximal possible atom type penalty.  
 			 *
 			 *  "virtual" means that NO  
-			 *  atoms and bonds are added to the AtomContainer. 
+			 *  atoms and bonds are added to the original AtomContainer. 
 			 *	
 			 *	@param  atom the atom, to which the virtual hydrogens should be added.
 			 *  @return float - the max possible penalty the atom can get, if hydrogen(s) are added. 
@@ -565,8 +574,8 @@ namespace BALL
 			float computeVirtualHydrogens_(Atom* atom);
 
 			/** Applies the given solution.
-			 *  TODO: move to the solution!
 			 */
+			//TODO: move to the solution!
 			bool apply_(BondOrderAssignment& solution);
 
 			/** Stores the original configuration of the atom container.
