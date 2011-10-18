@@ -1,3 +1,7 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+
 #include <BALL/FORMAT/genericMolFile.h>
 #include <BALL/FORMAT/molFileFactory.h>
 
@@ -26,15 +30,15 @@ int main(int argc, char** argv)
 		Log.error() << "error opening " << argv[1] << " for input." << endl;
 		return 2;
 	}
-	
+
 	// create a system and read the contents of the molecular file
 	System S;
 	*file >> S;
 	file->close();
 
 	// print the number of molecules, atoms, and bonds read from the file
-	Log << "read " << S.countMolecules() << " molecules, " 
-	               << S.countAtoms()     << " atoms, and " 
+	Log << "read " << S.countMolecules() << " molecules, "
+	               << S.countAtoms()     << " atoms, and "
 								 << S.countBonds()     << " bonds." << endl;
 
 	// write the structure to a file whose
@@ -47,7 +51,7 @@ int main(int argc, char** argv)
 		outfile->close();
 	}
 	else
-	{	
+	{
 		// if file type unknown: complain and abort
 		Log.error() << "error writing " << argv[1] << endl;
 		return 2;
@@ -57,7 +61,3 @@ int main(int argc, char** argv)
 	return 0;
 }
 
-	
-	
-	
-	
