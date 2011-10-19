@@ -1,3 +1,7 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/KERNEL/protein.h>
 #include <BALL/FORMAT/PDBFile.h>
@@ -12,7 +16,7 @@
 using namespace std;
 using namespace BALL;
 
-int main(int argc, char** argv) 
+int main(int argc, char** argv)
 {
 	// print usage information
 	if (argc < 5)
@@ -48,13 +52,13 @@ int main(int argc, char** argv)
 
 	// define two systems and two proteins
 	System    reference, docked;
-	Protein		static_reference, static_docked;
+	Protein   static_reference, static_docked;
 
 	// we'll need that one later
-	System docked_backup;
+	System    docked_backup;
 
 	// and a PDB file to read and write the proteins
-	PDBFile	pdb_file;
+	PDBFile   pdb_file;
 
 	// read the proteins
 	pdb_file.open(argv[1]);
@@ -86,15 +90,15 @@ int main(int argc, char** argv)
 	}
 
 	// map the two static chains
-	Matrix4x4				T;
-	StructureMapper	mapper;
-	Size						no_ca;
+	Matrix4x4       T;
+	StructureMapper mapper;
+	Size            no_ca;
 	double					rmsd;
-	
+
 	Log.info() << "Mapping static chain of " << argv[1] << " onto static chain of " << argv[2] << endl;
-	Log.info() << " (this may take a while)..." << endl; 
-	
-	Timer	t;
+	Log.info() << " (this may take a while)..." << endl;
+
+	Timer t;
 	t.start();
 
 	// default values
@@ -106,7 +110,7 @@ int main(int argc, char** argv)
 
 	t.stop();
 
-	if (no_ca < 1) 
+	if (no_ca < 1)
 	{
 		Log.info() << "Sorry - couldn't map (no CA atoms?)" << endl;
 		return 1;
@@ -126,7 +130,7 @@ int main(int argc, char** argv)
 	mapper.setTransformation(T);
 	reference.apply(mapper);
 	static_reference.apply(mapper);
-	
+
 	Log.info() << "Reading the docking results..." << endl;
 	DockResult dr;
 	dr.readDockResult(argv[3]);
@@ -144,7 +148,7 @@ int main(int argc, char** argv)
 		docked = docked_backup;
 		snap = (*conformation_set)[i];
 		snap.applySnapShot(docked);
-		
+
 		// split static chain from docked since we want to calculate the RMSD for static and mobile sperately
 		for (pi = docked.beginChain(); +pi; ++pi)
 		{
@@ -152,9 +156,9 @@ int main(int argc, char** argv)
 				static_docked.insert(*pi);
 		}
 
-		rmsd = 0.;	// RMSD for whole complex
-		float rmsd_1 = 0.;	// RMSD for mobile chains
-		float rmsd_2 = 0.;	// RMSD for static chains
+		rmsd = 0.;          // RMSD for whole complex
+		float rmsd_1 = 0.;  // RMSD for mobile chains
+		float rmsd_2 = 0.;  // RMSD for static chains
 		int count = 0;
 		int count_1 = 0;
 		int count_2 = 0;
