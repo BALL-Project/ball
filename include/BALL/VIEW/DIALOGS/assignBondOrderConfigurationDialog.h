@@ -23,7 +23,7 @@
 namespace BALL
 {
 	class MMFF94;
-	
+
 	namespace VIEW
 	{
 		class MolecularStructure;
