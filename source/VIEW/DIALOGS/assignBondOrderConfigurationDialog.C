@@ -27,7 +27,7 @@ namespace BALL
 		{
 			setupUi(this);
 
-			setINIFileSectionName("BONDORDERASSIGNER"); 
+			setINIFileSectionName("BONDORDERASSIGNER");
 			setObjectName(name);
 			// for preferences	
 			registerWidgets_();
@@ -36,7 +36,7 @@ namespace BALL
 			hide();
 
 			// signals and slots connections
-			connect( browse_button, SIGNAL( clicked() ), this, SLOT( browseParameterFiles_() ) );	
+			connect( browse_button, SIGNAL( clicked() ), this, SLOT( browseParameterFiles_() ) );
 			connect( penalty_balance_slider, SIGNAL( valueChanged(int) ), this, SLOT( balanceParameterChanged_() ) );
 
 			connect(overwrite_singleBO_box, SIGNAL(stateChanged(int)), this, SLOT(validateBOBoxes_()));
@@ -89,21 +89,33 @@ namespace BALL
 		void AssignBondOrderConfigurationDialog::validateStrategies_()
 		{
 			// if the FPT strategy is selected we have to disable some functionality
-			bool FPT_touched = FPT_button->isChecked();
-			bool ILP_touched = ILP_button->isChecked();
-			bool touched = FPT_touched || ILP_touched;
+			bool FPT_clicked = FPT_button->isChecked();
+			bool ILP_clicked = ILP_button->isChecked();
+			bool touched = FPT_clicked || ILP_clicked;
+
 			if (touched)
 			{
 				add_hydrogens_checkBox->setChecked(!touched);
+				penalty_balance_slider->setValue(0);
+
 			}
 			hydrogen_check_options->setDisabled(touched);
 			bond_length_groupBox->setDisabled(touched);
+			ASTAR_groupBox->setDisabled(touched);
 
-			if (FPT_touched)
+			if (FPT_clicked)
 			{
-				all_optimal_solutions_button->setChecked(!FPT_touched);
-				n_opt_solutions_button->setChecked(FPT_touched);
+				all_optimal_solutions_button->setChecked(!FPT_clicked);
+				n_opt_solutions_button->setChecked(FPT_clicked);
+
+				overwrite_singleBO_box->setChecked(FPT_clicked);
+				overwrite_doubleBO_box->setChecked(FPT_clicked);
+				overwrite_tripleBO_box->setChecked(FPT_clicked);
+				overwrite_selected_bonds_box->setChecked(!FPT_clicked);
 			}
+
+			all_optimal_solutions_button->setDisabled(FPT_clicked);
+			restrictions_groupBox->setDisabled(FPT_clicked);
 		}
 
 		void AssignBondOrderConfigurationDialog::browseParameterFiles_()

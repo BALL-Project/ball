@@ -65,8 +65,8 @@ namespace BALL
 
 				new_system->setName(solution_systems_[activated_item_]->getName());
 				getMainControl()->insert(*new_system);
-				getMainControl()->update(*new_system);		
-				
+				getMainControl()->update(*new_system);
+
 				//highlight as before
 				list<Composite*> sel;
 				Composite* to_highlight = bond_order_processor_->getAtomContainer()->getParent();
@@ -92,21 +92,21 @@ namespace BALL
 				// add this solution the results
 				// generate the tree entry
 				QString name = bond_order_processor_->getSolution(0).getName().c_str();
-				
+
 				// This is a hack
 				if (name.trimmed() == "")
 				{
 					name = "<Molecule>";
 				}
 				Size num_of_sol = bond_order_processor_->getNumberOfComputedSolutions();
-					
+
 				std::ostringstream stream_name;
 				stream_name.setf(std::ios_base::fixed);
 				stream_name.precision(2);
 
 				stream_name << ascii(name) << "_sol_" << num_of_sol << "_" << bond_order_processor_->getTotalPenalty(num_of_sol-1);
 				String sol_text = stream_name.str();
-				
+
 				std::ostringstream stream_description;
 				stream_description.setf(std::ios_base::fixed);
 				stream_description.precision(2);
@@ -129,7 +129,7 @@ namespace BALL
 				sdg.generateSD(S);
 
 				sd_systems_[current_item] = new System(S);
-				
+
 				queries->setCurrentItem(current_item);
 				current_item->setSelected(true);
 				queries->update();
