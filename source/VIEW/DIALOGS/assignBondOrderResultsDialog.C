@@ -21,7 +21,7 @@ namespace BALL
 				Ui_AssignBondOrderResultsDialogData(),
 				ModularWidget(name),
 				bond_order_processor_(0),
-				root_(NULL), 
+				root_(NULL),
 				activated_item_(NULL)
 		{
 			#ifdef BALL_VIEW_DEBUG
@@ -64,10 +64,25 @@ namespace BALL
 				System* new_system = new System(*org_system);
 
 				new_system->setName(solution_systems_[activated_item_]->getName());
+
+				// try to set correct coordinates
+				if (new_system->countAtoms() == bond_order_processor_->getAtomContainer()->countAtoms())
+				{
+					AtomIterator at2 = new_system->beginAtom();
+					for (AtomIterator at =  bond_order_processor_->getAtomContainer()->beginAtom(); +at && +at2; ++at, ++at2)
+					{
+						if (at->getName() == at2->getName())
+						{
+							at2->setPosition(at->getPosition());
+						}
+					}
+				}
+
+				// inform BV
 				getMainControl()->insert(*new_system);
 				getMainControl()->update(*new_system);
 
-				//highlight as before
+				// highlight as before
 				list<Composite*> sel;
 				Composite* to_highlight = bond_order_processor_->getAtomContainer()->getParent();
 
@@ -112,8 +127,8 @@ namespace BALL
 				stream_description.precision(2);
 
 				stream_description << "\n" << ascii(name)
-				                             << ":\n\n      solution : " << num_of_sol 
-				                             <<  "\n      penalty  : " << bond_order_processor_->getTotalPenalty(num_of_sol-1);
+				                             << ":\n\n      solution : " << num_of_sol
+				                             <<    "\n      penalty  : " << bond_order_processor_->getTotalPenalty(num_of_sol-1);
 				// 			     << "\n  charge     : " << bond_order_processor_->getTotalCharge(num_of_sol-1);
 
 				String description = stream_description.str();
@@ -139,19 +154,19 @@ namespace BALL
 			}	
 			else
 			{
-				Log.info() << "There are no further solutions!" << std::endl;		
+				Log.info() << "There are no further solutions!" << std::endl;
 				setStatusbarText(tr("There are no further solutions!"), true);
 
 			}
 		}
-		
+
 		void AssignBondOrderResultsDialog::finished()
 		{
-			hide();	
+			hide();
 		}
-		
+
 		void AssignBondOrderResultsDialog::createEntries()
-		{		
+		{
 			// before creating new entries, remove the old ones!
 			clearEntries();
 
@@ -162,19 +177,19 @@ namespace BALL
 				// first the root element
 				QList<QTreeWidgetItem *> query_results;
 				QString name = bond_order_processor_->getSolution(0).getName().c_str();
-				
+
 				// This is a hack
- 				if (name.trimmed() == "")
+				if (name.trimmed() == "")
 				{
 					name = "<Molecule>";
 				}
 
 				QTreeWidgetItem* query_item = new QTreeWidgetItem((QTreeWidget*)0, QStringList(name));
-				
+
 				query_results.append(query_item);
 				queries->insertTopLevelItems(0, query_results);
 				queries->expandItem(query_item);
-				
+
 				// store the root 
 				root_ = query_item;
 
@@ -189,13 +204,13 @@ namespace BALL
 
 					stream_name << ascii(name) << "_sol_" << i+1 << "_" << bond_order_processor_->getTotalPenalty(i);
 					String sol_text = stream_name.str();
-					
+
 					std::ostringstream stream_description;
 					stream_description.setf(std::ios_base::fixed);
 					stream_description.precision(2);
 
-					stream_description << "\n  " << ascii(name) 
-					                   << ":\n\n      solution : " << i+1 
+					stream_description << "\n  " << ascii(name)
+					                   << ":\n\n      solution : " << i+1
 					                   <<  "\n      penalty  : " << bond_order_processor_->getTotalPenalty(i);
 					//                 << "\n  charge   : " << bond_order_processor_->getTotalCharge(i);
 
@@ -222,7 +237,7 @@ namespace BALL
 					{
 						sd_systems_[current_item] = new System;
 					}
-				
+
 					queries->setCurrentItem(current_item);
 					//current_item->setSelected(true);
 					//queries->update();
@@ -241,7 +256,7 @@ namespace BALL
 		{
 			std::map<QTreeWidgetItem*, System*>::iterator it = sd_systems_.begin();
 			for (; it != sd_systems_.end(); it++)
-			{	
+			{
 				delete it->second;
 			}
 
@@ -270,8 +285,8 @@ namespace BALL
 			// is this item connected with a system?
 			if (sd_systems_.find(item) != sd_systems_.end())
 			{
-				activated_item_ = item; 
-				
+				activated_item_ = item;
+
 				sd_widget->plot(*sd_systems_[item], false);
 				if (applyToSelected_checkBox->isChecked())
 				{
@@ -291,7 +306,7 @@ namespace BALL
 				addAsNew_button->setEnabled(false);
 			}
 		}
- 	
+
 		void AssignBondOrderResultsDialog::initializeWidget(MainControl&)
 		{
 		}
