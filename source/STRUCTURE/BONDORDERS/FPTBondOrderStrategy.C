@@ -1317,7 +1317,7 @@ namespace BALL
 			current_state_ = new BackTrackingState_(*copy.current_state_);
 		}
 
-		std::multiset<BackTrackingState_*, StateComparator_> iter = copy.queue_.begin();
+		std::multiset<BackTrackingState_*, StateComparator_>::const_iterator iter = copy.queue_.begin();
 		for (; iter != copy.queue_.end(); ++iter)
 		{
 			queue_.insert(new BackTrackingState_(**iter));
@@ -1334,7 +1334,7 @@ namespace BALL
 			current_state_   = copy.current_state_;
 
 			queue_.clear();
-			std::multiset<BackTrackingState_*, StateComparator_> iter = copy.queue_.begin();
+			std::multiset<BackTrackingState_*, StateComparator_>::const_iterator iter = copy.queue_.begin();
 			for (; iter != copy.queue_.end(); ++iter)
 			{
 				queue_.insert(new BackTrackingState_(**iter));
