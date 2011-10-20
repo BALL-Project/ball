@@ -372,7 +372,7 @@ namespace BALL
 
 	template <class UndirectedGraph>
 	template <class L, class U>
-	void TreeWidthImplementation<UndirectedGraph>::QuickBB<L, U>::prune(QuickBB::QuickBBState& cstate)
+	void TreeWidthImplementation<UndirectedGraph>::QuickBB<L, U>::prune(QuickBBState& cstate)
 	{
 		Size nxt = cstate.permutation.size();
 
@@ -445,7 +445,7 @@ namespace BALL
 
 	template <class UndirectedGraph>
 	template <class L, class U>
-	void TreeWidthImplementation<UndirectedGraph>::QuickBB<L, U>::branchAndBound(QuickBB::QuickBBState& nstate)
+	void TreeWidthImplementation<UndirectedGraph>::QuickBB<L, U>::branchAndBound(QuickBBState& nstate)
 	{
 		Size length = boost::num_vertices(graph_);
 
