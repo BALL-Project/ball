@@ -33,6 +33,7 @@ namespace BALL
 			: QDialog(parent),
 				Ui_PubChemDialogData(),
 				ModularWidget(name),
+			  pcd_(0),
 				action1_(0),
 				action2_(0),
 				progress_(0),
@@ -67,6 +68,7 @@ namespace BALL
 	
 		PubChemDialog::~PubChemDialog()
 		{
+			delete pcd_;
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "deleting PubChemDialog " << this << std::endl;
 #endif
@@ -167,6 +169,12 @@ namespace BALL
 			String qt = ascii(pubchem_label->displayText());
 			if (qt == "") return;
 
+			if(pcd_) {
+				delete pcd_;
+			}
+
+			pcd_ = new PubChemDownloader();
+
 			File::createTemporaryFilename(downloader_.filename, ".sdf");
 
 			getMainControl()->setStatusbarText(String(tr("Performing query...")));
@@ -174,10 +182,10 @@ namespace BALL
 			progress_->show();
 			progress_->setMaximum(0);
 
-			connect(&pcd_, SIGNAL(downloadProgress(qint64, qint64)), 
+			connect(pcd_, SIGNAL(downloadProgress(qint64, qint64)), 
 			        this, SLOT(updateDownloadProgress(qint64, qint64)));
 		
-			connect(&pcd_, SIGNAL(downloadFinished(const QString&)),
+			connect(pcd_, SIGNAL(downloadFinished(const QString&)),
 			        this, SLOT(downloadFinished(const QString&)));
 
 			
@@ -190,6 +198,9 @@ namespace BALL
 
 		void PubChemDialog::downloadFinished(const QString& filename)
 		{
+			disconnect(pcd_, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(updateDownloadProgress(qint64, qint64)));
+			disconnect(pcd_, SIGNAL(downloadFinished(const QString&)), this, SLOT(downloadFinished(const QString&)));
+
 			SDFile sdf;
 			// now, try to read the SD File
 			try {
@@ -357,7 +368,7 @@ namespace BALL
 
 			void DownloadHelper::run()
 			{
-				parent_->pcd_.downloadSDF(query, filename, false);
+				parent_->pcd_->downloadSDF(query, filename, false);
 			}
 		}
 	}

@@ -129,7 +129,7 @@ namespace BALL
 				 
 				void insert_(ParsedResult_ d, QTreeWidgetItem* parent, bool plot);
 				
-				PubChemDownloader pcd_;
+				PubChemDownloader* pcd_;
 
 				std::map<QTreeWidgetItem*, System*> 				sd_systems_;
 				std::map<QTreeWidgetItem*, System*> 				original_systems_;
