@@ -14,10 +14,9 @@ class MOL2File
 %End
   public:
   MOL2File();
-  MOL2File(const String&, OpenMode /openmode/ = std::ios::in)
-		throw(FileNotFound);
-  ~MOL2File()
-		throw();
-  virtual bool write(const System& /system/) throw(File::CannotWrite);
-  virtual bool read(System& /system/)	throw(ParseError);
+  MOL2File(const String&, OpenMode /openmode/ = std::ios::in);
+  ~MOL2File();
+  virtual bool write(const System& /system/);
+  virtual bool read(System& /system/);
+	virtual Molecule* read();
 };
