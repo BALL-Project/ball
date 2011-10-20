@@ -126,7 +126,7 @@ namespace BALL
 
 			mutable typename boost::property_map<Graph2, boost::vertex_orig_ptr_t>::type vertex_orig_map;
 			Graph1 const& g1;
-			mutable Graph2& g2;
+			Graph2& g2;
 		};
 
 		template <typename Graph1, typename Graph2>
