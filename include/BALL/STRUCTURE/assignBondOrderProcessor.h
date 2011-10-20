@@ -63,12 +63,14 @@ namespace BALL
 	 *  Called with default options the processor computes up to 
 	 *  \link Default::MAX_NUMBER_OF_SOLUTIONS Default::MAX_NUMBER_OF_SOLUTIONS\endlink 
 	 *  many possible bond orders with optimal value and applies the first solution found 
-	 *  to the given AtomContainer ac_.
+	 *  to the given AtomContainer.
 	 *  \par
+	 *
 	 *  All further optimal solutions can be applied by calling
 	 *  the method \link apply()  apply() \endlink. 
 	 *  Additional solutions can be computed by calling the method 
-	 *  \link computeNextSolution()  computeNextSolution()\endlink (except when using the FPT strategy).
+	 *  \link computeNextSolution()  computeNextSolution()\endlink (except when 
+	 *  using the FPT strategy which currently does not support this behaviour).
 	 *  \par
 	 *  <br>
 	 *  Example code: <br> 
@@ -242,10 +244,10 @@ namespace BALL
 				 *  \par
 				 *   <b>NOTE:</b> This option requires an ILP solver and currently 
 				 *   cannot be combined with the options 
-				 *   	Option::USE_FINE_PENALTY, 
-				 *   	Option::BOND_LENGTH_WEIGHTING, 
-				 *   	Option::ADD_HYDROGENS, 
-				 *   	or Option::COMPUTE_ALSO_CONNECTIVITY.
+				 *   	\link Option::USE_FINE_PENALTY Option::USE_FINE_PENALTY \endlink, 
+				 *   	\link Option::BOND_LENGTH_WEIGHTING Option::BOND_LENGTH_WEIGHTING\endlink, 
+				 *   	\link Option::ADD_HYDROGENS Option::ADD_HYDROGENS\endlink, 
+				 *   	or \link Option::COMPUTE_ALSO_CONNECTIVITY  Option::COMPUTE_ALSO_CONNECTIVITY\endlink .
 				 */
 				static const String ILP;
 
@@ -303,19 +305,20 @@ namespace BALL
 			/// Processor method which is called before the operator()-call.
 			virtual bool start();
 
-			/** Clears the datastructures.
+			/** Clears the data structures.
 			 *
 			 * 	<b>NOTE:</b> The options remain!
-			 * 	Use setDefaultOptions() to clear the options.
+			 * 	Use \link setDefaultOptions() setDefaultOptions()\endlink to clear the options.
 			 */
 			void clear();
 
 			/** Operator () for the processor 
 			 *
-			 * Called with \link Default Default\endlink-options the processor computes all 
-			 * possible bond orders with optimal value and 
-			 * applies the first solution to the given AtomContainer ac_.
+			 * Called with %Default-options the processor computes all 
+			 * possible bond order assignments with optimal atomic penalty value and 
+			 * applies the first solution to the given AtomContainer.
 			 * \par
+			 *
 			 * 	<b>NOTE:</b> Having used the \link Algorithm::A_STAR Algorithm::A_STAR\endlink-option (default)
 			 * 	the method \link getNumberOfComputedSolutions() getNumberOfComputedSolutions()\endlink
 			 * 	will return the  number of optimal solutions+1!
@@ -333,7 +336,7 @@ namespace BALL
 			*/
 			//@{
 
-			/** Returns the number of added hydrogens in Solution i.
+			/** Returns the number of added hydrogens in solution i.
 			 *
 			 *	<b>NOTE:</b> Hydrogens can only be added using the
 			 *	\link  Option::ADD_HYDROGENS  Option::ADD_HYDROGENS\endlink-option.
@@ -358,7 +361,7 @@ namespace BALL
 
 			/** Returns the number of already computed solutions.
 			 *
-			 *  <b>NOTE:</b> Having applied the operator with option ALGORITHM::ASTAR
+			 *  <b>NOTE:</b> Having applied the operator with option \link Option::Algorithm::A_STAR Option Algorithm::A_STAR \endlink
 			 * 			  this method returns the number of optimal solutions+1!
 			 * 	
 			 * 	@return Size - number of already computed solutions. 
@@ -378,7 +381,7 @@ namespace BALL
 
 			/** Returns a reference to the original system to which solution i was applied.
 			 *   
-			 *   <b>NOTE:</b> This method has the same effect as calling \link apply(i) apply(i)\endlink!
+			 *   <b>NOTE:</b> This method has the same effect as calling %apply(i)!
 			 *
 			 *  @param  i index of the solution, whose bond order assignment should be applied. 
 			 * 	@return const System& - the original system with bond order assignment of solution i. 
@@ -458,24 +461,24 @@ namespace BALL
 					return getQueueSize_(solutions_[i]);
 			}
 
-			/** Applies the i-th precomputed bond order combination.
+			/** Applies the i-th precomputed bond order assignment.
 			 *
-			 * Set the AtomContainer ac_'s bond orders to the ones found 
-			 * in the (already computed!) i-th solution, start counting in 0!
+			 * Sets the AtomContainer's bond orders to the ones found 
+			 * in the (already computed!) i-th solution, start counting at 0!
 			 * \par
 			 * <b>NOTE:</b> All virtual hydrogens added to the processed AtomContainer
 			 * 			 by a previous call of apply will be deleted by the current
 			 * 			 call!
 			 *
-			 *  @param    i  index of the solution, whose bond orders should be assigned. 
+			 *  @param    i  index of the solution whose bond orders should be assigned. 
 			 *	@return bool - true if the i-th solution is valid, false otherwise.
 			 */
 			bool apply(Position i);
 
-			/** Reset all bond orders and assigned hydrogens.
+			/** Resets all bond orders and assigned hydrogens.
 			 *  
-			 *  Resets the AtomContainer we are operating on to the bond order configuration it had 
-			 *  before applying the AssignBondOrderProcessor.
+			 *  Assigns the original bond order assignments to the AtomContainer 
+			 *  we are operating on.
 			 */
 			void resetBondOrders();
 
@@ -483,6 +486,7 @@ namespace BALL
 			 *
 			 *  Ignores the options  \link MAX_NUMBER_OF_SOLUTIONS MAX_NUMBER_OF_SOLUTIONS \endlink and
 			 *											 \link COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS\endlink .
+			 *
 			 *  @return bool - false if no further solution can be found.
 			 */
 			bool computeNextSolution(bool apply_solution = true);
@@ -495,10 +499,10 @@ namespace BALL
 			*/
 			bool hasValidOptions(){return readOptions_();}
 
-			/** Evaluates the AtomContainer ac's bond orders as specified in 
+			/** Evaluates the AtomContainer's bond orders as specified in 
 			 *  the Options and returns the computed penalty.
 			 *
-			 *  @param 	 ac	AtomContainer, whose bond orders should be evalated.
+			 *  @param 	 ac	AtomContainer, whose bond orders should be evaluated.
 			 *  @return  float - computed penalty, -1 if current assignment is not valid or includes aromatic bonds.
 			 */
 			float evaluatePenalty(AtomContainer* ac);
@@ -507,7 +511,7 @@ namespace BALL
 			/** @name Public Attributes
 			*/
 			//@{
-			/// options
+			/// the processor's options
 			Options options;
 
 			//@}
@@ -542,7 +546,7 @@ namespace BALL
 			 * Finds the first matching SMARTS-expression in the penalty-vector
 			 * and returns its index.
 			 *
-			 * @retval int - -1 if there is no matching expression
+			 * @retval int  -1 if there is no matching expression
 			 */
 			int getPenaltyClass_(Atom* atom);
 
@@ -565,7 +569,7 @@ namespace BALL
 			bool precomputeBondLengthPenalties_();
 
 			/** Adds missing hydrogens as virtual hydrogens to the 
-			 *  given Atom, determines the possible penalty blocks, and 
+			 *  given atom, determines the possible penalty blocks, and 
 			 *  returns the maximal possible atom type penalty.  
 			 *
 			 *  "virtual" means that NO  
@@ -579,10 +583,10 @@ namespace BALL
 
 			/** Applies the given solution.
 			 */
-			//TODO: move to the solution!
+			//TODO: move to solution!
 			bool apply_(BondOrderAssignment& solution);
 
-			/** Stores the original configuration of the atom container.
+			/** Stores the original configuration of the AtomContainer.
 			 */
 			void storeOriginalConfiguration_();
 
@@ -601,7 +605,7 @@ namespace BALL
 
 			float getTotalCharge_(const BondOrderAssignment& sol)
 			{
-				if (sol.valid) 
+				if (sol.valid)
 				{
 					return sol.total_charge;
 				}
