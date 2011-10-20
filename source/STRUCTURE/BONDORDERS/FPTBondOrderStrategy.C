@@ -1317,7 +1317,8 @@ namespace BALL
 			current_state_ = new BackTrackingState_(*copy.current_state_);
 		}
 
-		for (multiset<BackTrackingState_*>::const_iterator iter = copy.queue_.begin(); iter != copy.queue_.end(); ++iter)
+		std::multiset<BackTrackingState_*, StateComparator_> iter = copy.queue_.begin();
+		for (; iter != copy.queue_.end(); ++iter)
 		{
 			queue_.insert(new BackTrackingState_(**iter));
 		}
@@ -1333,7 +1334,8 @@ namespace BALL
 			current_state_   = copy.current_state_;
 
 			queue_.clear();
-			for (multiset<BackTrackingState_*>::const_iterator iter = copy.queue_.begin(); iter != copy.queue_.end(); ++iter)
+			std::multiset<BackTrackingState_*, StateComparator_> iter = copy.queue_.begin();
+			for (; iter != copy.queue_.end(); ++iter)
 			{
 				queue_.insert(new BackTrackingState_(**iter));
 			}
@@ -1438,7 +1440,7 @@ namespace BALL
 			delete current_state_;
 		}
 
-		multiset<BackTrackingState_*>::iterator first = queue_.begin();
+		multiset<BackTrackingState_*, StateComparator_>::iterator first = queue_.begin();
 		current_state_ = *first;
 		queue_.erase(first);
 		--max_heap_size_;
