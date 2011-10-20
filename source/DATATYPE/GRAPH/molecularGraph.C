@@ -1,4 +1,4 @@
-#include <BALL/DATATYPE/molecularGraph.h>
+#include <BALL/DATATYPE/GRAPH/molecularGraph.h>
 
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>

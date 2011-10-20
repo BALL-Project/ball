@@ -1,3 +1,5 @@
+INCLUDE(source/DATATYPE/GRAPH/sources.cmake)
+
 ### the directory name ###
 SET(DIRECTORY source/DATATYPE)
 
@@ -6,7 +8,6 @@ SET(SOURCES_LIST
 	bitVector.C
 	contourSurface.C
 	hashGrid.C
-	molecularGraph.C
 	options.C
 	regularExpression.C
 	regularData1D.C
