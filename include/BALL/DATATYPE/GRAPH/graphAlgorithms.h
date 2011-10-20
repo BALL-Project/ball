@@ -15,6 +15,7 @@
 #include <boost/graph/tree_traits.hpp>
 #include <boost/graph/iteration_macros.hpp>
 #include <boost/graph/copy.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include <iostream>
 
