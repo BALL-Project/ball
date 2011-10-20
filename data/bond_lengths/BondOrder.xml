@@ -260,7 +260,6 @@
 	<entry id="30">
 		<elementstring>S</elementstring>
 		<smartstring>SMARTS([#16D2])</smartstring>
-		<penalty valence="1">2</penalty>
 		<penalty valence="2">0</penalty>
 		<penalty valence="3">64</penalty>
 	</entry>
