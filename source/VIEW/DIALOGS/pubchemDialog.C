@@ -218,7 +218,13 @@ namespace BALL
 			Molecule *current_molecule;
 			std::deque<System*> sd_systems;
 			do {
-				current_molecule = sdf.read();	
+				try {
+					current_molecule = sdf.read();
+				} catch(Exception::ParseError& exn) {
+					QMessageBox::critical(this, tr("Download failed"), tr("Error while parsing downloaded SD file. Aborting"));
+					Log.error() << exn.getMessage() << std::endl;
+					return;
+				}
 
 				if (current_molecule)
 				{
