@@ -47,11 +47,11 @@ namespace BALL
 		(File&)(*this) << charge_line << std::endl;
 
 		// next, we need the element counts
-		HashMap<String, Size> element_counts;
+		std::map<String, Size> element_counts;
 		for (AtomConstIterator at_it = ac.beginAtom(); +at_it; ++at_it)
 		{
 			String const& element = at_it->getElement().getSymbol();
-			if (element_counts.has(element))
+			if (element_counts.find(element) != element_counts.end())
 				element_counts[element]++;
 			else
 				element_counts[element] = 1;
@@ -60,7 +60,7 @@ namespace BALL
 		// and write it to the file.
 		String formula_line("Formula: ");
 
-		HashMap<String, Size>::iterator element_iterator = element_counts.begin();
+		std::map<String, Size>::iterator element_iterator = element_counts.begin();
 		for (; element_iterator != element_counts.end(); ++element_iterator)
 		{
 			formula_line += element_iterator->first + String(element_iterator->second) + " ";
