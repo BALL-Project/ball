@@ -322,13 +322,13 @@ namespace BALL
 			 * A single row in a DPTable, which consists of the DPConfig (valences and bond values) and the penalty, which was
 			 * computed for the DPConfig and it's ancestors.
 			 */
-			typedef pair<DPConfig_&, Penalty> DPRow_;
+			typedef pair<DPConfig_, Penalty> DPRow_;
 
 			/**
 			 * After computing a DPTable, we don't modify it's entries (because we need them for backtracking). So usually we
 			 * work with const references to the table entries
 			 */
-			typedef pair<DPConfig_ const&, Penalty> DPConstRow_;
+			typedef pair<DPConfig_ const, Penalty> DPConstRow_;
 
 			/**
 			 * Is used to save a reference to a const DPConfig in an object (which isn't 
