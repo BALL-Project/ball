@@ -43,7 +43,7 @@ namespace BALL
 	 *   const Atom* atom = boost::get(atom_ptrs, vertex_handle);
 	 * @endcode
 	 */
-	class BALL_EXPORT MolecularGraph 
+	class MolecularGraph 
 		: public MolecularGraphBase
 	{
 		public:
