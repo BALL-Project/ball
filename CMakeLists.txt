@@ -629,77 +629,6 @@ IF (WIN32)
 	ENDFOREACH()
 ENDIF()
 
-#IF (NOT APPLE AND NOT MSVC) ##=Linux
-#	target_link_libraries(OpenMS ${OPENMS_DEP_LIBRARIES}) ## do not link OpenMS against QT on Linux
-#else()
-#	target_link_libraries(OpenMS ${QT_LIBRARIES} ${OPENMS_DEP_LIBRARIES})
-#endif()
-
-## OPENMS_LIBRARIES defines the libraries used by OpenMS; this should be used to link against executables
-#set(OPENMS_LIBRARIES OpenMS)
-#if (MSVC) ## Windows
-#	## somehow the link dependencies of cmake are broken such that when using POSTFIX names for libs the dependencies are not forwarded...
-#	## we fix this by adding the dependencies of OpenMS directly to the executables as well.
-#	set(OPENMS_LIBRARIES optimized OpenMS${CMAKE_RELEASE_POSTFIX} debug OpenMS${CMAKE_DEBUG_POSTFIX} ${QT_LIBRARIES} ${OPENMS_DEP_LIBRARIES})
-#elseif (NOT APPLE) ## Linux
-#	set(OPENMS_LIBRARIES optimized OpenMS${CMAKE_RELEASE_POSTFIX} debug OpenMS${CMAKE_DEBUG_POSTFIX} ${QT_LIBRARIES})
-#endif()
-#
-### directory for OpenMS(d).lib (required for linking executables)
-#if (MSVC)
-#	link_directories(${PROJECT_BINARY_DIR})
-#endif()
-
-####### BALLView #########
-#include(source/APPLICATIONS/BALLView/executables.cmake)
-#
-#set(BALLVIEW_DIR source/APPLICATIONS/BALLVIEW/)
-#foreach(i ${TOPP_executables})
-#	set(resource_file ${CMAKE_SOURCE_DIR}/${TOPP_DIR}${i}.rc)
-#	set(resource_dir ${CMAKE_SOURCE_DIR}/${TOPP_DIR}/${i}-resources/)
-#	## add icons to TOPPView and INIFileEditor
-#	if (MSVC AND EXISTS ${resource_file})
-#		Message(STATUS "Setting resource file ${resource_file} for ${i}")
-#		add_executable(${i} ${TOPP_DIR}${i}.C ${resource_file})
-#  elseif(APPLE AND EXISTS ${resource_dir}) 
-#    set_source_files_properties(${resource_dir}/${i}.icns 
-#      PROPERTIES
-#      MACOSX_PACKAGE_LOCATION Resources)
-#
-#    add_executable(${i} MACOSX_BUNDLE ${TOPP_DIR}${i}.C ${resource_dir}/${i}.icns)         
-#    ## transform TOPPView and INIFileEditor to real Mac OS X applications
-#    set_target_properties(${i} PROPERTIES MACOSX_BUNDLE_INFO_STRING "${i} - Version 1.5")
-#    set_target_properties(${i} PROPERTIES MACOSX_BUNDLE_SHORT_VERSION_STRING "1.5")
-#    set_target_properties(${i} PROPERTIES MACOSX_BUNDLE_VERSION "1.5")
-#    set_target_properties(${i} PROPERTIES MACOSX_BUNDLE_LONG_VERSION_STRING "1.5")
-#    set_target_properties(${i} PROPERTIES MACOSX_BUNDLE_ICON_FILE "${i}.icns")
-#    set_target_properties(${i} PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "de.openms.${i}")
-#    set_target_properties(${i} PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "${i}") 
-#  else()
-#		add_executable(${i} ${TOPP_DIR}${i}.C)
-#	endif()
-#	
-#	target_link_libraries(${i} ${OPENMS_LIBRARIES})
-#	if (OPENMP_FOUND AND NOT MSVC)
-#		set_target_properties(${i} PROPERTIES LINK_FLAGS ${OpenMP_CXX_FLAGS})
-#	endif()
-#endforeach(i)
-#add_custom_target(TOPP)
-#add_dependencies(TOPP ${TOPP_executables})
-#
-#
-###### Doc progs ####
-#set(OpenMS_doc_executables)
-#include(doc/doxygen/parameters/executables.cmake)
-#foreach(i ${OpenMS_doc_executables})
-#	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "doc/doxygen/parameters")
-#	add_executable(${i} EXCLUDE_FROM_ALL doc/doxygen/parameters/${i}.C)
-#	target_link_libraries(${i} ${OPENMS_LIBRARIES})
-#	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "bin")
-#endforeach(i)
-#add_custom_target(doc_progs)
-#add_dependencies(doc_progs ${OpenMS_doc_executables} TOPP UTILS)
-
 ##### Packaging #####
 IF (BALL_ENABLE_PACKAGING)
 	INCLUDE(cmake/BALLPackageConfig.cmake)
@@ -711,14 +640,6 @@ ENDIF()
 	ENABLE_TESTING()
 	ADD_SUBDIRECTORY(source/TEST EXCLUDE_FROM_ALL) ## configure the Test project (but do not add it to BALL itself)
 #ENDIF()
-
-#### configs for external include files, e.g. to develop code with OpenMS
-#configure_file(
-#	"${PROJECT_SOURCE_DIR}/cmake/OpenMSConfig.cmake.in"
-#	"${PROJECT_BINARY_DIR}/cmake/OpenMSConfig.cmake"
-#	@ONLY
-#)
-
 
 ##### targets list #####
 INCLUDE(cmake/BALLTargets.cmake)
