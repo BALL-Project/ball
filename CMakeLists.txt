@@ -236,7 +236,7 @@ ENDIF()
 OPTION(BALL_HAS_VIEW "Compile BALL's VIEW library required for visualization and graphical user interfaces" ON)
 
 ## QT
-OPTION(BALL_HAS_QTSQL "Compile BALL's database adapaters (requires QtSql)" ON)
+OPTION(BALL_HAS_QTSQL "Compile BALL's database adapaters (requires QtSql)" OFF)
 
 FIND_PACKAGE(Qt4 REQUIRED)
 
