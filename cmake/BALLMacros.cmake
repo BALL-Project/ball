@@ -1,25 +1,3 @@
-## fills ${varname} with the names of Debug and Release libraries (which usually only differ on MSVC)
-## @param varname Name of the variable which will hold the result string (e.g. "optimized myLib.so debug myLibDebug.so")
-## @param libnames   List of library names which are searched (release libs)
-## @param libnames_d List of library names which are searched (debug libs)
-## @param human_libname Name of the library (for display only) 
-MACRO (OPENMS_CHECKLIB varname libnames libnames_d human_libname)
-	FIND_LIBRARY(${varname}_OPT NAMES ${libnames} PATHS ${CONTRIB_LIB_DIR} DOC "${human_libname} library dir" NO_DEFAULT_PATH)
-	if ("${varname}_OPT" STREQUAL "${varname}_OPT-NOTFOUND")
-		MESSAGE(FATAL_ERROR "Unable to find ${human_libname} library! Searched names are: [${libnames}] Please make sure it is part of the contrib (which we assume to be at: ${CONTRIB_DIR}")
-	else()
-		MESSAGE(STATUS "Found ${human_libname} library (Release) at: " ${${varname}_OPT})
-	endif()
-	FIND_LIBRARY(${varname}_DBG NAMES ${libnames_d} PATHS ${CONTRIB_LIB_DIR} DOC "${human_libname} (Debug) library dir" NO_DEFAULT_PATH)
-	if ("${varname}_DBG" STREQUAL "${varname}_DBG-NOTFOUND")
-		MESSAGE(FATAL_ERROR "Unable to find ${human_libname} (Debug) library! Searched names are: [${libnames_d}] Please make sure it is part of the contrib (which we assume to be at: ${CONTRIB_DIR}")
-	else()
-		MESSAGE(STATUS "Found ${human_libname} library (Debug) at: " ${${varname}_DBG})
-	endif()
-	## combine result and include "optimized" and "debug" keywords which are essential for target_link_libraries()
-	set(${varname} optimized ${${varname}_OPT} debug ${${varname}_DBG})
-ENDMACRO (OPENMS_CHECKLIB)
-
 ### This macro is a terrible ugly hack and if life was fair, it would never exist.
 ### However, the QT4_WRAP_UI - macro from FindQt4.cmake does not allow changing the
 ### output directory, and the default choice is unacceptable.
