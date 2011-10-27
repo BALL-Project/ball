@@ -634,7 +634,7 @@ namespace BALL
 			{
 				if (*it != iv)
 				{
-					conf.consumed_valences[vindex] = child_entry.first.consumed_valences[cindex++];
+					conf.consumed_valences[vindex] = child_entry.first.get().consumed_valences[cindex++];
 				}
 			}
 
@@ -657,7 +657,7 @@ namespace BALL
 				} 
 				else
 				{
-					conf.bond_assignments[vindex] = child_entry.first.bond_assignments[cindex++];
+					conf.bond_assignments[vindex] = child_entry.first.get().bond_assignments[cindex++];
 				}
 			}
 
@@ -831,18 +831,19 @@ namespace BALL
 		for (DPTable_::const_iterator left_iter = left_child.begin(); left_iter != left_child.end(); ++left_iter)
 		{
 			DPConstRow_ left_entry = *left_iter;
-			map.insert(pair<DPConfig_ const*, Penalty> (&(left_entry.first), left_entry.second));
+			map.insert(pair<DPConfig_ const*, Penalty> (left_entry.first.get_pointer(), left_entry.second));
 		}
 
 		// find for each entry of the right child's table appropiate entries in the DPJoinMap (which have the same bondvalues)
 		for (DPTable_::const_iterator r_iter = right_child.begin(); r_iter != right_child.end(); ++r_iter)
 		{
 			DPConstRow_ right_entry = *r_iter;
-			DPConfig_ const* right_conf = &right_entry.first;
+			DPConfig_ const* right_conf = right_entry.first.get_pointer();
 
 			pair<DPJoinMap_::const_iterator, DPJoinMap_::const_iterator> matching_range(map.equal_range(right_conf));
 
-			for (DPJoinMap_::const_iterator match = matching_range.first; match != matching_range.second; ++match)
+			for (DPJoinMap_::const_iterator match  = matching_range.first;
+					                            match != matching_range.second; ++match)
 			{
 				// merge both entries by summate the consumed valences and penalties
 				DPConfig_ config = *match->first;
@@ -851,7 +852,7 @@ namespace BALL
 
 				for (Size index = 0; index < num_valences; ++index)
 				{
-					config.consumed_valences[index] += right_entry.first.consumed_valences[index];
+					config.consumed_valences[index] += right_entry.first.get().consumed_valences[index];
 					{
 						MolecularGraphTraits::VertexType vertex = vertices[index];
 						if (config.consumed_valences[index] > (int) (std::min(static_cast<BondOrder>(max_valence_-1),
@@ -1598,7 +1599,7 @@ namespace BALL
 		for (DPTable_::const_iterator iter = left_table.begin(); iter != left_table.end(); ++iter)
 		{
 			DPConstRow_ antecessor = *iter;
-			if (comp.compare(&successor, &(antecessor.first)) == 0)
+			if (comp.compare(&successor, antecessor.first.get_pointer()) == 0)
 			{
 				left_entries.push_back(iter);
 			}
@@ -1607,7 +1608,7 @@ namespace BALL
 		for (DPTable_::const_iterator iter = right_table.begin(); iter != right_table.end(); ++iter)
 		{
 			DPConstRow_ antecessor = *iter;
-			if (comp.compare(&successor, &(antecessor.first)) == 0)
+			if (comp.compare(&successor, antecessor.first.get_pointer()) == 0)
 			{
 				right_entries.push_back(iter);
 			}
@@ -1628,8 +1629,8 @@ namespace BALL
 				for (Size i = 0; i < n; ++i)
 				{
 					if (successor.consumed_valences[i]
-							!= (left_entry.first.consumed_valences[i]
-									+ right_entry.first.consumed_valences[i]))
+							!= (left_entry.first.get().consumed_valences[i]
+									+ right_entry.first.get().consumed_valences[i]))
 					{
 						correct_valences = false;
 						break;
