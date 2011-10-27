@@ -1,4 +1,4 @@
-SET(BALL_BOOST_COMPONENTS system thread iostreams regex)
+SET(BALL_BOOST_COMPONENTS system thread iostreams regex date_time)
 if ( WIN32 )
   LIST(APPEND BALL_BOOST_COMPONENTS zlib bzip2)
 	ADD_DEFINITIONS(-DBOOST_ALL_DYN_LINK)
