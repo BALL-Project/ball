@@ -49,7 +49,7 @@ int main(int argc, char** argv)
 	//    set the options:
 	//
 	// the solution strategy (A*, ILP or FPT)
-	abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM, AssignBondOrderProcessor::AssignBondOrderProcessor::Algorithm::A_STAR);
+	abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM, AssignBondOrderProcessor::Algorithm::A_STAR);
 
 	// specify the inifile with the atomic valence penalties
 	abop.options.set(AssignBondOrderProcessor::Option::INIFile, AssignBondOrderProcessor::Default::INIFile);
