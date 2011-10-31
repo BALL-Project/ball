@@ -262,7 +262,7 @@ CHECK(Option::ALGORITHM: FPT)
 	sys60.apply(abop);
 	TEST_EQUAL(abop.hasValidOptions(), true)
 
-	TEST_REAL_EQUAL(abop.getNumberOfComputedSolutions(), 2)
+	TEST_REAL_EQUAL(abop.getNumberOfComputedSolutions(), 2.f)
 	TEST_REAL_EQUAL(abop.getTotalPenalty(1), 6.f)
 RESULT
 
