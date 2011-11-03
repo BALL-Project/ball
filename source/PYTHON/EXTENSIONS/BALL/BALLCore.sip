@@ -259,6 +259,7 @@
 %Include pyFragmentProcessor.sip
 %Include pyResidueProcessor.sip
 %Include pyCompositeProcessor.sip
+%Include pyChainProcessor.sip
 //%Include pyLists.sip
 
 // QSAR

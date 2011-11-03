@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id$
-//
 
 class AtomContainer
   : Composite, 
@@ -76,6 +74,7 @@ class AtomContainer
 
 	// workaround for template method apply()...
 	bool apply(AtomProcessor& /processor/);
+	bool apply(ChainProcessor& /processor/);
 	bool apply(CompositeProcessor& /processor/);
 	bool apply(FragmentProcessor& /processor/);
 	bool apply(ResidueProcessor& /processor/);

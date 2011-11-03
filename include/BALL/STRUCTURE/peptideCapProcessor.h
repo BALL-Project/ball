@@ -21,22 +21,26 @@
 # include <BALL/KERNEL/residue.h>
 #endif
 
+#ifndef BALL_KERNEL_CHAIN_H
+# include <BALL/KERNEL/chain.h>
+#endif
+
 #ifndef BALL_STRUCTURE_ATOMBIJECTION_H
 # include <BALL/STRUCTURE/atomBijection.h>
 #endif
 
 namespace BALL
 {
-  
+
   /** Processor for adding caps to proteins
 		\ingroup StructureMiscellaneous
    */
 
   /** \brief This processor adds ACE-N and NME-C caps to proteins.
-  */ 
+  */
 
-	class BALL_EXPORT PeptideCapProcessor 
-		:	public UnaryProcessor<Composite>
+	class BALL_EXPORT PeptideCapProcessor
+		: public UnaryProcessor<Chain>
 	{
 		public:
 
@@ -49,7 +53,7 @@ namespace BALL
 		/**	@name Processor-related methods */
 		//@{
 				/// ()-operator
-				virtual Processor::Result operator() (Composite& composite);
+				virtual Processor::Result operator() (Chain& chain);
 		//@}
 
 		protected:
@@ -58,7 +62,7 @@ namespace BALL
 			float computeDistance(std::vector<Atom*>& a, std::vector<Atom*>& b);
 
 			//function to optimize cap position by rotation
-			void optimizeCapPosition(Protein* p, bool start);
+			void optimizeCapPosition(Chain& chain, bool start);
 	};
 
 } //namespace BALL
