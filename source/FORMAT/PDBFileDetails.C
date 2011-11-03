@@ -515,41 +515,55 @@ namespace BALL
 		{
 			PDB_atom = atom_map_it->second; // retrieve the pointer
 		}
-			
+
 		try
 		{
-			// read the entries for the bonds
-			for (i = 0; i < 4; ++i)
+			//Metal knows no bo(u)nds
+			if(!PDB_atom->getElement().isMetal())
 			{
-				if (record.bond_atom[i] == 0) continue;
-				
-				// retrieve the second atom via the hash table
-				atom_map_it = PDB_atom_map_.find(record.bond_atom[i]);				
-				if (atom_map_it == PDB_atom_map_.end()) continue;
-
-				// create the new bond
-				bond = PDB_atom->createBond(*atom_map_it->second);
-	
-				if (bond != 0)
+				// read the entries for the bonds
+				for (i = 0; i < 4; ++i)
 				{
-					bond->setType(Bond::TYPE__COVALENT);
-					bond->setOrder(Bond::ORDER__SINGLE);
-				}
-			}
+					if (record.bond_atom[i] == 0) continue;
 					
-			for (i = 0; i < 4; ++i)
-			{
-				if (record.hbond_atom[i] == 0) continue;
-				
-				atom_map_it = PDB_atom_map_.find(record.hbond_atom[i]);
-				if (atom_map_it == PDB_atom_map_.end()) continue;
-				
-				bond = PDB_atom->createBond(*atom_map_it->second);
-	
-				if (bond != 0)
+					// retrieve the second atom via the hash table
+					atom_map_it = PDB_atom_map_.find(record.bond_atom[i]);				
+					if (atom_map_it == PDB_atom_map_.end()) continue;
+
+					//Metal knows no bo(u)nds. See above
+					if(atom_map_it->second->getElement().isMetal()) {
+						continue;
+					}
+
+					// create the new bond
+					bond = PDB_atom->createBond(*atom_map_it->second);
+		
+					if (bond != 0)
+					{
+						bond->setType(Bond::TYPE__COVALENT);
+						bond->setOrder(Bond::ORDER__SINGLE);
+					}
+				}
+						
+				for (i = 0; i < 4; ++i)
 				{
-					bond->setType(Bond::TYPE__HYDROGEN);
-					bond->setOrder(Bond::ORDER__SINGLE);
+					if (record.hbond_atom[i] == 0) continue;
+					
+					atom_map_it = PDB_atom_map_.find(record.hbond_atom[i]);
+					if (atom_map_it == PDB_atom_map_.end()) continue;
+
+					//Metal knows no bo(u)nds. See above
+					if(atom_map_it->second->getElement().isMetal()) {
+						continue;
+					}
+
+					bond = PDB_atom->createBond(*atom_map_it->second);
+		
+					if (bond != 0)
+					{
+						bond->setType(Bond::TYPE__HYDROGEN);
+						bond->setOrder(Bond::ORDER__SINGLE);
+					}
 				}
 			}
 			
