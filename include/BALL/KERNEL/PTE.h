@@ -29,6 +29,7 @@
 #define BALL_ELEMENT_COVALENTRADIUS_DEFAULT      0
 #define BALL_ELEMENT_VANDERWAALSRADIUS_DEFAULT   0
 #define BALL_ELEMENT_ELECTRONEGATIVITY_DEFAULT   0
+#define BALL_ELEMENT_IS_METAL_DEFAULT            false
 
 
 namespace BALL 
@@ -330,6 +331,7 @@ namespace BALL
 				 float atomic_radius,
 				 float covalent_radius,
 				 float van_der_waals_radius,
+				 bool is_metal,
 				 float electronegativity);
 
 			/**	Destructor
@@ -523,6 +525,13 @@ namespace BALL
 			*/
 			bool isUnknown() const;
 
+			/**
+			 * Test if the Element is a metal.
+			 *
+			 * @return true if the Element represents a metal.
+			 */
+			bool isMetal() const;
+
 			//@}
 
 			/** Standard element.
@@ -609,6 +618,10 @@ namespace BALL
 			/** van der Waals radius (in Angstrom) 
 			*/
 			float van_der_waals_radius_;
+
+			/** is the element a metal
+			 */
+			bool is_metal_;
 
 			/** electronegativity (according to the Pauling scale) 
 			*/
