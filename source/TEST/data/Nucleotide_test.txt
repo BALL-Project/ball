@@ -31,7 +31,7 @@
       number of selected children:0
       number of children containing selection:0
       children:
-      element: Helium He 18 1 2 4.0026 1.28 0 1.22 0 
+      element: Helium He 18 1 2 4.0026 1.28 0 1.22 0 0 
       formal charge: 0
       charge: 0
       name: a1
