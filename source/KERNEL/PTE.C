@@ -390,20 +390,6 @@ namespace BALL
 	{
 	}
 
-	Element::Element(const Element& element)
-			:	name_(element.name_),
-				symbol_(element.symbol_),
-				group_(element.group_),
-				period_(element.period_),
-				atomic_number_(element.atomic_number_),
-				atomic_weight_(element.atomic_weight_),
-				atomic_radius_(element.atomic_radius_),
-				covalent_radius_(element.covalent_radius_),
-				van_der_waals_radius_(element.van_der_waals_radius_),
-				electronegativity_(element.electronegativity_)
-	{
-	}
-
 	Element::Element
 		(const String& name,
 		 const String& symbol,
@@ -446,22 +432,6 @@ namespace BALL
 			<< element.electronegativity_ << ' ';
 
 		return s;
-	}
-
-	Element& Element::operator = (const Element& element)
-	{
-		name_ = element.name_;
-		symbol_ = element.symbol_;
-		group_ = element.group_;
-		period_ = element.period_;
-		atomic_number_ = element.atomic_number_;
-		atomic_weight_ = element.atomic_weight_;
-		atomic_radius_ = element.atomic_radius_;
-		covalent_radius_ = element.covalent_radius_;
-		van_der_waals_radius_ = element.van_der_waals_radius_;
-		electronegativity_ = element.electronegativity_;
-
-		return *this;
 	}
 
 

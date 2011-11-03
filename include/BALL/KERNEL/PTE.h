@@ -318,10 +318,6 @@ namespace BALL
 			*/
 			Element();
 
-			/**	Constructor
-			*/
-			Element(const Element& element);
-
 			/**	Detailed constructor
 			*/
 			Element
@@ -350,12 +346,6 @@ namespace BALL
 			/**	@name	Assignment 
 			*/
 			//@{
-
-			/** Assignment operator.
-					@param   element the Element to be copied (cloned)
-					@return  Element& - this instance
-			*/
-			Element& operator = (const Element& element);
 
 			//@}
 			/** @name	Inspectors and Mutators
