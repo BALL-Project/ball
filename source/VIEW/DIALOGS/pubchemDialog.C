@@ -179,6 +179,14 @@ namespace BALL
 
 			getMainControl()->setStatusbarText(String(tr("Performing query...")));
 
+			int progress_x = (queries->width() - progress_->width())/2;
+			if (progress_x < 0) progress_x = 0;
+
+			int progress_y = (queries->height() - progress_->height())/2;
+			if (progress_y < 0) progress_y = 0;
+
+			progress_->move(progress_x, progress_y);
+
 			progress_->show();
 			progress_->setMaximum(0);
 
