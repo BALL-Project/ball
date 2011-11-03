@@ -1079,6 +1079,10 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 		const Position t1 = atom1.getType();
 		const Position t2 = atom2.getType();
 
+		if(t1 == BALL_ATOM_DEFAULT_TYPE || t2 == BALL_ATOM_DEFAULT_TYPE) {
+			return -1.0;
+		}
+
 		// currently only supports atoms up to Xenon
 		if (e1 > 53 || e2 > 53 ||
 				e1 == 0 || e2 == 0) 
