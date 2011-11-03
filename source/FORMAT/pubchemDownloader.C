@@ -34,6 +34,7 @@ namespace BALL
 
 		if (response.size() == 0)
 		{
+			emit downloadFinished(outfile_.fileName());
 			return false;
 		}
 		response.push_back('\0');
@@ -42,7 +43,7 @@ namespace BALL
 		response_dom.setContent(QString::fromLatin1(&response[0]));
 
 		QString query_key = response_dom.elementsByTagName("QueryKey").at(0).firstChild().nodeValue();
-		QString web_env = response_dom.elementsByTagName("WebEnv").at(0).firstChild().nodeValue();
+		QString web_env   = response_dom.elementsByTagName("WebEnv").at(0).firstChild().nodeValue();
 
 		// the search has finished. now let's try to download the data.
 		if ( (query_key != "") && (web_env != ""))
@@ -91,6 +92,11 @@ namespace BALL
 			if (!download_url_list.isEmpty())
 			{
 				QUrl download_url(download_url_list.at(0).firstChild().nodeValue());
+				if (!download_url.isValid())
+				{
+					emit downloadFinished(outfile_.fileName());
+					return false;
+				}
 				
 				// blocking downloads can be handled by the simple downloader
 				// non-blocking ones are more complicated... at the moment, this
@@ -112,9 +118,15 @@ namespace BALL
 					ftp_.close();
 				}
 			}
+			else
+			{
+				emit downloadFinished(outfile_.fileName());
+				return false;
+			}
 		} 
 		else 
 		{
+			emit downloadFinished(outfile_.fileName());
 			return false;
 		}
 

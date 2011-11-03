@@ -206,7 +206,12 @@ namespace BALL
 			try {
 				sdf.open(ascii(filename), std::ios::in);
 			} catch(Exception::FileNotFound& e) {
-				QMessageBox::critical(this, tr("Download failed"), tr("Could not download pubchem entries for") + " \"" + pubchem_label->displayText() + "\"");
+				QMessageBox::critical(this, tr("Download failed"),
+				                            tr("Could not download pubchem entries for") + " \"" + pubchem_label->displayText() + "\"");
+
+				search_button->setEnabled(true);
+				progress_->hide();
+
 				return;
 			}
 
