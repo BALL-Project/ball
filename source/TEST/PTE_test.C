@@ -55,7 +55,7 @@ CHECK(Element(const String& name, const String& symbol, Group group, Period peri
 	TEST_REAL_EQUAL(static_element.getAtomicRadius(), 1.43)
 	TEST_REAL_EQUAL(static_element.getCovalentRadius(), 1.25)
 	TEST_REAL_EQUAL(static_element.getVanDerWaalsRadius(), 2.05)
-	TEST_REAL_EQUAL(static_element.isMetal(), true)
+	TEST_EQUAL(static_element.isMetal(), true)
 	TEST_REAL_EQUAL(static_element.getElectronegativity(), 1.61)
 
 	Element* e1 = new Element("e1", "id", 2, 3, 25, 25.0, 2.0, 3.0, 4.0, false, 5.0);
@@ -245,7 +245,7 @@ CHECK(Element& operator = (const Element& element) throw())
 	TEST_REAL_EQUAL(el.getAtomicRadius(), 1.43)
 	TEST_REAL_EQUAL(el.getCovalentRadius(), 1.25)
 	TEST_REAL_EQUAL(el.getVanDerWaalsRadius(), 2.05)
-	TEST_REAL_EQUAL(el.isMetal(), true)
+	TEST_EQUAL(el.isMetal(), true)
 	TEST_REAL_EQUAL(el.getElectronegativity(), 1.61)
 
 	Element rhs2("ALUMINUM", "lA", 31, 5, 26, 27.333333,  2.45,  7.89, 1.12, true, 3.67);
@@ -286,7 +286,7 @@ CHECK(static Element& getElement(Position position) throw())
 	TEST_REAL_EQUAL(PTE.getElement(13).getAtomicRadius(), 1.43)
 	TEST_REAL_EQUAL(PTE.getElement(13).getCovalentRadius(), 1.25)
 	TEST_REAL_EQUAL(PTE.getElement(13).getVanDerWaalsRadius(), 2.05)
-	TEST_REAL_EQUAL(PTE.getElement(13).isMetal(), true)
+	TEST_EQUAL(PTE.getElement(13).isMetal(), true)
 	TEST_REAL_EQUAL(PTE.getElement(13).getElectronegativity(), 1.61)
 RESULT
 
