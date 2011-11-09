@@ -8,6 +8,7 @@
 //
 
 #include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
 
 ///////////////////////////
 
@@ -144,25 +145,4 @@ RESULT
 
 
 END_TEST
-
-
-
-
-
-
-
-
-
-
- 
-											//   TEST_EQUAL(expression1, expression2)
-											//   TEST_REAL_EQUAL(expression1, expression2)
-											//   TEST_NOT_EQUAL(expression1, expression2)
-							        	              //   TEST_EXCEPTION(exception_class, expression)
-									                      //   TEST_FILE(infile, templatefile, use_regexps)
-
-										
-
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
 
