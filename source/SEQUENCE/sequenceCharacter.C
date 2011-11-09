@@ -14,33 +14,37 @@ namespace BALL
 			 *Default Constructor
 			 */
 			SequenceCharacter::SequenceCharacter()
-				:t(type::CHAR),
-				character()
+				:t_(type::CHAR),
+				character_()
 			 { 
-					origin=0;
+					origin_=0;
+					res_=0;
 				}
 
 			/**
 			 *Copy Constructor
 			 *@param sequenceCharacter the SequenceCharacter to construct from
 			 */
-			SequenceCharacter::SequenceCharacter( SequenceCharacter& seq_char)
+			SequenceCharacter::SequenceCharacter(const SequenceCharacter& seq_char)
 			{
-				origin = seq_char.getOrigin();
-				t= seq_char.getType();
-				character=seq_char.getChar();
+				origin_ = seq_char.getOrigin();
+				t_ = seq_char.getType();
+				character_ = seq_char.getChar();
+				res_= seq_char.res_;
 			} 
 
 			/**
 			 *Detailed Constructor
-			 *@param character the character of which comprises the new SequenceCharacter
-			 *@param origin the sequence from which the character originates
-			 *@param type tells whether the character is a GAP a nucleic acid or an amino acid
+			 *@param character_ the character of which comprises the new SequenceCharacter
+			 *@param origin_ the sequence from which the character_ originates
+			 *@param type tells whether the character_ is a GAP a nucleic acid or an amino acid
 			 */
-			SequenceCharacter::SequenceCharacter(char c, Sequence* ori, type ty)
-				:t(ty),
-				origin(ori),
-				character(c)
+			SequenceCharacter::SequenceCharacter(char c, Sequence* ori, type ty, Residue* residue)
+				:t_(ty),
+				origin_(ori),
+				character_(c),
+				res_(residue)
+				
 				{		}
 
 			/**
@@ -57,25 +61,25 @@ namespace BALL
 			/**
 			 *sets the type of the Character and if type is GAP char will be automatically setted to '-'
 			 *@param type the new type to be set
-			 *@throws BALL::InvalidArgument if character is a GAP and type is to be setted to CHAR
+			 *@throws BALL::InvalidArgument if character_ is a GAP and type is to be setted to CHAR
 			 */
-			void SequenceCharacter::setType(SequenceCharacter::type ty)
+			void SequenceCharacter::setType(const SequenceCharacter::type ty)
 			{
 
-				//if type is to be setted to GAP the character will also be set to GAP
+				//if type is to be setted to GAP the character_ will also be set to GAP
 				if (ty == type::GAP) 
 				{ 
-					character = '-'; 
+					character_ = '-'; 
 				} 
 				
-				//if type is to be setted to CHAR and character is a GAP throw Exception
-				if( (character == '-') && (ty == type::CHAR ) ) 
+				//if type is to be setted to CHAR and character_ is a GAP throw Exception
+				if( (character_ == '-') && (ty == type::CHAR ) ) 
 				{ 
-					throw Exception::InvalidArgument(__FILE__,__LINE__, "Don't set the type to Char manually just set the Char you want to change, the rest will be done automatically"); 
+					throw Exception::InvalidArgument(__FILE__,__LINE__, "Don't set the type to Char manually just set the Char you want to change, the res_t will be done automatically"); 
 				}
 
 				//change the type
-				t=ty;
+				t_=ty;
 
 			}
 
@@ -85,21 +89,21 @@ namespace BALL
 			 */
 			SequenceCharacter::type SequenceCharacter::getType() const
 			{
-				return t;
+				return t_;
 			}
 
 			/**
-			 *@param character the character to be set
-			@throws InvalisArgumentException if Character does not represent a valid AminoAcid or Nucleotide OneLetterCode
+			 *@param character_ the character to be set
+			@throws InvalisArgumentException if Character does not repres_ent a valid AminoAcid or Nucleotide OneLetterCode
 
 			 */
-			void SequenceCharacter::setChar(char c)
+			void SequenceCharacter::setChar(const char c)
 			{
 
 					switch(c){
 							case '-': 
 											{
-												t = type::GAP; character = c;return;
+												t_ = type::GAP; character_ = c;return;
 											}
 
 							case 'B': 
@@ -108,63 +112,78 @@ namespace BALL
 							case 'X':
 							case 'Z': 
 											{
-												throw Exception::InvalidArgument(__FILE__,__LINE__,"character is not a valid OneLetterCode");
+												throw Exception::InvalidArgument(__FILE__,__LINE__,"character_ is not a valid OneLetterCode");
 											}
 
 									}
 
-				character = c;
+				character_ = c;
 
-				t = type::CHAR;
+				t_ = type::CHAR;
 			}
 
 			/**
-			 *@return the stored character
+			 *@return the stored character_
 			 */
 			char SequenceCharacter::getChar() const 
 			{
-				return character;
+				return character_;
 			}
 
 			/**
 			 *sets the Origin of the Character
-			 *@param origin the origin to be set
+			 *@param origin_ the origin to be set
 			 */
 			void SequenceCharacter::setOrigin(Sequence::Sequence* ori)
 			{
-				origin = ori;
+				origin_ = ori;
 			}
 
 			/**
-			 *@return the origin of the character
+			 *@return the origin_ of the character_
 			 */
 			Sequence::Sequence* SequenceCharacter::getOrigin() const 
 			{
-				return origin;
+				return origin_;
 			}
+
+
+void SequenceCharacter::setResidue(Residue* residue)
+	{
+		res_ = residue;
+	}
+
+Residue* SequenceCharacter::getResidue() const
+{
+	return res_;
+}
+
+
+
 					//////////////////////////////////////////////////////////////////////////////// Operators ///////////////////////////////////////////////////
 			/**
 			*operator ==
 			*/
-			bool SequenceCharacter::operator== (SequenceCharacter::SequenceCharacter& c)
+			bool SequenceCharacter::operator== (const SequenceCharacter::SequenceCharacter& c)
 			{
-				return ( (character== c.getChar()) && (origin == c.getOrigin()) && (t == c.getType()) );
+				return ( (character_== c.getChar()) && (origin_ == c.getOrigin()) && (t_ == c.getType()) );
 			}
 			
 			/**
 			*operator !=
 			**/
 			
-			bool SequenceCharacter::operator!= (SequenceCharacter::SequenceCharacter& c)
+			bool SequenceCharacter::operator!= (const SequenceCharacter::SequenceCharacter& c)
 			{
 				return !(operator==(c));
 			}
 
 			SequenceCharacter& SequenceCharacter::operator = (const SequenceCharacter& c)
 			{
-				origin = (c.getOrigin());
-				t= c.getType();
-				character=c.getChar();	
+				origin_ = (c.getOrigin());
+				t_ = c.getType();
+				character_=c.getChar();	
+				res_ = c.res_;
 
 				return *this;
 			}
@@ -178,7 +197,14 @@ namespace BALL
 			 */
 			bool SequenceCharacter::isGap()
 			{
-				return t == type::GAP;
+				return t_ == type::GAP;
+			}
+
+			void SequenceCharacter::reset()
+			{
+				origin_ = NULL;
+				character_ = NULL;
+			//TODO was ist mit reset type!			
 			}
 
 	

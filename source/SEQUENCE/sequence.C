@@ -34,7 +34,7 @@ namespace BALL{
 				/**
 				 *Copy Constructor
 				 */
-				Sequence::Sequence(Sequence& seq)
+				Sequence::Sequence(const Sequence& seq)
 				{
 								name_ = seq.getName();
 								origin_ =  seq.getOrigin();
@@ -60,7 +60,7 @@ namespace BALL{
 				/**
 				 *@return the name_ of the sequence
 				 */
-				String& Sequence::getName()
+			String Sequence::getName() const
 				{
 								return name_;
 				}
@@ -77,7 +77,7 @@ namespace BALL{
 				/**
 				 *@return the origin_ of the Sequence
 				 */
-				AtomContainer* Sequence::getOrigin()
+				AtomContainer* Sequence::getOrigin() const
 				{
 								return origin_;
 				}	
@@ -85,7 +85,7 @@ namespace BALL{
 				/**
 				 *operator==
 				 */
-				bool Sequence::operator== (Sequence& seq)
+				bool Sequence::operator== (const Sequence& seq)
 				{
 								return ((name_==seq.getName()) && (origin_==seq.getOrigin()));
 				}
@@ -93,7 +93,7 @@ namespace BALL{
 				/**
 				 *operator!=
 				 */
-				bool Sequence::operator!= (Sequence& seq)
+				bool Sequence::operator!= (const Sequence& seq)
 				{
 								return ! (operator==(seq));
 				}
@@ -101,7 +101,7 @@ namespace BALL{
 				/**
 				 *assignment operator
 				 */
-				Sequence& Sequence::operator= (Sequence& seq)
+				Sequence& Sequence::operator= (const Sequence& seq)
 				{
 								name_ = seq.getName();
 								origin_ = seq.getOrigin();
@@ -116,29 +116,16 @@ namespace BALL{
 				 */
 				SequenceIterator Sequence::begin()
 				{
-								//Initialize the new Iterator
-								SequenceIterator it;
-								it.setSequence(*this);
+					//Initialize the new Iterator
+					SequenceIterator it;
+					it.setSequence(*this);
 
-								if (RTTI::isKindOf<Protein>(*origin_)) 
-								{
-												//create new Sequencecharacter
-												SequenceCharacter c;
-												c.setOrigin(this);
-												Protein* p= RTTI::castTo<Protein>(*origin_);
+					if (it.first())
+					{
+						return it;
+					}
 
-												if (p)
-												{	
-																c.setChar(Peptides::OneLetterCode(p->getResidue(0)->getName()));
-
-																it.setChar(c);
-
-															return it;
-												}
-								}
-
-								throw BALL::Exception::InvalidArgument(__FILE__,__LINE__,"origin_ is no Protein");
-								//			cout<<"leaving SequenceBegin() now"<< endl;
+					throw BALL::Exception::InvalidArgument(__FILE__,__LINE__,"origin_ is no Protein");
 
 				}				
 
@@ -202,7 +189,8 @@ namespace BALL{
 								return *nseq;
 				}
 
-				Eigen::Array<SequenceCharacter,Eigen::Dynamic,1> Sequence::getArraySequence(){
+				Eigen::Array<SequenceCharacter,Eigen::Dynamic,1> Sequence::getArraySequence()
+				{
 
 								//initialize the array
 								Eigen::Array<SequenceCharacter, Eigen::Dynamic, 1> seq;
@@ -215,7 +203,8 @@ namespace BALL{
 												//make room for the new Character
 												seq.conservativeResize(seq.rows()+1);
 												//retrieve the current Sequencecharacter for each Step
-												SequenceCharacter c = it.getCharacter();
+												SequenceCharacter c;
+													c = it.getCharacter();
 												//store it in the Array
 												seq(seq.rows()-1,0) = c;
 

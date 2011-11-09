@@ -51,7 +51,7 @@ namespace BALL
 			/**
 			 *Copy Constructor
 			 */
-			Sequence(Sequence& seq);
+			Sequence(const Sequence& seq);
 
 			/**
 			 *Deconstrcutor
@@ -69,7 +69,7 @@ namespace BALL
 			/**
 			 *@return the name_ of the sequence
 			 */
-			String& getName();
+			String getName()const;
 
 
 			/**
@@ -80,24 +80,24 @@ namespace BALL
 			/**
 			 *@return the origin_ of the Sequence
 			 */
-			AtomContainer* getOrigin();	
+			AtomContainer* getOrigin() const;	
 
 			///////////////////////////////////////////////////////////// Operators //////////////////////////////////////////////////////////////////////
 
 			/**
 			 *operator==
 			 */
-			bool operator== (Sequence& seq);
+			bool operator== (const Sequence& seq);
 
 			/**
 			 *operator!=
 			 */
-			bool operator!= (Sequence& seq);
+			bool operator!= (const Sequence& seq);
 
 			/**
 			 *assignment operator
 			 */
-			Sequence& operator= (Sequence& seq);
+			Sequence& operator= (const Sequence& seq);
 
 
 			/////////////////////////////////////////////////Misc///////////////////////////////////////////
