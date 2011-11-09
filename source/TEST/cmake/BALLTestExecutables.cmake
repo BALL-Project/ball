@@ -260,6 +260,8 @@ SET(BALL_FORMATS_TESTS
 	Bruker2DFile_test
 	CCP4File_test
 	DockResultFile_test
+	ClustalFile_test
+	FastaFile_test
 	INIFile_test
 	JCAMPFile_test
 	KCFFile_test
@@ -289,10 +291,9 @@ SET(BALL_ENERGY_TESTS
 )
 
 SET(BALL_SEQUENCE_TESTS
-	FastaFile_test
 	SequenceCharacter_test
 	Sequence_test
-	ClustalFile_test
+	SequenceIterator_test
 )
 
 SET(BALL_STRUCTURE_TESTS
@@ -305,6 +306,7 @@ SET(BALL_STRUCTURE_TESTS
 	ConnectedComponentsProcessor_test
 	DisulfidBondProcessor_test
 	Enumerator_test
+
 	EnumeratorIndex_test
 	GeometricProperties_test
 	SimpleMolecularGraph_test

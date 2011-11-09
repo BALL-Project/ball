@@ -87,6 +87,12 @@ namespace BALL
 
 				/*prints the values contained in this SequenceLine*/
 				virtual void dump(std::ostream& s = std::cout) const;
+				
+				/**
+				*assignment operator
+				*/
+				SequenceLine& operator = (const SequenceLine& line);
+				
 
 			//////////////////////////////////////////////
 
@@ -135,7 +141,11 @@ namespace BALL
 					*/
 					std::ostream& operator >> (std::ostream& os);
 
-					
+				/**
+				* assignment operator
+				*/
+				Block& operator = (const Block& block);					
+
 				/*prints the values contained in this SequenceLine*/
 				virtual void dump(std::ostream& s = std::cout) const;
 
@@ -230,7 +240,7 @@ namespace BALL
 			*/
 			ClustalFile& operator << (Alignment& alignment);
 			
-			
+			ClustalFile& operator = (const ClustalFile& file);
 	
 			//@}
 			/** @name Accessors
@@ -238,7 +248,7 @@ namespace BALL
 			//@{
 
 			/**
-			*adds a Block at the top of the vector blocks
+			*adds a Block at the top of the vector blocks_
 			*/
 			void addBlock(const Block& block);
 
@@ -254,7 +264,7 @@ namespace BALL
 			static State state;
 
 			private:
-				std::vector<Block> blocks;
+				std::vector<Block> blocks_;
 				
 					//methods to faciliate the writing process
 					

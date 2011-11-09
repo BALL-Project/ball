@@ -15,7 +15,7 @@ namespace BALL
 
 	ClustalFile::ClustalFile()
 		: File(),
-			blocks()	
+			blocks_()	
 			{ }
 
 	ClustalFile::ClustalFile(const String& filename, File::OpenMode open_mode)
@@ -47,15 +47,15 @@ namespace BALL
 					*/
 
 					//check whether there are no blocks, then all blocks conatained are valid
-					if(blocks.empty())
+					if(blocks_.empty())
 					{
 									return true;
 					}
 
 					//if the file contains blocks, but the first one is empty all following blocks must be emoty, too
-					if(blocks.at(0).seqs.empty())
+					if(blocks_.at(0).seqs.empty())
 					{
-									for(vector<Block>::iterator it = blocks.begin(); it != blocks.end(); it++)
+									for(vector<Block>::iterator it = blocks_.begin(); it != blocks_.end(); it++)
 									{
 													if(!(it->seqs.empty()))
 													{ 
@@ -73,14 +73,14 @@ namespace BALL
 					*/
 
 					// number of lines in the first block and therefore in every block
-					unsigned int num_of_lines = blocks.at(0).seqs.size();
+					unsigned int num_of_lines = blocks_.at(0).seqs.size();
 
 
 					//Vector of Idents of the first block, must be equal to that of all other blocks
 					std::vector<String> idents;
 
 					// fill the idents vector
-					for(std::vector<SequenceLine>::iterator it = blocks.at(0).seqs.begin(); it != blocks.at(0).seqs.end(); it++)
+					for(std::vector<SequenceLine>::iterator it = blocks_.at(0).seqs.begin(); it != blocks_.at(0).seqs.end(); it++)
 					{ 
 									idents.push_back(it->ident);
 					}
@@ -94,7 +94,7 @@ namespace BALL
 					unsigned int num_of_aa_old=0;
 
 					//iterate over all blocks of the file
-					for(vector<Block>::iterator it = blocks.begin(); it != blocks.end(); it++)
+					for(vector<Block>::iterator it = blocks_.begin(); it != blocks_.end(); it++)
 					{
 
 									//check whether the block is empty
@@ -158,7 +158,6 @@ namespace BALL
 
 	bool ClustalFile::read() 
 	{
-//cout<<"reading now---------------------------------"<<endl;
 		if (!isValid())
 		{
 			Log.error() << "Trying to read from invalid ClustalFile '" << getName() << "'" << std::endl;
@@ -183,7 +182,6 @@ namespace BALL
 		Log.error() << "Trying to read from invalid ClustalFile '" <<getName() << "'" << std::endl;
 		return false;
 		}
-//cout<<"parsing done file contains: ---------"<<endl;
 
 		return true;
 	}
@@ -207,7 +205,7 @@ namespace BALL
 
 
 		vector<Block>::iterator it;
-		for (it = blocks.begin(); it != blocks.end(); it++)
+		for (it = blocks_.begin(); it != blocks_.end(); it++)
 		{
 			*it >> getFileStream();
 		}
@@ -219,32 +217,38 @@ namespace BALL
 
 
 	void ClustalFile::addBlock(const ClustalFile::Block& block){
-			blocks.push_back(block);
+			blocks_.push_back(block);
 	}
 
 
 
 
 	std::vector<ClustalFile::Block> ClustalFile::getBlocks(){
-		return blocks;
+		return blocks_;
 	}
 
 
 	void ClustalFile::clear(){
 
-		blocks.clear();
-		//TODO Überklasse clear aufrufen???	
+		blocks_.clear();
 	}
 
 void ClustalFile::dump()
 {	
 	int i=0;
-	for(vector<Block>::iterator it = blocks.begin(); it != blocks.end(); it++)
+	for(vector<Block>::iterator it = blocks_.begin(); it != blocks_.end(); it++)
 	{
 		cout<<"Block "<<i<<" contains: "<<endl;	
 		it->dump();
 		++i;
 	}
+}
+
+ClustalFile& ClustalFile::operator = (const ClustalFile& file)
+{
+	state = file.state;
+	blocks_ = file.blocks_;
+  return *this;
 }
 
 	////////////////////////////////// Implementations for nested class Block ///////////////////////////////////
@@ -315,6 +319,14 @@ void ClustalFile::dump()
 		}
 	}
 
+	ClustalFile::Block& ClustalFile::Block::operator= (const ClustalFile::Block& block)
+	{
+		seqs = block.seqs;
+		conserv_line = block.conserv_line;
+		return *this;
+	}
+
+
 	///////////////////////////////////////////// Nested class SequenceLine /////////////////////////////////////////////////////
 
 	ClustalFile::SequenceLine::SequenceLine()
@@ -349,12 +361,19 @@ void ClustalFile::dump()
 		s <<"The ident is: "<< ident <<endl << "The sequence is: " << sequence<<endl << "The length is: "<<length<<endl;
 	}
 
+	ClustalFile::SequenceLine& ClustalFile::SequenceLine::operator = (const SequenceLine& line)
+	{
+		ident= line.ident;
+		sequence = line.sequence;
+		length = line.length;
+		return *this;
+	}
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	ClustalFile& ClustalFile::ClustalFile::operator >> (System& system)
 	{
 					//iterate over first block to create new Proteins and add them to the System
-					for(vector<SequenceLine>::iterator it = blocks.at(0).seqs.begin(); it != blocks.at(0).seqs.end() ; it++)
+					for(vector<SequenceLine>::iterator it = blocks_.at(0).seqs.begin(); it != blocks_.at(0).seqs.end() ; it++)
 					{
 									Protein* p = new Protein();
 									p->setID(it->ident);
