@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FASTAFile_test.C,2011/06/06$
+// $Id: FastaFile_test.C,2011/06/06$
 //
 // Author:
 //   Nikola Koch
@@ -22,39 +22,39 @@
 #include <iostream>
 ///////////////////////////
 
-START_TEST(FASTAFile, "$Id: FASTAFile_test.C,2011/06/06$")
+START_TEST(FastaFile, "$Id: FastaFile_test.C,2011/06/06$")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-	FASTAFile *fp= new FASTAFile();
+	FastaFile *fp= new FastaFile();
 		
 //////////////////////////////////////// Constructor and Deconstructor Test ///////////////////////////////////////////////////
 
-CHECK(FASTAFile())
+CHECK(FastaFile())
 	TEST_NOT_EQUAL(fp,0);
 RESULT
 
 
-CHECK(~FASTAFile())
+CHECK(~FastaFile())
 	delete fp;
 RESULT
 
 
 
 //Checks whether Exception is thrown if filename is invalid
-CHECK(FASTAFile(const BALL::String& filename,BALL::File::OpenMode open_mode=std::ios::in, bool trim_whitespaces=false))
-	cout<< "TEST EXCEPTION"<<endl;
+CHECK(FastaFile(const BALL::String& filename,BALL::File::OpenMode open_mode=std::ios::in, bool trim_whitespaces=false))
 
-	FASTAFile *fp;
-	TEST_EXCEPTION(Exception::FileNotFound, fp= new FASTAFile("x"))
-	TEST_EXCEPTION(Exception::FileNotFound, fp=new FASTAFile("abscdf"))
+
+	FastaFile *fp;
+TEST_EXCEPTION(Exception::FileNotFound, fp= new FastaFile("x"))
+	TEST_EXCEPTION(Exception::FileNotFound, fp=new FastaFile("abscdf"))
 RESULT
 
 
-	fp=new FASTAFile();
+	fp=new FastaFile();
 
 	////////////////////open the File ///////////////////////////
 
@@ -69,7 +69,7 @@ RESULT
 	
 CHECK(read (Protein& protein))
 
-	fp->open(BALL_TEST_DATA_PATH(FASTAFile_test1.fasta));
+	fp->open(BALL_TEST_DATA_PATH(FastaFile_test1.fasta));
 
 
 	fp->read(*pp);
@@ -80,7 +80,7 @@ CHECK(read (Protein& protein))
 
 RESULT
 
-////////TODO CHECK(operator>>(FASTAFile file, Molecule& molecue))
+////////TODO CHECK(operator>>(FastaFile file, Molecule& molecue))
 
 	
 	/**	fp>>mp;
@@ -93,7 +93,7 @@ CHECK(read(System& system))
 
 	seq->destroy();
 	
-	fp->open(BALL_TEST_DATA_PATH(FASTAFile_test1.fasta));
+	fp->open(BALL_TEST_DATA_PATH(FastaFile_test1.fasta));
 
 	fp->read(*sp);
 
@@ -125,7 +125,7 @@ RESULT
 CHECK(operator>>(Protein& protein))
 
 	seq->destroy();
-	fp->open(BALL_TEST_DATA_PATH(FASTAFile_test1.fasta));
+	fp->open(BALL_TEST_DATA_PATH(FastaFile_test1.fasta));
 
 
         fp->read(*np);
@@ -138,7 +138,7 @@ RESULT
 CHECK(operator>>(System& system))
 
 	seq->destroy();
-	fp->open(BALL_TEST_DATA_PATH(FASTAFile_test1.fasta));
+	fp->open(BALL_TEST_DATA_PATH(FastaFile_test1.fasta));
 
 	fp->read(*ns);
          for(ProteinIterator it = ns->beginProtein(); +it; ++it) {
