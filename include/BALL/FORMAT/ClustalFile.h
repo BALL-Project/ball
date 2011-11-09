@@ -10,8 +10,8 @@
 	#include <BALL/DATATYPE/string.h>
 #endif
 
-#ifndef BALL_FORMAT_LINEBASEDFILE_H
-	#include <BALL/FORMAT/lineBasedFile.h>
+#ifndef BALL_SYSTEM_FILE_H
+	#include <BALL/SYSTEM/file.h>
 #endif
 
 #ifndef BALL_SEQUENCE_ALIGNMENT_H
@@ -51,7 +51,7 @@ namespace BALL
 
 	
 	class BALL_EXPORT ClustalFile 
-		: public LineBasedFile
+		: public File
 	{
 		public:
 
@@ -173,7 +173,7 @@ namespace BALL
 			 *Detailed Constructor
 			 *@param trim_whitespaces sets whether leading and trailing whitespaces shall be removed while reading the file
 			 */
-			ClustalFile(const String& filename, File::OpenMode open_mode=std::ios::in, bool trim_whitespaces=false);
+			ClustalFile(const String& filename, File::OpenMode open_mode=std::ios::in);
 
 			/**
 			 *Copy Constructor

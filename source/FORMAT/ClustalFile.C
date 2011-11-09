@@ -14,12 +14,12 @@ namespace BALL
 
 
 	ClustalFile::ClustalFile()
-		: LineBasedFile(),
+		: File(),
 			blocks()	
 			{ }
 
-	ClustalFile::ClustalFile(const String& filename, File::OpenMode open_mode, bool trim_whitespaces)
-		: LineBasedFile(filename,open_mode, trim_whitespaces)
+	ClustalFile::ClustalFile(const String& filename, File::OpenMode open_mode)
+		: File(filename,open_mode)
 			{ }
 
 	/*ClustalFile::ClustalFile(ClustalFile& file)
@@ -42,14 +42,40 @@ namespace BALL
 	
 	bool ClustalFile::hasValidBlocks()
 	{
-					// number of lines in the first block and therefore in every block
-					unsigned int num = blocks.at(0).seqs.size();
+					/* 
+					* Check emptyness
+					*/
 
-					//if there are more than 60 AAs in the block the block isn't valid
-					if (num > 60) 
+					//check whether there are no blocks, then all blocks conatained are valid
+					if(blocks.empty())
 					{
-									return false;
+									return true;
 					}
+
+					//if the file contains blocks, but the first one is empty all following blocks must be emoty, too
+					if(blocks.at(0).seqs.empty())
+					{
+									for(vector<Block>::iterator it = blocks.begin(); it != blocks.end(); it++)
+									{
+													if(!(it->seqs.empty()))
+													{ 
+																	//there is a block that is not empty -> return false
+																	return false;
+													}
+									}
+									//all following blocks are empty -> return true
+									return true;
+					}
+
+
+					/*
+					* Now check for the rest
+					*/
+
+					// number of lines in the first block and therefore in every block
+					unsigned int num_of_lines = blocks.at(0).seqs.size();
+
+
 					//Vector of Idents of the first block, must be equal to that of all other blocks
 					std::vector<String> idents;
 
@@ -59,11 +85,42 @@ namespace BALL
 									idents.push_back(it->ident);
 					}
 
+					//denotes the over all number of Amino Acids 
+					unsigned int num_of_aa = 0;
+
+					//TODO invent better idea!
+
+					//counter to compute the difference later
+					unsigned int num_of_aa_old=0;
+
 					//iterate over all blocks of the file
 					for(vector<Block>::iterator it = blocks.begin(); it != blocks.end(); it++)
-					{ 
+					{
+
+									//check whether the block is empty
+									if(it->seqs.empty())
+									{
+													return false;
+									}
+
 									//check if the current Block has equal amount of sequences than the others
-									if(it->seqs.size() != num) 
+									if(it->seqs.size() != num_of_lines) 
+									{
+													return false;
+									}
+
+									//check if there are only 60 Amino Acids per line
+									if ((it->getSequenceLine(0).length - num_of_aa) > 60 )
+									{
+													return false;
+									}
+
+									//increment number of aas if, the length matches the real amount auf aas in the line
+									if((it->getSequenceLine(0).length - it->getSequenceLine(0).sequence.length()) == num_of_aa)
+									{
+													num_of_aa = it->getSequenceLine(0).length;
+									}
+									else
 									{
 													return false;
 									}
@@ -71,7 +128,7 @@ namespace BALL
 									//iterate over all sequences of the Block
 									for(unsigned int i = 0; i < it->seqs.size(); i++)
 									{
-													SequenceLine line= it->getSequenceLine(i);
+													SequenceLine line = it->getSequenceLine(i);
 
 													//check whether idents match
 													if (line.ident != idents.at(i))  
@@ -80,12 +137,17 @@ namespace BALL
 													}
 
 													//check whether given number at end of each line matches the length of the sequence
-													if(line.length != line.sequence.length())
+													if( (line.length != num_of_aa))
 													{
 																	return false;
 													}
-
+													if(line.sequence.length() != num_of_aa - num_of_aa_old)
+													{
+																	return false;
+													}
 									}
+
+									num_of_aa_old = num_of_aa;
 
 					}
 
@@ -174,6 +236,16 @@ namespace BALL
 		//TODO Überklasse clear aufrufen???	
 	}
 
+void ClustalFile::dump()
+{	
+	int i=0;
+	for(vector<Block>::iterator it = blocks.begin(); it != blocks.end(); it++)
+	{
+		cout<<"Block "<<i<<" contains: "<<endl;	
+		it->dump();
+		++i;
+	}
+}
 
 	////////////////////////////////// Implementations for nested class Block ///////////////////////////////////
 
@@ -225,10 +297,11 @@ namespace BALL
 
 	void ClustalFile::Block::dump(std::ostream& s) const 
 	{
-		s<<"The block contains "<< seqs.size() <<"SequenceLines."<< endl <<"These are: "<< endl;
+		s<<"The block contains "<< seqs.size() <<" SequenceLines."<< endl <<"These are: "<< endl;
 
 			for(unsigned int i=0; i < seqs.size(); i++) 
 			{
+				s<<"SequenceLine 1:"<<endl;
 				seqs.at(i).dump(s);
 			}
 
