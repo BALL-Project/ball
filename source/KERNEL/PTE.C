@@ -61,7 +61,7 @@ namespace BALL
 		Element("Erbium",                  "Er",         0,    6,      68,     167.26,      1.76,  1.57, 0.0,  true,  1.25),
 		Element("Europium",                "Eu",         0,    6,      63,     151.965,     2.04,  1.85, 0.0,  true,  1.2),
 		Element("Fermium",                 "Fm",         0,    7,     100,     257.0951,    0.0,   0.0,  0.0,  false, 1.3),
-		Element("Fluorine",                "F",         17,    2,       9,      18.9984032, 0.709, 0.58, 1.35, true,  3.98),
+		Element("Fluorine",                "F",         17,    2,       9,      18.9984032, 0.709, 0.58, 1.35, false, 3.98),
 		Element("Francium",                "Fr",         1,    7,      87,     223.0197,    2.7,   0.0,  0.0,  true,  0.7),
 		Element("Gadolinium",              "Gd",         0,    6,      64,     157.25,      1.8,   1.61, 0.0,  true,  0.94),
 		Element("Gallium",                 "Ga",        13,    4,      31,      69.723,     1.22,  1.25, 0.0,  true,  1.81),
