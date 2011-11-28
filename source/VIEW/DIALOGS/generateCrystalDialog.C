@@ -5,6 +5,8 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/FORMAT/parameters.h>
 #include <BALL/SYSTEM/path.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/threads.h>
 
 #include <QComboBox>
 
@@ -20,7 +22,7 @@ namespace BALL
 			generator_(new CrystalGenerator()),
 			//sg_list(0),
 			//sg_entry(0),
-			selectedSystem_(0)
+			system_(0)
 
 		{
 #ifdef BALL_VIEW_DEBUG
@@ -100,5 +102,86 @@ namespace BALL
 		void GenerateCrystalDialog::slotCancel()
 		{
 		}
+		
+		bool GenerateCrystalDialog::generate()
+		{
+			if (system_ == 0) system_ = getMainControl()->getSelectedSystem();
+			if (system_ == 0)
+			{
+				Log.error() << "No system given! Aborting..." << std::endl;
+				return false;
+			}
+
+			if (!lockComposites()) 
+			{
+				setStatusbarText(tr("Can not generate a crystal packing, since I can not lock the molecular data. Is a simulation running?"), true);
+				return false;
+			}
+			
+			bool use_mt = false;
+			// currently doesnt work:
+			#ifdef BALL_QT_HAS_THREADS
+			if (getMainControl()->useMultithreading())
+			{
+				use_mt = true;
+
+				if (thread_ == 0)
+				{
+					thread_ = new GenerateCrystalThread();
+				}
+				else
+				{
+					if (thread_->isRunning())
+					{
+						Log.error() << "Thread already running in"  << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+						return false;
+					}
+				}
+
+				thread_->setCrystalDialog(this);
+				thread_->start();
+
+				Position pos = 3;
+				QString dots;
+				Position i = 0;
+				while (thread_->isRunning())
+				{
+					setStatusbarText(tr("Generating a crystal packing ") + dots, false);
+					qApp->processEvents();
+					if (i > 10)
+					{
+						if (pos < 40) 
+						{
+							pos ++;
+							dots +=".";
+						}
+						else 
+						{
+							pos = 3;
+							dots = "...";
+						}
+						i = 0;
+					}
+
+					i++;
+					thread_->wait(10); 
+				}
+			}
+			
+			setStatusbarText(tr("Finished crystal generation"), true);
+
+			#endif
+			if (!use_mt) generate_();
+			
+			system_ = 0;
+			unlockComposites();
+			
+			return true;
+		}
+		
+		void GenerateCrystalDialog::generate_()
+		{
+		}
+
 	} // namespace VIEW
 }	// namespace BALL

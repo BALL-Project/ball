@@ -22,6 +22,7 @@ namespace VIEW
 	class FDPBDialog;
 	class Message;
 	class Representation;
+	class GenerateCrystalDialog; 
 
 	/** A QT Event, that can contain a VIEW message.
 	 		Use this class to post events and thus messages over thread boundaries.
@@ -134,6 +135,25 @@ namespace VIEW
 			FDPBDialog* dialog_;
 	};
 
+	
+	///
+	class BALL_VIEW_EXPORT GenerateCrystalThread
+		: public BALLThread
+	{
+		public:
+
+			///
+			GenerateCrystalThread();
+
+			///
+			virtual void run();
+
+			///
+			void setCrystalDialog(GenerateCrystalDialog* dialog) {dialog_ = dialog;}
+
+		protected:
+			GenerateCrystalDialog* dialog_;
+	};
 
 	///
 	class BALL_VIEW_EXPORT UpdateRepresentationThread

@@ -7,6 +7,7 @@
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
+#include <BALL/VIEW/DIALOGS/generateCrystalDialog.h>
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -342,6 +343,18 @@ namespace BALL
 			dialog_->calculate_();
 		}
 
+		// =================================================0
+		
+		GenerateCrystalThread::GenerateCrystalThread()
+			: BALLThread(),
+				dialog_(0)
+		{}
+
+		void GenerateCrystalThread::run()
+		{
+			if (dialog_ == 0) return;
+			dialog_->generate_();
+		}
 
 		// =========================== implementation of class DockingThread ================
 		

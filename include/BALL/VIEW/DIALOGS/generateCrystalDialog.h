@@ -35,6 +35,8 @@ namespace BALL
 
 	namespace VIEW
 	{
+		
+		class GenerateCrystalThread;
 
 		/** Dialog for generating crystallographic objects like the ASU, the unit cell
 				or an arbitrarily spaced crystal packing
@@ -45,7 +47,9 @@ namespace BALL
 				public Ui_GenerateCrystalDialogData,
 				public ModularWidget
 		{ 
-				Q_OBJECT
+			friend class GenerateCrystalThread;
+
+			Q_OBJECT
 			
 			public:
 				BALL_EMBEDDABLE(GenerateCrystalDialog, ModularWidget)
@@ -64,6 +68,9 @@ namespace BALL
 				bool initSpaceGroupList() throw(Exception::FileNotFound);
 				
 				///
+				bool generate();
+				
+				///
 				//virtual void initializeWidget(MainControl& main_control);
 				
 			public slots:
@@ -76,6 +83,8 @@ namespace BALL
 
 
 			protected:
+				
+				void generate_();
 
 				HashMap<String, QImage> image_cache_;
 
@@ -86,8 +95,11 @@ namespace BALL
 				CrystalGenerator* generator_;
 				ParameterSection sg_list_;
 				ParameterSection sg_entry_;
-				System* selectedSystem_;
+				System* system_;
+				
 				String filename_;
+
+				GenerateCrystalThread* thread_;
 		};
 
 	} 
