@@ -486,7 +486,7 @@ namespace BALL
 
 				Size lower_bound = L()(graph_);
 				xstate.h = lower_bound;
-				xstate.f = max(xstate.g, lower_bound);
+				xstate.f = std::max(xstate.g, lower_bound);
 
 				if (xstate.f >= upper_bound)
 				{

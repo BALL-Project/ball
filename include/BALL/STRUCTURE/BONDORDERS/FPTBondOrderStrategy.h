@@ -323,26 +323,26 @@ namespace BALL
 			 * A single row in a DPTable, which consists of the DPConfig (valences and bond values) and the penalty, which was
 			 * computed for the DPConfig and it's ancestors.
 			 */
-			typedef pair<boost::reference_wrapper<DPConfig_>, Penalty> DPRow_;
+			typedef std::pair<boost::reference_wrapper<DPConfig_>, Penalty> DPRow_;
 
 			/**
 			 * After computing a DPTable, we don't modify it's entries (because we need them for backtracking). So usually we
 			 * work with const references to the table entries
 			 */
-			typedef pair<boost::reference_wrapper<DPConfig_ const>, Penalty> DPConstRow_;
+			typedef std::pair<boost::reference_wrapper<DPConfig_ const>, Penalty> DPConstRow_;
 
 			/**
 			 * Is used to save a reference to a const DPConfig in an object (which isn't 
 			 * possible with references, because they are constant and would prevent it's
 			 * adding into collections)
 			 */
-			typedef pair<DPConfig_*, Penalty> DPPointerRow_;
+			typedef std::pair<DPConfig_*, Penalty> DPPointerRow_;
 
 			/**
 			 * A map which gives fast access to the penalty of a given DPConfig. Is used to compare the penalty of two DPConfigs or to
 			 * iterate above all table entries.
 			 */
-			typedef map<DPConfig_, Penalty> DPMap_;
+			typedef std::map<DPConfig_, Penalty> DPMap_;
 
 			/**
 			 * The dynamic programming table. 
@@ -928,7 +928,7 @@ namespace BALL
 					 * which entry of the table of the second child it choosed. This is done in this stack. It contains the table entry
 					 * of the right child and the index of this child in pre-order.
 					 */
-					stack<pair<DPConfig_, Size> > join_branches;
+					std::stack<std::pair<DPConfig_, Size> > join_branches;
 
 					/**
 					 * pre-order index of this bag. If you traverse the tree in pre-order and give each vertex a number from 0 to n-1,
@@ -959,7 +959,7 @@ namespace BALL
 			 * A map which remember pointers to DPConfigs of a child of a join-node. It uses a DPJoinMapComparator to find
 			 * entries with equal bond-values very fast.
 			 */
-			typedef multimap<DPConfig_ const*, Penalty, DPJoinMapComparator_> DPJoinMap_;
+			typedef std::multimap<DPConfig_ const*, Penalty, DPJoinMapComparator_> DPJoinMap_;
 
 			/**
 			 * The backtracking algorithm. It traverses the nice tree decomposition in pre-order and chooses from the next table
@@ -1092,7 +1092,7 @@ namespace BALL
 					 * priority queue for backtracking states. It is implemented as search tree, because we need also
 					 * access to the worst element (to limit the queues size).
 					 */
-					multiset<BackTrackingState_*, StateComparator_> queue_;
+					std::multiset<BackTrackingState_*, StateComparator_> queue_;
 
 					/**
 					 * the maximum number of solutions we want do backtrack.
@@ -1316,7 +1316,7 @@ namespace BALL
 					 * component can be combined with each other found assignment of the other connection components,
 					 * you get many new solutions in each backtracking step. They are combined inserted into this queue.
 					 */
-					std::priority_queue<Assignment_, std::vector<Assignment_>, greater<Assignment_> > priority_queue_;
+					std::priority_queue<Assignment_, std::vector<Assignment_>, std::greater<Assignment_> > priority_queue_;
 
 					/**
 					 * The backtracked solutions of the connection components. They can be combined to build the

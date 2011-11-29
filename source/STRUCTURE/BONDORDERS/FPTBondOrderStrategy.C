@@ -831,7 +831,7 @@ namespace BALL
 		for (DPTable_::const_iterator left_iter = left_child.begin(); left_iter != left_child.end(); ++left_iter)
 		{
 			DPConstRow_ left_entry = *left_iter;
-			map.insert(pair<DPConfig_ const*, Penalty> (left_entry.first.get_pointer(), left_entry.second));
+			map.insert(std::pair<DPConfig_ const*, Penalty> (left_entry.first.get_pointer(), left_entry.second));
 		}
 
 		// find for each entry of the right child's table appropiate entries in the DPJoinMap (which have the same bondvalues)
@@ -840,7 +840,7 @@ namespace BALL
 			DPConstRow_ right_entry = *r_iter;
 			DPConfig_ const* right_conf = right_entry.first.get_pointer();
 
-			pair<DPJoinMap_::const_iterator, DPJoinMap_::const_iterator> matching_range(map.equal_range(right_conf));
+			std::pair<DPJoinMap_::const_iterator, DPJoinMap_::const_iterator> matching_range(map.equal_range(right_conf));
 
 			for (DPJoinMap_::const_iterator match  = matching_range.first;
 					                            match != matching_range.second; ++match)
@@ -1441,7 +1441,7 @@ namespace BALL
 			delete current_state_;
 		}
 
-		multiset<BackTrackingState_*, StateComparator_>::iterator first = queue_.begin();
+		std::multiset<BackTrackingState_*, StateComparator_>::iterator first = queue_.begin();
 		current_state_ = *first;
 		queue_.erase(first);
 		--max_heap_size_;
@@ -1783,7 +1783,7 @@ namespace BALL
 		{
 			while (queue_.size() > max_heap_size_)
 			{
-				multiset<BackTrackingState_*, StateComparator_>::iterator pos = queue_.end();
+				std::multiset<BackTrackingState_*, StateComparator_>::iterator pos = queue_.end();
 				--pos;
 				delete *pos;
 				queue_.erase(pos);
