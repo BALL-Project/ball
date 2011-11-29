@@ -50,13 +50,6 @@ namespace BALL
 
 		}
 		
-// 		void GenerateCrystalDialog::checkMenu(MainControl& mc)
-// 		{
-// 			std::cout << "hier geh ich kaputt" << std::endl;
-// 			menu_id_->setEnabled(!mc.compositesAreLocked());
-// 			std::cout << "hier bin ich kaputt" << std::endl;
-// 		}
-
 		bool GenerateCrystalDialog::initSpaceGroupList()
 		throw(Exception::FileNotFound)
 		{

@@ -58,7 +58,7 @@ namespace BALL
 				fdpb_dialog_(0),
 				bond_order_dialog_(parent),
 				bond_order_results_dialog_(parent),
-				generate_crystal_dialog_(parent)
+				crystal_dialog_(0)
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "New MolecularStructure " << this << std::endl;
@@ -1568,49 +1568,20 @@ namespace BALL
 			setStatusbarText((String)tr("  > build peptide ") + Peptides::GetSequence(*protein), true);
 		}
 		
-		void MolecularStructure::generateCrystal()
+		bool MolecularStructure::generateCrystal(bool show)
 		{
-			// Make sure we only perform one crystal generation at a time.
-			if (getMainControl()->isBusy())
+			if (crystal_dialog_ == 0)
 			{
-				Log.error() << (String)tr("Please, be patient. Another task is still in progress") << std::endl;
-				return;
-			}
-			
-			if (getMainControl()->getMolecularControlSelection().size() == 0) 
-			{
-				setStatusbarText((String)tr("Please highlight exactly one AtomContainer!"), true);
-				return;
-			}
-			
-			setStatusbarText("  > " + (String)tr("Crystal generation in progress") + " ...", true);
-			
-			// Retrieve the selected atom container and abort if nothing is selected.
-			list<AtomContainer*> containers;
-			list<Composite*> highl = getMainControl()->getMolecularControlSelection();
-			list<Composite*>::iterator lit = highl.begin();
-			for (; lit != highl.end(); ++lit)
-			{
-				AtomContainer* ac = dynamic_cast<AtomContainer*>(*lit);
-				if (ac != 0) containers.push_back(ac);
+				crystal_dialog_ = new GenerateCrystalDialog(getMainControl(), ((String)tr("GenerateCrystalDialog")).c_str());
+				//crystal_dialog_->fetchPreferences(getMainControl()->getINIFile());
 			}
 
-			if (containers.size() != 1) 
+			if (show)
 			{
-				setStatusbarText((String)tr("Please highlight exactly one AtomContainer!"), true);
-				return;
+				return crystal_dialog_->exec();
 			}
-
-			// Execute the assign bond order dialog
-			// and abort if cancel is clicked or nonsense arguments are given
-			if (!generate_crystal_dialog_.exec())
-			{
-					return;
-			}
-
-// 			GenerateCrystalDialog dialog(this, ((String)tr("CrystalDialog")).c_str());
-// 			dialog.exec();
 			
+			return crystal_dialog_->generate();
 		}
 		
 		void MolecularStructure::showAmberForceFieldOptions()

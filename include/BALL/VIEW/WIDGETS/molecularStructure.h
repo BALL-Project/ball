@@ -298,7 +298,7 @@ namespace BALL
 			void buildPeptide();
 
 			/// Build a crystal packing for a loaded system
-			void generateCrystal();
+			bool generateCrystal(bool show = true);
 			
 			/// Calculate the H-Bonds for a Protein
 			void calculateHBonds();
@@ -393,7 +393,7 @@ namespace BALL
 			AssignBondOrderConfigurationDialog 	bond_order_dialog_;
 			AssignBondOrderResultsDialog				bond_order_results_dialog_;
 			Position 														force_field_id_;
-			GenerateCrystalDialog				generate_crystal_dialog_;
+			GenerateCrystalDialog*			crystal_dialog_;
 		};
 
 	} // namespace VIEW
