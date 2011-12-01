@@ -131,7 +131,7 @@ namespace BALL
 			min /= 2.;
 			min -= 0.01;
 
-			if (min < 0) return false;
+			if (min < 0) return 0;
 
 			float radius = min;
 			float delta_phi     = 2.*M_PI/(num_lines_phi-1);
