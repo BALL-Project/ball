@@ -60,7 +60,6 @@ if (EIGEN3_INCLUDE_DIR)
   set(EIGEN3_FOUND ${EIGEN3_VERSION_OK})
 
 else (EIGEN3_INCLUDE_DIR)
-
   find_path(EIGEN3_INCLUDE_DIR NAMES signature_of_eigen3_matrix_library
       PATHS
       ${CMAKE_INSTALL_PREFIX}/include
@@ -70,12 +69,12 @@ else (EIGEN3_INCLUDE_DIR)
 
 	if (NOT EIGEN3_INCLUDE_DIR)
 		## Try harder...
-		find_file(EIGEN3_INCLUDE_DIR NAMES src/Core/EigenBase.h
+		find_file(EIGENBASE_PATH NAMES src/Core/EigenBase.h
 			PATHS ${CMAKE_FIND_ROOT_PATH}
 			PATH_SUFFIXES include Eigen include/Eigen)
-		IF (EIGEN3_INCLUDE_DIR)
-			STRING(REGEX REPLACE /Eigen/src/Core/EigenBase.h / EIGEN3_INCLUDE_DIR ${EIGEN3_INCLUDE_DIR})
-		ENDIF ()
+			IF (EIGENBASE_PATH)
+				STRING(REPLACE "/Eigen/src/Core/EigenBase.h" "/" EIGEN3_INCLUDE_DIR ${EIGENBASE_PATH})
+			ENDIF ()
 	endif (NOT EIGEN3_INCLUDE_DIR)
 
   if(EIGEN3_INCLUDE_DIR)
