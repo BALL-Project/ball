@@ -73,7 +73,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 
 	qInstallMsgHandler(logMessages);
 
-	putenv("BALL_RETURN_VALUE=");
 	QApplication application(argc, argv);
 
 	QStringList arguments = application.arguments();
@@ -205,18 +204,5 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 	delete splash;
 	
 	// Hand over control to the application.
-	int value = application.exec();
-	char*	return_value = getenv("BALL_RETURN_VALUE");
-	if (return_value != 0)
-	{
-		try
-		{
-			value = BALL::String(return_value).toInt();
-		}
-		catch(...)
-		{
-		}
-	}
-
-	return value;
+	return application.exec();
 }
