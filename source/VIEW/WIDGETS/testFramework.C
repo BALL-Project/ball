@@ -671,7 +671,6 @@ void TestFramework::processEvent_()
 		{
 			if (is_command_line_)
 			{
-				putenv(const_cast<char*>((String("BALL_RETURN_VALUE=") + String(errors_)).c_str()));
 				getMainControl()->quit(errors_);
 			}
 			else
