@@ -115,10 +115,10 @@ namespace BALL
 		template <typename Graph1, typename Graph2>
 		struct EditableVertexCopier 
 		{
-			EditableVertexCopier(const Graph1& /*g1*/, Graph2& g2) 
-				: vertex_orig_map(get(boost::vertex_orig_ptr, g2)),
-					g1(g1),
-				  g2(g2)
+			EditableVertexCopier(const Graph1& g1_, Graph2& g2_)
+				: vertex_orig_map(get(boost::vertex_orig_ptr, g2_)),
+				  g1(g1_),
+				  g2(g2_)
 			{}
 
 			template <typename Vertex1, typename Vertex2>
