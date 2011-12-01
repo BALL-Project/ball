@@ -68,6 +68,17 @@ else (EIGEN3_INCLUDE_DIR)
       PATH_SUFFIXES eigen3 eigen
     )
 
+	if (NOT EIGEN3_INCLUDE_DIR)
+		## Try harder...
+		find_file(EIGEN3_INCLUDE_DIR NAMES src/Core/EigenBase.h
+			PATHS ${CMAKE_FIND_ROOT_PATH}
+			PATH_SUFFIXES include Eigen include/Eigen)
+		MESSAGE(STATUS ${EIGEN3_INCLUDE_DIR})
+		IF (EIGEN3_INCLUDE_DIR)
+			STRING(REGEX REPLACE /Eigen/src/Core/EigenBase.h / EIGEN3_INCLUDE_DIR ${EIGEN3_INCLUDE_DIR})
+		ENDIF ()
+	endif (NOT EIGEN3_INCLUDE_DIR)
+
   if(EIGEN3_INCLUDE_DIR)
     _eigen3_check_version()
   endif(EIGEN3_INCLUDE_DIR)
