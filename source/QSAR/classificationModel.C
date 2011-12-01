@@ -121,19 +121,19 @@ namespace BALL
 		}
 
 
-		void ClassificationModel::equalSpaceDiscretization(uint bins, Eigen::MatrixXd & discretization_information)
+		void ClassificationModel::equalSpaceDiscretization(unsigned int bins, Eigen::MatrixXd & discretization_information)
 		{
-			uint no_features = descriptor_matrix_.cols();
-			uint no_compounds = descriptor_matrix_.rows();
+			unsigned int no_features = descriptor_matrix_.cols();
+			unsigned int no_compounds = descriptor_matrix_.rows();
 			
 			discretization_information.resize(2, no_features); 
 			discretization_information.row(0).fill( 1e10); // minimum of each feature in first row
 			discretization_information.row(1).fill(-1e10); // maximum of each feature in second row
 			
 			// find minimum and maximum of each feature
-			for (uint i = 0; i < no_features; i++)
+			for (unsigned int i = 0; i < no_features; i++)
 			{
-				for (uint j = 0; j < no_compounds; j++)
+				for (unsigned int j = 0; j < no_compounds; j++)
 				{
 					if (descriptor_matrix_(j, i) < discretization_information(0, i))
 					{
@@ -147,12 +147,12 @@ namespace BALL
 			}
 
 			// transform each feature value to a discrete value
-			for (uint i = 0; i < no_features; i++)
+			for (unsigned int i = 0; i < no_features; i++)
 			{
 				double step_width = (discretization_information(1, i)-discretization_information(0, i)) / bins; 
-				for (uint j = 0; j < no_compounds; j++)
+				for (unsigned int j = 0; j < no_compounds; j++)
 				{
-					uint feat_bucket = (uint)((descriptor_matrix_(j, i)-discretization_information(0, i)) / step_width); 
+					unsigned int feat_bucket = (unsigned int)((descriptor_matrix_(j, i)-discretization_information(0, i)) / step_width); 
 					if (feat_bucket >= bins) feat_bucket = bins-1; // for max.
 					descriptor_matrix_(j, i) = feat_bucket;
 				}	
@@ -160,21 +160,21 @@ namespace BALL
 		}
 
 
-		void ClassificationModel::equalSpaceDiscretizationTestData(Eigen::VectorXd & compound, uint bins, const Eigen::MatrixXd & discretization_information)
+		void ClassificationModel::equalSpaceDiscretizationTestData(Eigen::VectorXd & compound, unsigned int bins, const Eigen::MatrixXd & discretization_information)
 		{
 			if (compound.rows() != discretization_information.cols())
 			{
 				throw BALL::Exception::GeneralException(__FILE__, __LINE__, "Discretization error", "no of features of test compound and of discretized training data are different!"); 
 			}
 			
-			uint no_features = compound.rows();
+			unsigned int no_features = compound.rows();
 
-			for (uint i = 0; i < no_features; i++)
+			for (unsigned int i = 0; i < no_features; i++)
 			{
 				double step_width = (discretization_information(1, i)-discretization_information(0, i))/bins; 
 				int feat_bucket = (int)((compound(i)-discretization_information(0, i))/step_width); 
 				if (feat_bucket < 1) feat_bucket = 0; 
-				else if ((uint)feat_bucket >= bins) feat_bucket = bins-1; 
+				else if ((unsigned int)feat_bucket >= bins) feat_bucket = bins-1; 
 				compound(i) = feat_bucket;
 			}
 		}

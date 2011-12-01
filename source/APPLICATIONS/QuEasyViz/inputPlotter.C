@@ -43,7 +43,7 @@ namespace BALL
 			
 			if(data_->getNoResponseVariables()>1)
 			{
-				for(uint i=0; i<data_->getNoResponseVariables();i++)
+				for(unsigned int i=0; i<data_->getNoResponseVariables();i++)
 				{
 					String s = "Activity "+String(i);
 					activity_combobox_->addItem(s.c_str(),i);
@@ -99,7 +99,7 @@ namespace BALL
 		void InputPlotter::plotActivity(bool zoom)
 		{
 			const vector<string>* names = data_->getSubstanceNames();
-			uint no = data_->getNoResponseVariables();
+			unsigned int no = data_->getNoResponseVariables();
 			
 			if(no==0)
 			{
@@ -110,7 +110,7 @@ namespace BALL
 			
 			double min_y=1e10;
 			double max_y=-1e10;
-			for(uint i=0; i<data_->getNoSubstances();i++)
+			for(unsigned int i=0; i<data_->getNoSubstances();i++)
 			{
 				QwtPlotMarker* marker= new QwtPlotMarker;
 				marker->setSymbol(data_symbol);
@@ -153,7 +153,7 @@ namespace BALL
 		void InputPlotter::plotSortedActivity(bool zoom)
 		{
 			const vector<string>* names = data_->getSubstanceNames();
-			uint no = data_->getNoResponseVariables();
+			unsigned int no = data_->getNoResponseVariables();
 			
 			if(no==0)
 			{
@@ -162,8 +162,8 @@ namespace BALL
 			}
 			if(names->size()==0) show_data_labels=0;
 			
-			std::multiset<pair<double,uint> > act;
-			for(uint i=0; i<data_->getNoSubstances();i++)
+			std::multiset<pair<double,unsigned int> > act;
+			for(unsigned int i=0; i<data_->getNoSubstances();i++)
 			{
 				vector<double>* y0 = data_->getActivity(i);
 				act.insert(make_pair((*y0)[selected_activity_],i));
@@ -172,12 +172,12 @@ namespace BALL
 				
 			double min_y=1e10;
 			double max_y=-1e10;
-			std::multiset<pair<double, uint> >::iterator a_it = act.begin();
-			for(uint i=0; i<data_->getNoSubstances();i++, ++a_it)
+			std::multiset<pair<double, unsigned int> >::iterator a_it = act.begin();
+			for(unsigned int i=0; i<data_->getNoSubstances();i++, ++a_it)
 			{
 				QwtPlotMarker* marker= new QwtPlotMarker;
 				marker->setSymbol(data_symbol);
-				const pair<double,uint>& pair = *a_it;
+				const pair<double,unsigned int>& pair = *a_it;
 				double y=pair.first;
 				if(y<min_y) min_y=y;
 				if(y>max_y) max_y=y;

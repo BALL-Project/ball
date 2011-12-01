@@ -543,7 +543,7 @@ namespace BALL
 
 		void QSARData::calculateBALLDescriptors(Molecule& m)
 		{
-		/*	uint index = m.countNamedProperties();
+		/*	unsigned int index = m.countNamedProperties();
 			
 			SimpleBase b0;
 			b0.computeAllDescriptors(m);
@@ -557,7 +557,7 @@ namespace BALL
 			SurfaceBase b3;
 			b3.computeAllDescriptors(m);
 			
-			uint i = 0;
+			unsigned int i = 0;
 			for (; index < m.countNamedProperties(); index++)
 			{
 				descriptor_matrix_[i].push_back(((String)m.getNamedProperty(i).getString()).toDouble());
@@ -1018,13 +1018,13 @@ namespace BALL
 			// if response variable(s) were normalized, normalize the given thresholds first
 			else
 			{
-				uint no_thresholds = thresholds.size();
+				unsigned int no_thresholds = thresholds.size();
 				
 				vector<vector<double> > norm_thresholds(Y_.size());
-				for (uint act = 0; act < Y_.size(); act++)
+				for (unsigned int act = 0; act < Y_.size(); act++)
 				{
 					norm_thresholds[act].resize(no_thresholds);
-					for (uint i = 0; i < no_thresholds; i++)
+					for (unsigned int i = 0; i < no_thresholds; i++)
 					{
 						norm_thresholds[act][i] = (thresholds[i]-y_transformations_[act][0])/y_transformations_[act][1]; 
 					}
@@ -1186,7 +1186,7 @@ namespace BALL
 			v[1]->class_names_ = class_names_;
 			
 			std::multiset<unsigned int> val;
-			set<uint> map_val;
+			set<unsigned int> map_val;
 			unsigned int no_val = static_cast<unsigned int>(descriptor_matrix_[0].size()*fraction);
 			
 			PreciseTime pt;
@@ -1321,7 +1321,7 @@ namespace BALL
 				{
 					ordered_names[it->second] = it->first;
 				}
-				for (uint i = 0; i < ordered_names.size(); i++)
+				for (unsigned int i = 0; i < ordered_names.size(); i++)
 				{
 					out<<ordered_names[i]<<"\t";
 				}
@@ -1418,8 +1418,8 @@ namespace BALL
 			if (translated_class_labels)
 			{
 				getline(in, line); // skip empty line
-				uint no_labels = line.countFields("\t");
-				for (uint i = 0; i < no_labels; i++)
+				unsigned int no_labels = line.countFields("\t");
+				for (unsigned int i = 0; i < no_labels; i++)
 				{
 					class_names_.insert(make_pair(line.getField(i), i));
 				}
@@ -1448,7 +1448,7 @@ namespace BALL
 		vector<double>* QSARData::getActivity(int s) const
 		{
 			vector<double>* v = new vector<double>(Y_.size(), 0);
-			for (uint i = 0; i < Y_.size(); i++)
+			for (unsigned int i = 0; i < Y_.size(); i++)
 			{
 				(*v)[i] = Y_[i][s];
 			}
@@ -1470,9 +1470,9 @@ namespace BALL
 
 		bool QSARData::checkforDiscreteY() const
 		{
-			for (uint i = 0; i < Y_.size(); i++)
+			for (unsigned int i = 0; i < Y_.size(); i++)
 			{
-				for (uint j = 0; j < Y_[0].size(); j++)
+				for (unsigned int j = 0; j < Y_[0].size(); j++)
 				{
 					int label = static_cast<int>(Y_[i][j]);
 					if (label != Y_[i][j])
@@ -1519,10 +1519,10 @@ namespace BALL
 			
 			/// use only those features that do not have identical values for all compounds
 			std::multiset<int> features_to_use;
-			for (uint i = 0; i < descriptor_matrix_.size(); i++) // descriptors
+			for (unsigned int i = 0; i < descriptor_matrix_.size(); i++) // descriptors
 			{
 				bool identical_values = 1;
-				for (uint j = 1; j < descriptor_matrix_[0].size(); j++) // compounds
+				for (unsigned int j = 1; j < descriptor_matrix_[0].size(); j++) // compounds
 				{
 					if (descriptor_matrix_[i][j] != descriptor_matrix_[i][0])
 					{
@@ -1539,9 +1539,9 @@ namespace BALL
 			std::multiset<int>::iterator f_it = features_to_use.begin();
 			for (; f_it != features_to_use.end(); ++f_it)
 			{
-				list<pair<uint, String> > similar_descriptor_IDs;
+				list<pair<unsigned int, String> > similar_descriptor_IDs;
 				getSimilarDescriptors(*f_it, feature_cor_threshold, similar_descriptor_IDs);
-				for (list < pair < uint, String > > ::iterator it = similar_descriptor_IDs.begin(); it != similar_descriptor_IDs.end(); it++)
+				for (list < pair < unsigned int, String > > ::iterator it = similar_descriptor_IDs.begin(); it != similar_descriptor_IDs.end(); it++)
 				{
 					features_to_use.erase(it->first);
 				}
@@ -1550,11 +1550,11 @@ namespace BALL
 			vector<double> stddev(descriptor_matrix_[0].size(), 0);
 			vector<double> mean(descriptor_matrix_[0].size(), 0);
 
-			for (uint i = 0; i < mean.size(); i++)
+			for (unsigned int i = 0; i < mean.size(); i++)
 			{
 				mean[i] = Statistics::getRowMean(descriptor_matrix_, i, &features_to_use);
 			}		
-			for (uint i = 0; i < stddev.size(); i++)
+			for (unsigned int i = 0; i < stddev.size(); i++)
 			{
 				stddev[i] = Statistics::getRowStddev(descriptor_matrix_, i, mean[i], &features_to_use);
 			}
@@ -1564,12 +1564,12 @@ namespace BALL
 			std::multiset<int> to_be_deleted;
 			
 			/// find highly correlated compounds
-			for (uint i = 0; i < descriptor_matrix_[0].size(); i++)
+			for (unsigned int i = 0; i < descriptor_matrix_[0].size(); i++)
 			{	
 				if (to_be_deleted.find(i) != to_be_deleted.end()) continue; 
 				int no = 1;
 				
-				for (uint j = 0; j < descriptor_matrix_[0].size(); j++)
+				for (unsigned int j = 0; j < descriptor_matrix_[0].size(); j++)
 				{
 					if (i == j) continue; 
 					if (to_be_deleted.find(j) != to_be_deleted.end()) continue; 
@@ -1583,7 +1583,7 @@ namespace BALL
 						if (!discrete_response)
 						{
 							// add up response values in order to calculate the mean later
-							for (uint c = 0; c < Y_.size(); c++)
+							for (unsigned int c = 0; c < Y_.size(); c++)
 							{
 								Y_[c][i] += Y_[c][j];
 							}
@@ -1594,7 +1594,7 @@ namespace BALL
 						{
 							bool identical_labels = 1;
 							// delete compound only if all class-labels are identical!
-							for (uint c = 0; c < Y_.size(); c++)
+							for (unsigned int c = 0; c < Y_.size(); c++)
 							{
 								if ((int)Y_[c][i] != (int)Y_[c][j]) 
 								{
@@ -1613,7 +1613,7 @@ namespace BALL
 				
 				if (discrete_response && no > 1)
 				{
-					for (uint c = 0; c < Y_.size(); c++)
+					for (unsigned int c = 0; c < Y_.size(); c++)
 					{
 						Y_[c][i] /= no;
 					}
@@ -1626,7 +1626,7 @@ namespace BALL
 		}
 
 
-		void QSARData::getSimilarDescriptors(int descriptor_ID, double correlation, list<pair<uint, String> >& similar_descriptor_IDs) const
+		void QSARData::getSimilarDescriptors(int descriptor_ID, double correlation, list<pair<unsigned int, String> >& similar_descriptor_IDs) const
 		{
 			if (descriptor_ID < 0 || descriptor_ID >= (int)descriptor_matrix_.size())
 			{
@@ -1647,20 +1647,20 @@ namespace BALL
 			// if data has not been centered, calculate mean and stddev of each feature
 			if (descriptor_transformations_.size() == 0)
 			{
-				for (uint i = 0; i < mean.size(); i++)
+				for (unsigned int i = 0; i < mean.size(); i++)
 				{
 					mean[i] = Statistics::getMean(descriptor_matrix_[i]);
 				}		
-				for (uint i = 0; i < stddev.size(); i++)
+				for (unsigned int i = 0; i < stddev.size(); i++)
 				{
 					stddev[i] = Statistics::getStddev(descriptor_matrix_[i], mean[i]);
 				}
 			}
 			
-			uint size = (uint)descriptor_matrix_.size();
-			for (uint i = 0; i < size; i++)
+			unsigned int size = (unsigned int)descriptor_matrix_.size();
+			for (unsigned int i = 0; i < size; i++)
 			{
-				if ((uint)descriptor_ID == i) continue; 
+				if ((unsigned int)descriptor_ID == i) continue; 
 					
 				double covar = Statistics::getCovariance(descriptor_matrix_[descriptor_ID], descriptor_matrix_[i], mean[descriptor_ID], mean[i]);
 					

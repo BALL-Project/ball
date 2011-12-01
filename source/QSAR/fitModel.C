@@ -64,7 +64,7 @@ namespace BALL
 			
 			String var="";
 			// replace all x-values for the current substance
-			for (uint j = 0; j < v.rows(); j++)
+			for (unsigned int j = 0; j < v.rows(); j++)
 			{
 				var = var+"x"+String(j)+"="+String(v(j))+";";
 			}

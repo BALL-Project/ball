@@ -32,7 +32,7 @@ namespace BALL
 		void ConfigIO::putbackLine(std::istream* input, String& line)
 		{
 			input->unget();
-			for (uint i = 0; i < line.size(); i++)
+			for (unsigned int i = 0; i < line.size(); i++)
 			{
 				input->unget();
 			}
@@ -109,8 +109,8 @@ namespace BALL
 				else if (line.hasPrefix("activity_IDs"))
 				{
 					String act = ((String)line.after("=")).trimLeft();
-					uint no = act.countFields(" ");
-					for (uint i = 0; i < no; i++)
+					unsigned int no = act.countFields(" ");
+					for (unsigned int i = 0; i < no; i++)
 					{
 						conf.activities.insert(act.getField(i).toInt());
 					}
@@ -162,7 +162,7 @@ namespace BALL
 				}
 			}
 			
-			uint no = conf.csv_file.size();
+			unsigned int no = conf.csv_file.size();
 			if (no != conf.csv_separator.size() || no != conf.csv_desc_labels.size() || no != conf.csv_compound_labels.size() || no != conf.csv_no_response.size())
 			{
 				throw Exception::ConfigurationReadingError(__FILE__, __LINE__, "Some options for CSV-files to be appended to other input data are missing!"); 
@@ -346,8 +346,8 @@ namespace BALL
 				else if (line.hasPrefix("model_parameters"))
 				{
 					line = ((String)line.after("=")).trimLeft();
-					uint no = line.countFields(" ");
-					for (uint i = 0; i < no; i++)
+					unsigned int no = line.countFields(" ");
+					for (unsigned int i = 0; i < no; i++)
 					{
 						conf.model_parameters.push_back(line.getField(i).toDouble());
 					}
@@ -524,7 +524,7 @@ namespace BALL
 					if (s == "R2/Q2 version2") s="R2/Q2"; 
 					conf.statistic_name = s;
 					
-					const map<uint, String>* stats;
+					const map<unsigned int, String>* stats;
 					if (line.hasPrefix("classification_statistic"))
 					{
 						stats = reg.getClassificationStatistics(); 
@@ -533,7 +533,7 @@ namespace BALL
 					
 					string choices = ""; 
 					bool ok = 0;
-					for (map < uint, String > ::const_iterator it = stats->begin(); it != stats->end(); it++)
+					for (map < unsigned int, String > ::const_iterator it = stats->begin(); it != stats->end(); it++)
 					{
 						if (s == it->second)
 						{
@@ -728,7 +728,7 @@ namespace BALL
 					if (s == "R2/Q2 version2") s="R2/Q2"; 
 					conf.statistic_name = s;
 					
-					const map<uint, String>* stats;
+					const map<unsigned int, String>* stats;
 					if (line.hasPrefix("classification_statistic"))
 					{
 						stats = reg.getClassificationStatistics(); 
@@ -737,7 +737,7 @@ namespace BALL
 					
 					string choices = ""; 
 					bool ok = 0;
-					for (map < uint, String > ::const_iterator it = stats->begin(); it != stats->end(); it++)
+					for (map < unsigned int, String > ::const_iterator it = stats->begin(); it != stats->end(); it++)
 					{
 						if (s == it->second)
 						{
@@ -880,7 +880,7 @@ namespace BALL
 					if (s == "R2/Q2 version2") s="R2/Q2"; 
 					conf.statistic_name = s;
 					
-					const map<uint, String>* stats;
+					const map<unsigned int, String>* stats;
 					if (line.hasPrefix("classification_statistic"))
 					{
 						stats = reg.getClassificationStatistics(); 
@@ -889,7 +889,7 @@ namespace BALL
 					
 					string choices = ""; 
 					bool ok = 0;
-					for (map < uint, String > ::const_iterator it = stats->begin(); it != stats->end(); it++)
+					for (map < unsigned int, String > ::const_iterator it = stats->begin(); it != stats->end(); it++)
 					{
 						if (s == it->second)
 						{

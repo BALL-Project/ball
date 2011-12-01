@@ -166,7 +166,7 @@ namespace BALL
 				(*it)->setSourceNode(this);
 				addOutEdge(*it);
 				
-				uint source_type=(*it)->destNode()->type();
+				unsigned int source_type=(*it)->destNode()->type();
 				if(is_input && source_type==ModelItem::Type)
 				{
 					ModelItem* modelitem = dynamic_cast<ModelItem*>((*it)->destNode());

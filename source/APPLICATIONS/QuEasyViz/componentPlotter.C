@@ -78,7 +78,7 @@ namespace BALL
 				int no_y = model_item_->inputDataItem()->data()->getNoResponseVariables();
 				if(no_y>1)
 				{
-					for(uint i=0; i<no_y;i++)
+					for(unsigned int i=0; i<no_y;i++)
 					{
 						String s = "Activity "+String(i);
 						activity_combobox_->addItem(s.c_str(),i);
@@ -118,7 +118,7 @@ namespace BALL
 				return;
 			}
 			
-			uint no_components=0;
+			unsigned int no_components=0;
 			
 			LatentVariableModel* lv_model = dynamic_cast<LatentVariableModel*>(model_item_->model());
 			
@@ -136,11 +136,11 @@ namespace BALL
 				no_components=component_matrix_->Ncols();
 				if(no_components<2) return;
 				
-				uint size = model_item_->model()->data->getNoSubstances();
+				unsigned int size = model_item_->model()->data->getNoSubstances();
 				min_response_value_ = 1e10;
 				max_response_value_ = -1e10;
 				const QSARData* data = model_item_->inputDataItem()->data();
-				for(uint j=0; j<size; j++)
+				for(unsigned int j=0; j<size; j++)
 				{
 					vector<double>* resp = data->getActivity(j);
 					double response_value = (*resp)[selected_activity_];
@@ -166,7 +166,7 @@ namespace BALL
 
 			if(component_one_combobox_->count()==0)
 			{
-				for(uint i=1;i<=no_components;i++)
+				for(unsigned int i=1;i<=no_components;i++)
 				{
 					String tmp;
 					if(!plot_loadings_) tmp="component ";
@@ -203,10 +203,10 @@ namespace BALL
 			const vector<string>* feature_names;
 			if(!plot_loadings_) feature_names = model_item_->model()->getSubstanceNames();
 			else feature_names = model_item_->model()->getDescriptorNames();
-			const uint size = feature_names->size();
+			const unsigned int size = feature_names->size();
 			
-			uint comp_one=component_one_combobox_->itemData(component_one_combobox_->currentIndex()).toInt();
-			uint comp_two=component_two_combobox_->itemData(component_two_combobox_->currentIndex()).toInt();
+			unsigned int comp_one=component_one_combobox_->itemData(component_one_combobox_->currentIndex()).toInt();
+			unsigned int comp_two=component_two_combobox_->itemData(component_two_combobox_->currentIndex()).toInt();
 
 			QwtLinearColorMap color_map;
 			color_map.setColorInterval(QColor(255,0,0),QColor(0,255,0));
@@ -214,7 +214,7 @@ namespace BALL
 			
 			const QSARData* data = model_item_->inputDataItem()->data();
 			
-			for(uint j=1; j<=size; j++)
+			for(unsigned int j=1; j<=size; j++)
 			{
 				QwtPlotMarker* marker= new QwtPlotMarker;
 				QwtSymbol symbol = data_symbol;

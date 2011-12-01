@@ -55,8 +55,8 @@ namespace BALL
 			readLabels();
 			
 			// map values of Y to their index
-			map<int, uint> label_to_pos; 
-			for (uint i = 0; i < labels_.size(); i++)
+			map<int, unsigned int> label_to_pos; 
+			for (unsigned int i = 0; i < labels_.size(); i++)
 			{
 				label_to_pos.insert(make_pair(labels_[i], i));
 			}
@@ -140,7 +140,7 @@ namespace BALL
 				for (int k = 0; k < mean_vectors_[c].rows(); k++)
 				{
 					Eigen::VectorXd diff(s.rows()); 
-					for (uint i = 0; i < s.rows(); i++)
+					for (unsigned int i = 0; i < s.rows(); i++)
 					{
 						diff(i) = s(i)-mean_vectors_[c](k, i); 
 					}

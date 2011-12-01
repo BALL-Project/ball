@@ -301,7 +301,7 @@ namespace BALL
 			model_item_->model_parameters.clear();
 			bool ok;
 			double num = 0.;
-			for (uint i=0; i < modelPage_->edits_.size(); i++)
+			for (unsigned int i=0; i < modelPage_->edits_.size(); i++)
 			{
 				num = modelPage_->edits_[i]->text().toDouble(&ok);
 				if (ok)

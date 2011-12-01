@@ -68,7 +68,7 @@ namespace BALL
 				if(dynamic_cast<InputDataItem*>(itemAt(origin)))
 				{
 					QPointF pos(20,0);
-					for(uint i=0; i<20;i++)
+					for(unsigned int i=0; i<20;i++)
 					{
 						QPointF p = origin+pos;
 						if((dynamic_cast<DataItem*>(itemAt(p))))
@@ -105,7 +105,7 @@ namespace BALL
 				pos = QPointF(200,-200);
 			}	
 
-			for(uint i=0; i<50;i++)
+			for(unsigned int i=0; i<50;i++)
 			{
 				QPointF p = origin+pos;
 				if((dynamic_cast<DataItem*>(itemAt(p))))
@@ -123,7 +123,7 @@ namespace BALL
 
 		void DataItemScene::dropEvent(QGraphicsSceneDragDropEvent* event)
 		{
-			uint type = 0;
+			unsigned int type = 0;
 			if(main_window->dragged_item!=NULL) type=main_window->dragged_item->type();
 			
 			if(view->name!="view" || ((main_window->dragged_item==NULL||type<QVariant::UserType) && !event->mimeData()->hasUrls())) 
@@ -608,7 +608,7 @@ namespace BALL
 			InputDataItem* data_item = (InputDataItem*)item;
 			
 			double frac=val_item->getValFraction();
-			uint folds = val_item->numOfNCVFolds();
+			unsigned int folds = val_item->numOfNCVFolds();
 			PartitioningItem* partitioner = new PartitioningItem(data_item,view,folds,frac);
 			QPointF p0 = first_model->pos();
 			addItem(partitioner);
@@ -618,7 +618,7 @@ namespace BALL
 			Edge* e = new Edge(data_item,partitioner);
 			addItem(e);
 			
-			for(uint i=0;i<folds;i++)
+			for(unsigned int i=0;i<folds;i++)
 			{
 				InputPartitionItem* train_part = new InputPartitionItem(0,partitioner); // training-partition of fold i
 				addItem(train_part);

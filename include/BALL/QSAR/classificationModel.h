@@ -98,17 +98,17 @@ namespace BALL
 				@param bins the number of discrete values to be created for each features 
 				@param discretization_information a Eigen::MatrixXd into which the information about the applied discretization should be saved (into one column per feature). \n
 				This Eigen::MatrixXd can later be used to discretize test data according to the discretization of the training data. */
-				void (ClassificationModel::* discretizeFeatures)(uint bins, Eigen::MatrixXd& discretization_information);
+				void (ClassificationModel::* discretizeFeatures)(unsigned int bins, Eigen::MatrixXd& discretization_information);
 				
 				/** Discretizes test data according to the given discretization of the training data.
 				@param discretization_information the discretization according to which the current descriptor_matrix should be discretized. */
-				void (ClassificationModel::* discretizeTestDataFeatures)(Eigen::VectorXd& compound, uint bins, const Eigen::MatrixXd& discretization_information);
+				void (ClassificationModel::* discretizeTestDataFeatures)(Eigen::VectorXd& compound, unsigned int bins, const Eigen::MatrixXd& discretization_information);
 				
 				
 				/** discretizes each feature in such a way that each created bin has an equal range of values */
-				void equalSpaceDiscretization(uint bins, Eigen::MatrixXd& discretization_information);
+				void equalSpaceDiscretization(unsigned int bins, Eigen::MatrixXd& discretization_information);
 				
-				void equalSpaceDiscretizationTestData(Eigen::VectorXd& compound, uint bins, const Eigen::MatrixXd& discretization_information);
+				void equalSpaceDiscretizationTestData(Eigen::VectorXd& compound, unsigned int bins, const Eigen::MatrixXd& discretization_information);
 				
 				
 				

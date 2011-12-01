@@ -36,7 +36,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-		PartitioningItem::PartitioningItem(InputDataItem* input, DataItemView* miv, uint folds, double& fraction, int ID):
+		PartitioningItem::PartitioningItem(InputDataItem* input, DataItemView* miv, unsigned int folds, double& fraction, int ID):
 			DataItem(miv),
 			input_(input)
 		{
@@ -147,17 +147,17 @@ namespace BALL
 			return val_fraction_;
 		}
 
-		uint PartitioningItem::getNoFolds()
+		unsigned int PartitioningItem::getNoFolds()
 		{
 			return no_folds_;
 		}
 
-		uint PartitioningItem::getID()
+		unsigned int PartitioningItem::getID()
 		{
 			return id_;
 		}
 
-		void PartitioningItem::setID(uint ID)
+		void PartitioningItem::setID(unsigned int ID)
 		{
 			id_ = ID;
 		}

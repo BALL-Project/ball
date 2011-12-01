@@ -258,9 +258,9 @@ namespace BALL
 		}
 
 
-		String Registry::getValidationName(uint no)
+		String Registry::getValidationName(unsigned int no)
 		{
-			map<uint, String>::iterator it = validation_names.find(no);
+			map<unsigned int, String>::iterator it = validation_names.find(no);
 			if (it != validation_names.end())
 			{
 				return it->second;
@@ -274,9 +274,9 @@ namespace BALL
 		}
 
 
-		String Registry::getClassificationStatisticName(uint no)
+		String Registry::getClassificationStatisticName(unsigned int no)
 		{
-			map < uint, String > ::iterator it = classification_statistics.find(no); 
+			map < unsigned int, String > ::iterator it = classification_statistics.find(no); 
 			if (it != classification_statistics.end())
 			{
 				return it->second;
@@ -289,9 +289,9 @@ namespace BALL
 			return "";
 		}
 
-		String Registry::getRegressionStatisticName(uint no)
+		String Registry::getRegressionStatisticName(unsigned int no)
 		{
-			map<uint, String>::iterator it = regression_statistics.find(no);
+			map<unsigned int, String>::iterator it = regression_statistics.find(no);
 			if (it != regression_statistics.end())
 			{
 				return it->second;
@@ -304,9 +304,9 @@ namespace BALL
 			return "";
 		}
 
-		String Registry::getFeatureSelectionName(uint no)
+		String Registry::getFeatureSelectionName(unsigned int no)
 		{
-			map<uint, String>::iterator it = feature_selection_names.find(no);
+			map<unsigned int, String>::iterator it = feature_selection_names.find(no);
 			if (it != feature_selection_names.end())
 			{
 				return it->second;
@@ -319,12 +319,12 @@ namespace BALL
 			return "";
 		}
 
-		const map < uint, String > * Registry::getClassificationStatistics()
+		const map < unsigned int, String > * Registry::getClassificationStatistics()
 		{
 			return &classification_statistics; 
 		}
 
-		const map<uint, String>* Registry::getRegressionStatistics()
+		const map<unsigned int, String>* Registry::getRegressionStatistics()
 		{
 			return &regression_statistics;
 		}
@@ -409,7 +409,7 @@ namespace BALL
 		}
 
 
-		const map<uint, String>* RegistryEntry::getStatistics()
+		const map<unsigned int, String>* RegistryEntry::getStatistics()
 		{
 			if (regression) return &registry_->regression_statistics; 
 			return &registry_->classification_statistics; 

@@ -47,10 +47,10 @@ namespace BALL
 			zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas(),this);
 			setWindowTitle("Prediction Plotter");
 			
-			uint no_y = data_->getNoResponseVariables();
+			unsigned int no_y = data_->getNoResponseVariables();
 			if(no_y>1)
 			{
-				for(uint i=0; i<no_y;i++)
+				for(unsigned int i=0; i<no_y;i++)
 				{
 					String s = "Activity "+String(i);
 					activity_combobox_->addItem(s.c_str(),i);
@@ -71,10 +71,10 @@ namespace BALL
 			zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas(),this);
 			setWindowTitle("Nested Validation Prediction-Plotter");
 			
-			uint no_y = val_item_->modelItem()->inputDataItem()->data()->getNoResponseVariables();
+			unsigned int no_y = val_item_->modelItem()->inputDataItem()->data()->getNoResponseVariables();
 			if(no_y>1)
 			{
-				for(uint i=0; i<no_y;i++)
+				for(unsigned int i=0; i<no_y;i++)
 				{
 					String s = "Activity "+String(i);
 					activity_combobox_->addItem(s.c_str(),i);
@@ -293,8 +293,8 @@ namespace BALL
 			
 			double min_exp=labels[0];
 			double max_exp=labels[labels.size()-1];
-			map<int,uint> labels_map; // maps the class-IDs to the index in the above vector
-			for(uint i=0; i<labels.size(); i++)
+			map<int,unsigned int> labels_map; // maps the class-IDs to the index in the above vector
+			for(unsigned int i=0; i<labels.size(); i++)
 			{
 				labels_map[labels[i]] = i;
 			}
@@ -330,8 +330,8 @@ namespace BALL
 					delete e;
 					if(observed==expected)
 					{
-						uint id = labels_map[observed];
-						for(uint j=0; j<labels.size();j++)
+						unsigned int id = labels_map[observed];
+						for(unsigned int j=0; j<labels.size();j++)
 						{
 							if(j==id) TP[j]++;
 							else TN[j]++;
@@ -339,9 +339,9 @@ namespace BALL
 					}
 					else
 					{
-						uint obs_id = labels_map[observed];
-						uint exp_id = labels_map[expected];
-						for(uint j=0; j<labels.size();j++)
+						unsigned int obs_id = labels_map[observed];
+						unsigned int exp_id = labels_map[expected];
+						for(unsigned int j=0; j<labels.size();j++)
 						{
 							if(j==obs_id) FP[j]++;
 							else if(j==exp_id) FN[j]++;
@@ -351,13 +351,13 @@ namespace BALL
 				}
 			}
 			
-		// 	for(uint a=0; a<4; a++) // for TP,..,FN
+		// 	for(unsigned int a=0; a<4; a++) // for TP,..,FN
 		// 	{
 		// 		if(a==0) cout<<"TP:  ";
 		// 		else if(a==1) cout<<"FP:  ";
 		// 		else if(a==2) cout<<"TN:  ";
 		// 		else if(a==3) cout<<"FN:  ";
-		// 		for(uint i=0; i<TP.size(); i++) // for each class
+		// 		for(unsigned int i=0; i<TP.size(); i++) // for each class
 		// 		{
 		// 			if(a==0) cout<<TP[i]<<"  ";
 		// 			else if(a==1) cout<<FP[i]<<"  ";
@@ -374,7 +374,7 @@ namespace BALL
 			vector<double*> x(4);
 			vector<double*> y(4);
 			
-			for(uint a=0; a<4; a++) // for TP,..,FN
+			for(unsigned int a=0; a<4; a++) // for TP,..,FN
 			{
 				curves[a] = new QwtPlotCurve;
 				x[a] = new double[labels.size()];
@@ -397,7 +397,7 @@ namespace BALL
 					c = QColor(100,50,80); // ?!
 				}
 				QPen pen(c);
-				for(uint i=0; i<labels.size(); i++) // for each class
+				for(unsigned int i=0; i<labels.size(); i++) // for each class
 				{
 					x[a][i] = labels[i];
 					if(a==0) y[a][i] = TP[i]; 

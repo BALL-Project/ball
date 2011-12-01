@@ -86,7 +86,7 @@ namespace BALL
 				 */
 				//@{
 				
-				uint discretization_steps_;
+				unsigned int discretization_steps_;
 				
 				
 				/** the minmum (row1) and maximum (row2) of each feature. */

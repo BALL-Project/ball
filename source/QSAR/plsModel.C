@@ -67,7 +67,7 @@ namespace BALL
 			// determine the number of components that are to be created.
 			// no_components_ contains the number of components desired by the user, 
 			// but obviously we cannot calculate more PLS components than features
-			uint components_to_create = no_components_;
+			unsigned int components_to_create = no_components_;
 			if (cols < no_components_) components_to_create = cols; 
 			
 			U_.resize(X.rows(), components_to_create);
@@ -82,7 +82,7 @@ namespace BALL
 			Eigen::VectorXd u = Y_.col(0);
 			Eigen::VectorXd u_old;
 			
-			for (uint j = 0; j < components_to_create; j++)
+			for (unsigned int j = 0; j < components_to_create; j++)
 			{
 				for (int i = 0; i < 10000; i++)
 				{	

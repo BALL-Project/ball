@@ -51,7 +51,7 @@ namespace BALL
 			QGridLayout *layout = new QGridLayout();
 
 			///create labels and line edits for every model parameter and print out the parameter name and the default value (read from the registry)
-			for (uint i=0; i < parent->entry()->parameterNames.size(); i++)
+			for (unsigned int i=0; i < parent->entry()->parameterNames.size(); i++)
 			{
 				ostringstream value;
 				value.precision(3);
@@ -397,7 +397,7 @@ namespace BALL
 			QGroupBox *paramGroup = new QGroupBox(tr("Model Parameters"),this);
 			QGridLayout *layout = new QGridLayout();
 
-			for (uint i=0; i < parent->entry()->parameterNames.size(); i++)
+			for (unsigned int i=0; i < parent->entry()->parameterNames.size(); i++)
 			{
 				QLabel* label = new QLabel(QString(parent->entry()->parameterNames[i].c_str()),this);
 				layout->addWidget(label, i,1);
@@ -450,7 +450,7 @@ namespace BALL
 				layout2->addWidget(label6, 3,2);
 
 				/*
-				for (uint i=0; i < parent->entry()->parameterNames.size(); i++)
+				for (unsigned int i=0; i < parent->entry()->parameterNames.size(); i++)
 				{
 					
 					QLabel* label = new QLabel(QString(parent->entry()->parameterNames[i].c_str()));

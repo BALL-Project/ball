@@ -48,7 +48,7 @@ namespace BALL
 			if(no_y>1)
 			{
 				activity_combobox_->addItem("All activities",-1);
-				for(uint i=0; i<no_y;i++)
+				for(unsigned int i=0; i<no_y;i++)
 				{
 					String s = "Activity "+String(i);
 					activity_combobox_->addItem(s.c_str(),i);
@@ -93,7 +93,7 @@ namespace BALL
 			double max_y=-1e10;
 			double min_x=1;
 			double max_x=coefficient_matrix->Nrows();
-			const uint size = coefficient_matrix->Nrows();
+			const unsigned int size = coefficient_matrix->Nrows();
 			
 			int start_matrixindex = selected_activity_+1;
 			int end_matrixindex = selected_activity_+1;
@@ -108,7 +108,7 @@ namespace BALL
 				double* x = new double[size];
 				double* y = new double[size];
 				
-				for(uint j=1; j<=size; j++)
+				for(unsigned int j=1; j<=size; j++)
 				{
 					QwtPlotMarker* marker= new QwtPlotMarker;
 					marker->setSymbol(data_symbol);

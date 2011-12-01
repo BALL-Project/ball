@@ -105,9 +105,9 @@ namespace BALL
 			kernel->calculateKernelMatrix(m1, mx); // k(x*, x*), dim: 1x1
 			
 			double sum = 0;
-			for (uint i = 1; i <= K_t_.cols(); i++)
+			for (unsigned int i = 1; i <= K_t_.cols(); i++)
 			{
-				for (uint j = 1; j <= K_t_.cols(); j++)
+				for (unsigned int j = 1; j <= K_t_.cols(); j++)
 				{
 					sum += K_t_(i)*K_t_(j)*L_(i, j); // k(x*, _i)*k(x*, x_j)*L_ij
 				}

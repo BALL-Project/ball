@@ -71,8 +71,8 @@ bool ContourSurfaceDialog::exec()
 	grids->clear();
 	vector<Dataset*> sets = controller_->getDatasets();
 	vector<Dataset*>::iterator it = sets.begin();
-	uint index_selected_grid=0;
-	for (uint i=0; it != sets.end(); it++, i++)
+	unsigned int index_selected_grid=0;
+	for (unsigned int i=0; it != sets.end(); it++, i++)
 	{
 		grids->addItem((**it).getName().c_str());
 		if(*it==grid_) index_selected_grid=i;

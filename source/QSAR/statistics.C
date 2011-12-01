@@ -98,7 +98,7 @@ namespace BALL
 		{
 			if (mean == -1) {	mean = getMean(v); }
 			double sum_of_squares = 0;
-			for (uint i = 0; i < v.size(); i++)
+			for (unsigned int i = 0; i < v.size(); i++)
 			{
 				sum_of_squares += (v[i]-mean)*(v[i]-mean);
 			}
@@ -118,7 +118,7 @@ namespace BALL
 			if (mean1 == -1) {mean1 = getMean(v1); }
 			if (mean2 == -1) {mean2 = getMean(v2); }
 			double sum_of_squares = 0;
-			for (uint i = 0; i < v1.size() && i < v2.size(); i++)
+			for (unsigned int i = 0; i < v1.size() && i < v2.size(); i++)
 			{
 				sum_of_squares += (v1[i]-mean1)*(v2[i]-mean2);
 			}
@@ -130,7 +130,7 @@ namespace BALL
 		double Statistics::getMean(const vector<double>& v)
 		{
 			double sum = 0;
-			for (uint i = 0; i < v.size(); i++)
+			for (unsigned int i = 0; i < v.size(); i++)
 			{
 				sum += v[i];
 			}
@@ -155,7 +155,7 @@ namespace BALL
 				size = features_to_use->size();
 			}	
 			
-			for (uint i = 0; i < v.size(); i++)
+			for (unsigned int i = 0; i < v.size(); i++)
 			{
 				if (features_to_use != 0 && *it != (int)i) continue; 
 				sum_of_squares += (v[i][row1]-mean1)*(v[i][row2]-mean2);
@@ -175,7 +175,7 @@ namespace BALL
 				size = features_to_use->size();
 			}	
 			
-			for (uint i = 0; i < v.size(); i++)
+			for (unsigned int i = 0; i < v.size(); i++)
 			{
 				if (features_to_use != 0 && *it != (int)i) continue; 
 				sum += v[i][row];
@@ -196,7 +196,7 @@ namespace BALL
 				size = features_to_use->size();
 			}
 			
-			for (uint i = 0; i < v.size(); i++)
+			for (unsigned int i = 0; i < v.size(); i++)
 			{
 				if (features_to_use != 0 && *it != (int)i) continue; 
 				sum_of_squares += (v[i][row]-mean)*(v[i][row]-mean);

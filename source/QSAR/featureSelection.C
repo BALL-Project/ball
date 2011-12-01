@@ -441,9 +441,9 @@ namespace BALL
 			int best_col = 0;
 			double best_q2 = 0;
 			
-			std::multiset<pair<double, uint> > potential_descriptors; // sorted descendingly by their increase of prediction quality during the first scan
+			std::multiset<pair<double, unsigned int> > potential_descriptors; // sorted descendingly by their increase of prediction quality during the first scan
 			
-			for (uint i = 0; i < columns; i++)
+			for (unsigned int i = 0; i < columns; i++)
 			{	
 				// do not insert a descriptor more than one time and do not use irrelevant descriptors
 				if (model_->descriptor_IDs_.find(i) != model_->descriptor_IDs_.end()
@@ -473,7 +473,7 @@ namespace BALL
 					continue;
 				}
 				
-				std::multiset< pair<double, uint> >::iterator it = potential_descriptors.insert(make_pair(1-model_->model_val->getCVRes(), i));
+				std::multiset< pair<double, unsigned int> >::iterator it = potential_descriptors.insert(make_pair(1-model_->model_val->getCVRes(), i));
 				
 				if (model_->model_val->getCVRes() > best_q2)
 				{
@@ -489,10 +489,10 @@ namespace BALL
 			/// now check ONCE for each remaining (non-empty) descriptor, whether it can increase the prediction quality
  			double old_q2 = best_q2;
 			
-			std::multiset< pair<double, uint> >::iterator p_it = potential_descriptors.begin();
+			std::multiset< pair<double, unsigned int> >::iterator p_it = potential_descriptors.begin();
 			for (; p_it != potential_descriptors.end(); ++p_it)
 			{
-				uint i = p_it->second;
+				unsigned int i = p_it->second;
 				last_insertion = model_->descriptor_IDs_.insert(i);
 			
 				try
@@ -748,11 +748,11 @@ namespace BALL
 			// if data has not been centered, calculate mean and stddev of each feature
 			if (model_->data->descriptor_transformations_.size() == 0)
 			{
-				for (uint i = 0; i < mean.size(); i++)
+				for (unsigned int i = 0; i < mean.size(); i++)
 				{
 					mean[i] = Statistics::getMean(model_->data->descriptor_matrix_[i]);
 				}		
-				for (uint i = 0; i < stddev.size(); i++)
+				for (unsigned int i = 0; i < stddev.size(); i++)
 				{
 					stddev[i] = Statistics::getStddev(model_->data->descriptor_matrix_[i], mean[i]);
 				}
@@ -760,9 +760,9 @@ namespace BALL
 				
 			double abs_cor_threshold = abs(cor_threshold);
 			
-			for (std::multiset < uint > ::iterator it1 = model_->descriptor_IDs_.begin(); it1 != model_->descriptor_IDs_.end(); it1++)
+			for (std::multiset < unsigned int > ::iterator it1 = model_->descriptor_IDs_.begin(); it1 != model_->descriptor_IDs_.end(); it1++)
 			{	
-				for (std::multiset < uint > ::iterator it2 = model_->descriptor_IDs_.begin(); it2 != model_->descriptor_IDs_.end(); )
+				for (std::multiset < unsigned int > ::iterator it2 = model_->descriptor_IDs_.begin(); it2 != model_->descriptor_IDs_.end(); )
 				{
 					if (*it1 == *it2)
 					{
@@ -776,7 +776,7 @@ namespace BALL
 					
 					if (abs_cor > abs_cor_threshold)
 					{
-						std::multiset<uint>::iterator tmp = it2;
+						std::multiset<unsigned int>::iterator tmp = it2;
 						tmp++;
 						model_->descriptor_IDs_.erase(it2);
 						it2 = tmp;
@@ -794,18 +794,18 @@ namespace BALL
 			vector<double> desc_stddev(model_->data->getNoDescriptors(), 1);
 			vector<double> desc_mean(model_->data->getNoDescriptors(), 0);
 			
-			uint no_y = model_->data->Y_.size();
+			unsigned int no_y = model_->data->Y_.size();
 			vector<double> y_stddev(no_y, 1);
 			vector<double> y_mean(no_y, 0);
 			
 			// if data has not been centered, calculate mean and stddev of each feature
 			if (model_->data->descriptor_transformations_.size() == 0)
 			{
-				for (uint i = 0; i < desc_mean.size(); i++)
+				for (unsigned int i = 0; i < desc_mean.size(); i++)
 				{
 					desc_mean[i] = Statistics::getMean(model_->data->descriptor_matrix_[i]);
 				}		
-				for (uint i = 0; i < desc_stddev.size(); i++)
+				for (unsigned int i = 0; i < desc_stddev.size(); i++)
 				{
 					desc_stddev[i] = Statistics::getStddev(model_->data->descriptor_matrix_[i], desc_mean[i]);
 				}
@@ -813,11 +813,11 @@ namespace BALL
 			// if response variables have not been centered, calculate their mean and stddev
 			if (model_->data->y_transformations_.size() == 0)
 			{
-				for (uint i = 0; i < y_mean.size(); i++)
+				for (unsigned int i = 0; i < y_mean.size(); i++)
 				{
 					y_mean[i] = Statistics::getMean(model_->data->Y_[i]);
 				}		
-				for (uint i = 0; i < y_stddev.size(); i++)
+				for (unsigned int i = 0; i < y_stddev.size(); i++)
 				{
 					y_stddev[i] = Statistics::getStddev(model_->data->Y_[i], y_mean[i]);
 				}
@@ -826,11 +826,11 @@ namespace BALL
 			double abs_cor_threshold = abs(min_correlation);
 			
 			/// check correlation of each feature with each response variable
-			for (std::multiset < uint > ::iterator it = model_->descriptor_IDs_.begin(); it != model_->descriptor_IDs_.end(); )
+			for (std::multiset < unsigned int > ::iterator it = model_->descriptor_IDs_.begin(); it != model_->descriptor_IDs_.end(); )
 			{	
 				double max_abs_cor = 0;
 				
-				for (uint i = 0; i < no_y; i++)
+				for (unsigned int i = 0; i < no_y; i++)
 				{
 					double covar = Statistics::getCovariance(model_->data->descriptor_matrix_[*it], model_->data->Y_[i], desc_mean[*it], y_mean[i]);
 					
@@ -840,7 +840,7 @@ namespace BALL
 
 				if (max_abs_cor < abs_cor_threshold)
 				{
-					std::multiset<uint>::iterator tmp = it;
+					std::multiset<unsigned int>::iterator tmp = it;
 					tmp++;
 					model_->descriptor_IDs_.erase(it);
 					it = tmp;

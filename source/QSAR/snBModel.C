@@ -56,8 +56,8 @@ namespace BALL
 			readLabels();
 				
 			// map values of Y to their index
-			map<int, uint> label_to_pos; 
-			for (uint i = 0; i < labels_.size(); i++)
+			map<int, unsigned int> label_to_pos; 
+			for (unsigned int i = 0; i < labels_.size(); i++)
 			{
 				label_to_pos.insert(make_pair(labels_[i], i));
 			}	
@@ -83,13 +83,13 @@ namespace BALL
 					// sort values of current feature into the respective vector (one for each class)
 					for (int j = 0; j < descriptor_matrix_.rows(); j++)
 					{
-						uint index = label_to_pos.find((int)Y_(j, act))->second;
+						unsigned int index = label_to_pos.find((int)Y_(j, act))->second;
 						class_values[index].push_back(descriptor_matrix_(j, i));
 						if (act == 0 && i == 1) no_substances_[index]++; 
 					}
 					
 					// calculate mean and stddev for current feature for all classes
-					for (uint j = 0; j < labels_.size(); j++)
+					for (unsigned int j = 0; j < labels_.size(); j++)
 					{
 						mean_[act](j, i) = Statistics::getMean(class_values[j]);
 						stddev_[act](j, i) = Statistics::getStddev(class_values[j], mean_[act](j, i));
@@ -108,24 +108,24 @@ namespace BALL
 			
 			Eigen::VectorXd s = getSubstanceVector(substance, transform); 
 			
-			uint no_activities = mean_.size();
-			uint no_classes = mean_[0].rows();
-			uint no_features = mean_[0].cols();
+			unsigned int no_activities = mean_.size();
+			unsigned int no_classes = mean_[0].rows();
+			unsigned int no_features = mean_[0].cols();
 			
 			Eigen::VectorXd result(no_activities);
 			result.setZero();
 			
-			for (uint act = 0; act < no_activities; act++)
+			for (unsigned int act = 0; act < no_activities; act++)
 			{
 				vector<double> d(no_classes, 0);
 				vector<vector<double> > probabilities (no_features, d);
 				vector<double> pdf_sums(no_features, 0);
 				
 				// calculate probability-density-function value for each given feature value
-				for (uint i = 0; i < no_features; i++)
+				for (unsigned int i = 0; i < no_features; i++)
 				{
 					double x = s[i];
-					for (uint j = 0; j < no_classes; j++)
+					for (unsigned int j = 0; j < no_classes; j++)
 					{
 						double stddev = stddev_[act](j, i);
 						if (stddev == 0) stddev = 0.000001; // zero is not allowed by the below equation
@@ -141,9 +141,9 @@ namespace BALL
 				double max = 0;
 				double second_best = 0;
 				int best_label = labels_[0];
-				for (uint i = 0; i < no_features; i++)
+				for (unsigned int i = 0; i < no_features; i++)
 				{
-					for (uint j = 0; j < no_classes; j++)
+					for (unsigned int j = 0; j < no_classes; j++)
 					{
 						probabilities[i][j] /= pdf_sums[i];
 						substance_prob[j] *= probabilities[i][j];
@@ -203,12 +203,12 @@ namespace BALL
 
 		bool SNBModel::isTrained()
 		{
-			uint sel_features = descriptor_IDs_.size();
+			unsigned int sel_features = descriptor_IDs_.size();
 			if (sel_features == 0)
 			{
 				sel_features = data->getNoDescriptors();
 			}
-			if (mean_.size() > 0 && (uint)mean_[0].cols() == sel_features) return true; 
+			if (mean_.size() > 0 && (unsigned int)mean_[0].cols() == sel_features) return true; 
 			return false;
 		}
 
@@ -283,13 +283,13 @@ namespace BALL
 			saveClassInformationToFile(out); 
 			
 			// write mean_ matrices
-			for (uint i = 0; i < mean_.size(); i++)
+			for (unsigned int i = 0; i < mean_.size(); i++)
 			{
 				out<<mean_[i]<<endl;
 			}
 			
 			// write stddev_ matrices
-			for (uint i = 0; i < stddev_.size(); i++)
+			for (unsigned int i = 0; i < stddev_.size(); i++)
 			{
 				out<<stddev_[i]<<endl;
 			}

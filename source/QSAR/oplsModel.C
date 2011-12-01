@@ -60,7 +60,7 @@ namespace BALL
 			Eigen::VectorXd c;
 			Eigen::VectorXd u(X.rows());
 			
-			for (uint i = 1; i <= u.rows(); i++)
+			for (unsigned int i = 1; i <= u.rows(); i++)
 			{
 				u(i) = Y_(i, 1);
 			}
@@ -72,13 +72,13 @@ namespace BALL
 			// no_ortho_components_ contains the number of components desired by the user, 
 			// but obviously the number of orthogonal components must be <= #features-1
 			// since we will need at least one non-orthogonal component as well
-			uint orthogonal_components_to_create = no_ortho_components_;
+			unsigned int orthogonal_components_to_create = no_ortho_components_;
 			if (cols-1 < no_ortho_components_) orthogonal_components_to_create = cols-1; 
 			
 			W_ortho_.resize(cols, orthogonal_components_to_create);
 			T_ortho_.resize(descriptor_matrix_.rows(), orthogonal_components_to_create);
 
-			for (uint j = 0; j < orthogonal_components_to_create; j++)
+			for (unsigned int j = 0; j < orthogonal_components_to_create; j++)
 			{	
 				for (int i = 0; ; i++)
 				{

@@ -26,8 +26,6 @@
 #include <iterator>
 
 
-typedef unsigned int uint;
-
 namespace BALL
 {
 	namespace VIEW
@@ -112,7 +110,7 @@ namespace BALL
 					return map_it->second;	
 				};
 				
-				uint size()
+				unsigned int size()
 				{
 					return list_.size();
 				};

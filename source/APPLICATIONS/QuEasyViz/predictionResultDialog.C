@@ -82,7 +82,7 @@ namespace BALL
 				if(no_y==1) labels<<"Prediction"<<"Expected";
 				else
 				{
-					for(uint i=0; i<no_y;i++)
+					for(unsigned int i=0; i<no_y;i++)
 					{
 						String p = "Prediction"+String(i);
 						String e = "Expected"+String(i);
@@ -120,7 +120,7 @@ namespace BALL
 					vector<double>* e = 0;
 					if(show_expected) e = test_data->getActivity(i);
 					
-					for(uint act=0; act<it->getSize(); act++)
+					for(unsigned int act=0; act<it->getSize(); act++)
 					{
 						QTableWidgetItem* pred = new QTableWidgetItem(QString((((String)(*it)(1+act)).c_str())));
 						table_->setItem(i, 1+(1+show_expected)*act, pred);
@@ -153,13 +153,13 @@ namespace BALL
 			setWindowTitle("Predicted Activity Values for " + item->name());
 			table_->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 			
-			uint width = 0;
+			unsigned int width = 0;
 			for(int i=0; i<table_->columnCount();i++)
 			{
 				width+=table_->columnWidth(i);
 			}
 			width+=65;
-			uint mainWindow_width = item->view()->data_scene->main_window->size().width();
+			unsigned int mainWindow_width = item->view()->data_scene->main_window->size().width();
 			if(width<mainWindow_width) resize(width,450);
 			else resize(mainWindow_width,450);
 			table_->setSortingEnabled(1);
@@ -184,8 +184,8 @@ namespace BALL
 			}
 			ofstream out(file.fileName().toStdString().c_str());
 			
-			uint no_rows=table_->rowCount();
-			uint no_cols=table_->columnCount();
+			unsigned int no_rows=table_->rowCount();
+			unsigned int no_cols=table_->columnCount();
 			bool use_selection = (table_->selectedItems().size()>1);
 
 			list<int> selected_columns;

@@ -90,21 +90,21 @@ namespace BALL
 			
 			if(ok)
 			{
-				uint index = feature_combobox_->currentIndex();
+				unsigned int index = feature_combobox_->currentIndex();
 			
-				map<String,uint>::iterator it=map_names_to_ID_.find(feature_combobox_->currentText().toStdString());
+				map<String,unsigned int>::iterator it=map_names_to_ID_.find(feature_combobox_->currentText().toStdString());
 				if(it==map_names_to_ID_.end())
 				{
 					cout<<"error: ID of feature to be deleted not found!"<<endl;
 					return;
 				}		
 				
-				uint feature_ID = it->second;
+				unsigned int feature_ID = it->second;
 				
-				std::multiset<uint>* features = model_item_->model()->getDescriptorIDs();
+				std::multiset<unsigned int>* features = model_item_->model()->getDescriptorIDs();
 				if(features->size()==0)
 				{
-					for(uint i=0; i<feature_combobox_->count()-1; i++)
+					for(unsigned int i=0; i<feature_combobox_->count()-1; i++)
 					{
 						if(i!=feature_ID) features->insert(i);
 					}
@@ -170,21 +170,21 @@ namespace BALL
 			double max_y=-1e10;
 			double min_x=1e10;
 			double max_x=-1e10;
-			const uint no_compounds = descriptor_matrix->Nrows();
-			const uint no_features = descriptor_matrix->Ncols();
+			const unsigned int no_compounds = descriptor_matrix->Nrows();
+			const unsigned int no_features = descriptor_matrix->Ncols();
 			
 			if(feature_combobox_->count()==0) // if combobox has not yet been set up
 			{
 				feature_combobox_->addItem("All features",0);
 				map_names_to_ID_.clear();
 				
-				std::multiset<uint>* features = model_item_->model()->getDescriptorIDs();
+				std::multiset<unsigned int>* features = model_item_->model()->getDescriptorIDs();
 
 				if(features->size()>0) // features have already been selected
 				{
-					std::multiset<uint>::iterator f_it = features->begin();
+					std::multiset<unsigned int>::iterator f_it = features->begin();
 
-					for(uint i=0;f_it != features->end();i++, ++f_it)
+					for(unsigned int i=0;f_it != features->end();i++, ++f_it)
 					{
 						feature_combobox_->addItem((*feature_names)[i].c_str(),i+1);
 						map_names_to_ID_.insert(make_pair((*feature_names)[i],*f_it));
@@ -192,7 +192,7 @@ namespace BALL
 				}
 				else
 				{
-					for(uint i=0;i<no_features;i++)
+					for(unsigned int i=0;i<no_features;i++)
 					{
 						feature_combobox_->addItem((*feature_names)[i].c_str(),i+1);
 						map_names_to_ID_.insert(make_pair((*feature_names)[i],i));
@@ -202,8 +202,8 @@ namespace BALL
 				feature_combobox_->setCurrentIndex(0);
 			}
 			
-			uint first_index=1;
-			uint last_index=no_features;
+			unsigned int first_index=1;
+			unsigned int last_index=no_features;
 			bool one_feature=0;
 			if(feature_combobox_->currentIndex()>0)
 			{
@@ -213,14 +213,14 @@ namespace BALL
 			}
 			
 			/// create plot-curve(s)
-			for(uint i=first_index; i<=last_index; i++)
+			for(unsigned int i=first_index; i<=last_index; i++)
 			{
-				uint feature_index = feature_combobox_->itemData(i).toInt();
+				unsigned int feature_index = feature_combobox_->itemData(i).toInt();
 				if(feature_index==0) continue;
 				
 				// sort ascendingly according to activity value
-				std::multiset<pair<double,pair<double,uint> > > values;
-				for(uint j=1; j<=no_compounds; j++)
+				std::multiset<pair<double,pair<double,unsigned int> > > values;
+				for(unsigned int j=1; j<=no_compounds; j++)
 				{
 					double feature_value, response_value;
 					model->getUnnormalizedFeatureValue(j,feature_index,feature_value);
@@ -228,14 +228,14 @@ namespace BALL
 					values.insert(make_pair(feature_value,make_pair(response_value,j)));
 				}
 				
-				std::multiset<pair<double, pair<double, uint> > >::iterator v_it = values.begin();
+				std::multiset<pair<double, pair<double, unsigned int> > >::iterator v_it = values.begin();
 				QwtPlotCurve* curve_i = new QwtPlotCurve;
 				double* x = new double[no_compounds];
 				double* y = new double[no_compounds];
 				
-				for(uint j=1; j<=no_compounds; j++, ++v_it)
+				for(unsigned int j=1; j<=no_compounds; j++, ++v_it)
 				{
-					const pair<double,pair<double,uint> >& p = *v_it;
+					const pair<double,pair<double,unsigned int> >& p = *v_it;
 					double x_ji = p.first;
 					double y_j = p.second.first;
 					x[j-1] = x_ji;
@@ -294,7 +294,7 @@ namespace BALL
 			
 			if(feature_combobox_->currentIndex()>0)
 			{
-				uint feature_index = feature_combobox_->itemData(feature_combobox_->currentIndex()).toInt();
+				unsigned int feature_index = feature_combobox_->itemData(feature_combobox_->currentIndex()).toInt();
 				const vector<string>* names = model_item_->model()->getDescriptorNames();
 			
 				const String* expl = model_item_->view()->data_scene->main_window->getDescriptorExplanation((*names)[feature_index-1]);
@@ -303,9 +303,9 @@ namespace BALL
 					QFont font = s1.font();
 					s1 = QwtText(expl->c_str());
 				
-					uint max_width=width()-100;
-					uint size=font.pointSize();
-					uint i=0;
+					unsigned int max_width=width()-100;
+					unsigned int size=font.pointSize();
+					unsigned int i=0;
 					for(; s1.textSize(font).width()>max_width && i<6; i++) 
 					{
 						size--;

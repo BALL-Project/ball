@@ -340,9 +340,9 @@ namespace BALL
 
 				if(training_result->getColumnCount()==cols && training_result->getRowCount()==rows)
 				{
-					for(uint i=1; i<=rows;i++) // for each feature
+					for(unsigned int i=1; i<=rows;i++) // for each feature
 					{
-						for(uint j=1; j<=cols;j++) // for each activity
+						for(unsigned int j=1; j<=cols;j++) // for each activity
 						{
 							double t_ij = (*training_result)(i,j);
 							double s_ij = coeff_stddev_(i,j);
@@ -362,7 +362,7 @@ namespace BALL
 			else if(type_==4)
 			{
 				double mean_q2=0;
-				for(uint i=1;i<=result_of_rand_test_.getRowCount();i++)
+				for(unsigned int i=1;i<=result_of_rand_test_.getRowCount();i++)
 				{
 					mean_q2+=result_of_rand_test_(i,2);
 				}

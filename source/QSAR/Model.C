@@ -475,15 +475,15 @@ namespace BALL
 			}
 		}
 			
-		void Model::readMatrix(Eigen::MatrixXd & mat, ifstream& in, uint lines, uint col)
+		void Model::readMatrix(Eigen::MatrixXd & mat, ifstream& in, unsigned int lines, unsigned int col)
 		{
 			mat.resize(lines, col);
 			String line;
 			
-			for (uint i = 0; i < lines; i++)
+			for (unsigned int i = 0; i < lines; i++)
 			{
 				//getline(in, line);
-				for (uint j = 0; j < col; j++)
+				for (unsigned int j = 0; j < col; j++)
 				{
 					String s;
 					in>>s;
@@ -493,12 +493,12 @@ namespace BALL
 			getline(in, line); // read the rest of the last matrix-line
 		}
 
-		void Model::readVector(Eigen::RowVectorXd & vec, ifstream& in, uint no_cells, bool column_vector)
+		void Model::readVector(Eigen::RowVectorXd & vec, ifstream& in, unsigned int no_cells, bool column_vector)
 		{
 			vec.resize(no_cells);
 			String line;
 			
-			for (uint i = 0; i < no_cells; i++)
+			for (unsigned int i = 0; i < no_cells; i++)
 			{
 				String s;
 				in>>s;
@@ -576,7 +576,7 @@ namespace BALL
 			if (!descriptor_IDs_.empty())  // write information about transformation of descriptors
 			{
 				std::multiset<unsigned int>::iterator d_it = descriptor_IDs_.begin();
-				for (uint i = 0; i < descriptor_IDs_.size(); i++, ++d_it)
+				for (unsigned int i = 0; i < descriptor_IDs_.size(); i++, ++d_it)
 				{
 					out<<String(*d_it)<<"\t"<<descriptor_names_[i]<<"\t";
 					if (centered_data)
@@ -588,7 +588,7 @@ namespace BALL
 			}
 			else
 			{
-				for (uint i = 0; i < descriptor_names_.size(); i++)
+				for (unsigned int i = 0; i < descriptor_names_.size(); i++)
 				{
 					out<<String(i)<<"\t"<<descriptor_names_[i]<<"\t";
 					if (centered_data)

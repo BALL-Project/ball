@@ -832,17 +832,17 @@ namespace BALL
 
 			
 			///create dock widget for listing all available models
-			uint row_height=65; uint col_width=65;
-			uint x_offset = 20; uint y_offset = 50;
-			uint x=x_offset; uint y=y_offset;
+			unsigned int row_height=65; unsigned int col_width=65;
+			unsigned int x_offset = 20; unsigned int y_offset = 50;
+			unsigned int x=x_offset; unsigned int y=y_offset;
 			
 			QPen pen; pen.setStyle(Qt::SolidLine);
 			pen.setWidth(1); pen.setColor(QColor(220,220,220));
 			
-			uint y0=y_offset;
-			for(uint a=0; a<3; a++)
+			unsigned int y0=y_offset;
+			for(unsigned int a=0; a<3; a++)
 			{
-				uint no_models=0;
+				unsigned int no_models=0;
 				QGraphicsTextItem* text0 = new QGraphicsTextItem;
 				if (a==0) text0->setPlainText(tr("Linear regression models"));
 				else if(a==1) text0->setPlainText(tr("Nonlinear regression models"));
@@ -851,7 +851,7 @@ namespace BALL
 				model_list_scene_.addItem(text0);
 				rect0->setPen(pen);
 				text0->setPos(x_offset,y-30);
-				uint i=0;
+				unsigned int i=0;
 				for(RegistryEntryIterator it=reg_->beginEntry(); it!=reg_->endEntry(); it++,i++)
 				{ 
 					if(a==0 && (it->second.kernel || !it->second.regression)) continue; // create only lin. model 
@@ -860,8 +860,8 @@ namespace BALL
 					
 					ModelItem* item = new ModelItem(&(it->second), model_list_);
 					model_list_scene_.addItem(item);
-					uint col=no_models%3;
-					uint row=no_models/3;
+					unsigned int col=no_models%3;
+					unsigned int row=no_models/3;
 					x=col*col_width+x_offset;
 					y=row*row_height+y0;
 					item->setPos(x,y);
@@ -885,7 +885,7 @@ namespace BALL
 			windowMenu_->addAction(modeldock->toggleViewAction());
 
 			///create dock widget for listing all available feature selection methods
-			for(uint i=0; i<=6;i++)
+			for(unsigned int i=0; i<=6;i++)
 			{ 
 				FeatureSelectionItem* item = new FeatureSelectionItem(i, fs_list_);
 				fs_list_scene_.addItem(item);
@@ -903,7 +903,7 @@ namespace BALL
 			fs_list_->setBackgroundBrush(b2);
 
 			///create dock widget for model validation
-			for(uint i=1; i<7;i++)
+			for(unsigned int i=1; i<7;i++)
 			{ 
 				ValidationItem* item = new ValidationItem(i, val_list_);
 				val_list_scene_.addItem(item);
@@ -1418,7 +1418,7 @@ namespace BALL
 						string contents_file = directory+"/archive_contents.tmp";
 						archive_contents.open(contents_file.c_str());
 						
-						uint no_conf_files=0;
+						unsigned int no_conf_files=0;
 						while (archive_contents)
 						{
 							String item;
@@ -1799,7 +1799,7 @@ namespace BALL
 
 		int MainWindow::chooseValidationStatisticDialog(ModelItem* modelitem)
 		{
-			const map<uint,String>* statistics = modelitem->getRegistryEntry()->getStatistics();
+			const map<unsigned int,String>* statistics = modelitem->getRegistryEntry()->getStatistics();
 			
 			// if there is just one registered statistic, don't bother the user with a useless question! 
 			if (statistics->size()==1)
@@ -1814,7 +1814,7 @@ namespace BALL
 			QLabel label(tr("Desired quality statistic"));
 			QComboBox statistic_box;
 				
-			for (map<uint,String>::const_iterator it=statistics->begin(); it!=statistics->end(); ++it)
+			for (map<unsigned int,String>::const_iterator it=statistics->begin(); it!=statistics->end(); ++it)
 			{
 				statistic_box.addItem(it->second.c_str(),it->first);
 			}
@@ -1842,7 +1842,7 @@ namespace BALL
 		BALL::String valueToString(double value)
 		{
 			BALL::String t(value);
-			int index = (uint)t.find_last_not_of("0");
+			int index = (unsigned int)t.find_last_not_of("0");
 			if (index!=(int)string::npos)
 			{
 				if (index+1<=(int)t.size() && (t[index]!='.')) 

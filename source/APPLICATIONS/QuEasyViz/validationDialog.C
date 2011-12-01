@@ -103,8 +103,8 @@ namespace BALL
 				QLabel* label3 = new QLabel("quality statistic");
 				statistic_box_ = new QComboBox;
 				
-				const map<uint,String>* statistics = model->getRegistryEntry()->getStatistics();
-				for(map<uint,String>::const_iterator it=statistics->begin(); it!=statistics->end(); ++it)
+				const map<unsigned int,String>* statistics = model->getRegistryEntry()->getStatistics();
+				for(map<unsigned int,String>::const_iterator it=statistics->begin(); it!=statistics->end(); ++it)
 				{
 					statistic_box_->addItem(it->second.c_str(),it->first);
 				}

@@ -58,8 +58,8 @@ void startInputReading(ifstream& in, String data_path, QSARData* q, String* data
 		{
 			q->readSDFile(conf.sd_file.c_str());
 		}
-		uint no_csv = conf.csv_file.size();	
-		for(uint i=0; i<no_csv; i++)
+		unsigned int no_csv = conf.csv_file.size();	
+		for(unsigned int i=0; i<no_csv; i++)
 		{
 			q->readCSVFile(conf.csv_file[i].c_str(),0,conf.csv_desc_labels[i],conf.csv_compound_labels[i],conf.csv_separator[i].c_str(),1,conf.nonnumeric_class_names);
 		}

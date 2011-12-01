@@ -195,9 +195,9 @@ namespace BALL
 				 */
 				//@{
 				/** reconstructs a Eigen::MatrixXd from a given input stream after resizing the given Eigen::MatrixXd as specified */
-				void readMatrix(Eigen::MatrixXd& mat, std::ifstream& in, uint lines, uint col);
+				void readMatrix(Eigen::MatrixXd& mat, std::ifstream& in, unsigned int lines, unsigned int col);
 				
-				void readVector(Eigen::RowVectorXd& vec, std::ifstream& in, uint no_cells, bool column_vector);
+				void readVector(Eigen::RowVectorXd& vec, std::ifstream& in, unsigned int no_cells, bool column_vector);
 				
 				void readModelParametersFromFile(std::ifstream& in);
 				void saveModelParametersToFile(std::ofstream& out);

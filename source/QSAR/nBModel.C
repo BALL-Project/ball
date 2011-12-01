@@ -54,14 +54,14 @@ namespace BALL
 			}
 			readLabels();
 			
-			uint no_features = descriptor_matrix_.cols();
-			uint no_classes = labels_.size();
-			uint no_compounds = descriptor_matrix_.rows();
-			uint no_activities = Y_.cols();
+			unsigned int no_features = descriptor_matrix_.cols();
+			unsigned int no_classes = labels_.size();
+			unsigned int no_compounds = descriptor_matrix_.rows();
+			unsigned int no_activities = Y_.cols();
 				
 			// map values of Y to their index
-			map<int, uint> label_to_pos; 
-			for (uint i = 0; i < no_classes; i++)
+			map<int, unsigned int> label_to_pos; 
+			for (unsigned int i = 0; i < no_classes; i++)
 			{
 				label_to_pos.insert(make_pair(labels_[i], i));
 			}	
@@ -80,27 +80,27 @@ namespace BALL
 			
 			Eigen::MatrixXd prob_matrix(discretization_steps_, no_features); prob_matrix.setZero();
 			probabilities_.resize(no_activities);
-			for (uint act = 0; act < no_activities; act++)
+			for (unsigned int act = 0; act < no_activities; act++)
 			{
 				probabilities_[act].resize(no_classes, prob_matrix);
 			
-				for (uint j = 0; j < no_compounds; j++)
+				for (unsigned int j = 0; j < no_compounds; j++)
 				{
-					uint class_id = label_to_pos.find((int)Y_(j, act))->second;
+					unsigned int class_id = label_to_pos.find((int)Y_(j, act))->second;
 					no_substances_[class_id]++;
-					for (uint i = 0; i < no_features; i++)
+					for (unsigned int i = 0; i < no_features; i++)
 					{
-						// features have been discretized, so that descriptor_matrix_ contains only uint's
-						uint feat_bucket = (uint)descriptor_matrix_(j, i);
+						// features have been discretized, so that descriptor_matrix_ contains only unsigned int's
+						unsigned int feat_bucket = (unsigned int)descriptor_matrix_(j, i);
 						probabilities_[act][class_id](feat_bucket, i)++;
 					}	
 				}
 				
-				for (uint i = 0; i < no_features; i++)
+				for (unsigned int i = 0; i < no_features; i++)
 				{
-					for (uint j = 0; j < discretization_steps_; j++)
+					for (unsigned int j = 0; j < discretization_steps_; j++)
 					{
-						for (uint k = 0; k < no_classes; k++)
+						for (unsigned int k = 0; k < no_classes; k++)
 						{
 							// calculate p(x_ij | k)
 							probabilities_[act][k](j, i) /= no_substances_[k];
@@ -120,9 +120,9 @@ namespace BALL
 			
 			Eigen::VectorXd s = getSubstanceVector(substance, transform); 
 			
-			uint no_activities = probabilities_.size();
-			uint no_classes = probabilities_[0].size();
-			uint no_features = probabilities_[0][0].cols();
+			unsigned int no_activities = probabilities_.size();
+			unsigned int no_classes = probabilities_[0].size();
+			unsigned int no_features = probabilities_[0][0].cols();
 			
 			Eigen::RowVectorXd result(no_activities);
 			result.setZero();
@@ -130,19 +130,19 @@ namespace BALL
 			/// discretize the test data features according to the discretization of training data
 			(this->*discretizeTestDataFeatures)(s, discretization_steps_, min_max_);
 
-			for (uint act = 0; act < no_activities; act++)
+			for (unsigned int act = 0; act < no_activities; act++)
 			{
 				vector<double> substance_prob(no_classes, 1); // prob. for the entire substance
 				double max = 0;
 				int best_label = labels_[0];
 				double second_best = 0;
 				
-				for (uint i = 0; i < no_features; i++)
+				for (unsigned int i = 0; i < no_features; i++)
 				{
-					// features were discretized, so they contain only uint's
-					uint feature_bucket = (uint) s(i);
+					// features were discretized, so they contain only unsigned int's
+					unsigned int feature_bucket = (unsigned int) s(i);
 					
-					for (uint j = 0; j < no_classes; j++)
+					for (unsigned int j = 0; j < no_classes; j++)
 					{
 						substance_prob[j] *= probabilities_[act][j](feature_bucket, i);
 						
@@ -204,13 +204,13 @@ namespace BALL
 
 		bool NBModel::isTrained()
 		{
-			uint sel_features = descriptor_IDs_.size();
+			unsigned int sel_features = descriptor_IDs_.size();
 			if (sel_features == 0)
 			{
 				sel_features = data->getNoDescriptors();
 			}
 			
-			if (probabilities_.size() > 0 && (uint)min_max_.cols() == sel_features) return true; 
+			if (probabilities_.size() > 0 && (unsigned int)min_max_.cols() == sel_features) return true; 
 			return false;
 		}
 
@@ -228,14 +228,14 @@ namespace BALL
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Model must be trained before a probability for a given feature value can be calculated!"); 
 			}
-			uint no_features = probabilities_[0][0].cols();
-			uint no_classes = probabilities_[0].size();
+			unsigned int no_features = probabilities_[0][0].cols();
+			unsigned int no_classes = probabilities_[0].size();
 			if (activitiy_index >= (int)probabilities_.size() || feature_index >= (int)no_features || activitiy_index < 0 || feature_index < 0)
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Index out of bounds for parameters given to SNBModel::calculateProbability() !"); 
 			}
 			
-			uint no_discretizations = probabilities_[0][0].rows();
+			unsigned int no_discretizations = probabilities_[0][0].rows();
 			double step = (min_max_(1, feature_index)-min_max_(0, feature_index))/no_discretizations;
 			int disc_index = (int)((feature_value-min_max_(0, feature_index))/step);
 			
@@ -243,7 +243,7 @@ namespace BALL
 			else if (disc_index >= (int)no_discretizations) disc_index = no_discretizations - 1; 
 			
 			vector<double> prob(no_classes);
-			for (uint i = 0; i < no_classes; i++)
+			for (unsigned int i = 0; i < no_classes; i++)
 			{
 				prob[i] = probabilities_[activitiy_index][i](disc_index, feature_index);
 			}
@@ -291,9 +291,9 @@ namespace BALL
 			out<<min_max_<<endl;
 			
 			// write probability matrices
-			for (uint i = 0; i < probabilities_.size(); i++)
+			for (unsigned int i = 0; i < probabilities_.size(); i++)
 			{
-				for (uint j = 0; j < probabilities_[0].size(); j++)
+				for (unsigned int j = 0; j < probabilities_[0].size(); j++)
 				{
 					out<<probabilities_[i][j]<<endl;
 				}

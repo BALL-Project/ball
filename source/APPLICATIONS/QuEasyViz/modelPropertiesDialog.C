@@ -103,7 +103,7 @@ void ModelPropertiesDialog::apply()
 	parameters_.clear();
 	bool ok;
 	double num = 0.;
-	for (uint i=0; i < edits_.size(); i++)
+	for (unsigned int i=0; i < edits_.size(); i++)
 	{
 		num = edits_[i]->text().toDouble(&ok);
 		if (ok)

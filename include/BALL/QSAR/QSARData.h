@@ -196,7 +196,7 @@ namespace BALL
 				@param similarity the desired minimal correlation 
 				@param similar_descriptor_IDs list to which the IDs of the found descriptors will be saved as pairs of descriptor ID and descriptor name */
 
-				void getSimilarDescriptors(int descriptor_ID, double correlation, std::list<std::pair<uint,String> >& similar_descriptor_IDs) const;
+				void getSimilarDescriptors(int descriptor_ID, double correlation, std::list<std::pair<unsigned int,String> >& similar_descriptor_IDs) const;
 				//@}
 				
 				

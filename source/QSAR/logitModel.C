@@ -107,7 +107,7 @@ namespace BALL
 				backTransformPrediction(res); 
 			}
 
-			for (uint i = 0; i < res.rows(); i++)
+			for (unsigned int i = 0; i < res.rows(); i++)
 			{
 				if (res(i) >= 0)
 				{

@@ -279,7 +279,7 @@ namespace BALL
 				bool trained = (training_result_.rows() == descriptor_IDs_.size());
 				
 				std::multiset<unsigned int>::iterator d_it = descriptor_IDs_.begin();
-				for (uint i = 0; i < descriptor_IDs_.size(); i++, ++d_it)
+				for (unsigned int i = 0; i < descriptor_IDs_.size(); i++, ++d_it)
 				{
 					out<<String(*d_it)<<"\t"<<descriptor_names_[i]<<"\t";
 					if (trained)
@@ -303,7 +303,7 @@ namespace BALL
 			else
 			{
 				bool trained = (training_result_.rows() == descriptor_names_.size());
-				for (uint i = 0; i < descriptor_names_.size(); i++)
+				for (unsigned int i = 0; i < descriptor_names_.size(); i++)
 				{
 					out<<String(i)<<"\t"<<descriptor_names_[i]<<"\t";
 

@@ -281,7 +281,7 @@ namespace BALL
 			out<<"expected_values = "<<print_expected<<endl;
 			out<<"dimensions = "<<results_.size()<<" "<<no_cols<<endl;
 			list<Eigen::VectorXd >::const_iterator it=results_.begin();
-			for(uint i=0; it!=results_.end(); i++, it++)
+			for(unsigned int i=0; it!=results_.end(); i++, it++)
 			{	
 				vector<double>* e = 0;
  				if(print_expected) e=test_data->getActivity(i);
@@ -313,8 +313,8 @@ namespace BALL
 			ifstream in(filename.c_str());
 			bool pred_section=0;
 			bool expected_values=0;
-			uint no_rows = 0;
-			uint no_cols = 0;
+			unsigned int no_rows = 0;
+			unsigned int no_cols = 0;
 			while(in)
 			{
 				String line;
@@ -343,11 +343,11 @@ namespace BALL
 			
 			int no_act = no_cols;
 			if(expected_values) no_act /= 2;
-			for(uint i=1;i<=no_rows;i++)
+			for(unsigned int i=1;i<=no_rows;i++)
 			{
 				Eigen::VectorXd v(no_act);
 				int act=1;
-				for(uint j=1; j<=no_cols;j++)
+				for(unsigned int j=1; j<=no_cols;j++)
 				{
 					String s;
 					in>>s;

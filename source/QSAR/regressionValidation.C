@@ -222,15 +222,15 @@ namespace BALL
 			{
 				//unsigned int des = model_->descriptor_IDs_.size();
 				//unsigned int data_cols = model_->data->descriptor_matrix_.size();
-				uint res_rows = regr_model_->training_result_.rows();
+				unsigned int res_rows = regr_model_->training_result_.rows();
 				//unsigned int desmat_cols = model_->descriptor_matrix_.cols();
 				
 				if (res_rows == 0)
 				{
 					throw Exception::InconsistentUsage(__FILE__, __LINE__, "Model must be trained before its fit to the input data can be evaluated!"); 
 				}
-				uint test_col = model_->descriptor_IDs_.size(); // no of columns of X^T X (linear model)
-				uint kernel_test_col = model_->descriptor_matrix_.rows();  // no of columns of X X^T (nonlinear model)
+				unsigned int test_col = model_->descriptor_IDs_.size(); // no of columns of X^T X (linear model)
+				unsigned int kernel_test_col = model_->descriptor_matrix_.rows();  // no of columns of X X^T (nonlinear model)
 				if (test_col == 0)
 				{
 					test_col = model_->data->getNoDescriptors();
@@ -603,8 +603,8 @@ namespace BALL
 					if (line.hasPrefix("dimensions"))
 					{
 						line = ((String)line.after("="));
-						uint no_rows = line.getField(0).toInt();
-						uint no_cols = line.getField(1).toInt();
+						unsigned int no_rows = line.getField(0).toInt();
+						unsigned int no_cols = line.getField(1).toInt();
 						model_->readMatrix(coefficient_stderr_, in, no_rows, no_cols);
 					}
 					stddev_section = 0;
@@ -615,8 +615,8 @@ namespace BALL
 					if (line.hasPrefix("dimensions"))
 					{
 						line = ((String)line.after("="));
-						uint no_rows = line.getField(0).toInt();
-						uint no_cols = line.getField(1).toInt();
+						unsigned int no_rows = line.getField(0).toInt();
+						unsigned int no_cols = line.getField(1).toInt();
 						model_->readMatrix(yRand_results_, in, no_rows, no_cols);
 					}
 					yRand_section = 0;

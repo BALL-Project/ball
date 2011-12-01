@@ -723,7 +723,7 @@ namespace BALL
 		{
 			String parameter_string;
 			String tmp;
-			for (uint i = 0; i < model_parameters.size(); i++)
+			for (unsigned int i = 0; i < model_parameters.size(); i++)
 			{
 				parameter_string += " "+ String(model_parameters[i]);
 			}
@@ -855,7 +855,7 @@ namespace BALL
 				const vector<double>& par = model_->getParameters();
 				std::multiset<int>& opt_par = entry_->optimizableParameters;
 				std::multiset<int>::iterator it = opt_par.begin();
-				for(uint i=0; i<entry_->parameterNames.size()&&i<par.size(); i++)
+				for(unsigned int i=0; i<entry_->parameterNames.size()&&i<par.size(); i++)
 				{
 					message+=entry_->parameterNames[i];
 					if(!done_&&

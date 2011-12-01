@@ -247,9 +247,9 @@ namespace BALL
 
 			try
 			{
-				uint no=conf.csv_file.size();
+				unsigned int no=conf.csv_file.size();
 				QDir qdir(directory.c_str());
-				for(uint i=0; i<no;i++)
+				for(unsigned int i=0; i<no;i++)
 				{
 					CSVInputDataItem* csv_item;
 					if(sd_item!=0)

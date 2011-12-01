@@ -63,7 +63,7 @@ namespace BALL
 				
 				~RegistryEntry();
 				
-				const std::map<uint,String>* getStatistics();
+				const std::map<unsigned int,String>* getStatistics();
 				String getStatName(int s);
 
 				bool kernel;
@@ -140,12 +140,12 @@ namespace BALL
 				/** return the ID of a specified model */
 				int getModelNo(String model_name);
 				
-				String getClassificationStatisticName(uint no);
-				String getRegressionStatisticName(uint no);
-				String getFeatureSelectionName(uint no);
-				String getValidationName(uint no);
-				const std::map<uint,String>* getClassificationStatistics();
-				const std::map<uint,String>* getRegressionStatistics();
+				String getClassificationStatisticName(unsigned int no);
+				String getRegressionStatisticName(unsigned int no);
+				String getFeatureSelectionName(unsigned int no);
+				String getValidationName(unsigned int no);
+				const std::map<unsigned int,String>* getClassificationStatistics();
+				const std::map<unsigned int,String>* getRegressionStatistics();
 				
 				/** returns an iterator to the first model in model_map */
 				RegistryEntryIterator beginEntry();
@@ -160,10 +160,10 @@ namespace BALL
 				/** enable fast finding of a RegistryEntry for a given model name */
 				std::map<String,int> model_map;
 				
-				std::map<uint,String> classification_statistics;
-				std::map<uint,String> regression_statistics;
-				std::map<uint,String> feature_selection_names;
-				std::map<uint,String> validation_names;
+				std::map<unsigned int,String> classification_statistics;
+				std::map<unsigned int,String> regression_statistics;
+				std::map<unsigned int,String> feature_selection_names;
+				std::map<unsigned int,String> validation_names;
 				
 				friend class RegistryEntry;
 		};

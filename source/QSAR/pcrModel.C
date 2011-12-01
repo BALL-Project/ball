@@ -56,13 +56,13 @@ namespace BALL
 			double complete_var = svd.singularValues().sum();
 
 			double explained_var = 0;
-			uint cols = 0;
+			unsigned int cols = 0;
 			if (complete_var < 5*std::numeric_limits < double > ::epsilon())
 			{
 				throw Exception::NoPCAVariance(__FILE__, __LINE__, "No variance present to be explained by PCA!");
 			}
 
-			uint last_vector = 0;
+			unsigned int last_vector = 0;
 			for (; last_vector < svd.singularValues().rows() && cols < data.rows() && explained_var/complete_var < frac_var ; last_vector++)
 			{
 				// (singular-value)^2 == eigen-value
@@ -72,9 +72,9 @@ namespace BALL
 
 			output.resize(data.rows(), cols);
 
-			for (uint i = 0; i < data.rows(); i++)
+			for (unsigned int i = 0; i < data.rows(); i++)
 			{
-				for (uint j = 0; j < last_vector ; j++)
+				for (unsigned int j = 0; j < last_vector ; j++)
 				{
 					output(i, j) = svd.matrixV()(i, j);
 				}

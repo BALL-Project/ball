@@ -89,7 +89,7 @@ namespace BALL
 						// find class with highest probability 
 						double max_prob=0;
 						int max_index=0; 
-						for(uint a=0;a<probabilities.size();a++) 
+						for(unsigned int a=0;a<probabilities.size();a++) 
 						{	
 							if(probabilities[a]>max_prob)
 							{
@@ -129,10 +129,10 @@ namespace BALL
 			plot(1);
 			zoomer_ = new QwtPlotZoomer(qwt_plot_->canvas(),this);
 			
-			uint no_y = ((BayesModel*)model_item_->model())->getNoResponseVariables();
+			unsigned int no_y = ((BayesModel*)model_item_->model())->getNoResponseVariables();
 			if(no_y>1)
 			{
-				for(uint i=0; i<no_y;i++)
+				for(unsigned int i=0; i<no_y;i++)
 				{
 					String s = "Activity "+String(i);
 					activity_combobox_->addItem(s.c_str(),i);
