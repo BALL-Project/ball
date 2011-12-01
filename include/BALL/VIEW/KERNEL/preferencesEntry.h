@@ -157,7 +157,7 @@ namespace BALL
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 			/// Allows to prevent restoring of widgets
-			virtual bool setValueAllowed(QObject* widget) { return true; }
+			virtual bool setValueAllowed(QObject* /*widget*/) { return true; }
 
 			protected:
 
