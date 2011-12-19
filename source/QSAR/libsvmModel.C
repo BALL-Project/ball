@@ -181,7 +181,7 @@ void LibsvmModel::createParameters()
 // }
 
 
-void LibsvmModel::setParameters(Eigen::VectorXd& v)
+void LibsvmModel::setParameters(vector<double>& v)
 {
 	if (v.size() != 6)
 	{
@@ -201,8 +201,14 @@ void LibsvmModel::setParameters(Eigen::VectorXd& v)
 }
 
 
-Eigen::VectorXd LibsvmModel::getParameters() const
+vector<double> LibsvmModel::getParameters() const
 {
-	Eigen::VectorXd d(6) << use_nu_, use_shrinking_, nu_, p_, eps_, C_;
+	vector<double> d;
+	d.push_back(use_nu_);
+	d.push_back(use_shrinking_);
+	d.push_back(nu_);
+	d.push_back(p_);
+	d.push_back(eps_);
+	d.push_back(C_);
 	return d;
 }
