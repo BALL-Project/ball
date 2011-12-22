@@ -292,11 +292,12 @@
 // %Include rotamerLibrary.sip
 // %Include rules.sip
 %Include structureMapper.sip
-//%Include smilesParser.sip
 %Include peptideBuilder.sip
 %Include peptideCapProcessor.sip
 %Include secondaryStructureProcessor.sip
 %Include surfaceProcessor.sip
+%Include smilesParser.sip
+%Include sdGenerator.sip
 
 // SYSTEM
 // %Include directory.sip
