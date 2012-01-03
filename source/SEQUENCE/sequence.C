@@ -189,24 +189,24 @@ namespace BALL{
 								return *nseq;
 				}
 
-				Eigen::Array<SequenceCharacter,Eigen::Dynamic,1> Sequence::getArraySequence()
+				Eigen::Array<SequenceCharacter, 1, Eigen::Dynamic> Sequence::getArraySequence()
 				{
 
-								//initialize the array
-								Eigen::Array<SequenceCharacter, Eigen::Dynamic, 1> seq;
+					//initialize the array
+								Eigen::Array<SequenceCharacter, 1 , Eigen::Dynamic> seq;
 
 								SequenceIterator it,e;
 								e = end(); 
 
 								for(it = begin(); it != e; it.next())
 								{
-												//make room for the new Character
-												seq.conservativeResize(seq.rows()+1);
+											//make room for the new Character
+												seq.conservativeResize(seq.cols()+1);
 												//retrieve the current Sequencecharacter for each Step
 												SequenceCharacter c;
 													c = it.getCharacter();
 												//store it in the Array
-												seq(seq.rows()-1,0) = c;
+												seq(0, seq.cols()-1) = c;
 
 
 								}

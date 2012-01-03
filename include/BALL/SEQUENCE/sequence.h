@@ -120,7 +120,7 @@ namespace BALL
 			/**
 			*@return an Eigen Array of SequenceCharacters containing the Sequence
 			*/
-			Eigen::Array< SequenceCharacter ,Eigen::Dynamic,1> getArraySequence();
+			Eigen::Array< SequenceCharacter , 1, Eigen::Dynamic> getArraySequence();
 			
 
 		private:
