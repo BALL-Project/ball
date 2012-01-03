@@ -41,8 +41,9 @@
 
 //////////////////////////////////////////////////////
 
-                                                                
-#include <Eigen/Dense>
+#ifndef EIGEN_DENSE                                                               
+	#include <Eigen/Dense>
+#endif
 
 ///////////////////////////////////////////////
 
@@ -50,6 +51,10 @@
 
 namespace BALL
 {
+
+	class AlignAlgorithm;
+
+
 	typedef Eigen::Array<SequenceCharacter, Eigen::Dynamic, Eigen::Dynamic> AlignmentMatrix;
 
 
@@ -70,13 +75,13 @@ namespace BALL
 		 *@param score the score which the alignment has reached Default=0
 		 *@param isaligned tells whether the sequences have already been aligned
 		 */
-		Alignment(AlignmentMatrix & alignmentmatrix, double al_score, bool al_is_aligned=false);
+		Alignment(const AlignmentMatrix & alignmentmatrix, const double score, const bool is_aligned=false);
 
 		/**
 		 *Copy Constructor
 		 *@param alignment the alignment which is to be copied
 		 */
-		//Alignment(Alignment & alignment);
+		Alignment(Alignment & alignment);
 
 		/**
 		 *Destructor
@@ -87,18 +92,44 @@ namespace BALL
 		/**
 		 *returns the score of the alignment
 		 */
-		double getScore();
+		double getScore() const;
 
 		/**
-		 * return the Matrix with the  alignment
+		 * return the Matrix containing the  alignment
 		 */
 		AlignmentMatrix& getAlignmentMatrix();
 
 		/**
 		 *tells whether the sequences are already aligned
 		 */
-		bool isAligned();
+		bool isAligned() const;
+		
+	
+		/**
+		* return the SequnceCharacter stored at given position in Alignment
+		* @param row the row out of which character is to be retrieved
+		* @param column the column out of which the character is to be retrieved
+		* @return  character stored in alignment(row, column)
+		*/
+		SequenceCharacter getSeqChar(unsigned int row, unsigned int column) const;
 
+		/**
+		*@return number of columns in the alignment
+		*/
+		unsigned int cols() const;
+		
+		/**
+		*@return the number of rows in the alignment
+		*/
+		unsigned int rows() const;
+
+		/**
+		* sets the score of the alignment
+		*@param score the scroe to be setted
+		*/
+		void setScore(double score);
+			
+	
 		/////////////////////////////////////////////////////////////////////// Edit the Alignment ////////////////////////////////////////////
 
 		/**
@@ -117,14 +148,16 @@ namespace BALL
 		bool insertGap(int row, int column);
 
 		/**
-		 *deletes a GAP in a given Sequence at a given position   
-		 *@param seq the Sequence where the insertion should take place
-		 *@param pos the int in the Sequence where the insertion should take place
-		 */
+		*deletes a GAP in a given Sequence at a given position  
+		*does not delete a Gap at the very last position of the sequence if you want to delete a whole column of 		gaps use geleteGapColumn
+		*@param seq the Sequence where the insertion should take place
+		*@param pos the int in the Sequence where the insertion should take place
+		*/
 		bool deleteGap(Sequence& seq, int pos);
 
 		/**
 		*deletes a Gap at a given row and column
+		*does not delete a Gap at the very last position of the sequence if you want to delete a whole column of 		gaps use geleteGapColumn instead
 		*@param row the row where the Gap is to be deleted
 		*@param column the column where the Gap is to be deleted
 		*/
@@ -149,6 +182,13 @@ namespace BALL
 		bool deleteSequence(int row);
 		
 		/**
+		*@param row the row, where the sequence is to be retrieved of
+		*@return the Sequence at the given row
+		*/
+		Sequence& getSequence(int row);
+
+
+		/**
 		 *inserts a given SequenceCharacter into a given sequence at a given position 
 		 *@param seq the Sequence where the character is to be inserted
 		 *@param c the SequenceCharacter to be added
@@ -163,6 +203,21 @@ namespace BALL
 		*@param c the SequenceCharacter to be added
 		*/
 		bool insertSeqChar(int row, int column, SequenceCharacter& c);
+
+	
+		/**
+		*deletes a whole column that consists only of Gaps
+		*@param pos the position where the column is to be deleted
+		*@return true if column could be deleted fals else
+		*/
+		bool deleteGapColumn(unsigned int pos);
+
+		/**
+		*resets the Alignment
+		*/
+		void reset();
+		
+
 
 
 		/////////////////////////////////////////////////////////////////////// Reading and Writing ///////////////////////////////////////////////////////////////
@@ -191,7 +246,20 @@ namespace BALL
 		*/
 		void read(Protein& protein);
 
+		/**
+		*aligns the Sequences contained in the Alignment with a given Algorithm
+		*@param algorithm the alignALgorithm witch which the alignment is to to be computed
+		*@return true if alignment has been computed correctly, false otherwise
+		*/
+		bool align(AlignAlgorithm& algorithm);
+
 		
+		/**
+		*shifts the alignment into the stream, or prints it
+		*/
+		virtual void dump(std::ostream& s= std::cout) const;
+
+	
 		/**
 		 *reads a Clustalfile into an alignment
 		 *@param file the file to be read
@@ -253,9 +321,9 @@ namespace BALL
 		
 
 	private:
-			AlignmentMatrix alignment;
-			double score;
-			bool is_aligned;
+			AlignmentMatrix alignment_;
+			double score_;
+			bool is_aligned_;
 };
 
 }//namespace BALL
