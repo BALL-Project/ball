@@ -69,7 +69,8 @@ namespace BALL
 				//if type is to be setted to GAP the character_ will also be set to GAP
 				if (ty == type::GAP) 
 				{ 
-					character_ = '-'; 
+					character_ = '-';
+					res_ = 0; 
 				} 
 				
 				//if type is to be setted to CHAR and character_ is a GAP throw Exception
@@ -103,7 +104,10 @@ namespace BALL
 					switch(c){
 							case '-': 
 											{
-												t_ = type::GAP; character_ = c;return;
+												t_ = type::GAP; 
+												character_ = c;
+												res_= 0;
+												return;
 											}
 
 							case 'B': 
