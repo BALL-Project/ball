@@ -7,7 +7,6 @@
 // vi: set ts=2:
 //
 #include <BALL/VIEW/WIDGETS/sequenceControl.h>
-#include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/DIALOGS/compositeProperties.h>
@@ -28,16 +27,17 @@ namespace BALL
 	{
 
 		SequenceControl::SequenceControl(QWidget* parent, const char* name)
-				: MolecularControl(parent, name),
-				  Ui_SequenceControlData(),
-					PreferencesEntry()
+				: DockWidget(parent, name),
+				  PreferencesEntry()
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new SequenceControl " << this << std::endl;
 		#endif
 
 			//TODO
-			//setupUi(this);
+			QTabWidget* tab = new QTabWidget(this);
+			ui_.setupUi(tab);
+			setGuest(*tab);
 
 			setINIFileSectionName("SEQUENCECONTROL");
 			setObjectName(name);
@@ -65,7 +65,7 @@ namespace BALL
 */
 			registerWidget(this);
 
-			buildContextMenu_();
+			//buildContextMenu_();
 		}
 
 		SequenceControl::~SequenceControl()
@@ -80,8 +80,7 @@ namespace BALL
 			// add specific menu entries
 			// TODO
 
-			//TODO Molecular oder Generic??
-			GenericControl::initializeWidget(main_control);
+			DockWidget::initializeWidget(main_control);
 
 			registerForHelpSystem(this, "sequenceControl.html");
 

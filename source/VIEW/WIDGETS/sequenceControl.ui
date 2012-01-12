@@ -1,81 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>SequenceControlData</class>
- <widget class="QDialog" name="SequenceControlData">
+ <widget class="QTabWidget" name="SequenceControlData">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>582</width>
-    <height>412</height>
+    <width>400</width>
+    <height>300</height>
    </rect>
-  </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
-  </property>
-  <property name="minimumSize">
-   <size>
-    <width>0</width>
-    <height>0</height>
-   </size>
-  </property>
-  <property name="maximumSize">
-   <size>
-    <width>6500</width>
-    <height>4900</height>
-   </size>
   </property>
   <property name="windowTitle">
    <string>Sequences</string>
   </property>
-  <widget class="QTabWidget" name="tabWidget">
-   <property name="geometry">
-    <rect>
-     <x>4</x>
-     <y>4</y>
-     <width>531</width>
-     <height>341</height>
-    </rect>
-   </property>
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Expanding" vsizetype="Ignored">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="toolTip">
-    <string>sequences</string>
-   </property>
-   <property name="currentIndex">
-    <number>0</number>
-   </property>
-   <widget class="QWidget" name="basic_tab">
-    <attribute name="title">
-     <string>Basic</string>
-    </attribute>
-    <layout class="QGridLayout" name="gridLayout_3">
-     <item row="0" column="0">
-      <widget class="QTextEdit" name="textEdit"/>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="advanced_tab">
-    <attribute name="title">
-     <string>Advanced</string>
-    </attribute>
-   </widget>
+  <property name="currentIndex">
+   <number>0</number>
+  </property>
+  <widget class="QWidget" name="tab_2">
+   <attribute name="title">
+    <string>All</string>
+   </attribute>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QColumnView" name="columnView"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="tab">
+   <attribute name="title">
+    <string>blubb</string>
+   </attribute>
   </widget>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
- <includes>
-  <include location="global">BALL/COMMON/global.h</include>
- </includes>
  <resources/>
  <connections/>
- <slots>
-  <slot>dialogButtonClicked_(QAbstractButton*)</slot>
- </slots>
 </ui>

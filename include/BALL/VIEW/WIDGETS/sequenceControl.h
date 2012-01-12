@@ -5,8 +5,8 @@
 #ifndef BALL_VIEW_WIDGETS_SEQUENCECONTROL_H
 #define BALL_VIEW_WIDGETS_SEQUENCECONTROL_H
 
-#ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
-# include <BALL/VIEW/WIDGETS/molecularControl.h>
+#ifndef BALL_VIEW_WIDGETS_DOCKWIDGET_H
+# include <BALL/VIEW/WIDGETS/dockWidget.h>
 #endif
 
 #ifndef BALL_CONCEPT_MOLECULARINFORMATION_H
@@ -41,7 +41,7 @@ namespace BALL
 
 //TODO
 /**	SequenceControl is a widget to display the sequence of Composite objects. 
-		This class is derived from the class MolecularControl and extends it for showing and modifiying
+		This class is derived from the class DockWidget and extends it for showing and modifiying
 		molecular structures. The methods checkMenu() and buildContextMenu() are overridden 
 		for performing special molecular tasks.
 		SequenceControl has also a QLineEdit to select Composites by BALL expressions.
@@ -49,8 +49,7 @@ namespace BALL
 		\ingroup ViewWidgets
 */
 class BALL_VIEW_EXPORT SequenceControl
-	: public MolecularControl,
-		public Ui_SequenceControlData,
+	: public DockWidget,
 		public PreferencesEntry
 {
 
@@ -58,7 +57,7 @@ class BALL_VIEW_EXPORT SequenceControl
 
 	public:
 
-  BALL_EMBEDDABLE(SequenceControl,MolecularControl)
+  BALL_EMBEDDABLE(SequenceControl, DockWidget)
 
 	/**	@name	Constructors and Destructor
 	*/
@@ -158,6 +157,7 @@ class BALL_VIEW_EXPORT SequenceControl
 
 
 	protected:
+		Ui_SequenceControlData ui_;
 
 	///
 	//	void buildContextMenu_();
