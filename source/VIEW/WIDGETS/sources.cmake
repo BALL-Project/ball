@@ -1,3 +1,8 @@
+### The ui files go here ###
+SET(UI_LIST
+	sequenceControl.ui
+)
+	
 ### list all filenames of the directory here ###
 SET(SOURCES_LIST
 	colorButton.C
@@ -15,6 +20,7 @@ SET(SOURCES_LIST
 	molecularStructure.C
 	propertyEditor.C
 	scene.C
+	sequenceControl.C
 	shortcutTableView.C
 	SDWidget.C
 	testFramework.C
@@ -41,3 +47,5 @@ SET(MOC_SOURCES_LIST "${SOURCES_LIST}")
 ADD_VIEW_SOURCES("VIEW/WIDGETS" "${SOURCES_LIST}")
 
 ADD_BALL_MOCFILES("VIEW/WIDGETS" "include/BALL/VIEW/WIDGETS" "${MOC_SOURCES_LIST}")
+
+ADD_BALL_UIFILES("VIEW/WIDGETS" "${UI_LIST}")

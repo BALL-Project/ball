@@ -115,6 +115,7 @@ namespace BALL
 		new UndoManagerDialog      (this, "UndoManagerDialog");
 
 		addDockWidget(Qt::LeftDockWidgetArea, new MolecularControl(this, ((String)tr("Structures")).c_str()));
+		addDockWidget(Qt::LeftDockWidgetArea, new SequenceControl(this, ((String)tr("Sequences")).c_str()));
 		addDockWidget(Qt::LeftDockWidgetArea, new GeometricControl(this, ((String)tr("Representations")).c_str()));
 		addDockWidget(Qt::TopDockWidgetArea,  new DatasetControl(this, ((String)tr("Datasets")).c_str()));
 		DatasetControl* dc = DatasetControl::getInstance(0);
