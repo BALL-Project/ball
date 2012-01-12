@@ -75,6 +75,15 @@ namespace BALL{
 		score_=score;
 	}
 
+	void Alignment::setAligned(bool aligned)
+	{
+		is_aligned_=aligned;
+	}
+
+	void Alignment::setAlignmentMatrix(AlignmentMatrix& align_matrix)
+	{
+		alignment_=align_matrix;
+	}
 
 				bool Alignment::insertGap(Sequence& seq, int pos)
 				{

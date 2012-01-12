@@ -99,6 +99,11 @@ namespace BALL
 		 */
 		AlignmentMatrix& getAlignmentMatrix();
 
+		/*
+		* sets the Matrix conaining the alignment
+		*/
+		void setAlignmentMatrix(AlignmentMatrix& align_matrix);
+
 		/**
 		 *tells whether the sequences are already aligned
 		 */
@@ -129,7 +134,11 @@ namespace BALL
 		*/
 		void setScore(double score);
 			
-	
+	/**
+	*sets whether alignment is aligned or not
+	*/
+	void setAligned(bool aligned);
+
 		/////////////////////////////////////////////////////////////////////// Edit the Alignment ////////////////////////////////////////////
 
 		/**
@@ -251,7 +260,7 @@ namespace BALL
 		*@param algorithm the alignALgorithm witch which the alignment is to to be computed
 		*@return true if alignment has been computed correctly, false otherwise
 		*/
-		bool align(AlignAlgorithm& algorithm);
+//		bool align(AlignAlgorithm& algorithm);
 
 		
 		/**

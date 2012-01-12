@@ -52,7 +52,7 @@ CHECK(void addSequence(Sequence& seq))
 
 	SequenceCharacter *tmp = new SequenceCharacter('A', &seq, SequenceCharacter::type::CHAR, r1);
 	TEST_EQUAL(al.getSequence(0)== seq, true);
-	TEST_EQUAL(al.getAlignmentMatrix()(0,0) == *tmp, true)
+	TEST_EQUAL(al.getSeqChar(0,0) == *tmp, true)
 
 
 	Sequence seq2;
@@ -69,7 +69,7 @@ CHECK(void addSequence(Sequence& seq))
 
 	SequenceCharacter *tmp2 = new SequenceCharacter('-', &seq2, SequenceCharacter::type::GAP, 0);
 	
-	TEST_EQUAL(al.getAlignmentMatrix()(1,1) == *tmp2, true)
+	TEST_EQUAL(al.getSeqChar(1,1) == *tmp2, true)
 	
 
 
@@ -92,7 +92,7 @@ CHECK(void reset())
 
 	al.reset();
 	
-	TEST_EQUAL( (al.getAlignmentMatrix().cols() == 0) && (al.getAlignmentMatrix().rows() == 0), true)
+	TEST_EQUAL( (al.cols() == 0) && (al.rows() == 0), true)
 	TEST_EQUAL( al.isAligned(), false)
 	TEST_EQUAL( al.getScore() , 0)
 
@@ -130,32 +130,32 @@ CHECK(bool insertGap(Sequence& seq, int pos))
 	al.addSequence(seq2);
 	al.insertGap(seq,2);
 
-	TEST_EQUAL(al.getAlignmentMatrix()(0,2).isGap(), true)
-	TEST_EQUAL(al.getAlignmentMatrix()(1,2).isGap(), true)
-	TEST_EQUAL(al.getAlignmentMatrix().cols(), 3)
+	TEST_EQUAL(al.getSeqChar(0,2).isGap(), true)
+	TEST_EQUAL(al.getSeqChar(1,2).isGap(), true)
+	TEST_EQUAL(al.cols(), 3)
 
 	al.insertGap(seq, 1);
 	
-	TEST_EQUAL(al.getAlignmentMatrix()(0,1).isGap() ,true)
-	TEST_EQUAL(al.getAlignmentMatrix()(0,0).getChar(),'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,2).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix().cols(), 3)
+	TEST_EQUAL(al.getSeqChar(0,1).isGap() ,true)
+	TEST_EQUAL(al.getSeqChar(0,0).getChar(),'A')
+	TEST_EQUAL(al.getSeqChar(0,2).getChar(), 'G')
+	TEST_EQUAL(al.cols(), 3)
 
-	TEST_EQUAL(al.getAlignmentMatrix()(1,0).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,1).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,2).isGap(), true)
+	TEST_EQUAL(al.getSeqChar(1,0).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,1).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,2).isGap(), true)
 
 	al.insertGap(seq,0);
-	TEST_EQUAL(al.getAlignmentMatrix().cols(), 4)
-	TEST_EQUAL(al.getAlignmentMatrix()(0,0).isGap() ,true)
-	TEST_EQUAL(al.getAlignmentMatrix()(0,1).getChar(), 'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,2).isGap(), true)
-	TEST_EQUAL(al.getAlignmentMatrix()(0,3).getChar(), 'G')
+	TEST_EQUAL(al.cols(), 4)
+	TEST_EQUAL(al.getSeqChar(0,0).isGap() ,true)
+	TEST_EQUAL(al.getSeqChar(0,1).getChar(), 'A')
+	TEST_EQUAL(al.getSeqChar(0,2).isGap(), true)
+	TEST_EQUAL(al.getSeqChar(0,3).getChar(), 'G')
 
-	TEST_EQUAL(al.getAlignmentMatrix()(1,0).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,1).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,2).isGap(), true)
-	TEST_EQUAL(al.getAlignmentMatrix()(1,3).isGap(),true)
+	TEST_EQUAL(al.getSeqChar(1,0).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,1).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,2).isGap(), true)
+	TEST_EQUAL(al.getSeqChar(1,3).isGap(),true)
 
 RESULT
 
@@ -191,35 +191,35 @@ CHECK(insertGap(int row, int column))
 	
 	TEST_EQUAL(al.insertGap(0,2), true)
 	
-	TEST_EQUAL(al.getAlignmentMatrix()(0,2).isGap(), true)
-	TEST_EQUAL(al.getAlignmentMatrix().cols(), 3)
-	TEST_EQUAL(al.getAlignmentMatrix()(1,2).isGap(), true)
+	TEST_EQUAL(al.getSeqChar(0,2).isGap(), true)
+	TEST_EQUAL(al.cols(), 3)
+	TEST_EQUAL(al.getSeqChar(1,2).isGap(), true)
 
 
 	TEST_EQUAL(al.insertGap(0, 1), true)
 
-	TEST_EQUAL(al.getAlignmentMatrix()(0,1).isGap() ,true)
-	TEST_EQUAL(al.getAlignmentMatrix()(0,0).getChar(),'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,2).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix().cols(), 3)
+	TEST_EQUAL(al.getSeqChar(0,1).isGap() ,true)
+	TEST_EQUAL(al.getSeqChar(0,0).getChar(),'A')
+	TEST_EQUAL(al.getSeqChar(0,2).getChar(), 'G')
+	TEST_EQUAL(al.cols(), 3)
 
-	TEST_EQUAL(al.getAlignmentMatrix()(1,0).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,1).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,2).isGap(), true)
+	TEST_EQUAL(al.getSeqChar(1,0).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,1).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,2).isGap(), true)
 
 
 	TEST_EQUAL(al.insertGap(0,0), true)
 
-	TEST_EQUAL(al.getAlignmentMatrix().cols(), 4)
-	TEST_EQUAL(al.getAlignmentMatrix()(0,0).isGap() ,true)
-	TEST_EQUAL(al.getAlignmentMatrix()(0,1).getChar(), 'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,2).isGap(), true)
-	TEST_EQUAL(al.getAlignmentMatrix()(0,3).getChar(), 'G')
+	TEST_EQUAL(al.cols(), 4)
+	TEST_EQUAL(al.getSeqChar(0,0).isGap() ,true)
+	TEST_EQUAL(al.getSeqChar(0,1).getChar(), 'A')
+	TEST_EQUAL(al.getSeqChar(0,2).isGap(), true)
+	TEST_EQUAL(al.getSeqChar(0,3).getChar(), 'G')
 
-	TEST_EQUAL(al.getAlignmentMatrix()(1,0).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,1).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,2).isGap(), true)
-	TEST_EQUAL(al.getAlignmentMatrix()(1,3).isGap(),true)
+	TEST_EQUAL(al.getSeqChar(1,0).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,1).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,2).isGap(), true)
+	TEST_EQUAL(al.getSeqChar(1,3).isGap(),true)
 
 RESULT
 
@@ -260,35 +260,35 @@ CHECK(bool deleteGap(Sequence& seq, int pos))
 
 
 	TEST_EQUAL(al.deleteGap(seq, 1), true)
-	TEST_EQUAL(al.getAlignmentMatrix()(0,2).isGap() ,true)
-	TEST_EQUAL(al.getAlignmentMatrix()(0,0).getChar(),'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,1).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix().cols(), 3)
-	TEST_EQUAL(al.getAlignmentMatrix()(1,0).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,1).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,2).isGap(), true)
+	TEST_EQUAL(al.getSeqChar(0,2).isGap() ,true)
+	TEST_EQUAL(al.getSeqChar(0,0).getChar(),'A')
+	TEST_EQUAL(al.getSeqChar(0,1).getChar(), 'G')
+	TEST_EQUAL(al.cols(), 3)
+	TEST_EQUAL(al.getSeqChar(1,0).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,1).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,2).isGap(), true)
 
 
 	al.insertGap(1,0);
 
 	TEST_EQUAL(al.deleteGap(seq2,0), true)
-	TEST_EQUAL(al.getAlignmentMatrix()(0,2).isGap() ,true)
-	TEST_EQUAL(al.getAlignmentMatrix()(0,0).getChar(),'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,1).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix().cols(), 3)
-	TEST_EQUAL(al.getAlignmentMatrix()(1,0).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,1).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,2).isGap(), true)
+	TEST_EQUAL(al.getSeqChar(0,2).isGap() ,true)
+	TEST_EQUAL(al.getSeqChar(0,0).getChar(),'A')
+	TEST_EQUAL(al.getSeqChar(0,1).getChar(), 'G')
+	TEST_EQUAL(al.cols(), 3)
+	TEST_EQUAL(al.getSeqChar(1,0).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,1).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,2).isGap(), true)
 
 
 	TEST_EQUAL(al.deleteGap(seq,2), true)
-	TEST_EQUAL(al.getAlignmentMatrix()(0,2).isGap() ,true)
-	TEST_EQUAL(al.getAlignmentMatrix()(0,0).getChar(),'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,1).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix().cols(), 3)
-	TEST_EQUAL(al.getAlignmentMatrix()(1,0).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,1).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,2).isGap(), true)
+	TEST_EQUAL(al.getSeqChar(0,2).isGap() ,true)
+	TEST_EQUAL(al.getSeqChar(0,0).getChar(),'A')
+	TEST_EQUAL(al.getSeqChar(0,1).getChar(), 'G')
+	TEST_EQUAL(al.cols(), 3)
+	TEST_EQUAL(al.getSeqChar(1,0).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,1).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,2).isGap(), true)
 
 RESULT
 
@@ -328,35 +328,35 @@ CHECK(bool deleteGap(int row, int column))
 
 
 	TEST_EQUAL(al.deleteGap(0, 1), true)
-	TEST_EQUAL(al.getAlignmentMatrix()(0,2).isGap() ,true)
-	TEST_EQUAL(al.getAlignmentMatrix()(0,0).getChar(),'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,1).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix().cols(), 3)
-	TEST_EQUAL(al.getAlignmentMatrix()(1,0).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,1).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,2).isGap(), true)
+	TEST_EQUAL(al.getSeqChar(0,2).isGap() ,true)
+	TEST_EQUAL(al.getSeqChar(0,0).getChar(),'A')
+	TEST_EQUAL(al.getSeqChar(0,1).getChar(), 'G')
+	TEST_EQUAL(al.cols(), 3)
+	TEST_EQUAL(al.getSeqChar(1,0).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,1).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,2).isGap(), true)
 
 
 	al.insertGap(1,0);
 
 	TEST_EQUAL(al.deleteGap(1,0), true)
-	TEST_EQUAL(al.getAlignmentMatrix()(0,2).isGap() ,true)
-	TEST_EQUAL(al.getAlignmentMatrix()(0,0).getChar(),'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,1).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix().cols(), 3)
-	TEST_EQUAL(al.getAlignmentMatrix()(1,0).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,1).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,2).isGap(), true)
+	TEST_EQUAL(al.getSeqChar(0,2).isGap() ,true)
+	TEST_EQUAL(al.getSeqChar(0,0).getChar(),'A')
+	TEST_EQUAL(al.getSeqChar(0,1).getChar(), 'G')
+	TEST_EQUAL(al.cols(), 3)
+	TEST_EQUAL(al.getSeqChar(1,0).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,1).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,2).isGap(), true)
 
 
 	TEST_EQUAL(al.deleteGap(0,2), true)
-	TEST_EQUAL(al.getAlignmentMatrix()(0,2).isGap() ,true)
-	TEST_EQUAL(al.getAlignmentMatrix()(0,0).getChar(),'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,1).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix().cols(), 3)
-	TEST_EQUAL(al.getAlignmentMatrix()(1,0).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,1).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,2).isGap(), true)
+	TEST_EQUAL(al.getSeqChar(0,2).isGap() ,true)
+	TEST_EQUAL(al.getSeqChar(0,0).getChar(),'A')
+	TEST_EQUAL(al.getSeqChar(0,1).getChar(), 'G')
+	TEST_EQUAL(al.cols(), 3)
+	TEST_EQUAL(al.getSeqChar(1,0).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,1).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,2).isGap(), true)
 RESULT
 
 al.reset();
@@ -395,9 +395,9 @@ CHECK(bool deleteSequence(Sequence& seq))
 	al.addSequence(seq2);
 
 	TEST_EQUAL(al.deleteSequence(seq), true)
-	TEST_EQUAL(al.getAlignmentMatrix().rows(),1)
-	TEST_EQUAL(al.getAlignmentMatrix()(0,0).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,1).getChar(), 'G')
+	TEST_EQUAL(al.rows(),1)
+	TEST_EQUAL(al.getSeqChar(0,0).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(0,1).getChar(), 'G')
 	
 RESULT
 
@@ -432,9 +432,9 @@ CHECK(bool deleteSequence(int row))
 	TEST_EQUAL(al.deleteSequence (4), false)
 
 	TEST_EQUAL(al.deleteSequence(0), true)
-	TEST_EQUAL(al.getAlignmentMatrix().rows(),1)
-	TEST_EQUAL(al.getAlignmentMatrix()(0,0).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,1).getChar(), 'G')
+	TEST_EQUAL(al.rows(),1)
+	TEST_EQUAL(al.getSeqChar(0,0).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(0,1).getChar(), 'G')
 	
 RESULT
 
@@ -481,45 +481,45 @@ CHECK(bool insertSeqChar(Sequence& seq, SequenceCharacter& c, int pos=0))
 
 	TEST_EQUAL(al.insertSeqChar(seq,c), true)
 
-	TEST_EQUAL(al.getAlignmentMatrix().cols(), 3)
-	TEST_EQUAL(al.getAlignmentMatrix()(0,1).getChar(),'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,0).getChar(),'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,2).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix().cols(), 3)
+	TEST_EQUAL(al.cols(), 3)
+	TEST_EQUAL(al.getSeqChar(0,1).getChar(),'A')
+	TEST_EQUAL(al.getSeqChar(0,0).getChar(),'A')
+	TEST_EQUAL(al.getSeqChar(0,2).getChar(), 'G')
 
-	TEST_EQUAL(al.getAlignmentMatrix()(1,0).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,1).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,2).isGap(), true)
+
+	TEST_EQUAL(al.getSeqChar(1,0).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,1).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,2).isGap(), true)
 
 	al.insertGap(seq,3);
 	al.insertSeqChar(seq,c,3);
 	
-	TEST_EQUAL(al.getAlignmentMatrix().cols(), 4)
+	TEST_EQUAL(al.cols(), 4)
 
-	TEST_EQUAL(al.getAlignmentMatrix()(0,1).getChar(),'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,0).getChar(),'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,2).getChar(),'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,3).getChar(),'A')
+	TEST_EQUAL(al.getSeqChar(0,1).getChar(),'A')
+	TEST_EQUAL(al.getSeqChar(0,0).getChar(),'A')
+	TEST_EQUAL(al.getSeqChar(0,2).getChar(),'G')
+	TEST_EQUAL(al.getSeqChar(0,3).getChar(),'A')
 
-	TEST_EQUAL(al.getAlignmentMatrix()(1,0).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,1).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,2).isGap(), true)
-	TEST_EQUAL(al.getAlignmentMatrix()(1,3).isGap(), true)
+	TEST_EQUAL(al.getSeqChar(1,0).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,1).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,2).isGap(), true)
+	TEST_EQUAL(al.getSeqChar(1,3).isGap(), true)
 
 	al.insertSeqChar(seq,c,2);
 
-	TEST_EQUAL(al.getAlignmentMatrix().cols(), 5)
-	TEST_EQUAL(al.getAlignmentMatrix()(0,1).getChar(), 'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,0).getChar(),'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,2).getChar(),'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,3).getChar(),'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,4).getChar(),'A')
+	TEST_EQUAL(al.cols(), 5)
+	TEST_EQUAL(al.getSeqChar(0,1).getChar(), 'A')
+	TEST_EQUAL(al.getSeqChar(0,0).getChar(),'A')
+	TEST_EQUAL(al.getSeqChar(0,2).getChar(),'A')
+	TEST_EQUAL(al.getSeqChar(0,3).getChar(),'G')
+	TEST_EQUAL(al.getSeqChar(0,4).getChar(),'A')
 	
-	TEST_EQUAL(al.getAlignmentMatrix()(1,0).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,1).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,2).isGap(), true)
-	TEST_EQUAL(al.getAlignmentMatrix()(1,3).isGap(),true)
-	TEST_EQUAL(al.getAlignmentMatrix()(1,4).isGap(),true)
+	TEST_EQUAL(al.getSeqChar(1,0).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,1).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,2).isGap(), true)
+	TEST_EQUAL(al.getSeqChar(1,3).isGap(),true)
+	TEST_EQUAL(al.getSeqChar(1,4).isGap(),true)
 
 RESULT
 
@@ -567,40 +567,40 @@ CHECK(bool insertSeqChar(int row, int column, SequenceCharacter& c))
 
 	TEST_EQUAL(al.insertSeqChar(0,0,c), true)
 
-	TEST_EQUAL(al.getAlignmentMatrix().cols(), 3)
+	TEST_EQUAL(al.cols(), 3)
 	
-	TEST_EQUAL(al.getAlignmentMatrix()(0,1).getChar(),'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,0).getChar(),'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,2).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix().cols(), 3)
-	TEST_EQUAL(al.getAlignmentMatrix()(1,0).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,1).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,2).isGap(), true)
+	TEST_EQUAL(al.getSeqChar(0,1).getChar(),'A')
+	TEST_EQUAL(al.getSeqChar(0,0).getChar(),'A')
+	TEST_EQUAL(al.getSeqChar(0,2).getChar(), 'G')
+	TEST_EQUAL(al.cols(), 3)
+	TEST_EQUAL(al.getSeqChar(1,0).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,1).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,2).isGap(), true)
 
 	al.insertGap(0,3);
 	al.insertSeqChar(0,3, c);
-	TEST_EQUAL(al.getAlignmentMatrix().cols(), 4)
-	TEST_EQUAL(al.getAlignmentMatrix()(0,1).getChar(),'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,0).getChar(),'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,2).getChar(),'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,3).getChar(),'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,0).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,1).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,2).isGap(), true)
-	TEST_EQUAL(al.getAlignmentMatrix()(1,3).isGap(), true)
+	TEST_EQUAL(al.cols(), 4)
+	TEST_EQUAL(al.getSeqChar(0,1).getChar(),'A')
+	TEST_EQUAL(al.getSeqChar(0,0).getChar(),'A')
+	TEST_EQUAL(al.getSeqChar(0,2).getChar(),'G')
+	TEST_EQUAL(al.getSeqChar(0,3).getChar(),'A')
+	TEST_EQUAL(al.getSeqChar(1,0).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,1).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,2).isGap(), true)
+	TEST_EQUAL(al.getSeqChar(1,3).isGap(), true)
 
 	al.insertSeqChar(0,2, c);
-	TEST_EQUAL(al.getAlignmentMatrix().cols(), 5)
-	TEST_EQUAL(al.getAlignmentMatrix()(0,1).getChar(), 'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,0).getChar(),'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,2).getChar(),'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,3).getChar(),'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,4).getChar(),'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,0).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,1).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,2).isGap(), true)
-	TEST_EQUAL(al.getAlignmentMatrix()(1,3).isGap(),true)
-	TEST_EQUAL(al.getAlignmentMatrix()(1,4).isGap(),true)
+	TEST_EQUAL(al.cols(), 5)
+	TEST_EQUAL(al.getSeqChar(0,1).getChar(), 'A')
+	TEST_EQUAL(al.getSeqChar(0,0).getChar(),'A')
+	TEST_EQUAL(al.getSeqChar(0,2).getChar(),'A')
+	TEST_EQUAL(al.getSeqChar(0,3).getChar(),'G')
+	TEST_EQUAL(al.getSeqChar(0,4).getChar(),'A')
+	TEST_EQUAL(al.getSeqChar(1,0).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,1).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,2).isGap(), true)
+	TEST_EQUAL(al.getSeqChar(1,3).isGap(),true)
+	TEST_EQUAL(al.getSeqChar(1,4).isGap(),true)
 
 RESULT
 
@@ -616,10 +616,10 @@ CHECK(void read(Protein& protein))
 
 	al.read(*p1);
 
-	TEST_EQUAL(al.getAlignmentMatrix()(0,0).getChar(),'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,1).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix().cols(), 2)
-	TEST_EQUAL(al.getAlignmentMatrix().rows(),1)
+	TEST_EQUAL(al.getSeqChar(0,0).getChar(),'A')
+	TEST_EQUAL(al.getSeqChar(0,1).getChar(), 'G')
+	TEST_EQUAL(al.cols(), 2)
+	TEST_EQUAL(al.rows(),1)
 	TEST_EQUAL(al.isAligned(), false)
 
 
@@ -632,12 +632,12 @@ CHECK(void read(Protein& protein))
 
 	al.read(*p2);
 
-	TEST_EQUAL(al.getAlignmentMatrix()(0,0).getChar(),'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,1).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix().cols(), 2)
-	TEST_EQUAL(al.getAlignmentMatrix().rows(),2)
-	TEST_EQUAL(al.getAlignmentMatrix()(1,0).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,1).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(0,0).getChar(),'A')
+	TEST_EQUAL(al.getSeqChar(0,1).getChar(), 'G')
+	TEST_EQUAL(al.cols(), 2)
+	TEST_EQUAL(al.rows(),2)
+	TEST_EQUAL(al.getSeqChar(1,0).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,1).getChar(), 'G')
 	TEST_EQUAL(al.isAligned(), false)
 RESULT
 
@@ -668,12 +668,12 @@ CHECK (void read(System& system))
 
 	al.read(sys);
 
-	TEST_EQUAL(al.getAlignmentMatrix()(0,0).getChar(),'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,1).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix().cols(), 2)
-	TEST_EQUAL(al.getAlignmentMatrix().rows(),2)
-	TEST_EQUAL(al.getAlignmentMatrix()(1,0).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,1).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(0,0).getChar(),'A')
+	TEST_EQUAL(al.getSeqChar(0,1).getChar(), 'G')
+	TEST_EQUAL(al.cols(), 2)
+	TEST_EQUAL(al.rows(),2)
+	TEST_EQUAL(al.getSeqChar(1,0).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,1).getChar(), 'G')
 	TEST_EQUAL(al.isAligned(), false)
 
 
@@ -711,12 +711,12 @@ CHECK(bool deleteGapColumn(unsigned int col))
 	
 	al.deleteGapColumn(2);
 
-	TEST_EQUAL(al.getAlignmentMatrix()(0,0).getChar(),'A')
-	TEST_EQUAL(al.getAlignmentMatrix()(0,1).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix().cols(), 2)
-	TEST_EQUAL(al.getAlignmentMatrix().rows(),2)
-	TEST_EQUAL(al.getAlignmentMatrix()(1,0).getChar(), 'G')
-	TEST_EQUAL(al.getAlignmentMatrix()(1,1).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(0,0).getChar(),'A')
+	TEST_EQUAL(al.getSeqChar(0,1).getChar(), 'G')
+	TEST_EQUAL(al.cols(), 2)
+	TEST_EQUAL(al.rows(),2)
+	TEST_EQUAL(al.getSeqChar(1,0).getChar(), 'G')
+	TEST_EQUAL(al.getSeqChar(1,1).getChar(), 'G')
 	TEST_EQUAL(al.isAligned(), false)
 
 
