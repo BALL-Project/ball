@@ -4,6 +4,7 @@ SET(SOURCES_LIST
 	sequence.C
 	sequenceCharacter.C
 	sequenceIterator.C
+	alignAlgorithm.C
 )
 
 ADD_BALL_SOURCES("SEQUENCE" "${SOURCES_LIST}")
