@@ -294,6 +294,8 @@ SET(BALL_SEQUENCE_TESTS
 	SequenceCharacter_test
 	Sequence_test
 	SequenceIterator_test
+	Alignment_test
+	AlignAlgorithm_test
 )
 
 SET(BALL_STRUCTURE_TESTS
