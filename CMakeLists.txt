@@ -74,7 +74,7 @@ SET(BALL_TEST_DATA_PATH ${PROJECT_SOURCE_DIR}/source/TEST/data)
 SET(BALL_BENCHMARK_DATA_PATH ${PROJECT_SOURCE_DIR}/source/BENCHMARKS/data)
 
 # Should we build packages as well?
-OPTION(BALL_ENABLE_PACKAGING "Enable the building of binary packages" ON)
+OPTION(BALL_ENABLE_PACKAGING "Enable the building of binary packages" OFF)
 
 # Used for linking BALL dependent applications and libraries (BALLView, Python bindings, ...)
 SET(BALL_LIBRARIES optimized BALL debug BALLd)
