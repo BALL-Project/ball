@@ -55,7 +55,9 @@ DemoTutorialDialog::DemoTutorialDialog(QWidget* parent, const char* name)
 	:	QDialog(parent),
 		Ui_DemoTutorialDialogData(),
 		ModularWidget(name),
-		surface_(0)
+		surface_(0),
+		demo_action_(0),
+		tutorial_action_(0)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new DemoTutorialDialog " << this << std::endl;
