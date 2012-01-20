@@ -443,7 +443,6 @@ namespace BALL
 				// we found _another_ atom: set the bond
 				new Bond("Bond", *scene_->getCurrentAtom(), *atom, Bond::ORDER__SINGLE);
 /*			Bond* c = new Bond("Bond", *scene_->getCurrentAtom(), *atom, Bond::ORDER__SINGLE);
-
 				EditOperation eo(0, c, "Added bond of type single" , EditOperation::ADDED__BOND);
 				undo_.push_back(eo);
 
