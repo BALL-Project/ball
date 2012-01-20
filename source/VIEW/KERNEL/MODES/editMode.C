@@ -23,7 +23,8 @@ namespace BALL
 	{
 		EditMode::EditMode(Scene* scene)
 			: InteractionMode(scene),
-			  atomic_number_(1),
+				temp_move_(false),
+				atom_number_(0),
 			  fragment_db_(0),
 				delete_atom_(0),
 				atom_properties_(0),
@@ -132,21 +133,19 @@ namespace BALL
 			}
 
 			// TODO QShortcut* shortcut
-			if      (evt->key() == Qt::Key_H) atomic_number_ = 1;
-			else if (evt->key() == Qt::Key_C) atomic_number_ = 6;
-			else if (evt->key() == Qt::Key_N) atomic_number_ = 7;
-			else if (evt->key() == Qt::Key_O) atomic_number_ = 8;
-			else if (evt->key() == Qt::Key_P) atomic_number_ = 15;
-			else if (evt->key() == Qt::Key_S) atomic_number_ = 16;
+			if      (evt->key() == Qt::Key_H) scene_->setEditElementType(1);
+			else if (evt->key() == Qt::Key_C) scene_->setEditElementType(6);
+			else if (evt->key() == Qt::Key_N) scene_->setEditElementType(7);
+			else if (evt->key() == Qt::Key_O) scene_->setEditElementType(8);
+			else if (evt->key() == Qt::Key_P) scene_->setEditElementType(15);
+			else if (evt->key() == Qt::Key_S) scene_->setEditElementType(16);
 			else
 			{
 				return;
 			}
 
-			scene_->setElementCursor(atomic_number_);
-
 			String text(qApp->tr("Edit Mode", "Setting element to "));
-			text += PTE[atomic_number_].getName();
+			text += PTE[scene_->getEditElementType()].getName();
 			scene_->setStatusbarText(text);
 		}
 
@@ -160,16 +159,21 @@ namespace BALL
 
 			if (scene_->getCurrentAtom() != 0)
 			{
+				int atomic_number = scene_->getEditElementType();
+
 				Atom* current_atom = scene_->getCurrentAtom();
-				current_atom->setElement(PTE[atomic_number_]);
-				String new_name = PTE[atomic_number_].getSymbol();
+				current_atom->setElement(PTE[atomic_number]);
+				String new_name = PTE[atomic_number].getSymbol();
+
 				//get the old atom number
 				String old_name = current_atom->getName();
 				old_name.toUpper();
 				new_name += old_name.trimLeft("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 				current_atom->setName(new_name);
+
 				scene_->deselect();
 				scene_->getMainControl()->update(*current_atom);
+
 				return;
 			}
 
@@ -241,13 +245,14 @@ namespace BALL
 		{
 			if (scene_->isAnimationRunning() || scene_->getMainControl()->isBusy()) return;
 
-/*			if (temp_move_)
+			if (temp_move_)
 			{
-				processMoveModeMouseEvents_(evt);
+				// TODO: this *has* to work again!
+//				scene_->processMoveModeMouseEvents_(evt);
 
 				return;
 			}
-*/
+
 			// create a new bond
 			//
 			// is there an atom nearby the actual mouse position?
@@ -348,10 +353,12 @@ namespace BALL
 
 				/////////////////////////////////////////
 				// insert a new atom:
-				String name = PTE[atomic_number_].getSymbol();
+				int atomic_number = scene_->getEditElementType();
+
+				String name = PTE[atomic_number].getSymbol();
 				name += String(atom_number_);
 				++atom_number_;
-				PDBAtom* a = new PDBAtom(PTE[atomic_number_], name);
+				PDBAtom* a = new PDBAtom(PTE[atomic_number], name);
 				insert_(evt->x(), evt->y(), *a);
 				scene_->setCurrentAtom(a);
 
@@ -425,9 +432,9 @@ namespace BALL
 				}
 
 				// we found _another_ atom: set the bond
-
 				Bond* c = new Bond("Bond", *scene_->getCurrentAtom(), *atom, Bond::ORDER__SINGLE);
-/*				EditOperation eo(0, c, "Added bond of type single" , EditOperation::ADDED__BOND);
+/*
+				EditOperation eo(0, c, "Added bond of type single" , EditOperation::ADDED__BOND);
 				undo_.push_back(eo);
 
 				// tell about the new undo operation
@@ -453,17 +460,18 @@ namespace BALL
 				}
 
 				// build a new atom...
-				String name(PTE[atomic_number_].getSymbol());
+				int atomic_number = scene_->getEditElementType();
+				String name(PTE[atomic_number].getSymbol());
 				name += String(atom_number_);
 				atom_number_++;
-				PDBAtom* a = new PDBAtom(PTE[atomic_number_], name);
+				PDBAtom* a = new PDBAtom(PTE[atomic_number], name);
 				a->setPosition(new_pos);
 				scene_->getCurrentAtom()->getParent()->appendChild(*a);
 
 				//store the Operation in undo_
 				Vector3 atom_position = a->getPosition();
 /*
-				EditOperation eo(a, NULL, (String)qApp->tr("Edit Mode", "Added atom of type ") + PTE[atomic_number_].getName() + (String)qApp->tr("Edit Mode", " at position (")
+				EditOperation eo(a, NULL, (String)qApp->tr("Edit Mode", "Added atom of type ") + PTE[atomic_number].getName() + (String)qApp->tr("Edit Mode", " at position (")
 						+ String(atom_position.x) + ", "
 						+ String(atom_position.y) + ", "
 						+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
@@ -476,17 +484,18 @@ namespace BALL
 				Bond* c = new Bond("Bond", *scene_->getCurrentAtom(), *a, Bond::ORDER__SINGLE);
 
 				// tell about the new undo operation
-				String bond_string = scene_->getBondOrderString_(bond_order_);
+				/*
+				String bond_string = getBondOrderString_(bond_order_);
 				EditOperation eo2(0, c, (String)qApp->tr("Edit Mode", "Added bond of type ") + bond_string, EditOperation::ADDED__BOND);
-/*				undo_.push_back(eo2);
+				undo_.push_back(eo2);
 				emit newEditOperation(eo2);
-*/
+				*/
+
 				scene_->getMainControl()->update(*a->getParent(), true);
 				scene_->setStatusbarText(qApp->tr("Edit Mode", "Added a bond and an atom"));
 			}
 
 			scene_->deselect();
-
 		}
 
 		void EditMode::wheelEvent(QWheelEvent* evt)
@@ -534,7 +543,7 @@ namespace BALL
 			scene_->notify(msg);
 
 			//edit_id_->setChecked(true);
-			scene_->setElementCursor(atomic_number_);
+			scene_->setElementCursor(scene_->getEditElementType());
 
 			HashSet<Composite*> selection = scene_->getMainControl()->getSelection();
 			HashSet<Composite*>::Iterator it = selection.begin();
@@ -859,20 +868,21 @@ namespace BALL
 
 		void EditMode::changeAtomElementTriggered_()
 		{
+			int atomic_number = scene_->getEditElementType();
+
 			if (scene_->getCurrentAtom() != 0)
 			{
-				atomic_number_ = scene_->getCurrentAtom()->getElement().getAtomicNumber();
+				atomic_number = scene_->getCurrentAtom()->getElement().getAtomicNumber();
 			}
 
 			PTEDialog pte;
 			pte.exec();
 
-			atomic_number_ = scene_->getEditElementType();
-
 			if (scene_->getCurrentAtom() != 0 && scene_->getCurrentAtom()->isSelected())
 			{
-				scene_->getCurrentAtom()->setElement(PTE[atomic_number_]);
-				String new_name = PTE[atomic_number_].getSymbol();
+				atomic_number = scene_->getEditElementType();
+				scene_->getCurrentAtom()->setElement(PTE[atomic_number]);
+				String new_name = PTE[atomic_number].getSymbol();
 				//get the old atom number
 				String old_name = scene_->getCurrentAtom()->getName();
 				old_name.toUpper();

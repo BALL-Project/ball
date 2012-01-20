@@ -52,7 +52,6 @@ namespace BALL
 
 			protected:
 				bool temp_move_;
-				int atomic_number_;
 				int atom_number_;
 				int bond_order_;
 				Qt::MouseButtons last_buttons_;
