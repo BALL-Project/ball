@@ -16,20 +16,15 @@
   <property name="currentIndex">
    <number>0</number>
   </property>
-  <widget class="QWidget" name="tab_2">
+  <widget class="QWidget" name="all_sequences">
    <attribute name="title">
     <string>All</string>
    </attribute>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QColumnView" name="columnView"/>
+     <widget class="QColumnView" name="sequence_view"/>
     </item>
    </layout>
-  </widget>
-  <widget class="QWidget" name="tab">
-   <attribute name="title">
-    <string>blubb</string>
-   </attribute>
   </widget>
  </widget>
  <resources/>

@@ -556,7 +556,7 @@ namespace BALL
 			insertPopupMenuSeparator(MainControl::FILE, UIOperationMode::MODE_ADVANCED);
 
 			String description = "Shortcut|File|Quit";
-			insertMenuEntry(MainControl::FILE, (String)tr("&Quit"), qApp, 
+			insertMenuEntry(MainControl::FILE, (String)tr("&Quit"), qApp,
 											SLOT(quit()), description,
 											QKeySequence("Ctrl+Q"), UIOperationMode::MODE_ADVANCED);
 
@@ -754,9 +754,9 @@ namespace BALL
 
 		void MainControl::onNotify(Message *message)
 		{
-  		#ifdef BALL_VIEW_DEBUG
+			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "MainControl " << this << " onNotify " << message << std::endl;
-   		#endif
+			#endif
 
 			if (RTTI::isKindOf<CompositeMessage>(*message))
 			{

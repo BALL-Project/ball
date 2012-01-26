@@ -21,32 +21,69 @@
 # include <BALL/VIEW/KERNEL/common.h>
 #endif
 
-#ifndef BALL_MATHS_MATRIX44_H
- #include <BALL/MATHS/matrix44.h>
+#ifndef BALL_SEQUENCE_SEQUENCE_H
+# include <BALL/SEQUENCE/sequence.h>
 #endif
 
+#ifndef BALL_DATATYPE_STRINGHASHMAP_H
+# include <BALL/DATATYPE/stringHashMap.h>
+#endif
+
+#include <QtCore/QAbstractTableModel>
 #include <QtCore/QPoint>
 #include <QtGui/QMenu>
 #include <QtGui/QTreeView>
 #include <QtGui/QComboBox>
+
+
+#include <boost/shared_ptr.hpp>
 
 #include <BALL/VIEW/UIC/ui_sequenceControl.h>
 
 
 namespace BALL
 {
+	class Protein;
+	class NucleicAcid;
+
 	namespace VIEW
 	{
 
+		class BALL_VIEW_EXPORT SequenceControlModel
+			: public QAbstractTableModel
+		{
+			Q_OBJECT
+
+			public:
+				typedef std::vector<boost::shared_ptr<Sequence> > SequenceVector;
+
+				SequenceControlModel();
+
+				void addSequence(boost::shared_ptr<Sequence> const& sequence)
+				{
+					sequences_.push_back(sequence);
+				};
+
+				int rowCount(const QModelIndex& parent = QModelIndex()) const;
+				int columnCount(const QModelIndex& parent = QModelIndex()) const;
+
+				QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+				QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+				Qt::ItemFlags flags(const QModelIndex& index) const;
+
+				// TODO: allow editing later on
+				// bool setData(const QModelIndex& index, const QVariant& data, int role = Qt::EditRole);
+
+			protected:
+				SequenceVector sequences_;
+		};
 
 //TODO
 /**	SequenceControl is a widget to display the sequence of Composite objects. 
 		This class is derived from the class DockWidget and extends it for showing and modifiying
-		molecular structures. The methods checkMenu() and buildContextMenu() are overridden 
-		for performing special molecular tasks.
-		SequenceControl has also a QLineEdit to select Composites by BALL expressions.
-		For further informations on this topic have a look at the class Selector.
-		\ingroup ViewWidgets
+		sequences. The methods checkMenu() and buildContextMenu() are overridden 
+		for performing special sequential tasks.
+	  \ingroup ViewWidgets
 */
 class BALL_VIEW_EXPORT SequenceControl
 	: public DockWidget,
@@ -56,7 +93,6 @@ class BALL_VIEW_EXPORT SequenceControl
 	Q_OBJECT
 
 	public:
-
   BALL_EMBEDDABLE(SequenceControl, DockWidget)
 
 	/**	@name	Constructors and Destructor
@@ -107,7 +143,7 @@ class BALL_VIEW_EXPORT SequenceControl
 			Calls reactToMessages_().\par
 			\param  message a pointer to a Message object
 	*/
-//	virtual void onNotify(Message *message);
+	virtual void onNotify(Message *message);
 
 	/** Build a context menu for a Composite.
 			If the Composite has certain properties a context menu is created.
@@ -157,8 +193,16 @@ class BALL_VIEW_EXPORT SequenceControl
 
 
 	protected:
+		void updateTab_(const String& tab_name);
+		void handleProtein_(Protein* protein);
+		void handleNucleicAcid_(NucleicAcid* na);
+
 		Ui_SequenceControlData ui_;
 
+		StringHashMap<boost::shared_ptr<SequenceControlModel> >  sequences_per_tab_;
+		StringHashMap<Index>          tab_indices_per_name_;
+
+		QTabWidget* tab_widget_;
 	///
 	//	void buildContextMenu_();
 

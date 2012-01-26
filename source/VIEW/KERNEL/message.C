@@ -327,6 +327,26 @@ DockingFinishedMessage::~DockingFinishedMessage()
 	#endif
 }
 
+AddSequenceMessage::AddSequenceMessage()
+	: Message(),
+		composite_(0),
+		composite_name_()
+{
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "new AddSequenceMessage" << std::endl;
+	#endif
+}
+
+AddSequenceMessage::AddSequenceMessage(const Composite& composite)
+	: Message(),
+		composite_((Composite*)&composite),
+		composite_name_()
+{
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "new AddSequenceMessage" << std::endl;
+	#endif
+}
+
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/message.iC>

@@ -188,11 +188,11 @@ class DatasetMessage
 		protected:
 
 		Dataset* dataset_;
-		Type 		 type_;
-		String 	 dataset_type_;
+		Type     type_;
+		String   dataset_type_;
 };
 
-				
+
 
 /** CompositeMessage is the base class of all messages concerning the change of one Composite.
 		With it ConnectionObject can notify and react to Composite changes.
@@ -212,22 +212,22 @@ class BALL_VIEW_EXPORT CompositeMessage
 		 		MolecularStructure will add bonds, normalize names and send a msg with type NEW_MOLECULE afterwards.
 		*/
 		NEW_COMPOSITE,
-		
+
 		/// A Composite to be removed
 		REMOVED_COMPOSITE,
-		
+
 		/// Update all datas for a Composite (but not in the MolecularControl)
 		CHANGED_COMPOSITE,
-		
+
 		/// Update all datas for a composite (also in MolecularControl)
 		CHANGED_COMPOSITE_HIERARCHY,
-		
+
 		/// selected a composite (e.g. per checkboxes in MolecularControl)
 		SELECTED_COMPOSITE,
-		
+
 		/// deselected a composite (e.g. per checkboxes in MolecularControl)
 		DESELECTED_COMPOSITE,
-		
+
 		/// center the camera on a composite
 		CENTER_CAMERA,
 
@@ -238,7 +238,7 @@ class BALL_VIEW_EXPORT CompositeMessage
 	};
 
 	/**	@name	Constructors and Destructors
-	*/	
+	*/
 	//@{
 
 	/** Default Constructor.
@@ -261,7 +261,7 @@ class BALL_VIEW_EXPORT CompositeMessage
 	/**	@name	Accessors: inspectors and mutators 
 	*/
 	//@{
-	
+
 	/** Change the composite.
 	*/
 	void setComposite(const Composite& composite);
@@ -325,7 +325,8 @@ class BALL_VIEW_EXPORT CompositeMessage
 		Send by MainControl, GeometricControl and several dialogs. \par
 		Received by Scene
 */
-class BALL_VIEW_EXPORT SceneMessage: public Message
+class BALL_VIEW_EXPORT SceneMessage
+	: public Message
 {
 	public:
 
@@ -518,7 +519,7 @@ class BALL_VIEW_EXPORT GeometricObjectSelectionMessage: public Message
 	public:
 
 	/**	@name	Constructors and Destructors
-	*/	
+	*/
 	//@{
 
 	/** Default Constructor.
@@ -533,7 +534,7 @@ class BALL_VIEW_EXPORT GeometricObjectSelectionMessage: public Message
 	/**	@name	Accessors: inspectors and mutators 
 	*/
 	//@{
-	
+
 	/** Change the selection of Composite objects.
 			The selection list will be copied from the given list.
 	*/
@@ -600,7 +601,7 @@ class BALL_VIEW_EXPORT RepresentationMessage: public Message
 
 	///
 	RepresentationMessage();
-	
+
 	///
 	virtual ~RepresentationMessage();
 
@@ -612,7 +613,7 @@ class BALL_VIEW_EXPORT RepresentationMessage: public Message
 		 {representation_ = &rep;}
 
 	///
-	Representation* getRepresentation() 
+	Representation* getRepresentation()
 		 {return representation_;}
 
 	///
@@ -621,13 +622,13 @@ class BALL_VIEW_EXPORT RepresentationMessage: public Message
 	///
 	RepresentationMessageType getType() const
 		 { return type_;}
-	
+
 	private:
 
-	Representation* 					representation_;
+	Representation*           representation_;
 	RepresentationMessageType type_;
 };
-	
+
 
 /** Message to perform specific tasks for molecular items.\par
 		Send by MolecularControl to MolecularProperties.
@@ -663,7 +664,7 @@ class BALL_VIEW_EXPORT MolecularTaskMessage
 		 {return type_;}
 
 	protected:
-	
+
 	MolecularTaskMessageType type_;
 };
 
@@ -692,9 +693,8 @@ class BALL_VIEW_EXPORT CreateRepresentationMessage
 
 		///
 		CreateRepresentationMessage(const std::list<Composite*>& composites,
-																ModelType model_type, 
-																ColoringMethod coloring_method)
-			;   
+																ModelType model_type,
+																ColoringMethod coloring_method);
 
 		///
 		const std::list<Composite*>& getComposites() const
@@ -702,18 +702,18 @@ class BALL_VIEW_EXPORT CreateRepresentationMessage
 
 		///
 		ModelType getModelType() const
- 			 { return model_type_;}
-		
+			{ return model_type_;}
+
 		///
 		ColoringMethod getColoringMethod() const
-			 { return coloring_method_;} 
-	
- 		private: 
-		std::list<Composite*> 	composites_;
-		ModelType 				model_type_;
-		ColoringMethod 		coloring_method_;
+			 { return coloring_method_;}
+
+		private:
+		std::list<Composite*>   composites_;
+		ModelType               model_type_;
+		ColoringMethod          coloring_method_;
 };
-	
+
 
 /** Message send by one GenericControl to notify all other GenericControl instances to
  		deselect their QListView.
@@ -762,7 +762,7 @@ class BALL_VIEW_EXPORT FinishedSimulationMessage
 	///
 	FinishedSimulationMessage();
 };
-	
+
 
 ///
 class BALL_VIEW_EXPORT SyncClippingPlanesMessage
@@ -831,9 +831,9 @@ class BALL_VIEW_EXPORT RegisterHelpSystemMessage
 	protected:
 
 	const QObject* object_;
-	Index 	 menu_entry_;
-	String 	 url_;
-	bool  	 register_;
+	Index          menu_entry_;
+	String         url_;
+	bool           register_;
 };
 
 
@@ -848,19 +848,19 @@ class BALL_VIEW_EXPORT DockingFinishedMessage
 
 		///
 		DockingFinishedMessage(bool abort);
-			 
+
 		///
 		virtual ~DockingFinishedMessage();
-			
+
 		///
 		void setConformationSet(const ConformationSet* conformation_set)
 		{
 			conformation_set_ = conformation_set;
 		}
-		
+
 		//
 		const ConformationSet* getConformationSet() const { return conformation_set_; }
-		
+
 		///
 		bool wasAborted() { return abort_; }
 
@@ -871,12 +871,60 @@ class BALL_VIEW_EXPORT DockingFinishedMessage
 		bool abort_;
 };
 
+/** AddSequenceMessage notifies the Sequence Widget about a new sequence
+*/
+class BALL_VIEW_EXPORT AddSequenceMessage
+	: public Message
+{
+	public:
+
+	/**	@name	Constructors and Destructors
+	*/
+	//@{
+
+	///
+	AddSequenceMessage();
+
+	///
+	AddSequenceMessage(const Composite& composite);
+	//@}
+	/**	@name	Accessors: inspectors and mutators 
+	*/
+	//@{
+
+	/** Change the composite.
+	*/
+	void setComposite(const Composite& composite);
+
+	/** Inspection of the composite.
+	*/
+	Composite* getComposite() const;
+
+	/** Change the name of the composite.
+			\param       name the new name of the composite of this compositeMessage
+	*/
+	void setCompositeName(const String& name);
+
+	/** Inspection of the name of the composite.
+	*/
+	const String& getCompositeName() const;
+
+	//@}
+
+	protected:
+
+	Composite*   composite_;
+	String       composite_name_;
+
+};
+
+
 //@}
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/message.iC>
 #	endif
-  			
+
 } } // namespaces
 
 #endif // BALL_VIEW_KERNEL_MESSAGE_H

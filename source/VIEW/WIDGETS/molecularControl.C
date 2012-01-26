@@ -90,7 +90,7 @@ namespace BALL
 		void MolecularControl::MyTreeWidgetItem::init_()
 		{
 			setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-			
+
 			// force QT to show checkboxes!
 			setCheckState(2, Qt::Checked);
 			if (!composite->isSelected()) setCheckState(2, Qt::Unchecked);
@@ -214,7 +214,6 @@ namespace BALL
 			bool busy = main_control.isBusy();
 
 			// prevent changes to composites while simulations are running
-			
 			// check for paste-slot: enable only if one selected item &&
 			// 																			copy_list_ not empty && 
 			// 																			no simulation running &&
@@ -262,10 +261,10 @@ namespace BALL
 			// ------------------------------------------------------------------
 			// cut / delete  +  select / deselect
 			bool list_filled = selected_.size() && !busy;
-			
+
 			if (list_filled) hint = "";
 			else hint = (String)tr("No item selected or simulation running");
-			
+
 			if (cut_id_)
 			{
 				cut_id_->setEnabled(list_filled);
@@ -313,17 +312,17 @@ namespace BALL
 				{
 					case CompositeMessage::NEW_MOLECULE:
 					{
-						addComposite(*(Composite *)composite_message->getComposite(), 
+						addComposite(*(Composite *)composite_message->getComposite(),
 																			 composite_message->getCompositeName());
 						return false;
 					}
-					
+
 					case CompositeMessage::REMOVED_COMPOSITE:
 					{
 						removeComposite(*(Composite *)composite_message->getComposite());
 						return true;
 					}
-					
+
 					case CompositeMessage::CHANGED_COMPOSITE:
 						return false;
 
@@ -486,6 +485,8 @@ namespace BALL
 			atom_overview_ = context_menu_.addAction(tr("Atom Overview"), this, SLOT(showAtomOverview()), 0);
 			atom_overview_selection_ = context_menu_.addAction(tr("Atom Overview for Selection"), this,
 																												SLOT(showAtomOverviewForSelection()), 0);
+			add_sequence_action_     = context_menu_.addAction(tr("Add to Sequences Widget"), this,
+																												SLOT(addToSequenceWidget()), 0);
 			// <----------------------------------- AtomContainer
 
 			context_menu_.addSeparator();
@@ -539,9 +540,11 @@ namespace BALL
 
 			// -----------------------------------> AtomContainer
 			bool ac = RTTI::isKindOf<AtomContainer>(composite);
+			bool is_residue = RTTI::isKindOf<Residue>(composite);
 			count_items_action_->setEnabled(ac);
 			atom_overview_->setEnabled(ac);
 			atom_overview_selection_->setEnabled(ac);
+			add_sequence_action_->setEnabled(ac && !is_residue);
 			// <----------------------------------- AtomContainer
 
 			// -----------------------------------> Atoms
@@ -1047,7 +1050,7 @@ namespace BALL
 
 		// set the checkboxes according to the selection in the MainControl
 		void MolecularControl::setSelection_(bool /*open*/, bool /*force*/)
-		{	
+		{
 			//if (!force) open = false;
 
 			QTreeWidgetItemIterator qit(listview);
@@ -1096,7 +1099,7 @@ namespace BALL
 				}
 				else
 				{
- 					removeComposite(c);
+					removeComposite(c);
 					update = true;
 					deleted_roots.insert(&c);
 				}
@@ -1108,7 +1111,7 @@ namespace BALL
 
 
 			listview->clearSelection();
- 			enableUpdates_(true);
+			enableUpdates_(true);
 			HashSet<Composite*>::Iterator roots_it = roots.begin();
 			for (; +roots_it; roots_it++)
 			{
@@ -1213,7 +1216,7 @@ namespace BALL
 		}
 
 
-		QTreeWidgetItem* MolecularControl::generateListViewItem_(QTreeWidgetItem* parent, 
+		QTreeWidgetItem* MolecularControl::generateListViewItem_(QTreeWidgetItem* parent,
 																							Composite& composite, QString* default_name)
 		{
 			#ifdef BALL_VIEW_DEBUG
@@ -1247,7 +1250,7 @@ namespace BALL
 					name += getInformationVisitor_().getTypeName().c_str();
 					name += ">";
 				}
-				else 
+				else
 				{
 					name = *default_name;
 				}
@@ -1266,8 +1269,8 @@ namespace BALL
 			if (parent == 0)
 			{
 				new_item = new MyTreeWidgetItem(listview, sl, &composite);
-			} 
-			else 
+			}
+			else
 			{
 				// no, insert into the current item
 				new_item = new MyTreeWidgetItem(parent, sl, &composite);
@@ -1290,7 +1293,7 @@ namespace BALL
 			return selected_;
 		}
 
-		void MolecularControl::createRepresentation() 
+		void MolecularControl::createRepresentation()
 		{
 			// make sure selection is send, to enter create Represenation Mode in DP
 			ControlSelectionMessage* message = new ControlSelectionMessage;
@@ -1328,7 +1331,7 @@ namespace BALL
 		void MolecularControl::countItems()
 		{
 			if (context_composite_ == 0 ||
-					dynamic_cast<AtomContainer*>(context_composite_) == 0) 
+					dynamic_cast<AtomContainer*>(context_composite_) == 0)
 			{
 				return;
 			}
@@ -1698,6 +1701,33 @@ namespace BALL
 			ao.showOnlySelection(true);
 			ao.setParent(dynamic_cast<AtomContainer*>(((MyTreeWidgetItem*)context_item_)->composite));
 			ao.exec();
+		}
+
+		void MolecularControl::addToSequenceWidget()
+		{
+			Log.info() << " Add the sequence(s) to Sequences Widget " << selected_.size() << std::endl;
+			list<Composite*> sel = selected_;
+			list<Composite*>::iterator it = sel.begin();
+			for (; it != sel.end(); it++)
+			{
+				Composite& composite = **it;
+				if (RTTI::isKindOf<Chain>(composite))
+				{
+					Chain* chain = RTTI::castTo<Chain>(composite);
+
+					Log.info() << "add chain " << chain->getName() << " with " <<  chain->countResidues() << " residues." << std::endl;
+				}
+				else
+				{
+					Log.info() << "not a chain!" << endl;
+				}
+			}
+			/*AtomContainer* test_ac = (dynamic_cast<AtomContainer*>(((MyTreeWidgetItem*)context_item_)->composite));
+			BALL::ChainIterator ch_it = test_ac->beginChain();
+			for (; +ch_it; ++ch_it)
+			{
+				Log.info() << "add chain " << ch_it->getName() << "with " <<  ch_it->countResidues() << " residues." << std::endl;
+			}*/
 		}
 
 		void MolecularControl::showDistance()

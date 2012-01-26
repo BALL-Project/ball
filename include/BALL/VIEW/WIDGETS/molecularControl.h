@@ -308,10 +308,13 @@ class BALL_VIEW_EXPORT MolecularControl
 
 	///
 	void showDistance();
-	
+
 	///
 	void showAngle();
-	
+
+	///
+	void addToSequenceWidget();
+
 	//@} 
 	/** @name Protected members 
 	*/ 
@@ -401,7 +404,7 @@ class BALL_VIEW_EXPORT MolecularControl
 			\param  composite the Composite object whose subtree will be inserted into <b>parent</b>
 			\param  default_name the name of the <b>item</b>
 	*/
-	QTreeWidgetItem* generateListViewItem_(QTreeWidgetItem* parent,
+ 	QTreeWidgetItem* generateListViewItem_(QTreeWidgetItem* parent, 
 																					Composite& composite, QString* default_name = 0);
 
 	//_ Test, if its allowed to paste the copy liste into the current selected context item.
@@ -454,7 +457,7 @@ class BALL_VIEW_EXPORT MolecularControl
 
 	ModelType        selected_model_;
 	ColoringMethod   selected_coloring_method_;
-	std::map<Composite*, MyTreeWidgetItem*> composite_to_item_;
+	std::map<Composite*, MyTreeWidgetItem*>     composite_to_item_;
 
 	// let cut know to delete the entries, set by deleteCurrentItems()
 	bool            was_delete_;
@@ -463,8 +466,10 @@ class BALL_VIEW_EXPORT MolecularControl
 
 	bool            show_ss_;
 	QAction* center_camera_action_, *composite_properties_action_, *bond_propertes_action_, *disulfidbond_action_,
-					 *select_action_, *deselect_action_, *count_items_action_, *atom_overview_, *atom_overview_selection_,
+					 *select_action_, *deselect_action_, *count_items_action_, 
 					 *angle_action_, *distance_action_, *paste_action_;
+					 *atom_overview_, *atom_overview_selection_,
+					 *add_sequence_action_;
 
 	bool ignore_messages_;
 

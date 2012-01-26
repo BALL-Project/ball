@@ -139,7 +139,7 @@ ConnectionObject *ConnectionObject::getRoot()
 
 void ConnectionObject::onNotify(Message * /* message */)
 {
-} 
+}
 
 bool ConnectionObject::isValid() const
 {

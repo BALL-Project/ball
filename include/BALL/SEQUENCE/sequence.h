@@ -24,9 +24,8 @@
 namespace BALL
 {
 	class SequenceIterator;
-
 	class SequenceCharacter;
-	     
+
 	class BALL_EXPORT Sequence
 	{
 
@@ -46,7 +45,7 @@ namespace BALL
 			 *@param name_ the name_ of the Sequence
 			 *@param origin_ the composite from which the sequence origin_ates
 			 */
-			Sequence(String& name, AtomContainer* origin);
+			Sequence(const String& name, AtomContainer* origin);
 
 			/**
 			 *Copy Constructor
