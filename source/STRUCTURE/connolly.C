@@ -92,7 +92,7 @@
 
 // End of defines 
 
-#include <math.h>
+#include <cmath>
 
 #ifdef BALL_HAS_VALUES_H
 # include <values.h> // required for M_PI on some systems

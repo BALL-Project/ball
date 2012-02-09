@@ -35,7 +35,7 @@
 #ifdef BALL_HAS_DIRECT_H
 #	include <direct.h>
 #endif
-#include <stdio.h>
+#include <cstdio>
 #ifdef BALL_COMPILER_MSVC
 #define WINDOWS_LEAN_AND_MEAN
 #include <windows.h>

@@ -26,7 +26,7 @@
 #include <QtGui/QWheelEvent>
 #include <QtGui/QMenu>
 
-#include <math.h>
+#include <cmath>
 
 namespace BALL
 {

@@ -18,7 +18,7 @@
 # include <BALL/COMMON/global.h>
 #endif
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <new>
 #include <iostream>
 

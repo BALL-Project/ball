@@ -15,9 +15,9 @@
 #include <BALL/COMMON/logStream.h>
 #include <BALL/DATATYPE/regularExpression.h>
 
-#include <ctype.h>
-#include <stdarg.h>
-#include <stdlib.h>
+#include <cctype>
+#include <cstdarg>
+#include <cstdlib>
 
 using std::streampos;
 using std::ios;

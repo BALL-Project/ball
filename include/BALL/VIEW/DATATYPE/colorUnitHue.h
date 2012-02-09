@@ -18,7 +18,7 @@
 #endif
 
 #include <iostream>
-#include <stdio.h>
+#include <cstdio>
 
 namespace BALL 
 {

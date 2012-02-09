@@ -7,7 +7,7 @@
 
 ///////////////////////////
 #include <BALL/MATHS/vector2.h>
-#include <math.h>
+#include <cmath>
 #include <BALL/CONCEPT/persistenceManager.h>
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////

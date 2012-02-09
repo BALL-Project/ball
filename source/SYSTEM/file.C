@@ -9,10 +9,10 @@
 
 #include <BALL/DATATYPE/regularExpression.h>
 
-#include <stdlib.h>     // 'getenv'
+#include <cstdlib>     // 'getenv'
 #include <sys/types.h>
 #include <sys/stat.h>   // 'stat', 'lstat'
-#include <stdio.h>      // 'rename'
+#include <cstdio>      // 'rename'
 
 // maximum number of substitutions performed in TransformationManager::transform()
 // (in order to avoid infinite recursion)

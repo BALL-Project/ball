@@ -3,7 +3,7 @@
 //
 
 #include <BALL/VIEW/DATATYPE/colorUnit.h>
-#include <stdio.h>
+#include <cstdio>
 #include <BALL/COMMON/rtti.h>
 
 using namespace std;

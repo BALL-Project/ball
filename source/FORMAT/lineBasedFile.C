@@ -4,7 +4,7 @@
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/COMMON/exception.h>
-#include <stdio.h>
+#include <cstdio>
 
 using namespace std;
 

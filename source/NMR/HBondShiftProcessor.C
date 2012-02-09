@@ -3,8 +3,8 @@
 //
 
 #include <BALL/NMR/HBondShiftProcessor.h>
-#include <stdio.h>
-#include <math.h>
+#include <cstdio>
+#include <cmath>
 
 using namespace std;
 

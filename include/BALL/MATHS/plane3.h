@@ -9,7 +9,7 @@
 #	include <ieeefp.h>
 #endif
 
-#include <math.h>
+#include <cmath>
 #include <iostream>
 
 #ifndef BALL_MATHS_LINE3_H

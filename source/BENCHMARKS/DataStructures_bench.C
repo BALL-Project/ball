@@ -18,7 +18,7 @@
 #include <map>
 // #include <ext/hash_map>
 
-#include <stdlib.h> // rand
+#include <cstdlib> // rand
 
 
 

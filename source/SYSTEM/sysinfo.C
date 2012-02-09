@@ -7,8 +7,8 @@
 
 #ifdef BALL_OS_SOLARIS
 # undef BALL_HAS_SYS_SYSINFO_H
-# include <stdlib.h>
-# include <stdio.h>
+# include <cstdlib>
+# include <cstdio>
 # include <kstat.h>
 # include <sys/sysinfo.h>
 # include <sys/stat.h>
@@ -26,7 +26,7 @@
 #	  include <windows.h>
 # endif
 # ifdef BALL_OS_DARWIN
-#   include <stdlib.h>
+#   include <cstdlib>
 #		include <sys/sysctl.h>
 #   include <mach/mach.h>
 # endif

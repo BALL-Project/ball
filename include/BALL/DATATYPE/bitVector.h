@@ -18,7 +18,7 @@
 #endif
 
 
-#include <string.h>
+#include <cstring>
 
 #define BALL_BLOCK_BITS 8
 #define BALL_BLOCK_MASK (BALL_BLOCK_BITS - 1)

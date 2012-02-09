@@ -4,7 +4,7 @@
 
 #include <BALL/MOLMEC/PARAMETER/charmmEEF1.h>
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
-#include <string.h>
+#include <cstring>
 
 using namespace std;
 

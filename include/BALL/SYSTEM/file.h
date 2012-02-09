@@ -19,9 +19,9 @@
 
 #include <BALL/DATATYPE/hashSet.h>
 
-#include <stdlib.h>                   // 'getenv'
+#include <cstdlib>                   // 'getenv'
 #include <sys/stat.h>                 // 'stat', 'lstat'
-#include <stdio.h>                    // 'rename'
+#include <cstdio>                    	// 'rename'
 #include <algorithm>                  // 'reverse'
 
 #ifdef BALL_COMPILER_MSVC
