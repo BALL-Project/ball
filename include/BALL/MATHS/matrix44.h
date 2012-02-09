@@ -11,9 +11,9 @@
 # include <BALL/COMMON/exception.h>
 #endif
 
-#include <math.h>
+#include <cmath>
 #include <iostream>
-#include <stdlib.h>
+#include <cstdlib>
 
 #ifndef BALL_MATHS_ANGLE_H
 #	include <BALL/MATHS/angle.h>

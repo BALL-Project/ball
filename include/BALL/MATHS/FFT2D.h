@@ -17,7 +17,7 @@
 # include <BALL/MATHS/vector2.h>
 #endif
 
-#include <math.h>
+#include <cmath>
 #include <complex>
 #include <fftw3.h>
 

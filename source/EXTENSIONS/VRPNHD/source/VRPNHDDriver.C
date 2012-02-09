@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <cstdio>
 #include <VRPNHDDriver.h>
 #include <quat.h>
 #include <BALL/MATHS/vector3.h>

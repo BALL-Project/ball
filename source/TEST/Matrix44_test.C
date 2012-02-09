@@ -11,7 +11,7 @@
 #include <BALL/MATHS/angle.h>
 #include <BALL/common.h>
 #include <BALL/COMMON/limits.h>
-#include <math.h>
+#include <cmath>
 ///////////////////////////
 
 START_TEST(Matrix44)

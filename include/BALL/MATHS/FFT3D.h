@@ -19,7 +19,7 @@
 //#endif
 
 #include <BALL/MATHS/fftwCommon.h>
-#include <math.h>
+#include <cmath>
 #include <complex>
 #include <fftw3.h>
 

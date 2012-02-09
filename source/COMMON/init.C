@@ -4,8 +4,8 @@
 
 #include <BALL/COMMON/init.h>
 
-#include <locale.h>
-#include <stdlib.h>
+#include <clocale>
+#include <cstdlib>
 
 namespace BALL
 {

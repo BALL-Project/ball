@@ -5,8 +5,8 @@
 //
 
 #include <BALL/KERNEL/PTE.h>
-#include <ctype.h>			// toupper, tolower
-#include <stdlib.h>			// bsearch
+#include <cctype>			// toupper, tolower
+#include <cstdlib>			// bsearch
 
 using std::ostream;
 namespace BALL 

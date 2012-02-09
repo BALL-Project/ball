@@ -11,7 +11,7 @@
 #include <BALL/COMMON/limits.h>
 #include <BALL/SYSTEM/sysinfo.h>
 
-#include <math.h>
+#include <cmath>
 
 //   #define BALL_BENCHMARK
 

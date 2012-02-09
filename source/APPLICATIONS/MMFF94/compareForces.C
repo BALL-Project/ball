@@ -11,7 +11,7 @@
 #include <BALL/MATHS/vector3.h>
 #include <BALL/FORMAT/lineBasedFile.h>
 
-#include <math.h>
+#include <cmath>
 
 using namespace std;
 using namespace BALL;

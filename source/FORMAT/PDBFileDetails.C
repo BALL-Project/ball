@@ -15,10 +15,10 @@
 #include <BALL/DATATYPE/regularExpression.h>
 #include <BALL/XRAY/crystalInfo.h>
 
-#include <time.h> // time, asctime
-#include <ctype.h>
-#include <stdarg.h>
-#include <stdlib.h>
+#include <ctime> // time, asctime
+#include <cctype>
+#include <cstdarg>
+#include <cstdlib>
 
 using namespace std;
 

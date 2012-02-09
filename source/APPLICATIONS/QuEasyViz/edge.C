@@ -22,7 +22,7 @@
 #include <dataItem.h>
 
 using namespace std;
-#include <math.h>
+#include <cmath>
 #include <algorithm>
 
 namespace BALL

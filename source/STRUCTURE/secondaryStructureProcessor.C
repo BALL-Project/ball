@@ -9,7 +9,7 @@
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/bond.h>
-#include <math.h>
+#include <cmath>
 
 using namespace std;
 

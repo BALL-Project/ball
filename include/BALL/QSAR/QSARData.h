@@ -46,7 +46,7 @@
 #include <BALL/QSAR/partialChargeDescriptors.h>
 #include <BALL/QSAR/surfaceDescriptors.h>
 #include <BALL/COMMON/exception.h>
-#include <string.h>
+#include <cstring>
 
 #ifndef STATISTICS
 #include <BALL/QSAR/statistics.h>

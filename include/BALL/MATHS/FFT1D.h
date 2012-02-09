@@ -13,7 +13,7 @@
 # include <BALL/DATATYPE/regularData1D.h>
 #endif
 
-#include <math.h>
+#include <cmath>
 #include <complex>
 #include <fftw3.h>
 

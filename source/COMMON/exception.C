@@ -9,10 +9,10 @@
 #include <iostream>
 #include <typeinfo>
 #include <exception>
-#include <stdio.h>
-#include <stdlib.h>	// for getenv in terminate()
+#include <cstdio>
+#include <cstdlib>	// for getenv in terminate()
 #include <sys/types.h>
-#include <signal.h> // for SIGSEGV and kill
+#include <csignal> // for SIGSEGV and kill
 
 #ifdef BALL_HAS_UNISTD_H
 #	include <unistd.h> // fot getpid

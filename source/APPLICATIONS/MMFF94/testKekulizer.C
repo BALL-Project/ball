@@ -27,7 +27,7 @@
 #include <BALL/QSAR/aromaticityProcessor.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 
-#include <math.h>
+#include <cmath>
 
 using namespace std;
 using namespace BALL;

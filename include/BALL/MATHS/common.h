@@ -11,7 +11,7 @@
 #	include <BALL/CONFIG/config.h>
 #endif
 
-#include <math.h>
+#include <cmath>
 
 #ifdef BALL_HAS_IEEEFP_H
 # include <ieeefp.h>

@@ -6,8 +6,8 @@
 
 #include <BALL/SYSTEM/directory.h>
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 #include <sys/stat.h>
 
 #ifdef BALL_HAS_SYS_TYPES_H
@@ -23,7 +23,7 @@
 #endif
 
 #include <iostream>
-#include <errno.h>
+#include <cerrno>
 
 #ifdef BALL_COMPILER_MSVC
 #	define chdir _chdir

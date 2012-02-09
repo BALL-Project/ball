@@ -7,7 +7,7 @@
 #include <BALL/MATHS/analyticalGeometry.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/KERNEL/PTE.h>
-#include <math.h>
+#include <cmath>
 #include <BALL/STRUCTURE/fragmentDB.h>
 
 namespace BALL

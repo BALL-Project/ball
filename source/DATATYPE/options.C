@@ -6,10 +6,10 @@
 
 #include <BALL/DATATYPE/options.h>
 
-#include <stdlib.h>
-#include <errno.h>
-#include <stdio.h>
-#include <math.h>
+#include <cstdlib>
+#include <cerrno>
+#include <cstdio>
+#include <cmath>
 
 #include <fstream>
 #include <list>

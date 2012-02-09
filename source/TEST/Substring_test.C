@@ -7,7 +7,7 @@
 
 ///////////////////////////
 #include <BALL/DATATYPE/string.h>
-#include <string.h>
+#include <cstring>
 #include <string>
 ///////////////////////////
 

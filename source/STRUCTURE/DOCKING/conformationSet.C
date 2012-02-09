@@ -11,7 +11,7 @@
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <iostream>
 
 using namespace::std;

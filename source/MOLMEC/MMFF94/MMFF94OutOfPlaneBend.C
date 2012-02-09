@@ -11,7 +11,7 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/SYSTEM/path.h>
 
-#include <math.h>
+#include <cmath>
 
 //     #define BALL_DEBUG_MMFF
 //   #define BALL_MMFF94_TEST
