@@ -8,7 +8,6 @@
 #include <BALL/KERNEL/nucleotide.h>
 #include <BALL/KERNEL/nucleicAcid.h>
 #include <BALL/KERNEL/chain.h>
-#include <BALL/COMMON/limits.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/MATHS/matrix44.h>
@@ -477,7 +476,7 @@ namespace BALL
 				}
 				
 
-				Property prop = Limits<Property>::max();
+				Property prop = std::numeric_limits<Property>::max();
 				if (property == "NON_STANDARD")
 				{
 					prop = Residue::PROPERTY__NON_STANDARD;
@@ -507,7 +506,7 @@ namespace BALL
 					prop = Nucleotide::PROPERTY__NUCLEOTIDE;
 				}
 
-				if (prop == Limits<Property>::max())
+				if (prop == std::numeric_limits<Property>::max())
 				{
 					// if the property was not recognized,
 					// store it as a name-value pair

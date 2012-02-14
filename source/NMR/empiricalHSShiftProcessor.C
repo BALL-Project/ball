@@ -4,7 +4,6 @@
 
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/NMR/empiricalHSShiftProcessor.h>
-#include <BALL/COMMON/limits.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/FORMAT/parameterSection.h>
 #include <BALL/STRUCTURE/peptides.h>

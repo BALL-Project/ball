@@ -9,10 +9,6 @@
 # include <BALL/FORMAT/CIFFile.h>
 #endif
 
-#ifndef BALL_COMMON_LIMITS_H
-# include <BALL/COMMON/limits.h>
-#endif
-
 #ifndef BALL_KERNEL_PROTEIN_H
 # include <BALL/KERNEL/protein.h>
 #endif

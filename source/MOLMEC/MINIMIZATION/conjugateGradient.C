@@ -8,8 +8,9 @@
 
 #include <BALL/MOLMEC/MINIMIZATION/conjugateGradient.h>
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
-#include <BALL/COMMON/limits.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
+
+#include <limits>
 
 //#define BALL_DEBUG
 #undef BALL_DEBUG
@@ -445,7 +446,7 @@ namespace BALL
 					}
 					else
 					{
-						direction_.inv_norm = sqrt(Limits<float>::max());
+						direction_.inv_norm = sqrt(std::numeric_limits<float>::max());
 					}
 					unscaled_direction_ = direction_;
 				}
@@ -552,7 +553,7 @@ namespace BALL
 						}
 						else
 						{
-							direction_.inv_norm = sqrt(Limits<float>::max());
+							direction_.inv_norm = sqrt(std::numeric_limits<float>::max());
 						}
 						unscaled_direction_ = direction_;
 					}
@@ -712,7 +713,7 @@ namespace BALL
 				}
 				else
 				{
-					direction_.inv_norm = sqrt(Limits<float>::max());
+					direction_.inv_norm = sqrt(std::numeric_limits<float>::max());
 				}
 				// No necessary in Shanno case
 				//unscaled_direction_ = direction_;
@@ -783,7 +784,7 @@ namespace BALL
 			
 			// Obviously, we don't have "old" energies yet, so we initialize it a with 
 			// sensible value. We don't need "old" gradients here.
-			old_energy_ = Limits<float>::max();
+			old_energy_ = std::numeric_limits<float>::max();
 		}
 		
 		Size max_iterations = std::min(getNumberOfIterations() + iterations, getMaxNumberOfIterations());

@@ -65,14 +65,14 @@ RESULT
 
 CHECK(PeakList1D::getMaxIntensity() const )
 	PeakList1D pl2;
-	TEST_REAL_EQUAL(pl2.getMaxIntensity(), -Limits<float>::max())
+	TEST_REAL_EQUAL(pl2.getMaxIntensity(), -std::numeric_limits<float>::max())
 	TEST_REAL_EQUAL(pl.getMaxIntensity(), 8.0)
 RESULT
 
 
 CHECK(PeakList1D::getMinIntensity() const )
 	PeakList1D pl2;
-	TEST_REAL_EQUAL(pl2.getMinIntensity(), Limits<float>::max())
+	TEST_REAL_EQUAL(pl2.getMinIntensity(), std::numeric_limits<float>::max())
 	TEST_REAL_EQUAL(pl.getMinIntensity(), 2.0)
 RESULT
 
@@ -128,14 +128,14 @@ RESULT
 
 CHECK(PeakList2D::getMaxIntensity() const )
 	PeakList2D pl_2D_2;
-	TEST_REAL_EQUAL(pl_2D_2.getMaxIntensity(), -Limits<float>::max())
+	TEST_REAL_EQUAL(pl_2D_2.getMaxIntensity(), -std::numeric_limits<float>::max())
 	TEST_REAL_EQUAL(pl_2D.getMaxIntensity(), 8.0)
 RESULT
 
 
 CHECK(PeakList2D::getMinIntensity() const )
 	PeakList2D pl_2D_2;
-	TEST_REAL_EQUAL(pl_2D_2.getMinIntensity(), Limits<float>::max())
+	TEST_REAL_EQUAL(pl_2D_2.getMinIntensity(), std::numeric_limits<float>::max())
 	TEST_REAL_EQUAL(pl_2D.getMinIntensity(), 2.0)
 RESULT
 
@@ -195,14 +195,14 @@ RESULT
 
 CHECK(PeakList3D::getMaxIntensity() const )
 	PeakList3D pl_3D_2;
-	TEST_REAL_EQUAL(pl_3D_2.getMaxIntensity(), -Limits<float>::max())
+	TEST_REAL_EQUAL(pl_3D_2.getMaxIntensity(), -std::numeric_limits<float>::max())
 	TEST_REAL_EQUAL(pl_3D.getMaxIntensity(), 8.0)
 RESULT
 
 
 CHECK(PeakList3D::getMinIntensity() const )
 	PeakList3D pl_3D_2;
-	TEST_REAL_EQUAL(pl_3D_2.getMinIntensity(), Limits<float>::max())
+	TEST_REAL_EQUAL(pl_3D_2.getMinIntensity(), std::numeric_limits<float>::max())
 	TEST_REAL_EQUAL(pl_3D.getMinIntensity(), 2.0)
 RESULT
 

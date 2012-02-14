@@ -7,7 +7,8 @@
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
-#include <BALL/COMMON/limits.h>
+
+#include <limits>
 
 //#define BALL_DEBUG
 #undef BALL_DEBUG
@@ -167,7 +168,7 @@ namespace BALL
 			
 			// Obviously, we don't have "old" energies yet, so we initialize it a with 
 			// sensible value. We don't need "old" gradients.
-			old_energy_ = Limits<float>::max();
+			old_energy_ = std::numeric_limits<float>::max();
 		}
 		Size max_iterations = std::min(getNumberOfIterations() + iterations, getMaxNumberOfIterations());
 		

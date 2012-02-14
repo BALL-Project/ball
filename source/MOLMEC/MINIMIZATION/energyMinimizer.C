@@ -6,9 +6,10 @@
 
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 
-#include <BALL/COMMON/limits.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
+
+#include <limits>
 
 using namespace std;
 
@@ -33,7 +34,7 @@ namespace BALL
 	
 	Size EnergyMinimizer::Default::MAXIMAL_NUMBER_OF_ITERATIONS = 1000;
 	Size EnergyMinimizer::Default::ENERGY_OUTPUT_FREQUENCY = 50;
-	Size EnergyMinimizer::Default::SNAPSHOT_FREQUENCY = Limits<Size>::max();
+	Size EnergyMinimizer::Default::SNAPSHOT_FREQUENCY = std::numeric_limits<Size>::max();
 	Size EnergyMinimizer::Default::MAX_SAME_ENERGY = 20; 
 	Size EnergyMinimizer::Default::NUMBER_OF_ITERATION = 0;              // start number 
 	float EnergyMinimizer::Default::ENERGY_DIFFERENCE_BOUND = 1e-2;      // in kJ/mol
@@ -351,7 +352,7 @@ namespace BALL
 			epsilon = eps;
 			eps /= 2.;
 		}
-		cutlo_ = sqrt(Limits<float>::min()/epsilon);
+		cutlo_ = sqrt(std::numeric_limits<float>::min()/epsilon);
 		
 		// Check options
 		maximal_number_of_iterations_ = (Size)options.setDefaultInteger

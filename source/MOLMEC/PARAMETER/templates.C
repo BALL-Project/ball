@@ -4,7 +4,6 @@
 
 #include <BALL/MOLMEC/PARAMETER/templates.h>
 #include <BALL/KERNEL/residue.h>
-#include <BALL/COMMON/limits.h>
 
 using namespace std;
 
@@ -14,7 +13,7 @@ namespace BALL
 	Templates::Templates()
 		: ParameterSection(),
 			unassigned_atoms_(),
-			max_number_unassigned_atoms_(Limits<Size>::max())
+			max_number_unassigned_atoms_(std::numeric_limits<Size>::max())
 	{
 	}
 
@@ -36,7 +35,7 @@ namespace BALL
 
 		ParameterSection::clear();
 		unassigned_atoms_.clear();
-		max_number_unassigned_atoms_ = Limits<Size>::max();
+		max_number_unassigned_atoms_ = std::numeric_limits<Size>::max();
 	}
 
 

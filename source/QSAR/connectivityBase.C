@@ -8,7 +8,6 @@
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/bond.h>
-#include <BALL/COMMON/limits.h>
 
 #include <queue>
 #include <numeric>
@@ -123,7 +122,7 @@ namespace BALL
 		{
 			if (atom_it->getElement() != PTE[Element::H])
 			{
-				vector<double> dists(num_heavy_atoms, Limits<double>::max());
+				vector<double> dists(num_heavy_atoms, std::numeric_limits<double>::max());
 				recursion_(dists, &(*atom_it), index_map);		
 				// calc ro sum
 				double sum(0);

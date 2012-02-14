@@ -463,7 +463,7 @@ cout << " ) : atom type pen = " << estimated_atom_type_penalty << ", bond len pe
 		// by finding the minimum in all further possible penalty vector entries.
 
 		// the minimal penalty of all possible penalty vectors for this atom
-		float min_atom_type_penalty = Limits<float>::max();
+		float min_atom_type_penalty = std::numeric_limits<float>::max();
 
 		// just look into the penalty vectors starting from the already fixed virtual order
 		for (Size vi = fixed_virtual_order; vi < abop->atom_to_block_[atom_index].size(); vi++)
@@ -624,7 +624,7 @@ cout << " ) : atom type pen = " << estimated_atom_type_penalty << ", bond len pe
 		// such that the summed bond length penalty is minimal
 
 		// the minimal penalty of all possible penalty vectors for this atom
-		float min_bond_length_penalty = Limits<float>::max();
+		float min_bond_length_penalty = std::numeric_limits<float>::max();
 
 		bool found_a_value = false;
 
@@ -654,7 +654,7 @@ cout << " ) : atom type pen = " << estimated_atom_type_penalty << ", bond len pe
 					// (we know there is at least one free bond)
 					for (Size fb=0; fb < free_bonds.size(); fb++)
 					{
-						float current_bond_min = Limits<float>::max();
+						float current_bond_min = std::numeric_limits<float>::max();
 						// Note: for simplification we do not share the free bond 
 						//       orders correctly! We just find the min!
 						// the number of the remaining bond orders to be assigned 

@@ -2033,7 +2033,7 @@ CHECK(clear())
 	TEST_EQUAL(testbop.getNumberOfComputedSolutions(),0)
 	TEST_EQUAL(testbop.getNumberOfAddedHydrogens(0), 0)
 	TEST_EQUAL(testbop.getAtomContainer()==NULL, true)
-	TEST_REAL_EQUAL(testbop.getTotalPenalty(3),Limits<float>::max())
+	TEST_REAL_EQUAL(testbop.getTotalPenalty(3),std::numeric_limits<float>::max())
 	TEST_EQUAL(testbop.apply(0),false)
 	testbop.resetBondOrders();
 	TEST_EQUAL(testbop.computeNextSolution(), false)

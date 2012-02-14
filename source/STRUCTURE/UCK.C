@@ -4,8 +4,6 @@
 
 #include <BALL/STRUCTURE/UCK.h>
 
-#include <BALL/COMMON/limits.h>
-
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/PTE.h>
 
@@ -92,7 +90,7 @@ namespace BALL
 				}
 				else
 				{
-					line->push_back(Limits<Index>::max()); // otherwise the distance is set to infinity
+					line->push_back(std::numeric_limits<Index>::max()); // otherwise the distance is set to infinity
 				}
 			}
 			sp.push_back(*line);

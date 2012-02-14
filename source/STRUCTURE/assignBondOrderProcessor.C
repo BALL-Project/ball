@@ -12,7 +12,6 @@
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/DATATYPE/hashGrid.h>
-#include <BALL/COMMON/limits.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/FORMAT/parameters.h>
 #include <BALL/FORMAT/parameterSection.h>
@@ -780,7 +779,7 @@ cout << " AssignBondOrderProcessor::precomputeBondLengthPenalties_:   " << endl;
 				// This is no problem for the heuristic, since this bond will
 				// get zero in all PQEntries.
 				float max_bond_length_deviation = 0.;
-				float min_bond_length_deviation = Limits<float>::max();
+				float min_bond_length_deviation = std::numeric_limits<float>::max();
 
 				bool complete = true;
 				max_bond_length_deviation = 0.;

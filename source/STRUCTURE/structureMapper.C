@@ -4,7 +4,6 @@
 
 #include <BALL/STRUCTURE/structureMapper.h>
 
-#include <BALL/COMMON/limits.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/DATATYPE/hashGrid.h>
@@ -186,7 +185,7 @@ namespace BALL
 		// calculate all triangles from the bijection
 		Size i, j, k;
 		double square_distance;
-		double min_rmsd = Limits<double>::max();
+		double min_rmsd = std::numeric_limits<double>::max();
 		double rmsd;
 
 		for (k = 0; k < size; k++)

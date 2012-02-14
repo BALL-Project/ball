@@ -5,6 +5,8 @@
 #include <BALL/STRUCTURE/RDFSection.h>
 #include <BALL/FORMAT/parameters.h>
 
+#include <limits>
+
 using namespace std;
 
 namespace BALL
@@ -132,7 +134,7 @@ namespace BALL
 					upper_limit = getValue(i, 1);
 					if (upper_limit == "inf")
 					{
-						interval.second = INFINITY;
+						interval.second = std::numeric_limits<double>::infinity();
 					}
 					else 
 					{

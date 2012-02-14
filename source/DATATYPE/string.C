@@ -3,13 +3,13 @@
 //
 
 #include <BALL/DATATYPE/string.h>
-#include <BALL/COMMON/limits.h>
 
 #include <QtCore/QString>
 #include <QtCore/QByteArray>
 
 #include <cstdio>
 #include <cstdarg>
+#include <limits>
 
 #include <algorithm>
 
@@ -51,7 +51,7 @@ namespace BALL
 	const char* String::CHARACTER_CLASS__WHITESPACE = " \n\t\r\f\v";
 	const char* String::CHARACTER_CLASS__QUOTES = "\"";
 
-	const Size String::EndPos = Limits<Size>::max();
+	const Size String::EndPos = std::numeric_limits<Size>::max();
 	
 	const String String::EMPTY("");
 
@@ -395,7 +395,7 @@ namespace BALL
 		errno = 0;
 		int i = atoi(c_str());
 
-		if ((errno == ERANGE) || (i < (int)Limits<short>::min()) || (i > (int)Limits<short>::max()))
+		if ((errno == ERANGE) || (i < (int)std::numeric_limits<short>::min()) || (i > (int)std::numeric_limits<short>::max()))
 		{
 			errno = 0;
 			throw Exception::InvalidFormat(__FILE__, __LINE__, string("out of range: ") + c_str());
@@ -415,7 +415,7 @@ namespace BALL
 		errno = 0;
 		int i = atoi(c_str());
 
-		if ((errno == ERANGE) || (i < (int)0) || (i > (int)Limits<unsigned short>::max()))
+		if ((errno == ERANGE) || (i < (int)0) || (i > (int)std::numeric_limits<unsigned short>::max()))
 		{
 			errno = 0;
 			throw Exception::InvalidFormat(__FILE__, __LINE__, string("out of range: ") + c_str());

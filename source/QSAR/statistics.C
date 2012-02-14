@@ -24,7 +24,6 @@
 // 
 
 #include <BALL/QSAR/statistics.h>
-#include <BALL/COMMON/limits.h>
 #include <iostream>
 
 namespace BALL

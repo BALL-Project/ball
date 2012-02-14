@@ -6,7 +6,6 @@
 #include <BALL/MOLMEC/CHARMM/charmm.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
 #include <BALL/MOLMEC/COMMON/support.h>
-#include <BALL/COMMON/limits.h>
 #include <BALL/KERNEL/PTE.h>
 
 
@@ -387,21 +386,21 @@ namespace BALL
 		{
 			Log.warn() << "CharmmNonBonded::setup: vdW cutoff value cannot be negative: " << cut_off_vdw_ 
 								 << " (is set to infinite now, switching function disabled)"<< endl;
-			cut_off_vdw_ = Limits<float>::max() - 2.0;
+			cut_off_vdw_ = std::numeric_limits<float>::max() - 2.0;
 			cut_on_vdw_ = cut_off_vdw_ - 1.0;
 		}
 		if (cut_off_solvation_ < 0.0)
 		{
 			Log.warn() << "CharmmNonBonded::setup: solvation cutoff value cannot be negative: " << cut_off_solvation_ 
 								 << " (is set to infinite now, switching function disabled)"<< endl;
-			cut_off_solvation_ = Limits<float>::max() - 2.0;
+			cut_off_solvation_ = std::numeric_limits<float>::max() - 2.0;
 			cut_on_solvation_ = cut_off_solvation_ - 1.0;
 		}
 		if (cut_off_electrostatic_ < 0.0)
 		{
 			Log.warn() << "CharmmNonBonded::setup: electrostatic cutoff value cannot be negative: " << cut_off_electrostatic_ 
 								 << " (is set to infinite now, switching function disabled)"<< endl;
-			cut_off_electrostatic_ = Limits<float>::max() - 2.0;
+			cut_off_electrostatic_ = std::numeric_limits<float>::max() - 2.0;
 			cut_on_electrostatic_ = cut_off_electrostatic_ - 1.0;
 		}
 
