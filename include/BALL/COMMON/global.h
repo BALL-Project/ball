@@ -9,7 +9,7 @@
 #	include <BALL/CONFIG/config.h>
 #endif
 
-#include <limits.h>
+#include <limits>
 #include <time.h>
 
 #ifdef BALL_HAS_BASETSD_H
@@ -223,28 +223,28 @@ namespace BALL
 		ASCII__SEMICOLON        = ';'
 	};
 
-	static const Distance INVALID_DISTANCE = INT_MIN;
-	static const Distance DISTANCE_MIN = (INT_MIN + 1);
-	static const Distance DISTANCE_MAX = INT_MAX;
+	static const Distance INVALID_DISTANCE = std::numeric_limits<Distance>::max();
+	static const Distance DISTANCE_MIN = (std::numeric_limits<Distance>::min() + 1);
+	static const Distance DISTANCE_MAX = std::numeric_limits<Distance>::max();
 
-	static const Handle INVALID_HANDLE = INT_MAX;
+	static const Handle INVALID_HANDLE = std::numeric_limits<Handle>::max();
 	static const Handle HANDLE_MIN = 0 ;
-	static const Handle HANDLE_MAX = INT_MAX - 1;
+	static const Handle HANDLE_MAX = std::numeric_limits<Handle>::max() - 1;
 
 	static const Index INVALID_INDEX = -1;
 	static const Index INDEX_MIN = 0;
-	static const Index INDEX_MAX = INT_MAX;
+	static const Index INDEX_MAX = std::numeric_limits<Index>::max();
 
-	static const Position INVALID_POSITION = INT_MAX;
+	static const Position INVALID_POSITION = std::numeric_limits<Position>::max();
 	static const Position POSITION_MIN = 0;
-	static const Position POSITION_MAX = INT_MAX - 1;
+	static const Position POSITION_MAX = std::numeric_limits<Position>::max() - 1;
 
 #	undef SIZE_MAX
-	static const Size INVALID_SIZE = INT_MAX;
+	static const Size INVALID_SIZE = std::numeric_limits<Size>::max();
 	static const Size SIZE_MIN = 0;
-	static const Size SIZE_MAX = INT_MAX - 1;
-	
-	
+	static const Size SIZE_MAX = std::numeric_limits<Size>::max() - 1;
+
+
 }
 
 #endif // BALL_COMMON_GLOBAL_H
