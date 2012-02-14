@@ -70,7 +70,7 @@ class File
   // std::fstream& getFileStream();
   bool copyTo(const String&);
   bool moveTo(const String&);
-  bool remove() const;
+  bool remove();
   bool renameTo(const String&);
   bool truncate(int) const;
   bool operator == (const File& /file/) const;
