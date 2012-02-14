@@ -44,7 +44,7 @@ namespace BALL
 	    \ingroup Common
 	*/
 	template <typename T>
-	class BALL_EXPORT Limits
+	class BALL_EXPORT BALL_DEPRECATED Limits
 	{
 		public:
 
