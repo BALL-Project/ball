@@ -8,10 +8,6 @@
 # include <BALL/common.h>
 #endif
 
-#ifndef BALL_COMMON_LIMITS_H
-# include <BALL/COMMON/limits.h>
-#endif
-
 #ifndef BALL_DATATYPE_OPTIONS_H
 # include <BALL/DATATYPE/options.h>
 #endif

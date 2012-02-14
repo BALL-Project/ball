@@ -6,11 +6,12 @@
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/DATATYPE/hashGrid.h>
-#include <BALL/COMMON/limits.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/FORMAT/resourceFile.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
+
+#include <limits>
 
 using namespace std;
 
@@ -337,7 +338,7 @@ namespace BALL
 			if (group != 1 && group != 17) continue;
 
 			Bond* min_bond = 0;
-			float length= Limits<float>::max();
+			float length= std::numeric_limits<float>::max();
 			HashSet<Bond*> bonds;
 			for (Atom::BondIterator bit = ait->beginBond(); +bit;++bit)
 			{
@@ -416,7 +417,7 @@ namespace BALL
 		}
 	
 		Bond::BondOrder order = Bond::ORDER__UNKNOWN;
-		float min_dist(Limits<float>::max());
+		float min_dist(std::numeric_limits<float>::max());
 		HashMap<int, float> bonds = bond_lengths_[e1][e2];
 		HashMap<int, float>::ConstIterator it = bonds.begin();
 		for (; it != bonds.end(); ++it)

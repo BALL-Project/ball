@@ -8,10 +8,10 @@
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/atomIterator.h>
-#include <BALL/COMMON/limits.h>
 #include <BALL/SYSTEM/sysinfo.h>
 
 #include <cmath>
+#include <limits>
 
 //   #define BALL_BENCHMARK
 
@@ -45,8 +45,8 @@ namespace BALL
 
 			// determine lower and upper corner of the hash grid that contains
 			// the box plus "distance" many units on each side
-			Vector3 lower(Limits<float>::max());
-			Vector3 upper(Limits<float>::min());
+			Vector3 lower(std::numeric_limits<float>::max());
+			Vector3 upper(std::numeric_limits<float>::min());
 
 			// Iterators for the atom vector
 			AtomVector::ConstIterator atom_it;

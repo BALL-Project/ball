@@ -14,7 +14,6 @@
 
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/PTE.h>
-#include <BALL/COMMON/limits.h>
 
 #include <algorithm>
 
@@ -952,7 +951,7 @@ namespace BALL
 	void SDGenerator::findFloydWarshallPath_(std::vector<int>& path, std::vector<Index>& next, Size remaining_atoms, 
 	                                         Position i, Position j, std::list<Index>& output)
 	{
-		if (path[i+j*remaining_atoms] == Limits<int>::max())
+		if (path[i+j*remaining_atoms] == std::numeric_limits<int>::max())
 		{
 			return;
 		}
@@ -1012,7 +1011,7 @@ namespace BALL
 			}
 
 			// initialize the path matrix
-			std::vector<int> path(remaining_atoms*remaining_atoms, Limits<int>::max());
+			std::vector<int> path(remaining_atoms*remaining_atoms, std::numeric_limits<int>::max());
 			// and the backtracking matrix
 			std::vector<Index> next(remaining_atoms*remaining_atoms, -1);
 
@@ -1041,7 +1040,7 @@ namespace BALL
 				{
 					int& p_ik = path[i+k*remaining_atoms];
 
-					if (p_ik == Limits<int>::max())
+					if (p_ik == std::numeric_limits<int>::max())
 						continue;
 
 					for (Position j=0; j<remaining_atoms; ++j)
@@ -1049,7 +1048,7 @@ namespace BALL
 						int& p_kj = path[k+j*remaining_atoms];
 						int& p_ij = path[i+j*remaining_atoms];
 
-						if (p_kj == Limits<int>::max())
+						if (p_kj == std::numeric_limits<int>::max())
 							continue;
 
 						if (p_ik + p_kj < p_ij)
@@ -1062,7 +1061,7 @@ namespace BALL
 			}
 
 			// find the path of maximal minimum length
-			int max_value = Limits<int>::min();
+			int max_value = std::numeric_limits<int>::min();
 			Position max_i = 0, max_j = 0;
 
 			for (Position i=0; i<remaining_atoms; ++i)
@@ -1071,7 +1070,7 @@ namespace BALL
 				{
 						int current_value = path[i+j*remaining_atoms];
 						
-						if ((current_value != Limits<int>::max()) && (current_value > max_value ))
+						if ((current_value != std::numeric_limits<int>::max()) && (current_value > max_value ))
 						{
 							max_value = path[i+j*remaining_atoms];
 							max_i = i;
@@ -1313,7 +1312,7 @@ namespace BALL
 			if (!next_substituent)
 			{
 				// otherwise, set s to the highest priority atom of left
-				int max_value = Limits<int>::min();
+				int max_value = std::numeric_limits<int>::min();
 				for (std::list<Atom*>::iterator a_it = left.begin(); a_it != left.end(); ++a_it)
 				{
 					if ((*a_it)->getProperty("SDGenerator::PRIORITY").getInt() > max_value)
@@ -1602,7 +1601,7 @@ namespace BALL
 	{
 
 		// find the atom with maximum priority
-		int max_value = Limits<int>::min();
+		int max_value = std::numeric_limits<int>::min();
 		Atom *head_atom;
 
 		AtomIterator at_it;

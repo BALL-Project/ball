@@ -11,7 +11,6 @@
 #	include <BALL/common.h>
 #endif
 
-#include <limits.h>
 #ifdef BALL_HAS_SYS_PARAM_H
 #	include <sys/param.h>
 #endif

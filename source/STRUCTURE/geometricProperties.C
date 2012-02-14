@@ -4,7 +4,6 @@
 
 #include <BALL/STRUCTURE/geometricProperties.h>
 
-#include <BALL/COMMON/limits.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/residue.h>
@@ -21,16 +20,16 @@ namespace BALL
 	bool BoundingBoxProcessor::start()
 		
 	{
-		lower_.set(Limits<float>::max(), Limits<float>::max(), Limits<float>::max());
-		upper_.set(-Limits<float>::max(), -Limits<float>::max(), -Limits<float>::max());
+		lower_.set(std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
+		upper_.set(-std::numeric_limits<float>::max(), -std::numeric_limits<float>::max(), -std::numeric_limits<float>::max());
 		return true;
 	}
 
 	bool BoundingBoxProcessor::finish()
 		
 	{
-		if ((lower_.x == Limits<float>::max()) && (lower_.y == Limits<float>::max()) && (lower_.z == Limits<float>::max())
-				&& (upper_.x == -Limits<float>::max()) && (upper_.y == -Limits<float>::max()) && (upper_.z == -Limits<float>::max()))
+		if ((lower_.x == std::numeric_limits<float>::max()) && (lower_.y == std::numeric_limits<float>::max()) && (lower_.z == std::numeric_limits<float>::max())
+				&& (upper_.x == -std::numeric_limits<float>::max()) && (upper_.y == -std::numeric_limits<float>::max()) && (upper_.z == -std::numeric_limits<float>::max()))
 		{
 			lower_.set(0, 0, 0);
 			upper_.set(0, 0, 0);

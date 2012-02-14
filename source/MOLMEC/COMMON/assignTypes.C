@@ -9,7 +9,6 @@
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/fragment.h>
-#include <BALL/COMMON/limits.h>
 
 using namespace std;
 

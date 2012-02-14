@@ -14,7 +14,6 @@
 #include <BALL/MATHS/vector4.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/SYSTEM/timer.h>
-#include <BALL/COMMON/limits.h>
 
 // DEBUG
 #include <BALL/KERNEL/PTE.h>
@@ -1379,7 +1378,7 @@ namespace BALL
 		{
 			// if the ionic strength equals zero, set beta to MAX_FLOAT
 			// since the Debye length becomes infinity
-			beta = Limits<float>::max();
+			beta = std::numeric_limits<float>::max();
 		}
 
 		if (verbosity > 1)
@@ -2515,7 +2514,7 @@ namespace BALL
 			boundary_point = phi_grid->getCoordinates(boundary_points_[i]);
 
 			// 1. Calculate the nearest atom surface and the difference vector
-			min_distance = Limits<float>::max();
+			min_distance = std::numeric_limits<float>::max();
 			min_distance_vector = Vector3(0.0);
 			for (atom_iterator = atom_array->begin(); atom_iterator != atom_array->end(); ++atom_iterator)
 			{
@@ -2533,7 +2532,7 @@ namespace BALL
 			}
 				
 			// 2. Beam it.
-			if (min_distance < Limits<float>::max())
+			if (min_distance < std::numeric_limits<float>::max())
 			{
 				image_position = boundary_point - min_distance_vector.normalize() * min_distance;
 

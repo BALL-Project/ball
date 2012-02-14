@@ -5,10 +5,6 @@
 # include <BALL/COMMON/global.h>
 #endif
 
-#ifndef BALL_COMMON_LIMITS_H
-# include <BALL/COMMON/limits.h>
-#endif 
-
 #ifndef BALL_MATHS_COMMON_H
 # include <BALL/MATHS/common.h>
 #endif

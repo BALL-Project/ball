@@ -8,7 +8,6 @@
 #include <vector>
 
 #include <BALL/KERNEL/PTE.h>
-#include <BALL/COMMON/limits.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>

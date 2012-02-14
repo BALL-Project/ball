@@ -29,10 +29,6 @@
 # include <BALL/DATATYPE/options.h>
 #endif
 
-#ifndef BALL_COMMON_LIMITS_H
-# include <BALL/COMMON/limits.h>
-#endif
-
 #ifndef BALL_COMMON_EXCEPTION_H
 # include <BALL/COMMON/exception.h>
 #endif
@@ -402,7 +398,7 @@ namespace BALL
 				{
 					Log.error() << "AssignBondOrderProcessor: No solution with index " << i << std::endl;
 
-					return Limits<float>::max();
+					return std::numeric_limits<float>::max();
 				}
 				else
 				{
@@ -421,7 +417,7 @@ namespace BALL
 				{
 					Log.error() << "AssignBondOrderProcessor: No solution with index " << i << std::endl;
 
-					return Limits<float>::max();
+					return std::numeric_limits<float>::max();
 				}
 				else
 					return getTotalPenalty_(solutions_[i]);

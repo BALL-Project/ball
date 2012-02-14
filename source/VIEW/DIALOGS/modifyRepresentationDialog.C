@@ -17,7 +17,6 @@
 #include <BALL/SYSTEM/file.h>
 #include <BALL/DATATYPE/regularData3D.h>
 #include <BALL/DATATYPE/hashGrid.h>
-#include <BALL/COMMON/limits.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/STRUCTURE/geometricProperties.h>

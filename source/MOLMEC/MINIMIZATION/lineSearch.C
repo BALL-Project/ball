@@ -8,7 +8,6 @@
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 #include <BALL/MOLMEC/COMMON/atomVector.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
-#include <BALL/COMMON/limits.h>
 
 // Parameter alpha for 'sufficient energy decrease'.
 #define LINESEARCH__DEFAULT_ALPHA 1.e-4
