@@ -21,6 +21,7 @@
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/FORMAT/DSN6File.h>
 #include <BALL/FORMAT/CCP4File.h>
+#include <BALL/FORMAT/amiraMeshFile.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
 #include <BALL/DATATYPE/contourSurface.h>
 #include <BALL/STRUCTURE/DOCKING/dockResult.h>
@@ -307,6 +308,7 @@ namespace BALL
 			file_formats_.push_back("omap");
 			file_formats_.push_back("map");
 			file_formats_.push_back("dsn6");
+			file_formats_.push_back("am");
 			setIdentifier("RegularData3DController");
 			registerThis();
 		}
@@ -378,6 +380,14 @@ namespace BALL
 				//type = "Electron Density";
 				type = RegularData3DController::type;
 				maptype = "DSN6";
+			}
+			else if(filetype == "am")
+			{
+				AmiraMeshFile* amirafile = new AmiraMeshFile(filename);
+				read_success = amirafile->read(*d3);
+				amirafile->close();
+				type = RegularData3DController::type;
+				maptype = "AMIRA";
 			}
 			else
 			{
