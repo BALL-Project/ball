@@ -109,37 +109,27 @@ namespace BALL
 
 		protected:
 
+			///  Find string in given buffer and return a pointer
+    	/// to the contents directly behind the SearchString
 			const char* findAndJump_(const char* buffer, const char* search_String);
 			
 			/// flag indicating whether a ascii or binary data section
 			bool binary_;
 			
-			/// the start coordinates in grid coordinates, i.e. indices
-			Vector3 start_;
-
 			/// the extent of the map
 			Vector3 extent_;
-
-			/// the sampling rates used for the map
-			Vector3 sampling_rate_;
 			
-			/// dimension of the crystal unit cell in Angstrom/sample
-			Vector3 cell_dimension_;
+			/// Vector representing the first point of the maps bounding box
+			Vector3 min_;
 
-			/// angles of the crystal unit cell
-			Angle alpha_, beta_, gamma_;
+			/// Vector representing the second point of the maps bounding box
+			Vector3 max_;
 
-			/// mean density value
-			float mean_density_;
 			
-			/// rms deviation of whole map from mean density value
-			float deviation_sigma_;
+			long idx_start_data_;
 			
-			/// space group number
-			int space_group_;
-
-			/// geometry in cartesian coordinates
-			Vector3 origin_, xaxis_, yaxis_, zaxis_;
+			// number of components of the map
+			Position num_components_;
 	};
 } // namespace BALL
 

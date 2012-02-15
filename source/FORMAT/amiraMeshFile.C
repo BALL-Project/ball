@@ -12,13 +12,17 @@ namespace BALL
 {
 	AmiraMeshFile::AmiraMeshFile()
 		: File(),
-			binary_(false)
+			binary_(false),
+			idx_start_data_(0),
+			num_components_(0)
 	{
 	}
 	
 	AmiraMeshFile::AmiraMeshFile(const String& name, File::OpenMode open_mode)
 		: File(name, open_mode),
-			binary_(false)
+			binary_(false),
+			idx_start_data_(0),
+			num_components_(0)
 	{
 	}
 	
@@ -32,6 +36,8 @@ namespace BALL
 	{
 		File::clear();
 		binary_= false;
+		idx_start_data_ = 0;
+		num_components_ = 0;
 	}
 	
 	bool AmiraMeshFile::operator == (const AmiraMeshFile& file) const
@@ -42,16 +48,147 @@ namespace BALL
 	
 	bool AmiraMeshFile::open(const String& name, File::OpenMode open_mode)
 	{
+		if (!(open_mode |= std::ios::binary))
+		{
+			open_mode = open_mode | std::ios::binary;
+		}
+
+		if (!File::open(name, open_mode))
+		{
+			return(false);
+		}
+
 		return true;
 	}
 	
 	bool AmiraMeshFile::readHeader()
 	{
+    
+		//We read the first 2k bytes into memory to parse the header.
+    //The fixed buffer size looks a bit like a hack, and it is one, but it gets the job done.
+    char buffer[2048];
+    
+		std::fstream::read(buffer, 1024);
+    buffer[2047] = '\0'; //The following string routines prefer null-terminated strings
+
+    if (strstr(buffer, "# AmiraMesh BINARY-LITTLE-ENDIAN 2.1"))
+    {
+        binary_ = true;
+    }
+    else if (strstr(buffer, "# AmiraMesh ASCII 1.0"))
+    {
+        binary_ = false;
+    }
+    else
+    {
+        return false;
+    }
+    
+		sscanf(findAndJump_(buffer, "define Lattice"), "%g %g %g", &extent_.x, &extent_.y, &extent_.z);
+	
+		
+    sscanf(findAndJump_(buffer, "BoundingBox"), "%g %g %g %g %g %g", &min_.x, &max_.x,
+																																		&min_.y, &max_.y,
+																																		&min_.z, &max_.z);
+		
+
+    //Is it a uniform grid? We need this only for the sanity check below.
+    const bool bIsUniform = (strstr(buffer, "CoordType \"uniform\"") != NULL);
+
+    //Type of the field: scalar, vector
+    num_components_ = 0;
+    if (strstr(buffer, "Lattice { float Data }"))
+    {
+        //Scalar field
+        num_components_ = 1;
+    }
+    else
+    {
+        //A field with more than one component, i.e., a vector field
+        sscanf(findAndJump_(buffer, "Lattice { float["), "%u", &num_components_);
+    }
+
+    //Sanity check
+    if (extent_.x <= 0 || extent_.y <= 0 || extent_.z <= 0
+        || min_.x > max_.x || min_.y > max_.y || min_.z > max_.z
+        || !bIsUniform || num_components_ <= 0)
+    {
+        Log.error() << "Something went wrong\n" << std::endl;
+        return false;
+    }
+    
+		idx_start_data_ = strstr(buffer, "@1") - buffer;
+		
 		return true;
 	}
 	
-	bool AmiraMeshFile::read(RegularData3D& density_map)
+	bool AmiraMeshFile::read(RegularData3D& map)
 	{
+		// first read the header
+		if (!readHeader())
+		{
+			Log.error() << "CCP4File::read(): readHeader() failed. Aborting read." << std::endl;
+			return false;
+		}
+
+		RegularData3D::IndexType size;
+		size.x = (Size) extent_.x;
+		size.y = (Size) extent_.y;
+		size.z = (Size) extent_.z;
+		
+		Log.info()	<< extent_ << std::endl;
+		Log.info()	<< min_ << std::endl;
+		Log.info()	<< max_ << std::endl;
+		
+		map = RegularData3D(size, min_, max_);
+		
+		char file_buffer[2048];
+
+		if (idx_start_data_ > 0)
+		{
+			if (binary_)
+			{
+				Log.error() << "Sorry, Binary data sections are not supported yet. ";
+			}
+			else
+			{
+				std::fstream::seekg( idx_start_data_);
+
+				//Consume this line, which is the Lattice definition
+				std::fstream::getline(file_buffer, 2048);		
+        
+				//Consume this line, which is an empty line
+				std::fstream::getline(file_buffer, 2048);		
+        
+				//Consume the next line, which is "@1"
+				std::fstream::getline(file_buffer, 2048);		
+				
+        Size num_to_read = size.x * size.y * size.z * num_components_;
+        Index actual_read = 0; 
+        float a, b, c, d, e, f = 0.0;
+        
+				
+				//while (!std::fstream::eof())
+				while (actual_read < num_to_read)
+				{
+					std::fstream::getline(file_buffer, 2048);		
+      		sscanf(file_buffer, "%e %e %e %e %e %e", &a, &b, &c, &d, &e, &f);
+					
+					map[actual_read++] = a;
+					map[actual_read++] = b;
+					map[actual_read++] = c;
+					map[actual_read++] = d;
+					map[actual_read++] = e;
+					map[actual_read++] = f;
+					
+				}
+
+			}
+		}
+		else
+		{
+			Log.error() << "Error: Corrupted data section.  ";
+		}
 		return true;
 	}
 	
