@@ -70,16 +70,19 @@ namespace BALL
 			Index psi(0);
 			double probability(0);
 		
+			std::vector<String> split;
 			while(readLine()) 
 			{
-				phi = line_.getField(1).toInt();
-				psi = line_.getField(2).toInt();
-				probability = line_.getField(8).toFloat();
+				line_.split(split);
+
+				phi = split[1].toInt();
+				psi = split[2].toInt();
+				probability = split[8].toFloat();
 
 				Size number_of_torsions(0);
 				for (Size i = 4; i != 8; ++i)
 				{
-					if (line_.getField(i).toInt() != 0)
+					if (split[i].toInt() != 0)
 					{
 						number_of_torsions++;
 					}
@@ -91,17 +94,17 @@ namespace BALL
 
 				//Angle chi1, chi2, chi3, chi4;
 	
-				//chi1.set(line_.getField(9).toFloat(), false);
-				//chi2.set(line_.getField(10).toFloat(), false);
-				//chi3.set(line_.getField(11).toFloat(), false);
-				//chi4.set(line_.getField(12).toFloat(), false);
+				//chi1.set(split[9].toFloat(), false);
+				//chi2.set(split[10].toFloat(), false);
+				//chi3.set(split[11].toFloat(), false);
+				//chi4.set(split[12].toFloat(), false);
 	
-				aa_name = line_.getField(0);
+				aa_name = split[0];
 
-				rotamer_library.addRotamer(aa_name, Rotamer(probability, line_.getField(9).toFloat(), 
-																																 line_.getField(10).toFloat(), 
-																																 line_.getField(11).toFloat(), 
-																																 line_.getField(12).toFloat()), number_of_torsions, phi, psi);
+				rotamer_library.addRotamer(aa_name, Rotamer(probability, split[9].toFloat(), 
+																																 split[10].toFloat(), 
+																																 split[11].toFloat(), 
+																																 split[12].toFloat()), number_of_torsions, phi, psi);
 			}
 	
 			return;
@@ -123,29 +126,29 @@ namespace BALL
 					String aa_name = line_(0, 3);	
 					Size number_of_fields = line_.split(split, 18);
 
-					float prob = line_.getField(7).toFloat() / 100.0;
+					float prob = split[7].toFloat() / 100.0;
 
 					//Angle chi1, chi2, chi3, chi4;
 					float chi1(0), chi2(0), chi3(0), chi4(0);
-					//chi1.set(line_.getField(11).toFloat());
-					chi1 = line_.getField(11).toFloat();
+					//chi1.set(split[11].toFloat());
+					chi1 = split[11].toFloat();
           Size number_of_torsions = 1;
           if (number_of_fields > 13)
           {
-            //chi2.set(line_.getField(13).toFloat());
-						chi2 = line_.getField(13).toFloat();
+            //chi2.set(split[13].toFloat());
+						chi2 = split[13].toFloat();
             number_of_torsions = 2;
           }
           if (number_of_fields > 15)
           {
-            //chi3.set(line_.getField(15).toFloat());
-						chi3 = line_.getField(15).toFloat();
+            //chi3.set(split[15].toFloat());
+						chi3 = split[15].toFloat();
             number_of_torsions = 3;
           }
           if (number_of_fields > 17)
           {
-            //chi4.set(line_.getField(17).toFloat());
-						chi4 = line_.getField(17).toFloat();
+            //chi4.set(split[17].toFloat());
+						chi4 = split[17].toFloat();
             number_of_torsions = 4;
           }
 
