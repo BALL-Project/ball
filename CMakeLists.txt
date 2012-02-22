@@ -65,6 +65,11 @@ IF(BALL_BUILD_TYPE)
 	SET(CMAKE_BUILD_TYPE ${BALL_BUILD_TYPE})
 ENDIF()
 
+## if no build type is given, default to Release
+IF(NOT CMAKE_BUILD_TYPE)
+	SET(CMAKE_BUILD_TYPE Release)
+ENDIF()
+
 SET(BALL_CONTRIB_PATH "" CACHE PATH "Path to the contrib directory, if installed (optional)")
 SET(CMAKE_PREFIX_PATH ${BALL_CONTRIB_PATH} ${CMAKE_PREFIX_PATH})
 
