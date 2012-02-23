@@ -106,6 +106,11 @@ namespace BALL
     {
         //A field with more than one component, i.e., a vector field
         sscanf(findAndJump_(buffer, "Lattice { float["), "%u", &num_components_);
+
+				
+        Log.error() << "Sorry, currently, we do not support Amira files containing" << std::endl;
+        Log.error() << "multiple component fields (e.g. vector fields)\n" << std::endl;
+				return false;
     }
 
     //Sanity check
@@ -116,9 +121,17 @@ namespace BALL
         Log.error() << "Something went wrong\n" << std::endl;
         return false;
     }
-    
-		idx_start_data_ = strstr(buffer, "@1") - buffer;
 		
+		//if (binary_)
+		//{
+		//	idx_start_data_ = strstr(buffer, "# Data section follows") - buffer;
+		//}
+		//else
+		//{
+			idx_start_data_ = strstr(buffer, "@1") - buffer;
+			Log.info() << "idx_start_data_ " << idx_start_data_ << std::endl;
+		//}
+    
 		return true;
 	}
 	
@@ -127,7 +140,7 @@ namespace BALL
 		// first read the header
 		if (!readHeader())
 		{
-			Log.error() << "CCP4File::read(): readHeader() failed. Aborting read." << std::endl;
+			Log.error() << "AmiraMeshFile::read(): readHeader() failed. Aborting read." << std::endl;
 			return false;
 		}
 
@@ -135,54 +148,80 @@ namespace BALL
 		size.x = (Size) extent_.x;
 		size.y = (Size) extent_.y;
 		size.z = (Size) extent_.z;
-		
+
 		Log.info()	<< extent_ << std::endl;
 		Log.info()	<< min_ << std::endl;
 		Log.info()	<< max_ << std::endl;
-		
+
 		map = RegularData3D(size, min_, max_);
-		
+
+		Size num_to_read = size.x * size.y * size.z * num_components_;
+		Index idx_actual_read = 0; 
+
 		char file_buffer[2048];
 
 		if (idx_start_data_ > 0)
 		{
+			std::fstream::seekg( idx_start_data_);
+			
 			if (binary_)
 			{
-				Log.error() << "Sorry, Binary data sections are not supported yet. ";
-			}
-			else
-			{
-				std::fstream::seekg( idx_start_data_);
 
 				//Consume this line, which is the Lattice definition
 				std::fstream::getline(file_buffer, 2048);		
-        
+				
 				//Consume this line, which is an empty line
 				std::fstream::getline(file_buffer, 2048);		
-        
+
+				//Consume this line, which is "# Data section follows"
+				std::fstream::getline(file_buffer, 2048);		
+
 				//Consume the next line, which is "@1"
 				std::fstream::getline(file_buffer, 2048);		
 				
-        Size num_to_read = size.x * size.y * size.z * num_components_;
-        Index actual_read = 0; 
-        float a, b, c, d, e, f = 0.0;
-        
+				//char* data = new char[(4 * 192)];
+				const Size char_to_read = num_to_read * sizeof(float);
+
+				char* data = new char[char_to_read];
 				
+				std::fstream::read(data, char_to_read);
+				
+				while (idx_actual_read < num_to_read)
+				{
+					map[idx_actual_read] = * ((float*) (data + 4*idx_actual_read) );
+					idx_actual_read++;
+
+				}
+			}
+			else
+			{
+				
+				//Consume this line, which is the Lattice definition
+				std::fstream::getline(file_buffer, 2048);		
+
+				//Consume this line, which is an empty line
+				std::fstream::getline(file_buffer, 2048);		
+
+				//Consume the next line, which is "@1"
+				std::fstream::getline(file_buffer, 2048);		
+
+				float a, b, c, d, e, f = 0.0;
+
+
 				//while (!std::fstream::eof())
-				while (actual_read < num_to_read)
+				while (idx_actual_read < num_to_read)
 				{
 					std::fstream::getline(file_buffer, 2048);		
-      		sscanf(file_buffer, "%e %e %e %e %e %e", &a, &b, &c, &d, &e, &f);
-					
-					map[actual_read++] = a;
-					map[actual_read++] = b;
-					map[actual_read++] = c;
-					map[actual_read++] = d;
-					map[actual_read++] = e;
-					map[actual_read++] = f;
-					
-				}
+					sscanf(file_buffer, "%e %e %e %e %e %e", &a, &b, &c, &d, &e, &f);
 
+					map[idx_actual_read++] = a;
+					map[idx_actual_read++] = b;
+					map[idx_actual_read++] = c;
+					map[idx_actual_read++] = d;
+					map[idx_actual_read++] = e;
+					map[idx_actual_read++] = f;
+
+				}
 			}
 		}
 		else
