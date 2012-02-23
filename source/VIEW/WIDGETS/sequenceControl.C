@@ -30,6 +30,7 @@ namespace BALL
 	{
 		//////////////////////////   MODEL   ////////////////////////////
 		SequenceControlModel::SequenceControlModel()
+			: QAbstractTableModel()
 		{
 		}
 
@@ -48,8 +49,8 @@ namespace BALL
 		{
 			if(index.column() == 0) {
 				switch(role) {
-					case Qt::DisplayRole: {
-						return QVariant::fromValue(true);
+					case Qt::CheckStateRole: {
+						return Qt::Checked;
 					}
 				}
 			} else if (index.column() == 1) {
@@ -61,6 +62,14 @@ namespace BALL
 				switch(role) {
 					case Qt::DisplayRole:
 						return QVariant::fromValue(QString(sequences_[index.row()]->getStringSequence().c_str()));
+					case Qt::FontRole:
+				  {
+						QFont boldFont;
+						boldFont.setBold(true);
+						boldFont.setStyleHint(QFont::Monospace);
+
+						return boldFont;
+					}
 				}
 			}
 
@@ -94,12 +103,15 @@ namespace BALL
 			}
 		}
 
-		Qt::ItemFlags SequenceControlModel::flags(const QModelIndex& /*index*/) const
+		Qt::ItemFlags SequenceControlModel::flags(const QModelIndex& index) const
 		{
-			return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+			if (index.column() == 0)
+				return Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled;
+			else
+				return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 		}
 
-
+		// --------------------- SequenceControl ----------------------------------------
 		SequenceControl::SequenceControl(QWidget* parent, const char* name)
 				: DockWidget(parent, name),
 				  PreferencesEntry()
@@ -140,7 +152,12 @@ namespace BALL
 			registerWidget(this);
 
 			sequences_per_tab_["all_sequences"] = boost::shared_ptr<SequenceControlModel>(new SequenceControlModel());
-			tab_widget_->findChild<QColumnView*>("sequence_view")->setModel(sequences_per_tab_["all_sequences"].get());
+
+			QTableView* sequence_view = tab_widget_->findChild<QTableView*>("sequence_view");
+			sequence_view->setModel(sequences_per_tab_["all_sequences"].get());
+
+			sequence_view->setColumnWidth(2, sequence_view->width() - sequence_view->columnWidth(0) - sequence_view->columnWidth(1));
+
 			tab_indices_per_name_["all_sequences"] = 0;
 			//buildContextMenu_();
 		}
@@ -160,7 +177,6 @@ namespace BALL
 			DockWidget::initializeWidget(main_control);
 
 			registerForHelpSystem(this, "sequenceControl.html");
-
 		}
 
 		void SequenceControl::fetchPreferences(INIFile& inifile)
@@ -198,7 +214,6 @@ namespace BALL
 			{
 				CompositeMessage* composite_message = RTTI::castTo<CompositeMessage>(*message);
 				Composite* composite = composite_message->getComposite();
-		Log.error() << "dooing " << std::endl;
 
 				switch (composite_message->getType())
 				{
@@ -238,24 +253,14 @@ namespace BALL
 /*			for (ChainIterator c_it = protein->beginChain(); +c_it; ++c_it)
 			{
 				sequences_per_tab_["all_sequences"].push_back(boost::shared_ptr<Sequence>(new Sequence(protein->getName() + "_" + c_it->getName(), &*c_it)));
-				updateTab_("all_sequences");
 			}
 */
 				sequences_per_tab_["all_sequences"]->addSequence(boost::shared_ptr<Sequence>(new Sequence(protein->getName(), protein)));
-				updateTab_("all_sequences");
 		}
 
 		void SequenceControl::handleNucleicAcid_(NucleicAcid* na)
 		{
 			sequences_per_tab_["all_sequences"]->addSequence(boost::shared_ptr<Sequence>(new Sequence(na->getName(), na)));
-			updateTab_("all_sequences");
 		}
-
-		// TODO: better use QTs model view delegate for this
-		void SequenceControl::updateTab_(const String& tab_name)
-		{
-			//sequences_per_tab_[tab_name]->invalidate();
-		}
-
 	} // namespace VIEW
 } // namespace BALL

@@ -61,7 +61,9 @@ namespace BALL
 
 				void addSequence(boost::shared_ptr<Sequence> const& sequence)
 				{
+					beginInsertRows(QModelIndex(), sequences_.size(), sequences_.size());
 					sequences_.push_back(sequence);
+					endInsertRows();
 				};
 
 				int rowCount(const QModelIndex& parent = QModelIndex()) const;
@@ -193,7 +195,6 @@ class BALL_VIEW_EXPORT SequenceControl
 
 
 	protected:
-		void updateTab_(const String& tab_name);
 		void handleProtein_(Protein* protein);
 		void handleNucleicAcid_(NucleicAcid* na);
 
