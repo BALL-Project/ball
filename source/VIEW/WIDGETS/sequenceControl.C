@@ -64,9 +64,9 @@ namespace BALL
 						return QVariant::fromValue(QString(sequences_[index.row()]->getStringSequence().c_str()));
 					case Qt::FontRole:
 				  {
-						QFont boldFont;
+						QFont boldFont("Monospace");
 						boldFont.setBold(true);
-						boldFont.setStyleHint(QFont::Monospace);
+						boldFont.setStyleHint(QFont::TypeWriter);
 
 						return boldFont;
 					}
