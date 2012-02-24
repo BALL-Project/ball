@@ -4,12 +4,13 @@
 		<link rel="stylesheet" href="../css/style.css">
 	</head>
 	<body style="background-color:#000000;color:#FFFFFF;margin:0px 0px 0px 0px">
-		<script>
+		<script type="text/javascript">
 			firsttime=true
 			mini_index=0
 			mini_pics=['../images/cool_scaled.png', '../images/3eml_scaled.png', '../images/1glu2_scaled.png']
 
 			fade_step=0
+
 
 			function animateOpacity(id, from, to, duration, time) {
 				var elem = document.getElementById(id)
@@ -41,6 +42,14 @@
 				mini_index = (mini_index == 2) ? 0 : mini_index + 1
 				window.setTimeout("changeMiniPicture()", 5000);
 			}
+
+			function onJSCompositeMessage(int i) {
+				alert("Received Composite Message" + i);
+			
+			myWebview.fireJSCompositeMessage.connect(onJSCompositeMessage);
+
+			}
+
 		</script>
 		<div id="breadcrumb">
 		Startseite

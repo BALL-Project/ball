@@ -7,6 +7,10 @@
 #include <BALL/PYTHON/pyInterpreter.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/message.h>
+
+#include <QtWebKit/QWebPage>
+#include <QtWebKit/QWebFrame>
 
 namespace BALL
 {
@@ -20,8 +24,9 @@ namespace BALL
 			emit finishedExecution();
 		}
 
-		HTMLBasedInterface::HTMLBasedInterface(QWidget* parent)
-			: HTMLView(parent)
+		HTMLBasedInterface::HTMLBasedInterface(QWidget* parent, const char* name)
+			: HTMLView(parent),
+				ModularWidget(name)
 		{
 			page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
 
@@ -61,6 +66,19 @@ namespace BALL
 			}
 
 			script_base_ = p.find("HTMLBasedInterface/scripts") + "/";
+			
+
+			ModularWidget::registerWidget(this);
+			//MainControl* mc = MainControl::getInstance(0);
+			//if(mc != 0)
+			//{
+			//	mc->registerConnectionObject(*this);
+			//}
+			// ...
+			QWebPage *page = this->page();
+			QWebFrame *frame = page->mainFrame();
+			frame->addToJavaScriptWindowObject("myWebview", this);
+			// ...
 		}
 
 		HTMLBasedInterface::~HTMLBasedInterface()
@@ -96,6 +114,22 @@ namespace BALL
 			}
 		}
 
+		void HTMLBasedInterface::onNotify(Message* message)
+		{
+			Log.info() << "In onNotify()" << std::endl;
+			
+			CompositeMessage* cmsg = RTTI::castTo<CompositeMessage>(*message);
+			Log.info() << cmsg << std::endl;
+			if (cmsg == 0) return;
+			if (cmsg->getType() != CompositeMessage::NEW_MOLECULE) return;
+			//RepresentationMessage* rmsg = RTTI::castTo<RepresentationMessage>(*message);
+			
+			//if (cmsg == 0 | cmsg->getType() != CompositeMessage::NEW_MOLECULE) return;
+			
+			emit fireJSCompositeMessage(cmsg->getType());
+			Log.info() << "CompositeMessage fired to JS" << std::endl;
+		}
+		
 		void HTMLBasedInterface::contextMenuEvent(QContextMenuEvent*)
 		{
 		}

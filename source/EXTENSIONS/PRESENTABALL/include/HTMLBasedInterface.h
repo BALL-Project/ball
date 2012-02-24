@@ -29,19 +29,27 @@ namespace BALL
 				void finishedExecution();
 		};
 
-		class HTMLBasedInterface : public HTMLView
+		class BALL_VIEW_EXPORT HTMLBasedInterface : public HTMLView, public ModularWidget
 		{
 			Q_OBJECT
+			BALL_EMBEDDABLE(HTMLBasedInterface, ModularWidget)
 
 			public:
-				HTMLBasedInterface(QWidget* parent = 0);
+				HTMLBasedInterface(QWidget* parent = 0, const char* name = 0);
 				virtual ~HTMLBasedInterface();
 
 				void registerAction(HTMLInterfaceAction* action);
+				virtual void onNotify(Message* message); 
 
+			signals:
+				
+				void fireJSCompositeMessage(int i);
+				void fireJSRepresentationMessage(int i);
+			
 			protected:
 				typedef QList<QPair<QString, QString> > ParameterList;
 				void contextMenuEvent(QContextMenuEvent* evt);
+			
 			protected slots:
 
 				void handleLinkClicked(const QUrl& url);

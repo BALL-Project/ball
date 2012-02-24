@@ -41,6 +41,11 @@
 				mini_index = (mini_index == 2) ? 0 : mini_index + 1
 				window.setTimeout("changeMiniPicture()", 5000);
 			}
+
+			function onBALLViewRepresentationsMessage(int i){
+			
+				alert("Got RepresentationMessage " + i)
+			}
 		</script>
 		<div id="breadcrumb">
 		Main Page
