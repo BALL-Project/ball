@@ -166,6 +166,7 @@ SET(BALL_NMR_TESTS
 )
 
 SET(BALL_FORMATS_TESTS
+	AmiraMeshFile_test
 	AntechamberFile_test
 	LineBasedFile_test
 	BinaryFileAdaptor_test
