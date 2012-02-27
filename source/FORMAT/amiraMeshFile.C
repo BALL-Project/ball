@@ -122,15 +122,7 @@ namespace BALL
         return false;
     }
 		
-		//if (binary_)
-		//{
-		//	idx_start_data_ = strstr(buffer, "# Data section follows") - buffer;
-		//}
-		//else
-		//{
-			idx_start_data_ = strstr(buffer, "@1") - buffer;
-			Log.info() << "idx_start_data_ " << idx_start_data_ << std::endl;
-		//}
+		idx_start_data_ = strstr(buffer, "@1") - buffer;
     
 		return true;
 	}
@@ -148,10 +140,6 @@ namespace BALL
 		size.x = (Size) extent_.x;
 		size.y = (Size) extent_.y;
 		size.z = (Size) extent_.z;
-
-		Log.info()	<< extent_ << std::endl;
-		Log.info()	<< min_ << std::endl;
-		Log.info()	<< max_ << std::endl;
 
 		map = RegularData3D(size, min_, max_);
 

@@ -16,8 +16,8 @@
 
 namespace BALL
 {
-	/** AmiraMesh grid file format. This class enables BALL to read (and
-	 		write) the native format of Amira. The academic version of Amira is
+	/** AmiraMesh grid file format. This class enables BALL to read 
+	 		the native format of Amira. The academic version of Amira is
 			developed by the Visualization and Data Analysis Group at Zuse
 			Institute Berlin. Commercial versions are available from Visage
 			Imaging, Berlin and VSG - Visualization Sciences Group, France.
@@ -60,7 +60,7 @@ namespace BALL
 
 		/// Clear method
 		virtual void clear();
-
+		
 		//@}
 		/** @name Predicates
 		*/
@@ -92,17 +92,10 @@ namespace BALL
 		*/
 		virtual bool writeHeader();
 
-		/** Write a RegularData3D to a CCP4 File
+		/** Write a RegularData3D to a AmiraMesh File
 				Return true if the map could be written successfully, false ow.
 		*/
 		virtual bool write(RegularData3D& map);
-
-		//@}
-		/** @name Accessors 
-		*/
-		//@{
-
-		//@}
 
 		private:
 			const AmiraMeshFile& operator = (const AmiraMeshFile& file);
