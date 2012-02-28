@@ -220,8 +220,8 @@ namespace BALL
 			*/
 			const T& operator [] (const Key& key) const;
 
-			//Use the operator [] implementation of the base class
-			using BALL_MAP_NAME::operator[];
+			/// Return a mutable reference to the element whose key is @p key. If an element with the key @p key does not exist, it is inserted.
+			T& operator [] (const Key& key);
 			
 			/// Equality operator. Check whether two two hashmaps contain the same elements. O(n) runtime.
 			bool operator == (const HashMap<Key, T>& rhs) const;
@@ -266,6 +266,18 @@ namespace BALL
 			if (!rhs.has(it->first)) return false;
 		}
 		return true;
+	}
+	
+	template <class Key, class T>
+	T& HashMap<Key, T>::operator [] (const Key& key)
+		
+	{
+		Iterator it = this->find(key);
+		if (it == Base::end())
+		{
+			it = this->insert(ValueType(key, T())).first;
+		}
+		return it->second;
 	}
 
 } // namespace BALL
