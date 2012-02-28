@@ -267,17 +267,11 @@ namespace BALL
 		}
 		return true;
 	}
-	
+
 	template <class Key, class T>
 	T& HashMap<Key, T>::operator [] (const Key& key)
-		
 	{
-		Iterator it = this->find(key);
-		if (it == Base::end())
-		{
-			it = this->insert(ValueType(key, T())).first;
-		}
-		return it->second;
+		return BALL_MAP_NAME::operator[] (key);
 	}
 
 } // namespace BALL
