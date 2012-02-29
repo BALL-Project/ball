@@ -318,7 +318,7 @@ RESULT
 CHECK(Size getNumberOfClasses() const throw())
 	PersistenceTest tpm;
 	Size noc = tpm.getNumberOfClasses();
-	TEST_EQUAL(noc, 15);
+	TEST_EQUAL(noc, 18);
 RESULT
 
 
