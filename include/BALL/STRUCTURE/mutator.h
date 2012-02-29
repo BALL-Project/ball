@@ -84,13 +84,9 @@ namespace BALL
 			void freeDB_();
 	};
 
-	BALL_INLINE
-	void Mutator::setFragmentDB(FragmentDB* db)
-	{
-		freeDB_();
-		db_ = db;
-		keep_db_ = true;
-	}
+#ifndef BALL_DEBUG
+# include <BALL/STRUCTURE/mutator.iC>
+#endif
 
 }
 
