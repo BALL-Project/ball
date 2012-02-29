@@ -70,7 +70,7 @@ SET(BALL_DATATYPE_TESTS
 	ContourSurface_test
 )
 
-SET(BALL_CONCEPTS_TEST
+SET(BALL_CONCEPTS_TESTS
 	LogStream_test
 	AutoDeletable_test
 	Factory_test
