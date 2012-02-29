@@ -88,7 +88,7 @@ CHECK(NamedProperty(const string& name, double value))
 RESULT
 
 CHECK(NamedProperty(const string& name, const string& str))
-	string x = "xxx";
+	String x = "xxx";
   np = new NamedProperty("test", x);
 	TEST_NOT_EQUAL(np, 0)
 	TEST_EQUAL(np->getType(), NamedProperty::STRING)
