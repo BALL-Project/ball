@@ -3,6 +3,9 @@ class NucleotideMapping
 %TypeHeaderCode
 	#include <BALL/STRUCTURE/nucleotideMapping.h>
 	using namespace BALL;
+	#ifdef BALL_COMPILER_MSVC
+	typedef unsigned int uint;
+	#endif
 %End
 	public:
 		typedef std::pair<const std::string, const std::string> Alignment;
