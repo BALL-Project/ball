@@ -4,6 +4,11 @@
 
 namespace BALL
 {
+
+#ifdef BALL_DEBUG
+# include <BALL/STRUCTURE/mutator.iC>
+#endif
+
 	Mutator::Mutator(FragmentDB* db)
 		: db_(db), keep_db_(true)
 	{
