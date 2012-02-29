@@ -244,7 +244,7 @@ namespace BALL
 		Log.info() << "Setup of minimizer completed\n";
 
 		//Select all atoms in to_optimize_
-		std::for_each(to_optimize_.begin(), to_optimize_.end(), mem_fun(&Atom::select));
+		std::for_each(to_optimize_.begin(), to_optimize_.end(), std::mem_fun(&Atom::select));
 
 		if(!minimizer_->isValid()) {
 			return false;
@@ -255,7 +255,7 @@ namespace BALL
 		}
 
 		//Deselect all atoms in to_optimize_
-		std::for_each(to_optimize_.begin(), to_optimize_.end(), mem_fun(&Atom::deselect));
+		std::for_each(to_optimize_.begin(), to_optimize_.end(), std::mem_fun(&Atom::deselect));
 
 		return true;
 	}
