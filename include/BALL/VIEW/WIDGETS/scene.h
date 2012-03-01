@@ -249,6 +249,8 @@ namespace BALL
 				*/
 				virtual bool exportScene(Renderer &er) const;
 
+				String getBondOrderString_(Index order);
+
 				//@}
 				/**	ModularWidget methods.
 				*/
@@ -759,8 +761,6 @@ namespace BALL
 				TVector2<float> getScreenPosition_(Vector3 vec);
 
 				void initializeMembers_();
-
-				String getBondOrderString_(Index order);
 
 				void renderGrid_();
 
