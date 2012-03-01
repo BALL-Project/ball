@@ -50,7 +50,7 @@ namespace BALL
 			if(index.column() == 0) {
 				switch(role) {
 					case Qt::CheckStateRole: {
-						return Qt::Checked;
+						return selection_[index.row()] ? Qt::Checked : Qt::Unchecked;
 					}
 				}
 			} else if (index.column() == 1) {
@@ -111,6 +111,19 @@ namespace BALL
 				return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 		}
 
+		bool SequenceControlModel::setData(const QModelIndex& index, const QVariant& data, int role)
+		{
+			if (index.column() == 0 && role == Qt::CheckStateRole && index.row() < selection_.size())
+			{
+				selection_[index.row()] = !selection_[index.row()];
+				emit dataChanged(index, index);
+
+				return true;
+			}
+
+			return false;
+		}
+
 		// --------------------- SequenceControl ----------------------------------------
 		SequenceControl::SequenceControl(QWidget* parent, const char* name)
 				: DockWidget(parent, name),
@@ -133,22 +146,6 @@ namespace BALL
 			ModularWidget::registerWidget(this);
 
 			// signals and slots connections
-
-
-		/*	QGridLayout* glay = getGuestLayout();
-			QGridLayout* lay = new QGridLayout();
-			glay->addLayout(lay, 2, 0);
-
-			listview->setObjectName("SequenceControlList");
-			listview->headerItem()->setText(0, tr("Name") + " ["+ tr("highlight") + "]");
-			listview->headerItem()->setText(1, tr("checked"));
-			listview->headerItem()->setText(2, tr("Sequence"));
-			listview->resizeColumnToContents(0);
-			listview->resizeColumnToContents(2);
-			lay->addWidget(listview,0, 0, 1, -1);
-
-			resize(200,400);
-*/
 			registerWidget(this);
 
 			sequences_per_tab_["all_sequences"] = boost::shared_ptr<SequenceControlModel>(new SequenceControlModel());
@@ -167,6 +164,12 @@ namespace BALL
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "Destroying SequenceControl " << this << std::endl;
 		#endif
+		}
+
+		void SequenceControl::resizeEvent(QResizeEvent* event)
+		{
+			QTableView* sequence_view = tab_widget_->findChild<QTableView*>("sequence_view");
+			sequence_view->setColumnWidth(2, event->size().width() - sequence_view->columnWidth(0) - sequence_view->columnWidth(1) - 5);
 		}
 
 		void SequenceControl::initializeWidget(MainControl& main_control)

@@ -63,6 +63,7 @@ namespace BALL
 				{
 					beginInsertRows(QModelIndex(), sequences_.size(), sequences_.size());
 					sequences_.push_back(sequence);
+					selection_.push_back(false);
 					endInsertRows();
 				};
 
@@ -73,11 +74,11 @@ namespace BALL
 				QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 				Qt::ItemFlags flags(const QModelIndex& index) const;
 
-				// TODO: allow editing later on
-				// bool setData(const QModelIndex& index, const QVariant& data, int role = Qt::EditRole);
+				bool setData(const QModelIndex& index, const QVariant& data, int role = Qt::EditRole);
 
 			protected:
 				SequenceVector sequences_;
+				std::vector<bool> selection_;
 		};
 
 //TODO
@@ -110,6 +111,9 @@ class BALL_VIEW_EXPORT SequenceControl
 	/** Destructor.
 	*/
 	virtual ~SequenceControl();
+
+	/// Resize Event
+	virtual void resizeEvent(QResizeEvent* event);
 
 	//@} 
 	/**	@name	Accessors: inspectors and mutators 
