@@ -867,9 +867,10 @@ namespace BALL
 			PTEDialog pte;
 			pte.exec();
 
-			if (scene_->getCurrentAtom() != 0)
+			atomic_number_ = scene_->getEditElementType();
+
+			if (scene_->getCurrentAtom() != 0 && scene_->getCurrentAtom()->isSelected())
 			{
-				atomic_number_ = scene_->getEditElementType();
 				scene_->getCurrentAtom()->setElement(PTE[atomic_number_]);
 				String new_name = PTE[atomic_number_].getSymbol();
 				//get the old atom number
