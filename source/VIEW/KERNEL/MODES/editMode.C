@@ -425,9 +425,9 @@ namespace BALL
 				}
 
 				// we found _another_ atom: set the bond
-/*
+
 				Bond* c = new Bond("Bond", *scene_->getCurrentAtom(), *atom, Bond::ORDER__SINGLE);
-				EditOperation eo(0, c, "Added bond of type single" , EditOperation::ADDED__BOND);
+/*				EditOperation eo(0, c, "Added bond of type single" , EditOperation::ADDED__BOND);
 				undo_.push_back(eo);
 
 				// tell about the new undo operation
@@ -471,13 +471,14 @@ namespace BALL
 
 				// tell about the new undo operation
 				emit newEditOperation(eo);
+*/
 				//set the bond
 				Bond* c = new Bond("Bond", *scene_->getCurrentAtom(), *a, Bond::ORDER__SINGLE);
 
 				// tell about the new undo operation
-				String bond_string = getBondOrderString_(bond_order_);
+				String bond_string = scene_->getBondOrderString_(bond_order_);
 				EditOperation eo2(0, c, (String)qApp->tr("Edit Mode", "Added bond of type ") + bond_string, EditOperation::ADDED__BOND);
-				undo_.push_back(eo2);
+/*				undo_.push_back(eo2);
 				emit newEditOperation(eo2);
 */
 				scene_->getMainControl()->update(*a->getParent(), true);
