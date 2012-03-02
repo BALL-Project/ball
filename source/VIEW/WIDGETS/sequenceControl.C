@@ -45,6 +45,29 @@ namespace BALL
 			return 3;
 		}
 
+		bool SequenceControlModel::hasSequenceFor(AtomContainer const* ac)
+		{
+			for (Position i=0; i<sequences_.size(); ++i)
+			{
+				if (sequences_[i]->getOrigin() == ac)
+					return true;
+			}
+
+			return false;
+		}
+
+		boost::shared_ptr<Sequence> SequenceControlModel::getSequenceFor(AtomContainer const* ac)
+		{
+			boost::shared_ptr<Sequence> result;
+			for (Position i=0; i<sequences_.size(); ++i)
+			{
+				if (sequences_[i]->getOrigin() == ac)
+					result = sequences_[i];
+			}
+
+			return result;
+		}
+
 		QVariant SequenceControlModel::data(const QModelIndex& index, int role) const
 		{
 			if(index.column() == 0) {
@@ -64,11 +87,11 @@ namespace BALL
 						return QVariant::fromValue(QString(sequences_[index.row()]->getStringSequence().c_str()));
 					case Qt::FontRole:
 				  {
-						QFont boldFont("Monospace");
-						boldFont.setBold(true);
-						boldFont.setStyleHint(QFont::TypeWriter);
+						QFont font("Monospace");
+						font.setStyleHint(QFont::TypeWriter);
+						font.setLetterSpacing(QFont::PercentageSpacing, 150);
 
-						return boldFont;
+						return font;
 					}
 				}
 			}
@@ -88,7 +111,7 @@ namespace BALL
 
 					if (section == 0)
 					{
-						return QVariant::fromValue(QString("Selected"));
+						return QVariant::fromValue(QString("")); //Selected"));
 					}
 					else if (section == 1)
 					{
@@ -113,7 +136,7 @@ namespace BALL
 
 		bool SequenceControlModel::setData(const QModelIndex& index, const QVariant& data, int role)
 		{
-			if (index.column() == 0 && role == Qt::CheckStateRole && index.row() < selection_.size())
+			if (index.column() == 0 && role == Qt::CheckStateRole && index.row() < (int)selection_.size())
 			{
 				selection_[index.row()] = !selection_[index.row()];
 				emit dataChanged(index, index);
@@ -133,7 +156,6 @@ namespace BALL
 			Log.error() << "new SequenceControl " << this << std::endl;
 		#endif
 
-			//TODO
 			tab_widget_ = new QTabWidget(this);
 			ui_.setupUi(tab_widget_);
 			setGuest(*tab_widget_);
@@ -148,14 +170,12 @@ namespace BALL
 			// signals and slots connections
 			registerWidget(this);
 
-			sequences_per_tab_["all_sequences"] = boost::shared_ptr<SequenceControlModel>(new SequenceControlModel());
+			addSequenceTab("all_sequences");
 
-			QTableView* sequence_view = tab_widget_->findChild<QTableView*>("sequence_view");
-			sequence_view->setModel(sequences_per_tab_["all_sequences"].get());
+			// allow closing of tabs
+			tab_widget_->setTabsClosable(true);
+			connect(tab_widget_, SIGNAL(tabCloseRequested(int)), this, SLOT(onTabCloseRequested_(int)));
 
-			sequence_view->setColumnWidth(2, sequence_view->width() - sequence_view->columnWidth(0) - sequence_view->columnWidth(1));
-
-			tab_indices_per_name_["all_sequences"] = 0;
 			//buildContextMenu_();
 		}
 
@@ -168,8 +188,8 @@ namespace BALL
 
 		void SequenceControl::resizeEvent(QResizeEvent* event)
 		{
-			QTableView* sequence_view = tab_widget_->findChild<QTableView*>("sequence_view");
-			sequence_view->setColumnWidth(2, event->size().width() - sequence_view->columnWidth(0) - sequence_view->columnWidth(1) - 5);
+			//QTableView* sequence_view = tab_widget_->findChild<QTableView*>("sequence_view");
+			//sequence_view->setColumnWidth(2, event->size().width() - sequence_view->columnWidth(0) - sequence_view->columnWidth(1)-27);
 		}
 
 		void SequenceControl::initializeWidget(MainControl& main_control)
@@ -187,10 +207,10 @@ namespace BALL
 			//TODO
 			DockWidget::fetchPreferences(inifile);
 			//TODO
-			if (inifile.hasEntry("SEQUENCECONTROL", "RegularExpressions"))
+			if (inifile.hasEntry("SEQUENCECONTROL", "LetterSpacing"))
 			{
 				vector<String> fields;
-				Size size = inifile.getValue("SEQUENCECONTROL", "RegularExpressions").split(fields, "|");
+				Size size = inifile.getValue("SEQUENCECONTROL", "LetterSpacing").split(fields, "|");
 				for (Position p = 0; p < size; p++)
 				{
 				//	selector_edit_->addItem(fields[p].c_str());
@@ -202,7 +222,7 @@ namespace BALL
 		{
 			//TODO
 			inifile.appendSection("SEQUENCECONTROL");
-			//inifile.insertValue("SEQUENCECONTROL", "ShowSS", show_ss_);
+			//inifile.insertValue("SEQUENCECONTROL", "LetterSpacing", show_ss_);
 
 			DockWidget::writePreferences(inifile);
 		}
@@ -222,6 +242,7 @@ namespace BALL
 				{
 					case CompositeMessage::NEW_MOLECULE:
 					{
+						// TODO: make nicer
 						if (RTTI::isKindOf<System>(*composite))
 						{
 							System* system = RTTI::castTo<System>(*composite);
@@ -245,9 +266,64 @@ namespace BALL
 							handleNucleicAcid_(na);
 						}
 					}
+					case CompositeMessage::CHANGED_COMPOSITE_HIERARCHY:
+					{
+						for (StringHashMap<boost::shared_ptr<SequenceControlModel> >::Iterator model_it = sequences_per_tab_.begin(); model_it != sequences_per_tab_.end(); ++model_it)
+						{
+							boost::shared_ptr<SequenceControlModel> current_model = model_it->second;
+
+							if (RTTI::isKindOf<System>(*composite))
+							{
+								System* system = RTTI::castTo<System>(*composite);
+								for (ProteinIterator p_it = system->beginProtein(); +p_it; ++p_it)
+								{
+									if (current_model->hasSequenceFor(&*p_it))
+									{
+										current_model->getSequenceFor(&*p_it)->setName(p_it->getName());
+									}
+								}
+								for (NucleicAcidIterator na_it = system->beginNucleicAcid(); +na_it; ++na_it)
+								{
+									if (current_model->hasSequenceFor(&*na_it))
+									{
+										current_model->getSequenceFor(&*na_it)->setName(na_it->getName());
+									}
+								}
+							}
+							else if (RTTI::isKindOf<Protein>(*composite))
+							{
+								AtomContainer* ac = RTTI::castTo<AtomContainer>(*composite);
+								if (current_model->hasSequenceFor(ac))
+								{
+									current_model->getSequenceFor(ac)->setName(ac->getName());
+								}
+							}
+							else if (RTTI::isKindOf<NucleicAcid>(*composite))
+							{
+								AtomContainer* ac = RTTI::castTo<AtomContainer>(*composite);
+								if (current_model->hasSequenceFor(RTTI::castTo<AtomContainer>(*composite)))
+								{
+									current_model->getSequenceFor(ac)->setName(ac->getName());
+								}
+							}
+						}
+					}
 					default:
 						break;
 				}
+			}
+
+		}
+
+		void SequenceControl::onTabCloseRequested_(int index)
+		{
+			String tab_name = ascii(tab_widget_->tabText(index));
+			if (tab_name != "all_sequences")
+			{
+				sequences_per_tab_.remove(tab_name);
+				tabs_per_name_.remove(tab_name);
+
+				tab_widget_->removeTab(index);
 			}
 		}
 
@@ -258,12 +334,40 @@ namespace BALL
 				sequences_per_tab_["all_sequences"].push_back(boost::shared_ptr<Sequence>(new Sequence(protein->getName() + "_" + c_it->getName(), &*c_it)));
 			}
 */
-				sequences_per_tab_["all_sequences"]->addSequence(boost::shared_ptr<Sequence>(new Sequence(protein->getName(), protein)));
+			sequences_per_tab_["all_sequences"]->addSequence(boost::shared_ptr<Sequence>(new Sequence(protein->getName(), protein)));
+
+			tabs_per_name_["all_sequences"]->resizeColumnToContents(2);
+
+			/// TEST for Nikola: TODO add a tab for an alignment! 
+			addSequenceTab(protein->getName());
+			sequences_per_tab_[protein->getName()]->addSequence(boost::shared_ptr<Sequence>(new Sequence(protein->getName(), protein)));
+			tabs_per_name_[protein->getName()]->resizeColumnToContents(2);
+			/// END TEST Nikola
 		}
 
 		void SequenceControl::handleNucleicAcid_(NucleicAcid* na)
 		{
 			sequences_per_tab_["all_sequences"]->addSequence(boost::shared_ptr<Sequence>(new Sequence(na->getName(), na)));
 		}
+
+		void SequenceControl::addSequenceTab(String const& name)
+		{
+			// create a new tab 
+			sequences_per_tab_[name] = boost::shared_ptr<SequenceControlModel>(new SequenceControlModel());
+
+			QTableView* sequence_view = new QTableView();
+			sequence_view->setModel(sequences_per_tab_[name].get());
+			sequence_view->horizontalHeader()->setStretchLastSection(true);
+			sequence_view->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
+			sequence_view->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
+
+			sequence_view->resizeColumnToContents(0);
+
+			//sequence_view->setColumnWidth(2, sequence_view->width() - sequence_view->columnWidth(0) - sequence_view->columnWidth(1));
+
+			tabs_per_name_[name] = sequence_view;
+			tab_widget_->addTab(sequence_view, name.c_str());
+		}
+
 	} // namespace VIEW
 } // namespace BALL

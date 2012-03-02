@@ -32,7 +32,7 @@
 #include <QtCore/QAbstractTableModel>
 #include <QtCore/QPoint>
 #include <QtGui/QMenu>
-#include <QtGui/QTreeView>
+#include <QtGui/QTableView>
 #include <QtGui/QComboBox>
 
 
@@ -69,6 +69,9 @@ namespace BALL
 
 				int rowCount(const QModelIndex& parent = QModelIndex()) const;
 				int columnCount(const QModelIndex& parent = QModelIndex()) const;
+
+				bool hasSequenceFor(AtomContainer const* ac);
+				boost::shared_ptr<Sequence> getSequenceFor(AtomContainer const* ac);
 
 				QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 				QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
@@ -182,6 +185,9 @@ class BALL_VIEW_EXPORT SequenceControl
 	///
 	void fetchPreferences(INIFile& inifile);
 
+	///
+	void addSequenceTab(String const& name);
+
 	public slots:
 
 	//@}
@@ -195,8 +201,7 @@ class BALL_VIEW_EXPORT SequenceControl
 	*/
 	//@{
 	protected slots:
-
-
+		void onTabCloseRequested_(int index);
 
 	protected:
 		void handleProtein_(Protein* protein);
@@ -205,7 +210,7 @@ class BALL_VIEW_EXPORT SequenceControl
 		Ui_SequenceControlData ui_;
 
 		StringHashMap<boost::shared_ptr<SequenceControlModel> >  sequences_per_tab_;
-		StringHashMap<Index>          tab_indices_per_name_;
+		StringHashMap<QTableView*>                               tabs_per_name_;
 
 		QTabWidget* tab_widget_;
 	///
