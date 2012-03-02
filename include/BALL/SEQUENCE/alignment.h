@@ -268,66 +268,6 @@ namespace BALL
 		*/
 		virtual void dump(std::ostream& s= std::cout) const;
 
-	
-		/**
-		 *reads a Clustalfile into an alignment
-		 *@param file the file to be read
-		 */
-//		Alignment& operator<<(ClustalFile & file);
-		
-		
-		/**
-		*reads a FastaFile into the alignment
-		*@param file the file to be read
-		*/
-//		Alignment& operator<<(FastaFile & file);
-
-		/**
-		*reads a PDBFile into the alignment
-		*@param file the file to be read
-		*/
-//		Alignment& operator<<(PDBFile& file);
-
-
-		
-		/**
-		 *writes an alignment into a FastaFile
-		 *@param file the file to be read
-		 */
-//		Alignment& operator>>(ClustalFile & file);
-		
-		
-		/**
-		*writes an Alignment into a FastaFile 
-		*@param file the file to be read
-		*/
-//		Alignment& operator>>(FastaFile & file);
-
-		/**
-		*writes an alignment into a PDBFile
-		*@param file the file to be read
-		*/
-//		Alignment& operator>>(PDBFile& file);
-
-		/**
-		 *writes the alignment into a given Clustalfile
-		 *@param file the file to be written to
-		 */
-//		void write(ClustalFile & file);
-		
-
-		/**
-		*writes the alignment into a given FastaFile
-		*@param file the file to be written to
-		*/
-//		void write(FastaFile & file);
-
-		/**
-		*writes the alignment into a given PDBFile
-		*@param file the file to be read
-		*/
-//		void write(PDBFile& file);		
-		
 
 	private:
 			AlignmentMatrix alignment_;
