@@ -44,8 +44,8 @@ namespace BALL {
 								{
 												return false;
 								}
-
-					/*			typedef seqan::String<seqan::AminoAcid> SSequence; //sequence type
+#ifdef BALL_HAS_SEQAN
+								typedef seqan::String<seqan::AminoAcid> SSequence; //sequence type
 								typedef seqan::Align<SSequence, seqan::ArrayGaps> SAlign; //align type
 								typedef seqan::Row<SAlign>::Type SRow; //gapped sequence type
 								typedef seqan::Iterator<SRow>::Type        TIterator; // Itersator for Seqan Alignment
@@ -198,11 +198,14 @@ namespace BALL {
 
 				//now that we are done also set the score
 				alignment.setScore(score);
-*/
+
 				//set aligned
 				alignment.setAligned(true);
 
 				return true;
+#endif //BALL_HAS_SEQAN
+
+				return false;
 				}
 
 
