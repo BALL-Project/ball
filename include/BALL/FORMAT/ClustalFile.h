@@ -195,7 +195,7 @@ namespace BALL
 			 */
 			~ClustalFile();
 
-			///////////////////////////////////////////////////////////// Reading and Writing /////////////////////////////////////////
+							///////////////////////////////////////////////////////////// Reading and Writing /////////////////////////////////////////
 
 	
 /*prints the values contained in this SequenceLine*/
@@ -228,12 +228,6 @@ namespace BALL
 			*/
 			ClustalFile& operator >>(Alignment& alignment);
 			
-
-			/**
-			*writes a System into a ClustalFile
-			*/
-			ClustalFile& operator << (System& system);
-
 
 			/**
 			*writes an ALignment into a ClustalFile

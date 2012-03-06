@@ -275,76 +275,14 @@ CHECK(operator << (Alignment& alignment))
 	
 	al.insertGap(0,2);
 	al.setAligned(true);
-al.dump();
+
 	cp << al;
 
-//	cp.dump();
-
-//TODO CHECK Ergebnis mit compare
+TEST_EQUAL(cp.getBlocks().at(0).getSequenceLine(0).ident, "blib");
+TEST_EQUAL(cp.getBlocks().at(0).getSequenceLine(1).ident, "blub");	
 
 RESULT
 
+//TODO Check mehrere Blöcke
 
-//TODO corrupted File read ->Exception?
-/*bool read();
-
-
-ClustalFile& operator >> (System& system);
-
-ClustalFile& operator >>(Alignment& alignment);
-
-ClustalFile& operator << (System& system);
-
-ClustalFile& operator << (Alignment& alignment);
-
-*/
-
-//////////////////////////////////////////////////////////////////// Reading Tests //////////////////////////////////////////////////77
-
-	
-	//Molecule *mp;
-/*	System *sp;
-		
-CHECK(operator>> (ClustalFile file, System& system))
-	*fp >> *sp;
-	
-	//TODO evaluate number
-  TEST_EQUAL(sp->countProteins(), 3);
-RESULT
-
-
-	delete sp;
-
-
-	//instantiate new ones
-
-         System *ns;
-
-  */      
-/*
-CHECK(read(System& system))
-	fp->read(ns);
-         
-        TEST_EQUAL(ns->countDescendants(),3);
-RESULT          
-*/
-
-
-
-
-
-
-
-
-/** TODO test the write function
-                void write(Protein& protein);
-                        void write(Molecule& molecule);
-                        void write(System& system);
-*/
-                ////////////////////////////////////////////////// Misc ////////////////////////////////////////////////////
-
-						
-
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
 END_TEST
