@@ -21,7 +21,7 @@
 
 ///////////////////////////
 
-START_TEST(ClustalFile, "$Id: ClustalFile_test.C,2011/06/07$")
+START_TEST(ClustalFile)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -236,6 +236,51 @@ CHECK(bool read())
 	ClustalFile::SequenceLine line= block.getSequenceLine(0);
 
 	TEST_EQUAL(line.ident , "seq1");
+
+
+
+RESULT
+
+
+cp.clear();
+CHECK(operator << (Alignment& alignment))
+
+	Alignment al;
+
+	Sequence seq;
+	Protein *p1 = new Protein();
+
+	Residue* r1 = new Residue("ALA");
+	p1->insert(*r1);
+	Residue* r2 = new Residue ("GLY");
+	p1->insert(*r2);
+
+	seq.setOrigin(p1);
+	seq.setName("blib");
+	al.addSequence(seq);
+
+	Sequence seq2;
+	seq2.setName("blub");
+	Protein *p2 = new Protein();
+
+	Residue* r3 = new Residue("GLY");
+
+	Residue* r4 = new Residue("GLY");
+
+	p2->insert(*r3);
+	p2->insert(*r4);
+		
+	seq2.setOrigin(p2);
+	al.addSequence(seq2);
+	
+	al.insertGap(0,2);
+	al.setAligned(true);
+al.dump();
+	cp << al;
+
+//	cp.dump();
+
+//TODO CHECK Ergebnis mit compare
 
 RESULT
 

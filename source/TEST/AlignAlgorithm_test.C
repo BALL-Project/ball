@@ -15,7 +15,7 @@
 ///////////////////////////
 
 
-START_TEST(class_name, "$Id: AlignAlgorithm_test.C, 2011/11/24$")
+START_TEST(AlignAlgorithm_test.C)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -135,7 +135,7 @@ CHECK(align(Alignment& alignment))
 	TEST_EQUAL(al.isAligned(), true);
 
 	TEST_EQUAL(al.getScore(), 1);
-
+al.dump();
 	RESULT
 
 	al.reset();

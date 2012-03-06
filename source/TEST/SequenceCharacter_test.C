@@ -14,7 +14,7 @@
 ////////////////////////////////////////////////////////////////////////////
 using namespace BALL;
 
-START_TEST(SequenceCharacter, "SequenceCharacter Test 2011/05/31 Author: nikoch")
+START_TEST(SequenceCharacter)
 PRECISION(1e-5)
 
 
