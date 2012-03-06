@@ -176,7 +176,7 @@ namespace BALL
 			tab_widget_->setTabsClosable(true);
 			connect(tab_widget_, SIGNAL(tabCloseRequested(int)), this, SLOT(onTabCloseRequested_(int)));
 
-			//buildContextMenu_();
+			buildContextMenu_();
 		}
 
 		SequenceControl::~SequenceControl()
@@ -345,6 +345,38 @@ namespace BALL
 			/// END TEST Nikola
 		}
 
+				void SequenceControl::buildContextMenu_()
+			{
+			// ===============================================================
+			// create sequences context menu:
+			// ===============================================================
+			context_menu_.setObjectName("ContextMenu");
+			model_menu_.setObjectName("ModelMenu");
+/*
+			model_menu_.addAction(tr("Custom"), this, SLOT(align())); 
+
+			const ModelInformation& mi = getMainControl()->getModelInformation();
+			QAction* action =	0;
+			Position p = 0;
+			for (Position pos = MODEL_LINES; pos < MODEL_LABEL; pos++)
+			{
+				if (!mi.modelMuteableByDisplayProperties((ModelType)pos)) break;
+				action = model_menu_.addMenu(&color_menu_[p]);
+				color_menu_[p].setObjectName((String("ColorMenu") + String(p)).c_str());
+				action->setText(mi.getModelName((ModelType)pos).c_str());
+				action->setObjectName(String(pos).c_str());
+				p++;
+			}
+*/
+			
+		}
+//TODO NUR GRADE ZUM LINKEN
+void SequenceControl::align()
+{
+}
+
+
+		
 		void SequenceControl::handleNucleicAcid_(NucleicAcid* na)
 		{
 			sequences_per_tab_["all_sequences"]->addSequence(boost::shared_ptr<Sequence>(new Sequence(na->getName(), na)));
@@ -368,6 +400,19 @@ namespace BALL
 			tabs_per_name_[name] = sequence_view;
 			tab_widget_->addTab(sequence_view, name.c_str());
 		}
+
+
+				action->setText(mi.getModelName((ModelType)pos).c_str());
+				action->setObjectName(String(pos).c_str());
+				p++;
+			}
+*/
+			
+		}
+//TODO NUR GRADE ZUM LINKEN
+void SequenceControl::align()
+{
+}
 
 	} // namespace VIEW
 } // namespace BALL

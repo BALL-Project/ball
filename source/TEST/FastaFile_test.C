@@ -124,7 +124,7 @@ RESULT
 
 CHECK(operator>>(Protein& protein))
 
-	seq->destroy();
+//	seq->destroy();
 	fp->open(BALL_TEST_DATA_PATH(FastaFile_test1.fasta));
 
 

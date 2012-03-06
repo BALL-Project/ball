@@ -79,6 +79,8 @@ namespace BALL
 
 				bool setData(const QModelIndex& index, const QVariant& data, int role = Qt::EditRole);
 
+			
+
 			protected:
 				SequenceVector sequences_;
 				std::vector<bool> selection_;
@@ -201,6 +203,7 @@ class BALL_VIEW_EXPORT SequenceControl
 	*/
 	//@{
 	protected slots:
+	void align();
 		void onTabCloseRequested_(int index);
 
 	protected:
@@ -214,7 +217,7 @@ class BALL_VIEW_EXPORT SequenceControl
 
 		QTabWidget* tab_widget_;
 	///
-	//	void buildContextMenu_();
+		void buildContextMenu_();
 
 	/** Set the selection of the checkboxes and the opening of the tree 
 			according to the selection in the MainControl.
@@ -235,6 +238,11 @@ class BALL_VIEW_EXPORT SequenceControl
 	/** @name Menu entries ids
 	*/
 	//@{
+	// the context menus
+	QMenu               context_menu_,
+											model_menu_;
+	//										edit_menu_,
+		//									color_menu_[MODEL_LABEL - MODEL_LINES];
 
 
 };
