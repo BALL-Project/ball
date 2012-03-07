@@ -49,7 +49,7 @@
 namespace BALL
 {
 
-	
+
 	class BALL_EXPORT ClustalFile 
 		: public File
 	{
@@ -58,55 +58,55 @@ namespace BALL
 			///////////////////////////////////////////////////Constructors and Destructors ///////////////////////////////////////////////////
 
 			class SequenceLine {
-				
-			public:	/*
-				*Constructor
-				*/
-				SequenceLine();
 
-				/*
-				*Copy Constructor
-				*/
-				SequenceLine(const SequenceLine& line);
-				
-				/**
-				*Detailed Constructor
-				*/
-				SequenceLine(String& id, String& seq, int len);
+				public:	/*
+					 *Constructor
+					 */
+					SequenceLine();
 
-				/*
-				*resets the Block
-				*/
-				void reset();
-				
-				/**
-				*operator >>
-				* writes a SequenceLine into the stream buffer
-				*/
-				std::ostream& operator >> (std::ostream& os);
+					/*
+					 *Copy Constructor
+					 */
+					SequenceLine(const SequenceLine& line);
 
-				/*prints the values contained in this SequenceLine*/
-				virtual void dump(std::ostream& s = std::cout) const;
-				
-				/**
-				*assignment operator
-				*/
-				SequenceLine& operator = (const SequenceLine& line);
-				
+					/**
+					 *Detailed Constructor
+					 */
+					SequenceLine(String& id, String& seq, int len);
 
-			//////////////////////////////////////////////
+					/*
+					 *resets the Block
+					 */
+					void reset();
 
-				String ident;
-				String  sequence;
-				unsigned int length;
-							
+					/**
+					 *operator >>
+					 * writes a SequenceLine into the stream buffer
+					 */
+					std::ostream& operator >> (std::ostream& os);
+
+					/*prints the values contained in this SequenceLine*/
+					virtual void dump(std::ostream& s = std::cout) const;
+
+					/**
+					 *assignment operator
+					 */
+					SequenceLine& operator = (const SequenceLine& line);
+
+
+					//////////////////////////////////////////////
+
+					String ident;
+					String  sequence;
+					unsigned int length;
+
 			};
 
-			
+
 
 			/**
-			*Nested Class for Block
-			*/
+			 *Nested Class for Block
+			 */
 			class Block {
 
 				public: 
@@ -136,20 +136,20 @@ namespace BALL
 					SequenceLine& getSequenceLine(unsigned int i);
 
 					/**
-					* operator >> ostream
-					* writes a block into the stream
-					*/
+					 * operator >> ostream
+					 * writes a block into the stream
+					 */
 					std::ostream& operator >> (std::ostream& os);
 
-				/**
-				* assignment operator
-				*/
-				Block& operator = (const Block& block);					
+					/**
+					 * assignment operator
+					 */
+					Block& operator = (const Block& block);					
 
-				/*prints the values contained in this SequenceLine*/
-				virtual void dump(std::ostream& s = std::cout) const;
+					/*prints the values contained in this SequenceLine*/
+					virtual void dump(std::ostream& s = std::cout) const;
 
-				////////////////////////////////////////////////////////////////////////
+					////////////////////////////////////////////////////////////////////////
 
 					/**
 					 *contains all the sequence lines of the Block as sequences
@@ -163,16 +163,16 @@ namespace BALL
 
 
 			};
-			
 
-					
+
+
 			/** State of the parser **/
 			struct State
 			{
 				ClustalFile* current_parser;
 			};
 
-///////////////////////////////////////////////////////// Clustal File ///////////////////////////////////////////
+			///////////////////////////////////////////////////////// Clustal File ///////////////////////////////////////////
 
 			/**
 			 *Default Constructor
@@ -195,55 +195,55 @@ namespace BALL
 			 */
 			~ClustalFile();
 
-							///////////////////////////////////////////////////////////// Reading and Writing /////////////////////////////////////////
-
-	
-/*prints the values contained in this SequenceLine*/
-				void dump();
+			///////////////////////////////////////////////////////////// Reading and Writing /////////////////////////////////////////
 
 
-	
+			/*prints the values contained in this SequenceLine*/
+			void dump();
+
+
+
 			/*
-			*checks whether all Blocks have the same idents, and the same number of lines
-			*/
+			 *checks whether all Blocks have the same idents, and the same number of lines
+			 */
 			bool hasValidBlocks();
-			
+
 			/**
-			*reads a ClustalFile
-			*/
+			 *reads a ClustalFile
+			 */
 			bool read();
 
 			/**
-			* writes a ClustalFile
-			*/
+			 * writes a ClustalFile
+			 */
 			bool write();
-		
+
 			/**
 			 *reads a ClustalFile into a System
 			 */
 			ClustalFile& operator >> (System& system);
 
 			/**
-			*
-			*/
+			 * writes a Clustalfile into an alignment
+			 */
 			ClustalFile& operator >>(Alignment& alignment);
-			
+
 
 			/**
-			*writes an ALignment into a ClustalFile
-			*/
+			 *writes an ALignment into a ClustalFile
+			 */
 			ClustalFile& operator << (Alignment& alignment);
-			
+
 			ClustalFile& operator = (const ClustalFile& file);
-	
+
 			//@}
 			/** @name Accessors
 			 */
 			//@{
 
 			/**
-			*adds a Block at the top of the vector blocks_
-			*/
+			 *adds a Block at the top of the vector blocks_
+			 */
 			void addBlock(const Block& block);
 
 			std::vector<Block> getBlocks();
@@ -257,13 +257,13 @@ namespace BALL
 
 			static State state;
 
-			private:
-				std::vector<Block> blocks_;
-				
-					//methods to faciliate the writing process
-					
-					
-			
+	private:
+			std::vector<Block> blocks_;
+
+			//methods to faciliate the writing process
+
+
+
 };
 
 }

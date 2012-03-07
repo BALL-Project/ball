@@ -385,41 +385,37 @@ namespace BALL
 								}
 
 								//iterate over all blocks to retrieve all SequenceLines
-								for(vector<Block>::iterator b_it = getBlocks().begin(); b_it!= getBlocks().end(); b_it++)
+								for(unsigned int b_i =0; b_i < blocks_.size(); b_i++)
 								{
 												//counter that denotes which protein is to be updated
 												unsigned int p_counter = 0;
 
 												//iterate over all SequenceLines of the Block
-												for(vector<SequenceLine>::iterator s_it = b_it->seqs.begin(); s_it != b_it->seqs.end() ; s_it++)
+												for(unsigned int s_i = 0; s_i < blocks_.at(b_i).seqs.size(); s_i++)
 												{
-																//fetch the current protein an increment the counter
-																Protein* p_ptr = system.getProtein(p_counter++);
-
 																//check the protein's Name and the current SequenceLines Ident are equal
-																if(p_ptr->getName() != s_it->ident) 
+																if(/*p_ptr*/ system.getProtein(p_counter)->getName() != blocks_.at(b_i).seqs.at(s_i).ident) 
 																{ 
 																				throw Exception::InvalidArgument(__FILE__,__LINE__, "ClustalFile Error: IDs don't match");
 																}
-
-
 																//iterate through the string to get the single characters
-																for (unsigned int j=0; j < s_it -> length; j++)						
-																{	
-
-																				String three_letter;
+																for (unsigned int j=0; j < (blocks_.at(b_i).seqs.at(s_i).length - b_i* 60); j++)						
+																{
+	
+																			String three_letter;
 
 																				//retrieve the next character
-																				char check = s_it->sequence[j];
-
-																				//check whether the next character is a valid AS and if it is, change it to three letter code						
+																				char check = /*s_it*/blocks_.at(b_i).seqs.at(s_i).sequence[j];
+																				//check whether the next character is a valid AS and if it is, change it to three letter code															
+																				if(check != '-'){
 																				if(Peptides::IsOneLetterCode(check)) 
 																				{
 																								three_letter = Peptides::ThreeLetterCode(check);
+
 																				}
 																				else
 																				{ 
-																								throw Exception::InvalidArgument(__FILE__,__LINE__, "There is no OneLetterCode in the FASTAFile");
+																								throw Exception::InvalidArgument(__FILE__,__LINE__, "There is no OneLetterCode in the ClustalFile");
 																				}  
 
 																				//for every Amino Acid create a new Residue named with the name of the Amino Acid
@@ -428,16 +424,20 @@ namespace BALL
 																				//set the Property to Amino Acid
 																				r->setProperty(Residue::Property::PROPERTY__AMINO_ACID);
 
+
 																				//append Residue to the Protein	
-																				p_ptr->append(*r); 	
+																			system.getProtein(p_counter)->append(*r);
+															
+																			}//end if check != '-' 	
+
 
 
 																}// end of iteration through string
+p_counter++;
 
 												}//end of iteration over all sequenceLines
 
 								}//end of iteration over all Blocks
-
 								return *this;
 
 				}

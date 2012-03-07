@@ -234,15 +234,61 @@ CHECK(bool read())
 
 	ClustalFile::Block block = cp.getBlocks().at(0);
 	ClustalFile::SequenceLine line= block.getSequenceLine(0);
+	ClustalFile::SequenceLine line2 = block.getSequenceLine(1);
+	ClustalFile::SequenceLine line3 = block.getSequenceLine(2);
 
-	TEST_EQUAL(line.ident , "seq1");
+	TEST_EQUAL(line.ident , "seq1")
+	TEST_EQUAL(line.sequence, "-----------------------KSKERYKDENGGNYFQLREDWWDANRETVWKAITCNA")
+	TEST_EQUAL(line.length, 60)
 
+	TEST_EQUAL(line2.ident, "seq2")
+	TEST_EQUAL(line2.sequence, "----------------YEGLTTANGKEYYQDKNGGNFFKLREDWWTANRETVWKAITCGA")
+	TEST_EQUAL(line2.length, 60)
+
+	TEST_EQUAL(line3.ident, "seq3")
+	TEST_EQUAL(line3.sequence, "----KRIYKKIFKEIHSGLSTKNGVKDRYQN-DGDNYFQLREDWWTANRSTVWKALTCSD")
+	TEST_EQUAL(line3.length, 60)
+
+	block = cp.getBlocks().at(1);
+	line= block.getSequenceLine(0);
+	line2 = block.getSequenceLine(1);
+	line3 = block.getSequenceLine(2);
+
+	TEST_EQUAL(line.ident , "seq1")
+	TEST_EQUAL(line.sequence, "--GGGKYFRNTCDG--GQNPTETQNNCRCIG----------ATVPTYFDYVPQYLRWSDE")
+	TEST_EQUAL(line.length, 120)
+
+	TEST_EQUAL(line2.ident, "seq2")
+	TEST_EQUAL(line2.sequence, "P-GDASYFHATCDSGDGRGGAQAPHKCRCDG---------ANVVPTYFDYVPQFLRWPEE")
+	TEST_EQUAL(line2.length, 120)
+
+	TEST_EQUAL(line3.ident, "seq3")
+	TEST_EQUAL(line3.sequence, "KLSNASYFRATC--SDGQSGAQANNYCRCNGDKPDDDKP-NTDPPTYFDYVPQYLRWSEE")
+	TEST_EQUAL(line3.length,120)
 
 
 RESULT
+//cp.dump();
 
+CHECK(operator >>(System& system))
+
+	BALL::System S;
+	cp>>S;
+cout<<S.countResidues();
+	BALL::ResidueIterator resit = S.beginResidue();
+	for (; +resit ; ++resit)
+	{
+   	if (resit->isAminoAcid())
+   	{
+    	  std::cout << Peptides::OneLetterCode(resit->getName()) << " ";
+   	}
+	}     
+
+RESULT
 
 cp.clear();
+
+
 CHECK(operator << (Alignment& alignment))
 
 	Alignment al;
@@ -278,8 +324,19 @@ CHECK(operator << (Alignment& alignment))
 
 	cp << al;
 
-TEST_EQUAL(cp.getBlocks().at(0).getSequenceLine(0).ident, "blib");
-TEST_EQUAL(cp.getBlocks().at(0).getSequenceLine(1).ident, "blub");	
+	ClustalFile::SequenceLine line1 = cp.getBlocks().at(0).getSequenceLine(0);
+	ClustalFile::SequenceLine line2 = cp.getBlocks().at(0).getSequenceLine(1);
+
+	TEST_EQUAL(cp.getBlocks().size(),1)
+	TEST_EQUAL(cp.getBlocks().at(0).seqs.size(),2)
+
+	TEST_EQUAL(line1.ident, "blib")
+	TEST_EQUAL(line1.sequence , "AG-")
+	TEST_EQUAL(line1.length, 3)
+
+	TEST_EQUAL(line2.ident, "blub")
+	TEST_EQUAL(line2.sequence, "GG-")
+	TEST_EQUAL(line2.length, 3)
 
 RESULT
 
