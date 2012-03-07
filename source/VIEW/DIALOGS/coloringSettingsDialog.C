@@ -24,7 +24,7 @@ namespace BALL
 			setupUi(this);
 
 			element_table_ ->setObjectName("Elements");
-			residue_table_ ->setObjectName("Residues");
+//			residue_table_ ->setObjectName("Residues");
 			chain_table_   ->setObjectName("Chains");
 			molecule_table_->setObjectName("Molecules");
 
@@ -129,6 +129,57 @@ namespace BALL
 			}
 
 			return colors;
+		}
+
+		void ColoringSettingsDialog::writePreferenceEntries(INIFile& inifile)
+		{
+			PreferencesEntry::writePreferenceEntries(inifile);
+
+			if (!inifile.hasSection("COLORING_OPTIONS"))
+			{
+				inifile.appendSection("COLORING_OPTIONS");
+			}
+
+			String residue_names, residue_name_colors;
+
+			for (Index i=0; i<residue_table_->rowCount(); ++i)
+			{
+				residue_names       += ascii(residue_table_->item(i, 0)->text()) + ";";
+				residue_name_colors += static_cast<ColorRGBA>(residue_table_->item(i, 1)->backgroundColor()) + ";";
+			}
+
+			inifile.insertValue("COLORING_OPTIONS", "ResidueNames",      residue_names);
+			inifile.insertValue("COLORING_OPTIONS", "ResidueNameColors", residue_name_colors);
+		}
+
+		void ColoringSettingsDialog::readPreferenceEntries(INIFile& inifile)
+		{
+			PreferencesEntry::readPreferenceEntries(inifile);
+
+			if (    inifile.hasEntry("COLORING_OPTIONS", "ResidueNames") 
+				   && inifile.hasEntry("COLORING_OPTIONS", "ResidueNameColors"))
+			{
+				String residue_names       = inifile.getValue("COLORING_OPTIONS", "ResidueNames");
+				String residue_name_colors = inifile.getValue("COLORING_OPTIONS", "ResidueNameColors");
+
+				std::vector<String> split_names;
+				residue_names.split(split_names);
+
+				std::vector<String> split_colors;
+				residue_name_colors.split(split_colors);
+
+				if (split_names.size() != split_colors.size())
+				{
+					Log.warn() << "ColoringSettingsDialog::fetchPreferences: residue name coloring in inifile is invalid!" << std::endl;
+				}
+
+				std::vector<ColorRGBA> split_color_rgba(split_colors.size());
+				for (Position i=0; i<split_color_rgba.size(); ++i)
+				{
+					split_color_rgba[i] = ColorRGBA(split_colors[i]);
+				}
+				residue_table_->setContent(split_names, split_color_rgba);
+			}
 		}
 
 		void ColoringSettingsDialog::applySettingsTo(ColorProcessor& cp) const
