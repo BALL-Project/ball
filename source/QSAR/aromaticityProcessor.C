@@ -9,7 +9,8 @@
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/PTE.h>
-#include <BALL/COMMON/limits.h>
+
+#include <limits>
 
 using namespace std;
 
@@ -603,7 +604,7 @@ namespace BALL
 				inter_sections.push_back(is2);
 			}
 				// find ring with fewest intersection with other rings
-			int min_is = Limits<int>::max();
+			int min_is = std::numeric_limits<int>::max();
 			HashSet<Atom*> min_is_ring = 0;
 			Size sssr_it(0), tmp(0);
 			int min_is_d(0);

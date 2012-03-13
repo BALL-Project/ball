@@ -7,6 +7,8 @@
 #include <BALL/MATHS/common.h>
 #include <BALL/SOLVATION/pair6_12RDFIntegrator.h>
 
+#include <limits>
+
 using namespace std;
 
 #ifdef BALL_COMPILER_MSVC
@@ -154,7 +156,7 @@ namespace BALL
 		interval = poly.getInterval(number_of_intervals - 1);
 
 		// the last interval has to be defined to infinity
-		if (interval.second != INFINITY)
+		if (interval.second != std::numeric_limits<double>::infinity())
 		{
 			// ?????: Sollte hier eine Exception geworfen werden?
 			Log.error() << "Pair6_12RDFIntegrator::integrateToInf(): "

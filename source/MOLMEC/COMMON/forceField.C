@@ -10,7 +10,8 @@
 #include <BALL/MOLMEC/COMMON/periodicBoundary.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
-#include <BALL/COMMON/limits.h>
+
+#include <limits>
 
 using namespace std;
 
@@ -33,7 +34,7 @@ namespace BALL
 			update_time_stamp_(),
 			setup_time_stamp_(),
 			unassigned_atoms_(),
-			max_number_of_errors_(Limits<Size>::max()),
+			max_number_of_errors_(std::numeric_limits<Size>::max()),
 			number_of_errors_(0)
 	{
 	}
@@ -66,7 +67,7 @@ namespace BALL
 		components_.clear();
 
 		unassigned_atoms_.clear();
-		max_number_of_errors_= Limits<Size>::max();
+		max_number_of_errors_= std::numeric_limits<Size>::max();
 		number_of_errors_ = 0;
 	}
 
@@ -149,7 +150,7 @@ namespace BALL
 			update_time_stamp_(),
 			setup_time_stamp_(),
 			unassigned_atoms_(),
-			max_number_of_errors_(Limits<Size>::max()),
+			max_number_of_errors_(std::numeric_limits<Size>::max()),
 			number_of_errors_(0)
 	{
 		bool result = setup(system);
@@ -177,7 +178,7 @@ namespace BALL
 			update_time_stamp_(),
 			setup_time_stamp_(),
 			unassigned_atoms_(),
-			max_number_of_errors_(Limits<Size>::max()),
+			max_number_of_errors_(std::numeric_limits<Size>::max()),
 			number_of_errors_(0)
 	{
 		bool result = setup(system, new_options);

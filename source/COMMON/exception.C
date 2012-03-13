@@ -299,6 +299,11 @@ namespace BALL
 			{
 			}
 
+			NotInitialized::NotInitialized(const char* file, int line, const String& reason)
+				: GeneralException(file, line, "NotInitialized", reason)
+			{
+			}
+
 			DEF_EXCEPTION(OutOfRange, "the range of the operation was invalid")
 
 			DEF_EXCEPTION(DivisionByZero, "a division by zero was requested")

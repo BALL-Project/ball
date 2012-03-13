@@ -56,7 +56,7 @@ CHECK(bool readHeader())
 	TEST_EQUAL(f3_result, true)
 RESULT
 
-CHECK(bool readHeader())
+CHECK(bool readSymmetryRecords())
 	CCP4File f4(BALL_TEST_DATA_PATH(2ovc.ccp4));
 	bool f4_result = f4.readSymmetryRecords();
 	TEST_EQUAL(f4_result, true)

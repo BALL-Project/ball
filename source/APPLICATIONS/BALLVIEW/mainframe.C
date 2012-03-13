@@ -234,7 +234,7 @@ namespace BALL
 
 #ifdef BALL_HAS_QTWEBKIT
 		HTMLBasedInterface* html_interface = new HTMLBasedInterface;
-		HTMLViewDock* html_view_dock = new HTMLViewDock(html_interface, this, ((String(tr("HTMLNavigation")).c_str())));
+		HTMLViewDock* html_view_dock = new HTMLViewDock(html_interface, this, ((String(tr("PresentaBALL")).c_str())));
 
 		if (UIOperationMode::instance().getMode() > UIOperationMode::MODE_ADVANCED)
 		{

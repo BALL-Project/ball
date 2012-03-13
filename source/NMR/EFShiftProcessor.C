@@ -3,9 +3,10 @@
 //
 
 #include<BALL/NMR/EFShiftProcessor.h>
-#include <BALL/COMMON/limits.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/FORMAT/parameterSection.h>
+
+#include <limits>
 
 using namespace std;
 
@@ -116,7 +117,7 @@ namespace BALL
 		bool result = parameter_section.extractSection(*parameters_, "Charges");
 
 		// Check for the cut off.
-		cut_off2_ = Limits<float>::max();
+		cut_off2_ = std::numeric_limits<float>::max();
 		if (parameter_section.options.has("cut_off"))
 		{
 			// Store the squared value of the cut off in the member cut_off2_.

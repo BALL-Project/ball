@@ -385,8 +385,8 @@ CHECK(const T& operator () (Position row, Position col) const throw(Exception::I
 
 	TEST_EXCEPTION(Exception::IndexOverflow, m1.m22 = c_m1(4, 1))
 	TEST_EXCEPTION(Exception::IndexOverflow, m1.m22 = c_m1(1, 4))
-	TEST_EXCEPTION(Exception::IndexOverflow, m1.m22 = c_m1(Limits<Position>::max(), 1))
-	TEST_EXCEPTION(Exception::IndexOverflow, m1.m22 = c_m1(1, Limits<Position>::max()))
+	TEST_EXCEPTION(Exception::IndexOverflow, m1.m22 = c_m1(std::numeric_limits<Position>::max(), 1))
+	TEST_EXCEPTION(Exception::IndexOverflow, m1.m22 = c_m1(1, std::numeric_limits<Position>::max()))
 RESULT
 
 CHECK(T& operator () (Position row, Position col) throw(Exception::IndexOverflow))
@@ -409,8 +409,8 @@ CHECK(T& operator () (Position row, Position col) throw(Exception::IndexOverflow
 
 	TEST_EXCEPTION(Exception::IndexOverflow, m1(4, 1))
 	TEST_EXCEPTION(Exception::IndexOverflow, m1(1, 4))
-	TEST_EXCEPTION(Exception::IndexOverflow, m1(Limits<Position>::max(), 1))
-	TEST_EXCEPTION(Exception::IndexOverflow, m1(1, Limits<Position>::max()))
+	TEST_EXCEPTION(Exception::IndexOverflow, m1(std::numeric_limits<Position>::max(), 1))
+	TEST_EXCEPTION(Exception::IndexOverflow, m1(1, std::numeric_limits<Position>::max()))
 RESULT
 
 CHECK(const T& operator [] (Position position) const throw(Exception::IndexOverflow))
@@ -433,7 +433,7 @@ CHECK(const T& operator [] (Position position) const throw(Exception::IndexOverf
 	TEST_REAL_EQUAL(c_m1[15], m1.m44)
 
 	TEST_EXCEPTION(Exception::IndexOverflow, m1.m44 = c_m1[16])
-	TEST_EXCEPTION(Exception::IndexOverflow, m1.m44 = c_m1[Limits<Position>::max()])
+	TEST_EXCEPTION(Exception::IndexOverflow, m1.m44 = c_m1[std::numeric_limits<Position>::max()])
 RESULT
 
 
@@ -456,7 +456,7 @@ CHECK(T& operator [] (Position position) throw(Exception::IndexOverflow))
 	TEST_REAL_EQUAL(m1[15] , m1.m44)
 
 	TEST_EXCEPTION(Exception::IndexOverflow, m1.m44 = m1[16])
-	TEST_EXCEPTION(Exception::IndexOverflow, m1.m44 = m1[Limits<Position>::max()])
+	TEST_EXCEPTION(Exception::IndexOverflow, m1.m44 = m1[std::numeric_limits<Position>::max()])
 RESULT
 
 CHECK(TMatrix4x4 operator + () const throw())

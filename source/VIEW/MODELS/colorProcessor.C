@@ -6,7 +6,6 @@
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
 
-#include <BALL/COMMON/limits.h>
 #include <BALL/VIEW/DATATYPE/colorExtensions.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/KERNEL/bond.h>
@@ -380,7 +379,7 @@ namespace BALL
 			float radius, new_dist;
 
 			const Atom* const* item = 0;
-			float distance = Limits<float>::max();
+			float distance = std::numeric_limits<float>::max();
 			list<HashGridBox3<const Atom*>* > box_list;
 			Size dist = 1;
 			// iterator over neighbour boxes

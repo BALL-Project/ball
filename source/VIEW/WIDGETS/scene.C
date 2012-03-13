@@ -1728,7 +1728,7 @@ namespace BALL
 			}
 
 			// and paint our overlay, if we have one
-			if (has_overlay_)
+			if (has_overlay_ && current_dev)
 			{
 				QPainter painter(current_dev);
 				painter.drawPicture(0, 0, overlay_);

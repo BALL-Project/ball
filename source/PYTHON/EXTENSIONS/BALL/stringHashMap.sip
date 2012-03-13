@@ -5,7 +5,6 @@ template <ValueType>
 {
 %TypeHeaderCode
 #include <BALL/DATATYPE/stringHashMap.h>
-#include <BALL/PYTHON/pyBALLSipHelper.h>
 using namespace BALL;
 %End
 

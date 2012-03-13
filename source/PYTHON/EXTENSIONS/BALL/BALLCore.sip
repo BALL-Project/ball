@@ -277,6 +277,7 @@
 %Include atomBijection.sip
 %Include connectedComponentsProcessor.sip
 %Include defaultProcessors.sip
+%Include DNAMutator.sip
 %Include fragmentDB.sip
 %Include HBondProcessor.sip
 %Include reconstructFragmentProcessor.sip
@@ -285,6 +286,7 @@
 %Include pyAtomHashGrid.sip
 %Include peptides.sip
 %Include numericalSAS.sip 
+%Include nucleotideMapping.sip
 %Include residueChecker.sip
 %Include RMSDMinimizer.sip
 // %Include rotamerLibrary.sip

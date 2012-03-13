@@ -266,7 +266,7 @@ void Kekuliser::dump()
 			Log.error() << partner->getName() << " ";
 		}
 		Log.error() << "  " << current_penalty_;
-		if (lowest_penalty_ != INT_MAX) Log.error() << " + " << lowest_penalty_;
+		if (lowest_penalty_ != std::numeric_limits<int>::max()) Log.error() << " + " << lowest_penalty_;
 		Log.error() << std::endl;
 	}
 }
@@ -415,11 +415,11 @@ bool Kekuliser::fixAromaticRings_()
 #endif
 
 		solutions_.clear();
-		lowest_penalty_ = INT_MAX;
+		lowest_penalty_ = std::numeric_limits<int>::max();
 		current_penalty_ = 0;
 		fixAromaticSystem_(0);
 		// test could be changed to achieve at most a given max value:
-		if (lowest_penalty_ < INT_MAX) 
+		if (lowest_penalty_ < std::numeric_limits<int>::max())
 		{
 			if (lowest_penalty_ == 0)
 			{
@@ -765,7 +765,7 @@ void Kekuliser::applySolution_(Position pos)
 // return the best solution
 Position Kekuliser::calculateDistanceScores_()
 {
-	float best_score = INT_MAX;
+	float best_score = std::numeric_limits<int>::max();
 	Size best_solution = 0;
 
 	for (Position solp = 0; solp < solutions_.size(); solp++)

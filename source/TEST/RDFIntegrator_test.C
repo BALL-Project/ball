@@ -48,7 +48,7 @@ coef.clear();
 intervals.push_back(Interval(0.0, 1.0));
 intervals.push_back(Interval(1.0, 2.0));
 intervals.push_back(Interval(2.0, 3.0));
-intervals.push_back(Interval(3.0, INFINITY));
+intervals.push_back(Interval(3.0, std::numeric_limits<double>::infinity()));
 
 PiecewisePolynomial poly(4, intervals, coefs);
 RadialDistributionFunction rdf(poly);

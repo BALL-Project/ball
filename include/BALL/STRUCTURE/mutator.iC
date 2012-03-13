@@ -1,0 +1,7 @@
+BALL_INLINE
+void Mutator::setFragmentDB(FragmentDB* db)
+{
+	freeDB_();
+	db_ = db;
+	keep_db_ = true;
+}

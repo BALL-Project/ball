@@ -142,7 +142,7 @@ class MainControl
 	virtual void openFile(const String&) throw();
 	void saveBALLViewProjectFile(const String&);
 	void loadBALLViewProjectFile(const String&) throw();
-	void quickSave() const;
+	void quickSave();
 	void quickLoad();
 	void processEvents(Size);
 };

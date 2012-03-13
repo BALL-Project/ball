@@ -72,7 +72,7 @@ namespace BALL
 		Index index = 0;
 		Index temp_index;
 
-#		define BALL_BITS_IN_HASHVALUE_   (sizeof(Index) * CHAR_BIT)
+#		define BALL_BITS_IN_HASHVALUE_   (sizeof(Index) * std::numeric_limits<unsigned char>::digits)
 #		define BALL_THREE_QUARTERS_      ((Index)((BALL_BITS_IN_HASHVALUE_ * 3) / 4))
 #		define BALL_ONE_EIGHTH_          ((Index)(BALL_BITS_IN_HASHVALUE_ / 8))
 #		define BALL_HIGH_BITS_           (~((Index)(~0) >> BALL_ONE_EIGHTH_))

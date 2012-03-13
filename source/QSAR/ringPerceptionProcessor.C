@@ -7,7 +7,7 @@
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 #include <BALL/KERNEL/forEach.h>
 
-#include <BALL/COMMON/limits.h>
+#include <limits>
 
 #define BALL_QSAR_RINGPERCEPTIONPROCESSOR_DEBUG
 #undef  BALL_QSAR_RINGPERCEPTIONPROCESSOR_DEBUG
@@ -175,7 +175,7 @@ namespace BALL
 
 		while (full_set.size() != trim_set.size())
 		{
-			Size min_deg = Limits<int>::max();
+			Size min_deg = std::numeric_limits<int>::max();
 			Atom* init = 0;
 
 			// all atoms with 2 bonds

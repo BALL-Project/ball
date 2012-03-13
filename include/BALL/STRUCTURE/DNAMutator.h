@@ -10,9 +10,16 @@
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/MATHS/vector3.h>
+#include <BALL/STRUCTURE/mutator.h>
+#include <BALL/STRUCTURE/nucleotideMapping.h>
+
+#include <deque>
+#include <map>
 
 namespace BALL
 {
+	class Chain;
+	class Residue;
 	class FragmentDB;
 	class EnergyMinimizer;
 	class ForceField;
@@ -21,13 +28,19 @@ namespace BALL
 	class Atom;
 
 	class BALL_EXPORT DNAMutator
+		: public Mutator
 	{
 		public:
-			/**
-			 * Entries of this enum are used for the selection of bases in the <b>mutate</b> function
-			 */
-			enum Base { ADENINE = 0, THYMINE = 1, GUANINE = 2, CYTOSINE = 3, URACILE = 4 };
-
+			///This controls how a purine and pyrimidine base are matched onto
+			/// each other
+			enum MatchingMode
+			{
+				///Use a minimum angle criterion and try out which conformation fits best
+				MINIMUM_ANGLE,
+				///Set the torsion angle of the sugar-base connection in the new base
+				///to the torsion angle found in the second base
+				MATCH_TORSION
+			};
 			/**
 			 * Constructs a DNAMutator
 			 *
@@ -51,7 +64,7 @@ namespace BALL
 			DNAMutator(EnergyMinimizer* mini = NULL, ForceField* ff = NULL, FragmentDB* frag = NULL);
 
 			/**
-			 * The destructor of the the DNAMutator must delete the FragmentDB instance
+			 * The destructor of the DNAMutator; Deletes the FragmentDB instance
 			 * iff it has been auto generated
 			 */
 			~DNAMutator();
@@ -59,41 +72,20 @@ namespace BALL
 			/**
 			 * Calling this method explicitly circumvents lazy loading of the FragmentDB.
 			 * This method has no effect if mutate has already been called or if valid instances
-			 * of the fragmentDB has been passed via the constructor.
+			 * of the FragmentDB has been passed via the constructor.
 			 *
 			 * @warning If you called setup() and then set the FragmentDB to NULL via setFragmentDB()
 			 *          you will need to call setup() again in order to prevent lazy loading.
 			 */
-			void setup();
+			virtual void setup();
 
 			/**
-			 * This method changes a given base to another one. Changing the base
-			 * on the opposite strand is <br>not</br> handled. Most likely you will
-			 * need to localy reoptimize the structure after the insertion.
-			 *
-			 * @param res A pointer to the Fragment that will be changed
-			 *
-			 * @param base A string specifiying the base which will be used to replace
-			 *        the current one. Can be one of "A", "T", "G", "C" and "U".
-			 *
-			 * @todo - Add capabilities into the FragmentDB that allows the retrival of Molecule type information
-			 */
-			void mutate(Fragment* res, Base base) throw(Exception::InvalidOption);
-
-			/*
 			 * Set the current minimizer to mini. Passing NULL will disable
 			 * minimization.
 			 */
 			void setMinimizer(EnergyMinimizer* mini);
 
-			/*
-			 * Set a new FragmentDB instance that shall be used to obtain
-			 * the new bases. If NULL is passed, a default instance will be automatically
-			 * created when calling DNAMutator::mutate().
-			 */
-			void setFragmentDB(FragmentDB* frag);
-
-			/*
+			/**
 			 * Set a new ForceField instance that is used in conjunction with the minimizer to
 			 * refine the structure. Even if no minimizer has been passed this force field will
 			 * be used to calculate the most favourable rotation of the base using a simple heuristic.
@@ -101,37 +93,106 @@ namespace BALL
 			 */
 			void setForceField(ForceField* ff);
 
-			/*
+			/**
 			 * Controlls maximum number of steps to be used when
 			 * refining the generated structure via a minimizer.
 			 */
 			void setMaxOptimizationSteps(Size steps);
 
-			/*
+			/**
 			 * The DNAMutator internally uses the unnamed property mechanism of the Atoms.
 			 * This defaults to property Atom::NUMBER_OF_PROPERTIES. If you already use this
 			 * property in your code you can set another property by passing it to this function.
 			 */
 			void setUsedProperty(Property p);
 
+			/**
+			 * This function optimizes the new bases. Inherited from Mutator.
+			 * Calling it before mutate will have no effect.
+			 *
+			 * @return true if the optimization was successful false otherwise.
+			 */
+			bool optimize();
+
+			/**
+			 * Sets the first and the second strand. This will lead to the computation
+			 * of a NucleotideMapping using NucleotideMapping::assignNaively
+			 *
+			 * @sa NucleotideMapping::assignNaively
+			 */
+			void setStrands(Chain* s1, Chain* s2);
+
+			/**
+			 * Sets the first strand. If the second strand is already specified, this will lead
+			 * to the computation of a NucleotideMapping using NucleotideMapping::assignNaively
+			 *
+			 * @sa NucleotideMapping::assignNaively
+			 */
+			void setFirstStrand(Chain* s1);
+
+			/**
+			 * Sets the second strand. If the first strand is already specified, this will lead
+			 * to the computation of a NucleotideMapping using NucleotideMapping::assignNaively
+			 *
+			 * @sa NucleotideMapping::assignNaively
+			 */
+			void setSecondStrand(Chain* s2);
+
+			/**
+			 * Assign a custom NucleotideMapping.
+			 */
+			void setNucleotideMapping(const NucleotideMapping& bij);
+
+			/**
+			 * Implements Mutator::addMutation.
+			 *
+			 * @sa Mutator::addMutation
+			 *
+			 * @throw Exception::NotInitialized This exception is thrown when the first DNA
+			 *        strand has not been set.
+			 * @throw Exception::IndexOverflow If the specified index is larger than the number of
+			 *        bases in the first strand, an exception is raised.
+			 */
+			void addMutation(Index i, const String& new_frag_name);
+
+			/**
+			 * Clears the already specified mutations.
+			 */
+			void clearMutations();
+
+			/**
+			 * Sets the matching heuristic used for aligning a pyrimidine to a purine base.
+			 * Default is MATCH_TORSION.
+			 */
+			void setMatchingMode(MatchingMode mmode);
+
+		protected:
+			virtual void mutate_impl_(MutatorOptions opt);
+
 		private:
-			bool keep_db_;
+			typedef std::map<Residue*, String> Mutations;
+			typedef Mutations::iterator MutIterator;
+
 			bool keep_ff_;
 
-			FragmentDB* db_;
 			ForceField* ff_;
 			EnergyMinimizer* minimizer_;
 
 			Size num_steps_;
 			Property prop_;
 
-			void freeDB_();
+			Chain* first_strand_;
+			Chain* second_strand_;
+
+			NucleotideMapping mapping_;
+			MatchingMode matching_mode_;
+
+			void mutateSingleBase_(Residue* res, const String& basename) const;
+
 			void freeFF_();
 
-			void mark_(AtomContainer* atoms);
-			void unmark_(AtomContainer* atoms);
-
-			void tryFlip_(Fragment* res, const Vector3& connect_atom, const Vector3& axis) const;
+			void mark_(AtomContainer* atoms) const;
+			void unmark_(AtomContainer* atoms) const;
 
 			/**
 			 * Reoptimize the given fragment using the minimizer stored in minimizer_.
@@ -144,34 +205,43 @@ namespace BALL
 			 * This function returns a pointer to the nitrogen atom that attaches
 			 * a base to the sugar backbone
 			 */
-			Atom* getAttachmentAtom(AtomContainer* res);
+			Atom* getAttachmentAtom(AtomContainer* res) const;
 
 			/**
 			 * Selects the atoms in a base. If succesfull it returns
 			 * the pointer to the attachment nitrogen.
 			 */
-			Atom* markBaseAtoms(AtomContainer* res);
+			Atom* markBaseAtoms_(AtomContainer* res) const;
 
-			void rotateBases(AtomContainer* from, const Atom* from_at, const Atom* to_at,
-			                 const Vector3& from_connection, const Vector3& to_connection);
-			void rotateSameBases(AtomContainer* from, AtomContainer* to);
+			void alignBases_(AtomContainer* from, const Vector3& from_connection, const Vector3& to_connection, Atom* from_at) const;
 
-			const Atom* getSecondNitro(const std::vector<const Atom*>& ring_atoms, const Atom* base);
+			Atom* getTorsionDefiningAtom_(Atom* atom) const;
+			const Atom* getTorsionDefiningAtom_(const Atom* atom) const;
 
-			Vector3 getNormalVector(const Atom* at);
-			Atom* getConnectionAtom(Atom* at);
-			Vector3 getOrthogonalVector(const Vector3& n, const Atom* base, const Atom* at);
+			void rotateBasesMatchTorsion_(AtomContainer* from, const Atom* to_connection_at, Atom* from_at, const Atom* to_at) const;
+			void rotateBasesMinAngle_    (AtomContainer* from, const Vector3& to_connection,   Atom* from_at, const Atom* to_at) const;
+			void rotateSameBases_(AtomContainer* from, AtomContainer* to) const;
+
+			Vector3 getNormalVector_(const Atom* at) const;
+			Atom* getConnectionAtom_(Atom* at) const;
+
+			String canonizeName_(const String& frag_name) const;
 
 			/**
 			 * The methods below decide whether a base is a Purine or a Pyrimidine.
 			 * In an ideal distant future this should be stored in the fragment and thus
 			 * be not necessary.
 			 */
-			bool isPurine(const Atom& baseNitrogen) const;
-			bool isPyrimidine(const Atom& baseNitrogen) const;
+			bool isPurine_(const Atom& baseNitrogen) const;
+			bool isPyrimidine_(const Atom& baseNitrogen) const;
 
 			static const char* bases_[];
 			static const Size default_num_steps_;
+
+			String getComplement_(const String& s) const;
+
+			std::map<Residue*, String> mutations_;
+			std::deque<Atom*> to_optimize_;
 	};
 }
 

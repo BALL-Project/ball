@@ -65,6 +65,11 @@ IF(BALL_BUILD_TYPE)
 	SET(CMAKE_BUILD_TYPE ${BALL_BUILD_TYPE})
 ENDIF()
 
+## if no build type is given, default to Release
+IF(NOT CMAKE_BUILD_TYPE)
+	SET(CMAKE_BUILD_TYPE Release)
+ENDIF()
+
 SET(BALL_CONTRIB_PATH "" CACHE PATH "Path to the contrib directory, if installed (optional)")
 SET(CMAKE_PREFIX_PATH ${BALL_CONTRIB_PATH} ${CMAKE_PREFIX_PATH})
 
@@ -74,7 +79,7 @@ SET(BALL_TEST_DATA_PATH ${PROJECT_SOURCE_DIR}/source/TEST/data)
 SET(BALL_BENCHMARK_DATA_PATH ${PROJECT_SOURCE_DIR}/source/BENCHMARKS/data)
 
 # Should we build packages as well?
-OPTION(BALL_ENABLE_PACKAGING "Enable the building of binary packages" ON)
+OPTION(BALL_ENABLE_PACKAGING "Enable the building of binary packages" OFF)
 
 # Used for linking BALL dependent applications and libraries (BALLView, Python bindings, ...)
 SET(BALL_LIBRARIES optimized BALL debug BALLd)
@@ -259,8 +264,12 @@ ENDIF()
 INCLUDE(${QT_USE_FILE})
 
 SET(BALL_HAS_QTWEBKIT FALSE)
-IF(QT_QTWEBKIT_FOUND AND USE_QTWEBKIT)
-	SET(BALL_HAS_QTWEBKIT TRUE)
+IF(USE_QTWEBKIT)
+	IF(NOT QT_QTWEBKIT_FOUND)
+		MESSAGE(FATAL_ERROR "QtWebkit is a required dependency. Aborting")
+	ELSE()
+		SET(BALL_HAS_QTWEBKIT TRUE)
+	ENDIF()
 ENDIF()
 
 MESSAGE(STATUS "QT qmake at ${QT_QMAKE_EXECUTABLE}")

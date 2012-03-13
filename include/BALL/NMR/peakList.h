@@ -11,10 +11,6 @@
 #	include<BALL/NMR/peak.h>
 #endif
 
-#ifndef BALL_COMMON_LIMITS_H
-#	include<BALL/COMMON/limits.h>
-#endif
-
 namespace BALL 
 {
 
@@ -88,12 +84,12 @@ namespace BALL
 		}
 
 		/**	Determine the maximum intensity of all peaks.
-				@return maximum intensity, Limits<float>::min() for an empty peak list
+				@return maximum intensity, std::numeric_limits<float>::min() for an empty peak list
 		*/
 		float getMaxIntensity() const
 		{
 			ConstIterator it = std::list<PT>::begin();
-			float max = -Limits<float>::max();
+			float max = -std::numeric_limits<float>::max();
 			for (; it != std::list<PT>::end(); ++it)
 			{
 				max = std::max(max, it->getIntensity());
@@ -103,12 +99,12 @@ namespace BALL
 		}
 
 		/**	Determine the minimum intensity of all peaks.
-				@return minimum intensity, Limits<float>::max() for an empty peak list
+				@return minimum intensity, std::numeric_limits<float>::max() for an empty peak list
 		*/
 		float getMinIntensity() const
 		{
 			ConstIterator it = std::list<PT>::begin();
-			float min = Limits<float>::max();
+			float min = std::numeric_limits<float>::max();
 			for (; it != std::list<PT>::end(); ++it)
 			{
 				min = std::min(min, it->getIntensity());

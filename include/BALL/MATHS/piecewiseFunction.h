@@ -5,13 +5,11 @@
 #ifndef BALL_MATHS_PIECEWISEFUNCTION_H
 #define BALL_MATHS_PIECEWISEFUNCTION_H
 
-#ifndef BALL_COMMON_LIMITS_H
-# include <BALL/COMMON/limits.h>
-#endif
-
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>
 #endif
+
+#include <limits>
 
 namespace BALL
 {
@@ -23,10 +21,6 @@ namespace BALL
 	/** An interval is defined by its limits 
 	*/
 	typedef std::pair<double,double> Interval;
-	#ifdef INFINITY
-	#undef INFINITY
-	#endif
-	static const double INFINITY = Limits<double>::max();
 
 	/** Piecewise function object.
 			This class provides the interface for piecewise functions needed as
