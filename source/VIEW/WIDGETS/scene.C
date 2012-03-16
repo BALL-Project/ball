@@ -1801,6 +1801,10 @@ namespace BALL
 
 		void Scene::customEvent(QEvent* evt)
 		{
+			// strangely enough, this can actually happen...
+			if (!evt)
+				return;
+
 			switch(static_cast<EventsIDs>(evt->type())) {
 				case MOTIONTRACKING_EVENT:
 					motionTrackingEvent(static_cast<MotionTrackingEvent*>(evt));
