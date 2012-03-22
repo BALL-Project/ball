@@ -20,9 +20,9 @@ namespace BALL
 
 				ClustalFile::ClustalFile(const String& filename, File::OpenMode open_mode)
 								: File(filename,open_mode),
-									blocks_()
+								blocks_()
 				{
-						File::open(filename, open_mode);
+								File::open(filename, open_mode);
 				}
 
 				/*ClustalFile::ClustalFile(ClustalFile& file)
@@ -194,8 +194,8 @@ namespace BALL
 
 				bool ClustalFile::write()
 				{
-					if (!isOpen() || getOpenMode() != std::ios::out)
-							{
+								if (!isOpen() || getOpenMode() != std::ios::out)
+								{
 												throw(File::CannotWrite(__FILE__, __LINE__, name_));
 								}	
 
@@ -376,6 +376,11 @@ namespace BALL
 
 				ClustalFile& ClustalFile::ClustalFile::operator >> (System& system)
 				{
+								if(!hasValidBlocks())
+								{
+												throw Exception::InvalidArgument(__FILE__,__LINE__, "ClustalFile Error: Invalid File");
+								}
+
 								//iterate over first block to create new Proteins and add them to the System
 								for(vector<SequenceLine>::iterator it = blocks_.at(0).seqs.begin(); it != blocks_.at(0).seqs.end() ; it++)
 								{
@@ -388,7 +393,7 @@ namespace BALL
 								for(unsigned int b_i =0; b_i < blocks_.size(); b_i++)
 								{
 												//counter that denotes which protein is to be updated
-												unsigned int p_counter = 0;
+												unsigned int p_counter = system.countProteins()-blocks_.at(0).seqs.size();
 
 												//iterate over all SequenceLines of the Block
 												for(unsigned int s_i = 0; s_i < blocks_.at(b_i).seqs.size(); s_i++)
@@ -396,44 +401,42 @@ namespace BALL
 																//check the protein's Name and the current SequenceLines Ident are equal
 																if(/*p_ptr*/ system.getProtein(p_counter)->getName() != blocks_.at(b_i).seqs.at(s_i).ident) 
 																{ 
-																				throw Exception::InvalidArgument(__FILE__,__LINE__, "ClustalFile Error: IDs don't match");
+																				throw Exception::InvalidArgument(__FILE__,__LINE__, "ClustalFile Error: Names of Proteins don't match");
 																}
 																//iterate through the string to get the single characters
 																for (unsigned int j=0; j < (blocks_.at(b_i).seqs.at(s_i).length - b_i* 60); j++)						
 																{
-	
-																			String three_letter;
+
+																				String three_letter;
 
 																				//retrieve the next character
 																				char check = /*s_it*/blocks_.at(b_i).seqs.at(s_i).sequence[j];
 																				//check whether the next character is a valid AS and if it is, change it to three letter code															
 																				if(check != '-'){
-																				if(Peptides::IsOneLetterCode(check)) 
-																				{
-																								three_letter = Peptides::ThreeLetterCode(check);
+																								if(Peptides::IsOneLetterCode(check)) 
+																								{
+																												three_letter = Peptides::ThreeLetterCode(check);
 
-																				}
-																				else
-																				{ 
-																								throw Exception::InvalidArgument(__FILE__,__LINE__, "There is no OneLetterCode in the ClustalFile");
-																				}  
+																								}
+																								else
+																								{ 
+																												throw Exception::InvalidArgument(__FILE__,__LINE__, "There is no OneLetterCode in the ClustalFile");
+																								}  
 
-																				//for every Amino Acid create a new Residue named with the name of the Amino Acid
-																				Residue* r= new Residue(three_letter);
+																								//for every Amino Acid create a new Residue named with the name of the Amino Acid
+																								Residue* r= new Residue(three_letter);
 
-																				//set the Property to Amino Acid
-																				r->setProperty(Residue::Property::PROPERTY__AMINO_ACID);
-
-
-																				//append Residue to the Protein	
-																			system.getProtein(p_counter)->append(*r);
-															
-																			}//end if check != '-' 	
+																								//set the Property to Amino Acid
+																								r->setProperty(Residue::Property::PROPERTY__AMINO_ACID);
 
 
+																								//append Residue to the Protein	
+																								system.getProtein(p_counter)->append(*r);
+
+																				}//end if check != '-' 	
 
 																}// end of iteration through string
-p_counter++;
+																p_counter++;
 
 												}//end of iteration over all sequenceLines
 
@@ -442,276 +445,160 @@ p_counter++;
 
 				}
 
+
+
 				/**
-				 *reads a ClustalFile into an Alignment
-				 * Note: take care when using this feature, because Origin of all SequenceCharacters will not be setted
-				 * better: shift the file into a system and then shift the system into the alignment
+				 *writes an Alignment into a ClustalFile
 				 */
-				ClustalFile& ClustalFile::operator >>(Alignment& alignment)
-				{
-					//first reset Score
-					alignment.setScore(0);
-
-					//reset aligned_
-					alignment.setAligned(false);
-		
-					AlignmentMatrix matrix = alignment.getAlignmentMatrix();
-					
-					//Check whether there are already sequences in the alignment
-					unsigned int old_width = matrix.rows();
-																
-					//iterate over all blocks to retrieve all SequenceLines
-					for(vector<Block>::iterator b_it = getBlocks().begin(); b_it!= getBlocks().end(); b_it++)
+				ClustalFile& ClustalFile::operator << (Alignment& alignment)
+				{ 
+								if(!alignment.isAligned())
 								{
-										//iterate over all SequenceLines of the block
-										for(unsigned int count = 0; count < b_it->seqs.size(); count++)
-										{
-												String sequence = b_it->seqs.at(count).sequence;
-
-													//check whether resizing is necessary
-													if(old_width + count >= matrix.rows())
-													{
-														//resize matrix
-														matrix.conservativeResize(old_width + count, Eigen::NoChange);
-
-														//initialize all characters left, with Gaps
-														for(int i= sequence.length(); i> matrix.cols(); i--)
-														{
-															matrix(old_width + count, i) = *(new SequenceCharacter('-', matrix(old_width + count,0).getOrigin(), SequenceCharacter::type::GAP, 0));
-														}
-													}
-
-
-													//iterate over sequence
-													for(unsigned int i =0; i<sequence.length();i++)
-													{
-														char c = sequence[i];
-														SequenceCharacter seq_c;
-														seq_c.setType(SequenceCharacter::CHAR);
-														seq_c.setChar(c);
-											
-														//check whether we have to resize the matrix
-														if (i >= matrix.cols())
-														{
-																matrix.conservativeResize(Eigen::NoChange, i);
-																//initialize the newly created empty cols with Gaps, except the ith row
-																for (unsigned int m =0; m< matrix.rows(); m++)
-																{
-																		if(m != old_width + count)
-																		{
-																				matrix(m,i)= *(new SequenceCharacter('-', matrix(m,0).getOrigin(), SequenceCharacter::type::GAP, 0));
-																		}
-																}
-														}
-											
-														//einfügen an passender Stelle
-														matrix(old_width + count, i)= seq_c;
-												}
-										}
+												throw File::CannotWrite(__FILE__, __LINE__, name_);
 								}
 
-					return *this;
+								AlignmentMatrix matrix = alignment.getAlignmentMatrix();
+
+								//Check whether we have to create new blocks
+								if (blocks_.empty())
+								{
+												blocks_.push_back(* (new Block()));
+								}
+								//iterate over all Sequences in alignment
+								for (unsigned int i = 0; i< matrix.rows(); i++)
+								{
+												//denotes the number of characters in current line
+												unsigned int count = 1;
+												//iterate over all blocks to write the SequenceLines each time count mod 60 equals zero the next block is setted
+												unsigned int bl_count = 0;
+
+												//iterate over SequenceCharacters of currentline
+												for(unsigned int j=0; j< matrix.cols(); j++)
+												{
+																//CHECK whether we need to go to the next block
+																if(count % 60 == 0)
+																{
+																				//CHECK whether we need to create a new Block
+																				if(bl_count == 0 || bl_count >= blocks_.size())
+																				{
+																								addBlock(*(new Block));
+																				}
+																				//go to next block
+																				bl_count++;
+																}
+
+																//Check whether we have to newly create a SequenceLine at Position i
+																if (blocks_.at(bl_count).seqs.empty() || (blocks_.at(bl_count).seqs.size() <= i))
+																{
+																				SequenceLine* line = new SequenceLine();
+																				line->ident = matrix(i,0).getOrigin()->getName();
+																				blocks_.at(bl_count).seqs.push_back(*line);
+																}
+
+																//add SequenceCharacter to the sequenceLine
+																blocks_.at(bl_count).seqs[i].sequence += matrix(i,j).getChar();
+
+																//store number of AAs in current Sequence and increase counter
+																blocks_.at(bl_count).seqs.at(i).length = count++;
+
+												}
+								}
+								return *this;
 				}
+
+
 
 
 				/**
-				 *writes a System into a ClustalFile
+				 *reads a ClustalFile into an Alignment
+				 * Note: take care when using this feature, because Origin of all SequenceCharacters will not be setted correctly (will be 0) as well as residue pointer.
+				 * better: shift the file into a system and then shift the system into the alignment
 				 */
+				/*	ClustalFile& ClustalFile::operator >>(Alignment& alignment)
+						{
 
-				/*
-					 ClustalFile& ClustalFile::operator << (System& system)
-					 {
+						if(!hasValidBlocks())
+						{
+						throw Exception::InvalidArgument(__FILE__,__LINE__, "ClustalFile Error: Invalid File");
+						}
 
-				//first clear everything
-				blocks.clear();
+				//first reset Score
+				alignment.setScore(0);
 
-				//counter to denote which protein we are in
-				int pr_ctr = 0;
+				//reset aligned_
+				alignment.setAligned(false);
 
-				//iterate over all proteins of the system 
-				for (MoleculeIterator m_it = S.beginMolecule(); +m_it; ++m_it)
+				//Check whether there are already sequences in the alignment
+				unsigned int old_width = alignment.getAlignmentMatrix().rows();
+
+				//iterate over all blocks to retrieve all SequenceLines
+				for(unsigned int b_it =0; b_it < blocks_.size(); b_it++)
 				{
-
-				if (RTTI::isKindOf<Protein>(*(m_it)))
+				//iterate over all SequenceLines of the block
+				for(unsigned int count = 0; count < blocks_.at(b_it).seqs.size(); count++)
 				{
-				// cast to Protein
-				Protein* protein = RTTI::castTo<Protein>(*(m_it));
-				} 
-				else 
-				{ 
-				throw Exception::ParseError(__FILE__,__LINE__, "No Protein in this System");
+				String sequence = blocks_.at(b_it).seqs.at(count).sequence;
+
+				//if matrix is completley empty
+				if(old_width == 0 && count == 0)
+				{
+				//resize matrix
+				alignment.getAlignmentMatrix().conservativeResize(1, 1);
+
+				//intialize all newly created uninitialized entrys with Gaps
+				for( int i= 0; i< alignment.getAlignmentMatrix().rows(); i++)
+				{
+				alignment.getAlignmentMatrix()(i,0)= *(new SequenceCharacter('-', 0, SequenceCharacter::type::GAP, 0));
+				}
 				}
 
-				//TAKE CARE OF "?"
-				//get the protein's sequence
-				String tmp = Peptides::GetSequence(*protein);
-
-
-				//iterator for blocks 
-				vector<Block>::iterator bl_it = blocks.begin();
-
-				//initialize a SequenceLine
-				ClustalFile::SequenceLine* seqline__ptr = new SequenceLine();
-				seqline_ptr->ident= protein->getName();
-
-				//insert the sequenceLine at the desired Position 
-				bl_it->seqs.insert(bl_it->seqs.begin() + pr_ctr, *seqline_ptr);
-
-				int seq_ctr = 0;
-
-				//as long as the sequence's end isn't reached
-				while(  seq_ctr != tmp.length())
-				{												
-				//every time the counter reaches a number that is divisible by 60 create a new SequenceLine and go to the next block
-				if((seq_ctr + 1) % 60 ==	0)
+				//check whether resizing is necessary
+				if(old_width + count >= alignment.getAlignmentMatrix().rows())
 				{
 
-				//make new SequenceLine
-				seq_line_ptr = new SequenceLine();
-				seqline_ptr->ident = protein -> getName();
+				//resize matrix
+				alignment.getAlignmentMatrix().conservativeResize(old_width + count, Eigen::NoChange);
 
-				//go to the next block and insert the SequenceLine at the desired position
-				if(++bl_it != blocks.end())
+				//initialize all characters left, with Gaps
+				for(int i= sequence.length(); i> alignment.getAlignmentMatrix().cols(); i--)
 				{
-				bl_it->seqs.insert(bl_it->seq.begin() + pr_ctr, *seqline_ptr);
+				alignment.getAlignmentMatrix()(old_width + count, i) = *(new SequenceCharacter('-', 0, SequenceCharacter::type::GAP, 0));
 				}
-				else
+				}
+
+
+				//iterate over sequence
+				for(unsigned int i =0; i<sequence.length();i++)
 				{
-				//make a new Block
-				Block* n_bl = new Block();
-				//add it to the existing ones
-				blocks.push_back(*n_bl);
+				char c = sequence[i];
+				SequenceCharacter seq_c;
+				seq_c.setType(SequenceCharacter::CHAR);
+				seq_c.setChar(c);
 
-				}	
-				}
+				//check whether we have to resize the matrix
+				if (i >= alignment.getAlignmentMatrix().cols())
+				{
+				//			alignment.getAlignmentMatrix().conservativeResize(Eigen::NoChange, i);
+				//initialize the newly created empty cols with Gaps, except the ith row
+				for (unsigned int m =0; m<alignment.getAlignmentMatrix().rows(); m++)
+				{
+				if(m != old_width + count)
+				{
+				//alignment.getAlignmentMatrix()(m,i)= *(new SequenceCharacter('-', 0 , SequenceCharacter::type::GAP, 0));
+}
+}
+}
 
-				seqline_ptr->sequence += tmp[seq_ctr++];
-				}
-				pr_ctr++;
+//einfügen an passender Stelle
+//			alignment.getAlignmentMatrix()(old_width + count, i)= seq_c;
+}
 
+}
 }
 
 return *this;
-
 }
-
 */
-
-
-/**
- *writes an Alignment into a ClustalFile
- */
-ClustalFile& ClustalFile::operator << (Alignment& alignment)
-{ 
-				if(!alignment.isAligned())
-				{
-								throw File::CannotWrite(__FILE__, __LINE__, name_);
-				}
-
-				AlignmentMatrix matrix = alignment.getAlignmentMatrix();
-
-				//Check whether we have to create new blocks
-				if (blocks_.empty())
-				{
-								blocks_.push_back(* (new Block()));
-				}
-				//iterate over all Sequences in alignment
-				for (unsigned int i = 0; i< matrix.rows(); i++)
-				{
-								//denotes the number of characters in current line
-								unsigned int count = 1;
-								//iterate over all blocks to write the SequenceLines each time count mod 60 equals zero the next block is setted
-								unsigned int bl_count = 0;
-
-								//iterate over SequenceCharacters of currentline
-								for(unsigned int j=0; j< matrix.cols(); j++)
-								{
-												//CHECK whether we need to go to the next block
-												if(count % 60 == 0)
-												{
-																//CHECK whether we need to create a new Block
-																if(bl_count == 0 || bl_count >= blocks_.size())
-																{
-																				addBlock(*(new Block));
-																}
-																//go to next block
-																bl_count++;
-												}
-
-												//Check whether we have to newly create a SequenceLine at Position i
-												if (blocks_.at(bl_count).seqs.empty() || (blocks_.at(bl_count).seqs.size() <= i))
-												{
-																SequenceLine* line = new SequenceLine();
-																line->ident = matrix(i,0).getOrigin()->getName();
-																blocks_.at(bl_count).seqs.push_back(*line);
-												}
-
-												//add SequenceCharacter to the sequenceLine
-												blocks_.at(bl_count).seqs[i].sequence += matrix(i,j).getChar();
-
-												//store number of AAs in current Sequence and increase counter
-												blocks_.at(bl_count).seqs.at(i).length = count++;
-
-								}
-				}
-				return *this;
-}
-
-					
-/*					//Check whether there are already sequences in the alignment
-					unsigned int old_width = matrix.rows();
-																
-					//iterate over all blocks to retrieve all SequenceLines
-					for(vector<Block>::iterator b_it = getBlocks().begin(); b_it!= getBlocks().end(); b_it++)
-								{
-										//iterate over all SequenceLines of the block
-										for(unsigned int count = 0; count < b_it->seqs.size(); count++)
-										{
-												String sequence = b_it->seqs.at(count).sequence;
-
-													//check whether resizing is necessary
-													if(old_width + count >= matrix.rows())
-													{
-														//resize matrix
-														matrix.conservativeResize(old_width + count, Eigen::NoChange);
-
-														//initialize all characters left, with Gaps
-														for(int i= sequence.length(); i> matrix.cols(); i--)
-														{
-															matrix(old_width + count, i) = *(new SequenceCharacter('-', matrix(old_width + count,0).getOrigin(), SequenceCharacter::type::GAP, 0));
-														}
-													}
-
-
-													//iterate over sequence
-													for(unsigned int i =0; i<sequence.length();i++)
-													{
-														char c = sequence[c];
-														SequenceCharacter seq_c;
-														seq_c.setType(SequenceCharacter::CHAR);
-														seq_c.setChar(c);
-											
-														//check whether we have to resize the matrix
-														if (i >= matrix.cols())
-														{
-																matrix.conservativeResize(Eigen::NoChange, i);
-																//initialize the newly created empty cols with Gaps, except the ith row
-																for (unsigned int m =0; m< matrix.rows(); m++)
-																{
-																		if(m != old_width + count)
-																		{
-																				matrix(m,i)= *(new SequenceCharacter('-', matrix(m,0).getOrigin(), SequenceCharacter::type::GAP, 0));
-																		}
-																}
-														}
-											
-														//einfügen an passender Stelle
-														matrix(old_width + count, i)= seq_c;
-												}
-	*/									
-
-			
-
 
 
 struct ClustalFile::State ClustalFile::state;
