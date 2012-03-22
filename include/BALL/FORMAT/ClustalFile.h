@@ -226,7 +226,7 @@ namespace BALL
 			/**
 			 * writes a Clustalfile into an alignment
 			 */
-			ClustalFile& operator >>(Alignment& alignment);
+	//		ClustalFile& operator >>(Alignment& alignment);
 
 
 			/**

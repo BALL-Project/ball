@@ -268,26 +268,17 @@ CHECK(bool read())
 
 
 RESULT
-//cp.dump();
 
 CHECK(operator >>(System& system))
 
-	BALL::System S;
-	cp>>S;
-cout<<S.countResidues();
-	BALL::ResidueIterator resit = S.beginResidue();
-	for (; +resit ; ++resit)
-	{
-   	if (resit->isAminoAcid())
-   	{
-    	  std::cout << Peptides::OneLetterCode(resit->getName()) << " ";
-   	}
-	}     
-
+	BALL::System s;
+	cp>>s;
+	TEST_EQUAL(s.countProteins(), 3)
+	TEST_EQUAL(s.countResidues(), 289)
+		     
 RESULT
 
 cp.clear();
-
 
 CHECK(operator << (Alignment& alignment))
 
