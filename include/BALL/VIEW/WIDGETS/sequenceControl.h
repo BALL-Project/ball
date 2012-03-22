@@ -25,6 +25,10 @@
 # include <BALL/SEQUENCE/sequence.h>
 #endif
 
+#ifndef BALL_SEQUENCE_ALIGNMENT_H
+#include<BALL/SEQUENCE/alignment.h>
+#endif
+
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
 # include <BALL/DATATYPE/stringHashMap.h>
 #endif
@@ -45,7 +49,7 @@ namespace BALL
 {
 	class Protein;
 	class NucleicAcid;
-
+	
 	namespace VIEW
 	{
 
@@ -53,6 +57,8 @@ namespace BALL
 			: public QAbstractTableModel
 		{
 			Q_OBJECT
+
+		friend class SequenceControl;
 
 			public:
 				typedef std::vector<boost::shared_ptr<Sequence> > SequenceVector;
@@ -85,6 +91,46 @@ namespace BALL
 				SequenceVector sequences_;
 				std::vector<bool> selection_;
 		};
+
+
+class BALL_VIEW_EXPORT AlignmentControlModel
+			: public QAbstractTableModel
+		{
+			Q_OBJECT
+
+		friend class SequenceControl;
+
+			public:
+				
+				AlignmentControlModel();
+
+				void addSequence(boost::shared_ptr<Sequence> const& sequence)
+				{
+					beginInsertRows(QModelIndex(), alignment_.rows(), alignment_.rows());
+					alignment_.addSequence(*sequence);
+					selection_.push_back(false);
+					endInsertRows();
+				};
+
+				int rowCount(const QModelIndex& parent = QModelIndex()) const;
+				int columnCount(const QModelIndex& parent = QModelIndex()) const;
+
+				bool hasSequenceFor(AtomContainer const* ac);
+				boost::shared_ptr<Sequence> getSequenceFor(AtomContainer const* ac);
+
+				QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+				QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+				Qt::ItemFlags flags(const QModelIndex& index) const;
+
+				bool setData(const QModelIndex& index, const QVariant& data, int role = Qt::EditRole);
+
+			
+
+			protected:
+				Alignment alignment_;
+				std::vector<bool> selection_;
+		};
+
 
 //TODO
 /**	SequenceControl is a widget to display the sequence of Composite objects. 
@@ -190,12 +236,16 @@ class BALL_VIEW_EXPORT SequenceControl
 	///
 	void addSequenceTab(String const& name);
 
+	///
+	void addAlignmentTab(String const& name);
+	
 	public slots:
 
 	//@}
 	/** @name Public slots
 	*/
 	//@{
+	void alignSelected();
 
 
 	//@} 
@@ -203,7 +253,9 @@ class BALL_VIEW_EXPORT SequenceControl
 	*/
 	//@{
 	protected slots:
-	void align();
+
+	void showGuestContextMenu(const QPoint& pos);
+
 		void onTabCloseRequested_(int index);
 
 	protected:
@@ -212,6 +264,7 @@ class BALL_VIEW_EXPORT SequenceControl
 
 		Ui_SequenceControlData ui_;
 
+		StringHashMap<boost::shared_ptr<AlignmentControlModel> > alignment_per_tab_;
 		StringHashMap<boost::shared_ptr<SequenceControlModel> >  sequences_per_tab_;
 		StringHashMap<QTableView*>                               tabs_per_name_;
 
@@ -239,11 +292,11 @@ class BALL_VIEW_EXPORT SequenceControl
 	*/
 	//@{
 	// the context menus
-	QMenu               context_menu_,
-											model_menu_;
-	//										edit_menu_,
+	QMenu               context_menu_;
+								//			model_menu_;
+//											edit_menu_,
 		//									color_menu_[MODEL_LABEL - MODEL_LINES];
-
+QAction* align_selected_action_;
 
 };
 }} // namespaces

@@ -40,7 +40,7 @@ namespace BALL{
 								return score_;
 				}
 
-				AlignmentMatrix& Alignment::getAlignmentMatrix()
+				AlignmentMatrix Alignment::getAlignmentMatrix() const
 				{
 								return alignment_;
 				}
@@ -60,6 +60,21 @@ namespace BALL{
 		return alignment_(row,column);
 	}
 
+
+
+String Alignment::getStringSequence(unsigned int  row) const
+{
+	String sequence;
+	for(int i=0; i<alignment_.cols();i++)
+	{
+		sequence+=alignment_(row,i).getChar();
+	}
+
+	return sequence;
+}
+
+
+
 	unsigned int Alignment::cols() const
 	{
 		return alignment_.cols();
@@ -73,6 +88,12 @@ namespace BALL{
 	void Alignment::setScore(double score)
 	{
 		score_=score;
+	}
+
+
+	bool Alignment::empty() const
+	{
+		return ((alignment_.rows()== 0) || (alignment_.cols()== 0));
 	}
 
 	void Alignment::setAligned(bool aligned)
@@ -500,7 +521,7 @@ namespace BALL{
 				
 			}
 
-			Sequence& Alignment::getSequence(int row)
+			Sequence& Alignment::getSequence(int row) const
 			{
 					//retrieve Character at given row an fetch its origin
 					return *(alignment_(row,0).getOrigin());

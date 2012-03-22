@@ -209,4 +209,4 @@ namespace BALL
 		return seq;
 	}
 
-}//name_space BALL
+}//namespace BALL

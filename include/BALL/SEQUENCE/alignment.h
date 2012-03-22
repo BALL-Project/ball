@@ -97,7 +97,7 @@ namespace BALL
 		/**
 		 * return the Matrix containing the  alignment
 		 */
-		AlignmentMatrix& getAlignmentMatrix();
+		AlignmentMatrix getAlignmentMatrix() const;
 
 		/*
 		* sets the Matrix conaining the alignment
@@ -133,11 +133,23 @@ namespace BALL
 		*@param score the scroe to be setted
 		*/
 		void setScore(double score);
-			
+		
+	
+		/**
+		*tells whether Alignment is empty
+		*/
+		bool empty() const;			
 	/**
 	*sets whether alignment is aligned or not
 	*/
 	void setAligned(bool aligned);
+
+		/*
+		*@return the Sequeence as String at line row
+		*@param row the row where the Sequence is stored
+		*/
+		String getStringSequence(unsigned int  row) const;
+
 
 		/////////////////////////////////////////////////////////////////////// Edit the Alignment ////////////////////////////////////////////
 
@@ -194,7 +206,7 @@ namespace BALL
 		*@param row the row, where the sequence is to be retrieved of
 		*@return the Sequence at the given row
 		*/
-		Sequence& getSequence(int row);
+		Sequence& getSequence(int row) const;
 
 
 		/**
@@ -231,20 +243,7 @@ namespace BALL
 
 		/////////////////////////////////////////////////////////////////////// Reading and Writing ///////////////////////////////////////////////////////////////
 		
-		/**
-		 *reads a Clustalfile into an alignment
-		 *@param file the file to be read
-		 */
-//		void read(ClustalFile & file);
-		
-		
 	
-		/**
-		*reads a PDBFile into the alignment
-		*@param file the file to be read
-		*/
-	//	void read(PDBFile& file);
-
 		/**
 		*reads a System into the Alignment
 		*/
@@ -255,14 +254,7 @@ namespace BALL
 		*/
 		void read(Protein& protein);
 
-		/**
-		*aligns the Sequences contained in the Alignment with a given Algorithm
-		*@param algorithm the alignALgorithm witch which the alignment is to to be computed
-		*@return true if alignment has been computed correctly, false otherwise
-		*/
-//		bool align(AlignAlgorithm& algorithm);
-
-		
+			
 		/**
 		*shifts the alignment into the stream, or prints it
 		*/
