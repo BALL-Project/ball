@@ -30,6 +30,9 @@ namespace BALL
 		{
 			page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
 
+			// make us available in Javascript, even after a new url has been loaded
+			connect(page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(exposeQObjectToJavascript()));
+			
 			connect(this, SIGNAL(linkClicked(const QUrl&)), this, SLOT(handleLinkClicked(const QUrl&)));
 			connect(this, SIGNAL(urlChanged(const QUrl&)), this, SLOT(executeLink(const QUrl&)));
 
@@ -69,16 +72,7 @@ namespace BALL
 			
 
 			ModularWidget::registerWidget(this);
-			//MainControl* mc = MainControl::getInstance(0);
-			//if(mc != 0)
-			//{
-			//	mc->registerConnectionObject(*this);
-			//}
-			// ...
-			QWebPage *page = this->page();
-			QWebFrame *frame = page->mainFrame();
-			frame->addToJavaScriptWindowObject("myWebview", this);
-			// ...
+			
 		}
 
 		HTMLBasedInterface::~HTMLBasedInterface()
@@ -105,6 +99,16 @@ namespace BALL
 
 			action_registry_.insert(action->getName(), action);
 		}
+		
+		void HTMLBasedInterface::exposeQObjectToJavascript()
+		{
+			
+			//add us (the object of HTMLBasedInterface) to JavaScript runtime of currently loaded page
+			page()->mainFrame()->addToJavaScriptWindowObject(QString("mywebview"), this);
+			
+			// Just for testing
+			//page()->mainFrame()->evaluateJavaScript("alert('Qt is good'); ");
+		}
 
 		void HTMLBasedInterface::handleLinkClicked(const QUrl& url)
 		{
@@ -116,18 +120,31 @@ namespace BALL
 
 		void HTMLBasedInterface::onNotify(Message* message)
 		{
-			Log.info() << "In onNotify()" << std::endl;
+			//Log.info() << "In onNotify()" << std::endl;
 			
+			//Try to cast message to the type, that you want to handle
 			CompositeMessage* cmsg = RTTI::castTo<CompositeMessage>(*message);
-			Log.info() << cmsg << std::endl;
-			if (cmsg == 0) return;
-			if (cmsg->getType() != CompositeMessage::NEW_MOLECULE) return;
-			//RepresentationMessage* rmsg = RTTI::castTo<RepresentationMessage>(*message);
 			
-			//if (cmsg == 0 | cmsg->getType() != CompositeMessage::NEW_MOLECULE) return;
 			
-			emit fireJSCompositeMessage(cmsg->getType());
-			Log.info() << "CompositeMessage fired to JS" << std::endl;
+			//Log.info() << cmsg << std::endl;
+			
+			if (cmsg == 0)
+			{
+				return;
+			}
+			else
+			{
+			
+				//if (cmsg->getType() != CompositeMessage::NEW_MOLECULE) return;
+				//RepresentationMessage* rmsg = RTTI::castTo<RepresentationMessage>(*message);
+
+				//if (cmsg == 0 | cmsg->getType() != CompositeMessage::NEW_MOLECULE) return;
+
+				// fire a Qt signal that can be handled by the website 
+				emit fireJSCompositeMessage((int) cmsg->getType());
+
+				Log.info() << "CompositeMessage fired to JS" << std::endl;
+			}
 		}
 		
 		void HTMLBasedInterface::contextMenuEvent(QContextMenuEvent*)

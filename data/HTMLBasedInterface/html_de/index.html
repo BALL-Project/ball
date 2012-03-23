@@ -4,6 +4,7 @@
 		<link rel="stylesheet" href="../css/style.css">
 	</head>
 	<body style="background-color:#000000;color:#FFFFFF;margin:0px 0px 0px 0px">
+		<script type="text/javascript" src="../scripts/connectVIEW.js"></script>
 		<script type="text/javascript">
 			firsttime=true
 			mini_index=0
@@ -43,12 +44,20 @@
 				window.setTimeout("changeMiniPicture()", 5000);
 			}
 
-			function onJSCompositeMessage(int i) {
-				alert("Received Composite Message" + i);
-			
-			myWebview.fireJSCompositeMessage.connect(onJSCompositeMessage);
+			//function onJSCompositeMessage(i) {
 
-			}
+			//alert("Received Composite Message " + i);
+
+			//}
+
+			//try
+			//{
+			//	mywebview.fireJSCompositeMessage.connect(onJSCompositeMessage);
+			//}
+			//catch (e)
+			//{
+			//	alert(e);
+			//}
 
 		</script>
 		<div id="breadcrumb">

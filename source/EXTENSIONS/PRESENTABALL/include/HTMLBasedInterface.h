@@ -52,6 +52,7 @@ namespace BALL
 			
 			protected slots:
 
+				void exposeQObjectToJavascript();
 				void handleLinkClicked(const QUrl& url);
 				void executeLink(const QUrl& url);
 				void executePython_(const QString& action, const ParameterList& parameters);
