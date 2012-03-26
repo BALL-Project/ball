@@ -30,10 +30,12 @@
 #include <map>
 #include <set>
 #include <vector>
+#include <iostream>
 
 #include <boost/graph/connected_components.hpp>
 #include <boost/graph/filtered_graph.hpp>
 #include <boost/graph/graph_as_tree.hpp>
+#include <boost/graph/graphviz.hpp>
 #include <boost/graph/copy.hpp>
 
 namespace boost
@@ -91,7 +93,7 @@ namespace BALL
 				END_BAG
 			};
 
-			typedef typename GRAPH::GraphTraits<UndirectedGraph>::EditableGraph EditableGraph;
+			typedef typename GRAPH::GraphTraits<UndirectedGraph>::EditableGraph      EditableGraph;
 			typedef typename boost::graph_traits<UndirectedGraph>::vertex_descriptor OriginalVertexType;
 
 			typedef std::set<OriginalVertexType> TreeDecompositionContent;
@@ -111,6 +113,16 @@ namespace BALL
 
 			TreeWidth(UndirectedGraph const& input);
 
+			/** Compute the tree width of a given tree decomposition.
+			 *  This function iterates over all nodes in the graph to determine the tree width,
+			 *  i.e., the (maximum number of vertices over all bags) - 1 
+			 */
+			static Size computeTreeWidth(TreeDecomposition const& td);
+
+			/** Write a tree decomposition in graphviz format.
+			 */
+			void writeGraphvizFile(std::ostream& out, TreeDecomposition const& td);
+
 			std::vector<boost::shared_ptr<EditableGraph> >& getComponents() { return components_; }
 			std::vector<boost::shared_ptr<TreeDecomposition> >& getNiceTreeDecompositions()   { return nice_tree_decompositions_; }
 
@@ -120,25 +132,44 @@ namespace BALL
 			{
 				public:
 					ComponentFilter_(ComponentMap cm, Position i) 
-						: cm_(&cm),
+						: cm_(cm),
 							component_(i)
 					{ }
 
 					template <typename Vertex>
 					bool operator() (const Vertex& e) const 
 					{
-						return ((*cm_)[e] == component_);
+						return ((cm_)[e] == component_);
 					}
 
 				protected:
-					ComponentMap* cm_;
+					ComponentMap  cm_;
 					Position      component_;	
 			};
 
+			/** PropertyWriter for graphviz output.
+			 */
+			class BagContentWriter 
+			{
+				public:
+					BagContentWriter(TreeDecomposition const* td, UndirectedGraph const* original_graph)
+					  : td_(td),
+						  original_graph_(original_graph)
+					{ }
+
+					void operator() (std::ostream& out, const TreeDecompositionBag& v) const;
+
+				protected:
+					TreeDecomposition const* td_;
+					UndirectedGraph   const* original_graph_;
+			};
+
+			// TODO: would UndirectedGraph suffice here?
 			MolecularGraph const* input_;
+
 			std::vector<boost::shared_ptr<EditableGraph> > components_; 
 
-			std::vector<boost::shared_ptr<TreeDecomposition> >    nice_tree_decompositions_;
+			std::vector<boost::shared_ptr<TreeDecomposition> >      nice_tree_decompositions_;
 			std::vector<boost::shared_ptr<TreeDecompositionGraph> > nice_tree_decomposition_graphs_;
 	};
 
@@ -397,6 +428,9 @@ namespace BALL
 				 * The bitset remembers the eliminated vertices without an ordering.
 				 */
 				BitSet buildBitset() const;
+
+			protected:
+				std::map<int, VertexType> index_to_vertex_;
 		};
 
 		/**

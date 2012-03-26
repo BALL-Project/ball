@@ -68,6 +68,34 @@ namespace BALL
 		}
 	}
 
+	template <class UndirectedGraph>
+	Size TreeWidth<UndirectedGraph>::computeTreeWidth(TreeDecomposition const& td)
+	{
+		Size result = 1;
+
+		BGL_FORALL_VERTICES_T(current_vertex, td._g, UndirectedGraph)
+		{
+			result = std::max((Size)(boost::get(boost::vertex_bag_content, td, current_vertex).size()), result);
+		}
+
+		return result - 1;
+	}
+
+	template <class UndirectedGraph>
+	void TreeWidth<UndirectedGraph>::writeGraphvizFile(std::ostream& out, TreeDecomposition const& td)
+	{
+		boost::write_graphviz(out, td._g, BagContentWriter(&td, input_));
+	}
+
+	template <>
+	void TreeWidth<MolecularGraph>::BagContentWriter::operator() (std::ostream& out, const TreeDecompositionBag& v) const;
+
+	template <class UndirectedGraph>
+	void TreeWidth<UndirectedGraph>::BagContentWriter::operator() (std::ostream& out, const TreeDecompositionBag& v) const
+	{
+		out << "[label=\"" << boost::get(boost::vertex_index, *td_, v) << "\"]";
+	}
+
 	// *****************************************************************************************
 	// * TreeWidthImplementation                                                               *
 	// *****************************************************************************************
@@ -322,8 +350,9 @@ namespace BALL
 		if (boost::out_degree(vertex, graph_) <= 1)
 			return IS_SIMPLICIAL;
 
-		VertexType* n1 = NULL;
-		VertexType* n2 = NULL;
+		VertexType n1 = VertexType();
+		VertexType n2 = VertexType();
+		bool found_unconnected = false;
 
 		typename boost::graph_traits<UndirectedGraph>::adjacency_iterator a_i, a_j, ai_end;
 
@@ -337,20 +366,21 @@ namespace BALL
 
 				if (!boost::edge(i, j, graph_).second)
 				{
-					if (!n1)
+					if (!found_unconnected)
 					{
-						n1 = &i;
-						n2 = &j;
+						n1 = i;
+						n2 = j;
+						found_unconnected = true;
 					} 
-					else if (i == *n1 || i == *n2)
+					else if (i == n1 || i == n2)
 					{
-						n1 = &i;
-						n2 = &i;
+						n1 = i;
+						n2 = i;
 					} 
-					else if (j == *n1 || j == *n2)
+					else if (j == n1 || j == n2)
 					{
-						n1 = &j;
-						n2 = &j;
+						n1 = j;
+						n2 = j;
 					} 
 					else
 					{
@@ -376,11 +406,10 @@ namespace BALL
 	{
 		Size nxt = cstate.permutation.size();
 
-		std::map<int, VertexType> index_to_vertex;
 		BGL_FORALL_VERTICES_T(current_vertex, graph_, UndirectedGraph)
 		{
 			Size index = boost::get(boost::vertex_index, graph_, current_vertex);
-			index_to_vertex[index] = current_vertex;
+			index_to_vertex_[index] = current_vertex;
 			SIMPLICIAL_TYPE simplicial(isSimplicial(current_vertex));
 			if (simplicial == IS_SIMPLICIAL || simplicial == ALMOST_SIMPLICIAL)
 			{
@@ -388,14 +417,13 @@ namespace BALL
 			}
 		}
 
-	
-		for (typename std::vector<Size>::const_iterator st_iter = cstate.permutation.begin() + nxt; 
-				st_iter != cstate.permutation.end(); ++st_iter)
+		for (typename std::vector<Size>::const_iterator st_iter  = cstate.permutation.begin() + nxt; 
+				                                            st_iter != cstate.permutation.end(); 
+																										++st_iter)
 		{
-			VertexType vertex = index_to_vertex[*st_iter];
+			VertexType vertex = index_to_vertex_[*st_iter];
 			cstate.g = std::max(cstate.g, (Size)boost::out_degree(vertex, graph_));
 			cstate.f = std::max(cstate.f, cstate.g);
-
 			GRAPH::eliminateVertex(vertex, graph_);
 		}
 	}
@@ -459,55 +487,62 @@ namespace BALL
 			{
 				upper_bound = nstate.f;
 				state.permutation = nstate.permutation;
-				state.permutation.push_back(0);
+				BGL_FORALL_VERTICES_T(v, graph_, UndirectedGraph) // yes, it is only one, but still...
+				{
+					state.permutation.push_back(boost::get(boost::vertex_index, graph_, v));
+				}
 			}
 		} 
 		else
 		{
-			std::map<int, VertexType> index_to_vertex;
+			index_to_vertex_.clear();
 			BGL_FORALL_VERTICES_T(v, graph_, UndirectedGraph)
 			{
-				index_to_vertex[boost::get(boost::vertex_index, graph_, v)] = v;
+				index_to_vertex_[boost::get(boost::vertex_index, graph_, v)] = v;
 			}
 
 			for (typename std::vector<Size>::iterator viter = greedy_solution.first.begin(); 
 					viter != greedy_solution.first.end(); ++viter)
 			{
-				VertexType& vertex = index_to_vertex[*viter];
-				Size degree = boost::out_degree(vertex, graph_);
-
-				GRAPH::UndoEliminateOperation<UndirectedGraph> elimination(graph_, vertex);
-
-				QuickBBState xstate(nstate);
-				xstate.g = std::max(nstate.g, degree);
-				xstate.permutation.push_back(boost::get(boost::vertex_index, graph_, vertex));
-
-				BitSet bitset(buildBitset());
-
-				Size lower_bound = L()(graph_);
-				xstate.h = lower_bound;
-				xstate.f = std::max(xstate.g, lower_bound);
-
-				if (xstate.f >= upper_bound)
+				if (index_to_vertex_.find(*viter) != index_to_vertex_.end())
 				{
-					elimination.undo();
+					VertexType& vertex = index_to_vertex_[*viter];
+					Size degree = boost::out_degree(vertex, graph_);
 
-					continue;
+					GRAPH::UndoEliminateOperation<UndirectedGraph> elimination = GRAPH::eliminateVertexUndoable(vertex, graph_);
+
+					QuickBBState xstate(nstate);
+					xstate.g = std::max(nstate.g, degree);
+					xstate.permutation.push_back(*viter);
+
+					BitSet bitset(buildBitset());
+
+					Size lower_bound = L()(graph_);
+					xstate.h = lower_bound;
+					xstate.f = std::max(xstate.g, lower_bound);
+
+					if (xstate.f >= upper_bound)
+					{
+						VertexType vertex_replace = elimination.undo();
+						index_to_vertex_[*viter] = vertex_replace;
+						continue;
+					}
+
+					MapPos entry(visitedSubgraphs.insert(MapEntry(bitset, xstate.f)));
+
+					if (entry.second)
+					{
+						branchAndBound(xstate);
+					} 
+					else if ((entry.first)->second > xstate.f)
+					{
+						entry.first->second = xstate.f;
+						branchAndBound(xstate);
+					}
+
+					VertexType vertex_replace = elimination.undo();
+					index_to_vertex_[*viter] = vertex_replace;
 				}
-
-				MapPos entry(visitedSubgraphs.insert(MapEntry(bitset, xstate.f)));
-
-				if (entry.second)
-				{
-					branchAndBound(xstate);
-				} 
-				else if ((entry.first)->second > xstate.f)
-				{
-					entry.first->second = xstate.f;
-					branchAndBound(xstate);
-				}
-
-				elimination.undo();
 			}
 		}
 	}
@@ -687,7 +722,7 @@ namespace BALL
 	typename TreeWidth<OriginalGraphType>::TreeDecompositionBag
 	TreeWidthImplementation<UndirectedGraph>::TreeDecompositionBuilder<OriginalGraphType>::buildRoot_(TreeDecompositionBag child)
 	{
-		TreeDecompositionBag last_vertex;
+		TreeDecompositionBag last_vertex = TreeDecompositionBag();
 
     TreeDecompositionContent content = boost::get(boost::vertex_bag_content, *nice_tree_, child);
 
