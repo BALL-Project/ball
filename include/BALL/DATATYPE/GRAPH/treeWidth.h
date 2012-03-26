@@ -100,14 +100,14 @@ namespace BALL
 
 			typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS,
 																		  boost::property<boost::vertex_bag_content_t, std::set<OriginalVertexType>,
-																			boost::property<boost::vertex_bag_special_t, OriginalVertexType, 
-																			boost::property<boost::vertex_bag_type_t, int> > >, 
+																			boost::property<boost::vertex_bag_special_t, OriginalVertexType,
+																			boost::property<boost::vertex_bag_type_t, int> > >,
 																	  boost::no_property> TreeDecompositionGraph;
 
 			typedef typename boost::graph_traits<TreeDecompositionGraph>::vertex_descriptor TreeDecompositionBag;
 
 			typedef boost::iterator_property_map<typename std::vector<TreeDecompositionBag>::iterator,
-							                             typename boost::property_map<TreeDecompositionGraph, boost::vertex_index_t>::type> 
+							                             typename boost::property_map<TreeDecompositionGraph, boost::vertex_index_t>::type>
 																					 TreeDecompositionParentMap;
 			typedef boost::graph_as_tree<TreeDecompositionGraph, TreeDecompositionParentMap> TreeDecomposition;
 
@@ -131,7 +131,7 @@ namespace BALL
 			class ComponentFilter_
 			{
 				public:
-					ComponentFilter_(ComponentMap cm, Position i) 
+					ComponentFilter_(ComponentMap cm, Position i)
 						: cm_(cm),
 							component_(i)
 					{ }
@@ -144,7 +144,7 @@ namespace BALL
 
 				protected:
 					ComponentMap  cm_;
-					Position      component_;	
+					Position      component_;
 			};
 
 			/** PropertyWriter for graphviz output.
@@ -167,7 +167,7 @@ namespace BALL
 			// TODO: would UndirectedGraph suffice here?
 			MolecularGraph const* input_;
 
-			std::vector<boost::shared_ptr<EditableGraph> > components_; 
+			std::vector<boost::shared_ptr<EditableGraph> > components_;
 
 			std::vector<boost::shared_ptr<TreeDecomposition> >      nice_tree_decompositions_;
 			std::vector<boost::shared_ptr<TreeDecompositionGraph> > nice_tree_decomposition_graphs_;
@@ -201,7 +201,7 @@ namespace BALL
 		 * @tparam Reducer the reducer which removes a vertex from the graph to reduce it's size
 		 */
 		template<class Criterion, class Reducer>
-		class GeneralLowerBoundAlgorithm 
+		class GeneralLowerBoundAlgorithm
 			: public UnaryFunctor<UndirectedGraph, Size>
 		{
 			public:
@@ -284,7 +284,7 @@ namespace BALL
 		 * @throw BALL::GRAPH::UnconnectedGraphException if called on unconnected graphs
 		 */
 		template<class Criterion>
-		class GreedyX 
+		class GreedyX
 			: public UnaryFunctor<UndirectedGraph, typename std::pair<
 				std::vector<boost::graph_traits<typename UndirectedGraph::vertex_descriptor> >, Size> >
 		{
@@ -296,7 +296,7 @@ namespace BALL
 		 * A criterium for GreedyFillIn which search for a vertex with
 		 * minimum number of additional edges after eliminating
 		 */
-		struct FillInHeuristic 
+		struct FillInHeuristic
 		{
 			VertexType& operator() (UndirectedGraph& graph);
 
@@ -323,8 +323,8 @@ namespace BALL
 				 */
 				enum SIMPLICIAL_TYPE
 				{
-					NOT_SIMPLICIAL, 
-					ALMOST_SIMPLICIAL, 
+					NOT_SIMPLICIAL,
+					ALMOST_SIMPLICIAL,
 					IS_SIMPLICIAL
 				};
 
@@ -484,7 +484,7 @@ namespace BALL
 				TreeDecompositionBag buildJoin_(TreeDecompositionBag node, TreeDecompositionBag left,
 				                                  TreeDecompositionBag right, bool do_forget);
 
-				TreeDecompositionBag buildSingle_(TreeDecompositionBag node, int node_type, 
+				TreeDecompositionBag buildSingle_(TreeDecompositionBag node, int node_type,
 				                                    TreeDecompositionBag child);
 
 				TreeDecompositionBag buildLinkage_(TreeDecompositionBag node, TreeDecompositionBag child);
@@ -492,8 +492,8 @@ namespace BALL
 				TreeDecompositionBag linkWithIntroduceNodes_(TreeDecompositionContent parent_set, TreeDecompositionBag child);
 				TreeDecompositionBag linkWithForgetNodes_   (TreeDecompositionContent parent_set, TreeDecompositionBag child);
 
-				TreeDecompositionBag branch_(TreeDecompositionBag node, int node_type, 
-				                               typename std::vector<TreeDecompositionBag>::iterator begin, 
+				TreeDecompositionBag branch_(TreeDecompositionBag node, int node_type,
+				                               typename std::vector<TreeDecompositionBag>::iterator begin,
 																			 typename std::vector<TreeDecompositionBag>::iterator end);
 
 				boost::shared_ptr<TreeDecomposition> tree_;

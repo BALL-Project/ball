@@ -12,10 +12,6 @@ namespace BALL
 	const FPTBondOrderStrategy::Penalty FPTBondOrderStrategy::infinite_penalty = 1e5;
 	const FPTBondOrderStrategy::Valence FPTBondOrderStrategy::max_valence      = 8;
 
-	String  FPTBondOrderStrategy::Option::UPPER_PENALTY_BOUND  = "upper_penalty_bound";
-
-	FPTBondOrderStrategy::Penalty FPTBondOrderStrategy::Default::UPPER_PENALTY_BOUND = infinite_penalty;
-
 	FPTBondOrderStrategy::FPTBondOrderStrategy(AssignBondOrderProcessor* parent)
 		: BondOrderAssignmentStrategy(parent)
 	{
@@ -33,15 +29,11 @@ namespace BALL
 
 	bool FPTBondOrderStrategy::readOptions(const Options& options)
 	{
-		upper_bound_ = options.get(Option::UPPER_PENALTY_BOUND).toFloat();
-
 		return true;
 	}
 
 	void FPTBondOrderStrategy::setDefaultOptions()
 	{
-		abop->options.setDefault(FPTBondOrderStrategy::Option::UPPER_PENALTY_BOUND,
-		                         FPTBondOrderStrategy::Default::UPPER_PENALTY_BOUND);
 	}
 
 	void FPTBondOrderStrategy::init()
@@ -64,16 +56,22 @@ namespace BALL
 		std::vector<boost::shared_ptr<TreeDecomposition> > & ntds = computing_data_->tw->getNiceTreeDecompositions();
 		std::vector<FPTBondOrderAssignment_*>& bond_assignments   = computing_data_->bond_assignments;
 
+		int max_penalty = abop->max_penalty_;
+		if (max_penalty == -1)
+			max_penalty = infinite_penalty;
+		else
+			max_penalty += 1;
+
 		bond_assignments.reserve(ntds.size());
 		for (Position i = 0; i < ntds.size(); ++i)
 		{
-			bond_assignments.push_back(new FPTBondOrderAssignment_(*this, ntds[i], upper_bound_));
-		  bond_assignments[i]->compute();
+			bond_assignments.push_back(new FPTBondOrderAssignment_(*this, ntds[i], max_penalty));
+		  Penalty result = bond_assignments[i]->compute();
 		}
 
 		// initialize backtracking
 		combiner_ = boost::shared_ptr<DPBackTrackingCombiner_>(
-		                   new DPBackTrackingCombiner_(bond_assignments, abop->max_number_of_solutions_, upper_bound_));
+		                   new DPBackTrackingCombiner_(bond_assignments, abop->max_number_of_solutions_, max_penalty));
 	}
 
 	boost::shared_ptr<BondOrderAssignment> FPTBondOrderStrategy::computeNextSolution()
@@ -144,7 +142,7 @@ namespace BALL
 			int penalty = (*penalties_)[start_index + position];
 
 			return (penalty < 0) ? infinite_penalty : static_cast<float>(penalty);
-		} 
+		}
 		else
 		{
 			return infinite_penalty;
@@ -155,20 +153,20 @@ namespace BALL
 	//*           DPConfig_                                                                               *
 	//*****************************************************************************************************
 
-	FPTBondOrderStrategy::DPConfig_::DPConfig_() 
-		: consumed_valences(0), 
+	FPTBondOrderStrategy::DPConfig_::DPConfig_()
+		: consumed_valences(0),
 		  bond_assignments(0)
 	{
 	}
 
-	FPTBondOrderStrategy::DPConfig_::DPConfig_(Size atoms, Size bonds) 
-		: consumed_valences(atoms, 0), 
+	FPTBondOrderStrategy::DPConfig_::DPConfig_(Size atoms, Size bonds)
+		: consumed_valences(atoms, 0),
 		  bond_assignments(bonds, 0)
 	{
 	}
 
-	FPTBondOrderStrategy::DPConfig_::DPConfig_(std::vector<Valence> const& v, std::vector<BondOrder> const& bo) 
-		: consumed_valences(v), 
+	FPTBondOrderStrategy::DPConfig_::DPConfig_(std::vector<Valence> const& v, std::vector<BondOrder> const& bo)
+		: consumed_valences(v),
 		  bond_assignments(bo)
 	{
 	}
@@ -258,12 +256,12 @@ namespace BALL
 	//*           DPTable_                                                                                *
 	//*****************************************************************************************************
 
-	FPTBondOrderStrategy::DPTable_::DPTable_() 
+	FPTBondOrderStrategy::DPTable_::DPTable_()
 	  : table()
 	{
 	}
 
-	FPTBondOrderStrategy::DPTable_::DPTable_(DPTable_ const& dptab) 
+	FPTBondOrderStrategy::DPTable_::DPTable_(DPTable_ const& dptab)
 		: table(dptab.table)
 	{
 	}
@@ -345,7 +343,7 @@ namespace BALL
 		if (insertion.second)
 		{
 			return true;
-		} 
+		}
 		else
 		{
 			if (insertion.first->second > penalty)
@@ -353,7 +351,7 @@ namespace BALL
 				insertion.first->second = penalty;
 
 				return true;
-			} 
+			}
 			else
 			{
 				return false;
@@ -365,14 +363,14 @@ namespace BALL
 	//*           AdditionalBagProperties_                                                                *
 	//*****************************************************************************************************
 
-	FPTBondOrderStrategy::AdditionalBagProperties_::AdditionalBagProperties_() 
-		: bonds(), 
-		  table(new DPTable_()) 
+	FPTBondOrderStrategy::AdditionalBagProperties_::AdditionalBagProperties_()
+		: bonds(),
+		  table(new DPTable_())
 	{
 	}
 
-	FPTBondOrderStrategy::AdditionalBagProperties_::AdditionalBagProperties_(AdditionalBagProperties_ const& copy) 
-		: bonds(copy.bonds), 
+	FPTBondOrderStrategy::AdditionalBagProperties_::AdditionalBagProperties_(AdditionalBagProperties_ const& copy)
+		: bonds(copy.bonds),
 			table(new DPTable_(*copy.table))
 	{
 	}
@@ -384,7 +382,7 @@ namespace BALL
 
 	FPTBondOrderStrategy::AdditionalBagProperties_& FPTBondOrderStrategy::AdditionalBagProperties_::operator=(AdditionalBagProperties_ const& copy)
 	{
-		if (&copy != this) 
+		if (&copy != this)
 		{
 			bonds = copy.bonds;
 			table = new DPTable_(*copy.table);
@@ -447,7 +445,7 @@ namespace BALL
 				{
 					throw Exception::NullPointer(__FILE__, __LINE__);
 				}
-			case TreeWidth<MolecularGraph>::LEAF_BAG: 
+			case TreeWidth<MolecularGraph>::LEAF_BAG:
 				break;
 			case TreeWidth<MolecularGraph>::END_BAG:
 				if (boost::num_vertices(*molecule_) == 0 && (bag == root(*ntd_)))
@@ -455,7 +453,7 @@ namespace BALL
 					// empty molecule -> empty table
 					bag_properties.table->insert(DPConfig_(), 0);
 					return bag_properties.table;
-				} 
+				}
 				else
 				{
 					// else nice tree decomposition is damaged
@@ -603,7 +601,7 @@ namespace BALL
 		return bonds;
 	}
 
-	void FPTBondOrderStrategy::FPTBondOrderAssignment_::computeIntroduceBag(TreeDecompositionBag& bag, DPTable_& child, 
+	void FPTBondOrderStrategy::FPTBondOrderAssignment_::computeIntroduceBag(TreeDecompositionBag& bag, DPTable_& child,
 	                                                                        AdditionalBagProperties_& property)
 	{
 		typedef TreeWidth<MolecularGraph>::TreeDecompositionContent TreeDecompositionContent;
@@ -614,7 +612,7 @@ namespace BALL
 
 		TreeDecompositionContent vertices = boost::get(boost::vertex_bag_content, *ntd_, bag);
 		Size num_valences = vertices.size();
-		
+
 		std::vector<MolecularGraphTraits::EdgeType>& bonds = property.bonds;
 		Size num_bonds = bonds.size();
 
@@ -654,7 +652,7 @@ namespace BALL
 				{
 					// remember the indizes of the new introduced bonds
 					indices.push_back(vindex);
-				} 
+				}
 				else
 				{
 					conf.bond_assignments[vindex] = child_entry.first.get().bond_assignments[cindex++];
@@ -662,7 +660,7 @@ namespace BALL
 			}
 
 			// if there are any introduced bonds we have to fill them with each possible value
-			if (indices.size() > 0) 
+			if (indices.size() > 0)
 			{
 				std::vector<int> bond_values(indices.size());
 
@@ -685,7 +683,7 @@ namespace BALL
 						++current_index;
 					}
 				}
-			} 
+			}
 			else
 			{
 				table.insert(conf, child_entry.second);
@@ -768,7 +766,7 @@ namespace BALL
 		return parent_->getPenaltyFor_(forgotten_vertex, forgotten_valence) + child_row.second;
 	}
 
-	void FPTBondOrderStrategy::FPTBondOrderAssignment_::computeForgetBag(TreeDecompositionBag& bag, DPTable_& child, 
+	void FPTBondOrderStrategy::FPTBondOrderAssignment_::computeForgetBag(TreeDecompositionBag& bag, DPTable_& child,
 																					                             AdditionalBagProperties_& property)
 	{
 		typedef TreeWidth<MolecularGraph>::TreeDecompositionContent TreeDecompositionContent;
@@ -795,7 +793,7 @@ namespace BALL
 		}
 	}
 
-	void FPTBondOrderStrategy::FPTBondOrderAssignment_::computeRootBag(TreeDecompositionBag& bag, 
+	void FPTBondOrderStrategy::FPTBondOrderAssignment_::computeRootBag(TreeDecompositionBag& bag,
 	                                                                   DPTable_& child, AdditionalBagProperties_& bag_properties)
 	{
 		DPConfig_ empty(0, 0);
@@ -816,7 +814,8 @@ namespace BALL
 	}
 
 	void FPTBondOrderStrategy::FPTBondOrderAssignment_::computeJoinBag(TreeDecompositionBag& bag,
-                                  			DPTable_& left_child, DPTable_& right_child, AdditionalBagProperties_& property)
+			                                                               DPTable_& left_child, DPTable_& right_child, 
+																																		 AdditionalBagProperties_& property)
 	{
 		typedef TreeWidth<MolecularGraph>::TreeDecompositionContent TreeDecompositionContent;
 
@@ -1268,22 +1267,23 @@ namespace BALL
 	//*           DPBackTracking_                                                                        *
 	//*****************************************************************************************************
 
-	FPTBondOrderStrategy::DPBackTracking_::DPBackTracking_(FPTBondOrderAssignment_& bond_assignment, Size max_num_solutions, 
-                                                         std::vector<MolecularGraphTraits::EdgeType> const& bonds, Penalty upper_bound) 
-		: bond_assignment_(&bond_assignment), 
-			current_state_(NULL), 
-			queue_(), 
-			max_num_solutions_(max_num_solutions), 
+	FPTBondOrderStrategy::DPBackTracking_::DPBackTracking_(FPTBondOrderAssignment_& bond_assignment, Size max_num_solutions,
+                                                         std::vector<MolecularGraphTraits::EdgeType> const& bonds, Penalty upper_bound)
+		: bond_assignment_(&bond_assignment),
+			current_state_(NULL),
+			queue_(),
+			max_num_solutions_(max_num_solutions),
 			bonds_(&bonds),
-			bags_(boost::shared_ptr<std::vector<TreeDecompositionBag> >(new std::vector<TreeDecompositionBag>)), 
-			max_heap_size_(max_num_solutions), 
+			bags_(boost::shared_ptr<std::vector<TreeDecompositionBag> >(new std::vector<TreeDecompositionBag>)),
+			max_heap_size_(1e6),
+			num_computed_solutions_(0),
 			upper_bound_(upper_bound)
 	{
 		// order bags in preorder
 		if (bond_assignment.ntd_ == NULL)
 		{
 			throw Exception::NullPointer(__FILE__, __LINE__);
-		} 
+		}
 		else
 		{
 			bags_->reserve(boost::num_vertices(bond_assignment.ntd_->_g));
@@ -1303,14 +1303,15 @@ namespace BALL
 		}
 	}
 
-	FPTBondOrderStrategy::DPBackTracking_::DPBackTracking_(DPBackTracking_ const& copy) 
-	 : bond_assignment_(copy.bond_assignment_), 
-		 current_state_(NULL), 
+	FPTBondOrderStrategy::DPBackTracking_::DPBackTracking_(DPBackTracking_ const& copy)
+	 : bond_assignment_(copy.bond_assignment_),
+		 current_state_(NULL),
 		 queue_(),
-		 max_num_solutions_(copy.max_num_solutions_), 
-		 bonds_(copy.bonds_), 
-		 bags_(copy.bags_), 
+		 max_num_solutions_(copy.max_num_solutions_),
+		 bonds_(copy.bonds_),
+		 bags_(copy.bags_),
 		 max_heap_size_(copy.max_heap_size_),
+		 num_computed_solutions_(copy.num_computed_solutions_),
 		 upper_bound_(copy.upper_bound_)
 	{
 		if (copy.current_state_ != NULL)
@@ -1345,6 +1346,7 @@ namespace BALL
 			bonds_ = copy.bonds_;
 			bags_ = copy.bags_;
 			max_heap_size_ = copy.max_heap_size_;
+			num_computed_solutions_ = copy.num_computed_solutions_;
 			upper_bound_ = copy.upper_bound_;
 		}
 
@@ -1365,6 +1367,7 @@ namespace BALL
 
 		std::vector<BackTrackingState_*> copy(queue_.begin(), queue_.end());
 		queue_.clear();
+		num_computed_solutions_ = 0;
 
 		for (std::vector<BackTrackingState_*>::iterator iter = copy.begin(); iter != copy.end(); ++iter)
 		{
@@ -1372,7 +1375,7 @@ namespace BALL
 		}
 	}
 
-	bool FPTBondOrderStrategy::DPBackTracking_::StateComparator_::operator() (BackTrackingState_ const * left, 
+	bool FPTBondOrderStrategy::DPBackTracking_::StateComparator_::operator() (BackTrackingState_ const * left,
 	                                                                          BackTrackingState_ const * right) const
 	{
 		return *left < *right;
@@ -1397,7 +1400,7 @@ namespace BALL
 		if (order < properties.size())
 		{
 			return properties[order];
-		} 
+		}
 		else
 		{
 			throw Exception::IndexOverflow(__FILE__, __LINE__, static_cast<Index>(order), properties.size());
@@ -1426,12 +1429,12 @@ namespace BALL
 
 	bool FPTBondOrderStrategy::DPBackTracking_::hasMoreSolutions() const
 	{
-		return (!queue_.empty() && (max_heap_size_ > 0));
+		return (!queue_.empty() && (!max_num_solutions_ || (num_computed_solutions_ <= max_num_solutions_)));
 	}
 
 	void FPTBondOrderStrategy::DPBackTracking_::nextSolution()
 	{
-		if (queue_.empty() || max_heap_size_ == 0)
+		if (queue_.empty() || max_heap_size_ == 0 || ((max_num_solutions_ > 0) && (num_computed_solutions_ > max_num_solutions_)))
 		{
 			throw Exception::OutOfRange(__FILE__, __LINE__);
 		}
@@ -1444,7 +1447,7 @@ namespace BALL
 		std::multiset<BackTrackingState_*, StateComparator_>::iterator first = queue_.begin();
 		current_state_ = *first;
 		queue_.erase(first);
-		--max_heap_size_;
+		++num_computed_solutions_;
 
 		TreeDecomposition& tree = *bond_assignment_->ntd_;
 
@@ -1469,7 +1472,7 @@ namespace BALL
 				{
 					TreeDecomposition::children_iterator c_2 = c_i;
 					++c_2;
-					visitJoin(*current_state_, bag, getTable(boost::get(boost::vertex_index, tree, *c_i)), 
+					visitJoin(*current_state_, bag, getTable(boost::get(boost::vertex_index, tree, *c_i)),
 																				getTable(boost::get(boost::vertex_index, tree, *c_2)));
 					break;
 				}
@@ -1769,7 +1772,7 @@ namespace BALL
 		if (d < bonds_->size())
 		{
 			return d;
-		} 
+		}
 		else
 		{
 			throw Exception::IndexOverflow(__FILE__, __LINE__, static_cast<Index>(d), bonds_->size());
@@ -1795,7 +1798,7 @@ namespace BALL
 
 	bool FPTBondOrderStrategy::DPBackTracking_::isSolutionNeeded(Penalty penalty)
 	{
-		if (max_heap_size_ == 0) {return false;}
+		if (max_heap_size_ == 0 || ((max_num_solutions_ > 0) && (num_computed_solutions_ > max_num_solutions_))) {return false;}
 		if (queue_.size() >= max_heap_size_) {return Maths::isLess(penalty, upper_bound_);}
 		return Maths::isLessOrEqual(penalty, upper_bound_);
 	}
@@ -1846,7 +1849,7 @@ namespace BALL
 		if (queue_.empty() || max_heap_size_ == 0)
 		{
 			return FPTBondOrderStrategy::infinite_penalty;
-		} 
+		}
 		else
 		{
 			return (*queue_.begin())->assignment.penalty;
@@ -1857,25 +1860,25 @@ namespace BALL
 	//*           DPBackTrackingCombiner_                                                                 *
 	//*****************************************************************************************************
 
-	FPTBondOrderStrategy::DPBackTrackingCombiner_::DPBackTrackingCombiner_(DPBackTrackingCombiner_ const& copy) 
-		: backtrackers_(copy.deepCopyOfBacktrackers_()), 
+	FPTBondOrderStrategy::DPBackTrackingCombiner_::DPBackTrackingCombiner_(DPBackTrackingCombiner_ const& copy)
+		: backtrackers_(copy.deepCopyOfBacktrackers_()),
 		  priority_queue_(copy.priority_queue_),
-			component_solutions_(copy.component_solutions_), 
+			component_solutions_(copy.component_solutions_),
 			assignment_(copy.assignment_),
-			solution_number_(copy.solution_number_), 
-			optimum_(copy.optimum_), 
+			solution_number_(copy.solution_number_),
+			optimum_(copy.optimum_),
 			upper_bound_(copy.upper_bound_)
 	{
 	}
 
-	FPTBondOrderStrategy::DPBackTrackingCombiner_::DPBackTrackingCombiner_(std::vector<FPTBondOrderAssignment_*>& bond_assignments, 
-		                                                                     Size solution_number, Penalty upper_bound) 
-		: backtrackers_(), 
-		  priority_queue_(), 
+	FPTBondOrderStrategy::DPBackTrackingCombiner_::DPBackTrackingCombiner_(std::vector<FPTBondOrderAssignment_*>& bond_assignments,
+		                                                                     Size solution_number, Penalty upper_bound)
+		: backtrackers_(),
+		  priority_queue_(),
 			component_solutions_(bond_assignments.size()),
-			assignment_(), 
-			solution_number_(solution_number), 
-			optimum_(FPTBondOrderStrategy::infinite_penalty), 
+			assignment_(),
+			solution_number_(solution_number),
+			optimum_(FPTBondOrderStrategy::infinite_penalty),
 			upper_bound_(upper_bound)
 	{
 		if (bond_assignments.empty())
@@ -1897,43 +1900,10 @@ namespace BALL
 		FPTBondOrderStrategy::EdgeComparator_ ec(&graph);
 		std::sort(sorted_edges.begin(), sorted_edges.end(), ec);
 
-		for (std::vector<FPTBondOrderAssignment_*>::const_iterator iter  = bond_assignments.begin(); 
+		for (std::vector<FPTBondOrderAssignment_*>::const_iterator iter  = bond_assignments.begin();
 		                                                           iter != bond_assignments.end();   ++iter)
 		{
 			backtrackers_.push_back(new DPBackTracking_(**iter, solution_number_, sorted_edges, upper_bound_));
-		}
-
-		initialize_();
-	}
-
-	FPTBondOrderStrategy::DPBackTrackingCombiner_::DPBackTrackingCombiner_(std::vector<FPTBondOrderAssignment_>& bond_assignments, 
-		                                             Size solution_number, Penalty upper_bound) 
-		: backtrackers_(), 
-		  priority_queue_(), 
-			component_solutions_(bond_assignments.size()),
-			assignment_(), 
-			solution_number_(solution_number), 
-			optimum_(FPTBondOrderStrategy::infinite_penalty), 
-			upper_bound_(upper_bound)
-	{
-		backtrackers_.reserve(bond_assignments.size());
-
-		MolecularGraph& graph = *bond_assignments[0].molecule_;
-		sorted_edges.reserve(boost::num_edges(graph));
-
-		BGL_FORALL_EDGES(edge_it, graph, MolecularGraph)
-		{
-			sorted_edges.push_back(edge_it);
-		}
-
-		// sort bonds - the second vertex could be in false order
-		FPTBondOrderStrategy::EdgeComparator_ ec(&graph);
-		std::sort(sorted_edges.begin(), sorted_edges.end(), ec);
-
-		for (std::vector<FPTBondOrderAssignment_>::iterator iter  = bond_assignments.begin(); 
-		                                                    iter != bond_assignments.end();   ++iter)
-		{
-			backtrackers_.push_back(new DPBackTracking_(*iter, solution_number_, sorted_edges, upper_bound_));
 		}
 
 		initialize_();
@@ -1946,14 +1916,14 @@ namespace BALL
 
 	void FPTBondOrderStrategy::DPBackTrackingCombiner_::clear()
 	{
-		for (std::vector<DPBackTracking_*>::iterator iter  = backtrackers_.begin(); 
+		for (std::vector<DPBackTracking_*>::iterator iter  = backtrackers_.begin();
 		                                             iter != backtrackers_.end();   ++iter)
 		{
 			delete *iter;
 		}
 	}
 
-	FPTBondOrderStrategy::DPBackTrackingCombiner_& 
+	FPTBondOrderStrategy::DPBackTrackingCombiner_&
 	FPTBondOrderStrategy::DPBackTrackingCombiner_::operator = (DPBackTrackingCombiner_ const& copy)
 	{
 		if (this != &copy)
@@ -1972,7 +1942,7 @@ namespace BALL
 		return *this;
 	}
 
-	std::pair<Size, FPTBondOrderStrategy::Penalty> 
+	std::pair<Size, FPTBondOrderStrategy::Penalty>
 	FPTBondOrderStrategy::DPBackTrackingCombiner_::getNextMinimumBackTracker_() const
 	{
 		if (backtrackers_.size() == 1)
@@ -2034,7 +2004,7 @@ namespace BALL
 				assignment_ = ass;
 
 				return;
-			} 
+			}
 			else
 			{
 				throw Exception::OutOfRange(__FILE__, __LINE__);
@@ -2061,7 +2031,7 @@ namespace BALL
 			assignment_ = priority_queue_.top();
 
 			priority_queue_.pop();
-		} 
+		}
 		else
 		{
 			throw Exception::OutOfRange(__FILE__, __LINE__);
@@ -2151,7 +2121,7 @@ namespace BALL
 		return assignment_;
 	}
 
-	std::vector<FPTBondOrderStrategy::DPBackTracking_*> 
+	std::vector<FPTBondOrderStrategy::DPBackTracking_*>
 	FPTBondOrderStrategy::DPBackTrackingCombiner_::deepCopyOfBacktrackers_() const
 	{
 		std::vector<DPBackTracking_*> ts;
@@ -2165,6 +2135,5 @@ namespace BALL
 
 		return ts;
 	}
-
 
 }

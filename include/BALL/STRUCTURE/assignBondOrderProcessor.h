@@ -183,16 +183,34 @@ namespace BALL
 
 				/** the maximal number of solutions to compute
 				 *
-				 *  If set to zero all optimal solutions will be computed.
+				 *  If set to zero all optimal or all up to \link MAX_PENALTY MAX_PENALTY \endlink 
+				 *  solutions will be computed.
 				 *
-				 *  @see Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS
+				 *  @see Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS 
+				 *  @see Option::MAX_PENALTY
 				 */
 				static const char* MAX_NUMBER_OF_SOLUTIONS;
 
-				/** compute also non-optimal solutions but not more than 
-				 *  \link MAX_NUMBER_OF_SOLUTIONS MAX_NUMBER_OF_SOLUTIONS \endlink solutions.
+				/** the maximal penalty score allowed
+				 *  
+				 *  This option respects option \link MAX_NUMBER_OF_SOLUTIONS MAX_NUMBER_OF_SOLUTIONS \endlink
+				 *  if specified.
 				 *
+				 *  If set to -1 this option will be ignored. 
+				 *
+				 *  @see Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS
 				 *  @see Option::MAX_NUMBER_OF_SOLUTIONS
+				 */
+				static const char* MAX_PENALTY;
+
+				/** compute also sub-optimal solutions but not more than 
+				 *  \link MAX_NUMBER_OF_SOLUTIONS MAX_NUMBER_OF_SOLUTIONS \endlink solutions.
+				 *  
+				 *  Alternatively \link Option::MAX_PENALTY  Option::MAX_PENALTY  \endlink
+				 *  allows to specify a maximal penalty. 
+				 *
+				 *  @see Option::MAX_NUMBER_OF_SOLUTIONS 
+				 *  @see Option::MAX_PENALTY
 				 */
 				static const char* COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS;
 
@@ -227,6 +245,7 @@ namespace BALL
 				static const String INIFile;
 				static const int MAX_BOND_ORDER;
 				static const int MAX_NUMBER_OF_SOLUTIONS;
+				static const int MAX_PENALTY;
 				static const bool COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS;
 				static const float BOND_LENGTH_WEIGHTING;
 				static const bool APPLY_FIRST_SOLUTION;
@@ -715,6 +734,9 @@ namespace BALL
 
 			// the max number of solutions to compute 
 			int max_number_of_solutions_;
+
+			// the max penalty score 
+			int max_penalty_;
 
 			// flag to indicate, whether also non-optimal solutions should be computed 
 			bool compute_also_non_optimal_solutions_;
