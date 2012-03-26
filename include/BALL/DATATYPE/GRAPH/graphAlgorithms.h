@@ -29,7 +29,7 @@ namespace boost
 	enum vertex_orig_ptr_t { vertex_orig_ptr };
 
 	enum edge_bond_ptr_t { edge_bond_ptr };
-	enum edge_orig_ptr_t   { edge_orig_ptr   };
+	enum edge_orig_ptr_t { edge_orig_ptr   };
 
 	BOOST_INSTALL_PROPERTY(vertex, atom_ptr);
 	BOOST_INSTALL_PROPERTY(vertex, orig_ptr);
@@ -154,7 +154,7 @@ namespace BALL
 			{
 				bi = ai; ++bi;
 				for (; bi != ai_end; ++bi)
-					if (!boost::edge(*ai, *bi, graph).second)
+					if (*bi != *ai && !boost::edge(*ai, *bi, graph).second)
 						boost::add_edge(*ai, *bi, graph);
 			}
 
@@ -183,7 +183,6 @@ namespace BALL
 
 				typedef typename boost::property_traits<typename boost::property_map<UndirectedGraph, boost::edge_all_t>::type>::value_type EdgeProperties;
 				
-				EdgeProperties ep = boost::get(boost::edge_all_t(), graph, boost::edge(vertex, *ai, graph).first) ;
 				result.getEdgeProperties().push_back(boost::get(boost::edge_all_t(), graph, boost::edge(vertex, *ai, graph).first));
 
 				bi = ai; ++bi;
@@ -193,7 +192,7 @@ namespace BALL
 					{
 						boost::add_edge(*ai, *bi, graph);
 						result.getEdges().push_back(std::make_pair(boost::get(boost::vertex_index, graph, *ai),
-						                                                     boost::get(boost::vertex_index, graph, *bi)));
+						                                                      boost::get(boost::vertex_index, graph, *bi)));
 					}
 				}
 			}

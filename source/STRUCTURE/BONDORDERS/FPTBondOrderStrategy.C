@@ -68,7 +68,7 @@ namespace BALL
 		for (Position i = 0; i < ntds.size(); ++i)
 		{
 			bond_assignments.push_back(new FPTBondOrderAssignment_(*this, ntds[i], upper_bound_));
-		  Penalty result = bond_assignments[i]->compute();
+		  bond_assignments[i]->compute();
 		}
 
 		// initialize backtracking
@@ -647,8 +647,8 @@ namespace BALL
 			{
 				Edge e = *it;
 
-				MolecularGraphTraits::VertexType source = boost::source(*it, *molecule_);
-				MolecularGraphTraits::VertexType target = boost::target(*it, *molecule_);
+				MolecularGraphTraits::VertexType source = boost::source(e, *molecule_);
+				MolecularGraphTraits::VertexType target = boost::target(e, *molecule_);
 
 				if (iv == source || iv == target)
 				{
@@ -1890,8 +1890,7 @@ namespace BALL
 
 		BGL_FORALL_EDGES(edge_it, graph, MolecularGraph)
 		{
-			if (boost::source(edge_it, graph) < boost::target(edge_it, graph))
-				sorted_edges.push_back(edge_it);
+			sorted_edges.push_back(edge_it);
 		}
 
 		// sort bonds - the second vertex could be in false order
@@ -1924,8 +1923,7 @@ namespace BALL
 
 		BGL_FORALL_EDGES(edge_it, graph, MolecularGraph)
 		{
-			if (boost::source(edge_it, graph) < boost::target(edge_it, graph))
-				sorted_edges.push_back(edge_it);
+			sorted_edges.push_back(edge_it);
 		}
 
 		// sort bonds - the second vertex could be in false order
