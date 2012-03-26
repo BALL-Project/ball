@@ -287,6 +287,7 @@ IF (BALL_HAS_VIEW)
 	## VIEW dependent options
 	OPTION(BALL_ENABLE_CG "Build against NVIDIA Cg library" OFF)
 	OPTION(BALL_REQUIRE_CG "Fail if NVIDIA Cg could not be detected" OFF)
+	OPTION(DISABLE_RTFACT "Explicitly disable RTfact" OFF)
 
 	## OpenGL
 	FIND_PACKAGE(OpenGL)
@@ -301,17 +302,19 @@ IF (BALL_HAS_VIEW)
 	ENDIF()
 
 	## RTfact
-	FIND_PACKAGE(RTfact)
-	IF (RTFACT_FOUND)
-		## RTfact requires TBB
-		IF (NOT CMAKE_COMPILER_IS_INTELCXX)
-			IF (NOT TBB_FOUND)
-				MESSAGE(SEND_ERROR "RTfact support requires TBB!")
+	IF (NOT DISABLE_RTFACT)
+		FIND_PACKAGE(RTfact)
+		IF (RTFACT_FOUND)
+			## RTfact requires TBB
+			IF (NOT CMAKE_COMPILER_IS_INTELCXX)
+				IF (NOT TBB_FOUND)
+					MESSAGE(SEND_ERROR "RTfact support requires TBB!")
+				ENDIF()
 			ENDIF()
-		ENDIF()
 
-		SET(BALL_HAS_RTFACT TRUE)
-		INCLUDE_DIRECTORIES(${RTFACT_INCLUDE_DIR})
+			SET(BALL_HAS_RTFACT TRUE)
+			INCLUDE_DIRECTORIES(${RTFACT_INCLUDE_DIR})
+		ENDIF()
 	ENDIF()
 
 	## Cg
