@@ -107,6 +107,9 @@ namespace BALL
 	const char* AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS = "max_number_of_solutions";
 	const int  AssignBondOrderProcessor::Default::MAX_NUMBER_OF_SOLUTIONS = 10;
 
+	const char* AssignBondOrderProcessor::Option::MAX_PENALTY = "max_penalty_score";
+	const int  AssignBondOrderProcessor::Default::MAX_PENALTY = -1;
+
 	const char* AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS = "compute_also_non_optimal_solutions";
 	const bool  AssignBondOrderProcessor::Default::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS = false;
 
@@ -147,6 +150,7 @@ namespace BALL
 			max_bond_order_(),
 			alpha_(),
 			max_number_of_solutions_(),
+			max_penalty_(-1),
 			compute_also_non_optimal_solutions_(),
 			add_missing_hydrogens_(),
 			compute_also_connectivity_(),
@@ -236,13 +240,14 @@ namespace BALL
 			ret &= s_it->second->readOptions(options);
 		}
 
-		max_bond_order_ = options.getInteger(Option::MAX_BOND_ORDER);
-		alpha_ = options.getReal(Option::BOND_LENGTH_WEIGHTING);
-		max_number_of_solutions_ = options.getInteger(Option::MAX_NUMBER_OF_SOLUTIONS);
+		max_bond_order_            = options.getInteger(Option::MAX_BOND_ORDER);
+		alpha_                     = options.getReal(Option::BOND_LENGTH_WEIGHTING);
+		max_number_of_solutions_   = options.getInteger(Option::MAX_NUMBER_OF_SOLUTIONS);
+		max_penalty_               = options.getInteger(Option::MAX_PENALTY);
 		compute_also_non_optimal_solutions_ = options.getBool(Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS);
-		add_missing_hydrogens_ = options.getBool(Option::ADD_HYDROGENS);
+		add_missing_hydrogens_     = options.getBool(Option::ADD_HYDROGENS);
 		compute_also_connectivity_ = options.getBool(Option::COMPUTE_ALSO_CONNECTIVITY);
-		use_fine_penalty_ = options.getBool(Option::USE_FINE_PENALTY);
+		use_fine_penalty_          = options.getBool(Option::USE_FINE_PENALTY);
 
 		if (max_bond_order_ <= 0)
 		{
@@ -254,6 +259,12 @@ namespace BALL
 		{
 			Log.error() << __FILE__ << " " << __LINE__
 				          << " : Error in options! Please check the option Option::MAX_NUMBER_OF_SOLUTIONS."  << endl;
+			ret = false;
+		}
+		if (max_penalty_ < -1)
+		{
+			Log.error() << __FILE__ << " " << __LINE__
+				          << " : Error in options! Please check the option Option::MAX_PENALTY."  << endl;
 			ret = false;
 		}
 		if ((alpha_ < 0) || ((alpha_ > 1)))
@@ -279,14 +290,13 @@ namespace BALL
 						|| (options.getBool(Option::OVERWRITE_SELECTED_BONDS)  == true)
 						|| (options.getBool(Option::OVERWRITE_SINGLE_BOND_ORDERS) == false)
 						|| (options.getBool(Option::OVERWRITE_DOUBLE_BOND_ORDERS) == false)
-						|| (options.getBool(Option::OVERWRITE_TRIPLE_BOND_ORDERS) == false)
-						|| (options.getInteger(Option::MAX_NUMBER_OF_SOLUTIONS) == 0))
+						|| (options.getBool(Option::OVERWRITE_TRIPLE_BOND_ORDERS) == false) )
 			 )
 		{
 			Log.error() << __FILE__ << " " << __LINE__
 				          << " : Error in options! FPT cannot be used with these options." << endl
-									<< " Switch to solution strategy ASTAR by setting Option::ALGORITHM to Algorithm::ASTAR." << endl;
-
+									<< " Consider switch to solution strategy ASTAR by setting Option::ALGORITHM to Algorithm::ASTAR." << endl
+									<< " Abort." << endl;
 			ret = false;
 		}
 
@@ -327,6 +337,7 @@ cout << " \t Penalty file " << options[Option::Option::INIFile] << endl;
 cout << " \t alpha: " << options[Option::BOND_LENGTH_WEIGHTING] << endl;
 cout << " \t max bond order: " << options[Option::MAX_BOND_ORDER] << endl;
 cout << " \t max number of solutions " << options[Option::MAX_NUMBER_OF_SOLUTIONS] << endl;
+cout << " \t max penalty " << options[Option::MAX_PENALTY] << endl;
 cout << " \t compute also non-optimal solutions: " << options.getBool(Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS) << endl;
 cout << " \t compute also connectivity: " << options.getBool(Option::COMPUTE_ALSO_CONNECTIVITY) << endl;
 cout << " \t connectivity cutoff: " << options[Option::CONNECTIVITY_CUTOFF] << endl;
@@ -353,7 +364,7 @@ cout << endl;
 			// check the options
 
 			// What kind of composite do we have?
-			// Do we have a molecule? (Nothingelse is allowed)
+			// Do we have a molecule? (Nothing else is allowed)
 			if (RTTI::isKindOf<Molecule>(ac))
 			{
 				// Store the AtomContainer
@@ -516,7 +527,7 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 #ifdef BALL_HAS_LPSOLVE
 						strategy = strategies_["ILP"].get();
 #else
-						Log.error() << "Error: BALL was configured without lpsolve support! Try A_STAR instead!" <<
+						Log.error() << "Error: BALL was configured without lpsolve support! Try A_STAR or FPT instead!" <<
 												__FILE__ << " " << __LINE__<< std::endl;
 
 						return Processor::ABORT;
@@ -551,16 +562,20 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 						solutions_.push_back(*solution);
 
 						// Do we have to find more solutions?
-						bool found_another = true;
-						bool last_sol_is_optimal = true;
+						bool found_another        = true;
+						bool last_sol_is_optimal  = true;
+						bool consider_max_penalty = (max_penalty_ > -1);
+						double last_penalty       = getTotalPenalty(0);
 
 						while (    found_another
 						        && ((getNumberOfComputedSolutions() < max_number_of_solutions_) || (!max_number_of_solutions_))
 						        && (last_sol_is_optimal || (compute_also_non_optimal_solutions_))
+										&& ((last_penalty <= max_penalty_) || (!consider_max_penalty))
 						      )
 						{
 							found_another = computeNextSolution(options.getBool(Option::APPLY_FIRST_SOLUTION));
 							last_sol_is_optimal &= (fabs(getTotalPenalty(0) - getTotalPenalty(solutions_.size()-1)) < 1.e-4);
+							last_penalty  = getTotalPenalty(solutions_.size()-1);
 						}
 #if defined DEBUG_TIMER		
 					timer_.stop();
@@ -1204,6 +1219,9 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 
 		options.setDefaultInteger(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS,
 		                          AssignBondOrderProcessor::Default::MAX_NUMBER_OF_SOLUTIONS);
+
+		options.setDefaultInteger(AssignBondOrderProcessor::Option::MAX_PENALTY,
+		                          AssignBondOrderProcessor::Default::MAX_PENALTY);
 
 		options.setDefaultBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS,
 		                       AssignBondOrderProcessor::Default::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS);

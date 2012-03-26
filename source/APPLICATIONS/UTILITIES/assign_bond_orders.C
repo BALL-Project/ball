@@ -16,10 +16,10 @@ using namespace BALL;
 
 int main(int argc, char** argv)
 {
-	if ((argc < 3) || (argc > 4))
+	if (argc < 3)
 	//	if (argc != 3)
 	{
-		Log << "Usage:" << argv[0] << " <Molecule infile> <Molecule outfile> [num_sol]" << endl;
+		Log << "Usage:" << argv[0] << " <Molecule infile> <Molecule outfile> [--num-sol=n] [--strategy=(fpt|a_star|ilp)] [--max-penalty=m]" << endl;
 		return 1;
 	}
 
@@ -49,24 +49,40 @@ int main(int argc, char** argv)
 	//    set the options:
 	//
 	// the solution strategy (A*, ILP or FPT)
-	abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM, AssignBondOrderProcessor::Algorithm::A_STAR);
+	abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM, AssignBondOrderProcessor::Algorithm::FPT);
 
 	// specify the inifile with the atomic valence penalties
 	abop.options.set(AssignBondOrderProcessor::Option::INIFile, AssignBondOrderProcessor::Default::INIFile);
 
 	// options for considering bond length as well 
-	abop.options.setReal(AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING, 0);
-	abop.options.setReal(AssignBondOrderProcessor::Option::USE_FINE_PENALTY, true);
+//	abop.options.setReal(AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING, 0);
+//	abop.options.setReal(AssignBondOrderProcessor::Option::USE_FINE_PENALTY, true);
 
 	// the combination of the following two options causes the computation of all optimal solutions
 	abop.options.setInteger(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, 0);
 	abop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, false);
 
-	if (argc == 4)
+	if (argc > 3)
 	{
-		Log << "  with compute fixed number (" << argv[3] << ") solutions" << endl;
-		abop.options.setInteger(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, String(argv[3]).toInt());
-		abop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, true);
+		for (Index i=3; i<argc; ++i)
+		{
+			if (String(argv[i]).hasPrefix("--strategy"))
+			{
+				abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM, String(argv[i]).getField(1, "="));
+			}
+			else if (String(argv[i]).hasPrefix("--num-sol"))
+			{
+				Log << "  with compute fixed number (" << argv[i] << ") solutions" << endl;
+				abop.options.setInteger(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, String(argv[i]).getField(1, "=").toInt());
+				abop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, true);
+			}
+			else if (String(argv[i]).hasPrefix("--max-penalty"))
+			{
+				abop.options.setInteger(AssignBondOrderProcessor::Option::MAX_PENALTY, String(argv[i]).getField(1, "=").toInt());
+				abop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, true);
+				Log << "  with maximum penalty (" <<  abop.options.getInteger(AssignBondOrderProcessor::Option::MAX_PENALTY) << ")" << endl;
+			}
+		}
 	}
 
 	// define input and output properties

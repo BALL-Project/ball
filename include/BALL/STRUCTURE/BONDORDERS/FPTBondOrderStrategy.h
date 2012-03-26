@@ -1113,6 +1113,11 @@ namespace BALL
 					Size max_heap_size_;
 
 					/**
+					 * The number of solutions produced so far.
+					 */
+					Size num_computed_solutions_;
+
+					/**
 					 * current upperbound. This algorithm will just iterate solutions which are better than this upperbound;
 					 */
 					Penalty upper_bound_;
@@ -1242,14 +1247,6 @@ namespace BALL
 					 */
 					DPBackTrackingCombiner_(std::vector<FPTBondOrderAssignment_*>& bond_assignments,
 							                    Size solution_number, Penalty upper_bound = infinite_penalty);
-
-					/**
-					 * Construct a DPBackTrackingCombiner with the given FPTBondOrder and the number of solutions
-					 * @param bondAssignments vector with the bond assignments. Call #compute before constructing
-					 * @param solutionNumber the maximum number of solutions you want to backtrack
-					 */
-					DPBackTrackingCombiner_(std::vector<FPTBondOrderAssignment_>& bond_assignments, 
-					                        Size solution_number, Penalty upper_bound = infinite_penalty);
 
 					/**
 					 * Copy constructor
@@ -1402,9 +1399,6 @@ namespace BALL
 			 * contains the block index for the given atom
 			 */
 			std::vector<std::vector<int> > const* atom_to_block_;
-
-			/// upper bound on the penalty values for which we compute solutions
-			Penalty upper_bound_;
 
 			/**
 			 * A shared pointer to the computing data, so that you can copy this instance without copying

@@ -12,7 +12,7 @@ namespace BALL
 		// find all vertices in the current bag
 		TreeDecompositionContent content = boost::get(boost::vertex_bag_content, *td_, v);
 
-		for (typename TreeDecompositionContent::const_iterator tdc_it = content.begin(); tdc_it != content.end(); ++tdc_it)
+		for (TreeDecompositionContent::const_iterator tdc_it = content.begin(); tdc_it != content.end(); ++tdc_it)
 		{
 			TreeWidth<MolecularGraph>::OriginalVertexType ov = *tdc_it;
 			Atom const* atom = boost::get(boost::vertex_atom_ptr, *original_graph_, ov);
