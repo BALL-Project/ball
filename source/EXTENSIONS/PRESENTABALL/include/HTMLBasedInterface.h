@@ -45,6 +45,7 @@ namespace BALL
 				
 				void fireJSCompositeMessage(int i);
 				void fireJSRepresentationMessage(int i);
+				void fireJSSceneMessage(int i);
 			
 			protected:
 				typedef QList<QPair<QString, QString> > ParameterList;

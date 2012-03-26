@@ -124,13 +124,40 @@ namespace BALL
 			
 			//Try to cast message to the type, that you want to handle
 			CompositeMessage* cmsg = RTTI::castTo<CompositeMessage>(*message);
-			
-			
+			RepresentationMessage* rmsg = RTTI::castTo<RepresentationMessage>(*message);
+			SceneMessage* smsg = RTTI::castTo<SceneMessage>(*message);
+						
 			//Log.info() << cmsg << std::endl;
+			
 			
 			if (cmsg == 0)
 			{
+			  
+			  if (rmsg == 0)
+			    
+			  {
+			    if (smsg == 0)
+			    
+			    {
 				return;
+			    }
+			    else
+				{
+			 
+				emit fireJSSceneMessage((int) smsg->getType());
+
+				Log.info() << "SceneMessage fired to JS" << std::endl;
+				}
+				//return;
+			  }
+			  else
+			      {
+			 
+				emit fireJSRepresentationMessage((int) rmsg->getType());
+
+				Log.info() << "RepresentationMessage fired to JS" << std::endl;
+			      }
+				//return;
 			}
 			else
 			{
@@ -145,6 +172,8 @@ namespace BALL
 
 				Log.info() << "CompositeMessage fired to JS" << std::endl;
 			}
+			
+			
 		}
 		
 		void HTMLBasedInterface::contextMenuEvent(QContextMenuEvent*)
