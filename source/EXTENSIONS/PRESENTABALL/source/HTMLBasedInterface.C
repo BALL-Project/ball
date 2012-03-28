@@ -145,7 +145,7 @@ namespace BALL
 			      }
 			      else
 			      {
-				emit fireJSMessage(3, (int) dmsg->getType()); //SceneMessage = 2
+				emit fireJSMessage(3, (int) dmsg->getType()); //DataMessage = 3
 
 				Log.info() << "DataMessage fired to JS" << std::endl;
 			      }

@@ -125,7 +125,7 @@ var MsgTypeDataSet = {
 			"VISUALIZE": 4,
 
 			/// Allow >90 different kinds of visualization
-			"VISUALIZE_END": 5
+			"VISUALIZE_END": 100
 		};
 
 function onJSMessage(i, j) { //i = Message Class, j = Message Type
@@ -161,7 +161,50 @@ function onJSMessage(i, j) { //i = Message Class, j = Message Type
 		  document.getElementById('button1').disabled=false;  
 		  break; 
 		  }
-	  
+	  case 5: // Visualisation of trajectories
+		  {
+		    
+		   if (j != MsgTypeComp.CHANGED_COMPOSITE) return;
+		   
+		  document.getElementById('button1').disabled=false;  
+		  break; 
+		  }
+	  case 6: // Calculation of electrostatics
+		  {
+		    
+		   if (i != MsgClass.DATASET && j != MsgTypeDataSet.ADD) return;
+		   
+		  document.getElementById('button1').disabled=false;  
+		  break; 
+		  }
+	  case 7: // Creating a Solvent Excluded Surface
+		  {
+		    
+		   if (j != MsgTypeRep.ADD_TO_GEOMETRIC_CONTROL) return;
+		   
+		  document.getElementById('button1').disabled=false;  
+		  break; 
+		  }
+	  case 8: // Coloring a SES by electrostatics
+		  {
+		    
+		   if (j != MsgTypeRep.UPDATE) return;
+		   
+		  document.getElementById('button1').disabled=false;  
+		  break; 
+		  }
+	  case 9: // Creating a isocontour surface
+		  {
+		    
+		   if (j != MsgTypeRep.ADD) return;
+		   
+		  document.getElementById('button1').disabled=false;  
+		  break; 
+		  }
+	  case 10: // Ending
+		  { 
+		  break; 
+		  }
 	}
 	
 	
