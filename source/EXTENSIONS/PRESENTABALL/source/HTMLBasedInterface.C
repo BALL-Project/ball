@@ -126,7 +126,7 @@ namespace BALL
 			CompositeMessage* cmsg = RTTI::castTo<CompositeMessage>(*message);
 			RepresentationMessage* rmsg = RTTI::castTo<RepresentationMessage>(*message);
 			SceneMessage* smsg = RTTI::castTo<SceneMessage>(*message);
-						
+			DatasetMessage* dmsg = RTTI::castTo<DatasetMessage>(*message);			
 			//Log.info() << cmsg << std::endl;
 			
 			
@@ -139,25 +139,32 @@ namespace BALL
 			    if (smsg == 0)
 			    
 			    {
+			      if (dmsg == 0)
+			      {
 				return;
+			      }
+			      else
+			      {
+				emit fireJSMessage(3, (int) dmsg->getType()); //SceneMessage = 2
+
+				Log.info() << "DataMessage fired to JS" << std::endl;
+			      }
 			    }
 			    else
 				{
 			 
-				emit fireJSSceneMessage((int) smsg->getType());
+				emit fireJSMessage(2, (int) smsg->getType()); //SceneMessage = 2
 
 				Log.info() << "SceneMessage fired to JS" << std::endl;
 				}
-				//return;
 			  }
 			  else
 			      {
 			 
-				emit fireJSRepresentationMessage((int) rmsg->getType());
+				emit fireJSMessage(1, (int) rmsg->getType()); // RepresentationMessage = 1
 
 				Log.info() << "RepresentationMessage fired to JS" << std::endl;
 			      }
-				//return;
 			}
 			else
 			{
@@ -168,7 +175,7 @@ namespace BALL
 				//if (cmsg == 0 | cmsg->getType() != CompositeMessage::NEW_MOLECULE) return;
 
 				// fire a Qt signal that can be handled by the website 
-				emit fireJSCompositeMessage((int) cmsg->getType());
+				emit fireJSMessage(0, (int) cmsg->getType()); // CompositeMessage = 0
 
 				Log.info() << "CompositeMessage fired to JS" << std::endl;
 			}

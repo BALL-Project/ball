@@ -43,10 +43,11 @@ namespace BALL
 
 			signals:
 				
-				void fireJSCompositeMessage(int i);
-				void fireJSRepresentationMessage(int i);
-				void fireJSSceneMessage(int i);
-			
+				//void fireJSCompositeMessage(int i);
+				//void fireJSRepresentationMessage(int i);
+				//void fireJSSceneMessage(int i);
+				void fireJSMessage(int i, int j);
+				
 			protected:
 				typedef QList<QPair<QString, QString> > ParameterList;
 				void contextMenuEvent(QContextMenuEvent* evt);
