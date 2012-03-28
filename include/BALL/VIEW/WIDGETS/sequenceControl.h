@@ -112,6 +112,9 @@ class BALL_VIEW_EXPORT AlignmentControlModel
 					endInsertRows();
 				};
 
+				void removeSequence(boost::shared_ptr<Sequence> const& sequence);
+				
+				
 				int rowCount(const QModelIndex& parent = QModelIndex()) const;
 				int columnCount(const QModelIndex& parent = QModelIndex()) const;
 
@@ -166,52 +169,8 @@ class BALL_VIEW_EXPORT SequenceControl
 	/// Resize Event
 	virtual void resizeEvent(QResizeEvent* event);
 
-	//@} 
-	/**	@name	Accessors: inspectors and mutators 
-	*/
-	//@{
-
-	/**	Menu checking method.
-			This method is called by MainControl::checkMenus before a popup menu is shown.
-			The copy menu entry is only enabled for selected System objects.
-			\param main_control the MainControl object whose menus should be checked
-			\see   Control::checkMenu
-	*/
-//	virtual void checkMenu(VIEW::MainControl& main_control);
-
-	/** Insert a Composite object into this Control.
-			If <tt>name == ""</tt> than the Information visitor is used for determining
-			a name for the Composite.\par
-			Calls generateListViewItem_() for the Composite.
-			\param   composite a pointer to the Composite to be inserted into the Control
-	*/
-  //void addComposite(Composite& composite, String given_name = "");
-
-	/** Recursive removal of a Composite from the Control.
-	*/
-	//Size removeComposite(Composite& composite);
-
-	/** Non-mutable inspection of the selection.
-	*/
-	//const std::list<Composite*>& getSelection() const;
-
-	/** Message handling.
-			Overridden method from ConnectionObject to handle incoming messages.\par
-			Calls reactToMessages_().\par
-			\param  message a pointer to a Message object
-	*/
 	virtual void onNotify(Message *message);
 
-	/** Build a context menu for a Composite.
-			If the Composite has certain properties a context menu is created.
-			This method only creates the necessary interface for derived classes.
-			Override this method for creating other context menu entries, but call 
-			Control::buildContextMenu at the end of your method to create the standard entries.
-			Calls insertContextMenuEntry() for each context menu entry that will be created.
-			\param   composite the Composite object for that a context menu should be created
-			\see     onContextMenu
-	*/
-//	virtual void updateContextMenu(Composite& composite);
 
 	/**	Initialize the menu entries:
 				- cut 
