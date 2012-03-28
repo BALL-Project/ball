@@ -6,19 +6,9 @@ BALL_INLINE
 FastaFile& FastaFile::operator >> (Protein& protein)
 {
   read(protein);
-  
   return *this;
 }
 
-
-
-BALL_INLINE 
-FastaFile& FastaFile::operator >> (Molecule& molecule)
-{
-  read(molecule);
-  
-  return *this;
-}
 
 BALL_INLINE 
 FastaFile& FastaFile::operator >> (System& system)

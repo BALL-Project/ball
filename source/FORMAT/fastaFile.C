@@ -2,7 +2,11 @@
 
 #include<BALL/FORMAT/fastaFile.h>
 #include <BALL/KERNEL/residueIterator.h>
-namespace BALL{
+#include <BALL/STRUCTURE/peptideBuilder.h>
+#include <BALL/STRUCTURE/fragmentDB.h>
+
+namespace BALL
+{
 
 	///////////////////////////////////////////// Constructor und Deconstructor //////////////////////////////////////////////////////////////
 			
@@ -31,22 +35,7 @@ namespace BALL{
 			return LineBasedFile::operator != (f);
 			}
 			
-			
-			/**
-			const FastaFile& FastaFile::operator = (const FastaFile& f){
-				return LineBasedFile::operator=(f);
-			}
-			*/
-
-
-
-
-
-
-
-
-
-
+		
 			///////////////////////////////////////////////////////////// Reading and Writing /////////////////////////////////////////
 
 
@@ -57,15 +46,20 @@ namespace BALL{
        */
 			void FastaFile::read(Protein& protein)
 			{
-							//counter
+							//counter to denote lines
 							int i=0;
 
 							//read the first line
 							if (!readLine()) throw Exception::InvalidArgument(__FILE__,__LINE__, "could not read the current Line");
 
-
 							//extract the current line
 							String& current_str_l = getLine();
+
+							//String to store the Sequence
+							String sequence;
+
+							//String to store the name of the protein
+							String name;
 
 							//iterate over all lines of the file
 							while(gotoLine(i) && readLine()) 
@@ -79,11 +73,23 @@ namespace BALL{
 											if ((c =='>') || (c == ';'))
 											{
 															//check whether currentline is the first line, else there is more than one Sequence in the FastaFile and we can not read it into a protein
-															//TODO extraction of the ID
+
 															if(i==0)
 															{
-																			//Substring& name = current_str_l.getSubstring(2);
-																			//protein.setName 
+																			//retrieve the name of the protein. It starts right after '>' and ends before the first whitespace
+																			unsigned int counter =  0;
+																			while(counter < current_str_l.length() )
+																			{
+																							if(current_str_l(counter) == ' ' || current_str_l(counter) == '\t' )
+																							{ 
+																											break;
+																							}
+																							else
+																							{
+																											name += current_str_l(counter);
+																											counter++;
+																							}
+																			}
 															}
 															else
 															{
@@ -97,14 +103,13 @@ namespace BALL{
 															//iterate through the string to get the single characters
 															for (unsigned int j=0; j<current_str_l.length(); j++)						
 															{	
-																			String tmp;
 
 																			char check = current_str_l[j];
 
 																			//check whether the next character is a valid AS and if it is change it to three letter code						
 																			if(Peptides::IsOneLetterCode(check)) 
 																			{
-																							tmp= Peptides::ThreeLetterCode(check);
+																							sequence += check/*Peptides::ThreeLetterCode(check)*/;
 
 																			}
 																			else
@@ -112,15 +117,6 @@ namespace BALL{
 																							throw Exception::InvalidArgument(__FILE__,__LINE__, "There is no OneLetterCode in the FastaFile");
 																			}  
 
-																			//for every Amino Acid create a new Residue named with the name of the Amino Acid
-																			Residue* r= new Residue(tmp);
-
-																			//set the Property to Amino Acid
-																			r->setProperty(Residue::Property::PROPERTY__AMINO_ACID);
-
-
-																			//append Residue to the Protein	
-																			protein.append(*r); 	
 															}
 
 											}
@@ -129,68 +125,47 @@ namespace BALL{
 											++i;
 
 							}
+
+							//Build Peptide with Peptidebuilder
+
+							// we need to define the peptid's AA sequence as a vector of descriptors
+							vector<BALL::Peptides::AminoAcidDescriptor> descriptor_seq;
+
+							for(unsigned int i=0; i< sequence.length(); i++)
+							{
+											// each aminoacid is represented by a descriptor
+											BALL::Peptides::AminoAcidDescriptor* aad = new BALL::Peptides::AminoAcidDescriptor;
+
+
+											// define a glycin
+											aad->setAminoAcidType(Peptides::ThreeLetterCode(sequence.c_str() [i]));
+											//aad->setPhi(Angle(-47., false));
+											//aad->setPsi(Angle(-77., false));
+
+											// add it to the sequence
+											descriptor_seq.push_back(*aad);
+							}
+
+							// create a builder using the sequence
+							BALL::Peptides::PeptideBuilder* pb = new BALL::Peptides::PeptideBuilder(descriptor_seq);
+
+							// "link" the fragment db for adding missing information
+							FragmentDB fdb("");
+							pb->setFragmentDB(&fdb);
+
+							// now build the peptide 
+							Protein* prot = pb->construct();
+
+							// give sensible names
+							pb->setChainName("Chain A");
+							pb->setProteinName(name);
+
+							protein = *prot;	
+
 			}
 			
 
-			/**
-       * reads a Fastafile into a Molecule
-       */
-			void FastaFile::read(Molecule& molecule){
-
-				//counter
-				int i=0;
-
-				//read the first line
-				if (! readLine())
-				{ 
-					throw Exception::InvalidArgument(__FILE__,__LINE__, "could not read the current Line");
-				}
-
-				//extract the first line
-				String& current_str_l =getLine();
-
-				//iterate over all Lines of the file
-				while(gotoLine(i) && readLine()) 
-				{
-
-								//extract current line of the Sequence
-								current_str_l = this->getLine();
-
-								//extract first character of current line to check whether the line conatins a comment							
-								char c= current_str_l.toChar();
-
-								//check whether it is a headline or a comment
-								if (( c =='>') || (c == ';'))
-								{ 
-												//Check whether there is more than one protein in the file
-												if(i!=0) throw BALL::Exception::InvalidArgument(__FILE__,__LINE__, "The file holds more than one sequence for a molecule. Either split the file or load it into a system.");
-
-								}
-								else
-								{			
-
-												//iterate through the string to get the single characters
-												for (unsigned int j=1; j<=current_str_l.length(); j++)
-												{	
-
-																//for every Amino Acid create a new Residue named with the name of the Amino Acid
-																Residue* r= new Residue(current_str_l[j]);
-
-																//append Residue to the molecule		
-																molecule.append(*r); 	
-
-												}
-
-								}
-
-								//increment the counter
-								++i;
-
-				}
-
-
-			}
-
+			
 
 			/**
        *reads a FastaFile into a System
@@ -198,75 +173,152 @@ namespace BALL{
 			//TODO check whether it is a protein or a nucleic acid
 			void FastaFile::read(System& system)
 			{
-				//counter
-				int i=0;
+							//counter to denote the lines
+							int i=0;
 
-				//read the first line
-				if (! readLine()) 
-				{
-					throw Exception::InvalidArgument(__FILE__,__LINE__, "could not read the current Line");
-				}
+							//counter to denote the protein
+							int p_ct=0;
 
-				//extract the first line
-				String& current_str_l= getLine();
+							//read the first line
+							if (! readLine()) 
+							{
+											throw Exception::InvalidArgument(__FILE__,__LINE__, "could not read the current Line");
+							}
 
-				//iterate over all Lines of the File
-				while(gotoLine(i) && readLine()) 
-				{
-								//extract current line of the Sequence
-								current_str_l = this->getLine();
-
-								//check whether the current line is a > then start a new Protein
-								char c = current_str_l.toChar();
-
-								Protein* pp;
-
-								//check whether it is a headline or a comment
-								if (( c =='>') || (c == ';'))
-								{ 
-												pp= new Protein;	
-												system.append(*pp);
-
-								}
-								else
-								{			
-												//iterate through the string to get the single characters
-												for (unsigned int j=0; j<current_str_l.length(); j++)
-												{	
-
-																String tmp;
-
-																char check = current_str_l[j];
-
-																//check whether the next character is a valid AS and if it is change it to three letter code						
-																if(Peptides::IsOneLetterCode(check)) 
-																{
-																				tmp= Peptides::ThreeLetterCode(check);
-
-																}
-																else
-																{ 
-																				throw Exception::InvalidArgument(__FILE__,__LINE__, "There is no OneLetterCode in the FastaFile");
-																}  
-
-																//for every Amino Acid create a new Residue named with the name of the Amino Acid
-																Residue* r= new Residue(tmp);
-
-																//set the Property to Amino Acid
-																r->setProperty(Residue::Property::PROPERTY__AMINO_ACID);
+							//extract the first line
+							String& current_str_l= getLine();
 
 
-																//append Residue to the Protein	
-																pp->append(*r); 	
+							//vector to store the Sequence
+							vector<String> sequences;
 
-												}
+							//String to store the name of the protein
+							vector<String> names;
 
-								}
 
-								//increment the counter
-								++i;
+							//String to store the sequence
+							String sequence;
 
-				}
+							//iterate over all Lines of the File
+							while(gotoLine(i) && readLine()) 
+							{
+											//extract current line of the Sequence
+											current_str_l = this->getLine();
+
+											//check whether the current line is a > then start a new Protein
+											char c = current_str_l.toChar();
+
+											//check whether it is a headline or a comment
+											if (( c =='>') || (c == ';'))
+											{
+															//retrieve the name of the protein. It starts right after '>' and ends before the first whitespace
+															unsigned int counter =  0;
+															String name;
+															while(counter < current_str_l.length() )
+															{
+																			if(current_str_l(counter) == ' ' || current_str_l(counter) == '\t' )
+																			{ 
+																							break;
+																			}
+																			else
+																			{
+																							name += current_str_l(counter);
+																							counter++;
+																			}
+															}
+															//insert name
+															names.push_back(name);
+
+															//add last sequence to sequences vector if it is not the very first sequence
+															if(p_ct > 0)
+															{
+																			sequences.push_back(sequence);
+															}
+
+															//increment counter
+															p_ct++;
+
+															//reset Sequence
+															sequence="";
+
+											}
+											else
+											{			
+															String tmp;
+
+															//iterate through the string to get the single characters
+															for (unsigned int j=0; j<current_str_l.length(); j++)
+															{	
+
+																			char check = current_str_l[j];
+
+																			//check whether the next character is a valid AS and if it is change it to three letter code						
+																			if(Peptides::IsOneLetterCode(check)) 
+																			{
+																							tmp += check;
+																			}
+																			else
+																			{ 
+																							throw Exception::InvalidArgument(__FILE__,__LINE__, "No OneLetterCode in the FastaFile");
+																			}  
+
+															}
+								
+												sequence +=tmp;
+
+											}
+
+											//increment the counter
+											++i;
+
+							}
+
+
+							//add the lastly retrieved sequence
+							sequences.push_back(sequence);
+
+							//************ Build Peptide with Peptidebuilder *********************************
+
+							if(sequences.size() != names.size())
+							{
+											throw Exception::InvalidArgument(__FILE__,__LINE__, "Not the same number of names and sequences in the FastaFile!");
+							}
+							//iterate over all proteins of the fastafile
+							for (unsigned int i=0; i<sequences.size(); i++)
+							{
+											// we need to define the peptid's AA sequence as a vector of descriptors
+											vector<BALL::Peptides::AminoAcidDescriptor> descriptor_seq;
+
+											for(unsigned int j=0; j<sequences.at(i).length(); j++)
+											{
+															// each aminoacid is represented by a descriptor
+															BALL::Peptides::AminoAcidDescriptor* aad = new BALL::Peptides::AminoAcidDescriptor;
+
+
+															// define a glycin
+															aad->setAminoAcidType(Peptides::ThreeLetterCode(sequences.at(i).c_str() [j]));
+															//aad->setPhi(Angle(-47., false));
+															//aad->setPsi(Angle(-77., false));
+
+															// add it to the sequence
+															descriptor_seq.push_back(*aad);
+											}
+											// create a builder using the sequence
+											BALL::Peptides::PeptideBuilder* pb = new BALL::Peptides::PeptideBuilder(descriptor_seq);
+
+											// "link" the fragment db for adding missing information
+											FragmentDB fdb("");
+											pb->setFragmentDB(&fdb);
+
+											// now build the peptide 
+											Protein* prot = pb->construct();
+
+											// give sensible names
+											pb->setChainName("Chain A");
+											pb->setProteinName(names.at(i));
+
+											system.append(*prot);	
+							}
 
 
 			}
@@ -275,22 +327,7 @@ namespace BALL{
 		
 
 
-		/**
-		* reads an alignment into a fastaFile
-		*/
-		void FastaFile::read(Alignment& align){
-					
-				//read the file into a System
-				System* s= new System();
-				
-				read(*s);
-		
-			//aligns;
-
-				}
-
-
-
+	
 
 
 

@@ -83,11 +83,7 @@ namespace BALL{
                         */
 			void read(Protein& protein);
 
-			/**
-                        * reads a Fastafile into a Molecule
-                        */
-			void read(Molecule& molecule);
-
+			
 			/**
                         *reads a FastaFile into a System
                         */
@@ -126,11 +122,7 @@ namespace BALL{
 	 	*/
 		FastaFile& operator >> (Protein& protein);
 
-		/** Read a molecule from the file
-		 *  @throw Exception::ParseError if a syntax error was encountered
-		 */
-		FastaFile& operator >> (Molecule& molecule);
-
+		
 		/** Read system from the file
 		 *  @throw Exception::ParseError if a syntax error was encountered
 		 */

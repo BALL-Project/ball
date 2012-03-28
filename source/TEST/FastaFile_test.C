@@ -58,15 +58,16 @@ RESULT
 
 	////////////////////open the File ///////////////////////////
 
+
 	String* seq=new String();
 	
 //////////////////////////////////////////////////////////////////// Reading Tests //////////////////////////////////////////////////77
 
 	Protein *pp = new Protein();
-	//Molecule *mp;
+
 	System *sp = new System();
 	String *rs= new String("AGTACGTAGTAGCTGCTGCTACGTGCGCTAGCTAGTACGTCACGACGTAGATGCTAGCTGACTCGATGC");
-	
+
 CHECK(read (Protein& protein))
 
 	fp->open(BALL_TEST_DATA_PATH(FastaFile_test1.fasta));
@@ -80,14 +81,7 @@ CHECK(read (Protein& protein))
 
 RESULT
 
-////////TODO CHECK(operator>>(FastaFile file, Molecule& molecue))
 
-	
-	/**	fp>>mp;
-	seq=
-	TEST_EQUAL(
-	*/
-	
 
 CHECK(read(System& system))
 
@@ -119,20 +113,20 @@ RESULT
 
 	//instantiate new ones
 	 Protein *np=new Protein();
-         System *ns=new System();
-
+  
 
 CHECK(operator>>(Protein& protein))
 
-//	seq->destroy();
 	fp->open(BALL_TEST_DATA_PATH(FastaFile_test1.fasta));
 
 
         fp->read(*np);
-        *seq=Peptides::GetSequence(*pp);
+        *seq=Peptides::GetSequence(*np);
         TEST_EQUAL(*seq, *rs)
 RESULT
 
+
+ System s;
 
         
 CHECK(operator>>(System& system))
@@ -140,8 +134,9 @@ CHECK(operator>>(System& system))
 	seq->destroy();
 	fp->open(BALL_TEST_DATA_PATH(FastaFile_test1.fasta));
 
-	fp->read(*ns);
-         for(ProteinIterator it = ns->beginProtein(); +it; ++it) {
+	*fp >> s;
+
+         for(ProteinIterator it = s.beginProtein(); +it; ++it) {
          *seq = Peptides::GetSequence(*it);
         }
         TEST_EQUAL(*seq, *rs)
