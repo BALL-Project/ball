@@ -3,6 +3,7 @@
 //
 
 
+
 #include <BALL/SEQUENCE/homologyModeller.h>
 
 #include <BALL/SEQUENCE/alignment.h>
@@ -64,44 +65,44 @@ namespace BALL
 																				//iterate over all Atoms of the Residue 
 																				AtomIterator prot_it, tmpl_it = templ.getResidue(al_char)->beginAtom();
 																				prot_it = alignment.getSeqChar(al_row, al_char).getResidue()->beginAtom();
-																				
-																				
+
+
 																				for (; +tmpl_it && +prot_it; ++tmpl_it, ++prot_it)
 																				{
 																								//map template atom onto new Atom
 																								bijections.at(al_row).push_back(AtomBijection::AtomPair(&*tmpl_it, &*prot_it));
-																							
+
 																				}
 																}
 												}
 								}
 
-								//iterate over all Atombijections and transform the Protein
-								for (int i=0; i<bijections.size();i++)
+								if(bijections.empty())
 								{
-												//StructureMapper mapper(*(alignment.getAlignmentMatrix()(i,0).getResidue()) , templ);
-												//mapper.setAtombijection(bijections.at(i));
+												return false;
+								}
 
-											RMSDMinimizer minimizer;
+								//iterate over all Atombijections and transform the Protein
+								for (vector<AtomBijection>::iterator it = bicetions.begin(); it++)
+								{
+												RMSDMinimizer minimizer;
 
-											//Note: at the moment RMSD is just thrown away
-											RMSDMinimizer::Result result = minimizer.computeTransformation(bijections.at(i));
+												//Note: at the moment RMSD is just thrown away
+												RMSDMinimizer::Result result = minimizer.computeTransformation(bijections.at(i));
 
-											TMatrix4x4<float> transformation = result.first;
-					
-											//perform a transformation for each Atom of the bijection
-											for (AtomBijection::iterator it = bijections.at(i).begin(); it !=bijections.at(i).end() ; ++it)
-											{
-												TransformationProcessor *transformer = new TransformationProcessor(transformation);
-												
-												transformer->operator() ( *(it->second));
-											}
-											
-											
+												TMatrix4x4<float> transformation = result.first;
+
+												//perform a transformation for each Atom of the bijection
+												for (AtomBijection::iterator it = bijections.at(i).begin(); it !=bijections.at(i).end() ; ++it)
+												{
+																TransformationProcessor *transformer = new TransformationProcessor(transformation);
+
+																transformer->operator() ( *(it->second));
+												}
+
+
 								}
 								return true;	
 				}
-
-
 
 }//namespace BALL

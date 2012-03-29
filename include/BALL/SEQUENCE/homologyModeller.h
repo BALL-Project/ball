@@ -14,10 +14,6 @@
 	#include <BALL/KERNEL/atomContainer.h>
 #endif
 
-
-/////////////////////////////////////////////////////////////////////7
-#include <Eigen/Dense>
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -64,11 +60,9 @@ namespace BALL
 			*/
 			bool createModel(Alignment& alignment, Protein& templ);
 
-
-		private:
-
+		
 					
 	};
 
 }//name_space BALL
-#endif // BALL_SEQUENCE_SEQUENCE_H
+#endif // BALL_SEQUENCE_HOMOLOGYMODELLER_H
