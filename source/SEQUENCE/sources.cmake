@@ -1,10 +1,11 @@
 ### list all filenames of the directory here ###
 SET(SOURCES_LIST
 	alignment.C
+	alignAlgorithm.C
+	homologyModeller.C
 	sequence.C
 	sequenceCharacter.C
 	sequenceIterator.C
-	alignAlgorithm.C
-)
+	)
 
 ADD_BALL_SOURCES("SEQUENCE" "${SOURCES_LIST}")
