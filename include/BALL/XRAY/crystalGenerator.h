@@ -89,12 +89,6 @@ namespace BALL
 			*/
 			CrystalGenerator(const CrystalGenerator& cg);
 
-			/**	Detailed Constructor.
-					This methods creates a new CrystalGenerator object from a given System
-					@param	system	a pointer to an existing System
-			*/
-			CrystalGenerator(System* system);
-			
 			/**	Destructor.
 			*/
 			~CrystalGenerator();

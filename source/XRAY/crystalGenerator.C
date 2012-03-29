@@ -30,17 +30,6 @@ namespace BALL
 	{
 	}
 
-	CrystalGenerator::CrystalGenerator(System* system)
-		:	center_processor_(),
-			transformer_(),
-			system_(system),
-			asu_(0),
-			unitcell_(0),
-			filename_(Default::SPACE_GROUP_FILE)
-	{
-		setSystem(system);
-	}
-	
 	CrystalGenerator::~CrystalGenerator()
 	{
 		system_ = 0;
@@ -64,15 +53,18 @@ namespace BALL
 
 	void CrystalGenerator::setSystem(System* system_ptr)
 	{
+			
+		system_ = system_ptr;	
+		ci_ptr_.reset();
 		
-		if (system_ptr->countProteins() == 0)
+		if (system_->countProteins() == 0)
 		{
 			Log.warn() << "System does not contain any proteins" << std::endl;
 		}
 		else
 		{
 			//Iterate over all proteins in the system and look for the first CrystalInfo object
-			for (ProteinIterator pit = system_ptr->beginProtein(); !pit.isEnd(); ++pit) 		
+			for (ProteinIterator pit = system_->beginProtein(); !pit.isEnd(); ++pit) 		
 			{
 				if (pit->hasProperty("CRYSTALINFO"))
 				{
@@ -82,7 +74,8 @@ namespace BALL
 				}
 			}
 		}
-		if ( ci_ptr_ == 0)
+		
+		if (!ci_ptr_)
 		{
 			Log.warn() << "No CrystalInfo object found, generating default CrystalInfo" << std::endl;
 			boost::shared_ptr<CrystalInfo> tmp_ptr(new CrystalInfo());
