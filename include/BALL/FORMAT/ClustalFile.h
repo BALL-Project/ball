@@ -22,9 +22,7 @@
 	#include <BALL/COMMON/exception.h>
 #endif
 
-#ifndef BALL_STRUCTURE_PEPTIDES_H
-	#include<BALL/STRUCTURE/peptides.h>
-#endif
+
 
 #ifndef BALL_KERNEL_PROTEIN_H
 	#include<BALL/KERNEL/protein.h>

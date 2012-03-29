@@ -3,7 +3,11 @@
 //
 
 #include<BALL/FORMAT/ClustalFile.h>
-
+#include <BALL/STRUCTURE/peptideBuilder.h>
+#include <BALL/STRUCTURE/fragmentDB.h>
+#ifndef BALL_STRUCTURE_PEPTIDES_H
+	#include<BALL/STRUCTURE/peptides.h>
+#endif
 //defined in the lexer (ClustalParserLexer.l)
 
 extern int  ClustalParserparse();
@@ -25,19 +29,9 @@ namespace BALL
 								File::open(filename, open_mode);
 				}
 
-				/*ClustalFile::ClustalFile(ClustalFile& file)
-					: LineBasedFile::LineBasedFile() 
-					{
-					open	
-					blocks(file.getBlocks());
-					state.current_parser = file.state.current_parser;
-					}
-				 */
-
+			
 				ClustalFile::~ClustalFile()
-				{
-								//	LineBasedFile::~LineBasedFile();
-				}
+				{		}
 
 
 				///////////////////////////////////////////////////////////// Reading and Writing /////////////////////////////////////////
@@ -381,12 +375,23 @@ namespace BALL
 												throw Exception::InvalidArgument(__FILE__,__LINE__, "ClustalFile Error: Invalid File");
 								}
 
-								//iterate over first block to create new Proteins and add them to the System
+								//vector to store the names of the proteins
+								vector<String> names;
+
+								//vector to store the Sequences of the Proteins
+								vector<String> sequences_per_line;
+
+								String sequence;
+
+								//iterate over first block to create new Proteins and add them to the System				
 								for(vector<SequenceLine>::iterator it = blocks_.at(0).seqs.begin(); it != blocks_.at(0).seqs.end() ; it++)
 								{
-												Protein* p = new Protein();
-												p->setName(it->ident);
-												system.append(*p);
+												names.push_back(it->ident);
+												//		sequences.push_back("");
+
+												//		Protein* p = new Protein();
+												//		p->setName(it->ident);
+												//		system.append(*p);
 								}
 
 								//iterate over all blocks to retrieve all SequenceLines
@@ -399,23 +404,26 @@ namespace BALL
 												for(unsigned int s_i = 0; s_i < blocks_.at(b_i).seqs.size(); s_i++)
 												{
 																//check the protein's Name and the current SequenceLines Ident are equal
-																if(/*p_ptr*/ system.getProtein(p_counter)->getName() != blocks_.at(b_i).seqs.at(s_i).ident) 
-																{ 
-																				throw Exception::InvalidArgument(__FILE__,__LINE__, "ClustalFile Error: Names of Proteins don't match");
-																}
+																//	if(/*p_ptr*/ system.getProtein(p_counter)->getName() != blocks_.at(b_i).seqs.at(s_i).ident) 
+																//{ 
+																//			throw Exception::InvalidArgument(__FILE__,__LINE__, "ClustalFile Error: Names of Proteins don't match");
+																//}
+
 																//iterate through the string to get the single characters
 																for (unsigned int j=0; j < (blocks_.at(b_i).seqs.at(s_i).length - b_i* 60); j++)						
 																{
 
-																				String three_letter;
+																				//	String three_letter;
 
 																				//retrieve the next character
-																				char check = /*s_it*/blocks_.at(b_i).seqs.at(s_i).sequence[j];
+																				char check = blocks_.at(b_i).seqs.at(s_i).sequence[j];
+
 																				//check whether the next character is a valid AS and if it is, change it to three letter code															
-																				if(check != '-'){
+																				if(check != '-')
+																				{
 																								if(Peptides::IsOneLetterCode(check)) 
 																								{
-																												three_letter = Peptides::ThreeLetterCode(check);
+																												/*three_letter*/ sequence += /*Peptides::ThreeLetterCode*/(check);
 
 																								}
 																								else
@@ -424,23 +432,100 @@ namespace BALL
 																								}  
 
 																								//for every Amino Acid create a new Residue named with the name of the Amino Acid
-																								Residue* r= new Residue(three_letter);
+																								//		Residue* r= new Residue(three_letter);
 
 																								//set the Property to Amino Acid
-																								r->setProperty(Residue::Property::PROPERTY__AMINO_ACID);
+																								//	r->setProperty(Residue::Property::PROPERTY__AMINO_ACID);
 
 
 																								//append Residue to the Protein	
-																								system.getProtein(p_counter)->append(*r);
+																								//	system.getProtein(p_counter)->append(*r);
 
 																				}//end if check != '-' 	
 
 																}// end of iteration through string
+
+																if(p_counter > 0)
+																{
+																				sequences_per_line.push_back(sequence);
+																}
+
 																p_counter++;
+
+																sequence ="";
+
 
 												}//end of iteration over all sequenceLines
 
+
 								}//end of iteration over all Blocks
+
+								sequences_per_line.push_back(sequence);
+
+								vector<String> sequences;
+
+								//retrieve sequences from sequences_per_line
+								int real_counter = 0;
+
+								while(real_counter < names.size())
+								{
+												sequence="";
+
+												for(int i = real_counter; i < sequences_per_line.size(); i+=names.size())
+												{
+																sequence += sequences_per_line.at(i);
+												}
+
+												sequences.push_back(sequence);
+												real_counter++;
+
+								}
+
+
+								//************ Build Peptide with Peptidebuilder *********************************
+
+								if(sequences.size() != names.size())
+								{
+												throw Exception::InvalidArgument(__FILE__,__LINE__, "Not the same number of names and sequences in the ClustalFile!");
+								}
+								//iterate over all proteins of the ClustalFile
+								for (unsigned int i=0; i<sequences.size(); i++)
+								{
+												// we need to define the peptid's AA sequence as a vector of descriptors
+												vector<BALL::Peptides::AminoAcidDescriptor> descriptor_seq;
+
+												for(unsigned int j=0; j<sequences.at(i).length(); j++)
+												{
+																// each aminoacid is represented by a descriptor
+																BALL::Peptides::AminoAcidDescriptor* aad = new BALL::Peptides::AminoAcidDescriptor;
+
+
+																// define a glycin
+																aad->setAminoAcidType(Peptides::ThreeLetterCode(sequences.at(i).c_str() [j]));
+																//aad->setPhi(Angle(-47., false));
+																//aad->setPsi(Angle(-77., false));
+
+																// add it to the sequence
+																descriptor_seq.push_back(*aad);
+												}
+												// create a builder using the sequence
+												BALL::Peptides::PeptideBuilder* pb = new BALL::Peptides::PeptideBuilder(descriptor_seq);
+
+												// "link" the fragment db for adding missing information
+												FragmentDB fdb("");
+												pb->setFragmentDB(&fdb);
+
+												// now build the peptide 
+												Protein* prot = pb->construct();
+
+												// give sensible names
+												pb->setChainName("Chain A");
+												pb->setProteinName(names.at(i));
+
+												system.append(*prot);	
+								}
+
+
 								return *this;
 
 				}
