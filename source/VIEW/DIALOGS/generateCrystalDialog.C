@@ -7,6 +7,7 @@
 #include <BALL/SYSTEM/path.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/threads.h>
+#include <BALL/XRAY/crystalInfo.h>
 
 #include <QComboBox>
 
@@ -90,6 +91,7 @@ namespace BALL
 		
 		void GenerateCrystalDialog::slotOk()
 		{
+			generate();
 		}
 		
 		void GenerateCrystalDialog::slotCancel()
@@ -99,6 +101,7 @@ namespace BALL
 		bool GenerateCrystalDialog::generate()
 		{
 			if (system_ == 0) system_ = getMainControl()->getSelectedSystem();
+			
 			if (system_ == 0)
 			{
 				Log.error() << "No system given! Aborting..." << std::endl;
@@ -111,60 +114,8 @@ namespace BALL
 				return false;
 			}
 			
-			bool use_mt = false;
-			// currently doesnt work:
-			#ifdef BALL_QT_HAS_THREADS
-			if (getMainControl()->useMultithreading())
-			{
-				use_mt = true;
-
-				if (thread_ == 0)
-				{
-					thread_ = new GenerateCrystalThread();
-				}
-				else
-				{
-					if (thread_->isRunning())
-					{
-						Log.error() << "Thread already running in"  << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-						return false;
-					}
-				}
-
-				thread_->setCrystalDialog(this);
-				thread_->start();
-
-				Position pos = 3;
-				QString dots;
-				Position i = 0;
-				while (thread_->isRunning())
-				{
-					setStatusbarText(tr("Generating a crystal packing ") + dots, false);
-					qApp->processEvents();
-					if (i > 10)
-					{
-						if (pos < 40) 
-						{
-							pos ++;
-							dots +=".";
-						}
-						else 
-						{
-							pos = 3;
-							dots = "...";
-						}
-						i = 0;
-					}
-
-					i++;
-					thread_->wait(10); 
-				}
-			}
 			
-			setStatusbarText(tr("Finished crystal generation"), true);
-
-			#endif
-			if (!use_mt) generate_();
+			generate_();
 			
 			system_ = 0;
 			unlockComposites();
@@ -174,6 +125,73 @@ namespace BALL
 		
 		void GenerateCrystalDialog::generate_()
 		{
+				
+		
+			generator_->setSystem(system_);
+			
+			boost::shared_ptr<CrystalInfo> ci_ptr;
+			
+			if (crystalinfo_checkbox->isChecked())
+			{
+				ci_ptr = boost::dynamic_pointer_cast<CrystalInfo>(system_->getAtomContainer(0)->getProperty("CRYSTALINFO").getSmartObject());
+			}
+			else
+			{
+				boost::shared_ptr<CrystalInfo> tmp_ptr(new CrystalInfo());
+				ci_ptr = tmp_ptr;
+				
+				ci_ptr->setSpaceGroup(space_group_combobox->currentText().toStdString());
+				
+				ci_ptr->setCellEdgeLengthA(axis_x_spinbox->value());
+				ci_ptr->setCellEdgeLengthB(axis_y_spinbox->value());
+				ci_ptr->setCellEdgeLengthC(axis_z_spinbox->value());
+				
+			}		
+			
+
+			generator_->setCrystalInfo(ci_ptr);
+
+			System* output = 0;
+			if (generatePacking->isChecked())
+			{
+				std::list<System*> crystal = generator_->generatePacking(genPack_a_from->value(), genPack_a_to->value(),
+						genPack_b_from->value(), genPack_b_to->value(),
+						genPack_c_from->value(), genPack_c_to->value());
+
+				if(crystal.size() != 0)		
+				{
+					std::list<System*>::iterator it_c = crystal.begin();	
+
+					for(;it_c != crystal.end(); it_c++)
+					{
+						getMainControl()->insert(**it_c, (*it_c)->getName());
+					}
+				}
+			}
+			else
+			{
+				if (generateASU->isChecked())
+				{
+					output = generator_->generateAsymmetricUnit();	
+				}
+
+				if (generateUC->isChecked())
+				{
+
+					output = generator_->generateUnitCell(genUC_a->value(), genUC_b->value(), genUC_c->value());	
+				}
+				
+				if (output)
+				{
+					getMainControl()->insert(*output, output->getName());
+				}
+			
+			}
+
+			
+
+					
+			//Log.info() << "Bis hierhin klappts !" << std::endl;
 		}
 
 	} // namespace VIEW
