@@ -454,7 +454,7 @@ namespace BALL
 					}
 
 				case SceneMessage::EXPORT_POVRAY:
-					exportPOVRay();
+					exportNextPOVRay();
 					return;
 
 
