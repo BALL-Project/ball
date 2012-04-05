@@ -421,7 +421,7 @@ namespace BALL
 					}
 
 				case SceneMessage::EXPORT_POVRAY:
-					exportPOVRay();
+					exportNextPOVRay();
 					return;
 
 				case SceneMessage::ENTER_ROTATE_MODE:
