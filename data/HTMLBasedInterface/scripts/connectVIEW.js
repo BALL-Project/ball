@@ -201,6 +201,7 @@ function onJSMessage(i, j) { //i = Message Class, j = Message Type
 		  document.getElementById('button1').disabled=false;  
 		  break; 
 	  }
+	  
 	  case 10: // Ending
 	  { 
 		  break; 
@@ -212,7 +213,39 @@ function onJSMessage(i, j) { //i = Message Class, j = Message Type
 
 
 function onJSActionSignal(i) { //i = ActionType
-	alert("Action Type " + i);
+	//alert("Action Type " + i);
+	switch (current_step)
+	{
+	  case 11: // optimizing = 1
+	  {
+		  if (i != 1) return; 
+	    
+		  document.getElementById('button1').disabled=false;
+		  
+		  break;
+	  }
+	  case 12: // bondorder = 2
+	  {
+		  if (i != 2) return;
+		 
+		  document.getElementById('button1').disabled=false;
+		 
+		  break;
+	  }
+	  case 13: // add_hydrogens = 3
+	  {
+		  if (i != 3) return;
+		  
+		  document.getElementById('button1').disabled=false;
+		  
+		  break;
+	  }
+	  case 14: // Ending
+	  { 
+		  break; 
+	  }
+	//break;
+	}
 }
 
 try

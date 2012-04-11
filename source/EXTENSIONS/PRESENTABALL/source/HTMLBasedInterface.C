@@ -136,7 +136,15 @@ namespace BALL
 				Log.info() << "Connected Bondorder action to ActionSignal 2" << std::endl;
 			}
 			
-
+			action = Scene::getInstance(0)->add_hydrogens_action_;
+			
+			if(action)
+			{
+				connect(action, SIGNAL(triggered()), signalMapper, SLOT(map()));
+				signalMapper->setMapping(action, 3);
+				connect(signalMapper, SIGNAL(mapped(int)), this, SIGNAL(fireJSActionSignal(int)));
+				Log.info() << "Connected Add_hydrogens action to ActionSignal 3" << std::endl;
+			}
 			
 			//add us (the object of HTMLBasedInterface) to JavaScript runtime of currently loaded page
 			page()->mainFrame()->addToJavaScriptWindowObject(QString("mywebview"), this);
