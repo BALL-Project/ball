@@ -20,8 +20,8 @@ def getDisplayProperties():
 def getScene():
 	return Scene.getInstance(0)
 
-def getEScene():
-	return EditableScene.getInstance(0)
+#def getEScene():
+#	return EditableScene.getInstance(0)
 
 def getGeometricControl():
 	return GeometricControl.getInstance(0)
@@ -170,7 +170,7 @@ def addOptimizedHydrogens():
 
 def relaxStructure():	
 	s = getOneSystem()
-	getEScene().optimizeStructure()
+	getScene().optimizeStructure()
 
 def highlightLigand():
 	s = getOneSystem()

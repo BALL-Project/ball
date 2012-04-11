@@ -1,4 +1,5 @@
 from BALL import *
+from VIEW import *
 
 def loadStructure(filename):
 	path = Path()
@@ -39,8 +40,8 @@ def getDisplayProperties():
 def getScene():
 	return Scene.getInstance(0)
 
-def getEScene():
-	return EditableScene.getInstance(0)
+#def getEScene():
+	#return EditableScene.getInstance(0)
 
 def getGeometricControl():
 	return GeometricControl.getInstance(0)
@@ -188,16 +189,18 @@ def removeWater():
 	setMultithreading(1)
 
 def addOptimizedHydrogens():
-	getOneSystem()
+	s = getOneSystem()
+	getMolecularControl().highlight(s)
 	setMultithreading(0)
 	getMolecularStructure().addHydrogens()
 	getMolecularControl().applySelector("element(H)")
 	setMultithreading(1)
 	getMolecularStructure().runMinimization(false)
 
-def relaxStructure():	
+def relaxStructure():
 	s = getOneSystem()
-	getEScene().optimizeStructure()
+	getMolecularControl().highlight(s)
+	getScene().optimizeStructure()
 
 def highlightLigand():
 	s = getOneSystem()
