@@ -213,28 +213,28 @@ function onJSMessage(i, j) { //i = Message Class, j = Message Type
 
 
 function onJSActionSignal(i) { //i = ActionType
-	//alert("Action Type " + i);
+	alert("Action Type " + i);
 	switch (current_step)
 	{
-	  case 11: // optimizing = 1
+	  case 11: // optimizing = 2
 	  {
-		  if (i != 1) return; 
+		  if (i != 2) return; 
 	    
 		  document.getElementById('button1').disabled=false;
 		  
 		  break;
 	  }
-	  case 12: // bondorder = 2
+	  case 12: // bondorder = 3
 	  {
-		  if (i != 2) return;
+		  if (i != 3) return;
 		 
 		  document.getElementById('button1').disabled=false;
 		 
 		  break;
 	  }
-	  case 13: // add_hydrogens = 3
+	  case 13: // add_hydrogens = 1
 	  {
-		  if (i != 3) return;
+		  if (i != 1) return;
 		  
 		  document.getElementById('button1').disabled=false;
 		  
@@ -263,6 +263,8 @@ try
 	// connect handler method to the fireJSCompositeMessage signal
 	// of the exposed HTMLBasedInterface object
 	mywebview.fireJSMessage.connect(onJSMessage);
+	mywebview.blockSignals(1);
+	mywebview.blockSignals(0);
 }
 catch (e)
 {

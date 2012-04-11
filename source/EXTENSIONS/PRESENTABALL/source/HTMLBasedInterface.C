@@ -8,6 +8,7 @@
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/VIEW/KERNEL/shortcutRegistry.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 
 #include <QtWebKit/QWebPage>
@@ -115,37 +116,20 @@ namespace BALL
 		{
 			QAction* action = 0;
 			
-			//connect optimize_action_ in Scene to fireJSActionSignal
-			action = Scene::getInstance(0)->optimize_action_;
+			ShortcutRegistry& sr = MainControl::getInstance(0)->getShortcutRegistry();
 			
-			if(action)
+			for(uint i = 0; i < sr.size(); i++)
 			{
-				connect(action, SIGNAL(triggered()), signalMapper, SLOT(map()));
-				signalMapper->setMapping(action, 1);
-				connect(signalMapper, SIGNAL(mapped(int)), this, SIGNAL(fireJSActionSignal(int)));
-				Log.info() << "Connected Optimize action to ActionSignal 1" << std::endl;
+				action = sr[i].second;
+				if (action)
+				{
+					connect(action, SIGNAL(triggered()), signalMapper, SLOT(map()));
+					signalMapper->setMapping(action, i);
+					connect(signalMapper, SIGNAL(mapped(int)), this, SIGNAL(fireJSActionSignal(int)));
+					Log.info() << "Connected <" << action->text().toStdString() << "> action to JSActionSignal " << i << std::endl;
+					
+				}
 			}
-			
-			action = Scene::getInstance(0)->bondorders_action_;
-			
-			if(action)
-			{
-				connect(action, SIGNAL(triggered()), signalMapper, SLOT(map()));
-				signalMapper->setMapping(action, 2);
-				connect(signalMapper, SIGNAL(mapped(int)), this, SIGNAL(fireJSActionSignal(int)));
-				Log.info() << "Connected Bondorder action to ActionSignal 2" << std::endl;
-			}
-			
-			action = Scene::getInstance(0)->add_hydrogens_action_;
-			
-			if(action)
-			{
-				connect(action, SIGNAL(triggered()), signalMapper, SLOT(map()));
-				signalMapper->setMapping(action, 3);
-				connect(signalMapper, SIGNAL(mapped(int)), this, SIGNAL(fireJSActionSignal(int)));
-				Log.info() << "Connected Add_hydrogens action to ActionSignal 3" << std::endl;
-			}
-			
 			//add us (the object of HTMLBasedInterface) to JavaScript runtime of currently loaded page
 			page()->mainFrame()->addToJavaScriptWindowObject(QString("mywebview"), this);
 			

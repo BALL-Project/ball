@@ -234,8 +234,6 @@ namespace BALL
 		{
 			std::map<String,QAction*>::const_iterator it = shortcuts_.begin();
 
-			QByteArray out;
-
 			for (; it!=shortcuts_.end() && (!it->second || it->second->shortcut().isEmpty()); ++it) ;
 
 			if (it == shortcuts_.end())
