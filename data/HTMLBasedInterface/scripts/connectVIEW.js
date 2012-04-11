@@ -133,84 +133,97 @@ function onJSMessage(i, j) { //i = Message Class, j = Message Type
 	switch (current_step)
 	{
 	  case 1: // Create a peptide
-		  {
+	  {
 		  if (j != MsgTypeSce.NEW_MOLECULE) return; 
 	    
 		  document.getElementById('button1').disabled=false;
 		  
 		  
 		  break;
-		  }
+	  }
 	  case 2: // Focusing
-		  {
+	  {
 		  if (i != MsgClass.SCENE) return;
 		  document.getElementById('button1').disabled=false;
 		  //alert("current_step:" + current_step);  
 		  break;
-		  }
+	  }
 	  case 3: // Hierarchy
-		  {
+	  {
 		    document.getElementById('button1').disabled=false;
 		    break;
-		  }
+	  }
 	  case 4: //Molecular Dynamics Simulation
-		  {
+	  {
 		    
 		   if (i != MsgClass.DATASET) return;
 		   
 		  document.getElementById('button1').disabled=false;  
 		  break; 
-		  }
+	  }
 	  case 5: // Visualisation of trajectories
-		  {
+	  {
 		    
 		   if (j != MsgTypeComp.CHANGED_COMPOSITE) return;
 		   
 		  document.getElementById('button1').disabled=false;  
 		  break; 
-		  }
+	  }
 	  case 6: // Calculation of electrostatics
-		  {
+	  {
 		    
 		   if (i != MsgClass.DATASET && j != MsgTypeDataSet.ADD) return;
 		   
 		  document.getElementById('button1').disabled=false;  
 		  break; 
-		  }
+	  }
 	  case 7: // Creating a Solvent Excluded Surface
-		  {
+	  {
 		    
 		   if (j != MsgTypeRep.ADD_TO_GEOMETRIC_CONTROL) return;
 		   
 		  document.getElementById('button1').disabled=false;  
 		  break; 
-		  }
+	  }
 	  case 8: // Coloring a SES by electrostatics
-		  {
+	  {
 		    
 		   if (j != MsgTypeRep.UPDATE) return;
 		   
 		  document.getElementById('button1').disabled=false;  
 		  break; 
-		  }
+	  }
 	  case 9: // Creating a isocontour surface
-		  {
+	  {
 		    
 		   if (j != MsgTypeRep.ADD) return;
 		   
 		  document.getElementById('button1').disabled=false;  
 		  break; 
-		  }
+	  }
 	  case 10: // Ending
-		  { 
+	  { 
 		  break; 
-		  }
+	  }
+	
 	}
 	
-	
-	
-
 }//end function onJSMessage
+
+
+function onJSActionSignal(i) { //i = ActionType
+	alert("Action Type " + i);
+}
+
+try
+{
+	mywebview.fireJSActionSignal.connect(onJSActionSignal);
+}
+catch (e)
+{
+	// if connection does not work an exception is thrown
+	alert(e);
+}
 
 try
 {

@@ -8,6 +8,7 @@
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
 
 #include <QtWebKit/QWebPage>
 #include <QtWebKit/QWebFrame>
@@ -29,13 +30,18 @@ namespace BALL
 				ModularWidget(name)
 		{
 			page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+			
+			//create SignalMapper for Scene actions
+			signalMapper = new QSignalMapper(this);
+			
 
+			
 			// make us available in Javascript, even after a new url has been loaded
 			connect(page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(exposeQObjectToJavascript()));
 			
 			connect(this, SIGNAL(linkClicked(const QUrl&)), this, SLOT(handleLinkClicked(const QUrl&)));
 			connect(this, SIGNAL(urlChanged(const QUrl&)), this, SLOT(executeLink(const QUrl&)));
-
+			
 			Path p;
 			String s;
 			
@@ -100,8 +106,37 @@ namespace BALL
 			action_registry_.insert(action->getName(), action);
 		}
 		
+		void HTMLBasedInterface::test(int i)
+		{
+			emit fireJSActionSignal(i);
+		}
+		
 		void HTMLBasedInterface::exposeQObjectToJavascript()
 		{
+			QAction* action = 0;
+			
+			//connect optimize_action_ in Scene to fireJSActionSignal
+			action = Scene::getInstance(0)->optimize_action_;
+			
+			if(action)
+			{
+				connect(action, SIGNAL(triggered()), signalMapper, SLOT(map()));
+				signalMapper->setMapping(action, 1);
+				connect(signalMapper, SIGNAL(mapped(int)), this, SIGNAL(fireJSActionSignal(int)));
+				Log.info() << "Connected Optimize action to ActionSignal 1" << std::endl;
+			}
+			
+			action = Scene::getInstance(0)->bondorders_action_;
+			
+			if(action)
+			{
+				connect(action, SIGNAL(triggered()), signalMapper, SLOT(map()));
+				signalMapper->setMapping(action, 2);
+				connect(signalMapper, SIGNAL(mapped(int)), this, SIGNAL(fireJSActionSignal(int)));
+				Log.info() << "Connected Bondorder action to ActionSignal 2" << std::endl;
+			}
+			
+
 			
 			//add us (the object of HTMLBasedInterface) to JavaScript runtime of currently loaded page
 			page()->mainFrame()->addToJavaScriptWindowObject(QString("mywebview"), this);
@@ -132,43 +167,42 @@ namespace BALL
 			
 			if (cmsg == 0)
 			{
-			  
-			  if (rmsg == 0)
-			    
-			  {
-			    if (smsg == 0)
-			    
-			    {
-			      if (dmsg == 0)
-			      {
-				return;
-			      }
-			      else
-			      {
-				emit fireJSMessage(3, (int) dmsg->getType()); //DataMessage = 3
 
-				Log.info() << "DataMessage fired to JS" << std::endl;
-			      }
-			    }
-			    else
+				if (rmsg == 0)
+
 				{
-			 
-				emit fireJSMessage(2, (int) smsg->getType()); //SceneMessage = 2
+					if (smsg == 0)
 
-				Log.info() << "SceneMessage fired to JS" << std::endl;
+					{
+						if (dmsg == 0)
+						{
+							return;
+						}
+						else
+						{
+							emit fireJSMessage(3, (int) dmsg->getType()); //DataMessage = 3
+
+							Log.info() << "DataMessage fired to JS" << std::endl;
+						}
+					}
+					else
+					{
+
+						emit fireJSMessage(2, (int) smsg->getType()); //SceneMessage = 2
+
+						Log.info() << "SceneMessage fired to JS" << std::endl;
+					}
 				}
-			  }
-			  else
-			      {
-			 
-				emit fireJSMessage(1, (int) rmsg->getType()); // RepresentationMessage = 1
+				else
+				{
+					emit fireJSMessage(1, (int) rmsg->getType()); // RepresentationMessage = 1
 
-				Log.info() << "RepresentationMessage fired to JS" << std::endl;
-			      }
+					Log.info() << "RepresentationMessage fired to JS" << std::endl;
+				}
 			}
 			else
 			{
-			
+
 				//if (cmsg->getType() != CompositeMessage::NEW_MOLECULE) return;
 				//RepresentationMessage* rmsg = RTTI::castTo<RepresentationMessage>(*message);
 
@@ -179,8 +213,8 @@ namespace BALL
 
 				Log.info() << "CompositeMessage fired to JS" << std::endl;
 			}
-			
-			
+
+
 		}
 		
 		void HTMLBasedInterface::contextMenuEvent(QContextMenuEvent*)

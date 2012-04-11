@@ -5,6 +5,7 @@
 	#include <BALL/VIEW/WIDGETS/HTMLView.h>
 #endif
 
+#include <QtCore/QSignalMapper>
 #include <QtCore/QHash>
 
 namespace BALL
@@ -46,6 +47,7 @@ namespace BALL
 				//void fireJSCompositeMessage(int i);
 				//void fireJSRepresentationMessage(int i);
 				//void fireJSSceneMessage(int i);
+				void fireJSActionSignal(int actionType);
 				void fireJSMessage(int i, int j);
 				
 			protected:
@@ -53,13 +55,15 @@ namespace BALL
 				void contextMenuEvent(QContextMenuEvent* evt);
 			
 			protected slots:
-
+				
+				void test(int i);
 				void exposeQObjectToJavascript();
 				void handleLinkClicked(const QUrl& url);
 				void executeLink(const QUrl& url);
 				void executePython_(const QString& action, const ParameterList& parameters);
 
 			private:
+				QSignalMapper *signalMapper;
 				String script_base_;
 				QHash<QString, HTMLInterfaceAction*> action_registry_;
 		};
