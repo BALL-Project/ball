@@ -195,11 +195,6 @@ namespace BALL
 			else
 			{
 
-				//if (cmsg->getType() != CompositeMessage::NEW_MOLECULE) return;
-				//RepresentationMessage* rmsg = RTTI::castTo<RepresentationMessage>(*message);
-
-				//if (cmsg == 0 | cmsg->getType() != CompositeMessage::NEW_MOLECULE) return;
-
 				// fire a Qt signal that can be handled by the website 
 				emit fireJSMessage(0, (int) cmsg->getType()); // CompositeMessage = 0
 

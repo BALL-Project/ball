@@ -1,5 +1,6 @@
 // include this file (connectVIEW.js) to every webpage that
 // shall be able to react on VIEW messages
+current_action = -1;
 
 var MsgClass = {
 		    "UNDEFINED" : -1,
@@ -213,6 +214,13 @@ function onJSMessage(i, j) { //i = Message Class, j = Message Type
 
 
 function onJSActionSignal(i) { //i = ActionType
+	
+	if (current_action == i)
+	{
+		return;
+	}
+	current_action = i;
+
 	alert("Action Type " + i);
 	switch (current_step)
 	{
@@ -246,6 +254,7 @@ function onJSActionSignal(i) { //i = ActionType
 	  }
 	//break;
 	}
+	
 }
 
 try
@@ -263,8 +272,6 @@ try
 	// connect handler method to the fireJSCompositeMessage signal
 	// of the exposed HTMLBasedInterface object
 	mywebview.fireJSMessage.connect(onJSMessage);
-	mywebview.blockSignals(1);
-	mywebview.blockSignals(0);
 }
 catch (e)
 {

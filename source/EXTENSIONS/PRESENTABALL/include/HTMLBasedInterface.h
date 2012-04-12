@@ -44,9 +44,6 @@ namespace BALL
 
 			signals:
 				
-				//void fireJSCompositeMessage(int i);
-				//void fireJSRepresentationMessage(int i);
-				//void fireJSSceneMessage(int i);
 				void fireJSActionSignal(int actionType);
 				void fireJSMessage(int i, int j);
 				
