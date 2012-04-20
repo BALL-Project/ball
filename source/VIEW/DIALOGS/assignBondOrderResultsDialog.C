@@ -233,14 +233,14 @@ namespace BALL
 
 					// The SDGenerator sometimes crashes ...
 					try {
+						// place the atoms in a plane
 						SDGenerator sdg(true);
 						sdg.generateSD(S);
-
-						sd_systems_[current_item] = new System(S);
 					} catch (...)
 					{
-						sd_systems_[current_item] = new System;
 					}
+					// create the 2D image
+					sd_systems_[current_item] = new System(S);
 
 					queries->setCurrentItem(current_item);
 					//current_item->setSelected(true);
