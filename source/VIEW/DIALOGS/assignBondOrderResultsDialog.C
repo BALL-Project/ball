@@ -141,7 +141,11 @@ namespace BALL
 				solution_systems_[current_item] = new System(S);
 
 				SDGenerator sdg(true);
-				sdg.generateSD(S);
+				try {
+					sdg.generateSD(S);
+				} catch (...)
+				{
+				}
 
 				sd_systems_[current_item] = new System(S);
 
