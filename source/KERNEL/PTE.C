@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTE.C,v 1.17 2003/08/26 09:17:48 oliver Exp $
 //
 
 #include <BALL/KERNEL/PTE.h>
@@ -9,10 +8,10 @@
 #include <cstdlib>			// bsearch
 
 using std::ostream;
-namespace BALL 
+namespace BALL
 {
 
-	extern "C" int 
+	extern "C" int
 #ifdef BALL_COMPILER_MSVC
 	__cdecl
 #endif
