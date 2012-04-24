@@ -180,6 +180,8 @@ namespace BALL
 					idx_actual_read++;
 
 				}
+
+				delete [] data;
 			}
 			else
 			{
