@@ -583,7 +583,7 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 #endif
 					}
 
-					if (solutions_.size() > 0)
+					if (!solutions_.empty())
 					{
 						if (options.getBool(Option::APPLY_FIRST_SOLUTION))
 						{

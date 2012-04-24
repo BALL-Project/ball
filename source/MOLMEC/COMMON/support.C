@@ -311,7 +311,7 @@ Log.error() << "calculateNonBondedAtomPairs time: " << String(t.getClockTime()) 
 		{
 			Size number_of_pairs_with_selection = 0;
 
-			if (pair_vector.size() > 0)
+			if (!pair_vector.empty())
 			{
 				// sort the list such that those pairs where one of the atoms
 				// is selected appear at the beginning of the list and the 

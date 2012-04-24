@@ -238,7 +238,7 @@ namespace BALL
 		//printTargets_();
 		
 		// If there were no targets, return immediately.
-		if (targets_.size() == 0)
+		if (targets_.empty())
 		{	
 			if (verbosity_ >= VERBOSITY_LEVEL_DEBUG)
 			{
@@ -248,7 +248,7 @@ namespace BALL
 		}
 		
 		// If there are no hypersurfaces, return immediately.
-		if (hypersurfaces_.size() == 0)
+		if (hypersurfaces_.empty())
 		{	
 			if (verbosity_ >= VERBOSITY_LEVEL_DEBUG)
 			{

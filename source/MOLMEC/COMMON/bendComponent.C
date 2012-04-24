@@ -24,7 +24,7 @@ namespace BALL
 		energy_ = 0;
 
 		// abort for an empty vector
-		if (bend_.size() == 0)
+		if (bend_.empty())
 		{
 			return 0.0;
 		}

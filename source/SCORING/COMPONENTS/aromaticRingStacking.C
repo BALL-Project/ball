@@ -142,7 +142,7 @@ namespace BALL
 			}
 		}
 		
-		if (receptor_rings_.size() == 0)
+		if (receptor_rings_.empty())
 		{
 			return(true);
 		}
@@ -171,7 +171,7 @@ namespace BALL
 			}
 		}
 
-		if (ligand_rings_.size() == 0)
+		if (ligand_rings_.empty())
 		{
 			return(true);
 		}
@@ -196,7 +196,7 @@ namespace BALL
 		
 	{
 
-		if (possible_interactions_.size() == 0)
+		if (possible_interactions_.empty())
 		{
 			return(0.0);
 		}

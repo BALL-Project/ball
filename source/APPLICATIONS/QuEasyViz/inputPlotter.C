@@ -106,7 +106,7 @@ namespace BALL
 				cout<<"Activities must be read before they can be plotted!!"<<endl;
 				return;
 			}
-			if(names->size()==0) show_data_labels=0;
+			if(names->empty()) show_data_labels=0;
 			
 			double min_y=1e10;
 			double max_y=-1e10;
@@ -160,7 +160,7 @@ namespace BALL
 				cout<<"Activities must be read before they can be plotted!!"<<endl;
 				return;
 			}
-			if(names->size()==0) show_data_labels=0;
+			if(names->empty()) show_data_labels=0;
 			
 			std::multiset<pair<double,unsigned int> > act;
 			for(unsigned int i=0; i<data_->getNoSubstances();i++)

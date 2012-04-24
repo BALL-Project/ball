@@ -2485,7 +2485,7 @@ namespace BALL
 
 		// If the system does not contain any atoms, there is nothing to calculate
 		// 
-		if (boundary_points_.size() == 0)
+		if (boundary_points_.empty())
 		{
 			return 0.0;
 		}

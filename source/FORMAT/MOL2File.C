@@ -260,7 +260,7 @@ namespace BALL
 		}
 
 		// if we have sets, we should write them
-		if (sets_.size())
+		if (!sets_.empty())
 		{
 			for (Position i=0; i<sets_.size(); i++)
 			{
@@ -913,7 +913,7 @@ namespace BALL
 
 		// if there are no substructures, insert the atoms
     // into the molecule
-		if (substructures_.size() == 0)
+		if (substructures_.empty())
 		{
 			for (i = 0; i < atom_ptr.size(); i++)
 			{

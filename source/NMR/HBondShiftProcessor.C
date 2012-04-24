@@ -141,7 +141,7 @@ namespace BALL
     }
 
     // If there were no donors or acceptors, return immediately.
-    if ((donors_.size() == 0) || acceptors_.size() == 0)
+    if (donors_.empty() || acceptors_.empty())
     {
       return true;
     }

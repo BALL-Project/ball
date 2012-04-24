@@ -39,7 +39,7 @@ int main(int argc, char** argv)
 	{
 		if (infile.getLine().hasSuffix("MOLECULE"))
 		{
-			if (file_contents.size() != 0 && file_name != "")
+			if (!file_contents.empty() && file_name != "")
 			{
 				File outfile(dir + FileSystem::PATH_SEPARATOR + file_name + ".mol2", std::ios::out);
 				vector<String>::iterator vit = file_contents.begin();

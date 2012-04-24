@@ -360,7 +360,7 @@ namespace BALL
 
 	void PersistenceManager::addNeededObjects_() 
 	{
-		while (object_out_needed_.size() > 0)
+		while (!object_out_needed_.empty())
 		{
 			const PersistentObject*	obj = object_out_needed_.back();
 			object_out_needed_.pop_back();

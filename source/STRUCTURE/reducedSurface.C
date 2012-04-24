@@ -1277,7 +1277,7 @@ namespace BALL
 		const std::deque<Index>& s = neighboursOfTwoAtoms(SortedPosition2(a1, a2));
 		std::deque<std::pair<Index,TSphere3<double> > > candidates;
 		findThirdAtom(a1, a2, s, candidates);
-		if (candidates.size() == 0)
+		if (candidates.empty())
 		{
 			return NULL;
 		}

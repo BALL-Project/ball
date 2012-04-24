@@ -178,7 +178,7 @@ void AtomTyper::assignTo(Molecule& mol)
 		}
 
 		// if no atoms to be matched: continue to next rule set
-		if (atoms_to_match.size() == 0) continue;
+		if (atoms_to_match.empty()) continue;
 
 		const vector<Position>& rule_numbers = eit->second;
 		for (Index nr = (Index)rule_numbers.size() - 1; nr >= 0; nr--)
@@ -196,7 +196,7 @@ void AtomTyper::assignTo(Molecule& mol)
 				t.start();
    #endif
 				sm.match(result, mol, rules_[rule], atoms_to_match);
-				if (result.size() == 0) continue;
+				if (result.empty()) continue;
 
 				// iterate over all matched atoms, and set values accordingly:
 				for (Position pos = 0; pos < result.size(); pos++)

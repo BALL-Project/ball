@@ -763,7 +763,7 @@ namespace BALL
 		}
 #endif
 		// linear independency tests
-		if (rings_.size() == 0)
+		if (rings_.empty())
 		{
 			rings_.push_back(beer);
 			matrix_.push_back(beer);

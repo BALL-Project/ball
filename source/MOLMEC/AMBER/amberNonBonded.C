@@ -924,7 +924,7 @@ namespace BALL
 		// The first results in the use of AmberNBEnergyPeriodic
 		// instead of AmberNBEnergy, the latter in the use of distanceDependentCoulomb
 		// instead of coulomb for the electrostatic energy.
-		if (non_bonded_.size() > 0)
+		if (!non_bonded_.empty())
 		{
 			if (!use_periodic_boundary && !use_dist_depend_dielectric_)
 			{

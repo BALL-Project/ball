@@ -199,7 +199,7 @@ namespace BALL
 			std::vector<String> split;
 			ac_split_(line, split);
 
-			if (split.size() == 0)
+			if (split.empty())
 				continue;
 
 			if (split[0] == "ATOM")

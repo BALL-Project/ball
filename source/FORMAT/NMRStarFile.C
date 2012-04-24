@@ -718,7 +718,7 @@ namespace BALL
 		// NOTE: currently, we walk only over the first of those data sets
 		const vector<NMRAtomDataSet>& nmr_data_sets = nmr_data_->getNMRData();
 
-		if (nmr_data_sets.size() == 0)
+		if (nmr_data_sets.empty())
 		{
 			Log.error() << "NMRStarFile::BALLToBMRBMapper::createTrivialMapping(): no atom data sets found!" << std::endl;
 
@@ -807,7 +807,7 @@ namespace BALL
 		}
 		// get the NMR data
 		// NOTE: we take the zero's dataset!
-		if (nmr_data_->atom_data_sets_.size() == 0)
+		if (nmr_data_->atom_data_sets_.empty())
 		{
 			Log.error() << "BALLToBMRBMapper::createMapping(): Warning: no atom data present!" << std::endl;
 			return false;
@@ -1099,7 +1099,7 @@ namespace BALL
 
 		String chemical_unit = "";
 		// get always the first chemical_unit
-		if (atom_data_sets_.size()>0)
+		if (!atom_data_sets_.empty())
 		{
 			Log.warn() << "NMRStarfile::read(): Warning: chemical unit ambiguous!" << endl;
 			// return false;
@@ -1237,7 +1237,7 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 
 	String NMRStarFile::getResidueSequence(Position i) const
 	{	
-		if (monomeric_polymers_.size() > 0)
+		if (!monomeric_polymers_.empty())
 		{			
 			if (atom_data_sets_.size() > i)
 			{	

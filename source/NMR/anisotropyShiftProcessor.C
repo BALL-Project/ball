@@ -68,7 +68,7 @@ namespace BALL
 		}
 
 		// Abort if there's nothing to do (no protons).
-		if (proton_list_.size() == 0)
+		if (proton_list_.empty())
 		{
 			return true;
 		}

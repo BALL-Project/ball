@@ -779,7 +779,7 @@ void DemoTutorialDialog::nextStepDemo_()
 		DatasetController* dc = DatasetControl::getInstance(0)->getController(RegularData3DController::type);
 		RegularData3DController& rcon = *(RegularData3DController*) dc;
 		vector<Dataset*> grids = rcon.getDatasets();
-		if (grids.size() == 0) return;
+		if (grids.empty()) return;
  		rcon.computeIsoContourSurface(*grids[0], ColorRGBA(255,0,0), -0.1);
  		rcon.computeIsoContourSurface(*grids[0], ColorRGBA(0,0,255), 0.1);
 

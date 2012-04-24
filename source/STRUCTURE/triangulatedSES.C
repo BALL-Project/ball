@@ -801,7 +801,7 @@ namespace BALL
 		{
 			return false;
 		}
-		while (border.size() > 0)
+		while (!border.empty())
 		{
 			TriangleEdge* edge = border.front();
 			border.pop_front();
@@ -1127,7 +1127,7 @@ namespace BALL
 		TriangleEdge* edge2;
 		Triangle* triangle;
 		bool old1, old2;
-		while (planar_edges.size() > 0)
+		while (!planar_edges.empty())
 		{
 			edge0 = planar_edges.front();
 			planar_edges.pop_front();

@@ -432,7 +432,7 @@ namespace BALL
 
 		// if we have read the Snapshots from the trajectory file
 		// use these, otherwise "seek" to the correct file position
-		if (snapshot_buffer_.size() != 0)
+		if (!snapshot_buffer_.empty())
 		{
 			if (snapshot_buffer_.size() <= number) return false;
 
@@ -482,7 +482,7 @@ namespace BALL
 
 		// if we have read the Snapshots from the trajectory file
 		// use these, otherwise read one Snapshot from the file
-		if (snapshot_buffer_.size() != 0)
+		if (!snapshot_buffer_.empty())
 		{
 			snapshot_buffer_[0].applySnapShot(*system_ptr_);
 			current_snapshot_ = 0;
@@ -508,7 +508,7 @@ namespace BALL
 
 		// if we have read the Snapshots from the trajectory file
 		// use these, otherwise read one Snapshot from the file
-		if (snapshot_buffer_.size() != 0)
+		if (!snapshot_buffer_.empty())
 		{
 			current_snapshot_++;
 			if (current_snapshot_ >= snapshot_buffer_.size()) return false;
@@ -543,7 +543,7 @@ namespace BALL
 
 		// if we have read the Snapshots from the trajectory file
 		// use these, otherwise read one Snapshot from the file
-		if (snapshot_buffer_.size() != 0)
+		if (!snapshot_buffer_.empty())
 		{
 			snapshot_buffer_[snapshot_buffer_.size() - 1].applySnapShot(*system_ptr_);
 			current_snapshot_ = snapshot_buffer_.size() - 1;

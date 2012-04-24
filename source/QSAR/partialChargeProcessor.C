@@ -279,7 +279,7 @@ namespace BALL
 	float PartialChargeProcessor::getElectronAffinity_(Element::AtomicNumber atomic_number, Size charge)
 	{
 		static vector<float> eas;
-		if (eas.size() == 0)
+		if (eas.empty())
 		{
 			readElectronAffinities_(eas);
 		}

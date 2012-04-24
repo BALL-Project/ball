@@ -196,7 +196,7 @@ namespace BALL
 				Log.warn() << "PeptideBuilder::construct(): no FragmengDB given!" << std::endl;
 				return 0;
 			}
-			if (sequence_.size() == 0)
+			if (sequence_.empty())
 			{
 
 				Log.warn() << "PeptideBuilder::construct(): no amino acid sequence specified." << std::endl;
