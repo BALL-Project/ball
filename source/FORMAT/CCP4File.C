@@ -312,6 +312,9 @@ namespace BALL
 				}
 			}
 		}
+
+		delete [] rowblock;
+
 		return true;
 	}
 
