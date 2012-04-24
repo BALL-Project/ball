@@ -263,8 +263,8 @@ namespace BALL
 				}
 			
 				curve_i->setData(x,y,no_compounds);
-				delete x;
-				delete y;
+				delete [] x;
+				delete [] y;
 				QColor c(135,135,135);
 				if(i==1)
 				{ 

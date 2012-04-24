@@ -193,6 +193,7 @@ namespace BALL
 		{
 			if ((st->swt_ent[i].ste_path = (char*)malloc(MAXPATHLEN)) == NULL)
 			{
+				free(st);
 				return -1;
 			}
 		}
@@ -206,7 +207,7 @@ namespace BALL
 			swap_avail += st->swt_ent[i].ste_free * pgsize_in_kbytes;
 		}
 
-		delete st;
+		free(st);
 
 		return ((LongIndex)swap_avail) * 1024;
 	}

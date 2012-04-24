@@ -193,7 +193,7 @@ namespace BALL
 				}
 				
 				delete fitY;
-				delete g;
+				delete [] g;
 				gsl_multifit_fdfsolver_free(s); 
 			}
 			cout <<training_result_<<endl;
