@@ -48,7 +48,7 @@ namespace BALL
 
 	bool SurfaceProcessor::finish()
 	{
-		if (spheres_.size() == 0) 
+		if (spheres_.empty())
 		{
 			Log.error() << "empty surface" << std::endl;
 			return true;

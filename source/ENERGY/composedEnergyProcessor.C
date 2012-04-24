@@ -75,7 +75,7 @@ namespace BALL
 		// if there was no processor in the list before, assume that the
 		// instance will be valid after insertion.
 
-		if (components_.size() == 0)
+		if (components_.empty())
 		{
 			valid_ = true;
 		}

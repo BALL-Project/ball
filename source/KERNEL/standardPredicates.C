@@ -546,7 +546,7 @@ namespace BALL
 		// (which is highly improbable, but nevertheless possible.
 
 		// First we have to remove links to the lower part of the tree
-		if (link_set_.size() > 0)
+		if (link_set_.size() != 0)
 		{
 			HashSet<CTPNode*>::iterator it = link_set_.begin();
 			for (; +it; ++it)
@@ -921,7 +921,7 @@ namespace BALL
 						Log.info() << "Found ), new depth is " << depth
 							<< std::endl;
 					}
-					if (bracket_stack.size() > 0)
+					if (!bracket_stack.empty())
 					{
 						current = bracket_stack.back();
 						bracket_stack.pop_back();

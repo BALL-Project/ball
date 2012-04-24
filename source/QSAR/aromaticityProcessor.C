@@ -576,7 +576,7 @@ namespace BALL
 		}
 		sssr = sssr_new;
 
-		while(sssr.size()!=0)
+		while(!sssr.empty())
 		{			
 			// calc intersection and sort the rings, for some reasons set_intersection does not work properly here
 			// also accumulate does not work properly

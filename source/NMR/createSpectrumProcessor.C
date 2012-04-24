@@ -168,7 +168,7 @@ namespace BALL
 								}
 							}
 						}
-						if (atoms.size() != 0)
+						if (!atoms.empty())
 						{
 							shift /= (float)atoms.size();
 							list<Atom*>::const_iterator list_it = atoms.begin();

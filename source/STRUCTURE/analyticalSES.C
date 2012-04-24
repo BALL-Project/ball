@@ -26,7 +26,7 @@ namespace BALL
 		}
 		
 		// if no atoms are found, return zero
-		if (atoms.size() == 0)
+		if (atoms.empty())
 		{
 			return 0;
 		}
@@ -80,7 +80,7 @@ namespace BALL
 		}
 		
 		// if no atoms are found, return zero
-		if (atoms.size() == 0)
+		if (atoms.empty())
 		{
 			return 0;
 		}
@@ -140,7 +140,7 @@ namespace BALL
 		}
 		
 		// if no atoms are found, return zero
-		if (atoms.size() == 0)
+		if (atoms.empty())
 		{
 			return 0;
 		}

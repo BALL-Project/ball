@@ -364,7 +364,7 @@ namespace BALL
 	float SimpleBase::getAtomicPolarizability_(int atomic_number)
 	{
 		static vector<float> a_pols;
-		if (a_pols.size() == 0)
+		if (a_pols.empty())
 		{
 			readAtomicPolarizabilities_(a_pols);
 		}

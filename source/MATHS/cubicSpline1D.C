@@ -295,7 +295,7 @@ namespace BALL
 	{
 		unsigned int n = sample_positions_.size();
 		// Is this access-value inside the boundaries?
-		if ((sample_positions_.size() > 0) && ((x < lower_bound_) || (x > upper_bound_)))
+		if (!sample_positions_.empty() && ((x < lower_bound_) || (x > upper_bound_)))
 		{
 			// Something _really_ bad happened.
 			if (		(!return_average_) 

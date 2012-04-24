@@ -913,7 +913,7 @@ namespace BALL
 		component_no_++;
 		stack<SPNode*> nodes;
 		nodes.push(spnode);
-		while (nodes.size() != 0)
+		while (!nodes.empty())
 		{
 			SPNode* node = nodes.top();
 			node->setComponentNumber(component_no_);

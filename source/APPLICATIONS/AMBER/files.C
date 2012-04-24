@@ -58,7 +58,7 @@ void SingleFile::moveTo(System& new_system)
 	
 void SingleFile::moveBack()
 {
-	while (composites.size() != 0)
+	while (!composites.empty())
 	{
 		// insert all composites back into the system
 		system.prependChild(*composites.back());

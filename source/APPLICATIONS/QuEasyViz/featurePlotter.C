@@ -101,8 +101,8 @@ namespace BALL
 				
 				uint feature_ID = it->second;
 				
-				std::multiset<uint>* features = model_item_->model()->getDescriptorIDs();
-				if(features->size()==0)
+				std::multiset<unsigned int>* features = model_item_->model()->getDescriptorIDs();
+				if(features->empty())
 				{
 					for(uint i=0; i<feature_combobox_->count()-1; i++)
 					{
@@ -180,7 +180,7 @@ namespace BALL
 				
 				std::multiset<uint>* features = model_item_->model()->getDescriptorIDs();
 
-				if(features->size()>0) // features have already been selected
+				if(!features->empty()) // features have already been selected
 				{
 					std::multiset<uint>::iterator f_it = features->begin();
 

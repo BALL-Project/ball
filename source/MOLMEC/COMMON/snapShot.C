@@ -238,15 +238,15 @@ namespace BALL
 
 		for (Size i = 0; +atom_it; ++atom_it, ++i)
 		{
-			if (atom_positions_.size() > 0)
+			if (!atom_positions_.empty())
 			{
 				atom_it->setPosition(atom_positions_[i]);
 			}
-			if (atom_velocities_.size() > 0)
+			if (!atom_velocities_.empty())
 			{
 				atom_it->setVelocity(atom_velocities_[i]);
 			}
-			if (atom_forces_.size() > 0)
+			if (!atom_forces_.empty())
 			{
 				atom_it->setForce(atom_forces_[i]);
 			}

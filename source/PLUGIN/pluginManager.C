@@ -284,7 +284,7 @@ namespace BALL
 
 	bool PluginManager::getValue(String& value) const
 	{
-		if (loaded_plugin_dirs_.size() > 0)
+		if (!loaded_plugin_dirs_.empty())
 		{
 			std::map<QString, vector<BALLPlugin*> >::const_iterator it = loaded_plugin_dirs_.begin(); 	
 			

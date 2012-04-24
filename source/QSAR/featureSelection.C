@@ -912,7 +912,7 @@ namespace BALL
 			int posNew = 1;
 			
 			// if a previous feature selection was done, find the position of all relevant weights_ by getting the position of each relevant descriptor within the old list
-			if (oldDescIDs.size() != 0)
+			if (!oldDescIDs.empty())
 			{
 				while (it != newDescIDs.end())
 				{

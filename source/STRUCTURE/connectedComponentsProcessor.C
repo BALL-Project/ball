@@ -69,7 +69,7 @@ namespace BALL
 				++start_atom;
 
 				// calculate the connected component
-				while (atom_stack.size() > 0)
+				while (!atom_stack.empty())
 				{
 					// check all bonds of this atom and remove it from the stack
 					Atom* current_atom = atom_stack.top();

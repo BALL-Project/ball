@@ -211,7 +211,7 @@ namespace BALL
 		}
 		
 		// If there were no effectors or no bonds, return immediately.
-		if ((targets_.size() == 0) || (effectors_.size() == 0))
+		if (targets_.empty() || effectors_.empty())
 		{
 			return true;
 		}

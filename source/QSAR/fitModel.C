@@ -132,7 +132,7 @@ namespace BALL
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Data must be read into the model before training!"); 
 			}
-			if (allEquations_.size() == 0)
+			if (allEquations_.empty())
 			{
 				cout<<"ERROR: No equations specified! Use method setEquations first."<<endl; 
 				return;

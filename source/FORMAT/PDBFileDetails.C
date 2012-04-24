@@ -1526,7 +1526,7 @@ namespace BALL
 
 		// --- ATOM/HETATM/TER ---
 		PDB::AdditionalAtomInfo atom_info;
-		if (structure.atoms.size() > 0)
+		if (!structure.atoms.empty())
 		{
 			atom_info.current_residue = structure.atoms[0].residue;
 			atom_info.current_chain = structure.atoms[0].chain;
@@ -1681,7 +1681,7 @@ namespace BALL
 			}
 			else
 			{
-				if (chain_size.size() > 0)
+				if (!chain_size.empty())
 				{
 					chain_size.back()++;
 				}

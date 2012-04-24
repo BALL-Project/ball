@@ -32,7 +32,7 @@ namespace BALL
 		SimpleDownloader entrez_dl(esearch_base_url_+query); 
 		entrez_dl.downloadToBuffer(response);
 
-		if (response.size() == 0)
+		if (response.empty())
 		{
 			emit downloadFinished(outfile_.fileName());
 			return false;

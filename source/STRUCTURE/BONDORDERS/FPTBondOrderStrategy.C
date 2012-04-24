@@ -660,7 +660,7 @@ namespace BALL
 			}
 
 			// if there are any introduced bonds we have to fill them with each possible value
-			if (indices.size() > 0)
+			if (!indices.empty())
 			{
 				std::vector<int> bond_values(indices.size());
 

@@ -443,7 +443,7 @@ if (!openNbr)
 							
 							multimap<float, AtomNames_> &names = (a1_sym < a3_sym) ? bond_angles_[a1_sym][a2_sym][a3_sym] : bond_angles_[a3_sym][a2_sym][a1_sym];
 							
-							if (names.size() == 0)
+							if (names.empty())
 							{
 								// We have an atom combination which is not in the database.
 								continue;

@@ -434,7 +434,7 @@ namespace BALL
 			Position ring_index = *current_ring_it;
 
 			std::set<Bond const*> shared_bonds = rings_[ring_index].shared_bonds;
-			if (shared_bonds.size() == 0)
+			if (shared_bonds.empty())
 			{
 				// since we know our ring system has more than one ring (otherwise, we would
 				// already have assigned CORE), this has to be a SPIRO ring.
@@ -572,7 +572,7 @@ namespace BALL
 			// and once with
 			for (Position current_run = 0; current_run < 2; ++current_run)
 			{
-				while (unassigned_rings.size() > 0)
+				while (!unassigned_rings.empty())
 				{
 					// try to find a peelable fused ring
 					while (peelNextRing_(unassigned_rings, current_run == 1))
@@ -584,7 +584,7 @@ namespace BALL
 			}
 
 			// no ring should be left behind...
-			if (unassigned_rings.size() != 0)
+			if (!unassigned_rings.empty())
 			{
 				Log.warn() << "Warning: RingAnalyser found an incomplete ring type assignment!" << std::endl;
 			}

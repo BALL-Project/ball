@@ -46,14 +46,12 @@ namespace BALL
 
 		bool QSARData::isDataCentered() const
 		{
-			if (descriptor_transformations_.size() > 0) return 1; 
-			return 0;
+			return !descriptor_transformations_.empty();
 		}
 
 		bool QSARData::isResponseCentered() const
 		{
-			if (y_transformations_.size() > 0) return 1; 
-			return 0;
+			return !y_transformations_.empty();
 		}
 
 
@@ -133,7 +131,7 @@ namespace BALL
 		{	
 			std::multiset<int>::iterator a_it = act.begin();
 			// No response variable in case of data set whose activity is to be predicted
-			if ((act.size() == 0) || ((*a_it == -1) && (act.size() == 1))) 
+			if (act.empty() || ((*a_it == -1) && (act.size() == 1)))
 			{									
 				return;
 				//throw Exception::InvalidActivityID(__FILE__, __LINE__);
@@ -480,7 +478,7 @@ namespace BALL
 
 		unsigned int QSARData::getNoSubstances() const
 		{
-			if (descriptor_matrix_.size() == 0)
+			if (descriptor_matrix_.empty())
 			{
 				return 0;
 			}
@@ -985,7 +983,7 @@ namespace BALL
 			sort(thresholds.begin(), thresholds.end());
 			
 			// if response variable(s) were not normalized, use given thresholds directly
-			if (y_transformations_.size() == 0)
+			if (y_transformations_.empty())
 			{	
 				for (unsigned int i = 0; i < Y_.size(); i++)
 				{
@@ -1262,7 +1260,7 @@ namespace BALL
 
 		void QSARData::printMatrix(const VMatrix& mat, std::ostream& out) const
 		{
-			if (mat.size() == 0)
+			if (mat.empty())
 			{
 				return;
 			}
@@ -1284,15 +1282,15 @@ namespace BALL
 			
 			bool center_data = 0;
 			bool center_y = 0;
-			if (descriptor_transformations_.size() != 0)
+			if (!descriptor_transformations_.empty())
 			{
 				center_data = 1;
-				if (y_transformations_.size() != 0)
+				if (!y_transformations_.empty())
 				{
 					center_y = 1;
 				}
 			}
-			bool translated_class_labels = (class_names_.size()>0);
+			bool translated_class_labels = !class_names_.empty();
 			
 			out << descriptor_matrix_[0].size()<<"\t"<<descriptor_matrix_.size()<<"\t"<<Y_.size()<<"\t"<<center_data<<"\t"<<center_y<<"\t"<<translated_class_labels<<endl<<endl;
 			
@@ -1511,7 +1509,7 @@ namespace BALL
 
 		void QSARData::removeHighlyCorrelatedCompounds(double& compound_cor_threshold, double& feature_cor_threshold)
 		{
-			if (descriptor_matrix_.size() == 0)
+			if (descriptor_matrix_.empty())
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Data must be read before highly correlated compounds can be removed!"); 
 			}
@@ -1644,7 +1642,7 @@ namespace BALL
 			vector<double> mean(getNoDescriptors(), 0);
 			
 			// if data has not been centered, calculate mean and stddev of each feature
-			if (descriptor_transformations_.size() == 0)
+			if (descriptor_transformations_.empty())
 			{
 				for (uint i = 0; i < mean.size(); i++)
 				{

@@ -318,7 +318,7 @@ namespace BALL
    ***************************************************/
 	bool HBondProcessor::finishKabschSander_()
 	{
-		if (residue_data_.size() == 0) return true;
+		if (residue_data_.empty()) return true;
 
 		// matrix to save the existence of a HBond
 		backbone_h_bond_pairs_.resize(residue_data_.size());
@@ -449,7 +449,7 @@ namespace BALL
 		std::map<Atom*, bool> acceptor_occupied;
 
 		// if there were no donors or acceptors, return immediately
-		if ((donors_.size() == 0) || acceptors_.size() == 0)
+		if (donors_.empty() || acceptors_.empty())
 		{
 			return true;
 		}

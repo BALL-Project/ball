@@ -337,11 +337,11 @@ namespace BALL
 			}
 		}
 
-		if(queue.size() == 0) {
+		if(queue.empty()) {
 			return NULL;
 		}
 
-		while(queue.size() > 0) {
+		while(!queue.empty()) {
 			Atom* current = queue.front();
 			queue.pop_front();
 

@@ -157,7 +157,7 @@ namespace BALL
 			// represents a bracket pair (which is marked as INVALID)
 
       // the empty clause is always true
-      if (children_.size() == 0)
+      if (children_.empty())
       {
         return (!negate_);
 			}

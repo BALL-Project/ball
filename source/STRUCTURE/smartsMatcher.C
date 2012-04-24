@@ -158,7 +158,7 @@ namespace BALL
 			cerr << "rec nodes: " << rec_nodes.size() << endl;
 			#endif
 		
-			while (rec_nodes.size() != 0)
+			while (!rec_nodes.empty())
 			{
 				vector<set<const Atom*> > tmp;
 				//for (AtomConstIterator it=molecule.beginAtom(); +it; ++it)
@@ -330,7 +330,7 @@ namespace BALL
 		cerr << endl;
 		#endif
 		const map<Size, vector<SPNode*> >& ring_bonds = SmartsParser::state.current_parser->getRingConnections();
-		if (ring_bonds.size() > 0)
+		if (!ring_bonds.empty())
 		{
 		
 			for (map<Size, vector<SPNode*> >::const_iterator it = ring_bonds.begin(); it != ring_bonds.end(); ++it)
@@ -1024,7 +1024,7 @@ namespace BALL
 
 	SmartsMatcher::RecStructCore_* SmartsMatcher::RecStructPool_::getNextFree()
 	{
-		if (free_list_.size() == 0)
+		if (free_list_.empty())
 		{
 			resize_();
 		}

@@ -101,7 +101,7 @@ namespace BALL
 
 		BALL::Vector<double> SNBModel::predict(const vector<double> & substance, bool transform)
 		{
-			if (mean_.size() == 0)
+			if (mean_.empty())
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Model must be trained before it can predict the activitiy of substances!"); 
 			}
@@ -172,7 +172,7 @@ namespace BALL
 
 		vector<double> SNBModel::calculateProbabilities(int activitiy_index, int feature_index, double feature_value)
 		{
-			if (mean_.size() == 0)
+			if (mean_.empty())
 			{
 				throw Exception::InconsistentUsage(__FILE__, __LINE__, "Model must be trained before a probability for a given feature value can be calculated!"); 
 			}
@@ -208,7 +208,7 @@ namespace BALL
 			{
 				sel_features = data->getNoDescriptors();
 			}
-			if (mean_.size() > 0 && (uint)mean_[0].Ncols() == sel_features) return true; 
+			if (!mean_.empty() && (unsigned int)mean_[0].Ncols() == sel_features) return true;
 			return false;
 		}
 
@@ -231,7 +231,7 @@ namespace BALL
 
 		void SNBModel::setParameters(vector<double>& v)
 		{
-			if (v.size() != 0 && v.size() != 2)
+			if (!v.empty() && v.size() != 2)
 			{
 				String c = "Wrong number of model parameters! Needed: 2;";
 				c = c+" given: "+String(v.size());
@@ -248,8 +248,7 @@ namespace BALL
 
 		void SNBModel::saveToFile(string filename)
 		{
-			bool trained = 1;
-			if (mean_.size() == 0) trained = 0; 
+			bool trained = !mean_.empty();
 			ofstream out(filename.c_str());
 			
 			bool centered_data = 0;

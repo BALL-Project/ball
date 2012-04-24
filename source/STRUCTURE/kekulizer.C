@@ -101,7 +101,7 @@ bool Kekuliser::setup(Molecule& mol)
 	Size nr_am_gu = 0;
 	result.clear();
 	sm.match(result, mol, "[#7;D1]~[#6R0]~[#7;D1]", aromatic_atoms_);
-	if (result.size() != 0)
+	if (!result.empty())
 	{
 		for (Position pos = 0; pos < result.size(); pos++)
 		{
@@ -276,7 +276,7 @@ bool Kekuliser::fixAromaticRings_()
 	bool ok = true;
 
 	calculateAromaticSystems_();
-	if (aromatic_systems_.size() == 0) return true;
+	if (aromatic_systems_.empty()) return true;
 
 	getMaximumValence_();
 
@@ -481,7 +481,7 @@ void Kekuliser::fixAromaticSystem_(Position it)
 	AtomInfo& ai = atom_infos_[it];
 	
 	// no aromatic bonds left?
-	if (ai.abonds.size() == 0)
+	if (ai.abonds.empty())
 	{
 		// penality for this atom if we have not enough double bonds for it
 		// to become uncharged:
@@ -606,7 +606,7 @@ void Kekuliser::calculateAromaticSystems_()
 	collectAromaticAtoms_();
 
 	// iterate over all aromatic ring atoms:
-	while (aromatic_atoms_.size() > 0)
+	while (!aromatic_atoms_.empty())
 	{
 		// first ring aromatic atom that is still left:
 		Atom* atom = (Atom*)*aromatic_atoms_.begin();
