@@ -144,13 +144,13 @@ namespace BALL
 						QPen pen(c);
 						error_bar->setPen(pen);
 						error_bar->attach(qwt_plot_);
-						delete sx; delete sy;
+						delete [] sx; delete [] sy;
 					}
 				}
 			
 				curve_i->setData(x,y,size);
-				delete x;
-				delete y;
+				delete [] x;
+				delete [] y;
 				QColor c(135,135,135);
 				if(i==1)
 				{ 
