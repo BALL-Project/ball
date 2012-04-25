@@ -23,7 +23,7 @@ PRECISION(1e-5)
 
 using namespace BALL;
 
-HBondProcessor* hbp;
+HBondProcessor* hbp = 0;
 CHECK(HBondProcessor())
   hbp = new HBondProcessor();
 	TEST_NOT_EQUAL(hbp, 0)
