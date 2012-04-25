@@ -12,7 +12,7 @@ namespace BALL
 {
 	const char* VersionInfo::getVersion() 
 	{
-		return BALL_RELEASE_STRING " ("__DATE__", " __TIME__ ")";
+		return BALL_RELEASE_STRING " (" __DATE__", " __TIME__ ")";
 	}
 
 	int VersionInfo::getMinorRevision()
