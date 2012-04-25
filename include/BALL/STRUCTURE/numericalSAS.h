@@ -162,7 +162,7 @@ namespace BALL
 
 			/** Destructor.
 			 */
-			~NumericalSAS();
+			virtual ~NumericalSAS();
 			//@}
 			
 			/** @name Accessors. **/
