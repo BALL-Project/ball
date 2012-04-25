@@ -569,17 +569,9 @@ namespace BALL
 	{
 		backup_path_ = "";
 		char* buffer;
-#ifdef BALL_COMPILER_MSVC
-		if (dir_ != INVALID_HANDLE_VALUE)
-		{
-			CloseHandle(dir_);
-		}
 
-		if (dirent_ != INVALID_HANDLE_VALUE)
-		{
-			FindClose(dirent_);
-		}
-		dir_ = dirent_= INVALID_HANDLE_VALUE;
+		clear();
+#ifdef BALL_COMPILER_MSVC
 		if (   (directory_path.size() > 0) 
 			&& ((directory_path[0] == FileSystem::PATH_SEPARATOR) || 
 			    (directory_path[0] == '/') ||
