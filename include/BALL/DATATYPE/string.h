@@ -155,6 +155,9 @@ namespace BALL
 		/// STL string copy constructor
 		String(const string& string);
 
+		/// Copy constructor
+		String(const String& s);
+
 #ifdef BALL_STD_STRING_HAS_RVALUE_REFERENCES
 		/// Move constructor
 		String(String&& s);
