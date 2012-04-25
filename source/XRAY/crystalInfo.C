@@ -386,11 +386,14 @@ namespace BALL
 				sg_symops_.push_back(sym_mtrx);
 			}
 			groupfile->close();
+			delete groupfile;
 		}
 		else
 		{
 			cout << "Space Group \"" << sg << "\" unknown"  << endl;
 			groupfile->close();
+			delete groupfile;
+
 			return false;
 		}
 		return true;
