@@ -613,7 +613,7 @@ namespace BALL
 					molecule_.name = getLine().trim();
 					if (molecule_.name == "****")
 					{
-						molecule_.name == "";
+						molecule_.name = "";
 					}
 					break;
 
