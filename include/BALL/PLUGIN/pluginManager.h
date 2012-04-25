@@ -33,8 +33,7 @@ namespace BALL
 	class BALL_EXPORT PluginManager
 		: public PreferencesObject
 	{
-		
-		public:	
+		public:
 
 			virtual ~PluginManager();
 
@@ -52,13 +51,13 @@ namespace BALL
 			 * @param dir the directory to search for plugins.
 			 */
 			void addPluginDirectory(const QString& dir, bool autoactivate = false);
-			
+
 			/**
 			 * Tries to unload all plugins (files named like: pluginMyPlugin.$LIBRARY_SUFFIX)
 			 * located in the specified directoy dir.
 			 *
 			 * @param dir the directory to search for plugins to remove.
-				*/
+			 */
 			bool removePluginDirectory(const QString& dir);
 
 			/** Return a list of directories currently searched for plugins.
@@ -147,7 +146,7 @@ namespace BALL
 			bool stopPlugin(BALLPlugin* plugin);
 
 			/** Unload all registered plugins.
-			 */	
+			 */
 			void unloadAllPlugins();
 
 			/**
@@ -160,20 +159,20 @@ namespace BALL
 			 * be available for starting new plugins.
 			 */
 			void registerHandler(PluginHandler* h);
-	
+
 			// needed for storing this classes' preferences
 			virtual bool getValue(String&) const;
 			virtual bool setValue(const String&);
 
-		protected: 
+		protected:
 			static const char* BETWEEN_PLUGINDIR_SEPERATOR;
 
 			PluginManager();
 			PluginManager(const PluginManager&);
-			const PluginManager& operator=(const PluginManager&);
+			PluginManager& operator=(const PluginManager&);
 
 			std::map<QString, vector<BALLPlugin*> > loaded_plugin_dirs_;
-			
+
 			QHash<QString, QPluginLoader*> loaders_;
 			std::list<PluginHandler*> handlers_;
 
@@ -189,4 +188,3 @@ namespace BALL
 }
 
 #endif //BALL_PLUGIN_PLUGINMANAGER_H
-
