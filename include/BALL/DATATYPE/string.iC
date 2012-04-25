@@ -8,6 +8,11 @@ String::String()
 {
 }
 
+BALL_INLINE String::String(const String& s)
+	: string(s)
+{
+}
+
 #ifdef BALL_STD_STRING_HAS_RVALUE_REFERENCES
 BALL_INLINE
 String::String(String&& s)
