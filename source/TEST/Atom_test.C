@@ -26,7 +26,7 @@ START_TEST(Atom)
 
 using namespace BALL;
 
-Atom* atom;
+Atom* atom = 0;
 CHECK(Atom() throw())
 	atom = new Atom;
 	TEST_NOT_EQUAL(atom, 0)
@@ -139,7 +139,7 @@ CHECK(Size countBonds() const throw())
 	TEST_EQUAL(atom->countBonds(), 0)
 RESULT
 
-Atom* atom2;			
+Atom* atom2 = 0;
 CHECK(Atom(const Atom& atom, bool deep = true) throw())
 	atom2 = new Atom(*atom);
 	TEST_NOT_EQUAL(atom2, 0)
@@ -282,8 +282,8 @@ RESULT
 delete atom2;
 atom2 = 0;
 
-Atom*	atom3;
-Atom*	atom4;
+Atom* atom3 = 0;
+Atom* atom4 = 0;
 CHECK(void swap(Atom& atom) throw())
 	atom2 = new Atom(PTE[Element::LITHIUM],
 												"TESTNAME2",
@@ -451,6 +451,9 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 	ptr = 0;
 RESULT
 delete atom;
+delete atom3;
+delete atom4;
+
 atom = 0;
 
 CHECK(bool operator == (const Atom& atom) const throw())

@@ -51,6 +51,7 @@ CHECK(operator() (Composite& composite))
 	TEST_EQUAL(prot->countResidues(), 11)
 	TEST_EQUAL(prot->countAtoms(), 169)
 
+	delete prot;
 RESULT
 
 CHECK(operator() - single Residue)
@@ -65,6 +66,8 @@ CHECK(operator() - single Residue)
 	TEST_EQUAL(prot->getResidue(0)->getName() , "ACE")
 	TEST_EQUAL(prot->getResidue(2)->getName() , "NME")
 	TEST_EQUAL(prot->countAtoms(), 22)
+
+	delete prot;
 RESULT
 ////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

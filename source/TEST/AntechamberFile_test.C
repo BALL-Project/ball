@@ -165,6 +165,8 @@ CHECK(AntechamberFile read via MolFileFactory)
 	TEST_REAL_EQUAL(it->getPosition().x, 3.0)
 	TEST_REAL_EQUAL(it->getPosition().y, 4.0)
 	TEST_REAL_EQUAL(it->getPosition().z, 5.0)
+
+	delete file;
 RESULT
 
 NEW_TMP_FILE_WITH_SUFFIX(filename, "ac")
