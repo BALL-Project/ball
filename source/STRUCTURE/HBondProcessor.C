@@ -138,7 +138,7 @@ namespace BALL
 				 sit != to_delete.end(); 
 				 sit++)
 		{
-			(*sit)->destroy();
+			delete *sit;
 		}
 
 		// compute the hydrogen bonds
