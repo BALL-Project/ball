@@ -172,7 +172,7 @@ namespace BALL
 		std::set<Molecule*>::iterator del_it = to_delete.begin();
 		for (; del_it != to_delete.end(); ++del_it)
 		{
-			(*del_it)->destroy();
+			delete *del_it;
 		}
 
 		return getNumberOfConnectedComponents();
