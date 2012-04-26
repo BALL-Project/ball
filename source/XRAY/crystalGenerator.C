@@ -7,21 +7,27 @@ using namespace std;
 namespace BALL
 {
 	CrystalGenerator::CrystalGenerator()
-		:	system_(0),
+		: center_processor_(),
+			transformer_(),
+			system_(0),
 			asu_(0),
 			unitcell_(0)
 	{
 	}
 	
 	CrystalGenerator::CrystalGenerator(const CrystalGenerator& cg)
-		:	system_(cg.system_),
+		:	center_processor_(cg.center_processor_),
+			transformer_(cg.transformer_),
+			system_(cg.system_),
 			asu_(cg.asu_),
 			unitcell_(cg.unitcell_)
 	{
 	}
 
 	CrystalGenerator::CrystalGenerator(System* system)
-		:	system_(system),
+		:	center_processor_(),
+			transformer_(),
+			system_(system),
 			asu_(0),
 			unitcell_(0)
 	{
@@ -34,16 +40,7 @@ namespace BALL
 		asu_ = 0;
 		unitcell_ = 0;
 	}
-	//bool CrystalGenerator::buildASU_()
-	//{
-	//	System* ncs_component;
-	//	for(Position n = 0; n < ci_.getNumberOfSymOps(); n++)
-	//	{
-	//		
-	//		
-	//	}
-	//	return true;
-	//}
+	
 	void CrystalGenerator::setCrystalInfo(boost::shared_ptr<CrystalInfo> ci_ptr)
 	{
 		ci_ptr_ = ci_ptr;

@@ -385,6 +385,7 @@ namespace BALL
 				//cout << sym_mtrx << endl;
 				sg_symops_.push_back(sym_mtrx);
 			}
+			z_score_ = sg_symops_.size();
 			groupfile->close();
 			delete groupfile;
 		}

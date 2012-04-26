@@ -27,7 +27,10 @@ namespace BALL
 			offset_symops_(0),
 			col_axis_(1),
 			row_axis_(2),
-			sec_axis_(3)
+			sec_axis_(3),
+		  mean_density_(0),
+		  deviation_sigma_(0),
+		  space_group_(-1)
 	{
 		// CCP4Files are always binary
 		if ((open_mode & std::ios::binary) == 0)
