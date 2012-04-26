@@ -48,7 +48,6 @@ namespace BALL
 	Processor::Result GAFFTypeProcessor::operator() (Composite &composite)
 	{
 		// TODO: think whether application to other things than molecules would make sense...
-		bool value = false;
 		if (RTTI::isKindOf<Molecule>(composite))
 		{
 			Molecule *mol = RTTI::castTo<Molecule>(composite);
@@ -60,7 +59,14 @@ namespace BALL
 			AtomIterator atom_it = mol->beginAtom();
 			for ( ;+atom_it; ++atom_it)
 			{
-				value = assignAtomtype_(*atom_it);
+				try
+				{
+					assignAtomtype_(*atom_it);
+				}
+				catch(...)
+				{
+					Log.error()<< "GAFFTypeProcessor: Atom type could not be assigned!" << std::endl;
+				}
 			}	
 
 			// decide whether we want post-processing of atom types
@@ -393,13 +399,14 @@ namespace BALL
 		{
 			bool purely_aliphatic = true;
 			bool purely_aromatic  = true;
-			bool has_sp3_carbon   = false;
+// 			bool has_sp3_carbon   = false;
 
 			vector<Atom*>::iterator atom_it = ring_it->begin();
 			for ( ; atom_it != ring_it->end(); ++atom_it)
 			{
-				if( ((*atom_it)->getElement() == PTE[Element::C]) && ((*atom_it)->countBonds() == 4))
-					has_sp3_carbon = true;
+				//TODO why needed? has_sp3_carbon is just local and used nowhere else...
+// 				if( ((*atom_it)->getElement() == PTE[Element::C]) && ((*atom_it)->countBonds() == 4))
+// 					has_sp3_carbon = true;
 
 				// if one ring member is not sp3 carbon, the whole thing isn't	
 				if( ((*atom_it)->getElement() != PTE[Element::C]) || ((*atom_it)->countBonds() != 4))
