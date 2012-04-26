@@ -20,7 +20,8 @@ namespace BALL
 				color_(),
 				mode_(ALL_ITEMS),
 				nr_objects_(0),
-				center_()
+				center_(),
+				center_processor_()
 		{
 		}
 
@@ -29,7 +30,9 @@ namespace BALL
 				font_(model.font_),
 				color_(model.color_),
 				mode_(model.mode_),
-				nr_objects_(0)
+				nr_objects_(0),
+				center_(),
+				center_processor_()
 		{
 		}
 
