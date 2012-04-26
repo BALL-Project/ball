@@ -63,13 +63,13 @@ namespace BALL
 	
 	bool AmiraMeshFile::readHeader()
 	{
-    
+    const size_t MAX_READ_SIZE = 2048;
 		//We read the first 2k bytes into memory to parse the header.
     //The fixed buffer size looks a bit like a hack, and it is one, but it gets the job done.
-    char buffer[2048];
-    
-		std::fstream::read(buffer, 1024);
-    buffer[2047] = '\0'; //The following string routines prefer null-terminated strings
+    char buffer[MAX_READ_SIZE];
+
+    std::fstream::read(buffer, MAX_READ_SIZE);
+    buffer[std::fstream::gcount()] = '\0'; //The following string routines prefer null-terminated strings
 
     if (strstr(buffer, "# AmiraMesh BINARY-LITTLE-ENDIAN 2.1"))
     {
@@ -144,12 +144,13 @@ namespace BALL
 		map = RegularData3D(size, min_, max_);
 
 		Size num_to_read = size.x * size.y * size.z * num_components_;
-		Index idx_actual_read = 0; 
 
 		char file_buffer[2048];
 
 		if (idx_start_data_ > 0)
 		{
+			size_t idx_actual_read = 0;
+
 			std::fstream::seekg( idx_start_data_);
 			
 			if (binary_)
@@ -176,7 +177,7 @@ namespace BALL
 				
 				while (idx_actual_read < num_to_read)
 				{
-					map[idx_actual_read] = * ((float*) (data + 4*idx_actual_read) );
+					map[idx_actual_read] = static_cast<float>(*(data + 4*idx_actual_read));
 					idx_actual_read++;
 
 				}
