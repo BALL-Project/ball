@@ -8,14 +8,20 @@ namespace BALL
 {
 
 	DSN6File::DSN6File()
-	: File(),
-		swap_bytes_(false)
+		: File(),
+		swap_bytes_(false),
+		cell_scaling_(1.0),
+		prod_(1.0),
+		plus_(0.0)
 	{
 	}
 
 	DSN6File::DSN6File(const String& name, File::OpenMode open_mode)
 		: File(name, open_mode),
-			swap_bytes_(false)
+		swap_bytes_(false),
+		cell_scaling_(1.0),
+		prod_(1.0),
+		plus_(0.0)
 	{
 		// DSN6Files are always binary
 		if ((open_mode & std::ios::binary) == 0)
