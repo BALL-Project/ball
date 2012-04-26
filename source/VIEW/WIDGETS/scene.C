@@ -1499,7 +1499,7 @@ namespace BALL
 																						SLOT(exportXML3D()), description, QKeySequence(""),
 																						tr("Export a XML3D/XHTML file from the Scene"), 
 																						UIOperationMode::MODE_ADVANCED);
-			setMenuHelp(pov_action, "tips.html#XML3D");
+			setMenuHelp(xml3d_action, "tips.html#XML3D");
 			
 			description = "Shortcut|File|Export|VRML";
 			insertMenuEntry(MainControl::FILE_EXPORT, tr("3D Prototyping Export"), this, 
