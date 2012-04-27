@@ -68,7 +68,7 @@ namespace BALL
 			float total_charge;
 			int node_expansions;
 			int queue_size;
-			
+
 			AtomContainer* ac;
 	};
 }

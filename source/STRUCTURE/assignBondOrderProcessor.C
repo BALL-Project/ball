@@ -295,8 +295,20 @@ namespace BALL
 			 )
 		{
 			Log.error() << __FILE__ << " " << __LINE__
-				          << " : Error in options! FPT cannot be used with these options." << endl
-									<< " Consider switch to solution strategy ASTAR by setting Option::ALGORITHM to Algorithm::ASTAR." << endl
+				          << " : Error in options! FPT cannot be used with these option(s): ";
+			if (options.getReal(Option::BOND_LENGTH_WEIGHTING) > 0.)
+				Log.error() << "BOND_LENGTH_WEIGHTING ";
+			if (options.getBool(Option::ADD_HYDROGENS))
+				Log.error() << "ADD_HYDROGENS ";
+			if (options.getBool(Option::COMPUTE_ALSO_CONNECTIVITY))
+				Log.error() << "COMPUTE_ALSO_CONNECTIVITY ";
+			if (options.getBool(Option::OVERWRITE_SELECTED_BONDS))
+				Log.error() << "OVERWRITE_SELECTED_BONDS ";
+			if (!options.getBool(Option::OVERWRITE_SINGLE_BOND_ORDERS))
+				Log.error() << "OVERWRITE_SINGLE_BOND_ORDERS ";
+			Log.error() << endl;
+
+			Log.error() << " Consider switch to solution strategy ASTAR by setting Option::ALGORITHM to Algorithm::ASTAR." << endl
 									<< " Abort." << endl;
 			ret = false;
 		}
@@ -321,8 +333,8 @@ namespace BALL
 
 #ifdef DEBUG 
 cout << "  OPTIONS:" << endl;
-cout << " \t Algorithm: " <<  options[Option::Option::ALGORITHM] << endl;
-cout << " \t Heuristic: " <<  options[Option::Option::HEURISTIC] << endl;
+cout << " \t Algorithm: " <<  options[Option::ALGORITHM] << endl;
+cout << " \t Heuristic: " <<  options[Option::HEURISTIC] << endl;
 
 cout << " \t Overwrite bonds (single, double, triple, selected):"
 		 << options.getBool(Option::OVERWRITE_SINGLE_BOND_ORDERS) << " "
@@ -334,7 +346,7 @@ cout << " \t Overwrite bonds (single, double, triple, selected):"
 cout << " \t Add hydrogens : " << options.getBool(Option::ADD_HYDROGENS) << endl;
 cout << " \t Use fine penalty : " << options.getBool(Option::USE_FINE_PENALTY) << endl;
 cout << " \t Kekulizer: " << options.getBool(Option::KEKULIZE_RINGS)  << endl;
-cout << " \t Penalty file " << options[Option::Option::INIFile] << endl;
+cout << " \t Penalty file " << options[Option::INIFile] << endl;
 cout << " \t alpha: " << options[Option::BOND_LENGTH_WEIGHTING] << endl;
 cout << " \t max bond order: " << options[Option::MAX_BOND_ORDER] << endl;
 cout << " \t max number of solutions " << options[Option::MAX_NUMBER_OF_SOLUTIONS] << endl;
@@ -549,7 +561,7 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 					boost::shared_ptr<BondOrderAssignment> solution = strategy->computeNextSolution();
 
 					// Do we have a solution? 
-					if (!solution)
+					if (!solution || !solution->valid)
 					{
 						Log.info() << "AssignBondOrderProcessor: No valid bond order assignment found!" << endl;
 #if defined DEBUG_TIMER					
@@ -1237,7 +1249,6 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 		                       AssignBondOrderProcessor::Default::APPLY_FIRST_SOLUTION);
 	}
 
-
 	bool AssignBondOrderProcessor::apply(Position i)
 	{
 		bool result = false;
@@ -1370,7 +1381,7 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 
 		boost::shared_ptr<BondOrderAssignment> solution = strategy->computeNextSolution();
 
-		if (solution)
+		if (solution && solution->valid)
 		{
 			solutions_.push_back(*solution);
 			found_a_sol = true;

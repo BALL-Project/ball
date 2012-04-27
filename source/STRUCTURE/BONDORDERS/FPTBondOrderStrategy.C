@@ -108,7 +108,8 @@ namespace BALL
 		}
 		else
 		{
-		/*	Log.info() << "AssignBondOrderProcessor: strategy FPT does not support computeNextSolution(). " << endl
+			// since we return a pointer, nothing to do here
+			/*	Log.info() << "AssignBondOrderProcessor: strategy FPT does not support computeNextSolution(). " << endl
 								 << "Please use the options Option::MAX_NUMBER_OF_SOLUTIONS or Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS " << endl
 								 << "to compute additional solutions." << endl; */
 		}
@@ -1429,12 +1430,12 @@ namespace BALL
 
 	bool FPTBondOrderStrategy::DPBackTracking_::hasMoreSolutions() const
 	{
-		return (!queue_.empty() && (!max_num_solutions_ || (num_computed_solutions_ <= max_num_solutions_)));
+		return (!queue_.empty() && (!max_num_solutions_ || (num_computed_solutions_ < max_num_solutions_)));
 	}
 
 	void FPTBondOrderStrategy::DPBackTracking_::nextSolution()
 	{
-		if (queue_.empty() || max_heap_size_ == 0 || ((max_num_solutions_ > 0) && (num_computed_solutions_ > max_num_solutions_)))
+		if (queue_.empty() || (max_heap_size_ == 0) || ((max_num_solutions_ > 0) && (num_computed_solutions_ > max_num_solutions_)))
 		{
 			throw Exception::OutOfRange(__FILE__, __LINE__);
 		}
@@ -1987,7 +1988,9 @@ namespace BALL
 
 	bool FPTBondOrderStrategy::DPBackTrackingCombiner_::hasMoreSolutions() const
 	{
-		return (!priority_queue_.empty() || (getNextMinimumBackTracker_().second) < upper_bound_);
+		std::pair<Size, Penalty> next_min = getNextMinimumBackTracker_();
+
+		return (backtrackers_[next_min.first]->hasMoreSolutions() && (!priority_queue_.empty() || (next_min.second) < upper_bound_));
 	}
 
 	void FPTBondOrderStrategy::DPBackTrackingCombiner_::nextSolution()
@@ -2014,7 +2017,7 @@ namespace BALL
 		// compute next minimal Solution
 		std::pair<Size, Penalty> next_min = getNextMinimumBackTracker_();
 
-		if (next_min.second < upper_bound_ && (priority_queue_.empty() || next_min.second < priority_queue_.top().penalty))
+		if ((next_min.second < upper_bound_) && (priority_queue_.empty() || (next_min.second < priority_queue_.top().penalty)))
 		{
 			DPBackTracking_& min_back_tracker = *backtrackers_[next_min.first];
 
