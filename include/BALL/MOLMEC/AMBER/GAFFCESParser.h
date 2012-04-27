@@ -133,6 +133,7 @@ namespace BALL
 
 					CESPredicate(GAFFCESParser* parser) 
 						: parent(0),
+							atom_to_test(0),
 							parser_(parser)
 				  {
 						initStringToWildcard();
