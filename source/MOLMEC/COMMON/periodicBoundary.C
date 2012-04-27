@@ -39,7 +39,8 @@ namespace BALL
 
 	// Default Constructor
 	PeriodicBoundary::PeriodicBoundary()
-		:	force_field_(0), 
+		:	options(0),
+			force_field_(0), 
 			enabled_(false)
 	{
 	}
