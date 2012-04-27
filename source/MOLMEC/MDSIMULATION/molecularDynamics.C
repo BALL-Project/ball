@@ -41,6 +41,16 @@ namespace BALL
 		:	valid_(false),
 			force_field_ptr_(0),
 			system_ptr_(0),
+			atom_vector_(),
+			time_step_(0.0),
+			reference_temperature_(0.0),
+			current_temperature_(0.0),			
+			kinetic_energy_(0.0),
+			total_energy_(0.0),
+			current_time_(0.0),
+			energy_output_frequency_(0),
+			snapshot_frequency_(0),
+			snapshot_manager_ptr_(0),
 			abort_by_energy_enabled_(true),
 			abort_energy_(1.e12)
 	{
@@ -50,11 +60,22 @@ namespace BALL
 
 	// Constructor expecting a force field 
 	MolecularDynamics::MolecularDynamics(ForceField& force_field)
-		:	abort_energy_(1.e12)
+		:	system_ptr_(0),
+			atom_vector_(),
+			time_step_(0.0),
+			reference_temperature_(0.0),
+			current_temperature_(0.0),			
+			kinetic_energy_(0.0),
+			total_energy_(0.0),
+			current_time_(0.0),
+			energy_output_frequency_(0),
+			snapshot_frequency_(0),
+			snapshot_manager_ptr_(0),
+			abort_by_energy_enabled_(true),
+			abort_energy_(1.e12)
 	{
 		valid_ = true;
 		force_field_ptr_ = &force_field;
-		abort_by_energy_enabled_ = true;
 
 		if (!valid_)
 		{
