@@ -21,6 +21,9 @@
 #include <BALL/MATHS/analyticalGeometry.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/selector.h>
+#include <BALL/KERNEL/residue.h>
+#include <BALL/STRUCTURE/residueRotamerSet.h>
+#include <BALL/STRUCTURE/rotamerLibrary.h>
 
 #include <QtGui/QPushButton> 
 #include <QtGui/QLineEdit> 
@@ -29,12 +32,33 @@
 #include <QtGui/QGridLayout> 
 #include <QtGui/QCompleter> 
 
+#include <QtCore/QThread>
+#include <QtCore/QSignalMapper>
+
 #include <set>
 
 namespace BALL
 {
 	namespace VIEW
 	{
+
+		// This class loads an instance of the RotamerLibrary into a supplied memory location.
+		class RotamerLibraryLoader : public QThread
+		{
+			public:
+				RotamerLibraryLoader(QObject* parent, RotamerLibrary** rotamer_library)
+					: QThread(parent),
+					  rotamer_library_(rotamer_library)
+				{
+				}
+
+				void run() {
+					*rotamer_library_ = new RotamerLibrary;
+				}
+
+			private:
+				RotamerLibrary** rotamer_library_;
+		};
 
 		MolecularControl::MyTreeWidgetItem::MyTreeWidgetItem(QTreeWidget* parent,
 																												 QStringList& sl, 
@@ -66,7 +90,8 @@ namespace BALL
 
 
 		MolecularControl::MolecularControl(const MolecularControl& mc)
-			: GenericControl(mc)
+			: GenericControl(mc),
+			  rotamer_library_(new RotamerLibrary(*mc.rotamer_library_))
 		{
 		}
 
@@ -83,7 +108,8 @@ namespace BALL
 					was_delete_(false),
 					nr_items_removed_(0),
 					show_ss_(false),
-					ignore_messages_(false)
+					ignore_messages_(false),
+					rotamer_library_(0)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new MolecularControl " << this << std::endl;
@@ -151,6 +177,11 @@ namespace BALL
 			registerWidget(this);
 
 			buildContextMenu_();
+
+			// Load the rotamer library. This is done in a different thread as parsing the
+			// files is very slow.
+			rl_thread_ = new RotamerLibraryLoader(this, &rotamer_library_);
+			rl_thread_->start();
 		}
 
 		MolecularControl::~MolecularControl()
@@ -160,6 +191,8 @@ namespace BALL
 		#endif
 
 			clearClipboard();
+
+			delete rotamer_library_;
 		}
 
 		void MolecularControl::checkMenu(MainControl& main_control)
@@ -443,6 +476,12 @@ namespace BALL
 			// <----------------------------------- AtomContainer
 			
 			context_menu_.addSeparator();
+
+			rotamer_mapper_ = new QSignalMapper(this);
+			connect(rotamer_mapper_, SIGNAL(mapped(int)), this, SLOT(changeRotamer_(int)));
+			rotamer_menu_ = new QMenu(tr("Apply Rotamer"), this);
+			current_residue_ = 0;
+			context_menu_.addMenu(rotamer_menu_);
 			composite_properties_action_ = context_menu_.addAction(tr("Properties"), this, SLOT(compositeProperties()));
 
 			// -----------------------------------> Atoms
@@ -494,8 +533,65 @@ namespace BALL
 			// <----------------------------------- Atoms
 
 			composite_properties_action_->setEnabled(one_item);
+
+			// TODO: Deal with terminal residues. We will probably need to adapt
+			//       RotamerLibrary for that.
+			if(!composite.isResidue() || (current_residue_ = static_cast<Residue*>(&composite))->isTerminal()) {
+				rotamer_menu_->setEnabled(false);
+				return;
+			}
+
+			buildRotamerMenu_();
 		}
 
+		void MolecularControl::buildRotamerMenu_()
+		{
+			rotamer_menu_->clear();
+
+			// Make sure the rotamer library has been loaded
+			rl_thread_->wait();
+
+			ResidueRotamerSet* res_set = rotamer_library_->getRotamerSet(*current_residue_);
+
+			// Check if the rotamer set is valid
+			if(!res_set || res_set->getNumberOfRotamers() == 0) {
+				rotamer_menu_->setEnabled(false);
+				return;
+			}
+
+			// Helper variables for finding the closest rotamer
+			unsigned int i_min = 0;
+			float i_min_val = std::numeric_limits<float>::infinity();
+			const Rotamer r = res_set->getRotamer(*current_residue_);
+
+			unsigned int i = 0;
+			for(ResidueRotamerSet::iterator it = res_set->begin(); it != res_set->end(); ++it, ++i) {
+				//Create the action
+				QAction* action = rotamer_menu_->addAction(QString(res_set->getName().c_str()) + " " + QString::number(i) + " (p: " + QString::number(it->P) + ")");
+				action->setCheckable(true);
+
+				// Connect the action triggered signal with the correct slot
+				rotamer_mapper_->setMapping(action, i);
+				connect(action, SIGNAL(triggered()), rotamer_mapper_, SLOT(map()));
+
+				// Determine the closest residue
+				float dist = fabs(r.chi1 - it->chi1) + fabs(r.chi2 - it->chi2)
+				           + fabs(r.chi3 - it->chi3) + fabs(r.chi4 - it->chi4);
+
+				if(dist < i_min_val) {
+					i_min = i;
+					i_min_val = dist;
+				}
+			}
+
+			// If we found a rotamer that is very close to the current conformation
+			// then check it. 15.0f is just an arbitrary/empirically chosen threshold.
+			if(i_min_val / res_set->getNumberOfTorsions() < 15.0f) {
+				rotamer_menu_->actions().at(i_min)->setChecked(true);
+			}
+
+			rotamer_menu_->setEnabled(true);
+		}
 
 		void MolecularControl::compositeProperties()
 		{
@@ -1651,6 +1747,23 @@ namespace BALL
 			}
 
 			return allow_paste;
+		}
+
+		void MolecularControl::changeRotamer_(int i)
+		{
+			if(!current_residue_) {
+				return;
+			}
+
+			ResidueRotamerSet* res_set = rotamer_library_->getRotamerSet(*current_residue_);
+
+			if(!res_set || (unsigned int)i >= res_set->getNumberOfRotamers()) {
+				return;
+			}
+
+			res_set->setRotamer(*current_residue_, res_set->getRotamer(i));
+
+			getMainControl()->updateRepresentationsOf(*current_residue_, true);
 		}
 
 	} // namespace VIEW

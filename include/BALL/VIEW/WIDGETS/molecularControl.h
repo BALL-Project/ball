@@ -29,6 +29,9 @@
 
 namespace BALL
 {
+	class Residue;
+	class RotamerLibrary;
+
 	namespace VIEW
 	{
 
@@ -330,10 +333,15 @@ class BALL_VIEW_EXPORT MolecularControl
 	//
 	void onItemClicked(QTreeWidgetItem* item, int);
 
+	void changeRotamer_(int i);
+
 	protected:
 
 	///
 	void buildContextMenu_();
+
+	///
+	void buildRotamerMenu_();
 
 	/** Set the selection of the checkboxes and the opening of the tree 
 			according to the selection in the MainControl.
@@ -434,6 +442,8 @@ class BALL_VIEW_EXPORT MolecularControl
 											edit_menu_,
 											color_menu_[MODEL_LABEL - MODEL_LINES];
 
+	QMenu* rotamer_menu_;
+
 	Composite* 							context_composite_;
 
  	QTreeWidgetItem* context_item_;
@@ -453,6 +463,11 @@ class BALL_VIEW_EXPORT MolecularControl
 					 *angle_action_, *distance_action_, *paste_action_;
 
 	bool ignore_messages_;
+
+	QSignalMapper* rotamer_mapper_;
+	Residue* current_residue_;
+	RotamerLibrary* rotamer_library_;
+	QThread* rl_thread_;
 };
 	
 }} // namespaces
