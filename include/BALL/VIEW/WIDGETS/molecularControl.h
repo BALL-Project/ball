@@ -17,15 +17,13 @@
 # include <BALL/VIEW/KERNEL/common.h>
 #endif
 
-#ifndef BALL_MATHS_MATRIX44_H
- #include <BALL/MATHS/matrix44.h>
-#endif
-
-#include <QtCore/QPoint>
 #include <QtGui/QMenu>
 #include <QtGui/QTreeView>
-#include <QtGui/QComboBox>
 
+class QComboBox;
+class QPoint;
+class QSignalMapper;
+class QThread;
 
 namespace BALL
 {
@@ -34,8 +32,7 @@ namespace BALL
 
 	namespace VIEW
 	{
-
-class BondProperties;
+		class BondProperties;
 
 /**	MolecularControl is a widget to display the molecular structure of Composite objects. 
 		This class is derived from the class GenericControl and extends it for showing and modifiying
@@ -416,7 +413,7 @@ class BALL_VIEW_EXPORT MolecularControl
 	void newSelection_(std::list<Composite*>& sel, bool selected);
 
 	bool allowPaste_();
-	
+
 	//@} 
 	/** @name Menu entries ids
 	*/ 

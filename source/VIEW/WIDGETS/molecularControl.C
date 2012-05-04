@@ -25,6 +25,7 @@
 #include <BALL/STRUCTURE/residueRotamerSet.h>
 #include <BALL/STRUCTURE/rotamerLibrary.h>
 
+#include <QtGui/QComboBox>
 #include <QtGui/QPushButton> 
 #include <QtGui/QLineEdit> 
 #include <QtGui/QMessageBox> 
@@ -32,6 +33,7 @@
 #include <QtGui/QGridLayout> 
 #include <QtGui/QCompleter> 
 
+#include <QtCore/QPoint>
 #include <QtCore/QThread>
 #include <QtCore/QSignalMapper>
 
@@ -920,9 +922,9 @@ namespace BALL
 		}
 
 		// set the checkboxes according to the selection in the MainControl
-		void MolecularControl::setSelection_(bool open, bool force)
+		void MolecularControl::setSelection_(bool /*open*/, bool /*force*/)
 		{	
-			if (!force) open = false;
+			//if (!force) open = false;
 
 			QTreeWidgetItemIterator qit(listview);
 			while (*qit != 0)
