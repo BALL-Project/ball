@@ -5,6 +5,8 @@
 #include <BALL/STRUCTURE/addHydrogenProcessor.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/residue.h>
+#include <BALL/KERNEL/atom.h>
+#include <BALL/CONCEPT/composite.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/matrix44.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94Parameters.h>

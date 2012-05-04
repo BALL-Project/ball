@@ -13,15 +13,13 @@
 #include <BALL/MATHS/vector3.h> 
 #endif
 
-#ifndef BALL_KERNEL_ATOM_H
-#include <BALL/KERNEL/atom.h>
-#endif
-
 #include <vector>
 
 namespace BALL
 {
 	class Residue;
+	class Atom;
+	class Composite;
 
 	/** Saturate atoms with hydrogen atoms.
 	 		Only works with main group elements.
@@ -29,7 +27,7 @@ namespace BALL
 			The placement of the hydrogen atoms only depends on
 			the direct neighbour atoms.
 			No additional optimization of the atom placement is done.
-			The optimal bond lengths are calculized by
+			The optimal bond lengths are calculated by
 			a modified Schomaker-Stevenson rule 
 			(adapted from the MMFF94 force field).
 			<br>
