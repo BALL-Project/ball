@@ -5,10 +5,6 @@
 #ifndef BALL_STRUCTURE_RESIDUEROTAMERSET_H
 #define BALL_STRUCTURE_RESIDUEROTAMERSET_H
 
-#ifndef BALL_COMMON_H
-	#include <BALL/common.h>
-#endif
-
 #ifndef BALL_MATHS_ANGLE_H
 	#include <BALL/MATHS/angle.h>
 #endif
