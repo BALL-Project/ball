@@ -4,6 +4,7 @@
 
 #include <BALL/STRUCTURE/addHydrogenProcessor.h>
 #include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/matrix44.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94Parameters.h>
@@ -28,10 +29,17 @@ namespace BALL
 	{
 	}
 
-  Processor::Result AddHydrogenProcessor::operator() (Composite &composite)
+	Processor::Result AddHydrogenProcessor::operator() (Composite &composite)
 	{
-		Atom* atom = dynamic_cast<Atom*>(&composite);
-		if (atom == 0) return Processor::CONTINUE;
+		if(composite.isResidue()) {
+			return placePeptideBondH_(static_cast<Residue*>(&composite));
+		}
+
+		if(!composite.isAtom()) {
+			return Processor::CONTINUE;
+		}
+
+		Atom* atom = static_cast<Atom*>(&composite);
 
 		if (last_atom_ != atom)
 		{
@@ -516,6 +524,40 @@ namespace BALL
 		return (Size) (electrons);
 	}
 
+	Processor::Result AddHydrogenProcessor::placePeptideBondH_(Residue* res) const
+	{
+		const float BOND_LENGTH_N_H = 1.020f;
+
+		if(res->isAminoAcid() && !res->isNTerminal())
+		{
+			Atom* natom = res->getAtom("N");
+			const Atom* oatom = res->getAtom("O");
+			const Atom* catom = res->getAtom("C");
+
+			if(!natom || !oatom || !catom || natom->countBonds() >= 3)
+			{
+				return Processor::CONTINUE;
+			}
+
+			// Place the hydrogen according using the planarity of the peptide bond
+			const Vector3 OC(oatom->getPosition() - catom->getPosition());
+			const float length = OC.getLength();
+
+			if (Maths::isZero(length))
+			{
+				return Processor::CONTINUE;
+			}
+
+			// Create the new atom
+			Atom* hatom = new Atom();
+			hatom->setName("H");
+			hatom->setElement(PTE[1]);
+			hatom->setPosition(natom->getPosition() - (OC * BOND_LENGTH_N_H) / length);
+			natom->createBond(*hatom);
+		}
+
+		return Processor::CONTINUE;
+	}
 
 	Size AddHydrogenProcessor::countBondOrders(Atom& atom)
 	{

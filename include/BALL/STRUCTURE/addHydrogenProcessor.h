@@ -21,6 +21,7 @@
 
 namespace BALL
 {
+	class Residue;
 
 	/** Saturate atoms with hydrogen atoms.
 	 		Only works with main group elements.
@@ -74,6 +75,7 @@ namespace BALL
 		Size getNumberOfAddedHydrogens() { return nr_hydrogens_;}
 		
 		protected:
+			Processor::Result placePeptideBondH_(Residue* res) const;
 
 		Size countBondOrders(Atom& atom);
 		void addHydrogen_(Atom& atom, Vector3 position);
