@@ -271,28 +271,19 @@ SET(BALL_QSAR_TESTS
 	SurfaceBase_test
 	SurfaceDescriptors_test
 	NBModel_test
+	ALLModel_test
+	FeatureSelection_test
+	GPModel_test
+	KNNModel_test
+	KPCRModel_test
+	KPLSModel_test
+	LDAModel_test
+	MLRModel_test
+	PCRModel_test
+	PLSModel_test
+	RRModel_test
 	SNBModel_test
 )
-
-IF(BALL_HAS_LAPACK)
-	LIST(APPEND BALL_MATHS_TESTS
-		SVDSolver_test
-	)
-
-	LIST(APPEND BALL_QSAR_TESTS
-		ALLModel_test
-		FeatureSelection_test
-		GPModel_test
-		KNNModel_test
-		KPCRModel_test
-		KPLSModel_test
-		LDAModel_test
-		MLRModel_test
-		PCRModel_test
-		PLSModel_test
-		RRModel_test
-	)
-ENDIF()
 
 SET(BALL_XDR_TESTS
 	XDRPersistenceManager_test

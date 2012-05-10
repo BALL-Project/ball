@@ -12,7 +12,6 @@ SET(SOURCES_LIST
 	connectivityDescriptors.C
 	descriptor.C
 	exception.C
-	fitModel.C
 	kernel.C
 	kernelModel.C
 	latentVariableModel.C
@@ -39,22 +38,23 @@ SET(SOURCES_LIST
 	svmModel.C
 	svrModel.C
 	validation.C
+	allModel.C
+	featureSelection.C
+	gpModel.C
+	knnModel.C
+	kpcrModel.C
+	kplsModel.C
+	ldaModel.C
+	mlrModel.C
+	oplsModel.C
+	pcrModel.C
+	plsModel.C
+	rrModel.C
 )	
 
-IF(BALL_HAS_LAPACK)
+IF(BALL_HAS_GSL)
 	LIST(APPEND SOURCES_LIST
-		allModel.C
-		featureSelection.C
-		gpModel.C
-		knnModel.C
-		kpcrModel.C
-		kplsModel.C
-		ldaModel.C
-		mlrModel.C
-		oplsModel.C
-		pcrModel.C
-		plsModel.C
-		rrModel.C
+		fitModel.C
 	)
 ENDIF()
 
