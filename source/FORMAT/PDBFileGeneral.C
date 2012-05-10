@@ -83,7 +83,8 @@ namespace BALL
 			store_skipped_records_(true),
 			ignore_xplor_pseudo_atoms_(true),
 			parse_partial_charges_(false),
-			write_pdbformat_1996_(false)
+			write_pdbformat_1996_(false),
+			read_done_(0)
 	{
 		init_();
 	}
@@ -118,7 +119,8 @@ namespace BALL
 			store_skipped_records_(true),
 			ignore_xplor_pseudo_atoms_(true),
 			parse_partial_charges_(false),	
-			write_pdbformat_1996_(false)
+			write_pdbformat_1996_(false),
+			read_done_(0)
 	{
 		init_();
 	}
@@ -151,7 +153,8 @@ namespace BALL
 			store_skipped_records_(true),
 			ignore_xplor_pseudo_atoms_(true),
 			parse_partial_charges_(false),
-			write_pdbformat_1996_(false)
+			write_pdbformat_1996_(false),
+			read_done_(0)
 	{
 		open(filename, open_mode);
 	}
@@ -1658,6 +1661,12 @@ namespace BALL
 				break;
 		}
 
+	}
+
+	void PDBFile::open(const String& name, File::OpenMode open_mode)
+	{
+		read_done_ = 0;
+		File::open(name,open_mode);
 	}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS

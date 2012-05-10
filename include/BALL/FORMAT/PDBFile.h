@@ -232,6 +232,8 @@ namespace BALL
 		/// Returns the version number this PDB file reader is able to read.
 		virtual float getVersion() const;
 
+		void open(const String& name, File::OpenMode open_mode=std::ios::in);
+
 		/** Selects one of multiple models for reading. Default behaviour is
 				reading model 1. If a file does not contain a MODEL specifier, all
 				coordinates will be assigned to model 1.
@@ -710,7 +712,8 @@ namespace BALL
 		bool read(System& system);
 
 		/** Read a Molecule from the file
-		 *  return Molecule* pointer to the newly created Molecule
+		 *  @return Molecule* pointer to the newly created Molecule. 0 if no molecule could be read or
+		 *          if no further Molecule could be read.
 		 *  @throw Exception::ParseError if a syntax error was encountered
 		 */
 		Molecule* read();
@@ -909,6 +912,10 @@ namespace BALL
 
 		///write in the 1996-format?
 		bool write_pdbformat_1996_;
+
+		/// Has the Protein already been read by use of read() ?
+		/// If yes, the next call of read() will return 0. This is necesassry, since else the use of the GenericMolFile interface-function read() can result in endless loops.
+		bool read_done_;
 	};
 
 

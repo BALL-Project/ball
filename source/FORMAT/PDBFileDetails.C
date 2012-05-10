@@ -1194,10 +1194,25 @@ namespace BALL
 
 	Molecule* PDBFile::read()
 	{
-		Molecule* result = new Molecule;
-		read(*result);
+		if(read_done_)
+		{
+			return 0;
+		}
+		Molecule* protein = new Molecule;
+		bool result = read(*protein);
 
-		return result;
+		read_done_ = 1;
+
+		if(result)
+		{
+			return protein;
+		}
+		else
+		{
+			delete protein;
+			return 0;
+		}
+
 	}
 
 	bool PDBFile::write(const System& system)
