@@ -385,7 +385,7 @@ IF (WIN32)
 ENDIF()
 
 
-## CADDSuite needs either OpenEye library or OpenBabel ...
+## Tools that existed in CADDSuite need either OpenEye library or OpenBabel ...
 ## Check for OpenEye
 FIND_PATH(openeye_include oesystem.h)
 FIND_LIBRARY(oesystem_lib oesystem)
@@ -520,6 +520,7 @@ SET_PROPERTY(SOURCE ${BALL_headers} APPEND PROPERTY HEADER_FILE_ONLY TRUE)
 IF (BALL_HAS_VIEW)
 	SET_PROPERTY(SOURCE ${VIEW_headers} APPEND PROPERTY HEADER_FILE_ONLY TRUE)
 ENDIF()
+
 ## add library target
 ## warning: set BUILD_SHARED_LIBS to decide if library is shared or static (see above)! 
 ## We need the BUILD_SHARED_LIBS flag to set declspec flags for MSVC!
@@ -664,6 +665,18 @@ FOREACH(i ${UTILITIES_EXECUTABLES})
 ENDFOREACH(i)
 ADD_CUSTOM_TARGET(UTILITIES EXCLUDE_FROM_ALL)
 ADD_DEPENDENCIES(UTILITIES ${UTILITIES_EXECUTABLES})
+
+###### add TOOLS targets ########
+SET(TOOLS_EXECUTABLES)
+INCLUDE(source/APPLICATIONS/TOOLS/sources.cmake)
+
+FOREACH(i ${TOOLS_EXECUTABLES})
+	ADD_EXECUTABLE(${i} source/APPLICATIONS/TOOLS/${i}.C)
+	TARGET_LINK_LIBRARIES(${i} BALL)
+	SET_PROPERTY(TARGET ${i} PROPERTY FOLDER TOOLS)
+ENDFOREACH(i)
+ADD_CUSTOM_TARGET(TOOLS EXCLUDE_FROM_ALL)
+ADD_DEPENDENCIES(TOOLS ${TOOLS_EXECUTABLES})
 
 ###### add MMFF94 test targets ##########
 SET(MMFF94_EXECUTABLES)

@@ -1,0 +1,224 @@
+/* CombiLibGenerator.C
+*
+* Copyright (C) 2011 Marc Röttig, Marcel Schumann
+*
+* This program free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 3 of the License, or (at
+* your option) any later version.
+*
+* This program is distributed in the hope that it will be useful, but
+* WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, see <http://www.gnu.org/licenses/>.
+*/
+
+// ----------------------------------------------------
+// $Maintainer: Marc Röttig $
+// $Authors: Michael Betz, Marc Röttig $
+// ----------------------------------------------------
+
+#include <fstream>
+#include <BALL/DATATYPE/string.h>
+#include <BALL/FORMAT/genericMolFile.h>
+#include <BALL/FORMAT/molFileFactory.h>
+#include <BALL/STRUCTURE/rGroupAssembler.h>
+#include <BALL/FORMAT/commandlineParser.h>
+#include "version.h"
+#include <vector>
+#include <map>
+
+using namespace BALL;
+using namespace std;
+
+typedef enum { secScaffold, secMoiety, secConstraints, secNothing } Section;
+
+map<String, vector<String> > rgroups;
+vector<String> scaffolds;
+
+bool isSection(String line)
+{
+	if (line[0] == '<' && line[line.size()-1] == '>')
+		return true;
+	return false;
+}
+
+bool findRGroupNames()
+{
+	bool found_r_groups = 0;
+	for (Size i = 0; i < scaffolds.size(); i++)
+	{
+		Size no_chars = scaffolds[i].size();
+		bool r_found = 0;
+		String name="R";
+		for (Size s = 0; s < no_chars; s++)
+		{
+			if (scaffolds[i][s] == 'R')
+			{
+				r_found = 1;
+				continue;
+			}
+
+			if (r_found)
+			{
+				if (String(scaffolds[i][s]).isDigit())
+				{
+					name += scaffolds[i][s];
+				}
+				else
+				{
+					r_found = 0;
+					vector<String> v(0);
+					rgroups.insert(make_pair(name, v));
+					name = "R";
+					found_r_groups = 1;
+				}
+			}
+		}
+	}
+	return found_r_groups;
+}
+
+void readFile(String a_file_name)
+{
+	ifstream iniFile(a_file_name.c_str());
+	int current_line_number = 0;
+	String  current_line;
+	String  current_moiety_;
+	Section current_section_ = secNothing;
+
+	while (iniFile)
+	{
+		current_line_number++;
+		getline(iniFile, current_line);
+		current_line.trim();
+		if (current_line == "") continue;
+		switch(current_line[0])
+		{
+			// comment lines
+			case ';' : break;
+
+			// sections start with '<'
+			case '<':
+				if (isSection(current_line))
+				{
+					String section_name = current_line.substr(1, current_line.size() - 2);
+					if (section_name == "scaffold")
+					{
+						current_section_ = secScaffold;
+					}
+					else if (section_name.substr(0, 6) == "moiety")
+					{
+						findRGroupNames();
+						current_moiety_ = section_name.substr(6, section_name.size()-1);
+						current_section_ = secMoiety;
+					}
+					else if (section_name == "constraints")
+					{
+						current_section_ = secConstraints;
+					}
+
+					break;
+				}
+			default:
+				switch (current_section_)
+				{
+					case secScaffold:
+					{
+						scaffolds.push_back(current_line);
+					}
+					break;
+					case secMoiety:
+					{
+						/// find correct 'rgroups' entry
+						vector<String>* moiety = 0;
+						for (map < String, vector < String > > ::iterator it = rgroups.begin(); it != rgroups.end(); it++)
+						{
+							if (current_line.hasSubstring(it->first))
+							{
+								if (!moiety) moiety = &it->second;
+								else
+								{
+									Log.error()<<"Error while parsing a moiety line, because it contains more than one R-group name."<<endl;
+									exit(1);
+								}
+							}
+						}
+						if (!moiety)
+						{
+							Log.error()<<"Error while parsing a moiety line, because it contains no R-group name."<<endl;
+							Log.error() << "number of known rgroups = " << rgroups.size() << endl;
+							exit(1);
+						}
+						moiety->push_back(current_line);
+					}
+					break;
+					case secConstraints:
+					{
+						// NOP
+					}
+					break;
+					case secNothing:
+						Log.error() << "can't handle line " << current_line_number << endl;
+						break;
+				}
+		}
+	}
+
+	return;
+}
+
+int main(int argc, char** argv)
+{
+	CommandlineParser parpars("CombiLibGenerator", "generate combinatorial lib", VERSION, String(__DATE__), "Get Data");
+	parpars.registerParameter("i", "input combi-lib file", INFILE, true);
+	parpars.registerParameter("o", "output molecule file", OUTFILE, true);
+	parpars.registerParameter("write_ini", "write ini-file w/ default parameters (and don't do anything else)", OUTFILE);
+	parpars.setSupportedFormats("i","txt");
+	parpars.setSupportedFormats("o","mol2,sdf,drf");
+	String manual = "This tool generates a combinatorial library by combining the given molecule scaffolds with possible combinations of moieties.\n\nAs input we need a text file specifying SMARTS expressions for the desired scaffolds and R-groups. Its format should look like the following example, although you may specify as many scaffolds and as many SMARTS expressions per R-group as you need:\n\n<scaffold>\n\
+      Fc1ccc(cc1)C2=C(C([R1])=NO2)c3ccnc([R2])c3\n\
+<moietyR1>\n\
+      [R1]C(C)(C)C\n\
+<moietyR2>\n\
+      [R2]OC(C)(C)C\n\nOutput of CombiLibGenerator is a file containing created topologies. Note that this tool does *not* generate any conformations but only topologies, so that all coordinates in the output file will be zero. Thus, apply Ligand3DGenerator to the output generated by CombiLibGenerator if you need 3D conformations.";
+	parpars.setToolManual(manual);
+	parpars.parse(argc, argv);
+
+	String default_inifile = parpars.get("write_ini");
+	if (default_inifile != CommandlineParser::NOT_FOUND)
+	{
+		ofstream out(default_inifile.c_str());
+		out << "<scaffold>" << endl;
+	    out << " Fc1ccc(cc1)C2 = C(C([R1]) = NO2)c3ccnc([R2])c3" << endl;
+	    out << " Fc1ccc(cc1)C2 = NOC([R1]) = C2cccnc([R2])c3" << endl;
+	    out << "<moietyR1>" << endl;
+	    out << " [R1][H]" << endl;
+	    out << " [R1]C" << endl;
+	    out << " [R1]C(C)C" << endl;
+	    out << "<moietyR2>" << endl;
+	    out << " [R2][H]" << endl;
+	    out << " [R2]OC" << endl;
+	    out << " [R2]OC(C)C" << endl;
+		Log << "Ini-file w/ default values has been written to file '"<<default_inifile<<"'."<<endl<<"You can adjust the file to fit your needs."<<endl;
+		return 0;
+	}
+
+	String filename(parpars.get("i"));
+	readFile(filename);
+
+	GenericMolFile* outfile = MolFileFactory::open(parpars.get("o"), std::ios::out, "mol2.gz");
+	RGroupAssembler rasm(scaffolds, rgroups);
+
+	for (Molecule* mol = rasm.generateNextMolecule(); mol;
+	delete mol, mol = rasm.generateNextMolecule())
+	{
+		*outfile << *mol;
+	}
+
+	outfile->close();
+	delete outfile;
+}
