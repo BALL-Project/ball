@@ -46,7 +46,7 @@ int main( int argc, char **argv )
   double DEGREE_INTERVAL = 20.0;
 
   // what surface definition should the program use.
-  int SURFACE_TYPE = 1; // Connolly surface definition
+//   int SURFACE_TYPE = 1; // Connolly surface definition
 
   // how many peaks should the program keep for each rotation
   int TOP_N = 3;
@@ -89,7 +89,6 @@ usage: docking -a <PDB File name for protein A>\n\
               [-r <NEAR_RADIUS>]\n\
               [-s <GRID_SPACING>]\n\
               [-t <SURFACE_THICKNESS>]\n\
-              [-y <SURFACE_TYPE>]\n\
               [-i <DEGREE_INTERVAL>]\n\
               [-n <TOP_N>]\n\
               [-e <GRID_SIZE>]\n\
@@ -116,7 +115,7 @@ usage: docking -a <PDB File name for protein A>\n\
 				case 's':  GRID_SPACING      		= atof( argv[++arg_count] );   break;
 				case 'e':  GRID_SIZE         		= atoi( argv[++arg_count] );   break;
 				case 't':  SURFACE_THICKNESS 		= atof( argv[++arg_count] );   break;
-				case 'y':  SURFACE_TYPE      		= atoi( argv[++arg_count] );   break;
+// 				case 'y':  SURFACE_TYPE      		= atoi( argv[++arg_count] );   break;
 				case 'i':  DEGREE_INTERVAL   		= atof( argv[++arg_count] );   break;
 				case 'g':  ADD_HYDROGENS        = true;                        break;
 				case 'x':  BEST_NUM             = atoi( argv[++arg_count] );   break;
