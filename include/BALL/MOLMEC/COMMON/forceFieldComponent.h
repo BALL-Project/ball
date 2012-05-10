@@ -21,6 +21,8 @@
 #	include	<BALL/KERNEL/atom.h>
 #endif
 
+#include <BALL/SCORING/COMMON/scoringComponent.h>
+
 namespace BALL 
 {
 	class ForceField;
@@ -29,7 +31,7 @@ namespace BALL
 			
     	\ingroup  MolmecCommon
 	*/
-	class BALL_EXPORT ForceFieldComponent 
+	class BALL_EXPORT ForceFieldComponent : public ScoringComponent
 	{
 
 		friend class ForceField;
@@ -135,6 +137,9 @@ namespace BALL
 		*/
 		virtual void update()
 			throw(Exception::TooManyErrors);
+
+		/** interface to ScoringComponent */
+		double updateScore();
 
 		protected:
 

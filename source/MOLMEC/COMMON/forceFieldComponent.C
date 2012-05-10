@@ -102,4 +102,11 @@ namespace BALL
 	{
 	}
 
+	double ForceFieldComponent::updateScore()
+	{
+		score_ = updateEnergy();
+		scaleScore();
+		return score_;
+	}
+
 } // namespace BALL

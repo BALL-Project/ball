@@ -29,8 +29,10 @@
 
 namespace BALL 
 {
+	class AdvancedElectrostatic;
+
 	/**	Amber NonBonded (VdW + Electrostatic) component
-			
+
     	\ingroup  AMBER
 	*/
 	class BALL_EXPORT AmberNonBonded 
@@ -40,6 +42,9 @@ namespace BALL
 
 		/// flag to enable NB
 		#define AMBER_NB_ENABLED "enable NB"
+
+		// NA*e0*e0*1e7 / (4.0*PI*VACUUM_PERMITTIVITY)
+		static const double ELECTROSTATIC_FACTOR;
 
 		/**	@name	Constructors and Destructors	
 		*/
@@ -102,6 +107,11 @@ namespace BALL
 		virtual bool setup()
 			throw(Exception::TooManyErrors);
 
+
+		/** Setup this component according to the given options and store the ForceFieldParameters in par */
+		bool setup(Options& options, ForceFieldParameters& par);
+
+
 		//@}
 		/**	@name	Accessors	
 		*/
@@ -124,6 +134,11 @@ namespace BALL
 		*/
 		virtual void update()
 			throw(Exception::TooManyErrors);
+
+
+		/** Update this component using the given atom-pairs only */
+		void update(const vector<pair<Atom*, Atom*> >& atom_vector);
+
 
 		/**	Return the electrostatic energy.
 		*/
@@ -155,6 +170,10 @@ namespace BALL
 			throw(Exception::TooManyErrors);
 
 		//@}
+
+		void enableStoreInteractions(bool b=true);
+
+		void setAdvancedElectrostatic(AdvancedElectrostatic* advES);
 
 		protected:
 

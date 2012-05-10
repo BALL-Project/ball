@@ -6,6 +6,8 @@
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
 #include <BALL/MOLMEC/COMMON/support.h>
+#include <BALL/SCORING/COMPONENTS/advElectrostatic.h>
+#include <BALL/SYSTEM/path.h>
 
 using namespace std;
 
@@ -20,6 +22,11 @@ using namespace std;
 
 namespace BALL 
 {
+	bool store_interactions = false;
+	AdvancedElectrostatic* advanced_electrostatic = 0;
+	using namespace Constants;
+	const double AmberNonBonded::ELECTROSTATIC_FACTOR
+		= NA * e0 * e0 * 1e7 / (4.0 * PI * VACUUM_PERMITTIVITY);
 
 	// default constructor
 	AmberNonBonded::AmberNonBonded()
@@ -228,6 +235,133 @@ namespace BALL
 		buildVectorOfNonBondedAtomPairs(atom_pair_vector, van_der_waals_, hydrogen_bond_);
 	}
 
+	bool AmberNonBonded::setup(Options& options, ForceFieldParameters& parameters)
+		{
+			// clear vector of non-bonded atom pairs
+			clear();
+
+			// the cutoffs for the nonbonded pair list and the switching function
+			// for vdW and electrostatics
+			cut_off_ = options.setDefaultReal(AmberFF::Option::NONBONDED_CUTOFF, AmberFF::Default::NONBONDED_CUTOFF);
+			cut_off_electrostatic_ = options.setDefaultReal(AmberFF::Option::ELECTROSTATIC_CUTOFF, AmberFF::Default::ELECTROSTATIC_CUTOFF);
+			cut_off_vdw_ = options.setDefaultReal(AmberFF::Option::VDW_CUTOFF, AmberFF::Default::VDW_CUTOFF);
+			cut_on_electrostatic_ = options.setDefaultReal(AmberFF::Option::ELECTROSTATIC_CUTON, AmberFF::Default::ELECTROSTATIC_CUTON);
+			cut_on_vdw_ = options.setDefaultReal(AmberFF::Option::VDW_CUTON, AmberFF::Default::VDW_CUTON);
+
+			inverse_distance_off_on_vdw_3_ = SQR(cut_off_vdw_) - SQR(cut_on_vdw_);
+			inverse_distance_off_on_electrostatic_3_ = SQR(cut_off_electrostatic_) - SQR(cut_on_electrostatic_);
+
+			inverse_distance_off_on_vdw_3_ *= SQR(inverse_distance_off_on_vdw_3_);
+			inverse_distance_off_on_electrostatic_3_ *= SQR(inverse_distance_off_on_electrostatic_3_);
+
+			if (inverse_distance_off_on_vdw_3_ <= 0.0)
+			{
+				Log.warn() << "AmberNonBonded::setup(): "
+						<< "vdW cuton value should be smaller than cutoff -- "
+						<< "switching function disabled." << endl;
+				cut_on_vdw_ = cut_off_vdw_ + 1.0;
+			}
+			else
+			{
+				inverse_distance_off_on_vdw_3_ = 1.0 / inverse_distance_off_on_vdw_3_;
+			}
+			if (inverse_distance_off_on_electrostatic_3_ <= 0.0)
+			{
+				Log.warn() << "AmberNonBonded::setup(): "
+						<< "electrostatic cuton value should be smaller than cutoff." << endl
+						<< "Switching function disabled." << endl;
+				cut_on_electrostatic_ = cut_off_electrostatic_ + 1.0;
+			}
+			else
+			{
+				inverse_distance_off_on_electrostatic_3_ = 1.0 / inverse_distance_off_on_electrostatic_3_;
+			}
+
+			scaling_electrostatic_1_4_
+					= options.setDefaultReal(AmberFF::Option::SCALING_ELECTROSTATIC_1_4,
+					AmberFF::Default::SCALING_ELECTROSTATIC_1_4);
+			if (scaling_electrostatic_1_4_ == 0.0)
+			{
+				Log.warn() << "AmberNonBonded::setup(): "
+						<< "illegal - 1-4-electrostatic scaling factor must be non-zero!"
+						<< endl << "Resetting to 1.0." << endl;
+				scaling_electrostatic_1_4_ = 1.0;
+			}
+			else
+			{
+				scaling_electrostatic_1_4_ = 1.0 / scaling_electrostatic_1_4_;
+			}
+
+			scaling_vdw_1_4_
+					= options.setDefaultReal(AmberFF::Option::SCALING_VDW_1_4,
+					AmberFF::Default::SCALING_VDW_1_4);
+			if (scaling_vdw_1_4_ == 0.0)
+			{
+				Log.warn() << "AmberNonBonded::setup(): "
+						<< "illegal - 1-4-vdW scaling factor must be non-zero!" << endl
+						<< "Resetting to 1.0." << endl;
+				scaling_vdw_1_4_ = 1.0;
+			}
+			else
+			{
+				scaling_vdw_1_4_ = 1.0 / scaling_vdw_1_4_;
+			}
+
+			 // set the option for using a constant dielectric constant (default) or
+			// or distance dependent one
+			use_dist_depend_dielectric_
+					= options.setDefaultBool(AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC,
+					AmberFF::Default::DISTANCE_DEPENDENT_DIELECTRIC);
+
+			// check whether the parameter file name
+			// is set in the options
+			string file = AmberFF::Default::FILENAME;
+			if (options.has(AmberFF::Option::FILENAME))
+			{
+				file = options[AmberFF::Option::FILENAME];
+				setName("Amber [" + file + "]");
+			}
+			else
+			{
+				options[AmberFF::Option::FILENAME] = AmberFF::Default::FILENAME;
+			}
+
+			// open parameter file
+			Path    path;
+			String  filename(path.find(file));
+
+			if (filename == "")
+			{
+				throw Exception::FileNotFound(__FILE__, __LINE__, filename);
+			}
+
+			// initialize the force field parameters
+			// and retrieve the atom types
+			if (parameters.getFilename() != filename)
+			{
+				parameters.setFilename(filename);
+				parameters.init();
+			}
+
+			bool result = van_der_waals_.extractSection(parameters, "LennardJones");
+			if (!result)
+			{
+				Log.error() << "AmberNonBonded::setup(): "
+						<< "cannot find section LennardJones in " << getForceField()->getParameters().getFilename() << endl;
+				return false;
+			}
+
+			result = hydrogen_bond_.extractSection(parameters, "HydrogenBonds");
+			if (!result)
+			{
+				Log.error() << "AmberNonBonded::setup(): "
+						<< "cannot find section HydrogenBonds in " << getForceField()->getParameters().getFilename() << endl;
+				return false;
+			}
+
+			return true;
+		}
+
 	// setup the internal datastructures for the component
 	bool AmberNonBonded::setup()
 		throw(Exception::TooManyErrors)
@@ -394,6 +528,15 @@ namespace BALL
 		return true;
 	}
 
+	void AmberNonBonded::update(const vector<pair<Atom*, Atom*> >& atom_vector)
+	{
+		if(&atom_vector==0)
+		{
+			cout<<"ERROR, invalid atom_vector given !!!"<<endl;
+			exit(1);
+		}
+		buildVectorOfNonBondedAtomPairs(atom_vector, van_der_waals_, hydrogen_bond_);
+	}
 
 	// Build a vector of non-bonded atom pairs with the vdw parameters 
 	// The vector starts with 1-4 interactions
@@ -637,6 +780,7 @@ namespace BALL
 		 double& es_energy, double& vdw_energy, 
 		 const SwitchingCutOnOff& switching_es, const SwitchingCutOnOff& switching_vdw)
 	{
+		/* original BALL code (before CADDSuite merging)
 		// iterate over all pairs
 		for (; ptr != end_ptr; ++ptr)
 		{
@@ -645,6 +789,34 @@ namespace BALL
 			double inverse_square_distance(1.0 / square_distance);
 			es_energy += ESEnergy(inverse_square_distance, ptr->atom1->getCharge() * ptr->atom2->getCharge()) * Switch(square_distance, switching_es);
 			vdw_energy += VdwEnergy(inverse_square_distance, ptr->values.A, ptr->values.B) * Switch(square_distance, switching_vdw);
+		}
+		*/
+		for (; ptr != end_ptr; ++ptr)
+		{
+			// compute the square distance
+			double square_distance(ptr->atom1->getPosition().getSquareDistance(ptr->atom2->getPosition()));
+			double inverse_square_distance(1.0 / square_distance);
+			double es_p = ESEnergy(inverse_square_distance, ptr->atom1->getCharge() * ptr->atom2->getCharge()) * Switch(square_distance, switching_es);
+			double vdw_p = VdwEnergy(inverse_square_distance, ptr->values.A, ptr->values.B) * Switch(square_distance, switching_vdw);
+
+			if(advanced_electrostatic)
+			{
+				es_p /= advanced_electrostatic->calculateDielectricConstant(ptr->atom1->getPosition(),ptr->atom2->getPosition());
+			}
+			if(store_interactions)
+			{
+				double vdw_scaled = vdw_p*0.1;
+				ptr->atom1->addInteraction(ptr->atom2,"vdW",vdw_scaled);
+				ptr->atom2->addInteraction(ptr->atom1,"vdW",vdw_scaled);
+
+				double es_scaled = AmberNonBonded::ELECTROSTATIC_FACTOR * es_p;
+				es_scaled *= 0.01;
+				ptr->atom1->addInteraction(ptr->atom2,"ES",es_scaled);
+				ptr->atom2->addInteraction(ptr->atom1,"ES",es_scaled);
+			}
+
+			es_energy += es_p;
+			vdw_energy += vdw_p;
 		}
 	}
 
@@ -668,6 +840,7 @@ namespace BALL
 		 SwitchingCutOnOff es_switching, SwitchingCutOnOff vdw_switching,
 		 const Vector3& period)
 	{
+		/*
 		// iterate over all pairs
 		Vector3 difference;
 		for (; ptr != end_ptr; ++ptr)
@@ -681,6 +854,42 @@ namespace BALL
 
 			es_energy += ESEnergyFct(inverse_square_distance, ptr->atom1->getCharge() * ptr->atom2->getCharge()) * SwitchFct(square_distance, es_switching);
 			vdw_energy += VdwEnergyFct(inverse_square_distance, ptr->values.A, ptr->values.B) * SwitchFct(square_distance, vdw_switching);
+		}
+		*/
+
+		// iterate over all pairs
+		Vector3 difference;
+		for (; ptr != end_ptr; ++ptr)
+		{
+			difference = ptr->atom1->getPosition() - ptr->atom2->getPosition();
+			AMBERcalculateMinimumImage(difference, period);
+
+			// compute the square distance and correct for periodic boundary if necessary
+			double square_distance(difference.getSquareLength());
+			double inverse_square_distance(1.0 / square_distance);
+
+			double es_p = ESEnergyFct(inverse_square_distance, ptr->atom1->getCharge() * ptr->atom2->getCharge()) * SwitchFct(square_distance, es_switching);
+			double vdw_p = VdwEnergyFct(inverse_square_distance, ptr->values.A, ptr->values.B) * SwitchFct(square_distance, vdw_switching);
+
+			if(advanced_electrostatic)
+			{
+				es_p /= advanced_electrostatic->calculateDielectricConstant(ptr->atom1->getPosition(),ptr->atom2->getPosition());
+			}
+			if(store_interactions)
+			{
+				double vdw_scaled = vdw_p*0.1;
+				ptr->atom1->addInteraction(ptr->atom2,"vdW",vdw_scaled);
+				ptr->atom2->addInteraction(ptr->atom1,"vdW",vdw_scaled);
+
+				// correct for the additional factor 1/4 in the distance dependent case
+				double es_scaled = AmberNonBonded::ELECTROSTATIC_FACTOR*0.25 * es_p;
+				es_scaled *= 0.01;
+				ptr->atom1->addInteraction(ptr->atom2,"ES",es_scaled);
+				ptr->atom2->addInteraction(ptr->atom1,"ES",es_scaled);
+			}
+
+			es_energy += es_p;
+			vdw_energy += vdw_p;
 		}
 	}
 
@@ -902,7 +1111,13 @@ namespace BALL
 		double electrostatic_energy_1_4 = 0.0;
 
 		static Vector3 period;
-		bool use_periodic_boundary = force_field_->periodic_boundary.isEnabled(); 
+
+		bool use_periodic_boundary = false;
+		if (force_field_!=NULL)
+		{
+			use_periodic_boundary = force_field_->periodic_boundary.isEnabled();
+		}
+
 		if (use_periodic_boundary)
 		{
 			// calculate the box period (half of the box period)
@@ -1169,4 +1384,13 @@ namespace BALL
 		return vdw_energy_;
 	}
 
+	void AmberNonBonded::enableStoreInteractions(bool b)
+	{
+		store_interactions = b;
+	}
+
+	void AmberNonBonded::setAdvancedElectrostatic(AdvancedElectrostatic* advES)
+	{
+		advanced_electrostatic = advES;
+	}
 } // namespace BALL
