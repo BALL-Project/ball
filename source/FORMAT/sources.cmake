@@ -20,6 +20,7 @@ SET(SOURCES_LIST
 	SDFile.C
 	MOL2File.C
 	NMRStarFile.C
+	paramFile.C
 	parameters.C
 	parameterSection.C
 	PDBdefs.C
