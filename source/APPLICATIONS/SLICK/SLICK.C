@@ -4,7 +4,7 @@
 
 #include <BALL/SCORING/FUNCTIONS/slickEnergy.h>
 #include <BALL/SCORING/FUNCTIONS/slickScore.h>
-#include <BALL/SCORING/COMPONENTS/vanDerWaals.h>
+#include <BALL/SCORING/COMPONENTS/vanDerWaalsSlick.h>
 #include <BALL/SCORING/COMPONENTS/polarSolvation.h>
 #include <BALL/SCORING/COMPONENTS/nonpolarSolvation.h>
 

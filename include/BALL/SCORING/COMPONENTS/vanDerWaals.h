@@ -1,174 +1,57 @@
-// $Id: vanDerWaals.h,v 1.3 2006/05/21 17:35:26 anker Exp $
-// Molecular Mechanics: SLICK force field, modified van-der-Waals term
+/* vdW.h
+*
+* Copyright (C) 2011 Marcel Schumann
+*
+* This program free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 3 of the License, or (at
+* your option) any later version.
+*
+* This program is distributed in the hope that it will be useful, but
+* WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, see <http://www.gnu.org/licenses/>.
+*/
+
+// ----------------------------------------------------
+// $Maintainer: Marcel Schumann $
+// $Authors: Marcel Schumann $
+// ----------------------------------------------------
 
 #ifndef BALL_SCORING_COMPONENTS_VANDERWAALS_H
 #define BALL_SCORING_COMPONENTS_VANDERWAALS_H
 
-#include <BALL/SCORING/COMMON/scoringComponent.h>
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
-#include <BALL/MOLMEC/PARAMETER/lennardJones.h>
-#include <BALL/MOLMEC/COMMON/atomVector.h>
-#include <BALL/MOLMEC/COMMON/forceField.h>
+
 
 namespace BALL
 {
-	/** SLICK van-der-Waals Component based on AmberNonBonded \\
-			{\bf Definition:} \URL{BALL/SCORING/COMPONENTS/vanDerWaals.h}
-	*/
-	class VanDerWaals
-		:	public ScoringComponent
+	class Electrostatic;
+
+	class BALL_EXPORT VanDerWaals : public ScoringComponent
 	{
+		public :
+			VanDerWaals(Options& options, ForceFieldParameters& forcefield_parameters);
 
-		public:
+			VanDerWaals(Electrostatic* es);
 
-		///
-		enum CalculationMethod
-		{
-			/// Full Lennard-Jones 6-12 potential
-			CALCULATION__FULL_LJ_POTENTIAL,
+			~VanDerWaals();
 
-			/// Softened Lennard-Jones 6-12 potential (simple cut)
-			CALCULATION__SOFTENED_LJ_POTENTIAL_SIMPLE,
+			void update(const vector<std::pair<Atom*, Atom*> >& pair_vector);
 
-			/// Log-Softened Lennard-Jones 6-12 potential
-			CALCULATION__SOFTENED_LJ_POTENTIAL_LOG
+			double updateScore();
 
-		};
-
-
-		///
-		struct Option
-		{
-
-			///
-			static const String VERBOSITY;
-
-			///
-			static const String VDW_METHOD;
-
-			/// 
-			static const String VDW_CUT_ON;
-
-			/// 
-			static const String VDW_CUT_OFF;
-
-			///
-			static const String VDW_SOFTENING_LIMIT;
-
-			///
-			static const String LENNARD_JONES_FILE;
-
-		};
-
-
-		struct Default
-		{
-
-			///
-			static const Size VERBOSITY;
-
-			///
-			static const Size VDW_METHOD;
-
-			///
-			static const float VDW_CUT_ON;
-
-			///
-			static const float VDW_CUT_OFF;
-
-			///
-			static const float VDW_SOFTENING_LIMIT;
-
-			///
-			static const String LENNARD_JONES_FILE;
-
-		};
-
-
-
-		///
-		VanDerWaals()
-			;
-
-		///
-		VanDerWaals(ScoringFunction& sf)
-			;
-
-		///
-		VanDerWaals(ScoringComponent& sc)
-			;
-
-		///
-		virtual ~VanDerWaals()
-			;
-
-		///
-		virtual void clear()
-			;
-
-		///
-		virtual bool setup()
-			;
-
-		///
-		virtual double calculateScore()
-			;
-
-
-		protected:
-
-		//_
-		std::vector<LennardJones::Data> non_bonded_;
-
-		//_
-		std::vector<bool> is_hydrogen_bond_;
-
-		Size number_of_1_4_;
-		Size number_of_h_bonds_;
-		
-		LennardJones lennard_jones_;
-		Potential1210 hydrogen_bond_;
-
+			AmberNonBonded* getAmberNonBonded();
 
 		private:
+			bool do_calculations_;
 
-		//_
-		System vdw_system_;
-
-		//_
-		Molecule* vdw_receptor_;
-
-		//_
-		Molecule* vdw_ligand_;
-
-		//_
-		Size calculation_method_;
-
-		//_
-		float cut_on_vdw_;
-
-		//_
-		float cut_off_vdw_;
-
-		//_
-		float scaling_vdw_1_4_;
-
-		//_
-		float softening_limit_;
-
-		//_
-		double calculateVDWEnergy_(const AtomVector& atom_vector)
-			;
-
-		//_
-		Size createNonBondedList_(const ForceField::PairVector& atom_pair_vector)
-			;
-
-		//_ Verbosity of the code
-		Size verbosity_;
-
+			AmberNonBonded* amber_nb_;
 	};
-
 }
+
 
 #endif // BALL_SCORING_COMPONENTS_VANDERWAALS_H

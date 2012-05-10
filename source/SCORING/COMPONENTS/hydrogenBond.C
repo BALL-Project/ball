@@ -1,8 +1,29 @@
+/* hydrogenBond.C
+ *
+ * Copyright (C) 2011 Marcel Schumann
+ *
+ * This program free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ */
+
 // $Id: hydrogenBond.C,v 1.4 2006/05/21 17:32:10 anker Exp $
-// hydrogen bond component
+// ----------------------------------------------------
+// $Maintainer: Marcel Schumann $
+// $Authors: Slick-development Team, Marcel Schumann $
+// ----------------------------------------------------
 
 #include <BALL/SCORING/COMPONENTS/hydrogenBond.h>
-#include <BALL/SCORING/TYPES/fresnoTypes.h>
+#include <BALL/SCORING/COMMON/scoringFunction.h>
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/bond.h>
@@ -10,378 +31,377 @@
 
 #include <BALL/SYSTEM/timer.h>
 
-// #define DEBUG 1
+using namespace BALL;
 
-#ifdef DEBUG
-#include <BALL/FORMAT/HINFile.h>
-#endif
 
-namespace BALL
+const char* HydrogenBond::Option::HB_IDEAL_LENGTH = "hb_ideal_length";
+const char* HydrogenBond::Option::HB_IDEAL_ANGLE = "hb_ideal_angle";
+const char* HydrogenBond::Option::HB_DIST_LOWER = "hb_dist_lower";
+const char* HydrogenBond::Option::HB_DIST_UPPER = "hb_dist_upper";
+const char* HydrogenBond::Option::HB_ANG_LOWER = "hb_ang_lower";
+const char* HydrogenBond::Option::HB_ANG_UPPER = "hb_ang_upper";
+const char* HydrogenBond::Option::VERBOSITY = "verbosity";
+
+const float HydrogenBond::Default::HB_IDEAL_LENGTH = 1.85;
+const float HydrogenBond::Default::HB_IDEAL_ANGLE = 180;
+const float HydrogenBond::Default::HB_DIST_LOWER = 0.25;
+const float HydrogenBond::Default::HB_DIST_UPPER = 0.65;
+const float HydrogenBond::Default::HB_ANG_LOWER = 30;
+const float HydrogenBond::Default::HB_ANG_UPPER = 80;
+const Size HydrogenBond::Default::VERBOSITY = 0;
+
+
+HydrogenBond::HydrogenBond(Mode mode)
+	throw()
+	:	ScoringComponent(),
+		possible_hydrogen_bonds_()
+{
+	// set component name
+	setName("HydrogenBond");
+	receptor_fresno_types_ = 0;
+	ligand_fresno_types_ = 0;
+	mode_ = mode;
+	type_name_ = "HB";
+	charge_evaluation_enabled_ = false;
+
+	if (mode_ == LIGAND_HYDROGENS)
+	{
+		gridable_ = false;
+	}
+}
+
+
+HydrogenBond::HydrogenBond(ScoringFunction& sf, Mode mode)
+	throw()
+	:	ScoringComponent(sf),
+		possible_hydrogen_bonds_()
+{
+	// set component name
+	setName("HydrogenBond");
+	receptor_fresno_types_ = 0;
+	ligand_fresno_types_ = 0;
+	mode_ = mode;
+	type_name_ = "HB";
+	charge_evaluation_enabled_ = false;
+
+	if (mode_ == LIGAND_HYDROGENS)
+	{
+		gridable_ = false;
+	}
+}
+
+
+HydrogenBond::HydrogenBond(const HydrogenBond& hb)
+	throw()
+	:	ScoringComponent(hb),
+		possible_hydrogen_bonds_(hb.possible_hydrogen_bonds_),
+		h_bond_distance_lower_(hb.h_bond_distance_lower_),
+		h_bond_distance_upper_(hb.h_bond_distance_upper_),
+		h_bond_angle_lower_(hb.h_bond_angle_lower_),
+		h_bond_angle_upper_(hb.h_bond_angle_upper_)
+{
+	receptor_fresno_types_ = 0;
+	ligand_fresno_types_ = 0;
+	mode_ = hb.mode_;
+
+	if (mode_ == LIGAND_HYDROGENS)
+	{
+		gridable_ = false;
+	}
+}
+
+
+HydrogenBond::~HydrogenBond()
+	throw()
+{
+	clear();
+}
+
+
+void HydrogenBond::clear()
+	throw()
+{
+	possible_hydrogen_bonds_.clear();
+	h_bond_distance_lower_ = 0.0;
+	h_bond_distance_upper_ = 0.0;
+	h_bond_angle_lower_ = 0.0;
+	h_bond_angle_upper_ = 0.0;
+
+	delete receptor_fresno_types_;
+	delete ligand_fresno_types_;
+}
+
+
+void HydrogenBond::enableChargeEvaluation(bool b)
+{
+	charge_evaluation_enabled_ = b;
+	if (charge_evaluation_enabled_) gridable_ = false;
+	else
+	{
+		if (mode_ == LIGAND_HYDROGENS) gridable_ = false;
+		else gridable_ = true;
+	}
+}
+
+
+bool HydrogenBond::setup()
+{
+	Timer timer;
+	timer.start();
+
+	ScoringFunction* scoring_function = getScoringFunction();
+	if (scoring_function == 0)
+	{
+		Log.error() << "HydrogenBond::setup(): "
+			<< "component not bound to scoring function." << std::endl;
+		return false;
+	}
+
+	// clear the vector of possible hydrogen bonds
+	possible_hydrogen_bonds_.clear();
+
+	Options options = getScoringFunction()->getOptions();
+
+	ideal_hbond_length_
+		 = options.setDefaultReal(HydrogenBond::Option::HB_IDEAL_LENGTH,
+				HydrogenBond::Default::HB_IDEAL_LENGTH);
+	ideal_hbond_angle_
+		 = options.setDefaultReal(HydrogenBond::Option::HB_IDEAL_ANGLE,
+				HydrogenBond::Default::HB_IDEAL_ANGLE);
+	h_bond_distance_lower_
+		 = options.setDefaultReal(HydrogenBond::Option::HB_DIST_LOWER,
+				HydrogenBond::Default::HB_DIST_LOWER);
+	h_bond_distance_upper_
+		 = options.setDefaultReal(HydrogenBond::Option::HB_DIST_UPPER,
+				HydrogenBond::Default::HB_DIST_UPPER);
+	h_bond_angle_lower_
+		 = options.setDefaultReal(HydrogenBond::Option::HB_ANG_LOWER,
+				HydrogenBond::Default::HB_ANG_LOWER);
+	h_bond_angle_upper_
+		 = options.setDefaultReal(HydrogenBond::Option::HB_ANG_UPPER,
+				HydrogenBond::Default::HB_ANG_UPPER);
+	verbosity_
+		 = options.setDefaultInteger(HydrogenBond::Option::VERBOSITY,
+				HydrogenBond::Default::VERBOSITY);
+
+	delete receptor_fresno_types_;
+	receptor_fresno_types_ = new FresnoTypes(getScoringFunction()->getReceptor());
+
+	setupLigand();
+
+	timer.stop();
+	Log.info() << "HydrogenBond::setup(): "
+		<< timer.getCPUTime() << " s" << std::endl;
+
+	return true;
+}
+
+
+void HydrogenBond::setupLigand()
+{
+	delete ligand_fresno_types_;
+	ligand_fresno_types_ = new FresnoTypes(getScoringFunction()->getLigand());
+}
+
+
+Size HydrogenBond::getType(Atom* atom)
+{
+	HashMap<const Atom*, Size>::const_iterator it = receptor_fresno_types_->getTypeMap()->find(atom);
+	if (it != receptor_fresno_types_->getTypeMap()->end())
+	{
+		return it->second;
+	}
+	it = ligand_fresno_types_->getTypeMap()->find(atom);
+	if (it != ligand_fresno_types_->getTypeMap()->end())
+	{
+		return it->second;
+	}
+	return FresnoTypes::UNKNOWN;
+}
+
+
+// If intermolecular H-bonds are to be evaluated, the _first_ atom of each pair must be a ligand atom and the second one a receptor atom.
+// This is automatically done this way by ScoringFunction::createNonbondedPairVector()
+void HydrogenBond::update(const vector<std::pair<Atom*, Atom*> >& pair_vector)
+{
+	possible_hydrogen_bonds_.clear();
+
+	for (vector < std::pair < Atom*, Atom* > > ::const_iterator it = pair_vector.begin(); it != pair_vector.end(); it++)
+	{
+		// is there exactly one hydrogen? (tested here for speed-up only)
+		bool h1 = (it->first->getElement().getSymbol() == "H");
+		bool h2 = (it->second->getElement().getSymbol() == "H");
+		if ( (!h1 && !h2) || (h1 && h2) )
+		{
+			continue;
+		}
+
+		// is there a hydrogen that is part of the ligand?
+		bool ligand_hydrogen = h1;
+
+		// HydrogenBonds with ligand-hydrogens cannot be precalculated (no donor-atom)
+		if (mode_ == RECEPTOR_HYDROGENS && ligand_hydrogen)
+		{
+			continue;
+		}
+
+		// Scores for HydrogenBonds with receptor-hydrogens have already been precalculated by different HydrogenBond-component and are part of the score-grids
+		else if (mode_ == LIGAND_HYDROGENS && !ligand_hydrogen)
+		{
+			continue;
+		}
+
+		int first_type = getType(it->first);
+		int second_type = getType(it->second);
+		if (first_type == FresnoTypes::UNKNOWN || second_type == FresnoTypes::UNKNOWN)
+		{
+			continue;
+		}
+
+		if ( first_type == FresnoTypes::HBOND_HYDROGEN
+			&& (second_type == FresnoTypes::HBOND_ACCEPTOR_DONOR
+			|| second_type == FresnoTypes::HBOND_ACCEPTOR) )
+
+		{
+			possible_hydrogen_bonds_.push_back(*it);
+		}
+
+		else if ( second_type == FresnoTypes::HBOND_HYDROGEN
+			&& (first_type == FresnoTypes::HBOND_ACCEPTOR_DONOR
+			|| first_type == FresnoTypes::HBOND_ACCEPTOR) )
+
+		{
+			possible_hydrogen_bonds_.push_back(make_pair(it->second, it->first));
+		}
+	}
+
+	if (verbosity_ > 8)
+	{
+		Log.info() << "HydrogenBond update() statistics:" << std::endl;
+		Log.info() << "Found " << possible_hydrogen_bonds_.size()
+				<< " possible hydrogen bonds" << std::endl << std::endl;
+	}
+}
+
+
+double HydrogenBond::updateScore()
 {
 
-	const char* HydrogenBond::Option::HB_IDEAL_LENGTH = "hb_ideal_length";
-	const char* HydrogenBond::Option::HB_IDEAL_ANGLE = "hb_ideal_angle";
-	const char* HydrogenBond::Option::HB_DIST_LOWER = "hb_dist_lower";
-	const char* HydrogenBond::Option::HB_DIST_UPPER = "hb_dist_upper";
-	const char* HydrogenBond::Option::HB_ANG_LOWER = "hb_ang_lower";
-	const char* HydrogenBond::Option::HB_ANG_UPPER = "hb_ang_upper";
-	const char* HydrogenBond::Option::VERBOSITY = "verbosity";
+#ifdef DEBUG
+	Timer timer;
+	timer.start();
+	Molecule debug_molecule;
+#endif
 
-	const float HydrogenBond::Default::HB_IDEAL_LENGTH = 1.85;
-	const float HydrogenBond::Default::HB_IDEAL_ANGLE = 180;
-	const float HydrogenBond::Default::HB_DIST_LOWER = 0.25;
-	const float HydrogenBond::Default::HB_DIST_UPPER = 0.65;
-	const float HydrogenBond::Default::HB_ANG_LOWER = 30;
-	const float HydrogenBond::Default::HB_ANG_UPPER = 80;
-	const Size HydrogenBond::Default::VERBOSITY = 0;
+	Size verbosity
+		 = getScoringFunction()->getOptions().getInteger(Option::VERBOSITY);
 
+	score_ = 0.0;
+	float val = 0.0;
+	float distance;
+	float angle;
+	const Atom* hydrogen;
+	const Atom* acceptor;
+	Vector3 h_bond;
+	Vector3 h_connection;
 
-	HydrogenBond::HydrogenBond()
-		
-		:	ScoringComponent(),
-			possible_hydrogen_bonds_()
+	// iterate over all possible hydrogen bond std::pairs
+	vector<pair<const Atom*, const Atom*> >::const_iterator it;
+	for (it = possible_hydrogen_bonds_.begin(); it != possible_hydrogen_bonds_.end(); ++it)
 	{
-		// set component name
-		setName("SLICK HydrogenBond");
-	}
+		hydrogen = it->first;
 
+		// we could check for multiple scoring here, but it would cost a lot
+		// of performance.
+		acceptor = it->second;
 
-	HydrogenBond::HydrogenBond(ScoringFunction& sf)
-		
-		:	ScoringComponent(sf),
-			possible_hydrogen_bonds_()
-	{
-		// set component name
-		setName("SLICK HydrogenBond");
-	}
+		// h_bond is the vector of the hbond
+		h_bond = acceptor->getPosition() - hydrogen->getPosition();
+		distance = fabs(ideal_hbond_length_ - h_bond.getLength());
 
-
-	HydrogenBond::HydrogenBond(const HydrogenBond& hb)
-		
-		:	ScoringComponent(hb),
-			possible_hydrogen_bonds_(hb.possible_hydrogen_bonds_),
-			h_bond_distance_lower_(hb.h_bond_distance_lower_),
-			h_bond_distance_upper_(hb.h_bond_distance_upper_),
-			h_bond_angle_lower_(hb.h_bond_angle_lower_),
-			h_bond_angle_upper_(hb.h_bond_angle_upper_)
-	{
-	}
-
-
-	HydrogenBond::~HydrogenBond()
-		
-	{
-		clear();
-	}
-
-
-	void HydrogenBond::clear()
-		
-	{
-		possible_hydrogen_bonds_.clear();
-		h_bond_distance_lower_ = 0.0;
-		h_bond_distance_upper_ = 0.0;
-		h_bond_angle_lower_ = 0.0;
-		h_bond_angle_upper_ = 0.0;
-		// ?????
-		// ScoringComponent does not comply to the OCI
-		// ScoringComponent::clear();
-	}
-
-
-	bool HydrogenBond::setup()
-		
-	{
-
-		Timer timer;
-		timer.start();
-
-		ScoringFunction* scoring_function = getScoringFunction();
-		if (scoring_function == 0)
+		// if the distance is too large, the product of g1 and g2 is zero, so
+		// we can skip the rest
+		if (distance <= h_bond_distance_upper_)
 		{
-			Log.error() << "HydrogenBond::setup(): "
-				<< "component not bound to scoring function." << std::endl;
-			return false;
-		}
+			// calculate g1
+			val = base_function_->calculate(distance,
+				h_bond_distance_lower_, h_bond_distance_upper_);
 
-		// clear the vector of possible hydrogen bonds
-		possible_hydrogen_bonds_.clear();
-
-    Options& options = getScoringFunction()->options;
-
-		ideal_hbond_length_ 
-			= options.setDefaultReal(HydrogenBond::Option::HB_IDEAL_LENGTH,
-					HydrogenBond::Default::HB_IDEAL_LENGTH);
-		ideal_hbond_angle_
-			= options.setDefaultReal(HydrogenBond::Option::HB_IDEAL_ANGLE,
-					HydrogenBond::Default::HB_IDEAL_ANGLE);
-		h_bond_distance_lower_
-			= options.setDefaultReal(HydrogenBond::Option::HB_DIST_LOWER,
-					HydrogenBond::Default::HB_DIST_LOWER);
-		h_bond_distance_upper_
-			= options.setDefaultReal(HydrogenBond::Option::HB_DIST_UPPER,
-					HydrogenBond::Default::HB_DIST_UPPER);
-		h_bond_angle_lower_
-			= options.setDefaultReal(HydrogenBond::Option::HB_ANG_LOWER,
-					HydrogenBond::Default::HB_ANG_LOWER);
-		h_bond_angle_upper_
-			= options.setDefaultReal(HydrogenBond::Option::HB_ANG_UPPER,
-					HydrogenBond::Default::HB_ANG_UPPER);
-		Size verbosity
-			= options.setDefaultInteger(HydrogenBond::Option::VERBOSITY,
-					HydrogenBond::Default::VERBOSITY);
-
-		FresnoTypes fresno_types_class(*this);
-		// const HashMap<const Atom*, Size>& fresno_types 
-		//	= fresno_types_class.getTypeMap();
-		fresno_types = fresno_types_class.getTypeMap();
-
-		// two times quadratic run time. not nice.
-
-		Molecule* A = getScoringFunction()->getReceptor();
-		Molecule* B = getScoringFunction()->getLigand();
-
-		AtomConstIterator A_it = A->beginAtom();
-		AtomConstIterator B_it;
-
-		for (; +A_it; ++A_it)
-		{
-			if (fresno_types.has(&*A_it))
+			/// Use partial charges for detection of strong hydrogen-bonds.
+			/// Maximal charge-difference will result in score being multiplied by three.
+			if (charge_evaluation_enabled_)
 			{
-				if (fresno_types[&*A_it] == FresnoTypes::HBOND_HYDROGEN)
+				double charge1 = hydrogen->getCharge();
+				double charge2 = acceptor->getCharge();
+				if ((charge1 < 0 && charge2 > 0) || (charge1 > 0 && charge2 < 0))
 				{
-					for (B_it = B->beginAtom(); +B_it; ++B_it)
-					{
-						if (fresno_types.has(&*B_it))
-						{
-							if ((fresno_types[&*B_it] == FresnoTypes::HBOND_ACCEPTOR_DONOR)
-									|| (fresno_types[&*B_it] == FresnoTypes::HBOND_ACCEPTOR))
-							{
-								possible_hydrogen_bonds_.push_back(std::pair<const Atom*, const Atom*>(&*A_it, &*B_it));
-								if (verbosity >= 90)
-								{
-									Log.info() << "found possible HB: " 
-										<< A_it->getBond(0)->getPartner(*A_it)->getFullName() 
-										<< "---"
-										<< A_it->getFullName() << "..." << B_it->getFullName()
-										<< " (length: " 
-										<< (A_it->getPosition() - B_it->getPosition()).getLength() 
-										<< " A) " 
-										<< std::endl;
-								}
-							}
-						}
-					}
+					double abs_charge_diff = fabs(charge2-charge1);
+					if (abs_charge_diff > 2) abs_charge_diff = 2;
+					if (abs_charge_diff > 1) abs_charge_diff = 1+(1-abs_charge_diff)*2;
+					val *= abs_charge_diff;
+					cout<<"hb factor = "<<abs_charge_diff<<endl;
 				}
 			}
-		}
 
-		for (B_it = B->beginAtom(); +B_it; ++B_it)
-		{
-			if (fresno_types.has(&*B_it))
+			// If this component is to be precalculated for a grid,
+			/// use distance only if probe-atom is a hydrogen.
+			/// If probe-atom is donor atom, angle-dependend score can be precalculated.
+			if (gridable_ && hydrogen->countBonds() == 0)
 			{
-				if (fresno_types[&*B_it] == FresnoTypes::HBOND_HYDROGEN)
+				score_ += val;
+				continue;
+			}
+
+			// calculate the angle of the hbond. It is necessary to find out
+			// which one of the atoms is the actual hydrogen in order to
+			// calculate the vector of the connection (in contrast to h bond)
+			// of the hydrogen to the molecule it is attached to
+			if (hydrogen->getElement().getSymbol() == "H")
+			{
+				h_connection =
+					hydrogen->getBond(0)->getPartner(*hydrogen)->getPosition()
+					- hydrogen->getPosition();
+			}
+			else // PARANOIA
+			{
+				throw BALL::Exception::GeneralException(__FILE__, __LINE__, "HydrogenBond::updateScore() error!", "black magic: hydrogen bond without hydrogens");
+			}
+
+
+			// angle is the angle of the h bond
+			angle = ideal_hbond_angle_ - h_bond.getAngle(h_connection).toDegree();
+
+			// if angle is too large, skip the rest
+			if (angle <= h_bond_angle_upper_)
+			{
+				val *= base_function_->calculate(angle,
+					h_bond_angle_lower_, h_bond_angle_upper_);
+
+				if (scoring_function_->storeInteractionsEnabled())
 				{
-					for (A_it = A->beginAtom(); +A_it; ++A_it)
-					{
-						if (fresno_types.has(&*A_it))
-						{
-							if ((fresno_types[&*A_it] == FresnoTypes::HBOND_ACCEPTOR_DONOR)
-									|| (fresno_types[&*A_it] == FresnoTypes::HBOND_ACCEPTOR))
-							{
-								possible_hydrogen_bonds_.push_back(std::pair<const Atom*, const Atom*>(&*B_it, &*A_it));
-								if (verbosity >= 90)
-								{
-									Log.info() << "found possible HB: " 
-										<< B_it->getBond(0)->getPartner(*B_it)->getFullName() << "-"
-										<< B_it->getFullName() << "..." << A_it->getFullName()
-										<< " (length: " 
-										<< (B_it->getPosition() - A_it->getPosition()).getLength() 
-										<< " A) " 
-										<< std::endl;
-								}
-							}
-						}
-					}
+					// negative score for good pose ...
+					double scaled_atom_score = -val;
+					scaleScore(scaled_atom_score);
+					Atom* a1 = const_cast<Atom*>(hydrogen);
+					Atom* a2 = const_cast<Atom*>(acceptor);
+					a1->addInteraction(acceptor, "HB", scaled_atom_score);
+					a2->addInteraction(hydrogen, "HB", scaled_atom_score);
 				}
+
+				score_ += val;
 			}
 		}
-
-		if (verbosity > 8)
-		{
-			Log.info() << "HydrogenBond setup statistics:" << std::endl;
-			Log.info() << "Found " << possible_hydrogen_bonds_.size() 
-				<< " possible hydrogen bonds" << std::endl << std::endl;
-		}
-
-		timer.stop();
-		Log.info() << "HydrogenBond::setup(): "
-			<< timer.getCPUTime() << " s" << std::endl;
-
-		return(true);
-
 	}
 
-
-	const HashMap<const Atom*, Size>& HydrogenBond::getFresnoTypes()
-		
+	if (verbosity > 0)
 	{
-		return(fresno_types);
+		Log.info() << "HB: energy is " << score_ << std::endl;
 	}
 
+	// we want a negative score for a good pose, thus we will use the negative of the value computed above
+	score_ *= -1;
 
-	double HydrogenBond::calculateScore()
-		
-	{
+	scaleScore();
 
-		Timer timer;
-		timer.start();
-
-#ifdef DEBUG
-		Molecule debug_molecule;
-#endif
-
-		Size verbosity 
-			= getScoringFunction()->options.getInteger(Option::VERBOSITY);
-
-		score_ = 0.0;
-		float val = 0.0;
-		float distance;
-		float angle;
-		const Atom* hydrogen;
-		const Atom* acceptor;
-		Vector3 h_bond;
-		Vector3 h_connection;
-
-		// iterate over all possible hydrogen bond std::pairs
-		::vector< std::pair<const Atom*, const Atom*> >::const_iterator it;
-		for (it = possible_hydrogen_bonds_.begin();
-			it != possible_hydrogen_bonds_.end();
-			++it)
-		{
-			hydrogen = it->first;
-			// we could check for multiple scoring here, but it would cost a lot
-			// of performance. 
-			acceptor = it->second;
-
-			// h_bond is the vector of the hbond
-
-			h_bond = acceptor->getPosition() - hydrogen->getPosition();
-			distance = fabs(ideal_hbond_length_ - h_bond.getLength());
-
-			// if the distance is too large, the product of g1 and g2 is zero, so
-			// we can skip the rest
-
-			if (distance <= h_bond_distance_upper_)
-			{
-				// calculate g1
-
-				val = getScoringFunction()->getBaseFunction()->calculate(distance,
-						h_bond_distance_lower_, h_bond_distance_upper_);
-
-				// calculate the angle of the hbond. It is necessary to find out
-				// which one of the atoms is the actual hydrogen in order to
-				// calculate the vector of the connection (in contrast to h bond)
-				// of the hydrogen to the molecule it is attached to
-
-				if (hydrogen->getElement().getSymbol() == "H")
-				{
-					h_connection = 
-						hydrogen->getBond(0)->getPartner(*hydrogen)->getPosition()
-						- hydrogen->getPosition();
-				}
-				// PARANOIA
-				else
-				{
-					Log.error() << "HydrogenBond::updateEnergy(): "
-						<< "black magic: hydrogen bond without hydrogens:" << std::endl
-						<< hydrogen->getFullName() << ":" << acceptor->getFullName()
-						<< std::endl;
-					continue;
-				}
-				// /PARANOIA
-
-				// angle is the angle of the h bond
-				angle = ideal_hbond_angle_ - h_bond.getAngle(h_connection).toDegree();
-
-				// if angle is too large, skip the rest
-				if (angle <= h_bond_angle_upper_)
-				{
-					val *= getScoringFunction()->getBaseFunction()->calculate(angle,
-							h_bond_angle_lower_, h_bond_angle_upper_);
-#ifdef DEBUG
-					Atom* atom_ptr_H = new Atom();
-					atom_ptr_H->setElement(PTE[Element::Fe]);
-					atom_ptr_H->setName("H");
-					atom_ptr_H->setPosition(hydrogen->getPosition());
-					atom_ptr_H->setCharge(val);
-
-					Atom* atom_ptr_acceptor = new Atom();
-					atom_ptr_acceptor->setElement(PTE[Element::Fe]);
-					atom_ptr_acceptor->setName("ACC");
-					atom_ptr_acceptor->setPosition(acceptor->getPosition());
-					atom_ptr_acceptor->setCharge(val);
-
-					Atom* atom_ptr_donor = new Atom();
-					atom_ptr_donor->setElement(PTE[Element::Fe]);
-					atom_ptr_donor->setName("DON");
-					atom_ptr_donor->setPosition(hydrogen->getBond(0)->getPartner(*hydrogen)->getPosition());
-					atom_ptr_donor->setCharge(val);
-
-					atom_ptr_H->createBond(*atom_ptr_acceptor);
-					atom_ptr_H->createBond(*atom_ptr_donor);
-
-					debug_molecule.insert(*atom_ptr_H);
-					debug_molecule.insert(*atom_ptr_acceptor);
-					debug_molecule.insert(*atom_ptr_donor);
-#endif
-
-					// Print all single energy contributions
-					if (verbosity >= 100)
-					{
-						Atom* donor = it->first->getBond(0)->getPartner(*it->first);
-						Log.info() << "HB: " << val << " " 
-							<< donor->getFullName() << "-"
-							<< it->first->getFullName();
-						if (it->first->getResidue() != 0)
-						{
-							Log.info() << "[" << it->first->getResidue()->getID()
-								<< "]";
-						}
-						Log.info() << "..."
-							<< it->second->getFullName();
-						if (it->second->getResidue() != 0)
-						{
-							Log.info() << "[" << it->second->getResidue()->getID()
-								<< "]";
-						}
-						Log.info() << " (delta d " << distance
-							<< ", delta phi " << angle << ")"
-							<< std::endl;
-					}
-					score_ += val;
-				}
-			}
-		}
-
-		if (verbosity > 0)
-		{
-			Log.info() << "HB: energy is " << score_ << std::endl;
-		}
-		
-#ifdef DEBUG
-		HINFile debug_file("HB_debug.hin", std::ios::out);
-		debug_file << debug_molecule;
-		debug_file.close();
-#endif
-
-		timer.stop();
-#ifdef DEBUG
-		Log.info() << "HydrogenBond::updateEnergy(): "
-			<< timer.getCPUTime() << " s" << std::endl;
-#endif
-
-		return(score_);
-	}
-
+	return score_;
 }

@@ -1,86 +1,149 @@
-// $id$
+/* scoringComponent.h
+*
+* Copyright (C) 2011 Marcel Schumann
+*
+* This program free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 3 of the License, or (at
+* your option) any later version.
+*
+* This program is distributed in the hope that it will be useful, but
+* WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, see <http://www.gnu.org/licenses/>.
+*/
 
-#ifndef BALL_SCORING_COMMON_SCORINGCOMPONENT
-#define BALL_SCORING_COMMON_SCORINGCOMPONENT
+// ----------------------------------------------------
+// $Maintainer: Marcel Schumann $
+// $Authors: Marcel Schumann $
+// ----------------------------------------------------
+
+#ifndef BALL_SCORING_COMMON_SCORINGCOMPONENT_H
+#define BALL_SCORING_COMMON_SCORINGCOMPONENT_H
 
 #include <BALL/DATATYPE/string.h>
+#include <BALL/SCORING/COMMON/baseFunction.h>
 #include <BALL/SCORING/COMMON/scoringFunction.h>
+
+#include <BALL/KERNEL/atom.h>
+
 
 namespace BALL
 {
-
 	class ScoringFunction;
 
-	class ScoringComponent
+	class BALL_EXPORT ScoringComponent
 	{
-
 		public:
 
-		///
-		ScoringComponent()
-			;
+			ScoringComponent();
 
-		///
-		ScoringComponent(const ScoringComponent& sc)
-			;
+			ScoringComponent(const ScoringComponent& sc);
 
-		///
-		ScoringComponent(ScoringFunction& sf)
-			;
+			ScoringComponent(ScoringFunction& sf);
 
-		///
-		virtual ~ScoringComponent()
-			;
+			/** select the base function (necessary only if the specific ScoringComponent uses it). Possible choices are 'fermi' and 'linear'. */
+			void selectBaseFunction(String function);
 
-		///
-		virtual void clear()
-			;
+			virtual ~ScoringComponent();
 
-		///
-		virtual bool setup()
-			;
+			virtual void clear();
 
-		///
-		ScoringFunction* getScoringFunction() const
-			;
+			virtual bool setup();
 
-		///
-		void setScoringFunction(ScoringFunction& sf)
-			;
+			/** Function that needs to be called once for every new ligand.\n
+			The default implementation of this base class does nothing and should be overloaded by derived classes if necessary. */
+			virtual void setupLigand();
 
-		///
-		String getName() const
-			;
+			ScoringFunction* getScoringFunction() const;
 
-		///
-		void setName(const String& name)
-			;
+			void setScoringFunction(ScoringFunction& sf);
 
-		///
-		virtual double calculateScore()
-			;
+			String getName() const;
 
-		///
-		virtual double getScore() const
-			;
+			void setName(const String& name);
 
+			virtual double calculateScore();
+
+			const String& getTypeName();
+
+			virtual double getScore() const;
+
+			/** Update this ScoringComponent using the given atom-pairs. \n
+			This function should be overloaded by all ScoringComponents */
+			virtual void update(const vector<std::pair<Atom*, Atom*> >& pair_vector);
+
+			/** Calculate the score for this component (for all interactions that have been set by the last call of update()) and return the score.\n
+			The coefficient assigned by the user to this component should be taken into account for the calculation, so that the weighted score is returned. */
+			virtual double updateScore() = 0;
+
+			virtual void setLigandIntraMolecular(bool b);
+
+			/** Is this ScoringComponent to be used to calculate an intra-molecular score for the ligand ? */
+			bool isLigandIntraMolecular();
+
+			/** Can the scores of this ScoringFunction be precomputed for a grid? */
+			bool isGridable();
+
+			/** Does this component calculate the score based on atom-atom pairs? */
+			bool isAtomPairwise();
+
+			void setCoefficient(const double& coeff);
+
+			const double& getCoefficient();
+
+			void setNormalizationParameters(double stddev, double mean);
+
+			void getNormalizationParameters(double& stddev, double& mean);
+
+			bool isEnabled();
+
+			void enable();
+
+			void disable();
 
 		protected:
+			/** Is this ScoringComponent to be used to calculate an intra-molecular score for the ligand ? */
+			bool ligand_intra_molecular_;
 
-		//_
-		ScoringFunction* scoring_function_;
-	
-		//_
-		double score_;
+			/** Can the scores of this ScoringFunction be precomputed for a grid? */
+			bool gridable_;
 
+			/** Does this component calculate the score based on atom-atom pairs? */
+			bool atom_pairwise_;
+
+			ScoringFunction* scoring_function_;
+
+			ScoringBaseFunction* base_function_;
+
+			double score_;
+
+			double coefficient_;
+
+			double stddev_;
+			double mean_;
+
+			/** multiplies the score_ with coefficient_ and, if necessary, does transformation and backtransformation */
+			void scaleScore();
+
+			/** multiplies the given score with coefficient_ and, if necessary, does transformation and backtransformation */
+			void scaleScore(double& score);
+
+			/** determines whether this ScoringComponent is enabled and should be used when ScoringFunction::update()/updateScore() is called */
+			bool enabled_;
+
+			/** an abreviation for the type of this ScoringComponent, i.e.:
+			'ES', 'vdW', 'fragSolv', 'nRot', 'HB'.\n
+			This type-name cannot be changed dynmically and is used to differentiate between the differnt types of ScoringComponents as is necessary e.g. for PharmacophoreConstraints. */
+			String type_name_;
 
 		private:
-
-		//_
-		String name_;
-
+			/** A name for this individual ScoringComponent. It can be set by use of setName() */
+			String name_;
 	};
-
 }
 
-#endif // BALL_SCORING_COMMON_SCORINGCOMPONENT
+#endif // BALL_SCORING_COMMON_SCORINGCOMPONENT_H

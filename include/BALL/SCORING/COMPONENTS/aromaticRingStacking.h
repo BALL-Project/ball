@@ -1,9 +1,28 @@
-// $id$
+/* aromaticRingStacking.h
+*
+* Copyright (C) 2011 Marcel Schumann
+*
+* This program free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 3 of the License, or (at
+* your option) any later version.
+*
+* This program is distributed in the hope that it will be useful, but
+* WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, see <http://www.gnu.org/licenses/>.
+*/
 
-// THIS IS PRELIMINARY AND UNTESTED CODE! Use at your own risk.
+// ----------------------------------------------------
+// $Maintainer: Marcel Schumann $
+// $Authors: Slick-development Team, Marcel Schumann $
+// ----------------------------------------------------
 
-#ifndef BALL_SCORING_COMPONENTS_AROMATIC_RING_STACKING_H
-#define BALL_SCORING_COMPONENTS_AROMATIC_RING_STACKING_H
+#ifndef BALL_SCORING_COMPONENTS_AROMATICRINGSTACKING_H
+#define BALL_SCORING_COMPONENTS_AROMATICRINGSTACKING_H
 
 #include <BALL/SCORING/COMMON/scoringComponent.h>
 #include <BALL/SCORING/COMMON/scoringFunction.h>
@@ -13,91 +32,92 @@
 
 namespace BALL
 {
-
-	/** 
-	*/
-
-	class AromaticRingStacking
+	class BALL_EXPORT AromaticRingStacking
 		:	public ScoringComponent
 	{
-
 		public:
+			struct Option
+			{
+				static const String VERBOSITY;
+				static const String F2F_PLANE_DISTANCE_LOWER;
+				static const String F2F_PLANE_DISTANCE_UPPER;
+				static const String F2F_LATERAL_DISPLACEMENT_LOWER;
+				static const String F2F_LATERAL_DISPLACEMENT_UPPER;
+				static const String F2E_CENTER_DISTANCE_LOWER;
+				static const String F2E_CENTER_DISTANCE_UPPER;
+				static const String SCORING_TOLERANCE;
+			};
 
-		struct Option
-		{
-			static const String VERBOSITY;
+			struct Default
+			{
+				static const Size VERBOSITY;
+				static const float F2F_PLANE_DISTANCE_LOWER;
+				static const float F2F_PLANE_DISTANCE_UPPER;
+				static const float F2F_LATERAL_DISPLACEMENT_LOWER;
+				static const float F2F_LATERAL_DISPLACEMENT_UPPER;
+				static const float F2E_CENTER_DISTANCE_LOWER;
+				static const float F2E_CENTER_DISTANCE_UPPER;
+				static const float SCORING_TOLERANCE;
+			};
 
-			static const String F2F_PLANE_DISTANCE_LOWER;
-			static const String F2F_PLANE_DISTANCE_UPPER;
-			static const String F2F_LATERAL_DISPLACEMENT_LOWER;
-			static const String F2F_LATERAL_DISPLACEMENT_UPPER;
+			AromaticRingStacking()
+				throw();
 
-			static const String F2E_CENTER_DISTANCE_LOWER;
-			static const String F2E_CENTER_DISTANCE_UPPER;
+			AromaticRingStacking(ScoringFunction& sf)
+				throw();
 
-			static const String SCORING_TOLERANCE;
-		};
+			AromaticRingStacking(const AromaticRingStacking& ars)
+				throw();
 
-		struct Default
-		{
-			static const Size VERBOSITY;
+			~AromaticRingStacking()
+				throw();
 
-			static const float F2F_PLANE_DISTANCE_LOWER;
-			static const float F2F_PLANE_DISTANCE_UPPER;
-			static const float F2F_LATERAL_DISPLACEMENT_LOWER;
-			static const float F2F_LATERAL_DISPLACEMENT_UPPER;
+			void clear();
 
-			static const float F2E_CENTER_DISTANCE_LOWER;
-			static const float F2E_CENTER_DISTANCE_UPPER;
+			virtual bool setup(Options& options)
+				throw();
 
-			static const float SCORING_TOLERANCE;
-		};
+			/** This function needs to be called once for every new ligand */
+			void setupLigand();
 
-		
-		AromaticRingStacking()
-			;
+			void update(const vector<std::pair<Atom*, Atom*> >& /*atom_pairs*/);
 
-		AromaticRingStacking(ScoringFunction& sf)
-			;
-
-		AromaticRingStacking(const AromaticRingStacking& ars)
-			;
-
-		~AromaticRingStacking()
-			;
-
-		virtual bool setup()
-			;
-
-		virtual double  calculateScore()
-			;
+			virtual double updateScore()
+				throw();
 
 		private:
+			/** A TimeStamp that is used to check during each call of update whether the receptor has been changed.\n
+			If this is the case, the ring-centers and normal-vector will be recomputed. */
+			TimeStamp update_time_stamp_;
 
-		std::vector< std::pair<const CHPI::AromaticRing*, const CHPI::AromaticRing*> > possible_interactions_;
+			std::vector< std::pair<const CHPI::AromaticRing*, const CHPI::AromaticRing*> > possible_interactions_;
 
-		std::vector<CHPI::AromaticRing> receptor_rings_;
+			std::vector<CHPI::AromaticRing*> receptor_rings_;
 
-		std::vector<CHPI::AromaticRing> ligand_rings_;
+			std::vector<CHPI::AromaticRing*> ligand_rings_;
 
-		float f2f_plane_distance_lower_;
-		float f2f_plane_distance_upper_;
-		float f2f_lateral_displacemant_lower_;
-		float f2f_lateral_displacemant_upper_;
+			float f2f_plane_distance_lower_;
+			float f2f_plane_distance_upper_;
+			float f2f_lateral_displacemant_lower_;
+			float f2f_lateral_displacemant_upper_;
+			float f2e_center_distance_lower_;
+			float f2e_center_distance_upper_;
 
-		float f2e_center_distance_lower_;
-		float f2e_center_distance_upper_;
+			//_ The tolerance for judging angles to be "equal"
+			float angle_tolerance_;
 
-		//_ The tolerance for judging angles to be "equal"
-		float angle_tolerance_;
+			float distance_cutoff_;
 
-		//_ The tolerance area for creating scores instead of simply counted
-		//_ interactions.
-		float scoring_tolerance_;
+			//_ The tolerance area for creating scores instead of simply counted
+			//_ interactions.
+			float scoring_tolerance_;
 
+			/** This component is valid only if setup() has been run and the receptor has thus been processed */
+			bool valid_;
+
+			RingPerceptionProcessor rp_;
+			AromaticityProcessor ap_;
 	};
-
 }
 
-
-#endif // BALL_MOLMEC_SLICK_SLICK_AROMATIC_RING_STACKING_H
+#endif // BALL_SCORING_COMPONENTS_AROMATICRINGSTACKING_H

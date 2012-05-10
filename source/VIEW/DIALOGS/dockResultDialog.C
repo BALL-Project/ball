@@ -9,9 +9,9 @@
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
-#include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
-#include <BALL/STRUCTURE/DOCKING/amberEvaluation.h>
-#include <BALL/STRUCTURE/DOCKING/randomEvaluation.h>
+#include <BALL/SCORING/FUNCTIONS/energeticEvaluation.h>
+#include <BALL/SCORING/FUNCTIONS/amberEvaluation.h>
+#include <BALL/SCORING/FUNCTIONS/randomEvaluation.h>
 #include <BALL/DOCKING/COMMON/dockResult.h>
 
 #include <QtGui/QTableWidget>

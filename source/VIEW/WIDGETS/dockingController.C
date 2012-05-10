@@ -13,12 +13,12 @@
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
-#include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
-#include <BALL/STRUCTURE/DOCKING/amberEvaluation.h>
-#include <BALL/STRUCTURE/DOCKING/randomEvaluation.h>
 #include <BALL/DOCKING/COMMON/dockResult.h>
 #include <BALL/DOCKING/COMMON/conformationSet.h>
 #include <BALL/DOCKING/COMMON/dockingAlgorithm.h>
+#include <BALL/SCORING/FUNCTIONS/energeticEvaluation.h>
+#include <BALL/SCORING/FUNCTIONS/amberEvaluation.h>
+#include <BALL/SCORING/FUNCTIONS/randomEvaluation.h>
 
 #ifdef BALL_HAS_FFTW
 #include <BALL/VIEW/DIALOGS/geometricFitDialog.h>

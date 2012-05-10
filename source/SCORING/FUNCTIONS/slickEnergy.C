@@ -6,7 +6,7 @@
 #include <BALL/SCORING/FUNCTIONS/slickEnergy.h>
 #include <BALL/SCORING/COMPONENTS/CHPI.h>
 #include <BALL/SCORING/COMPONENTS/hydrogenBond.h>
-#include <BALL/SCORING/COMPONENTS/vanDerWaals.h>
+#include <BALL/SCORING/COMPONENTS/vanDerWaalsSlick.h>
 #include <BALL/SCORING/COMPONENTS/nonpolarSolvation.h>
 #include <BALL/SCORING/COMPONENTS/polarSolvation.h>
 

@@ -4,7 +4,7 @@
 // $Id: slickScore.C,v 1.3 2006/05/21 18:15:29 anker Exp $
 
 #include <BALL/SCORING/FUNCTIONS/slickScore.h>
-#include <BALL/SCORING/COMPONENTS/vanDerWaals.h>
+#include <BALL/SCORING/COMPONENTS/vanDerWaalsSlick.h>
 #include <BALL/SCORING/COMPONENTS/CHPI.h>
 #include <BALL/SCORING/COMPONENTS/polarSolvation.h>
 #include <BALL/SCORING/COMPONENTS/hydrogenBond.h>

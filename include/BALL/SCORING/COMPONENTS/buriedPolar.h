@@ -1,178 +1,137 @@
-// $Id: buriedPolar.h,v 1.3 2006/05/21 17:38:39 anker Exp $
-// Molecular Mechanics: Fresno force field, lipophilic component
+/* buriedPolar.h
+*
+* Copyright (C) 2011 Marcel Schumann
+*
+* This program free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 3 of the License, or (at
+* your option) any later version.
+*
+* This program is distributed in the hope that it will be useful, but
+* WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, see <http://www.gnu.org/licenses/>.
+*/
 
-#ifndef BALL_SCORING_COMPONENTS_FRESNOBURIEDPOLAR_H
-#define BALL_SCORING_COMPONENTS_FRESNOBURIEDPOLAR_H
+// ----------------------------------------------------
+// $Maintainer: Marcel Schumann $
+// $Authors: Slick-development Team, Marcel Schumann $
+// ----------------------------------------------------
+
+#ifndef BALL_SCORING_COMPONENTS_BURIEDPOLAR_H
+#define BALL_SCORING_COMPONENTS_BURIEDPOLAR_H
 
 #include <BALL/SCORING/COMMON/scoringComponent.h>
+#include <BALL/SCORING/COMMON/scoringFunction.h>
+#include <BALL/SCORING/COMPONENTS/fresnoTypes.h>
+
 
 namespace BALL
 {
-
 	/** Fresno buried polar component.
-			{\bf Definition:} \URL{BALL/SCORING/COMPONENTS/buriedPolar.h}
+		{\bf Definition:} \URL{BALL/DOCKING/SCORING_COMPONENTS/buriedPolar.h}
 	*/
-	class BuriedPolar
+	class BALL_EXPORT BuriedPolar
 		:	public ScoringComponent
 	{
-
 		public:
-
-		/**	Option names
-		*/
-		struct Option
-		{
-
-			/**
+			/**	Option names
 			*/
-			static const char* BP_R1_OFFSET;
+			struct Option
+			{
+				static const char* BP_R1_OFFSET;
+				static const char* BP_R2_OFFSET;
+				static const char* VERBOSITY;
+			};
 
-			/**
+			/** Default values for SLICK options.
 			*/
-			static const char* BP_R2_OFFSET;
+			struct Default
+			{
+				static const float BP_R1_OFFSET;
+				static const float BP_R2_OFFSET;
+				static const Size VERBOSITY;
+			};
 
-			/**
+			/** @name	Constructors and Destructors
 			*/
-			static const char* CREATE_INTERACTIONS_FILE;
+			//@{
 
-			/**
+			/**	Constructor.
 			*/
-			static const char* VERBOSITY;
+			BuriedPolar(ScoringFunction& sf);
 
-		};
-
-		/** Default values for SLICK options.
-		*/
-		struct Default
-		{
-
-			/**
+			/**	Copy constructor
 			*/
-			static const float BP_R1_OFFSET;
+			BuriedPolar(const BuriedPolar& bp);
 
-			/**
+			/**	Destructor.
 			*/
-			static const float BP_R2_OFFSET;
+			virtual ~BuriedPolar();
 
-			/**
+			//@}
+			/**	@name	Assignment
 			*/
-			static const bool CREATE_INTERACTIONS_FILE;
+			//@{
 
-			/**
+			/** Assignment.
 			*/
-			static const Size VERBOSITY;
+			const BuriedPolar& operator = (const BuriedPolar& bp);
 
-		};
+			/** Clear method.
+			*/
+			void clear();
 
+			//@}
+			/**	@name	Setup Methods
+			*/
+			//@{
 
+			/**	Setup method.
+			*/
+			bool setup();
 
-		/** @name	Constructors and Destructors	
-		*/
-		//@{ 
+			void setupLigand();
 
-		/**	Default constructor.
-		*/
-		BuriedPolar()
-			;
+			//@}
+			/**	@name	Accessors
+			*/
+			//@{
 
-		/**	Constructor.
-		*/
-		BuriedPolar(ScoringFunction& sf)
-			;
+			/**	Calculates and returns the component's energy.
+			*/
+			double updateScore();
 
-		/**	Copy constructor
-		*/
-		BuriedPolar(const BuriedPolar& bp)
-			;
-
-		/**	Destructor.
-		*/
-		virtual ~BuriedPolar()
-			;
-
-		//@}
-		/**	@name	Assignment
-		*/
-		//@{
-
-		/** Assignment.
-		*/
-		const BuriedPolar& operator = (const BuriedPolar& bp)
-			;
-
-		/** Clear method.
-		*/
-		virtual void clear()
-			;
-
-		//@}
-		/**	@name	Predicates.
-		*/
-		//@{
-
-		bool operator == (const BuriedPolar& bp) const
-			;
-
-		//@}
-		/**	@name	Setup Methods	
-		*/
-		//@{
-
-		/**	Setup method.
-		*/
-		virtual bool setup()
-			;
-
-		//@}
-		/**	@name	Accessors	
-		*/
-		//@{
-
-		/**	Calculates and returns the component's energy.
-		*/
-		virtual double calculateScore()
-			;
-
-		//@}
+			void update(const vector<std::pair<Atom*, Atom*> >& pair_vector);
+			//@}
 
 		private:
+			AtomPairVector possible_buried_polar_interactions_;
 
-		/*_
-		*/
-		std::vector< std::pair<const Atom*, const Atom*> > possible_buried_polar_interactions_;
+			double factor_;
 
-		/*_
-		*/
-		double factor_;
+			/*_ This length will be added to the sum of the van-der-Waals radii for
+					obtaining the lower bound of the scoring function.
+			*/
+			double r1_offset_;
 
-		/*_ This length will be added to the sum of the van-der-Waals radii for
-				obtaining the lower bound of the scoring function.
-		*/
-		double r1_offset_;
+			/*_ The upper bound for the scoring function is obtained by adding a
+					constant to the lower bound.
+			*/
+			double r2_offset_;
 
-		/*_ The upper bound for the scoring function is obtained by adding a
-				constant to the lower bound.
-		*/
-		double r2_offset_;
+			Size verbosity_;
 
-		// The following two variables are only necessary if the buried polar
-		// component is meant to assign its own radii. They are unused at the
-		// moment.
+			Size getType(Atom* atom);
 
-		///
-		Molecule* bp_receptor_;
+			bool isBackboneAtom(const Atom* atom);
 
-		///
-		Molecule* bp_ligand_;
-
-		///
-		bool write_interactions_file_;
-
-		///
-		Size verbosity_;
-
+			FresnoTypes* receptor_fresno_types_;
+			FresnoTypes* ligand_fresno_types_;
 	};
-
 } // namespace BALL
 
-#endif // BALL_SCORING_COMPONENTS_FRESNOBURIEDPOLAR_H
+#endif // BALL_SCORING_COMPONENTS_BURIEDPOLAR_H

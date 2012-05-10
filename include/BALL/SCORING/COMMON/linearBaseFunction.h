@@ -1,7 +1,7 @@
 // $Id: linearBaseFunction.h,v 1.1 2005/11/21 19:27:03 anker Exp $
 
-#ifndef BALL_SCORING_COMMON_LINEARBASEFUNCTION
-#define BALL_SCORING_COMMON_LINEARBASEFUNCTION
+#ifndef BALL_SCORING_COMMON_LINEARBASEFUNCTION_H
+#define BALL_SCORING_COMMON_LINEARBASEFUNCTION_H
 
 #include <BALL/SCORING/COMMON/baseFunction.h>
 
@@ -10,7 +10,7 @@ namespace BALL
 
 	/** Linear base function
 	 */
-	class LinearBaseFunction 
+	class BALL_EXPORT LinearBaseFunction
 		: public ScoringBaseFunction
 	{
 
@@ -39,4 +39,4 @@ namespace BALL
 
 }
 
-#endif // BALL_SCORING_COMMON_LINEARBASEFUNCTION
+#endif // BALL_SCORING_COMMON_LINEARBASEFUNCTION_H

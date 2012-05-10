@@ -1,283 +1,267 @@
+/* buriedPolar.C
+ *
+ * Copyright (C) 2011 Marcel Schumann
+ *
+ * This program free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ */
+
 // $Id: buriedPolar.C,v 1.4 2006/05/21 17:38:39 anker Exp $
 // Molecular Mechanics: Fresno force field, buried polar component
+// ----------------------------------------------------
+// $Maintainer: Marcel Schumann $
+// $Authors: Slick-development Team, Marcel Schumann $
+// ----------------------------------------------------
 
 #include <BALL/SCORING/COMPONENTS/buriedPolar.h>
-#include <BALL/SCORING/TYPES/fresnoTypes.h>
+#include <BALL/SCORING/COMPONENTS/fresnoTypes.h>
+#include <BALL/KERNEL/PTE.h>
 
 #include <BALL/SYSTEM/timer.h>
 
-#define DEBUG 1
-
-#ifdef DEBUG
-#include <BALL/FORMAT/HINFile.h>
-#endif
 
 using namespace std;
+using namespace BALL;
 
-namespace BALL
+
+const char* BuriedPolar::Option::BP_R1_OFFSET = "bp_r1_offset";
+const char* BuriedPolar::Option::BP_R2_OFFSET = "bp_r2_offset";
+const char* BuriedPolar::Option::VERBOSITY = "verbosity";
+
+const float BuriedPolar::Default::BP_R1_OFFSET = 0.5;
+const float BuriedPolar::Default::BP_R2_OFFSET = 3.0;
+const Size BuriedPolar::Default::VERBOSITY = 0;
+
+
+BuriedPolar::BuriedPolar(ScoringFunction& sf)
+
+	:	ScoringComponent(sf),
+		possible_buried_polar_interactions_(),
+		r1_offset_(0.0),
+		r2_offset_(0.0)
 {
+	setName("BuriedPolar");
+	type_name_ = "BP";
+	receptor_fresno_types_ = 0;
+	ligand_fresno_types_ = 0;
+	gridable_ = false;
+}
 
-	const char* BuriedPolar::Option::BP_R1_OFFSET = "bp_r1_offset";
-	const char* BuriedPolar::Option::BP_R2_OFFSET = "bp_r2_offset";
-	const char* BuriedPolar::Option::CREATE_INTERACTIONS_FILE
-		= "BP_create_interactions_file";
-	const char* BuriedPolar::Option::VERBOSITY = "verbosity";
 
-	const float BuriedPolar::Default::BP_R1_OFFSET = 0.5;
-	const float BuriedPolar::Default::BP_R2_OFFSET = 3.0;
-	const bool BuriedPolar::Default::CREATE_INTERACTIONS_FILE = false;
-	const Size BuriedPolar::Default::VERBOSITY = 0;
+BuriedPolar::BuriedPolar(const BuriedPolar& bp)
+	:	ScoringComponent(bp),
+	possible_buried_polar_interactions_(bp.possible_buried_polar_interactions_),
+		r1_offset_(bp.r1_offset_),
+		r2_offset_(bp.r2_offset_)
+{
+	setName("BuriedPolar");
+	type_name_ = "BP";
+	receptor_fresno_types_ = 0;
+	ligand_fresno_types_ = 0;
+	gridable_ = false;
+}
 
-	BuriedPolar::BuriedPolar()
-		
-		:	ScoringComponent(),
-			possible_buried_polar_interactions_(),
-			r1_offset_(0.0),
-			r2_offset_(0.0)
+
+BuriedPolar::~BuriedPolar()
+{
+}
+
+
+void BuriedPolar::clear()
+{
+	possible_buried_polar_interactions_.clear();
+}
+
+
+bool BuriedPolar::setup()
+{
+	ScoringFunction* sf = getScoringFunction();
+	if (sf == 0)
 	{
-		// set component name
-		setName("Fresno BuriedPolar");
+		Log.error() << "BuriedPolar::setup(): "
+			<< "component not bound to force field." << endl;
+		return false;
 	}
 
+	// clear the vector of buried polar interactions
+	possible_buried_polar_interactions_.clear();
 
-	BuriedPolar::BuriedPolar(ScoringFunction& sf)
-		
-		:	ScoringComponent(sf),
-			possible_buried_polar_interactions_(),
-			r1_offset_(0.0),
-			r2_offset_(0.0)
+	Options options = getScoringFunction()->getOptions();
+
+	r1_offset_
+		 = options.setDefaultReal(BuriedPolar::Option::BP_R1_OFFSET,
+				BuriedPolar::Default::BP_R1_OFFSET);
+	r2_offset_
+		 = options.setDefaultReal(BuriedPolar::Option::BP_R2_OFFSET,
+				BuriedPolar::Default::BP_R2_OFFSET);
+
+	verbosity_
+		 = options.setDefaultInteger(BuriedPolar::Option::VERBOSITY,
+				BuriedPolar::Default::VERBOSITY);
+
+	delete receptor_fresno_types_;
+	receptor_fresno_types_ = new FresnoTypes(getScoringFunction()->getReceptor());
+
+	setupLigand();
+
+	if (verbosity_ > 2)
 	{
-		// set component name
-		setName("Fresno BuriedPolar");
+		Log.info() << "BuriedPolar setup statistics:" << endl;
+		Log.info() << "Found " << possible_buried_polar_interactions_.size()
+			<< " possible buried polar interactions" << endl << endl;
 	}
 
+	return true;
+}
 
-	BuriedPolar::BuriedPolar(const BuriedPolar& bp)
-		
-		:	ScoringComponent(bp),
-			possible_buried_polar_interactions_(bp.possible_buried_polar_interactions_),
-			r1_offset_(bp.r1_offset_),
-			r2_offset_(bp.r2_offset_)
+
+void BuriedPolar::setupLigand()
+{
+	delete ligand_fresno_types_;
+	ligand_fresno_types_ = new FresnoTypes(getScoringFunction()->getLigand());
+}
+
+
+Size BuriedPolar::getType(Atom* atom)
+{
+	HashMap<const Atom*, Size>::const_iterator it = receptor_fresno_types_->getTypeMap()->find(atom);
+	if (it != receptor_fresno_types_->getTypeMap()->end())
 	{
+		return it->second;
+	}
+	it = ligand_fresno_types_->getTypeMap()->find(atom);
+	if (it != ligand_fresno_types_->getTypeMap()->end())
+	{
+		return it->second;
+	}
+	return FresnoTypes::UNKNOWN;
+}
+
+
+bool BuriedPolar::isBackboneAtom(const Atom* atom)
+{
+	if (atom->getName() == "O" || atom->getName() == "N" || atom->getName() == "H"
+		|| atom->getName() == "C")
+	{
+		return true;
 	}
 
+	return false;
+}
 
-	BuriedPolar::~BuriedPolar()
-		
+
+void BuriedPolar::update(const vector<std::pair<Atom*, Atom*> >& pair_vector)
+{
+	possible_buried_polar_interactions_.clear();
+
+	for (vector < std::pair < Atom*, Atom* > > ::const_iterator it = pair_vector.begin(); it != pair_vector.end(); it++)
 	{
-		clear();
-	}
+		int type_A = getType(it->first);
+		if (type_A == FresnoTypes::UNKNOWN) continue;
 
+		int type_B = getType(it->second);
+		if (type_B == FresnoTypes::UNKNOWN || isBackboneAtom(it->second)) continue;
 
-	void BuriedPolar::clear()
-		
-	{
-		possible_buried_polar_interactions_.clear();
-		r1_offset_ = 0.0;
-		r2_offset_ = 0.0;
-		// ?????
-		// ScoringComponent does not comply with the OCI
-		// ScoringComponent::clear();
-	}
-
-
-	bool BuriedPolar::setup()
-		
-	{
-		Timer timer;
-		timer.start();
-
-		ScoringFunction* sf = getScoringFunction();
-		if (sf == 0)
+		if ( (((type_B == FresnoTypes::POLAR)
+				|| (type_B == FresnoTypes::HBOND_ACCEPTOR)
+				|| (type_B == FresnoTypes::HBOND_DONOR)
+				|| (type_B == FresnoTypes::HBOND_ACCEPTOR_DONOR)
+				|| (type_B == FresnoTypes::HBOND_HYDROGEN))
+				&& (type_A == FresnoTypes::LIPOPHILIC))
+			/*|| ((type_B == FresnoTypes::LIPOPHILIC)
+				&& ((type_A == FresnoTypes::POLAR)
+				|| (type_A == FresnoTypes::HBOND_ACCEPTOR)
+				|| (type_A == FresnoTypes::HBOND_DONOR)
+				|| (type_A == FresnoTypes::HBOND_ACCEPTOR_DONOR)
+				|| (type_A == FresnoTypes::HBOND_HYDROGEN)))*/ )
 		{
-			Log.error() << "BuriedPolar::setup(): "
-				<< "component not bound to force field." << endl;
-			return false;
-		}
-
-		// clear the vector of buried polar interactions
-		possible_buried_polar_interactions_.clear();
-
-    Options& options = getScoringFunction()->options;
-
-		r1_offset_
-			= options.setDefaultReal(BuriedPolar::Option::BP_R1_OFFSET,
-					BuriedPolar::Default::BP_R1_OFFSET);
-		r2_offset_
-			= options.setDefaultReal(BuriedPolar::Option::BP_R2_OFFSET,
-					BuriedPolar::Default::BP_R2_OFFSET);
-		write_interactions_file_ 
-			= options.setDefaultBool(BuriedPolar::Option::CREATE_INTERACTIONS_FILE,
-					BuriedPolar::Default::CREATE_INTERACTIONS_FILE);
-		verbosity_
-			= options.setDefaultInteger(BuriedPolar::Option::VERBOSITY,
-					BuriedPolar::Default::VERBOSITY);
-
-		FresnoTypes fresno_types_class(*this);
-		const HashMap<const Atom*, Size>& fresno_types 
-			= fresno_types_class.getTypeMap();
-
-		// quadratic run time. not nice.
-
-		Molecule* A = getScoringFunction()->getReceptor();
-		Molecule* B = getScoringFunction()->getLigand();
-
-		AtomConstIterator A_it = A->beginAtom();
-		AtomConstIterator B_it;
-		
-		Size type_A;
-		Size type_B;
-
-		for (; +A_it; ++A_it)
-		{
-			type_A = fresno_types[&*A_it];
-			for (B_it = B->beginAtom(); +B_it; ++B_it)
+			possible_buried_polar_interactions_.push_back(*it);
+			if (verbosity_ >= 10)
 			{
-				type_B = fresno_types[&*B_it];
-				if ((((type_B == FresnoTypes::POLAR)
-								|| (type_B == FresnoTypes::HBOND_ACCEPTOR)
-								|| (type_B == FresnoTypes::HBOND_DONOR)
-								|| (type_B == FresnoTypes::HBOND_ACCEPTOR_DONOR)
-								|| (type_B == FresnoTypes::HBOND_HYDROGEN))
-							&& (type_A == FresnoTypes::LIPOPHILIC))
-						|| ((type_B == FresnoTypes::LIPOPHILIC)
-							&& ((type_A == FresnoTypes::POLAR)
-								|| (type_A == FresnoTypes::HBOND_ACCEPTOR)
-								|| (type_A == FresnoTypes::HBOND_DONOR)
-								|| (type_A == FresnoTypes::HBOND_ACCEPTOR_DONOR)
-								|| (type_A == FresnoTypes::HBOND_HYDROGEN))))
-				{
-					possible_buried_polar_interactions_.push_back(pair<const Atom*, const Atom*>(&*A_it, &*B_it));
-					if (verbosity_ >= 10)
-					{
-						Log.info() << "found possible buried polar int.: " 
-							<< A_it->getFullName() << "..." << B_it->getFullName()
-							<< " (length: " 
-							<< (A_it->getPosition() - B_it->getPosition()).getLength() 
-							<< " A) " 
-							<< endl;
-					}
-				}
+				Log.info() << "found possible buried polar int.: "
+				<< it->first->getFullName() << "..." << it->second->getFullName()
+				<< " (length: "
+				<< (it->first->getPosition() - it->second->getPosition()).getLength()
+				<< " A) "
+				<< endl;
 			}
 		}
-
-		if (verbosity_ > 2)
-		{
-			Log.info() << "BuriedPolar setup statistics:" << endl;
-			Log.info() << "Found " << possible_buried_polar_interactions_.size() 
-				<< " possible buried polar interactions" << endl << endl;
-		}
-
-		timer.stop();
-		Log.info() << "BuriedPolar::setup(): " << timer.getCPUTime() << " s"
-			<< std::endl;
-
-		return(true);
-
 	}
+}
 
 
-	double BuriedPolar::calculateScore()
-		
+double BuriedPolar::updateScore()
+{
+	score_ = 0.0;
+	float val = 0.0;
+	float distance;
+	float R1;
+	float R2;
+	Atom* atom1;
+	Atom* atom2;
+
+	AtomPairVector::const_iterator it;
+	for (it = possible_buried_polar_interactions_.begin(); it != possible_buried_polar_interactions_.end(); ++it)
 	{
+		atom1 = it->first;
+		atom2 = it->second;
 
-		Timer timer;
-		timer.start();
+		R1 = atom1->getElement().getVanDerWaalsRadius()+atom2->getElement().getVanDerWaalsRadius()-1;
+		R2 = R1 + 1.5;
 
-		Molecule interactions_molecule;
+		distance = (atom1->getPosition() - atom2->getPosition()).getLength();
 
-		score_ = 0.0;
-		float val = 0.0;
-		float distance;
-		float R1;
-		float R2;
-		const Atom* atom1;
-		const Atom* atom2;
-
-		::vector< pair<const Atom*, const Atom*> >::const_iterator it;
-		for (it = possible_buried_polar_interactions_.begin();
-			it != possible_buried_polar_interactions_.end();
-			++it)
+		// if the distance is too large, the product of g1 and g2 is zero, so
+		// we can skip the rest
+		if (distance <= R2)
 		{
-			atom1 = it->first;
-			atom2 = it->second;
-
-			R1 = atom1->getRadius() + atom2->getRadius() + r1_offset_;
-			R2 = R1 + r2_offset_;
-
-			distance = (atom1->getPosition() - atom2->getPosition()).getLength();
-
-			// if the distance is too large, the product of g1 and g2 is zero, so
-			// we can skip the rest
-
-			if (distance <= R2)
+			// we could possibly speed up the next step by using the fact that the
+			// difference between R1 and R2 is constant
+			val = base_function_->calculate(distance, R1, R2);
+			if (scoring_function_->storeInteractionsEnabled())
 			{
-				// we could possibly speed up the next step by using the fact that the
-				// difference between R1 and R2 is constant
-				val = getScoringFunction()->getBaseFunction()->calculate(distance, R1, R2);
+				double scaled_atom_score = val;
+				scaleScore(scaled_atom_score);
+				atom1->addInteraction(atom2, "pol", scaled_atom_score);
+				atom2->addInteraction(atom1, "pol", scaled_atom_score);
+			}
+			score_ += val;
 
-				if (verbosity_ >= 1)
+			if (verbosity_ >= 1)
+			{
+				Log.info() << "BP: " << val << " "
+					<< atom1->getFullName() << " "
+					<< endl;
+				if (atom1->getResidue() != 0)
 				{
-					Log.info() << "BP: " << val << " "
-						<< atom1->getFullName() << " " 
-						<< endl;
-//						<< fresno_types_class.getFresnoTypeString(atom1);
-					if (atom1->getResidue() != 0)
-					{
-						Log.info() << "[" << atom1->getResidue()->getID() << "]";
-					}
-					Log.info() << "..." << atom2->getFullName() << " "
-						<< endl;
-//						<< fresno_types_class.getFresnoTypeString(atom2);
-					if (atom2->getResidue() != 0)
-					{
-						Log.info() << "[" << atom2->getResidue()->getID() << "]";
-					}
-					Log.info() << " (d " << distance << ", R1 " << R1 
-						<< ", R2 " << R2 << ")" << endl;
+					Log.info() << "[" << atom1->getResidue()->getID() << "]";
 				}
-
-				if (write_interactions_file_ == true)
+				Log.info() << "..." << atom2->getFullName() << " "
+					<< endl;
+				if (atom2->getResidue() != 0)
 				{
-					Atom* atom_ptr_L1 = new Atom();
-					atom_ptr_L1->setElement(atom1->getElement());
-					atom_ptr_L1->setName("L1");
-					atom_ptr_L1->setPosition(atom1->getPosition());
-					atom_ptr_L1->setCharge(val);
-
-					Atom* atom_ptr_L2 = new Atom();
-					atom_ptr_L2->setElement(atom2->getElement());
-					atom_ptr_L2->setName("L2");
-					atom_ptr_L2->setPosition(atom2->getPosition());
-					atom_ptr_L2->setCharge(val);
-
-					atom_ptr_L1->createBond(*atom_ptr_L2);
-
-					interactions_molecule.insert(*atom_ptr_L1);
-					interactions_molecule.insert(*atom_ptr_L2);
+					Log.info() << "[" << atom2->getResidue()->getID() << "]";
 				}
-				score_ += val;
+				Log.info() << " (d " << distance << ", R1 " << R1
+					<< ", R2 " << R2 << ")" << endl;
 			}
 		}
-
-		if (write_interactions_file_ == true)
-		{
-			HINFile debug_file("BP_debug.hin", std::ios::out);
-			debug_file << interactions_molecule;
-			debug_file.close();
-		}
-
-		if (verbosity_ > 0)
-		{
-			Log.info() << "BP: energy is " << score_ << endl;
-		}
-
-		timer.stop();
-		Log.info() << "BuriedPolar::updateEnergy(): " 
-			<< timer.getCPUTime() << " s" << std::endl;
-
-		return score_;
-
 	}
 
+	if (verbosity_ > 0)
+	{
+		Log.info() << "BP: energy is " << score_ << endl;
+	}
+
+	return score_;
 }

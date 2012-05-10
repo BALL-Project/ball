@@ -1,102 +1,255 @@
-// $Id: scoringComponent.C,v 1.1 2005/11/21 19:27:08 anker Exp $
+/* scoringComponent.C
+ *
+ * Copyright (C) 2011 Marcel Schumann
+ *
+ * This program free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ */
+
+// ----------------------------------------------------
+// $Maintainer: Marcel Schumann $
+// $Authors: Marcel Schumann $
+// ----------------------------------------------------
 
 #include <BALL/SCORING/COMMON/scoringComponent.h>
+#include <BALL/SCORING/COMMON/fermiBaseFunction.h>
+#include <BALL/SCORING/COMMON/linearBaseFunction.h>
+#include <BALL/SCORING/COMMON/scoringFunction.h>
 
-namespace BALL
+using namespace std;
+using namespace BALL;
+
+ScoringComponent::ScoringComponent()
+	:	scoring_function_(0),
+		score_(0.0),
+		name_("")
 {
+	base_function_ = new LinearBaseFunction;
+	ligand_intra_molecular_ = 0;
+	coefficient_ = 1;
+	gridable_ = 1;
+	atom_pairwise_ = 1;
+	stddev_ = 0;
+	mean_ = 0;
+	enabled_ = true;
+}
 
-	ScoringComponent::ScoringComponent()
-		
-		:	scoring_function_(0),
-			score_(0.0),
-			name_("")
+
+ScoringComponent::ScoringComponent(const ScoringComponent& sc)
+	:	scoring_function_(sc.scoring_function_),
+		score_(sc.score_),
+		name_(sc.name_)
+{
+	base_function_ = new ScoringBaseFunction(*sc.base_function_);
+	ligand_intra_molecular_ = 0;
+	coefficient_ = 1;
+	gridable_ = 1;
+	atom_pairwise_ = 1;
+	stddev_ = 0;
+	mean_ = 0;
+	enabled_ = true;
+}
+
+
+ScoringComponent::ScoringComponent(ScoringFunction& sf)
+	:	scoring_function_(&sf),
+		score_(0.0),
+		name_("")
+{
+	base_function_ = new LinearBaseFunction;
+	ligand_intra_molecular_ = 0;
+	coefficient_ = 1;
+	gridable_ = 1;
+	atom_pairwise_ = 1;
+	stddev_ = 0;
+	mean_ = 0;
+	enabled_ = true;
+}
+
+
+ScoringComponent::~ScoringComponent()
+{
+	clear();
+}
+
+
+void ScoringComponent::selectBaseFunction(String function)
+{
+	if (function == "fermi")
 	{
-		// ???
+		delete base_function_;
+		base_function_ = new FermiBaseFunction;
 	}
-
-
-	ScoringComponent::ScoringComponent(const ScoringComponent& sc)
-		
-		:	scoring_function_(sc.scoring_function_),
-			score_(sc.score_),
-			name_(sc.name_)
+	else if (function == "linear")
 	{
-		// ???
+		delete base_function_;
+		base_function_ = new LinearBaseFunction;
 	}
-
-
-	ScoringComponent::ScoringComponent(ScoringFunction& sf)
-		
-		:	scoring_function_(&sf),
-			score_(0.0),
-			name_("")
+	else
 	{
-		// ???
+		throw BALL::Exception::GeneralException(__FILE__, __LINE__, "BaseFunction selection error", "BaseFunction '"+function+"' unknown!");
 	}
+}
+
+void ScoringComponent::clear()
+{
+	delete base_function_;
+	scoring_function_ = 0;
+	score_ = 0.0;
+	name_ = "";
+}
 
 
-	ScoringComponent::~ScoringComponent()
-		
+bool ScoringComponent::setup()
+{
+	return true;
+}
+
+
+ScoringFunction* ScoringComponent::getScoringFunction() const
+{
+	return scoring_function_;
+}
+
+
+void ScoringComponent::setScoringFunction(ScoringFunction& sf)
+{
+	scoring_function_ = &sf;
+}
+
+
+String ScoringComponent::getName() const
+{
+	return name_;
+}
+
+
+void ScoringComponent::setName(const String& name)
+{
+	name_ = name;
+}
+
+double ScoringComponent::calculateScore()
+{
+	return(score_);
+}
+
+double ScoringComponent::getScore() const
+{
+	return score_;
+}
+
+void ScoringComponent::setLigandIntraMolecular(bool b)
+{
+	ligand_intra_molecular_ = b;
+}
+
+bool ScoringComponent::isLigandIntraMolecular()
+{
+	return ligand_intra_molecular_;
+}
+
+// should be overloaded by all ScoringComponents that are to be used for Scoring
+void ScoringComponent::update(const AtomPairVector& /*pair_vector*/)
+{
+	string mess="update(AtomPairVector* pair_vector) is not implemented for this ScoringComponent!! Thus this ScoringComponent can not (yet) be used!!";
+	throw BALL::Exception::GeneralException(__FILE__, __LINE__, "ScoringComponent error", mess);
+}
+
+void ScoringComponent::setCoefficient(const double& coefficient)
+{
+	coefficient_ = coefficient;
+}
+
+const double& ScoringComponent::getCoefficient()
+{
+	return coefficient_;
+}
+
+void ScoringComponent::setupLigand()
+{
+}
+
+bool ScoringComponent::isGridable()
+{
+	return gridable_;
+}
+
+bool ScoringComponent::isAtomPairwise()
+{
+	return atom_pairwise_;
+}
+
+void ScoringComponent::setNormalizationParameters(double stddev, double mean)
+{
+	stddev_ = stddev;
+	mean_ = mean;
+}
+
+void ScoringComponent::getNormalizationParameters(double& stddev, double& mean)
+{
+	stddev = stddev_;
+	mean = mean_;
+}
+
+void ScoringComponent::scaleScore()
+{
+	scaleScore(score_);
+}
+
+void ScoringComponent::scaleScore(double& score)
+{
+	// if desired, transform score
+	if (stddev_ > 0.01)
 	{
-		clear();
-	}
-
-
-	void ScoringComponent::clear()
+		score -= mean_;
+		score /= stddev_;
 		
-	{
-		scoring_function_ = 0;
-		score_ = 0.0;
-		name_ = "";
+		score *= coefficient_;
+
+		// BACK-transform accoring to normalization of the binding free energies of the traning data set
+		if (scoring_function_ != 0)
+		{
+			double act_stddev = scoring_function_->getExpEnergyStddev();
+			if (act_stddev > 0.01) score *= act_stddev;
+		}
+		else
+		{
+			throw BALL::Exception::GeneralException(__FILE__, __LINE__, "ScoringComponent update error", "This components must be bound to a ScoringFunction before a score can be calculated!");
+		}
 	}
-
-
-	bool ScoringComponent::setup()
-		
+	else
 	{
-		return(true);
+		score *= coefficient_;
 	}
+}
 
+void ScoringComponent::enable()
+{
+	enabled_ = true;
+}
 
-	ScoringFunction* ScoringComponent::getScoringFunction() const
-		
-	{
-		return(scoring_function_);
-	}
+void ScoringComponent::disable()
+{
+	enabled_ = false;
+}
 
+bool ScoringComponent::isEnabled()
+{
+	return enabled_;
+}
 
-	void ScoringComponent::setScoringFunction(ScoringFunction& sf)
-		
-	{
-		scoring_function_ = &sf;
-	}
-
-
-	String ScoringComponent::getName() const
-		
-	{
-		return(name_);
-	}
-
-
-	void ScoringComponent::setName(const String& name)
-		
-	{
-		name_ = name;
-	}
-
-
-	double ScoringComponent::calculateScore()
-		
-	{
-		return(score_);
-	}
-
-
-	double ScoringComponent::getScore() const
-		
-	{
-		return(score_);
-	}
-
+const String& ScoringComponent::getTypeName()
+{
+	return type_name_;
 }

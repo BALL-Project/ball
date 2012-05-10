@@ -1,7 +1,7 @@
 // $Id: fermiBaseFunction.h,v 1.1 2005/11/21 19:27:02 anker Exp $
 
-#ifndef BALL_SCORING_COMMON_FERMIBASEFUNCTION
-#define BALL_SCORING_COMMON_FERMIBASEFUNCTION
+#ifndef BALL_SCORING_COMMON_FERMIBASEFUNCTION_H
+#define BALL_SCORING_COMMON_FERMIBASEFUNCTION_H
 
 #include <BALL/SCORING/COMMON/baseFunction.h>
 
@@ -10,7 +10,7 @@ namespace BALL
 
 	/** Sigmoidal base function
 	 */
-	class FermiBaseFunction
+	class BALL_EXPORT FermiBaseFunction
 		: public ScoringBaseFunction
 	{
 
@@ -59,4 +59,4 @@ namespace BALL
 	};
 
 }
-#endif // BALL_SCORING_COMMON_FERMIBASEFUNCTION
+#endif // BALL_SCORING_COMMON_FERMIBASEFUNCTION_H
