@@ -309,6 +309,12 @@
 // Define whether BALL was built with rtfact support
 #cmakedefine BALL_HAS_RTFACT
 
+// OpenEye
+#cmakedefine BALL_HAS_OPENEYE
+
+//OpenBabel
+#cmakedefine BALL_HAS_OPENBABEL
+
 // QT options
 #define BALL_QT_HAS_THREADS // Qt now always has thread support
 #define QT_THREAD_SUPPORT
