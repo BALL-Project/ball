@@ -75,6 +75,8 @@ namespace BALL
 		*/
 		virtual ~GenericMolFile();
 		
+		virtual void close();
+
 		//@}
 		/**	@name Assignment
 		*/
@@ -85,6 +87,16 @@ namespace BALL
 		 *  @throw Exception::FileNotFound if the file could not be opened
 		 */
 		const GenericMolFile& operator = (const GenericMolFile& rhs);
+
+		/** Define the input file to be a temporary file (e.g. an unzipped file).
+		In this case, the input file will be deleted when this GenericMolFile is closed. */
+		void defineInputAsTemporary(bool b = true);
+
+		/** Enable compression of the output file.
+		If enabled, the output-file will be gzip'ed. Output will be stored under the specified filename and the original (uncompressed) output file will be deleted. */
+		void enableOutputCompression(String zipped_filename);
+
+		bool isCompressedFile();
 
 		//@}
 		/**	@name Reading and Writing of Kernel Datastructures
@@ -178,6 +190,11 @@ namespace BALL
 				prior to writing a system.
 		*/
 		virtual void initWrite_();
+
+		bool input_is_temporary_;
+		bool compress_output_;
+		bool gmf_is_closed_;
+		String zipped_filename_;
 		
 	};
 } // namespace BALL
