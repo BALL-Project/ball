@@ -14,6 +14,7 @@ SET(SOURCES_LIST
 	extractors.C
 	fragment.C
 	global.C
+	molecularInteractions.C
 	molecule.C
 	nucleicAcid.C
 	nucleotide.C
