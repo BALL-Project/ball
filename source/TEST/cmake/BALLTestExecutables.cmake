@@ -99,8 +99,76 @@ SET(BALL_CONCEPTS_TESTS
 )
 
 SET(BALL_DOCKING_TESTS
-	ScoringFunction_test
+	IMGDock_test
+	ConformationSet_test
+	Conformation_test
+	Constraints_test
+	DockProblem_test
+	DockResult_test
+	DockingAlgorithm_test
+	EvolutionaryDocking_test
+	FlexDefinition_test
+	FlexibleMolecule_test
+	Genes_test
+	GeneticAlgorithm_test
+	GeneticIndividual_test
+	GeometricFit_test
+	GridAnalysis_test
 	MolDB_test
+	Parameter_test
+	Receptor_test
+	Result_test
+	RotateBond_test
+	RotateBonds_test
+	SideChainOptimizer_test
+	StaticLigandFragment_test
+	StructurePreparer_test
+)
+
+SET(BALL_SCORING_TESTS
+	CHPI_test
+	MMScoring_test
+	PBScoring_test
+	PB_test
+	PLPScoring_test
+	PLP_test
+	AdvElectrostatic_test
+	AmberEvaluation_test
+	AromaticRingStacking_test
+	BaseFunction_test
+	BurialDepth_test
+	BuriedPolar_test
+	DiffGridBasedScoring_test
+	DiffScoringFunction_test
+	Electrostatic_test
+	EnergeticEvaluation_test
+	FermiBaseFunction_test
+	ForceFieldEvaluation_test
+	FragmentationalSolvation_test
+	FresnoTypes_test
+	GridBasedScoring_test
+	GridedMM_test
+	GridedPLP_test
+	HydrogenBond_test
+	LinearBaseFunction_test
+	Lipophilic_test
+	Polarity_test
+	RandomEvaluation_test
+	Rescorer_test
+	Rescoring1D_test
+	Rescoring3D_test
+	Rescoring4D_test
+	Rescoring_test
+	RotationalEntropy_test
+	ScoreGridSet_test
+	ScoringComponent_test
+	ScoringFunction_test
+	ScoringOptimizer_test
+	SlickEnergy_test
+	SlickScore_test
+	Solvation_test
+	VanDerWaalsSlick_test
+	VanDerWaals_test
 )
 
 SET(BALL_KERNEL_TESTS
@@ -241,7 +309,6 @@ SET(BALL_STRUCTURE_TESTS
 	SecondaryStructureProcessor_test
 	UCK_test
 	BuildBondsProcessor_test
-	DockResult_test
 #	MoleculeAssembler_test
 #	SDGenerator_test
 #	RingAnalyser_test
@@ -320,6 +387,7 @@ SET(BALL_TESTS
 	BALL_DATATYPE_TESTS
 	BALL_CONCEPTS_TESTS
 	BALL_DOCKING_TESTS
+	BALL_SCORING_TESTS
 	BALL_KERNEL_TESTS
 	BALL_MOLMEC_TESTS
 	BALL_NMR_TESTS
