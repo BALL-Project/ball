@@ -18,6 +18,11 @@ namespace BALL
 		: AtomContainer(molecule, deep)
 	{
 	}
+
+	Molecule::Molecule(const AtomContainer& atomContainer, bool deep)
+		: AtomContainer(atomContainer, deep)
+	{
+	}
 		
 	Molecule::Molecule(const String& name)
 		: AtomContainer(name)

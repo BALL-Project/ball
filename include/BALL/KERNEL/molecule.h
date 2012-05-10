@@ -57,6 +57,10 @@ namespace BALL
 		/** Copy constructor. 
 		*/
 		Molecule(const Molecule& molecule, bool deep = true);
+
+		/** Constructor using an AtomContainer.
+		 */
+		Molecule(const AtomContainer& atomContainer, bool deep = true);
 	
 		/** Detailled constructor. 
 		*/
