@@ -5,6 +5,7 @@ SET(SOURCES_LIST
 	bruker1DFile.C
 	bruker2DFile.C
 	commandlineParser.C
+	dockResultFile.C
 	CCP4File.C
 	CIFFile.C
 	DCDFile.C
@@ -17,6 +18,7 @@ SET(SOURCES_LIST
 	JCAMPFile.C
 	KCFFile.C
 	lineBasedFile.C
+	molDB.C
 	MOLFile.C
 	SDFile.C
 	MOL2File.C
