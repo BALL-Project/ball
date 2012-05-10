@@ -26,19 +26,17 @@
 #include <BALL/QSAR/snBModel.h>
 #include <BALL/QSAR/nBModel.h>
 
-#ifdef BALL_HAS_LAPACK
-	#include <BALL/QSAR/allModel.h>
-	#include <BALL/QSAR/gpModel.h>
-	#include <BALL/QSAR/knnModel.h>
-	#include <BALL/QSAR/kpcrModel.h>
-	#include <BALL/QSAR/kplsModel.h>
-	#include <BALL/QSAR/ldaModel.h>
-	#include <BALL/QSAR/mlrModel.h>
-	#include <BALL/QSAR/oplsModel.h>
-	#include <BALL/QSAR/pcrModel.h>
-	#include <BALL/QSAR/plsModel.h>
-	#include <BALL/QSAR/rrModel.h>
-#endif
+#include <BALL/QSAR/allModel.h>
+#include <BALL/QSAR/gpModel.h>
+#include <BALL/QSAR/knnModel.h>
+#include <BALL/QSAR/kpcrModel.h>
+#include <BALL/QSAR/kplsModel.h>
+#include <BALL/QSAR/ldaModel.h>
+#include <BALL/QSAR/mlrModel.h>
+#include <BALL/QSAR/oplsModel.h>
+#include <BALL/QSAR/pcrModel.h>
+#include <BALL/QSAR/plsModel.h>
+#include <BALL/QSAR/rrModel.h>
 
 using namespace std;
 
@@ -66,7 +64,6 @@ namespace BALL
 			default_gridsearch_par2_start = -0.25;
 			
 			/// add new Model classes here:
-#ifdef BALL_HAS_LAPACK
 			RegistryEntry r0(0, 1, "Multiple Linear Regression", "MLR", (CreateMethod) &ModelFactory<MLRModel>::create);
 			addEntry(r0, 0);
 			
@@ -131,7 +128,6 @@ namespace BALL
 			r6.parameterNames.push_back("lambda");
 			r6.parameterDefaults.push_back(0.03);
 			addEntry(r6, 9);
-#endif
 
 		#ifdef BALL_HAS_LIBSVM
 			RegistryEntry r9(1, 1, "Support Vector Regression", "SVR", (CreateKernel1) &ModelFactory<LibsvmModel>::createKernel1, NULL);
@@ -149,12 +145,10 @@ namespace BALL
 			r9.parameterDefaults.push_back(1);
 			addEntry(r9, 10);
 		#endif
-#ifdef BALL_HAS_LAPACK
 			RegistryEntry r7(0, 0, "Linear Discriminant Analysis", "LDA", (CreateMethod) &ModelFactory<LDAModel>::create);
 			r7.parameterNames.push_back("lambda");
 			r7.parameterDefaults.push_back(0.03);
 			addEntry(r7, 11);
-#endif
 		// 	RegistryEntry r8(0, 0, "Logistical Regression", "Logit", (CreateMethod) &ModelFactory<LogitModel>::create);
 		// 	addEntry(r8, 12);
 			
