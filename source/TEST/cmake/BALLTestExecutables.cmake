@@ -98,6 +98,11 @@ SET(BALL_CONCEPTS_TESTS
 	RandomAccessIterator_test
 )
 
+SET(BALL_DOCKING_TESTS
+	ScoringFunction_test
+	MolDB_test
+)
+
 SET(BALL_KERNEL_TESTS
 	PTE_test
 	Atom_test
@@ -175,6 +180,7 @@ SET(BALL_FORMATS_TESTS
 	Bruker1DFile_test
 	Bruker2DFile_test
 	CCP4File_test
+	DockResultFile_test
 	INIFile_test
 	JCAMPFile_test
 	KCFFile_test
@@ -243,6 +249,12 @@ SET(BALL_STRUCTURE_TESTS
 	RotamerLibrary_test
 )
 
+IF(BALL_HAS_OPENBABEL)
+	LIST(APPEND BALL_STRUCTURE_TESTS
+		OBinterface_test
+	)
+ENDIF()
+
 SET(BALL_SOLVATION_TESTS
 	PoissonBoltzmann_test
 	SolventDescriptor_test
@@ -307,6 +319,7 @@ SET(BALL_TESTS
 	BALL_SYSTEM_TESTS
 	BALL_DATATYPE_TESTS
 	BALL_CONCEPTS_TESTS
+	BALL_DOCKING_TESTS
 	BALL_KERNEL_TESTS
 	BALL_MOLMEC_TESTS
 	BALL_NMR_TESTS
