@@ -730,6 +730,9 @@ namespace BALL
 		*/
 		Size substitute(const String& to_replace, const String& replacing);
 
+		/** Substitute *all* occurences of <b>to_replace</b> by the content of <b>replacing</b>. */
+		void substituteAll(const String& to_replace, const String& replacing);
+
 		//@}
 
 		/**	@name	Predicates 

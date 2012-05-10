@@ -1347,6 +1347,14 @@ namespace BALL
 
 		return ((found == string::npos) ? EndPos : (Size)found);
 	}
+
+
+	void String::substituteAll(const String& to_replace, const String& replacing)
+	{
+		while(substitute(to_replace,replacing)!=EndPos)
+		{
+		}
+	}
  
 
 	void String::validateIndex_(Index& index) const
