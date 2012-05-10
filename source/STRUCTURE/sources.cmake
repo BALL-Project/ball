@@ -22,6 +22,7 @@ SET(SOURCES_LIST
 	HBondProcessor.C
 	hybridisationProcessor.C
 	kekulizer.C
+	molecularSimilarity.C
 	mutator.C
 	nucleotideMapping.C
 	numericalSAS.C
@@ -35,6 +36,7 @@ SET(SOURCES_LIST
 	RDFSection.C
 	reducedSurface.C
 	residueChecker.C
+	rGroupAssembler.C
 	ringAnalyser.C
 	RSEdge.C
 	RSFace.C
@@ -66,6 +68,10 @@ SET(SOURCES_LIST
 	rotamerLibrary.C
 	RMSDMinimizer.C
 )
+
+IF(BALL_HAS_OPENBABEL OR BALL_HAS_OPENEYE)
+	LIST(APPEND SOURCES_LIST logP.C)
+ENDIF()
 
 ADD_BALL_SOURCES("STRUCTURE" "${SOURCES_LIST}")
 
