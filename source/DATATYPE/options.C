@@ -38,6 +38,63 @@ namespace BALL
 
 	Options::~Options()
 	{
+		clear();
+	}
+
+	void Options::addParameterDescription(const String& key, String description, ParameterType type, list<String>* allowed_values)
+	{
+		ParameterDescription td;
+		td.name = key;
+		td.description = description;
+		td.type = type;
+		if (allowed_values) td.allowed_values = *allowed_values;
+		descriptions_.insert(make_pair(key, td));
+	}
+
+	const ParameterDescription* Options::getParameterDescription(const String& key) const
+	{
+		StringHashMap<ParameterDescription>::ConstIterator it = descriptions_.find(key);
+
+		if (it == descriptions_.end())
+		{
+			return NULL;
+		}
+		else
+		{
+			return &it->second;
+		}
+	}
+
+	Options* Options::createSubcategory(String name)
+	{
+		StringHashMap<Options*>::Iterator it = subcategories_.find(name);
+		if (it == subcategories_.end())
+		{
+			Options* child_options = new Options;
+			child_options->name_ = name;
+			it = subcategories_.insert(make_pair(name, child_options)).first;
+		}
+		return it->second;
+	}
+
+	Options* Options::getSubcategory(String name)
+	{
+		StringHashMap<Options*>::Iterator it = subcategories_.find(name);
+		if (it != subcategories_.end())
+		{
+			return it->second;
+		}
+		return NULL;
+	}
+
+	StringHashMap<Options*>::Iterator Options::beginSubcategories()
+	{
+		return subcategories_.begin();
+	}
+
+	StringHashMap<Options*>::Iterator Options::endSubcategories()
+	{
+		return subcategories_.end();
 	}
 
 	bool Options::isReal(const String& key) const
@@ -485,6 +542,13 @@ namespace BALL
 	{
 		name_ = "";
 		StringHashMap<String>::clear();
+		descriptions_.clear();
+
+		for(StringHashMap<Options*>::iterator it = subcategories_.begin(); it != subcategories_.end(); it++)
+		{
+			delete it->second;
+		}
+		subcategories_.clear();
 	}
 
 
