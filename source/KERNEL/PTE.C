@@ -390,6 +390,21 @@ namespace BALL
 	{
 	}
 
+	Element::Element(const Element& element)
+				:	name_(element.name_),
+					symbol_(element.symbol_),
+					group_(element.group_),
+					period_(element.period_),
+					atomic_number_(element.atomic_number_),
+					atomic_weight_(element.atomic_weight_),
+					atomic_radius_(element.atomic_radius_),
+					covalent_radius_(element.covalent_radius_),
+					van_der_waals_radius_(element.van_der_waals_radius_),
+					is_metal_(element.is_metal_),
+					electronegativity_(element.electronegativity_)
+		{
+		}
+
 	Element::Element
 		(const String& name,
 		 const String& symbol,
@@ -440,6 +455,23 @@ namespace BALL
 	bool Element::isMetal() const
 	{
 		return is_metal_;
+	}
+
+	Element& Element::operator = (const Element& element)
+	{
+		name_ = element.name_;
+		symbol_ = element.symbol_;
+		group_ = element.group_;
+		period_ = element.period_;
+		atomic_number_ = element.atomic_number_;
+		atomic_weight_ = element.atomic_weight_;
+		atomic_radius_ = element.atomic_radius_;
+		covalent_radius_ = element.covalent_radius_;
+		van_der_waals_radius_ = element.van_der_waals_radius_;
+		is_metal_ = element.is_metal_;
+		electronegativity_ = element.electronegativity_;
+
+		return *this;
 	}
 
 	PTE_::PTE_()
