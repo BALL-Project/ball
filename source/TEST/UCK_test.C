@@ -40,7 +40,7 @@ CHECK([Extra] Structure initialization)
 RESULT
 	
 
-UCK u1(*m, 2);
+UCK u1(*m, (Size)2);
 UCK u2(*m);
 UCK u3(u1);
 

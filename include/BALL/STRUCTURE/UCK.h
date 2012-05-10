@@ -37,6 +37,10 @@ namespace BALL
 		*/
 		UCK(const Molecule& mol, Size d=3);
 		
+		/* constructor added originally in CADDSuite
+		 */
+		UCK(const Molecule& mol, bool ignore_hydrogens, Size d=3);
+
 		/* copy constructor
 		*/
 		UCK(UCK& uck);
@@ -98,6 +102,7 @@ namespace BALL
 		String uck_str_; 
 		String id_;
 		float weight_;
+		bool ignore_hydrogens_;
 	};
 
 }//namespace

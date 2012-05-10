@@ -20,19 +20,33 @@ namespace BALL
 
 	//default constructor
 	UCK::UCK()
-		: depth_(0),
-			weight_(0.0)
+		: 	depth_(0),
+			weight_(0.0),
+			ignore_hydrogens_(false)
 	{
 	}
 	
 	//constructor
 	UCK::UCK(const Molecule& mol, Size d)
 		:	depth_(d),
+			weight_(0.0),
+			ignore_hydrogens_(false)
+	{
+		id_ = mol.getName();
+		id_.trim();
+		depth_ = d;
+		makeUCK(mol);
+	}
+
+	//constructor (originally included in CADDSuite)
+	UCK::UCK(const Molecule& mol, bool ignore_hydrogens, Size d)
+		:	depth_(d),
 			weight_(0.0)
 	{
 		id_ = mol.getName();
 		id_.trim();
 		depth_ = d;
+		ignore_hydrogens_ = ignore_hydrogens;
 		makeUCK(mol);
 	}
 	
@@ -126,6 +140,8 @@ namespace BALL
 
 		for(AtomConstIterator atit1 = mol.beginAtom(); atit1 != mol.endAtom(); ++atit1)
 		{
+			if(ignore_hydrogens_ && atit1->getElement()==PTE[1]) continue;
+
 			// find chemical formula
 			for(Size i = 0; i != mol_name->size(); ++i)
 			{
@@ -150,6 +166,8 @@ namespace BALL
 			// find bonds from current atom to all other atoms and store them in e
 			for(AtomConstIterator atit2 = mol.beginAtom(); atit2 != mol.endAtom(); ++atit2)
 			{
+				if(ignore_hydrogens_ && atit2->getElement()==PTE[1]) continue;
+
 				if(atit1->getBond(*atit2) != 0)
 				{
 					e.push_back(make_pair(count, dest));
@@ -243,6 +261,7 @@ namespace BALL
 		}	
 		uck_str_ += "\n";
 
+		// TODO: Do we want to use MD5? In CADDSuite this was SHA1!
 		uck_str_ = QCryptographicHash::hash(QByteArray(uck_str_.c_str()), 
 		                                    QCryptographicHash::Md5).toHex().constData(); 
 
