@@ -14,8 +14,8 @@
 # include <BALL/DATATYPE/options.h>
 #endif
 
-#ifndef BALL_STRUCTURE_DOCKING_DOCKINGALGORITHM_H
-# include <BALL/STRUCTURE/DOCKING/dockingAlgorithm.h>
+#ifndef BALL_DOCKING_COMMON_DOCKINGALGORITHM_H
+# include <BALL/DOCKING/COMMON/dockingAlgorithm.h>
 #endif
 
 #include <QtCore/QTimer>

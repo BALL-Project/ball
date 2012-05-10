@@ -2,8 +2,8 @@
 // vi: set ts=2:
 //
 
-#ifndef BALL_STRUCTURE_DOCKING_GEOMETRICFIT_H
-#define BALL_STRUCTURE_DOCKING_GEOMETRICFIT_H
+#ifndef BALL_DOCKING_GEOMETRICFIT_H
+#define BALL_DOCKING_GEOMETRICFIT_H
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
 #include <BALL/DATATYPE/regularData3D.h>
@@ -21,49 +21,49 @@
 #include <BALL/MATHS/FFT3D.h>
 #endif
 
-#ifndef BALL_STRUCTURE_DOCKING_DOCKINGALGORITHM_H
-#include <BALL/STRUCTURE/DOCKING/dockingAlgorithm.h>
+#ifndef BALL_DOCKING_COMMON_DOCKINGALGORITHM_H
+#include <BALL/DOCKING/COMMON/dockingAlgorithm.h>
 #endif
 
 namespace BALL
 {
-  /** GeometricFit
-     This class is derived from class DockingAlgorithm.
-     Protein docking algorithm via geometric fit invented by Katchalski-Katzir,
-     et al. (1992) is implemented in this class.
-		 \ingroup Docking
-  */
-  class BALL_EXPORT GeometricFit 
+	/** GeometricFit
+	This class is derived from class DockingAlgorithm.
+	Protein docking algorithm via geometric fit invented by Katchalski-Katzir,
+	et al. (1992) is implemented in this class.
+			\ingroup Docking
+	*/
+	class BALL_EXPORT GeometricFit
 		: public DockingAlgorithm
-  {
-    public:
-      BALL_CREATE(GeometricFit)
-			
+	{
+		public:
+			BALL_CREATE(GeometricFit)
+
 			/**	Symbolic names for option keys.
 				This struct contains a symbolic name
 				for each recognized key in FDPB::options. \par
 				For each symbol the required type is given under parameters.
 			*/
-			struct BALL_EXPORT Option 
+			struct BALL_EXPORT Option
 			{
 				// the parameter r,
-				// "Any grid point is considered inside the molecule if there is at 
-				// least one atom nucleus within a distance r from it." 
+				// "Any grid point is considered inside the molecule if there is at
+				// least one atom nucleus within a distance r from it."
 				// Default value is 1.8 Angstrom
 				static const String NEAR_RADIUS;
 
-				// Default grid spacing. 
+				// Default grid spacing.
 				// Default value is 1.0 Angstrom
-	 			static const String GRID_SPACING;
-	
+				static const String GRID_SPACING;
+
 				// grid size = (ceil)(molecule size / grid spacing);
-			  static const String GRID_SIZE;	
+				static const String GRID_SIZE;
 
 				// The thickness of the surface of the protein
 				// Default value is 1.0 Angstrom
 				static const String SURFACE_THICKNESS;
 
-				// Degree interval is the delta parameter, 
+				// Degree interval is the delta parameter,
 				// which is the degrees that protein B rotates every time
 				// Default value is 20 degrees
 				static const String DEGREE_INTERVAL;
@@ -77,27 +77,27 @@ namespace BALL
 				 *	@see Default::SURFACE_TYPE
 				 *	@param surface_type int
 				 */
-				static const String SURFACE_TYPE;	
+				static const String SURFACE_TYPE;
 
 				// How many results should be kept in total (also in DockingAlgorithms)
 				static const String BEST_NUM;
 
 				// Verbosity of the Algorithm (also in DockingAlgorithm)
 				static const String VERBOSITY;
-				
+
 				// Euler angels for redocking
 				static const String PHI_MIN;
 				static const String PHI_MAX;
 				static const String DEG_PHI;
-				
+
 				static const String THETA_MIN;
 				static const String THETA_MAX;
 				static const String DEG_THETA;
-				
+
 				static const String PSI_MIN;
 				static const String PSI_MAX;
 				static const String DEG_PSI;
-				
+
 				// penalty value of the inside points
 				// Default value for static protein is -15, for mobile protein 1
 				static const String PENALTY_STATIC;
@@ -105,29 +105,29 @@ namespace BALL
 
 				// Number of processes in total for a parallel run
 				static const String NUMBER_OF_PROCESSES;
-				
-        // Full path to the slave to spawn
-        static const String SLAVE_PATH;
+
+				// Full path to the slave to spawn
+				static const String SLAVE_PATH;
 			};
-    
-      struct BALL_EXPORT Default
+
+			struct BALL_EXPORT Default
 			{
 				// Default parameter r,
 				// Default value is 1.8 Angstrom
 				static const float NEAR_RADIUS;
 
-				// Default grid spacing. 
+				// Default grid spacing.
 				// Default value is 1.0 Angstrom
 				static const float GRID_SPACING;
 
 				// grid size = (ceil)(molecule size / grid spacing);
-				static const int GRID_SIZE;	
+				static const int GRID_SIZE;
 
 				// Default thickness of the surface of the protein
 				// Default value is 1.0 Angstrom
 				static const float SURFACE_THICKNESS;
 
-				// Degree interval is the delta parameter, 
+				// Degree interval is the delta parameter,
 				// which is the degrees that protein B rotates every time
 				// Default value is 20 degrees
 				static const double DEGREE_INTERVAL;
@@ -140,7 +140,7 @@ namespace BALL
 				// How many peaks should the program keep for each rotation
 				static const int TOP_N;
 
-				// How many overall top best peaks should the program keep 
+				// How many overall top best peaks should the program keep
 				// after doing all rotations.
 				static const int BEST_NUM;
 
@@ -149,20 +149,20 @@ namespace BALL
 				// For values > 1, some information is printed on Log
 				// For values > 5, timing information is included
 				static const int VERBOSITY;
-				
+
 				// Euler angels for redocking
 				static const float PHI_MIN;
 				static const float PHI_MAX;
 				static const float DEG_PHI;
-				
+
 				static const float THETA_MIN;
 				static const float THETA_MAX;
 				static const float DEG_THETA;
-				
+
 				static const float PSI_MIN;
 				static const float PSI_MAX;
 				static const float DEG_PSI;
-				
+
 				// penalty value of the inside points
 				// Default value for static protein is -15, for mobile protein 1
 				static const int PENALTY_STATIC;
@@ -171,16 +171,15 @@ namespace BALL
 				// number of processes for a parallel run
 				static const int NUMBER_OF_PROCESSES;
 
-        // Full path to the slave to spawn
-        static const String SLAVE_PATH;
+				// Full path to the slave to spawn
+				static const String SLAVE_PATH;
 			};
 
-      /**
-				nested class Peak_ 
-				This class is needed for an efficient handling of all peaks corresponding
-				to one orientation in a multiset
-      */
-      class BALL_EXPORT Peak_
+			/** nested class Peak_
+			 *  This class is needed for an efficient handling of all peaks corresponding
+			 *  to one orientation in a multiset
+			*/
+			class BALL_EXPORT Peak_
 			{
 				public:
 
@@ -198,16 +197,15 @@ namespace BALL
 					Vector3 translation;
 			};
 
-      /**
-				nested class RotationAngles_
-      */
-      class BALL_EXPORT RotationAngles_
+			/** nested class RotationAngles_
+			*/
+			class BALL_EXPORT RotationAngles_
 			{
-				public: 
+				public:
 
 					// constructor
 					RotationAngles_();
-					
+
 					// constructor
 					RotationAngles_( int step );
 
@@ -217,7 +215,7 @@ namespace BALL
 					// generate all non-degenerate rotation angles.
 					// This algorithm is based on ???
 					bool generateSomeAngles( const float deg_phi,   const float deg_psi, const float deg_theta,
-												 					 const float phi_min,   const float phi_max,
+																	 const float phi_min,   const float phi_max,
 																	 const float psi_min,   const float psi_max,
 																	 const float theta_min, const float theta_max );
 
@@ -255,16 +253,17 @@ namespace BALL
 					int max_rotation_;
 			};
 
-      // PROTEIN_A is the static protein, i.e., the bigger one;
-      // PROTEIN_B is the mobile protein, i.e., the smaller one.
-      enum ProteinIndex{  PROTEIN_A = 1, PROTEIN_B    = 2 };
+			// PROTEIN_A is the static protein, i.e., the bigger one;
+			// PROTEIN_B is the mobile protein, i.e., the smaller one.
+			enum ProteinIndex{  PROTEIN_A = 1, PROTEIN_B    = 2 };
 
-			// The surface type to use for construction of the grids.
-      enum SurfaceType {  CONNOLLY  = 1, VAN_DER_WAALS = 2, FTDOCK = 3 };
+						// The surface type to use for construction of the grids.
+			enum SurfaceType {  CONNOLLY  = 1, VAN_DER_WAALS = 2, FTDOCK = 3 };
 
-      // Default constructor
-      // Creates an empty GeometricFit object
-      GeometricFit();
+			/** Default constructor
+			 * Creates an empty GeometricFit object
+			 */
+			GeometricFit();
 
 			/** Constructor.
 					Creates an instance of Geometric Fit and calls
@@ -278,27 +277,28 @@ namespace BALL
 					the given options to the Geometric Fit object's options.
 			*/
 			GeometricFit(Options& new_options);
-			
+
 			/** Constructor.
 					Creates an instance of FDPB and calls
 					setup(system1, system2, new_options)
 			*/
 			GeometricFit(System &system1,System &system2 ,Options& new_options);
-				
-				
-/*       // Copy constructor */
-/*       // Copies an existing GeometricFit object */
-/*       GeometricFit( const GeometricFit& geo_fit ); */
 
-      // Destructor
-      ~GeometricFit();
+
+			/**
+			 * Copy Constructor.
+			*/
+			GeometricFit( const GeometricFit& geo_fit );
+
+			// Destructor
+			~GeometricFit();
 
 			/** The setup routines.
 			 */
 			virtual void setup(System& system1, System& system2, Options& new_options);
-			
-			virtual void setup(System& system1, System& system2);		
-	
+
+			virtual void setup(System& system1, System& system2);
+
 			/** Start the main loop of the algorithm.
 			 */
 			void start();
@@ -308,11 +308,11 @@ namespace BALL
 			void MPI_Slave_start(int argc, char**argv);
 #endif
 
-      // return the overall docking progress as a percentage
-      float getProgress() const;
-      
-      // 
-      bool hasFinished() const;
+			// return the overall docking progress as a percentage
+			float getProgress() const;
+
+			//
+			bool hasFinished() const;
 
 			/** Return the translation corresponding to conformation con_num.
 			 */
@@ -325,14 +325,14 @@ namespace BALL
 			/** Return the ranked conformations.
 			 */
 			ConformationSet getConformationSet(Index total_number = 0);
-			
+
       //////////////////////////////////////////
       // the member variables
 
 			/**	The options for the algorithm.
 			*/
 			Options	options;
-      
+
 		protected:
 
       // Free all allocated memory and destroys the options and results
@@ -369,7 +369,7 @@ namespace BALL
 			 *	Certain combinations of certain powers are optimal for the fft algorithm, and
 			 *	this function tries to determine the smallest optimal combination large enough
 			 *	to accomodate the original data.
-			 */ 
+			 */
       int optimizeGridSize_( int raw_size );
 
 			/** Initialize the grid.
@@ -403,7 +403,7 @@ namespace BALL
 
       // the FFT grid for protein A
       FFT3D*  FFT_grid_a_;
-      
+
       // the FFT grid for protein B
       FFT3D*  FFT_grid_b_;
 
@@ -413,8 +413,8 @@ namespace BALL
       Vector3 FFT_grid_lower_index_;
       Vector3 FFT_grid_upper_index_;
       Vector3 FFT_grid_lower_coord_;
-      Vector3 FFT_grid_upper_coord_;     
-      
+      Vector3 FFT_grid_upper_coord_;
+
       Vector3 FFT_grid_size_index_;
 
       // the translation we do to the system b before FFT

@@ -14,7 +14,7 @@
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
 
-#include <BALL/STRUCTURE/DOCKING/dockingAlgorithm.h>
+#include <BALL/DOCKING/COMMON/dockingAlgorithm.h>
 #include <BALL/FORMAT/DCDFile.h>
 
 #include <QtGui/QApplication>

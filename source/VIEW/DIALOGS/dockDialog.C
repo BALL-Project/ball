@@ -24,7 +24,7 @@
 #include <BALL/DATATYPE/options.h>
 
 #ifdef BALL_HAS_FFTW
-#include <BALL/STRUCTURE/DOCKING/geometricFit.h>
+#include <BALL/DOCKING/geometricFit.h>
 #include <BALL/VIEW/DIALOGS/geometricFitDialog.h>
 #endif
 

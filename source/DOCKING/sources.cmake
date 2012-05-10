@@ -1,0 +1,13 @@
+### the directory name ###
+SET(DIRECTORY source/DOCKING)
+
+INCLUDE(source/DOCKING/COMMON/sources.cmake)
+INCLUDE(source/DOCKING/GENETICDOCK/sources.cmake)
+INCLUDE(source/DOCKING/IMGDOCK/sources.cmake)
+
+SET(SOURCES_LIST )
+
+IF (BALL_HAS_FFTW)
+	SET(SOURCES_LIST geometricFit.C)
+	ADD_BALL_SOURCES("DOCKING" "${SOURCES_LIST}")
+ENDIF()

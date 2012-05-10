@@ -48,6 +48,9 @@ INCLUDE(include/BALL/SOLVATION/sources.cmake)
 INCLUDE(source/STRUCTURE/sources.cmake)
 INCLUDE(include/BALL/STRUCTURE/sources.cmake)
 
+INCLUDE(source/DOCKING/sources.cmake)
+INCLUDE(include/BALL/DOCKING/sources.cmake)
+
 INCLUDE(source/SYSTEM/sources.cmake)
 INCLUDE(include/BALL/SYSTEM/sources.cmake)
 

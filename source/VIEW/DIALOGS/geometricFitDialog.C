@@ -3,7 +3,7 @@
 //
 
 #include <BALL/VIEW/DIALOGS/geometricFitDialog.h>
-#include <BALL/STRUCTURE/DOCKING/geometricFit.h>
+#include <BALL/DOCKING/geometricFit.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
 #include <QtGui/QLineEdit>

@@ -13,16 +13,16 @@
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
-#include <BALL/STRUCTURE/DOCKING/dockResult.h>
-#include <BALL/STRUCTURE/DOCKING/conformationSet.h>
-#include <BALL/STRUCTURE/DOCKING/dockingAlgorithm.h>
 #include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
 #include <BALL/STRUCTURE/DOCKING/amberEvaluation.h>
 #include <BALL/STRUCTURE/DOCKING/randomEvaluation.h>
+#include <BALL/DOCKING/COMMON/dockResult.h>
+#include <BALL/DOCKING/COMMON/conformationSet.h>
+#include <BALL/DOCKING/COMMON/dockingAlgorithm.h>
 
 #ifdef BALL_HAS_FFTW
 #include <BALL/VIEW/DIALOGS/geometricFitDialog.h>
-#include <BALL/STRUCTURE/DOCKING/geometricFit.h>
+#include <BALL/DOCKING/geometricFit.h>
 #endif
 
 #include <BALL/VIEW/KERNEL/threads.h>

@@ -22,7 +22,7 @@
 #include <BALL/FORMAT/amiraMeshFile.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
 #include <BALL/DATATYPE/contourSurface.h>
-#include <BALL/STRUCTURE/DOCKING/dockResult.h>
+#include <BALL/DOCKING/COMMON/dockResult.h>
 #include <BALL/DATATYPE/regularData3D.h>
 
 #include <QtGui/QFileDialog>

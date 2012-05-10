@@ -18,8 +18,8 @@
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
-#include <BALL/STRUCTURE/DOCKING/geometricFit.h>
-#include <BALL/STRUCTURE/DOCKING/dockResult.h>
+#include <BALL/DOCKING/geometricFit.h>
+#include <BALL/DOCKING/COMMON/dockResult.h>
 
 using namespace std;
 using namespace BALL;

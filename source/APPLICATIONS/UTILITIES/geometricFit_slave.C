@@ -1,5 +1,5 @@
 /** This should be spawned by geometricFit **/
-#include <BALL/STRUCTURE/DOCKING/geometricFit.h>
+#include <BALL/DOCKING/geometricFit.h>
 
 #include <iostream>
 

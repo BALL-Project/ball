@@ -8,7 +8,7 @@
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/STRUCTURE/structureMapper.h>
 #include <BALL/MATHS/matrix44.h>
-#include <BALL/STRUCTURE/DOCKING/dockResult.h>
+#include <BALL/DOCKING/COMMON/dockResult.h>
 
 #include <iostream>
 #include <map>

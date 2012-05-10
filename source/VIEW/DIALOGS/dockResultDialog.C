@@ -12,7 +12,7 @@
 #include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
 #include <BALL/STRUCTURE/DOCKING/amberEvaluation.h>
 #include <BALL/STRUCTURE/DOCKING/randomEvaluation.h>
-#include <BALL/STRUCTURE/DOCKING/dockResult.h>
+#include <BALL/DOCKING/COMMON/dockResult.h>
 
 #include <QtGui/QTableWidget>
 #include <QtGui/QHeaderView>

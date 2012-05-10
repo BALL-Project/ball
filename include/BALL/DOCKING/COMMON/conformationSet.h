@@ -6,8 +6,8 @@
 // Author:
 //
 
-#ifndef BALL_STRUCTURE_DOCKING_RANKEDCONFORMATION_H
-#define BALL_STRUCTURE_DOCKING_RANKEDCONFORMATION_H
+#ifndef BALL_DOCKING_COMMON_CONFORMATIONSET_H
+#define BALL_DOCKING_COMMON_CONFORMATIONSET_H
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 # include <BALL/DATATYPE/hashMap.h>
@@ -37,51 +37,51 @@ namespace BALL
 		{
 		  public:
 
-				/** The conformations are scored as indices into 
+				/** The conformations are scored as indices into
 				 * 	the vector of snapshots with a score
 				 */
-				typedef std::pair<Index, float> Conformation;
+				typedef std::pair < Index, float > Conformation;
 
 				ConformationSet() {};
 				ConformationSet(const System& system);
 
 				virtual ~ConformationSet() {};
-				
+
 				/** Operations
 				*/
 				void setup(const System& system)
-					;
+					throw();
 
-				void add(const float score, const System& conformations) 
-					;
+				void add(const float score, const System& conformation)
+					throw();
 
 				const System& getSystem() const
-					;
-					
+					throw();
+
 				System& getSystem()
-					;
+					throw();
 
 				/** Use score as the new scoring information.
 				 */
-				void setScoring(std::vector<Conformation>& score)
-					;
-				
+				void setScoring(std::vector < Conformation > & score)
+					throw();
+
 				/** Return the current scoring.
 				 */
-				const std::vector<Conformation>& getScoring() const
-					;
+				const std::vector < Conformation > & getScoring() const
+					throw();
 
 				/** Reset the scoring vector to the identity permutation with
 				 * 	identical scores of 0.
 				 */
 				void resetScoring()
-					;
+					throw();
 
 				/** Returns the _unranked_ list of conformations, i.e. the conformations
 				 *  in the order in which they were added.
 				 */
-				const std::vector<SnapShot>& getUnscoredConformations() const
-					;
+				const std::vector < SnapShot > & getUnscoredConformations() const
+					throw();
 
 				/** Returns the i-th snapshot using the current scoring information.
 				 * 	TODO: Exception handling
@@ -91,15 +91,15 @@ namespace BALL
 				/** Export the first num results in the order of the current scoring as dcd file
 				 *  with name filename. If num == 0, all results are exported.
 				 */
-				bool writeDCDFile(const String& filename, const Size num=0);
-				
+				bool writeDCDFile(const String& filename, const Size num = 0);
+
 				bool readDCDFile(const String& filename)
-					;
+					throw();
 
 				/** Return the number of conformations.
 				 */
 				Size size() const;
-				
+
 			protected:
 
 				/** Attributes
@@ -107,7 +107,7 @@ namespace BALL
 
 				// Indices of the conformations in the SnapShotManager.
 				// Sorted according to their score
-				std::vector<Conformation> snapshot_order_;
+				std::vector < Conformation > snapshot_order_;
 
 				/** The original system on which the SnapShots are based
 				*/
