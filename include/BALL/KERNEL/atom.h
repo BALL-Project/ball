@@ -42,6 +42,7 @@ namespace BALL
 	class Chain;
 	class SecondaryStructure;
 	class Molecule;
+	class MolecularInteractions;
 
 	/** Atom class.
 			A class representing atoms.
@@ -618,6 +619,18 @@ namespace BALL
 			 * @param a the atom to which to compute the distance
 			 */
 			float getDistance(const Atom& a) const;
+
+			MolecularInteractions* interactions;
+
+			void addInteraction(const Atom* atom, String interaction_type, double energy);
+
+			void addInteraction(String interaction_type, double energy);
+
+			void disableStoreInteractions();
+
+			void enableStoreInteractions();
+
+			bool store_interactions_disabled_;
 
 			//@}
 

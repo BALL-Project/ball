@@ -10,6 +10,7 @@
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/PTE.h>
+#include <BALL/KERNEL/molecularInteractions.h>
 
 #include <algorithm>
 
@@ -30,7 +31,9 @@ namespace BALL
 		  position_(BALL_ATOM_DEFAULT_POSITION),
 		  charge_(BALL_ATOM_DEFAULT_CHARGE),
 		  velocity_(BALL_ATOM_DEFAULT_VELOCITY),
-		  force_(BALL_ATOM_DEFAULT_FORCE)
+		  force_(BALL_ATOM_DEFAULT_FORCE),
+		  interactions(0),
+		  store_interactions_disabled_(0)
 	{
 	}
 
@@ -47,7 +50,9 @@ namespace BALL
 		  position_(atom.position_),
 		  charge_(atom.charge_),
 		  velocity_(atom.velocity_),
-		  force_(atom.force_)
+		  force_(atom.force_),
+		  interactions(0),
+		  store_interactions_disabled_(0)
 	{
 	}
 
@@ -68,7 +73,9 @@ namespace BALL
 		  position_(position),
 		  charge_(charge),
 		  velocity_(velocity),
-		  force_(force)
+		  force_(force),
+		  interactions(0),
+		  store_interactions_disabled_(0)
 	{
 	}
 
@@ -81,6 +88,8 @@ namespace BALL
 	{
 		Composite::clear();
 		PropertyManager::clear();
+		delete interactions;
+		interactions = 0;
 
 		clear_();
 	}
@@ -620,6 +629,9 @@ namespace BALL
 		velocity_.set(BALL_ATOM_DEFAULT_VELOCITY);
 		force_.set(BALL_ATOM_DEFAULT_FORCE);
 
+		delete interactions;
+		interactions = 0;
+
 		destroyBonds();
 	}
 
@@ -634,6 +646,30 @@ namespace BALL
 				break;
 			}
 		}
+	}
+
+	void Atom::addInteraction(const Atom* atom, String interaction_type, double energy)
+	{
+		if(store_interactions_disabled_) return;
+		if(interactions==NULL) interactions = new MolecularInteractions;
+		interactions->addInteraction(atom, interaction_type, energy);
+	}
+
+	void Atom::addInteraction(String interaction_type, double energy)
+	{
+		if(store_interactions_disabled_) return;
+		if(interactions==NULL) interactions = new MolecularInteractions;
+		interactions->addInteraction(interaction_type, energy);
+	}
+
+	void Atom::disableStoreInteractions()
+	{
+		store_interactions_disabled_ = 1;
+	}
+
+	void Atom::enableStoreInteractions()
+	{
+		store_interactions_disabled_ = 0;
 	}
 
 # ifdef BALL_NO_INLINE_FUNCTIONS
