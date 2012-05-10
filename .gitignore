@@ -26,3 +26,8 @@ source/libBALL.objects
 source/libVIEW.objects
 source/qt.version
 include/BALL/VIEW/UIC/*
+.project
+.cproject
+data/BALLView/translations/BALLView.de_DE.qm
+data/BALLView/translations/BALLView.zh_TW.qm
+source/TEST/data/SideChainPlacementProcessor_test_output_pre_1.pdb
