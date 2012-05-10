@@ -85,8 +85,9 @@ namespace BALL
 	
 				/** calculate mean of given vector */
 				static double getMean(const std::vector<double>& v);
-	
 				
+				/** calculate Spearman's rank correlation */
+				static double calculateRankCorrelation(vector<double>& observed_values, vector<double>& expected_values);
 				//--- methods for calculating mean, covar, var of matrix-ROWS ---
 				
 				/** calculates covarianve between two rows of the given matrix 

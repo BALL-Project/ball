@@ -22,25 +22,19 @@
 // vi: set ts=2:
 //
 //
-#ifndef MODEL
-#define MODEL
+#ifndef BALL_QSAR_MODEL_H
+#define BALL_QSAR_MODEL_H
 
 #include <vector>
 #include <set>
 
 #include <Eigen/Core>
 
-#ifndef VALIDATION
 #include <BALL/QSAR/validation.h>
-#endif
 
-#ifndef QSARH
 #include <BALL/QSAR/QSARData.h>
-#endif
 
-#ifndef QSAR_EXCEPTION
 #include <BALL/QSAR/exception.h>
-#endif
 
 #include <BALL/MATHS/parsedFunction.h>
 
@@ -135,7 +129,12 @@ namespace BALL
 				
 				/** returns a const pointer to the names of the descriptors of this model */
 				const vector<string>* getDescriptorNames();
-				
+
+				/** returns descriptor transformations **/
+				const Eigen::MatrixXd getDescriptorTransformations();
+
+				const Eigen::MatrixXd getYTransformations();
+
 				/** returns a const pointer to the activity values of this model */
 				const Eigen::MatrixXd* getY();
 				
@@ -258,4 +257,4 @@ namespace BALL
 	}
 }
 
-#endif // MODEL
+#endif // BALL_QSAR_MODEL_H

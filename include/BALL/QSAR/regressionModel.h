@@ -23,21 +23,18 @@
 //
 // 
 
-#ifndef REGRESSION
-#define REGRESSION
+#ifndef BALL_QSAR_REGRESSIONMODEL_H
+#define BALL_QSAR_REGRESSIONMODEL_H
 
-#ifndef MODELH
 #include <BALL/QSAR/Model.h>
-#endif
-
-#ifndef REGVALIDATION
 #include <BALL/QSAR/regressionValidation.h>
-#endif
 
 #include <fstream>
 
 namespace BALL
 {
+	class Rescoring;
+
 	namespace QSAR
 	{
 		class BALL_EXPORT RegressionModel : public Model
@@ -103,12 +100,12 @@ namespace BALL
 				
 				void saveDescriptorInformationToFile(std::ofstream& out);
 				//@}
-				
-				
+
 				friend class RegressionValidation;
-				
+				friend class Rescoring;
+
 		};
 	}
 }
 
-#endif // REGRESSION
+#endif // BALL_QSAR_REGRESSIONMODEL_H

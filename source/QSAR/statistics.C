@@ -25,6 +25,7 @@
 
 #include <BALL/QSAR/statistics.h>
 #include <iostream>
+#include <map>
 
 namespace BALL
 {
@@ -135,6 +136,106 @@ namespace BALL
 			}
 			return sum/v.size();
 		}
+
+
+		double Statistics::calculateRankCorrelation(vector<double>& observed_values, vector<double>& expected_values)
+		{
+			if(observed_values.size()!=expected_values.size())
+			{
+				throw BALL::Exception::GeneralException(__FILE__,__LINE__,"PropertyPlotter::calculateRankCorrelation() error","Both vectors need to have an identical number of entries for calculation of rank correlation!");
+			}
+
+			std::map<int,double> observed_ranks; // map score to rank
+			std::map<int,double> expected_ranks;
+
+			for(Size i=0; i<observed_values.size(); i++)
+			{
+				int value = (int)(observed_values[i]*10);
+				std::map<int,double>::iterator it=observed_ranks.find(value);
+				if(it!=observed_ranks.end())
+				{
+					it->second++;
+				}
+				else
+				{
+					observed_ranks.insert(std::make_pair(value,1));
+				}
+			}
+			for(Size i=0; i<expected_values.size(); i++)
+			{
+				int value = (int)(expected_values[i]*10);
+				std::map<int,double>::iterator it=expected_ranks.find(value);
+				if(it!=expected_ranks.end())
+				{
+					it->second++;
+				}
+				else
+				{
+					expected_ranks.insert(std::make_pair(value,1));
+				}
+			}
+
+
+			// replace number of occurences of each score (rounded to precision of 0.1) by its Spearman rank
+			Size position=1;
+			for(std::map<int,double>::iterator it=observed_ranks.begin(); it!=observed_ranks.end(); it++, position++)
+			{
+				if(it->second==1) it->second=position;
+				else
+				{
+					Size no_entries = (Size)it->second;
+					int rank_sum=0;
+					int end_current_score=position+no_entries;
+					for(Size i=position; i<end_current_score; i++)
+					{
+						rank_sum+=i;
+					}
+					double rank = rank_sum/((double)no_entries);
+					it->second = rank;
+					position+=no_entries-1;
+				}
+			}
+
+			// replace number of occurences of each score (rounded to precision of 0.1) by its Spearman rank
+			position=1;
+			for(std::map<int,double>::iterator it=expected_ranks.begin(); it!=expected_ranks.end(); it++, position++)
+			{
+				if(it->second==1) it->second=position;
+				else
+				{
+					Size no_entries = (Size)it->second;
+					int rank_sum=0;
+					int end_current_score=position+no_entries;
+					for(Size i=position; i<end_current_score; i++)
+					{
+						rank_sum+=i;
+					}
+					double rank = rank_sum/((double)no_entries);
+					it->second = rank;
+					position+=no_entries-1;
+				}
+			}
+
+			double dist_sum=0;
+			for(Size i=0; i<expected_values.size(); i++)
+			{
+				std::map<int,double>::iterator it1=expected_ranks.find((int)(expected_values[i]*10));
+				std::map<int,double>::iterator it2=observed_ranks.find((int)(observed_values[i]*10));
+
+				if(it1==expected_ranks.end() || it2==observed_ranks.end())
+				{
+					throw BALL::Exception::GeneralException(__FILE__,__LINE__,"PropertyPlotter::calculateRankCorrelation() error","Stored value could not be found in map!");
+				}
+
+				dist_sum += pow(it1->second-it2->second,2);
+			}
+
+			int n = observed_values.size();
+			double p = 1-((6*dist_sum)/(n*(n*n-1)));
+
+			return p;
+		}
+
 
 
 

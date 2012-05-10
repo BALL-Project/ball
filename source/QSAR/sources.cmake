@@ -4,6 +4,7 @@ SET(DIRECTORY source/QSAR)
 ### list all filenames of the directory here ###
 SET(SOURCES_LIST
 	aromaticityProcessor.C
+	automaticModelCreator.C
 	bayesModel.C
 	classificationModel.C
 	classificationValidation.C

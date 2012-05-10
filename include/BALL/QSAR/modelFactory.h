@@ -24,8 +24,8 @@
 // $Id: factory.h,v 1.10 2003/08/26 08:04:07 oliver Exp $
 //
 
-#ifndef MODEL_FACTORY_H
-#define MODEL_FACTORY_H
+#ifndef BALL_QSAR_MODELFACTORY_H
+#define BALL_QSAR_MODELFACTORY_H
 
 #ifndef BALL_CONCEPT_FACTORY_H
 #include <BALL/CONCEPT/factory.h>
@@ -70,4 +70,4 @@ namespace BALL
 	}
 }
 
-#endif // QSAR_FACTORY_H
+#endif // BALL_QSAR_MODELFACTORY_H

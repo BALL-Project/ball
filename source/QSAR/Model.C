@@ -433,6 +433,16 @@ namespace BALL
 			return &descriptor_names_;
 		}
 
+
+		const Eigen::MatrixXd Model::getDescriptorTransformations()
+		{
+			return descriptor_transformations_;
+		}
+
+                const Eigen::MatrixXd Model::getYTransformations()
+                {
+                        return y_transformations_;
+                }
 			
 		const Eigen::MatrixXd* Model::getY()
 		{

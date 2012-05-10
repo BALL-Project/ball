@@ -64,6 +64,8 @@
 
 namespace BALL
 {
+	class MolecularSimilarity;
+
 	namespace QSAR
 	{
 		typedef vector<double> Column;
@@ -103,11 +105,8 @@ namespace BALL
 				@param useExDesc if set to 1, descriptors read from the sd-file will be used in addition to those calculated by BALL internally 
 				@param append if set to 1, the substances read from the sd-file will be appended as new lines to the current descriptor_matrix */
 				void readSDFile(const char* file, std::multiset<int>& act, bool useExDesc=1, bool append=0, bool translate_class_labels=0);
-	
-				/** 
-				Calculates descriptors for one molecule and saves them into one new line of descriptor_matrix 
-				*/
-				void calculateBALLDescriptors(Molecule& m);
+
+				void readSDFile(const char* file, set<String>& activity_names, bool useExDesc=1, bool append=0, bool translate_class_labels=0, bool calc_phychem_properties=1, bool calc_topological_properties=1);
 					
 				/** show descriptor_matrix on stdout */
 				void displayMatrix();
@@ -196,7 +195,7 @@ namespace BALL
 				@param similarity the desired minimal correlation 
 				@param similar_descriptor_IDs list to which the IDs of the found descriptors will be saved as pairs of descriptor ID and descriptor name */
 
-				void getSimilarDescriptors(int descriptor_ID, double correlation, std::list<std::pair<unsigned int,String> >& similar_descriptor_IDs) const;
+				void getSimilarDescriptors(int descriptor_ID, double correlation, std::list<std::pair<uint,String> >& similar_descriptor_IDs) const;
 				//@}
 				
 				
@@ -205,8 +204,17 @@ namespace BALL
 				/** @name Accessors
 				 */
 				//@{
+
+				/**
+				Calculates descriptors for one molecule and saves them into one new line of descriptor_matrix
+				*/
+				void calculateBALLDescriptors(Molecule& m);
+
+				/** Calculates topological descriptors based on functional groups counts done by SMARTS matching */
+				void calculateTopologicalDescriptors(Molecule& mol, MolecularSimilarity& molsim, const map<String,int>& descriptor_map);
+
 				/** writes the names of all external descriptors into column_names */
-				void setDescriptorNames(const Molecule& m, std::multiset<int>& activity_IDs, bool useExDesc=1);
+				void setDescriptorNames(const Molecule& m, std::multiset<int>& activity_IDs, bool useExDesc=1, bool resize=1);
 				
 				/** removes columns of invalid descriptor from descriptor_matrix 
 				@param invalidDescriptors list containing the IDs of the columns to be deleted */

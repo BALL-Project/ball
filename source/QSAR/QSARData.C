@@ -24,6 +24,9 @@
 // 
 
 #include <BALL/QSAR/QSARData.h>
+
+#include <BALL/STRUCTURE/molecularSimilarity.h>
+
 #include <set>
 #include <algorithm>
 
@@ -166,6 +169,216 @@ namespace BALL
 			}
 			input.close();
 			return names;
+		}
+
+
+		void QSARData::readSDFile(const char* file, set<String>& activity_names, bool useExDesc, bool append, bool translate_class_labels, bool calc_phychem_properties, bool calc_topological_properties)
+		{
+			int no_phychem_descr = 60*calc_phychem_properties;
+			int no_topologiocal_descr = 0;
+			MolecularSimilarity* molsim = 0;
+			if(calc_topological_properties)
+			{
+				molsim = new MolecularSimilarity("fragments/functionalGroups.smarts");
+				no_topologiocal_descr = molsim->getFunctionalGroupNames().size();
+			}
+			int no_internal_descriptors = no_phychem_descr+no_topologiocal_descr;
+
+			if(!append)
+			{
+				descriptor_matrix_.clear();
+				column_names_.clear();
+				substance_names_.clear();
+				Y_.clear();
+				descriptor_transformations_.clear();
+				y_transformations_.clear();
+				descriptor_matrix_.resize(no_internal_descriptors);
+				column_names_.resize(no_internal_descriptors,"");
+				class_names_.clear();
+			}
+
+			string f=file;
+			SDFile input(f);
+
+			int no_properties=0; // no of descriptors as determined by the first substance in the sd-file
+			int no_descriptors=0;
+			std::multiset<int> newInvalidDescriptors; // invalid descriptors of the current input file only; save no. of columns
+			std::multiset<int> newInvalidSubstances;
+			std::multiset<int> tmp; // invalid descriptors of the current input file; save no. of external descriptor
+
+			map<String,int> descriptor_map; // map descriptor-names to their column-index in descriptor_matrix_
+			map<String,int> activity_map; // map activity-names to their column-index in Y_
+
+			// read all molecules in the sd-file
+			for(int n=0; input.getSize()!=0; n++)
+			{
+				Molecule* mol;
+
+				try
+				{
+					mol=input.read();
+				}
+				catch(BALL::Exception::ParseError e)
+				{
+					throw Exception::WrongFileFormat(__FILE__,__LINE__,file);
+				}
+
+				int no=mol->countNamedProperties();
+
+				if (n==0) // for the first substance
+				{
+					no_descriptors=no-activity_names.size();
+					no_properties=no;
+
+					if(append)
+					{
+						if(no_internal_descriptors+useExDesc*no_descriptors!=(int)(descriptor_matrix_.size()+invalidDescriptors_.size()))
+						{
+							throw Exception::PropertyError(__FILE__,__LINE__, file, n, "substances to append must have the same number of descriptors than the rest of the data!!");
+						}
+						if(activity_names.size()!=Y_.size())
+						{
+							throw Exception::PropertyError(__FILE__,__LINE__, file, n, "substances to append must have the same number of activities than the rest of the data!!");
+						}
+					}
+					else
+					{
+						std::multiset<int> dummy;
+						if(calc_phychem_properties) setDescriptorNames(*mol,dummy,false,false);
+						if(calc_topological_properties)
+						{
+							const vector<String>& group_names = molsim->getFunctionalGroupNames();
+							for(Size i=0; i<group_names.size(); i++)
+							{
+								column_names_[no_phychem_descr+i] = group_names[i];
+							}
+						}
+
+						if(useExDesc)
+						{
+							for(int i=0; i<no_properties;i++)
+							{
+								String name = mol->getNamedProperty(i).getName();
+								if(activity_names.find(name)!=activity_names.end()) continue;
+								Column c;
+								descriptor_matrix_.push_back(c);
+								descriptor_map.insert(make_pair(name,no_internal_descriptors+i));
+								column_names_.push_back(name);
+							}
+						}
+						Y_.resize(activity_names.size());
+					}
+
+					Size i=0;
+					for(set<String>::iterator it=activity_names.begin(); it!=activity_names.end(); it++, i++)
+					{
+						activity_map.insert(make_pair(*it,i));
+					}
+
+					for(Size i=0; i<column_names_.size(); i++)
+					{
+						descriptor_map.insert(make_pair(column_names_[i],i));
+					}
+				}
+
+				substance_names_.push_back(mol->getName());
+
+				for(int i=0; i<no;i++) // create descriptors and activities for current molecule
+				{
+					String name = mol->getNamedProperty(i).getName();
+
+					/// add response value
+					if(activity_names.find(name)!=activity_names.end())
+					{
+						map<String,int>::iterator it = activity_map.find(name);
+						try
+						{
+							double response_value = String(mol->getProperty(name).getString()).toDouble();
+
+							if(translate_class_labels)
+							{
+								map<String,int>::iterator it2=class_names_.find(name);
+								if(it2!=class_names_.end()) response_value = it2->second;
+								else // assign ID for new class label
+								{
+									int id = class_names_.size();
+									class_names_.insert(make_pair(name,id));
+									response_value = id;
+								}
+							}
+
+							Y_[it->second].push_back(response_value);
+						}
+						catch(BALL::Exception::InvalidFormat g)
+						{
+							Y_[it->second].push_back(0);
+							if(invalidSubstances_.find(n) == invalidSubstances_.end())
+							{
+								newInvalidSubstances.insert(n);
+							}
+						}
+					}
+
+					/// add descriptor value
+					else if(useExDesc)
+					{
+						map<String,int>::iterator it = descriptor_map.find(name);
+						if(it!=descriptor_map.end()) // features that appear only for some molecules, but not for the first one, are ignored!
+						{
+							try
+							{
+								descriptor_matrix_[it->second].push_back(String(mol->getProperty(name).getString()).toDouble());
+							}
+							// descriptors with invalid entries will be removed ...
+							catch(BALL::Exception::InvalidFormat g)
+							{
+								descriptor_matrix_[it->second].push_back(0);
+								if(newInvalidDescriptors.find(it->second) == newInvalidDescriptors.end())
+								{
+									newInvalidDescriptors.insert(it->second);
+								}
+							}
+						}
+					}
+				}
+
+				/// If desired, calculate descriptors
+				if(calc_phychem_properties) calculateBALLDescriptors(*mol); // calculate BALL-descriptors
+				if(calc_topological_properties) calculateTopologicalDescriptors(*mol,*molsim,descriptor_map);
+
+				/// Mark descriptors as invalid if it appeared for the first molecule but not for the current one
+				for(int p=no_internal_descriptors; p<descriptor_matrix_.size(); p++)
+				{
+					if(descriptor_matrix_[p].size()<n+1)
+					{
+						descriptor_matrix_[p].push_back(0);
+						if(newInvalidDescriptors.find(p) == newInvalidDescriptors.end())
+						{
+							newInvalidDescriptors.insert(p);
+						}
+					}
+				}
+
+				/// Mark current compound as invalid if activity values are missing
+				for(int act=0; act<Y_.size(); act++)
+				{
+					if(Y_[act].size()<n+1)
+					{
+						Y_[act].push_back(0);
+						if(invalidSubstances_.find(n) == invalidSubstances_.end())
+						{
+							newInvalidSubstances.insert(n);
+						}
+					}
+				}
+
+				delete mol; // delete the completly processed molecule!
+			}
+
+			removeInvalidDescriptors(newInvalidDescriptors);
+			removeInvalidSubstances(newInvalidSubstances);
+			invalidSubstances_=newInvalidSubstances;
+			delete molsim;
 		}
 
 
@@ -382,7 +595,7 @@ namespace BALL
 		}
 
 
-		void QSARData::setDescriptorNames(const Molecule& m, std::multiset<int>& activity_IDs, bool useExDesc)
+		void QSARData::setDescriptorNames(const Molecule& m, std::multiset<int>& activity_IDs, bool useExDesc, bool resize)
 		{
 			if (useExDesc)
 			{
@@ -409,7 +622,7 @@ namespace BALL
 					i++;
 				}
 			}
-			else
+			else if(resize)
 			{
 				column_names_.resize(60);
 			}
@@ -536,6 +749,20 @@ namespace BALL
 		{
 			Statistics stat;
 			stat.scaling(descriptor_matrix_);
+		}
+
+
+		void QSARData::calculateTopologicalDescriptors(Molecule& mol, MolecularSimilarity& molsim, const map<String,int>& descriptor_map)
+		{
+			vector<Size> fingerprint;
+			molsim.generateFingerprint(mol,fingerprint);
+			const vector<String>& group_names = molsim.getFunctionalGroupNames();
+
+			for(Size i=0; i<fingerprint.size(); i++)
+			{
+				int index = descriptor_map.find(group_names[i])->second;
+				descriptor_matrix_[index].push_back(fingerprint[i]);
+			}
 		}
 
 

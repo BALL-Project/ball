@@ -18,8 +18,8 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CONFIG_IO_H
-#define CONFIG_IO_H
+#ifndef BALL_QSAR_CONFIGIO_H
+#define BALL_QSAR_CONFIGIO_H
 
 #include <istream>
 #include <BALL/DATATYPE/string.h>
@@ -36,6 +36,7 @@ namespace BALL
 			
 			String sd_file;
 			std::multiset<int> activities;
+			std::set<String> activity_names;
 			bool read_sd_descriptors;
 			bool center_data;
 			bool center_y;
@@ -59,6 +60,7 @@ namespace BALL
 			String input_file;
 			double validation_fraction;
 			int no_folds;
+			bool even_split;
 			int ID;
 			bool done;
 		};
@@ -166,4 +168,4 @@ namespace BALL
 }
 
 
-#endif // CONFIG_IO_H
+#endif // BALL_QSAR_CONFIGIO_H

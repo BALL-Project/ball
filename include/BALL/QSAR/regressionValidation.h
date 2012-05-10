@@ -23,20 +23,14 @@
 //
 //
 
-#ifndef REGVALIDATION
-#define REGVALIDATION
+#ifndef BALL_QSAR_REGRESSIONVALIDATION_H
+#define BALL_QSAR_REGRESSIONVALIDATION_H
 
-#ifndef BALL_QSAR_COMMON_H
-	#include <BALL/QSAR/common.h>
-#endif
+#include <BALL/QSAR/common.h>
 
-#ifndef QSARDATA
 #include <BALL/QSAR/QSARData.h>
-#endif
 
-#ifndef VALIDATION
 #include <BALL/QSAR/validation.h>
-#endif
 
 #include <iterator>
 
@@ -229,4 +223,4 @@ namespace BALL
 
 
 
-#endif // REGVALIDATION
+#endif // BALL_QSAR_REGRESSIONVALIDATION_H

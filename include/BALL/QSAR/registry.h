@@ -18,8 +18,8 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef QSAR_REGISTRY
-#define QSAR_REGISTRY
+#ifndef BALL_QSAR_REGISTRY_H
+#define BALL_QSAR_REGISTRY_H
 
 #ifndef MODEL_FACTORY_H
 #include <BALL/QSAR/modelFactory.h>
@@ -172,4 +172,4 @@ namespace BALL
 	}
 }
 
-#endif // QSAR_REGISTRY
+#endif // BALL_QSAR_REGISTRY_H

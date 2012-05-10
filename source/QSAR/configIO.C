@@ -191,6 +191,7 @@ namespace BALL
 			no_folds = 0;
 			ID = -1;
 			done = 0;
+			even_split = 0;
 		}
 
 		InputPartitioningConfiguration ConfigIO::readInputPartitioningConfiguration(istream* input)
@@ -243,6 +244,10 @@ namespace BALL
 				else if (line.hasPrefix("ID"))
 				{
 					conf.ID = ((String)line.after("=")).trimLeft().toInt();
+				}
+				else if(line.hasPrefix("even_split"))
+				{
+					conf.even_split = ((String)line.after("=")).trimLeft().toInt();
 				}
 				else
 				{
