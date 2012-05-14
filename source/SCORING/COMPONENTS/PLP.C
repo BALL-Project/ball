@@ -140,7 +140,8 @@ PLP::PLP(ForceField& force_field)
 
 PLP::PLP(const PLP& component)
 	throw()
-	:	cut_off_(component.cut_off_),
+	:	ForceFieldComponent(*component.force_field_),
+		cut_off_(component.cut_off_),
 		vdw_cut_on_(component.vdw_cut_on_),
 		vdw_cut_off_(component.vdw_cut_off_),
 		es_cut_on_(component.es_cut_on_),
@@ -224,10 +225,21 @@ void PLP::setRotatableBonds(vector<Bond*>& bonds)
 			if (at != ght.at1) ght.at4 = at;
 		}
 
-		if (isSp3(ght.at1) && isSp3(ght.at2)) ght.type = 0;
-		else if (isSp3(ght.at1) && !isSp3(ght.at2) || !isSp3(ght.at1) && isSp3(ght.at2))
-			ght.type = 1;
-		else ght.type = 2;
+		if (isSp3(ght.at1) && isSp3(ght.at2))
+		{
+			ght.type = 0;
+		}
+		else
+		{
+			if ( (isSp3(ght.at1) && !isSp3(ght.at2)) || (!isSp3(ght.at1) && isSp3(ght.at2)) )
+			{
+				ght.type = 1;
+			}
+			else
+			{
+				ght.type = 2;
+			}
+		}
 
 		ghtorsions_.push_back(ght);
 	}

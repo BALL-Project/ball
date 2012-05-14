@@ -25,7 +25,6 @@ namespace BALL
 
 	Rescorer::Rescorer(const Rescorer& rescorer)
 	{
-
 	}
 
 	Rescorer& Rescorer::operator = (const Rescorer& rescorer)

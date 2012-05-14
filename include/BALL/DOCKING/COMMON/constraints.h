@@ -192,7 +192,7 @@ namespace BALL
 			AtomContainer grid_container_;
 
 			/** Saves the ID of the relevant ScoreGridSet in case of grid-based ScoringFunctions */
-			int gridSetID_;
+			unsigned int gridSetID_;
 
 			friend class BALL::DockingAlgorithm;
 			friend class BALL::VIEW::DockRLDialog;

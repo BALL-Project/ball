@@ -102,16 +102,10 @@ namespace BALL
 		SLICKScore()
 			;
 
-		/** Construct a SLICKScore with pointers to protein and
-				ligand
-		*/
-		SLICKScore(Molecule& protein, Molecule& ligand)
-			;
-
 		/** Construct a SLICKScore with options.
 		*/
 		SLICKScore(Molecule& protein, Molecule& ligand,
-				const Options& options)
+				Options& options)
 			;
 
 		/**	Copy constructor
@@ -144,10 +138,10 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Force field specific setup
-		*/
-		virtual bool specificSetup()
-			throw();
+		/**
+		 * 	Setup scorinf function
+		 */
+		bool setup();
 
 		//@}
 		/**	@name Accessors specific to the SLICKScore scoring function

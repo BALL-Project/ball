@@ -30,61 +30,52 @@ namespace BALL
 	const String VanDerWaalsSlick::Option::VDW_METHOD = "van_der_Waals_method";
 	const String VanDerWaalsSlick::Option::VDW_CUT_ON = "van_der_Waals_cut_on";
 	const String VanDerWaalsSlick::Option::VDW_CUT_OFF = "van_der_Waals_cut_off";
-	const String VanDerWaalsSlick::Option::VDW_SOFTENING_LIMIT
-		= "van_der_Waals_softening_limit";
+	const String VanDerWaalsSlick::Option::VDW_SOFTENING_LIMIT = "van_der_Waals_softening_limit";
 	const String VanDerWaalsSlick::Option::LENNARD_JONES_FILE = "lennard_jones_file";
 
-
 	const Size VanDerWaalsSlick::Default::VERBOSITY = 0;
-	const Size VanDerWaalsSlick::Default::VDW_METHOD
-		= CALCULATION__FULL_LJ_POTENTIAL;
+	const Size VanDerWaalsSlick::Default::VDW_METHOD = CALCULATION__FULL_LJ_POTENTIAL;
 	const float VanDerWaalsSlick::Default::VDW_CUT_ON = 13.0f;
 	const float VanDerWaalsSlick::Default::VDW_CUT_OFF = 15.0f;
 	// This option is only in effect if the method supports it
 	const float VanDerWaalsSlick::Default::VDW_SOFTENING_LIMIT = 5.0f;
-	const String VanDerWaalsSlick::Default::LENNARD_JONES_FILE
-		= "Amber/amber94gly.ini";
+	const String VanDerWaalsSlick::Default::LENNARD_JONES_FILE = "Amber/amber94gly.ini";
 
 
 	VanDerWaalsSlick::VanDerWaalsSlick()
-
 		:	ScoringComponent()
 	{
 		// Set the name of this component
-		setName("van-der-Waals");
+		setName("vanDerWaalsSlick");
 		// ???
 	}
 
 
 	VanDerWaalsSlick::VanDerWaalsSlick(ScoringComponent& vdw)
-
 		: ScoringComponent(vdw)
 	{
 		// Set the name of this component
-		setName("van-der-Waals");
+		setName("vanDerWaalsSlick");
 		// ???
 	}
 
 
 	VanDerWaalsSlick::VanDerWaalsSlick(ScoringFunction& sf)
-
 		: ScoringComponent(sf)
 	{
 		// Set the name of this component
-		setName("van-der-Waals");
+		setName("vanDerWaalsSlick");
 		// ???
 	}
 
 
 	VanDerWaalsSlick::~VanDerWaalsSlick()
-
 	{
 		clear();
 	}
 
 
 	void VanDerWaalsSlick::clear()
-
 	{
 		non_bonded_.clear();
 	}
@@ -99,9 +90,7 @@ namespace BALL
 
 
 	bool VanDerWaalsSlick::setup()
-
 	{
-
 		if (getScoringFunction() == 0)
 		{
 			Log.error() << "VanDerWaalsSlick::setup(): Not bound to a ScoringFunction"
@@ -224,12 +213,9 @@ namespace BALL
 
 
 	Size VanDerWaalsSlick::createNonBondedList_(const ForceField::PairVector& atom_pair_vector)
-
 	{
-
 		// The following piece of code is stolen and adapted from
 		// AmberNonBonded::buildVectorOfNonBondedAtomPairs
-
 		non_bonded_.clear();
 		non_bonded_.reserve(atom_pair_vector.size());
 		is_hydrogen_bond_.clear();
@@ -246,129 +232,130 @@ namespace BALL
 
 		// Iterate and search torsions, fill the atom pairs that have a torsion
 		// in non_bonded_
-    for (Position i = 0; i < (Size)atom_pair_vector.size(); ++i)
-    {
-      atom1 = atom_pair_vector[i].first;
-      atom2 = atom_pair_vector[i].second;
-      if (!atom1->isVicinal(*atom2))
-      {
-        // store the non-torsions for later appending in the non_torsions
-        // vector
-        non_torsions.push_back(i);
-      }
-      else
-      {
-        type_atom1 = atom1->getType();
-        type_atom2 = atom2->getType();
-        lj_tmp.atom1 = atom1;
-        lj_tmp.atom2 = atom2;
+		for (Position i = 0; i < (Size)atom_pair_vector.size(); ++i)
+		{
+			atom1 = atom_pair_vector[i].first;
+			atom2 = atom_pair_vector[i].second;
+			if (!atom1->isVicinal(*atom2))
+			{
+				// store the non-torsions for later appending in the non_torsions
+				// vector
+				non_torsions.push_back(i);
+			}
+			else
+			{
+				type_atom1 = atom1->getType();
+				type_atom2 = atom2->getType();
+				lj_tmp.atom1 = atom1;
+				lj_tmp.atom2 = atom2;
 
-        if (!lennard_jones_.assignParameters(lj_tmp.values, type_atom1,
-type_atom2))
-        {
-          // hydrogen bond parameters are assigned later - do nothing!
-          if (!hydrogen_bond_.hasParameters(type_atom1, type_atom2))
-          {
-            Log.error() << "VanDerWaalsSlick::setup(): "
+				if (!lennard_jones_.assignParameters(lj_tmp.values, type_atom1, type_atom2))
+				{
+					// hydrogen bond parameters are assigned later - do nothing!
+					if (!hydrogen_bond_.hasParameters(type_atom1, type_atom2))
+					{
+						Log.error() << "VanDerWaalsSlick::setup(): "
 							<< "cannot find vdw parameters for types "
 							<< atom1->getTypeName() << "-" << atom2->getTypeName()
 							<< " (" << atom1->getFullName() << "-"
 							<< atom2->getFullName() << ")" << std::endl;
+
 						lj_tmp.values.A = 0;
 						lj_tmp.values.B = 0;
 
-            getScoringFunction()->getUnassignedAtoms().insert(atom1);
-            getScoringFunction()->getUnassignedAtoms().insert(atom2);
-          }
-        }
+						getScoringFunction()->getUnassignedAtoms().insert(atom1);
+						getScoringFunction()->getUnassignedAtoms().insert(atom2);
+					}
+				}
 
-        non_bonded_.push_back(lj_tmp);
-      }
-    }
+				non_bonded_.push_back(lj_tmp);
+			}
+		}
 
-    // Determine and set the number of 1-4 interactions (torsions)
-    number_of_1_4_ = (Size)non_bonded_.size();
+		// Determine and set the number of 1-4 interactions (torsions)
+		number_of_1_4_ = (Size)non_bonded_.size();
 
-    // Iterate and search non torsions, fill them in the vector non_bonded_
-    for (Position i = 0; i < (Size)non_torsions.size(); ++i)
-    {
-      atom1 = atom_pair_vector[non_torsions[i]].first;
-      atom2 = atom_pair_vector[non_torsions[i]].second;
+		// Iterate and search non torsions, fill them in the vector non_bonded_
+		for (Position i = 0; i < (Size)non_torsions.size(); ++i)
+		{
+			atom1 = atom_pair_vector[non_torsions[i]].first;
+			atom2 = atom_pair_vector[non_torsions[i]].second;
 
-      type_atom1 = atom1->getType();
-      type_atom2 = atom2->getType();
-      lj_tmp.atom1 = atom1;
-      lj_tmp.atom2 = atom2;
+			type_atom1 = atom1->getType();
+			type_atom2 = atom2->getType();
+			lj_tmp.atom1 = atom1;
+			lj_tmp.atom2 = atom2;
 
-      if (lennard_jones_.hasParameters(type_atom1, type_atom2))
-      {
-        lennard_jones_.assignParameters(lj_tmp.values, type_atom1, type_atom2);
-#ifdef DEBUGDEFUNCT
+			if (lennard_jones_.hasParameters(type_atom1, type_atom2))
+			{
+				lennard_jones_.assignParameters(lj_tmp.values, type_atom1, type_atom2);
+			#ifdef DEBUGDEFUNCT
 				std::cout << "Assigning: " << type_atom1 << "/" << type_atom2
 					<< " --> A = " << lj_tmp.values.A << ", B = " << lj_tmp.values.B
 					<< std::endl;
-#endif
-      }
-      else
-      {
-        Log.error() << "AmberNonBonded::setup(): "
-          << "cannot find Lennard Jones parameters for types "
-          << " (" << atom1->getFullName() << "-" << atom2->getFullName() << ")"
-          << std::endl;
-        lj_tmp.atom1 = atom1;
-        lj_tmp.atom2 = atom2;
-        lj_tmp.values.A = 0;
-        lj_tmp.values.B = 0;
-      }
-      non_bonded_.push_back(lj_tmp);
-    }
+			#endif
+			}
+			else
+			{
+				Log.error() << "AmberNonBonded::setup(): "
+				<< "cannot find Lennard Jones parameters for types "
+				<< " (" << atom1->getFullName() << "-" << atom2->getFullName() << ")"
+				<< std::endl;
 
+				lj_tmp.atom1 = atom1;
+				lj_tmp.atom2 = atom2;
+				lj_tmp.values.A = 0;
+				lj_tmp.values.B = 0;
+			}
 
-    // now check for hydrogen bonds
-    // parameters for hydrogen bonds are used, if they exist
-    // and the two atoms are not vicinal (1-4).
-    // We make sure that the H-bond parameters are all at the
-    // end of the pair list.
-    Potential1210::Values values;
-    number_of_h_bonds_ = 0;
-    Position first_h_bond = non_bonded_.size();
-    for (Position i = number_of_1_4_; i < first_h_bond; )
-    {
-      // Retrieve the two atom types...
-      type_atom1 = non_bonded_[i].atom1->getType();
-      type_atom2 = non_bonded_[i].atom2->getType();
+			non_bonded_.push_back(lj_tmp);
+		}
 
-      // and figure out whether we have suitable H-bond parameters.
-      bool is_hydrogen_bond = hydrogen_bond_.hasParameters(type_atom1,
-type_atom2);
-      if (is_hydrogen_bond)
-      {
-        // OK, it's an H-bond pair. Retrieve its parameters and assign
-        // them.
-        hydrogen_bond_.assignParameters(values, type_atom1, type_atom2);
-        non_bonded_[i].values.A = values.A;
-        non_bonded_[i].values.B = values.B;
+		// now check for hydrogen bonds
+		// parameters for hydrogen bonds are used, if they exist
+		// and the two atoms are not vicinal (1-4).
+		// We make sure that the H-bond parameters are all at the
+		// end of the pair list.
+		Potential1210::Values values;
+		number_of_h_bonds_ = 0;
+		Position first_h_bond = non_bonded_.size();
+		for (Position i = number_of_1_4_; i < first_h_bond; )
+		{
+			// Retrieve the two atom types...
+			type_atom1 = non_bonded_[i].atom1->getType();
+			type_atom2 = non_bonded_[i].atom2->getType();
 
-        // Note this as an H-bond.
-        number_of_h_bonds_++;
+			// and figure out whether we have suitable H-bond parameters.
+			bool is_hydrogen_bond = hydrogen_bond_.hasParameters(type_atom1,
+			type_atom2);
+			if (is_hydrogen_bond)
+			{
+				// OK, it's an H-bond pair. Retrieve its parameters and assign
+				// them.
+				hydrogen_bond_.assignParameters(values, type_atom1, type_atom2);
+				non_bonded_[i].values.A = values.A;
+				non_bonded_[i].values.B = values.B;
 
-        // ...and swap it to the end of the pair list.
-        first_h_bond--;
-        std::swap(non_bonded_[i], non_bonded_[first_h_bond]);
-      }
-      else
-      {
-        // No H-bond, get the next pair.
-        is_hydrogen_bond_.push_back(false);
-        i++;
-      }
-    }
-    // Fill the is_hydrogen_bond_ vector with the reamining pairs
-    // (H-bonds only)
-    for (Position i = first_h_bond; i < non_bonded_.size(); i++)
-    {
-      is_hydrogen_bond_.push_back(true);
-    }
+				// Note this as an H-bond.
+				number_of_h_bonds_++;
+
+				// ...and swap it to the end of the pair list.
+				first_h_bond--;
+				std::swap(non_bonded_[i], non_bonded_[first_h_bond]);
+			}
+			else
+			{
+				// No H-bond, get the next pair.
+				is_hydrogen_bond_.push_back(false);
+				i++;
+			}
+		}
+		// Fill the is_hydrogen_bond_ vector with the reamining pairs
+		// (H-bonds only)
+		for (Position i = first_h_bond; i < non_bonded_.size(); i++)
+		{
+			is_hydrogen_bond_.push_back(true);
+		}
 
 		return(getScoringFunction()->getUnassignedAtoms().size());
 	}
@@ -549,9 +536,8 @@ type_atom2);
 	}
 */
 
-  float noSwitch(double /* square_distance */,
-			const SwitchingCutOnOff& /* cutoffs */)
-  {
+	float noSwitch(double /* square_distance */, const SwitchingCutOnOff& /* cutoffs */)
+	{
 		return 1.0f;
 	}
 
@@ -656,6 +642,19 @@ type_atom2);
 		return(energy);
 	}
 
+
+	void VanDerWaalsSlick::update(const vector<std::pair<Atom*, Atom*> >& pair_vector)
+	{
+	}
+
+
+	double VanDerWaalsSlick::updateScore()
+	{
+		double score = 0.0;
+		score += coefficient_ * calculateScore();
+
+		return score;
+	}
 
 	double VanDerWaalsSlick::calculateScore()
 

@@ -67,7 +67,7 @@ void DiffGridBasedScoring::update()
 	bool update_ligand_nonbonded = 0;
 
 	// Make sure to update pairlists for all atoms, including those belonging to flexible residues.
-	HashGrid3<Atom*>* backup_grid;
+	HashGrid3<Atom*>* backup_grid = 0;
 	if (!flexible_residues_.empty())
 	{
 		backup_grid = hashgrid_;

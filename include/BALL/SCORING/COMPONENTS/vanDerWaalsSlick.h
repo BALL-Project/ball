@@ -110,6 +110,10 @@ namespace BALL
 		virtual bool setup()
 			;
 
+		void update(const vector<std::pair<Atom*, Atom*> >& pair_vector);
+
+		virtual double updateScore();
+
 		///
 		virtual double calculateScore()
 			;

@@ -38,6 +38,7 @@ SET(EXECUTABLES_LIST
 	SideChainGridBuilder
 	SimilarityAnalyzer
 	SimpleRescorer
+	SLICK
 	SpatialConstraintDefiner
 	TaGRes
 	TaGRes-train

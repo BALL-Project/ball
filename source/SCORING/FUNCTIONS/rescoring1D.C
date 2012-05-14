@@ -60,7 +60,7 @@ namespace BALL
 		}
 
 
-		void Rescoring1D::generateScoreContributions_(Molecule* mol, vector<vector<double> >* matrix, vector<double>* v)
+		void Rescoring1D::generateScoreContributions_(vector<vector<double> >* matrix, vector<double>* v)
 		{
 			Size column_no = 0;
 

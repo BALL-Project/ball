@@ -34,115 +34,57 @@ namespace BALL
 	const float SLICKScore::Default::VDW      =  0.1f;
 	const float SLICKScore::Default::POLAR    =  0.05f;
 
+
 	SLICKScore::SLICKScore()
-		
 		:	ScoringFunction()
 	{
-		// register all components of the force field
-		registerComponents_();
-	}
-
-
-	SLICKScore::SLICKScore(Molecule& protein, Molecule& ligand)
-		
-		:	ScoringFunction()
-	{
-		setReceptor(protein);
-		setLigand(ligand);
-
-		// register all components of the force field
-		registerComponents_();
-
-		// set up with the given system
-		bool result = setup();
-
-    if (!result)
-    {
-			Log.error() << "SLICKScore::SLICKScore(Molecule&, Molecule&): "
-				<< "Setup of scoring function failed! " << std::endl;
-		}
 	}
 
 
 	SLICKScore::SLICKScore(Molecule& protein, Molecule& ligand,
-			const Options& new_options)
-		
-		:	ScoringFunction()
+			Options& new_options)
+		:	ScoringFunction(protein, ligand, new_options)
 	{
-		setReceptor(protein);
-		setLigand(ligand);
-
-		// register all components of the force field
-		registerComponents_();
-
-		options = new_options;
-
-		bool result = setup(protein, ligand);
-
-    if (!result)
-    {
-			Log.error() << "SLICKScore::SLICKScore(Molecule&, Molecule&, const Options&): "
-				<< "Setup of scoring function failed! " << std::endl;
-		}
+		setup();
 	}
 
 
 	SLICKScore::SLICKScore(const SLICKScore& slick)
-		
 		:	ScoringFunction(slick)
 	{
 	}
 
 
 	SLICKScore::~SLICKScore()
-		
 	{
 		clear();
 	}
 
 
 	void SLICKScore::clear()
-		
 	{
 		ScoringFunction::clear();
 	}
 
 
-	bool SLICKScore::specificSetup()
-		throw()
+	bool SLICKScore::setup()
 	{
+		setName("SLICKScore");
 
-		// Set VDW to use a cut repulsive potential with a limit of 5 kJ/mol
-		// per interaction
-		options.setInteger(VanDerWaals::Option::VDW_METHOD, 
-				VanDerWaals::CALCULATION__SOFTENED_LJ_POTENTIAL_LOG);
-		options.setReal(VanDerWaals::Option::VDW_SOFTENING_LIMIT, 5.0f);
+		// Set VDW to use a cut repulsive potential with a limit of 5 kJ/mol per interaction
+		options_.setInteger(VanDerWaalsSlick::Option::VDW_METHOD, VanDerWaalsSlick::CALCULATION__SOFTENED_LJ_POTENTIAL_LOG);
+		options_.setReal(VanDerWaalsSlick::Option::VDW_SOFTENING_LIMIT, 5.0f);
 
 		// Use simple (and fast) Coulomb interactions for the scoring
-		options.setInteger(PolarSolvation::Option::POLAR_METHOD,
-				PolarSolvation::CALCULATION__COULOMB);
+		options_.setInteger(PolarSolvation::Option::POLAR_METHOD, PolarSolvation::CALCULATION__COULOMB);
 
-		// Now extract options from options table and set the coefficients of
+		// Now extract options_ from options table and set the coefficients of
 		// the components accordingly.
-		float CONST = options.setDefaultReal(SLICKScore::Option::CONST,
-				SLICKScore::Default::CONST);
+		float CONST = options_.setDefaultReal(SLICKScore::Option::CONST, SLICKScore::Default::CONST);
 		setIntercept(CONST);
 
-		float CHPI = options.setDefaultReal(SLICKScore::Option::CHPI,
-				SLICKScore::Default::CHPI);
-		setCoefficient("CHPI", CHPI);
-
-		float HB = options.setDefaultReal(SLICKScore::Option::HB,
-				SLICKScore::Default::HB);
-		setCoefficient("SLICK HydrogenBond", HB);
-
-		float VDW = options.setDefaultReal(SLICKScore::Option::VDW,
-				SLICKScore::Default::VDW);
-		setCoefficient("van-der-Waals", VDW);
-
-		float PS = options.setDefaultReal(SLICKScore::Option::POLAR,
-				SLICKScore::Default::POLAR);
-		setCoefficient("Polar Solvation", PS);
+		// register all components of the force field
+		registerComponents_();
 
 		// check whether we know which molecule is the protein and which is the
 		// ligand in this complex. In case we don't know, we have to guess.
@@ -152,16 +94,14 @@ namespace BALL
 		{
 			Log.error() << "I don't know what the protein and the ligand is." 
 				<< std::endl;
-			return(false);
+			return false;
 		}
 
-		return(true);
-
+		return true;
 	}
 
 
 	const SLICKScore& SLICKScore::operator = (const SLICKScore& slick)
-		
 	{
 		// avoid self assignment
 		if (&slick != this)
@@ -174,7 +114,6 @@ namespace BALL
 
 
 	double SLICKScore::getCHPIScore() const
-		
 	{
 		const ScoringComponent* component = getComponent("CHPI");
 		if (component != 0)
@@ -189,7 +128,6 @@ namespace BALL
 
 
 	double SLICKScore::getVDWScore() const
-		
 	{
 		const ScoringComponent* component = getComponent("van-der-Waals");
 		if (component != 0)
@@ -204,7 +142,6 @@ namespace BALL
 
 
 	double SLICKScore::getPolarSolvationScore() const
-		
 	{
 		const ScoringComponent* component = getComponent("Polar Solvation");
 		if (component != 0)
@@ -219,7 +156,6 @@ namespace BALL
 
 
 	double SLICKScore::getNonpolarSolvationScore() const
-		
 	{
 		const ScoringComponent* component = getComponent("Nonpolar Solvation");
 		if (component != 0)
@@ -233,7 +169,6 @@ namespace BALL
 	}
 
 	double SLICKScore::getHydrogenBondScore() const
-		
 	{
 		const ScoringComponent* component = getComponent("SLICK HydrogenBond");
 		if (component != 0)
@@ -247,13 +182,35 @@ namespace BALL
 	}
 	
 	void SLICKScore::registerComponents_()
-		
 	{
-		// create the component list
-		insertComponent(new CHPI(*this));
-		insertComponent(new HydrogenBond(*this));
-		insertComponent(new VanDerWaals(*this));
-		insertComponent(new PolarSolvation(*this));
+		float coeff_CHPI = options_.setDefaultReal(SLICKScore::Option::CHPI, SLICKScore::Default::CHPI);
+		float coeff_HB = options_.setDefaultReal(SLICKScore::Option::HB, SLICKScore::Default::HB);
+		float coeff_VDW = options_.setDefaultReal(SLICKScore::Option::VDW, SLICKScore::Default::VDW);
+		float coeff_PS = options_.setDefaultReal(SLICKScore::Option::POLAR, SLICKScore::Default::POLAR);
+
+		CHPI* chpi = new CHPI(*this);
+		chpi->setCoefficient(coeff_CHPI);
+		chpi->setup();
+		chpi->setNormalizationParameters(0.0, 0.0);
+		insertComponent(chpi);
+
+		HydrogenBond* hb = new HydrogenBond(*this, HydrogenBond::ALL_HYDROGENS);
+		hb->setCoefficient(coeff_HB);
+		hb->setup();
+		hb->setNormalizationParameters(0.0, 0.0);
+		insertComponent(hb);
+
+		VanDerWaalsSlick* vdws = new VanDerWaalsSlick(*this);
+		vdws->setCoefficient(coeff_VDW);
+		vdws->setup();
+		vdws->setNormalizationParameters(0.0, 0.0);
+		insertComponent(vdws);
+
+		PolarSolvation* ps = new PolarSolvation(*this);
+		ps->setCoefficient(coeff_PS);
+		ps->setup();
+		ps->setNormalizationParameters(0.0, 0.0);
+		insertComponent(ps);
 	}
 
 } // namespace BALL

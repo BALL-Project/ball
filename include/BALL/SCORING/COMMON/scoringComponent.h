@@ -78,7 +78,7 @@ namespace BALL
 
 			/** Calculate the score for this component (for all interactions that have been set by the last call of update()) and return the score.\n
 			The coefficient assigned by the user to this component should be taken into account for the calculation, so that the weighted score is returned. */
-			virtual double updateScore() = 0;
+			virtual double updateScore();
 
 			virtual void setLigandIntraMolecular(bool b);
 

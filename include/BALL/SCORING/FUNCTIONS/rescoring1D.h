@@ -36,7 +36,7 @@ namespace BALL
 		protected:
 			void setup_();
 			const Protein* protein_;
-			void generateScoreContributions_(Molecule* mol, vector<vector<double> >* matrix, vector<double>* v);
+			void generateScoreContributions_(vector<vector<double> >* matrix, vector<double>* v);
 	};
 }
 

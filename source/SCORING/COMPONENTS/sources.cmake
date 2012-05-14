@@ -18,8 +18,8 @@ SET(SOURCES_LIST
 	PLP.C
 	rotationalEntropy.C
 	solvation.C
-	#nonpolarSolvation.C
-	#polarSolvation.C
+	nonpolarSolvation.C
+	polarSolvation.C
 	#rotationalEntropyLoss.C
 	#vanDerWaals should be included again, right now there are unresolved compilation problems
 	vanDerWaalsSlick.C

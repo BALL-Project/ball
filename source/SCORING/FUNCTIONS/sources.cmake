@@ -16,8 +16,8 @@ SET(SOURCES_LIST
 	PLPScoring.C
 	randomEvaluation.C
 	PBScoring.C
-	#slickEnergy.C
-	#slickScore.C
+	slickEnergy.C
+	slickScore.C
 )	
 
 ADD_BALL_SOURCES("SCORING/FUNCTIONS" "${SOURCES_LIST}")

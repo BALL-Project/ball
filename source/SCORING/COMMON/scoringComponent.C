@@ -166,6 +166,11 @@ void ScoringComponent::update(const AtomPairVector& /*pair_vector*/)
 	throw BALL::Exception::GeneralException(__FILE__, __LINE__, "ScoringComponent error", mess);
 }
 
+double ScoringComponent::updateScore()
+{
+	return 0.0;
+}
+
 void ScoringComponent::setCoefficient(const double& coefficient)
 {
 	coefficient_ = coefficient;

@@ -46,14 +46,14 @@ bool ScoringFunction::Default::IGNORE_H_CLASHES = true;
 
 
 ScoringFunction::ScoringFunction()
-	:	options_(),
+	:	name_(""),
+		options_(),
 		receptor_(0),
 		ligand_(0),
-		name_(""),
 		score_(0.0),
 		intercept_(0.0),
 		base_function_(0),
-		components_(),
+		scoring_components_(),
 		unassigned_atoms_(),
 		max_number_of_errors_(0),
 		number_of_errors_(0)
@@ -64,14 +64,14 @@ ScoringFunction::ScoringFunction()
 
 
 ScoringFunction::ScoringFunction(const ScoringFunction& sf)
-	:	options_(),
+	:	name_(sf.name_),
+		options_(sf.options_),
 		receptor_(sf.receptor_),
 		ligand_(sf.ligand_),
-		name_(sf.name_),
 		score_(sf.score_),
 		intercept_(sf.intercept_),
 		base_function_(sf.base_function_),
-		components_(sf.components_),
+		scoring_components_(sf.scoring_components_),
 		unassigned_atoms_(),
 		max_number_of_errors_(sf.max_number_of_errors_),
 		number_of_errors_(sf.number_of_errors_)
@@ -85,14 +85,14 @@ ScoringFunction::ScoringFunction(const ScoringFunction& sf)
 
 ScoringFunction::ScoringFunction(AtomContainer& receptor, AtomContainer& ligand,
 				 const Options& options)
-	:	options_(options),
+	:	name_(""),
+		options_(options),
 		receptor_(&receptor),
 		ligand_(&ligand),
-		name_(""),
 		score_(0.0),
 		intercept_(0.0),
 		base_function_(0),
-		components_(),
+		scoring_components_(),
 		unassigned_atoms_(),
 		max_number_of_errors_(0),
 		number_of_errors_(0)
@@ -160,6 +160,10 @@ void ScoringFunction::clear()
 	score_ = 0.0;
 	intercept_ = 0.0;
 
+	unassigned_atoms_.clear();
+	max_number_of_errors_ = 0;
+	number_of_errors_ = 0;
+
 	// The base function was (hopefully) assigned by the setup() method, do
 	// we have to delete it here.
 	if (base_function_ != 0)
@@ -168,24 +172,35 @@ void ScoringFunction::clear()
 		base_function_ = 0;
 	}
 
-	components_.clear();
-	unassigned_atoms_.clear();
-	max_number_of_errors_ = 0;
-	number_of_errors_ = 0;
+	if (hashgrid_ != 0)
+	{
+		delete hashgrid_;
+		hashgrid_ = 0;
+	}
 
-	delete hashgrid_;
-	delete flexible_residues_hashgrid_;
-	delete all_residues_hashgrid_;
+	if (flexible_residues_hashgrid_ != 0)
+	{
+		delete flexible_residues_hashgrid_;
+		flexible_residues_hashgrid_ = 0;
+	}
+
+	if (all_residues_hashgrid_ != 0)
+	{
+		delete all_residues_hashgrid_;
+		all_residues_hashgrid_ = 0;
+	}
 
 	for (Size i = 0; i < static_ligand_fragments_.size(); i++)
 	{
 		delete static_ligand_fragments_[i];
 	}
+	static_ligand_fragments_.clear();
 
-	for (Size i = 0; i < scoring_components_.size(); i++)
+	for (Size i=0; i < scoring_components_.size(); i++)
 	{
 		delete scoring_components_[i];
 	}
+	scoring_components_.clear();
 }
 
 
@@ -195,7 +210,7 @@ ScoringFunction& ScoringFunction::operator = (const ScoringFunction& sf)
 	name_ = sf.name_;
 	score_ = sf.score_;
 	intercept_ = sf.intercept_;
-	components_ = sf.components_;
+	scoring_components_ = sf.scoring_components_;
 	unassigned_atoms_ = sf.unassigned_atoms_;
 	max_number_of_errors_ = sf. max_number_of_errors_;
 	number_of_errors_ = sf.number_of_errors_;
@@ -229,43 +244,6 @@ bool ScoringFunction::setup()
 		if (base_function_type == ScoringBaseFunction::BASE_FUNCTION_TYPE__FERMI)
 		{
 			base_function_ = new FermiBaseFunction;
-		}
-	}
-
-	// parts that are specific to the scoring function
-	bool success = false;
-	try
-	{
-		success = specificSetup();
-	}
-	catch(...)
-	{
-	}
-
-	if (!success)
-	{
-		Log.error() << "ScoringFunction::setup(): specificSetup() failed!"
-			<< std::endl;
-		return(false);
-	}
-
-	// Now setup all the components of this scoring function
-	std::vector< std::pair<ScoringComponent*, float> >::iterator it;
-	for (it = components_.begin(); it != components_.end(); ++it)
-	{
-		success = false;
-		try
-		{
-			success = it->first->setup();
-		}
-		catch(...)
-		{
-		}
-
-		if (!success)
-		{
-			Log.error() << "ScoringFunction::setup(): Setup of component "
-				<< it->first->getName() << " failed!" << std::endl;
 		}
 	}
 
@@ -317,7 +295,7 @@ bool ScoringFunction::setup()
 	flexible_residues_hashgrid_ = NULL;
 	all_residues_hashgrid_ = NULL;
 
-	return(success);
+	return true;
 }
 
 /*
@@ -391,14 +369,6 @@ bool ScoringFunction::setup(AtomContainer& receptor, AtomContainer& ligand,
 	options_ = options;
 
 	return setup();
-}
-
-
-bool ScoringFunction::specificSetup()
-	throw(Exception::TooManyErrors)
-{
-	// ????
-	return true;
 }
 
 
@@ -495,7 +465,7 @@ void ScoringFunction::setLigand(AtomContainer& molecule)
 AtomContainer* ScoringFunction::getLigand() const
 
 {
-	return(getSecondMolecule());
+	return getSecondMolecule();
 }
 
 
@@ -509,34 +479,40 @@ void ScoringFunction::setIntercept(double intercept)
 double ScoringFunction::getIntercept() const
 
 {
-	return(intercept_);
+	return intercept_;
 }
 
 
 ScoringBaseFunction* ScoringFunction::getBaseFunction() const
 {
-	return(base_function_);
+	return base_function_;
+}
+
+
+void ScoringFunction::insertComponent(ScoringComponent* component)
+{
+	scoring_components_.push_back(component);
 }
 
 
 void ScoringFunction::insertComponent(ScoringComponent* component,
 				      float coefficient)
-
 {
-	components_.push_back(std::pair<ScoringComponent*, float>(component, coefficient));
+	component->setCoefficient(coefficient);
+	scoring_components_.push_back(component);
 }
 
 
 void ScoringFunction::removeComponent(const ScoringComponent* component)
-
 {
-	std::vector< std::pair<ScoringComponent*, float> >::iterator it;
-	for (it = components_.begin(); it != components_.end(); ++it)
+	std::vector<ScoringComponent*>::iterator it;
+	for (it = scoring_components_.begin(); it != scoring_components_.end(); ++it)
 	{
-		if (it->first == component)
+		if (*it == component)
 		{
-			delete it->first;
-			components_.erase(it);
+			delete (*it);
+			scoring_components_.erase(it);
+
 			break;
 		}
 	}
@@ -544,15 +520,15 @@ void ScoringFunction::removeComponent(const ScoringComponent* component)
 
 
 void ScoringFunction::removeComponent(const String& name)
-
 {
-	std::vector< std::pair<ScoringComponent*, float> >::iterator it;
-	for (it = components_.begin(); it != components_.end(); ++it)
+	std::vector<ScoringComponent*>::iterator it;
+	for (it = scoring_components_.begin(); it != scoring_components_.end(); ++it)
 	{
-		if (it->first->getName() == name)
+		if ((*it)->getName() == name)
 		{
-			delete it->first;
-			components_.erase(it);
+			delete (*it);
+			scoring_components_.erase(it);
+
 			break;
 		}
 	}
@@ -563,12 +539,13 @@ void ScoringFunction::setCoefficient(const ScoringComponent* component,
 				     float coefficient)
 
 {
-	std::vector< std::pair<ScoringComponent*, float> >::iterator it;
-	for (it = components_.begin(); it != components_.end(); ++it)
+	std::vector<ScoringComponent*>::iterator it;
+	for (it = scoring_components_.begin(); it != scoring_components_.end(); ++it)
 	{
-		if (it->first == component)
+		if ((*it) == component)
 		{
-			it->second = coefficient;
+			(*it)->setCoefficient(coefficient);
+
 			break;
 		}
 	}
@@ -578,12 +555,13 @@ void ScoringFunction::setCoefficient(const ScoringComponent* component,
 void ScoringFunction::setCoefficient(const String& name,
 				     float coefficient)
 {
-	std::vector< std::pair<ScoringComponent*, float> >::iterator it;
-	for (it = components_.begin(); it != components_.end(); ++it)
+	std::vector<ScoringComponent*>::iterator it;
+	for (it = scoring_components_.begin(); it != scoring_components_.end(); ++it)
 	{
-		if (it->first->getName() == name)
+		if ((*it)->getName() == name)
 		{
-			it->second = coefficient;
+			(*it)->setCoefficient(coefficient);
+
 			break;
 		}
 	}
@@ -593,88 +571,89 @@ void ScoringFunction::setCoefficient(const String& name,
 bool ScoringFunction::getCoefficient(const ScoringComponent* component,
 				     float& coefficient) const
 {
-	std::vector< std::pair<ScoringComponent*, float> >::const_iterator it;
-	for (it = components_.begin(); it != components_.end(); ++it)
+	std::vector<ScoringComponent*>::const_iterator it;
+	for (it = scoring_components_.begin(); it != scoring_components_.end(); ++it)
 	{
-		if (it->first == component)
+		if ((*it) == component)
 		{
-			coefficient = it->second;
-			return(true);
+			coefficient = (*it)->getCoefficient();;
+
+			return true;
 		}
 	}
 
-	return(false);
+	return false;
 }
 
 
 bool ScoringFunction::getCoefficient(const String& name,
 				     float& coefficient) const
 {
-	std::vector< std::pair<ScoringComponent*, float> >::const_iterator it;
-	for (it = components_.begin(); it != components_.end(); ++it)
+	std::vector<ScoringComponent*>::const_iterator it;
+	for (it = scoring_components_.begin(); it != scoring_components_.end(); ++it)
 	{
-		if (it->first->getName() == name)
+		if ((*it)->getName() == name)
 		{
-			coefficient = it->second;
-			return(true);
+			coefficient = (*it)->getCoefficient();
+
+			return true;
 		}
 	}
 
-	return(false);
+	return false;
 }
 
 
 ScoringComponent* ScoringFunction::getComponent(const String& name) const
 {
-	std::vector< std::pair<ScoringComponent*, float> >::const_iterator it;
-	for (it = components_.begin(); it != components_.end(); ++it)
+	std::vector<ScoringComponent*>::const_iterator it;
+	for (it = scoring_components_.begin(); it != scoring_components_.end(); ++it)
 	{
-		if (it->first->getName() == name)
+		if ((*it)->getName() == name)
 		{
-			return(it->first);
+			return (*it);
 		}
 	}
 
-	return(0);
+	return 0;
 }
 
 
 ScoringComponent* ScoringFunction::getComponent(const Size index) const
 {
-	if (index < components_.size())
+	if (index < scoring_components_.size())
 	{
-		return(components_[index].first);
+		return scoring_components_[index];
 	}
 	else
 	{
-		return(0);
+		return 0;
 	}
 }
 
 
 double ScoringFunction::calculateScore()
 {
-	score_ = 0.0;
-	for (Size i = 0; i < components_.size(); ++i)
+	double score = 0.0;
+
+	for (vector<ScoringComponent*>::iterator it = scoring_components_.begin(); it!=scoring_components_.end(); it++)
 	{
-		float score = components_[i].first->calculateScore();
-		float factor = components_[i].second;
-		score_ += factor * score;
+		score += (*it)->updateScore();
 	}
 
-	return(intercept_ + score_);
+	return (intercept_ + score_);
 }
 
 
 const HashSet<const Atom*>& ScoringFunction::getUnassignedAtoms() const
 {
-	return(unassigned_atoms_);
+	return unassigned_atoms_;
 }
 
 
 HashSet<const Atom*>& ScoringFunction::getUnassignedAtoms()
 {
-	return(unassigned_atoms_);
+	return unassigned_atoms_;
 }
 
 
@@ -1900,6 +1879,12 @@ Options ScoringFunction::getOptions()
 }
 
 
+Options* ScoringFunction::getOptionsToModify()
+{
+	return &options_;
+}
+
+
 const vector<Bond*>* ScoringFunction::getRotatableLigandBonds() const
 {
 	return &rotatable_ligand_bonds_;
@@ -1915,6 +1900,14 @@ const vector<StaticLigandFragment*>* ScoringFunction::getStaticLigandFragments()
 void ScoringFunction::setName(String name)
 {
 	name_ = name;
+}
+
+
+double ScoringFunction::getES()
+{
+	double es = 0.0;
+
+	return es;
 }
 
 
