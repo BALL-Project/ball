@@ -721,19 +721,21 @@ namespace BALL
 			QMenu* menu = getMainControl()->initPopupMenu(MainControl::CHOOSE_FF, UIOperationMode::MODE_ADVANCED);
 			if (menu)
 				menu->setEnabled(composites_muteable);
-			
+
 			if (build_peptide_id_)
 				build_peptide_id_->setEnabled(composites_muteable);
 
 			bool allow = composites_muteable && one_system;
 			if (add_hydrogens_id_)
-				add_hydrogens_id_->setEnabled( allow);
+				add_hydrogens_id_->setEnabled(allow);
 			if (build_bonds_id_)
-				build_bonds_id_->setEnabled( allow);
+				build_bonds_id_->setEnabled(allow);
+			if (build_endcaps_id_)
+				build_endcaps_id_->setEnabled(allow);
 			if (check_structure_id_)
-				check_structure_id_->setEnabled( allow);
+				check_structure_id_->setEnabled(allow);
 			if (calculate_ss_id_)
-				calculate_ss_id_->setEnabled( allow);
+				calculate_ss_id_->setEnabled(allow);
 			if (center_camera_id_)
 				center_camera_id_->setEnabled(allow);
 			if (create_distance_grid_id_)
