@@ -49,7 +49,7 @@ namespace BALL
 			String help_url = "scene.html#editing";
 
 			String description = "Shortcut|Display|Edit_Mode";
-			main_action_ = scene_->insertMenuEntry(MainControl::DISPLAY, tr("Edit Mode"), 0, 
+			main_action_ = scene_->insertMenuEntry(MainControl::DISPLAY, tr("Edit Mode"), 0,
 			                                       0, description, QKeySequence("Ctrl+E"),
 																						 tr("Create and modify molecular structures"),
 																						 UIOperationMode::MODE_ADVANCED);
@@ -432,8 +432,9 @@ namespace BALL
 				}
 
 				// we found _another_ atom: set the bond
-				Bond* c = new Bond("Bond", *scene_->getCurrentAtom(), *atom, Bond::ORDER__SINGLE);
-/*
+				new Bond("Bond", *scene_->getCurrentAtom(), *atom, Bond::ORDER__SINGLE);
+/*			Bond* c = new Bond("Bond", *scene_->getCurrentAtom(), *atom, Bond::ORDER__SINGLE);
+
 				EditOperation eo(0, c, "Added bond of type single" , EditOperation::ADDED__BOND);
 				undo_.push_back(eo);
 
@@ -480,11 +481,12 @@ namespace BALL
 				// tell about the new undo operation
 				emit newEditOperation(eo);
 */
-				//set the bond
-				Bond* c = new Bond("Bond", *scene_->getCurrentAtom(), *a, Bond::ORDER__SINGLE);
+				// set the bond
+				new Bond("Bond", *scene_->getCurrentAtom(), *a, Bond::ORDER__SINGLE);
 
 				// tell about the new undo operation
 				/*
+				Bond* c = new Bond("Bond", *scene_->getCurrentAtom(), *a, Bond::ORDER__SINGLE);
 				String bond_string = getBondOrderString_(bond_order_);
 				EditOperation eo2(0, c, (String)qApp->tr("Edit Mode", "Added bond of type ") + bond_string, EditOperation::ADDED__BOND);
 				undo_.push_back(eo2);
@@ -571,7 +573,7 @@ namespace BALL
 			list<Composite*> composite_list = scene_->getMainControl()->getMolecularControlSelection();
 
 			Size nr_high = composite_list.size();
-			//TODO: readd highlighting
+			//TODO: read highlighting
 			if (nr_high > 1 /*|| (only_highlighted_ && nr_high == 0)*/)
 			{
 				scene_->setStatusbarText(qApp->tr("Edit Mode", "Please highlight exactly one AtomContainer for insertion of the created atoms!"), true);
@@ -895,7 +897,7 @@ namespace BALL
 
 		void EditMode::createBond_()
 		{
-			// this functionaltiy shall be independent from the edit mode
+			// this functionality shall be independent from the edit mode
 			// check if two atoms are selected
 			HashSet<Composite*> selection = scene_->getMainControl()->getSelection();
 
