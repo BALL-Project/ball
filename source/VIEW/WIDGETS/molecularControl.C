@@ -26,12 +26,12 @@
 #include <BALL/STRUCTURE/rotamerLibrary.h>
 
 #include <QtGui/QComboBox>
-#include <QtGui/QPushButton> 
-#include <QtGui/QLineEdit> 
-#include <QtGui/QMessageBox> 
-#include <QtGui/QToolTip> 
-#include <QtGui/QGridLayout> 
-#include <QtGui/QCompleter> 
+#include <QtGui/QPushButton>
+#include <QtGui/QLineEdit>
+#include <QtGui/QMessageBox>
+#include <QtGui/QToolTip>
+#include <QtGui/QGridLayout>
+#include <QtGui/QCompleter>
 
 #include <QtCore/QPoint>
 #include <QtCore/QThread>
@@ -473,10 +473,10 @@ namespace BALL
 			// -----------------------------------> AtomContainer
 			count_items_action_ = context_menu_.addAction(tr("Count items"), this, SLOT(countItems()), 0);
 			atom_overview_ = context_menu_.addAction(tr("Atom Overview"), this, SLOT(showAtomOverview()), 0);
-			atom_overview_selection_ = context_menu_.addAction(tr("Atom Overview for Selection"), this, 
+			atom_overview_selection_ = context_menu_.addAction(tr("Atom Overview for Selection"), this,
 																												SLOT(showAtomOverviewForSelection()), 0);
 			// <----------------------------------- AtomContainer
-			
+
 			context_menu_.addSeparator();
 
 			rotamer_mapper_ = new QSignalMapper(this);
@@ -484,6 +484,9 @@ namespace BALL
 			rotamer_menu_ = new QMenu(tr("Apply Rotamer"), this);
 			current_residue_ = 0;
 			context_menu_.addMenu(rotamer_menu_);
+
+			disulfidbond_action_ = context_menu_.addAction(tr("Create Disulfidbond"), this, SLOT(createDisulfidBond()));
+
 			composite_properties_action_ = context_menu_.addAction(tr("Properties"), this, SLOT(compositeProperties()));
 
 			// -----------------------------------> Atoms
@@ -495,7 +498,7 @@ namespace BALL
 			context_menu_.addAction(tr("Expand all"), this, SLOT(expandAll()));
 			context_menu_.addAction(tr("Highlight Selection"), this, SLOT(highlightSelection()));
 			context_menu_.addSeparator();
-			show_ss_id_ = context_menu_.addAction(tr("Show Secondary Structures"), this, 
+			show_ss_id_ = context_menu_.addAction(tr("Show Secondary Structures"), this,
 																						SLOT(switchShowSecondaryStructure()));
 			show_ss_id_->setCheckable(true);
 
@@ -556,7 +559,8 @@ namespace BALL
 			ResidueRotamerSet* res_set = rotamer_library_->getRotamerSet(*current_residue_);
 
 			// Check if the rotamer set is valid
-			if(!res_set || res_set->getNumberOfRotamers() == 0) {
+			if(!res_set || res_set->getNumberOfRotamers() == 0)
+			{
 				rotamer_menu_->setEnabled(false);
 				return;
 			}
@@ -567,7 +571,8 @@ namespace BALL
 			const Rotamer r = res_set->getRotamer(*current_residue_);
 
 			unsigned int i = 0;
-			for(ResidueRotamerSet::iterator it = res_set->begin(); it != res_set->end(); ++it, ++i) {
+			for(ResidueRotamerSet::iterator it = res_set->begin(); it != res_set->end(); ++it, ++i)
+			{
 				//Create the action
 				QAction* action = rotamer_menu_->addAction(QString(res_set->getName().c_str()) + " " + QString::number(i) + " (p: " + QString::number(it->P) + ")");
 				action->setCheckable(true);
@@ -611,7 +616,7 @@ namespace BALL
 
 			Atom* const atom = dynamic_cast<Atom*>(context_composite_);
 			if (atom == 0) return;
-			if (atom->countBonds() == 0) 
+			if (atom->countBonds() == 0)
 			{
 				setStatusbarText((String)tr("Atom has no bonds!"));
 				return;
@@ -619,13 +624,13 @@ namespace BALL
 			BondProperties bs(atom, this);
 			bs.exec();
 		}
-			
+
 		void MolecularControl::buildBonds()
 		{
 			if (context_composite_ == 0) return;
 			notify_(new MolecularTaskMessage(MolecularTaskMessage::BUILD_BONDS));
 		}
-			
+
 		void MolecularControl::centerCamera()
 		{
 			if (context_composite_ == 0) return;
@@ -738,13 +743,13 @@ namespace BALL
 		{
 			String hint;
 
-			select_id_ = insertMenuEntry(MainControl::EDIT, tr("&Select"), this, SLOT(select()), 
+			select_id_ = insertMenuEntry(MainControl::EDIT, tr("&Select"), this, SLOT(select()),
 			                             "Shortcut|Edit|Select", QKeySequence(),
 																	 tr("Select a molecular object to see its position in the scene or to mark it for a simulation"),
 																	 UIOperationMode::MODE_ADVANCED);
 			setMenuHelp(select_id_, "molecularControl.html#selection_highlight");
 
-			deselect_id_ = insertMenuEntry(MainControl::EDIT, tr("&Deselect"), this, SLOT(deselect()), 
+			deselect_id_ = insertMenuEntry(MainControl::EDIT, tr("&Deselect"), this, SLOT(deselect()),
 			                               "Shortcut|Edit|Deselect", QKeySequence(), tr("Deselect a molecular object."),
 																		 UIOperationMode::MODE_ADVANCED);
 			setMenuHelp(deselect_id_, "molecularControl.html#selection_highlight");
@@ -1591,7 +1596,7 @@ namespace BALL
 		void MolecularControl::showDistance(Atom* a1, Atom* a2)
 		{
 			if (!a1 || !a2 || a1 == a2) return;
-			
+
 			Vector3 pos1 = a1->getPosition();
 			Vector3 pos2 = a2->getPosition();
 			ColorRGBA color(0,0,1.0);

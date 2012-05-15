@@ -86,7 +86,7 @@ namespace BALL
 	// 		hint = "To assign charges, one System has to be selected.";
 	// 		assign_charges_id_ = insertMenuEntry(MainControl::BUILD, "Assign Char&ges", this, SLOT(assignCharges()),
 	// 										CTRL+Key_G, -1 , hint);
-		
+
 			description = "Shortcut|Build|Build_Peptide";
 			build_peptide_id_ = insertMenuEntry(MainControl::BUILD, tr("B&uild Peptide"), this, 
 			                                    SLOT(buildPeptide()), description, QKeySequence("Ctrl+Alt+U"),
@@ -117,13 +117,13 @@ namespace BALL
 																						SLOT(checkResidue()), description, QKeySequence("Ctrl+K"),
 																						tr("Check a structure against the fragment database."), 
 																						UIOperationMode::MODE_ADVANCED);
-		
+
 			description = "Shortcut|Build|Add_Hydrogens";
 			add_hydrogens_id_ = insertMenuEntry(MainControl::BUILD, tr("Add &Hydrogens"), this, 
 																					SLOT(addHydrogens()), description, QKeySequence("Ctrl+H"),
 																					tr("Add missing atoms to a selected structure by using the fragment database."),
 																					UIOperationMode::MODE_ADVANCED);
-			
+
 			// MOLECULARMECHANICS Menu -------------------------------------------------------------------
 
 			description = "Shortcut|MolecularMechanics|Single_Point_Calculation";
@@ -132,14 +132,14 @@ namespace BALL
 			                             tr("Calculate the energy of a System with the selected force field."),
 																	 UIOperationMode::MODE_ADVANCED);
 			setMenuHelp(energy_id_, "mm.html#single_point");
-				
+
 			description = "Shortcut|MolecularMechanics|Energy_Minimization";
 			minimization_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, tr("&Energy Minimization"), this, 
 																				 SLOT(runMinimization()), description, QKeySequence(),
 																				 tr("To perform an Energy Minimization, first select the molecular structures."),
 																				 UIOperationMode::MODE_ADVANCED);
 			setMenuHelp(minimization_id_, "mm.html#mini");
-			
+
 			description = "Shortcut|MolecularMechanics|Molecular_Dynamics";
 			mdsimulation_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, tr("Molecular &Dynamics"), this, 
 																				 SLOT(MDSimulation()), description, QKeySequence("Ctrl+M"),
@@ -159,7 +159,7 @@ namespace BALL
 				amber_ff_id_->setCheckable(true);
 				setMenuHelp(amber_ff_id_, "mm.html");
 			}
-			
+
 			description = "Shortcut|MolecularMechanics|Choose_ForceField|Charmm";
 			charmm_ff_id_ = insertMenuEntry(MainControl::CHOOSE_FF, tr("Charmm"), this, 
 																			SLOT(chooseCharmmFF()), description, QKeySequence(),
@@ -262,7 +262,7 @@ namespace BALL
 		MolecularStructure::MolecularStructure(const MolecularStructure& m)
 		 : QWidget(),
 			 ModularWidget()
-		{ 
+		{
 			// prevent warnings
 			m.isValid();
 		}
@@ -311,18 +311,18 @@ namespace BALL
 						return;
 
 					default:
-						Log.error() << (String)tr("Unknown type of MolecularTaskMessage in") << " " 
+						Log.error() << (String)tr("Unknown type of MolecularTaskMessage in") << " "
 							          << __FILE__ << "  " << __LINE__ << std::endl;
 				}
 			}
-		}	
+		}
 
 
 		bool MolecularStructure::checkResidue()
 		{
 			// selection can change
 			list<Composite*> selection = getMainControl()->getMolecularControlSelection();
-			if (selection.size() == 0) 
+			if (selection.size() == 0)
 			{
 				return false;
 			}
@@ -334,20 +334,20 @@ namespace BALL
 			res_check.enableSelection();
 
 			bool okay = true;
-			
+
 			HashSet<Composite*> changed_roots;
 			list<Composite*>::const_iterator it = selection.begin();
 			for (; it != selection.end(); ++it)
-			{	
+			{
 				if (!RTTI::isKindOf<AtomContainer>(**it))
 				{
-					Log.error() << (String)tr("ResidueChecker: cannot apply to a") << " " << typeid(**it).name() 
+					Log.error() << (String)tr("ResidueChecker: cannot apply to a") << " " << typeid(**it).name()
 						          << " " << (String)tr("object") << std::endl;
 					continue;
 				}
 
 				(*it)->apply(res_check);
-				okay &= res_check.getStatus();	
+				okay &= res_check.getStatus();
 				if (!res_check.getStatus())
 				{
 					changed_roots.insert(&(**it).getRoot());
@@ -375,8 +375,8 @@ namespace BALL
 			if (okay)
 			{
 				setStatusbarText((String)tr("ResidueChecker: no errors found."), true);
-			} 
-			else 
+			}
+			else
 			{
 				setStatusbarText((String)tr("Errors found in molecule, the problematic atoms are now selected and colored! See also logs"), true);
 				HashSet<Composite*>::Iterator it = changed_roots.begin();
@@ -392,7 +392,7 @@ namespace BALL
 
 		void MolecularStructure::addHydrogens()
 		{
-			if (getMainControl()->getMolecularControlSelection().size() == 0) 
+			if (getMainControl()->getMolecularControlSelection().size() == 0)
 			{
 				return;
 			}
@@ -409,27 +409,27 @@ namespace BALL
 			bool bond_ok = true;
 
 			for (; it != temp_selection_.end(); ++it)
-			{	
+			{
 				hydrogen_ok &= (*it)->apply(getFragmentDB().add_hydrogens);
 				number_of_hydrogens += getFragmentDB().add_hydrogens.getNumberOfInsertedAtoms();
-				
+
 				if (getFragmentDB().add_hydrogens.getNumberOfInsertedAtoms() == 0) continue;
-				
+
 				bond_ok &= (*it)->apply(getFragmentDB().build_bonds);
 
-				CompositeMessage *change_message = 
+				CompositeMessage *change_message =
 					new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
 				notify_(change_message);
 			}
 
-			String result =	String(tr("added ")) + String(number_of_hydrogens) + " " + (String)tr("hydrogen atoms.");
+			String result = String(tr("added ")) + String(number_of_hydrogens) + " " + (String)tr("hydrogen atoms.");
 
-			if (!bond_ok) 
+			if (!bond_ok)
 			{
 				result += " " + (String)tr("An error occured, while adding the bonds. Too many bonds for one atom?");
 			}
 
-			if (!hydrogen_ok) 
+			if (!hydrogen_ok)
 			{
 				result += " " + (String)tr("An error occured, while adding the hydrogens. Too many bonds for one atom?");
 			}
@@ -440,7 +440,7 @@ namespace BALL
 
 		void MolecularStructure::buildBonds()
 		{
-			if (getMainControl()->getMolecularControlSelection().size() == 0) 
+			if (getMainControl()->getMolecularControlSelection().size() == 0)
 			{
 				return;
 			}
@@ -456,7 +456,7 @@ namespace BALL
 			HashSet<System*> roots;
 
 			for (; it != temp_selection_.end(); ++it)
-			{	
+			{
 				if (!roots.has((System*)&(**it).getRoot()))
 				{
 					old_number_of_bonds += (((AtomContainer*)&(**it).getRoot()))->countBonds();
@@ -467,21 +467,21 @@ namespace BALL
 			bool ok = true;
 
 			for (it = temp_selection_.begin(); it != temp_selection_.end(); ++it)
-			{	
+			{
 				ok &= (*it)->apply(getFragmentDB().build_bonds);
 
-				CompositeMessage *change_message = 
+				CompositeMessage *change_message =
 					new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
 				notify_(change_message);
 			}
 
 			Size new_number_of_bonds = 0;
 			for (HashSet<System*>::iterator sit = roots.begin(); sit != roots.end(); sit++)
-			{	
+			{
 				new_number_of_bonds += ((**sit).countBonds());
 			}
 
-			String result = (String)tr("added ") + String(new_number_of_bonds - old_number_of_bonds) + 
+			String result = (String)tr("  > added ") + String(new_number_of_bonds - old_number_of_bonds) +
 				(String)tr(" bonds") + " (" + (String)tr("total") + " " + String(new_number_of_bonds) + ").";
 
 			if (!ok) result +=  " " + (String)tr("An error occured. Too many bonds for one atom?");
@@ -491,12 +491,14 @@ namespace BALL
 
 		void MolecularStructure::buildEndcaps()
 		{
-			if (getMainControl()->getMolecularControlSelection().size() == 0) 
+			if (getMainControl()->getMolecularControlSelection().size() == 0)
 			{
+				setStatusbarText((String)tr("Please highlight a peptide!"), true);
+
 				return;
 			}
 
-			setStatusbarText((String)tr("adding neutral end caps..."), true);
+			//setStatusbarText((String)tr("adding neutral end caps..."), true);
 
 			// copy the selection_, it can change after a changemessage event
 			list<Composite*> temp_selection_ = getMainControl()->getMolecularControlSelection();
@@ -506,22 +508,22 @@ namespace BALL
 			PeptideCapProcessor pcp;
 
 			for (; it != temp_selection_.end(); ++it)
-			{	
+			{
 				ok &= (*it)->apply(pcp);
 
-				CompositeMessage *change_message = 
+				CompositeMessage *change_message =
 					new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
 				notify_(change_message);
 			}
 
-			String result = (String)tr("added end caps");
+			String result = (String)tr("  > added end caps");
 
 			if (!ok) result +=  " " + (String)tr("An error occured.");
 
 			setStatusbarText(result, true);
 		}
 
-		
+
 		void MolecularStructure::runBondOrderAssignment(bool show_dialog)
 		{
 			// Make sure we run one instance of a assignment at a time only.
@@ -531,13 +533,13 @@ namespace BALL
 				return;
 			}
 
-			if (getMainControl()->getMolecularControlSelection().size() == 0) 
+			if (getMainControl()->getMolecularControlSelection().size() == 0)
 			{
 				setStatusbarText((String)tr("Please highlight exactly one AtomContainer!"), true);
 				return;
 			}
-			
-			setStatusbarText("  > " + (String)tr("assigning bond orders") + " ...", true);
+
+			setStatusbarText("  > " + (String)tr("  > assigning bond orders") + " ...", true);
 
 			// Retrieve the selected atom container and abort if nothing is selected.
 			list<AtomContainer*> containers;
@@ -549,7 +551,7 @@ namespace BALL
 				if (ac != 0) containers.push_back(ac);
 			}
 
-			if (containers.size() != 1) 
+			if (containers.size() != 1)
 			{
 				setStatusbarText((String)tr("Please highlight exactly one AtomContainer!"), true);
 				return;
@@ -568,18 +570,18 @@ namespace BALL
 			AssignBondOrderProcessor abop;
 
 			// read the options
-			abop.options[AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS] 		= bond_order_dialog_.overwrite_singleBO_box->isChecked();
-			abop.options[AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS] 		= bond_order_dialog_.overwrite_doubleBO_box->isChecked();
-			abop.options[AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS] 		= bond_order_dialog_.overwrite_tripleBO_box->isChecked();
-			abop.options[AssignBondOrderProcessor::Option::OVERWRITE_SELECTED_BONDS] 		= bond_order_dialog_.overwrite_selected_bonds_box->isChecked();
-			abop.options[AssignBondOrderProcessor::Option::KEKULIZE_RINGS] 									= bond_order_dialog_.kekulizeBonds_button->isChecked();
-			abop.options[AssignBondOrderProcessor::Option::ADD_HYDROGENS] 									= bond_order_dialog_.add_hydrogens_checkBox->isChecked();
-			abop.options[AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING]						= (bond_order_dialog_.penalty_balance_slider->value()/100.);
+			abop.options[AssignBondOrderProcessor::Option::OVERWRITE_SINGLE_BOND_ORDERS] = bond_order_dialog_.overwrite_singleBO_box->isChecked();
+			abop.options[AssignBondOrderProcessor::Option::OVERWRITE_DOUBLE_BOND_ORDERS] = bond_order_dialog_.overwrite_doubleBO_box->isChecked();
+			abop.options[AssignBondOrderProcessor::Option::OVERWRITE_TRIPLE_BOND_ORDERS] = bond_order_dialog_.overwrite_tripleBO_box->isChecked();
+			abop.options[AssignBondOrderProcessor::Option::OVERWRITE_SELECTED_BONDS]     = bond_order_dialog_.overwrite_selected_bonds_box->isChecked();
+			abop.options[AssignBondOrderProcessor::Option::KEKULIZE_RINGS]               = bond_order_dialog_.kekulizeBonds_button->isChecked();
+			abop.options[AssignBondOrderProcessor::Option::ADD_HYDROGENS]                = bond_order_dialog_.add_hydrogens_checkBox->isChecked();
+			abop.options[AssignBondOrderProcessor::Option::BOND_LENGTH_WEIGHTING]        = (bond_order_dialog_.penalty_balance_slider->value()/100.);
 
 			if (bond_order_dialog_.ILP_button->isChecked())
 			{
 				abop.options[AssignBondOrderProcessor::Option::ALGORITHM] = AssignBondOrderProcessor::Algorithm::ILP;
-			} 
+			}
 			else if (bond_order_dialog_.ASTAR_button->isChecked())
 			{
 				abop.options[AssignBondOrderProcessor::Option::ALGORITHM] = AssignBondOrderProcessor::Algorithm::A_STAR;
@@ -591,7 +593,7 @@ namespace BALL
 
 			// automatically applying a solution might confuse the user --> set to false
 			abop.options.setBool(AssignBondOrderProcessor::Option::APPLY_FIRST_SOLUTION, false);
-			
+
 			// get the parameter folder
 			//
 			// does the given INIFile exist?
@@ -617,39 +619,39 @@ namespace BALL
 			// get the limitations for number of bond order assignments
 			if (bond_order_dialog_.single_solution_button->isChecked())
 			{
-				abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]						= 1;
+				abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]          = 1;
 				abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS]= false;
 			}
 			else if (bond_order_dialog_.all_optimal_solutions_button->isChecked())
 			{
-				abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]						= 0;
+				abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]           = 0;
 				abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS]= false;
 			}
 			else if (bond_order_dialog_.n_opt_solutions_button->isChecked())
 			{
-				abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]						= bond_order_dialog_.max_n_opt_solutions->text().toInt();
+				abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]           = bond_order_dialog_.max_n_opt_solutions->text().toInt();
 				abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS]= false;
 			}
 			else if (bond_order_dialog_.n_all_solutions_button->isChecked())
 			{
-				abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]						= bond_order_dialog_.max_n_all_solutions->text().toInt();
+				abop.options[AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS]           = bond_order_dialog_.max_n_all_solutions->text().toInt();
 				abop.options[AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS]= true;
 			}
 
-		
+
 			// apply
 			containers.front()->apply(abop);
-			
+
 			// give a message
 			if (abop.getNumberOfComputedSolutions() == 0)
 			{
 				setStatusbarText(String(tr("Could not find a valid bond order assignment.")), true);
 			}
 			else
-			{	
+			{
 				String nr = abop.getNumberOfComputedSolutions();
 				setStatusbarText(String(tr("Found")) + " " + nr + " " +  (String)tr("bond order assignments."), true);
-			
+
 				Log.info()<< "  > " + (String)tr("Result AssignBondOrderProcessor: ") << endl;
 
 				for (Size i = 0; i < abop.getNumberOfComputedSolutions(); i++)
@@ -658,23 +660,23 @@ namespace BALL
 					stream_description.setf(std::ios_base::fixed);
 					stream_description.precision(2);
 
-					stream_description << "      " + (String)tr("Solution") << " " << i 
-								 						 << " "  + (String)tr("has penalty") << " " << abop.getTotalPenalty(i)
-								 						 << ", " + (String)tr("charge") << " " << abop.getTotalCharge(i)
+					stream_description << "      " + (String)tr("Solution") << " " << i
+														 << " "  + (String)tr("has penalty") << " " << abop.getTotalPenalty(i)
+														 << ", " + (String)tr("charge") << " " << abop.getTotalCharge(i)
 														 << ", " <<  abop.getNumberOfAddedHydrogens(i) << " " << (String)tr("added hydrogens.");
- 
+
 					String description = stream_description.str();
 
-					Log.info() << description << endl; 
+					Log.info() << description << endl;
 				}
 
 				showBondOrderAssignmentResults(abop);
 			}
-			
+
 			getMainControl()->update(*containers.front(), true);
 		}
-		
-		
+
+
 		void MolecularStructure::showBondOrderAssignmentResults(AssignBondOrderProcessor& bop)
 		{
 			bond_order_results_dialog_.setProcessor(&bop);
@@ -747,14 +749,14 @@ namespace BALL
 
 //			menuBar()->setItemEnabled( map_proteins_id_, (number_of_selected_objects == 2) && 
 // 																									 composites_muteable);
-			
+
 			if (calculate_RMSD_id_)
-				calculate_RMSD_id_->setEnabled( (number_of_selected_objects == 2) && composites_muteable); 
+				calculate_RMSD_id_->setEnabled( (number_of_selected_objects == 2) && composites_muteable);
 
 			menu = getMainControl()->initPopupMenu(MainControl::TOOLS_GRID, UIOperationMode::MODE_ADVANCED);
 			if (menu)
 				menu->setEnabled(composites_muteable);
-			
+
 //   			calculate_ramachandran_->setEnabled((number_of_selected_objects == 1) &&
 //   							RTTI::isKindOf<Protein>(**getMainControl()->getMolecularControlSelection().begin()));
 		}
@@ -769,19 +771,20 @@ namespace BALL
 
 			// properties will be used only for atom containers
 			if (!RTTI::isKindOf<AtomContainer>(composite)) return;
-			
+
 			Log.info() << "> " + (String)tr("applying molecular properties") + " ... " << endl;
-			
+
 			AtomContainer& atom_container = *RTTI::castTo<AtomContainer>(composite);
-			
-			if(normalize) {
+
+			if (normalize)
+			{
 				try
 				{
 					atom_container.apply(getFragmentDB().normalize_names);
 				}
 				catch (Exception::GeneralException& e)
 				{
-					Log.error() << " > " + (String)tr("normalize names failed: ") <<endl; 
+					Log.error() << " > " + (String)tr("normalize names failed: ") << endl;
 					Log.error() << e << endl;
 				}
 				catch (std::exception& e)
@@ -790,16 +793,16 @@ namespace BALL
 					Log.error() << e.what() << std::endl;
 					return;
 				}
-				
+
 				Log.info() << "  > " + (String)tr("normalized names") << endl;
-				
+
 				try
 				{
 					atom_container.apply(getFragmentDB().build_bonds);
 				}
 				catch (Exception::GeneralException& e)
 				{
-					Log.error() << " > " + (String)tr("generate missing bonds - failed: ") <<endl; 
+					Log.error() << " > " + (String)tr("generate missing bonds - failed: ") << endl;
 					Log.error() << e << endl;
 				}
 				catch (...)
@@ -807,15 +810,15 @@ namespace BALL
 					Log.error() << "  > " + (String)tr("generate missing bonds - failed.") << endl;
 					return;
 				}
-				
+
 				Log.info() << "  > " + (String)tr("generated missing bonds") << endl;
 			}
-	
+
 			if (atom_container.getName() == "")
 			{
 				atom_container.setName(name);
 			}
-			
+
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "finished applying molecular properties" << std::endl;
 			#endif
@@ -829,7 +832,7 @@ namespace BALL
 		{
 			if (!getMainControl()->getSelectedSystem()) return;
 			System& S = *(System*) getMainControl()->getSelectedSystem();
-			
+
 			Vector3 v(0,0,0);
 			AtomIterator atit = S.beginAtom();
 
@@ -844,8 +847,8 @@ namespace BALL
 
 			S.apply(bs);
 
-			RegularData3D* regdat = new RegularData3D(RegularData3D::IndexType(64), 
-																								bs.getLower()-Vector3(20,20,20), 
+			RegularData3D* regdat = new RegularData3D(RegularData3D::IndexType(64),
+																								bs.getLower()-Vector3(20,20,20),
 																								bs.getUpper()-bs.getLower()+Vector3(40,40,40));
 
 			for (Size i=0; i < regdat->size(); i++)
