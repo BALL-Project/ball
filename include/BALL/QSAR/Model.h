@@ -253,7 +253,7 @@ namespace BALL
 		};
 		
 		/** convenience function for creating a new Model object from a given model-file */
-		Model* createNewModelFromFile(String model_file, const QSARData& q);
+		BALL_EXPORT Model* createNewModelFromFile(String model_file, const QSARData& q);
 	}
 }
 
