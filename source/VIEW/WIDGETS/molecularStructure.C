@@ -1562,6 +1562,7 @@ namespace BALL
 			system->insert(*protein);
 			system->setName(dialog.getSequence());
 			getMainControl()->insert(*system, dialog.getSequence());
+			setStatusbarText((String)tr("  > build peptide ") + Peptides::GetSequence(*protein), true);
 		}
 
 		void MolecularStructure::showAmberForceFieldOptions()
@@ -1572,7 +1573,7 @@ namespace BALL
 				chooseAmberFF();
 			}
 		}
-		
+
 		void MolecularStructure::showCharmmForceFieldOptions()
 		{
 			charmm_dialog_.raise();
