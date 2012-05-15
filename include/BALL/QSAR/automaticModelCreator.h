@@ -1,3 +1,4 @@
+#include <BALL/COMMON/global.h>
 #include <BALL/QSAR/Model.h>
 #include <BALL/QSAR/QSARData.h>
 
@@ -8,7 +9,7 @@ namespace BALL
 		/** A class for automatic creation of the most appropriate QSAR model.\n
 		All available model-types are therefore evaluated using nested cross-validation and several successive feature selection steps. */
 
-		class AutomaticModelCreator
+		class BALL_EXPORT AutomaticModelCreator
 		{
 			public:
 
