@@ -25,7 +25,7 @@ namespace BALL
 		 */
 		//@{
 		typedef std::vector<Atom*>      Component;
-		typedef	std::vector<Component>	ComponentVector;
+		typedef	std::vector<Component>  ComponentVector;
 		//@}
 
 		BALL_CREATE(ConnectedComponentsProcessor);
@@ -91,7 +91,7 @@ namespace BALL
 		Size splitIntoMolecules(System& to_split);
 
 		//@}
-		
+
 		protected:
 			ComponentVector components_;
 	};
