@@ -22,8 +22,11 @@
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/selector.h>
 #include <BALL/KERNEL/residue.h>
+#include <BALL/KERNEL/PTE.h>
 #include <BALL/STRUCTURE/residueRotamerSet.h>
 #include <BALL/STRUCTURE/rotamerLibrary.h>
+#include <BALL/STRUCTURE/peptides.h>
+#include <BALL/STRUCTURE/disulfidBondProcessor.h>
 
 #include <QtGui/QComboBox>
 #include <QtGui/QPushButton>
@@ -88,7 +91,7 @@ namespace BALL
 			setCheckState(2, Qt::Checked);
 			if (!composite->isSelected()) setCheckState(2, Qt::Unchecked);
 		}
-					
+
 
 
 		MolecularControl::MolecularControl(const MolecularControl& mc)
@@ -117,9 +120,9 @@ namespace BALL
 			Log.error() << "new MolecularControl " << this << std::endl;
 		#endif
 
- 			QGridLayout* glay = getGuestLayout();
- 			QGridLayout* lay = new QGridLayout();
- 			glay->addLayout(lay, 2, 0);
+			QGridLayout* glay = getGuestLayout();
+			QGridLayout* lay = new QGridLayout();
+			glay->addLayout(lay, 2, 0);
 
 			listview->setObjectName("MolecularControlList");
 			listview->headerItem()->setText(0, tr("Name") + " ["+ tr("highlight") + "]");
@@ -127,7 +130,7 @@ namespace BALL
 			listview->headerItem()->setText(2, tr("checked"));
 			listview->resizeColumnToContents(2);
 			listview->resizeColumnToContents(0);
- 			lay->addWidget(listview,0, 0, 1, -1);
+			lay->addWidget(listview,0, 0, 1, -1);
 
 			selector_edit_ = new QComboBox(this);
 			BALL_ASSIGN_NAME(selector_edit_)
@@ -151,7 +154,7 @@ namespace BALL
 			clear_button->setMinimumSize(40, 25);
 			clear_button->setText(tr("Clear"));
 			connect(clear_button, SIGNAL(clicked()), this, SLOT(clearSelector()));
- 			clear_button->setToolTip(tr("Clear the selection."));
+			clear_button->setToolTip(tr("Clear the selection."));
 			lay->addWidget(clear_button,3, 0);
 
 			QPushButton* help_button = new QPushButton(this);
@@ -532,16 +535,55 @@ namespace BALL
 			atom_overview_->setEnabled(ac);
 			atom_overview_selection_->setEnabled(ac);
 			// <----------------------------------- AtomContainer
-			
+
 			// -----------------------------------> Atoms
 			bond_propertes_action_->setEnabled(RTTI::isKindOf<Atom>(composite) && one_item && composites_muteable);
 			// <----------------------------------- Atoms
 
 			composite_properties_action_->setEnabled(one_item);
 
+			// -----------------------------------> Residues
+			bool two_cysteins = false;
+			Size num_cysteins = 0;
+			bool two_sulfurs  = false;
+			Size num_sulfurs  = 0;
+
+			list<Composite*> composite_list = getMainControl()->getMolecularControlSelection();
+			if (composite_list.size() == 2)
+			{
+				list<Composite*>::const_iterator it = composite_list.begin();
+				for ( ; it!=composite_list.end(); ++it)
+				{
+					if (RTTI::isKindOf<Residue>(**it))
+					{
+						Residue* res = reinterpret_cast<Residue*>(*it);
+						if (Peptides::OneLetterCode(res->getName()) == 'C')
+						{
+							num_cysteins++;
+						}
+					}
+					else if (RTTI::isKindOf<Atom>(**it))
+					{
+						Atom* atom = reinterpret_cast<Atom*>(*it);
+						if (atom->getElement() == PTE[Element::S])
+						{
+							num_sulfurs++;
+						}
+					}
+				}
+			}
+			two_cysteins = (num_cysteins == 2);
+
+			two_sulfurs  = (num_sulfurs == 2);
+
+			disulfidbond_action_->setEnabled(two_cysteins || two_sulfurs);
+
+			// ------------------------------------ Residues
+
 			// TODO: Deal with terminal residues. We will probably need to adapt
 			//       RotamerLibrary for that.
-			if(!composite.isResidue() || (current_residue_ = static_cast<Residue*>(&composite))->isTerminal()) {
+			if((composite_list.size() != 1) || !composite.isResidue() || (current_residue_ = static_cast<Residue*>(&composite))->isTerminal())
+			{
 				rotamer_menu_->setEnabled(false);
 				return;
 			}
@@ -585,7 +627,8 @@ namespace BALL
 				float dist = fabs(r.chi1 - it->chi1) + fabs(r.chi2 - it->chi2)
 				           + fabs(r.chi3 - it->chi3) + fabs(r.chi4 - it->chi4);
 
-				if(dist < i_min_val) {
+				if(dist < i_min_val)
+				{
 					i_min = i;
 					i_min_val = dist;
 				}
@@ -593,11 +636,50 @@ namespace BALL
 
 			// If we found a rotamer that is very close to the current conformation
 			// then check it. 15.0f is just an arbitrary/empirically chosen threshold.
-			if(i_min_val / res_set->getNumberOfTorsions() < 15.0f) {
+			if(i_min_val / res_set->getNumberOfTorsions() < 15.0f)
+			{
 				rotamer_menu_->actions().at(i_min)->setChecked(true);
 			}
 
 			rotamer_menu_->setEnabled(true);
+		}
+
+		void MolecularControl::createDisulfidBond()
+		{
+			if (context_composite_ == 0) return;
+			bool success = false;
+
+			Composite* composite1, *composite2;
+			list<Composite*> composite_list = getMainControl()->getMolecularControlSelection();
+
+			if (composite_list.size()==2)
+			{
+				list<Composite*>::iterator cit = composite_list.begin();
+				composite1 = *cit;
+				++cit;
+				composite2 = *cit;
+
+				DisulfidBondProcessor dbp;
+				//bool success = dbp.connect(*composite_list.begin(), *composite_list.begin()++);
+				success = dbp.connect(composite1, composite2);
+			}
+			if (success)
+			{
+				Scene* scene = Scene::getInstance(0);
+				if (scene != 0)
+				{
+					// update representation
+					scene->notify(new CompositeMessage(*composite1, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY));
+					scene->notify(new CompositeMessage(*composite2, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY));
+
+					scene->getMainControl()->update(*composite1, true);
+					scene->getMainControl()->update(*composite2, true);
+				}
+			}
+			else
+			{
+				setStatusbarText((String)tr("Disulfid bond could not be created!"));
+			}
 		}
 
 		void MolecularControl::compositeProperties()

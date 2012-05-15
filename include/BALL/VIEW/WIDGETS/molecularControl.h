@@ -194,12 +194,15 @@ class BALL_VIEW_EXPORT MolecularControl
 	/** @name Public slots
 	*/
 	//@{
-	
+
 	/// Create a Representation with the DisplayProperties Dialog
 	void createRepresentation();
 
 	/// Composite properties dialog requested
 	void compositeProperties();
+
+	/// Create a disulfid bond
+	void createDisulfidBond();
 
 	/// Bond properties dialog requested
 	void bondProperties();
@@ -455,7 +458,7 @@ class BALL_VIEW_EXPORT MolecularControl
 	Size 						nr_items_removed_;
 
 	bool 						show_ss_;
-	QAction* center_camera_action_, *composite_properties_action_, *bond_propertes_action_, 
+	QAction* center_camera_action_, *composite_properties_action_, *bond_propertes_action_, *disulfidbond_action_,
 					 *select_action_, *deselect_action_, *count_items_action_, *atom_overview_, *atom_overview_selection_,
 					 *angle_action_, *distance_action_, *paste_action_;
 

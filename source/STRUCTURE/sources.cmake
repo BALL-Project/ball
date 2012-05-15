@@ -12,6 +12,7 @@ SET(SOURCES_LIST
 	connectedComponentsProcessor.C
 	connolly.C
 	defaultProcessors.C
+	disulfidBondProcessor.C
 	DNAMutator.C
 	fragmentDB.C
 	geometricProperties.C

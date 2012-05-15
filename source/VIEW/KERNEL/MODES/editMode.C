@@ -1,3 +1,12 @@
+/* TRANSLATOR BALL::VIEW::editMode
+
+		Necessary for lupdate.
+*/
+
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+
 #include <BALL/VIEW/KERNEL/MODES/editMode.h>
 
 #include <QtGui/QMenu>
@@ -443,7 +452,7 @@ namespace BALL
 */
 				scene_->merge(scene_->getCurrentAtom(), atom);
 
-				//update representation
+				// update representation
 				getMainControl()->update(*atom, true);
 				scene_->setStatusbarText(qApp->tr("Edit Mode", "Added a bond"));
 			}
