@@ -421,7 +421,7 @@ class BALL_VIEW_EXPORT SceneMessage: public Message
 	private:
 
 	SceneMessageType  type_;
-	Stage 			 			stage_;
+	Stage             stage_;
 };
 
 
@@ -435,7 +435,7 @@ class BALL_VIEW_EXPORT GenericSelectionMessage: public Message
 	public:
 
 	/**	@name	Constructors and Destructors
-	*/	
+	*/
 	//@{
 
 	/** Default Constructor.
@@ -451,7 +451,7 @@ class BALL_VIEW_EXPORT GenericSelectionMessage: public Message
 	/** Destructor.
 	*/
 	virtual ~GenericSelectionMessage();
-					
+
 	//@}
 	/**	@name	Accessors: inspectors and mutators 
 	*/
