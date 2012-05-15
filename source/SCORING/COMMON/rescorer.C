@@ -306,11 +306,11 @@ namespace BALL
 			}
 			else
 			{
-				double correlation, q2, stderr;
-				rescoring->calculateQuality(correlation, q2, stderr);
+				double correlation, q2, std_err;
+				rescoring->calculateQuality(correlation, q2, std_err);
 				cout<<"Correlation = "<<String(correlation)<<endl;
 				cout<<"Q2="<<String(q2)<<endl;
-				cout<<"Standard error="<<String(stderr)<<endl;
+				cout<<"Standard error="<<String(std_err)<<endl;
 			}
 		}
 
