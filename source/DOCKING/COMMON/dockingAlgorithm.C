@@ -329,6 +329,7 @@ namespace BALL
 
 	double DockingAlgorithm::dockLigand(AtomContainer& ligand, bool verbose)
 	{
+		return 0.0;
 	}
 
 	void DockingAlgorithm::setLigand(AtomContainer* ligand)
