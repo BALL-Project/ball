@@ -15,7 +15,7 @@ namespace BALL
 	    \ingroup StructureMiscellaneous
 	*/
 
-	/** Computation of disulfid bonds of the atom container.
+	/** Detection and Computation of disulfid bonds of the atom container.
 	 */
 	class BALL_EXPORT DisulfidBondProcessor
 		: public UnaryProcessor<AtomContainer>
@@ -24,7 +24,7 @@ namespace BALL
 		/** @name Type definitions
 		 */
 		//@{
-		typedef std::pair<Atom*, Atom*>    DisulfidBond;
+		typedef std::pair<Residue*, Residue*>    DisulfidBond;
 		typedef	std::vector<DisulfidBond>  DisulfidBondVector;
 		//@}
 
@@ -66,14 +66,14 @@ namespace BALL
 		*/
 		//@{
 
-		/// Return the number of created disulfid bonds.
-		Size getNumberOfCreatedDisulfidBonds();
+		/// Return the number of detected disulfid bonds.
+		Size getNumberOfDetectedDisulfidBonds() {return sulfur_bridges_.size();};
 
-		/// Return the vector of computed disulfid bonds.
-		DisulfidBondVector& getCreatedDisulfidBonds();
+		/// Return the vector of disulfid bonds.
+		DisulfidBondVector& getDisulfidBonds() {return sulfur_bridges_;};
 
-		/// Return the vector of created disulfid bonds, const variant.
-		const DisulfidBondVector& getCreatedDisulfidBonds() const;
+		/// Return the vector of disulfid bonds, const variant.
+		const DisulfidBondVector& getDisulfidBonds() const {return sulfur_bridges_;};
 
 		//@}
 
@@ -87,7 +87,7 @@ namespace BALL
 		bool connect(Composite* composite1, Composite* composite2);
 
 		protected:
-			DisulfidBondVector  bonds_;
+			DisulfidBondVector  sulfur_bridges_;
 	};
 }
 

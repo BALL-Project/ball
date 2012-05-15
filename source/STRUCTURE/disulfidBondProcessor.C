@@ -11,6 +11,7 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/forEach.h>
 
 namespace BALL
 {
@@ -30,6 +31,29 @@ namespace BALL
 
 	Processor::Result DisulfidBondProcessor::operator () (AtomContainer& ac)
 	{
+		AtomIterator atom_it;
+		AtomBondIterator bond_it;
+
+		Residue* residue1 = NULL;
+		Residue* residue2 = NULL;
+
+		BALL_FOREACH_BOND(ac, atom_it, bond_it)
+		{
+			residue1 = bond_it->getFirstAtom()->getResidue();
+			residue2 = bond_it->getSecondAtom()->getResidue();
+
+			if ((bond_it->getFirstAtom()->getElement() == PTE[Element::S])
+					&& (bond_it->getSecondAtom()->getElement() == PTE[Element::S])
+					&& (residue1->hasProperty(Residue::PROPERTY__HAS_SSBOND) == true)
+					&& (residue2->hasProperty(Residue::PROPERTY__HAS_SSBOND) == true)
+					&& (residue1 != residue2)
+					&& (residue1 != 0)
+					&& (residue2 != 0))
+			{
+				sulfur_bridges_.push_back(pair<Residue*, Residue*>(residue1, residue2));
+			}
+		}
+
 		return Processor::BREAK;
 	}
 
@@ -40,7 +64,7 @@ namespace BALL
 
 	void DisulfidBondProcessor::clear()
 	{
-		bonds_.clear();
+		sulfur_bridges_.clear();
 	}
 
 	bool DisulfidBondProcessor::connect(Atom* atom1, Atom* atom2)
@@ -96,6 +120,7 @@ namespace BALL
 					atom1->getResidue()->setProperty(Residue::PROPERTY__HAS_SSBOND);
 					atom2->getResidue()->setProperty(Residue::PROPERTY__HAS_SSBOND);
 					bond->setType(Bond::TYPE__DISULPHIDE_BRIDGE);
+					sulfur_bridges_.push_back(pair<Residue*, Residue*>(atom1->getResidue(), atom2->getResidue()));
 				}
 				else
 				{
