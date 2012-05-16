@@ -72,9 +72,13 @@ double VanDerWaals::updateScore()
 	}
 
 	score_ = amber_nb_->getVdwEnergy();
-	scaleScore();
 
+	/*
+	scaleScore();
 	return score_;
+	*/
+
+	return getScaledScore();
 }
 
 

@@ -49,6 +49,11 @@ double BurialDepth::updateScore()
 {
 	score_ = scoring_function_->getNoNeighboringReceptorAtoms();
 
+	/*
 	scaleScore();
 	return score_;
+	*/
+
+	return getScaledScore();
 }
+

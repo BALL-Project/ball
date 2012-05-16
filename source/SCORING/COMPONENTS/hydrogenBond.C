@@ -381,7 +381,7 @@ double HydrogenBond::updateScore()
 				{
 					// negative score for good pose ...
 					double scaled_atom_score = -val;
-					scaleScore(scaled_atom_score);
+					scaled_atom_score = scaleScore(scaled_atom_score);
 					Atom* a1 = const_cast<Atom*>(hydrogen);
 					Atom* a2 = const_cast<Atom*>(acceptor);
 					a1->addInteraction(acceptor, "HB", scaled_atom_score);
@@ -401,7 +401,12 @@ double HydrogenBond::updateScore()
 	// we want a negative score for a good pose, thus we will use the negative of the value computed above
 	score_ *= -1;
 
+	/*
 	scaleScore();
-
 	return score_;
+	*/
+
+	return getScaledScore();
 }
+
+

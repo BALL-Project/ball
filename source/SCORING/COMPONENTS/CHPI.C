@@ -47,7 +47,6 @@ using namespace std;
 namespace BALL
 {
 		CHPI::AromaticRing::AromaticRing()
-			throw()
 			:	ring_atoms_(),
 				centre_(0.0f),
 				normal_vector_(0.0f)
@@ -56,7 +55,6 @@ namespace BALL
 
 		CHPI::AromaticRing::AromaticRing
 			(const AromaticRing& aromatic_ring)
-			throw()
 			:	ring_atoms_(aromatic_ring.ring_atoms_),
 				centre_(aromatic_ring.centre_),
 				normal_vector_(aromatic_ring.normal_vector_)
@@ -65,7 +63,6 @@ namespace BALL
 
 		CHPI::AromaticRing::AromaticRing
 			(const std::vector<Atom*>& atoms)
-			throw()
 			:	ring_atoms_(),
 				centre_(0.0f),
 				normal_vector_(0.0f)
@@ -75,7 +72,6 @@ namespace BALL
 
 
 		void CHPI::AromaticRing::computeCentre_()
-			throw()
 		{
 			std::vector<Atom*>::const_iterator iter = ring_atoms_.begin();
 			Size x = 0;
@@ -89,7 +85,6 @@ namespace BALL
 
 
 		void CHPI::AromaticRing::computeNormalVector_()
-			throw()
 		{
 			Vector3 v13 = ring_atoms_[2]->getPosition() - ring_atoms_[0]->getPosition();
 			Vector3 v15 = ring_atoms_[4]->getPosition() - ring_atoms_[0]->getPosition();
@@ -99,17 +94,16 @@ namespace BALL
 
 
 		const Vector3& CHPI::AromaticRing::getCentre() const
-			throw()
 		{
 			return(centre_);
 		}
 
 
 		const Vector3& CHPI::AromaticRing::getNormalVector() const
-			throw()
 		{
 			return(normal_vector_);
 		}
+
 
 		void CHPI::AromaticRing::update()
 		{
@@ -117,8 +111,8 @@ namespace BALL
 			computeNormalVector_();
 		}
 
+
 		void CHPI::AromaticRing::dump(ostream& s) const
-			throw()
 		{
 			vector<Atom*>::const_iterator it = ring_atoms_.begin();
 			for (; it != ring_atoms_.end(); ++it)
@@ -133,7 +127,6 @@ namespace BALL
 
 		void CHPI::AromaticRing::setRing
 			(const std::vector<Atom*>& atoms)
-			throw()
 		{
 			ring_atoms_ = atoms;
 			computeCentre_();
@@ -142,27 +135,23 @@ namespace BALL
 
 
 		const std::vector<Atom*>& CHPI::AromaticRing::getRing() const
-			throw()
 		{
 			return(ring_atoms_);
 		}
 
 
 		CHPI::CHGroup::~CHGroup()
-			throw()
 		{
 		}
 
 
 		CHPI::CHGroup::CHGroup(const Atom* C_Atom, const Atom* H_Atom)
-			throw()
 		{
 			setAtoms(C_Atom, H_Atom);
 		}
 
 
 		CHPI::CHGroup::CHGroup(const CHGroup& CH_groups)
-			throw()
 			:	H_atom_(CH_groups.H_atom_),
 				C_atom_(CH_groups.C_atom_)
 		{
@@ -170,7 +159,6 @@ namespace BALL
 
 
 		void CHPI::CHGroup::dump(std::ostream& s) const
-			throw()
 		{
 			s << "C: " << C_atom_ << endl;
 			s << "H: " << H_atom_ << endl;
@@ -178,7 +166,6 @@ namespace BALL
 
 
 		void CHPI::CHGroup::setAtoms(const Atom* C_Atom, const Atom* H_Atom)
-			throw()
 		{
 			C_atom_ = C_Atom;
 			H_atom_ = H_Atom;
@@ -219,7 +206,6 @@ namespace BALL
 
 		// Default constructor
 		CHPI::CHPI ()
-			throw ()
 			:	ScoringComponent(),
 				possible_interactions_(),
 				ligand_CH_groups_(),
@@ -237,7 +223,6 @@ namespace BALL
 
 		// Detailed constructor
 		CHPI::CHPI (ScoringFunction& sf)
-			throw()
 			: ScoringComponent(sf),
 				possible_interactions_(),
 				ligand_CH_groups_(),
@@ -255,7 +240,6 @@ namespace BALL
 
 		// Copy constructor
 		CHPI::CHPI (const CHPI& frs )
-			throw()
 			: ScoringComponent(frs),
 				possible_interactions_(frs.possible_interactions_),
 				ligand_CH_groups_(frs.ligand_CH_groups_),
@@ -273,14 +257,12 @@ namespace BALL
 
 		// Destructor
 		CHPI::~CHPI()
-			throw()
 		{
 			clear();
 		}
 
 
 		void CHPI::clear()
-			throw()
 		{
 			possible_interactions_.clear();
 
@@ -309,9 +291,7 @@ namespace BALL
 		// Set up atomic properties for the calculation of the scoring
 		// contribution
 		bool CHPI::setup()
-			throw()
 		{
-
 			Timer timer;
 			timer.start();
 
@@ -367,19 +347,12 @@ namespace BALL
 			// All ring-CH-pairs with a distance larger than this value would result in a score of zero, so simple ignore those pairs!
 			distance_cutoff_ = CX_distance_upper_+distance_tolerance_;
 
-
 			/// Find aromatic rings in receptor
 			AtomContainer* receptor = scoring_function_->getReceptor();
 
 			// First, find the rings of the receptor (via SSSR)
 			vector<vector<Atom*> > SSSR_r;
 			rp_.calculateSSSR(SSSR_r, *receptor);
-
-			// If there are no rings, we cannot compute anything.
-// 			if (rings_r == 0)
-// 			{
-// 				return true;
-// 			}
 
 			// Now look for aromatic rings
 			receptor_aromatic_rings_.clear();
@@ -427,9 +400,8 @@ namespace BALL
 				}
 			}
 
-
-			cout<<"CHPI::setup() found "<<receptor_aromatic_rings_.size()<<" aromatic rings within the receptor"<<endl;
-			cout<<"CHPI::setup() found "<<receptor_CH_groups_.size()<<" CH-groups within the receptor"<<endl;
+			cout << "CHPI::setup() found " << receptor_aromatic_rings_.size() << " aromatic rings within the receptor" << endl;
+			cout << "CHPI::setup() found " << receptor_CH_groups_.size() << " CH-groups within the receptor" << endl;
 
 			setupLigand();
 
@@ -494,15 +466,12 @@ namespace BALL
 				}
 			}
 
-
 			/// Find aromatic rings within the ligand
-
-			// First, find the rings of the receptor (via SSSR)
 			vector<vector<Atom*> > SSSR_r;
 			rp_.calculateSSSR(SSSR_r, *ligand);
 
 			// Now look for aromatic rings
-			receptor_aromatic_rings_.clear();
+			ligand_aromatic_rings_.clear();
 			ap_.aromatize(SSSR_r, *ligand);
 			vector<vector<Atom*> >::iterator SSSR_it;
 			for (SSSR_it = SSSR_r.begin(); SSSR_it != SSSR_r.end(); ++SSSR_it)
@@ -517,15 +486,16 @@ namespace BALL
 
 			cout<<"CHPI::setupLigand() found "<<ligand_CH_groups_.size()<<" CH-groups within ligand"<<endl;
 			cout<<"CHPI::setupLigand() found "<<ligand_aromatic_rings_.size()<<" aromatic rings within ligand"<<endl;
+
+			calculatePossibleInteractions();
 		}
 
 
-
-		void CHPI::update(const vector<std::pair<Atom*, Atom*> >& /*atom_pairs*/)
+		void CHPI::update(const vector<std::pair<Atom*, Atom*> >&)
 		{
 			// ignore 'atom_pairs', since this component does not calculate a pair-wise score
 
-			 /// Recalculate ring-centers and normal-vectors
+			/// Recalculate ring-centers and normal-vectors
 			if (update_time_stamp_.isOlderThan(scoring_function_->getReceptor()->getModificationTime()))
 			{
 				cout<<"Receptor has been translated or rotated; updating the aromatic ring centers and normal-vectors..."<<endl;
@@ -540,7 +510,12 @@ namespace BALL
 				(*l_it)->update();
 			}
 
+			calculatePossibleInteractions();
+		}
 
+
+		void CHPI::calculatePossibleInteractions()
+		{
 			/// Build pairs of aromatic rings and CH-groups
 			possible_interactions_.clear();
 
@@ -567,14 +542,10 @@ namespace BALL
 					}
 				}
 			}
-
-			//cout<<"CHPI::update() found "<<possible_interactions_.size()<<" possible interactions"<<endl;
 		}
 
 
-
 		double CHPI::updateScore()
-			throw()
 		{
 			Timer timer;
 			timer.start();
@@ -599,11 +570,8 @@ namespace BALL
 			float distance;
 
 			// Iterate over all possible interactions
-			vector< pair<const AromaticRing*, const CHGroup*> >::const_iterator
-				inter_it;
-
-			for (inter_it = possible_interactions_.begin();
-					inter_it != possible_interactions_.end(); ++inter_it)
+			vector< pair<const AromaticRing*, const CHGroup*> >::const_iterator inter_it;
+			for (inter_it = possible_interactions_.begin(); inter_it != possible_interactions_.end(); ++inter_it)
 			{
 				const Vector3& ring_centre = inter_it->first->getCentre();
 				const Vector3& C_atom = inter_it->second->getCAtom()->getPosition();
@@ -612,14 +580,12 @@ namespace BALL
 				distance = (ring_centre - C_atom).getLength();
 
 				// compute a score for that interaction
-				CX_score
-					 = base_function_->calculate(distance,
+				CX_score = getScoringFunction()->getBaseFunction()->calculate(distance,
 							CX_distance_upper_ - distance_tolerance_,
 							CX_distance_upper_ + distance_tolerance_);
 
 				if (CX_score > limit_)
 				{
-
 					// Check angle (C, H, X)
 					const Vector3& H_atom = inter_it->second->getHAtom()->getPosition();
 					const Vector3& C_atom = inter_it->second->getCAtom()->getPosition();
@@ -631,34 +597,31 @@ namespace BALL
 					// Calculate the angle score. Note that lower tolerance has to be
 					// greater than the upper tolerance because we have to invert the
 					// function
-					CHX_score = base_function_->calculate(angle_CHX,
-						CHX_angle_lower_ + angle_tolerance_,
-						CHX_angle_lower_ - angle_tolerance_);
+
+					CHX_score = getScoringFunction()->getBaseFunction()->calculate(angle_CHX,
+								CHX_angle_lower_ + angle_tolerance_,
+								CHX_angle_lower_ - angle_tolerance_);
 
 					// if (angle_CHX >= CHX_angle_lower_)
 					if (CHX_score > limit_)
 					{
-
 						const Vector3& normal = inter_it->first->getNormalVector();
 						// Check the projected distance
-						float projected_distance_XH
-							 = (ring_centre + (-HX * normal) * normal - H_atom).getLength();
-
+						float projected_distance_XH = (ring_centre + (-HX * normal) * normal - H_atom).getLength();
 
 						// Calculate a score for the H---X distance. Note that the upper
 						// and lower limits in the first base_function() have to be
 						// chosen so that lower > upper in order to invert the base
 						// function. The whole term has to provide something similar to a
 						// Gauss curve.
-						HX_score
-							 = base_function_->calculate(
-									projected_distance_XH,
-									HX_projected_distance_lower_ + distance_tolerance_,
-									HX_projected_distance_lower_ - distance_tolerance_)
-								* base_function_->calculate(
-									projected_distance_XH,
-									HX_projected_distance_upper_ - distance_tolerance_,
-									HX_projected_distance_upper_ + distance_tolerance_);
+						HX_score = getScoringFunction()->getBaseFunction()->calculate(
+								projected_distance_XH,
+								HX_projected_distance_lower_ + distance_tolerance_,
+								HX_projected_distance_lower_ - distance_tolerance_)
+							* getScoringFunction()->getBaseFunction()->calculate(
+								projected_distance_XH,
+								HX_projected_distance_upper_ - distance_tolerance_,
+								HX_projected_distance_upper_ + distance_tolerance_);
 
 						if (HX_score > limit_)
 						{
@@ -739,13 +702,6 @@ namespace BALL
 				interactions_file.close();
 			}
 
-			// we want a negative score for a good pose, thus we will use the negative of the value computed above
-			score_ *= -1;
-
-			//cout<<"CHPI score = "<<score_<<endl;
-			//cout<<"possible_interactions_.size()="<<possible_interactions_.size()<<endl;
-
-			scaleScore();
 			return score_;
 		}
 }

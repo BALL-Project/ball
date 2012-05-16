@@ -93,10 +93,6 @@ bool PLP::isSp3(const Atom* at)
 }
 
 
-//extern vector<Residue*> scheisse;
-
-//extern vector<Bond*> rbonds;
-
 // Conversion from kJ / (mol A) into Newton
 double FORCES_FACTOR = 1000 * 1E10 / Constants::AVOGADRO;
 

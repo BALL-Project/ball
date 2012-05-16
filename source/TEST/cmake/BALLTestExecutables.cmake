@@ -132,6 +132,7 @@ ENDIF()
 
 SET(BALL_SCORING_TESTS
 	CHPI_test
+	CHPISlick_test
 	MMScoring_test
 	PBScoring_test
 	PB_test
@@ -155,9 +156,12 @@ SET(BALL_SCORING_TESTS
 	GridedMM_test
 	GridedPLP_test
 	HydrogenBond_test
+	HydrogenBondSlick_test
 	LinearBaseFunction_test
 	Lipophilic_test
+	NonpolarSolvation_test
 	Polarity_test
+	PolarSolvation_test
 	RandomEvaluation_test
 	Rescorer_test
 	Rescoring1D_test

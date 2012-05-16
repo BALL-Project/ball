@@ -231,7 +231,7 @@ double BuriedPolar::updateScore()
 			if (scoring_function_->storeInteractionsEnabled())
 			{
 				double scaled_atom_score = val;
-				scaleScore(scaled_atom_score);
+				scaled_atom_score = scaleScore(scaled_atom_score);
 				atom1->addInteraction(atom2, "pol", scaled_atom_score);
 				atom2->addInteraction(atom1, "pol", scaled_atom_score);
 			}

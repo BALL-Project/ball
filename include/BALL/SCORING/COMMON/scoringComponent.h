@@ -66,11 +66,13 @@ namespace BALL
 
 			void setName(const String& name);
 
-			virtual double calculateScore();
-
 			const String& getTypeName();
 
-			virtual double getScore() const;
+			//virtual double getScore() const;
+
+			double getRawScore() const;
+
+			double getScaledScore() const;
 
 			/** Update this ScoringComponent using the given atom-pairs. \n
 			This function should be overloaded by all ScoringComponents */
@@ -106,13 +108,19 @@ namespace BALL
 			void disable();
 
 		protected:
-			/** Is this ScoringComponent to be used to calculate an intra-molecular score for the ligand ? */
+			/**
+			 * Is this ScoringComponent to be used to calculate an intra-molecular score for the ligand?
+			 */
 			bool ligand_intra_molecular_;
 
-			/** Can the scores of this ScoringFunction be precomputed for a grid? */
+			/**
+			 * Can the scores of this ScoringFunction be precomputed for a grid?
+			 */
 			bool gridable_;
 
-			/** Does this component calculate the score based on atom-atom pairs? */
+			/**
+			 * Does this component calculate the score based on atom-atom pairs?
+			 */
 			bool atom_pairwise_;
 
 			ScoringFunction* scoring_function_;
@@ -126,22 +134,28 @@ namespace BALL
 			double stddev_;
 			double mean_;
 
-			/** multiplies the score_ with coefficient_ and, if necessary, does transformation and backtransformation */
-			void scaleScore();
+			/**
+			 * Multiplies the score_ with coefficient_ and, if necessary, does transformation and backtransformation.
+			 */
+			double scaleScore(double score) const;
 
-			/** multiplies the given score with coefficient_ and, if necessary, does transformation and backtransformation */
-			void scaleScore(double& score);
-
-			/** determines whether this ScoringComponent is enabled and should be used when ScoringFunction::update()/updateScore() is called */
+			/**
+			 * Determines whether this ScoringComponent is enabled and should be used when ScoringFunction::update()/updateScore() is called.
+			 */
 			bool enabled_;
 
-			/** an abreviation for the type of this ScoringComponent, i.e.:
-			'ES', 'vdW', 'fragSolv', 'nRot', 'HB'.\n
-			This type-name cannot be changed dynmically and is used to differentiate between the differnt types of ScoringComponents as is necessary e.g. for PharmacophoreConstraints. */
+			/**
+			 * An abreviation for the type of this ScoringComponent, i.e.:
+			 * 'ES', 'vdW', 'fragSolv', 'nRot', 'HB'.\n
+			 * This type-name cannot be changed dynmically and is used to differentiate between the differnt types of ScoringComponents as is necessary
+			 * e.g. for PharmacophoreConstraints.
+			 */
 			String type_name_;
 
 		private:
-			/** A name for this individual ScoringComponent. It can be set by use of setName() */
+			/**
+			 * A name for this individual ScoringComponent. It can be set by use of setName().
+			 */
 			String name_;
 	};
 }

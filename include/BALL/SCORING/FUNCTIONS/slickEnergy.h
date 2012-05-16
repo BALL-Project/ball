@@ -24,8 +24,7 @@ namespace BALL
 	/** SLICKEnergy scoring function
 			{\bf Definition:} \URL{BALL/SCORING/FUNCTIONS/slickEnergy.h}
 	*/
-	class SLICKEnergy
-		: public ScoringFunction
+	class BALL_EXPORT SLICKEnergy : public ScoringFunction
 	{
 		public:
 			/**	@name Constant Definitions

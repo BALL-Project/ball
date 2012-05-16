@@ -297,9 +297,10 @@ double Lipophilic::updateScore()
 	// we want a negative score for a good pose, thus we will use the negative of the value computed above
 	score_ *= -1;
 
-
+	/*
 	scaleScore();
-	cout<<"lipophilicity score = "<<score_<<endl;
-
 	return score_;
+	*/
+
+	return getScaledScore();
 }

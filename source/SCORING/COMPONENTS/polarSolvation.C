@@ -264,15 +264,6 @@ namespace BALL
 
 
 	double PolarSolvation::updateScore()
-	{
-		double score = 0.0;
-		score += coefficient_ * calculateScore();
-
-		return score;
-	}
-
-
-	double PolarSolvation::calculateScore()
 
 	{
 		// Because we have local copies, we need to update the atom postition

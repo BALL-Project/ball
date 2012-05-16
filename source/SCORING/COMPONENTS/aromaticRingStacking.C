@@ -63,7 +63,6 @@ namespace BALL
 
 
 	AromaticRingStacking::AromaticRingStacking()
-		throw()
 	{
 		// Set the name
 		setName("AromaticRingStacking");
@@ -74,7 +73,6 @@ namespace BALL
 	}
 
 	AromaticRingStacking::AromaticRingStacking(ScoringFunction& sf)
-		throw()
 		: ScoringComponent(sf)
 	{
 		// Set the name
@@ -86,7 +84,6 @@ namespace BALL
 	}
 
 	AromaticRingStacking::~AromaticRingStacking()
-		throw()
 	{
 		clear();
 	}
@@ -109,11 +106,11 @@ namespace BALL
 
 
 	bool AromaticRingStacking::setup(Options& options)
-		throw()
 	{
 		if (scoring_function_ == 0)
 		{
-			throw BALL::Exception::GeneralException(__FILE__, __LINE__, "CHPI::setup() error", "Component not bound to scoring function!");
+			Log.error() << "AromaticRingStacking::setup(): "
+				<< "component not bound to scoring function." << std::endl;
 			return false;
 		}
 
@@ -199,7 +196,7 @@ namespace BALL
 	{
 		if (valid_ == 0)
 		{
-			throw BALL::Exception::GeneralException(__FILE__, __LINE__, "AromaticRingStacking::setupLigand() error", "Component has not been set up properly!");
+			Log.error() << "AromaticRingStacking::setupLigand() error: Component has not been set up properly!" << endl;
 			return;
 		}
 
@@ -216,7 +213,7 @@ namespace BALL
 		// If there are no rings, we cannot compute anything.
 		if (rings_l == 0)
 		{
-			cout<<"AromaticRingStacking::setupLigand() found no aromatic rings within the ligand"<<endl;
+			cout << "AromaticRingStacking::setupLigand() found no aromatic rings within the ligand" << endl;
 			return;
 		}
 
@@ -240,11 +237,11 @@ namespace BALL
 
 		if (ligand_rings_.size() == 0)
 		{
-			cout<<"AromaticRingStacking::setupLigand() found no aromatic rings within the ligand"<<endl;
+			cout << "AromaticRingStacking::setupLigand() found no aromatic rings within the ligand" << endl;
 			return;
 		}
 
-		cout<<"AromaticRingStacking::setupLigand() found "<<ligand_rings_.size()<<" aromatic rings within the ligand"<<endl;
+		cout << "AromaticRingStacking::setupLigand() found " << ligand_rings_.size()<< " aromatic rings within the ligand" << endl;
 
 		AtomPairVector empty(0);
 		update(empty);
@@ -294,7 +291,6 @@ namespace BALL
 
 
 	double AromaticRingStacking::updateScore()
-		throw()
 	{
 		if (possible_interactions_.size() == 0)
 		{
@@ -371,7 +367,11 @@ namespace BALL
 		// we want a negative score for a good pose, thus we will use the negative of the value computed above
 		score_ = -(f2f_score + f2e_score);
 
+		/*
 		scaleScore();
 		return score_;
+		*/
+
+		return getScaledScore();
 	}
 }

@@ -4,8 +4,8 @@
 // $Id: slickEnergy.C,v 1.4 2006/05/21 18:15:29 anker Exp $
 
 #include <BALL/SCORING/FUNCTIONS/slickEnergy.h>
-#include <BALL/SCORING/COMPONENTS/CHPI.h>
-#include <BALL/SCORING/COMPONENTS/hydrogenBond.h>
+#include <BALL/SCORING/COMPONENTS/CHPISlick.h>
+#include <BALL/SCORING/COMPONENTS/hydrogenBondSlick.h>
 #include <BALL/SCORING/COMPONENTS/vanDerWaalsSlick.h>
 #include <BALL/SCORING/COMPONENTS/nonpolarSolvation.h>
 #include <BALL/SCORING/COMPONENTS/polarSolvation.h>
@@ -38,17 +38,25 @@ namespace BALL
 	// const float SLICKEnergy::Default::NONPOLAR =  0.49981964;
 	// const float SLICKEnergy::Default::POLAR    = -0.12498055;
 
-
 	// Parameters for the whole calibration set, this time with Bondi
 	// observed mean radii in the nonpolar term and the log-softened VDW
 	// component
 	// [anker 2006/04/26]
-	const float SLICKEnergy::Default::CONST    = -5.23774531;
-	const float SLICKEnergy::Default::HB       = -0.09077441;
-	const float SLICKEnergy::Default::CHPI     = -0.50244683;
-	const float SLICKEnergy::Default::VDW      =  0.01559796;
-	const float SLICKEnergy::Default::NONPOLAR =  0.36638941;
-	const float SLICKEnergy::Default::POLAR    = -0.10725374;
+// 	const float SLICKEnergy::Default::CONST    = -5.23774531;
+// 	const float SLICKEnergy::Default::HB       = -0.09077441;
+// 	const float SLICKEnergy::Default::CHPI     = -0.50244683;
+// 	const float SLICKEnergy::Default::VDW      =  0.01559796;
+// 	const float SLICKEnergy::Default::NONPOLAR =  0.36638941;
+// 	const float SLICKEnergy::Default::POLAR    = -0.10725374;
+
+	// Recalibrated after finding inconsistencies
+	// [anker 2008-Dec-15]
+	const float SLICKEnergy::Default::CONST    = -5.303867;
+	const float SLICKEnergy::Default::HB       =  0.160806;
+	const float SLICKEnergy::Default::CHPI     = -0.655133;
+	const float SLICKEnergy::Default::VDW      =  0.006934;
+	const float SLICKEnergy::Default::NONPOLAR =  0.406553;
+	const float SLICKEnergy::Default::POLAR    = -0.099546;
 
 	SLICKEnergy::SLICKEnergy()
 		:	ScoringFunction()
@@ -130,7 +138,7 @@ namespace BALL
 		const ScoringComponent* component = getComponent("SLICK HydrogenBond");
 		if (component != 0)
 		{
-			return component->getScore();
+			return component->getRawScore();
 		} 
 		else 
 		{
@@ -141,10 +149,10 @@ namespace BALL
 
 	double SLICKEnergy::getCHPIScore() const
 	{
-		const ScoringComponent* component = getComponent("CHPI");
+		const ScoringComponent* component = getComponent("CHPISlick");
 		if (component != 0)
 		{
-			return component->getScore();
+			return component->getRawScore();
 		} 
 		else 
 		{
@@ -155,10 +163,10 @@ namespace BALL
 
 	double SLICKEnergy::getVDWScore() const
 	{
-		const ScoringComponent* component = getComponent("van-der-Waals");
+		const ScoringComponent* component = getComponent("vanDerWaalsSlick");
 		if (component != 0)
 		{
-			return component->getScore();
+			return component->getRawScore();
 		} 
 		else 
 		{
@@ -172,7 +180,7 @@ namespace BALL
 		const ScoringComponent* component = getComponent("Polar Solvation");
 		if (component != 0)
 		{
-			return component->getScore();
+			return component->getRawScore();
 		} 
 		else 
 		{
@@ -186,7 +194,7 @@ namespace BALL
 		const ScoringComponent* component = getComponent("Nonpolar Solvation");
 		if (component != 0)
 		{
-			return component->getScore();
+			return component->getRawScore();
 		} 
 		else 
 		{
@@ -204,13 +212,13 @@ namespace BALL
 		float coeff_NPS = options_.setDefaultReal(SLICKEnergy::Option::NONPOLAR, SLICKEnergy::Default::NONPOLAR);
 		float coeff_PS = options_.setDefaultReal(SLICKEnergy::Option::POLAR, SLICKEnergy::Default::POLAR);
 
-		CHPI* chpi = new CHPI(*this);
+		CHPISlick* chpi = new CHPISlick(*this);
 		chpi->setCoefficient(coeff_CHPI);
 		chpi->setup();
 		chpi->setNormalizationParameters(0.0, 0.0);
 		insertComponent(chpi);
 
-		HydrogenBond* hb = new HydrogenBond(*this, HydrogenBond::ALL_HYDROGENS);
+		HydrogenBondSlick* hb = new HydrogenBondSlick(*this);
 		hb->setCoefficient(coeff_HB);
 		hb->setup();
 		hb->setNormalizationParameters(0.0, 0.0);

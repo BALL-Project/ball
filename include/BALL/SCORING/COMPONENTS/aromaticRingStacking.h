@@ -24,6 +24,8 @@
 #ifndef BALL_SCORING_COMPONENTS_AROMATICRINGSTACKING_H
 #define BALL_SCORING_COMPONENTS_AROMATICRINGSTACKING_H
 
+#include <BALL/QSAR/aromaticityProcessor.h>
+#include <BALL/QSAR/ringPerceptionProcessor.h>
 #include <BALL/SCORING/COMMON/scoringComponent.h>
 #include <BALL/SCORING/COMMON/scoringFunction.h>
 #include <BALL/DATATYPE/options.h>
@@ -60,30 +62,24 @@ namespace BALL
 				static const float SCORING_TOLERANCE;
 			};
 
-			AromaticRingStacking()
-				throw();
+			AromaticRingStacking();
 
-			AromaticRingStacking(ScoringFunction& sf)
-				throw();
+			AromaticRingStacking(ScoringFunction& sf);
 
-			AromaticRingStacking(const AromaticRingStacking& ars)
-				throw();
+			AromaticRingStacking(const AromaticRingStacking& ars);
 
-			~AromaticRingStacking()
-				throw();
+			~AromaticRingStacking();
 
 			void clear();
 
-			virtual bool setup(Options& options)
-				throw();
+			virtual bool setup(Options& options);
 
 			/** This function needs to be called once for every new ligand */
 			void setupLigand();
 
 			void update(const vector<std::pair<Atom*, Atom*> >& /*atom_pairs*/);
 
-			virtual double updateScore()
-				throw();
+			virtual double updateScore();
 
 		private:
 			/** A TimeStamp that is used to check during each call of update whether the receptor has been changed.\n

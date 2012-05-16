@@ -72,7 +72,7 @@ double Electrostatic::updateScore()
 
 	score_ = amber_nb_->getElectrostaticEnergy();
 
-	scaleScore();
+	//scaleScore();
 
 	// use threshold for unrealistically good amber-ES energies due to consideration of only point-charges
 	/// TODO: convert this to a value for each ligand atom == each grid cell
@@ -81,7 +81,8 @@ double Electrostatic::updateScore()
 	//if (score < threshold) score_ = threshold;
 	//if (score_ < -40) score_ = -40;
 
-	return score_;
+	//return score_;
+	return getScaledScore();
 }
 
 

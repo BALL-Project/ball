@@ -38,7 +38,6 @@ FresnoTypes::FresnoTypes(AtomContainer* container)
 }
 
 
-
 bool FresnoTypes::setup()
 {
 	Size verbosity = 0;

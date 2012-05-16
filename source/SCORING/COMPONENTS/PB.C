@@ -143,7 +143,7 @@ double PB::updateScore()
 	double com_solv = pb_solver_->getEnergy();
 
 	score_ = (com_solv-com_vac)-(rec_solv-rec_vac)-(lig_solv-lig_vac);
-	scaleScore();
+	//scaleScore();
 
 	cout<<"  rec_vac = "<<rec_vac<<endl;
 	cout<<"  rec_solv = "<<rec_solv<<endl;
@@ -152,10 +152,12 @@ double PB::updateScore()
 	cout<<"  com_vac = "<<com_vac<<endl;
 	cout<<"  com_solv = "<<com_solv<<endl;
 	cout<<"  ----------------------"<<endl;
-	cout<<"  total PB score = "<<score_<<endl<<flush;
+	cout<<"  total PB score = "<< getScaledScore() <<endl<<flush;
 
 	timer.stop();
 	Log<<"Time used by PB::updateScore(): "<<timer.getClockTime()<<endl;
 
-	return score_;
+	//return score_;
+	return getScaledScore();
 }
+

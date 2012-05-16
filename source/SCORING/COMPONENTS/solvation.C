@@ -110,6 +110,12 @@ double Solvation::updateScore()
 		score_ += par_i*vol_j*exp((-distance*distance)/(2*3.5*3.5));
 	}
 
+	/*
 	scaleScore();
 	return score_;
+	*/
+
+	return getScaledScore();
 }
+
+

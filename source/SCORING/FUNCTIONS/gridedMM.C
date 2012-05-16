@@ -24,7 +24,6 @@
 #include <BALL/SCORING/FUNCTIONS/gridedMM.h>
 
 #include <BALL/SCORING/COMPONENTS/advElectrostatic.h>
-#include <BALL/SCORING/COMPONENTS/CHPI.h>
 #include <BALL/SCORING/COMPONENTS/aromaticRingStacking.h>
 #include <BALL/SCORING/COMPONENTS/solvation.h>
 #include <BALL/SCORING/COMPONENTS/fragmentationalSolvation.h>
@@ -130,7 +129,7 @@ double GridedMM::getES()
 		Electrostatic* es = dynamic_cast<Electrostatic*>(*it);
 		if (!(*it)->isLigandIntraMolecular() && (*it)->isEnabled() && es != NULL)
 		{
-			es_score += es->getScore();
+			es_score += es->getScaledScore();
 		}
 	}
 

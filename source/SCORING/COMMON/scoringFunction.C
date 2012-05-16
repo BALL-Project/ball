@@ -634,11 +634,14 @@ ScoringComponent* ScoringFunction::getComponent(const Size index) const
 
 double ScoringFunction::calculateScore()
 {
-	double score = 0.0;
+	double score_ = 0.0;
 
 	for (vector<ScoringComponent*>::iterator it = scoring_components_.begin(); it!=scoring_components_.end(); it++)
 	{
-		score += (*it)->updateScore();
+		(*it)->updateScore();
+		score_ += (*it)->getScaledScore();
+
+		//score_ += (*it)->updateScore();
 	}
 
 	return (intercept_ + score_);
@@ -1179,15 +1182,14 @@ void ScoringFunction::clearStoredInteractions_()
 
 			const list<const AtomContainer*
 			>* interaction_partners = ph->getInteractionPartners();
-			for (list < const AtomContainer* > ::const_iterator c_it = interaction_partners->begin();
-			     c_it!=interaction_partners->end(); c_it++)
-			     {
-				     AtomContainer* ac = const_cast<AtomContainer*>(*c_it);
-				     for (AtomIterator a_it = ac->beginAtom(); +a_it; a_it++)
-				     {
-					     if (a_it->interactions) a_it->interactions->clear();
-				     }
-			     }
+			for (list < const AtomContainer* > ::const_iterator c_it = interaction_partners->begin(); c_it!=interaction_partners->end(); c_it++)
+			{
+				AtomContainer* ac = const_cast<AtomContainer*>(*c_it);
+				for (AtomIterator a_it = ac->beginAtom(); +a_it; a_it++)
+				{
+					if (a_it->interactions) a_it->interactions->clear();
+				}
+			}
 		}
 	}
 }
@@ -1416,12 +1418,12 @@ void ScoringFunction::update()
 		}
 	}
 	if (all_ligand_nonbonded_ == NULL) // calculate ligand nonbonded pairs
-		{
-			ligand_nonbonded = createLigandNonbondedPairVector(0, ligand_intramol_overlaps_);
-			update_ligand_nonbonded = 1;
-		}
+	{
+		ligand_nonbonded = createLigandNonbondedPairVector(0, ligand_intramol_overlaps_);
+		update_ligand_nonbonded = 1;
+	}
 
-		AtomPairVector* receptor_ligand = createNonbondedPairVector(hashgrid_, overlaps_, 1);
+	AtomPairVector* receptor_ligand = createNonbondedPairVector(hashgrid_, overlaps_, 1);
 	AtomPairVector empty_vector(0);
 
 	for (vector<ScoringComponent*> ::iterator it = scoring_components_.begin(); it != scoring_components_.end(); ++it)
@@ -1523,7 +1525,7 @@ void ScoringFunction::getScoreContributions(vector<double>& score_contributions,
 
 	for (Size i = 0; i < scoring_components_.size(); i++)
 	{
-		score_contributions[i] = scoring_components_[i]->getScore();
+		score_contributions[i] = scoring_components_[i]->getScaledScore();
 		names[i] = scoring_components_[i]->getName();
 	}
 }

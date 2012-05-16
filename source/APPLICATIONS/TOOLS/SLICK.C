@@ -65,10 +65,14 @@ int main(int argc, char** argv)
 
 	parpars.parse(argc, argv);
 
+	Options options;
+	ScoringFunction::getDefaultOptions(options);
+
 	unsigned int verbosity = 0;
 	if (parpars.get("v") != CommandlineParser::NOT_FOUND)
 	{
 		verbosity = parpars.get("v").toInt();
+		options.setInteger("verbosity", verbosity);
 	}
 
 	float receptor_charge_scaling_factor = 1.0f;
@@ -113,7 +117,6 @@ int main(int argc, char** argv)
 	time(&rawtime);
 	String time_string("start: " + String(asctime(localtime(&rawtime))));
 
-
 	// now load the molecules and assign radii and charges depending on
 	// what the user wants
 	System system;
@@ -151,23 +154,23 @@ int main(int argc, char** argv)
 	else
 	{
 		configuration_string += "use_charge_rules " + charge_rule_file_name + "\n";
-	}
 
-	tmp = path.find(charge_rule_file_name);
-	if (tmp != "")
-	{
-		charge_rule_file_name = tmp;
-	}
+		tmp = path.find(charge_rule_file_name);
+		if (tmp != "")
+		{
+			charge_rule_file_name = tmp;
+		}
 
-	if (verbosity > 0)
-	{
-		Log.info() << "Using " << charge_rule_file_name << " as charge rule file" << endl;
-	}
+		if (verbosity > 0)
+		{
+			Log.info() << "Using " << charge_rule_file_name << " as charge rule file" << endl;
+		}
 
-	INIFile charge_ini(charge_rule_file_name);
-	charge_ini.read();
-	ChargeRuleProcessor charge_rules(charge_ini);
-	system.apply(charge_rules);
+		INIFile charge_ini(charge_rule_file_name);
+		charge_ini.read();
+		ChargeRuleProcessor charge_rules(charge_ini);
+		system.apply(charge_rules);
+	}
 
 
 	// Read and apply polar charge rules
@@ -179,23 +182,22 @@ int main(int argc, char** argv)
 	else
 	{
 		configuration_string += "use_polar_radius_rules " + polar_radius_rule_file_name + "\n";
-	}
 
-	tmp = path.find(polar_radius_rule_file_name);
-	if (tmp != "")
-	{
-		polar_radius_rule_file_name = tmp;
-	}
-	if (verbosity > 0)
-	{
-		Log.info() << "Using " << polar_radius_rule_file_name << " as polar radius rule file" << endl;
-	}
+		tmp = path.find(polar_radius_rule_file_name);
+		if (tmp != "")
+		{
+			polar_radius_rule_file_name = tmp;
+		}
+		if (verbosity > 0)
+		{
+			Log.info() << "Using " << polar_radius_rule_file_name << " as polar radius rule file" << endl;
+		}
 
-	INIFile radius_ini(polar_radius_rule_file_name);
-	radius_ini.read();
-	RadiusRuleProcessor radius_rules(radius_ini);
-	system.apply(radius_rules);
-
+		INIFile radius_ini(polar_radius_rule_file_name);
+		radius_ini.read();
+		RadiusRuleProcessor radius_rules(radius_ini);
+		system.apply(radius_rules);
+	}
 
 	if (verbosity > 8)
 	{
@@ -222,8 +224,6 @@ int main(int argc, char** argv)
 			Log.error() << "Mysterious charge: " << it->getCharge() << "\t"
 				<< it->getFullName() << "\t" << count << "\t" << it->getElement().getSymbol() << endl;
 		}
-
-// 		cerr << " " << it->getElement() << " " << it->getCharge() << endl;
 	}
 
 	// scale charges
@@ -252,7 +252,6 @@ int main(int argc, char** argv)
 	}
 
 
-	Options options;
 	String options_file_name = parpars.get("op");
 	if (options_file_name != CommandlineParser::NOT_FOUND)
 	{
@@ -271,7 +270,6 @@ int main(int argc, char** argv)
 	}
 
 	options.set(VanDerWaalsSlick::Option::LENNARD_JONES_FILE, lj_parameter_file_name);
-	options.setInteger(ScoringFunction::Option::VERBOSITY, verbosity);
 
 	if (parpars.has("u"))
 	{
@@ -294,10 +292,11 @@ int main(int argc, char** argv)
 	{
 		cout << "Using " << nonpolar_radius_rule_file_name << " for nonpolar radii" << endl;
 		configuration_string += "use_nonpolar_radius_rules " + nonpolar_radius_rule_file_name + "\n";
+
+		options.setBool(NonpolarSolvation::Option::NONPOLAR_OVERWRITE_RADII, true);
+		options.set(NonpolarSolvation::Option::NONPOLAR_RADIUS_RULES, nonpolar_radius_rule_file_name);
 	}
 
-	options.setBool(NonpolarSolvation::Option::NONPOLAR_OVERWRITE_RADII, true);
-	options.set(NonpolarSolvation::Option::NONPOLAR_RADIUS_RULES, nonpolar_radius_rule_file_name);
 
 
 	float score = 0.0f;
@@ -308,8 +307,6 @@ int main(int argc, char** argv)
 
 		SLICKEnergy slick(*protein, *ligand, options);
 		score = slick.calculateScore();
-		//slick.update();
-		//score = slick.updateScore();
 
 		cout << endl << "SLICK/energy is " << score << " kJ/mol" << endl;
 
@@ -318,7 +315,7 @@ int main(int argc, char** argv)
 			cout << endl << "Scores (w/o coefficients)" << endl << endl;
 			cout << "Hydrogen bonds     " << slick.getHydrogenBondScore() << endl;
 			cout << "CHPI               " << slick.getCHPIScore() << endl;
-			cout << "Van-der-Waals      " << slick.getVDWScore() << endl;
+			cout << "VanDerWaalsSlick   " << slick.getVDWScore() << endl;
 			cout << "Nonpolar solvation " << slick.getNonpolarSolvationScore() << endl;
 			cout << "Polar Solvation    " << slick.getPolarSolvationScore() << endl;
 		}
@@ -341,7 +338,7 @@ int main(int argc, char** argv)
 			<< " " << component << endl;
 		datfile.close();
 
-		component = "CHPI";
+		component = "CHPISlick";
 		dat_file_name = component + ".dat";
 		datfile.open(dat_file_name, std::ios::out);
 		datfile << protein_file_name << " " << ligand_file_name << " " << slick.getCHPIScore()
@@ -389,8 +386,7 @@ int main(int argc, char** argv)
 
 		SLICKScore slick(*protein, *ligand, options);
 		score = slick.calculateScore();
-		//slick.update();
-		//score = slick.updateScore();
+
 		cout << endl << "SLICK/score is " << score << " (arb. units)" << endl;
 
 		if (verbosity > 1)
@@ -398,7 +394,7 @@ int main(int argc, char** argv)
 			cout << endl << "Scores (w/o coefficients)" << endl << endl;
 			cout << "Hydrogen bonds     " << slick.getHydrogenBondScore() << endl;
 			cout << "CHPI               " << slick.getCHPIScore() << endl;
-			cout << "Van-der-Waals      " << slick.getVDWScore() << endl;
+			cout << "VanDerWaalsSlick   " << slick.getVDWScore() << endl;
 			cout << "Electrostatic int. " << slick.getPolarSolvationScore() << endl;
 		}
 
@@ -419,7 +415,7 @@ int main(int argc, char** argv)
 		datfile << protein_file_name << " " << ligand_file_name << " " << slick.getHydrogenBondScore() << " " << component << endl;
 		datfile.close();
 
-		component = "CHPI";
+		component = "CHPISlick";
 		dat_file_name = component + ".dat";
 		datfile.open(dat_file_name, std::ios::out);
 		datfile << protein_file_name << " " << ligand_file_name << " " << slick.getCHPIScore() << " " << component << endl;

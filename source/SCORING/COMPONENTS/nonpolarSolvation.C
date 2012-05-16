@@ -380,17 +380,6 @@ namespace BALL
 
 	double NonpolarSolvation::updateScore()
 	{
-		double score = 0.0;
-		score += coefficient_ * calculateScore();
-
-		return score;
-	}
-
-
-	double NonpolarSolvation::calculateScore()
-
-	{
-
 		Timer timer;
 		timer.start();
 
@@ -456,5 +445,4 @@ namespace BALL
 
 		return score_;
 	}
-
 }

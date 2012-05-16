@@ -139,14 +139,15 @@ void ScoringComponent::setName(const String& name)
 	name_ = name;
 }
 
-double ScoringComponent::calculateScore()
-{
-	return(score_);
-}
 
-double ScoringComponent::getScore() const
+double ScoringComponent::getRawScore() const
 {
 	return score_;
+}
+
+double ScoringComponent::getScaledScore() const
+{
+	return scaleScore(score_);
 }
 
 void ScoringComponent::setLigandIntraMolecular(bool b)
@@ -207,26 +208,33 @@ void ScoringComponent::getNormalizationParameters(double& stddev, double& mean)
 	mean = mean_;
 }
 
+/*
 void ScoringComponent::scaleScore()
 {
 	scaleScore(score_);
 }
+*/
 
-void ScoringComponent::scaleScore(double& score)
+double ScoringComponent::scaleScore(double score) const
 {
+	double scaled_score = score;
+
 	// if desired, transform score
 	if (stddev_ > 0.01)
 	{
-		score -= mean_;
-		score /= stddev_;
-		
-		score *= coefficient_;
+		scaled_score -= mean_;
+		scaled_score /= stddev_;
+
+		scaled_score *= coefficient_;
 
 		// BACK-transform accoring to normalization of the binding free energies of the traning data set
 		if (scoring_function_ != 0)
 		{
 			double act_stddev = scoring_function_->getExpEnergyStddev();
-			if (act_stddev > 0.01) score *= act_stddev;
+			if (act_stddev > 0.01)
+			{
+				scaled_score *= act_stddev;
+			}
 		}
 		else
 		{
@@ -235,9 +243,12 @@ void ScoringComponent::scaleScore(double& score)
 	}
 	else
 	{
-		score *= coefficient_;
+		scaled_score *= coefficient_;
 	}
+
+	return scaled_score;
 }
+
 
 void ScoringComponent::enable()
 {

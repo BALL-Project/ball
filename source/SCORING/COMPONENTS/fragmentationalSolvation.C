@@ -107,9 +107,10 @@ double FragmentationalSolvation::updateScore()
 
 		if (scoring_function_->storeInteractionsEnabled())
 		{
-			double scaled_atom_score = atom_score;
-			scaleScore(scaled_atom_score);
-			atom_it->addInteraction("fragSolv", scaled_atom_score);
+			//double scaled_atom_score = atom_score;
+			//scaled_atom_score = scaleScore(scaled_atom_score);
+			//atom_it->addInteraction("fragSolv", scaled_atom_score);
+			atom_it->addInteraction("fragSolv", scaleScore(atom_score));
 		}
 
 		score_ += atom_score;
@@ -132,8 +133,12 @@ double FragmentationalSolvation::updateScore()
 		delete hashgrid;
 	}
 
+	/*
 	scaleScore();
 	return score_;
+	*/
+
+	return getScaledScore();
 }
 
 

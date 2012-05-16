@@ -44,36 +44,28 @@ namespace BALL
 			{
 				public:
 					///
-					AromaticRing()
-						throw();
+					AromaticRing();
 
 					///
-					AromaticRing(const AromaticRing& aromatic_ring)
-						throw();
+					AromaticRing(const AromaticRing& aromatic_ring);
 
 					///
-					AromaticRing(const std::vector<Atom*>& atoms)
-						throw();
+					AromaticRing(const std::vector<Atom*>& atoms);
 
 					///
-					const Vector3& getCentre() const
-						throw();
+					const Vector3& getCentre() const;
 
 					///
-					const Vector3& getNormalVector() const
-						throw();
+					const Vector3& getNormalVector() const;
 
 					///
-					void setRing(const std::vector<Atom*>& atoms)
-						throw();
+					void setRing(const std::vector<Atom*>& atoms);
 
 					// accessors for the private data members
-					const std::vector<Atom*>& getRing() const
-						throw();
+					const std::vector<Atom*>& getRing() const;
 
 					///
-					void dump(std::ostream& s = std::cout) const
-						throw();
+					void dump(std::ostream& s = std::cout) const;
 
 					/** Recalculates ring-center and normal-vector. Use this function if the parent-molecule has been moved or changed */
 					void update();
@@ -89,12 +81,10 @@ namespace BALL
 					Vector3 normal_vector_;
 
 					//_
-					void computeCentre_()
-						throw();
+					void computeCentre_();
 
 					//_
-					void computeNormalVector_()
-						throw();
+					void computeNormalVector_();
 			};
 
 			/// A class for storing aliphatic CH groups suitable for building
@@ -103,49 +93,39 @@ namespace BALL
 			{
 				public:
 					///
-					CHGroup()
-						throw();
+					CHGroup();
 
 					///
-					~CHGroup()
-						throw();
+					~CHGroup();
 
 					///
-					CHGroup(const CHGroup& CH_groups)
-						throw();
+					CHGroup(const CHGroup& CH_groups);
 
 					///
-					CHGroup (const Atom* C_atom, const Atom* H_atom)
-						throw();
+					CHGroup (const Atom* C_atom, const Atom* H_atom);
 
 					///
-					void setCAtom(const Atom* C_atom)
-						throw();
+					void setCAtom(const Atom* C_atom);
 
 					///
-					void setHAtom(const Atom* H_atom)
-						throw();
+					void setHAtom(const Atom* H_atom);
 
 					///
-					void setAtoms(const Atom* C_atom, const Atom* H_atom)
-						throw();
+					void setAtoms(const Atom* C_atom, const Atom* H_atom);
 
 					///
 					const Atom* getHAtom() const
-						throw()
 					{
 						return(H_atom_);
 					}
 
 					///
 					const Atom* getCAtom() const
-						throw()
 					{
 						return(C_atom_);
 					}
 
-					void dump(std::ostream& s = std::cout) const
-						throw();
+					void dump(std::ostream& s = std::cout) const;
 
 				private :
 					//_
@@ -221,23 +201,19 @@ namespace BALL
 
 			/**	Default constructor.
 			*/
-			CHPI()
-				throw();
+			CHPI();
 
 			/**	Constructor.
 			*/
-			CHPI(ScoringFunction& sf)
-				throw();
+			CHPI(ScoringFunction& sf);
 
 			/**	Copy constructor
 			*/
-			CHPI(const CHPI& chpi)
-				throw();
+			CHPI(const CHPI& chpi);
 
 			/**	Destructor.
 			*/
-			virtual ~CHPI()
-				throw();
+			virtual ~CHPI();
 
 			//@}
 			/**	@name	Assignment
@@ -246,21 +222,18 @@ namespace BALL
 
 			/** Assignment.
 			*/
-			const CHPI& operator = (const CHPI& chpi)
-				throw();
+			const CHPI& operator = (const CHPI& chpi);
 
 			/** Clear method.
 			*/
-			virtual void clear()
-				throw();
+			virtual void clear();
 
 			//@}
 			/**	@name	Predicates.
 			*/
 			//@{
 
-			bool operator == (const CHPI& chpi) const
-				throw();
+			bool operator == (const CHPI& chpi) const;
 
 			//@}
 			/**	@name	Setup Methods
@@ -269,22 +242,30 @@ namespace BALL
 
 			/**	Setup method.
 			*/
-			virtual bool setup()
-				throw();
+			virtual bool setup();
 
 			void setupLigand();
 
-			virtual double updateScore()
-				throw();
+			void update(const vector<std::pair<Atom*, Atom*> >&);
 
-			void update(const vector<std::pair<Atom*, Atom*> >& /*atom_pairs*/);
+			/**
+			* Calculates and returns the component's energy.
+			*/
+			virtual double updateScore();
 
 			///
 			Options options;
 
 		private:
-			/** A TimeStamp that is used to check during each call of update whether the receptor has been changed.\n
-			If this is the case, the ring-centers and normal-vector will be recomputed. */
+			/**
+			 * Calculate possible CH-PI interactions between receptor and ligand.
+			 */
+			void calculatePossibleInteractions();
+
+			/**
+			 * A TimeStamp that is used to check during each call of update whether the receptor has been changed.\n
+			 * If this is the case, the ring-centers and normal-vector will be recomputed.
+			 */
 			TimeStamp update_time_stamp_;
 
 			//_ A vector containing all possible interactions between aliphatic C-H groups and aromatic rings

@@ -24,10 +24,8 @@ namespace BALL
 	/** SLICKEnergy scoring function
 			{\bf Definition:} \URL{BALL/SCORING/FUNCTIONS/slickScore.h}
 	*/
-	class SLICKScore
-		: public ScoringFunction
+	class BALL_EXPORT SLICKScore : public ScoringFunction
 	{
-
 		public:
 
 		/**	@name Constant Definitions

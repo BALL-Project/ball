@@ -242,7 +242,7 @@ double Polarity::updateScore()
 
 							if (scoring_function_->storeInteractionsEnabled())
 							{
-								scaleScore(val);
+								val = scaleScore(val);
 								it->addInteraction(*d_it, "pol", val);
 								(*d_it)->addInteraction(&*it, "pol", val);
 							}
@@ -270,10 +270,12 @@ double Polarity::updateScore()
 		//cout<<it->getFullName()<<" : "<<no_negative_contacts<<", "<<no_positive_contacts<<"  "<<(no_negative_contacts-no_positive_contacts)/((double)no_neighbor_cells)<<endl;
 	}
 
-	scaleScore();
+// 	scaleScore();
 
 //	cout<<"polarity: total sum="<<total_sum<<endl;
 //	cout<<"polarity: score="<<score_<<endl;
 
-	return score_;
+// 	return score_;
+
+	return getScaledScore();
 }

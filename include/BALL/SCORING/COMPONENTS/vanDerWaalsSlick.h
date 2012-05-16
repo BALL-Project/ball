@@ -15,10 +15,8 @@ namespace BALL
 	/** SLICK van-der-Waals Component based on AmberNonBonded \\
 			{\bf Definition:} \URL{BALL/SCORING/COMPONENTS/vanDerWaalsSlick.h}
 	*/
-	class VanDerWaalsSlick
-		:	public ScoringComponent
+	class BALL_EXPORT VanDerWaalsSlick : public ScoringComponent
 	{
-
 		public:
 
 		///
@@ -37,7 +35,7 @@ namespace BALL
 
 
 		///
-		struct Option
+		struct BALL_EXPORT Option
 		{
 
 			///
@@ -106,17 +104,17 @@ namespace BALL
 		virtual void clear()
 			;
 
-		///
-		virtual bool setup()
-			;
+		/**
+		 * Setup method
+		 */
+		virtual bool setup();
 
 		void update(const vector<std::pair<Atom*, Atom*> >& pair_vector);
 
+		/**
+		 * Calculates and returns the component's energy.
+		*/
 		virtual double updateScore();
-
-		///
-		virtual double calculateScore()
-			;
 
 
 		protected:

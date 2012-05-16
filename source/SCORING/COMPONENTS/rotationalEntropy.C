@@ -69,7 +69,11 @@ double RotationalEntropy::updateScore()
 		return 0;
 	}
 
+	/*
 	scaleScore();
-
 	return score_;
+	*/
+
+	return getScaledScore();
 }
+

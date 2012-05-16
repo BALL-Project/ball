@@ -25,7 +25,6 @@
 #include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 
-#include <BALL/SCORING/COMPONENTS/CHPI.h>
 #include <BALL/SCORING/COMPONENTS/aromaticRingStacking.h>
 #include <BALL/SCORING/COMPONENTS/solvation.h>
 #include <BALL/SCORING/COMPONENTS/fragmentationalSolvation.h>
@@ -37,7 +36,7 @@
 #include <BALL/SCORING/COMPONENTS/lipophilic.h>
 #include <BALL/SCORING/COMPONENTS/burialDepth.h>
 
-//using namespace BALL::Docking;
+
 using namespace BALL;
 
 
@@ -95,7 +94,7 @@ double MMScoring::getES()
 		Electrostatic* es = dynamic_cast<Electrostatic*>(*it);
 		if (!(*it)->isLigandIntraMolecular() && (*it)->isEnabled() && es != NULL)
 		{
-			es_score += es->getScore();
+			es_score += es->getScaledScore();
 		}
 	}
 

@@ -10,14 +10,11 @@
 
 namespace BALL
 {
-
 	/** SLICK polar solvation component \\
 			{\bf Definition:} \URL{BALL/SCORING/COMPONENTS/polarSolvation.h}
 	*/
-	class PolarSolvation
-		:	public ScoringComponent
+	class BALL_EXPORT PolarSolvation : public ScoringComponent
 	{
-
 		public:
 
 		/**
@@ -78,7 +75,7 @@ namespace BALL
 		};
 
 
-		struct Option
+		struct BALL_EXPORT Option
 		{
 
 			/**
@@ -230,24 +227,22 @@ namespace BALL
 		*/
 		//@{
 
+		/**
+		 * Setup method.
+		*/
+		virtual bool setup();
+
 		void update(const vector<std::pair<Atom*, Atom*> >& pair_vector);
 
-		virtual double updateScore();
-
-		/**	Setup method.
+		/**
+		 * Calculates and returns the component's energy.
 		*/
-		virtual bool setup()
-			;
+		virtual double updateScore();
 
 		//@}
 		/**	@name	Accessors
 		*/
 		//@{
-
-		/**	Calculates and returns the component's energy.
-		*/
-		virtual double calculateScore()
-			;
 
 		//@}
 

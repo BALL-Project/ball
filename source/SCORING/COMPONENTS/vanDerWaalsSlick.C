@@ -650,16 +650,6 @@ namespace BALL
 
 	double VanDerWaalsSlick::updateScore()
 	{
-		double score = 0.0;
-		score += coefficient_ * calculateScore();
-
-		return score;
-	}
-
-	double VanDerWaalsSlick::calculateScore()
-
-	{
-
 		// Because we have local copies, we need to update the atom postition
 		// for our molecules.
 		AtomConstIterator src = getScoringFunction()->getReceptor()->beginAtom();
@@ -727,7 +717,6 @@ namespace BALL
 				<< score_ << std::endl;
 		}
 
-		return(score_);
+		return score_;
 	}
-
 }

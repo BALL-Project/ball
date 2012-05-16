@@ -5,9 +5,9 @@
 
 #include <BALL/SCORING/FUNCTIONS/slickScore.h>
 #include <BALL/SCORING/COMPONENTS/vanDerWaalsSlick.h>
-#include <BALL/SCORING/COMPONENTS/CHPI.h>
+#include <BALL/SCORING/COMPONENTS/CHPISlick.h>
 #include <BALL/SCORING/COMPONENTS/polarSolvation.h>
-#include <BALL/SCORING/COMPONENTS/hydrogenBond.h>
+#include <BALL/SCORING/COMPONENTS/hydrogenBondSlick.h>
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/PTE.h>
@@ -115,10 +115,10 @@ namespace BALL
 
 	double SLICKScore::getCHPIScore() const
 	{
-		const ScoringComponent* component = getComponent("CHPI");
+		const ScoringComponent* component = getComponent("CHPISlick");
 		if (component != 0)
 		{
-			return component->getScore();
+			return component->getRawScore();
 		} 
 		else 
 		{
@@ -129,10 +129,10 @@ namespace BALL
 
 	double SLICKScore::getVDWScore() const
 	{
-		const ScoringComponent* component = getComponent("van-der-Waals");
+		const ScoringComponent* component = getComponent("vanDerWaalsSlick");
 		if (component != 0)
 		{
-			return component->getScore();
+			return component->getRawScore();
 		} 
 		else 
 		{
@@ -146,7 +146,7 @@ namespace BALL
 		const ScoringComponent* component = getComponent("Polar Solvation");
 		if (component != 0)
 		{
-			return component->getScore();
+			return component->getRawScore();
 		} 
 		else 
 		{
@@ -160,7 +160,7 @@ namespace BALL
 		const ScoringComponent* component = getComponent("Nonpolar Solvation");
 		if (component != 0)
 		{
-			return component->getScore();
+			return component->getRawScore();
 		} 
 		else 
 		{
@@ -173,7 +173,7 @@ namespace BALL
 		const ScoringComponent* component = getComponent("SLICK HydrogenBond");
 		if (component != 0)
 		{
-			return component->getScore();
+			return component->getRawScore();
 		} 
 		else 
 		{
@@ -188,13 +188,13 @@ namespace BALL
 		float coeff_VDW = options_.setDefaultReal(SLICKScore::Option::VDW, SLICKScore::Default::VDW);
 		float coeff_PS = options_.setDefaultReal(SLICKScore::Option::POLAR, SLICKScore::Default::POLAR);
 
-		CHPI* chpi = new CHPI(*this);
+		CHPISlick* chpi = new CHPISlick(*this);
 		chpi->setCoefficient(coeff_CHPI);
 		chpi->setup();
 		chpi->setNormalizationParameters(0.0, 0.0);
 		insertComponent(chpi);
 
-		HydrogenBond* hb = new HydrogenBond(*this, HydrogenBond::ALL_HYDROGENS);
+		HydrogenBondSlick* hb = new HydrogenBondSlick(*this);
 		hb->setCoefficient(coeff_HB);
 		hb->setup();
 		hb->setNormalizationParameters(0.0, 0.0);

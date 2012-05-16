@@ -9,9 +9,11 @@ SET(SOURCES_LIST
 	burialDepth.C
 	buriedPolar.C
 	CHPI.C
+	CHPISlick.C
 	electrostatic.C
 	fresnoTypes.C
 	hydrogenBond.C
+	hydrogenBondSlick.C
 	lipophilic.C
 	polarity.C
 	PB.C
@@ -21,11 +23,8 @@ SET(SOURCES_LIST
 	nonpolarSolvation.C
 	polarSolvation.C
 	#rotationalEntropyLoss.C
-	#vanDerWaals should be included again, right now there are unresolved compilation problems
-	vanDerWaalsSlick.C
 	vanDerWaals.C
-	# vdW.C should be merged into other files. it is a wrapper for amberNonBonded
-	#vdW.C
-)	
+	vanDerWaalsSlick.C
+)
 
 ADD_BALL_SOURCES("SCORING/COMPONENTS" "${SOURCES_LIST}")

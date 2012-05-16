@@ -11,14 +11,11 @@
 
 namespace BALL
 {
-
 	/** SLICK nonpolar solvation component.
 			{\bf Definition:} \URL{BALL/SORING/COMMON/nonpolarSolvation.h}
 	*/
-	class NonpolarSolvation
-		:	public ScoringComponent
+	class BALL_EXPORT NonpolarSolvation : public ScoringComponent
 	{
-
 		public:
 
 		/**
@@ -51,7 +48,7 @@ namespace BALL
 
 		/**
 		*/
-		struct Option
+		struct BALL_EXPORT Option
 		{
 
 			/**
@@ -233,12 +230,10 @@ namespace BALL
 
 		void update(const vector<std::pair<Atom*, Atom*> >& pair_vector);
 
-		virtual double updateScore();
-
-		/**	Calculates and returns the component's energy.
+		/**
+		 * Calculates and returns the component's energy.
 		*/
-		virtual double calculateScore()
-			;
+		virtual double updateScore();
 
 		//@}
 
