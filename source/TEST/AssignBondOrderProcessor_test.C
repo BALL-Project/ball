@@ -259,7 +259,7 @@ CHECK(Option::ALGORITHM: FPT)
 	sys60.apply(abop);
 	TEST_EQUAL(abop.hasValidOptions(), true)
 
-	TEST_REAL_EQUAL(abop.getNumberOfComputedSolutions(), 2.f)
+	TEST_EQUAL(abop.getNumberOfComputedSolutions(), 2)
 	TEST_REAL_EQUAL(abop.getTotalPenalty(1), 6.f)
 RESULT
 
@@ -917,7 +917,7 @@ CHECK(operator() FPT vs A*)
 	mol4 >> sys4;
 	sys4.apply(testbop_a);
 	sys4.apply(testbop_fpt);
-	TEST_REAL_EQUAL(testbop_a.getNumberOfComputedSolutions(), testbop_fpt.getNumberOfComputedSolutions())
+	TEST_EQUAL(testbop_a.getNumberOfComputedSolutions(), testbop_fpt.getNumberOfComputedSolutions())
 
 	TEST_REAL_EQUAL(testbop_a.getTotalPenalty(0), testbop_fpt.getTotalPenalty(0)) //1.f )
 	TEST_REAL_EQUAL(testbop_a.getTotalPenalty(1), testbop_fpt.getTotalPenalty(1)) //1.f )
