@@ -660,7 +660,6 @@ namespace BALL
 				composite2 = *cit;
 
 				DisulfidBondProcessor dbp;
-				//bool success = dbp.connect(*composite_list.begin(), *composite_list.begin()++);
 				success = dbp.connect(composite1, composite2);
 			}
 			if (success)
@@ -674,6 +673,7 @@ namespace BALL
 
 					scene->getMainControl()->update(*composite1, true);
 					scene->getMainControl()->update(*composite2, true);
+					setStatusbarText((String)tr("  > disulfid bond created.") + String());
 				}
 			}
 			else
@@ -1039,7 +1039,7 @@ namespace BALL
 			// delete old composites in copy list
 			if (!was_delete_) clearClipboard();
 
- 			enableUpdates_(false);
+			enableUpdates_(false);
 
 			// remove the selected composites from the tree and from the scene
 			// if !was_delete_, copy them into the copy_list_
@@ -1053,7 +1053,7 @@ namespace BALL
 			{
 				bool update = false;
 				Composite& c = **it;
-				if (!c.isRoot()) 
+				if (!c.isRoot())
 				{
 					roots.insert(&c.getRoot());
 				}

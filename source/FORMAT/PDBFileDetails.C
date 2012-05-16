@@ -22,7 +22,7 @@
 
 using namespace std;
 
-namespace BALL 
+namespace BALL
 {
 
 	const char* PDBFile::getAtomElementSymbol

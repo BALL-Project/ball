@@ -397,7 +397,7 @@ namespace BALL
 				return;
 			}
 
-			setStatusbarText((String)tr("adding hydrogens ..."), true);
+			setStatusbarText((String)tr("  > adding hydrogens ..."), true);
 
 			// copy the selection_, it can change after a changemessage event
 			list<Composite*> temp_selection_ = getMainControl()->getMolecularControlSelection();
@@ -445,7 +445,7 @@ namespace BALL
 				return;
 			}
 
-			setStatusbarText((String)tr("building bonds ..."), true);
+			setStatusbarText((String)tr("  > building bonds ..."), true);
 
 			// copy the selection_, it can change after a changemessage event
 			list<Composite*> temp_selection_ = getMainControl()->getMolecularControlSelection();

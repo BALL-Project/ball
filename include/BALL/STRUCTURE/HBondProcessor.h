@@ -14,7 +14,7 @@
 #endif
 
 #ifndef BALL_MATHS_VECTOR3_H
-#include <BALL/MATHS/vector3.h> 
+#include <BALL/MATHS/vector3.h>
 #endif
 
 #ifndef BALL_DATATYPE_OPTIONS_H

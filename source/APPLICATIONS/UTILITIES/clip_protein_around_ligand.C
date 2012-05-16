@@ -31,7 +31,7 @@
 using namespace BALL;
 using namespace std;
 
-void usage(const String& name) 
+void usage(const String& name)
 {
 	Log.error() << name << endl << endl
 		<< "This program is designed for clipping the protein structures around" <<endl
@@ -84,7 +84,6 @@ Size find_sulphur_bridges(const System& system,
 	}
 
 	return(found);
-
 }
 
 Size count_heavy_atoms(const AtomContainer& container)
@@ -107,13 +106,13 @@ Residue* transform_residue_to_cap(PDBAtom& atom, FragmentDB& fragment_db,
 	new_residue->setProperty(Residue::PROPERTY__AMINO_ACID);
 	if (new_residue == 0) return(0);
 
-	if (atom.getName() == "N") 
+	if (atom.getName() == "N")
 	{
 		new_residue->setName("NME");
 	}
 	else
 	{
-		if (atom.getName() == "C") 
+		if (atom.getName() == "C")
 		{
 			new_residue->setName("ACE");
 		}
@@ -131,7 +130,7 @@ Residue* transform_residue_to_cap(PDBAtom& atom, FragmentDB& fragment_db,
 
 	// Copy the anchor atom
 	new_residue->insert(*new_atom);
-	
+
 	AtomBondIterator bond_it = atom.beginBond();
 	for (; +bond_it; ++ bond_it)
 	{
@@ -225,10 +224,9 @@ int main(int argc, char** argv)
 		{
 			// pring usage hints, an error message, exit
 			usage(argv[0]);
-			Log.error() << "Option " << option << " requires an additional argument." 
-				<< endl;
+			Log.error() << "Option " << option << " requires an additional argument."	<< endl;
 			return 3;
-		}		
+		}
 
 		// interpret all command line options
 		switch (option[1])
