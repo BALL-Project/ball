@@ -9,6 +9,8 @@
 # include <BALL/KERNEL/system.h>
 #endif
 
+#include <set>
+
 namespace BALL
 {
 	/** Disulfid Bond Processor
@@ -25,7 +27,7 @@ namespace BALL
 		 */
 		//@{
 		typedef std::pair<Residue*, Residue*>    DisulfidBond;
-		typedef	std::vector<DisulfidBond>  DisulfidBondVector;
+		typedef	std::set<DisulfidBond>  DisulfidBondVector;
 		//@}
 
 		BALL_CREATE(DisulfidBondProcessor);
@@ -83,8 +85,18 @@ namespace BALL
 		/// Connect two residues by disulid bond
 		bool connect(Residue* residue1, Residue* residue2);
 
-		/// Connect two AtomContainers by disulid bond
+		/// Connect two atom containers by disulid bond
 		bool connect(Composite* composite1, Composite* composite2);
+
+		/// Disconnect a disulid bond
+		bool disconnect(Atom* atom1, Atom* atom2);
+
+		/// Disconnect a disulid bond by its residues 
+		bool disconnect(Residue* residue1, Residue* residue2);
+
+		/// Disconnect a disulid bond by its constitutional atom containers
+		bool disconnect(Composite* composite1, Composite* composite2);
+
 
 		protected:
 			DisulfidBondVector  sulfur_bridges_;

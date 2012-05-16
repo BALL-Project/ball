@@ -8,6 +8,7 @@
 
 #include <BALL/STRUCTURE/disulfidBondProcessor.h>
 #include <BALL/STRUCTURE/peptides.h>
+#include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/atom.h>
@@ -50,7 +51,7 @@ namespace BALL
 					&& (residue1 != 0)
 					&& (residue2 != 0))
 			{
-				sulfur_bridges_.push_back(pair<Residue*, Residue*>(residue1, residue2));
+				sulfur_bridges_.insert(pair<Residue*, Residue*>(residue1, residue2));
 			}
 		}
 
@@ -120,7 +121,7 @@ namespace BALL
 					atom1->getResidue()->setProperty(Residue::PROPERTY__HAS_SSBOND);
 					atom2->getResidue()->setProperty(Residue::PROPERTY__HAS_SSBOND);
 					bond->setType(Bond::TYPE__DISULPHIDE_BRIDGE);
-					sulfur_bridges_.push_back(pair<Residue*, Residue*>(atom1->getResidue(), atom2->getResidue()));
+					sulfur_bridges_.insert(pair<Residue*, Residue*>(atom1->getResidue(), atom2->getResidue()));
 				}
 				else
 				{
@@ -184,6 +185,122 @@ namespace BALL
 				Atom* atom1 = reinterpret_cast<Atom*>(composite1);
 				Atom* atom2 = reinterpret_cast<Atom*>(composite2);
 				success = connect(atom1, atom2);
+		}
+		else
+		{
+			Log.warn() << "DisulfidBondProcessor: Invalid object type(s). Allowed objects are atoms or residues." << endl;
+		}
+		return success;
+	}
+
+	bool DisulfidBondProcessor::disconnect(Atom* atom1, Atom* atom2)
+	{
+		// if already disconnected, nothing to do!
+		Bond* bond = atom1->getBond(*atom2);
+		bool success = false;
+		if (bond &&  (atom1->getElement() == PTE[Element::S])
+			          && (atom2->getElement() == PTE[Element::S]))
+		{
+			bond->destroy();
+			success = true;
+
+			// use FragmentDB to rebuild residues, i.e. add hydrogens
+			FragmentDB fdb = FragmentDB("");
+			atom1->getResidue()->apply(fdb.normalize_names);
+			atom1->getResidue()->apply(fdb.add_hydrogens);
+			atom1->getResidue()->apply(fdb.build_bonds);
+
+			atom2->getResidue()->apply(fdb.normalize_names);
+			atom2->getResidue()->apply(fdb.add_hydrogens);
+			atom2->getResidue()->apply(fdb.build_bonds);
+
+			// delete property
+			Residue* residue1 = atom1->getResidue();
+			Residue* residue2 = atom2->getResidue();
+			residue1->clearProperty(Residue::PROPERTY__HAS_SSBOND);
+			residue2->clearProperty(Residue::PROPERTY__HAS_SSBOND);
+
+			// remove from internal list
+			DisulfidBondVector::iterator bond_it = sulfur_bridges_.begin();
+
+			for ( ; bond_it != sulfur_bridges_.end();  ++bond_it)
+			{
+				if (   (bond_it->first == residue1 && bond_it->second == residue2)
+					  || (bond_it->first == residue2 && bond_it->second == residue1))
+				{
+					sulfur_bridges_.erase(bond_it);
+					break;
+				}
+			}
+		}
+		else
+		{
+			Log.warn() << "DisulfidBondProcessor: No disulfid bond found to disconnect!" << endl;
+		}
+
+		return success;
+	}
+
+	bool DisulfidBondProcessor::disconnect(Residue* residue1, Residue* residue2)
+	{
+		bool success = !(   residue1->hasProperty(Residue::PROPERTY__HAS_SSBOND)
+									   && residue2->hasProperty(Residue::PROPERTY__HAS_SSBOND));
+		if (success)
+		{
+			Log.error() << "DisulfidBondProcessor: Disconnect not possible!" << endl;
+		}
+		else
+		{
+			Atom* atom1 = NULL;
+			Atom* atom2 = NULL;
+			if (   (Peptides::OneLetterCode(residue1->getName()) == 'C')
+					&& (Peptides::OneLetterCode(residue2->getName()) == 'C'))
+			{
+				// find S 
+				AtomIterator a_it = residue1->beginAtom();
+				for (; +a_it && !atom1; ++a_it)
+				{
+					if (a_it->getElement() == PTE[Element::S])
+					{
+						atom1 = &*a_it;
+					}
+				}
+				a_it = residue2->beginAtom();
+				for (; +a_it && !atom2; ++a_it)
+				{
+					if (a_it->getElement() == PTE[Element::S])
+					{
+						atom2 = &*a_it;
+					}
+				}
+			}
+			else
+			{
+				Log.warn() << "DisulfidBondProcessor: Invalid residue type. Select two cystein residues." << endl;
+			}
+
+			if (atom1 && atom2)
+			{
+				success = disconnect(atom1, atom2);
+			}
+		}
+		return success;
+	}
+
+	bool DisulfidBondProcessor::disconnect(Composite* composite1, Composite* composite2)
+	{
+		bool success = false;
+		if (RTTI::isKindOf<Residue>(*composite1) && RTTI::isKindOf<Residue>(*composite2) )
+		{
+			Residue* res1 = reinterpret_cast<Residue*>(composite1);
+			Residue* res2 = reinterpret_cast<Residue*>(composite2);
+			success = disconnect(res1, res2);
+		}
+		else if (RTTI::isKindOf<Atom>(*composite1) && RTTI::isKindOf<Atom>(*composite2))
+		{
+				Atom* atom1 = reinterpret_cast<Atom*>(composite1);
+				Atom* atom2 = reinterpret_cast<Atom*>(composite2);
+				success = disconnect(atom1, atom2);
 		}
 		else
 		{

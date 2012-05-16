@@ -292,6 +292,7 @@ SET(BALL_STRUCTURE_TESTS
 	AtomBijection_test
 	BindingPocketProcessor_test
 	ConnectedComponentsProcessor_test
+	DisulfidBondProcessor_test
 	Enumerator_test
 	EnumeratorIndex_test
 	GeometricProperties_test
