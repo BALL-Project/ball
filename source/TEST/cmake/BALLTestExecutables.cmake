@@ -112,7 +112,6 @@ SET(BALL_DOCKING_TESTS
 	Genes_test
 	GeneticAlgorithm_test
 	GeneticIndividual_test
-	GeometricFit_test
 	GridAnalysis_test
 	MolDB_test
 	Parameter_test
@@ -124,6 +123,12 @@ SET(BALL_DOCKING_TESTS
 	StaticLigandFragment_test
 	StructurePreparer_test
 )
+
+IF(BALL_HAS_FFTW)
+	LIST(APPEND BALL_DOCKING_TESTS
+		GeometricFit_test
+	)
+ENDIF()
 
 SET(BALL_SCORING_TESTS
 	CHPI_test
