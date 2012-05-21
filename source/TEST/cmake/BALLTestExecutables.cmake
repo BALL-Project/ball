@@ -83,6 +83,7 @@ SET(BALL_CONCEPTS_TESTS
 	PropertyManager_test
 	Composite_test1
 	Composite_test2
+	Composite_test3
 	CompositeCompositeIteratorTraits_test
 	CompositeChildcompositeIteratorTraits_test
 	CompositeAncestorIteratorTraits_test
