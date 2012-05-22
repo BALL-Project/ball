@@ -84,6 +84,7 @@ SET(BALL_CONCEPTS_TESTS
 	Composite_test1
 	Composite_test2
 	Composite_test3
+	Composite_test4
 	CompositeCompositeIteratorTraits_test
 	CompositeChildcompositeIteratorTraits_test
 	CompositeAncestorIteratorTraits_test
