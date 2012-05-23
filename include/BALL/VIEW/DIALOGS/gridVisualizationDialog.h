@@ -65,7 +65,7 @@ namespace BALL
 			void accept();
 			void autoScale();
 			void gridSelected();
-			bool exec();
+			int exec();
 
 			protected:
 

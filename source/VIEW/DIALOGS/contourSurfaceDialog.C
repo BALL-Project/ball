@@ -66,7 +66,7 @@ void ContourSurfaceDialog::valuesChanged()
 												(getThreshold() != DBL_MAX));
 }
 
-bool ContourSurfaceDialog::exec()
+int ContourSurfaceDialog::exec()
 {
 	grids->clear();
 	vector<Dataset*> sets = controller_->getDatasets();
@@ -80,12 +80,12 @@ bool ContourSurfaceDialog::exec()
 	grids->setCurrentIndex(index_selected_grid);
 
 	valuesChanged();
-	if (!QDialog::exec()) return false;
+	if (!QDialog::exec()) return QDialog::Rejected;
 	
 	if (grids->currentIndex() == -1) grid_ = 0;
 	else grid_ = sets[grids->currentIndex()];
 
-	return true;
+	return QDialog::Accepted;
 }
 
 void ContourSurfaceDialog::chooseColor()

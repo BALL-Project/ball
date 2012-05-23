@@ -67,7 +67,7 @@ namespace BALL
 
 			/** Show and raise the dialog
 			*/
-			void exec();
+			int exec();
 
 			///
 			void accept();

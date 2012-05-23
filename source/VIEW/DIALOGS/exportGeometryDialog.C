@@ -51,10 +51,10 @@ ExportGeometryDialog::~ExportGeometryDialog()
 
 
 
-void ExportGeometryDialog::exec()
+int ExportGeometryDialog::exec()
 {
 	MainControl* mc = getMainControl();
-	if (mc == 0) return;
+	if (mc == 0) return QDialog::Rejected;
 
 	RepresentationManager& rm = mc->getRepresentationManager();
 
@@ -107,7 +107,7 @@ void ExportGeometryDialog::exec()
 	vrml_ = false;
 	stl_ = false;
 	raise();
-	QDialog::exec();
+	return QDialog::exec();
 }
 
 

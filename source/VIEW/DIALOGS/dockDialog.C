@@ -684,7 +684,7 @@ namespace BALL
 
 		// Shows and raises the dialog.
 		// In case of docking, the comboboxes for the docking partners are filled with the loaded systems in BALLView.
-		bool DockDialog::exec()
+		int DockDialog::exec()
 		{
 			if (is_redock_)
 			{

@@ -278,14 +278,14 @@ namespace BALL
 			gridColorWidget->setEnabled(grid_ != 0);
 		}
 
-		bool GridVisualizationDialog::exec()
+		int GridVisualizationDialog::exec()
 		{
 			grids->clear();
 			grid_list_.clear();
 			if (controller_ == 0)
 			{
 				BALLVIEW_DEBUG
-				return false;
+				return QDialog::Rejected;
 			}
 
 			RegularData3D* selected_grid = grid_;

@@ -37,12 +37,12 @@ ClippingDialog::~ClippingDialog()
 #endif
 }
 
-void ClippingDialog::exec()
+int ClippingDialog::exec()
 {
-	if (clipping_plane_ == 0) return;
+	if (clipping_plane_ == 0) return QDialog::Rejected;
 
 	MainControl* mc = getMainControl();
-	if (mc == 0) return;
+	if (mc == 0) return QDialog::Rejected;
 
 	RepresentationManager& pm = mc->getRepresentationManager();
 
@@ -82,7 +82,7 @@ void ClippingDialog::exec()
 	}
 
 	raise();
-	QDialog::exec();
+	return QDialog::exec();
 }
 
 

@@ -169,7 +169,7 @@ namespace BALL
 					* Dialog is adapted for docking / redocking.
 				 *	Calls \link fillSystemComboboxes_ fillSystemComboboxes_ \endlink in case of docking.
 				 */
-				bool exec();
+				int exec();
 				
 				/** Is called when reset button is pressed.
 				 * Calls \link DockDialog::reset reset \endlink.
