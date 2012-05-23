@@ -16,7 +16,7 @@
 
 #include <BALL/VIEW/PLUGIN/VIEWPlugin.h>
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 
 namespace BALL
 {
