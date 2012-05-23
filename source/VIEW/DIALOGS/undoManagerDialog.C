@@ -7,8 +7,8 @@
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/logStream.h>
 
-#include <QtGui/QLineEdit>
-#include <QtGui/QRadioButton>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QRadioButton>
 #include <QtCore/QDateTime>
 
 namespace BALL

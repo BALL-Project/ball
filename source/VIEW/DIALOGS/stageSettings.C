@@ -9,20 +9,20 @@
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
 #include <BALL/VIEW/RENDERING/renderSetup.h>
 
-#include <QtGui/QPushButton>
-#include <QtGui/QLabel>
-#include <QtGui/QCheckBox>
-#include <QtGui/QSlider>
-#include <QtGui/QStackedWidget>
-#include <QtGui/QListWidget>
-#include <QtGui/QFileDialog>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QSlider>
+#include <QtWidgets/QStackedWidget>
+#include <QtWidgets/QListWidget>
+#include <QtWidgets/QFileDialog>
 #include <QtGui/QImage>
 #include <QtGui/QPainter>
 #include <QtGui/QPainterPath>
 #include <QtGui/QPixmap>
-#include <QtGui/QApplication>
-#include <QtGui/QDesktopWidget>
-#include <QtGui/QSplashScreen>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QDesktopWidget>
+#include <QtWidgets/QSplashScreen>
 #include <QtGui/QLinearGradient>
 
 namespace BALL

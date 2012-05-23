@@ -14,8 +14,9 @@
 
 #include <BALL/STRUCTURE/geometricProperties.h>
 
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 #include <QtCore/QUrl>
+#include <QtCore/QMimeData>
 
 #include <BALL/COMMON/init.h>
 

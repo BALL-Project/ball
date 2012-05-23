@@ -8,8 +8,8 @@
 #include <BALL/KERNEL/residue.h>
 #include <BALL/VIEW/WIDGETS/propertyEditor.h>
 
-#include <QtGui/QLineEdit>
-#include <QtGui/QPushButton>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
 
 namespace BALL
 {

@@ -30,7 +30,7 @@
 #endif
 
 #include <QtCore/QTimer>
-#include <QtGui/QLabel>
+#include <QtWidgets/QLabel>
 
 class QLabel;
 

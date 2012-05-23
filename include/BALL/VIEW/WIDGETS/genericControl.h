@@ -11,8 +11,8 @@
 #endif
 
 #include <QtGui/QKeyEvent>
-#include <QtGui/QTreeWidget>
-#include <QtGui/QTreeWidgetItem>
+#include <QtWidgets/QTreeWidget>
+#include <QtWidgets/QTreeWidgetItem>
 #include <QtCore/QList>
 
 namespace BALL

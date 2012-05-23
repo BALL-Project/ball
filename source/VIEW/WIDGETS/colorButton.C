@@ -2,11 +2,11 @@
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 
 #include <QtGui/QPaintEvent>
-#include <QtGui/QColorDialog>
+#include <QtWidgets>
 #include <QtGui/QPainter>
-#include <QtGui/QStyle>
-#include <QtGui/QStyleOption>
-#include <QtGui/QApplication>
+#include <QtWidgets/QStyle>
+#include <QtWidgets/QStyleOption>
+#include <QtWidgets/QApplication>
 
 namespace BALL
 {

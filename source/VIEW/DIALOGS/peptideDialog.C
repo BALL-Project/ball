@@ -7,8 +7,8 @@
 #include <BALL/COMMON/logStream.h>
 #include <BALL/STRUCTURE/peptideCapProcessor.h>
 
-#include <QtGui/QLineEdit>
-#include <QtGui/QRadioButton>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QRadioButton>
 
 namespace BALL
 {

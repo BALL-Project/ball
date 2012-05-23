@@ -6,8 +6,8 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/residue.h>
 
-#include <QtGui/QLineEdit>
-#include <QtGui/QPushButton>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
 
 namespace BALL
 {

@@ -7,7 +7,7 @@
 
 #include <BALL/VIEW/UIC/ui_openSavePreferences.h>
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 
 namespace BALL
 {

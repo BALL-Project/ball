@@ -25,8 +25,8 @@
 # include <BALL/VIEW/KERNEL/UIOperationMode.h>
 #endif
 
-#include <QtGui/QMenu>
-#include <QtGui/QTreeWidgetItem>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QTreeWidgetItem>
 
 namespace BALL
 {

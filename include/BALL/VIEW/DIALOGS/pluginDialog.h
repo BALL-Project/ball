@@ -14,8 +14,8 @@
 #endif
 
 #include <QtCore/QModelIndex>
-#include <QtGui/QItemDelegate>
-#include <QtGui/QDialog>
+#include <QtWidgets/QItemDelegate>
+#include <QtWidgets/QDialog>
 
 namespace Ui
 {

@@ -4,10 +4,10 @@
 
 #include <BALL/VIEW/DIALOGS/raytraceableContourSurfaceDialog.h>
 
-#include <QtGui/QPushButton>
-#include <QtGui/QLineEdit>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QLineEdit>
 //#include <QtGui/qpushbutton.h>
-#include <QtGui/QSlider>
+#include <QtWidgets/QSlider>
 #include <iostream>
 
 namespace BALL

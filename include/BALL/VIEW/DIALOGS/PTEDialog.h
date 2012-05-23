@@ -11,7 +11,7 @@
 
 #include <BALL/VIEW/UIC/ui_PTEDialog.h>
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 
 namespace BALL
 {

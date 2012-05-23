@@ -12,8 +12,8 @@
 #include <BALL/DOCKING/COMMON/receptor.h>
 
 #include <QtXml/QXmlDefaultHandler>
-#include <QtXml/QXmlStreamReader>
-#include <QtXml/QXmlStreamWriter>
+#include <QtCore/QXmlStreamReader>
+#include <QtCore/QXmlStreamWriter>
 #include <QtCore/QFile>
 #include <QtCore/QTemporaryFile>
 

@@ -5,14 +5,14 @@
 #include <BALL/VIEW/DIALOGS/pythonSettings.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
-#include <QtGui/QLineEdit>
-#include <QtGui/QFileDialog>
-#include <QtGui/QPushButton>
-#include <QtGui/QStackedWidget>
-#include <QtGui/QTableWidgetItem>
-#include <QtGui/QHeaderView>
-#include <QtGui/QComboBox>
-#include <QtGui/QFontDialog>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QStackedWidget>
+#include <QtWidgets/QTableWidgetItem>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QFontDialog>
 
 namespace BALL
 {

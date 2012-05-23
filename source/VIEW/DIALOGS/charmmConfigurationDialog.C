@@ -12,11 +12,11 @@
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/SYSTEM/path.h>
 
-#include <QtGui/QFileDialog>
-#include <QtGui/QLineEdit>
-#include <QtGui/QRadioButton>
-#include <QtGui/QCheckBox>
-#include <QtGui/QPushButton>
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QRadioButton>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QPushButton>
 
 namespace BALL
 {

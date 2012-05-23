@@ -6,11 +6,11 @@
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/KERNEL/PTE.h>
 
-#include <QtGui/QColorDialog>
-#include <QtGui/QSlider>
-#include <QtGui/QLabel>
-#include <QtGui/QStackedWidget>
-#include <QtGui/QCheckBox>
+#include <QtWidgets>
+#include <QtWidgets/QSlider>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QStackedWidget>
+#include <QtWidgets/QCheckBox>
 
 namespace BALL
 {

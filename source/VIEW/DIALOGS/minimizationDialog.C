@@ -9,9 +9,9 @@
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/SYSTEM/path.h>
 
-#include <QtGui/QFileDialog>
-#include <QtGui/QLineEdit>
-#include <QtGui/QMessageBox> 
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QMessageBox>
 
 namespace BALL
 {

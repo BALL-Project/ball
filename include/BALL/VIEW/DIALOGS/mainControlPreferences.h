@@ -19,7 +19,7 @@
 
 #include <BALL/VIEW/UIC/ui_mainControlPreferences.h>
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 #include <QtGui/QFont>
 
 namespace BALL

@@ -19,7 +19,7 @@
 #include <BALL/FORMAT/trajectoryFile.h>
 #include <BALL/FORMAT/DCDFile.h>
 
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 
 namespace BALL
 {

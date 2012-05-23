@@ -27,7 +27,7 @@
 
 #include <BALL/VIEW/UIC/ui_stageSettings.h>
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 
 class QSplashScreen;
 

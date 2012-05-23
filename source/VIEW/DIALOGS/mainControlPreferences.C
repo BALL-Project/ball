@@ -9,9 +9,9 @@
 
 #include <QtCore/QDir>
 
-#include <QtGui/QCheckBox>
-#include <QtGui/QStyleFactory>
-#include <QtGui/QFontDialog>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QStyleFactory>
+#include <QtWidgets/QFontDialog>
 
 #include <BALL/SYSTEM/path.h>
 

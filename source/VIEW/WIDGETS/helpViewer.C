@@ -8,12 +8,12 @@
 #include <BALL/SYSTEM/path.h>
 #include <BALL/FORMAT/lineBasedFile.h>
 
-#include <QtGui/QMenu>
+#include <QtWidgets/QMenu>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QKeyEvent>
 #include <QtCore/QEvent>
 #include <QtGui/QTextCursor>
-#include <QtGui/QToolBar>
+#include <QtWidgets/QToolBar>
 
 using namespace std;
 

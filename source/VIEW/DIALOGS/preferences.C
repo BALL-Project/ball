@@ -8,9 +8,9 @@
 #include <BALL/VIEW/WIDGETS/helpViewer.h>
 #include <BALL/FORMAT/INIFile.h>
 
-#include <QtGui/QStackedWidget>
-#include <QtGui/QTreeWidget>
-#include <QtGui/QPushButton>
+#include <QtWidgets/QStackedWidget>
+#include <QtWidgets/QTreeWidget>
+#include <QtWidgets/QPushButton>
 
 namespace BALL
 {

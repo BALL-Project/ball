@@ -1,5 +1,7 @@
 #ifndef BALL_VIEW_WIDGETS_COLOR_TABLE_H
-#include <QtGui/QTableWidget>
+#define BALL_VIEW_WIDGETS_COLOR_TABLE_H
+
+#include <QtWidgets/QTableWidget>
 
 #ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>

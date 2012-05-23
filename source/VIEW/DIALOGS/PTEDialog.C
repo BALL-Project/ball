@@ -5,8 +5,8 @@
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 
-#include <QtGui/QToolTip>
-#include <QtGui/QPushButton>
+#include <QtWidgets/QToolTip>
+#include <QtWidgets/QPushButton>
 
 namespace BALL
 {

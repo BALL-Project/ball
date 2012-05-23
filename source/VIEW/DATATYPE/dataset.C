@@ -9,7 +9,7 @@
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/CONCEPT/molecularInformation.h>
 
-#include <QtGui/QFileDialog>
+#include <QtWidgets/QFileDialog>
 #include <QtCore/QStringList>
 
 using namespace std;

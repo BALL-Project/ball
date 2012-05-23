@@ -14,12 +14,12 @@
 #include <BALL/SCORING/FUNCTIONS/randomEvaluation.h>
 #include <BALL/DOCKING/COMMON/dockResult.h>
 
-#include <QtGui/QTableWidget>
-#include <QtGui/QHeaderView>
-#include <QtGui/QComboBox>
-#include <QtGui/QPushButton>
-#include <QtGui/QTextEdit>
-#include <QtGui/QMessageBox>
+#include <QtWidgets/QTableWidget>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QTextEdit>
+#include <QtWidgets/QMessageBox>
 
 
 //#define BALL_VIEW_DEBUG

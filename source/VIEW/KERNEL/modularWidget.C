@@ -8,7 +8,7 @@
 #include <BALL/VIEW/KERNEL/iconLoader.h>
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
-#include <QtGui/QMenuBar>
+#include <QtWidgets/QMenuBar>
 
 using namespace std;
 

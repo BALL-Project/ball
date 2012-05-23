@@ -45,7 +45,7 @@
 #include <QtCore/QTimer>
 #include <QtGui/QDragEnterEvent>
 #include <QtGui/QDropEvent>
-#include <QtGui/QToolBar>
+#include <QtWidgets/QToolBar>
 #include <QtGui/QFont>
 #include <QtGui/QPicture>
 

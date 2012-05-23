@@ -15,7 +15,7 @@
 
 #include <BALL/VIEW/UIC/ui_networkPreferences.h>
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 
 namespace BALL
 {

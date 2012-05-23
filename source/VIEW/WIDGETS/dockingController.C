@@ -27,8 +27,8 @@
 
 #include <BALL/VIEW/KERNEL/threads.h>
 
-#include <QtGui/QMessageBox>
-#include <QtGui/QComboBox>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QComboBox>
 
 //#define BALL_VIEW_DEBUG
 //#undef BALL_QT_HAS_THREADS

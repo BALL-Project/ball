@@ -17,7 +17,7 @@
 # include <BALL/VIEW/KERNEL/snapshotManagerInterface.h>
 #endif
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 
 #include <BALL/VIEW/UIC/ui_undoManagerDialog.h>
 

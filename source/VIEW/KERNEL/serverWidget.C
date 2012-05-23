@@ -11,9 +11,9 @@
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/SYSTEM/systemCalls.h>
 
-#include <QtGui/QStatusBar>
+#include <QtWidgets/QStatusBar>
 #include <QtGui/QPixmap>
-#include <QtGui/QToolTip>
+#include <QtWidgets/QToolTip>
 
 using namespace std;
 

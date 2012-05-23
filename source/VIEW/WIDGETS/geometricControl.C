@@ -20,10 +20,10 @@
 #include <BALL/VIEW/DIALOGS/clippingDialog.h>
 #include <BALL/VIEW/DIALOGS/setClippingPlane.h>
 
-#include <QtGui/QFileDialog>
-#include <QtGui/QMenuBar>
-#include <QtGui/QToolTip>
-#include <QtGui/QInputDialog>
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QToolTip>
+#include <QtWidgets/QInputDialog>
 
 #include <BALL/MATHS/matrix44.h>
 #include <BALL/MATHS/analyticalGeometry.h>

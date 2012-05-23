@@ -21,8 +21,8 @@
 # include <BALL/VIEW/KERNEL/common.h>
 #endif
 
-#include <QtGui/QMenu>
-#include <QtGui/QTreeView>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QTreeView>
 
 class QComboBox;
 class QPoint;

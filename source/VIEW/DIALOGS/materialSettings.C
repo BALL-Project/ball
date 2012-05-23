@@ -8,8 +8,8 @@
 #include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
 #include <BALL/CONCEPT/property.h>
 
-#include <QtGui/QLabel>
-#include <QtGui/QSlider>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QSlider>
 
 namespace BALL
 {

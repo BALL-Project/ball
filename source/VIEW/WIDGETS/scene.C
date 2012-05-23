@@ -74,19 +74,20 @@
 
 #endif
 
-#include <QtGui/QMenuBar>
-#include <QtGui/QPrinter>
-#include <QtGui/QPrintDialog>
+#include <QtCore/QMimeData>
+#include <QtWidgets/QMenuBar>
+#include <QtPrintSupport/QPrinter>
+#include <QtPrintSupport/QPrintDialog>
 #include <QtGui/QPainter>
 #include <QtGui/QImage>
 #include <QtGui/QCursor>
-#include <QtGui/QApplication>
-#include <QtGui/QDesktopWidget>
-#include <QtGui/QFileDialog>
-#include <QtGui/QInputDialog>
-#include <QtGui/QProgressBar>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QDesktopWidget>
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QInputDialog>
+#include <QtWidgets/QProgressBar>
 #include <QtOpenGL/QGLPixelBuffer>
-#include <QtGui/QMessageBox>
+#include <QtWidgets/QMessageBox>
 
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_real.hpp>

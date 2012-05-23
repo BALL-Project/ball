@@ -15,7 +15,7 @@
 
 Q_DECLARE_METATYPE(BALL::VIEW::VIEWPlugin*)
 
-#include <QtGui/QFileDialog>
+#include <QtWidgets/QFileDialog>
 #include <QtCore/QObject>
 #include <QtCore/QDebug>
 #include <QtCore/QLibraryInfo>

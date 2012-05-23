@@ -14,13 +14,13 @@
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/SYSTEM/directory.h>
 
-#include <QtGui/QFileDialog>
-#include <QtGui/QApplication>
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QApplication>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QDropEvent>
 #include <QtGui/QTextCursor>
-#include <QtGui/QSplitter>
-#include <QtGui/QPushButton>
+#include <QtWidgets/QSplitter>
+#include <QtWidgets/QPushButton>
 
 // currently doesnt work right
 #undef BALL_PYTHON_USE_THREADS

@@ -31,11 +31,11 @@
 
 #include <BALL/CONCEPT/textPersistenceManager.h>
 
-#include <QtGui/QMenuBar>
-#include <QtGui/QLabel>
-#include <QtGui/QPushButton>
-#include <QtGui/QSlider>
-#include <QtGui/QRadioButton>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QSlider>
+#include <QtWidgets/QRadioButton>
 
 namespace BALL
 {

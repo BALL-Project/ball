@@ -17,7 +17,7 @@
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 
 // include our new processor
 #include "glBoundingBoxModel.h"

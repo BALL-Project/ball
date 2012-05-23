@@ -7,9 +7,9 @@
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
-#include <QtGui/QLineEdit>
-#include <QtGui/QPushButton>
-#include <QtGui/QLayout>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QLayout>
 
 namespace BALL
 {

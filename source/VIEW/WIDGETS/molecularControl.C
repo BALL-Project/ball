@@ -28,13 +28,13 @@
 #include <BALL/STRUCTURE/peptides.h>
 #include <BALL/STRUCTURE/disulfidBondProcessor.h>
 
-#include <QtGui/QComboBox>
-#include <QtGui/QPushButton>
-#include <QtGui/QLineEdit>
-#include <QtGui/QMessageBox>
-#include <QtGui/QToolTip>
-#include <QtGui/QGridLayout>
-#include <QtGui/QCompleter>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QToolTip>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QCompleter>
 
 #include <QtCore/QPoint>
 #include <QtCore/QThread>

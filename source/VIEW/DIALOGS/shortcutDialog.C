@@ -8,7 +8,7 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/SYSTEM/path.h>
 
-#include <QtGui/QFileDialog>
+#include <QtWidgets/QFileDialog>
 
 namespace BALL
 {

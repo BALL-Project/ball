@@ -18,7 +18,7 @@
 #endif
 
 #include <QtGui/QKeySequence>
-#include <QtGui/QToolBar>
+#include <QtWidgets/QToolBar>
 
 class QObject;
 class QMenuBar;

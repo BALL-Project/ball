@@ -20,7 +20,7 @@
 #endif
 #endif
 
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 
 namespace BALL
 {

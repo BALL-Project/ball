@@ -23,8 +23,8 @@
 
 #include <BALL/VIEW/UIC/ui_modelSettingsDialog.h>
 
-#include <QtGui/QCheckBox>
-#include <QtGui/QLabel>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QLabel>
 
 class QSlider;
 class QLabel;

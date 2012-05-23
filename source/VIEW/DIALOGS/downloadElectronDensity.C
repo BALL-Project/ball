@@ -20,14 +20,14 @@
 #include <boost/iostreams/copy.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
 
-#include <QtGui/QLineEdit> 
-#include <QtGui/QRadioButton>
-#include <QtGui/QCheckBox>
-#include <QtGui/QComboBox>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QRadioButton>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QComboBox>
 #include <QtGui/QImage>
-#include <QtGui/QPushButton>
-#include <QtGui/QApplication>
-#include <QtGui/QProgressBar>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QProgressBar>
 
 #include <QtCore/QUrl>
 #include <QtCore/QFile>

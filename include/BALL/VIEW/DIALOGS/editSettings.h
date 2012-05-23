@@ -15,7 +15,7 @@
 
 #include <BALL/VIEW/UIC/ui_editSettings.h>
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 
 namespace BALL
 {

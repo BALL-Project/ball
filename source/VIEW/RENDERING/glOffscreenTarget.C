@@ -4,7 +4,7 @@
 
 #include <BALL/VIEW/RENDERING/glOffscreenTarget.h>
 
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 #include <QtGui/QImage>
 #include <QtGui/QPaintEvent>
 #include <QtGui/QPainter>

@@ -11,7 +11,7 @@
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/FORMAT/INIFile.h>
 
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 
 //   #define BALL_VIEW_DEBUG
 

@@ -12,11 +12,11 @@
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
 #include <BALL/SYSTEM/path.h>
 
-#include <QtGui/QLineEdit>
-#include <QtGui/QRadioButton>
-#include <QtGui/QCheckBox>
-#include <QtGui/QPushButton>
-#include <QtGui/QFileDialog>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QRadioButton>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QFileDialog>
 
 namespace BALL
 {

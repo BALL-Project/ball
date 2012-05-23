@@ -15,8 +15,8 @@
 
 #include <BALL/VIEW/UIC/ui_materialSettings.h>
 
-#include <QtGui/QWidget>
-#include <QtGui/QLabel>
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QLabel>
 
 namespace BALL
 {

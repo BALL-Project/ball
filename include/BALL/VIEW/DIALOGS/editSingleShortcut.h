@@ -20,7 +20,7 @@
 
 #include <BALL/VIEW/UIC/ui_editSingleShortcut.h>
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 
 class QModelIndex;
 

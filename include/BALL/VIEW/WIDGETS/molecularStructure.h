@@ -58,7 +58,7 @@
 #endif
 
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 
 namespace BALL
 {

@@ -8,11 +8,11 @@
 #include <BALL/STRUCTURE/sdGenerator.h>
 
 #include <QtGui/QPainter>
-#include <QtGui/QStyle>
-#include <QtGui/QStyleOptionFocusRect>
-#include <QtGui/QAction>
+#include <QtWidgets/QStyle>
+#include <QtWidgets/QStyleOptionFocusRect>
+#include <QtWidgets/QAction>
 
-#include <QtGui/QFileDialog>
+#include <QtWidgets/QFileDialog>
 #include <QtGui/QImageWriter>
 
 #include <set>

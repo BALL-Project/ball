@@ -9,11 +9,11 @@
 #include <BALL/KERNEL/system.h>
 #include <BALL/SYSTEM/path.h>
 
-#include <QtCore/QFSFileEngine>
-#include <QtGui/QFileDialog>
-#include <QtGui/QApplication>
-#include <QtGui/QTreeView> 
-#include <QTest>
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QTreeView>
+#include <QtTest/QTest>
+#include <QtTest/QSpontaneKeyEvent>
 
 #ifdef BALL_PYTHON_SUPPORT
  #include <BALL/VIEW/WIDGETS/pyWidget.h>

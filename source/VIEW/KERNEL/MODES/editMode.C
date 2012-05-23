@@ -9,7 +9,7 @@
 
 #include <BALL/VIEW/KERNEL/MODES/editMode.h>
 
-#include <QtGui/QMenu>
+#include <QtWidgets/QMenu>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QWheelEvent>
 

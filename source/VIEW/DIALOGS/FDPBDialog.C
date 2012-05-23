@@ -10,11 +10,11 @@
 #include <BALL/VIEW/KERNEL/threads.h>
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
 
-#include <QtGui/QLineEdit>
-#include <QtGui/QPushButton>
-#include <QtGui/QRadioButton>
-#include <QtGui/QCheckBox>
-#include <QtGui/QFileDialog>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QRadioButton>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QFileDialog>
 
 namespace BALL
 {
