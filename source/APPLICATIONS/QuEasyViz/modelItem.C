@@ -9,7 +9,7 @@
 #include <mainWindow.h>
 #include <BALL/QSAR/exception.h>
 #include <exception.h>
-#include <QtGui/QMessageBox>
+#include <QtWidgets/QMessageBox>
 #include <QtGui/QFileDialog>
 #include <BALL/QSAR/configIO.h>
 #include <coefficientPlotter.h>

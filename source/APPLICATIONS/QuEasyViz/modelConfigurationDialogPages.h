@@ -1,14 +1,14 @@
 #ifndef PAGES_H
 #define PAGES_H
 
-#include <QtGui/QWidget>
-#include <QtGui/QPushButton>
-#include <QtGui/QMessageBox>
-#include <QtGui/QCheckBox>
-#include <QtGui/QComboBox>
-#include <QtGui/QGroupBox>
-#include <QtGui/QTextEdit>
-#include <QtGui/QTableWidget>
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QTextEdit>
+#include <QtWidgets/QTableWidget>
 
 #include <modelConfigurationDialog.h>
 #include <connectionManager.h>

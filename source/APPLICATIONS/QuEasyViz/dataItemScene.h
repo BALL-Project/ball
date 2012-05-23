@@ -2,7 +2,7 @@
 #define DATAITEMSCENE_H
 
 //#include <QtGui/QGraphicsView>
-#include <QtGui/QGraphicsScene>
+#include <QtWidgets/QGraphicsScene>
 #include <qobject.h>
 
 

@@ -1,7 +1,7 @@
 #ifndef VALRESDIALOG_H
 #define VALRESDIALOG_H
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 #include <validationItem.h>
 
 namespace BALL

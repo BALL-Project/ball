@@ -3,8 +3,8 @@
 #include <BALL/QSAR/exception.h>
 #include <exception.h>
 #include <mainWindow.h>
-#include <QtGui/QMessageBox>
-#include <QtGui/QPushButton>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QPushButton>
 #include <iterator>
 
 using namespace BALL::QSAR;

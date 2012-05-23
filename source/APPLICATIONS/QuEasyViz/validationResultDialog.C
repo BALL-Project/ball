@@ -6,7 +6,7 @@
 #include <QtGui/QGroupBox>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QVBoxLayout>
-#include <QtGui/QPushButton>
+#include <QtWidgets/QPushButton>
 #include <QtCore/QFile>
 #include <QtCore/QTextStream>
 #include <QtGui/QScrollArea>

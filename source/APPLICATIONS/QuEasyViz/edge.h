@@ -4,7 +4,7 @@
 
 
 #include <QtGui/QPainter>
-#include <QtGui/QStyleOptionGraphicsItem>
+#include <QtWidgets/QStyleOptionGraphicsItem>
 
 #include <dataItem.h>
 

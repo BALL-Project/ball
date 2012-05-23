@@ -1,8 +1,8 @@
 #ifndef PREDDIALOG_H
 #define PREDDIALOG_H
 
-#include <QtGui/QDialog>
-#include <QtGui/QTableWidget>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QTableWidget>
 #include <predictionItem.h>
 
 

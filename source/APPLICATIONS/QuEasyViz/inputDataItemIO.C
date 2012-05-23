@@ -2,7 +2,7 @@
 #include <mainWindow.h>
 #include <BALL/QSAR/configIO.h>
 
-#include <QtGui/QMessageBox>
+#include <QtWidgets/QMessageBox>
 
 using namespace BALL::QSAR;
 

@@ -1,7 +1,7 @@
 #include <CSVInputDialog.h>
 #include <BALL/QSAR/exception.h>
-#include <QtGui/QMessageBox>
-#include <QtGui/QPushButton>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QPushButton>
 
 using namespace BALL::QSAR;
 

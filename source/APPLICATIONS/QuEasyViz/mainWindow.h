@@ -2,13 +2,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QtGui/QMainWindow>
-#include <QtGui/QMenu>
-#include <QtGui/QDialog>
-#include <QtGui/QToolBar>
-#include <QtGui/QAction>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QToolBar>
+#include <QtWidgets/QAction>
 #include <QtGui/QContextMenuEvent>
-#include <QtGui/QProgressBar>
+#include <QtWidgets/QProgressBar>
 
 #include <dataItemView.h>
 #include <dataItemScene.h>

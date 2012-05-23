@@ -1,7 +1,7 @@
 #ifndef DATADIALOG_H
 #define DATADIALOG_H
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 
 #include <inputDataItem.h>
 

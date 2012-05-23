@@ -4,8 +4,8 @@
 */
 
 #include <modelPropertiesDialog.h>
-#include <QtGui/QPushButton>
-#include <QtGui/QMessageBox>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QMessageBox>
 #include <QtGui/QCheckBox>
 
 #include <iostream>

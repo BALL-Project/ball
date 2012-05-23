@@ -5,10 +5,10 @@
 #include <dataItem.h>
 #include <list>
 #include <QString>
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 #include <QMouseEvent>
 #include <QPushButton>
-#include <QtGui/QDialogButtonBox>
+#include <QtWidgets/QDialogButtonBox>
 #include <QHBoxLayout>
 #include <QCheckBox>
 #include <QComboBox>

@@ -2,7 +2,7 @@
 #include <BALL/VIEW/KERNEL/iconLoader.h>
 #include <inputPartitionItem.h>
 #include <mainWindow.h>
-#include <QtGui/QMessageBox>
+#include <QtWidgets/QMessageBox>
 #include <QtGui/QDrag>
 
 

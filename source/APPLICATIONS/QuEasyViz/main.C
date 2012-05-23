@@ -1,5 +1,5 @@
 
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 #include <BALL/COMMON/global.h>
 
 #include <mainWindow.h>

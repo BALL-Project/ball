@@ -1,9 +1,9 @@
 #ifndef FILEBROWSER_H
 #define FILEBROWSER_H
 
-#include <QtGui/QDirModel>
-#include <QtGui/QTreeView>
-#include <QtGui/QFileIconProvider>
+#include <QtWidgets/QDirModel>
+#include <QtWidgets/QTreeView>
+#include <QtWidgets/QFileIconProvider>
 
 
 namespace BALL

@@ -3,7 +3,7 @@
 
 #include  <plotter.h>
 #include  <modelItem.h>
-#include <QtGui/QComboBox>
+#include <QtWidgets/QComboBox>
 
 
 namespace BALL

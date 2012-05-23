@@ -1,9 +1,9 @@
 #ifndef CONMANAGER_H
 #define CONMANAGER_H
 
-#include<QtGui/QListWidget>
-#include <QtGui/QPushButton>
-#include <QtGui/QListWidgetItem>
+#include<QtWidgets/QListWidget>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QListWidgetItem>
 
 #include <modelConfigurationDialog.h>
 #include <inputDataItem.h>

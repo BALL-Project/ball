@@ -8,8 +8,8 @@
 #include <QtGui/QDialog>
 #include <QtGui/QDrag>
 #include <QtCore/QMimeData>
-#include <QtGui/QApplication>
-#include <QtGui/QMessageBox>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QMessageBox>
 #include <BALL/VIEW/KERNEL/iconLoader.h>
 
 using namespace BALL::QSAR;

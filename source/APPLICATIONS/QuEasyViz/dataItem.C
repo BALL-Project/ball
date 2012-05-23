@@ -6,7 +6,7 @@
 
 #include <QtGui/QDrag>
 #include <QtCore/QMimeData>
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 #include <QtGui/QGraphicsScene>
 
 using namespace std;

@@ -5,11 +5,11 @@
 #include <BALL/QSAR/registry.h>
 #include <BALL/QSAR/Model.h>
 
-#include <QtGui/QDialog>
-#include <QtGui/QListWidget>
-#include <QtGui/QListWidgetItem>
-#include <QtGui/QStackedWidget>
-#include <QtGui/QDialogButtonBox>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QListWidget>
+#include <QtWidgets/QListWidgetItem>
+#include <QtWidgets/QStackedWidget>
+#include <QtWidgets/QDialogButtonBox>
 
 #include <modelConfigurationDialogPages.h>
 #include <mainWindow.h>

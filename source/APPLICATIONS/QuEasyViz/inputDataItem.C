@@ -13,8 +13,8 @@
 #include <QtGui/QDialog>
 #include <QtGui/QDrag>
 #include <QtCore/QMimeData>
-#include <QtGui/QApplication>
-#include <QtGui/QMessageBox>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QMessageBox>
 
 
 using namespace BALL::QSAR;

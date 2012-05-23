@@ -14,17 +14,17 @@
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/VIEW/KERNEL/iconLoader.h>
 
-#include <QtGui/QMessageBox>
+#include <QtWidgets/QMessageBox>
 #include <QtGui/QFileDialog>
 #include <QtGui/QMenuBar>
 #include <QtGui/QStatusBar>
 #include <QtGui/QDockWidget>
 #include <QtCore/QTextStream>
-#include <QtGui/QPrinter>
-#include <QtGui/QPrintDialog>
+#include <QtPrintSupport/QPrinter>
+#include <QtPrintSupport/QPrintDialog>
 #include <QtGui/QShortcut>
-#include <QtGui/QTextBrowser>
-#include <QtGui/QApplication>
+#include <QtWidgets/QTextBrowser>
+#include <QtWidgets/QApplication>
 
 #include <sstream>
 #include <map>

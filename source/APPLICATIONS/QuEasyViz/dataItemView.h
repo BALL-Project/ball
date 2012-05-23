@@ -1,8 +1,8 @@
 #ifndef DATAITEMVIEW_H
 #define DATAITEMVIEW_H
 
-#include <QtGui/QGraphicsView>
-#include <QtGui/QGraphicsScene>
+#include <QtWidgets/QGraphicsView>
+#include <QtWidgets/QGraphicsScene>
 
 #include <dataItemScene.h>
 

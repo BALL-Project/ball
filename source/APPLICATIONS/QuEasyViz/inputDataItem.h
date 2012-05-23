@@ -4,7 +4,7 @@
 #include <dataItem.h>
 #include <BALL/QSAR/QSARData.h>
 
-#include <QtGui/QGraphicsSceneMouseEvent>
+#include <QtWidgets/QGraphicsSceneMouseEvent>
 
 
 

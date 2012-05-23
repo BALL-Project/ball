@@ -1,10 +1,10 @@
 #ifndef DATAITEM_H
 #define DATAITEM_H
 
-#include <QtGui/QGraphicsPixmapItem>
+#include <QtWidgets/QGraphicsPixmapItem>
 #include <QtGui/QPainter>
-#include <QtGui/QStyleOptionGraphicsItem>
-#include <QtGui/QGraphicsSceneMouseEvent>
+#include <QtWidgets/QStyleOptionGraphicsItem>
+#include <QtWidgets/QGraphicsSceneMouseEvent>
 #include <QtCore/QPointer>
 #include <QtCore/QTextStream>
 

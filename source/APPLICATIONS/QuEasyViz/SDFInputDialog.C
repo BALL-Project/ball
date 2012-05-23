@@ -1,7 +1,7 @@
 #include <SDFInputDialog.h>
 #include <BALL/QSAR/exception.h>
-#include <QtGui/QMessageBox>
-#include <QtGui/QPushButton>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QPushButton>
 #include <QtGui/QScrollArea>
 #include <QtGui/QTableWidget>
 #include <QtGui/QHeaderView>
