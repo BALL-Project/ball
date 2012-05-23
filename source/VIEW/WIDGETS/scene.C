@@ -2290,7 +2290,7 @@ namespace BALL
 			{
 				// it's a GLRenderer => use tiling
 				GLOffscreenTarget* new_widget = new GLOffscreenTarget(main_display_, filename);
-				new_widget->init();
+				//new_widget->init();
 				new_widget->resize(width(), height());
 				new_widget->prepareRendering();
 

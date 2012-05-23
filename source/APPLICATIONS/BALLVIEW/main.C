@@ -74,7 +74,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 	qInstallMsgHandler(logMessages);
 
 	// *sigh* this is required as long as Qt does not correctly paint on OpenGL 2 contexts
-	QGL::setPreferredPaintEngine(QPaintEngine::OpenGL);
+	//QGL::setPreferredPaintEngine(QPaintEngine::OpenGL);
 
 	QApplication application(argc, argv);
 
