@@ -37,7 +37,7 @@
 # include <BALL/VIEW/WIDGETS/molecularControl.h>
 #endif
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 
 namespace BALL
 {

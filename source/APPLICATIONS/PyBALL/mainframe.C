@@ -21,7 +21,7 @@
 
 #include <QtGui/QMenuBar>
 #include <QtGui/QLabel>
-#include <QtGui/QMessageBox>
+#include <QtWidgets/QMessageBox>
 #include <QtGui/QCursor>
 #include <QtGui/QPixmap>
 

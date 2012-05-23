@@ -3,7 +3,7 @@
 //
 
 // order of includes is important: first qapplication, than BALL includes
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/SYSTEM/directory.h>

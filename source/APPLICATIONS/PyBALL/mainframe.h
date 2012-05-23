@@ -9,7 +9,7 @@
 # include <BALL/VIEW/KERNEL/mainControl.h>
 #endif
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 
 namespace BALL
 {
