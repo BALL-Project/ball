@@ -30,9 +30,9 @@
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/SYSTEM/path.h>
 
-#include <QtGui/QPushButton>
-#include <QtGui/QMessageBox>
-#include <QtGui/QTextBrowser>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QTextBrowser>
 
 using namespace std;
 

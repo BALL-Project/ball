@@ -3,7 +3,7 @@
 //
 
 // order of includes is important: first qapplication, than BALL includes
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 #include <BALL/CONFIG/config.h>
 
 #ifdef BALL_HAS_GLEW
@@ -13,8 +13,8 @@
 #include <QtCore/QLocale>
 #include <QtCore/QTranslator>
 
-#include <QtGui/QMessageBox>
-#include <QtGui/QSplashScreen>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QSplashScreen>
 #include <QtOpenGL/qgl.h>
 
 #include "mainframe.h"
