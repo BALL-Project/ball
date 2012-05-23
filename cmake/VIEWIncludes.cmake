@@ -1,5 +1,7 @@
+SET(VIEW_headers CACHE INTERNAL "This variable should hold all VIEW headers at the end of the config step")
 SET(VIEW_sources CACHE INTERNAL "This variable should hold all VIEW sources at the end of the config step")
 
+INCLUDE(include/BALL/VIEW/sources.cmake)
 INCLUDE(source/VIEW/DIALOGS/sources.cmake)
 INCLUDE(source/VIEW/DATATYPE/sources.cmake)
 INCLUDE(source/VIEW/KERNEL/sources.cmake)

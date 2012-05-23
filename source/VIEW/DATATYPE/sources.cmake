@@ -13,13 +13,4 @@ SET(SOURCES_LIST
 	standardDatasets.C
 )
 
-### the list of all files requiring a moc run ###
-SET(MOC_SOURCES_LIST
-	dataset.C
-	standardDatasets.C
-)
-
 ADD_VIEW_SOURCES("VIEW/DATATYPE" "${SOURCES_LIST}")
-
-ADD_BALL_MOCFILES("VIEW/DATATYPE" "include/BALL/VIEW/DATATYPE" "${MOC_SOURCES_LIST}")
-

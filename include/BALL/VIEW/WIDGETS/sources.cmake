@@ -1,0 +1,20 @@
+### list all filenames of the directory here ###
+SET(GROUP VIEW/WIDGETS)
+
+FILE(GLOB HEADERS_LIST "include/BALL/${GROUP}/*.h" "include/BALL/${GROUP}/*.iC")
+
+IF(NOT BALL_HAS_QTWEBKIT)
+	LIST(REMOVE_ITEM HEADERS_LIST
+		"${CMAKE_SOURCE_DIR}/include/BALL/${GROUP}/HTMLBasedInterface.h"
+		"${CMAKE_SOURCE_DIR}/include/BALL/${GROUP}/HTMLView.h"
+	)
+ENDIF()
+
+IF(NOT BALL_PYTHON_SUPPORT)
+	LIST(REMOVE_ITEM HEADERS_LIST
+		"${CMAKE_SOURCE_DIR}/include/BALL/${GROUP}/hotkeyTable.h"
+		"${CMAKE_SOURCE_DIR}/include/BALL/${GROUP}/pyWidget.h"
+	)
+ENDIF()
+
+ADD_VIEW_HEADERS("${GROUP}" "${HEADERS_LIST}")
