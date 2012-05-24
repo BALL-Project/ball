@@ -16,7 +16,7 @@
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
-#include <BALL/STRUCTURE/defaultProcessors.h>
+#include <BALL/STRUCTURE/disulfidBondProcessor.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
@@ -50,41 +50,6 @@ void usage(const String& name)
 		<< endl;
 }
 
-
-// *Appends* sulphur bridges to the list
-Size find_sulphur_bridges(const System& system,
-		list< pair<const Residue*, const Residue*> >& sulphur_bridges)
-{
-	AtomConstIterator atom_it;
-	AtomBondConstIterator bond_it;
-
-	const Residue* residue1 = 0;
-	const Residue* residue2 = 0;
-
-	Size found = 0;
-
-	BALL_FOREACH_BOND(system, atom_it, bond_it)
-	{
-		residue1 = bond_it->getFirstAtom()->getResidue();
-		residue2 = bond_it->getSecondAtom()->getResidue();
-
-		if ((bond_it->getFirstAtom()->getElement() == PTE[Element::S])
-				&& (bond_it->getSecondAtom()->getElement() == PTE[Element::S])
-				&& (residue1->hasProperty(Residue::PROPERTY__HAS_SSBOND) == true)
-				&& (residue2->hasProperty(Residue::PROPERTY__HAS_SSBOND) == true)
-				&& (residue1 != residue2)
-				&& (residue1 != 0)
-				&& (residue2 != 0))
-		{
-			// cout << "Found sulphur bridge " << residue1->getID() << "---" 
-			//	<< residue2->getID() << endl;
-			sulphur_bridges.push_back(pair<const Residue*, const Residue*>(residue1, residue2));
-			found++;
-		}
-	}
-
-	return(found);
-}
 
 Size count_heavy_atoms(const AtomContainer& container)
 {
@@ -348,10 +313,10 @@ int main(int argc, char** argv)
 	if (max_atoms == 0) max_atoms = protein.countAtoms() + ligand.countAtoms();
 	if (max_heavy_atoms == 0) max_heavy_atoms = max_atoms;
 
-	// Build a list of sulphur bridges
-
-	list< pair<const Residue*, const Residue*> > sulphur_bridges;
-	find_sulphur_bridges(protein, sulphur_bridges);
+	// Build a list of sulphur bridges	
+	DisulfidBondProcessor dbp;
+	protein.apply(dbp);
+	DisulfidBondProcessor::DisulfidBonds sulphur_bridges = dbp.getDisulfidBonds();
 
 	// Find residues that have atoms which are less than cutoff \AA away from
 	// any atom of the ligand
@@ -387,7 +352,7 @@ int main(int argc, char** argv)
 		// /DEBUG
 
 		res_it = protein.beginResidue();
-		for (; +res_it && (atoms <= max_atoms) && (heavy_atoms <= max_heavy_atoms); 
+		for (; +res_it && (atoms <= max_atoms) && (heavy_atoms <= max_heavy_atoms);
 				++res_it)
 		{
 			atom_it = res_it->beginPDBAtom();
@@ -482,7 +447,7 @@ int main(int argc, char** argv)
 				if (cut.has(&*res_it)) break;
 			}
 		}
-	} while ((max_atoms != 0) 
+	} while ((max_atoms != 0)
 			&& (atoms > max_atoms || heavy_atoms > max_heavy_atoms));
 
 	if (cut.size() == 0)
@@ -492,19 +457,15 @@ int main(int argc, char** argv)
 	// Build a hash set containing all residues that still have sulphur
 	// bridge partners after the cut
 	HashSet<const Residue*> residues_with_sulphur_bridges;
-	list< pair<const Residue*, const Residue*> >::const_iterator
-		sulphur_bridges_iterator = sulphur_bridges.begin();
-	for (; sulphur_bridges_iterator != sulphur_bridges.end();
-			++sulphur_bridges_iterator)
+	DisulfidBondProcessor::DisulfidBonds::iterator bond_it = sulphur_bridges.begin();
+	for ( ; bond_it != sulphur_bridges.end();  ++bond_it)
 	{
-		const pair<const Residue*, const Residue*>& bridge = *sulphur_bridges_iterator;
-		if (cut.has(bridge.first) && cut.has(bridge.second))
+		if (cut.has(bond_it->first) && cut.has(bond_it->second))
 		{
-			residues_with_sulphur_bridges.insert(bridge.first);
-			residues_with_sulphur_bridges.insert(bridge.second);
+			residues_with_sulphur_bridges.insert(bond_it->first);
+			residues_with_sulphur_bridges.insert(bond_it->second);
 		}
 	}
-	
 
 	Protein* cut_protein = new Protein;
 	Chain* chain;
