@@ -488,7 +488,7 @@ namespace BALL
 			current_residue_ = 0;
 			context_menu_.addMenu(rotamer_menu_);
 
-			disulfidbond_action_ = context_menu_.addAction(tr("Create Disulfidbond"), this, SLOT(createDisulfidBond()));
+			disulfidbond_action_ = context_menu_.addAction(tr("Create Disulfidbond"), this, SLOT(toggleDisulfidBond()));
 
 			composite_properties_action_ = context_menu_.addAction(tr("Properties"), this, SLOT(compositeProperties()));
 
@@ -547,6 +547,8 @@ namespace BALL
 			Size num_cysteins = 0;
 			bool two_sulfurs  = false;
 			Size num_sulfurs  = 0;
+			Atom *s1 = NULL;
+			Atom *s2 = NULL;
 
 			list<Composite*> composite_list = getMainControl()->getMolecularControlSelection();
 			if (composite_list.size() == 2)
@@ -559,6 +561,18 @@ namespace BALL
 						Residue* res = reinterpret_cast<Residue*>(*it);
 						if (Peptides::OneLetterCode(res->getName()) == 'C')
 						{
+							// find S 
+							AtomIterator a_it = res->beginAtom();
+							for (; +a_it; ++a_it)
+							{
+								if (a_it->getElement() == PTE[Element::S])
+								{
+									if (s1)
+										s2 = &*a_it;
+									else
+										s1 = &*a_it;
+								}
+							}
 							num_cysteins++;
 						}
 					}
@@ -568,15 +582,27 @@ namespace BALL
 						if (atom->getElement() == PTE[Element::S])
 						{
 							num_sulfurs++;
+							if (s1)
+								s2 = atom;
+							else
+								s1 = atom;
 						}
 					}
 				}
 			}
 			two_cysteins = (num_cysteins == 2);
-
 			two_sulfurs  = (num_sulfurs == 2);
 
 			disulfidbond_action_->setEnabled(two_cysteins || two_sulfurs);
+			Bond* bond = s1->getBond(*s2);
+			if (bond == NULL)
+			{
+				disulfidbond_action_->setText(tr("Create Disulfidbond"));
+			}
+			else
+			{
+				disulfidbond_action_->setText(tr("Disconnect Disulfidbond"));
+			}
 
 			// ------------------------------------ Residues
 
@@ -644,7 +670,7 @@ namespace BALL
 			rotamer_menu_->setEnabled(true);
 		}
 
-		void MolecularControl::createDisulfidBond()
+		void MolecularControl::toggleDisulfidBond()
 		{
 			if (context_composite_ == 0) return;
 			bool success = false;
@@ -660,7 +686,7 @@ namespace BALL
 				composite2 = *cit;
 
 				DisulfidBondProcessor dbp;
-				success = dbp.connect(composite1, composite2);
+				success = dbp.connect(composite1, composite2, true);
 			}
 			if (success)
 			{

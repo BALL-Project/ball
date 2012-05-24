@@ -68,71 +68,77 @@ namespace BALL
 		sulfur_bridges_.clear();
 	}
 
-	bool DisulfidBondProcessor::connect(Atom* atom1, Atom* atom2)
+	bool DisulfidBondProcessor::connect(Atom* atom1, Atom* atom2, bool toggle)
 	{
-		// if already bonded, nothing to do!
-		bool success = !(atom1->getBond(*atom2));
+		Bond* bonded = (atom1->getBond(*atom2));
+		bool success = false;
 
-		if (success && (atom1->getElement() == PTE[Element::S])
-			          && (atom2->getElement() == PTE[Element::S]))
+		if (bonded && toggle)
 		{
-			// Do the atoms live in the same system?
-			Composite* anchestor = atom1->getLowestCommonAncestor(*atom2);
-			if (anchestor)
+			success = disconnect(atom1, atom2);
+		}
+		else if (bonded == NULL) // if already bonded, nothing to do!
+		{
+			// if already bonded, nothing to do!
+			if (   (atom1->getElement() == PTE[Element::S])
+					&& (atom2->getElement() == PTE[Element::S]))
 			{
-				// valid distance ?  else warning!
-				//if (atom1.getDistance(atom2) < 3) 
-				////TODO: decent S-S bond distance!
-
-				// find and delete hydrogens
-				Atom* hydrogen1 = NULL;
-			  Atom* hydrogen2 = NULL;
-				Atom::BondIterator b_it  = atom1->beginBond();
-				for ( ; +b_it; ++b_it)
+				// Do the atoms live in the same system?
+				Composite* anchestor = atom1->getLowestCommonAncestor(*atom2);
+				if (anchestor)
 				{
-					if (b_it->getPartner(*atom1)->getElement() == PTE[Element::H])
+					// find and delete hydrogens
+					Atom* hydrogen1 = NULL;
+					Atom* hydrogen2 = NULL;
+					Atom::BondIterator b_it  = atom1->beginBond();
+					for ( ; +b_it; ++b_it)
 					{
-						hydrogen1 = b_it->getPartner(*atom1);
+						if (b_it->getPartner(*atom1)->getElement() == PTE[Element::H])
+						{
+							hydrogen1 = b_it->getPartner(*atom1);
+						}
 					}
-				}
-				b_it  = atom2->beginBond();
-				for ( ; +b_it; ++b_it)
-				{
-					if (b_it->getPartner(*atom2)->getElement() == PTE[Element::H])
+					b_it  = atom2->beginBond();
+					for ( ; +b_it; ++b_it)
 					{
-						hydrogen2 = b_it->getPartner(*atom2);
+						if (b_it->getPartner(*atom2)->getElement() == PTE[Element::H])
+						{
+							hydrogen2 = b_it->getPartner(*atom2);
+						}
 					}
-				}
 
-				if (hydrogen1)
-				{
-					hydrogen1->destroy();
-				}
-				if (hydrogen2)
-				{
-					hydrogen2->destroy();
-				}
+					if (hydrogen1)
+					{
+						hydrogen1->destroy();
+					}
+					if (hydrogen2)
+					{
+						hydrogen2->destroy();
+					}
 
-				// add a bond 		
-				Bond* bond = atom1->createBond(*atom2);
-				if (bond)
-				{
-					bond->setOrder(Bond::ORDER__SINGLE);
-					atom1->getResidue()->setProperty(Residue::PROPERTY__HAS_SSBOND);
-					atom2->getResidue()->setProperty(Residue::PROPERTY__HAS_SSBOND);
-					bond->setType(Bond::TYPE__DISULPHIDE_BRIDGE);
-					sulfur_bridges_.insert(pair<Residue*, Residue*>(atom1->getResidue(), atom2->getResidue()));
-				}
-				else
-				{
-					success = false;
+					// add a bond 		
+					Bond* bond = atom1->createBond(*atom2);
+
+					if (bond)
+					{
+						bond->setOrder(Bond::ORDER__SINGLE);
+						atom1->getResidue()->setProperty(Residue::PROPERTY__HAS_SSBOND);
+						atom2->getResidue()->setProperty(Residue::PROPERTY__HAS_SSBOND);
+						bond->setType(Bond::TYPE__DISULPHIDE_BRIDGE);
+						sulfur_bridges_.insert(pair<Residue*, Residue*>(atom1->getResidue(), atom2->getResidue()));
+						success = true;
+					}
+					else
+					{
+						success = false;
+					}
 				}
 			}
 		}
 		return success;
 	}
 
-	bool DisulfidBondProcessor::connect(Residue* residue1, Residue* residue2)
+	bool DisulfidBondProcessor::connect(Residue* residue1, Residue* residue2, bool toggle)
 	{
 		bool success = false;
 		Atom* atom1 = NULL;
@@ -166,25 +172,25 @@ namespace BALL
 
 		if (atom1 && atom2)
 		{
-			success = connect(atom1, atom2);
+			success = connect(atom1, atom2, toggle);
 		}
 		return success;
 	}
 
-	bool DisulfidBondProcessor::connect(Composite* composite1, Composite* composite2)
+	bool DisulfidBondProcessor::connect(Composite* composite1, Composite* composite2, bool toggle)
 	{
 		bool success = false;
 		if (RTTI::isKindOf<Residue>(*composite1) && RTTI::isKindOf<Residue>(*composite2) )
 		{
 			Residue* res1 = reinterpret_cast<Residue*>(composite1);
 			Residue* res2 = reinterpret_cast<Residue*>(composite2);
-			success = connect(res1, res2);
+			success = connect(res1, res2, toggle);
 		}
 		else if (RTTI::isKindOf<Atom>(*composite1) && RTTI::isKindOf<Atom>(*composite2))
 		{
 				Atom* atom1 = reinterpret_cast<Atom*>(composite1);
 				Atom* atom2 = reinterpret_cast<Atom*>(composite2);
-				success = connect(atom1, atom2);
+				success = connect(atom1, atom2, toggle);
 		}
 		else
 		{
@@ -198,22 +204,28 @@ namespace BALL
 		// if already disconnected, nothing to do!
 		Bond* bond = atom1->getBond(*atom2);
 		bool success = false;
-		if (bond &&  (atom1->getElement() == PTE[Element::S])
-			          && (atom2->getElement() == PTE[Element::S]))
+		if (bond && (atom1->getElement() == PTE[Element::S])
+			       && (atom2->getElement() == PTE[Element::S]))
 		{
 			bond->destroy();
 			success = true;
 
+			//TODO: add hydrogens - the following does not work, 
 			// use FragmentDB to rebuild residues, i.e. add hydrogens
-			FragmentDB fdb = FragmentDB("");
-			atom1->getResidue()->apply(fdb.normalize_names);
-			atom1->getResidue()->apply(fdb.add_hydrogens);
-			atom1->getResidue()->apply(fdb.build_bonds);
+/*			FragmentDB fdb = FragmentDB("");
+			ReconstructFragmentProcessor rfp(fdb);
+			atom1->getResidue()->getProtein()->apply(fdb.normalize_names);
+			atom1->getResidue()->getProtein()->apply(rfp);
+			atom1->getResidue()->getProtein()->apply(fdb.build_bonds);
 
-			atom2->getResidue()->apply(fdb.normalize_names);
-			atom2->getResidue()->apply(fdb.add_hydrogens);
-			atom2->getResidue()->apply(fdb.build_bonds);
+			atom1->getResidue()->getParent()->apply(fdb.normalize_names);
+			atom1->getResidue()->getParent()->apply(fdb.add_hydrogens);
+			atom1->getResidue()->getParent()->apply(fdb.build_bonds);
 
+			atom2->getResidue()->getParent()->apply(fdb.normalize_names);
+			atom2->getResidue()->getParent()->apply(fdb.add_hydrogens);
+			atom2->getResidue()->getParent()->apply(fdb.build_bonds);
+*/
 			// delete property
 			Residue* residue1 = atom1->getResidue();
 			Residue* residue2 = atom2->getResidue();
@@ -237,7 +249,6 @@ namespace BALL
 		{
 			Log.warn() << "DisulfidBondProcessor: No disulfid bond found to disconnect!" << endl;
 		}
-
 		return success;
 	}
 

@@ -6,11 +6,11 @@
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 
 #ifndef BALL_VIEW_WIDGETS_GENERICCONTROL_H
-#	include <BALL/VIEW/WIDGETS/genericControl.h>
+# include <BALL/VIEW/WIDGETS/genericControl.h>
 #endif
 
 #ifndef BALL_CONCEPT_MOLECULARINFORMATION_H
-#	include <BALL/CONCEPT/molecularInformation.h>
+# include <BALL/CONCEPT/molecularInformation.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -44,7 +44,7 @@ namespace BALL
 */
 class BALL_VIEW_EXPORT MolecularControl
 	: public GenericControl
-{			
+{
 	// for internal usage only:
 	class MyTreeWidgetItem
 		: public QTreeWidgetItem
@@ -92,9 +92,9 @@ class BALL_VIEW_EXPORT MolecularControl
 	Q_OBJECT
 
 	public:
-	
- 	BALL_EMBEDDABLE(MolecularControl,GenericControl)
-	
+
+	BALL_EMBEDDABLE(MolecularControl,GenericControl)
+
 	friend class BondProperties;
 
 	/**	@name	Constructors and Destructor
@@ -202,7 +202,7 @@ class BALL_VIEW_EXPORT MolecularControl
 	void compositeProperties();
 
 	/// Create a disulfid bond
-	void createDisulfidBond();
+	void toggleDisulfidBond();
 
 	/// Bond properties dialog requested
 	void bondProperties();
@@ -322,8 +322,8 @@ class BALL_VIEW_EXPORT MolecularControl
 			\param  column not used at the moment
 			\see    buildContextMenu
 	*/
- 	void showGuestContextMenu(const QPoint& pos);
-	
+	void showGuestContextMenu(const QPoint& pos);
+
 	//_ called when a model is selected in the context menu
 	void activatedItem_(QAction* action);
 
@@ -397,14 +397,14 @@ class BALL_VIEW_EXPORT MolecularControl
 			\param  composite the Composite object whose subtree will be inserted into <b>parent</b>
 			\param  default_name the name of the <b>item</b>
 	*/
- 	QTreeWidgetItem* generateListViewItem_(QTreeWidgetItem* parent, 
+	QTreeWidgetItem* generateListViewItem_(QTreeWidgetItem* parent,
 																					Composite& composite, QString* default_name = 0);
-	
+
 	//_ Test, if its allowed to paste the copy liste into the current selected context item.
 	bool pasteAllowedFor_(Composite& composite);
 
 	//
- 	inline void removeRecursive_(QTreeWidgetItem* item);
+	inline void removeRecursive_(QTreeWidgetItem* item);
 
 	// only for Python Interface
 	MolecularControl(const MolecularControl& mc);
@@ -419,7 +419,7 @@ class BALL_VIEW_EXPORT MolecularControl
 
 	//@} 
 	/** @name Menu entries ids
-	*/ 
+	*/
 	//@{
 
 	//_
@@ -427,37 +427,37 @@ class BALL_VIEW_EXPORT MolecularControl
 			*show_ss_id_;
 
 	//@}
-	
-	std::list<Composite*> 				selected_;
-	std::list<Composite*> 				copy_list_;
-	
-	MolecularInformation 		information_;
-	
-	QComboBox* 							selector_edit_;
-	QComboBox* 							smarts_edit_;
+
+	std::list<Composite*>   selected_;
+	std::list<Composite*>   copy_list_;
+
+	MolecularInformation    information_;
+
+	QComboBox*              selector_edit_;
+	QComboBox*              smarts_edit_;
 
 	// the context menus
-	QMenu 							context_menu_, 
-											model_menu_, 
-											edit_menu_,
-											color_menu_[MODEL_LABEL - MODEL_LINES];
+	QMenu            context_menu_,
+									 model_menu_,
+									 edit_menu_,
+									 color_menu_[MODEL_LABEL - MODEL_LINES];
 
 	QMenu* rotamer_menu_;
 
-	Composite* 							context_composite_;
+	Composite*       context_composite_;
 
- 	QTreeWidgetItem* context_item_;
+	QTreeWidgetItem* context_item_;
 
-	ModelType 			selected_model_;
-	ColoringMethod  selected_coloring_method_;
+	ModelType        selected_model_;
+	ColoringMethod   selected_coloring_method_;
 	std::map<Composite*, MyTreeWidgetItem*> composite_to_item_;
 
 	// let cut know to delete the entries, set by deleteCurrentItems()
-	bool 						was_delete_;
+	bool            was_delete_;
 
-	Size 						nr_items_removed_;
+	Size            nr_items_removed_;
 
-	bool 						show_ss_;
+	bool            show_ss_;
 	QAction* center_camera_action_, *composite_properties_action_, *bond_propertes_action_, *disulfidbond_action_,
 					 *select_action_, *deselect_action_, *count_items_action_, *atom_overview_, *atom_overview_selection_,
 					 *angle_action_, *distance_action_, *paste_action_;
@@ -469,7 +469,7 @@ class BALL_VIEW_EXPORT MolecularControl
 	RotamerLibrary* rotamer_library_;
 	QThread* rl_thread_;
 };
-	
+
 }} // namespaces
 
 #endif // BALL_VIEW_WIDGETS_MOLECULARCONTROL_H

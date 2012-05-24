@@ -80,13 +80,13 @@ namespace BALL
 		//@}
 
 		/// Connect two sulfurs by disulid bond
-		bool connect(Atom* atom1, Atom* atom2);
+		bool connect(Atom* atom1, Atom* atom2, bool toggle = false);
 
 		/// Connect two residues by disulid bond
-		bool connect(Residue* residue1, Residue* residue2);
+		bool connect(Residue* residue1, Residue* residue2, bool toggle = false);
 
 		/// Connect two atom containers by disulid bond
-		bool connect(Composite* composite1, Composite* composite2);
+		bool connect(Composite* composite1, Composite* composite2, bool toggle = false);
 
 		/// Disconnect a disulid bond
 		bool disconnect(Atom* atom1, Atom* atom2);

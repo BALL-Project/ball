@@ -166,6 +166,21 @@ CHECK( disconnect() / connect())
 	dbp.disconnect(res4, res9);
 	TEST_EQUAL(dbp.getNumberOfDetectedDisulfidBonds(), 0)
 
+	Atom *s_res4 = getSulfurByResidueIndex( 4, &sys);
+	Atom *s_res9 = getSulfurByResidueIndex( 9, &sys);
+
+	TEST_EQUAL(dbp.connect(s_res4, s_res9), true);
+	TEST_EQUAL(dbp.getNumberOfDetectedDisulfidBonds(), 1)
+
+	TEST_EQUAL(dbp.disconnect(s_res4, s_res9), true);
+	TEST_EQUAL(dbp.getNumberOfDetectedDisulfidBonds(), 0)
+
+	TEST_EQUAL(dbp.connect(s_res4, s_res9), true);
+	TEST_EQUAL(dbp.getNumberOfDetectedDisulfidBonds(), 1)
+
+	TEST_EQUAL(dbp.disconnect(s_res4, s_res9), true);
+	TEST_EQUAL(dbp.getNumberOfDetectedDisulfidBonds(), 0)
+
 RESULT
 
 CHECK( getDisulfidBonds())
