@@ -26,8 +26,8 @@ namespace BALL
 		/** @name Type definitions
 		 */
 		//@{
-		typedef std::pair<Residue*, Residue*>    DisulfidBond;
-		typedef	std::set<DisulfidBond>  DisulfidBondVector;
+		typedef std::pair<Residue*, Residue*>  DisulfidBond;
+		typedef	std::set<DisulfidBond>         DisulfidBonds;
 		//@}
 
 		BALL_CREATE(DisulfidBondProcessor);
@@ -72,10 +72,10 @@ namespace BALL
 		Size getNumberOfDetectedDisulfidBonds() {return sulfur_bridges_.size();};
 
 		/// Return the vector of disulfid bonds.
-		DisulfidBondVector& getDisulfidBonds() {return sulfur_bridges_;};
+		DisulfidBonds& getDisulfidBonds() {return sulfur_bridges_;};
 
 		/// Return the vector of disulfid bonds, const variant.
-		const DisulfidBondVector& getDisulfidBonds() const {return sulfur_bridges_;};
+		const DisulfidBonds& getDisulfidBonds() const {return sulfur_bridges_;};
 
 		//@}
 
@@ -99,7 +99,7 @@ namespace BALL
 
 
 		protected:
-			DisulfidBondVector  sulfur_bridges_;
+			DisulfidBonds  sulfur_bridges_;
 	};
 }
 

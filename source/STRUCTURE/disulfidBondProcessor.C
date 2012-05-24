@@ -233,8 +233,7 @@ namespace BALL
 			residue2->clearProperty(Residue::PROPERTY__HAS_SSBOND);
 
 			// remove from internal list
-			DisulfidBondVector::iterator bond_it = sulfur_bridges_.begin();
-
+			DisulfidBonds::iterator bond_it = sulfur_bridges_.begin();
 			for ( ; bond_it != sulfur_bridges_.end();  ++bond_it)
 			{
 				if (   (bond_it->first == residue1 && bond_it->second == residue2)

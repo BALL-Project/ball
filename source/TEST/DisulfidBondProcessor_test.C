@@ -80,7 +80,7 @@ CHECK( applied on empty System )
 
 	TEST_EQUAL(dbp.getNumberOfDetectedDisulfidBonds(), 0)
 
-	DisulfidBondProcessor::DisulfidBondVector bridges = dbp.getDisulfidBonds();
+	DisulfidBondProcessor::DisulfidBonds bridges = dbp.getDisulfidBonds();
 	TEST_EQUAL(bridges.size(), 0)
 
 RESULT
@@ -191,7 +191,7 @@ CHECK( getDisulfidBonds())
 
 	sys.apply(dbp);
 
-	DisulfidBondProcessor::DisulfidBondVector bridges = dbp.getDisulfidBonds();
+	DisulfidBondProcessor::DisulfidBonds bridges = dbp.getDisulfidBonds();
 
 	TEST_EQUAL(bridges.size(), 1)
 
