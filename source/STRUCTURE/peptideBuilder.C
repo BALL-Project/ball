@@ -14,7 +14,7 @@ namespace BALL
 {
 	namespace Peptides
 	{
-		
+
 		// Default bond lengths for divers bonds in the peptide backbone.
 		const float BOND_LENGTH_N_C  = 1.335;
 		const float BOND_LENGTH_C_CA = 1.520;
@@ -55,11 +55,11 @@ namespace BALL
 
 
 		AminoAcidDescriptor::AminoAcidDescriptor(const AminoAcidDescriptor& aad)
-			:	type_(aad.getType()), 
+			: type_(aad.getType()),
 				phi_(aad.getPhi()),
 				psi_(aad.getPsi()),
 				omega_(aad.getOmega())
-		{  
+		{
 		}
 
 
@@ -111,7 +111,7 @@ namespace BALL
 		}
 
 		PeptideBuilder::PeptideBuilder()
-			: sequence_(), 
+			: sequence_(),
 				chainname_("Chain"),
 				proteinname_("Protein"),
 				is_proline_(false),
@@ -129,7 +129,7 @@ namespace BALL
 		}
 
 		PeptideBuilder::PeptideBuilder(const String& sequence, const Angle& phi, const Angle& psi, const Angle& omega)
-			: sequence_(), 
+			: sequence_(),
 				chainname_("_"),
 				proteinname_(sequence),
 				is_proline_(false),
@@ -149,7 +149,7 @@ namespace BALL
 			 proteinname_(pc.proteinname_),
 			 is_proline_(false),
 			 fragment_db_(0)
-		{ 
+		{
 		}
 
 		PeptideBuilder::~PeptideBuilder()
@@ -191,8 +191,8 @@ namespace BALL
 
 		Protein* PeptideBuilder::construct()
 		{
-			if (fragment_db_ == 0) 
-			{	
+			if (fragment_db_ == 0)
+			{
 				Log.warn() << "PeptideBuilder::construct(): no FragmengDB given!" << std::endl;
 				return 0;
 			}
@@ -200,19 +200,19 @@ namespace BALL
 			{
 
 				Log.warn() << "PeptideBuilder::construct(): no amino acid sequence specified." << std::endl;
- 				return 0;
+				return 0;
 			}
 			int id = 1;
 			Protein *protein = new Protein(proteinname_);
 			Chain *chain = new Chain(chainname_);
-			
+
 			// create the first residue
 			Residue* residue = createResidue_(sequence_[0].getType(), id);
 			chain->insert(*residue);
 			Residue* residueold = residue;
 			std::vector<AminoAcidDescriptor>::iterator i = sequence_.begin();
 			++id;
-			
+
 			// consistency check for empty sequences and sequences of length < 2!!	
 			// loop for the remaining residues ;
 			for (++i; i != sequence_.end(); ++i)
@@ -228,15 +228,15 @@ namespace BALL
 				type.toUpper();
 
 				is_proline_ = (type == "PRO") ? true : false;
-				
+
 				Residue* residue2 = createResidue_(i->getType(), id);
-					
+
 				insert_(*residue2,*residueold);
 				chain->insert(*residue2);
-					
+
 				//set the torsion angle 
 				// TODO: angle of the peptide bond (omega)
-					
+
 				transform_(i->getPhi(),(i-1)->getPsi(),*residueold,*residue2);
 				peptide_(*residueold,*residue2);
 
@@ -247,22 +247,22 @@ namespace BALL
 				++id;
 			}
 
-			protein->insert(*chain); 
-			
+			protein->insert(*chain);
+
 			// read the names for a unique nomenclature 
 			protein->apply(fragment_db_->normalize_names);
-			
+
 			// Add missing bonds and atoms (including side chains!)
 			ReconstructFragmentProcessor rfp(*fragment_db_);
 			protein->apply(rfp);
 			protein->apply(fragment_db_->build_bonds);
-			
+
 			return protein;
 		}
 
 		Residue* PeptideBuilder::createResidue_(const String& type, const int id)
 		{
-			Residue* res = new Residue(type, String(id)); 
+			Residue* res = new Residue(type, String(id));
 			PDBAtom* nitrogen = new PDBAtom(PTE[Element::N], "N");
 			PDBAtom* carbona = new PDBAtom(PTE[Element::C], "CA");
 			PDBAtom* carbon = new PDBAtom(PTE[Element::C], "C");
@@ -299,36 +299,36 @@ namespace BALL
 			PDBAtom* pnitrogen_n = getAtomByName_(resnew, "N");
 			PDBAtom* pcarbona_n  = getAtomByName_(resnew, "CA");
 			PDBAtom* pcarbon_n   = getAtomByName_(resnew, "C");
-		 
+
 			Vector3 rot_axis;    // axis  for the torsion angle
 
 			//set C-N-bond 
 			pcarbon->createBond(*pnitrogen_n)->setOrder(Bond::ORDER__SINGLE);;
-			
-			
+
+
 			//  --------------  move N into  0|0|0   
 			TranslationProcessor translation(Vector3(BOND_LENGTH_N_CA, 0., 0.));
 			resnew.apply(translation);
-			
+
 			// --------------- calculate the coordinates for N
-			Vector3 CA_C_axis = (pcarbon->getPosition() - pcarbona->getPosition()).normalize(); 
+			Vector3 CA_C_axis = (pcarbon->getPosition() - pcarbona->getPosition()).normalize();
 			Vector3 N_CA_axis = (pcarbona->getPosition() - pnitrogen->getPosition()).normalize();
 			Vector3 CA_N_axis = ((float)-1.) * N_CA_axis;
-			Vector3 newpos = (CA_N_axis - (CA_C_axis * CA_N_axis) * CA_C_axis).normalize();  
-			Vector3 normaxis = (CA_C_axis % newpos).normalize(); 
-			
+			Vector3 newpos = (CA_N_axis - (CA_C_axis * CA_N_axis) * CA_C_axis).normalize();
+			Vector3 normaxis = (CA_C_axis % newpos).normalize();
+
 			Matrix4x4 mat;
-			mat.setRotation(Angle(-1. * 30.* Constants::PI/180.), normaxis); 
+			mat.setRotation(Angle(-1. * 30.* Constants::PI/180.), normaxis);
 
 			newpos = mat * newpos;          // rotation
 			newpos = newpos *  BOND_LENGTH_N_C; // scaling of the bond length
 			newpos = newpos + pcarbon->getPosition();
 
 			// positioning of the nitrogen
-			translation.setTranslation(newpos); 
+			translation.setTranslation(newpos);
 			resnew.apply(translation);
-			
-			 
+
+
 			 //---------------set the angle in NN to 120 degrees
 			Vector3 NN_C_axis   = pcarbon->getPosition() - pnitrogen_n->getPosition();
 			Vector3 NN_NCA_axis = pcarbona_n->getPosition() - pnitrogen_n->getPosition();
@@ -336,12 +336,12 @@ namespace BALL
 
 			//current angle for C
 			Angle current(acos(NN_C_axis * NN_NCA_axis /
-										 (NN_C_axis.getLength() * NN_NCA_axis.getLength() ))); 
+										 (NN_C_axis.getLength() * NN_NCA_axis.getLength() )));
 
 			Matrix4x4 transmat;
 			Vector3 rotaxis;
 
-			if (current < (float)(Constants::PI - 1e-2)) 
+			if (current < (float)(Constants::PI - 1e-2))
 			{
 				current = Angle(120.*Constants::PI/180.) - current;
 				rotaxis = (NN_C_axis%NN_NCA_axis).normalize();
@@ -353,7 +353,7 @@ namespace BALL
 				  // is this line really correct???
 					current = Angle(-120. * 120. * Constants::PI / 180.) - current;
 					rotaxis = (NN_C_axis % NN_NCA_axis).normalize();
-				} 
+				}
 				else
 				{
 					current = Angle(-120. * Constants::PI / 180.) - current;
@@ -361,8 +361,8 @@ namespace BALL
 				}
 			}
 
-			transmat.rotate(current,rotaxis); 
-		 
+			transmat.rotate(current, rotaxis);
+
 			TransformationProcessor transformation(transmat);
 
 			// translate to 0|0|0 (needed for the rotation)
@@ -374,7 +374,7 @@ namespace BALL
 			// translate back to the correct position
 			translation.setTranslation(toOrigin);
 			resnew.apply(translation);
-				 
+
 			//---------------- set torsion angle to 0
 			Vector3 v_pca  = pcarbona->getPosition();
 			Vector3 v_pc   = pcarbon->getPosition();
@@ -382,17 +382,17 @@ namespace BALL
 			Vector3 v_pca_n = pcarbona_n->getPosition();
 			Vector3 v_pc_n  = pcarbon_n->getPosition();
 			Vector3 v_pn   =pnitrogen->getPosition();
-			current = getTorsionAngle( v_pca.x,   v_pca.y,   v_pca.z, 
+			current = getTorsionAngle( v_pca.x,   v_pca.y,   v_pca.z,
 					 v_pc.x,    v_pc.y,    v_pc.z,
 					 v_pn_n.x,  v_pn_n.y,  v_pn_n.z,
 					 v_pca_n.x, v_pca_n.y, v_pca_n.z );
-		 
+
 
 			rot_axis =  (pnitrogen_n->getPosition() - pcarbon->getPosition()).normalize();
 			transmat.getZero();/// is this necessary???
 			transmat.rotate(Angle(-1. * current), rot_axis);
 			transformation.setTransformation(transmat);
-			 
+
 			//translate to 0|0|0
 			toOrigin = pnitrogen_n->getPosition();
 			translation.setTranslation(((float)(-1.))*toOrigin);
@@ -403,14 +403,14 @@ namespace BALL
 			 //translate back
 			translation.setTranslation(toOrigin);
 			resnew.apply(translation);
-			
+
 			// ---------------------set the peptide bond angle omega  to 180 degrees
 			v_pca  = pcarbona->getPosition();
 			v_pc   = pcarbon->getPosition();
 			v_pn_n = pnitrogen_n->getPosition();
 			v_pca_n = pcarbona_n->getPosition();
 			v_pc_n  = pcarbon_n->getPosition();
-			current = getTorsionAngle( v_pca.x,   v_pca.y,   v_pca.z, 
+			current = getTorsionAngle( v_pca.x,   v_pca.y,   v_pca.z,
 					 v_pc.x,    v_pc.y,    v_pc.z,
 					 v_pn_n.x,  v_pn_n.y,  v_pn_n.z,
 					 v_pca_n.x, v_pca_n.y, v_pca_n.z );
@@ -422,13 +422,13 @@ namespace BALL
 			// translate to 0|0|0 (needed for the rotation)
 			toOrigin = pnitrogen_n->getPosition();
 			translation.setTranslation(((float)(-1.))*toOrigin);
-			resnew.apply(translation);  
+			resnew.apply(translation);
 			//rotate in 0|0|0  about 180 degrees
 			resnew.apply(transformation);
 			//translate back
 			translation.setTranslation(toOrigin);
 			 resnew.apply(translation);
-			
+
 			//------------- angle psi
 			v_pca  = pcarbona->getPosition();
 			v_pc   = pcarbon->getPosition();
@@ -438,13 +438,13 @@ namespace BALL
 			current = getTorsionAngle( v_pc.x,    v_pc.y,    v_pc.z,
 					 v_pn_n.x,  v_pn_n.y,  v_pn_n.z,
 					 v_pca_n.x, v_pca_n.y, v_pca_n.z,
-					 v_pc_n.x,  v_pc_n.y,  v_pc_n.z  ); 
+					 v_pc_n.x,  v_pc_n.y,  v_pc_n.z  );
 
 			rot_axis = (pcarbona_n->getPosition()-pnitrogen_n->getPosition()).normalize();
-			
-			transmat.rotate(Angle(-1. * current), rot_axis); 
-			transformation.setTransformation(transmat);  
-			
+
+			transmat.rotate(Angle(-1. * current), rot_axis);
+			transformation.setTransformation(transmat);
+
 			//translate to 0|0|0 (needed for the rotation)
 			toOrigin = pcarbona_n->getPosition();
 			translation.setTranslation(((float)(-1.))*toOrigin);
@@ -454,7 +454,7 @@ namespace BALL
 			// translate back to the correct position
 			translation.setTranslation(toOrigin);
 			resnew.apply(translation);
-			
+
 			return;
 		}
 
@@ -484,21 +484,20 @@ namespace BALL
 			Vector3 v_pn_n   = pnitrogen_n->getPosition();
 			Vector3 v_pca_n  = pcarbona_n->getPosition();
 			Vector3 v_pc_n   = pcarbon_n->getPosition();
-			currentpsi = getTorsionAngle( v_pn.x,    v_pn.y,   v_pn.z, 
+			currentpsi = getTorsionAngle( v_pn.x,    v_pn.y,   v_pn.z,
 							v_pca.x,   v_pca.y,  v_pca.z,
-							v_pc.x,  v_pc.y, v_pc.z,	
+							v_pc.x,  v_pc.y, v_pc.z,
 							v_pn_n.x,  v_pn_n.y,  v_pn_n.z);
 
 			psiaxis = ( pcarbon->getPosition() - pcarbona->getPosition()).normalize();
 			psimat.rotate((float)-1. * currentpsi, psiaxis);
 			TransformationProcessor psitrans(psimat);
 
-		 
 			//translate  to 0|0|0 (needed for the rotation)
-			Vector3 toOrigin = pcarbon->getPosition(); 
+			Vector3 toOrigin = pcarbon->getPosition();
 			translation.setTranslation(((float)(-1.))*toOrigin);
 			resnew.apply(translation);
-		 
+
 			//rotate
 			resnew.apply(psitrans);
 
@@ -519,8 +518,8 @@ namespace BALL
 
 			currentphi = getTorsionAngle( v_pc.x,    v_pc.y,    v_pc.z,
 					 v_pn_n.x,  v_pn_n.y,  v_pn_n.z,
-					 v_pca_n.x, v_pca_n.y, v_pca_n.z,  
-					 v_pc_n.x,  v_pc_n.y,  v_pc_n.z	);
+					 v_pca_n.x, v_pca_n.y, v_pca_n.z,
+					 v_pc_n.x,  v_pc_n.y,  v_pc_n.z);
 
 
 			phiaxis = (pcarbona_n->getPosition() -  pnitrogen_n->getPosition()).normalize();
@@ -538,7 +537,7 @@ namespace BALL
 			// translate back to the correct position
 			translation.setTranslation(toOrigin);
 			resnew.apply(translation);
-		 
+
 			return;
 		}
 
@@ -550,23 +549,23 @@ namespace BALL
 			PDBAtom* pcarbona    = getAtomByName_(resold, "CA");
 			PDBAtom* pnitrogen_n = getAtomByName_(resnew, "N");
 
-			Vector3 CA_C_axis =(pcarbon->getPosition() - pcarbona->getPosition()).normalize(); 
+			Vector3 CA_C_axis =(pcarbon->getPosition() - pcarbona->getPosition()).normalize();
 			Vector3 C_NN_axis =(pnitrogen_n->getPosition() - pcarbon->getPosition()).normalize();
 
 			Matrix4x4 mat;
-			mat.setRotation(Angle(Constants::PI), CA_C_axis); 
+			mat.setRotation(Angle(Constants::PI), CA_C_axis);
 			Vector3  newpos = mat * C_NN_axis;
 
 			// newpos = mat * newpos; 
 			newpos = newpos.normalize() * BOND_LENGTH_C_O + pcarbon->getPosition();
-			
+
 			//newpos= pcarbon->getPosition();
 			poxygen->setPosition(newpos);
-			
+
 			//set C-O-bond
 			(pcarbon->createBond(*poxygen))->setOrder(Bond::ORDER__DOUBLE);
 			resold.insert(*poxygen);
-			
+
 			//----------set hydrogen. We can't do this for proline,
 			//					since in this case, this hydrogen doesn't exist
 			if (!is_proline_)
@@ -595,7 +594,7 @@ namespace BALL
 
 			// At this point, omega has been fixed to 180 degrees
 			Matrix4x4 mat;
-			mat.setRotation(Angle(omega-Angle(Constants::PI)), C_NN_axis); 
+			mat.setRotation(Angle(omega-Angle(Constants::PI)), C_NN_axis);
 			TransformationProcessor omegatrans(mat);
 
 			// translate to 0|0|0 (needed for the rotation)
@@ -613,7 +612,7 @@ namespace BALL
 
 			return;
 		}
-		
+
 		PDBAtom* PeptideBuilder::getAtomByName_(Residue& res, const String& name)
 		{
 			PDBAtomIterator ai;
@@ -624,19 +623,17 @@ namespace BALL
 					return &(*ai);
 				}
 			}
-			
+
 			return 0;
 		}
 
 
 		void PeptideBuilder::setFragmentDB(const FragmentDB* db)
-			
 		{
 			fragment_db_ = (FragmentDB*) db;
 		}
 
 		const FragmentDB* PeptideBuilder::getFragmentDB() const
-			
 		{
 			return fragment_db_;
 		}
