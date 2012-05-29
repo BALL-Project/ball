@@ -225,8 +225,26 @@ namespace BALL
 			bond->destroy();
 			success = true;
 
-			//TODO: add hydrogens - the following does not work, 
-			// use FragmentDB to rebuild residues, i.e. add hydrogens
+			// Unfortunately, use of FragmentDB to rebuild residues, i.e. add hydrogens
+			// does not work, so we do it manually	
+			PDBAtom* hydrogen1 = new PDBAtom(PTE[Element::H], PTE[Element::H].getSymbol());
+			PDBAtom* hydrogen2 = new PDBAtom(PTE[Element::H], PTE[Element::H].getSymbol());
+
+			Vector3 bond = atom1->getPosition() - atom2->getPosition();
+			bond = bond.normalize();
+
+			hydrogen1->setPosition(atom1->getPosition() - bond * 1.34);
+			hydrogen2->setPosition(atom2->getPosition() + bond * 1.34);
+
+			Bond* b1 = hydrogen1->createBond(*atom1);
+			b1->setOrder(1);
+			Bond* b2 = hydrogen2->createBond(*atom2);
+			b2->setOrder(1);
+
+			atom1->getResidue()->insert(*hydrogen1);
+			atom2->getResidue()->insert(*hydrogen2);
+
+
 /*			FragmentDB fdb = FragmentDB("");
 			ReconstructFragmentProcessor rfp(fdb);
 			atom1->getResidue()->getProtein()->apply(fdb.normalize_names);
