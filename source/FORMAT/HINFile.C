@@ -14,7 +14,7 @@
 
 #include <stack>
 
-namespace BALL 
+namespace BALL
 {
 
   struct HINFileBondStruct
@@ -23,7 +23,7 @@ namespace BALL
     Size        atom2;
     Bond::Order order;
 	};
- 
+
 	HINFile::HINFile()
 		:	GenericMolFile(),
 			box_(0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
@@ -43,14 +43,14 @@ namespace BALL
 	HINFile::~HINFile()
 	{
 	}
-	
+
 	const HINFile& HINFile::operator = (const HINFile& rhs)
 	{
 		box_ = SimpleBox3(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		temperature_ = 0.0;
 
 		GenericMolFile::operator = (rhs);
-		
+
 		return *this;
 	}
 
@@ -58,7 +58,7 @@ namespace BALL
 	{
 		getFileStream() << "atom " << number + 1 - atom_offset << " ";
 		String name = atom.getName();
-		if (name != "") 
+		if (name != "")
 		{
 			// if the atom name contains blanks or some bullshit like that, 
 			// truncate it to the first field and complain about it
@@ -71,8 +71,8 @@ namespace BALL
 			{
 				getFileStream() << name.trim() << " ";
 			}
-		} 
-		else 
+		}
+		else
 		{
 			getFileStream() << "- ";
 		}
@@ -81,10 +81,10 @@ namespace BALL
 		if ((atom.getTypeName() == "?") || (atom.getTypeName() == ""))
 		{
 			getFileStream() << "**";
-		} 
-		else 
+		}
+		else
 		{
-			getFileStream() << atom.getTypeName();	
+			getFileStream() << atom.getTypeName();
 		}
 		getFileStream() << " - ";
 		getFileStream() << atom.getCharge() << " ";
@@ -94,12 +94,12 @@ namespace BALL
 
 		Size number_of_bonds = 0;
 		String bond_string(" ");
-		const Atom*	bond_partner;
+		const Atom* bond_partner;
 
 		// count the valid bonds (bonds to atoms inside the system)
-		for (Position i = 0; i < atom.countBonds(); ++i) 
+		for (Position i = 0; i < atom.countBonds(); ++i)
 		{
-			const Bond*	bond = atom.getBond(i);
+			const Bond* bond = atom.getBond(i);
 			bond_partner = bond->getPartner(atom);
 
 			Size index = bond_partner->getProperty("__HINFILE_INDEX").getUnsignedInt();
@@ -109,23 +109,23 @@ namespace BALL
 
 				bond_string += String(index);
 
-				switch (bond->getOrder()) 
+				switch (bond->getOrder())
 				{
-					case Bond::ORDER__DOUBLE:		bond_string += " d "; break;
-					case Bond::ORDER__TRIPLE:		bond_string += " t "; break;
-					case Bond::ORDER__AROMATIC:	bond_string += " a "; break;
+					case Bond::ORDER__DOUBLE:   bond_string += " d "; break;
+					case Bond::ORDER__TRIPLE:   bond_string += " t "; break;
+					case Bond::ORDER__AROMATIC: bond_string += " a "; break;
 					// default is single bond!
 					default:										bond_string += " s ";
 				}
 			}
 		}
-		
+
 		// write the bonds
 		getFileStream() << number_of_bonds << bond_string << std::endl;
 
 		// HyperChem uses A/ps, as does BALL. So, no conversion is needed.
-		getFileStream() << "vel " << number + 1 - atom_offset << " " 
-								 << atom.getVelocity().x << " " 
+		getFileStream() << "vel " << number + 1 - atom_offset << " "
+								 << atom.getVelocity().x << " "
 								 << atom.getVelocity().y << " "
 								 << atom.getVelocity().z << std::endl;
 	}
@@ -136,7 +136,7 @@ namespace BALL
 		S.insert(*(Molecule*)molecule.create(true));
 		return write(S);
 	}
-	
+
 	bool HINFile::write(const System& system)
 	{
 		if (!isOpen() || getOpenMode() != std::ios::out)
@@ -149,7 +149,7 @@ namespace BALL
 		vector<const Atom*> atom_vector;
 
 		// create a vector containing pointers to the atoms
-		AtomConstIterator	atom_it;		
+		AtomConstIterator atom_it;
 		for (atom_it = system.beginAtom(); +atom_it; ++atom_it)
 		{
 			atom_vector.push_back(&(*atom_it));
@@ -158,16 +158,16 @@ namespace BALL
 
 		// the index_vector contains the index of the connected component
 		// (HyperChem molecule) it is in and initialize it to zero
-		vector<Index>		index_vector(atom_vector.size(), -1);
+		vector<Index>  index_vector(atom_vector.size(), -1);
 
 		typedef list<Size> Component;
-		typedef	vector<Component>	ComponentVector;
+		typedef	vector<Component> ComponentVector;
 
 		// now calculate all connected components in the graph
 		// formed by atoms and bonds of the system
 		// each of these connected components represents a molecule
 		// for the new HyperChem file
-			
+
 		// index of the current connected component
 		Size current_index = 0;
 
@@ -178,16 +178,15 @@ namespace BALL
 		while (start_index < atom_vector.size())
 		{
 			while ((start_index < atom_vector.size()) && (index_vector[start_index] >= 0))
-						 
 			{
 				start_index++;
 			}
-					
+
 			if (start_index < atom_vector.size())
 			{
 				// create a stack containing all atoms to be axamined for this component
 				std::stack<Size> atom_stack;
-				
+
 				// our start atom is the first to be considered and is marked, too
 				atom_stack.push(start_index);
 				index_vector[start_index] = (Index)current_index;
@@ -203,8 +202,8 @@ namespace BALL
 					const Atom& current_atom = *atom_vector[atom_stack.top()];
 					atom_stack.pop();
 
-					Atom::BondConstIterator	bond_it = current_atom.beginBond();
-					for (; +bond_it; ++bond_it) 
+					Atom::BondConstIterator bond_it = current_atom.beginBond();
+					for (; +bond_it; ++bond_it)
 					{
 						// add the atom if it is not marked yet
 						// ignore all bonds to atoms outside the system 
@@ -220,7 +219,7 @@ namespace BALL
 						}
 					}
 				}
-				
+
 				// done with this component, increase the component counter
 				current_index++;
 			}
@@ -237,10 +236,10 @@ namespace BALL
 		{
 			// remember the index of the atom
 			components[index_vector[i]].push_back(i);
-			
+
 			// and set the atom's HINFILE_INDEX properly
 			// (i.e. to the index in the right connected component
-			(const_cast<Atom*>(atom_vector[i]))->setProperty("__HINFILE_INDEX", 
+			(const_cast<Atom*>(atom_vector[i]))->setProperty("__HINFILE_INDEX",
 																	(unsigned int)components[index_vector[i]].size());
 		}
 
@@ -255,7 +254,7 @@ namespace BALL
 
 		// ?????:
 		// insert the periodic box size (if any)
-		
+
 		Size atom_count = 0;
 		Size atom_offset = 0;
 
@@ -647,7 +646,6 @@ namespace BALL
 												 + getLine().getField(4) + ")")
 					}
 
-						
 					// check whether the atom exists
 					Position atom_number;
 					try
@@ -662,17 +660,17 @@ namespace BALL
 					if (atom_number > last_atom)
 					{
 						ERROR(String("cannot assign velocity for atom ") + String(atom_number) + ": atom not defined!")
-					} 
+					}
 
 					if (atom_vector[atom_number] != 0)
 					{
 						atom_vector[atom_number]->setVelocity(velocity);
-					} 
-					else 
+					}
+					else
 					{
 						ERROR(String("cannot assign velocity for atom ") + String(atom_number) + ": atom not defined!")
 					}
-						
+
 					continue;
 				}
 
@@ -680,13 +678,13 @@ namespace BALL
 				if (tag == "res")
 				{
 					// remember where we are.
-					if (state != IN_MOLECULE) 
+					if (state != IN_MOLECULE)
 					{
 						ERROR(String("<res> tag must be inside a <mol>/<endmol>"))
 					}
 
 					state = IN_RESIDUE;
-					
+
 					// create a protein if it doesn't exist already
 					if (protein == 0)
 					{
@@ -795,7 +793,7 @@ namespace BALL
 						{
 							// Remove leading/trailing blanks from the name.
 							name.trim();
-							
+
 							// For newer versions of HyperChem, the name has to be
 							// enclosed in double quotes.
 							if (name[0] == '"')
@@ -807,9 +805,9 @@ namespace BALL
 								name.erase(name.size() - 1, 1);
 							}
 							molecule->setName(name);
-						}	
+						}
 					}
-					
+
 					continue;
 				}
 
@@ -821,7 +819,7 @@ namespace BALL
 					}
 
 					state = START;
-					
+
 					if (fragment != 0)
 					{
 						if (fragment->countAtoms() == 0)
@@ -844,16 +842,15 @@ namespace BALL
 					for (Size i = 0; i < bond_vector.size(); i++)
 					{
 						// check whether both atoms exist
-						if (bond_vector[i].atom1 > last_atom || 
-								bond_vector[i].atom2 > last_atom)
+						if (   bond_vector[i].atom1 > last_atom
+								|| bond_vector[i].atom2 > last_atom)
 						{
 							// complain if one of the atoms does not exist
 							ERROR(String("HINFile: cannot create bond from atom ") + String(bond_vector[i].atom1 + 1)
-										+ " to atom " + String(bond_vector[i].atom2 + 1) + " of molecule " 
+										+ " to atom " + String(bond_vector[i].atom2 + 1) + " of molecule "
 										+ getLine().getField(1) + " - non-existing atom!")
-
-						} 
-						else  
+						}
+						else
 						{
 							// everything all right, create the bond
 							Bond* b = atom_vector[bond_vector[i].atom1]->createBond(*atom_vector[bond_vector[i].atom2]);
@@ -879,7 +876,6 @@ namespace BALL
 							}
 						}
 					}
-
 					bond_vector.clear();
 					atom_vector.clear();
 					last_atom = 0;
@@ -923,7 +919,7 @@ namespace BALL
 												 + getLine().getField(1)  + " / "
 												 + getLine().getField(2)  + " / "
 												 + getLine().getField(3)  + " )")
-					}		
+					}
 
 					box_.b.x = - box_.a.x;
 					box_.b.y = - box_.a.y;
@@ -949,7 +945,7 @@ namespace BALL
 						tag == "formalcharge")
 				{
 					continue;
-				}	
+				}
 
 				// if the tag was not recognized: complain about it
 				Log.warn() << "HINFile: unknown tag " << tag << " ignored." << std::endl;
@@ -983,7 +979,7 @@ namespace BALL
 		{
 			// a list to hold the lone pairs (for deletion)
 			list<Atom*> del_list;
-			
+
 			// Iterate over all atoms
 			AtomIterator it = molecule->beginAtom();
 			for (; +it; ++it)
@@ -992,7 +988,7 @@ namespace BALL
 				{
 					// store lone pair in the del_list
 					del_list.push_back(&*it);
-					
+
 					// sum the lone pair charge into the
 					// heavy atom it is bound to
 					if (it->countBonds() > 0)
@@ -1012,7 +1008,7 @@ namespace BALL
 					it->destroyBonds();
 				}
 			}
-			
+
 			// remove the lone pairs
 			list<Atom*>::iterator list_it = del_list.begin();
 			for (; list_it != del_list.end(); ++list_it)
@@ -1021,8 +1017,8 @@ namespace BALL
 				{
 					// delete dynamically created objects
 					delete *list_it;
-				} 
-				else 
+				}
+				else
 				{
 					// destroy static atoms
 					(*list_it)->destroy();
