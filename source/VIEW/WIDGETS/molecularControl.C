@@ -343,7 +343,7 @@ namespace BALL
 						}
 
 						Composite& root = composite_message->getComposite()->getRoot();
- 						removeComposite(root);
+						removeComposite(root);
 						addComposite(root);
 
 						list<QTreeWidgetItem*> item_list;
@@ -372,7 +372,7 @@ namespace BALL
 					case CompositeMessage::SELECTED_COMPOSITE:
 					case CompositeMessage::DESELECTED_COMPOSITE:
 					{
- 						setSelection_(false);
+						setSelection_(false);
 						return true;
 					}
 					default:
@@ -427,7 +427,7 @@ namespace BALL
 			model_menu_.addAction(tr("Custom"), this, SLOT(createRepresentation())); 
 
 			const ModelInformation& mi = getMainControl()->getModelInformation();
-			QAction* action =	0;
+			QAction* action = 0;
 			Position p = 0;
 			for (Position pos = MODEL_LINES; pos < MODEL_LABEL; pos++)
 			{
@@ -593,15 +593,18 @@ namespace BALL
 			two_cysteins = (num_cysteins == 2);
 			two_sulfurs  = (num_sulfurs == 2);
 
-			disulfidbond_action_->setEnabled(two_cysteins || two_sulfurs);
-			Bond* bond = s1->getBond(*s2);
-			if (bond == NULL)
+			bool has_bond = (s1->getBond(*s2) != NULL);
+
+			disulfidbond_action_->setEnabled(   (two_cysteins || two_sulfurs)
+			                                 && ( has_bond == s1->getResidue()->hasProperty(Residue::PROPERTY__HAS_SSBOND))
+																			 && ( has_bond == s2->getResidue()->hasProperty(Residue::PROPERTY__HAS_SSBOND)));
+			if (has_bond)
 			{
-				disulfidbond_action_->setText(tr("Create Disulfidbond"));
+				disulfidbond_action_->setText(tr("Disconnect Disulfidbond"));
 			}
 			else
 			{
-				disulfidbond_action_->setText(tr("Disconnect Disulfidbond"));
+				disulfidbond_action_->setText(tr("Create Disulfidbond"));
 			}
 
 			// ------------------------------------ Residues
