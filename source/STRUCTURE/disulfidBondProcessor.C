@@ -43,6 +43,21 @@ namespace BALL
 			residue1 = bond_it->getFirstAtom()->getResidue();
 			residue2 = bond_it->getSecondAtom()->getResidue();
 
+			// detect and assign
+			Atom* a1 = bond_it->getFirstAtom();  // dynamic_cast<PDBAtom*>(const_cast<Atom*>(b->getFirstAtom()));
+			Atom* a2 = bond_it->getSecondAtom(); // dynamic_cast<PDBAtom*>(const_cast<Atom*>(b->getSecondAtom()));
+			if ((a1 != 0) && (a2 != 0)
+					&& (a1->getElement() == PTE[Element::S]) && (a2->getElement() == PTE[Element::S])
+					&& (residue1 != residue2)
+					&& (residue1 != 0) && (residue2 != 0)
+					&& (residue1->hasProperty(Residue::PROPERTY__AMINO_ACID))
+					&& (residue2->hasProperty(Residue::PROPERTY__AMINO_ACID)))
+			{
+				residue1->setProperty(Residue::PROPERTY__HAS_SSBOND);
+				residue2->setProperty(Residue::PROPERTY__HAS_SSBOND);
+			}
+
+			// store for us
 			if ((bond_it->getFirstAtom()->getElement() == PTE[Element::S])
 					&& (bond_it->getSecondAtom()->getElement() == PTE[Element::S])
 					&& (residue1->hasProperty(Residue::PROPERTY__HAS_SSBOND) == true)
