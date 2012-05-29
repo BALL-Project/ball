@@ -91,8 +91,11 @@ namespace BALL
 		if (bonded && toggle)
 		{
 			success = disconnect(atom1, atom2);
-		}
-		else if (bonded == NULL) // if already bonded, nothing to do!
+		} // else if already bonded, nothing to do!
+		else if (   (bonded == NULL)
+				     && not (   atom1->getResidue()->hasProperty(Residue::PROPERTY__HAS_SSBOND)
+							       || atom1->getResidue()->hasProperty(Residue::PROPERTY__HAS_SSBOND)
+						)       )
 		{
 			// if already bonded, nothing to do!
 			if (   (atom1->getElement() == PTE[Element::S])
