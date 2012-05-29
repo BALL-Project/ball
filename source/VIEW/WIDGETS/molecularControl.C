@@ -697,8 +697,8 @@ namespace BALL
 				if (scene != 0)
 				{
 					// update representation
-					scene->notify(new CompositeMessage(*composite1, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY));
-					scene->notify(new CompositeMessage(*composite2, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY));
+					scene->notify(new CompositeMessage(*composite1, CompositeMessage::CHANGED_COMPOSITE));
+					scene->notify(new CompositeMessage(*composite2, CompositeMessage::CHANGED_COMPOSITE));
 
 					scene->getMainControl()->update(*composite1, true);
 					scene->getMainControl()->update(*composite2, true);
