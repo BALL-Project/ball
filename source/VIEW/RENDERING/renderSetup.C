@@ -367,8 +367,8 @@ namespace BALL
 			// reduce the ttl
 			if (ttl_ > 0) --ttl_;
 
-			renderer->setPreviewMode(scene_->use_preview_ && scene_->preview_);
-			renderer->showLightSources(scene_->show_light_sources_);
+			renderer->setPreviewMode(scene_->usePreview());
+			renderer->showLightSources(scene_->showLightSourcesEnabled());
 
 			updateCamera();
 

@@ -140,7 +140,6 @@ namespace BALL
 				public ModularWidget
 		{
 			friend class AnimationThread;
-			friend class RenderSetup;
 
 #ifdef BALL_HAS_RTFACT
       typedef boost::shared_ptr<RaytracingRenderer> RaytracingRendererPtr;
@@ -936,7 +935,6 @@ namespace BALL
 				bool continuous_loop_;
 #endif
 				bool want_to_use_vertex_buffer_;
-				bool preview_;
 				bool use_preview_;
 
 				PreciseTime time_;
