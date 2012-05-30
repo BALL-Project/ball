@@ -1,9 +1,11 @@
 #ifndef BALL_VIEW_KERNEL_MODES_MODEMANAGER_H
 #define BALL_VIEW_KERNEL_MODES_MODEMANAGER_H
 
-#include <list>
+#ifndef BALL_VIEW_RENDERING_RENDERERS_RENDERER_H
+	#include <BALL/VIEW/RENDERING/RENDERERS/renderer.h>
+#endif
 
-#include <BALL/VIEW/RENDERING/RENDERERS/glRenderer.h>
+#include <list>
 
 #include <QtCore/QObject>
 
@@ -52,7 +54,7 @@ namespace BALL
 				void setMode_(InteractionMode* new_mode);
 
 			protected:
-				GLRenderer::StereoMode stereo_mode_;
+				Renderer::StereoMode stereo_mode_;
 				InteractionMode* current_mode_;
 				InteractionMode* last_mode_;
 				QActionGroup* actions_;

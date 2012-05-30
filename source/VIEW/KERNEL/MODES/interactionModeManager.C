@@ -14,7 +14,7 @@ namespace BALL
 	namespace VIEW
 	{
 		InteractionModeManager::InteractionModeManager(Scene* scene)
-			: stereo_mode_(GLRenderer::NO_STEREO),
+			: stereo_mode_(Renderer::NO_STEREO),
 			  current_mode_(0),
 			  last_mode_(0),
 			  scene_(scene)
@@ -89,14 +89,14 @@ namespace BALL
 		bool InteractionModeManager::handleStereoKeyPress_(QKeyEvent* evt)
 		{
 			// TODO make keys configurable in shortcutRegistry 
-			if ((stereo_mode_ == GLRenderer::NO_STEREO) &&
+			if ((stereo_mode_ == Renderer::NO_STEREO) &&
 					(evt->key() == Qt::Key_Escape))
 			{
 				setMode_(last_mode_);
 				return true;
 			}
 
-			if (stereo_mode_ == GLRenderer::NO_STEREO)
+			if (stereo_mode_ == Renderer::NO_STEREO)
 			{
 				evt->ignore();
 				return false;
