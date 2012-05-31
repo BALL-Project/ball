@@ -323,7 +323,7 @@ namespace BALL
 				}
 */
 				loop_mutex.lock();
-				QApplication::instance()->postEvent(scene_, new RenderToBufferFinishedEvent(this));
+				QApplication::instance()->postEvent(scene_, new RenderToBufferFinishedEvent(shared_from_this()));
 				wait_for_render.wait(&loop_mutex);
 				loop_mutex.unlock();
 				t.reset();

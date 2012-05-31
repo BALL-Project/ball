@@ -1681,7 +1681,7 @@ namespace BALL
 
 		void Scene::handleRenderToBufferFinishedEvent_(RenderToBufferFinishedEvent* evt)
 		{
-			RenderSetup* renderer = evt->getRenderer();
+			boost::shared_ptr<RenderSetup> renderer = evt->getRenderer();
 
 			if (renderer->isAboutToQuit())
 			{
@@ -1786,7 +1786,7 @@ namespace BALL
 
 				for (it = renderers_.begin(); it != renderers_.end(); ++it)
 				{
-					if (it->get() == renderer)
+					if (*it == renderer)
 					{
 						delete((*it)->renderer);
 						delete((*it)->target);

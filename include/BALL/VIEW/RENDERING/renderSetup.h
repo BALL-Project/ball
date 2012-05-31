@@ -24,6 +24,8 @@
 #include <QtCore/QThread>
 #include <QtCore/QWaitCondition>
 
+#include <boost/enable_shared_from_this.hpp>
+
 #include <deque>
 
 class QImage;
@@ -40,7 +42,7 @@ namespace BALL {
 		 * 	the renderers and targets directly to ensure thread safety.
 		 */
 		class BALL_VIEW_EXPORT RenderSetup
-			:	public QThread
+			:	public QThread, public boost::enable_shared_from_this<RenderSetup>
 		{
 			public:
 				RenderSetup(Renderer* r, RenderTarget* t, Scene* scene, const Stage* stage);
@@ -365,15 +367,15 @@ namespace BALL {
 			: public QEvent
 		{
 			public:
-				RenderToBufferFinishedEvent(RenderSetup* renderer)
+				RenderToBufferFinishedEvent(boost::shared_ptr<RenderSetup> renderer)
 					: QEvent(static_cast<QEvent::Type>(RENDER_TO_BUFFER_FINISHED_EVENT)),
 						renderer_(renderer)
 				{};
 
-				RenderSetup* getRenderer() { return renderer_; }
+				boost::shared_ptr<RenderSetup> getRenderer() { return renderer_; }
 
 			protected:
-				RenderSetup* renderer_;
+				boost::shared_ptr<RenderSetup> renderer_;
 		};
 
 	}
