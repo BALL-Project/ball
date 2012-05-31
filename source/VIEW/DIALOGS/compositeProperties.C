@@ -79,7 +79,7 @@ CompositeProperties::CompositeProperties(Composite* composite, QWidget* parent,
 	vector<String> elements;
 	Element element;
 
-	for (Position nr = 0; ; nr++) 
+	for (Position nr = 1; ; nr++) 
 	{
 		element = PTE.getElement(nr);
 		if (element == Element::UNKNOWN) break;
@@ -89,7 +89,7 @@ CompositeProperties::CompositeProperties(Composite* composite, QWidget* parent,
 
 	sort(elements.begin(), elements.end());
 
-	for (Position nr = 0; nr < elements.size(); nr++)
+	for (Position nr = 1; nr < elements.size(); nr++)
 	{
 		element_box->addItem(elements[nr].c_str());
 	}
