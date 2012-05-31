@@ -94,9 +94,13 @@ namespace BALL
 			 */
 			virtual bool specificShutdown_(BALLPlugin* plugin) = 0;
 
+			/**
+			 * The list of plugins this handler is responsible for. Plugins should only
+			 * be added/removed by using start/stopPlugin
+			 */
+			std::list<BALLPlugin*> running_plugins_;
 		private:
 			mutable QReadWriteLock mutex_;
-			std::list<BALLPlugin*> running_plugins_;
 	};
 }
 
