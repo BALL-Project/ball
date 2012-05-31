@@ -79,6 +79,10 @@ namespace BALL
 			gl_renderer_ = dynamic_cast<GLRenderer*>(renderer);
 		}
 
+		RenderSetup::~RenderSetup()
+		{
+		}
+
 		const RenderSetup& RenderSetup::operator = (const RenderSetup& rs)
 		{
 			if (&rs == this) return *this;
