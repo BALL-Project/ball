@@ -4,7 +4,6 @@
 
 #include <QtCore/QPluginLoader>
 #include <QtCore/QDir>
-#include <QtCore/QDebug>
 #include <QtCore/QReadLocker>
 #include <QtCore/QWriteLocker>
 #include <BALL/COMMON/logStream.h>
@@ -123,19 +122,27 @@ namespace BALL
 		BALLPlugin* plugin = 0;
 		QPluginLoader* loader = new QPluginLoader(plugin_name);
 
-		qDebug() << "Trying to load plugin: " << plugin_name;
+		Log.info() << "Trying to load plugin: " << plugin_name.toStdString() << std::endl;
 		if (loader->load())
 		{
 			plugin = qobject_cast<BALLPlugin*>(loader->instance());
 		}
 		else
 		{
-			qDebug() << "Error:" << loader->errorString();
+			Log.info() << "Error:" << loader->errorString().toStdString() << std::endl;
 		}
 
 		if (plugin)
 		{
-			qDebug() << "Loaded plugin " << plugin_name << ".";
+			QHash<QString, QPluginLoader*>::iterator it = loaders_.find(plugin->getName());
+
+			if(it != loaders_.end()) {
+				Log.info() << "Plugin was already loaded." << std::endl;
+				delete loader;
+				return qobject_cast<BALLPlugin*>(*it);
+			}
+
+			Log.info() << "Loaded plugin " << plugin_name.toStdString() << "." << std::endl;
 			loader_mutex_.lockForWrite();
 			loaders_.insert(plugin->getName(), loader);
 			loader_mutex_.unlock();
