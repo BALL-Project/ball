@@ -32,9 +32,8 @@ namespace BALL
 	namespace VIEW
 	{
 
-		Renderer::Renderer()
-			: Object(),
-				scene_(0),
+		Renderer::Renderer(const QString& name)
+			: scene_(0),
 				stage_(0),
 				width_(0),
 				height_(0),

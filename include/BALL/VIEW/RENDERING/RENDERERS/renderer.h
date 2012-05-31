@@ -52,7 +52,6 @@ namespace BALL
 				\ingroup ViewRendering
 		*/
 		class BALL_VIEW_EXPORT Renderer
-			:	public Object
 		{
 			public:
 
