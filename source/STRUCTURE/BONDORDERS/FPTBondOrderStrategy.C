@@ -322,7 +322,7 @@ namespace BALL
 			}
 		}
 
-		return *best;
+		return DPConstRow_(boost::reference_wrapper<DPConfig_ const>(best->first), best->second);
 	}
 
 	FPTBondOrderStrategy::Penalty FPTBondOrderStrategy::DPTable_::operator[](FPTBondOrderStrategy::DPConfig_ const& config) const
@@ -601,6 +601,9 @@ namespace BALL
 
 		return bonds;
 	}
+	
+#define	convertToCRow(tmp)\
+		std::make_pair(boost::reference_wrapper<const DPConfig_>((tmp).first), (tmp).second)
 
 	void FPTBondOrderStrategy::FPTBondOrderAssignment_::computeIntroduceBag(TreeDecompositionBag& bag, DPTable_& child,
 	                                                                        AdditionalBagProperties_& property)
@@ -621,7 +624,7 @@ namespace BALL
 		// copy with n new bondvalue-columns with different values
 		for (DPTable_::const_iterator iter = child.begin(); iter != child.end(); ++iter)
 		{
-			DPConstRow_ child_entry = *iter;
+			DPConstRow_ child_entry = convertToCRow(*iter);
 			DPConfig_ conf(num_valences, num_bonds);
 
 			Size vindex = 0;
@@ -786,7 +789,7 @@ namespace BALL
 
 		for (DPTable_::const_iterator entry_iterator = child.begin(); entry_iterator != child.end(); ++entry_iterator)
 		{
-			Penalty entry_penalty(forgetInnerVertexIn(bag, *entry_iterator, new_entry, child_property.bonds, forgotten_index));
+			Penalty entry_penalty(forgetInnerVertexIn(bag, convertToCRow(*entry_iterator), new_entry, child_property.bonds, forgotten_index));
 			if (entry_penalty < upper_bound_)
 			{
 				property.table->insert(new_entry, entry_penalty);
@@ -803,7 +806,7 @@ namespace BALL
 		Penalty min_penalty = FPTBondOrderStrategy::infinite_penalty;
 		for (DPTable_::const_iterator iter = child.begin(); iter != child.end(); ++iter)
 		{
-			min_penalty = std::min(min_penalty, forgetInnerVertexIn(bag, *iter, empty, empty_list, 0));
+			min_penalty = std::min(min_penalty, forgetInnerVertexIn(bag, convertToCRow(*iter), empty, empty_list, 0));
 
 			if (Maths::isEqual(0, min_penalty))
 			{
@@ -830,14 +833,14 @@ namespace BALL
 		// insert each entry of the left child into a DPJoinMap
 		for (DPTable_::const_iterator left_iter = left_child.begin(); left_iter != left_child.end(); ++left_iter)
 		{
-			DPConstRow_ left_entry = *left_iter;
+			DPConstRow_ left_entry = convertToCRow(*left_iter);
 			map.insert(std::pair<DPConfig_ const*, Penalty> (left_entry.first.get_pointer(), left_entry.second));
 		}
 
 		// find for each entry of the right child's table appropiate entries in the DPJoinMap (which have the same bondvalues)
 		for (DPTable_::const_iterator r_iter = right_child.begin(); r_iter != right_child.end(); ++r_iter)
 		{
-			DPConstRow_ right_entry = *r_iter;
+			DPConstRow_ right_entry = convertToCRow(*r_iter);
 			DPConfig_ const* right_conf = right_entry.first.get_pointer();
 
 			std::pair<DPJoinMap_::const_iterator, DPJoinMap_::const_iterator> matching_range(map.equal_range(right_conf));
@@ -1602,7 +1605,7 @@ namespace BALL
 		// insert possible antecessors in vectors
 		for (DPTable_::const_iterator iter = left_table.begin(); iter != left_table.end(); ++iter)
 		{
-			DPConstRow_ antecessor = *iter;
+			DPConstRow_ antecessor = convertToCRow(*iter);
 			if (comp.compare(&successor, antecessor.first.get_pointer()) == 0)
 			{
 				left_entries.push_back(iter);
@@ -1611,7 +1614,7 @@ namespace BALL
 
 		for (DPTable_::const_iterator iter = right_table.begin(); iter != right_table.end(); ++iter)
 		{
-			DPConstRow_ antecessor = *iter;
+			DPConstRow_ antecessor = convertToCRow(*iter);
 			if (comp.compare(&successor, antecessor.first.get_pointer()) == 0)
 			{
 				right_entries.push_back(iter);
@@ -1623,10 +1626,10 @@ namespace BALL
 
 		for (std::vector<DPTable_::const_iterator>::const_iterator left = left_entries.begin(); left != left_entries.end(); ++left)
 		{
-			DPConstRow_ left_entry = **left;
+			DPConstRow_ left_entry = convertToCRow(**left);
 			for (std::vector<DPTable_::const_iterator>::const_iterator right = right_entries.begin(); right != right_entries.end(); ++right)
 			{
-				DPConstRow_ right_entry = **right;
+				DPConstRow_ right_entry = convertToCRow(**right);
 
 				// check sum of valences
 				bool correct_valences = true;
@@ -1657,8 +1660,8 @@ namespace BALL
 
 		Penalty best_penalty = best.first->second + best.second->second;
 
-		DPConstRow_ left  = *best.first;
-		DPConstRow_ right = *best.second;
+		DPConstRow_ left  = convertToCRow(*best.first);
+		DPConstRow_ right = convertToCRow(*best.second);
 
 		extendState(state, left.first, 0);
 		++state.index;
@@ -1668,8 +1671,8 @@ namespace BALL
 		{
 			DPPairIt_ entry = *iter;
 
-			DPConstRow_ left  = *entry.first;
-			DPConstRow_ right = *entry.second;
+			DPConstRow_ left  = convertToCRow(*entry.first);
+			DPConstRow_ right = convertToCRow(*entry.second);
 
 			Penalty add_penalty = (left.second + right.second) - best_penalty;
 			if (isSolutionNeeded(state.assignment.penalty + add_penalty))
@@ -1720,7 +1723,7 @@ namespace BALL
 		// check for each row entry: is it a possible anteccessor?
 		for (DPTable_::iterator iter = table.begin(); iter != table.end(); ++iter)
 		{
-			Penalty pen  = bond_assignment_->forgetInnerVertexIn(bag, *iter, test_entry, child_bonds, forgotten_index);
+			Penalty pen  = bond_assignment_->forgetInnerVertexIn(bag, convertToCRow(*iter), test_entry, child_bonds, forgotten_index);
 
 			if (pen < FPTBondOrderStrategy::infinite_penalty && test_entry == successor)
 			{
