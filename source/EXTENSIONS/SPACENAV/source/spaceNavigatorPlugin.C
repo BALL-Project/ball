@@ -11,7 +11,7 @@ namespace BALL
 	{
 		SpaceNavigatorPlugin::SpaceNavigatorPlugin()
 			: receiver_(), 
-				icon_(":logo.png"),
+				icon_(":pluginSpaceNavigator.png"),
 				is_active_(false)
 		{
 		}

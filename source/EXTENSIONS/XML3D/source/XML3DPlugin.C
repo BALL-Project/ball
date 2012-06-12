@@ -21,7 +21,7 @@ namespace BALL
 	{
 		XML3DPlugin::XML3DPlugin()
 			: receiver_(), 
-			  icon_(":logo.png"), 
+			  icon_(":pluginXML3D.png"),
 				is_active_(false),
 				hostname_("localhost"),
 				port_("51967"),

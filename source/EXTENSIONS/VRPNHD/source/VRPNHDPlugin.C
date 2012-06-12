@@ -11,7 +11,7 @@ namespace BALL
 	namespace VIEW
 	{
 		VRPNHDPlugin::VRPNHDPlugin()
-			: receiver_(), icon_(":logo.png"), is_active_(false)
+			: receiver_(), icon_(":pluginVRPNHD.png"), is_active_(false)
 		{
 		}
 

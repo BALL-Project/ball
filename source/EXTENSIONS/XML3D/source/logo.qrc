@@ -1,5 +1,5 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
-    <file>logo.png</file>
+    <file alias="pluginXML3D.png">logo.png</file>
 </qresource>
 </RCC>
