@@ -5,6 +5,7 @@
 #include <BALL/COMMON/logStream.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/iconLoader.h>
 
 #include <BALL/VIEW/PLUGIN/inputDevPluginHandler.h>
 
@@ -112,6 +113,11 @@ namespace BALL
 
 			setObjectName(name);
 
+			IconLoader& icon_loader = IconLoader::instance();
+
+			plugin_dir_button_add->setIcon(icon_loader.getIcon("actions/list-add"));
+			plugin_dir_button_remove->setIcon(icon_loader.getIcon("actions/edit-delete"));
+
 			// register all visible childs
 			registerWidgets_();	
 			// register the PluginManager explicitly; it is not a QWidget
@@ -193,28 +199,17 @@ namespace BALL
 			}
 		}
 
-/*		void PluginDialog::close()
-		{
-			hide();
-		}
-
-		void PluginDialog::reject()
-		{
-			hide();
-		}
-*/
-		
 		void PluginDialog::pluginChanged(QModelIndex i)
 		{
 			active_index_ = i;
 			QObject* active_object = qvariant_cast<QObject*>(model_.data(i, Qt::UserRole));
 
-			BALLPlugin* active_plugin;
-			if (!(active_plugin = qobject_cast<BALLPlugin*>(active_object))) 
+			BALLPlugin* active_plugin = qobject_cast<BALLPlugin*>(active_object);
+			if (!active_plugin)
 			{
 				return;
 			}
-			
+
 			plugin_toggle_button->setEnabled(true);
 			if (active_plugin->isActive()) 
 			{
