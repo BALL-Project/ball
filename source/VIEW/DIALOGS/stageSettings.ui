@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>802</width>
-    <height>501</height>
+    <width>664</width>
+    <height>408</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <widget class="QStackedWidget" name="widget_stack">
      <property name="currentIndex">
-      <number>4</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="Main">
       <layout class="QHBoxLayout" name="horizontalLayout_7">
@@ -283,7 +283,7 @@
         </layout>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_10">
+        <layout class="QVBoxLayout" name="_6">
          <item>
           <widget class="QGroupBox" name="fog_box">
            <property name="toolTip">
@@ -897,299 +897,281 @@
       </layout>
      </widget>
      <widget class="QWidget" name="VRSettings">
-      <widget class="QWidget" name="">
-       <property name="geometry">
-        <rect>
-         <x>225</x>
-         <y>81</y>
-         <width>315</width>
-         <height>191</height>
-        </rect>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_4">
-        <item>
-         <widget class="QGroupBox" name="groupBox_2">
-          <property name="title">
-           <string>Viewer Position</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_4">
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_4">
-             <property name="text">
-              <string>eye level: </string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLineEdit" name="eye_level_lineEdit">
-             <property name="text">
-              <string>180</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight</set>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QLabel" name="label_5">
-             <property name="text">
-              <string>cm</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_3">
-             <property name="text">
-              <string>eye distance: </string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QLineEdit" name="eye_distance_lineEdit">
-             <property name="text">
-              <string>6</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight</set>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2">
-            <widget class="QLabel" name="label_6">
-             <property name="text">
-              <string>cm</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_2">
-             <property name="text">
-              <string>distance to screen: </string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QLineEdit" name="screen_distance_lineEdit">
-             <property name="text">
-              <string>150</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight</set>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="2">
-            <widget class="QLabel" name="label_7">
-             <property name="text">
-              <string>cm</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <spacer name="verticalSpacer_4">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <layout class="QHBoxLayout">
-          <property name="spacing">
-           <number>6</number>
-          </property>
-          <property name="margin">
-           <number>0</number>
-          </property>
-          <item>
-           <spacer>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>141</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QPushButton" name="computeDefault_button">
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>Viewer Position</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_4">
             <property name="text">
-             <string>compute default</string>
+             <string>Eye level: </string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="eye_level_lineEdit">
+            <property name="text">
+             <string>180</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>cm</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>Eye distance: </string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="eye_distance_lineEdit">
+            <property name="text">
+             <string>6</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>cm</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Distance to screen: </string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="screen_distance_lineEdit">
+            <property name="text">
+             <string>150</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>cm</string>
             </property>
            </widget>
           </item>
          </layout>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="">
-       <layout class="QVBoxLayout" name="verticalLayout_5">
-        <item>
-         <widget class="QGroupBox" name="groupBox1_2_2">
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="title">
-           <string>Eye points distance</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignHCenter</set>
-          </property>
-          <layout class="QGridLayout">
-           <property name="margin">
-            <number>9</number>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="derived_values_box_">
+         <property name="title">
+          <string>Update Automatically</string>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_9">
+          <item row="3" column="2">
+           <widget class="QLabel" name="TextLabel1_2_2_2">
+            <property name="text">
+             <string>max</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="TextLabel1_3_2_2">
+            <property name="text">
+             <string>min</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_11">
+            <property name="text">
+             <string>Focal distance</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3">
+           <widget class="QLabel" name="eye_distance_label">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>600.0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLabel" name="focal_distance_label">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>600.0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" colspan="2">
+           <widget class="QSlider" name="focal_distance_slider">
+            <property name="minimum">
+             <number>15</number>
+            </property>
+            <property name="maximum">
+             <number>6000</number>
+            </property>
+            <property name="singleStep">
+             <number>5</number>
+            </property>
+            <property name="pageStep">
+             <number>5</number>
+            </property>
+            <property name="value">
+             <number>333</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="tickInterval">
+             <number>5</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="TextLabel1_2_2_2_2">
+            <property name="text">
+             <string>max</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLabel" name="TextLabel1_3_2">
+            <property name="text">
+             <string>min</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1" colspan="2">
+           <widget class="QSlider" name="eye_distance_slider">
+            <property name="toolTip">
+             <string>The greater the eye point distance is the greater is the stereo effect.</string>
+            </property>
+            <property name="maximum">
+             <number>40</number>
+            </property>
+            <property name="singleStep">
+             <number>5</number>
+            </property>
+            <property name="pageStep">
+             <number>5</number>
+            </property>
+            <property name="value">
+             <number>20</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="tickInterval">
+             <number>5</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_12">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Eye points distance</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_11">
+         <item>
+          <widget class="QCheckBox" name="swap_sss_button">
+           <property name="text">
+            <string>Swap side by side stereo</string>
            </property>
-           <property name="spacing">
-            <number>6</number>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
            </property>
-           <item row="0" column="0" colspan="2">
-            <widget class="QSlider" name="eye_distance_slider">
-             <property name="toolTip">
-              <string>The greater the eye point distance is the greater is the stereo effect.</string>
-             </property>
-             <property name="maximum">
-              <number>40</number>
-             </property>
-             <property name="singleStep">
-              <number>5</number>
-             </property>
-             <property name="pageStep">
-              <number>5</number>
-             </property>
-             <property name="value">
-              <number>20</number>
-             </property>
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="tickInterval">
-              <number>5</number>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QLabel" name="eye_distance_label">
-             <property name="text">
-              <string>99.9</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QLabel" name="TextLabel1_2_2_2">
-             <property name="text">
-              <string>max</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="TextLabel1_3_2">
-             <property name="text">
-              <string>min</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="groupBox1_2_2_2">
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="title">
-           <string>Focal distance</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignHCenter</set>
-          </property>
-          <layout class="QGridLayout">
-           <property name="margin">
-            <number>9</number>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
            </property>
-           <property name="spacing">
-            <number>6</number>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="computeDefault_button">
+           <property name="text">
+            <string>Compute from Scene</string>
            </property>
-           <item row="1" column="1">
-            <widget class="QLabel" name="TextLabel1_2_2_2_2">
-             <property name="text">
-              <string>max</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QLabel" name="focal_distance_label">
-             <property name="text">
-              <string>99.9</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0" colspan="2">
-            <widget class="QSlider" name="focal_distance_slider">
-             <property name="minimum">
-              <number>15</number>
-             </property>
-             <property name="maximum">
-              <number>6000</number>
-             </property>
-             <property name="singleStep">
-              <number>5</number>
-             </property>
-             <property name="pageStep">
-              <number>5</number>
-             </property>
-             <property name="value">
-              <number>333</number>
-             </property>
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="tickInterval">
-              <number>5</number>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="TextLabel1_3_2_2">
-             <property name="text">
-              <string>min</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="swap_sss_button">
-          <property name="text">
-           <string>Swap side by side stereo</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
      </widget>
      <widget class="QWidget" name="DisplaySettings">
       <layout class="QVBoxLayout" name="dpy_layout">
@@ -2057,8 +2039,6 @@
   <tabstop>slider_</tabstop>
   <tabstop>wheel_slider_</tabstop>
   <tabstop>eye_distance_slider</tabstop>
-  <tabstop>focal_distance_slider</tabstop>
-  <tabstop>swap_sss_button</tabstop>
   <tabstop>extensions_list</tabstop>
   <tabstop>use_vertex_buffers</tabstop>
  </tabstops>
