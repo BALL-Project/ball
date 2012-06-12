@@ -25,7 +25,8 @@ namespace BALL
 				is_active_(false),
 				hostname_("localhost"),
 				port_("51967"),
-				sensitivity_(500)
+				sensitivity_(500),
+				settings_(0)
 		{
 		}
 
@@ -51,13 +52,14 @@ namespace BALL
 
 		QDialog* XML3DPlugin::getConfigDialog()
 		{
-			XML3DSettings *settings = new XML3DSettings(this, receiver_);
+			if(!settings_) {
+				settings_ = new XML3DSettings(this, receiver_);
+				settings_->setHostName(hostname_);
+				settings_->setPort(port_);
+				settings_->setSensitivity(sensitivity_);
+			}
 
-			settings->setHostName(hostname_);
-			settings->setPort(port_);
-			settings->setSensitivity(sensitivity_);
-
-			return static_cast<QDialog*>(settings);
+			return settings_;
 		}
 
 		InputDeviceDriver* XML3DPlugin::startDriver()

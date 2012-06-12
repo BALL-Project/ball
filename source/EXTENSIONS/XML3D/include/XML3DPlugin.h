@@ -13,6 +13,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
+		class XML3DSettings;
 
 		class XML3DPlugin 
 			: public QObject, 
@@ -61,6 +62,7 @@ namespace BALL
 				String hostname_;
 				String port_;
 				Size sensitivity_;
+				XML3DSettings* settings_;
 		};
 	}
 }
