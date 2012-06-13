@@ -201,6 +201,8 @@ namespace BALL
 
 		void PluginDialog::pluginChanged(QModelIndex i)
 		{
+			//Cleanup the old config dialog
+			settings_button->disconnect();
 			active_index_ = i;
 			QObject* active_object = qvariant_cast<QObject*>(model_.data(i, Qt::UserRole));
 
