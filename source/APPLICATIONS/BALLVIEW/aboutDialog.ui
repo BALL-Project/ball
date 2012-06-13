@@ -569,16 +569,6 @@
     </widget>
    </item>
    <item>
-    <widget class="QLineEdit" name="lineEdit">
-     <property name="styleSheet">
-      <string notr="true">font: 11pt &quot;Sans Serif&quot;;</string>
-     </property>
-     <property name="text">
-      <string>    MS Wissenschaft 2011</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <spacer name="verticalSpacer">
      <property name="toolTip">
       <string notr="true">Vertical Spacer 'verticalSpacer', 20 x 40</string>
