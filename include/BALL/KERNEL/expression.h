@@ -18,21 +18,64 @@ namespace BALL
 	class Atom;
 	class ExpressionTree;
 
-	/** Expression class. 
-			This class provides a frontend to ExpressionTree.	 \par
-			Expressions may be built from the following modules:  \par
-			AND & a conjunction  \par
-			OR & a disjunction  \par
-			predicate(argument) & a predicate class that is derived from
-			\Ref{ExpressionPredicate) and provides <tt>operator () (const Atom& atom) const</tt>.  \par
-			 \par
-			Additionally brackets can be used for grouping. At least one bracket
-			pair must exist which encloses the argument of a predicate. Empty arguments are allowed.
-			
-			@see ExpressionTree
-
-    	\ingroup  Predicates
-	*/
+	/**
+	 * The class \ref Expression provides a frontend to \ref ExpressionTree.
+	 * \par
+	 * Expressions may be built from the following modules:
+	 * <ul>
+	 *   <li><tt>AND</tt> a conjunction
+	 *   <li><tt>OR</tt>  a disjunction
+	 *   <li><tt>!</tt>   a negation
+	 *   <li><tt>predicate(argument) </tt> a predicate class that is derived from
+	 *       \ref ExpressionPredicate and provides <tt>operator()(const \ref Atom& atom) const</tt>.
+	 * </ul>
+	 * Additionally brackets can be used for grouping. At least one bracket
+	 * pair must exist which encloses the argument of a predicate.
+	 * Empty arguments are allowed.
+	 * \par
+	 * <b>Example:</b>
+	 * \code
+	 * !residueID(12) AND (element(N) OR element(C))
+	 * \endcode
+	 * \par
+	 * BALL offers various predefined ExpressionPredicates. These are:
+	 * \par
+	 * <table>
+	 *   <tr><th>Syntax</th><th>Description</th></tr>
+	 *   <tr><td><b> true()                  </b></td><td> always true </td></tr>
+	 *   <tr><td><b> false()                 </b></td><td> always false </td></tr>
+	 *   <tr><td><b> SMARTS(string)          </b></td><td> use a <a href="http://www.daylight.com/dayhtml/doc/theory/theory.smarts.html">SMARTS</a> expression </td></tr>
+	 *   <tr><td><b> selected()              </b></td><td> true for already selected atoms </td></tr>
+	 *   <tr><td><b> name(string)            </b></td><td> the name of an atom </td></tr>
+	 *   <tr><td><b> type(string)            </b></td><td> type name of an atom </td></tr>
+	 *   <tr><td><b> element(char)           </b></td><td> element (abbreviated by its symbol) </td></tr>
+	 *   <tr><td><b> residue(string)         </b></td><td> name of a residue </td></tr>
+	 *   <tr><td><b> residueID(string)       </b></td><td> PDB ID of the residue (usually a number) </td></tr>
+	 *   <tr><td><b> protein(string)         </b></td><td> name of protein, the atom is contained in </td></tr>
+	 *   <tr><td><b> secondaryStruct(string) </b></td><td> name of the secondary structure, the atom is contained in </td></tr>
+	 *   <tr><td><b> chain(string)           </b></td><td> name of the chain, the atom is contained in </td></tr>
+	 *   <tr><td><b> nucleotide(string)      </b></td><td> name of the nucleotide the atom is contained in</td></tr>
+	 *   <tr><td><b> solvent()               </b></td><td> the atom is a solvent atom added by BALL </td></tr>
+	 *   <tr><td><b> backbone()              </b></td><td> backbone atoms </td></tr>
+	 *   <tr><td><b> inRing()                </b></td><td> part of a ring</td></tr>
+	 *   <tr><td><b> doubleBonds()           </b></td><td> atoms with double bonds </td></tr>
+	 *   <tr><td><b> tripleBonds()           </b></td><td> atoms with triple bonds </td></tr>
+	 *   <tr><td><b> numberOfBonds(int)      </b></td><td> atoms with a given number of bonds </td></tr>
+	 *   <tr><td><b> aromaticBonds()         </b></td><td> atoms with aromatic bonds </td></tr>
+	 *   <tr><td><b> connectedTo(char)       </b></td><td> atoms which are connected to an atom (see \ref ConnectedToPredicate)</td></tr>
+	 *   <tr><td><b> charge([op][number])    </b></td><td> select by charge, Possible operators are '&lt;'&nbsp; '&lt;='&nbsp; '='&nbsp; '&gt;='&nbsp; '&gt;'  </td></tr>
+	 *   <tr><td><b> spHybridized()          </b></td><td> &nbsp; </td></tr>
+	 *   <tr><td><b> sp2Hybridized()         </b></td><td> &nbsp; </td></tr>
+	 *   <tr><td><b> sp3Hybridized()         </b></td><td> &nbsp; </td></tr>
+	 *   <tr><td><b> charge(float)           </b></td><td> atoms with given charge </td></tr>
+	 *   <tr><td><b> isAxial()               </b></td><td> &nbsp; </td></tr>
+	 *   <tr><td><b> is4C1()                 </b></td><td> &nbsp; </td></tr>
+	 * </table>
+	 * \par
+	 * \see ExpressionTree
+	 *
+   * \ingroup  Predicates
+	 */
 	class BALL_EXPORT Expression
 	{
 		public:

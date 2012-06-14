@@ -16,9 +16,17 @@ namespace BALL
 {
 	class Atom;
 
-	/**	Atom Selection from BALL Expression.
-    	\ingroup  Predicates
-	*/
+	/**
+	 * Atom Selection from BALL \ref Expression.
+	 * \par
+	 * This class takes a string that represents an \ref Expression. It can then be applied to a \ref Composite
+	 * and will select all atoms matching the \ref Expression. Refer to the documentation of \ref Expression for a
+	 * list of available predicates.
+	 *
+	 * \see Expression
+	 *
+	 * \ingroup  Predicates
+	 */
 	class BALL_EXPORT Selector
 		:	public UnaryProcessor<Composite>
 	{
