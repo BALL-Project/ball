@@ -637,14 +637,8 @@ namespace BALL
 		ok &= parseColumnFormat("%d", 36, 3, (void*)&atom.charge);
 
 		atom.parity = 0;
-		ok &= parseColumnFormat("%d", 39, 3, (void*)&atom.parity);
-
 		atom.hydrogen_count = 0;
-		ok &= parseColumnFormat("%d", 42, 3, (void*)&atom.hydrogen_count);
-
 		atom.stereo_care_box = 0;
-		ok &= parseColumnFormat("%d", 45, 3, (void*)&atom.stereo_care_box);
-
 		atom.valence = 0;
 		atom.reaction_component_type = 0;
 		atom.reaction_component_number = 0;
@@ -652,7 +646,11 @@ namespace BALL
 		atom.number = 0;
 		atom.inversion_retention = 0;
 		atom.exact_change = 0;
+		
 		Size len = getLine().size();
+		if (len >= 42) ok &= parseColumnFormat("%d", 39, 3, (void*)&atom.parity);
+		if (len >= 45) ok &= parseColumnFormat("%d", 42, 3, (void*)&atom.hydrogen_count);
+		if (len >= 48) ok &= parseColumnFormat("%d", 45, 3, (void*)&atom.stereo_care_box);
 		if (len >= 51) parseColumnFormat("%d", 48, 3, (void*)&atom.valence);
 		if (len >= 54) parseColumnFormat("%d", 51, 3, (void*)&atom.H0_designator);
 		if (len >= 57) parseColumnFormat("%d", 54, 3, (void*)&atom.reaction_component_type);
@@ -708,10 +706,11 @@ namespace BALL
 		ok &= parseColumnFormat("%3d", 9, 3, (void*)&bond.stereo);
 
 		bond.topology = 0;
-		ok &= parseColumnFormat("%3d", 15, 3, (void*)&bond.topology);
-
 		bond.reacting_center_status = 0;
-		ok &= parseColumnFormat("%3d", 15, 3, (void*)&bond.reacting_center_status);
+		
+		Size len = getLine().size();
+		if (len >= 18) ok &= parseColumnFormat("%3d", 15, 3, (void*)&bond.topology);
+		if (len >= 21) ok &= parseColumnFormat("%3d", 18, 3, (void*)&bond.reacting_center_status);
 
 		return ok;
 	}
