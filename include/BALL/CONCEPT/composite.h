@@ -44,6 +44,8 @@
 ///
 namespace BALL 
 {
+	class Atom;
+
 	/**	Composite Class.
 			This class implements a variant of the composite design pattern. A
 			Composite may contain an arbitrary number of other composites, thus
@@ -1546,12 +1548,18 @@ B		*/
 		bool applyPreorderNostart_(UnaryProcessor<T>& processor);
 
 		// \throws Exception::GeneralException
+		bool applyPreorderNostart_(UnaryProcessor<Atom>& processor);
+
+		// \throws Exception::GeneralException
 		template <typename T>
 		bool applyPreorderNostart_(ConstUnaryProcessor<T>& processor) const;
 
 		// \throws Exception::GeneralException
 		template <typename T>
 		bool applyDescendantPreorderNostart_(UnaryProcessor<T>& processor);
+
+		// \throws Exception::GeneralException
+		bool applyDescendantPreorderNostart_(UnaryProcessor<Atom>& processor);
 
 		// \throws Exception::GeneralException
 		template <typename T>

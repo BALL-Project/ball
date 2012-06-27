@@ -9,6 +9,8 @@
 #include <BALL/DATATYPE/listSort.mac>
 #include <BALL/KERNEL/predicate.h>
 
+#include <BALL/KERNEL/atom.h>
+
 using namespace std;
 
 namespace BALL 
@@ -1699,6 +1701,57 @@ namespace BALL
 	bool Composite::operator != (const Composite& composite) const
 	{
 		return !(*this == composite);
+	}
+
+	bool Composite::applyDescendantPreorderNostart_(UnaryProcessor<Atom>& processor)
+	{
+		Processor::Result result;
+
+		for (Composite* composite = first_child_;
+				 composite != 0; composite = composite->next_)
+		{
+			if (composite->isAtom())
+			{
+				result = processor(*static_cast<Atom*>(composite));
+
+				if (result <= Processor::BREAK)
+				{
+					return (result == Processor::BREAK);
+				}
+			}
+
+			if (composite->first_child_ != 0  && composite->applyDescendantPreorderNostart_(processor) == false)
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	bool Composite::applyPreorderNostart_(UnaryProcessor<Atom>& processor)
+	{
+		Processor::Result result;
+		bool return_value;
+		if (isAtom())
+		{
+			result = processor(*static_cast<Atom*>(this));
+
+			if (result <= Processor::BREAK)
+			{
+				return_value = (result == Processor::BREAK);
+			}
+			else
+			{
+				return_value =  applyDescendantPreorderNostart_(processor);
+			}
+		}
+		else
+		{
+			return_value =  applyDescendantPreorderNostart_(processor);
+		}
+
+		return return_value;
 	}
 
 
