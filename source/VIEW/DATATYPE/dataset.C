@@ -270,6 +270,9 @@ namespace BALL
  			QTreeWidgetItem* item = dataset_to_item_[set];
 			dataset_to_item_.erase(set);
 			item_to_dataset_.erase(item);
+
+			getMainControl()->sendMessage(*(new DatasetMessage(set, DatasetMessage::REMOVE)));
+
 			delete item;
 			deleteDataset_(set);
 
