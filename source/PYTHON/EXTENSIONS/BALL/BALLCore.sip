@@ -273,6 +273,7 @@
 
 // STRUCTURE
 // %Include analyticalSES.sip
+%Include addHydrogenProcessor.sip
 %Include assignBondOrderProcessor.sip
 %Include atomBijection.sip
 %Include connectedComponentsProcessor.sip
