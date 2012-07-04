@@ -23,7 +23,7 @@ namespace BALL
 {
 
 	AddHydrogenProcessor::AddHydrogenProcessor()
-		: last_atom_(0)
+		: atom_nr_(0), last_atom_(0), nr_hydrogens_(0)
 	{
 	}
 
@@ -409,7 +409,7 @@ namespace BALL
 	}
 
 
-	bool AddHydrogenProcessor::normalize_(Vector3& v)
+	bool AddHydrogenProcessor::normalize_(Vector3& v) const
 	{
 		float l = v.getLength();
 		if (Maths::isZero(l)) 
@@ -422,7 +422,7 @@ namespace BALL
 	}
 
 
-	Vector3 AddHydrogenProcessor::getNormal_(const Vector3& v)
+	Vector3 AddHydrogenProcessor::getNormal_(const Vector3& v) const
 	{
 		Vector3 n = v % Vector3(1,0,0);
 		if (!normalize_(n))
@@ -438,15 +438,15 @@ namespace BALL
 	}
 
 
-	bool AddHydrogenProcessor::isRingAtom_(Atom& atom)
+	bool AddHydrogenProcessor::isRingAtom_(const Atom& atom) const
 	{
 		return (ring_atoms_.has(&atom));
 	}
 
 
-	bool AddHydrogenProcessor::hasMultipleBond_(Atom& atom)
+	bool AddHydrogenProcessor::hasMultipleBond_(const Atom& atom) const
 	{
-		AtomBondIterator bit = atom.beginBond();
+		AtomBondConstIterator bit = atom.beginBond();
 		for (; +bit; ++bit)
 		{
 			if (bit->getOrder() != Bond::ORDER__SINGLE)
@@ -459,7 +459,7 @@ namespace BALL
 	}
 
 
-	vector<Atom*> AddHydrogenProcessor::getPartners_(Atom& atom)
+	vector<Atom*> AddHydrogenProcessor::getPartners_(Atom& atom) const
 	{
 		vector<Atom*> partners;
 		AtomBondIterator bit = atom.beginBond();
@@ -495,7 +495,7 @@ namespace BALL
 	}
 
 
-	Size AddHydrogenProcessor::getConnectivity(Atom& atom)
+	Size AddHydrogenProcessor::getConnectivity(const Atom& atom) const
 	{
 		const Element& element = atom.getElement();
 		Size group = element.getGroup();
@@ -518,8 +518,8 @@ namespace BALL
 
 		if (electrons < 0) 
 		{
-			Log.error() << "Could not calculate number of electrons for " 
-									<< atom.getFullName(Atom::ADD_RESIDUE_ID) << std::endl;
+			Log.error() << "Could not calculate number of electrons for "
+			            << atom.getFullName(Atom::ADD_RESIDUE_ID) << std::endl;
 			return 0;
 		}
 
@@ -561,10 +561,10 @@ namespace BALL
 		return Processor::CONTINUE;
 	}
 
-	Size AddHydrogenProcessor::countBondOrders(Atom& atom)
+	Size AddHydrogenProcessor::countBondOrders(const Atom& atom) const
 	{
 		float nr = 0;
-		AtomBondIterator bit = atom.beginBond();
+		AtomBondConstIterator bit = atom.beginBond();
 		for (; +bit; ++bit)
 		{
 			if (bit->isAromatic())
@@ -599,7 +599,7 @@ namespace BALL
 
 	// Calculate the reference bond length value using a modified Schomaker-Stevenson rule
 	// (taken from MMFF94 force field)
-	float AddHydrogenProcessor::getBondLength_(Position element)
+	float AddHydrogenProcessor::getBondLength_(Position element) const
 	{
 		// currently only supports atoms up to Xenon
 		if (element > 53 || element == 0) return 1;
