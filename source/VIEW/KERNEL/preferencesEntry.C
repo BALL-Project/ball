@@ -7,6 +7,7 @@
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
+#include <BALL/VIEW/WIDGETS/colorButton.h>
 
 #include <QtGui/QSlider>
 #include <QtGui/QSpinBox>
@@ -86,7 +87,8 @@ namespace BALL
 					RTTI::isKindOf<QLineEdit>(widget) ||
 					RTTI::isKindOf<QCheckBox>(widget) ||
 					RTTI::isKindOf<QComboBox>(widget) ||
-					RTTI::isKindOf<QButtonGroup>(widget))
+					RTTI::isKindOf<QButtonGroup>(widget) ||
+					RTTI::isKindOf<ColorButton>(widget))
 			{
 				return true;
 			}
@@ -246,6 +248,11 @@ namespace BALL
 										<< " in PreferencesEntry without QRadioButton" << std::endl;
 				return false;
 			}
+			else if (RTTI::isKindOf<ColorButton>(*widget))
+			{
+				const ColorButton* button = static_cast<const ColorButton*>(widget);
+				value = String(button->getColor().name());
+			}
 			else
 			{
 				Log.error() << "Unknown Preferences object " << ascii(widget->objectName()) << std::endl;
@@ -346,6 +353,11 @@ namespace BALL
 												<< " in GroupBox in PreferencesEntry" << std::endl;
 						return false;
 					}
+				}
+				else if(RTTI::isKindOf<ColorButton>(*widget))
+				{
+					ColorButton* button = static_cast<ColorButton*>(widget);
+					button->setColor(QColor(value.c_str()));
 				}
 				else
 				{
