@@ -107,9 +107,6 @@ namespace BALL
 
 			public slots:
 
-			/// Show a QColorDialog to select a new background color for the Scene
-			void colorPressed();
-			
 			///
 			void computeDefaultPressed();
 
@@ -121,9 +118,6 @@ namespace BALL
 			
 			///
 			void fogBoxChanged(bool active);
-
-			///
-			void cappingColorPressed();
 
 			///
 			void screenCountChanged(int number);

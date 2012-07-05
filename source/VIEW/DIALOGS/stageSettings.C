@@ -82,9 +82,7 @@ namespace BALL
 			stereoModeChanged();
 // END TODO
 			// signals and slots connections
-			connect( color_button, SIGNAL( clicked() ), this, SLOT( colorPressed() ) );
 			connect( computeDefault_button, SIGNAL( clicked() ), this, SLOT( computeDefaultPressed() ) );
-			connect( capping_color_button, SIGNAL( clicked() ), this, SLOT( cappingColorPressed() ) );
 			connect( eye_distance_slider, SIGNAL( valueChanged(int) ), this, SLOT( eyeDistanceChanged() ) );
 			connect( focal_distance_slider, SIGNAL( valueChanged(int) ), this, SLOT( focalDistanceChanged() ) );
 			connect( radioButton_perspectiveProjection, SIGNAL( clicked() ), this, SLOT( projectionTransformationChanged() ) );
@@ -122,11 +120,6 @@ namespace BALL
 			return true;
 		}
 
-		void StageSettings::colorPressed()
-		{
-			chooseColor(color_sample);
-		}
-	
 		void StageSettings::computeDefaultPressed()
 		{
 			// try to compute sensible stereo settings
@@ -210,15 +203,10 @@ namespace BALL
 			}
 		}
 
-		void StageSettings::cappingColorPressed()
-		{
-			chooseColor(capping_color);
-		}
-
 		void StageSettings::updateFromStage()
 		{
 			if (stage_ == 0) return;
-			setColor(color_sample, stage_->getBackgroundColor());
+			color_button->setColor(stage_->getBackgroundColor());
 
 			slider_->setValue((int) Scene::getMouseSensitivity() - 1);
 			wheel_slider_->setValue((int) Scene::getMouseWheelSensitivity() - 1);
@@ -234,7 +222,7 @@ namespace BALL
 			//setTextureUpDirection_(stage->getTextureUpDirection());
 				
 			ColorRGBA color = ClippingPlane::getCappingColor();
-			setColor(capping_color, color);
+			capping_color_button->setColor(color);
 			capping_transparency->setValue(255 - (int)color.getAlpha());
 
 			eyeDistanceChanged();
@@ -249,7 +237,7 @@ namespace BALL
 		void StageSettings::apply()
 		{
 			if (stage_ == 0) return;
-			stage_->setBackgroundColor(getColor(color_sample));
+			stage_->setBackgroundColor(color_button->getColor());
 
 			Scene::setMouseSensitivity(slider_->value() + 1);
 			Scene::setMouseWheelSensitivity(wheel_slider_->value() + 1);
@@ -286,7 +274,7 @@ namespace BALL
 			scene_->setOffScreenRendering(offscreen_group->isChecked(), resolution_factor->value());
 
 			ColorRGBA color;
-			color = getColor(capping_color);
+			color = capping_color_button->getColor();
 			color.setAlpha(255 - capping_transparency->value());
 			ClippingPlane::getCappingColor() = color;
 
@@ -374,7 +362,7 @@ namespace BALL
 		
 		void StageSettings::setDefaultValues_()
 		{
-			setColor(color_sample, ColorRGBA(0,0,0));
+			color_button->setColor(QColor(0,0,0));
 			animation_smoothness->setValue(25);
 			show_lights_->setChecked(false);
 			smooth_lines_->setChecked(false);

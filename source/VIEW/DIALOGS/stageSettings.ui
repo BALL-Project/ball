@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <widget class="QStackedWidget" name="widget_stack">
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="Main">
       <layout class="QHBoxLayout" name="horizontalLayout_7">
@@ -36,41 +36,7 @@
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
-             <widget class="QLabel" name="color_sample">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>150</width>
-                <height>25</height>
-               </size>
-              </property>
-              <property name="frameShape">
-               <enum>QFrame::Panel</enum>
-              </property>
-              <property name="frameShadow">
-               <enum>QFrame::Sunken</enum>
-              </property>
-              <property name="lineWidth">
-               <number>1</number>
-              </property>
-              <property name="midLineWidth">
-               <number>0</number>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-              <property name="margin">
-               <number>0</number>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="color_button">
+             <widget class="BALL::VIEW::ColorButton" name="color_button">
               <property name="text">
                <string>Edit</string>
               </property>
@@ -144,62 +110,44 @@
            <property name="alignment">
             <set>Qt::AlignHCenter</set>
            </property>
-           <layout class="QGridLayout">
-            <property name="margin">
-             <number>9</number>
-            </property>
-            <property name="spacing">
-             <number>6</number>
-            </property>
-            <item row="1" column="1">
-             <widget class="QSpinBox" name="capping_transparency">
-              <property name="maximum">
-               <number>255</number>
+           <layout class="QFormLayout" name="formLayout">
+            <item row="0" column="1">
+             <widget class="BALL::VIEW::ColorButton" name="capping_color_button">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Edit</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="0">
+            <item row="3" column="0">
              <widget class="QLabel" name="label">
               <property name="text">
                <string>Transparency</string>
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
-             <widget class="QPushButton" name="capping_color_button">
-              <property name="text">
-               <string>Edit</string>
+            <item row="3" column="1">
+             <widget class="QSpinBox" name="capping_transparency">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximum">
+               <number>255</number>
               </property>
              </widget>
             </item>
             <item row="0" column="0">
-             <widget class="QLabel" name="capping_color">
-              <property name="minimumSize">
-               <size>
-                <width>150</width>
-                <height>25</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>Color for Caping planes</string>
-              </property>
-              <property name="frameShape">
-               <enum>QFrame::Panel</enum>
-              </property>
-              <property name="frameShadow">
-               <enum>QFrame::Sunken</enum>
-              </property>
-              <property name="lineWidth">
-               <number>1</number>
-              </property>
-              <property name="midLineWidth">
-               <number>0</number>
-              </property>
+             <widget class="QLabel" name="label_13">
               <property name="text">
-               <string/>
-              </property>
-              <property name="margin">
-               <number>0</number>
+               <string>Color</string>
               </property>
              </widget>
             </item>
@@ -2029,6 +1977,13 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>BALL::VIEW::ColorButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">BALL/VIEW/WIDGETS/colorButton.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>color_button</tabstop>
   <tabstop>capping_color_button</tabstop>
