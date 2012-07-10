@@ -287,6 +287,7 @@ SET(BALL_ENERGY_TESTS
 )
 
 SET(BALL_STRUCTURE_TESTS
+	AddHydrogenProcessor_test
 	AnalyticalSES_test
 	AssignBondOrderProcessor_test
 	AtomBijection_test
