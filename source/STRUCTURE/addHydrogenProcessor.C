@@ -526,15 +526,22 @@ namespace BALL
 		return (Size) (electrons);
 	}
 
-	Processor::Result AddHydrogenProcessor::placePeptideBondH_(Residue* res) const
+	Processor::Result AddHydrogenProcessor::placePeptideBondH_(Residue* res)
 	{
 		const float BOND_LENGTH_N_H = 1.020f;
 
 		if(res->isAminoAcid() && !res->isNTerminal())
 		{
+			const Residue* prev = res->getPrevious(RTTI::getDefault<Residue>());
+
+			if(!prev)
+			{
+				return Processor::CONTINUE;
+			}
+
 			Atom* natom = res->getAtom("N");
-			const Atom* oatom = res->getAtom("O");
-			const Atom* catom = res->getAtom("C");
+			const Atom* oatom = prev->getAtom("O");
+			const Atom* catom = prev->getAtom("C");
 
 			if(!natom || !oatom || !catom || natom->countBonds() >= 3)
 			{
@@ -555,7 +562,11 @@ namespace BALL
 			hatom->setName("H");
 			hatom->setElement(PTE[1]);
 			hatom->setPosition(natom->getPosition() - (OC * BOND_LENGTH_N_H) / length);
-			natom->createBond(*hatom);
+			natom->createBond(*hatom)->setOrder(Bond::ORDER__SINGLE);
+
+			res->appendChild(*hatom);
+
+			++nr_hydrogens_;
 		}
 
 		return Processor::CONTINUE;

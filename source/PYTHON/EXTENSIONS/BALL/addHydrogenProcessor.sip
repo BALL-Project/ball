@@ -16,7 +16,7 @@ class AddHydrogenProcessor : CompositeProcessor
 		Size getNumberOfAddedHydrogens() const;
 
 	protected:
-		Processor::Result placePeptideBondH_(Residue* res) const;
+		Processor::Result placePeptideBondH_(Residue* res);
 
 		Size countBondOrders(const Atom& atom) const;
 		void addHydrogen_(Atom& atom, Vector3 position);

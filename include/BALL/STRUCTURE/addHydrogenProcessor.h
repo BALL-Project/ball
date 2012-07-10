@@ -123,7 +123,7 @@ namespace BALL
 			 * \param res A pointer to a \ref Residue for which a peptide bond hydrogen should be placed
 			 * \returns Processor::CONTINUE in all cases.
 			 */
-			Processor::Result placePeptideBondH_(Residue* res) const;
+			Processor::Result placePeptideBondH_(Residue* res);
 
 			/**
 			 * Sums up the bond orders of all bonds the atom participates in.
