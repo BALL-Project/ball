@@ -267,36 +267,34 @@ namespace BALL
 				Vector3 p = atom_position - Vector3(bond_length, 0, 0);
 				addHydrogen_(*atom, p);
 				DEBUG_LINE
-				// add second and third bond
-				operator() (*atom);
-				return Processor::CONTINUE;
+
+				return operator() (*atom);
 			}
 
 			if (h_to_add == 2)
 			{
 				// add second bond
 				Vector3 bv = partners[0]->getPosition() - atom_position;
-				if (Maths::isZero(bv.getLength()))
-				{
-					addHydrogen_(*atom, atom_position - Vector3(0,0,1));
-					DEBUG_LINE
-					return Processor::CONTINUE;
-				}
+				if (!normalize_(bv)) bv = Vector3(0, 1, 0);
 
 				Vector3 axis = getNormal_(bv);
-				m.setRotation(Angle(106, false), axis);
-				bv = m * bv;
-				if (!normalize_(bv)) bv = Vector3(0, 1, 0);
-				bv *= bond_length;
-				addHydrogen_(*atom, atom_position + bv);
+				m.setRotation(Angle(112.754181, false), axis);
+				axis = m * bv;
+
+				m.setRotation(Angle(120.0, false), axis);
+				Vector3 new_pos = m * bv;
+				addHydrogen_(*atom, atom_position + new_pos * bond_length);
+				addHydrogen_(*atom, atom_position + m * new_pos * bond_length );
+
 				DEBUG_LINE
 				// add third bond
-				operator() (*atom);
 				return Processor::CONTINUE;
 			}
 
 			if (h_to_add == 1)
 			{
+				//TODO: This can be improved further. However the approximation
+				//      should provide a good placement.
 				Vector3 p1 = partners[0]->getPosition();
 				Vector3 p2 = partners[1]->getPosition();
 				// connection line between the two partner atoms:
@@ -311,7 +309,7 @@ namespace BALL
 				// Point between two partner aoms:
 				Vector3 p = p1 + d / 2.;
 				Vector3 d2 = p - atom_position;
-				m.setRotation(Angle(106, false), d);
+				m.setRotation(Angle(117.3, false), d);
 				Vector3 v = m * d2;
 				if (!normalize_(v)) v = Vector3(0, 0, 1);
 				v *= bond_length;
@@ -329,9 +327,9 @@ namespace BALL
 				// add first hydrogen randomly
 				addHydrogen_(*atom,atom_position + Vector3(bond_length, 0, 0));
 				DEBUG_LINE
-				// add 3 other bonds
-				operator() (*atom);
-				return Processor::CONTINUE;
+
+				// continue with the next case:
+				return operator() (*atom);
 			}
 
 			Vector3 v = partners[0]->getPosition() - atom_position;
@@ -339,14 +337,23 @@ namespace BALL
 
 			if (h_to_add == 3)
 			{
+				// Rotate the partner atom around the target atom
+				// in order to obtain the first hydrogen
 				Vector3 axis = getNormal_(v);
-				m.setRotation(Angle(110, false), axis);
-				v = m * v;
-				v *= bond_length;
-				addHydrogen_(*atom, atom_position + v);
+				m.setRotation(Angle(109.471221, false), axis);
+				Vector3 new_pos = m * v * bond_length;
+				addHydrogen_(*atom, atom_position + new_pos);
+
+				// Create two copies of the first hydrogen by rotating
+				// for 120 degrees.
+				m.setRotation(Angle(120, false), v);
+				new_pos = m * new_pos;
+				addHydrogen_(*atom, atom_position + new_pos);
+				new_pos = m * new_pos;
+				addHydrogen_(*atom, atom_position + new_pos);
+
 				DEBUG_LINE
 				// add 2 other bonds
-				operator() (*atom);
 				return Processor::CONTINUE;
 			}
 
@@ -355,22 +362,23 @@ namespace BALL
 
 			if (h_to_add == 2)
 			{
-				// normal on two first bonds:
+				// Create a normal to the plane defined by the atom and its two partners
 				Vector3 v12 = partners[1]->getPosition() - partners[0]->getPosition();
+				if (!normalize_(v12)) v12 = Vector3(0, 1, 0);
 
-				v = partners[0]->getPosition() + v12 / 2.;
-				v -= atom_position;
+				Vector3 norm = v % v2;
 
-				if (!normalize_(v)) v = Vector3(0,1,0);
+				// The new hydrogen atoms are obtained by rotating the normal around the
+				// connection between the two partner atoms
+				m.setRotation(Angle(-(180 - 109.471221)/2.0, false), v12);
+				Vector3 new_pos = m * norm * bond_length;
+				addHydrogen_(*atom, atom_position + new_pos);
 
-				m.setRotation(Angle(110, false), v12);
-				v = m * v;
-				if (!normalize_(v)) v = Vector3(0,1,0);
-				v *= bond_length;
-				addHydrogen_(*atom, atom_position + v);
+				m.setRotation(Angle(-109.471221, false), v12);
+				new_pos = m * new_pos * bond_length;
+				addHydrogen_(*atom, atom_position + new_pos);
 				DEBUG_LINE
-				// add 1 other bonds
-				operator() (*atom);
+
 				return Processor::CONTINUE;
 			}
 
@@ -381,21 +389,8 @@ namespace BALL
 
 				Vector3 v4;
 
-				Size nr_h = 0;
-				nr_h += (partners[0]->getElement().getSymbol() == "H");
-				nr_h += (partners[1]->getElement().getSymbol() == "H");
-				nr_h += (partners[2]->getElement().getSymbol() == "H");
-
-				if (nr_h > 1)
-				{
-					v4 = v + v2 + v3;
-					DEBUG_LINE
-				}
-				else
-				{
-					v4 = -(v2 % v3);
-					DEBUG_LINE
-				}
+				v4 = v + v2 + v3;
+				DEBUG_LINE
 
 				if (!normalize_(v4)) v4 = Vector3(1,0,0);
 
