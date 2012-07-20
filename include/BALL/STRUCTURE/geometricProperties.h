@@ -63,24 +63,36 @@ namespace BALL
 		//@{
 			
 		/**
+		 * Initialize the processor. Resets lower and upper vectors to lower
+		 * and upper numeric float limits.
+		 *
+		 * \see UnaryProcessor::start()
+		 *
+		 * \return true in all cases
 		*/
-		virtual bool start()
-			;
+		virtual bool start();
 
 		/**
+		 * Checks if bounding box has been calculated.
+		 *
+		 * \see UnaryProcessor::finish()
+		 *
+		 * \return true if bounding box has been calculated, otherwise reset lower and upper to (0,0,0) and return false
 		*/
-		virtual bool finish()
-			;
+		virtual bool finish();
 
 		/**
+		 * Contributes the coordinates of provided \ref Atom to the bounding box.
+		 * The function internally calls the more generic \ref operator() with
+		 * \ref Vector3 argument derived from atom position.
 		*/
 		virtual Processor::Result operator () (const Atom& atom)
 			 { return operator() (atom.getPosition());}
 
 		/**
+		 * Contributes coordinates of \ref Vector3 argument to the bounding box.
 		*/
-		virtual Processor::Result operator () (const Vector3& v)
-			;
+		virtual Processor::Result operator () (const Vector3& v);
 
 
 		//@}
@@ -90,18 +102,15 @@ namespace BALL
 
 		/** Return the bounding box
 		*/
-		SimpleBox3 getBox() const
-			;
+		SimpleBox3 getBox() const;
 
 		/**	Returns the lower corner of the bounding box
 		*/
-		const Vector3& getLower() const
-			;
+		const Vector3& getLower() const;
 
 		/**	Returns the upper corner of the bounding box
 		*/
-		const Vector3& getUpper() const
-			;
+		const Vector3& getUpper() const;
 
 		//@}
 			
