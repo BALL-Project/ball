@@ -208,6 +208,9 @@ CHECK_CXX_SOURCE_COMPILES("template <int i>
 ## Check for the presence of the slist extension
 INCLUDE(cmake/BALLConfigSList.cmake)
 
+## Check for the presence of C++11 initializer lists
+INCLUDE(cmake/BALLConfigInitializerList.cmake)
+
 ## Check for rvalue reference
 INCLUDE(cmake/BALLConfigExternTemplates.cmake)
 
