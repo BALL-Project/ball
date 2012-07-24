@@ -8,6 +8,7 @@
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/FORMAT/SDFile.h>
 #include <BALL/FORMAT/XYZFile.h>
+#include <BALL/FORMAT/dockResultFile.h>
 
 #include <boost/iostreams/filtering_streambuf.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
@@ -113,12 +114,10 @@ namespace BALL
 		{
 			gmf = new XYZFile(filename, open_mode);
 		}
-		/*
 		else if(tmp.hasSuffix(".drf"))
 		{
-			gmf = new Docking::DockResultFile(filename, open_mode);
+			gmf = new DockResultFile(filename, open_mode);
 		}
-		*/
 		else
 		{
 			if (open_mode == ios::in)
@@ -239,12 +238,10 @@ namespace BALL
 			{
 				file = new XYZFile(filename, open_mode);
 			}
-			/*
 			else if(default_format == "drf")
 			{
-				file = new Docking::DockResultFile(filename, open_mode);
+				file = new DockResultFile(filename, open_mode);
 			}
-			*/
 			// Make sure that temporary output-file is compressed and then deleted when GenericMolFile is closed.
 			if (compression)
 			{
@@ -304,12 +301,10 @@ namespace BALL
 			{
 				file = new XYZFile(filename, open_mode);
 			}
-			/*
-			else if(dynamic_cast<Docking::DockResultFile*>(default_format_file))
+			else if(dynamic_cast<DockResultFile*>(default_format_file))
 			{
-				file = new Docking::DockResultFile(filename, open_mode);
+				file = new DockResultFile(filename, open_mode);
 			}
-			*/
 			// Make sure that temporary output-file is compressed and then deleted when GenericMolFile is closed.
 			if (compression)
 			{
@@ -347,12 +342,10 @@ namespace BALL
 			{
 				return new SDFile(name, ios::in);
 			}
-			/*
 			else if (line.hasPrefix("<dockingfile>"))
 			{
-				return new Docking::DockResultFile(name, ios::in);
+				return new DockResultFile(name, ios::in);
 			}
-			*/
 			else if (line.hasPrefix("HEADER") || line.hasPrefix("ATOM") || line.hasPrefix("USER"))
 			{
 				return new PDBFile(name, ios::in);

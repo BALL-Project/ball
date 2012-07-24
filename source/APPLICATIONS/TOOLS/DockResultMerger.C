@@ -21,18 +21,17 @@
 // $Authors: Marcel Schumann $
 // ----------------------------------------------------
 
+#include <BALL/DOCKING/COMMON/conformation.h>
 #include <BALL/FORMAT/molFileFactory.h>
 #include <BALL/FORMAT/genericMolFile.h>
 #include <BALL/FORMAT/dockResultFile.h>
 #include <BALL/FORMAT/commandlineParser.h>
 #include <BALL/KERNEL/molecule.h>
+
 #include <map>
 #include <set>
 #include "version.h"
 
-#ifdef BALL_HAS_QTXML
-	#include <BALL/DOCKING/COMMON/conformation.h>
-#endif
 
 using namespace BALL;
 using namespace std;
@@ -108,7 +107,6 @@ void sortMolecules(vector<String>& names, string& output_file, Size& best_k, str
 }
 
 
-#ifdef BALL_HAS_QTXML
 void mergeDRFiles(vector<String>& names, string& output_file, Size& best_k, string& e_property, double& score_cutoff, double& score_cuton)
 {
 
@@ -304,8 +302,6 @@ void mergeDRFiles(vector<String>& names, string& output_file, Size& best_k, stri
 	output->close();
 	delete output;
 }
-#endif // BALL_HAS_QTXML
-
 
 
 int main(int argc, char* argv[])
@@ -361,24 +357,22 @@ int main(int argc, char* argv[])
 		}
 	}
 
-#ifndef BALL_HAS_QTXML
 	if (drf_merge)
 	{
 		Log.error()<<"[Error:] Using DockingFiles (*.drf) is not possible since this version of DockResultMerger has been compiled without QtXML support."<<endl;
 		return 1;
 	}
-#endif
 
 	if (!drf_merge)
 	{
 		sortMolecules(names, output, best_k, e_property, energy_cutoff, energy_cuton);
 	}
-#ifdef BALL_HAS_QTXML
+
 	else
 	{
 		mergeDRFiles(names, output, best_k, e_property, energy_cutoff, energy_cuton);
 	}
-#endif
+
 
 	if (parpars.has("rm"))
 	{

@@ -25,15 +25,12 @@
 #include <BALL/SCORING/COMMON/scoringFunction.h>
 #include <BALL/FORMAT/molFileFactory.h>
 #include <BALL/FORMAT/genericMolFile.h>
+#include <BALL/FORMAT/dockResultFile.h>
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/DOCKING/COMMON/structurePreparer.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/STRUCTURE/structureMapper.h>
-
-#ifdef BALL_HAS_QTXML
-	#include <BALL/FORMAT/dockResultFile.h>
-#endif
 
 #include <stdlib.h>
 #include <iostream>
@@ -467,7 +464,7 @@ namespace BALL
 			String m = "Format of output file '"+output_filename+"' is not supported!";
 			throw BALL::Exception::GeneralException(__FILE__, __LINE__, "DockingAlgorithm::processMuliMoleculeFile() error", m);
 		}
-	#ifdef BALL_HAS_QTXML
+		
 		DockResultFile* drf_output = dynamic_cast<DockResultFile*>(output);
 		if (drf_output)
 		{
@@ -475,7 +472,7 @@ namespace BALL
 			drf_output->setOutputParameters(Result::DOCKING, "score", dummy, name_+"+"+scoring_function_->getName());
 			drf_output->setToolInfo(toolinfo, timestamp);
 		}
-	#endif
+		
 
 		bool output_failed_dockings = (options.setDefaultBool("output_failed_dockings", false) && score_cutoff>=1e10);
 
