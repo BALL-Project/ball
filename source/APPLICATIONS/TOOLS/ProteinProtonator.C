@@ -47,11 +47,94 @@ int main(int argc, char* argv[])
 	parpars.setToolManual(man);
 	parpars.setSupportedFormats("i","pdb");
 	parpars.setSupportedFormats("o","pdb");
+	parpars.setSupportedFormats("o","drf");
 	parpars.setOutputFormatSource("o","i");
 	String manual = "ProteinProtonator allows you add hydrogens to a protein structure.\n\nNote that all hydrogen atoms already present in the input file will be ignored. If desired, you can specify a specific pH value, for which protonation is to be done; otherwise a neutral pH will be assumed.\n\nOutput of this tool is one pdb-file containing the input protein structure with added hydrogens atoms.";
 	parpars.setToolManual(manual);
 	parpars.parse(argc, argv);
-
+	
+	
+	double pH = 7.4;
+	if (parpars.get("ph") != CommandlineParser::NOT_FOUND)
+	{
+		pH = parpars.get("ph").toDouble();
+	}
+	
+	
+	PDBFile pdb_input(parpars.get("i"));
+	if (pdb_input.bad())
+	{
+		Log.error() << "Cannot open PDB input file " << parpars.get("i") << endl;
+		return 2;
+	}
+	
+	Protein protein;
+	pdb_input.read(protein);
+	pdb_input.close();
+	
+	FragmentDB fragdb;
+	fragdb.setFilename("fragments/Fragments.db");
+	fragdb.init();
+	
+	Log.disableOutput();
+	protein.apply(fragdb.normalize_names);
+	protein.apply(fragdb.build_bonds);
+	Log.enableOutput();
+	
+	fragdb.destroy();
+	
+	
+	// If the input protein already has hydrogens, then delete them first.
+	for (AtomIterator it=protein.beginAtom(); it!=protein.endAtom(); it++)
+	{
+		if (it->getElement().getSymbol() == "H")
+		{
+			it->select();
+		}
+		else 
+		{
+			it->deselect();
+		}
+	}
+	protein.removeSelected();
+	
+	
+	OpenBabel::OBMol* obmol = MolecularSimilarity::createOBMol(protein,0,1);
+	obmol->DeleteHydrogens();
+	obmol->SetDimension(3);
+	obmol->AddConformer(obmol->GetCoordinates());
+	
+	// Add hydrogens for the specified ph-value
+	obmol->AddHydrogens(false, true, pH);
+	
+	// Fetch final 3D coordinates
+	copyHydrogens(obmol, &protein);
+	
+	// Generate output file and write protonated protein structure
+	GenericMolFile* output = MolFileFactory::open(parpars.get("o"), ios::out, &pdb_input);
+	DockResultFile* drf_output = dynamic_cast<DockResultFile*>(output);
+	if (drf_output)
+	{
+		drf_output->setToolInfo(parpars.getStartCommand(), parpars.getStartTime());
+	}
+	
+	bool write_success = output->write(protein);
+	output->close();
+	
+	delete obmol;
+	delete output;
+	
+	if (write_success)
+	{
+		Log.level(20)<<"wrote protonated protein."<<endl;
+	}
+	else
+	{
+		Log.level(20)<<"protein protonation failed.."<<endl;
+	}
+	
+	
+	/*
 	GenericMolFile* input = MolFileFactory::open(parpars.get("i"), ios::in);
 	GenericMolFile* output = MolFileFactory::open(parpars.get("o"), ios::out, input);
 	DockResultFile* drf_output = dynamic_cast<DockResultFile*>(output);
@@ -142,6 +225,7 @@ int main(int argc, char* argv[])
 	if (fragdb) delete fragdb;
 	delete input;
 	delete output;
+	*/
 }
 
 
