@@ -60,17 +60,17 @@ int main(int argc, char* argv[])
 		pH = parpars.get("ph").toDouble();
 	}
 	
-	
-	PDBFile pdb_input(parpars.get("i"));
-	if (pdb_input.bad())
+	//PDBFile pdb_input(parpars.get("i"));
+	GenericMolFile* input = MolFileFactory::open(parpars.get("i"), ios::in);
+	PDBFile* pdb_input = dynamic_cast<PDBFile*>(input); 
+	if (!pdb_input)
 	{
 		Log.error() << "Cannot open PDB input file " << parpars.get("i") << endl;
 		return 2;
 	}
 	
 	Protein protein;
-	pdb_input.read(protein);
-	pdb_input.close();
+	pdb_input->read(protein);
 	
 	FragmentDB fragdb;
 	fragdb.setFilename("fragments/Fragments.db");
@@ -82,7 +82,6 @@ int main(int argc, char* argv[])
 	Log.enableOutput();
 	
 	fragdb.destroy();
-	
 	
 	// If the input protein already has hydrogens, then delete them first.
 	for (AtomIterator it=protein.beginAtom(); it!=protein.endAtom(); it++)
@@ -111,7 +110,7 @@ int main(int argc, char* argv[])
 	copyHydrogens(obmol, &protein);
 	
 	// Generate output file and write protonated protein structure
-	GenericMolFile* output = MolFileFactory::open(parpars.get("o"), ios::out, &pdb_input);
+	GenericMolFile* output = MolFileFactory::open(parpars.get("o"), ios::out, pdb_input);
 	DockResultFile* drf_output = dynamic_cast<DockResultFile*>(output);
 	if (drf_output)
 	{
@@ -119,9 +118,12 @@ int main(int argc, char* argv[])
 	}
 	
 	bool write_success = output->write(protein);
+	
 	output->close();
+	input->close();
 	
 	delete obmol;
+	delete input;
 	delete output;
 	
 	if (write_success)
@@ -130,7 +132,7 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
-		Log.level(20)<<"protein protonation failed.."<<endl;
+		Log.level(20)<<"protein protonation failed."<<endl;
 	}
 	
 	
