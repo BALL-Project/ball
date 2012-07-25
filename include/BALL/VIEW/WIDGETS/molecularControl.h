@@ -13,6 +13,10 @@
 # include <BALL/CONCEPT/molecularInformation.h>
 #endif
 
+#ifndef BALL_SYSTEM_MUTEX_H
+# include <BALL/SYSTEM/mutex.h>
+#endif
+
 #ifndef BALL_VIEW_KERNEL_COMMON_H
 # include <BALL/VIEW/KERNEL/common.h>
 #endif
@@ -467,6 +471,7 @@ class BALL_VIEW_EXPORT MolecularControl
 	QSignalMapper* rotamer_mapper_;
 	Residue* current_residue_;
 	RotamerLibrary* rotamer_library_;
+	ReadWriteLock rotamer_library_mutex_;
 	QThread* rl_thread_;
 };
 

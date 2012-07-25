@@ -51,18 +51,22 @@ namespace BALL
 		class RotamerLibraryLoader : public QThread
 		{
 			public:
-				RotamerLibraryLoader(QObject* parent, RotamerLibrary** rotamer_library)
+				RotamerLibraryLoader(QObject* parent, RotamerLibrary** rotamer_library, ReadWriteLock* rotamer_lock)
 					: QThread(parent),
-					  rotamer_library_(rotamer_library)
+					  rotamer_library_(rotamer_library),
+					  rotamer_lock_(rotamer_lock)
 				{
 				}
 
 				void run() {
+					rotamer_lock_->lockForWrite();
 					*rotamer_library_ = new RotamerLibrary;
+					rotamer_lock_->unlock();
 				}
 
 			private:
 				RotamerLibrary** rotamer_library_;
+				ReadWriteLock*   rotamer_lock_;
 		};
 
 		MolecularControl::MyTreeWidgetItem::MyTreeWidgetItem(QTreeWidget* parent,
@@ -95,9 +99,11 @@ namespace BALL
 
 
 		MolecularControl::MolecularControl(const MolecularControl& mc)
-			: GenericControl(mc),
-			  rotamer_library_(new RotamerLibrary(*mc.rotamer_library_))
+			: GenericControl(mc)
 		{
+			rotamer_library_mutex_.lockForWrite();
+			rotamer_library_ = new RotamerLibrary(*mc.rotamer_library_);
+			rotamer_library_mutex_.unlock();
 		}
 
 
@@ -185,7 +191,7 @@ namespace BALL
 
 			// Load the rotamer library. This is done in a different thread as parsing the
 			// files is very slow.
-			rl_thread_ = new RotamerLibraryLoader(this, &rotamer_library_);
+			rl_thread_ = new RotamerLibraryLoader(this, &rotamer_library_, &rotamer_library_mutex_);
 			rl_thread_->start();
 		}
 
@@ -197,7 +203,9 @@ namespace BALL
 
 			clearClipboard();
 
+			rotamer_library_mutex_.lockForWrite();
 			delete rotamer_library_;
+			rotamer_library_mutex_.unlock();
 		}
 
 		void MolecularControl::checkMenu(MainControl& main_control)
@@ -625,9 +633,9 @@ namespace BALL
 			rotamer_menu_->clear();
 
 			// Make sure the rotamer library has been loaded
-			rl_thread_->wait();
-
+			rotamer_library_mutex_.lockForRead();
 			ResidueRotamerSet* res_set = rotamer_library_->getRotamerSet(*current_residue_);
+			rotamer_library_mutex_.unlock();
 
 			// Check if the rotamer set is valid
 			if(!res_set || res_set->getNumberOfRotamers() == 0)
@@ -1873,7 +1881,9 @@ namespace BALL
 				return;
 			}
 
+			rotamer_library_mutex_.lockForRead();
 			ResidueRotamerSet* res_set = rotamer_library_->getRotamerSet(*current_residue_);
+			rotamer_library_mutex_.unlock();
 
 			if(!res_set || (unsigned int)i >= res_set->getNumberOfRotamers()) {
 				return;
