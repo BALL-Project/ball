@@ -31,28 +31,17 @@ namespace BALL
 
 		void SCWRLRotamerFile::operator >> (RotamerLibrary& rotamer_library)
 		{
-			// now we must decide wether this is a backbone dependent or not
-			RegularExpression match_indep("[A-Z][A-Z][A-Z] [0-9] [0-9] [0-9] [0-9] *[0-9]* *[0-9]* *[0-9\\.]*");
-			
-			// if the expression matches at least one time, this might be a bb indep file
-			while (readLine())
-			{
-				if (match_indep.match(line_))
-				{
-					rewind();
-					readSCWRLBackboneIndependentLibraryFile_(rotamer_library);
-					if (!rotamer_library.validate())
-					{
-						throw(Exception::ParseError(__FILE__, __LINE__, "The discretization of the backbone torsions are not correct!", ""));
-					}
-					clear();
-					return;
-				}
+			// Ok, this is stupid, but at least better and faster than what we used to do.
+			// We first try to read the file as a backbone dependent version. If this fails,
+			// we try the backbone independent variant before we barf.
+
+			try {
+				readSCWRLBackboneDependentLibraryFile_(rotamer_library);
+			} catch (...) { // ok, it was not a backbone dependent library. But is it indep?
+				rewind();
+				readSCWRLBackboneIndependentLibraryFile_(rotamer_library);
 			}
-			
-			// if not matched this is much likely a backbone independent file
-			rewind();
-			readSCWRLBackboneDependentLibraryFile_(rotamer_library);
+
 			if (!rotamer_library.validate())
 			{
 				throw(Exception::ParseError(__FILE__, __LINE__, "The discretization of the backbone torsions are not correct!", ""));
@@ -74,6 +63,12 @@ namespace BALL
 			while(readLine()) 
 			{
 				line_.split(split);
+
+				if (!split.size() == 13)
+				{
+					rotamer_library.clear();		
+					throw(Exception::ParseError(__FILE__, __LINE__, "Invalid Format in backbone dependent SCWRL rotamer file!", ""));
+				}
 
 				phi = split[1].toInt();
 				psi = split[2].toInt();
