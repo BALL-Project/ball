@@ -299,6 +299,7 @@ namespace BALL
 		bool isSuperAtomContainerOf(const AtomContainer& atom_container) const;
 
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(AtomContainer)
+		BALL_DECLARE_STD_ITERATOR_WRAPPER(Nucleotide, AtomContainer, atomContainers)
 
 		// --- ATTRIBUTES
 

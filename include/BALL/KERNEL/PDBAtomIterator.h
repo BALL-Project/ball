@@ -23,6 +23,10 @@
 #	include <BALL/KERNEL/predicate.h>
 #endif
 
+#ifndef BALL_CONCEPT_STDITERATORWRAPPER_H
+# include <BALL/CONCEPT/stdIteratorWrapper.h>
+#endif
+
 namespace BALL 
 {
 	/** Traits class for the PDBAtomIterator.
@@ -93,6 +97,9 @@ namespace BALL
 	/// A constant reverse bidirectional iterator for the PDBAtom class.
 	typedef std::reverse_iterator<PDBAtomConstIterator> PDBAtomConstReverseIterator;
 	//@}
+
+	IteratorWrapper(PDBAtom)
+	ConstIteratorWrapper(PDBAtom)
 } // namespace BALL
 
 #endif // BALL_KERNEL_PDBATOMITERATOR_H

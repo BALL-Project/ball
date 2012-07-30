@@ -13,7 +13,6 @@
 #	include <BALL/KERNEL/atomContainerIterator.h>
 #endif
 
-
 #define BALL_ATOMCONTAINER_DEFAULT_NAME   ""
 
 namespace BALL
@@ -396,6 +395,8 @@ namespace BALL
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Atom)
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(AtomContainer)
 
+		BALL_DECLARE_STD_ITERATOR_WRAPPER(AtomContainer, Atom, atoms)
+		BALL_DECLARE_STD_ITERATOR_WRAPPER(AtomContainer, AtomContainer, atomContainers)
 
 		private:
 
@@ -404,6 +405,7 @@ namespace BALL
 		String  name_;
 
 	};
+
 } // namespace BALL
 
 #endif // BALL_KERNEL_ATOMCONTAINER_H

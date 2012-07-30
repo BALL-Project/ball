@@ -19,6 +19,10 @@
 #	include <BALL/KERNEL/predicate.h>
 #endif
 
+#ifndef BALL_CONCEPT_STDITERATORWRAPPER_H
+# include <BALL/CONCEPT/stdIteratorWrapper.h>
+#endif
+
 namespace BALL
 {
 	/** Traits class for the various ChainIterators.
@@ -90,6 +94,9 @@ namespace BALL
 	/// A constant reverse bidirectional iterator for the Chain class.
 	typedef std::reverse_iterator<ChainConstIterator> ChainConstReverseIterator;
 	//@}
+
+	IteratorWrapper(Chain)
+	ConstIteratorWrapper(Chain)
 } // namespace BALL 
 
 #endif // BALL_KERNEL_CHAINITERATOR_H

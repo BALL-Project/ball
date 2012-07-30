@@ -75,6 +75,9 @@ namespace BALL
 
 	///
 	typedef std::reverse_iterator<ProteinConstIterator> ProteinConstReverseIterator;
+
+	IteratorWrapper(Protein)
+	ConstIteratorWrapper(Protein)
 } // namespace BALL 
 
 #endif // BALL_KERNEL_PROTEINITERATOR_H

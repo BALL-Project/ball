@@ -222,7 +222,7 @@ namespace BALL
 		// --- EXTERNAL ITERATORS
 
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Nucleotide)
-		
+		BALL_DECLARE_STD_ITERATOR_WRAPPER(NucleicAcid, Nucleotide, nucleotides)
 
 		private:
 

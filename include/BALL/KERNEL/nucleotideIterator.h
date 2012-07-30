@@ -15,6 +15,10 @@
 # include <BALL/KERNEL/predicate.h>
 #endif
 
+#ifndef BALL_CONCEPT_STDITERATORWRAPPER_H
+# include <BALL/CONCEPT/stdIteratorWrapper.h>
+#endif
+
 namespace BALL 
 {
 	class Nucleotide;
@@ -69,6 +73,9 @@ namespace BALL
 	typedef std::reverse_iterator<NucleotideIterator> NucleotideReverseIterator;
 
 	typedef std::reverse_iterator<NucleotideConstIterator> NucleotideConstReverseIterator;
+
+	IteratorWrapper(Nucleotide)
+	ConstIteratorWrapper(Nucleotide)
 } // namespace BALL
 
 #endif // BALL_KERNEL_NUCLEOTIDEITERATOR_H

@@ -243,6 +243,7 @@ namespace BALL
 
 
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Fragment)
+		BALL_DECLARE_STD_ITERATOR_WRAPPER(Molecule, Fragment, fragments)
 
 
 		protected:

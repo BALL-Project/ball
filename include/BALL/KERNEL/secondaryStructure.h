@@ -317,6 +317,9 @@ namespace BALL
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Residue)
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(PDBAtom)
 
+		BALL_DECLARE_STD_ITERATOR_WRAPPER(SecondaryStructure, Residue, residues)
+		BALL_DECLARE_STD_ITERATOR_WRAPPER(SecondaryStructure, PDBAtom, pdbAtoms)
+
 		protected:
 		
 		/// The secondary structure type (helix, strand, coil, turn)
@@ -363,7 +366,7 @@ namespace BALL
 		bool remove(AtomContainer& atom_container);
 
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(AtomContainer)
-
+		BALL_DECLARE_STD_ITERATOR_WRAPPER(SecondaryStructure, AtomContainer, atomContainers)
 	};
 
 } // namespace BALL

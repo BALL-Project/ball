@@ -71,6 +71,8 @@ namespace BALL
 	///
 	typedef std::reverse_iterator<MoleculeConstIterator> MoleculeConstReverseIterator;
 
+	IteratorWrapper(Molecule)
+	ConstIteratorWrapper(Molecule)
 } // namespace BALL
 
 #endif // BALL_KERNEL_MOLECULEITERATOR_H

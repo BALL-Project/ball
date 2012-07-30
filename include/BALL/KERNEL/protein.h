@@ -301,7 +301,11 @@ namespace BALL
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Residue)
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(PDBAtom)
 
-		
+		BALL_DECLARE_STD_ITERATOR_WRAPPER(Protein, Chain, chains)
+		BALL_DECLARE_STD_ITERATOR_WRAPPER(Protein, SecondaryStructure, secondaryStructures)
+		BALL_DECLARE_STD_ITERATOR_WRAPPER(Protein, Residue, residues)
+		BALL_DECLARE_STD_ITERATOR_WRAPPER(Protein, PDBAtom, pdbAtoms)
+
 		private:
 
 		// --- ATTRIBUTES

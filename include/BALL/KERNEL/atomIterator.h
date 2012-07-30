@@ -92,6 +92,9 @@ namespace BALL
 	typedef std::reverse_iterator<AtomConstIterator> AtomConstReverseIterator;
 
 	//@}
+
+	IteratorWrapper(Atom)
+	ConstIteratorWrapper(Atom)
 } // namespace BALL
 
 #endif // BALL_KERNEL_ATOMITERATOR_H

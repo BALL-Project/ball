@@ -80,6 +80,9 @@ namespace BALL
 	///
 	typedef std::reverse_iterator<SecondaryStructureConstIterator> SecondaryStructureConstReverseIterator;
 
+	IteratorWrapper(SecondaryStructure)
+	ConstIteratorWrapper(SecondaryStructure)
+
 } // namespace BALL 
 
 #endif // BALL_KERNEL_SECONDARYSTRUCTUREITERATOR_H

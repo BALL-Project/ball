@@ -15,6 +15,10 @@
 #	include <BALL/KERNEL/predicate.h>
 #endif
 
+#ifndef BALL_CONCEPT_STDITERATORWRAPPER_H
+# include <BALL/CONCEPT/stdIteratorWrapper.h>
+#endif
+
 namespace BALL
 {
 	class AtomContainer;
@@ -96,6 +100,10 @@ namespace BALL
 	typedef std::reverse_iterator<AtomContainerConstIterator> AtomContainerConstReverseIterator;
 
 	//@}
+
+	IteratorWrapper(AtomContainer)
+	ConstIteratorWrapper(AtomContainer)
+
 } // namespace BALL
 
 #endif // BALL_KERNEL_ATOMCONTAINERITERATOR_H

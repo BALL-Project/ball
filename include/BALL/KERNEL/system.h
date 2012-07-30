@@ -263,6 +263,16 @@ namespace BALL
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Nucleotide)
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(NucleicAcid)
 
+		BALL_DECLARE_STD_ITERATOR_WRAPPER(System, Atom, atoms)
+		BALL_DECLARE_STD_ITERATOR_WRAPPER(System, AtomContainer, atomContainers)
+		BALL_DECLARE_STD_ITERATOR_WRAPPER(System, Fragment, fragments)
+		BALL_DECLARE_STD_ITERATOR_WRAPPER(System, Molecule, molecules)
+		BALL_DECLARE_STD_ITERATOR_WRAPPER(System, Protein, proteins)
+		BALL_DECLARE_STD_ITERATOR_WRAPPER(System, Residue, residues)
+		BALL_DECLARE_STD_ITERATOR_WRAPPER(System, Chain, chains)
+		BALL_DECLARE_STD_ITERATOR_WRAPPER(System, SecondaryStructure, secondaryStructures)
+		BALL_DECLARE_STD_ITERATOR_WRAPPER(System, Nucleotide, nucleotides)
+		BALL_DECLARE_STD_ITERATOR_WRAPPER(System, NucleicAcid, nucleicAcids)
 	};
 } // namespace BALL
 

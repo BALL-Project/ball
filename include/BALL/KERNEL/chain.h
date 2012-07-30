@@ -334,6 +334,10 @@ namespace BALL
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Residue)
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(PDBAtom)
 
+		BALL_DECLARE_STD_ITERATOR_WRAPPER(Chain, SecondaryStructure, secondaryStructures)
+		BALL_DECLARE_STD_ITERATOR_WRAPPER(Chain, Residue           , residues)
+		BALL_DECLARE_STD_ITERATOR_WRAPPER(Chain, PDBAtom           , pdbAtoms)
+
 	protected:
 
 	private:
@@ -376,6 +380,7 @@ namespace BALL
 		bool remove(AtomContainer& atom_container);
 
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(AtomContainer)
+		BALL_DECLARE_STD_ITERATOR_WRAPPER(Chain, AtomContainer, atomContainers)
 	};
 } // namespace BALL
 

@@ -389,6 +389,7 @@ namespace BALL
 		// --- EXTERNAL ITERATORS	
 
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(PDBAtom)
+		BALL_DECLARE_STD_ITERATOR_WRAPPER(Residue, PDBAtom, pdbAtoms)
 
 
 		private:
@@ -420,6 +421,7 @@ namespace BALL
 		bool isSuperAtomContainerOf(const AtomContainer& atom_container) const;
 
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(AtomContainer)
+		BALL_DECLARE_STD_ITERATOR_WRAPPER(Residue, AtomContainer, atomContainers)
 
 		// --- ATTRIBUTES
 

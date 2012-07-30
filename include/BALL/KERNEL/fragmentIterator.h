@@ -15,6 +15,10 @@
 # include <BALL/KERNEL/predicate.h>
 #endif
 
+#ifndef BALL_CONCEPT_STDITERATORWRAPPER_H
+# include <BALL/CONCEPT/stdIteratorWrapper.h>
+#endif
+
 namespace BALL 
 {
 	/** Traits class for the FragmentIterator.
@@ -81,6 +85,9 @@ namespace BALL
 
 	///
 	typedef std::reverse_iterator<FragmentConstIterator> FragmentConstReverseIterator;
+
+	IteratorWrapper(Fragment)
+	ConstIteratorWrapper(Fragment)
 
 } // namespace BALL 
 #endif // BALL_KERNEL_FRAGMENTITERATOR_H

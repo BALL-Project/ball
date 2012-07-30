@@ -79,6 +79,8 @@ namespace BALL
 
 	typedef std::reverse_iterator<NucleicAcidConstIterator> NucleicAcidConstReverseIterator;
 
+	IteratorWrapper(NucleicAcid)
+	ConstIteratorWrapper(NucleicAcid)
 } // namespace BALL
 
 #endif // BALL_KERNEL_NUCLEICACIDITERATOR_H

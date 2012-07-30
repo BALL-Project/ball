@@ -72,6 +72,8 @@ namespace BALL
 	///
 	typedef std::reverse_iterator<ResidueConstIterator> ResidueConstReverseIterator;
 
+	IteratorWrapper(Residue)
+	ConstIteratorWrapper(Residue)
 } // namespace BALL
 
 #endif // BALL_KERNEL_RESIDUEITERATOR_H
