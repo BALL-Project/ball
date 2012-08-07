@@ -169,11 +169,11 @@ int main(int argc, char* argv[])
 	parpars.registerFlag("rm", "remove input file when finished");
 	parpars.registerFlag("k", "keep existing 3D coordinates (flag precedes '-kp')");
 	parpars.registerFlag("kp", "keep existing 3D coordinates but re-protonate compound in a pH dependent manner (flag is preceded by '-k')");
-	String man = String("This tool adds (missing) hydrogens to input molecules and generates a single valid 3D conformation. The input has to be a chemical file\n\
+	String man = String("This tool takes input molecules and generates a single 3D conformation which is ready for docking. The input has to be a chemical file\n\
 containing valid topologies and conistent bond order assignements. 2D coordinates in the input file are overwritten, 3D coordinates can be kept ('-k' or '-kp').\n\n\
   '-k':   3D coordinates are tried to be kept. Molecules with non-zero coordinates in all three dimensions are passed through without modifications. \n\
-          However. if a molecule is not ready for docking (i.e. unusual bond leghts, unusual charges), the molecule will be rebuild and new 3D coordinates \n\
-          are assigned. If only hydrogens are missing, the 3D coordinates are kept but the molecule gets newly protonated.\n\
+          However, if a molecule is not ready for docking (i.e. unusual bond leghts, unusual charges), the molecule will be rebuild and new \n\
+          3D coordinates are assigned. If only hydrogens are missing, the coordinates of non-hydrogen atoms are kept but the molecule gets newly protonated.\n\
   '-kp':  3D coordinates are tried to be kept as for the '-k' flag but the molecule will be newly protonated.\n\n\
 Please note that the main purpose of this tool is to generate valid starting conformations for docking or other optimization procedures.\n\
 Therefore, the generated 3D coordinates for each fragment should be all right, but in extreme cases (i.e. very large and/or complex molecules) \n\
