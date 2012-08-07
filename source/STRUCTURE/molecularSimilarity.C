@@ -258,11 +258,16 @@ Molecule* MolecularSimilarity::createMolecule(OpenBabel::OBMol& obmol, bool igno
 		if(ignore_hydrogen && obatom->GetAtomicNum()==1) continue;
 		Atom* atom = new Atom;
 		atom->setElement(PTE_::getElement(obatom->GetAtomicNum()));
+		
+		atom->setCharge(obatom->GetPartialCharge());
+		atom->setFormalCharge(obatom->GetFormalCharge());
+		
 		Vector3 pos(obatom->GetX(), obatom->GetY(), obatom->GetZ());
 		atom->setPosition(pos);
 		atoms.insert(make_pair(obatom,atom));
 		mol->insert(*atom);
 	}
+	
 	for(OBAtomIterator a_it=obmol.BeginAtoms(); a_it!=obmol.EndAtoms(); a_it++)
 	{
 		if(ignore_hydrogen && (*a_it)->GetAtomicNum()==1) continue;
