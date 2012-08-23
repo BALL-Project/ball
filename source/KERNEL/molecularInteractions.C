@@ -2,6 +2,9 @@
 
 using namespace BALL;
 
+using std::map;
+using std::make_pair;
+
 bool MolecularInteractions::SAVE_ONLY_SUMS = 0;
 
 

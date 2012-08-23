@@ -30,13 +30,13 @@ namespace BALL
 
 			double getInteractionEnergy(const Atom* atom, const list<String>& interaction_types) const;
 
-			const map<const Atom*,double>* getInteractions(String interaction_type) const;
+			const std::map<const Atom*,double>* getInteractions(String interaction_type) const;
 
-			void getInteractions(const list<String>& interaction_types, map<const Atom*,double>& interactions) const;
+			void getInteractions(const std::list<String>& interaction_types, std::map<const Atom*,double>& interactions) const;
 
 			double getInteractionEnergy(String interaction_type) const;
 
-			double getInteractionEnergy(const list<String>& interaction_types) const;
+			double getInteractionEnergy(const std::list<String>& interaction_types) const;
 
 			double getInteractionEnergy() const;
 
@@ -46,10 +46,10 @@ namespace BALL
 			double threshold_;
 
 			/** Contains one map for each type of interaction (vdW,electrostatic, etc.) */
-			map<String, map<const Atom*,double> > interactions_map_;
+			std::map<String, std::map<const Atom*,double> > interactions_map_;
 
 			/** Contains the total energy for each type of interaction */
-			map<String,double> interaction_energies_;
+			std::map<String,double> interaction_energies_;
 
 			/** The total interaction energy, i.e. sum over all components (vdW,electrostatic, etc.) */
 			double total_energy_;
