@@ -3,7 +3,7 @@
 #include <BALL/QSAR/featureSelection.h>
 
 using namespace BALL::QSAR;
-
+using namespace std;
 
 
 AutomaticModelCreator::AutomaticModelCreator(const QSARData* data)
@@ -65,8 +65,8 @@ Model* AutomaticModelCreator::generateModel()
 
 	/// Do 4-fold nested cross validation, including feature selection steps, for each model type and, if applicable, each kernel function
 
-	Log.level(10)<<"model-name  kernel  #features  nested Q^2  stddev"<<endl;
-	Log.level(10)<<"---------------------------------------------------"<<endl;
+	Log.level(10)<<"model-name  kernel  #features  nested Q^2  stddev"<<std::endl;
+	Log.level(10)<<"---------------------------------------------------"<<std::endl;
 
 	Log.level(10)<<std::setiosflags(std::ios::fixed)<<std::left;
 
@@ -142,7 +142,7 @@ Model* AutomaticModelCreator::generateModel()
 			no_features /= no_folds;
 			double stddev = Statistics::getStddev(q2_values);
 
-			Log.level(10)<<setw(10)<<reg_entry->name_abreviation<<"  ";
+			Log.level(10)<<std::setw(10)<<reg_entry->name_abreviation<<"  ";
 			if (reg_entry->kernel)
 			{
 				if (kernel_id == 1) Log.level(10)<<setw(6)<<"polyn."; 
