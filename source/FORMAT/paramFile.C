@@ -62,7 +62,7 @@ void ParamFile::writeSection(String section_name, String section_description, St
 	{
 		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"ParamFile::writeSection() error","Writing is not possible, file is opened in read mode!");
 	}
-
+		
 	xmlOut_->writeStartElement("tool");
 	xmlOut_->writeAttribute("status","internal");
 	xmlOut_->writeStartElement("name");
@@ -201,7 +201,7 @@ void ParamFile::writeSection(String section_name, String section_description, St
 		{
 			xmlOut_->writeStartElement("ITEMLIST");
 		}
-
+		
 		xmlOut_->writeAttribute("name",d_it->first.c_str());
 		xmlOut_->writeAttribute("type",type.c_str());
 		xmlOut_->writeAttribute("description",d_it->second.description.c_str());
@@ -294,7 +294,7 @@ void ParamFile::readSection(String& section_name, String& section_description, S
 	version = "";
 	section_helptext = "";
 	category = "";
-
+	
 	int inside_par_node = 0;
 	String section = "";
 
@@ -338,7 +338,7 @@ void ParamFile::readSection(String& section_name, String& section_description, S
 					section_helptext = xmlIn_->readElementText().toStdString();
 				}
 			}
-
+			
 			QXmlStreamAttributes attrs = xmlIn_->attributes();
 			String category = "";
 			if(tagname=="NODE")
@@ -533,3 +533,4 @@ void ParamFile::readSection(String& section_name, String& section_description, S
 		throw(Exception::ParseError(__FILE__, __LINE__,"ParamFile::readSection",String(xmlIn_->errorString().toLatin1().data())));
 	}
 }
+

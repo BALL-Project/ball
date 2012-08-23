@@ -1,25 +1,51 @@
 #ifndef BALL_FORMAT_COMMANDLINEPARSER_H
 #define BALL_FORMAT_COMMANDLINEPARSER_H
 
-#include <BALL/CONFIG/config.h>
-#include <BALL/DATATYPE/options.h>
-#include <BALL/DATATYPE/string.h>
-#include <BALL/FORMAT/paramFile.h>
+//#ifndef BALL_KERNEL_MOLECULE_H
+//#include <BALL/CONFIG/config.h>
+//#endif
+
+#ifndef BALL_DATATYPE_OPTIONS_H
+# include <BALL/DATATYPE/options.h>
+#endif
+
+#ifndef BALL_DATATYPE_STRING_H
+# include <BALL/DATATYPE/string.h>
+#endif
+
+#ifndef BALL_FORMAT_PARAMFILE_H
+# include <BALL/FORMAT/paramFile.h>
+#endif
+
 #include <map>
 #include <set>
 
 namespace BALL
 {
 	/** Class for parsing parameters specified on the command line.\n
-	Register the parameters and flags of your tool with registerParameter(), resp. registerFlag() and have the command-line parsed with parse(). After this, you can retrieve the values of all parameters with get().\n
-	In addition to this, you can also register a tool-manual text, define restrictions on parameters and register file-formats that are supported for in- or output-files.\n
-	If the parameter '-write_par somefilename.xml' is given to the program, an xml-based parameter-file will be automatically written, containing the specification the tool, all its parameters and all parameter values used on the commend-line.\n
-	If the parameter '-par somefilename.xml' is used, such a file can be read, so that the parameter-values stored in it will be used. However, if, although this is not necessary, parameters (other than -par) are specified on the command-line, their values will automatically overload those stored in the xml-file. */
+
+			Register the parameters and flags of your tool with registerParameter(), 
+			resp. registerFlag() and have the command-line parsed with parse(). 
+			After this, you can retrieve the values of all parameters with get().\n
+
+			In addition to this, you can also register a tool-manual text, define 
+			restrictions on parameters and register file-formats that are supported 
+			for in- or output-files.\n
+			
+			If the parameter '-write_par somefilename.xml' is given to the program, 
+			an xml-based parameter-file will be automatically written, containing the 
+			specification the tool, all its parameters and all parameter values used 
+			on the commend-line.\n
+			
+			If the parameter '-par somefilename.xml' is used, such a file can be read, 
+			so that the parameter-values stored in it will be used. 
+			However, if, although this is not necessary, parameters (other than -par) 
+			are specified on the command-line, their values will automatically overload 
+			those stored in the xml-file. 
+	*/
 	class BALL_EXPORT CommandlineParser
 	{
 		public:
-			//BALL_CREATE(CommandlineParser);
-
 			CommandlineParser(String tool_name, String tool_description, String tool_version, String build_date, String category="");
 
 			/** Set the text to be displayed as mini-manual when starting the tool, containing a few sentences describing what the tool should be good for ... */
@@ -40,40 +66,60 @@ namespace BALL
 			/** Register the allowed values for a string-parameter. */
 			void setParameterRestrictions(String par_name, list<String>& allowed_values);
 
-			/** In case of output-files, this functions allows to specify the name of an input-parameter, whose format should be used for the given output-parameter. \n
-			Note, that this function will only have an effect on the creation of config-files for workflow-systems (Galaxy, Knime, etc.) and not for the command-line interface, where the user will directly specify output-filenames. */
+			/** In case of output-files, this functions allows to specify the name 
+			    of an input-parameter, whose format should be used for the given 
+			    output-parameter. \n
+					
+					Note, that this function will only have an effect on the creation of 
+					config-files for workflow-systems (Galaxy, Knime, etc.) and not for 
+					the command-line interface, where the user will directly specify 
+					output-filenames. 
+			*/
 			void setOutputFormatSource(String output_parname, String input_parname);
 
 			/** Register the supported formats for input-/output-files.
-			@param supported_formats supported file-formats separated by commas */
+			  
+					@param supported_formats supported file-formats separated by commas 
+			*/
 			void setSupportedFormats(String par_name, String supported_formats);
 
-			/** Parse all parameters found in the command line */
+			/** Parse all parameters found in the command line 
+			 */
 			void parse(int argc, char* argv[]);
 
-			/** Copies names and values of all advanced parameters to the given Options object. */
+			/** Copies names and values of all advanced parameters to the given Options object. 
+			*/
 			void copyAdvancedParametersToOptions(Options& options);
 
 			/** Returns the value for a given parameter name. \n
-			Example: For "-o outfile.sdf", CommandlineParser::get("o") will return "outfile.sdf". */
+					
+					Example: For "-o outfile.sdf", CommandlineParser::get("o") will return 
+					"outfile.sdf". 
+			*/
 			const String& get(String name);
 
-			/** Find out whether a the parameter or flag has been specified on the command-line. */
+			/** Find out whether a the parameter or flag has been specified on the command-line. 
+			 */
 			bool has(String name);
 
 			/** Returns a parameter-list for a given parameter name. \n
-			Example: For "-i infile1.sdf infile2.sdf", CommandlineParser::getList("i") will return a vector containing 'infile1.sdf' and infile2.sdf'. */
+				
+					Example: For "-i infile1.sdf infile2.sdf", CommandlineParser::getList("i") 
+					will return a vector containing 'infile1.sdf' and infile2.sdf'. */
 			const list<String>& getList(String name);
 
 			/** Print information about about all registered parameters.\n
-			If 'parameter_names' is specified, only information those parameters is shown. */
+			  
+					If 'parameter_names' is specified, only information those parameters is shown. 
+			*/
 			void printHelp(std::set<String>* parameter_names = 0, bool show_manual = true);
 
 			void printToolInfo();
 
 			const String& getStartTime();
 
-			/** Get the exact command with which the tool was started on the command-line. */
+			/** Get the exact command with which the tool was started on the command-line. 
+			*/
 			const String& getStartCommand();
 
 		private:

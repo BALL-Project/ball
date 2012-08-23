@@ -1,7 +1,9 @@
 #ifndef BALL_FORMAT_MOLFILEFACTORY_H
 #define BALL_FORMAT_MOLFILEFACTORY_H
 
-#include <BALL/SYSTEM/file.h>
+#ifndef BALL_SYSTEM_FILE_H
+# include <BALL/SYSTEM/file.h>
+#endif
 
 namespace BALL
 {
@@ -20,6 +22,10 @@ class BALL_EXPORT MolFileFactory
 		/**
 		* This method tries to determine the filetype based on the file extension of name and
 		* returns a pointer to an object of the appropriate subclass of GenericMolFile if available.
+				 * If the file should be opened in read-mode and the extension is unknown or the file does not
+				 * have an extension, we try to automatically detect the format. 
+				 * If the detection fails, NULL is returned.
+				 *
 		* @param name the path to the requested molecule file
 		* @return a pointer to a subclass of GenericMolFile, NULL if none is appropriate. Be aware, that
 		*         the file handle has not been checked for validity and that you have to delete it yourself

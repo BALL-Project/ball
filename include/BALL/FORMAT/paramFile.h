@@ -1,11 +1,18 @@
 #ifndef BALL_FORMAT_PARAMFILE_H
 #define BALL_FORMAT_PARAMFILE_H
 
+#ifndef BALL_SYSTEM_FILE_H
+# include <BALL/SYSTEM/file.h>
+#endif
+
+#ifndef BALL_DATATYPE_STRING_H
+# include <BALL/DATATYPE/string.h>
+#endif
+
 #include <QtXml/QXmlStreamReader>
 #include <QtXml/QXmlStreamWriter>
 #include <QtCore/QFile>
-#include <BALL/SYSTEM/file.h>
-#include <BALL/DATATYPE/string.h>
+
 #include <map>
 #include <list>
 
@@ -41,7 +48,7 @@ namespace BALL
 			allowed_values.clear();
 			supported_formats.clear();
 		};
-
+		
 		String name;
 		String description;
 		String category;
@@ -65,7 +72,7 @@ namespace BALL
 	class BALL_EXPORT ParamFile : public File
 	{
 		public:
-
+			
 			ParamFile(const String& name, File::OpenMode open_mode);
 			~ParamFile();
 
@@ -78,7 +85,7 @@ namespace BALL
 			void writeSection(String section_name, String section_description, String version, const String& section_helptext, const String& category, const std::list<std::pair<String,ParameterDescription> >& descriptions, const std::map<String,list<String> >& values);
 
 			/** Read a section from input file (e.g. parameters for one tool)
-			@param descriptions descriptions of parameters will be stored here
+			@param descriptions descriptions of parameters will be stored here 
 			@param values values of parameters will be stored here
 			@param overwrite_existing if set to true, entries already existing in 'descriptions' and 'values' will be overwritten. */
 			void readSection(String& section_name, String& section_description, String& version, String& section_helptext, String& category, std::list<std::pair<String,ParameterDescription> >& descriptions, std::map<String,list<String> >& values, bool overwrite_existing=false);

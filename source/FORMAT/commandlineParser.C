@@ -99,7 +99,7 @@ void CommandlineParser::checkAndRegisterParameter(String name, String descriptio
 	{
 		size += 9;
 	}
-	if (size > max_parname_length_) max_parname_length_ = size;
+	if (size > max_parname_length_) max_parname_length_ = size; 
 }
 
 void CommandlineParser::registerParameter(String name, String description, ParameterType type, bool mandatory, String default_value)
@@ -228,33 +228,33 @@ void CommandlineParser::printToolInfo()
 {
 	cout<<endl;
 	Size length = tool_name_.size()+tool_description_.size()+6;
-	cout<<" "; for (Size i = 0; i < length; i++) cout<<"="; cout<<endl;
+	cout<<" "; for (Size i = 0; i < length; i++) cout<<"="; cout<<endl; 
 	cout<<"| "<<tool_name_<<" -- "<<tool_description_<<" |"<<endl;
-	cout<<"|"; for (Size i = 0; i < length; i++) cout<<"="; cout<<"|"<<endl;
-	cout<<"|"; for (Size i = 0; i < length; i++) cout<<" ";
+	cout<<"|"; for (Size i = 0; i < length; i++) cout<<"="; cout<<"|"<<endl; 
+	cout<<"|"; for (Size i = 0; i < length; i++) cout<<" "; 
 	cout<<"|"<<endl;
 
 	int n = length-tool_version_.size()-11;
 	cout<<"| Version: "<<tool_version_;
-	for (int i = 0; i < n; i++) cout<<" ";
+	for (int i = 0; i < n; i++) cout<<" "; 
 	cout<<" |"<<endl;
 
 	cout<<"| build date: "<<build_date_;
 	n = length-build_date_.size()-14;
-	for (int i = 0; i < n; i++) cout<<" ";
+	for (int i = 0; i < n; i++) cout<<" "; 
 	cout<<" |"<<endl;
 
 	n = length-hostname_.size()-18;
 	cout<<"| execution host: "<<hostname_;
-	for (int i = 0; i < n; i++) cout<<" ";
+	for (int i = 0; i < n; i++) cout<<" "; 
 	cout<<" |"<<endl;
 
 	n = length-start_time_.size()-18;
 	cout<<"| execution time: "<<start_time_;
-	for (int i = 0; i < n; i++) cout<<" ";
+	for (int i = 0; i < n; i++) cout<<" "; 
 	cout<<" |"<<endl;
 
-	cout<<" "; for (Size i = 0; i < length; i++) cout<<"-";
+	cout<<" "; for (Size i = 0; i < length; i++) cout<<"-"; 
 	cout<<endl<<endl;
 }
 
@@ -290,7 +290,7 @@ void CommandlineParser::parse(int argc, char* argv[])
 		token = argv[i];
 		token.trim();
 		start_command_ += token;
-		if (i < argc-1) start_command_ += " ";
+		if (i < argc-1) start_command_ += " "; 
 
 		if (token[0] == '-' && !token.isFloat())
 		{
@@ -314,11 +314,11 @@ void CommandlineParser::parse(int argc, char* argv[])
 				{
 					if (registered_parameters_.find(current_par_name) != registered_parameters_.end())
 					{
-						Log.error()<<"No value specified for '"<<current_par_name<<"', but it is a parameter not a flag!!\nUse '-help' to display information about available parameters and flags."<<endl;
+						Log.error()<<"No value specified for '"<<current_par_name<<"', but it is a parameter not a flag!!\nUse '-help' to display information about available parameters and flags."<<endl; 
 					}
 					else
 					{
-						Log.error()<<"Flag '"<<current_par_name<<"' unknown!!\nUse '-help' to display information about available parameters and flags."<<endl;
+						Log.error()<<"Flag '"<<current_par_name<<"' unknown!!\nUse '-help' to display information about available parameters and flags."<<endl; 
 					}
 					exit(1);
 				}
@@ -345,7 +345,7 @@ void CommandlineParser::parse(int argc, char* argv[])
 					}
 					else
 					{
-						Log.error()<<"Parameter '"<<current_par_name<<"' unknown!!\nUse '-help' to display information about available parameters and flags."<<endl;
+						Log.error()<<"Parameter '"<<current_par_name<<"' unknown!!\nUse '-help' to display information about available parameters and flags."<<endl; 
 						exit(1);
 					}
 				}
@@ -374,7 +374,7 @@ void CommandlineParser::parse(int argc, char* argv[])
 		{
 			if (registered_parameters_.find(current_par_name) != registered_parameters_.end())
 			{
-				Log.error()<<"No value specified for '"<<current_par_name<<"', but it is a parameter not a flag!!\nUse '-help' to display information about available parameters and flags."<<endl;
+				Log.error()<<"No value specified for '"<<current_par_name<<"', but it is a parameter not a flag!!\nUse '-help' to display information about available parameters and flags."<<endl; 
 			}
 			else
 			{
@@ -413,7 +413,7 @@ void CommandlineParser::parse(int argc, char* argv[])
 
 		if (par_toolname != tool_name_)
 		{
-			Log.error()<<"[Error:] The specified parameter-file was created for tool '"<<par_toolname<<"' not for '"<<tool_name_<<"'. Please make sure to use the correct type of parameter-file!"<<endl;
+			Log.error()<<"[Error:] The specified parameter-file was created for tool '"<<par_toolname<<"' not for '"<<tool_name_<<"'. Please make sure to use the correct type of parameter-file!"<<endl; 
 			exit(1);
 		}
 		pf.close();
@@ -472,7 +472,7 @@ void CommandlineParser::parse(int argc, char* argv[])
 	set<String> missing_parameters;
 	for (map < String, ParameterDescription > :: iterator it = registered_parameters_.begin(); it != registered_parameters_.end(); it++)
 	{
-		if (it->second.mandatory == false) continue;
+		if (it->second.mandatory == false) continue; 
 		if (parameter_map_.find(it->second.name) == parameter_map_.end())
 		{
 			missing_parameters.insert(it->first);
@@ -503,7 +503,7 @@ void CommandlineParser::copyAdvancedParametersToOptions(Options& options)
 		ParameterDescription& p = (*it)->second;
 
 		if (!p.advanced) continue;
-
+		
 		map<String, list<String> >::iterator search_it = parameter_map_.find(p.name);
 		if (search_it != parameter_map_.end())
 		{
@@ -533,7 +533,7 @@ void CommandlineParser::printHelp(set<String>* parameter_names, bool show_manual
 			continue;
 		}
 		cout<<"   ";
-		if (!parameter_names && p.mandatory) cout<<"*  ";
+		if (!parameter_names && p.mandatory) cout<<"*  "; 
 		else cout<<"   ";
 		cout<<"-"<<p.name;
 		String n = "";
