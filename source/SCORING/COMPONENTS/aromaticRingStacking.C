@@ -23,6 +23,7 @@
 
 #include <BALL/SCORING/COMPONENTS/aromaticRingStacking.h>
 
+using namespace std;
 
 namespace BALL
 {
