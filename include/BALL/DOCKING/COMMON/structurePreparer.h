@@ -66,9 +66,9 @@ namespace BALL
 			/** run all of the above */
 			void prepare(AtomContainer* at, String parameterFile, String AtomType_file="");
 
-			void setSimpleAtomTypes(set<String>& new_types);
+			void setSimpleAtomTypes(std::set<String>& new_types);
 
-			const set<String>* getSimpleAtomTypes();
+			const std::set<String>* getSimpleAtomTypes();
 
 		private:
 
@@ -83,7 +83,7 @@ namespace BALL
 			/** determines whether Piecewise Linear Potential AtomTypes are to be used */
 			bool use_PLP_;
 
-			set<String> simple_atom_types_;
+			std::set<String> simple_atom_types_;
 	};
 }
 
