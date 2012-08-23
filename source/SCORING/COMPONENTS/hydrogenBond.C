@@ -32,7 +32,7 @@
 #include <BALL/SYSTEM/timer.h>
 
 using namespace BALL;
-
+using namespace std;
 
 const char* HydrogenBond::Option::HB_IDEAL_LENGTH = "hb_ideal_length";
 const char* HydrogenBond::Option::HB_IDEAL_ANGLE = "hb_ideal_angle";
