@@ -36,17 +36,17 @@ namespace BALL
 
             Rescoring3D(AtomContainer& receptor, AtomContainer& reference_ligand, Options& options, String free_energy_label, ScoringFunction* sf);
 
-            list<pair<String, RegularData3D*> > generateRegularData3DGrids();
+            std::list<std::pair<String, RegularData3D*> > generateRegularData3DGrids();
 
 
         protected:
 
             void setup_();
 
-            void generateScoreContributions_(Molecule* mol, vector<vector<double> >* matrix, vector<double>* v);
+            void generateScoreContributions_(Molecule* mol, std::vector<std::vector<double> >* matrix, std::vector<double>* v);
 
             /** Obtain score-contributions for a single atom. Overloaded by class Rescoring4D */
-            virtual void generateAtomScoreContributions_(const Atom* atom, vector<double>& contributions);
+            virtual void generateAtomScoreContributions_(const Atom* atom, std::vector<double>& contributions);
 
             Size sizeX_;
             Size sizeY_;
@@ -55,7 +55,7 @@ namespace BALL
             Vector3 origin_;
 
             /** the names for the RegularData3D-grids to be created by generateRegularData3DGrids() */
-            vector<String> reg3D_grid_names_;
+            std::vector<String> reg3D_grid_names_;
 
     };
 }
