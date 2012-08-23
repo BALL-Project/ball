@@ -162,9 +162,9 @@ void DiffGridBasedScoring::testOverlaps(Vector3& position, HashGrid3 < Atom* > *
 	if (hashg == NULL) hashg = hashgrid_;
 	AtomPairVector* nonbonded_pairs = createNonbondedPairVector(hashg, overlaps, 1);
 
-	cout<<e.getVanDerWaalsRadius()<<endl;
-	cout<<overlaps<<" atom overlaps were found at the given position"<<endl;
-	cout<<"neighboring_target_atoms_ = "<<neighboring_target_atoms_<<endl;
+	std::cout<<e.getVanDerWaalsRadius()<<std::endl;
+	std::cout<<overlaps<<" atom overlaps were found at the given position"<<std::endl;
+	std::cout<<"neighboring_target_atoms_ = "<<neighboring_target_atoms_<<std::endl;
 
 // 	update();
 // 	updateScore();
@@ -229,7 +229,7 @@ double DiffGridBasedScoring::updateScore()
 {
 	if (!store_interactions_ && hasPharmacophoreConstraints_())
 	{
-		cout<<"[info:] enabling storing interaction with PharmacophoreConstraint-residues"<<endl;
+		std::cout<<"[info:] enabling storing interaction with PharmacophoreConstraint-residues"<<std::endl;
 		enableStoreInteractionsOnlyForPhContraints();
 	}
 	if (store_interactions_) clearStoredInteractions_();
