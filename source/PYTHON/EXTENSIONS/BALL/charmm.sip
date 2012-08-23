@@ -56,9 +56,9 @@ class CharmmFF
 //  };
   // BALL_CREATE(CharmmFF)
   CharmmFF();
-  CharmmFF(System& /system/);
-  CharmmFF(System& /system/, const Options& /options/);
-  CharmmFF(const CharmmFF& /force_field/);
+  CharmmFF(System&);
+  CharmmFF(System&, const Options&);
+  CharmmFF(const CharmmFF&);
   ~CharmmFF();
   virtual bool specificSetup() throw(TooManyErrors);
   double getStretchEnergy() const;

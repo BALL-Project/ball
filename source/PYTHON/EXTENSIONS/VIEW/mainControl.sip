@@ -48,31 +48,31 @@ class MainControl
 
 	// methods implemented by the BALL_EMBEDDED macro
 	static Size countInstances();
-	static MainControl* getInstance(Position /index/);
+	static MainControl* getInstance(Position);
 
 	RepresentationManager& getRepresentationManager() throw();
   CompositeManager& getCompositeManager() throw();
-	bool updateRepresentationsOf(const Composite& /composite/, bool /rebuild/ = true, bool = false) throw();
-	void redrawAllRepresentations(bool /rebuild_display_lists/ = false) throw();
+	bool updateRepresentationsOf(const Composite&, bool rebuild = true, bool = false) throw();
+	void redrawAllRepresentations(bool rebuild_display_lists = false) throw();
  	
-	void update(Composite& /composite/, bool /changed_hierarchy/ = true) throw();
+	void update(Composite&, bool changed_hierarchy = true) throw();
 
 	// we get a seg fault under windows if we use default parameters here:
 	bool insert(Composite& /Transfer/, String) throw();
 	bool insert(Composite& /Transfer/) throw();
 
-	bool remove(Composite& /composite/, bool = true, bool = true) throw();
+	bool remove(Composite&, bool = true, bool = true) throw();
 
-	bool update(Representation& /composite/) throw();
+	bool update(Representation&) throw();
 	bool insert(Representation& /Transfer/) throw();
-	bool remove(Representation& /composite/) throw();
+	bool remove(Representation&) throw();
 	 	
 	Preferences* getPreferences() throw();
 
 	INIFile& getINIFile() throw();
 	// const INIFile& getINIFile() const throw();
   
-	// void onNotify(Message* /message/) throw();	
+	// void onNotify(Message*) throw();	
 	void sendMessage(Message& /Transfer/) throw();
 
 	virtual void show();
@@ -87,16 +87,16 @@ class MainControl
 	void setContentSize(int, int);
 	
 	// static MainControl* getMainControl(const QObject* object) throw();
-	// int insertMenuEntry(int /ID/, const String& /name/, const QObject* /receiver/ = 0, const char* /slot/ = 0, int /accel/ = 0, int /entry_ID/ = -1, String /hint/ = "") throw();
-	// void removeMenuEntry(int /ID/, const String& /name/, const QObject* /receiver/ = 0, const char* /slot/ = 0, int /accel/ = 0, int /entry_ID/ = -1) throw();
+	// int insertMenuEntry(int /ID/, const String&, const QObject* receiver = 0, const char* slot = 0, int accel = 0, int entry_ID = -1, String hint = "") throw();
+	// void removeMenuEntry(int /ID/, const String&, const QObject* receiver = 0, const char* slot = 0, int accel = 0, int entry_ID = -1) throw();
 	//virtual QPopupMenu* initPopupMenu(int /ID/) throw();
-	void insertPopupMenuSeparator(int /ID/) throw();
+	void insertPopupMenuSeparator(int) throw();
 	void applyPreferences() throw();
-	void fetchPreferences(INIFile& /inifile/) throw();
-	void writePreferences(INIFile& /inifile/) throw();
+	void fetchPreferences(INIFile&) throw();
+	void writePreferences(INIFile&) throw();
 	void restoreWindows(const INIFile&) throw();
-	void addModularWidget(ModularWidget* /widget/) throw();
-	void removeModularWidget(ModularWidget* /widget/) throw();
+	void addModularWidget(ModularWidget*) throw();
+	void removeModularWidget(ModularWidget*) throw();
 
 
 	PyCompositeList getSelection() throw();
@@ -104,14 +104,14 @@ class MainControl
 
 	PyCompositeList getMolecularControlSelection() throw();
 	System* getSelectedSystem() throw();
-	void selectCompositeRecursive(Composite* /composite/, bool /first_call/ = false) throw();
-		void deselectCompositeRecursive(Composite* /composite/, bool /first_call/ = false) throw();
+	void selectCompositeRecursive(Composite*, bool first_call = false) throw();
+		void deselectCompositeRecursive(Composite*, bool first_call = false) throw();
   void clearSelection() throw();
 	void printSelectionInfos() throw();
 	void setStatusbarText(const String&, bool = false, bool = false);
 	String getStatusbarText() const	throw();
-//	void setMenuHint(Index /id/, const String& /hint/) throw();
-//	const String& getMenuHint(Index /id/) const throw();
+//	void setMenuHint(Index, const String&) throw();
+//	const String& getMenuHint(Index) const throw();
 	const FragmentDB& getFragmentDB() const throw();
 
 	bool compositesAreLocked() const throw();
@@ -135,7 +135,7 @@ class MainControl
 	const String& getLoggingFilename() const throw();
 	bool useMultithreading() throw();
 	void setMultithreading(bool) throw();
-	// void dump(std::ostream& /s/ = std::cout, Size /depth/ = 0) const throw();
+	// void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
 	virtual void openFile(const String&) throw();
 	void saveBALLViewProjectFile(const String&);
 	void loadBALLViewProjectFile(const String&) throw();

@@ -15,21 +15,21 @@ class RepresentationManager
 %End
   public:
   // BALL_CREATE(RepresentationManager);
-  // list<Representation*> changedComposite(const Composite& /composite/) throw();
+  // list<Representation*> changedComposite(const Composite&) throw();
   
 	RepresentationManager(MainControl* = 0) throw();
-  RepresentationManager(const RepresentationManager& /pm/) throw();
+  RepresentationManager(const RepresentationManager&) throw();
   //virtual ~RepresentationManager() throw();
   
-  //const RepresentationManager& operator = (const RepresentationManager& /pm/) throw();
-  bool operator == (const RepresentationManager& /pm/) const throw();
+  //const RepresentationManager& operator = (const RepresentationManager&) throw();
+  bool operator == (const RepresentationManager&) const throw();
   void clear() throw();
-  void remove(Representation& /representation/, bool = true) throw();
-  void insert(Representation& /representation/, bool = true) throw();
+  void remove(Representation&, bool = true) throw();
+  void insert(Representation&, bool = true) throw();
   const list<Representation*>& getRepresentations() const throw();
   Size getNumberOfRepresentations() const throw();
   Representation* createRepresentation() throw();
-  bool has(const Representation& /representation/) const throw();
+  bool has(const Representation&) const throw();
 	
   // void dump(std::ostream& s, Size depth) const throw();
   // RepresentationsConstIterator begin() const throw();

@@ -34,8 +34,8 @@ class SimpleBox3
   float getHeight() const;
   float getDepth() const;
   void join(SimpleBox3&);
-  bool operator == (const SimpleBox3& /box/) const;
-  bool operator != (SimpleBox3& /box/) const;
+  bool operator == (const SimpleBox3&) const;
+  bool operator != (SimpleBox3&) const;
   bool isValid() const;
   // void dump(std::ostream& s = std::cout, Size depth = 0) const;
   Vector3 a;

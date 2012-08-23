@@ -13,24 +13,24 @@ class LineSearch
 	public:
 	//    BALL_CREATE(LineSearch)
 	LineSearch();	
-	LineSearch(EnergyMinimizer& /minimizer/);
-	// LineSearch(const LineSearch& /line_search/);
+	LineSearch(EnergyMinimizer&);
+	// LineSearch(const LineSearch&);
 	virtual ~LineSearch() throw();
-	// LineSearch& operator = (const LineSearch& /rhs/);
-	void setAlpha(double /alpha/);
-	void setBeta(double /beta/);
+	// LineSearch& operator = (const LineSearch&);
+	void setAlpha(double);
+	void setBeta(double);
 	double getAlpha() const;
 	double getBeta() const;
 	Size getMaxSteps() const;
-	void setMaxSteps(Size /steps/);
-	void setLowerBound(double /lbound/);
+	void setMaxSteps(Size);
+	void setLowerBound(double);
 	double getLowerBound() const;
-	void setXTol(double /xtol/);
+	void setXTol(double);
 	double getXTol() const;
-	void setBracketedFlag(bool /bracktd/);
+	void setBracketedFlag(bool);
 	bool isBracketed() const;
-	void setMinimizer(EnergyMinimizer& /minimizer/);
-	virtual void takeStep(double& /st_a/, double& /f_a/, double& /g_a/, double& /st_b/, double& /f_b/, 
-								 double& /g_b/, double& /stp/, double /f/, double /g/, double /minstp/, double /maxstp/);
-	virtual bool minimize(double& /stp/, bool /keep_gradient/ = false);
+	void setMinimizer(EnergyMinimizer&);
+	virtual void takeStep(double&, double&, double&, double&, double&, 
+								 double&, double&, double, double, double, double);
+	virtual bool minimize(double&, bool keep_gradient = false);
 };

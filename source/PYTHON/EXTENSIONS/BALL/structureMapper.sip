@@ -12,34 +12,34 @@ class StructureMapper
 	public:
 
 	StructureMapper();
-	StructureMapper(AtomContainer& /A/, AtomContainer& /B/);
+	StructureMapper(AtomContainer&, AtomContainer&);
 
 	virtual ~StructureMapper();
 
-	void set(AtomContainer& /A/, AtomContainer& /B/);
+	void set(AtomContainer&, AtomContainer&);
 	double calculateRMSD();
 	bool calculateTransformation();
 	void calculateDefaultBijection();
 	const AtomBijection& getBijection() const;
-	AtomBijection calculateFragmentBijection(const vector<Fragment*>& /A/, const vector<Fragment*>& /B/);
+	AtomBijection calculateFragmentBijection(const vector<Fragment*>&, const vector<Fragment*>&);
 
-	bool mapFragments (const vector<Fragment*>& /A/, const vector<Fragment*>& /B/, 
-		 Matrix4x4* /transformation/, double /upper_bound/,	double /lower_bound/);
+	bool mapFragments (const vector<Fragment*>&, const vector<Fragment*>&, 
+		 Matrix4x4*, double,	double);
 
 	static Matrix4x4 matchPoints
-		(const Vector3& /w1/,	const Vector3& /w2/, const Vector3& /w3/,	
-		 const Vector3& /v1/,	const Vector3& /v2/, const Vector3& /v3/);
+		(const Vector3&,	const Vector3&, const Vector3&,	
+		 const Vector3&,	const Vector3&, const Vector3&);
 
-	static Matrix4x4 matchBackboneAtoms(const Residue& /r1/, const Residue& /r2/);
+	static Matrix4x4 matchBackboneAtoms(const Residue&, const Residue&);
 
-	Size mapResiduesByBackbone(const list<Residue*>& /l1/, const list<Residue*>& /l2/);
+	Size mapResiduesByBackbone(const list<Residue*>&, const list<Residue*>&);
  
 //	vector<vector<Fragment*> >& searchPattern
-//		(vector<Fragment*>& /pattern/, AtomContainer& /composite/,
-//		 double /max_rmsd/,	   double /max_center_tolerance/,
-//		 double /upper_bound/, double /lower_bound/);
+//		(vector<Fragment*>&, AtomContainer&,
+//		 double,	   double,
+//		 double, double);
 
-//	Matrix4x4 mapProteins(Protein& /P1/, Protein& /P2/, std::map<String, Size>&	/type_map/,
-//		 Size&	/no_matched_ca/, double& /rmsd/, double	/upper_bound/, double	/lower_bound/, double	/tolerance/);
+//	Matrix4x4 mapProteins(Protein& /P1/, Protein& /P2/, std::map<String, Size>&,
+//		 Size&, double&, double, double, double);
 
 };

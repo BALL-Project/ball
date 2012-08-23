@@ -16,7 +16,7 @@ class ModifyRepresentationDialog
 
 	// methods implemented by the BALL_EMBEDDED macro
 	static Size countInstances();
-	static ModifyRepresentationDialog* getInstance(Position /index/);
+	static ModifyRepresentationDialog* getInstance(Position);
 
   ~ModifyRepresentationDialog() throw();
 

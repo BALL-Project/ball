@@ -15,7 +15,7 @@ class FragmentProcessor
 	public:
 	bool start();
 	bool finish();
-	Processor::Result operator () (Fragment& /atom/);
+	Processor::Result operator () (Fragment&);
 %MethodCode
   sipRes = sipCpp->operator () (*a0);
 %End

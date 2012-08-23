@@ -15,7 +15,7 @@ class DockWidget
   public:
 
 	static Size countInstances();
-	static DockWidget* getInstance(Position /index/);
+	static DockWidget* getInstance(Position);
 
 	DockWidget();
   ~DockWidget() throw();

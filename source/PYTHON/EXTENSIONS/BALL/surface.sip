@@ -21,16 +21,16 @@ class Surface
 
 	public:
   Surface();
-  Surface(const Surface& /surface/);
+  Surface(const Surface&);
   ~Surface();
   void clear();
-  void set(const Surface& /box/);
+  void set(const Surface&);
 	//  const Surface& operator = (const Surface& box);
-  void get(Surface& /box/) const;
-  void readMSMSFile(const String& /vert_filename/, const String& /face_filename/);
+  void get(Surface&) const;
+  void readMSMSFile(const String&, const String&);
   float getArea() const;
-  bool operator == (const Surface& /box/) const;
-  bool operator != (const Surface& /box/) const;
+  bool operator == (const Surface&) const;
+  bool operator != (const Surface&) const;
   // vector<Vector3>  vertex;
   // vector<Vector3>  normal;
   // vector<Triangle> triangle;
@@ -39,21 +39,21 @@ class Surface
 	Size getNumberOfVertices() const throw();
 	Size getNumberOfNormals() const throw();
 
-	Triangle& getTriangle(Position /index/) throw();
-	// const Triangle& getTriangle(Position /index/) const throw();
+	Triangle& getTriangle(Position) throw();
+	// const Triangle& getTriangle(Position) const throw();
 
-	Vector3& getVertex(Position /index/) throw();
-	// const Vector3& getVertex(Position /index/) const throw();
+	Vector3& getVertex(Position) throw();
+	// const Vector3& getVertex(Position) const throw();
 
-	Vector3& getNormal(Position /index/) throw();
-	// const Vector3& getNormal(Position /index/) const throw();
+	Vector3& getNormal(Position) throw();
+	// const Vector3& getNormal(Position) const throw();
 	void clearVertices();
 	void clearTriangles();
 	void clearNormals();
-	void pushBackTriangle(const Triangle& /t/) throw();
-	void pushBackVertex(const Vector3& /v/) throw();
-	void pushBackNormal(const Vector3& /n/) throw();
-	void resizeTriangles(Size /size/);
-	void resizeNormals(Size /size/);
-	void resizeVertices(Size /size/);
+	void pushBackTriangle(const Triangle&) throw();
+	void pushBackVertex(const Vector3&) throw();
+	void pushBackNormal(const Vector3&) throw();
+	void resizeTriangles(Size);
+	void resizeNormals(Size);
+	void resizeVertices(Size);
 };

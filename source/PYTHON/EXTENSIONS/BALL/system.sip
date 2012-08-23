@@ -14,8 +14,8 @@ class System
 %End
   public:
   System();
-  System(const System& /system/, bool /deep/ = true);
-  System(const String& /name/);
+  System(const System&, bool deep = true);
+  System(const String&);
   ~System() throw();
   virtual void clear() throw();
   virtual void destroy() throw();

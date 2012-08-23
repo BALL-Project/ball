@@ -28,16 +28,16 @@ class ConjugateGradientMinimizer
 	//  };
 	//    BALL_CREATE(ConjugateGradientMinimizer)
 	ConjugateGradientMinimizer();
-	ConjugateGradientMinimizer(ForceField& /force_field/);
-	ConjugateGradientMinimizer(ForceField& /force_field/, SnapShotManager* /ssm/);
-	ConjugateGradientMinimizer(ForceField& /force_field/, SnapShotManager* /ssm/, const Options& /options/);
-	ConjugateGradientMinimizer(ForceField& /force_field/, const Options& /options/);
+	ConjugateGradientMinimizer(ForceField&);
+	ConjugateGradientMinimizer(ForceField&, SnapShotManager*);
+	ConjugateGradientMinimizer(ForceField&, SnapShotManager*, const Options&);
+	ConjugateGradientMinimizer(ForceField&, const Options&);
 	~ConjugateGradientMinimizer();
-	// ConjugateGradientMinimizer& operator = (const ConjugateGradientMinimizer& /rhs/);
+	// ConjugateGradientMinimizer& operator = (const ConjugateGradientMinimizer&);
 	virtual bool specificSetup();
-	void setUpdateMethod(UpdateMethod /method/);
+	void setUpdateMethod(UpdateMethod);
 	UpdateMethod getUpdateMethod() const;
 	virtual double findStep();
 	virtual void updateDirection();
-	virtual bool minimize(Size /iterations/ = 0, bool /restart/ = false);
+	virtual bool minimize(Size iterations = 0, bool restart = false);
 };

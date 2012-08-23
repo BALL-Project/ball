@@ -38,7 +38,7 @@ class File
 	class CannotWrite
 	{
 		 public:
-		 CannotWrite(const char* /file/, int /line/, const String& /filename/) throw();
+		 CannotWrite(const char*, int, const String&) throw();
 		 ~CannotWrite() throw();
 		 String getFilename() const throw();
 	};
@@ -56,10 +56,10 @@ class File
 
   File();
 	// default open mode: IN
-  File(const String&, OpenMode /openmode/ = std::ios::in);
+  File(const String&, OpenMode openmode = std::ios::in);
   ~File();
 	// default open mode: IN
-  bool open(const String&, OpenMode /openmode/ = std::ios::in);
+  bool open(const String&, OpenMode openmode = std::ios::in);
 
   bool reopen();
   void close();
@@ -73,8 +73,8 @@ class File
   bool remove();
   bool renameTo(const String&);
   bool truncate(int) const;
-  bool operator == (const File& /file/) const;
-  bool operator != (const File& /file/) const;
+  bool operator == (const File&) const;
+  bool operator != (const File&) const;
   bool isOpen() const;
   bool isClosed() const;
   bool isAccessible() const;
@@ -85,7 +85,7 @@ class File
   bool isValid() const;
 
 	private:
-  File(const File& /filename/);
+  File(const File&);
 };
 
 

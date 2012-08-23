@@ -16,7 +16,7 @@ class BoundingBoxProcessor
   public:
   virtual bool start() throw();
   virtual bool finish() throw();
-  Processor::Result operator()(Atom& /atom/) throw();
+  Processor::Result operator()(Atom&) throw();
 %MethodCode
   sipRes = sipCpp->operator () (*a0);
 %End
@@ -37,7 +37,7 @@ class GeometricCenterProcessor
   public:
   virtual bool start() throw();
   virtual bool finish() throw();
-  Processor::Result operator()(Atom& /atom/) throw();
+  Processor::Result operator()(Atom&) throw();
 %MethodCode
   sipRes = sipCpp->operator () (*a0);
 %End
@@ -55,20 +55,20 @@ class FragmentDistanceCollector
 %End
   public:
   FragmentDistanceCollector();
-  FragmentDistanceCollector(const Composite& /composite/);
-  FragmentDistanceCollector(const Composite& /composite/, float /distance/);
+  FragmentDistanceCollector(const Composite&);
+  FragmentDistanceCollector(const Composite&, float);
 	~FragmentDistanceCollector() throw();
   virtual bool start() throw();
   virtual bool finish() throw();
-  Processor::Result operator()(Composite& /composite/) throw();
+  Processor::Result operator()(Composite&) throw();
 %MethodCode
   sipRes = sipCpp->operator () (*a0);
 %End
   Size getNumberOfFragments();
-  void setComposite(const Composite& /composite/);
+  void setComposite(const Composite&);
   const Composite* getComposite() const;
   float getDistance() const;
-  void setDistance(float /distance/);
+  void setDistance(float);
   // vector<Fragment*> fragments;
 };
 
@@ -77,6 +77,6 @@ class FragmentDistanceCollector
 	#include <BALL/STRUCTURE/geometricProperties.h>
 	using namespace BALL;
 %End
-Angle calculateTorsionAngle(const Atom& /a1/, const Atom& /a2/, const Atom& /a3/, const Atom& /a4/);
-Angle setTorsionAngle(const Atom& /a1/, const Atom& /a2/, Atom& /a3/, const Atom& /a4/, Angle a);
-Angle calculateBondAngle(const Atom& /a1/, const Atom& /a2/, const Atom& /a3/);
+Angle calculateTorsionAngle(const Atom&, const Atom&, const Atom&, const Atom&);
+Angle setTorsionAngle(const Atom&, const Atom&, Atom&, const Atom&, Angle a);
+Angle calculateBondAngle(const Atom&, const Atom&, const Atom&);

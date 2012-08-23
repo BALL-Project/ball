@@ -14,11 +14,11 @@ class TypeRuleProcessor
 	public:
 	// BALL_CREATE(TypeRuleProcessor)
 	TypeRuleProcessor();
-	TypeRuleProcessor(INIFile& /file/, const String& /prefix/);
-	TypeRuleProcessor(const TypeRuleProcessor& /rule_processor/);
+	TypeRuleProcessor(INIFile&, const String&);
+	TypeRuleProcessor(const TypeRuleProcessor&);
 	~TypeRuleProcessor();
 
-	Processor::Result operator () (Atom& /atom/);
+	Processor::Result operator () (Atom&);
 %MethodCode
   sipRes = sipCpp->operator () (*a0);
 %End

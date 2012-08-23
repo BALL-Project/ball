@@ -13,19 +13,19 @@ class CanonicalMD
 %End
     public: 
     CanonicalMD(); 
-    CanonicalMD(ForceField& /myforcefield/); 
-    CanonicalMD(ForceField& /myforcefield/,SnapShotManager* /ssm/); 
-    CanonicalMD(ForceField& /myforcefield/,SnapShotManager* /ssm/, const Options& /options/);
-    CanonicalMD(const CanonicalMD& /rhs/); 
+    CanonicalMD(ForceField&); 
+    CanonicalMD(ForceField&,SnapShotManager*); 
+    CanonicalMD(ForceField&,SnapShotManager*, const Options&);
+    CanonicalMD(const CanonicalMD&); 
     ~CanonicalMD() throw(); 
-    // CanonicalMD &operator=(const CanonicalMD& /rhs/); 
-    void setBathRelaxationTime(double /time/);
+    // CanonicalMD &operator=(const CanonicalMD&); 
+    void setBathRelaxationTime(double);
     double getBathRelaxationTime() const; 
-    virtual bool setup(ForceField& /myforcefield/, SnapShotManager* /ssm/) throw(); 
-    virtual bool setup(ForceField& /myforcefield/, SnapShotManager* /ssm/, const Options& /options/) throw(); 
+    virtual bool setup(ForceField&, SnapShotManager*) throw(); 
+    virtual bool setup(ForceField&, SnapShotManager*, const Options&) throw(); 
     virtual bool specificSetup() throw();
-    virtual void setTimeStep(double /time/) throw(); 
-    virtual bool simulate(bool /restart/ = false) throw();
-    virtual bool simulateIterations(Size /number/, bool /restart/ = false) throw();
-    virtual bool simulateTime(double /simulation_time/, bool /restart/ = false) throw(); 
+    virtual void setTimeStep(double) throw(); 
+    virtual bool simulate(bool restart = false) throw();
+    virtual bool simulateIterations(Size, bool restart = false) throw();
+    virtual bool simulateTime(double, bool restart = false) throw(); 
 };

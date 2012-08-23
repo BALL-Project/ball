@@ -3,7 +3,7 @@
 	using namespace BALL;
 %End
 
-PyResidueDict& calculateResidueChiAngles(const Protein& /protein/);
+PyResidueDict& calculateResidueChiAngles(const Protein&);
 %MethodCode
 	const Protein *a0;
 
@@ -21,7 +21,7 @@ PyResidueDict& calculateResidueChiAngles(const Protein& /protein/);
 	}
 %End
 
-PyResidueDict& calculateResidueChiAngles(const Chain& /fragment/);
+PyResidueDict& calculateResidueChiAngles(const Chain&);
 %MethodCode
 	const Chain *a0;
 
@@ -40,10 +40,10 @@ PyResidueDict& calculateResidueChiAngles(const Chain& /fragment/);
 %End
 
 
-float calculateResidueChiAngles(const Residue& /residue/) const;
+float calculateResidueChiAngles(const Residue&) const;
 
 
-PyResidueDict& calculateResidueChi2Angles(const Protein& /protein/);
+PyResidueDict& calculateResidueChi2Angles(const Protein&);
 %MethodCode
 	const Protein *a0;
 
@@ -61,7 +61,7 @@ PyResidueDict& calculateResidueChi2Angles(const Protein& /protein/);
 	}
 %End
 
-PyResidueDict& calculateResidueChi2Angles(const Chain& /fragment/);
+PyResidueDict& calculateResidueChi2Angles(const Chain&);
 %MethodCode
 	const Chain *a0;
 
@@ -79,5 +79,5 @@ PyResidueDict& calculateResidueChi2Angles(const Chain& /fragment/);
 	}
 %End
 
-float calculateResidueChi2Angles(const Residue& /residue/) const;
+float calculateResidueChi2Angles(const Residue&) const;
 

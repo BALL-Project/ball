@@ -14,9 +14,9 @@ using namespace BALL;
 	public:
 	Path();
 	String getDataPath();
-	void setDataPath(const String& /path/);
-	void addDataPath(const String& /path/);
+	void setDataPath(const String&);
+	void addDataPath(const String&);
 	String getDefaultDataPath();
-	String find(const String& /name/);
-	String findStrict(const String& /name/);
+	String find(const String&);
+	String findStrict(const String&);
 };

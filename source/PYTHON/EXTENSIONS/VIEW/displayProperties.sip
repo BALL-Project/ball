@@ -16,7 +16,7 @@ class DisplayProperties
 
 // methods implemented by the BALL_EMBEDDED macro
 static Size countInstances();
-static DisplayProperties* getInstance(Position /index/);
+static DisplayProperties* getInstance(Position);
 
 //  DisplayProperties(QWidget *parent, const char*);
 //	DisplayProperties(const DisplayProperties&)

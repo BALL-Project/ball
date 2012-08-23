@@ -15,13 +15,13 @@ class PyWidget
   public:
 	// methods implemented by the BALL_EMBEDDED macro
 	static Size countInstances();
-	static PyWidget* getInstance(Position /index/);
+	static PyWidget* getInstance(Position);
 	
   PyWidget() throw();
   ~PyWidget() throw();
 	
-	virtual void initializeWidget(MainControl& /main_control/) throw();
-	virtual void finalizeWidget(MainControl& /main_control/) throw();
+	virtual void initializeWidget(MainControl&) throw();
+	virtual void finalizeWidget(MainControl&) throw();
 	bool toAbortScript() throw();
 	bool openFile(const String&, bool, bool = false) throw();
 	bool runCurrentScript();

@@ -16,14 +16,14 @@ class ExpressionPredicate
   public:
   // BALL_CREATE_NODEEP(ExpressionPredicate)
   ExpressionPredicate();
-  ExpressionPredicate(const String& /argument/);
+  ExpressionPredicate(const String&);
 	~ExpressionPredicate() throw();
-  bool operator () (const Atom& /atom/) const throw();
+  bool operator () (const Atom&) const throw();
 %MethodCode
 	sipRes = sipCpp->operator () (*a0);
 %End
 
-  virtual void setArgument(const String& /argument/) throw();
+  virtual void setArgument(const String&) throw();
 };
 
 //class ExpressionTree
@@ -86,17 +86,17 @@ class Expression
   public:
   // typedef void * (*CreationMethod) ();
   Expression();
-  Expression(const Expression& /expression/);
-  Expression(const String& /expression_string/);
+  Expression(const Expression&);
+  Expression(const String&);
   ~Expression() throw();
-  bool hasPredicate(const String& /name/);
-  bool operator () (const Atom& /atom/) const throw();
+  bool hasPredicate(const String&);
+  bool operator () (const Atom&) const throw();
 %MethodCode
 	sipRes = sipCpp->operator () (*a0);
 %End
 
-  ExpressionPredicate* getPredicate(const String& /name/, const String& /args/ = "") const;
+  ExpressionPredicate* getPredicate(const String&, const String& args = "") const;
   // void registerPredicate(const String& name, CreationMethod creation_method);
-  void setExpression(const String& /expression/);
+  void setExpression(const String&);
   const String& getExpressionString() const;
 };

@@ -14,21 +14,21 @@ class TrajectoryFile
 %End
 				public:
 				TrajectoryFile();
-				TrajectoryFile(const String& /filename/,
-											 OpenMode /open_mode/ = std::ios::in) throw(FileNotFound);
+				TrajectoryFile(const String&,
+											 OpenMode open_mode = std::ios::in) throw(FileNotFound);
 				~TrajectoryFile();
-				//const TrajectoryFile& operator = (const TrajectoryFile& /file/);
+				//const TrajectoryFile& operator = (const TrajectoryFile&);
 				virtual void clear();
-				bool operator == (const TrajectoryFile& /file/) const;
+				bool operator == (const TrajectoryFile&) const;
 
 				Size getNumberOfSnapShots() const;
 				Size getNumberOfAtoms() const;
 
 				virtual bool readHeader();
 				virtual bool writeHeader();
-				virtual bool append(const SnapShot& /snapshot/);
-				virtual bool read(SnapShot& /snapshot/);
+				virtual bool append(const SnapShot&);
+				virtual bool read(SnapShot&);
 				//virtual bool flushToDisk(const ::std::vector<SnapShot> buffer);
 				private:
-				TrajectoryFile(const TrajectoryFile& /file/);
+				TrajectoryFile(const TrajectoryFile&);
 };

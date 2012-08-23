@@ -11,7 +11,7 @@
 %End
 		public:
 		PDBRecords() throw();
-		PDBRecords(const PDBRecords& /pdbr/) throw();
+		PDBRecords(const PDBRecords&) throw();
 		virtual ~PDBRecords() throw();
 		//		PDBRecords& operator = (const PDBRecords& rhs);
 
@@ -31,30 +31,30 @@
 		bool empty() const;
 		void clear();
 
-		void resize(Size /sz/, String /c/ = String());
+		void resize(Size, String c = String());
 		String& front();
 		// const String& front() const;
 
 		String& back();
 		// const String& back() const;
 
-		void push_back(const String& /x/);
-		// void insert(Index /pos/, const String& /value/);
-		// void insert(Index /pos/, Size /n/, const String& /value/);
+		void push_back(const String&);
+		// void insert(Index, const String&);
+		// void insert(Index, Size, const String&);
 		void pop_back();
-		// Index erase(Index /pos/);
-		// Index erase(Index /first/, Index /last/);
+		// Index erase(Index);
+		// Index erase(Index, Index);
 
-		bool operator == (const PDBRecords& /rhs/) const;
-		bool operator != (const PDBRecords& /rhs/) const;
-		bool operator < (const PDBRecords& /rhs/) const;
-		bool operator > (const PDBRecords& /rhs/) const;
-		bool operator <= (const PDBRecords& /rhs/) const;
-		bool operator >= (const PDBRecords& /rhs/) const;
-		void swap(PDBRecords& /rhs/);
+		bool operator == (const PDBRecords&) const;
+		bool operator != (const PDBRecords&) const;
+		bool operator < (const PDBRecords&) const;
+		bool operator > (const PDBRecords&) const;
+		bool operator <= (const PDBRecords&) const;
+		bool operator >= (const PDBRecords&) const;
+		void swap(PDBRecords&);
 
-		// const String& operator [] (Size /n/) const;
-		// String& operator [] (Size /n/);
-		// const String& at(Size /n/) const throw(std::out_of_range);
-		// String& at(Size /n/) throw(std::out_of_range);
+		// const String& operator [] (Size) const;
+		// String& operator [] (Size);
+		// const String& at(Size) const throw(std::out_of_range);
+		// String& at(Size) throw(std::out_of_range);
 	};

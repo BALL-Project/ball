@@ -14,7 +14,7 @@ class RegularData3DController
 %End
 	public:
 	static Size countInstances();
-	static RegularData3DController* getInstance(Position /index/);
+	static RegularData3DController* getInstance(Position);
 
 	RegularData3DController();
 	RegularData3DController(RegularData3DController& );
@@ -51,7 +51,7 @@ class TrajectoryController
 
 	public:
 	static Size countInstances();
-	static TrajectoryController* getInstance(Position /index/);
+	static TrajectoryController* getInstance(Position);
 
 	TrajectoryController();
 	TrajectoryController(TrajectoryController& );
@@ -80,7 +80,7 @@ class DockResultController
 
 	public:
 	static Size countInstances();
-	static DockResultController* getInstance(Position /index/);
+	static DockResultController* getInstance(Position);
 
 	DockResultController();
 	DockResultController(DockResultController& );
@@ -108,7 +108,7 @@ class VectorGridController
 
 	public:
 	static Size countInstances();
-	static VectorGridController* getInstance(Position /index/);
+	static VectorGridController* getInstance(Position);
 
 	VectorGridController();
 	VectorGridController(VectorGridController& );

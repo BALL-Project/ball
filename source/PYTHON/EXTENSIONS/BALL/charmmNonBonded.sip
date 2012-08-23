@@ -16,8 +16,8 @@ class CharmmNonBonded
   public:
   // BALL_CREATE(CharmmNonBonded)
   CharmmNonBonded();
-  CharmmNonBonded(ForceField& /force_field/);
-  CharmmNonBonded(const CharmmNonBonded& /charmm_non_bonded/);
+  CharmmNonBonded(ForceField&);
+  CharmmNonBonded(const CharmmNonBonded&);
   ~CharmmNonBonded() throw();
   virtual bool setup() throw(TooManyErrors);
   virtual double updateEnergy() throw();

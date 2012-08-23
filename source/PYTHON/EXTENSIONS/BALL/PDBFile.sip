@@ -15,25 +15,25 @@ class PDBFile : GenericMolFile
   public:
   PDBFile();
 	// default open mode: READ
-  PDBFile(const String&, OpenMode /openmode/ = std::ios::in) throw(FileNotFound);
+  PDBFile(const String&, OpenMode openmode = std::ios::in) throw(FileNotFound);
 	~PDBFile();
 	void selectAltLocationIndicator(char ch);
-  virtual bool read(Protein& /protein/) throw (ParseError);
-  virtual bool read(Molecule& /molecule/) throw (ParseError);
-  virtual bool read(System& /system/) throw (ParseError);
-  virtual bool write(const Protein& /protein/) throw(File::CannotWrite);
-  virtual bool write(const Molecule& /protein/) throw(File::CannotWrite);
-  virtual bool write(const System& /system/) throw(File::CannotWrite);
+  virtual bool read(Protein&) throw (ParseError);
+  virtual bool read(Molecule&) throw (ParseError);
+  virtual bool read(System&) throw (ParseError);
+  virtual bool write(const Protein&) throw(File::CannotWrite);
+  virtual bool write(const Molecule&) throw(File::CannotWrite);
+  virtual bool write(const System&) throw(File::CannotWrite);
 
 	//Actually all of the following methods are non virtual
 	//However we need to declare them as virtual to trick sip into
 	//producing correct code
-  PDBFile& operator >> (Protein& /protein/) throw (ParseError);
-  virtual PDBFile& operator >> (Molecule& /molecule/) throw (ParseError);
-  virtual PDBFile& operator >> (System& /system/) throw (ParseError);
-  PDBFile& operator << (const Protein& /protein/) throw(File::CannotWrite);
-  virtual PDBFile& operator << (const Molecule& /molecule/) throw(File::CannotWrite);
-  virtual PDBFile& operator << (const System& /system/) throw(File::CannotWrite);
+  PDBFile& operator >> (Protein&) throw (ParseError);
+  virtual PDBFile& operator >> (Molecule&) throw (ParseError);
+  virtual PDBFile& operator >> (System&) throw (ParseError);
+  PDBFile& operator << (const Protein&) throw(File::CannotWrite);
+  virtual PDBFile& operator << (const Molecule&) throw(File::CannotWrite);
+  virtual PDBFile& operator << (const System&) throw(File::CannotWrite);
 
 	void close();
 	private:

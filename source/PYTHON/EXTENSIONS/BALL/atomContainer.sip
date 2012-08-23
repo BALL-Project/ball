@@ -73,11 +73,11 @@ class AtomContainer
 	//  virtual void write(ostream& s) const;
 
 	// workaround for template method apply()...
-	bool apply(AtomProcessor& /processor/);
-	bool apply(ChainProcessor& /processor/);
-	bool apply(CompositeProcessor& /processor/);
-	bool apply(FragmentProcessor& /processor/);
-	bool apply(ResidueProcessor& /processor/);
+	bool apply(AtomProcessor&);
+	bool apply(ChainProcessor&);
+	bool apply(CompositeProcessor&);
+	bool apply(FragmentProcessor&);
+	bool apply(ResidueProcessor&);
 
 	AtomIterator iteratoms();
 %MethodCode

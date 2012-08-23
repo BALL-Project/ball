@@ -13,8 +13,8 @@ using namespace BALL;
 %End
   public:
   NucleicAcid();
-  NucleicAcid(const NucleicAcid& /nucleic_acid/, bool /deep/ = true);
-  NucleicAcid(const String& /name/, const String& /id/ = "" );
+  NucleicAcid(const NucleicAcid&, bool deep = true);
+  NucleicAcid(const String&, const String& id = "" );
   ~NucleicAcid() throw();
 
   virtual void clear() throw();
@@ -22,13 +22,13 @@ using namespace BALL;
 
   // void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
   // void persistentRead(PersistenceManager& pm);
-  void set(const NucleicAcid& /nucleic_acid/, bool /deep/ = true);
+  void set(const NucleicAcid&, bool deep = true);
 	//  NucleicAcid& operator = (const NucleicAcid& nucleic_acid);
-  void get(NucleicAcid& /nucleic_acid/, bool /deep/ = true) const;
-  void swap(NucleicAcid& /nucleic_acid/);
+  void get(NucleicAcid&, bool deep = true) const;
+  void swap(NucleicAcid&);
 
-  Nucleotide* getNucleotide(int /position/);
-  // const Nucleotide* getNucleotide(int /position/) const;
+  Nucleotide* getNucleotide(int);
+  // const Nucleotide* getNucleotide(int) const;
 
   Nucleotide* get3Prime();
   // const Nucleotide* get3Prime() const;
@@ -36,7 +36,7 @@ using namespace BALL;
   Nucleotide* get5Prime();
   // const Nucleotide* get5Prime() const;
 
-  void setID(const String& /id/);
+  void setID(const String&);
   const String& getID() const;
   int countNucleotides() const;
   virtual bool isValid() const throw();

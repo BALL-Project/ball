@@ -14,20 +14,20 @@
 	using namespace BALL;
 %End
 
-list<Atom*>                 atoms(const AtomContainer& /fragment/, const String& /expression/ = String());
-//AtomList                  all_atoms(const Composite& /fragment/);
-list<PDBAtom*>              PDBAtoms(const AtomContainer& /fragment/, const String& /expression/ = String());
-list<Bond*>                 bonds(const AtomContainer& /fragment/, bool /selected_only/ = false);
-list<Bond*>                 bonds(const Atom& /atom/);
-list<AtomContainer*>        atomContainers(const AtomContainer& /fragment/, bool /selected_only/ = false);
-list<Fragment*>             fragments(const AtomContainer& /fragment/, bool /selected_only/ = false);
-list<Molecule*>             molecules(const AtomContainer& /fragment/, bool /selected_only/ = false);
-list<Residue*>              residues(const AtomContainer& /fragment/, bool /selected_only/ = false);
-list<SecondaryStructure*>   secondaryStructures(const AtomContainer& /fragment/, bool /selected_only/ = false);
-list<Chain*>                chains(const AtomContainer& /fragment/, bool /selected_only/ = false);
-list<Protein*>              proteins(const AtomContainer& /fragment/, bool /selected_only/ = false);
-list<Nucleotide*>           nucleotides(const AtomContainer& /fragment/, bool /selected_only/ = false);
-list<NucleicAcid*>          nucleicAcids(const AtomContainer& /fragment/, bool /selected_only/ = false);
+list<Atom*>                 atoms(const AtomContainer&, const String& expression = String());
+//AtomList                  all_atoms(const Composite&);
+list<PDBAtom*>              PDBAtoms(const AtomContainer&, const String& expression = String());
+list<Bond*>                 bonds(const AtomContainer&, bool selected_only = false);
+list<Bond*>                 bonds(const Atom&);
+list<AtomContainer*>        atomContainers(const AtomContainer&, bool selected_only = false);
+list<Fragment*>             fragments(const AtomContainer&, bool selected_only = false);
+list<Molecule*>             molecules(const AtomContainer&, bool selected_only = false);
+list<Residue*>              residues(const AtomContainer&, bool selected_only = false);
+list<SecondaryStructure*>   secondaryStructures(const AtomContainer&, bool selected_only = false);
+list<Chain*>                chains(const AtomContainer&, bool selected_only = false);
+list<Protein*>              proteins(const AtomContainer&, bool selected_only = false);
+list<Nucleotide*>           nucleotides(const AtomContainer&, bool selected_only = false);
+list<NucleicAcid*>          nucleicAcids(const AtomContainer&, bool selected_only = false);
 
 // this is the most useful class in the whole of BALL: it is here to get around some %$&%$/ sip bugs!
 class BALLCoreSipExtractors

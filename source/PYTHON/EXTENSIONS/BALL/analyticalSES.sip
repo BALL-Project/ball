@@ -10,8 +10,8 @@
 %End
 
 float calculateSESAtomAreas
-  (const AtomContainer& /atom_container/, AtomDict& /atom_areas/, float /probe_radius/ = 1.5);
+  (const AtomContainer&, AtomDict&, float probe_radius = 1.5);
 float calculateSESArea
-  (const AtomContainer& /atom_container/, float /probe_radius/ = 1.5);
+  (const AtomContainer&, float probe_radius = 1.5);
 float calculateSESVolume
-  (const AtomContainer& /atom_container/, float /probe_radius/ = 1.5);
+  (const AtomContainer&, float probe_radius = 1.5);

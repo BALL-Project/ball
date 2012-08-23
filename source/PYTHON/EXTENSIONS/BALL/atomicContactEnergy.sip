@@ -8,4 +8,4 @@
 	#include <BALL/ENERGY/atomicContactEnergy.h>
 	using namespace BALL;
 %End
-double calculateACE(AtomContainer& /fragment/);
+double calculateACE(AtomContainer&);

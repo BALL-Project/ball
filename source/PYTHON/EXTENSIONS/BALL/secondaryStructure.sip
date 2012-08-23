@@ -35,7 +35,7 @@ class SecondaryStructure
   void swap(SecondaryStructure&);
 
 	Type getType() const throw();
-	void setType(Type /type/) throw();
+	void setType(Type) throw();
 
   Protein* getProtein();
   // const Protein* getProtein() const;

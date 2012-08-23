@@ -25,25 +25,25 @@ class Vector2
 	//BALL_CREATE(Vector2)
 
 	Vector2() throw();
-	Vector2(float /value/) throw();
-	Vector2(float /vx/, float /vy/) throw();
-	Vector2(const Vector2& /vector/) throw();
+	Vector2(float) throw();
+	Vector2(float, float) throw();
+	Vector2(const Vector2&) throw();
 	~Vector2() throw();
 	virtual void clear() throw();
 
 	//virtual void persistentWrite
-	//	(PersistenceManager& /pm/, const char* /name/ = 0) const
+	//	(PersistenceManager&, const char* name = 0) const
 	//	throw();
 
-	//virtual void persistentRead(PersistenceManager& /pm/)
+	//virtual void persistentRead(PersistenceManager&)
 	//	throw();
 
-	void set(float /value/) throw();
-	void set(float /vx/, float /vy/) throw();
-	void set(const Vector2& /vector/) throw();
-	//const Vector2& operator = (const Vector2& /v/)
+	void set(float) throw();
+	void set(float, float) throw();
+	void set(const Vector2&) throw();
+	//const Vector2& operator = (const Vector2&)
 	//	throw();
-	//const Vector2& operator = (float /value/)
+	//const Vector2& operator = (float)
 	//	throw();
 	//const Vector2& operator = (const T* ptr)
 	//				throw(NullPointer);
@@ -54,32 +54,32 @@ class Vector2
 	Vector2& negate() throw();
 	static const Vector2& getZero() throw();
 	static const Vector2& getUnit() throw();
-	// float& operator [] (Position /position/)
+	// float& operator [] (Position)
 	//	throw(IndexOverflow);
-	float operator [] (Position /position/) const throw(IndexOverflow);
+	float operator [] (Position) const throw(IndexOverflow);
 %MethodCode
 	sipRes = sipCpp->operator [] (*a0);
 %End
 
 	// ???? const Vector2& operator + () const throw();
 	// ???? Vector2 operator - () const	throw();
-	Vector2 operator + (const Vector2& /vector/) const throw();
-	Vector2 operator - (const Vector2& /vector/) const throw();
-	Vector2& operator += (const Vector2& /vector/) throw();
-	Vector2& operator -= (const Vector2& /vector/) throw();
-	Vector2 operator * (float /scalar/) const throw();
-	Vector2& operator *= (float /scalar/) throw();
-	Vector2 operator / (float /lambda/) const	throw(DivisionByZero);
-	Vector2& operator /= (float /lambda/) throw(DivisionByZero);
-	float operator * (const Vector2& /vector/) const throw();
+	Vector2 operator + (const Vector2&) const throw();
+	Vector2 operator - (const Vector2&) const throw();
+	Vector2& operator += (const Vector2&) throw();
+	Vector2& operator -= (const Vector2&) throw();
+	Vector2 operator * (float) const throw();
+	Vector2& operator *= (float) throw();
+	Vector2 operator / (float) const	throw(DivisionByZero);
+	Vector2& operator /= (float) throw(DivisionByZero);
+	float operator * (const Vector2&) const throw();
 
-	float getDistance(const Vector2& /vector/) const throw();
-	float getSquareDistance(const Vector2& /vector/) const throw();
+	float getDistance(const Vector2&) const throw();
+	float getSquareDistance(const Vector2&) const throw();
 
-	bool operator == (const Vector2& /vector/) const throw();
-	bool operator != (const Vector2& /vector/) const throw();
+	bool operator == (const Vector2&) const throw();
+	bool operator != (const Vector2&) const throw();
 	bool isZero() const throw();
-	bool isOrthogonalTo(Vector2& /vector/) const throw();
+	bool isOrthogonalTo(Vector2&) const throw();
 
 	//void dump(std::ostream& s = std::cout, Size depth = 0) const
 	//				throw();

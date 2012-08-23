@@ -16,8 +16,8 @@ class CharmmImproperTorsion
   public:
   // BALL_CREATE(CharmmImproperTorsion)
   CharmmImproperTorsion();
-  CharmmImproperTorsion(ForceField& /force_field/);
-  CharmmImproperTorsion(const CharmmImproperTorsion& /charmm_stretch/);
+  CharmmImproperTorsion(ForceField&);
+  CharmmImproperTorsion(const CharmmImproperTorsion&);
   ~CharmmImproperTorsion();
   virtual bool setup() throw(TooManyErrors);
   virtual double updateEnergy();

@@ -33,12 +33,12 @@ class SDGenerator
 				static const float STANDARD_BOND_LENGTH;
 		};
 			
-		SDGenerator(bool /show_hydrogens/);
+		SDGenerator(bool);
 		virtual ~SDGenerator();
 			
 		Options options;
 			
 		void setDefaultOptions();
-    void generateSD(System& /molecule_sys/);
+    void generateSD(System&);
 		void clear();
 }; 

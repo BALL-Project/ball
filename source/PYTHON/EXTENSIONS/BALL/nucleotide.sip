@@ -13,40 +13,40 @@ using namespace BALL;
 %End
   public:
   Nucleotide();
-  Nucleotide(const Nucleotide& /nucleotide/, bool /deep/ = true);
+  Nucleotide(const Nucleotide&, bool deep = true);
   Nucleotide
-   (const String& /name/,
-    const String& /id/ = "" ,
-    char /insertion_code/ = ' ' );
+   (const String&,
+    const String& id = "" ,
+    char insertion_code = ' ' );
   ~Nucleotide() throw();
 
   virtual void clear() throw();
   virtual void destroy() throw();
 
-  // void persistentWrite(PersistenceManager& /pm/, const char* /name/ = 0) const;
-  // void persistentRead(PersistenceManager& /pm/);
+  // void persistentWrite(PersistenceManager&, const char* name = 0) const;
+  // void persistentRead(PersistenceManager&);
 
-  void set(const Nucleotide& /nucleotide/, bool /deep/ = true);
-  // Nucleotide& operator = (const Nucleotide& /nucleotide/);
-  void get(Nucleotide& /nucleotide/, bool /deep/ = true) const;
-  void swap(Nucleotide& /nucleotide/);
+  void set(const Nucleotide&, bool deep = true);
+  // Nucleotide& operator = (const Nucleotide&);
+  void get(Nucleotide&, bool deep = true) const;
+  void swap(Nucleotide&);
 
   NucleicAcid* getNucleicAcid();
   // const NucleicAcid* getNucleicAcid() const;
 
-  void setID(const String& /id/);
+  void setID(const String&);
   const String& getID() const;
-  void setInsertionCode(char /insertion_code/);
+  void setInsertionCode(char);
   char getInsertionCode() const;
   void prepend(Atom& /Transfer/);
   void append(Atom& /Transfer/);
   void insert(Atom& /Transfer/);
-  void insertBefore(Atom& /Transfer/, Composite& /before/);
-  void insertAfter(Atom& /Transfer/, Composite& /after/);
-  bool remove(Atom& /atom/);
-  void spliceBefore(Nucleotide& /nucleotide/);
-  void spliceAfter(Nucleotide& /nucleotide/);
-  void splice(Nucleotide& /nucleotide/);
+  void insertBefore(Atom& /Transfer/, Composite&);
+  void insertAfter(Atom& /Transfer/, Composite&);
+  bool remove(Atom&);
+  void spliceBefore(Nucleotide&);
+  void spliceAfter(Nucleotide&);
+  void splice(Nucleotide&);
   bool isTerminal() const;
   bool is3Prime() const;
   bool is5Prime() const;

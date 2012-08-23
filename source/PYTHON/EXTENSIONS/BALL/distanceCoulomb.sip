@@ -9,4 +9,4 @@
 	using namespace BALL;
 %End
 
-double calculateDistanceCoulomb(const AtomContainer& /fragment/);
+double calculateDistanceCoulomb(const AtomContainer&);

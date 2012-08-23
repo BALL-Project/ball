@@ -26,7 +26,7 @@ class SnapShotManager
     SnapShotManager(System*, const ForceField*, TrajectoryFile*);
     SnapShotManager(System*, TrajectoryFile* file = 0);
     SnapShotManager(System*, const ForceField*, const Options&, TrajectoryFile*);
-    SnapShotManager(const SnapShotManager& /manager/);
+    SnapShotManager(const SnapShotManager&);
     ~SnapShotManager();
 
 		bool setup(System*, TrajectoryFile*);
@@ -37,16 +37,16 @@ class SnapShotManager
 		virtual void clear();
     virtual bool isValid() const;
 
-		void setSystem(System* /my_system/);
+		void setSystem(System*);
 		System* getSystem() const;
-		void setForceField(const ForceField* /my_ff/);
+		void setForceField(const ForceField*);
 		const ForceField* getForceField() const;
-		void setTrajectoryFile(TrajectoryFile* /my_file/);
+		void setTrajectoryFile(TrajectoryFile*);
 		TrajectoryFile* getTrajectoryFile() const;
-    void setFlushToDiskFrequency(Size /number/);
+    void setFlushToDiskFrequency(Size);
     Size getFlushToDiskFrequency() const;
     virtual void takeSnapShot() throw(File::CannotWrite);
-		virtual bool applySnapShot(Size /number/);
+		virtual bool applySnapShot(Size);
 		virtual bool applyFirstSnapShot();
 		virtual bool applyNextSnapShot();
 		virtual bool applyLastSnapShot();

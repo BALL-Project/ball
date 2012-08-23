@@ -157,24 +157,24 @@ class FDPB
 	typedef struct FastAtomStruct FastAtom;
 	public:
 	FDPB();
-	FDPB(const FDPB& /fdpb/);
-	FDPB(System& /system/);
-	FDPB(Options& /new_options/);
+	FDPB(const FDPB&);
+	FDPB(System&);
+	FDPB(Options&);
 
-	FDPB(System& /system/, Options& /new_options/);
+	FDPB(System&, Options&);
 	~FDPB();
 	void destroy();
 
 	void destroyGrids();
 
-	bool setup(System& /system/);
+	bool setup(System&);
 
-	bool setup(System& /system/, Options& /options/);
+	bool setup(System&, Options&);
 
-	bool setupEpsGrid(System& /system/);
-	bool setupSASGrid(System& /system/);
+	bool setupEpsGrid(System&);
+	bool setupSASGrid(System&);
 
-	bool setupAtomArray(System& /system/);
+	bool setupAtomArray(System&);
 	bool setupKappaGrid();
 	bool setupQGrid();
 	bool setupPhiGrid();
@@ -189,7 +189,7 @@ class FDPB
 	Size getNumberOfIterations() const;
 
 	Index getErrorCode() const;
-	static String getErrorMessage(Index /error_code/);
+	static String getErrorMessage(Index);
 
 	Options options;
 	Options results;

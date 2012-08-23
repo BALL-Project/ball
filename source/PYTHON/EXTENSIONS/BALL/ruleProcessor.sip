@@ -15,22 +15,22 @@ class RuleProcessor
   public:
   // BALL_CREATE(RuleProcessor)
   RuleProcessor();
-  RuleProcessor(INIFile& /file/, const String& /prefix/);
-  RuleProcessor(const RuleProcessor& /rule_processor/);
+  RuleProcessor(INIFile&, const String&);
+  RuleProcessor(const RuleProcessor&);
   ~RuleProcessor();
   void clear();
   void destroy();   
-  bool initialize(INIFile& /file/, const String& /prefix/);
-  // const RuleProcessor& operator = (const RuleProcessor& /rule_processor/);
-  void set(const RuleProcessor& /rule_processor/);
+  bool initialize(INIFile&, const String&);
+  // const RuleProcessor& operator = (const RuleProcessor&);
+  void set(const RuleProcessor&);
   virtual bool start();
   virtual bool finish();
-  Processor::Result operator () (Atom& /atom/);
+  Processor::Result operator () (Atom&);
 %MethodCode
   sipRes = sipCpp->operator () (*a0);
 %End
 
-  String evaluate(const Atom& /atom/);
+  String evaluate(const Atom&);
   bool isValid() const;
   // void dump(std::ostream& s = std::cout) const;
 };

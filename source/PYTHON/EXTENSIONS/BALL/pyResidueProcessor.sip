@@ -15,7 +15,7 @@ class ResidueProcessor
 	public:
 	bool start();
 	bool finish();
-	Processor::Result operator () (Residue& /atom/);
+	Processor::Result operator () (Residue&);
 %MethodCode
   sipRes = sipCpp->operator () (*a0);
 %End

@@ -26,24 +26,24 @@ class FragmentDB
 
 
   FragmentDB();
-  FragmentDB(const String& /filename/);
-  FragmentDB(const FragmentDB& /db/, bool /deep/ = true); 
+  FragmentDB(const String&);
+  FragmentDB(const FragmentDB&, bool deep = true); 
   ~FragmentDB();
   void destroy();
   void init();
-  void setFilename(const String& /filename/);
+  void setFilename(const String&);
   const String& getFilename() const;
-  bool has(const String& /fragment_name/) const;
-  FragmentDB::Type getFragmentType(const String& /fragment_name/) const;
+  bool has(const String&) const;
+  FragmentDB::Type getFragmentType(const String&) const;
 	// BAUSTELLE
-  // list<String> getVariantNames(const String& /name/) const;
-  const Fragment* getFragment(const String& /fragment_name/) const;
-  const Fragment* getReferenceFragment(const Fragment& /fragment/) const;
-  const Residue* getResidue(const String& /fragment_name/) const;
-  Fragment* getFragmentCopy(const String& /fragment_name/) const;
-  Molecule* getMoleculeCopy(const String& /fragment_name/) const;
-  Residue* getResidueCopy(const String& /fragment_name/) const;
-	const StringHashMap<String>& getNamingStandard(const String& /std/) const
+  // list<String> getVariantNames(const String&) const;
+  const Fragment* getFragment(const String&) const;
+  const Fragment* getReferenceFragment(const Fragment&) const;
+  const Residue* getResidue(const String&) const;
+  Fragment* getFragmentCopy(const String&) const;
+  Molecule* getMoleculeCopy(const String&) const;
+  Residue* getResidueCopy(const String&) const;
+	const StringHashMap<String>& getNamingStandard(const String&) const
 		throw(IllegalKey);
 	vector<String> getAvailableNamingStandards() const;
   const String& getDefaultNamingStandard() const;
@@ -66,7 +66,7 @@ class FragmentDB
 //	using namespace BALL;
 //%End
 // public:
-// NoFragmentNode(const char* /file/, int /line/, const String& /filename/);
+// NoFragmentNode(const char*, int, const String&);
 //};
 
 class NormalizeNamesProcessor 
@@ -81,16 +81,16 @@ class NormalizeNamesProcessor
 %End
 	public:
 	NormalizeNamesProcessor();
-	NormalizeNamesProcessor(FragmentDB& /db/);
+	NormalizeNamesProcessor(FragmentDB&);
 	~NormalizeNamesProcessor();
-	void setFragmentDB(FragmentDB& /db/);
-	void setNamingStandard(const String& /naming_standard/);
+	void setFragmentDB(FragmentDB&);
+	void setNamingStandard(const String&);
 	const String& getNamingStandard();
 	// BAUSTELLE
-	// bool matchName(String&  /res_name/, String&  /atom_name/, const StringHashMap<String>* /map/) const;
+	// bool matchName(String& , String& , const StringHashMap<String>*) const;
 	virtual bool start();
 	virtual bool finish();
-	Processor::Result operator () (Fragment& /fragment/);
+	Processor::Result operator () (Fragment&);
 %MethodCode
   sipRes = sipCpp->operator () (*a0);
 %End
@@ -109,17 +109,17 @@ class BuildBondsProcessor
 %End
 	public:
 	BuildBondsProcessor();
-	BuildBondsProcessor(const FragmentDB& /db/);
+	BuildBondsProcessor(const FragmentDB&);
 	~BuildBondsProcessor();
 	virtual bool finish();
 	virtual bool start();
-	Processor::Result operator () (Fragment& /fragment/);
+	Processor::Result operator () (Fragment&);
 %MethodCode
   sipRes = sipCpp->operator () (*a0);
 %End
 	Size getNumberOfBondsBuilt();
-	void setFragmentDB(const FragmentDB& /fragment_db/);
-	Size buildFragmentBonds(Fragment& /fragment/) const;
-	Size buildInterFragmentBonds(Fragment& /first/, Fragment& /second/) const;
+	void setFragmentDB(const FragmentDB&);
+	Size buildFragmentBonds(Fragment&) const;
+	Size buildInterFragmentBonds(Fragment&, Fragment&) const;
 };
 

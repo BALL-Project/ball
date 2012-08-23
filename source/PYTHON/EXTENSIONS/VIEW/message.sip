@@ -16,7 +16,7 @@ class Message
   public:
 
 	Message() throw();
-	Message(const Message& /message/) throw();
+	Message(const Message&) throw();
 //  virtual ~Message() throw();
 	// void setSender(const void* object);
 	// const void* getSender() const;
@@ -51,13 +51,13 @@ class CompositeMessage
 
 	CompositeMessage() throw();
 	CompositeMessage(const Composite& , CompositeMessageType , bool = true) throw();
-	CompositeMessage(const CompositeMessage& /message/) throw();
+	CompositeMessage(const CompositeMessage&) throw();
 	//virtual ~CompositeMessage() throw();
-	void setComposite(const Composite& /composite/) throw();
+	void setComposite(const Composite&) throw();
 	Composite* getComposite() const throw();
-	void setCompositeName(const String& /name/) throw();
+	void setCompositeName(const String&) throw();
 	const String& getCompositeName() const throw();
-	void setType(CompositeMessageType /type/) throw();
+	void setType(CompositeMessageType) throw();
 	CompositeMessageType getType() const throw();
 	void setUpdateRepresentations(bool) throw(); 
 	bool updateRepresentations() const throw();

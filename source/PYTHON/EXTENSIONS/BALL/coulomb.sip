@@ -9,5 +9,5 @@
 	using namespace BALL;
 %End
 
-double calculateCoulomb(const AtomContainer& /fragment/);
+double calculateCoulomb(const AtomContainer&);
  

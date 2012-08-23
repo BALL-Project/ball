@@ -17,7 +17,7 @@ class Element
 %End
    public:
    Element();
-   Element(const Element& /element/);
+   Element(const Element&);
 //   Element(const Element&, bool = true); this is nonsense
 //   Element
 //    (const String& name,
@@ -75,7 +75,7 @@ class PTE_
 	static Element& getElement(int);
 	static Element& getElement(const String&);
 	const Element& operator [] (const String&);
-	const Element& operator [] (Index /index/) const;
+	const Element& operator [] (Index) const;
 %MethodCode
   sipRes = &sipCpp->operator [] (*a0);
 %End

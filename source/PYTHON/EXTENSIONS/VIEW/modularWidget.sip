@@ -20,7 +20,7 @@ class ModularWidget
  		
 	// methods implemented by the BALL_EMBEDDED macro
 	static Size countInstances();
-	static ModularWidget* getInstance(Position /index/);
+	static ModularWidget* getInstance(Position);
 
   ModularWidget(const char* = "<ModularWidget>")	throw();
 	ModularWidget(const ModularWidget&) throw();
@@ -30,9 +30,9 @@ class ModularWidget
 	virtual void clear() throw();
 
 	static void registerWidget(ModularWidget*) throw(NullPointer);
-//	virtual void initializeWidget(MainControl& /main_control/);
-// 	virtual void finalizeWidget(MainControl& /main_control/);
-	virtual void checkMenu(MainControl& /main_control/) throw();
+//	virtual void initializeWidget(MainControl&);
+// 	virtual void finalizeWidget(MainControl&);
+	virtual void checkMenu(MainControl&) throw();
 //	virtual void initializePreferencesTab(Preferences&)	throw();
 //	virtual void finalizePreferencesTab(Preferences&)	throw();
 	virtual void applyPreferences() throw();
@@ -54,6 +54,6 @@ class ModularWidget
 //	virtual void dump(std::ostream& = std::cout, Size = 0) const throw();
 	void setWorkingDirFromFilename_(String) throw();
 	virtual void showHelp(const String&);
-	virtual bool canHandle(const String& /fileformat/) const;
-	virtual bool openFile(const String& /filename/);
+	virtual bool canHandle(const String&) const;
+	virtual bool openFile(const String&);
 }; 

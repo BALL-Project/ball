@@ -31,7 +31,7 @@ class ConnectedComponentsProcessor
 		virtual ~ConnectedComponentsProcessor();
 		
 		void clear();
-		virtual Processor::Result operator () (AtomContainer& /ac/);
+		virtual Processor::Result operator () (AtomContainer&);
 %MethodCode
   sipRes = sipCpp->operator () (*a0);
 %End
@@ -40,6 +40,6 @@ class ConnectedComponentsProcessor
 		//ComponentVector& getComponents();
 		//const ComponentVector& getComponents() const;
 
-		Size splitIntoMolecules(System& /to_split/);
+		Size splitIntoMolecules(System&);
 		
 };

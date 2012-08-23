@@ -15,10 +15,10 @@ class TranslationProcessor
 %End
   public:
   TranslationProcessor();
-  TranslationProcessor(const Vector3& /translation/);
-  void setTranslation(const Vector3& /translation/);
+  TranslationProcessor(const Vector3&);
+  void setTranslation(const Vector3&);
   const Vector3& getTranslation() const;
-  Processor::Result operator()(Atom& /atom/);
+  Processor::Result operator()(Atom&);
 %MethodCode
   sipRes = sipCpp->operator () (*a0);
 %End
@@ -35,10 +35,10 @@ class TransformationProcessor
 %End
   public:
   TransformationProcessor();
-  TransformationProcessor(const Matrix4x4& /transformation/);
-  void setTransformation(const Matrix4x4& /transformation/);
+  TransformationProcessor(const Matrix4x4&);
+  void setTransformation(const Matrix4x4&);
   const Matrix4x4& getTransformation() const;
-  Processor::Result operator()(Atom& /atom/);
+  Processor::Result operator()(Atom&);
 %MethodCode
   sipRes = sipCpp->operator () (*a0);
 %End

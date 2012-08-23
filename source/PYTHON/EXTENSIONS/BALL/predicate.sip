@@ -12,5 +12,5 @@ class KernelPredicate
 	using namespace BALL
 %End
   public:
-  virtual bool operator () (const Composite& /composite/) const throw();
+  virtual bool operator () (const Composite&) const throw();
 };

@@ -30,18 +30,18 @@ class Residue
    	ADD_VARIANT_EXTENSIONS
   };
   Residue();
-  Residue(const Residue& /residue/, bool /deep/ = true);
-  Residue(const String& /name/, const String& /id/ = "" , char /insertion_code/ = ' ' );
+  Residue(const Residue&, bool deep = true);
+  Residue(const String&, const String& id = "" , char insertion_code = ' ' );
   ~Residue() throw();
   virtual void clear() throw();
   virtual void destroy() throw();
   // void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
   // void persistentRead(PersistenceManager& pm);
-  void set(const Residue& /residue/, bool /deep/ = true);
+  void set(const Residue&, bool deep = true);
   // Residue& operator = (const Residue& residue);
-  void get(Residue& /residue/, bool /deep/ = true) const;
-  void swap(Residue& /residue/);
-  String getFullName(FullNameType /type/ = ADD_VARIANT_EXTENSIONS) const;
+  void get(Residue&, bool deep = true) const;
+  void swap(Residue&);
+  String getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const;
   bool hasTorsionPhi() const;
   Angle getTorsionPhi() const;
   bool hasTorsionPsi() const;
@@ -53,26 +53,26 @@ class Residue
   Chain* getChain();
   // const Chain* getChain() const;
 
-  PDBAtom* getPDBAtom(Position /position/);
-  // const PDBAtom* getPDBAtom(Position /position/) const;
+  PDBAtom* getPDBAtom(Position);
+  // const PDBAtom* getPDBAtom(Position) const;
 
 	SecondaryStructure* getSecondaryStructure() throw();
 	//const SecondaryStructure* getSecondaryStructure() const throw();
 
-  void setID(const String& /id/);
+  void setID(const String&);
   const String& getID() const;
-  void setInsertionCode(char /insertion_code/);
+  void setInsertionCode(char);
   char getInsertionCode() const;
   Size countPDBAtoms() const;
   void prepend(PDBAtom& /Transfer/);
   void append(PDBAtom& /Transfer/);
   void insert(PDBAtom& /Transfer/);
-  void insertBefore(PDBAtom& /Transfer/, Composite& /before/);
-  void insertAfter(PDBAtom& /Transfer/, Composite& /after/);
-  bool remove(PDBAtom& /atom/);
-  void spliceBefore(Residue& /residue/);
-  void spliceAfter(Residue& /residue/);
-  void splice(Residue& /residue/);
+  void insertBefore(PDBAtom& /Transfer/, Composite&);
+  void insertAfter(PDBAtom& /Transfer/, Composite&);
+  bool remove(PDBAtom&);
+  void spliceBefore(Residue&);
+  void spliceAfter(Residue&);
+  void splice(Residue&);
   bool isAminoAcid() const;
   bool isTerminal() const;
   bool isNTerminal() const;

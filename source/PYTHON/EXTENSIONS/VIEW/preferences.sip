@@ -19,8 +19,8 @@ class Preferences
 	//bool hasPages() throw();
 	//void insertEntry(PreferencesEntry*) throw();
 	//void removeEntry(PreferencesEntry *)	throw();
-	void fetchPreferences(INIFile& /inifile/) throw();
-	void writePreferences(INIFile& /inifile/) throw();
+	void fetchPreferences(INIFile&) throw();
+	void writePreferences(INIFile&) throw();
 
 	void show();
 	//void showEntry(QWidget* page);

@@ -16,25 +16,25 @@ class Vector3
   // BALL_CREATE_NODEEP(Vector3)
   Vector3();
   // Vector3(const T* ptr);
-  Vector3(float /value/);
-  Vector3(float /vx/, float /vy/, float /vz/);
-  Vector3(const Vector3& /vector/);
-  Vector3(float /r/, const Angle& /phi/, const Angle& /theta/);
+  Vector3(float);
+  Vector3(float, float, float);
+  Vector3(const Vector3&);
+  Vector3(float, const Angle&, const Angle&);
   ~Vector3();
   // virtual void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
   // virtual void persistentRead(PersistenceManager& pm);
   // void set(const float* ptr);
-  void set(float /value/);
-  void set(float /vx/, float /vy/, float /vz/);
-  void set(const Vector3& /vector/);
-  void set(float /r/, const Angle& /phi/, const Angle& /theta/);
-  // Vector3& operator = (const Vector3& /v/);
-  // Vector3& operator = (const float* /ptr/);
-  // void get(float* /ptr/) const;
-  // void get(float& /x/, float& /y/, float& /z/) const;
-  void get(Vector3& /vector/) const;
-  void get(float /r/, Angle& /phi/, Angle& /theta/) const;
-  void swap(Vector3& /vector/);
+  void set(float);
+  void set(float, float, float);
+  void set(const Vector3&);
+  void set(float, const Angle&, const Angle&);
+  // Vector3& operator = (const Vector3&);
+  // Vector3& operator = (const float*);
+  // void get(float*) const;
+  // void get(float&, float&, float&) const;
+  void get(Vector3&) const;
+  void get(float, Angle&, Angle&) const;
+  void swap(Vector3&);
   float getLength() const;
   float getSquareLength() const;
   Vector3& normalize();
@@ -42,34 +42,34 @@ class Vector3
   static const Vector3& getZero();
   static const Vector3& getUnit();
 
-  float operator [] (Index /index/);
+  float operator [] (Index);
 %MethodCode
 	sipRes = sipCpp->operator [] (*a0);
 %End
 
-  // float operator [] (Index /index/) const;
+  // float operator [] (Index) const;
   // ???? const Vector3& operator + () const;
   // ???? Vector3 operator - () const;
-  Vector3& operator += (const Vector3& /vector/);
-  Vector3& operator -= (const Vector3& /vector/);
- //???? Vector3& operator *= (float /scalar/);
-  Vector3& operator /= (float /lambda/) throw(DivisionByZero);
-  // Vector3& operator %= (const Vector3& /vector/);
-  Vector3 operator * (float /scalar/);
-  Vector3 operator / (float /lambda/) throw(DivisionByZero);
-  float operator * (const Vector3& /vector/) const;
-  Vector3 operator % (const Vector3& /vector/) const;
-  float getDistance(const Vector3& /vector/) const;
-  float getSquareDistance(const Vector3& /vector/) const;
-  Angle getAngle(const Vector3& /vector/) const;
-  Vector3 getOrthogonalProjection(const Vector3& /direction/) const;
+  Vector3& operator += (const Vector3&);
+  Vector3& operator -= (const Vector3&);
+ //???? Vector3& operator *= (float);
+  Vector3& operator /= (float) throw(DivisionByZero);
+  // Vector3& operator %= (const Vector3&);
+  Vector3 operator * (float);
+  Vector3 operator / (float) throw(DivisionByZero);
+  float operator * (const Vector3&) const;
+  Vector3 operator % (const Vector3&) const;
+  float getDistance(const Vector3&) const;
+  float getSquareDistance(const Vector3&) const;
+  Angle getAngle(const Vector3&) const;
+  Vector3 getOrthogonalProjection(const Vector3&) const;
   static Vector3 getPerpendicularNormalization
-   (const Vector3& /a/, const Vector3& /b/, const Vector3& /c/);
-  static float getTripleProduct (const Vector3& /a/, const Vector3& /b/, const Vector3& /c/);
-  bool operator == (const Vector3& /vector/) const;
-  bool operator != (const Vector3& /vector/) const;
+   (const Vector3&, const Vector3&, const Vector3&);
+  static float getTripleProduct (const Vector3&, const Vector3&, const Vector3&);
+  bool operator == (const Vector3&) const;
+  bool operator != (const Vector3&) const;
   bool isZero() const;
-  bool isOrthogonalTo(Vector3& /vector/) const;
+  bool isOrthogonalTo(Vector3&) const;
   // void dump(std::ostream& s = std::cout, Size depth = 0) const;
   bool isValid() const;
 
