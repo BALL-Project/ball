@@ -11,7 +11,6 @@
 
 #include <QtCore/QCryptographicHash>
 
-
 namespace BALL
 {
 
@@ -86,7 +85,7 @@ namespace BALL
 				@param value the value of the property to be added */
 			void addProperty(const String& name, const String& value);
 
-			const vector<pair<String, String> >* getProperties();
+			const std::vector<std::pair<String, String> >* getProperties();
 
 			Size getNoOfAtoms() const;
 
@@ -116,7 +115,7 @@ namespace BALL
 			/** Map containing pairs of atom-index and atom-positions */
 			HashMap<Size, Vector3> atom_positions_;
 
-			vector<pair<String, String> > properties_;
+			std::vector<std::pair<String, String> > properties_;
 	};
 }
 
