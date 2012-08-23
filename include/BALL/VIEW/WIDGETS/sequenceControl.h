@@ -39,7 +39,6 @@
 #include <QtGui/QTableView>
 #include <QtGui/QComboBox>
 
-
 #include <boost/shared_ptr.hpp>
 
 #include <BALL/VIEW/UIC/ui_sequenceControl.h>
@@ -49,16 +48,16 @@ namespace BALL
 {
 	class Protein;
 	class NucleicAcid;
-	
+
 	namespace VIEW
 	{
 
 		class BALL_VIEW_EXPORT SequenceControlModel
-			: public QAbstractTableModel
+				: public QAbstractTableModel
 		{
-			Q_OBJECT
+				Q_OBJECT
 
-		friend class SequenceControl;
+				friend class SequenceControl;
 
 			public:
 				typedef std::vector<boost::shared_ptr<Sequence> > SequenceVector;
@@ -85,7 +84,6 @@ namespace BALL
 
 				bool setData(const QModelIndex& index, const QVariant& data, int role = Qt::EditRole);
 
-			
 
 			protected:
 				SequenceVector sequences_;
@@ -93,15 +91,15 @@ namespace BALL
 		};
 
 
-class BALL_VIEW_EXPORT AlignmentControlModel
-			: public QAbstractTableModel
+		class BALL_VIEW_EXPORT AlignmentControlModel
+				: public QAbstractTableModel
 		{
-			Q_OBJECT
+				Q_OBJECT
 
-		friend class SequenceControl;
+				friend class SequenceControl;
 
 			public:
-				
+
 				AlignmentControlModel();
 
 				void addSequence(boost::shared_ptr<Sequence> const& sequence)
@@ -113,8 +111,8 @@ class BALL_VIEW_EXPORT AlignmentControlModel
 				};
 
 				void removeSequence(boost::shared_ptr<Sequence> const& sequence);
-				
-				
+
+
 				int rowCount(const QModelIndex& parent = QModelIndex()) const;
 				int columnCount(const QModelIndex& parent = QModelIndex()) const;
 
@@ -127,137 +125,124 @@ class BALL_VIEW_EXPORT AlignmentControlModel
 
 				bool setData(const QModelIndex& index, const QVariant& data, int role = Qt::EditRole);
 
-			
-
 			protected:
 				Alignment alignment_;
 				std::vector<bool> selection_;
 		};
 
 
-//TODO
-/**	SequenceControl is a widget to display the sequence of Composite objects. 
-		This class is derived from the class DockWidget and extends it for showing and modifiying
-		sequences. The methods checkMenu() and buildContextMenu() are overridden 
-		for performing special sequential tasks.
-	  \ingroup ViewWidgets
-*/
-class BALL_VIEW_EXPORT SequenceControl
-	: public DockWidget,
-		public PreferencesEntry
-{
+		/** SequenceControl is a widget to display the sequence of Composite objects.
+		    This class is derived from the class DockWidget and extends it for showing and modifiying
+		    sequences. The methods checkMenu() and buildContextMenu() are overridden
+		    for performing special sequential tasks.
+		    \ingroup ViewWidgets
+		*/
+		class BALL_VIEW_EXPORT SequenceControl
+				: public DockWidget,
+				public PreferencesEntry
+		{
 
-	Q_OBJECT
+				Q_OBJECT
 
-	public:
-  BALL_EMBEDDABLE(SequenceControl, DockWidget)
+			public:
+				BALL_EMBEDDABLE(SequenceControl, DockWidget)
 
-	/**	@name	Constructors and Destructor
-	*/
-	//@{
+				/** @name Constructors and Destructor
+				*/
+				//@{
 
-	/** Default Constructor.
-			\param      parent the parent widget 
-			\param      name the name of this widget
-	*/
-	SequenceControl(QWidget* parent = 0, const char* name = "SequenceControl");
+				/** Default Constructor.
+				    \param      parent the parent widget
+				    \param      name the name of this widget
+				*/
+				SequenceControl(QWidget* parent = 0, const char* name = "SequenceControl");
 
-	/** Destructor.
-	*/
-	virtual ~SequenceControl();
+				/** Destructor.
+				*/
+				virtual ~SequenceControl();
 
-	/// Resize Event
-	virtual void resizeEvent(QResizeEvent* event);
+				/// Resize Event
+				virtual void resizeEvent(QResizeEvent* event);
 
-	virtual void onNotify(Message *message);
+				virtual void onNotify(Message *message);
 
+				/** Initialize the menu entries:
+				      - cut
+				      - copy
+				      - paste
+				      - delete
+				      - clear clipboard
+				    \par
+				    This method is called automatically immediately before the main application
+				    is started by MainControl::show.
+				    \param main_control the MainControl object to be initialized with this ModularWidget
+				*/
+				virtual void initializeWidget(MainControl& main_control);
 
-	/**	Initialize the menu entries:
-				- cut 
-				- copy 
-				- paste 
-				- delete
-				- clear clipboard
-			\par
-			This method is called automatically	immediately before the main application 
-			is started by MainControl::show.
-			\param main_control the MainControl object to be initialized with this ModularWidget
-	*/
-	virtual void initializeWidget(MainControl& main_control);
+				///
+				void writePreferences(INIFile& inifile);
 
+				///
+				void fetchPreferences(INIFile& inifile);
 
-	///
-	void writePreferences(INIFile& inifile);
+				///
+				void addSequenceTab(String const& name);
 
-	///
-	void fetchPreferences(INIFile& inifile);
+				///
+				void addAlignmentTab(String const& name);
 
-	///
-	void addSequenceTab(String const& name);
+			public slots:
 
-	///
-	void addAlignmentTab(String const& name);
-	
-	public slots:
-
-	//@}
-	/** @name Public slots
-	*/
-	//@{
-	void alignSelected();
+				//@}
+				/** @name Public slots
+				*/
+				//@{
+				void alignSelected();
 
 
-	//@} 
-	/** @name Protected members 
-	*/
-	//@{
-	protected slots:
+				//@}
+				/** @name Protected members
+				*/
+				//@{
+			protected slots:
 
-	void showGuestContextMenu(const QPoint& pos);
+				void showGuestContextMenu(const QPoint& pos);
 
-		void onTabCloseRequested_(int index);
+				void onTabCloseRequested_(int index);
 
-	protected:
-		void handleProtein_(Protein* protein);
-		void handleNucleicAcid_(NucleicAcid* na);
+			protected:
+				void handleProtein_(Protein* protein);
+				void handleNucleicAcid_(NucleicAcid* na);
 
-		Ui_SequenceControlData ui_;
+				Ui_SequenceControlData ui_;
 
-		StringHashMap<boost::shared_ptr<AlignmentControlModel> > alignment_per_tab_;
-		StringHashMap<boost::shared_ptr<SequenceControlModel> >  sequences_per_tab_;
-		StringHashMap<QTableView*>                               tabs_per_name_;
+				StringHashMap<boost::shared_ptr<AlignmentControlModel> > alignment_per_tab_;
+				StringHashMap<boost::shared_ptr<SequenceControlModel> >  sequences_per_tab_;
+				StringHashMap<QTableView*>                               tabs_per_name_;
 
-		QTabWidget* tab_widget_;
-	///
-		void buildContextMenu_();
+				QTabWidget* tab_widget_;
 
-	/** Set the selection of the checkboxes and the opening of the tree 
-			according to the selection in the MainControl.
-			\param open true means, that the item tree is opend and closed according to the changes
-			\param force true means, that the item tree is opend and closed
-						 also if more than 50 items are selected.
-	*/
-	//	void setSelection_(bool open, bool force = false);
+				///
+				void buildContextMenu_();
 
+				/** Set the selection of the checkboxes and the opening of the tree
+				    according to the selection in the MainControl.
+				    \param open true means, that the item tree is opend and closed according to the changes
+				    \param force true means, that the item tree is opend and closed
+				           also if more than 50 items are selected.
+				*/
+				//@}
 
-	// only for Python Interface
-	//	SequenceControl(const SequenceControl& mc);
+				/** @name Menu entries ids
+				*/
+				//@{
+				// the context menus
+				QMenu     context_menu_;
+				QAction*  align_selected_action_;
 
-	//	void enableUpdates_(bool state);
-	//	void newSelection_(std::list<Composite*>& sel, bool selected);
-
-	//@} 
-	/** @name Menu entries ids
-	*/
-	//@{
-	// the context menus
-	QMenu               context_menu_;
-								//			model_menu_;
-//											edit_menu_,
-		//									color_menu_[MODEL_LABEL - MODEL_LINES];
-QAction* align_selected_action_;
-
-};
-}} // namespaces
+				//@}
+		};
+	}
+} // namespaces
 
 #endif // BALL_VIEW_WIDGETS_SEQUENCECONTROL_H
