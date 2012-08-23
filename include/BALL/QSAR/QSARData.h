@@ -106,7 +106,7 @@ namespace BALL
 				@param append if set to 1, the substances read from the sd-file will be appended as new lines to the current descriptor_matrix */
 				void readSDFile(const char* file, std::multiset<int>& act, bool useExDesc=1, bool append=0, bool translate_class_labels=0);
 
-				void readSDFile(const char* file, set<String>& activity_names, bool useExDesc=1, bool append=0, bool translate_class_labels=0, bool calc_phychem_properties=1, bool calc_topological_properties=1);
+				void readSDFile(const char* file, std::set<String>& activity_names, bool useExDesc=1, bool append=0, bool translate_class_labels=0, bool calc_phychem_properties=1, bool calc_topological_properties=1);
 					
 				/** show descriptor_matrix on stdout */
 				void displayMatrix();
@@ -134,7 +134,7 @@ namespace BALL
 				void readCSVFile(const char* file, int no_y, bool xlabels, bool ylabels, const char* sep=",", bool appendDescriptors=0, bool translate_class_labels=0);
 	
 				/** for testing purposes only: change Y-matrix according to the given equations */
-				void manipulateY(vector<String> v);
+				void manipulateY(std::vector<String> v);
 	
 				/** for testing purposes only: change Y-matrix according to the given equation
 				@param v string containing the equation, e.g."x1+x3*5+x10^2" */
@@ -142,12 +142,12 @@ namespace BALL
 				
 				/** Discretize the response values. If the response variable(s) of this data object have been normalized, the given thresolds will be automatically normalized accordingly.
 				@param thresolds d thresholds for d+1 classes, that are to be created */
-				void discretizeY(vector<double> thresholds);
+				void discretizeY(std::vector<double> thresholds);
 				
-				void transformX(vector<String> v);
+				void transformX(std::vector<String> v);
 				
 				/** partitions the input data into p QSARData object of (approx.) equal size. */
-				vector<QSARData*> partitionInputData(int p);
+				std::vector<QSARData*> partitionInputData(int p);
 				
 				/** saves the current QSARData object to a text file */
 				void saveToFile(string filename) const;
@@ -157,24 +157,24 @@ namespace BALL
 				
 				/** generates a training and an external validation set from the current QSARData object 
 				@param fraction the fraction of this current coumpounds that should be used as external validation set (by random drawing) */
-				vector<QSARData*> generateExternalSet(double fraction) const;
+				std::vector<QSARData*> generateExternalSet(double fraction) const;
 
 				/** Split this data set into a training set and a test set.
 				In contrast to generateExternalSet(), compounds for the test set are *not* randomly selected. Instead, this data set is first sorted according to response values (in order to ensure equal response value ranges) and then split regularly into training and test set.
 				@param no_test_splits the total number of splits you want to create by successive calls of this function
 				@param current_test_split_id the split to be produced, with 0<=current_test_split_id<no_test_splits */
-				vector<QSARData*> evenSplit(int no_test_splits, int current_test_split_id, int response_id=0) const;
+				std::vector<QSARData*> evenSplit(int no_test_splits, int current_test_split_id, int response_id=0) const;
 				
 				/** returns a pointer to a new vector containing the UNcentered descriptor values for the s'th substance of the current data set */
-				vector<double>* getSubstance(int s) const;
+				std::vector<double>* getSubstance(int s) const;
 				
 				/** returns a pointer to a new vector containing the UNcentered response values for the s'th substance of the current data set */
-				vector<double>* getActivity(int s) const;
+				std::vector<double>* getActivity(int s) const;
 				
 				/** returns the number of response variables */
 				unsigned int getNoResponseVariables() const;
 				
-				const vector<string>* getSubstanceNames() const;
+				const std::vector<string>* getSubstanceNames() const;
 				
 				/** checks whether the response variables contain only discrete values. This can be used to check whether the current input data set is suitable for a ClassificationModel */
 				bool checkforDiscreteY() const;
@@ -211,7 +211,7 @@ namespace BALL
 				void calculateBALLDescriptors(Molecule& m);
 
 				/** Calculates topological descriptors based on functional groups counts done by SMARTS matching */
-				void calculateTopologicalDescriptors(Molecule& mol, MolecularSimilarity& molsim, const map<String,int>& descriptor_map);
+				void calculateTopologicalDescriptors(Molecule& mol, MolecularSimilarity& molsim, const std::map<String,int>& descriptor_map);
 
 				/** writes the names of all external descriptors into column_names */
 				void setDescriptorNames(const Molecule& m, std::multiset<int>& activity_IDs, bool useExDesc=1, bool resize=1);
