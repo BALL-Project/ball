@@ -24,7 +24,7 @@ PeptideBuilder* pbptr = 0;
 CHECK(PeptideBuilder())
 	pbptr = new PeptideBuilder;
 	TEST_NOT_EQUAL(pbptr, 0)
-RESULT								
+RESULT
 
 CHECK(~PeptideBuilder())
 	delete pbptr;
@@ -261,7 +261,7 @@ CHECK(PeptideBuilder(const String& sequence, const Angle& phi, const Angle& psi,
 	TEST_EQUAL(res_it->getName(), "GLU")
 	TEST_REAL_EQUAL(res_it->getTorsionPhi(), Angle(-47, false));
 
-	delete prot;	
+	delete prot;
 RESULT
 
 
@@ -279,7 +279,7 @@ CHECK(PeptideBuilder())
 RESULT
 
 // Proline as first residue 
-CHECK(~PeptideBuilder() throw())
+CHECK(~PeptideBuilder())
 	delete pb;
 	pb = 0;
 	delete pb2;
