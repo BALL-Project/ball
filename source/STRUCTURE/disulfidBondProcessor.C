@@ -14,6 +14,8 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/forEach.h>
 
+using namespace std;
+
 namespace BALL
 {
 	DisulfidBondProcessor::DisulfidBondProcessor()
