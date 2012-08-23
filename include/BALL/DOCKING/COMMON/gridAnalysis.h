@@ -41,10 +41,10 @@ namespace BALL
 
 			RegularData3D* calculate();
 
-			list<AtomContainer*> getBestPoses();
+			std::list<AtomContainer*> getBestPoses();
 
 		protected:
-			typedef multimap<double, pair<Vector3, Vector3> > PoseList;
+			typedef std::multimap<double, std::pair<Vector3, Vector3> > PoseList;
 
 			/** Translate probe_group_ to the given destination. */
 			void moveProbeGroup_(const Vector3& destination);

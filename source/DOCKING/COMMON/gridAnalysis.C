@@ -23,6 +23,7 @@
 
 #include <BALL/DOCKING/COMMON/gridAnalysis.h>
 
+using namespace std;
 
 namespace BALL
 {
