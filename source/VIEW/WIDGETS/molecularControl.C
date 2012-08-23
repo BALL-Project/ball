@@ -1017,7 +1017,7 @@ namespace BALL
 
 		// set the highlighting according to a given list
 		void MolecularControl::highlight(const list<Composite*>& selection)
-		{	
+		{
 			enableUpdates_(false);
 			listview->clearSelection();
 			selected_.clear();
