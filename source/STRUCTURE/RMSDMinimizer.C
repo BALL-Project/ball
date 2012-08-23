@@ -9,12 +9,12 @@
 
 #include <BALL/STRUCTURE/RMSDMinimizer.h>
 #include <BALL/STRUCTURE/structureMapper.h>
+#include <BALL/STRUCTURE/geometricTransformations.h>
 
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/MATHS/matrix44.h>
 #include <BALL/MATHS/quaternion.h>
 #include <BALL/KERNEL/PTE.h>
-#include <BALL/STRUCTURE/geometricTransformations.h>
 
 #include <Eigen/Core>
 #include <Eigen/Eigenvalues>
@@ -32,7 +32,7 @@ namespace BALL
 
 	RMSDMinimizer::IncompatibleCoordinateSets::IncompatibleCoordinateSets(const char* file, int line, Size size_a, Size size_b)
 		:	Exception::GeneralException(file, line, "RMSDMinimizer::IncompatibleCoordinateSets",
-																	String("coordinate sets of differing size are incompatible ( size of A: ") 
+																	String("coordinate sets of differing size are incompatible ( size of A: ")
 																	+ String(size_a) + " / size of B: " + String(size_b))
 	{
 	}
@@ -70,7 +70,6 @@ namespace BALL
 			throw TooFewCoordinates(__FILE__, __LINE__, X.size());
 		}
 
-		
 		// Compute the barycenters (geometric center of mass)
 		Vector3 barycenter_X;
 		Vector3 barycenter_Y;
@@ -103,7 +102,7 @@ namespace BALL
 				}
 			}
 		}
-	
+
 		// Compute the residual matrix F (see original paper for details, names should
 		// be identical).
 		Eigen::Matrix4d F;
