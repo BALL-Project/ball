@@ -145,7 +145,7 @@ namespace BALL
 			for (Index i=0; i<residue_table_->rowCount(); ++i)
 			{
 				residue_names       += ascii(residue_table_->item(i, 0)->text()) + ";";
-				residue_name_colors += static_cast<ColorRGBA>(residue_table_->item(i, 1)->backgroundColor()) + ";";
+				residue_name_colors += (String)(static_cast<ColorRGBA>(residue_table_->item(i, 1)->backgroundColor())) + ";";
 			}
 
 			inifile.insertValue("COLORING_OPTIONS", "ResidueNames",      residue_names);
