@@ -27,7 +27,7 @@ namespace BALL
 
 		private:
 			void addRule(String smarts, double value);
-			vector<pair<String,double> > rules_;
+			std::vector<std::pair<String,double> > rules_;
 
 			MolecularSimilarity* molecular_similarity_;
 
