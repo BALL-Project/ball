@@ -269,19 +269,19 @@ namespace BALL
 			TimeStamp update_time_stamp_;
 
 			//_ A vector containing all possible interactions between aliphatic C-H groups and aromatic rings
-			vector<pair<const AromaticRing*, const CHGroup*> > possible_interactions_;
+			std::vector<std::pair<const AromaticRing*, const CHGroup*> > possible_interactions_;
 
 			// A vector containing all aliphatic C-H groups of the ligand.
-			vector<CHGroup*> ligand_CH_groups_;
+			std::vector<CHGroup*> ligand_CH_groups_;
 
 			// A vector containing all aromatic rings of the receptor.
-			vector<AromaticRing*> receptor_aromatic_rings_;
+			std::vector<AromaticRing*> receptor_aromatic_rings_;
 
 			// A vector containing all aliphatic C-H groups of the ligand.
-			vector<CHGroup*> receptor_CH_groups_;
+			std::vector<CHGroup*> receptor_CH_groups_;
 
 			// A vector containing all aromatic rings of the receptor.
-			vector<AromaticRing*> ligand_aromatic_rings_;
+			std::vector<AromaticRing*> ligand_aromatic_rings_;
 
 			//_
 			float CX_distance_upper_;
