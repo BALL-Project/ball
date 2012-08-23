@@ -7,6 +7,7 @@
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/KERNEL/PTE.h>
 
+using namespace std;
 
 namespace BALL
 {
