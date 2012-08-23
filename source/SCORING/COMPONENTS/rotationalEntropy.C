@@ -41,12 +41,12 @@ void RotationalEntropy::setLigandIntraMolecular(bool b)
 {
 	if (b == true)
 	{
-		cout<<"RotationalEntropy ScoringComponent can not be used to compute ligand conformation score !"<<endl;
+		std::cout<<"RotationalEntropy ScoringComponent can not be used to compute ligand conformation score !"<<std::endl;
 	}
 }
 
 
-void RotationalEntropy::update(const vector<std::pair<Atom*, Atom*> >& /*pair_vector*/)
+void RotationalEntropy::update(const std::vector<std::pair<Atom*, Atom*> >& /*pair_vector*/)
 {
 	// nothing needs to be done here
 }
