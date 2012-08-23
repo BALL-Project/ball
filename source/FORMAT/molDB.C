@@ -7,6 +7,8 @@
 #include <BALL/DOCKING/COMMON/conformation.h>
 #include <BALL/STRUCTURE/UCK.h>
 
+using namespace std;
+
 namespace BALL
 {
 		// adjust this value if the format of MolDB (layout of mysql-tables, etc.) is changed
