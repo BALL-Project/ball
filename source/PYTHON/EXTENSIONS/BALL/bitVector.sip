@@ -13,12 +13,12 @@ class Bit
 %End
   public:
   Bit() throw();
-  Bit(const Bit& /bit/) throw();
+  Bit(const Bit&) throw();
 	// BAUSTELLE: folgende Funktionen scheinen für sip die gleich Signatur zu
 	// haben:
-  // Bit(BitVector* /bitvector/, Index /index/ = 0) 
+  // Bit(BitVector*, Index index = 0) 
   // throw(NullPointer);
-  // Bit(const BitVector* /bitvector/, Index /index/ = 0) 
+  // Bit(const BitVector*, Index index = 0) 
   // throw(NullPointer, IndexUnderflow, IndexOverflow);
   ~Bit() throw();
   // operator bool() const throw(NullPointer);
@@ -26,10 +26,10 @@ class Bit
   // const Bit& operator = (bool bit) 
   //   throw(NullPointer, IllegalOperation);
   virtual void clear() throw();
-  bool operator == (const Bit& /bit/) const throw();
-  bool operator == (bool /bit/) const throw(NullPointer);
-	bool operator != (const Bit& /bit/) const throw();
-  bool operator != (bool /bit/) const throw(NullPointer);
+  bool operator == (const Bit&) const throw();
+  bool operator == (bool) const throw(NullPointer);
+	bool operator != (const Bit&) const throw();
+  bool operator != (bool) const throw(NullPointer);
 };
 
 class BitVector
@@ -42,75 +42,75 @@ class BitVector
 %End
 	public:
 	BitVector() throw();
-	BitVector(Size /size/) throw(OutOfMemory);
-	BitVector(const BitVector& /bit_vector/) 
+	BitVector(Size) throw(OutOfMemory);
+	BitVector(const BitVector&) 
 		throw(OutOfMemory);
-	BitVector(const char* /bit_string/)
+	BitVector(const char*)
 		throw(OutOfMemory);
 	~BitVector() throw();
 	void clear() throw();
-	void set(const BitVector& /bit_vector/)
+	void set(const BitVector&)
 		throw(OutOfMemory);
-	void set(const char* /bit_string/)
+	void set(const char*)
 		throw(OutOfMemory);
-	// BitVector& operator = (const BitVector& /bit_vector/)
+	// BitVector& operator = (const BitVector&)
 	//	throw(OutOfMemory);
 	// const BitVector& operator = (const char *bit_string)
 	// 	throw(OutOfMemory);
-	void get(BitVector& /bitvector/) const throw(OutOfMemory);
-	BitVector operator () (Index /first/, Index /last/) const	throw(IndexUnderflow, IndexOverflow);
+	void get(BitVector&) const throw(OutOfMemory);
+	BitVector operator () (Index, Index) const	throw(IndexUnderflow, IndexOverflow);
 %MethodCode
 	sipRes = new BitVector(sipCpp->operator() (*a0, *a1));
 %End
-	void setSize(Size /size/, bool /keep/ = true) throw(OutOfMemory);
+	void setSize(Size, bool keep = true) throw(OutOfMemory);
 	Size getSize() const throw();
-	Size countValue(bool /value/) const throw();
+	Size countValue(bool) const throw();
 	// BlockType* getBitSet() throw();
 	// const BlockType* getBitSet() const throw();
-	// Bit operator [] (Index /index/)	throw(IndexUnderflow, OutOfMemory);
-	bool operator [] (Index /index/) const throw(IndexUnderflow, IndexOverflow);
+	// Bit operator [] (Index)	throw(IndexUnderflow, OutOfMemory);
+	bool operator [] (Index) const throw(IndexUnderflow, IndexOverflow);
 %MethodCode
 	sipRes = sipCpp->operator[](*a0);
 %End
-	void setBit(Index /index/, bool /value/ = true)
+	void setBit(Index, bool value = true)
 		throw(IndexUnderflow, OutOfMemory);
-	bool getBit(Index /index/) const
+	bool getBit(Index) const
 		throw(IndexUnderflow, IndexOverflow);
-	void toggleBit(Index /index/)
+	void toggleBit(Index)
 		throw(IndexUnderflow, OutOfMemory);
-	void fill(bool /value/ = true, Index /first/ = 0 , Index /last/ = -1)
+	void fill(bool value = true, Index first = 0 , Index last = -1)
 		throw(IndexUnderflow, OutOfMemory);
-	void toggle(Index /first/ = 0, Index /last/ = -1)
+	void toggle(Index first = 0, Index last = -1)
 		throw(IndexUnderflow, OutOfMemory);
-	void setUnsignedChar(unsigned char /bit_pattern/) throw();
+	void setUnsignedChar(unsigned char) throw();
 	unsigned char getUnsignedChar() const throw();
-	void setUnsignedShort(unsigned short /bit_pattern/) throw();
+	void setUnsignedShort(unsigned short) throw();
 	unsigned short getUnsignedShort() const throw();
 // BAUSTELLE: unsigned int scheint sip Probleme zu machen
-//	void setUnsignedInt(unsigned int /bit_pattern/) throw();
+//	void setUnsignedInt(unsigned int) throw();
 //	unsigned int getUnsignedInt() const throw();
-	void setUnsignedLong(unsigned long /bit_pattern/) throw();
+	void setUnsignedLong(unsigned long) throw();
 	unsigned long getUnsignedLong() const throw();
-	void bitwiseOr(const BitVector& /bit_vector/) throw(OutOfMemory);
-	void bitwiseXor(const BitVector& /bit_vector/) throw(OutOfMemory);
-	void bitwiseAnd(const BitVector& /bit_vector/) throw(OutOfMemory);
-	BitVector operator | (const BitVector& /bit_vector/) throw(OutOfMemory);
-	BitVector& operator |= (const BitVector& /bit_vector/) throw(OutOfMemory);
-	BitVector operator & (const BitVector& /bit_vector/) throw(OutOfMemory);
-	BitVector& operator &= (const BitVector& /bit_vector/) throw(OutOfMemory);
-	BitVector operator ^ (const BitVector& /bit_vector/) throw(OutOfMemory);
-	BitVector& operator ^= (const BitVector& /bit_vector/) throw(OutOfMemory);
+	void bitwiseOr(const BitVector&) throw(OutOfMemory);
+	void bitwiseXor(const BitVector&) throw(OutOfMemory);
+	void bitwiseAnd(const BitVector&) throw(OutOfMemory);
+	BitVector operator | (const BitVector&) throw(OutOfMemory);
+	BitVector& operator |= (const BitVector&) throw(OutOfMemory);
+	BitVector operator & (const BitVector&) throw(OutOfMemory);
+	BitVector& operator &= (const BitVector&) throw(OutOfMemory);
+	BitVector operator ^ (const BitVector&) throw(OutOfMemory);
+	BitVector& operator ^= (const BitVector&) throw(OutOfMemory);
 	// BitVector operator ~ () throw(OutOfMemory);
-	bool operator == (const BitVector& /bit_vector/) const throw();
-	bool operator != (const BitVector& /bit_vector/) const throw();
-	bool isAnyBit(bool /value/, Index /first/ = 0, Index /last/ = -1) const
+	bool operator == (const BitVector&) const throw();
+	bool operator != (const BitVector&) const throw();
+	bool isAnyBit(bool, Index first = 0, Index last = -1) const
 		throw(IndexUnderflow, IndexOverflow);
-	bool isEveryBit(bool /value/, Index /first/ = 0, Index /last/ = -1) const
+	bool isEveryBit(bool, Index first = 0, Index last = -1) const
 		throw(IndexUnderflow, IndexOverflow);
 	bool isValid() const throw();
-	// friend std::istream& operator >> (std::istream& s, BitVector& /bit_vector/)
+	// friend std::istream& operator >> (std::istream& s, BitVector&)
 	//	throw(OutOfMemory);
-	// friend std::ostream& operator << (std::ostream& s, const BitVector& /bit_vector/)
+	// friend std::ostream& operator << (std::ostream& s, const BitVector&)
 	//	throw();
 	// virtual void read(std::istream& s)
 	// 	throw(OutOfMemory);

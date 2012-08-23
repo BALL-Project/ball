@@ -33,17 +33,17 @@ class ResidueChecker
 
   // BALL_CREATE(ResidueChecker)
   ResidueChecker();
-  ResidueChecker(FragmentDB& /fragment_db/);
-  ResidueChecker(const ResidueChecker& /residue_checker/);
+  ResidueChecker(FragmentDB&);
+  ResidueChecker(const ResidueChecker&);
   ~ResidueChecker();
 
 
-  void enable(TestType /t/) throw();
-  void disable(TestType /t/) throw();
-	bool isEnabled(TestType /t/) throw();
+  void enable(TestType) throw();
+  void disable(TestType) throw();
+	bool isEnabled(TestType) throw();
 
   bool getStatus() const;
-  Processor::Result operator () (Residue& /residue/);
+  Processor::Result operator () (Residue&);
 %MethodCode
   sipRes = sipCpp->operator () (*a0);
 %End

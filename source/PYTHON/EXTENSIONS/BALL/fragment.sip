@@ -18,8 +18,8 @@ class Fragment
    NUMBER_OF_PROPERTIES = AtomContainer::Property::NUMBER_OF_PROPERTIES
   };
   Fragment();
-  Fragment(const Fragment& /fragment/, bool /deep/ = true);
-  Fragment(const String& /name/);
+  Fragment(const Fragment&, bool deep = true);
+  Fragment(const String&);
   ~Fragment();
   // void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
   // void persistentRead(PersistenceManager& pm);

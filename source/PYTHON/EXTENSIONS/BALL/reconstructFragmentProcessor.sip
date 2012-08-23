@@ -15,7 +15,7 @@ class ReconstructFragmentProcessor
 %End
 	public:
 	ReconstructFragmentProcessor();
-	ReconstructFragmentProcessor(const FragmentDB& /db/);
+	ReconstructFragmentProcessor(const FragmentDB&);
 	~ReconstructFragmentProcessor();
 	virtual bool start();
 	virtual bool finish();
@@ -24,7 +24,7 @@ class ReconstructFragmentProcessor
   sipRes = sipCpp->operator () (*a0);
 %End
 	Size getNumberOfInsertedAtoms();
-	void setFragmentDB(const FragmentDB& /fragment_db/);
+	void setFragmentDB(const FragmentDB&);
 	const FragmentDB* getFragmentDB() const;
 };
 

@@ -20,7 +20,7 @@ class PeptideCapProcessor
 %End
 public:
 	PeptideCapProcessor();
-	virtual Processor::Result operator() (Chain& /chain/);
+	virtual Processor::Result operator() (Chain&);
 %MethodCode
   sipRes = sipCpp->operator () (*a0);
 %End

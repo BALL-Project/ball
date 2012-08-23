@@ -14,28 +14,28 @@ class ResourceEntry
   public:
   // BALL_CREATE(ResourceEntry)
   ResourceEntry();
-  ResourceEntry(const ResourceEntry& /entry/, bool /deep/ = true);
-  ResourceEntry(const String& /key/, const String& /value/, ResourceEntry* /parent/ = 0);
+  ResourceEntry(const ResourceEntry&, bool deep = true);
+  ResourceEntry(const String&, const String&, ResourceEntry* parent = 0);
   ~ResourceEntry();
   void clear();
   void destroy();
-  void set(const ResourceEntry& /entry/, bool /deep/ = true);
-  // ResourceEntry& operator = (const ResourceEntry& /entry/);
-  void get(ResourceEntry& /entry/, bool /deep/ = true) const;
+  void set(const ResourceEntry&, bool deep = true);
+  // ResourceEntry& operator = (const ResourceEntry&);
+  void get(ResourceEntry&, bool deep = true) const;
   ResourceEntry& getRoot();
   // const ResourceEntry& getRoot() const;
 
   ResourceEntry* getParent();
   // const ResourceEntry* getParent() const;
 
-  ResourceEntry* getChild(Position /index/);
-  //const ResourceEntry* getChild(Position /index/) const;
+  ResourceEntry* getChild(Position);
+  //const ResourceEntry* getChild(Position) const;
 
-  ResourceEntry* getEntry(const String& /key_path/);
-  // const ResourceEntry* getEntry(const String& /key_path/) const;
+  ResourceEntry* getEntry(const String&);
+  // const ResourceEntry* getEntry(const String&) const;
 
   const String& getKey() const;
-  void setValue(const String& /value/);
+  void setValue(const String&);
 
   String& getValue();
   // const String& getValue() const;
@@ -46,28 +46,28 @@ class ResourceEntry
   Size getSize() const;
   Size getDepth() const;
 
-  ResourceEntry* insertChild(const String& /key/, const String& /value/, bool /replace_value/ = true);
-  ResourceEntry* insertSibling(const String& /key/, const String& /value/, bool /replace_value/ = true);
-  ResourceEntry* insertChild(ResourceEntry& /entry/, bool /replace_value/ = true);
-  ResourceEntry* insert(const String& /key_path/, const String& /name/);
-  bool mergeChildrenOf(ResourceEntry& /entry/, bool /replace_value/ = true);
-  // bool removeChild(const String& /key/, ResourceEntry** /removed/ = 0);
-  bool removeKey(const String& /key_path/);
-  ResourceEntry* findChild(const String& /key/);
-  // const ResourceEntry* findChild(const String& /key/) const;
+  ResourceEntry* insertChild(const String&, const String&, bool replace_value = true);
+  ResourceEntry* insertSibling(const String&, const String&, bool replace_value = true);
+  ResourceEntry* insertChild(ResourceEntry&, bool replace_value = true);
+  ResourceEntry* insert(const String&, const String&);
+  bool mergeChildrenOf(ResourceEntry&, bool replace_value = true);
+  // bool removeChild(const String&, ResourceEntry** removed = 0);
+  bool removeKey(const String&);
+  ResourceEntry* findChild(const String&);
+  // const ResourceEntry* findChild(const String&) const;
 
-  ResourceEntry* findDescendant(const String& /key/);
-  // const ResourceEntry* findDescendant(const String& /key/) const;
+  ResourceEntry* findDescendant(const String&);
+  // const ResourceEntry* findDescendant(const String&) const;
 
-  ResourceEntry* findEntry(const String& /key/);
-  // const ResourceEntry* findEntry(const String& /key/) const;
-  bool hasChild(const String& /key/) const;
+  ResourceEntry* findEntry(const String&);
+  // const ResourceEntry* findEntry(const String&) const;
+  bool hasChild(const String&) const;
   bool isEmpty() const;
-  bool isParentOf(const ResourceEntry& /entry/) const;
-  bool isChildOf(const ResourceEntry& /entry/) const;
-  bool isAncestorOf(const ResourceEntry& /entry/) const;
-  bool isDescendantOf(const ResourceEntry& /entry/) const;
-  bool isRelatedWith(const ResourceEntry& /entry/) const;
+  bool isParentOf(const ResourceEntry&) const;
+  bool isChildOf(const ResourceEntry&) const;
+  bool isAncestorOf(const ResourceEntry&) const;
+  bool isDescendantOf(const ResourceEntry&) const;
+  bool isRelatedWith(const ResourceEntry&) const;
   bool isRoot() const;
   bool isValid() const;
   // void dump(std::ostream& s = std::cout, Size depth = 0) const;
@@ -91,28 +91,28 @@ class ResourceFile
   static char SEPARATOR;
   typedef ResourceEntry Entry;
   ResourceFile();
-  ResourceFile(const String& /name/);
+  ResourceFile(const String&);
   ~ResourceFile();
   void destroy();
-  bool open(const String& /name/);
+  bool open(const String&);
   void close();
-  // static void saveAs(const Entry& /entry/, const String& /name/);
-  void saveAs(const String& /name/);
-  void save(const Entry& /entry/);
+  // static void saveAs(const Entry&, const String&);
+  void saveAs(const String&);
+  void save(const Entry&);
   void save();
   Size getSize() const;
   Entry& getRoot();
   // const Entry& getRoot() const;
 
-  Entry* getEntry(const String& /key_path/);
-  // const Entry* getEntry(const String& /key_path/) const;
+  Entry* getEntry(const String&);
+  // const Entry* getEntry(const String&) const;
 
-  String* getValue(const String& /key_path/);
-  // const String* getValue(const String& /key_path/) const;
+  String* getValue(const String&);
+  // const String* getValue(const String&) const;
 
-  Entry* insert(const String& /key_path/, const String& /name/);
-  bool removeKey(const String& /key_path/);
-  bool hasKey(const String& /key_path/) const;
+  Entry* insert(const String&, const String&);
+  bool removeKey(const String&);
+  bool hasKey(const String&) const;
   bool isEmpty() const;
   bool isValid() const;
   // void dump(std::ostream& s = std::cout, Size depth = 0) const;
@@ -122,6 +122,6 @@ class ResourceFile
   // static bool applyChildren(Entry& entry, UnaryProcessor<Entry>& processor);
   // typedef Entry::Iterator Iterator;
 	private:
-	ResourceFile(const ResourceFile& /resource_file/);
+	ResourceFile(const ResourceFile&);
 };
   

@@ -17,7 +17,7 @@ class LightSettings
 
 	// methods implemented by the BALL_EMBEDDED macro
 	static Size countInstances();
-	static LightSettings* getInstance(Position /index/);
+	static LightSettings* getInstance(Position);
 
 	/// Update the display of all fields
 	void update();

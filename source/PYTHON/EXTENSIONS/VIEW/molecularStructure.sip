@@ -16,7 +16,7 @@ class  MolecularStructure
 
 	// methods implemented by the BALL_EMBEDDED macro
 	static Size countInstances();
-	static MolecularStructure* getInstance(Position /index/);
+	static MolecularStructure* getInstance(Position);
 
   //AmberConfigurationDialog& getAmberConfigurationDialog() throw();
   AmberFF& getAmberFF() throw();

@@ -109,9 +109,9 @@ class PropertyManager
   void clearProperty(const String&);
 	Size countNamedProperties() const;
 
-  //const NamedProperty& getNamedProperty(Position /index/) const
+  //const NamedProperty& getNamedProperty(Position) const
   //   throw(IndexOverflow);
-  NamedProperty& getNamedProperty(Position /index/)
+  NamedProperty& getNamedProperty(Position)
      throw(IndexOverflow);
 
   bool hasProperty(int) const;

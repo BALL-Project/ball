@@ -13,10 +13,10 @@ class RadiusRuleProcessor
   public:
   // BALL_CREATE(RadiusRuleProcessor)
   RadiusRuleProcessor();
-  RadiusRuleProcessor(INIFile& /file/, const String& /prefix/ = "RadiusRules");
-  RadiusRuleProcessor(const RadiusRuleProcessor& /rule_processor/);
+  RadiusRuleProcessor(INIFile&, const String& prefix = "RadiusRules");
+  RadiusRuleProcessor(const RadiusRuleProcessor&);
   ~RadiusRuleProcessor();
-  Processor::Result operator () (Atom& /atom/);
+  Processor::Result operator () (Atom&);
 %MethodCode
 	sipRes = sipCpp->operator () (*a0);
 %End

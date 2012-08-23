@@ -23,8 +23,8 @@ class Box3
   float getWidth() const;
   float getHeight() const;
   float getDepth() const;
-  bool operator == (const Box3& /box/) const;
-  bool operator != (Box3& /box/) const;
+  bool operator == (const Box3&) const;
+  bool operator != (Box3&) const;
   bool isValid() const;
   // void dump(std::ostream& s = std::cout, Size depth = 0) const;
 

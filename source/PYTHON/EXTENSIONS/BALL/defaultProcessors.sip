@@ -15,7 +15,7 @@ class ClearChargeProcessor
 	typedef UnaryProcessor<Atom> AtomProcessor;
 %End
   public:
-  Processor::Result operator () (Atom& /atom/);
+  Processor::Result operator () (Atom&);
 %MethodCode
   sipRes = sipCpp->operator () (*a0);
 %End
@@ -31,7 +31,7 @@ class ClearRadiusProcessor
 	typedef UnaryProcessor<Atom> AtomProcessor;
 %End
   public:
-  Processor::Result operator () (Atom& /atom/);
+  Processor::Result operator () (Atom&);
 %MethodCode
   sipRes = sipCpp->operator () (*a0);
 %End
@@ -48,14 +48,14 @@ class AssignRadiusProcessor
 %End
   public:
   AssignRadiusProcessor();
-  AssignRadiusProcessor(const String& /filename/);
+  AssignRadiusProcessor(const String&);
   virtual bool start();
   virtual bool finish();
-  Processor::Result operator() (Atom& /atom/);
+  Processor::Result operator() (Atom&);
 %MethodCode
   sipRes = sipCpp->operator () (*a0);
 %End
-  void setFilename(const String& /filename/);
+  void setFilename(const String&);
   String& getFilename();
   Size getNumberOfAssignments();
   Size getNumberOfErrors();
@@ -71,9 +71,9 @@ class AssignChargeProcessor
 %End
   public:
   AssignChargeProcessor();
-  AssignChargeProcessor(const String& /filename/);
+  AssignChargeProcessor(const String&);
   virtual bool start();
-  Processor::Result operator () (Atom& /atom/);
+  Processor::Result operator () (Atom&);
 %MethodCode
   sipRes = sipCpp->operator () (*a0);
 %End

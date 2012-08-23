@@ -16,12 +16,12 @@ class SDFile
   public:
   SDFile();
 	// default open mode is "IN"
-  SDFile(String&, OpenMode /openmode/ = std::ios::in)	throw(FileNotFound);
+  SDFile(String&, OpenMode openmode = std::ios::in)	throw(FileNotFound);
 	~SDFile()	throw();
 
-  virtual bool write(const System& /system/) throw(File::CannotWrite);
-	virtual bool write(const Molecule& /molecule/) throw(File::CannotWrite);
-  virtual bool read(System& /system/)	throw(ParseError);
+  virtual bool write(const System&) throw(File::CannotWrite);
+	virtual bool write(const Molecule&) throw(File::CannotWrite);
+  virtual bool read(System&)	throw(ParseError);
 	virtual Molecule* read() throw(ParseError);
 	void disableAtoms() throw();
 	void enableAtoms() throw();

@@ -14,15 +14,15 @@ class PreciseTime
   public:
   // BALL_CREATE_NODEEP(PreciseTime)
   PreciseTime();
-  PreciseTime(const PreciseTime& /time/);
+  PreciseTime(const PreciseTime&);
   ~PreciseTime() throw();
   static const PreciseTime ZERO;
-  void set(long /secs/, long /usecs/) throw();
-  void set(const PreciseTime& /time/) throw();
-  // const PreciseTime& operator = (const PreciseTime& /time/) throw();
-	bool operator < (const PreciseTime& /time/) const throw();
-	bool operator > (const PreciseTime& /time/) const throw();
- 	bool operator == (const PreciseTime& /time/) const throw();
+  void set(long, long) throw();
+  void set(const PreciseTime&) throw();
+  // const PreciseTime& operator = (const PreciseTime&) throw();
+	bool operator < (const PreciseTime&) const throw();
+	bool operator > (const PreciseTime&) const throw();
+ 	bool operator == (const PreciseTime&) const throw();
   long getSeconds() const throw();
   long getMicroSeconds() const throw();
   static PreciseTime now() throw();
@@ -53,11 +53,11 @@ class TimeStamp
   // BALL_CREATE_NODEEP(TimeStamp)
   TimeStamp() throw();
   ~TimeStamp() throw();
-  bool isNewerThan(const PreciseTime& /time/) const throw ();
-  bool isOlderThan(const PreciseTime& /time/) const throw ();
-  bool isNewerThan(const TimeStamp& /stamp/) const throw ();
-  bool isOlderThan(const TimeStamp& /stamp/) const throw ();
-  virtual void stamp(const PreciseTime& /time/ = PreciseTime::ZERO) throw ();
+  bool isNewerThan(const PreciseTime&) const throw ();
+  bool isOlderThan(const PreciseTime&) const throw ();
+  bool isNewerThan(const TimeStamp&) const throw ();
+  bool isOlderThan(const TimeStamp&) const throw ();
+  virtual void stamp(const PreciseTime& time = PreciseTime::ZERO) throw ();
   const PreciseTime& getTime() const throw ();
   //  void write(PersistenceManager& pm) const;
   //  bool read(PersistenceManager& pm);

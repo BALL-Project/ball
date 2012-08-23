@@ -15,8 +15,8 @@ class CharmmBend
 %End
   public:
   CharmmBend();
-  CharmmBend(ForceField& /force_field/);
-  CharmmBend(const CharmmBend& /charmm_stretch/);
+  CharmmBend(ForceField&);
+  CharmmBend(const CharmmBend&);
   ~CharmmBend();
   virtual bool setup() throw(TooManyErrors);
   virtual double updateEnergy();

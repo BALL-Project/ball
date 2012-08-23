@@ -16,7 +16,7 @@ class DatasetControl
   public:
 
 	static Size countInstances();
-	static DatasetControl* getInstance(Position /index/);
+	static DatasetControl* getInstance(Position);
 
 	DatasetControl() throw();
   ~DatasetControl() throw();
@@ -27,7 +27,7 @@ class DatasetControl
 //	virtual void deleteCurrentItems() throw();
 	Size getSelectionSize();
 	PyDatasetVector getDatasets(const String& type);
-	DatasetController* getController(const String& /type/);
+	DatasetController* getController(const String&);
 	private:
 		DatasetControl(const DatasetControl&);
 };

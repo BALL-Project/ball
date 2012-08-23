@@ -14,10 +14,10 @@ class MOL2File
 %End
   public:
   MOL2File();
-  MOL2File(const String&, OpenMode /openmode/ = std::ios::in);
+  MOL2File(const String&, OpenMode openmode = std::ios::in);
   ~MOL2File();
-  virtual bool write(const System& /system/);
-  virtual bool write(const Molecule& /molecule/);
-  virtual bool read(System& /system/);
+  virtual bool write(const System&);
+  virtual bool write(const Molecule&);
+  virtual bool read(System&);
   virtual Molecule* read();
 };

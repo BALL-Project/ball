@@ -12,7 +12,7 @@ class ServerWidget
 
 	// methods implemented by the BALL_EMBEDDED macro
 	static Size countInstances();
-	static ModularWidget* getInstance(Position /index/);
+	static ModularWidget* getInstance(Position);
 
 	//ServerWidget(QWidget* parent = 0, const char* name = 0) throw();
 	~ServerWidget() throw();

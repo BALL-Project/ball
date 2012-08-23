@@ -14,20 +14,20 @@ class ColorProcessor
   public:
 
   ColorProcessor() throw();
-  ColorProcessor(const ColorProcessor& /color_calculator/) throw();
+  ColorProcessor(const ColorProcessor&) throw();
   ~ColorProcessor();
   virtual void clear() throw();
-  void set(const ColorProcessor& /color_calculator/) throw();
+  void set(const ColorProcessor&) throw();
 	virtual bool start() throw();
-  // const ColorProcessor& operator = (const ColorProcessor& /color_calculator/) throw();
+  // const ColorProcessor& operator = (const ColorProcessor&) throw();
 	bool updateAlwaysNeeded();
-  void setDefaultColor(const ColorRGBA& /color/) throw();
+  void setDefaultColor(const ColorRGBA&) throw();
   const ColorRGBA& getDefaultColor() const throw();
-  //Processor::Result operator() (GeometricObject& /object/);
+  //Processor::Result operator() (GeometricObject&);
 	void getColor(const Composite&, ColorRGBA&);
   Size getTransparency() const throw();
-  void setTransparency(Size /value/) throw();
-  // void setComposites(const CompositeSet* /composites/) throw();
+  void setTransparency(Size) throw();
+  // void setComposites(const CompositeSet*) throw();
   // const CompositeSet* getComposites() throw();
   //void clearAtomGrid() throw();
 	void setAdditionalGridDistance(float) throw();

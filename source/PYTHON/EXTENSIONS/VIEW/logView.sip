@@ -15,7 +15,7 @@ class LogView
   public:
 
 	static Size countInstances();
-	static LogView* getInstance(Position /index/);
+	static LogView* getInstance(Position);
 
 	LogView() throw();
   ~LogView() throw();

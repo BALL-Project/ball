@@ -47,8 +47,8 @@ class CharmmTorsion
 //  };
   // BALL_CREATE(CharmmTorsion)
   CharmmTorsion();
-  CharmmTorsion(ForceField& /force_field/);
-  CharmmTorsion(const CharmmTorsion& /charmm_stretch/);
+  CharmmTorsion(ForceField&);
+  CharmmTorsion(const CharmmTorsion&);
   ~CharmmTorsion();
   virtual bool setup() throw(TooManyErrors);
   virtual double updateEnergy();

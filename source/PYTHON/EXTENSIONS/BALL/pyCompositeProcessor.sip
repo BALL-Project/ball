@@ -15,7 +15,7 @@ class CompositeProcessor
 	public:
 	bool start();
 	bool finish();
-	Processor::Result operator () (Composite& /atom/);
+	Processor::Result operator () (Composite&);
 %MethodCode
   sipRes = sipCpp->operator () (*a0);
 %End

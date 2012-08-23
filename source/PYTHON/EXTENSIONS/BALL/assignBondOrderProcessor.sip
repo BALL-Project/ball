@@ -104,24 +104,24 @@ class AssignBondOrderProcessor
 		virtual ~AssignBondOrderProcessor();
 		
 		void clear();
-		virtual Processor::Result operator () (AtomContainer& /ac/);
+		virtual Processor::Result operator () (AtomContainer&);
 %MethodCode
   sipRes = sipCpp->operator () (*a0);
 %End
-		Size getNumberOfAddedHydrogens(Position /i/);
+		Size getNumberOfAddedHydrogens(Position);
 		Size getNumberOfComputedSolutions();
 		AtomContainer* getAtomContainer();
 		//AtomContainer const* getAtomContainer() const;
-		const System& getSolution(Position /i/) throw(IndexOverflow);
-		//float getTotalCharge(Position /i/);
-		float getTotalPenalty(Position /i/);
-		int getNumberOfNodeExpansions(Position /i/);
-		int getQueueSize(Position /i/);
-		bool apply(Position /i/); 
+		const System& getSolution(Position) throw(IndexOverflow);
+		//float getTotalCharge(Position);
+		float getTotalPenalty(Position);
+		int getNumberOfNodeExpansions(Position);
+		int getQueueSize(Position);
+		bool apply(Position); 
 		void resetBondOrders();
 		bool computeNextSolution();
 		void setDefaultOptions();
-		float evaluatePenalty(AtomContainer* /ac/);
+		float evaluatePenalty(AtomContainer*);
 		Options options;
 
 	private:

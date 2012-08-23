@@ -70,39 +70,39 @@ class Atom
 		 ADD_VARIANT_EXTENSIONS_AND_ID
   };
   Atom() throw();
-  Atom(const Atom& /atom/, bool /deep/ = true) throw();
+  Atom(const Atom&, bool deep = true) throw();
   Atom
-    (Element& /element/,
-     const String& /name/, const String& /type_name/ = "UNK" ,
-     int /atom_type/ = UNKNOWN_TYPE ,
-     const Vector3& /position/ = Vector3(0,0,0 ),
-     const Vector3& /velocity/ = Vector3(0,0,0 ),
-     const Vector3& /force/ = Vector3(0,0,0 ),
-     float /charge/ = 0,
-     float /radius/ = 0,
-		 Index /formal_charge/ = 0);
+    (Element&,
+     const String&, const String& type_name = "UNK" ,
+     int atom_type = UNKNOWN_TYPE ,
+     const Vector3& position = Vector3(0,0,0 ),
+     const Vector3& velocity = Vector3(0,0,0 ),
+     const Vector3& force = Vector3(0,0,0 ),
+     float charge = 0,
+     float radius = 0,
+		 Index formal_charge = 0);
    ~Atom() throw();
    virtual void clear() throw();
    virtual void destroy() throw();
-   // void persistentWrite(PersistenceManager& /pm/, const char* /name/ = 0) const throw(GeneralException);
-   // void persistentRead(PersistenceManager& /pm/) throw(GeneralException);
-   void set(const Atom& /atom/, bool /deep/ = true) throw();
-   void get(Atom& /atom/, bool /deep/ = true) const throw();
-   void swap(Atom& /atom/) throw();
-   // Atom& operator = (const Atom& /atom/);
+   // void persistentWrite(PersistenceManager&, const char* name = 0) const throw(GeneralException);
+   // void persistentRead(PersistenceManager&) throw(GeneralException);
+   void set(const Atom&, bool deep = true) throw();
+   void get(Atom&, bool deep = true) const throw();
+   void swap(Atom&) throw();
+   // Atom& operator = (const Atom&);
 
 	 // Predicates
-	 bool operator == (const Atom& /atom/) const throw();
-	 bool operator != (const Atom& /atom/) const throw();
+	 bool operator == (const Atom&) const throw();
+	 bool operator != (const Atom&) const throw();
 
 	 // Accessors
-   void setElement(Element& /element/) throw();
+   void setElement(Element&) throw();
    const Element& getElement() const throw();
 
-   void setCharge(float /charge/) throw();
+   void setCharge(float) throw();
    float getCharge() const throw();
 
-	 void setFormalCharge(Index /formal_charge/) throw();
+	 void setFormalCharge(Index) throw();
    Index getFormalCharge() const throw();
 
    // const Fragment* getFragment() const throw();
@@ -120,58 +120,58 @@ class Atom
    // const Molecule* getMolecule() const throw();
    Molecule* getMolecule() throw();
 
-   void setName(const String& /name/) throw();
+   void setName(const String&) throw();
    const String& getName() const throw();
-   String getFullName(FullNameType /type/ = ADD_VARIANT_EXTENSIONS) const throw();
+   String getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const throw();
 
-   void setPosition(const Vector3& /position/) throw();
+   void setPosition(const Vector3&) throw();
    const Vector3& getPosition() const throw();
    float getDistance(const Atom& a) const;
    //Vector3& getPosition() throw();
 
-   void setRadius(float /radius/) throw();
+   void setRadius(float) throw();
    float getRadius() const throw();
 
-   void setType(AtomType /atom_type/);
+   void setType(AtomType);
    AtomType getType() const;
 
    String getTypeName() const throw();
-   void setTypeName(const String& /name/) throw();
+   void setTypeName(const String&) throw();
 
-   void setVelocity(const Vector3& /velocity/) throw();
+   void setVelocity(const Vector3&) throw();
    const Vector3& getVelocity() const throw();
 	 // Vector3& getForce() throw();
 	  
-   void setForce(const Vector3& /force/) throw();
+   void setForce(const Vector3&) throw();
    const Vector3& getForce() const throw();
    // Vector3& getForce() throw();
 
    Size countBonds() const;
 
-   Bond* getBond(Position /index/) throw(IndexOverflow);
-   //const Bond* getBond(Position /index/) const throw(IndexOverflow);
+   Bond* getBond(Position) throw(IndexOverflow);
+   //const Bond* getBond(Position) const throw(IndexOverflow);
 
-   Bond* getBond(const Atom& /atom/) throw();
-   //const Bond *getBond(const Atom& /atom/) const throw();
+   Bond* getBond(const Atom&) throw();
+   //const Bond *getBond(const Atom&) const throw();
 
-   Bond* createBond(Atom& /atom/) throw(TooManyBonds);
-   Bond* createBond(Bond& /bond/, Atom& /atom/) throw(TooManyBonds);
+   Bond* createBond(Atom&) throw(TooManyBonds);
+   Bond* createBond(Bond&, Atom&) throw(TooManyBonds);
 
-   Bond* cloneBond(Bond& /bond/, Atom& /atom/) throw();
-   bool destroyBond(const Atom& /atom/) throw();
+   Bond* cloneBond(Bond&, Atom&) throw();
+   bool destroyBond(const Atom&) throw();
    void destroyBonds() throw();
 
-   bool hasBond(const Bond& /bond/) const throw();
-   bool isBoundTo(const Atom& /atom/) const throw();
+   bool hasBond(const Bond&) const throw();
+   bool isBoundTo(const Atom&) const throw();
    bool isBound() const throw();
-   bool isGeminal(const Atom& /atom/) const throw();
-   bool isVicinal(const Atom& /atom/) const throw();
+   bool isGeminal(const Atom&) const throw();
+   bool isVicinal(const Atom&) const throw();
    virtual bool isValid() const throw();
 
    // virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
    // virtual void read(std::istream& s);
    // virtual void write(std::ostream& s) const;
-   bool applyBonds(BondProcessor& /processor/) throw();
+   bool applyBonds(BondProcessor&) throw();
 	
 	// convert the atom to a string representation
 	SIP_PYOBJECT __str__();

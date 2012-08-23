@@ -18,8 +18,8 @@ class AmberNonBonded
   public:
   // BALL_CREATE(AmberNonBonded)
   AmberNonBonded();
-  AmberNonBonded(ForceField& /force_field/);
-  AmberNonBonded(const AmberNonBonded& /amber_non_bonded/);
+  AmberNonBonded(ForceField&);
+  AmberNonBonded(const AmberNonBonded&);
   ~AmberNonBonded();
 	virtual void clear();
   virtual bool setup() throw(TooManyErrors);

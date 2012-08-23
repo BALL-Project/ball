@@ -30,7 +30,7 @@
 
 			public:	
 				HBond();
-				HBond(const Atom* /acceptor/, const Atom* /donor/, bool /donor_is_hydrogen/); 
+				HBond(const Atom*, const Atom*, bool); 
 					
 				const Atom * getAcceptor();
 				const Atom * getDonor();
@@ -72,10 +72,10 @@
 		};
 
     HBondProcessor();	
-		HBondProcessor(Options /new_options/);
+		HBondProcessor(Options);
 		virtual ~HBondProcessor();
 		
-    Processor::Result operator() (Composite& /composite/);
+    Processor::Result operator() (Composite&);
 %MethodCode
   sipRes = sipCpp->operator () (*a0);
 %End

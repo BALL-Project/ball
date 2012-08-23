@@ -18,7 +18,7 @@ class GeometricControl
   public:
 
 	static Size countInstances();
-	static GeometricControl* getInstance(Position /index/);
+	static GeometricControl* getInstance(Position);
 
 	GeometricControl() throw();
   ~GeometricControl() throw();

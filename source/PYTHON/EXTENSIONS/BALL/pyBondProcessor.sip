@@ -15,7 +15,7 @@ class BondProcessor
 	public:
 	bool start();
 	bool finish();
-	Processor::Result operator () (Bond& /atom/);
+	Processor::Result operator () (Bond&);
 %MethodCode
   sipRes = sipCpp->operator () (*a0);
 %End

@@ -16,7 +16,7 @@ class ModelProcessor
   public:
 
  	ModelProcessor() throw();
-  ModelProcessor(const ModelProcessor& /model_processor/) throw();
+  ModelProcessor(const ModelProcessor&) throw();
   ~ModelProcessor() throw();
   virtual void clear() throw();
   virtual bool isValid() const throw();
@@ -32,7 +32,7 @@ class ModelProcessor
 	float getSurfaceDrawingPrecision() const throw();
 	virtual bool createGeometricObjects() throw();
 				
-  Processor::Result operator() (Composite& /composite/);
+  Processor::Result operator() (Composite&);
 %MethodCode
 	sipRes = sipCpp->operator () (*a0);
 %End

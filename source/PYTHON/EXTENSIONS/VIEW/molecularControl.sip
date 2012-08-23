@@ -15,7 +15,7 @@ class MolecularControl
   public:
 
 	static Size countInstances();
-	static MolecularControl* getInstance(Position /index/);
+	static MolecularControl* getInstance(Position);
 
 	MolecularControl() throw();
   ~MolecularControl() throw();

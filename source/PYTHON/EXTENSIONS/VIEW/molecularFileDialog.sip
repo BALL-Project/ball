@@ -16,7 +16,7 @@ class MolecularFileDialog
 
 	// methods implemented by the BALL_EMBEDDED macro
 	static Size countInstances();
-	static MolecularFileDialog* getInstance(Position /index/);
+	static MolecularFileDialog* getInstance(Position);
 
   ~MolecularFileDialog() throw();
   virtual void initializeWidget(MainControl&) throw();

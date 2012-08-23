@@ -16,8 +16,8 @@ class CharmmStretch
   public:
   // BALL_CREATE(CharmmStretch)
   CharmmStretch();
-  CharmmStretch(ForceField& /force_field/);
-  CharmmStretch(const CharmmStretch& /charmm_stretch/);
+  CharmmStretch(ForceField&);
+  CharmmStretch(const CharmmStretch&);
   ~CharmmStretch();
   virtual bool setup() throw(TooManyErrors);
   virtual double updateEnergy();

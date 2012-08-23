@@ -13,29 +13,29 @@ class Quaternion
   public:
   // BALL_CREATE_NODEEP(Quaternion)
   Quaternion();
-  Quaternion(const Quaternion& /q/);
+  Quaternion(const Quaternion&);
 };
 /*
-  Quaternion(const Vector3& /axis/, float /angle/);
-  Quaternion(float /x/, float /y/, float /z/, float /angle/);
+  Quaternion(const Vector3&, float);
+  Quaternion(float, float, float, float);
   ~Quaternion();
-  void set(const Quaternion& /q/);
-  void set(const Vector3& /axis/, float /angle/);
-  void set(float /x/, float /y/, float /z/, float /angle/);
+  void set(const Quaternion&);
+  void set(const Vector3&, float);
+  void set(float, float, float, float);
   // Quaternion& operator = (const Quaternion& q);
-  void get(Quaternion& /q/) const;
+  void get(Quaternion&) const;
   void setIdentity();
-  void swap(Quaternion& /q/);
+  void swap(Quaternion&);
   float getAngle() const;
   Vector3 getAxis();
-  Matrix4x4& getRotationMatrix(Matrix4x4& /m/) const;
+  Matrix4x4& getRotationMatrix(Matrix4x4&) const;
   // ???? Quaternion operator - () const;
   Quaternion getInverse() const;
   Quaternion getConjugate() const;
-  Quaternion& operator += (const Quaternion& /q/);
-  Quaternion& operator -= (const Quaternion& /q/);
-  bool operator == (const Quaternion& /q/) const;
-  bool operator != (const Quaternion& /q/) const;
+  Quaternion& operator += (const Quaternion&);
+  Quaternion& operator -= (const Quaternion&);
+  bool operator == (const Quaternion&) const;
+  bool operator != (const Quaternion&) const;
   // void dump(std::ostream& s = std::cout, Size depth = 0) const;
   float i;
   float j;

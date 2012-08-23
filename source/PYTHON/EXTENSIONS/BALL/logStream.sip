@@ -14,7 +14,7 @@
 	static std::ofstream py_oflogstream_;
 %End
 
-	void redirectLogToFile(String /filename/);
+	void redirectLogToFile(String);
 %MethodCode
 	if (py_oflogstream_.is_open())
 	{

@@ -45,20 +45,20 @@ class SmilesParser
 		: Atom
 	{
 		public:
-		SPAtom(const String& /symbol/, bool /in_brackets/);
+		SPAtom(const String&, bool);
 		~SPAtom() throw();
 		Size getDefaultValence() const;
 		Size countRealValences() const;
 		Size getIsotope() const;
-		void setIsotope(Size /isotope/);
+		void setIsotope(Size);
 		Index getFormalCharge() const;
-		void setFormalCharge(Index /charge/);
+		void setFormalCharge(Index);
 		const SmilesParser::ChiralDef& getChirality() const;
-		void setChirality(const SmilesParser::ChiralDef& /chirality/);
+		void setChirality(const SmilesParser::ChiralDef&);
 		bool isAromatic() const;
-		void setAromatic(bool /is_aromatic/);
+		void setAromatic(bool);
 		bool isInBrackets() const;
-		void setInBrackets(bool /in_brackets/);
+		void setInBrackets(bool);
 	};
 
 	class SPBond
@@ -66,9 +66,9 @@ class SmilesParser
 	{
 		public:
 		~SPBond() throw();
-		SPBond(SmilesParser::SPAtom* /first/, SmilesParser::SPAtom* /second/, Index /order/ = 1);
+		SPBond(SmilesParser::SPAtom*, SmilesParser::SPAtom*, Index order = 1);
 		SmilesParser::ZEIsomerType getZEType() const;
-		void setZEType(SmilesParser::ZEIsomerType /type/);
+		void setZEType(SmilesParser::ZEIsomerType);
 	};
 
 	public:
@@ -76,14 +76,14 @@ class SmilesParser
 	typedef std::list<Position> ConnectionList;
 
 	SmilesParser();
-	SmilesParser(const SmilesParser& /parser/);
+	SmilesParser(const SmilesParser&);
 	~SmilesParser();
-	void parse(const String& /s/)
+	void parse(const String&)
 		throw(ParseError);
 	System getSystem() const;
-	//SPAtom* createAtom(const String& /symbol/, bool /in_bracket/ = false);
-	//void createBonds(SPAtom* /atom/, const ConnectionList* /list/);
-	//void createBond(SPAtom* /left/, SPAtom* /right/, Index /order/);
+	//SPAtom* createAtom(const String&, bool in_bracket = false);
+	//void createBonds(SPAtom*, const ConnectionList*);
+	//void createBond(SPAtom*, SPAtom*, Index);
 	//void addMissingHydrogens();
 	//struct State
 	//{

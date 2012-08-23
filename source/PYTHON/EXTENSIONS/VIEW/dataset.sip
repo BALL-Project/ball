@@ -39,7 +39,7 @@ class DatasetController
 	public:
 
 	static Size countInstances();
-	static DatasetController* getInstance(Position /index/);
+	static DatasetController* getInstance(Position);
 
 	DatasetController();
 	DatasetController(DatasetController& );

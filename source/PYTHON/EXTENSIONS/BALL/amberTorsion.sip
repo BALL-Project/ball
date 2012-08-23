@@ -16,8 +16,8 @@ class AmberTorsion
   public:
   // BALL_CREATE(AmberTorsion)
   AmberTorsion();
-  AmberTorsion(ForceField& /force_field/);
-  AmberTorsion(const AmberTorsion& /amber_stretch/);
+  AmberTorsion(ForceField&);
+  AmberTorsion(const AmberTorsion&);
   virtual ~AmberTorsion();
 
 	struct SingleAmberTorsion {

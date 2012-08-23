@@ -22,7 +22,7 @@ class Client
 	using namespace BALL;
 %End
 		public:
-		InvalidClient(const char* /file/, int /line/)
+		InvalidClient(const char*, int)
 			throw();
 	};
 	class NoPersistentObject
@@ -33,7 +33,7 @@ class Client
 	using namespace BALL;
 %End
 		public:
-		NoPersistentObject(const char* /file/, int /line/)
+		NoPersistentObject(const char*, int)
 			throw();
 	};
 
@@ -47,11 +47,11 @@ class Client
 	};
 
 	Client() throw();
-	Client(const String& /host/, int /port/ = DEFAULT_PORT) throw();
+	Client(const String&, int port = DEFAULT_PORT) throw();
   ~Client() throw();
 	virtual void clear() throw();
-	void connect(const String& /host/, int /port/ = DEFAULT_PORT) throw();
-	void insert(Composite& /composite/) throw(GeneralException);
+	void connect(const String&, int port = DEFAULT_PORT) throw();
+	void insert(Composite&) throw(GeneralException);
 	virtual bool isValid() const throw();
 	//virtual void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
 };

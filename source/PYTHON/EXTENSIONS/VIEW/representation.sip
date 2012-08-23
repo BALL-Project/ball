@@ -22,26 +22,26 @@ class Representation
 		PROPERTY__IS_COORDINATE_SYSTEM
 	};
 	Representation() throw();
-	Representation(ModelType /model_type/, DrawingPrecision /drawing_precision/, DrawingMode /drawing_mode/) throw();
-	Representation(const Representation& /representation/) throw();
+	Representation(ModelType, DrawingPrecision, DrawingMode) throw();
+	Representation(const Representation&) throw();
   ~Representation() throw();
-	// const Representation& operator = (const Representation& /representation/) throw();
+	// const Representation& operator = (const Representation&) throw();
 
 	void clear() throw();
 	
 	void setHidden(bool) throw();
 	bool isHidden() const throw();
 
-	void setDrawingPrecision(DrawingPrecision /precision/) throw();
+	void setDrawingPrecision(DrawingPrecision) throw();
 	DrawingPrecision getDrawingPrecision() const throw();
-	void setSurfaceDrawingPrecision(float /precision/) throw();
+	void setSurfaceDrawingPrecision(float) throw();
 	float getSurfaceDrawingPrecision() const throw();
 
  	DrawingMode getDrawingMode() const throw();
-	void setDrawingMode(DrawingMode /mode/) throw();
+	void setDrawingMode(DrawingMode) throw();
 
 	Size getTransparency() const throw();
-	void setTransparency(Size /value/) throw();
+	void setTransparency(Size) throw();
 
 	list<GeometricObject*>& getGeometricObjects() throw();
 	// const list<GeometricObject*>& getGeometricObjects() const throw();
@@ -81,10 +81,10 @@ class Representation
 	ColorProcessor* getColorProcessor() throw();
 	void setColorProcessor(ColorProcessor* /Transfer/) throw();
 
-	void setModelType(ModelType /type/) throw();
+	void setModelType(ModelType) throw();
 	ModelType getModelType() const throw();
 
-	void setColoringMethod(ColoringMethod /type/) throw();
+	void setColoringMethod(ColoringMethod) throw();
 	ColoringMethod getColoringMethod() const throw();
 
 	void enableModelUpdate(bool);
@@ -94,7 +94,7 @@ class Representation
 
 	String getProperties() const throw();
 	bool isValid() const throw();
-	void update(bool /rebuild/) throw();
+	void update(bool) throw();
 	void clearGeometricObjects() throw();
 	const PreciseTime& getModelBuildTime() const throw();
 	bool needsUpdate() const throw();

@@ -15,24 +15,24 @@ class SnapShot
  public:
  SnapShot()
    throw();
- SnapShot(const SnapShot& /snapshot/)
+ SnapShot(const SnapShot&)
    throw();
  ~SnapShot() throw();
- // const SnapShot& operator = (const SnapShot& /snapshot/)
+ // const SnapShot& operator = (const SnapShot&)
  //  throw();
 	virtual void clear() throw();
-	bool operator == (const SnapShot& /snapshot/) const throw();
+	bool operator == (const SnapShot&) const throw();
   bool isValid() const throw();
-  void setIndex(Size /index/) throw();
+  void setIndex(Size) throw();
   Size getIndex() const throw();
-  void setNumberOfAtoms(Size /number_of_atoms/) throw();
+  void setNumberOfAtoms(Size) throw();
   Size getNumberOfAtoms() const
    throw();
-  void setPotentialEnergy(DoubleReal /potential_energy/) 
+  void setPotentialEnergy(DoubleReal) 
    throw();
   DoubleReal getPotentialEnergy() const
    throw();
-  void setKineticEnergy(DoubleReal /kinetic_energy/)
+  void setKineticEnergy(DoubleReal)
    throw();
   DoubleReal getKineticEnergy() const
    throw();
@@ -48,20 +48,20 @@ class SnapShot
   //  throw();
   // const ::std::vector<Vector3>& getAtomForces() const
   //  throw();
-  void takeSnapShot(const System& /system/)
+  void takeSnapShot(const System&)
    throw(OutOfMemory);
-  void applySnapShot(System& /system/) const
+  void applySnapShot(System&) const
    throw();
-  void getAtomPositions(const System& /system/)
+  void getAtomPositions(const System&)
    throw(OutOfMemory);
-  void setAtomPositions(System& /system/) const
+  void setAtomPositions(System&) const
    throw();
-  void getAtomVelocities(const System& /system/)
+  void getAtomVelocities(const System&)
    throw(OutOfMemory);
-  void setAtomVelocitites(System& /system/) const
+  void setAtomVelocitites(System&) const
    throw();
-  void getAtomForces(const System& /system/)
+  void getAtomForces(const System&)
    throw(OutOfMemory);
-  void setAtomForces(System& /system/) const
+  void setAtomForces(System&) const
    throw();
 };

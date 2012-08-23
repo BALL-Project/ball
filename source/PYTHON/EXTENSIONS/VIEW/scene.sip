@@ -18,7 +18,7 @@ class Scene
 
 // methods implemented by the BALL_EMBEDDED macro
 static Size countInstances();
-static Scene* getInstance(Position /index/);
+static Scene* getInstance(Position);
 
   Scene() throw();
 //  Scene(QWidget*, const char*, WFlags);

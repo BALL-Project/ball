@@ -14,11 +14,11 @@ class ForceFieldComponent
 %End
   public:
   ForceFieldComponent();
-  ForceFieldComponent(ForceField& /force_field/);
-  ForceFieldComponent(const ForceFieldComponent& /force_field/);
+  ForceFieldComponent(ForceField&);
+  ForceFieldComponent(const ForceFieldComponent&);
   virtual bool setup() throw(TooManyErrors);
   ForceField* getForceField() const;
-  void setForceField(ForceField& /force_field/);
+  void setForceField(ForceField&);
   void setName(const String&);
   String getName() const;
   virtual double getEnergy() const;

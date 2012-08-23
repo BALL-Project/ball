@@ -15,10 +15,10 @@ class Selector
   public:
   // BALL_CREATE_NODEEP(Selector)
   Selector();
-  Selector(const Selector& /selector/);
-  Selector(const String& /expression_string/);
+  Selector(const Selector&);
+  Selector(const String&);
   ~Selector();
-  Processor::Result operator () (Composite& /composite/);
+  Processor::Result operator () (Composite&);
 %MethodCode
 	sipRes = sipCpp->operator () (*a0);
 %End

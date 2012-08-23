@@ -16,8 +16,8 @@ class AmberStretch
   public:
   // BALL_CREATE(AmberStretch)
   AmberStretch();
-  AmberStretch(ForceField& /force_field/);
-  AmberStretch(const AmberStretch& /amber_stretch/);
+  AmberStretch(ForceField&);
+  AmberStretch(const AmberStretch&);
   virtual ~AmberStretch();
   virtual bool setup() throw(TooManyErrors);
   virtual double updateEnergy();

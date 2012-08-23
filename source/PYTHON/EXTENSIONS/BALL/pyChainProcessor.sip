@@ -13,7 +13,7 @@ class ChainProcessor
 	public:
 	bool start();
 	bool finish();
-	Processor::Result operator () (Chain& /atom/);
+	Processor::Result operator () (Chain&);
 %MethodCode
   sipRes = sipCpp->operator () (*a0);
 %End

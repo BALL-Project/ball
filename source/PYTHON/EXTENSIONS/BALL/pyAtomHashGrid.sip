@@ -79,18 +79,18 @@ class AtomHashGridBox3
 	void destroy();
 
 	//Item* find(const Item &/item/);
-	//const Item* find(const Item& /item/) const;
+	//const Item* find(const Item&) const;
 
 	Size getSize() const;
-	void insert(Atom* /item/);
-	bool remove(Atom* /item/);
-	bool removeAll(Atom* /item/);
+	void insert(Atom*);
+	bool remove(Atom*);
+	bool removeAll(Atom*);
 		
 	//void host(Visitor<HashGridBox3> &visitor);
 
-	bool operator == (const AtomHashGridBox3 /box/) const;
-	bool operator != (const AtomHashGridBox3 /box/) const;
-	bool has(Atom* /item/) const;
+	bool operator == (const AtomHashGridBox3) const;
+	bool operator != (const AtomHashGridBox3) const;
+	bool has(Atom*) const;
 
 	bool isEmpty() const;
 	bool isValid() const;
@@ -105,7 +105,7 @@ class AtomHashGridBox3
 	return BALL_CONVERT_FROM_INSTANCE(new AtomHashGrid3BoxDataIterator(sipCpp->beginData()), AtomHashGrid3BoxDataIterator, Py_None);
 %End
 
-//	void dump(ostream /s/, Size /depth/) const;
+//	void dump(ostream, Size) const;
 
 	//bool apply(UnaryProcessor<Item> processor);
 	//bool apply(UnaryProcessor< HashGridBox3<Item> > processor);
@@ -127,33 +127,33 @@ class AtomHashGrid3
 //	BALL_CREATE(HashGrid3)
 	AtomHashGrid3();
 		
-	AtomHashGrid3(const Vector3 /origin/, Size /dimension_x/, Size /dimension_y/,
-			Size /dimension_z/, float /spacing_x/, float /spacing_y/, float /spacing_z/);
+	AtomHashGrid3(const Vector3, Size, Size,
+			Size, float, float, float);
 
-	AtomHashGrid3(const Vector3 /origin/, Size /dimension_x/, Size /dimension_y/, 
-			Size /dimension_z/, float /spacing/);
+	AtomHashGrid3(const Vector3, Size, Size, 
+			Size, float);
 
-	AtomHashGrid3(const Vector3 /origin/, const Vector3 /size/, float /spacing/);
+	AtomHashGrid3(const Vector3, const Vector3, float);
 
-	AtomHashGrid3(const AtomHashGrid3 /grid/, bool /deep/);
+	AtomHashGrid3(const AtomHashGrid3, bool);
 
 	virtual void clear();
-	void clear(Position /x/, Position /y/, Position /z/);
-	void clear(const Vector3 /vector/);
+	void clear(Position, Position, Position);
+	void clear(const Vector3);
 	void destroy();
 
-	void destroy(Position /x/, Position /y/, Position /z/);
-	void destroy(const Vector3 /vector/);
+	void destroy(Position, Position, Position);
+	void destroy(const Vector3);
 
-	void set(const Vector3 /origin/, const Vector3 /unit/, 
-			Size /dimension_x/, Size	/dimension_y/, Size	/dimension_z/);
+	void set(const Vector3, const Vector3, 
+			Size, Size, Size);
 
-	void set(const Vector3 /origin/, float /unit/, Size /size/);
-	void set(const AtomHashGrid3 /grid/, bool /deep/);
-	//const AtomHashGrid3& operator = (const AtomHashGrid3 /grid/);
+	void set(const Vector3, float, Size);
+	void set(const AtomHashGrid3, bool);
+	//const AtomHashGrid3& operator = (const AtomHashGrid3);
 
-	void get(Vector3 /origin/, Vector3 /unit/, Size	/dimension_x/, Size	/dimension_y/, Size	/dimension_z/) const; 
-	void get(AtomHashGrid3 /grid/, bool /deep/) const;
+	void get(Vector3, Vector3, Size, Size, Size) const; 
+	void get(AtomHashGrid3, bool) const;
 
 	Size countNonEmptyBoxes() const;
 	Size getSize() const;
@@ -164,27 +164,27 @@ class AtomHashGrid3
 	Size getSizeY() const;
 	Size getSizeZ() const;
 
-	AtomHashGridBox3* getBox(Position /x/, Position /y/, Position /z/);
-	AtomHashGridBox3* getBox(const Vector3 /vector/);
+	AtomHashGridBox3* getBox(Position, Position, Position);
+	AtomHashGridBox3* getBox(const Vector3);
 
 	bool getIndices(const AtomHashGridBox3, Position& /Out/, Position& /Out/, Position& /Out/) const;
 
-	void insert(Position /x/, Position /y/, Position /z/, Atom* /item/);
-	void insert(const Vector3 /vector/, Atom* /item/);
+	void insert(Position, Position, Position, Atom*);
+	void insert(const Vector3, Atom*);
 
-	bool remove(Position /x/, Position /y/, Position /z/, Atom* /item/);
-	bool remove(const Vector3 /vector/, Atom* /item/);
+	bool remove(Position, Position, Position, Atom*);
+	bool remove(const Vector3, Atom*);
 
 	//void host(Visitor<HashGrid3>& visitor);
 
-	bool operator == (const AtomHashGrid3 /grid/) const;
-	bool operator != (const AtomHashGrid3 /grid/) const;
+	bool operator == (const AtomHashGrid3) const;
+	bool operator != (const AtomHashGrid3) const;
 
 	bool isEmpty() const;
 
 	virtual bool isValid() const;
 
-//	virtual void dump(ostream /s/, Size /depth/) const;
+//	virtual void dump(ostream, Size) const;
 
 	//bool apply(UnaryProcessor<Item> processor);
 	//bool apply(UnaryProcessor< HashGridBox3<Item> > processor);
@@ -195,5 +195,5 @@ class AtomHashGrid3
 	sipRes = &(**atom_ptr_ptr);
 %End
 
-	static float calculateMinSpacing(LongIndex /memory/, const Vector3 /size/);
+	static float calculateMinSpacing(LongIndex, const Vector3);
 };

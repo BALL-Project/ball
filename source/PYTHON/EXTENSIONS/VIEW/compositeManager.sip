@@ -13,13 +13,13 @@ class CompositeManager
 	public:
 
  	CompositeManager() throw();
-  CompositeManager(const CompositeManager& /cm/) throw();
+  CompositeManager(const CompositeManager&) throw();
   ~CompositeManager() throw();
   virtual void clear() throw();
   bool has(const Composite*) const throw();
   bool hasRoot(const Composite*) const throw();
-  bool insert(Composite& /composite/) throw();
-  void remove(Composite& /composite/, bool = true) throw();
+  bool insert(Composite&) throw();
+  void remove(Composite&, bool = true) throw();
   Size getNumberOfComposites() const throw();
 	
 	// CompositeConstIterator begin() const throw();

@@ -24,19 +24,19 @@ class StrangLBFGSMinimizer
 	//	};
 	//    BALL_CREATE(StrangLBFGSMinimizer)
 	StrangLBFGSMinimizer();	
-	StrangLBFGSMinimizer(ForceField& /force_field/);
-	StrangLBFGSMinimizer(ForceField& /force_field/, SnapShotManager* /ssm/);
-	StrangLBFGSMinimizer(ForceField& /force_field/, SnapShotManager* /ssm/, const Options& /options/);
-	StrangLBFGSMinimizer(ForceField& /force_field/, const Options& /options/);
+	StrangLBFGSMinimizer(ForceField&);
+	StrangLBFGSMinimizer(ForceField&, SnapShotManager*);
+	StrangLBFGSMinimizer(ForceField&, SnapShotManager*, const Options&);
+	StrangLBFGSMinimizer(ForceField&, const Options&);
 	~StrangLBFGSMinimizer();
-	// StrangLBFGSMinimizer& operator = (const StrangLBFGSMinimizer& /rhs/);
+	// StrangLBFGSMinimizer& operator = (const StrangLBFGSMinimizer&);
 	virtual bool specificSetup();
-	void setMaxNumOfStoredVectPairs(Size /num/);
+	void setMaxNumOfStoredVectPairs(Size);
 	Size getMaxNumOfStoredVectPairs() const;
-	void setImprovedFlag(bool /flag/);
+	void setImprovedFlag(bool);
 	bool getImprovedFlag() const;
 	virtual double findStep();
 	virtual void updateDirection();
-	virtual bool minimize(Size /iterations/ = 0, bool /restart/ = false); 
+	virtual bool minimize(Size iterations = 0, bool restart = false); 
 	Options options;
 };

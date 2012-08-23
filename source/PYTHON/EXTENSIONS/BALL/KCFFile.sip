@@ -23,13 +23,13 @@
 
 
 		KCFFile() throw();
-		KCFFile(const String& /filename/, OpenMode /open_mode/ = File::MODE_IN)
+		KCFFile(const String&, OpenMode open_mode = File::MODE_IN)
 			throw(FileNotFound);
 		virtual ~KCFFile() throw();
 
-		virtual bool write(const Molecule& /molecule/) throw(File::CannotWrite);
-		virtual bool write(const System& /system/) throw(File::CannotWrite);
-		virtual bool read(System& /system/) throw(ParseError);
+		virtual bool write(const Molecule&) throw(File::CannotWrite);
+		virtual bool write(const System&) throw(File::CannotWrite);
+		virtual bool read(System&) throw(ParseError);
 		virtual Molecule* read() throw(ParseError);
 
 		private:

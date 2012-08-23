@@ -22,8 +22,8 @@ class ForceField
 
 	// ForceField& operator = (const ForceField& force_field);
 	bool isValid();
-	bool setup(System& /system/) throw(FileNotFound);
-	bool setup(System& /system/, Options& /options/) throw(FileNotFound);
+	bool setup(System&) throw(FileNotFound);
+	bool setup(System&, Options&) throw(FileNotFound);
 	virtual bool specificSetup() throw(TooManyErrors);
 	void setName(const String&);
 	String getName() const;

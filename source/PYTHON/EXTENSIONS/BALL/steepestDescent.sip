@@ -14,14 +14,14 @@ class SteepestDescentMinimizer
 	public:
 	//    BALL_CREATE(SteepestDescentMinimizer)
 	SteepestDescentMinimizer();
-	SteepestDescentMinimizer(ForceField& /force_field/);
-	SteepestDescentMinimizer(ForceField& /force_field/, SnapShotManager* /ssm/);
-	SteepestDescentMinimizer(ForceField& /force_field/, SnapShotManager* /ssm/, const Options& /options/);
-	SteepestDescentMinimizer(ForceField& /force_field/, const Options& /options/);
+	SteepestDescentMinimizer(ForceField&);
+	SteepestDescentMinimizer(ForceField&, SnapShotManager*);
+	SteepestDescentMinimizer(ForceField&, SnapShotManager*, const Options&);
+	SteepestDescentMinimizer(ForceField&, const Options&);
 	~SteepestDescentMinimizer();
-	// SteepestDescentMinimizer& operator = (const SteepestDescentMinimizer& /rhs/);
+	// SteepestDescentMinimizer& operator = (const SteepestDescentMinimizer&);
 	virtual bool specificSetup();
 	virtual double findStep();
 	virtual void updateDirection();
-	virtual bool minimize(Size /iterations/ = 0, bool /resume/ = false);
+	virtual bool minimize(Size iterations = 0, bool resume = false);
 };

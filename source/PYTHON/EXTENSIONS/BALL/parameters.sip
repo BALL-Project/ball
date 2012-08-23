@@ -12,16 +12,16 @@
 %End
 		public:
 		Parameters();
-		Parameters(const String& /filename/);
-		Parameters(const Parameters& /force_field_parameter/);
+		Parameters(const String&);
+		Parameters(const Parameters&);
 		virtual ~Parameters();
 		virtual void clear() throw();
 
 		// const Parameters& operator = (const Parameters& parameters);
-		void setFilename(const String& /filename/);
+		void setFilename(const String&);
 		const String& getFilename() const;
 		INIFile& getParameterFile();
 		bool init();
 		virtual bool isValid() const;
-		bool operator == (const Parameters& /parameters/) const;
+		bool operator == (const Parameters&) const;
 	};

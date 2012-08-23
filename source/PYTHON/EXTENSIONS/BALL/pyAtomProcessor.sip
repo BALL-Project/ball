@@ -15,7 +15,7 @@ class AtomProcessor
 	public:
 	bool start();
 	bool finish();
-	Processor::Result operator () (Atom& /atom/);
+	Processor::Result operator () (Atom&);
 %MethodCode
   sipRes = sipCpp->operator () (*a0);
 %End

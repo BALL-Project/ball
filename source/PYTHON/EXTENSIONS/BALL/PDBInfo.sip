@@ -12,13 +12,13 @@
 		public:
 		
 		PDBInfo() throw();
-		PDBInfo(const PDBInfo& /pdbi/) throw();
+		PDBInfo(const PDBInfo&) throw();
 		virtual ~PDBInfo() throw();
 		virtual void clear();
 
 		// PDBInfo& operator = (const PDBInfo& rhs);
-		bool operator == (const PDBInfo& /rhs/) const;
-		bool operator != (const PDBInfo& /rhs/) const;
+		bool operator == (const PDBInfo&) const;
+		bool operator != (const PDBInfo&) const;
 
 		PDBRecords& getSkippedRecords();
 		// const PDBRecords& getSkippedRecords() const;
@@ -27,20 +27,20 @@
 		// const PDBRecords& getInvalidRecords() const;
 
 		const String& getFilename() const;
-		void setFilename(const String& /filename/);
+		void setFilename(const String&);
 		const String& getID() const;
-		void setID(const String& /id/);
+		void setID(const String&);
 		Size getNumberOfRecords() const;
-		void setNumberOfRecords(Size /n/);
+		void setNumberOfRecords(Size);
 		Size getNumberOfModels() const;
-		void setNumberOfModels(Size /n/);
+		void setNumberOfModels(Size);
 		Position getCurrentModel() const;
-		void setCurrentModel(Position /n/);
+		void setCurrentModel(Position);
 		Size getNumberOfATOMRecords() const;
-		void setNumberOfATOMRecords(Size /n/);
+		void setNumberOfATOMRecords(Size);
 		Size getNumberOfHETATMRecords() const;
-		void setNumberOfHETATMRecords(Size /n/);
+		void setNumberOfHETATMRecords(Size);
 		const String& getName() const;
-		void setName(const String& /name/);
-		PyIndexList getRecordIndices(PDB::RecordType /record/) const;
+		void setName(const String&);
+		PyIndexList getRecordIndices(PDB::RecordType) const;
 	};

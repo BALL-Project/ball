@@ -15,7 +15,7 @@ class IllegalKey
 	typedef StringHashMap<String>::IllegalKey IllegalKey;
 %End
 	public:
-	IllegalKey(const char* /file/, int /line/);
+	IllegalKey(const char*, int);
 };
 
 class Options
@@ -28,35 +28,35 @@ class Options
   public:
   static const Size MAX_ENTRY_LENGTH;
   Options();
-  Options(const Options& /options/);
+  Options(const Options&);
   ~Options();
-  bool isInteger(const String& /key/) const;
-  bool isBool(const String& /key/) const;
-  bool isReal(const String& /key/) const;
-  bool isVector(const String& /key/) const;
-  bool isSet(const String& /key/) const;
-  void setName(const String& /name/);
+  bool isInteger(const String&) const;
+  bool isBool(const String&) const;
+  bool isReal(const String&) const;
+  bool isVector(const String&) const;
+  bool isSet(const String&) const;
+  void setName(const String&);
   const String& getName() const;
-  String get(const String& /key/) const;
-  bool getBool(const String& /key/) const;
-  double getReal(const String& /key/) const;
-  Vector3 getVector(const String& /key/) const;
-  long getInteger(const String& /key/) const;
-  void set(const String& /key/, const String& /value/);
-  void setReal(const String& /key/,  double /value/);
-  void setVector(const String& /key/, const Vector3& /value/);
-  void setInteger(const String& /key/, long /value/);
-  void setBool(const String& /key/, bool /value/);
-  String setDefault(const String& /key/, const String& /value/);
-  long setDefaultInteger(const String& /key/, long /value/);
-  double setDefaultReal(const String& /key/, double /value/);
-  bool setDefaultBool(const String& /key/, bool /value/);
-  bool readOptionFile(const String& /filename/);
+  String get(const String&) const;
+  bool getBool(const String&) const;
+  double getReal(const String&) const;
+  Vector3 getVector(const String&) const;
+  long getInteger(const String&) const;
+  void set(const String&, const String&);
+  void setReal(const String&,  double);
+  void setVector(const String&, const Vector3&);
+  void setInteger(const String&, long);
+  void setBool(const String&, bool);
+  String setDefault(const String&, const String&);
+  long setDefaultInteger(const String&, long);
+  double setDefaultReal(const String&, double);
+  bool setDefaultBool(const String&, bool);
+  bool readOptionFile(const String&);
   // virtual void dump (std::ostream& s = std::cout, Size depth = 0) const;
 	// methods inherited from HashMap<String, String>
-	// String& operator [] (const String& /key/) throw();
+	// String& operator [] (const String&) throw();
 
-	const String& operator [] (const String& /key/) const	throw(IllegalKey);
+	const String& operator [] (const String&) const	throw(IllegalKey);
 %MethodCode
   sipRes = new String(sipCpp->operator [] (*a0));
 %End

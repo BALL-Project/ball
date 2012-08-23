@@ -16,14 +16,14 @@ class GeneralException
 	public:
 	GeneralException();
 	GeneralException
-    (const char* /file/, int /line/);
+    (const char*, int);
 	
 	GeneralException
-    (const char* /file/, int /line/,	
-     const String& /name/,
-     const String& /message/);
+    (const char*, int,	
+     const String&,
+     const String&);
 
-	GeneralException(const GeneralException& /exception/);
+	GeneralException(const GeneralException&);
 	~GeneralException();
 	const char* getName() const;
 	const char* getMessage() const;
@@ -57,7 +57,7 @@ class IndexUnderflow
 	using namespace BALL::Exception;
 %End
   public:
-  IndexUnderflow(const char* /file/, int /line/, Index /index/ = 0, Size /size/ = 0);
+  IndexUnderflow(const char*, int, Index index = 0, Size size = 0);
  	SIP_PYOBJECT __repr__();
 %MethodCode
   if (sipCpp == 0)
@@ -83,7 +83,7 @@ class SizeUnderflow
 	using namespace BALL::Exception;
 %End
   public:
-  SizeUnderflow(const char* /file/, int /line/, Size /size/ = 0);
+  SizeUnderflow(const char*, int, Size size = 0);
  	SIP_PYOBJECT __repr__();
 %MethodCode
   if (sipCpp == 0)
@@ -111,7 +111,7 @@ class IndexOverflow
 	using namespace BALL::Exception;
 %End
 	public:
-	IndexOverflow(const char* /file/, int /line/, Index /index/ = 0, Size /size/ = 0);
+	IndexOverflow(const char*, int, Index index = 0, Size size = 0);
  	SIP_PYOBJECT __repr__();
 %MethodCode
   if (sipCpp == 0)
@@ -137,7 +137,7 @@ class InvalidRange
 	using namespace BALL::Exception;
 %End
 	public:
-	InvalidRange(const char* /file/, int /line/, float);
+	InvalidRange(const char*, int, float);
  	SIP_PYOBJECT __repr__();
 %MethodCode
   if (sipCpp == 0)
@@ -163,7 +163,7 @@ class InvalidFormat
 	using namespace BALL::Exception;
 %End
 	public:
-	InvalidFormat(const char* /file/, int /line/, const String& /format/);
+	InvalidFormat(const char*, int, const String&);
  	SIP_PYOBJECT __repr__();
 %MethodCode
   if (sipCpp == 0)
@@ -189,7 +189,7 @@ class IllegalSelfOperation
 	using namespace BALL::Exception;
 %End
 	public:
-	IllegalSelfOperation(const char* /file/, int /line/);
+	IllegalSelfOperation(const char*, int);
  	SIP_PYOBJECT __repr__();
 %MethodCode
   if (sipCpp == 0)
@@ -215,7 +215,7 @@ class NullPointer
 	using namespace BALL::Exception;
 %End
 	public:
-	NullPointer(const char* /file/, int /line/);
+	NullPointer(const char*, int);
  	SIP_PYOBJECT __repr__();
 %MethodCode
   if (sipCpp == 0)
@@ -241,7 +241,7 @@ class InvalidIterator
 	using namespace BALL::Exception;
 %End
 	public:
-	InvalidIterator(const char* /file/, int /line/);
+	InvalidIterator(const char*, int);
  	SIP_PYOBJECT __repr__();
 %MethodCode
   if (sipCpp == 0)
@@ -267,7 +267,7 @@ class IncompatibleIterators
 	using namespace BALL::Exception;
 %End
 	public:
-	IncompatibleIterators(const char* /file/, int /line/);
+	IncompatibleIterators(const char*, int);
  	SIP_PYOBJECT __repr__();
 %MethodCode
   if (sipCpp == 0)
@@ -293,7 +293,7 @@ class NotImplemented
 	using namespace BALL::Exception;
 %End
 	public:
-	NotImplemented(const char* /file/, int /line/);
+	NotImplemented(const char*, int);
  	SIP_PYOBJECT __repr__();
 %MethodCode
   if (sipCpp == 0)
@@ -345,7 +345,7 @@ class TooManyErrors
 	using namespace BALL::Exception;
 %End
 	public:
-	TooManyErrors(const char* /file/, int /line/);
+	TooManyErrors(const char*, int);
  	SIP_PYOBJECT __repr__();
 %MethodCode
   if (sipCpp == 0)
@@ -372,7 +372,7 @@ class OutOfMemory
 	using namespace BALL::Exception;
 %End
 	public:
-	OutOfMemory(const char* /file/, int /line/, Size /size/ = 0);
+	OutOfMemory(const char*, int, Size size = 0);
 	~OutOfMemory() throw();
  	SIP_PYOBJECT __repr__();
 %MethodCode
@@ -399,7 +399,7 @@ class OutOfGrid
 	using namespace BALL::Exception;
 %End
 	public:
-	OutOfGrid(const char* /file/, int /line/)
+	OutOfGrid(const char*, int)
     throw();
  	SIP_PYOBJECT __repr__();
 %MethodCode
@@ -427,7 +427,7 @@ class BufferOverflow
 	using namespace BALL::Exception;
 %End
 	public:
-	BufferOverflow(const char* /file/, int /line/);
+	BufferOverflow(const char*, int);
  	SIP_PYOBJECT __repr__();
 %MethodCode
   if (sipCpp == 0)
@@ -453,7 +453,7 @@ class DivisionByZero
 	using namespace BALL::Exception;
 %End
 	public:
-	DivisionByZero(const char* /file/, int /line/);
+	DivisionByZero(const char*, int);
  	SIP_PYOBJECT __repr__();
 %MethodCode
   if (sipCpp == 0)
@@ -479,7 +479,7 @@ class FileNotFound
 	using namespace BALL::Exception;
 %End
   public:
-  FileNotFound(const char* /file/, int /line/, const String& /filename/);
+  FileNotFound(const char*, int, const String&);
   String getFilename() const;
  	SIP_PYOBJECT __repr__();
 %MethodCode
@@ -506,8 +506,8 @@ class ParseError
 	using namespace BALL::Exception;
 %End
 	public:
-	ParseError(const char* /file/, int /line/, const String& /expression/,
- 	  				 const String& /message/)
+	ParseError(const char*, int, const String&,
+ 	  				 const String&)
 							throw();
  	SIP_PYOBJECT __repr__();
 %MethodCode
@@ -534,7 +534,7 @@ class TooManyBonds
   using namespace BALL::Exception;
 %End
   public:
-  TooManyBonds(const char* /file/, int /line/, const String /error/) throw();
+  TooManyBonds(const char*, int, const String) throw();
 };
 
 
@@ -549,13 +549,13 @@ class GlobalExceptionHandler
 %End
 	public:
 	GlobalExceptionHandler();
-	static void setName(const String& /name/);
-	static void setMessage(const String& /message/);
-	static void setLine(int /line/);
-	static void setFile(const String& /file/);
+	static void setName(const String&);
+	static void setMessage(const String&);
+	static void setLine(int);
+	static void setFile(const String&);
 	static void set
-		(const String& /file/, int /line/, 
-		 const String& /name/, const String& /message/);
+		(const String&, int, 
+		 const String&, const String&);
 };	
 
 GlobalExceptionHandler globalHandler;

@@ -13,10 +13,10 @@ class ChargeRuleProcessor
   public:
   // BALL_CREATE(ChargeRuleProcessor)
   ChargeRuleProcessor();
-  ChargeRuleProcessor(INIFile& /file/, const String& /prefix/ = "ChargeRules");
-  ChargeRuleProcessor(const ChargeRuleProcessor& /rule_processor/);
+  ChargeRuleProcessor(INIFile&, const String& prefix = "ChargeRules");
+  ChargeRuleProcessor(const ChargeRuleProcessor&);
   ~ChargeRuleProcessor();
-  Processor::Result operator () (Atom& /atom/);
+  Processor::Result operator () (Atom&);
 %MethodCode
 	sipRes = sipCpp->operator () (*a0);
 %End
