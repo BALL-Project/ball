@@ -1,11 +1,11 @@
-
+// -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AlignAlgorithm_test.C, 2011/11/24$
 //
 // Author:
 //   Nikola Koch
 //
+
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
 ///////////////////////////
@@ -340,24 +340,4 @@ al.dump();
 	RESULT
 
 
-
-
-/*	TEST_EQUAL(al.getSeqChar(0,0).isGap,true)
-	TEST_EQUAL(al.getSeqChar(0,1).isGap() ,true)
-	TEST_EQUAL(al.getSeqChar(0,2).getChar(), 'C')
-	TEST_EQUAL(al.getSeqChar(0,3).getChar(), 'D')
-
-TEST_EQUAL(al.getSeqChar(0,5).getChar(), 'F')
-TEST_EQUAL(al.getSeqChar(0,6).getChar(), 'G')
-
-TEST_EQUAL(al.getSeqChar(0,8).getChar(), 'H')
-TEST_EQUAL(al.getSeqChar(0,9).getChar(), 'C')
-*/
-
-
-
-/*
-
-		bool alignFromSpecificPosition(Position pos);
-*/
 END_TEST
