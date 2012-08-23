@@ -27,6 +27,7 @@
 
 using namespace BALL::QSAR;
 using namespace BALL;
+using namespace std;
 
 
 void startFeatureSelection(FeatureSelectionConfiguration& conf, QSARData* q, String* data_filename);

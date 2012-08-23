@@ -33,6 +33,7 @@
 
 
 using namespace BALL;
+using namespace std;
 
 void deleteUnwantedProperties(Molecule* mol, const String& id_prop_name)
 {

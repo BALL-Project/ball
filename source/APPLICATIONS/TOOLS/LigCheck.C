@@ -34,7 +34,7 @@
 #include "version.h"
 
 using namespace BALL;
-
+using namespace std;
 
 bool isUnique(const Molecule* mol, map<String, pair<int, String> >& mol_hashs, bool unique_topologies)
 {

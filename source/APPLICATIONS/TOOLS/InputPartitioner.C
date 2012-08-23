@@ -27,7 +27,7 @@
 
 using namespace BALL::QSAR;
 using namespace BALL;
-
+using namespace std;
 
 void startInputPartitioning(InputPartitioningConfiguration& conf, QSARData* q, String* data_filename);
 

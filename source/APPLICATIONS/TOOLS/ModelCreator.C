@@ -27,7 +27,7 @@
 
 using namespace BALL::QSAR;
 using namespace BALL;
-
+using namespace std;
 
 void startModelCreation(ModelConfiguration& conf, QSARData* q, String* data_filename);
 

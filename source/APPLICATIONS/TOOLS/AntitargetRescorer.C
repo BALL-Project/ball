@@ -30,6 +30,7 @@
 #include "version.h"
 
 using namespace BALL;
+using namespace std;
 
 double calculateMedian(HashMap<String, double>& scores)
 {

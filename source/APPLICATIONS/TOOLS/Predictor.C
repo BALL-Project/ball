@@ -26,7 +26,7 @@
 
 using namespace BALL::QSAR;
 using namespace BALL;
-
+using namespace std;
 
 void startPrediction(PredictionConfiguration& conf, QSARData* q, String* data_filename);
 

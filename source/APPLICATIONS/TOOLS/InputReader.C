@@ -26,8 +26,7 @@
 
 using namespace BALL::QSAR;
 using namespace BALL;
-
-
+using namespace std;
 
 void startInputReading(InputConfiguration& conf, String data_path, QSARData* q, String* data_filename);
 

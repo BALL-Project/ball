@@ -30,7 +30,7 @@
 #include "version.h"
 
 using namespace BALL;
-
+using namespace std;
 
 void optimizePurchase(list<pair<Size, list<MolDB::VendorInfo> > >& result_list, map<String, double> & prices, ostream& out);
 

@@ -30,7 +30,7 @@
 #include <BALL/STRUCTURE/logP.h>
 
 using namespace BALL;
-
+using namespace std;
 
 int main(int argc, char* argv[])
 {

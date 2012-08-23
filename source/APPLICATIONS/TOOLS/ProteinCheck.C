@@ -33,7 +33,7 @@
 #include "version.h"
 
 using namespace BALL;
-
+using namespace std;
 
 String broken_chains_info = "";
 String bond_error_info = "";
@@ -819,21 +819,21 @@ void generateReport(Protein& protein, String inputfilename, String outputfile)
 	system(command.c_str());
 
 	command = "dvipdf -sPAPERSIZE=a4 ";
-	command += file9.before(".tex") + ".dvi ";
+	command += (String)(file9.before(".tex")) + ".dvi ";
 	system(command.c_str());
 
 	// remove temporary files
 	File::remove(file6);
 	File::remove(file8);
 	File::remove(file9);
-	s = file9.before(".tex") + ".dvi";
+	s = (String)(file9.before(".tex")) + ".dvi";
 	File::remove(s);
-	s = file9.before(".tex") + ".log";
+	s = (String)(file9.before(".tex")) + ".log";
 	File::remove(s);
-	s = file9.before(".tex") + ".aux";
+	s = (String)(file9.before(".tex")) + ".aux";
 	File::remove(s);
 
-	File::move(file9.before(".tex") + ".pdf", outputfile);
+	File::move((String)(file9.before(".tex")) + ".pdf", outputfile);
 }
 
 
