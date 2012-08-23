@@ -27,7 +27,7 @@
 #include <BALL/KERNEL/PTE.h>
 
 using namespace BALL;
-
+using namespace std;
 
 PB::PB(ScoringFunction& sf)
 	: ScoringComponent(sf)
