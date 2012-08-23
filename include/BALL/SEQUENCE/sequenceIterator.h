@@ -2,14 +2,11 @@
 // vi: set ts=2:
 //
 
-
 #ifndef BALL__SEQUENCE_SEQUENCEITERATOR_H
 #define BALL__SEQUENCE_SEQUENCEITERATOR_H
 
-/////////////////////////////////////////////////////////////////////////
-
 #ifndef BALL_SEQUENCE_SEQUENCECHARACTER_H
-	#include <BALL/SEQUENCE/sequenceCharacter.h>
+#include <BALL/SEQUENCE/sequenceCharacter.h>
 #endif
 
 #ifndef BALL_KERNEL_PROTEIN_H
@@ -24,18 +21,13 @@
 #include <BALL/KERNEL/atomContainer.h>
 #endif
 
-//////////////////////////////////////////////////////////////////////////
 
-
-////////////////////////////////////////////////////////////////////////
-
-
-namespace BALL 
+namespace BALL
 {
 	class Sequence;
 
 
-	class BALL_EXPORT SequenceIterator //: RandomAccessIterator
+	class BALL_EXPORT SequenceIterator
 	{
 		public:
 
@@ -51,18 +43,6 @@ namespace BALL
 			 *@param seq the sequence through which we want to iterate
 			 */
 			SequenceIterator(Sequence& seq);
-
-			/**
-			 *Copy Constructor
-			 *@param it the iterator to be copied
-			 */
-			SequenceIterator(const SequenceIterator& it);
-
-
-			/**
-			 *Destructor
-			 */
-			~SequenceIterator();
 
 			/////////////////////////////////////////////Getter and Setter//////////////////////////////////////////
 
@@ -89,7 +69,7 @@ namespace BALL
 			SequenceCharacter getCharacter() const;
 
 			/**
-			*sets the Character 
+			*sets the Character
 			*@param c the character to be set
 			*/
 			void setChar(SequenceCharacter& c);
@@ -114,138 +94,113 @@ namespace BALL
 			SequenceCharacter& operator * ();
 
 			/**
-			* operator
+			* postfix - operator ++
+			* increments iterator after returning it
+			*@return unchanged Iterator
 			*/
-//		SequenceIterator* operator -> ();
-	
-		/**
-		* postfix - operator ++
-		* increments iterator after returning it
-		*@return unchanged Iterator
-		*/
+			SequenceIterator operator ++ ();
 
-	SequenceIterator operator ++ ();
-
-	/**
+			/**
 			* operator++ increments the Iterator
 			*@return the incremented Iterator
 			*@throws Exception if reaching the end
 			*/
+			SequenceIterator& operator++ (int);
 
-		SequenceIterator& operator++ (int);
-
-
-	/**
-	* postfix operator --
-	*decrements SequenceIterator after returning
-	*@ return unchanged Iterator
-	*/
-SequenceIterator operator -- ();
-	/**
-	* operator-- decrements the SequenceIterator
-	*prefix
-	*@return incremented Iterator
-	*/
-
-SequenceIterator& operator --(int); 
-	/**
-	*operator +
-	* increments the SequenceIterator by n
-	*@return incremented SequenceIterator
-	*/
-SequenceIterator operator + (const unsigned int  n);
-
-//n + a
-
-	/**
-	*operator -
-	* decrements the SequenceIterator by n
-	*@return decremented SequenceIterator
- 	*/
-SequenceIterator operator - (const unsigned int n);
-
-	/**
-	* assignment operator
+			/**
+			* postfix operator --
+			*decrements SequenceIterator after returning
+			*@ return unchanged Iterator
 			*/
-//SequenceIterator& operator - (SequenceIterator& it); TODO Das macht doch keine Sinn!
+			SequenceIterator operator -- ();
 
-	/**
-	* comparison operator
-	*/
+			/**
+			* operator-- decrements the SequenceIterator
+			*prefix
+			*@return incremented Iterator
+			*/
+			SequenceIterator& operator --(int);
 
-bool operator < (const SequenceIterator& it) const;
+			/**
+			*operator +
+			* increments the SequenceIterator by n
+			*@return incremented SequenceIterator
+			*/
+			SequenceIterator operator + (const unsigned int  n);
 
-	/**
-	* comparison operator
-	*/
-bool operator > (const SequenceIterator& it) const;
+			/**
+			*operator -
+			* decrements the SequenceIterator by n
+			*@return decremented SequenceIterator
+			*/
+			SequenceIterator operator - (const unsigned int n);
 
-	/**
-	* comparison operator
-	*/
-bool operator <= (const SequenceIterator& it) const;
+			/**
+			* comparison operator
+			*/
+			bool operator < (const SequenceIterator& it) const;
 
-	/**
-	* comparison operator
-	*/
-bool operator >= (const SequenceIterator& it) const;
+			/**
+			* comparison operator
+			*/
+			bool operator > (const SequenceIterator& it) const;
 
-	/**
-	* assignment and increment operator
-	*/
-SequenceIterator& operator += (const unsigned int i);
+			/**
+			* comparison operator
+			*/
+			bool operator <= (const SequenceIterator& it) const;
 
-	/**
-	* assignment and decrement operator
-	*/
-SequenceIterator& operator -= (const unsigned int i);
+			/**
+			* comparison operator
+			*/
+			bool operator >= (const SequenceIterator& it) const;
 
-	/**
-	* access whats inside the ith SequenceIterator
-	*/
-//SequenceCharacter& operator[] (int i); 
+			/**
+			* assignment and increment operator
+			*/
+			SequenceIterator& operator += (const unsigned int i);
 
+			/**
+			* assignment and decrement operator
+			*/
+			SequenceIterator& operator -= (const unsigned int i);
 
-		/**
-		 *operator !=
-		 **/
-		bool operator != (const SequenceIterator& it) const;
-
-
+			/**
+			 *operator !=
+			 **/
+			bool operator != (const SequenceIterator& it) const;
 
 			/**
 			 *@return a sequenceIterator pointing to the next Character of the Sequence
 			 */
 			void next();
 
-		/**
-		*@return the previous SequenceIterator
-		*/
-		void previous();	
-		
-		/**
-		*resets the current iterator to default
-		*/	
-		void reset();
+			/**
+			*@return the previous SequenceIterator
+			*/
+			void previous();
 
-		/**
-		* sets the Iterator to the first element
-		*@return true, if setting was ok
-		*/
-		bool first();
+			/**
+			*resets the current iterator to default
+			*/
+			void reset();
 
-		/** 
-		*sets the Iterator to the last element	
-		*@return true, if setting was ok
-		*/
-		bool last();
+			/**
+			* sets the Iterator to the first element
+			*@return true, if setting was ok
+			*/
+			bool first();
 
-	
+			/**
+			*sets the Iterator to the last element
+			*@return true, if setting was ok
+			*/
+			bool last();
+
 		private:
-			Sequence* sequence_;
 
-			unsigned int counter_;
-			
+			Sequence*         sequence_;
+			unsigned int      counter_;
 			SequenceCharacter character_;
 	};
 
