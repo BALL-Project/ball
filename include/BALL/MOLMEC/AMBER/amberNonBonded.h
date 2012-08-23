@@ -137,7 +137,7 @@ namespace BALL
 
 
 		/** Update this component using the given atom-pairs only */
-		void update(const vector<pair<Atom*, Atom*> >& atom_vector);
+		void update(const std::vector<std::pair<Atom*, Atom*> >& atom_vector);
 
 
 		/**	Return the electrostatic energy.
@@ -199,12 +199,12 @@ namespace BALL
 
 		/*_	Vector array with all atom pairs whose distance is smaller than cut_off
 		*/
-		vector<LennardJones::Data>	non_bonded_;
+		std::vector<LennardJones::Data>	non_bonded_;
 
     /*_ Vector of flags deciding whether the pair forms a hydrogen bond or a
 				standard VdW interaction.
     */
-    vector<char> is_hydrogen_bond_;
+    std::vector<char> is_hydrogen_bond_;
  
 		/*_	Number of 1-4 interactions in the vector non_bonded
 		*/
