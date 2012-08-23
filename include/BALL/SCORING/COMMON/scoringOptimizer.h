@@ -39,15 +39,15 @@ namespace BALL
 
 			void evaluate(double* correlation = 0, double* R2 = 0, double* RMSE = 0, Size* no_valid_complexes = 0);
 
-			void printMatrix(ostream& out = cout);
+			void printMatrix(std::ostream& out = std::cout);
 
 			struct Result
 			{
-				list<double> predictions;
-				list<double> expected_affinities;
-				list<String> target_names;
-				vector<vector<double> > score_contributions;
-				vector<String> score_contribution_names;
+				std::list<double> predictions;
+				std::list<double> expected_affinities;
+				std::list<String> target_names;
+				std::vector<std::vector<double> > score_contributions;
+				std::vector<String> score_contribution_names;
 			};
 
 			const Result* getResult();
