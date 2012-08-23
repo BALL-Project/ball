@@ -27,6 +27,7 @@
 #include <BALL/STRUCTURE/structureMapper.h>
 #include <BALL/KERNEL/molecularInteractions.h>
 
+using namespace std;
 
 namespace BALL
 {
