@@ -448,7 +448,7 @@ namespace BALL
 			 */
 			double getScore();
 
-			const map<Atom*, int>* getAtomFragmentMap();
+			const std::map<Atom*, int>* getAtomFragmentMap();
 
 			/**
 			 * List holding all ReferenceAreas of the ScoringFunction. \n
@@ -676,7 +676,7 @@ namespace BALL
 			/**
 			 * Maps each ligand atom to its StaticLigandFragments (if StaticLigandFragments have been calculated).
 			 */
-			map<Atom*, int> atoms_to_fragments_;
+			std::map<Atom*, int> atoms_to_fragments_;
 
 			/**
 			 * Average number of interactions per atom of a reference ligand within a small radius.
@@ -794,7 +794,7 @@ namespace BALL
 			 */
 			double exp_energy_mean_;
 
-			set<Residue*> flexible_residues_;
+			std::set<Residue*> flexible_residues_;
 
 			/**
 			 * Saves the final and all intermediate results of the last call of updateScore().
