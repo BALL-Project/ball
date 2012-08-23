@@ -1,0 +1,86 @@
+<tool id="molecularfileconverter" name="MolecularFileConverter" version="0.9.6" force_history_refresh="True"> 
+		<description>converts molecular file-formats</description>
+		<command>ln -s $i ${i}.${i.extension}; /usr/local/ballaxy/build/MolecularFileConverter 
+#if str( $i ) != ''  and str( $i ) != 'None' :
+	-i "${i}.${i.extension}"
+#end if
+#if str( $o ) != ''  and str( $o ) != 'None' :
+   -o "$o"
+#end if
+#if str( $of ) != '' and str( $of ) != 'None' :
+	-of "$of"
+#end if
+	| tail -n 1 ; rm ${i}.${i.extension}
+</command>
+    <inputs>
+			<param name="i" optional="false" label="input file" type="data" format="mol2/sdf/drf/pdb/mol/hin/ac/xyz"/>
+ 			<param name="of" type="select" label="output format">
+              <option value="mol2" selected="True">mol2</option>
+              <option value="sdf">sdf</option>
+              <option value="drf">drf</option>
+              <option value="pdb">pdb</option>
+              <option value="ac">ac</option>
+              <option value="hin">hin</option>
+              <option value="mol">mol</option>
+              <option value="xyz">xyz</option>
+      </param>
+ 		</inputs>
+    <outputs>
+			<data  format="mol2" name="o">
+				<change_format>
+					<when input="of" value="sdf" format="sdf" />
+					<when input="of" value="drf" format="drf" />
+					<when input="of" value="ac"  format="ac"  />
+					<when input="of" value="hin" format="hin" />
+					<when input="of" value="mol" format="mol" />
+					<when input="of" value="xyz" format="xyz" />
+				</change_format>
+			</data>
+    </outputs>
+		<help>This tool converts different molecular file formats into each other.
+
+**mol2**
+
+Sybol Mol2 format
+
+-----
+
+**mol**
+
+MDL MOL format
+
+-----
+
+**pdb**
+
+Protein Data Bank format
+
+-----
+
+**sdf**
+
+MDL structure data file format
+
+-----
+
+**hin**
+
+HyperChem HIN format
+
+-----
+
+**ac**
+
+Antechamber file format
+
+-----
+
+**xyz**
+
+XYZ cartesian coordinates format
+		
+		</help>
+</tool>
+
+
+

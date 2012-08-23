@@ -1,0 +1,81 @@
+<!--This is a configuration file for the integration of a BALLSuite tool into Galaxy (http://usegalaxy.org). This file was automatically generated using GalaxyConfigGenerator, so do not bother to make too many manual modifications.-->
+<tool id="crystalgenerator" name="X-Ray Crystal Generator" version="0.0.1" force_history_refresh="True"> 
+		<description>Generates crystal packings for pdb structures</description>
+		<command>/home/AH/nicste/PROMO/GALAXY/new/ballaxy-tools/build/CrystalGenerator
+#if str( $i ) != ''  and str( $i ) != 'None' :
+   -i "$i"
+#end if
+#if str( $outfile ) != ''  and str( $outfile ) != 'None' :
+   -o "$outfile"
+#end if
+#if str( $sg ) != ''  and str( $sg ) != 'None' :
+   -sg "$sg"
+#end if
+#if str( $axis_a ) != ''  and str( $axis_a ) != 'None' :
+   -axis_a "$axis_a"
+#end if
+#if str( $axis_b ) != ''  and str( $axis_b ) != 'None' :
+   -axis_b "$axis_b"
+#end if
+#if str( $axis_c ) != ''  and str( $axis_c ) != 'None' :
+   -axis_c "$axis_c"
+#end if
+#if str( $angle_alpha ) != ''  and str( $angle_alpha ) != 'None' :
+   -angle_alpha "$angle_alpha"
+#end if
+#if str( $angle_beta ) != ''  and str( $angle_beta ) != 'None' :
+   -angle_beta "$angle_beta"
+#end if
+#if str( $angle_gamma ) != ''  and str( $angle_gamma ) != 'None' :
+   -angle_gamma "$angle_gamma"
+#end if
+#if str( $from_uc_a ) != ''  and str( $from_uc_a ) != 'None' :
+   -from_uc_a "$from_uc_a"
+#end if
+#if str( $from_uc_b ) != ''  and str( $from_uc_b ) != 'None' :
+   -from_uc_b "$from_uc_b"
+#end if
+#if str( $from_uc_c ) != ''  and str( $from_uc_c ) != 'None' :
+   -from_uc_c "$from_uc_c"
+#end if
+#if str( $to_uc_a ) != ''  and str( $to_uc_a ) != 'None' :
+   -to_uc_a "$to_uc_a"
+#end if
+#if str( $to_uc_b ) != ''  and str( $to_uc_b ) != 'None' :
+   -to_uc_b "$to_uc_b"
+#end if
+#if str( $to_uc_c ) != ''  and str( $to_uc_c ) != 'None' :
+   -to_uc_c "$to_uc_c"
+#end if
+ | tail -n 1
+</command>
+    <inputs>
+      <param name="i" type="data" format="pdb" optional="false" label="input pdb file"/>
+      <param name="sg" type="select" optional="false" label="maximal number of assignment solutions">
+        <option value="P 1">P 1</option>
+        <option value="I 4" selected="True">I 4</option>
+      </param>
+      <param name="axis_a" value="10." label="cell axis a" type="float" optional="true"/>
+      <param name="axis_b" value="10." label="cell axis b" type="float" optional="true"/>
+      <param name="axis_c" value="10." label="cell axis c" type="float" optional="true"/>
+
+      <param name="angle_alpha" value="90." min="0." max="359." label= "cell angle alpha" type="float" optional="true"/>
+      <param name="angle_beta" value="90." min="0." max="359." label="cell angle beta" type="float" optional="true"/>
+      <param name="angle_gamma" value="90." min="0." max="359." label= "cell angle gamma" type="float" optional="true"/>
+
+      <param name="from_uc_a" value="0" min="0" max="9" label="from unit cell index a" type="integer" optional="false"/>
+      <param name="from_uc_b" value="0" min="0" max="9" label="from unit cell index b" type="integer" optional="false"/>
+      <param name="from_uc_c" value="0" min="0" max="9" label="from unit cell index c" type="integer" optional="false"/>
+      <param name="to_uc_a" value="0" min="0" max="9" label="to uni cell index a" type="integer" optional="false"/>
+      <param name="to_uc_b" value="0" min="0" max="9" label="to uni cell index b" type="integer" optional="false"/>
+      <param name="to_uc_c" value="0" min="0" max="9" label="to uni cell index c" type="integer" optional="false"/>
+
+    </inputs>
+    <outputs>
+        <data name="outfile" format="pdb"/>
+    </outputs>
+		<help>Blubber</help>
+</tool>
+
+
+

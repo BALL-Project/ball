@@ -1,0 +1,37 @@
+<!--This is a configuration file for the integration of a BALLSuite tool into Galaxy (http://usegalaxy.org). This file was automatically generated using GalaxyConfigGenerator, so do not bother to make too many manual modifications.-->
+<tool id="splitconncetedcomponents" name="Split2ConnectedComponents" version="0.9.6" force_history_refresh="True"> 
+		<description>splits a file into its connected components</description>
+		<command>/home/AH/nicste/PROMO/GALAXY/new//ballaxy/tools/BALL/build/Split2ConnectedComponents 
+#if str( $i ) != ''  and str( $i ) != 'None' :
+   -i "$i"
+#end if
+#if str( $outfile ) != ''  and str( $outfile ) != 'None' :
+   -o "$outfile"
+#end if
+#if str( $outfile.id ) != '' and str( $outfile.id ) != 'None' :
+	-o_id "$outfile.id"
+#end if
+#if str( $__new_file_path__ ) != '' and str( $__new_file_path__ ) != 'None' :
+	-o_dir "$__new_file_path__"
+#end if
+#if str( $min_atoms ) != ''  and str( $min_atoms ) != 'None' :
+   -min_atoms "$min_atoms"
+#end if
+ | tail -n 1
+</command>
+    <inputs>
+ 			<param name="i" optional="false" label="input mol2-file" type="data" format="mol2"/>
+			<param name="min_atoms" type="integer" size="4" value="10" label="minimum number of atoms"/>
+ 		</inputs>
+    <outputs>
+        <data name="outfile" format="mol2"/>
+    </outputs>
+		<help>This tool splits a given molecular file into its connected components.
+
+Optional parameters are the minimal number of atoms ('-min_atoms') a connected component should have to be furhter processed, e.g. water can be ommitted.
+
+Output of this tool is a number of mol2 files each containing one connected component.</help>
+</tool>
+
+
+

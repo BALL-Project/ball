@@ -1,0 +1,57 @@
+<!--This is a configuration file for the integration of a BALLSuite tool into Galaxy (http://usegalaxy.org). This file was automatically generated using GalaxyConfigGenerator, so do not bother to make too many manual modifications.-->
+<tool id="bondassigner" name="BOA Constructor" version="0.9.6" force_history_refresh="True"> 
+		<description>computes bond order assignments for a ligand</description>
+		<command>/usr/local/ballaxy/build/BondOrderAssigner 
+#if str( $i ) != ''  and str( $i ) != 'None' :
+   -i "$i"
+#end if
+#if str( $outfile ) != ''  and str( $outfile ) != 'None' :
+   -o "$outfile"
+#end if
+#if str( $outfile.id ) != '' and str( $outfile.id ) != 'None' :
+	-o_id "$outfile.id"
+#end if
+#if str( $__new_file_path__ ) != '' and str( $__new_file_path__ ) != 'None' :
+	-o_dir "$__new_file_path__"
+#end if
+#if str( $max_sol ) != ''  and str( $max_sol ) != 'None' :
+   -max_sol "$max_sol"
+#end if
+#if str( $non_opt ) != ''  and str( $non_opt ) != 'None' :
+   -non_opt "$non_opt"
+#end if
+#if str( $scr_pen ) != ''  and str( $scr_pen ) != 'None' :
+   -scr_pen "$scr_pen"
+#end if
+ | tail -n 1
+</command>
+    <inputs>
+ 			<param name="i" optional="false" label="input mol2-file" type="data" format="mol2"/>
+			<param name="max_sol" type="integer" size="4" value="10" label="maximal number of assignment solutions"/>
+			<param name="non_opt" type="boolean" checked="no" optional="true" label="compute sub-optimal assignments as well" area="true" />  
+		<!--	<param name="add_hyd" type="boolean" checked="no" label="add hydrogens as well"/> -->
+ 			<param name="scr_pen" type="select" label="penalty score rules">
+              <option value="Antechamber">Antechamber</option>
+              <option value="BALL" selected="True">BALL</option>
+      </param>
+
+ 		</inputs>
+    <outputs>
+        <data name="outfile" format="mol2"/>
+    </outputs>
+		<help>This tool computes optimal and suboptimal bond order assignments based on a atomic penalty function for a given ligand in mol2 file format.
+
+Output of this tool is a number of mol2 files each containing one bond order assignment.
+
+To upload an input file please use the upload tool (Get Data -> Upload File).
+
+**Further information and help** can be found in our wiki http://ball-trac.bioinf.uni-sb.de/wiki/BOAConstructor.
+
+If you use this tool, please don't forget to cite us: 
+
+   Dehof, A.K., Rurainski, A., Bui, Q.B.A., Böcker, S., Lenhof, H.-P., Hildebrandt, A.: Automated Bond Order Assignment as an Optimization Problem. 2011. Bioinformatics. 27(5), 619-625
+</help>
+</tool>
+
+
+
