@@ -3,6 +3,8 @@
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/STRUCTURE/rGroupAssembler.h>
 
+using namespace std;
+
 namespace BALL
 {
 	RGroupAssembler::RGroupAssembler(vector<String>& scaffolds, map<String, vector<String> > &rgroups)
