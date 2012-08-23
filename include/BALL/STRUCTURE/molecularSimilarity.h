@@ -95,7 +95,8 @@ namespace BALL
 			This function was adapted from OpenBabel (finger2.cpp). */
 			void generatePathHash_(vector<Size>& path, Size& hash);
 
-			bool generatePathFingerprint_(const Atom* atom, vector<Size>& path,   set<const Bond*>& path_bonds, vector<bool>& fingerprint);
+			bool generatePathFingerprint_(const Atom* atom, std::vector<Size>& path, std::set<const Bond*>& path_bonds, 
+			                              std::vector<bool>& fingerprint);
 
 	};
 }
