@@ -49,11 +49,11 @@ namespace BALL
 		else if(compress_output_)
 		{
 			std::fstream::close();
-			ifstream unzipped_file(name_.c_str(), ios_base::in);
+			std::ifstream unzipped_file(name_.c_str(), ios_base::in);
 			boost::iostreams::filtering_streambuf<boost::iostreams::input> in;
 			in.push(boost::iostreams::gzip_compressor());
 			in.push(unzipped_file);
-			ofstream zipped_file(zipped_filename_.c_str(), ios::out | ios_base::binary);
+			std::ofstream zipped_file(zipped_filename_.c_str(), std::ios::out | std::ios_base::binary);
 			boost::iostreams::copy(in, zipped_file);
 			File::remove(name_);
 		}
