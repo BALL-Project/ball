@@ -74,7 +74,7 @@ namespace BALL
 			void printResult();
 
 			/** sets the atom_types that are to be used */
-			void setAtomTypeNames(set<String>& types);
+			void setAtomTypeNames(std::set<String>& types);
 
 			/** precalculate one Grid for each desired AtomType and one Grid for the electrostatic (q1/distance) */
 			void precalculateGrids(bool ony_flexRes_grids = false);
@@ -90,7 +90,7 @@ namespace BALL
 
 			/** Load precalculated ScoreGridSets for the given residues from files. \n
 			The values stored in those grids are automatically added to the ScoreGridSets that holds the scores for all flexible residues. */
-			void loadFlexibleResidueScoreGrids(list<pair<const Residue*, const Rotamer*> > residue_list);
+			void loadFlexibleResidueScoreGrids(std::list<std::pair<const Residue*, const Rotamer*> > residue_list);
 
 			void setupReferenceLigand();
 
@@ -104,7 +104,7 @@ namespace BALL
 			/** Returns the average number of receptor atoms neighboring each ligand atom as determined by the last call of calculateGridScore() (which is called by update()). */
 			int getNoNeighboringReceptorAtoms();
 
-			vector<ScoreGridSet*>* getScoreGridSets();
+			std::vector<ScoreGridSet*>* getScoreGridSets();
 
 			void validateGridSets();
 
@@ -114,13 +114,13 @@ namespace BALL
 			struct GridSetsResult
 			{
 				/** contains one energy value per GridSet */
-				vector<double> gridSet_scores;
+				std::vector<double> gridSet_scores;
 
 				/** for each GridSet, it contains the average number of neighbors to each atom of the current ligand */
-				vector<double> no_neighbors;
+				std::vector<double> no_neighbors;
 
 				/** for each GridSet, it contains the number of atoms of the current ligand that lie outside of the GridSet*/
-				vector<Size> no_out_of_grid;
+				std::vector<Size> no_out_of_grid;
 
 				void setup(Size no_gridSets);
 			};
@@ -152,10 +152,10 @@ namespace BALL
 			int combine_operation_;
 
 			/** maps each AtomType that is to be used to the ID of its Grid (position within ScoreGridSet.score_grids) */
-			map<String, int> atom_types_map_;
+			std::map<String, int> atom_types_map_;
 
 			/** stores all calculated GridSets */
-			vector<BALL::ScoreGridSet*> grid_sets_;
+			std::vector<BALL::ScoreGridSet*> grid_sets_;
 
 			/** update all nonbonded atom-pair lists and precalculate the score
 			@param set the id of the ScoreGrid, whose HashGrid is to be used */
@@ -172,7 +172,7 @@ namespace BALL
 
 			/** Stores one ScoreGridSets for each flexible sidechain. \n
 			These ScoreGridSets are not used directly during updateScore() (and therefore they are not put into grid_sets_), but their scores are added to the one ScoreGridSet that holds the score-sums of all flexible residues by loadFlexibleResidueScoreGrids(). */
-			map<const Residue*, ScoreGridSet*> flex_gridsets_;
+			std::map<const Residue*, ScoreGridSet*> flex_gridsets_;
 
 			friend class ScoreGridSet;
 			friend class PharmacophoreConstraint;

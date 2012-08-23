@@ -35,7 +35,7 @@
 
 
 using namespace BALL;
-
+using namespace std;
 
 const char* GridBasedScoring ::Option::SCOREGRID_RESOLUTION = "scoregrid_resolution";
 const char* GridBasedScoring ::Option::SCOREGRID_INTERPOLATION="scoregrid_interpolation";
