@@ -43,8 +43,8 @@ namespace BALL
 			AtomPairVector pair_vector_;
 
 		protected:
-			map<String, double> solvation_parameters;
-			map<String, double> solvation_volumes;
+			std::map<String, double> solvation_parameters;
+			std::map<String, double> solvation_volumes;
 	};
 }
 
