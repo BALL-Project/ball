@@ -34,6 +34,8 @@
 #include <BALL/SCORING/FUNCTIONS/gridedPLP.h>
 #include <BALL/SCORING/FUNCTIONS/PLPScoring.h>
 
+using namespace std;
+
 namespace BALL
 {
 	const char* IMGDock::Option::GLOBAL_ROTATION="global_rotation";

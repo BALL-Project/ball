@@ -102,9 +102,9 @@ namespace BALL
 			double getScore();
 
 			/** prints information about each fragment of the ligand */
-			void printFragments(ostream& out = cout);
+			void printFragments(std::ostream& out = std::cout);
 
-			void printResults(ostream& out = cout);
+			void printResults(std::ostream& out = std::cout);
 
 			/** rotate a ligand fragment around one of its bonds that connects it to another fragment */
 			void rotateLigandFragment(Size fragment, Size bond, int degree);
@@ -130,7 +130,7 @@ namespace BALL
 			//@}
 
 		private:
-			typedef multimap<double, vector<int> > PoseList;
+			typedef std::multimap<double, std::vector<int> > PoseList;
 
 			/**	@name	Accessors  */
 			//@{
@@ -155,17 +155,17 @@ namespace BALL
 
 			void saveBondInformation(AtomPairList* mapped_atoms);
 
-			bool findUnfrozenFragments(int fragment, set<int> frozen_fragments, set<int>& processed_fragments);
+			bool findUnfrozenFragments(int fragment, std::set<int> frozen_fragments, std::set<int>& processed_fragments);
 
 			void postDockOptimization(double step_width, int no_steps);
 
 			void recursionPrint(string line);
 
-			void optimizeRotation(vector < int > & conf, PoseList& best_conformations, Size bond, bool ignore_original_angle);
+			void optimizeRotation(std::vector < int > & conf, PoseList& best_conformations, Size bond, bool ignore_original_angle);
 
-			void displayConformation(const vector < int > & conf, const double& energy);
+			void displayConformation(const std::vector < int > & conf, const double& energy);
 
-			void applyConformation(const vector < int > & conf, bool verbose = 0);
+			void applyConformation(const std::vector < int > & conf, bool verbose = 0);
 
 			/** try to find a bond, so that the force vector is orthogonal to the plane spanned by the bond and the fragment center */
 			//void findBestFragmentRotation(int fragment, Size& bond, int& degree, map<int>* ignore_bonds);
@@ -201,7 +201,7 @@ namespace BALL
 
 			int no_steps_;
 
-			vector<Vector3> original_atom_positions_;
+			std::vector<Vector3> original_atom_positions_;
 
 			//AtomContainer* receptor_;
 
@@ -211,13 +211,13 @@ namespace BALL
 			Vector3 reference_center_;
 
 			/** saves force vectors of ligand atoms, so that after undoing a rotation (because it increased overall energy) the forces need not be calculated anew */
-			vector < Vector3 > old_forces_;
+			std::vector < Vector3 > old_forces_;
 
 			/** current rotation angles of all inter-fragment bonds */
-			vector < int > current_conformation_;
+			std::vector < int > current_conformation_;
 
 			/** for each entry of current_conformation_, this matrix saves the id of the fragment and the id of the inter-fragment bond of this fragment that this entry corresponds to in one column */
-			vector < vector < int > > bond_information_;
+			std::vector < std::vector < int > > bond_information_;
 
 			/** the highest index of a inter-fragment bond that has been rotated so far */
 			int max_rotated_pos_;
