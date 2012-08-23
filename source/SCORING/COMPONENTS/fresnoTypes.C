@@ -29,7 +29,7 @@
 
 
 using namespace BALL;
-
+using namespace std;
 
 FresnoTypes::FresnoTypes(AtomContainer* container)
 {
