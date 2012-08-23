@@ -103,7 +103,7 @@ namespace BALL
 				/** the name of the rescoring approach */
 				String name_;
 
-				ofstream stddev_out_;
+				std::ofstream stddev_out_;
 		};
 
 }

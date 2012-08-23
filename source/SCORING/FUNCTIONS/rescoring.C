@@ -30,6 +30,7 @@
 #include <BALL/QSAR/automaticModelCreator.h>
 
 using namespace BALL;
+using namespace std;
 
 Rescoring::Rescoring(AtomContainer& receptor, AtomContainer& reference_ligand, Options& options, String free_energy_label, ScoringFunction* sf)
 {
