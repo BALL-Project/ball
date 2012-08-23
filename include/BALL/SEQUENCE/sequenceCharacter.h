@@ -1,11 +1,9 @@
 #ifndef BALL_SEQUENCE_SEQUENCECHARACTER_H
 #define BALL_SEQUENCE_SEQUENCECHARACTER_H
 
-//////////////////////////////////////////////////////
 #ifndef BALL_DATATYPE_STRING_H
 #include <BALL/DATATYPE/string.h>
 #endif
-
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #include <BALL/CONCEPT/composite.h>
@@ -18,8 +16,6 @@
 #ifndef BALL_KERNEL_RESIDUE_H
 #include<BALL/KERNEL/residue.h>
 #endif
-////////////////////////////////////////////////////////////
-
 
 
 namespace BALL
@@ -31,8 +27,7 @@ namespace BALL
 
 		public:
 
-			enum type { GAP , CHAR};
-
+			enum type { GAP, CHAR };
 
 
 			/////////////////////////////////////////// Constructors and Destructor ////////////////////////////////////////////////////
@@ -43,24 +38,12 @@ namespace BALL
 			SequenceCharacter();
 
 			/**
-			 *Copy Constructor
-			 *@param sequenceCharacter the SequenceCharacter to construct from
-			 *@param origin the Sequence from which the character origins
-			 */
-			SequenceCharacter(const SequenceCharacter& seq_char); 
-
-			/**
 			 *Detailed Constructor
 			 *@param character the character of which comprises the new SequenceCharacter
 			 *@param origin the sequence from which the character originates
 			 *@param type tells whether the character is a GAP a nucleic acid or an amino acid
 			 */
 			SequenceCharacter(char c, Sequence* ori, type ty,Residue* residue);
-
-			/**
-			 *Destructor
-			 */					
-			~SequenceCharacter();
 
 			////////////////////////////////////////////////////// Getter and Setter ///////////////////////////////////////////////////
 
@@ -108,7 +91,7 @@ namespace BALL
 			*@return the corresponding residue of the character
 			*/
 			Residue* getResidue() const;
-						
+
 			//////////////////////////////////////////////////////////////////////////////// Operators ///////////////////////////////////////////////////
 			/**
 			 *operator ==
@@ -133,6 +116,7 @@ namespace BALL
 			bool isGap();
 
 			void reset();
+
 		private:
 			type t_;
 			Sequence* origin_;
