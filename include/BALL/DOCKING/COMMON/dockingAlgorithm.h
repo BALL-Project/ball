@@ -182,7 +182,7 @@ namespace BALL
 
 		protected:
 
-			static void writeSubcategories_(Options& category, ostream& out);
+			static void writeSubcategories_(Options& category, std::ostream& out);
 
 			System* system1_;
 			System* system2_;
