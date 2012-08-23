@@ -25,7 +25,7 @@
 
 
 using namespace BALL;
-
+using namespace std;
 
 ScoreGridSet::ScoreGridSet(GridBasedScoring* gbs, Vector3& v_origin_, Vector3& size, double& res)
 {
@@ -245,7 +245,7 @@ bool ScoreGridSet::isEnabled()
 }
 
 
-map<BALL::String, int>* ScoreGridSet::getAtomTypesMap()
+std::map<BALL::String, int>* ScoreGridSet::getAtomTypesMap()
 {
 	if (parent) return parent->getAtomTypesMap();
 	else return &atom_types_map_no_parent_;
@@ -256,7 +256,7 @@ BALL::String ScoreGridSet::getGridAtomTypeName(int grid_id)
 {
 	if (parent) return parent->getGridAtomTypeName(grid_id);
 
-	for (map < String, int > ::iterator it = atom_types_map_no_parent_.begin(); it != atom_types_map_no_parent_.end(); it++)
+	for (std::map < String, int > ::iterator it = atom_types_map_no_parent_.begin(); it != atom_types_map_no_parent_.end(); it++)
 	{
 		if (it->second == grid_id) return it->first;
 	}
@@ -285,8 +285,8 @@ void ScoreGridSet::initializeEmptyGrids(int no)
 	}
 
 	score_grids_->resize(no_grids);
-	vector<double> v1((int)size_z, 0);
-	vector<vector<double> > v2((int)size_y, v1);
+	std::vector<double> v1((int)size_z, 0);
+	std::vector<vector<double> > v2((int)size_y, v1);
 	for (int i = 0; i < no_grids; i++)
 	{
 		(*score_grids_)[i] = new ScoreGrid((int)size_x, v2);
@@ -446,7 +446,7 @@ Size ScoreGridSet::noGrids()
 }
 
 
-void ScoreGridSet::binaryWrite(ostream& outfile)
+void ScoreGridSet::binaryWrite(std::ostream& outfile)
 {
 	BinaryFileAdaptor<Size> adapt_size;
 	BinaryFileAdaptor<Vector3> adapt_vector3;
@@ -511,7 +511,7 @@ void ScoreGridSet::binaryWrite(ostream& outfile)
 }
 
 
-void ScoreGridSet::binaryRead(istream& infile)
+void ScoreGridSet::binaryRead(std::istream& infile)
 {
 	BinaryFileAdaptor<Size> adapt_size;
 	BinaryFileAdaptor<Vector3> adapt_vector3;
@@ -546,7 +546,7 @@ void ScoreGridSet::binaryRead(istream& infile)
 
 	initializeEmptyGrids(no_grids);
 
-	map<String, int>* type_map = getAtomTypesMap();
+	std::map<String, int>* type_map = getAtomTypesMap();
 
 	bool replace = 0;
 	if (!parent || parent->grid_sets_.size() == 1)
@@ -581,7 +581,7 @@ void ScoreGridSet::binaryRead(istream& infile)
 			String expected_atomtype = getGridAtomTypeName(g);
 			if (type_name != expected_atomtype)
 			{
-				cout<<type_name<<"  "<<expected_atomtype<<endl;
+				std::cout<<type_name<<"  "<<expected_atomtype<<std::endl;
 				throw BALL::Exception::GeneralException(__FILE__, __LINE__, "ScoreGridSet::readFromFile() error", "If using more than one ScoreGridSet, all ScoreGridSets MUST contain the same AtomTypes!!");
 			}
 		}
@@ -601,7 +601,7 @@ void ScoreGridSet::binaryRead(istream& infile)
 }
 
 
-void ScoreGridSet::saveToFile(ostream& out, String receptor_name)
+void ScoreGridSet::saveToFile(std::ostream& out, String receptor_name)
 {
 	out<<"ScoreGridSet for receptor "<<receptor_name<<endl;
 	out<<"no of grids: "<<score_grids_->size()<<endl;

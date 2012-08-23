@@ -70,13 +70,13 @@ namespace BALL
 
 			ScoreGrid& operator[](int i);
 
-			void binaryWrite(ostream& output);
+			void binaryWrite(std::ostream& output);
 
-			void binaryRead(istream& input);
+			void binaryRead(std::istream& input);
 
-			void saveToFile(ostream& output, String receptor_name);
+			void saveToFile(std::ostream& output, String receptor_name);
 
-			void readFromFile(istream& input);
+			void readFromFile(std::istream& input);
 
 			void setHashGrid(HashGrid3<Atom*>* hashgrid);
 
@@ -115,7 +115,7 @@ namespace BALL
 
 			/** Converts the content of this object to RegularData3D grids, e.g. for visualization purposes. For each atom type, one RegularData3D grid is created.
 			@return a list containing pairs of grid name and RegularData3D*. */
-			list<pair<String, BALL::RegularData3D*> > convertToRegularData3DGrids();
+			std::list<std::pair<String, BALL::RegularData3D*> > convertToRegularData3DGrids();
 
 			PharmacophoreConstraint* getPharmacophoreConstraint();
 
@@ -160,7 +160,7 @@ namespace BALL
 			/** determines whether this ScoreGridSet is currently active and should be takeb into account when calculating scores */
 			bool enabled_;
 
-			vector<ScoreGrid*>* score_grids_;
+			std::vector<ScoreGrid*>* score_grids_;
 
 			Size size_x;
 
@@ -188,7 +188,7 @@ namespace BALL
 			HashGrid3<Atom*>* hashgrid_;
 
 			/** will ONLY be used if this object is not connencted to a parent. Thus, always use getAtomTypesMap() to obtain the correct map */
-			map<BALL::String, int> atom_types_map_no_parent_;
+			std::map<BALL::String, int> atom_types_map_no_parent_;
 
 			PharmacophoreConstraint* pharm_constraint_;
 
