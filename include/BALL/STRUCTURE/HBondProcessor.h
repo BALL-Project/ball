@@ -309,7 +309,7 @@ namespace BALL
 			//@{
 
 			/// store HBond 
-			std::vector<HBond>        h_bonds_;
+			std::vector<HBond>              h_bonds_;
 			//@}
 
   }; //class HBondProcessor
