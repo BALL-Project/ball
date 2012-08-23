@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Alignment_test.C, 2011/06/14$
 //
 // Author:
 //   Nikola Koch
@@ -35,11 +34,11 @@ CHECK(~Alignment())
 	delete alp;
 RESULT
 
-	Alignment al; 
+	Alignment al;
 
 CHECK(void addSequence(Sequence& seq))
 	Sequence seq;
-	
+
 	Protein *p1 = new Protein();
 
 	Residue* r1 = new Residue("ALA");
@@ -54,29 +53,25 @@ CHECK(void addSequence(Sequence& seq))
 	TEST_EQUAL(al.getSequence(0)== seq, true);
 	TEST_EQUAL(al.getSeqChar(0,0) == *tmp, true)
 
-
 	Sequence seq2;
-	
+
 	Protein *p2 = new Protein();
 
 	Residue* r3 = new Residue("GLY");
 	p2->insert(*r3);
-		
+
 	seq2.setOrigin(p2);
 	al.addSequence(seq2);
 
 	TEST_EQUAL(al.getSequence(1) == seq2, true)
 
 	SequenceCharacter *tmp2 = new SequenceCharacter('-', &seq2, SequenceCharacter::type::GAP, 0);
-	
-	TEST_EQUAL(al.getSeqChar(1,1) == *tmp2, true)
-	
 
+	TEST_EQUAL(al.getSeqChar(1,1) == *tmp2, true)
 
 RESULT
 
 al.reset();
-
 
 
 CHECK(void reset())
@@ -91,7 +86,7 @@ CHECK(void reset())
 	al.addSequence(seq);
 
 	al.reset();
-	
+
 	TEST_EQUAL( (al.cols() == 0) && (al.rows() == 0), true)
 	TEST_EQUAL( al.isAligned(), false)
 	TEST_EQUAL( al.getScore() , 0)
@@ -100,7 +95,7 @@ RESULT
 
 al.reset();
 
-	
+
 
 CHECK(bool insertGap(Sequence& seq, int pos))
 
@@ -116,16 +111,14 @@ CHECK(bool insertGap(Sequence& seq, int pos))
 	al.addSequence(seq);
 
 	Sequence seq2;
-	
+
 	Protein *p2 = new Protein();
-
 	Residue* r3 = new Residue("GLY");
-
 	Residue* r4 = new Residue("GLY");
 
 	p2->insert(*r3);
 	p2->insert(*r4);
-		
+
 	seq2.setOrigin(p2);
 	al.addSequence(seq2);
 	al.insertGap(seq,2);
@@ -135,7 +128,7 @@ CHECK(bool insertGap(Sequence& seq, int pos))
 	TEST_EQUAL(al.cols(), 3)
 
 	al.insertGap(seq, 1);
-	
+
 	TEST_EQUAL(al.getSeqChar(0,1).isGap() ,true)
 	TEST_EQUAL(al.getSeqChar(0,0).getChar(),'A')
 	TEST_EQUAL(al.getSeqChar(0,2).getChar(), 'G')
@@ -176,25 +169,22 @@ CHECK(insertGap(int row, int column))
 	al.addSequence(seq);
 
 	Sequence seq2;
-	
+
 	Protein *p2 = new Protein();
-
 	Residue* r3 = new Residue("GLY");
-
 	Residue* r4 = new Residue("GLY");
 
 	p2->insert(*r3);
 	p2->insert(*r4);
-		
+
 	seq2.setOrigin(p2);
 	al.addSequence(seq2);
-	
+
 	TEST_EQUAL(al.insertGap(0,2), true)
-	
+
 	TEST_EQUAL(al.getSeqChar(0,2).isGap(), true)
 	TEST_EQUAL(al.cols(), 3)
 	TEST_EQUAL(al.getSeqChar(1,2).isGap(), true)
-
 
 	TEST_EQUAL(al.insertGap(0, 1), true)
 
@@ -206,7 +196,6 @@ CHECK(insertGap(int row, int column))
 	TEST_EQUAL(al.getSeqChar(1,0).getChar(), 'G')
 	TEST_EQUAL(al.getSeqChar(1,1).getChar(), 'G')
 	TEST_EQUAL(al.getSeqChar(1,2).isGap(), true)
-
 
 	TEST_EQUAL(al.insertGap(0,0), true)
 
@@ -240,7 +229,7 @@ CHECK(bool deleteGap(Sequence& seq, int pos))
 	al.addSequence(seq);
 
 	Sequence seq2;
-	
+
 	Protein *p2 = new Protein();
 
 	Residue* r3 = new Residue("GLY");
@@ -249,7 +238,7 @@ CHECK(bool deleteGap(Sequence& seq, int pos))
 
 	p2->insert(*r3);
 	p2->insert(*r4);
-		
+
 	seq2.setOrigin(p2);
 	al.addSequence(seq2);
 
