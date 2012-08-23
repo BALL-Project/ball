@@ -33,11 +33,11 @@ namespace BALL
 
 			~SideChainOptimizer();
 
-			void setFlexibleResidues(const set<String>& residues_IDs);
+			void setFlexibleResidues(const std::set<String>& residues_IDs);
 
 			void optimize();
 
-			void findFlexibleSideChains(set<Residue*>& residues, const double& dist_cutoff, const double& min_B_factor);
+			void findFlexibleSideChains(std::set<Residue*>& residues, const double& dist_cutoff, const double& min_B_factor);
 
 		private:
 			FragmentDB* frag_db_;

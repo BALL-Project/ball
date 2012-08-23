@@ -20,6 +20,8 @@
 #include <BALL/SCORING/COMMON/gridBasedScoring.h>
 #include <BALL/SYSTEM/timer.h>
 
+using namespace std;
+
 namespace BALL
 {
 	SideChainOptimizer::SideChainOptimizer(ScoringFunction* sf)
