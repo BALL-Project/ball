@@ -7,29 +7,29 @@
 
 ///////////////////////////////////////
 #ifndef BALL_DATATYPE_STRING_H
-	#include <BALL/DATATYPE/string.h>
+#include <BALL/DATATYPE/string.h>
 #endif
 
 #ifndef BALL_SYSTEM_FILE_H
-	#include <BALL/SYSTEM/file.h>
+#include <BALL/SYSTEM/file.h>
 #endif
 
 #ifndef BALL_SEQUENCE_ALIGNMENT_H
-	#include <BALL/SEQUENCE/alignment.h>
+#include <BALL/SEQUENCE/alignment.h>
 #endif
 
 #ifndef BALL_COMMON_EXCEPTION_H
-	#include <BALL/COMMON/exception.h>
+#include <BALL/COMMON/exception.h>
 #endif
 
 
 
 #ifndef BALL_KERNEL_PROTEIN_H
-	#include<BALL/KERNEL/protein.h>
+#include<BALL/KERNEL/protein.h>
 #endif
 
 #ifndef BALL_KERNEL_SYSTEM_H
-	#include<BALL/KERNEL/system.h>
+#include<BALL/KERNEL/system.h>
 #endif
 
 #define CLUSTALPARSER_LINE_LENGTH 2550
@@ -48,18 +48,19 @@ namespace BALL
 {
 
 
-	class BALL_EXPORT ClustalFile 
-		: public File
+	class BALL_EXPORT ClustalFile
+			: public File
 	{
 		public:
 
 			///////////////////////////////////////////////////Constructors and Destructors ///////////////////////////////////////////////////
 
-			class SequenceLine {
+			class SequenceLine
+			{
 
-				public:	/*
-					 *Constructor
-					 */
+				public: /*
+           *Constructor
+           */
 					SequenceLine();
 
 					/*
@@ -105,9 +106,10 @@ namespace BALL
 			/**
 			 *Nested Class for Block
 			 */
-			class Block {
+			class Block
+			{
 
-				public: 
+				public:
 					/*
 					 *Constructor
 					 */
@@ -142,7 +144,7 @@ namespace BALL
 					/**
 					 * assignment operator
 					 */
-					Block& operator = (const Block& block);					
+					Block& operator = (const Block& block);
 
 					/*prints the values contained in this SequenceLine*/
 					virtual void dump(std::ostream& s = std::cout) const;
@@ -177,7 +179,7 @@ namespace BALL
 			 */
 			ClustalFile();
 
-			/**			
+			/**
 			 *Detailed Constructor
 			 *@param trim_whitespaces sets whether leading and trailing whitespaces shall be removed while reading the file
 			 */
@@ -185,7 +187,7 @@ namespace BALL
 
 			/**
 			 *Copy Constructor
-			 */ 
+			 */
 			ClustalFile(ClustalFile& file);
 
 			/**
@@ -224,7 +226,7 @@ namespace BALL
 			/**
 			 * writes a Clustalfile into an alignment
 			 */
-	//		ClustalFile& operator >>(Alignment& alignment);
+			//    ClustalFile& operator >>(Alignment& alignment);
 
 
 			/**
@@ -255,14 +257,14 @@ namespace BALL
 
 			static State state;
 
-	private:
+		private:
 			std::vector<Block> blocks_;
 
 			//methods to faciliate the writing process
 
 
 
-};
+	};
 
 }
 #endif // BALL_FORMAT_CLUSTALFILE_H
