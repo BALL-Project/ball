@@ -14,6 +14,7 @@
 #include <BALL/DOCKING/GENETICDOCK/parameter.h>
 #include <BALL/DOCKING/COMMON/dockingAlgorithm.h>
 
+using namespace std;
 
 namespace BALL
 {
