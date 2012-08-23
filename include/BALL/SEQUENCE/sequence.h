@@ -2,10 +2,9 @@
 // vi: set ts=2:
 //
 
-
 #ifndef BALL_SEQUENCE_SEQUENCE_H
 #define BALL_SEQUENCE_SEQUENCE_H
-////////////////////////////////////////////////////////////////////////////////
+
 #ifndef BALL_DATATYPE_STRING_H
 	#include <BALL/DATATYPE/string.h>
 #endif
@@ -15,10 +14,7 @@
 #endif
 
 
-/////////////////////////////////////////////////////////////////////7
 #include <Eigen/Dense>
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 namespace BALL
@@ -31,9 +27,7 @@ namespace BALL
 
 		public:
 
-
 			//////////////////////////////////Constructors and Deconstructor//////////////////////////////////////////
-
 
 			/**
 			 *Default Constructor
@@ -42,10 +36,17 @@ namespace BALL
 
 			/**
 			 *Detailed Constructor
-			 *@param name_ the name_ of the Sequence
-			 *@param origin_ the composite from which the sequence origin_ates
+			 *@param name the name of the Sequence
+			 *@param origin the composite from which the sequence originates
 			 */
 			Sequence(const String& name, AtomContainer* origin);
+
+			/**
+			 *Detailed Constructor
+			 *@param name_ the name of the Sequence
+			 *@param sequence  the sequence given in one letter code
+			 */
+			Sequence(const String& name, const String& sequence);
 
 			/**
 			 *Copy Constructor
@@ -70,7 +71,6 @@ namespace BALL
 			 */
 			String getName()const;
 
-
 			/**
 			 *@param origin_ the origin_ which is to be setted
 			 */
@@ -79,7 +79,7 @@ namespace BALL
 			/**
 			 *@return the origin_ of the Sequence
 			 */
-			AtomContainer* getOrigin() const;	
+			AtomContainer* getOrigin() const;
 
 			///////////////////////////////////////////////////////////// Operators //////////////////////////////////////////////////////////////////////
 
@@ -104,7 +104,7 @@ namespace BALL
 			/**
 			 *@return a SequenceIterator which points to the first character of the Sequence
 			 */
-			SequenceIterator begin();				
+			SequenceIterator begin();
 
 			/**
 			 *@return a SequenceIterator which points to exactly one position after the last character of the Sequence
@@ -119,15 +119,12 @@ namespace BALL
 			/**
 			*@return an Eigen Array of SequenceCharacters containing the Sequence
 			*/
-			Eigen::Array< SequenceCharacter , 1, Eigen::Dynamic> getArraySequence();
-			
+			Eigen::Array< SequenceCharacter, 1, Eigen::Dynamic> getArraySequence();
 
 		private:
 
 			String name_;
 			AtomContainer* origin_;
-			
 	};
-
-}//name_space BALL
+}
 #endif // BALL_SEQUENCE_SEQUENCE_H

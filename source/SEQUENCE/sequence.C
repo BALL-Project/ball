@@ -2,119 +2,122 @@
 // vi: set ts=2:
 //
 
+#include <BALL/COMMON/exception.h>
 
-#include<BALL/SEQUENCE/sequence.h>
-
-#include<BALL/SEQUENCE/sequenceIterator.h>
-
+#include <BALL/SEQUENCE/sequence.h>
+#include <BALL/SEQUENCE/sequenceIterator.h>
 #include <BALL/SEQUENCE/sequenceCharacter.h>
+
+#include <BALL/STRUCTURE/peptideBuilder.h>
+#include <BALL/STRUCTURE/fragmentDB.h>
 
 namespace BALL
 {
 
-	/**
-	 *Default Constructor
-	 */
+	// Default Constructor
 	Sequence::Sequence()
-		//	:name_(""),origin_(0)
 	{
 		name_= "";
 		origin_ = 0;
 	}
-	/**
-	 *Detailed Constructor
-	 *@param name_ the name_ of the Sequence
-	 *@param origin_ the composite from which the sequence originates
-	 */
+
+	// Detailed Constructor
 	Sequence::Sequence(const String& name, AtomContainer* origin)
 	 : name_(name),
 		 origin_(origin)
 	{
 	}
 
-	/**
-	 *Copy Constructor
-	 */
+	// Copy Constructor
 	Sequence::Sequence(const Sequence& seq)
 	{
 		name_ = seq.getName();
 		origin_ =  seq.getOrigin();
 	}
 
-	/**
-	 *Destructor
-	 **/
+	Sequence::Sequence(const String& name, const String& sequence_text)
+	{
+		/// we build a dummy peptide with Peptidebuilder
+
+
+		// we need to define the peptid's AA sequence as a vector of descriptors
+		vector<Peptides::AminoAcidDescriptor> descriptor_seq;
+
+		for (unsigned int i=0; i < sequence_text.length(); i++)
+		{
+			char current_seq_char = sequence_text.c_str() [i];
+			// handle gaps, .i.e. "?" and "UNK" are excluded
+			if (   (current_seq_char != '-')
+					&& (current_seq_char != '?'))
+			{
+				// each aminoacid is represented by a descriptor
+				Peptides::AminoAcidDescriptor* aad = new Peptides::AminoAcidDescriptor;
+				aad->setAminoAcidType(Peptides::ThreeLetterCode(current_seq_char));
+				descriptor_seq.push_back(*aad);
+			}
+		}
+
+		BALL::Peptides::PeptideBuilder* pb = new BALL::Peptides::PeptideBuilder(descriptor_seq);
+
+		// "link" the fragment db for adding missing information
+		FragmentDB fdb("");
+		pb->setFragmentDB(&fdb);
+
+		// give sensible names
+		pb->setChainName("Chain A");
+		pb->setProteinName(name);
+
+		// now build a peptide
+		origin_ = pb->construct();
+
+	}
+
+	// Destructor
 	Sequence::~Sequence()
 	{
 	}
 
-
-	/**
-	 * @param name_ the new name_ to be set
-	 */
 	void Sequence::setName(const BALL::String& name)
 	{
 		name_= name;
 	}
 
-	/**
-	 *@return the name_ of the sequence
-	 */
 	String Sequence::getName() const
 	{
 		return name_;
 	}
 
-
-	/**
-	 *@param origin_ the origin which is to be setted
-	 */
 	void Sequence::setOrigin(AtomContainer* origin)
 	{
 		origin_=origin;
 	}
 
-	/**
-	 *@return the origin_ of the Sequence
-	 */
 	AtomContainer* Sequence::getOrigin() const
 	{
 		return origin_;
 	}
 
-	/**
-	 *operator==
-	 */
 	bool Sequence::operator== (const Sequence& seq)
 	{
 		return ((name_==seq.getName()) && (origin_==seq.getOrigin()));
 	}
 
-	/**
-	 *operator!=
-	 */
 	bool Sequence::operator!= (const Sequence& seq)
 	{
-		return ! (operator==(seq));
+		return !(operator==(seq));
 	}
 
-	/**
-	 *assignment operator
-	 */
 	Sequence& Sequence::operator= (const Sequence& seq)
 	{
-		name_ = seq.getName();
+		name_   = seq.getName();
 		origin_ = seq.getOrigin();
 
 		return *this;
 	}
 
-	/**
-	 *@return a SequenceIterator which points to the first character of the Sequence
-	 */
 	SequenceIterator Sequence::begin()
 	{
-		//Initialize the new Iterator
+		// Initialize the new Iterator
 		SequenceIterator it;
 		it.setSequence(*this);
 
@@ -122,90 +125,68 @@ namespace BALL
 		{
 			return it;
 		}
-
-		throw BALL::Exception::InvalidArgument(__FILE__,__LINE__,"origin_ is no Protein");
+		return it;
 	}
 
-	/**
-	 *@return a SequenceIterator which points to the end character of the Sequence
-	 */
-	SequenceIterator Sequence::end(){
-
-		//initialize the new Iterator
+	SequenceIterator Sequence::end()
+	{
+		// initialize the new Iterator
 		SequenceIterator it;
 
-		//set the the sequence
+		// set the the sequence
 		it.setSequence(*this);
 
-
-		if (RTTI::isKindOf<Protein>(*origin_)) {
-
-			//cast origin_ to a protein
+		if (RTTI::isKindOf<Protein>(*origin_))
+		{
+			// cast origin_ to a protein
 			Protein* protein = RTTI::castTo<Protein>(*origin_);
 
 			int num_of_res = protein->countResidues();
 
-			//set the counter to the number of residues in the protein
+			// set the counter to the number of residues in the protein
 			it.setCounter(num_of_res);
 
-			//to ensure comparing with another one  gives right decision we have to initiali
+			// to ensure comparing with another one  gives right decision we have to initiali
 			SequenceCharacter c;
 			c.setOrigin(this);
 			it.setChar(c);
-
 		}
-		//cout<<"returning now"<<endl;
-
 		return it;
 	}
 
-
-
-
-
-	/**
-	 *@return String which contains the Sequence
-	 **/
-	String Sequence::getStringSequence(){
-
-		//TODO when implemented all Iterator functionalities change!!!
-
+	String Sequence::getStringSequence()
+	{
 		String* nseq = new String();
+		SequenceIterator it;
 
-		SequenceIterator it,e;
-		e = end();
-
-		for(it = begin(); it != e; it.next())
+		for (it = begin(); it != end(); it.next())
 		{
-
 			String* tmp = new String(it.getCharacter().getChar());
 
 			*nseq += *tmp;
-
 		}
 		return *nseq;
 	}
 
+
 	Eigen::Array<SequenceCharacter, 1, Eigen::Dynamic> Sequence::getArraySequence()
 	{
-
-		//initialize the array
+		// initialize the array
 		Eigen::Array<SequenceCharacter, 1 , Eigen::Dynamic> seq;
 
-		SequenceIterator it,e;
-		e = end();
-
-		for(it = begin(); it != e; it.next())
+		SequenceIterator it;
+		for(it = begin(); it != end(); it.next())
 		{
-			//make room for the new Character
+			// make room for the new character
 			seq.conservativeResize(seq.cols()+1);
-			//retrieve the current Sequencecharacter for each Step
+
+			// retrieve the current Sequencecharacter for each step
 			SequenceCharacter c;
 			c = it.getCharacter();
-			//store it in the Array
+
+			// store it in the array
 			seq(0, seq.cols()-1) = c;
 		}
-
 		return seq;
 	}
 
