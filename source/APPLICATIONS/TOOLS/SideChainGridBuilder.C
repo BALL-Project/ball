@@ -23,6 +23,7 @@
 
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/FORMAT/molFileFactory.h>
+#include <BALL/FORMAT/commandlineParser.h>
 #include <BALL/DOCKING/COMMON/structurePreparer.h>
 #include <BALL/DOCKING/COMMON/dockingAlgorithm.h>
 #include <BALL/COMMON/exception.h>
@@ -33,6 +34,7 @@
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/STRUCTURE/rotamerLibrary.h>
 #include <BALL/STRUCTURE/peptideBuilder.h>
+#include "version.h"
 
 
 using namespace BALL;
@@ -60,22 +62,27 @@ GridBasedScoring* createScoringFunction(AtomContainer* receptor, AtomContainer* 
 
 int main(int argc, char* argv[])
 {
-	cout<<endl<<"========================================="<<endl;
-	cout<<"| SideChainGridBuilder  build "<<__DATE__<<" |"<<endl;
-	cout<<"========================================="<<endl<<endl;
+	CommandlineParser parpars("SideChainGridBuilder", "build side chain grid", VERSION, String(__DATE__), "Docking");
+	parpars.registerParameter("ini", "parameter file", INFILE, true);
+	parpars.registerParameter("d", "output directory", STRING, true);
+	parpars.setSupportedFormats("ini", "ini");
+	parpars.setToolManual("This tool precalculates a side chain grid.");
 
-	if (argc != 3)
-	{
-		cout<<"Usage: "<<endl;
-		cout<<"\tSideChainGridBuilder <parameter file> <output directory>"<<endl<<endl;
-		return 1;
-	}
+	parpars.parse(argc, argv);
 
 	//Log.setMinLevel(cout, 10);
 
 	Options option;
 	list<Constraint*> constraints;
-	DockingAlgorithm::readOptionFile(argv[1], option, constraints);
+
+	if (parpars.get("ini") == CommandlineParser::NOT_FOUND)
+	{
+		cout<<"[Error:] ini file must be given" << std::endl;
+		exit (1);
+	}
+
+	String inifile = parpars.get("ini");
+	DockingAlgorithm::readOptionFile(inifile, option, constraints);
 	String scoring_type = option.get("scoring_type");
 	String grid_file = option.get("grid_file");
 
@@ -100,12 +107,12 @@ int main(int argc, char* argv[])
 	if (par_file == "" && !scoring_type.hasSubstring("GH"))
 	{
 		cout<<"[Error:] 'filename' for force-field parameter file must be specified in the config-file  !"<<endl;
-		exit(1);
+		return(1);
 	}
 	if (grid_file == "")
 	{
 		cout<<"'grid_file' must be specified in the config-file  !"<<endl;
-		exit(1);
+		return(1);
 	}
 
 	StructurePreparer* sp;
@@ -136,7 +143,14 @@ int main(int argc, char* argv[])
 
 	// Angles are irrelevant, since we construct only single amino acids
 	Angle angle(0);
-	String prefix = argv[2];
+
+	if (parpars.get("d") == CommandlineParser::NOT_FOUND)
+	{
+		cout<<"[Error:] out directory must be given" << std::endl;
+		exit (1);
+	}
+
+	String prefix = parpars.get("d");
 	prefix += "/";
 
 	FragmentDB frag_db("fragments/Fragments.db");

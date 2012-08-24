@@ -5,9 +5,11 @@ SET(EXECUTABLES_LIST
 	AntitargetRescorer
 	AutoModel
 	BindingDBCleaner
+	BondOrderAssigner
 	CombiLibGenerator
 	ConstraintsFinder
 	Converter
+	CrystalGenerator
 	DBExporter
 	DBImporter
 	DockResultMerger
@@ -23,6 +25,7 @@ SET(EXECUTABLES_LIST
 	LigCheck
 	ModelCreator
 	MolCombine
+	MolecularFileConverter
 	MolFilter
 	MolPredictor
 	PartialChargesCopy
@@ -40,6 +43,7 @@ SET(EXECUTABLES_LIST
 	SimpleRescorer
 	SLICK
 	SpatialConstraintDefiner
+	Split2ConnectedComponents
 	TaGRes
 	TaGRes-train
 	Validator

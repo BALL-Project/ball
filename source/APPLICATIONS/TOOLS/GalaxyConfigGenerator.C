@@ -97,7 +97,10 @@ int main(int argc, char* argv[])
 		{
 			xml.writeAttribute("id",s.c_str());
 		}
-		else xml.writeAttribute("id",search_it->second.c_str());
+		else
+		{
+			xml.writeAttribute("id",search_it->second.c_str());
+		}
 		xml.writeAttribute("name", tool_name.c_str());
 		xml.writeAttribute("version", tool_version.c_str());
 		xml.writeStartElement("description");
@@ -118,7 +121,7 @@ int main(int argc, char* argv[])
 	list<String> inputs;
 	list<String> input_files;
 	list<String> input_parameters;
-	String command = "../../" + tool_name;
+	String command = tool_name;
 	command += " \n";
 	for (list<pair<String,ParameterDescription> >::iterator it=parameter_descriptions.begin();
 		it!=parameter_descriptions.end(); it++)
@@ -230,6 +233,7 @@ int main(int argc, char* argv[])
 
 	/// Write header
 	xml.writeComment("This is a configuration file for the integration of a CADDSuite tool into Galaxy (http://usegalaxy.org). This file was automatically generated using GalaxyConfigGenerator, so do not bother to make too many manual modifications.");
+	xml.writeComment((String("Proposed Tool Section: [") + category + "]").c_str());
 	xml.writeStartElement("tool");
 	map<String,String>::iterator search_it = old_toolkeys.find(tool_name);
 	if (search_it == old_toolkeys.end())
@@ -241,11 +245,17 @@ int main(int argc, char* argv[])
 	else xml.writeAttribute("id",search_it->second.c_str());
 	xml.writeAttribute("name",tool_name.c_str());
 	xml.writeAttribute("version",tool_version.c_str());
+	xml.writeStartElement("requirements");
+	xml.writeStartElement("requirement");
+	xml.writeAttribute("type", "package");
+	xml.writeCharacters("ballaxy");
+	xml.writeEndElement();
+	xml.writeEndElement();
 	xml.writeStartElement("description");
 	xml.writeCharacters(tool_description.c_str());
 	xml.writeEndElement();
 	xml.writeStartElement("command");
-	xml.writeAttribute("interpreter","bash");
+//	xml.writeAttribute("interpreter","bash");
 	xml.writeCDATA(command.c_str()); // Do not use writeCharacters() here, because it would excape the "-" signs within the repeat-sections, which chetah needs!
 	xml.writeEndElement();
 
