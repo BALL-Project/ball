@@ -1,0 +1,133 @@
+C[*X1](C)([*X1])[*X1]	terminal primary C(sp3)
+[C,c]([C,c])([C,c])(*)*	 total secondary C(sp3)
+[C,c]([C,c])([C,c])([C,c])*	total tertiary C(sp3)
+[C,c]([C,c])([C,c])([C,c])[C,c]	total quaternary C(sp3)
+[$([Cr,cr]([Cr,cr])([Cr,cr])(*)*),$([Cr,cr]([Cr,cr])([C,c])([*r])*)]		ring secondary C(sp3)
+[$([Cr,cr]([Cr,cr])([Cr,cr])([C,c])*),$([Cr,cr]([Cr,cr])([C,c])([C,c])[*r])]	ring tertiary C(sp3)
+[Cr,cr]([Cr,cr])([Cr,cr])([C,c])[C,c]	ring quaternary C(sp3)
+[cX3]		aromatic C(sp2)
+[Ch1,ch1]1[C,c][C,c][C,c][C,c][C,c]1	unsubstituted benzene C(sp2)
+[Ch0,ch0]1[C,c][C,c][C,c][C,c][C,c]1	substituted benzene C(sp2)
+O=CC1=CCCC=C1		non-aromatic conjugated C(sp2)
+[C,c]=[C,c](*)(*)		terminal primary C(sp2)
+C=C(C)(*)	aliphatic secondary C(sp2)
+C=C(C)(C)	aliphatic tertiary C(sp2)
+[C,c]=[C,c]=[C,c]		allenes groups
+[*X1][C,c]#C	terminal C(sp)
+**[C,c]#C	non-terminal C(sp)
+OC#N		cyanates
+O=C=N	isocyanates
+SC#N		thiocyanates
+N=C=S	isothiocyanates
+[OH,Oh]C=O	carboxylic acids
+[*;!H]OC=O	 esters
+[NH2,Nh2]C=O		primary amides
+[*;!H][NH,Nh]C=O		secondary amides
+[*;!H]N([*;!H])C=O	tertiary amides
+*N(*)C([O,S]*)=[O,S]		(thio-)carbamates
+[F,Cl,Br,I,At]C(*)=O		acyl halogenides
+[$([OH,Oh]C(*)=S),$([SH,Sh]C(*)=O)]		thioacids
+[SH,Sh]C(*)=S		dithioacids
+[$([*;!H]OC(*)=S),$([*;!H]SC(*)=O)]		thioesters
+[*;!H]SC(*)=S		dithioesters
+[CH,Ch](*)=O	aldehydes
+*C(*)=O		ketones
+[NX3]C([NX3])=[O,S]		urea (-thio) derivatives
+[OX2,SX2]C([OX2,SX2])=[O,S]	carbonate (-thio) derivatives
+[NX2]C([C,H])[NX3]	amidine derivatives
+[NX3]C(=[NX2])[NX3]	guanidine derivatives
+*C(*)=N[N,C,H]		imines
+*C(*)=NO*	oximes
+[NH2X3,Nh2X3]		primary amines
+[NH1X3,Nh1X3]		secondary amines
+[NH0X3;Nh0X3]	 tertiary amines
+[C,H][NX3][NX3][C,H]		N hydrazines
+[C,H][NX2]=[NX2][C,H]	N azo-derivatives
+N#C*	nitriles
+[N+n]	positive charged N
+[NX4]	quaternary N
+*N(*)O*	hydroxylamines
+*N(*)N=O		nitrosamine
+*N=O	nitroso groups
+*N(O)=O		nitro groups
+[CX3](=[O,S])[NX3]([H,C])[CX3]=[O,S]	imides
+[C,H]C([C,H])=NN([C,H])[C,H]	hydrazones
+A[OX2h1,OX2H1]		hydroxyl groups
+a[OX2h1,OX2H1]		aromatic hydroxyls
+C[CH2,Ch2][OH,Oh]		primary alcohols
+C[CH,Ch](C)[OH,Oh]	secondary alcohols
+CC(C)(C)[OH,Oh]	tertiary alcohols
+*O*	 ethers
+*O[F,Cl,Br,I,At]	hypohalogenides
+[CX3](=[O,S])O[CX3][O,S]	anhydrides
+[OH2,Oh2]	water
+C[SH,Sh]	thiols
+S=C(C)C	thioketones
+C[SX2]C	sulfides
+C[SX2][SX2]C	disulfides
+[$(CS(C)=O),$(C=S=O),$(S=S=O)]	sulfoxides
+[$(O=[SX4]=O),$(O=S(=[C,S])=O)]	sulfones
+[SX2][Oh1,OH1,Sh1,SH1]		sulfenic acids
+[SX3](=[O,S])[Oh1,OH1,Sh1,SH1]		sulfinic acids
+[SX4](=[O,S])(=[O,S])[Oh1,OH1,Sh1,SH1]		sulfonic acids
+[OX2,SX2][SX4](=[O,S])(=[O,S])[Oh1,OH1,Sh1,SH1]		sulfuric acids
+[SX3](=[O,S])[OX2,SX2]		sulfites
+[SX4](=[O,S])(=[O,S])[OX2,SX2]	sulfonates
+[OX2,SX2][SX4](=[O,S])(=[O,S])[OX2,SX2]	sulfates
+[$(C[SX4](=O)(=O)[NX3]),$(C[SX4](=S)(=O)[NX3]),$(C[SX3](=O)[NX3]),$(C[SX3](=S)[NX3]),$(CS[NX3])]	sulfonamides/sulfinamides/sulfenamides
+[O,S]P([O,S])[O,S]	phosphites/thiophosphites
+[O,S]P(=[O,S])([O,S])[O,S]		phosphates/thiophosphates
+[O,S]P([O,S])[O,S]	phosphanes
+[H,S,F,Cl,Br,I,At][PX4](=[S,O])([SX2,OX2])[SX2,OX2]	phosphonates/thiophosphonates
+[$([H,S,F,Cl,Br,I,At][PX4](=[S,O])([H,S,F,Cl,Br,I,At])[H,S,F,Cl,Br,I,At]),$([H,S,F,Cl,Br,I,At][PX5]([H,S,F,Cl,Br,I,At])([H,S,F,Cl,Br,I,At])([H,S,F,Cl,Br,I,At])[H,S,F,Cl,Br,I,At])]		phosphoranes/thiophosphoranes
+[F,Cl,Br,I,At][CX4h2,CX4H2,cx4h2,cx4H2][C,c]		CH2RX
+[F,Cl,Br,I,At][CX4h1,CX4H1,cX4h1,cX4H1]([C,c])[C,c]	CHR2X
+[F,Cl,Br,I,At][C,c]([C,c])([C,c])[C,c]		CR3X
+[C,c]=[CX3h1,cX3h1,CX3H1,cX3H1][F,Cl,Br,I,At]	R=CHX
+[C,c]=[C,c]([C,c])[F,Cl,Br,I,At]		R=CRX
+[F,Cl,Br,I,At]C#C		R#CX
+[F,Cl,Br,I,At][CX4h1,CX4H1,cX4h1,cX4H1]([C,c])[F,Cl,Br,I,At]	 CHRX2
+[F,Cl,Br,I,At][C,c]([C,c])([C,c])[F,Cl,Br,I,At]	CR2X2
+[C,c]=[C,c]([F,Cl,Br,I,At])[F,Cl,Br,I,At]	 R=CX2
+[F,Cl,Br,I,At][C,c]([C,c])([F,Cl,Br,I,At])[F,Cl,Br,I,At]	CRX3
+[F,Cl,Br,I,At][ar]	halogene on aromatic ring
+[CrX4,crX4][F,Cl,Br,I,At]	X on ring C(sp3)
+[CrX3,crX3][F,Cl,Br,I,At]	X on ring C(sp2)
+[C,c]=[C,c]([F,Cl,Br,I,At])[C,c]=[C,c]	 halogene on exo-conjugated C
+[N,n]1@[C,c]@[C,c]1	Aziridines
+[O,o]1@[C,c]@[C,c]1	Oxiranes
+[S,s]1@[C,c]@[C,c]1	Thiranes
+[N,n]1@[C,c]@[C,c]@[C,c]1	Azetidines
+[O,o]1@[C,c]@[C,c]@[C,c]1	Oxetanes
+[S,s]1@[C,c]@[C,c]@[C,c]1	Thioethanes
+[N,n]12@[C,c]@[C,c]@[C,c]@[C,c]@[C,c]1(@[C,c]@C2(=O))	Beta-Lactams
+[N,n]1@[C,c]@[C,c]@[C,c]1		Pyrrolidines
+[O,o]1[C,c][C,c][C,c][C,c]1	Oxolanes
+[S,s]1[C,c][C,c][C,c][C,c]1	tetrahydro-Thiophenes
+[N,n]1@[C,c]@[C,c]@[C,c]@[C,c]1	Pyrroles
+[N,n]1@[N,n]@[C,c]@[C,c]@[C,c]1	Pyrazoles
+[N,n]1@[C,c]@[N,n]@[C,c]@[C,c]1	Imidazoles
+[O,o]1[C,c]=[C,c][C,c]=[C,c]1	Furanes
+[S,s]1[C,c]=[C,c][C,c]=[C,c]1	Thiophenes
+[O,o]1@[C,c]@[N,n]@[C,c]@[C,c]1	Oxazoles
+[O,o]1@[N,n]@[C,c]@[C,c]@[C,c]1	Isoxazoles
+[S,s]1@[C,c]@[N,n]@[C,c]@[C,c]1	Thiazoles
+[S,s]1@[N,n]@[C,c]@[C,c]@[C,c]1	Isothiazoles
+[$([N,n]1@[N,n]@[C,c]@[N,n]@C1),$([N,n]1@[N,n]@[N,n]@[C,c]@[C,c]1)]	Triazoles
+[N,n]1@[C,c]@[C,c]@[C,c]@[C,c]@[C,c]1	Pyridines
+[N,n]1@[C,c]@[C,c]@[C,c]@[C,c]@[N,n]1	Pyridazines
+[N,n]1@[C,c]@[C,c]@[C,c]@[N,n]@[C,c]1	Pyrimidines
+[N,n]1@[C,c]@[C,c]@[N,n]@[C,c]@[C,c]1	Pyrazines
+[N,n]1@[C,c]@[N,n]@[C,c]@[N,n]@[C,c]1	135-Triazines
+[N,n]1@[C,c]@[N,n]@[N,n]@[C,c]@[C,c]1	124-Triazines
+[C,c]1([Oh1,OH1])[C,c][C,c][C,c][C,c][C,c]1	Phenoles
+[C,c]1([C])[C,c][C,c][C,c][C,c][C,c]1	Phenyles
+[C,c]1([CH3,ch3])[C,c][C,c][C,c][C,c][C,c]1	Toluenes
+OC[C,c]1@[C,c](O)@[C,c](O)@[C,c](O)@[C,c](O)@[O,o]1	Glucose
+OC[C,c]1(O)@[C,c](O)@[C,c](O)@[C,c](CO)[O,o]1	Fructose
+[CH3,Ch3]	Methyl
+[F,Cl,Br,I,At]		Halogenides
+[CH2,Ch2,Ch3,CH3][CH2,Ch2][CH2,Ch2,Ch3,CH3]	Propyl
+[CH2,Ch2,Ch3,CH3][CH2,Ch2][CH2,Ch2][CH2,Ch2,Ch3,CH3]	Butyl
+[CH2,Ch2,Ch3,CH3][CH2,Ch2][CH2,Ch2][CH2,Ch2][CH2,Ch2,Ch3,CH3]	Pentyl
+CC=C([CH3,Ch3])([CH3,Ch3])	Prenyl
