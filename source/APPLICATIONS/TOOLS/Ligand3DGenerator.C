@@ -31,7 +31,7 @@
 #include <BALL/FORMAT/commandlineParser.h>
 #include <BALL/STRUCTURE/molecularSimilarity.h>
 
-#include <unordered_map>
+#include <boost/unordered_map.hpp>
 
 #include <openbabel/mol.h>
 #include <openbabel/builder.h>
@@ -226,7 +226,7 @@ Supported formats are ") + MolFileFactory::getSupportedFormats() + String(".");
 	int no_ignored = 0;
 	Molecule *mol, *new_mol;
 	OpenBabel::OBMol *obmol;
-	unordered_map<unsigned int, OpenBabel::vector3> coord_backup;
+	boost::unordered_map<unsigned int, OpenBabel::vector3> coord_backup;
 	for (Size i=1; (mol = input->read()); i++)
 	{
 		if (no_written%5 == 0)
