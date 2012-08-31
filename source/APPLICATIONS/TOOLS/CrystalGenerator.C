@@ -16,6 +16,9 @@
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/FORMAT/commandlineParser.h>
+#include <BALL/FORMAT/parameters.h>
+#include <BALL/FORMAT/parameterSection.h>
+#include <BALL/SYSTEM/path.h>
 
 using namespace std;
 using namespace BALL;
@@ -36,6 +39,37 @@ int main(int argc, char* argv[])
   // the space group
 	parpars.registerParameter("sg", "space group symbol in Herman-Mauguin notation", STRING, true);
   
+	CrystalGenerator generator;
+	
+	// Fill the space group symbol list
+	generator.getSpaceGroupFilename();
+	Path path;
+	String filename = generator.getSpaceGroupFilename();
+	String filepath = path.find(filename);
+	if (filepath == "")
+	{
+			throw Exception::FileNotFound(__FILE__, __LINE__, filename);
+	}
+
+	Parameters* param = new Parameters(filepath);
+	if (!param->isValid()) return false;
+
+	ParameterSection* pms = new ParameterSection();
+	pms->extractSection(*param, "SpacegroupList");	
+	if (!pms->isValid()) return false;
+	
+	delete param;
+			
+	list<String> space_groups;
+	for (Position i = 0; i < pms->getNumberOfKeys(); i++)
+	{
+		space_groups.push_back(pms->getValue(i,0).c_str());
+	}
+	
+	delete pms;
+					
+	parpars.setParameterRestrictions("sg", space_groups);
+	
   // the cell axes
   parpars.registerParameter("axis_a", "cell axis a", DOUBLE, false);
 	//parpars.setParameterRestrictions("axis_a", 0, 100);
@@ -79,7 +113,6 @@ int main(int argc, char* argv[])
   System system;
   file >> system;
 
-  CrystalGenerator generator;
   generator.setSystem(&system);
 
   boost::shared_ptr<CrystalInfo> ci_ptr(new CrystalInfo());
