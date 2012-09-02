@@ -215,15 +215,15 @@ namespace BALL
 
 		option_category->setDefaultBool(Option::DECREASE_STEPWIDTH, Default::DECREASE_STEPWIDTH);
 		allowed_values.clear();
-		allowed_values.push_back("0");
-		allowed_values.push_back("1");
-		option_category->addParameterDescription(Option::DECREASE_STEPWIDTH, "decrease step-width in each iterations", BALL::INT, &allowed_values);
+		allowed_values.push_back("true");
+		allowed_values.push_back("false");
+		option_category->addParameterDescription(Option::DECREASE_STEPWIDTH, "decrease step-width in each iterations", BALL::STRING, &allowed_values);
 
 		option_category->setDefaultBool(Option::SUPERPOSE_LIGAND, Default::SUPERPOSE_LIGAND);
-		option_category->addParameterDescription(Option::SUPERPOSE_LIGAND, "superpose ligands with ref.-ligand", BALL::INT, &allowed_values);
+		option_category->addParameterDescription(Option::SUPERPOSE_LIGAND, "superpose ligands with ref.-ligand", BALL::STRING, &allowed_values);
 
 		option_category->setDefaultBool("output_failed_dockings", false);
-		option_category->addParameterDescription("output_failed_dockings", "output erroneous molecules", BALL::INT, &allowed_values);
+		option_category->addParameterDescription("output_failed_dockings", "output erroneous molecules", BALL::STRING, &allowed_values);
 	}
 
 

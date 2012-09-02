@@ -298,60 +298,6 @@ bool ScoringFunction::setup()
 	return true;
 }
 
-/*
-void ScoringFunction::setDefaults()
-{
-	store_interactions_ = false;
-	store_interactions_phC_only_ = false;
-	all_ligand_nonbonded_ = NULL;
-	resolution_ = options.setDefaultReal(Option::HASHGRID_RESOLUTION, Default::HASHGRID_RESOLUTION);
-	nonbonded_cutoff_ = options.setDefaultReal(Option::NONBONDED_CUTOFF, Default::NONBONDED_CUTOFF);
-	nonbonded_cutoff_2_ = nonbonded_cutoff_*nonbonded_cutoff_;
-	conformation_scale_ = options.setDefaultReal(Option::CONFORMATION_SCALE, Default::CONFORMATION_SCALE);
-	reference_neighbors_ = 0;
-	hashgrid_search_radius_ = (int) ceil(nonbonded_cutoff_/resolution_);
-	use_all_lig_nonb_ = options.setDefaultBool(Option::ALL_LIG_NONB_PAIRS, Default::ALL_LIG_NONB_PAIRS);
-	use_static_lig_fragments_ = options.setDefaultBool(Option::USE_STATIC_LIG_FRAGMENTS, Default::USE_STATIC_LIG_FRAGMENTS);
-	neighbor_cutoff_2_ = 16;
-	burial_depth_scale_ = options.setDefaultInteger(Option::BURIAL_DEPTH_SCALE, Default::BURIAL_DEPTH_SCALE);
-
-	// If nonbonded-parameters are not set, set them to senseful default values
-	options.setDefaultReal("electrostatic_cutoff", 20.0);
-	options.setDefaultReal("electrostatic_cuton", 17.000000);
-	options.setDefaultReal("vdw_cutoff", 20.000000);
-	options.setDefaultReal("vdw_cuton", 17.000000);
-
-	String iniFile;
-	if (options.get("filename") != "")
-	{
-		iniFile = options.get("filename");
-	}
-	else
-	{
-		iniFile = "Amber/amber96-docking.ini";
-	}
-	Path path;
-	String fullpath = path.find(iniFile);
-	if (fullpath == "")
-	{
-		throw BALL::Exception::FileNotFound(__FILE__, __LINE__, iniFile);
-	}
-	options.setDefault("filename", fullpath);
-
-	//--- determine what to consider as sterical clashes ----
-	ignore_h_clashes_ = options.setDefaultBool(Option::IGNORE_H_CLASHES, Default::IGNORE_H_CLASHES);
-	allowed_intermolecular_overlap_ = options.setDefaultReal(Option::ALLOWED_INTERMOL_OVERLAP, Default::ALLOWED_INTERMOL_OVERLAP);
-	allowed_intramolecular_overlap_ = options.setDefaultReal(Option::ALLOWED_INTRAMOL_OVERLAP, Default::ALLOWED_INTRAMOL_OVERLAP);
-	// ------------------------
-
-	exp_energy_stddev_ = 0;
-	exp_energy_mean_ = 0;
-	flexible_residues_hashgrid_ = NULL;
-	all_residues_hashgrid_ = NULL;
-}
-*/
-
-
 bool ScoringFunction::setup(AtomContainer& receptor, AtomContainer& ligand)
 {
 	setReceptor(receptor);
@@ -1535,10 +1481,16 @@ void ScoringFunction::getDefaultOptions(Options& options)
 {
 	Options* option_category = options.createSubcategory("Scoring Function");
 
-	option_category->setDefaultReal(Option::HASHGRID_RESOLUTION, Default::HASHGRID_RESOLUTION);
+	// units in Armstrongs
 	list<String> allowed_values;
 	allowed_values.push_back("1");
 	allowed_values.push_back("5");
+
+	list<String> boolean_values;
+	boolean_values.push_back("true");
+	boolean_values.push_back("false");
+
+	option_category->setDefaultInteger(Option::HASHGRID_RESOLUTION, Default::HASHGRID_RESOLUTION);
 	option_category->addParameterDescription(Option::HASHGRID_RESOLUTION, "hashgrid resolution", BALL::INT, &allowed_values);
 
 	option_category->setDefaultInteger(Option::HASHGRID_SIZE, Default::HASHGRID_SIZE);
@@ -1551,7 +1503,7 @@ void ScoringFunction::getDefaultOptions(Options& options)
 	option_category->addParameterDescription(Option::BURIAL_DEPTH_SCALE, "relative-depth-of-burial scale", BALL::DOUBLE, &allowed_values);
 
 	option_category->setDefaultBool(Option::IGNORE_H_CLASHES, Default::IGNORE_H_CLASHES);
-	option_category->addParameterDescription(Option::IGNORE_H_CLASHES, "ignore clashes involving hydrogens", BALL::INT, &allowed_values);
+	option_category->addParameterDescription(Option::IGNORE_H_CLASHES, "ignore clashes involving hydrogens", BALL::STRING, &boolean_values);
 
 	option_category->setDefaultReal(Option::ALLOWED_INTERMOL_OVERLAP, Default::ALLOWED_INTERMOL_OVERLAP);
 	allowed_values.clear();
