@@ -61,7 +61,7 @@ namespace BALL
 		typedef std::pair<ChiralClass, Position> ChiralDef;
 
 		class SPAtom;
-		BALL_EXPORT class SPBond 
+		class BALL_EXPORT SPBond 
 			:	public Bond
 		{
 			public:
@@ -76,7 +76,7 @@ namespace BALL
 			ZEIsomerType	ze_type_;
 		};
 		
-		BALL_EXPORT class SPAtom
+		class BALL_EXPORT SPAtom
 			:	public Atom
 		{
 			public:
