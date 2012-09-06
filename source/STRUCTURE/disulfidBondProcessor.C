@@ -95,7 +95,7 @@ namespace BALL
 			success = disconnect(atom1, atom2);
 		} // else if already bonded, nothing to do!
 		else if (   (bonded == NULL)
-				     && not (   atom1->getResidue()->hasProperty(Residue::PROPERTY__HAS_SSBOND)
+				     &&  !(   atom1->getResidue()->hasProperty(Residue::PROPERTY__HAS_SSBOND)
 							       || atom1->getResidue()->hasProperty(Residue::PROPERTY__HAS_SSBOND)
 						)       )
 		{
