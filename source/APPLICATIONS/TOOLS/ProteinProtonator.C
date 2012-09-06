@@ -46,8 +46,7 @@ int main(int argc, char* argv[])
 	String man = "";
 	parpars.setToolManual(man);
 	parpars.setSupportedFormats("i","pdb");
-	parpars.setSupportedFormats("o","pdb");
-	parpars.setSupportedFormats("o","drf");
+	parpars.setSupportedFormats("o","pdb,drf");
 	parpars.setOutputFormatSource("o","i");
 	String manual = "ProteinProtonator allows you add hydrogens to a protein structure.\n\nNote that all hydrogen atoms already present in the input file will be ignored. If desired, you can specify a specific pH value, for which protonation is to be done; otherwise a neutral pH will be assumed.\n\nOutput of this tool is one pdb-file containing the input protein structure with added hydrogens atoms.";
 	parpars.setToolManual(manual);

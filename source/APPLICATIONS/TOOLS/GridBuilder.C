@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
 	CommandlineParser parpars("GridBuilder", "create score-grids for docking", VERSION, String(__DATE__), "Docking");
 	parpars.registerParameter("rec", "receptor pdb-file", INFILE, true);
 	parpars.registerParameter("rl", "reference-ligand", INFILE, true);
-	parpars.registerParameter("ini", "configuration file", INFILE);
+	parpars.registerParameter("pocket", "configuration file", INFILE);
 	parpars.registerParameter("write_ini", "write ini-file w/ default parameters (and don't do anything else)", OUTFILE);
 	parpars.registerParameter("grd", "ScoreGrid file", OUTFILE, true);
 	String man = "This tool precalculates a score-grid for a binding pocket of a given receptor.\n\nAs input we need:\n\
@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
 	parpars.setToolManual(man);
 	parpars.setSupportedFormats("rec","pdb");
 	parpars.setSupportedFormats("rl",MolFileFactory::getSupportedFormats());
-	parpars.setSupportedFormats("ini","ini");
+	parpars.setSupportedFormats("pocket","ini");
 	parpars.setSupportedFormats("grd","grd.gz,grd,bngrd.gz,bngrd");
 
 	Options default_options;
@@ -95,9 +95,9 @@ int main(int argc, char* argv[])
 	Options option;
 	parpars.copyAdvancedParametersToOptions(option);
 	list<Constraint*> constraints;
-	if (parpars.get("ini") != CommandlineParser::NOT_FOUND)
+	if (parpars.get("pocket") != CommandlineParser::NOT_FOUND)
 	{
-		DockingAlgorithm::readOptionFile(parpars.get("ini"), option, constraints, ref_ligand);
+		DockingAlgorithm::readOptionFile(parpars.get("pocket"), option, constraints, ref_ligand);
 	}
 	Options* option_category = option.getSubcategory("Scoring Function");
 	if (!option_category) option_category = &option;
