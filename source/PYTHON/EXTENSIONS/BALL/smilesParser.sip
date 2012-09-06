@@ -11,65 +11,65 @@ class SmilesParser
 %End
 
 	public:
-	enum ZEIsomerType
-	{
-		NONE,
-		Z,
-		E
-	};
+//	enum ZEIsomerType
+//	{
+//		NONE,
+//		Z,
+//		E
+//	};
 
-	enum ChiralClass
-	{
-		NONCHIRAL,
-		TH,
-		AL,
-		SP,
-		TB,
-		OH
-	};
+//	enum ChiralClass
+//	{
+//		NONCHIRAL,
+//		TH,
+//		AL,
+//		SP,
+//		TB,
+//		OH
+//	};
 
-	enum
-	{
-		MAX_CONNECTIONS = 100
-	};
-
+//	enum
+//	{
+//		MAX_CONNECTIONS = 100
+//	};
+//
 	//typedef std::pair<ChiralClass, Position> ChiralDef;
-	class ChiralDef
-	{
-		public:
-		SmilesParser::ChiralClass first;
-		Position second;
-	};
+//	class ChiralDef
+//	{
+//		public:
+//		SmilesParser::ChiralClass first;
+//		Position second;
+//	};
 
-	class SPAtom
-		: Atom
-	{
-		public:
-		SPAtom(const String&, bool);
-		~SPAtom() throw();
-		Size getDefaultValence() const;
-		Size countRealValences() const;
-		Size getIsotope() const;
-		void setIsotope(Size);
-		Index getFormalCharge() const;
-		void setFormalCharge(Index);
-		const SmilesParser::ChiralDef& getChirality() const;
-		void setChirality(const SmilesParser::ChiralDef&);
-		bool isAromatic() const;
-		void setAromatic(bool);
-		bool isInBrackets() const;
-		void setInBrackets(bool);
-	};
+//	class SPAtom
+//		: Atom
+//	{
+//		public:
+//		SPAtom(const String&, bool);
+//		~SPAtom() throw();
+//		Size getDefaultValence() const;
+//		Size countRealValences() const;
+//		Size getIsotope() const;
+//		void setIsotope(Size);
+//		Index getFormalCharge() const;
+//		void setFormalCharge(Index);
+//		const SmilesParser::ChiralDef& getChirality() const;
+//		void setChirality(const SmilesParser::ChiralDef&);
+//		bool isAromatic() const;
+//		void setAromatic(bool);
+//		bool isInBrackets() const;
+//		void setInBrackets(bool);
+//	};
 
-	class SPBond
-		: Bond
-	{
-		public:
-		~SPBond() throw();
-		SPBond(SmilesParser::SPAtom*, SmilesParser::SPAtom*, Index order = 1);
-		SmilesParser::ZEIsomerType getZEType() const;
-		void setZEType(SmilesParser::ZEIsomerType);
-	};
+//	class SPBond
+//		: Bond
+//	{
+//		public:
+//		~SPBond() throw();
+//		SPBond(SmilesParser::SPAtom*, SmilesParser::SPAtom*, Index order = 1);
+//		SmilesParser::ZEIsomerType getZEType() const;
+//		void setZEType(SmilesParser::ZEIsomerType);
+//	};
 
 	public:
 
