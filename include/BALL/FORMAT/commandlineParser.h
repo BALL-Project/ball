@@ -28,7 +28,7 @@ namespace BALL
 			static const String NOT_FOUND;
 			static const list<String> EMTPY_LIST;
 
-			void registerParameter(String name, String description, ParameterType type, bool mandatory = 0, String default_value = "");
+			void registerParameter(String name, String description, ParameterType type, bool mandatory = false, String default_value = "");
 
 			void registerFlag(String name, String description, bool default_gui_value = false);
 
@@ -79,6 +79,14 @@ namespace BALL
 		private:
 
 			void replaceExcapedCharacters_(String& parameter_value);
+			void checkAndRegisterParameter(String name, String description, ParameterType type, bool mandatory = false, String default_value = "", bool perform_check = true);
+			void checkAndRegisterFlag(String name, String description, bool default_gui_value = false, bool perform_check = true);
+
+			/** Throws an exception if the given parameter name is not allowed to be used. */
+			void checkParameterName(const String& name, const bool perform_check = true);
+
+			/** blacklisted param names */
+			std::set<String> reserved_params_;
 
 			/** map excaped characters to the original characters */
 			std::list<std::pair<String, String> > excaped_chars_;

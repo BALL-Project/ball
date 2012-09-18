@@ -55,11 +55,20 @@ CommandlineParser::CommandlineParser(String tool_name, String tool_description, 
 	excaped_chars_.push_back(make_pair("__cn__","\n"));
 	excaped_chars_.push_back(make_pair("__cr__","\r"));
 	excaped_chars_.push_back(make_pair("__tc__","\t"));
+
+	// init the blacklist
+	// "write_par", "par", "help", "ini"
+	// write_ini is allowed to be used, but some tools might ignore it
+	reserved_params_.insert("write_par");
+	reserved_params_.insert("par");
+	reserved_params_.insert("help");
+	reserved_params_.insert("ini");
 }
 
-
-void CommandlineParser::registerParameter(String name, String description, ParameterType type, bool mandatory, String default_value)
+void CommandlineParser::checkAndRegisterParameter(String name, String description, ParameterType type, bool mandatory, String default_value, bool perform_check)
 {
+	checkParameterName(name, perform_check);
+
 	ParameterDescription pardes;
 	pardes.name = name;
 	pardes.description = description;
@@ -93,9 +102,16 @@ void CommandlineParser::registerParameter(String name, String description, Param
 	if (size > max_parname_length_) max_parname_length_ = size;
 }
 
-
-void CommandlineParser::registerFlag(String name, String description, bool default_gui_value)
+void CommandlineParser::registerParameter(String name, String description, ParameterType type, bool mandatory, String default_value)
 {
+	// add parameter and check if the parameter name is valid
+	checkAndRegisterParameter(name, description, type, mandatory, default_value, true);
+}
+
+void CommandlineParser::checkAndRegisterFlag(String name, String description, bool default_gui_value, bool perform_check)
+{
+	checkParameterName(name, perform_check);
+
 	ParameterDescription pardes;
 	pardes.name = name;
 	pardes.description = description;
@@ -116,6 +132,11 @@ void CommandlineParser::registerFlag(String name, String description, bool defau
 	}
 }
 
+void CommandlineParser::registerFlag(String name, String description, bool default_gui_value)
+{
+	checkAndRegisterFlag(name, description, default_gui_value, true);
+}
+
 
 void CommandlineParser::registerAdvancedParameters(Options& options)
 {
@@ -130,6 +151,7 @@ void CommandlineParser::registerAdvancedParameters(Options& options)
 		for (Options::ConstIterator it = options.begin(); it != options.end(); it++)
 		{
 			const String& name = it->first;
+			checkParameterName(name, true);
 			const ParameterDescription* pardes = options.getParameterDescription(name);
 			if (!pardes)
 			{
@@ -239,9 +261,9 @@ void CommandlineParser::printToolInfo()
 
 void CommandlineParser::parse(int argc, char* argv[])
 {
-	registerFlag("help", "show help about parameters and flags of this program");
-	registerParameter("write_par", "write xml parameter file for this tool", OUTFILE);
-	registerParameter("par", "read parameters from parameter-xml-file", INFILE);
+	checkAndRegisterFlag("help", "show help about parameters and flags of this program", false, false);
+	checkAndRegisterParameter("write_par", "write xml parameter file for this tool", OUTFILE, false, "", false);
+	checkAndRegisterParameter("par", "read parameters from parameter-xml-file", INFILE, false, "", false);
 
 	printToolInfo();
 
@@ -619,4 +641,12 @@ void CommandlineParser::setToolManual(const String& manual)
 const String& CommandlineParser::getStartCommand()
 {
 	return start_command_;
+}
+
+void CommandlineParser::checkParameterName(const String& name, bool perform_check)
+{
+	if (perform_check && reserved_params_.count(name) != 0)
+		{
+			throw BALL::Exception::GeneralException(__FILE__,__LINE__,"registerParameter error","The parameter [" + name + "] is part of the reserved parameters. Reserved parameters are: [write_par, par, help, ini]");
+		}
 }
