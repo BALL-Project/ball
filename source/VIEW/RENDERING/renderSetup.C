@@ -144,7 +144,7 @@ namespace BALL
 			}			
 
 			if (gl_renderer_)
-				gl_renderer_->enableVertexBuffers(scene_->want_to_use_vertex_buffer_);
+				gl_renderer_->enableVertexBuffers(scene_->useVertexBuffers());
 
 			render_mutex_.unlock();
 		}

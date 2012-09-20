@@ -590,6 +590,8 @@ namespace BALL
 				/// Returns the state of the preview mode
 				bool usePreview() const { return use_preview_; }
 
+				bool useVertexBuffers() const { return want_to_use_vertex_buffer_; }
+
 				/** Show or hide widget (Called by menu entry in "WINDOWS")
 					If the ModularWidget is not also a QWidget, this method does nothing
 					*/
