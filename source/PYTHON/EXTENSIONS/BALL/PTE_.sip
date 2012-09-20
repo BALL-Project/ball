@@ -61,7 +61,7 @@ class Element
    //friend ostream& operator << (ostream& s, const Element&);
    bool isUnknown() const;
 
-	 static Element UNKNOWN;
+//	 static Element UNKNOWN;
  };
 
 class PTE_

@@ -79,6 +79,10 @@ namespace BALL
 			gl_renderer_ = dynamic_cast<GLRenderer*>(renderer);
 		}
 
+		RenderSetup::~RenderSetup()
+		{
+		}
+
 		const RenderSetup& RenderSetup::operator = (const RenderSetup& rs)
 		{
 			if (&rs == this) return *this;
@@ -140,7 +144,7 @@ namespace BALL
 			}			
 
 			if (gl_renderer_)
-				gl_renderer_->enableVertexBuffers(scene_->want_to_use_vertex_buffer_);
+				gl_renderer_->enableVertexBuffers(scene_->useVertexBuffers());
 
 			render_mutex_.unlock();
 		}
@@ -367,8 +371,8 @@ namespace BALL
 			// reduce the ttl
 			if (ttl_ > 0) --ttl_;
 
-			renderer->setPreviewMode(scene_->use_preview_ && scene_->preview_);
-			renderer->showLightSources(scene_->show_light_sources_);
+			renderer->setPreviewMode(scene_->usePreview());
+			renderer->showLightSources(scene_->showLightSourcesEnabled());
 
 			updateCamera();
 

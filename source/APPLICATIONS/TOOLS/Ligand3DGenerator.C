@@ -40,6 +40,7 @@
 
 
 using namespace BALL;
+using namespace std;
 
 
 // Check whether the given molecule really contains only one molecule

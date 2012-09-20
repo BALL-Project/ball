@@ -129,6 +129,7 @@ namespace BALL
 
 		void HTMLBasedInterface::executePython_(const QString& action, const ParameterList& parameters)
 		{
+#ifdef BALL_PYTHON_SUPPORT
 			//Ensure, that the module search path is registered
 			static bool added_module_path = false;
 
@@ -162,6 +163,9 @@ namespace BALL
 			{
 				Log.error() << "Could not execute action " << action.toAscii().data() << "\n No such file or directory." << std::endl;
 			}
+#else
+			Log.error() << "BALL is compiled without Python support. Action " << action.toAscii().data() << " could not be executed." << std::endl;
+#endif
 		}
 
 	}
