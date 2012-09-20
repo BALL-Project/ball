@@ -34,6 +34,7 @@
 #include "version.h"
 
 using namespace BALL;
+using namespace std;
 
 void copyHydrogens(OpenBabel::OBMol* obmol, Protein* protein);
 

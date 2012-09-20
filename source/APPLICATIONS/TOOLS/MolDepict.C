@@ -32,6 +32,7 @@
 #include "version.h"
 
 using namespace BALL;
+using namespace std;
 
 void fixSvg(String& svg);
 void createPDF(vector<String>& pictures, vector<String>& IDs, vector<String>& scores, vector<String>& MW, String pdf_filename);
@@ -282,8 +283,11 @@ void createPDF(vector<String>& pictures, vector<String>& IDs, vector<String>& sc
 
 	system(("pdflatex "+tmp).c_str());
 	String c = "mv ";
-	c += tmp.before(".tex")+".pdf ";
+	// for some weird reason, we must cast to BALL::String for this to compile...
+	// the overload of operator + is not recognized for BALL::Substring in Debug mode
+	c += ((BALL::String)tmp.before(".tex"))+".pdf ";
 	c += pdf_filename;
+	// FIXME: This might not work in Windows! (in windows you need the "move" command, not "mv")
 	system(c.c_str());
 
 	for (Size i=0; i<pictures.size(); i++)
@@ -291,8 +295,8 @@ void createPDF(vector<String>& pictures, vector<String>& IDs, vector<String>& sc
 		File::remove(pictures[i]);
 	}
 	File::remove(tmp);
-	File::remove(tmp.before(".tex")+".log");
-	File::remove(tmp.before(".tex")+".aux");
+	File::remove(((BALL::String)tmp.before(".tex"))+".log");
+	File::remove(((BALL::String)tmp.before(".tex"))+".aux");
 }
 
 BALL::String valueToString(double value)
