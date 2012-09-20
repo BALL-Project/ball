@@ -228,12 +228,6 @@ namespace BALL
 		void InteractionModeManager::mouseReleaseEvent(QMouseEvent* evt)
 		{
 			current_mode_->mouseReleaseEvent(evt);
-
-			if (need_update_)
-			{
-				scene_->updateGL();
-				need_update_ = false;
-			}
 		}
 
 		void InteractionModeManager::wheelEvent(QWheelEvent* evt)
