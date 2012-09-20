@@ -24,6 +24,7 @@
 #include <BALL/FORMAT/molFileFactory.h>
 #include <BALL/FORMAT/dockResultFile.h>
 #include <BALL/FORMAT/commandlineParser.h>
+#include <BALL/DOCKING/COMMON/dockingAlgorithm.h>
 #include <BALL/DOCKING/COMMON/structurePreparer.h>
 #include <BALL/SCORING/FUNCTIONS/gridedMM.h>
 #include <BALL/SCORING/FUNCTIONS/MMScoring.h>
@@ -40,10 +41,10 @@ using namespace BALL;
 
 int main(int argc, char* argv[])
 {
-	CommandlineParser par("TaGRes-train", "Target-specific Grid-Rescoring, training", VERSION, String(__DATE__), "Rescoring");
+	CommandlineParser par("TaGResTrain", "Target-specific Grid-Rescoring, training", VERSION, String(__DATE__), "Rescoring");
 	par.registerParameter("rec", "receptor pdb-file", INFILE, true);
 	par.registerParameter("rl", "reference-ligand", INFILE, true);
-	par.registerParameter("ini", "configuration file", INFILE);
+	par.registerParameter(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME, "configuration file", INFILE);
 	par.registerParameter("i", "training compound data set", INFILE, true);
 	par.registerParameter("o", "model file", OUTFILE, true);
 	par.registerParameter("write_ini", "write ini-file w/ default parameters (and don't do anything else)", OUTFILE);
@@ -67,7 +68,7 @@ int main(int argc, char* argv[])
 	par.setParameterRestrictions("function",slist);
 	par.setSupportedFormats("rec","pdb");
 	par.setSupportedFormats("rl",MolFileFactory::getSupportedFormats());
-	par.setSupportedFormats("ini","ini");
+	par.setSupportedFormats(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME,"ini");
 	par.setSupportedFormats("i",MolFileFactory::getSupportedFormats());
 	par.setSupportedFormats("o","mod");
 	Options default_options;

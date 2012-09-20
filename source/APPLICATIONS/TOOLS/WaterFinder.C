@@ -439,7 +439,7 @@ int main(int argc, char* argv[])
 	CommandlineParser par("WaterFinder", "find strongly bound waters ", VERSION, String(__DATE__), "Docking");
 	par.registerParameter("rec", "receptor pdb-file", INFILE, true);
 	par.registerParameter("rl", "reference-ligand", INFILE, true);
-	par.registerParameter("ini", "configuration file", INFILE);
+	par.registerParameter(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME, "configuration file", INFILE);
 	par.registerParameter("wat", "input pdb-file containing water molecules (if not part of rec.-file)", INFILE);
 	par.registerFlag("ai", "use ab-initio water search (ignore water in pdb-file), experimental!");
 	par.registerParameter("o", "output pdb file", OUTFILE);
@@ -462,7 +462,7 @@ int main(int argc, char* argv[])
 	par.setSupportedFormats("rec","pdb");
 	par.setSupportedFormats("wat","pdb");
 	par.setSupportedFormats("rl",MolFileFactory::getSupportedFormats());
-	par.setSupportedFormats("ini","ini");
+	par.setSupportedFormats(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME,"ini");
 	par.setSupportedFormats("o","pdb");
 	Options default_options;
 	ScoringFunction::getDefaultOptions(default_options);
@@ -499,9 +499,9 @@ int main(int argc, char* argv[])
 	Options option;
 	par.copyAdvancedParametersToOptions(option);
 	list<Constraint*> constraints;
-	if (par.get("ini") != CommandlineParser::NOT_FOUND)
+	if (par.get(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME) != CommandlineParser::NOT_FOUND)
 	{
-		DockingAlgorithm::readOptionFile(par.get("ini"), option, constraints, ref_ligand);
+		DockingAlgorithm::readOptionFile(par.get(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME), option, constraints, ref_ligand);
 	}
 	Options* option_category = option.getSubcategory("Scoring Function");
 	if (!option_category) option_category = &option;

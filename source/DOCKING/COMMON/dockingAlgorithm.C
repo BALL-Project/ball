@@ -39,6 +39,8 @@ using namespace std;
 
 namespace BALL
 {
+	const String DockingAlgorithm::OPTION_FILE_PARAMETER_NAME = "option";
+
 	DockingAlgorithm::DockingAlgorithm()
 	{
 		display_mode_ = NO_DISPLAY;

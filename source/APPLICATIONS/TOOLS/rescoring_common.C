@@ -203,9 +203,9 @@ int runRescoring(CommandlineParser& par, bool simple_rescoring, bool train)
 	if (!option_category) option_category = &option;
 
 	list<Constraint*> constraints;
-	if (par.get("ini") != CommandlineParser::NOT_FOUND)
+	if (par.get(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME) != CommandlineParser::NOT_FOUND)
 	{
-		DockingAlgorithm::readOptionFile(par.get("ini"), option, constraints);
+		DockingAlgorithm::readOptionFile(par.get(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME), option, constraints);
 		scoring_type = option_category->setDefault("scoring_function", "MM");
 		grid_file = option_category->setDefault("grid_file", "");
 	}

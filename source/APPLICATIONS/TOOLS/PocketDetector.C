@@ -169,7 +169,7 @@ int main (int argc, char **argv)
 	parpars.registerParameter("rec", "receptor pdb-file", INFILE, true);
 	parpars.registerParameter("rl", "reference ligand", INFILE, true);
 	parpars.registerParameter("o", "output file", OUTFILE, true);
-	parpars.registerParameter("ini", "input ini file", INFILE);
+	parpars.registerParameter(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME, "input ini file", INFILE);
 	parpars.registerParameter("mol_out", "output file for pseudo-atoms describing pocket (for visualization purposes)", OUTFILE);
 
 	String man = "This tool tries to detect the binding pocket in which the reference ligand is located.\nTherefore, probe atoms are placed above the protein surface at positions of relative deep burial. The cluster of probe atoms around the geometric center of the reference ligand is used for the description of the binding pocket.\n\nAs input we need:\n\
@@ -181,7 +181,7 @@ int main (int argc, char **argv)
 	parpars.setToolManual(man);
 	parpars.setSupportedFormats("rec","pdb");
 	parpars.setSupportedFormats("rl",MolFileFactory::getSupportedFormats());
-	parpars.setSupportedFormats("ini","ini");
+	parpars.setSupportedFormats(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME,"ini");
 	parpars.setSupportedFormats("o","ini");
 	parpars.setSupportedFormats("mol_out",MolFileFactory::getSupportedFormats());
 	parpars.parse(argc, argv);
@@ -233,9 +233,9 @@ int main (int argc, char **argv)
 
 	Options option;
 	list<Constraint*> constraints;
-	if (parpars.has("ini"))
+	if (parpars.has(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME))
 	{
-		DockingAlgorithm::readOptionFile(parpars.get("ini"), option, constraints, ligand);
+		DockingAlgorithm::readOptionFile(parpars.get(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME), option, constraints, ligand);
 	}
 	String outmol_filename = "";
 	if (parpars.has("mol_out"))

@@ -59,6 +59,7 @@ int main(int argc, char** argv)
 	parpars.setSupportedFormats("cr","rul");
 	parpars.setSupportedFormats("pr","rul");
 	parpars.setSupportedFormats("lj","rul");
+	parpars.setSupportedFormats("op", "ini");
 
 	String man = "This tool calculates the SLICKEnergy / SLICK Score for protein-carbohydrate complexes.";
 	parpars.setToolManual(man);

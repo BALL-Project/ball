@@ -161,6 +161,8 @@ namespace BALL
 
 			static Matrix4x4 mapCompounds(const AtomContainer& S1, const AtomContainer& S2, Size& no_matched_heavy_atoms, double& rmsd, double upper_bound, double lower_bound, double tolerance);
 
+			const static String OPTION_FILE_PARAMETER_NAME;
+
 
 		#ifdef BALL_HAS_VIEW
 			const AtomContainer* getVisualizationPose();

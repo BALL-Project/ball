@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
 	CommandlineParser parpars("ConstraintsFinder", "find strongly interacting residues", VERSION, String(__DATE__), "Docking");
 	parpars.registerParameter("rec", "receptor pdb-file", INFILE, true);
 	parpars.registerParameter("rl", "reference-ligand", INFILE, true);
-	parpars.registerParameter("ini", "configuration file", INFILE);
+	parpars.registerParameter(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME, "configuration file", INFILE);
 	parpars.registerParameter("o", "output configuration file", OUTFILE);
 	parpars.registerParameter("write_ini", "write ini-file w/ default parameters (and don't do anything else)", OUTFILE);
 	String man = "This tool searches protein residues with which the reference ligand interacts strongly.\nTherefore the interaction of the reference ligand to each residue is evaluated. Residues with a score worse (i.e. larger) than -2 are ignored. A maximum of 3 constraints are created for the most strongly interacting residues that met the above criterion.\n\nAs input we need:\n\
@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
 	parpars.setToolManual(man);
 	parpars.setSupportedFormats("rec","pdb");
 	parpars.setSupportedFormats("rl",MolFileFactory::getSupportedFormats());
-	parpars.setSupportedFormats("ini","ini");
+	parpars.setSupportedFormats(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME,"ini");
 	parpars.setSupportedFormats("o","ini");
 	Options default_options;
 	ScoringFunction::getDefaultOptions(default_options);
@@ -92,9 +92,9 @@ int main(int argc, char* argv[])
 	Options option;
 	parpars.copyAdvancedParametersToOptions(option);
 	list<Constraint*> constraints;
-	if (parpars.has("ini"))
+	if (parpars.has(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME))
 	{
-		DockingAlgorithm::readOptionFile(parpars.get("ini"), option, constraints, ref_ligand);
+		DockingAlgorithm::readOptionFile(parpars.get(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME), option, constraints, ref_ligand);
 	}
 	Options* option_category = option.getSubcategory("Scoring Function");
 	if (!option_category) option_category = &option;

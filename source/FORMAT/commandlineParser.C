@@ -265,6 +265,8 @@ void CommandlineParser::parse(int argc, char* argv[])
 	checkAndRegisterParameter("write_par", "write xml parameter file for this tool", OUTFILE, false, "", false);
 	checkAndRegisterParameter("par", "read parameters from parameter-xml-file", INFILE, false, "", false);
 
+	// TODO: check that all registered input/output files have supported formats
+
 	printToolInfo();
 
 	if (argc < 2)

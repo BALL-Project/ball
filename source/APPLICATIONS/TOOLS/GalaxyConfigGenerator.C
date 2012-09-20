@@ -38,6 +38,8 @@ int main(int argc, char* argv[])
 	String man = "This tool can be used to create galaxy tool-configuration files.\nAs input, please supply a parameter-file as written by '-write_par' by all of our tools.";
 	parpars.setToolManual(man);
 	parpars.setSupportedFormats("o","xml");
+	parpars.setSupportedFormats("s", "xml");
+	parpars.setSupportedFormats("i", "xml");
 	parpars.parse(argc, argv);
 
 	// Use this map to store old galaxy tool-keys.
