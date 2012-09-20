@@ -140,7 +140,6 @@ namespace BALL
 				public ModularWidget
 		{
 			friend class AnimationThread;
-			friend class RenderSetup;
 
 #ifdef BALL_HAS_RTFACT
       typedef boost::shared_ptr<RaytracingRenderer> RaytracingRendererPtr;
@@ -591,6 +590,8 @@ namespace BALL
 				/// Returns the state of the preview mode
 				bool usePreview() const { return use_preview_; }
 
+				bool useVertexBuffers() const { return want_to_use_vertex_buffer_; }
+
 				/** Show or hide widget (Called by menu entry in "WINDOWS")
 					If the ModularWidget is not also a QWidget, this method does nothing
 					*/
@@ -936,7 +937,6 @@ namespace BALL
 				bool continuous_loop_;
 #endif
 				bool want_to_use_vertex_buffer_;
-				bool preview_;
 				bool use_preview_;
 
 				PreciseTime time_;

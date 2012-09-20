@@ -33,8 +33,7 @@ namespace BALL
 	{
 
 		Renderer::Renderer()
-			: Object(),
-				scene_(0),
+			: scene_(0),
 				stage_(0),
 				width_(0),
 				height_(0),
@@ -50,8 +49,7 @@ namespace BALL
 		}
 
 		Renderer::Renderer(const Renderer& renderer)
-		: Object(renderer),
-			scene_(renderer.scene_),
+		: scene_(renderer.scene_),
 			stage_(renderer.stage_),
 			width_(renderer.width_),
 			height_(renderer.height_),

@@ -19,7 +19,7 @@ template <first_type, second_type>
 {
 %TypeHeaderCode
 #include <utility>
-#include <BALL/COMMON/global.h>
+#include <BALLglobal.h>
 using namespace BALL;
 %End
 

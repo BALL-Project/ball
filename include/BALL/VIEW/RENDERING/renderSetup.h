@@ -49,6 +49,8 @@ namespace BALL {
 
 				RenderSetup(const RenderSetup& rs);
 
+				virtual ~RenderSetup();
+
 				const RenderSetup& operator = (const RenderSetup& rs);
 
 				// TODO: this should be boost smart pointers!
