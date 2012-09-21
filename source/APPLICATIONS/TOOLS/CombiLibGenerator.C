@@ -179,6 +179,7 @@ int main(int argc, char** argv)
 	parpars.registerParameter("write_ini", "write ini-file w/ default parameters (and don't do anything else)", OUTFILE);
 	parpars.setSupportedFormats("i","txt");
 	parpars.setSupportedFormats("o","mol2,sdf,drf");
+	parpars.setSupportedFormats("write_ini","ini");
 	String manual = "This tool generates a combinatorial library by combining the given molecule scaffolds with possible combinations of moieties.\n\nAs input we need a text file specifying SMARTS expressions for the desired scaffolds and R-groups. Its format should look like the following example, although you may specify as many scaffolds and as many SMARTS expressions per R-group as you need:\n\n<scaffold>\n\
       Fc1ccc(cc1)C2=C(C([R1])=NO2)c3ccnc([R2])c3\n\
 <moietyR1>\n\

@@ -54,6 +54,7 @@ int main(int argc, char* argv[])
 	parpars.setSupportedFormats("rec","pdb");
 	parpars.setSupportedFormats("rl",MolFileFactory::getSupportedFormats());
 	parpars.setSupportedFormats("pocket","ini");
+	parpars.setSupportedFormats("write_ini","ini");
 	parpars.setSupportedFormats("grd","grd.gz,grd,bngrd.gz,bngrd");
 
 	Options default_options;

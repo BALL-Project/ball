@@ -264,8 +264,10 @@ void CommandlineParser::parse(int argc, char* argv[])
 	checkAndRegisterFlag("help", "show help about parameters and flags of this program", false, false);
 	checkAndRegisterParameter("write_par", "write xml parameter file for this tool", OUTFILE, false, "", false);
 	checkAndRegisterParameter("par", "read parameters from parameter-xml-file", INFILE, false, "", false);
+	setSupportedFormats("par", "xml");
+	setSupportedFormats("write_par", "xml");
 
-	// TODO: check that all registered input/output files have supported formats
+	validateRegisteredFilesHaveFormats();
 
 	printToolInfo();
 
@@ -651,4 +653,23 @@ void CommandlineParser::checkParameterName(const String& name, bool perform_chec
 		{
 			throw BALL::Exception::GeneralException(__FILE__,__LINE__,"registerParameter error","The parameter [" + name + "] is part of the reserved parameters. Reserved parameters are: [write_par, par, help, ini]");
 		}
+}
+
+void CommandlineParser::validateRegisteredFilesHaveFormats()
+{
+	for (map<String, ParameterDescription> :: iterator it = registered_parameters_.begin(); it != registered_parameters_.end(); it++)
+	{
+		ParameterDescription& p = it->second;
+		if (p.type == INFILE || p.type == OUTFILE)
+		{
+			if (p.supported_formats.empty())
+			{
+				throw BALL::Exception::GeneralException(__FILE__,__LINE__,"registerParameter error",
+						"The parameter [" + p.name + "] has been registerd as a file " +
+						"but does not have any supported formats registered.\n"+
+						"You can set the supported formats by using CommandlineParser::setSupportedFormats.");
+			}
+		}
+
+	}
 }

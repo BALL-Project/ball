@@ -81,6 +81,7 @@ namespace BALL
 			void replaceExcapedCharacters_(String& parameter_value);
 			void checkAndRegisterParameter(String name, String description, ParameterType type, bool mandatory = false, String default_value = "", bool perform_check = true);
 			void checkAndRegisterFlag(String name, String description, bool default_gui_value = false, bool perform_check = true);
+			void validateRegisteredFilesHaveFormats();
 
 			/** Throws an exception if the given parameter name is not allowed to be used. */
 			void checkParameterName(const String& name, const bool perform_check = true);

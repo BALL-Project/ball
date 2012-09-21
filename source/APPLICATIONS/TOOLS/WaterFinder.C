@@ -464,6 +464,7 @@ int main(int argc, char* argv[])
 	par.setSupportedFormats("rl",MolFileFactory::getSupportedFormats());
 	par.setSupportedFormats(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME,"ini");
 	par.setSupportedFormats("o","pdb");
+	par.setSupportedFormats("write_ini","ini");
 	Options default_options;
 	ScoringFunction::getDefaultOptions(default_options);
 	par.registerAdvancedParameters(default_options);

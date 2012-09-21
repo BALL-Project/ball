@@ -57,6 +57,7 @@ int main(int argc, char* argv[])
 	parpars.setSupportedFormats("rl",MolFileFactory::getSupportedFormats());
 	parpars.setSupportedFormats(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME,"ini");
 	parpars.setSupportedFormats("o","ini");
+	parpars.setSupportedFormats("write_ini","ini");
 	Options default_options;
 	ScoringFunction::getDefaultOptions(default_options);
 	parpars.registerAdvancedParameters(default_options);

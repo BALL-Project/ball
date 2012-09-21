@@ -57,6 +57,7 @@ int main(int argc, char* argv[])
 	parpars.setSupportedFormats("grd","grd.gz,grd,bngrd,bngrd.gz");
 	parpars.setSupportedFormats("i",MolFileFactory::getSupportedFormats());
 	parpars.setSupportedFormats("o","mol2,sdf,drf");
+	parpars.setSupportedFormats("write_ini","ini");
 	parpars.setOutputFormatSource("o","i");
 	Options default_options;
 	ScoringFunction::getDefaultOptions(default_options);
