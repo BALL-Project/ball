@@ -112,7 +112,7 @@ namespace BALL
 				The <tt>Type</tt> is set to  \link OBJECT OBJECT \endlink .
 				@param	name the propertie's name
 		*/
-		NamedProperty(const string& name);
+		NamedProperty(const std::string& name);
 
 		/**	Constructor for bool-type properties.
 				Creates a NamedProperty object containing a boolean value.
@@ -120,7 +120,7 @@ namespace BALL
 				@param	name the property's name
 				@param	value the boolean value stored in the property
 		*/	
-		NamedProperty(const string& name, bool value);
+		NamedProperty(const std::string& name, bool value);
 
 		/**	Constructor for int-type properties.
 				Creates a NamedProperty object containing a signed int value.
@@ -128,7 +128,7 @@ namespace BALL
 				@param	name the property's name
 				@param	value the int value stored in the property
 		*/
-		NamedProperty(const string& name, int value);
+		NamedProperty(const std::string& name, int value);
 
 		/** Constructor for unsigned int-type properties.
 				Creates a NamedProperty object containing an unsigned int value.
@@ -136,7 +136,7 @@ namespace BALL
 				@param	name the property's name
 				@param	value the int value stored in the property
 		*/
-		NamedProperty(const string& name, unsigned int value);
+		NamedProperty(const std::string& name, unsigned int value);
 
 		/** Constructor for float-type properties.
 				Creates a NamedProperty object containing a float value.
@@ -144,7 +144,7 @@ namespace BALL
 				@param	name the property's name
 				@param	value the float value stored in the property
 		*/
-		NamedProperty(const string& name, float value);
+		NamedProperty(const std::string& name, float value);
 
 		/** Constructor for double-type properties.
 				Creates a NamedProperty object containing a double value.
@@ -152,7 +152,7 @@ namespace BALL
 				@param	name the property's name
 				@param	value the double value stored in the property
 		*/
-		NamedProperty(const string& name, double value);
+		NamedProperty(const std::string& name, double value);
 
 		/** Constructor for string-type properties.
 				Objects of type STRING contain a pointer to a string
@@ -161,7 +161,7 @@ namespace BALL
 				@param	name the property's name
 				@param	str the string stored in the property
 		*/
-		NamedProperty(const string& name, const string& str);
+		NamedProperty(const std::string& name, const std::string& str);
 
 		/**	Constructor for object-type properties.
 				Creates a NamedProperty object containing a 
@@ -170,7 +170,7 @@ namespace BALL
 				@param	name the property's name
 				@param	po a reference to the persistent object stored in the property
 		*/
-		NamedProperty(const string& name, PersistentObject& po);
+		NamedProperty(const std::string& name, PersistentObject& po);
 
 		/**	Constructor for smart-pointer handled object-type properties.
 				Creates a NamedProperty object containing a 
@@ -179,7 +179,7 @@ namespace BALL
 				@param	name the property's name
 				@param	ptr a smart pointer to the persistent object
 		*/
-		NamedProperty(const string& name, boost::shared_ptr<PersistentObject>& po);
+		NamedProperty(const std::string& name, boost::shared_ptr<PersistentObject>& po);
 
 		/**	Copy constructor
 		*/
@@ -188,7 +188,7 @@ namespace BALL
 		/**
 		 * Copy constructor with renaming
 		 */
-		NamedProperty(const NamedProperty&, const string& name);
+		NamedProperty(const NamedProperty&, const std::string& name);
 
 		/**	Destructor .
 				The destructor destructs the contained data in the case of STRING-type 
@@ -224,7 +224,7 @@ namespace BALL
 		Type getType() const;
 		
 		/// Return the name of the property
-		const string& getName() const;
+		const std::string& getName() const;
 
 		/** Return the data of the property object as bool.
 				If the property object is not of BOOL type, <b>false</b>
@@ -306,7 +306,7 @@ namespace BALL
 
 		/*_	The name of the property object 
 		*/
-		string name_;
+		std::string name_;
 		
 		/*_	The data
 		*/
@@ -500,7 +500,7 @@ namespace BALL
 				Already existing data using the same <tt>name</tt> is overwritten.
 				@param	name the name to be used for the new property
 		*/
-		void setProperty(const string& name);
+		void setProperty(const std::string& name);
 
 		/**	Set a named property containing boolean data.
 				This method creates a new named property containing boolean
@@ -509,7 +509,7 @@ namespace BALL
 				@param	name the name to be used for the new property
 				@param	value the boolean value 
 		*/
-		void setProperty(const string& name, bool value);
+		void setProperty(const std::string& name, bool value);
 
 		/**	Set a named property containing a signed integer number.
 				This method creates a new named property containing an 
@@ -518,7 +518,7 @@ namespace BALL
 				@param	name the name to be used for the new property
 				@param	value the data 
 		*/
-		void setProperty(const string& name, int value);
+		void setProperty(const std::string& name, int value);
 
 		/**	Set a named property containing an unsigned integer number.
 				This method creates a new named property containing an 
@@ -527,7 +527,7 @@ namespace BALL
 				@param	name the name to be used for the new property
 				@param	value the data 
 		*/
-		void setProperty(const string& name, unsigned int value);
+		void setProperty(const std::string& name, unsigned int value);
 
 		/**	Set a named property containing a floating point number.
 				This method creates a new named property containing a
@@ -536,7 +536,7 @@ namespace BALL
 				@param	name the name to be used for the new property
 				@param	value the data 
 		*/
-		void setProperty(const string& name, float value);
+		void setProperty(const std::string& name, float value);
 
 		/**	Set a named property containing a double-precision floating point number.
 				This method creates a new named property containing a
@@ -545,7 +545,7 @@ namespace BALL
 				@param	name the name to be used for the new property
 				@param	value the data 
 		*/
-		void setProperty(const string& name, double value);
+		void setProperty(const std::string& name, double value);
 
 		/**	Set a named property containing a string.
 				This method creates a new named property containing a
@@ -554,7 +554,7 @@ namespace BALL
 				@param	name the name to be used for the new property
 				@param	value the data 
 		*/
-		void setProperty(const string& name, const string& value);
+		void setProperty(const std::string& name, const std::string& value);
 
 		/**	Set a named property containing a PersistentObject.
 				This method creates a new named property containing a
@@ -563,7 +563,7 @@ namespace BALL
 				@param	name the name to be used for the new property
 				@param	value the data 
 		*/
-		void setProperty(const string& name, const PersistentObject& value);
+		void setProperty(const std::string& name, const PersistentObject& value);
 
 		/**	Retrieve a named property.
 				If the property manager contains a property named <tt>name</tt>
@@ -571,7 +571,7 @@ namespace BALL
 				otherwise.
 				@param	name the name of the proeprty to be retrieved
 		*/
-		const NamedProperty& getProperty(const string& name) const;
+		const NamedProperty& getProperty(const std::string& name) const;
 
 		/** Return an iterator to the first NamedProperty stored in this container. */
 		NamedPropertyIterator beginNamedProperty();
@@ -584,7 +584,7 @@ namespace BALL
 				the array of properties.
 				@param name the name of the property to be removed
 		*/
-		void clearProperty(const string& name);
+		void clearProperty(const std::string& name);
 
 		/**	Return the number of named properties.
 				@return Size the number of named properties stored in the ProprtyManager object
@@ -599,7 +599,7 @@ namespace BALL
 		bool hasProperty(Property property) const;
 
 		/// Query for a named property
-		bool hasProperty(const string& name) const;
+		bool hasProperty(const std::string& name) const;
 
 		/** Equality operator
 				Two instances are equal if they have the same named and unnamed properties.

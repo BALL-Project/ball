@@ -88,7 +88,7 @@ namespace BALL
 
 			/** Set the rotatable bonds. This is necessary in order to be able to compute GHTorsion-Energies.\n
 			Note that setting the rotatable bonds must of course be done anew for each new ligand !! */
-			void setRotatableBonds(vector<Bond*>& bonds);
+			void setRotatableBonds(std::vector<Bond*>& bonds);
 
 			/** Returns the Gehlhaar Atom-Type (0, 1, 2 or 3) for the given atom.\n
 			0 : steric \n
@@ -99,7 +99,7 @@ namespace BALL
 			static Size getAtomType(const Atom* atom);
 
 			/** Update this component using only the given atom-pairs */
-			void update(const vector<pair<Atom*, Atom*> >& atom_vector);
+			void update(const std::vector<std::pair<Atom*, Atom*> >& atom_vector);
 
 			/// Clear method
 			virtual void clear() throw();
@@ -150,11 +150,11 @@ namespace BALL
 			void e1(double& d, double& e, double& delta);
 			void e2(double& d, double& e, double& delta);
 
-			vector<GhTorsion> ghtorsions_;
+			std::vector<GhTorsion> ghtorsions_;
 
 			ForceField::PairVector atom_pair_vector_;
 
-			vector<NonBondedPairData> non_bonded_data_;
+			std::vector<NonBondedPairData> non_bonded_data_;
 
 			double cut_off_;
 			double vdw_cut_on_, vdw_cut_off_;
@@ -177,7 +177,7 @@ namespace BALL
 
 			std::vector<bool> dismiss_vector_;
 
-			vector<double> rotgrad_;
+			std::vector<double> rotgrad_;
 	};
 } //
 

@@ -15,6 +15,8 @@
 
 bool system_changed_;
 
+using namespace std;
+
 namespace BALL
 {
 	const String EvolutionaryDocking::Option::MAX_ITERATIONS = "max_iterations";

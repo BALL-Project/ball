@@ -95,9 +95,7 @@
 
 //#define BALL_BENCHMARKING
 
-
-using std::endl;
-using std::istream;
+using namespace std;
 
 namespace BALL
 {

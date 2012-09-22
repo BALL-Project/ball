@@ -26,6 +26,7 @@
 #include <BALL/SCORING/COMPONENTS/PLP.h>
 
 using namespace BALL;
+using namespace std;
 
 PLPScoring::PLPScoring(AtomContainer& receptor, AtomContainer& ligand, Options& options)
 	: ScoringFunction(receptor, ligand, options)

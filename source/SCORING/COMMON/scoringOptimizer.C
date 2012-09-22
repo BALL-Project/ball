@@ -34,6 +34,7 @@
 #include <BALL/KERNEL/PTE.h>
 
 using namespace BALL;
+using namespace std;
 
 
 ScoringOptimizer::ScoringOptimizer(Options& options, bool train)

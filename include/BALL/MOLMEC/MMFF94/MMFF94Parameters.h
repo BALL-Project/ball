@@ -17,8 +17,6 @@
 # include <BALL/DATATYPE/hashMap.h>
 #endif 
 
-using namespace std;
-
 namespace BALL 
 {
 
@@ -70,7 +68,7 @@ namespace BALL
 		
 		protected:
 
-		virtual bool setup_(const vector<vector<String> >&) { return true;};
+		virtual bool setup_(const std::vector<std::vector<String> >&) { return true;};
 
 		bool is_initialized_;
 
@@ -109,10 +107,10 @@ namespace BALL
 
 		protected:
 
-		virtual bool setup_(const vector<vector<String> >&);
-		vector<vector<Position> > equivalences_;
-		vector<String> 	 names_;
-		vector<bool> 	 	 exists_;
+		virtual bool setup_(const std::vector<std::vector<String> >&);
+		std::vector<std::vector<Position> > equivalences_;
+		std::vector<String> 	 names_;
+		std::vector<bool> 	 	 exists_;
 	};
 	
 
@@ -172,12 +170,12 @@ namespace BALL
 		~MMFF94AtomTypes() {};
 
 		///
-		const vector<MMFF94AtomType>& getAtomTypes() const { return data_;}
+		const std::vector<MMFF94AtomType>& getAtomTypes() const { return data_;}
 
 		protected:
 
-		virtual bool setup_(const vector<vector<String> >&);
-		vector<MMFF94AtomType> data_;
+		virtual bool setup_(const std::vector<std::vector<String> >&);
+		std::vector<MMFF94AtomType> data_;
 	};
 
 ///////////////////////////////////////////////////////////////////////////
@@ -250,7 +248,7 @@ namespace BALL
 
 		protected:
 
-		virtual bool setup_(const vector<vector<String> >&);
+		virtual bool setup_(const std::vector<std::vector<String> >&);
 
 		/// standard parameters 
 		StretchMap parameters_;
@@ -269,7 +267,7 @@ namespace BALL
 		public:
 
 		/// Map with the force constant and reference angle
-		typedef HashMap<Position, pair<double, double> > BendMap;
+		typedef HashMap<Position, std::pair<double, double> > BendMap;
 
 		BALL_CREATE(MMFF94BendParameters)
 
@@ -294,7 +292,7 @@ namespace BALL
 
 		protected:
 
-		virtual bool setup_(const vector<vector<String> >&);
+		virtual bool setup_(const std::vector<std::vector<String> >&);
 
 		Position getIndex_(Position bend_type, Position atom_type1, Position atom_type2, Position atom_type3) const;
 
@@ -316,7 +314,7 @@ namespace BALL
 		public:
 
 		/// Map with the force constant and reference angle
-		typedef HashMap<Position, pair<double, double> > StretchBendMap;
+		typedef HashMap<Position, std::pair<double, double> > StretchBendMap;
 
 		BALL_CREATE(MMFF94StretchBendParameters)
 
@@ -346,7 +344,7 @@ namespace BALL
 
 		protected:
 
-		virtual bool setup_(const vector<vector<String> >&);
+		virtual bool setup_(const std::vector<std::vector<String> >&);
 
 		Position getIndex_(Position stretch_bend_type,
 											 Position atom_type1, Position atom_type2, Position atom_type3) const; 
@@ -371,7 +369,7 @@ namespace BALL
 		public:
 
 		/// Map with the force constant and reference angle
-		typedef HashMap<String, vector<double> > TorsionsMap;
+		typedef HashMap<String, std::vector<double> > TorsionsMap;
 
 		BALL_CREATE(MMFF94TorsionParameters)
 
@@ -396,7 +394,7 @@ namespace BALL
 
 		protected:
 
-		virtual bool setup_(const vector<vector<String> >&);
+		virtual bool setup_(const std::vector<std::vector<String> >&);
 
 		String getIndex_(Position type, Position atom_type1, Position atom_type2, Position atom_type3, Position atom_type4) const;
 
@@ -442,7 +440,7 @@ namespace BALL
 
 		protected:
 
-		virtual bool setup_(const vector<vector<String> >&);
+		virtual bool setup_(const std::vector<std::vector<String> >&);
 
 		String getIndex_(Position atom_type1, Position atom_type2, Position atom_type3, Position atom_type4) const;
 
@@ -499,22 +497,22 @@ namespace BALL
 
 		protected:
 
-		virtual bool setup_(const vector<vector<String> >&);
+		virtual bool setup_(const std::vector<std::vector<String> >&);
 
 		/// parameters 
-		vector<VDWEntry> parameters_;
+		std::vector<VDWEntry> parameters_;
 
 		// R star ii for all individual atom types
-		mutable vector<double> rs_;
+		mutable std::vector<double> rs_;
 
 		// R star ij for pairs of atom types
-		mutable vector<double> rij_;
+		mutable std::vector<double> rij_;
 		// R star ij ^ 7 for pairs of atom types
-		mutable vector<double> rij_7_;
+		mutable std::vector<double> rij_7_;
 		// R star ij and for pairs of atom types
-		mutable vector<double> eij_;
+		mutable std::vector<double> eij_;
 		// bools if indivual value was already calculated
-		mutable vector<bool> 	 calculated_;
+		mutable std::vector<bool> 	 calculated_;
 	};
 
 
@@ -563,11 +561,11 @@ namespace BALL
 
 		protected:
 
-		virtual bool setup_(const vector<vector<String> >&);
+		virtual bool setup_(const std::vector<std::vector<String> >&);
 		Position getIndex_(Position at1, Position at2, Position bt) const;
 
 		/// parameters 
-		vector<double> parameters_, phis_, pbcis_;
+		std::vector<double> parameters_, phis_, pbcis_;
 	};
 
 

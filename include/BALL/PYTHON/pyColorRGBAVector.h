@@ -19,13 +19,11 @@
 
 namespace BALL 
 {
-	using namespace VIEW;
-	
 	/** Equivalent for a STL::vector of ColorRGBA in Python
 			\ingroup PythonExtensions
 	*/
 	class PyColorRGBAVector
-		:	public vector<ColorRGBA>
+		:	public std::vector<VIEW::ColorRGBA>
 	{
 		public:
 
@@ -37,19 +35,19 @@ namespace BALL
 
 		/**	ColorRGBA type
 		*/
-		typedef ColorRGBA ValueType;
+		typedef VIEW::ColorRGBA ValueType;
 
 		/**	Pointer type
 		*/
-		typedef ColorRGBA* PointerType;
+		typedef VIEW::ColorRGBA* PointerType;
 
 		/**	Iterator type.
 		*/
-		typedef vector<ColorRGBA>::iterator Iterator;
+		typedef std::vector<VIEW::ColorRGBA>::iterator Iterator;
 
 		/**	Constant iterator type.
 		*/
-		typedef vector<ColorRGBA>::const_iterator ConstIterator;
+		typedef std::vector<VIEW::ColorRGBA>::const_iterator ConstIterator;
 
 		//@}
 		/**	@name	Constructors and Destructors */
@@ -63,7 +61,7 @@ namespace BALL
 		PyColorRGBAVector(const PyColorRGBAVector& c_vector);
 
 		/// Copy constructor.
-		PyColorRGBAVector(const vector<ColorRGBA>& c_vector);
+		PyColorRGBAVector(const std::vector<VIEW::ColorRGBA>& c_vector);
 			
 		///	Destructor
 		virtual ~PyColorRGBAVector() throw();

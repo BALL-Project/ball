@@ -10,29 +10,29 @@ namespace BALL
 {
 
 	PyDatasetVector::PyDatasetVector()
-		: vector<Dataset*>()
+		: vector<VIEW::Dataset*>()
 	{
 	}
 
 	PyDatasetVector::PyDatasetVector(const PyDatasetVector& dvector)
-		: vector<Dataset*>(dvector)
+		: vector<VIEW::Dataset*>(dvector)
   {
 	}
 
-	PyDatasetVector::PyDatasetVector(const vector<Dataset*>& dvector)
-		: vector<Dataset*>(dvector)
+	PyDatasetVector::PyDatasetVector(const std::vector<VIEW::Dataset*>& dvector)
+		: vector<VIEW::Dataset*>(dvector)
   {
 	}
 
-	PyDatasetVector& PyDatasetVector::operator = (const vector<Dataset*>& dvector)	
+	PyDatasetVector& PyDatasetVector::operator = (const std::vector<VIEW::Dataset*>& dvector)
 		throw()
 	{
 		clear();
 
-		vector<Dataset*>::const_iterator it(dvector.begin());
+		std::vector<VIEW::Dataset*>::const_iterator it(dvector.begin());
 		for (; it != dvector.end(); ++it)
 		{
-			push_back(const_cast<Dataset*>(*it));
+			push_back(const_cast<VIEW::Dataset*>(*it));
 		}
 
 		return *this;

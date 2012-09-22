@@ -17,13 +17,11 @@
 
 namespace BALL 
 {
-	using namespace BALL::VIEW;
-
 	/** Equivalent for a STL::Vector of Dataset Pointers in Python
 			\ingroup PythonExtensions
 	*/
 	class PyDatasetVector
-		:	public vector<Dataset*>
+		:	public vector<BALL::VIEW::Dataset*>
 	{
 		public:
 
@@ -35,19 +33,19 @@ namespace BALL
 
 		/**	Dataset* type
 		*/
-		typedef Dataset* ValueType;
+		typedef BALL::VIEW::Dataset* ValueType;
 
 		/**	Pointer type
 		*/
-		typedef Dataset** PointerType;
+		typedef BALL::VIEW::Dataset** PointerType;
 
 		/**	Iterator type.
 		*/
-		typedef vector<Dataset*>::iterator Iterator;
+		typedef vector<BALL::VIEW::Dataset*>::iterator Iterator;
 
 		/**	Constant iterator type.
 		*/
-		typedef vector<Dataset*>::const_iterator ConstIterator;
+		typedef vector<BALL::VIEW::Dataset*>::const_iterator ConstIterator;
 
 		//@}
 
@@ -63,10 +61,10 @@ namespace BALL
 		PyDatasetVector(const PyDatasetVector& dvector);
 
 		/// Copy constructor.
-		PyDatasetVector(const vector<Dataset*>& dvector);
+		PyDatasetVector(const vector<BALL::VIEW::Dataset*>& dvector);
 		
 		/// Constructor from a const Dataset pointer list
-		PyDatasetVector& operator = (const vector<Dataset*>& dvector)	throw();
+		PyDatasetVector& operator = (const vector<BALL::VIEW::Dataset*>& dvector)	throw();
 				
 		///	Destructor
 		virtual ~PyDatasetVector() throw();

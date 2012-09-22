@@ -39,6 +39,7 @@
 #include "version.h"
 
 using namespace BALL;
+using namespace std;
 
 Residue* createNewWater(Vector3 center = Vector3(0, 0, 0))
 {

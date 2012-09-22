@@ -11,6 +11,8 @@
 #include <BALL/SCORING/FUNCTIONS/rescoring4D.h>
 #include <BALL/SCORING/FUNCTIONS/rescoring1D.h>
 
+using namespace std;
+
 namespace BALL
 {
 	Rescorer::Rescorer()

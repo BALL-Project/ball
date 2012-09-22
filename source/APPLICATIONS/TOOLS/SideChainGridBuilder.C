@@ -36,6 +36,7 @@
 
 
 using namespace BALL;
+using namespace std;
 
 GridBasedScoring* createScoringFunction(AtomContainer* receptor, AtomContainer* ref_ligand, String scoring_type, list<Constraint*>* constraints, Options* option)
 {

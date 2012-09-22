@@ -37,6 +37,7 @@
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/SYSTEM/path.h>
 
+using namespace std;
 
 namespace BALL
 {

@@ -34,8 +34,6 @@
 #endif
 
 
-using namespace std;
-
 namespace BALL 
 {
 	/**	A generic NMR spectrum class.
@@ -100,9 +98,9 @@ namespace BALL
 		///
 		DataType& getData();
 		
-		const vector<float>& getHuInvariants() const;
+		const std::vector<float>& getHuInvariants() const;
 		
-		vector<float>& getHuInvariants();
+		std::vector<float>& getHuInvariants();
 
 		//@}
 
@@ -126,7 +124,7 @@ namespace BALL
 		// computes the integral over the fabs() of the spectrum
 		virtual double getAbsIntegral() const;
 		virtual void computeHuInvariants();
-		virtual vector<float> computeHuInvariantsDifferences(vector<Spectrum<DataT, PeakT, PositionT> >& spectra);
+		virtual std::vector<float> computeHuInvariantsDifferences(std::vector<Spectrum<DataT, PeakT, PositionT> >& spectra);
 
 		/** Computes the difference between the spectra in Fourier space. max_freq and min_freq can be used to
 		 *  include only a certain range into the comparison. In this case, we only use the positive frequencies (the
@@ -278,13 +276,13 @@ namespace BALL
 */
 
 	template <typename DataT, typename PeakT, typename PositionT>
-	const vector<float>& Spectrum<DataT, PeakT, PositionT>::getHuInvariants() const
+	const std::vector<float>& Spectrum<DataT, PeakT, PositionT>::getHuInvariants() const
 	{
 		return Hu_invariants_;
 	}
 
 	template <typename DataT, typename PeakT, typename PositionT>
-	vector<float>& Spectrum<DataT, PeakT, PositionT>::getHuInvariants() 
+	std::vector<float>& Spectrum<DataT, PeakT, PositionT>::getHuInvariants()
 	{
 		return Hu_invariants_;
 	}
@@ -299,7 +297,7 @@ namespace BALL
 	}
 
 	template <typename DataT, typename PeakT, typename PositionT>
-	vector<float> Spectrum<DataT, PeakT, PositionT>::computeHuInvariantsDifferences(vector<Spectrum<DataT, PeakT, PositionT> >& /*spectra*/)
+	std::vector<float> Spectrum<DataT, PeakT, PositionT>::computeHuInvariantsDifferences(std::vector<Spectrum<DataT, PeakT, PositionT> >& /*spectra*/)
 	{
 		Log.error()<< "computeHuInvariantsDifferences() only implemented in 2D" << std::endl;
 		std::vector<float> result;

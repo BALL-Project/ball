@@ -27,6 +27,7 @@
 
 
 using namespace BALL;
+using namespace std;
 
 
 GridedPLP::GridedPLP(AtomContainer& receptor, AtomContainer& ligand, Options& options)

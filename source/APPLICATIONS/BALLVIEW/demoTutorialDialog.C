@@ -34,6 +34,8 @@
 #include <QtGui/QMessageBox>
 #include <QtGui/QTextBrowser>
 
+using namespace std;
+
 namespace BALL
 {
 	namespace VIEW

@@ -10,17 +10,17 @@ namespace BALL
 {
 
 	PyColorRGBAVector::PyColorRGBAVector()
-		: vector<ColorRGBA>()
+		: vector<VIEW::ColorRGBA>()
 	{
 	}
 
 	PyColorRGBAVector::PyColorRGBAVector(const PyColorRGBAVector& v)
-		: vector<ColorRGBA>(v)
+		: vector<VIEW::ColorRGBA>(v)
   {
 	}
 
-	PyColorRGBAVector::PyColorRGBAVector(const vector<ColorRGBA>& v)
-		: vector<ColorRGBA>(v)
+	PyColorRGBAVector::PyColorRGBAVector(const vector<VIEW::ColorRGBA>& v)
+		: vector<VIEW::ColorRGBA>(v)
   {
 	}
 
