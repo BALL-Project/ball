@@ -4,12 +4,12 @@
 
 SET(USE_PEDANTIC ON CACHE BOOL "Use pedantic compilation options if offered by the compiler")
 
-SET(CXX_COMPILER_ID "(unknown)" CACHE INTERNAL STRING "The C++ compiler id")
+SET(CXX_COMPILER_ID "(unknown)" CACHE INTERNAL "The C++ compiler id")
 
-SET(CXX_COMPILER_VERSION "0" CACHE INTERNAL STRING "The C++ compiler version")
-SET(CXX_COMPILER_VERSION_MAJOR "0" CACHE INTERNAL STRING "The C++ compiler major version")
-SET(CXX_COMPILER_VERSION_MINOR "0" CACHE INTERNAL STRING "The C++ compiler minor version")
-SET(CXX_COMPILER_VERSION_MINOR_MINOR "0" CACHE INTERNAL STRING "The C++ compiler minor minor version")
+SET(CXX_COMPILER_VERSION "0" CACHE INTERNAL "The C++ compiler version")
+SET(CXX_COMPILER_VERSION_MAJOR "0" CACHE INTERNAL "The C++ compiler major version")
+SET(CXX_COMPILER_VERSION_MINOR "0" CACHE INTERNAL "The C++ compiler minor version")
+SET(CXX_COMPILER_VERSION_MINOR_MINOR "0" CACHE INTERNAL "The C++ compiler minor minor version")
 
 SET(CXX_USE_TR1 TRUE CACHE STRING "Use tr1 support if available")
 
