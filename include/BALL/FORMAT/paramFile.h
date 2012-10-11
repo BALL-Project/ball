@@ -1,3 +1,7 @@
+/// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+
 #ifndef BALL_FORMAT_PARAMFILE_H
 #define BALL_FORMAT_PARAMFILE_H
 
@@ -47,8 +51,9 @@ namespace BALL
 			output_format_source = "";
 			allowed_values.clear();
 			supported_formats.clear();
+			hidden = false;
 		};
-		
+
 		String name;
 		String description;
 		String category;
@@ -66,13 +71,16 @@ namespace BALL
 		/** In case of input-/output-files, this list should contain the supported file-extensions. \n
 		If the list is empty, no format restrictions are set. */
 		list<String> supported_formats;
+
+		// if parameters shall be hidden in galaxy
+		bool hidden;
 	};
 
 	/** Class for storing and retrieving parameters (e.g. tool-parameters) to an xml-based file */
 	class BALL_EXPORT ParamFile : public File
 	{
 		public:
-			
+
 			ParamFile(const String& name, File::OpenMode open_mode);
 			~ParamFile();
 
@@ -82,13 +90,18 @@ namespace BALL
 			@param category the category into which the tool falls (e.g. Docking, QSAR, etc.)
 			@param descriptions description for all parameters to be saved
 			@param value values of all parameters to be saved */
-			void writeSection(String section_name, String section_description, String version, const String& section_helptext, const String& category, const std::list<std::pair<String,ParameterDescription> >& descriptions, const std::map<String,list<String> >& values);
+			void writeSection(String section_name, String section_description, String version, const String& section_helptext,
+					              const String& category, const std::list<std::pair<String,ParameterDescription> >& descriptions,
+												const std::map<String,list<String> >& values);
 
 			/** Read a section from input file (e.g. parameters for one tool)
 			@param descriptions descriptions of parameters will be stored here 
 			@param values values of parameters will be stored here
 			@param overwrite_existing if set to true, entries already existing in 'descriptions' and 'values' will be overwritten. */
-			void readSection(String& section_name, String& section_description, String& version, String& section_helptext, String& category, std::list<std::pair<String,ParameterDescription> >& descriptions, std::map<String,list<String> >& values, bool overwrite_existing=false);
+			void readSection(String& section_name, String& section_description, String& version, String& section_helptext,
+					             String& category, std::list<std::pair<String, ParameterDescription> >& descriptions,
+											 std::map<String,list<String> >& values,
+											 bool overwrite_existing=false);
 
 			void close();
 

@@ -65,7 +65,7 @@ CommandlineParser::CommandlineParser(String tool_name, String tool_description, 
 	reserved_params_.insert("ini");
 }
 
-void CommandlineParser::checkAndRegisterParameter(String name, String description, ParameterType type, bool mandatory, String default_value, bool perform_check)
+void CommandlineParser::checkAndRegisterParameter(String name, String description, ParameterType type, bool mandatory, String default_value, bool perform_check, bool hidden)
 {
 	checkParameterName(name, perform_check);
 
@@ -74,6 +74,8 @@ void CommandlineParser::checkAndRegisterParameter(String name, String descriptio
 	pardes.description = description;
 	pardes.mandatory = mandatory;
 	pardes.type = type;
+	pardes.hidden = hidden;
+
 	registered_parameters_.insert(make_pair(name, pardes));
 	original_parameter_order_.push_back(registered_parameters_.find(name));
 	if (default_value != "")
@@ -99,10 +101,10 @@ void CommandlineParser::checkAndRegisterParameter(String name, String descriptio
 	{
 		size += 9;
 	}
-	if (size > max_parname_length_) max_parname_length_ = size; 
+	if (size > max_parname_length_) max_parname_length_ = size;
 }
 
-void CommandlineParser::registerParameter(String name, String description, ParameterType type, bool mandatory, String default_value)
+void CommandlineParser::registerParameter(String name, String description, ParameterType type, bool mandatory, String default_value, bool hidden)
 {
 	// add parameter and check if the parameter name is valid
 	checkAndRegisterParameter(name, description, type, mandatory, default_value, true);
@@ -194,7 +196,6 @@ void CommandlineParser::setParameterRestrictions(String par_name, list<String>& 
 	it->second.allowed_values.clear();
 	it->second.allowed_values = allowed_values;
 }
-
 
 void CommandlineParser::setSupportedFormats(String par_name, String supported_formats)
 {
@@ -290,7 +291,7 @@ void CommandlineParser::parse(int argc, char* argv[])
 		token = argv[i];
 		token.trim();
 		start_command_ += token;
-		if (i < argc-1) start_command_ += " "; 
+		if (i < argc-1) start_command_ += " ";
 
 		if (token[0] == '-' && !token.isFloat())
 		{
@@ -314,11 +315,12 @@ void CommandlineParser::parse(int argc, char* argv[])
 				{
 					if (registered_parameters_.find(current_par_name) != registered_parameters_.end())
 					{
-						Log.error()<<"No value specified for '"<<current_par_name<<"', but it is a parameter not a flag!!\nUse '-help' to display information about available parameters and flags."<<endl; 
+						Log.error()<<"No value specified for '"<<current_par_name<<"', but it is a parameter not a flag!!\n"
+							         <<"Use '-help' to display information about available parameters and flags."<<endl;
 					}
 					else
 					{
-						Log.error()<<"Flag '"<<current_par_name<<"' unknown!!\nUse '-help' to display information about available parameters and flags."<<endl; 
+						Log.error()<<"Flag '"<<current_par_name<<"' unknown!!\nUse '-help' to display information about available parameters and flags."<<endl;
 					}
 					exit(1);
 				}
@@ -345,7 +347,7 @@ void CommandlineParser::parse(int argc, char* argv[])
 					}
 					else
 					{
-						Log.error()<<"Parameter '"<<current_par_name<<"' unknown!!\nUse '-help' to display information about available parameters and flags."<<endl; 
+						Log.error()<<"Parameter '"<<current_par_name<<"' unknown!!\nUse '-help' to display information about available parameters and flags."<<endl;
 						exit(1);
 					}
 				}
@@ -374,7 +376,8 @@ void CommandlineParser::parse(int argc, char* argv[])
 		{
 			if (registered_parameters_.find(current_par_name) != registered_parameters_.end())
 			{
-				Log.error()<<"No value specified for '"<<current_par_name<<"', but it is a parameter not a flag!!\nUse '-help' to display information about available parameters and flags."<<endl; 
+				Log.error()<<"No value specified for '"<<current_par_name<<"', but it is a parameter not a flag!!\n"
+					         << "Use '-help' to display information about available parameters and flags."<<endl;
 			}
 			else
 			{
@@ -409,11 +412,13 @@ void CommandlineParser::parse(int argc, char* argv[])
 		String par_version = "";
 		String par_helptext = "";
 		String category = "";
-		pf.readSection(par_toolname, par_description, par_version, par_helptext, category, descriptions, parameter_map_, false);
+		pf.readSection(par_toolname, par_description, par_version, par_helptext, category, descriptions, parameter_map_);
 
 		if (par_toolname != tool_name_)
 		{
-			Log.error()<<"[Error:] The specified parameter-file was created for tool '"<<par_toolname<<"' not for '"<<tool_name_<<"'. Please make sure to use the correct type of parameter-file!"<<endl; 
+			Log.error()<<"[Error:] The specified parameter-file was created for tool '"
+				         <<par_toolname<<"' not for '"<<tool_name_
+								 <<"'. Please make sure to use the correct type of parameter-file!"<<endl;
 			exit(1);
 		}
 		pf.close();
@@ -425,7 +430,8 @@ void CommandlineParser::parse(int argc, char* argv[])
 		write_par_file = true;
 	}
 
-	// If no value for a parameter was specified on the command-line, but the parameter has a default-value, then make sure to use that default-value.
+	// If no value for a parameter was specified on the command-line, but the 
+	// parameter has a default-value, then make sure to use that default-value.
 	for (map<String, list<String> >::iterator it = default_values.begin();
 		it != default_values.end(); it++)
 	{
@@ -463,6 +469,7 @@ void CommandlineParser::parse(int argc, char* argv[])
 		{
 			descriptions.push_back(make_pair((*it)->first, (*it)->second));
 		}
+
 		pf.writeSection(tool_name_, tool_description_, tool_version_, tool_manual_, tool_category_, descriptions, parameter_map_);
 		pf.close();
 		Log << "Tool-parameter file has been written to '"<<write_par<<"'. Goodbye!"<<endl;
@@ -472,7 +479,7 @@ void CommandlineParser::parse(int argc, char* argv[])
 	set<String> missing_parameters;
 	for (map < String, ParameterDescription > :: iterator it = registered_parameters_.begin(); it != registered_parameters_.end(); it++)
 	{
-		if (it->second.mandatory == false) continue; 
+		if (it->second.mandatory == false) continue;
 		if (parameter_map_.find(it->second.name) == parameter_map_.end())
 		{
 			missing_parameters.insert(it->first);

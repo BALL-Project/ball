@@ -1,10 +1,6 @@
 #ifndef BALL_FORMAT_COMMANDLINEPARSER_H
 #define BALL_FORMAT_COMMANDLINEPARSER_H
 
-//#ifndef BALL_KERNEL_MOLECULE_H
-//#include <BALL/CONFIG/config.h>
-//#endif
-
 #ifndef BALL_DATATYPE_OPTIONS_H
 # include <BALL/DATATYPE/options.h>
 #endif
@@ -54,7 +50,7 @@ namespace BALL
 			static const String NOT_FOUND;
 			static const list<String> EMTPY_LIST;
 
-			void registerParameter(String name, String description, ParameterType type, bool mandatory = false, String default_value = "");
+			void registerParameter(String name, String description, ParameterType type, bool mandatory = false, String default_value = "", bool hidden = false);
 
 			void registerFlag(String name, String description, bool default_gui_value = false);
 
@@ -125,7 +121,7 @@ namespace BALL
 		private:
 
 			void replaceExcapedCharacters_(String& parameter_value);
-			void checkAndRegisterParameter(String name, String description, ParameterType type, bool mandatory = false, String default_value = "", bool perform_check = true);
+			void checkAndRegisterParameter(String name, String description, ParameterType type, bool mandatory = false, String default_value = "", bool perform_check = true, bool hidden=false);
 			void checkAndRegisterFlag(String name, String description, bool default_gui_value = false, bool perform_check = true);
 			void validateRegisteredFilesHaveFormats();
 
@@ -139,6 +135,7 @@ namespace BALL
 			std::list<std::pair<String, String> > excaped_chars_;
 			std::map<String, list<String> > parameter_map_;
 			std::map<String, ParameterDescription> registered_parameters_;
+
 			std::map<String, ParameterDescription> registered_flags_;
 			typedef std::map<String, ParameterDescription>::iterator MapIterator;
 			std::list<MapIterator> original_parameter_order_;

@@ -1,3 +1,7 @@
+/// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+
 #include <BALL/FORMAT/paramFile.h>
 
 using namespace BALL;
@@ -56,15 +60,17 @@ void ParamFile::close()
 
 
 
-void ParamFile::writeSection(String section_name, String section_description, String version, const String& section_helptext, const String& category, const list<pair<String,ParameterDescription> >& descriptions, const map<String,list<String> >& values)
+void ParamFile::writeSection(String section_name, String section_description, String version, const String& section_helptext,
+		                         const String& category, const list<pair<String,ParameterDescription> >& descriptions,
+														 const map<String,list<String> >& values)
 {
-	if(mode_read_)
+	if (mode_read_)
 	{
 		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"ParamFile::writeSection() error","Writing is not possible, file is opened in read mode!");
 	}
-		
+
 	xmlOut_->writeStartElement("tool");
-	xmlOut_->writeAttribute("status","internal");
+	xmlOut_->writeAttribute("status", "internal");
 	xmlOut_->writeStartElement("name");
 	xmlOut_->writeCharacters(section_name.c_str());
 	xmlOut_->writeEndElement();
@@ -112,7 +118,7 @@ void ParamFile::writeSection(String section_name, String section_description, St
 			if (section != "")
 			{
 				xmlOut_->writeStartElement("NODE");
-				xmlOut_->writeAttribute("name",section.c_str());
+				xmlOut_->writeAttribute("name", section.c_str());
 				String description = "Parameters for section '";
 				description += section;
 				description += "'";
@@ -201,9 +207,11 @@ void ParamFile::writeSection(String section_name, String section_description, St
 		{
 			xmlOut_->writeStartElement("ITEMLIST");
 		}
-		
+
 		xmlOut_->writeAttribute("name",d_it->first.c_str());
 		xmlOut_->writeAttribute("type",type.c_str());
+		if (d_it->second.hidden)
+			xmlOut_->writeAttribute("hidden", "true");
 		xmlOut_->writeAttribute("description",d_it->second.description.c_str());
 		if(tag!="")
 		{
@@ -281,10 +289,11 @@ void ParamFile::writeSection(String section_name, String section_description, St
 }
 
 
-
-void ParamFile::readSection(String& section_name, String& section_description, String& version,  String& section_helptext, String& category, list<pair<String,ParameterDescription> >& descriptions, map<String,list<String> >& values, bool overwrite_existing)
+void ParamFile::readSection(String& section_name, String& section_description, String& version,  String& section_helptext,
+		                        String& category, list<pair<String,ParameterDescription> >& descriptions,
+														map<String,list<String> >& values,bool overwrite_existing)
 {
-	if(!mode_read_)
+	if (!mode_read_)
 	{
 		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"ParamFile::readSection() error","Reading is not possible, file is opened in write mode!");
 	}
@@ -294,7 +303,7 @@ void ParamFile::readSection(String& section_name, String& section_description, S
 	version = "";
 	section_helptext = "";
 	category = "";
-	
+
 	int inside_par_node = 0;
 	String section = "";
 
@@ -313,9 +322,9 @@ void ParamFile::readSection(String& section_name, String& section_description, S
 		QXmlStreamReader::TokenType token = xmlIn_->readNext();
 		String tagname = xmlIn_->name().toString().toStdString();
 
-		if(token == QXmlStreamReader::StartElement)
+		if (token == QXmlStreamReader::StartElement)
 		{
-			if(!inside_par_node)
+			if (!inside_par_node)
 			{
 				if(tagname=="name")
 				{
@@ -338,10 +347,10 @@ void ParamFile::readSection(String& section_name, String& section_description, S
 					section_helptext = xmlIn_->readElementText().toStdString();
 				}
 			}
-			
+
 			QXmlStreamAttributes attrs = xmlIn_->attributes();
 			String category = "";
-			if(tagname=="NODE")
+			if (tagname=="NODE")
 			{
 				inside_par_node++;
 				if (inside_par_node > 1)
@@ -349,11 +358,17 @@ void ParamFile::readSection(String& section_name, String& section_description, S
 					section = attrs.value("name").toString().toStdString();
 				}
 			}
-			if(inside_par_node && (tagname=="ITEM" || tagname=="ITEMLIST") )
+
+			if (inside_par_node && (tagname=="ITEM" || tagname=="ITEMLIST") )
 			{
 				pd.name = attrs.value("name").toString().toStdString();
 				pd.description = attrs.value("description").toString().toStdString();
 				pd.category = section;
+				pd.hidden = false;
+				if (attrs.hasAttribute("hidden"))
+				{
+					pd.hidden = (attrs.value("hidden").toString() == "true");
+				}
 				String type = attrs.value("type").toString().toStdString();
 				bool is_list = 0;
 				if (tagname=="ITEM")
@@ -362,20 +377,20 @@ void ParamFile::readSection(String& section_name, String& section_description, S
 					{
 						pd.type=INT;
 					}
-					if(type=="float")
+					if (type=="float")
 					{
 						pd.type=DOUBLE;
 					}
-					if(type=="string")
+					if (type=="string")
 					{
-						if(attrs.hasAttribute("tags"))
+						if (attrs.hasAttribute("tags"))
 						{
 							String tags = attrs.value("tags").toString().toStdString();
-							if(tags.hasSubstring("input file"))
+							if (tags.hasSubstring("input file"))
 							{
 								pd.type=INFILE;
 							}
-							else if(tags.hasSubstring("output file"))
+							else if (tags.hasSubstring("output file"))
 							{
 								pd.type=OUTFILE;
 							}
@@ -392,26 +407,26 @@ void ParamFile::readSection(String& section_name, String& section_description, S
 				}
 				else if (tagname=="ITEMLIST")
 				{
-					if(type=="int")
+					if (type=="int")
 					{
 						pd.type=INTLIST;
 						is_list = 1;
 					}
-					if(type=="float")
+					if (type=="float")
 					{
 						pd.type=DOUBLELIST;
 						is_list = 1;
 					}
-					if(type=="string")
+					if (type=="string")
 					{
-						if(attrs.hasAttribute("tags"))
+						if (attrs.hasAttribute("tags"))
 						{
 							String tags = attrs.value("tags").toString().toStdString();
-							if(tags.hasSubstring("input file"))
+							if (tags.hasSubstring("input file"))
 							{
 								pd.type=INFILELIST;
 							}
-							else if(tags.hasSubstring("output file"))
+							else if (tags.hasSubstring("output file"))
 							{
 								pd.type=OUTFILELIST;
 							}
@@ -439,6 +454,11 @@ void ParamFile::readSection(String& section_name, String& section_description, S
 					{
 						pd.advanced = true;
 					}
+					if (tags.hasSubstring("hidden"))
+					{
+						pd.hidden = true;
+					}
+
 				}
 
 				if (attrs.hasAttribute("restrictions"))
@@ -472,7 +492,7 @@ void ParamFile::readSection(String& section_name, String& section_description, S
 					pd.output_format_source = source;
 				}
 
-				if(!is_list)
+				if (!is_list)
 				{
 					String value = attrs.value("value").toString().toStdString();
 					if(value!="")
@@ -482,7 +502,7 @@ void ParamFile::readSection(String& section_name, String& section_description, S
 				}
 			}
 
-			if(tagname=="LISTITEM")
+			if (tagname=="LISTITEM")
 			{
 				String value = attrs.value("value").toString().toStdString();
 				if(value!="")
@@ -491,6 +511,7 @@ void ParamFile::readSection(String& section_name, String& section_description, S
 				}
 			}
 		}
+
 		if(token == QXmlStreamReader::EndElement)
 		{
 			if(inside_par_node)
@@ -520,7 +541,7 @@ void ParamFile::readSection(String& section_name, String& section_description, S
 
 					if(values_current_par.size()>0 && (overwrite_existing || values.find(pd.name)==values.end()))
 					{
-						values.insert(make_pair(pd.name,values_current_par));
+						values.insert(make_pair(pd.name, values_current_par));
 					}
 					pd = ParameterDescription();
 					values_current_par.clear();

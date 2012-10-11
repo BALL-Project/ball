@@ -1,25 +1,6 @@
-/* GalaxyConfigGenerator.C
-*
-* Copyright (C) 2011 Marcel Schumann
-*
-* This program free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 3 of the License, or (at
-* your option) any later version.
-*
-* This program is distributed in the hope that it will be useful, but
-* WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-* General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, see <http://www.gnu.org/licenses/>.
-*/
-
-// ----------------------------------------------------
-// $Maintainer: Marcel Schumann $
-// $Authors: Marcel Schumann $
-// ----------------------------------------------------
+/// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/FORMAT/commandlineParser.h>
@@ -112,7 +93,7 @@ int main(int argc, char* argv[])
 	QFile file(parpars.get("o").c_str());
 	if(!file.open(QIODevice::WriteOnly| QIODevice::Text))
 	{
-		cerr << "[Error:] the specified ouput-file can not be created!" << endl;
+		cerr << "[Error:] the specified output-file can not be created!" << endl;
 		exit(1);
 	}
 
@@ -132,6 +113,7 @@ int main(int argc, char* argv[])
 		}
 
 		// Galaxy does not support a dynamic number of output files, yet.
+		// Anne: Au contraire: see BondOrderAssigner
 		if (tool_name == "LigandFileSplitter" && it->first == "o")
 		{
 			// use a pre-set number of output-files, i.e. 15
@@ -232,7 +214,7 @@ int main(int argc, char* argv[])
 	xml.setAutoFormatting(true);
 
 	/// Write header
-	xml.writeComment("This is a configuration file for the integration of a CADDSuite tool into Galaxy (http://usegalaxy.org). This file was automatically generated using GalaxyConfigGenerator, so do not bother to make too many manual modifications.");
+	xml.writeComment("This is a configuration file for the integration of a BALL tools into Galaxy (http://usegalaxy.org). This file was automatically generated using BALL's GalaxyConfigGenerator, so do not bother to make too many manual modifications.");
 	xml.writeComment((String("Proposed Tool Section: [") + category + "]").c_str());
 	xml.writeStartElement("tool");
 	map<String,String>::iterator search_it = old_toolkeys.find(tool_name);
@@ -264,6 +246,8 @@ int main(int argc, char* argv[])
 	for (list<String>::iterator it = inputs.begin(); it != inputs.end(); it++)
 	{
 		ParameterDescription& desc = parameter_map.find(*it)->second->second;
+		if (desc.hidden)
+			continue;
 
 		// Write repeat section for input-file lists
 		if (desc.type == INFILELIST)
