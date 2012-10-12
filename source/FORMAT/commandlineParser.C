@@ -107,7 +107,7 @@ void CommandlineParser::checkAndRegisterParameter(String name, String descriptio
 void CommandlineParser::registerParameter(String name, String description, ParameterType type, bool mandatory, String default_value, bool hidden)
 {
 	// add parameter and check if the parameter name is valid
-	checkAndRegisterParameter(name, description, type, mandatory, default_value, true);
+	checkAndRegisterParameter(name, description, type, mandatory, default_value, true, hidden);
 }
 
 void CommandlineParser::checkAndRegisterFlag(String name, String description, bool default_gui_value, bool perform_check)
