@@ -17,9 +17,29 @@
 #include <BALL/MATHS/vector3.h>
 #include <BALL/DATATYPE/hashMap.h>
 
-//RTRemote proxy to RTfact
-#include <RTremote/Renderer.hpp>
-#include <RTremote/Picking.hpp>
+
+#include <RTpieCpp/RayTracerHandle.hpp>
+#include <RTpie/Utils/TransformTools.hpp>
+#include <RTfact/Model/Image/BasicImage2D.hpp>
+#include <RTfact/Model/Framebuffer/Image2DFramebuffer.hpp>
+
+namespace std { namespace tr1
+{
+    template <>
+    struct hash< RTpieCpp::InstanceHandle > : public unary_function<RTpieCpp::InstanceHandle, size_t> {
+    public:
+        union conv
+        {
+            size_t s;
+            const void  *p;
+        };
+        size_t operator()(const RTpieCpp::InstanceHandle& x ) const throw() {
+            conv c;
+            c.p=x.get();
+            return c.s;
+        }
+    };
+}}
 
 namespace BALL
 {
@@ -31,22 +51,26 @@ namespace BALL
 			*/
 		class BALL_VIEW_EXPORT RTfactRenderer
 			: public RaytracingRenderer
-		{	  
-			public:	  
+		{
+			public:
 
 				/** This class encapsulates RTfact's data structures per Representation.
 				 */
 				class RTfactData
 				{
 					public:
-						/// The top-level group handles this object was assigned to
-						std::vector<RTfact::Remote::GroupHandle> top_group_handles;
-						
-						/// The object handles
-						std::vector<RTfact::Remote::GeoHandle> object_handles;
+
+						/// The object handles (all objects)
+						std::vector<RTpieCpp::GeometryHandle> object_handles;
+
+						/// The meshes
+						std::vector<RTpieCpp::MeshHandle> mesh_handles;
+
+						/// The instances (visible objects)
+						std::vector<RTpieCpp::InstanceHandle> instance_handles;
 
 						/// The materials
-						std::vector<RTfact::Remote::RTAppearanceHandle> material_handles;
+						std::vector<RTpieCpp::AppearanceHandle> material_handles;
 
 						/// Mark previously disabled representations
 						bool has_been_disabled;
@@ -69,7 +93,7 @@ namespace BALL
 				/************************************************************************/
 				virtual bool init(Scene& scene);
 
-				virtual String getRenderer()  
+				virtual String getRenderer()
 				{
 					return "RTfact-RTRemote Ray Tracer";
 				}
@@ -83,7 +107,7 @@ namespace BALL
 				                         std::list<GeometricObject*>& objects);
 
 				virtual void setSize(float width, float height);
-				
+
 				virtual void setupStereo(float eye_separation, float focal_length);
 
 				virtual void getFrustum(float& near_f, float& far_f, float& left_f, float& right_f, float& top_f, float& bottom_f);
@@ -100,43 +124,65 @@ namespace BALL
 				void setLights(bool reset_all = false);
 
 				void updateCamera(const Camera* camera = 0);
-				
+
 				void updateBackgroundColor();
 
 				void setupEnvironmentMap(const QImage& image);
 
 				void updateMaterialForRepresentation(Representation const* rep);
 
-				RTfact::Remote::GroupHandle transformTube(const TwoColoredTube& tube);
-				RTfact::Remote::GroupHandle transformLine(const TwoColoredLine& line);
-				void updateMaterialFromStage(RTfact::Remote::RTAppearanceHandle& material);
-				void convertMaterial(Stage::RaytracingMaterial const& rt_material, RTfact::Remote::RTAppearanceHandle& material);
+				void transformTube(const TwoColoredTube& tube, RTpieCpp::InstanceHandle& instance);
+				void transformLine(const TwoColoredLine& line, RTpieCpp::InstanceHandle& instance);
+
+				void updateMaterialFromStage(RTpieCpp::AppearanceHandle& material);
+				void convertMaterial(Stage::RaytracingMaterial const& rt_material, RTpieCpp::AppearanceHandle& material);
 
 				/** Raytracing-related functionality **/
-				//@{ 
+				//@{
 				/** Intersect a set of rays with the geometry buffered by this renderer.
 				 *
-				 *  This function will intersect the rays 
+				 *  This function will intersect the rays
 				 *
 				 *     origins[i] + l * directions[i]
 				 *
 				 *  with the geometry that has been buffered by this renderer previously.
 				 */
-				virtual std::vector<float> intersectRaysWithGeometry(const std::vector<Vector3>& origins, 
+				virtual std::vector<float> intersectRaysWithGeometry(const std::vector<Vector3>& origins,
 																														 const std::vector<Vector3>& directions);
 
 				//@}
 
 			private:
 
-				std::vector<RTfact::Remote::RTLightHandle> lights_;
+				std::vector<RTpieCpp::LightHandle> lights_;
 
-				RTfact::Remote::Renderer m_renderer;
+				typedef RTfact::BasicImage2D<float>						t_ColorImage;
+				typedef RTfact::BasicImage2D<float>						t_DistanceImage;
+				typedef RTfact::Image2DFramebuffer<
+												t_ColorImage,
+												t_DistanceImage>							t_Framebuffer;
 
-				boost::shared_ptr<RTfact::Remote::Picking>  m_picking;
+				typedef RTfact::BasicImage2D<unsigned char>		t_ByteColorImage;
+				typedef RTfact::BasicImage2D<unsigned char>		t_ByteDistanceImage;
+				typedef RTfact::Image2DFramebuffer<
+												t_ByteColorImage,
+												t_ByteDistanceImage>					t_ByteFramebuffer;
+
+				RTpieCpp::SceneHandle					sceneHandle;
+				RTpieCpp::RayTracerHandle			rayTracer;
+				RTpieCpp::CameraHandle				cameraHandle;
+				RTpieCpp::FrameBufferHandle		renderBuffer;
+				RTpieCpp::RenderTaskHandle		renderTask;
+				t_Framebuffer 								framebuffer;
+				t_ByteFramebuffer							byteFramebuffer;
+
+
+				RTpieCpp::PickTaskHandle pickTask;
+
+				//boost::shared_ptr<RTfact::Remote::Picking>  m_picking;
 
 				HashMap<Representation const*, RTfactData> objects_;
-				HashMap<RTfact::Remote::GeoHandle, GeometricObject*> geometric_objects_;
+				HashMap<RTpieCpp::InstanceHandle, GeometricObject*> geometric_objects_;
 
 				Surface sphere_template_;
 				Surface tube_template_;

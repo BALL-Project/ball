@@ -9,7 +9,7 @@ SET(RTFACT_POSSIBLE_ROOT_DIRS
 )
 
 ## First, try to find the required header files (RTremote/Renderer.hpp)
-FIND_PATH(RTFACT_INCLUDE_PATH 
+FIND_PATH(RTFACT_INCLUDE_PATH
 	NAMES RTremote/Renderer.hpp
 	PATHS ${RTFACT_POSSIBLE_ROOT_DIRS}
 	PATH_SUFFIXES include
@@ -21,19 +21,19 @@ ELSE()
 	SET(RTFACT_INCLUDE_DIR ${RTFACT_INCLUDE_PATH} CACHE STRING "Full path to the RTfact headers")
 
 	## Now, try to find the rtfact library itself.
-	FIND_LIBRARY(RTFACT_OPT_LIBRARY 
-		NAMES RTfactRemote
+	FIND_LIBRARY(RTFACT_OPT_LIBRARY
+		NAMES RTfactRTpie
 		PATHS ${RTFACT_POSSIBLE_ROOT_DIRS} ${RTFACT_POSSIBLE_ROOT_DIRS}/remote/build ${RTFACT_POSSIBLE_ROOT_DIRS} ${RTFACT_POSSIBLE_ROOT_DIRS}/remote/build/lib ${RTFACT_POSSIBLE_ROOT_DIRS}/remote/build/Release ${RTFACT_POSSIBLE_ROOT_DIRS}/remote/build/lib/Release
 
 		PATH_SUFFIXES lib
-		DOC "RTfact library, optimized") 
+		DOC "RTfact library, optimized")
 
 	## And a possible debug version
 	FIND_LIBRARY(RTFACT_DEBUG_LIBRARY
-		NAMES RTfactRemoted RTfactRemote
+		NAMES RTfactRemoted RTfactRTpie
 		PATHS ${RTFACT_POSSIBLE_ROOT_DIRS} ${RTFACT_POSSIBLE_ROOT_DIRS}/remote/build ${RTFACT_POSSIBLE_ROOT_DIRS}/remote/build/Debug
 		PATH_SUFFIXES lib
-		DOC "RTfact library, debug") 
+		DOC "RTfact library, debug")
 
 	IF (RTFACT_OPT_LIBRARY OR RTFACT_DEBUG_LIBRARY)
 		BALL_COMBINE_LIBS(RTFACT_LIBRARIES ${RTFACT_OPT_LIBRARY} ${RTFACT_DEBUG_LIBRARY})

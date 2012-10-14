@@ -7,6 +7,8 @@
 
 #include <RTfact/Config/Init.hpp>
 
+#include <RTpie/Utils/TransformTools.hpp>
+
 #include <QtGui/QImage>
 
 #include <list>
@@ -14,24 +16,44 @@
 static const float LINE_RADIUS = 0.02;
 
 using RTfact::Vec3f;
-using RTfact::Remote::GroupHandle;
-using RTfact::Remote::GeoHandle;
-using RTfact::Remote::Picking;
-using RTfact::Remote::Transform;
-using RTfact::Remote::float3;
-using RTfact::Remote::RTAppearanceHandle;
+using RTpieCpp::GeometryHandle;
+using RTpieCpp::MeshHandle;
+using RTpieCpp::PickTaskHandle;
+using RTpieCpp::IntersectTaskHandle;
+using RTpieCpp::LightHandle;
+using RTpieCpp::Image2DHandle;
+using RTpieCpp::BufferHandle;
+using RTpieCpp::float3;
+using RTpieCpp::InstanceHandle;
+using RTpieCpp::FrameBufferHandle;
+using RTpieCpp::SceneHandle;
+using RTpieCpp::AppearanceHandle;
 
 namespace BALL
 {
 	namespace VIEW
 	{
 		bool RTfactRenderer::init(Scene& scene)
-		{		     
+		{
 			Renderer::init(scene);
 
-			GroupHandle root = m_renderer.getRoot();
-			m_picking = boost::shared_ptr<Picking>(new Picking(&m_renderer));
-			
+			// create rtpie handles
+			rayTracer = RTpieCpp::CreateRayTracerHandle();
+			sceneHandle = RTpieCpp::CreateSceneHandle();
+
+			rayTracer.attachScene(sceneHandle);
+
+			renderTask = rayTracer.createRenderTask();
+			renderTask.setOverSamplingRate(1);
+			renderTask.setAccumulatePixels(true);
+			renderTask.setMaxDepth(20);
+
+			pickTask = rayTracer.createPickTask();
+
+			cameraHandle = RTpieCpp::CreateCameraHandle();
+
+			renderTask.setCamera(cameraHandle);
+
 			// prepare the sphere template
 			TriangulatedSphere sphere_template;
 			sphere_template.pentakisDodecaeder();
@@ -43,7 +65,7 @@ namespace BALL
 			TriangulatedSurface* tube_template = TriangulatedSurface::createTube(18, 0, false, true);
 			tube_template->exportSurface(tube_template_);
 			delete (tube_template);
-				
+
 			objects_.clear();
 
 			rtfact_needs_update_ = false;
@@ -53,25 +75,27 @@ namespace BALL
 
 		GeometricObject* RTfactRenderer::pickObject(Position x, Position y)
 		{
-			RTfact::Remote::Picking::ScreenCoordinates coords((float)x, (float)y);
-			RTfact::Remote::Picking::Result result;
+			PickTaskHandle pickTask = rayTracer.createPickTask();
+			pickTask.setCamera( cameraHandle );
+			pickTask.pick(
+				static_cast<int>(x),
+				static_cast<int>(y),
+				renderBuffer.getWidth(), renderBuffer.getHeight());
 
-			if (!m_picking->pick(coords, result))
+			//returns true if some object was picked
+			if(pickTask.hasResult())
 			{
-				return NULL;
-			}
-			else
-			{
-				HashMap<RTfact::Remote::GeoHandle, GeometricObject*>::iterator geo = geometric_objects_.begin();
-				
+				//for all scene object
+				HashMap<RTpieCpp::InstanceHandle, GeometricObject*>::iterator geo = geometric_objects_.begin();
 				for (; geo != geometric_objects_.end(); ++geo)
 				{
-					if (RTfact::Remote::Geometry::equal(result.mGeometry, geo->first))
+					if (pickTask.getInstance() == geo->first)
 					{
 						return geo->second;
 					}
 				}
 			}
+
 			return NULL;
 		}
 
@@ -110,7 +134,7 @@ namespace BALL
 				x_scale_ = 0.5;
 				y_scale_ = height / (width * 2);
 			}
-			
+
 			setFrustum(1.5f, RTfact::Packet<1,float>::C_INFINITY, -2.f * x_scale_, 2.f * x_scale_, 2.f * y_scale_, -2.f * y_scale_);
 		}
 
@@ -128,42 +152,32 @@ namespace BALL
 
 			float new_left   = 2*left  - eye_separation * ndfl;
 			float new_right  = 2*right - eye_separation * ndfl;
-			
+
 			if (stage_->getCamera().getProjectionMode() == Camera::PERSPECTIVE)
 				setFrustum(nearf, RTfact::Packet<1,float>::C_INFINITY, left, right, top, bottom);
 			else
 			{
-				//glOrtho(new_left * orthographic_zoom_, new_right * orthographic_zoom_, 
+				//glOrtho(new_left * orthographic_zoom_, new_right * orthographic_zoom_,
 				//         bottom_ * orthographic_zoom_,      top_ * orthographic_zoom_, near_, far_);
 			}
 		}
 
 		void RTfactRenderer::getFrustum(float& near_f, float& far_f, float& left_f, float& right_f, float& top_f, float& bottom_f)
 		{
-			RTfact::Remote::FrustumParameters rtfact_frustum = m_renderer.getFrustum();
-			
-			near_f   = rtfact_frustum.nearPlane;
-			far_f    = rtfact_frustum.farPlane;
-			left_f   = rtfact_frustum.left   * 2.f*x_scale_;
-			right_f  = rtfact_frustum.right  * 2.f*x_scale_;
-			top_f    = rtfact_frustum.top    * 2.f*y_scale_;
-			bottom_f = rtfact_frustum.bottom * 2.f*y_scale_;
+		  cameraHandle.getFrustum(&left_f, &right_f, &top_f, &bottom_f, &near_f, &far_f);
+
+			left_f   *= 2.f*x_scale_;
+			right_f  *= 2.f*x_scale_;
+			top_f    *= 2.f*y_scale_;
+			bottom_f *= 2.f*y_scale_;
 		}
 
 		void RTfactRenderer::setFrustum(float near_f, float far_f, float left_f, float right_f, float top_f, float bottom_f)
 		{
-			RTfact::Remote::FrustumParameters rtfact_frustum;
-			
-			rtfact_frustum.nearPlane = near_f;
-			rtfact_frustum.farPlane  = far_f;
-
-			rtfact_frustum.left  = left_f  / (2.f*x_scale_);
-			rtfact_frustum.right = right_f / (2.f*x_scale_);
-
-			rtfact_frustum.top    = top_f     / (2.f*y_scale_);
-			rtfact_frustum.bottom = bottom_f  / (2.f*y_scale_);
-
-			m_renderer.setFrustum(rtfact_frustum);
+			cameraHandle.setFrustum(
+				left_f/ (2.f*x_scale_), right_f/ (2.f*x_scale_),
+				top_f/ (2.f*y_scale_), bottom_f/ (2.f*y_scale_),
+				near_f, far_f);
 		}
 
 		void RTfactRenderer::setLights(bool reset_all)
@@ -171,29 +185,28 @@ namespace BALL
 			if (reset_all)
 			{
 				for (Position i=0; i<lights_.size(); ++i)
-					m_renderer.removeLight(lights_[i]);
+				  lights_[i].clear();
 				lights_.clear();
 			}
 
 			Vector3 direction, light_position, attenuation;
 
-			Size current_light=0; 
+			Size current_light=0;
 			Size num_lights=lights_.size();
 
 			std::list<LightSource>::const_iterator it = stage_->getLightSources().begin();
-
 			for (; it != stage_->getLightSources().end(); ++it, ++current_light)
 			{
 				if (current_light >= num_lights)
 				{
-					RTfact::Remote::RTLightHandle light; 
+					LightHandle light;
 					switch (it->getType())
 					{
 						case LightSource::DIRECTIONAL:
-							light = m_renderer.createLight("DirectionalLight"); 
+						  light = sceneHandle.createLight("DirectionalLight");
 							break;
 						case LightSource::POSITIONAL:
-							light = m_renderer.createLight("PointLight"); 
+						  light = sceneHandle.createLight("PointLight");
 							break;
 						default:
 							std::cerr << "Light source type not supported!" << std::endl;
@@ -209,7 +222,7 @@ namespace BALL
 						if (it->isRelativeToCamera())
 							direction = stage_->calculateAbsoluteCoordinates(direction);
 
-						lights_[current_light]->setParam("direction", float3(direction.x, direction.y, direction.z));
+						lights_[current_light].setParam3f("direction", float3(direction.x, direction.y, direction.z));
 						break;
 					case LightSource::POSITIONAL:
 						light_position = it->getPosition();
@@ -217,54 +230,58 @@ namespace BALL
 						{
 							light_position = stage_->calculateAbsoluteCoordinates(it->getPosition())+stage_->getCamera().getViewPoint();
 						}
-						lights_[current_light]->setParam("position", float3(light_position.x, light_position.y, light_position.z));
+						lights_[current_light].setParam3f("position", float3(light_position.x, light_position.y, light_position.z));
 
 						attenuation = it->getAttenuation();
-						lights_[current_light]->setParam("attenuation", float3(attenuation.x, attenuation.y, attenuation.z));
+						lights_[current_light].setParam3f("attenuation", float3(attenuation.x, attenuation.y, attenuation.z));
 						break;
 					default:
 						std::cerr << "Light source type not supported!" << std::endl;
 						break;
 				}
+
 				float intensity = it->getIntensity();
 				ColorRGBA const& color = it->getColor();
 
-				lights_[current_light]->setParam("intensity", float3((float)color.getRed()*intensity,(float)color.getGreen()*intensity,(float)color.getBlue()*intensity));
+				lights_[current_light].setParam3f("intensity", float3((float)color.getRed()*intensity,(float)color.getGreen()*intensity,(float)color.getBlue()*intensity));
 			}
 		}
 
 		void RTfactRenderer::updateCamera(const Camera* camera)
 		{
+
 			// the renderer should be paused whenever the camera has been updated
 			if (camera == 0) camera = &(stage_->getCamera());
 
 			Vector3 const& position = camera->getViewPoint();
-			// RTfact relies on a normalized view vector, so we have to normalize it prior to handing it to RTfact 
-			// TODO: Store a normalized view vector in our Camera, mind project files 
+			// RTfact relies on a normalized view vector, so we have to normalize it prior to handing it to RTfact
+			// TODO: Store a normalized view vector in our Camera, mind project files
 			Vector3  view_vector = camera->getViewVector();
 			view_vector.normalize();
 			Vector3 const& look_up = camera->getLookUpVector();
 
+			//TODO:
+		  /*
 			if (use_continuous_loop_)
 			{
 				if (   ((last_camera_position - position   ).getSquareLength() > 1e-5)
 						 ||((last_camera_view_vec - view_vector).getSquareLength() > 1e-5)
 						 ||((last_camera_lookup   - look_up    ).getSquareLength() > 1e-5))
 						m_renderer.useProgressiveRefinement(false);
-			}
+			}*/
 
-			m_renderer.setCameraPosition(float3(position.x, position.y, position.z),
-																	 float3(view_vector.x, view_vector.y, view_vector.z),
-																	 float3(look_up.x, look_up.y, look_up.z));
+			cameraHandle.setPosition( float3(position.x, position.y, position.z) );
+			cameraHandle.setDirection( float3(view_vector.x, view_vector.y, view_vector.z) );
+			cameraHandle.setUpVector( float3(look_up.x, look_up.y, look_up.z) );
 
 			if (lights_.size() != stage_->getLightSources().size()) return;
-			
+
 			// lights that are relative to the camera need to have their position updated
 			if (lights_.size() == 0) return; // TEST
 			std::list<LightSource>::const_iterator it = stage_->getLightSources().begin();
 			Size current_light=0;
 			Vector3 light_position, direction;
-			
+
 			for (; it != stage_->getLightSources().end(); ++it, ++current_light)
 			{
 				switch (it->getType())
@@ -274,29 +291,29 @@ namespace BALL
 						if (it->isRelativeToCamera())
 							direction = stage_->calculateAbsoluteCoordinates(direction);
 
-						lights_[current_light]->setParam("direction", float3(direction.x, direction.y, direction.z));
+						lights_[current_light].setParam3f("direction", float3(direction.x, direction.y, direction.z));
 					case LightSource::POSITIONAL:
 						light_position = it->getPosition();
 						if (it->isRelativeToCamera())
 						{
 							light_position = stage_->calculateAbsoluteCoordinates(it->getPosition())+stage_->getCamera().getViewPoint();
 						}
-						lights_[current_light]->setParam("position", float3(light_position.x, light_position.y, light_position.z));
+						lights_[current_light].setParam3f("position", float3(light_position.x, light_position.y, light_position.z));
 						break;
 					default:
 						break;
 				}
 			}
 			last_camera_position  = position;
-			last_camera_view_vec  = view_vector; 
+			last_camera_view_vec  = view_vector;
 			last_camera_lookup    = look_up;
 		}
 
-		void RTfactRenderer::updateBackgroundColor() 
+		void RTfactRenderer::updateBackgroundColor()
 		{
-			m_renderer.setEnvironmentColor(stage_->getBackgroundColor().getRed(),
-																		 stage_->getBackgroundColor().getGreen(),
-																		 stage_->getBackgroundColor().getBlue());
+			sceneHandle.setEnvironmentColor(stage_->getBackgroundColor().getRed(),
+															  stage_->getBackgroundColor().getGreen(),
+																stage_->getBackgroundColor().getBlue(), 1);
 		}
 
 		void RTfactRenderer::setupEnvironmentMap(const QImage& image)
@@ -319,11 +336,20 @@ namespace BALL
 				}
 			}
 
-			m_renderer.setEnvironmentTexture(rtfact_env_map, 3, image.width(), image.height());
+			RTfact::uint colorBufferLength = image.width() * image.height() * 3 * sizeof(float);
+			BufferHandle colorBuffer = RTpieCpp::CreateBufferHandleUseData(colorBufferLength, rtfact_env_map);
+			Image2DHandle imageHandle = RTpieCpp::CreateImage2DHandleUseData(
+								RTfact::RTpie::IImage2D::COMPONENT_FLOAT,
+								3,
+								image.width(), image.height(),
+								colorBuffer
+						);
+
+			sceneHandle.setEnvironmentTexture(imageHandle);
 
 			delete[] (rtfact_env_map);
 		}
-			
+
 		void RTfactRenderer::prepareBufferedRendering(const Stage& stage)
 		{
 			// this function is not needed for this kind of raytracer
@@ -356,9 +382,9 @@ namespace BALL
 					RTfactData& rt_data = objects_[&rep];
 
 					// iterate over all top group handles and add them to the root again to make them visible
-					for (Position i=0; i<rt_data.top_group_handles.size(); ++i)
+					for (Position i=0; i<rt_data.object_handles.size(); ++i)
 					{
-						m_renderer.getRoot()->add(rt_data.top_group_handles[i]);
+						rt_data.instance_handles.push_back(rt_data.object_handles[i].createInstance());
 					}
 
 					objects_[&rep].has_been_disabled = false;
@@ -389,6 +415,7 @@ namespace BALL
 					 it != rep.getGeometricObjects().end();
 					 it++)
 			{
+
 				if (RTTI::isKindOf<Mesh>(**it))
 				{
 					Mesh const& mesh = *(const Mesh*)*it;
@@ -397,44 +424,60 @@ namespace BALL
 					float const* normals  = reinterpret_cast<float const*>(&(mesh.normal[0]));
 					Index const* indices  = reinterpret_cast<Index const*>(&(mesh.triangle[0]));
 
+					//
+					rt_data.material_handles.push_back(
+					    sceneHandle.createAppearance("PhongShader"));
+					convertMaterial(rt_material, rt_data.material_handles.back());
 
-					RTAppearanceHandle material = m_renderer.createAppearance("PhongShader");
-					convertMaterial(rt_material, material);
-
-					GeoHandle handle;
-
+					//
 					float const* colors = 0;
 					if (mesh.colors.size() > 1)
 					{
 						colors  = reinterpret_cast<float const*>(&(mesh.colors[0]));
-						material->setParam("useVertexColor", true);
 
-						handle = m_renderer.createGeometry(vertices, normals, colors, (const unsigned int*)indices, (unsigned int)mesh.triangle.size(), material);
-					} 
-					else 
+						rt_data.object_handles.push_back(
+								sceneHandle.createGeometry());
+						rt_data.mesh_handles.push_back(
+								rt_data.object_handles.back().createMesh());
+						rt_data.mesh_handles.back().setPrimitives(
+												(unsigned int)sphere_template_.triangle.size(),
+												indices,
+												vertices,
+												normals,
+												colors, 0);
+						rt_data.mesh_handles.back().setAppearance(
+								rt_data.material_handles.back());
+					}
+					else
 					{
 						ColorRGBA const &c = (mesh.colors.size() == 1) ? mesh.colors[0] : ColorRGBA(1., 1., 1., 1.);
 
-						material->setParam("diffuseColor", float3(c.getRed(), c.getGreen(), c.getBlue()));
-						material->setParam("useVertexColor", false);
+						rt_data.material_handles.back().setParam3f(
+						    "diffuseColor", float3(c.getRed(), c.getGreen(), c.getBlue()));
 
-						handle = m_renderer.createGeometry(vertices, normals, (const unsigned int*)indices, (unsigned int)mesh.triangle.size(), material);
+						rt_data.object_handles.push_back(
+								sceneHandle.createGeometry());
+						rt_data.mesh_handles.push_back(
+								rt_data.object_handles.back().createMesh());
+						rt_data.mesh_handles.back().setPrimitives(
+												(unsigned int)sphere_template_.triangle.size(),
+												indices,
+												vertices,
+												normals,
+												0, 0);
+						rt_data.mesh_handles.back().setAppearance(
+								rt_data.material_handles.back());
 					}
 
-					GroupHandle meshGroup = m_renderer.createGroup(Transform::identity());
-					meshGroup->add(handle);                
+					if (!rep.isHidden()) {
+						rt_data.instance_handles.push_back(
+						    rt_data.object_handles.back().createInstance());
+					}
 
-					if (!rep.isHidden())
-						m_renderer.getRoot()->add(meshGroup);
-
-					rt_data.top_group_handles.push_back(meshGroup);
-					rt_data.object_handles.push_back(handle);
-					rt_data.material_handles.push_back(material);
-
-					geometric_objects_[handle] = *it;
+					geometric_objects_[rt_data.instance_handles.back()] = *it;
 
 					rtfact_needs_update_ = true;
-				} 
+				}
 
 				if (RTTI::isKindOf<Sphere>(**it))
 				{
@@ -446,44 +489,44 @@ namespace BALL
 
 					ColorRGBA const& color = sphere.getColor();
 
-					RTAppearanceHandle material = m_renderer.createAppearance("PhongShader");
-					convertMaterial(rt_material, material);
+					//
+					rt_data.material_handles.push_back(
+					    sceneHandle.createAppearance("PhongShader"));
+					convertMaterial(rt_material, rt_data.material_handles.back());
+					rt_data.material_handles.back().setParam3f(
+					    "diffuseColor", float3(color.getRed(), color.getGreen(), color.getBlue()));
 
-					material->setParam("diffuseColor", float3(color.getRed(), color.getGreen(), color.getBlue()));
-					material->setParam("useVertexColor", false);
+					//
+					rt_data.object_handles.push_back(
+							sceneHandle.createGeometry());
+					rt_data.mesh_handles.push_back(
+							rt_data.object_handles.back().createMesh());
+					rt_data.mesh_handles.back().setPrimitives(
+											(unsigned int)sphere_template_.triangle.size(),
+											indices,
+											vertices,
+											normals,
+											0, 0);
+					rt_data.mesh_handles.back().setAppearance(
+							rt_data.material_handles.back());
 
-					GeoHandle handle   = m_renderer.createGeometry(vertices, normals, (const unsigned int*)indices, (unsigned int)sphere_template_.triangle.size(), material);
-
+					//
 					Vector3 const& sphere_pos = sphere.getPosition();
 					float radius = sphere.getRadius();
 
-					const float mat[16] = {
+					float mat[16] = {
 						radius, 0, 0, 0,
 						0, radius, 0, 0,
 						0, 0, radius, 0,
 						sphere_pos.x, sphere_pos.y, sphere_pos.z, 1};
 
-					float inv_radius = 1./radius;
+					if (!rep.isHidden()) {
+						rt_data.instance_handles.push_back(
+						    rt_data.object_handles.back().createInstance());
+						rt_data.instance_handles.back().setTransform(mat, NULL);
+					}
 
-					const float inv_mat[16] = {
-						inv_radius, 0, 0, 0,
-						0, inv_radius, 0, 0,
-						0, 0, inv_radius, 0,
-						-sphere_pos.x, -sphere_pos.y, -sphere_pos.z, 1};
-
-					Transform trafo(mat, inv_mat);
-
-					GroupHandle sphereGroup = m_renderer.createGroup(trafo);
-
-					sphereGroup->add(handle);
-					if (!rep.isHidden())
-						m_renderer.getRoot()->add(sphereGroup);
-
-					rt_data.top_group_handles.push_back(sphereGroup);
-					rt_data.object_handles.push_back(handle);
-					rt_data.material_handles.push_back(material);
-
-					geometric_objects_[handle] = *it;
+					geometric_objects_[rt_data.instance_handles.back()] = *it;
 
 					rtfact_needs_update_ = true;
 				}
@@ -500,37 +543,63 @@ namespace BALL
 					ColorRGBA const& color1 = old_tube.getColor();
 					ColorRGBA const& color2 = old_tube.getColor2();
 
-					RTAppearanceHandle material_1 = m_renderer.createAppearance("PhongShader");
-					convertMaterial(rt_material, material_1);
+					//
+					rt_data.material_handles.push_back(
+					    sceneHandle.createAppearance("PhongShader"));
+					convertMaterial(rt_material, rt_data.material_handles.back());
+					rt_data.material_handles.back().setParam3f(
+					    "diffuseColor", float3(color1.getRed(), color1.getGreen(), color1.getBlue()));
 
-					material_1->setParam("diffuseColor", float3(color1.getRed(), color1.getGreen(), color1.getBlue()));
-					material_1->setParam("useVertexColor", false);
-
-					GeoHandle handle_1 = m_renderer.createGeometry(vertices, normals, (const unsigned int*)indices, (unsigned int)tube_template_.triangle.size(), material_1);
+					//
+					rt_data.object_handles.push_back(
+							sceneHandle.createGeometry());
+					geometric_objects_[rt_data.instance_handles.back()] = *it;
+					rt_data.mesh_handles.push_back(
+							rt_data.object_handles.back().createMesh());
+					rt_data.mesh_handles.back().setPrimitives(
+											(unsigned int)tube_template_.triangle.size(),
+											indices,
+											vertices,
+											normals,
+											0, 0);
+					rt_data.mesh_handles.back().setAppearance(
+							rt_data.material_handles.back());
 
 					if (color1 == color2)
 					{
-						GroupHandle tubeGroup = transformTube(old_tube);
-						tubeGroup->add(handle_1);
 
-						if (!rep.isHidden())
-							m_renderer.getRoot()->add(tubeGroup);
+						if (!rep.isHidden()) {
+							rt_data.instance_handles.push_back(
+									rt_data.object_handles.back().createInstance());
 
-						rt_data.top_group_handles.push_back(tubeGroup);
-						rt_data.object_handles.push_back(handle_1);
-						rt_data.material_handles.push_back(material_1);
+							transformTube(old_tube, rt_data.instance_handles.back());
+						}
 
-						geometric_objects_[handle_1] = *it;
-					} 
-					else 
+					}
+					else
 					{
-						RTAppearanceHandle material_2 = m_renderer.createAppearance("PhongShader");
-						convertMaterial(rt_material, material_2);
+						//
+						rt_data.material_handles.push_back(
+								sceneHandle.createAppearance("PhongShader"));
+						convertMaterial(rt_material, rt_data.material_handles.back());
+						rt_data.material_handles.back().setParam3f(
+								"diffuseColor", float3(color2.getRed(), color2.getGreen(), color2.getBlue()));
 
-						material_2->setParam("diffuseColor", float3(color2.getRed(), color2.getGreen(), color2.getBlue()));
-						material_2->setParam("useVertexColor", false);
-
-						GeoHandle handle_2 = m_renderer.createGeometry(vertices, normals, (const unsigned int*)indices, (unsigned int)tube_template_.triangle.size(), material_2);
+						//
+						RTpieCpp::GeometryHandle& lastGeom = rt_data.object_handles.back();
+						rt_data.object_handles.push_back(
+								sceneHandle.createGeometry());
+						geometric_objects_[rt_data.instance_handles.back()] = *it;
+						rt_data.mesh_handles.push_back(
+								rt_data.object_handles.back().createMesh());
+						rt_data.mesh_handles.back().setPrimitives(
+												(unsigned int)tube_template_.triangle.size(),
+												indices,
+												vertices,
+												normals,
+												0, 0);
+						rt_data.mesh_handles.back().setAppearance(
+								rt_data.material_handles.back());
 
 						// NOTE: Just copying tube would be highly dangerous; vertex2 can store pointers
 						//       to the vertices instead of using its own, and these are copied as well!
@@ -544,28 +613,15 @@ namespace BALL
 						new_tube_2.setVertex2(old_tube.getVertex2());
 						new_tube_2.setRadius(old_tube.getRadius());
 
-						GroupHandle all_group = m_renderer.createGroup(Transform::identity());
+						if (!rep.isHidden()) {
+							rt_data.instance_handles.push_back(
+									lastGeom.createInstance());
+              transformTube(new_tube_1, rt_data.instance_handles.back());
 
-						GroupHandle tubeGroup_1 = transformTube(new_tube_1);
-						tubeGroup_1->add(handle_1);
-
-						GroupHandle tubeGroup_2 = transformTube(new_tube_2);
-						tubeGroup_2->add(handle_2);
-
-						all_group->add(tubeGroup_1);
-						all_group->add(tubeGroup_2);
-
-						if (!rep.isHidden())
-							m_renderer.getRoot()->add(all_group);
-
-						rt_data.top_group_handles.push_back(all_group);
-						rt_data.object_handles.push_back(handle_1);
-						rt_data.object_handles.push_back(handle_2);
-						rt_data.material_handles.push_back(material_1);
-						rt_data.material_handles.push_back(material_2);
-
-						geometric_objects_[handle_1] = *it;
-						geometric_objects_[handle_2] = *it;
+							rt_data.instance_handles.push_back(
+									rt_data.object_handles.back().createInstance());
+              transformTube(new_tube_2, rt_data.instance_handles.back());
+						}
 					}
 
 					rtfact_needs_update_ = true;
@@ -583,37 +639,61 @@ namespace BALL
 					ColorRGBA const& color1 = old_line.getColor();
 					ColorRGBA const& color2 = old_line.getColor2();
 
-					RTAppearanceHandle material_1 = m_renderer.createAppearance("PhongShader");
-					updateMaterialFromStage(material_1);
+					//
+					rt_data.material_handles.push_back(
+					    sceneHandle.createAppearance("PhongShader"));
+					updateMaterialFromStage(rt_data.material_handles.back());
+					rt_data.material_handles.back().setParam3f(
+							"diffuseColor", float3(color1.getRed(), color1.getGreen(), color1.getBlue()));
 
-					material_1->setParam("diffuseColor", float3(color1.getRed(), color1.getGreen(), color1.getBlue()));
-					material_1->setParam("useVertexColor", false);
-
-					GeoHandle handle_1 = m_renderer.createGeometry(vertices, normals, (const unsigned int*)indices, (unsigned int)tube_template_.triangle.size(), material_1);
+					//
+					rt_data.object_handles.push_back(
+							sceneHandle.createGeometry());
+					geometric_objects_[rt_data.instance_handles.back()] = *it;
+					rt_data.mesh_handles.push_back(
+							rt_data.object_handles.back().createMesh());
+					rt_data.mesh_handles.back().setPrimitives(
+											(unsigned int)tube_template_.triangle.size(),
+											indices,
+											vertices,
+											normals,
+											0, 0);
+					rt_data.mesh_handles.back().setAppearance(
+							rt_data.material_handles.back());
 
 					if (color1 == color2)
 					{
-						GroupHandle tubeGroup = transformLine(old_line);
-						tubeGroup->add(handle_1);
+						if (!rep.isHidden()) {
+							rt_data.instance_handles.push_back(
+									rt_data.object_handles.back().createInstance());
 
-						if (!rep.isHidden())
-							m_renderer.getRoot()->add(tubeGroup);
-
-						rt_data.top_group_handles.push_back(tubeGroup);
-						rt_data.object_handles.push_back(handle_1);
-						rt_data.material_handles.push_back(material_1);
-
-						geometric_objects_[handle_1] = *it;
-					} 
-					else 
+							transformLine(old_line, rt_data.instance_handles.back());
+						}
+					}
+					else
 					{
-						RTAppearanceHandle material_2 = m_renderer.createAppearance("PhongShader");
-						updateMaterialFromStage(material_2);
+						//
+						rt_data.material_handles.push_back(
+								sceneHandle.createAppearance("PhongShader"));
+						convertMaterial(rt_material, rt_data.material_handles.back());
+						rt_data.material_handles.back().setParam3f(
+								"diffuseColor", float3(color2.getRed(), color2.getGreen(), color2.getBlue()));
 
-						material_2->setParam("diffuseColor", float3(color2.getRed(), color2.getGreen(), color2.getBlue()));
-						material_2->setParam("useVertexColor", false);
-
-						GeoHandle handle_2 = m_renderer.createGeometry(vertices, normals, (const unsigned int*)indices, (unsigned int)tube_template_.triangle.size(), material_2);
+						//
+						RTpieCpp::GeometryHandle& lastGeom = rt_data.object_handles.back();
+						rt_data.object_handles.push_back(
+								sceneHandle.createGeometry());
+						geometric_objects_[rt_data.instance_handles.back()] = *it;
+						rt_data.mesh_handles.push_back(
+								rt_data.object_handles.back().createMesh());
+						rt_data.mesh_handles.back().setPrimitives(
+												(unsigned int)tube_template_.triangle.size(),
+												indices,
+												vertices,
+												normals,
+												0, 0);
+						rt_data.mesh_handles.back().setAppearance(
+								rt_data.material_handles.back());
 
 						// NOTE: Just copying tube would be highly dangerous; vertex2 can store pointers
 						//       to the vertices instead of using its own, and these are copied as well!
@@ -627,36 +707,25 @@ namespace BALL
 						new_line_2.setVertex2(old_line.getVertex2());
 						//new_line_2.setRadius(LINE_RADIUS);//old_line.getRadius());
 
-						GroupHandle all_group = m_renderer.createGroup(Transform::identity());
+						if (!rep.isHidden()) {
+							rt_data.instance_handles.push_back(
+									lastGeom.createInstance());
+              transformLine(new_line_1, rt_data.instance_handles.back());
 
-						GroupHandle tubeGroup_1 = transformLine(new_line_1);
-						tubeGroup_1->add(handle_1);
-
-						GroupHandle tubeGroup_2 = transformLine(new_line_2);
-						tubeGroup_2->add(handle_2);
-
-						all_group->add(tubeGroup_1);
-						all_group->add(tubeGroup_2);
-
-						if (!rep.isHidden())
-							m_renderer.getRoot()->add(all_group);
-
-						rt_data.top_group_handles.push_back(all_group);
-						rt_data.object_handles.push_back(handle_1);
-						rt_data.object_handles.push_back(handle_2);
-						rt_data.material_handles.push_back(material_1);
-						rt_data.material_handles.push_back(material_2);
-
-						geometric_objects_[handle_1] = *it;
-						geometric_objects_[handle_2] = *it;
+							rt_data.instance_handles.push_back(
+									rt_data.object_handles.back().createInstance());
+              transformLine(new_line_2, rt_data.instance_handles.back());
+						}
 					}
 
 					rtfact_needs_update_ = true;
+
 				}
 			}
 
-			if (rtfact_needs_update_ && use_continuous_loop_)
-				m_renderer.useProgressiveRefinement(false);
+			//TODO:
+			//if (rtfact_needs_update_ && use_continuous_loop_)
+				//m_renderer.useProgressiveRefinement(false);
 
 			objects_[&rep] = rt_data;
 		}
@@ -667,36 +736,40 @@ namespace BALL
 			{
 				// TODO: find out if this also deletes the geometries and materials
 				RTfactData& rt_data = objects_[&rep];
-				GroupHandle root = m_renderer.getRoot();
 
-				for (Position i=0; i<rt_data.top_group_handles.size(); ++i)
+				for (Position i=0; i<rt_data.instance_handles.size(); ++i)
 				{
-					root->remove(rt_data.top_group_handles[i]);
-
-					for (Position current_geo_handle=0; current_geo_handle<rt_data.object_handles.size(); ++current_geo_handle)
-					{
-						geometric_objects_.erase(rt_data.object_handles[current_geo_handle]);
-					}
+					geometric_objects_.erase(rt_data.instance_handles[i]);
+					rt_data.instance_handles[i].clear();
 				}
+				rt_data.instance_handles.clear();
+
+				rt_data.material_handles.clear();
+
+				rt_data.mesh_handles.clear();
 
 				rtfact_needs_update_ = true;
 
-				if (use_continuous_loop_ && !rep.isHidden())
-					m_renderer.useProgressiveRefinement(false);
+				//TODO:
+				//if (use_continuous_loop_ && !rep.isHidden())
+					//m_renderer.useProgressiveRefinement(false);
 
 				objects_.erase(&rep);
 			}
 		}
 
+		//TODO:
 		void RTfactRenderer::useContinuousLoop(bool use_loop)
 		{
+		  /*
 			Renderer::useContinuousLoop(use_loop);
 
 			m_renderer.useProgressiveRefinement(use_loop);
+			*/
 		}
 
 		void RTfactRenderer::renderToBufferImpl(FrameBufferPtr buffer)
-		{		    
+		{
 			Stage const& stage = *(scene_->getStage());
 
 			// deactivate hidden representations (we need no reactivation code,
@@ -708,12 +781,12 @@ namespace BALL
 					// It is safe to remove a group multiple times from RTfact. It may not be
 					// *fast*, but it should be safe.
 					RTfactData& rt_data = it->second;
-					GroupHandle root = m_renderer.getRoot();
 
-					for (Position i=0; i<rt_data.top_group_handles.size(); ++i)
+					for (Position i=0; i<rt_data.instance_handles.size(); ++i)
 					{
-						root->remove(rt_data.top_group_handles[i]);
+					  rt_data.instance_handles[i].clear();
 					}
+					rt_data.instance_handles.clear();
 
 					it->second.has_been_disabled = true;
 
@@ -723,37 +796,86 @@ namespace BALL
 
 			if (rtfact_needs_update_)
 			{
-				m_renderer.createAccelStruct();
+				rayTracer.syncStructures();
 				rtfact_needs_update_ = false;
 			}
 
-			FrameBufferFormat fmt = buffer->getFormat();		    
+			FrameBufferFormat fmt = buffer->getFormat();
 			if (objects_.size() != 0)
 			{
+
+				Image2DHandle distanceBufferHandle;
+				Image2DHandle colorBufferHandle;
+
 				if (fmt.getPixelFormat() == PixelFormat::RGBF_96)
 				{
- 					m_renderer.attachFrameBuffer((float*)buffer->getData()+offset_, 3, width_, height_, width_+stride_);
+					//color buffer (use given memory)
+					t_ColorImage* colorImage = new t_ColorImage((float*)buffer->getData(), 3, width_, height_, width_+stride_, false);
+					RTfact::uint colorBufferLength = colorImage->getResX() * colorImage->getResY()* colorImage->getComponentCount() * sizeof(t_ColorImage::Component);
+					BufferHandle colorBuffer = RTpieCpp::CreateBufferHandleUseData(colorBufferLength, colorImage->getFirstComponent(0,0));
+					colorBufferHandle = RTpieCpp::CreateImage2DHandleUseData(RTfact::RTpie::IImage2D::COMPONENT_FLOAT, 3, width_, height_, colorBuffer);
+
+					//distance buffer
+					t_DistanceImage* distanceImage = new t_DistanceImage(1, width_, height_);
+					RTfact::uint distanceBufferLength = distanceImage->getResX() * distanceImage->getResY()* distanceImage->getComponentCount() * sizeof(t_DistanceImage::Component);
+					BufferHandle distanceBuffer = RTpieCpp::CreateBufferHandleUseData(distanceBufferLength, distanceImage->getFirstComponent(0,0));
+					distanceBufferHandle = RTpieCpp::CreateImage2DHandleUseData(RTfact::RTpie::IImage2D::COMPONENT_FLOAT, 1, width_, height_, distanceBuffer);
+
+					//set framebuffer buffers
+					framebuffer.setColorImage(colorImage);
+					framebuffer.setDistanceImage(distanceImage);
 				}
 				else if (fmt.getPixelFormat() == PixelFormat::RGBA_32)
 				{
- 					m_renderer.attachFrameBuffer((unsigned char*)buffer->getData()+offset_, 4, width_, height_, width_+stride_);
+					//color buffer (use given memory)
+					t_ByteColorImage* colorImage = new t_ByteColorImage((unsigned char*)buffer->getData(), 4, width_, height_, width_+stride_, false);
+					RTfact::uint colorBufferLength = colorImage->getResX() * colorImage->getResY()* colorImage->getComponentCount() * sizeof(t_ByteColorImage::Component);
+					BufferHandle colorBuffer = RTpieCpp::CreateBufferHandleUseData(colorBufferLength, colorImage->getFirstComponent(0,0));
+					colorBufferHandle = RTpieCpp::CreateImage2DHandleUseData(RTfact::RTpie::IImage2D::COMPONENT_BYTE, 4, width_, height_, colorBuffer);
+
+					//distance buffer
+					t_ByteDistanceImage* distanceImage = new t_ByteDistanceImage(1, width_, height_);
+					RTfact::uint distanceBufferLength = distanceImage->getResX() * distanceImage->getResY()* distanceImage->getComponentCount() * sizeof(t_ByteDistanceImage::Component);
+					BufferHandle distanceBuffer = RTpieCpp::CreateBufferHandleUseData(distanceBufferLength, distanceImage->getFirstComponent(0,0));
+					distanceBufferHandle = RTpieCpp::CreateImage2DHandleUseData(RTfact::RTpie::IImage2D::COMPONENT_BYTE, 1, width_, height_, distanceBuffer);
+
+					//set framebuffer buffers
+					byteFramebuffer.setColorImage(colorImage);
+					byteFramebuffer.setDistanceImage(distanceImage);
 				}
 				else
 				{
 					return;
 				}
 
-				m_renderer.renderToBuffer();
+				//set framebuffer to rendertask
+				renderBuffer = RTpieCpp::CreateFrameBufferHandle();
+				renderBuffer.setColorBuffer(colorBufferHandle);
+				renderBuffer.setDistanceBuffer(distanceBufferHandle);
+				renderTask.setFrameBuffer(renderBuffer);
 
+				//
+				framebuffer.prePaint();
+
+				rayTracer.syncStructures();
+
+				renderTask.run();
+
+				framebuffer.postPaint();
+
+				//TODO:
+				/*
 				if (use_continuous_loop_)
 				{
 					m_renderer.useProgressiveRefinement(true);
 				}
+				*/
 			}
 		}
 
 		void RTfactRenderer::updateMaterialForRepresentation(Representation const* rep)
 		{
+
 			if (objects_.find(rep) != objects_.end())
 			{
 				RTfactData& rt_data = objects_[rep];
@@ -772,7 +894,7 @@ namespace BALL
 			}
 		}
 
-		GroupHandle RTfactRenderer::transformTube(const TwoColoredTube& tube) 
+		void RTfactRenderer::transformTube(const TwoColoredTube& tube, InstanceHandle& instance)
 		{
 			Vector3 vec = tube.getVertex2() - tube.getVertex1();
 			const double len = vec.getLength();
@@ -783,7 +905,7 @@ namespace BALL
 			//Rotate the vector around the normal
 			vec /= sqrt(vec.x*vec.x + vec.y*vec.y);
 
-			Matrix4x4 matrix = Matrix4x4::getIdentity(); 
+			Matrix4x4 matrix = Matrix4x4::getIdentity();
 			matrix.rotate(Angle(-angle), vec.y, -vec.x, 0);
 
 			Matrix4x4 temp;
@@ -793,18 +915,15 @@ namespace BALL
 			temp.setTranslation(midpoint);
 			matrix = temp*matrix;
 
-			//return m_renderer.createGroup(	Transform::translation(midpoint.x, midpoint.y, midpoint.z)
-			//															 *matrix*Transform::scale(Vec3f<1>(radius, radius, len)));
-			Transform trafo;
+			float trafo[16];
 			for (Position i=0; i<4; ++i)
 				for (Position j=0; j<4; ++j)
-					trafo.matrix[j][i] = matrix(i, j);
-			trafo.hasInverse = false;
+					trafo[i*4+j] = matrix(j, i);
 
-			return m_renderer.createGroup(trafo);
+			instance.setTransform(trafo, 0);
 		}
-		
-		GroupHandle RTfactRenderer::transformLine(const TwoColoredLine& line) 
+
+		void RTfactRenderer::transformLine(const TwoColoredLine& line, InstanceHandle& instance)
 		{
 			Vector3 vec = line.getVertex2() - line.getVertex1();
 			const double len = vec.getLength();
@@ -817,7 +936,7 @@ namespace BALL
 
 			Matrix4x4 matrix = Matrix4x4::getIdentity();
 			matrix.rotate(Angle(-angle), vec.y, -vec.x, 0);
-			
+
 			Matrix4x4 temp;
 			temp.setScale(radius, radius, len);
 			matrix*=temp;
@@ -825,51 +944,50 @@ namespace BALL
 			temp.setTranslation(midpoint);
 			matrix = temp*matrix;
 
-			//return m_renderer.createGroup(	Transform::translation(midpoint.x, midpoint.y, midpoint.z)
-			//															 *matrix*Transform::scale(Vec3f<1>(radius, radius, len)));
-			Transform trafo;
+			float trafo[16];
 			for (Position i=0; i<4; ++i)
 				for (Position j=0; j<4; ++j)
-					trafo.matrix[j][i] = matrix(i, j);
-			trafo.hasInverse = false;
+					trafo[i*4+j] = matrix(i, j);
 
-			return m_renderer.createGroup(trafo);
+			instance.setTransform(trafo, 0);
 		}
 
-		void RTfactRenderer::updateMaterialFromStage(RTAppearanceHandle& material)
+		void RTfactRenderer::updateMaterialFromStage(AppearanceHandle& material)
 		{
+
 			Stage::RaytracingMaterial const& rt_material = scene_->getStage()->getRTMaterial();
 			convertMaterial(rt_material, material);
+
 		}
 
-		void RTfactRenderer::convertMaterial(Stage::RaytracingMaterial const& rt_material, RTAppearanceHandle& material)
+		void RTfactRenderer::convertMaterial(Stage::RaytracingMaterial const& rt_material, AppearanceHandle& material)
 		{
 			// ambience
 			float red   = (float)rt_material.ambient_color.getRed()   * rt_material.ambient_intensity;
 			float blue  = (float)rt_material.ambient_color.getBlue()  * rt_material.ambient_intensity;
 			float green = (float)rt_material.ambient_color.getGreen() * rt_material.ambient_intensity;
 
-			material->setParam("ambientIntensity", float3(red, blue, green));
+			material.setParam3f("ambientIntensity", float3(red, blue, green));
 
 			// specularity
 			red   = (float)rt_material.specular_color.getRed()   * rt_material.specular_intensity;
 			blue  = (float)rt_material.specular_color.getBlue()  * rt_material.specular_intensity;
 			green = (float)rt_material.specular_color.getGreen() * rt_material.specular_intensity;
 
-			material->setParam("specularColor", float3(red, blue, green));
+			material.setParam3f("specularColor", float3(red, blue, green));
 
 			// reflectiveness
 			red   = (float)rt_material.reflective_color.getRed()   * rt_material.reflective_intensity;
 			blue  = (float)rt_material.reflective_color.getBlue()  * rt_material.reflective_intensity;
 			green = (float)rt_material.reflective_color.getGreen() * rt_material.reflective_intensity;
 
-			material->setParam("reflective", float3(red, blue, green));
+			material.setParam3f("reflective", float3(red, blue, green));
 
 			// shininess
-			material->setParam("shininess", rt_material.shininess);
+			material.setParamf("shininess", rt_material.shininess);
 
 			// transparency
-			material->setParam("alpha", (100.f - rt_material.transparency) * 0.01f);
+			material.setParamf("alpha", (100.f - rt_material.transparency) * 0.01f);
 		}
 
 		std::vector<float> RTfactRenderer::intersectRaysWithGeometry(const std::vector<Vector3>& origins,
@@ -884,10 +1002,12 @@ namespace BALL
 
 			std::vector<float> results(origins.size());
 
-			m_renderer.intersectRays(reinterpret_cast<const float*>(&origins[0]), 
-			                         reinterpret_cast<const float*>(&directions[0]), 
-															 origins.size(),
-															 reinterpret_cast<float*>(&results[0]));
+			IntersectTaskHandle intersectTask = rayTracer.createIntersectTask();
+			intersectTask.intersectRays(
+				reinterpret_cast<const float*>(&origins[0]),
+				reinterpret_cast<const float*>(&directions[0]),
+				origins.size(),
+				reinterpret_cast<float*>(&results[0]));
 
 			return results;
 		}
