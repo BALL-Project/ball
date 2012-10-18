@@ -23,7 +23,7 @@ ELSE()
 	## Now, try to find the rtfact library itself.
 	FIND_LIBRARY(RTFACT_OPT_LIBRARY
 		NAMES RTfactRTpie
-		PATHS ${RTFACT_POSSIBLE_ROOT_DIRS} ${RTFACT_POSSIBLE_ROOT_DIRS}/remote/build ${RTFACT_POSSIBLE_ROOT_DIRS} ${RTFACT_POSSIBLE_ROOT_DIRS}/remote/build/lib ${RTFACT_POSSIBLE_ROOT_DIRS}/remote/build/Release ${RTFACT_POSSIBLE_ROOT_DIRS}/remote/build/lib/Release
+		PATHS ${RTFACT_POSSIBLE_ROOT_DIRS} ${RTFACT_POSSIBLE_ROOT_DIRS}/build ${RTFACT_POSSIBLE_ROOT_DIRS}/build/lib ${RTFACT_POSSIBLE_ROOT_DIRS}/build/Release ${RTFACT_POSSIBLE_ROOT_DIRS}/build/lib/Release ${RTFACT_POSSIBLE_ROOT_DIRS}/remote/build ${RTFACT_POSSIBLE_ROOT_DIRS}/remote/build/lib ${RTFACT_POSSIBLE_ROOT_DIRS}/remote/build/Release ${RTFACT_POSSIBLE_ROOT_DIRS}/remote/build/lib/Release
 
 		PATH_SUFFIXES lib
 		DOC "RTfact library, optimized")
@@ -31,7 +31,7 @@ ELSE()
 	## And a possible debug version
 	FIND_LIBRARY(RTFACT_DEBUG_LIBRARY
 		NAMES RTfactRemoted RTfactRTpie
-		PATHS ${RTFACT_POSSIBLE_ROOT_DIRS} ${RTFACT_POSSIBLE_ROOT_DIRS}/remote/build ${RTFACT_POSSIBLE_ROOT_DIRS}/remote/build/Debug
+		PATHS ${RTFACT_POSSIBLE_ROOT_DIRS} ${RTFACT_POSSIBLE_ROOT_DIRS}/build ${RTFACT_POSSIBLE_ROOT_DIRS}/build/lib ${RTFACT_POSSIBLE_ROOT_DIRS}/build/Debug ${RTFACT_POSSIBLE_ROOT_DIRS}/remote/build ${RTFACT_POSSIBLE_ROOT_DIRS}/remote/build/Debug ${RTFACT_POSSIBLE_ROOT_DIRS}/remote/build/lib
 		PATH_SUFFIXES lib
 		DOC "RTfact library, debug")
 

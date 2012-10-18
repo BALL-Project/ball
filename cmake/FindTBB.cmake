@@ -66,7 +66,7 @@ if (UNIX)
         set(_TBB_ARCHITECTURE "ia32")
     else (APPLE)
         # LINUX
-        set(_TBB_DEFAULT_INSTALL_DIR "/opt/intel/tbb" "/usr/local/include" "/usr/include")
+        set(_TBB_DEFAULT_INSTALL_DIR "/opt/intel/tbb" "/usr/local/include" "/usr/include" "/usr")
         set(_TBB_LIB_NAME "tbb")
         set(_TBB_LIB_MALLOC_NAME "${_TBB_LIB_NAME}malloc")
         set(_TBB_LIB_DEBUG_NAME "${_TBB_LIB_NAME}_debug")
