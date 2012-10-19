@@ -434,33 +434,46 @@ namespace BALL
 					if (mesh.colors.size() > 1)
 					{
 						colors  = reinterpret_cast<float const*>(&(mesh.colors[0]));
+						rt_data.material_handles.back().setParamb("useVertexColor", true);
+
+						//colors conversion (rtfact accepts RGB)
+						float* rgbcolors = new float[3*mesh.colors.size()];
+						for(int i =0; i < mesh.colors.size(); i++)
+						{
+							rgbcolors[i * 3 + 0] = colors[i * 4 + 0];
+							rgbcolors[i * 3 + 1] = colors[i * 4 + 1];
+							rgbcolors[i * 3 + 2] = colors[i * 4 + 2];
+						}
 
 						rt_data.object_handles.push_back(
 								sceneHandle.createGeometry());
 						rt_data.mesh_handles.push_back(
 								rt_data.object_handles.back().createMesh());
 						rt_data.mesh_handles.back().setPrimitives(
-												(unsigned int)sphere_template_.triangle.size(),
+												(unsigned int)mesh.triangle.size(),
 												indices,
 												vertices,
 												normals,
-												colors, 0);
+												rgbcolors, 0);
 						rt_data.mesh_handles.back().setAppearance(
 								rt_data.material_handles.back());
+
+						delete[] rgbcolors;
 					}
 					else
 					{
 						ColorRGBA const &c = (mesh.colors.size() == 1) ? mesh.colors[0] : ColorRGBA(1., 1., 1., 1.);
 
 						rt_data.material_handles.back().setParam3f(
-						    "diffuseColor", float3(c.getRed(), c.getGreen(), c.getBlue()));
+								"diffuseColor", float3(c.getRed(), c.getGreen(), c.getBlue()));
+						rt_data.material_handles.back().setParamb("useVertexColor", false);
 
 						rt_data.object_handles.push_back(
 								sceneHandle.createGeometry());
 						rt_data.mesh_handles.push_back(
 								rt_data.object_handles.back().createMesh());
 						rt_data.mesh_handles.back().setPrimitives(
-												(unsigned int)sphere_template_.triangle.size(),
+												(unsigned int)mesh.triangle.size(),
 												indices,
 												vertices,
 												normals,
@@ -494,7 +507,8 @@ namespace BALL
 					    sceneHandle.createAppearance("PhongShader"));
 					convertMaterial(rt_material, rt_data.material_handles.back());
 					rt_data.material_handles.back().setParam3f(
-					    "diffuseColor", float3(color.getRed(), color.getGreen(), color.getBlue()));
+							"diffuseColor", float3(color.getRed(), color.getGreen(), color.getBlue()));
+					rt_data.material_handles.back().setParamb("useVertexColor", false);
 
 					//
 					rt_data.object_handles.push_back(
@@ -548,7 +562,8 @@ namespace BALL
 					    sceneHandle.createAppearance("PhongShader"));
 					convertMaterial(rt_material, rt_data.material_handles.back());
 					rt_data.material_handles.back().setParam3f(
-					    "diffuseColor", float3(color1.getRed(), color1.getGreen(), color1.getBlue()));
+							"diffuseColor", float3(color1.getRed(), color1.getGreen(), color1.getBlue()));
+					rt_data.material_handles.back().setParamb("useVertexColor", false);
 
 					//
 					rt_data.object_handles.push_back(
@@ -584,6 +599,7 @@ namespace BALL
 						convertMaterial(rt_material, rt_data.material_handles.back());
 						rt_data.material_handles.back().setParam3f(
 								"diffuseColor", float3(color2.getRed(), color2.getGreen(), color2.getBlue()));
+						rt_data.material_handles.back().setParamb("useVertexColor", false);
 
 						//
 						RTpieCpp::GeometryHandle& lastGeom = rt_data.object_handles.back();
@@ -645,6 +661,7 @@ namespace BALL
 					updateMaterialFromStage(rt_data.material_handles.back());
 					rt_data.material_handles.back().setParam3f(
 							"diffuseColor", float3(color1.getRed(), color1.getGreen(), color1.getBlue()));
+					rt_data.material_handles.back().setParamb("useVertexColor", false);
 
 					//
 					rt_data.object_handles.push_back(
@@ -678,6 +695,7 @@ namespace BALL
 						convertMaterial(rt_material, rt_data.material_handles.back());
 						rt_data.material_handles.back().setParam3f(
 								"diffuseColor", float3(color2.getRed(), color2.getGreen(), color2.getBlue()));
+						rt_data.material_handles.back().setParamb("useVertexColor", false);
 
 						//
 						RTpieCpp::GeometryHandle& lastGeom = rt_data.object_handles.back();
