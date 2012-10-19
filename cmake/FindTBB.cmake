@@ -109,7 +109,7 @@ endif (NOT _TBB_INSTALL_DIR)
 # third: try to find path automatically
 if (NOT _TBB_INSTALL_DIR)
     if (_TBB_DEFAULT_INSTALL_DIR)
-        set (_TBB_INSTALL_DIR $ENV{_TBB_DEFAULT_INSTALL_DIR})
+        set (_TBB_INSTALL_DIR ${_TBB_DEFAULT_INSTALL_DIR})
     endif (_TBB_DEFAULT_INSTALL_DIR)
 endif (NOT _TBB_INSTALL_DIR)
 # sanity check
