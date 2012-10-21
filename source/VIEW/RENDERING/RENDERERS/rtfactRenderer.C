@@ -260,15 +260,13 @@ namespace BALL
 			view_vector.normalize();
 			Vector3 const& look_up = camera->getLookUpVector();
 
-			//TODO:
-		  /*
 			if (use_continuous_loop_)
 			{
 				if (   ((last_camera_position - position   ).getSquareLength() > 1e-5)
 						 ||((last_camera_view_vec - view_vector).getSquareLength() > 1e-5)
 						 ||((last_camera_lookup   - look_up    ).getSquareLength() > 1e-5))
-						m_renderer.useProgressiveRefinement(false);
-			}*/
+						renderTask.setAccumulatePixels(true);
+			}
 
 			cameraHandle.setPosition( float3(position.x, position.y, position.z) );
 			cameraHandle.setDirection( float3(view_vector.x, view_vector.y, view_vector.z) );
@@ -291,14 +289,17 @@ namespace BALL
 						if (it->isRelativeToCamera())
 							direction = stage_->calculateAbsoluteCoordinates(direction);
 
-						lights_[current_light].setParam3f("direction", float3(direction.x, direction.y, direction.z));
+						if(!(lights_[current_light].getParam3f("direction") == float3(direction.x, direction.y, direction.z)))
+							lights_[current_light].setParam3f("direction", float3(direction.x, direction.y, direction.z));
 					case LightSource::POSITIONAL:
 						light_position = it->getPosition();
 						if (it->isRelativeToCamera())
 						{
 							light_position = stage_->calculateAbsoluteCoordinates(it->getPosition())+stage_->getCamera().getViewPoint();
 						}
-						lights_[current_light].setParam3f("position", float3(light_position.x, light_position.y, light_position.z));
+
+						if(!(lights_[current_light].getParam3f("position") == float3(light_position.x, light_position.y, light_position.z)))
+							lights_[current_light].setParam3f("position", float3(light_position.x, light_position.y, light_position.z));
 						break;
 					default:
 						break;
@@ -741,9 +742,8 @@ namespace BALL
 				}
 			}
 
-			//TODO:
-			//if (rtfact_needs_update_ && use_continuous_loop_)
-				//m_renderer.useProgressiveRefinement(false);
+			if (rtfact_needs_update_ && use_continuous_loop_)
+			  renderTask.setAccumulatePixels(true);
 
 			objects_[&rep] = rt_data;
 		}
@@ -768,22 +768,17 @@ namespace BALL
 
 				rtfact_needs_update_ = true;
 
-				//TODO:
-				//if (use_continuous_loop_ && !rep.isHidden())
-					//m_renderer.useProgressiveRefinement(false);
+				if (use_continuous_loop_ && !rep.isHidden())
+					renderTask.setAccumulatePixels(true);
 
 				objects_.erase(&rep);
 			}
 		}
 
-		//TODO:
 		void RTfactRenderer::useContinuousLoop(bool use_loop)
 		{
-		  /*
 			Renderer::useContinuousLoop(use_loop);
-
-			m_renderer.useProgressiveRefinement(use_loop);
-			*/
+			renderTask.setAccumulatePixels(use_loop);
 		}
 
 		void RTfactRenderer::renderToBufferImpl(FrameBufferPtr buffer)
@@ -881,13 +876,11 @@ namespace BALL
 
 				framebuffer.postPaint();
 
-				//TODO:
-				/*
 				if (use_continuous_loop_)
 				{
-					m_renderer.useProgressiveRefinement(true);
+					renderTask.setAccumulatePixels(true);
 				}
-				*/
+
 			}
 		}
 
