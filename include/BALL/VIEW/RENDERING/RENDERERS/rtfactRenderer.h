@@ -23,8 +23,11 @@
 #include <RTfact/Model/Image/BasicImage2D.hpp>
 #include <RTfact/Model/Framebuffer/Image2DFramebuffer.hpp>
 
-namespace std { namespace tr1
+#ifdef BALL_HAS_TR1_UNORDERED_MAP
+namespace std
 {
+	namespace tr1
+	{
     template <>
     struct hash< RTpieCpp::InstanceHandle > : public unary_function<RTpieCpp::InstanceHandle, size_t> {
     public:
@@ -39,7 +42,9 @@ namespace std { namespace tr1
             return c.s;
         }
     };
-}}
+	}
+}
+#endif // BALL_HAS_TR1_UNORDERED_MAP
 
 namespace BALL
 {
