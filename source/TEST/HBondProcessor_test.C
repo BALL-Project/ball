@@ -76,8 +76,8 @@ RESULT
 
 
 CHECK(Option::ADD_HBONDS)
-	HBondProcessor hbond_pro;  
-  hbond_pro.options.set(HBondProcessor::Option::PREDICTION_METHOD, 
+	HBondProcessor hbond_pro;
+  hbond_pro.options.set(HBondProcessor::Option::PREDICTION_METHOD,
 			                  HBondProcessor::PredictionMethod::KABSCH_SANDER);
 	hbond_pro.options.set(HBondProcessor::Option::ADD_HBONDS, true);
 
@@ -86,7 +86,7 @@ CHECK(Option::ADD_HBONDS)
 	mol >> sys;
 
   sys.apply(hbond_pro);
-	std::vector<std::vector<Position> > backbone_HBonds = hbond_pro.getBackboneHBondPattern();	
+	std::vector<std::vector<Position> > backbone_HBonds = hbond_pro.getBackboneHBondPattern();
 	std::vector<HBondProcessor::HBond>  HBonds          = hbond_pro.getHBonds();
 
   TEST_EQUAL(backbone_HBonds.size(), 439)
