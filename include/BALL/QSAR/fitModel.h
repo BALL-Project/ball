@@ -23,21 +23,26 @@
 //
 //
 
-#ifndef FMODEL
-#define FMODEL
+#ifndef BALL_QSAR_FITMODEL
+#define BALL_QSAR_FITMODEL
 
-#include <BALL/CONFIG/config.h>
+#ifndef BALL_CONFIG_CONFIG_H
+# include <BALL/CONFIG/config.h>
+#endif
 
 #ifdef BALL_HAS_GSL
 
-#ifndef NLMODEL
-#include <BALL/QSAR/nonlinearModel.h>
+#ifndef BALL_QSAR_NONLINEARMODEL_H
+# include <BALL/QSAR/nonlinearModel.h>
 #endif
 
 #include <gsl/gsl_multifit_nlin.h>
 #include <gsl/gsl_deriv.h>
 #include <gsl/gsl_math.h>
-#include <BALL/MATHS/parsedFunction.h>
+
+#ifndef BALL_MATHS_PARSEDFUNCTION_H
+#  include <BALL/MATHS/parsedFunction.h>
+#endif
 
 //#include <list>
 
@@ -46,7 +51,7 @@ namespace BALL
 	namespace QSAR
 	{
 		class BALL_EXPORT FitModel : public NonLinearModel
-		{ 
+		{
 			public:
 				/** @name Constructors and Destructors
 				 */
@@ -127,4 +132,4 @@ namespace BALL
 
 #endif //BALL_HAS_GSL
 
-#endif // FMODEL
+#endif // BALL_QSAR_FITMODEL
