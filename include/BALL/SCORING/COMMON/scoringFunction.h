@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scoringFunction.h,v 1.2 2006/05/21 18:15:28 anker Exp $
 
 #ifndef BALL_SCORING_COMMON_SCORINGFUNCTION_H
 #define BALL_SCORING_COMMON_SCORINGFUNCTION_H
