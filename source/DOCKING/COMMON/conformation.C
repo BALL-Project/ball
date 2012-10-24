@@ -1,7 +1,6 @@
-// ----------------------------------------------------
-// $Maintainer: Marc Röttig $
-// $Authors: Marcel Schumann, Marc Röttig $
-// ----------------------------------------------------
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 
 #include <BALL/DOCKING/COMMON/conformation.h>
 #include <BALL/KERNEL/PTE.h>
@@ -25,7 +24,7 @@ namespace BALL
 	}
 
 	Conformation::Conformation (const Conformation& conf)
-	: 	id_(conf.id_),
+	: id_(conf.id_),
 	source_(conf.source_),
 	number_of_atoms_(conf.number_of_atoms_),
 	atom_positions_(conf.atom_positions_),

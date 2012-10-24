@@ -1,7 +1,6 @@
-// ----------------------------------------------------
-// $Maintainer: Marc Röttig $
-// $Authors: Marcel Schumann, Marc Röttig $
-// ----------------------------------------------------
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 
 #ifndef BALL_DOCKING_COMMON_CONFORMATION_H
 #define BALL_DOCKING_COMMON_CONFORMATION_H
@@ -15,8 +14,11 @@ namespace BALL
 {
 
 	/**     Conformation class.
+
 	        This class represents conformations of a molecule by simply
-	        storing the atom positions (Vector3) of all atoms that deviate significantly from the resp. atom positions of the base conformation ( = parent molecule). Stored conformations can be applied to
+	        storing the atom positions (Vector3) of all atoms that deviate significantly 
+					from the resp. atom positions of the base conformation ( = parent molecule). 
+					Stored conformations can be applied to
 	        the parent molecule to reconstruct the conformer of the molecule.
 	 */
 	class BALL_EXPORT Conformation
