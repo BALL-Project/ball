@@ -95,23 +95,23 @@ namespace BALL
 	 *    J Biomol NMR, 26(3):215-240.".	
 	 *
    */
-  class BALL_EXPORT HBondProcessor 
-		:	public UnaryProcessor<Composite>
+  class BALL_EXPORT HBondProcessor
+		: public UnaryProcessor<Composite>
   {
- 
-		public:	
-			
+
+		public:
+
 			/** @name Nested classes
 			 */
 			//@{
-			 
+
 			/** Class to represent a hydrogen bond.
 			 */
 			class BALL_EXPORT HBond
 			{
-				public:	
+				public:
 					HBond();
-					HBond(Atom const* acceptor, Atom const* donor, bool donor_is_hydrogen=false) 
+					HBond(Atom const* acceptor, Atom const* donor, bool donor_is_hydrogen=false)
 					      {acceptor_ = acceptor; donor_ = donor; donor_is_hydrogen_ = donor_is_hydrogen;}
 					Atom const* getAcceptor() { return acceptor_; }
 					Atom const* getDonor()    { return donor_; }
@@ -137,34 +137,34 @@ namespace BALL
 			/// Option names
 			struct BALL_EXPORT Option
 			{
-				/** the hydorgen bond prediction criterion used
+				/** the hydrogen bond prediction criterion used
 				 */
 				static const String PREDICTION_METHOD;
-				
+
 				/** add bonds to the system
 				 */
-				static const String ADD_HBONDS;	
-				
+				static const String ADD_HBONDS;
+
 				/** the energy cutoff for the Kabsch Sander algorithm
 				 */
 				static const String KABSCH_SANDER_ENERGY_CUTOFF;
-			};	
-			
+			};
+
 			/// Default values for options
 			struct BALL_EXPORT Default
 			{
-				static const String PREDICTION_METHOD;	 
-				static const bool ADD_HBONDS;	
+				static const String PREDICTION_METHOD;
+				static const bool ADD_HBONDS;
 				static const float KABSCH_SANDER_ENERGY_CUTOFF;
 			};
-			
+
 			/// Default values for options
 			struct BALL_EXPORT PredictionMethod
 			{
 				static const String KABSCH_SANDER;
-				static const String WISHART_ET_AL;	
+				static const String WISHART_ET_AL;
 			};
-				
+
 			// constants for Kabsch Sander
 			// 5.2 Angstrom is the maximum distance between N and O in a hydrogen bond.
 			// 4.2 Angstrom is an upper bound for the distance between N and O in the same
@@ -178,40 +178,39 @@ namespace BALL
 			static float AMIDE_PROTON_OXYGEN_SEPARATION_DISTANCE; // = 3.5;
 			static float ALPHA_PROTON_OXYGEN_SEPARATION_DISTANCE; // = 2.77208;
 
-			
-   	 	///
+			///
 			struct BALL_EXPORT ResidueData
 			{
-				Vector3 pos_C;
-				Vector3 pos_N;
-				Vector3 pos_H;
-				Vector3 pos_O;
-				Size		number;
-				Residue*	res; 
+				Vector3  pos_C;
+				Vector3  pos_N;
+				Vector3  pos_H;
+				Vector3  pos_O;
+				Size     number;
+				Residue* res;
 				/// sometimes there are defect residues around...
-				bool is_complete; 
+				bool is_complete;
 			};
 
-  		BALL_CREATE(HBondProcessor);
+			BALL_CREATE(HBondProcessor);
 
 			/**	Constructors and Descructor */
 			//@{
-			
+
 			/// Default constructor. 
 			HBondProcessor();
 
 			/// Detailed constructor.
 			HBondProcessor(Options& new_options);
-			
+
 			///
 			virtual ~HBondProcessor();
-			
+
 			//@}
 
 
 			/** @name	Processor-related methods */
 			//@{
-			
+
 			/** Initialization method.
 			 */
 			virtual void init();
@@ -226,32 +225,32 @@ namespace BALL
 			//														
 			/// in case of Wishart et Al: collects the donors (H, HA) and acceptors all kinds of O 
 			virtual Processor::Result operator() (Composite &composite);
-			
+
 			/// Finish computes all hbonds of the composite according 
 			// to the chosen method <tt> PredictionMethod</tt>.
 			virtual bool finish();
 
 			//@}
-	
+
 			/**	@name	Access methods
 			 */
 			//@{
-			
+
 			///	
 			const std::vector< HBond>& getHBonds() const {return h_bonds_;}
-			
+
 			///
 			std::vector< HBond> getHBonds() {return h_bonds_;}
 
 			///	
 			BALL_DEPRECATED const std::vector< std::vector<Position> >& getBackboneHBondPairs() const;
-			
+
 			/// computes the HBond pattern as needed, e.g. by the SecondaryStructureProcessor
 			const std::vector< std::vector<Position> >& getBackboneHBondPattern() const;
 
 			/// 
 			const std::vector<ResidueData>& getResidueData() const;
-			
+
 			//@}
 
 			/** @name Public Attributes
@@ -265,12 +264,12 @@ namespace BALL
 			void setDefaultOptions();
 			//@}
 
-		protected:  
+		protected:
 
 			void preComputeBonds_(ResidueIterator& data);
 			bool finishKabschSander_();
 			bool finishWishartEtAl_();
-			
+
 
 			/** @name Kabsch Sander related objects
 			 */
@@ -280,7 +279,7 @@ namespace BALL
 			Vector3         upper_;
 			//_ upper point of the grid
 			Vector3         lower_;
-			
+
 			//_ the atom positions and an accending number per residue 
 			std::vector<ResidueData>            residue_data_;
 
@@ -293,7 +292,7 @@ namespace BALL
 			/** @name  Wishart et al related objects
 			 */
 			//@{
-		  
+
 			/*_ list of __ShiftX__ HBond donors collected by <tt>operator ()</tt>
 			 */
 			std::vector<Atom*>             donors_;
@@ -302,15 +301,15 @@ namespace BALL
 			 */
 			std::vector<Atom*>             acceptors_;
 
-			std::map< Residue*, Position>  residue_ptr_to_position_;		
+			std::map< Residue*, Position>  residue_ptr_to_position_;
 			//@}
-		
+
 			/** @name  objects for both prediciton methods
 			 */
 			//@{
-				
+
 			/// store HBond 
-			std::vector<HBond> 						 h_bonds_; 
+			std::vector<HBond>        h_bonds_;
 			//@}
 
   }; //class HBondProcessor
