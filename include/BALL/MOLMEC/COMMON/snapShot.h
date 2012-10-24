@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShot.h,v 1.28 2005/12/23 17:01:52 amoll Exp $
-//
 
 // This file contains the definitions of the classes 
 // SnapshotManager and Snapshot. 
@@ -40,102 +38,81 @@ namespace BALL
 
     /** The default constructor. It creates an empty SnapShot object. 
     */
-    SnapShot()
-			;
+    SnapShot();
 
 		/// Copy constructor.
-		SnapShot(const SnapShot& snapshot)
-			;
+		SnapShot(const SnapShot& snapshot);
 
     /// The destructor 
-    virtual ~SnapShot()
-			;
+    virtual ~SnapShot();
 
     //@}
     /// @name Assignment 
     //@{ 
 
     /// Assignment operator.
-    const SnapShot& operator = (const SnapShot& snapshot)
-			;
+    const SnapShot& operator = (const SnapShot& snapshot);
 
 		/// Clear method.
-		virtual void clear()
-			;
+		virtual void clear();
 
     //@}
     /// @name Predicates
     //@{
 
 		/// Equality operator
-		bool operator == (const SnapShot& snapshot) const
-			;
+		bool operator == (const SnapShot& snapshot) const;
 
     /** Indicates validity of the SnapShot
 				@return true if this instance is valid
     */
-    bool isValid() const
-			;
+    bool isValid() const;
 
     //@}
 		/// @name Accessors
 		//@{
 
 		/// Set the index attribute.
-		void setIndex(Size index)
-			;
+		void setIndex(Size index);
 
 		/// Get the index of this instance.
-		Size getIndex() const
-			;
+		Size getIndex() const;
 
 		/// Set the number of atoms that are covered by this snapshot.
-		void setNumberOfAtoms(Size number_of_atoms)
-			;
+		void setNumberOfAtoms(Size number_of_atoms);
 
 		/// Get the number of atoms that are covered by this snapshot.
-		Size getNumberOfAtoms() const
-			;
+		Size getNumberOfAtoms() const;
 
 		/// Set the value for the potential energy of this snapshot's system
-		void setPotentialEnergy(DoubleReal potential_energy) 
-			;
+		void setPotentialEnergy(DoubleReal potential_energy);
 
 		/// Get the value for the potential energy of this snapshot's system
-		DoubleReal getPotentialEnergy() const
-			;
+		DoubleReal getPotentialEnergy() const;
 
 		/// Set the value for the kinetic energy of this snapshot's system
-		void setKineticEnergy(DoubleReal kinetic_energy)
-			;
+		void setKineticEnergy(DoubleReal kinetic_energy);
 
 		/// Get the value for the kinetic energy of this snapshot's system
-		DoubleReal getKineticEnergy() const
-			;
+		DoubleReal getKineticEnergy() const;
 
 		/// Specify all atom positions
-		void setAtomPositions(const ::std::vector<Vector3>& atom_postions)
-			;
+		void setAtomPositions(const ::std::vector<Vector3>& atom_postions);
 
 		/// Get the vector containing the atom postions
-		const ::std::vector<Vector3>& getAtomPositions() const
-			;
+		const ::std::vector<Vector3>& getAtomPositions() const;
 
 		/// Specify all atom velocities
-		void setAtomVelocities(const ::std::vector<Vector3>& atom_velocities)
-			;
+		void setAtomVelocities(const ::std::vector<Vector3>& atom_velocities);
 
 		/// Get the vector containing the atom velocitites
-		const ::std::vector<Vector3>& getAtomVelocities() const
-			;
+		const ::std::vector<Vector3>& getAtomVelocities() const;
 
 		/// Specify all atom forces
-		void setAtomForces(const ::std::vector<Vector3>& atom_forces)
-			;
+		void setAtomForces(const ::std::vector<Vector3>& atom_forces);
 
 		/// Get all atom forces
-		const ::std::vector<Vector3>& getAtomForces() const
-			;
+		const ::std::vector<Vector3>& getAtomForces() const;
 
 		//@}
 		/// @name System interaction
@@ -155,8 +132,7 @@ namespace BALL
 				a file.
 				@param system the System which will be manipulated
 		*/
-		void applySnapShot(System& system) const
-			;
+		void applySnapShot(System& system) const;
 
 		/** Read all atom positions from a System and store them in this
 				instance of SnapShot.
@@ -169,8 +145,7 @@ namespace BALL
 				instance of SnapShot.
 				@param system the system which will be manipulated
 		*/
-		void setAtomPositions(System& system) const
-			;
+		void setAtomPositions(System& system) const;
 
 		/** Read all atom velocities from a System and store them in this
 				instance of SnapShot.
@@ -183,8 +158,7 @@ namespace BALL
 				instance of SnapShot.
 				@param system the system which will be manipulated
 		*/
-		void setAtomVelocitites(System& system) const
-			;
+		void setAtomVelocitites(System& system) const;
 
 		/** Read all atom forces from a System and store them in this
 				instance of SnapShot.
@@ -197,8 +171,7 @@ namespace BALL
 				instance of SnapShot.
 				@param system the system which will be manipulated
 		*/
-		void setAtomForces(System& system) const
-			;
+		void setAtomForces(System& system) const;
 
 		//@}
 
@@ -208,13 +181,13 @@ namespace BALL
     //@{
 
     //_ The index of the current snapshot object. Valid indices start at 1.
-    Size index_; 
+    Size index_;
 
     /*_ The number of atoms of the underlying system. The system being
         snapshot must always be the same, especially with respect to
         the number of atoms. 
     */
-    Size number_of_atoms_; 
+    Size number_of_atoms_;
 
     /*_ The potential energy in the system when the snapshot is taken.
         Only contributions from selected atoms are considered. 
@@ -224,7 +197,7 @@ namespace BALL
     /*_ The  kinetic energy due to electrostatic interactions. 
         Only contributions from selected atoms are considered. 
     */
-    double kinetic_energy_; 
+    double kinetic_energy_;
 
     //_ An STL vector with the positions of all atoms 
     vector<Vector3> atom_positions_;
