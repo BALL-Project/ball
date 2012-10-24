@@ -68,7 +68,7 @@ pdb2amber_naming:
 	which will not be resolved by this program. Instead a standard case will
 	be assumed (like CYX for CYS residues which built a sulphur bridge).
 
-pdb2dcd: (obsolete, deprecated by file_converter)
+pdb2dcd:
 
 	Converts a bunch of PDB files to a dcd file containing the spatial
 	information of these PDBs as trajectory information.
