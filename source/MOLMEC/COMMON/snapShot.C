@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShot.C,v 1.31 2003/08/26 09:17:52 oliver Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -14,7 +13,6 @@ namespace BALL
 
 	// The default constructor of the SnapShot class. 
   SnapShot::SnapShot()
-		
 		:	index_(0),
 			number_of_atoms_(0),
 			potential_energy_(0.0),
@@ -28,7 +26,6 @@ namespace BALL
 
 	// The copy constructor of the SnapShot class. 
 	SnapShot::SnapShot (const SnapShot& snapshot)
-		
 		:	index_(snapshot.index_),
 			number_of_atoms_(snapshot.number_of_atoms_),
 			potential_energy_(snapshot.potential_energy_),
@@ -43,7 +40,6 @@ namespace BALL
 	// The destructor just deletes all STL components (superfluous and just
 	// for clarity) 
 	SnapShot::~SnapShot()
-		
 	{
 		clear();
 	}
@@ -51,7 +47,6 @@ namespace BALL
 
 	// The assignment operator 
 	const SnapShot& SnapShot::operator = (const SnapShot& snapshot)
-		
 	{
 		index_ = snapshot.index_;
 		number_of_atoms_ = snapshot.number_of_atoms_;
@@ -66,7 +61,6 @@ namespace BALL
 
 
 	void SnapShot::clear()
-		
 	{
 		index_ = 0;
 		number_of_atoms_ = 0;
@@ -80,9 +74,8 @@ namespace BALL
 
 
 	bool SnapShot::operator == (const SnapShot& snapshot) const
-		
 	{
-		return 
+		return
 			   (index_ == snapshot.index_)
 			&& (number_of_atoms_ == snapshot.number_of_atoms_)
 			&& (potential_energy_ == snapshot.potential_energy_)
@@ -94,7 +87,6 @@ namespace BALL
 
 
 	bool SnapShot::isValid() const
-		
 	{
 		return 	number_of_atoms_ > 0 &&
 					 	number_of_atoms_ == atom_forces_.size() &&
@@ -102,100 +94,86 @@ namespace BALL
 						number_of_atoms_ == atom_positions_.size();
 	}
 
-	
+
 	void SnapShot::setIndex(Size index)
-		
 	{
 		index_ = index;
 	}
 
 
 	Size SnapShot::getIndex() const
-		
 	{
 		return index_;
 	}
 
 
 	void SnapShot::setNumberOfAtoms(Size number_of_atoms)
-		
 	{
 		number_of_atoms_ = number_of_atoms;
 	}
 
 
 	Size SnapShot::getNumberOfAtoms() const
-		
 	{
 		return number_of_atoms_;
 	}
 
 
 	DoubleReal SnapShot::getPotentialEnergy() const
-		
 	{
 		return potential_energy_;
 	}
 
 
-	void SnapShot::setPotentialEnergy(DoubleReal potential_energy) 
-		
+	void SnapShot::setPotentialEnergy(DoubleReal potential_energy)
 	{
 		potential_energy_ = potential_energy;
 	}
 
 
 	DoubleReal SnapShot::getKineticEnergy() const
-		
 	{
 		return kinetic_energy_;
 	}
 
 
 	void SnapShot::setKineticEnergy(DoubleReal kinetic_energy)
-		
 	{
 		kinetic_energy_ = kinetic_energy;
 	}
 
 
 	void SnapShot::setAtomPositions(const ::std::vector<Vector3>& atom_postions)
-		
 	{
 		atom_positions_ = atom_postions;
 	}
 
 
 	const ::std::vector<Vector3>& SnapShot::getAtomPositions() const
-		
 	{
 		return atom_positions_;
 	}
 
 
 	void SnapShot::setAtomVelocities(const ::std::vector<Vector3>& atom_velocities)
-		
 	{
 		atom_velocities_ = atom_velocities;
 	}
 
 
 	const ::std::vector<Vector3>& SnapShot::getAtomVelocities() const
-		
 	{
 		return atom_velocities_;
 	}
 
 
 	void SnapShot::setAtomForces(const ::std::vector<Vector3>& atom_forces)
-		
 	{
 		atom_forces_ = atom_forces;
 	}
 
 
 	const ::std::vector<Vector3>& SnapShot::getAtomForces() const
-		
 	{
 		return atom_forces_;
 	}
@@ -212,7 +190,7 @@ namespace BALL
 		atom_positions_.resize(number_of_atoms_);
 		atom_velocities_.resize(number_of_atoms_);
 		atom_forces_.resize(number_of_atoms_);
-		
+
 		// This is the data section of the snapshot object 
 		for (Size i = 0; +atom_it; ++atom_it, ++i)
 		{
@@ -224,7 +202,6 @@ namespace BALL
 
 
 	void SnapShot::applySnapShot(System& system) const
-		
 	{
 		if (system.countAtoms() != number_of_atoms_)
 		{
@@ -273,7 +250,6 @@ namespace BALL
 
 
 	void SnapShot::setAtomPositions(System& system) const
-		
 	{
 		if (system.countAtoms() != number_of_atoms_)
 		{
@@ -306,7 +282,6 @@ namespace BALL
 
 
 	void SnapShot::setAtomVelocitites(System& system) const
-		
 	{
 		if (system.countAtoms() != number_of_atoms_)
 		{
@@ -340,7 +315,6 @@ namespace BALL
 
 
 	void SnapShot::setAtomForces(System& system) const
-		
 	{
 		if (system.countAtoms() != number_of_atoms_)
 		{
