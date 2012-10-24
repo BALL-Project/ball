@@ -70,13 +70,17 @@ namespace BALL
 		//@}
 
 		/**	Assign the two objects to be mapped
-		*/	
+		*/
 		void set(AtomContainer& A, AtomContainer& B);
-		
+
 		/**	Calculate the root mean squared deviation
 		*/
 		double calculateRMSD();
-		
+
+		/**	Calculate the root mean squared deviation given a AtomBijection
+		*/
+		double calculateRMSD(const AtomBijection& new_bijection);
+
 		/**	Calculate the transformation to map the first of two isomorphous 
 				AtomContainer objects onto the second
 		*/

@@ -108,6 +108,16 @@ namespace BALL
 		return sqrt(square_deviation);
 	}
 
+	/**	Calculate the root mean squared deviation given a AtomBijection
+	*/
+	// TODO: add possibility to compute a transformation
+	double StructureMapper::calculateRMSD(const AtomBijection& new_bijection)
+	{
+		transformation_ = Matrix4x4::getIdentity();
+		bijection_ = new_bijection;
+		return calculateRMSD();
+	}
+
 	/* Calculate the transformation to map the first of two isomorphous
 	   AtomContainer objects onto the second */
 	bool StructureMapper::calculateTransformation()
@@ -240,7 +250,7 @@ namespace BALL
 		bijection_.assignByName(*A_, *B_);
 
 		// Check whether we could map anything.
-		// If not: method of last resort, map the atoms inthe
+		// If not: method of last resort, map the atoms in the
 		// order they appear in.
 		if (bijection_.size() == 0)	
 		{
