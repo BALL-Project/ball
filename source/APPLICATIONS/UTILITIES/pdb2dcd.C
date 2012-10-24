@@ -1,5 +1,7 @@
-// $Id: pdb2dcd.C,v 1.2.30.1 2007/08/07 18:26:19 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
 //
+
 // A very simple utility for combining several pdb snapshots of a system
 // into one dcd file
 
@@ -15,9 +17,9 @@ using namespace std;
 int main(int argc, char** argv)
 {
 
-	if (argc == 1) 
-	{	
-		Log.info() << "Usage:" << argv[0] << " <PDB infile>* " << endl;	
+	if (argc == 1)
+	{
+		Log.info() << "Usage:" << argv[0] << " <PDB infile>* " << endl;
 		Log.info() << "Converts all given PDBFiles into snapshots of a DCDFile." << endl;
 		return 1;
 	}
