@@ -115,6 +115,7 @@ SET(BALL_DOCKING_TESTS
 	GridAnalysis_test
 	MolDB_test
 	Parameter_test
+	PoseClustering_test
 	Receptor_test
 	Result_test
 	RotateBond_test

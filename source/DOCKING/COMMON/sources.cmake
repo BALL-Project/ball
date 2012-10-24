@@ -11,6 +11,7 @@ SET(SOURCES_LIST
 	flexDefinition.C
 	flexibleMolecule.C
 	gridAnalysis.C
+	poseClustering.C
 	receptor.C
 	result.C
 	sideChainOptimizer.C
