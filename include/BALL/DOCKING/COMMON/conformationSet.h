@@ -1,10 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conformationSet.h,v 1.3.18.2 2007/06/17 07:02:21 oliver Exp $
-//
-// Author:
-//
 
 #ifndef BALL_DOCKING_COMMON_CONFORMATIONSET_H
 #define BALL_DOCKING_COMMON_CONFORMATIONSET_H
@@ -43,45 +39,40 @@ namespace BALL
 				typedef std::pair < Index, float > Conformation;
 
 				ConformationSet() {};
+
+				ConformationSet(const ConformationSet& cs);
+
 				ConformationSet(const System& system);
 
 				virtual ~ConformationSet() {};
 
 				/** Operations
 				*/
-				void setup(const System& system)
-					throw();
+				void setup(const System& system);
 
-				void add(const float score, const System& conformation)
-					throw();
+				void add(const float score, const System& conformation);
 
-				const System& getSystem() const
-					throw();
+				const System& getSystem() const;
 
-				System& getSystem()
-					throw();
+				System& getSystem();
 
 				/** Use score as the new scoring information.
 				 */
-				void setScoring(std::vector < Conformation > & score)
-					throw();
+				void setScoring(std::vector < Conformation > & score);
 
 				/** Return the current scoring.
 				 */
-				const std::vector < Conformation > & getScoring() const
-					throw();
+				const std::vector < Conformation > & getScoring() const;
 
 				/** Reset the scoring vector to the identity permutation with
 				 * 	identical scores of 0.
 				 */
-				void resetScoring()
-					throw();
+				void resetScoring();
 
 				/** Returns the _unranked_ list of conformations, i.e. the conformations
 				 *  in the order in which they were added.
 				 */
-				const std::vector < SnapShot > & getUnscoredConformations() const
-					throw();
+				const std::vector < SnapShot > & getUnscoredConformations() const;
 
 				/** Returns the i-th snapshot using the current scoring information.
 				 * 	TODO: Exception handling
@@ -93,12 +84,17 @@ namespace BALL
 				 */
 				bool writeDCDFile(const String& filename, const Size num = 0);
 
-				bool readDCDFile(const String& filename)
-					throw();
+				bool readDCDFile(const String& filename);
 
 				/** Return the number of conformations.
 				 */
 				Size size() const;
+
+				void setParent(ConformationSet* new_parent){parent_= new_parent;}
+
+				ConformationSet* getParent() {return parent_;}
+
+				const ConformationSet* getParent() const {return parent_;}
 
 			protected:
 
@@ -116,6 +112,10 @@ namespace BALL
 				/** The SnapShots
 				*/
 				vector<SnapShot> structures_;
+
+				/** the original ConformationSet on which this set is based
+				 */
+				ConformationSet* parent_;
 		};
 
 }

@@ -1,8 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conformationSet.C,v 1.2.22.2 2007/05/07 11:49:25 zeistacita Exp $
-//
+
 
 #include <BALL/DOCKING/COMMON/conformationSet.h>
 
@@ -18,19 +17,27 @@ using namespace std;
 
 namespace BALL
 {
+	ConformationSet::ConformationSet(const ConformationSet& cs)
+		: snapshot_order_(cs.snapshot_order_),
+			system_(cs.system_),
+			structures_(cs.structures_),
+			parent_(cs.parent_)
+	{
+	}
+
 	ConformationSet::ConformationSet(const System& system)
-		: system_(system)
+		: system_(system),
+		  parent_(NULL)
 	{
 	}
 
 	void ConformationSet::setup(const System& system)
-		throw()
 	{
 		system_ = system;
+		parent_ = NULL;
 	}
 
 	void ConformationSet::add(const float score, const System& conformation)
-	  throw()
 	{
 		SnapShot sn;
 		sn.takeSnapShot(conformation);
@@ -41,31 +48,26 @@ namespace BALL
 	}
 
 	const System& ConformationSet::getSystem() const
-		throw()
 	{
 		return system_;
 	}
 
 	System& ConformationSet::getSystem()
-		throw()
 	{
 		return system_;
 	}
 
 	const std::vector < ConformationSet::Conformation > & ConformationSet::getScoring() const
-		throw()
 	{
 		return snapshot_order_;
 	}
 
 	void ConformationSet::setScoring(std::vector < Conformation > & score)
-		throw()
 	{
 		snapshot_order_ = score;
 	}
 
 	void ConformationSet::resetScoring()
-		throw()
 	{
 		snapshot_order_.resize(structures_.size());
 
@@ -77,7 +79,6 @@ namespace BALL
 	}
 
 	const std::vector < SnapShot > & ConformationSet::getUnscoredConformations() const
-		throw()
 	{
 		return structures_;
 	}
@@ -115,7 +116,6 @@ namespace BALL
 	}
 
 	bool ConformationSet::readDCDFile(const String& filename)
-		throw()
 	{
 		try
 		{
