@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scoringFunction.C,v 1.2 2006/05/21 18:15:29 anker Exp $
 
 #include <BALL/DOCKING/COMMON/sideChainOptimizer.h>
 #include <BALL/KERNEL/bond.h>
