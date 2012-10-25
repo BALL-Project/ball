@@ -180,6 +180,56 @@ CHECK(PoseClustering::Option::RMSD_THRESHOLD)
 
 RESULT
 
+
+CHECK(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL)
+	PDBFile pdb(BALL_TEST_DATA_PATH(PoseClustering_test.pdb));
+	System sys;
+	pdb.read(sys);
+	ConformationSet cs2;
+	cs2.setup(sys);
+	cs2.readDCDFile(BALL_TEST_DATA_PATH(PoseClustering2_test.dcd));
+	cs2.resetScoring();
+	PoseClustering pc;
+
+//std::cout << " TEST PoseClustering::RMSDLevelOfDetail::C_ALPHA " << std::endl;
+
+	// Option::RMSD_LEVEL_OF_DETAIL::C_ALPHA
+	pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::RMSDLevelOfDetail::C_ALPHA);
+	TEST_EQUAL(pc.options.getInteger(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL), PoseClustering::RMSDLevelOfDetail::C_ALPHA)
+	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 6.00);
+	TEST_REAL_EQUAL(pc.options.getReal(PoseClustering::Option::RMSD_THRESHOLD), 6.00)
+
+	pc.setConformationSet(&cs2);
+	pc.compute();
+	TEST_EQUAL(pc.getNumberOfClusters(), 15)
+
+	//TODO: HEAVY_ATOMS, add implementation and tests 
+
+
+//std::cout << " TEST PoseClustering::RMSDLevelOfDetail::BACKBONE " << std::endl;
+	// Option::RMSD_LEVEL_OF_DETAIL::BACKBONE;
+	pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::RMSDLevelOfDetail::BACKBONE);
+	TEST_EQUAL(pc.options.getInteger(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL), PoseClustering::RMSDLevelOfDetail::BACKBONE)
+	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 6.00);
+
+	pc.setConformationSet(&cs2);
+	pc.compute();
+	TEST_EQUAL(pc.getNumberOfClusters(), 15)
+
+//std::cout << " TEST PoseClustering::RMSDLevelOfDetail::ALL_ATOMS " << std::endl;
+	// Option::RMSD_LEVEL_OF_DETAIL::ALL_ATOMS
+	pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::RMSDLevelOfDetail::ALL_ATOMS);
+	TEST_EQUAL(pc.options.getInteger(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL), PoseClustering::RMSDLevelOfDetail::ALL_ATOMS)
+	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 6.00);
+
+	pc.setConformationSet(&cs2);
+	pc.compute();
+	TEST_EQUAL(pc.getNumberOfClusters(), 15)
+
+RESULT
+
+
+
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST
