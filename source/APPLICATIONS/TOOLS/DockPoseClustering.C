@@ -43,12 +43,12 @@ int main (int argc, char **argv)
 	parpars.registerParameter("o_dir", "output directory for 2nd to last solution", STRING, true, "", true);
 
 	// register String parameter for supplying max number of solutions
-	parpars.registerParameter("rmsd_cutoff", "minimal rmsd between the final clusters ", DOUBLE, false, 5.0);
+	parpars.registerParameter("rmsd_cutoff", "minimal rmsd between the final clusters (default 5.0) ", DOUBLE, false, 5.0);
 	parpars.setParameterRestrictions("rmsd_cutoff", 0, 100);
 
 
 	// choice of penalty table 
-	parpars.registerParameter("rmsd_scope", "atoms to be considered for rmsd score ", STRING, false, "C_ALPHA");
+	parpars.registerParameter("rmsd_scope", "atoms to be considered for rmsd score (C_ALPHA, BACKBONE, ALL_ATOMS) ", STRING, false, "C_ALPHA");
 	list<String> rmsd_levels;
 	rmsd_levels.push_back("C_ALPHA");
 	//rmsd_levels.push_back("HEAVY_ATOMS"); //TODO
@@ -74,7 +74,6 @@ int main (int argc, char **argv)
 	PDBFile pdb;
 	pdb.open(parpars.get("i_pdb"));
 	System sys;
-	pdb >> sys;
 	pdb.read(sys);
 
 	ConformationSet cs;
@@ -84,6 +83,7 @@ int main (int argc, char **argv)
 
 
 	PoseClustering pc;
+
 	if (parpars.has("rmsd_cutoff"))
 	{
 		float rmsd = parpars.get("rmsd_cutoff").toInt();
@@ -101,11 +101,16 @@ int main (int argc, char **argv)
 			pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::RMSDLevelOfDetail::ALL_ATOMS);
 	}
 
+	pc.setConformationSet(&cs);
+
 	pc.compute();
+
 	Size num_clusters = pc.getNumberOfClusters();
 
 	for (Size i = 0; i < num_clusters; i++)
 	{
+		Log << "   Cluster " << i << " has " << pc.getClusterSize(i) << " members." << endl;
+
 		boost::shared_ptr<ConformationSet> new_cs = pc.getClusterConformationSet(i);
 
 		String outfile_name = (i == 0) ? String(parpars.get("o"))

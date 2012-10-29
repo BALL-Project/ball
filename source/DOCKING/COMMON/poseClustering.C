@@ -42,6 +42,12 @@ namespace BALL
 		// 
 		rmsd_level_of_detail_ = options.getInteger(Option::RMSD_LEVEL_OF_DETAIL);
 
+		if (!current_set_)
+		{
+			Log.info() << "No valid ConformationSet given." << endl;
+			return false;
+		}
+
 		// in the beginning each pose is a cluster	
 		pairwise_scores_.resize(current_set_->size(), current_set_->size());
 
