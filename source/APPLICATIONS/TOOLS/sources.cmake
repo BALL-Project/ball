@@ -12,6 +12,7 @@ SET(EXECUTABLES_LIST
 	CrystalGenerator
 	DBExporter
 	DBImporter
+	DCD2PDBSplitter
 	DockPoseClustering
 	DockResultMerger
 	EvenSplit
