@@ -96,14 +96,12 @@ namespace BALL
 
 
 	DCDFile::~DCDFile()
-		
 	{
 		close();
 		clear();
 	}
 
 	void DCDFile::clear()
-		
 	{
 		swap_bytes_ = false;
 		has_velocities_ = false;
@@ -112,7 +110,6 @@ namespace BALL
 
 
 	bool DCDFile::operator == (const DCDFile& file) const
-		
 	{
 		// ?????: Header vergleichen. Was heiﬂt gleich eigentlich in diesem Fall?
 		return (TrajectoryFile::operator == (file));
@@ -120,7 +117,6 @@ namespace BALL
 
 
 	bool DCDFile::isSwappingBytes() const
-		
 	{
 		return swap_bytes_;
 	}
@@ -149,14 +145,12 @@ namespace BALL
 
 
 	bool DCDFile::hasVelocities() const
-		
 	{
 		return has_velocities_;
 	}
 
 
 	bool DCDFile::readHeader()
-		
 	{
 		/*
 		* general structure of a DCD-file header:
@@ -443,12 +437,10 @@ namespace BALL
 		}
 
 		return true;
-
 	}
 
 
 	bool DCDFile::writeHeader()
-		
 	{
 		/*
 		* general structure of a DCD-file header:
@@ -533,7 +525,6 @@ namespace BALL
 
 
 	bool DCDFile::append(const SnapShot& snapshot)
-		
 	{
 		if (number_of_atoms_ != snapshot.getNumberOfAtoms())
 		{
@@ -570,7 +561,6 @@ namespace BALL
 
 
 	void DCDFile::writeVector_(const vector<Vector3>& v)
-		
 	{
 		writeSize_(4*number_of_atoms_);
 		for (Size atom = 0; atom < number_of_atoms_; ++atom)
@@ -597,7 +587,7 @@ namespace BALL
 	{
 		#ifdef BALL_DEBUG
 			Log.info() << "file position at beginning of read(): " << tellg() << endl;
- 		#endif
+		#endif
 
 		Size current = 0;
 		if (((int(current_snapshot_) - int(number_of_snapshots_)) > 0) && (int(current_snapshot_) != int(number_of_snapshots_)))
@@ -611,8 +601,10 @@ namespace BALL
 			current = current_snapshot_;
 		}
 
-		if (!good() || ((current > number_of_snapshots_) && (current == current_snapshot_)) || ((current_snapshot_ == number_of_snapshots_) && (number_of_snapshots_ != 0))) return false;
-	 
+		if (!good() || ((current > number_of_snapshots_) && (current == current_snapshot_))
+				        || ((current_snapshot_ == number_of_snapshots_) && (number_of_snapshots_ != 0)))
+			return false;
+
 		// the number of atoms has to be read from the file header before ever
 		// thinking of reading correct information
 		Size expected_noa = getNumberOfAtoms();
@@ -683,7 +675,6 @@ namespace BALL
 	}
 
 	Size DCDFile::readSize_()
-		
 	{
 		*this >> adapt_size_; 
 		if (swap_bytes_) swapBytes(adapt_size_.getData());
@@ -691,7 +682,6 @@ namespace BALL
 	}
 
 	bool DCDFile::readSize_(Size expected_size, const String& what)
-		
 	{
 		Size tmp = readSize_();
 		// sanity check
@@ -706,7 +696,6 @@ namespace BALL
 	}
 
 	float DCDFile::readFloat_()
-		
 	{
 		*this >> adapt_float_; 
 		if (swap_bytes_) swapBytes(adapt_float_.getData());
@@ -715,7 +704,6 @@ namespace BALL
 
 
 	bool DCDFile::readVector_(vector<Vector3>& v)
-		
 	{
 		Size expected_noa = getNumberOfAtoms();
 		Size expected_size = expected_noa * 4;
@@ -749,7 +737,6 @@ namespace BALL
 
 
 	bool DCDFile::seekAndWriteHeader()
-		
 	{
 		Position here = tellp();
 		seekp(0, ios::beg);
@@ -806,7 +793,6 @@ namespace BALL
 
 
 	bool DCDFile::init()
-		
 	{
 		#ifdef BALL_DEBUG
 		 verbosity_ = 1;
@@ -831,14 +817,12 @@ namespace BALL
 
 
 	void DCDFile::enableVelocityStorage()
-		
 	{
 		has_velocities_ = true;
 	}
 
-	
+
 	void DCDFile::disableVelocityStorage()
-		
 	{
 		has_velocities_ = false;
 	}
