@@ -1,7 +1,6 @@
-// ----------------------------------------------------
-// $Maintainer: Marc Ršttig $
-// $Authors: Marc Ršttig, Marcel Schumann $
-// ----------------------------------------------------
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 
 #include <BALL/DOCKING/COMMON/result.h>
 
