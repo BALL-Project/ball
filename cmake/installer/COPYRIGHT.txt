@@ -23,11 +23,11 @@
 
    You can contact the authors by electronic mail
 
-     Andreas Hildebrandt: anhi@bioinf.uni-sb.de
+     Andreas Hildebrandt: Andreas.Hildebrandt@uni-mainz.de
 
-     Oliver Kohlbacher: oliver.kohlbacher@uni-tuebingen.de 
+     Oliver Kohlbacher:   oliver.kohlbacher@uni-tuebingen.de 
 
-     Hans-Peter Lenhof: len@bioinf.uni-sb.de
+     Hans-Peter Lenhof:   lenhof@bioinf.uni-sb.de
 
    or visit our website at
 
