@@ -1,40 +1,20 @@
-/* classificationModel.h
- * 
- * Copyright (C) 2009 Marcel Schumann
- * 
- * This file is part of QuEasy -- A Toolbox for Automated QSAR Model
- * Construction and Validation.
- * QuEasy is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or (at
- * your option) any later version.
- * 
- * QuEasy is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
- */
-
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
 // 
 
-#ifndef CLASSIFICATION
-#define CLASSIFICATION
+#ifndef BALL_QSAR_CLASSIFICATIONMODEL_H
+#define BALL_QSAR_CLASSIFICATIONMODEL_H
 
-#ifndef MODELH
+#ifndef BALL_QSAR_MODEL_H
 #include <BALL/QSAR/Model.h>
 #endif
 
-#ifndef CLASVALIDATION
+#ifndef BALL_QSAR_CLASSIFICATIONVALIDATION_H
 #include <BALL/QSAR/classificationValidation.h>
 #endif
 
-#ifndef QSAR_EXCEPTION
+#ifndef BALL_QSAR_EXCEPTION_H
 #include <BALL/QSAR/exception.h>
 #endif
 
@@ -43,7 +23,8 @@ namespace BALL
 {
 	namespace QSAR
 	{
-		class BALL_EXPORT ClassificationModel : public Model
+		class BALL_EXPORT ClassificationModel
+			: public Model
 		{
 			public:
 				/** @name Constructors and Destructors
@@ -109,8 +90,6 @@ namespace BALL
 				void equalSpaceDiscretization(unsigned int bins, Eigen::MatrixXd& discretization_information);
 				
 				void equalSpaceDiscretizationTestData(Eigen::VectorXd& compound, unsigned int bins, const Eigen::MatrixXd& discretization_information);
-				
-				
 				
 				
 				//@}
