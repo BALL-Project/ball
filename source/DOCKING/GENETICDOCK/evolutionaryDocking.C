@@ -1,7 +1,6 @@
-// ----------------------------------------------------
-// $Maintainer: Marcel Schumann $
-// $Authors: Jan Fuhrmann, Marcel Schumann $
-// ----------------------------------------------------
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 
 #include <BALL/DOCKING/GENETICDOCK/evolutionaryDocking.h>
 #include <BALL/DOCKING/GENETICDOCK/geneticAlgorithm.h>
