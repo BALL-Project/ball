@@ -1,68 +1,56 @@
-/* Model.h
- * 
- * Copyright (C) 2009 Marcel Schumann
- * 
- * This file is part of QuEasy -- A Toolbox for Automated QSAR Model
- * Construction and Validation.
- * QuEasy is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or (at
- * your option) any later version.
- * 
- * QuEasy is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
- */
-
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-//
+
 #ifndef BALL_QSAR_MODEL_H
 #define BALL_QSAR_MODEL_H
+
+
+#ifndef BALL_QSAR_VALIDATION_H
+#include <BALL/QSAR/validation.h>
+#endif
+
+#ifndef BALL_QSAR_QSARDATA_H
+#include <BALL/QSAR/QSARData.h>
+#endif
+
+#ifndef BALL_QSAR_EXCEPTION_H
+#include <BALL/QSAR/exception.h>
+#endif
+
+#ifndef BALL_MATHS_PARSEDFUNCTION_H
+#include <BALL/MATHS/parsedFunction.h>
+#endif
 
 #include <vector>
 #include <set>
 
 #include <Eigen/Core>
 
-#include <BALL/QSAR/validation.h>
-
-#include <BALL/QSAR/QSARData.h>
-
-#include <BALL/QSAR/exception.h>
-
-#include <BALL/MATHS/parsedFunction.h>
-
-namespace BALL 
+namespace BALL
 {
-	
 	namespace QSAR
-	{	
+	{
 		class BALL_EXPORT Model
-		{	
+		{
 			public:
 				/** @name Constructors and Destructors
 				 */
 				//@{
 				/** constructur
 				@param q QSARData object, from which the data for this model should be taken */
-				Model(const QSARData& q);	
+				Model(const QSARData& q);
 
 				virtual ~Model();
-				
+
 				/** copy constructur; creates a model with the same specifications as the given one (same model and kernel parameters). If the given model has been trained, the training result is copied as well. \n
 				Note, that the input data that has been read by m to m.descriptor_matrix_ and m.Y_ is NOT copied to new model, since the input data is not part of the specification of a model. If nevertheless, copying of the input data is desired, use function copyData() (afterwards).  */
 				virtual void operator=(const Model& m);
 
 				EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 				//@}
-				
-				
+
+
 				/** @name Accessors
 				 */
 				//@{
@@ -71,8 +59,8 @@ namespace BALL
 				
 				/** copies the IDs of the selected descriptors from m */
 				void copyDescriptorIDs(const Model& m);
-				
-				
+
+
 				/** copies the data for the relevant descriptors from the bound QSARData object into this model and updates Model.descriptor_transformations and Model.y_transformations . \n
 				If no explicit feature selection was done, i.e. if descriptor_IDs is emtpy, all data is fetched. \n
 				If feature selection was done, i.e. if descriptor_IDs is not empty, only the columns of the relevant descriptors are fetched. */
@@ -108,7 +96,7 @@ namespace BALL
 				/** sets the model parameters according to the given values. */
 				virtual void setParameters(vector<double>& /*v*/){};
 				
-				virtual vector<double> getParameters() const;			
+				virtual vector<double> getParameters() const;
 
 				/** returns a const pointer to the descriptor IDs of this model */
 				std::multiset<unsigned int>* getDescriptorIDs();
