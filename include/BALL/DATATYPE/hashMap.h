@@ -111,7 +111,7 @@ namespace std
 			}
 		};
 
-#ifndef BALL_COMPILER_MSVC
+#if !defined(BALL_COMPILER_MSVC) && !defined(BALL_COMPILER_LLVM)
 		template<>
 		struct hash<const ::BALL::String&> : public std::unary_function<const ::BALL::String &, size_t>
 		{

@@ -53,6 +53,8 @@
 #cmakedefine BALL_COMPILER_GXX
 // Intel C++
 #cmakedefine BALL_COMPILER_INTEL
+// LLVM
+#cmakedefine BALL_COMPILER_LLVM
 
 // The compiler name.
 #cmakedefine BALL_COMPILER "@BALL_COMPILER@"
