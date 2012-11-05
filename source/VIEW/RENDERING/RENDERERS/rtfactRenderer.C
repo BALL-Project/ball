@@ -603,7 +603,7 @@ namespace BALL
 						rt_data.material_handles.back().setParamb("useVertexColor", false);
 
 						//
-						RTpieCpp::GeometryHandle& lastGeom = rt_data.object_handles.back();
+						Size last_geom_index = rt_data.object_handles.size() - 1;
 						rt_data.object_handles.push_back(
 								sceneHandle.createGeometry());
 						geometric_objects_[rt_data.instance_handles.back()] = *it;
@@ -632,7 +632,7 @@ namespace BALL
 
 						if (!rep.isHidden()) {
 							rt_data.instance_handles.push_back(
-									lastGeom.createInstance());
+									rt_data.object_handles[last_geom_index].createInstance());
               transformTube(new_tube_1, rt_data.instance_handles.back());
 
 							rt_data.instance_handles.push_back(
