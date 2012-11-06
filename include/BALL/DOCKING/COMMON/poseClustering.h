@@ -17,6 +17,10 @@
 # include <BALL/MOLMEC/COMMON/snapShot.h>
 #endif
 
+#ifndef BALL_STRUCTURE_ATOMBIJECTION_H
+# include <BALL/STRUCTURE/atomBijection.h>
+#endif
+
 #ifndef BALL_KERNEL_SYSTEM_H
   #include <BALL/KERNEL/system.h>
 #endif
@@ -85,7 +89,8 @@ namespace BALL
 				C_ALPHA, //=0
 				HEAVY_ATOMS,
 				BACKBONE,
-				ALL_ATOMS
+				ALL_ATOMS,
+				PROPERTY_BASED_ATOM_BIJECTION
 			};
 
 
@@ -156,10 +161,13 @@ namespace BALL
 			//System& getClusterRepresentative(Index i);
 
 			/// 
-			boost::shared_ptr<System> getClusterRepresentative(Index i);
+			boost::shared_ptr<System> getClusterRepresentative(Index i) const;
 
+			/// returns cluster i as ConformationSet
 			boost::shared_ptr<ConformationSet> getClusterConformationSet(Index i) const;
 
+			/// returns a ConformationSet containing one structure per cluster
+			boost::shared_ptr<ConformationSet> getReducedConformationSet() const;
 
 			//@}
 

@@ -12,7 +12,8 @@
 #include <BALL/MOLMEC/COMMON/snapShot.h>
 #include <BALL/DOCKING/COMMON/conformationSet.h>
 #include <BALL/FORMAT/PDBFile.h>
-
+#include <BALL/KERNEL/selector.h>
+#include <BALL/CONCEPT/property.h>
 ///////////////////////////
 
 using namespace BALL;
@@ -158,7 +159,6 @@ CHECK(getClusterConformationSet(Index i))
 	TEST_EQUAL(cs4->size(), 8)
 
 	TEST_EQUAL(sys.getProtein(0)->countAtoms(), cs3->getSystem().getProtein(0)->countAtoms())
-
 RESULT
 
 
@@ -177,7 +177,6 @@ CHECK(PoseClustering::Option::RMSD_THRESHOLD)
 
 	TEST_EQUAL(pc.getNumberOfClusters(), 1)
 	TEST_EQUAL(pc.getClusterSize(0), 20)
-
 RESULT
 
 
@@ -190,8 +189,6 @@ CHECK(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL)
 	cs2.readDCDFile(BALL_TEST_DATA_PATH(PoseClustering2_test.dcd));
 	cs2.resetScoring();
 	PoseClustering pc;
-
-//std::cout << " TEST PoseClustering::RMSDLevelOfDetail::C_ALPHA " << std::endl;
 
 	// Option::RMSD_LEVEL_OF_DETAIL::C_ALPHA
 	pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::RMSDLevelOfDetail::C_ALPHA);
@@ -206,7 +203,6 @@ CHECK(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL)
 	//TODO: HEAVY_ATOMS, add implementation and tests 
 
 
-//std::cout << " TEST PoseClustering::RMSDLevelOfDetail::BACKBONE " << std::endl;
 	// Option::RMSD_LEVEL_OF_DETAIL::BACKBONE;
 	pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::RMSDLevelOfDetail::BACKBONE);
 	TEST_EQUAL(pc.options.getInteger(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL), PoseClustering::RMSDLevelOfDetail::BACKBONE)
@@ -216,7 +212,6 @@ CHECK(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL)
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 15)
 
-//std::cout << " TEST PoseClustering::RMSDLevelOfDetail::ALL_ATOMS " << std::endl;
 	// Option::RMSD_LEVEL_OF_DETAIL::ALL_ATOMS
 	pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::RMSDLevelOfDetail::ALL_ATOMS);
 	TEST_EQUAL(pc.options.getInteger(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL), PoseClustering::RMSDLevelOfDetail::ALL_ATOMS)
@@ -225,9 +220,57 @@ CHECK(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL)
 	pc.setConformationSet(&cs2);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 15)
-
 RESULT
 
+
+CHECK(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL::PROPERTY_BASED_ATOM_BIJECTION)
+	PDBFile pdb(BALL_TEST_DATA_PATH(PoseClustering_test.pdb));
+	System sys;
+	pdb.read(sys);
+
+	Selector sel;
+	sys.deselect();
+	Expression e("residue(ALA)");
+	sel.setExpression(e);
+	sys.apply(sel);
+	list<Atom*> selected_atoms = sel.getSelectedAtoms();
+	list<BALL::Atom*>::iterator it = selected_atoms.begin();
+	for ( ; it != selected_atoms.end(); ++it)
+	{
+		(*it)->setProperty("ATOMBIJECTION_RMSD_SELECTION", true);
+	}
+
+	TEST_EQUAL(sel.getNumberOfSelectedAtoms(), 105)
+
+	ConformationSet cs2;
+	cs2.setup(sys);
+	cs2.readDCDFile(BALL_TEST_DATA_PATH(PoseClustering2_test.dcd));
+	cs2.resetScoring();
+
+	PoseClustering pc;
+	pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::RMSDLevelOfDetail::PROPERTY_BASED_ATOM_BIJECTION);
+	pc.setConformationSet(&cs2);
+	pc.compute();
+	TEST_EQUAL(pc.getNumberOfClusters(), 18)
+RESULT
+
+
+CHECK(getReducedConformationSet())
+	PDBFile pdb(BALL_TEST_DATA_PATH(PoseClustering_test.pdb));
+	System sys;
+	pdb.read(sys);
+	ConformationSet cs2;
+	cs2.setup(sys);
+	cs2.readDCDFile(BALL_TEST_DATA_PATH(PoseClustering2_test.dcd));
+	cs2.resetScoring();
+	PoseClustering pc(&cs2, 10.00);
+	pc.compute();
+
+	boost::shared_ptr<ConformationSet> cs3 = pc.getReducedConformationSet();
+	TEST_EQUAL(cs3->size(),  pc.getNumberOfClusters())
+
+	TEST_EQUAL(sys.getProtein(0)->countAtoms(), cs3->getSystem().getProtein(0)->countAtoms())
+RESULT
 
 
 /////////////////////////////////////////////////////////////

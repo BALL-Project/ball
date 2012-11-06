@@ -2,8 +2,8 @@
 // vi: set ts=2:
 //
 
-#include <BALL/DOCKING/COMMON/poseClustering.h>
 #include <BALL/STRUCTURE/structureMapper.h>
+#include <BALL/DOCKING/COMMON/poseClustering.h>
 
 using namespace std;
 
@@ -235,7 +235,7 @@ namespace BALL
 		return clusters_[i].size();
 	}
 
-	boost::shared_ptr<System> PoseClustering::getClusterRepresentative(Index i)
+	boost::shared_ptr<System> PoseClustering::getClusterRepresentative(Index i) const
 	{
 		if (i >= (Index)clusters_.size())
 			throw(Exception::OutOfRange(__FILE__, __LINE__));
@@ -291,6 +291,32 @@ namespace BALL
 		return new_set;
 	}
 
+
+	boost::shared_ptr<ConformationSet> PoseClustering::getReducedConformationSet() const
+	{
+		if (clusters_.size()==0)
+			throw(Exception::OutOfRange(__FILE__, __LINE__));
+
+		// create a new ConformationSet
+		boost::shared_ptr<ConformationSet> new_set(new ConformationSet());
+
+		new_set->setup(current_set_->getSystem());
+		new_set->setParent(current_set_);
+
+		// iterate over all clusters
+		for (Size i=0; i<clusters_.size(); i++)
+		{
+			// and take the first  
+			System conf(new_set->getSystem());
+			SnapShot sn = (*current_set_)[*clusters_[i].begin()];
+			sn.applySnapShot(conf);
+			new_set->add(0, conf);
+		}
+
+		return new_set;
+	}
+
+
 	//TODO shouldnt this method return double?
 	// distance between cluster i and cluster j
 	float PoseClustering::getRMSD_(Index i, Index j)
@@ -318,21 +344,27 @@ namespace BALL
 		float rmsd = 0.;
 		StructureMapper mapper(*si, *sj);
 
-		AtomBijection atom_bijection;
+		AtomBijection temp_atom_bijection;
 		switch (rmsd_level_of_detail_)
 		{
-			case PoseClustering::RMSDLevelOfDetail::ALL_ATOMS:
-				mapper.calculateDefaultBijection();
-				rmsd=mapper.calculateRMSD();
-				break;
 			case PoseClustering::RMSDLevelOfDetail::C_ALPHA:
-				atom_bijection.assignCAlphaAtoms(*si, *sj);
-				rmsd=mapper.calculateRMSD(atom_bijection);
+				temp_atom_bijection.assignCAlphaAtoms(*si, *sj);
+				rmsd = mapper.calculateRMSD(temp_atom_bijection);
 				break;
 			case PoseClustering::RMSDLevelOfDetail::BACKBONE:
-				atom_bijection.assignBackboneAtoms(*si, *sj);
-				rmsd=mapper.calculateRMSD(atom_bijection);
+				temp_atom_bijection.assignBackboneAtoms(*si, *sj);
+				rmsd = mapper.calculateRMSD(temp_atom_bijection);
 				break;
+			case PoseClustering::RMSDLevelOfDetail::ALL_ATOMS:
+				mapper.calculateDefaultBijection();
+				//temp_atom_bijection = mapper_.getBijection();
+				rmsd = mapper.calculateRMSD();
+				break;
+			case PoseClustering::RMSDLevelOfDetail::PROPERTY_BASED_ATOM_BIJECTION:
+				temp_atom_bijection.assignAtomsByProperty(*si, *sj);
+				rmsd = mapper.calculateRMSD(temp_atom_bijection);
+				break;
+
 			case PoseClustering::RMSDLevelOfDetail::HEAVY_ATOMS:
 			default:
 				Log.info() << "Option RMSDLevelOfDetaill::HEAVY_ATOMS not yet implemented" << endl;
