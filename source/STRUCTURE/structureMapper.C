@@ -238,7 +238,7 @@ namespace BALL
 		return true;
 	}
 
-	void StructureMapper::calculateDefaultBijection()
+	void StructureMapper::calculateDefaultBijection(bool limit_to_selection)
 	{
 		// Make sure we have two structures...
 		if (A_ == 0 || B_ == 0)
@@ -247,14 +247,14 @@ namespace BALL
 		}
 
 		// Assign by names first.
-		bijection_.assignByName(*A_, *B_);
+		bijection_.assignByName(*A_, *B_, limit_to_selection);
 
 		// Check whether we could map anything.
 		// If not: method of last resort, map the atoms in the
 		// order they appear in.
-		if (bijection_.size() == 0)	
+		if (bijection_.size() == 0)
 		{
-			bijection_.assignTrivial(*A_, *B_);
+			bijection_.assignTrivial(*A_, *B_, limit_to_selection);
 		}
 	}
 

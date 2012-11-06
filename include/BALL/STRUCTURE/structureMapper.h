@@ -88,7 +88,7 @@ namespace BALL
 
 		/**	Calculate a reasonable bijection for the mapping of A and B
 		*/
-		void calculateDefaultBijection();
+		void calculateDefaultBijection(bool limit_to_selection = false);
 
 		/**	Return the current bijection
 		*/
@@ -102,8 +102,8 @@ namespace BALL
 		/**	Maps two fragments onto each other
 		*/
 		bool mapFragments
-			(const vector<Fragment*>& A, const vector<Fragment*>& B, 
-			 Matrix4x4* transformation, double upper_bound = 8.0,	double lower_bound = 2.5);
+			(const vector<Fragment*>& A, const vector<Fragment*>& B,
+			 Matrix4x4* transformation, double upper_bound = 8.0, double lower_bound = 2.5);
 
 		/**	Map three points onto each other.
 				Computes a transformation that maps
