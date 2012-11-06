@@ -36,13 +36,15 @@ int main (int argc, char **argv)
 	// - description
 	// - Outputfile
 	// - required
-	parpars.registerParameter("o", "output dcd-file name for first solution", STRING, true, "", true);
+	parpars.registerParameter("o", "output dcd-file name for first solution ", STRING, true, "", true);
 
-	parpars.registerParameter("o_id", "output id", STRING, true, "", true);
+	parpars.registerParameter("o_id", "output id ", STRING, true, "", true);
 
-	parpars.registerParameter("o_dir", "output directory for 2nd to last solution", STRING, true, "", true);
+	parpars.registerParameter("o_dir", "output directory for 2nd to last solution ", STRING, true, "", true);
 
-	// register String parameter for supplying max number of solutions
+	parpars.registerParameter("o_dcd", "output directory for the reduced cluster set (one structure per final cluster) ", STRING, false, "", true);
+
+	// register String parameter for supplying minimal rmsd between clusters
 	parpars.registerParameter("rmsd_cutoff", "minimal rmsd between the final clusters (default 5.0) ", DOUBLE, false, 5.0);
 	parpars.setParameterRestrictions("rmsd_cutoff", 0, 100);
 
@@ -57,14 +59,15 @@ int main (int argc, char **argv)
 	parpars.setParameterRestrictions("rmsd_scope", rmsd_levels);
 
   // the manual
-	String man = "This tool computes clusters of docking poses given as conformation set using a complete linkage algorithm.\n\nParameters are the input ConformationSet (-i_dcd), one corresponding pdb file (-i_pdb) and a naming schema for the results (-o). Optional parameters the minimal rmsd between the final clusters  (-rmsd_cutoff) and the scope/level of detail of the rmsd computation (-rmsd_scope).\n\nOutput of this tool is a number of dcd files each containing one ConformationSet.";
+	String man = "This tool computes clusters of docking poses given as conformation set using a complete linkage algorithm.\n\nParameters are the input ConformationSet (-i_dcd), one corresponding pdb file (-i_pdb) and a naming schema for the results (-o). Optional parameters are the minimal rmsd between the final clusters  (-rmsd_cutoff) and the scope/level of detail of the rmsd computation (-rmsd_scope). The optional parameter (-o_dcd)\n\nOutput of this tool is a number of dcd files each containing one ConformationSet.";
 
 	parpars.setToolManual(man);
 
-	// here we set the types of I/O files, for example sdf is also allowed
+	// here we set the types of I/O files
 	parpars.setSupportedFormats("i_dcd","dcd");
 	parpars.setSupportedFormats("i_pdb","pdb");
 	parpars.setSupportedFormats("o","dcd");
+	parpars.setSupportedFormats("o_dcd","dcd");
 
 	parpars.parse(argc, argv);
 
@@ -118,13 +121,15 @@ int main (int argc, char **argv)
 			                               + String(parpars.get("o_id"))  + "_cluster" + String(i)
 			                               + "_visible_dcd";
 		//Log << "   Writing solution " << String(i) << " as " << outfile_name << endl;
-		//	GenericMolFile* outfile = MolFileFactory::open(outfile_name, ios::out);
-
-		//DCD2File outfile(outfile_name, ios::out);
-		//outfile << new_cs;
-		//outfile.close();
 
 		new_cs->writeDCDFile(outfile_name);
+	}
+
+	if (parpars.has("o_dcd"))
+	{
+		String outfile_name = String(parpars.get("o_dcd"));
+		boost::shared_ptr<ConformationSet> cs = pc.getReducedConformationSet();
+		cs->writeDCDFile(outfile_name);
 	}
 
 	Log << "done." << endl;
