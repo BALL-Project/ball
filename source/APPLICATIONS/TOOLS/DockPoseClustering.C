@@ -47,7 +47,7 @@ int main (int argc, char **argv)
 	parpars.setParameterRestrictions("rmsd_cutoff", 0, 100);
 
 
-	// choice of penalty table 
+	// choice of atom rmsd scope 
 	parpars.registerParameter("rmsd_scope", "atoms to be considered for rmsd score (C_ALPHA, BACKBONE, ALL_ATOMS) ", STRING, false, "C_ALPHA");
 	list<String> rmsd_levels;
 	rmsd_levels.push_back("C_ALPHA");
