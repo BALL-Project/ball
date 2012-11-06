@@ -88,8 +88,24 @@ CHECK(AtomBijection(AtomContainer& A, AtomContainer& B))
 	AtomBijection ab(indole, benzene);
 	STATUS("Bijection: \n" << dumpBijection(ab))
 	TEST_EQUAL(ab.size(), 12)
-	double rmsd = ab.calculateRMSD();		
+	double rmsd = ab.calculateRMSD();
 	TEST_REAL_EQUAL(rmsd, 14.3947)
+RESULT
+
+CHECK(AtomBijection(AtomContainer& A, AtomContainer& B,  bool limit_to_selection))
+	AtomIterator at = benzene.beginAtom();
+	at->select();
+	(++at)->select();
+	(++at)->select();
+	(++at)->select();
+	//((benzene.beginAtom())++)->select();
+	AtomBijection ab(indole, benzene, true);
+	STATUS("Bijection: \n" << dumpBijection(ab))
+	TEST_EQUAL(ab.size(), 4)
+	double rmsd = ab.calculateRMSD();
+	TEST_REAL_EQUAL(rmsd, 14.3404)
+	(++at)->select();
+	(++at)->select();
 RESULT
 
 CHECK(Size assignBackboneAtoms(AtomContainer& A, AtomContainer& B))
@@ -101,9 +117,19 @@ CHECK(Size assignByName(AtomContainer& A, AtomContainer& B))
 	ab.assignByName(indole, benzene);
 	STATUS("Bijection: \n" << dumpBijection(ab))
 	TEST_EQUAL(ab.size(), 12)
-	double rmsd = ab.calculateRMSD();		
-	TEST_REAL_EQUAL(rmsd, 14.3947)	
+	double rmsd = ab.calculateRMSD();
+	TEST_REAL_EQUAL(rmsd, 14.3947)
 RESULT
+
+CHECK(Size assignByName(AtomContainer& A, AtomContainer& B, bool limit_to_selection))
+	AtomBijection ab;
+	ab.assignByName(indole, benzene, true);
+	STATUS("Bijection: \n" << dumpBijection(ab))
+	TEST_EQUAL(ab.size(), 6)
+	double rmsd = ab.calculateRMSD();
+	TEST_REAL_EQUAL(rmsd, 14.3332)
+RESULT
+
 
 CHECK(Size assignCAlphaAtoms(AtomContainer& A, AtomContainer& B))
   // ???
@@ -114,8 +140,23 @@ CHECK(Size assignTrivial(AtomContainer& A, AtomContainer& B))
 	ab.assignTrivial(indole, benzene);
 	STATUS("Bijection: \n" << dumpBijection(ab))
 	TEST_EQUAL(ab.size(), 12)
-	double rmsd = ab.calculateRMSD();		
+	double rmsd = ab.calculateRMSD();
 	TEST_REAL_EQUAL(rmsd, 14.1103)
+RESULT
+
+CHECK (Size assignAtomsByProperty(AtomContainer& A, AtomContainer& B))
+	AtomIterator at = benzene.beginAtom();
+	at->setProperty("ATOMBIJECTION_RMSD_SELECTION", true);
+	(++at)->setProperty("ATOMBIJECTION_RMSD_SELECTION", true);
+	(++at)->setProperty("ATOMBIJECTION_RMSD_SELECTION", true);
+	(++at)->setProperty("ATOMBIJECTION_RMSD_SELECTION", true);
+
+	AtomBijection ab;
+	ab.assignAtomsByProperty(indole, benzene);
+	STATUS("Bijection: \n" << dumpBijection(ab))
+	TEST_EQUAL(ab.size(), 4)
+	double rmsd = ab.calculateRMSD();
+	TEST_REAL_EQUAL(rmsd,  14.3404)
 RESULT
 
 /////////////////////////////////////////////////////////////
