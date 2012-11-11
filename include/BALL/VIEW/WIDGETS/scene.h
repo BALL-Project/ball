@@ -51,13 +51,13 @@
 
 #include <boost/shared_ptr.hpp>
 
-#ifdef BALL_HAS_RTFACT 
+#ifdef BALL_HAS_RTFACT
 
 #ifndef BALL_VIEW_RENDERING_RAYTRACINGRENDERER_H
 # include <BALL/VIEW/RENDERING/RENDERERS/raytracingRenderer.h>
 #endif
 
-#endif // BALL_HAS_RTFACT 
+#endif // BALL_HAS_RTFACT
 
 class QMouseEvent;
 class QRubberBand;
@@ -97,11 +97,11 @@ namespace BALL
 		/**	Scene is the main visualization widget that shows the graphical Representation 's.
 				To do this, the class Scene must be a child of the MainControl.
 				Because the MainControl is also the main application object
-				a Scene must be created with the pointer to the MainControl 
+				a Scene must be created with the pointer to the MainControl
 				as parent widget. <br>
-				Scene is capable of stereo 3D view with shutter glasses and CRT monitors. This only works, if the 
+				Scene is capable of stereo 3D view with shutter glasses and CRT monitors. This only works, if the
 				OpenGL-driver supports this. NVIDIA cards need a Quad buffer, like they are used in the "Quad" cards.
-				For other NVIDIA cards, you can try the tool <a href="http://www.guru3d.com/rivatuner">"Rivatuner"</a>, 
+				For other NVIDIA cards, you can try the tool <a href="http://www.guru3d.com/rivatuner">"Rivatuner"</a>,
 				which tries to enable this feature for cards, which natively dont support this. To enter
 				and leave the stereo mode, press ALT-Y. If your OpenGL doesnt support the stereo view, you will see an
 				error message in the message bar at the bottom of the main window.
@@ -111,15 +111,15 @@ namespace BALL
 				- Picking Mode: To select Composite 's, e.g. Molecules
 				- Rotate Mode: Transform your view point in the threedimensional room, e.g. rotate or zoom
 				- Eye Distance: Change the eye distance for stereo view
-					
+
 				To change between the first two modi, there is a menu entry with checkboxes in the main
-				menu bar of the application. 
+				menu bar of the application.
 				<br>
 				In Picking mode, left mouse button selects composites and right mouse button deselects.
 				There are two ways to (de-)select: Either click on single items, or draw a selection rectangle
 				by keeping the mouse button pressed and moving the mouse.
 				Users with only one mouse button can use the SHIFT button, while pressing the mouse button
-				to deselect. 
+				to deselect.
 				<br>
 				In Rotate mode, left mouse button rotates, mid mouse button zooms in and out and right button
 				moves the view.
@@ -181,21 +181,21 @@ namespace BALL
 					the camera position.
 					\par
 					Calls registerWidget.
-					\param      parent_widget the parent widget of this scene 
-					\param      name the name of this scene 
-					\param      w_flags the flags the scene widget should have 
+					\param      parent_widget the parent widget of this scene
+					\param      name the name of this scene
+					\param      w_flags the flags the scene widget should have
 					(See documentation of QT-library for information concerning widget flags)
 					*/
 				Scene(QWidget* parent_widget = 0, const char* name = NULL, Qt::WFlags w_flags = 0);
 
 				/** Copy constructor.
 					Initialize the width, height and camera position.
-					\par					
+					\par
 					Calls registerWidget.
 					\param  scene the scene to be copied
-					\param  parent_widget the parent widget of this scene 
-					\param  name the name of this scene 
-					\param  wflags the flags the scene widget should have 
+					\param  parent_widget the parent widget of this scene
+					\param  name the name of this scene
+					\param  wflags the flags the scene widget should have
 					(See documentation of QT-library for information concerning widget flags)
 					*/
 				BALL_DEPRECATED Scene(const Scene& scene, QWidget* parent_widget = NULL, const char* name = NULL, Qt::WFlags wflags = 0);
@@ -237,7 +237,7 @@ namespace BALL
 				//@{
 
 				/** Handles messages sent by other registered ConnectionObject objects.
-					Filters for SceneMessage and sets the Camera appropriate or updates the visualization. 
+					Filters for SceneMessage and sets the Camera appropriate or updates the visualization.
 					\param message the pointer to the message that should be processed
 					\see   ConnectionObject
 					\see   Message
@@ -260,7 +260,7 @@ namespace BALL
 					translating and zooming the scene)
 					- the <b> picking mode</b> (all mouse actions are attached to picking objects from the scene)
 					\par
-					This method is called automatically	immediately before the main application is started 
+					This method is called automatically	immediately before the main application is started
 					by MainControl::show().
 					\param main_control the MainControl object to be initialized with this scene
 					*/
@@ -295,7 +295,7 @@ namespace BALL
 				virtual bool isValid() const;
 
 				/** Internal value dump.
-					Dump the current internal state of this scene to 
+					Dump the current internal state of this scene to
 					the output ostream <b> s</b> with dumping depth <b> depth</b>.
 					\param   s output stream where to output the internal state of this scene
 					\param   depth the dumping depth
@@ -466,7 +466,7 @@ namespace BALL
 				/** Move the view. \\
 					v.x = right  \\
 					v.y = up     \\
-					v.z = view direction 
+					v.z = view direction
 					*/
 				void move(Vector3 v);
 
@@ -474,14 +474,14 @@ namespace BALL
 				/** Move some Composites. \\
 					v.x = right  \\
 					v.y = up     \\
-					v.z = view direction 
+					v.z = view direction
 					*/
 				void moveComposites(const std::list<Composite*>& composites, Vector3 v);
 
 				/** Rotate some Composites. \\
 					v.x = right  \\
 					v.y = up     \\
-					v.z = view direction 
+					v.z = view direction
 					*/
 				void rotateComposites(const std::list<Composite*>& composites, float degree_right, float degree_up, float degree_clockwise = 0);
 
@@ -516,8 +516,8 @@ namespace BALL
 
 				void updateRTMaterialForRepresentation(Representation* rep, const Stage::RaytracingMaterial& new_material);
 #endif
-				
-				void lightsUpdated(bool redraw = false); 
+
+				void lightsUpdated(bool redraw = false);
 
 				/// Try to setup an environment map for all renderers that support it
 				void setupEnvironmentMap(const QImage& image);
@@ -568,13 +568,13 @@ namespace BALL
 
 				/// Export to POVRay whithout showing file dialog
 				void exportNextPOVRay();
-			
+
 				///
 				void exportXML3D();
 
 				///
 				void dumpXML3D(std::ostream& xml3ddump);
-				
+
 				///
 				void printScene();
 
@@ -765,7 +765,7 @@ namespace BALL
 
 				void renderGrid_();
 
-				QAction *new_molecule_action_, *optimize_action_; 
+				QAction *new_molecule_action_, *optimize_action_;
 				QAction *add_hydrogens_action_;
 				QAction *bondorders_action_;
 
@@ -799,7 +799,7 @@ namespace BALL
 				virtual void paintGL();
 
 				/** Resize the widget.
-						Overridden qt method for resizing this scene. 
+						Overridden qt method for resizing this scene.
 						This method will be called automatically every time a rezize event is handled.
 						\param  width the new width of this scene
 						\param  height the new height of this scene
@@ -807,7 +807,7 @@ namespace BALL
 				virtual void resizeEvent(QResizeEvent* event);
 
 				/**
-				 * This function handles custom events that for example are sent 
+				 * This function handles custom events that for example are sent
 				 * by the input device drivers
 				 * \param evt A pointer to the event that shell be processed
 				 */
@@ -871,7 +871,7 @@ namespace BALL
 				void pickParent_(QPoint p);
 
 				void writeLights_(INIFile& inifile) const;
-				
+
 				void readLights_(const INIFile& inifile);
 
 				void createCoordinateSystem_(bool at_origin);
@@ -879,19 +879,19 @@ namespace BALL
 				void registerRenderers_();
 
 				/// Estimate current fps and convert into a string
-				String createFPSInfo_();
+				String createFPSInfo_(Renderer* renderer);
 
 				// Menu entry IDs
 				QAction *no_stereo_action_, *enter_stereo_action_, *active_stereo_action_, *dual_stereo_action_, *dual_stereo_different_display_action_;
 				QAction *record_animation_action_, *start_animation_action_, *clear_animation_action_, *cancel_animation_action_;
 				QAction *animation_export_POV_action_, *animation_export_VRML_action_, 	*animation_export_PNG_action_, *animation_repeat_action_;
 
-#ifdef BALL_HAS_RTFACT	
+#ifdef BALL_HAS_RTFACT
 				QAction *start_continuous_loop_action_, *stop_continuous_loop_action_, *toggle_continuous_loop_action_;
-#endif			
+#endif
 				QAction *switch_grid_;
 				QMenu* create_coordinate_system_;
-				
+
 				Vector3 system_origin_;
 				Vector3 old_trackorigin_;
 				bool tracking_initialized_;

@@ -79,13 +79,13 @@ namespace BALL
 			BALL_CREATE(Renderer)
 
 			/**	@name	Constructors and Destructors
-			*/	
+			*/
 			//@{
 
 			/** Default Constructor.
 			*/
 			Renderer();
-			
+
 			/**	Copy constructor.
 			*/
 			Renderer(const Renderer& renderer);
@@ -130,8 +130,8 @@ namespace BALL
 
 			/** Decide between event based and (threaded) continuous loop rendering.
 			*/
-			virtual void useContinuousLoop(bool use_loop) 
-			{ 
+			virtual void useContinuousLoop(bool use_loop)
+			{
 				// TODO: mutex for use_continuous_loop_ just to be on the safe side
 				use_continuous_loop_ = use_loop;
 			};
@@ -139,6 +139,14 @@ namespace BALL
 			/** Returns the mode of the render loop.
 			*/
 			bool isContinuous() { return use_continuous_loop_; }
+
+			/** Whether renderer has its own FPS counter.
+			 */
+			virtual bool hasFPScounter() { return false; }
+
+			/** Internal renderer FPS if available, otherwise returns 0.
+			 */
+			virtual double getFPS() { return 0; }
 
 			///
 			virtual bool finish();
@@ -155,19 +163,19 @@ namespace BALL
 
 			/** Pick all objects in the given screen rectangle.
 			 */
-			virtual void pickObjects(Position x1, Position y1, Position x2, Position y2, 
+			virtual void pickObjects(Position x1, Position y1, Position x2, Position y2,
 			                         std::list<GeometricObject*>& objects);
 
 			/** Return the frustum used by this renderer.
 			 */
-			virtual void getFrustum(float& near_f, float& far_f, float& left_f, float& right_f, 
+			virtual void getFrustum(float& near_f, float& far_f, float& left_f, float& right_f,
 			                        float& top_f,  float& bottom_f);
 
 			//@}
 			/**	@name	Accessors
 			*/
 			//@{
-			
+
 			/** Render a Representation.
 			*/
 			virtual bool renderOneRepresentation(const Representation& representation);
@@ -185,7 +193,7 @@ namespace BALL
 			 */
 			virtual const Stage& getStage() const
 				{ return *stage_;}
-			
+
 			/** Set the stage for the renderer
 			 */
 			virtual void setStage(const Stage& stage)
@@ -214,7 +222,7 @@ namespace BALL
 			 *  just to ignore this setting.
 			 */
 			virtual void showLightSources(bool show_light_sources) { show_light_sources_ = show_light_sources; }
-			
+
 			/** Render a ruler.
 			 *
 			 *  If supported by the renderer implementation, this function will produce
@@ -237,11 +245,11 @@ namespace BALL
 			/**	@name Predicates
 			*/
 			//@{
-			
+
 			///
 			bool operator == (const Renderer& /*renderer*/) const
 				{ return true; }
-			
+
 			/// Wrapper for the renderering of special GeometricObjects
 			virtual void render_(const GeometricObject* object);
 
@@ -258,7 +266,7 @@ namespace BALL
 			/// Render a line
 			virtual void renderLine_(const Line& /*line*/)
 				{Log.error() << "renderLine_ not implemented in derived Renderer class" << std::endl;}
-			
+
 			/// Render an illuminated line
 			virtual void renderMultiLine_(const MultiLine& /*line*/)
 				{Log.error() << "renderMultiLine_ not implemented in derived Renderer class" << std::endl;}
@@ -266,7 +274,7 @@ namespace BALL
 			/// Render a surface mesh
 			virtual void renderMesh_(const Mesh& /*mesh*/)
 				{Log.error() << "renderMesh_ not implemented in derived Renderer class" << std::endl;}
- 
+
 			/// Render a single point
  			virtual void renderPoint_(const Point& /*point*/)
 				{Log.error() << "renderPoint_ not implemented in derived Renderer class" << std::endl;}
@@ -298,7 +306,7 @@ namespace BALL
 			/// Render a tube with two colors
 			virtual void renderTwoColoredTube_(const TwoColoredTube& /*two_colored_tube*/)
 				{Log.error() << "renderTwoColoredTube_ not implemented in derived Renderer class" << std::endl;}
-			
+
 			/// Render a grid
 			virtual void renderGridVisualisation_(const GridVisualisation&)
 				{Log.error() << "renderGridVisualisation_ not implemented in derived Renderer class" << std::endl;}
@@ -306,7 +314,7 @@ namespace BALL
 			virtual void renderQuadMesh_(const QuadMesh&)
 				{Log.error() << "renderQuadMesh_ not implemented in derived Renderer class" << std::endl;}
 				//@}
-			
+
 			//_
 			Scene* scene_;
 

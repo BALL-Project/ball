@@ -22,6 +22,7 @@
 #include <RTpie/Utils/TransformTools.hpp>
 #include <RTfact/Model/Image/BasicImage2D.hpp>
 #include <RTfact/Model/Framebuffer/Image2DFramebuffer.hpp>
+#include <RTfact/Utils/FPSMeter.hpp>
 
 #ifdef BALL_HAS_TR1_UNORDERED_MAP
 namespace std
@@ -92,6 +93,10 @@ namespace BALL
 				virtual ~RTfactRenderer()
 				{
 				}
+
+				virtual bool hasFPScounter();
+
+				virtual double getFPS();
 
 				/************************************************************************/
 				/* RaytracingRenderer methods					   */
@@ -182,6 +187,7 @@ namespace BALL
 				t_ByteFramebuffer							byteFramebuffer;
 
 
+				RTfact::FPSMeter fpsMeter;
 				RTpieCpp::PickTaskHandle pickTask;
 
 				//boost::shared_ptr<RTfact::Remote::Picking>  m_picking;
@@ -207,6 +213,7 @@ namespace BALL
 
 				float x_scale_;
 				float y_scale_;
+
 		};
 
 

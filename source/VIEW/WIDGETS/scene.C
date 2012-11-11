@@ -69,7 +69,7 @@
 #ifdef BALL_HAS_RTFACT
 
 #include <BALL/VIEW/RENDERING/glRenderWindow.h>
-//#include <BALL/VIEW/RENDERING/RENDERERS/cudaVolumeRenderer.h>    
+//#include <BALL/VIEW/RENDERING/RENDERERS/cudaVolumeRenderer.h>
 #include <BALL/VIEW/RENDERING/RENDERERS/rtfactRenderer.h>
 
 #endif
@@ -102,7 +102,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-#ifdef BALL_HAS_RTFACT    
+#ifdef BALL_HAS_RTFACT
 		//typedef CudaVolumeRenderer t_RaytracingRenderer;
 		typedef RTfactRenderer t_RaytracingRenderer;
 		typedef GLRenderWindow t_RaytracingWindow;
@@ -115,7 +115,7 @@ namespace BALL
 
 		// ###############CONSTRUCTORS,DESTRUCTORS,CLEAR###################
 
-		// values for mouse-sensitivity 
+		// values for mouse-sensitivity
 		float Scene::mouse_sensitivity_ = 5;
 		float Scene::mouse_wheel_sensitivity_ = 5;
 		bool  Scene::show_light_sources_ = false;
@@ -228,7 +228,7 @@ namespace BALL
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.info() << "Destructing object Scene " << this << " of class Scene" << std::endl;
-#endif 
+#endif
 			delete stage_;
 
 			for (Position i=0; i<renderers_.size(); ++i)
@@ -242,7 +242,7 @@ namespace BALL
 
 				renderers_[i]->wait(1000);
 				//	NOTE: This is problematic, since we have some smart pointers
-				//	delete renderers_[i].renderer; 
+				//	delete renderers_[i].renderer;
 				delete(renderers_[i]->target);
 			}
 
@@ -296,7 +296,7 @@ namespace BALL
 
 			stage_->dump(s, depth);
 
-			BALL_DUMP_STREAM_SUFFIX(s);     
+			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
 		// ####################GL, CAMERA############################################
@@ -455,7 +455,7 @@ namespace BALL
 		void Scene::handleControlSelectionMessage_(ControlSelectionMessage* /*csm*/)
 		{
 			checkMenu(*getMainControl());
-		}	
+		}
 
 		void Scene::onNotify(Message *message)
 		{
@@ -473,11 +473,11 @@ namespace BALL
 				ControlSelectionMessage* csm = RTTI::castTo<ControlSelectionMessage>(*message);
 				handleControlSelectionMessage_(csm);
 			}
-			else if (RTTI::isKindOf<RepresentationMessage>(*message)) 
+			else if (RTTI::isKindOf<RepresentationMessage>(*message))
 			{
 				RepresentationMessage* rm = RTTI::castTo<RepresentationMessage>(*message);
 				handleRepresentationMessage_(rm);
-			} 
+			}
 			else if (RTTI::isKindOf<DatasetMessage>(*message))
 			{
 				DatasetMessage* dm = RTTI::castTo<DatasetMessage>(*message);
@@ -498,7 +498,7 @@ namespace BALL
 			{
 				renderers_[i]->init();
 				GLRenderWindow* gt = dynamic_cast<GLRenderWindow*>(renderers_[i]->target);
-				if (gt) 
+				if (gt)
 				{
 					gt->ignoreEvents(true);
 					gt->installEventFilter(this);
@@ -508,37 +508,46 @@ namespace BALL
 			if (stage_->getLightSources().size() == 0) setDefaultLighting(false);
 		}
 
-		String Scene::createFPSInfo_()
+		String Scene::createFPSInfo_(Renderer* renderer)
 		{
 			String fps_string;
+			float fps = -1;
 
-			float ti = 1000000.0 / (PreciseTime::now().getMicroSeconds() - time_.getMicroSeconds());
-
-			if (ti < 0)
+			// gather renderer specific fps
+			if(renderer->hasFPScounter())
 			{
-				time_ = PreciseTime::now();
-				return fps_string;
+				fps = (float)renderer->getFPS();
 			}
-
-			if (fps_.size() > 0)
+			// if fps not available render gui fps
+			else
 			{
-				if (BALL_ABS(*fps_.begin() - ti) > ti / 0.5)
+				float ti = 1000000.0 / (PreciseTime::now().getMicroSeconds() - time_.getMicroSeconds());
+
+				if (ti < 0)
 				{
-					fps_.clear();
+					time_ = PreciseTime::now();
+					return fps_string;
 				}
+
+				if (fps_.size() > 0)
+				{
+					if (BALL_ABS(*fps_.begin() - ti) > ti / 0.5)
+					{
+						fps_.clear();
+					}
+				}
+
+				fps_.push_back(ti);
+				if (fps_.size() > 10) fps_.pop_front();
+
+				list<float>::iterator lit = fps_.begin();
+				for (; lit != fps_.end(); lit++)
+				{
+					fps += *lit;
+				}
+
+				fps /= fps_.size();
 			}
-
-			fps_.push_back(ti);
-			if (fps_.size() > 10) fps_.pop_front();
-
-			float fps = 0;
-			list<float>::iterator lit = fps_.begin();
-			for (; lit != fps_.end(); lit++)
-			{
-				fps += *lit;
-			}
-
-			fps /= fps_.size();
 
 			std::ostringstream stream;
 			stream.imbue(std::locale("C"));
@@ -562,7 +571,7 @@ namespace BALL
 
 			QPainter p(current_dev);
 
-			QPen pen(QColor((int)text_color.getRed(),  (int)text_color.getGreen(), 
+			QPen pen(QColor((int)text_color.getRed(),  (int)text_color.getGreen(),
 						          (int)text_color.getBlue(), (int)text_color.getAlpha()));
 
 			p.setPen(pen);
@@ -608,7 +617,7 @@ namespace BALL
 		}
 
 		void Scene::resizeEvent(QResizeEvent* /*event*/)
-		{						
+		{
 			for (Position i=0; i<renderers_.size(); ++i)
 				renderers_[i]->resize(width(), height());
 		}
@@ -616,7 +625,7 @@ namespace BALL
 		bool Scene::eventFilter(QObject* object, QEvent* event)
 		{
 			for (Position i=0; i<renderers_.size(); ++i)
-			{				
+			{
 				if (static_cast<QObject*>(dynamic_cast<GLRenderWindow*>(renderers_[i]->target)) != object)
 					continue;
 
@@ -712,7 +721,7 @@ namespace BALL
 			const Camera& camera = stage_->getCamera();
 
 			Vector3 vv = camera.getViewVector();
-			vv.normalize(); 
+			vv.normalize();
 
 			Quaternion q1;
 			q1.fromAxisAngle(camera.getLookUpVector(), Angle(degree_right, false).toRadian());
@@ -749,7 +758,7 @@ namespace BALL
 
 			HashSet<Composite*> roots;
 
-			for (cit = selection.begin(); cit != selection.end(); cit++) 
+			for (cit = selection.begin(); cit != selection.end(); cit++)
 			{
 				(*cit)->apply(tp1);
 				(*cit)->apply(tp2);
@@ -783,16 +792,16 @@ namespace BALL
 			const Camera& camera = stage_->getCamera();
 
 			String text((String)tr("ViewPoint:") + " ("
-					+ String(camera.getViewPoint().x) + "|" 
-					+ String(camera.getViewPoint().y) + "|" 
-					+ String(camera.getViewPoint().z) 
-					+ ")   " + (String)tr("LookAt:") + " (" 
-					+ String(camera.getLookAtPosition().x) + "|" 
-					+ String(camera.getLookAtPosition().y) + "|" 
-					+ String(camera.getLookAtPosition().z) 
-					+ ")   " + (String)tr("LookUp") + ": (" 
-					+ String(camera.getLookUpVector().x) + "|" 
-					+ String(camera.getLookUpVector().y) + "|" 
+					+ String(camera.getViewPoint().x) + "|"
+					+ String(camera.getViewPoint().y) + "|"
+					+ String(camera.getViewPoint().z)
+					+ ")   " + (String)tr("LookAt:") + " ("
+					+ String(camera.getLookAtPosition().x) + "|"
+					+ String(camera.getLookAtPosition().y) + "|"
+					+ String(camera.getLookAtPosition().z)
+					+ ")   " + (String)tr("LookUp") + ": ("
+					+ String(camera.getLookUpVector().x) + "|"
+					+ String(camera.getLookUpVector().y) + "|"
 					+ String(camera.getLookUpVector().z) + ")");
 
 			setStatusbarText(text);
@@ -921,7 +930,7 @@ namespace BALL
 			Vector3 px;
 			for (Position i = 0; i <= size; i+=1)
 			{
-				if (i % 10 == 0) 
+				if (i % 10 == 0)
 				{
 					color = color2;
 				}
@@ -1091,17 +1100,17 @@ namespace BALL
 
 		void Scene::finalizePreferencesTab(Preferences &preferences)
 		{
-			if (light_settings_) 
+			if (light_settings_)
 			{
 				preferences.removeEntry(light_settings_);
 				light_settings_ = 0;
 			}
-			if (stage_settings_) 
+			if (stage_settings_)
 			{
 				preferences.removeEntry(stage_settings_);
 				stage_settings_= 0;
 			}
-			if (material_settings_) 
+			if (material_settings_)
 			{
 				preferences.removeEntry(material_settings_);
 				material_settings_= 0;
@@ -1147,7 +1156,7 @@ namespace BALL
 					notify_(new RepresentationMessage(*coordinate_rep, RepresentationMessage::REMOVE));
 				}
 			}
-			else if (!showed_coordinate && stage_->coordinateSystemEnabled()) 
+			else if (!showed_coordinate && stage_->coordinateSystemEnabled())
 			{
 				createCoordinateSystem();
 			}
@@ -1306,16 +1315,16 @@ namespace BALL
 				shortcut_registry->registerShortcut("Shortcut|Display|Show_Coordinate_System|here", new_action);
 			}
 
-			insertMenuEntry(MainControl::DISPLAY, tr("Add new GL Window"), this, SLOT(addGlWindow()), 
+			insertMenuEntry(MainControl::DISPLAY, tr("Add new GL Window"), this, SLOT(addGlWindow()),
 			                "Shortcut|Display|Add_new_GL_Window", QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 #ifdef BALL_HAS_RTFACT
-			insertMenuEntry(MainControl::DISPLAY, tr("Add new RTfact Window"), this, SLOT(addRTfactWindow()), 
+			insertMenuEntry(MainControl::DISPLAY, tr("Add new RTfact Window"), this, SLOT(addRTfactWindow()),
 			                "Shortcut|Display|Add_new_RTfact_Window", QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 #endif
 			// ======================== Display->Animation ===============================================
 			String help_url = "tips.html#animations";
 
-			record_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Record"), this, 
+			record_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Record"), this,
 			                                           SLOT(dummySlot()), "Shortcut|Display|Animation|Record", QKeySequence(),
 																								 tr("Record an animation for later processing"),
 																								 UIOperationMode::MODE_ADVANCED);
@@ -1325,8 +1334,8 @@ namespace BALL
 				record_animation_action_->setCheckable(true);
 			}
 
-			clear_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Clear"), this, 
-			                                          SLOT(clearRecordedAnimation()), "Shortcut|Display|Animation|Clear", 
+			clear_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Clear"), this,
+			                                          SLOT(clearRecordedAnimation()), "Shortcut|Display|Animation|Clear",
 																								QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 			if (clear_animation_action_)
 			{
@@ -1335,7 +1344,7 @@ namespace BALL
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION, UIOperationMode::MODE_ADVANCED);
 
-			start_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Start"), this, 
+			start_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Start"), this,
 			                                          SLOT(startAnimation()), "Shortcut|Display|Animation|Start",
 																								QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 			if (start_animation_action_)
@@ -1343,7 +1352,7 @@ namespace BALL
 				setMenuHelp(start_animation_action_, help_url);
 			}
 
-			cancel_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Stop"), this, 
+			cancel_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Stop"), this,
 			                                           SLOT(stopAnimation()), "Shortcut|Display|Animation|Stop",
 																								 QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 
@@ -1355,7 +1364,7 @@ namespace BALL
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION, UIOperationMode::MODE_ADVANCED);
 
-			animation_export_PNG_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Export PNG"), this, 
+			animation_export_PNG_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Export PNG"), this,
 			                                               SLOT(dummySlot()), "Shortcut|Display|Animation|Export_PNG",
 																										 QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 
@@ -1365,7 +1374,7 @@ namespace BALL
 				animation_export_PNG_action_->setCheckable(true);
 			}
 
-			animation_export_POV_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Export POV"), this, 
+			animation_export_POV_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Export POV"), this,
 			                                               SLOT(dummySlot()), "Shortcut|Display|Animation|Export_POV",
 																										 QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 
@@ -1375,7 +1384,7 @@ namespace BALL
 				animation_export_POV_action_->setCheckable(true);
 			}
 
-			animation_repeat_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Repeat"), this, 
+			animation_repeat_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Repeat"), this,
 			                                           SLOT(dummySlot()), "Shortcut|Display|Animation|Repeat",
 																								 QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 
@@ -1388,7 +1397,7 @@ namespace BALL
 			// ======================== Display->Stereo ===============================================
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY, UIOperationMode::MODE_ADVANCED);
 
-			no_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, tr("No Stereo"), this, 
+			no_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, tr("No Stereo"), this,
 			                                    SLOT(exitStereo()), "Shortcut|Display|Stereo|No_Stereo",
 																					QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 
@@ -1409,7 +1418,7 @@ namespace BALL
 				setMenuHelp(enter_stereo_action_, "tips.html#3D");
 			}
 
-			//active_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, tr("Shutter Glasses"), this, 
+			//active_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, tr("Shutter Glasses"), this,
 			//                                        SLOT(enterActiveStereo()), "Shortcut|Display|Stereo|Shutter_Glasses",
 			//																				QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 
@@ -1429,8 +1438,8 @@ namespace BALL
 			//	dual_stereo_action_->setCheckable(true);
 			//}
 
-			//dual_stereo_different_display_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, 
-			//                                                        tr("Side by Side on Different Displays"), this, 
+			//dual_stereo_different_display_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO,
+			//                                                        tr("Side by Side on Different Displays"), this,
 			//																												SLOT(enterDualStereoDifferentDisplays()),
 			//																												"Shortcut|Display|Stereo|Side_by_Side_on_Different_Displays",
 			//																												QKeySequence(), tr(""),
@@ -1444,69 +1453,69 @@ namespace BALL
 			// ======================== Display->Viewpoint ===============================================
 			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT, UIOperationMode::MODE_ADVANCED);
 
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("&Store Viewpoint"), this, 
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("&Store Viewpoint"), this,
 			                SLOT(storeViewPoint()), "Shortcut|Display|Viewpoint|Store",
 											QKeySequence(), tr("Store the current viewpoint"), UIOperationMode::MODE_ADVANCED);
 
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("&Restore Viewpoint"), this, 
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("&Restore Viewpoint"), this,
 			                SLOT(restoreViewPoint()), "Shortcut|Display|Viewpoint|Restore", QKeySequence(),
 											tr("Restore the viewpoint"), UIOperationMode::MODE_ADVANCED);
 
 			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT, UIOperationMode::MODE_ADVANCED);
 
 			String description("Shortcut|Display|Viewpoint|Show_Vie&wpoint");
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("Show Viewpoint"), this, 
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("Show Viewpoint"), this,
 			                SLOT(showViewPoint_()), description, QKeySequence("Ctrl+W"),
 											tr("Print the coordinates of the current viewpoint"), UIOperationMode::MODE_ADVANCED);
 
 
 			description = "Shortcut|Display|Viewpoint|Set_Viewpoint";
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("Set Viewpoi&nt"), this, 
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("Set Viewpoi&nt"), this,
 			                SLOT(setViewPoint_()), description, QKeySequence("Ctrl+N"),
 											tr("Move the viewpoint to the given coordinates"), UIOperationMode::MODE_ADVANCED);
 
 			description = "Shortcut|Display|Viewpoint|Reset_Camera";
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("Rese&t Camera"), this, 
-			                SLOT(resetCamera_()), description, QKeySequence(), 
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("Rese&t Camera"), this,
+			                SLOT(resetCamera_()), description, QKeySequence(),
 											tr("Reset the camera to the orgin (0,0,0)"), UIOperationMode::MODE_ADVANCED);
 
 			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT, UIOperationMode::MODE_ADVANCED);
 
 			description = "Shortcut|Display|Viewpoint|Limit_View_Volume";
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("Limit View Volume"), this, 
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("Limit View Volume"), this,
 			                SLOT(setupViewVolume()), description, QKeySequence(),
 											tr(""), UIOperationMode::MODE_ADVANCED);
 
 			description = "Shortcut|File|Export|PNG";
-			QAction* screenshot_action = insertMenuEntry(MainControl::FILE_EXPORT, tr("PNG..."), this, 
+			QAction* screenshot_action = insertMenuEntry(MainControl::FILE_EXPORT, tr("PNG..."), this,
 			                                             SLOT(showExportPNGDialog()), description, QKeySequence("Alt+P"),
 																									 tr("Export a PNG image file from the Scene"),
 																									 UIOperationMode::MODE_ADVANCED);
 			setIcon(screenshot_action, "actions/screenshot", false);
 
 			description = "Shortcut|File|Export|POVRay";
-			QAction* pov_action = insertMenuEntry(MainControl::FILE_EXPORT, tr("POVRa&y scene"), this, 
+			QAction* pov_action = insertMenuEntry(MainControl::FILE_EXPORT, tr("POVRa&y scene"), this,
  			                                      SLOT(exportPOVRay()), description, QKeySequence("Ctrl+Y"),
-																						tr("Export a POVRay file from the Scene"), 
+																						tr("Export a POVRay file from the Scene"),
 																						UIOperationMode::MODE_ADVANCED);
 			setIcon(pov_action, "mimetype/text-x-povray", false);
 			setMenuHelp(pov_action, "tips.html#povray");
 
 			description = "Shortcut|File|Export|XML3D";
-			QAction* xml3d_action = insertMenuEntry(MainControl::FILE_EXPORT, tr("XML3D as XHTML"), this, 
+			QAction* xml3d_action = insertMenuEntry(MainControl::FILE_EXPORT, tr("XML3D as XHTML"), this,
 																						SLOT(exportXML3D()), description, QKeySequence(""),
-																						tr("Export a XML3D/XHTML file from the Scene"), 
+																						tr("Export a XML3D/XHTML file from the Scene"),
 																						UIOperationMode::MODE_ADVANCED);
 			setMenuHelp(xml3d_action, "tips.html#XML3D");
-			
+
 			description = "Shortcut|File|Export|VRML";
-			insertMenuEntry(MainControl::FILE_EXPORT, tr("3D Prototyping Export"), this, 
+			insertMenuEntry(MainControl::FILE_EXPORT, tr("3D Prototyping Export"), this,
 			                SLOT(showExportVRMLDialog()), description, QKeySequence(),
 											tr("Export a VRML or stl file from the scene"),
 											UIOperationMode::MODE_ADVANCED);
 
 			// ====================================== MODES =====================================
-			switch_grid_ = NULL;	
+			switch_grid_ = NULL;
 			if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
 			{
 				description = "Shortcut|ShowRuler";
@@ -1520,7 +1529,7 @@ namespace BALL
 				shortcut_registry->registerShortcut(description, switch_grid_);
 
 				// and push the icons whose actions are defined somewhere else
-				// into the toolbar_actions_view 
+				// into the toolbar_actions_view
 				toolbar_actions_view_controls_.push_back(screenshot_action);
 			}
 
@@ -1543,10 +1552,10 @@ namespace BALL
 #endif
 
 			description = "Shortcut|File|Print";
-			insertMenuEntry(MainControl::FILE, tr("Print"), this, SLOT(printScene()), description, QKeySequence(), 
+			insertMenuEntry(MainControl::FILE, tr("Print"), this, SLOT(printScene()), description, QKeySequence(),
 			                tr("Print the scene"), UIOperationMode::MODE_ADVANCED);
 
-			window_menu_entry_ = insertMenuEntry(MainControl::WINDOWS, tr("Scene"), this, SLOT(switchShowWidget()), "", 
+			window_menu_entry_ = insertMenuEntry(MainControl::WINDOWS, tr("Scene"), this, SLOT(switchShowWidget()), "",
 			                                     QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 			if (window_menu_entry_)
 			{
@@ -1701,9 +1710,9 @@ namespace BALL
 			QPoint fps_point;
 
 			if (show_fps_)
-				fps_string = createFPSInfo_();
+				fps_string = createFPSInfo_(renderer->renderer);
 
-			// draw all renderable texts 
+			// draw all renderable texts
 			// TODO: does this work for dependent renderers?
 			QPaintDevice* current_dev = dynamic_cast<QPaintDevice*>(renderer->target);
 
@@ -1820,7 +1829,7 @@ namespace BALL
 					onNotify(static_cast<NotificationEvent*>(evt)->getMessage());
 					notify_(static_cast<NotificationEvent*>(evt)->getMessage());
 					break;
-				case RENDER_TO_BUFFER_FINISHED_EVENT: 
+				case RENDER_TO_BUFFER_FINISHED_EVENT:
 					handleRenderToBufferFinishedEvent_(static_cast<RenderToBufferFinishedEvent*>(evt));
 					break;
 				default:
@@ -1898,13 +1907,13 @@ namespace BALL
 			//										v3.x, v3.y, v3.z, 0,
 			//											 0,    0,    0, 1);
 
-			//if (  (track_rotation.getAxis().getSquareLength() < 1e-6) 
+			//if (  (track_rotation.getAxis().getSquareLength() < 1e-6)
 			//		|| fabs(track_rotation.getAngle()) < 1e-4)
 			//	return;
 
 			//Matrix4x4 qmat;
 			//track_rotation.getRotationMatrix(qmat);
-			//Matrix4x4 rotation = to_origin;	
+			//Matrix4x4 rotation = to_origin;
 			//rotation *= qmat;
 			//to_origin.transpose();
 			//rotation *= to_origin;
@@ -1969,7 +1978,7 @@ namespace BALL
 			info_point_ = mapFromGlobal(info_point_);
 
 			if (!rect().contains(info_point_) ||
-					!lockComposites()) 
+					!lockComposites())
 			{
 				return;
 			}
@@ -2032,7 +2041,7 @@ namespace BALL
 				string += this_string;
 			}
 
-			if (string == "") 
+			if (string == "")
 			{
 				unlockComposites();
 				return;
@@ -2081,7 +2090,7 @@ namespace BALL
 			//prepare the filename
 			QString filename = ts.getFilename();
 			QString vrml_end = ".wrl";
-			QString stl_end = ".stl"; 
+			QString stl_end = ".stl";
 			filename.remove( vrml_end );
 			filename.remove( stl_end );
 
@@ -2090,7 +2099,7 @@ namespace BALL
 			RepresentationList::const_iterator rit;
 
 			if ( ve || se)
-			{	
+			{
 				if ( ts.split() )
 					//every representation gets its own file
 				{
@@ -2155,9 +2164,9 @@ namespace BALL
 							(*rit)->setHidden(false);
 						}
 						count++;
-					}								
+					}
 
-					QString vtemp = filename;				
+					QString vtemp = filename;
 
 					//export as requested
 					if (ve)
@@ -2178,14 +2187,14 @@ namespace BALL
 						{
 							change = true;
 						}
-					}	
+					}
 				}
 			}
 
 			//it is very important to restore the representations just when a basestats array was created
 			//as he is only created if an export was made whenever the export is started the "change" boolean is set true
 			if ( change )
-			{	
+			{
 				//now we have to restore the basestats:
 				bool *base = ts.basestats;
 				count = 0;
@@ -2201,13 +2210,13 @@ namespace BALL
 					else
 					{
 						(*rit)->setHidden(true);
-					}	
+					}
 					count ++;
-				}		
+				}
 				setWorkingDirFromFilename_(ascii(filename));
 				vrml_nr_ ++;
 			}
-			getMainControl()->redrawAllRepresentations();			
+			getMainControl()->redrawAllRepresentations();
 		}
 
 		void Scene::printScene()
@@ -2219,11 +2228,11 @@ namespace BALL
 			setStatusbarText((String)tr("printing.."));
 
 			QPainter p;
-			if(!p.begin(&printer)) return; 
+			if(!p.begin(&printer)) return;
 
 			// TODO: push into renderSetup
 			QImage pic = main_display_->grabFrameBuffer();
-			p.drawImage(0,0, pic);	
+			p.drawImage(0,0, pic);
 			p.end();
 
 			setStatusbarText((String)tr("finished printing"));
@@ -2236,7 +2245,7 @@ namespace BALL
 			screenshot_nr_ ++;
 
 			exportPNG(filename);
-			Log.info() << (String)tr("Exporting PNG to ") 
+			Log.info() << (String)tr("Exporting PNG to ")
 				<< Directory().getPath() << FileSystem::PATH_SEPARATOR
 				<< filename << std::endl;
 
@@ -2273,7 +2282,7 @@ namespace BALL
 			if (!offscreen_rendering_)
 				return renderers_[main_renderer_]->exportPNG(filename);
 
-			// ok, we have to do this the hard way...	
+			// ok, we have to do this the hard way...
 
 			// What kind of renderer do we have to encapsulate?
 			if (RTTI::isKindOf<GLRenderer>(*(renderers_[main_renderer_]->renderer)))
@@ -2720,9 +2729,9 @@ namespace BALL
 #endif
 			Renderer::StereoMode mode = stage_settings_->getStereoMode();
 
-			if (mode == Renderer::DUAL_VIEW_STEREO || mode == Renderer::TOP_BOTTOM_STEREO) 
+			if (mode == Renderer::DUAL_VIEW_STEREO || mode == Renderer::TOP_BOTTOM_STEREO)
 			{
-				// in both cases (side by side and top bottom), we can 
+				// in both cases (side by side and top bottom), we can
 				// use the same code
 				GLRenderWindow* left_widget = new GLRenderWindow(left_screen, "left eye", Qt::FramelessWindowHint);
 				left_widget->setDoNotResize(true);
@@ -3106,7 +3115,7 @@ namespace BALL
 					renderers_[i]->loop_mutex.unlock();
 					// set the menu buttons correctly
 					//stop_continuous_loop_action_->setEnabled(true);
-					//start_continuous_loop_action_->setEnabled(false);	
+					//start_continuous_loop_action_->setEnabled(false);
 					// set the icon
 					//toggle_continuous_loop_action_->setChecked(true);
 				}
@@ -3368,7 +3377,7 @@ namespace BALL
 			//       is called *after* switching to stereo!
 			//
 			// TODO: - change this to something more sensible!
-			//       - call something in RenderSetup instead!	
+			//       - call something in RenderSetup instead!
 			Position texname = 0;
 
 			for (Position i=0; i<renderers_.size(); ++i)
@@ -3471,14 +3480,14 @@ namespace BALL
 					return RaytracingWindowPtr(main_display_);
 					break;
 
-				default: 
+				default:
 					return RaytracingWindowPtr(main_display_);
 					break;
 			}
 		}
 #endif
 
-		void AnimationThread::mySleep(Size msec) 
+		void AnimationThread::mySleep(Size msec)
 		{
 			msleep(msec);
 			while (scene_ != 0 && scene_->isUpdateRunning())
@@ -4011,7 +4020,7 @@ namespace BALL
 			if (bond_order_dialog.ILP_button->isChecked())
 			{
 				abop.options[AssignBondOrderProcessor::Option::ALGORITHM] = AssignBondOrderProcessor::Algorithm::ILP;
-			} 
+			}
 			else if (bond_order_dialog.ASTAR_button->isChecked())
 			{
 				abop.options[AssignBondOrderProcessor::Option::ALGORITHM] = AssignBondOrderProcessor::Algorithm::A_STAR;

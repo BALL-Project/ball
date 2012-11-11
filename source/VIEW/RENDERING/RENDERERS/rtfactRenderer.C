@@ -33,6 +33,17 @@ namespace BALL
 {
 	namespace VIEW
 	{
+
+		bool RTfactRenderer::hasFPScounter()
+		{
+			return true;
+		}
+
+		double RTfactRenderer::getFPS()
+		{
+			return fpsMeter.getFPS();
+		}
+
 		bool RTfactRenderer::init(Scene& scene)
 		{
 			Renderer::init(scene);
@@ -870,9 +881,13 @@ namespace BALL
 				//
 				framebuffer.prePaint();
 
+				fpsMeter.startFrame();
+
 				rayTracer.syncStructures();
 
 				renderTask.run();
+
+				fpsMeter.endFrame();
 
 				framebuffer.postPaint();
 
