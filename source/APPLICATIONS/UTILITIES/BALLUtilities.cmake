@@ -8,6 +8,7 @@ SET(EXECUTABLES_LIST
 	assign_charges_from_rules
 	assign_radii_from_rules
 	assign_typenames_from_rules
+	assign_positions_from_template
 	atomtyper
 	calculate_RMSD
 	clip_protein_around_ligand
