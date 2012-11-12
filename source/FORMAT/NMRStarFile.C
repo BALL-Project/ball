@@ -807,7 +807,7 @@ namespace BALL
 		}
 		// get the NMR data
 		// NOTE: we take the zero's dataset!
-		if (nmr_data_->atom_data_sets_.empty())
+		if (nmr_data_ && nmr_atom_data_set_ && nmr_data_->atom_data_sets_.empty())
 		{
 			Log.error() << "BALLToBMRBMapper::createMapping(): Warning: no atom data present!" << std::endl;
 			return false;
@@ -831,7 +831,14 @@ namespace BALL
 		std::vector<std::list<Position> > atoms_per_nmr_residue(len_sequence);
 		for (Position i=0; i<nmr_data.size(); i++)
 		{
-			atoms_per_nmr_residue[nmr_data[i].residue_seq_code-1].push_back(i);
+			if (nmr_data[i].residue_seq_code-1 < len_sequence)
+			{
+				atoms_per_nmr_residue[nmr_data[i].residue_seq_code-1].push_back(i);
+			}
+			else
+			{
+				Log.error() << "BALLToBMRBMapper::createMapping(): Warning: corrupt index!" << std::endl;
+			}
 		}
 
 		ResidueConstIterator res_it = chain_->beginResidue();
@@ -1237,7 +1244,7 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 
 	String NMRStarFile::getResidueSequence(Position i) const
 	{	
-		if (!monomeric_polymers_.empty())
+		if (monomeric_polymers_.size() > i)
 		{			
 			if (atom_data_sets_.size() > i)
 			{	
@@ -1248,6 +1255,7 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 				for (Position j=0; identical_sequences && (j<atom_data.size()); j++)
 				{
 					if (   (  atom_data[j].residue_seq_code != POSITION_VALUE_NA ) 
+							&& (  atom_data[j].residue_seq_code - 1 < residue_sequence.size())
 							&& (   residue_sequence[atom_data[j].residue_seq_code - 1] 
 							    != Peptides::OneLetterCode(atom_data[j].residue_label))
 						 )
