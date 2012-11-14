@@ -13,16 +13,8 @@
 # include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
-#ifndef BALL_VIEW_WIDGETS_SDWIDGET_H
-# include <BALL/VIEW/WIDGETS/SDWidget.h>
-#endif
-
 #ifndef BALL_STRUCTURE_SMILESPARSER_H
 # include <BALL/STRUCTURE/smilesParser.h>
-#endif
-
-#ifndef BALL_FORMAT_PUBCHEMDOWNLOADER_H
-# include <BALL/FORMAT/pubchemDownloader.h>
 #endif
 
 #include <BALL/VIEW/UIC/ui_pubchemDialog.h>
@@ -31,65 +23,44 @@
 
 #include <map>
 
-class QProgressBar;
+class QNetworkAccessManager;
+class QNetworkReply;
+
+class QTreeWidgetItem;
 
 namespace BALL
 {
 	namespace VIEW
 	{
-		class PubChemDialog;
-
-		namespace PubChemDialogPrivate
-		{
-			class DownloadHelper
-				: public QThread
-			{
-				Q_OBJECT
-
-				public:
-					DownloadHelper(PubChemDialog* parent);
-
-					void run();
-
-					String query;
-					String filename;
-
-				protected:
-					PubChemDialog *parent_;
-			};
-		}
-
 		/** Dialog for querying PubChem and generating structures from a SMILES string
 		 */
-		class BALL_VIEW_EXPORT PubChemDialog 
+		class BALL_VIEW_EXPORT PubChemDialog
 			: public QDialog,
-				public Ui_PubChemDialogData,
-				public ModularWidget
+			  public Ui_PubChemDialogData,
+			  public ModularWidget
 		{
-			Q_OBJECT
-
-			friend class PubChemDialogPrivate::DownloadHelper;
+				Q_OBJECT
 
 			public:
 
-				BALL_EMBEDDABLE(PubChemDialog,ModularWidget)
+				BALL_EMBEDDABLE ( PubChemDialog,ModularWidget )
 
 				/// Default Constructor.
-				PubChemDialog(QWidget *parent = NULL, const char *name = "PubChemDialog");
+				PubChemDialog ( QWidget* parent = NULL, const char* name = "PubChemDialog" );
 
 				/// Destructor.
 				virtual ~PubChemDialog();
 
 				///
-				virtual void initializeWidget(MainControl& main_control);
+				virtual void initializeWidget ( MainControl& main_control );
 
 				///
-				virtual void checkMenu(MainControl& main_control);
+				virtual void checkMenu ( MainControl& main_control );
 
 				///
-				void generateFromSMILES(const String& SMILES);
+				void generateFromSMILES ( const String& SMILES );
 			public slots:
-				
+
 				/// Show and raise dialog
 				void show();
 
@@ -100,7 +71,7 @@ namespace BALL
 				void queryPubChem();
 
 				///
-				void switchView(QTreeWidgetItem* item, int column);
+				void switchView ( QTreeWidgetItem* item, int column );
 
 				///
 				void clearEntries();
@@ -109,14 +80,14 @@ namespace BALL
 				void finished();
 
 				///
-				void updateDownloadProgress(qint64 done, qint64 total);
+				void updateDownloadProgress ( qint64 done, qint64 total );
 
 				///
-				void downloadFinished(const QString& filename);
-				
+				void downloadFinished ( QNetworkReply* reply );
+
 			protected:
 
-				SmilesParser      smiles_parser_;
+				SmilesParser smiles_parser_;
 
 				struct ParsedResult_
 				{
@@ -125,26 +96,21 @@ namespace BALL
 					String smiles;
 				};
 
-				void parseItemRecursive_(const QDomNode& current_node, Position level, ParsedResult_& result);
-				 
-				void insert_(ParsedResult_ d, QTreeWidgetItem* parent, bool plot);
-				
-				PubChemDownloader* pcd_;
+				void insert_ ( ParsedResult_ d, QTreeWidgetItem* parent, bool plot );
+				bool downloadError_ ( QNetworkReply* reply);
 
-				std::map<QTreeWidgetItem*, System*> 				sd_systems_;
-				std::map<QTreeWidgetItem*, System*> 				original_systems_;
-				std::map<QTreeWidgetItem*, ParsedResult_>  	descriptions_;
+				std::map<QTreeWidgetItem*, System*> sd_systems_;
+				std::map<QTreeWidgetItem*, System*> original_systems_;
+				std::map<QTreeWidgetItem*, ParsedResult_> descriptions_;
 
 				QAction* action1_, *action2_;
 
 				int current_request_id_;
 
 				HashMap<int, QTreeWidgetItem*> esummary_request_ids_;
-				QProgressBar *progress_;
 
 				QPushButton* add_button_;
-
-				PubChemDialogPrivate::DownloadHelper downloader_;
+				QNetworkAccessManager* network_manager_;
 		};
 
 	}
