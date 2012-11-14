@@ -118,7 +118,7 @@ namespace BALL
 
 			QPainter painter(pd);
 
-			QPen pen(Qt::black, 3, Qt::SolidLine, Qt::RoundCap, Qt::MiterJoin);
+			QPen pen(palette().foreground().color(), 3, Qt::SolidLine, Qt::RoundCap, Qt::MiterJoin);
 			painter.setPen(pen);
 			painter.setRenderHint(QPainter::Antialiasing, true);
 			painter.translate(pd->width()/2, pd->height()/2);
