@@ -17,8 +17,6 @@
 # include <BALL/STRUCTURE/smilesParser.h>
 #endif
 
-#include <BALL/VIEW/UIC/ui_pubchemDialog.h>
-
 #include <QtGui/QDialog>
 
 #include <map>
@@ -28,6 +26,11 @@ class QNetworkReply;
 
 class QTreeWidgetItem;
 
+namespace Ui
+{
+	class PubChemDialogData;
+}
+
 namespace BALL
 {
 	namespace VIEW
@@ -36,7 +39,6 @@ namespace BALL
 		 */
 		class BALL_VIEW_EXPORT PubChemDialog
 			: public QDialog,
-			  public Ui_PubChemDialogData,
 			  public ModularWidget
 		{
 				Q_OBJECT
@@ -86,6 +88,7 @@ namespace BALL
 				void downloadFinished ( QNetworkReply* reply );
 
 			protected:
+				Ui::PubChemDialogData* ui_;
 
 				SmilesParser smiles_parser_;
 

@@ -14,6 +14,7 @@
 
 #include <QtGui/QPushButton>
 #include <QtGui/QTreeWidget>
+#include <QtGui/QTreeWidgetItem>
 #include <QtGui/QProgressBar>
 #include <QtGui/QMessageBox>
 
@@ -25,6 +26,7 @@
 #include <QtNetwork/QNetworkRequest>
 
 #include <algorithm>
+#include <BALL/VIEW/UIC/ui_pubchemDialog.h>
 
 namespace BALL
 {
@@ -32,7 +34,6 @@ namespace BALL
 	{
 		PubChemDialog::PubChemDialog ( QWidget* parent, const char* name )
 			: QDialog ( parent ),
-			  Ui_PubChemDialogData(),
 			  ModularWidget ( name ),
 			  action1_ ( 0 ),
 			  action2_ ( 0 ),
@@ -41,25 +42,26 @@ namespace BALL
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new PubChemDialog " << this << std::endl;
 #endif
+			ui_ = new Ui::PubChemDialogData;
+			ui_->setupUi ( this );
 
-			setupUi ( this );
 			setObjectName ( name );
 
-			progress_bar->hide();
+			ui_->progress_bar->hide();
 
 			// register the widget with the MainControl
 			ModularWidget::registerWidget ( this );
 
-			add_button_ = buttonBox->addButton ( tr ( "Add" ), QDialogButtonBox::AcceptRole );
-			QPushButton* clear = buttonBox->addButton ( tr ( "Clear Results" ), QDialogButtonBox::ResetRole );
+			add_button_ = ui_->buttonBox->addButton ( tr ( "Add" ), QDialogButtonBox::AcceptRole );
+			QPushButton* clear = ui_->buttonBox->addButton ( tr ( "Clear Results" ), QDialogButtonBox::ResetRole );
 
-			connect ( generate_button, SIGNAL ( clicked() ), this, SLOT ( generateButtonClicked() ) );
-			connect ( search_button, SIGNAL ( clicked() ), this, SLOT ( queryPubChem() ) );
+			connect ( ui_->generate_button, SIGNAL ( clicked() ), this, SLOT ( generateButtonClicked() ) );
+			connect ( ui_->search_button, SIGNAL ( clicked() ), this, SLOT ( queryPubChem() ) );
 			connect ( clear, SIGNAL ( clicked() ), this, SLOT ( clearEntries() ) );
-			connect ( queries, SIGNAL ( itemActivated ( QTreeWidgetItem*, int ) ), this, SLOT ( switchView ( QTreeWidgetItem*, int ) ) );
+			connect ( ui_->queries, SIGNAL ( itemActivated ( QTreeWidgetItem*, int ) ), this, SLOT ( switchView ( QTreeWidgetItem*, int ) ) );
 
-			queries->setColumnCount ( 1 );
-			queries->headerItem()->setText ( 0, tr ( "Results" ) );
+			ui_->queries->setColumnCount ( 1 );
+			ui_->queries->headerItem()->setText ( 0, tr ( "Results" ) );
 			//
 			// TODO: re-enable the status bar...
 		}
@@ -69,13 +71,14 @@ namespace BALL
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "deleting PubChemDialog " << this << std::endl;
 #endif
-
 			clearEntries();
+
+			delete ui_;
 		}
 
 		void PubChemDialog::finished()
 		{
-			QTreeWidgetItem* item = queries->currentItem();
+			QTreeWidgetItem* item = ui_->queries->currentItem();
 
 			// is this item connected with a system?
 			if ( sd_systems_.find ( item ) == sd_systems_.end() ) return;
@@ -111,9 +114,9 @@ namespace BALL
 			sd_systems_.clear();
 			original_systems_.clear();
 			descriptions_.clear();
-			queries->clear();
-			sdwidget_->clear();
-			text_field->clear();
+			ui_->queries->clear();
+			ui_->sdwidget_->clear();
+			ui_->text_field->clear();
 		}
 
 		void PubChemDialog::generateFromSMILES ( const String& SMILES )
@@ -144,7 +147,7 @@ namespace BALL
 
 		void PubChemDialog::generateButtonClicked()
 		{
-			generateFromSMILES ( String ( ascii ( smiles_label->displayText() ) ) );
+			generateFromSMILES ( String ( ascii ( ui_->smiles_label->displayText() ) ) );
 		}
 
 		void PubChemDialog::switchView ( QTreeWidgetItem* item, int /*column*/ )
@@ -152,13 +155,13 @@ namespace BALL
 			// is this item connected with a system?
 			if ( sd_systems_.find ( item ) != sd_systems_.end() )
 			{
-				sdwidget_->plot ( *sd_systems_[item], false );
+				ui_->sdwidget_->plot ( *sd_systems_[item], false );
 			}
 
 			// do we have a description for it?
 			if ( descriptions_.find ( item ) != descriptions_.end() )
 			{
-				text_field->setText ( QString ( descriptions_[item].description.c_str() ) );
+				ui_->text_field->setText ( QString ( descriptions_[item].description.c_str() ) );
 			}
 
 			add_button_->setEnabled ( true );
@@ -166,7 +169,7 @@ namespace BALL
 
 		void PubChemDialog::queryPubChem()
 		{
-			QString qt = pubchem_label->displayText();
+			QString qt = ui_->pubchem_label->displayText();
 
 			if ( qt == "" ) return;
 			QString pug_name_query_("http://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/%1/SDF");
@@ -185,10 +188,10 @@ namespace BALL
 			connect(reply, SIGNAL(downloadProgress(qint64,qint64)),
 			        this, SLOT(updateDownloadProgress(qint64,qint64)));
 	
-			progress_bar->setMaximum(0);
-			progress_bar->show();
+			ui_->progress_bar->setMaximum(0);
+			ui_->progress_bar->show();
 
-			search_button->setEnabled ( false );
+			ui_->search_button->setEnabled ( false );
 		}
 
 		bool PubChemDialog::downloadError_(QNetworkReply* reply)
@@ -216,8 +219,8 @@ namespace BALL
 
 			if(!downloadError_(reply))
 			{
-				search_button->setEnabled ( true );
-				progress_bar->hide();
+				ui_->search_button->setEnabled ( true );
+				ui_->progress_bar->hide();
 
 				return;
 			}
@@ -232,9 +235,9 @@ namespace BALL
 
 			if(!outfile.open(QIODevice::WriteOnly)) {
 				QMessageBox::critical ( this, tr ( "Download failed" ),
-				                        tr ( "Could not open download destination (%1) for query %2").arg(fname.c_str()).arg(pubchem_label->displayText()));
-				search_button->setEnabled ( true );
-				progress_bar->hide();
+				                        tr ( "Could not open download destination (%1) for query %2").arg(fname.c_str()).arg(ui_->pubchem_label->displayText()));
+				ui_->search_button->setEnabled ( true );
+				ui_->progress_bar->hide();
 
 				return;
 			}
@@ -258,7 +261,7 @@ namespace BALL
 				{
 					if ( current_molecule )
 					{
-						String qt = ascii ( pubchem_label->displayText() );
+						String qt = ascii ( ui_->pubchem_label->displayText() );
 						System* new_system = new System ( qt );
 
 						new_system->insert ( *current_molecule );
@@ -285,10 +288,10 @@ namespace BALL
 			File::remove (fname);
 
 			QTreeWidgetItem* new_query_result = new QTreeWidgetItem ( ( QTreeWidget* ) 0,
-			        QStringList ( pubchem_label->displayText()
+			        QStringList ( ui_->pubchem_label->displayText()
 			                      +" ("+QString::number ( sd_systems.size() ) + ")" ) );
-			queries->insertTopLevelItem ( 0, new_query_result );
-			queries->expandItem ( new_query_result );
+			ui_->queries->insertTopLevelItem ( 0, new_query_result );
+			ui_->queries->expandItem ( new_query_result );
 
 			QTreeWidgetItem* first_item = NULL;
 
@@ -314,13 +317,13 @@ namespace BALL
 				QTreeWidgetItem* current_item = new QTreeWidgetItem ( new_query_result, QStringList ( QString ( pr.name.c_str() ) ) );
 				descriptions_[current_item] = pr;
 
-				sdwidget_->plot ( **sys_it, false );
+				ui_->sdwidget_->plot ( **sys_it, false );
 				sd_systems_[current_item] = *sys_it;
 
-				queries->setCurrentItem ( current_item );
+				ui_->queries->setCurrentItem ( current_item );
 				current_item->setSelected ( true );
 				switchView ( current_item, 0 );
-				queries->setCurrentItem ( current_item );
+				ui_->queries->setCurrentItem ( current_item );
 				current_item->setSelected ( true );
 
 				if ( !first_item )
@@ -328,19 +331,19 @@ namespace BALL
 					first_item = current_item;
 				}
 
-				queries->update();
+				ui_->queries->update();
 			}
 
 			if ( first_item )
 			{
 				first_item->setSelected ( true );
-				queries->setCurrentItem ( first_item );
+				ui_->queries->setCurrentItem ( first_item );
 				first_item->setSelected ( true );
 				switchView ( first_item, 0 );
 			}
 
-			search_button->setEnabled ( true );
-			progress_bar->hide();
+			ui_->search_button->setEnabled ( true );
+			ui_->progress_bar->hide();
 		}
 
 		void PubChemDialog::insert_ ( ParsedResult_ pr, QTreeWidgetItem* parent, bool plot )
@@ -366,7 +369,7 @@ namespace BALL
 
 			if ( plot )
 			{
-				sdwidget_->plot ( S, false );
+				ui_->sdwidget_->plot ( S, false );
 				switchView ( current_item, 0 );
 			}
 
@@ -376,12 +379,12 @@ namespace BALL
 			{
 				QList<QTreeWidgetItem*> structure;
 				structure.append ( current_item );
-				queries->insertTopLevelItems ( 0, structure );
+				ui_->queries->insertTopLevelItems ( 0, structure );
 			}
 
-			queries->setCurrentItem ( current_item );
+			ui_->queries->setCurrentItem ( current_item );
 			current_item->setSelected ( true );
-			queries->update();
+			ui_->queries->update();
 		}
 
 
@@ -408,8 +411,8 @@ namespace BALL
 
 		void PubChemDialog::updateDownloadProgress ( qint64 done, qint64 total )
 		{
-			progress_bar->setMaximum ( std::max ( total, ( qint64 ) 0 ) );
-			progress_bar->setValue ( done );
+			ui_->progress_bar->setMaximum ( std::max ( total, ( qint64 ) 0 ) );
+			ui_->progress_bar->setValue ( done );
 		}
 
 	}
