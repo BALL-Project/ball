@@ -623,10 +623,10 @@ IF(BALL_HAS_VIEW)
 	                      ${QT_QTGUI_LIBRARY}
 	                      ${QT_QTTEST_LIBRARY}
 	                      ${QT_QTOPENGL_LIBRARY})
-ENDIF()
 
-IF(USE_QTWEBKIT)
-	TARGET_LINK_LIBRARIES(VIEW ${QT_QTWEBKIT_LIBRARY})
+	IF(USE_QTWEBKIT)
+		TARGET_LINK_LIBRARIES(VIEW ${QT_QTWEBKIT_LIBRARY})
+	ENDIF()
 ENDIF()
 
 ## add targets for Python modules
