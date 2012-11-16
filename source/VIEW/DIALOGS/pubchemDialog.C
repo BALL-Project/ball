@@ -64,6 +64,7 @@ namespace BALL
 			ui_->queries->headerItem()->setText ( 0, tr ( "Results" ) );
 			//
 			// TODO: re-enable the status bar...
+			buildInformationTemplates_();
 		}
 
 		PubChemDialog::~PubChemDialog()
@@ -90,7 +91,7 @@ namespace BALL
 			System* org_system = sd_systems_.find ( item )->second;
 			System* new_system = new System ( *org_system );
 
-			new_system->setName ( res.name );
+			new_system->setName ( res.name.toStdString() );
 			getMainControl()->insert ( *new_system );
 			getMainControl()->update ( *new_system );
 		}
@@ -133,8 +134,8 @@ namespace BALL
 
 			ParsedResult_ pr;
 			pr.smiles = SMILES;
-			pr.description = ( String ) tr ( "Generated from SMILES " ) +SMILES;
-			pr.name = SMILES;
+			pr.description = tr ( "Generated from SMILES " ) + SMILES.c_str();
+			pr.name = SMILES.c_str();
 			insert_ ( pr, 0, true );
 		}
 
@@ -161,7 +162,7 @@ namespace BALL
 			// do we have a description for it?
 			if ( descriptions_.find ( item ) != descriptions_.end() )
 			{
-				ui_->text_field->setText ( QString ( descriptions_[item].description.c_str() ) );
+				ui_->text_field->setText ( descriptions_[item].description );
 			}
 
 			add_button_->setEnabled ( true );
@@ -194,7 +195,7 @@ namespace BALL
 			ui_->search_button->setEnabled ( false );
 		}
 
-		bool PubChemDialog::downloadError_(QNetworkReply* reply)
+		bool PubChemDialog::handleDownloadError_(QNetworkReply* reply)
 		{
 			QString errormessage;
 
@@ -217,7 +218,7 @@ namespace BALL
 		{
 			disconnect(reply);
 
-			if(!downloadError_(reply))
+			if(!handleDownloadError_(reply))
 			{
 				ui_->search_button->setEnabled ( true );
 				ui_->progress_bar->hide();
@@ -299,22 +300,23 @@ namespace BALL
 			        sys_it != sd_systems.end(); ++sys_it )
 			{
 				ParsedResult_ pr;
-				pr.name = ( *sys_it )->beginMolecule()->getName();
+				pr.name = ( *sys_it )->beginMolecule()->getName().c_str();
 
 				NamedPropertyIterator npi = ( *sys_it )->beginMolecule()->beginNamedProperty();
 
 				for ( ; npi != ( *sys_it )->beginMolecule()->endNamedProperty(); ++npi )
 				{
 					String prop_name = npi->getName();
+					prop_name.trim();
 
-					if ( prop_name.hasPrefix ( "PUBCHEM_" ) )
+					boost::unordered_map<String, QString>::iterator it = information_templates_.find(prop_name);
+					if ( it != information_templates_.end() )
 					{
-						pr.description += String ( "<b>" ) +prop_name.after ( "PUBCHEM_" ) +"</b><br/>";
-						pr.description += npi->toString() +"<br/>";
+						pr.description += it->second.arg(npi->toString().c_str());
 					}
 				}
 
-				QTreeWidgetItem* current_item = new QTreeWidgetItem ( new_query_result, QStringList ( QString ( pr.name.c_str() ) ) );
+				QTreeWidgetItem* current_item = new QTreeWidgetItem ( new_query_result, QStringList ( pr.name) );
 				descriptions_[current_item] = pr;
 
 				ui_->sdwidget_->plot ( **sys_it, false );
@@ -346,9 +348,33 @@ namespace BALL
 			ui_->progress_bar->hide();
 		}
 
+		void PubChemDialog::buildInformationTemplates_()
+		{
+			information_templates_.insert(std::make_pair("PUBCHEM_IUPAC_NAME"           , buildHeaderTemplate_(LONG, "IUPAC Name:")));
+			information_templates_.insert(std::make_pair("PUBCHEM_OPENEYE_CAN_SMILES"   , buildHeaderTemplate_(LONG, "Canonical SMILES:")));
+			information_templates_.insert(std::make_pair("PUBCHEM_MOLECULAR_FORMULA"    , buildHeaderTemplate_(LONG, "Molecular Formula:")));
+			information_templates_.insert(std::make_pair("PUBCHEM_COMPOUND_CID"         , buildHeaderTemplate_(SHORT, "Pubchem Database Key:")));
+			information_templates_.insert(std::make_pair("PUBCHEM_XLOGP3"               , buildHeaderTemplate_(SHORT, "Predicted logP:")));
+			information_templates_.insert(std::make_pair("PUBCHEM_CACTVS_TPSA"          , buildHeaderTemplate_(SHORT, "Predicted Polar Surface Area (TPSA):")));
+			information_templates_.insert(std::make_pair("PUBCHEM_CACTVS_HBOND_DONOR"   , buildHeaderTemplate_(SHORT, "Number of H-Bond Donors:")));
+			information_templates_.insert(std::make_pair("PUBCHEM_CACTVS_HBOND_ACCEPTOR", buildHeaderTemplate_(SHORT, "Number of H-Bond Acceptors:")));
+			information_templates_.insert(std::make_pair("PUBCHEM_CACTVS_ROTATABLE_BOND", buildHeaderTemplate_(SHORT, "Number of Rotatable Bonds:")));
+			information_templates_.insert(std::make_pair("PUBCHEM_TOTAL_CHARGE"         , buildHeaderTemplate_(SHORT, "Total Charge:")));
+			information_templates_.insert(std::make_pair("PUBCHEM_ATOM_DEF_STEREO_COUNT", buildHeaderTemplate_(SHORT, "Number of Chiral Atoms:")));
+			information_templates_.insert(std::make_pair("PUBCHEM_HEAVY_ATOM_COUNT"     , buildHeaderTemplate_(SHORT, "Number of Heavy Atoms:")));
+			information_templates_.insert(std::make_pair("PUBCHEM_EXACT_MASS"           , buildHeaderTemplate_(SHORT, "Exact Mass (Most Intense MS Peak):")));
+			information_templates_.insert(std::make_pair("PUBCHEM_MONOISOTOPIC_WEIGHT"  , buildHeaderTemplate_(SHORT, "Monoisotopic Weight (Most abundant isotopes):")));
+			information_templates_.insert(std::make_pair("PUBCHEM_MOLECULAR_WEIGHT"     , buildHeaderTemplate_(SHORT, "Molecular Weight (Average weight):")));
+		}
+
+		QString PubChemDialog::buildHeaderTemplate_(InfoDisplayStyle style, const char* str) const
+		{
+			return "<b>" + tr(str) + "</b>" + ((style == LONG) ? "<br/>" : " ") + "%1<br/><br/>";
+		}
+
 		void PubChemDialog::insert_ ( ParsedResult_ pr, QTreeWidgetItem* parent, bool plot )
 		{
-			QTreeWidgetItem* current_item = new QTreeWidgetItem ( parent, QStringList ( pr.name.c_str() ) );
+			QTreeWidgetItem* current_item = new QTreeWidgetItem ( parent, QStringList ( pr.name ) );
 			descriptions_[current_item] = pr;
 			System S;
 
