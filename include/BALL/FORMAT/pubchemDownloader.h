@@ -5,50 +5,63 @@
 #ifndef BALL_FORMAT_PUBCHEMDOWNLOADER_H
 #define BALL_FORMAT_PUBCHEMDOWNLOADER_H
 
-#ifndef BALL_SYSTEM_SIMPLEDOWNLOADER_H
-# include <BALL/SYSTEM/simpleDownloader.h>
+#ifndef BALL_DATATYPE_STRING_H
+# include <BALL/DATATYPE/string.h>
 #endif
-
-#include <QDomDocument>
 
 namespace BALL
 {
+	/**
+	 * \brief Downloads PubChem entries
+	 *
+	 * This class provides a simplistic, blocking interface to the PubChem REST
+	 * query interface. It downloads the obtained records in SDF format and
+	 */
 	class BALL_EXPORT PubChemDownloader
-		: public QObject
 	{
-		Q_OBJECT
-
 		public:
+			/**
+			 * Default constructor
+			 */
 			PubChemDownloader();
-			virtual ~PubChemDownloader() {};
 
-			bool downloadSDF(const String& query, const String& filename, bool blocking = true);
+			/**
+			 * Download an SD file corresponding to the Pubchem record
+			 * identified by name.
+			 *
+			 * @param query The name of the substance that should be received.
+			 * @param filename The path to the file into which the results should be saved.
+			 *
+			 * @return false if an error was encountered during download.
+			 */
+			bool downloadSDFByName(const String& query, const String& filename);
 
-		public slots:
-			void downloadFinished(bool error);
-			void dataTransferProgress(qint64 done, qint64 total);
+			/**
+			 * Download an SD file corresponding to the Pubchem record
+			 * identified by Pubchem CID
+			 * 
+			 * @param cid The CID of the substance that should be received.
+			 * @param filename The path to the file into which the results should be saved.
+			 *
+			 * @return false if an error was encountered during download.
+			 */
+			bool downloadSDFByCID(int cid, const String& filename);
 
-		signals:
-			void downloadProgress(qint64 done, qint64 total);
-			void downloadFinished(const QString& filename);
+		private:
+			/// Holds the base URL for the pubchem rest interface
+			const String pubchem_rest_url_;
 
-		protected:
-			QDomDocument pollPubChem_(const QString& request_id);
-			void buildSimpleTree_(const String& names);
-			void addTextNode_(const String& value);
-
-			String esearch_base_url_;
-			String pug_base_url_;
-
-			SimpleDownloader dl_;
-			QDomDocument request_;
-			QDomElement last_node_;
-			QDomElement current_node_;
-
-			QFile outfile_;
-			QFtp   ftp_;
+			/**
+			 * Helper that does the actual download work.
+			 *
+			 * @param query The query defining the record
+			 * @param type The type of the query
+			 * @param filename The path to the resulting SD File
+			 *
+			 * @return false if an error was encountered during download
+			 */
+			bool downloadSDF_(const String& query, const String& type, const String& filename);
 	};
 }
 
 #endif // BALL_FORMAT_PUBCHEMDOWNLOADER_H
-
