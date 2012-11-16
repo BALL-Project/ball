@@ -12,7 +12,7 @@ namespace BALL
 	//const String PoseClustering::Option::CLUSTER_METHOD     = "cluster_method";
 
 	const String PoseClustering::Option::RMSD_LEVEL_OF_DETAIL = "rmsd_level_of_detail";
-	const Index PoseClustering::Default::RMSD_LEVEL_OF_DETAIL = PoseClustering::RMSDLevelOfDetail::C_ALPHA;
+	const Index PoseClustering::Default::RMSD_LEVEL_OF_DETAIL = PoseClustering::C_ALPHA;
 
 	const String PoseClustering::Option::RMSD_THRESHOLD = "pose_clustering_rmsd_threshold";
   const float PoseClustering::Default::RMSD_THRESHOLD = 3;
@@ -347,25 +347,25 @@ namespace BALL
 		AtomBijection temp_atom_bijection;
 		switch (rmsd_level_of_detail_)
 		{
-			case PoseClustering::RMSDLevelOfDetail::C_ALPHA:
+			case PoseClustering::C_ALPHA:
 				temp_atom_bijection.assignCAlphaAtoms(*si, *sj);
 				rmsd = mapper.calculateRMSD(temp_atom_bijection);
 				break;
-			case PoseClustering::RMSDLevelOfDetail::BACKBONE:
+			case PoseClustering::BACKBONE:
 				temp_atom_bijection.assignBackboneAtoms(*si, *sj);
 				rmsd = mapper.calculateRMSD(temp_atom_bijection);
 				break;
-			case PoseClustering::RMSDLevelOfDetail::ALL_ATOMS:
+			case PoseClustering::ALL_ATOMS:
 				mapper.calculateDefaultBijection();
 				//temp_atom_bijection = mapper_.getBijection();
 				rmsd = mapper.calculateRMSD();
 				break;
-			case PoseClustering::RMSDLevelOfDetail::PROPERTY_BASED_ATOM_BIJECTION:
+			case PoseClustering::PROPERTY_BASED_ATOM_BIJECTION:
 				temp_atom_bijection.assignAtomsByProperty(*si, *sj);
 				rmsd = mapper.calculateRMSD(temp_atom_bijection);
 				break;
 
-			case PoseClustering::RMSDLevelOfDetail::HEAVY_ATOMS:
+			case PoseClustering::HEAVY_ATOMS:
 			default:
 				Log.info() << "Option RMSDLevelOfDetaill::HEAVY_ATOMS not yet implemented" << endl;
 		}
