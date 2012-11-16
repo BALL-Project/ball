@@ -20,6 +20,7 @@
 #include <QtGui/QDialog>
 
 #include <map>
+#include <boost/unordered_map.hpp>
 
 class QNetworkAccessManager;
 class QNetworkReply;
@@ -41,7 +42,7 @@ namespace BALL
 			: public QDialog,
 			  public ModularWidget
 		{
-				Q_OBJECT
+			Q_OBJECT
 
 			public:
 
@@ -94,13 +95,19 @@ namespace BALL
 
 				struct ParsedResult_
 				{
-					String name;
-					String description;
+					QString name;
+					QString description;
 					String smiles;
 				};
 
+				enum InfoDisplayStyle{
+					LONG, SHORT
+				};
+
 				void insert_ ( ParsedResult_ d, QTreeWidgetItem* parent, bool plot );
-				bool downloadError_ ( QNetworkReply* reply);
+				bool handleDownloadError_ ( QNetworkReply* reply);
+				void buildInformationTemplates_();
+				QString buildHeaderTemplate_(InfoDisplayStyle style, const char* str) const;
 
 				std::map<QTreeWidgetItem*, System*> sd_systems_;
 				std::map<QTreeWidgetItem*, System*> original_systems_;
@@ -108,9 +115,8 @@ namespace BALL
 
 				QAction* action1_, *action2_;
 
-				int current_request_id_;
-
 				HashMap<int, QTreeWidgetItem*> esummary_request_ids_;
+				boost::unordered_map<String, QString> information_templates_;
 
 				QPushButton* add_button_;
 				QNetworkAccessManager* network_manager_;
