@@ -37,6 +37,10 @@ namespace BALL
 
 			err_ = exec();
 
+			if(reply->error() != QNetworkReply::NoError) {
+				err_ = reply->error();
+			}
+
 			delete dl;
 			delete reply;
 			delete man;
