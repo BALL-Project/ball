@@ -15,24 +15,6 @@
 
 namespace BALL 
 {
-	/**	General Hash Function Template.
-			This template function provides a simple wrapper
-			for the specialized hash functions. It facilitates their use 
-			in STL hash associative containers which expect a <b>Hasher</b>
-			class as template parameter.
-	\ingroup Common
-	*/
-  template <typename T>
-  class HashFunction
-  {
-    public:
-		
-		HashIndex operator () (const T& t) const
-    {
-      return Hash(t);
-		}
-	};
-
 	/**	@name Specialized Hash Functions.
 	*/
 	//@{
