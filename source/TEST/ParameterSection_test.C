@@ -55,7 +55,7 @@ CHECK(ParameterSection::extractSection(Parameters& parameters, const String& sec
   bool result;
 	CAPTURE_OUTPUT_LEVEL(2000)
 		result = ps.extractSection(param, "Section1");
-	COMPARE_OUTPUT("ParameterSection::extractSection: error reading section Section1 of file "BALL_TEST_DATA_PATH(ParameterSection_test.ini)":\nWrong number of fields in the format line: 0. FORMAT:\n")
+	COMPARE_OUTPUT("ParameterSection::extractSection: error reading section Section1 of file " BALL_TEST_DATA_PATH(ParameterSection_test.ini) ":\nWrong number of fields in the format line: 0. FORMAT:\n")
 	TEST_EQUAL(result, false)
 	TEST_EQUAL(ps.getSectionName(), "Section1")
 

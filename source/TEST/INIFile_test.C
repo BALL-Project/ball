@@ -198,10 +198,10 @@ CHECK(bool appendLine(const String& section_name, const String& line))
 	
 	CAPTURE_OUTPUT_LEVEL(2000)
 		TEST_EQUAL(ini.appendLine("Section9", "GAU"), false)
-	COMPARE_OUTPUT("In INIFile "BALL_TEST_DATA_PATH(INIFile_test.ini)" , error while appending line: GAU . Illegal section-name: Section9\n")
+	COMPARE_OUTPUT("In INIFile " BALL_TEST_DATA_PATH(INIFile_test.ini) " , error while appending line: GAU . Illegal section-name: Section9\n")
 	CAPTURE_OUTPUT_LEVEL(2000)
 		TEST_EQUAL(ini.appendLine("Section2", "[AU"), false)	
-	COMPARE_OUTPUT("In INIFile "BALL_TEST_DATA_PATH(INIFile_test.ini)" , error while appending line: [AU . Illegal section-name: Section2\n")
+	COMPARE_OUTPUT("In INIFile " BALL_TEST_DATA_PATH(INIFile_test.ini) " , error while appending line: [AU . Illegal section-name: Section2\n")
 	TEST_EQUAL(ini.appendLine("Section3", "test1 = 123"), true)	
 	TEST_EQUAL(*ini.getLine(9), "test1 = 123")
 	TEST_EQUAL(ini.getNumberOfLines(), 11)
@@ -403,13 +403,13 @@ CHECK(bool appendSection(const String& section))
 	TEST_EQUAL(ini.hasSection(ini.HEADER), true)
 	CAPTURE_OUTPUT_LEVEL(2000)
 		TEST_EQUAL(ini.appendSection(ini.HEADER), false)
-		const char* output = "INIFile::appendSection: "BALL_TEST_DATA_PATH(INIFile_test.ini)" , while adding section: '#HEADER!' already exists.\n";
+		const char* output = "INIFile::appendSection: " BALL_TEST_DATA_PATH(INIFile_test.ini) " , while adding section: '#HEADER!' already exists.\n";
 	COMPARE_OUTPUT(output)
   TEST_EQUAL(ini.getNumberOfLines(), 10)
 
   CAPTURE_OUTPUT_LEVEL(2000)
 		TEST_EQUAL(ini.appendSection("Section1"), false)
-	COMPARE_OUTPUT("INIFile::appendSection: "BALL_TEST_DATA_PATH(INIFile_test.ini)" , while adding section: 'Section1' already exists.\n")
+	COMPARE_OUTPUT("INIFile::appendSection: " BALL_TEST_DATA_PATH(INIFile_test.ini) " , while adding section: 'Section1' already exists.\n")
   TEST_EQUAL(ini.getNumberOfLines(), 10)
 	TEST_EQUAL(ini.hasSection("Section1"), true)
 
