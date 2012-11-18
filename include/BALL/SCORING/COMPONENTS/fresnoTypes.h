@@ -121,6 +121,7 @@ namespace BALL
 			};
 
 			FresnoTypes(AtomContainer* system);
+			virtual ~FresnoTypes() {}
 
 			virtual bool setup();
 
