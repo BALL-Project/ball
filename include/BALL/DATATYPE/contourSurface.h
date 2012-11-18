@@ -24,18 +24,6 @@
 #include <vector>
 #include <math.h>
 
-#ifdef BALL_HAS_HASH_MAP
-namespace BALL_MAP_NAMESPACE
-{
-  template<>
-  struct hash<std::pair<BALL::Position, BALL::Position> >
-  {
-    size_t operator () (const std::pair<BALL::Position, BALL::Position>& p) const
-    {return (size_t)(p.first + p.second);}
-	};
-}
-#endif
-
 namespace BALL
 {
 	template<>

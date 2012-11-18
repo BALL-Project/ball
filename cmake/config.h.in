@@ -195,28 +195,6 @@
 // Define whether inline functions may be used as template parameters.
 #cmakedefine BALL_HAS_INLINE_TPL_ARGS
 
-// tr1 related variables
-
-// Do we have an unordered_map, and if so, where?
-#cmakedefine BALL_HAS_UNORDERED_MAP
-#cmakedefine BALL_HAS_HASH_MAP
-
-#cmakedefine BALL_HAS_STD_UNORDERED_MAP
-#cmakedefine BALL_HAS_TR1_UNORDERED_MAP
-#cmakedefine BALL_HAS_BOOST_UNORDERED_MAP
-
-#cmakedefine BALL_MAP_NAMESPACE @BALL_MAP_NAMESPACE@
-#cmakedefine BALL_MAP_NAME @BALL_MAP_NAME@
-
-// Defines the prefix needed when including extensions to the stl
-#cmakedefine BALL_EXT_INCLUDE_PREFIX @BALL_EXT_INCLUDE_PREFIX@
-
-// Defines if extensions to hash must be defined in namespace std
-#cmakedefine BALL_EXTEND_HASH_IN_STD_NS
-
-// Defines whether the HashMap already provides LongSize hashing
-#cmakedefine BALL_NEEDS_LONGSIZE_HASH
-
 // Defines whether the GNU slist implementation could be found
 // This is useful for e.g. an efficient HashGrid implementation
 #cmakedefine BALL_HAS_GNU_SLIST

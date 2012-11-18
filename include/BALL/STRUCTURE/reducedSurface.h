@@ -146,38 +146,37 @@ namespace BALL
 	};
 }
 
-#if defined(BALL_HAS_UNORDERED_MAP) || defined(BALL_HAS_HASH_MAP)
-
-#ifdef BALL_EXTEND_HASH_IN_STD_NS
-namespace std
+namespace boost
 {
-#endif // BALL_EXTEND_HASH_IN_STD_NS
-
-	namespace BALL_MAP_NAMESPACE {
-		template<>
-		struct hash<BALL::SortedPosition2> : public std::unary_function<BALL::SortedPosition2, size_t>
+	template<>
+	struct hash<BALL::SortedPosition2>
+	{
+		inline size_t operator()(const BALL::SortedPosition2& p) const
 		{
-			inline size_t operator()(const BALL::SortedPosition2& p) const
-			{
-				return 5323 * p.a + 1847 * p.b;
-			}
-		};
+			size_t seed = 0;
 
-		template<>
-		struct hash<BALL::SortedPosition3> : public std::unary_function<BALL::SortedPosition3, size_t>
+			boost::hash_combine(seed, p.a);
+			boost::hash_combine(seed, p.b);
+
+			return seed;
+		}
+	};
+
+	template<>
+	struct hash<BALL::SortedPosition3>
+	{
+		inline size_t operator()(const BALL::SortedPosition3& p) const
 		{
-			inline size_t operator()(const BALL::SortedPosition3& p) const
-			{
-				return 5323 * p.a + 1847 * p.b + 2347 * p.c;
-			}
-		};
-	}
+			size_t seed = 0;
 
-#ifdef BALL_EXTEND_HASH_IN_STD_NS
+			boost::hash_combine(seed, p.a);
+			boost::hash_combine(seed, p.b);
+			boost::hash_combine(seed, p.c);
+
+			return seed;
+		}
+	};
 }
-#endif // BALL_EXTEND_HASH_IN_STD_NS
-
-#endif
 
 namespace BALL
 {

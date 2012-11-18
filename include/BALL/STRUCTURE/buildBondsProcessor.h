@@ -25,19 +25,6 @@
 	#include <BALL/DATATYPE/options.h>
 #endif
 
-
-#ifdef BALL_HAS_HASH_MAP
-namespace BALL_MAP_NAMESPACE
-{
-  template<>
-  struct hash<BALL::Bond::BondOrder>
-  {
-    size_t operator () (const BALL::Bond::BondOrder o) const
-    {return (size_t)o;}
-	};
-}
-#endif
-
 namespace BALL 
 {
 

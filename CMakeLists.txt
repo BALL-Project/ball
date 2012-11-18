@@ -138,7 +138,7 @@ LIST(APPEND BALL_DEP_LIBRARIES ${BOOST_LIBRARIES})
 # make the rest of CMake aware of boost's existence
 LIST(APPEND CMAKE_REQUIRED_INCLUDES ${BOOST_INCLUDE_DIRS})
 
-## Find a suitable hash map implementation (or fall back to map)
+## Check for the boost::unordered_map implementation
 INCLUDE(cmake/BALLConfigHashMap.cmake)
 
 ## GSL
