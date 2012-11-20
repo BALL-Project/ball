@@ -45,12 +45,49 @@ void validateParameters(CommandlineParser& params)
     }
 }
 
+String getFileExtension(String& fileName)
+{
+    // locate the first dot, from right to left
+    int dotIndex = fileName.find_last_of('.');
+    if (dotIndex < 0)
+    {
+        return "";
+    }
+    return fileName.substr(dotIndex + 1, fileName.length() - dotIndex - 1);
+}
+
+String getOutputFileName(CommandlineParser& parameters, int index)
+{
+    String fileName = parameters.get("i");
+    String extension = getFileExtension(fileName);
+    // check that we have a supported file extension
+    if (!(extension == "mol2" || extension == "sdf" || extension == "drf"))
+    {
+        Log.error() << "Error: Extension of file '" << fileName << "' not supported!" << endl;
+        exit(1);
+    }
+    // make things easier and append a dot to the extension
+    extension = '.' + extension;
+    String outputBaseName = parameters.get("output_base_name");
+    String baseName;
+    if (outputBaseName != CommandlineParser::NOT_FOUND)
+    {
+        baseName = outputBaseName;
+    }
+    else
+    {
+        baseName = fileName.before(extension);
+    }
+    return (baseName + "_" + String(index) + extension);
+}
+
 int main(int argc, char* argv[])
 {
     CommandlineParser parpars("LigandFileSplitter", "split molecule files", VERSION, String(__DATE__), "Preparation");
 	parpars.registerParameter("i", "input molecule file", INFILE, true);
     parpars.registerParameter("no", "no. of splits to be created", BALL::INT, false);
     parpars.registerParameter("ligands_per_file", "max. number of ligands to output to a file", BALL::INT, false);
+    parpars.registerParameter("output_base_name", "the base name of the output files; this parameter is useful if you are using 'ligands_per_file' and want to change the output file name", BALL::STRING, false);
 	parpars.registerParameter("o", "output filenames; if none are specified, input filename postfixed with IDs will be used", OUTFILELIST, false);
 	String man = "LigandFileSplitter splits a molecule file into a given number of subsets.\nNote that the molecules are not sorted in any way for this.";
 	parpars.setToolManual(man);
@@ -134,24 +171,7 @@ int main(int argc, char* argv[])
 		}
 		else
 		{
-			filename = parpars.get("i");
-			if (filename.hasSuffix(".mol2"))
-			{
-				filename = ((String)filename.before(".mol2"))+"_"+String(i)+".mol2";
-			}
-			else if (filename.hasSuffix(".sdf"))
-			{
-				filename = ((String)filename.before(".sdf"))+"_"+String(i)+".sdf";
-			}
-			else if (filename.hasSuffix(".drf"))
-			{
-				filename = ((String)filename.before(".drf"))+"_"+String(i)+".drf";
-			}
-			else
-			{
-				cerr<<"Error: Extension of file '"<<filename<<"' not supported!"<<endl;
-				return 1;
-			}
+            filename = getOutputFileName(parpars, i);
 		}
 
 		GenericMolFile* output = MolFileFactory::open(filename, ios::out, input);
