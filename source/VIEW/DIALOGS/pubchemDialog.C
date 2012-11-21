@@ -173,7 +173,7 @@ namespace BALL
 			QString qt = ui_->pubchem_label->displayText();
 
 			if ( qt == "" ) return;
-			QString pug_name_query_("http://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/%1/SDF");
+			QString pug_query_("http://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/%1/%2/SDF");
 
 			if(!network_manager_) {
 				network_manager_ = new QNetworkAccessManager(this);
@@ -184,7 +184,7 @@ namespace BALL
 
 			getMainControl()->setStatusbarText ( String ( tr ( "Performing query..." ) ) );
 
-			QNetworkReply* reply  = network_manager_->get(QNetworkRequest(QUrl(pug_name_query_.arg(qt))));
+			QNetworkReply* reply  = network_manager_->get(QNetworkRequest(QUrl(pug_query_.arg(ui_->query_type_box->currentText().toLower()).arg(qt))));
 
 			connect(reply, SIGNAL(downloadProgress(qint64,qint64)),
 			        this, SLOT(updateDownloadProgress(qint64,qint64)));
