@@ -84,7 +84,6 @@ int main (int argc, char **argv)
 	cs.readDCDFile(parpars.get("i_dcd"));
 	cs.resetScoring();
 
-
 	PoseClustering pc;
 
 	if (parpars.has("rmsd_cutoff"))
@@ -97,11 +96,11 @@ int main (int argc, char **argv)
 	{
 		String scope = parpars.get("rmsd_scope");
 		if (scope == "C_ALPHA")
-			pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::RMSDLevelOfDetail::C_ALPHA);
+			pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::C_ALPHA);
 		else if (scope == "BACKBONE")
-			pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::RMSDLevelOfDetail::BACKBONE);
+			pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::BACKBONE);
 		else if (scope == "ALL_ATOMS")
-			pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::RMSDLevelOfDetail::ALL_ATOMS);
+			pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::ALL_ATOMS);
 	}
 
 	pc.setConformationSet(&cs);
