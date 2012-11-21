@@ -35,14 +35,29 @@ void validateParameters(CommandlineParser& params)
             exit(1);
         }
     }
-    if (params.has("ligands_per_file"))
+	String ligandsPerFile = params.get("ligands_per_file");
+	if (ligandsPerFile != CommandlineParser::NOT_FOUND)
     {
         if (params.get("ligands_per_file").toInt() < 1)
         {
             Log.error() << "The provided value for parameter 'ligands_per_file', " << params.get("ligands_per_file").toInt() << ", is invalid. Values must be greater or equal to 1." << endl;
             exit(1);
         }
-    }
+	}
+	String outputNamePattern = params.get("output_name_pattern");
+	if (outputNamePattern != CommandlineParser::NOT_FOUND)
+	{
+		// count the number of '%d' and exit if the name is different to one
+		string::size_type firstPlaceholder = outputNamePattern.find("%d");
+		string::size_type lastPlaceholder = outputNamePattern.rfind("%d");
+		// if there is more than one %d, it means that the index of the first and last occurrences are different
+		// if there is not a single %d, then the index of both first and last occurrences must be npos
+		if (firstPlaceholder != lastPlaceholder || firstPlaceholder == String::npos)
+		{
+			Log.error() << "The provided value for output_name_pattern '" << outputNamePattern << "' is invalid." << endl;
+			exit(1);
+		}
+	}
 }
 
 String getFileExtension(String& fileName)
@@ -58,27 +73,29 @@ String getFileExtension(String& fileName)
 
 String getOutputFileName(CommandlineParser& parameters, int index)
 {
-    String fileName = parameters.get("i");
-    String extension = getFileExtension(fileName);
+	String inputFileName = parameters.get("i");
+	String extension = getFileExtension(inputFileName);
     // check that we have a supported file extension
     if (!(extension == "mol2" || extension == "sdf" || extension == "drf"))
     {
-        Log.error() << "Error: Extension of file '" << fileName << "' not supported!" << endl;
+		Log.error() << "Error: Extension of file '" << inputFileName << "' not supported!" << endl;
         exit(1);
     }
     // make things easier and append a dot to the extension
     extension = '.' + extension;
-    String outputBaseName = parameters.get("output_base_name");
-    String baseName;
-    if (outputBaseName != CommandlineParser::NOT_FOUND)
+	String outputNamePattern = parameters.get("output_name_pattern");
+	String outputFileName;
+	if (outputNamePattern != CommandlineParser::NOT_FOUND)
     {
-        baseName = outputBaseName;
+		outputNamePattern.substituteAll("%d", String(index));
+		outputFileName = outputNamePattern;
     }
     else
     {
-        baseName = fileName.before(extension);
+		// if invoked with -i ligands.sdf, output name will be ligands_<index>.sdf
+		outputFileName = inputFileName.before(extension) + "_" + String(index) + extension;
     }
-    return (baseName + "_" + String(index) + extension);
+	return outputFileName;
 }
 
 int main(int argc, char* argv[])
@@ -87,9 +104,24 @@ int main(int argc, char* argv[])
 	parpars.registerParameter("i", "input molecule file", INFILE, true);
     parpars.registerParameter("no", "no. of splits to be created", BALL::INT, false);
     parpars.registerParameter("ligands_per_file", "max. number of ligands to output to a file", BALL::INT, false);
-    parpars.registerParameter("output_base_name", "the base name of the output files; this parameter is useful if you are using 'ligands_per_file' and want to change the output file name", BALL::STRING, false);
+	parpars.registerParameter("output_name_pattern", "pattern that will be used to generate the names of the output files, see notes and examples below.", BALL::STRING, false);
 	parpars.registerParameter("o", "output filenames; if none are specified, input filename postfixed with IDs will be used", OUTFILELIST, false);
-	String man = "LigandFileSplitter splits a molecule file into a given number of subsets.\nNote that the molecules are not sorted in any way for this.";
+	String man =
+			"LigandFileSplitter splits a molecule file into a given number of subsets.\n"
+			"Note that the molecules are not sorted in any way for this.\n\n"
+			"Examples:\n\n"
+			"$ LigandFileSplitter -i Trypsin_actives.sdf -no 3\n"
+			"    will split the input file Trypsin_actives.sdf in three files named Trypsin_actives_0.sdf, Trypsin_actives_1.sdf and Trypsin_actives_2.sdf\n\n"
+			"$ LigandFileSplitter -i ligands.sdf -ligands_per_file 4\n"
+			"    will split the input file ligands.sdf in as many files needed to fit at most 4 ligands per file.\n"
+			"    The files will be named ligands_0.sdf, ligands_1.sdf ... ligands_N.sdf\n\n"
+			"$ LigandFileSplitter -i ligands.sdf -ligands_per_file 5 -output_name_pattern split_ligands-%d.sdf\n"
+			"    will split the input file ligands.sdf in as many files needed to fit at most 5 ligands per file.\n"
+			"    The files will be named split_ligands-0.sdf, split_ligands-1.sdf, ... , split_ligands-N.sdf\n\n"
+			"NOTE:\n"
+			"    output_name_pattern accepts a printf-like pattern, expecting exactly one decimal integer placeholder, %d.\n"
+			"    The following are valid patterns: output_ligand.sdf_%d, split_%d.mol, %d_lig.drf\n"
+			"    The following are invalid patterns: output_%f.sdf, ligands.drf_%u, %d_lig_%d.mol, molecules.sdf";
 	parpars.setToolManual(man);
 	parpars.setSupportedFormats("i","mol2,sdf,drf");
 	parpars.setSupportedFormats("o","mol2,sdf,drf");
