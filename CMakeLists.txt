@@ -385,56 +385,11 @@ IF (WIN32)
 ENDIF()
 
 
-## Tools that existed in CADDSuite need either OpenEye library or OpenBabel ...
-## Check for OpenEye
-FIND_PATH(openeye_include oesystem.h)
-FIND_LIBRARY(oesystem_lib oesystem)
-FIND_LIBRARY(oechem_lib oechem)
-FIND_LIBRARY(oeplatform_lib oeplatform)
-IF(openeye_include AND oesystem_lib AND oeplatform_lib AND oechem_lib)
-	INCLUDE_DIRECTORIES(${openeye_include})
-	LIST(APPEND BALL_DEP_LIBRARIES ${oechem_lib} ${oesystem_lib} ${oeplatform_lib})
-	message(STATUS "Looking for OpenEye ... ok")
-	SET(BALL_HAS_OPENEYE TRUE)
-ELSE()
-	message(STATUS "Looking for Openeye ... not found")
-	SET(BALL_HAS_OPENEYE FALSE)
+OPTION(USE_OPEN_EYE_BABLE "Build BALL with support for OpenEye/OpenBabel" ON)
+
+IF(USE_OPEN_EYE_BABLE)
+	INCLUDE(cmake/BALLConfigOpenEye_Babel.cmake)
 ENDIF()
-
-## Check for OpenBabel ...
-## OpenBabel Check
-IF(NOT BALL_HAS_OPENEYE)
-	## OpenBabel
-	FIND_PATH(openbabel_include openbabel/mol.h)
-	IF(NOT openbabel_include)
-		FIND_PATH(openbabel_include openbabel-2.0/openbabel/mol.h)
-		IF(openbabel_include)
-			SET(openbabel_include "${openbabel_include}/openbabel-2.0/" CACHE INTERNAL "Path to openbabel")
-			message(STATUS "OpenBabel include = ${openbabel_include}")
-		ENDIF()
-	ENDIF()
-	FIND_LIBRARY(openbabel_lib openbabel)
-	IF(openbabel_include AND openbabel_lib)
-		INCLUDE_DIRECTORIES(${openbabel_include})
-		LIST(APPEND BALL_DEP_LIBRARIES ${openbabel_lib})
-		message(STATUS "Looking for OpenBabel ... ok")
-		SET(BALL_HAS_OPENBABEL TRUE CACHE BOOL "openbabel-support")
-
-		SET(backup_prefix ${CMAKE_FIND_LIBRARY_PREFIXES})
-		LIST(APPEND CMAKE_FIND_LIBRARY_PREFIXES "")
-		FIND_LIBRARY(ob_forcefield_lib plugin_forcefields)
-		SET(CMAKE_FIND_LIBRARY_PREFIXES ${backup_prefix})
-		IF(NOT ob_forcefield_lib)
-			message(STATUS "Looking for OpenBabel's force-field plugin-lib ... not found")
-		ELSE()
-			message(STATUS "Looking for OpenBabel's force-field plugin-lib ... ok")
-			LIST(APPEND BALL_DEP_LIBRARIES ${ob_forcefield_lib})
-		ENDIF()
-	ELSE()
-		message(STATUS "Looking for OpenBabel ... not found")
-	ENDIF()
-ENDIF()
-
 
 OPTION(BALL_BUILD_QUEASY "Build BALL with QSAR frontends" OFF)
 
