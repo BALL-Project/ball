@@ -72,7 +72,7 @@ namespace BALL
     /** optimize pool
      */
     while (!docking_algorithm_->wasAborted())
-      {
+	{
 	cout << "\r" << iteration_<<flush;
 
 	/** calulate fitness score for each individual
@@ -114,7 +114,6 @@ namespace BALL
 	mutate();
 	++iteration_;
 
-#ifdef BALL_HAS_VIEW
 	// if started from BALLView, show best pose found so far
 	if (docking_algorithm_->getDisplayMode() == DockingAlgorithm::BEST_INTERMEDIATE_POSES)
 	{
@@ -124,7 +123,6 @@ namespace BALL
 		docking_algorithm_->setVisualizationPose(score);
 		cout<<"  score = "<<score;
 	}
-#endif
       }
   }
 

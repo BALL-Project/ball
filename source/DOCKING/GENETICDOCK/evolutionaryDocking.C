@@ -253,13 +253,11 @@ namespace BALL
 			scoring_function_->updateScore();
 		}
 
-	#ifdef BALL_HAS_VIEW
 		if (display_mode_ != NO_DISPLAY) // show final pose
 		{
 			setVisualizationPose(score);
 			cout<<"final score = "<<score<<endl;
 		}
-	#endif
 		return score;
 	}
 

@@ -29,10 +29,8 @@ namespace BALL
 		finished_ = 0;
 		abort_ = 0;
 
-	#ifdef BALL_HAS_VIEW
 		new_pose_to_be_visualized = 0;
 		min_sec_between_visualizations_ = 1./20; // default: 50ms = 20fps
-	#endif
 	}
 
 
@@ -44,10 +42,8 @@ namespace BALL
 		finished_ = 0;
 		abort_ = 0;
 
-	#ifdef BALL_HAS_VIEW
 		new_pose_to_be_visualized = 0;
 		min_sec_between_visualizations_ = 1./20; // default: 50ms = 20fps
-	#endif
 	}
 
 	DockingAlgorithm::DockingAlgorithm(System& receptor, System& ligand)
@@ -58,10 +54,8 @@ namespace BALL
 		finished_ = 0;
 		abort_ = 0;
 
-	#ifdef BALL_HAS_VIEW
 		new_pose_to_be_visualized = 0;
 		min_sec_between_visualizations_ = 1./20; // default: 50ms = 20fps
-	#endif
 	}
 
 	DockingAlgorithm::~DockingAlgorithm()
@@ -317,7 +311,6 @@ namespace BALL
 		ligand_ = ligand;
 	}
 
-#ifdef BALL_HAS_VIEW
 	void DockingAlgorithm::setDisplayMode(DISPLAYMODE display_mode)
 	{
 		display_mode_ = display_mode;
@@ -361,18 +354,16 @@ namespace BALL
 	{
 		min_sec_between_visualizations_ = 1./no;
 	}
-#endif
 
 	void DockingAlgorithm::start()
 	{
 		pause_ = false;
 		abort_ = false;
 		finished_ = false;
-	#ifdef BALL_HAS_VIEW
+
 		visualization_timer_.stop();
 		visualization_timer_.reset();
 		visualization_timer_.start();
-	#endif
 	}
 
 	void DockingAlgorithm::pause()
@@ -396,18 +387,15 @@ namespace BALL
 		pause_ = false;
 		abort_ = false;
 		finished_ = false;
-#ifdef BALL_HAS_VIEW
+
 		new_pose_to_be_visualized = 0;
-#endif
 	}
 
 	void DockingAlgorithm::finish()
 	{
 		finished_ = true;
-	#ifdef BALL_HAS_VIEW
 		visualization_timer_.stop();
 		visualization_timer_.reset();
-	#endif
 	}
 
 	bool DockingAlgorithm::hasFinished() const

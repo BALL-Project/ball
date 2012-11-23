@@ -153,8 +153,6 @@ namespace BALL
 
 			const static String OPTION_FILE_PARAMETER_NAME;
 
-
-		#ifdef BALL_HAS_VIEW
 			const AtomContainer* getVisualizationPose();
 
 			void setVisualizationPose(const double& score);
@@ -169,8 +167,6 @@ namespace BALL
 
 			/** Set the maximal number of frames per second for the visualization output. This affects only the number of poses that are written for visualization NOT the actual speed of the docking algorithm itself. */
 			void setMaxFps(int no);
-		#endif
-
 
 		protected:
 
@@ -203,7 +199,6 @@ namespace BALL
 
 			DISPLAYMODE display_mode_;
 
-		#ifdef BALL_HAS_VIEW
 			/** copy of a intermediate pose that is to be visualized.  */
 			AtomContainer visualization_pose_;
 
@@ -211,7 +206,6 @@ namespace BALL
 
 			double min_sec_between_visualizations_;
 			Timer visualization_timer_;
-		#endif
 	};
 
 } // namespace BALL

@@ -94,7 +94,6 @@ namespace BALL
 		opt->registerParameter(&quaternion_parameter_);
 	}
 
-
 	DockProblem::~DockProblem()
 	{
 		delete rb_;
@@ -112,12 +111,10 @@ namespace BALL
 
 		double score = scoring_function_->getScore();
 
-	#ifdef BALL_HAS_VIEW
 		if (docker_->getDisplayMode() == DockingAlgorithm::ALL_INTERMEDIATE_POSES)
 		{
 			docker_->setVisualizationPose(score);
 		}
-	#endif
 
 		restore();
 

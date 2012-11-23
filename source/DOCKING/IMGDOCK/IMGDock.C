@@ -347,13 +347,12 @@ namespace BALL
 			}
 			else if (decrease_stepwidth_) step_width_ /= 2;
 
-		#ifdef BALL_HAS_VIEW
 			if (display_mode_ != NO_DISPLAY && display_mode_ != NO_INTERMEDIATE_POSES)
 			{
 				Log<<"---- iteration	"<<a<<" -------"<<endl;
 				setVisualizationPose(score_);
 			}
-		#endif
+
 			startDock(verbose);
 
 			if (scoring_function_->hasFlexibleResidues())
@@ -369,14 +368,12 @@ namespace BALL
 
 		update();
 
-	#ifdef BALL_HAS_VIEW
 		// if started from BALLView, show start conformation
 		if (display_mode_ != NO_DISPLAY && display_mode_ != ALL_INTERMEDIATE_POSES)
 		{
 			setVisualizationPose(score_);
 			Log<<"score after completed docking = "<<score_<<endl;
 		}
-	#endif
 
 		timer.stop();
 		Log.level(20)<<timer.getClockTime()<<" seconds"<<endl;
@@ -411,14 +408,12 @@ namespace BALL
 	{
 		update();
 
-	#ifdef BALL_HAS_VIEW
 		// if started from BALLView, show start conformation
 		if (display_mode_ != NO_DISPLAY && display_mode_ != NO_INTERMEDIATE_POSES)
 		{
 			setVisualizationPose(score_);
 			Log<<"score of start conformation = "<<score_<<endl;
 		}
-	#endif
 
 		max_rotated_pos_ = 0;
 		best_conformations_.clear();
@@ -458,7 +453,6 @@ namespace BALL
 				optimizeRotation(conf, best_conformations_, i, true);
 			}
 
-		#ifdef BALL_HAS_VIEW
 			// if started from BALLView, show best pose found so far
 			if (display_mode_ == BEST_INTERMEDIATE_POSES)
 			{
@@ -467,7 +461,6 @@ namespace BALL
 				setVisualizationPose(score);
 				Log<<"\rscore = "<<score<<endl;
 			}
-		#endif
 		}
 
 		/// Apply the best conformation found in this iteration and do a local translation optimization.
@@ -487,15 +480,12 @@ namespace BALL
 			best_conformations_.insert(best_pose_copy);
 		}
 
-	#ifdef BALL_HAS_VIEW
 		// if started from BALLView, show start conformation
 		if (display_mode_ != NO_DISPLAY && display_mode_ != NO_INTERMEDIATE_POSES)
 		{
 			setVisualizationPose(score_);
 			Log<<"score after optimized translation = "<<score_<<endl;
 		}
-	#endif
-
 	}
 
 
@@ -909,12 +899,10 @@ namespace BALL
 
 		score_ = scoring_function_->getScore();
 
-	#ifdef BALL_HAS_VIEW
 		if (display_mode_ == ALL_INTERMEDIATE_POSES)
 		{
 			setVisualizationPose(score_);
 		}
-	#endif
 	}
 
 
